@@ -10,8 +10,13 @@
 app.controller("LoginController", ["$scope", "$window", "WebSocket", function($scope, $window, WebSocket) {
 	var socketOpen = false;
 	$scope.$emit("dontShowMessage");
+	var target = "http://localhost/index.html";
 
-	$scope.authenticate = function(){
+	/**
+	 * autenticar usuario
+	 */
+	$cope.authenticate = function(){
+
 		if(!socketOpen) {
 			$scope.$emit("showMessage", "No es posible realizar la autenticacion");
 			return;
@@ -30,17 +35,19 @@ app.controller("LoginController", ["$scope", "$window", "WebSocket", function($s
 	});
 	
 	$scope.$on('socketOnMessage', function(event, msg) { 
-		var json = JSON.parse(msg.data);
+		var response = JSON.parse(msg.data);
+			
+		if(response.ok){
+			$window.location.href = target+"?id="+response.id;
+		} 
 		
-		if(json.user == 'ivan'){
-			$window.location.href = "http://localhost/angular/index2.html";
-		} else {
-			var message = "usuario o clave incorrectas"
-			$scope.user = "";
-			$scope.password = "";
+		if((response.error == "") || (response.error == null)){
+			response.error = "Error no identificado"
 		}
 		
-		$scope.$emit("showMessage", message);
+		$scope.user = "";
+		$scope.password = "";				
+		$scope.$emit("showMessage", response.error);
 
 	});
 
