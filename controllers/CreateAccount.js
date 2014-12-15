@@ -15,6 +15,19 @@ app.controller("CreateAccountController", ["$rootScope", "$scope", "WebSocket", 
 	});
 	
 	$scope.createAccount = function(){
-		WebSocket.send("test");
+		if(!$rootScope.socketOpen) {
+			$scope.$emit("showMessage", "Error de conexion con WebSocket");
+			return;
+		}
+		
+		var data = {
+			"name" : $scope.name,
+			"lastname" : $scope.lastname,
+			"dni" : $scope.dni,
+			"mail" : $scope.mail,
+			"action" : "createAccountRequest",
+		}
+		
+		WebSocket.send(JSON.stringify(data));
 	}
 }]); 
