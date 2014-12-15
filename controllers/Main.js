@@ -1,6 +1,7 @@
 
-app.controller("MainController", ["$scope", function($scope) {
+app.controller("MainController", ["$rootScope", "$scope", function($rootScope, $scope) {
 	$scope.showMessage = false;
+	$rootScope.socketOpen = false;
 	
 	$scope.$on('showMessage', function(event, msg) { 
 		$scope.message = msg;

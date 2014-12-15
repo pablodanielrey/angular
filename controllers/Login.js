@@ -7,17 +7,16 @@
  *		"url": Url de redireccion
  * Supone la existencia de un elemento padre que maneja los eventos dontShowMessage y showMessage para administrar mensajes
  */
-app.controller("LoginController", ["$scope", "$window", "WebSocket", function($scope, $window, WebSocket) {
-	var socketOpen = false;
+app.controller("LoginController", ["$rootScope", "$scope", "$location", "WebSocket", function($rootScope, $scope, $location, WebSocket) {
 	$scope.$emit("dontShowMessage");
-	var target = "http://localhost/index.html";
-
+	var target = null;
+	
 	/**
 	 * autenticar usuario
 	 */
-	$cope.authenticate = function(){
-
-		if(!socketOpen) {
+	$scope.authenticate = function(url){
+		target = url
+		if(!$rootScope.socketOpen) {
 			$scope.$emit("showMessage", "No es posible realizar la autenticacion");
 			return;
 		}
@@ -25,30 +24,36 @@ app.controller("LoginController", ["$scope", "$window", "WebSocket", function($s
 		var data = {
 			"user" : $scope.user,
 			"password" : $scope.password,
+			"action" : "login"
 		}
 
 		WebSocket.send(JSON.stringify(data));
 	};
 	
-	$scope.$on('socketOnOpen', function(event, msg) { 
-		socketOpen = true;
+	$scope.$on('socketOnOpen', function(event, msg) {
+		$rootScope.socketOpen = true;
 	});
 	
-	$scope.$on('socketOnMessage', function(event, msg) { 
-		var response = JSON.parse(msg.data);
-			
-		if(response.ok){
-			$window.location.href = target+"?id="+response.id;
-		} 
-		
-		if((response.error == "") || (response.error == null)){
-			response.error = "Error no identificado"
+	$scope.$on('socketOnMessage', function(event, msg){
+		if(target == null) {
+			$scope.$emit("showMessage", "No esta definido el target");
+			return
 		}
-		
-		$scope.user = "";
-		$scope.password = "";				
-		$scope.$emit("showMessage", response.error);
 
+		var response = JSON.parse(msg.data);
+
+		if(response.ok){
+			$rootScope.session = response.session
+			$location.path(target)
+		} else {
+			if((response.error == "") || (response.error == null)){
+				response.error = "Error no identificado"
+			}
+		
+			$scope.user = "";
+			$scope.password = "";
+			$scope.$emit("showMessage", response.error);
+		}
 	});
 
 }]); 

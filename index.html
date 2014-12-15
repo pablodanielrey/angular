@@ -1,26 +1,16 @@
- <!DOCTYPE html>
-<html>
-<head>
-	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
-	<script src="modules/Main.js"></script>
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script> 
+	<script src="modules/Main.js"></script> 
 	<script src="services/WebSocket.js"></script>
-	<script src="controllers/Main.js"></script>
-	<script src="controllers/Login.js"></script>
-</head>
-
-<body>
-<div ng-app="AngularApp" ng-controller="MainController">
+	<script src="controllers/Main.js"></script> 
+	<script src="controllers/Login.js"></script> 
+	<script src="controllers/CreateAccount.js"></script> 
+	<script src="routing/user.js"></script>
+</head> 
+<body ng-app="AngularApp" ng-controller="MainController"> 
+	<div ng-view></div>
 	<p ng-show="showMessage">{{message}}</p>
-	<div ng-controller="LoginController">
-		<form>
-			<input type="text" name="user" ng-model="user">
-			<input type="password" name="password" ng-model="password">
-
-			<button ng-click="authenticate()">Aceptar</button>
-		</form>
-	</div>
-
-</div>
-</body>
-
-</html> 
+</body> 
+</html>
