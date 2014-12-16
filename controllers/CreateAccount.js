@@ -7,7 +7,12 @@
  *		"url": Url de redireccion
  * Supone la existencia de un elemento padre que maneja los eventos dontShowMessage y showMessage para administrar mensajes
  */
-app.controller("CreateAccountController", ["$rootScope", "$scope", "WebSocket", function($rootScope, $scope, WebSocket) {	
+app.controller("CreateAccountController", ["$rootScope", "$scope", "$location", "WebSocket", function($rootScope, $scope, $location, WebSocket){
+	
+	//redireccionar a login si no hay sesion definida
+	if($rootScope.session == null){
+		$location.path("login")
+	}
 	
 	$scope.$on('socketOnMessage', function(event, msg) {
 		//var response = JSON.parse(msg.data);

@@ -7,15 +7,13 @@
  *		"url": Url de redireccion
  * Supone la existencia de un elemento padre que maneja los eventos dontShowMessage y showMessage para administrar mensajes
  */
-app.controller("LoginController", ["$rootScope", "$scope", "$location", "WebSocket", function($rootScope, $scope, $location, WebSocket) {
+app.controller("LoginController", ["$rootScope", "$scope", "$location", "WebSocket", function($rootScope, $scope, $location, WebSocket){
 	$scope.$emit("dontShowMessage");
-	var target = null;
 	
 	/**
 	 * autenticar usuario
 	 */
-	$scope.authenticate = function(url){
-		target = url
+	$scope.authenticate = function(){
 		if(!$rootScope.socketOpen) {
 			$scope.$emit("showMessage", "No es posible realizar la autenticacion");
 			return;
@@ -35,7 +33,7 @@ app.controller("LoginController", ["$rootScope", "$scope", "$location", "WebSock
 	});
 	
 	$scope.$on('socketOnMessage', function(event, msg){
-		if(target == null) {
+		if($rootScope.target == null) {
 			$scope.$emit("showMessage", "No esta definido el target");
 			return
 		}
@@ -44,7 +42,7 @@ app.controller("LoginController", ["$rootScope", "$scope", "$location", "WebSock
 
 		if(response.ok){
 			$rootScope.session = response.session
-			$location.path(target)
+			$location.path($rootScope.target)
 		} else {
 			if((response.error == "") || (response.error == null)){
 				response.error = "Error no identificado"
