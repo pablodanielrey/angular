@@ -1,5 +1,5 @@
 
-app.controller("MainController", ["$rootScope", "$scope", function($rootScope, $scope) {
+app.controller("MainAdminController", ["$rootScope", "$scope", function($rootScope, $scope) {
 	$scope.showMessage = false;
 	$rootScope.socketOpen = false;
 	$rootScope.session = null;
