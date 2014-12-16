@@ -11,6 +11,6 @@ app.config(['$routeProvider',
 		controller: 'CreateAccountController'
       }). 
       otherwise({ 
-        redirectTo: '/createAccount' 
+        redirectTo: '/login' 
       }); 
   }]);

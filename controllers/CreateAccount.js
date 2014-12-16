@@ -9,11 +9,6 @@
  */
 app.controller("CreateAccountController", ["$rootScope", "$scope", "$location", "WebSocket", function($rootScope, $scope, $location, WebSocket){
 	
-	//redireccionar a login si no hay sesion definida
-	if($rootScope.session == null){
-		$location.path("login")
-	}
-	
 	$scope.$on('socketOnMessage', function(event, msg) {
 		//var response = JSON.parse(msg.data);
 		alert(msg.data);
