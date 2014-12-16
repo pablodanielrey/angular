@@ -8,12 +8,12 @@
 	<link rel="stylesheet" type="text/css" href="css/style.css" />
 	<script src="modules/Main.js"></script> 
 	<script src="services/WebSocket.js"></script>
-	<script src="controllers/Main.js"></script> 
+	<script src="controllers/MainUser.js"></script> 
 	<script src="controllers/Login.js"></script> 
 	<script src="controllers/CreateAccount.js"></script> 
 	<script src="routing/user.js"></script>
 </head> 
-<body ng-app="AngularApp" ng-controller="MainController"> 
+<body ng-app="AngularApp" ng-controller="MainUserController"> 
 	<div ng-view></div>
 	<p id="error"  ng-show="showMessage" ng-show="showMessage">{{message}}</p>
 </body> 

@@ -10,11 +10,10 @@
 	<script src="services/WebSocket.js"></script>
 	<script src="controllers/Main.js"></script> 
 	<script src="controllers/Login.js"></script> 
-	<script src="controllers/AdminAccountController.js"></script> 
 	<script src="controllers/ListCreateAccountController.js"></script> 
-	<script src="routing/user.js"></script>
+	<script src="routing/admin.js"></script>
 </head> 
-<body ng-app="AngularApp" ng-controller="MainController"> 
+<body ng-app="AngularApp" ng-controller="MainAdminController"> 
 	<div ng-view></div>
 	<p id="error"  ng-show="showMessage" ng-show="showMessage">{{message}}</p>
 </body> 
