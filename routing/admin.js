@@ -10,9 +10,9 @@ app.config(['$routeProvider',
         templateUrl: 'templates/listCreateAccount.html', 
 		controller: 'ListCreateAccountController'
       }). 
-      when('/adminAccount', { 
-        templateUrl: 'templates/adminAccount.html', 
-		controller: 'AdminAccountController'
+      when('/adminUser', { 
+        templateUrl: 'templates/adminUser.html', 
+		//controller: 'AdminUser'
       }). 
       otherwise({ 
         redirectTo: '/listCreateAccount' 

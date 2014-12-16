@@ -4,11 +4,13 @@
 		<th>APELLIDOS</th>
 		<th>DNI</th>    
 		<th>EMAIL</th> 
+		<th>OPCIONES</th> 
 	</tr>
 	<tr ng-repeat="user in users">
 		<td>{{user.name}}</td>
 		<td>{{user.lastname}}</td> 
 		<td>{{user.dni}}</td>
 		<td>{{user.email}}</td>
+		<td><a href="#adminUser">Modificar</a></td>
 	</tr>
 </table>
