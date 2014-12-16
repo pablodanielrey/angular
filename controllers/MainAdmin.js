@@ -3,8 +3,12 @@ app.controller("MainAdminController", ["$rootScope", "$scope", function($rootSco
 	$scope.showMessage = false;
 	$rootScope.socketOpen = false;
 	$rootScope.session = null;
-	$rootScope.target = "createAccount"
+	$rootScope.target = "listCreateAccount"
 		
+	$scope.$on('socketOnOpen', function(event, msg) {
+		$rootScope.socketOpen = true;
+	});
+	
 	$scope.$on('showMessage', function(event, msg) { 
 		$scope.message = msg;
 		$scope.showMessage = true;
