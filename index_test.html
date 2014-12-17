@@ -1,0 +1,20 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+	<title>Administración de Cuentas</title>
+	<meta charset="utf-8"/>
+	<meta name="description"= content="Administración de Cuentas"/>
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script> 
+	<link rel="stylesheet" type="text/css" href="css/ccstyle.css" />
+	<script src="modules/Main.js"></script> 
+	<script src="services/WebSocket.js"></script>
+	<script src="controllers/MainUser.js"></script> 
+	<script src="controllers/Login.js"></script> 
+	<script src="controllers/CreateAccount.js"></script> 
+	<script src="routing/user.js"></script>
+</head> 
+<body ng-app="AngularApp" ng-controller="MainUserController"> 
+	<div ng-include="'templates/createAccount.html'"></div>
+	<p id="error"  ng-show="showMessage" ng-show="showMessage">{{message}}</p>
+</body> 
+</html>

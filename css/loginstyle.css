@@ -48,7 +48,7 @@ header{
 div{
 	margin-top:5px;
 }
-input[type=text] {
+.login input[type=text] {
     appearance: none;
 	-webkit-appearance: none;
 	-moz-appearance: none;
