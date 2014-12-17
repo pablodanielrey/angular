@@ -11,10 +11,13 @@
 	<script src="controllers/MainUser.js"></script> 
 	<script src="controllers/Login.js"></script> 
 	<script src="controllers/CreateAccount.js"></script> 
+	<script src="controllers/Home.js"></script> 
+	<script src="controllers/Logout.js"></script> 
 	<script src="routing/user.js"></script>
 </head> 
-<body ng-app="AngularApp" ng-controller="MainUserController"> 
+<body ng-app="AngularApp" ng-controller="MainUserController">
+	<div ng-include="'templates/menu/user.html'"></div>
 	<div ng-view></div>
-	<p id="error"  ng-show="showMessage" ng-show="showMessage">{{message}}</p>
+
 </body> 
 </html>
