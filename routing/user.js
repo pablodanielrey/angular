@@ -22,7 +22,7 @@ app.config(['$routeProvider', function($routeProvider) {
 		}). 
 		when('/adminUser', { 
 			templateUrl: 'templates/adminUser.html', 
-			//controller: 'CreateAccountController'
+			controller: 'AdminUserController'
 		}).
 		otherwise({ 
 			redirectTo: '/home' 

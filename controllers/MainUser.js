@@ -4,6 +4,7 @@ app.controller("MainUserController", ["$rootScope", "$scope", "$cookies", "$loca
 	$location.path("/start");
 	
 	$scope.$on('onEvent', function(event, data){
+
 		var response = JSON.parse(data);
 
 		switch(response.action){
@@ -42,10 +43,29 @@ app.controller("MainUserController", ["$rootScope", "$scope", "$cookies", "$loca
 					"password" : response.password,
 					"action" : "login",
 				}
-
-				if($rootScope.socketOpen){
-					WebSocket.send(JSON.stringify(data));
+				
+				WebSocket.send(JSON.stringify(data));
+			break;
+			
+			case "getUserSession":
+				var data = {
+					"session" : $cookies.fceSession,
+					"action" : "getUserSession",
 				}
+				
+				WebSocket.send(JSON.stringify(data));
+			break;
+			
+			case "userSessionData":
+				var data = {
+					"session" : $cookies.fceSession,
+					"name" : response.user,
+					"lastname" : response.lastname,
+					"dni" : response.dni,
+					"mail" : response.mail,
+				}
+				
+				$scope.$broadcast("userData", JSON.stringify(data));
 			break;
 			
 			case "createSession":

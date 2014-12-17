@@ -7,9 +7,25 @@
  *		"url": Url de redireccion
  * Supone la existencia de un elemento padre que maneja los eventos dontShowMessage y showMessage para administrar mensajes
  */
-app.controller("AdminUserController", ["$rootScope", "$scope", "$location", "WebSocket", function($rootScope, $scope, $location, WebSocket){
+app.controller("AdminUserController", ["$scope", function($scope){
 	
+	var data = {
+		"action" : "getUserSession",
+	}
+		
+	$scope.$emit("onEvent", JSON.stringify(data));
+			
+	$scope.$on('userData', function(event, data){
+		var response = JSON.parse(data);
 
+		$scope.name =  response.name
+		$scope.lastname =  response.lastname
+		$scope.mail =  response.mail
+		$scope.dni =  response.dni
+	
+	});
+
+	
 
 	
 }]); 
