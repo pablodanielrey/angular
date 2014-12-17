@@ -112,6 +112,22 @@ button[type=submit] {
 	
 	
 }
+button:hover[type=submit] {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -o-appearance: none;
+	border-radius: 0.2em;
+	height:30px;
+    background-color: #0066A6;
+    color: #FFF;
+	border:0px;
+	width: 275px;
+	margin-top:20px;
+	box-shadow: 0px 0px 8px #0066A6;
+	
+}
+
 footer{
 }
 
