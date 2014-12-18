@@ -19,7 +19,6 @@ app.factory('Session', ["$rootScope", "$cookies", "$location", function($rootSco
 	
 	factory.create = function(session){
 		$cookies.fceSession = session;
-		this.goHome();
 	}
 	
 	/**
@@ -27,7 +26,6 @@ app.factory('Session', ["$rootScope", "$cookies", "$location", function($rootSco
 	 */
 	factory.destroy = function(){
 		$cookies.fceSession = "";
-		this.goHome();
 	};
 	
 	factory.getSessionId = function(){

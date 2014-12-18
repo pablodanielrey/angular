@@ -1,7 +1,7 @@
 
 app.factory('WebSocket', ["$rootScope", function($rootScope){
 		
-	var socket = new WebSocket("ws://localhost:8000");
+	var socket = new WebSocket("ws://localhost:8001");
 	
 	socket.onopen = function(msg){
 		$rootScope.$apply(function () {

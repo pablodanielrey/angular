@@ -1,23 +1,55 @@
 
-/**
- * Controlador para realizar login
- * @param $scope Scope
- * @param WebSocket Servicio de conexion con el WebSocket de login, debe aceptar un usuario y clave, realizar la autenticacion y devolver como respuesta un json con los siguientes datos:
- *		"result":true|false Resultado de la autenticacion
- *		"url": Url de redireccion
- * Supone la existencia de un elemento padre que maneja los eventos dontShowMessage y showMessage para administrar mensajes
- */
-app.controller("CreateAccountController", ["$scope", "WebSocket", function($scope, WebSocket){
+app.controller("CreateAccountController", ["$scope", "WebSocket", "Session", function($scope, WebSocket, Session){
+
+	var ids = new Array();
 
 	$scope.createAccount = function(){
+		var id =  (Math.floor((Math.random() * 1000000000) + 1)).toString(); 
+		ids[id] = true;
+		
 		var data = {
+			"id" : id,
+			"session" : "",
 			"name" : $scope.name,
 			"lastname" : $scope.lastname,
 			"dni" : $scope.dni,
 			"mail" : $scope.mail,
 			"action" : "createAccountRequest",
 		}
-		
 		WebSocket.send(JSON.stringify(data));
 	}
+	
+	/**
+	 * Manejo de evento message producido por el socket
+ 	 * @param event
+	 * @param data string JSON: Datos del mensaje
+	 */
+	$scope.$on('onMessage', function(event, data){
+		alert(data);
+		var response = JSON.parse(data);
+		
+		if(response.id == undefined)
+			return;
+		
+		if(ids[response.id] == undefined)
+			return;
+			
+		if(response.error != undefined){
+			var data = {
+				"message" : response.error,
+			}
+			$rootScope.$broadcast("onAppError", JSON.stringify(data));
+		}
+		
+		if(response.ok != undefined){
+
+			var data = {
+				"message" : "Cuenta creada exitosamente",
+			}
+			$rootScope.$broadcast("onAppMessage", JSON.stringify(data));
+			return;
+		}
+
+
+	});	
 }]); 
