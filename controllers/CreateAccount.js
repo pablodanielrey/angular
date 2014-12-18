@@ -7,19 +7,10 @@
  *		"url": Url de redireccion
  * Supone la existencia de un elemento padre que maneja los eventos dontShowMessage y showMessage para administrar mensajes
  */
-app.controller("CreateAccountController", ["$rootScope", "$scope", "$location", "WebSocket", function($rootScope, $scope, $location, WebSocket){
-	
-	$scope.$on('socketOnMessage', function(event, msg) {
-		//var response = JSON.parse(msg.data);
-		alert(msg.data);
-	});
+app.controller("CreateAccountController", ["$scope", "WebSocket", function($scope, WebSocket){
+
 	
 	$scope.createAccount = function(){
-		if(!$rootScope.socketOpen) {
-			$scope.$emit("showMessage", "Error de conexion con WebSocket");
-			return;
-		}
-		
 		var data = {
 			"name" : $scope.name,
 			"lastname" : $scope.lastname,

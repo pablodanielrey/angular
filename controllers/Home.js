@@ -6,10 +6,11 @@
  */
 app.controller("HomeController", ["$scope",  function($scope){
 
+
 	var data = {
 		"action" : "goHome",
 	}
 		
-	$scope.$emit("onEvent", JSON.stringify(data));
+	$scope.$emit("onMessage", JSON.stringify(data));
 	
 }]); 

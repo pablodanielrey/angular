@@ -3,87 +3,112 @@ app.controller("MainUserController", ["$rootScope", "$scope", "$cookies", "$loca
 	$rootScope.socketOpen = false;
 	$location.path("/start");
 	
-	$scope.$on('onEvent', function(event, data){
+	/**
+	 * Ir a la pagina de inicio que variara en funcion de si existe sesion o no
+	 */
+	var goHome = function(){
+
+		if(($cookies.fceSession != undefined) 
+		&& ($cookies.fceSession != "") 
+		&& ($cookies.fceSession != null)
+		&& ($cookies.fceSession != false)){
+			$location.path("/home");				
+		} else {
+			$location.path("/login");	
+		}
+	};
+	
+	/**
+	 * Destruir session
+	 */
+	var destroySession = function(){
+		$cookies.fceSession = "";
+		goHome();
+	};
+	
+	
+	/**
+	 * Crear session
+	 * @param response JSON con el mensaje recibido
+	 */
+	var getActionFromMessage = function(message){
+
+		//si esta definida la accion en el mensaje, se retorna
+		if(message.action != undefined){
+			return message.action;
+		}
+		
+		//si no esta definida la accion en el mensaje se determinara en funcion de los parametros recibidos
+		if(message.session != undefined){
+			return "createSession";
+		}
+		
+		if(message.ok != "undefined"){
+			if(message.ok.substring(0, 23) == "request created with id"){
+				return "accountCreated";
+			}
+		}
+	};
+	
+	/**
+	 * Manejo de evento apertura de socket
+	 */
+	$scope.$on('onOpenSocket', function(event, data){
+		$rootScope.socketOpen = true;
+		goHome();
+	});
+	
+	/**
+	 * Manejo de evento message producido por el socket
+ 	 * @param event
+	 * @param data string JSON: Datos del mensaje
+	 */
+	$scope.$on('onMessageSocket', function(event, data){
+		$scope.$broadcast("onMessage", data);
+	});
+	
+	/**
+	 * Manejo de evento error general
+	 * @param data string JSON
+	 *		message: Descripcion del error
+	 */
+	$scope.$on('onError', function(event, data){
+		var response = JSON.parse(data);
+		alert(response.message);
+		$rootScope.socketOpen = false;
+		$scope.goHome();
+	});
+	
+	/**
+	 * Manejo de evento mensaje general
+	 * @param data string JSON: Datos del mensaje
+	 */
+	$scope.$on('onMessage', function(event, data){
 
 		var response = JSON.parse(data);
 
-		switch(response.action){
+		action = getActionFromMessage(response);
 		
-			case "goHome":
-				if(($cookies.fceSession != undefined) 
-				&& ($cookies.fceSession != "0") 
-				&& ($cookies.fceSession != null)
-				&& ($cookies.fceSession != false)){
-					$location.path("/home");				
-				} else {
-					$location.path("/login");	
-				}
-			break;
-			
-			case "error":
-				alert(response.message);
-				$cookies.fceSession = "0";
-				var data = {"action" : "goHome"}
-				$scope.$broadcast("onEvent", JSON.stringify(data));
-			break;
-			
-			case "openSocket":
-				$rootScope.socketOpen = true;
-				var data = {"action" : "goHome"	}
-				$scope.$broadcast("onEvent", JSON.stringify(data));
-			break;
-			
-			case "closeSocket":
-				$rootScope.socketOpen = false;
-			break;
-			
-			case "authenticate":	
-				var data = {
-					"user" : response.user,
-					"password" : response.password,
-					"action" : "login",
-				}
-				
-				WebSocket.send(JSON.stringify(data));
-			break;
-			
-			case "getUserSession":
-				var data = {
-					"session" : $cookies.fceSession,
-					"action" : "getUserSession",
-				}
-				
-				WebSocket.send(JSON.stringify(data));
-			break;
-			
-			case "userSessionData":
-				var data = {
-					"session" : $cookies.fceSession,
-					"name" : response.user,
-					"lastname" : response.lastname,
-					"dni" : response.dni,
-					"mail" : response.mail,
-				}
-				
-				$scope.$broadcast("userData", JSON.stringify(data));
-			break;
-			
+		switch(action){
 			case "createSession":
 				$cookies.fceSession = response.session;
-				var data = {"action" : "goHome"}
-				$scope.$broadcast("onEvent", JSON.stringify(data));
+				goHome();
+			break;
+			
+			case "accountCreated":
+				alert("cuenta creada satisfactoriamente");
+				goHome();
 			break;
 			
 			case "destroySession":
-				$cookies.fceSession = "0";
-				var data = {"action" : "goHome"}
-				$scope.$broadcast("onEvent", JSON.stringify(data));
+				$cookies.fceSession = "";
+				goHome();
 			break;
-
-			default:
-				var data = {"action" : "destroySession"}
-				$scope.$broadcast("onEvent", JSON.stringify(data));
+			
+			case "goHome":
+				goHome();
 			break;
 		}
 	});
+	
 }]);

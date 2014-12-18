@@ -5,26 +5,19 @@ app.factory('WebSocket', ["$rootScope", function($rootScope){
 	
 	socket.onopen = function(msg){
 		$rootScope.$apply(function () {
-			var data = {
-				"action" : "openSocket"
-			}
-			$rootScope.$broadcast("onEvent", JSON.stringify(data));
+			$rootScope.$broadcast("onOpenSocket", msg);
 		});
 	}
 	
 	socket.onmessage = function(msg){
 		$rootScope.$apply(function () {
-			$rootScope.$broadcast("onEvent", msg.data);
+			$rootScope.$broadcast("onMessageSocket", msg.data);
 		});
 	}
 	
 	socket.onerror = function(msg){
 		$rootScope.$apply(function (){
-			var data = {
-				"action" : "error",
-				"message" : "error websocket",
-			}
-			$rootScope.$broadcast("onEvent", JSON.stringify(data));
+			$rootScope.$broadcast("onErrorSocket", JSON.stringify(msg));
 		});
 	}
 	

@@ -10,6 +10,6 @@ app.controller("LogoutController", ["$scope",  function($scope){
 		"action" : "destroySession",
 	}
 		
-	$scope.$emit("onEvent", JSON.stringify(data));
+	$scope.$emit("onMessage", JSON.stringify(data));
 	
 }]); 

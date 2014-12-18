@@ -4,7 +4,7 @@
  * @param $scope Scope
  * Supone la existencia de un elemento padre que maneja los eventos dontShowMessage y showMessage para administrar mensajes
  */
-app.controller("LoginController", ["$scope", function($scope){
+app.controller("LoginController", ["$scope", "WebSocket", function($scope, WebSocket){
 	
 	/**
 	 * autenticar usuario
@@ -13,10 +13,10 @@ app.controller("LoginController", ["$scope", function($scope){
 		var data = {
 			"user" : $scope.user,
 			"password" : $scope.password,
-			"action" : "authenticate",
+			"action" : "login",
 		}
 		
-		$scope.$emit("onEvent", JSON.stringify(data));
+		WebSocket.send(JSON.stringify(data));
 	};
 	
 	
