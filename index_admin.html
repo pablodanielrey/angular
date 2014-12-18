@@ -5,17 +5,21 @@
 	<meta charset="utf-8"/>
 	<meta name="description"= content="Administración de Cuentas"/>
 	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script> 
+	<script src="http://code.angularjs.org/1.0.7/angular-cookies.js"></script> 
+	
 	<link rel="stylesheet" type="text/css" href="css/style.css" />
-	<script src="modules/Main.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/ccstyle.css" />
+	<script src="modules/Main.js"></script> 
 	<script src="services/WebSocket.js"></script>
 	<script src="controllers/MainAdmin.js"></script> 
 	<script src="controllers/Login.js"></script> 
-	<script src="controllers/ListCreateAccount.js"></script>
-
+	<script src="controllers/Home.js"></script> 
+	<script src="controllers/Logout.js"></script> 
 	<script src="routing/admin.js"></script>
 </head> 
-<body ng-app="AngularApp" ng-controller="MainAdminController"> 
+<body ng-app="AngularApp" ng-controller="MainAdminController">
+	<div ng-include="'templates/menu/home.html'"></div>
 	<div ng-view></div>
-	<p id="error"  ng-show="showMessage" ng-show="showMessage">{{message}}</p>
+
 </body> 
 </html>

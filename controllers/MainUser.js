@@ -1,30 +1,7 @@
 
-app.controller("MainUserController", ["$rootScope", "$scope", "$cookies", "$location", "WebSocket", function($rootScope, $scope, $cookies, $location, WebSocket) {
+app.controller("MainUserController", ["$rootScope", "$scope", "$cookies", "$location", "WebSocket", "Session", function($rootScope, $scope, $cookies, $location, WebSocket, Session) {
 	$rootScope.socketOpen = false;
 	$location.path("/loading");
-	
-	/**
-	 * Ir a la pagina de inicio que variara en funcion de si existe sesion o no
-	 */
-	var goHome = function(){
-		if(($cookies.fceSession != undefined) 
-		&& ($cookies.fceSession != "") 
-		&& ($cookies.fceSession != null)
-		&& ($cookies.fceSession != false)){
-			$location.path("/home");				
-		} else {
-			$location.path("/login");	
-		}
-	};
-	
-	/**
-	 * Destruir session
-	 */
-	var destroySession = function(){
-		$cookies.fceSession = "";
-		goHome();
-	};
-	
 	
 	/**
 	 * Crear session
@@ -55,7 +32,7 @@ app.controller("MainUserController", ["$rootScope", "$scope", "$cookies", "$loca
 	 */
 	$scope.$on('onOpenSocket', function(event, data){
 		$rootScope.socketOpen = true;
-		goHome();
+		Session.goHome();
 	});
 	
 	/**
@@ -76,7 +53,7 @@ app.controller("MainUserController", ["$rootScope", "$scope", "$cookies", "$loca
 		var response = JSON.parse(data);
 		alert(response.message);
 		$rootScope.socketOpen = false;
-		$scope.goHome();
+		Session.goHome();
 	});
 	
 	/**
@@ -91,26 +68,26 @@ app.controller("MainUserController", ["$rootScope", "$scope", "$cookies", "$loca
 		switch(action){
 			case "createSession":
 				$cookies.fceSession = response.session;
-				goHome();
+				Session.goHome();
 			break;
 			
 			case "accountCreated":
 				alert("cuenta creada satisfactoriamente");
-				goHome();
+				Session.goHome();
 			break;
 			
 			case "userSessionModified":
 				alert("usuario modificado satisfactoriamente");
-				goHome();
+				Session.goHome();
 			break;
 			
 			case "destroySession":
 				$cookies.fceSession = "";
-				goHome();
+				Session.goHome();
 			break;
 			
 			case "goHome":
-				goHome();
+				Session.goHome();
 			break;
 		}
 	});
