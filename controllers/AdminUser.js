@@ -7,25 +7,48 @@
  *		"url": Url de redireccion
  * Supone la existencia de un elemento padre que maneja los eventos dontShowMessage y showMessage para administrar mensajes
  */
-app.controller("AdminUserController", ["$scope", function($scope){
-	
+app.controller("AdminUserController", ["$scope", "$cookies", "WebSocket", function($scope, $cookies, WebSocket){
+
+	//Al acceder al controlador se deben obtener los datos de usuario del servidor
 	var data = {
 		"action" : "getUserSession",
+		"session" : $cookies.fceSession,
 	}
 		
-	$scope.$emit("onEvent", JSON.stringify(data));
-			
-	$scope.$on('userData', function(event, data){
+	WebSocket.send(JSON.stringify(data));
+		
+	/**
+	 * Analizar evento onMessage para determinar si es una respuesta a la peticion de los datos de usuario del servidor
+	 */
+	$scope.$on('onMessage', function(event, data){
 		var response = JSON.parse(data);
 
-		$scope.name =  response.name
-		$scope.lastname =  response.lastname
-		$scope.mail =  response.mail
-		$scope.dni =  response.dni
-	
+		if((response.name != undefined)
+		&& (response.lastname != undefined)
+		&& (response.dni != undefined)
+		&& (response.mail != undefined)){
+			$scope.name =  response.name
+			$scope.lastname =  response.lastname
+			$scope.mail =  response.mail
+			$scope.dni =  response.dni
+		}
 	});
 
-	
 
+	/**
+	 * Modificar datos de usuario de la session
+	 */
+	$scope.modify = function(){
+		var data = {
+			"session" : $cookies.fceSession,
+			"name" : $scope.name,
+			"lastname" : $scope.lastname,
+			"dni" : $scope.dni,
+			"mail" : $scope.mail,
+			"action" : "modifyUserSession",
+		}
+		
+		WebSocket.send(JSON.stringify(data));
+	}
 	
 }]); 

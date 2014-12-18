@@ -7,7 +7,6 @@ app.controller("MainUserController", ["$rootScope", "$scope", "$cookies", "$loca
 	 * Ir a la pagina de inicio que variara en funcion de si existe sesion o no
 	 */
 	var goHome = function(){
-
 		if(($cookies.fceSession != undefined) 
 		&& ($cookies.fceSession != "") 
 		&& ($cookies.fceSession != null)
@@ -43,7 +42,7 @@ app.controller("MainUserController", ["$rootScope", "$scope", "$cookies", "$loca
 			return "createSession";
 		}
 		
-		if(message.ok != "undefined"){
+		if(message.ok != undefined){
 			if(message.ok.substring(0, 23) == "request created with id"){
 				return "accountCreated";
 			}
@@ -52,6 +51,7 @@ app.controller("MainUserController", ["$rootScope", "$scope", "$cookies", "$loca
 	
 	/**
 	 * Manejo de evento apertura de socket
+	 * @param data string JSON: Datos del mensaje 
 	 */
 	$scope.$on('onOpenSocket', function(event, data){
 		$rootScope.socketOpen = true;
@@ -84,7 +84,6 @@ app.controller("MainUserController", ["$rootScope", "$scope", "$cookies", "$loca
 	 * @param data string JSON: Datos del mensaje
 	 */
 	$scope.$on('onMessage', function(event, data){
-
 		var response = JSON.parse(data);
 
 		action = getActionFromMessage(response);
@@ -97,6 +96,11 @@ app.controller("MainUserController", ["$rootScope", "$scope", "$cookies", "$loca
 			
 			case "accountCreated":
 				alert("cuenta creada satisfactoriamente");
+				goHome();
+			break;
+			
+			case "userSessionModified":
+				alert("usuario modificado satisfactoriamente");
 				goHome();
 			break;
 			

@@ -9,7 +9,6 @@
  */
 app.controller("CreateAccountController", ["$scope", "WebSocket", function($scope, WebSocket){
 
-	
 	$scope.createAccount = function(){
 		var data = {
 			"name" : $scope.name,
