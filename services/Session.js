@@ -17,13 +17,19 @@ app.factory('Session', ["$rootScope", "$cookies", "$location", function($rootSco
 		}
 	};
 	
+	factory.create = function(session){
+		$cookies.fceSession = session;
+		this.goHome();
+	}
+	
 	/**
 	 * Destruir session
 	 */
-	factory.destroySession = function(){
+	factory.destroy = function(){
 		$cookies.fceSession = "";
 		this.goHome();
 	};
+	
 	
 	return factory;
 }]);

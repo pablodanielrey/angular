@@ -1,5 +1,5 @@
 
-app.controller("MainUserController", ["$rootScope", "$scope", "$cookies", "$location", "WebSocket", "Session", function($rootScope, $scope, $cookies, $location, WebSocket, Session) {
+app.controller("MainUserController", ["$rootScope", "$scope", "$location", "WebSocket", "Session", function($rootScope, $scope, $location, WebSocket, Session) {
 	$rootScope.socketOpen = false;
 	$location.path("/loading");
 	
@@ -67,8 +67,7 @@ app.controller("MainUserController", ["$rootScope", "$scope", "$cookies", "$loca
 		
 		switch(action){
 			case "createSession":
-				$cookies.fceSession = response.session;
-				Session.goHome();
+				Session.create(response.session);
 			break;
 			
 			case "accountCreated":
@@ -82,8 +81,7 @@ app.controller("MainUserController", ["$rootScope", "$scope", "$cookies", "$loca
 			break;
 			
 			case "destroySession":
-				$cookies.fceSession = "";
-				Session.goHome();
+				Session.destroy();
 			break;
 			
 			case "goHome":
