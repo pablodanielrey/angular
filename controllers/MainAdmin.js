@@ -55,7 +55,6 @@ app.controller("MainAdminController", ["$rootScope", "$scope", "$location", "Web
 	 * @param data string JSON: Datos del mensaje
 	 */
 	$scope.$on('onMessage', function(event, data){
-		alert(data);
 		var response = JSON.parse(data);
 
 		action = getActionFromMessage(response);
