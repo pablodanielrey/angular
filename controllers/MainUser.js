@@ -1,7 +1,7 @@
 
 app.controller("MainUserController", ["$rootScope", "$scope", "$cookies", "$location", "WebSocket", function($rootScope, $scope, $cookies, $location, WebSocket) {
 	$rootScope.socketOpen = false;
-	$location.path("/start");
+	$location.path("/loading");
 	
 	/**
 	 * Ir a la pagina de inicio que variara en funcion de si existe sesion o no

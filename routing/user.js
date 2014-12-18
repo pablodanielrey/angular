@@ -6,7 +6,7 @@ app.config(['$routeProvider', function($routeProvider) {
 			controller: 'LoginController'
 		}). 
 		when('/home', { 
-			templateUrl: 'templates/home.html',
+			templateUrl: 'templates/menu/user.html',
 			controller: 'HomeController'
 		}). 
 		when('/logout', { 
