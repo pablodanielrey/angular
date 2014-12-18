@@ -18,12 +18,6 @@ app.controller("MainAdminController", ["$rootScope", "$scope", "$location", "Web
 		if(message.session != undefined){
 			return "createSession";
 		}
-		
-		if(message.ok != undefined){
-			if(message.ok.substring(0, 23) == "request created with id"){
-				return "accountCreated";
-			}
-		}
 	};
 	
 	/**
@@ -61,6 +55,7 @@ app.controller("MainAdminController", ["$rootScope", "$scope", "$location", "Web
 	 * @param data string JSON: Datos del mensaje
 	 */
 	$scope.$on('onMessage', function(event, data){
+		alert(data);
 		var response = JSON.parse(data);
 
 		action = getActionFromMessage(response);
@@ -68,16 +63,6 @@ app.controller("MainAdminController", ["$rootScope", "$scope", "$location", "Web
 		switch(action){
 			case "createSession":
 				Session.create(response.session);
-			break;
-			
-			case "accountCreated":
-				alert("cuenta creada satisfactoriamente");
-				Session.goHome();
-			break;
-			
-			case "userSessionModified":
-				alert("usuario modificado satisfactoriamente");
-				Session.goHome();
 			break;
 			
 			case "destroySession":

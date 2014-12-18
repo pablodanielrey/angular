@@ -4,13 +4,8 @@
  * @param $scope Scope
  * Supone la existencia de un elemento padre que maneja los eventos dontShowMessage y showMessage para administrar mensajes
  */
-app.controller("HomeController", ["$scope",  function($scope){
+app.controller("HomeController", ["Session", function(Session){
 
-
-	var data = {
-		"action" : "goHome",
-	}
-		
-	$scope.$emit("onMessage", JSON.stringify(data));
+	Session.goHome();
 	
 }]); 

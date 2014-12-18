@@ -30,6 +30,9 @@ app.factory('Session', ["$rootScope", "$cookies", "$location", function($rootSco
 		this.goHome();
 	};
 	
+	factory.getSessionId = function(){
+		return $cookies.fceSession;
+	}
 	
 	return factory;
 }]);
