@@ -14,8 +14,10 @@ app.controller("CreateAccountController", ["$rootScope", "$scope", "WebSocket", 
 			"lastname" : $scope.lastname,
 			"dni" : $scope.dni,
 			"mail" : $scope.mail,
+			"reason" : $scope.reason,
 			"action" : "createAccountRequest",
 		}
+		alert(JSON.stringify(data));
 		WebSocket.send(JSON.stringify(data));
 	}
 	
@@ -25,7 +27,6 @@ app.controller("CreateAccountController", ["$rootScope", "$scope", "WebSocket", 
 	 * @param data string JSON: Datos del mensaje
 	 */
 	$scope.$on('onMessage', function(event, data){
-
 		var response = JSON.parse(data);
 		
 		if(response.id == undefined)

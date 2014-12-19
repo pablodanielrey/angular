@@ -8,7 +8,7 @@ app.controller("MainUserController", ["$rootScope", "$scope", "$location", "WebS
 	 * @param data string JSON: Datos del mensaje 
 	 */
 	$scope.$on('onOpenSocket', function(event, data){
-		$location.path("/modifyUser");
+		$location.path("/createAccount");
 	});
 	
 	/**

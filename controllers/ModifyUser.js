@@ -44,6 +44,7 @@ app.controller("ModifyUserController", ["$scope", "$cookies", "WebSocket", "Sess
 
 		if(response.ok != undefined){
 			if(action = "userSessionData"){
+				/*TODO
 				$scope.name =  response.name
 				$scope.lastname =  response.lastname
 				$scope.dni =  response.dni
@@ -55,7 +56,19 @@ app.controller("ModifyUserController", ["$scope", "$cookies", "WebSocket", "Sess
 				$scope.genre = response.genre
 				$scope.studentNumber = response.studentNumber
 				$scope.personalEmail = response.personaEmail
-				$scope.email = response.email
+				$scope.email = response.email*/
+				$scope.name =  "unNombre"
+				$scope.lastname =  response.lastname
+				$scope.dni =  response.dni
+				$scope.mail =  response.mail
+				$scope.telephone = response.telephone
+				$scope.adress = response.adress
+				$scope.bornCity = response.bornCity
+				$scope.country = response.country
+				$scope.genre = response.genre
+				$scope.studentNumber = response.studentNumber
+				$scope.personalEmail = response.personaEmail
+				$scope.email = response.email				
 				return;
 			} /*else if(action = "modifyUserSessionData") {
 				var data = {
