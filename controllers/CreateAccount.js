@@ -1,5 +1,5 @@
 
-app.controller("CreateAccountController", ["$scope", "WebSocket", "Session", function($scope, WebSocket, Session){
+app.controller("CreateAccountController", ["$rootScope", "$scope", "WebSocket", "Session", function($rootScope, $scope, WebSocket, Session){
 
 	var ids = new Array();
 
@@ -25,7 +25,7 @@ app.controller("CreateAccountController", ["$scope", "WebSocket", "Session", fun
 	 * @param data string JSON: Datos del mensaje
 	 */
 	$scope.$on('onMessage', function(event, data){
-		alert(data);
+
 		var response = JSON.parse(data);
 		
 		if(response.id == undefined)
