@@ -17,7 +17,7 @@ app.controller("CreateAccountController", ["$rootScope", "$scope", "WebSocket", 
 			"reason" : $scope.reason,
 			"action" : "createAccountRequest",
 		}
-		alert(JSON.stringify(data));
+
 		WebSocket.send(JSON.stringify(data));
 	}
 	
