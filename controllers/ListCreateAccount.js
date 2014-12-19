@@ -21,6 +21,7 @@ app.controller("ListCreateAccountController", ["$scope", "WebSocket", "Session",
 		var response = JSON.parse(data);
 		
 		if(response.id == undefined){
+
 			return;
 		
 		}

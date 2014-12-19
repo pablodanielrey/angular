@@ -2,6 +2,7 @@
 app.controller("MainAdminController", ["$rootScope", "$scope", "$location", "WebSocket", "Session", function($rootScope, $scope, $location, WebSocket, Session) {
 	$rootScope.socketOpen = false;
 	$location.path("/loading");
+	Session.create("temp");
 
 	/**
 	 * Manejo de evento apertura de socket
