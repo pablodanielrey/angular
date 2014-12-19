@@ -16,6 +16,8 @@ app.config(['$routeProvider', function($routeProvider) {
 		when('/loading', { 
 			templateUrl: 'templates/loading.html',
 		}). 
+		
+		
 		when('/listCreateAccount', { 
 			templateUrl: 'templates/listCreateAccount.html', 
 			controller: 'ListCreateAccountController',

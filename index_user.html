@@ -6,7 +6,8 @@
 	<meta name="description"= content="Administración de Cuentas"/>
 	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script> 
 	<script src="http://code.angularjs.org/1.0.7/angular-cookies.js"></script> 
-	
+
+	<link rel="stylesheet" type="text/css" href="css/loginstyle.css" />	
 	<link rel="stylesheet" type="text/css" href="css/ccstyle.css" />
 	<link rel="stylesheet" type="text/css" href="css/austyle.css" />
 	<script src="modules/Main.js"></script> 
@@ -15,12 +16,15 @@
 	<script src="services/Session.js"></script>
 	<script src="controllers/MainUser.js"></script> 
 	<script src="controllers/Login.js"></script> 
-	<script src="controllers/CreateAccount.js"></script> 
 	<script src="controllers/Home.js"></script> 
-	<script src="controllers/ModifyUser.js"></script>
-	
 	<script src="controllers/Logout.js"></script> 
-	<script src="routing/user.js"></script>
+
+	<script src="controllers/CreateAccount.js"></script>
+	<script src="controllers/ListCreateAccount.js"></script>	
+	<script src="controllers/ModifyUser.js"></script>
+
+	<script src="routing/user.js"></script>	
+
 </head> 
 <body ng-app="AngularApp" ng-controller="MainUserController">
 	<div ng-include="'templates/menu/home.html'"></div>
