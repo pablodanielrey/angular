@@ -6,11 +6,11 @@
 		<th>EMAIL</th> 
 		<th>OPCIONES</th> 
 	</tr>
-	<tr ng-repeat="user in users">
-		<td>{{user.name}}</td>
-		<td>{{user.lastname}}</td> 
-		<td>{{user.dni}}</td>
-		<td>{{user.email}}</td>
-		<td><a href="#adminUser">Modificar</a></td>
+	<tr ng-repeat="account in accounts">
+		<td>{{account.name}}</td>
+		<td>{{account.lastname}}</td> 
+		<td>{{account.dni}}</td>
+		<td>{{account.email}}</td>
+		<td><button ng-click="approveAccount(account.id)">Aprobar</button></td>
 	</tr>
 </table>

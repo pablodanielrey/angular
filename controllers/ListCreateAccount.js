@@ -1,5 +1,5 @@
 
-app.controller("ListCreateAccountController", ["$scope", "WebSocket", "Session", "uuid4", function($scope, WebSocket, Session, uuid4){
+app.controller("ListCreateAccountController", ["$rootScope", "$scope", "WebSocket", "Session", "uuid4", function($rootScope, $scope, WebSocket, Session, uuid4){
 	
 	var ids = new Array();
 	var id = uuid4.generate();
@@ -13,6 +13,21 @@ app.controller("ListCreateAccountController", ["$scope", "WebSocket", "Session",
 	
 	WebSocket.send(JSON.stringify(data));
 	
+	$scope.approveAccount = function(accountId){
+		var id = uuid4.generate();
+		ids[id] = "aprobeCreateRequest";
+		
+		var data = {
+			"id" : id,
+			"reqId" : accountId,
+			"session" : Session.getSessionId(),
+			"action" : "aprobeCreateRequest",
+		};
+		
+		WebSocket.send(JSON.stringify(data));
+	};
+	
+
 	/**
 	 * Analizar evento onMessage para determinar si es una respuesta a la peticion de la lista de creacion de cuentas
 	 */
@@ -28,6 +43,9 @@ app.controller("ListCreateAccountController", ["$scope", "WebSocket", "Session",
 		if(ids[response.id] == undefined){
 			return;
 		}
+		
+		var action = ids[response.id];
+		delete ids[response.id];
 			
 		if(response.error != undefined){
 			var data = {
@@ -37,7 +55,16 @@ app.controller("ListCreateAccountController", ["$scope", "WebSocket", "Session",
 		}
 
 		if(response.ok != undefined){
-			$scope.users = response.list;
+;
+			if(action == "listCreateAccountRequests"){
+				$scope.accounts = response.list;
+			} else if(action == "aprobeCreateRequest"){
+				var data = {
+					"message" : "Cuenta aprobada",
+				}
+				$rootScope.$broadcast("onAppMessage", JSON.stringify(data));
+				return;
+			}
 		}
 			
 	});
