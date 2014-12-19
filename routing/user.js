@@ -22,9 +22,9 @@ app.config(['$routeProvider', function($routeProvider) {
 			templateUrl: 'templates/createAccount.html', 
 			controller: 'CreateAccountController'
 		}). 
-		when('/adminUser', { 
-			templateUrl: 'templates/adminUser.html', 
-			controller: 'AdminUserController'
+		when('/modifyUser', { 
+			templateUrl: 'templates/modifyUser.html', 
+			controller: 'ModifyUserController'
 		}).
 		otherwise({ 
 			redirectTo: '/home' 

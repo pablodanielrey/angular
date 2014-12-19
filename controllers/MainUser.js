@@ -1,14 +1,14 @@
 
 app.controller("MainUserController", ["$rootScope", "$scope", "$location", "WebSocket", "Session", function($rootScope, $scope, $location, WebSocket, Session) {
 	$rootScope.socketOpen = false;
-	$location.path("/createAccount");
+	$location.path("/loading");
 
 	/**
 	 * Manejo de evento apertura de socket
 	 * @param data string JSON: Datos del mensaje 
 	 */
 	$scope.$on('onOpenSocket', function(event, data){
-		
+		$location.path("/modifyUser");
 	});
 	
 	/**
