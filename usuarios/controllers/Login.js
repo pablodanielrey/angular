@@ -61,7 +61,7 @@ app.controller("LoginController", ["$rootScope", "$scope", "WebSocket", "Session
 		}
 		
 		if(response.ok != undefined){
-
+			Session.create(response.session);
 			var data = {
 				"session" : response.session,
 				"user" : $scope.user,
