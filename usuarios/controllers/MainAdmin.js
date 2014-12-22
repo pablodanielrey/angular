@@ -2,14 +2,24 @@
 app.controller("MainAdminController", ["$rootScope", "$scope", "$location", "WebSocket", "Session", function($rootScope, $scope, $location, WebSocket, Session) {
 	$rootScope.socketOpen = false;
 	$location.path("/loading");
-	Session.create("temp");
 
+	/**
+	 * Manejo de evento create session
+	 */
+	$scope.$on("createSession", function(event, data){
+		var response = JSON.parse(data);
+		Session.create(response.session);
+		alert("Bienvenido " + response.user);
+		$location.path("/home");
+	});
+		
+			
 	/**
 	 * Manejo de evento apertura de socket
 	 * @param data string JSON: Datos del mensaje 
 	 */
 	$scope.$on('onOpenSocket', function(event, data){
-		$location.path("/listCreateAccount");
+		$location.path("/home");
 	});
 	
 	/**
@@ -40,7 +50,5 @@ app.controller("MainAdminController", ["$rootScope", "$scope", "$location", "Web
 		var response = JSON.parse(data);
 		alert(response.message);
 	});
-	
 
-	
 }]);
