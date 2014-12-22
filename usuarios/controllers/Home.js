@@ -1,11 +1,12 @@
 
-/**
- * Controlador para realizar login
- * @param $scope Scope
- * Supone la existencia de un elemento padre que maneja los eventos dontShowMessage y showMessage para administrar mensajes
- */
-app.controller("HomeController", ["Session", function(Session){
+app.controller("HomeController", ["Session", "$location", function(Session, $location){
 
 	Session.goHome();
 	
+	if((Session.getSessionId() != undefined) 
+	&& (Session.getSessionId() != "")){
+		$location.path("/home");				
+	} else {
+		$location.path("/login");	
+	}
 }]); 
