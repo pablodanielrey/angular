@@ -7,6 +7,33 @@ app.config(['$routeProvider',
       .when('/main', {
 	    templateUrl: 'views/main.html',
       })
+      .when('/login', {
+	    templateUrl: 'views/login.html',
+      })
+	  .when('/logout', {
+	    templateUrl: 'views/logout.html',
+      })
+	  .when('/createAccountRequest', {
+	    templateUrl: 'views/createAccountRequest.html',
+      })
+	  .when('/confirmAccountRequest', {
+	    templateUrl: 'views/confirmAccountRequest.html',
+      })
+	  .when('/editUsers', {
+	    templateUrl: 'views/editUsers.html',
+      })
+	  .when('/editProfile', {
+	    templateUrl: 'views/editProfile.html',
+      })
+	  .when('/resetPassword', {
+	    templateUrl: 'views/resetPassword.html',
+      })
+	  .when('/changePassword', {
+	    templateUrl: 'views/changePassword.html',
+      })
+	  .when('/editGroups', {
+	    templateUrl: 'views/editGroups.html',
+      })
       .when('/test', {
 	    templateUrl: 'views/test.html',
 	    controller: 'TestCtrl'
