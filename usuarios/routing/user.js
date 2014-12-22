@@ -22,7 +22,7 @@ app.config(['$routeProvider', function($routeProvider) {
 			templateUrl: 'templates/createAccount.html', 
 			controller: 'CreateAccountController'
 		}). 
-		when('/modifyUser', { 
+		when('/modifyUser', {  //TODO
 			templateUrl: 'templates/modifyUser.html', 
 			controller: 'ModifyUserController'
 		}).

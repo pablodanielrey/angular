@@ -21,11 +21,7 @@ app.config(['$routeProvider', function($routeProvider) {
 		when('/listCreateAccount', { 
 			templateUrl: 'templates/listCreateAccount.html', 
 			controller: 'ListCreateAccountController',
-		}). 
-		when('/adminCreateAccount:userId', { 
-			templateUrl: 'templates/adminCreateAccount.html', 
-			controller: 'AdminCreateAccountController',
-		}). 
+		}).
 		otherwise({ 
 			redirectTo: '/home' 
 		}); 

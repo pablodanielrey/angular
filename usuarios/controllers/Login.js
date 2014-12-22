@@ -63,9 +63,10 @@ app.controller("LoginController", ["$rootScope", "$scope", "WebSocket", "Session
 		if(response.ok != undefined){
 			Session.create(response.session);
 			var data = {
-				"message" : "Acceso correcto",
-			}
-			$rootScope.$broadcast("onAppMessage", JSON.stringify(data));
+				"session" : response.session,
+				"user" : $scope.user,
+			};
+			$rootScope.$broadcast("createSession", JSON.stringify(data));
 			return;
 		}
 		
