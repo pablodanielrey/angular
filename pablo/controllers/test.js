@@ -1,7 +1,7 @@
 
 var app = angular.module('mainApp')
 
-app.controller('MainCtrl', 
+app.controller('TestCtrl', 
   function ($scope) {
     
   }
