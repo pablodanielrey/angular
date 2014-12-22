@@ -1,27 +1,16 @@
-		<form id="contenedor" method="post">
-			<div id="logo">
-				<img src="img/logo.jpg" />
-			</div>	
-
-			<div>
-				<div>
-					<label>Usuario (DNI)</label>
-					<input type="text" name="user" ng-model="user" >
-				</div>
-				<div>	
-					<label>Contraseña</label>
-					<input type="password" name="password" ng-model="password">
-				</div>	
-			</div>
-			<div>
-			<button type="submit" ng-click="authenticate()"> Entrar</button>
-
-				<div id="contrasena">
-					<span>Olvide mi contraseña</span>
-					<span>|</span>
-					<span><a href="#createAccount"> Crear cuenta </a></span>
-					<span>|</span>
-					<span>FAQ</span>
-				</div>	
-			</div>
-		</form>	
+<form class="contenedor" method="post">
+	<div class="logo">
+		<img src="img/logo.jpg" />
+	</div>	
+	<div>
+		<div><label>Usuario (DNI)</label><input class="campo1" type="text" name="user" ng-model="user"></div>
+		<div><label>Contraseña</label><input class="campo2" type="password" name="password" ng-model="password"></div>	
+	</div>
+	<div><button class="boton" type="submit" ng-click="authenticate()"> Entrar</button></div>
+	<div class="opciones">
+		<span><a class="links" href=""> Olvid&eacute mi contraseña </a></span>
+		<span>|</span>
+		<span><a class="links" href="#createAccount"> Crear cuenta </a></span>
+		</div>	
+			
+</form>	
