@@ -1,18 +1,29 @@
- 
+
 var app = angular.module('mainApp')
 
 app.config(['$routeProvider',
   function($routeProvider) {
     $routeProvider
+
       .when('/main', {
-	    templateUrl: 'views/main.html',
+	       templateUrl: 'views/main.html',
+         controller: 'MainCtrl'
       })
+
       .when('/login', {
-	    templateUrl: 'views/login.html',
+	       templateUrl: 'views/login.html',
+         controller: 'LoginCtrl'
       })
-	  .when('/logout', {
-	    templateUrl: 'views/logout.html',
+
+	    .when('/logout', {
+	       templateUrl: 'views/logout.html',
+         controller: 'LogoutCtrl'
       })
+
+      .when('/menu', {
+        templateUrl: 'views/menu.html',
+      })
+
 	  .when('/createAccountRequest', {
 	    templateUrl: 'views/createAccountRequest.html',
       })
