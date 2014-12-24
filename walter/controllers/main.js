@@ -11,4 +11,8 @@ app.controller('MainCtrl', function($rootScope, $location, Session) {
   });
 
 
+  if (!Session.isLogged()) {
+    $location.path('/login');
+  }
+
 });
