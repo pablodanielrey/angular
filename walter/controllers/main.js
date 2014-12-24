@@ -13,4 +13,8 @@ app.controller('MainCtrl', function($rootScope, $location, Session) {
     $location.path('/menu');
   });
 
+  $rootScope.$on('logoutOk',function(event,data) {
+    $location.path('/main');
+  });
+
 });

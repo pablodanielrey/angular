@@ -5,7 +5,7 @@ var app = angular.module('mainApp');
  * @param $scope Scope
  * Supone la existencia de un elemento padre que maneja los eventos dontShowMessage y showMessage para administrar mensajes
  */
-app.controller("LoginCtrl", function($rootScope, $scope, $location, WebSocket, Session){
+app.controller("LoginCtrl", function($rootScope, $scope, $location, WebSocket, Session, Utils){
 
 		$scope.user = { username: '', password: ''};
 
@@ -15,8 +15,7 @@ app.controller("LoginCtrl", function($rootScope, $scope, $location, WebSocket, S
 		 * autenticar usuario
 		 */
 		$scope.login = function() {
-			var id =  (Math.floor((Math.random() * 1000000000) + 1)).toString();
-			ids[id] = true;
+			var id =  Utils.getId();
 
 			var data = {
 				"id" : id,
@@ -25,6 +24,7 @@ app.controller("LoginCtrl", function($rootScope, $scope, $location, WebSocket, S
 				"action" : "login",
 			}
 
+			ids[id] = true;
 			WebSocket.send(JSON.stringify(data));
 		};
 

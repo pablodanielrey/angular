@@ -24,6 +24,10 @@ app.config(['$routeProvider',
         templateUrl: 'views/menu.html',
       })
 
+      .when('/resetPassword', {
+        templateUrl: 'views/resetPassword.html',
+      })
+
 	  .when('/createAccountRequest', {
 	    templateUrl: 'views/createAccountRequest.html',
       })
@@ -36,9 +40,6 @@ app.config(['$routeProvider',
 	  .when('/editProfile', {
 	    templateUrl: 'views/editProfile.html',
       })
-	  .when('/resetPassword', {
-	    templateUrl: 'views/resetPassword.html',
-      })
 	  .when('/changePassword', {
 	    templateUrl: 'views/changePassword.html',
       })
@@ -50,7 +51,7 @@ app.config(['$routeProvider',
 	    controller: 'TestCtrl'
       })
       .otherwise({
- 	redirectTo: '/main'
+ 	      redirectTo: '/main'
       });
   }
 ])

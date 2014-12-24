@@ -25,7 +25,7 @@ app.controller('LogoutCtrl', function($scope, Session, WebSocket, Utils) {
     }
 
     Session.destroy();
-    $scope.$emit('routeEvent','#/index');
+    $scope.$emit('logoutOk','');
   });
 
 });
