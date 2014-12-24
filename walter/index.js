@@ -12,8 +12,8 @@ app.controller('IndexCtrl', function ($rootScope, $location, Session) {
       var response = JSON.parse(data);
 
       // analizo el tipo de evento desde el server.
-      if ((response.type != undefined) && (response.type == 'routeEvent')) {
-        $rootScope.$emit('routeEvent',response.data);
+      if (response.type != undefined) {
+        $rootScope.$broadcast(response.type,response.data);
         return;
       }
 

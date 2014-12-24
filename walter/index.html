@@ -20,6 +20,7 @@
   <script type="text/javascript" src="controllers/menu.js"></script>
   <script type="text/javascript" src="controllers/login.js"></script>
   <script type="text/javascript" src="controllers/logout.js"></script>
+  <script type="text/javascript" src="controllers/chat.js"></script>
 
   <!-- vistas -->
   <link rel="stylesheet" type="text/css" href="views/css/login.css" />
@@ -40,6 +41,9 @@
   </div>
   <div ng-controller="IndexCtrl">
     <div ng-view></div>
+  </div>
+  <div ng-controller="ChatCtrl">
+    <ng-include src="'views/chat.html'"/>
   </div>
 </body>
 </html>
