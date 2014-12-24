@@ -21,6 +21,7 @@ app.config(['$routeProvider',
       })
 
 /*
+      // ya no es necesaria esta ruta ya que se incluye dentro del index.html dentro de un div aparte.
       .when('/menu', {
         templateUrl: 'views/menu.html',
       })

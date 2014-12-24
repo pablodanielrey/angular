@@ -16,5 +16,10 @@ app.factory('Session', ["$rootScope", "$cookies", "$location", function($rootSco
 		return $cookies.fceSession;
 	}
 
+	factory.isLogged = function() {
+		var sid = this.getSessionId();
+		return (!((sid == undefined) || (sid == '') || (sid == null) || (sid == false)));
+	}
+
 	return factory;
 }]);

@@ -5,14 +5,20 @@ var app = angular.module('mainApp',['ngRoute','ngCookies']);
 
 // agrego el controlador principal.
 
-app.controller('IndexCtrl',
-
-  function ($rootScope, $location, Session) {
+app.controller('IndexCtrl', function ($rootScope, $location, Session) {
 
     // mensajes que vienen del socket.
-    $rootScope.$on('onMessageSocket', function(event, data) {
+    $rootScope.$on('onSocketMessage', function(event, data) {
       var response = JSON.parse(data);
 
+      // analizo el tipo de evento desde el server.
+      if ((response.type != undefined) && (response.type == 'routeEvent')) {
+        $rootScope.$emit('routeEvent',response.data);
+        return;
+      }
+
+
+      // es un mensaje de datos asi que lo proceso normalmente.
       if(response.id == undefined) {
         alert('la respuesta no tiene id : ' + data);
         return;
@@ -33,9 +39,36 @@ app.controller('IndexCtrl',
     });
 
 
+/*
+    $rootScope.$on('$routeChangeStart', function(event, next, current) {
+      if (!Session.isLogged()) {
+//        event.preventDefault();
+        $location.path('/login');
+      }
+    });
+*/
+
+
+/*
+    // chequeo que cuando se cambia la navegación se este logueado. si no que vaya a la pantalla de login.
+    $rootScope.$on('$afterRouteChange', function(current, previous) {
+      alert("afterroutechange");
+      if (!Session.isLogged()) {
+        $location.path('/login');
+      }
+    });
+
+    // chequeo que cuando se cambia la navegación se este logueado. si no que vaya a la pantalla de login.
+    $rootScope.$on('$afterLocationChange', function(current, previous) {
+      alert("afterlocationchange");
+      if (!Session.isLogged()) {
+        $location.path('/login');
+      }
+    });
+*/
+
+
     // la vista por defecto.
     $location.path('/main');
 
-  }
-
-);
+});
