@@ -28,4 +28,6 @@ app.controller('LogoutCtrl', function($scope, Session, WebSocket, Utils) {
     $scope.$emit('logoutOk','');
   });
 
+  $scope.logout();
+
 });

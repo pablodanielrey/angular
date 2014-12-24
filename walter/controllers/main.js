@@ -6,15 +6,16 @@ app.controller('MainCtrl', function($rootScope, $location, Session) {
   if ((sid == undefined) || (sid == '') || (sid == null) || (sid == false)) {
     $location.path('/login');
   } else {
-    $location.path('/menu');
+    $location.path('/main');
   }
 
   $rootScope.$on('loginOk',function(event,data) {
-    $location.path('/menu');
+    $location.path('/main');
   });
 
   $rootScope.$on('logoutOk',function(event,data) {
     $location.path('/main');
   });
+
 
 });

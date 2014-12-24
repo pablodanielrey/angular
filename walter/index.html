@@ -17,6 +17,7 @@
   <!-- controladores -->
   <script type="text/javascript" src="controllers/test.js"></script>
   <script type="text/javascript" src="controllers/main.js"></script>
+  <script type="text/javascript" src="controllers/menu.js"></script>
   <script type="text/javascript" src="controllers/login.js"></script>
   <script type="text/javascript" src="controllers/logout.js"></script>
 
@@ -34,9 +35,9 @@
 
 </head>
 <body>
-  <header>
-    <h1> prueba de header </h1>
-  </header>
+  <div ng-controller="MenuCtrl">
+    <ng-include src="'views/menu.html'"/>
+  </div>
   <div ng-controller="IndexCtrl">
     <div ng-view></div>
   </div>

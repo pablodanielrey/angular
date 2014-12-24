@@ -32,6 +32,10 @@ app.controller('IndexCtrl',
       $location.path(data);
     });
 
+
+    // la vista por defecto.
+    $location.path('/main');
+
   }
 
 );
