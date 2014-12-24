@@ -20,9 +20,11 @@ app.config(['$routeProvider',
          controller: 'LogoutCtrl'
       })
 
+/*
       .when('/menu', {
         templateUrl: 'views/menu.html',
       })
+*/
 
       .when('/resetPassword', {
         templateUrl: 'views/resetPassword.html',
