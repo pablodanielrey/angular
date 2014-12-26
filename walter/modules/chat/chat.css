@@ -11,17 +11,17 @@
 
 .chat-hide {
   transform: translate3d(0,0,0);
-  transition: all 1s ease;
+  transition: all 2s ease;
 }
 
 .chat-my-message {
   transform: translate3d(260px,0,0);
-  transition: all 1s ease;
+  transition: all 2s ease;
 }
 
 .chat-show {
   transform: translate3d(260px,0,0);
-  transition: all 1s ease;
+  transition: all 2s ease;
 }
 
 
