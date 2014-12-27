@@ -1,15 +1,23 @@
 <div class='chat-shower' ng-mouseover='showChat()'>
 </div>
 <div class='chat' ng-class='cclass'>
-  <div>
-    <label>Ingrese texto a enviar</label>
-    <input type='text' ng-model='new_message.text'/>
-    <button type='button' ng-click='sendMessage()'>Enviar</button>
+  <!-- <div class='chat-header' ng-mousedown='moving()' ng-mouseup='notmoving()'> -->
+  <div class='chat-header'>
+    <button class='close' ng-click='closeChat()'>X</button>
+    <button class='minimize' ng-click='minimizeChat()'>_</button>
+    <button class='maximize' ng-click='maximizeChat()'>[]</button>
   </div>
-  <div>
-    <label>Mensajes</label>
-    <li ng-repeat='message in messages'>
-      <ul>{{message.data}}</ul>
-    </li>
+  <div class='chat-messages' ng-class='cmessages'>
+    <div>
+      <label>Ingrese texto a enviar</label>
+      <input type='text' ng-model='new_message.text'/>
+      <button type='button' ng-click='sendMessage()'>Enviar</button>
+    </div>
+    <div>
+      <label>Mensajes</label>
+      <li ng-repeat='message in messages'>
+        <ul>{{message.data}}</ul>
+      </li>
+    </div>
   </div>
 </div>
