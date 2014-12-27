@@ -2,10 +2,20 @@ var app = angular.module('mainApp');
 
 app.controller('ChatCtrl', function($rootScope, $scope, WebSocket, Utils) {
 
+
+  remove = function(array, element) {
+    for (var i = 0; i < array.length; i++) {
+      if (array[i] == element) {
+        array.slice(i,1);
+        break;
+      }
+    }
+  }
+
   var delay = 1000;
   $scope.new_message = {'text':'escriba algo'};
   $scope.messages = [];
-  $scope.cclass = '';
+  $scope.cclass = [];
   $scope.cmessages = '';
   $scope.m = false;
 
@@ -28,16 +38,21 @@ app.controller('ChatCtrl', function($rootScope, $scope, WebSocket, Utils) {
       'data': $scope.new_message.text
     };
     WebSocket.send(JSON.stringify(msg));
-    $scope.cclass = 'chat-my-message';
+
+    remove($scope.cclass,'chat-show');
+    remove($scope.cclass,'chat-hide');
+    $scope.cclass.push('chat-my-message');
     $scope.cmessages = '';
   }
 
   $scope.showChat = function() {
-    $scope.cclass = 'chat-show';
+    remove($scope.cclass,'chat-hide');
+    $scope.cclass.push('chat-show');
   }
 
   $scope.hideChat = function() {
-    $scope.cclass = 'chat-hide';
+    remove($scope.cclass,'chat-show');
+    $scope.cclass.push('chat-hide');
   }
 
 
@@ -47,11 +62,13 @@ app.controller('ChatCtrl', function($rootScope, $scope, WebSocket, Utils) {
   }
 
   $scope.maximizeChat = function() {
-    $scope.cmessages = 'chat-maximize';
+    remove($scope.cclass,'chat-minimize');
+    $scope.cclass.push('chat-maximize');
   }
 
   $scope.minimizeChat = function() {
-    $scope.cmessages = 'chat-minimize';
+    remove($scope.cclass,'chat-maximize');
+    $scope.cclass.push('chat-minimize');
   }
 
 /*

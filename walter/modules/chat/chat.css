@@ -25,20 +25,21 @@
 }
 
 
+/* area donde se pasa el mouse por arriba y dispara el cambio de estilo para mostrar el chat */
+.chat-shower {
+  width: 100px;
+  height: 100px;
+  position: fixed;
+  top: 0px;
+  right: 0px;
+  z-index: 1000;
+  background-color: red;
+}
+
+
 .chat-hide {
   transform: translate3d(0,0,0);
   transition: all 2s ease;
-}
-
-
-.chat-minimize {
-  transform: scale(0);
-  transition: all 2s ease;
-}
-
-.chat-maximize {
-  transform: translate3d(500px,100px,0) rotate(360deg) scale(3);
-  transition: all 1s ease;
 }
 
 
@@ -53,13 +54,15 @@
 }
 
 
-/* area donde se pasa el mouse por arriba y dispara el cambio de estilo para mostrar el chat */
-.chat-shower {
-  width: 100px;
-  height: 100px;
-  position: fixed;
-  top: 0px;
-  right: 0px;
-  z-index: 1000;
-  background-color: red;
+
+/* estilos para minimizar y maximizar el chat */
+
+.chat-minimize {
+  transform: scale(0);
+  transition: all 2s ease;
+}
+
+.chat-maximize {
+  transform: translate3d(500px,100px,0) rotate(360deg) scale(3);
+  transition: all 1s ease;
 }
