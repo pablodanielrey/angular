@@ -11,12 +11,12 @@ app.config(['$routeProvider',
       })
 
       .when('/login', {
-	       templateUrl: 'views/login.html',
+	       templateUrl: 'modules/login/login.html',
          controller: 'LoginCtrl'
       })
 
 	    .when('/logout', {
-	       templateUrl: 'views/logout.html',
+	       templateUrl: 'modules/login/logout.html',
          controller: 'LogoutCtrl'
       })
 
