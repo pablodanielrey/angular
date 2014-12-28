@@ -1,0 +1,22 @@
+<div>
+	<div class="formularioderegistro">
+		<div class="logo">
+			<img src="views/img/logo.jpg" />
+		</div>
+		<div class="titulo_formulario">
+			<p>FORMULARIO DE REGISTRO</p>
+		</div>
+		<hr>
+		<div><label>Nombres</label></div>
+		<div><input class="input_name_formulario" type="text" ng-model="request.name" required></div>
+		<div><label>Apellidos</label></div>
+		<div><input class="input_apellido_formulario" type="text" ng-model="request.lastname" required> </div>
+		<div><label>DNI</label></div>
+		<div><input class="input_dni_formulario" type="text" ng-model="request.dni" required></div>
+		<div><label>Email</label></div>
+		<div><input class="input_email_formulario" type="text" ng-model="request.email" required></div>
+		<div><label>Motivo de la solicitud</label></div>
+		<div><textarea class="Input_motivo_formulario"ng-model="request.reason" required ></textarea>
+		<div><button class="boton_enviar_formulario" ng-click="createRequest()">Enviar</button></div>
+	</div>
+</div>

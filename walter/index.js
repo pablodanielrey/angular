@@ -7,24 +7,16 @@ var app = angular.module('mainApp',['ngRoute','ngCookies']);
 
 app.controller('IndexCtrl', function ($rootScope, $location, Session) {
 
-    // mensajes que vienen del socket.
+    // mensajes que vienen del socket. solo me interesan los eventos, las respuestas son procesadas por otro lado.
     $rootScope.$on('onSocketMessage', function(event, data) {
       var response = JSON.parse(data);
 
       // analizo el tipo de evento desde el server.
-      if (response.type != undefined) {
-        $rootScope.$broadcast(response.type,response.data);
+      if (response.type == undefined) {
         return;
       }
 
-
-      // es un mensaje de datos asi que lo proceso normalmente.
-      if(response.id == undefined) {
-        alert('la respuesta no tiene id : ' + data);
-        return;
-      }
-
-      $rootScope.$broadcast('onMessage', response);
+      $rootScope.$broadcast(response.type,response.data);
     });
 
 

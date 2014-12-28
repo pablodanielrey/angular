@@ -1,0 +1,21 @@
+
+.menu body, ul, li, h1, h2, span {
+  margin: 0;
+  padding: 0;
+}
+
+.menu ul {
+  list-style: none;
+}
+
+.menu {
+  float: right;
+}
+
+.display-menu {
+  display: inline;
+}
+
+.hide-menu {
+  display: none;
+}

@@ -1,32 +1,26 @@
 
 var app = angular.module('mainApp');
 
-app.controller('LogoutCtrl', function($scope, Session, WebSocket, Utils) {
-
-  var ids = new Array();
+app.controller('LogoutCtrl', function($scope, Session, Messages, Utils) {
 
   $scope.logout = function() {
-    var id = Utils.getId();
-    var session = Session.getSessionId();
-    var msg = {'id':id, 'action':'logout', 'session':session};
 
-    ids[id] = true;
-    WebSocket.send(JSON.stringify(msg));
+    var msg = {
+      id: Utils.getId(),
+      action: 'logout',
+      session: Session.getSessionId()
+    };
+
+    Messages.send(msg, function(response) {
+
+      if (response.ok != undefined) {
+        Session.destroy();
+        $scope.$emit('logoutOk','');
+      }
+
+    });
+
   };
-
-  $scope.$on('onMessage', function(event, data) {
-
-    if (ids[data.id] == undefined) {
-      return;
-    }
-
-    if (data.ok == undefined) {
-      return;
-    }
-
-    Session.destroy();
-    $scope.$emit('logoutOk','');
-  });
 
   $scope.logout();
 

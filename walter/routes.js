@@ -1,8 +1,8 @@
 
 var app = angular.module('mainApp')
 
-app.config(['$routeProvider',
-  function($routeProvider) {
+app.config(['$routeProvider', function($routeProvider) {
+
     $routeProvider
 
       .when('/main', {
@@ -20,20 +20,16 @@ app.config(['$routeProvider',
          controller: 'LogoutCtrl'
       })
 
-/*
-      // ya no es necesaria esta ruta ya que se incluye dentro del index.html dentro de un div aparte.
-      .when('/menu', {
-        templateUrl: 'views/menu.html',
+      .when('/createAccountRequest', {
+        templateUrl: 'modules/account/createAccountRequest.html',
+        controller: 'CreateAccountRequestCtrl'
       })
-*/
 
       .when('/resetPassword', {
         templateUrl: 'views/resetPassword.html',
       })
 
-	  .when('/createAccountRequest', {
-	    templateUrl: 'views/createAccountRequest.html',
-      })
+
 	  .when('/confirmAccountRequest', {
 	    templateUrl: 'views/confirmAccountRequest.html',
       })

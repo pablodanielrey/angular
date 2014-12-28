@@ -1,6 +1,6 @@
 
-<div class="menu">
-  <ul id="slidingMenu" class="slidingMenu" style="display:{{menuDisplay}}">
+<div class="menu" ng-class="{true:'display-menu',false:'hide-menu'}[isMenuVisible()]">
+  <ul>
     <li><a href="#/main">Principal</a></li>
     <li><a href="#/changePassword">Cambiar Clave</a></li>
     <li><a href="#/resetPassword">Olvidé la clave</a></li>

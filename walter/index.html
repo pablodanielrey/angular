@@ -11,34 +11,32 @@
 
   <!-- servicios -->
   <script type="text/javascript" src="services/Utils.js"></script>
-  <script type="text/javascript" src="services/WebSocket.js"></script>
   <script type="text/javascript" src="services/Session.js"></script>
+  <script type="text/javascript" src="services/WebSocket.js"></script>
+  <script type="text/javascript" src="services/Messages.js"></script>
+
 
   <!-- controladores -->
   <script type="text/javascript" src="controllers/test.js"></script>
   <script type="text/javascript" src="controllers/main.js"></script>
-  <script type="text/javascript" src="controllers/menu.js"></script>
+  <script type="text/javascript" src="modules/menu/menu.js"></script>
   <script type="text/javascript" src="modules/login/login.js"></script>
   <script type="text/javascript" src="modules/login/logout.js"></script>
   <script type="text/javascript" src="modules/chat/chat.js"></script>
+  <script type="text/javascript" src="modules/account/createAccountRequest.js"></script>
 
   <!-- vistas -->
   <link rel="stylesheet" type="text/css" href="modules/chat/chat.css" />
   <link rel="stylesheet" type="text/css" href="modules/login/login.css" />
-  <link rel="stylesheet" type="text/css" href="views/css/logout.css" />
-  <link rel="stylesheet" type="text/css" href="views/css/menu.css" />
-  <link rel="stylesheet" type="text/css" href="views/css/createAccountRequest.css" />
-  <link rel="stylesheet" type="text/css" href="views/css/confirmAccountRequest.css" />
-  <link rel="stylesheet" type="text/css" href="views/css/editUsers.css" />
-  <link rel="stylesheet" type="text/css" href="views/css/editProfile.css" />
-  <link rel="stylesheet" type="text/css" href="views/css/resetPassword.css" />
-  <link rel="stylesheet" type="text/css" href="views/css/changePassword.css" />
-  <link rel="stylesheet" type="text/css" href="views/css/editGroups.css" />
+  <link rel="stylesheet" type="text/css" href="modules/login/logout.css" />
+  <link rel="stylesheet" type="text/css" href="modules/menu/menu.css" />
+  <link rel="stylesheet" type="text/css" href="modules/account/createAccountRequest.css" />
+
 
 </head>
 <body>
   <div ng-controller="MenuCtrl">
-    <ng-include src="'views/menu.html'"/>
+    <ng-include src="'modules/menu/menu.html'"/>
   </div>
   <div ng-controller="IndexCtrl">
     <div ng-view></div>
