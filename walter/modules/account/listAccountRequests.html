@@ -1,0 +1,19 @@
+<table>
+	<tr>
+		<th>NOMBRES</th>
+		<th>APELLIDOS</th>
+		<th>DNI</th>
+		<th>EMAIL</th>
+		<th>OPCIONES</th>
+	</tr>
+	<tr ng-repeat="request in requests">
+		<td>{{request.name}}</td>
+		<td>{{request.lastname}}</td>
+		<td>{{request.dni}}</td>
+		<td>{{request.email}}</td>
+		<td>{{request.reason}}</td>
+		<td>
+			<button ng-click="approveAccount(account.id)">Aprobar</button>
+		</td>
+	</tr>
+</table>

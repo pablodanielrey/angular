@@ -25,6 +25,11 @@ app.config(['$routeProvider', function($routeProvider) {
         controller: 'CreateAccountRequestCtrl'
       })
 
+      .when('/listAccountRequests', {
+        templateUrl: 'modules/account/listAccountRequests.html',
+        controller: 'ListAccountRequestsCtrl'
+      })
+
       .when('/resetPassword', {
         templateUrl: 'views/resetPassword.html',
       })
