@@ -23,38 +23,20 @@ app.controller("ListAccountRequestsCtrl", function($rootScope, $scope, Messages,
 
 	}
 
+	$scope.approveRequest = function(accountId){
 
-
-	$scope.approveAccount = function(accountId){
-		var id = uuid4.generate();
-		ids[id] = "aprobeCreateRequest";
-
-		var data = {
-			"id" : id,
+		var msg = {
+			"id" : Utils.getId(),
 			"reqId" : accountId,
 			"session" : Session.getSessionId(),
-			"action" : "aprobeCreateRequest",
+			"action" : "aprobeRequest",
 		};
 
+		Messages.send(msg,function(response) {
+				$scope.listAccountRequests();
+		});
+
 	};
-
-	$scope.approveSelectedAccounts = function(){
-		alert("en construccion");
-	};
-
-	$scope.selectAccount = function(accountId){
-		var idRow = document.getElementById("account"+accountId);
-
-		if(accountsSelected[accountId] == undefined){
-			accountsSelected[accountId] = true;
-			idRow.className = "selected";
-		} else {
-			delete accountsSelected[accountId];
-			idRow.className = "";
-		}
-	};
-
-
 
 	$scope.listAccountRequests();
 
