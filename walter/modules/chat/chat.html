@@ -1,8 +1,9 @@
 <div class='chat-shower' ng-mouseover='showChat()'>
+  <p>mostrar chat</p>
 </div>
 <div class='chat' ng-class="{true:'chat-show',false:'chat-hide'}[isChatVisible()]">
   <div class='chat-translator' ng-class="{true:'maximized',false:'minimized'}[isMaximized()]">
-    <div class='chat-header'>
+    <div class='chat-header' ng-class="{true:'blink',false:''}[blink]" >
       <button class='close' ng-click='closeChat()'>X</button>
       <button class='minimize' ng-click='minimizeChat()'>_</button>
       <button class='maximize' ng-click='maximizeChat()'>[]</button>

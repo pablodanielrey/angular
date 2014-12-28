@@ -1,11 +1,12 @@
 var app = angular.module('mainApp');
 
-app.controller('ChatCtrl', function($rootScope, $scope, WebSocket, Utils) {
+app.controller('ChatCtrl', function($rootScope, $scope, $timeout, WebSocket, Utils) {
 
   $scope.new_message = {'text':''};
   $scope.chatVisible = false;
   $scope.maximized = true;
   $scope.messages = [];
+  $scope.blink = false;
 
   $scope.$on('ChatMessage', function(event,data) {
     var message = {'text':data}
@@ -14,6 +15,12 @@ app.controller('ChatCtrl', function($rootScope, $scope, WebSocket, Utils) {
     if (!$scope.chatVisible) {
       $scope.chatVisible = true;
     }
+
+    /* resuelvo el tema del estilo css y la animación con un timeout. pedorro pero funca. */
+    $scope.blink = true;
+    $timeout(function() {
+      $scope.blink = false;
+    },2000);
   });
 
 
