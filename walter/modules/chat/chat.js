@@ -2,30 +2,16 @@ var app = angular.module('mainApp');
 
 app.controller('ChatCtrl', function($rootScope, $scope, WebSocket, Utils) {
 
-
-  remove = function(array, element) {
-    for (var i = 0; i < array.length; i++) {
-      if (array[i] == element) {
-        array.slice(i,1);
-        break;
-      }
-    }
-  }
-
-  var delay = 1000;
-  $scope.new_message = {'text':'escriba algo'};
+  $scope.new_message = {'text':''};
+  $scope.chatVisible = false;
   $scope.messages = [];
-  $scope.cclass = [];
-  $scope.cmessages = '';
-  $scope.m = false;
 
   $scope.$on('ChatMessage', function(event,data) {
-    var message = {'data':data}
+    var message = {'text':data}
     $scope.messages.push(message);
-    if ($scope.cclass == 'chat-my-message') {
-      $scope.hideChat();
-    } else {
-      $scope.showChat();
+
+    if (!$scope.chatVisible) {
+      $scope.chatVisible = true;
     }
   });
 
@@ -39,36 +25,27 @@ app.controller('ChatCtrl', function($rootScope, $scope, WebSocket, Utils) {
     };
     WebSocket.send(JSON.stringify(msg));
 
-    remove($scope.cclass,'chat-show');
-    remove($scope.cclass,'chat-hide');
-    $scope.cclass.push('chat-my-message');
-    $scope.cmessages = '';
+    $scope.new_message.text = '';
+  }
+
+  $scope.isChatVisible = function() {
+    return $scope.chatVisible;
   }
 
   $scope.showChat = function() {
-    remove($scope.cclass,'chat-hide');
-    $scope.cclass.push('chat-show');
+    $scope.chatVisible = true;
   }
-
-  $scope.hideChat = function() {
-    remove($scope.cclass,'chat-show');
-    $scope.cclass.push('chat-hide');
-  }
-
 
   $scope.closeChat = function() {
-    $scope.cmessages = '';
-    $scope.hideChat();
-  }
-
-  $scope.maximizeChat = function() {
-    remove($scope.cclass,'chat-minimize');
-    $scope.cclass.push('chat-maximize');
+    $scope.chatVisible = false;
   }
 
   $scope.minimizeChat = function() {
-    remove($scope.cclass,'chat-maximize');
-    $scope.cclass.push('chat-minimize');
+
+  }
+
+  $scope.maximizeChat = function() {
+
   }
 
 /*
