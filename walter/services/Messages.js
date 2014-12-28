@@ -23,6 +23,7 @@ app.factory('Messages', function($rootScope, WebSocket) {
     for (var i = 0; i < factory.ids.length; i++) {
       if (this.ids[i].id == response.id) {
         this.ids[i].callback(response);
+        this.ids.splice(i,1);                   // remuevo el id ya que la respuesta ya se proceso.
         break;
       }
     }
