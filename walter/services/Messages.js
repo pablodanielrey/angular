@@ -6,6 +6,10 @@ app.factory('Messages', function($rootScope, WebSocket) {
   var factory = {};
   factory.ids = [];
 
+  factory.send = function(msg) {
+    WebSocket.send(JSON.stringify(msg));
+  }
+
   factory.send = function(msg, callback) {
     this.ids.push({
       id:msg.id,

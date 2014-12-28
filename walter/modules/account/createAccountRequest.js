@@ -12,8 +12,6 @@ app.controller('CreateAccountRequestCtrl', function($scope, Messages, Utils, Ses
           reason:''
   };
 
-  $scope.ids = [];
-
   $scope.createRequest = function() {
 
     var msg = {
@@ -24,7 +22,9 @@ app.controller('CreateAccountRequestCtrl', function($scope, Messages, Utils, Ses
     };
 
     Messages.send(msg, function(response) {
-      alert('groso');
+
+      alert('Pedido de cuenta creado correctamente, se confirmará mediante un mail a su dirección de correo');
+
     });
 
     clearRequest();

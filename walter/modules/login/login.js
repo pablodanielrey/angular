@@ -18,6 +18,7 @@ app.controller("LoginCtrl", function($rootScope, $scope, $location, Messages, Se
 			}
 
 			Messages.send(msg, function(response) {
+
 				if(response.session != undefined) {
 					// logueo al usuario con el id de sesion retornado por el server.
 					Session.create(response.session);
