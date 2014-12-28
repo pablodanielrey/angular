@@ -43,7 +43,7 @@
 }
 
 .chat-show {
-  transform: translate3d(260px,0,0);
+  transform: translate3d(100%,0,0);
   transition: all 0.5s ease;
 }
 
@@ -51,12 +51,21 @@
 
 /* estilos para minimizar y maximizar el chat */
 
+.minimized {
+  transform: translate3d(0,800px,0);
+  transition: all 0.5s;
+}
+
+.maximized {
+  transform: translate3d(0,0,0);
+  transition: all 0.5s;
+}
+
 .chat-minimize {
   transform: scale(0);
-  transition: all 2s ease;
+  transition: all 0.5s ease;
 }
 
 .chat-maximize {
-  transform: translate3d(500px,100px,0) rotate(360deg) scale(3);
-  transition: all 1s ease;
+  transition: all 0.5s ease;
 }

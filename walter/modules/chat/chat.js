@@ -4,6 +4,7 @@ app.controller('ChatCtrl', function($rootScope, $scope, WebSocket, Utils) {
 
   $scope.new_message = {'text':''};
   $scope.chatVisible = false;
+  $scope.maximized = true;
   $scope.messages = [];
 
   $scope.$on('ChatMessage', function(event,data) {
@@ -32,6 +33,10 @@ app.controller('ChatCtrl', function($rootScope, $scope, WebSocket, Utils) {
     return $scope.chatVisible;
   }
 
+  $scope.isMaximized = function() {
+    return $scope.maximized;
+  }
+
   $scope.showChat = function() {
     $scope.chatVisible = true;
   }
@@ -41,11 +46,11 @@ app.controller('ChatCtrl', function($rootScope, $scope, WebSocket, Utils) {
   }
 
   $scope.minimizeChat = function() {
-
+    $scope.maximized = false;
   }
 
   $scope.maximizeChat = function() {
-
+    $scope.maximized = true;
   }
 
 /*
