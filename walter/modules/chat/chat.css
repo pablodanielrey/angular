@@ -27,13 +27,17 @@
 
 /* area donde se pasa el mouse por arriba y dispara el cambio de estilo para mostrar el chat */
 .chat-shower {
-  width: 50px;
-  height: 50px;
   position: fixed;
   top: 0px;
   right: 0px;
   z-index: 1000;
+}
 
+.chat-shower p {
+  color: red;
+  border: 1px;
+  font-family: "Times New Roman", Times, serif;
+  font-size: 2em;
 }
 
 
