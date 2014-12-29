@@ -10,7 +10,7 @@
   transition: all 0.3s ease;
 }
 
-.selected {
+.user.selected {
   transition: all 0.5s ease;
   color: red;
   background-color: black;
