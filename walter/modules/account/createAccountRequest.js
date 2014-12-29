@@ -23,7 +23,12 @@ app.controller('CreateAccountRequestCtrl', function($scope, Messages, Utils, Ses
 
     Messages.send(msg, function(response) {
 
-      alert('Pedido de cuenta creado correctamente, se confirmará mediante un mail a su dirección de correo');
+      if (response.ok == undefined) {
+        alert('error creando el pedido');
+      } else {
+        alert('Pedido de cuenta creado correctamente, se confirmará mediante un mail a su dirección de correo');
+      }
+
 
     });
 
