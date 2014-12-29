@@ -30,30 +30,16 @@ app.config(['$routeProvider', function($routeProvider) {
         controller: 'ListAccountRequestsCtrl'
       })
 
-      .when('/resetPassword', {
-        templateUrl: 'views/resetPassword.html',
+      .when('/listUsers', {
+        templateUrl: 'modules/users/listUsers.html',
+        controller: 'ListUsersCtrl'
       })
 
+      .when('/editUsers', {
+        templateUrl: 'modules/users/editUsers.html',
+        controller: 'EditUsersCtrl'
+      })
 
-	  .when('/confirmAccountRequest', {
-	    templateUrl: 'views/confirmAccountRequest.html',
-      })
-	  .when('/editUsers', {
-	    templateUrl: 'views/editUsers.html',
-      })
-	  .when('/editProfile', {
-	    templateUrl: 'views/editProfile.html',
-      })
-	  .when('/changePassword', {
-	    templateUrl: 'views/changePassword.html',
-      })
-	  .when('/editGroups', {
-	    templateUrl: 'views/editGroups.html',
-      })
-      .when('/test', {
-	    templateUrl: 'views/test.html',
-	    controller: 'TestCtrl'
-      })
       .otherwise({
  	      redirectTo: '/main'
       });
