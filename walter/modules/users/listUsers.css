@@ -1,17 +1,17 @@
 
 .user {
   border: solid 2px;
-  border-color: red;
+  border-color: blue;
   width: 300px;
 }
 
 .user:hover {
-  transform: translate3d(5%,0,0);
+  transform: translate3d(5%,5%,0);
   transition: all 0.3s ease;
 }
 
 .user.selected {
   transition: all 0.5s ease;
-  color: red;
+  color: white;
   background-color: black;
 }
