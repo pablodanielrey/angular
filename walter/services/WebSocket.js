@@ -9,7 +9,7 @@ app.factory('WebSocket', ['$rootScope',
 		factory.registerHandlers = function() {
 
 			// abro el socket y registro los handlers de los eventos.
-			this.socket = new WebSocket("ws://localhost:8001");
+			this.socket = new WebSocket("ws://192.168.0.100:8001");
 
 			this.socket.onopen = function(msg){
 				$rootScope.$apply(function () {

@@ -1,7 +1,23 @@
 
+
+/*
+	Lista de los pedidos de creación de cuentas de la facultad.
+
+	eventos soportados :
+
+		NewAccountRequestEvent
+
+
+*/
+
+
 app.controller("ListAccountRequestsCtrl", function($rootScope, $scope, Messages, Session, Utils) {
 
 	$scope.requests = [];
+
+	$scope.$on('NewAccountRequestEvent', function(event,data) {
+		$scope.listAccountRequests();
+	});
 
 	$scope.listAccountRequests = function() {
 
@@ -29,7 +45,7 @@ app.controller("ListAccountRequestsCtrl", function($rootScope, $scope, Messages,
 			"id" : Utils.getId(),
 			"reqId" : accountId,
 			"session" : Session.getSessionId(),
-			"action" : "aprobeRequest",
+			"action" : "aprobeAccountRequest",
 		};
 
 		Messages.send(msg,function(response) {

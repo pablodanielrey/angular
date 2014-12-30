@@ -35,6 +35,11 @@ app.config(['$routeProvider', function($routeProvider) {
         controller: 'ListUsersCtrl'
       })
 
+      .when('/editProfile', {
+        templateUrl: 'modules/users/editProfile.html',
+        controller: 'EditProfileCtrl'
+      })
+
       .when('/editUsers', {
         templateUrl: 'modules/users/editUsers.html',
         controller: 'EditUsersCtrl'
