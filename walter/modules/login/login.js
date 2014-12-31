@@ -7,7 +7,10 @@ var app = angular.module('mainApp');
  */
 app.controller("LoginCtrl", function($rootScope, $scope, $location, Messages, Session, Utils){
 
-		$scope.user = { username: '', password: ''};
+		$scope.user = {
+			username: '',
+			password: ''
+		};
 
 		$scope.login = function() {
 			var msg = {
@@ -21,7 +24,12 @@ app.controller("LoginCtrl", function($rootScope, $scope, $location, Messages, Se
 
 				if(response.session != undefined) {
 					// logueo al usuario con el id de sesion retornado por el server.
-					Session.create(response.session);
+
+					var data = {
+						user_id: response.user_id
+					}
+
+					Session.create(response.session, data);
 					$scope.$emit('loginOk','');
 				} else {
 					$scope.$emit('loginError','');

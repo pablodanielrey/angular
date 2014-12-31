@@ -1,25 +1,48 @@
 var app = angular.module('mainApp');
 
-app.factory('Session', ["$rootScope", "$cookies", "$location", function($rootScope, $cookies, $location) {
+app.factory('Session', function($window) {
 
 	var factory = {};
 
-	factory.create = function(session){
-		$cookies.fceSession = session;
+	factory.sessionIdentifier = 'sessionId';
+
+	factory.getStorage = function() {
+		return $window['localStorage'];
+	}
+
+	factory.create = function(session, data) {
+		s = this.getStorage();
+		s.setItem(this.sessionIdentifier,session);
+		s.setItem(session,JSON.stringify(data));
 	}
 
 	factory.destroy = function(){
-		$cookies.fceSession = "";
+		s = this.getStorage();
+		var sid = s.getItem(this.sessionIdentifier);
+		s.removeItem(sid);
+		s.removeItem(this.sessionIdentifier);
 	};
 
 	factory.getSessionId = function(){
-		return $cookies.fceSession;
+		s = this.getStorage();
+		return s.getItem(this.sessionIdentifier);
 	}
 
 	factory.isLogged = function() {
 		var sid = this.getSessionId();
-		return (!((sid == undefined) || (sid == '') || (sid == null) || (sid == false)));
+		if (sid == null) {
+			return false;
+		}
+
+		s = this.getStorage();
+		json_data = s.getItem(sid);
+		if (json_data == null) {
+			return false;
+		}
+
+		var data = JSON.parse(json_data);
+		return (data.user_id != undefined);
 	}
 
 	return factory;
-}]);
+});
