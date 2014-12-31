@@ -1,6 +1,16 @@
+
+/*
+  Lista los usuarios del sistema.
+
+  eventos :
+
+    UserSelectedEvent
+
+*/
+
 var app = angular.module('mainApp');
 
-app.controller('ListUsersCtrl',function($scope, Messages, Utils, Session) {
+app.controller('ListUsersCtrl',function($rootScope, $scope, Messages, Utils, Session) {
 
   $scope.users = [];
   $scope.selected = '';
@@ -11,6 +21,7 @@ app.controller('ListUsersCtrl',function($scope, Messages, Utils, Session) {
 
   $scope.selectUser = function(id) {
     $scope.selected = id;
+    $rootScope.$broadcast('UserSelectedEvent',id);
   }
 
   $scope.listUsers = function() {

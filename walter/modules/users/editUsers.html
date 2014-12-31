@@ -1,57 +1,8 @@
-<div>
-		<div class="editUsers_search">
-			<div class="editUsers_search_container">
-				<div><input class="editUsers_search_imput" type="search" name="search" ng-model="search"></div>
-			</div>
-			<div class="editUsers_post">
-				<div class="editUsers_column1">
-					<div><input type="checkbox" name="post" value="estudiante"><label> Estudiante</label></div>
-					<div><input type="checkbox" name="post" value="docente"><label> Docente</label></div>
-					<div><input type="checkbox" name="post" value="docente"><label> Graduado</label></div>
-				</div>
-				<div class="editUsers_column1">
-					<div><input type="checkbox" name="post" value="posgrado"><label> Posgrado</label></div>
-					<div><input type="checkbox" name="post" value="nodocente"><label> NoDocente</label></div>
-					<div><input type="checkbox" name="post" value="visitante"><label> Visitante</label></div>
-				</div>
-			</div>
-			<div class="editUsers_list_resultados">
-				<div class="editUsers_resultados"><p>Resultados Encontrados</p><hr></div>
-			</div>
-		</div>
-		<div class="editUsers_user">
-			<div><label class="editUsers_user">Nombres</label></div><div><input type="text" name="name" ng-model="name"><br></div>
-			<div><label class="editUsers_lastname">Apellidos</label></div><div><input type="text" name="lastname" ng-model="lastname"><br></div>
-			<div><label class="editUsers_genre">Género:</label></div>
-			<div><select name="editUsers_genre_option" ng-model="genre">
-			  <option value="female">Femenino</option>
-			  <option value="mens">Masculino</option>
-  			  <option value="other">Otro</option>
-			</select>
-			</div>
-			<div><label class="editUsers_dni">DNI</label></div><div><input type="text" name="dni" ng-model="dni"><br></div>
-			<div><label class="editUsers_studentNumber">Legajo</label></div><div><input type="text" name="studentNumber" ng-model="studentNumber"><br></div>
-			<div><label class="editUsers_telefone">Teléfono</label></div><div><input type="text" name="telephone" ng-model="telephone"><br></div>
-			<div><label class="editUsers_bornCity">Ciudad de Origen</label></div><div><input type="text" name="bornCity" ng-model="bornCity"><br></div>
-			<div><label class="editUsers_country">Ciudad de Residencia</label></div><div><input type="text" name="country" ng-model="country"><br></div>
-			<div><label class="editUsers_addres">Dirección</label></div><div><input type="text" name="adress" ng-model="adress"><br></div>
-			<br><div><label>Mail</label><br><hr></div>
-				<div><label class="editUsers_personalEmail">Personal</label></div><div><input type="text" name="personalEmail" ng-model="personalEmail"><br></div>
-				<div><label class="editUsers_institucionalEmail">Institucional</label></div><div><input type="text" name="institucionalEmail" ng-model="institucionalEmail"><br></div>
-		</div>
-
-		<div class="editUsers_systems">
-		</div>
-
-		<div class="editUsers_systems">
-		</div>
-
-		<div class="editUsers_password">
-			<div><label>Contraseña</label><input class="editUsers_password" type="password" name="password" ng-model="password"></div>
-		</div>
-
-		<div class="editUsers_save">
-			<div><button class="editUsers_buttonGuardar" type="submit" ng-click="authenticate()"> Guardar</button></div>
-		</div>
-
+<div class='edit_users'>
+	<div class='user_list' ng-controller='ListUsersCtrl'>
+		<div ng-include="'modules/users/listUsers.html'"/>
+	</div>
+	<div class='user_profile' ng-controller='EditProfileCtrl'>
+		<div ng-include="'modules/users/editProfile.html'"/>
+	</div>
 </div>

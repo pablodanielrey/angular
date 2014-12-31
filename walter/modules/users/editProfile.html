@@ -1,24 +1,52 @@
 <div>
 		<div class="editProfile_container">
-			<div><label>Nombres</label><input class="editProfile_name" type="text" ng-model="name"><br></div>
-			<div><label>Apellidos</label><input class="editProfile_lastname" type="text" ng-model="lastname"><br></div>
-			<div><label>Género:</label>
-			<select class="editProfile_genre" name="genre" ng-model="genre">
-			  <option value="femenino">Femenino</option>
-			  <option value="masculino">Masculino</option>
-  			  <option value="otro">Otro</option>
-			</select>
-			</div>
-			<div><label>DNI</label><input class="editProfile_dni" type="text" ng-model="dni"><br></div>
-			<div><label>Legajo</label><input class="editProfile_studentNumber" type="text" ng-model="studentNumber"><br></div>
-			<div><label>Teléfono</label><input class="editProfile_telephone" type="text"  ng-model="telephone"><br></div>
-			<div><label>Ciudad de Origen</label><input class="editProfile_bornCity" type="text"  ng-model="bornCity"><br></div>
-			<div><label>Ciudad de Residencia</label><input class="editProfile_country" type="text"  ng-model="country"><br></div>
-			<div><label>Dirección</label><input class="editProfile_address" type="text" ng-model="address"><br></div>
-			<div><br><div><label>Mail</label><br><hr></div>
-				<div><label>Personal</label><input class="editProfile_personalEmail" type="text"  ng-model="personalEmail"><br></div>
-				<div><label>Institucional</label><input class="editProfile_institucionalEmail" type="text" ng-model="intitucionalemail"><br></div>
-			</div><br>
 			<div>
+				<label>Nombres</label>
+				<input class="editProfile_name" type="text" ng-model="user.name">
+			</div>
+			<div>
+				<label>Apellidos</label>
+				<input class="editProfile_lastname" type="text" ng-model="user.lastname">
+			</div>
+			<div>
+				<label>Género:</label>
+				<select class="editProfile_genre" ng-model="user.genre">
+				  <option value="femenino">Femenino</option>
+				  <option value="masculino">Masculino</option>
+	  			<option value="otro">Otro</option>
+				</select>
+			</div>
+			<div>
+				<label>DNI</label>
+				<input class="editProfile_dni" type="text" ng-model="user.dni">
+			</div>
+			<div>
+				<label>Legajo</label><input class="editProfile_studentNumber" type="text" ng-model="user.studentNumber">
+			</div>
+			<div>
+				<label>Teléfono</label><input class="editProfile_telephone" type="text"  ng-model="user.telephone">
+			</div>
+			<div>
+				<label>Ciudad de Origen</label><input class="editProfile_bornCity" type="text"  ng-model="user.bornCity">
+			</div>
+			<div>
+				<label>Ciudad de Residencia</label><input class="editProfile_country" type="text"  ng-model="user.country">
+			</div>
+			<div>
+				<label>Dirección</label><input class="editProfile_address" type="text" ng-model="user.address">
+			</div>
+			<div>
+				<div>
+					<label>Mail</label><hr>
+				</div>
+				<div>
+					<label>Personal</label>
+					<input class="editProfile_personalEmail" type="text"  ng-model="personalEmail">
+				</div>
+				<div>
+					<label>Institucional</label>
+					<input class="editProfile_institucionalEmail" type="text" ng-model="intitucionalemail">
+				</div>
+			</div>
 		</div>
 </div>
