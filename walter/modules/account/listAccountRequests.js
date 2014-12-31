@@ -6,6 +6,7 @@
 	eventos soportados :
 
 		NewAccountRequestEvent
+		AccountRequestApprovedEvent
 
 
 */
@@ -16,6 +17,10 @@ app.controller("ListAccountRequestsCtrl", function($rootScope, $scope, Messages,
 	$scope.requests = [];
 
 	$scope.$on('NewAccountRequestEvent', function(event,data) {
+		$scope.listAccountRequests();
+	});
+
+	$scope.$on('AccountRequestApprovedEvent', function(event,data) {
 		$scope.listAccountRequests();
 	});
 
@@ -45,7 +50,7 @@ app.controller("ListAccountRequestsCtrl", function($rootScope, $scope, Messages,
 			"id" : Utils.getId(),
 			"reqId" : accountId,
 			"session" : Session.getSessionId(),
-			"action" : "aprobeAccountRequest",
+			"action" : "approveAccountRequest",
 		};
 
 		Messages.send(msg,function(response) {
