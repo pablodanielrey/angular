@@ -19,9 +19,15 @@ app.controller('ListUsersCtrl',function($rootScope, $scope, $log, Messages, Util
 
   $scope.users = [];
   $scope.selected = '';
+  $scope.updating = '';
 
+  $scope.isUpdated = function(id) {
+    return ($scope.updating == id);
+  }
 
   $scope.$on('UserUpdatedEvent',function(event,data) {
+
+    $scope.updating = data;
 
     var id = data;
     var found = null;

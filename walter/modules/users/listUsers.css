@@ -15,3 +15,15 @@
   color: white;
   background-color: black;
 }
+
+@keyframes updated-animation {
+  0% { scale(1); }
+  50% { scale(1.5); }
+  100% { scale(1); }
+}
+
+.updated {
+  animation-name: updated-animation;
+  animation-duration: 4s;
+  animation-timing-function: linear;
+}

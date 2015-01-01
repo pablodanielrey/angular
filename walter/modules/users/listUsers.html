@@ -3,9 +3,11 @@
   <li ng-repeat='user in users'>
     <ul>
       <div class='user' ng-click='selectUser(user.id)' ng-class="{true:'selected',false:''}[isSelected(user.id)]">
-        <div>dni : {{user.dni}}</div>
-        <div>nombre : {{user.name}}</div>
-        <div>apellido : {{user.lastname}}</div>
+        <div ng-class="{true:'updated',false:''}[isUpdated(user.id)]">
+          <div>dni : {{user.dni}}</div>
+          <div>nombre : {{user.name}}</div>
+          <div>apellido : {{user.lastname}}</div>
+        </div>
     </div>
     </ul>
   </li>
