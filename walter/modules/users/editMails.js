@@ -66,11 +66,13 @@ app.controller('EditMailsCtrl', function($scope, Users) {
 
 
   $scope.sendConfirmation = function(id) {
-    for (var i = 0; i < $scope.mails.length; i++) {
-      if ($scope.mails[i].id == id) {
-        $scope.mails[i].confirmed = true;
-      }
-    }
+    Users.sendConfirmMail(id,
+      function(ok) {
+        alert('Se ha enviado un mail de confirmación a su casilla. por favor chequee su bandeja de entrada');
+      },
+      function(error) {
+        alert(error);
+      });
   }
 
   $scope.deleteMail = function(id) {

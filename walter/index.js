@@ -61,6 +61,6 @@ app.controller('IndexCtrl', function ($rootScope, $location, Session) {
 
 
     // la vista por defecto.
-    $location.path('/main');
+//    $location.path('/main');
 
 });

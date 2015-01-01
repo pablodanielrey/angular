@@ -45,6 +45,12 @@ app.config(['$routeProvider', function($routeProvider) {
         controller: 'EditUsersCtrl'
       })
 
+      .when('/confirmMail:hash', {
+        templateUrl: 'modules/users/confirmMail.html',
+        controller: 'ConfirmMailCtrl'
+      })
+
+
       .otherwise({
  	      redirectTo: '/main'
       });

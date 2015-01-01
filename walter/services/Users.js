@@ -6,6 +6,47 @@ app.factory('Users', function(Messages, Session, Utils) {
   var users = {};
 
   /*
+    Dispara la confirmación de un mail dado por el hash
+  */
+  users.confirmMail = function(hash, callbackOk, callbackError) {
+    var msg = {
+      id: Utils.getId(),
+      session: Session.getSessionId(),
+      action: 'confirmMail',
+      sub_action: 'confirm',
+      hash: hash
+    }
+    Messages.send(msg, function(response) {
+      if (response.error != undefined) {
+        callbackError(response.error);
+      } else {
+        callbackOk(response.ok);
+      }
+    });
+  }
+
+  /*
+    Envía un mail de confirmación al email dado por mail_id
+  */
+  users.sendConfirmMail = function(mail_id, callbackOk, callbackError) {
+    var msg = {
+      id: Utils.getId(),
+      session: Session.getSessionId(),
+      action: 'confirmMail',
+      sub_action: 'generate',
+      mail_id: mail_id,
+      url: document.URL
+    }
+    Messages.send(msg, function(response) {
+      if (response.error != undefined) {
+        callbackError(response.error);
+      } else {
+        callbackOk(response.ok);
+      }
+    });
+  }
+
+  /*
     Agrega un email a un usuario.
     formato de email :
     {
