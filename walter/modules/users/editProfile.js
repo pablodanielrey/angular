@@ -5,7 +5,6 @@ app.controller('EditProfileCtrl', function($scope, Session, Messages, Utils, Use
   $scope.user = {};
 
   $scope.$on('UserSelectedEvent', function(event,data) {
-
     $scope.user = {};
     Users.findUser(data,
       function(user) {
@@ -14,9 +13,18 @@ app.controller('EditProfileCtrl', function($scope, Session, Messages, Utils, Use
       function(error) {
         alert(error);
       });
-
   });
 
+  $scope.$on('UserUpdatedEvent', function(event,data) {
+    $scope.user = {};
+    Users.findUser(data,
+      function(user) {
+        $scope.user = user;
+      },
+      function(error) {
+        alert(error);
+      });
+  });
 
   $scope.update = function() {
     Users.updateUser($scope.user,
