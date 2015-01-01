@@ -5,6 +5,22 @@ app.factory('Users', function(Messages, Session, Utils) {
 
   var users = {};
 
+  users.deleteMail = function(id, callbackOk, callbackError) {
+    var msg = {
+      id: Utils.getId(),
+      session: Session.getSessionId(),
+      action: 'removeMail',
+      mail_id: id
+    }
+    Messages.send(msg, function(response) {
+      if (response.error != undefined) {
+        callbackError(response.error);
+      } else {
+        callbackOk(response.ok);
+      }
+    });
+  }
+
   /*
     Dispara la confirmación de un mail dado por el hash
   */

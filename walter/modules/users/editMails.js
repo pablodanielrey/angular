@@ -68,7 +68,7 @@ app.controller('EditMailsCtrl', function($scope, Users) {
   $scope.sendConfirmation = function(id) {
     Users.sendConfirmMail(id,
       function(ok) {
-        alert('Se ha enviado un mail de confirmación a su casilla. por favor chequee su bandeja de entrada');
+        alert('Se ha enviado un mail de confirmación a su casilla. por favor chequee su bandeja de entrada y la carpeta de correo no deseado');
       },
       function(error) {
         alert(error);
@@ -76,6 +76,13 @@ app.controller('EditMailsCtrl', function($scope, Users) {
   }
 
   $scope.deleteMail = function(id) {
+    Users.deleteMail(id,
+      function(ok) {
+        // no hago nada ya que se dispara un evento de UserUpdatedEvent
+      },
+      function(error) {
+        alert(error);
+      });
 
   }
 
