@@ -2,18 +2,55 @@
 /*
   Lista los usuarios del sistema.
 
-  eventos :
+  eventos disparados :
 
     UserSelectedEvent
+
+
+  eventos escuchados :
+
+    UserUpdatedEvent
 
 */
 
 var app = angular.module('mainApp');
 
-app.controller('ListUsersCtrl',function($rootScope, $scope, Messages, Utils, Session) {
+app.controller('ListUsersCtrl',function($rootScope, $scope, $log, Messages, Utils, Session, Users) {
 
   $scope.users = [];
   $scope.selected = '';
+
+
+  $scope.$on('UserUpdatedEvent',function(event,data) {
+
+    var id = data;
+    var found = null;
+    var pos = -1;
+
+    // busco el usuario dentro de la lista de usuarios
+    for (var i = 0; i < $scope.users.length; i++) {
+      var user = $scope.users[i];
+      if (user.id == id) {
+        found = user;
+        pos = i;
+        break;
+      }
+    }
+
+    if (found == null) {
+      $scope.listUsers();
+      return;
+    }
+
+    // busco los datos del usuario actualizado, en caso de error busco nuevamente la lista.
+    Users.findUser(found.id,
+      function(user) {
+        $scope.users[pos] = user;
+      },
+      function(error) {
+        $scope.listUsers();
+      });
+  });
 
   $scope.isSelected = function(id) {
     return ($scope.selected == id);
@@ -25,21 +62,13 @@ app.controller('ListUsersCtrl',function($rootScope, $scope, Messages, Utils, Ses
   }
 
   $scope.listUsers = function() {
-    var  msg = {
-      id: Utils.getId(),
-      action: 'listUsers',
-      session: Session.getSessionId()
-    };
-    Messages.send(msg, function(response) {
-      $scope.users = [];
-
-      if (response.error != undefined) {
-        alert(response.error);
-        return;
-      }
-
-      $scope.users = response.users;
-    });
+    Users.listUsers(
+      function(users) {
+        $scope.users = users;
+      },
+      function(error) {
+        alert(error);
+      });
   };
 
   $scope.listUsers();

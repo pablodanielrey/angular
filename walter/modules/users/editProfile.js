@@ -1,29 +1,13 @@
 var app = angular.module('mainApp');
 
-app.controller('EditProfileCtrl', function($scope, Session, Messages, Utils) {
+app.controller('EditProfileCtrl', function($scope, Session, Messages, Utils, Users) {
 
   $scope.user = {};
-
-  $scope.findUserData = function(id, callbackOk, callbackError) {
-    var msg = {
-      id: Utils.getId(),
-      session: Session.getSessionId(),
-      action: 'findUser',
-      user: { id: id}
-    }
-    Messages.send(msg, function(response) {
-      if (response.error != undefined) {
-        callbackError(response.error);
-      } else {
-        callbackOk(response.user);
-      }
-    });
-  }
 
   $scope.$on('UserSelectedEvent', function(event,data) {
 
     $scope.user = {};
-    $scope.findUserData(data,
+    Users.findUser(data,
       function(user) {
         $scope.user = user;
       },
@@ -35,23 +19,17 @@ app.controller('EditProfileCtrl', function($scope, Session, Messages, Utils) {
 
 
   $scope.update = function() {
-    var msg = {
-      id: Utils.getId(),
-      session: Session.getSessionId(),
-      action: 'updateUser',
-      user: $scope.user
-    };
-    Messages.send(msg,function(response) {
-      if (response.error != undefined) {
-        alert(response.error);
-        return
-      }
-    });
+    Users.updateUser($scope.user,
+      function(ok) {
+        // nada
+      },
+      function(error) {
+        alert(error);
+      });
   }
 
   $scope.cancel = function() {
-    $scope.user = {};
-    $scope.findUserData(data,
+    Users.findUser($scope.user.id,
       function(user) {
         $scope.user = user;
       },
