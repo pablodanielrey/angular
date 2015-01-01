@@ -1,6 +1,6 @@
 
 // defino el módulo principal.
-var app = angular.module('mainApp',['ngRoute','ngCookies']);
+var app = angular.module('mainApp',['ngRoute']);
 
 
 // agrego el controlador principal.

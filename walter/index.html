@@ -16,6 +16,11 @@
   <script type="text/javascript" src="services/Messages.js"></script>
 
 
+  <!-- modulos -->
+  <script type="text/javascript" src="modules/connection/con.js"></script>
+  <link rel="stylesheet" type="text/css" href="modules/connection/con.css"/>
+
+
   <!-- controladores -->
   <script type="text/javascript" src="controllers/test.js"></script>
   <script type="text/javascript" src="controllers/main.js"></script>
@@ -41,6 +46,9 @@
 
 </head>
 <body>
+  <div ng-controller="ConnectionCtrl">
+    <ng-include src="'modules/connection/con.html'"/>
+  </div>
   <div ng-controller="MenuCtrl">
     <ng-include src="'modules/menu/menu.html'"/>
   </div>

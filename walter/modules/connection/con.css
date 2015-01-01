@@ -1,0 +1,24 @@
+
+.connection {
+  width: 260px;
+  position: fixed;
+  top: 50%;
+  right: 0;
+}
+
+.connection .status {
+  overflow: hidden;
+  opacity: 0;
+}
+
+.connection .connected {
+  background-color: back;
+  color: red;
+  opacity: 1;
+}
+
+.connection .disconnected {
+  background-color: red;
+  color: back;
+  opacity: 1;
+}
