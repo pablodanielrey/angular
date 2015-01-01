@@ -16,6 +16,12 @@ app.controller('EditProfileCtrl', function($scope, Session, Messages, Utils, Use
   });
 
   $scope.$on('UserUpdatedEvent', function(event,data) {
+
+    if ($scope.user.id != data) {
+      // no es el usuario seleccionado, por lo que ignoro el evento ya que estoy mostrando otro usuario.
+      return;
+    }
+
     $scope.user = {};
     Users.findUser(data,
       function(user) {
