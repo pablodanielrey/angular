@@ -6,14 +6,8 @@ app.controller('EditMailsCtrl', function($scope, Users) {
   $scope.mails = [];
   $scope.selected = '';
 
-  /*
-    Actualizo los mails del usuario en caso de que sea el que estoy mostrando.
-  */
-  $scope.$on('UserUpdatedEvent', function(event,data) {
-    var user_id = data;
-    if ($scope.selected != user_id) {
-      return;
-    }
+
+  $scope.findMails = function(user_id) {
     Users.findMails(user_id,
       function(mails) {
         if (mails == null) {
@@ -25,6 +19,17 @@ app.controller('EditMailsCtrl', function($scope, Users) {
       function(error) {
         alert(error);
       });
+  };
+
+  /*
+    Actualizo los mails del usuario en caso de que sea el que estoy mostrando.
+  */
+  $scope.$on('UserUpdatedEvent', function(event,data) {
+    var user_id = data;
+    if ($scope.selected != user_id) {
+      return;
+    }
+    $scope.findMails(user_id);
   });
 
   /*
@@ -32,17 +37,7 @@ app.controller('EditMailsCtrl', function($scope, Users) {
   */
   $scope.$on('UserSelectedEvent', function(event,data) {
     $scope.selected = data;
-    Users.findMails(data,
-      function(mails) {
-        if (mails == null) {
-          $scope.mails = [];
-        } else {
-          $scope.mails = mails;
-        }
-      },
-      function(error) {
-        alert(error);
-      });
+    $scope.findMails(data);
   });
 
 
@@ -68,7 +63,7 @@ app.controller('EditMailsCtrl', function($scope, Users) {
   $scope.sendConfirmation = function(id) {
     Users.sendConfirmMail(id,
       function(ok) {
-        alert('Se ha enviado un mail de confirmación a su casilla. por favor chequee su bandeja de entrada y la carpeta de correo no deseado');
+        $scope.findMails($scope.selected);
       },
       function(error) {
         alert(error);

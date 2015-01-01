@@ -11,6 +11,9 @@
         <span ng-if='mail.confirmed == true'>email Confirmado</span>
         <span ng-if='mail.confirmed == false'>
           <button ng-click='sendConfirmation(mail.id)'>enviar confirmación</button>
+          <span ng-if='mail.hash != ""'>
+            Pendiente de confirmación
+          </span>
         </span>
         <span>
           <button ng-click='deleteMail(mail.id)'>X</button>
