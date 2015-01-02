@@ -24,7 +24,7 @@
   <script type="text/javascript" src="modules/users/editMails.js"></script>
   <link rel="stylesheet" type="text/css" href="modules/users/editMails.css"/>
   <script type="text/javascript" src="modules/users/confirmMail.js"></script>
-  <link rel="stylesheet" type="text/css" href="modules/users/confirmMail.css"/>  
+  <link rel="stylesheet" type="text/css" href="modules/users/confirmMail.css"/>
 
 
   <!-- controladores -->
@@ -52,6 +52,9 @@
 
 </head>
 <body>
+  <div ng-controller="LoginCtrl">
+    <ng-include src="'modules/login/login.html'"/>
+  </div>
   <div ng-controller="ConnectionCtrl">
     <ng-include src="'modules/connection/con.html'"/>
   </div>

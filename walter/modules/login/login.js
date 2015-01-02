@@ -12,6 +12,11 @@ app.controller("LoginCtrl", function($rootScope, $scope, $location, Messages, Se
 			password: ''
 		};
 
+
+		$scope.isLogged = function() {
+			return Session.isLogged();
+		}
+
 		$scope.login = function() {
 			var msg = {
 				"id" : Utils.getId(),

@@ -13,6 +13,7 @@ app.factory('Session', function($window) {
 	factory.create = function(session, data) {
 		s = this.getStorage();
 		s.setItem(this.sessionIdentifier,session);
+		data.id = session;
 		s.setItem(session,JSON.stringify(data));
 	}
 
@@ -26,6 +27,23 @@ app.factory('Session', function($window) {
 	factory.getSessionId = function(){
 		s = this.getStorage();
 		return s.getItem(this.sessionIdentifier);
+	}
+
+
+  factory.getSession = function(id) {
+		s = this.getStorage();
+		jdata = s.getItem(id);
+		if (jdata == null) {
+			return null;
+		}
+		data = JSON.parse(data);
+		return data;
+	}
+
+	factory.saveSession = function(data) {
+		id = data.id;
+		s = getStorage();
+		s.setItem(id,JSON.stringify(s));
 	}
 
 	factory.isLogged = function() {

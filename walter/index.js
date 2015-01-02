@@ -16,9 +16,22 @@ app.controller('IndexCtrl', function ($rootScope, $location, Session) {
         return;
       }
 
+      if (response.type == 'Exception') {
+        $rootScope.processGeneralExceptions(response);
+        return;
+      }
+
       $rootScope.$broadcast(response.type,response.data);
     });
 
+
+    $rootScope.processGeneralExceptions = function(e) {
+      if (e.name == 'SessionNotFound') {
+        // debo desloguear al usuario ya que no se encontro en el server remoto.
+        $location.path('/logout');
+        return;
+      }
+    }
 
     // errores de applicacion
     $rootScope.$on('onAppError', function(event, data) {
