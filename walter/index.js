@@ -5,11 +5,16 @@ var app = angular.module('mainApp',['ngRoute']);
 
 // agrego el controlador principal.
 
-app.controller('IndexCtrl', function ($rootScope, $location, Session) {
+app.controller('IndexCtrl', function ($rootScope, $location, Session, Cache) {
 
     // mensajes que vienen del socket. solo me interesan los eventos, las respuestas son procesadas por otro lado.
     $rootScope.$on('onSocketMessage', function(event, data) {
       var response = JSON.parse(data);
+
+      // por las dudas si esta cacheado algo lo remuevo, si es una respuesta.
+      if ((response.type != undefined) && (/.*Event$/.test(response.type))) {
+        Cache.removeItem(response.data);
+      }
 
       // tiene que tener tipo si o si.
       if (response.type == undefined) {
@@ -29,7 +34,7 @@ app.controller('IndexCtrl', function ($rootScope, $location, Session) {
       if (e.name == 'SessionNotFound') {
         // no se encontro la session en el server asi que la destruyo y vuelvo a la pantlla principal.
         Session.destroy();
-        $location.path('/');
+        $location.path('/main');
         return;
       }
     }

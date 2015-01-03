@@ -109,16 +109,25 @@ app.factory('Users', function(Messages, Session, Utils, Cache) {
 
   // obtiene los datos de un usuario cuyo id es el pasado por parámetro.
   users.findUser = function(id, callbackOk, callbackError) {
+
+    // chequeo la cache primero
+    var user = Cache.getItem(id);
+    if (user != null) {
+      callbackOk(user);
+      return;
+    }
+
     var msg = {
       id: Utils.getId(),
       session: Session.getSessionId(),
       action: 'findUser',
-      user: { id: id}
+      user: { id: id }
     }
     Messages.send(msg, function(response) {
       if (response.error != undefined) {
         callbackError(response.error);
       } else {
+        Cache.setItem(response.user.id,user);
         callbackOk(response.user);
       }
     });
@@ -126,6 +135,10 @@ app.factory('Users', function(Messages, Session, Utils, Cache) {
 
 
   users.updateUser = function(user, callbackOk, callbackError) {
+
+    // elimino ese usuario de la cache
+    Cache.removeItem(user.id);
+
     var msg = {
       id: Utils.getId(),
       session: Session.getSessionId(),
