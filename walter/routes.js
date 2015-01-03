@@ -40,6 +40,11 @@ app.config(['$routeProvider', function($routeProvider) {
         controller: 'EditUsersCtrl'
       })
 
+      .when('/status', {
+        templateUrl: 'modules/admin/status.html',
+        controller: 'StatusCtrl'
+      })
+
       .when('/confirmMail:hash', {
         templateUrl: 'modules/users/confirmMail.html',
         controller: 'ConfirmMailCtrl'

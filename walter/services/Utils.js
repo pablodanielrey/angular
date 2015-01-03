@@ -7,4 +7,15 @@ app.service('Utils', function() {
     return id;
   };
 
+
+  this.filter = function(f,a) {
+    var r = [];
+    for (var i = 0; i < a.length; i++) {
+      if (f(a[i]) == true) {
+        r.push(a[i])
+      }
+    }
+    return r;
+  }
+
 });

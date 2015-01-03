@@ -7,7 +7,7 @@ app.service('Users', function($rootScope, Messages, Session, Utils, Cache) {
   $rootScope.$on('UserUpdatedEvent', function(event,data) {
     Cache.removeItem(data);
   });
-  
+
 
   this.deleteMail = function(id, callbackOk, callbackError) {
     var msg = {
@@ -182,6 +182,12 @@ app.service('Users', function($rootScope, Messages, Session, Utils, Cache) {
           } else {
             cachedUsers.push(user);
           }
+        }
+
+        // si no hay mas usuarios que pedir. (tengo todos en la cache local)
+        if (remainingIds.length <= 0) {
+          callbackOk(cachedUsers);
+          return;
         }
 
         // hago la llamada al servidor pidiendo los datos de los usuarios de los ids que faltan
