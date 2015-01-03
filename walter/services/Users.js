@@ -1,7 +1,7 @@
 
 var app = angular.module('mainApp');
 
-app.factory('Users', function(Messages, Session, Utils) {
+app.factory('Users', function(Messages, Session, Utils, Cache) {
 
   var users = {};
 
@@ -141,17 +141,51 @@ app.factory('Users', function(Messages, Session, Utils) {
     });
   }
 
+
   users.listUsers = function(callbackOk, callbackError) {
     var  msg = {
       id: Utils.getId(),
       action: 'listUsers',
-      session: Session.getSessionId()
+      session: Session.getSessionId(),
+      onlyIds: true
     };
     Messages.send(msg, function(response) {
       if (response.error != undefined) {
         callbackError(response.error);
       } else {
-        callbackOk(response.users);
+
+        // tengo los ids de las personas que existen en el server.
+        var cachedUsers = [];
+        var remainingIds = [];
+        var ids = response.users;
+        for (var i = 0; i < ids.length; i++) {
+          var user = Cache.getItem(ids[i].id);
+          if (user == null) {
+            remainingIds.push(ids[i].id);
+          } else {
+            cachedUsers.push(user);
+          }
+        }
+
+        // hago la llamada al servidor pidiendo los datos de los usuarios de los ids que faltan
+        var  msg = {
+          id: Utils.getId(),
+          action: 'listUsers',
+          session: Session.getSessionId(),
+          ids: remainingIds
+        };
+        Messages.send(msg, function(response) {
+          if (response.error != undefined) {
+            callbackError(response.error);
+          } else {
+            // actualizo la cache con las personas retornadas.
+            for (var i = 0; i < response.users.length; i++) {
+              var user = response.users[i];
+              Cache.setItem(user['id'],user);
+            }
+            callbackOk(cachedUsers.concat(response.users));
+          }
+        });
       }
     });
   };
