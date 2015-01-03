@@ -1,38 +1,36 @@
 var app = angular.module('mainApp');
 
-app.factory('Session', function(Cache) {
+app.service('Session', function(Cache) {
 
-	var factory = {};
+	this.sessionIdentifier = 'sessionId';
 
-	factory.sessionIdentifier = 'sessionId';
-
-	factory.create = function(session, data) {
+	this.create = function(session, data) {
 		Cache.setItem(this.sessionIdentifier,session);
 		data.id = session;
 		Cache.setItem(session,data);
 	}
 
-	factory.destroy = function(){
+	this.destroy = function(){
 		var sid = Cache.getItem(this.sessionIdentifier);
 		Cache.removeItem(sid);
 		Cache.removeItem(this.sessionIdentifier);
 	};
 
-	factory.getSessionId = function(){
+	this.getSessionId = function(){
 		return Cache.getItem(this.sessionIdentifier);
 	}
 
-  factory.getSession = function(id) {
+  this.getSession = function(id) {
 		return Cache.getItem(id);
 	}
 
 
-	factory.saveSession = function(data) {
+	this.saveSession = function(data) {
 		var id = data.id;
 		Cache.setItem(id,data);
 	}
 
-	factory.isLogged = function() {
+	this.isLogged = function() {
 		var sid = this.getSessionId();
 		if (sid == null) {
 			return false;
@@ -45,5 +43,4 @@ app.factory('Session', function(Cache) {
 		return (data.user_id != undefined);
 	}
 
-	return factory;
 });

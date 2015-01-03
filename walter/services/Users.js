@@ -1,11 +1,15 @@
 
 var app = angular.module('mainApp');
 
-app.factory('Users', function(Messages, Session, Utils, Cache) {
+app.service('Users', function($rootScope, Messages, Session, Utils, Cache) {
 
-  var users = {};
 
-  users.deleteMail = function(id, callbackOk, callbackError) {
+  $rootScope.$on('UserUpdatedEvent', function(event,data) {
+    Cache.removeItem(data);
+  });
+  
+
+  this.deleteMail = function(id, callbackOk, callbackError) {
     var msg = {
       id: Utils.getId(),
       session: Session.getSessionId(),
@@ -24,7 +28,7 @@ app.factory('Users', function(Messages, Session, Utils, Cache) {
   /*
     Dispara la confirmación de un mail dado por el hash
   */
-  users.confirmMail = function(hash, callbackOk, callbackError) {
+  this.confirmMail = function(hash, callbackOk, callbackError) {
     var msg = {
       id: Utils.getId(),
       session: Session.getSessionId(),
@@ -44,7 +48,7 @@ app.factory('Users', function(Messages, Session, Utils, Cache) {
   /*
     Envía un mail de confirmación al email dado por mail_id
   */
-  users.sendConfirmMail = function(mail_id, callbackOk, callbackError) {
+  this.sendConfirmMail = function(mail_id, callbackOk, callbackError) {
     var msg = {
       id: Utils.getId(),
       session: Session.getSessionId(),
@@ -70,7 +74,7 @@ app.factory('Users', function(Messages, Session, Utils, Cache) {
       email: 'email del usuario'
     }
   */
-  users.addMail = function(email, callbackOk, callbackError) {
+  this.addMail = function(email, callbackOk, callbackError) {
     var msg = {
       id: Utils.getId(),
       session: Session.getSessionId(),
@@ -89,7 +93,7 @@ app.factory('Users', function(Messages, Session, Utils, Cache) {
   /*
     Encuentra todos los mails de un usuario.
   */
-  users.findMails = function(user_id, callbackOk, callbackError) {
+  this.findMails = function(user_id, callbackOk, callbackError) {
     var msg = {
       id: Utils.getId(),
       session: Session.getSessionId(),
@@ -108,7 +112,7 @@ app.factory('Users', function(Messages, Session, Utils, Cache) {
 
 
   // obtiene los datos de un usuario cuyo id es el pasado por parámetro.
-  users.findUser = function(id, callbackOk, callbackError) {
+  this.findUser = function(id, callbackOk, callbackError) {
 
     // chequeo la cache primero
     var user = Cache.getItem(id);
@@ -134,7 +138,7 @@ app.factory('Users', function(Messages, Session, Utils, Cache) {
   }
 
 
-  users.updateUser = function(user, callbackOk, callbackError) {
+  this.updateUser = function(user, callbackOk, callbackError) {
 
     // elimino ese usuario de la cache
     Cache.removeItem(user.id);
@@ -155,7 +159,7 @@ app.factory('Users', function(Messages, Session, Utils, Cache) {
   }
 
 
-  users.listUsers = function(callbackOk, callbackError) {
+  this.listUsers = function(callbackOk, callbackError) {
     var  msg = {
       id: Utils.getId(),
       action: 'listUsers',
@@ -203,6 +207,5 @@ app.factory('Users', function(Messages, Session, Utils, Cache) {
     });
   };
 
-  return users;
 
 });

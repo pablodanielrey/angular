@@ -2,15 +2,13 @@
 
 var app = angular.module('mainApp');
 
-app.factory('Cache', function($window) {
+app.service('Cache', function($window) {
 
-  var cache = {};
-
-  cache.getStorage = function() {
+  this.getStorage = function() {
     return $window['localStorage'];
   }
 
-  cache.getItem = function(key) {
+  this.getItem = function(key) {
     var s = this.getStorage();
     var jdata = s.getItem(key);
     if (jdata == null) {
@@ -20,17 +18,14 @@ app.factory('Cache', function($window) {
     return data;
   };
 
-  cache.removeItem = function(key) {
+  this.removeItem = function(key) {
     var s = this.getStorage();
     s.removeItem(key);
   };
 
-  cache.setItem = function(key,value) {
+  this.setItem = function(key,value) {
     var s = this.getStorage();
     s.setItem(key,JSON.stringify(value));
   };
-
-
-  return cache;
 
 });

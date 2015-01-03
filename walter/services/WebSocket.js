@@ -1,12 +1,8 @@
 var app = angular.module('mainApp');
 
-app.factory('WebSocket', ['$rootScope',
+app.service('WebSocket', function($rootScope) {
 
-	function($rootScope) {
-
-		var factory = {};
-
-		factory.registerHandlers = function() {
+		this.registerHandlers = function() {
 
 			// abro el socket y registro los handlers de los eventos.
 			this.socket = new WebSocket("ws://192.168.0.100:8001");
@@ -38,17 +34,15 @@ app.factory('WebSocket', ['$rootScope',
 
 		}
 
-		factory.send = function(msg){
+		this.send = function(msg){
 				this.socket.send(msg);
 		}
 
-		factory.close = function(){
+		this.close = function(){
 			this.socket.close();
 			this.socket = null;
 		}
 
-		factory.registerHandlers();
-		return factory;
+		this.registerHandlers();
 
-	}
-]);
+});

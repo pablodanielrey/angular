@@ -11,10 +11,12 @@ app.controller('IndexCtrl', function ($rootScope, $location, Session, Cache) {
     $rootScope.$on('onSocketMessage', function(event, data) {
       var response = JSON.parse(data);
 
+/*
       // por las dudas si esta cacheado algo lo remuevo, si es una respuesta.
       if ((response.type != undefined) && (/.*Event$/.test(response.type))) {
         Cache.removeItem(response.data);
       }
+*/
 
       // tiene que tener tipo si o si.
       if (response.type == undefined) {
