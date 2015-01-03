@@ -1,50 +1,35 @@
 var app = angular.module('mainApp');
 
-app.factory('Session', function($window) {
+app.factory('Session', function(Cache) {
 
 	var factory = {};
 
 	factory.sessionIdentifier = 'sessionId';
 
-	factory.getStorage = function() {
-		return $window['localStorage'];
-	}
-
 	factory.create = function(session, data) {
-		var s = this.getStorage();
-		s.setItem(this.sessionIdentifier,session);
+		Cache.setItem(this.sessionIdentifier,session);
 		data.id = session;
-		s.setItem(session,JSON.stringify(data));
+		Cache.setItem(session,data);
 	}
 
 	factory.destroy = function(){
-		var s = this.getStorage();
-		var sid = s.getItem(this.sessionIdentifier);
-		s.removeItem(sid);
-		s.removeItem(this.sessionIdentifier);
+		var sid = Cache.getItem(this.sessionIdentifier);
+		Cache.removeItem(sid);
+		Cache.removeItem(this.sessionIdentifier);
 	};
 
 	factory.getSessionId = function(){
-		var s = this.getStorage();
-		return s.getItem(this.sessionIdentifier);
+		return Cache.getItem(this.sessionIdentifier);
 	}
 
-
   factory.getSession = function(id) {
-		var s = this.getStorage();
-		var jdata = s.getItem(id);
-		if (jdata == null) {
-			return null;
-		}
-		var data = JSON.parse(jdata);
-		return data;
+		return Cache.getItem(id);
 	}
 
 
 	factory.saveSession = function(data) {
 		var id = data.id;
-		var s = getStorage();
-		s.setItem(id,JSON.stringify(s));
+		Cache.setItem(id,data);
 	}
 
 	factory.isLogged = function() {
@@ -53,13 +38,10 @@ app.factory('Session', function($window) {
 			return false;
 		}
 
-		var s = this.getStorage();
-		var json_data = s.getItem(sid);
-		if (json_data == null) {
+		var data = Cache.getItem(sid);
+		if (data == null) {
 			return false;
 		}
-
-		var data = JSON.parse(json_data);
 		return (data.user_id != undefined);
 	}
 
