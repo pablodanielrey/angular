@@ -27,8 +27,9 @@ app.controller('IndexCtrl', function ($rootScope, $location, Session) {
 
     $rootScope.processGeneralExceptions = function(e) {
       if (e.name == 'SessionNotFound') {
-        // debo desloguear al usuario ya que no se encontro en el server remoto.
-        $location.path('/logout');
+        // no se encontro la session en el server asi que la destruyo y vuelvo a la pantlla principal.
+        Session.destroy();
+        $location.path('/');
         return;
       }
     }
