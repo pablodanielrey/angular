@@ -25,11 +25,10 @@ app.controller('ListUsersCtrl',function($rootScope, $scope, $log, Messages, Util
     return ($scope.updating == id);
   }
 
-  $scope.$on('UserUpdatedEvent',function(event,data) {
+  $scope.$on('UserUpdatedEvent',function(event,id) {
 
-    $scope.updating = data;
+    $scope.updating = id;
 
-    var id = data;
     var found = null;
     var pos = -1;
 
