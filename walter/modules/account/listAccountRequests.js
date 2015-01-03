@@ -3,10 +3,11 @@
 /*
 	Lista de los pedidos de creación de cuentas de la facultad.
 
-	eventos soportados :
+	eventos escuchados :
 
 		NewAccountRequestEvent
 		AccountRequestApprovedEvent
+		AccountRequestRemovedEvent
 
 
 */
@@ -24,6 +25,10 @@ app.controller("ListAccountRequestsCtrl", function($rootScope, $scope, Messages,
 		$scope.listAccountRequests();
 	});
 
+	$scope.$on('AccountRequestRemovedEvent', function(event,data) {
+		$scope.listAccountRequests();
+	});
+
 	$scope.listAccountRequests = function() {
 
 		var msg = {
@@ -31,7 +36,6 @@ app.controller("ListAccountRequestsCtrl", function($rootScope, $scope, Messages,
 			session : Session.getSessionId(),
 			action : "listAccountRequests",
 		}
-
 		Messages.send(msg, function(response) {
 
 			if (response.requests == undefined) {
@@ -52,12 +56,24 @@ app.controller("ListAccountRequestsCtrl", function($rootScope, $scope, Messages,
 			"session" : Session.getSessionId(),
 			"action" : "approveAccountRequest",
 		};
-
 		Messages.send(msg,function(response) {
 				$scope.listAccountRequests();
 		});
-
 	};
+
+	$scope.removeRequest = function(id) {
+		var msg = {
+			"id" : Utils.getId(),
+			"reqId" : id,
+			"session" : Session.getSessionId(),
+			"action" : "removeAccountRequest",
+		};
+		Messages.send(msg,function(response) {
+			$scope.listAccountRequests();
+		});
+	}
+
+
 
 	$scope.listAccountRequests();
 

@@ -13,11 +13,14 @@ app.controller('LogoutCtrl', function($scope, Session, Messages, Utils) {
 
     Messages.send(msg, function(response) {
 
-      if (response.ok != undefined) {
-        Session.destroy();
-        $scope.$emit('logoutOk','');
-        $location.path('/');
+      if (response.ok == undefined) {
+        // ocurrio algun error en el deslogueo.
+        return;
       }
+
+      Session.destroy();
+      $scope.$emit('logoutOk','');
+      $location.path('/');
 
     });
 

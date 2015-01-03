@@ -1,20 +1,14 @@
-<table>
-	<tr>
-		<th>NOMBRES</th>
-		<th>APELLIDOS</th>
-		<th>DNI</th>
-		<th>EMAIL</th>
-		<th>OPCIONES</th>
-	</tr>
-	<tr ng-repeat="request in requests">
-		<td>{{request.id}}</td>
-		<td>{{request.name}}</td>
-		<td>{{request.lastname}}</td>
-		<td>{{request.dni}}</td>
-		<td>{{request.email}}</td>
-		<td>{{request.reason}}</td>
-		<td>
+<div>
+	<div ng-repeat="request in requests">
+		<div>{{request.id}}</div>
+		<div>{{request.name}}</div>
+		<div>{{request.lastname}}</div>
+		<div>{{request.dni}}</div>
+		<div>{{request.email}}</div>
+		<div>{{request.reason}}</div>
+		<div>
 			<button ng-click="approveRequest(request.id)">Aprobar</button>
-		</td>
-	</tr>
-</table>
+			<button ng-click="removeRequest(request.id)">Eliminar</button>
+		</div>
+	</div>
+</div>
