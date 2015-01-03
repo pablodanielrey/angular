@@ -14,7 +14,15 @@ app.controller("LoginCtrl", function($rootScope, $scope, $location, Messages, Se
 
 
 		$scope.isLogged = function() {
-			return Session.isLogged();
+			var sid = Session.getSessionId();
+			if (sid == null) {
+				return false;
+			}
+			var s = Session.getSession(sid);
+			if (s == null) {
+				return false;
+			}
+			return ((s.user_id != undefined) && (s.user_id != null));
 		}
 
 		$scope.login = function() {
@@ -22,23 +30,25 @@ app.controller("LoginCtrl", function($rootScope, $scope, $location, Messages, Se
 				"id" : Utils.getId(),
 				"user" : $scope.user.username,
 				"password" : $scope.user.password,
-				"action" : "login",
+				"action" : "login"
 			}
 
 			Messages.send(msg, function(response) {
 
-				if(response.session != undefined) {
-					// logueo al usuario con el id de sesion retornado por el server.
-
-					var data = {
-						user_id: response.user_id
-					}
-
-					Session.create(response.session, data);
-					$scope.$emit('loginOk','');
-				} else {
-					$scope.$emit('loginError','');
+				if(response.session == undefined) {
+					$scope.$emit('loginError');
+					return;
 				}
+
+
+				var data = {
+					session_id: response.session,
+					user_id: response.user_id
+				}
+				Session.create(response.session, data);
+				$scope.user.username = '';
+				$scope.user.password = '';
+				$scope.$emit('loginOk','');
 
 			});
 

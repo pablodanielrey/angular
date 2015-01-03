@@ -11,7 +11,7 @@ app.controller('IndexCtrl', function ($rootScope, $location, Session) {
     $rootScope.$on('onSocketMessage', function(event, data) {
       var response = JSON.parse(data);
 
-      // analizo el tipo de evento desde el server.
+      // tiene que tener tipo si o si.
       if (response.type == undefined) {
         return;
       }

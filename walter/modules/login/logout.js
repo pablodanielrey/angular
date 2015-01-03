@@ -16,6 +16,7 @@ app.controller('LogoutCtrl', function($scope, Session, Messages, Utils) {
       if (response.ok != undefined) {
         Session.destroy();
         $scope.$emit('logoutOk','');
+        $location.path('/');
       }
 
     });

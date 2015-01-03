@@ -11,38 +11,39 @@ app.factory('Session', function($window) {
 	}
 
 	factory.create = function(session, data) {
-		s = this.getStorage();
+		var s = this.getStorage();
 		s.setItem(this.sessionIdentifier,session);
 		data.id = session;
 		s.setItem(session,JSON.stringify(data));
 	}
 
 	factory.destroy = function(){
-		s = this.getStorage();
+		var s = this.getStorage();
 		var sid = s.getItem(this.sessionIdentifier);
 		s.removeItem(sid);
 		s.removeItem(this.sessionIdentifier);
 	};
 
 	factory.getSessionId = function(){
-		s = this.getStorage();
+		var s = this.getStorage();
 		return s.getItem(this.sessionIdentifier);
 	}
 
 
   factory.getSession = function(id) {
-		s = this.getStorage();
-		jdata = s.getItem(id);
+		var s = this.getStorage();
+		var jdata = s.getItem(id);
 		if (jdata == null) {
 			return null;
 		}
-		data = JSON.parse(data);
+		var data = JSON.parse(jdata);
 		return data;
 	}
 
+
 	factory.saveSession = function(data) {
-		id = data.id;
-		s = getStorage();
+		var id = data.id;
+		var s = getStorage();
 		s.setItem(id,JSON.stringify(s));
 	}
 
@@ -52,8 +53,8 @@ app.factory('Session', function($window) {
 			return false;
 		}
 
-		s = this.getStorage();
-		json_data = s.getItem(sid);
+		var s = this.getStorage();
+		var json_data = s.getItem(sid);
 		if (json_data == null) {
 			return false;
 		}
