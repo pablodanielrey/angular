@@ -1,7 +1,7 @@
 
 var app = angular.module('mainApp');
 
-app.controller('LogoutCtrl', function($scope, Session, Messages, Utils) {
+app.controller('LogoutCtrl', function($scope, $location, Session, Messages, Utils) {
 
   $scope.logout = function() {
 
