@@ -4,8 +4,12 @@ app.controller('EditProfileCtrl', function($scope, Session, Messages, Utils, Use
 
   $scope.user = {};
 
+  $scope.clearUser = function() {
+    $scope.user = { id:'', name:'', lastname:'', dni:'', telephone:'', genre:'' }
+  }
+
   $scope.$on('UserSelectedEvent', function(event,data) {
-    $scope.user = {};
+    $scope.clearUser();
     Users.findUser(data,
       function(user) {
         $scope.user = user;
@@ -22,7 +26,7 @@ app.controller('EditProfileCtrl', function($scope, Session, Messages, Utils, Use
       return;
     }
 
-    $scope.user = {};
+    $scope.clearUser();
     Users.findUser(data,
       function(user) {
         $scope.user = user;
@@ -43,6 +47,10 @@ app.controller('EditProfileCtrl', function($scope, Session, Messages, Utils, Use
   }
 
   $scope.cancel = function() {
+    $scope.clearUser();
+    if ($scope.user.id == undefined || $scope.user.id == null || $scope.user.id == '') {
+      return;
+    }
     Users.findUser($scope.user.id,
       function(user) {
         $scope.user = user;
@@ -52,5 +60,6 @@ app.controller('EditProfileCtrl', function($scope, Session, Messages, Utils, Use
       });
   }
 
+  $scope.clearUser();
 
 });
