@@ -45,11 +45,20 @@ app.config(['$routeProvider', function($routeProvider) {
         controller: 'StatusCtrl'
       })
 
-      .when('/confirmMail:hash', {
+      .when('/confirmMail/:hash', {
         templateUrl: 'modules/users/confirmMail.html',
         controller: 'ConfirmMailCtrl'
       })
 
+      .when('/changePassword/:username?/:hash?', {
+        templateUrl: 'modules/login/changePassword.html',
+        controller: 'ChangePasswordCtrl'
+      })
+
+      .when('/resetPassword', {
+        templateUrl: 'modules/login/resetPassword.html',
+        controller: 'ResetPasswordCtrl'
+      })
 
       .otherwise({
  	      redirectTo: '/main'

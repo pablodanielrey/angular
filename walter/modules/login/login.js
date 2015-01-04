@@ -26,10 +26,14 @@ app.controller("LoginCtrl", function($rootScope, $scope, $location, Messages, Se
 		}
 
 		$scope.login = function() {
+
+			var username = $scope.user.username;
+			var password = $scope.user.password;
+
 			var msg = {
 				"id" : Utils.getId(),
-				"user" : $scope.user.username,
-				"password" : $scope.user.password,
+				"user" : username,
+				"password" : password,
 				"action" : "login"
 			}
 
@@ -40,10 +44,12 @@ app.controller("LoginCtrl", function($rootScope, $scope, $location, Messages, Se
 					return;
 				}
 
-
 				var data = {
 					session_id: response.session,
-					user_id: response.user_id
+					user_id: response.user_id,
+					login: {
+						username: username
+					}
 				}
 				Session.create(response.session, data);
 				$scope.user.username = '';

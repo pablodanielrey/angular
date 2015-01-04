@@ -6,7 +6,7 @@ app.service('Session', function(Cache) {
 
 	this.create = function(session, data) {
 		Cache.setItem(this.sessionIdentifier,session);
-		data.id = session;
+		data.sessionId = session;
 		Cache.setItem(session,data);
 	}
 
@@ -24,9 +24,17 @@ app.service('Session', function(Cache) {
 		return Cache.getItem(id);
 	}
 
+	this.getCurrentSession = function() {
+		var sid = this.getSessionId();
+		if (sid == null) {
+			return null;
+		}
+		var data = Cache.getItem(sid);
+		return data;
+	}
 
 	this.saveSession = function(data) {
-		var id = data.id;
+		var id = data.sessionId;
 		Cache.setItem(id,data);
 	}
 
