@@ -4,13 +4,15 @@ var app = angular.module('mainApp');
 
 app.controller('ResetPasswordCtrl', function($scope, Utils, Messages) {
 
+  $scope.user = { username:'' };
+
   $scope.clearUsername = function() {
     $scope.user = { username:'' };
   }
 
   $scope.resetPassword = function() {
 
-    if (($scope.user.username == undefined) || ($scope.user.username == null) || ($scope.user.username == '')) {
+    if (($scope.user.username == null) || ($scope.user.username == '')) {
       return;
     }
 
