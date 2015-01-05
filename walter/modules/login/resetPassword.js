@@ -2,7 +2,7 @@
 var app = angular.module('mainApp');
 
 
-app.controller('ResetPasswordCtl', function($scope, Utils, Messages) {
+app.controller('ResetPasswordCtrl', function($scope, Utils, Messages) {
 
   $scope.clearUsername = function() {
     $scope.user = { username:'' };

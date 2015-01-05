@@ -8,6 +8,7 @@
 
   <script type="text/javascript" src="index.js"></script>
   <script type="text/javascript" src="routes.js"></script>
+  <link rel="stylesheet" type="text/css" href="index.css"/>
 
   <!-- servicios -->
   <script type="text/javascript" src="services/Utils.js"></script>
@@ -38,43 +39,48 @@
   <link rel="stylesheet" type="text/css" href="modules/login/login.css" />
   <link rel="stylesheet" type="text/css" href="modules/login/logout.css" />
 
-  <!-- controladores -->
-  <script type="text/javascript" src="controllers/test.js"></script>
-  <script type="text/javascript" src="controllers/main.js"></script>
-  <script type="text/javascript" src="modules/menu/menu.js"></script>
-
-  <script type="text/javascript" src="modules/chat/chat.js"></script>
   <script type="text/javascript" src="modules/account/createAccountRequest.js"></script>
   <script type="text/javascript" src="modules/account/listAccountRequests.js"></script>
+  <link rel="stylesheet" type="text/css" href="modules/account/createAccountRequest.css" />
+
+
+  <script type="text/javascript" src="modules/menu/menu.js"></script>
+  <link rel="stylesheet" type="text/css" href="modules/menu/menu.css" />
+
+  <script type="text/javascript" src="modules/chat/chat.js"></script>
+
   <script type="text/javascript" src="modules/users/editProfile.js"></script>
   <script type="text/javascript" src="modules/users/editUsers.js"></script>
   <script type="text/javascript" src="modules/users/listUsers.js"></script>
-
-  <!-- vistas -->
-  <link rel="stylesheet" type="text/css" href="modules/chat/chat.css" />
-
-  <link rel="stylesheet" type="text/css" href="modules/menu/menu.css" />
-  <link rel="stylesheet" type="text/css" href="modules/account/createAccountRequest.css" />
   <link rel="stylesheet" type="text/css" href="modules/users/editProfile.css" />
   <link rel="stylesheet" type="text/css" href="modules/users/editUsers.css" />
   <link rel="stylesheet" type="text/css" href="modules/users/listUsers.css" />
 
+  <link rel="stylesheet" type="text/css" href="modules/chat/chat.css" />
+
+  <script type="text/javascript" src="controllers/test.js"></script>
+  <script type="text/javascript" src="controllers/main.js"></script>
+
+
+
 </head>
 <body>
-  <div ng-controller="LoginCtrl">
-    <ng-include src="'modules/login/login.html'"/>
-  </div>
-  <div ng-controller="ConnectionCtrl">
-    <ng-include src="'modules/connection/con.html'"/>
-  </div>
-  <div ng-controller="MenuCtrl">
-    <ng-include src="'modules/menu/menu.html'"/>
-  </div>
-  <div ng-controller="IndexCtrl">
-    <div ng-view></div>
-  </div>
-  <div ng-controller="ChatCtrl">
-    <ng-include src="'modules/chat/chat.html'"/>
-  </div>
+  <div class='principal'>
+    <div ng-controller="LoginCtrl">
+      <ng-include src="'modules/login/login.html'"/>
+    </div>
+    <div ng-controller="ConnectionCtrl">
+      <ng-include src="'modules/connection/con.html'"/>
+    </div>
+    <div ng-controller="MenuCtrl">
+      <ng-include src="'modules/menu/menu.html'"/>
+    </div>
+    <div ng-controller="IndexCtrl">
+      <div ng-view></div>
+    </div>
+    <div ng-controller="ChatCtrl">
+      <ng-include src="'modules/chat/chat.html'"/>
+    </div>
+</div>
 </body>
 </html>

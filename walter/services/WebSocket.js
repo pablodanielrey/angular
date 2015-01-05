@@ -5,7 +5,7 @@ app.service('WebSocket', function($rootScope) {
 		this.registerHandlers = function() {
 
 			// abro el socket y registro los handlers de los eventos.
-			this.socket = new WebSocket("ws://192.168.0.100:8001");
+			this.socket = new WebSocket("ws://163.10.17.105:8001");
 
 			this.socket.onopen = function(msg){
 				$rootScope.$apply(function () {

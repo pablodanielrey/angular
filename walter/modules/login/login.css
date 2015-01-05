@@ -1,17 +1,3 @@
-*{
-	margin:0;
-	padding:0;
-}
-body {
-	background: url(../img/fondo1.jpg) no-repeat fixed center;
-    background-size: cover;
-	font-family: Calibri;
-	font-size: 14px;
-	-webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-}
-
 
 .visible {
 	display: block;
@@ -20,6 +6,7 @@ body {
 .hidden {
 	display: none;
 }
+
 
 .login_container {
 	background-clip: padding-box;
