@@ -60,6 +60,11 @@ app.config(['$routeProvider', function($routeProvider) {
         controller: 'ResetPasswordCtrl'
       })
 
+      .when('/editUserProfile', {
+        templateUrl: 'modules/users/editUserProfile.html',
+        controller: 'EditUserProfileCtrl'
+      })
+
       .otherwise({
  	      redirectTo: '/main'
       });

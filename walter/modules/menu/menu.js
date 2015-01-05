@@ -7,7 +7,7 @@ app.controller('MenuCtrl', function($rootScope, $scope, Session) {
 {url:'#/main',label:'Principal'},
 {url:'#/status',label:'Estado del sistema'},
 {url:'#/editUsers',label:'Editar Usuarios'},
-{url:'#/editProfile',label:'Editar Perfil'},
+{url:'#/editUserProfile',label:'Editar Perfil'},
 {url:'#/createAccountRequest',label:'Pedir una cuenta nueva'},
 {url:'#/logout',label:'Salir'}
   ];
