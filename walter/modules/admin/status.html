@@ -2,8 +2,10 @@
 <div>
   <div>Sesiones</div>
   <div ng-repeat='s in status.sessions'>
-    <div>{{s.id}}</div>
-    <div>{{s.expire}}</div>
-    <div>{{s.data}}</div>
+    <div class='status'>
+      <span class='id'>{{s.id}}</span>
+      <span class='expire'>{{s.expire}}</span>
+      <span class='data'>{{s.data}}</span>
+    </div>
   </div>
 </div>
