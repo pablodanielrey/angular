@@ -2,7 +2,7 @@
 var app = angular.module('mainApp');
 
 
-app.controller('ChangePasswordCtrl', function($scope, $routeParams, Messages, Utils, Session) {
+app.controller('ChangePasswordCtrl', function($scope, $routeParams, Messages, Utils, Session, Credentials) {
 
   $scope.user = {};
   $scope.cp = {};
@@ -12,6 +12,38 @@ app.controller('ChangePasswordCtrl', function($scope, $routeParams, Messages, Ut
     $scope.user.newPassword = '';
     $scope.user.newPasswordRepeat = '';
   }
+
+  $scope.changePassword = function() {
+
+    if (($scope.cp.hash != undefined) && ($scope.cp.hash != null)) {
+      Credentials.changePasswordWithHash($scope.user,$scope.cp.hash,
+        function(ok) {
+          alert(ok);
+        },
+        function(error) {
+          alert(error);
+        });
+    } else {
+      Credentials.changePassword($scope.user,
+        function(ok) {
+          alert(ok);
+        },
+        function(error) {
+          alert(error);
+        });
+    }
+
+  }
+
+  $scope.$on('UserSelectedEvent', function(e,id) {
+    Users.findUser(id,
+    function(user) {
+
+    },
+    function(error) {
+
+    })
+  })
 
   $scope.clear();
 
@@ -28,33 +60,5 @@ app.controller('ChangePasswordCtrl', function($scope, $routeParams, Messages, Ut
     $scope.cp.hash = null;
 
   }
-
-
-  $scope.changePassword = function() {
-    var msg = {
-      id: Utils.getId(),
-      action: 'changePassword',
-      username: $scope.user.username,
-      password: $scope.user.newPassword
-    };
-
-    if (($scope.cp.hash != undefined) && ($scope.cp.hash != null)) {
-      msg.hash = $scope.cp.hash;
-    }
-
-    var sid = Session.getSessionId();
-    if (sid != null) {
-      msg.session = sid;
-    }
-
-    Messages.send(msg,
-      function(ok){
-        alert(ok);
-      },
-      function(error) {
-        alert(error);
-      });
-  }
-
 
 });
