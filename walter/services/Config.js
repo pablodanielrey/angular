@@ -3,13 +3,12 @@ var app = angular.module('mainApp');
 
 app.service('Config', function($http) {
 
-  this.websocket = {
-    proto: 'ws',
-    host: '192.168.0.100',
-    port: '8001'
-  }
+  this.websocket = config;
 
   instance = this;
+/*
+no la voy a usar por ahora
+
 
   this.initialize = function() {
     $http.get('config.json').
@@ -21,7 +20,7 @@ app.service('Config', function($http) {
       alert('el sistema no pudo obtener la configuración, algunas funciones no estarán disponibles');
     })
   }
-
+*/
 
   this.getWebsocketConnectionUrl = function() {
     return this.websocket.proto + '://' + this.websocket.host + ':' + this.websocket.port;
@@ -31,6 +30,6 @@ app.service('Config', function($http) {
     return document.URL;
   }
 
-  this.initialize();
+//  this.initialize();
 
 });

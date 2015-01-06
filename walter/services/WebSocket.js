@@ -10,6 +10,7 @@ app.service('WebSocket', function($rootScope, Config) {
 
 			// abro el socket y registro los handlers de los eventos.
 			var url = Config.getWebsocketConnectionUrl();
+			console.log(url);
 			instance.socket = new WebSocket(url);
 
 			instance.socket.onopen = function(msg){
