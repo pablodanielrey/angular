@@ -1,7 +1,7 @@
 
 var app = angular.module('mainApp');
 
-app.service('Users', function($rootScope, Messages, Session, Utils, Cache) {
+app.service('Users', function($rootScope, Messages, Session, Utils, Cache, Config) {
 
 
   $rootScope.$on('UserUpdatedEvent', function(event,data) {
@@ -55,7 +55,7 @@ app.service('Users', function($rootScope, Messages, Session, Utils, Cache) {
       action: 'confirmMail',
       sub_action: 'generate',
       mail_id: mail_id,
-      url: document.URL
+      url: Config.getServerUrl()
     }
     Messages.send(msg, function(response) {
       if (response.error != undefined) {

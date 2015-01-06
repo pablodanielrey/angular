@@ -1,32 +1,40 @@
 var app = angular.module('mainApp');
 
-app.service('WebSocket', function($rootScope) {
+app.service('WebSocket', function($rootScope, Config) {
 
-		this.registerHandlers = function() {
+		var instance = this;
+		this.states = { CONNECTING:0, OPEN:1, CLOSING:2, CLOSED:3 };
+		this.socket = null;
+
+		this.registerHandlers = function(ready) {
 
 			// abro el socket y registro los handlers de los eventos.
-			this.socket = new WebSocket("ws://163.10.17.105:8001");
+			var url = Config.getWebsocketConnectionUrl();
+			instance.socket = new WebSocket(url);
 
-			this.socket.onopen = function(msg){
+			instance.socket.onopen = function(msg){
 				$rootScope.$apply(function () {
 					$rootScope.$broadcast("onSocketOpened", msg);
 				});
+				if (ready != null) {
+						ready();
+				}
 			}
 
-			this.socket.onclose = function(msg) {
-				this.socket = null;
+			instance.socket.onclose = function(msg) {
+				instance.socket = null;
 				$rootScope.$apply(function() {
 					$rootScope.$broadcast('onSocketClosed',msg);
 				});
 			}
 
-			this.socket.onmessage = function(msg){
+			instance.socket.onmessage = function(msg){
 				$rootScope.$apply(function () {
 					$rootScope.$broadcast("onSocketMessage", msg.data);
 				});
 			}
 
-			this.socket.onerror = function(msg){
+			instance.socket.onerror = function(msg){
 				$rootScope.$apply(function () {
 					$rootScope.$broadcast("onSocketError", JSON.stringify(msg));
 				});
@@ -34,13 +42,22 @@ app.service('WebSocket', function($rootScope) {
 
 		}
 
-		this.send = function(msg){
-				this.socket.send(msg);
+		this.send = function(msg) {
+				if ((instance.socket == null) || (instance.socket.readyState != instance.states.OPEN)) {
+					instance.registerHandlers(function() {
+						instance.socket.send(msg);
+					});
+				} else {
+					instance.socket.send(msg);
+				}
 		}
 
-		this.close = function(){
-			this.socket.close();
-			this.socket = null;
+		this.close = function() {
+			if (instance.socket == null) {
+				return;
+			}
+			instance.socket.close();
+			instance.socket = null;
 		}
 
 		this.registerHandlers();

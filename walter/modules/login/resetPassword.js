@@ -2,7 +2,7 @@
 var app = angular.module('mainApp');
 
 
-app.controller('ResetPasswordCtrl', function($scope, Utils, Messages) {
+app.controller('ResetPasswordCtrl', function($scope, Utils, Messages, Config) {
 
   $scope.user = { username:'' };
 
@@ -20,7 +20,7 @@ app.controller('ResetPasswordCtrl', function($scope, Utils, Messages) {
       id: Utils.getId(),
       action: 'resetPassword',
       username: $scope.user.username,
-      url: document.URL
+      url: Config.getServerUrl()
     };
     Messages.send(msg,
       function(ok) {
