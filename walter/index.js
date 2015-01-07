@@ -5,18 +5,11 @@ var app = angular.module('mainApp',['ngRoute']);
 
 // agrego el controlador principal.
 
-app.controller('IndexCtrl', function ($rootScope, $location, Session, Cache) {
+app.controller('IndexCtrl', function ($rootScope, $location, Session, Cache, WebSocket) {
 
     // mensajes que vienen del socket. solo me interesan los eventos, las respuestas son procesadas por otro lado.
     $rootScope.$on('onSocketMessage', function(event, data) {
       var response = JSON.parse(data);
-
-/*
-      // por las dudas si esta cacheado algo lo remuevo, si es una respuesta.
-      if ((response.type != undefined) && (/.*Event$/.test(response.type))) {
-        Cache.removeItem(response.data);
-      }
-*/
 
       // tiene que tener tipo si o si.
       if (response.type == undefined) {
@@ -35,8 +28,9 @@ app.controller('IndexCtrl', function ($rootScope, $location, Session, Cache) {
     $rootScope.processGeneralExceptions = function(e) {
       if (e.name == 'SessionNotFound') {
         // no se encontro la session en el server asi que la destruyo y vuelvo a la pantlla principal.
+        alert("no se encontro la sesion en el servidor, debe loguearse nuevamente");
         Session.destroy();
-        $location.path('/main');
+        $location.reload();
         return;
       }
     }
@@ -52,33 +46,7 @@ app.controller('IndexCtrl', function ($rootScope, $location, Session, Cache) {
     });
 
 
-/*
-    $rootScope.$on('$routeChangeStart', function(event, next, current) {
-      if (!Session.isLogged()) {
-//        event.preventDefault();
-        $location.path('/login');
-      }
-    });
-*/
-
-
-/*
-    // chequeo que cuando se cambia la navegación se este logueado. si no que vaya a la pantalla de login.
-    $rootScope.$on('$afterRouteChange', function(current, previous) {
-      alert("afterroutechange");
-      if (!Session.isLogged()) {
-        $location.path('/login');
-      }
-    });
-
-    // chequeo que cuando se cambia la navegación se este logueado. si no que vaya a la pantalla de login.
-    $rootScope.$on('$afterLocationChange', function(current, previous) {
-      alert("afterlocationchange");
-      if (!Session.isLogged()) {
-        $location.path('/login');
-      }
-    });
-*/
+    WebSocket.registerHandlers();
 
 
     // la vista por defecto.

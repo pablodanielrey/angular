@@ -13,9 +13,10 @@ app.service('WebSocket', function($rootScope, Config) {
 			this.socket = new WebSocket(url);
 
 			this.socket.onopen = function(msg){
-//				$rootScope.$apply(function () {
-//					$rootScope.$broadcast("onSocketOpened", msg);
-//				});
+				console.log('socket conectado');
+				$rootScope.$apply(function () {
+					$rootScope.$broadcast("onSocketOpened", msg);
+				});
 			}
 
 			this.socket.onclose = function(msg) {
@@ -45,6 +46,9 @@ app.service('WebSocket', function($rootScope, Config) {
 //						instance.socket.send(msg);
 //					});
 //				} else {
+					if (this.socket == null) {
+						throw "this.socket == null";
+					}
 					this.socket.send(msg);
 //				}
 		}

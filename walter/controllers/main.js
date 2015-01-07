@@ -1,7 +1,7 @@
 var app = angular.module('mainApp');
 
 app.controller('MainCtrl', function($rootScope, $location, Session) {
-
+/*
   $rootScope.$on('loginOk',function(event,data) {
     $location.path('/main');
   });
@@ -14,5 +14,5 @@ app.controller('MainCtrl', function($rootScope, $location, Session) {
   if (!Session.isLogged()) {
     $location.path('/login');
   }
-
+*/
 });
