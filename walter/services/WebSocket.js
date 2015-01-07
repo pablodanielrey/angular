@@ -2,40 +2,36 @@ var app = angular.module('mainApp');
 
 app.service('WebSocket', function($rootScope, Config) {
 
-		var instance = this;
 		this.states = { CONNECTING:0, OPEN:1, CLOSING:2, CLOSED:3 };
 		this.socket = null;
 
-		this.registerHandlers = function(ready) {
+		this.registerHandlers = function() {
 
 			// abro el socket y registro los handlers de los eventos.
 			var url = Config.getWebsocketConnectionUrl();
 			console.log(url);
-			instance.socket = new WebSocket(url);
+			this.socket = new WebSocket(url);
 
-			instance.socket.onopen = function(msg){
-				$rootScope.$apply(function () {
-					$rootScope.$broadcast("onSocketOpened", msg);
-				});
-				if (ready != null) {
-						ready();
-				}
+			this.socket.onopen = function(msg){
+//				$rootScope.$apply(function () {
+//					$rootScope.$broadcast("onSocketOpened", msg);
+//				});
 			}
 
-			instance.socket.onclose = function(msg) {
-				instance.socket = null;
-				$rootScope.$apply(function() {
-					$rootScope.$broadcast('onSocketClosed',msg);
-				});
+			this.socket.onclose = function(msg) {
+				this.socket = null;
+//				$rootScope.$apply(function() {
+//					$rootScope.$broadcast('onSocketClosed',msg);
+//				});
 			}
 
-			instance.socket.onmessage = function(msg){
+			this.socket.onmessage = function(msg){
 				$rootScope.$apply(function () {
 					$rootScope.$broadcast("onSocketMessage", msg.data);
 				});
 			}
 
-			instance.socket.onerror = function(msg){
+			this.socket.onerror = function(msg){
 				$rootScope.$apply(function () {
 					$rootScope.$broadcast("onSocketError", JSON.stringify(msg));
 				});
@@ -44,23 +40,23 @@ app.service('WebSocket', function($rootScope, Config) {
 		}
 
 		this.send = function(msg) {
-				if ((instance.socket == null) || (instance.socket.readyState != instance.states.OPEN)) {
-					instance.registerHandlers(function() {
-						instance.socket.send(msg);
-					});
-				} else {
-					instance.socket.send(msg);
-				}
+//				if ((instance.socket == null) || (instance.socket.readyState != instance.states.OPEN)) {
+//					instance.registerHandlers(function() {
+//						instance.socket.send(msg);
+//					});
+//				} else {
+					this.socket.send(msg);
+//				}
 		}
 
 		this.close = function() {
-			if (instance.socket == null) {
+			if (this.socket == null) {
 				return;
 			}
-			instance.socket.close();
-			instance.socket = null;
+			this.socket.close();
+			this.socket = null;
 		}
 
-		this.registerHandlers();
+//		this.registerHandlers();
 
 });

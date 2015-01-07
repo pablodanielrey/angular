@@ -1,6 +1,24 @@
 var app = angular.module('mainApp');
 
-app.service('Credentials', function($rootScope, Utils, Messages) {
+app.service('Credentials', function($rootScope, Utils, Messages, Session) {
+
+  this.resetPassword = function(username, ok, error) {
+    var msg = {
+      id: Utils.getId(),
+      action: 'resetPassword',
+      username: username,
+      url: Config.getServerUrl()
+    };
+
+    Messages.send(msg,
+      function(k) {
+        ok(k);
+      },
+      function(err) {
+        error(err);
+      });
+  }
+
 
   this.isLogged = function() {
     var sid = Session.getSessionId();
@@ -28,7 +46,8 @@ app.service('Credentials', function($rootScope, Utils, Messages) {
         ok({user_id:response.user_id, session:response.session});
       } else {
         error(response.error);
-      });
+      }
+    });
   }
 
   this.logout = function(ok,error) {
@@ -48,8 +67,7 @@ app.service('Credentials', function($rootScope, Utils, Messages) {
       }
 
     });
-
-
+  }
 
 
   this.changePasswordWithHash = function(creds, hash, ok, error) {
@@ -62,12 +80,12 @@ app.service('Credentials', function($rootScope, Utils, Messages) {
     };
 
     Messages.send(msg,
-      function(mok){
+      function(mok) {
         ok(mok);
       },
       function(merror) {
         error(merror);
-    });
+      });
   }
 
   this.changePassword = function(creds, ok, error) {

@@ -2,7 +2,7 @@
 var app = angular.module('mainApp');
 
 
-app.controller('ResetPasswordCtrl', function($scope, Utils, Messages, Config) {
+app.controller('ResetPasswordCtrl', function($scope) {
 
   $scope.user = { username:'' };
 
@@ -16,13 +16,7 @@ app.controller('ResetPasswordCtrl', function($scope, Utils, Messages, Config) {
       return;
     }
 
-    var msg = {
-      id: Utils.getId(),
-      action: 'resetPassword',
-      username: $scope.user.username,
-      url: Config.getServerUrl()
-    };
-    Messages.send(msg,
+    Credentials.resetPassword($scope.user.username,
       function(ok) {
         alert('Se ha enviado un mail de confirmación a sus cuentas de email. Por favor chequee bandeja de entrada y correo no deseado');
       },
