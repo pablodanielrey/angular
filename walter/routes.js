@@ -65,6 +65,13 @@ app.config(['$routeProvider', function($routeProvider) {
         controller: 'EditUserProfileCtrl'
       })
 
+
+
+      .when('/editStudent', {
+        templateUrl: 'modules/systems/student/editStudent.html',
+        controller: 'EditStudentCtrl'
+      })
+
       .otherwise({
  	      redirectTo: '/main'
       });
