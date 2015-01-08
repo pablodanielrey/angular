@@ -18,7 +18,7 @@ app.controller('EditStudentCtrl', function($rootScope, $scope,Student,Session) {
     if (s == null) {
       return;
     }
-    $scope.findStudent(s.user_id);
+    $scope.findStudent(s.selectedUser);
   }
 
   $rootScope.$on('UserSelectedEvent', function(e,id) {

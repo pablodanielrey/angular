@@ -15,7 +15,7 @@
 
 var app = angular.module('mainApp');
 
-app.controller('ListUsersCtrl',function($rootScope, $scope, $log, Messages, Utils, Session, Users) {
+app.controller('ListUsersCtrl',function($rootScope, $scope, $log, Session, Users) {
 
   $scope.users = [];
   $scope.selected = '';
@@ -63,6 +63,9 @@ app.controller('ListUsersCtrl',function($rootScope, $scope, $log, Messages, Util
 
   $scope.selectUser = function(id) {
     $scope.selected = id;
+    var s = Session.getCurrentSession();
+    s.selectedUser = id;
+    Session.saveSession(s);
     $rootScope.$broadcast('UserSelectedEvent',id);
   }
 
