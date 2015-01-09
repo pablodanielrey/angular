@@ -1,6 +1,10 @@
 <div>
 		<div class="editProfile_container">
 			<div>
+				<label>DNI</label>
+				<input class="editProfile_dni" type="text" ng-model="user.dni">
+			</div>
+			<div>
 				<label>Nombres</label>
 				<input class="editProfile_name" type="text" ng-model="user.name">
 			</div>
@@ -17,11 +21,24 @@
 				</select>
 			</div>
 			<div>
-				<label>DNI</label>
-				<input class="editProfile_dni" type="text" ng-model="user.dni">
+				<label>Fecha de nacimiento</label>
+				<input class="editProfile_birthdate" type="text"  ng-model="user.birthdate">
 			</div>
 			<div>
-				<label>Teléfono</label><input class="editProfile_telephone" type="text"  ng-model="user.telephone">
+				<label>País</label>
+				<input class="editProfile_country" type="text"  ng-model="user.country">
+			</div>
+			<div>
+				<label>Ciudad</label>
+				<input class="editProfile_city" type="text"  ng-model="user.city">
+			</div>
+			<div>
+				<label>Dirección</label>
+				<input class="editProfile_address" type="text"  ng-model="user.address">
+			</div>
+			<div>
+				<label>Teléfono</label>
+				<input class="editProfile_telephone" type="text"  ng-model="user.telephone">
 			</div>
 			<div>
 				<button ng-click='update()'>actualizar</button>

@@ -3,9 +3,11 @@ var app = angular.module('mainApp');
 
 app.service('Users', function($rootScope, Messages, Session, Utils, Cache, Config) {
 
+  var instance = this;
+  this.userPrefix = 'user_';
 
-  $rootScope.$on('UserUpdatedEvent', function(event,data) {
-    Cache.removeItem(data);
+  $rootScope.$on('UserUpdatedEvent', function(event,id) {
+    Cache.removeItem(instance.userPrefix + id);
   });
 
 
@@ -110,12 +112,19 @@ app.service('Users', function($rootScope, Messages, Session, Utils, Cache, Confi
   }
 
 
+  this.normalizeUser = function(user) {
+    if (user.birthdate != undefined) {
+      user.birthdate = new Date(user.birthdate)
+    }
+  }
+
+
 
   // obtiene los datos de un usuario cuyo id es el pasado por parámetro.
   this.findUser = function(id, callbackOk, callbackError) {
 
     // chequeo la cache primero
-    var user = Cache.getItem(id);
+    var user = Cache.getItem(instance.userPrefix + id);
     if (user != null) {
       callbackOk(user);
       return;
@@ -131,8 +140,10 @@ app.service('Users', function($rootScope, Messages, Session, Utils, Cache, Confi
       if (response.error != undefined) {
         callbackError(response.error);
       } else {
-        Cache.setItem(response.user.id,user);
-        callbackOk(response.user);
+        var user = response.user;
+        instance.normalizeUser(user);
+        Cache.setItem(instance.userPrefix + user.id,user);
+        callbackOk(user);
       }
     });
   }
@@ -141,7 +152,9 @@ app.service('Users', function($rootScope, Messages, Session, Utils, Cache, Confi
   this.updateUser = function(user, callbackOk, callbackError) {
 
     // elimino ese usuario de la cache
-    Cache.removeItem(user.id);
+    Cache.removeItem(instance.userPrefix + user.id);
+
+    instance.normalizeUser(user);
 
     var msg = {
       id: Utils.getId(),
@@ -176,7 +189,7 @@ app.service('Users', function($rootScope, Messages, Session, Utils, Cache, Confi
         var remainingIds = [];
         var ids = response.users;
         for (var i = 0; i < ids.length; i++) {
-          var user = Cache.getItem(ids[i].id);
+          var user = Cache.getItem(instance.userPrefix + ids[i].id);
           if (user == null) {
             remainingIds.push(ids[i].id);
           } else {
@@ -204,7 +217,8 @@ app.service('Users', function($rootScope, Messages, Session, Utils, Cache, Confi
             // actualizo la cache con las personas retornadas.
             for (var i = 0; i < response.users.length; i++) {
               var user = response.users[i];
-              Cache.setItem(user['id'],user);
+              instance.normalizeUser(user)
+              Cache.setItem(instance.userPrefix + user['id'],user);
             }
             callbackOk(cachedUsers.concat(response.users));
           }
