@@ -63,9 +63,11 @@ app.controller('ListUsersCtrl',function($rootScope, $scope, $log, Session, Users
 
   $scope.selectUser = function(id) {
     $scope.selected = id;
+
     var s = Session.getCurrentSession();
     s.selectedUser = id;
     Session.saveSession(s);
+
     $rootScope.$broadcast('UserSelectedEvent',id);
   }
 

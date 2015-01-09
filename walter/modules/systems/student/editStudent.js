@@ -18,6 +18,9 @@ app.controller('EditStudentCtrl', function($rootScope, $scope,Student,Session) {
     if (s == null) {
       return;
     }
+    if (s.selectedUser == undefined) {
+      return;
+    }
     $scope.findStudent(s.selectedUser);
   }
 
