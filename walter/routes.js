@@ -66,6 +66,10 @@ app.config(['$routeProvider', function($routeProvider) {
       })
 
 
+      .when('/listGroups', {
+        templateUrl: 'modules/groups/listGroups.html',
+        controller: 'ListGroupsCtrl'
+      })
 
       .when('/editStudent', {
         templateUrl: 'modules/systems/student/editStudent.html',

@@ -7,6 +7,7 @@ app.controller('MenuCtrl', function($rootScope, $scope, Session) {
 {url:'#/main',label:'Principal'},
 {url:'#/status',label:'Estado del sistema'},
 {url:'#/editUsers',label:'Editar Usuarios'},
+{url:'#/listGroups',label:'Editar Grupos'},
 {url:'#/editUserProfile',label:'Editar Perfil'},
 {url:'#/listAccountRequests',label:'Listar pedidos de cuentas'},
 {url:'#/changePassword',label:'Cambiar clave'},
