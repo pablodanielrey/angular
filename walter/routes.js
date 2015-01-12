@@ -66,9 +66,9 @@ app.config(['$routeProvider', function($routeProvider) {
       })
 
 
-      .when('/listGroups', {
-        templateUrl: 'modules/groups/listGroups.html',
-        controller: 'ListGroupsCtrl'
+      .when('/editGroups', {
+        templateUrl: 'modules/groups/editGroups.html',
+        controller: 'EditGroupsCtrl'
       })
 
       .when('/editStudent', {

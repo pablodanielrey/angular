@@ -1,14 +1,12 @@
 <div>
-  <div>
-    <div>Grupos</div>
-    <ul>
-    </ul>
+
+  <div ng-controller='ListGroupsCtrl'>
+    <ng-include src="'modules/groups/listGroups.html'"/>
   </div>
 
-  <div>
-    <div>Grupos a los que pertenece</div>
-    <ul>
-    </ul>
+  <div ng-controller='EditGroupCtrl'>
+    <ng-include src="'modules/groups/editGroup.html'"/>
   </div>
+
 
 </div>

@@ -2,9 +2,9 @@
   <div>Grupos</div>
   <ul ng-repeat='g in groups'>
     <li>
-      <div ng-click='select(g.id)'  ng-class="{true:'selected',false:''}[isSelected(g.id)]">
+      <div ng-click='select(g.id)' ng-class="{true:'selected',false:''}[isSelected(g.id)]">
         <span>{{g.id}}</span>
-        <span>{{g.system_id}}</span>
+        <span>{{g.systemId}}</span>
         <span>{{g.name}}</span>
       </div>
     </li>

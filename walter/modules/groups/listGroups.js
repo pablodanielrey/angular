@@ -1,7 +1,7 @@
 
 var app = angular.module('mainApp');
 
-app.controller('ListGroupsCtrl',function($scope,Groups) {
+app.controller('ListGroupsCtrl',function($rootScope,$scope,Groups) {
 
   $scope.groups = [];
   $scope.selected = null;
@@ -18,8 +18,10 @@ app.controller('ListGroupsCtrl',function($scope,Groups) {
   $scope.select = function(id) {
     if ($scope.isSelected(id)) {
       $scope.selected = null;
+      $rootScope.$broadcast('GroupSelectedEvent',null);
     } else {
       $scope.selected = id;
+      $rootScope.$broadcast('GroupSelectedEvent',$scope.selected);
     }
   }
 
