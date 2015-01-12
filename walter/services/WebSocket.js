@@ -26,10 +26,12 @@ app.service('WebSocket', function($rootScope, Config) {
 //				});
 			}
 
-			this.socket.onmessage = function(msg){
-				$rootScope.$apply(function () {
-					$rootScope.$broadcast("onSocketMessage", msg.data);
-				});
+			this.socket.onmessage = function(msg) {
+				setTimeout(function() {
+					$rootScope.$apply(function () {
+						$rootScope.$broadcast("onSocketMessage", msg.data);
+					});
+				}, 0);
 			}
 
 			this.socket.onerror = function(msg){
