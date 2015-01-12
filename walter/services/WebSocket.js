@@ -14,16 +14,20 @@ app.service('WebSocket', function($rootScope, Config) {
 
 			this.socket.onopen = function(msg){
 				console.log('socket conectado');
-				$rootScope.$apply(function () {
-					$rootScope.$broadcast("onSocketOpened", msg);
-				});
+				setTimeout(function() {
+					$rootScope.$apply(function () {
+						$rootScope.$broadcast("onSocketOpened", msg);
+					});
+				},0);
 			}
 
 			this.socket.onclose = function(msg) {
 				this.socket = null;
-//				$rootScope.$apply(function() {
-//					$rootScope.$broadcast('onSocketClosed',msg);
-//				});
+				setTimeout(function() {
+						$rootScope.$apply(function() {
+							$rootScope.$broadcast('onSocketClosed',msg);
+						});
+					},0);
 			}
 
 			this.socket.onmessage = function(msg) {
@@ -35,9 +39,11 @@ app.service('WebSocket', function($rootScope, Config) {
 			}
 
 			this.socket.onerror = function(msg){
-				$rootScope.$apply(function () {
-					$rootScope.$broadcast("onSocketError", JSON.stringify(msg));
-				});
+				setTimeout(function() {
+					$rootScope.$apply(function () {
+						$rootScope.$broadcast("onSocketError", JSON.stringify(msg));
+					});
+				},0);
 			}
 
 		}

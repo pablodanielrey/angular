@@ -3,6 +3,21 @@ var app = angular.module('mainApp');
 
 app.service('Groups', function($rootScope, Messages, Session, Utils, Cache, Config) {
 
+  this.findMembers = function(id, ok, err) {
+    var msg = {
+      id: Utils.getId(),
+      session: Session.getSessionId(),
+      action: 'findMembers',
+      group: { id: id }
+    };
+    Messages.send(msg, function(response) {
+      if (response.error != undefined) {
+        err(response.error);
+      } else {
+        ok(response.group.members);
+      }
+    })
+  }
 
 
   // obtiene los datos de un usuario cuyo id es el pasado por parámetro.
