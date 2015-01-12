@@ -1,5 +1,5 @@
 
-<div>
+<div ng-if='members.length > 0'>
   <ul ng-repeat='user in members'>
     <li ng-click='select(user.id)' ng-class="{true:'selected',false:''}[isSelected(user.id)]">
       <div>dni : {{user.dni}}</div>
