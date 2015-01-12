@@ -5,6 +5,33 @@ var app = angular.module('mainApp');
 app.controller('GroupMembersCtrl', function($rootScope, $scope, Groups, Users) {
 
   $scope.members = [];
+  $scope.selected = [];
+
+
+  $scope.findSelected = function(id) {
+    for (var i = 0; i < $scope.selected.length; i++) {
+      if ($scope.selected[i] == id) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+
+  $scope.select = function(id) {
+    var s = $scope.findSelected(id);
+    if (s == -1) {
+      $scope.selected.push(id);
+    } else {
+      $scope.selected.splice(s,1);
+    }
+  }
+
+  $scope.isSelected = function(id) {
+    return ($scope.findSelected(id) != -1);
+  }
+
+
 
   $scope.findMember = function(id) {
     for (var i = 0; i < $scope.members.length; i++) {
