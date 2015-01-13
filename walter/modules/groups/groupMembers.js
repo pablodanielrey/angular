@@ -4,8 +4,23 @@ var app = angular.module('mainApp');
 
 app.controller('GroupMembersCtrl', function($rootScope, $scope, Groups, Users) {
 
+  $scope.groupSelected = null;
   $scope.members = [];
   $scope.selected = [];
+
+  $scope.remove = function() {
+    Groups.removeMembers(
+            $scope.groupSelected,
+            $scope.selected,
+            function(ok) {
+              setTimeout(function() {
+                $rootScope.broadcast('GroupSelectedEvent',$scope.groupSelected);
+              },0);
+            },
+            function(err) {
+              alert(err);
+            });
+  }
 
 
   $scope.findSelected = function(id) {
@@ -43,6 +58,11 @@ app.controller('GroupMembersCtrl', function($rootScope, $scope, Groups, Users) {
   }
 
   $rootScope.$on('UserUpdatedEvent', function(e,id) {
+
+    if ($scope.groupSelected == null) {
+      return;
+    }
+
     var i = $scope.findMember(id);
     if (i == -1) {
       // no esta dentro de los miembros asi que no actualizo nada.
@@ -68,9 +88,11 @@ app.controller('GroupMembersCtrl', function($rootScope, $scope, Groups, Users) {
 
   $rootScope.$on('GroupSelectedEvent', function(e,id) {
     if (id == null) {
+      $scope.groupSelected = null;
       $scope.members = [];
       return;
     }
+    $scope.groupSelected = id;
     $scope.members = [];
     Groups.findMembers(id,
       function(members) {
@@ -82,7 +104,7 @@ app.controller('GroupMembersCtrl', function($rootScope, $scope, Groups, Users) {
             },
             function(error) {
               var user = {
-                id: id,
+                id: $scope.groupSelected,
                 name: 'error',
                 lastname: 'error',
                 dni: 'error'

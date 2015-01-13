@@ -3,6 +3,26 @@ var app = angular.module('mainApp');
 
 app.service('Groups', function($rootScope, Messages, Session, Utils, Cache, Config) {
 
+  this.removeMembers = function(id, members, ok, err) {
+    var msg = {
+      id: Utils.getId(),
+      session: Session.getSessionId(),
+      action: 'removeMembers',
+      group: {
+        id: id,
+        members: members
+      }
+    };
+    Messages.send(msg, function(response) {
+      if (response.error != undefined) {
+        err(response.error);
+      } else {
+        ok(response.ok);
+      }
+    });
+  }
+  
+
   this.findMembers = function(id, ok, err) {
     var msg = {
       id: Utils.getId(),
