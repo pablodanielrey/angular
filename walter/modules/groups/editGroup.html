@@ -9,12 +9,13 @@
       <span>{{group.id}}</span>
     </div>
     <div>
-      <span>Systema</span>
+      <span>Sistema</span>
       <span>{{group.systemId}}</span>
     </div>
     <div>
       <span>Nombre</span>
-      <span>{{group.name}}</span>
+      <input type='text' ng-model='group.name'/>
     </div>
+    <button ng-click='update()'>actualizar</button>
   </div>
 </div>

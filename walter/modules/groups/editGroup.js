@@ -21,7 +21,18 @@ app.controller('EditGroupCtrl', function($rootScope,$scope,Groups) {
     $scope.findGroupData(id);
   });
 
-
+  $scope.update = function() {
+    if ($scope.group == null) {
+      return;
+    }
+    Groups.updateGroup($scope.group,
+      function(ok) {
+        // nada ya que se dispara el evento
+      },
+      function(err) {
+        alert(err);
+      });
+  }
 
   $scope.findGroupData = function(id) {
     Groups.findGroup(id,
