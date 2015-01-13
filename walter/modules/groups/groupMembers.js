@@ -57,6 +57,17 @@ app.controller('GroupMembersCtrl', function($rootScope, $scope, Groups, Users) {
     return -1;
   }
 
+
+  $rootScope.$on('GroupUpdatedEvent', function(e,id) {
+    if ($scope.groupSelected != id) {
+      return;
+    }
+
+    $scope.members = [];
+    $scope.selected = [];
+    $scope.findMembers(id);
+  });
+
   $rootScope.$on('UserUpdatedEvent', function(e,id) {
 
     if ($scope.groupSelected == null) {
@@ -90,10 +101,18 @@ app.controller('GroupMembersCtrl', function($rootScope, $scope, Groups, Users) {
     if (id == null) {
       $scope.groupSelected = null;
       $scope.members = [];
+      $scope.selected = [];
       return;
     }
     $scope.groupSelected = id;
     $scope.members = [];
+    $scope.selected = [];
+    $scope.findMembers(id);
+
+  });
+
+
+  $scope.findMembers = function(id) {
     Groups.findMembers(id,
       function(members) {
         for (var i = 0; i < members.length; i++) {
@@ -110,14 +129,13 @@ app.controller('GroupMembersCtrl', function($rootScope, $scope, Groups, Users) {
                 dni: 'error'
               };
               $scope.members.push(user);
-          });
+            });
+          }
+        },
+        function(error) {
+          alert(error);
         }
-      },
-      function(error) {
-        alert(error);
-      });
-    });
-
-
+      );
+  }
 
 });

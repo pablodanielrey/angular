@@ -6,6 +6,15 @@ app.controller('ListGroupsCtrl',function($rootScope,$scope,Groups) {
   $scope.groups = [];
   $scope.selected = null;
 
+
+  $rootScope.$on('GroupUpdatedEvent', function(e,id) {
+    if ($scope.selected != id) {
+      return;
+    }
+    $scope.listGroups();
+  });
+
+
   $scope.listGroups = function() {
     Groups.listGroups(function(gps) {
       $scope.groups = gps;
