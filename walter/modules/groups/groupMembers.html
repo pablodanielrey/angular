@@ -1,5 +1,7 @@
 <div>
+  <!-- solo se muestra si el grupo tiene al menos un miembro -->
   <div ng-if='members.length > 0'>
+    <!-- miembros del grupo -->
     <ul ng-repeat='user in members'>
       <li ng-click='select(user.id)' ng-class="{true:'selected',false:''}[isSelected(user.id)]">
         <div>dni : {{user.dni}}</div>
@@ -8,10 +10,16 @@
         <div>dni : {{user.dni}}</div>
       </li>
     </ul>
+    <!-- elmina los miembros seleccionados del grupo -->
     <button ng-click='remove()'>eliminar</button>
   </div>
-  <div>
+
+  <!-- solo se muestra si existe algun grupo seleccionado -->
+  <div ng-if='groupSelected != null'>
+    <!-- muestra el dialogo de agregar usuarios -->
     <button ng-click='showAdd()'>agregar</button>
+
+    <!-- agregar usuarios a un grupo -->
     <div ng-if='adding == true' class='addPanel'>
       <ul ng-repeat='u in usersToAdd'>
         <li ng-click='selectToAdd(u.id)' ng-class="{true:'selected',false:''}[isSelectedToAdd(u.id)]">
