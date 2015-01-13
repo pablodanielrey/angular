@@ -9,6 +9,19 @@
       </li>
     </ul>
     <button ng-click='remove()'>eliminar</button>
-    <button ng-click='add()'>agregar</button>
+  </div>
+  <div>
+    <button ng-click='showAdd()'>agregar</button>
+    <div ng-if='adding == true' class='addPanel'>
+      <ul ng-repeat='u in usersToAdd'>
+        <li ng-click='selectToAdd(u.id)' ng-class="{true:'selected',false:''}[isSelectedToAdd(u.id)]">
+          <div>dni : {{u.dni}}</div>
+          <div>nombre : {{u.name}}</div>
+          <div>apellido : {{u.lastname}}</div>
+        </li>
+      </ul>
+      <button ng-click='addToGroup()'>agregar al grupo</button>
+      <button ng-click='cancelAddToGroup()'>cancelar</button>
+    </div>
   </div>
 </div>
