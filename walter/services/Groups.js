@@ -79,6 +79,22 @@ app.service('Groups', function($rootScope, Messages, Session, Utils, Cache, Conf
   }
 
 
+  this.createGroup = function(group, callbackOk, callbackError) {
+    var msg = {
+      id: Utils.getId(),
+      session: Session.getSessionId(),
+      action: 'createGroup',
+      group: group
+    };
+    Messages.send(msg,function(response) {
+      if (response.error != undefined) {
+        callbackError(response.error);
+      } else {
+        callbackOk(response.ok);
+      }
+    });
+  }
+
   this.updateGroup = function(group, callbackOk, callbackError) {
     var msg = {
       id: Utils.getId(),

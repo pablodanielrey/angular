@@ -1,0 +1,18 @@
+
+<div>
+  <div>
+    <span>Sistema</span>
+    <span>
+      <select ng-repeat='s in systems' ng-model='group.systemId'>
+        <option value='{{s.id}}'>{{s.name}}</option>
+      </select>
+    </span>
+  </div>
+  <div>
+    <span>Nombre</span>
+    <span>
+      <input ng-model='group.name'/>
+    </span>
+  </div>
+  <button ng-click='add()'>agregar</button>
+</div>
