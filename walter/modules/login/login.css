@@ -1,14 +1,11 @@
 
-.visible {
-	display: block;
+
+.login div {
+	display: flex;
 }
 
-.hidden {
-	display: none;
-}
-
-
-.login_container {
+.login {
+	display: flex;
 	background-clip: padding-box;
 	background-color: rgba(255, 255, 255, 1);
 	border:10px solid;
@@ -16,15 +13,22 @@
 	border-radius: 0.3em;
 	margin: 0.5em auto;
 	margin-top:100px;
-	max-width: 275px;
+	max-width: 150px;
 	padding: 20px;
 	-webkit-background-clip: padding-box;
 }
-.login_logo{
+
+.login .logo {
 	margin-top:10px;
 	margin: 0 auto;
 }
-.login_error{
+
+.login .label_user {
+
+}
+
+
+.login .error{
 	background-clip: padding-box;
 	background-color: rgba(255, 255, 255, 1);
 	padding-left:5px;
@@ -40,10 +44,12 @@
 	color:red;
 	font-size: 18px;
 }
+
 div{
 	margin-top:5px;
 }
-.login_user {
+
+.login .user .input_user {
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -56,16 +62,14 @@ div{
     background-color:#F2F2F2;
     color: #000;
 	margin-top:5px;
-	background-image: url(../img/imguser.png);
+	background-image: url(/views/img/imguser.png);
     background-repeat: no-repeat;
 	background-position: right center;
 	font-size: 18px;
 	padding-left:5px
-
-
 }
 
-.login_lastname {
+.login .password .input_password {
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -78,7 +82,7 @@ div{
     background-color:#F2F2F2;
     color: #000;
 	margin-top:5px;
-	background-image: url(../img/imglocked.png);
+	background-image: url(/views/img/imglocked.png);
     background-repeat: no-repeat;
 	background-position: right center;
 	font-size: 18px;
@@ -86,7 +90,7 @@ div{
 
 }
 
-.login_button {
+.login .button {
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -102,7 +106,7 @@ div{
 	font-size: 14px;
 
 }
-.login_button:hover{
+.login .button:hover{
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;

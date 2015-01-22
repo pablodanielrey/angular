@@ -1,9 +1,13 @@
 
 <div class="menu" ng-class="{true:'display-menu',false:'hide-menu'}[isMenuVisible()]">
-  <ul ng-repeat='i in items'>
-    <li><a href={{i.url}}>{{i.label}}</a></li>
+  <ul>
+      <li ng-repeat='i in items'>
+        <a href={{i.url}}>{{i.label}}</a>
+      </li>
   </ul>
 </div>
+
+
 
 
 <!--
