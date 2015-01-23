@@ -68,10 +68,11 @@ create table user_password (
 create table account_requests (
     id varchar not null primary key,
     dni varchar not null unique,
-    lastname varchar,
-    name varchar,
-    email varchar,
+    lastname varchar default '',
+    name varchar default '',
+    email varchar not null,
     reason varchar,
+    password varchar not null,
     created timestamp default now()
 );
 

@@ -9,10 +9,20 @@ app.controller('CreateAccountRequestCtrl', function($scope, Messages, Utils, Ses
           lastname:'',
           dni:'',
           email:'',
-          reason:''
+          reason:'',
+          password:'',
+          password2:''
   };
 
   $scope.createRequest = function() {
+
+    if ($scope.request.password != $scope.request.password2) {
+      alert('las claves ingresadas no son iguales');
+      $scope.request.password = '';
+      $scope.request.password2 = '';
+      return;
+    }
+
 
     var msg = {
         id: Utils.getId(),
@@ -36,11 +46,15 @@ app.controller('CreateAccountRequestCtrl', function($scope, Messages, Utils, Ses
   };
 
   clearRequest = function() {
-    $scope.request.name = '';
-    $scope.request.lastname = '';
-    $scope.request.dni = '';
-    $scope.request.email = '';
-    $scope.request.reason = '';
+    $scope.request = {
+      name:'',
+      lastname:'',
+      dni:'',
+      email:'',
+      reason:'',
+      password:'',
+      password2:''
+    };
   }
 
 });

@@ -7,16 +7,38 @@
 			<p>FORMULARIO DE REGISTRO</p>
 		</div>
 		<hr>
-		<div><label>Nombres</label></div>
-		<div><input class="input_name_formulario" type="text" ng-model="request.name" required></div>
-		<div><label>Apellidos</label></div>
-		<div><input class="input_apellido_formulario" type="text" ng-model="request.lastname" required> </div>
-		<div><label>DNI</label></div>
-		<div><input class="input_dni_formulario" type="text" ng-model="request.dni" required></div>
-		<div><label>Email</label></div>
-		<div><input class="input_email_formulario" type="text" ng-model="request.email" required></div>
-		<div><label>Motivo de la solicitud</label></div>
-		<div><textarea class="Input_motivo_formulario"ng-model="request.reason" required ></textarea>
-		<div><button class="boton_enviar_formulario" ng-click="createRequest()">Enviar</button></div>
+		<div>
+			<label>Nombres</label>
+			<input class="input_name_formulario" type="text" ng-model="request.name" required>
+		</div>
+		<div>
+			<label>Apellidos</label>
+			<input class="input_apellido_formulario" type="text" ng-model="request.lastname" required>
+		</div>
+		<div>
+			<label>DNI</label>
+			<input class="input_dni_formulario" type="text" ng-model="request.dni" required>
+		</div>
+		<div>
+			<label>Email</label>
+			<input class="input_email_formulario" type="email" ng-model="request.email" required>
+		</div>
+		<div>
+			<label>Clave</label>
+			<input class="input_password" type="password" ng-model="request.password" required>
+		</div>
+		<div>
+			<label>Repetir Clave</label>
+			<input class="input_password" type="password" ng-model="request.password2" required>
+		</div>
+		<div>
+			<label>Motivo de la solicitud</label>
+		</div>
+		<div>
+			<textarea class="Input_motivo_formulario" ng-model="request.reason" required ></textarea>
+		</div>
+		<div>
+			<button class="boton_enviar_formulario" ng-click="createRequest()">Enviar</button>
+		</div>
 	</div>
 </div>

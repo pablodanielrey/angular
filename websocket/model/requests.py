@@ -5,7 +5,7 @@ class Requests:
 
     def listRequests(self, con):
         cur = con.cursor()
-        cur.execute('select id,dni,name,lastname,email,reason from account_requests');
+        cur.execute('select id,dni,name,lastname,email,reason,password from account_requests');
         data = cur.fetchall();
         if data == None:
             return []
@@ -19,7 +19,8 @@ class Requests:
                 'name':d[2],
                 'lastname':d[3],
                 'email':d[4],
-                'reason':d[5]
+                'reason':d[5],
+                'password':d[6]
             })
 
         return rdata
@@ -27,7 +28,7 @@ class Requests:
 
     def findRequest(self, con, id):
         cur = con.cursor()
-        cur.execute('select id,dni,name,lastname,email,reason from account_requests where id = %s',(id,));
+        cur.execute('select id,dni,name,lastname,email,reason,password from account_requests where id = %s',(id,));
         d = cur.fetchone()
         if d == None:
             return None
@@ -39,15 +40,16 @@ class Requests:
             'name':d[2],
             'lastname':d[3],
             'email':d[4],
-            'reason':d[5]
+            'reason':d[5],
+            'password':d[6]
         }
         return rdata
 
 
     def createRequest(self, con, req):
-        rreq = (req['id'],req['dni'],req['name'],req['lastname'],req['email'],req['reason'])
+        rreq = (req['id'],req['dni'],req['name'],req['lastname'],req['email'],req['reason'],req['password'])
         cur = con.cursor()
-        cur.execute('insert into account_requests (id,dni,name,lastname,email,reason) values (%s,%s,%s,%s,%s,%s)', rreq)
+        cur.execute('insert into account_requests (id,dni,name,lastname,email,reason,password) values (%s,%s,%s,%s,%s,%s,%s)', rreq)
 
     def removeRequest(self, con, rid):
         cur = con.cursor()

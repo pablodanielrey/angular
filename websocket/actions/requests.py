@@ -304,11 +304,19 @@ class ApproveAccountRequest:
             'email':req['email']
       })
 
+      """
       ''' autogenero un password usando sha1 y uuid '''
       creds = {
         'user_id':user_id,
         'username':user['dni'],
         'password': hashlib.sha1(str(uuid.uuid4())).hexdigest()
+      }
+      """
+      ''' uso la clave que pidio en el request '''
+      creds = {
+        'user_id':user_id,
+        'username':user['dni'],
+        'password': req['password']
       }
       self.userPass.createUserPassword(con,creds)
       self.req.removeRequest(con,reqId)
