@@ -25,12 +25,6 @@ app.controller('IndexCtrl', function ($rootScope, $location, Session, Cache, Web
       $rootScope.$broadcast(response.type,response.data);
     });
 
-
-    $rootScope.isUserLogged = function() {
-      return Session.isLogged();
-    }
-
-
     $rootScope.processGeneralExceptions = function(e) {
       if (e.name == 'SessionNotFound') {
         // no se encontro la session en el server asi que la destruyo y vuelvo a la pantlla principal.
