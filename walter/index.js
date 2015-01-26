@@ -7,6 +7,7 @@ var app = angular.module('mainApp',['ngRoute']);
 
 app.controller('IndexCtrl', function ($rootScope, $location, Session, Cache, WebSocket) {
 
+
     // mensajes que vienen del socket. solo me interesan los eventos, las respuestas son procesadas por otro lado.
     $rootScope.$on('onSocketMessage', function(event, data) {
       var response = JSON.parse(data);
@@ -23,6 +24,11 @@ app.controller('IndexCtrl', function ($rootScope, $location, Session, Cache, Web
 
       $rootScope.$broadcast(response.type,response.data);
     });
+
+
+    $rootScope.isUserLogged = function() {
+      return Session.isLogged();
+    }
 
 
     $rootScope.processGeneralExceptions = function(e) {

@@ -19,7 +19,9 @@
   position: absolute;
   top: 0;
   left: 0;
+  z-index: -1;
 }
+
 
 .flex-container {
   display: flex;
@@ -29,8 +31,10 @@
 
 .hidden {
   display: none;
+  z-index: -1;
 }
 
 .visible {
   display: block;
+  z-index: 999;
 }

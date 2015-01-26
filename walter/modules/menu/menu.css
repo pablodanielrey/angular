@@ -7,6 +7,7 @@
 .menu {
   border: solid red 1px;
   width: 10%;
+  z-index: 900;
 }
 
 .menu ul {

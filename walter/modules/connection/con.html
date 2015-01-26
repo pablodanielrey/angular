@@ -1,7 +1,9 @@
+<div class='container-screen'>
 <div class='connection'>
   <span class='status' ng-class="{true:'connected',false:'hidden'}[isConnected()]">Conectado</span>
   <span class='status' ng-class="{true:'hidden',false:'disconnected'}[isConnected()]">
     <div class='disconnected'>Desconectado</div>
     <button class='disconnected' ng-click='connect()'>conectar</button>
   </span>
+</div>
 </div>

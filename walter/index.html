@@ -102,21 +102,20 @@
 <body>
   <div class='principal'>
 
-
-    <div class='container-screen' ng-controller="ConnectionCtrl">
+    <div ng-controller="ConnectionCtrl">
       <ng-include src="'modules/connection/con.html'"/>
     </div>
 
-    <div class='container-screen' ng-controller="MenuCtrl">
-      <ng-include class='container-screen menu-container-style' src="'modules/menu/menu.html'"/>
+    <div ng-controller="MenuCtrl">
+      <ng-include src="'modules/menu/menu.html'"/>
     </div>
 
-    <div class='container-screen' ng-controller="IndexCtrl">
+    <div ng-controller="IndexCtrl">
       <div ng-view></div>
     </div>
 
-    <div class='container-screen' ng-controller="LoginCtrl">
-      <ng-include class='container-screen' src="'modules/login/login.html'"/>
+    <div ng-controller="LoginCtrl" ng-class="{false:'display',true:'hidden'}[isUserLogged()]">
+      <ng-include src="'modules/login/login.html'"/>
     </div>
 
     <!--
