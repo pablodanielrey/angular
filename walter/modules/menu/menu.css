@@ -1,31 +1,14 @@
 
-.menu body, ul, li, h1, h2, span {
-  margin: 0;
-  padding: 0;
+
+.menu-container-style {
+  justify-content: flex-end;
+}
+
+.menu {
+  border: solid red 1px;
+  width: 10%;
 }
 
 .menu ul {
   list-style: none;
-}
-
-.menu {
-  width: 100px;
-  display: inline;
-}
-
-.display-menu {
-  display: inline;
-}
-
-.hide-menu {
-  display: none;
-}
-
-
-.student {
-
-}
-
-.admin {
-
 }

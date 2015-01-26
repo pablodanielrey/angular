@@ -1,22 +1,31 @@
-* {
-  margin:0;
-  padding:0;
-}
 
 .principal {
   display: flex;
-  align-items: center;
-  justify-content: center;
 
-  border: solid red 2px;
+<!--
   background: url(/views/img/fondo3.jpg) no-repeat fixed center;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
+
   font-family: Calibri;
   font-size: 14px;
+  -->
 }
+
+.container-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.flex-container {
+  display: flex;
+}
+
+
 
 .hidden {
   display: none;

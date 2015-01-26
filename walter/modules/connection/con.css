@@ -1,9 +1,8 @@
 
 .connection {
-  width: 260px;
-  position: fixed;
-  top: 95%;
-  right: 0;
+  align-self: flex-end;
+  width: 30%;
+  height: 7%;
 }
 
 .connection .status {

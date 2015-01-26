@@ -1,15 +1,18 @@
 
-
 <div class='login'>
 	<img src="views/img/logo.jpg" />
-	<label class="item first label_user">Usuario (DNI)</label>
-	<input class="item second input_user" type="text" ng-model="user.username"/>
-	<label class='item first'>Contraseña</label>
-	<input class="item second input_password" type="password" ng-model="user.password"/>
+	<label>Usuario (DNI)</label>
+	<input type="text" ng-model="user.username"/>
+	<label>Contraseña</label>
+	<input type="password" ng-model="user.password"/>
+
+	<button class="button" ng-click="login()">Entrar</button>
 
 	<div>
-		<span><a class="login_links" href="#/resetPassword"> Olvidé mi contraseña </a></span>
+		<span><a href="#/resetPassword"> Olvidé mi contraseña </a></span>
 		<span>|</span>
-		<span><a class="login_links" href="#/createAccountRequest"> Crear cuenta </a></span>
+		<span><a href="#/createAccountRequest"> Crear cuenta </a></span>
 	<div>
+
+
 </div>

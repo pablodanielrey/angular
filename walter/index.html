@@ -80,7 +80,7 @@
 
 
   <script type="text/javascript" src="modules/menu/menu.js"></script>
-<!--  <link rel="stylesheet" type="text/css" href="modules/menu/menu.css" /> -->
+  <link rel="stylesheet" type="text/css" href="modules/menu/menu.css"/>
 
   <script type="text/javascript" src="modules/chat/chat.js"></script>
 
@@ -101,26 +101,23 @@
 </head>
 <body>
   <div class='principal'>
-    <div class='login-container' ng-controller="LoginCtrl">
-      <ng-include src="'modules/login/login.html'"/>
-    </div>
 
-    <!--
-    <div ng-controller="ConnectionCtrl">
+
+    <div class='container-screen' ng-controller="ConnectionCtrl">
       <ng-include src="'modules/connection/con.html'"/>
     </div>
 
-  -->
-
-    <div ng-controller="MenuCtrl">
-      <ng-include src="'modules/menu/menu.html'"/>
+    <div class='container-screen' ng-controller="MenuCtrl">
+      <ng-include class='container-screen menu-container-style' src="'modules/menu/menu.html'"/>
     </div>
 
-
-    <div ng-controller="IndexCtrl">
+    <div class='container-screen' ng-controller="IndexCtrl">
       <div ng-view></div>
     </div>
 
+    <div class='container-screen' ng-controller="LoginCtrl">
+      <ng-include class='container-screen' src="'modules/login/login.html'"/>
+    </div>
 
     <!--
     <div ng-controller="ChatCtrl">

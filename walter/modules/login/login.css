@@ -1,9 +1,6 @@
 
 .login {
-	display: flex;
-	flex-direction: column;
-}
-
-.login .first {
-	flex-grow:2;
+	width: 50%;
+	height: 50%;
+	border: solid blue 1px;
 }
