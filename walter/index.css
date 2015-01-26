@@ -3,11 +3,12 @@
   padding:0;
 }
 
-
 .principal {
-  border: solid red 2px;
   display: flex;
-  flex: 0 0 100%;
+  align-items: center;
+  justify-content: center;
+
+  border: solid red 2px;
   background: url(/views/img/fondo3.jpg) no-repeat fixed center;
   -webkit-background-size: cover;
   -moz-background-size: cover;
