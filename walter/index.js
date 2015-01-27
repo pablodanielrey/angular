@@ -5,7 +5,16 @@ var app = angular.module('mainApp',['ngRoute']);
 
 // agrego el controlador principal.
 
-app.controller('IndexCtrl', function ($rootScope, $location, Session, Cache, WebSocket) {
+app.controller('IndexCtrl', function ($rootScope, $scope, $location, Session, Cache, WebSocket) {
+
+
+    $rootScope.isLogged = function() {
+      return Session.isLogged();
+    }
+
+    $rootScope.isConnected = function() {
+      return ($rootScope.socket != null);
+    }
 
 
     // mensajes que vienen del socket. solo me interesan los eventos, las respuestas son procesadas por otro lado.

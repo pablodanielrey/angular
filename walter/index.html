@@ -40,7 +40,7 @@
 <!--  <link rel="stylesheet" type="text/css" href="modules/admin/status.css"/> -->
 
   <script type="text/javascript" src="modules/connection/con.js"></script>
-<!--  <link rel="stylesheet" type="text/css" href="modules/connection/con.css"/> -->
+  <link rel="stylesheet" type="text/css" href="modules/connection/con.css"/>
 
   <script type="text/javascript" src="modules/groups/groupMembers.js"></script>
   <script type="text/javascript" src="modules/groups/listGroups.js"></script>
@@ -112,10 +112,8 @@
     <div class='screen'>
       <header>
         <div class='header-container' ng-controller="HeaderCtrl" ng-include="'modules/header/header.html'">
-          <div ng-controller="ConnectionCtrl" ng-include="'modules/connection/con.html'">
-          </div>
         </div>
-      </header>
+      <header>
 
       <div id='main'>
         <nav>
@@ -134,19 +132,14 @@
         <div class='footer-container' ng-controller='FooterCtrl' ng-include="'modules/footer/footer.html'">
         </div>
       </footer>
-
     </div>
 
-    <div class='hidden-screen'>
-      <div ng-controller="LoginCtrl" ng-include="'modules/login/login.html'">
-      </div>
+    <div class='login-container' ng-class="{false:'visible',true:'hidden'}[isLogged()]" ng-controller="LoginCtrl" ng-include="'modules/login/login.html'">
     </div>
 
-    <!--
-    <div ng-controller="ChatCtrl">
-      <ng-include src="'modules/chat/chat.html'"/>
+    <div class='connection-container' ng-class="{false:'visible',true:'hidden'}[isConnected()]" ng-controller="ConnectionCtrl" ng-include="'modules/connection/con.html'">
     </div>
-    -->
+
   </div>
 </body>
 </html>

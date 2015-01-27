@@ -2,17 +2,17 @@ var app = angular.module('mainApp');
 
 app.service('WebSocket', function($rootScope, Config) {
 
-		this.states = { CONNECTING:0, OPEN:1, CLOSING:2, CLOSED:3 };
-		this.socket = null;
+		$rootScope.states = { CONNECTING:0, OPEN:1, CLOSING:2, CLOSED:3 };
+		$rootScope.socket = null;
 
 		this.registerHandlers = function() {
 
 			// abro el socket y registro los handlers de los eventos.
 			var url = Config.getWebsocketConnectionUrl();
 			console.log(url);
-			this.socket = new WebSocket(url);
+			$rootScope.socket = new WebSocket(url);
 
-			this.socket.onopen = function(msg){
+			$rootScope.socket.onopen = function(msg){
 				console.log('socket conectado');
 				setTimeout(function() {
 					$rootScope.$apply(function () {
@@ -21,8 +21,8 @@ app.service('WebSocket', function($rootScope, Config) {
 				},0);
 			}
 
-			this.socket.onclose = function(msg) {
-				this.socket = null;
+			$rootScope.socket.onclose = function(msg) {
+				$rootScope.socket = null;
 				setTimeout(function() {
 						$rootScope.$apply(function() {
 							$rootScope.$broadcast('onSocketClosed',msg);
@@ -30,7 +30,7 @@ app.service('WebSocket', function($rootScope, Config) {
 					},0);
 			}
 
-			this.socket.onmessage = function(msg) {
+			$rootScope.socket.onmessage = function(msg) {
 				setTimeout(function() {
 					$rootScope.$apply(function () {
 						$rootScope.$broadcast("onSocketMessage", msg.data);
@@ -38,7 +38,7 @@ app.service('WebSocket', function($rootScope, Config) {
 				}, 0);
 			}
 
-			this.socket.onerror = function(msg){
+			$rootScope.socket.onerror = function(msg){
 				setTimeout(function() {
 					$rootScope.$apply(function () {
 						$rootScope.$broadcast("onSocketError", JSON.stringify(msg));
@@ -54,19 +54,19 @@ app.service('WebSocket', function($rootScope, Config) {
 //						instance.socket.send(msg);
 //					});
 //				} else {
-					if (this.socket == null) {
-						throw "this.socket == null";
+					if ($rootScope.socket == null) {
+						throw "$rootScope.socket == null";
 					}
-					this.socket.send(msg);
+					$rootScope.socket.send(msg);
 //				}
 		}
 
 		this.close = function() {
-			if (this.socket == null) {
+			if ($rootScope.socket == null) {
 				return;
 			}
-			this.socket.close();
-			this.socket = null;
+			$rootScope.socket.close();
+			$rootScope.socket = null;
 		}
 
 //		this.registerHandlers();

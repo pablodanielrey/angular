@@ -39,15 +39,14 @@ article {
   height: 0;
   visible: hidden;
   overflow: visible;
+  top: 100%;
+  left: 0;
 }
 
 
 .hidden {
-  visibility: hidden;
-  z-index: -1;
 }
 
 .visible {
-  visibility: visible;
-  z-index: 999;
+
 }

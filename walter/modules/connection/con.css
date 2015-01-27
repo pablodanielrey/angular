@@ -1,23 +1,26 @@
 
+
+.connection-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.connection-container.visible {
+
+}
+
+.connection-container.hidden {
+  display: none;
+}
+
 .connection {
-  align-self: flex-end;
-  width: 30%;
-  height: 7%;
-}
-
-.connection .status {
-  overflow: hidden;
-  opacity: 0;
-}
-
-.connection .connected {
-  background-color: back;
-  color: red;
-  opacity: 1;
-}
-
-.connection .disconnected {
-  background-color: red;
-  color: back;
-  opacity: 1;
+  position: relative;
+  top: 100%;
+  left: 50%;
+  width: 300px;
+  margin-left: -150px;
+  border: solid blue 1px;
 }
