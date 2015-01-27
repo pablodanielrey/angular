@@ -29,6 +29,13 @@
 
 
   <!-- modulos -->
+
+  <script type="text/javascript" src="modules/header/header.js"></script>
+  <link rel="stylesheet" type="text/css" href="modules/header/header.css"/>
+  <script type="text/javascript" src="modules/footer/footer.js"></script>
+  <link rel="stylesheet" type="text/css" href="modules/footer/footer.css"/>
+
+
   <script type="text/javascript" src="modules/admin/status.js"></script>
 <!--  <link rel="stylesheet" type="text/css" href="modules/admin/status.css"/> -->
 
@@ -102,20 +109,37 @@
 <body>
   <div class='principal'>
 
-    <div ng-controller="ConnectionCtrl">
-      <ng-include src="'modules/connection/con.html'"/>
+    <div class='screen'>
+      <header>
+        <div class='header-container' ng-controller="HeaderCtrl" ng-include="'modules/header/header.html'">
+          <div ng-controller="ConnectionCtrl" ng-include="'modules/connection/con.html'">
+          </div>
+        </div>
+      </header>
+
+      <div id='main'>
+        <nav>
+          <div class='menu-container' ng-controller="MenuCtrl" ng-include="'modules/menu/menu.html'">
+          </div>
+        </nav>
+
+        <article>
+          <div ng-controller="IndexCtrl">
+            <div ng-view></div>
+          </div>
+        </article>
+      </div>
+
+      <footer>
+        <div class='footer-container' ng-controller='FooterCtrl' ng-include="'modules/footer/footer.html'">
+        </div>
+      </footer>
+
     </div>
 
-    <div ng-controller="IndexCtrl">
-      <div ng-view></div>
-    </div>
-
-    <div ng-controller="MenuCtrl">
-      <ng-include src="'modules/menu/menu.html'"/>
-    </div>
-
-    <div ng-controller="LoginCtrl">
-      <ng-include src="'modules/login/login.html'"/>
+    <div class='hidden-screen'>
+      <div ng-controller="LoginCtrl" ng-include="'modules/login/login.html'">
+      </div>
     </div>
 
     <!--
@@ -123,6 +147,6 @@
       <ng-include src="'modules/chat/chat.html'"/>
     </div>
     -->
-</div>
+  </div>
 </body>
 </html>

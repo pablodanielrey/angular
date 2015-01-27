@@ -1,12 +1,10 @@
-<div class='container-screen menu-container-style'>
-  <div class="menu" ng-class="{true:'visible',false:'hidden'}[isMenuVisible()]">
-    <ul>
-        <li ng-repeat='i in items'>
-          <a href={{i.url}}>{{i.label}}</a>
-        </li>
-    </ul>
-  </div>
-</div>
+<nav class="menu" ng-class="{true:'visible',false:'hidden'}[isMenuVisible()]">
+  <ul>
+      <li ng-repeat='i in items'>
+        <a href={{i.url}}>{{i.label}}</a>
+      </li>
+  </ul>
+</nav>
 
 
 
