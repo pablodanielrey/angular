@@ -1,6 +1,6 @@
 var app = angular.module('mainApp');
 
-app.service('Credentials', function($rootScope, Utils, Messages, Session) {
+app.service('Credentials', function($rootScope, Utils, Messages, Session, Config) {
 
   this.resetPassword = function(username, ok, error) {
     var msg = {
