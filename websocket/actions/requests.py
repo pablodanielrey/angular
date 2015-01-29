@@ -382,8 +382,38 @@ class ApproveAccountRequest:
       self.events.broadcast(server,event)
 
 
-  def sendNotificationMail(self,request):
-      pass
+
+
+  def sendEmail(self, request):
+
+      """
+        variables a reemplazar :
+        ###NAME###
+        ###LASTNAME###
+        ###DNI###
+      """
+
+      From = self.config.configs['mail_approve_account_request_from']
+      To = request['email']
+      subject = self.config.configs['mail_approve_account_request_subject']
+
+
+      fbody = open('model/systems/accounts/mails/' + self.config.configs['mail_approve_account_request_body'],'r')
+      body = fbody.read().decode('utf8')
+      fbody.close()
+
+      body = re.sub('###NAME###', request['name'], body)
+      body = re.sub('###LASTNAME###', request['lastname'], body)
+      content = re.sub('###DNI###', request['dni'], body)
+
+      msg = self.mail.createMail(From,To,subject)
+      p1 = self.mail.getHtmlPart(content)
+      msg.attach(p1)
+      self.mail.sendMail(From,[To],msg.as_string())
+
+      return True
+
+
 
 
   def handleAction(self, server, message):
@@ -414,19 +444,14 @@ class ApproveAccountRequest:
         'lastname':req['lastname']
       }
       user_id = self.users.createUser(con,user)
-      self.users.createMail(con,{
-            'user_id':user_id,
-            'email':req['email']
-      })
 
-      """
-      ''' autogenero un password usando sha1 y uuid '''
-      creds = {
-        'user_id':user_id,
-        'username':user['dni'],
-        'password': hashlib.sha1(str(uuid.uuid4())).hexdigest()
+      mail = {
+        'user_id': user_id,
+        'email': req['email'],
+        'confirmed': req['confirmed']
       }
-      """
+      self.users.createMail(con,mail)
+
       ''' uso la clave que pidio en el request '''
       creds = {
         'user_id':user_id,
@@ -434,6 +459,7 @@ class ApproveAccountRequest:
         'password': req['password']
       }
       self.userPass.createUserPassword(con,creds)
+
       self.req.removeRequest(con,reqId)
 
       con.commit()
@@ -443,7 +469,8 @@ class ApproveAccountRequest:
 
       self.sendEvents(server,reqId,user_id)
 
-      self.sendNotificationMail(req)
+      if mail['confirmed']:
+          self.sendEmail(req)
 
       return True
 

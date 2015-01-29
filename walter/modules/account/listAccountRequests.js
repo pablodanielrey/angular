@@ -21,6 +21,10 @@ app.controller("ListAccountRequestsCtrl", function($rootScope, $scope, Messages,
 		$scope.listAccountRequests();
 	});
 
+	$scope.$on('AccountRequestConfirmedEvent', function(event,data) {
+		$scope.listAccountRequests();
+	});
+
 	$scope.$on('AccountRequestApprovedEvent', function(event,data) {
 		$scope.listAccountRequests();
 	});

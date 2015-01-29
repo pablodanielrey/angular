@@ -7,9 +7,12 @@ class Users:
 
 
     def createMail(self,con,data):
+        if 'confirmed' not in data:
+            data['confirmed'] = False
+
         mail = ObjectView(data)
         mid = str(uuid.uuid4())
-        rreq = (mid,mail.user_id,mail.email,False,'')
+        rreq = (mid,mail.user_id,mail.email,mail.confirmed,'')
         cur = con.cursor()
         cur.execute('insert into user_mails (id,user_id,email,confirmed,hash) values (%s,%s,%s,%s,%s)', rreq)
         return mid
