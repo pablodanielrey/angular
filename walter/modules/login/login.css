@@ -9,15 +9,12 @@
 	background-image: url('/views/img/fondo1.jpg');
 }
 
+.login-container.hidden {
+	display: none;
+}
+
+
 .login {
-	/*
-	position: relative;
-	top: 30%;
-	left: 50%;
-	width: 300px;
-	margin-left: -150px;
-	border: solid blue 1px;
-  */
 	background-clip: padding-box;
 	background-color: rgba(255, 255, 255, 1);
 	border:10px solid;
@@ -29,15 +26,18 @@
 	padding: 20px;
 	-webkit-background-clip: padding-box;
 }
-.text_login{
+
+
+.login .text {
 	font: 15px arial, sans-serif, bold;
 
 }
-.margin_div_login{
+
+.login .margin_div_login{
 	margin-top:5px;
 }
 
-.name_login {
+.login .name {
 	appearance: none;
 	-webkit-appearance: none;
 	-moz-appearance: none;
@@ -57,7 +57,7 @@
 	padding-left:5px
 }
 
-.password_login {
+.login .password {
 	appearance: none;
 	-webkit-appearance: none;
 	-moz-appearance: none;
@@ -79,7 +79,7 @@
 }
 
 
-.button_login{
+.login .loginAction {
 	appearance: none;
 	-webkit-appearance: none;
 	-moz-appearance: none;
@@ -95,7 +95,8 @@
 	font-size: 15px;
 
 }
-.button_login:hover{
+
+.login .loginAction:hover{
 	appearance: none;
 	-webkit-appearance: none;
 	-moz-appearance: none;
@@ -112,25 +113,20 @@
 	font-size: 15px;
 }
 
-.option_login{
+.login .option {
 	margin-top:20px;
 	font-size:14px, bold;
 	color: #0066A6;
 	text-align: center
 
 }
-.links_login{
+
+.login .links {
 	color: #0066A6;
 	text-decoration:none;
 }
-.links_login:hover{
 
+.login .links:hover {
 	text-decoration:none;
 	text-decoration: underline;
-
-}
-
-
-.login-container.hidden {
-	display: none;
 }

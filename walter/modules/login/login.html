@@ -1,28 +1,28 @@
 <div class='login'>
 
-	<div class="logo_login">
+	<div class="logo">
 		<img src="views/img/logo.jpg" />
 	</div>
 
 	<div>
 		<div class="margin_div_login">
-			<label class="text_login"> Usuario (DNI)</label>
-			<input class="name_login" type="text" ng-model="user.username"/>
+			<label class="text"> Usuario (DNI)</label>
+			<input class="name" type="text" ng-model="user.username"/>
 		</div>
 
 		<div class="margin_div_login">
-			<label class="text_login"> Contraseña</label>
-			<input class="password_login" type="password" ng-model="user.password"/>
+			<label class="text"> Contraseña</label>
+			<input class="password" type="password" ng-model="user.password"/>
 		</div>
 	</div>
 
 	<div>
-		<button class="button_login" ng-click="login()">Entrar</button>
+		<button class="loginAction" ng-click="login()">Entrar</button>
 	</div>
 
-	<div class="option_login">
-		<span><a class="links_login" href="#/resetPassword"> Olvidé mi contraseña </a></span>
+	<div class="option">
+		<span><a class="links" href="#/resetPassword"> Olvidé mi contraseña </a></span>
 		<span>|</span>
-		<span><a class="links_login" href="#/createAccountRequest"> Crear cuenta </a></span>
+		<span><a class="links" href="createAccountRequest.html"> Crear cuenta </a></span>
 	<div>
 </div>
