@@ -5,7 +5,7 @@ var app = angular.module('mainApp',['ngRoute']);
 
 // agrego el controlador principal.
 
-app.controller('IndexCtrl', function ($rootScope, $scope, $location, Session, Cache, WebSocket) {
+app.controller('IndexCtrl', function ($rootScope, $scope, $location, $timeout, Session, Cache, WebSocket) {
 
 
     $rootScope.isLogged = function() {
@@ -55,7 +55,9 @@ app.controller('IndexCtrl', function ($rootScope, $scope, $location, Session, Ca
     });
 
 
-    WebSocket.registerHandlers();
+    $timeout(function() {
+      WebSocket.registerHandlers();
+    }, 0);
 
 
     // la vista por defecto.

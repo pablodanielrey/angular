@@ -1,11 +1,13 @@
 <div>
 	<div ng-repeat="request in requests">
-		<div>{{request.id}}</div>
-		<div>{{request.name}}</div>
-		<div>{{request.lastname}}</div>
-		<div>{{request.dni}}</div>
-		<div>{{request.email}}</div>
-		<div>{{request.reason}}</div>
+		<div>id : {{request.id}}</div>
+		<div>nombre : {{request.name}}</div>
+		<div>apellido : {{request.lastname}}</div>
+		<div>dni : {{request.dni}}</div>
+		<div>email : {{request.email}}</div>
+		<div>razón : {{request.reason}}</div>
+		<div>hash : {{request.hash}}</div>
+		<div>confirmado : {{request.confirmed}}</div>
 		<div>
 			<button ng-click="approveRequest(request.id)">Aprobar</button>
 			<button ng-click="removeRequest(request.id)">Eliminar</button>

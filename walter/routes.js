@@ -51,12 +51,12 @@ app.config(['$routeProvider', function($routeProvider) {
       })
 
       .when('/changePassword/:username?/:hash?', {
-        templateUrl: 'modules/login/changePassword.html',
+        templateUrl: 'modules/account/changePassword.html',
         controller: 'ChangePasswordCtrl'
       })
 
       .when('/resetPassword', {
-        templateUrl: 'modules/login/resetPassword.html',
+        templateUrl: 'modules/account/resetPassword.html',
         controller: 'ResetPasswordCtrl'
       })
 

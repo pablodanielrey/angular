@@ -27,7 +27,8 @@ app.controller('MenuCtrl', function($rootScope, $scope, $location, Session) {
   $scope.items = [
 {label:'Mis datos', function: $scope.editProfile },
 {label:'Cambiar clave', url:'#/changePassword', function: $scope.defaultAction },
-{label:'Salir', url:'#/logout', function: $scope.defaultAction }
+{label:'Salir', url:'#/logout', function: $scope.defaultAction },
+{label:'Listar pedidos de cuentas', url:'#/listAccountRequests', function: $scope.defaultAction },
 ];
 
 
