@@ -1,41 +1,42 @@
 <div class='createAccountRequest'>
 		<div class="logo">
+			<img src="views/img/logo.jpg" />
 		</div>
-		<div class="titulo_formulario">
-		<p>FORMULARIO DE REGISTRO</p>
+		<div class="title">
+			<label>FORMULARIO DE REGISTRO</label>
 		</div>
 		<hr>
 		<div>
-		<label>Nombres</label>
-		<input class="input_name_formulario" type="text" ng-model="request.name" required>
+			<label>Nombres</label>
+			<input class="name" type="text" ng-model="request.name" required>
 		</div>
 		<div>
-		<label>Apellidos</label>
-		<input class="input_apellido_formulario" type="text" ng-model="request.lastname" required>
+			<label>Apellidos</label>
+			<input class="lastname" type="text" ng-model="request.lastname" required>
 		</div>
 		<div>
-		<label>DNI</label>
-		<input class="input_dni_formulario" type="text" ng-model="request.dni" required>
+			<label>DNI</label>
+			<input class="dni" type="text" ng-model="request.dni" required>
 		</div>
 		<div>
-		<label>Email</label>
-		<input class="input_email_formulario" type="email" ng-model="request.email" required>
+			<label>Email</label>
+			<input class="email" type="email" ng-model="request.email" required>
 		</div>
 		<div>
-		<label>Clave</label>
-		<input class="input_password" type="password" ng-model="request.password" required>
+			<label>Contraseña</label>
+			<input class="password" type="password" ng-model="request.password" required>
 		</div>
 		<div>
-		<label>Repetir Clave</label>
-		<input class="input_password" type="password" ng-model="request.password2" required>
+			<label>Repetir Contraseña</label>
+			<input class="password" type="password" ng-model="request.password2" required>
 		</div>
 		<div>
-		<label>Motivo de la solicitud</label>
+			<label>Motivo de la solicitud</label>
 		</div>
 		<div>
-		<textarea class="Input_motivo_formulario" ng-model="request.reason" required ></textarea>
+			<textarea class="reason" ng-model="request.reason" required ></textarea>
 		</div>
 		<div>
-		<button class="boton_enviar_formulario" ng-click="createRequest()">Enviar</button>
+			<button class="action" ng-click="createRequest()">Enviar</button>
 		</div>
 </div>
