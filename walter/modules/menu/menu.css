@@ -1,44 +1,43 @@
 
 
 .menu-container {
-  width: 30%;
+  width: 500px;
   height: 100%;
-}
-
-.menu-container-style {
-  justify-content: flex-end;
+  display: flex;
+  flex-direction: row;
 }
 
 .menu {
-  background-color: white;
-  width: 10%;
-}
-
-.menu ul {
   list-style: none;
+  width: 100%;
 }
 
 
+.menu.fisrt {
+  background-color: white;
+}
 
 
+.menu.second {
+  background-color: red;
+}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+.menu.hidden {
+  visibility: hidden;
+}
 
 .menu.visible {
-  animation: pepe 1s;
+
+}
+
+.menu-item {
+    width: 200px;
+}
+
+.menu-item:hover {
+  background-color: black;
+  color: white;
 }
 
 

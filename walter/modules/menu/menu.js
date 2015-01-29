@@ -1,31 +1,57 @@
 
+
 var app = angular.module('mainApp');
 
-app.controller('MenuCtrl', function($rootScope, $scope, Session) {
+app.controller('MenuCtrl', function($rootScope, $scope, $location, Session) {
 
-  $scope.items = [
-{url:'#/main',label:'Principal'},
-{url:'#/status',label:'Estado del sistema'},
-{url:'#/editUsers',label:'Editar Usuarios'},
-{url:'#/editGroups',label:'Editar Grupos'},
-{url:'#/editUserProfile',label:'Editar Perfil'},
-{url:'#/listAccountRequests',label:'Listar pedidos de cuentas'},
-{url:'#/changePassword',label:'Cambiar clave'},
-{url:'#/logout',label:'Salir'}
-  ];
+  $scope.secondItems = [];
+  $scope.itemSelected = null;
 
-
-  $scope.isMenuVisible = function() {
-    return Session.isLogged();
+  $scope.defaultAction = function() {
+    $scope.secondItems = [];
+    $scope.itemSelected = null;
   }
 
-  $rootScope.$on('loginOk', function(event,data) {
+  $scope.editProfile = function() {
+    $scope.secondItems = [
+    {label:'Perfil', url:'#/editUserProfile', function: $scope.editProfile },
+    {label:'Datos de Alumno', url:'#/editStudent', function: $scope.editProfile },
+    {label:'Au24', url:'#', function: $scope.editProfile },
+    {label:'Inserción Laboral', url:'#', function: $scope.editProfile }
+    ];
 
-  });
+    $scope.itemSelected = 'editUserProfile';
+  }
 
-  $rootScope.$on('logoutOk', function(event,data) {
 
-  });
+  $scope.items = [
+{label:'Mis datos', function: $scope.editProfile },
+{label:'Cambiar clave', url:'#/changePassword', function: $scope.defaultAction },
+{label:'Salir', url:'#/logout', function: $scope.defaultAction }
+];
 
+
+/*
+  $scope.items = [
+{label:'Estado del sistema', url:'#/status', function: $scope.defaultAction },
+{label:'Editar Usuarios', url:'#/editUsers', function: $scope.defaultAction },
+{label:'Editar Grupos', url:'#/editGroups', function: $scope.defaultAction },
+{label:'Editar Perfil', url:'#/editUserProfile', function: $scope.editProfile },
+{label:'Listar pedidos de cuentas', url:'#/listAccountRequests', function: $scope.defaultAction },
+{label:'Cambiar clave', url:'#/changePassword', function: $scope.defaultAction },
+{label:'Salir', url:'#/logout', function: $scope.defaultAction }
+  ];
+*/
+
+
+
+  $scope.ejemplo1 = function() {
+    alert('ej1');
+  }
+
+
+  $scope.isSecondVisible = function() {
+    return ($scope.itemSelected != null);
+  }
 
 });

@@ -86,7 +86,7 @@
 <!--  <link rel="stylesheet" type="text/css" href="modules/account/createAccountRequest.css" /> -->
 
 
-  <script type="text/javascript" src="modules/menu/menu.js"></script>
+  <script type="text/javascript" src="modules/menu/menu.js" charset="UTF-8"></script>
   <link rel="stylesheet" type="text/css" href="modules/menu/menu.css"/>
 
   <script type="text/javascript" src="modules/chat/chat.js"></script>
@@ -116,7 +116,7 @@
       <header>
 
       <div id='main'>
-        <nav>
+        <nav ng-class="{true:'visible',false:'hidden'}[isLogged()]">
           <div class='menu-container' ng-controller="MenuCtrl" ng-include="'modules/menu/menu.html'">
           </div>
         </nav>
