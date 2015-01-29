@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-import json, uuid, psycopg2, inject
-import hashlib
+import json, uuid, psycopg2, inject, re, hashlib
 from model.requests import Requests
 from model.users import Users
 from model.objectView import ObjectView
@@ -102,7 +101,8 @@ peticion:
     "name":""
     "lastname":""
     "email":""
-    "reason":""
+    "reason":"",
+    "password":""
   }
 }
 
@@ -122,6 +122,43 @@ class CreateAccountRequest:
   events = inject.attr(Events)
   profiles = inject.attr(Profiles)
   config = inject.attr(Config)
+  mail = inject.attr(Mail)
+
+  def sendEmail(self, request):
+
+      """
+        variables a reemplazar :
+        ###NAME###
+        ###LASTNAME###
+        ###DNI###
+        ###URL###
+        y dentro de la url config se pueden usar variable :
+        ###HASH###
+      """
+
+      From = self.config.configs['mail_create_account_request_from']
+      To = request['email']
+      subject = self.config.configs['mail_create_account_request_subject']
+      url = self.config.configs['mail_create_account_request_url']
+      url = re.sub('###HASH###', request['hash'], url)
+
+      fbody = open('model/systems/accounts/mails/' + self.config.configs['mail_create_account_request_body'],'r')
+      body = fbody.read().decode('utf8')
+      fbody.close()
+
+      body = re.sub('###NAME###', request['name'], body)
+      body = re.sub('###LASTNAME###', request['lastname'], body)
+      body = re.sub('###DNI###', request['dni'], body)
+      content = re.sub('###URL###', url, body)
+
+      msg = self.mail.createMail(From,To,subject)
+      p1 = self.mail.getHtmlPart(content)
+      msg.attach(p1)
+      self.mail.sendMail(From,[To],msg.as_string())
+
+      return True
+
+
 
   def handleAction(self, server, message):
 
@@ -138,10 +175,12 @@ class CreateAccountRequest:
 
     data = message['request']
     data['id'] = str(uuid.uuid4());
+    data['hash'] = hashlib.sha1(data['id'] + str(uuid.uuid4())).hexdigest()
 
     con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
     try:
       self.req.createRequest(con,data)
+      self.sendEmail(data)
       con.commit()
 
       response = {'id':pid, 'ok':'petición creada correctamente'}
@@ -159,6 +198,82 @@ class CreateAccountRequest:
         con.close()
 
 
+
+"""
+peticion:
+{
+  "id":"id de la peticion"
+  "action":"confirmAccountRequest",
+  "hash":"hash de la peticion"
+}
+
+respuesta:
+{
+  "id":"id de la peticion"
+  O "ok":""
+  O "error":""
+}
+
+eventos :
+
+AccountRequestConfirmedEvent
+
+
+"""
+
+class ConfirmAccountRequest:
+
+  req = inject.attr(Requests)
+  users = inject.attr(Users)
+  profiles = inject.attr(Profiles)
+  events = inject.attr(Events)
+  mail = inject.attr(Mail)
+  userPass = inject.attr(UserPassword)
+  config = inject.attr(Config)
+
+
+  def sendEvents(self,server,req_id):
+      event = {
+        'type':'AccountRequestConfirmedEvent',
+        'data':req_id
+      }
+      self.events.broadcast(server,event)
+
+
+  def sendNotificationMail(self,request):
+      pass
+
+
+  def handleAction(self, server, message):
+
+    if message['action'] != 'confirmAccountRequest':
+      return False
+
+    pid = message['id']
+    hash = message['hash']
+
+    con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+    try:
+      req = self.req.findRequestByHash(con,hash)
+      if (req == None):
+          raise MalformedMessage()
+
+      self.req.confirmRequest(con,req['id'])
+      con.commit()
+
+      response = {'id':pid, 'ok':'requerimiento confirmado correctamente'}
+      server.sendMessage(response)
+
+      self.sendEvents(server,req['id'])
+
+      return True
+
+    except psycopg2.DatabaseError as e:
+        con.rollback()
+        raise e
+
+    finally:
+        con.close()
 
 
 

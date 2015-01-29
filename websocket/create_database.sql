@@ -62,9 +62,6 @@ create table user_password (
 );
 
 
-
-
-
 create table account_requests (
     id varchar not null primary key,
     dni varchar not null unique,
@@ -73,6 +70,8 @@ create table account_requests (
     email varchar not null,
     reason varchar,
     password varchar not null,
+    hash varchar default '',
+    confirmed boolean default false,
     created timestamp default now()
 );
 

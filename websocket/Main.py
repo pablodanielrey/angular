@@ -15,7 +15,7 @@ from websocketServer import WebsocketServer
 
 from actions.chat import SendEventToClients
 from actions.login import Login, Logout, ResetPassword, ChangePassword
-from actions.requests import CreateAccountRequest, ListAccountRequests, ApproveAccountRequest, RemoveAccountRequest
+from actions.requests import CreateAccountRequest, ConfirmAccountRequest, ListAccountRequests, ApproveAccountRequest, RemoveAccountRequest
 from actions.users import UpdateUser, FindUser, ListUsers, ListMails, PersistMail, ConfirmMail, RemoveMail
 from actions.status import GetStatus
 from actions.students import CreateStudent, FindStudent
@@ -47,7 +47,7 @@ if __name__ == '__main__':
   actions = [
     SendEventToClients(),
     Login(), Logout(), ResetPassword(), ChangePassword(),
-    CreateAccountRequest(), ListAccountRequests(), ApproveAccountRequest(), RemoveAccountRequest(),
+    CreateAccountRequest(), ConfirmAccountRequest(), ListAccountRequests(), ApproveAccountRequest(), RemoveAccountRequest(),
     ListUsers(), UpdateUser(), FindUser(), ListMails(), PersistMail(), ConfirmMail(), RemoveMail(),
     GetStatus(),
     CreateStudent(), FindStudent(),
