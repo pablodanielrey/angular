@@ -48,6 +48,10 @@ app.service('WebSocket', function($rootScope, Config) {
 
 		}
 
+		this.isConnected = function() {
+			return !($rootScope.socket == null);
+		}
+
 		this.send = function(msg) {
 //				if ((instance.socket == null) || (instance.socket.readyState != instance.states.OPEN)) {
 //					instance.registerHandlers(function() {

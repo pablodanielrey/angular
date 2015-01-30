@@ -2,7 +2,7 @@
 var app = angular.module('mainApp');
 
 
-app.controller('CreateAccountRequestCtrl', function($scope, Messages, Utils, Session) {
+app.controller('CreateAccountRequestCtrl', function($scope, $timeout, Messages, Utils, Session) {
 
   $scope.request = {
           name:'',
@@ -45,16 +45,21 @@ app.controller('CreateAccountRequestCtrl', function($scope, Messages, Utils, Ses
     clearRequest();
   };
 
-  clearRequest = function() {
-    $scope.request = {
-      name:'',
-      lastname:'',
-      dni:'',
-      email:'',
-      reason:'',
-      password:'',
-      password2:''
-    };
-  }
+  $scope.clearRequest = function() {
+      $scope.request = {
+        name:'',
+        lastname:'',
+        dni:'',
+        email:'',
+        reason:'',
+        password:'',
+        password2:''
+      };
+  };
+
+
+  $timeout(function() {
+    $scope.clearRequest();
+  },0)
 
 });

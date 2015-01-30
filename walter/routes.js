@@ -50,6 +50,11 @@ app.config(['$routeProvider', function($routeProvider) {
         controller: 'ConfirmMailCtrl'
       })
 
+      .when('/confirmAccountRequest/:hash?', {
+        templateUrl: '/modules/account/confirmAccountRequest.html',
+        controller: 'ConfirmAccountRequestCtrl'
+      })
+
       .when('/changePassword/:username?/:hash?', {
         templateUrl: '/modules/account/changePassword.html',
         controller: 'ChangePasswordCtrl'
