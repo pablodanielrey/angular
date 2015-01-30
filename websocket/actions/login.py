@@ -24,7 +24,6 @@ peticion:
     id: "id de la peticion"
     action: "resetPassword"
     username: 'nombre de usuario'
-    url: 'url del cliente para generar el link'
 }
 
 respuesta:
@@ -43,20 +42,38 @@ class ResetPassword:
     mail = inject.attr(Mail)
     config = inject.attr(Config)
 
+
     ''' envío el hash a todos los mails que tenga confirmado el usuario '''
-    def sendEmail(self, con, url, hash, username):
+    def sendEmail(self, con, hash, username):
+
+        """
+            variables a reemplazar :
+            ###DNI###
+            ###NAME###
+            ###LASTNAME###
+            ###URL###
+            ###HASH###
+        """
 
         creds = self.userPassword.findCredentials(con,username)
         user_id = creds['user_id']
 
+        user = self.users.findUser(con,user_id)
+
+
         From = self.config.configs['mail_reset_password_from']
         subject = self.config.configs['mail_reset_password_subject']
+        url = self.config.configs['mail_reset_password_url']
+        url = re.sub('###HASH###', hash, url)
+        url = re.sub('###USERNAME###', username, url)
 
-
-        ''' falta leer el contenido del archivo y ver el tema de la url '''
-
-        link = re.sub('\#.*$','#/changePassword',url)
-        content = '<html><head></head><body><a href="' + link + "/" + username + "/" + hash + '">click aqui para cambiar la clave de su cuenta</a></body></html>'
+        fbody = open('model/systems/accounts/mails/' + self.config.configs['mail_reset_password_body'],'r')
+        body = fbody.read().decode('utf8')
+        fbody.close()
+        body = re.sub('###DNI###', user['dni'], body)
+        body = re.sub('###NAME###', user['name'], body)
+        body = re.sub('###LASTNAME###', user['lastname'], body)
+        content = re.sub('###URL###', url, body)
 
         mails = self.users.listMails(con,user_id)
         mails = filter(lambda x: x['confirmed'] == True, mails)
@@ -87,17 +104,12 @@ class ResetPassword:
         if 'username' not in message:
             raise MalformedMessage()
 
-        if 'url' not in message:
-            raise MalformedMessage()
-
-
         username = message['username']
-        url = message['url']
 
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
             hash = self.userPassword.getResetPasswordHash(con,username)
-            self.sendEmail(con,url,hash,username)
+            self.sendEmail(con, hash, username)
 
             con.commit()
 

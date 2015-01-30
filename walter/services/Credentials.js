@@ -6,17 +6,16 @@ app.service('Credentials', function($rootScope, Utils, Messages, Session, Config
     var msg = {
       id: Utils.getId(),
       action: 'resetPassword',
-      username: username,
-      url: Config.getServerUrl()
+      username: username
     };
 
-    Messages.send(msg,
-      function(k) {
-        ok(k);
-      },
-      function(err) {
-        error(err);
-      });
+    Messages.send(msg, function(response) {
+      if (response.error != undefined) {
+        error(response.error);
+      } else {
+        ok(response.ok);
+      }
+    });
   }
 
 
@@ -79,13 +78,13 @@ app.service('Credentials', function($rootScope, Utils, Messages, Session, Config
       hash: hash
     };
 
-    Messages.send(msg,
-      function(mok) {
-        ok(mok);
-      },
-      function(merror) {
-        error(merror);
-      });
+    Messages.send(msg, function(response) {
+      if (response.error != undefined) {
+        error(response.error);
+      } else {
+        ok(response.ok);
+      }
+    });
   }
 
   this.changePassword = function(creds, ok, error) {
@@ -104,13 +103,13 @@ app.service('Credentials', function($rootScope, Utils, Messages, Session, Config
       session: sid
     };
 
-    Messages.send(msg,
-      function(mok){
-        ok(mok);
-      },
-      function(merror) {
-        error(merror);
-      });
+    Messages.send(msg, function(response) {
+      if (response.error != undefined) {
+        error(response.error);
+      } else {
+        ok(response.ok);
+      }
+    });
   }
 
 })
