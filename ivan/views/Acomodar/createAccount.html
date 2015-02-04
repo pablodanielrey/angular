@@ -1,0 +1,31 @@
+<html lang="es">
+<head>
+	<title>Formulario de Registro</title>
+	<meta charset="utf-8"/>
+	<meta name="description"= content="Formulario de Registro FCE"/>
+	<link rel="stylesheet" type="text/css" href="css/ccstyle.css" />
+</head>
+<body>
+<form>
+	<div class="formularioderegistro">
+		<div class="logo">
+			<img src="img/logo.jpg" />
+		</div>
+		<div class="titulo_formulario">
+			<p>FORMULARIO DE REGISTRO</p>
+		</div>
+		<hr>
+		<div><label>Nombres</label></div> 
+		<div><input class="input_name_formulario" type="text" name="name" ng-model="name" required></div>
+		<div><label>Apellidos</label></div> 
+		<div><input class="input_apellido_formulario" type="text" name="lastname" ng-model="lastname" required> </div>
+		<div><label>DNI</label></div> 
+		<div><input class="input_dni_formulario" type="text" name="dni" ng-model="dni" required></div>
+		<div><label>Email</label></div>
+		<div><input class="input_email_formulario" type="text" name="mail" ng-model="mail" required></div>
+		<div><label>Motivo de la solicitud</label></div>
+		<div><textarea class="Input_motivo_formulario" name="reason" ng-model="reason" required ></textarea>
+		<div><button class="boton_enviar_formulario" ng-click="createAccount()">Enviar</button></div>
+	</div>
+</form>
+</body>

@@ -1,0 +1,7 @@
+<ul ng-class="{display:isLogged(), nodisplay:!isLogged()}">
+	<li>{{getConnectedUserName()}}</li>
+	<li ng-class="{display:isConnected(), nodisplay:!isConnected()}">Conectado</li>
+	<li ng-class="{display:!isConnected(), nodisplay:isConnected()}">No conectado</li>
+	<li ng-class="{display:!isConnected(), nodisplay:isConnected()}"><button ng-click='connect()'>Conectar</button></li>
+	<li><a href="/">Salir</a></li>
+</ul>

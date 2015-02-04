@@ -1,0 +1,91 @@
+
+.chat {
+  position: absolute;
+  width: 260px;
+  left: -260px;
+  top: 0;
+  bottom: 0;
+}
+
+.chat-header {
+  width: 100%;
+  height: 20px;
+}
+
+.chat-header .close {
+  float: right;
+}
+
+.chat-header .maximize {
+  float: right;
+}
+
+.chat-header .minimize {
+  float: right;
+}
+
+
+/* area donde se pasa el mouse por arriba y dispara el cambio de estilo para mostrar el chat */
+.chat-shower {
+  position: fixed;
+  top: 0px;
+  right: 0px;
+  z-index: 1000;
+}
+
+.chat-shower p {
+  color: red;
+  border: 1px;
+  font-family: "Times New Roman", Times, serif;
+  font-size: 2em;
+}
+
+
+.chat-hide {
+  transform: translate3d(0,0,0);
+  transition: all 0.5s ease;
+}
+
+.chat-show {
+  transform: translate3d(100%,0,0);
+  transition: all 0.5s ease;
+}
+
+
+
+/* estilos para minimizar y maximizar el chat */
+
+.minimized {
+  transform: translate3d(0,800px,0);
+  transition: all 0.5s;
+}
+
+.maximized {
+  transform: translate3d(0,0,0);
+  transition: all 0.5s;
+}
+
+.chat-minimize {
+  transform: scale(0);
+  transition: all 0.5s ease;
+}
+
+.chat-maximize {
+  transition: all 0.5s ease;
+}
+
+
+/* para hacer blink en el titulo cuando llega un mensaje */
+
+.blink {
+  animation-name: blinker;
+  animation-duration: 1s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes blinker {
+  0% { opacity: 1.0; transform: scale(1); }
+  50% { opacity: 0.0; transform: scale(2); }
+  100% { opacity: 1.0; transform: scale(1); }
+}

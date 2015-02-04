@@ -1,0 +1,9 @@
+
+
+.addPanel {
+  position: fixed;
+  width: 200px;
+  height: 400px;
+  top: 30%;
+  left: 30%;
+}

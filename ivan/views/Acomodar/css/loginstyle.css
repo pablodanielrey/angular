@@ -1,0 +1,144 @@
+*{
+	margin:0;	
+	padding:0;
+}
+body {
+	background: url(../img/fondo1.jpg) no-repeat fixed center;
+    background-size: cover;
+	font-family: Calibri;
+	font-size: 14px;
+	-webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+}
+header{
+}
+.contenedor{
+	background-clip: padding-box;
+	background-color: rgba(255, 255, 255, 1);
+	border:10px solid;
+	border-color: rgba(255, 255, 255, 0.3);
+	border-radius: 0.3em;
+	margin: 0.5em auto;
+	margin-top:100px;
+	max-width: 275px;
+	padding: 20px;
+	-webkit-background-clip: padding-box;
+}
+.logo{
+	margin-top:10px;
+	margin: 0 auto;
+}
+#error{
+	background-clip: padding-box;
+	background-color: rgba(255, 255, 255, 1);
+	padding-left:5px;
+	border:10px solid;
+	border-color: rgba(255, 255, 255, 0.3);
+	border-radius: 0.3em;
+	margin: 0.5em auto;
+	margin-top:10px;
+	max-width: 275px;
+	padding: 20px;
+	-webkit-background-clip: padding-box;
+	text-align:center;
+	color:red;
+	font-size: 18px;
+}
+div{
+	margin-top:5px;
+}
+.campo1 {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -o-appearance: none;
+	border-radius: 0.2em;
+	border:1px solid;
+	border-color: #E7DDE9;
+    width: 270px;
+	height:30px;
+    background-color:#F2F2F2;
+    color: #000;
+	margin-top:5px;
+	background-image: url(../img/imguser.png);
+    background-repeat: no-repeat;
+	background-position: right center;
+	font-size: 18px;
+	padding-left:5px
+   
+		
+}
+
+.campo2 {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -o-appearance: none;
+	border-radius: 0.2em;
+	border:1px solid;
+	border-color: #E7DDE9;
+    width: 270px;
+	height:30px;
+    background-color:#F2F2F2;
+    color: #000;
+	margin-top:5px;
+	background-image: url(../img/imglocked.png);
+    background-repeat: no-repeat;
+	background-position: right center;
+	font-size: 18px;
+	padding-left:5px
+	
+}
+
+.boton {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -o-appearance: none;
+	border-radius: 0.2em;
+    height:30px;
+    background-color: #0066A6;
+    color: #FFF;
+	border:0px;
+	width: 277px;
+	height:30px;
+	margin-top:20px;
+	font-size: 14px;
+	
+}
+.boton:hover{
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -o-appearance: none;
+	border-radius: 0.2em;
+    height:30px;
+    background-color: #0066A6;
+    color: #FFF;
+	border:0px;
+	width: 277px;
+	height:30px;
+	margin-top:20px;
+	box-shadow: 0px 0px 8px #0066A6;
+	font-size: 14px;
+	
+	
+}
+.opciones{
+	margin-top:20px;
+	font-size:14px;
+	color: #0066A6;
+	text-align: center
+}
+.links{
+	color: #0066A6;
+	text-decoration:none;
+}
+.links:hover{
+	
+	text-decoration:none;
+	text-decoration: underline;
+	
+}
+

@@ -1,0 +1,32 @@
+
+.user-list {
+}
+
+.user {
+  border: solid 2px;
+  border-color: blue;
+  width: 300px;
+}
+
+.user:hover {
+  transform: translate3d(5%,5%,0);
+  transition: all 0.3s ease;
+}
+
+.user.selected {
+  transition: all 0.5s ease;
+  color: white;
+  background-color: black;
+}
+
+@keyframes updated-animation {
+  0% { scale(1); }
+  50% { scale(1.5); }
+  100% { scale(1); }
+}
+
+.updated {
+  animation-name: updated-animation;
+  animation-duration: 4s;
+  animation-timing-function: linear;
+}

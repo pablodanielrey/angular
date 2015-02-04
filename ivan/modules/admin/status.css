@@ -1,0 +1,16 @@
+
+.status {
+
+}
+
+.status .id {
+  color:red;
+}
+
+.status .expire {
+  color: blue;
+}
+
+.status .data {
+  color: green;
+}

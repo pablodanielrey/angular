@@ -1,0 +1,21 @@
+
+<div>
+  <div ng-if='group == null'>
+    No hay ningún grupo seleccionado
+  </div>
+  <div ng-if='group != null'>
+    <div>
+      <span>Id</span>
+      <span>{{group.id}}</span>
+    </div>
+    <div>
+      <span>Sistema</span>
+      <span>{{group.systemId}}</span>
+    </div>
+    <div>
+      <span>Nombre</span>
+      <input type='text' ng-model='group.name'/>
+    </div>
+    <button ng-click='update()'>actualizar</button>
+  </div>
+</div>

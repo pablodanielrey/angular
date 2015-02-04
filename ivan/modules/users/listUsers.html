@@ -1,0 +1,16 @@
+
+<div class='user-list'>
+	<p><label>Buscar:</label><input type='text' ng-model="search" autofocus/></p>
+	<ul>
+		<li ng-repeat="user in users | filter:search | orderBy:'name'">
+	
+		<div class='user' ng-click='selectUser(user.id)' ng-class="{true:'selected',false:''}[isSelected(user.id)]">
+			<div ng-class="{true:'updated',false:''}[isUpdated(user.id)]">
+			<div>dni : {{user.dni}}</div>
+			<div>nombre : {{user.name}}</div>
+			<div>apellido : {{user.lastname}}</div>
+			</div>
+		</div>
+	</ul>
+	</li>
+</div>

@@ -1,0 +1,54 @@
+
+
+.menu-container {
+  width: 500px;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+.menu {
+  list-style: none;
+  width: 100%;
+}
+
+
+.menu.fisrt {
+  background-color: white;
+}
+
+
+.menu.second {
+  background-color: red;
+}
+
+
+.menu.hidden {
+  visibility: hidden;
+}
+
+.menu.visible {
+
+}
+
+.menu-item {
+    width: 200px;
+}
+
+.menu-item:hover {
+  background-color: black;
+  color: white;
+}
+
+
+
+@keyframes pepe {
+  from {
+    width: 0;
+    transform: rotate(0deg);
+  }
+  to {
+    width: 10%;
+    transform: rotate(360deg);
+  }
+}

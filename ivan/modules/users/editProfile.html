@@ -1,0 +1,46 @@
+<div class="editProfile">
+	<div>
+		<label>DNI</label>
+		<input class="editProfile_dni" type="text" ng-model="user.dni">
+	</div>
+	<div>
+		<label>Nombres</label>
+		<input class="editProfile_name" type="text" ng-model="user.name">
+	</div>
+	<div>
+		<label>Apellidos</label>
+		<input class="editProfile_lastname" type="text" ng-model="user.lastname">
+	</div>
+	<div>
+		<label>Género:</label>
+		<select class="editProfile_genre" ng-model="user.genre">
+		  <option value="femenino">Femenino</option>
+		  <option value="masculino">Masculino</option>
+			<option value="otro">Otro</option>
+		</select>
+	</div>
+	<div>
+		<label>Fecha de nacimiento</label>
+		<input class="editProfile_birthdate" type="text"  ng-model="user.birthdate">
+	</div>
+	<div>
+		<label>País</label>
+		<input class="editProfile_country" type="text"  ng-model="user.country">
+	</div>
+	<div>
+		<label>Ciudad</label>
+		<input class="editProfile_city" type="text"  ng-model="user.city">
+	</div>
+	<div>
+		<label>Dirección</label>
+		<input class="editProfile_address" type="text"  ng-model="user.address">
+	</div>
+	<div>
+		<label>Teléfono</label>
+		<input class="editProfile_telephone" type="text"  ng-model="user.telephone">
+	</div>
+	<div>
+		<button ng-click='update()'>actualizar</button>
+		<button ng-click='cancel()'>cancelar</button>
+	</div>
+</div>
