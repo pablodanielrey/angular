@@ -80,12 +80,12 @@
 -->
 
   <script type="text/javascript" src="modules/account/createAccountRequest.js"></script>
-  <script type="text/javascript" src="modules/account/confirmRequestAccount.js"></script>
+  <script type="text/javascript" src="modules/account/confirmAccountRequest.js"></script>
   <script type="text/javascript" src="modules/account/listAccountRequests.js"></script>
   <script type="text/javascript" src="modules/account/changePassword.js"></script>
   <script type="text/javascript" src="modules/account/resetPassword.js"></script>
   <link rel="stylesheet" type="text/css" href="modules/account/changePassword.css"/>
-  <link rel="stylesheet" type="text/css" href="modules/account/confirmRequestAccount.css"/>
+  <link rel="stylesheet" type="text/css" href="modules/account/confirmAccountRequest.css"/>
 
 
   <script type="text/javascript" src="modules/menu/menu.js" charset="UTF-8"></script>
@@ -109,13 +109,11 @@
 
 </head>
 <body>
-  <div ng-controller="IndexCtrl" class='principal'>
+	
+<div ng-controller="IndexCtrl" class="principal">
 
-    <div class='screen'>
-      <header>
-        <div class='header-container' ng-controller="HeaderCtrl" ng-include="'modules/header/header.html'">
-        </div>
-      <header>
+<div class="screen">
+	<div class="header-container" ng-controller="HeaderCtrl" ng-include="'modules/header/header.html'"></div>
 
       <div id='main'>
         <nav ng-class="{true:'visible',false:'hidden'}[isLogged()]">
@@ -140,6 +138,7 @@
     <div class='connection-container' ng-class="{false:'visible',true:'hidden'}[isConnected()]" ng-controller="ConnectionCtrl" ng-include="'modules/connection/con.html'">
     </div>
 
-  </div>
+</div>
+	
 </body>
 </html>

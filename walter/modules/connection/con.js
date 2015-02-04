@@ -1,9 +1,11 @@
 
 var app = angular.module('mainApp');
 
-app.controller('ConnectionCtrl', function($scope, WebSocket) {
+app.controller('ConnectionCtrl', function($scope, WebSocket, Session) {
 
   $scope.connected = false;
+
+$scope.displayLog = "{color:'red'}";
 
   $scope.$on('onSocketOpened', function(event,data) {
     $scope.connected = true;
@@ -16,9 +18,19 @@ app.controller('ConnectionCtrl', function($scope, WebSocket) {
   $scope.isConnected = function() {
     return $scope.connected;
   };
+  
+	/**
+	 * Obtener nombre de usuario conectado
+	 * @returns {Session@call;getCurrentSession.login.username}
+	 */
+	$scope.getConnectedUserName = function(){
+		var user = Session.getCurrentSession();
 
-  $scope.connect = function() {
-    WebSocket.registerHandlers();
-  }
+		return user.login.username;
+	};
 
-})
+	$scope.connect = function() {
+		WebSocket.registerHandlers();
+	};
+
+});

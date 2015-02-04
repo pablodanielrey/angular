@@ -1,7 +1,7 @@
-<div class='connection'>
-  <span class='status' ng-class="{true:'visible',false:'hidden'}[isConnected()]">Conectado</span>
-  <span class='status' ng-class="{true:'hidden',false:'visible'}[isConnected()]">
-    <div class='disconnected'>Desconectado</div>
-    <button class='disconnected' ng-click='connect()'>conectar</button>
-  </span>
-</div>
+<ul ng-class="{display:isLogged(), nodisplay:!isLogged()}">
+	<li>{{getConnectedUserName()}}</li>
+	<li ng-class="{display:isConnected(), nodisplay:!isConnected()}">Conectado</li>
+	<li ng-class="{display:!isConnected(), nodisplay:isConnected()}">No conectado</li>
+	<li ng-class="{display:!isConnected(), nodisplay:isConnected()}"><button ng-click='connect()'>Conectar</button></li>
+	<li><a href="/">Salir</a></li>
+</ul>
