@@ -4,6 +4,7 @@ app.service('WebSocket', function($rootScope, Config) {
 
 		$rootScope.states = { CONNECTING:0, OPEN:1, CLOSING:2, CLOSED:3 };
 		$rootScope.socket = null;
+		$rootScope.onSocketOpen = false
 
 		this.registerHandlers = function() {
 
@@ -13,6 +14,7 @@ app.service('WebSocket', function($rootScope, Config) {
 			$rootScope.socket = new WebSocket(url);
 
 			$rootScope.socket.onopen = function(msg){
+				$rootScope.onSocketOpen = true;
 				console.log('socket conectado');
 				setTimeout(function() {
 					$rootScope.$apply(function () {
@@ -49,7 +51,7 @@ app.service('WebSocket', function($rootScope, Config) {
 		}
 
 		this.isConnected = function() {
-			return !($rootScope.socket == null);
+			return $rootScope.onSocketOpen;
 		}
 
 		this.send = function(msg) {
