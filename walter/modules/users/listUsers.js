@@ -61,15 +61,19 @@ app.controller('ListUsersCtrl',function($rootScope, $scope, $log, Session, Users
     return ($scope.selected == id);
   }
 
-  $scope.selectUser = function(id) {
-    $scope.selected = id;
 
-    var s = Session.getCurrentSession();
-    s.selectedUser = id;
-    Session.saveSession(s);
+	/**
+	 * Seleccionar usuario en funcion del id
+	 */
+	$scope.selectUser = function(id) {
+		$scope.selected = id;
 
-    $rootScope.$broadcast('UserSelectedEvent',id);
-  }
+		var s = Session.getCurrentSession();
+		s.selectedUser = id;
+		Session.saveSession(s);
+
+		$rootScope.$broadcast('UserSelectedEvent',id);
+	}
 
   $scope.listUsers = function() {
     Users.listUsers(
