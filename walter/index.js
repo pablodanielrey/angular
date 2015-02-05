@@ -3,8 +3,11 @@
 var app = angular.module('mainApp',['ngRoute']);
 
 
-// agrego el controlador principal.
-
+/**
+ * controlador principal. Funciones principales:
+ * 		Verificar la conexión y autentificación de usuarios.
+ * 		Recibir eventos del socket y transferirlo a los controladores secundarios
+ */
 app.controller('IndexCtrl', function ($rootScope, $scope, $location, $timeout, Session, Cache, WebSocket) {
 
 
