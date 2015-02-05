@@ -4,7 +4,6 @@ app.service('WebSocket', function($rootScope, Config) {
 
 		$rootScope.states = { CONNECTING:0, OPEN:1, CLOSING:2, CLOSED:3 };
 		$rootScope.socket = null;
-		$rootScope.onSocketOpen = false
 
 		this.registerHandlers = function() {
 
@@ -12,9 +11,7 @@ app.service('WebSocket', function($rootScope, Config) {
 			var url = Config.getWebsocketConnectionUrl();
 			console.log(url);
 			$rootScope.socket = new WebSocket(url);
-
 			$rootScope.socket.onopen = function(msg){
-				$rootScope.onSocketOpen = true;
 				console.log('socket conectado');
 				setTimeout(function() {
 					$rootScope.$apply(function () {
@@ -51,20 +48,30 @@ app.service('WebSocket', function($rootScope, Config) {
 		}
 
 		this.isConnected = function() {
-			return $rootScope.onSocketOpen;
+			if($rootScope.socket == null){
+				return false;
+			}
+			
+			return ($rootScope.socket.readyState == 1);
+			
+		}
+		
+		this.isConnecting = function() {
+			if($rootScope.socket == null){
+				return false;
+			}
+			
+			return ($rootScope.socket.readyState == 0);
 		}
 
 		this.send = function(msg) {
-//				if ((instance.socket == null) || (instance.socket.readyState != instance.states.OPEN)) {
-//					instance.registerHandlers(function() {
-//						instance.socket.send(msg);
-//					});
-//				} else {
-					if ($rootScope.socket == null) {
-						throw "$rootScope.socket == null";
-					}
+			if(this.isConnected()){
+				$rootScope.socket.send(msg);
+			} else {
+				$rootScope.$on('onSocketOpened',function(event,data){
 					$rootScope.socket.send(msg);
-//				}
+			    });
+			} 
 		}
 
 		this.close = function() {
