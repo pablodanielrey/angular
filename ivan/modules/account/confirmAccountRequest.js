@@ -39,7 +39,7 @@ app.controller('ConfirmAccountRequestCtrl',function($scope,$rootScope,$routePara
     } else {
       $scope.sendConfirmation();
     }
-  },20);
+  },5);
 
 
 });

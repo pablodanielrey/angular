@@ -14,36 +14,38 @@ app.controller('CreateAccountRequestCtrl', function($scope, $timeout, Messages, 
           password2:''
   };
 
-  $scope.createRequest = function() {
 
-    if ($scope.request.password != $scope.request.password2) {
-      alert('las claves ingresadas no son iguales');
-      $scope.request.password = '';
-      $scope.request.password2 = '';
-      return;
-    }
+	/**
+	 * Verificar variables y en caso afirmativo enviar mensaje de requirimiento de creacion de cuenta
+	 */
+	$scope.createRequest = function() {
 
+		if ($scope.request.password != $scope.request.password2) {
+			alert('las claves ingresadas no son iguales');
+			$scope.request.password = '';
+			$scope.request.password2 = '';
+			return;
+		}
 
-    var msg = {
-        id: Utils.getId(),
-        action: 'createAccountRequest',
-        session: Session.getSessionId(),
-        request: $scope.request
-    };
+		var msg = {
+			id: Utils.getId(),
+			action: 'createAccountRequest',
+			session: Session.getSessionId(),
+			request: $scope.request
+		};
 
-    Messages.send(msg, function(response) {
+		Messages.send(msg, function(response) {
 
-      if (response.ok == undefined) {
-        alert('error creando el pedido');
-      } else {
-        alert('Pedido de cuenta creado correctamente, se confirmará mediante un mail a su dirección de correo');
-      }
+			if (response.ok == undefined) {
+				alert('error creando el pedido');
+			} else {
+				alert('Pedido de cuenta creado correctamente, se confirmará mediante un mail a su dirección de correo');
+			}
 
+		});
 
-    });
-
-    clearRequest();
-  };
+		$scope.clearRequest();
+	};
 
   $scope.clearRequest = function() {
       $scope.request = {
