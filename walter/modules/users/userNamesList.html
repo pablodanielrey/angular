@@ -1,6 +1,6 @@
 
 <p><label>Buscar:</label><input type='text' ng-model="search" autofocus/></p>
 <ul>
-	<li ng-click='selectUser(user.id)' ng-class="{selected:isSelected(user.id), updated:isUpdated(user.id)}" ng-repeat="user in users | filter:search | orderBy:'name'">{{user.name}}</li>
+	<li ng-click='selectUser(user.id)' ng-class="{selected:isSelected(user.id), updated:isUpdated(user.id)}" ng-repeat="user in users | filter:search | orderBy:'name'">{{user.fullname}}</li>
 	
 </ul>
