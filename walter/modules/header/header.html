@@ -1,11 +1,10 @@
-<header class="header">
-	<ul class="list" ng-controller="ConnectionCtrl" ng-class="{display:isLogged(), nodisplay:!isLogged()}">
-		<li class="items"> <a href="/">Inicio</a></li>
-		<li class="items">{{getConnectedUserName()}}</li>
-		<li class="items" ng-class="{display:isConnected(), nodisplay:!isConnected()}">Conectado</li>
-		<li class="items" ng-class="{display:!isConnected(), nodisplay:isConnected()}"> No conectado</li>
-		<li class="items" ng-class="{display:!isConnected(), nodisplay:isConnected()}"><button ng-click='connect()'>Conectar</button></li>
-		<li class="items"><a href="/">Salir</a></li>
+<header>
+	<ul class="navigation" ng-controller="ConnectionCtrl" ng-class="{display:isLogged(), nodisplay:!isLogged()}">
+		<li><a href="/"><i class="fa fa-home"></i>  Inicio</a></li>
+		<li><a <i class="fa fa-user">&nbsp;</i>{{getConnectedUserName()}}</a></li>
+		<li ng-class="{display:isConnected(), nodisplay:!isConnected()}"><a><i class="fa fa-check">&nbsp;</i>Conectado</a></li>
+		<li ng-class="{display:!isConnected(), nodisplay:isConnected()}"><a><i class="fa fa-bolt">&nbsp;</i>No conectado</a></li>
+		<li ng-class="{display:!isConnected(), nodisplay:isConnected()}"><button class="conect" ng-click='connect()'><i class="fa fa-cog fa-spin"></i> Conectar</button></li>
+		<li><a href="/"><i class="fa fa-power-off"></i> Salir</a></li>
 	</ul>
-
 </header>
