@@ -1,6 +1,7 @@
 <div class="menu first">
   <ul>
       <li ng-repeat='i in items'>
+        <div class="menu-item-ico"><i class="fa {{i.img}}"></i></div>
         <a href='{{i.url}}' ng-click=i.function() class='menu-item' ng-if='i.url != undefined && i.url != null'>{{i.label}}</a>
         <div ng-click=i.function() class='menu-item' ng-if='i.url == undefined'>{{i.label}}</div>
       </li>
@@ -10,7 +11,8 @@
 <div class='menu second' ng-class="{true:'visible',false:'hidden'}[isSecondVisible()]">
   <ul>
     <li ng-repeat='i in secondItems'>
-      <a href={{i.url}} ng-click=i.function()>{{i.label}}</a>
+      <div class="menu-item-ico"><i class="fa {{i.img}}"></i></div>
+      <a href={{i.url}} ng-click=i.function() class='menu-item'>{{i.label}}</a>
     </li>
   </ul>
 </div>
