@@ -1,0 +1,10 @@
+
+<p><label>Buscar:</label><input type='text' ng-model="search" autofocus/></p>
+<p>
+	<input type="checkbox" checked="checked" ng-model="filterconfirmed.confirmed" ng-init="filterconfirmed.confirmed=true">Confirmado<br />
+	<input type="checkbox" ng-model="filterconfirmed.unconfirmed">Sin confirmar
+</p>
+<ul>
+	<li ng-repeat="request in requests | filter:search | filterAccountRequestByConfirmed:filterconfirmed | orderBy:['name', 'lastname']">{{request.name}} {{request.lastname}}</li>
+	
+</ul>
