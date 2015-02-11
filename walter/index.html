@@ -14,6 +14,10 @@
   <script type="text/javascript" src="routes.js"></script>
   <link rel="stylesheet" type="text/css" href="index.css"/>
 
+	<!-- filtros -->
+  <script type="text/javascript" src="filters/account/filterAccountRequestByConfirmed.js"></script>	
+
+
   <!-- servicios -->
   <script type="text/javascript" src="config.json"></script>
   <script type="text/javascript" src="services/Config.js"></script>
@@ -28,13 +32,14 @@
   <script type="text/javascript" src="services/Users.js"></script>
 
 
-  <!-- modulos -->
+  <!-- modules -->
+
 
   <script type="text/javascript" src="modules/header/header.js"></script>
   <link rel="stylesheet" type="text/css" href="modules/header/header.css"/>
+  
   <script type="text/javascript" src="modules/footer/footer.js"></script>
   <link rel="stylesheet" type="text/css" href="modules/footer/footer.css"/>
-
 
   <script type="text/javascript" src="modules/admin/status.js"></script>
 <!--  <link rel="stylesheet" type="text/css" href="modules/admin/status.css"/> -->
@@ -79,9 +84,11 @@
 <!--  <link rel="stylesheet" type="text/css" href="modules/login/logout.css" />
 -->
 
+	<script type="text/javascript" src="modules/account/accountRequestEdit.js"></script>
   <script type="text/javascript" src="modules/account/createAccountRequest.js"></script>
   <script type="text/javascript" src="modules/account/confirmAccountRequest.js"></script>
   <script type="text/javascript" src="modules/account/listAccountRequests.js"></script>
+	<script type="text/javascript" src="modules/account/accountRequestsList.js"></script>
   <script type="text/javascript" src="modules/account/changePassword.js"></script>
   <script type="text/javascript" src="modules/account/resetPassword.js"></script>
   <link rel="stylesheet" type="text/css" href="modules/account/changePassword.css"/>
@@ -96,10 +103,11 @@
   <script type="text/javascript" src="modules/users/editProfile.js"></script>
   <script type="text/javascript" src="modules/users/editUsers.js"></script>
   <script type="text/javascript" src="modules/users/listUsers.js"></script>
-<!--  <link rel="stylesheet" type="text/css" href="modules/users/editProfile.css" />
+  <link rel="stylesheet" type="text/css" href="modules/users/editProfile.css" />
   <link rel="stylesheet" type="text/css" href="modules/users/editUsers.css" />
+  <link rel="stylesheet" type="text/css" href="modules/users/editUserProfile.css" />
   <link rel="stylesheet" type="text/css" href="modules/users/listUsers.css" />
-
+<!--
   <link rel="stylesheet" type="text/css" href="modules/chat/chat.css" />
 -->
   <script type="text/javascript" src="controllers/test.js"></script>
@@ -109,7 +117,7 @@
 
 </head>
 <body>
-	
+
 <div ng-controller="IndexCtrl" class="principal">
 
 <div class="screen">
@@ -139,6 +147,6 @@
     </div>
 
 </div>
-	
+
 </body>
 </html>

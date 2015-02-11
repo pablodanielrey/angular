@@ -1,43 +1,45 @@
 <div class="editProfile">
 	<div>
-		<label>DNI</label>
-		<input class="editProfile_dni" type="text" ng-model="user.dni">
+		<label>DNI </label>
+		<input class="dni" type="text" ng-model="user.dni">
+		<i class="fa fa-credit-card"></i>
 	</div>
 	<div>
 		<label>Nombres</label>
-		<input class="editProfile_name" type="text" ng-model="user.name">
+		<input class="name" type="text" ng-model="user.name">
+		<i class="fa fa-user"></i>
 	</div>
 	<div>
-		<label>Apellidos</label>
-		<input class="editProfile_lastname" type="text" ng-model="user.lastname">
+		<label><i class="fa fa-user"></i> Apellidos</label>
+		<input class="lastname" type="text" ng-model="user.lastname">
 	</div>
 	<div>
-		<label>Género:</label>
-		<select class="editProfile_genre" ng-model="user.genre">
+		<label><i class="fa fa-venus-mars"></i> Género:</label>
+		<select class="genre" ng-model="user.genre">
 		  <option value="femenino">Femenino</option>
 		  <option value="masculino">Masculino</option>
 			<option value="otro">Otro</option>
 		</select>
 	</div>
 	<div>
-		<label>Fecha de nacimiento</label>
-		<input class="editProfile_birthdate" type="text"  ng-model="user.birthdate">
+		<label><i class="fa fa-calendar"></i> Nacimiento</label>
+		<input class="birthdate" type="date" ng-model="user.birthdate">
 	</div>
 	<div>
 		<label>País</label>
-		<input class="editProfile_country" type="text"  ng-model="user.country">
+		<input class="country" type="text"  ng-model="user.country">
 	</div>
 	<div>
 		<label>Ciudad</label>
-		<input class="editProfile_city" type="text"  ng-model="user.city">
+		<input class="city" type="text"  ng-model="user.city">
 	</div>
 	<div>
 		<label>Dirección</label>
-		<input class="editProfile_address" type="text"  ng-model="user.address">
+		<input class="address" type="text"  ng-model="user.address">
 	</div>
 	<div>
 		<label>Teléfono</label>
-		<input class="editProfile_telephone" type="text"  ng-model="user.telephone">
+		<input class="telephone" type="text"  ng-model="user.telephone">
 	</div>
 	<div>
 		<button ng-click='update()'>actualizar</button>
