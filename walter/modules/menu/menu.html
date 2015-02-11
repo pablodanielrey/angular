@@ -1,9 +1,8 @@
 <div class="menu first">
   <ul>
-      <li ng-repeat='i in items'>
+      <li ng-repeat='i in items' ng-click="itemClicked($index); i.function()" ng-class="{ 'selectedItem': $index == selectedItemIndex }">
         <div class="menu-item-ico"><i class="fa {{i.img}}"></i></div>
-        <a href='{{i.url}}' ng-click=i.function() class='menu-item' ng-if='i.url != undefined && i.url != null'>{{i.label}}</a>
-        <div ng-click=i.function() class='menu-item' ng-if='i.url == undefined'>{{i.label}}</div>
+        <div class='menu-item'>{{i.label}}</div>
       </li>
   </ul>
 </div>
