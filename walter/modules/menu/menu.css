@@ -56,7 +56,8 @@
 .menu.visible {
 }
 
-.menu.first li:hover {
+
+.menu.first li:hover, .selectedItem {
   background-color: #0066A6;
   color: white;
 }
