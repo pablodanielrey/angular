@@ -57,7 +57,7 @@
 }
 
 
-.menu.first li:hover, .selectedItem {
+.menu.first li:hover, .selectedItem, .selectedSecondItem {
   background-color: #0066A6;
   color: white;
 }
