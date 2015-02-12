@@ -1,6 +1,10 @@
-
-<p><label>Buscar:</label><input type='text' ng-model="search" autofocus/></p>
-<ul>
-	<li ng-click='selectUser(user.id)' ng-class="{selected:isSelected(user.id), updated:isUpdated(user.id)}" ng-repeat="user in users | filter:search | orderBy:'name'">{{user.fullname}}</li>
-	
-</ul>
+<div class="search_container">
+	<div class="search_imput">
+		<p><input type='search' ng-model="search" autofocus/></p>
+	</div>
+	<div>
+		<ul>
+			<li ng-click='selectUser(user.id)' ng-class="{selected:isSelected(user.id), updated:isUpdated(user.id)}" ng-repeat="user in users | filter:search | orderBy:'name'">{{user.fullname}}</li>
+		</ul>
+	</div>
+</div>
