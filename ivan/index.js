@@ -16,7 +16,7 @@ app.controller('IndexCtrl', function ($rootScope, $scope, $location, $timeout, S
     }
 
     $rootScope.isConnected = function() {
-      return ($rootScope.socket != null);
+      return WebSocket.isConnected();
     }
 
 

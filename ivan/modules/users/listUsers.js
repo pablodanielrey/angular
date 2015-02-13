@@ -25,41 +25,50 @@ app.controller('ListUsersCtrl',function($rootScope, $scope, $log, Session, Users
     return ($scope.updating == id);
   }
 
-  $scope.$on('UserUpdatedEvent',function(event,id) {
+	/**
+	 * UserUpdatedEvent. Al actualizar un usuario:
+	 *		Se modifica el usuario actualizado dentro de la lista de usuarios
+	 *		Si no se encuentra el usuario actualizado, se listan nuevamente todos los usuarios
+	 */
+	$scope.$on('UserUpdatedEvent',function(event,id) {
 
-    $scope.updating = id;
+		$scope.updating = id;
 
-    var found = null;
-    var pos = -1;
+		var found = null;
+		var pos = -1;
 
-    // busco el usuario dentro de la lista de usuarios
-    for (var i = 0; i < $scope.users.length; i++) {
-      var user = $scope.users[i];
-      if (user.id == id) {
-        found = user;
-        pos = i;
-        break;
-      }
-    }
+		// busco el usuario dentro de la lista de usuarios
+		for (var i = 0; i < $scope.users.length; i++) {
+		  var user = $scope.users[i];
+		  if (user.id == id) {
+			found = user;
+			pos = i;
+			break;
+		  }
+		}
 
-    if (found == null) {
-      $scope.listUsers();
-      return;
-    }
+		if (found == null) {
+		  $scope.listUsers();
+		  return;
+		}
 
-    // busco los datos del usuario actualizado, en caso de error busco nuevamente la lista.
-    Users.findUser(found.id,
-      function(user) {
-        $scope.users[pos] = user;
-      },
-      function(error) {
-        $scope.listUsers();
-      });
-  });
+		// busco los datos del usuario actualizado, en caso de error busco nuevamente la lista.
+		Users.findUser(found.id,
 
-  $scope.isSelected = function(id) {
-    return ($scope.selected == id);
-  }
+			function(user) {
+				$scope.users[pos] = user;
+				$scope.users[pos].fullname =  $scope.users[pos].name + " " +  $scope.users[pos].lastname; //definir dato fullname compuesto por el name y el lastname
+			},
+	
+			function(error) {
+				$scope.listUsers();
+			}
+		);
+	});
+
+	$scope.isSelected = function(id) {
+	return ($scope.selected == id);
+	}
 
 
 	/**
@@ -79,6 +88,10 @@ app.controller('ListUsersCtrl',function($rootScope, $scope, $log, Session, Users
     Users.listUsers(
       function(users) {
         $scope.users = users;
+        for (i = 0; i < users.length; i++) {
+	        $scope.users[i].fullname = users[i].name + " " + users[i].lastname;
+		}
+        
       },
       function(error) {
         alert(error);

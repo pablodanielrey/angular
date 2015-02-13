@@ -1,0 +1,30 @@
+<!DOCTIPE html>
+<html lang="es">
+<head>
+	<title>Search</title>
+	<meta charset="utf-8"/>
+	<meta name="description"= content="search"/>
+	<link rel="stylesheet" type="text/css" href="search.css" />
+</head>
+<body>
+		<div class="container">
+			<div class="imput_search">
+				<div><input class="search" type="search" name="buscar" ng-model="search"></div>
+			</div>
+			<div class="charges">
+				<div class="column1">
+					<div><input type="checkbox" name="cargo" value="estudiante"><label> Estudiante</label></div>
+					<div><input type="checkbox" name="cargo" value="docente"><label> Docente</label></div>
+					<div><input type="checkbox" name="cargo" value="docente"><label> Graduado</label></div>
+				</div>
+				<div class="column2">
+					<div><input type="checkbox" name="cargo" value="posgrado"><label> Posgrado</label></div>
+					<div><input type="checkbox" name="cargo" value="nodocente"><label> NoDocente</label></div>
+					<div><input type="checkbox" name="cargo" value="visitante"><label> Visitante</label></div>
+				</div>
+			</div>
+			<div class="list">
+				<div class="results"><p>Resultados Encontrados</p><hr></div>
+			</div>
+		</div>
+</body>
