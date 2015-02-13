@@ -7,6 +7,20 @@
 .search_imput{
   display:flex;
   justify-content:center;
-
-
 }
+.input_container{
+  border-radius: 0.3em;
+  padding-left:30px;
+  width:180px;
+  height:28px;
+  font-size: 18px;
+  background-image: url("/views/img/Search.png");
+  background-repeat:no-repeat;
+}
+
+.userNamesList li{
+  padding-left:10px;
+}
+
+.userNamesList li:nth-child(even) { background: #1F4464 }
+.userNamesList li:nth-child(odd) { background: #355C7D}
