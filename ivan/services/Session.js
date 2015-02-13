@@ -1,5 +1,14 @@
 var app = angular.module('mainApp');
 
+/**
+ * Administracion de sesiones
+ *
+ * @service Cache
+ *
+ * @sessionVar sessionIdentifier //id de sesion (acceder mediante getSessionId)
+ * @sessionVar user_id //id del usuario conectado
+ * @sessionVar selectedUser //id del usuario seleccionado
+ */
 app.service('Session', function(Cache) {
 
 	this.sessionIdentifier = 'sessionId';

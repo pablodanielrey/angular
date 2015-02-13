@@ -2,7 +2,7 @@
 
 var app = angular.module('mainApp');
 
-app.controller('MenuCtrl', function($rootScope, $scope, $location, Session) {
+app.controller('MenuCtrl', function($scope, $location, Session) {
 
 	$scope.secondItems = [];
 	$scope.selectedItemIndex = null;
@@ -10,7 +10,10 @@ app.controller('MenuCtrl', function($rootScope, $scope, $location, Session) {
 	$scope.secondVisible = false;
 	$scope.secondMenuVisible = false;
 	$scope.userListVisible = false;
-	$rootScope.userId = null;
+        
+	var session = Session.getCurrentSession(); //obtengo sesión actual
+	session.selectedUser = null; //cargo variable en la sesión actual
+	Session.saveSession(session); //guardo sessión actual
 
 	/**
 	* Cargar indice del elemento seleccionado
@@ -19,7 +22,10 @@ app.controller('MenuCtrl', function($rootScope, $scope, $location, Session) {
 		$scope.selectedItemIndex = $index;
 		$scope.selectedSecondItemIndex = null;
 		$location.url("");
-		$rootScope.userId = null;
+		
+		//inicializar usuario seleccionado
+		session.selectedUser = null; //cargo variable en la sesión actual
+		Session.saveSession(session); //guardo sessión actual
 	};
 	
 	/**
@@ -84,11 +90,16 @@ app.controller('MenuCtrl', function($rootScope, $scope, $location, Session) {
 	];
 	
 	var ep = editProfile;
+	
+	
 	$scope.$on('UserSelectedEvent', function(event,userId) {
 		if($scope.userListVisible){
 			ep();
 		}
-		$rootScope.userId = userId;
+                
+		//guardar el id del usuario seleccionado en variable de sesion
+		session.selectedUser = userId;
+		Session.saveSession(session);
 	});
 	
 

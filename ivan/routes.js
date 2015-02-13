@@ -77,8 +77,7 @@ app.config(['$routeProvider', function($routeProvider) {
       })
 
       .when('/editStudent', {
-        templateUrl: '/modules/systems/student/editStudent.html',
-        controller: 'EditStudentCtrl'
+        templateUrl: '/modules/students/studentForm.html',
       })
 
       .otherwise({
