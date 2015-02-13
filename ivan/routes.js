@@ -76,9 +76,10 @@ app.config(['$routeProvider', function($routeProvider) {
         controller: 'EditGroupsCtrl'
       })
 
-      .when('/editStudent', {
-        templateUrl: '/modules/students/studentForm.html',
-      })
+	.when('/editStudent', {
+		templateUrl: '/modules/students/studentForm.html',
+		controller: 'StudentFormCtrl'
+	})
 
       .otherwise({
  	      redirectTo: '/main'
