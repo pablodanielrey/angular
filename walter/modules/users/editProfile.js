@@ -22,7 +22,7 @@ app.controller('EditProfileCtrl', function($scope, $log, Session, Messages, Util
   $scope.user = {};
 
   $scope.clearUser = function() {
-    $scope.user = { id:'', name:'', lastname:'', dni:'', telephone:'', genre:'', city:'', country:'', address:'', birthdate:'' }
+    $scope.user = { id:'', name:'', lastname:'', dni:'', telephone:'', genre:'', city:'', country:'', address:'', birthdate:'', residenceCity:'', movil:'' }
   }
 
 	$scope.$on('UserSelectedEvent', function(event,data) {

@@ -1,17 +1,24 @@
 <div class="menu first">
-  <ul>
-      <li ng-repeat='i in items' ng-click="itemClicked($index); i.function()" ng-class="{ 'selectedItem': $index == selectedItemIndex }">
-        <div class="menu-item-ico"><i class="fa {{i.img}}"></i></div>
-        <div class='menu-item'>{{i.label}}</div>
-      </li>
-  </ul>
+	<ul>
+		<li ng-repeat="i in items" ng-click="itemClicked($index); i.function()" ng-class="{ 'selectedItem': $index == selectedItemIndex }">
+			<div class="menu-item-ico fa {{i.img}}"></div>
+			<div class="menu-item">{{i.label}}</div>
+		</li>
+	</ul>
 </div>
 
-<div class='menu second' ng-class="{true:'visible',false:'hidden'}[isSecondVisible()]">
-  <ul>
-    <li ng-repeat='i in secondItems'>
-      <div class="menu-item-ico"><i class="fa {{i.img}}"></i></div>
-      <a href={{i.url}} ng-click=i.function() class='menu-item'>{{i.label}}</a>
-    </li>
-  </ul>
+<div class="menu second" ng-show="secondVisible">
+
+	<div ng-show="userListVisible" ng-controller='ListUsersCtrl' ng-include="'modules/users/userNamesList.html'" /></div>
+	<div ng-show="secondMenuVisible">
+		<ul>
+			<li ng-repeat="i in secondItems" ng-click="secondItemClicked($index); i.function()" ng-class="{'selectedSecondItem': $index == selectedSecondItemIndex}">
+				<div class="menu-item-ico fa {{i.img}}"></div>
+				<div class="menu-item">{{i.label}}</div>
+			</li>
+		</ul>
+	</div>
 </div>
+
+
+

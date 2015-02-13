@@ -21,8 +21,8 @@ app.config(['$routeProvider', function($routeProvider) {
       })
 
       .when('/listAccountRequests', {
-        templateUrl: '/modules/account/listAccountRequests.html',
-        controller: 'ListAccountRequestsCtrl'
+        templateUrl: '/modules/account/accountRequestsIndex.html',
+
       })
 
       .when('/listUsers', {
