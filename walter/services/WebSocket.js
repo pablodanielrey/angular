@@ -82,6 +82,5 @@ app.service('WebSocket', function($rootScope, Config) {
 			$rootScope.socket = null;
 		}
 
-//		this.registerHandlers();
 
 });
