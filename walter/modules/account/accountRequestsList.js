@@ -5,12 +5,12 @@ app.controller("AccountRequestsListCtrl", function($rootScope, $scope, Utils, Se
 	$scope.filterconfirmed = [];
 	$scope.filterconfirmed.confirmed = true;
 	$scope.filterconfirmed.unconfirmed = false;
-	$scope.filterconfirmed.rejected = false;
 
 	/**
 	 * Manejo del evento AccountRequestApproved: Cuando se aprueba una cuenta se debe actualizar la lista de requerimientos
 	 */
 	$scope.$on('AccountRequestUpdated', function(event,data) {
+		$scope.requests = [];
 		$scope.listAccountRequests();
 	});
 
@@ -19,8 +19,8 @@ app.controller("AccountRequestsListCtrl", function($rootScope, $scope, Utils, Se
 	 * @param accountRequestId
 	 * 
 	 */
-	$scope.selectAccountRequest = function(accountRequestId){
-		$rootScope.$broadcast('AccountRequestSelection',accountRequestId);
+	$scope.selectAccountRequest = function($index){
+		$rootScope.$broadcast('AccountRequestSelection',$scope.requests[$index]);
 	};
 	
 	/**
