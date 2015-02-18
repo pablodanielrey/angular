@@ -4,23 +4,20 @@ var app = angular.module('mainApp');
 app.controller('EditUserProfileCtrl',function($scope,$rootScope,$timeout,Session) {
 
   $timeout(function() {
-    var s = Session.getCurrentSession();
-    if (s == null) {
+    var session = Session.getCurrentSession();
+    if (session == null) {
       return;
     }
 
 
 	var uid = null;
-	if($rootScope.userId != null){
-		uid = $rootScope.userId;
-	} else {
-	     uid = s.user_id;
-	    s.selectedUser = s.user_id;
-	    Session.saveSession(s);
 	
+	if(session.selectedUser == null){
+		session.selectedUser = session.user_id;
+	    Session.saveSession(session);
 	}
 
-    $rootScope.$broadcast('UserSelectedEvent',uid);
+    $rootScope.$broadcast('UserSelectedEvent',session.selectedUser);
   });
   
 })
