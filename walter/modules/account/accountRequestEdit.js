@@ -6,7 +6,7 @@ app.controller("AccountRequestEditCtrl", function($rootScope, $scope, Utils, Mes
 	$scope.container = {
 	    'display':'none'
 	};
-		
+	
 	$scope.$on('AccountRequestSelection', function(event,accountRequest) {
 		$scope.name = accountRequest.name;
 		$scope.lastname = accountRequest.lastname;
@@ -16,11 +16,18 @@ app.controller("AccountRequestEditCtrl", function($rootScope, $scope, Utils, Mes
 		$scope.id = accountRequest.id;
 		$scope.showAccountRequestEdit = true;
 	});
+	
+	$scope.clearForm = function(){
+		$scope.name = "";
+		$scope.lastname = "";
+		$scope.dni = "";
+		$scope.reason = "";
+		$scope.confirmed = false;
+		$scope.id = "";
+		$scope.showAccountRequestEdit = false;
+	}
 
 	$scope.approveAccountRequest = function(){
-		alert("approve");
-		$scope.showAccountRequestEdit = false;
-
 		var msg = {
 			"id" : Utils.getId(),
 			"reqId" : $scope.id,
@@ -28,16 +35,14 @@ app.controller("AccountRequestEditCtrl", function($rootScope, $scope, Utils, Mes
 			"action" : "approveAccountRequest",
 		};
 
-		
 		Messages.send(msg,function(response) {
 			$rootScope.$broadcast('AccountRequestUpdated');
 		});
+		
+		$scope.clearForm();
 	};
 
-	$scope.removeAccountRequest = function() {
-		alert("remove");
-		$scope.showAccountRequestEdit = false;
-	
+	$scope.removeAccountRequest = function() {	
 		var msg = {
 			"id" : Utils.getId(),
 			"reqId" : $scope.id,
@@ -49,11 +54,11 @@ app.controller("AccountRequestEditCtrl", function($rootScope, $scope, Utils, Mes
 		Messages.send(msg,function(response) {
 			$rootScope.$broadcast('AccountRequestUpdated');
 		});
+		
+		$scope.clearForm();
 	};
 	
 	$scope.rejectAccountRequest = function(){
-		$scope.showAccountRequestEdit = false;
-	
 		var msg = {
 			"id" : Utils.getId(),
 			"reqId" : $scope.id,
@@ -64,6 +69,8 @@ app.controller("AccountRequestEditCtrl", function($rootScope, $scope, Utils, Mes
 		Messages.send(msg,function(response) {
 			$rootScope.$broadcast('AccountRequestUpdated');
 		});
+		
+		$scope.clearForm();
 	}
 	
 });

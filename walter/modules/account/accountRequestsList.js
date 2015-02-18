@@ -19,9 +19,19 @@ app.controller("AccountRequestsListCtrl", function($rootScope, $scope, Utils, Se
 	 * @param accountRequestId
 	 * 
 	 */
-	$scope.selectAccountRequest = function($index){
-		$rootScope.$broadcast('AccountRequestSelection',$scope.requests[$index]);
+	$scope.selectAccountRequest = function(requestId){
+		var requestAccount = Utils.filter(function(e) {
+			return e.id == requestId;
+		}, $scope.requests)[0];
+		
+		$scope.accountRequestSelected = requestAccount.id;
+		$rootScope.$broadcast('AccountRequestSelection',requestAccount);
 	};
+	
+	
+	$scope.isSelected = function(id) {
+		return $scope.accountRequestSelected == id;
+	}
 	
 	/**
 	 * Definir lista de requerimientos de cuenta
