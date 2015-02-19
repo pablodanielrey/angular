@@ -15,7 +15,7 @@ from websocketServer import WebsocketServer
 
 from actions.chat import SendEventToClients
 from actions.login import Login, Logout, ResetPassword, ChangePassword
-from actions.requests import CreateAccountRequest, ConfirmAccountRequest, ListAccountRequests, ApproveAccountRequest, RemoveAccountRequest
+from actions.requests import CreateAccountRequest, ConfirmAccountRequest, ListAccountRequests, ApproveAccountRequest, RemoveAccountRequest, RejectAccountRequest
 from actions.users import UpdateUser, FindUser, ListUsers, ListMails, PersistMail, ConfirmMail, RemoveMail
 from actions.status import GetStatus
 from actions.students import CreateStudent, FindStudent
