@@ -9,26 +9,27 @@ var app = angular.module('mainApp');
  */
 app.controller("StudentFormCtrl", ["$scope", "Session", function($scope, Session) { 
 	
-	var session = Session.getCurrentSession();
-	
-		
 	/**
 	 * Obtener datos de estudiante
 	 *
 	 */
 	var getStudentData = function(){
-		//TODO buscar datos de alumno en base al id de usuario
+		alert("Datos de prueba");
+		$scope.student = new Array();
+		$scope.student.studentNumber = "11111/2";
+		$scope.student.degrees = new Array();
+		$scope.student.degrees[0] = Array();
+		$scope.student.degrees[0]["name"] = "Test";
 		
 	};
-	
-	/**
-	 * Codigo de ejecucion principal
-	 */
+
+	var session = Session.getCurrentSession();
+
 	if((session.selectedUser == null) || (session.selectedUser == undefined)){
 		session.selectedUser = session.user_id;
 		Session.saveSession(session);
 	};
-	
+
 	getStudentData();
 	
 }]); 
