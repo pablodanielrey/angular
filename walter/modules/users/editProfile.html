@@ -1,55 +1,43 @@
 <div class="editProfile">
-	<div class="content">
-		<label for="dni"><span class="fa fa-credit-card"></span> DNI </label>
-		<input id="dni" class="dni" type="text" ng-model="user.dni">
+	<div class="tittle">
+		<label><i class="fa fa-user"></i> | Información Básica</label>
 	</div>
-	<div class="content">
-		<label for="name"><span class="fa fa-user"></span> Nombres</label>
-		<input id="name" class="name" type="text" ng-model="user.name">
+
+	<div class"content">
+		<div class="column_left">
+			<label for="name"><span class="fa fa-user"></span> Nombres</label>
+			<label for="lastname"><span class="fa fa-user"></span> Apellidos</label>
+			<label for="dni"><span class="fa fa-credit-card"></span> DNI </label>
+			<!-- <label for="genre"><span class="fa fa-venus-mars"></span> Género</label>
+			<label for="birthdate"><span class="fa fa-calendar"></span> Nacimiento</label>
+			<label for="country"><span class="fa fa-bullseye"></span> País</label>
+			<label for="city"><span class="fa fa-street-view"></span> Ciudad Origen</label>
+			<label for="residenceCity"><span class="fa fa-street-view"></span> Ciudad Residencia</label>
+			<label for="address">Domicilio</label>
+			<label for="telephone">Teléfono</label>
+			<label for="movil">Celular</label> -->
+		</div>
+		<div class="column_right">
+			<input id="name" class="name" type="text" ng-model="user.name">
+			<input id="lastname" class="lastname" type="text" ng-model="user.lastname">
+			<input id="dni" class="dni" type="text" ng-model="user.dni">
+			<!-- <select id="genre" class="genre" ng-model="user.genre">
+				<option value="femenino">Femenino</option>
+				<option value="masculino">Masculino</option>
+				<option value="otro">Otro</option>
+			</select>
+			<input id="birthdate" class="birthdate" type="date" ng-model="user.birthdate">
+			<input id="country" class="country" type="text" ng-model="user.country">
+			<input id="city" class="city" type="text" name="city" ng-model="user.city">
+			<input id="residenceCity" class="residenceCity" type="text" ng-model="user.residenceCity">
+			<input id="address" class="address" type="text" ng-model="user.address">
+			<input id="telephone" class="telephone" type="text" ng-model="user.telephone">
+			<input id="movil" type="text" ng-model="user.movil"> -->
+		</div>
 	</div>
+
 	<div>
-		<label for="lastname"><span class="fa fa-user"></span> Apellidos</label>
-		<input id="lastname" class="lastname" type="text" ng-model="user.lastname">
-	</div>
-	<div>
-		<label for="genre"><span class="fa fa-venus-mars"></span> Género:</label>
-		<select id="genre" class="genre" ng-model="user.genre">
-		 <option value="femenino">Femenino</option>
-		 <option value="masculino">Masculino</option>
-			<option value="otro">Otro</option>
-		</select>
-	</div>
-	<div>
-		<label for="birthdate"><span class="fa fa-calendar"></span>Nacimiento</label>
-		<input id="birthdate" class="birthdate" type="date" ng-model="user.birthdate">
-	</div>
-	<div>
-		<label for="country">País</label>
-		<input id="country" class="country" type="text" ng-model="user.country">
-	</div>
-	<div>
-		<label for="city">Ciudad de Origen</label>
-		<input id="city" class="city" type="text" name="city" ng-model="user.city">
-	</div>
-	<div>
-		<label for="residenceCity">Ciudad de Residencia</label>
-		<input id="residenceCity" class="residenceCity" type="text" ng-model="user.residenceCity">
-	</div>
-	<div>
-		<label for="address">Domicilio</label>
-		<input id="address" class="address" type="text" ng-model="user.address">
-	</div>
-	<div>
-		<label for="telephone">Teléfono</label>
-		<input id="telephone" class="telephone" type="text" ng-model="user.telephone">
-	</div>
-	<div>
-		<label for="movil">Móvil</label>
-		<input id="movil" type="text" ng-model="user.movil">
-	</div>
-	
-	<div>
-		<button ng-click='update()'>actualizar</button>
+		<button class="actualizar" ng-click='update()'>Actualizar</button>
 		<button ng-click='cancel()'>cancelar</button>
 	</div>
 </div>
