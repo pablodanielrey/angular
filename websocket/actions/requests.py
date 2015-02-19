@@ -44,7 +44,7 @@ class RejectAccountRequest:
   config = inject.attr(Config)
   mail = inject.attr(Mail)
 
-  def sendEmail(self,request,description):
+  def sendEmail(self,email,description):
 
       """
         variables a reemplazar :
@@ -53,7 +53,7 @@ class RejectAccountRequest:
         ###DESCRIPTION###
       """
       From = self.config.configs['mail_reject_account_request_from']
-      To = request['email']
+      To = email
       subject = self.config.configs['mail_reject_account_request_subject']
 
 
@@ -92,9 +92,15 @@ class RejectAccountRequest:
 
     con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
     try:
+      req = self.req.findRequest(con,reqId)
+      if (req == None):
+        raise MalformedMessage()
+
+      mail = req['email']
+
       self.req.removeRequest(con,rid)
       description = message['description']
-      self.sendEmail(data,description)
+      self.sendEmail(email,description)
       con.commit()
 
       response = {'id':pid, 'ok':'petición eliminada correctamente'}
@@ -255,7 +261,7 @@ class CreateAccountRequest:
     pid = message['id']
 
     data = message['request']
-    data['id'] = str(uuid.uuid4());
+    data['id'] = str(uuid.uuid4());ok
     data['hash'] = hashlib.sha1(data['id'] + str(uuid.uuid4())).hexdigest()
 
     con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
