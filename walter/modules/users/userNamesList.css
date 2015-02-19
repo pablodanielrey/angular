@@ -4,11 +4,11 @@
   flex-direction:column;
 
 }
-.search_imput{
+.userNamesList .search_imput{
   display:flex;
   justify-content:center;
 }
-.input_container{
+.userNamesList .input_container{
   border-radius: 0.3em;
   padding-left:30px;
   width:180px;
