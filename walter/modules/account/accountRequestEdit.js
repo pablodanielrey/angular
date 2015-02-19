@@ -1,12 +1,15 @@
 
 app.controller("AccountRequestEditCtrl", function($rootScope, $scope, Utils, Messages, Session) {
 
-	$scope.showAccountRequestEdit = false;
-
-	$scope.container = {
-	    'display':'none'
-	};
-
+	if($rootScope.accountRequest){
+		$scope.name = $rootScope.accountRequest.name;
+		$scope.lastname = $rootScope.accountRequest.lastname;
+		$scope.dni = $rootScope.accountRequest.dni;
+		$scope.reason = $rootScope.accountRequest.reason;
+		$scope.confirmed = $rootScope.accountRequest.confirmed;
+		$scope.id = $rootScope.accountRequest.id;
+	}
+	
 	$scope.$on('AccountRequestSelection', function(event,accountRequest) {
 		$scope.name = accountRequest.name;
 		$scope.lastname = accountRequest.lastname;
@@ -14,7 +17,6 @@ app.controller("AccountRequestEditCtrl", function($rootScope, $scope, Utils, Mes
 		$scope.reason = accountRequest.reason;
 		$scope.confirmed = accountRequest.confirmed;
 		$scope.id = accountRequest.id;
-		$scope.showAccountRequestEdit = true;
 	});
 
 	$scope.clearForm = function(){
@@ -24,7 +26,6 @@ app.controller("AccountRequestEditCtrl", function($rootScope, $scope, Utils, Mes
 		$scope.reason = "";
 		$scope.confirmed = false;
 		$scope.id = "";
-		$scope.showAccountRequestEdit = false;
 	}
 
 	$scope.approveAccountRequest = function(){

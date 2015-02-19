@@ -81,6 +81,11 @@ app.config(['$routeProvider', function($routeProvider) {
         controller: 'EditStudentCtrl'
       })
 
+	.when('/accountRequestEdit', {
+		templateUrl: '/modules/account/accountRequestEdit.html',
+		controller: 'AccountRequestEditCtrl'
+	})
+
       .otherwise({
  	      redirectTo: '/main'
       });

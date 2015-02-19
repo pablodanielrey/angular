@@ -2,94 +2,195 @@
 
 var app = angular.module('mainApp');
 
-app.controller('MenuCtrl', function($rootScope, $scope, $location, Session) {
+app.controller('MenuCtrl', function($rootScope, $scope, $location, Session, Utils) {
 
-	$scope.secondItems = [];
-	$scope.selectedItemIndex = null;
-	$scope.selectedSecondItemIndex = null;
-	$scope.secondVisible = false;
-	$scope.secondMenuVisible = false;
-	$scope.userListVisible = false;
-	$rootScope.userId = null;
+	var selectedItemId = null; //id del item del menu seleccionado
+	var menuItemActive = null; //item  del menu activo
+	
+	var submenuMain = false; //flag para indicar la visualizacion del submenu principal
+	var submenuUser = false; //flag para indicar la visualizacion del submenu de usuarios
+	var submenuAccount = false; //flag para indicar la visualizacion del submenu de cuentas
+	
+	var selectedSubmenuItemId = null; //id del item del submenu seleccionado
+	var submenuItemActive = null; //item activo del submenu
+	
+	
+	//inicializar items del submenu principal
+	$scope.submenuItems = []; 
+	
+	
+	var initializeAllSubmenu = function(){
+		initializeSubmenuMain();
+		initializeSubmenuUser();
+		initializeSubmenuAccount();
+	}
+	
+	var showSubmenuMain = function(){
+		initializeAllSubmenu();
+		submenuMain = true;
+	}
+	
+	var showSubmenuUser = function(){
+		initializeAllSubmenu();
+		submenuUser = true;
+	}
+	
+	var showSubmenuAccount = function(){
+		initializeAllSubmenu();
+		submenuAccount = true;
+	}
+	
+	
+	/**
+	 * Inicializar submenu
+	 */
+	var initializeSubmenuMain = function(){
+		selectedSubmenuItemId = null;
+		submenuItemActive = null;
+		submenuMain = false;
+	};
+	
+	var initializeSubmenuUser = function(){
+		submenuUser = false;
+		$rootScope.userId = null;
+	}
+	
+	var initializeSubmenuAccount = function(){
+		submenuAccount = false;
+	}
+	
+	/**
+	 * Esta activo el submenu principal?
+	 */
+	$scope.isSubmenuMain = function(){
+		return submenuMain;
+	}
+	 
+	/**
+	 * Esta activo el submenu de usuarios?
+	 */
+	$scope.isSubmenuUser = function(){
+		return submenuUser;
+	}
+	 
+	 /**
+	 * Esta activo el submenu de cuentas?
+	 */
+	 $scope.isSubmenuAccount = function(){
+		return submenuAccount;
+	 }
+	 
+	
+	
+	 	 
 
 	/**
-	* Cargar indice del elemento seleccionado
-	*/
-	$scope.itemClicked = function ($index) {
-		$scope.selectedItemIndex = $index;
-		$scope.selectedSecondItemIndex = null;
+	 * Seleccionar item del menu principal
+	 */
+	$scope.selectItem = function (itemId){
+		//inicializar variables del menu
+		selectedItemId = itemId;
+
+		//inicializar submenus
+		initializeAllSubmenu();
+		
+		//inicializar interface de visualizacion
 		$location.url("");
-		$rootScope.userId = null;
+		
+		//buscar item seleccionado
+		menuItemActive = Utils.filter(function(element) {
+			return element.id == itemId;
+		}, $scope.items)[0];
+		
+		//ejecutar funcion del item seleccionado
+		menuItemActive.function();
+	};
+	
+	
+	/**
+	 * Seleccionar item del submenu principal
+	 */
+	$scope.selectSubmenuItem = function(itemId){
+		//inicializar variables del menu
+		selectedSubmenuItemId = itemId;
+		
+		//inicializar interface de visualizacion
+		$location.url("");
+		
+		//buscar item seleccionado
+		submenuItemActive = Utils.filter(function(element) {
+			return element.id == itemId;
+		}, $scope.submenuItems)[0];
+		
+		//ejecutar funcion del item seleccionado
+		submenuItemActive.function();
 	};
 	
 	/**
-	 * Cargar indice del segundo elemento seleccionado
+	 * Accion por defecto del submenu
 	 */
-	$scope.secondItemClicked = function ($index) {
-		$scope.selectedSecondItemIndex = $index;
-	};
-
-
-	/**
-	 * Accion por defecto de los items
-	 */
-	var defaultActionItem = function(){
-		$scope.secondItems = [];
-		$scope.secondVisible = false;
-		var item = $scope.items[$scope.selectedItemIndex];
-		if(item.url != undefined){
-			$location.url(item.url);
+	var defaultActionMenu = function(){
+		if(menuItemActive.url != undefined){
+			$location.url(menuItemActive.url);
 		}
 	};
 	
+	
 	/**
-	 * Accion por defecto de los second items
+	 * Accion por defecto del submenu
 	 */
-	var defaultActionSecondItem = function(){
-		var secondItem = $scope.secondItems[$scope.selectedSecondItemIndex];
-		if(secondItem.url != undefined){
-			$location.url(secondItem.url);
+	var defaultActionSubmenu = function(){
+		if(submenuItemActive.url != undefined){
+			$location.url(submenuItemActive.url);
 		}
 	};
 	
 	var editProfile = function() {
-		$scope.secondItems = [
-			{label:'Perfil', img:'fa-user', url:'editUserProfile', function: defaultActionSecondItem },
-			{label:'Datos de Alumno', img:'fa-university', url:'editStudent', function: defaultActionSecondItem },
-			{label:'Au24', img:'fa-th-large', url:'#', function: defaultActionSecondItem },
-			{label:'Inserción Laboral', img:'fa-th-large', url:'#', function: defaultActionSecondItem }
+		$scope.submenuItems = [
+			{id:'user', label:'Perfil', img:'fa-user', url:'editUserProfile', function: defaultActionSubmenu },
+			{id:'student', label:'Datos de Alumno', img:'fa-university', url:'editStudent', function: defaultActionSubmenu },
+			{id:'au24', label:'Au24', img:'fa-th-large', url:'#', function: defaultActionSubmenu },
+			{id:'job', label:'Inserción Laboral', img:'fa-th-large', url:'#', function: defaultActionSubmenu }
 		];
 
-		$scope.userListVisible = false;
-		$scope.secondVisible = true;
-		$scope.secondMenuVisible = true;
+		showSubmenuMain();
 	};
-
-
-	/**
-	 * Activar submenu de edicion de usuarios
-	 */
-	var editUsers = function(){
-		$scope.secondVisible = true;
-		$scope.secondMenuVisible = false;
-		$scope.userListVisible = true;
-	};
-
-	$scope.items = [
-		{label:'Mis datos', img:'fa-pencil-square-o', function: editProfile },
-		{label:'Cambiar clave', img:'fa-lock', url:'changePassword', function: defaultActionItem },
-		{label:'Editar usuarios', img:'fa-users', url:'editUsers', function: editUsers },
-		{label:'Pedidos de cuentas', img:'fa-inbox', url:'listAccountRequests', function: defaultActionItem },
-		{label:'Salir', img:'fa-sign-out', url:'logout', function: defaultActionItem }
-	];
 	
-	var ep = editProfile;
+	
+	/**
+	 * Esta seleccionado el item del menu enviado como parametro?
+	 */
+	$scope.isSelectedItem = function(itemId){
+		return (selectedItemId == itemId);
+	}
+	
+	/**
+	 * Esta seleccionado el item del submenu enviado como parametro?
+	 */
+	$scope.isSelectedSubmenuItem = function(itemId){
+		return (selectedSubmenuItemId == itemId);
+	}
+
+	
+	//items del menu principal (se define en esta instancia para cargar los metodos correctamente)
+	$scope.items = [
+		{id: "data", label:'Mis datos', img:'fa-pencil-square-o', function: editProfile },
+		{id: "password",label:'Cambiar clave', img:'fa-lock', url:'changePassword', function: defaultActionMenu },
+		{id: "user", label:'Editar usuarios', img:'fa-users', url:'editUsers', function: showSubmenuUser },
+		{id: "account", label:'Pedidos de cuentas', img:'fa-inbox', url:'accountRequestEdit', function: showSubmenuAccount },
+		{id: "logout", label:'Salir', img:'fa-sign-out', url:'logout', function: defaultActionMenu}
+	];
+
 	$scope.$on('UserSelectedEvent', function(event,userId) {
-		if($scope.userListVisible){
-			ep();
-		}
+		editProfile();
 		$rootScope.userId = userId;
 	});
 	
+	$scope.$on('AccountRequestSelection', function(event,accountRequest) {
+		$rootScope.accountRequest = accountRequest;
+		defaultActionMenu();
+		
+	});
+
 
 });
