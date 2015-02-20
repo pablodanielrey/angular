@@ -21,6 +21,7 @@ app.controller('ListUsersCtrl',function($rootScope, $scope, $log, Session, Users
   $scope.selected = '';
   $scope.updating = '';
 
+
   $scope.isUpdated = function(id) {
     return ($scope.updating == id);
   }
@@ -59,7 +60,7 @@ app.controller('ListUsersCtrl',function($rootScope, $scope, $log, Session, Users
 				$scope.users[pos] = user;
 				$scope.users[pos].fullname =  $scope.users[pos].name + " " +  $scope.users[pos].lastname; //definir dato fullname compuesto por el name y el lastname
 			},
-	
+
 			function(error) {
 				$scope.listUsers();
 			}
@@ -91,13 +92,15 @@ app.controller('ListUsersCtrl',function($rootScope, $scope, $log, Session, Users
         for (i = 0; i < users.length; i++) {
 	        $scope.users[i].fullname = users[i].name + " " + users[i].lastname;
 		}
-        
+
       },
       function(error) {
         alert(error);
       });
   };
 
-  $scope.listUsers();
+  $scope.$on('EditUserMenuEvent',function(event) {
+    $scope.listUsers();
+  });
 
 });

@@ -33,6 +33,7 @@ app.controller('MenuCtrl', function($rootScope, $scope, $location, Session, Util
 	var showSubmenuUser = function(){
 		initializeAllSubmenu();
 		submenuUser = true;
+		$rootScope.$broadcast('EditUserMenuEvent');
 	}
 
 	var showSubmenuAccount = function(){
