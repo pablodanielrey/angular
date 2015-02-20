@@ -1,0 +1,15 @@
+
+.messages {
+  position: fixed;
+  top: 200;
+  left: 200;
+}
+
+.messages.hidden {
+  display: none;
+}
+
+.messages.visible {
+  width: 200px;
+  height: 400px;
+}

@@ -47,6 +47,10 @@
   <script type="text/javascript" src="modules/connection/con.js"></script>
   <link rel="stylesheet" type="text/css" href="modules/connection/con.css"/>
 
+  <script type="text/javascript" src="modules/messages/messages.js"></script>
+  <link rel="stylesheet" type="text/css" href="modules/messages/messages.css"/>
+
+
   <script type="text/javascript" src="modules/groups/groupMembers.js"></script>
   <script type="text/javascript" src="modules/groups/listGroups.js"></script>
   <script type="text/javascript" src="modules/groups/editGroup.js"></script>
@@ -86,6 +90,7 @@
   <link rel="stylesheet" type="text/css" href="modules/login/login.css" />
 <!--  <link rel="stylesheet" type="text/css" href="modules/login/logout.css" />
 -->
+
 
 	<script type="text/javascript" src="modules/account/accountRequestEdit.js"></script>
   <script type="text/javascript" src="modules/account/createAccountRequest.js"></script>
@@ -151,6 +156,9 @@
     </div>
 
     <div class='connection-container' ng-class="{false:'visible',true:'hidden'}[isConnected()]" ng-controller="ConnectionCtrl" ng-include="'modules/connection/con.html'">
+    </div>
+
+    <div ng-controller="MessagesCtrl" ng-include="'modules/messages/messages.html'">
     </div>
 
 </div>
