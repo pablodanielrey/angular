@@ -81,6 +81,12 @@ app.config(['$routeProvider', function($routeProvider) {
         controller: 'EditStudentCtrl'
       })
 
+
+      .when('/editInsercion', {
+        templateUrl: '/modules/systems/insercion/editData.html',
+        controller: 'EditDataCtrl'
+      })
+
 	.when('/accountRequestEdit', {
 		templateUrl: '/modules/account/accountRequestEdit.html',
 		controller: 'AccountRequestEditCtrl'

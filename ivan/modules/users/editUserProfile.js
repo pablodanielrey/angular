@@ -1,7 +1,11 @@
 
 var app = angular.module('mainApp');
 
-app.controller('EditUserProfileCtrl',function($scope,$rootScope,$timeout,Session) {
+app.controller('EditUserProfileCtrl',function($scope,$routeParams,$rootScope,$timeout,Session) {
+
+	if(($routeParams.userId == null) || ($routeParams.userId == undefined)){
+		return;
+	}
 
   $timeout(function() {
     var session = Session.getCurrentSession();
@@ -17,7 +21,7 @@ app.controller('EditUserProfileCtrl',function($scope,$rootScope,$timeout,Session
 	    Session.saveSession(session);
 	}
 
-    $rootScope.$broadcast('UserSelectedEvent',session.selectedUser);
+    $rootScope.$broadcast('UserSelectedEvent',$routeParams.userId);
   });
   
-})
+});

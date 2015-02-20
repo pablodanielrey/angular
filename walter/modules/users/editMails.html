@@ -1,23 +1,27 @@
-
 <div class="editMails">
-    <div>
-      <div>Nuevo email</div>
-      <input type='email' ng-model='user.email'/>
-      <button ng-click='addMail()'>agregar</button>
-    </div>
-    <li ng-repeat='mail in mails'>
-      <ul>
-        <span>{{mail.email}}</span>
-        <span ng-if='mail.confirmed == true'>email Confirmado</span>
-        <span ng-if='mail.confirmed == false'>
-          <button ng-click='sendConfirmation(mail.id)'>enviar confirmación</button>
-          <span ng-if='mail.hash != ""'>
-            Pendiente de confirmación
+  <div class="tittle">
+    <label><i class="fa fa-envelope"></i> | e-mails</label>
+  </div>
+    <div class="content">
+      <div>
+        <span><b>Agregar nuevo e-mail</b> <i class="fa fa-envelope-o"></i></span>
+        <input type='email' ng-model='user.email' placeholder="mail@dominio.com"/>
+        <button class="agregar_email" ng-click='addMail()'><i class="fa fa-plus"></i> Agregar</button>
+      </div>
+      <ul ng-repeat='mail in mails'>
+        <li>
+          <span>{{mail.email}}</span>
+          <span ng-if='mail.confirmed == true'>email Confirmado</span>
+          <span ng-if='mail.confirmed == false'>
+            <button ng-click='sendConfirmation(mail.id)'>enviar confirmación</button>
+            <span ng-if='mail.hash != ""'>
+              Pendiente de confirmación
+            </span>
           </span>
-        </span>
-        <span>
-          <button ng-click='deleteMail(mail.id)'>X</button>
-        </span>
+          <span>
+            <button ng-click='deleteMail(mail.id)'>X</button>
+          </span>
+        </li>
       </ul>
-    </li>
+    </div>
 </div>

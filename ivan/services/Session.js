@@ -8,6 +8,7 @@ var app = angular.module('mainApp');
  * @sessionVar sessionIdentifier //id de sesion (acceder mediante getSessionId)
  * @sessionVar user_id //id del usuario conectado
  * @sessionVar selectedUser //id del usuario seleccionado
+ * @sessionVar accountRequest //accountRequest seleccionada
  */
 app.service('Session', function(Cache) {
 

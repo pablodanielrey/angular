@@ -1,14 +1,18 @@
 
-app.controller("AccountRequestEditCtrl", function($rootScope, $scope, Utils, Messages, Session) {
+app.controller("AccountRequestEditCtrl", function($rootScope ,$scope, Utils, Messages, Session) {
+	
+	$scope.session = Session.getCurrentSession();
 
-	if($rootScope.accountRequest){
-		$scope.name = $rootScope.accountRequest.name;
-		$scope.lastname = $rootScope.accountRequest.lastname;
-		$scope.dni = $rootScope.accountRequest.dni;
-		$scope.reason = $rootScope.accountRequest.reason;
-		$scope.confirmed = $rootScope.accountRequest.confirmed;
-		$scope.id = $rootScope.accountRequest.id;
-	}
+/*
+	if (($scope.session != null) && ($scope.session.accountRequest != null) && ($scope.session.accountRequest != undefined)) {
+		$scope.name = $scope.session.accountRequest.accountRequest.name;
+		$scope.lastname = $scope.session.accountRequest.accountRequest.lastname;
+		$scope.dni = $scope.session.accountRequest.accountRequest.dni;
+		$scope.reason = $scope.session.accountRequest.accountRequest.reason;
+		$scope.confirmed = $scope.session.accountRequest.accountRequest.confirmed;
+		$scope.id = $scope.session.accountRequest.accountRequest.id;
+    }
+*/
 	
 	$scope.$on('AccountRequestSelection', function(event,accountRequest) {
 		$scope.name = accountRequest.name;

@@ -65,7 +65,7 @@ app.config(['$routeProvider', function($routeProvider) {
         controller: 'ResetPasswordCtrl'
       })
 
-      .when('/editUserProfile', {
+      .when('/editUserProfile/:userId', {
         templateUrl: '/modules/users/editUserProfile.html',
         controller: 'EditUserProfileCtrl'
       })

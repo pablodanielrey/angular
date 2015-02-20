@@ -25,7 +25,9 @@ app.service('Cache', function($window) {
 
   this.setItem = function(key,value) {
     var s = this.getStorage();
-    s.setItem(key,JSON.stringify(value));
+	var j = JSON.stringify(value);
+	console.log(j);
+    s.setItem(key,j);
   };
 
 });
