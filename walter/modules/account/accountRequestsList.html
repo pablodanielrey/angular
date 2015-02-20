@@ -8,12 +8,12 @@
 
 	</p>
 	<ul>
-		<li ng-click='selectAccountRequest(request.id)' ng-repeat="request in requests | filter:search | filterAccountRequestByConfirmed:filterconfirmed | orderBy:['name', 'lastname']">
-			<div ng-class='{true:"selected",false:""}[isSelected(request.id)]'>
+		<li ng-click='selectAccountRequest(request)' ng-repeat="request in requests | filter:search | filterAccountRequestByConfirmed:filterconfirmed | orderBy:['name', 'lastname']">
+			<div ng-class='{true:"selected",false:""}[isSelected(request)]'>
 				{{request.name}} {{request.lastname}}
 			</div>
 		</li>
-	
+
 </ul>
 
 </div>

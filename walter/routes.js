@@ -87,10 +87,10 @@ app.config(['$routeProvider', function($routeProvider) {
         controller: 'EditDataCtrl'
       })
 
-	.when('/accountRequestEdit', {
-		templateUrl: '/modules/account/accountRequestEdit.html',
-		controller: 'AccountRequestEditCtrl'
-	})
+    	.when('/editAccountRequest', {
+    		templateUrl: '/modules/account/accountRequestEdit.html',
+    		controller: 'AccountRequestEditCtrl'
+    	})
 
       .otherwise({
  	      redirectTo: '/main'

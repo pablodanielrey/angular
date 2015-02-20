@@ -17,25 +17,26 @@ app.controller("AccountRequestsListCtrl", function($rootScope, $scope, Utils, Se
 	/**
 	 * Seleccionar un requerimiento de cuenta para su edicion, denegacion o aprobacion
 	 * @param accountRequestId
-	 * 
+	 *
 	 */
-	$scope.selectAccountRequest = function(requestId){
-		var requestAccount = Utils.filter(function(e) {
-			return e.id == requestId;
-		}, $scope.requests)[0];
-		
-		$scope.accountRequestSelected = requestAccount.id;
-		$rootScope.$broadcast('AccountRequestSelection',requestAccount);
+	$scope.selectAccountRequest = function(accountRequest){
+		var s = Session.getCurrentSession();
+		s.accountRequestSelected = accountRequest;
+		Session.saveSession(s);
+
+		$scope.accountRequestSelected = accountRequest;
+
+		$rootScope.$broadcast('AccountRequestSelection',accountRequest);
 	};
-	
-	
+
+
 	$scope.isSelected = function(id) {
 		return $scope.accountRequestSelected == id;
 	}
-	
+
 	/**
 	 * Definir lista de requerimientos de cuenta
-	 * 
+	 *
 	 */
 	$scope.listAccountRequests = function(){
 
@@ -44,7 +45,7 @@ app.controller("AccountRequestsListCtrl", function($rootScope, $scope, Utils, Se
 			session : Session.getSessionId(),
 			action : "listAccountRequests",
 		}
-		
+
 		Messages.send(msg, function(response) {
 
 			if (response.requests == undefined) {
@@ -55,8 +56,10 @@ app.controller("AccountRequestsListCtrl", function($rootScope, $scope, Utils, Se
 			$scope.requests = response.requests;
 		});
 	};
-	
-	//llamar a la lista de AccountRequests
-	$scope.listAccountRequests();
+
+	$scope.$on('InitializeAccountRequestList', function() {
+		//llamar a la lista de AccountRequests
+		$scope.listAccountRequests();
+	});
 
 });

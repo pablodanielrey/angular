@@ -1,37 +1,22 @@
 
-app.controller("AccountRequestEditCtrl", function($rootScope, $scope, Utils, Messages, Session) {
+app.controller("AccountRequestEditCtrl", function($rootScope, $scope, $timeout, Utils, Messages, Session) {
 
-	if($rootScope.accountRequest){
-		$scope.name = $rootScope.accountRequest.name;
-		$scope.lastname = $rootScope.accountRequest.lastname;
-		$scope.dni = $rootScope.accountRequest.dni;
-		$scope.reason = $rootScope.accountRequest.reason;
-		$scope.confirmed = $rootScope.accountRequest.confirmed;
-		$scope.id = $rootScope.accountRequest.id;
+	$scope.initialize = function() {
+		var s = Session.getCurrentSession();
+		if (s.accountRequestSelected == null) {
+			return;
+		}
+		$scope.accountRequest = s.accountRequestSelected;
 	}
-	
-	$scope.$on('AccountRequestSelection', function(event,accountRequest) {
-		$scope.name = accountRequest.name;
-		$scope.lastname = accountRequest.lastname;
-		$scope.dni = accountRequest.dni;
-		$scope.reason = accountRequest.reason;
-		$scope.confirmed = accountRequest.confirmed;
-		$scope.id = accountRequest.id;
-	});
 
 	$scope.clearForm = function(){
-		$scope.name = "";
-		$scope.lastname = "";
-		$scope.dni = "";
-		$scope.reason = "";
-		$scope.confirmed = false;
-		$scope.id = "";
+		$scope.accountRequest = {};
 	}
 
 	$scope.approveAccountRequest = function(){
 		var msg = {
 			"id" : Utils.getId(),
-			"reqId" : $scope.id,
+			"reqId" : $scope.accountRequest.id,
 			"session" : Session.getSessionId(),
 			"action" : "approveAccountRequest",
 		};
@@ -46,7 +31,7 @@ app.controller("AccountRequestEditCtrl", function($rootScope, $scope, Utils, Mes
 	$scope.removeAccountRequest = function() {
 		var msg = {
 			"id" : Utils.getId(),
-			"reqId" : $scope.id,
+			"reqId" : $scope.accountRequest.id,
 			"session" : Session.getSessionId(),
 			"action" : "removeAccountRequest",
 		};
@@ -62,7 +47,7 @@ app.controller("AccountRequestEditCtrl", function($rootScope, $scope, Utils, Mes
 	$scope.rejectAccountRequest = function(){
 		var msg = {
 			"id" : Utils.getId(),
-			"reqId" : $scope.id,
+			"reqId" : $scope.accountRequest.id,
 			"session" : Session.getSessionId(),
 			"description" : $scope.description,
 			"action" : "rejectAccountRequest",
@@ -74,5 +59,16 @@ app.controller("AccountRequestEditCtrl", function($rootScope, $scope, Utils, Mes
 
 		$scope.clearForm();
 	}
+
+
+	$scope.$on('AccountRequestSelection', function(event,data) {
+		console.log('accountRequestSelection');
+		$scope.initialize();
+	});
+
+	$timeout(function() {
+		console.log('timeout');
+		$scope.initialize();
+	},0);
 
 });

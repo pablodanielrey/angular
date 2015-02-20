@@ -50,11 +50,22 @@
   border-right: 3px solid;
   border-color:#0066A6;
 }
+
 .menu.hidden {
   visibility: hidden;
 }
+
 .menu.visible {
 }
+
+.menu.second > .hidden {
+  visibility: hidden;
+}
+
+.menu.second > .visible {
+
+}
+
 
 
 .menu.first li:hover, .selectedItem, .selectedSecondItem {

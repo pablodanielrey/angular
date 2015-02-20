@@ -1,6 +1,6 @@
 <div class="menu first">
 	<ul>
-		<li ng-repeat="i in items" ng-click="selectItem(i.id)" ng-class="{true:'selected'}[isSelectedItem(i.id)]">
+		<li ng-repeat="i in items" ng-click="selectItem(i)" ng-class="{true:'selected'}[isItemSelected(i)]">
 			<div class="menu-item-ico fa {{i.img}}"></div>
 			<div class="menu-item">{{i.label}}</div>
 		</li>
@@ -9,24 +9,6 @@
 
 <div class="menu second">
 
-	<!-- submenu principal -->
-	<div ng-show="isSubmenuMain()">
-		<ul>
-			<li ng-repeat="i in submenuItems" ng-click="selectSubmenuItem(i.id)" ng-class="{true:'selected'}[isSelectedSubmenuItem(i.id)]">
-				<div class="menu-item-ico fa {{i.img}}"></div>
-				<div class="menu-item">{{i.label}}</div>
-			</li>
-		</ul>
-	</div>
-	
-	<div ng-show="isSubmenuUser()" ng-controller='ListUsersCtrl' ng-include="'modules/users/userNamesList.html'" /></div>
-	
-	<div ng-show="isSubmenuAccount()" ng-controller='AccountRequestsListCtrl' ng-include="'modules/account/accountRequestsList.html'" /></div>
-	
+	<div ng-controller='AccountRequestOptionCtrl' ng-include="'/modules/menu/account-requests/account-request.html'" ng-class="{true:'visible',false:'hidden'}[isVisible()]"></div>
 
-	
-	
 </div>
-
-
-
