@@ -1,7 +1,164 @@
 <div class='insercion-container'>
   <div class='insercion'>
     <div>
-      <span>Fecha de inscripción</span>
+      <span>Nombre</span>
+      <input type="text" name="name">
+    </div>
+    <div>
+      <span>Apellido</span>
+      <input type="text" name="lastname">
+    </div>
+    <div><span>Género:</span>
+      <input type="text" list="generos">
+        <datalist id="generos">
+          <option value="Hombre" />
+          <option value="Mujer" />
+          <option value="Otro" />
+        </datalist>
+    </div>
+    <div>
+      <span>DNI</span>
+      <input type="text" name="dni">
+    </div>
+    <div>
+      <span>Nacimiento</span>
+      <input type="text" name="nacimiento">
+    </div>
+    <div>
+      <span>Edad</span>
+      <input type="text" name="edad">
+    </div>
+    <div>
+      <span>Legajo</span>
+      <input type="text" name="legajo">
+    </div>
+    <div>
+      <span>Teléfono</span>
+      <input type="text" name="telefono">
+    </div>
+    <div>
+      <span>Celular</span>
+      <input type="text" name="celular">
+    </div>
+    <div>
+      <span>Ciudad de Origen</span>
+      <input type="text" name="ciudado">
+    </div>
+    <div>
+      <span>Ciudad de Residencia</span>
+      <input type="text" name="ciudadr">
+    </div>
+    <div>
+      <span>País</span>
+      <input type="text" name="pais"></div>
+    <div>
+      <span>Domicilio</span>
+      <input type="text" name="domicilio"></div>
+    <div>
+      <br>
+      <div>
+        <span>Cargo</span><br><hr>
+      </div>
+      <div class="cargo">
+        <div><input type="checkbox" name="cargo" value="estudiante"><span>Estudiante</span></div>
+        <div><input type="checkbox" name="cargo" value="docente"><span>Docente</span></div>
+        <div><input type="checkbox" name="cargo" value="docente"><span>Graduado</span></div>
+        <div><input type="checkbox" name="cargo" value="posgrado"><span>Posgrado</span></div>
+        <div><input type="checkbox" name="cargo" value="nodocente"><span>NoDocente</span></div><br>
+        <div><input type="checkbox" name="cargo" value="visitante"><span>Visitante</span></div>
+      </div>
+    </div>
+    <div>
+      <br><div><span>Mail</span><br><hr>
+    </div>
+      <div>
+        <span>FCE</span>
+          <input type="text" name="cinstitucional"><br>
+      </div>
+      <div>
+        <span>Personal</span>
+        <input type="text" name="cpersonal"><br>
+      </div>
+    </div>
+
+    <div>
+      <span>Carrera</span><input type="text" list="carrera">
+      <datalist id="carrera">
+        <option value="Contador Público" />
+        <option value="Licenciado en Administración" />
+        <option value="Licenciado en Turismo" />
+        <option value="Licenciado en Economía" />
+        <option value="Técnico en Cooperativas" />
+      </datalist>
+    </div>
+    <div>
+      <span>Materias</span>
+      <input type="text" name="maprobadas">
+    </div>
+    <div>
+      <span>Aprobadas</span>
+      <input type="text" name="aprobadas">
+      </div>
+    <div>
+      <span>Promedio1</span>
+      <input type="text" name="promedio">
+    </div>
+    <div>
+      <span>Promedio2</span>
+      <input type="text" name="promedio2">
+    </div>
+    <div>
+      <span>Oferta</span>
+      <input type="text" list="oferta">
+        <datalist id="oferta">
+          <option value="Pasantías" />
+          <option value="Part-Time" />
+          <option value="Full-Time" />
+          <option value="Programa de Jóvenes Profesionales" />
+        </datalist>
+    </div>
+    <div>
+      <span>Viajar</span>
+      <input type="text" list="viajar">
+        <datalist id="viajar">
+          <option value="Si" />
+          <option value="No" />
+        </datalist>
+    </div>
+    <div>
+      <span>Residir</span>
+      <input type="text" name="residir">
+    </div>
+    <div>
+      <span>CV</span>
+      <input type="text" name="cv">
+    </div>
+    <div>
+      <span>Idioma</span>
+      <input type="text" list="idioma">
+        <datalist id="idioma">
+          <option value="Ingles" />
+          <option value="Portugués" />
+          <option value="Otro" />
+        </datalist>
+    </div>
+    <div>
+      <span>Nivel</span>
+      <input type="text" list="nivel">
+        <datalist id="nivel">
+          <option value="Básico" />
+          <option value="Intermedio" />
+          <option value="Avanzado" />
+        </datalist>
+    </div>
+    <div>
+      <button type="submit"> GUARDAR</button>
+    </div>
+  </div>
+</div>
+
+    <!-- <div>
+    <span>Fecha de inscripción</span>
       <span>{{system.inscription}}</span>
     </div>
     <div>
@@ -23,6 +180,4 @@
     <div>
       <span>Ciudad de origen</span>
       <span>{{system.cityOfOrigin}}</span>
-    </div>
-  </div>
-</div>
+    </div> -->
