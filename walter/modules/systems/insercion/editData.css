@@ -1,0 +1,33 @@
+.insercion-container{
+  width:100%;
+  display: flex;
+}
+.insercion{
+  display: flex;
+  width:100%;
+  flex-direction:row;
+}
+.insercion .column_left{
+  display:flex;
+  flex-direction:column;
+  align-items: flex-end;
+  width:50%;
+  max-width:320px;
+  min-width:180px;
+}
+
+.insercion .column_right{
+  display:flex;
+  flex-direction:column;
+  align-items: flex-end;
+  width:50%;
+  max-width:250px;
+  min-width:180px;
+}
+.insercion .cargo{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content: space-between;
+  max-width:290px;
+
+}
