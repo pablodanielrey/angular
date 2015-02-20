@@ -1,25 +1,28 @@
 <div class="editMails">
   <div class="tittle">
-    <label><i class="fa fa-envelope"></i> | e-mails</label>
+    <label><i class="fa fa-envelope"></i> | e-Mails</label>
   </div>
     <div class="content">
       <div>
         <span><b>Agregar nuevo e-mail</b> <i class="fa fa-envelope-o"></i></span>
         <input type='email' ng-model='user.email' placeholder="mail@dominio.com"/>
-        <button class="agregar_email" ng-click='addMail()'><i class="fa fa-plus"></i> Agregar</button>
+        <button class="email" ng-click='addMail()'><i class="fa fa-plus"></i> Agregar</button>
       </div>
-      <ul ng-repeat='mail in mails'>
+      <hr>
+      
+      <ul class="list"  ng-repeat='mail in mails' >
+
         <li>
-          <span>{{mail.email}}</span>
-          <span ng-if='mail.confirmed == true'>email Confirmado</span>
+          <span><i class="fa fa-envelope-o"></i> {{mail.email}}</span>
+          <span class="email_confirmado" ng-if='mail.confirmed == true'> | <i class="fa fa-check-square"></i> e-Mail Confirmado | </span>
           <span ng-if='mail.confirmed == false'>
-            <button ng-click='sendConfirmation(mail.id)'>enviar confirmación</button>
-            <span ng-if='mail.hash != ""'>
-              Pendiente de confirmación
+            <button class="email" ng-click='sendConfirmation(mail.id)'>Enviar Confirmación</button>
+            <span class="email_no_confirmado" ng-if='mail.hash != ""'>
+            | <i class="fa fa-clock-o"></i> Pendiente de confirmación |
             </span>
           </span>
           <span>
-            <button ng-click='deleteMail(mail.id)'>X</button>
+            <button class="delete_mail" ng-click='deleteMail(mail.id)'><i class="fa fa-trash-o"></i></button>
           </span>
         </li>
       </ul>

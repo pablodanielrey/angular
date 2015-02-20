@@ -30,28 +30,59 @@
 .editMails .content{
   margin-left:15px;
 }
+.editMails .list{
+  list-style:none;
+}
 
-.editMails .agregar_email{
+.editMails .email{
   text-align: center;
   cursor: pointer;
   border: 1px solid transparent;
   color:white;
   padding: 3px 6px;
-  margin:10px;
+  margin-left:10px;
   font-size: 14px;
   border-radius: 4px;
   background-color:#275276;
 }
-.editMails .agregar_email:hover{
+.editMails .email:hover{
   text-align: center;
   cursor: pointer;
   color:white;
   padding: 3px 6px;
-  margin:10px;
+  margin-left:10px;
   font-size: 14px;
 
   border-radius: 4px;
   background-image:linear-gradient(to right,#275276, #0066A6);
+}
+.editMails .delete_mail{
+  text-align: center;
+  cursor: pointer;
+  border: 1px solid transparent;
+  color:white;
+  padding: 3px 6px;
+  margin-left:10px;
+  font-size: 14px;
+  border-radius: 4px;
+  background-color:#d9534f;
+}
+.editMails .delete_mail:hover{
+  text-align: center;
+  cursor: pointer;
+  color:white;
+  padding: 3px 6px;
+  margin-left:10px;
+  font-size: 14px;
+
+  border-radius: 4px;
+  background-color:#d43f3a;
+}
+.editMails .email_confirmado{
+  color:#275276;
+}
+.editMails .email_no_confirmado{
+  color:#d9534f;
 }
 
 .editMails label{
@@ -61,4 +92,7 @@
 }
 .editMails input{
   border-radius: 0.2em;
+}
+.editMails ul{
+  padding-left:0px;
 }
