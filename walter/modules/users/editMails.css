@@ -7,13 +7,58 @@
   list-style: none;
   font-size: 14px;
   font-family:Arial, Helvetica, sans-serif;
-  color:white;
-  width:500px;
-  background-image:linear-gradient(to right,#275276, #0066A6);
-  border: 5px solid;
-  border-color:#275276;
+  color:black;
+  width:100%;
+  background:white;
   padding:5px;
-  margin:5px;
+  margin-top:5px;
   flex-direction:column;
-  
+
+}
+.editMails .tittle{
+  display:flex;
+  align-items: center;
+  background-image:linear-gradient(to right,#275276, #0066A6);
+  font-size:16px;
+  width:100%;
+  height:20px;
+  padding:5px;
+  padding-left:15px;
+  color:white;
+  margin-bottom:10px;
+}
+.editMails .content{
+  margin-left:15px;
+}
+
+.editMails .agregar_email{
+  text-align: center;
+  cursor: pointer;
+  border: 1px solid transparent;
+  color:white;
+  padding: 3px 6px;
+  margin:10px;
+  font-size: 14px;
+  border-radius: 4px;
+  background-color:#275276;
+}
+.editMails .agregar_email:hover{
+  text-align: center;
+  cursor: pointer;
+  color:white;
+  padding: 3px 6px;
+  margin:10px;
+  font-size: 14px;
+
+  border-radius: 4px;
+  background-image:linear-gradient(to right,#275276, #0066A6);
+}
+
+.editMails label{
+  margin-top:0px;
+  margin-bottom:1px;
+  margin-left:10px;
+}
+.editMails input{
+  border-radius: 0.2em;
 }

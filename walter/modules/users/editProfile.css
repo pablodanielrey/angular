@@ -84,3 +84,28 @@
   border-radius: 4px;
   background-image:linear-gradient(to right,#275276, #0066A6);
 }
+.editProfile .cancel{
+  text-align: center;
+  cursor: pointer;
+  border: 1px solid transparent;
+  color:white;
+  padding: 6px 12px;
+  
+  font-size: 14px;
+  line-height: 1.42857143;
+  border-radius: 4px;
+  background-color:#d9534f;
+
+
+}
+.editProfile .cancel:hover{
+  text-align: center;
+  cursor: pointer;
+  color:white;
+  padding: 6px 12px;
+
+  font-size: 14px;
+  line-height: 1.42857143;
+  border-radius: 4px;
+  background-color:#d43f3a;
+}
