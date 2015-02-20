@@ -6,5 +6,6 @@
 		<ul>
 			<li  ng-click='selectUser(user.id)' ng-class="{selected:isSelected(user.id), updated:isUpdated(user.id)}" ng-repeat="user in users | filter:search | orderBy:'name'"> <i class="fa fa-user"></i>&nbsp {{user.fullname}} </li>
 		</ul>
+
 	</div>
 </div>

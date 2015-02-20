@@ -15,7 +15,7 @@
 
 var app = angular.module('mainApp');
 
-app.controller('ListUsersCtrl',function($rootScope, $scope, $log, Session, Users) {
+app.controller('ListUsersCtrl',function($rootScope, $scope, $timeout, Session, Users) {
 
   $scope.users = [];
   $scope.selected = '';
@@ -97,7 +97,8 @@ app.controller('ListUsersCtrl',function($rootScope, $scope, $log, Session, Users
         alert(error);
       });
   };
-
-  $scope.listUsers();
-
+  
+	$timeout(function() {
+		$scope.listUsers();
+	},0);
 });
