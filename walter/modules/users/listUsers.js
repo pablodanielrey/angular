@@ -91,8 +91,7 @@ app.controller('ListUsersCtrl',function($rootScope, $scope, $log, Session, Users
         $scope.users = users;
         for (i = 0; i < users.length; i++) {
 	        $scope.users[i].fullname = users[i].name + " " + users[i].lastname;
-		}
-
+		    }
       },
       function(error) {
         alert(error);

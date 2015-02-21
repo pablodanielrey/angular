@@ -7,17 +7,17 @@ var app = angular.module('mainApp');
  * @service $log
  * @service Session
  * @service Utils
- * @service Users  
+ * @service Users
  *
  * @scope user
  * @scope clearUser()
  * @scope update()
- * @scope cancel() 
+ * @scope cancel()
  *
  * @listen UserSelectedEvent
  * @listen UserUpdatedEvent
- */ 
-app.controller('EditProfileCtrl', function($scope, $log, Session, Messages, Utils, Users) {
+ */
+app.controller('EditProfileCtrl', function($scope, $log, $timeout, Session, Messages, Utils, Users) {
 
   $scope.user = {};
 
@@ -25,9 +25,36 @@ app.controller('EditProfileCtrl', function($scope, $log, Session, Messages, Util
     $scope.user = { id:'', name:'', lastname:'', dni:'', telephone:'', genre:'', city:'', country:'', address:'', birthdate:'', residenceCity:'', movil:'' }
   }
 
+  /**
+  * Carga los datos del usuario seleccionado dentro de la sesion, dentro de la pantalla de datos del perfil.
+  */
+  $scope.loadUserData = function() {
+    var s = Session.getCurrentSession();
+    if (s == null) {
+      return;
+    }
+    if (s.selectedUser == undefined || s.selectedUser == null) {
+      $scope.clearUser();
+    }
+
+    var uid = s.selectedUser;
+    Users.findUser(uid,
+      function(user) {
+        user.birthdate = new Date(user.birthdate);
+        $scope.user = user;
+      },
+      function(error) {
+        alert(error);
+        $scope.clearUser();
+      }
+    );
+  }
+
+
 	$scope.$on('UserSelectedEvent', function(event,data) {
 		$scope.clearUser();
-	   
+    $scope.loadUserData();
+/*
 		Users.findUser(data,
 			function(user) {
 				user.birthdate = new Date(user.birthdate);
@@ -37,6 +64,7 @@ app.controller('EditProfileCtrl', function($scope, $log, Session, Messages, Util
 				alert(error);
 			}
 		);
+*/
 	});
 
   $scope.$on('UserUpdatedEvent', function(event,data) {
@@ -47,6 +75,8 @@ app.controller('EditProfileCtrl', function($scope, $log, Session, Messages, Util
     }
 
     $scope.clearUser();
+    $scope.loadUserData();
+/*
     Users.findUser(data,
       function(user) {
         user.birthdate = new Date(user.birthdate);
@@ -55,6 +85,7 @@ app.controller('EditProfileCtrl', function($scope, $log, Session, Messages, Util
       function(error) {
         alert(error);
       });
+*/
   });
 
 	/**
@@ -62,7 +93,7 @@ app.controller('EditProfileCtrl', function($scope, $log, Session, Messages, Util
 	 */
 	$scope.update = function() {
 		if(($scope.user.birthdate != "") && ($scope.user.birthdate != null)){
-			$scope.user.birthdate = new Date($scope.user.birthdate);	
+			$scope.user.birthdate = new Date($scope.user.birthdate);
 		}
 
 		Users.updateUser($scope.user,
@@ -85,14 +116,17 @@ app.controller('EditProfileCtrl', function($scope, $log, Session, Messages, Util
 		}
 		Users.findUser($scope.user.id,
 		  function(user) {
-			user.birthdate = new Date(user.birthdate);
-			$scope.user = user;
+  			user.birthdate = new Date(user.birthdate);
+  			$scope.user = user;
 		  },
 		  function(error) {
-			alert(error);
+			  alert(error);
 		  });
 	}
 
-  $scope.clearUser();
+  $timeout(function() {
+    $scope.clearUser();
+    $scope.loadUserData();
+  }, 0);
 
 });
