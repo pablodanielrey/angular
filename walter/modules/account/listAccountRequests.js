@@ -18,6 +18,7 @@ app.controller("ListAccountRequestsCtrl", function($rootScope, $scope, Messages,
 	$scope.requests = [];
 
 	$scope.$on('NewAccountRequestEvent', function(event,data) {
+		console.log('NewAccountRequestEvent');
 		$scope.listAccountRequests();
 	});
 
@@ -78,7 +79,6 @@ app.controller("ListAccountRequestsCtrl", function($rootScope, $scope, Messages,
 	}
 
 
-
-	$scope.listAccountRequests();
+//	$scope.listAccountRequests();
 
 });

@@ -4,7 +4,25 @@ app.controller("AccountRequestsListCtrl", function($rootScope, $scope, Utils, Se
 	//inicializar filtro
 	$scope.filterconfirmed = [];
 	$scope.filterconfirmed.confirmed = true;
-	$scope.filterconfirmed.unconfirmed = false;
+	$scope.filterconfirmed.unconfirmed = true;
+
+
+	$scope.$on('NewAccountRequestEvent', function(event,data) {
+		$scope.listAccountRequests();
+	});
+
+	$scope.$on('AccountRequestConfirmedEvent', function(event,data) {
+		$scope.listAccountRequests();
+	});
+
+	$scope.$on('AccountRequestApprovedEvent', function(event,data) {
+		$scope.listAccountRequests();
+	});
+
+	$scope.$on('AccountRequestRemovedEvent', function(event,data) {
+		$scope.listAccountRequests();
+	});
+
 
 	/**
 	 * Manejo del evento AccountRequestApproved: Cuando se aprueba una cuenta se debe actualizar la lista de requerimientos

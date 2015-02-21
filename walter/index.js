@@ -35,11 +35,12 @@ app.controller('IndexCtrl', function ($rootScope, $scope, $location, $timeout, S
         return;
       }
 
+      console.log(response.type);
       $rootScope.$broadcast(response.type,response.data);
     });
 
     $rootScope.processGeneralExceptions = function(e) {
-   
+
       if (e.name == 'SessionNotFound') {
         // no se encontro la session en el server asi que la destruyo y vuelvo a la pantlla principal.
         alert("no se encontro la sesion en el servidor, debe loguearse nuevamente");
