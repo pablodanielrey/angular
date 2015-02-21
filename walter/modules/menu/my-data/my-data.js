@@ -1,6 +1,6 @@
 var app = angular.module('mainApp');
 
-app.controller('MyDataOptionCtrl', function($scope, $rootScope) {
+app.controller('MyDataOptionCtrl', function($scope, $rootScope, $location, Session) {
 
   $scope.visible = false;
 
@@ -8,16 +8,22 @@ app.controller('MyDataOptionCtrl', function($scope, $rootScope) {
     return $scope.visible;
   }
 
+  $scope.initialize = function() {
+    var s = Session.getCurrentSession();
+    s.selectedUser = s.user_id;
+    Session.saveSession(s);
+  }
+
   $scope.$on('MenuOptionSelectedEvent', function(event,data) {
     $scope.visible = false;
     if (data == 'MyDataOption') {
       $scope.visible = true;
+      $scope.initialize();
     }
   });
 
-
   $scope.myProfile = function() {
-
+    $location.path('/editUsers');
   }
 
   $scope.studentData = function() {
