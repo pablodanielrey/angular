@@ -37,6 +37,7 @@ app.controller('MenuCtrl', function($rootScope, $scope, $location, Session, Util
 	$scope.itemSelected = null;
 
 	$scope.selectItem = function(i) {
+		$location.path('/');
 		$scope.itemSelected = i;
 		i.function();
 	}
