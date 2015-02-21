@@ -25,6 +25,4 @@ app.controller('ResetPasswordCtrl', function($scope, Credentials) {
       });
   }
 
-  $scope.clearUsername();
-
 });
