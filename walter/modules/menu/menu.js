@@ -4,7 +4,15 @@ var app = angular.module('mainApp');
 
 app.controller('MenuCtrl', function($rootScope, $scope, $location, Session, Utils) {
 
+	$scope.showSubOptions = false;
+
+	$scope.showSubOptionsMenu = function() {
+		return $scope.showSubOptions;
+	}
+
+
 	$scope.myProfile = function() {
+		$scope.showSubOptions = true;
 		$rootScope.$broadcast("MenuOptionSelectedEvent",'MyDataOption');
 	}
 
@@ -14,10 +22,12 @@ app.controller('MenuCtrl', function($rootScope, $scope, $location, Session, Util
 	}
 
 	$scope.editUsers = function() {
+		$scope.showSubOptions = true;
 		$rootScope.$broadcast("MenuOptionSelectedEvent",'EditUsersOption');
 	}
 
 	$scope.accountRequests = function() {
+		$scope.showSubOptions = true;
 		$rootScope.$broadcast("MenuOptionSelectedEvent",'AccountRequestsOption');
 	}
 
@@ -40,6 +50,7 @@ app.controller('MenuCtrl', function($rootScope, $scope, $location, Session, Util
 
 	$scope.selectItem = function(i) {
 		$location.path('/');
+		$scope.showSubOptions = false;
 		$scope.itemSelected = i;
 		i.function();
 	}

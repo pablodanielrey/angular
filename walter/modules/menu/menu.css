@@ -44,6 +44,7 @@
   padding:0px;
   margin:0px;
 }
+
 .menu.second {
   background-color: #275276;
   border-left: 3px solid;
@@ -58,8 +59,17 @@
 .menu.visible {
 }
 
+.menu.second.hidden {
+  display:none;
+}
+
+.menu.second.visible {
+
+}
+
 .menu.second > .hidden {
   visibility: hidden;
+  display: none;
 }
 
 .menu.second > .visible {

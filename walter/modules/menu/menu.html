@@ -7,7 +7,7 @@
 	</ul>
 </div>
 
-<div class="menu second">
+<div class="menu second" ng-class="{true:'visible',false:'hidden'}[showSubOptionsMenu()]">
 
 	<div ng-controller='MyDataOptionCtrl' ng-include="'/modules/menu/my-data/my-data.html'" ng-class="{true:'visible',false:'hidden'}[isVisible()]"></div>
 	<div ng-controller='AccountRequestOptionCtrl' ng-include="'/modules/menu/account-requests/account-request.html'" ng-class="{true:'visible',false:'hidden'}[isVisible()]"></div>
