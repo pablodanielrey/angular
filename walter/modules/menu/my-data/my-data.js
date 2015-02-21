@@ -12,6 +12,7 @@ app.controller('MyDataOptionCtrl', function($scope, $rootScope, $location, Sessi
     $scope.visible = false;
     if (data == 'MyDataOption') {
       $scope.visible = true;
+      $scope.itemSelected = null;
     }
   });
 
