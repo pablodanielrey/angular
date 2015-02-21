@@ -9,7 +9,8 @@ app.controller('MenuCtrl', function($rootScope, $scope, $location, Session, Util
 	}
 
 	$scope.changePassword = function() {
-		alert("2");
+		$rootScope.$broadcast("MenuOptionSelectedEvent",'ChangePasswordOption');		// esto lo realizo para que los otros menus se cierren.
+		$location.path('/changePassword');
 	}
 
 	$scope.editUsers = function() {
