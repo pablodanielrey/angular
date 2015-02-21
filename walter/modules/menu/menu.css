@@ -4,6 +4,7 @@
   display: flex;
   flex-direction: row;
 }
+
 .menu {
   list-style: none;
   width: 100%;
@@ -11,22 +12,27 @@
   color: white;
 
 }
+
 .menu-item {
     float:left;
     margin-left:10px;
 }
+
 .menu-item-ico{
     width:20px;
     float:left;
     margin-left:20px;
 }
+
 .menu.first {
   background-color:#275276;
   text-decoration: none;
 }
+
 .menu a{
   text-decoration: none;
 }
+
 .menu a:visited {
   color:white;
 }
@@ -39,6 +45,7 @@
   width:100%;
   height:40px;
 }
+
 .menu ul {
   list-style:none;
   padding:0px;
@@ -76,7 +83,10 @@
 
 }
 
-
+.menu .selected {
+  background-color: #0066A6;
+  color: white;
+}
 
 .menu.first li:hover, .selectedItem, .selectedSecondItem {
   background-color: #0066A6;
