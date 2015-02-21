@@ -1,6 +1,6 @@
 var app = angular.module('mainApp');
 
-app.controller('EditUsersOptionCtrl', function($scope, $rootScope) {
+app.controller('EditUsersOptionCtrl', function($scope, $rootScope, $location) {
 
   $scope.visible = true;
 
@@ -16,6 +16,8 @@ app.controller('EditUsersOptionCtrl', function($scope, $rootScope) {
     }
   });
 
-
+  $scope.$on('UserSelectedEvent',function(event,data) {
+    $location.path('/editUsers');
+  });
 
 });
