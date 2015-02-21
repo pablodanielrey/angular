@@ -13,7 +13,7 @@ app.controller('MenuCtrl', function($rootScope, $scope, $location, Session, Util
 	}
 
 	$scope.editUsers = function() {
-		alert("3");
+		$rootScope.$broadcast("MenuOptionSelectedEvent",'EditUsersOption');
 	}
 
 	$scope.accountRequests = function() {

@@ -103,4 +103,10 @@ app.controller('ListUsersCtrl',function($rootScope, $scope, $log, Session, Users
     $scope.listUsers();
   });
 
+
+  $scope.$on('InitializeUserList',function(event) {
+    $scope.listUsers();
+  });
+
+
 });
