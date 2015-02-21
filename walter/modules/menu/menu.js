@@ -27,10 +27,10 @@ app.controller('MenuCtrl', function($rootScope, $scope, $location, Session, Util
 
 	$scope.items = [
 		{ label:'Mis datos', img:'fa-pencil-square-o', function: $scope.myProfile },
-		{ label:'Cambiar clave', img:'fa-lock', url:'changePassword', function: $scope.changePassword },
-		{ label:'Editar usuarios', img:'fa-users', url:'editUsers', function: $scope.editUsers },
-		{ label:'Pedidos de cuentas', img:'fa-inbox', url:'accountRequestEdit', function: $scope.accountRequests },
-		{ label:'Salir', img:'fa-sign-out', url:'logout', function: $scope.exit }
+		{ label:'Cambiar clave', img:'fa-lock', function: $scope.changePassword },
+		{ label:'Editar usuarios', img:'fa-users', function: $scope.editUsers },
+		{ label:'Pedidos de cuentas', img:'fa-inbox', function: $scope.accountRequests },
+		{ label:'Salir', img:'fa-sign-out', function: $scope.exit }
 	];
 
 

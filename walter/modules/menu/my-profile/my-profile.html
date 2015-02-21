@@ -1,8 +1,7 @@
 
-<!-- submenu principal -->
-<div ng-show="isSubmenuMain()">
+<div>
   <ul>
-    <li ng-repeat="i in submenuItems" ng-click="selectSubmenuItem(i.id)" ng-class="{true:'selected'}[isSelectedSubmenuItem(i.id)]">
+    <li ng-repeat="i in items" ng-click="selectItem(i)" ng-class="{true:'selected'}[isItemSelected(i)]">
       <div class="menu-item-ico fa {{i.img}}"></div>
       <div class="menu-item">{{i.label}}</div>
     </li>
