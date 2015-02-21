@@ -22,7 +22,8 @@ app.controller('MenuCtrl', function($rootScope, $scope, $location, Session, Util
 	}
 
 	$scope.exit = function() {
-		alert("5");
+		$rootScope.$broadcast("MenuOptionSelectedEvent",'LogoutOption');		// esto lo realizo para que los otros menus se cierren.
+		$location.path('/logout');
 	}
 
 
