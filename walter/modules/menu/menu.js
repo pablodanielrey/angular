@@ -12,6 +12,12 @@ app.controller('MenuCtrl', function($rootScope, $scope, $location, Session, Util
 
 
 	$scope.myProfile = function() {
+
+		// selecciono para que toda la funcionalidad de myData funcione sobre el usuario logueado.
+		var s = Session.getCurrentSession();
+		s.selectedUser = s.user_id;
+		Session.saveSession(s);
+
 		$scope.showSubOptions = true;
 		$rootScope.$broadcast("MenuOptionSelectedEvent",'MyDataOption');
 	}

@@ -8,17 +8,10 @@ app.controller('MyDataOptionCtrl', function($scope, $rootScope, $location, Sessi
     return $scope.visible;
   }
 
-  $scope.initialize = function() {
-    var s = Session.getCurrentSession();
-    s.selectedUser = s.user_id;
-    Session.saveSession(s);
-  }
-
   $scope.$on('MenuOptionSelectedEvent', function(event,data) {
     $scope.visible = false;
     if (data == 'MyDataOption') {
       $scope.visible = true;
-      $scope.initialize();
     }
   });
 

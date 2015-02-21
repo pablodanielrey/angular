@@ -17,7 +17,12 @@ app.controller('EditUsersOptionCtrl', function($scope, $rootScope, $location) {
   });
 
   $scope.$on('UserSelectedEvent',function(event,data) {
+    /*
+    // tradicionalmente mostraría para modificar el perfil.
     $location.path('/editUsers');
+    */
+
+    $rootScope.$broadcast("MenuOptionSelectedEvent",'MyDataOption');    
   });
 
 });
