@@ -5,7 +5,7 @@ var app = angular.module('mainApp');
 app.controller('MenuCtrl', function($rootScope, $scope, $location, Session, Utils) {
 
 	$scope.myProfile = function() {
-		$rootScope.$broadcast("MenuOptionSelectedEvent",'MyProfileOption');
+		$rootScope.$broadcast("MenuOptionSelectedEvent",'MyDataOption');
 	}
 
 	$scope.changePassword = function() {

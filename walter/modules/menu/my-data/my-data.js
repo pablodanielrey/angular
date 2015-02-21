@@ -1,6 +1,6 @@
 var app = angular.module('mainApp');
 
-app.controller('MyProfileOptionCtrl', function($scope, $rootScope) {
+app.controller('MyDataOptionCtrl', function($scope, $rootScope) {
 
   $scope.visible = false;
 
@@ -10,7 +10,7 @@ app.controller('MyProfileOptionCtrl', function($scope, $rootScope) {
 
   $scope.$on('MenuOptionSelectedEvent', function(event,data) {
     $scope.visible = false;
-    if (data == 'MyProfileOption') {
+    if (data == 'MyDataOption') {
       $scope.visible = true;
     }
   });
