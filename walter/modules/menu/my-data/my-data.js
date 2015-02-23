@@ -21,7 +21,7 @@ app.controller('MyDataOptionCtrl', function($scope, $rootScope, $location, Sessi
   }
 
   $scope.studentData = function() {
-
+    $location.path('/editStudent');
   }
 
   $scope.au24 = function() {

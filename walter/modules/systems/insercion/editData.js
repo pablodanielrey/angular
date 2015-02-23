@@ -39,7 +39,7 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, Session, Users
         $scope.studentData = data;
       },
       function(error) {
-        alert(errors);
+        alert(error);
       }
     );
 
