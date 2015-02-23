@@ -3,15 +3,15 @@
     <div class="column_left">
       <div>
         <span>Nombre</span>
-        <input type="text" name="name">
+        <input type="text" ng-model="user.name">
       </div>
       <div>
         <span>Apellido</span>
-        <input type="text" name="lastname">
+        <input type="text" ng-model="user.lastname">
       </div>
       <div><span>Género:</span>
-        <input type="text" list="generos">
-          <datalist id="generos">
+        <input type="text" list="genre" ng-model='user.genre'>
+          <datalist id="genre">
             <option value="Hombre" />
             <option value="Mujer" />
             <option value="Otro" />
@@ -19,78 +19,50 @@
       </div>
       <div>
         <span>DNI</span>
-        <input type="text" name="dni">
+        <input type="text" ng-model="user.dni">
       </div>
       <div>
         <span>Nacimiento</span>
-        <input type="text" name="nacimiento">
-      </div>
-      <div>
-        <span>Edad</span>
-        <input type="text" name="edad">
+        <input type="text" ng-model="user.birthdate">
       </div>
       <div>
         <span>Legajo</span>
-        <input type="text" name="legajo">
+        <input type="text" ng-model="studentData.studentNumber">
       </div>
       <div>
         <span>Teléfono</span>
-        <input type="text" name="telefono">
+        <input type="text" ng-model="user.telephone">
       </div>
       <div>
         <span>Celular</span>
-        <input type="text" name="celular">
+        <input type="text" ng-model="user.telephone">
       </div>
       <div>
         <span>Ciudad de Origen</span>
-        <input type="text" name="ciudado">
+        <input type="text" ng-model="insertionData.originalCity">
       </div>
       <div>
         <span>Ciudad de Residencia</span>
-        <input type="text" name="ciudadr">
+        <input type="text" ng-model="user.city">
       </div>
       <div>
         <span>País</span>
-        <input type="text" name="pais">
+        <input type="text" name="user.country">
       </div>
       <div>
         <span>Domicilio</span>
-        <input type="text" name="domicilio">
-      </div>
-      <div>
-        <br>
-        <div>
-          <span>Cargo</span><hr>
-        </div>
-        <div class="cargo">
-          <div><input type="checkbox" name="cargo" value="estudiante"><span>Estudiante</span></div>
-          <div><input type="checkbox" name="cargo" value="docente"><span>Docente</span></div>
-          <div><input type="checkbox" name="cargo" value="docente"><span>Graduado</span></div>
-          <div><input type="checkbox" name="cargo" value="posgrado"><span>Posgrado</span></div>
-          <div><input type="checkbox" name="cargo" value="nodocente"><span>NoDocente</span></div><br>
-          <div><input type="checkbox" name="cargo" value="visitante"><span>Visitante</span></div>
-        </div>
+        <input type="text" name="user.address">
       </div>
 
 
-      <br>
-      <div>
-        <span>e-Mails</span><hr>
-      </div>
-        <div>
-          <span>FCE</span>
-          <input type="text" name="cinstitucional"><br>
-        </div>
-        <div>
-          <span>Personal</span>
-          <input type="text" name="cpersonal"><br>
-        </div>
-
+      <!-- los datos del mail del usuario -->
+      <div class='editMails-container' ng-controller='EditMailsCtrl' ng-include="'modules/users/editMails.html'"></div>
     </div>
+
     <div class="column_right">
       <div>
         <span>Carrera</span><input type="text" list="carrera">
-        <datalist id="carrera">
+        <datalist id="carrera" ng-model='insertionData.degree'>
           <option value="Contador Público" />
           <option value="Licenciado en Administración" />
           <option value="Licenciado en Turismo" />
@@ -100,23 +72,23 @@
       </div>
       <div>
         <span>Materias</span>
-        <input type="text" name="maprobadas">
+        <input type="text" ng-model="insertionData.courses">
       </div>
       <div>
         <span>Aprobadas</span>
-        <input type="text" name="aprobadas">
+        <input type="text" ng-model="insertionData.aprovedCourses">
         </div>
       <div>
         <span>Promedio1</span>
-        <input type="text" name="promedio">
+        <input type="text" ng-model="insertionData.average1">
       </div>
       <div>
         <span>Promedio2</span>
-        <input type="text" name="promedio2">
+        <input type="text" name="insertionData.average2">
       </div>
       <div>
         <span>Oferta</span>
-        <input type="text" list="oferta">
+        <input type="text" list="insertionData.internType">
           <datalist id="oferta">
             <option value="Pasantías" />
             <option value="Part-Time" />
@@ -126,14 +98,14 @@
       </div>
       <div>
         <span>Viajar</span>
-        <input type="text" list="viajar">
+        <input type="text" list='viajar' ng-model="insertionData.travel">
           <datalist id="viajar">
             <option value="Si" />
             <option value="No" />
           </datalist>
       </div>
       <div>
-        <span>Residir</span>
+        <span>Residir???</span>
         <input type="text" name="residir">
       </div>
       <div>
@@ -142,7 +114,7 @@
       </div>
       <div>
         <span>Idioma</span>
-        <input type="text" list="idioma">
+        <input type="text" list="idioma" ng-model='insertionData.languages'>
           <datalist id="idioma">
             <option value="Ingles" />
             <option value="Portugués" />
@@ -151,7 +123,7 @@
       </div>
       <div>
         <span>Nivel</span>
-        <input type="text" list="nivel">
+        <input type="text" list="nivel" ng-model='insertionData.studiesLevel'>
           <datalist id="nivel">
             <option value="Básico" />
             <option value="Intermedio" />
@@ -160,7 +132,7 @@
       </div>
     </div>
     <div>
-      <button type="submit"> GUARDAR</button>
+      <button type="submit" ng-click='save()'> GUARDAR</button>
     </div>
   </div>
 </div>

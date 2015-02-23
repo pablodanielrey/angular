@@ -1,14 +1,14 @@
 
 var app = angular.module('mainApp');
 
-app.service('Student', function(Messages, Utils, Session) {
+app.service('LaboralInsertion', function(Messages, Utils, Session) {
 
-  this.findStudentData = function(id,ok,err) {
+  this.findLaboralInsertionData = function(id,ok,err) {
     var msg = {
       id: Utils.getId(),
       session: Session.getSessionId(),
-      action:'findStudentData',
-      student: {
+      action:'findLaboralInsertionData',
+      person: {
         id: id
       }
     }

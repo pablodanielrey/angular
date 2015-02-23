@@ -1,6 +1,6 @@
 var app = angular.module('mainApp');
 
-app.controller('EditMailsCtrl', function($scope, Users) {
+app.controller('EditMailsCtrl', function($scope, $timeout, Users, Session) {
 
   $scope.user = { email: '' };
   $scope.mails = [];
@@ -21,6 +21,7 @@ app.controller('EditMailsCtrl', function($scope, Users) {
       });
   };
 
+
   /*
     Actualizo los mails del usuario en caso de que sea el que estoy mostrando.
   */
@@ -39,6 +40,24 @@ app.controller('EditMailsCtrl', function($scope, Users) {
     $scope.selected = data;
     $scope.findMails(data);
   });
+
+
+  /*
+    Cuando se carga el controlador, Busco los mails del usuario que exista en session como usuario seleccionado.
+  */
+  $timeout(function() {
+    var s = Session.getCurrentSession();
+    if (s == null) {
+      return;
+    }
+    if (s.selectedUser == undefined || s.selectedUser == null) {
+      return;
+    }
+
+    $scope.selected = s.selectedUser;
+    $scope.findMails(s.selectedUser);
+  },0);
+
 
 
 
