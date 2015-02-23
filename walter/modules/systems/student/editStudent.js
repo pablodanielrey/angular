@@ -22,9 +22,9 @@ app.controller('EditStudentCtrl', function($scope, $timeout, Student, Session) {
 
     var uid = s.selectedUser;
 
-    Student.findStudentData(
+    Student.findStudentData(uid,
       function(data) {
-        $scope.studentData = data;
+        $scope.studentData = data.student;
       },
       function(error) {
         alert(error);
