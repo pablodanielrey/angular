@@ -7,7 +7,7 @@ app.controller("Au24Ctrl", ["$scope", "$rootScope", "$timeout", "Au24", "Session
  * Cargar datos de au24 en funcion del usuario seleccionado
  * @session selectedUser Se utiliza la variable de session con el usuario seleccionado para buscar los datos asociados de au 24
  */	
-$scope.loadAu24Data = function(){
+$scope.loadAu24Data = function() {
 	var session = Session.getCurrentSession();
     
     if (session == null) {
@@ -26,8 +26,8 @@ $scope.loadAu24Data = function(){
 		 * @param au24 Datos de au24 correspondientes al usuario
 		 */
 		function(au24) {
-			user.birthdate = new Date(user.birthdate);
-			$scope.user = user;
+
+
 		},
 		
 		/**
