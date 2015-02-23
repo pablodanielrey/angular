@@ -25,7 +25,7 @@ app.controller('MyDataOptionCtrl', function($scope, $rootScope, $location, Sessi
   }
 
   $scope.au24 = function() {
-
+	$location.path('/au24');
   }
 
   $scope.laboralInsertion = function() {

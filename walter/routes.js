@@ -87,10 +87,15 @@ app.config(['$routeProvider', function($routeProvider) {
         controller: 'EditInsertionDataCtrl'
       })
 
-    	.when('/editAccountRequest', {
-    		templateUrl: '/modules/account/accountRequestEdit.html',
-    		controller: 'AccountRequestEditCtrl'
-    	})
+	.when('/editAccountRequest', {
+		templateUrl: '/modules/account/accountRequestEdit.html',
+		controller: 'AccountRequestEditCtrl'
+	})
+	
+	.when('/au24', {
+		templateUrl: '/modules/systems/au24/au24.html',
+		controller: 'Au24Ctrl'
+	})	
 
       .otherwise({
  	      redirectTo: '/main'

@@ -87,7 +87,8 @@ app.controller('EditProfileCtrl', function($scope, $log, $timeout, Session, Mess
       });
 */
   });
-
+  
+ 
 	/**
 	 * Actualizar usuario
 	 */
@@ -107,21 +108,11 @@ app.controller('EditProfileCtrl', function($scope, $log, $timeout, Session, Mess
 	}
 
 	/**
-	 * Cancelar edicion de usuario
-	 */
+	* Cancelar edicion de usuario, se deben reinicializar los valores
+	*/
 	$scope.cancel = function() {
 		$scope.clearUser();
-		if ($scope.user.id == undefined || $scope.user.id == null || $scope.user.id == '') {
-		  return;
-		}
-		Users.findUser($scope.user.id,
-		  function(user) {
-  			user.birthdate = new Date(user.birthdate);
-  			$scope.user = user;
-		  },
-		  function(error) {
-			  alert(error);
-		  });
+		$scope.loadUserData();
 	}
 
   $timeout(function() {
