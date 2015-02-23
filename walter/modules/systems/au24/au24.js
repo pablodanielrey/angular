@@ -1,6 +1,6 @@
 var app = angular.module('mainApp');
 
-app.controller("Au24Ctrl", ["$scope", "$rootScope", "Au24", function($scope, $rootScope, Au24) {
+app.controller("Au24Ctrl", ["$scope", "$rootScope", "$timeout", "Au24", "Session", function($scope, $rootScope, $timeout, Au24, Session) {
 
 
 /**
