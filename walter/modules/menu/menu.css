@@ -88,14 +88,16 @@
   color: white;
 }
 
-.menu.first li:hover, .selectedItem, .selectedSecondItem {
+.menu li:hover.selected {
+  background-color: #D9534F;
+  color: white;
+}
+
+.menu li:hover {
   background-color: #0066A6;
   color: white;
 }
-.menu.second li:hover {
-  background-color: #0066A6;
-  color: white;
-}
+
 
 
 @keyframes pepe {
