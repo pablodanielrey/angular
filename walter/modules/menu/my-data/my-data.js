@@ -29,7 +29,7 @@ app.controller('MyDataOptionCtrl', function($scope, $rootScope, $location, Sessi
   }
 
   $scope.laboralInsertion = function() {
-
+    $location.path('/editInsertion');
   }
 
   $scope.items = [

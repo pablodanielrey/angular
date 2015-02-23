@@ -82,9 +82,9 @@ app.config(['$routeProvider', function($routeProvider) {
       })
 
 
-      .when('/editInsercion', {
+      .when('/editInsertion', {
         templateUrl: '/modules/systems/insercion/editData.html',
-        controller: 'EditDataCtrl'
+        controller: 'EditInsertionDataCtrl'
       })
 
     	.when('/editAccountRequest', {
