@@ -35,7 +35,7 @@ app.controller('MyDataOptionCtrl', function($scope, $rootScope, $location, Sessi
   $scope.items = [
     { label:'Perfil', img:'fa-user', url:'editUserProfile', function: $scope.myProfile },
     { label:'Datos de Alumno', img:'fa-university', url:'editStudent', function: $scope.studentData },
-    { label:'Au24', img:'fa-th-large', url:'#', function: $scope.au24 },
+    //{ label:'Au24', img:'fa-th-large', url:'#', function: $scope.au24 },
     { label:'Inserción Laboral', img:'fa-th-large', url:'editInsercion', function: $scope.laboralInsertion }
   ];
 
