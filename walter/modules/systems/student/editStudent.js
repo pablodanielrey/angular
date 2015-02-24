@@ -2,29 +2,48 @@
 var app = angular.module('mainApp');
 
 app.controller('EditStudentCtrl', function($scope, $timeout, Student, Session) {
-  $scope.studentData = {};
+  $scope.student = {};
 
   $scope.save = function() {
-
+    var s = Session.getCurrentSession();
+    if (s == null) {
+      return;
+    }
+    
+    if (s.selectedUser == undefined || s.selectedUser == null) {
+      return;
+    }
+    
+    $scope.student.id = s.selectedUser;	
+   
+    Student.persistStudent($scope.student,
+		function(student) {
+			alert("registro actualizado");
+		},
+		function(error) {
+			alert(error);
+		}
+	);
   }
+ 
 
   /**
   * Carga los datos del usuario seleccionado dentro de la sesion
   */
-  $scope.loadUserData = function() {
+  $scope.loadStudentData = function() {
     var s = Session.getCurrentSession();
     if (s == null) {
       return;
     }
     if (s.selectedUser == undefined || s.selectedUser == null) {
-      $scope.clearUser();
+      alert("error");
     }
 
     var uid = s.selectedUser;
 
     Student.findStudentData(uid,
       function(data) {
-        $scope.studentData = data.student;
+        $scope.student = data.student;
       },
       function(error) {
         alert(error);
@@ -34,7 +53,9 @@ app.controller('EditStudentCtrl', function($scope, $timeout, Student, Session) {
 
 
   $timeout(function() {
-    $scope.loadUserData();
+    $scope.loadStudentData();
   },0);
+  
+  
 
 })
