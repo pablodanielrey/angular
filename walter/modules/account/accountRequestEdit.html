@@ -1,32 +1,48 @@
 <div class="accountRequestEdit-container">
 	<div class="accountRequestEdit">
-		<div ng-style="es" >
-			<div>
-				<legend>Datos de la solicitud</legend>
-				<label for="name">Nombres:</label>
-				<input id="name" type="text" ng-model="accountRequest.name"/>
+			<div class="solicitud">
+				<div class="tittles">&nbsp; Datos de la solicitud</div>
+				<div>
+					<span for="name">Nombres:</span>
+					<input id="name" type="text" ng-model="accountRequest.name"/>
+				</div>
+				<div>
+					<span for="lastname">Apellidos:</span>
+					<input id="lastname" type="text" ng-model="accountRequest.lastname"/>
+				</div>
+				<div>
+					<span for="document_number">DNI:</span>
+					<input id="document_number" type="text" ng-model="accountRequest.dni"/>
+				</div>
+				<div>
+					<input id="confirmed" type="checkbox" ng-model="accountRequest.confirmed"/>
+					<span for="document_number">Correo</span>
 
-				<label for="lastname">Apellidos:</label>
-				<input id="lastname" type="text" ng-model="accountRequest.lastname"/>
+					<input id="document_number" type="text" ng-model="accountRequest.email"/>
 
-				<label for="document_number">DNI:</label>
-				<input id="document_number" type="text" ng-model="accountRequest.dni"/>
 
-				<label for="reason">Motivo de la solicitud:</label>
-				<input id="reason" type="text" ng-model="accountRequest.reason"/>
 
-				<label for="confirmed">Confirmado:</label>
-				<input id="confirmed" type="checkbox" ng-model="accountRequest.confirmed"/>
+				</div>
 			</div>
 
-			<div>
-				<legend>Procesamiento de la solicitud</legend>
-				<label for="description">Descripcion:</label>
-				<textarea id="description" name="description" ng-model="description"></textarea>
-				<input type="button" value="Aprobar" ng-click="approveAccountRequest()"/>
+			<div class="motivoSolicitud">
+				<div class="tittles">&nbsp;Motivo</div>
+				<div>
+					<input class="reason" type="text" ng-model="accountRequest.reason"/>
+				</div>
+
+			</div>
+
+			<div class="acciones">
+				<div class="tittles">&nbsp;Motivo</div>
+				<button class="aprobar" ng-click="approveAccountRequest()"><i class="fa fa-check"></i>Aprobar</button>
 				<input type="button" value="Rechazar" ng-click="rejectAccountRequest()"/>
 				<input type="button" value="Eliminar" ng-click="removeAccountRequest()"/>
 			</div>
-		</div>
+
+			<div class="respuesta">
+				<div class="tittles">&nbsp;Respuesta</div>
+				<textarea id="description" name="description" ng-model="description"></textarea>
+			</div>
 	</div>
 </div>
