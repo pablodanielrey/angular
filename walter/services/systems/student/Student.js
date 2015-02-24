@@ -33,9 +33,11 @@ app.service('Student', function(Messages, Utils, Session, Cache) {
     }
     
     Messages.send(msg,
-		function(student){
-			callbackOk(student);
-			Cache.setItem(self.prefix + student.id, student);
+		function(response){
+			callbackOk(response);
+			if(response.student != null){
+				Cache.setItem(self.prefix + response.student.id, response.student);
+			}
 		},
 
 		function(error){
