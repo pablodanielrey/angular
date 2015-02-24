@@ -2,7 +2,6 @@
 /*
 Módulo de sistemas.
 */
-
 create schema systems;
 
 create table systems.systems (
@@ -16,7 +15,6 @@ create table systems.systems (
 /*
   Modulo principal de datos del usuario.
 */
-
 create schema profile;
 
 create table profile.users (
@@ -47,10 +45,10 @@ create table profile.telephones (
 
 
 
+
 /*
   Módulo de los grupos.
 */
-
 create schema groups;
 
 create table groups.groups (
@@ -70,7 +68,6 @@ create table groups.groups_users (
 /*
   Módulo de credenciales.
 */
-
 create schema credentials;
 
 create table credentials.user_password (
@@ -96,7 +93,6 @@ create table credentials.password_resets (
 /*
   Módulo de requests.
 */
-
 create schema account_requests;
 
 create table account_requests.requests (
@@ -117,7 +113,6 @@ create table account_requests.requests (
 /*
   tablas del módulo de estudiantes.
 */
-
 create schema students;
 
 create table students.users (
@@ -132,7 +127,6 @@ create table students.users (
 /*
   tablas del módulo de inserción laboral
 */
-
 create schema laboral_insertion;
 
 create table laboral_insertion.users (
@@ -165,8 +159,6 @@ create table laboral_insertion.degree (
 /*
   Tablas internas de logs, sesiones, etc. cuestiones internas del sistema van dentro de este esquema.
 */
-
-
 create schema system;
 
 
