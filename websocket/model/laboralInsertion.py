@@ -1,18 +1,34 @@
 import psycopg2
 from model.objectView import ObjectView
 
-class LaboralInsertions:
+class LaboralInsertion:
 
+
+    def persistLaboralInsertion(self,con,data):
+        if findLaboralInsertion(con,data['id']) == None:
+            params = (data['id'],psycopg2.Binary(data['cv']),data['reside'],data['travel'])
+            cur = con.cursor()
+            cur.execute("insert into laboral_insertion.users (id,cv,reside,travel) values (%s,%s,%s,%s)",params)
+        else:
+            params = (psycopg2.Binary(data['cv']),data['reside'],data['travel'],data[id])
+            cur = con.cursor()
+            cur.execute('update laboral_insertion.users set cv = %s,reside = %s,travel = %s where id = %s',params)
+
+
+"""
     def createLaboralInsertion(self,con,laboralInsertion):
         params = (laboralInsertion['id'],laboralInsertion['cv'],laboralInsertion['residir'],laboralInsertion['viajar'])
         cur = con.cursor()
         cur.execute("insert into laboral_insertion.users (id,cv,reside,travel) values (%s,%s,%s,%s)",params)
+
 
     def updateLaboralInsertion(self,con,li):
         laboralInsertion = ObjectView(li)
         params = (laboralInsertion.cv,laboralInsertion.residir,laboralInsertion.viajar,laboralInsertion.id)
         cur = con.cursor()
         cur.execute('update laboral_insertion.users set cv = %s,reside = %s,travel = %s where id = %s',params)
+"""
+
 
     def findLaboralInsertion(self,con,id):
         cur = con.cursor()

@@ -16,7 +16,7 @@ from wexceptions import MalformedMessage
 peticion:
 {
     "id":"",
-    "action":"createLaboralInsertion",
+    "action":"persistLaboralInsertionData",
     "session":"session de usuario",
     "laboralInsertion": {
         "id":"id del usuario a agregar la info de insercion laboral",
@@ -35,16 +35,16 @@ respuesta:
 
 """
 
-class CreateLaboralInsertion:
+class PersistLaboralInsertion:
 
-    laboralInsertions = inject.attr(LaboralInsertions)
+    laboralInsertion = inject.attr(LaboralInsertion)
     events = inject.attr(Events)
     profiles = inject.attr(Profiles)
     config = inject.attr(Config)
 
     def handleAction(self, server, message):
 
-        if (message['action'] != 'createLaboralInsertionData'):
+        if (message['action'] != 'persistLaboralInsertionData'):
             return False
 
         if 'laboralInsertion' not in message:
@@ -59,7 +59,7 @@ class CreateLaboralInsertion:
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
             laboralInsertion = message['laboralInsertion']
-            self.laboralInsertions.createLaboralInsertion(con,laboralInsertion)
+            self.laboralInsertion.persistLaboralInsertion(con,laboralInsertion)
             con.commit()
 
             response = {'id':message['id'], 'ok':''}
