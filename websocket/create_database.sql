@@ -106,8 +106,8 @@ create table students.user_data (
 
 create schema laboral_insertion;
 
-create table laboral_insertion.user_data (
-  id varchar not null primary key references user (id),
+create table laboral_insertion.users (
+  id varchar not null primary key references users (id),
   cv bytea,
   reside boolean default false,
   travel boolean default false
@@ -115,14 +115,14 @@ create table laboral_insertion.user_data (
 
 create table laboral_insertion.languages (
   id varchar not null primary key,
-  user_id varchar not null references laboral_insertion.user (id),
+  user_id varchar not null references laboral_insertion.users (id),
   name varchar not null,
   level varchar not null
 );
 
 create table laboral_insertion.degree (
   id varchar not null primary key,
-  user_id references laboral_insertion.user (id),
+  user_id references laboral_insertion.users (id),
   name varchar not null,
   curses integer,
   aproved integer,
