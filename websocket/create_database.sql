@@ -86,38 +86,54 @@ create table password_resets (
 
 
 
+/*
+  tablas del módulo de estudiantes.
+*/
 
-create table students (
+create schema students;
+
+create table students.user_data (
   id varchar not null primary key references users (id),
   student_number varchar unique,
   condition varchar
 );
 
 
-create table languages (
-  id varchar not null primary key,
-  name varchar not null,
-  nivel varchar not null,
-  user_id varchar not null references users (id)
-);
 
-create table laboralInsertion (
-  id varchar not null primary key references user (id),
+/*
+  tablas del módulo de inserción laboral
+*/
+
+create schema laboral_insertion;
+
+create table laboral_insertion.users (
+  id varchar not null primary key references users (id),
   cv bytea,
-  residir boolean default false,
-  viajar boolean default false
+  reside boolean default false,
+  travel boolean default false
 );
 
-create table career (
-  id varchar not null primary key references user (id),
+create table laboral_insertion.languages (
+  id varchar not null primary key,
+  user_id varchar not null references laboral_insertion.users (id),
   name varchar not null,
-  materias integer,
-  aprobadas integer,
-  promedio1 real,
-  promedio2 real,
-  oferta varchar,
-  user_id not null references users (id)
+  level varchar not null
 );
+
+create table laboral_insertion.degree (
+  id varchar not null primary key,
+  user_id varchar references laboral_insertion.users (id),
+  name varchar not null,
+  curses integer,
+  aproved integer,
+  average1 real,
+  average2 real,
+  work_type varchar
+);
+
+
+
+
 
 
 
