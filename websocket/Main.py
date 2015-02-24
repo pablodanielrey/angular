@@ -54,7 +54,7 @@ if __name__ == '__main__':
     CreateStudent(), FindStudent(), PersistStudent(),
     ListGroups(), FindGroup(), FindMembers(), RemoveMembers(), AddMembers(), UpdateGroup(), CreateGroup(),
     ListSystems(),
-    PersistLaboralInsertionData(), FindLaboralInsertionData()
+    PersistLaboralInsertion(), FindLaboralInsertion()
   ]
 
 

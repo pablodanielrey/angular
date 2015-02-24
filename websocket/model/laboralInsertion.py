@@ -15,7 +15,7 @@ class LaboralInsertion:
             cur.execute('update laboral_insertion.users set cv = %s,reside = %s,travel = %s where id = %s',params)
 
 
-"""
+    """
     def createLaboralInsertion(self,con,laboralInsertion):
         params = (laboralInsertion['id'],laboralInsertion['cv'],laboralInsertion['residir'],laboralInsertion['viajar'])
         cur = con.cursor()
@@ -27,7 +27,7 @@ class LaboralInsertion:
         params = (laboralInsertion.cv,laboralInsertion.residir,laboralInsertion.viajar,laboralInsertion.id)
         cur = con.cursor()
         cur.execute('update laboral_insertion.users set cv = %s,reside = %s,travel = %s where id = %s',params)
-"""
+    """
 
 
     def findLaboralInsertion(self,con,id):
