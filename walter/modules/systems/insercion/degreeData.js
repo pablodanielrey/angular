@@ -8,7 +8,7 @@ app.controller('DegreeLaboralInsertionCtrl', function($scope) {
   $scope.$on('SaveEvent',function() {
 
       var saveData = { type:'degree', data:$scope.insertionData };
-      $scope.emit('SaveDataEvent',saveData);
+      $scope.$emit('SaveDataEvent',saveData);
 
   });
 
