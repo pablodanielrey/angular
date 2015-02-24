@@ -128,8 +128,7 @@ create table laboral_insertion.degree (
   aproved integer,
   average1 real,
   average2 real,
-  work_type varchar,
-  user_id not null references users (id)
+  work_type varchar
 );
 
 
