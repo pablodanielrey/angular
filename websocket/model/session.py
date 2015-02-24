@@ -66,7 +66,7 @@ class Session:
         try:
             self.removeExpired(con)
             cur = con.cursor()
-            cur.execute('select id,data,expire from sessions where id = %s',(id,))
+            cur.execute('select id,data,expire from system.sessions where id = %s',(id,))
             s = cur.fetchone()
             if s:
                 return self.convertToDict(s)
@@ -79,7 +79,7 @@ class Session:
 
     def removeExpired(self,con):
         cur = con.cursor()
-        cur.execute('delete from sessions where expire < now()')
+        cur.execute('delete from system.sessions where expire < now()')
 
 
     def getSessions(self):
@@ -87,7 +87,7 @@ class Session:
         try:
             self.removeExpired(con)
             cur = con.cursor()
-            cur.execute('select id,data,expire from sessions')
+            cur.execute('select id,data,expire from system.sessions')
             ss = cur.fetchall()
             sessions = []
             if ss:
@@ -111,7 +111,7 @@ class Session:
             session = (id,self.sessionToJson(data),expire)
 
             cur = con.cursor()
-            cur.execute('insert into sessions (id,data,expire) values (%s,%s,%s)',session)
+            cur.execute('insert into system.sessions (id,data,expire) values (%s,%s,%s)',session)
 
             con.commit()
             return id
@@ -126,7 +126,7 @@ class Session:
         try:
             self.removeExpired(con)
             cur = con.cursor()
-            cur.execute('delete from sessions where id = %s',(id,))
+            cur.execute('delete from system.sessions where id = %s',(id,))
             con.commit()
 
         finally:

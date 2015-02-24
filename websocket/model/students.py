@@ -7,12 +7,12 @@ class Students:
     def createStudent(self,con,student):
         params = (student['id'],student['studentNumber'],student['condition'])
         cur = con.cursor()
-        cur.execute('insert into students (id,student_number,condition) values (%s,%s,%s)',params)
+        cur.execute('insert into students.users (id,student_number,condition) values (%s,%s,%s)',params)
 
 
     def findStudent(self,con,id):
         cur = con.cursor()
-        cur.execute('select id,student_number,condition from students where id = %s',(id,))
+        cur.execute('select id,student_number,condition from students.users where id = %s',(id,))
         s = cur.fetchone()
         if s:
             return self.convertToDict(s)
@@ -21,14 +21,14 @@ class Students:
 
     def findStudentByNumber(self,con,n):
         cur = con.cursor()
-        cur.execute('select id,student_number,condition from students where student_number = %s',(n,))
+        cur.execute('select id,student_number,condition from students.users where student_number = %s',(n,))
         s = cur.fetchone()
         return self.convertToDict(s)
 
 
     def findAll(self,con):
         cur = con.cursor()
-        cur.execute('select id,student_number,condition from students where id = %s',(id,))
+        cur.execute('select id,student_number,condition from students.users where id = %s',(id,))
         ss = cur.fetchall()
         students = []
         for s in ss:
@@ -43,7 +43,7 @@ class Students:
             'condition':s[2]
         }
         return student
-        
+
     """
     " updateStudent
     " @param con Conexion con la base de datos
@@ -53,7 +53,6 @@ class Students:
         student = ObjectView(studentDic)
         studentTuple = (student.studentNumber, student.condition)
         cur = con.cursor()
-        cur.execute('update student set student_number = %s, condition = %s where id = %s', rreq)
+        cur.execute('update students.users set student_number = %s, condition = %s where id = %s', rreq)
         if cur.rowcount <= 0:
             raise Exception()
-        	
