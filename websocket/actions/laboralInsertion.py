@@ -1,6 +1,6 @@
 import inject, json
 import psycopg2
-from model.laboralInsertions import LaboralInsertions
+from model.laboralInsertion import LaboralInsertions
 from model.events import Events
 from model.profiles import Profiles
 from model.config import Config
@@ -109,7 +109,7 @@ class UpdateLaboralInsertion:
     profiles = inject.attr(Profiles)
     config = inject.attr(Config)
 
-    def hanldeAction(self, server, message):
+    def handleAction(self, server, message):
 
         if (message['action'] != 'updateLaboralInsertionData'):
             return False
@@ -174,7 +174,7 @@ peticion:
 
 respuesta:
 {
-    "id":"id de la petición"
+    "id":"id de la peticion",
     "laboralInsertion":[
         {
         "id":"id del usuario a agregar la info de insercion laboral",
@@ -199,6 +199,9 @@ class FindLaboralInsertion:
 
         if (message['action'] != 'findLaboralInsertionData'):
             return False
+
+
+        print "Holaaaaaaaaaaaaaaaa"
 
         """ chequeo que exista la sesion, etc """
         sid = message['session']

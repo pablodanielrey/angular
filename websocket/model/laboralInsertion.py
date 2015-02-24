@@ -15,6 +15,7 @@ class LaboralInsertions:
         cur.execute('update laboralInsertion set cv = %s,residir = %s,viajar = %s where id = %s',params)
 
     def findLaboralInsertion(self,con,id):
+        print "LaboralInsertions.findLaboralInserion id: %s" %id
         cur = con.cursor()
         cur.execute('select id,cv,residir,viajar from laboralInsertion where id = %s',(id))
         li = cur.fetchone()
@@ -33,7 +34,7 @@ class LaboralInsertions:
             laboralInsertions.append(laboralInsertion)
         return laboralInsertions
 
-    def convertToDict(self,li) {
+    def convertToDict(self,li):
         laboralInsertion = {
             'id':li[0],
             'cv':li[1],
@@ -41,4 +42,3 @@ class LaboralInsertions:
             'viajar':li[3]
         }
         return laboralInsertion
-    }
