@@ -94,6 +94,32 @@ create table students (
 );
 
 
+create table languages (
+  id varchar not null primary key,
+  name varchar not null,
+  nivel varchar not null,
+  user_id varchar not null references users (id)
+);
+
+create table laboralInsertion (
+  id varchar not null primary key references user (id),
+  cv bytea,
+  residir boolean default false,
+  viajar boolean default false
+);
+
+create table career (
+  id varchar not null primary key references user (id),
+  name varchar not null,
+  materias integer,
+  aprobadas integer,
+  promedio1 real,
+  promedio2 real,
+  oferta varchar,
+  user_id not null references users (id)
+);
+
+
 
 create table logs (
   id serial primary key,
