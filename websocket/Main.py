@@ -18,7 +18,7 @@ from actions.login import Login, Logout, ResetPassword, ChangePassword
 from actions.requests import CreateAccountRequest, ConfirmAccountRequest, ListAccountRequests, ApproveAccountRequest, RemoveAccountRequest
 from actions.users import UpdateUser, FindUser, ListUsers, ListMails, PersistMail, ConfirmMail, RemoveMail
 from actions.status import GetStatus
-from actions.students import CreateStudent, FindStudent, UpdateStudent
+from actions.students import CreateStudent, FindStudent, PersistStudent
 from actions.groups import ListGroups, FindGroup, FindMembers, RemoveMembers, AddMembers, UpdateGroup, CreateGroup
 from actions.systems import ListSystems
 
@@ -50,7 +50,7 @@ if __name__ == '__main__':
     CreateAccountRequest(), ConfirmAccountRequest(), ListAccountRequests(), ApproveAccountRequest(), RemoveAccountRequest(),
     ListUsers(), UpdateUser(), FindUser(), ListMails(), PersistMail(), ConfirmMail(), RemoveMail(),
     GetStatus(),
-    CreateStudent(), FindStudent(), UpdateStudent(),
+    CreateStudent(), FindStudent(), PersistStudent(),
     ListGroups(), FindGroup(), FindMembers(), RemoveMembers(), AddMembers(), UpdateGroup(), CreateGroup(),
     ListSystems()
   ]
