@@ -1,0 +1,12 @@
+<form>
+<fieldset>
+	<label for="studentNumber">Legajo</label>
+	<input id="studentNumber" type="text" ng-model="student.studentNumber" />
+	<label for="condition">Condicion</label>
+	<select ng-model="student.condition">
+		<option value="regular">Regular</option>
+		<option value="no regular">No regular </option>
+	</select>
+</fieldset>
+<input type="button" value="Guardar" ng-click="save()"/>
+</form>
