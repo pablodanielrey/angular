@@ -44,7 +44,7 @@ class CreateLaboralInsertion:
 
     def handleAction(self, server, message):
 
-        if (message['action'] != 'createLaboralInsertion'):
+        if (message['action'] != 'createLaboralInsertionData'):
             return False
 
         if 'laboralInsertion' not in message:
@@ -111,7 +111,7 @@ class UpdateLaboralInsertion:
 
     def hanldeAction(self, server, message):
 
-        if (message['action'] != 'updateLaboralInsertion'):
+        if (message['action'] != 'updateLaboralInsertionData'):
             return False
 
         if 'laboralInsertion' not in message:
@@ -197,7 +197,7 @@ class FindLaboralInsertion:
 
     def handleAction(self, server, message):
 
-        if (message['action'] != 'findLaboralInsertion'):
+        if (message['action'] != 'findLaboralInsertionData'):
             return False
 
         """ chequeo que exista la sesion, etc """
