@@ -1,7 +1,7 @@
 var app = angular.module('mainApp');
 
 
-app.controller('ProfileLaboralInsertionCtrl', function() {
+app.controller('ProfileLaboralInsertionCtrl', function($scope) {
 
   $scope.insertionData = {};
   $scope.user = {};

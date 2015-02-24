@@ -1,7 +1,7 @@
 var app = angular.module('mainApp');
 
 
-app.controller('DegreeLaboralInsertionCtrl', function() {
+app.controller('DegreeLaboralInsertionCtrl', function($scope) {
 
   $scope.insertionData = {};
 

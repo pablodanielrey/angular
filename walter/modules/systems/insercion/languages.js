@@ -1,7 +1,7 @@
 var app = angular.module('mainApp');
 
 
-app.controller('LanguageLaboralInsertionCtrl', function() {
+app.controller('LanguagesLaboralInsertionCtrl', function($scope) {
 
   $scope.insertionData = {};
 
