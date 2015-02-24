@@ -1,29 +1,32 @@
+<div class="accountRequestEdit-container">
+	<div class="accountRequestEdit">
+		<div ng-style="es" >
+			<div>
+				<legend>Datos de la solicitud</legend>
+				<label for="name">Nombres:</label>
+				<input id="name" type="text" ng-model="accountRequest.name"/>
 
-<div ng-style="es" >
-	<fieldset>
-		<legend>Datos de la solicitud</legend>
-		<label for="name">Nombres:</label>
-		<input id="name" type="text" ng-model="accountRequest.name"/>
+				<label for="lastname">Apellidos:</label>
+				<input id="lastname" type="text" ng-model="accountRequest.lastname"/>
 
-		<label for="lastname">Apellidos:</label>
-		<input id="lastname" type="text" ng-model="accountRequest.lastname"/>
+				<label for="document_number">DNI:</label>
+				<input id="document_number" type="text" ng-model="accountRequest.dni"/>
 
-		<label for="document_number">DNI:</label>
-		<input id="document_number" type="text" ng-model="accountRequest.dni"/>
+				<label for="reason">Motivo de la solicitud:</label>
+				<input id="reason" type="text" ng-model="accountRequest.reason"/>
 
-		<label for="reason">Motivo de la solicitud:</label>
-		<input id="reason" type="text" ng-model="accountRequest.reason"/>
+				<label for="confirmed">Confirmado:</label>
+				<input id="confirmed" type="checkbox" ng-model="accountRequest.confirmed"/>
+			</div>
 
-		<label for="confirmed">Confirmado:</label>
-		<input id="confirmed" type="checkbox" ng-model="accountRequest.confirmed"/>
-	</fieldset>
-
-	<fieldset>
-		<legend>Procesamiento de la solicitud</legend>
-		<label for="description">Descripcion:</label>
-		<textarea id="description" name="description" ng-model="description"></textarea>
-		<input type="button" value="Aprobar" ng-click="approveAccountRequest()"/>
-		<input type="button" value="Rechazar" ng-click="rejectAccountRequest()"/>
-		<input type="button" value="Eliminar" ng-click="removeAccountRequest()"/>
-	</fieldset>
+			<div>
+				<legend>Procesamiento de la solicitud</legend>
+				<label for="description">Descripcion:</label>
+				<textarea id="description" name="description" ng-model="description"></textarea>
+				<input type="button" value="Aprobar" ng-click="approveAccountRequest()"/>
+				<input type="button" value="Rechazar" ng-click="rejectAccountRequest()"/>
+				<input type="button" value="Eliminar" ng-click="removeAccountRequest()"/>
+			</div>
+		</div>
+	</div>
 </div>
