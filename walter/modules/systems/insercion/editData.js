@@ -34,9 +34,10 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, Session, Users
       }
     );
 
+
     Student.findStudentData(uid,
       function(data) {
-        $scope.studentData = data;
+        $scope.studentData = data.student;
       },
       function(error) {
         alert(error);

@@ -1,5 +1,11 @@
 <div class='insercion-container'>
+
+
   <div class='insercion'>
+
+    <div class="tittle">
+      <label><i class="fa fa-th-large"></i> | Inserción Laboral</label>
+    </div>
 
     <div ng-controller='ProfileLaboralInsertionCtrl' ng-include="'modules/systems/insercion/profileData.html'"></div>
     <div ng-controller='LanguagesLaboralInsertionCtrl' ng-include="'modules/systems/insercion/languages.html'"></div>
@@ -8,30 +14,7 @@
     <div>
       <button type="submit" ng-click='save()'> GUARDAR</button>
     </div>
+
   </div>
 </div>
 
-    <!-- <div>
-    <span>Fecha de inscripción</span>
-      <span>{{system.inscription}}</span>
-    </div>
-    <div>
-      <span>Fecha de nacimiento</span>
-      <span>{{user.birthdate}}</span>
-    </div>
-    <div>
-      <span>Edad</span>
-      <span>{{calc.age}}</span>
-    </div>
-    <div>
-      <span>Pais</span>
-      <span>{{user.country}}</span>
-    </div>
-    <div>
-      <span>Ciudad de residencia</span>
-      <span>{{user.city}}</span>
-    </div>
-    <div>
-      <span>Ciudad de origen</span>
-      <span>{{system.cityOfOrigin}}</span>
-    </div> -->

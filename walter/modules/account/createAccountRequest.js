@@ -2,8 +2,7 @@
 var app = angular.module('mainApp');
 
 
-app.controller('CreateAccountRequestCtrl', function($scope, $timeout, Messages, Utils, Session) {
-
+app.controller('CreateAccountRequestCtrl', function($scope, $window, $timeout, Messages, Utils, Session) {
   $scope.request = {
           name:'',
           lastname:'',
@@ -40,6 +39,7 @@ app.controller('CreateAccountRequestCtrl', function($scope, $timeout, Messages, 
 				alert('error creando el pedido');
 			} else {
 				alert('Pedido de cuenta creado correctamente, se confirmará mediante un mail a su dirección de correo');
+				$window.location.href = "/#/main"
 			}
 
 		});
