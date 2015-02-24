@@ -1,0 +1,79 @@
+<div>
+  <div class="column_left">
+    <div>
+      <span>Nombre</span>
+      <input type="text" ng-model="user.name">
+    </div>
+    <div>
+      <span>Apellido</span>
+      <input type="text" ng-model="user.lastname">
+    </div>
+    <div><span>Género:</span>
+      <input type="text" list="genre" ng-model='user.genre'>
+      <datalist id="genre">
+        <option value="Hombre" />
+        <option value="Mujer" />
+        <option value="Otro" />
+      </datalist>
+    </div>
+    <div>
+      <span>DNI</span>
+      <input type="text" ng-model="user.dni">
+    </div>
+    <div>
+      <span>Nacimiento</span>
+      <input type="text" ng-model="user.birthdate">
+    </div>
+    <div>
+      <span>Legajo</span>
+      <input type="text" ng-model="studentData.studentNumber">
+    </div>
+    <div>
+      <span>Teléfono</span>
+      <input type="text" ng-model="user.telephone">
+    </div>
+    <div>
+      <span>Celular</span>
+      <input type="text" ng-model="user.telephone">
+    </div>
+    <div>
+      <span>Ciudad de Origen</span>
+      <input type="text" ng-model="insertionData.originalCity">
+    </div>
+    <div>
+      <span>Ciudad de Residencia</span>
+      <input type="text" ng-model="user.city">
+    </div>
+    <div>
+      <span>País</span>
+      <input type="text" name="user.country">
+    </div>
+    <div>
+      <span>Domicilio</span>
+      <input type="text" name="user.address">
+    </div>
+
+
+  </div>
+
+  <div class="column_right">
+
+    <div>
+      <span>Viajar</span>
+      <input type="text" list='viajar' ng-model="insertionData.travel">
+      <datalist id="viajar">
+        <option value="Si" />
+        <option value="No" />
+      </datalist>
+    </div>
+    <div>
+      <span>Residir???</span>
+      <input type="text" name="residir">
+    </div>
+    <div>
+      <span>CV</span>
+      <input type="text" name="cv">
+    </div>
+
+  </div>  
+</div>

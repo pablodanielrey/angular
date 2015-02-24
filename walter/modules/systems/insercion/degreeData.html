@@ -1,0 +1,38 @@
+<div>
+  <div>
+    <span>Carrera</span><input type="text" list="carrera">
+    <datalist id="carrera" ng-model='insertionData.degree'>
+      <option value="Contador Público" />
+      <option value="Licenciado en Administración" />
+      <option value="Licenciado en Turismo" />
+      <option value="Licenciado en Economía" />
+      <option value="Técnico en Cooperativas" />
+    </datalist>
+  </div>
+  <div>
+    <span>Materias</span>
+    <input type="text" ng-model="insertionData.courses">
+  </div>
+  <div>
+    <span>Aprobadas</span>
+    <input type="text" ng-model="insertionData.aprovedCourses">
+  </div>
+  <div>
+    <span>Promedio1</span>
+    <input type="text" ng-model="insertionData.average1">
+  </div>
+  <div>
+    <span>Promedio2</span>
+    <input type="text" name="insertionData.average2">
+  </div>
+  <div>
+    <span>Oferta</span>
+    <input type="text" list='oferta' ng-model="insertionData.internType">
+    <datalist id="oferta">
+      <option value="Pasantías" />
+      <option value="Part-Time" />
+      <option value="Full-Time" />
+      <option value="Programa de Jóvenes Profesionales" />
+    </datalist>
+  </div>  
+</div>

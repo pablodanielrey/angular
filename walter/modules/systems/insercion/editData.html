@@ -2,168 +2,19 @@
 
 
   <div class='insercion'>
+
     <div class="tittle">
       <label><i class="fa fa-th-large"></i> | Inserción Laboral</label>
     </div>
 
-    <div class="column_left">
-      <div>
-        <span>Nombre</span>
-        <input type="text" ng-model="user.name">
-      </div>
-      <div>
-        <span>Apellido</span>
-        <input type="text" ng-model="user.lastname">
-      </div>
-      <div><span>Género:</span>
-        <input type="text" list="genre" ng-model='user.genre'>
-          <datalist id="genre">
-            <option value="Hombre" />
-            <option value="Mujer" />
-            <option value="Otro" />
-          </datalist>
-      </div>
-      <div>
-        <span>DNI</span>
-        <input type="text" ng-model="user.dni">
-      </div>
-      <div>
-        <span>Nacimiento</span>
-        <input type="text" ng-model="user.birthdate">
-      </div>
-      <div>
-        <span>Legajo</span>
-        <input type="text" ng-model="studentData.studentNumber">
-      </div>
-      <div>
-        <span>Teléfono</span>
-        <input type="text" ng-model="user.telephone">
-      </div>
-      <div>
-        <span>Celular</span>
-        <input type="text" ng-model="user.telephone">
-      </div>
-      <div>
-        <span>Ciudad de Origen</span>
-        <input type="text" ng-model="insertionData.originalCity">
-      </div>
-      <div>
-        <span>Ciudad de Residencia</span>
-        <input type="text" ng-model="user.city">
-      </div>
-      <div>
-        <span>País</span>
-        <input type="text" name="user.country">
-      </div>
-      <div>
-        <span>Domicilio</span>
-        <input type="text" name="user.address">
-      </div>
+    <div ng-controller='ProfileLaboralInsertionCtrl' ng-include="'modules/systems/insercion/profileData.html'"></div>
+    <div ng-controller='LanguagesLaboralInsertionCtrl' ng-include="'modules/systems/insercion/languages.html'"></div>
+    <div ng-controller='DegreeLaboralInsertionCtrl' ng-include="'modules/systems/insercion/degreeData.html'"></div>
 
-
-
+    <div>
+      <button type="submit" ng-click='save()'> GUARDAR</button>
     </div>
 
-    <div class="column_right">
-      <div>
-        <span>Carrera</span><input type="text" list="carrera">
-        <datalist id="carrera" ng-model='insertionData.degree'>
-          <option value="Contador Público" />
-          <option value="Licenciado en Administración" />
-          <option value="Licenciado en Turismo" />
-          <option value="Licenciado en Economía" />
-          <option value="Técnico en Cooperativas" />
-        </datalist>
-      </div>
-      <div>
-        <span>Materias</span>
-        <input type="text" ng-model="insertionData.courses">
-      </div>
-      <div>
-        <span>Aprobadas</span>
-        <input type="text" ng-model="insertionData.aprovedCourses">
-        </div>
-      <div>
-        <span>Promedio1</span>
-        <input type="text" ng-model="insertionData.average1">
-      </div>
-      <div>
-        <span>Promedio2</span>
-        <input type="text" name="insertionData.average2">
-      </div>
-      <div>
-        <span>Oferta</span>
-        <input type="text" list='oferta' ng-model="insertionData.internType">
-          <datalist id="oferta">
-            <option value="Pasantías" />
-            <option value="Part-Time" />
-            <option value="Full-Time" />
-            <option value="Programa de Jóvenes Profesionales" />
-          </datalist>
-      </div>
-      <div>
-        <span>Viajar</span>
-        <input type="text" list='viajar' ng-model="insertionData.travel">
-          <datalist id="viajar">
-            <option value="Si" />
-            <option value="No" />
-          </datalist>
-      </div>
-      <div>
-        <span>Residir???</span>
-        <input type="text" name="residir">
-      </div>
-      <div>
-        <span>CV</span>
-        <input type="text" name="cv">
-      </div>
-      <div>
-        <span>Idioma</span>
-        <input type="text" list="idioma" ng-model='insertionData.languages'>
-          <datalist id="idioma">
-            <option value="Ingles" />
-            <option value="Portugués" />
-            <option value="Otro" />
-          </datalist>
-      </div>
-      <div>
-        <span>Nivel</span>
-        <input type="text" list="nivel" ng-model='insertionData.studyLevel'>
-          <datalist id="nivel">
-            <option value="Básico" />
-            <option value="Intermedio" />
-            <option value="Avanzado" />
-          </datalist>
-      </div>
-    </div>
-  
-    <div class="action">
-      <button class="guardar" type="submit" ng-click='save()'> GUARDAR</button>
-    </div>
   </div>
 </div>
 
-    <!-- <div>
-    <span>Fecha de inscripción</span>
-      <span>{{system.inscription}}</span>
-    </div>
-    <div>
-      <span>Fecha de nacimiento</span>
-      <span>{{user.birthdate}}</span>
-    </div>
-    <div>
-      <span>Edad</span>
-      <span>{{calc.age}}</span>
-    </div>
-    <div>
-      <span>Pais</span>
-      <span>{{user.country}}</span>
-    </div>
-    <div>
-      <span>Ciudad de residencia</span>
-      <span>{{user.city}}</span>
-    </div>
-    <div>
-      <span>Ciudad de origen</span>
-      <span>{{system.cityOfOrigin}}</span>
-    </div> -->
