@@ -42,3 +42,17 @@ class Students:
             'condition':s[2]
         }
         return student
+        
+    """
+    " updateStudent
+    " @param con Conexion con la base de datos
+    " @param studentDic Diccionario con los datos del estudiante
+    """
+    def updateStudent(self,con,studentDic):
+        student = ObjectView(studentDic)
+        studentTuple = (student.studentNumber, student.condition)
+        cur = con.cursor()
+        cur.execute('update student set student_number = %s, condition = %s where id = %s', rreq)
+        if cur.rowcount <= 0:
+            raise Exception()
+        	
