@@ -47,7 +47,12 @@ app.controller('IndexCtrl', function ($rootScope, $scope, $location, $timeout, S
         Session.destroy();
         $location.reload();
         return;
+      } else if(e.name == "NotImplemented"){
+      	console.log("Mensaje no implementado en el servidor");
+		$location.path("/main");
       }
+      
+      
     }
 
     // errores de applicacion
