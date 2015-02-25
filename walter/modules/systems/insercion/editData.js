@@ -1,6 +1,13 @@
 var app = angular.module('mainApp');
 
-app.controller('EditInsertionDataCtrl',function($scope, $timeout, Session, Users, LaboralInsertion) {
+app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Session, Users, LaboralInsertion) {
+
+
+  $timeout(function() {
+    // se controlan los terminos y condiciones
+
+    $location.path('/acceptTermsAndConditionsInsertion');
+  });
 
 
   $scope.user = {};
@@ -18,6 +25,13 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, Session, Users
   }
 
   $scope.$on('SaveDataEvent',function(event,data) {
+
+
+    // controlo terminos y condifciones
+
+    $location.path('/acceptTermsAndConditionsInsertion');
+
+
     if (data.type == undefined) {
       return;
     }

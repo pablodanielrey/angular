@@ -1,22 +1,5 @@
 
 
-.termsAndConditions-container.visible {
-  position: fixed;
-  top: 100;
-  left: 100;
-  height: 100%;
-  width: 100%;
-  z-index: 9999;
-  background-color: white;
-}
-
-.termsAndConditions-container.hidden {
-  display: none;
-}
-
-
-
-
 .insercion-container{
   width:100%;
   height:100%;

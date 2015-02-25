@@ -3,6 +3,14 @@ var app = angular.module('mainApp');
 
 app.service('LaboralInsertion', function(Messages, Utils, Session) {
 
+  this.acceptTermsAndConditions = function(id,ok,err) {
+
+  }
+
+  this.termsAndConditionsAccepted = function() {
+    
+  }
+
   this.findLaboralInsertionData = function(id,ok,err) {
     var msg = {
       id: Utils.getId(),
