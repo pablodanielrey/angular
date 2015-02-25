@@ -13,6 +13,9 @@ app.controller('MyDataOptionCtrl', function($scope, $rootScope, $location, Sessi
     if (data == 'MyDataOption') {
       $scope.visible = true;
       $scope.itemSelected = null;
+
+      // selecciono por defecto el primer item.
+      $scope.selectItem($scope.items[0]);
     }
   });
 
