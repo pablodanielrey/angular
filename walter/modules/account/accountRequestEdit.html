@@ -28,21 +28,21 @@
 			<div class="motivoSolicitud">
 				<div class="tittles">&nbsp;Motivo</div>
 				<div>
-					<input class="reason" type="text" ng-model="accountRequest.reason"/>
+					<textarea class="reason" name="description" ng-model="accountRequest.reason"></textarea>
+				
 				</div>
 
 			</div>
 
 			<div class="acciones">
-				<div class="tittles">&nbsp;Motivo</div>
-				<button class="aprobar" ng-click="approveAccountRequest()"><i class="fa fa-check"></i>Aprobar</button>
-				<input type="button" value="Rechazar" ng-click="rejectAccountRequest()"/>
-				<input type="button" value="Eliminar" ng-click="removeAccountRequest()"/>
+				<button class="aprobar" ng-click="approveAccountRequest()"><i class="fa fa-check"></i> Aprobar</button>
+				<button class="rechazar" ng-click="rejectAccountRequest()"><i class="fa fa-ban"></i> Rechazar</button>
+				<button class="eliminar" ng-click="removeAccountRequest()"><i class="fa fa-trash-o"></i> Eliminar</button>
 			</div>
 
 			<div class="respuesta">
 				<div class="tittles">&nbsp;Respuesta</div>
-				<textarea id="description" name="description" ng-model="description"></textarea>
+				<textarea class="textRespuesta" name="description" ng-model="description"></textarea>
 			</div>
 	</div>
 </div>

@@ -1,88 +1,50 @@
-.accountRequestEdit-container{
+.accountRequestEdit-container {
   width:100%;
   height:100%;
   display: flex;
 }
-.accountRequestEdit{
+
+.accountRequestEdit {
   width:100%;
   height:100%;
   display: flex;
   flex-direction: row;
+  flex-wrap:wrap;
+  align-items: baseline;
 }
-.accountRequestEdit .solicitud{
 
-  width:30%;
-  height:100%;
-  display: flex;
-  flex-direction:column;
-  flex-wrap: nowrap;
-  align-items: flex-end;
-  margin:5px;
-  /*background-color:blue;*/
-}
-.accountRequestEdit .tittles{
+.accountRequestEdit .tittles {
   display:flex;
-  align-items: center;
   background-image:linear-gradient(to right,#275276, #0066A6);
   font-size:16px;
   width:100%;
   height:20px;
   padding:3px 0px 3px 0px;
   color:white;
-  margin-bottom:5px;
+  margin-left:5px;
 }
 
-.accountRequestEdit .motivoSolicitud{
-  width:30%;
+.accountRequestEdit .solicitud {
+  width:400px;
   height:100%;
-  display: flex;
-  flex-direction:column;
-
-
-  margin:5px;
-  /*background-color:red;*/
-}
-.accountRequestEdit .acciones{
-  width:10%;
-  height:100%;
+  min-width:250px;
   display: flex;
   flex-direction:column;
   flex-wrap: nowrap;
   align-items: flex-end;
   margin:5px;
-  /*background-color:orange;*/
-}
-.accountRequestEdit .aprobar{
-  text-align: center;
-  cursor: pointer;
-  border: 1px solid transparent;
-  color:white;
-  padding: 6px 12px;
-  margin:10px;
-  font-size: 14px;
-  line-height: 1.42857143;
-  border-radius: 4px;
-  background-color:#275276;
-}
-.accountRequestEdit .aprobar:hover{
-  text-align: center;
-  cursor: pointer;
-  color:white;
-  padding: 2px 3px;
-  margin:10px;
-  font-size: 14px;
-  line-height: 1.42857143;
-  border-radius: 4px;
-  background-image:linear-gradient(to right,#275276, #0066A6);
 }
 
-
-.accountRequestEdit .reason{
-  width:237px;
+.accountRequestEdit .motivoSolicitud {
+  width:400px;
+  height:100%;
+  min-width:250px;
+  display: flex;
+  flex-direction:column;
+}
+.accountRequestEdit .reason {
+  width:99%;
   height:110px;
-  margin-top:2px;
-  margin-left:0px;
-  padding: 2px 2px;
   font-size: 14px;
   line-height: 1.42857143;
   color: #555555;
@@ -92,19 +54,117 @@
   border-radius: 4px;
   text-align:left;
   transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  margin:5px;
 }
-.accountRequestEdit .respuesta{
-  width:30%;
+
+.accountRequestEdit .acciones {
+  width:100%;
   height:100%;
+  min-width:250px;
+  display: flex;
+  flex-direction:row;
+  flex-wrap: nowrap;
+  margin:10px;
+
+}
+
+.accountRequestEdit .aprobar {
+  text-align: center;
+  cursor: pointer;
+  border: 1px solid transparent;
+  color:white;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  border-radius: 4px;
+  background-color: #1fa67a;
+}
+.accountRequestEdit .aprobar:hover {
+  text-align: center;
+  cursor: pointer;
+  color:white;
+  padding: 6px 12px;
+
+  font-size: 14px;
+  line-height: 1.42857143;
+  border-radius: 4px;
+  background-color:#21b384;
+}
+
+.accountRequestEdit .rechazar {
+  text-align: center;
+  cursor: pointer;
+  border: 1px solid transparent;
+  color:white;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  border-radius: 4px;
+  background-color:#275276;
+}
+.accountRequestEdit .rechazar:hover {
+  text-align: center;
+  cursor: pointer;
+  color:white;
+  padding: 6px 12px;
+
+  font-size: 14px;
+  line-height: 1.42857143;
+  border-radius: 4px;
+  background-image:linear-gradient(to right,#275276, #0066A6);
+}
+
+.accountRequestEdit .eliminar {
+  text-align: center;
+  cursor: pointer;
+  border: 1px solid transparent;
+  color:white;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  border-radius: 4px;
+  background-color:#d43f3a;
+
+}
+.accountRequestEdit .eliminar:hover {
+  text-align: center;
+  cursor: pointer;
+  color:white;
+  padding: 6px 12px;
+
+  font-size: 14px;
+  line-height: 1.42857143;
+  border-radius: 4px;
+  background-color:#d9534f;
+}
+
+.accountRequestEdit .respuesta {
+  width:400px;
+  height:100%;
+  min-width:250px;
   display: flex;
   flex-direction:column;
   flex-wrap: nowrap;
-  align-items: flex-end;
-  margin:5px;
-  /*background-color:green;*/
 
 }
-.accountRequestEdit span{
+.accountRequestEdit .textRespuesta {
+  width:99%;
+  height:110px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #555555;
+  background-color: #ffffff;
+  background-image: none;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  text-align:left;
+  transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  margin:5px;
+
+
+}
+
+.accountRequestEdit span {
 
   padding: 5px 8px;
   font-size: 14px;
@@ -115,17 +175,15 @@
   border-radius: 4px;
 
 }
-.accountRequestEdit input{
-margin-left:0px;
 
-padding: 2px 2px;
-font-size: 14px;
-line-height: 1.42857143;
-color: #555555;
-background-color: #ffffff;
-background-image: none;
-border: 1px solid #cccccc;
-border-radius: 4px;
-
-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+.accountRequestEdit input {
+  padding: 2px 2px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #555555;
+  background-color: #ffffff;
+  background-image: none;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
 }
