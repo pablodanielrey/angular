@@ -2,14 +2,6 @@ var app = angular.module('mainApp');
 
 app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Session, Users, LaboralInsertion) {
 
-
-  $timeout(function() {
-    // se controlan los terminos y condiciones
-
-    $location.path('/acceptTermsAndConditionsInsertion');
-  });
-
-
   $scope.user = {};
 
   $scope.degreeData = false;
@@ -27,9 +19,7 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
   $scope.$on('SaveDataEvent',function(event,data) {
 
 
-    // controlo terminos y condifciones
-
-    $location.path('/acceptTermsAndConditionsInsertion');
+    $scope.checkTermsAndConditions();
 
 
     if (data.type == undefined) {
@@ -76,6 +66,48 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
     }
 
   });
+  
+
+	/**
+	 * procesar verificacion de terminos y condiciones
+	 */
+	$scope.checkTermsAndConditions = function(){
+		console.log("TODO: Actualmente no se esta controlando los terminos y condiciones debido a que no se encuentran implementados en el servidor. Una vez que esten definidos en el servidor la accion checkTermsAndConditions se debe modificar el metodo del controlador editData.checkTermsAndConditions!!!");	 //TODO QUITAR ESTA LINEA UNA VEZ QUE ESTE DEFINIDAS LA ACCION CHECKTERMS AND CONDITION EN EL SERVIDOR Y DESCOMENTAR EL CODIGO
+		
+		/*
+		var session = Session.getCurrentSession(); 
+		if((session == null) || (session.selectedUser == null)){
+			alert("error: usuario no seleccionado");
+			$location.path('/main');			
+		} 
+		
+		/**
+		 * callback en el caso de que el servidor haya devuelto una respuesta correcta
+		 * @param accepted Booleano que indica si la condicion esta aceptada o no
+		 *
+		callbackOk = function(response){
+			if(!response.accepted){
+				$location.path('/acceptTermsAndConditionsInsertion');
+			}
+		}
+		
+		/**
+		 * callback en el caso de que el servidor haya devuelto una respuesta erronea
+		 * @param error String con el error
+		 *
+		callbackError = function(error){
+			console.log(error)
+			$location.path('/main');
+		}
+
+		LaboralInsertion.isTermsAndConditionsAccepted(session.selectedUser, callbackOk, callbackError);
+		*/
+
+	}
+
+	$timeout(function() {
+		$scope.checkTermsAndConditions();	
+	});
 
 
 });
