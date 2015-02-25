@@ -22,6 +22,7 @@ app.controller('ProfileLaboralInsertionCtrl', function($scope,$timeout, Session,
 
 
   $scope.loadUserData = function() {
+	
     var s = Session.getCurrentSession();
     if (s == null) {
       return;
@@ -31,7 +32,7 @@ app.controller('ProfileLaboralInsertionCtrl', function($scope,$timeout, Session,
     }
 
     var uid = s.selectedUser;
-
+	
     Users.findUser(uid,
       function(user) {
         user.birthdate = new Date(user.birthdate);
@@ -61,6 +62,8 @@ app.controller('ProfileLaboralInsertionCtrl', function($scope,$timeout, Session,
     );
   }
 
-  $timeout($scope.loadUserData());
+	$timeout(function() {
+		$scope.loadUserData(); 
+	},0);
 
 });
