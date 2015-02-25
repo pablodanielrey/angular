@@ -148,7 +148,6 @@ create table laboral_insertion.degree (
   user_id varchar references laboral_insertion.users (id),
   name varchar not null,
   curses integer,
-  aproved integer,
   average1 real,
   average2 real,
   work_type varchar

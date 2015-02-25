@@ -448,6 +448,41 @@ class ListLanguages:
 
 
         """-------------------------------"""
+"""
+    Modulo de acceso a los datos de las carreras del usuario
+"""
+
+
+"""
+peticion:
+{
+    "id":"id de la peticion",
+    "action":"persistDegree",
+    "session":"session de usuario",
+    "degree": {
+            'id':'id de la carrera',
+            'user_id':'id del usuario',
+            'name':'nombre de la carrera',
+            'curses':'materias aprobadas',
+            'average1':'promedio con aplazo',
+            'average2':'promedio sin aplazo',
+            'work_type': 'lista de tipos de trabajos solicitados'
+    }
+}
+
+respuesta:
+{
+    "id":"id de la peticion",
+    "ok":"",
+    "error":""
+}
+
+evento:
+{
+    'type':'DegreePersistedEvent',
+    'data':degree['id']
+}
+"""
 
 #class PersistDegree:
 
