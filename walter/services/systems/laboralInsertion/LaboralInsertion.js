@@ -4,7 +4,6 @@ var app = angular.module('mainApp');
 app.service('LaboralInsertion', function(Messages, Utils, Session) {
 
   this.findLaboralInsertionData = function(id,ok,err) {
-    console.log("LaboralInsertion service -> findLaboralInsertionData")
     var msg = {
       id: Utils.getId(),
       session: Session.getSessionId(),
@@ -13,12 +12,32 @@ app.service('LaboralInsertion', function(Messages, Utils, Session) {
         id: id
       }
     }
-    Messages.send(msg, function(data) {
-      ok(data)
-    },
-    function(error) {
-      err(error);
-    })
+    Messages.send(msg,
+      function(data) {
+        ok(data);
+      },
+      function(error) {
+        err(error);
+      }
+    );
+  }
+
+
+  this.updateLaboralInsertionData = function(data, ok, err) {
+    var msg = {
+      id: Utils.getId(),
+      session: Session.getSessionId(),
+      action: 'persistLaboralInsertionData',
+      laboralInsertion: data
+    };
+
+    Messages.send(msg,function(response){
+      if (response.error != undefined) {
+        callbackError(response.error);
+      } else {
+        callbackOk(response.ok);
+      }
+    });
   }
 
 });

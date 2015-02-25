@@ -1,6 +1,23 @@
 
+/*
+Módulo de sistemas.
+*/
+create schema systems;
 
-create table users (
+create table systems.systems (
+  id varchar not null primary key,
+  name varchar not null,
+  config varchar
+);
+
+
+
+/*
+  Modulo principal de datos del usuario.
+*/
+create schema profile;
+
+create table profile.users (
     id varchar not null primary key,
     dni varchar not null unique,
     name varchar,
@@ -12,57 +29,73 @@ create table users (
     address varchar
 );
 
-create table user_mails (
+create table profile.mails (
     id varchar not null primary key,
-    user_id varchar not null references users (id),
+    user_id varchar not null references profile.users (id),
     email varchar not null,
     confirmed boolean not null default false,
     hash varchar
 );
 
-create table user_telephones (
+create table profile.telephones (
     id varchar not null primary key,
-    user_id varchar not null references users (id),
+    user_id varchar not null references profile.users (id),
     number varchar not null
 );
 
 
 
 
-create table systems (
+/*
+  Módulo de los grupos.
+*/
+create schema groups;
+
+create table groups.groups (
     id varchar not null primary key,
-    name varchar not null,
-    config varchar
-);
-
-
-
-
-create table groups (
-    id varchar not null primary key,
-    system_id varchar not null references systems (id),
+    system_id varchar not null references systems.systems (id),
     name varchar not null
 );
 
-
-create table groups_users (
-    user_id varchar not null references users (id),
-    group_id varchar not null references groups (id),
+create table groups.groups_users (
+    user_id varchar not null references profile.users (id),
+    group_id varchar not null references groups.groups (id),
     constraint primary_key_group_users unique (user_id,group_id)
 );
 
 
 
+/*
+  Módulo de credenciales.
+*/
+create schema credentials;
 
-create table user_password (
+create table credentials.user_password (
     id varchar not null primary key,
-    user_id varchar not null references users (id),
+    user_id varchar not null references profile.users (id),
     username varchar not null unique,
     password varchar not null
 );
 
 
-create table account_requests (
+create table credentials.password_resets (
+  user_id varchar not null references profile.users (id),
+  username varchar not null,
+  creds_id varchar not null references credentials.user_password (id),
+  creation timestamp default now(),
+  hash varchar not null primary key,
+  executed boolean default false
+);
+
+
+
+
+/*
+  Módulo de requests.
+*/
+create schema account_requests;
+
+create table account_requests.requests (
     id varchar not null primary key,
     dni varchar not null unique,
     lastname varchar default '',
@@ -75,39 +108,29 @@ create table account_requests (
     created timestamp default now()
 );
 
-create table password_resets (
-    user_id varchar not null references users (id),
-    username varchar not null,
-    creds_id varchar not null references user_password (id),
-    creation timestamp default now(),
-    hash varchar not null primary key,
-    executed boolean default false
-);
-
 
 
 /*
   tablas del módulo de estudiantes.
 */
-
 create schema students;
 
-create table students.user_data (
-  id varchar not null primary key references users (id),
+create table students.users (
+  id varchar not null primary key references profile.users (id),
   student_number varchar unique,
   condition varchar
 );
 
 
 
+
 /*
   tablas del módulo de inserción laboral
 */
-
 create schema laboral_insertion;
 
 create table laboral_insertion.users (
-  id varchar not null primary key references users (id),
+  id varchar not null primary key references profile.users (id),
   cv bytea,
   reside boolean default false,
   travel boolean default false
@@ -133,19 +156,20 @@ create table laboral_insertion.degree (
 
 
 
+/*
+  Tablas internas de logs, sesiones, etc. cuestiones internas del sistema van dentro de este esquema.
+*/
+create schema system;
 
 
-
-
-create table logs (
+create table system.logs (
   id serial primary key,
+  user_id varchar references profile.users (id),
   creation timestamp default now(),
-  log varchar not null,
-  user_id varchar references users (id)
+  log varchar not null
 );
 
-
-create table sessions (
+create table system.sessions (
   id varchar not null primary key,
   data varchar,
   expire timestamp default now()

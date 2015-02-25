@@ -22,7 +22,7 @@ class UserPassword:
     ''' cambia la clave de un usuario siempre y cuando se haya generado el hash previo usado getResetPasswordHash '''
     def resetUserPassword(self,con,hash,username,password):
         cur = con.cursor()
-        cur.execute('select creds_id, user_id from password_resets where executed = false and hash = %s and username = %s', (hash,username))
+        cur.execute('select creds_id, user_id from credentials.password_resets where executed = false and hash = %s and username = %s', (hash,username))
         d = cur.fetchone()
         if d == None:
             raise UserNotFound()
@@ -35,7 +35,7 @@ class UserPassword:
         }
         self.updateUserPassword(con,newCreds)
 
-        cur.execute('update password_resets set executed = true where hash = %s and username = %s', (hash,username))
+        cur.execute('update credentials.password_resets set executed = true where hash = %s and username = %s', (hash,username))
 
 
     ''' genera el hash necesario para resetear la clave de un usuario '''
@@ -49,7 +49,7 @@ class UserPassword:
 
             rreq = (creds['id'],creds['user_id'],creds['username'],hash)
             cur = con.cursor()
-            cur.execute('insert into password_resets (creds_id, user_id, username, hash) values (%s,%s,%s,%s)', rreq)
+            cur.execute('insert into credentials.password_resets (creds_id, user_id, username, hash) values (%s,%s,%s,%s)', rreq)
 
             return hash
 
@@ -70,7 +70,7 @@ class UserPassword:
             user = ObjectView(data)
             rreq = (str(uuid.uuid4()),user.user_id,user.username,user.password)
             cur = con.cursor()
-            cur.execute('insert into user_password (id,user_id,username,password) values (%s,%s,%s,%s)', rreq)
+            cur.execute('insert into credentials.user_password (id,user_id,username,password) values (%s,%s,%s,%s)', rreq)
 
         except psycopg2.DatabaseError as e:
             con.rollback()
@@ -90,7 +90,7 @@ class UserPassword:
             user = ObjectView(data)
             rreq = (user.user_id, user.username, user.password, user.id)
             cur = con.cursor()
-            cur.execute('update user_password set user_id = %s, username = %s, password = %s where id = %s', rreq)
+            cur.execute('update credentials.user_password set user_id = %s, username = %s, password = %s where id = %s', rreq)
 
         except psycopg2.DatabaseError as e:
             con.rollback()
@@ -106,7 +106,7 @@ class UserPassword:
     def findUserPassword(self,con,credentials):
         cred = ObjectView(credentials)
         cur = con.cursor()
-        cur.execute('select id, user_id, username from user_password where username = %s and password = %s', (cred.username,cred.password))
+        cur.execute('select id, user_id, username from credentials.user_password where username = %s and password = %s', (cred.username,cred.password))
         data = cur.fetchone()
         if data != None:
             return self.convertToDict(data)
@@ -117,7 +117,7 @@ class UserPassword:
 
     def findCredentials(self,con,username):
         cur = con.cursor()
-        cur.execute('select id, user_id, username from user_password where username = %s', (username,))
+        cur.execute('select id, user_id, username from credentials.user_password where username = %s', (username,))
         data = cur.fetchone()
         if data != None:
             return self.convertToDict(data)

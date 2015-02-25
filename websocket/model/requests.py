@@ -4,7 +4,7 @@ import psycopg2
 class Requests:
 
     def __init__(self):
-        self.registerQuery = 'select id,dni,name,lastname,email,reason,password,hash,confirmed from account_requests'
+        self.registerQuery = 'select id,dni,name,lastname,email,reason,password,hash,confirmed from account_requests.requests'
 
 
     def convertToDict(self, d):
@@ -63,15 +63,15 @@ class Requests:
 
     def confirmRequest(self, con, rid):
         cur = con.cursor()
-        cur.execute('update account_requests set confirmed = true where id = %s', (rid,))
+        cur.execute('update account_requests.requests set confirmed = true where id = %s', (rid,))
 
 
     def createRequest(self, con, req):
         rreq = (req['id'],req['dni'],req['name'],req['lastname'],req['email'],req['reason'],req['password'],req['hash'])
         cur = con.cursor()
-        cur.execute('insert into account_requests (id,dni,name,lastname,email,reason,password,hash) values (%s,%s,%s,%s,%s,%s,%s,%s)', rreq)
+        cur.execute('insert into account_requests.requests (id,dni,name,lastname,email,reason,password,hash) values (%s,%s,%s,%s,%s,%s,%s,%s)', rreq)
 
 
     def removeRequest(self, con, rid):
         cur = con.cursor()
-        cur.execute('delete from account_requests where id = %s', (rid,))
+        cur.execute('delete from account_requests.requests where id = %s', (rid,))

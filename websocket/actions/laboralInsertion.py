@@ -1,6 +1,6 @@
 import inject, json
 import psycopg2
-from model.laboralInsertion import LaboralInsertions
+from model.laboralInsertion import LaboralInsertion
 from model.events import Events
 from model.profiles import Profiles
 from model.config import Config
@@ -16,7 +16,7 @@ from wexceptions import MalformedMessage
 peticion:
 {
     "id":"",
-    "action":"createLaboralInsertion",
+    "action":"persistLaboralInsertionData",
     "session":"session de usuario",
     "laboralInsertion": {
         "id":"id del usuario a agregar la info de insercion laboral",
@@ -35,16 +35,16 @@ respuesta:
 
 """
 
-class CreateLaboralInsertion:
+class PersistLaboralInsertion:
 
-    laboralInsertions = inject.attr(LaboralInsertions)
+    laboralInsertion = inject.attr(LaboralInsertion)
     events = inject.attr(Events)
     profiles = inject.attr(Profiles)
     config = inject.attr(Config)
 
     def handleAction(self, server, message):
 
-        if (message['action'] != 'createLaboralInsertionData'):
+        if (message['action'] != 'persistLaboralInsertionData'):
             return False
 
         if 'laboralInsertion' not in message:
@@ -59,7 +59,7 @@ class CreateLaboralInsertion:
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
             laboralInsertion = message['laboralInsertion']
-            self.laboralInsertions.createLaboralInsertion(con,laboralInsertion)
+            self.laboralInsertion.persistLaboralInsertion(con,laboralInsertion)
             con.commit()
 
             response = {'id':message['id'], 'ok':''}
@@ -104,7 +104,7 @@ respuesta:
 
 class UpdateLaboralInsertion:
 
-    laboralInsertions = inject.attr(LaboralInsertions)
+    laboralInsertion = inject.attr(LaboralInsertion)
     events = inject.attr(Events)
     profiles = inject.attr(Profiles)
     config = inject.attr(Config)
@@ -139,7 +139,7 @@ class UpdateLaboralInsertion:
             if laboralInsertion == None:
                 raise MailformedMessage()
 
-            self.laboralInsertions.updateLaboralInsertion(con,laboralInsertion)
+            self.LaboralInsertion.updateLaboralInsertion(con,laboralInsertion)
             con.commit()
 
             response = {'id':message['id'], 'ok':''}
@@ -191,7 +191,7 @@ respuesta:
 
 class FindLaboralInsertion:
 
-    laboralInsertions = inject.attr(LaboralInsertions)
+    LaboralInsertion = inject.attr(LaboralInsertion)
     profiles = inject.attr(Profiles)
     config = inject.attr(Config)
 
@@ -213,7 +213,7 @@ class FindLaboralInsertion:
                 raise MalformedMessage()
 
             id = message['laboralInsertion']['id']
-            laboralInsertion = self.laboralInsertions.findLaboralInsertion(con,id)
+            laboralInsertion = self.LaboralInsertion.findLaboralInsertion(con,id)
             response = {'id':message['id'],'ok':'','laboralInsertion':laboralInsertion}
             server.sendMessage(response)
             return True

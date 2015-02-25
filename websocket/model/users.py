@@ -14,12 +14,12 @@ class Users:
         mid = str(uuid.uuid4())
         rreq = (mid,mail.user_id,mail.email,mail.confirmed,'')
         cur = con.cursor()
-        cur.execute('insert into user_mails (id,user_id,email,confirmed,hash) values (%s,%s,%s,%s,%s)', rreq)
+        cur.execute('insert into profile.mails (id,user_id,email,confirmed,hash) values (%s,%s,%s,%s,%s)', rreq)
         return mid
 
     def findMailByHash(self,con,hash):
         cur = con.cursor()
-        cur.execute('select id,user_id,email,confirmed,hash from user_mails where hash = %s', (hash,))
+        cur.execute('select id,user_id,email,confirmed,hash from profile.mails where hash = %s', (hash,))
         data = cur.fetchone()
         if data != None:
             return self.convertMailToDict(data)
@@ -28,7 +28,7 @@ class Users:
 
     def findMail(self,con,id):
         cur = con.cursor()
-        cur.execute('select id,user_id,email,confirmed,hash from user_mails where id = %s', (id,))
+        cur.execute('select id,user_id,email,confirmed,hash from profile.mails where id = %s', (id,))
         data = cur.fetchone()
         if data != None:
             return self.convertMailToDict(data)
@@ -37,7 +37,7 @@ class Users:
 
     def listMails(self, con, user_id):
         cur = con.cursor()
-        cur.execute('select id, user_id, email, confirmed, hash from user_mails where user_id = %s',(user_id,))
+        cur.execute('select id, user_id, email, confirmed, hash from profile.mails where user_id = %s',(user_id,))
         data = cur.fetchall()
         rdata = []
         for d in data:
@@ -46,7 +46,7 @@ class Users:
 
     def deleteMail(self,con,id):
         cur = con.cursor()
-        cur.execute('delete from user_mails where id = %s', (id,))
+        cur.execute('delete from profile.mails where id = %s', (id,))
 
 
     def updateMail(self,con,data):
@@ -55,7 +55,7 @@ class Users:
         mail = ObjectView(data)
         rreq = (mail.email, mail.confirmed, mail.hash, mail.id)
         cur = con.cursor()
-        cur.execute('update user_mails set email = %s, confirmed = %s, hash = %s where id = %s', rreq)
+        cur.execute('update profile.mails set email = %s, confirmed = %s, hash = %s where id = %s', rreq)
 
 
     ''' transformo a diccionario las respuestas de psycopg2'''
@@ -84,21 +84,21 @@ class Users:
                 data['genre'] if 'genre' in data else '',
                 data['birthdate'] if 'birthdate' in data else None)
         cur = con.cursor()
-        cur.execute('insert into users (id,dni,name,lastname,city,country,address,genre,birthdate) values (%s,%s,%s,%s,%s,%s,%s,%s,%s)', rreq)
+        cur.execute('insert into profile.users (id,dni,name,lastname,city,country,address,genre,birthdate) values (%s,%s,%s,%s,%s,%s,%s,%s,%s)', rreq)
         return uid
 
     def updateUser(self,con,data):
         user = ObjectView(data)
         rreq = (user.dni,user.name,user.lastname,user.city,user.country,user.address,user.genre,user.birthdate, user.id)
         cur = con.cursor()
-        cur.execute('update users set dni = %s, name = %s, lastname = %s, city = %s, country = %s, address = %s, genre = %s, birthdate = %s where id = %s', rreq)
+        cur.execute('update profile.users set dni = %s, name = %s, lastname = %s, city = %s, country = %s, address = %s, genre = %s, birthdate = %s where id = %s', rreq)
         if cur.rowcount <= 0:
             raise Exception()
 
 
     def findUserByDni(self,con,dni):
         cur = con.cursor()
-        cur.execute('select id,dni,name,lastname,city,country,address,genre,birthdate from users where dni = %s', (dni,))
+        cur.execute('select id,dni,name,lastname,city,country,address,genre,birthdate from profile.users where dni = %s', (dni,))
         data = cur.fetchone()
         if data != None:
             return self.convertUserToDict(data)
@@ -107,7 +107,7 @@ class Users:
 
     def findUser(self,con,id):
         cur = con.cursor()
-        cur.execute('select id,dni,name,lastname,city,country,address,genre,birthdate from users where id = %s', (id,))
+        cur.execute('select id,dni,name,lastname,city,country,address,genre,birthdate from profile.users where id = %s', (id,))
         data = cur.fetchone()
         if data != None:
             return self.convertUserToDict(data)
@@ -116,7 +116,7 @@ class Users:
 
     def listUsers(self, con):
         cur = con.cursor()
-        cur.execute('select id,dni,name,lastname,city,country,address,genre,birthdate from users')
+        cur.execute('select id,dni,name,lastname,city,country,address,genre,birthdate from profile.users')
         data = cur.fetchall()
         rdata = []
         for d in data:

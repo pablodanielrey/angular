@@ -4,7 +4,7 @@ class Systems:
 
     def listSystems(self,con):
         cur = con.cursor()
-        cur.execute('select id,name,config from systems')
+        cur.execute('select id,name,config from systems.systems')
         ss = cur.fetchall()
         systems = []
         for s in ss:

@@ -5,26 +5,26 @@ class Groups:
 
     def createGroup(self,con,group):
         cur = con.cursor()
-        cur.execute('insert into groups (id,system_id,name) values (%s,%s,%s)',(group.id,group.systemId,group.name))
+        cur.execute('insert into groups.groups (id,system_id,name) values (%s,%s,%s)',(group.id,group.systemId,group.name))
 
     def updateGroup(self,con,group):
         cur = con.cursor()
-        cur.execute('update groups set name = %s where id = %s',(group.name,group.id))
+        cur.execute('update groups.groups set name = %s where id = %s',(group.name,group.id))
 
     def addMembers(self,con,id,members):
         cur = con.cursor()
         for uid in members:
-            cur.execute('insert into groups_users (group_id,user_id) values (%s,%s)',(id,uid))
+            cur.execute('insert into groups.groups_users (group_id,user_id) values (%s,%s)',(id,uid))
 
 
     def removeMembers(self,con,id,members):
         cur = con.cursor()
         for uid in members:
-            cur.execute('delete from groups_users where group_id = %s and user_id = %s',(id,uid))
+            cur.execute('delete from groups.groups_users where group_id = %s and user_id = %s',(id,uid))
 
     def findMembers(self,con,id):
         cur = con.cursor()
-        cur.execute('select user_id from groups_users where group_id = %s',(id,))
+        cur.execute('select user_id from groups.groups_users where group_id = %s',(id,))
         data = cur.fetchall()
         rdata = []
         for d in data:
@@ -34,7 +34,7 @@ class Groups:
 
     def findGroup(self,con,id):
         cur = con.cursor()
-        cur.execute('select id,system_id,name from groups where id = %s',(id,))
+        cur.execute('select id,system_id,name from groups.groups where id = %s',(id,))
         g = cur.fetchone()
         group = self.convertToDict(g)
         return group
@@ -42,7 +42,7 @@ class Groups:
 
     def listGroups(self, con):
         cur = con.cursor()
-        cur.execute('select id,system_id,name from groups')
+        cur.execute('select id,system_id,name from groups.groups')
         data = cur.fetchall()
         rdata = []
         for d in data:
