@@ -2,20 +2,44 @@ var app = angular.module('mainApp');
 
 app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Session, Users, LaboralInsertion) {
 
+  $scope.studentData = {};
+  $scope.insertionData = {};
   $scope.user = {};
 
+/*
   $scope.degreeData = false;
   $scope.profileData = false;
   $scope.languageData = false;
-
+*/
   $scope.save = function() {
+/*
     $scope.degreeData = false;
     $scope.profileData = false;
     $scope.languageData = false;
 
     $scope.$broadcast('SaveEvent');
+*/
+    Users.updateUser($scope.user,
+      function(ok) {
+        // nada
+      },
+      function(error) {
+        alert(error);
+      }
+    );
+
+    LaboralInsertion.updateLaboralInsertionData($scope.insertionData,
+      function(ok) {
+        // nada
+      },
+      function(error) {
+        alert(error);
+      }
+    );
+
   }
 
+/*
   $scope.$on('SaveDataEvent',function(event,data) {
 
 
@@ -66,18 +90,18 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
     }
 
   });
-  
+*/
 
 	/**
 	 * procesar verificacion de terminos y condiciones
 	 */
 	$scope.checkTermsAndConditions = function(){
-		var session = Session.getCurrentSession(); 
+		var session = Session.getCurrentSession();
 		if((session == null) || (session.selectedUser == null)){
 			alert("error: usuario no seleccionado");
-			$location.path('/main');			
-		} 
-		
+			$location.path('/main');
+		}
+
 		/**
 		 * callback en el caso de que el servidor haya devuelto una respuesta correcta
 		 * @param accepted Booleano que indica si la condicion esta aceptada o no
@@ -87,7 +111,7 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 				$location.path('/acceptTermsAndConditionsInsertion');
 			}
 		}
-		
+
 		/**
 		 * callback en el caso de que el servidor haya devuelto una respuesta erronea
 		 * @param error String con el error
@@ -102,7 +126,7 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 	}
 
 	$timeout(function() {
-		$scope.checkTermsAndConditions();	
+		$scope.checkTermsAndConditions();
 	});
 
 

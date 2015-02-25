@@ -3,9 +3,7 @@ var app = angular.module('mainApp');
 
 app.controller('ProfileLaboralInsertionCtrl', function($scope,$timeout, Session, Users, Student, LaboralInsertion) {
 
-  $scope.studentData = {};
-  $scope.insertionData = {};
-  $scope.user = {};
+
 
   $scope.$on('SaveEvent',function() {
 
@@ -22,7 +20,7 @@ app.controller('ProfileLaboralInsertionCtrl', function($scope,$timeout, Session,
 
 
   $scope.loadUserData = function() {
-	
+
     var s = Session.getCurrentSession();
     if (s == null) {
       return;
@@ -32,7 +30,7 @@ app.controller('ProfileLaboralInsertionCtrl', function($scope,$timeout, Session,
     }
 
     var uid = s.selectedUser;
-	
+
     Users.findUser(uid,
       function(user) {
         user.birthdate = new Date(user.birthdate);
@@ -63,7 +61,7 @@ app.controller('ProfileLaboralInsertionCtrl', function($scope,$timeout, Session,
   }
 
 	$timeout(function() {
-		$scope.loadUserData(); 
+		$scope.loadUserData();
 	},0);
 
 });
