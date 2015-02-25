@@ -1,16 +1,41 @@
 var app = angular.module('mainApp');
 
 
-app.controller('LaboralInsertionTermsAndConditionsCtrl',function($scope) {
+app.controller('LaboralInsertionTermsAndConditionsCtrl',["$scope", "Session", "LaboralInsertion", function($scope, Session, LaboralInsertion) {
 
-  $scope.accepted = false;
 
-  $scope.termsAndConditionsAccepted = function() {
-    return $scope.accepted;
-  }
+  
+  	/**
+	 * procesar verificacion de terminos y condiciones
+	 */
+	$scope.accept = function(){
+		
+		var session = Session.getCurrentSession(); 
+		if((session == null) || (session.selectedUser == null)){
+			console.log("error: usuario no seleccionado");
+			$location.path('/main');			
+		} 
+		
+		/**
+		 * callback en el caso de que el servidor haya devuelto una respuesta correcta
+		 * @param ok Booleano que indica si se ha aceptado la condicion
+		 */
+		callbackOk = function(ok){
+			$location.path('/editInsertion');
+		}
+		
+		/**
+		 * callback en el caso de que el servidor haya devuelto una respuesta erronea
+		 * @param error String con el error
+		 */
+		callbackError = function(error){
+			console.log(error)
+			$location.path('/main');
+		}
 
-  $scope.accept = function() {
-    $scope.accepted = true;
-  }
+		LaboralInsertion.isTermsAndConditionsAccepted(session.selectedUser, callbackOk, callbackError);
+	}
 
-});
+
+
+}]);
