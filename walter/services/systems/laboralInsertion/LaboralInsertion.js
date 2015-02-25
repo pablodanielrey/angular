@@ -3,12 +3,15 @@ var app = angular.module('mainApp');
 
 app.service('LaboralInsertion', function(Messages, Utils, Session) {
 
-  this.acceptTermsAndConditions = function(id,ok,err) {
-
+  this.acceptTermsAndConditions = function(userId, ok,err) {
+    // se aceptan los terminos y condicinoes.
+    // y se llama ok();
   }
 
-  this.termsAndConditionsAccepted = function() {
-    
+  this.termsAndConditionsAccepted = function(userId,ok,err) {
+    // se consulta si estan aceptadas
+    //ok(true);
+    //ok(false);
   }
 
   this.findLaboralInsertionData = function(id,ok,err) {
