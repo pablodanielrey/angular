@@ -3,16 +3,56 @@ var app = angular.module('mainApp');
 
 app.service('LaboralInsertion', function(Messages, Utils, Session) {
 
-  this.acceptTermsAndConditions = function(userId, ok,err) {
-    // se aceptan los terminos y condicinoes.
-    // y se llama ok();
-  }
+	/**
+	 * Aceptar los terminos y condiciones de insercion laboral
+	 * @param userId Id de usuario al que se modificaran los terminos y condiciones
+	 * @param ok Callback en el caso de que el servidor reciba una respuesta correcta
+	 * @param err Callback en el caso de que el servidor reciba una respuesta erronea
+	 */
+	this.acceptTermsAndConditions = function(userId, ok, err) {
+		var msg = {
+		  id: Utils.getId(),
+		  session: Session.getSessionId(),
+		  action:'acceptTermsAndConditions',
+		  user_id: userId,
+		}
+		
+		Messages.send(msg,
+			function(response) {
+				ok(response);
+			},
+			function(error) {
+				err(error);
+			}
+		);			
+	}
 
-  this.termsAndConditionsAccepted = function(userId,ok,err) {
-    // se consulta si estan aceptadas
-    //ok(true);
-    //ok(false);
-  }
+
+	/**
+	 * Estan aceptados los terminos y condiciones de insercion laboral?
+	 * @param userId Id de usuario al que se modificaran los terminos y condiciones
+	 * @param ok Callback en el caso de que el servidor reciba una respuesta correcta
+	 * @param err Callback en el caso de que el servidor reciba una respuesta erronea	 
+	 * @response boolean accepted = true | false
+	 */
+	this.isTermsAndConditionsAccepted = function(userId, ok, err) {
+		var msg = {
+			id: Utils.getId(),
+			session: Session.getSessionId(),
+			action:'checkTermsAndConditions',
+			user_id: userId,
+		}
+
+		Messages.send(msg,
+			function(response) {
+				ok(response);
+			},
+			function(error) {
+				err(error);
+			}
+		);	
+	}
+
 
   this.findLaboralInsertionData = function(id,ok,err) {
     var msg = {
