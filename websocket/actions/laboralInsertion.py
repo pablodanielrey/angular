@@ -460,3 +460,76 @@ class ListLanguages:
 
 
 #class ListDegree:
+
+    """-------------------------------"""
+
+"""
+
+peticion:
+{
+    "id":"",
+    "action":"acceptTermsAndConditions"
+    "session":"sesion de usuario"
+    "user_id":"id del usuario"
+}
+
+respuesta:
+{
+    "id":"id de la peticion",
+    "ok":""
+    "error":""
+}
+
+"""
+class AcceptTermsAndConditions:
+
+    req = inject.attr(LaboralInsertion)
+    profiles = inject.attr(Profiles)
+    config = inject.attr(Config)
+
+    def handleAction(self, server, message):
+
+        #El procesamiento continuara solo si el mensaje solicitado por el cliente es el que indica
+        if message['action'] != 'acceptTermsAndConditions':
+            return False
+
+        #esto es momentaneo para que puedan utilizarlo
+        response = {'id':message['id'],'ok':''}
+        server.sendMessage(response)
+        return True
+
+"""
+
+peticion:
+{
+    "id":"",
+    "action":"checkTermsAndConditions"
+    "session":"sesion de usuario"
+    "user_id":"id del usuario"
+}
+
+respuesta:
+{
+    "id":"id de la peticion",
+    "accepted":"verifica si ya acepto los terminos y condiciones"
+    "ok":""
+    "error":""
+}
+
+"""
+class CheckTermsAndConditions:
+
+    req = inject.attr(LaboralInsertion)
+    profiles = inject.attr(Profiles)
+    config = inject.attr(Config)
+
+    def handleAction(self, server, message):
+
+        #El procesamiento continuara solo si el mensaje solicitado por el cliente es el que indica
+        if message['action'] != 'checkTermsAndConditions':
+            return False
+
+        # esto es momentaneamente para que pueda usuarlo ivan
+        response = {'id':message['id'],'accepted':true, 'ok':''}
+        server.sendMessage(response)
+        return True

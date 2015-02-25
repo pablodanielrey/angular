@@ -21,7 +21,7 @@ from actions.status import GetStatus
 from actions.students import CreateStudent, FindStudent, PersistStudent
 from actions.groups import ListGroups, FindGroup, FindMembers, RemoveMembers, AddMembers, UpdateGroup, CreateGroup
 from actions.systems import ListSystems
-from actions.laboralInsertion import PersistLaboralInsertion, FindLaboralInsertion, PersistLanguage, DeleteLanguage, FindLanguage, ListLanguages
+from actions.laboralInsertion import PersistLaboralInsertion, FindLaboralInsertion, PersistLanguage, DeleteLanguage, FindLanguage, ListLanguages, AcceptTermsAndConditions, CheckTermsAndConditions
 
 from model.session import Session
 from model.config import Config
@@ -54,7 +54,7 @@ if __name__ == '__main__':
     CreateStudent(), FindStudent(), PersistStudent(),
     ListGroups(), FindGroup(), FindMembers(), RemoveMembers(), AddMembers(), UpdateGroup(), CreateGroup(),
     ListSystems(),
-    PersistLaboralInsertion(), FindLaboralInsertion(), PersistLanguage(), DeleteLanguage(), FindLanguage(), ListLanguages()
+    PersistLaboralInsertion(), FindLaboralInsertion(), PersistLanguage(), DeleteLanguage(), FindLanguage(), ListLanguages(), AcceptTermsAndConditions(), CheckTermsAndConditions()
   ]
 
 
