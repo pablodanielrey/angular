@@ -530,6 +530,6 @@ class CheckTermsAndConditions:
             return False
 
         # esto es momentaneamente para que pueda usuarlo ivan
-        response = {'id':message['id'],'accepted':true, 'ok':''}
+        response = {'id':message['id'],'accepted':True, 'ok':''}
         server.sendMessage(response)
         return True
