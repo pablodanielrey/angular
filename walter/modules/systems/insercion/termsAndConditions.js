@@ -1,7 +1,7 @@
 var app = angular.module('mainApp');
 
 
-app.controller('LaboralInsertionTermsAndConditionsCtrl',["$scope", "Session", "LaboralInsertion", function($scope, Session, LaboralInsertion) {
+app.controller('LaboralInsertionTermsAndConditionsCtrl',["$scope", "$location", "Session", "LaboralInsertion", function($scope, $location, Session, LaboralInsertion) {
 
 
   
