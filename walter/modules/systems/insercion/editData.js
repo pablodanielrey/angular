@@ -4,7 +4,15 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 
   $scope.studentData = {};
   $scope.insertionData = {};
-  $scope.user = {};
+  $scope.userData = {};
+
+  $scope.$watch("userData",function() {
+    console.log('user cambiado');
+  });
+
+  $scope.$watch("insertionData",function() {
+    console.log('insertion cambiado');
+  });
 
 /*
   $scope.degreeData = false;
@@ -19,7 +27,7 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 
     $scope.$broadcast('SaveEvent');
 */
-    Users.updateUser($scope.user,
+    Users.updateUser($scope.userData,
       function(ok) {
         // nada
       },

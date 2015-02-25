@@ -4,7 +4,6 @@ var app = angular.module('mainApp');
 app.controller('ProfileLaboralInsertionCtrl', function($scope,$timeout, Session, Users, Student, LaboralInsertion) {
 
 
-
   $scope.$on('SaveEvent',function() {
 
     var collectedData = { studentData: $scope.studentData, insertionData: $scope.insertionData, $userData: $scope.user };
@@ -13,11 +12,12 @@ app.controller('ProfileLaboralInsertionCtrl', function($scope,$timeout, Session,
 
   });
 
+/*
   $scope.clearUserData = function() {
-    $scope.user = {};
+    $scope.userData = {};
     $scope.insertionData = {};
   }
-
+*/
 
   $scope.loadUserData = function() {
 
@@ -26,7 +26,7 @@ app.controller('ProfileLaboralInsertionCtrl', function($scope,$timeout, Session,
       return;
     }
     if (s.selectedUser == undefined || s.selectedUser == null) {
-      $scope.clearUserData();
+      return;
     }
 
     var uid = s.selectedUser;
@@ -34,7 +34,7 @@ app.controller('ProfileLaboralInsertionCtrl', function($scope,$timeout, Session,
     Users.findUser(uid,
       function(user) {
         user.birthdate = new Date(user.birthdate);
-        $scope.user = user;
+        $scope.userData = user;
       },
       function(error) {
         alert(error);
