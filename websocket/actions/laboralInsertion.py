@@ -142,7 +142,7 @@ class FindLaboralInsertion:
             con.close()
 
 
-        """-------------------------------"""
+"""-------------------------------"""
 """
     Modulo de acceso a los datos de los idiomas del usuario
 """
@@ -496,7 +496,7 @@ evento:
 
 #class ListDegree:
 
-    """-------------------------------"""
+"""-------------------------------"""
 
 """
 
