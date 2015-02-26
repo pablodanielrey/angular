@@ -4,34 +4,9 @@ var app = angular.module('mainApp');
 app.controller('ProfileLaboralInsertionCtrl', function($scope,$timeout, Session, Users, Student, LaboralInsertion) {
 
 
-  $scope.$on('SaveEvent',function() {
+  $scope.loadData = function() {
 
-    var collectedData = { studentData: $scope.studentData, insertionData: $scope.insertionData, $userData: $scope.user };
-    var saveData = { type:'profile', data: collectedData };
-    $scope.$emit('SaveDataEvent',saveData);
-
-  });
-
-/*
-  $scope.clearUserData = function() {
-    $scope.userData = {};
-    $scope.insertionData = {};
-  }
-*/
-
-  $scope.loadUserData = function() {
-
-    var s = Session.getCurrentSession();
-    if (s == null) {
-      return;
-    }
-    if (s.selectedUser == undefined || s.selectedUser == null) {
-      return;
-    }
-
-    var uid = s.selectedUser;
-
-    Users.findUser(uid,
+    Users.findUser($scope.selectedUser,
       function(user) {
         user.birthdate = new Date(user.birthdate);
         $scope.userData = user;
@@ -41,7 +16,7 @@ app.controller('ProfileLaboralInsertionCtrl', function($scope,$timeout, Session,
       }
     );
 
-    Student.findStudentData(uid,
+    Student.findStudentData($scope.selectedUser,
       function(data) {
         $scope.studentData = data.student;
       },
@@ -50,18 +25,15 @@ app.controller('ProfileLaboralInsertionCtrl', function($scope,$timeout, Session,
       }
     );
 
-    LaboralInsertion.findLaboralInsertionData(uid,
-      function(data) {
-        $scope.insertionData = data;
-      },
-      function(error) {
-        alert(error);
-      }
-    );
   }
 
+  $scope.$on('UpdateUserDataEvent',function(event,data) {
+    $scope.loadData();
+  });
+
+
 	$timeout(function() {
-		$scope.loadUserData();
+		$scope.loadData();
 	},0);
 
 });
