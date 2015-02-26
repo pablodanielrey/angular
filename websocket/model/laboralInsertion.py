@@ -68,6 +68,10 @@ class LaboralInsertion:
         cur = con.cursor()
         cur.execute('delete from laboral_insertion.languages where id = %s',(id))
 
+    def deleteLanguages(self,con,user_id):
+        cur = con.cursor()
+        cur.execute('delete from laboral_insertion.languages where user_id = %s',(user_id))
+
     def findLanguage(self,con,id):
         cur = con.cursor()
         cur.execute('select id, user_id, name, level from laboral_insertion.languages where id = %s',(id))
@@ -113,6 +117,12 @@ class LaboralInsertion:
     def deleteDegree(self,con,id):
         cur = con.cursor()
         cur.execute('delete from laboral_insertion.degree where id = %s',(id))
+
+
+    def deleteDegrees(self,con,user_id):
+        cur = con.cursor()
+        cur.execute('delete from laboral_insertion.degree where user_id = %s',(user_id))
+
 
     def findDegree(self,con,id):
         cur = con.cursor()
