@@ -3,6 +3,19 @@ from model.objectView import ObjectView
 
 class LaboralInsertion:
 
+    def acceptTermsAndConditions(self,con,id):
+        params = (True,id)
+        cur = con.cursor()
+        cur.execute('update laboral_insertion.users set accepted_conditions = %s where id = %s',params)
+
+    def checkTermsAndConditions(self,con,id):
+        cur = con.cursor()
+        cur.execute('select accepted_conditions from laboral_insertion.users where id = %s',(id))
+        language = cur.fetchone()
+        if language != None:
+            return language[0]
+        else:
+            return False
 
     def persistLaboralInsertion(self,con,data):
         if findLaboralInsertion(con,data['id']) == None:
@@ -10,7 +23,7 @@ class LaboralInsertion:
             cur = con.cursor()
             cur.execute("insert into laboral_insertion.users (id,cv,reside,travel) values (%s,%s,%s,%s)",params)
         else:
-            params = (psycopg2.Binary(data['cv']),data['reside'],data['travel'],data[id])
+            params = (psycopg2.Binary(data['cv']),data['reside'],data['travel'],data['id'])
             cur = con.cursor()
             cur.execute('update laboral_insertion.users set cv = %s,reside = %s,travel = %s where id = %s',params)
 
@@ -26,7 +39,7 @@ class LaboralInsertion:
 
     def findAll(self,con):
         cur = con.cursor()
-        cur.execute('select id,cv,reside,travel from laboral_insertion.users where id = %s',(id))
+        cur.execute('select id,cv,reside,travel from laboral_insertion.users')
         data = cur.fetchall()
         laboralInsertions = []
         for li in data:

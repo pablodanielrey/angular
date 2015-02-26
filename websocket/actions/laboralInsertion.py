@@ -447,7 +447,7 @@ class FindLanguage:
 
             #realizo la consulta al modelo
             l = message['language']
-            language = self.req.finLanguage(con,l['id'])
+            language = self.req.findLanguage(con,l['id'])
             response = {'id':message['id'], 'language':language, 'ok':''}
             server.sendMessage(response)
 
@@ -859,7 +859,7 @@ class ListDegree:
     profiles = inject.attr(Profiles)
     config = inject.attr(Config)
 
-    def handleAction(self, server, sendMessage):
+    def handleAction(self, server, message):
 
         if message['action'] != 'listDegrees':
             return False
@@ -917,10 +917,34 @@ class AcceptTermsAndConditions:
         if message['action'] != 'acceptTermsAndConditions':
             return False
 
-        #esto es momentaneo para que puedan utilizarlo
-        response = {'id':message['id'],'ok':''}
-        server.sendMessage(response)
-        return True
+
+        if 'user_id' not in message:
+            response = {'id':message['id'],'error':'no existe el usuario'}
+            server.sendMessage(response)
+            return True
+
+        sid = message['session']
+        self.profiles.checkAccess(sid,['ADMIN','USER'])
+
+        try:
+            #Abrir conexion a la base de datos
+            con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+
+            self.req.acceptTermsAndConditions(con,message['user_id'])
+            response = {'id':message['id'],'ok':''}
+            server.sendMessage(response)
+
+            con.commit()
+
+            return True
+
+        except psycopg2.DatabaseError, e:
+            con.rollback()
+            raise e
+
+        finally:
+            con.close()
+
 
 """
 
@@ -953,7 +977,23 @@ class CheckTermsAndConditions:
         if message['action'] != 'checkTermsAndConditions':
             return False
 
-        # esto es momentaneamente para que pueda usuarlo ivan
-        response = {'id':message['id'],'accepted':True, 'ok':''}
-        server.sendMessage(response)
-        return True
+        if 'user_id' not in message:
+            response = {'id':message['id'], 'error':'no existe el id del usuario'}
+            server.sendMessage(response)
+            return True
+
+        sid = message['session']
+        self.profiles.checkAccess(sid,['ADMIN','USER'])
+
+        try:
+            #Abrir conexion a la base de datos
+            con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+
+            #realizo la consulta al modelo
+            accepted = self.req.checkTermsAndConditions(con,message['user_id'])
+            response = {'id':message['id'],'accepted':accepted, 'ok':''}
+            server.sendMessage(response)
+            return True
+
+        finally:
+            con.close()
