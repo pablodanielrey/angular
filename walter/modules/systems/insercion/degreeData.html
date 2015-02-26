@@ -1,60 +1,48 @@
-<div ng-repeat='degree in insertionData.degrees'>
-  <div>
-    <span>Carrera</span>
-    <input type="text" value='{{degree.degree}}'>
-  </div>
-  <div>
-    <span>Materias aprobadas con final</span>
-    <input type="text" value="{{degree.courses}}">
-  </div>
-  <div>
-    <span>Promedio sin aplazos</span>
-    <input type="text" value="{{degree.average1}}">
-  </div>
-  <div>
-    <span>Promedio con aplazos</span>
-    <input type="text" value="{{degree.average2}}">
-  </div>
-  <div>
-    <span>Oferta</span>
-    <div>
-      <input type="checkbox" value="{{degree.offerInternship}}">Pasantía</input>
-      <input type="checkbox" value="{{degree.offerFullTime}}">Full-Time</input>
-      <input type="checkbox" value="{{degree.offerYoungProfetionals}}">Programa Jóvenes Profesionales</input>
-    </div>
-  </div>
-</div>
+<div class="degreeData">
+  <div ng-repeat='degree in insertionData.degrees'>
 
-<div>
-  <div>
-    <span>Carrera</span>
-    <input type="text" list="carrera">
-    <datalist id="carrera" ng-model='insertionData.degree'>
-      <option value="Contador Público" />
-      <option value="Licenciado en Administración" />
-      <option value="Licenciado en Turismo" />
-      <option value="Licenciado en Economía" />
-      <option value="Técnico en Cooperativas" />
-    </datalist>
-  </div>
-  <div>
-    <span>Materias aprobadas con final</span>
-    <input type="text" ng-model="insertionData.courses">
-  </div>
-  <div>
-    <span>Promedio sin aplazos</span>
-    <input type="text" ng-model="insertionData.average1">
-  </div>
-  <div>
-    <span>Promedio con aplazos</span>
-    <input type="text" name="insertionData.average2">
-  </div>
-  <div>
-    <span>Oferta</span>
-    <div>
-      <input type="checkbox" ng-model="insertionData.offerInternship">Pasantía</input>
-      <input type="checkbox" ng-model="insertionData.offerFullTime">Full-Time</input>
-      <input type="checkbox" ng-model="insertionData.offerYoungProfetionals">Programa Jóvenes Profesionales</input>
+      <span>Carrera</span>
+      <input type="text" value='{{degree.degree}}'>
+      <span>Materias aprobadas con final</span>
+      <input type="text" value="{{degree.courses}}">
+      <span>Promedio sin aplazos</span>
+      <input type="text" value="{{degree.average1}}">
+      <span>Promedio con aplazos</span>
+      <input type="text" value="{{degree.average2}}">
+      <span>Oferta</span>
+      <div>
+        <input type="checkbox" value="{{degree.offerInternship}}">Pasantía</input>
+        <input type="checkbox" value="{{degree.offerFullTime}}">Full-Time</input>
+        <input type="checkbox" value="{{degree.offerYoungProfetionals}}">Programa Jóvenes Profesionales</input>
+      </div>
     </div>
-  </div>
+
+
+  <!-- <div>
+    <div>
+      <span>Carrera</span>
+      <input type="text" list="carrera">
+      <datalist id="carrera" ng-model='insertionData.degree'>
+        <option value="Contador Público" />
+        <option value="Licenciado en Administración" />
+        <option value="Licenciado en Turismo" />
+        <option value="Licenciado en Economía" />
+        <option value="Técnico en Cooperativas" />
+      </datalist>
+    </div>
+
+      <span>Materias aprobadas con final</span>
+      <input type="text" ng-model="insertionData.courses">
+      <span>Promedio sin aplazos</span>
+      <input type="text" ng-model="insertionData.average1">
+      <span>Promedio con aplazos</span>
+      <input type="text" name="insertionData.average2">
+      <span>Oferta</span>
+      <div>
+        <input type="checkbox" ng-model="insertionData.offerInternship">Pasantía</input>
+        <input type="checkbox" ng-model="insertionData.offerFullTime">Full-Time</input>
+        <input type="checkbox" ng-model="insertionData.offerYoungProfetionals">Programa Jóvenes Profesionales</input>
+      </div>
+    </div>
+  </div> -->
 </div>
