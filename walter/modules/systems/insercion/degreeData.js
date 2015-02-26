@@ -1,13 +1,27 @@
 var app = angular.module('mainApp');
 
 
-app.controller('DegreeLaboralInsertionCtrl', function($scope) {
+app.controller('DegreeLaboralInsertionCtrl', function($scope, $timeout, LaboralInsertion) {
 
-  $scope.$on('SaveEvent',function() {
+  $scope.$on('UpdateUserDataEvent',function(event,data) {
+    $scope.loadData();
+  });
 
-      var saveData = { type:'degree', data:$scope.insertionData };
-      $scope.$emit('SaveDataEvent',saveData);
 
+  $scope.loadData = function() {
+
+    LaboralInsertion.findDegreeData($scope.selectedUser,
+      function(data) {
+        $scope.degrees = data;
+      },
+      function(err) {
+        alert(err);
+      });
+
+  }
+
+  $timeout(function() {
+    $scope.loadData();
   });
 
 

@@ -8,8 +8,7 @@ var app = angular.module('mainApp',['ngRoute']);
  * 		Verificar la conexión y autentificación de usuarios.
  * 		Recibir eventos del socket y transferirlo a los controladores secundarios
  */
-app.controller('IndexCtrl', function ($rootScope, $scope, $location, $timeout, Session, Cache, WebSocket) {
-
+app.controller('IndexCtrl', function ($rootScope, $scope, $location, $timeout, $window, Session, Cache, WebSocket) {
 
     $rootScope.isLogged = function() {
       return Session.isLogged();
@@ -45,7 +44,7 @@ app.controller('IndexCtrl', function ($rootScope, $scope, $location, $timeout, S
         // no se encontro la session en el server asi que la destruyo y vuelvo a la pantlla principal.
         alert("no se encontro la sesion en el servidor, debe loguearse nuevamente");
         Session.destroy();
-        $location.reload();
+        $window.location.reload();
         return;
       } else if(e.name == "NotImplemented"){
       	console.log("Mensaje no implementado en el servidor");

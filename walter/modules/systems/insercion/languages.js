@@ -1,29 +1,33 @@
 var app = angular.module('mainApp');
 
 
-app.controller('LanguagesLaboralInsertionCtrl', ["$scope", "$timeout", function($scope, $timeout) {
-	
-	$scope.initializeLanguage = function(){
-		if(($scope.insertionData.languages == null) || ($scope.insertionData.languages == undefined)){
-			$scope.insertionData.languages = [];
-		}
-		
-		if($scope.insertionData.languages.length == 0){
-			$scope.addLanguage();
-		}
+app.controller('LanguagesLaboralInsertionCtrl', function($scope, $timeout, LaboralInsertion) {
+
+	$scope.addLanguage = function() {
+		//$scope.insertionData.languages.push({language:"", level:"basico"});
 	}
 
-	$scope.addLanguage = function(){
-		$scope.insertionData.languages.push({language:"", level:"basico"});
-	}
-	
 	$scope.deleteLanguage = function($index){
-		$scope.insertionData.languages.splice($index, 1);
-		$scope.initializeLanguage();
+		$scope.languages.splice($index, 1);
 	}
-	
+
+	$scope.loadData = function() {
+		LaboralInsertion.findLaboralInsertionData($scope.selectedUser,
+			function(data) {
+				$scope.languages = data;
+			},
+			function(err) {
+				alert(err);
+			}
+		);
+	}
+
+	$scope.$on('UpdateUserDataEvent',function(event,data) {
+		$scope.loadData();
+	});
+
 	$timeout(function() {
-		$scope.initializeLanguage()
+		$scope.loadData();
 	},0);
 
-}]);
+});

@@ -73,13 +73,6 @@ app.service('LaboralInsertion', function(Messages, Utils, Session) {
     );
   }
 
-	this.findDegreeData = function(user_id,ok,err) {
-		// falta implementar.
-	}
-
-
-
-
   this.updateLaboralInsertionData = function(data, ok, err) {
     var msg = {
       id: Utils.getId(),
@@ -96,5 +89,22 @@ app.service('LaboralInsertion', function(Messages, Utils, Session) {
       }
     });
   }
+
+	this.findDegreeData = function(user_id,ok,err) {
+		// falta implementar.
+	}
+
+
+	this.updateDegreeData = function(data,ok,err) {
+		// dalta implementar
+	}
+
+	this.findLanguageData = function(user_id,ok,err) {
+		// falta implementar.
+	}
+
+	this.updateLanguageData = function(data,ok,err) {
+		// falta implementar.
+	}
 
 });

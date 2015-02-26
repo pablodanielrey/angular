@@ -1,7 +1,7 @@
 
 var app = angular.module('mainApp');
 
-app.controller('LaboralInsertionDataCtrl', function($scope) {
+app.controller('LaboralInsertionDataCtrl', function($scope, $timeout, LaboralInsertion) {
 
   $scope.addCv = function() {
 
@@ -26,5 +26,28 @@ app.controller('LaboralInsertionDataCtrl', function($scope) {
 //    });
 
   }
+
+
+  $scope.loadData = function() {
+
+    LaboralInsertion.findLaboralInsertionData($scope.selectedUser,
+      function(data) {
+        $scope.insertionData = data;
+      },
+      function(err) {
+        alert(err);
+      });
+
+  }
+
+  $scope.$on('UpdateUserDataEvent',function(event,data) {
+    $scope.loadData();
+  });
+
+
+  $timeout(function() {
+    $scope.loadData();
+  });
+
 
 });

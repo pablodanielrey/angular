@@ -1,24 +1,19 @@
-
-<div>
-  <div>
-    <span>Dispuesto a viajar</span>
-    <input type="text" list='viajar' ng-model="insertionData.travel">
-    <datalist id="viajar">
-      <option value="Si" />
-      <option value="No" />
-    </datalist>
-  </div>
-  <div>
-    <span>Dispuesto a residir</span>
-    <input type="text" list="reside" ng-model="insertionData.reside">
-    <datalist id="reside">
-      <option value="Si" />
-      <option value="No" />
-    </datalist>
-  </div>
-  <div>
-    <span>CV</span>
-    <input type="file" id='fileCv'>
-    <button ng-click='addCv()'>Agregar Cv</button>
-  </div>
+<div class="insertionData">
+  <span>Dispuesto a viajar</span>
+  <input type="text" list='viajar' ng-model="insertionData.travel">
+  <datalist id="viajar">
+    <option value="Si" />
+    <option value="No" />
+  </datalist>
+  <span>Dispuesto a residir</span>
+  <input type="text" list="reside" ng-model="insertionData.reside">
+  <datalist id="reside">
+    <option value="Si" />
+    <option value="No" />
+  </datalist>
+  <hr>
+  <span>CV</span>
+  <input type="file" id='fileCv'>
+  <button ng-click='addCv()'>Cargar</button>
+  <hr>
 </div>
