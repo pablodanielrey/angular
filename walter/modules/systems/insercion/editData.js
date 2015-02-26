@@ -4,28 +4,8 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 
   $scope.studentData = {};
 
-  $scope.degrees = [
-    {
-      degree:'Carrera1',
-      courses:25,
-      average1:10,
-      average2:2,
-      offerInternship: true,
-      offerFullTime:true,
-      offerYoungProfetionals:false
-    }
-  ];
-
-  $scope.languages = [
-    {
-      language: 'español',
-      level: 'intermedio'
-    },
-    {
-      language: 'inglés',
-      level: 'básico'
-    }
-  ];
+  $scope.degrees = [ {} ];
+  $scope.languages = [ {} ];
 
   $scope.insertionData = {};
   $scope.userData = {};
