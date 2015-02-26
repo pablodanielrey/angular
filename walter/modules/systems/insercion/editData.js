@@ -3,7 +3,7 @@ var app = angular.module('mainApp');
 app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Session, Users, LaboralInsertion) {
 
   $scope.studentData = {};
-  $scope.insertionData = {};
+  $scope.insertionData = { degrees:[{ degree:'Carrera1', courses:25, average1:10, average2:2, offerInternship: true, offerFullTime:true, offerYoungProfetionals:false }] };
   $scope.userData = {};
 
   $scope.$watch("userData",function() {
