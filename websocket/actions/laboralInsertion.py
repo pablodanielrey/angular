@@ -147,6 +147,77 @@ class FindLaboralInsertion:
     Modulo de acceso a los datos de los idiomas del usuario
 """
 
+"""
+peticion:
+{
+    "id":"id de la peticion",
+    "action":"createLanguagesData",
+    "session":"session de usuario",
+    "user_id":"id del usuario"
+    "language": [
+            {
+            "id":"id del idioma a actualizar",
+            "user_id":"id del usuario",
+            "name":"nombre del idioma",
+            "level":"nivel"
+            }
+    ]
+}
+
+respuesta:
+{
+    "id":"id de la peticion",
+    "ok":"",
+    "error":""
+}
+
+"""
+
+class CreateLanguages:
+
+    req = inject.attr(LaboralInsertion)
+    profiles = inject.attr(Profiles)
+    config = inject.attr(Config)
+
+    def handleAction(self, server, message):
+
+        if message['action'] != 'createLanguagesData':
+            return False
+
+        if 'user_id' not in message:
+            response = {'id':message['id'],'error':'no existe el id del usuario'}
+
+        sid = message['session']
+        self.profiles.checkAccess(sid,['ADMIN','USER'])
+
+        try:
+            con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+
+            #elimino todos los idomas del usuario
+            self.req.deleteDegrees(con,message['user_id'])
+
+            #verifico que se hayan mandado idiomas en el mensaje
+            if 'language' in message:
+                #agrego todos los idiomas
+                languages = message['language']
+                for l in languages:
+                    self.req.persistLanguage(con,l)
+
+            con.commit()
+
+            response = {'id':message['id'],'ok':''}
+            server.sendMessage(response)
+            self.events.broadcast(server,event)
+
+        except psycopg2.DatabaseError, e:
+            con.rollback()
+            raise e
+
+        finally:
+            con.close()
+
+
+
 
 """
 peticion:
@@ -497,6 +568,34 @@ class CreateDegrees:
         if 'user_id' not in message:
             response = {'id':message['id'],'error':'no existe el id del usuario'}
 
+        sid = message['session']
+        self.profiles.checkAccess(sid,['ADMIN','USER'])
+
+        try:
+            con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+
+            #elimino todas las carreras que posea el usuario
+            self.req.deleteDegrees(con,message['user_id'])
+
+            #verifico que se hayan mandado carreras en el mensaje
+            if 'degree' in message:
+                #agrego todas las carreras
+                degrees = message['degree']
+                for d in degrees:
+                    self.req.persistDegree(con,d)
+
+            con.commit()
+
+            response = {'id':message['id'],'ok':''}
+            server.sendMessage(response)
+            self.events.broadcast(server,event)
+
+        except psycopg2.DatabaseError, e:
+            con.rollback()
+            raise e
+
+        finally:
+            con.close()
 
 """
 peticion:
