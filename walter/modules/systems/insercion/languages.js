@@ -3,12 +3,13 @@ var app = angular.module('mainApp');
 
 app.controller('LanguagesLaboralInsertionCtrl', function($scope) {
 
-  $scope.$on('SaveEvent',function() {
-
-    var saveData = { type:'language', data:$scope.insertionData };
-    $scope.$emit('SaveDataEvent',saveData);
-
-  });
-
+	$scope.addLanguage = function(){
+		$scope.insertionData.languages.push({language:"", level:"basico"});
+	}
+	
+	$scope.deleteLanguage = function($index){
+		$scope.insertionData.languages.splice($index, 1);
+	}
+	
 
 });
