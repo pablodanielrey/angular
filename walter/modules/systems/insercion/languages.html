@@ -1,20 +1,26 @@
-<div>
-  <div>
-    <span>Idioma</span>
-    <input type="text" list="idioma" ng-model='insertionData.languages'>
-    <datalist id="idioma">
-      <option value="Ingles" />
-      <option value="Portugués" />
-      <option value="Otro" />
-    </datalist>
-  </div>
-  <div>
-    <span>Nivel</span>
-    <input type="text" list="nivel" ng-model='insertionData.studyLevel'>
-    <datalist id="nivel">
-      <option value="Básico" />
-      <option value="Intermedio" />
-      <option value="Avanzado" />
-    </datalist>
-  </div>    
-</div>
+<fieldset>
+	<legend>Idiomas</legend>
+	<div ng-repeat="language in insertionData.languages">
+		<label>Idioma</label>
+		<input list="idioma" type="text" ng-model='language.language'>
+		<datalist id="idioma">
+			<option value="Ingles" />
+			<option value="Portugués" />
+			<option value="Otro" />
+		</datalist>
+		
+		<label>Nivel</label>
+		<select ng-model='language.level'>
+			<option value="basico">Basico</option>
+			<option value="intermedio">Intermedio</option>
+			<option value="avanzado">Avanzado</option>
+		</select>
+		
+		<input type="button" value="Eliminar" ng-click="deleteLanguage($index)" >
+	</div>
+	<input type="button" value="Agregar" ng-click="addLanguage()" >
+	
+</fieldset>
+
+
+

@@ -16,7 +16,7 @@ app.service('LaboralInsertion', function(Messages, Utils, Session) {
 		  action:'acceptTermsAndConditions',
 		  user_id: userId,
 		}
-		
+
 		Messages.send(msg,
 			function(response) {
 				ok(response);
@@ -24,7 +24,7 @@ app.service('LaboralInsertion', function(Messages, Utils, Session) {
 			function(error) {
 				err(error);
 			}
-		);			
+		);
 	}
 
 
@@ -32,7 +32,7 @@ app.service('LaboralInsertion', function(Messages, Utils, Session) {
 	 * Estan aceptados los terminos y condiciones de insercion laboral?
 	 * @param userId Id de usuario al que se modificaran los terminos y condiciones
 	 * @param ok Callback en el caso de que el servidor reciba una respuesta correcta
-	 * @param err Callback en el caso de que el servidor reciba una respuesta erronea	 
+	 * @param err Callback en el caso de que el servidor reciba una respuesta erronea
 	 * @response boolean accepted = true | false
 	 */
 	this.isTermsAndConditionsAccepted = function(userId, ok, err) {
@@ -50,17 +50,17 @@ app.service('LaboralInsertion', function(Messages, Utils, Session) {
 			function(error) {
 				err(error);
 			}
-		);	
+		);
 	}
 
 
-  this.findLaboralInsertionData = function(id,ok,err) {
+  this.findLaboralInsertionData = function(user_id,ok,err) {
     var msg = {
       id: Utils.getId(),
       session: Session.getSessionId(),
       action:'findLaboralInsertionData',
       laboralInsertion: {
-        id: id
+        id: user_id
       }
     }
     Messages.send(msg,
@@ -72,6 +72,12 @@ app.service('LaboralInsertion', function(Messages, Utils, Session) {
       }
     );
   }
+
+	this.findDegreeData = function(user_id,ok,err) {
+		// falta implementar.
+	}
+
+
 
 
   this.updateLaboralInsertionData = function(data, ok, err) {
