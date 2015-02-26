@@ -10,7 +10,6 @@ var app = angular.module('mainApp',['ngRoute']);
  */
 app.controller('IndexCtrl', function ($rootScope, $scope, $location, $timeout, $window, Session, Cache, WebSocket) {
 
-	console.log("hola");
     $rootScope.isLogged = function() {
       return Session.isLogged();
     }
