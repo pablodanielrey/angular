@@ -261,7 +261,7 @@ class DeleteLanguage:
 
     def handleAction(self, server, message):
         #El procesamiento continuara solo si el mensaje solicitado por el cliente es el que se indica
-        if message['action'] != 'deleteLanguage':
+        if message['action'] != 'removeLanguage':
             return False
 
         #Verificar datos del mensaje, si no es correcto responder con un error
@@ -453,11 +453,56 @@ class ListLanguages:
 """
 
 
+
 """
 peticion:
 {
     "id":"id de la peticion",
-    "action":"persistDegree",
+    "action":"createDegreesData",
+    "session":"session de usuario",
+    "user_id":"id del usuario"
+    "degree": [
+            {
+            'id':'id de la carrera',
+            'user_id':'id del usuario',
+            'name':'nombre de la carrera',
+            'curses':'materias aprobadas',
+            'average1':'promedio con aplazo',
+            'average2':'promedio sin aplazo',
+            'work_type': 'lista de tipos de trabajos solicitados'
+            }
+    ]
+}
+
+respuesta:
+{
+    "id":"id de la peticion",
+    "ok":"",
+    "error":""
+}
+
+"""
+
+class CreateDegrees:
+
+    req = inject.attr(LaboralInsertion)
+    profiles = inject.attr(Profiles)
+    config = inject.attr(Config)
+
+    def handleAction(self, server, message):
+
+        if message['action'] != 'createDegreesData':
+            return False
+
+        if 'user_id' not in message:
+            response = {'id':message['id'],'error':'no existe el id del usuario'}
+
+
+"""
+peticion:
+{
+    "id":"id de la peticion",
+    "action":"persistDegreeData",
     "session":"session de usuario",
     "degree": {
             'id':'id de la carrera',
@@ -484,17 +529,262 @@ evento:
 }
 """
 
-#class PersistDegree:
+class PersistDegree:
+
+    req = inject.attr(LaboralInsertion)
+    events = inject.attr(Events)
+    profiles = inject.attr(Profiles)
+    config = inject.attr(Config)
+
+    def handleAction(self, server, message):
+        if message['action'] != 'persistDegreeData':
+            return False
+
+        if 'degree' not in message:
+            response = {'id':message['id'], 'error:': 'no existe la info de la carrera'}
+            server.sendMessage(response)
+            return True
+
+
+        sid = message['session']
+        self.profile.checkAccess(sid,['ADMIN','USER'])
+
+        try:
+            con = psycopg2.connect(host=self.config.configs['database_host'],dbname=self.config.configs['database_database'],user=self.config.configs['database_user'],password=self.config.configs['database_password'])
+
+            degree = message['degree']
+            self.req.persistDegree(con,degree)
+            con.commit()
+
+            response = {'id':message['id'],'ok':''}
+            server.sendMessage(response)
+
+            event = {
+                'type':'DegreePersistedEvent',
+                'data':degree['id']
+            }
+            self.events.broadcast(server,event)
+
+            return True
+
+        except psycopg2.DatabaseError, e:
+            con.roolback()
+            raise e
+
+        finally:
+            con.close()
+
+"""
+peticion:
+{
+    "id":"id de la peticion",
+    "action":"removeDegreeData",
+    "session":"session de usuario",
+    "degree": {
+            'id':'id de la carrera',
+            'user_id':'id del usuario',
+            'name':'nombre de la carrera',
+            'curses':'materias aprobadas',
+            'average1':'promedio con aplazo',
+            'average2':'promedio sin aplazo',
+            'work_type': 'lista de tipos de trabajos solicitados'
+    }
+}
+
+respuesta:
+{
+    "id":"id de la peticion",
+    "ok":"",
+    "error":""
+}
+
+evento:
+{
+    'type':'DegreeDeletedEvent',
+    'data':degree['id']
+}
+"""
+class DeleteDegree:
+
+    req = inject.attr(LaboralInsertion)
+    events = inject.attr(Events)
+    profiles = inject.attr(Profiles)
+    config = inject.attr(Config)
+
+    def handleAction(self, server, message):
+
+        if message['action'] != 'removeDegreeData':
+            return False
+
+        if 'degree' not in message:
+            reponse = {'id':message['id'],'error':'no existe la info de la carrera'}
+            server.sendMessage(response)
+            return True
+
+        if 'id' not in message['degree']:
+            respnse = {'id':message['id'],'error':'carrera.id = null'}
+            server.sendMessage(response)
+            return True
+
+        sid = message['session']
+        self.profiles.checkAccess(sid,['ADMIN','USER'])
+
+        try:
+            con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+
+            d = message['degree']
+            degree = self.req.findDegree(con,d['id'])
+            if degree == None:
+                response = {'id':message['id'],'error':'carrera inexistente'}
+                server.sendMessage(response)
+                return True
+
+            self.req.deleteDegree(con,d['id'])
+
+            event = {
+                'type':'DegreeDeletedEvent',
+                'data':degree['id']
+            }
+            self.events.broadcast(server,event)
+
+            return True
+
+        except psycopg2.DatabaseError, e:
+            con.rollback()
+            raise e
+
+        finally:
+            con.close()
 
 
 
-#class DeleteDegree:
+"""
 
+peticion:
+{
+    "id":"",
+    "action":"findDegree"
+    "session":"sesion de usuario"
+    "degree":{
+        "id":"id de la carrera"
+    }
+}
 
-#class FindDegree:
+respuesta:
+{
+    "id":"id de la peticion",
 
+    "degree": {
+            'id':'id de la carrera',
+            'user_id':'id del usuario',
+            'name':'nombre de la carrera',
+            'curses':'materias aprobadas',
+            'average1':'promedio con aplazo',
+            'average2':'promedio sin aplazo',
+            'work_type': 'lista de tipos de trabajos solicitados'
+    }
+    "ok":""
+    "error":""
+}
 
-#class ListDegree:
+"""
+class FindDegree:
+
+    req = inject.attr(LaboralInsertion)
+    profiles = inject.attr(Profiles)
+    config = inject.attr(Config)
+
+    def handleAction(self, server, message):
+
+        if message['action'] != 'findDegree':
+            return False
+
+        if 'degree' not in message:
+            response = {'id':message['id'],'error':'no existe la info de la carrera'}
+            server.sendMessage(response)
+            return True
+
+        if 'id' not in message['degree']:
+            response = {'id':message['id'],'error':'carrera.id = null'}
+            server.sendMessage(response)
+            return True
+
+        sid = message['session']
+        self.profiles.checkAccess(sid,['ADMIN','USER'])
+
+        try:
+            con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+
+            d = message['degree']
+            degree = self.req.findDegree(con,d['id'])
+            response = {'id':message['id'], 'degree':degree,'ok':''}
+            server.sendMessage(response)
+
+            return True
+
+        finally:
+            con.close()
+"""
+
+peticion:
+{
+    "id":"",
+    "action":"listDegrees"
+    "session":"sesion de usuario"
+    'user_id':"id de usuario"
+}
+
+respuesta:
+{
+    "id":"id de la peticion",
+
+    "degree": [
+            {
+            'id':'id de la carrera',
+            'user_id':'id del usuario',
+            'name':'nombre de la carrera',
+            'curses':'materias aprobadas',
+            'average1':'promedio con aplazo',
+            'average2':'promedio sin aplazo',
+            'work_type': 'lista de tipos de trabajos solicitados'
+            }
+    ]
+    "ok":""
+    "error":""
+}
+
+"""
+class ListDegree:
+
+    req = inject.attr(LaboralInsertion)
+    profiles = inject.attr(Profiles)
+    config = inject.attr(Config)
+
+    def handleAction(self, server, sendMessage):
+
+        if message['action'] != 'listDegrees':
+            return False
+
+        if 'user_id' not in message:
+            response = {'id':message['id'],'error':'no existe el id del usuario'}
+            server.sendMessage(response)
+            return True
+
+        sid = message['session']
+        self.profiles.checkAccess(sid,['ADMIN','USER'])
+
+        try:
+            con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+
+            degrees = self.req.listDegree(con,message['user_id'])
+            response = {'id':message['id'],'ok':'','degrees':degrees}
+            server.sendMessage(response)
+
+            return True
+
+        finally:
+            con.close()
+
 
 """-------------------------------"""
 
