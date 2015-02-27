@@ -10,6 +10,7 @@ from httpServer import MyHttpServerRequestHandler
 
 ''' el core de websockets '''
 from Ws.SimpleWebSocketServer import SimpleWebSocketServer
+from Ws.SimpleWebSocketServer import SimpleSSLWebSocketServer
 from websocketServer import WebsocketServer
 
 
@@ -61,16 +62,19 @@ if __name__ == '__main__':
   ''' codigo de inicialización del servidor '''
 
   websocketServer = SimpleWebSocketServer(config.configs['server_ip'],int(config.configs['server_port']),WebsocketServer,actions)
+  websocketSslServer = SimpleSSLWebSocketServer(config.configs['server_ssl_ip'],int(config.configs['server_ssl_port']),WebsocketServer,actions, '/etc/ssl/certs/ssl-cert-snakeoil.pem','/etc/ssl/private/ssl-cert-snakeoil.key')
 #  httpServer = SocketServer.TCPServer(('192.168.0.100',8002), MyHttpServerRequestHandler)
 
   def close_sig_handler(signal,frame):
     websocketServer.close()
+    websocketSslServer.close();
     #httpServer.shutdown()
     sys.exit()
 
   signal.signal(signal.SIGINT,close_sig_handler)
 
   thread.start_new_thread(serveWebsockets,(websocketServer,1))
+  thread.start_new_thread(serveWebsockets,(websocketSslServer,1))
 #  thread.start_new_thread(serveHttp,(httpServer,1))
 
   while True:
