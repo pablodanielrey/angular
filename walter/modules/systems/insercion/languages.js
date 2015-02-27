@@ -4,7 +4,7 @@ var app = angular.module('mainApp');
 app.controller('LanguagesLaboralInsertionCtrl', function($scope, $timeout, LaboralInsertion) {
 
 	$scope.addLanguage = function() {
-		$scope.model.languages.push({language:"", level:"básico"});
+		$scope.model.languages.push({name:"", level:"básico"});
 	}
 
 	$scope.addLanguageIfNone = function() {
@@ -15,6 +15,7 @@ app.controller('LanguagesLaboralInsertionCtrl', function($scope, $timeout, Labor
 
 	$scope.deleteLanguage = function($index) {
 		$scope.model.languages.splice($index, 1);
+		$scope.addLanguageIfNone()
 	}
 
 	$scope.loadData = function() {
@@ -23,6 +24,7 @@ app.controller('LanguagesLaboralInsertionCtrl', function($scope, $timeout, Labor
 				if ((data != undefined) && (data != null) && (data.length > 0)){
 					$scope.model.languages = data;
 				}
+				$scope.addLanguageIfNone()
 			},
 			function(err) {
 				alert(err);

@@ -4,7 +4,7 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 
   $scope.model = {
     insertionData: {},
-    degress: [],
+    degrees: [],
     languages: [],
     userData: {},
     selectedUser: null

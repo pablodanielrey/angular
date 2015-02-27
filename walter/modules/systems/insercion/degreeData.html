@@ -29,7 +29,7 @@
         <input class="check" type="checkbox" ng-model="model.insertionData.offerYoungProfetionals">Programa Jóvenes Profesionales</input>
       </div>
 
-      <button>eliminar</button>
+      <button ng-click="deleteDegree($index)">eliminar</button>
   </div>
-  <button>agregar</button>
+  <button ng-click="addDegree()">agregar</button>
 </div>
