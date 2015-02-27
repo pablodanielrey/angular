@@ -1,5 +1,7 @@
 <div class="degreeData">
+  <span class="title">Carrera/s</span>
   <div ng-repeat='degree in degrees'>
+
     <div>
       <span>Carrera</span>
       <input type="text" list="carrera">
@@ -18,7 +20,9 @@
       <input type="text" ng-model="degree.average1">
       <span>Promedio con aplazos</span>
       <input type="text" name="degree.average2">
-      <span>Oferta</span>
+      <div class="title2">
+        <span>Oferta Laboral</span>
+      </div>
       <div>
         <input type="checkbox" ng-model="insertionData.offerInternship">Pasantía</input>
         <input type="checkbox" ng-model="insertionData.offerFullTime">Full-Time</input>
