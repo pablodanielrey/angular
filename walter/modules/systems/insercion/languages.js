@@ -20,11 +20,10 @@ app.controller('LanguagesLaboralInsertionCtrl', function($scope, $timeout, Labor
 	$scope.loadData = function() {
 		LaboralInsertion.findLanguageData($scope.selectedUser,
 			function(data) {
-				if((data == undefined) || (data == null)){
-
-				} else {
+				if ((data != undefined) && (data != null)){
 					$scope.languages = data;
 				}
+				$scope.addLanguageIfNone();
 			},
 			function(err) {
 				alert(err);
