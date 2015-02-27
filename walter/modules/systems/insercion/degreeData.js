@@ -12,11 +12,9 @@ app.controller('DegreeLaboralInsertionCtrl', function($scope, $timeout, LaboralI
 
     LaboralInsertion.findDegreeData($scope.selectedUser,
       function(data) {
-        if ((data == undefined) || (data == null) || len(data) == 0) {
-          $scope.addLanguage();
+        if ((data != undefined) && (data != null) && (data.length > 0)) {
+          $scope.degrees = data;
         }
-
-        $scope.degrees = data;
       },
       function(err) {
         alert(err);

@@ -112,7 +112,7 @@ app.service('LaboralInsertion', function(Messages, Utils, Session) {
 		var msg = {
 			id:Utils.getId(),
 	    action:"persistDegreeData",
-	    session:Session.getId(),
+	    session:Session.getSessionId(),
 	    degree: data
 		}
 		Messages.send(msg,
