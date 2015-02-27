@@ -7,10 +7,31 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
     degrees: [],
     languages: [],
     userData: {},
-    selectedUser: null
+    selectedUser: null,
+    status: {languages:false, degrees:false, laboralInsertion:false} //objeto para indicar si los datos de lenguajes estan en condiciones de guardarse, el objeto sera modificado en los subcontroladores
   };
 
-  $scope.save = function() {
+	/**
+	 * Al guardar datos se debe disparar un evento de chequeo que sera escuchado por cada subcontrolador
+	 */
+	$scope.save = function() {
+		$scope.$broadcast('LaboralInsertionCheckDataEvent');
+	}
+  
+	/**
+	 * Escuchar evento de finalizacion de chequeo de datos. Los subcontroladores al finalizar el chequeo dispararan el evento de finalizacion de chequeo de datos.
+	 */
+	$scope.$on('LaboralInsertionDataCheckedEvent',function() {
+		for(var status in $scope.model.status){
+			if($scope.model.status[status]){
+				return;
+			}
+		}
+		
+		$scope.mainSave();
+	});
+	
+  $scope.mainSave = function() {
 
     // actualizo los datos del perfil.
     Users.updateUser($scope.model.userData,
@@ -21,10 +42,6 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
         alert(error);
       }
     );
-
-
-
-    console.log($scope.model.insertionData)
 
     // actualizo los datos básicos de inserción
     LaboralInsertion.updateLaboralInsertionData($scope.model.insertionData,
