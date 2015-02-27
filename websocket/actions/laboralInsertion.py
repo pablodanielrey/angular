@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import inject, json
 import psycopg2
 from model.laboralInsertion import LaboralInsertion
