@@ -73,7 +73,7 @@ app.service('LaboralInsertion', function(Messages, Utils, Session) {
     );
   }
 
-  this.updateLaboralInsertionData = function(data, ok, err) {
+  this.updateLaboralInsertionData = function(data, callbackOk, callbackError) {
     var msg = {
       id: Utils.getId(),
       session: Session.getSessionId(),
@@ -91,20 +91,72 @@ app.service('LaboralInsertion', function(Messages, Utils, Session) {
   }
 
 	this.findDegreeData = function(user_id,ok,err) {
-		// falta implementar.
+		var msg = {
+			id:Utils.getId(),
+	    action:"listDegrees",
+	    session:Session.getSessionId(),
+	    user_id:user_id
+		}
+		Messages.send(msg,
+			function(data) {
+				ok(data.degree)
+			},
+			function(error) {
+				err(error)
+			}
+		);
 	}
 
 
 	this.updateDegreeData = function(data,ok,err) {
-		// dalta implementar
+		var msg = {
+			id:Utils.getId(),
+	    action:"persistDegreeData",
+	    session:Session.getId(),
+	    degree: data
+		}
+		Messages.send(msg,
+			function(data) {
+				ok(data)
+			},
+			function(error) {
+				err(error)
+			}
+		);
 	}
 
 	this.findLanguageData = function(user_id,ok,err) {
-		// falta implementar.
+		var msg = {
+			id:Utils.getId(),
+	    action:'listLanguageData',
+	    session:Session.getSessionId(),
+	    user_id:user_id
+		}
+		Messages.send(msg,
+			function(data) {
+				ok(data.languages);
+			},
+			function(error) {
+				err(error);
+			}
+		);
 	}
 
 	this.updateLanguageData = function(data,ok,err) {
-		// falta implementar.
+		var msg = {
+			id:Utils.getId(),
+	    action:'persistLanguage',
+	    session:Session.getSessionId(),
+	    language: data
+	  }
+		Messages.send(msg,
+			function(data) {
+				ok(data)
+			},
+			function(error) {
+				err(error)
+			}
+		);
 	}
 
 });

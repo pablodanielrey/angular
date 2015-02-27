@@ -491,7 +491,7 @@ class ListLanguages:
     def handleAction(self, server, message):
 
         #El procesamiento continuara solo si el mensaje solicitando por el cliente es el que se indica
-        if message['action'] != 'listLenguageData':
+        if message['action'] != 'listLanguageData':
             return False
 
         #verificar datos del mensaje, si no es correcto responder con un error
@@ -509,7 +509,7 @@ class ListLanguages:
             con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
 
             #realizo la consulta al modelo
-            languages = self.req.listLanguage(con, message['user_id'])
+            languages = self.req.listLanguages(con, message['user_id'])
             response = {'id':message['id'], 'ok':'', 'languages':languages}
             server.sendMessage(response)
             return True
@@ -875,7 +875,7 @@ class ListDegree:
         try:
             con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
 
-            degrees = self.req.listDegree(con,message['user_id'])
+            degrees = self.req.listDegrees(con,message['user_id'])
             response = {'id':message['id'],'ok':'','degrees':degrees}
             server.sendMessage(response)
 

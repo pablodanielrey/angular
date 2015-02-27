@@ -6,7 +6,7 @@ app.controller('LanguagesLaboralInsertionCtrl', function($scope, $timeout, Labor
 	$scope.addLanguage = function() {
 		$scope.languages.push({language:"", level:"básico"});
 	}
-	
+
 	$scope.addLanguageIfNone = function(){
 		if($scope.languages.length == 0){
 			$scope.addLanguage();
@@ -18,13 +18,12 @@ app.controller('LanguagesLaboralInsertionCtrl', function($scope, $timeout, Labor
 	}
 
 	$scope.loadData = function() {
-		LaboralInsertion.findLaboralInsertionData($scope.selectedUser,
+		LaboralInsertion.findLanguageData($scope.selectedUser,
 			function(data) {
-				if((data.laboralInsertion == undefined) || (data.laboralInsertion == null)
-				|| (data.laboralInsertion.languages == undefined) || (data.laboralInsertion.languages == null)){
+				if((data == undefined) || (data == null)){
 
 				} else {
-					$scope.languages = data.laboralInsertion.languajes;
+					$scope.languages = data;
 				}
 			},
 			function(err) {
