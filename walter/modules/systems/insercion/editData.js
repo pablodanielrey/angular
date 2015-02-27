@@ -2,20 +2,18 @@ var app = angular.module('mainApp');
 
 app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Session, Users, LaboralInsertion) {
 
-  $scope.studentData = {};
-
-  $scope.degrees = [ {} ];
-  $scope.languages = [ {} ];
-
-  $scope.insertionData = {};
-  $scope.userData = {};
-  $scope.selectedUser = null;
-
+  $scope.model = {
+    insertionData: {},
+    degress: [],
+    languages: [],
+    userData: {},
+    selectedUser: null
+  };
 
   $scope.save = function() {
 
     // actualizo los datos del perfil.
-    Users.updateUser($scope.userData,
+    Users.updateUser($scope.model.userData,
       function(ok) {
         // nada
       },
@@ -24,8 +22,12 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
       }
     );
 
+
+
+    console.log($scope.model.insertionData)
+
     // actualizo los datos básicos de inserción
-    LaboralInsertion.updateLaboralInsertionData($scope.insertionData,
+    LaboralInsertion.updateLaboralInsertionData($scope.model.insertionData,
       function(ok) {
         // nada
       },
@@ -35,7 +37,7 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
     );
 
     // actualizo la info de las carreras
-    LaboralInsertion.updateDegreeData($scope.degrees,
+    LaboralInsertion.updateDegreeData($scope.model.degrees,
       function(ok) {
         // nada
       },
@@ -52,7 +54,7 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 	 */
 	$scope.checkTermsAndConditions = function() {
 
-		LaboralInsertion.isTermsAndConditionsAccepted($scope.selectedUser,
+		LaboralInsertion.isTermsAndConditionsAccepted($scope.model.selectedUser,
       function(response) {
         if(!response.accepted) {
           $location.path('/acceptTermsAndConditionsInsertion');
@@ -74,7 +76,7 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
     if (s.selectedUser == undefined || s.selectedUser == null) {
       $location.path('/main');
     }
-    $scope.selectedUser = s.selectedUser;
+    $scope.model.selectedUser = s.selectedUser;
   }
 
 

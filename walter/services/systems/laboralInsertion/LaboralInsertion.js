@@ -65,7 +65,7 @@ app.service('LaboralInsertion', function(Messages, Utils, Session) {
     }
     Messages.send(msg,
       function(data) {
-        ok(data);
+        ok(data.laboralInsertion);
       },
       function(error) {
         err(error);

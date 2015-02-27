@@ -10,10 +10,10 @@ app.controller('DegreeLaboralInsertionCtrl', function($scope, $timeout, LaboralI
 
   $scope.loadData = function() {
 
-    LaboralInsertion.findDegreeData($scope.selectedUser,
+    LaboralInsertion.findDegreeData($scope.model.selectedUser,
       function(data) {
         if ((data != undefined) && (data != null) && (data.length > 0)) {
-          $scope.degrees = data;
+          $scope.model.degrees = data;
         }
       },
       function(err) {

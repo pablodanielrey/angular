@@ -6,19 +6,19 @@ app.controller('ProfileLaboralInsertionCtrl', function($scope,$timeout, Session,
 
   $scope.loadData = function() {
 
-    Users.findUser($scope.selectedUser,
+    Users.findUser($scope.model.selectedUser,
       function(user) {
         user.birthdate = new Date(user.birthdate);
-        $scope.userData = user;
+        $scope.model.userData = user;
       },
       function(error) {
         alert(error);
       }
     );
 
-    Student.findStudentData($scope.selectedUser,
+    Student.findStudentData($scope.model.selectedUser,
       function(data) {
-        $scope.studentData = data.student;
+        $scope.model.studentData = data.student;
       },
       function(error) {
         alert(error);

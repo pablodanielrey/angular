@@ -19,7 +19,7 @@ app.controller('LaboralInsertionDataCtrl', function($scope, $timeout, LaboralIns
         for (var i = 0; i < len; i++) {
           binary += String.fromCharCode(uInt8[i]);
         }
-        $scope.insertionData.cv = window.btoa(binary);
+        $scope.model.insertionData.cv = window.btoa(binary);
       }
       r.readAsArrayBuffer(f);
 
@@ -30,9 +30,11 @@ app.controller('LaboralInsertionDataCtrl', function($scope, $timeout, LaboralIns
 
   $scope.loadData = function() {
 
-    LaboralInsertion.findLaboralInsertionData($scope.selectedUser,
+    LaboralInsertion.findLaboralInsertionData($scope.model.selectedUser,
       function(data) {
-        $scope.insertionData = data;
+        $scope.model.insertionData = data;
+
+        console.log($scope.model.insertionData)
       },
       function(err) {
         alert(err);

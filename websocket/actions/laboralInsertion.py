@@ -646,7 +646,7 @@ class PersistDegree:
 
 
         sid = message['session']
-        self.profile.checkAccess(sid,['ADMIN','USER'])
+        self.profiles.checkAccess(sid,['ADMIN','USER'])
 
         try:
             con = psycopg2.connect(host=self.config.configs['database_host'],dbname=self.config.configs['database_database'],user=self.config.configs['database_user'],password=self.config.configs['database_password'])

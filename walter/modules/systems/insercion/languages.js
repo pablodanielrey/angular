@@ -4,24 +4,24 @@ var app = angular.module('mainApp');
 app.controller('LanguagesLaboralInsertionCtrl', function($scope, $timeout, LaboralInsertion) {
 
 	$scope.addLanguage = function() {
-		$scope.languages.push({language:"", level:"básico"});
+		$scope.model.languages.push({language:"", level:"básico"});
 	}
 
-	$scope.addLanguageIfNone = function(){
-		if($scope.languages.length == 0){
+	$scope.addLanguageIfNone = function() {
+		if ($scope.model.languages.length == 0) {
 			$scope.addLanguage();
 		}
 	}
 
-	$scope.deleteLanguage = function($index){
-		$scope.languages.splice($index, 1);
+	$scope.deleteLanguage = function($index) {
+		$scope.model.languages.splice($index, 1);
 	}
 
 	$scope.loadData = function() {
-		LaboralInsertion.findLanguageData($scope.selectedUser,
+		LaboralInsertion.findLanguageData($scope.model.selectedUser,
 			function(data) {
 				if ((data != undefined) && (data != null) && (data.length > 0)){
-					$scope.languages = data;
+					$scope.model.languages = data;
 				}
 			},
 			function(err) {

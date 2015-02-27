@@ -17,17 +17,6 @@ class LaboralInsertion:
         else:
             return False
 
-    def persistLaboralInsertion(self,con,data):
-        if findLaboralInsertion(con,data['id']) == None:
-            params = (data['id'],psycopg2.Binary(data['cv']),data['reside'],data['travel'])
-            cur = con.cursor()
-            cur.execute("insert into laboral_insertion.users (id,cv,reside,travel) values (%s,%s,%s,%s)",params)
-        else:
-            params = (psycopg2.Binary(data['cv']),data['reside'],data['travel'],data['id'])
-            cur = con.cursor()
-            cur.execute('update laboral_insertion.users set cv = %s,reside = %s,travel = %s where id = %s',params)
-
-
     def findLaboralInsertion(self,con,id):
         cur = con.cursor()
         cur.execute('select id,cv,reside,travel from laboral_insertion.users where id = %s',(id))
@@ -36,6 +25,17 @@ class LaboralInsertion:
             return self.convertUserToDict(li)
         else:
             return None
+
+    def persistLaboralInsertion(self,con,data): 
+        if (self.findLaboralInsertion(con,data['id'])) == None:
+            params = (data['id'],psycopg2.Binary(data['cv']),data['reside'],data['travel'])
+            cur = con.cursor()
+            cur.execute("insert into laboral_insertion.users (id,cv,reside,travel) values (%s,%s,%s,%s)",params)
+        else:
+            params = (psycopg2.Binary(data['cv']),data['reside'],data['travel'],data['id'])
+            cur = con.cursor()
+            cur.execute('update laboral_insertion.users set cv = %s,reside = %s,travel = %s where id = %s',params)
+
 
     def findAll(self,con):
         cur = con.cursor()
@@ -67,6 +67,15 @@ class LaboralInsertion:
         }
         return language
 
+    def findLanguage(self,con,id):
+        cur = con.cursor()
+        cur.execute('select id, user_id, name, level from laboral_insertion.languages where id = %s',(id))
+        language = cur.fetchone()
+        if language != None:
+            return self.convertLanguageToDict(language)
+        else:
+            return None
+
     def persistLanguage(self,con,data):
         if findLanguage(con,data['id']) == None:
             params = (data['id'],data['user_id'],data['name'],data['level'])
@@ -84,15 +93,6 @@ class LaboralInsertion:
     def deleteLanguages(self,con,user_id):
         cur = con.cursor()
         cur.execute('delete from laboral_insertion.languages where user_id = %s',(user_id))
-
-    def findLanguage(self,con,id):
-        cur = con.cursor()
-        cur.execute('select id, user_id, name, level from laboral_insertion.languages where id = %s',(id))
-        language = cur.fetchone()
-        if language != None:
-            return self.convertLanguageToDict(language)
-        else:
-            return None
 
     def listLanguages(self,con,user_id):
         cur = con.cursor()
@@ -117,6 +117,16 @@ class LaboralInsertion:
         }
         return degree
 
+
+    def findDegree(self,con,id):
+        cur = con.cursor()
+        cur.execute('select id,user_id,name,curses,average1,average2,work_type from laboral_insertion.degree where id = %s',(id))
+        degree = cur.fetchone()
+        if degree != None:
+            return self.convertDegreeToDict(degree)
+        else:
+            return None
+
     def persistDegree(self,con,data):
         if findDegree(con,data['id']) == None:
             params = (degree['id'],degree['user_id'],degree['name'],degree['curses'],degree['average1'],degree['average2'],degree['work_type'])
@@ -135,16 +145,6 @@ class LaboralInsertion:
     def deleteDegrees(self,con,user_id):
         cur = con.cursor()
         cur.execute('delete from laboral_insertion.degree where user_id = %s',(user_id))
-
-
-    def findDegree(self,con,id):
-        cur = con.cursor()
-        cur.execute('select id,user_id,name,curses,average1,average2,work_type from laboral_insertion.degree where id = %s',(id))
-        degree = cur.fetchone()
-        if degree != None:
-            return self.convertDegreeToDict(degree)
-        else:
-            return None
 
     def listDegrees(self,con,user_id):
         cur = con.cursor()
