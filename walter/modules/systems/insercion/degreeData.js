@@ -11,7 +11,7 @@ app.controller('DegreeLaboralInsertionCtrl', function($scope, $timeout, LaboralI
   $scope.addDegree = function() {
     var degree = {
       id: null,
-      user_id: null,
+      user_id: $scope.model.selectedUser,
       name: '',
       curses: '0',
       average1: '0',

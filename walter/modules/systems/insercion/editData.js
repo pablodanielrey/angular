@@ -14,10 +14,10 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 	/**
 	 * Al guardar datos se debe disparar un evento de chequeo que sera escuchado por cada subcontrolador
 	 */
-	$scope.save = function() {
+	$scope.ivanSave = function() {
 		$scope.$broadcast('LaboralInsertionCheckDataEvent');
 	}
-  
+
 	/**
 	 * Escuchar evento de finalizacion de chequeo de datos. Los subcontroladores al finalizar el chequeo dispararan el evento de finalizacion de chequeo de datos.
 	 */
@@ -27,11 +27,11 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 				return;
 			}
 		}
-		
+
 		$scope.mainSave();
 	});
-	
-  $scope.mainSave = function() {
+
+  $scope.save = function() {
 
     // actualizo los datos del perfil.
     Users.updateUser($scope.model.userData,
@@ -53,6 +53,18 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
       }
     );
 
+
+    /*
+      NOTAAAAAAA: esta mal hacerlo aca. debería ir en el controlador de degreeeeee.
+      lo acomodo aca para hacerlo rapido y probar que todo funcione.
+    */
+
+    $scope.transformDegreeData();
+
+    /*
+    -------------------------------------------------
+    */
+
     // actualizo la info de las carreras
     LaboralInsertion.updateDegreeData($scope.model.degrees,
       function(ok) {
@@ -63,6 +75,27 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
       }
     );
 
+  }
+
+
+  $scope.transformDegreeData = function() {
+    for (var i = 0; i < $scope.model.degrees.length; i++) {
+      var d = $scope.model.degrees[i];
+      d.work_type = '';
+      if (d.offerInternship) {
+        delete d.offerIntership;
+        d.work_type += 'Intership;';
+
+      }
+      if (d.offerFullTime) {
+        delete d.offerFullTime;
+        d.work_type += 'FullTime;';
+      }
+      if (d.offerYoungProfessionals) {
+        delete d.offerYoungProfessionals;
+        d.work_type += 'YoungProfessionals;';
+      }
+    }
   }
 
 

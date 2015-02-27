@@ -565,8 +565,9 @@ class CreateDegrees:
         if message['action'] != 'createDegreesData':
             return False
 
-        if 'user_id' not in message:
-            response = {'id':message['id'],'error':'no existe el id del usuario'}
+        if 'degree' not in message:
+            response = {'id':message['id'],'error':'no se enviaron los datos del degree'}
+            return True
 
         sid = message['session']
         self.profiles.checkAccess(sid,['ADMIN','USER'])
@@ -577,12 +578,10 @@ class CreateDegrees:
             #elimino todas las carreras que posea el usuario
             self.req.deleteDegrees(con,message['user_id'])
 
-            #verifico que se hayan mandado carreras en el mensaje
-            if 'degree' in message:
-                #agrego todas las carreras
-                degrees = message['degree']
-                for d in degrees:
-                    self.req.persistDegree(con,d)
+            #agrego todas las carreras
+            degrees = message['degree']
+            for d in degrees:
+                self.req.persistDegree(con,d)
 
             con.commit()
 
