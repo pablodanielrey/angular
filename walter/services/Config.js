@@ -23,7 +23,12 @@ no la voy a usar por ahora
 */
 
   this.getWebsocketConnectionUrl = function() {
-    return this.websocket.proto + '://' + this.websocket.host + ':' + this.websocket.port;
+    if (window.location.protocol != 'https:') {
+      return 'ws://' + this.websocket.host + ':' + this.websocket.port;
+    } else {
+      return 'wss://' + this.websocket.host + ':' + this.websocket.port;
+    }
+    //return this.websocket.proto + '://' + this.websocket.host + ':' + this.websocket.port;
   }
 
   this.getServerUrl = function() {
