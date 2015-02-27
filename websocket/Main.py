@@ -3,6 +3,7 @@ import signal, sys
 import inject
 import thread
 import time
+import logging
 
 ''' para la parte web '''
 import SocketServer
@@ -40,6 +41,7 @@ def serveHttp(server, *args):
 
 if __name__ == '__main__':
 
+  logging.basicConfig(level=logging.DEBUG);
 
   inject.configure(config_injector)
   config = inject.instance(Config)

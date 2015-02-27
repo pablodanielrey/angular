@@ -560,6 +560,7 @@ class SimpleWebSocketServer(object):
 
                except Exception as n:
 
+                  logging.exception(n)
                   logging.debug(str(client.address) + ' ' + str(n))
 
                   try:
