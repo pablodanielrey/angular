@@ -5,13 +5,7 @@
   background-color:white;
 }
 
-.insercion-container input {
-  background-color:grey;
-  width:95%;
-  background-color: rgb(248, 248, 248);
 
-
-}
 
 .insercion .container {
   width:240px;
@@ -39,7 +33,7 @@
   height:30px;
   padding:5px;
   color:white;
-  
+
 }
 
 .insercion .center {
