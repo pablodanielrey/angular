@@ -4,7 +4,7 @@ var app = angular.module('mainApp');
 app.controller('LanguagesLaboralInsertionCtrl', function($scope, $timeout, LaboralInsertion) {
 
 	$scope.addLanguage = function() {
-		$scope.model.languages.push({name:"", level:"básico"});
+		$scope.model.languages.push({ name:"", level:"básico" });
 	}
 
 	$scope.addLanguageIfNone = function() {

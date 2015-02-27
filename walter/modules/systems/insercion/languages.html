@@ -2,14 +2,14 @@
 	<span class="title">Idiomas</span>
 	<div ng-repeat="language in model.languages">
 		<span>Idioma</span>
-		<input list="idioma" type="text" ng-model='language.name'>
+		<input list="idioma" type="text" value='seleccione lenguaje' ng-model='language.name'>
 		<datalist id="idioma">
 			<option value="Ingles" />
 			<option value="Portugués" />
 			<option value="Otro" />
 		</datalist>
 		<span>Nivel</span>
-		<select ng-model='language.level'>
+		<select value='seleccione nivel' ng-model='language.level'>
 			<option value="básico">Básico</option>
 			<option value="intermedio">Intermedio</option>
 			<option value="avanzado">Avanzado</option>
