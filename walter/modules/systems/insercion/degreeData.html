@@ -1,11 +1,11 @@
 <div class="degreeData">
   <span class="title">Carrera/s</span>
-  <div ng-repeat='degree in degrees'>
+  <div ng-repeat='degree in model.degrees'>
 
     <div>
       <span>Carrera</span>
       <input type="text" list="carrera">
-      <datalist id="carrera" ng-model='degree.degree'>
+      <datalist id="carrera" ng-model='degree.name'>
         <option value="Contador Público" />
         <option value="Licenciado en Administración" />
         <option value="Licenciado en Turismo" />
@@ -24,9 +24,9 @@
         <span>Oferta Laboral</span>
       </div>
       <div class="oferta">
-        <input class="check" type="checkbox" ng-model="insertionData.offerInternship">Pasantía</input>
-        <input class="check" type="checkbox" ng-model="insertionData.offerFullTime">Full-Time</input>
-        <input class="check" type="checkbox" ng-model="insertionData.offerYoungProfetionals">Programa Jóvenes Profesionales</input>
+        <input class="check" type="checkbox" ng-model="model.insertionData.offerInternship">Pasantía</input>
+        <input class="check" type="checkbox" ng-model="model.insertionData.offerFullTime">Full-Time</input>
+        <input class="check" type="checkbox" ng-model="model.insertionData.offerYoungProfetionals">Programa Jóvenes Profesionales</input>
       </div>
 
       <button>eliminar</button>
