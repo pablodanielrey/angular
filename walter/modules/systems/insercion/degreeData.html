@@ -15,7 +15,7 @@
     </div>
 
       <span>Materias aprobadas con final</span>
-      <input type="text" ng-model="degree.courses">
+      <input type="text" ng-model="degree.courses" ng-change='onCoursesChange(degree)'>
       <span>Promedio sin aplazos</span>
       <input type="text" ng-model="degree.average1">
       <span>Promedio con aplazos</span>
@@ -31,7 +31,7 @@
         <div>
           <input class="check" type="checkbox" ng-model="degree.offerFullTime">Full-Time</input>
         </div>
-        <div>
+        <div ng-class="{true:'visible', false:'hidden'}[showOffer(degree)]">
           <input class="check" type="checkbox" ng-model="degree.offerYoungProfessionals">Prog. Jóvenes Profesionales</input>
         </div>
 

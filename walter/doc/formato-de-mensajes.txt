@@ -14,6 +14,7 @@ peticion:
     "id":"id de la peticion",
     "action":"createDegreesData",
     "session":"session de usuario",
+    "user_id":"id del usuario dueño de las carreras"
     "degree": [
             {
             'id':'id de la carrera',

@@ -565,6 +565,10 @@ class CreateDegrees:
         if message['action'] != 'createDegreesData':
             return False
 
+        if 'user_id' not in message:
+            response = {'id':message['id'],'error':'no se envió el dato del usuario'}
+            return True
+
         if 'degree' not in message:
             response = {'id':message['id'],'error':'no se enviaron los datos del degree'}
             return True

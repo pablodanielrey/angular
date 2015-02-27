@@ -8,6 +8,30 @@ app.controller('DegreeLaboralInsertionCtrl', function($scope, $timeout, LaboralI
   });
 
 
+
+  /*
+    para implementar el chequeo que quiere lucas de las ofertas.
+  */
+  $scope.onCoursesChange = function(degree) {
+    if (degree.courses > 29) {
+      $scope.showDegree = degree;
+    } else {
+      $scope.showDegree = null;
+      degree.offerYoungProfessionals = false;
+    }
+  }
+
+  $scope.showOffer = function(degree) {
+    if ($scope.showDegree == degree) {
+      return true;
+    }
+    return false;
+  }
+
+
+
+
+
   $scope.addDegree = function() {
     var degree = {
       id: null,
@@ -17,7 +41,7 @@ app.controller('DegreeLaboralInsertionCtrl', function($scope, $timeout, LaboralI
       average1: '0',
       average2: '0'
     }
-    $scope.model.degrees.push(degree)
+    $scope.model.degrees.push(degree);
   }
 
   $scope.deleteDegree = function($index) {
