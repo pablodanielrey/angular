@@ -21,12 +21,18 @@
       <span>Promedio con aplazos</span>
       <input type="text" name="degree.average2">
       <div class="title2">
-        <span>Oferta Laboral</span>
+        <span class="title">Oferta Laboral</span>
       </div>
       <div class="oferta">
-        <input class="check" type="checkbox" ng-model="model.insertionData.offerInternship">Pasantía</input>
-        <input class="check" type="checkbox" ng-model="model.insertionData.offerFullTime">Full-Time</input>
-        <input class="check" type="checkbox" ng-model="model.insertionData.offerYoungProfetionals">Programa Jóvenes Profesionales</input>
+        <div>
+          <input class="check" type="checkbox" ng-model="model.insertionData.offerInternship">Pasantía</input>
+        </div>
+        <div>
+          <input class="check" type="checkbox" ng-model="model.insertionData.offerFullTime">Full-Time</input>
+        </div>
+        <div>
+          <input class="check" type="checkbox" ng-model="model.insertionData.offerYoungProfetionals">Prog. Jóvenes Profesionales</input>
+        </div>
       </div>
 
       <button ng-click="deleteDegree($index)">eliminar</button>
