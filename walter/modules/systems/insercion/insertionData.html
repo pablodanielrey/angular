@@ -1,11 +1,13 @@
 <div class="insertionData">
-  <span class="title">Viajar</span>
+  <span class="title"><i class="fa fa-plane"></i>  Viajar</span>
   <span>Dispuesto a viajar</span>
-  <input type="text" list='viajar' ng-model="insertionData.travel">
-  <datalist id="viajar">
-    <option value="Si" />
-    <option value="No" />
-  </datalist>
+
+
+  <select id="viajar" ng-model="insertionData.travel">
+    <option value="">Seleccione... </i></option>
+    <option value="Si">Si</option>
+    <option value="No">No</option>
+  </select>
   <span>Dispuesto a residir</span>
   <input type="text" list="reside" ng-model="insertionData.reside">
   <datalist id="reside">
