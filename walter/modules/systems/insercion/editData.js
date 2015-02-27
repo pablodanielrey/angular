@@ -23,9 +23,6 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
     );
 
 
-
-    console.log($scope.model.insertionData)
-
     // actualizo los datos básicos de inserción
     LaboralInsertion.updateLaboralInsertionData($scope.model.insertionData,
       function(ok) {
@@ -35,6 +32,18 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
         alert(error);
       }
     );
+
+
+    /*
+      NOTAAAAAAA: esta mal hacerlo aca. debería ir en el controlador de degreeeeee.
+      lo acomodo aca para hacerlo rapido y probar que todo funcione.
+    */
+
+    $scope.transformDegreeData();
+
+    /*
+    -------------------------------------------------
+    */
 
     // actualizo la info de las carreras
     LaboralInsertion.updateDegreeData($scope.model.degrees,
@@ -46,6 +55,27 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
       }
     );
 
+  }
+
+
+  $scope.transformDegreeData = function() {
+    for (var i = 0; i < $scope.model.degrees.length; i++) {
+      var d = $scope.model.degrees[i];
+      d.work_type = '';
+      if (d.offerInternship) {
+        delete d.offerIntership;
+        d.work_type += 'Intership;';
+
+      }
+      if (d.offerFullTime) {
+        delete d.offerFullTime;
+        d.work_type += 'FullTime;';
+      }
+      if (d.offerYoungProfessionals) {
+        delete d.offerYoungProfessionals;
+        d.work_type += 'YoungProfessionals;';
+      }
+    }
   }
 
 

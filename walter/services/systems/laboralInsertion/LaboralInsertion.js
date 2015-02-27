@@ -111,7 +111,7 @@ app.service('LaboralInsertion', function(Messages, Utils, Session) {
 	this.updateDegreeData = function(data,ok,err) {
 		var msg = {
 			id:Utils.getId(),
-	    action:"persistDegreeData",
+	    action:"createDegreesData",
 	    session:Session.getSessionId(),
 	    degree: data
 		}
