@@ -1,4 +1,13 @@
 
+.login-container .disclaimer {
+	font-size: 11px;
+}
+
+.login-container .disclaimer a {
+	color: red;
+}
+
+
 .login-container {
 	position: absolute;
 	top: 0;
