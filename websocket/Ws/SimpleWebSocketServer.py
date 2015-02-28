@@ -614,6 +614,7 @@ class SimpleSSLWebSocketServer(SimpleWebSocketServer):
 
    def constructWebSocket(self, sock, address):
       ws = self.websocketclass(self, sock, address)
+      ws.setActions(self.actions)
       ws.usingssl = True
       return ws
 
