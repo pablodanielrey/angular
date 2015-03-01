@@ -25,8 +25,7 @@ try:
         con = psycopg2.connect(host='127.0.0.1', dbname=dbname, user=dbuser, password=dbpass)
 
         for dn,g in result:
-                #print "\n"
-                sys.stdout.write('.')
+                print ".",
 
                 userid = g['x-dcsys-uuid'][0]
                 dni = g['x-dcsys-dni'][0]
