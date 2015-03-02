@@ -84,9 +84,8 @@ class WebsocketServer(WebSocket):
 
 
   def sendMessage(self,msg):
-      print 'R:' + str(msg)
       jmsg = json.dumps(msg,cls=DateTimeEncoder)
-      print 'RJ' + jmsg
+      logging.debug(jmsg);
       super(WebsocketServer,self).sendMessage(jmsg)
 
 

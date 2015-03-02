@@ -585,6 +585,34 @@ respuesta:
     "error":""
 }
 
+
+respuestas multiples en caso de ser muy grande el resultado:
+
+primer mensaje
+{
+    "id":"id de la petición",
+    "parts":"cantidad de partes del mensaje a esperar"
+    "ok":"",
+    "error":""
+}
+
+seguida de n mensajes de respuesta:
+{
+    "id":"id de la petición",
+    "part_number":"numero de parte -- la primer parte es = 0"
+    "users":[
+        {
+         "id":"",
+         "dni":"",
+         "name":"",
+         "lastname":""
+        }
+      ],
+    "ok":"",
+    "error":""
+}
+
+
 """
 
 class ListUsers:
@@ -612,8 +640,20 @@ class ListUsers:
       if 'ids' in message:
           rdata = filter(lambda x: x['id'] in message['ids'], rdata)
 
-      response = {'id':message['id'], 'ok':'', 'users': rdata}
+
+      """ envío el mensaje de cabecera indicando la cantidad de partes """
+      response = {'id':message['id'], 'parts':str(len(rdata)), 'ok':''}
       server.sendMessage(response)
+
+      """ envío las partes del mensaje """
+      i = 0
+      for user in rdata:
+          response = {'id':message['id'], 'part_number':str(i), 'ok':'', 'users': [user]}
+          server.sendMessage(response)
+          i = i + 1
+
+      #response = {'id':message['id'], 'ok':'', 'users': rdata}
+      #server.sendMessage(response)
       return True
 
     finally:
