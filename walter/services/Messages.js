@@ -13,7 +13,7 @@ app.service('Messages', function($rootScope, WebSocket) {
     this.ids.push({
       id:msg.id,
       callback:callback,
-      parts:{count:0, parts:0}
+      parts:{count:0, parts:[]}
     });
 
     WebSocket.send(JSON.stringify(msg));
@@ -27,22 +27,38 @@ app.service('Messages', function($rootScope, WebSocket) {
       for (var i = 0; i < this.ids.length; i++) {
         if (this.ids[i].id == response.id) {
           this.ids[i].parts.count = int(response.parts);
+          this.ids[i].parts.parts = (new Array(int(response.parts))).map(function(x,i) { return null; }); // un array de la cantidad de partes a null.
           return;
         }
       }
       return;
     }
 
-    // en caso de ser una parte, etnocnes llamo al callback pero sin removerlo.
+    // en caso de ser una parte, la guardo para hacer el ensamblado posterior.
     if (response.part_number != undefined) {
       // proceso el mensaje parte y lo guardo
       for (var i = 0; i < this.ids.length; i++) {
         if (this.ids[i].id == response.id) {
-          this.ids[i].parts.parts += 1;
-          this.ids[i].callback(response);
-          if (this.ids[i].parts.parts >= this.ids[i].parts.count) {
-            this.ids.splice(i,1);              // ya tengo todas las partes. remuevo el callback.
+
+          // agrego la parte en el indice que va.
+          this.ids[i].parts.parts[int(response.part_number)] = response;
+
+          // controlo si ya se tiene todas para llamar al callback.
+          var count = 0;
+          for (var a = 0; a < this.ids[i].parts.parts.length; a++) {
+            if (this.ids[i].parts.parts[a] !== null) {
+              count = count + 1;
+            }
           }
+          if (this.ids[i].parts.count <= count) {
+            // tengo todos. reensamblo y llamo al callback
+            var fullmessage = this.ids[i].parts.parts.join("");
+            this.ids[i].callback(fullmessage);
+            this.ids.splice(i,1);                   // remuevo el id ya que la respuesta ya se proceso.
+            return;
+
+          }
+
           break;
         }
       }

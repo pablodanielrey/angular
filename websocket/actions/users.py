@@ -640,20 +640,8 @@ class ListUsers:
       if 'ids' in message:
           rdata = filter(lambda x: x['id'] in message['ids'], rdata)
 
-
-      """ envío el mensaje de cabecera indicando la cantidad de partes """
-      response = {'id':message['id'], 'parts':str(len(rdata)), 'ok':''}
+      response = {'id':message['id'], 'ok':'', 'users': rdata}
       server.sendMessage(response)
-
-      """ envío las partes del mensaje """
-      i = 0
-      for user in rdata:
-          response = {'id':message['id'], 'part_number':str(i), 'ok':'', 'users': [user]}
-          server.sendMessage(response)
-          i = i + 1
-
-      #response = {'id':message['id'], 'ok':'', 'users': rdata}
-      #server.sendMessage(response)
       return True
 
     finally:
