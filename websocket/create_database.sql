@@ -133,6 +133,28 @@ create table au24.users (
 );
 
 /*
+tablas del módulo del dominio
+*/
+create schema domain;
+
+create table domain.users (
+  id varchar not null primary key references profile.users (id)
+);
+
+
+/*
+tablas del módulo del servidor de correo
+*/
+create schema mail;
+
+create table mail.users (
+  id varchar not null primary key references profile.users (id)
+);
+
+
+
+
+/*
   tablas del módulo de inserción laboral
 */
 create schema laboral_insertion;
