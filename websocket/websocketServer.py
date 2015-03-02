@@ -3,6 +3,7 @@ from Ws.SimpleWebSocketServer import WebSocket, SimpleWebSocketServer
 import json
 import datetime
 import traceback
+import logging
 from wexceptions import MalformedMessage
 from model.profiles import AccessDenied
 from model.utils import DateTimeEncoder
