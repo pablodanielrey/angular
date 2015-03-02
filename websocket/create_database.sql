@@ -153,7 +153,6 @@ create table mail.users (
 
 
 
-
 /*
   tablas del módulo de inserción laboral
 */
