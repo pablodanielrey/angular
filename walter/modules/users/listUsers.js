@@ -38,9 +38,13 @@ app.controller('ListUsersCtrl',function($rootScope, $scope, $timeout, Session, U
 		
 		$scope.model.searchPromise = $timeout(
 			function(){
-				$scope.listUsers();
+				if($scope.model.search.length < 3) {
+					$scope.model.users = []
+				} else {
+					$scope.listUsers();
+				}
 			}
-		,2000);
+		,1000);
 	};
 	
 	
