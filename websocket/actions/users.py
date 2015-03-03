@@ -632,8 +632,17 @@ class ListUsers:
 
     con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
     try:
-      rdata = self.req.listUsers(con)
-
+      rdataAux = self.req.listUsers(con)
+      rdata = []
+      
+      if 'search' in message:
+        for user in rdataAux:
+      	  if message['search'] in user["name"] or message['search'] in user["lastname"] or message['search'] in user["dni"]:
+      	    rdata.append(user)
+      	    
+      if 'limit' in message:
+        del rdata[message['limit']:]
+      
       if 'onlyIds' in message:
           rdata = map(lambda x: {'id':x['id']}, rdata)
 
