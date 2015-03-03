@@ -634,12 +634,25 @@ class ListUsers:
     try:
       rdata = self.req.listUsers(con)
 
+      if 'search' in message:
+        rdataAux = []
+        pattern = re.compile(message['search'])
+        for user in rdata:
+      	  if pattern.search(user["name"]) or pattern.search(user["lastname"]) or pattern.search(user["dni"]):           
+            rdataAux.append(user)
+        rdata = rdataAux
+      	    
+      if 'limit' in message:
+        del rdata[message['limit']:]
+      
       if 'onlyIds' in message:
           rdata = map(lambda x: {'id':x['id']}, rdata)
 
       if 'ids' in message:
           rdata = filter(lambda x: x['id'] in message['ids'], rdata)
 
+
+      
       response = {'id':message['id'], 'ok':'', 'users': rdata}
       server.sendMessage(response)
       return True

@@ -1,10 +1,10 @@
 <div class="userNamesList">
 	<div class="search_imput">
-		<p><input class="input_container" type='search' ng-model="search" autofocus/></p>
+		<p><input class="input_container" type='search' ng-model="model.search" autofocus ng-change="search()" /></p>
 	</div>
 	<div>
 		<ul>
-			<li  ng-click='selectUser(user.id)' ng-class="{selected:isSelected(user.id), updated:isUpdated(user.id)}" ng-repeat="user in users | filter:search | orderBy:'name'"> <i class="fa fa-user"></i>&nbsp {{user.fullname}} </li>
+			<li  ng-click='selectUser(user.id)' ng-class="{selected:isSelected(user.id), updated:isUpdated(user.id)}" ng-repeat="user in model.users | orderBy:'name'"><i class="fa fa-user"></i>&nbsp {{user.name}} {{user.lastname}}</li>
 		</ul>
 
 	</div>
