@@ -15,16 +15,75 @@
 
 var app = angular.module('mainApp');
 
-app.controller('ListUsersCtrl',function($rootScope, $scope, $log, Session, Users) {
+app.controller('ListUsersCtrl',function($rootScope, $scope, $timeout, Session, Users) {
 
-  $scope.users = [];
-  $scope.selected = '';
-  $scope.updating = '';
+	/**
+	 * Inicializacion de variables
+	 */
+	$scope.model = {
+		users:[], //lista de usuarios buscados
+		search:"", //busqueda de usuarios
+		selected:"", //usuario seleccionado
+		updated:"", //usuario actualizado
+		searchPromise:false, //promesa de busqueda
+	}
+	
+	/**
+	 * Buscar usuarios
+	 */
+	$scope.search = function(){
+		if($scope.model.searchPromise){
+			$timeout.cancel($scope.model.searchPromise);
+		}
+		
+		$scope.model.searchPromise = $timeout(
+			function(){
+				$scope.listUsers();
+			}
+		,2000);
+	};
+	
+	
+	/**
+	 * Listar usuarios
+	 */
+	$scope.listUsers = function() {
+		Users.listUsers($scope.model.search,
+			function(users){
+				$scope.model.users = users;
+			},
+			function(error){
+				alert(error);
+			}
+		);
+	};
+	
+	/**
+	 * Seleccionar usuario en funcion del id
+	 */
+	$scope.selectUser = function(id) {
+		$scope.model.selected = id;
 
+		var s = Session.getCurrentSession();
+		s.selectedUser = id;
+		Session.saveSession(s);
 
-  $scope.isUpdated = function(id) {
-    return ($scope.updating == id);
-  }
+		$rootScope.$broadcast('UserSelectedEvent',id);
+	}
+	
+	/**
+	 * Verificar usuario seleccionado
+	 */
+	$scope.isSelected = function(id) {
+		return ($scope.model.selected == id);
+	}
+
+	/**
+	 * Verificar usuario actualizado
+	 */	
+	$scope.isUpdated = function(id) {
+		return ($scope.model.updated == id);
+	}
 
 	/**
 	 * UserUpdatedEvent. Al actualizar un usuario:
@@ -33,14 +92,14 @@ app.controller('ListUsersCtrl',function($rootScope, $scope, $log, Session, Users
 	 */
 	$scope.$on('UserUpdatedEvent',function(event,id) {
 
-		$scope.updating = id;
+		$scope.model.updated = id;
 
 		var found = null;
 		var pos = -1;
 
 		// busco el usuario dentro de la lista de usuarios
-		for (var i = 0; i < $scope.users.length; i++) {
-		  var user = $scope.users[i];
+		for (var i = 0; i < $scope.model.users.length; i++) {
+		  var user = $scope.model.users[i];
 		  if (user.id == id) {
 			found = user;
 			pos = i;
@@ -49,7 +108,6 @@ app.controller('ListUsersCtrl',function($rootScope, $scope, $log, Session, Users
 		}
 
 		if (found == null) {
-		  $scope.listUsers();
 		  return;
 		}
 
@@ -57,55 +115,11 @@ app.controller('ListUsersCtrl',function($rootScope, $scope, $log, Session, Users
 		Users.findUser(found.id,
 
 			function(user) {
-				$scope.users[pos] = user;
-				$scope.users[pos].fullname =  $scope.users[pos].name + " " +  $scope.users[pos].lastname; //definir dato fullname compuesto por el name y el lastname
+				$scope.model.users[pos] = user;
 			},
 
 			function(error) {
-				$scope.listUsers();
 			}
 		);
 	});
-
-	$scope.isSelected = function(id) {
-	return ($scope.selected == id);
-	}
-
-
-	/**
-	 * Seleccionar usuario en funcion del id
-	 */
-	$scope.selectUser = function(id) {
-		$scope.selected = id;
-
-		var s = Session.getCurrentSession();
-		s.selectedUser = id;
-		Session.saveSession(s);
-
-		$rootScope.$broadcast('UserSelectedEvent',id);
-	}
-
-  $scope.listUsers = function() {
-    Users.listUsers(
-      function(users) {
-        $scope.users = users;
-        for (i = 0; i < users.length; i++) {
-	        $scope.users[i].fullname = users[i].name + " " + users[i].lastname;
-		    }
-      },
-      function(error) {
-        alert(error);
-      });
-  };
-
-  $scope.$on('EditUserMenuEvent',function(event) {
-    $scope.listUsers();
-  });
-
-
-  $scope.$on('InitializeUserList',function(event) {
-    $scope.listUsers();
-  });
-
-
 });

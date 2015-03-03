@@ -172,7 +172,7 @@ app.service('Users', function($rootScope, Messages, Session, Utils, Cache, Confi
   }
 
 
-  this.listUsers = function(callbackOk, callbackError) {
+  this.listUsers = function(search, callbackOk, callbackError) {
     var  msg = {
       id: Utils.getId(),
       action: 'listUsers',
