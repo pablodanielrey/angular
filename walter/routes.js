@@ -87,6 +87,11 @@ app.config(['$routeProvider', function($routeProvider) {
         controller: 'EditInsertionDataCtrl'
       })
 
+      .when('/mainAssistance', {
+        templateUrl: '/modules/systems/assistance/assistance.html',
+        controller: 'AssistanceCtrl'
+      })
+
       .when('/acceptTermsAndConditionsInsertion', {
         templateUrl: '/modules/systems/insercion/termsAndConditions.html',
         controller: 'LaboralInsertionTermsAndConditionsCtrl'
