@@ -9,7 +9,7 @@ from model.users import Users
 from model.events import Events
 from model.profiles import Profiles
 from model.config import Config
-from wexceptions import MalformedMessage
+from wexceptions import MalformedMessage, AccessDenied
 
 """
     Modulo de acceso al manejo de usuarios
@@ -49,10 +49,9 @@ class RemoveMail:
         return False
 
 
-    """ chequeo que exista la sesion, etc """
+    """ chequeo tener permiso como usuario como minimo """
     sid = message['session']
     self.profiles.checkAccess(sid,['ADMIN','USER'])
-
 
     try:
       con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
@@ -180,7 +179,7 @@ class ConfirmMail:
     try:
       if message['sub_action'] == 'generate':
 
-          """ chequeo que exista la sesion, etc """
+          """ chequeo que sea aunque sea un usuario """
           sid = message['session']
           self.profiles.checkAccess(sid,['ADMIN','USER'])
 

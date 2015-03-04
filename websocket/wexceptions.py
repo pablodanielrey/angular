@@ -34,3 +34,12 @@ class InsuficientAccess(Exception):
 
     def __str__(self):
         return self.__class__.__name__
+
+
+class AccessDenied(Exception):
+
+    def __init__(self):
+        pass
+
+    def __str__(self):
+        return self.__class__.__name__

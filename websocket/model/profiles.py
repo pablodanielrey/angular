@@ -4,15 +4,7 @@ import psycopg2
 import logging
 from model.config import Config
 from model.session import Session
-
-class AccessDenied(Exception):
-
-    def __init__(self):
-        pass
-
-    def __str__(self):
-        return self.__class__.__name__
-
+from wexceptions import AccessDenied
 
 
 
