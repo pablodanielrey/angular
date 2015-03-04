@@ -2,7 +2,7 @@
 
 var app = angular.module('mainApp');
 
-app.controller('MenuCtrl', function($rootScope, $scope, $location, Session, Utils) {
+app.controller('MenuCtrl', function($rootScope, $scope, $location, $timeout, Session, Utils, Profiles) {
 
 	$scope.showSubOptions = false;
 
@@ -42,15 +42,34 @@ app.controller('MenuCtrl', function($rootScope, $scope, $location, Session, Util
 		$location.path('/logout');
 	}
 
+	$scope.items = [];
 
-	$scope.items = [
-		{ label:'Mis datos', img:'fa-pencil-square-o', function: $scope.myProfile },
-		{ label:'Cambiar clave', img:'fa-lock', function: $scope.changePassword },
-		{ label:'Editar usuarios', img:'fa-users', function: $scope.editUsers },
-		{ label:'Pedidos de cuentas', img:'fa-inbox', function: $scope.accountRequests },
-		{ label:'Salir', img:'fa-sign-out', function: $scope.exit }
-	];
+	// se generan por los distintos perfiles de usuarios.
+	$scope.generateItems = function() {
+		Profiles.checkAccess(Session.getSessionId(),'ADMIN', function(ok) {
 
+			if (ok == 'granted') {
+				$scope.items = [];
+				$scope.items.push({ label:'Mis datos', img:'fa-pencil-square-o', function: $scope.myProfile });
+				$scope.items.push({ label:'Cambiar clave', img:'fa-lock', function: $scope.changePassword });
+				$scope.items.push({ label:'Editar usuarios', img:'fa-users', function: $scope.editUsers });
+				$scope.items.push({ label:'Pedidos de cuentas', img:'fa-inbox', function: $scope.accountRequests });
+				$scope.items.push({ label:'Salir', img:'fa-sign-out', function: $scope.exit });
+				$scope.itemsGenerated = true;
+			} else {
+
+				$scope.items = [];
+				$scope.items.push({ label:'Mis datos', img:'fa-pencil-square-o', function: $scope.myProfile });
+				$scope.items.push({ label:'Cambiar clave', img:'fa-lock', function: $scope.changePassword });
+				$scope.items.push({ label:'Salir', img:'fa-sign-out', function: $scope.exit });
+				$scope.itemsGenerated = true;
+			}
+
+		},
+		function(error) {
+			alert(error);
+		});
+	}
 
 	$scope.itemSelected = null;
 
@@ -68,5 +87,8 @@ app.controller('MenuCtrl', function($rootScope, $scope, $location, Session, Util
 		return ($scope.itemSelected == i);
 	}
 
+	$scope.$on('LoginEvent',function(event,data) {
+		$scope.generateItems();
+	});
 
 });

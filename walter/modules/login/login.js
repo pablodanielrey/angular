@@ -37,6 +37,8 @@ app.controller("LoginCtrl", function($rootScope,$scope, Session, Credentials) {
 					Session.create(s.session, data);
 					$scope.user.username = '';
 					$scope.user.password = '';
+
+					$rootScope.$broadcast('LoginEvent');
 				},
 				function(error) {
 					alert(error);

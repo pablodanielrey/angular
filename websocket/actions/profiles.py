@@ -28,7 +28,7 @@ peticion:
 respuesta:
 {
     "id":"id de la peticion",
-    "result":"granted|not granted"
+    "response":"granted|not granted"
     "ok":"",
     "error":""
 }
@@ -59,7 +59,7 @@ class CheckAccess:
         response = {'id':message['id'], 'ok':'', 'response':'granted'}
         server.sendMessage(response)
 
-    except AccessDenied e:
+    except AccessDenied, e:
         response = {'id':message['id'], 'ok':'', 'response':'not granted'}
         server.sendMessage(response)
 
