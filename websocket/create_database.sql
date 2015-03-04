@@ -45,7 +45,6 @@ create table profile.telephones (
 
 
 
-
 /*
   Módulo de los grupos.
 */
@@ -87,6 +86,10 @@ create table credentials.password_resets (
   executed boolean default false
 );
 
+create table credentials.auth_profile (
+  user_id varchar not null references profile.users (id),
+  profile varchar not null
+);
 
 
 

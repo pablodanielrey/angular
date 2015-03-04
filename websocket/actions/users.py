@@ -628,7 +628,7 @@ class ListUsers:
 
     """ chequeo que exista la sesion, etc """
     sid = message['session']
-    self.profiles.checkAccess(sid,['ADMIN','USER'])
+    self.profiles.checkAccess(sid,['ADMIN'])
 
     con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
     try:
@@ -638,13 +638,13 @@ class ListUsers:
         rdataAux = []
         pattern = re.compile(message['search'])
         for user in rdata:
-      	  if pattern.search(user["name"]) or pattern.search(user["lastname"]) or pattern.search(user["dni"]):           
+      	  if pattern.search(user["name"]) or pattern.search(user["lastname"]) or pattern.search(user["dni"]):
             rdataAux.append(user)
         rdata = rdataAux
-      	    
+
       if 'limit' in message:
         del rdata[message['limit']:]
-      
+
       if 'onlyIds' in message:
           rdata = map(lambda x: {'id':x['id']}, rdata)
 
@@ -652,7 +652,7 @@ class ListUsers:
           rdata = filter(lambda x: x['id'] in message['ids'], rdata)
 
 
-      
+
       response = {'id':message['id'], 'ok':'', 'users': rdata}
       server.sendMessage(response)
       return True
