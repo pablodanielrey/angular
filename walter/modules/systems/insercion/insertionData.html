@@ -4,19 +4,18 @@
 
   <select id="viajar" ng-model="model.insertionData.travel">
     <option value="">Seleccione... </i></option>
-    <option value="Si">Si</option>
-    <option value="No">No</option>
+    <option value="true">Si</option>
+    <option value="false">No</option>
   </select>
   <span>Dispuesto a residir</span>
-  <input type="text" list="reside" ng-model="model.insertionData.reside">
-  <datalist id="reside">
-    <option value="Si" />
-    <option value="No" />
-  </datalist>
+  <select id="viajar" ng-model="model.insertionData.reside">
+    <option value="">Seleccione... </i></option>
+    <option value="true">Si</option>
+    <option value="false">No</option>
+  </select>
   <hr>
 
   <span class=title>Curriculum Vitae</span>
-  <input type="file" id='fileCv'>
-  <button ng-click='addCv()'>Cargar</button>
+  <input type="file" on-read-file-binary-string="addCv($fileContent)">
   <hr>
 </div>
