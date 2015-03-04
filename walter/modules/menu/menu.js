@@ -54,13 +54,14 @@ app.controller('MenuCtrl', function($rootScope, $scope, $location, $timeout, Ses
 				$scope.items.push({ label:'Cambiar clave', img:'fa-lock', function: $scope.changePassword });
 				$scope.items.push({ label:'Editar usuarios', img:'fa-users', function: $scope.editUsers });
 				$scope.items.push({ label:'Pedidos de cuentas', img:'fa-inbox', function: $scope.accountRequests });
+				$scope.items.push({ label:'Asistencia', img:'fa-clock-o', function: $scope.Assistance });
 				$scope.items.push({ label:'Salir', img:'fa-sign-out', function: $scope.exit });
 				$scope.itemsGenerated = true;
 			} else {
 
 				$scope.items = [];
 				$scope.items.push({ label:'Mis datos', img:'fa-pencil-square-o', function: $scope.myProfile });
-				$scope.items.push({ label:'Cambiar clave', img:'fa-lock', function: $scope.changePassword });
+				$scope.items.push({ label:'Cambiar clave', img:'fa-lock fa-spin', function: $scope.changePassword });
 				$scope.items.push({ label:'Salir', img:'fa-sign-out', function: $scope.exit });
 				$scope.itemsGenerated = true;
 			}
@@ -87,8 +88,11 @@ app.controller('MenuCtrl', function($rootScope, $scope, $location, $timeout, Ses
 		return ($scope.itemSelected == i);
 	}
 
+
 	$scope.$on('LoginEvent',function(event,data) {
 		$scope.generateItems();
 	});
+
+
 
 });

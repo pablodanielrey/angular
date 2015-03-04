@@ -24,16 +24,27 @@
   color:#0066A6;
   font-size:22px;
 }
+.assistanceHome .data3 {
+  color:#0066A6;
+  font-size:14px;
+}
+.assistanceHome .data2 {
+  color:white;
+  font-size:14px;
+}
 .assistanceHome .spanBlue {
   color:#0066A6;
   font-size:18px;
+}
+.assistanceHome .spanWhite {
+  color:white;
+  font-size:16px;
 }
 
 .assistanceHome .summaryUser {
   display:flex;
   flex-direction:row;
   justify-content: space-around;
-
   margin-bottom:20px;
 
 }
@@ -63,8 +74,9 @@
   display:flex;
   flex-direction:row;
   justify-content: space-around;
-
   margin-bottom:20px;
+  background-color:#0066A6;
+  align-items:center;
 }
 .assistanceHome .entryTime {
   display:flex;
@@ -83,6 +95,8 @@
   flex-direction:column;
   align-items:center;
   padding:5px;
+  margin-bottom:5px;
+  margin-top:5px;
 }
 
 
@@ -115,14 +129,34 @@
   display:flex;
   flex-direction:column;
   align-items:center;
-  padding:2px;
+  padding:5px;
+}
+.assistanceHome .preEvaluation {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:5px;
+}
+.assistanceHome .lao {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:5px;
 }
 .assistanceHome .boxes {
-  background-color:red;
+  padding:10px 25px 10px 25px;
+  margin:5px;
+  color:#0066A6;
+  background-color:white;
+  font-size:40px;
+  border-radius: 4px;
+  border: 1px solid grey ;
+}
+.assistanceHome .boxes2 {
   padding:10px 25px 10px 25px;
   margin:5px;
   color:white;
-  background-color:#275276;
+  background-color:#0066A6;
   font-size:40px;
   border-radius: 4px;
   border: 1px solid grey ;
@@ -133,8 +167,12 @@
   border-collapse: collapse;
   text-align:center;
   font-size:11px;
-  background-color:#275276;
+
   color:white;
   border-radius: 4px;
 
+}
+.assistanceHome hr {
+  margin-left:0px;
+  margin-right:0px;
 }
