@@ -1,51 +1,51 @@
 var app = angular.module('mainApp');
 
-app.controller("Au24Ctrl", ["$scope", "$rootScope", "$timeout", "Au24", "Session", function($scope, $rootScope, $timeout, Au24, Session) {
+app.controller("Au24Ctrl", function($scope, $rootScope, $timeout, Au24, Session) {
 
+	$scope.loadAu24Data = function() {
+		var session = Session.getCurrentSession();
 
-/**
- * Cargar datos de au24 en funcion del usuario seleccionado
- * @session selectedUser Se utiliza la variable de session con el usuario seleccionado para buscar los datos asociados de au 24
- */	
-$scope.loadAu24Data = function() {
-	var session = Session.getCurrentSession();
-    
-    if (session == null) {
-      return;
-    }
-    
-    if (session.selectedUser == undefined || session.selectedUser == null) {
-      return;
-	}
-    
-    
-	Au24.findAu24ByUserId(session.selectedUser,
-	
-		/**
-		 * callback ok
-		 * @param au24 Datos de au24 correspondientes al usuario
-		 */
-		function(au24) {
+	    if (session == null) {
+	      return;
+	    }
 
-
-		},
-		
-		/**
-		 * callback error
-		 * @param error String con la descripcion del error
-		 */
-		function(error) {
-			alert(error);
+	    if (session.selectedUser == undefined || session.selectedUser == null) {
+	      return;
 		}
-    );
-    
-}
+
+
+		Au24.findAu24ByUserId(session.selectedUser,
+			function(au24) {
+
+
+			},
+			function(error) {
+				alert(error);
+			}
+	  );
+
+	}
+
+
+	$scope.redirect = function(url, method, username, password) {
+
+		var newDiv = document.createElement('div');
+		newDiv.innerHTML = "<input type='text' name='username' value='" + username + "'/><input type='password' name='password' value='" + password + "'/>";
+
+		var form = document.createElement('form');
+		form.method = method;
+		form.action = url;
+		form.target = '_blank';
+		form.appendChild(newDiv);
+		form.submit();
+	};
 
 	
-$timeout(function() { 
-	$scope.loadAu24Data(); 
-},0);
+
+	$timeout(function() {
+		//$scope.loadAu24Data();
+		$scope.redirect("http://www.au24.econo.unlp.edu.ar/login/index.php",'post','alog','prueba');
+	},0);
 
 
-	
-}]);
+});
