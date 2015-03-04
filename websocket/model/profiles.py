@@ -27,7 +27,7 @@ class Profiles:
 
         """ por ahora cualquier usuario logueado exitósamente es usuario """
         if 'USER' in roles:
-            return true;
+            return True;
 
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
