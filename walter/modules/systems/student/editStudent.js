@@ -9,13 +9,13 @@ app.controller('EditStudentCtrl', function($scope, $timeout, Student, Session) {
     if (s == null) {
       return;
     }
-    
+
     if (s.selectedUser == undefined || s.selectedUser == null) {
       return;
     }
-    
-    $scope.student.id = s.selectedUser;	
-   
+
+    $scope.student.id = s.selectedUser;
+
     Student.persistStudent($scope.student,
 		function(student) {
 			alert("registro actualizado");
@@ -25,12 +25,13 @@ app.controller('EditStudentCtrl', function($scope, $timeout, Student, Session) {
 		}
 	);
   }
- 
+
 
   /**
   * Carga los datos del usuario seleccionado dentro de la sesion
   */
   $scope.loadStudentData = function() {
+    console.log('load data');
     var s = Session.getCurrentSession();
     if (s == null) {
       return;
@@ -43,7 +44,7 @@ app.controller('EditStudentCtrl', function($scope, $timeout, Student, Session) {
 
     Student.findStudentData(uid,
       function(data) {
-        $scope.student = data.student;
+        $scope.student = data;
       },
       function(error) {
         alert(error);
@@ -51,11 +52,10 @@ app.controller('EditStudentCtrl', function($scope, $timeout, Student, Session) {
     );
   }
 
-
   $timeout(function() {
     $scope.loadStudentData();
   },0);
-  
-  
+
+
 
 })
