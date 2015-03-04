@@ -38,8 +38,8 @@ class Mail:
 
 
     def sendMail(self, ffrom, tos, body):
+      s = smtplib.SMTP(self.config.configs['mail_host'])
       try:
-          s = smtplib.SMTP(self.config.configs['mail_host'])
           if s == None:
               raise MailServerNotFound()
           s.login(self.config.configs['mail_user'],self.config.configs['mail_password'])
