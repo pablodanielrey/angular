@@ -142,12 +142,13 @@ app.service('LaboralInsertion', function(Messages, Utils, Session) {
 		);
 	}
 
-	this.updateLanguageData = function(data,ok,err) {
+	this.updateLanguageData = function(user_id, data,ok,err) {
 		var msg = {
 			id:Utils.getId(),
-	    action:'persistLanguage',
-	    session:Session.getSessionId(),
-	    language: data
+	    	action:'persistLanguage',
+			session:Session.getSessionId(),
+			user_id:user_id,
+			language: data,
 	  }
 		Messages.send(msg,
 			function(data) {

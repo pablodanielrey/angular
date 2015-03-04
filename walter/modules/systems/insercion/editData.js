@@ -1,6 +1,6 @@
 var app = angular.module('mainApp');
 
-app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Session, Users, LaboralInsertion) {
+app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Session, Users, Student, LaboralInsertion) {
 
   $scope.model = {
     insertionData: {},
@@ -30,52 +30,72 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 
 		$scope.mainSave();
 	});
+	
+	
+	$scope.saveUser = function(){
+		// actualizo los datos del perfil.
+		Users.updateUser($scope.model.userData,
+			function(ok) {
+			},
+			function(error) {
+				alert(error);
+			}
+		);
+	
+	};
+	
+	$scope.saveInsertionData = function(){
+		$scope.model.insertionData.id = $scope.model.userData.id;
+		
+		LaboralInsertion.updateLaboralInsertionData($scope.model.insertionData,
+			function(ok) {
+			},
+			function(error) {
+				alert(error);
+			}
+		);
+	
+	};
+	
+	$scope.saveLangugages = function(){
 
-  $scope.save = function() {
-
-    // actualizo los datos del perfil.
-    Users.updateUser($scope.model.userData,
-      function(ok) {
-        // nada
-      },
-      function(error) {
-        alert(error);
-      }
-    );
-
-    // actualizo los datos básicos de inserción
-    LaboralInsertion.updateLaboralInsertionData($scope.model.insertionData,
-      function(ok) {
-        // nada
-      },
-      function(error) {
-        alert(error);
-      }
-    );
+		LaboralInsertion.updateLanguageData($scope.model.userData.id, $scope.model.languages,
+			function(ok) {
+			},
+			function(error) {
+				alert(error);
+			}
+		);
+	};
 
 
-    /*
-      NOTAAAAAAA: esta mal hacerlo aca. debería ir en el controlador de degreeeeee.
-      lo acomodo aca para hacerlo rapido y probar que todo funcione.
-    */
 
-    $scope.transformDegreeData();
+	
+	$scope.save = function() {
+		$scope.saveUser	();
+		$scope.saveInsertionData();
+		$scope.saveLangugages();
+		/*
 
-    /*
-    -------------------------------------------------
-    */
+		NOTAAAAAAA: esta mal hacerlo aca. debería ir en el controlador de degreeeeee.
+		lo acomodo aca para hacerlo rapido y probar que todo funcione.
 
-    // actualizo la info de las carreras
-    LaboralInsertion.updateDegreeData($scope.model.degrees,
-      function(ok) {
-        // nada
-      },
-      function(error) {
-        alert(error);
-      }
-    );
+		$scope.transformDegreeData();
 
-  }
+
+		-------------------------------------------------
+
+
+		// actualizo la info de las carreras
+		LaboralInsertion.updateDegreeData($scope.model.degrees,
+		function(ok) {
+		// nada
+		},
+		function(error) {
+		alert(error);
+		}
+		); */
+	}
 
 
   $scope.transformDegreeData = function() {

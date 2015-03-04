@@ -77,14 +77,8 @@ class LaboralInsertion:
             return None
 
     def persistLanguage(self,con,data):
-        if findLanguage(con,data['id']) == None:
-            params = (data['id'],data['user_id'],data['name'],data['level'])
-            cur = con.cursor()
-            cur.execute('insert into laboral_insertion.languages (id,user_id,name,level) values(%s,%s,%s,%s)',params)
-        else:
-            params = (data['user_id'],data['name'],data['level'],data['id'])
-            cur = con.cursor()
-            cur.execute('update laboral_insertion.languages set user_id = %s, name = %s, level = %s where id = %s',params)
+        """TODO """
+ 
 
     def deleteLanguage(self,con,id):
         cur = con.cursor()
