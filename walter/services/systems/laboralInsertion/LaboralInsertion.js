@@ -99,7 +99,7 @@ app.service('LaboralInsertion', function(Messages, Utils, Session) {
 		}
 		Messages.send(msg,
 			function(data) {
-				ok(data.degree)
+				ok(data.degrees)
 			},
 			function(error) {
 				err(error)
@@ -107,13 +107,21 @@ app.service('LaboralInsertion', function(Messages, Utils, Session) {
 		);
 	}
 
-
-	this.updateDegreeData = function(data,ok,err) {
+	/**
+	 * Actualizar lenguages
+	 * @param user_id Id del usuario al cual se actualizaran las carreras
+	 * @param degrees Datos de las carreras
+	 * @param ok Callback en el caso de que la actualizacion se realice de forma correcta
+ 	 * @param error Callback en el caso de que la actualizacion se realice de forma erronea
+	 */
+	this.updateDegreeData = function(user_id,degrees,ok,err) {
+	
 		var msg = {
 			id:Utils.getId(),
-	    action:"createDegreesData",
-	    session:Session.getSessionId(),
-	    degree: data
+			action:"persistDegreeData",
+			session:Session.getSessionId(),
+			degrees: degrees,
+			user_id:user_id,
 		}
 		Messages.send(msg,
 			function(data) {
@@ -124,6 +132,7 @@ app.service('LaboralInsertion', function(Messages, Utils, Session) {
 			}
 		);
 	}
+	
 
 	this.findLanguageData = function(user_id,ok,err) {
 		var msg = {

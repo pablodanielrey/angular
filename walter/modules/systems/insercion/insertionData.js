@@ -17,8 +17,6 @@ app.controller('LaboralInsertionDataCtrl', function($scope, $timeout, LaboralIns
     LaboralInsertion.findLaboralInsertionData($scope.model.selectedUser,
       function(data) {
         $scope.model.insertionData = data;
-
-        console.log($scope.model.insertionData)
       },
       function(err) {
         alert(err);
