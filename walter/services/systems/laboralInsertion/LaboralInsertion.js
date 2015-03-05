@@ -142,14 +142,22 @@ app.service('LaboralInsertion', function(Messages, Utils, Session) {
 		);
 	}
 
-	this.updateLanguageData = function(user_id, data,ok,err) {
+	/**
+	 * Actualizar lenguages
+	 * @param user_id Id del usuario al cual se actualizaran los lenguajes
+	 * @param languages Datos de los lenguajes
+	 * @param ok Callback en el caso de que la actualizacion se realice de forma correcta
+ 	 * @param error Callback en el caso de que la actualizacion se realice de forma erronea
+	 */
+	this.updateLanguageData = function(user_id, languages,ok,err) {
 		var msg = {
 			id:Utils.getId(),
-	    	action:'persistLanguage',
+			action:'persistLanguage',
 			session:Session.getSessionId(),
 			user_id:user_id,
-			language: data,
-	  }
+			languages:languages,
+		}
+		
 		Messages.send(msg,
 			function(data) {
 				ok(data)
