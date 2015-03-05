@@ -55,11 +55,11 @@
   border-radius: 0.2em;
 }
 .editProfile span{
-  background-image:linear-gradient(to right,#275276, #0066A6);
+
   /*background-color:#1F4464;*/
   width:15px;
   padding:5px;
-  color:white;
+  color:black;
 }
 .editProfile .actualizar{
   text-align: center;
@@ -90,7 +90,7 @@
   border: 1px solid transparent;
   color:white;
   padding: 6px 12px;
-  
+
   font-size: 14px;
   line-height: 1.42857143;
   border-radius: 4px;
