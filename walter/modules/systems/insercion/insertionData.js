@@ -8,7 +8,6 @@ app.controller('LaboralInsertionDataCtrl', function($scope, $timeout, LaboralIns
 	 */
 	$scope.addCv = function($fileContent){
 		$scope.model.insertionData.cv = window.btoa($fileContent)
-		$scope.model.insertionData.cv = null;
 	};
 
 
@@ -33,5 +32,7 @@ app.controller('LaboralInsertionDataCtrl', function($scope, $timeout, LaboralIns
     $scope.loadData();
   });
 
+
+	
 
 });

@@ -93,15 +93,13 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 		for (var i = 0; i < $scope.model.degrees.length; i++) {
 			$scope.model.degrees[i].work_type = '';
 			if ($scope.model.degrees[i].offerInternship) {
-				delete $scope.model.degrees[i].offerInternship;
+	
 				$scope.model.degrees[i].work_type += 'Internship;';
 			}
 			if ($scope.model.degrees[i].offerFullTime) {
-				delete $scope.model.degrees[i].offerFullTime;
 				$scope.model.degrees[i].work_type += 'FullTime;';
 			}
 			if ($scope.model.degrees[i].offerYoungProfessionals) {
-				delete $scope.model.degrees[i].offerYoungProfessionals;
 				$scope.model.degrees[i].work_type += 'YoungProfessionals;';
 			}
 		}

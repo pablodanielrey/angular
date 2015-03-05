@@ -53,6 +53,8 @@ app.controller('DegreeLaboralInsertionCtrl', function($scope, $timeout, LaboralI
       function(data) {
 		if ((data != undefined) && (data != null) && (data.length > 0)) {
 			$scope.model.degrees = data;
+			$scope.extendWorkType();
+			
 		}
 		if ($scope.model.degrees.length == 0) {
 			$scope.addDegree()
@@ -63,6 +65,29 @@ app.controller('DegreeLaboralInsertionCtrl', function($scope, $timeout, LaboralI
       });
 
   }
+  
+ 	 /**
+	 * Transformar datos de degree. La oferta seleccionada se transfora en su correspondiente valor string
+	 * @private
+	 */
+	$scope.extendWorkType = function() {
+		for (var i = 0; i < $scope.model.degrees.length; i++) {
+			$scope.model.degrees[i].offerInternship = false;
+			$scope.model.degrees[i].offerFullTime = false;
+			$scope.model.degrees[i].offerYoungProfessionals = false;
+			if($scope.model.degrees[i].work_type.indexOf("Internship") > -1){
+				$scope.model.degrees[i].offerInternship = true;
+			}
+			if($scope.model.degrees[i].work_type.indexOf("FullTime") > -1){
+				$scope.model.degrees[i].offerFullTime = true;
+			}
+			if($scope.model.degrees[i].work_type.indexOf("YoungProfessionals") > -1){
+				$scope.model.degrees[i].offerYoungProfessionals = true;
+			}
+		}
+	}
+	
+	
 
   $timeout(function() {
     $scope.loadData();
