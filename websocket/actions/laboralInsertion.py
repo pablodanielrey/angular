@@ -654,8 +654,13 @@ class PersistDegree:
     def handleAction(self, server, message):
         if message['action'] != 'persistDegreeData':
             return False
-
-        if 'degree' not in message:
+	
+        if 'user_id' not in message:
+            response = {'id':message['id'], 'error:': 'no existe la info del usuario'}
+            server.sendMessage(response)
+            return True
+            
+        if 'degrees' not in message:
             response = {'id':message['id'], 'error:': 'no existe la info de la carrera'}
             server.sendMessage(response)
             return True
@@ -666,17 +671,24 @@ class PersistDegree:
 
         try:
             con = psycopg2.connect(host=self.config.configs['database_host'],dbname=self.config.configs['database_database'],user=self.config.configs['database_user'],password=self.config.configs['database_password'])
+            
+            #eliminar carreras existentes
+            user_id = message['user_id']
+            self.req.deleteDegrees(con,user_id)
 
-            degree = message['degree']
-            self.req.persistDegree(con,degree)
-            con.commit()
+            #persistir nuevas carreras
+            degrees = message['degrees']
+            for i, degree in enumerate(degrees):
+                degree['id'] = str(uuid.uuid4());
+                degree['user_id'] = message['user_id'];
+                self.req.persistDegree(con,degree);
+                con.commit()
 
             response = {'id':message['id'],'ok':''}
             server.sendMessage(response)
 
             event = {
                 'type':'DegreePersistedEvent',
-                'data':degree['id']
             }
             self.events.broadcast(server,event)
 
