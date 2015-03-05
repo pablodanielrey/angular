@@ -57,7 +57,7 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 	
 	};
 	
-	$scope.saveLangugages = function(){
+	$scope.saveLanguages = function(){
 
 		LaboralInsertion.updateLanguageData($scope.model.userData.id, $scope.model.languages,
 			function(ok) {
@@ -67,14 +67,50 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 			}
 		);
 	};
+	
+	/**
+	 * Guardar datos de degrees
+	 * @protected
+	 */
+	$scope.saveDegrees = function(){
+	
+		$scope.transformDegreeData();
+		console.log($scope.model.degrees);
+		LaboralInsertion.updateDegreeData($scope.model.userData.id, $scope.model.degrees,
+			function(ok) {
+			},
+			function(error) {
+				alert(error);
+			}
+		);
+	}
 
-
+	/**
+	 * Transformar datos de degree. La oferta seleccionada se transfora en su correspondiente valor string
+	 * @private
+	 */
+	$scope.transformDegreeData = function() {
+		for (var i = 0; i < $scope.model.degrees.length; i++) {
+			$scope.model.degrees[i].work_type = '';
+			if ($scope.model.degrees[i].offerInternship) {
+	
+				$scope.model.degrees[i].work_type += 'Internship;';
+			}
+			if ($scope.model.degrees[i].offerFullTime) {
+				$scope.model.degrees[i].work_type += 'FullTime;';
+			}
+			if ($scope.model.degrees[i].offerYoungProfessionals) {
+				$scope.model.degrees[i].work_type += 'YoungProfessionals;';
+			}
+		}
+	}
 
 	
 	$scope.save = function() {
 		$scope.saveUser	();
 		$scope.saveInsertionData();
-		$scope.saveLangugages();
+		$scope.saveLanguages();
+		$scope.saveDegrees();
 		/*
 
 		NOTAAAAAAA: esta mal hacerlo aca. debería ir en el controlador de degreeeeee.
@@ -98,25 +134,7 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 	}
 
 
-  $scope.transformDegreeData = function() {
-    for (var i = 0; i < $scope.model.degrees.length; i++) {
-      var d = $scope.model.degrees[i];
-      d.work_type = '';
-      if (d.offerInternship) {
-        delete d.offerIntership;
-        d.work_type += 'Intership;';
 
-      }
-      if (d.offerFullTime) {
-        delete d.offerFullTime;
-        d.work_type += 'FullTime;';
-      }
-      if (d.offerYoungProfessionals) {
-        delete d.offerYoungProfessionals;
-        d.work_type += 'YoungProfessionals;';
-      }
-    }
-  }
 
 
 	/**
@@ -151,9 +169,9 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 
 
 	$timeout(function() {
-    $scope.setUserSelected();
+		$scope.setUserSelected();
 		$scope.checkTermsAndConditions();
-    $scope.$broadcast('UpdateUserDataEvent');
+		$scope.$broadcast('UpdateUserDataEvent');
 	});
 
 

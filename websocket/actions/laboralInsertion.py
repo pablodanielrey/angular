@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-import inject, json
+import inject, json, base64
 import psycopg2
+import uuid
 from model.laboralInsertion import LaboralInsertion
 from model.events import Events
 from model.profiles import Profiles
@@ -61,6 +62,7 @@ class PersistLaboralInsertion:
             con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
 
             laboralInsertion = message['laboralInsertion']
+            laboralInsertion["cv"] = base64.b64decode(laboralInsertion["cv"])
             self.laboralInsertion.persistLaboralInsertion(con,laboralInsertion)
             con.commit()
 
@@ -261,8 +263,13 @@ class PersistLanguage:
             return False
 
         #Verificar datos del mensaje, si no es correcto responder con un error
-        if 'language' not in message:
-            response = {'id':messages['id'], 'error':'no existe la info del lenguaje'}
+        if 'user_id' not in message:
+            response = {'id':messages['id'], 'error':'no existe la info del usuario'}
+            server.sendMessage(response)
+            return True
+            
+        if 'languages' not in message:
+            response = {'id':messages['id'], 'error':'no existe la info de los lenguajes'}
             server.sendMessage(response)
             return True
 
@@ -274,10 +281,17 @@ class PersistLanguage:
             #Abrir conexion con base de datos
             con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
 
-            #persistir el dato en la base
-            language = message['language']
-            self.req.persistLanguage(con,language)
-            con.commit()
+            #eliminar lenguajes existentes
+            user_id = message['user_id']
+            self.req.deleteLanguages(con,user_id)
+            
+            #persistir nuevos lenguajes
+            languages = message['languages']
+            for i, language in enumerate(languages):
+                language['id'] = str(uuid.uuid4());
+                language['user_id'] = message['user_id'];
+                self.req.persistLanguage(con,language);
+                con.commit()
 
             #enviar respuesta al cliente
             response = {'id':message['id'],'ok':''}
@@ -286,7 +300,6 @@ class PersistLanguage:
             #enviar evento al cliente
             event = {
                 'type':'LanguagePersistedEvent',
-                'data':language['id']
             }
             self.events.broadcast(server,event)
 
@@ -642,8 +655,13 @@ class PersistDegree:
     def handleAction(self, server, message):
         if message['action'] != 'persistDegreeData':
             return False
-
-        if 'degree' not in message:
+	
+        if 'user_id' not in message:
+            response = {'id':message['id'], 'error:': 'no existe la info del usuario'}
+            server.sendMessage(response)
+            return True
+            
+        if 'degrees' not in message:
             response = {'id':message['id'], 'error:': 'no existe la info de la carrera'}
             server.sendMessage(response)
             return True
@@ -654,17 +672,24 @@ class PersistDegree:
 
         try:
             con = psycopg2.connect(host=self.config.configs['database_host'],dbname=self.config.configs['database_database'],user=self.config.configs['database_user'],password=self.config.configs['database_password'])
+            
+            #eliminar carreras existentes
+            user_id = message['user_id']
+            self.req.deleteDegrees(con,user_id)
 
-            degree = message['degree']
-            self.req.persistDegree(con,degree)
-            con.commit()
+            #persistir nuevas carreras
+            degrees = message['degrees']
+            for i, degree in enumerate(degrees):
+                degree['id'] = str(uuid.uuid4());
+                degree['user_id'] = message['user_id'];
+                self.req.persistDegree(con,degree);
+                con.commit()
 
             response = {'id':message['id'],'ok':''}
             server.sendMessage(response)
 
             event = {
                 'type':'DegreePersistedEvent',
-                'data':degree['id']
             }
             self.events.broadcast(server,event)
 

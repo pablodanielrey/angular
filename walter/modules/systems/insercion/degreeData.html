@@ -4,14 +4,14 @@
 
     <div>
       <span>Carrera</span>
-      <input type="text" list="carrera" value="ingrese su carrera">
-      <datalist id="carrera" ng-model='degree.name'>
-        <option value="Contador Público" />
-        <option value="Licenciado en Administración" />
-        <option value="Licenciado en Turismo" />
-        <option value="Licenciado en Economía" />
-        <option value="Técnico en Cooperativas" />
-      </datalist>
+		<select ng-model="degree.name"  >
+			<option value="">Seleccione...</option>
+			<option value="Contador Público">Contador Público</option>
+			<option value="Licenciado en Administración">Licenciado en Administración</option>
+			<option value="Licenciado en Turismo">Licenciado en Turismo</option>
+			<option value="Licenciado en Economía">Licenciado en Economía</option>
+			<option value="Técnico en Cooperativas">Técnico en Cooperativas</option>
+		</select>
     </div>
 
       <span>Materias aprobadas con final</span>
@@ -19,7 +19,7 @@
       <span>Promedio sin aplazos</span>
       <input type="text" ng-model="degree.average1">
       <span>Promedio con aplazos</span>
-      <input type="text" name="degree.average2">
+      <input type="text" ng-model="degree.average2">
       <div class="title2">
         <span class="title">Oferta Laboral</span>
       </div>

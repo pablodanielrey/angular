@@ -68,8 +68,8 @@ class LaboralInsertion:
         return language
 
     def findLanguage(self,con,id):
-        cur = con.cursor()
-        cur.execute('select id, user_id, name, level from laboral_insertion.languages where id = %s',(id))
+        cur = con.cursor()       
+        cur.execute("select id, user_id, name, level from laboral_insertion.languages  WHERE id = '" + id + "'")
         language = cur.fetchone()
         if language != None:
             return self.convertLanguageToDict(language)
@@ -77,8 +77,14 @@ class LaboralInsertion:
             return None
 
     def persistLanguage(self,con,data):
-        """TODO """
- 
+    	if self.findLanguage(con,data['id']) == None:
+            params = (data['id'],data['user_id'],data['name'],data['level'])
+            cur = con.cursor()
+            cur.execute('insert into laboral_insertion.languages (id,user_id,name,level) values(%s,%s,%s,%s)',params)
+        else:
+            params = (data['user_id'],degree['name'],degree['level'],degree['id'])
+            cur = con.cursor()
+            cur.execute('update laboral_insertion.languages set user_id = %s, name = %s, level = %s where id = %s',params)
 
     def deleteLanguage(self,con,id):
         cur = con.cursor()
@@ -104,7 +110,7 @@ class LaboralInsertion:
             'id':d[0],
             'user_id':d[1],
             'name':d[2],
-            'curses':d[3],
+            'courses':d[3],
             'average1':d[4],
             'average2':d[5],
             'work_type':d[6]
@@ -114,22 +120,23 @@ class LaboralInsertion:
 
     def findDegree(self,con,id):
         cur = con.cursor()
-        cur.execute('select id,user_id,name,curses,average1,average2,work_type from laboral_insertion.degree where id = %s',(id))
+        cur.execute("SELECT id,user_id,name,courses,average1,average2,work_type FROM laboral_insertion.degree WHERE id = '" + id + "'")
         degree = cur.fetchone()
         if degree != None:
             return self.convertDegreeToDict(degree)
         else:
             return None
 
-    def persistDegree(self,con,data):
-        if findDegree(con,data['id']) == None:
-            params = (degree['id'],degree['user_id'],degree['name'],degree['curses'],degree['average1'],degree['average2'],degree['work_type'])
+    def persistDegree(self,con,degree):
+        if self.findDegree(con,degree['id']) == None:
+            params = (degree['id'],degree['user_id'],degree['name'],degree['courses'],degree['average1'],degree['average2'],degree['work_type'])
             cur = con.cursor()
-            cur.execute('insert into laboral_insertion.degree (id,user_id,name,curses,average1,average2,work_type) values(%s,%s,%s,%s,%s,%s,%s)',params)
+            cur.execute('insert into laboral_insertion.degree (id,user_id,name,courses,average1,average2,work_type) values(%s,%s,%s,%s,%s,%s,%s)',params)
         else:
-            params = (degree['user_id'],degree['name'],degree['curses'],degree['average1'],degree['average2'],degree['work_type'],degree['id'])
+            params = (degree['user_id'],degree['name'],degree['courses'],degree['average1'],degree['average2'],degree['work_type'],degree['id'])
             cur = con.cursor()
-            cur.execute('update laboral_insertion.degree set user_id = %s, name = %s, curses = %s, average1 = %s, average2 = %s, work_type = %s where id = %s',params)
+            cur.execute('update laboral_insertion.degree set user_id = %s, name = %s, courses = %s, average1 = %s, average2 = %s, work_type = %s where id = %s',params)
+
 
     def deleteDegree(self,con,id):
         cur = con.cursor()
@@ -142,7 +149,7 @@ class LaboralInsertion:
 
     def listDegrees(self,con,user_id):
         cur = con.cursor()
-        cur.execute('select id,user_id,name,curses,average1,average2,work_type from laboral_insertion.degree where user_id = %s',(user_id))
+        cur.execute('select id,user_id,name,courses,average1,average2,work_type from laboral_insertion.degree where user_id = %s',(user_id))
         data = cur.fetchall()
         degrees = []
         for d in data:
