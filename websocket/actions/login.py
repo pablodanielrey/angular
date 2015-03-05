@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import psycopg2
+import psycopg2, logging
 import inject
 import hashlib
 import re
@@ -55,11 +55,14 @@ class ResetPassword:
             ###HASH###
         """
 
+        logging.debug('obteniendo el usuario del nombre de usuario : ' + username)
+
         creds = self.userPassword.findCredentials(con,username)
         user_id = creds['user_id']
 
         user = self.users.findUser(con,user_id)
 
+        logging.debug('usuario obtenido ' + str(user))
 
         From = self.config.configs['mail_reset_password_from']
         subject = self.config.configs['mail_reset_password_subject']
@@ -75,8 +78,12 @@ class ResetPassword:
         body = re.sub('###LASTNAME###', user['lastname'], body)
         content = re.sub('###URL###', url, body)
 
+        logging.debug('contenido : ' + content)
+
         mails = self.users.listMails(con,user_id)
         mails = filter(lambda x: x['confirmed'] == True, mails)
+
+        logging.debug('mails confirmados : ' + str(mails))
 
         for email in mails:
             To = email['email']
