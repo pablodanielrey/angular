@@ -1,6 +1,6 @@
 var app = angular.module('mainApp');
 
-app.controller('MyDataOptionCtrl', function($scope, $rootScope, $location, Session) {
+app.controller('MyDataOptionCtrl', function($scope, $rootScope, Profiles, $location, Session) {
 
   $scope.visible = false;
 
@@ -14,8 +14,7 @@ app.controller('MyDataOptionCtrl', function($scope, $rootScope, $location, Sessi
       $scope.visible = true;
       $scope.itemSelected = null;
 
-      // selecciono por defecto el primer item.
-      $scope.selectItem($scope.items[0]);
+      $scope.generateItems();
     }
   });
 
@@ -35,13 +34,42 @@ app.controller('MyDataOptionCtrl', function($scope, $rootScope, $location, Sessi
     $location.path('/editInsertion');
   }
 
-  $scope.items = [
-    { label:'Perfil', img:'fa-user', url:'editUserProfile', function: $scope.myProfile },
-    { label:'Datos de Alumno', img:'fa-university', url:'editStudent', function: $scope.studentData }
-    //{ label:'Au24', img:'fa-th-large', url:'#', function: $scope.au24 }
-    //{ label:'Inserción Laboral', img:'fa-th-large', url:'editInsercion', function: $scope.laboralInsertion }
-  ];
+  $scope.systemData = function() {
+    $location.path('/editSystems');
+  }
 
+  $scope.items = [];
+
+
+  // se generan por los distintos perfiles de usuario
+  $scope.generateItems = function() {
+    Profiles.checkAccess(Session.getSessionId(),'ADMIN', function(ok) {
+
+      if (ok == 'granted') {
+        $scope.items = [];
+        $scope.items.push({ label:'Perfil', img:'fa-user', url:'editUserProfile', function: $scope.myProfile });
+        $scope.items.push({ label:'Datos de Alumno', img:'fa-university', url:'editStudent', function: $scope.studentData });
+        $scope.items.push({ label:'Sistemas', img:'fa-user', url:'editSystems', function: $scope.systemData });
+        //{ label:'Au24', img:'fa-th-large', url:'#', function: $scope.au24 }
+        //{ label:'Inserción Laboral', img:'fa-th-large', url:'editInsercion', function: $scope.laboralInsertion }
+
+        // selecciono por defecto el primer item.
+        $scope.selectItem($scope.items[0]);
+      } else {
+        $scope.items = [];
+        $scope.items.push({ label:'Perfil', img:'fa-user', url:'editUserProfile', function: $scope.myProfile });
+        $scope.items.push({ label:'Datos de Alumno', img:'fa-university', url:'editStudent', function: $scope.studentData });
+        //{ label:'Au24', img:'fa-th-large', url:'#', function: $scope.au24 }
+        //{ label:'Inserción Laboral', img:'fa-th-large', url:'editInsercion', function: $scope.laboralInsertion }
+
+        // selecciono por defecto el primer item.
+        $scope.selectItem($scope.items[0]);
+      }
+    },
+    function(error){
+      alert(error);
+    });
+  }
 
   $scope.itemSelected = null;
 

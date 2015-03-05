@@ -1,0 +1,11 @@
+
+<div>
+  <ul>
+    <li ng-repeat="s in systems">
+      <label>{{s.label}}</label>
+      <input type="checkbox" name="{{s.name}}" ng-model="s.value" />
+    </li>
+  </ul>
+
+  <input type="button" ng-click="save()" value="Guardar"/>
+</div>

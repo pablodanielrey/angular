@@ -11,17 +11,17 @@ app.service('Student', function(Messages, Utils, Session, Cache) {
    * buscar datos de estudiante
    * @param studentId Id del estudiante. Es el mismo que el id del usuario
    * @param callbackOk
-   * @param callbackError   
+   * @param callbackError
    */
-  this.findStudentData = function(studentId,callbackOk,callbackError){
-  
+  this.findStudentData = function(studentId,callbackOk,callbackError) {
+
     //chequear cache para ver si existe el student
     var student = Cache.getItem(self.prefix + studentId);
     if (student != null) {
       callbackOk(student);
       return;
     }
-    
+
     //si no existe usuario en la cache, enviar mensaje al servidor para consultar estudiante
     var msg = {
       id: Utils.getId(),
@@ -31,7 +31,7 @@ app.service('Student', function(Messages, Utils, Session, Cache) {
         id: studentId
       }
     }
-    
+
     Messages.send(msg,
 		function(response){
 			callbackOk(response);
@@ -44,7 +44,7 @@ app.service('Student', function(Messages, Utils, Session, Cache) {
 			callbackError(error);
 		})
   }
-  
+
 
   this.persistStudent = function(student, callbackOk, callbackError){
 
@@ -57,7 +57,7 @@ app.service('Student', function(Messages, Utils, Session, Cache) {
       action: 'persistStudent',
       student: student
     };
-    
+
     Messages.send(msg,function(response){
       if (response.error != undefined) {
         callbackError(response.error);

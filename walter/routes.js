@@ -97,6 +97,11 @@ app.config(['$routeProvider', function($routeProvider) {
         controller: 'LaboralInsertionTermsAndConditionsCtrl'
       })
 
+      .when('/editSystems', {
+        templateUrl: '/modules/systems/editSystems.html',
+        controller: 'EditSystemsCtrl'
+      })
+
 
 	.when('/editAccountRequest', {
 		templateUrl: '/modules/account/accountRequestEdit.html',

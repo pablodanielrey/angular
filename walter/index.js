@@ -50,8 +50,8 @@ app.controller('IndexCtrl', function ($rootScope, $scope, $location, $timeout, $
       	console.log("Mensaje no implementado en el servidor");
 		$location.path("/main");
       }
-      
-      
+
+
     }
 
     // errores de applicacion
@@ -69,6 +69,9 @@ app.controller('IndexCtrl', function ($rootScope, $scope, $location, $timeout, $
       WebSocket.registerHandlers();
     }, 0);
 
+
+    console.log('index');
+    $rootScope.$broadcast('LoginEvent');
 
     // la vista por defecto.
 //    $location.path('/main');
