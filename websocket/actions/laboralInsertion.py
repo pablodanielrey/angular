@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import inject, json
+import inject, json, base64
 import psycopg2
 import uuid
 from model.laboralInsertion import LaboralInsertion
@@ -62,6 +62,7 @@ class PersistLaboralInsertion:
             con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
 
             laboralInsertion = message['laboralInsertion']
+            laboralInsertion["cv"] = base64.b64decode(laboralInsertion["cv"])
             self.laboralInsertion.persistLaboralInsertion(con,laboralInsertion)
             con.commit()
 
