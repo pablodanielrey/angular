@@ -4,20 +4,21 @@ import psycopg2
 class Requests:
 
     def __init__(self):
-        self.registerQuery = 'select id,dni,name,lastname,email,reason,password,hash,confirmed from account_requests.requests'
+        self.registerQuery = 'select id,dni,student_number,name,lastname,email,reason,password,hash,confirmed from account_requests.requests'
 
 
     def convertToDict(self, d):
         r = {
             'id':d[0],
             'dni':d[1],
-            'name':d[2],
-            'lastname':d[3],
-            'email':d[4],
-            'reason':d[5],
-            'password':d[6],
-            'hash':d[7],
-            'confirmed':d[8]
+            'studentNumber':d[2],
+            'name':d[3],
+            'lastname':d[4],
+            'email':d[5],
+            'reason':d[6],
+            'password':d[7],
+            'hash':d[8],
+            'confirmed':d[9]
         }
         return r
 
@@ -67,9 +68,9 @@ class Requests:
 
 
     def createRequest(self, con, req):
-        rreq = (req['id'],req['dni'],req['name'],req['lastname'],req['email'],req['reason'],req['password'],req['hash'])
+        rreq = (req['id'],req['dni'],req['studentNumber'],req['name'],req['lastname'],req['email'],req['reason'],req['password'],req['hash'])
         cur = con.cursor()
-        cur.execute('insert into account_requests.requests (id,dni,name,lastname,email,reason,password,hash) values (%s,%s,%s,%s,%s,%s,%s,%s)', rreq)
+        cur.execute('insert into account_requests.requests (id,dni,student_number,name,lastname,email,reason,password,hash) values (%s,%s,%s,%s,%s,%s,%s,%s,%s)', rreq)
 
 
     def removeRequest(self, con, rid):

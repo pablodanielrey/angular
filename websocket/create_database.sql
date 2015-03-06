@@ -103,6 +103,7 @@ create schema account_requests;
 create table account_requests.requests (
     id varchar not null primary key,
     dni varchar not null unique,
+    student_number varchar,
     lastname varchar default '',
     name varchar default '',
     email varchar not null,

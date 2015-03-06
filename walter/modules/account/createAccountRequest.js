@@ -2,16 +2,8 @@
 var app = angular.module('mainApp');
 
 
-app.controller('CreateAccountRequestCtrl', function($scope, $window, $timeout, Messages, Utils, Session) {
-  $scope.request = {
-          name:'',
-          lastname:'',
-          dni:'',
-          email:'',
-          reason:'',
-          password:'',
-          password2:''
-  };
+app.controller('CreateAccountRequestCtrl', function($rootScope, $scope, $window, $timeout, Messages, Utils, Session) {
+  $scope.request = { };
 
 
 	/**
@@ -19,12 +11,24 @@ app.controller('CreateAccountRequestCtrl', function($scope, $window, $timeout, M
 	 */
 	$scope.createRequest = function() {
 
+    var createForm = document.getElementById('createForm');
+    if (!createForm.checkValidity()) {
+      return;
+    }
+
 		if ($scope.request.password != $scope.request.password2) {
-			alert('las claves ingresadas no son iguales');
+      $rootScope.$broadcast('ShowMessageEvent',['Las claves ingresadas no son iguales','Ingrese nuevamente la información de la clave']);
+//			alert('las claves ingresadas no son iguales');
 			$scope.request.password = '';
 			$scope.request.password2 = '';
 			return;
 		}
+
+
+    if ($scope.request.reason == '') {
+      $rootScope.$broadcast('ShowMessageEvent',['Debe seleccionar un motivo para crear la cuenta']);
+      return
+    }
 
 		var msg = {
 			id: Utils.getId(),
@@ -36,6 +40,7 @@ app.controller('CreateAccountRequestCtrl', function($scope, $window, $timeout, M
 		Messages.send(msg, function(response) {
 
 			if (response.ok == undefined) {
+
 				alert('error creando el pedido');
 			} else {
 				alert('Pedido de cuenta creado correctamente, se confirmará mediante un mail a su dirección de correo');
@@ -48,15 +53,7 @@ app.controller('CreateAccountRequestCtrl', function($scope, $window, $timeout, M
 	};
 
   $scope.clearRequest = function() {
-      $scope.request = {
-        name:'',
-        lastname:'',
-        dni:'',
-        email:'',
-        reason:'',
-        password:'',
-        password2:''
-      };
+      $scope.request = { };
   };
 
 

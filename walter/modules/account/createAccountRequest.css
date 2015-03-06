@@ -98,6 +98,25 @@
   font-size: 18px;
   margin-bottom:3px;
 }
+
+.createAccountRequest .studentNumber {
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -o-appearance: none;
+  border-radius: 0.3em;
+  border:1px solid;
+  border-color:#E7DDE9;
+  width: 268px;
+  height:25px;
+  background-color: #F2F2F2;
+  padding-left:5px;
+  font-size: 18px;
+  margin-bottom:3px;
+}
+
 .createAccountRequest .email {
   -webkit-background-clip: padding-box;
   background-clip: padding-box;
@@ -132,6 +151,7 @@
   font-size: 18px;
   margin-bottom:3px;
 }
+
 .createAccountRequest .reason {
   -webkit-background-clip: padding-box;
   background-clip: padding-box;
@@ -144,11 +164,22 @@
   border-color:#E7DDE9;
   width: 268px;
   height:40px;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+
   background-color: #F2F2F2;
   padding-left:5px;
   font-size: 18px;
   resize:none;
 }
+
+.createAccountRequest .reason option {
+  white-space: nowrap;
+  width: 100%;
+}
+
+
 .createAccountRequest .action {
   appearance: none;
   -webkit-appearance: none;

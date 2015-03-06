@@ -6,7 +6,14 @@ app.controller('MessagesCtrl',function($scope,$timeout) {
   $scope.messages = [];
 
   $scope.$on('ShowMessageEvent',function(event,data) {
-    $scope.messages.push(data);
+
+    if (typeof data === 'string') {
+      $scope.messages = [];
+      $scope.messages.push(data);
+    } else {
+      $scope.messages = data;
+    }
+
     $scope.visible = true;
     $timeout(function() {
       $scope.visible = false;
@@ -18,5 +25,9 @@ app.controller('MessagesCtrl',function($scope,$timeout) {
     return $scope.visible;
   }
 
+
+  $scope.accept = function() {
+    $scope.visible = false;
+  }
 
 });

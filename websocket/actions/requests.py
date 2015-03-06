@@ -98,6 +98,7 @@ peticion:
 
   "request":{
     "dni":""
+    "studentNumber":""
     "name":""
     "lastname":""
     "email":""
