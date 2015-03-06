@@ -18,7 +18,7 @@ app.controller('ResetPasswordCtrl', function($rootScope, $scope, Credentials) {
 
     Credentials.resetPassword($scope.user.username,
       function(ok) {
-        $rootScope.$broadcast('ShowMessageEvent',['Se ha enviado un mail de confirmación a sus cuentas de email''Por favor chequee bandeja de entrada y correo no deseado']);
+        $rootScope.$broadcast('ShowMessageEvent',['Se ha enviado un mail de confirmación a sus cuentas de email','Por favor chequee bandeja de entrada y correo no deseado']);
       },
       function(error) {
         $rootScope.$broadcast('ShowMessageEvent',error);
