@@ -36,6 +36,9 @@
 	<script type="text/javascript" src="services/systems/laboralInsertion/LaboralInsertion.js"></script>
 	<script type="text/javascript" src="services/systems/au24/Au24.js"></script>
 
+	<script type="text/javascript" src="services/systems/domain/Domain.js"></script>
+	<script type="text/javascript" src="services/systems/email/Mail.js"></script>
+
 	<!-- modules -->
 	<script type="text/javascript" src="modules/systems/au24/au24.js"></script>
 	<link rel="stylesheet" type="text/css" href="modules/systems/au24/au24.css"/>
@@ -88,10 +91,6 @@
   <script type="text/javascript" src="services/systems/student/Student.js"></script>
   <script type="text/javascript" src="modules/systems/student/editStudent.js"></script>
   <link rel="stylesheet" type="text/css" href="modules/systems/student/editStudent.css" />
-
-  <script type="text/javascript" src="modules/systems/tutors/tutors.js"></script>
-  <link rel="stylesheet" type="text/css" href="modules/systems/tutors/tutors.css" />
-
 
   <script type="text/javascript" src="modules/systems/insercion/editData.js"></script>
   <script type="text/javascript" src="modules/systems/insercion/degreeData.js"></script>
@@ -188,7 +187,7 @@
     </div>
 
 
-    <div class='messages-container' ng-controller="MessagesCtrl" ng-include="'modules/messages/messages.html'" ng-class="{false: 'hidden', true: 'hidden'}[ isVisible() ]">
+    <div class='messages-container' ng-controller="MessagesCtrl" ng-include="'modules/messages/messages.html'" ng-class="{false: 'hidden', true: 'visible'}[ isVisible() ]">
     </div>
 
 

@@ -10,12 +10,12 @@ app.service('Mail', function(Messages, Utils, Session, Cache) {
                 id:Utils.getId(),
                 action:'persistUserMailEcono',
                 session:Session.getSessionId(),
-                user:data
+                mail:data
             };
 
             Messages.send(msg,
                 function(data) {
-                    callbackOk(data);
+                    callbackOk(data.mail);
                 },
                 function(error) {
                     callbackError(error);
@@ -24,20 +24,39 @@ app.service('Mail', function(Messages, Utils, Session, Cache) {
         };
 
         this.daleteMailData = function(user_id,callbackOk,callbackError) {
+                console.log("Eliminando mail");
                 var msg = {
                     id:Utils.getId(),
                     session:Session.getSessionId(),
-                    action:'daleteMailEcono',
+                    action:'deleteInstitutionalMail',
                     user_id:user_id
                 };
 
                 Messages.send(msg,
                     function(response) {
-                        callbackOk(response);
+                        callbackOk(response.mail);
                     },
                     function(error) {
                         callbackError(error);
                     }
                 );
         };
-)};
+
+        this.findMailData = function(user_id,callbackOk,callbackError) {
+            var msg = {
+                id:Utils.getId(),
+                session:Session.getSessionId(),
+                action:'findInstitutionalMailData',
+                user_id:user_id
+            };
+
+            Messages.send(msg,
+                function(response) {
+                    callbackOk(response.mail);
+                },
+                function(error) {
+                    callbackError(error)
+                }
+            );
+        }
+});
