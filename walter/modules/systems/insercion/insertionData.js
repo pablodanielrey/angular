@@ -33,6 +33,20 @@ app.controller('LaboralInsertionDataCtrl', function($scope, $timeout, LaboralIns
   });
 
 
-	
+	$scope.$on('EditInsertionCheckDataEvent',function() {
+		$scope.model.status.laboralInsertion = true;
+		
+		if($scope.model.insertionData.travel == ""){
+			$scope.model.insertionData.travelError = true;
+			$scope.model.status.laboralInsertion = false;
+		}
+		if($scope.model.insertionData.reside == ""){
+			$scope.model.insertionData.resideError = true;
+			$scope.model.status.laboralInsertion = false;
+		}
+		
+		$scope.$emit("EditInsertionDataCheckedEvent");
+		
+	});
 
 });
