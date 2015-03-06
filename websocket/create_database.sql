@@ -41,8 +41,8 @@ create table profile.mails (
 create table profile.telephones (
     id varchar not null primary key,
     user_id varchar not null references profile.users (id),
-    number varchar not null
-    type varchar not null
+    number varchar not null,
+    type varchar
 );
 
 
