@@ -421,6 +421,10 @@ peticion:
         'address':"direccion actual"
         'genre':"género"
         'birthdate':"fecha de nacimiento"
+        'telephones':[{
+        	'number':"numero"
+        	'type':"tipo"        	
+        }]
     }
 }
 
