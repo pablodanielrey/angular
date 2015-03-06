@@ -52,7 +52,7 @@ class LaboralInsertion:
             'id':li[0],
             'reside':li[1],
             'travel':li[2],
-            #'cv':li[1]
+            'cv':"",
         }
         return laboralInsertion
 
