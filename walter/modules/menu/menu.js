@@ -42,34 +42,47 @@ app.controller('MenuCtrl', function($rootScope, $scope, $location, $timeout, Ses
 		$location.path('/logout');
 	}
 
+	$scope.tutors = function() {
+		$rootScope.$broadcast("MenuOptionSelectedEvent",'TutorOption');
+		$location.path('/tutors');
+	}
+
 	$scope.items = [];
 
 	// se generan por los distintos perfiles de usuarios.
 	$scope.generateItems = function() {
+		$scope.items = [];
+
 		Profiles.checkAccess(Session.getSessionId(),'ADMIN', function(ok) {
 
 			if (ok == 'granted') {
-				$scope.items = [];
 				$scope.items.push({ label:'Mis datos', img:'fa-pencil-square-o', function: $scope.myProfile });
 				$scope.items.push({ label:'Cambiar clave', img:'fa-lock', function: $scope.changePassword });
 				$scope.items.push({ label:'Editar usuarios', img:'fa-users', function: $scope.editUsers });
 				$scope.items.push({ label:'Pedidos de cuentas', img:'fa-inbox', function: $scope.accountRequests });
 				$scope.items.push({ label:'Asistencia', img:'fa-clock-o', function: $scope.Assistance });
 				$scope.items.push({ label:'Salir', img:'fa-sign-out', function: $scope.exit });
-				$scope.itemsGenerated = true;
-			} else {
 
-				$scope.items = [];
+			} else {
 				$scope.items.push({ label:'Mis datos', img:'fa-pencil-square-o', function: $scope.myProfile });
 				$scope.items.push({ label:'Cambiar clave', img:'fa-lock fa-spin', function: $scope.changePassword });
 				$scope.items.push({ label:'Salir', img:'fa-sign-out', function: $scope.exit });
-				$scope.itemsGenerated = true;
 			}
 
 		},
 		function(error) {
 			alert(error);
 		});
+
+		Profiles.checkAccess(Session.getSessionId(),'ADMIN-TUTOR,USER-TUTOR', function(ok) {
+			if (ok == 'granted') {
+				$scope.items.push({ label:'Tutorias', img:'fa-pencil-square-o', function: $scope.tutors });
+			}
+		},
+		function(error) {
+			alert(error);
+		});
+
 	}
 
 	$scope.itemSelected = null;

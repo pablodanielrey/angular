@@ -1,4 +1,4 @@
-
+# -*- coding: utf-8 -*-
 import psycopg2
 from model.objectView import ObjectView
 
@@ -28,7 +28,7 @@ class Students:
 
     def findAll(self,con):
         cur = con.cursor()
-        cur.execute('select id,student_number,condition from students.users where id = %s',(id,))
+        cur.execute('select id,student_number,condition from students.users')
         ss = cur.fetchall()
         students = []
         for s in ss:
