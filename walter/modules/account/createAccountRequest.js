@@ -2,7 +2,7 @@
 var app = angular.module('mainApp');
 
 
-app.controller('CreateAccountRequestCtrl', function($rootScope, $scope, $window, $timeout, Messages, Utils, Session) {
+app.controller('CreateAccountRequestCtrl', function($rootScope, $scope, $window, $timeout, Messages, Utils, Session, Notifications) {
   $scope.request = { };
 
 
@@ -17,7 +17,7 @@ app.controller('CreateAccountRequestCtrl', function($rootScope, $scope, $window,
     }
 
 		if ($scope.request.password != $scope.request.password2) {
-      $rootScope.$broadcast('ShowMessageEvent',['Las claves ingresadas no son iguales','Ingrese nuevamente la información de la clave']);
+      Notifications.message(['Las claves ingresadas no son iguales','Ingrese nuevamente la información de la clave']);
 //			alert('las claves ingresadas no son iguales');
 			$scope.request.password = '';
 			$scope.request.password2 = '';
@@ -26,7 +26,7 @@ app.controller('CreateAccountRequestCtrl', function($rootScope, $scope, $window,
 
 
     if ($scope.request.reason == '') {
-      $rootScope.$broadcast('ShowMessageEvent',['Debe seleccionar un motivo para crear la cuenta']);
+      Notifications.message(['Debe seleccionar un motivo para crear la cuenta']);
       return
     }
 
@@ -40,10 +40,9 @@ app.controller('CreateAccountRequestCtrl', function($rootScope, $scope, $window,
 		Messages.send(msg, function(response) {
 
 			if (response.ok == undefined) {
-
-				alert('error creando el pedido');
+				Notifications.message('error creando el pedido');
 			} else {
-				alert('Pedido de cuenta creado correctamente, se confirmará mediante un mail a su dirección de correo');
+				Notifications.message('Pedido de cuenta creado correctamente, se confirmará mediante un mail a su dirección de correo');
 				$window.location.href = "/#/main"
 			}
 

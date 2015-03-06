@@ -2,7 +2,7 @@
 var app = angular.module('mainApp');
 
 
-app.controller('ChangePasswordCtrl', function($rootScope, $scope, $routeParams, Messages, Utils, Session, Credentials) {
+app.controller('ChangePasswordCtrl', function($rootScope, $scope, $routeParams, Messages, Utils, Session, Credentials, Notifications) {
 
   $scope.user = {};
   $scope.cp = {};
@@ -18,18 +18,18 @@ app.controller('ChangePasswordCtrl', function($rootScope, $scope, $routeParams, 
     if (($scope.cp.hash != undefined) && ($scope.cp.hash != null)) {
       Credentials.changePasswordWithHash($scope.user,$scope.cp.hash,
         function(ok) {
-          $rootScope.$broadcast('ShowMessageEvent','Clave cambiada exitósamente');
+          Notifications.message('Clave cambiada exitósamente');
         },
         function(error) {
-          $rootScope.$broadcast('ShowMessageEvent',['Ocurrió un error cambiando su clave','Por favor reintente la operación']);
+          Notifications.message(['Ocurrió un error cambiando su clave','Por favor reintente la operación']);
         });
     } else {
       Credentials.changePassword($scope.user,
         function(ok) {
-          $rootScope.$broadcast('ShowMessageEvent','Clave cambiada exitósamente');
+          Notifications.message('Clave cambiada exitósamente');
         },
         function(error) {
-          $rootScope.$broadcast('ShowMessageEvent',['Ocurrió un error cambiando su clave','Por favor reintente la operación']);
+          Notifications.message(['Ocurrió un error cambiando su clave','Por favor reintente la operación']);
         });
     }
 
