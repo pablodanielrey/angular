@@ -178,6 +178,9 @@ class CreateAccountRequest:
     data['id'] = str(uuid.uuid4());
     data['hash'] = hashlib.sha1(data['id'] + str(uuid.uuid4())).hexdigest()
 
+    if 'studentNumber' not in data:
+        data['studentNumber'] = ''
+
     con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
     try:
       self.req.createRequest(con,data)
