@@ -42,8 +42,9 @@ app.controller('CreateAccountRequestCtrl', function($rootScope, $scope, $window,
 			if (response.ok == undefined) {
 				Notifications.message('error creando el pedido');
 			} else {
-				Notifications.message('Pedido de cuenta creado correctamente, se confirmará mediante un mail a su dirección de correo');
-				$window.location.href = "/#/main"
+				Notifications.messageWithCallback('Pedido de cuenta creado correctamente, se confirmará mediante un mail a su dirección de correo', function() {
+				      $window.location.href = "/#/main"
+        });
 			}
 
 		});
