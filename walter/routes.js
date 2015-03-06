@@ -113,6 +113,11 @@ app.config(['$routeProvider', function($routeProvider) {
 		controller: 'Au24Ctrl'
 	})
 
+  .when('/tutors', {
+    templateUrl: '/modules/systems/tutors/tutors.html',
+    controller: 'TutorsCtrl'
+  })
+
       .otherwise({
  	      redirectTo: '/main'
       });

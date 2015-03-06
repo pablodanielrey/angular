@@ -187,6 +187,21 @@ create table laboral_insertion.degree (
 );
 
 
+/*
+  Tablas del módulo de tutorias
+*/
+
+create schema tutors;
+
+create table tutors.tutors (
+  id varchar not null primary key,
+  user_id varchar references profile.users (id),
+  "date" timestamp not null,
+  student_number varchar not null,
+  type varchar not null
+);
+
+
 
 /*
   Tablas internas de logs, sesiones, etc. cuestiones internas del sistema van dentro de este esquema.

@@ -23,11 +23,15 @@ app.service('Messages', function($rootScope, WebSocket) {
 
     // codigo horrible!!! lo hago para hacer una prueba con los mensajes gigantes.
     if (response.parts != undefined) {
+
+      console.log('recibido un mensaje de cabecera de framming');
+      console.log(response.parts + ' partes del mensaje se transmitiran');
+
       // proceso el mensaje de cabecera indicando la cantidad de partes.
       for (var i = 0; i < this.ids.length; i++) {
         if (this.ids[i].id == response.id) {
-          this.ids[i].parts.count = int(response.parts);
-          this.ids[i].parts.parts = (new Array(int(response.parts))).map(function(x,i) { return null; }); // un array de la cantidad de partes a null.
+          this.ids[i].parts.count = parseInt(response.parts);
+          this.ids[i].parts.parts = (new Array(parseInt(response.parts))).map(function(x,i) { return null; }); // un array de la cantidad de partes a null.
           return;
         }
       }
@@ -36,24 +40,37 @@ app.service('Messages', function($rootScope, WebSocket) {
 
     // en caso de ser una parte, la guardo para hacer el ensamblado posterior.
     if (response.part_number != undefined) {
+
+      console.log("parte número " + response.part_number);
+
       // proceso el mensaje parte y lo guardo
       for (var i = 0; i < this.ids.length; i++) {
         if (this.ids[i].id == response.id) {
 
           // agrego la parte en el indice que va.
-          this.ids[i].parts.parts[int(response.part_number)] = response;
+          this.ids[i].parts.parts[parseInt(response.part_number)] = window.atob(response.part_data);
 
           // controlo si ya se tiene todas para llamar al callback.
           var count = 0;
           for (var a = 0; a < this.ids[i].parts.parts.length; a++) {
-            if (this.ids[i].parts.parts[a] !== null) {
+            if (this.ids[i].parts.parts[a] != null) {
               count = count + 1;
             }
           }
-          if (this.ids[i].parts.count <= count) {
+          if (count >= (this.ids[i].parts.count - 1)) {
             // tengo todos. reensamblo y llamo al callback
             var fullmessage = this.ids[i].parts.parts.join("");
-            this.ids[i].callback(fullmessage);
+
+            console.log('mensaje completo');
+            //console.log(fullmessage);
+
+            /*
+              ACA ES LO QUE TARDA UNA VIDA Y BLOQUEA EL THREAD PRINCIPAL!!! CUANDO SE PASA A JSON
+            */
+            //var jsonFullMessage = JSON.parse(fullmessage);
+            var jsonFullMessage = eval('(' + fullmessage + ')');
+
+            this.ids[i].callback(jsonFullMessage);
             this.ids.splice(i,1);                   // remuevo el id ya que la respuesta ya se proceso.
             return;
 

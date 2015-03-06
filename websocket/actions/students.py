@@ -42,42 +42,42 @@ class PersistStudent:
   profiles = inject.attr(Profiles)
   config = inject.attr(Config)
   students = inject.attr(Students)
-  
+
   def handleAction(self, server, message):
 
     #El procesamiento continuara solo si el mensaje solicitado por el cliente es el que se indica
     if (message['action'] != 'persistStudent'):
       return False
-      
+
     #Verificar datos del mensaje, si no es correcto responder con un error
     if 'student' not in message:
       response = {'id':message['id'], 'error':'no existe la info del estudiante'}
       server.sendMessage(response)
       return True
-      
+
     #Verificar rol del usuario conectado a la session
     sid = message['session']
     self.profiles.checkAccess(sid,['ADMIN'])
-    
+
     #Abrir conexion con base de datos
     con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
     try:
       #consultar datos para verificar si existe
       student = message['student']
       studentFromDb = self.students.findStudent(con,student['id'])
-      
+
       #si no existe estudiante en la base de datos se creara, si existe se actualizara
       if(studentFromDb == None):
         self.students.createStudent(con,student)
       else:
         self.students.updateStudent(con,student)
-      
+
       con.commit()
-      
+
       #enviar respuesta al cliente
       response = {'id':message['id'], 'ok':''}
       server.sendMessage(response)
-      
+
       #enviar evento al cliente
       event = {
         'type':'StudentPersistedEvent',
@@ -92,8 +92,8 @@ class PersistStudent:
 
     finally:
         con.close()
-      
-      
+
+
 """
 peticion:
 {
@@ -219,6 +219,57 @@ class FindStudent:
       st = message['student']
       student = self.students.findStudent(con,st['id'])
       response = {'id':message['id'], 'student':student, 'ok':''}
+      server.sendMessage(response)
+
+      return True
+
+    finally:
+        con.close()
+
+
+"""
+peticion:
+{
+    "id":"",
+    "action":"findAllStudents",
+    "session":"session de usuario",
+}
+
+respuesta:
+{
+    "id":"id de la peticion",
+    "students":[{
+        "id":"id de la persona",
+        "studentNumber":"legajo del alumno",
+        "condition":"condicion del alumno"
+    }]
+    "ok":"",
+    "error":""
+}
+
+"""
+
+class FindAllStudents:
+
+  students = inject.attr(Students)
+  events = inject.attr(Events)
+  profiles = inject.attr(Profiles)
+  config = inject.attr(Config)
+
+  def handleAction(self, server, message):
+
+    if (message['action'] != 'findAllStudents'):
+        return False
+
+    """ chequeo que exista la sesion, etc """
+    sid = message['session']
+    self.profiles.checkAccess(sid,['ADMIN','USER','ADMIN-TUTOR','USER-TUTOR'])
+
+    con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+    try:
+
+      students = self.students.findAll(con)
+      response = {'id':message['id'], 'students':students, 'ok':''}
       server.sendMessage(response)
 
       return True

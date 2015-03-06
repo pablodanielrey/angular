@@ -20,11 +20,12 @@ from actions.login import Login, Logout, ResetPassword, ChangePassword
 from actions.requests import CreateAccountRequest, ConfirmAccountRequest, ListAccountRequests, ApproveAccountRequest, RemoveAccountRequest
 from actions.users import UpdateUser, FindUser, ListUsers, ListMails, PersistMail, ConfirmMail, RemoveMail
 from actions.status import GetStatus
-from actions.students import CreateStudent, FindStudent, PersistStudent
+from actions.students import CreateStudent, FindStudent, PersistStudent, FindAllStudents
 from actions.groups import ListGroups, FindGroup, FindMembers, RemoveMembers, AddMembers, UpdateGroup, CreateGroup
 from actions.systems import ListSystems
 from actions.laboralInsertion import PersistLaboralInsertion, FindLaboralInsertion, CreateLanguages,PersistLanguage, DeleteLanguage, FindLanguage, ListLanguages, CreateDegrees, PersistDegree, DeleteDegree, FindDegree, ListDegree, AcceptTermsAndConditions, CheckTermsAndConditions
 from actions.profiles import CheckAccess
+from actions.tutors import PersistTutorData, ListTutorData
 
 from model.session import Session
 from model.config import Config
@@ -55,10 +56,11 @@ if __name__ == '__main__':
     CreateAccountRequest(), ConfirmAccountRequest(), ListAccountRequests(), ApproveAccountRequest(), RemoveAccountRequest(),
     ListUsers(), UpdateUser(), FindUser(), ListMails(), PersistMail(), ConfirmMail(), RemoveMail(),
     GetStatus(),
-    CreateStudent(), FindStudent(), PersistStudent(),
+    CreateStudent(), FindStudent(), PersistStudent(), FindAllStudents(),
     ListGroups(), FindGroup(), FindMembers(), RemoveMembers(), AddMembers(), UpdateGroup(), CreateGroup(),
     ListSystems(),
     PersistLaboralInsertion(), FindLaboralInsertion(), CreateLanguages(), PersistLanguage(), DeleteLanguage(), FindLanguage(), ListLanguages(), CreateDegrees(), PersistDegree(), DeleteDegree(), FindDegree(), ListDegree(), AcceptTermsAndConditions(), CheckTermsAndConditions(),
+    PersistTutorData(), ListTutorData(),
     CheckAccess()
   ]
 
@@ -66,7 +68,7 @@ if __name__ == '__main__':
   ''' codigo de inicialización del servidor '''
 
   websocketServer = SimpleWebSocketServer(config.configs['server_ip'],int(config.configs['server_port']),WebsocketServer,actions)
-  websocketSslServer = SimpleSSLWebSocketServer(config.configs['server_ssl_ip'],int(config.configs['server_ssl_port']),WebsocketServer,actions, config.configs['server_ssl_cert'],config.configs['server_ssl_key'])
+  #websocketSslServer = SimpleSSLWebSocketServer(config.configs['server_ssl_ip'],int(config.configs['server_ssl_port']),WebsocketServer,actions, config.configs['server_ssl_cert'],config.configs['server_ssl_key'])
   #httpServer = SocketServer.TCPServer(('192.168.0.100',8002), MyHttpServerRequestHandler)
 
   def close_sig_handler(signal,frame):
@@ -78,7 +80,7 @@ if __name__ == '__main__':
   signal.signal(signal.SIGINT,close_sig_handler)
 
   thread.start_new_thread(serveWebsockets,(websocketServer,1))
-  thread.start_new_thread(serveWebsockets,(websocketSslServer,1))
+  #thread.start_new_thread(serveWebsockets,(websocketSslServer,1))
   #thread.start_new_thread(serveHttp,(httpServer,1))
 
   while True:

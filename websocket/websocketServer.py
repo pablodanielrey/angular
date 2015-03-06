@@ -1,6 +1,6 @@
-
+# -*- coding: utf-8 -*-
 from Ws.SimpleWebSocketServer import WebSocket, SimpleWebSocketServer
-import json
+import json, base64
 import datetime
 import traceback
 import logging
@@ -84,10 +84,37 @@ class WebsocketServer(WebSocket):
       self.sendException(e)
 
 
+  def chunks(self,l,n):
+      n = max(1,n)
+      return [l[i:i+n] for i in range(0, len(l), n)]
+
+
   def sendMessage(self,msg):
       jmsg = json.dumps(msg,cls=DateTimeEncoder)
-      logging.debug(jmsg);
-      super(WebsocketServer,self).sendMessage(jmsg)
+
+      maxMessageSize = 1000
+      if len(jmsg) > maxMessageSize:
+          """ hago framing del mensaje """
+          data = self.chunks(jmsg,maxMessageSize)
+
+          """ envío la cabecera """
+          msg2 = {'id': msg['id'], 'parts': len(data), 'ok':''}
+          jmsg2 = json.dumps(msg2)
+          logging.debug(jmsg2);
+          super(WebsocketServer,self).sendMessage(jmsg2)
+
+          """ envío los datos en mensajes separados """
+          index = 0
+          for d in data:
+              msg2 = { 'id': msg['id'], 'part_number':index, 'part_data': base64.b64encode(d), 'ok':'' }
+              jmsg2 = json.dumps(msg2)
+              logging.debug(jmsg2);
+              super(WebsocketServer,self).sendMessage(jmsg2)
+              index = index + 1
+
+      else:
+          logging.debug(jmsg);
+          super(WebsocketServer,self).sendMessage(jmsg)
 
 
   def handleConnected(self):

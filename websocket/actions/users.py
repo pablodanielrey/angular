@@ -584,34 +584,6 @@ respuesta:
     "error":""
 }
 
-
-respuestas multiples en caso de ser muy grande el resultado:
-
-primer mensaje
-{
-    "id":"id de la petición",
-    "parts":"cantidad de partes del mensaje a esperar"
-    "ok":"",
-    "error":""
-}
-
-seguida de n mensajes de respuesta:
-{
-    "id":"id de la petición",
-    "part_number":"numero de parte -- la primer parte es = 0"
-    "users":[
-        {
-         "id":"",
-         "dni":"",
-         "name":"",
-         "lastname":""
-        }
-      ],
-    "ok":"",
-    "error":""
-}
-
-
 """
 
 class ListUsers:

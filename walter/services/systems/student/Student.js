@@ -8,6 +8,29 @@ app.service('Student', function(Messages, Utils, Session, Cache) {
 
 
   /**
+  * buscar todos los estudiantes.
+  * @param callbackOk
+  * @param callbackError
+  */
+  this.findAllStudentsData = function(callbackOk,callbackError) {
+
+    var msg = {
+      id: Utils.getId(),
+      session: Session.getSessionId(),
+      action:'findAllStudents'
+    }
+
+    Messages.send(msg,
+      function(response){
+        callbackOk(response);
+      },
+      function(error){
+        callbackError(error);
+      })
+    }
+
+
+  /**
    * buscar datos de estudiante
    * @param studentId Id del estudiante. Es el mismo que el id del usuario
    * @param callbackOk
