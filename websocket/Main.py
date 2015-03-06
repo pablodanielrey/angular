@@ -26,6 +26,8 @@ from actions.systems import ListSystems
 from actions.laboralInsertion import PersistLaboralInsertion, FindLaboralInsertion, CreateLanguages,PersistLanguage, DeleteLanguage, FindLanguage, ListLanguages, CreateDegrees, PersistDegree, DeleteDegree, FindDegree, ListDegree, AcceptTermsAndConditions, CheckTermsAndConditions
 from actions.profiles import CheckAccess
 from actions.tutors import PersistTutorData, ListTutorData
+from actions.domain import PersistDomain, DeleteDomain, FindDomain
+from actions.institutionalMail import PersistInstitutionalMail, DeleteInstitutionalMail, FindInstitutionalMail
 
 from model.session import Session
 from model.config import Config
@@ -61,6 +63,8 @@ if __name__ == '__main__':
     ListSystems(),
     PersistLaboralInsertion(), FindLaboralInsertion(), CreateLanguages(), PersistLanguage(), DeleteLanguage(), FindLanguage(), ListLanguages(), CreateDegrees(), PersistDegree(), DeleteDegree(), FindDegree(), ListDegree(), AcceptTermsAndConditions(), CheckTermsAndConditions(),
     PersistTutorData(), ListTutorData(),
+    PersistInstitutionalMail(), DeleteInstitutionalMail(), FindInstitutionalMail(),
+    PersistDomain(), DeleteDomain(), FindDomain(),
     CheckAccess()
   ]
 
