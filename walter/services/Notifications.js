@@ -2,7 +2,7 @@
 var app = angular.module('mainApp');
 
 
-app.service('Notifications',function($rootScope,$scope) {
+app.service('Notifications',function($rootScope) {
 
   this.message = function(data) {
 
@@ -12,7 +12,7 @@ app.service('Notifications',function($rootScope,$scope) {
     } else {
       message = {messages:data, callback:null};
     }
-    
+
     $rootScope.$broadcast('ShowMessageEvent',message);
   }
 
