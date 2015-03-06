@@ -74,8 +74,8 @@ class ResetPassword:
         body = fbody.read().decode('utf8')
         fbody.close()
         body = re.sub('###DNI###', user['dni'], body)
-        body = re.sub('###NAME###', user['name'], body)
-        body = re.sub('###LASTNAME###', user['lastname'], body)
+        body = re.sub('###NAME###', unicode(user['name'],'utf-8'), body)
+        body = re.sub('###LASTNAME###', unicode(user['lastname'],'utf-8'), body)
         content = re.sub('###URL###', url, body)
 
         logging.debug('contenido : ' + content)
