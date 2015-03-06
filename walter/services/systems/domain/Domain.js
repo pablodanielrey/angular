@@ -7,41 +7,59 @@ app.service('Domain', function(Messages, Utils, Session, Cache) {
         this.prefix = 'domain_'; //prefijo de identificacion de la cache
 
 
-        this.updatetData = function(data,callbackOk,callbackError) {
+        this.updateData = function(data,callbackOk,callbackError) {
                 var msg = {
                     id:Utils.getId(),
-                    action:'persistDomain',
+                    action:'persistDomainData',
                     session:Session.getSessionId(),
-                    user:data
+                    domain:data
                 }
 
                 Messages.send(msg,
                     function(data) {
-                        callbackOk(data);
+                        callbackOk(data.domain);
                     },
                     function(error) {
                         callbackError(error);
                     }
                 );
 
-        };
+        }
 
         this.deleteDomainData = function(user_id,callbackOk,callbackError) {
             var msg = {
                     id:Utils.getId(),
                     session: Session.getSessionId(),
-                    action:'deleteDomain',
+                    action:'deleteDomainData',
                     user_id:user_id
             };
 
             Messages.send(msg,
                 function(response) {
-                    callbackOk(response);
+                    callbackOk(response.domain);
                 },
                 function(error) {
                     callbackError(error);
                 }
             );
 
-        };
-)};
+        }
+
+        this.findDomainData = function(user_id,callbackOk,callbackError) {
+            var msg = {
+                id:Utils.getId(),
+                session:Session.getSessionId(),
+                action:'findDomainData',
+                user_id:user_id
+            };
+
+            Messages.send(msg,
+                function(response) {
+                    callbackOk(response.domain);
+                },
+                function(error) {
+                    callbackError(error)
+                }
+            );
+        }
+});
