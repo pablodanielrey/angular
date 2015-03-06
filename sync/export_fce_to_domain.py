@@ -7,9 +7,11 @@ import uuid
 import base64
 import hashlib
 
-user = sys.argv[1]
-passw = sys.argv[2]
-host = '127.0.0.1'
+#user = sys.argv[1]
+#passw = sys.argv[2]
+user = ''
+passw = ''
+host = ''
 
 def modifyUser(l,dni,name,lastname,username,password,result):
 
@@ -84,6 +86,9 @@ def getUser(l,dni,username):
 
 	return None
 
+
+
+
 def createUser(l,dni,name,lastname,username,password):
 
 	print "Creando Usuario nuevo"
@@ -131,7 +136,7 @@ def createUser(l,dni,name,lastname,username,password):
     	mod_attrs = [('sn', lastname),
 		 ('givenName', name),
 		 ('cn', name + " " + lastname),
-		 ('uid', [username, dni]),
+		 ('uid', username),
 		 ('userPassword',password),
 		 ('homeDirectory', '/home/' + username),
 		 ('loginShell', '/bin/bash'),
@@ -151,22 +156,37 @@ def createUser(l,dni,name,lastname,username,password):
 		 ('sambaAcctFlags','[UX          ]'),
 		 ('shadowLastChange','14659'),
 		 ('objectClass', ['top','person','organizationalPerson','inetOrgPerson','posixAccount','shadowAccount','sambaSamAccount'])
-    ]
+    	]
 
 
     	dn = "uid=" + username + ",ou=people,dc=econo"
     	l.add_s(dn,mod_attrs)
 
+
+	mod_attrs = [
+		('description','grupo de samba de usuario primario'),
+		('cn',username),
+		('gidNumber',gid),
+		('objectClass',['top','posixGroup','sambaGroupMapping']),
+		('sambaGroupType','2'),
+		('sambaSID',sambaGroupSID)
+	]
+    	dn = "cn=" + username + ",ou=groups,dc=econo"
+	l.add_s(dn,mod_attrs)
+
+
+
+
 try :
 
-	l = ldap.initialize("ldap://127.0.0.1:3389")
+	l = ldap.initialize("ldap://163.10.17.121:389")
 	l.protocol_version = ldap.VERSION3
 	l.simple_bind_s(user,passw)
 
     	db = psycopg2.connect(host=host, user="dcsys", password= "dcsys", dbname="dcsys")
     	cursor = db.cursor()
 
-    	sql = "select dni,name,lastname,password,u.id from domain.users du inner join profile.users u on (u.id = du.id) inner join credentials.user_password up on (u.id = up.user_id)"
+    	sql = "select dni,name,lastname,username,password,u.id from domain.users du inner join profile.users u on (u.id = du.id) inner join credentials.user_password up on (u.id = up.user_id)"
     	cursor.execute(sql)
     	result = cursor.fetchall()
 
@@ -174,9 +194,9 @@ try :
 		dni = row[0]
 		name = row[1]
 		lastname = row[2]
-		password = row[3]
-		id = row[4]
-		username = (name + "." + lastname).lower()
+		username = row[3]
+		password = row[4]
+		id = row[5]
 
 		result = getUser(l,dni,username)
 		if (result == None) :

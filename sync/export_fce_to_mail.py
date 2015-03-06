@@ -6,9 +6,11 @@ import re
 import uuid
 import base64
 
-user = sys.argv[1]
-passw = sys.argv[2]
-host = '127.0.0.1'
+#user = sys.argv[1]
+#passw = sys.argv[2]
+user = ''
+passw = ''
+host = ''
 
 def modifyUser(l,dni,name,lastname,username,password,email,result):
 	
@@ -95,16 +97,18 @@ def createUser(l,dni,name,lastname,username,password,email):
     	dn = "uid=" + username + ",ou=people,dc=econo"
     	l.add_s(dn,mod_attrs)
 
+
+
 try :
 
-	l = ldap.initialize("ldap://127.0.0.1:3389")
+	l = ldap.initialize("ldap://163.10.17.121:389")
 	l.protocol_version = ldap.VERSION3
 	l.simple_bind_s(user,passw)
 
     	db = psycopg2.connect(host=host, user="dcsys", password= "dcsys", dbname="dcsys")
     	cursor = db.cursor()
 
-    	sql = "select dni,name,lastname,password,u.id from mail.users mu inner join profile.users u on (u.id = mu.id) inner join credentials.user_password up on (u.id = up.user_id)"
+    	sql = "select dni,name,lastname,username,password,u.id from mail.users mu inner join profile.users u on (u.id = mu.id) inner join credentials.user_password up on (u.id = up.user_id)"
     	cursor.execute(sql)
     	result = cursor.fetchall()
 
@@ -115,9 +119,9 @@ try :
 		
 		name = row[1]
 		lastname = row[2]
-		password = row[3]
-		id = row[4]
-		username = (name + "." + lastname).lower()
+		username = row[3]
+		password = row[4]
+		id = row[5]
 
 		sqlMail = "select email from profile.users u inner join profile.mails um on (u.id = um.user_id) where u.id = '" + id + "'"
 		cursor.execute(sqlMail)
