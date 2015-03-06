@@ -17,8 +17,8 @@ app.controller('ProfileLaboralInsertionCtrl', function($scope,$timeout, Session,
     );
 
     Student.findStudentData($scope.model.selectedUser,
-      function(data) {
-        $scope.model.studentData = data.student;
+      function(student) {
+        $scope.model.studentData = student;
       },
       function(error) {
         alert(error);

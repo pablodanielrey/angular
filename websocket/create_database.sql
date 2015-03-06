@@ -25,6 +25,7 @@ create table profile.users (
     genre varchar,
     birthdate date,
     city varchar,
+    residence_city varchar,
     country varchar,
     address varchar
 );

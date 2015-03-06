@@ -7,6 +7,7 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
     degrees: [],
     languages: [],
     userData: {},
+    studentData : {},
     selectedUser: null,
     status: {languages:false, degrees:false, laboralInsertion:false} //objeto para indicar si los datos de lenguajes estan en condiciones de guardarse, el objeto sera modificado en los subcontroladores
   };
@@ -14,21 +15,26 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 	/**
 	 * Al guardar datos se debe disparar un evento de chequeo que sera escuchado por cada subcontrolador
 	 */
-	$scope.ivanSave = function() {
-		$scope.$broadcast('LaboralInsertionCheckDataEvent');
+	$scope.check = function() {
+		$scope.$broadcast('EditInsertionCheckDataEvent');
 	}
 
 	/**
 	 * Escuchar evento de finalizacion de chequeo de datos. Los subcontroladores al finalizar el chequeo dispararan el evento de finalizacion de chequeo de datos.
 	 */
-	$scope.$on('LaboralInsertionDataCheckedEvent',function() {
+	$scope.$on('EditInsertionDataCheckedEvent',function() {
 		for(var status in $scope.model.status){
-			if($scope.model.status[status]){
+			if(!$scope.model.status[status]){
+				var message = {
+					"description":"Error de datos",
+					"type":"red",
+				}	
+				$rootScope.$broadcast("ShowMessageEvent",message)
 				return;
 			}
 		}
 
-		$scope.mainSave();
+		$scope.save();
 	});
 	
 	
@@ -75,7 +81,7 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 	$scope.saveDegrees = function(){
 	
 		$scope.transformDegreeData();
-		console.log($scope.model.degrees);
+
 		LaboralInsertion.updateDegreeData($scope.model.userData.id, $scope.model.degrees,
 			function(ok) {
 			},

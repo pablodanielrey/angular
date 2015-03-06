@@ -19,7 +19,7 @@ class LaboralInsertion:
 
     def findLaboralInsertion(self,con,id):
         cur = con.cursor()
-        cur.execute('select id,cv,reside,travel from laboral_insertion.users where id = %s',(id))
+        cur.execute('select id,reside,travel from laboral_insertion.users where id = %s',(id))
         li = cur.fetchone()
         if li:
             return self.convertUserToDict(li)
@@ -50,9 +50,9 @@ class LaboralInsertion:
     def convertUserToDict(self,li):
         laboralInsertion = {
             'id':li[0],
-            'cv':li[1],
-            'reside':li[2],
-            'travel':li[3]
+            'reside':li[1],
+            'travel':li[2],
+            'cv':"",
         }
         return laboralInsertion
 
