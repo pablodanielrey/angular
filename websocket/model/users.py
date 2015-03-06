@@ -82,23 +82,24 @@ class Users:
                 data['country'] if 'country' in data else '',
                 data['address'] if 'address' in data else '',
                 data['genre'] if 'genre' in data else '',
-                data['birthdate'] if 'birthdate' in data else None)
+                data['birthdate'] if 'birthdate' in data else None,
+                data['residence_city'] if 'residence_city' in data else '')
         cur = con.cursor()
-        cur.execute('insert into profile.users (id,dni,name,lastname,city,country,address,genre,birthdate) values (%s,%s,%s,%s,%s,%s,%s,%s,%s)', rreq)
+        cur.execute('insert into profile.users (id,dni,name,lastname,city,country,address,genre,birthdate,residence_city) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)', rreq)
         return uid
 
     def updateUser(self,con,data):
         user = ObjectView(data)
-        rreq = (user.dni,user.name,user.lastname,user.city,user.country,user.address,user.genre,user.birthdate, user.id)
+        rreq = (user.dni,user.name,user.lastname,user.city,user.country,user.address,user.genre,user.birthdate,user.residence_city, user.id)
         cur = con.cursor()
-        cur.execute('update profile.users set dni = %s, name = %s, lastname = %s, city = %s, country = %s, address = %s, genre = %s, birthdate = %s where id = %s', rreq)
+        cur.execute('update profile.users set dni = %s, name = %s, lastname = %s, city = %s, country = %s, address = %s, genre = %s, birthdate = %s, residence_city = %s where id = %s', rreq)
         if cur.rowcount <= 0:
             raise Exception()
 
 
     def findUserByDni(self,con,dni):
         cur = con.cursor()
-        cur.execute('select id,dni,name,lastname,city,country,address,genre,birthdate from profile.users where dni = %s', (dni,))
+        cur.execute('select id,dni,name,lastname,city,country,address,genre,birthdate,residence_city from profile.users where dni = %s', (dni,))
         data = cur.fetchone()
         if data != None:
             return self.convertUserToDict(data)
@@ -107,7 +108,7 @@ class Users:
 
     def findUser(self,con,id):
         cur = con.cursor()
-        cur.execute('select id,dni,name,lastname,city,country,address,genre,birthdate from profile.users where id = %s', (id,))
+        cur.execute('select id,dni,name,lastname,city,country,address,genre,birthdate,residence_city from profile.users where id = %s', (id,))
         data = cur.fetchone()
         if data != None:
             return self.convertUserToDict(data)
@@ -116,7 +117,7 @@ class Users:
 
     def listUsers(self, con):
         cur = con.cursor()
-        cur.execute('select id,dni,name,lastname,city,country,address,genre,birthdate from profile.users')
+        cur.execute('select id,dni,name,lastname,city,country,address,genre,birthdate,residence_city from profile.users')
         data = cur.fetchall()
         rdata = []
         for d in data:
@@ -135,6 +136,7 @@ class Users:
                 'country':d[5],
                 'address':d[6],
                 'genre':d[7],
-                'birthdate':d[8]
+                'birthdate':d[8],
+                'residence_city':d[9]
             }
         return rdata
