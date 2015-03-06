@@ -65,8 +65,6 @@ app.controller('EditSystemsCtrl', function($scope, $timeout, Domain, Mail, Sessi
             if ($item.name == 'dominio') {
                 var $user = {id:s.selectedUser};
                 if ($item.value) {
-                    alert("Agregando al dominio el usuario:" + $user.id);
-
                     Domain.updateData($user,
                         function(domain) {
 
@@ -76,7 +74,6 @@ app.controller('EditSystemsCtrl', function($scope, $timeout, Domain, Mail, Sessi
                         }
                     );
                 } else {
-                    alert("Eliminando del dominio el usuario:" + $user.id);
                     Domain.deleteDomainData($user.id,
                         function(domain) {
 
@@ -92,7 +89,6 @@ app.controller('EditSystemsCtrl', function($scope, $timeout, Domain, Mail, Sessi
             if ($item.name == 'correo') {
                 var $user = {id:s.selectedUser};
                 if ($item.value) {
-                    alert("Agregando al correo el usuario:" + $user.id);
                     Mail.updateData($user,
                         function(mail) {
 
@@ -102,7 +98,6 @@ app.controller('EditSystemsCtrl', function($scope, $timeout, Domain, Mail, Sessi
                         }
                     );
                 } else {
-                    alert("Eliminando del correo el usuario:" + $user.id);
                     Mail.daleteMailData($user.id,
                         function(mail) {
 
