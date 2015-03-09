@@ -86,7 +86,121 @@ class RemoveAccountRequest:
         con.close()
 
 
+"""
+peticion:
+{
+  "id":"id de la peticion"
+  "action":"rejectAccountRequest",
+  "session":"id de session obtenido en el login",
+  "description":"motivo del rechazo",
+  "reqId":"id del request a eliminar"
+}
 
+respuesta:
+{
+  "id":"id de la peticion"
+  O "ok":""
+  O "error":""
+}
+
+"""
+
+
+class RejectAccountRequest:
+
+  req = inject.attr(Requests)
+  events = inject.attr(Events)
+  profiles = inject.attr(Profiles)
+  config = inject.attr(Config)
+  mail = inject.attr(Mail)
+
+  def sendEmail(self, request):
+
+      """
+        variables a reemplazar :
+        ###NAME###
+        ###LASTNAME###
+        ###DESCRIPTION###
+      """
+
+      From = self.config.configs['mail_reject_account_request_from']
+      To = request['email']
+      subject = self.config.configs['mail_reject_account_request_subject']
+
+      fbody = open('model/systems/accounts/mails/' + self.config.configs['mail_reject_account_request_body'],'r')
+      body = fbody.read().decode('utf8')
+      fbody.close()
+
+      body = re.sub('###NAME###', request['name'], body)
+      body = re.sub('###LASTNAME###', request['lastname'], body)
+      content = re.sub('###DESCRIPTION###', request['description'], body)
+
+      msg = self.mail.createMail(From,To,subject)
+      p1 = self.mail.getHtmlPart(content)
+      msg.attach(p1)
+      self.mail.sendMail(From,[To],msg.as_string())
+
+      return True
+
+
+  def handleAction(self, server, message):
+
+    if message['action'] != 'rejectAccountRequest':
+      return False
+
+    """ chequeo que exista la sesion, etc """
+    sid = message['session']
+    self.profiles.checkAccess(sid,['ADMIN'])
+
+    if 'id' not in message:
+        raise MalformedMessage()
+
+    if 'reqId' not in message:
+        raise MalformedMessage()
+
+    pid = message['id']
+    rid = message['reqId']
+
+    con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+    try:
+
+      req = self.req.findRequest(con,rid)
+      if (req == None):
+          raise MalformedMessage()
+
+
+      data = req
+
+      if 'description' not in message:
+          description = ""
+      else:
+          description = message['description']
+
+      data['description'] = description;
+
+
+      self.req.removeRequest(con,rid)
+      self.sendEmail(data);
+      con.commit()
+
+      response = {'id':pid, 'ok':'petición rechazada correctamente'}
+      server.sendMessage(response)
+
+      event = {
+        'type':'AccountRequestRemovedEvent',
+        'data': rid
+      }
+      self.events.broadcast(server,event)
+
+      return True
+
+    except psycopg2.DatabaseError as e:
+
+        con.rollback()
+        raise e
+
+    finally:
+        con.close()
 
 
 
