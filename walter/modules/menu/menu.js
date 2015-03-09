@@ -37,6 +37,11 @@ app.controller('MenuCtrl', function($rootScope, $scope, $location, $timeout, Ses
 		$rootScope.$broadcast("MenuOptionSelectedEvent",'AccountRequestsOption');
 	}
 
+	$scope.assistance = function() {
+		$scope.showSubOptions = true;
+		$rootScope.$broadcast("MenuOptionSelectedEvent",'AssistanceOption');
+	}
+
 	$scope.exit = function() {
 		$rootScope.$broadcast("MenuOptionSelectedEvent",'LogoutOption');		// esto lo realizo para que los otros menus se cierren.
 		$location.path('/logout');
@@ -60,7 +65,6 @@ app.controller('MenuCtrl', function($rootScope, $scope, $location, $timeout, Ses
 				$scope.items.push({ label:'Cambiar clave', img:'fa-lock', function: $scope.changePassword });
 				$scope.items.push({ label:'Editar usuarios', img:'fa-users', function: $scope.editUsers });
 				$scope.items.push({ label:'Pedidos de cuentas', img:'fa-inbox', function: $scope.accountRequests });
-				$scope.items.push({ label:'Asistencia', img:'fa-clock-o', function: $scope.Assistance });
 				$scope.items.push({ label:'Salir', img:'fa-sign-out', function: $scope.exit });
 
 			} else {
@@ -77,6 +81,15 @@ app.controller('MenuCtrl', function($rootScope, $scope, $location, $timeout, Ses
 		Profiles.checkAccess(Session.getSessionId(),'ADMIN-TUTOR,USER-TUTOR', function(ok) {
 			if (ok == 'granted') {
 				$scope.items.push({ label:'Tutorias', img:'fa-pencil-square-o', function: $scope.tutors });
+			}
+		},
+		function(error) {
+			alert(error);
+		});
+
+		Profiles.checkAccess(Session.getSessionId(),'ADMIN-ASSISTANCE,USER-ASSISTANCE', function(ok) {
+			if (ok == 'granted') {
+				$scope.items.push({ label:'Asistencia', img:'fa-clock-o', function: $scope.assistance });
 			}
 		},
 		function(error) {
