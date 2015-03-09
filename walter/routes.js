@@ -102,6 +102,11 @@ app.config(['$routeProvider', function($routeProvider) {
         controller: 'EditSystemsCtrl'
       })
 
+      .when('/summaryAssistance', {
+          templateUrl: '/modules/systems/assistance/assistance.html',
+          controller: 'AssistanceCtrl'
+      })
+
 
 	.when('/editAccountRequest', {
 		templateUrl: '/modules/account/accountRequestEdit.html',
