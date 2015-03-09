@@ -1,4 +1,11 @@
 
+
 .accountRequestsLists .selected {
 	background: red;
+}
+
+
+.accountRequestsList {
+	height: 470px;
+	overflow: scroll;
 }

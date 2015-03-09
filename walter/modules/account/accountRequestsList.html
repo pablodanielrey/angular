@@ -7,7 +7,7 @@
 		<input type="checkbox" ng-model="filterconfirmed.unconfirmed">Sin confirmar<br />
 
 	</p>
-	<ul>
+	<ul class='accountRequestsList'>
 		<li ng-click='selectAccountRequest(request)' ng-repeat="request in requests | filter:search | filterAccountRequestByConfirmed:filterconfirmed | orderBy:['name', 'lastname']">
 			<div ng-class='{true:"selected",false:""}[isSelected(request)]'>
 				{{request.name}} {{request.lastname}}
