@@ -9,7 +9,7 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
     userData: {},
     studentData : {},
     selectedUser: null,
-    status: {languages:false, degrees:false, laboralInsertion:false} //objeto para indicar si los datos de lenguajes estan en condiciones de guardarse, el objeto sera modificado en los subcontroladores
+    status: {profile:false, languages:false, degrees:false, laboralInsertion:false} //objeto para indicar si los datos de lenguajes estan en condiciones de guardarse, el objeto sera modificado en los subcontroladores
   };
 
 	/**
@@ -17,7 +17,8 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 	 */
 	$scope.check = function() {
 		$scope.$broadcast('EditInsertionCheckDataEvent');
-	}
+		$scope.save();
+	};
 
 	/**
 	 * Escuchar evento de finalizacion de chequeo de datos. Los subcontroladores al finalizar el chequeo dispararan el evento de finalizacion de chequeo de datos.
@@ -25,13 +26,10 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 	$scope.$on('EditInsertionDataCheckedEvent',function() {
 		for(var status in $scope.model.status){
 			if(!$scope.model.status[status]){
-				var message = {
-					"description":"Error de datos",
-					"type":"red",
-				}	
-				$rootScope.$broadcast("ShowMessageEvent",message)
-				return;
+				//alert("Error de datos");
+				//return;
 			}
+			
 		}
 
 		$scope.save();
