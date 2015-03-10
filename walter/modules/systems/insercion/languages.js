@@ -30,7 +30,14 @@ app.controller('LanguagesLaboralInsertionCtrl', function($scope, $timeout, Labor
 				alert(err);
 			}
 		);
-	}
+	};
+	
+	$scope.$on('EditInsertionCheckDataEvent',function() {
+		$scope.model.status.languages = true;
+		
+		$scope.$emit("EditInsertionDataCheckedEvent");
+		
+	});
 
 	$scope.$on('UpdateUserDataEvent',function(event,data) {
 		$scope.loadData();

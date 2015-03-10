@@ -23,9 +23,7 @@ app.controller('ProfileLaboralInsertionCtrl', function($scope,$timeout, Session,
 				alert(error);
 			}
 		);
-		
-
-	}
+	};
   
 	/**
 	 * Dar formato a los datos de user para que sean visualizados correctamente a los usuarios
@@ -37,37 +35,40 @@ app.controller('ProfileLaboralInsertionCtrl', function($scope,$timeout, Session,
 		$scope.model.userData.cellPhone = {
 			country:"54",
 			city:"221",
-			number:"123456789",
+			number:"",
 		};
 		
 		$scope.model.userData.homePhone = {
 			country:"54",
 			city:"221",
-			number:"123456789",
+			number:"",
 		};
 		
 		//telefonos
 		if(($scope.model.userData.telephones != undefined) || ($scope.model.userData.telephones != null)){
 			for(var telephone in $scope.model.userData.telephones){
 				switch($scope.model.userData.telephones[telephone].type){
-					case "cell":					
-						$scope.model.userData.cellPhone.country = "54";
-						$scope.model.userData.cellPhone.city = "221";
-						$scope.model.userData.cellPhone.number = "123456789";
+					case "cell":
+						var cellPhoneArray = $scope.model.userData.telephones[telephone].number.split(" ");
+						$scope.model.userData.cellPhone.country = cellPhoneArray[0];
+						$scope.model.userData.cellPhone.city = cellPhoneArray[1];
+						$scope.model.userData.cellPhone.number = cellPhoneArray[3];
 					break;
+
 					case "home":
-						$scope.model.userData.homePhone.country = "54";
-						$scope.model.userData.homePhone.city = "221";
-						$scope.model.userData.homePhone.number = "123456789";
+						var homePhoneArray = $scope.model.userData.telephones[telephone].number.split(" ");
+						$scope.model.userData.homePhone.country = homePhoneArray[0];
+						$scope.model.userData.homePhone.city = homePhoneArray[1];
+						$scope.model.userData.homePhone.number = homePhoneArray[2];
 					break;
 				}
 			}
 		}
-		
-		
 	};
 	
-	
+	/**
+	 * chequeo y transformacion de datos, por el momento se hace en el editData.
+	 *
 	$scope.$on('EditInsertionCheckDataEvent',function(){
 		$scope.model.status.profile = true;
 		
@@ -90,7 +91,7 @@ app.controller('ProfileLaboralInsertionCtrl', function($scope,$timeout, Session,
 		
 		$scope.$emit("EditInsertionDataCheckedEvent");
 		
-	});
+	});*/
 
 	$scope.test = function(){
 		alert("test");

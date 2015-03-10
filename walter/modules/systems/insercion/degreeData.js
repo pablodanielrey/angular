@@ -7,35 +7,29 @@ app.controller('DegreeLaboralInsertionCtrl', function($scope, $timeout, LaboralI
     $scope.loadData();
   });
 
-
+	$scope.$on('EditInsertionCheckDataEvent',function() {
+		$scope.model.status.degrees = true;
+		
+		$scope.$emit("EditInsertionDataCheckedEvent");
+		
+	});
 
   /*
     para implementar el chequeo que quiere lucas de las ofertas.
   */
   $scope.onCoursesChange = function(degree) {
-    if (degree.courses > 29) {
-      $scope.showDegree = degree;
-    } else {
-      $scope.showDegree = null;
       degree.offerYoungProfessionals = false;
-    }
   }
 
-  $scope.showOffer = function(degree) {
-    if ($scope.showDegree == degree) {
-      return true;
-    }
-    return false;
-  }
 
   $scope.addDegree = function() {
     var degree = {
       id: null,
       user_id: $scope.model.selectedUser,
       name: '',
-      courses: '0',
-      average1: '0',
-      average2: '0'
+      courses: 0,
+      average1: 0,
+      average2: 0	  
     }
     $scope.model.degrees.push(degree);
   }
@@ -85,13 +79,20 @@ app.controller('DegreeLaboralInsertionCtrl', function($scope, $timeout, LaboralI
 				$scope.model.degrees[i].offerYoungProfessionals = true;
 			}
 		}
-	}
-	
-	
+	};
 
   $timeout(function() {
     $scope.loadData();
   });
 
+
+	$scope.showOfferYoungProffesionals = function(degree){
+		if(degree.courses > 29){
+			return true;
+		} else {
+			return false;
+		}
+		
+	};
 
 });

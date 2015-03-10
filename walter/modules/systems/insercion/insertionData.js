@@ -33,20 +33,28 @@ app.controller('LaboralInsertionDataCtrl', function($scope, $timeout, LaboralIns
   });
 
 
+	/**
+	 * chequeo de datos, por el momento se realiza en el editData
+	 *
 	$scope.$on('EditInsertionCheckDataEvent',function() {
-		$scope.model.status.laboralInsertion = true;
+		$scope.model.status.insertion = true;
 		
-		if($scope.model.insertionData.travel == ""){
+		if($scope.model.insertionData.travel === ""){
 			$scope.model.insertionData.travelError = true;
-			$scope.model.status.laboralInsertion = false;
-		}
-		if($scope.model.insertionData.reside == ""){
-			$scope.model.insertionData.resideError = true;
-			$scope.model.status.laboralInsertion = false;
-		}
+			$scope.model.status.insertion = false;
+			alert($scope.model.status.insertion);
+		 	$scope.$emit("EditInsertionDataCheckedEvent");
+
 		
-		$scope.$emit("EditInsertionDataCheckedEvent");
+		}
+		if($scope.model.insertionData.reside === ""){
+			$scope.model.insertionData.resideError = true;
+			$scope.model.status.insertion = false;
+		 	$scope.$emit("EditInsertionDataCheckedEvent");
+
+		}
+
 		
 	});
-
+*/
 });
