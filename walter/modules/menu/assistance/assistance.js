@@ -22,6 +22,10 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, $l
             $location.path('/summaryAssistance');
         }
 
+        $scope.requestAssistance = function() {
+            $location.path('/requestAssistance')
+        }
+
         $scope.items = [];
 
         $scope.generateItems = function() {
@@ -29,11 +33,13 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, $l
                 if (ok == 'granted') {
                     $scope.items = [];
                     $scope.items.push({ label:'Inicio', img:'fa-user', function: $scope.summary});
+                    $scope.items.push({ label:'Pedido', img:'fa-user', function: $scope.requestAssistance});
 
                     $scope.selectItem($scope.items[0]);
                 } else {
                     $scope.items = [];
                     $scope.items.push({ label:'Resumen', img:'fa-user', function: $scope.summary});
+                    $scope.items.push({ label:'Pedido', img:'fa-user', function: $scope.requestAssistance});
 
                     $scope.selectItem($scope.items[0]);
                 }

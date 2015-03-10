@@ -107,6 +107,11 @@ app.config(['$routeProvider', function($routeProvider) {
           controller: 'AssistanceCtrl'
       })
 
+      .when('/requestAssistance', {
+          templateUrl: '/modules/systems/assistance/requestAssistance.html',
+          controller: 'RequestAssistanceCtrl'
+      })
+
 
 	.when('/editAccountRequest', {
 		templateUrl: '/modules/account/accountRequestEdit.html',
