@@ -89,18 +89,28 @@ class Users:
         return uid
 
     def updateUser(self,con,data):
+        
         user = ObjectView(data)
         rreq = (user.dni,user.name,user.lastname,user.city,user.country,user.address,user.genre,user.birthdate,user.residence_city, user.id)
         cur = con.cursor()
         cur.execute('update profile.users set dni = %s, name = %s, lastname = %s, city = %s, country = %s, address = %s, genre = %s, birthdate = %s, residence_city = %s where id = %s', rreq)
         if cur.rowcount <= 0:
             raise Exception()
-
+        
+        #actualizar telefonos del usuario
+        rreq = (user.id)
+        cur.execute('delete from profile.telephones where user_id = %s', rreq)
+        
+        for i, v in enumerate(user.telephones):
+             telephone_id = str(uuid.uuid4())
+             rreq = (telephone_id, user.id, v["number"], v["type"])
+             cur.execute('INSERT INTO profile.telephones (id, user_id, number, type) VALUES (%s, %s, %s, %s);', rreq)
 
     def findUserByDni(self,con,dni):
         cur = con.cursor()
         cur.execute('select id,dni,name,lastname,city,country,address,genre,birthdate,residence_city from profile.users where dni = %s', (dni,))
         data = cur.fetchone()
+      
         if data != None:
             return self.convertUserToDict(data)
         else:
@@ -109,9 +119,17 @@ class Users:
     def findUser(self,con,id):
         cur = con.cursor()
         cur.execute('select id,dni,name,lastname,city,country,address,genre,birthdate,residence_city from profile.users where id = %s', (id,))
-        data = cur.fetchone()
-        if data != None:
-            return self.convertUserToDict(data)
+        dataUser = cur.fetchone()
+        rdataUser = self.convertUserToDict(dataUser);
+        if dataUser != None:
+            cur.execute('SELECT id, number, type FROM profile.telephones WHERE user_id = %s',(dataUser[0],))
+            dataTelephones = cur.fetchall()
+            rdataTelephones = []
+            for dataTelephone in dataTelephones:
+                rdataTelephones.append(self.convertTelephoneToDict(dataTelephone))
+            rdataUser["telephones"] = rdataTelephones
+            return rdataUser
+            
         else:
             return None
 
@@ -138,5 +156,14 @@ class Users:
                 'genre':d[7],
                 'birthdate':d[8],
                 'residence_city':d[9]
+            }
+        return rdata
+        
+    ''' transformo a telefonos las respuestas de psycopg2'''
+    def convertTelephoneToDict(self,d):
+        rdata = {
+                'id':d[0],
+                'number':d[1],
+                'type':d[2]
             }
         return rdata
