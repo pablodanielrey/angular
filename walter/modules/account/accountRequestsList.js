@@ -1,10 +1,12 @@
 
-app.controller("AccountRequestsListCtrl", function($rootScope, $scope, Utils, Session, Messages) {
+app.controller("AccountRequestsListCtrl", function($rootScope, $scope, Utils, Account, Session) {
 
 	//inicializar filtro
 	$scope.filterconfirmed = [];
 	$scope.filterconfirmed.confirmed = true;
 	$scope.filterconfirmed.unconfirmed = true;
+	$scope.filterDescription = [];
+	$scope.filterDescriptionSelected = null;
 
 
 	$scope.$on('NewAccountRequestEvent', function(event,data) {
@@ -37,7 +39,7 @@ app.controller("AccountRequestsListCtrl", function($rootScope, $scope, Utils, Se
 	 * @param accountRequestId
 	 *
 	 */
-	$scope.selectAccountRequest = function(accountRequest){
+	$scope.selectAccountRequest = function(accountRequest) {
 		var s = Session.getCurrentSession();
 		s.accountRequestSelected = accountRequest;
 		Session.saveSession(s);
@@ -56,24 +58,55 @@ app.controller("AccountRequestsListCtrl", function($rootScope, $scope, Utils, Se
 	 * Definir lista de requerimientos de cuenta
 	 *
 	 */
-	$scope.listAccountRequests = function(){
+	$scope.listAccountRequests = function() {
 
-		var msg = {
-			id: Utils.getId(),
-			session : Session.getSessionId(),
-			action : "listAccountRequests",
+		Account.listAccounts(
+			function(response) {
+				if (response == undefined) {
+					$scope.requests = [];
+					return;
+				}
+				$scope.requests = response;
+				$scope.loadFilterDescription();
+			},
+			function(error) {
+				alert(error);
+			});
+	};
+
+
+	$scope.loadFilterDescription = function() {
+		$scope.filterDescription = [];
+		$scope.addFilterDescription(null);
+		for (var i = 0; i < $scope.requests.length; i++) {
+			var r = $scope.requests[i];
+			$scope.addFilterDescription(r);
 		}
+		$scope.filterDescriptionSelected = $scope.filterDescription[0];
+	};
 
-		Messages.send(msg, function(response) {
-
-			if (response.requests == undefined) {
-				$scope.requests = [];
+	$scope.addFilterDescription = function(r) {
+		if (r == null) {
+			$scope.filterDescription.push({label:'Todos',value:'all',items:$scope.requests});
+			return;
+		}
+		for (var i=0; i<$scope.filterDescription.length; i++) {
+			var d = $scope.filterDescription[i];
+			if (d.label == r.reason) {
+				d.items.push(r);
 				return;
 			}
+		}
+		var desciption = {label:r.reason,items:[r],value:r.reason};
+		$scope.filterDescription.push(desciption);
+	}
 
-			$scope.requests = response.requests;
-		});
-	};
+	$scope.onChangeFilterDescription = function(selected) {
+		$scope.requests = selected.items;
+		if ($scope.accountRequestSelected != null) {
+			$scope.selectAccountRequest(null);
+		}
+	}
 
 	$scope.$on('InitializeAccountRequestList', function() {
 		//llamar a la lista de AccountRequests

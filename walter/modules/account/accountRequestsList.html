@@ -2,6 +2,10 @@
 <div class='accountRequestsLists'>
 
 	<p><label>Buscar:</label><input type='text' ng-model="search" autofocus/></p>
+	<div>
+		<span>Motivo:</span>
+		<select ng-model="filterDescriptionSelected" ng-options="opt as opt.label for opt in filterDescription" ng-change='onChangeFilterDescription(filterDescriptionSelected)'></select>
+	</div>
 	<p>
 		<input type="checkbox" checked="checked" ng-model="filterconfirmed.confirmed">Confirmadas<br />
 		<input type="checkbox" ng-model="filterconfirmed.unconfirmed">Sin confirmar<br />
@@ -13,7 +17,6 @@
 				{{request.name}} {{request.lastname}}
 			</div>
 		</li>
-
-</ul>
+	</ul>
 
 </div>

@@ -2,6 +2,7 @@
 app.controller("AccountRequestEditCtrl", function($rootScope, $scope, $timeout, Utils, Messages, Session) {
 
 	$scope.initialize = function() {
+		$scope.clearForm();
 		var s = Session.getCurrentSession();
 		if (s.accountRequestSelected == null) {
 			return;
@@ -62,7 +63,6 @@ app.controller("AccountRequestEditCtrl", function($rootScope, $scope, $timeout, 
 
 
 	$scope.$on('AccountRequestSelection', function(event,data) {
-		console.log('accountRequestSelection');
 		$scope.initialize();
 	});
 
