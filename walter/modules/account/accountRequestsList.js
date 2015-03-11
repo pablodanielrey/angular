@@ -9,6 +9,11 @@ app.controller("AccountRequestsListCtrl", function($rootScope, $scope, Utils, Ac
 	$scope.filterDescriptionSelected = null;
 
 
+	//inicializo los elementos seleccionados
+	$scope.requests = [];
+	$scope.accountRequestSelected = [];
+
+
 	$scope.$on('NewAccountRequestEvent', function(event,data) {
 		$scope.listAccountRequests();
 	});
@@ -40,18 +45,44 @@ app.controller("AccountRequestsListCtrl", function($rootScope, $scope, Utils, Ac
 	 *
 	 */
 	$scope.selectAccountRequest = function(accountRequest) {
+
 		var s = Session.getCurrentSession();
-		s.accountRequestSelected = accountRequest;
+		var requests = [];
+
+		if (accountRequest == null) {
+			s.accountRequestSelected = null;
+			$scope.accountRequestSelected = [];
+		} else {
+			console.log(accountRequest.checked);
+			accountRequest.checked = !accountRequest.checked;
+			if (accountRequest.checked) {
+				$scope.accountRequestSelected.push(accountRequest);
+				request = accountRequest.request;
+			} else {
+				var index = $scope.accountRequestSelected.indexOf(accountRequest);
+				$scope.accountRequestSelected.splice(index, 1);
+			}
+
+
+			for (var i=0; i<$scope.accountRequestSelected.length; i++) {
+				requests.push($scope.accountRequestSelected[i].request);
+			}
+			s.accountRequestSelected = requests;
+		}
+
 		Session.saveSession(s);
 
-		$scope.accountRequestSelected = accountRequest;
-
-		$rootScope.$broadcast('AccountRequestSelection',accountRequest);
+		$rootScope.$broadcast('AccountRequestSelection',requests);
 	};
 
 
-	$scope.isSelected = function(id) {
-		return $scope.accountRequestSelected == id;
+	$scope.isSelected = function(r) {
+		for (var i = 0; i < $scope.accountRequestSelected.length; i++) {
+			if ($scope.accountRequestSelected[i] == r) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -66,7 +97,9 @@ app.controller("AccountRequestsListCtrl", function($rootScope, $scope, Utils, Ac
 					$scope.requests = [];
 					return;
 				}
-				$scope.requests = response;
+				for (var i = 0; i < response.length; i++) {
+					$scope.requests.push({request:response[i],checked:false});
+				}
 				$scope.loadFilterDescription();
 			},
 			function(error) {
@@ -75,11 +108,18 @@ app.controller("AccountRequestsListCtrl", function($rootScope, $scope, Utils, Ac
 	};
 
 
+	/**
+	* ---------------------------------------
+	*	Filtro de cuentas por la descripcion
+	* ---------------------------------------
+	**/
+
 	$scope.loadFilterDescription = function() {
 		$scope.filterDescription = [];
 		$scope.addFilterDescription(null);
 		for (var i = 0; i < $scope.requests.length; i++) {
 			var r = $scope.requests[i];
+			//$scope.addFilterDescription(r);
 			$scope.addFilterDescription(r);
 		}
 		$scope.filterDescriptionSelected = $scope.filterDescription[0];
@@ -92,20 +132,27 @@ app.controller("AccountRequestsListCtrl", function($rootScope, $scope, Utils, Ac
 		}
 		for (var i=0; i<$scope.filterDescription.length; i++) {
 			var d = $scope.filterDescription[i];
-			if (d.label == r.reason) {
+			if (d.label == r.request.reason) {
 				d.items.push(r);
 				return;
 			}
 		}
-		var desciption = {label:r.reason,items:[r],value:r.reason};
+		var desciption = {label:r.request.reason,items:[r],value:r.request.reason};
 		$scope.filterDescription.push(desciption);
 	}
 
 	$scope.onChangeFilterDescription = function(selected) {
 		$scope.requests = selected.items;
-		if ($scope.accountRequestSelected != null) {
-			$scope.selectAccountRequest(null);
+
+		$scope.clearSelectedAccountRequest();
+	}
+
+	$scope.clearSelectedAccountRequest = function() {
+		$scope.accountRequestSelected = [];
+		for (var i=0; i<$scope.requests.length; i++) {
+			$scope.requests[i].checked = false;
 		}
+		$scope.selectAccountRequest(null);
 	}
 
 	$scope.$on('InitializeAccountRequestList', function() {

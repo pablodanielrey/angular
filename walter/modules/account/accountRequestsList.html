@@ -7,14 +7,15 @@
 		<select ng-model="filterDescriptionSelected" ng-options="opt as opt.label for opt in filterDescription" ng-change='onChangeFilterDescription(filterDescriptionSelected)'></select>
 	</div>
 	<p>
-		<input type="checkbox" checked="checked" ng-model="filterconfirmed.confirmed">Confirmadas<br />
-		<input type="checkbox" ng-model="filterconfirmed.unconfirmed">Sin confirmar<br />
+		<input type="checkbox" checked="checked" ng-model="filterconfirmed.confirmed" ng-click="clearSelectedAccountRequest()">Confirmadas<br />
+		<input type="checkbox" ng-model="filterconfirmed.unconfirmed" ng-click="clearSelectedAccountRequest()">Sin confirmar<br />
 
 	</p>
 	<ul class='accountRequestsList'>
-		<li ng-click='selectAccountRequest(request)' ng-repeat="request in requests | filter:search | filterAccountRequestByConfirmed:filterconfirmed | orderBy:['name', 'lastname']">
-			<div ng-class='{true:"selected",false:""}[isSelected(request)]'>
-				{{request.name}} {{request.lastname}}
+		<!--<li ng-click='singleSelectionAccountRequest(request)' ng-repeat="request in requests | filter:search | filterAccountRequestByConfirmed:filterconfirmed | orderBy:['name', 'lastname']">-->
+		<li ng-click='selectAccountRequest(r)' ng-repeat="r in requests | filter:search | filterAccountRequestByConfirmed:filterconfirmed" ng-class='{true:"selected",false:""}[isSelected(r)]'>
+			<div>
+				{{r.request.name}} {{r.request.lastname}}
 			</div>
 		</li>
 	</ul>

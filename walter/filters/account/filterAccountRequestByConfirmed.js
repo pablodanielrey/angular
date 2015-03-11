@@ -9,14 +9,14 @@ app.filter('filterAccountRequestByConfirmed', function () {
 			filterconfirmed.confirmed = true;
 			filterconfirmed.unconfirmed = false;
 		}
-					
+
 		var items = {
             filterconfirmed: filterconfirmed,
             out: []
         };
 
 		 angular.forEach(accountRequests, function (accountRequest, key) {
-            if (accountRequest.confirmed){
+            if (accountRequest.request.confirmed){
             	if(this.filterconfirmed.confirmed) {
 					this.out.push(accountRequest);
             	}
@@ -25,7 +25,7 @@ app.filter('filterAccountRequestByConfirmed', function () {
 					this.out.push(accountRequest);
             	}
             }
-               
+
         }, items);
         return items.out;
 	}

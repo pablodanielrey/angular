@@ -4,10 +4,10 @@ app.controller("AccountRequestEditCtrl", function($rootScope, $scope, $timeout, 
 	$scope.initialize = function() {
 		$scope.clearForm();
 		var s = Session.getCurrentSession();
-		if (s.accountRequestSelected == null) {
+		if (s.accountRequestSelected == null || s.accountRequestSelected.length < 1) {
 			return;
 		}
-		$scope.accountRequest = s.accountRequestSelected;
+		$scope.accountRequest = s.accountRequestSelected[0];
 	}
 
 	$scope.clearForm = function(){
@@ -67,7 +67,6 @@ app.controller("AccountRequestEditCtrl", function($rootScope, $scope, $timeout, 
 	});
 
 	$timeout(function() {
-		console.log('timeout');
 		$scope.initialize();
 	},0);
 
