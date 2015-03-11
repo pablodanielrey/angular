@@ -306,7 +306,7 @@ class CreateAccountRequest:
           return True
 
       if (data['studentNumber'] != ''):
-          if (self.users.findStudentByNumber(con,data['studentNumber']) != None):
+          if (self.students.findStudentByNumber(con,data['studentNumber']) != None):
               response = {'id':message['id'], 'error':'Ya existe el legajo registrado a un usuario'}
               server.sendMessage(response)
               return True
