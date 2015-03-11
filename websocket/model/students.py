@@ -23,6 +23,8 @@ class Students:
         cur = con.cursor()
         cur.execute('select id,student_number,condition from students.users where student_number = %s',(n,))
         s = cur.fetchone()
+        if (s == None):
+            return None
         return self.convertToDict(s)
 
 

@@ -2,6 +2,7 @@
 import json, uuid, psycopg2, inject, re, hashlib
 from model.requests import Requests
 from model.users import Users
+from model.students import Students
 from model.objectView import ObjectView
 from model.events import Events
 from model.profiles import Profiles
@@ -238,6 +239,8 @@ class CreateAccountRequest:
   profiles = inject.attr(Profiles)
   config = inject.attr(Config)
   mail = inject.attr(Mail)
+  users = inject.attr(Users)
+  students = inject.attr(Students)
 
   def sendEmail(self, request):
 
@@ -297,6 +300,17 @@ class CreateAccountRequest:
 
     con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
     try:
+      if (self.users.findUserByDni(con,data['dni']) != None):
+          response = {'id':message['id'], 'error':'Ya existe el dni registrado a un usuario'}
+          server.sendMessage(response)
+          return True
+
+      if (data['studentNumber'] != ''):
+          if (self.users.findStudentByNumber(con,data['studentNumber']) != None):
+              response = {'id':message['id'], 'error':'Ya existe el legajo registrado a un usuario'}
+              server.sendMessage(response)
+              return True
+
       self.req.createRequest(con,data)
       self.sendEmail(data)
       con.commit()
