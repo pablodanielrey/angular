@@ -32,14 +32,16 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, $l
             Profiles.checkAccess(Session.getSessionId(),'ADMIN-ASSISTANCE,USER-ASSISTANCE', function(ok) {
                 if (ok == 'granted') {
                     $scope.items = [];
-                    $scope.items.push({ label:'Inicio', img:'fa-user', function: $scope.summary});
-                    $scope.items.push({ label:'Pedido', img:'fa-user', function: $scope.requestAssistance});
+                    $scope.items.push({ label:'Inicio', img:'fa-tachometer', function: $scope.summary});
+                    $scope.items.push({ label:'Solicitudes', img:'fa-ticket', function: $scope.requestAssistance});
+                    $scope.items.push({ label:'Licencias Médicas', img:'fa-stethoscope', function: $scope.medicalLicenses});
 
                     $scope.selectItem($scope.items[0]);
                 } else {
                     $scope.items = [];
-                    $scope.items.push({ label:'Resumen', img:'fa-user', function: $scope.summary});
-                    $scope.items.push({ label:'Pedido', img:'fa-user', function: $scope.requestAssistance});
+                    $scope.items.push({ label:'Inicio', img:'fa-tachometer', function: $scope.summary});
+                    $scope.items.push({ label:'Solicitudes', img:'fa-ticket', function: $scope.requestAssistance});
+                    $scope.items.push({ label:'Licencias Médicas', img:'fa-stethoscope', function: $scope.medicalLicenses});
 
                     $scope.selectItem($scope.items[0]);
                 }
