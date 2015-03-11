@@ -69,7 +69,7 @@ app.controller('MenuCtrl', function($rootScope, $scope, $location, $timeout, Ses
 
 			} else {
 				$scope.items.push({ label:'Mis datos', img:'fa-pencil-square-o', function: $scope.myProfile });
-				$scope.items.push({ label:'Cambiar clave', img:'fa-lock fa-spin', function: $scope.changePassword });
+				$scope.items.push({ label:'Cambiar clave', img:'fa-lock', function: $scope.changePassword });
 				$scope.items.push({ label:'Salir', img:'fa-sign-out', function: $scope.exit });
 			}
 
