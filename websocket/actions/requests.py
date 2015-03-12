@@ -498,6 +498,8 @@ class ApproveAccountRequest:
   mail = inject.attr(Mail)
   userPass = inject.attr(UserPassword)
   config = inject.attr(Config)
+  students = inject.attr(Students)
+
 
 
   def sendEvents(self,server,req_id,user_id):
@@ -591,6 +593,22 @@ class ApproveAccountRequest:
         'password': req['password']
       }
       self.userPass.createUserPassword(con,creds)
+
+
+      student = {
+        'id':user_id,
+        'studentNumber':req['studentNumber'],
+        'condition':'regular'
+      }
+      self.students.createStudent(con,student)
+
+
+
+      'esto hay que pasarlo a un model - es para habilitar a todo el mundo a au24'
+      cur = con.cursor()
+      cur.execute('insert into au24.users (id) values (%s)',(user_id,))
+
+
 
       self.req.removeRequest(con,reqId)
 
