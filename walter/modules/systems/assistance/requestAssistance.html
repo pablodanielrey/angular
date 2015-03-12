@@ -1,48 +1,255 @@
 <div class="requestAssistance">
-
   <div class="content">
+
+    <!-- AUSENTE CON AVISO -->
     <div class="subcontent">
       <div class="titulo">
         <p class="titulo"><i class="fa fa-ticket"></i> Ausente con Aviso</p>
       </div>
       <div class="info">
-        <p>aaaaaaaaaaaaaaaaa</p>
+        <div>
+          <div>
+            <input type="button" value="Solicitar">
+          </div>
+          <div>
+            <input type="button" value="Disponibles">
+          </div>
+          <div>
+            <input type="button" value="Solicitudes">
+          </div>
+        </div>
+        <hr>
+        <div>
+          <div ng-class="{true:'visible', false:'hidden'}[false]">
+            <p>Seleccione el día</p>
+            <input type="date">
+          </div>
+          <div ng-class="{true:'visible', false:'hidden'}[false]">
+            <p>Disponibilidad</p>
+            <p>Este mes</p>
+            <input type="text" placeholder="Cantidad de días">
+            <p>En el año</p>
+            <input type="text" placeholder="Cantidad de días">
+          </div>
+          <div ng-class="{true:'visible', false:'hidden'}[false]">
+            <div ng-class="{true:'visible', false:'hidden'}[false]">
+              <p>No existen solicitudes pendientes</p>
+            </div>
+            <div ng-class="{true:'visible', false:'hidden'}[true]">
+              <p>Solicitud reciente</p>
+              <input type="text" placeholder="Solicitud">
+              <p>Estado</p>
+              <input type="text" placeholder="Aprobada">
+            </div>
+          </div>
+        </div>
+        <hr>
+        <div ng-class="{true:'visible', false:'hidden'}[false]">
+          <p>Solicitar Ausente con aviso para el día</p>
+          <input type="text" placeholder="Día elegido">
+          <input type="button" value="Confirmar">
+        </div>
       </div>
     </div>
-
+    <!-- COMPENSATORIOS -->
     <div class="subcontent">
       <div class="titulo">
         <p class="titulo"><i class="fa fa-ticket"></i> Compensatorios</p>
       </div>
       <div class="info">
-        <p class="info">eeeeeeeeeeeeeeee</p>
+        <div>
+          <div>
+            <input type="button" value="Solicitar">
+          </div>
+          <div>
+            <input type="button" value="Disponibles">
+          </div>
+          <div>
+            <input type="button" value="Solicitudes">
+          </div>
+        </div>
+        <hr>
+        <div>
+          <div ng-class="{true:'visible', false:'hidden'}[false]">
+            <p>Seleccione el día</p>
+            <input type="date">
+          </div>
+          <div ng-class="{true:'visible', false:'hidden'}[false]">
+            <p>Disponibilidad</p>
+            <p>Este mes</p>
+            <input type="text" placeholder="Cantidad de días">
+            <p>En el año</p>
+            <input type="text" placeholder="Cantidad de días">
+          </div>
+          <div ng-class="{true:'visible', false:'hidden'}[false]">
+            <div ng-class="{true:'visible', false:'hidden'}[false]">
+              <p>No existen solicitudes pendientes</p>
+            </div>
+            <div ng-class="{true:'visible', false:'hidden'}[true]">
+              <p>Solicitud reciente</p>
+              <input type="text" placeholder="Solicitud">
+              <p>Estado</p>
+              <input type="text" placeholder="Aprobada">
+            </div>
+          </div>
+        </div>
+        <hr>
+        <div ng-class="{true:'visible', false:'hidden'}[false]">
+          <p>Solicitar compensatorio para el día</p>
+          <input type="text" placeholder="Día elegido">
+          <input type="button" value="Confirmar">
+        </div>
       </div>
     </div>
-
+    <!-- PRE-EXAMEN -->
     <div class="subcontent">
       <div class="titulo">
         <p class="titulo"><i class="fa fa-ticket"></i> Pre-Exámen</p>
       </div>
       <div class="info">
-        <p class="info">iiiiiiiiiiiiiiiiiii</p>
+        <div>
+          <div>
+            <input type="button" value="Solicitar">
+          </div>
+          <div>
+            <input type="button" value="Disponibles">
+          </div>
+          <div>
+            <input type="button" value="Solicitudes">
+          </div>
+        </div>
+        <hr>
+        <div>
+          <div ng-class="{true:'visible', false:'hidden'}[false]">
+            <p>Seleccione el día</p>
+            <input type="date">
+          </div>
+          <div ng-class="{true:'visible', false:'hidden'}[false]">
+            <p>Disponibilidad</p>
+            <p>Este mes</p>
+            <input type="text" placeholder="Cantidad de días">
+            <p>En el año</p>
+            <input type="text" placeholder="Cantidad de días">
+          </div>
+          <div ng-class="{true:'visible', false:'hidden'}[false]">
+            <div ng-class="{true:'visible', false:'hidden'}[false]">
+              <p>No existen solicitudes pendientes</p>
+            </div>
+            <div ng-class="{true:'visible', false:'hidden'}[true]">
+              <p>Solicitud reciente</p>
+              <input type="text" placeholder="Solicitud">
+              <p>Estado</p>
+              <input type="text" placeholder="Aprobada">
+            </div>
+          </div>
+        </div>
+        <hr>
+        <div ng-class="{true:'visible', false:'hidden'}[false]">
+          <p>Solicitar Pre-exámen para el día</p>
+          <input type="text" placeholder="Día elegido">
+          <input type="button" value="Confirmar">
+        </div>
       </div>
     </div>
-
+    <!-- SALIDAS EVENTUALES -->
     <div class="subcontent">
       <div class="titulo">
         <p class="titulo"><i class="fa fa-ticket"></i> Salidas Eventuales</p>
       </div>
       <div class="info">
-        <p class="info">ooooooooooooooooooooo</p>
+        <div>
+          <div>
+            <input type="button" value="Solicitar">
+          </div>
+          <div>
+            <input type="button" value="Disponibles">
+          </div>
+          <div>
+            <input type="button" value="Solicitudes">
+          </div>
+        </div>
+        <hr>
+        <div>
+          <div ng-class="{true:'visible', false:'hidden'}[false]">
+            <p>Seleccione el día</p>
+            <input type="date">
+            <p>Seleccione Horas</p>
+            desde <input type="time" name="hora"> hasta <input type="time" name="hora">
+            <p>Total de Horas  <input type="text" placeholder="Día elegido"></p>
+          </div>
+          <div ng-class="{true:'visible', false:'hidden'}[false]">
+            <p>Horas Disponibles</p>
+            <input type="text" placeholder="Cantidad de horas">
+          </div>
+          <div ng-class="{true:'visible', false:'hidden'}[false]">
+            <div ng-class="{true:'visible', false:'hidden'}[false]">
+              <p>No existen solicitudes pendientes</p>
+            </div>
+            <div ng-class="{true:'visible', false:'hidden'}[false]">
+              <p>Solicitud reciente</p>
+              <input type="text" placeholder="Solicitud">
+              <p>Estado</p>
+              <input type="text" placeholder="Aprobada">
+            </div>
+          </div>
+        </div>
+        <hr>
+        <div ng-class="{true:'visible', false:'hidden'}[false]">
+          <p>Solicitar Boleta de salida para el día</p>
+          <input type="text" placeholder="Día elegido">
+          <input type="button" value="Confirmar">
+        </div>
       </div>
     </div>
-
+    <!-- LICENCIA ANUAL -->
     <div class="subcontent">
       <div class="titulo">
         <p class="titulo"><i class="fa fa-ticket"></i> Licencia Anual (LAO)</p>
       </div>
       <div class="info">
-        <p class="info">uuuuuuuuuuuuuuuu</p>
+        <div>
+          <div>
+            <input type="button" value="Solicitar">
+          </div>
+          <div>
+            <input type="button" value="Disponibles">
+          </div>
+          <div>
+            <input type="button" value="Solicitudes">
+          </div>
+        </div>
+        <hr>
+        <div>
+          <div ng-class="{true:'visible', false:'hidden'}[false]">
+            <p>Seleccione los días de licencia anual</p>
+            desde <input type="date" min="2015-12-15" >
+            hasta <input type="date" min="2015-12-15" >
+          </div>
+          <div ng-class="{true:'visible', false:'hidden'}[true]">
+            <p>Disponibilidad</p>
+            <p>Antiguedad</p>
+            <input type="text" placeholder="Años de antiguedad">
+            <p>Cantidad de días</p>
+            <input type="text" placeholder="Cantidad de días">
+          </div>
+          <div ng-class="{true:'visible', false:'hidden'}[false]">
+            <div ng-class="{true:'visible', false:'hidden'}[false]">
+              <p>No existen solicitudes pendientes</p>
+            </div>
+            <div ng-class="{true:'visible', false:'hidden'}[false]">
+              <p>Solicitud reciente</p>
+              <input type="text" placeholder="Solicitud">
+              <p>Estado</p>
+              <input type="text" placeholder="Aprobada">
+            </div>
+          </div>
+        </div>
+        <hr>
+        <div ng-class="{true:'visible', false:'hidden'}[false]">
+          <p>Solicitar Licencia anual para los días</p>
+          <input type="text" placeholder="Días elegido">
+          <input type="button" value="Confirmar">
+        </div>
       </div>
     </div>
 
