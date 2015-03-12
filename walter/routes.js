@@ -122,6 +122,11 @@ app.config(['$routeProvider', function($routeProvider) {
 		templateUrl: '/modules/systems/au24/au24.html',
 		controller: 'Au24Ctrl'
 	})
+	
+	.when('/test', {
+		templateUrl: '/modules/test/test.html',
+		controller: 'TestCtrl'
+	})
 
   .when('/tutors', {
     templateUrl: '/modules/systems/tutors/tutors.html',
