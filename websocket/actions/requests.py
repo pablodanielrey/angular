@@ -23,7 +23,7 @@ peticion:
   "id":"id de la peticion"
   "action":"removeAccountRequest",
   "session":"id de session obtenido en el login",
-  "reqId":"id del request a eliminar"
+  "requests":"requests a eliminar"
 }
 
 respuesta:
@@ -55,27 +55,32 @@ class RemoveAccountRequest:
     if 'id' not in message:
         raise MalformedMessage()
 
-    if 'reqId' not in message:
+    if 'requests' not in message:
         raise MalformedMessage()
 
     pid = message['id']
-    rid = message['reqId']
+    requests = message['requests']
 
     con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
     try:
-      self.req.removeRequest(con,rid)
-      con.commit()
 
-      response = {'id':pid, 'ok':'petición eliminada correctamente'}
-      server.sendMessage(response)
+        for request in requests:
+            rid = request['id'];
+            self.req.removeRequest(con,rid)
 
-      event = {
-        'type':'AccountRequestRemovedEvent',
-        'data': rid
-      }
-      self.events.broadcast(server,event)
 
-      return True
+        con.commit()
+
+        response = {'id':pid, 'ok':'petición eliminada correctamente'}
+        server.sendMessage(response)
+
+        event = {
+            'type':'AccountRequestRemovedEvent',
+            'data': rid
+        }
+        self.events.broadcast(server,event)
+
+        return True
 
     except psycopg2.DatabaseError as e:
 
@@ -458,7 +463,7 @@ peticion:
   "id":"id de la peticion"
   "action":"aprobeAccountRequest",
   "session":"id de session obtenido en el login",
-  "reqId":"id de la peticion"
+  "requests":"peticiones a aprovar"
 }
 
 respuesta:
@@ -544,53 +549,59 @@ class ApproveAccountRequest:
     self.profiles.checkAccess(sid,['ADMIN'])
 
     pid = message['id']
-    reqId = message['reqId']
+    requests = message['requests']
 
     con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
     try:
-      req = self.req.findRequest(con,reqId)
-      if (req == None):
-          raise MalformedMessage()
+        for request in requests:
+            reqId = request['id'];
+            print "----------- ID:" + reqId;
+            req = self.req.findRequest(con,reqId)
+            if (req == None):
+                raise MalformedMessage()
 
-      user = self.users.findUserByDni(con,req['dni'])
-      if user != None:
-          raise DupplicatedUser()
+            user = self.users.findUserByDni(con,req['dni'])
+            if user != None:
+                raise DupplicatedUser()
 
-      user = {
-        'dni':req['dni'],
-        'name':req['name'],
-        'lastname':req['lastname']
-      }
-      user_id = self.users.createUser(con,user)
+            user = {
+                'dni':req['dni'],
+                'name':req['name'],
+                'lastname':req['lastname']
+            }
+            user_id = self.users.createUser(con,user)
 
-      mail = {
-        'user_id': user_id,
-        'email': req['email'],
-        'confirmed': req['confirmed']
-      }
-      self.users.createMail(con,mail)
+            mail = {
+                'user_id': user_id,
+                'email': req['email'],
+                'confirmed': req['confirmed']
+            }
 
-      ''' uso la clave que pidio en el request '''
-      creds = {
-        'user_id':user_id,
-        'username':user['dni'],
-        'password': req['password']
-      }
-      self.userPass.createUserPassword(con,creds)
+            self.users.createMail(con,mail)
 
-      self.req.removeRequest(con,reqId)
+            ''' uso la clave que pidio en el request '''
+            creds = {
+                'user_id':user_id,
+                'username':user['dni'],
+                'password': req['password']
+            }
 
-      con.commit()
+            self.userPass.createUserPassword(con,creds)
 
-      response = {'id':pid, 'ok':'usuario creado correctamente'}
-      server.sendMessage(response)
+            self.req.removeRequest(con,reqId)
 
-      self.sendEvents(server,reqId,user_id)
+            self.sendEvents(server,reqId,user_id)
 
-      if mail['confirmed']:
-          self.sendEmail(req)
+            if mail['confirmed']:
+                self.sendEmail(req)
 
-      return True
+
+        con.commit()
+
+        response = {'id':pid, 'ok':'usuario creado correctamente'}
+        server.sendMessage(response)
+
+        return True
 
     except psycopg2.DatabaseError as e:
         con.rollback()

@@ -35,7 +35,6 @@ app.controller("AccountRequestsListCtrl", function($rootScope, $scope, Utils, Ac
 	 * Manejo del evento AccountRequestApproved: Cuando se aprueba una cuenta se debe actualizar la lista de requerimientos
 	 */
 	$scope.$on('AccountRequestUpdated', function(event,data) {
-		$scope.requests = [];
 		$scope.listAccountRequests();
 	});
 
@@ -53,7 +52,6 @@ app.controller("AccountRequestsListCtrl", function($rootScope, $scope, Utils, Ac
 			s.accountRequestSelected = null;
 			$scope.accountRequestSelected = [];
 		} else {
-			console.log(accountRequest.checked);
 			accountRequest.checked = !accountRequest.checked;
 			if (accountRequest.checked) {
 				$scope.accountRequestSelected.push(accountRequest);
@@ -90,11 +88,10 @@ app.controller("AccountRequestsListCtrl", function($rootScope, $scope, Utils, Ac
 	 *
 	 */
 	$scope.listAccountRequests = function() {
-
 		Account.listAccounts(
 			function(response) {
+				$scope.requests = [];
 				if (response == undefined) {
-					$scope.requests = [];
 					return;
 				}
 				for (var i = 0; i < response.length; i++) {
@@ -103,6 +100,7 @@ app.controller("AccountRequestsListCtrl", function($rootScope, $scope, Utils, Ac
 				$scope.loadFilterDescription();
 			},
 			function(error) {
+				$scope.requests = [];
 				alert(error);
 			});
 	};

@@ -19,4 +19,53 @@ app.service('Account', function(Messages, Utils, Session, Cache) {
                 callbackError(error);
             })
     }
+
+    this.approveAccountsRequest = function(accounts, callbackOk, callbackError) {
+        var msg = {
+			"id" : Utils.getId(),
+			"requests" : accounts,
+			"session" : Session.getSessionId(),
+			"action" : "approveAccountRequest",
+		};
+
+        Messages.send(msg,function(response) {
+            callbackOk(response);
+        },
+        function(error) {
+            callbackError(error);
+        });
+    }
+
+    this.removeAccountsRequest = function(accounts, callbackOk, callbackError) {
+        var msg = {
+			"id" : Utils.getId(),
+			"requests" : accounts,
+			"session" : Session.getSessionId(),
+			"action" : "removeAccountRequest",
+		};
+
+        Messages.send(msg,function(response) {
+            callbackOk(response);
+        },
+        function(error) {
+            callbackError(error);
+        });
+    }
+
+    this.rejectAccountRequest = function(accountId,description,callbackOk, callbackError) {
+        var msg = {
+			"id" : Utils.getId(),
+			"reqId" : accountId,
+			"session" : Session.getSessionId(),
+			"description" : description,
+			"action" : "rejectAccountRequest",
+		};
+
+        Messages.send(msg,function(response) {
+            callbackOk(response);
+        },
+        function(error) {
+            alert(error);
+        });
+    }
 });

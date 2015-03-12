@@ -1,5 +1,8 @@
 
-app.controller("AccountRequestEditCtrl", function($rootScope, $scope, $timeout, Utils, Messages, Session) {
+app.controller("AccountRequestEditCtrl", function($rootScope, $scope, $timeout, Utils, Account, Session) {
+
+	$scope.accountRequests = [];
+	$scope.accountRequest = {};
 
 	$scope.initialize = function() {
 		$scope.clearForm();
@@ -7,56 +10,54 @@ app.controller("AccountRequestEditCtrl", function($rootScope, $scope, $timeout, 
 		if (s.accountRequestSelected == null || s.accountRequestSelected.length < 1) {
 			return;
 		}
-		$scope.accountRequest = s.accountRequestSelected[0];
+		$scope.accountRequests = s.accountRequestSelected;
+		$scope.accountRequest = $scope.accountRequests[0];
 	}
 
-	$scope.clearForm = function(){
+	$scope.clearForm = function() {
 		$scope.accountRequest = {};
+		$scope.accountRequest = [];
 	}
 
 	$scope.approveAccountRequest = function(){
-		var msg = {
-			"id" : Utils.getId(),
-			"reqId" : $scope.accountRequest.id,
-			"session" : Session.getSessionId(),
-			"action" : "approveAccountRequest",
-		};
 
-		Messages.send(msg,function(response) {
-			$rootScope.$broadcast('AccountRequestUpdated');
-		});
+		Account.approveAccountsRequest($scope.accountRequests,
+			function(response) {
+				$rootScope.$broadcast('AccountRequestUpdated');
+			},
+			function(error) {
+				alert(error);
+			}
+		);
 
 		$scope.clearForm();
 	};
 
 	$scope.removeAccountRequest = function() {
-		var msg = {
-			"id" : Utils.getId(),
-			"reqId" : $scope.accountRequest.id,
-			"session" : Session.getSessionId(),
-			"action" : "removeAccountRequest",
-		};
-
-
-		Messages.send(msg,function(response) {
-			$rootScope.$broadcast('AccountRequestUpdated');
-		});
+		Account.removeAccountsRequest($scope.accountRequests,
+			function(response) {
+				$rootScope.$broadcast('AccountRequestUpdated');
+			},
+			function(error) {
+				alert(error);
+			}
+		);
 
 		$scope.clearForm();
 	};
 
 	$scope.rejectAccountRequest = function(){
-		var msg = {
-			"id" : Utils.getId(),
-			"reqId" : $scope.accountRequest.id,
-			"session" : Session.getSessionId(),
-			"description" : $scope.description,
-			"action" : "rejectAccountRequest",
-		};
 
-		Messages.send(msg,function(response) {
-			$rootScope.$broadcast('AccountRequestUpdated');
-		});
+		var account = $scope.accountRequests[0];
+
+		Account.rejectAccountRequest(account.id,$scope.description,
+			function(response) {
+				$rootScope.$broadcast('AccountRequestUpdated');
+			},
+			function(error) {
+				alert(error);
+			}
+		);
 
 		$scope.clearForm();
 	}
