@@ -605,13 +605,12 @@ class ApproveAccountRequest:
 
             studentNumber = req['studentNumber']
             studentNumber = studentNumber.strip();
-            if (studentNumber != None or studentNumber != ''):
-                print "Es alumno------------------------"
+            if (studentNumber != None and studentNumber != ''):
                 student = {
                     'id':user_id,
                     'studentNumber':req['studentNumber'],
                     'condition':'regular'
-                    }
+                }
                 self.students.createStudent(con,student)
 
 
