@@ -595,13 +595,13 @@ class ApproveAccountRequest:
       self.userPass.createUserPassword(con,creds)
 
 
-      student = {
-        'id':user_id,
-        'studentNumber':req['studentNumber'],
-        'condition':'regular'
-      }
-      self.students.createStudent(con,student)
-
+      if (req['studentNumber'] != None):
+          student = {
+            'id':user_id,
+            'studentNumber':req['studentNumber'],
+            'condition':'regular'
+          }
+          self.students.createStudent(con,student)
 
 
       'esto hay que pasarlo a un model - es para habilitar a todo el mundo a au24'
