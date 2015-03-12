@@ -39,6 +39,11 @@ app.controller('CreateAccountRequestCtrl', function($rootScope, $scope, $window,
 
 		Messages.send(msg, function(response) {
 
+      if (response.error != undefined) {
+        Notifications.message(response.error);
+        return;
+      }
+
 			if (response.ok == undefined) {
 				Notifications.message('error creando el pedido');
 			} else {
