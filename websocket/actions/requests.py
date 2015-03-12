@@ -132,9 +132,9 @@ class RejectAccountRequest:
       body = fbody.read().decode('utf8')
       fbody.close()
 
-      body = re.sub('###NAME###', request['name'], body)
-      body = re.sub('###LASTNAME###', request['lastname'], body)
-      content = re.sub('###DESCRIPTION###', request['description'], body)
+      body = re.sub('###NAME###', unicode(request['name'],'utf-8'), body)
+      body = re.sub('###LASTNAME###', unicode(request['lastname'],'utf-8'), body)
+      content = re.sub('###DESCRIPTION###', unicode(request['description'],'utf-8'), body)
 
       msg = self.mail.createMail(From,To,subject)
       p1 = self.mail.getHtmlPart(content)
