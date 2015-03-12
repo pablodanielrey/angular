@@ -603,12 +603,17 @@ class ApproveAccountRequest:
             }
             self.userPass.createUserPassword(con,creds)
 
-            student = {
-                'id':user_id,
-                'studentNumber':req['studentNumber'],
-                'condition':'regular'
-            }
-            self.students.createStudent(con,student)
+            studentNumber = req['studentNumber']
+            studentNumber = studentNumber.strip();
+            if (studentNumber != None or studentNumber != ''):
+                print "Es alumno------------------------"
+                student = {
+                    'id':user_id,
+                    'studentNumber':req['studentNumber'],
+                    'condition':'regular'
+                    }
+                self.students.createStudent(con,student)
+
 
             'esto hay que pasarlo a un model - es para habilitar a todo el mundo a au24'
             cur = con.cursor()
