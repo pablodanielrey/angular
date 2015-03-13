@@ -19,10 +19,11 @@ response :
   ok: "caso exito",
   error: "error del servidor",
   response:{
-      status: 'estado del agente',
-      start: "fecha y hora de inicio",
-      end: "fecha y hora fin",
-      logs: [ date1, date2, date3, .... ]       // son las marcaciones en bruto
+      status: 'estado del agente ',
+      start: "fecha y hora de inicio para el dia actual",
+      end: "fecha y hora fin para el dia actual",
+      logs: [ date1, date2, date3, .... ]       // son todas las marcaciones en bruto del dia actual
+      workedMinutes: 'minutos trabajados dentro del dia actual'
   }
 
 }
