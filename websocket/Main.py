@@ -14,6 +14,8 @@ from Ws.SimpleWebSocketServer import SimpleWebSocketServer
 from Ws.SimpleWebSocketServer import SimpleSSLWebSocketServer
 from websocketServer import WebsocketServer
 
+from model.assistance import AssistanceWebsocketServer
+
 
 from actions.chat import SendEventToClients
 from actions.login import Login, Logout, ResetPassword, ChangePassword
@@ -72,6 +74,7 @@ if __name__ == '__main__':
   ''' codigo de inicialización del servidor '''
 
   websocketServer = SimpleWebSocketServer(config.configs['server_ip'],int(config.configs['server_port']),WebsocketServer,actions)
+  websocketServer = SimpleWebSocketServer(config.configs['server_ip'],8026,AssistanceWebsocketServer,None)
   #websocketSslServer = SimpleSSLWebSocketServer(config.configs['server_ssl_ip'],int(config.configs['server_ssl_port']),WebsocketServer,actions, config.configs['server_ssl_cert'],config.configs['server_ssl_key'])
   #httpServer = SocketServer.TCPServer(('192.168.0.100',8002), MyHttpServerRequestHandler)
 
