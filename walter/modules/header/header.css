@@ -14,9 +14,7 @@
   font-size: 14px;
   font-family:Arial, Helvetica, sans-serif;
 }*/
-header {
-  margin-bottom:5px;
-}
+
 header .content {
     background-color:#0066A6;
     display:flex;
