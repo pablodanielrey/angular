@@ -3,28 +3,28 @@
 
   <div class="summaryUser">
     <div class="name">
-      <span class="data">{{user.name}}&nbsp;{{user.lastname}}</span>
-      <span>{{user.dni}}</span>
+      <span class="data">{{model.user.name}}&nbsp;{{model.user.lastname}}</span>
+      <span>{{model.user.dni}}</span>
     </div>
     <hr>
     <div class="turn">
       <span><i class="fa fa-clock-o"></i> <b>Turno</b></span>
-      <span class="spanBlue">8:00 / 15:00</span>
+      <div class="spanBlue" ng-repeat="time in model.assistanceData.timetable">{{time}}</div>
     </div>
     <hr>
     <div class="oficce">
       <span><i class="fa fa-building-o"></i> <b>Oficina</b></span>
-      <span class="spanBlue">Informática</span>
+      <div class="spanBlue" ng-repeat="office in model.offices">{{office}}</div>
     </div>
     <hr>
     <div class="job">
       <span><i class="fa fa-bookmark-o"></i> <b>Cargo</b></span>
-      <span class="spanBlue">E7</span>
+      <span class="spanBlue">{{model.assistanceData.position}}</span>
     </div>
     <hr>
     <div class="job">
       <span><i class="fa fa-map-marker"></i> <b>Estado</b></span>
-      <span class="spanBlue">Trabajando</span>
+      <span class="spanBlue">{{model.assistanceStatus.status}}</span>
     </div>
   </div>
 
@@ -32,19 +32,20 @@
 
   <div class="schedule">
     <div class="entryTime">
-      <span class="spanWhite"><b><i class="fa fa-clock-o"></i> Hora de Entrada</b></span>
-      <span class="boxes">7:30</span>
+      <span class="spanWhite"><b><i class="fa fa-clock-o"></i>Hora de Entrada</b></span>
+      <span class="boxes">{{model.assistanceStatus.start}}</span>
 
     </div>
 
     <div class="departureTime">
       <span class="spanWhite"><b><i class="fa fa-clock-o"></i> Hora de Salida</b></span>
-      <span class="boxes">10:43</span>
+      <span class="boxes">{{model.assistanceStatus.end}}</span>
     </div>
     <div class="departureTime">
       <span class="spanWhite"><b><i class="fa fa-clock-o"></i> Horas Trabajadas </b></span>
-      <span class="boxes">6:47</span>
+      <span class="boxes">{{model.assistanceStatus.workedTime}}</span>
     </div>
+    <!--
     <div class="weeklySummary">
       <span class="data2"><b><i class="fa fa-clock-o"></i> Resumen Semanal</b></span>
 
@@ -70,7 +71,9 @@
         </TR>
 
       </TABLE>
+
     </div>
+    -->
   </div>
 
 
