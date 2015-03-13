@@ -49,8 +49,12 @@ response :
   error: "error del servidor",
   response:{
       position: 'cargo de la persona',
-      start: "fecha y hora de inicio del turno",
-      end: "fecha y hora de fin de turno"
+	  timetable:[
+		{
+	      start: "fecha y hora de inicio del turno",
+		  end: "fecha y hora de fin de turno"
+		}
+	  ]
   }
 
 }
