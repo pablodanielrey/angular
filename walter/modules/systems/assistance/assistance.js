@@ -15,7 +15,14 @@ app.controller('AssistanceCtrl', function($scope, $timeout, $window, Profiles, S
     		position : null, //cargo de la persona
 			timetable:[], //fracciones horarias del dia actual
     	},
-    	offices : [] //oficinas del usuario
+    	offices : [], //oficinas del usuario
+    	justifications : [], //auxiliar para almacenar los datos de las justificaciones
+		justificationAbsent : null, //stock de justificaciones ausentes con aviso
+		justificationCompensatory : null, //stock de justificaciones compensatorios
+		justificationOut : null, //stock de justificaciones salidas eventuales
+		justification102 : null, //stock de justificaciones articulo 102
+		justificationExam : null, //stock de justificaciones pre examen
+		justificationLao : null //stock de justificaciones licencia anual ordinaria
     };
 
 	/**
@@ -71,6 +78,28 @@ app.controller('AssistanceCtrl', function($scope, $timeout, $window, Profiles, S
 
 		}
 	};
+	
+	$scope.formatJustificationsFromServer = function(justificationsFromServer){	
+		for(var i in justificationsFromServer){
+			var name = justificationsFromServer[i].name.toLowerCase();
+			var stock = justificationsFromServer[i].stock;
+
+			if((name.indexOf("ausente") > -1)|| (name.indexOf("absent") > -1)){
+				$scope.model.justificationAbsent = stock;
+			} else if((name.indexOf("comp") > -1)){
+				$scope.model.justificationCompensatory = stock;
+			} else if((name.indexOf("salida") > -1)|| (name.indexOf("out") > -1)){
+				$scope.model.justificationOut = stock;
+			} else if(name.indexOf("102") > -1){
+				$scope.model.justification102 = stock;
+			} else if(name.indexOf("lao") > -1){
+				$scope.model.justificationLao = stock;
+			} else if(name.indexOf("exam") > -1){
+				$scope.model.justificationExam = stock;
+			}
+		}
+
+	}
 
 	/**
 	 * consultar datos de asistencia
@@ -120,8 +149,39 @@ app.controller('AssistanceCtrl', function($scope, $timeout, $window, Profiles, S
 				alert(error);
 			}
 		);
-
     }
+    
+    $scope.loadJustifications = function() {
+    	Assistance.getJustifications($scope.model.session.user_id, 
+			function(justifications){
+				for(i in justifications){
+					var id = justifications[i].id;
+					$scope.model.justifications[id] = {name:justifications[i].name}
+					$scope.loadJustificationStock(id);
+				}	
+				
+				$scope.formatJustificationsFromServer($scope.model.justifications);
+			},
+			function(error){
+				alert(error);
+			}
+		);
+    }
+    
+    /**
+	 * Consultar datos de stock de justificacion
+	 */
+    $scope.loadJustificationStock = function(justificationId) {
+	    Assistance.getJustificationStock($scope.model.session.user_id, justificationId,
+			function(justificationStock){
+				$scope.model.justifications[justificationId].stock = justificationStock;
+			},
+			function(error){
+				alert(error);
+			}
+		);
+    }
+    
     
     /**
 	 * cargar datos de la session
@@ -140,6 +200,7 @@ app.controller('AssistanceCtrl', function($scope, $timeout, $window, Profiles, S
 						$scope.loadAssistanceStatus();
 						$scope.loadAssistanceData();
 						$scope.loadOffices();
+						$scope.loadJustifications();
 					} else {
 						console.log("not granted");
 						$window.location.href = "/#/logout";
