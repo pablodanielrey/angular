@@ -3,6 +3,8 @@ var app = angular.module('mainApp');
 app.controller('EditSystemsCtrl', function($scope, $timeout, Domain, Mail, Session) {
 
 
+
+
     $scope.systems = [];
 
     $scope.loadSystemsData = function() {
@@ -25,10 +27,10 @@ app.controller('EditSystemsCtrl', function($scope, $timeout, Domain, Mail, Sessi
                 if (domain != null) {
                     value = true;
                 }
-                $scope.systems.push({name:'dominio',value:value,label:"Dominio"});
+                $scope.systems.push({name:'dominio',img:'fa fa-laptop',value:value,label:"Dominio"});
             },
             function(error) {
-                $scope.systems.push({name:'dominio',value:false,label:"Dominio"});
+                $scope.systems.push({name:'dominio',img:'fa fa-laptop',value:false,label:"Dominio"});
             }
         );
 
@@ -39,10 +41,10 @@ app.controller('EditSystemsCtrl', function($scope, $timeout, Domain, Mail, Sessi
                     value = true;
                 }
 
-                $scope.systems.push({name:'correo',value:value,label:"Correo"});
+                $scope.systems.push({name:'correo',img:'fa fa-envelope-o', value:value,label:"Correo"});
             },
             function(error) {
-                $scope.systems.push({name:'correo',value:false,label:"Correo"});
+                $scope.systems.push({name:'correo',img:'fa fa-envelope-o', value:false,label:"Correo"});
             }
         );
     }
