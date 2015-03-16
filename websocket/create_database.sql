@@ -231,13 +231,15 @@ create table system.sessions (
   Tablas del módulo de asistencia
 */
 
-create table assistance.attlog {
+create schema assistance;
+
+create table assistance.attlog (
     id varchar not null primary key,
     device_id  varchar not null,
     user_id  varchar not null,
     verifymode bigint not null,
     date timestamp not null
-}
+)
 
 
 /*
