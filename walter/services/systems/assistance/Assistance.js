@@ -41,11 +41,43 @@ app.service('Assistance',function() {
 		callbackOk(response);
 	};
 
-	this.getJustifications = function() {
-
+	this.getJustifications = function(userId, callbackOk, callbackError) {
+		//TODO
+		response = [
+			{id:"1",name:"Ausentes con aviso"},
+			{id:"2",name:"Compensatorios"},
+			{id:"3",name:"Salidas Eventuales"},
+			{id:"4",name:"Art. 102"},
+			{id:"5",name:"Pre-examen"},
+			{id:"6",name:"LAO"},
+			
+		];
+		callbackOk(response);
 	};
 
-	this.getJustificationStock = function() {
+	this.getJustificationStock = function(userId, justificationId, callbackOk, callbackError) {
+		//TODO
+		switch(justificationId){
+			case "1":
+				response = 2;
+			break;
+			case "2":
+				response = 4;
+			break;			
+			case "3":
+				response = 1;
+			break;
+			case "4":
+				response = 3;
+			break;
+			case "5":
+				response = 3;
+			break;			
+			case "6":
+				response = 20;
+			break;			
+		}
 
+		callbackOk(response);
 	};
 });
