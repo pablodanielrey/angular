@@ -27,7 +27,7 @@ header .content {
 header .logo{
   display:flex;
   align-items: center;
-  margin-left:5px;
+  margin-left:15px;
 }
 .navigation {
 

@@ -1,16 +1,17 @@
-
 <div class='accountRequestsLists'>
-
-	<p><label>Buscar:</label><input type='text' ng-model="search" autofocus/></p>
-	<div>
-		<span>Motivo:</span>
+	<div class="content_search">
+		<input class="search" type='text' ng-model="search" autofocus placeholder="Buscar..." />
+	</div>
+	<div class="content_search">
+		<span>Motivo&nbsp;&nbsp;</span>
 		<select ng-model="filterDescriptionSelected" ng-options="opt as opt.label for opt in filterDescription" ng-change='onChangeFilterDescription(filterDescriptionSelected)'></select>
 	</div>
-	<p>
-		<input type="checkbox" checked="checked" ng-model="filterconfirmed.confirmed" ng-click="clearSelectedAccountRequest()">Confirmadas<br />
+	<div class="estado">
+		<input type="checkbox" checked="checked" ng-model="filterconfirmed.confirmed" ng-click="clearSelectedAccountRequest()">Confirmadas &nbsp;<br />
 		<input type="checkbox" ng-model="filterconfirmed.unconfirmed" ng-click="clearSelectedAccountRequest()">Sin confirmar<br />
 
-	</p>
+	</div>
+	<hr>
 	<ul class='accountRequestsList'>
 		<!--<li ng-click='singleSelectionAccountRequest(request)' ng-repeat="request in requests | filter:search | filterAccountRequestByConfirmed:filterconfirmed | orderBy:['name', 'lastname']">-->
 		<li ng-click='selectAccountRequest(r)' ng-repeat="r in requests | filter:search | filterAccountRequestByConfirmed:filterconfirmed" ng-class='{true:"selected",false:""}[isSelected(r)]'>
