@@ -269,8 +269,8 @@ class CreateAccountRequest:
       body = fbody.read().decode('utf8')
       fbody.close()
 
-      body = re.sub('###NAME###', request['name'], body)
-      body = re.sub('###LASTNAME###', request['lastname'], body)
+      body = re.sub('###NAME###', unicode(request['name'],'utf-8'), body)
+      body = re.sub('###LASTNAME###', unicode(request['lastname'],'urf-8'), body)
       body = re.sub('###DNI###', request['dni'], body)
       content = re.sub('###URL###', url, body)
 
@@ -541,8 +541,8 @@ class ApproveAccountRequest:
       body = fbody.read().decode('utf8')
       fbody.close()
 
-      body = re.sub('###NAME###', request['name'], body)
-      body = re.sub('###LASTNAME###', request['lastname'], body)
+      body = re.sub('###NAME###', unicode(request['name'],'utf-8'), body)
+      body = re.sub('###LASTNAME###', unicode(request['lastname'],'utf-8'), body)
       content = re.sub('###DNI###', request['dni'], body)
 
       msg = self.mail.createMail(From,To,subject)
