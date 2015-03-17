@@ -145,11 +145,63 @@ response :
 }
 
 
+---------------
 
 
+query : Obtener solicitudes de licencia de un determinado usuario
+{
+  id:,
+  action:"getRequestLicences",
+  session:,
+  request:{
+      user_id: "id del usuario",
+  }
+
+}
+
+response :
+{
+  id: "id de la petición",
+  ok: "caso exito",
+  error: "error del servidor",
+  response:{
+    requestLicences : [ "lista de solicitudes de licencia de un determinado usuario"
+  		{
+  		justification_id: "id de la justificacion o licencia solicitada"
+  		stock: "stock de la justificacion o licencia solicitada"
+  		begin: "fecha de inicio de la justificacion o licencia solicitada"
+  		end: "fecha de finalizacion de la justificacion o licencia solicitada"
+  		state: "estado de la solicitud"
+  		}
+	]
+
+}
 
 
+---------------
 
+
+query : Almacenar solicitud de licencia de un determinado usuario
+{
+  id:,
+  action:"setRequestLicence",
+  session:,
+  request:{
+      user_id: "id del usuario",
+      justification_id: "id de la justificacion o licencia solicitada"
+  	  stock: "stock de la justificacion o licencia solicitada"
+  	  begin: "fecha de inicio de la justificacion o licencia solicitada"
+  	  end: "fecha de finalizacion de la justificacion o licencia solicitada"
+  }
+
+}
+
+response :
+{
+  id: "id de la petición",
+  ok: "caso exito",
+  error: "error del servidor",
+}
 
 
 

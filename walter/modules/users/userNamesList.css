@@ -8,12 +8,15 @@
   display:flex;
   justify-content:center;
 }
+
+
+
 .userNamesList .input_container{
   border-radius: 0.3em;
   padding-left:30px;
   width:180px;
   height:28px;
-  font-size: 18px;
+  font-size: 14px;
   background-image: url("/views/img/Search.png");
   background-repeat:no-repeat;
 }

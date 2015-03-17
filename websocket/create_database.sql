@@ -242,6 +242,8 @@ create table assistance.attlog (
 )
 
 
+
+
 /*
   Vistas útiles para buscar usuarios rápido
 */
