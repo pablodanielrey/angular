@@ -49,45 +49,37 @@ class GetAssistanceStatus:
     events = inject.attr(Events)
     profiles = inject.attr(Profiles)
     config = inject.attr(Config)
+    assitance = inject.attr(Assistance)
 
     def handleAction(self, server, message):
 
         if (message['action'] != 'getAssistanceStatus'):
             return False
 
-        if 'domain' not in message:
-            response = {"id":message['id'], 'error':'no existe la info correspondiente al dominio'}
-            server.sendMessage(response)
-            return True
-
-        if 'id' not in message['domain']:
-            response = {"id":message['id'],'error':'el usuario no posee id'}
+        if ('request' not in message) or ('user_id' not in message['request']):
+            response = {'id':message['id'], 'error':'Insuficientes parámetros'}
             server.sendMessage(response)
             return True
 
         sid = message['session']
         self.profiles.checkAccess(sid,['ADMIN'])
 
+        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
-            con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+            status = assistance.getAssistanceStatus(con,message['request']['user_id'])
 
-            domain = message['domain']
-            self.req.persistDomain(con,domain)
-            con.commit()
-
-            response = {'id':message['id'], 'ok':''}
-            server.sendMessage(response)
-
-            event = {
-                'type':'UserDomainUpdatedEvent',
-                'data':domain['id']
+            response = {
+                'id':message['id'],
+                'ok':'',
+                'response':status
             }
-            self.events.broadcast(server,event)
-
+            server.sendMessage(response)
             return True
+
         except psycopg2.DatabaseError, e:
             con.rollback()
             raise e
 
         finally:
             con.close()
+            
