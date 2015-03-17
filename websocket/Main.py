@@ -14,7 +14,7 @@ from Ws.SimpleWebSocketServer import SimpleWebSocketServer
 from Ws.SimpleWebSocketServer import SimpleSSLWebSocketServer
 from websocketServer import WebsocketServer
 
-from model.assistance import AssistanceWebsocketServer
+from model.assistance import AssistanceWebsocketServer,AssistanceWebSocketClient
 
 
 from actions.chat import SendEventToClients
@@ -75,6 +75,8 @@ if __name__ == '__main__':
 
   websocketServer = SimpleWebSocketServer(config.configs['server_ip'],int(config.configs['server_port']),WebsocketServer,actions)
   websocketServerAssistance = SimpleWebSocketServer(config.configs['server_ip'],8026,AssistanceWebsocketServer,None)
+  websocketClientAssistance = AssistanceWebSocketClient()
+  websocketClientAssistance.handle(config)
   #websocketSslServer = SimpleSSLWebSocketServer(config.configs['server_ssl_ip'],int(config.configs['server_ssl_port']),WebsocketServer,actions, config.configs['server_ssl_cert'],config.configs['server_ssl_key'])
   #httpServer = SocketServer.TCPServer(('192.168.0.100',8002), MyHttpServerRequestHandler)
 
@@ -87,6 +89,7 @@ if __name__ == '__main__':
   signal.signal(signal.SIGINT,close_sig_handler)
 
   thread.start_new_thread(serveWebsockets,(websocketServer,1))
+  thread.start_new_thread(serveWebsockets,(websocketServerAssistance,1))
   #thread.start_new_thread(serveWebsockets,(websocketSslServer,1))
   #thread.start_new_thread(serveHttp,(httpServer,1))
 
