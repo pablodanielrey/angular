@@ -1,8 +1,10 @@
+<div ng-class="{true:'menuContainerFull',false:'menuContainerComprimed'}[showSubOptionsMenu()]">
 <div class="menu first">
 	<ul>
 		<li ng-repeat="i in items" ng-click="selectItem(i)" ng-class="{true:'selected'}[isItemSelected(i)]">
 			<div class="menu-item-ico fa {{i.img}}"></div>
 			<div class="menu-item">{{i.label}}</div>
+
 		</li>
 	</ul>
 </div>
@@ -13,4 +15,5 @@
 	<div ng-controller='AccountRequestOptionCtrl' ng-include="'/modules/menu/account-requests/account-request.html'" ng-class="{true:'visible',false:'hidden'}[isVisible()]"></div>
 	<div ng-controller='EditUsersOptionCtrl' ng-include="'/modules/menu/edit-users/edit-users.html'" ng-class="{true:'visible',false:'hidden'}[isVisible()]"></div>
 	<div ng-controller='AssistanceOptionCtrl' ng-include="'/modules/menu/assistance/assistance.html'" ng-class="{true:'visible',false:'hidden'}[isVisible()]"></div>
+</div>
 </div>
