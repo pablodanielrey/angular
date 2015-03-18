@@ -1,6 +1,6 @@
 var app = angular.module('mainApp');
 
-app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Session, Users, Student, LaboralInsertion) {
+app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Session, Users, Student, LaboralInsertion, Notifications) {
 
 	$scope.model = {
 		insertionData: {},
@@ -9,7 +9,7 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 		userData: {},
 		studentData : {},
 		selectedUser: null,
-		//status: {profile:false, languages:false, degrees:false, insertion:false} //objeto para indicar si los datos de lenguajes estan en condiciones de guardarse, el objeto sera modificado en los subcontroladores
+		status : true,
 	};
 
 
@@ -102,7 +102,8 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 		for (var i = 0; i < $scope.model.degrees.length; i++) {
 			
 			if($scope.model.degrees[i].name == ""){
-				alert("Debe seleccionar carrera");
+				Notifications.message('Debe seleccionar carrera');
+				$scope.model.status = false;
 			}
 			
 			if(isNaN($scope.model.degrees[i].courses)){
@@ -173,7 +174,8 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 		}
 		
 		if($scope.model.insertionData.cv === ""){
-			alert("Debe cargar su CV");
+			Notifications.message('Debe cargar CV');
+			$scope.model.status = false
 		}
 	};
 
@@ -183,7 +185,11 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 		$scope.saveInsertionData();
 		$scope.saveLanguages();
 		$scope.saveDegrees();
-		alert("Sus datos han sido registrados");
+		if($scope.model.status){
+			Notifications.message('Sus datos han sido registrados');
+		} else {
+			$scope.model.status = true;		
+		}
 	};
 
 
