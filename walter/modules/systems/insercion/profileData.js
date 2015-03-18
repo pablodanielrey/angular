@@ -30,7 +30,9 @@ app.controller('ProfileLaboralInsertionCtrl', function($scope,$timeout, Session,
 	 */
 	$scope.formatUser = function(){
 		//fecha de nacimiento
-		$scope.model.userData.birthdate = new Date($scope.model.userData.birthdate);
+		if($scope.model.userData.birthdate != null){
+			$scope.model.userData.birthdate = new Date($scope.model.userData.birthdate);
+		}
 		
 		$scope.model.userData.cellPhone = {
 			country:"54",
