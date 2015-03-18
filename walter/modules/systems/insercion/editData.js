@@ -203,23 +203,25 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 
 	};
 
-	$scope.setUserSelected = function() {
+	$scope.initialize = function() {
 		// seteo el usuario seleccionado dentro del scope para que lo usen las subvistas facilmente.
 		var s = Session.getCurrentSession();
 		if (s == null) {
 		  $location.path('/main');
 		}
 		if (s.selectedUser == undefined || s.selectedUser == null) {
+		  s.selectedUser = s.user_id;
 		  $location.path('/main');
 		}
 		$scope.model.selectedUser = s.selectedUser;
+		$scope.checkTermsAndConditions();
+		$scope.$broadcast('UpdateUserDataEvent');
 	};
 
 
 	$timeout(function() {
-		$scope.setUserSelected();
-		$scope.checkTermsAndConditions();
-		$scope.$broadcast('UpdateUserDataEvent');
+		$scope.initialize();
+		
 	});
 
 
