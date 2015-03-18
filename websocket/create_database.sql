@@ -239,7 +239,7 @@ create table assistance.attlog (
     user_id  varchar not null,
     verifymode bigint not null,
     date timestamp not null
-)
+);
 
 
 

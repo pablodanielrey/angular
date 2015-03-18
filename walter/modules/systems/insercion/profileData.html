@@ -5,12 +5,11 @@
       <span>Apellido</span>
       <input type="text" ng-model="model.userData.lastname">
       <span>Género:</span>
-      <input type="text" list="genre" ng-model='model.userData.genre'>
-      <datalist id="genre">
-        <option value="Hombre" />
-        <option value="Mujer" />
-        <option value="Otro" />
-      </datalist>
+      <select id="genre"  ng-model="model.userData.genre">
+        <option value="Hombre">Hombre</option>
+        <option value="Mujer">Mujer</option>
+        <option value="Otro">Otro</option>
+      </select>
       <span>DNI</span>
       <input type="text" ng-model="model.userData.dni">
       <span>Nacimiento</span>
@@ -25,15 +24,23 @@
       <input type="text" ng-model="model.userData.country">
       <span>Domicilio</span>
       <input type="text" ng-model="model.userData.address">
-	  <fieldset>
-			<legend>Teléfonos</legend>
-			<span>Fijo</span>
-			<input type="text" ng-model="model.userData.homePhone.country"> - (
-			<input type="text" ng-model="model.userData.homePhone.city">)
-			<input type="text" ng-model="model.userData.homePhone.number">
-			<span>Personal</span>
-			<input type="text" ng-model="model.userData.cellPhone.country"> - (
-			<input type="text" ng-model="model.userData.cellPhone.city">) 15 -
-			<input type="text" ng-model="model.userData.cellPhone.number">
-	  </fieldset>
+
+  	  <fieldset>
+  			<legend>Teléfonos</legend>
+  			<div class='telephones'>
+          <div>Fijo</div>
+    			<input class='tcountry' type="text" ng-model="model.userData.homePhone.country">
+          <div>- (</div>
+    			<input class='tcity' type="text" ng-model="model.userData.homePhone.city">
+          <div>)</div>
+    			<input class='tnumber' type="text" ng-model="model.userData.homePhone.number">
+        </div>
+        <div class='telephones'>
+    			<span>Personal</span>
+    			<input type="text" ng-model="model.userData.cellPhone.country"> - (
+    			<input type="text" ng-model="model.userData.cellPhone.city">) 15 -
+    			<input type="text" ng-model="model.userData.cellPhone.number">
+        </div>
+  	  </fieldset>
+
 </div>

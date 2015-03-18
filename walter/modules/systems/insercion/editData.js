@@ -1,6 +1,6 @@
 var app = angular.module('mainApp');
 
-app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Session, Users, Student, LaboralInsertion) {
+app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Session, Users, Student, LaboralInsertion, Notifications) {
 
 	$scope.model = {
 		insertionData: {},
@@ -9,7 +9,7 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 		userData: {},
 		studentData : {},
 		selectedUser: null,
-		//status: {profile:false, languages:false, degrees:false, insertion:false} //objeto para indicar si los datos de lenguajes estan en condiciones de guardarse, el objeto sera modificado en los subcontroladores
+		status : true,
 	};
 
 
@@ -102,7 +102,8 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 		for (var i = 0; i < $scope.model.degrees.length; i++) {
 			
 			if($scope.model.degrees[i].name == ""){
-				alert("Debe seleccionar carrera");
+				Notifications.message('Debe seleccionar carrera');
+				$scope.model.status = false;
 			}
 			
 			if(isNaN($scope.model.degrees[i].courses)){
@@ -171,6 +172,11 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 		if($scope.model.insertionData.reside === ""){
 			$scope.model.insertionData.reside = false;
 		}
+		
+		if($scope.model.insertionData.cv === ""){
+			Notifications.message('Debe cargar CV');
+			$scope.model.status = false
+		}
 	};
 
 	
@@ -179,6 +185,11 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 		$scope.saveInsertionData();
 		$scope.saveLanguages();
 		$scope.saveDegrees();
+		if($scope.model.status){
+			Notifications.message('Sus datos han sido registrados');
+		} else {
+			$scope.model.status = true;		
+		}
 	};
 
 
@@ -203,23 +214,25 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 
 	};
 
-	$scope.setUserSelected = function() {
+	$scope.initialize = function() {
 		// seteo el usuario seleccionado dentro del scope para que lo usen las subvistas facilmente.
 		var s = Session.getCurrentSession();
 		if (s == null) {
 		  $location.path('/main');
 		}
 		if (s.selectedUser == undefined || s.selectedUser == null) {
-		  $location.path('/main');
+		  s.selectedUser = s.user_id;
+  		  Session.saveSession(s);
 		}
 		$scope.model.selectedUser = s.selectedUser;
+		$scope.checkTermsAndConditions();
+		$scope.$broadcast('UpdateUserDataEvent');
 	};
 
 
 	$timeout(function() {
-		$scope.setUserSelected();
-		$scope.checkTermsAndConditions();
-		$scope.$broadcast('UpdateUserDataEvent');
+		$scope.initialize();
+		
 	});
 
 

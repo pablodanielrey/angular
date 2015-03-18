@@ -114,7 +114,7 @@ app.service('Users', function($rootScope, Messages, Session, Utils, Cache, Confi
 
   this.normalizeUser = function(user) {
     if (user.birthdate != undefined) {
-      user.birthdate = new Date(user.birthdate)
+      //user.birthdate = new Date(user.birthdate)
     }
   }
 

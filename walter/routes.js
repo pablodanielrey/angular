@@ -112,6 +112,16 @@ app.config(['$routeProvider', function($routeProvider) {
           controller: 'RequestAssistanceCtrl'
       })
 
+      .when('/adminRequestAssistance', {
+          templateUrl: '/modules/systems/assistance/adminRequestAssistance.html',
+          controller: 'AdminRequestAssistanceCtrl'
+      })
+
+      .when('/medicalLicenses', {
+          templateUrl: '/modules/systems/assistance/medicalLicenses.html',
+          controller: 'MedicalLicensesCtrl'
+      })
+
 
 	.when('/editAccountRequest', {
 		templateUrl: '/modules/account/accountRequestEdit.html',
@@ -122,7 +132,7 @@ app.config(['$routeProvider', function($routeProvider) {
 		templateUrl: '/modules/systems/au24/au24.html',
 		controller: 'Au24Ctrl'
 	})
-	
+
 	.when('/test', {
 		templateUrl: '/modules/test/test.html',
 		controller: 'TestCtrl'
