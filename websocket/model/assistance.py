@@ -2,12 +2,98 @@
 from Ws.SimpleWebSocketServer import WebSocket, SimpleWebSocketServer
 from websocket import create_connection
 import json, base64
+import psycopg2
+import inject
 import datetime
 import traceback
 import logging
 from wexceptions import MalformedMessage
 from model.profiles import AccessDenied
 from model.utils import DateTimeEncoder
+from model.config import Config
+from model.users import Users
+
+
+class Asssistance:
+
+    """ http://stackoverflow.com/questions/4998427/how-to-group-elements-in-python-by-n-elements """
+    def _grouper(n, iterable, fillvalue=None):
+        "grouper(3, 'ABCDEFG', 'x') --> ABC DEF Gxx"
+        args = [iter(iterable)] * n
+        return izip_longest(fillvalue=fillvalue, *args)
+
+
+    """ a partir de una lista de datetime obtiene los grupos de worked """
+    def _getWorkedTimetable(self, logList):
+        worked = []
+        bytwo = _grouper(2,logList)
+        for b in bytwo:
+            w = { 'start':b[0], 'end':b[1], 'minutes':(b[1]-b[0]).total_seconds() }
+            worked.append(w)
+        return worked
+
+
+    """ obtiene el estado de asistencia del dia actual del usuario """
+    def getAssistanceStatus(self,con,userId):
+
+        date = datetime.date.now()
+        logs = self._getLogs(con,userId,date)
+        attlogs = map(lambda e : e['date'] , logs)
+        inside = len(attlogs) % 2
+        worked = self._getWorkedTimetable(attlogs);
+        sdate = worked[0]['start']
+        edate = worked[-1]['end']
+        totalMinutes = 0
+        for w in worked:
+            totalMinutes = totalMinutes + w['minutes']
+
+        assistanceStatus = {
+            'status': inside,
+            'start': sdate,
+            'end': edate,
+            'logs': attlogs,
+            'workedMinutes': totalMinutes
+        }
+        return assistanceStatus
+
+
+
+    """ obtiene los logs de una fecha en paticular """
+    def _getLogs(self,con,userId,date):
+        cur = con.cursor()
+        cur.execute('select id, device_id, user_id, verifymode, date from assistance.attlog where user_id = %s and date::date = %s::date',(userId,date))
+        data = cur.fetchall()
+        logs = []
+        for d in data:
+            logs.append(self._convertToDict(d))
+        return logs
+
+
+    """ Busca el log por el id """
+    def findLog(self,con,id):
+        cur = con.cursor()
+        cur.execute('select id, device_id, user_id, verifymode, date, id from assistance.attlog where id = %s',(id,))
+        d = cur.fetchone()
+        if d:
+            return self.convertToDict(d)
+        else:
+            return None
+
+
+    def persistLog(self,con,data):
+        print "persist log"
+        if (self.findLog(con,data['id'])) == None:
+            params = (data['id'],data['device_id'],data['user_id'],data['verifymode'],data['date'])
+            cur = con.cursor()
+            cur.execute('insert into assistance.attlog (id,device_id,user_id,verifymode,date) values (%s,%s,%s,%s,%s)',params)
+
+
+    def _convertToDict(self,data):
+        d['id'] = data[0]
+        d['deviceId'] = data[1]
+        d['userId'] = data[2]
+        d['verifymode'] = data[3]
+        d['date'] = data[4]
 
 
 class AssistanceWebSocketClient():
@@ -28,6 +114,11 @@ class AssistanceWebSocketClient():
 
 
 class AssistanceWebsocketServer(WebSocket):
+
+  config = inject.attr(Config)
+  # assistanceReq = inject.attr(Asssistance)
+  assistanceReq = Asssistance()
+  usersReq = inject.attr(Users)
 
   def setActions(self,actions):
     self.actions = actions
@@ -63,15 +154,47 @@ class AssistanceWebsocketServer(WebSocket):
 
       msgStr = self.data[len(cmdLog):]
 
+      try:
+          #Abrir conexion con base de datos
+          con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
 
-      """ decodifico el log """
 
-      message = json.loads(msgStr.decode('utf-8'))
+          """ decodifico el log """
 
-      obj = message['id']
-      print "Id log:"+obj
-      person = message['person']
-      print "DNI:"+ person['dni']
+          message = json.loads(msgStr.decode('utf-8'))
+
+          """ Creo el log """
+          log = {}
+          log['id'] = message['id']
+
+          device = message['device']
+          log['device_id'] = device['id']
+
+          log['verifymode'] = message['verifyMode']
+          """ message['date'] -> 07:43:32 13/03/2015 """
+          date = datetime.datetime.strptime(message['date'], "%H:%M:%S %d/%m/%Y")
+          log['date'] = date
+
+          person = message['person']
+          dni = person['dni']
+          user = self.usersReq.findUserByDni(con,dni)
+          if user == None:
+            # print "El usuario con dni %s no existe en el sistema"%dni
+            return
+
+          log['user_id'] = user['id']
+
+          """ Lo guardo en el sistema """
+          self.assistanceReq.persistLog(con,log)
+
+          con.commit()
+
+      except psycopg2.DatabaseError, e:
+          con.rollback()
+          raise e
+
+      finally:
+          con.close()
 
       #jmsg = json.dumps(msg,cls=DateTimeEncoder)
 
@@ -93,68 +216,3 @@ class AssistanceWebsocketServer(WebSocket):
 
   def handleClose(self):
     print("closed : ",self.address)
-
-
-
-
-
-class Asssistance:
-
-    """ http://stackoverflow.com/questions/4998427/how-to-group-elements-in-python-by-n-elements """
-    def _grouper(n, iterable, fillvalue=None):
-        "grouper(3, 'ABCDEFG', 'x') --> ABC DEF Gxx"
-        args = [iter(iterable)] * n
-        return izip_longest(fillvalue=fillvalue, *args)
-
-
-    """ a partir de una lista de datetime obtiene los grupos de worked """
-    def _getWorkedTimetable(self, logList):
-        worked = []
-        bytwo = _grouper(2,logList)
-        for b in bytwo:
-            w = { 'start':b[0], 'end':b[1], 'minutes':(b[1]-b[0]).total_seconds() }
-            worked.append(w)
-        return worked
-
-
-    """ obtiene el estado de asistencia del dia actual del usuario """
-    def getAssistanceStatus(self,con,userId):
-
-        date = new Date()
-        logs = self._getLogs(con,userId,date)
-        attlogs = map(function(e) { return e['date'] }, logs)
-        inside = len(attlogs) % 2
-        worked = self._getWorkedTimetable(attlogs);
-        sdate = worked[0]['start']
-        edate = worked[-1]['end']
-        totalMinutes = 0
-        for w in worked:
-            totalMinutes = totalMinutes + w['minutes']
-
-        assistanceStatus = {
-            'status': inside,
-            'start': sdate,
-            'end': edate,
-            'logs': attlogs,
-            'workedMinutes': totalMinutes
-        }
-        return assistanceStatus
-
-
-
-    """ obtiene los logs de una fecha en paticular """
-    def _getLogs(self,con,userId,date):
-        cur = con.cursor()
-        cur.execute('select device_id, user_id, verifymode, date from assistance.attlog where user_id = %s and date::date = %s::date',(userId,date))
-        data = cur.fetchall()
-        logs = []
-        for d in data:
-            logs.append(self._convertToDict(d))
-        return logs
-
-
-    def _convertToDict(self,data):
-        d['deviceId'] = data[0]
-        d['userId'] = data[1]
-        d['verifymode'] = data[2]
-        d['date'] = data[3]
