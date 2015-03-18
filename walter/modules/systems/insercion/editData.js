@@ -179,6 +179,7 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 		$scope.saveInsertionData();
 		$scope.saveLanguages();
 		$scope.saveDegrees();
+		alert("Sus datos han sido registrados");
 	};
 
 
@@ -212,7 +213,6 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 		if (s.selectedUser == undefined || s.selectedUser == null) {
 		  s.selectedUser = s.user_id;
   		  Session.saveSession(s);
-  		  alert("test");
 		}
 		$scope.model.selectedUser = s.selectedUser;
 		$scope.checkTermsAndConditions();
