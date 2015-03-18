@@ -25,22 +25,26 @@
       <span>Domicilio</span>
       <input type="text" ng-model="model.userData.address">
 
-  	  <fieldset>
-  			<legend>Teléfonos</legend>
-  			<div class='telephones'>
-          <div>Fijo</div>
-    			<input class='tcountry' type="text" ng-model="model.userData.homePhone.country">
-          <div>- (</div>
-    			<input class='tcity' type="text" ng-model="model.userData.homePhone.city">
-          <div>)</div>
-    			<input class='tnumber' type="text" ng-model="model.userData.homePhone.number">
-        </div>
-        <div class='telephones'>
-    			<span>Personal</span>
-    			<input type="text" ng-model="model.userData.cellPhone.country"> - (
-    			<input type="text" ng-model="model.userData.cellPhone.city">) 15 -
-    			<input type="text" ng-model="model.userData.cellPhone.number">
-        </div>
-  	  </fieldset>
+      <div class="telContent">
+        <hr><span>Teléfono Fijo</span>
+    			<div class='telephones'>
+          	<input class='area' type="text" ng-model="model.userData.homePhone.country" placeholder="54">
+            <div>(</div>
+        		<input class='area2' type="text" ng-model="model.userData.homePhone.city" placeholder="0221">
+            <div>)</div>
+        		<input class='tnumber' type="text" ng-model="model.userData.homePhone.number" placeholder="4231111">
+          </div>
+          <span>Celular</span>
+          <div class='telephones'>
+
+      			<input class="area" type="text" ng-model="model.userData.cellPhone.country" placeholder="54">
+            <div>(</div>
+      			<input class="area2" type="text" ng-model="model.userData.cellPhone.city" placeholder="0221">
+            <div>)</div>
+            <input class="area" type="text" placeholder="15">
+          	<input type="text" ng-model="model.userData.cellPhone.number" placeholder="5011111">
+          </div>
+      </div>
+
 
 </div>

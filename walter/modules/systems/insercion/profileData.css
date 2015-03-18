@@ -5,14 +5,25 @@
   width:240px;
 }
 
+.profileData .telContent {
+  display:flex;
+  flex-direction:column;
+}
 .profileData .telephones {
-  display: inline;
+  display: flex;
+  flex-direction:row;
+
+}
+.profileData .area {
+  width:75px;
+}
+.profileData .area2 {
+  width:100px;
 }
 
-.profileData .telephones div {
-  display: inline;
+.profileData .telephones div{
+  margin:5px;
 }
-
 
 .profileData input {
     width:95%;

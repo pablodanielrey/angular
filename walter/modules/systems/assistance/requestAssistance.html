@@ -8,18 +8,18 @@
       <div class="info">
         <div class="subInfo">
           <div>
-            <input class="button" type="button" value="Solicitar">
+            <input class="button blue" type="button" value="Solicitar">
           </div>
           <div>
-            <input class="button" type="button" value="Disponibles">
+            <input class="button green" type="button" value="Disponibles">
           </div>
           <div>
-            <input class="button" type="button" value="Solicitudes">
+            <input class="button orange" type="button" value="Solicitudes">
           </div>
         </div>
         <hr>
         <div>
-          <div ng-class="{true:'visible', false:'hidden'}[false]">
+          <div ng-class="{true:'visible', false:'hidden'}[true]">
             <p>Seleccione el día</p>
             <input type="date">
           </div>
@@ -251,6 +251,7 @@
         </div>
       </div>
     </div>
+
     <div class="myRequest">
       <div class="tittle">
         <label> | Mis Solicitudes</label><hr>
@@ -271,10 +272,11 @@
           <span class="tetxRefuse">Denegada</span>
         </div>
       </div>
+      <div class="reasonRequest" ng-class="{true:'visible', false:'hidden'}[false]">
+        <input class="reasonRefuse" type="text"></input>
+      </div>
     </div>
-    <div class="reasonRequest" ng-class="{true:'visible', false:'hidden'}[false]">
-      <input class="reasonRefuse" type="text"></input>
-    </div>
+
   </div>
 
 </div>

@@ -34,6 +34,25 @@
   height:40px;
   margin:5px;
 }
+.requestAssistance .blue{
+  background-color:#0066A6;
+  color:white;
+  text-shadow: 0px 1px black;
+  font-weight: bold;
+}
+.requestAssistance .orange{
+  background-color:#ec9122;
+  color:white;
+  text-shadow: 0px 1px black;
+  font-weight: bold;
+}
+
+.requestAssistance .green{
+  background-color:#128c78;
+  color:white;
+  text-shadow: 0px 1px black;
+  font-weight: bold;
+}
 
 .requestAssistance .myRequest {
   background-color: #f5f5f5;
