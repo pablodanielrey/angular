@@ -168,7 +168,7 @@ response :
     requestLicences : [ "lista de solicitudes de licencia de un determinado usuario"
   		{
   		justification_id: "id de la justificacion o licencia solicitada"
-  		stock: "stock de la justificacion o licencia solicitada"
+  		quantity: "cantidad de la justificacion o licencia solicitada"
   		begin: "fecha de inicio de la justificacion o licencia solicitada"
   		end: "fecha de finalizacion de la justificacion o licencia solicitada"
   		state: "estado de la solicitud"
