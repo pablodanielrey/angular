@@ -171,6 +171,10 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 		if($scope.model.insertionData.reside === ""){
 			$scope.model.insertionData.reside = false;
 		}
+		
+		if($scope.model.insertionData.cv === ""){
+			alert("Debe cargar su CV");
+		}
 	};
 
 	
