@@ -4,9 +4,15 @@ from model.objectView import ObjectView
 class LaboralInsertion:
 
     def acceptTermsAndConditions(self,con,id):
-        params = (True,id)
+
         cur = con.cursor()
-        cur.execute('update laboral_insertion.users set accepted_conditions = %s where id = %s',params)
+        cur.execute('select accepted_conditions from laboral_insertion.users where id = %s',(id))
+        result = cur.fetchone()
+        params = (True, id)
+        if result != None:
+            cur.execute('update laboral_insertion.users set accepted_conditions = %s where id = %s',params)
+        else:
+            cur.execute('INSERT INTO laboral_insertion.users (accepted_conditions, id) VALUES (%s, %s)',params)
 
     def checkTermsAndConditions(self,con,id):
         cur = con.cursor()
