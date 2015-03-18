@@ -75,7 +75,7 @@ class Asssistance:
         cur.execute('select id, device_id, user_id, verifymode, date, id from assistance.attlog where id = %s',(id,))
         d = cur.fetchone()
         if d:
-            return self.convertToDict(d)
+            return self._convertToDict(d)
         else:
             return None
 
@@ -89,11 +89,13 @@ class Asssistance:
 
 
     def _convertToDict(self,data):
+        d = {}
         d['id'] = data[0]
         d['deviceId'] = data[1]
         d['userId'] = data[2]
         d['verifymode'] = data[3]
         d['date'] = data[4]
+        return d
 
 
 class AssistanceWebSocketClient():
@@ -165,7 +167,8 @@ class AssistanceWebsocketServer(WebSocket):
 
           """ Creo el log """
           log = {}
-          log['id'] = message['id']
+          log_id = message['id']
+          log['id'] = log_id
 
           device = message['device']
           log['device_id'] = device['id']
@@ -189,6 +192,8 @@ class AssistanceWebsocketServer(WebSocket):
 
           con.commit()
 
+          super(AssistanceWebsocketServer,self).sendMessage("OK;delete;"+str(log_id));
+
       except psycopg2.DatabaseError, e:
           con.rollback()
           raise e
@@ -196,11 +201,7 @@ class AssistanceWebsocketServer(WebSocket):
       finally:
           con.close()
 
-      #jmsg = json.dumps(msg,cls=DateTimeEncoder)
 
-      #logging.debug("lalalalaaaaaaaaaaa");
-
-      #super(WebsocketServer,self).sendMessage("{OK;}");
 
     except Exception as e:
       print e.__class__.__name__ + ' ' + str(e)
