@@ -23,6 +23,18 @@
   color: white;
 }
 
+.requestAssistance .info {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+
+.requestAssistance .button {
+  width: 150px;
+  height:40px;
+  margin:5px;
+}
+
 .requestAssistance .hidden{
   display:none;
 }
