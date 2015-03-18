@@ -5,12 +5,11 @@
       <span>Apellido</span>
       <input type="text" ng-model="model.userData.lastname">
       <span>Género:</span>
-      <input type="text" list="genre" ng-model='model.userData.genre'>
-      <datalist id="genre">
-        <option value="Hombre" />
-        <option value="Mujer" />
-        <option value="Otro" />
-      </datalist>
+      <select id="genre"  ng-model="model.userData.genre">
+        <option value="Hombre">Hombre</option>
+        <option value="Mujer">Mujer</option>
+        <option value="Otro">Otro</option>
+      </select>
       <span>DNI</span>
       <input type="text" ng-model="model.userData.dni">
       <span>Nacimiento</span>
