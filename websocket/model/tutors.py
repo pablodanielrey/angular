@@ -16,9 +16,9 @@ class Tutors:
 
 
     def persist(self,con,tutor):
-        params = (str(uuid.uuid4()), tutor['userId'], tutor['date'], tutor['studentNumber'])
+        params = (str(uuid.uuid4()), tutor['userId'], tutor['date'], tutor['studentNumber'], tutor['type'])
         cur = con.cursor()
-        cur.execute('insert into tutors.tutors (id,user_id,date,student_number) values (%s,%s,%s,%s)',params)
+        cur.execute('insert into tutors.tutors (id,user_id,date,student_number,type) values (%s,%s,%s,%s,%s)',params)
 
 
     def convertToDict(self,s):
