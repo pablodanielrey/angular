@@ -4,7 +4,7 @@ var app = angular.module('mainApp');
 app.controller('TutorsCtrl', function($scope,$timeout,Student,Tutors) {
 
   $scope.model = {
-    register:{ type:'', student:'', date:new Date() },
+    register:{ type:'', studentNumber:'', date:new Date() },
     students:[]
   };
 
