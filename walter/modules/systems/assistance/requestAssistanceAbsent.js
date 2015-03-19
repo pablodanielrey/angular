@@ -3,9 +3,26 @@ var app = angular.module('mainApp');
 app.controller('RequestAssistanceAbsentCtrl', function($scope) {
 
 	$scope.model.justificationAbsentRequestSelected = false;
+	$scope.model.justificationAbsentRequestDateSelected = false; //flag para indicar que se ha definido el dia de la solicitud
 	$scope.model.justificationAbsentAvailableSelected = false;
 	$scope.model.justificationAbsentRequestsSelected = false;
-				
+	$scope.model.date = null;
+
+	$scope.changeDate = function(){
+		if($scope.model.date != null){
+			$scope.model.justificationAbsentRequestDateSelected = true;
+		} else {
+			$scope.model.justificationAbsentRequestDateSelected = false;
+		}
+	}
+
+	/**
+	 * Esta definido el dia de la solicitud?
+	 */
+	$scope.isSelectedJustificationAbsentRequestDateSelected = function(){
+		return $scope.model.justificationAbsentRequestDateSelected;
+	};
+					
 	$scope.isSelectedJustificationAbsent = function(){
 		return $scope.model.justificationAbsentSelected;
 	};
@@ -32,6 +49,7 @@ app.controller('RequestAssistanceAbsentCtrl', function($scope) {
 		var value = !$scope.model.justificationAbsentRequestSelected;
 		$scope.clearSelectionsAbsent();
 		$scope.model.justificationAbsentRequestSelected = value;
+		$scope.changeDate();
 	};
 	
 	
@@ -50,6 +68,7 @@ app.controller('RequestAssistanceAbsentCtrl', function($scope) {
 	
 	
 	$scope.clearSelectionsAbsent = function(){
+		$scope.model.justificationAbsentRequestDateSelected = false;
 		$scope.model.justificationAbsentRequestSelected = false;
 		$scope.model.justificationAbsentAvailableSelected = false;
 		$scope.model.justificationAbsentRequestsSelected = false;
