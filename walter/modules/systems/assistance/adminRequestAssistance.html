@@ -1,11 +1,11 @@
 <div class="adminRequestAssistance">
-  <div class="tittle">
+  <div class="title">
     <label> | Administrar Solicitudes</label>
   </div>
 
   <div class="content">
     <div class="request">
-      <span class="requestInfo">Solicitud</span>
+      <span class="requestInfo">Ausente con Aviso</span>
     </div>
     <div class="userRequest">
       <div>
@@ -13,21 +13,22 @@
       </div>
       <div>
         <span class="userDNI">DNI</span>
-      </div>  
+      </div>
     </div>
     <div class="dateRequest">
       <span class="requestDate">Día de la solicitud</span>
     </div>
     <div class"actionsRequest">
       <div class="approve">
-        <input class="approveRequest" type="button" value="Aprobar"></input>
+        <button class="approveRequest" ng-click="approveRequest()"><i class="fa fa-check"></i> Aprobar</button>
       </div>
       <div class="denegar">
-        <input class="refuseRequest" type="button" value="Denegar"></input>
+        <button class="refuseRequest" ng-click="refuseRequest()"><i class="fa fa-times"></i> Denegar</button>
+
       </div>
     </div>
     <div class="reasonRequest">
-      <input class="reasonRefuse" type="text"></input>
+      <textarea class="reasonRefuse">Falto porque tengo que ir al medico, ponele!!!</textarea>
     </div>
   </div>
 
