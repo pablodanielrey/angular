@@ -15,10 +15,10 @@ app.controller('TutorsCtrl', function($rootScope,$scope,$timeout,Student,Tutors)
   $scope.findStudents = function() {
     Student.findAllStudentsData(
       function(response) {
-        response.students.sort();
         $scope.model.students = response.students;
-        if (response.students.length > 0) {
-          $scope.model.register.studentNumber = response.students[0].studentNumber;
+        $scope.model.students.sort();
+        if ($scope.model.students.length > 0) {
+          $scope.model.register.studentNumber = $scope.model.students[0].studentNumber;
         }
       },
       function(error) {

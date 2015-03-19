@@ -20,7 +20,7 @@ app.service('Messages', function($rootScope, WebSocket) {
   }
 
   this.receive = function(response) {
-
+    /*
     // codigo horrible!!! lo hago para hacer una prueba con los mensajes gigantes.
     if (response.parts != undefined) {
 
@@ -64,9 +64,9 @@ app.service('Messages', function($rootScope, WebSocket) {
             console.log('mensaje completo');
             //console.log(fullmessage);
 
-            /*
-              ACA ES LO QUE TARDA UNA VIDA Y BLOQUEA EL THREAD PRINCIPAL!!! CUANDO SE PASA A JSON
-            */
+
+            //  ACA ES LO QUE TARDA UNA VIDA Y BLOQUEA EL THREAD PRINCIPAL!!! CUANDO SE PASA A JSON
+
             //var jsonFullMessage = JSON.parse(fullmessage);
             var jsonFullMessage = eval('(' + fullmessage + ')');
 
@@ -81,7 +81,7 @@ app.service('Messages', function($rootScope, WebSocket) {
       }
       return;
     }
-
+    */
 
     // proceso el mensaje normalmente y elimino el callback en el caso de existir.
     for (var i = 0; i < this.ids.length; i++) {
