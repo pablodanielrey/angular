@@ -6,29 +6,29 @@
       <div class="info">
         <div class="subInfo">
           <div>
-            <input class="button blue" type="button" value="Solicitar" >
+            <input class="button blue" type="button" value="Solicitar" ng-click="selectJustificationAbsentRequest()">
           </div>
           <div>
-            <input class="button green" type="button" value="Disponibles">
+            <input class="button green" type="button" value="Disponibles" ng-click="selectJustificationAbsentAvailable()">
           </div>
           <div>
-            <input class="button orange" type="button" value="Solicitudes">
+            <input class="button orange" type="button" value="Solicitudes" ng-click="selectJustificationAbsentRequests()">
           </div>
         </div>
         <hr>
         <div>
-          <div ng-class="{true:'visible', false:'hidden'}[true]">
+          <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationAbsentRequest()]">
             <p>Seleccione el día</p>
             <input type="date">
           </div>
-          <div ng-class="{true:'visible', false:'hidden'}[false]">
+          <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationAbsentAvailable()]">
             <p>Disponibilidad</p>
             <p>Este mes</p>
             <input type="text" placeholder="Cantidad de días">
             <p>En el año</p>
             <input type="text" placeholder="Cantidad de días">
           </div>
-          <div ng-class="{true:'visible', false:'hidden'}[false]">
+          <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationAbsentRequests()]">
             <div ng-class="{true:'visible', false:'hidden'}[false]">
               <p>No existen solicitudes pendientes</p>
             </div>
