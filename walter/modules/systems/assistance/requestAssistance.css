@@ -74,9 +74,14 @@
   overflow: hidden;
   -webkit-transition: height 0.2s;
 }
-.requestAssistance .subcontent:hover div.info{
+.requestAssistance .subcontentDisplay div.info{
   height:180px;
 }
+
+.requestAssistance .subcontentDisplay, .requestAssistance .subcontent {
+    cursor:pointer;
+}
+
 /****FIN DE ACORDEON****/
 
 .requestAssistance .info {

@@ -1,7 +1,7 @@
 <div class="requestAssistance">
   <div class="content">
     <!-- AUSENTE CON AVISO -->
-    <div class="subcontent">
+    <div ng-class="{true:'subcontentDisplay', false:'subcontent'}[isSelected('justificationAbsent')]" ng-click="select('justificationAbsentSelected')">
       <div class="titulo">
         <p class="titulo"><i class="fa fa-ticket"></i> Ausente con Aviso</p>
       </div>
@@ -51,7 +51,7 @@
       </div>
     </div>
     <!-- COMPENSATORIOS -->
-    <div class="subcontent">
+    <div ng-class="{true:'subcontentDisplay', false:'subcontent'}[isSelected('justificationCompensatory')]" ng-click="select('justificationCompensatorySelected')">
       <div class="titulo">
         <p class="titulo"><i class="fa fa-ticket"></i> Compensatorios</p>
       </div>
@@ -101,7 +101,7 @@
       </div>
     </div>
     <!-- PRE-EXAMEN -->
-    <div class="subcontent">
+    <div ng-class="{true:'subcontentDisplay', false:'subcontent'}[isSelected('justificationExam')]" ng-click="select('justificationExamSelected')">
       <div class="titulo">
         <p class="titulo"><i class="fa fa-ticket"></i> Pre-Exámen</p>
       </div>
@@ -151,7 +151,7 @@
       </div>
     </div>
     <!-- SALIDAS EVENTUALES -->
-    <div class="subcontent">
+    <div  ng-class="{true:'subcontentDisplay', false:'subcontent'}[isSelected('justificationOut')]" ng-click="select('justificationOutSelected')">
       <div class="titulo">
         <p class="titulo"><i class="fa fa-ticket"></i> Salidas Eventuales</p>
       </div>
@@ -201,7 +201,7 @@
       </div>
     </div>
     <!-- LICENCIA ANUAL -->
-    <div class="subcontent">
+    <div ng-class="{true:'subcontentDisplay', false:'subcontent'}[isSelected('justificationLao')]" ng-click="select('justificationLaoSelected')">
       <div class="titulo">
         <p class="titulo"><i class="fa fa-ticket"></i> Licencia Anual (LAO)</p>
       </div>
