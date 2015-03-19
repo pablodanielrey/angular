@@ -201,7 +201,8 @@ create table tutors.tutors (
   user_id varchar references profile.users (id),
   "date" timestamp not null,
   student_number varchar not null,
-  type varchar not null
+  type varchar not null,
+  created timestamp default now()
 );
 
 
