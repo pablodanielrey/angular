@@ -9,9 +9,9 @@ app.controller('DegreeLaboralInsertionCtrl', function($scope, $timeout, LaboralI
 
 	$scope.$on('EditInsertionCheckDataEvent',function() {
 		$scope.model.status.degrees = true;
-		
+
 		$scope.$emit("EditInsertionDataCheckedEvent");
-		
+
 	});
 
   /*
@@ -29,7 +29,7 @@ app.controller('DegreeLaboralInsertionCtrl', function($scope, $timeout, LaboralI
       name: '',
       courses: 0,
       average1: 0,
-      average2: 0	  
+      average2: 0
     }
     $scope.model.degrees.push(degree);
   }
@@ -48,7 +48,7 @@ app.controller('DegreeLaboralInsertionCtrl', function($scope, $timeout, LaboralI
 		if ((data != undefined) && (data != null) && (data.length > 0)) {
 			$scope.model.degrees = data;
 			$scope.extendWorkType();
-			
+
 		}
 		if ($scope.model.degrees.length == 0) {
 			$scope.addDegree()
@@ -59,7 +59,7 @@ app.controller('DegreeLaboralInsertionCtrl', function($scope, $timeout, LaboralI
       });
 
   }
-  
+
  	 /**
 	 * Transformar datos de degree. La oferta seleccionada se transfora en su correspondiente valor string
 	 * @private
@@ -87,12 +87,24 @@ app.controller('DegreeLaboralInsertionCtrl', function($scope, $timeout, LaboralI
 
 
 	$scope.showOfferYoungProffesionals = function(degree){
+
+
+    /*
+    Contador Público >= 28
+    Licenciado en Administración >= 30
+    Licenciado en Turismo >= 24
+    Licenciado en Economía >= 29
+    Técnico en Cooperativas >= 16
+
+    cantidad de materias como máximo 37
+    */
+
 		if(degree.courses > 29){
 			return true;
 		} else {
 			return false;
 		}
-		
+
 	};
 
 });

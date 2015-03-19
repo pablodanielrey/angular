@@ -19,7 +19,7 @@
         <div>
           <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationAbsentRequest()]">
             <p>Seleccione el día</p>
-            <input type="date">
+            <input type="date" ng-model="model.date" ng-change="changeDate()">
           </div>
           <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationAbsentAvailable()]">
             <p>Disponibilidad</p>
@@ -41,9 +41,9 @@
           </div>
         </div>
         <hr>
-        <div ng-class="{true:'visible', false:'hidden'}[false]">
+        <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationAbsentRequestDateSelected()]">
           <p>Solicitar Ausente con aviso para el día</p>
-          <input type="text" placeholder="Día elegido">
+		  <p>{{model.date}}</p>
           <input type="button" value="Confirmar">
         </div>
       </div>
