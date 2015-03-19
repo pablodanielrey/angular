@@ -8,18 +8,24 @@ app.controller('TutorsCtrl', function($rootScope,$scope,$timeout,Student,Tutors)
     students:[]
   };
 
-
   $timeout(function() {
+    $scope.findStudents();
+  });
+
+  $scope.findStudents = function() {
     Student.findAllStudentsData(
       function(response) {
+        response.students.sort();
         $scope.model.students = response.students;
+        if (response.students.length > 0) {
+          $scope.model.register.studentNumber = response.students[0].studentNumber;
+        }
       },
       function(error) {
         alert(error);
       }
     );
-  });
-
+  }
 
   $scope.save = function() {
     Tutors.persistTutorData($scope.model.register,
