@@ -49,12 +49,12 @@ response :
   error: "error del servidor",
   response:{
       position: 'cargo de la persona',
-	  timetable:[
-		{
-	      start: "fecha y hora de inicio del turno",
-		  end: "fecha y hora de fin de turno"
-		}
-	  ]
+  	  timetable:[
+    		{
+    	      start: "fecha y hora de inicio del turno",
+    		    end: "fecha y hora de fin de turno"
+    		}
+  	  ]
   }
 
 }
@@ -121,6 +121,8 @@ response :
 
 ---------------
 
+---- JUSTIFICACIONES TOTALES EN EL AÑO ------
+
 query :
 {
   id:,
@@ -143,6 +145,33 @@ response :
   }
 
 }
+
+------------------------------------------------------
+--- JUSTIFICACIONES ACTUALES POSIBLES DE TOMARSE -----
+
+query :
+{
+  id:,
+  action:"getJustificationActualStock",
+  session:,
+  request:{
+      user_id: "id del usuario",
+      justification_id: "id de la justificación"
+  }
+
+}
+
+response :
+{
+  id: "id de la petición",
+  ok: "caso exito",
+  error: "error del servidor",
+  response:{
+    count: "cantidad de justificaciones disponibles de ese tipo"
+  }
+
+}
+
 
 
 ---------------
@@ -167,11 +196,11 @@ response :
   response:{
     requestLicences : [ "lista de solicitudes de licencia de un determinado usuario"
   		{
-  		justification_id: "id de la justificacion o licencia solicitada"
-  		quantity: "cantidad de la justificacion o licencia solicitada"
-  		begin: "fecha de inicio de la justificacion o licencia solicitada"
-  		end: "fecha de finalizacion de la justificacion o licencia solicitada"
-  		state: "estado de la solicitud"
+    		justification_id: "id de la justificacion o licencia solicitada"
+    		quantity: "cantidad de la justificacion o licencia solicitada"
+    		begin: 2014-12-01 00:00:00 "fecha de inicio de la justificacion o licencia solicitada"
+    		end: 2014-12-02 00:00:00 "fecha de finalizacion de la justificacion o licencia solicitada"
+    		state: "PENDING|APPROVED|REJECTED"
   		}
 	]
 
@@ -181,17 +210,16 @@ response :
 ---------------
 
 
-query : Almacenar solicitud de licencia de un determinado usuario
+query : solicitud de licencia de un determinado usuario
 {
   id:,
-  action:"setRequestLicence",
+  action:"requestLicence",
   session:,
   request:{
       user_id: "id del usuario",
       justification_id: "id de la justificacion o licencia solicitada"
-  	  stock: "stock de la justificacion o licencia solicitada"
   	  begin: "fecha de inicio de la justificacion o licencia solicitada"
-  	  end: "fecha de finalizacion de la justificacion o licencia solicitada"
+  	  end: "fecha de finalizacion de la justificacion o licencia solicitada" -- si no viene en el mensaje se toma hasta el fin de turno
   }
 
 }
