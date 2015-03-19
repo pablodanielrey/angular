@@ -1,10 +1,15 @@
 var app = angular.module('mainApp');
 
-app.controller('RequestAssistanceCtrl', function($scope, $rootScope, $timeout, Session, Assistance, Profiles) {
+app.controller('RequestAssistanceCtrl', function($scope, $rootScope, $timeout, $window, Session, Assistance, Profiles) {
 
 	$scope.model = {
 		justifications : [], //auxiliar para almacenar las justificaciones del usuario y su stock asociado
 		requestedLicences : [], //auxiliar para almacenar los datos de las solicitudes de licencias
+		justificationAbsentSelected	: false,
+		justificationLaoSelected	: false,
+		justificationExamSelected	: false,
+		justificationOutSelected	: false,
+		justificationCompensatorySelected : false
 	};
 
 	/**
@@ -116,75 +121,16 @@ app.controller('RequestAssistanceCtrl', function($scope, $rootScope, $timeout, S
 		}
 	};
 
-	/**
-	* verifica si esta seleccionado el item
-	*/
-
-	$scope.isSelected = function(item) {
-		var isSelected = false;
-		switch (item) {
-			case 'justificationAbsent': isSelected = $scope.justificationAbsentSelected; break;
-			case 'justificationCompensatory': isSelected = $scope.justificationCompensatorySelected; break;
-			case 'justificationExam': isSelected = $scope.justificationExamSelected; break;
-			case 'justificationOut': isSelected = $scope.justificationOutSelected; break;
-			case 'justificationLao': isSelected = $scope.justificationLaoSelected; break;
-		}
-
-		return isSelected;
-	}
-
-	$scope.justificationAbsentSelected = false;
-	$scope.justificationCompensatorySelected = false;
-	$scope.justificationExamSelected = false;
-	$scope.justificationOutSelected = false;
-	$scope.justificationLaoSelected = false;
-
 
 	$scope.clearSelections = function() {
-		$scope.justificationAbsentSelected = false;
-		$scope.justificationCompensatorySelected = false;
-		$scope.justificationExamSelected = false;
-		$scope.justificationOutSelected = false;
-		$scope.justificationLaoSelected = false;
+		$scope.model.justificationAbsentSelected = false;
+		$scope.model.justificationCompensatorySelected = false;
+		$scope.model.justificationExamSelected = false;
+		$scope.model.justificationOutSelected = false;
+		$scope.model.justificationLaoSelected = false;
 	}
 
-	/**
-	* Selecciona un item
-	*/
-	$scope.select = function(item) {
-		switch (item) {
-			case 'justificationAbsentSelected':
-				var value = !$scope.justificationAbsentSelected;
-				$scope.clearSelections();
-				$scope.justificationAbsentSelected = value;
-				break;
-
-			case 'justificationCompensatorySelected':
-				var value = !$scope.justificationCompensatorySelected;
-				$scope.clearSelections();
-				$scope.justificationCompensatorySelected = value;
-				break;
-
-			case 'justificationExamSelected':
-				var value = !$scope.justificationExamSelected;
-				$scope.clearSelections();
-				$scope.justificationExamSelected = value;
-				break;
-
-			case 'justificationOutSelected':
-				var value = !$scope.justificationOutSelected;
-				$scope.clearSelections();
-				$scope.justificationOutSelected = value;
-				break;
-
-			case 'justificationLaoSelected':
-				var value = !$scope.justificationLaoSelected;
-				$scope.clearSelections();
-				$scope.justificationLaoSelected = value;
-				break;
-		}
-	}
-
+	
 
     $timeout(function() {
         $scope.initialize();

@@ -1,0 +1,50 @@
+<!-- SALIDAS EVENTUALES -->
+    <div  ng-class="{true:'subcontentDisplay', false:'subcontent'}[isSelected('justificationOut')]" ng-click="select('justificationOutSelected')">
+      <div class="titulo">
+        <p class="titulo"><i class="fa fa-ticket"></i> Salidas Eventuales</p>
+      </div>
+      <div class="info">
+        <div>
+          <div>
+            <input type="button" value="Solicitar">
+          </div>
+          <div>
+            <input type="button" value="Disponibles">
+          </div>
+          <div>
+            <input type="button" value="Solicitudes">
+          </div>
+        </div>
+        <hr>
+        <div>
+          <div ng-class="{true:'visible', false:'hidden'}[false]">
+            <p>Seleccione el día</p>
+            <input type="date">
+            <p>Seleccione Horas</p>
+            desde <input type="time" name="hora"> hasta <input type="time" name="hora">
+            <p>Total de Horas  <input type="text" placeholder="Día elegido"></p>
+          </div>
+          <div ng-class="{true:'visible', false:'hidden'}[false]">
+            <p>Horas Disponibles</p>
+            <input type="text" placeholder="Cantidad de horas">
+          </div>
+          <div ng-class="{true:'visible', false:'hidden'}[false]">
+            <div ng-class="{true:'visible', false:'hidden'}[false]">
+              <p>No existen solicitudes pendientes</p>
+            </div>
+            <div ng-class="{true:'visible', false:'hidden'}[false]">
+              <p>Solicitud reciente</p>
+              <input type="text" placeholder="Solicitud">
+              <p>Estado</p>
+              <input type="text" placeholder="Aprobada">
+            </div>
+          </div>
+        </div>
+        <hr>
+        <div ng-class="{true:'visible', false:'hidden'}[false]">
+          <p>Solicitar Boleta de salida para el día</p>
+          <input type="text" placeholder="Día elegido">
+          <input type="button" value="Confirmar">
+        </div>
+      </div>
+    </div>
