@@ -1,7 +1,7 @@
 
 var app = angular.module('mainApp');
 
-app.controller('TutorsCtrl', function($rootScope,$scope,$timeout,Student,Tutors) {
+app.controller('TutorsCtrl', function($rootScope,$scope,$timeout,Student,Tutors,Notifications) {
 
   $scope.model = {
     register:{ type:'', studentNumber:'', date:new Date() },
@@ -30,10 +30,10 @@ app.controller('TutorsCtrl', function($rootScope,$scope,$timeout,Student,Tutors)
   $scope.save = function() {
     Tutors.persistTutorData($scope.model.register,
       function(ok) {
-        $rootScope.$broadcast('ShowMessageEvent',ok);
+        Notifications.message(ok);
       },
       function(error) {
-        $rootScope.$broadcast('ShowMessageEvent',error);
+        Notifications.message(error);
       }
     );
   }
