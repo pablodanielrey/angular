@@ -24,10 +24,10 @@ app.controller('TutorsCtrl', function($rootScope,$scope,$timeout,Student,Tutors)
   $scope.save = function() {
     Tutors.persistTutorData($scope.model.register,
       function(ok) {
-        $rootScope.broadcast('ShowMessageEvent',ok);
+        $rootScope.$broadcast('ShowMessageEvent',ok);
       },
       function(error) {
-        $rootScope.broadcast('ShowMessageEvent',error);
+        $rootScope.$broadcast('ShowMessageEvent',error);
       }
     );
   }
