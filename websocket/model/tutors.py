@@ -6,7 +6,7 @@ class Tutors:
 
     def list(self,con):
         cur = con.cursor()
-        cur.execute('select user_id, date, student_number, type from tutors.tutors')
+        cur.execute('select user_id, date, student_number, type, created from tutors.tutors')
         data = cur.fetchall()
         tutors = []
         for d in data:
@@ -26,6 +26,7 @@ class Tutors:
             'userId':s[0],
             'date':s[1],
             'studentNumber':s[2],
-            'type':s[3]
+            'type':s[3],
+            'created':s[4]
         }
         return tutor

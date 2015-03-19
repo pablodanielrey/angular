@@ -65,7 +65,7 @@ class PersistTutorData:
             self.tutors.persist(con,tutor)
             con.commit()
 
-            response = {'id':message['id'], 'ok':''}
+            response = {'id':message['id'], 'ok':'Registro ingresado correctamente'}
             server.sendMessage(response)
 
             return True
@@ -90,7 +90,7 @@ peticion:
 respuesta:
 {
     "id":"id de la peticion",
-    "tutorData":[
+    "response":[
         {
         "date":"fecha",
         "studentNumber":"legajo",
