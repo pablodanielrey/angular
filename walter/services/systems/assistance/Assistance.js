@@ -16,7 +16,7 @@ app.service('Assistance',function() {
 			],
 			workedMinutes: '400'
 		};
-		callbackOk(response); 	
+		callbackOk(response);
 	};
 
 	this.getAssistanceData = function(userId, callbackOk, callbackError) {
@@ -50,7 +50,7 @@ app.service('Assistance',function() {
 			{id:"4",name:"Art. 102"},
 			{id:"5",name:"Pre-examen"},
 			{id:"6",name:"LAO"},
-			
+
 		];
 		callbackOk(response);
 	};
@@ -63,7 +63,7 @@ app.service('Assistance',function() {
 			break;
 			case "2":
 				response = 4;
-			break;			
+			break;
 			case "3":
 				response = 1;
 			break;
@@ -72,15 +72,15 @@ app.service('Assistance',function() {
 			break;
 			case "5":
 				response = 3;
-			break;			
+			break;
 			case "6":
 				response = 20;
-			break;			
+			break;
 		}
 
 		callbackOk(response);
 	};
-	
+
 	/**
 	 * Obtener solicitudes de licencia del usuario
 	 * Las solicitudes de licencia son aquellas peticiones de licencia futuras que aun no han sido tomadas, pueden estar aprobadas o no por el jefe o autoridad. Las fechas de inicio y/o finalizacion asociadas a las solicitudes de licencia deben ser posteriores a la fecha actual, caso contrario, la solicitud de licencia deberia ser archivada como justificacion (en el caso de que sea aprobada) o eliminada (en el caso de que este desaprobada)
@@ -94,7 +94,7 @@ app.service('Assistance',function() {
 	  		{justification_id: "1", quantity: 1, begin: '2015-05-13 00:00:00', end: '2015-05-13 00:00:00', state: "Desaprobada"},
   			{justification_id: "2", quantity: 3, begin: '2015-06-13 00:00:00', end: '2015-06-15 00:00:00', state: "Aprobada"}
 		]
-	
+
 		callbackOk(response);
 	}
 });

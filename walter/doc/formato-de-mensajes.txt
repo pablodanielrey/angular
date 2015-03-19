@@ -25,7 +25,6 @@ response :
       logs: [ date1, date2, date3, .... ]       // son todas las marcaciones en bruto del dia actual
       workedMinutes: 'minutos trabajados dentro del dia actual'
   }
-
 }
 
 

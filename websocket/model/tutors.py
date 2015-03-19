@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
+
+import uuid
+
 class Tutors:
 
-    def listTutorData(self,con):
+    def list(self,con):
         cur = con.cursor()
         cur.execute('select user_id, date, student_number, type from tutors.tutors')
         data = cur.fetchall()
@@ -12,7 +15,7 @@ class Tutors:
         return tutors
 
 
-    def persistTutorData(self,con,tutor):
+    def persist(self,con,tutor):
         params = (str(uuid.uuid4()), tutor['userId'], tutor['date'], tutor['studentNumber'])
         cur = con.cursor()
         cur.execute('insert into tutors.tutors (id,user_id,date,student_number) values (%s,%s,%s,%s)',params)

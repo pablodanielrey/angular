@@ -20,7 +20,7 @@ peticion:
     "id":"",
     "action":"persistTutorData",
     "session":"session de usuario",
-    "tutorData": {
+    "request": {
         "date":"fecha ingresada",
         "studentNumber":"legajo del alumno"
         "type":"tipo de relacion"
@@ -48,7 +48,7 @@ class PersistTutorData:
         if (message['action'] != 'persistTutorData'):
             return False
 
-        if 'tutorData' not in message:
+        if 'request' not in message:
             response = {'id':message['id'], 'error':'no existe la info correspondiente a las tutorías '}
             server.sendMessage(response)
             return True
@@ -60,9 +60,9 @@ class PersistTutorData:
         try:
             con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
 
-            tutor = message['tutorData']
+            tutor = message['request']
             tutor['userId'] = self.profiles.getLocalUserId(sid)
-            self.tutors.perist(con,tutor)
+            self.tutors.persist(con,tutor)
             con.commit()
 
             response = {'id':message['id'], 'ok':''}

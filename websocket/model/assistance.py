@@ -33,9 +33,19 @@ class Asssistance:
         return worked
 
 
+    """ obtiene los logs de una fecha en paticular """
+    def _getLogs(self,con,userId,date):
+        cur = con.cursor()
+        cur.execute('select id, device_id, user_id, verifymode, date from assistance.attlog where user_id = %s and date::date = %s::date',(userId,date))
+        data = cur.fetchall()
+        logs = []
+        for d in data:
+            logs.append(self._convertToDict(d))
+        return logs
+
+
     """ obtiene el estado de asistencia del dia actual del usuario """
     def getAssistanceStatus(self,con,userId):
-
         date = datetime.date.now()
         logs = self._getLogs(con,userId,date)
         attlogs = map(lambda e : e['date'] , logs)
@@ -57,16 +67,9 @@ class Asssistance:
         return assistanceStatus
 
 
+    def getAssistanceData(self,con,userId):
+        
 
-    """ obtiene los logs de una fecha en paticular """
-    def _getLogs(self,con,userId,date):
-        cur = con.cursor()
-        cur.execute('select id, device_id, user_id, verifymode, date from assistance.attlog where user_id = %s and date::date = %s::date',(userId,date))
-        data = cur.fetchall()
-        logs = []
-        for d in data:
-            logs.append(self._convertToDict(d))
-        return logs
 
 
     """ Busca el log por el id """
@@ -80,6 +83,7 @@ class Asssistance:
             return None
 
 
+    """ persiste el log solo si no existe algun log con ese id """
     def persistLog(self,con,data):
         print "persist log"
         if (self.findLog(con,data['id'])) == None:
@@ -96,6 +100,9 @@ class Asssistance:
         d['verifymode'] = data[3]
         d['date'] = data[4]
         return d
+
+
+
 
 
 class AssistanceWebSocketClient():
