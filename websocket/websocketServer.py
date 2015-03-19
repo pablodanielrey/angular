@@ -91,9 +91,9 @@ class WebsocketServer(WebSocket):
 
   def sendMessage(self,msg):
       jmsg = json.dumps(msg,cls=DateTimeEncoder)
-      if (len(jmsg) < 1000) {
-        logging.debug(jmsg)
-      }
+      if (len(jmsg) < 1000):
+          logging.debug(jmsg)
+
       super(WebsocketServer,self).sendMessage(jmsg)
 
       #maxMessageSize = 1000
