@@ -1,6 +1,6 @@
 <!-- SALIDAS EVENTUALES -->
-    <div  ng-class="{true:'subcontentDisplay', false:'subcontent'}[isSelected('justificationOut')]" ng-click="select('justificationOutSelected')">
-      <div class="titulo">
+    <div  ng-class="{true:'subcontentDisplay', false:'subcontent'}[isSelectedJustificationOut()]" ng-click="select('justificationOutSelected')">
+      <div class="titulo" ng-click="selectJustificationOut()">
         <p class="titulo"><i class="fa fa-ticket"></i> Salidas Eventuales</p>
       </div>
       <div class="info">

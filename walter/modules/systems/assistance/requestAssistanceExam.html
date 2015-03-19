@@ -1,6 +1,6 @@
 <!-- PRE-EXAMEN -->
-    <div ng-class="{true:'subcontentDisplay', false:'subcontent'}[isSelected('justificationExam')]" ng-click="select('justificationExamSelected')">
-      <div class="titulo">
+    <div ng-class="{true:'subcontentDisplay', false:'subcontent'}[isSelectedJustificationExam()]" ng-click="select('justificationExamSelected')">
+      <div class="titulo" ng-click="selectJustificationExam()">
         <p class="titulo"><i class="fa fa-ticket"></i> Pre-Exámen</p>
       </div>
       <div class="info">
