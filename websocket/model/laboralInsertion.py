@@ -6,7 +6,7 @@ class LaboralInsertion:
     def acceptTermsAndConditions(self,con,id):
 
         cur = con.cursor()
-        cur.execute('select accepted_conditions from laboral_insertion.users where id = %s',(id))
+        cur.execute('select accepted_conditions from laboral_insertion.users where id = %s',(id,))
         result = cur.fetchone()
         params = (True, id)
         if result != None:
@@ -16,7 +16,7 @@ class LaboralInsertion:
 
     def checkTermsAndConditions(self,con,id):
         cur = con.cursor()
-        cur.execute('select accepted_conditions from laboral_insertion.users where id = %s',(id))
+        cur.execute('select accepted_conditions from laboral_insertion.users where id = %s',(id,))
         language = cur.fetchone()
         if language != None:
             return language[0]
@@ -25,7 +25,7 @@ class LaboralInsertion:
 
     def findLaboralInsertion(self,con,id):
         cur = con.cursor()
-        cur.execute('select id,reside,travel from laboral_insertion.users where id = %s',(id))
+        cur.execute('select id,reside,travel from laboral_insertion.users where id = %s',(id,))
         li = cur.fetchone()
         if li:
             return self.convertUserToDict(li)
@@ -94,15 +94,15 @@ class LaboralInsertion:
 
     def deleteLanguage(self,con,id):
         cur = con.cursor()
-        cur.execute('delete from laboral_insertion.languages where id = %s',(id))
+        cur.execute('delete from laboral_insertion.languages where id = %s',(id,))
 
     def deleteLanguages(self,con,user_id):
         cur = con.cursor()
-        cur.execute('delete from laboral_insertion.languages where user_id = %s',(user_id))
+        cur.execute('delete from laboral_insertion.languages where user_id = %s',(user_id,))
 
     def listLanguages(self,con,user_id):
         cur = con.cursor()
-        cur.execute('select id, user_id, name, level from laboral_insertion.languages where user_id = %s',(user_id))
+        cur.execute('select id, user_id, name, level from laboral_insertion.languages where user_id = %s',(user_id,))
         data = cur.fetchall()
         languages = []
         for d in data:
@@ -146,7 +146,7 @@ class LaboralInsertion:
 
     def deleteDegree(self,con,id):
         cur = con.cursor()
-        cur.execute('delete from laboral_insertion.degree where id = %s',(id))
+        cur.execute('delete from laboral_insertion.degree where id = %s',(id,))
 
 
     def deleteDegrees(self,con,user_id):
