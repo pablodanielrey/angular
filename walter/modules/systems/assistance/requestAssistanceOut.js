@@ -2,9 +2,6 @@ var app = angular.module('mainApp');
 
 app.controller('RequestAssistanceOutCtrl', function($scope) {
 
-    $scope.model.justificationOutRequestSelected = false;
-    $scope.model.justificationOutAvailableSelected = false;
-    $scope.model.justificationOutRequestsSelected = false;
 
     $scope.isSelectedJustificationOut = function(){
 		return $scope.model.justificationOutSelected;
@@ -13,9 +10,16 @@ app.controller('RequestAssistanceOutCtrl', function($scope) {
 	$scope.selectJustificationOut = function(){
 		var value = !$scope.model.justificationOutSelected;
 		$scope.clearSelections();
+        $scope.clearSelectionsOut();
+        $scope.model.justification = {};
 		$scope.model.justificationOutSelected = value;
 	}
 
+
+
+    $scope.model.justificationOutRequestSelected = false;
+    $scope.model.justificationOutAvailableSelected = false;
+    $scope.model.justificationOutRequestsSelected = false;
 
 	$scope.isSelectedJustificationOutRequest = function(){
 		return $scope.model.justificationOutRequestSelected;
@@ -30,22 +34,19 @@ app.controller('RequestAssistanceOutCtrl', function($scope) {
 	};
 
 	$scope.selectJustificationOutRequest = function(){
-		var value = !$scope.model.justificationOutRequestSelected;
 		$scope.clearSelectionsOut();
-		$scope.model.justificationOutRequestSelected = value;
+		$scope.model.justificationOutRequestSelected = true;
 	};
 
 
 	$scope.selectJustificationOutRequests = function(){
-		var value = !$scope.model.justificationOutRequestsSelected;
 		$scope.clearSelectionsOut();
-		$scope.model.justificationOutRequestsSelected = value;
+		$scope.model.justificationOutRequestsSelected = true;
 	};
 
 	$scope.selectJustificationOutAvailable = function(){
-		var value = !$scope.model.justificationOutAvailableSelected;
 		$scope.clearSelectionsOut();
-		$scope.model.justificationOutAvailableSelected = value;
+		$scope.model.justificationOutAvailableSelected = true;
 
 	};
 
