@@ -6,31 +6,33 @@
       <div class="info">
         <div>
           <div>
-            <input type="button" value="Solicitar">
+            <input class="button blue" type="button" value="Solicitar" ng-click="selectJustificationLaoRequest()">
           </div>
           <div>
-            <input type="button" value="Disponibles">
+            <input class="button green" type="button" value="Disponibles" ng-click="selectJustificationLaoAvailable()">
           </div>
           <div>
-            <input type="button" value="Solicitudes">
+            <input class="button orange" type="button" value="Solicitudes" ng-click="selectJustificationLaoRequests()">
           </div>
         </div>
         <hr>
         <div>
-          <div ng-class="{true:'visible', false:'hidden'}[false]">
+          <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationLaoRequest()]">
             <p>Seleccione los días de licencia anual</p>
             desde <input type="date" min="2015-12-15" >
             hasta <input type="date" min="2015-12-15" >
           </div>
-          <div ng-class="{true:'visible', false:'hidden'}[true]">
+
+          <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationLaoAvailable()]">
             <p>Disponibilidad</p>
             <p>Antiguedad</p>
             <input type="text" placeholder="Años de antiguedad">
             <p>Cantidad de días</p>
             <input type="text" placeholder="Cantidad de días">
           </div>
-          <div ng-class="{true:'visible', false:'hidden'}[false]">
-            <div ng-class="{true:'visible', false:'hidden'}[false]">
+
+          <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationLaoRequests()]">
+            <div ng-class="{true:'visible', false:'hidden'}[true]">
               <p>No existen solicitudes pendientes</p>
             </div>
             <div ng-class="{true:'visible', false:'hidden'}[false]">
@@ -40,6 +42,7 @@
               <input type="text" placeholder="Aprobada">
             </div>
           </div>
+
         </div>
         <hr>
         <div ng-class="{true:'visible', false:'hidden'}[false]">

@@ -6,33 +6,35 @@
       <div class="info">
         <div>
           <div>
-            <input type="button" value="Solicitar">
+            <input class="button blue" type="button" value="Solicitar" ng-click="selectJustificationOutRequest()">
           </div>
           <div>
-            <input type="button" value="Disponibles">
+            <input class="button green" type="button" value="Disponibles" ng-click="selectJustificationOutAvailable()">
           </div>
           <div>
-            <input type="button" value="Solicitudes">
+            <input class="button orange" type="button" value="Solicitudes" ng-click="selectJustificationOutRequests()">
           </div>
         </div>
         <hr>
         <div>
-          <div ng-class="{true:'visible', false:'hidden'}[false]">
+          <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationOutRequest()]">
             <p>Seleccione el día</p>
             <input type="date">
             <p>Seleccione Horas</p>
             desde <input type="time" name="hora"> hasta <input type="time" name="hora">
             <p>Total de Horas  <input type="text" placeholder="Día elegido"></p>
           </div>
-          <div ng-class="{true:'visible', false:'hidden'}[false]">
+
+          <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationOutAvailable()]">
             <p>Horas Disponibles</p>
             <input type="text" placeholder="Cantidad de horas">
           </div>
-          <div ng-class="{true:'visible', false:'hidden'}[false]">
-            <div ng-class="{true:'visible', false:'hidden'}[false]">
+
+          <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationOutRequests()]">
+            <div ng-class="{true:'visible', false:'hidden'}[true]">
               <p>No existen solicitudes pendientes</p>
             </div>
-            <div ng-class="{true:'visible', false:'hidden'}[false]">
+            <div ng-class="{true:'visible', false:'hidden'}[true]">
               <p>Solicitud reciente</p>
               <input type="text" placeholder="Solicitud">
               <p>Estado</p>

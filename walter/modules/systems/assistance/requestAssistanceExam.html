@@ -6,29 +6,31 @@
       <div class="info">
         <div>
           <div>
-            <input type="button" value="Solicitar">
+            <input class="button blue" type="button" value="Solicitar" ng-click="selectJustificationExamRequest()">
           </div>
           <div>
-            <input type="button" value="Disponibles">
+            <input class="button green" type="button" value="Disponibles" ng-click="selectJustificationExamAvailable()">
           </div>
           <div>
-            <input type="button" value="Solicitudes">
+            <input class="button orange" type="button" value="Solicitudes" ng-click="selectJustificationExamRequests()">
           </div>
         </div>
         <hr>
         <div>
-          <div ng-class="{true:'visible', false:'hidden'}[false]">
+          <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationExamRequest()]">
             <p>Seleccione el día</p>
             <input type="date">
           </div>
-          <div ng-class="{true:'visible', false:'hidden'}[false]">
+
+          <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationExamAvailable()]">
             <p>Disponibilidad</p>
             <p>Este mes</p>
             <input type="text" placeholder="Cantidad de días">
             <p>En el año</p>
             <input type="text" placeholder="Cantidad de días">
           </div>
-          <div ng-class="{true:'visible', false:'hidden'}[false]">
+
+          <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationExamRequests()]">
             <div ng-class="{true:'visible', false:'hidden'}[false]">
               <p>No existen solicitudes pendientes</p>
             </div>
