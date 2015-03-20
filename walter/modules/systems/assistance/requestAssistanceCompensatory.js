@@ -120,7 +120,8 @@ app.controller('RequestAssistanceCompensatoryCtrl', function($scope, Assistance,
         Assistance.requestLicence($scope.model.user_id,$scope.model.justification,
             function(ok) {
                 Notifications.message("Guardado exitosamente");
-                $scope.initialize($scope.model.justification);
+                $scope.model.justification.begin = null; 
+                $scope.clearSelections();
             },
             function(error) {
                 Notifications.message(error);
