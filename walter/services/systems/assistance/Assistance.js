@@ -44,7 +44,7 @@ app.service('Assistance',function() {
 	this.getJustifications = function(userId, callbackOk, callbackError) {
 		//TODO
 		response = [
-			{id:"1",name:"Ausentes con aviso"},
+			{id:"1",name:"absent"},
 			{id:"2",name:"compensatory"},
 			{id:"3",name:"Salidas Eventuales"},
 			{id:"4",name:"Art. 102"},
@@ -81,6 +81,8 @@ app.service('Assistance',function() {
 		callbackOk(response);
 	};
 
+
+	//stock del mes que es generalmente el que le interesa visualizar al usuario
 	this.getJustificationActualStock = function(userId, justificationId, callbackOk, callbackError) {
 		//TODO
 		switch(justificationId){
@@ -121,6 +123,12 @@ app.service('Assistance',function() {
   			{justification_id: "2", quantity: 3, begin: '2015-06-13 00:00:00', end: '2015-06-15 00:00:00', state: "Aprobada"}
 		]
 
+		callbackOk(response);
+	}
+	
+	
+	this.requestLicence = function(userId, justification, callbackOk, callbackError){
+		response = "ok";
 		callbackOk(response);
 	}
 });
