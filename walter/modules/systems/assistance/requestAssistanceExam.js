@@ -16,6 +16,7 @@ app.controller('RequestAssistanceExamCtrl', function($scope, Assistance, Session
 	$scope.selectJustificationExam = function(){
 		var value = !$scope.model.justificationExamSelected;
 		$scope.clearSelections();
+		$scope.clearSelectionsExam();
 		$scope.model.justificationExamSelected = value;
 	}
 
