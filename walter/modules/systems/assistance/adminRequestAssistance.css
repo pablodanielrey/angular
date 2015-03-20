@@ -34,11 +34,11 @@
   width:170px;
   height:55px;
   margin-right:10px;
-  background-color:#ec9122;
+  background-color:#0066A6;
   color:white;
   text-shadow: 0px 1px black;
   font-weight: bold;
-  border: 1px solid #ec9122;
+  border: 1px solid #0066A6;
 }
 .adminRequestAssistance .userRequest {
   display:flex;

@@ -11,11 +11,11 @@
           <div>
             <input class="button green" type="button" value="Disponibles" ng-click="selectJustificationOutAvailable()">
           </div>
-          <div>
+          <!-- <div>
             <input class="button orange" type="button" value="Solicitudes" ng-click="selectJustificationOutRequests()">
-          </div>
+          </div> -->
         </div>
-        <hr>
+
         <div>
           <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationOutRequest()]">
             <p>Seleccione el día</p>
@@ -42,7 +42,7 @@
             </div>
           </div>
         </div>
-        <hr>
+        
         <div ng-class="{true:'visible', false:'hidden'}[true]">
           <p>Solicitar Boleta de salida para el día</p>
           <input type="text" placeholder="Día elegido">
