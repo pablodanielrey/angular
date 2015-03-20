@@ -31,63 +31,60 @@ app.controller('RequestAssistanceAbsentCtrl', function($scope, Assistance, Notif
 				$scope.model.requestAbsentBeginFormated = null;
 			}
 		}
-	
+
 		return false;
 	};
-					
+
 	$scope.isSelectedJustificationAbsent = function(){
 		return $scope.model.justificationAbsentSelected;
 	};
-	
+
 	$scope.selectJustificationAbsent = function(){
 		var value = !$scope.model.justificationAbsentSelected;
 		$scope.clearSelections();
 		$scope.model.justificationAbsentSelected = value;
 	};
-		
+
 	$scope.isSelectedJustificationAbsentRequest = function(){
 		return $scope.model.justificationAbsentRequestSelected;
 	};
-	
+
 	$scope.isSelectedJustificationAbsentAvailable = function(){
 		return $scope.model.justificationAbsentAvailableSelected;
 	};
-	
+
 	$scope.isSelectedJustificationAbsentRequests = function(){
 		return $scope.model.justificationAbsentRequestsSelected;
 	};
-	
+
 	$scope.selectJustificationAbsentRequest = function(){
-		var value = !$scope.model.justificationAbsentRequestSelected;
 		$scope.clearSelectionsAbsent();
-		$scope.model.justificationAbsentRequestSelected = value;
+		$scope.model.justificationAbsentRequestSelected = true;
 	};
-	
-	
+
+
 	$scope.selectJustificationAbsentRequests = function(){
-		var value = !$scope.model.justificationAbsentRequestsSelected;
 		$scope.clearSelectionsAbsent();
-		$scope.model.justificationAbsentRequestsSelected = value;
+		$scope.model.justificationAbsentRequestsSelected = true;
 	};
-	
+
 	$scope.selectJustificationAbsentAvailable = function(){
-		var value = !$scope.model.justificationAbsentAvailableSelected;
 		$scope.clearSelectionsAbsent();
-		$scope.model.justificationAbsentAvailableSelected = value;
-		
+		$scope.model.justificationAbsentAvailableSelected = true;
+
 	};
-	
-	
+
+
 	$scope.clearSelectionsAbsent = function(){
 		$scope.model.justificationAbsentRequestDateSelected = false;
 		$scope.model.justificationAbsentRequestSelected = false;
 		$scope.model.justificationAbsentAvailableSelected = false;
 		$scope.model.justificationAbsentRequestsSelected = false;
-		
+
 	}
-	
-	
-	
+
+
+
 	 // Carga el stock que se puede tomar
     $scope.loadAbsentActualStock = function(id) {
         Assistance.getJustificationActualStock($scope.model.session.user_id, id,
@@ -99,7 +96,7 @@ app.controller('RequestAssistanceAbsentCtrl', function($scope, Assistance, Notif
 			}
 		);
     }
-    
+
 	//Carga el stock disponible de los ausentes con aviso
     $scope.loadAbsentStock = function(id) {
         Assistance.getJustificationStock($scope.model.session.user_id, id,
@@ -111,47 +108,47 @@ app.controller('RequestAssistanceAbsentCtrl', function($scope, Assistance, Notif
 			}
 		);
     }
-    
-    
+
+
     /**
 	 * Actualmente solo puede solicitar un dia a la vez
 	 */
 	$scope.confirmRequestAbsent = function(){
-	
+
 		var requestLicence = {
 			id:$scope.model.absent.id,
-			start:$scope.model.absentStart, 
-			end:$scope.model.absentStart, 
+			start:$scope.model.absentStart,
+			end:$scope.model.absentStart,
 		}
 		Assistance.requestLicence($scope.model.session.user_id, requestLicence,
 			function(ok){
 				$scope.model.requestAbsentBegin = null;
-				$scope.clearSelections();
+				$scope.clearSelectionsAbsent();
 				Notifications.message('Ausente con aviso solicitado correctamente');
 				$scope.$broadcast('requestLicenceEvent');
 			},
 			function(error){
 				Notifications.message(error);
 			}
-		
+
 		);
 	}
-	
-	
+
+
 	$scope.initialize = function(justification){
         $scope.model.absent = {id:justification.id, name:justification.name, stock:0, actualStock:0};
 		$scope.loadAbsentStock(justification.id);
-		$scope.loadAbsentActualStock(justification.id);	
+		$scope.loadAbsentActualStock(justification.id);
 	}
 
 	// Escuchar evento de inicializacion
     $scope.$on('findStockJustification', function(event, data) {
-    
+
         justification = data.justification;
         if (justification.name == 'absent') {
 			$scope.initialize(justification);
         }
-        
+
     });
-	
+
 });
