@@ -11,11 +11,11 @@
           <div>
             <input class="button green" type="button" value="Disponibles" ng-click="selectJustificationExamAvailable()">
           </div>
-          <div>
+          <!-- <div>
             <input class="button orange" type="button" value="Solicitudes" ng-click="selectJustificationExamRequests()">
-          </div>
+          </div> -->
         </div>
-        <hr>
+
         <div>
           <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationExamRequest()]">
             <p>Seleccione el día</p>
@@ -42,7 +42,7 @@
             </div>
           </div>
         </div>
-        <hr>
+
         <div ng-class="{true:'visible', false:'hidden'}[false]">
           <p>Solicitar Pre-exámen para el día</p>
           <input type="text" placeholder="Día elegido">
