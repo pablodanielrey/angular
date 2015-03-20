@@ -67,6 +67,7 @@ class Asssistance:
         return assistanceStatus
 
 
+    """ obtiene tods los schedules para un usuario en determinada fecha, solo deja los actuales, tiene en cuenta el historial ordenado por date """
     def getAssistanceData(self,con,userId,date):
 
         cur = con.cursor()
@@ -98,6 +99,7 @@ class Asssistance:
         return data
 
 
+    """ obtiene todas las oficinas """
     def getOffices(self,con):
         cur = con.cursor()
         cur.execute('select id,parent,name from assistance.offices')
@@ -108,6 +110,7 @@ class Asssistance:
         return offices
 
 
+    """ obtiene todas las oficinas a las que pertenece un usuario y si tree=True obtiene todas las hijas también """
     def getOfficesByUser(self,con,tree=False):
         cur = con.cursor()
         cur.execute('select id,parent,name from assistance.offices o, assistance.offices_users ou where ou.user_id = %s and o.id = ou.office_id')
