@@ -11,9 +11,10 @@
           <div>
             <input class="button green" type="button" value="Disponibles" ng-click="selectJustificationCompensatoryAvailable()">
           </div>
+          <!--
           <div>
             <input class="button orange" type="button" value="Solicitudes" ng-click="selectJustificationCompensatoryRequests()">
-          </div>
+          </div>-->
         </div>
 
         <hr>
@@ -22,7 +23,7 @@
 
           <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationCompensatoryRequest()]">
             <p>Seleccione el día</p>
-            <input type="date">
+            <input type="date" ng-model="model.justification.begin">
           </div>
 
           <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationCompensatoryAvailable()]">
@@ -47,10 +48,10 @@
 
         <hr>
 
-        <div ng-class="{true:'visible', false:'hidden'}[false]">
+        <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationRequest()]">
           <p>Solicitar compensatorio para el día</p>
-          <input type="text" placeholder="Día elegido">
-          <input type="button" value="Confirmar">
+          <input type="text" placeholder="Día elegido" ng-model="dateFormated">
+          <input type="button" value="Confirmar" ng-click='save()'>
         </div>
       </div>
     </div>

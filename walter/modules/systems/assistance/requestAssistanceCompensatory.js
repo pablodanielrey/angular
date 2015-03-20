@@ -1,10 +1,14 @@
 var app = angular.module('mainApp');
 
-app.controller('RequestAssistanceCompensatoryCtrl', function($scope, Assistance) {
+app.controller('RequestAssistanceCompensatoryCtrl', function($scope, Assistance, Session, Notifications) {
 
     $scope.model.justificationCompensatoryRequestSelected = false;
 	$scope.model.justificationCompensatoryAvailableSelected = false;
 	$scope.model.justificationCompensatoryRequestsSelected = false;
+    $scope.model.justification = {};
+
+
+    // ------------------ Manejo de la vista ----------------------------
 
     $scope.isSelectedJustificationCompensatory = function(){
 		return $scope.model.justificationCompensatorySelected;
@@ -13,6 +17,7 @@ app.controller('RequestAssistanceCompensatoryCtrl', function($scope, Assistance)
 	$scope.selectJustificationCompensatory = function(){
 		var value = !$scope.model.justificationCompensatorySelected;
 		$scope.clearSelections();
+        $scope.clearSelectionsCompensatory();
 		$scope.model.justificationCompensatorySelected = value;
 	};
 
@@ -51,8 +56,18 @@ app.controller('RequestAssistanceCompensatoryCtrl', function($scope, Assistance)
 		$scope.model.justificationCompensatoryRequestSelected = false;
 		$scope.model.justificationCompensatoryAvailableSelected = false;
 		$scope.model.justificationCompensatoryRequestsSelected = false;
-
 	}
+
+
+    $scope.isSelectedJustificationRequest = function() {
+        if ($scope.model.justification != null && $scope.model.justification.begin != null) {
+            $scope.dateFormated = $scope.model.justification.begin.toLocaleDateString();
+        } else {
+            $scope.dateFormated = null;
+            return false;
+        }
+    }
+    // -----------------------------------------------------------------------------------
 
 
     // Carga el stock que se puede tomar
@@ -62,20 +77,20 @@ app.controller('RequestAssistanceCompensatoryCtrl', function($scope, Assistance)
 				$scope.model.compensatory.actualStock = justificationActualStock;
 			},
 			function(error){
-				alert(error);
+                Notifications.message(error);
 			}
 		);
     }
+
 
     //Carga el stock disponible de compensatorios
     $scope.loadCompensatoryStock = function(id) {
         Assistance.getJustificationStock($scope.model.session.user_id, id,
 			function(justificationStock){
-                $scope.loadCompensatoryActualStock(id);
-				$scope.model.compensatory.stock = justificationStock;
+                $scope.model.compensatory.stock = justificationStock;
 			},
 			function(error){
-				alert(error);
+                Notifications.message(error);
 			}
 		);
     }
@@ -83,11 +98,35 @@ app.controller('RequestAssistanceCompensatoryCtrl', function($scope, Assistance)
     // Cargo el stock de la justificacion
     // data.justification = {name,id}
     $scope.$on('findStockJustification', function(event, data) {
+
         justification = data.justification;
         if (justification.name == 'compensatory') {
-            $scope.model.compensatory = {id:justification.id, name:justification.name, stock:0, actualStock:0};
-            $scope.loadCompensatoryStock(justification.id);
+            $scope.initialize(justification);
         }
     });
+
+    $scope.initialize = function(justification) {
+        $scope.clearSelectionsCompensatory();
+        $scope.model.compensatory = {id:justification.id, name: justification.name, stock:0, actualStock:0};
+        $scope.loadCompensatoryStock(justification.id);
+        $scope.loadCompensatoryActualStock(justification.id);
+        $scope.model.justification = {id:justification.id,begin:null,end:null};
+    }
+
+
+    // Envio la peticion al servidor
+    $scope.save = function() {
+
+        Assistance.requestLicence($scope.model.user_id,$scope.model.justification,
+            function(ok) {
+                Notifications.message("Guardado exitosamente");
+                $scope.initialize($scope.model.justification);
+            },
+            function(error) {
+                Notifications.message(error);
+            }
+        );
+    }
+
 
 });
