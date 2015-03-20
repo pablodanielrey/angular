@@ -126,8 +126,9 @@ app.controller('RequestAssistanceAbsentCtrl', function($scope, Assistance, Notif
 		Assistance.requestLicence($scope.model.session.user_id, requestLicence,
 			function(ok){
 				$scope.model.requestAbsentBegin = null;
-				$scope.selectJustificationAbsentRequests();
+				$scope.clearSelections();
 				Notifications.message('Ausente con aviso solicitado correctamente');
+				$scope.$broadcast('requestLicenceEvent');
 			},
 			function(error){
 				alert(error);
