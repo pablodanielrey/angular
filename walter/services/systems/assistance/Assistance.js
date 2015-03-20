@@ -45,7 +45,7 @@ app.service('Assistance',function() {
 		//TODO
 		response = [
 			{id:"1",name:"Ausentes con aviso"},
-			{id:"2",name:"Compensatorios"},
+			{id:"2",name:"compensatory"},
 			{id:"3",name:"Salidas Eventuales"},
 			{id:"4",name:"Art. 102"},
 			{id:"5",name:"Pre-examen"},
@@ -75,6 +75,32 @@ app.service('Assistance',function() {
 			break;
 			case "6":
 				response = 20;
+			break;
+		}
+
+		callbackOk(response);
+	};
+
+	this.getJustificationActualStock = function(userId, justificationId, callbackOk, callbackError) {
+		//TODO
+		switch(justificationId){
+			case "1":
+				response = 1;
+			break;
+			case "2":
+				response = 2;
+			break;
+			case "3":
+				response = 0;
+			break;
+			case "4":
+				response = 2;
+			break;
+			case "5":
+				response = 2;
+			break;
+			case "6":
+				response = 10;
 			break;
 		}
 

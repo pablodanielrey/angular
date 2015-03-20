@@ -27,10 +27,8 @@
 
           <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationCompensatoryAvailable()]">
             <p>Disponibilidad</p>
-            <p>Este mes</p>
-            <input type="text" placeholder="Cantidad de días">
-            <p>En el año</p>
-            <input type="text" placeholder="Cantidad de días">
+            <p>Este mes: {{model.compensatory.actualStock}}</p>
+            <p>En el año: {{model.compensatory.stock}}</p>
           </div>
 
           <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationCompensatoryRequests()]">
