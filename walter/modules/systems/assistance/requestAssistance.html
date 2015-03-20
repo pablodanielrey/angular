@@ -11,23 +11,17 @@
         <label> | Mis Solicitudes</label><hr>
       </div>
     </div>
-    <div class="requestInfo">
+    <div class="requestInfo" ng-repeat="x in model.requestedLicences">
       <div class="request">
-        <span class="requestInfo">Solicitud</span>
+        <span class="requestInfo">Solicitud: {{x.justification_name}} {{x.begin}} al {{x.end}}</span>
       </div>
       <div class="stateRequest">
-        <div class="requestSlope" ng-class="{true:'visible', false:'hidden'}[true]">
-          <span class="tetxSlope">Pendiente</span>
-        </div>
-        <div class="requestApprove" ng-class="{true:'visible', false:'hidden'}[false]">
-          <span class="tetxApprove">Aprobada</span>
-        </div>
-        <div class="requestRefuse" ng-class="{true:'visible', false:'hidden'}[false]">
-          <span class="tetxRefuse">Denegada</span>
+        <div class="requestSlope">
+          <span class="tetxSlope">Estado: {{x.state}}</span>
         </div>
       </div>
-      <div class="reasonRequest" ng-class="{true:'visible', false:'hidden'}[false]">
-        <input class="reasonRefuse" type="text"></input>
+      <div class="reasonRequest" >
+        <span class="tetxSlope">Notas: {{x.notes}}</span>
       </div>
     </div>
 

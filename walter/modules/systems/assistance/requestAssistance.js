@@ -33,13 +33,42 @@ app.controller('RequestAssistanceCtrl', function($scope, $rootScope, $timeout, $
     }
 
 
+	$scope.formatName = function(name){
+		switch(name){
+			case "absent":
+				return "Ausente con aviso";
+			break;
+			case "compensatory":
+				return "Compensatorio";
+			break;
+			case "out":
+				return "Salida eventual";
+			break;
+			case "exam":
+				return "Pre examen";
+			break;
+			case "102":
+				return "Articulo 102";
+			break;
+		}
+	}
+	
 	$scope.loadRequestedLicences = function() {
 		Assistance.getRequestedLicences($scope.model.session.user_id,
 			function(requestedLicences){
 				for(i in requestedLicences){
 					var requestedLicence = requestedLicences[i]
-					var name = $scope.model.justifications[requestedLicence.justification_id].name;
+					var name = $scope.formatName($scope.model.justifications[requestedLicence.justification_id].name);
 					requestedLicence.justification_name = name;
+					if(requestedLicence.begin != null){
+						var date = new Date(requestedLicence.begin);
+						requestedLicence.begin = date.toLocaleDateString();
+					}
+					if(requestedLicence.end != null){
+						var date = new Date(requestedLicence.end);
+						requestedLicence.end = date.toLocaleDateString();
+					}
+					
 					$scope.model.requestedLicences.push(requestedLicence)
 				}
 

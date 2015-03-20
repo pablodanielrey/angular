@@ -119,8 +119,8 @@ app.service('Assistance',function() {
 	this.getRequestedLicences = function(userId, callbackOk, callbackError){
 		//TODO
 		response = [
-	  		{justification_id: "1", quantity: 1, begin: '2015-05-13 00:00:00', end: '2015-05-13 00:00:00', state: "Desaprobada"},
-  			{justification_id: "2", quantity: 3, begin: '2015-06-13 00:00:00', end: '2015-06-15 00:00:00', state: "Aprobada"}
+	  		{justification_id: "1", quantity: 1, begin: '2015-05-13 00:00:00', end: '2015-05-13 00:00:00', state: "Desaprobada", notes: "Es feriado"},
+  			{justification_id: "2", quantity: 3, begin: '2015-06-13 00:00:00', end: '2015-06-15 00:00:00', state: "Aprobada", notes: ""}
 		]
 
 		callbackOk(response);
