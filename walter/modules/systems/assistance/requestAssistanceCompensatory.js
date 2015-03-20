@@ -56,12 +56,17 @@ app.controller('RequestAssistanceCompensatoryCtrl', function($scope, Assistance,
 		$scope.model.justificationCompensatoryRequestSelected = false;
 		$scope.model.justificationCompensatoryAvailableSelected = false;
 		$scope.model.justificationCompensatoryRequestsSelected = false;
+
+        if ($scope.model.justification != null) {
+            $scope.model.justification.begin = null;
+        }        
 	}
 
 
     $scope.isSelectedJustificationRequest = function() {
         if ($scope.model.justification != null && $scope.model.justification.begin != null) {
             $scope.dateFormated = $scope.model.justification.begin.toLocaleDateString();
+            return true;
         } else {
             $scope.dateFormated = null;
             return false;
@@ -120,7 +125,7 @@ app.controller('RequestAssistanceCompensatoryCtrl', function($scope, Assistance,
         Assistance.requestLicence($scope.model.user_id,$scope.model.justification,
             function(ok) {
                 Notifications.message("Guardado exitosamente");
-                $scope.model.justification.begin = null; 
+                $scope.model.justification.begin = null;
                 $scope.clearSelections();
             },
             function(error) {

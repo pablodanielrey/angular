@@ -11,23 +11,23 @@
           <div>
             <input class="button green" type="button" value="Disponibles" ng-click="selectJustificationExamAvailable()">
           </div>
+          <!--
           <div>
             <input class="button orange" type="button" value="Solicitudes" ng-click="selectJustificationExamRequests()">
           </div>
+          -->
         </div>
         <hr>
         <div>
           <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationExamRequest()]">
             <p>Seleccione el día</p>
-            <input type="date">
+            <input type="date" ng-model="model.justification.begin">
           </div>
 
           <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationExamAvailable()]">
             <p>Disponibilidad</p>
-            <p>Este mes</p>
-            <input type="text" placeholder="Cantidad de días">
-            <p>En el año</p>
-            <input type="text" placeholder="Cantidad de días">
+            <p>Este mes: {{model.exam.actualStock}}</p>
+            <p>En el año: {{model.exam.stock}}</p>
           </div>
 
           <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationExamRequests()]">
@@ -43,10 +43,10 @@
           </div>
         </div>
         <hr>
-        <div ng-class="{true:'visible', false:'hidden'}[false]">
+        <div ng-class="{true:'visible', false:'hidden'}[isSelectedDate()]">
           <p>Solicitar Pre-exámen para el día</p>
-          <input type="text" placeholder="Día elegido">
-          <input type="button" value="Confirmar">
+          <input type="text" placeholder="Día elegido" ng-model="dateFormated">
+          <input type="button" value="Confirmar" ng-click="save()">
         </div>
       </div>
     </div>
