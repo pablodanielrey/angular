@@ -11,15 +11,17 @@
           <div>
             <input class="button green" type="button" value="Disponibles" ng-click="selectJustificationAbsentAvailable()">
           </div>
-          <div>
+          <!-- <div>
             <input class="button orange" type="button" value="Solicitudes" ng-click="selectJustificationAbsentRequests()">
-          </div>
+          </div> -->
+
         </div>
-        <hr>
+
         <div>
-          <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationAbsentRequest()]">
-            <p>Seleccione el día</p>
-            <input type="date" ng-model="model.date" ng-change="changeDate()">
+
+          <div class="margin" ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationAbsentRequest()]">
+            <p class="parrafos">Seleccione el día</p>
+            <input class="date" type="date" ng-model="model.date" ng-change="changeDate()" >
           </div>
           <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationAbsentAvailable()]">
             <p>Disponibilidad</p>
@@ -40,7 +42,7 @@
             </div>
           </div>
         </div>
-        <hr>
+
         <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationAbsentRequestDateSelected()]">
           <p>Solicitar Ausente con aviso para el día</p>
 		  <p>{{model.date}}</p>
