@@ -37,6 +37,7 @@ query :
   session:,
   request:{
       user_id: "id del usuario"
+      date: "fecha a consultar" -- en caso de que no exista consulta el día actual.
   }
 
 }
@@ -48,7 +49,7 @@ response :
   error: "error del servidor",
   response:{
       position: 'cargo de la persona',
-  	  timetable:[
+  	  schedule:[
     		{
     	      start: "fecha y hora de inicio del turno",
     		    end: "fecha y hora de fin de turno"
@@ -63,10 +64,11 @@ response :
 query :
 {
   id:,
-  action:"getOfficesByUser",
+  action:"getOffices",
   session:,
   request:{
-      user_id: "id del usuario"
+      user_id: "id del usuario" -- opcional. si no existe entonces retorna todas las oficinas.
+      tree: "False|True" -- retorna todo el arbol de las oficinas hijas a las que pertenece el usuario - Opcional
   }
 
 }
@@ -81,6 +83,7 @@ response :
       {
         id: 'id de la oficina',
         name: 'nombre de la oficina'
+        parent: 'id de la oficina padre' -- en el caso de que exista
       }
     ]
   }
@@ -229,6 +232,8 @@ response :
   ok: "caso exito",
   error: "error del servidor",
 }
+
+
 
 
 

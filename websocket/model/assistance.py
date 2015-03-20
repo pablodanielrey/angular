@@ -67,8 +67,82 @@ class Asssistance:
         return assistanceStatus
 
 
-    def getAssistanceData(self,con,userId):
-        
+    def getAssistanceData(self,con,userId,date):
+
+        cur = con.cursor()
+        cur.execute('select name from assistance.positions where user_id = %s',(userId,))
+        position = cur.fetchone()
+
+        """ obtengo todos los schedules que son en la fecha date del parámetro """
+        cur.execute("select sstart, send, date from assistance.schedule where \
+                    ((date = %s) or \
+                    (isDayOfWeek = true and extract(dow from date) = extract(dow from %s)) or \
+                    (isDayOfMonth = true and extract(dom from date) = extract(dom from %s)) or \
+                    (isDayOfYear = true and extract(doy from date) = extract(doy from %s))) and \
+                    user_id = %s \
+                    order by date desc",(date,date,date,date,userId))
+        scheduless = cur.fetchall()
+        schedules = []
+        dateS = None
+        for schedule in scheduless:
+            dateS = schedule[2] if dateS == None else dateS
+            if schedule[2] == dateS:
+                schedules.append({'start':schedule[0], 'end':schedule[1]})
+            else:
+                break
+
+        data = {
+            'position': position[0] if position != None else 'no tiene definida',
+            'schedule': schedules
+        }
+        return data
+
+
+    def getOffices(self,con):
+        cur = con.cursor()
+        cur.execute('select id,parent,name from assistance.offices')
+        offs = cur.fetchall()
+        offices = []
+        for off in offs:
+            offices.append({'id':off[0],'parent':off[1],'name':off[2]})
+        return offices
+
+
+    def getOfficesByUser(self,con,tree=False):
+        cur = con.cursor()
+        cur.execute('select id,parent,name from assistance.offices o, assistance.offices_users ou where ou.user_id = %s and o.id = ou.office_id')
+        offs = cur.fetchall()
+
+        offices = []
+        ids = []
+        for off in offs:
+            oId = off[0]
+            ids.append(oId)
+            offices.append({'id':oId,'parent':off[1],'name':off[2]})
+
+
+        if tree:
+            """ obtengo todo el arbol de oficinas abajo de las actuales """
+            pids = []
+            pids.extends(ids)
+
+            while len(pids) > 0:
+                toFollow = []
+                toFollow.extend(pids)
+                pids = []
+
+                for oId in toFollow:
+                    cur.execute('select id,parent,name from asssitance.offices where parent = %s',(oId,))
+                    cOffs = cur.fetchall()
+                    for cOff in cOffs:
+                        cId = off[0]
+                        if cId not in ids:
+                            offices.append({'id':cId,'parent':cOff[1],'name':cOff[2]})
+                            pids.append(cId)
+
+
+        return offices
+
 
 
 

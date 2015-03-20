@@ -234,12 +234,56 @@ create table system.sessions (
 
 create schema assistance;
 
+
+create table assistance.devices (
+
+);
+
 create table assistance.attlog (
     id varchar not null primary key,
     device_id  varchar not null,
-    user_id  varchar not null,
+    user_id  varchar not null references profile.users (id),
     verifymode bigint not null,
     date timestamp not null
+);
+
+create table assistance.positions (
+    id varchar primary key,
+    user_id varchar not null references profile.users (id),
+    name varchar not null
+);
+
+
+create table assistance.schedule (
+    id varchar primary key,
+    user_id varchar not null references profile.users (id),
+    date date not null,
+    sstart timestamp not null,
+    send timestamp not null,
+    isDayOfWeek boolean default true not null,
+    isDayOfMonth boolean default false not null,
+    isDayOfYear boolean default false not null,
+    created timestamp not null default now()
+);
+
+create table assistance.offices (
+    id varchar primary key,
+    name varchar not null,
+    parent varchar,
+    constraint unique_office unique (name,parent)
+);
+
+create table assistance.offices_users (
+    user_id varchar references profile.users (id),
+    office_id varchar references assistance.offices (id)
+    contraint unique_office_user unique (user_id,office_id)
+);
+
+create table assistance.offices_roles (
+  user_id varchar references profile.users (id),
+  office_id varchar references assistance.offices (id)
+  role varchar not null,
+  contraint unique_office_user unique (user_id,office_id,role)
 );
 
 
