@@ -11,24 +11,24 @@
           <div>
             <input class="button green" type="button" value="Disponibles" ng-click="selectJustificationLaoAvailable()">
           </div>
+          <!--
           <div>
             <input class="button orange" type="button" value="Solicitudes" ng-click="selectJustificationLaoRequests()">
           </div>
+           -->
         </div>
         <hr>
         <div>
           <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationLaoRequest()]">
             <p>Seleccione los días de licencia anual</p>
-            desde <input type="date" min="2015-12-15" >
-            hasta <input type="date" min="2015-12-15" >
+            desde <input type="date" ng-model="model.justification.begin">
+            hasta <input type="date" ng-model="model.justification.end">
           </div>
 
           <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationLaoAvailable()]">
             <p>Disponibilidad</p>
-            <p>Antiguedad</p>
-            <input type="text" placeholder="Años de antiguedad">
-            <p>Cantidad de días</p>
-            <input type="text" placeholder="Cantidad de días">
+            <p>Antiguedad:{{model.exam.actualStock}}</p>
+            <p>Cantidad de días:{{model.exam.stock}}</p>
           </div>
 
           <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationLaoRequests()]">
@@ -45,10 +45,10 @@
 
         </div>
         <hr>
-        <div ng-class="{true:'visible', false:'hidden'}[false]">
+        <div ng-class="{true:'visible', false:'hidden'}[isSelectedDate()]">
           <p>Solicitar Licencia anual para los días</p>
-          <input type="text" placeholder="Días elegido">
-          <input type="button" value="Confirmar">
+          <input type="text" placeholder="Días elegido" ng-model="dateFormated">
+          <input type="button" value="Confirmar" ng-click="save()">
         </div>
       </div>
     </div>

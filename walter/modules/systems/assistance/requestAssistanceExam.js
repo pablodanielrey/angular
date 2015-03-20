@@ -86,10 +86,8 @@ app.controller('RequestAssistanceExamCtrl', function($scope, Assistance, Session
 
     //Carga el stock disponible de compensatorios
     $scope.loadExamStock = function(id) {
-        console.log('Load Exam');
         Assistance.getJustificationStock($scope.model.session.user_id, id,
 			function(justificationStock) {
-                console.log("Stock:"+$scope.model.exam.stock);
                 $scope.model.exam.stock = justificationStock;
 			},
 			function(error) {
