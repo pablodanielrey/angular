@@ -19,7 +19,7 @@ response :
   ok: "caso exito",
   error: "error del servidor",
   response:{
-      status: 'estado del agente ',
+      status: 'estado del agente',
       start: "fecha y hora de inicio para el dia actual",
       end: "fecha y hora fin para el dia actual",
       logs: [ date1, date2, date3, .... ]       // son todas las marcaciones en bruto del dia actual
@@ -121,7 +121,7 @@ response :
 }
 
 
----------------
+---------------------------------------------
 
 ---- JUSTIFICACIONES TOTALES EN EL AÑO ------
 
@@ -134,7 +134,6 @@ query :
       user_id: "id del usuario",
       justification_id: "id de la justificación"
   }
-
 }
 
 response :
@@ -145,7 +144,6 @@ response :
   response:{
     count: "cantidad de justificaciones disponibles de ese tipo"
   }
-
 }
 
 ------------------------------------------------------
@@ -179,13 +177,14 @@ response :
 ---------------
 
 
-query : Obtener solicitudes de licencia de un determinado usuario
+query : Obtener solicitudes de justificationces de un determinado usuario
 {
   id:,
-  action:"getRequestLicences",
+  action:"getJustificationRequests",
   session:,
   request:{
       user_id: "id del usuario",
+      status: 'estado de la justificacion PENDING|APPROVED|REJECTED|CANCELED' -- si no existe se obtienen todas
   }
 
 }
@@ -196,13 +195,12 @@ response :
   ok: "caso exito",
   error: "error del servidor",
   response:{
-    requestLicences : [ "lista de solicitudes de licencia de un determinado usuario"
+    request : [ "lista de solicitudes de un determinado usuario"
   		{
     		justification_id: "id de la justificacion o licencia solicitada"
-    		quantity: "cantidad de la justificacion o licencia solicitada"
     		begin: 2014-12-01 00:00:00 "fecha de inicio de la justificacion o licencia solicitada"
     		end: 2014-12-02 00:00:00 "fecha de finalizacion de la justificacion o licencia solicitada"
-    		state: "PENDING|APPROVED|REJECTED"
+    		state: "PENDING|APPROVED|REJECTED|CANCELED"
   		}
 	]
 
@@ -212,10 +210,10 @@ response :
 ---------------
 
 
-query : solicitud de licencia de un determinado usuario
+query : solicitud de justificaciones de un determinado usuario
 {
   id:,
-  action:"requestLicence",
+  action:"requestJustification",
   session:,
   request:{
       user_id: "id del usuario",
@@ -230,7 +228,7 @@ response :
 {
   id: "id de la petición",
   ok: "caso exito",
-  error: "error del servidor",
+  error: "error del servidor"
 }
 
 

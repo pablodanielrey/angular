@@ -269,6 +269,8 @@ create table assistance.schedule (
 create table assistance.offices (
     id varchar primary key,
     name varchar not null,
+    telephone varchar,
+    email varchar,
     parent varchar,
     constraint unique_office unique (name,parent)
 );
@@ -286,7 +288,27 @@ create table assistance.offices_roles (
   contraint unique_office_user unique (user_id,office_id,role)
 );
 
+create table assistance.justifications (
+  id varchar primary key,
+  name varchar not null unique
+);
 
+create table assistance.justifications_stock (
+  justification_id varchar not null references assistance.justifications (id),
+  user_id varchar not null references profile.users (id),
+  quantity integer not null default 0,
+  constraint justifications_stock_unique unique (justification_id, user_id)
+);
+
+
+create table assistance.justifications_requests (
+  id varchar primary key,
+  user_id varchar not null references profile.users (id),
+  justification_id varchar not null references assistance.justifications (id),
+  jbegin timestamp not null,
+  jend timestamp not null,
+  status varchar not null
+);
 
 
 /*
