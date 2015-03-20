@@ -131,7 +131,7 @@ app.controller('RequestAssistanceAbsentCtrl', function($scope, Assistance, Notif
 				$scope.$broadcast('requestLicenceEvent');
 			},
 			function(error){
-				alert(error);
+				Notifications.message(error);
 			}
 		
 		);

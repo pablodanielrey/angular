@@ -3,7 +3,8 @@ var app = angular.module('mainApp');
 app.controller('RequestAssistanceCtrl', function($scope, $rootScope, $timeout, $window, Session, Assistance, Profiles) {
 
 	$scope.model = {
-		requestedLicences : [], //auxiliar para almacenar los datos de las solicitudes de licencias
+		justifications : [], //auxiliar para almacenar las justificaciones
+		requestedLicences : [], //solicitudes de licencias
 		justificationAbsentSelected	: false,
 		justificationLaoSelected	: false,
 		justificationExamSelected	: false,
@@ -20,7 +21,9 @@ app.controller('RequestAssistanceCtrl', function($scope, $rootScope, $timeout, $
 				for(i in justifications){
 					var justification = {name:justifications[i].name,id:justifications[i].id}
 					$scope.$broadcast('findStockJustification',{justification:justification});
+					$scope.model.justifications[justifications[i].id] = justifications[i];
 				}
+				
 
 			},
 			function(error){
@@ -30,18 +33,15 @@ app.controller('RequestAssistanceCtrl', function($scope, $rootScope, $timeout, $
     }
 
 
-
-	/**
-	 * Dar formato a las solicitudes de licencia del servidor
-	 */
-	$scope.formatRequestedLicencesFromServer = function(justificationsFromServer){
-
-	}
-
 	$scope.loadRequestedLicences = function() {
 		Assistance.getRequestedLicences($scope.model.session.user_id,
 			function(requestedLicences){
-				$scope.model.requestedLicences = requestedLicences;
+				for(i in requestedLicences){
+					var requestedLicence = requestedLicences[i]
+					var name = $scope.model.justifications[requestedLicence.justification_id].name;
+					requestedLicence.justification_name = name;
+					$scope.model.requestedLicences.push(requestedLicence)
+				}
 
 			},
 			function(error){
@@ -81,6 +81,12 @@ app.controller('RequestAssistanceCtrl', function($scope, $rootScope, $timeout, $
 	};
 
 
+	// Escuchar evento de nuevo requerimiento de licencia
+	$scope.$on('requestLicenceEvent', function() {
+		$scope.loadRequestedLicences();
+	});
+
+	
 	$scope.clearSelections = function() {
 		$scope.model.justificationAbsentSelected = false;
 		$scope.model.justificationCompensatorySelected = false;
