@@ -151,7 +151,7 @@
   height:150px;
 }
 
-.requestAssistance .subcontentDisplay, .requestAssistance .subcontent {
+.requestAssistance .subcontentDisplay .titulo, .requestAssistance .subcontent .titulo{
     cursor:pointer;
 }
 
