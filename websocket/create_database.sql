@@ -23,11 +23,12 @@ create table profile.users (
     name varchar,
     lastname varchar,
     genre varchar,
-    birthdate date,
+    birthdate timestamptz,
     city varchar,
     residence_city varchar,
     country varchar,
-    address varchar
+    address varchar,
+    CHECK(EXTRACT(TIMEZONE FROM birthdate) = '0')
 );
 
 create table profile.mails (
@@ -83,9 +84,10 @@ create table credentials.password_resets (
   user_id varchar not null references profile.users (id),
   username varchar not null,
   creds_id varchar not null references credentials.user_password (id),
-  creation timestamp default now(),
+  creation timestamptz default now(),
   hash varchar not null primary key,
-  executed boolean default false
+  executed boolean default false,
+  CHECK(EXTRACT(TIMEZONE FROM creation) = '0')
 );
 
 create table credentials.auth_profile (
@@ -111,7 +113,8 @@ create table account_requests.requests (
     password varchar not null,
     hash varchar default '',
     confirmed boolean default false,
-    created timestamp default now()
+    created timestamptz default now(),
+    CHECK(EXTRACT(TIMEZONE FROM created) = '0')
 );
 
 
@@ -199,10 +202,12 @@ create schema tutors;
 create table tutors.tutors (
   id varchar not null primary key,
   user_id varchar references profile.users (id),
-  "date" timestamp not null,
+  "date" timestamptz not null,
   student_number varchar not null,
   type varchar not null,
-  created timestamp default now()
+  created timestamptz default now(),
+  CHECK(EXTRACT(TIMEZONE FROM date) = '0'),
+  CHECK(EXTRACT(TIMEZONE FROM created) = '0')
 );
 
 
@@ -216,14 +221,16 @@ create schema system;
 create table system.logs (
   id serial primary key,
   user_id varchar references profile.users (id),
-  creation timestamp default now(),
-  log varchar not null
+  creation timestamptz default now(),
+  log varchar not null,
+  CHECK(EXTRACT(TIMEZONE FROM creation) = '0')
 );
 
 create table system.sessions (
   id varchar not null primary key,
   data varchar,
-  expire timestamp default now()
+  expire timestamptz default now(),
+  CHECK(EXTRACT(TIMEZONE FROM expire) = '0')
 );
 
 
@@ -241,11 +248,14 @@ create table assistance.devices (
 
 create table assistance.attlog (
     id varchar not null primary key,
-    device_id  varchar not null,
-    user_id  varchar not null references profile.users (id),
+    device_id varchar not null,
+    user_id varchar not null references profile.users (id),
     verifymode bigint not null,
-    date timestamp not null
+    log timestamptz not null,
+    CHECK(EXTRACT(TIMEZONE FROM log) = '0')
 );
+
+
 
 create table assistance.positions (
     id varchar primary key,
@@ -257,13 +267,17 @@ create table assistance.positions (
 create table assistance.schedule (
     id varchar primary key,
     user_id varchar not null references profile.users (id),
-    date date not null,
-    sstart timestamp not null,
-    send timestamp not null,
+    date timestamptz not null,
+    sstart timestamptz not null,
+    send timestamptz not null,
     isDayOfWeek boolean default true not null,
     isDayOfMonth boolean default false not null,
     isDayOfYear boolean default false not null,
-    created timestamp not null default now()
+    created timestamptz not null default now(),
+    CHECK(EXTRACT(TIMEZONE FROM date) = '0'),
+    CHECK(EXTRACT(TIMEZONE FROM sstart) = '0'),
+    CHECK(EXTRACT(TIMEZONE FROM send) = '0'),
+    CHECK(EXTRACT(TIMEZONE FROM created) = '0')
 );
 
 create table assistance.offices (
@@ -305,9 +319,11 @@ create table assistance.justifications_requests (
   id varchar primary key,
   user_id varchar not null references profile.users (id),
   justification_id varchar not null references assistance.justifications (id),
-  jbegin timestamp not null,
-  jend timestamp not null,
-  status varchar not null
+  jbegin timestamptz not null,
+  jend timestamptz not null,
+  status varchar not null,
+  CHECK(EXTRACT(TIMEZONE FROM jbegin) = '0'),
+  CHECK(EXTRACT(TIMEZONE FROM jend) = '0')
 );
 
 
