@@ -2,6 +2,7 @@
 import ldap3
 import psycopg2
 import datetime, pytz
+import sys
 
 """ creo una cache de uuid --> dni """
 def makeUsersCache(host,port,user,passw):
@@ -33,6 +34,12 @@ def copyLogs(src,dst,personCache):
 
     count = 0
     for sl in csrc:
+        count = count + 1
+
+        cdst.execute('select id from assistance.attlog where id = %s',(sl[0],))
+        if cdst.rowcount > 0:
+            print("{0} log ya importado asi que lo ignoro".format(count))
+            continue
 
         date = sl[3]
 
@@ -57,12 +64,7 @@ def copyLogs(src,dst,personCache):
 
         print("{4} insertando para {0} {1} -- {2} | utc={3}".format(personId,dni,date,utcdate,count))
         req = (sl[0],'1c5c90a3-2873-4b8f-9931-faca5808e932',personId,sl[2],utcdate)
-        try:
-            cdst.execute('insert into assistance.attlog (id,device_id,user_id,verifymode,log) values (%s,%s,%s,%s,%s)',req)
-        except Exception:
-            print("ocurrió una exception insertando log")
-
-        count = count + 1
+        cdst.execute('insert into assistance.attlog (id,device_id,user_id,verifymode,log) values (%s,%s,%s,%s,%s)',req)
 
 
 if __name__ == '__main__':
