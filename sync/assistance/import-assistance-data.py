@@ -12,6 +12,7 @@ passw = sys.argv[5]
 
 con = psycopg2.connect(host=host, port=port, user=user, password=passw, dbname=db)
 cur = con.cursor()
+cur.execute("set timezone 'utc'")
 
 for app,func,nombre,dni,maili,e,s,of,cargo,ma in csv.reader(sys.stdin):
     if dni == None or dni == '':

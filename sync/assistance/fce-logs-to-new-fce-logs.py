@@ -28,6 +28,7 @@ def makeUsersCache(host,port,user,passw):
 def copyLogs(src,dst,personCache):
 
     cdst = dst.cursor()
+    cdst.execute("set timezone to 'UTC'")
 
     csrc = src.cursor()
     csrc.execute('select id,person_id,verifymode,date from attlog order by date asc')
