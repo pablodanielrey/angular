@@ -146,6 +146,19 @@ class ActionsServerProtocol(WebSocketServerProtocol):
             self.sendException(e)
 
 
+    """ cliente se conecta. -- parametro : autobahn.websocket.protocol.ConnectionRequest """
+    def onConnect(self,cr):
+        logging.debug('cliente conectado')
+        logging.debug(cr)
+        return None
+
+    def onOpen(self):
+        logging.debug('conexión establecida')
+
+    def onClose(self,wasClean, code, reason):
+        logging.debug('cliente desconectado {0}, {1}, {2}'.format(wasClean,code,reason))
+
+
 
 def getReactor():
     config = inject.instance(Config)
