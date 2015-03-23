@@ -23,6 +23,7 @@ if __name__ == '__main__':
   reactor = network.websocket.getReactor()
 
   def close_sig_handler(signal,frame):
+      reactor.stopListening()
       sys.exit()
 
   signal.signal(signal.SIGINT,close_sig_handler)

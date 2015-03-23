@@ -2,7 +2,6 @@ import inject, logging, json, sys, traceback
 
 """
 from actions.chat import SendEventToClients
-from actions.login import Login, Logout, ResetPassword, ChangePassword
 from actions.requests import CreateAccountRequest, ConfirmAccountRequest, ListAccountRequests, ApproveAccountRequest, RemoveAccountRequest, RejectAccountRequest
 from actions.users import UpdateUser, FindUser, ListUsers, ListMails, PersistMail, ConfirmMail, RemoveMail
 from actions.status import GetStatus
@@ -16,7 +15,10 @@ from actions.domain import PersistDomain, DeleteDomain, FindDomain
 from actions.institutionalMail import PersistInstitutionalMail, DeleteInstitutionalMail, FindInstitutionalMail
 """
 
+from actions.login.login import Login, Logout
+from actions.login.password import ChangePassword, ResetPassword
 from actions.assistance.logs import GetAssistanceLogs
+
 
 from model.config import Config
 from model.utils import DateTimeEncoder
@@ -33,7 +35,6 @@ from wexceptions import *
 
 actions = [
 #    SendEventToClients(),
-#    Login(), Logout(), ResetPassword(), ChangePassword(),
 #    CreateAccountRequest(), ConfirmAccountRequest(), ListAccountRequests(), ApproveAccountRequest(), RemoveAccountRequest(), RejectAccountRequest(),
 #    ListUsers(), UpdateUser(), FindUser(), ListMails(), PersistMail(), ConfirmMail(), RemoveMail(),
 #    GetStatus(),
@@ -45,6 +46,7 @@ actions = [
 #    PersistInstitutionalMail(), DeleteInstitutionalMail(), FindInstitutionalMail(),
 #    PersistDomain(), DeleteDomain(), FindDomain(),
 #    CheckAccess(),
+    Login(), Logout(), ChangePassword(), ResetPassword(),
     GetAssistanceLogs()
 ]
 
