@@ -47,7 +47,7 @@ class WebsocketServer(WebSocket):
       if self.data is None:
         raise NullData()
 
-      print 'C:' + self.data
+      print('C:' + self.data)
       message = json.loads(str(self.data))
 
       if 'action' not in message:
@@ -64,13 +64,13 @@ class WebsocketServer(WebSocket):
               break
 
       except AccessDenied as e:
-          print e.__class__.__name__ + ' ' + str(e)
+          print(e.__class__.__name__ + ' ' + str(e))
           traceback.print_exc()
           self.sendError(message,e)
           managed = True
 
       except Exception as e:
-          print e.__class__.__name__ + ' ' + str(e)
+          print(e.__class__.__name__ + ' ' + str(e))
           traceback.print_exc()
           self.sendError(message,e)
           raise e
@@ -79,7 +79,7 @@ class WebsocketServer(WebSocket):
         raise NotImplemented()
 
     except Exception as e:
-      print e.__class__.__name__ + ' ' + str(e)
+      print(e.__class__.__name__ + ' ' + str(e))
       traceback.print_exc()
       self.sendException(e)
 
@@ -123,7 +123,7 @@ class WebsocketServer(WebSocket):
 
 
   def handleConnected(self):
-    print("connected : ",self.address)
+    print(("connected : ",self.address))
 
   def handleClose(self):
-    print("closed : ",self.address)
+    print(("closed : ",self.address))

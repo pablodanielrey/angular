@@ -59,7 +59,7 @@ class CheckAccess:
         response = {'id':message['id'], 'ok':'', 'response':'granted'}
         server.sendMessage(response)
 
-    except AccessDenied, e:
+    except AccessDenied as e:
         response = {'id':message['id'], 'ok':'', 'response':'not granted'}
         server.sendMessage(response)
 

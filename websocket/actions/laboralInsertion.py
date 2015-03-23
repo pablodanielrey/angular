@@ -76,7 +76,7 @@ class PersistLaboralInsertion:
             self.events.broadcast(server,event)
 
             return True
-        except psycopg2.DatabaseError, e:
+        except psycopg2.DatabaseError as e:
             con.rollback()
             raise e
 
@@ -212,7 +212,7 @@ class CreateLanguages:
             server.sendMessage(response)
             self.events.broadcast(server,event)
 
-        except psycopg2.DatabaseError, e:
+        except psycopg2.DatabaseError as e:
             con.rollback()
             raise e
 
@@ -305,7 +305,7 @@ class PersistLanguage:
 
             return True
 
-        except psycopg2.DatabaseError, e:
+        except psycopg2.DatabaseError as e:
             con.rollback()
             raise e
 
@@ -392,7 +392,7 @@ class DeleteLanguage:
 
             return True
 
-        except psycopg2.DatabaseError, e:
+        except psycopg2.DatabaseError as e:
             con.rollback()
             raise e
 
@@ -607,7 +607,7 @@ class CreateDegrees:
             server.sendMessage(response)
             self.events.broadcast(server,event)
 
-        except psycopg2.DatabaseError, e:
+        except psycopg2.DatabaseError as e:
             con.rollback()
             raise e
 
@@ -695,7 +695,7 @@ class PersistDegree:
 
             return True
 
-        except psycopg2.DatabaseError, e:
+        except psycopg2.DatabaseError as e:
             con.roolback()
             raise e
 
@@ -777,7 +777,7 @@ class DeleteDegree:
 
             return True
 
-        except psycopg2.DatabaseError, e:
+        except psycopg2.DatabaseError as e:
             con.rollback()
             raise e
 
@@ -967,7 +967,7 @@ class AcceptTermsAndConditions:
 
             return True
 
-        except psycopg2.DatabaseError, e:
+        except psycopg2.DatabaseError as e:
             con.rollback()
             raise e
 

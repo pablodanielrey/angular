@@ -45,7 +45,7 @@ class Profiles:
           logging.debug('no se encuentan los roles asignados al usuario (%s) en la lista de roles pedidos %s' % (rdata,tuple(roles)))
           raise AccessDenied()
 
-        except psycopg2.DatabaseError, e:
+        except psycopg2.DatabaseError as e:
             logging.exception(e)
             raise AccessDenied()
 

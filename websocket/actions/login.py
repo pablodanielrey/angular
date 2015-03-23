@@ -74,14 +74,14 @@ class ResetPassword:
         body = fbody.read().decode('utf8')
         fbody.close()
         body = re.sub('###DNI###', user['dni'], body)
-        body = re.sub('###NAME###', unicode(user['name'],'utf-8'), body)
-        body = re.sub('###LASTNAME###', unicode(user['lastname'],'utf-8'), body)
+        body = re.sub('###NAME###', str(user['name'],'utf-8'), body)
+        body = re.sub('###LASTNAME###', str(user['lastname'],'utf-8'), body)
         content = re.sub('###URL###', url, body)
 
         logging.debug('contenido : ' + content)
 
         mails = self.users.listMails(con,user_id)
-        mails = filter(lambda x: x['confirmed'] == True, mails)
+        mails = [x for x in mails if x['confirmed'] == True]
 
         logging.debug('mails confirmados : ' + str(mails))
 
@@ -297,7 +297,7 @@ class Login:
       self.sendEvents(server,rdata['user_id'])
 
       ''' para debug '''
-      print str(self.session)
+      print(str(self.session))
 
       return True
 
@@ -364,6 +364,6 @@ class Logout:
         self.sendEvents(server,uid)
 
     ''' para debug '''
-    print str(self.session)
+    print(str(self.session))
 
     return True

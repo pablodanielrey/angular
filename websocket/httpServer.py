@@ -1,6 +1,6 @@
 
-import SimpleHTTPServer
-import BaseHTTPServer
+import http.server
+import http.server
 
 """
 class MyHttpServerRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
@@ -15,7 +15,7 @@ class MyHttpServerRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     self.send_header("Expires", "0")
 """
 
-class MyHttpServerRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
+class MyHttpServerRequestHandler(http.server.BaseHTTPRequestHandler):
 
     def do_GET(self):
         self.send_response(200)

@@ -2,6 +2,43 @@
 /*******************
 /********** ASISTENCIA ***********
 
+
+query :
+{
+  id:,
+  action:'getAssistanceLogs',
+  session:,
+  request:{
+    user_id:'id del usuario'
+    from: 'fecha en ISO 8601 con info utc, YYYY-MM-DDTHH:MM:SS+HH:MM',
+    to: 'fecha en ISO 8601 con info utc, YYYY-MM-DDTHH:MM:SS+HH:MM'
+  }
+}
+
+response:
+{
+  id: "id de la petición",
+  ok: "caso exito",
+  error: "error del servidor",
+  response:{
+    logs: [
+      {
+        id:'id del log',
+        log: 'fecha en ISO 8601 con info utc, YYYY-MM-DDTHH:MM:SS+HH:MM',
+        verifymode: n,
+        deviceId: 'id del dispositivo',
+        userId: 'id del usuario'
+      }
+    ]
+  }
+}
+
+
+
+
+
+
+
 query :
 {
   id:,

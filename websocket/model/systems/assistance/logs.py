@@ -32,11 +32,12 @@
 """
 
 import datetime, pytz
-import json
+import json, logging
+import inject
 
 from model.systems.assistance.date import Date
 from model.systems.assistance.devices import Devices
-
+from model.users import Users
 
 class Logs:
 
@@ -66,13 +67,26 @@ class Logs:
             return None
 
 
-    """ obtiene los logs de una fecha utc en paticular """
-    def findLogs(self,con,userId,date):
+    """ obtiene los logs """
+    def findLogs(self,con,userId,dfrom=None,dto=None):
         cur = con.cursor()
-        cur.execute('select id,device_id,user_id,verifymode,log from assistance.attlog where user_id = %s and log::date = %s::date',(userId,date))
-        data = cur.fetchall()
+        cur.execute("set timezone to 'UTC'")
+
+        if dfrom == None and dto == None:
+            cur.execute('select id,device_id,user_id,verifymode,log from assistance.attlog where user_id = %s', (userId,))
+        elif dfrom == None:
+            if self.date.isNaive(dfrom):
+                raise TypeError('dfrom is naive')
+            cur.execute('select id,device_id,user_id,verifymode,log from assistance.attlog where user_id = %s and log <= %s',(userId,dto))
+        elif dto == None:
+            if self.date.isNaive(dto):
+                raise TypeError('dto is naive')
+            cur.execute('select id,device_id,user_id,verifymode,log from assistance.attlog where user_id = %s and log >= %s',(userId,dfrom))
+
+        #data = cur.fetchall()
         logs = []
-        for d in data:
+        for d in cur:
+            logging.debug(d)
             logs.append(self._convertToDict(d))
         return logs
 

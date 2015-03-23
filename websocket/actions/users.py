@@ -87,7 +87,7 @@ class RemoveMail:
       self.events.broadcast(server,event)
 
 
-    except psycopg2.DatabaseError, e:
+    except psycopg2.DatabaseError as e:
 
         response = {'id':message['id'], 'error':''}
         server.sendMessage(response)
@@ -247,7 +247,7 @@ class ConfirmMail:
 
       raise MalformedMessage()
 
-    except psycopg2.DatabaseError, e:
+    except psycopg2.DatabaseError as e:
         con.rollback()
         raise e
 
@@ -306,7 +306,7 @@ class ListMails:
 
       rdata = self.users.listMails(con, message['user_id'])
       response = {'id':message['id'], 'ok':'', 'mails': rdata}
-      print json.dumps(response);
+      print(json.dumps(response));
       server.sendMessage(response)
       return True
 
@@ -484,7 +484,7 @@ class UpdateUser:
       self.events.broadcast(server,event)
       return True
 
-    except psycopg2.DatabaseError, e:
+    except psycopg2.DatabaseError as e:
         con.rollback()
         raise e
 
@@ -621,10 +621,10 @@ class ListUsers:
         del rdata[message['limit']:]
 
       if 'onlyIds' in message:
-          rdata = map(lambda x: {'id':x['id']}, rdata)
+          rdata = [{'id':x['id']} for x in rdata]
 
       if 'ids' in message:
-          rdata = filter(lambda x: x['id'] in message['ids'], rdata)
+          rdata = [x for x in rdata if x['id'] in message['ids']]
 
 
 

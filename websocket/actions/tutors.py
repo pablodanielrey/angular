@@ -69,7 +69,7 @@ class PersistTutorData:
             server.sendMessage(response)
 
             return True
-        except psycopg2.DatabaseError, e:
+        except psycopg2.DatabaseError as e:
             con.rollback()
             raise e
 

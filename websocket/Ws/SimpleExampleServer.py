@@ -11,7 +11,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 '''
 
 import signal, sys, ssl, logging
-from SimpleWebSocketServer import WebSocket, SimpleWebSocketServer, SimpleSSLWebSocketServer
+from .SimpleWebSocketServer import WebSocket, SimpleWebSocketServer, SimpleSSLWebSocketServer
 from optparse import OptionParser
 
 logging.basicConfig(format='%(asctime)s %(message)s', level=logging.DEBUG)
@@ -25,13 +25,13 @@ class SimpleEcho(WebSocket):
       try:
          self.sendMessage(str(self.data))
       except Exception as n:
-         print n
+         print(n)
          
    def handleConnected(self):
-      print self.address, 'connected'
+      print(self.address, 'connected')
 
    def handleClose(self):
-      print self.address, 'closed'
+      print(self.address, 'closed')
 
 
 class SimpleChat(WebSocket):
@@ -40,31 +40,31 @@ class SimpleChat(WebSocket):
       if self.data is None:
          self.data = ''
       
-      for client in self.server.connections.itervalues():
+      for client in self.server.connections.values():
          if client != self:
             try:
                client.sendMessage(str(self.address[0]) + ' - ' + str(self.data))
             except Exception as n:
-               print n
+               print(n)
 
 
    def handleConnected(self):
-      print self.address, 'connected'
-      for client in self.server.connections.itervalues():
+      print(self.address, 'connected')
+      for client in self.server.connections.values():
          if client != self:
             try:
                client.sendMessage(str(self.address[0]) + ' - connected')
             except Exception as n:
-               print n
+               print(n)
 
    def handleClose(self):
-      print self.address, 'closed'
-      for client in self.server.connections.itervalues():
+      print(self.address, 'closed')
+      for client in self.server.connections.values():
          if client != self:
             try:
                client.sendMessage(str(self.address[0]) + ' - disconnected')
             except Exception as n:
-               print n
+               print(n)
 
 
 if __name__ == "__main__":

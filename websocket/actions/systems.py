@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import psycopg2
 import json, uuid, inject
-from model.systems import Systems
+from model.systems.systems import Systems
 from model.profiles import Profiles
 from model.config import Config
 from model.events import Events

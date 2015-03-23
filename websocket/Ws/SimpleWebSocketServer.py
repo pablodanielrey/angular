@@ -10,7 +10,7 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 '''
 
-import SocketServer
+import socketserver
 import hashlib
 import base64
 import socket
@@ -20,14 +20,16 @@ import time
 import sys
 import errno
 import logging
-from BaseHTTPServer import BaseHTTPRequestHandler
-from StringIO import StringIO
+from http.server import BaseHTTPRequestHandler
+from io import StringIO
+from io import BytesIO
 from select import select
 
 
 class HTTPRequest(BaseHTTPRequestHandler):
+
    def __init__(self, request_text):
-      self.rfile = StringIO(request_text)
+      self.rfile = BytesIO(request_text)
       self.raw_requestline = self.rfile.readline()
       self.error_code = self.error_message = None
       self.parse_request()
@@ -143,7 +145,7 @@ class WebSocket(object):
 
          if data:
             # accumulate
-            self.headerbuffer += data
+            self.headerbuffer += str(data,'iso-8859-1')
 
             if len(self.headerbuffer) >= self.maxheader:
                raise Exception('header exceeded allowable size')
@@ -163,7 +165,7 @@ class WebSocket(object):
             elif '\r\n\r\n' in self.headerbuffer:
                self.request = HTTPRequest(self.headerbuffer)
                # hixie handshake
-               if self.request.headers.has_key('Sec-WebSocket-Key1'.lower()) and self.request.headers.has_key('Sec-WebSocket-Key2'.lower()):
+               if 'Sec-WebSocket-Key1'.lower() in self.request.headers and 'Sec-WebSocket-Key2'.lower() in self.request.headers:
                   # check if we have the key in our buffer
                   index = self.headerbuffer.find('\r\n\r\n') + 4
                   # determine how much of the 8 byte key we have
@@ -182,7 +184,7 @@ class WebSocket(object):
                      self.handshake_hixie76()
 
                # handshake rfc 6455
-               elif self.request.headers.has_key('Sec-WebSocket-Key'.lower()):
+               elif 'Sec-WebSocket-Key'.lower() in self.request.headers:
                   key = self.request.headers['Sec-WebSocket-Key'.lower()]
                   hStr = self.handshakeStr % { 'acceptstr' :  base64.b64encode(hashlib.sha1(key + self.GUIDStr).digest()) }
                   self.sendBuffer(hStr)
@@ -523,7 +525,7 @@ class SimpleWebSocketServer(object):
    def close(self):
       self.serversocket.close()
 
-      for conn in self.connections.itervalues():
+      for conn in self.connections.values():
          try:
             conn.handleClose()
          except:

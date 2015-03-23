@@ -137,8 +137,8 @@ class RejectAccountRequest:
       body = fbody.read().decode('utf8')
       fbody.close()
 
-      body = re.sub('###NAME###', unicode(request['name'],'utf-8'), body)
-      body = re.sub('###LASTNAME###', unicode(request['lastname'],'utf-8'), body)
+      body = re.sub('###NAME###', str(request['name'],'utf-8'), body)
+      body = re.sub('###LASTNAME###', str(request['lastname'],'utf-8'), body)
       content = re.sub('###DESCRIPTION###', request['description'], body)
 
       msg = self.mail.createMail(From,To,subject)
@@ -541,8 +541,8 @@ class ApproveAccountRequest:
       body = fbody.read().decode('utf8')
       fbody.close()
 
-      body = re.sub('###NAME###', unicode(request['name'],'utf-8'), body)
-      body = re.sub('###LASTNAME###', unicode(request['lastname'],'utf-8'), body)
+      body = re.sub('###NAME###', str(request['name'],'utf-8'), body)
+      body = re.sub('###LASTNAME###', str(request['lastname'],'utf-8'), body)
       content = re.sub('###DNI###', request['dni'], body)
 
       msg = self.mail.createMail(From,To,subject)
@@ -571,7 +571,7 @@ class ApproveAccountRequest:
     try:
         for request in requests:
             reqId = request['id'];
-            print "----------- ID:" + reqId;
+            print("----------- ID:" + reqId);
             req = self.req.findRequest(con,reqId)
             if (req == None):
                 raise MalformedMessage()

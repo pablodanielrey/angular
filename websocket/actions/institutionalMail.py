@@ -74,7 +74,7 @@ class PersistInstitutionalMail:
             self.events.broadcast(server,event)
 
             return True
-        except psycopg2.DatabaseError, e:
+        except psycopg2.DatabaseError as e:
             con.rollback()
             raise e
 
@@ -152,7 +152,7 @@ class DeleteInstitutionalMail:
 
             return True
 
-        except psycopg2.DatabaseError, e:
+        except psycopg2.DatabaseError as e:
             con.rollback()
             raise e
 

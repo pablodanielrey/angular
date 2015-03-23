@@ -18,17 +18,17 @@ from model.systems.assistance.logs import Logs
 class AssistanceWebSocketClient():
 
     def handle(self,config):
-        print "ws://"+config.configs['websocketClient_ip']+":"+config.configs['websocketClient_port']+"/websocket"
+        print("ws://"+config.configs['websocketClient_ip']+":"+config.configs['websocketClient_port']+"/websocket")
         #ws = create_connection("ws://"+config.configs['websocketClient_ip']+":"+config.configs['websocketClient_port']+"/websocket")
         ws = create_connection("wss://echo.websocket.org")
 
-        print ws
-        print "Sending 'Hello, World'..."
+        print(ws)
+        print("Sending 'Hello, World'...")
         ws.send("Hello, World")
-        print "Sent"
-        print "Reeiving..."
+        print("Sent")
+        print("Reeiving...")
         result =  ws.recv()
-        print "Received '%s'" % result
+        print("Received '%s'" % result)
         ws.close()
 
 
@@ -67,7 +67,7 @@ class AssistanceWebsocketServer(WebSocket):
           """ ya tengo guardado el log, por lo que lo elimino del firmware """
           super(AssistanceWebsocketServer,self).sendMessage("OK;delete;"+str(log_id));
 
-      except psycopg2.DatabaseError, e:
+      except psycopg2.DatabaseError as e:
           con.rollback()
           raise e
 
@@ -77,7 +77,7 @@ class AssistanceWebsocketServer(WebSocket):
 
 
     except Exception as e:
-      print e.__class__.__name__ + ' ' + str(e)
+      print(e.__class__.__name__ + ' ' + str(e))
       """
       traceback.print_exc()
       self.sendException(e)
@@ -86,7 +86,7 @@ class AssistanceWebsocketServer(WebSocket):
 
 
   def handleConnected(self):
-    print("connected : ",self.address)
+    print(("connected : ",self.address))
 
   def handleClose(self):
-    print("closed : ",self.address)
+    print(("closed : ",self.address))

@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
-from Ws.SimpleWebSocketServer import WebSocket, SimpleWebSocketServer
-import json, base64
-import datetime
-import traceback
-import logging
+import json, base64, datetime, traceback, logging
+import inject
 from wexceptions import MalformedMessage
-from model.profiles import AccessDenied
-from model.utils import DateTimeEncoder
+from Ws.SimpleWebSocketServer import WebSocket, SimpleWebSocketServer
 
+from model.config import Config
+from model.profiles import AccessDenied, Profiles
+from model.utils import DateTimeEncoder
+from model.systems.assistance.logs import Logs
 
 
 
@@ -45,7 +45,6 @@ response :
 
 class GetAssistanceStatus:
 
-    req = inject.attr(Domain)
     events = inject.attr(Events)
     profiles = inject.attr(Profiles)
     config = inject.attr(Config)
@@ -76,7 +75,7 @@ class GetAssistanceStatus:
             server.sendMessage(response)
             return True
 
-        except psycopg2.DatabaseError, e:
+        except psycopg2.DatabaseError as e:
             con.rollback()
             raise e
 
@@ -166,7 +165,7 @@ class GetAssistanceData:
             server.sendMessage(response)
             return True
 
-        except psycopg2.DatabaseError, e:
+        except psycopg2.DatabaseError as e:
             con.rollback()
             raise e
 
@@ -255,7 +254,7 @@ class GetOffices:
             server.sendMessage(response)
             return True
 
-        except psycopg2.DatabaseError, e:
+        except psycopg2.DatabaseError as e:
             con.rollback()
             raise e
 
@@ -334,7 +333,7 @@ class GetJustifications:
             server.sendMessage(response)
             return True
 
-        except psycopg2.DatabaseError, e:
+        except psycopg2.DatabaseError as e:
             con.rollback()
             raise e
 
@@ -402,7 +401,7 @@ class GetJustificationStock:
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
             stock = assistance.getJustificationStock(con,userId,justificationId)
-            if stock = None:
+            if stock == None:
                 response = {'id':message['id'], 'error':'No existe stock para esa justificación'}
                 server.sendMessage(response)
                 return True
@@ -417,7 +416,7 @@ class GetJustificationStock:
             server.sendMessage(response)
             return True
 
-        except psycopg2.DatabaseError, e:
+        except psycopg2.DatabaseError as e:
             con.rollback()
             raise e
 
@@ -479,7 +478,7 @@ class GetJustificationActualStock:
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
             stock = assistance.getJustificationActualStock(con,userId,justificationId)
-            if stock = None:
+            if stock == None:
                 response = {'id':message['id'], 'error':'No existe stock para esa justificación'}
                 server.sendMessage(response)
                 return True
@@ -494,7 +493,7 @@ class GetJustificationActualStock:
             server.sendMessage(response)
             return True
 
-        except psycopg2.DatabaseError, e:
+        except psycopg2.DatabaseError as e:
             con.rollback()
             raise e
 
@@ -575,7 +574,7 @@ class GetJustificationRequests:
             server.sendMessage(response)
             return True
 
-        except psycopg2.DatabaseError, e:
+        except psycopg2.DatabaseError as e:
             con.rollback()
             raise e
 
@@ -653,7 +652,7 @@ class requestJustification:
             server.sendMessage(response)
             return True
 
-        except psycopg2.DatabaseError, e:
+        except psycopg2.DatabaseError as e:
             con.rollback()
 
             response = {

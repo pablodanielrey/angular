@@ -83,7 +83,7 @@ class LaboralInsertion:
             return None
 
     def persistLanguage(self,con,data):
-    	if self.findLanguage(con,data['id']) == None:
+        if self.findLanguage(con,data['id']) == None:
             params = (data['id'],data['user_id'],data['name'],data['level'])
             cur = con.cursor()
             cur.execute('insert into laboral_insertion.languages (id,user_id,name,level) values(%s,%s,%s,%s)',params)

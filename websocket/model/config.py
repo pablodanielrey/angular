@@ -1,5 +1,5 @@
 from os.path import expanduser
-import ConfigParser
+import configparser
 
 class Config:
 
@@ -8,9 +8,9 @@ class Config:
     def __init__(self):
         home = expanduser("~")
         cfg = home + '/' + 'server-config.cfg'
-        print "Reading config from : " + cfg
+        print("Reading config from : " + cfg)
 
-        config = ConfigParser.ConfigParser()
+        config = configparser.ConfigParser()
         config.read(cfg)
         for section in config.sections():
             options = config.options(section)
@@ -20,4 +20,4 @@ class Config:
                 except:
                     self.configs[section + '_' + option] = None
 
-        print self.configs
+        print(self.configs)
