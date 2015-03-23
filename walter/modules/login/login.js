@@ -5,7 +5,8 @@ var app = angular.module('mainApp');
  * @param $scope Scope
  * Supone la existencia de un elemento padre que maneja los eventos dontShowMessage y showMessage para administrar mensajes
  */
-app.controller("LoginCtrl", function($rootScope,$scope, Session, Credentials, Notifications) {
+app.controller("LoginCtrl", ['$rootScope','$scope','Session','Credentials','Notifications',
+	function($rootScope,$scope, Session, Credentials, Notifications) {
 
 		$scope.user = {
 			username: '',
@@ -45,4 +46,4 @@ app.controller("LoginCtrl", function($rootScope,$scope, Session, Credentials, No
 				});
 		};
 
-});
+}]);
