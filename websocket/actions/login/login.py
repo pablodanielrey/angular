@@ -71,10 +71,11 @@ class Login:
         server.sendMessage(response)
         return True
 
+      logging.debug(server.peer)
+
       sess = {
         self.config.configs['session_user_id']:rdata['user_id'],
-        'ip':server.address[0],
-        'port':server.address[1]
+        'peer':server.peer
       }
       sid = self.session.create(sess)
 
@@ -147,8 +148,5 @@ class Logout:
 
     if uid:
         self.sendEvents(server,uid)
-
-    ''' para debug '''
-    print(str(self.session))
 
     return True

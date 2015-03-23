@@ -38,5 +38,4 @@ class Events:
         self.broadcastRemote(server,msg)
 
     def broadcastRemote(self,server,msg):
-        for c in server.server.connections.values():
-          c.sendMessage(msg)
+        server.broadcast(msg)

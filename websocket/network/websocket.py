@@ -55,21 +55,35 @@ actions = [
 
 class ActionsServerProtocol(WebSocketServerProtocol):
 
+
+    def _encodeMessage(self,msg):
+        jmsg = json.dumps(msg, ensure_ascii = False, cls=DateTimeEncoder)
+        if (len(jmsg) < 1000):
+            logging.debug(jmsg)
+
+        ejmsg = jmsg.encode('utf-8')
+        return ejmsg
+
+    def _sendEncodedMessage(self,msg):
+        super(WebSocketServerProtocol,self).sendMessage(msg,False)
+
+
+
     def sendException(self,e):
         msg = {'type':'Exception','name':e.__class__.__name__}
         self.sendMessage(msg)
 
     def sendError(self,msg,e):
         mmsg = {'id':msg['id'],'error':e.__class__.__name__}
-        self.sendMessage(websocket,mmsg)
+        self.sendMessage(mmsg)
 
     def sendMessage(self,msg):
-        jmsg = json.dumps(msg, ensure_ascii = False, cls=DateTimeEncoder)
-        if (len(jmsg) < 1000):
-            logging.debug(jmsg)
+        ejmsg = self._encodeMessage(msg)
+        self._sendEncodedMessage(ejmsg)
 
-        ejmsg = jmsg.encode('utf-8')
-        super(WebSocketServerProtocol,self).sendMessage(ejmsg,False)
+    def broadcast(self,msg):
+        msg = self._encodeMessage(msg)
+        self.factory.broadcast(msg)
 
 
 
@@ -156,16 +170,50 @@ class ActionsServerProtocol(WebSocketServerProtocol):
 
     def onOpen(self):
         logging.debug('conexión establecida')
+        self.factory.register(self)
 
     def onClose(self,wasClean, code, reason):
         logging.debug('cliente desconectado {0}, {1}, {2}'.format(wasClean,code,reason))
+
+    def connectionLost(self, reason):
+        WebSocketServerProtocol.connectionLost(self, reason)
+        self.factory.unregister(self)
+
+
+
+
+
+class BroadcastServerFactory(WebSocketServerFactory):
+
+    def __init__(self, debug=False, debugCodePaths=False):
+        WebSocketServerFactory.__init__(self, debug=debug, debugCodePaths=debugCodePaths)
+        self.clients = []
+
+
+    def register(self, client):
+        if client not in self.clients:
+            print("registered client {}".format(client.peer))
+            self.clients.append(client)
+
+    def unregister(self, client):
+        if client in self.clients:
+            print("unregistered client {}".format(client.peer))
+            self.clients.remove(client)
+
+    def broadcast(self, msg):
+        print("broadcasting message '{}' ..".format(msg))
+        for c in self.clients:
+            c._sendEncodedMessage(msg)
+            print("message sent to {}".format(c.peer))
+
+
 
 
 
 def getReactor():
     config = inject.instance(Config)
     log.startLogging(sys.stdout)
-    factory = WebSocketServerFactory()
+    factory = BroadcastServerFactory()
     factory.protocol = ActionsServerProtocol
     reactor.listenTCP(int(config.configs['server_port']), factory)
     return reactor
