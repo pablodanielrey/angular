@@ -2,4 +2,7 @@ instalar los modulos de python.
 
 python3-pip python3-psycopg2 python3-arrow python3-dateutil
 
-pip3 install inject pytz websockets
+pip3 install inject pytz
+pip3 install autobahn[asyncio] -- si es que se quiere la version que usa asyncio
+pip3 install autobahn[twisted] -- si es que se quiere la version que usa twisted
+pip3 install --upgrade six
