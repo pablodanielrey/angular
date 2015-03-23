@@ -6,3 +6,13 @@ pip3 install inject pytz
 pip3 install autobahn[asyncio] -- si es que se quiere la version que usa asyncio
 pip3 install autobahn[twisted] -- si es que se quiere la version que usa twisted
 pip3 install --upgrade six
+
+
+para poder chequear las respuestas del websockets en json.
+
+https://www.jsoneditoronline.org/
+
+
+para testear la conexión al server de acciones mediante websocket se puede cargar la página.
+
+websocket.html

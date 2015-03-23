@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
-import json, base64, datetime, traceback, logging
-import inject
-import psycopg2
-from wexceptions import MalformedMessage
-from Ws.SimpleWebSocketServer import WebSocket, SimpleWebSocketServer
+import json, base64, datetime, traceback, logging, inject, psycopg2
+
+from wexceptions import *
 
 from model.config import Config
 from model.profiles import AccessDenied, Profiles
 from model.utils import DateTimeEncoder
+
 from model.systems.assistance.logs import Logs
 
 
