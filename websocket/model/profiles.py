@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-import inject
-import psycopg2
-import logging
+import inject, psycopg2, logging
+
 from model.config import Config
 from model.session import Session
-from wexceptions import AccessDenied
+
+from wexceptions import *
 
 
 
@@ -52,8 +52,6 @@ class Profiles:
         finally:
             if con:
                 con.close()
-
-
 
 
     def getLocalUserId(self,sid):

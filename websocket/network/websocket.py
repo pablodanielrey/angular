@@ -9,7 +9,7 @@ from actions.students import CreateStudent, FindStudent, PersistStudent, FindAll
 from actions.groups import ListGroups, FindGroup, FindMembers, RemoveMembers, AddMembers, UpdateGroup, CreateGroup
 from actions.systems import ListSystems
 from actions.laboralInsertion import PersistLaboralInsertion, FindLaboralInsertion, CreateLanguages,PersistLanguage, DeleteLanguage, FindLanguage, ListLanguages, CreateDegrees, PersistDegree, DeleteDegree, FindDegree, ListDegree, AcceptTermsAndConditions, CheckTermsAndConditions
-from actions.profiles import CheckAccess
+
 from actions.tutors import PersistTutorData, ListTutorData
 
 """
@@ -29,6 +29,7 @@ from wexceptions import *
 
 from actions.login.login import Login, Logout
 from actions.login.password import ChangePassword, ResetPassword
+from actions.profiles import CheckAccess
 
 """ sistemas """
 
@@ -54,7 +55,7 @@ actions = [
 #    ListSystems(),
 #    PersistLaboralInsertion(), FindLaboralInsertion(), CreateLanguages(), PersistLanguage(), DeleteLanguage(), FindLanguage(), ListLanguages(), CreateDegrees(), PersistDegree(), DeleteDegree(), FindDegree(), ListDegree(), AcceptTermsAndConditions(), CheckTermsAndConditions(),
 #    PersistTutorData(), ListTutorData(),
-#    CheckAccess(),
+    CheckAccess(),
     Login(), Logout(), ChangePassword(), ResetPassword(),
     PersistDomain(), DeleteDomain(), FindDomain(),
     PersistInstitutionalMail(), DeleteInstitutionalMail(), FindInstitutionalMail(),

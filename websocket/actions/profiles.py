@@ -1,15 +1,9 @@
 # -*- coding: utf-8 -*-
-import json, uuid, psycopg2, re
 import inject
-import hashlib
 
-
-from model.mail import Mail
-from model.users import Users
-from model.events import Events
 from model.profiles import Profiles
 from model.config import Config
-from wexceptions import MalformedMessage, AccessDenied
+from wexceptions import *
 
 """
     Modulo de acceso al manejo de perfiles/roles
