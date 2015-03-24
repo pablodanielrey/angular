@@ -4,6 +4,7 @@ import inject
 import hashlib
 import re
 
+from model.logging import Log
 from model.profiles import Profiles
 from model.mail.mail import Mail
 from model.config import Config
@@ -42,6 +43,7 @@ class Login:
   session = inject.attr(Session)
   config = inject.attr(Config)
   events = inject.attr(Events)
+  log = inject.attr(Log)
 
   def sendEvents(self,server,user_id):
       event = {
@@ -69,15 +71,18 @@ class Login:
       if rdata == None:
         response = {'id':message['id'], 'error':'autentificación denegada'}
         server.sendMessage(response)
-        return True
 
-      logging.debug(server.peer)
+        self.log.log('login - ERROR - ' + message['user'] + ' - ' + message['password'] + ' - ' + server.peer)
+
+        return True
 
       sess = {
         self.config.configs['session_user_id']:rdata['user_id'],
         'peer':server.peer
       }
       sid = self.session.create(sess)
+
+      self.log.log('login - ' + message['user'] + ' - ' + server.peer,sid)
 
       response = {'id':message['id'], 'ok':'', 'session':sid, 'user_id':rdata['user_id']}
       server.sendMessage(response)
@@ -117,6 +122,7 @@ class Logout:
   session = inject.attr(Session)
   events = inject.attr(Events)
   config = inject.attr(Config)
+  log = inject.attr(Log)
 
   def sendEvents(self,server,user_id):
       event = {
@@ -136,10 +142,16 @@ class Logout:
 
     uid = None
     sid = message['session']
+
+    self.log.log('logout - ' + server.peer,sid)
+
     try:
         sess = self.session.findSession(sid)
         uid = sess['data'][self.config.configs['session_user_id']]
         self.session.destroy(sid)
+
+        self.log.log('session destroyed - ' + server.peer)
+
     except SessionNotFound as e:
         pass
 

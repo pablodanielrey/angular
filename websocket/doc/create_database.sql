@@ -220,17 +220,15 @@ create schema system;
 
 create table system.logs (
   id serial primary key,
-  user_id varchar references profile.users (id),
+  user_id varchar,
   creation timestamptz default now(),
-  log varchar not null,
-  CHECK(EXTRACT(TIMEZONE FROM creation) = '0')
+  log varchar not null
 );
 
 create table system.sessions (
   id varchar not null primary key,
   data varchar,
-  expire timestamptz default now(),
-  CHECK(EXTRACT(TIMEZONE FROM expire) = '0')
+  expire timestamptz default now()
 );
 
 
