@@ -11,24 +11,35 @@ from actions.systems import ListSystems
 from actions.laboralInsertion import PersistLaboralInsertion, FindLaboralInsertion, CreateLanguages,PersistLanguage, DeleteLanguage, FindLanguage, ListLanguages, CreateDegrees, PersistDegree, DeleteDegree, FindDegree, ListDegree, AcceptTermsAndConditions, CheckTermsAndConditions
 from actions.profiles import CheckAccess
 from actions.tutors import PersistTutorData, ListTutorData
-from actions.domain import PersistDomain, DeleteDomain, FindDomain
-from actions.institutionalMail import PersistInstitutionalMail, DeleteInstitutionalMail, FindInstitutionalMail
+
 """
-
-from actions.login.login import Login, Logout
-from actions.login.password import ChangePassword, ResetPassword
-from actions.assistance.logs import GetAssistanceLogs
-
-
-from model.config import Config
-from model.utils import DateTimeEncoder
 
 from autobahn.twisted.websocket import WebSocketServerProtocol
 from autobahn.twisted.websocket import WebSocketServerFactory
 from twisted.python import log
 from twisted.internet import reactor
 
+from model.config import Config
+from model.utils import DateTimeEncoder
+
 from wexceptions import *
+
+
+""" actions del core """
+
+from actions.login.login import Login, Logout
+from actions.login.password import ChangePassword, ResetPassword
+
+""" sistemas """
+
+from actions.systems.assistance.logs import GetAssistanceLogs
+
+from actions.systems.ntdomain.domain import PersistDomain, DeleteDomain, FindDomain
+from actions.systems.mail.mail import PersistInstitutionalMail, DeleteInstitutionalMail, FindInstitutionalMail
+
+
+
+
 
 
 ''' aca se definen las acciones a ser manejadas por el server de websocket '''
@@ -43,10 +54,10 @@ actions = [
 #    ListSystems(),
 #    PersistLaboralInsertion(), FindLaboralInsertion(), CreateLanguages(), PersistLanguage(), DeleteLanguage(), FindLanguage(), ListLanguages(), CreateDegrees(), PersistDegree(), DeleteDegree(), FindDegree(), ListDegree(), AcceptTermsAndConditions(), CheckTermsAndConditions(),
 #    PersistTutorData(), ListTutorData(),
-#    PersistInstitutionalMail(), DeleteInstitutionalMail(), FindInstitutionalMail(),
-#    PersistDomain(), DeleteDomain(), FindDomain(),
 #    CheckAccess(),
     Login(), Logout(), ChangePassword(), ResetPassword(),
+    PersistDomain(), DeleteDomain(), FindDomain(),
+    PersistInstitutionalMail(), DeleteInstitutionalMail(), FindInstitutionalMail(),
     GetAssistanceLogs()
 ]
 

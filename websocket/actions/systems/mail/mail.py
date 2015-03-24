@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 import inject, json, psycopg2
 
-from model.institutionalMail import InstitutionalMail
+from model.systems.mail.institutionalMail import InstitutionalMail
 from model.events import Events
 from model.profiles import Profiles
 from model.config import Config
-from wexceptions import MalformedMessage
+
+from wexceptions import *
 
 """
     Modulo de acceso a los datos del servidor de correo
