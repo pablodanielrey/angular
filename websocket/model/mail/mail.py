@@ -5,16 +5,7 @@ from email.mime.text import MIMEText
 from email.header import Header
 
 from model.config import Config
-
-
-
-class MailServerNotFound(Exception):
-    def __init__(self):
-        pass
-
-    def __str__(self):
-        return self.__class__.__name__;
-
+from wexceptions import *
 
 
 class Mail:
