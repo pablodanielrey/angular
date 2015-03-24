@@ -29,7 +29,7 @@ from wexceptions import *
 
 from actions.login.login import Login, Logout
 from actions.login.password import ChangePassword, ResetPassword
-from actions.profiles import CheckAccess
+from actions.profiles.profiles import CheckAccess
 
 """ sistemas """
 
