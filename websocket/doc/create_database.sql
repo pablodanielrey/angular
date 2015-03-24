@@ -205,9 +205,7 @@ create table tutors.tutors (
   "date" timestamptz not null,
   student_number varchar not null,
   type varchar not null,
-  created timestamptz default now(),
-  CHECK(EXTRACT(TIMEZONE FROM date) = '0'),
-  CHECK(EXTRACT(TIMEZONE FROM created) = '0')
+  created timestamptz default now()
 );
 
 
