@@ -5,12 +5,12 @@ from actions.chat import SendEventToClients
 from actions.requests import CreateAccountRequest, ConfirmAccountRequest, ListAccountRequests, ApproveAccountRequest, RemoveAccountRequest, RejectAccountRequest
 from actions.users import UpdateUser, FindUser, ListUsers, ListMails, PersistMail, ConfirmMail, RemoveMail
 from actions.status import GetStatus
-from actions.students import CreateStudent, FindStudent, PersistStudent, FindAllStudents
+
 from actions.groups import ListGroups, FindGroup, FindMembers, RemoveMembers, AddMembers, UpdateGroup, CreateGroup
 from actions.systems import ListSystems
 from actions.laboralInsertion import PersistLaboralInsertion, FindLaboralInsertion, CreateLanguages,PersistLanguage, DeleteLanguage, FindLanguage, ListLanguages, CreateDegrees, PersistDegree, DeleteDegree, FindDegree, ListDegree, AcceptTermsAndConditions, CheckTermsAndConditions
 
-from actions.tutors import PersistTutorData, ListTutorData
+
 
 """
 
@@ -35,9 +35,12 @@ from actions.profiles.profiles import CheckAccess
 
 from actions.systems.assistance.logs import GetAssistanceLogs
 
+from actions.systems.tutors.tutors import PersistTutorData, ListTutorData
+
 from actions.systems.ntdomain.domain import PersistDomain, DeleteDomain, FindDomain
 from actions.systems.mail.mail import PersistInstitutionalMail, DeleteInstitutionalMail, FindInstitutionalMail
 
+from actions.systems.students.students import CreateStudent, FindStudent, PersistStudent, FindAllStudents
 
 
 
@@ -50,15 +53,16 @@ actions = [
 #    CreateAccountRequest(), ConfirmAccountRequest(), ListAccountRequests(), ApproveAccountRequest(), RemoveAccountRequest(), RejectAccountRequest(),
 #    ListUsers(), UpdateUser(), FindUser(), ListMails(), PersistMail(), ConfirmMail(), RemoveMail(),
 #    GetStatus(),
-#    CreateStudent(), FindStudent(), PersistStudent(), FindAllStudents(),
 #    ListGroups(), FindGroup(), FindMembers(), RemoveMembers(), AddMembers(), UpdateGroup(), CreateGroup(),
 #    ListSystems(),
 #    PersistLaboralInsertion(), FindLaboralInsertion(), CreateLanguages(), PersistLanguage(), DeleteLanguage(), FindLanguage(), ListLanguages(), CreateDegrees(), PersistDegree(), DeleteDegree(), FindDegree(), ListDegree(), AcceptTermsAndConditions(), CheckTermsAndConditions(),
-#    PersistTutorData(), ListTutorData(),
+#
     CheckAccess(),
     Login(), Logout(), ChangePassword(), ResetPassword(),
     PersistDomain(), DeleteDomain(), FindDomain(),
     PersistInstitutionalMail(), DeleteInstitutionalMail(), FindInstitutionalMail(),
+    CreateStudent(), FindStudent(), PersistStudent(), FindAllStudents(),
+    PersistTutorData(), ListTutorData(),
     GetAssistanceLogs()
 ]
 
@@ -166,7 +170,7 @@ class ActionsServerProtocol(WebSocketServerProtocol):
                 raise e
 
             if not managed:
-                raise NotImplemented()
+                raise NotImplemented(message['action'])
 
         except Exception as e:
             print(e.__class__.__name__ + ' ' + str(e))

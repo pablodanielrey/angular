@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import psycopg2
+
 from model.objectView import ObjectView
 
 class Students:

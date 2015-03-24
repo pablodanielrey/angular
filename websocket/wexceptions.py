@@ -4,54 +4,40 @@
 class NullData(Exception):
 
     def __init__(self):
-        pass
-
-    def __str__(self):
-        return self.__class__.__name__
+        Exception.__init__(self)
 
 
 class NotImplemented(Exception):
 
     def __init__(self):
-        pass
+        Exception.__init__(self)
 
-    def __str__(self):
-        return self.__class__.__name__
+    def __init__(self,msg):
+        Exception.__init__(self,msg)
 
 
 class MalformedMessage(Exception):
 
     def __init__(self):
-        pass
-
-    def __str__(self):
-        return self.__class__.__name__
+        Exception.__init__(self)
 
 
 class UserNotFound(Exception):
 
     def __init__(self):
-        pass
-
-    def __str__(self):
-        return self.__class__.__name__
+        Exception.__init__()
 
 
 class DupplicatedUser(Exception):
 
     def __init__(self):
-        pass
-
-    def __str__(self):
-        return self.__class__.__name__
+        Exception.__init__(self)
 
 
 class MailServerNotFound(Exception):
-    def __init__(self):
-        pass
 
-    def __str__(self):
-        return self.__class__.__name__;
+    def __init__(self):
+        Exception.__init__(self)
 
 
 class FailedConstraints(Exception):
@@ -62,23 +48,14 @@ class FailedConstraints(Exception):
     def __init__(self,msg):
         Exception.__init__(self,msg)
 
-    def __str__(self):
-        return self.__class__.__name__;
-
 
 class InsuficientAccess(Exception):
 
     def __init__(self):
-        pass
-
-    def __str__(self):
-        return self.__class__.__name__
+        Exception.__init__(self)
 
 
 class AccessDenied(Exception):
 
     def __init__(self):
-        pass
-
-    def __str__(self):
-        return self.__class__.__name__
+        Exception.__init__(self)

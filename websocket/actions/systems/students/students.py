@@ -1,7 +1,9 @@
 
 import inject, json
 import psycopg2
-from model.students import Students
+
+from model.systems.students.students import Students
+
 from model.events import Events
 from model.profiles import Profiles
 from model.config import Config

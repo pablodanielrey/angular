@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-import inject, json, base64
-import psycopg2
-import uuid
-from model.tutors import Tutors
+import inject, psycopg2
+
+from model.systems.tutors.tutors import Tutors
 from model.events import Events
 from model.profiles import Profiles
 from model.config import Config
-from wexceptions import MalformedMessage
+
+from wexceptions import *
 
 """
     Modulo de acceso a los datos de las tutorias
@@ -121,7 +121,7 @@ class ListTutorData:
             con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
 
             tutors = self.tutors.listTutorData(con);
-            response = {'id':message['id'], 'ok':'', 'tutorData':tutorData}
+            response = {'id':message['id'], 'ok':'', 'response':tutorData}
             server.sendMessage(response)
             return True
 
