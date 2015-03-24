@@ -46,6 +46,26 @@ class DupplicatedUser(Exception):
         return self.__class__.__name__
 
 
+class MailServerNotFound(Exception):
+    def __init__(self):
+        pass
+
+    def __str__(self):
+        return self.__class__.__name__;
+
+
+class FailedConstraints(Exception):
+
+    def __init__(self):
+        Exception.__init__(self)
+
+    def __init__(self,msg):
+        Exception.__init__(self,msg)
+
+    def __str__(self):
+        return self.__class__.__name__;
+
+
 class InsuficientAccess(Exception):
 
     def __init__(self):

@@ -5,11 +5,11 @@ import hashlib
 import re
 
 from model.profiles import Profiles
-from model.mail import Mail
+from model.mail.mail import Mail
 from model.config import Config
 from model.events import Events
 from model.users import Users
-from model.userPassword import UserPassword
+from model.credentials.credentials import UserPassword
 from model.session import Session, SessionNotFound
 
 from wexceptions import *

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-import uuid, hashlib
-import psycopg2
-from wexceptions import UserNotFound
+import uuid, hashlib, psycopg2
+
+from wexceptions import *
 from model.objectView import ObjectView
 
 """
@@ -45,7 +45,7 @@ class UserPassword:
             raise UserNotFound()
 
         try:
-            hash = hashlib.sha1(str(uuid.uuid4()) + username).hexdigest()
+            hash = hashlib.sha1((str(uuid.uuid4()) + username).encode('utf-8')).hexdigest()
 
             rreq = (creds['id'],creds['user_id'],creds['username'],hash)
             cur = con.cursor()

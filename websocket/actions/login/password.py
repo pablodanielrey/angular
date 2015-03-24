@@ -5,11 +5,11 @@ import hashlib
 import re
 
 from model.profiles import Profiles
-from model.mail import Mail
+from model.mail.mail import Mail
 from model.config import Config
 from model.events import Events
 from model.users import Users
-from model.userPassword import UserPassword
+from model.credentials.credentials import UserPassword
 from model.session import Session, SessionNotFound
 
 from wexceptions import *
@@ -147,46 +147,38 @@ class ResetPassword:
             ###NAME###
             ###LASTNAME###
             ###URL###
+
+            y estas en a url.
             ###HASH###
+            ###USERNAME###
         """
 
-        logging.debug('obteniendo el usuario del nombre de usuario : ' + username)
 
         creds = self.userPassword.findCredentials(con,username)
         user_id = creds['user_id']
-
         user = self.users.findUser(con,user_id)
+        mails = self.users.listMails(con,user_id)
+        emails = [x['email'] for x in mails if x['confirmed'] == True]
 
-        logging.debug('usuario obtenido ' + str(user))
+        if len(emails) <= 0:
+            raise FailedConstraints('No tienen ningún email confirmado')
 
-        From = self.config.configs['mail_reset_password_from']
-        subject = self.config.configs['mail_reset_password_subject']
         url = self.config.configs['mail_reset_password_url']
         url = re.sub('###HASH###', hash, url)
         url = re.sub('###USERNAME###', username, url)
 
-        fbody = open('model/systems/accounts/mails/' + self.config.configs['mail_reset_password_body'],'r')
-        body = fbody.read().decode('utf8')
-        fbody.close()
-        body = re.sub('###DNI###', user['dni'], body)
-        body = re.sub('###NAME###', str(user['name'],'utf-8'), body)
-        body = re.sub('###LASTNAME###', str(user['lastname'],'utf-8'), body)
-        content = re.sub('###URL###', url, body)
+        From = self.config.configs['mail_reset_password_from']
+        subject = self.config.configs['mail_reset_password_subject']
+        template = self.config.configs['mail_reset_password_template']
 
-        logging.debug('contenido : ' + content)
+        replace = [
+            ('###DNI###',user['dni']),
+            ('###NAME###',user['name']),
+            ('###LASTNAME###',user['lastname']),
+            ('###URL###',url)
+        ]
 
-        mails = self.users.listMails(con,user_id)
-        mails = [x for x in mails if x['confirmed'] == True]
-
-        logging.debug('mails confirmados : ' + str(mails))
-
-        for email in mails:
-            To = email['email']
-
-            msg = self.mail.createMail(From,To,subject)
-            p1 = self.mail.getHtmlPart(content)
-            msg.attach(p1)
-            self.mail.sendMail(From,[To],msg.as_string())
+        self.mail.sendMail(From,emails,subject,replace,html=template)
 
         return True
 
