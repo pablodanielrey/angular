@@ -287,15 +287,15 @@ create table assistance.offices (
 
 create table assistance.offices_users (
     user_id varchar references profile.users (id),
-    office_id varchar references assistance.offices (id)
-    contraint unique_office_user unique (user_id,office_id)
+    office_id varchar references assistance.offices (id),
+    constraint unique_office_user unique (user_id,office_id)
 );
 
 create table assistance.offices_roles (
   user_id varchar references profile.users (id),
-  office_id varchar references assistance.offices (id)
+  office_id varchar references assistance.offices (id),
   role varchar not null,
-  contraint unique_office_user unique (user_id,office_id,role)
+  constraint unique_office_roles unique (user_id,office_id,role)
 );
 
 create table assistance.justifications (
