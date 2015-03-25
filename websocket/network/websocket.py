@@ -47,8 +47,6 @@ from actions.systems.mail.mail import PersistInstitutionalMail, DeleteInstitutio
 
 
 
-
-
 ''' aca se definen las acciones a ser manejadas por el server de websocket '''
 
 actions = [
