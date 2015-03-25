@@ -145,7 +145,7 @@ app.controller('RequestAssistanceOutCtrl', function($scope, Assistance, Notifica
             $scope.model.justification.end = $scope.model.justification.begin;
         } else {
             var aux = $scope.model.justification.end;
-            $scope.model.justification.end = $scope.model.justification.begin;
+            $scope.model.justification.end = new Date($scope.model.justification.begin.getTime());
             $scope.model.justification.end.setHours(aux.getHours());
             $scope.model.justification.end.setMinutes(aux.getMinutes());
         }

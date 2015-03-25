@@ -17,16 +17,17 @@
         </div>
 
         <div>
-          <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationOutRequest()]">
-            <p>Seleccione el día</p>
-            <input type="date" ng-model="model.justification.begin" ng-change="changeDate()">
-            <p>Seleccione Horas</p>
+          <div class="margin" ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationOutRequest()]">
+            <p class="parrafos">Seleccione el día</p>
+            <input class="date" type="date" ng-model="model.justification.begin" ng-change="changeDate()">
+            <p class="parrafos">Seleccione Horas</p>
             desde <input type="time" name="hora" ng-model="model.justification.begin" ng-change="changeHours()"> hasta <input type="time" name="hora" ng-model="model.justification.end" ng-change="changeHours()">
             <p>Total de Horas: {{model.justification.totalHours}}</p>
           </div>
 
           <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationOutAvailable()]">
-            <p>Horas Disponibles: {{model.out.stock}}</p>
+            <p class="parrafosGreen margin">Disponibilidad Restante</p>
+            <p class="parrafosGreen2 margin">{{model.out.stock}} hs</p>
           </div>
 
           <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationOutRequests()]">
@@ -42,10 +43,10 @@
           </div>
         </div>
 
-        <div ng-class="{true:'visible', false:'hidden'}[isSelectedDate()]">
-          <p>Solicitar Boleta de salida para el día</p>
-          <input type="text" placeholder="Día elegido" ng-model="dateFormated">
-          <input type="button" value="Confirmar" ng-click="save()">
+        <div class="margin" ng-class="{true:'visible', false:'hidden'}[isSelectedDate()]">
+          <p class="parrafos">Solicitar Boleta de salida para el día</p>
+          <p class="parrafos2"><i class="fa fa-calendar-o"></i> {{dateFormated}} </p>
+          <input class="button2 blue2" type="button" value="Confirmar" ng-click="save()">
         </div>
       </div>
     </div>
