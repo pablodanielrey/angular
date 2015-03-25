@@ -27,9 +27,10 @@
           </div>
 
           <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationCompensatoryAvailable()]">
-            <p>Disponibilidad</p>
-            <p>Este mes: {{model.compensatory.actualStock}}</p>
-            <p>En el año: {{model.compensatory.stock}}</p>
+            <p class="parrafosGreen margin">Disponibilidad MENSUAL Restante</p>
+            <p class="parrafosGreen2 margin">{{model.compensatory.actualStock}} Días</p>
+            <p class="parrafosGreen margin">Disponibilidad ANUAL Restante</p>
+            <p class="parrafosGreen2 margin">{{model.compensatory.stock}} Días</p>
           </div>
 
           <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationCompensatoryRequests()]">
@@ -52,7 +53,7 @@
           <p class="parrafos">Solicitar compensatorio para el día</p>
           <p class="parrafos2"><i class="fa fa-calendar-o"></i> {{dateFormated}}</p>
           <input class="button2 blue2" type="button" value="Confirmar" ng-click="save()">
-      
+
         </div>
       </div>
     </div>
