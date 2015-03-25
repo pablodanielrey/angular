@@ -5,29 +5,13 @@ app.service('Assistance', ['Utils','Messages','Session',
 	function(Utils,Messages,Session) {
 
 		this.getAssistanceStatus = function(userId, callbackOk, callbackError) {
-			/*
-			//TODO
-			response = {
-				status : 'Trabajando',
-				start : '2015-03-13 08:25:00',
-				end : '2015-03-13 14:35:00',
-				logs : [
-						'2015-03-13 08:00:00',
-						'2015-03-13 12:00:00',
-						'2015-03-13 13:30:00',
-						'2015-03-13 14:45:00'
-				],
-				workedMinutes: '400'
-			};
-			callbackOk(response);
-			*/
-
 			var msg = {
 				id: Utils.getId(),
 				action: 'getAssistanceStatus',
 				session: Session.getSessionId(),
 				request:{
-					user_id: userId
+					user_id: userId,
+					date:'2012-11-09'
 				}
 			}
 
@@ -39,7 +23,6 @@ app.service('Assistance', ['Utils','Messages','Session',
 					callbackError(error);
 				}
 			);
-
 		};
 
 		this.getAssistanceData = function(userId, callbackOk, callbackError) {

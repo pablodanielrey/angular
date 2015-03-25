@@ -36,7 +36,7 @@ app.controller('AssistanceCtrl', function($scope, $timeout, $window, Profiles, S
 	 * Dar formato a los datos de oficina recibidos del servidor
 	 */
 	$scope.formatOfficesFromServer = function(officesFromServer){
-		for (office in officesFromServer){
+		for (var office in officesFromServer){
 			$scope.model.offices.push(officesFromServer[office].name);
 		}
 	};
@@ -65,6 +65,11 @@ app.controller('AssistanceCtrl', function($scope, $timeout, $window, Profiles, S
 		var workedH = Math.floor(workedMinutes/60);
 		var workedM = workedMinutes % 60;
 		$scope.model.assistanceStatus.workedTime = workedH + ":" + workedM;
+
+
+		for (var i in assistanceStatusFromServer.logs) {
+			console.log(assistanceStatusFromServer.logs[i]);
+		};
 
 	};
 
