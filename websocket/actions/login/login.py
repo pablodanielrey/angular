@@ -108,7 +108,8 @@ peticion :
 {
   "id":"id de la peticion"
   "action":"logout",
-  "session":"sesion del usuario"
+  "session":"sesion del usuario",
+  'info': 'info adicional para debug'
 }
 
 respuesta :
@@ -146,14 +147,16 @@ class Logout:
     uid = None
     sid = message['session']
 
-    self.log.log('logout - ' + server.peer,sid)
+    info = ' - ' + message['info'] if 'info' in message else ''
+
+    self.log.log('logout - ' + server.peer + info,sid)
 
     try:
         sess = self.session.findSession(sid)
         uid = sess['data'][self.config.configs['session_user_id']]
         self.session.destroy(sid)
 
-        self.log.log('session destroyed - ' + server.peer)
+        self.log.log('session destroyed - ' + server.peer + info)
 
     except SessionNotFound as e:
         pass
