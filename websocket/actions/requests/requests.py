@@ -1,15 +1,21 @@
 # -*- coding: utf-8 -*-
 import json, uuid, psycopg2, inject, re, hashlib
-from model.requests import Requests
-from model.users import Users
-from model.students import Students
+
+
 from model.objectView import ObjectView
+
 from model.events import Events
+from model.requests.requests import Requests
+from model.users.users import Users
+
+from model.systems.students.students import Students
+
 from model.profiles import Profiles
-from model.mail import Mail
+from model.mail.mail import Mail
 from model.config import Config
-from model.userPassword import UserPassword
-from wexceptions import MalformedMessage
+from model.credentials.credentials import UserPassword
+
+from wexceptions import *
 
 
 """
@@ -68,7 +74,6 @@ class RemoveAccountRequest:
         for request in requests:
             rid = request['id'];
             self.req.removeRequest(con,rid)
-
 
         con.commit()
 
@@ -129,22 +134,18 @@ class RejectAccountRequest:
         ###DESCRIPTION###
       """
 
-      From = self.config.configs['mail_reject_account_request_from']
+      From = self.config.configs['mail_account_request_rejected_from']
+      subject = self.config.configs['mail_account_request_rejected_subject']
+      template = self.config.configs['mail_account_request_rejected_template']
       To = request['email']
-      subject = self.config.configs['mail_reject_account_request_subject']
 
-      fbody = open('model/systems/accounts/mails/' + self.config.configs['mail_reject_account_request_body'],'r')
-      body = fbody.read().decode('utf8')
-      fbody.close()
+      replace = [
+        ('###NAME###',request['name']),
+        ('###LASTNAME###',request['lastname']),
+        ('###DESCRIPTION###', request['description'])
+      ]
 
-      body = re.sub('###NAME###', str(request['name'],'utf-8'), body)
-      body = re.sub('###LASTNAME###', str(request['lastname'],'utf-8'), body)
-      content = re.sub('###DESCRIPTION###', request['description'], body)
-
-      msg = self.mail.createMail(From,To,subject)
-      p1 = self.mail.getHtmlPart(content)
-      msg.attach(p1)
-      self.mail.sendMail(From,[To],msg.as_string())
+      self.mail.sendMail(From,[To],subject,replace,html=template)
 
       return True
 
@@ -262,22 +263,19 @@ class CreateAccountRequest:
       From = self.config.configs['mail_create_account_request_from']
       To = request['email']
       subject = self.config.configs['mail_create_account_request_subject']
+      template = self.config.configs['mail_create_account_request_template']
+
       url = self.config.configs['mail_create_account_request_url']
       url = re.sub('###HASH###', request['hash'], url)
 
-      fbody = open('model/systems/accounts/mails/' + self.config.configs['mail_create_account_request_body'],'r')
-      body = fbody.read().decode('utf8')
-      fbody.close()
+      replace = [
+        ('###NAME###',request['name']),
+        ('###LASTNAME###',request['lastname']),
+        ('###DNI###', request['dni']),
+        ('###URL###', url)
+      ]
 
-      body = re.sub('###NAME###', request['name'], body)
-      body = re.sub('###LASTNAME###', request['lastname'], body)
-      body = re.sub('###DNI###', request['dni'], body)
-      content = re.sub('###URL###', url, body)
-
-      msg = self.mail.createMail(From,To,subject)
-      p1 = self.mail.getHtmlPart(content)
-      msg.attach(p1)
-      self.mail.sendMail(From,[To],msg.as_string())
+      self.mail.sendMail(From,[To],subject,replace,html=template)
 
       return True
 
@@ -298,7 +296,7 @@ class CreateAccountRequest:
 
     data = message['request']
     data['id'] = str(uuid.uuid4());
-    data['hash'] = hashlib.sha1(data['id'] + str(uuid.uuid4())).hexdigest()
+    data['hash'] = hashlib.sha1((data['id'] + str(uuid.uuid4())).encode('utf-8')).hexdigest()
 
     if 'studentNumber' not in data:
         data['studentNumber'] = ''
@@ -360,57 +358,80 @@ AccountRequestConfirmedEvent
 
 class ConfirmAccountRequest:
 
-  req = inject.attr(Requests)
-  users = inject.attr(Users)
-  profiles = inject.attr(Profiles)
-  events = inject.attr(Events)
-  mail = inject.attr(Mail)
-  userPass = inject.attr(UserPassword)
-  config = inject.attr(Config)
+    req = inject.attr(Requests)
+    users = inject.attr(Users)
+    profiles = inject.attr(Profiles)
+    events = inject.attr(Events)
+    mail = inject.attr(Mail)
+    userPass = inject.attr(UserPassword)
+    config = inject.attr(Config)
 
 
-  def sendEvents(self,server,req_id):
-      event = {
+    def sendEvents(self,server,req_id):
+        event = {
         'type':'AccountRequestConfirmedEvent',
         'data':req_id
-      }
-      self.events.broadcast(server,event)
+        }
+        self.events.broadcast(server,event)
 
 
-  def sendNotificationMail(self,request):
-      pass
+    def sendEmail(self, request):
+
+        """
+            variables a reemplazar :
+            ###NAME###
+            ###LASTNAME###
+            ###DNI###
+        """
+
+        From = self.config.configs['mail_account_request_confirmed_from']
+        To = request['email']
+        subject = self.config.configs['mail_account_request_confirmed_subject']
+        template = self.config.configs['mail_account_request_confirmed_template']
+
+        replace = [
+            ('###NAME###',request['name']),
+            ('###LASTNAME###',request['lastname']),
+            ('###DNI###', request['dni'])
+        ]
+
+        self.mail.sendMail(From,[To],subject,replace,html=template)
+
+        return True
 
 
-  def handleAction(self, server, message):
+    def handleAction(self, server, message):
 
-    if message['action'] != 'confirmAccountRequest':
-      return False
+        if message['action'] != 'confirmAccountRequest':
+            return False
 
-    pid = message['id']
-    hash = message['hash']
+        pid = message['id']
+        hash = message['hash']
 
-    con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
-    try:
-      req = self.req.findRequestByHash(con,hash)
-      if (req == None):
-          raise MalformedMessage()
+        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+        try:
+            req = self.req.findRequestByHash(con,hash)
+            if (req == None):
+                raise MalformedMessage()
 
-      self.req.confirmRequest(con,req['id'])
-      con.commit()
+            self.req.confirmRequest(con,req['id'])
+            con.commit()
 
-      response = {'id':pid, 'ok':'requerimiento confirmado correctamente'}
-      server.sendMessage(response)
+            response = {'id':pid, 'ok':'requerimiento confirmado correctamente'}
+            server.sendMessage(response)
 
-      self.sendEvents(server,req['id'])
+            self.sendEvents(server,req['id'])
 
-      return True
+            self.sendEmail(req)
 
-    except psycopg2.DatabaseError as e:
-        con.rollback()
-        raise e
+            return True
 
-    finally:
-        con.close()
+        except psycopg2.DatabaseError as e:
+            con.rollback()
+            raise e
+
+        finally:
+            con.close()
 
 
 
@@ -496,146 +517,139 @@ UserUpdatedEvent
 
 class ApproveAccountRequest:
 
-  req = inject.attr(Requests)
-  users = inject.attr(Users)
-  profiles = inject.attr(Profiles)
-  events = inject.attr(Events)
-  mail = inject.attr(Mail)
-  userPass = inject.attr(UserPassword)
-  config = inject.attr(Config)
-  students = inject.attr(Students)
+    req = inject.attr(Requests)
+    users = inject.attr(Users)
+    profiles = inject.attr(Profiles)
+    events = inject.attr(Events)
+    mail = inject.attr(Mail)
+    userPass = inject.attr(UserPassword)
+    config = inject.attr(Config)
+    students = inject.attr(Students)
 
 
 
-  def sendEvents(self,server,req_id,user_id):
-      event = {
-        'type':'AccountRequestApprovedEvent',
-        'data':req_id
-      }
-      self.events.broadcast(server,event)
+    def sendEvents(self,server,req_id,user_id):
+        event = {
+            'type':'AccountRequestApprovedEvent',
+            'data':req_id
+        }
+        self.events.broadcast(server,event)
 
-      event = {
-        'type':'UserUpdatedEvent',
-        'data':user_id
-      }
-      self.events.broadcast(server,event)
-
-
+        event = {
+            'type':'UserUpdatedEvent',
+            'data':user_id
+        }
+        self.events.broadcast(server,event)
 
 
-  def sendEmail(self, request):
 
-      """
+    def sendEmail(self, request):
+
+        """
         variables a reemplazar :
         ###NAME###
         ###LASTNAME###
         ###DNI###
-      """
+        """
 
-      From = self.config.configs['mail_approve_account_request_from']
-      To = request['email']
-      subject = self.config.configs['mail_approve_account_request_subject']
+        From = self.config.configs['mail_account_request_aproved_from']
+        To = request['email']
+        subject = self.config.configs['mail_account_request_aproved_subject']
+        template = self.config.configs['mail_account_request_aproved_template']
 
+        replace = [
+            ('###NAME###',request['name']),
+            ('###LASTNAME###',request['lastname']),
+            ('###DNI###', request['dni'])
+        ]
 
-      fbody = open('model/systems/accounts/mails/' + self.config.configs['mail_approve_account_request_body'],'r')
-      body = fbody.read().decode('utf8')
-      fbody.close()
-
-      body = re.sub('###NAME###', str(request['name'],'utf-8'), body)
-      body = re.sub('###LASTNAME###', str(request['lastname'],'utf-8'), body)
-      content = re.sub('###DNI###', request['dni'], body)
-
-      msg = self.mail.createMail(From,To,subject)
-      p1 = self.mail.getHtmlPart(content)
-      msg.attach(p1)
-      self.mail.sendMail(From,[To],msg.as_string())
-
-      return True
-
-
-
-
-  def handleAction(self, server, message):
-
-    if message['action'] != 'approveAccountRequest':
-      return False
-
-    """ chequeo que exista la sesion, etc """
-    sid = message['session']
-    self.profiles.checkAccess(sid,['ADMIN'])
-
-    pid = message['id']
-    requests = message['requests']
-
-    con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
-    try:
-        for request in requests:
-            reqId = request['id'];
-            print("----------- ID:" + reqId);
-            req = self.req.findRequest(con,reqId)
-            if (req == None):
-                raise MalformedMessage()
-
-            user = self.users.findUserByDni(con,req['dni'])
-            if user != None:
-                raise DupplicatedUser()
-
-            user = {
-                'dni':req['dni'],
-                'name':req['name'],
-                'lastname':req['lastname']
-            }
-            user_id = self.users.createUser(con,user)
-
-            mail = {
-                'user_id': user_id,
-                'email': req['email'],
-                'confirmed': req['confirmed']
-            }
-
-            self.users.createMail(con,mail)
-
-            ''' uso la clave que pidio en el request '''
-            creds = {
-                'user_id':user_id,
-                'username':user['dni'],
-                'password': req['password']
-            }
-            self.userPass.createUserPassword(con,creds)
-
-            studentNumber = req['studentNumber']
-            studentNumber = studentNumber.strip();
-            if (studentNumber != None and studentNumber != ''):
-                student = {
-                    'id':user_id,
-                    'studentNumber':req['studentNumber'],
-                    'condition':'regular'
-                }
-                self.students.createStudent(con,student)
-
-
-            'esto hay que pasarlo a un model - es para habilitar a todo el mundo a au24'
-            cur = con.cursor()
-            cur.execute('insert into au24.users (id) values (%s)',(user_id,))
-
-            self.req.removeRequest(con,reqId)
-
-            self.sendEvents(server,reqId,user_id)
-
-
-        if mail['confirmed']:
-            self.sendEmail(req)
-
-        con.commit()
-
-        response = {'id':pid, 'ok':'usuario creado correctamente'}
-        server.sendMessage(response)
+        self.mail.sendMail(From,[To],subject,replace,html=template)
 
         return True
 
-    except psycopg2.DatabaseError as e:
-        con.rollback()
-        raise e
 
-    finally:
-        con.close()
+
+    def handleAction(self, server, message):
+
+        if message['action'] != 'approveAccountRequest':
+            return False
+
+        """ chequeo que exista la sesion, etc """
+        sid = message['session']
+        self.profiles.checkAccess(sid,['ADMIN'])
+
+        pid = message['id']
+        requests = message['requests']
+
+        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+        try:
+            for request in requests:
+                reqId = request['id'];
+                req = self.req.findRequest(con,reqId)
+                if (req == None):
+                    raise MalformedMessage()
+
+                user = self.users.findUserByDni(con,req['dni'])
+                if user != None:
+                    raise DupplicatedUser()
+
+                user = {
+                    'dni':req['dni'],
+                    'name':req['name'],
+                    'lastname':req['lastname']
+                }
+                user_id = self.users.createUser(con,user)
+
+                mail = {
+                    'user_id': user_id,
+                    'email': req['email'],
+                    'confirmed': req['confirmed']
+                }
+
+                self.users.createMail(con,mail)
+
+                ''' uso la clave que pidio en el request '''
+                creds = {
+                    'user_id':user_id,
+                    'username':user['dni'],
+                    'password': req['password']
+                }
+                self.userPass.createUserPassword(con,creds)
+
+                studentNumber = req['studentNumber']
+                studentNumber = studentNumber.strip();
+                if (studentNumber != None and studentNumber != ''):
+                    student = {
+                        'id':user_id,
+                        'studentNumber':req['studentNumber'],
+                        'condition':'regular'
+                    }
+                    self.students.createStudent(con,student)
+
+
+                'esto hay que pasarlo a un model - es para habilitar a todo el mundo a au24'
+                cur = con.cursor()
+                cur.execute('insert into au24.users (id) values (%s)',(user_id,))
+
+                self.req.removeRequest(con,reqId)
+
+                con.commit()
+
+                self.sendEvents(server,reqId,user_id)
+
+
+                if mail['confirmed']:
+                    self.sendEmail(req)
+
+
+            response = {'id':pid, 'ok':'usuario creado correctamente'}
+            server.sendMessage(response)
+
+            return True
+
+        except psycopg2.DatabaseError as e:
+            con.rollback()
+            raise e
+
+        finally:
+            con.close()

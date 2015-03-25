@@ -2,8 +2,6 @@ import inject, logging, json, sys, traceback
 
 """
 from actions.chat import SendEventToClients
-from actions.requests import CreateAccountRequest, ConfirmAccountRequest, ListAccountRequests, ApproveAccountRequest, RemoveAccountRequest, RejectAccountRequest
-from actions.users import UpdateUser, FindUser, ListUsers, ListMails, PersistMail, ConfirmMail, RemoveMail
 from actions.status import GetStatus
 
 from actions.groups import ListGroups, FindGroup, FindMembers, RemoveMembers, AddMembers, UpdateGroup, CreateGroup
@@ -32,6 +30,7 @@ from actions.login.password import ChangePassword, ResetPassword
 from actions.profiles.profiles import CheckAccess
 from actions.users.users import UpdateUser, FindUser, ListUsers
 from actions.users.mail import ListMails, PersistMail, ConfirmMail, RemoveMail
+from actions.requests.requests import CreateAccountRequest, ConfirmAccountRequest, ListAccountRequests, ApproveAccountRequest, RemoveAccountRequest, RejectAccountRequest
 
 
 """ sistemas """
@@ -54,7 +53,7 @@ from actions.systems.mail.mail import PersistInstitutionalMail, DeleteInstitutio
 
 actions = [
 #    SendEventToClients(),
-#    CreateAccountRequest(), ConfirmAccountRequest(), ListAccountRequests(), ApproveAccountRequest(), RemoveAccountRequest(), RejectAccountRequest(),
+#
 #    GetStatus(),
 #    ListGroups(), FindGroup(), FindMembers(), RemoveMembers(), AddMembers(), UpdateGroup(), CreateGroup(),
 #    ListSystems(),
@@ -67,7 +66,8 @@ actions = [
     PersistInstitutionalMail(), DeleteInstitutionalMail(), FindInstitutionalMail(),
     CreateStudent(), FindStudent(), PersistStudent(), FindAllStudents(),
     PersistTutorData(), ListTutorData(),
-    GetAssistanceLogs()
+    GetAssistanceLogs(),
+    CreateAccountRequest(), ConfirmAccountRequest(), ListAccountRequests(), ApproveAccountRequest(), RemoveAccountRequest(), RejectAccountRequest()
 ]
 
 
