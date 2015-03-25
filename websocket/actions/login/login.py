@@ -23,7 +23,8 @@ peticion :
   "id":"id de la peticion"
   "action":"login",
   "user":"usuario",
-  "password":"clave"
+  "password":"clave",
+  "info":"informacion adicional enviada por el clietne javascript"
 }
 
 respuesta :
@@ -65,6 +66,8 @@ class Login:
         'password':message['password']
     }
 
+    info = ' - ' + message['info'] if 'info' in message else ''
+
     con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
     try:
       rdata = self.userPassword.findUserPassword(con,credentials)
@@ -72,7 +75,7 @@ class Login:
         response = {'id':message['id'], 'error':'autentificación denegada'}
         server.sendMessage(response)
 
-        self.log.log('login - ERROR - ' + message['user'] + ' - ' + message['password'] + ' - ' + server.peer)
+        self.log.log('login - ERROR - ' + message['user'] + ' - ' + message['password'] + ' - ' + server.peer + info)
 
         return True
 
@@ -82,7 +85,7 @@ class Login:
       }
       sid = self.session.create(sess)
 
-      self.log.log('login - ' + message['user'] + ' - ' + server.peer,sid)
+      self.log.log('login - ' + message['user'] + ' - ' + server.peer + info,sid)
 
       response = {'id':message['id'], 'ok':'', 'session':sid, 'user_id':rdata['user_id']}
       server.sendMessage(response)
