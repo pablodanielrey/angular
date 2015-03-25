@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import datetime, pytz
-import dateutil, dateutil.tz
+import dateutil, dateutil.tz, dateutil.parser
 import logging
 
 class Date:
@@ -18,15 +18,20 @@ class Date:
         local = tz.localize(naive)
         return local
 
+    """ supnog que la fecha esta en la timezone local. """
     def localizeLocal(self,naive):
         tz = dateutil.tz.tzlocal()
-        local = tz.localize(naive)
+        local = naive.replace(tzinfo=tz)
         return local
 
     """ retorna el datetime transformado a utc """
     def awareToUtc(self, date):
         return date.astimezone(pytz.utc)
 
+
+    def now(self):
+        date = datetime.datetime.now()
+        return self.localizeLocal(date)
 
     def utcNow(self):
         return datetime.datetime.now(pytz.utc)
@@ -35,3 +40,14 @@ class Date:
     def isUTC(self,date):
         logging.debug(date.tzinfo)
         return date.tzinfo != None and date.tzinfo.utcoffset(date) == datetime.timedelta(0)
+
+
+    """
+        parsea una fecha y hora y la retorna el la zona local del servidor.
+        si viene sin timezone entonces supone que esta en la zona del server.
+    """
+    def parse(self,datestr):
+        dt = dateutil.parser.parse(datestr)
+        if self.isNaive(dt):
+            dt = self.localizeLocal(dt)
+        return dt

@@ -5,6 +5,7 @@ app.service('Assistance', ['Utils','Messages','Session',
 	function(Utils,Messages,Session) {
 
 		this.getAssistanceStatus = function(userId, callbackOk, callbackError) {
+			/*
 			//TODO
 			response = {
 				status : 'Trabajando',
@@ -19,21 +20,29 @@ app.service('Assistance', ['Utils','Messages','Session',
 				workedMinutes: '400'
 			};
 			callbackOk(response);
+			*/
+
+			var msg = {
+				id: Utils.getId(),
+				action: 'getAssistanceStatus',
+				session: Session.getSessionId(),
+				request:{
+					user_id: userId
+				}
+			}
+
+			Messages.send(msg,
+				function(data) {
+					callbackOk(data.response);
+				},
+				function(error) {
+					callbackError(error);
+				}
+			);
+
 		};
 
 		this.getAssistanceData = function(userId, callbackOk, callbackError) {
-
-			/*
-			response = {
-				position : 'E7',
-				timetable:[
-					{start : '2015-03-13 09:15:00',	end : '2015-03-13 10:35:00'},
-					{start : '2015-03-13 13:15:00',	end : '2015-03-13 14:35:00'}
-				]
-			};
-			callbackOk(response);
-			*/
-
 			var msg = {
 				id: Utils.getId(),
 				action: 'getAssistanceData',
@@ -51,8 +60,8 @@ app.service('Assistance', ['Utils','Messages','Session',
 					callbackError(error);
 				}
 			);
-
 		};
+
 
 		this.getOfficesByUser = function(userId, callbackOk, callbackError) {
 			//TODO

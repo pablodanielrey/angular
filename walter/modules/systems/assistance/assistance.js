@@ -47,11 +47,19 @@ app.controller('AssistanceCtrl', function($scope, $timeout, $window, Profiles, S
 	$scope.formatAssistanceStatusFromServer = function(assistanceStatusFromServer){
 		$scope.model.assistanceStatus.status = assistanceStatusFromServer.status;
 
-		var start = new Date(assistanceStatusFromServer.start);
-		$scope.model.assistanceStatus.start = start.getHours() + ":" + start.getMinutes();
+		if (assistanceStatusFromServer.start != null) {
+			var start = new Date(assistanceStatusFromServer.start);
+			$scope.model.assistanceStatus.start = start.getHours() + ":" + start.getMinutes();
+		} else {
+			$scope.model.assistanceStatus.start = '00:00';
+		}
 
-		var end = new Date(assistanceStatusFromServer.end);
-		$scope.model.assistanceStatus.end = end.getHours() + ":" + end.getMinutes();
+		if (assistanceStatusFromServer.end != null) {
+			var end = new Date(assistanceStatusFromServer.end);
+			$scope.model.assistanceStatus.end = end.getHours() + ":" + end.getMinutes();
+		} else {
+			$scope.model.assistanceStatus.end = '00:00';
+		}
 
 		var workedMinutes = assistanceStatusFromServer.workedMinutes;
 		var workedH = Math.floor(workedMinutes/60);

@@ -31,7 +31,7 @@ class Schedule:
         if scheduless is None or len(scheduless) <= 0:
             return []
 
-        dateNow = datetime.datetime.now(pytz.utc)
+        dateNow = self.date.utcNow()
         schedules = []
 
 

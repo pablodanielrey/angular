@@ -10,12 +10,11 @@ from model.config import Config
 from model.profiles import Profiles
 from model.utils import DateTimeEncoder
 
+from model.systems.assistance.assistance import Assistance
 from model.systems.assistance.logs import Logs
 from model.systems.assistance.schedule import Schedule
 from model.systems.assistance.positions import Positions
 from model.systems.assistance.date import Date
-
-
 
 
 
@@ -28,6 +27,7 @@ query :
   session:,
   request:{
       user_id: "id del usuario"
+      date: 'fecha opcional' -- si no se brinda entonces se obteiene la info del día actual.
   }
 
 }
@@ -53,6 +53,8 @@ class GetAssistanceStatus:
 
     profiles = inject.attr(Profiles)
     config = inject.attr(Config)
+    assistance = inject.attr(Assistance)
+    date = inject.attr(Date)
 
     def handleAction(self, server, message):
 
@@ -69,7 +71,13 @@ class GetAssistanceStatus:
 
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
-            status = assistance.getAssistanceStatus(con,message['request']['user_id'])
+            userId = message['request']['user_id']
+
+            date = None
+            if 'date' in message['request']:
+                date = self.date.parse(message['request']['date'])
+
+            status = self.assistance.getAssistanceStatus(con,userId,date)
 
             response = {
                 'id':message['id'],
@@ -80,7 +88,6 @@ class GetAssistanceStatus:
             return True
 
         except psycopg2.DatabaseError as e:
-            con.rollback()
             raise e
 
         finally:
