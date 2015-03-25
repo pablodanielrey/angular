@@ -12,6 +12,7 @@ from model.utils import DateTimeEncoder
 
 from model.systems.assistance.logs import Logs
 from model.systems.assistance.schedule import Schedule
+from model.systems.assistance.positions import Positions
 from model.systems.assistance.date import Date
 
 
@@ -123,6 +124,7 @@ class GetAssistanceData:
     profiles = inject.attr(Profiles)
     config = inject.attr(Config)
     schedule = inject.attr(Schedule)
+    positions = inject.attr(Positions)
     dateutils = inject.attr(Date)
 
 
@@ -174,13 +176,18 @@ class GetAssistanceData:
 
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
+            positions = self.positions.find(con,userId)
+            position = ''
+            if len(positions) > 0:
+                position = positions[0]['name']
+
             schedule = self.schedule.getSchedule(con,userId,date)
 
             response = {
                 'id':message['id'],
                 'ok':'',
                 'response':{
-                    'position':'prueba',
+                    'position':position,
                     'schedule':schedule
                 }
             }
