@@ -30,17 +30,21 @@ from wexceptions import *
 from actions.login.login import Login, Logout
 from actions.login.password import ChangePassword, ResetPassword
 from actions.profiles.profiles import CheckAccess
+from actions.users.users import UpdateUser, FindUser, ListUsers
+from actions.users.mail import ListMails, PersistMail, ConfirmMail, RemoveMail
+
 
 """ sistemas """
 
 from actions.systems.assistance.logs import GetAssistanceLogs
+
+from actions.systems.students.students import CreateStudent, FindStudent, PersistStudent, FindAllStudents
 
 from actions.systems.tutors.tutors import PersistTutorData, ListTutorData
 
 from actions.systems.ntdomain.domain import PersistDomain, DeleteDomain, FindDomain
 from actions.systems.mail.mail import PersistInstitutionalMail, DeleteInstitutionalMail, FindInstitutionalMail
 
-from actions.systems.students.students import CreateStudent, FindStudent, PersistStudent, FindAllStudents
 
 
 
@@ -51,7 +55,6 @@ from actions.systems.students.students import CreateStudent, FindStudent, Persis
 actions = [
 #    SendEventToClients(),
 #    CreateAccountRequest(), ConfirmAccountRequest(), ListAccountRequests(), ApproveAccountRequest(), RemoveAccountRequest(), RejectAccountRequest(),
-#    ListUsers(), UpdateUser(), FindUser(), ListMails(), PersistMail(), ConfirmMail(), RemoveMail(),
 #    GetStatus(),
 #    ListGroups(), FindGroup(), FindMembers(), RemoveMembers(), AddMembers(), UpdateGroup(), CreateGroup(),
 #    ListSystems(),
@@ -59,6 +62,7 @@ actions = [
 #
     CheckAccess(),
     Login(), Logout(), ChangePassword(), ResetPassword(),
+    ListUsers(), UpdateUser(), FindUser(), ListMails(), PersistMail(), ConfirmMail(), RemoveMail(),
     PersistDomain(), DeleteDomain(), FindDomain(),
     PersistInstitutionalMail(), DeleteInstitutionalMail(), FindInstitutionalMail(),
     CreateStudent(), FindStudent(), PersistStudent(), FindAllStudents(),

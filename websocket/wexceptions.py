@@ -25,7 +25,7 @@ class MalformedMessage(Exception):
 class UserNotFound(Exception):
 
     def __init__(self):
-        Exception.__init__()
+        Exception.__init__(self)
 
 
 class DupplicatedUser(Exception):

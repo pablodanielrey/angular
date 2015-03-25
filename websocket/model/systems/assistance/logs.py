@@ -37,7 +37,7 @@ import inject
 
 from model.systems.assistance.date import Date
 from model.systems.assistance.devices import Devices
-from model.users import Users
+from model.users.users import Users
 
 class Logs:
 

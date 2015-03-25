@@ -1,5 +1,5 @@
-import inject
-import smtplib
+import inject, smtplib, re
+
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.header import Header
@@ -12,11 +12,21 @@ class Mail:
 
     config = inject.attr(Config)
 
+    def __init__(self):
+        self.mailRe = re.compile('.*<(.*@.*)>.*')
+
+    def __extractFrom(self,ffrom):
+        fr = self.mailRe.match(ffrom)
+        if fr is None:
+            return ffrom
+        fffrom = fr.group(1)
+        return fffrom
+
     def createMail(self,From,To,subject):
         msg = MIMEMultipart('alternative')
         msg['Subject'] = Header(subject,'utf-8')
-        msg['From'] = From
-        msg['To'] = To
+        msg['From'] = Header(From,'utf-8')
+        msg['To'] = Header(To,'utf-8')
         return msg
 
     def getHtmlPart(self,body):
@@ -34,19 +44,19 @@ class Mail:
           if s == None:
               raise MailServerNotFound()
           s.login(self.config.configs['mail_user'],self.config.configs['mail_password'])
-          s.sendmail(ffrom, tos, body)
+          s.sendmail(self.__extractFrom(ffrom), tos, body)
 
       finally:
           s.quit()
 
 
     """ envía un mail con partes en html y partes en texto """
-    def sendMail(self,ffrom,tos,subject,replace,html=None,text=None):
+    def sendMail(self,ffrom,tos,subject,replace=[],html=None,text=None):
 
         parts = []
 
         if html:
-            fTemplate = fopen(html,'r')
+            fTemplate = open(html,'r')
             try:
                 hbody = fTemplate.read()
                 for pattern,data in replace:
@@ -56,7 +66,7 @@ class Mail:
                 fTemplate.close()
 
         if text:
-            fTemplate = fopen(text,'r')
+            fTemplate = open(text,'r')
             try:
                 tbody = fTemplate.read()
                 for pattern,data in replace:
@@ -66,7 +76,7 @@ class Mail:
                 fTemplate.close()
 
         for to in tos:
-            msg = self.mail.createMail(From,To,subject)
+            msg = self.createMail(ffrom,to,subject)
             for part in parts:
                 msg.attach(part)
-            self._sendMail(From,[To],msg.as_string())
+            self._sendMail(ffrom,[to],msg.as_string())

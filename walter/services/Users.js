@@ -56,8 +56,7 @@ app.service('Users', function($rootScope, Messages, Session, Utils, Cache, Confi
       session: Session.getSessionId(),
       action: 'confirmMail',
       sub_action: 'generate',
-      mail_id: mail_id,
-      url: Config.getServerUrl()
+      mail_id: mail_id
     }
     Messages.send(msg, function(response) {
       if (response.error != undefined) {

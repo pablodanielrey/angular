@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import uuid
 import psycopg2
+
 from model.objectView import ObjectView
 
 class Users:
@@ -89,18 +90,18 @@ class Users:
         return uid
 
     def updateUser(self,con,data):
-        
+
         user = ObjectView(data)
         rreq = (user.dni,user.name,user.lastname,user.city,user.country,user.address,user.genre,user.birthdate,user.residence_city, user.id)
         cur = con.cursor()
         cur.execute('update profile.users set dni = %s, name = %s, lastname = %s, city = %s, country = %s, address = %s, genre = %s, birthdate = %s, residence_city = %s where id = %s', rreq)
         if cur.rowcount <= 0:
             raise Exception()
-        
+
         #actualizar telefonos del usuario
         rreq = (user.id)
         cur.execute('delete from profile.telephones where user_id = %s', rreq)
-        
+
         for i, v in enumerate(user.telephones):
              telephone_id = str(uuid.uuid4())
              rreq = (telephone_id, user.id, v["number"], v["type"])
@@ -110,7 +111,7 @@ class Users:
         cur = con.cursor()
         cur.execute('select id,dni,name,lastname,city,country,address,genre,birthdate,residence_city from profile.users where dni = %s', (dni,))
         data = cur.fetchone()
-      
+
         if data != None:
             return self.convertUserToDict(data)
         else:
@@ -129,7 +130,7 @@ class Users:
                 rdataTelephones.append(self.convertTelephoneToDict(dataTelephone))
             rdataUser["telephones"] = rdataTelephones
             return rdataUser
-            
+
         else:
             return None
 
@@ -158,7 +159,7 @@ class Users:
                 'residence_city':d[9]
             }
         return rdata
-        
+
     ''' transformo a telefonos las respuestas de psycopg2'''
     def convertTelephoneToDict(self,d):
         rdata = {
