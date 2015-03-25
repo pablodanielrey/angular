@@ -20,23 +20,24 @@ app.controller('RequestAssistanceAbsentCtrl', function($scope, Assistance, Notif
 	/**
 	 * Esta definido el dia de la solicitud?
 	 */
-	$scope.isSelectedJustificationAbsentRequestDateSelected = function(){
-		if($scope.isSelectedJustificationAbsentRequest()){
-			if($scope.model.requestAbsentBegin != null){
-				if($scope.model.requestAbsentBeginFormated != $scope.model.requestAbsentBegin.toLocaleDateString()){
-					$scope.model.requestAbsentBeginFormated = $scope.model.requestAbsentBegin.toLocaleDateString();
-				}
-				return true;
-			} else {
-				$scope.model.requestAbsentBeginFormated = null;
-			}
+	$scope.changeRequestAbsentBegin = function(){
+		if($scope.model.requestAbsentBegin != null){
+			$scope.model.justificationAbsentRequestDateSelected = true;
+			$scope.model.requestAbsentBeginFormated = $scope.model.requestAbsentBegin.toLocaleDateString();
+			return true;
+		} else {
+			$scope.model.justificationAbsentRequestDateSelected = false;
+			$scope.model.requestAbsentBeginFormated = null;
+			return false;
 		}
-
-		return false;
 	};
 
 	$scope.isSelectedJustificationAbsent = function(){
 		return $scope.model.justificationAbsentSelected;
+	};
+	
+	$scope.isSelectedJustificationAbsentRequestDate = function(){
+		return $scope.model.justificationAbsentRequestDateSelected;
 	};
 
 	$scope.selectJustificationAbsent = function(){

@@ -48,7 +48,7 @@ app.service('Assistance',function() {
 			{id:"2",name:"compensatory"},
 			{id:"3",name:"Salidas Eventuales"},
 			{id:"4",name:"Art. 102"},
-			{id:"5",name:"Pre-examen"},
+			{id:"5",name:"exam"},
 			{id:"6",name:"LAO"},
 
 		];

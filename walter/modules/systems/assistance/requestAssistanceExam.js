@@ -90,6 +90,7 @@ app.controller('RequestAssistanceExamCtrl', function($scope, Assistance, Session
         Assistance.getJustificationStock($scope.model.session.user_id, id,
 			function(justificationStock) {
                 $scope.model.exam.stock = justificationStock;
+
 			},
 			function(error) {
                 Notifications.message(error);
@@ -97,15 +98,7 @@ app.controller('RequestAssistanceExamCtrl', function($scope, Assistance, Session
 		);
     }
 
-    // Cargo el stock de la justificacion
-    // data.justification = {name,id}
-    $scope.$on('findStockJustification', function(event, data) {
-
-        justification = data.justification;
-        if (justification.name == 'exam') {
-            $scope.initialize(justification);
-        }
-    });
+   
 
     $scope.initialize = function(justification) {
         $scope.clearSelectionsExam();
@@ -131,6 +124,14 @@ app.controller('RequestAssistanceExamCtrl', function($scope, Assistance, Session
         );
     }
 
+ 	// Cargo el stock de la justificacion
+    // data.justification = {name,id}
+    $scope.$on('findStockJustification', function(event, data) {
+        justification = data.justification;
+        if (justification.name == 'exam') {
+            $scope.initialize(justification);
+        }
+    });
 
 
 });
