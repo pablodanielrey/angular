@@ -4,11 +4,33 @@ app.service('Credentials', ['$rootScope','Utils','Messages','Session','Config',
 
   function($rootScope, Utils, Messages, Session, Config) {
 
+    /*
+    info local del explorador para detectar errores
+    */
+    this.getLocalInfo = function() {
+      var info = {
+        'appCodeName': navigator.appCodeName,
+        'appName': navigator.appName,
+        'appVersion': navigator.appVersion,
+        'cookieEnabled': navigator.cookieEnabled,
+        'language': navigator.language,
+        'onLine': navigator.onLine,
+        'platform': navigator.platform,
+        'product': navigator.product,
+        'userAgent': navigator.userAgent
+      };
+      return info;
+    }
+
+
     this.resetPassword = function(username, ok, error) {
+      var info = JSON.stringify(this.getLocalInfo());
+
       var msg = {
         id: Utils.getId(),
         action: 'resetPassword',
-        username: username
+        username: username,
+        info: info
       };
 
       Messages.send(msg, function(response) {
@@ -33,27 +55,9 @@ app.service('Credentials', ['$rootScope','Utils','Messages','Session','Config',
       return ((s.user_id != undefined) && (s.user_id != null));
     }
 
-    /*
-      info local del explorador para detectar errores
-    */
-    this.getLocalInfo = function() {
-      var info = {
-        'appCodeName': navigator.appCodeName,
-        'appName': navigator.appName,
-        'appVersion': navigator.appVersion,
-        'cookieEnabled': navigator.cookieEnabled,
-        'language': navigator.language,
-        'onLine': navigator.onLine,
-        'platform': navigator.platform,
-        'product': navigator.product,
-        'userAgent': navigator.userAgent
-      };
-      return info;
-    }
 
 
     this.login = function(creds, ok, error) {
-
       var info = JSON.stringify(this.getLocalInfo());
 
       var msg = {
@@ -62,7 +66,7 @@ app.service('Credentials', ['$rootScope','Utils','Messages','Session','Config',
         "password" : creds.password,
         "action" : "login",
         "info": info
-      }
+      };
 
       Messages.send(msg, function(response) {
         if (response.ok != undefined) {
@@ -74,11 +78,13 @@ app.service('Credentials', ['$rootScope','Utils','Messages','Session','Config',
     }
 
     this.logout = function(ok,error) {
+      var info = JSON.stringify(this.getLocalInfo());
 
       var msg = {
         id: Utils.getId(),
         action: 'logout',
-        session: Session.getSessionId()
+        session: Session.getSessionId(),
+        info: info
       };
 
       Messages.send(msg, function(response) {
@@ -94,12 +100,15 @@ app.service('Credentials', ['$rootScope','Utils','Messages','Session','Config',
 
 
     this.changePasswordWithHash = function(creds, hash, ok, error) {
+      var info = JSON.stringify(this.getLocalInfo());
+
       var msg = {
         id: Utils.getId(),
         action: 'changePassword',
         username: creds.username,
         password: creds.newPassword,
-        hash: hash
+        hash: hash,
+        info: info
       };
 
       Messages.send(msg, function(response) {
@@ -119,12 +128,15 @@ app.service('Credentials', ['$rootScope','Utils','Messages','Session','Config',
         return;
       }
 
+      var info = JSON.stringify(this.getLocalInfo());
+
       var msg = {
         id: Utils.getId(),
         action: 'changePassword',
         username: creds.username,
         password: creds.newPassword,
-        session: sid
+        session: sid,
+        info: info
       };
 
       Messages.send(msg, function(response) {
