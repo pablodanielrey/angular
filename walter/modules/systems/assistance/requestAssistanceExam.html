@@ -45,7 +45,7 @@
 
         <div ng-class="{true:'visible', false:'hidden'}[isSelectedDate()]">
           <p>Solicitar Pre-exámen para el día</p>
-          <input type="text" placeholder="Día elegido" ng-model="dateFormated">
+	      <p class="parrafos2"><i class="fa fa-calendar-o"></i> {{dateFormated}}</p>
           <input type="button" value="Confirmar" ng-click="save()">
         </div>
       </div>
