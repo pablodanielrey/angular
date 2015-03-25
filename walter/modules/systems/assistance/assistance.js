@@ -13,7 +13,7 @@ app.controller('AssistanceCtrl', function($scope, $timeout, $window, Profiles, S
     	},
     	assistanceData : {
     		position : null, //cargo de la persona
-			timetable:[], //fracciones horarias del dia actual
+				schedule:[], //fracciones horarias del dia actual
     	},
     	offices : [], //oficinas del usuario
     	justifications : [], //auxiliar para almacenar los datos de las justificaciones
@@ -46,18 +46,18 @@ app.controller('AssistanceCtrl', function($scope, $timeout, $window, Profiles, S
 	 */
 	$scope.formatAssistanceStatusFromServer = function(assistanceStatusFromServer){
 		$scope.model.assistanceStatus.status = assistanceStatusFromServer.status;
-		
+
 		var start = new Date(assistanceStatusFromServer.start);
 		$scope.model.assistanceStatus.start = start.getHours() + ":" + start.getMinutes();
-		
+
 		var end = new Date(assistanceStatusFromServer.end);
 		$scope.model.assistanceStatus.end = end.getHours() + ":" + end.getMinutes();
-		
+
 		var workedMinutes = assistanceStatusFromServer.workedMinutes;
 		var workedH = Math.floor(workedMinutes/60);
 		var workedM = workedMinutes % 60;
 		$scope.model.assistanceStatus.workedTime = workedH + ":" + workedM;
-	
+
 	};
 
 	/**
@@ -66,20 +66,21 @@ app.controller('AssistanceCtrl', function($scope, $timeout, $window, Profiles, S
 	$scope.formatAssistanceDataFromServer = function(assistanceDataFromServer){
 		$scope.model.assistanceData.position = assistanceDataFromServer.position;
 
-		for(var time in assistanceDataFromServer.timetable){
-			var start = new Date(assistanceDataFromServer.timetable[time].start);
+		for (var time in assistanceDataFromServer.schedule) {
+			console.log(time);
+			var start = new Date(assistanceDataFromServer.schedule[time].start);
 			var startHour = start.getHours() + ":" + start.getMinutes();
-		
-			var end = new Date(assistanceDataFromServer.timetable[time].end);
+
+			var end = new Date(assistanceDataFromServer.schedule[time].end);
 			var endHour = end.getHours() + ":" + end.getMinutes()
-			
-			$scope.model.assistanceData.timetable.push(startHour + " / " + endHour);
-			
+
+			$scope.model.assistanceData.schedule.push(startHour + " / " + endHour);
+
 
 		}
 	};
-	
-	$scope.formatJustificationsFromServer = function(justificationsFromServer){	
+
+	$scope.formatJustificationsFromServer = function(justificationsFromServer){
 		for(var i in justificationsFromServer){
 			var name = justificationsFromServer[i].name.toLowerCase();
 			var stock = justificationsFromServer[i].stock;
@@ -105,7 +106,7 @@ app.controller('AssistanceCtrl', function($scope, $timeout, $window, Profiles, S
 	 * consultar datos de asistencia
 	 */
 	$scope.loadAssistanceStatus = function(){
-		Assistance.getAssistanceStatus($scope.model.session.user_id, 
+		Assistance.getAssistanceStatus($scope.model.session.user_id,
 			function(assistanceStatus){
 				$scope.formatAssistanceStatusFromServer(assistanceStatus);
 			},
@@ -119,7 +120,7 @@ app.controller('AssistanceCtrl', function($scope, $timeout, $window, Profiles, S
 	 * consultar datos de asistencia
 	 */
 	$scope.loadAssistanceData = function(){
-		Assistance.getAssistanceData($scope.model.session.user_id, 
+		Assistance.getAssistanceData($scope.model.session.user_id,
 			function(assistanceData){
 				$scope.formatAssistanceDataFromServer(assistanceData);
 			},
@@ -141,7 +142,7 @@ app.controller('AssistanceCtrl', function($scope, $timeout, $window, Profiles, S
     };
 
     $scope.loadOffices = function() {
-    	Assistance.getOfficesByUser($scope.model.session.user_id, 
+    	Assistance.getOfficesByUser($scope.model.session.user_id,
 			function(offices){
 				$scope.formatOfficesFromServer(offices);
 			},
@@ -150,16 +151,16 @@ app.controller('AssistanceCtrl', function($scope, $timeout, $window, Profiles, S
 			}
 		);
     }
-    
+
     $scope.loadJustifications = function() {
-    	Assistance.getJustifications($scope.model.session.user_id, 
+    	Assistance.getJustifications($scope.model.session.user_id,
 			function(justifications){
 				for(i in justifications){
 					var id = justifications[i].id;
 					$scope.model.justifications[id] = {name:justifications[i].name}
 					$scope.loadJustificationStock(id);
-				}	
-				
+				}
+
 				$scope.formatJustificationsFromServer($scope.model.justifications);
 			},
 			function(error){
@@ -167,7 +168,7 @@ app.controller('AssistanceCtrl', function($scope, $timeout, $window, Profiles, S
 			}
 		);
     }
-    
+
     /**
 	 * Consultar datos de stock de justificacion
 	 */
@@ -181,8 +182,8 @@ app.controller('AssistanceCtrl', function($scope, $timeout, $window, Profiles, S
 			}
 		);
     }
-    
-    
+
+
     /**
 	 * cargar datos de la session
 	 */
@@ -196,7 +197,7 @@ app.controller('AssistanceCtrl', function($scope, $timeout, $window, Profiles, S
 				function(ok) {
 					if (ok == 'granted') {
 						console.log("granted");
-						$scope.loadUser(); 
+						$scope.loadUser();
 						$scope.loadAssistanceStatus();
 						$scope.loadAssistanceData();
 						$scope.loadOffices();

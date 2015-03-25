@@ -260,6 +260,20 @@ create table assistance.positions (
 );
 
 
+
+/*
+  para seleccionar el schedule actual es : 2015-02-25 13:00:00-03
+
+  select sstart, send, date from assistance.schedule where
+  ((date = '2015-02-25 13:00:00-03'::timestamp) or
+  (isDayOfWeek = true and extract(dow from date) = extract(dow from '2015-02-25 13:00:00-03'::timestamp)) or
+  (isDayOfMonth = true and extract(day from date) = extract(day from '2015-02-25 13:00:00-03'::timestamp)) or
+  (isDayOfYear = true and extract(doy from date) = extract(doy from '2015-02-25 13:00:00-03'::timestamp)))
+  order by date desc
+
+*/
+
+
 create table assistance.schedule (
     id varchar primary key,
     user_id varchar not null references profile.users (id),
@@ -272,9 +286,14 @@ create table assistance.schedule (
     created timestamptz not null default now(),
     CHECK(EXTRACT(TIMEZONE FROM date) = '0'),
     CHECK(EXTRACT(TIMEZONE FROM sstart) = '0'),
-    CHECK(EXTRACT(TIMEZONE FROM send) = '0'),
-    CHECK(EXTRACT(TIMEZONE FROM created) = '0')
+    CHECK(EXTRACT(TIMEZONE FROM send) = '0')
 );
+
+
+create or replace view assistance.full_data as
+  select p.id, p.dni, p.name, p.lastname, s.sstart, s.send from profile.users as p
+  left outer join assistance.schedule s on p.id = s.user_id;
+
 
 create table assistance.offices (
     id varchar primary key,
