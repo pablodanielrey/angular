@@ -19,15 +19,14 @@
         <div>
           <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationOutRequest()]">
             <p>Seleccione el día</p>
-            <input type="date">
+            <input type="date" ng-model="model.justification.begin" ng-change="changeDate()">
             <p>Seleccione Horas</p>
-            desde <input type="time" name="hora"> hasta <input type="time" name="hora">
-            <p>Total de Horas  <input type="text" placeholder="Día elegido"></p>
+            desde <input type="time" name="hora" ng-model="model.justification.begin" ng-change="changeHours()"> hasta <input type="time" name="hora" ng-model="model.justification.end" ng-change="changeHours()">
+            <p>Total de Horas: {{model.justification.totalHours}}</p>
           </div>
 
           <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationOutAvailable()]">
-            <p>Horas Disponibles</p>
-            <input type="text" placeholder="Cantidad de horas">
+            <p>Horas Disponibles: {{model.out.stock}}</p>
           </div>
 
           <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationOutRequests()]">
@@ -42,11 +41,11 @@
             </div>
           </div>
         </div>
-        
-        <div ng-class="{true:'visible', false:'hidden'}[true]">
+
+        <div ng-class="{true:'visible', false:'hidden'}[isSelectedDate()]">
           <p>Solicitar Boleta de salida para el día</p>
-          <input type="text" placeholder="Día elegido">
-          <input type="button" value="Confirmar">
+          <input type="text" placeholder="Día elegido" ng-model="dateFormated">
+          <input type="button" value="Confirmar" ng-click="save()">
         </div>
       </div>
     </div>
