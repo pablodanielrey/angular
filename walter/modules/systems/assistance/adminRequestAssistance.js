@@ -2,7 +2,7 @@ var app = angular.module('mainApp');
 
 app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistance, Users, Profiles, Session, Notifications) {
 
-    // requests = [{license:'',user:{name:'',lastname:'',dni:''},date:''}]
+    // requests = [{id:'',license:'',user:{name:'',lastname:'',dni:''},date:''}]
     $scope.model = {
         requests : [],
         requestMap: new Map()
@@ -61,7 +61,12 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistan
                 $scope.justifications = new Map();
                 for (x in response) {
                     var r = response[x];
-                    $scope.justifications.set(r.id,r.name);
+                    switch(r.name) {
+                        case "absent": name = "Ausente con Aviso"; break;
+                        case "compensatory": name = "Compensatorio"; break;
+                        default: name = r.name; break;
+                    }
+                    $scope.justifications.set(r.id,name);
                     $scope.loadRequests();
                 }
             },
@@ -95,4 +100,26 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistan
     $timeout(function() {
         $scope.initialize();
     }, 0);
+
+    $scope.updateStatus = function(status, request_id) {
+        Assistance.updateStatusRequestJustification(request_id, status,
+            function(ok) {
+                Notifications.message("El estado fue modificado correctamente");
+                $scope.loadRequests();
+            },
+            function(error) {
+
+            }
+        );
+    };
+
+    $scope.approveRequest = function(request) {
+        $scope.updateStatus("APPROVED",request.id);
+    };
+
+    $scope.refuseRequest = function(request) {
+        $scope.updateStatus("REJECTED",request.id);
+    }
+
+
 })
