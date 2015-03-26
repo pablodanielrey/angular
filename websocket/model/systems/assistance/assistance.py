@@ -70,8 +70,8 @@ class Assistance:
 
 
             #date = self.date.now()
-            dateIni = self.date.parse('2015-02-01 00:00:00')
-            dateFin = self.date.parse('2015-02-26 00:00:00')
+            dateIni = self.date.parse('2015-03-01 00:00:00')
+            dateFin = self.date.parse('2015-03-27 00:00:00')
             delta = dateFin - dateIni
             for i in range(delta.days):
                 date = dateIni + datetime.timedelta(days=i)
@@ -95,14 +95,15 @@ class Assistance:
 
                     for fail in fails:
                         localDate = self.date.localizeAwareToLocal(fail['date']).replace(hour=0,minute=0,second=0,microsecond=0)
-                        f = '{0},{1},{2},{3},{4},{5},{6}'.format(
+                        f = '{0},{1},{2},{3},{4},{5},{6},{7}'.format(
                             localDate.date(),
                             user['dni'],
                             user['name'],
                             user['lastname'],
                             fail['description'],
                             self.date.localizeAwareToLocal(fail['start']).time() if 'start' in fail else (self.date.localizeAwareToLocal(fail['end']).time() if 'end' in fail else 'no tiene'),
-                            self.date.localizeAwareToLocal(fail['startSchedule']).time() if 'startSchedule' in fail else (self.date.localizeAwareToLocal(fail['endSchedule']).time() if 'endSchedule' in fail else 'no tiene'))
+                            self.date.localizeAwareToLocal(fail['startSchedule']).time() if 'startSchedule' in fail else (self.date.localizeAwareToLocal(fail['endSchedule']).time() if 'endSchedule' in fail else 'no tiene'),
+                            fail['minutes'] if 'minutes' in fail else '')
                         out.write(f)
                         out.write('\n')
 
