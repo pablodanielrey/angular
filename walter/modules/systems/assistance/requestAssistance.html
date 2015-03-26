@@ -6,25 +6,32 @@
   	<div ng-controller="RequestAssistanceExamCtrl" ng-include="'modules/systems/assistance/requestAssistanceExam.html'"></div>
   	<div ng-controller="RequestAssistanceLaoCtrl" ng-include="'modules/systems/assistance/requestAssistanceLao.html'"></div>
 
-    <div class="myRequest">
-      <div class="tittle">
-        <label> | Mis Solicitudes</label><hr>
-      </div>
+    <div class="myRequests">
+      <span><i class="fa fa-ticket"></i> Mis Solicitudes</span>
     </div>
-    <div class="requestInfo" ng-repeat="x in model.requestedLicences">
-      <div class="request">
-        <span class="requestInfo">Solicitud: {{x.justification_name}} {{x.begin}} al {{x.end}}</span>
+
+    <div class="myRequestInfo" ng-repeat="x in model.requestedLicences">
+      <div class="iconsMyRequest"><i class="fa fa-ticket"></i></div>
+      <div class="myRequest">
+        <span>{{x.justification_name}}</span>
       </div>
-      <div class="stateRequest">
-        <div class="requestSlope">
-          <span class="tetxSlope">Estado: {{x.state}}</span>
-        </div>
+      <div class="iconsMyRequest"><i class="fa fa-calendar-o"></i></div>
+      <div class="myRequestDate">
+        <span>{{x.begin}}</span>
       </div>
-      <div class="reasonRequest" >
-        <span class="tetxSlope">Notas: {{x.notes}}</span>
+      <div class="iconsMyRequest"><i class="fa fa-bullhorn"></i></div>
+      <div class="myStateRequestSlope" ng-class="{true:'visible', false:'hidden'}[false]">
+        <span>{{x.state}}</span>
       </div>
+      <div class="myStateRequestApproved" ng-class="{true:'visible', false:'hidden'}[false]">
+        <span>{{x.state}}</span>
+      </div>
+      <div class="myStateRequestRejected" ng-class="{true:'visible', false:'hidden'}[true]">
+        <span>{{x.state}}</span>
+      </div>
+
+
     </div>
 
   </div>
-
 </div>

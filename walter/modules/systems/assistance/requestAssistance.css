@@ -16,6 +16,7 @@
   background-color: #0066A6;
   overflow: hidden;
   border-bottom: 1px solid #275276;
+
 }
 .requestAssistance p.titulo{
   margin:13px;
@@ -67,12 +68,80 @@
   font-weight: bold;
 }
 
-.requestAssistance .myRequest {
-  background-color: #f5f5f5;
-  margin-top:20px;
+.requestAssistance .myRequests {
+  padding:10px;
+  background-color: #128c78;
+  margin-top:15px;
+  padding-left:15px;
+  color:white;
+  border-top: 3px solid #0066A6;
+
 }
+.requestAssistance .myRequestInfo {
+  display:flex;
+  flex-direction:row;
+  background-color: #f5f5f5;
 
 
+}
+.requestAssistance .iconsMyRequest {
+  padding:5px;
+  margin-top:5px;
+  background-color:#128c78;
+  color:white;
+  border:1px solid #0066A6;
+}
+.requestAssistance .myRequest {
+  margin-top:5px;
+  width:150px;
+  background-color:white;
+  padding:5px;
+  padding-left:10px;
+  color:#0066A6;
+  border:1px solid #0066A6;
+  margin-right:10px;
+  font-weight: bold;
+}
+.requestAssistance .myRequestDate {
+  margin-top:5px;
+  width:150px;
+  border:1px solid #0066A6;
+  padding:5px;
+  padding-left:10px;
+  color:black;
+  margin-right:10px;
+  background-color:white;
+}
+.requestAssistance .myStateRequestSlope {
+  margin-top:5px;
+  width:150px;
+  border:1px solid #0066A6;
+  padding:5px;
+  padding-left:10px;
+  color:white;
+  margin-right:10px;
+  background-color:#0066A6;
+}
+.requestAssistance .myStateRequestApproved {
+  margin-top:5px;
+  width:150px;
+  border:1px solid #0066A6;
+  padding:5px;
+  padding-left:10px;
+  color:white;
+  margin-right:10px;
+  background-color:#128c78;
+}
+.requestAssistance .myStateRequestRejected {
+  margin-top:5px;
+  width:150px;
+  border:1px solid #0066A6;
+  padding:5px;
+  padding-left:10px;
+  color:white;
+  margin-right:10px;
+  background-color:#e43e46;
+}
 .requestAssistance .parrafos {
   background-color:#0066A6;
   color:white;
