@@ -54,7 +54,7 @@ app.controller('RequestAssistanceCtrl', function($scope, $rootScope, $timeout, $
 	}
 
 	$scope.loadRequestedLicences = function() {
-		Assistance.getRequestedLicences($scope.model.session.user_id,
+		Assistance.getJustificationRequests(null,null,
 			function(requestedLicences){
 				for(i in requestedLicences){
 					var requestedLicence = requestedLicences[i]

@@ -136,7 +136,6 @@ query :
   action:"getJustifications",
   session:,
   request:{
-      user_id: "id del usuario"
   }
 
 }
@@ -211,17 +210,19 @@ response :
 
 
 
+
+
 ---------------
 
 
-query : Obtener solicitudes de justificationces de un determinado usuario
+query : Obtener todas las solicitudes de justificationces
 {
   id:,
   action:"getJustificationRequests",
   session:,
   request:{
-      user_id: "id del usuario",
-      status: 'estado de la justificacion PENDING|APPROVED|REJECTED|CANCELED' -- si no existe se obtienen todas
+      status: 'estado de la justificacion PENDING|APPROVED|REJECTED|CANCELED' -- si no existe se obtienen todas,
+      group: "ROOT|TREE" -- si no existe obtiene solo las del usuario, sino las del grupo
   }
 
 }
@@ -234,6 +235,8 @@ response :
   response:{
     request : [ "lista de solicitudes de un determinado usuario"
   		{
+            id: "id de la solicitud de justificacion",
+            user_id:"id del usuario",
     		justification_id: "id de la justificacion o licencia solicitada"
     		begin: 2014-12-01 00:00:00 "fecha de inicio de la justificacion o licencia solicitada"
     		end: 2014-12-02 00:00:00 "fecha de finalizacion de la justificacion o licencia solicitada"
