@@ -34,6 +34,7 @@ cur.execute("set time zone %s",('utc',))
 
 cur.execute('delete from assistance.schedule')
 cur.execute('delete from assistance.positions')
+cur.execute('delete from assistance.offices')
 
 for line in csv.reader(sys.stdin):
 
@@ -83,6 +84,22 @@ for line in csv.reader(sys.stdin):
         if cargo.strip() != '':
             req = (str(uuid.uuid4()),pid,cargo)
             cur.execute('insert into assistance.positions (id,user_id,name) values (%s,%s,%s)',req)
+
+
+        """ actualizo las oficinas """
+        r = re.compile('.*\/*.*')
+        p = r.match(of)
+        if p:
+            off1 = p.group(1)
+            off2 = p.group(2)
+            cur.execute('select id from assistance.offices where name = %s',(off1,))
+            idof = str(uuid.uuid4())
+            if cur.rowcount <= 0:
+                cur.execute('insert into (id,name) values (%s,%s)',(idof,off1))
+            else:
+                idof = cur.fetchone()[0][0]
+
+            cur.execute('insert into (id,name) values (%s,%s)',(idof,))
 
         con.commit()
 

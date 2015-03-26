@@ -76,6 +76,7 @@ class Logs:
         if (self.findLog(con,data['id'])) == None:
             params = (data['id'],data['deviceId'],data['userId'],data['verifymode'],data['log'])
             cur = con.cursor()
+            cur.execute('set time zone %s',('utc'))
             cur.execute('insert into assistance.attlog (id,device_id,user_id,verifymode,log) values (%s,%s,%s,%s,%s)',params)
 
 
