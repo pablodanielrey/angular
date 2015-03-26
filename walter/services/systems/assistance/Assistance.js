@@ -155,9 +155,28 @@ app.service('Assistance', ['Utils','Messages','Session',
 			callbackOk(response);
 		}
 
-		this.requestLicence = function(userId, justification, callbackOk, callbackError){
-			response = "ok";
-			callbackOk(response);
+
+		/**
+		 * Solicitar licencia
+		 * @param userId Id del usuario que solicito la licencia
+		 * @param justification Datos de la licencia solicitada
+		 *		{id: Id de la justificacion
+		 *		start: fecha de inicio
+		 *		end: fecha de finalizacion
+		 */
+		this.requestJustification = function(userId, justification, callbackOk, callbackError){
+			var msg = {
+				id: Utils.getId(),
+				action: 'requestJustification',
+				session: Session.getSessionId(),
+				request:{
+					user_id: userId,
+					justification_id: justification.id,
+					begin: justification.begin,
+					end: justification.end
+				}
+			}
+			callbackOk("ok");
 		}
 	}]
 );
