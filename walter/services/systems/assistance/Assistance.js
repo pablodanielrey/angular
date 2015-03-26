@@ -4,14 +4,35 @@ app.service('Assistance', ['Utils','Messages','Session',
 
 	function(Utils,Messages,Session) {
 
-		this.getAssistanceStatus = function(userId, callbackOk, callbackError) {
+		this.getAssistanceStatusByDate = function(userId, date, callbackOk, callbackError) {
 			var msg = {
 				id: Utils.getId(),
 				action: 'getAssistanceStatus',
 				session: Session.getSessionId(),
 				request:{
 					user_id: userId,
-					date:'2012-11-09'
+					date: date
+				}
+			}
+
+			Messages.send(msg,
+				function(data) {
+					callbackOk(data.response);
+				},
+				function(error) {
+					callbackError(error);
+				}
+			);
+		};
+
+
+		this.getAssistanceStatus = function(userId, callbackOk, callbackError) {
+			var msg = {
+				id: Utils.getId(),
+				action: 'getAssistanceStatus',
+				session: Session.getSessionId(),
+				request:{
+					user_id: userId
 				}
 			}
 
@@ -49,8 +70,8 @@ app.service('Assistance', ['Utils','Messages','Session',
 		this.getOfficesByUser = function(userId, callbackOk, callbackError) {
 			//TODO
 			response = [
-				{id:"1",name:"Informatica"},
-				{id:"2",name:"Personal"}
+				//{id:"1",name:"Informatica"},
+				//{id:"2",name:"Personal"}
 			];
 			callbackOk(response);
 		};

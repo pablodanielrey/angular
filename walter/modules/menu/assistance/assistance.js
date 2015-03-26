@@ -44,7 +44,7 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, $l
                     $scope.items = [];
                     $scope.items.push({ label:'Inicio', img:'fa-tachometer', function: $scope.summary});
                     $scope.items.push({ label:'Solicitudes', img:'fa-ticket', function: $scope.requestAssistance});
-                    $scope.items.push({ label:'Licencias Médicas', img:'fa-stethoscope', function: $scope.medicalLicenses});
+                    //$scope.items.push({ label:'Licencias Médicas', img:'fa-stethoscope', function: $scope.medicalLicenses});
                     $scope.items.push({ label:'Adm. Solicitudes ', img:'fa-ticket', function: $scope.adminRequestAssistance});
 
                     $scope.selectItem($scope.items[0]);
@@ -52,7 +52,7 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, $l
                     $scope.items = [];
                     $scope.items.push({ label:'Inicio', img:'fa-tachometer', function: $scope.summary});
                     $scope.items.push({ label:'Solicitudes', img:'fa-ticket', function: $scope.requestAssistance});
-                    $scope.items.push({ label:'Licencias Médicas', img:'fa-stethoscope', function: $scope.medicalLicenses});
+                    //$scope.items.push({ label:'Licencias Médicas', img:'fa-stethoscope', function: $scope.medicalLicenses});
 
                     $scope.selectItem($scope.items[0]);
                 }

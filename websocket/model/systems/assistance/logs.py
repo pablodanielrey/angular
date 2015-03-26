@@ -1,40 +1,10 @@
 # -*- coding: utf-8 -*-
-
-"""
-    Todas las fechas que se manejan en el modelo son UTC.
-    si se obtienen desde lugares en localtime se convierten a utc para ser trabajadas.
-
-    formato del log enviado y recibido mediante json
-
-    {
-        "id":"03050f03-ff1a-427e-959e-9937a97b9392",
-        "device":{
-            "id":"1bb8258e-d3e4-4c29-9c4f-354c881668b8",
-            "name":"zk1",
-            "description":"dispositivo ZK 1",
-            "ip":"163.10.56.29",
-            "netmask":"255.255.255.192",
-            "enabled":true
-        },
-        "person":{
-            "id":"c4ac0f86-726f-44b6-bb4c-f809e78607d3",
-            "name":"Usuario",
-            "lastName":"Nuevo",
-            "dni":"28869650",
-            "gender":"M",
-            "types":[],
-            "telephones":[]
-        },
-        "date":"08:04:08 13/03/2015",
-        "verifyMode":1
-    }
-
-"""
-
 import datetime, pytz
 import json, logging
 import inject
+import itertools
 
+from model import utils
 from model.systems.assistance.date import Date
 from model.systems.assistance.devices import Devices
 from model.users.users import Users
@@ -67,7 +37,10 @@ class Logs:
             return None
 
 
-    """ obtiene los logs """
+    """
+        obtiene los logs
+        dfrom y dto deben estar en UTC
+    """
     def findLogs(self,con,userId,dfrom=None,dto=None):
         cur = con.cursor()
         cur.execute("set timezone to 'UTC'")
@@ -94,7 +67,6 @@ class Logs:
         #data = cur.fetchall()
         logs = []
         for d in cur:
-            logging.debug(d)
             logs.append(self._convertToDict(d))
         return logs
 
@@ -107,7 +79,111 @@ class Logs:
             cur.execute('insert into assistance.attlog (id,device_id,user_id,verifymode,log) values (%s,%s,%s,%s,%s)',params)
 
 
-    """ transforma el mensaje en json obtenido desde el firware a log """
+
+
+
+
+    """ a partir de una lista de datetime obtiene los grupos de worked """
+    def _getWorkedTimetable(self, dateList):
+        worked = []
+        bytwo = list(utils.grouper(2,dateList))
+        #logging.debug(bytwo)
+        for s,e in bytwo:
+            w = {
+                'start':s,
+                'end':e,
+                'seconds':(e-s).total_seconds() if s is not None and e is not None and s <= e else 0
+            }
+            worked.append(w)
+        return worked
+
+
+    """ controlo la tolerancia entre logs -- 5 minutos """
+    def _checkTolerance(self, log):
+        if self._dateBefore == None:
+            self._dateBefore = log
+            return True
+
+        ret = (log - self._dateBefore) >  datetime.timedelta(minutes=5)
+        self._dateBefore = log
+        return ret
+
+
+    """
+        Retorna el conjunto de horas trabajadas de a pares despues de chequear la tolerancia de las marcas.
+        tambien retonra el conjunto válido de logs tomados para realizar el cálculo
+    """
+    def getWorkedHours(self, logs):
+        attlogs = list(map(lambda e : e['log'] , logs))
+
+        self._dateBefore = None
+        attlogs = list(filter(self._checkTolerance,attlogs))
+
+        worked = self._getWorkedTimetable(attlogs);
+        return (worked,attlogs)
+
+
+    """
+        Procesa el conjunto de horas trabajadas y retorna.
+        (
+            Hora inical del trabajo
+            Hora final completa del trabajo
+            Cantidad de segundos trabajados en total
+        )
+    """
+    def explainWorkedHours(self,whs):
+        sdate = None
+        edate = None
+        totalSeconds = 0
+
+        if len(whs) > 0:
+            sdate = whs[0]['start']
+            edate = whs[-1]['end']
+            totalSeconds = 0
+            for w in whs:
+                totalSeconds = totalSeconds + w['seconds']
+
+        return (sdate,edate,totalSeconds)
+
+
+
+
+
+
+
+
+    """
+    transforma el mensaje en json obtenido desde el firware a log
+
+    Todas las fechas que se manejan en el modelo son UTC.
+    si se obtienen desde lugares en localtime se convierten a utc para ser trabajadas.
+
+    formato del log enviado y recibido mediante json
+
+    {
+        "id":"03050f03-ff1a-427e-959e-9937a97b9392",
+        "device":{
+            "id":"1bb8258e-d3e4-4c29-9c4f-354c881668b8",
+            "name":"zk1",
+            "description":"dispositivo ZK 1",
+            "ip":"163.10.56.29",
+            "netmask":"255.255.255.192",
+            "enabled":true
+        },
+        "person":{
+            "id":"c4ac0f86-726f-44b6-bb4c-f809e78607d3",
+            "name":"Usuario",
+            "lastName":"Nuevo",
+            "dni":"28869650",
+            "gender":"M",
+            "types":[],
+            "telephones":[]
+        },
+        "date":"08:04:08 13/03/2015",
+        "verifyMode":1
+    }
+
+    """
     def fromJsonMessage(self,con,jsonLog):
         fullLog = json.loads(msgStr.decode('utf-8'))
 
@@ -121,7 +197,6 @@ class Logs:
 
         """ TODO: obtengo la zona del dispositivo. MEJORAR!!! """
         timezone = self.devices.getTimeZone(deviceId)
-
 
         """ transformo la fecha obtenida desde el firmware a utc """
         date = datetime.datetime.strptime(fullLog['date'], "%H:%M:%S %d/%m/%Y")

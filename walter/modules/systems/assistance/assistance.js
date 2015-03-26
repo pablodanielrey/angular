@@ -23,7 +23,7 @@ app.controller('AssistanceCtrl', function($scope, $timeout, $window, Profiles, S
 		justification102 : null, //stock de justificaciones articulo 102
 		justificationExam : null, //stock de justificaciones pre examen
 		justificationLao : null //stock de justificaciones licencia anual ordinaria
-    };
+  };
 
 	/**
 	 * inicializar datos de usuario
@@ -88,8 +88,6 @@ app.controller('AssistanceCtrl', function($scope, $timeout, $window, Profiles, S
 			var endHour = end.getHours() + ":" + end.getMinutes()
 
 			$scope.model.assistanceData.schedule.push(startHour + " / " + endHour);
-
-
 		}
 	};
 
@@ -205,7 +203,7 @@ app.controller('AssistanceCtrl', function($scope, $timeout, $window, Profiles, S
 		if ((!$scope.model.session) || (!$scope.model.session.user_id)) {
 			alert("Error: Session no definida");
 			$window.location.href = "/#/logout";
-        } else {
+    } else {
 			Profiles.checkAccess(Session.getSessionId(),'ADMIN-ASSISTANCE,USER-ASSISTANCE',
 				function(ok) {
 					if (ok == 'granted') {

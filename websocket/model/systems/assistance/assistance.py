@@ -9,42 +9,19 @@ from wexceptions import *
 from model.profiles import AccessDenied
 from model.utils import DateTimeEncoder
 from model.config import Config
+from model.users.users import Users
 
 from model.systems.assistance.logs import Logs
 from model.systems.assistance.date import Date
+from model.systems.assistance.schedule import Schedule
 
 class Assistance:
 
+    config = inject.attr(Config)
     date = inject.attr(Date)
     logs = inject.attr(Logs)
-
-    """ http://stackoverflow.com/questions/4998427/how-to-group-elements-in-python-by-n-elements """
-    def _grouper(self, n, iterable, fillvalue=None):
-        "grouper(3, 'ABCDEFG', 'x') --> ABC DEF Gxx"
-        return itertools.zip_longest(*[iter(iterable)]*n, fillvalue=fillvalue)
-
-
-    """ a partir de una lista de datetime obtiene los grupos de worked """
-    def _getWorkedTimetable(self, dateList):
-        worked = []
-        bytwo = list(self._grouper(2,dateList))
-        logging.debug(bytwo)
-        for s,e in bytwo:
-            w = { 'start':s, 'end':e, 'seconds':(e-s).total_seconds() if s is not None and e is not None and s <= e else 0 }
-            worked.append(w)
-        return worked
-
-
-    """ controlo la tolerancia entre logs -- 5 minutos """
-    def _checkTolerance(self, log):
-        if self._dateBefore == None:
-            self._dateBefore = log
-            return True
-
-        ret = (log - self._dateBefore) >  datetime.timedelta(minutes=5)
-        self._dateBefore = log
-        return ret
-
+    schedule = inject.attr(Schedule)
+    users = inject.attr(Users)
 
     """
         Obtiene el estado de asistencia del usuario
@@ -64,29 +41,9 @@ class Assistance:
         To = self.date.awareToUtc(To)
 
         logs = self.logs.findLogs(con,userId,From,To)
-
-        logging.debug(logs)
-
-        attlogs = list(map(lambda e : e['log'] , logs))
-
-        self._dateBefore = None
-        attlogs = list(filter(self._checkTolerance,attlogs))
-
+        worked, attlogs = self.logs.getWorkedHours(con,logs)
+        sdate,edate,totalSeconds = self.logs.explainWorkedHours(worked)
         inside = 'Afuera' if len(attlogs) % 2 == 0 else 'Trabajando'
-        worked = self._getWorkedTimetable(attlogs);
-
-
-        sdate = None
-        edate = None
-        totalSeconds = 0
-
-        if len(worked) > 0:
-            sdate = worked[0]['start']
-            edate = worked[-1]['end']
-            totalSeconds = 0
-            for w in worked:
-                totalSeconds = totalSeconds + w['seconds']
-
 
         assistanceStatus = {
             'status': inside,
@@ -96,3 +53,64 @@ class Assistance:
             'workedMinutes': totalSeconds / 60
         }
         return assistanceStatus
+
+
+
+    """
+        chequea el schedule de las personas que tienen algún schedule para chequear
+        y envía mail en caso de que falle
+    """
+    def checkSchedule(self):
+
+        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+        try:
+
+            userIds = self.schedule.getUsersInSchedules(con)
+            logging.debug('users: {}'.format(userIds))
+
+
+            #date = self.date.now()
+            dateIni = self.date.parse('2015-02-01 00:00:00')
+            dateFin = self.date.parse('2015-02-26 00:00:00')
+            delta = dateFin - dateIni
+            for i in range(delta.days):
+                date = dateIni + datetime.timedelta(days=i)
+
+                start = date.replace(hour=0,minute=0,second=0,microsecond=0)
+                end = start + datetime.timedelta(days=1)
+                #end = date.replace(hour=23,minute=59,second=59,microsecond=0)
+
+                ustart = self.date.awareToUtc(start)
+                uend = self.date.awareToUtc(end)
+
+
+                out = open('/tmp/fallas/' + str(date) + '.csv','w')
+
+                for userId in userIds:
+                    user = self.users.findUser(con,userId)
+
+                    logs = self.logs.findLogs(con,userId,ustart,uend)
+                    whs,attlogs = self.logs.getWorkedHours(logs)
+                    userId,fails = self.schedule.checkSchedule(con,userId,ustart,uend,whs)
+
+                    for fail in fails:
+                        localDate = self.date.localizeAwareToLocal(fail['date']).replace(hour=0,minute=0,second=0,microsecond=0)
+                        f = '{0},{1},{2},{3},{4},{5},{6}'.format(
+                            localDate.date(),
+                            user['dni'],
+                            user['name'],
+                            user['lastname'],
+                            fail['description'],
+                            self.date.localizeAwareToLocal(fail['start']).time() if 'start' in fail else (self.date.localizeAwareToLocal(fail['end']).time() if 'end' in fail else 'no tiene'),
+                            self.date.localizeAwareToLocal(fail['startSchedule']).time() if 'startSchedule' in fail else (self.date.localizeAwareToLocal(fail['endSchedule']).time() if 'endSchedule' in fail else 'no tiene'))
+                        out.write(f)
+                        out.write('\n')
+
+                out.close()
+
+
+        except psycopg2.DatabaseError as e:
+            raise e
+
+        finally:
+            con.close()

@@ -18,6 +18,19 @@ class Date:
         local = tz.localize(naive)
         return local
 
+    """ retorna la zona del servidor """
+    def getLocalTimezone(self):
+        return dateutil.tz.tzlocal()
+
+    """ cambia la zona de un aware a la zona local del servidor """
+    def localizeAwareToLocal(self,aware):
+        tz = dateutil.tz.tzlocal()
+        return aware.astimezone(tz)
+
+    """ supongo la fecha en utc y retorno un datetime con la zona de utc """
+    def localizeUtc(self,naive):
+        return naive.replace(tzinfo=pytz.utc)
+
     """ supnog que la fecha esta en la timezone local. """
     def localizeLocal(self,naive):
         tz = dateutil.tz.tzlocal()
@@ -38,7 +51,7 @@ class Date:
 
 
     def isUTC(self,date):
-        logging.debug(date.tzinfo)
+        #logging.debug(date.tzinfo)
         return date.tzinfo != None and date.tzinfo.utcoffset(date) == datetime.timedelta(0)
 
 

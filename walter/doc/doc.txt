@@ -1,35 +1,11 @@
 
 
+Session {
 
-mensajes:
-
-getStatus -- retorna un objeto Status
-
-
-
-
-
--------------------------------------------------
-excepciones :
-
-SessionNotFound
-
-
-
--------------------------------------------------
-eventos :
-
-onSocketMessage
-onAppError
-routeEvent
-
-UserUpdatedEvent
-UserSelectedEvent
-
-
-AccountRequestRemovedEvent
-NewAccountRequestEvent
-AccountRequestApprovedEvent
-
-
-StatusChangedEvent
+  session_id: s.session,
+  user_id: s.user_id,
+  login: {
+    username: creds.username
+  }
+  
+}
