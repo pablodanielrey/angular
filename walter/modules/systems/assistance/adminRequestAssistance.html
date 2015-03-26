@@ -5,32 +5,32 @@
   <!-- EMA, IVAN... LAS SOLICITUDES APARECEN EN FORMA DE LISTA, UNA BAJO LA OTRA,
   Seguro hay que cambiar el div general por un una lista, pero nose como lo
   quieren manejar!!  -->
-  <div class="content">
+  <div class="content" ng-repeat="request in model.requests">
     <div class="request">
-      <span class="requestInfo">Ausente con Aviso</span>
+      <span class="requestInfo">{{request.license}}</span>
     </div>
     <div class="userRequest">
       <div>
-        <span class="userInfo">Usuario</span>
+        <span class="userInfo">{{request.user.lastname}}, {{request.user.name}}</span>
       </div>
       <div>
-        <span class="userDNI">DNI</span>
+        <span class="userDNI">{{request.user.dni}}</span>
       </div>
     </div>
     <div class="dateRequest">
-      <span class="requestDate">Día de la solicitud</span>
+      <span class="requestDate">{{request.date}}</span>
     </div>
     <div class"actionsRequest">
       <div class="approve">
-        <button class="approveRequest" ng-click="approveRequest()"><i class="fa fa-check"></i> Aprobar</button>
+        <button class="approveRequest" ng-click="approveRequest(request)"><i class="fa fa-check"></i> Aprobar</button>
       </div>
       <div class="denegar">
-        <button class="refuseRequest" ng-click="refuseRequest()"><i class="fa fa-times"></i> Denegar</button>
+        <button class="refuseRequest" ng-click="refuseRequest(request)"><i class="fa fa-times"></i> Denegar</button>
 
       </div>
     </div>
     <div class="reasonRequest">
-      <textarea class="reasonRefuse">Falto porque tengo que ir al medico, ponele!!!</textarea>
+      <textarea class="reasonRefuse"></textarea>
     </div>
   </div>
 
