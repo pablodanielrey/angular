@@ -35,7 +35,7 @@ if __name__ == '__main__':
   #rt = utils.Periodic(15 * 60, _checkAssistanceSchedule,assistance)
   _checkAssistanceSchedule(assistance)
 
-  """
+
   reactor = network.websocket.getReactor()
 
   def close_sig_handler(signal,frame):
@@ -52,4 +52,4 @@ if __name__ == '__main__':
 
   while True:
       time.sleep(1000)
-  """
+

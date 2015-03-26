@@ -1,6 +1,6 @@
 var app = angular.module('mainApp');
 
-app.controller('AssistanceCtrl', function($scope, $timeout, $window, Profiles, Session, Users, Assistance) {
+app.controller('AssistanceCtrl', function($scope, $timeout, $window, Profiles, Session, Users, Assistance, Notifications) {
 
 	$scope.model = {
 		session : null,
@@ -119,7 +119,11 @@ app.controller('AssistanceCtrl', function($scope, $timeout, $window, Profiles, S
 	$scope.loadAssistanceStatus = function(){
 		Assistance.getAssistanceStatus($scope.model.session.user_id,
 			function(assistanceStatus){
-				$scope.formatAssistanceStatusFromServer(assistanceStatus);
+				if(assistanceStatus == undefined){
+					Notifications.message('Error al consultar estado');
+				} else {
+					$scope.formatAssistanceStatusFromServer(assistanceStatus);
+				}
 			},
 			function(error){
 				alert(error);
