@@ -25,7 +25,7 @@ def _checkAssistanceSchedule(assistance):
 
 if __name__ == '__main__':
 
-  logging.basicConfig(level=logging.DEBUG);
+  logging.basicConfig(level=logging.DEBUG)
 
   inject.configure(config_injector)
   config = inject.instance(Config)
@@ -52,4 +52,3 @@ if __name__ == '__main__':
 
   while True:
       time.sleep(1000)
-

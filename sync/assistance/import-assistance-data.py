@@ -3,6 +3,8 @@
 import csv, sys, pytz, datetime
 import psycopg2
 import uuid, calendar
+import logging
+import re
 
 
 def localice(date):
@@ -15,6 +17,16 @@ def localice(date):
 
 def replaceTime(date,time):
     return date.replace(hour=time.hour,minute=time.minute,second=0,microsecond=0)
+
+
+def insertOfficeIfNotExist(cur,of,idParent):
+    cur.execute('select id from assistance.offices where name = %s',(of,))
+    idof = str(uuid.uuid4())
+    if cur.rowcount <= 0:
+        cur.execute('insert into assistance.offices (id,name,parent) values (%s,%s,%s)',(idof,of,idParent))
+    else:
+        idof = cur.fetchone()[0]
+    return idof
 
 
 host = sys.argv[1]
@@ -35,11 +47,15 @@ cur.execute("set time zone %s",('utc',))
 cur.execute('delete from assistance.schedule')
 cur.execute('delete from assistance.positions')
 cur.execute('delete from assistance.offices')
+cur.execute('delete from assistance.offices_users')
+cur.execute('delete from assistance.offices_roles')
+
+logging.basicConfig(level=logging.DEBUG)
 
 for line in csv.reader(sys.stdin):
 
     try:
-        print(line)
+        logging.debug(line)
 
         app,func,nombre,dni,maili,e,s,of,cargo,ma = line
         if dni == None or dni == '':
@@ -75,7 +91,7 @@ for line in csv.reader(sys.stdin):
             uend = send.astimezone(pytz.utc)
 
             req = (str(uuid.uuid4()), pid, uaware, ustart, uend, True, False, False)
-            print('Insertando schedule : {}'.format(str(req)))
+            logging.debug('Insertando schedule : {}'.format(str(req)))
             cur.execute('insert into assistance.schedule (id,user_id,date,sstart,send,isDayOfWeek,isDayOfMonth,isDayOfYear) values (%s,%s,%s,%s,%s,%s,%s,%s)',req)
 
 
@@ -87,24 +103,32 @@ for line in csv.reader(sys.stdin):
 
 
         """ actualizo las oficinas """
-        r = re.compile('.*\/*.*')
+        logging.debug('Actualizando la oficina : {}'.format(of))
+        r = re.compile('(.*?)\/(.*)')
         p = r.match(of)
+        idof = None
         if p:
             off1 = p.group(1)
             off2 = p.group(2)
-            cur.execute('select id from assistance.offices where name = %s',(off1,))
-            idof = str(uuid.uuid4())
-            if cur.rowcount <= 0:
-                cur.execute('insert into (id,name) values (%s,%s)',(idof,off1))
-            else:
-                idof = cur.fetchone()[0][0]
 
-            cur.execute('insert into (id,name) values (%s,%s)',(idof,))
+            logging.debug('insertando oficina {}'.format(off1))
+            idoff1 = insertOfficeIfNotExist(cur,off1,None)
+
+            logging.debug('insertando oficina {}'.format(off2))
+            idof = insertOfficeIfNotExist(cur,off2,idoff1)
+        else:
+            logging.debug('insertando oficina {}'.format(of))
+            idof = insertOfficeIfNotExist(cur,of,None)
+
+        cur.execute('insert into assistance.offices_users (user_id,office_id) values (%s,%s)',(pid,idof))
+
+        if func != '':
+            cur.execute('insert into assistance.offices_roles (user_id,office_id,role) values (%s,%s,%s)',(pid,idof,'autoriza'))
 
         con.commit()
 
     except Exception as e:
-        pass
+        logging.debug(e)
 
 
 
