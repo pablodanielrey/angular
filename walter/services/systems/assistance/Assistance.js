@@ -32,7 +32,8 @@ app.service('Assistance', ['Utils','Messages','Session',
 				action: 'getAssistanceStatus',
 				session: Session.getSessionId(),
 				request:{
-					user_id: userId
+					user_id: userId,
+					date: new Date('2015-02-03T09:30:00+00:00')
 				}
 			}
 
@@ -68,13 +69,25 @@ app.service('Assistance', ['Utils','Messages','Session',
 
 
 		this.getOfficesByUser = function(userId, callbackOk, callbackError) {
-			//TODO
-			response = [
-				//{id:"1",name:"Informatica"},
-				//{id:"2",name:"Personal"}
-			];
-			callbackOk(response);
+			var msg = {
+				id: Utils.getId(),
+				action: 'getOffices',
+				session: Session.getSessionId(),
+				request:{
+					user_id: userId
+				}
+			}
+
+			Messages.send(msg,
+				function(data) {
+					callbackOk(data.response);
+				},
+				function(error) {
+					callbackError(error);
+				}
+			);
 		};
+
 
 		this.getJustifications = function(callbackOk, callbackError) {
 			//TODO

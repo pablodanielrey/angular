@@ -46,9 +46,9 @@ cur.execute("set time zone %s",('utc',))
 
 cur.execute('delete from assistance.schedule')
 cur.execute('delete from assistance.positions')
-cur.execute('delete from assistance.offices')
 cur.execute('delete from assistance.offices_users')
 cur.execute('delete from assistance.offices_roles')
+cur.execute('delete from assistance.offices')
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -68,6 +68,17 @@ for line in csv.reader(sys.stdin):
         else:
             pid = cur.fetchone()[0]
             print("{0} ya existe - {1}".format(dni,pid))
+
+
+        """ actualizo las credenciales """
+
+        cur.execute('delete from credentials.user_password where user_id = %s',(pid,))
+        cur.execute('insert into credentials.user_password (id,user_id,username,password) values (%s,%s,%s,%s)',(str(uuid.uuid4()),pid,dni,'1'))
+
+        """ actualizo para asignarle el perfil de usuario dentro del sistema de asistencia """
+        
+        cur.execute('delete from credentials.auth_profile where user_id = %s and profile = %s',(pid,'USER-ASSISTANCE'))
+        cur.execute('insert into credentials.auth_profile (user_id,profile) values (%s,%s)',(pid,'USER-ASSISTANCE'))
 
 
         """ actualizo el tema del horario """

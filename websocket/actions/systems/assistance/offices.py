@@ -1,13 +1,16 @@
 # -*- coding: utf-8 -*-
 import json, base64, datetime, traceback, logging
 import inject
-from wexceptions import MalformedMessage
-from Ws.SimpleWebSocketServer import WebSocket, SimpleWebSocketServer
+import psycopg2
+
+from wexceptions import *
 
 from model.config import Config
-from model.profiles import AccessDenied, Profiles
+from model.profiles import Profiles
+
 from model.utils import DateTimeEncoder
-from model.systems.assistance.logs import Logs
+
+from model.systems.assistance.offices import Offices
 
 
 
@@ -47,11 +50,9 @@ response :
 
 class GetOffices:
 
-    req = inject.attr(Domain)
-    events = inject.attr(Events)
     profiles = inject.attr(Profiles)
     config = inject.attr(Config)
-    assitance = inject.attr(Assistance)
+    offices = inject.attr(Offices)
 
     def handleAction(self, server, message):
 
@@ -76,10 +77,10 @@ class GetOffices:
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
             offices = []
-            if userId == None:
-                offices = assistance.getOfficesByUser(con,userId,tree)
+            if userId is not None:
+                offices = self.offices.getOfficesByUser(con,userId,tree)
             else:
-                offices = assistance.getOffices(con)
+                offices = self.offices.getOffices(con)
 
             response = {
                 'id':message['id'],
@@ -92,7 +93,6 @@ class GetOffices:
             return True
 
         except psycopg2.DatabaseError as e:
-            con.rollback()
             raise e
 
         finally:

@@ -33,7 +33,7 @@ if __name__ == '__main__':
 
   assistance = inject.instance(Assistance)
   #rt = utils.Periodic(15 * 60, _checkAssistanceSchedule,assistance)
-  _checkAssistanceSchedule(assistance)
+  #_checkAssistanceSchedule(assistance)
 
 
   reactor = network.websocket.getReactor()
