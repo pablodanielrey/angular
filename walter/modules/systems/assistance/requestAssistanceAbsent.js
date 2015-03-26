@@ -116,15 +116,16 @@ app.controller('RequestAssistanceAbsentCtrl', function($scope, Assistance, Notif
 	 */
 	$scope.confirmRequestAbsent = function(){
 
-		var requestLicence = {
+		var requestedJustification = {
 			id:$scope.model.absent.id,
-			start:$scope.model.absentStart,
-			end:$scope.model.absentStart,
+			start:$scope.model.requestAbsentBegin,
+			end:$scope.model.requestAbsentBegin,
 		}
-		Assistance.requestLicence($scope.model.session.user_id, requestLicence,
+		Assistance.requestJustification($scope.model.session.user_id, requestedJustification,
 			function(ok){
 				$scope.model.requestAbsentBegin = null;
 				$scope.clearSelections();
+				$scope.clearSelectionsAbsent();
 				Notifications.message('Ausente con aviso solicitado correctamente');
 				$scope.$broadcast('requestLicenceEvent');
 			},

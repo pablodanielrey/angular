@@ -98,6 +98,7 @@ app.controller('RequestAssistanceOutCtrl', function($scope, Assistance, Notifica
     $scope.loadOutActualStock = function(id) {
         Assistance.getJustificationActualStock($scope.model.session.user_id, id,
 			function(justificationActualStock){
+				console.log(justificationActualStock);
 				$scope.model.out.actualStock = justificationActualStock;
 			},
 			function(error){
@@ -154,7 +155,7 @@ app.controller('RequestAssistanceOutCtrl', function($scope, Assistance, Notifica
     // Envio la peticion al servidor
     $scope.save = function() {
 
-        Assistance.requestLicence($scope.model.user_id,$scope.model.justification,
+        Assistance.requestJustification($scope.model.user_id,$scope.model.justification,
             function(ok) {
                 Notifications.message("Guardado exitosamente");
                 $scope.model.justification.begin = null;
