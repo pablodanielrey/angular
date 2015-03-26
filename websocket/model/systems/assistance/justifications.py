@@ -2,15 +2,24 @@
 
 class Justifications:
 
-    """ obtiene todas las justificaciones """
-    def getJustificationStock(self,con,userId,justId):
+
+    """ retorna todos los tipos de justificaciones que existan en la base """
+    def getJustifications(self,con):
         cur = con.cursor()
         cur.execute('select id,name from assistance.justifications')
-        justs = cur.fetchall()
-        justifications = []
-        for just in justs:
-            justifications.append({'id':just[0],'name':just[1]})
-        return justifications
+        if cur.rowcount <= 0:
+            return []
+
+        justs = []
+        for j in cur:
+            justs.append(
+                {
+                    'id':j[0],
+                    'name':j[1]
+                }
+            )
+        return justs
+
 
 
     """ retorna el stock total de la justificacion indicada """
@@ -18,7 +27,7 @@ class Justifications:
         cur = con.cursor()
         cur.execute('select quantity from assistance.justifications_stock where user_id = %s and justification_id = %s',(userId,justId))
         stock = cur.fetchone()
-        if stock = None:
+        if stock == None:
             return None
         s = {'quantity':stock[0]}
         return s
@@ -48,7 +57,7 @@ class Justifications:
 
         """ si no existe ninguna restricción sobre la justificación entonces se retorna el stock """
         stock = assistance.getJustificationStock(con,userId,justId)
-        if stock = None:
+        if stock == None:
             return 0
 
         jstock = stock['quantity']
@@ -68,28 +77,28 @@ class Justifications:
     def getJustificationRequests(self,con,userId=None,justificationId=None,state=None):
         cur = con.cursor()
 
-        if userId = None and justificationId = None and state = None:
+        if userId is None and justificationId == None and state is None:
             cur.execute('select id,user_id,justification_id,jbegin,jend,status from assistance.justifications_requests')
 
-        if userId != None and justificationId = None and state = None:
+        if userId != None and justificationId is None and state is None:
             cur.execute('select id,user_id,justification_id,jbegin,jend,status from assistance.justifications_requests where user_id = %s',(userId,))
 
-        elif userId != None and justificationId != None and state = None:
+        elif userId != None and justificationId != None and state is None:
             cur.execute('select id,user_id,justification_id,jbegin,jend,status from assistance.justifications_requests where user_id = %s and justification_id = %s',(userId,justificationId))
 
-        elif userId != None and justificationId = None and state != None:
+        elif userId != None and justificationId is None and state != None:
             cur.execute('select id,user_id,justification_id,jbegin,jend,status from assistance.justifications_requests where user_id = %s and state = %s',(userId,state))
 
         elif userId != None and justificationId != None and state != None:
             cur.execute('select id,user_id,justification_id,jbegin,jend,status from assistance.justifications_requests where user_id = %s and state = %s and justificationId = %s',(userId,state,justificationId))
 
-        elif userId = None and justificationId != None and state = None:
+        elif userId is None and justificationId != None and state is None:
             cur.execute('select id,user_id,justification_id,jbegin,jend,status from assistance.justifications_requests where justification_id = %s',(justificationId,))
 
-        elif userId = None and justificationId != None and state != None:
+        elif userId is None and justificationId != None and state != None:
             cur.execute('select id,user_id,justification_id,jbegin,jend,status from assistance.justifications_requests where justification_id = %s and state = %s',(justificationId,state))
 
-        elif userId = None and  justificationId = None and state != None
+        elif userId is None and  justificationId is None and state != None:
             cur.execute('select id,user_id,justification_id,jbegin,jend,status from assistance.justifications_requests where state = %s',(state,))
 
 

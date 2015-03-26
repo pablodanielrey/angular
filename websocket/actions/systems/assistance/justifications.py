@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 import json, base64, datetime, traceback, logging
 import inject
-from wexceptions import MalformedMessage
-from Ws.SimpleWebSocketServer import WebSocket, SimpleWebSocketServer
+import psycopg2
+
+from wexceptions import *
 
 from model.config import Config
-from model.profiles import AccessDenied, Profiles
-from model.utils import DateTimeEncoder
-from model.systems.assistance.logs import Logs
+from model.profiles import Profiles
+
+from model.systems.assistance.justifications import Justifications
 
 
 
@@ -17,11 +18,7 @@ query :
 {
   id:,
   action:"getJustifications",
-  session:,
-  request:{
-      user_id: "id del usuario"
-  }
-
+  session:
 }
 
 response :
@@ -44,32 +41,21 @@ response :
 
 class GetJustifications:
 
-    req = inject.attr(Domain)
-    events = inject.attr(Events)
     profiles = inject.attr(Profiles)
     config = inject.attr(Config)
-    assitance = inject.attr(Assistance)
+    justifications = inject.attr(Justifications)
 
     def handleAction(self, server, message):
 
         if (message['action'] != 'getJustifications'):
             return False
 
-        if ('request' not in message) or ('user_id' not in message['request']):
-            response = {'id':message['id'], 'error':'Insuficientes parámetros'}
-            server.sendMessage(response)
-            return True
-
-        userId = message['request']['user_id']
-
-        """
         sid = message['session']
-        self.profiles.checkAccess(sid,['ADMIN','USER'])
-        """
+        self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
 
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
-            justs = assistance.getJustifications(con,userId)
+            justs = self.justifications.getJustifications(con)
 
             response = {
                 'id':message['id'],
@@ -122,11 +108,8 @@ response :
 
 class GetJustificationStock:
 
-    req = inject.attr(Domain)
-    events = inject.attr(Events)
     profiles = inject.attr(Profiles)
     config = inject.attr(Config)
-    assitance = inject.attr(Assistance)
 
     def handleAction(self, server, message):
 
@@ -199,11 +182,8 @@ response :
 """
 class GetJustificationActualStock:
 
-    req = inject.attr(Domain)
-    events = inject.attr(Events)
     profiles = inject.attr(Profiles)
     config = inject.attr(Config)
-    assitance = inject.attr(Assistance)
 
     def handleAction(self, server, message):
 
@@ -281,11 +261,8 @@ response :
 """
 class GetJustificationRequests:
 
-    req = inject.attr(Domain)
-    events = inject.attr(Events)
     profiles = inject.attr(Profiles)
     config = inject.attr(Config)
-    assitance = inject.attr(Assistance)
 
     def handleAction(self, server, message):
 
@@ -358,11 +335,8 @@ response :
 
 class requestJustification:
 
-    req = inject.attr(Domain)
-    events = inject.attr(Events)
     profiles = inject.attr(Profiles)
     config = inject.attr(Config)
-    assitance = inject.attr(Assistance)
 
     def handleAction(self, server, message):
 

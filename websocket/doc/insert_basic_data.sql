@@ -7,6 +7,9 @@ insert into credentials.auth_profile (user_id,profile) values ('1','ADMIN-TUTOR'
 insert into credentials.auth_profile (user_id,profile) values ('1','ADMIN-ASSISTANCE');
 
 
+/*
+  justificaciones de la facultad de económicas
+*/
 insert into assistance.justifications (id,name) values ('e0dfcef6-98bb-4624-ae6c-960657a9a741','Ausente con aviso');
 insert into assistance.justifications (id,name) values ('48773fd7-8502-4079-8ad5-963618abe725','Compensatorio');
 insert into assistance.justifications (id,name) values ('fa64fdbd-31b0-42ab-af83-818b3cbecf46','Boleta de Salida');

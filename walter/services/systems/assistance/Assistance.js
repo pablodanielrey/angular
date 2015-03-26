@@ -90,18 +90,22 @@ app.service('Assistance', ['Utils','Messages','Session',
 
 
 		this.getJustifications = function(callbackOk, callbackError) {
-			//TODO
-			response = [
-				{id:"1",name:"absent"},
-				{id:"2",name:"compensatory"},
-				{id:"3",name:"Salidas Eventuales"},
-				{id:"4",name:"Art. 102"},
-				{id:"5",name:"exam"},
-				{id:"6",name:"LAO"},
+			var msg = {
+				id: Utils.getId(),
+				action: 'getJustifications',
+				session: Session.getSessionId(),
+			}
 
-			];
-			callbackOk(response);
+			Messages.send(msg,
+				function(data) {
+					callbackOk(data.response);
+				},
+				function(error) {
+					callbackError(error);
+				}
+			);
 		};
+
 
 		this.getJustificationStock = function(userId, justificationId, callbackOk, callbackError) {
 			//TODO

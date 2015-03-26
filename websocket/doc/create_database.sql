@@ -336,6 +336,8 @@ create table assistance.justifications (
   name varchar not null unique
 );
 
+
+
 create table assistance.justifications_stock (
   justification_id varchar not null references assistance.justifications (id),
   user_id varchar not null references profile.users (id),
