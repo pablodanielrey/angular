@@ -16,14 +16,14 @@ app.controller('RequestAssistanceCtrl', function($scope, $rootScope, $timeout, $
 	 * Obtener justificaciones del servidor
 	 */
 	$scope.loadJustifications = function() {
-    	Assistance.getJustifications($scope.model.session.user_id,
+    	Assistance.getJustifications(
 			function(justifications){
 				for(i in justifications){
 					var justification = {name:justifications[i].name,id:justifications[i].id}
 					$scope.$broadcast('findStockJustification',{justification:justification});
 					$scope.model.justifications[justifications[i].id] = justifications[i];
 				}
-				
+
 
 			},
 			function(error){
@@ -52,7 +52,7 @@ app.controller('RequestAssistanceCtrl', function($scope, $rootScope, $timeout, $
 			break;
 		}
 	}
-	
+
 	$scope.loadRequestedLicences = function() {
 		Assistance.getRequestedLicences($scope.model.session.user_id,
 			function(requestedLicences){
@@ -68,7 +68,7 @@ app.controller('RequestAssistanceCtrl', function($scope, $rootScope, $timeout, $
 						var date = new Date(requestedLicence.end);
 						requestedLicence.end = date.toLocaleDateString();
 					}
-					
+
 					$scope.model.requestedLicences.push(requestedLicence)
 				}
 
@@ -115,7 +115,7 @@ app.controller('RequestAssistanceCtrl', function($scope, $rootScope, $timeout, $
 		$scope.loadRequestedLicences();
 	});
 
-	
+
 	$scope.clearSelections = function() {
 		$scope.model.justificationAbsentSelected = false;
 		$scope.model.justificationCompensatorySelected = false;

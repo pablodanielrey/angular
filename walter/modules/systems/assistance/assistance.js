@@ -164,7 +164,7 @@ app.controller('AssistanceCtrl', function($scope, $timeout, $window, Profiles, S
     }
 
     $scope.loadJustifications = function() {
-    	Assistance.getJustifications($scope.model.session.user_id,
+    	Assistance.getJustifications(
 			function(justifications){
 				for(i in justifications){
 					var id = justifications[i].id;
