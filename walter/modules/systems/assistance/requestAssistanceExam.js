@@ -112,7 +112,7 @@ app.controller('RequestAssistanceExamCtrl', function($scope, Assistance, Session
     // Envio la peticion al servidor
     $scope.save = function() {
 
-        Assistance.requestLicence($scope.model.user_id,$scope.model.justification,
+        Assistance.requestJustification($scope.model.user_id,$scope.model.justification,
             function(ok) {
                 Notifications.message("Guardado exitosamente");
                 $scope.model.justification.begin = null;

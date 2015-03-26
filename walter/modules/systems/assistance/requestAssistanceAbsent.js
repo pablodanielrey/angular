@@ -125,6 +125,7 @@ app.controller('RequestAssistanceAbsentCtrl', function($scope, Assistance, Notif
 			function(ok){
 				$scope.model.requestAbsentBegin = null;
 				$scope.clearSelections();
+				$scope.clearSelectionsAbsent();
 				Notifications.message('Ausente con aviso solicitado correctamente');
 				$scope.$broadcast('requestLicenceEvent');
 			},
