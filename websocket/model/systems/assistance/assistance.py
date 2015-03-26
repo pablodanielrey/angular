@@ -95,7 +95,7 @@ class Assistance:
 
                     for fail in fails:
                         localDate = self.date.localizeAwareToLocal(fail['date']).replace(hour=0,minute=0,second=0,microsecond=0)
-                        f = '{0},{1},{2},{3},{4},{5},{6},{7}'.format(
+                        f = '{0},{1},{2},{3},{4},{5},{6},{7},{8}'.format(
                             localDate.date(),
                             user['dni'],
                             user['name'],
@@ -103,7 +103,8 @@ class Assistance:
                             fail['description'],
                             self.date.localizeAwareToLocal(fail['start']).time() if 'start' in fail else (self.date.localizeAwareToLocal(fail['end']).time() if 'end' in fail else 'no tiene'),
                             self.date.localizeAwareToLocal(fail['startSchedule']).time() if 'startSchedule' in fail else (self.date.localizeAwareToLocal(fail['endSchedule']).time() if 'endSchedule' in fail else 'no tiene'),
-                            fail['minutes'] if 'minutes' in fail else '')
+                            fail['minutes'] if 'minutes' in fail else '',
+                            fail['minutes']-datetime.timedelta(minutes=15) if 'minutes' in fail else '')
                         out.write(f)
                         out.write('\n')
 
