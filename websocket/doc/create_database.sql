@@ -337,8 +337,10 @@ create table assistance.justifications_requests (
   jbegin timestamptz not null,
   jend timestamptz not null,
   status varchar not null,
+  created timestamptz not null default now(),
   CHECK(EXTRACT(TIMEZONE FROM jbegin) = '0'),
-  CHECK(EXTRACT(TIMEZONE FROM jend) = '0')
+  CHECK(EXTRACT(TIMEZONE FROM jend) = '0'),
+  CHECK(EXTRACT(TIMEZONE FROM created) = '0')
 );
 
 
