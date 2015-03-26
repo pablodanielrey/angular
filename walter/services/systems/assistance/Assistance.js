@@ -155,6 +155,10 @@ app.service('Assistance', ['Utils','Messages','Session',
 			callbackOk(response);
 		}
 
+		this.updateStatusRequestJustification = function(request_id, status, callbackOk, callbackError) {
+			callbackOk(null);
+		}
+
 		this.requestLicence = function(userId, justification, callbackOk, callbackError){
 			response = "ok";
 			callbackOk(response);
