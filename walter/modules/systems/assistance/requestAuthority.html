@@ -1,0 +1,90 @@
+<div class="requestAuthority">
+
+  <div class="title">
+    <label><i class="fa fa-plus"></i> Solicitar Hora Extra</label>
+  </div>
+
+  <div class="requestOvertime">
+    <div class="search">
+      <div class="searchTitle">
+        <p>Seleccione Usuario</p>
+      </div>
+      <div>
+        <input list="list"  placeholder="Buscar...">
+           <datalist id="list">
+             <option value="juan Catulo">
+             <option value="Juan Trabuco">
+             <option value="Conchita MArtinez">
+             <option value="Thiago El Hoyo">
+             <option value="Emanuel Gay">
+           </datalist>
+      </div>
+    </div>
+    <div class="date">
+      <div class="dateTitle">
+        <p>Seleccione Fecha</p>
+      </div>
+      <div class="inputDate">
+        <input type="date" name="fecha">
+      </div>
+    </div>
+    <div class="time">
+      <div class="timeTitle">
+        <p>Seleccione Horas</p>
+      </div>
+      <div class="inputTime">
+        De <input type="time" name="hora">
+        Hasta <input type="time" name="hora">
+      </div>
+    </div>
+    <div class="reason">
+      <div class="reasonTitle">
+        <p>Motivo</p>
+      </div>
+      <div class="inputReason">
+        <textarea>
+        </textarea>
+      </div>
+    </div>
+    <div>
+      <button class="Solicitar" ng-click='update()'><i class="fa fa-reply"></i> Solicitar</button>
+    </div>
+  </div>
+
+  <div class="title2">
+    <label><i class="fa fa-sort-amount-asc"></i> Solicitudes de Horas Extras Relizadas </label>
+  </div>
+
+  <div class="requestOvertimeList">
+    <div>
+      Usuario
+    </div>
+    <div>
+      Fecha
+    </div>
+    <div>
+      Horas
+    </div>
+    <div>
+      Motivo
+    </div>
+    <div>
+      Estado
+    </div>
+
+    <div class="Slope" ng-class="{true:'visible', false:'hidden'}[true]">
+      Pendiente
+    </div>
+    <div class="Approved" ng-class="{true:'visible', false:'hidden'}[true]">
+      Aprobada
+    </div>
+
+    <div class="Rejected" ng-class="{true:'visible', false:'hidden'}[true]">
+      Denegada
+    </div>
+
+  </div>
+
+
+
+</div>

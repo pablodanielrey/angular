@@ -1,0 +1,5 @@
+
+<input list="users" ng-model="model.searchUser" ng-change="searchUsers()">
+<datalist id="users">
+	<option ng-repeat="user in model.users" value="{{user.name}}">
+</datalist>

@@ -297,7 +297,29 @@ response :
 }
 
 
+---------------
 
+
+query : solicitud de horas extra de un determinado usuario
+{
+  id:,
+  action:"requestOvertime",
+  session:,
+  request:{
+      user_id: "id del usuario al cual se le solicita el tiempo extra",
+  	  begin: "timestamp de inicio del tiempo extra"
+  	  end: "timestamp de fin del tiempo extra"
+  	  reason: "motivo de solicitud del tiempo extra"
+  }
+
+}
+
+response :
+{
+  id: "id de la petición",
+  ok: "caso exito",
+  error: "error del servidor"
+}
 
 
 
