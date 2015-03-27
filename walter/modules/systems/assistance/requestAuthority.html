@@ -10,7 +10,14 @@
         <p>Seleccione Usuario</p>
       </div>
       <div>
-        <input class="inputSearch" type='search' ng-model="model.search" autofocus ng-change="search()" placeholder="Buscar..." />
+        <input list="list"  placeholder="Buscar...">
+           <datalist id="list">
+             <option value="juan Catulo">
+             <option value="Juan Trabuco">
+             <option value="Conchita MArtinez">
+             <option value="Thiago El Hoyo">
+             <option value="Emanuel Gay">
+           </datalist>
       </div>
     </div>
     <div class="date">
@@ -63,6 +70,17 @@
     </div>
     <div>
       Estado
+    </div>
+
+    <div class="Slope" ng-class="{true:'visible', false:'hidden'}[true]">
+      Pendiente
+    </div>
+    <div class="Approved" ng-class="{true:'visible', false:'hidden'}[true]">
+      Aprobada
+    </div>
+
+    <div class="Rejected" ng-class="{true:'visible', false:'hidden'}[true]">
+      Denegada
     </div>
 
   </div>
