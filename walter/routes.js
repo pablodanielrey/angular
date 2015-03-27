@@ -121,6 +121,10 @@ app.config(['$routeProvider', function($routeProvider) {
           templateUrl: '/modules/systems/assistance/medicalLicenses.html',
           controller: 'MedicalLicensesCtrl'
       })
+      .when('/requestAuthority', {
+          templateUrl: '/modules/systems/assistance/requestAuthority.html',
+          controller: 'RequestAuthorityCtrl'
+      })
 
 
 	.when('/editAccountRequest', {

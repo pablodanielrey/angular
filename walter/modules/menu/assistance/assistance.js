@@ -34,6 +34,11 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, $l
             $location.path('/medicalLicenses')
         }
 
+        $scope.requestAuthority = function() {
+            $location.path('/requestAuthority')
+        }
+
+
 
 
         $scope.items = [];
@@ -46,6 +51,7 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, $l
                     $scope.items.push({ label:'Solicitudes', img:'fa-ticket', function: $scope.requestAssistance});
                     //$scope.items.push({ label:'Licencias Médicas', img:'fa-stethoscope', function: $scope.medicalLicenses});
                     $scope.items.push({ label:'Adm. Solicitudes ', img:'fa-ticket', function: $scope.adminRequestAssistance});
+                    $scope.items.push({ label:'Horas Extras ', img:'fa-plus', function: $scope.requestAuthority});
 
                     $scope.selectItem($scope.items[0]);
                 } else {

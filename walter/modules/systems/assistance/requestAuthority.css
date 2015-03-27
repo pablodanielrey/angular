@@ -1,0 +1,11 @@
+.requestAuthority {
+  margin:5px;
+  min-width:350px;
+  font-family: calibri, Arial, Helvetica, sans-serif;
+  font-size:14px;
+}
+.requestAuthority .title {
+  width:100%;
+  height:20px;
+  font-size:18px;
+}
