@@ -75,8 +75,9 @@ class Logs:
     def persist(self,con,data):
         if (self.findLog(con,data['id'])) == None:
             params = (data['id'],data['deviceId'],data['userId'],data['verifymode'],data['log'])
+            logging.debug(params)
             cur = con.cursor()
-            cur.execute('set time zone %s',('utc'))
+            cur.execute('set time zone %s',('utc',))
             cur.execute('insert into assistance.attlog (id,device_id,user_id,verifymode,log) values (%s,%s,%s,%s,%s)',params)
 
 
@@ -186,7 +187,7 @@ class Logs:
 
     """
     def fromJsonMessage(self,con,jsonLog):
-        fullLog = json.loads(msgStr.decode('utf-8'))
+        fullLog = json.loads(jsonLog)
 
         person = fullLog['person']
         dni = person['dni']
@@ -197,7 +198,7 @@ class Logs:
         devId = device['id']
 
         """ TODO: obtengo la zona del dispositivo. MEJORAR!!! """
-        timezone = self.devices.getTimeZone(deviceId)
+        timezone = self.devices.getTimeZone(devId)
 
         """ transformo la fecha obtenida desde el firmware a utc """
         date = datetime.datetime.strptime(fullLog['date'], "%H:%M:%S %d/%m/%Y")

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-from Ws.SimpleWebSocketServer import WebSocket, SimpleWebSocketServer
-from websocket import create_connection
+from autobahn.twisted.websocket import WebSocketServerProtocol
+from autobahn.twisted.websocket import WebSocketServerFactory
+from twisted.internet import reactor
 import json, base64
 import psycopg2
 import inject
@@ -11,7 +12,7 @@ from wexceptions import MalformedMessage
 from model.profiles import AccessDenied
 from model.utils import DateTimeEncoder
 from model.config import Config
-from model.users import Users
+from model.users.users import Users
 from model.systems.assistance.assistance import Assistance
 from model.systems.assistance.logs import Logs
 
@@ -34,44 +35,62 @@ class AssistanceWebSocketClient():
 
 
 
-class AssistanceWebsocketServer(WebSocket):
+class AssistanceWebsocketServer(WebSocketServerProtocol):
 
   config = inject.attr(Config)
   logs = inject.attr(Logs)
 
-  def handleMessage(self):
+
+  def onMessage(self, payload, isBinary):
     try:
 
-      if self.data is None:
-        raise NullData()
+        if isBinary:
+            """ por ahora no manejo mensajes binarios """
+            return
 
-      """
-      self.data = attLog;datos-del-log-en-json
-      """
+        logging.debug("Decode")
+        msg = payload.decode('utf-8')
 
-      cmdLog = "attLog;"
-      if not(self.data.startswith(cmdLog)):
+        """
+        self.data = attLog;datos-del-log-en-json
+        """
+
+        cmdLog = "attLog;"
+        if not(msg.startswith(cmdLog)):
           """ lo ignoro ya que no es un mensaje de log desde el firmware """
           return
 
-      msgstr = self.data[len(cmdLog):]
 
-      try:
+        msgstr = msg[len(cmdLog):]
+
+        try:
           con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
 
-          log = self.logs.fromJsonMessage(msgstr)
+          logging.debug("JSON")
+          log = self.logs.fromJsonMessage(con,msgstr)
+
+          logging.debug("PERSIST")
           self.logs.persist(con,log)
 
+
           con.commit()
+          logging.debug("COMMIT")
 
           """ ya tengo guardado el log, por lo que lo elimino del firmware """
-          super(AssistanceWebsocketServer,self).sendMessage("OK;delete;"+str(log_id));
+          response = ("OK;delete;"+log['id']).encode('utf-8')
+          self.sendMessage(response,False);
 
-      except psycopg2.DatabaseError as e:
+        except psycopg2.DatabaseError as e:
+          logging.debug(e)
           con.rollback()
           raise e
 
-      finally:
+        except Exception as e2:
+          traceback.print_exc()
+          logging.debug(e2)
+          raise e2
+
+        finally:
           con.close()
 
 
@@ -85,8 +104,52 @@ class AssistanceWebsocketServer(WebSocket):
 
 
 
-  def handleConnected(self):
-    print(("connected : ",self.address))
+  def onConnect(self,cr):
+        logging.debug('cliente conectado')
+        logging.debug(cr)
+        return None
 
-  def handleClose(self):
-    print(("closed : ",self.address))
+  def onClose(self,wasClean, code, reason):
+      print('cliente desconectado {0}, {1}, {2}'.format(wasClean,code,reason))
+      logging.debug('cliente desconectado {0}, {1}, {2}'.format(wasClean,code,reason))
+
+  def connectionLost(self, reason):
+    print("----------------------connection lost--------------------------")
+    WebSocketServerProtocol.connectionLost(self, reason)
+    self.factory.unregister(self)
+
+
+class BroadcastServerFactory(WebSocketServerFactory):
+
+    def __init__(self, debug=False, debugCodePaths=False):
+        WebSocketServerFactory.__init__(self, debug=debug, debugCodePaths=debugCodePaths)
+        self.clients = []
+
+
+    def register(self, client):
+        if client not in self.clients:
+            print("registered client {}".format(client.peer))
+            self.clients.append(client)
+
+    def unregister(self, client):
+        if client in self.clients:
+            print("unregistered client {}".format(client.peer))
+            self.clients.remove(client)
+
+    def broadcast(self, msg):
+        print("broadcasting message '{}' ..".format(msg))
+        for c in self.clients:
+            c._sendEncodedMessage(msg)
+            print("message sent to {}".format(c.peer))
+
+
+
+
+
+def getReactor():
+    config = inject.instance(Config)
+    # log.startLogging(sys.stdout)
+    factory = BroadcastServerFactory()
+    factory.protocol = AssistanceWebsocketServer
+    reactor.listenTCP(8026, factory)
+    return reactor

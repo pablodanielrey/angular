@@ -8,7 +8,7 @@ from model.utils import Periodic
 from model.systems.assistance.assistance import Assistance
 
 import network.websocket
-
+import model.systems.assistance.network
 
 
 def config_injector(binder):
@@ -37,16 +37,19 @@ if __name__ == '__main__':
 
 
   reactor = network.websocket.getReactor()
+  reactorAssistance = model.systems.assistance.network.getReactor()
 
   def close_sig_handler(signal,frame):
       rt.stop()
       reactor.stopListening()
+      reactorAssistance.stopListening()
       sys.exit()
 
   signal.signal(signal.SIGINT,close_sig_handler)
 
   logging.debug('Ejecutando servidor de acciones')
   reactor.run()
+  reactorAssistance.run()
 
   logging.debug('iniciando bucle infinito')
 
