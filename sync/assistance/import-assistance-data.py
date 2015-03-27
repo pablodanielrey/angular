@@ -49,6 +49,7 @@ cur.execute('delete from assistance.positions')
 cur.execute('delete from assistance.offices_users')
 cur.execute('delete from assistance.offices_roles')
 cur.execute('delete from assistance.offices')
+cur.execute('delete from assistance.justifications_stock')
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -76,7 +77,7 @@ for line in csv.reader(sys.stdin):
         cur.execute('insert into credentials.user_password (id,user_id,username,password) values (%s,%s,%s,%s)',(str(uuid.uuid4()),pid,dni,'1'))
 
         """ actualizo para asignarle el perfil de usuario dentro del sistema de asistencia """
-        
+
         cur.execute('delete from credentials.auth_profile where user_id = %s and profile = %s',(pid,'USER-ASSISTANCE'))
         cur.execute('insert into credentials.auth_profile (user_id,profile) values (%s,%s)',(pid,'USER-ASSISTANCE'))
 
@@ -135,6 +136,45 @@ for line in csv.reader(sys.stdin):
 
         if func != '':
             cur.execute('insert into assistance.offices_roles (user_id,office_id,role) values (%s,%s,%s)',(pid,idof,'autoriza'))
+
+
+        """
+            --------------------------------
+            --------------------------------
+            ---------------------------------
+            ---------------------------------
+            esto son datos de pruebas!!! hay que sacarlo cuando se pase a produccion. son compensatorios
+            ---------------------------------
+            --------------------------------
+            ---------------------------------
+            ---------------------------------
+        """
+        req = (pid,'48773fd7-8502-4079-8ad5-963618abe725',10)
+        cur.execute('insert into assistance.justifications_stock (user_id,justification_id,stock) values (%s,%s,%s)',req)
+
+
+
+        """
+            --------------------------------
+            --------------------------------
+            ---------------------------------
+            ---------------------------------
+            esto son datos de pruebas!!! hay que sacarlo cuando se pase a produccion. son boletas de salida
+            ---------------------------------
+            --------------------------------
+            ---------------------------------
+            ---------------------------------
+        """
+        rid = str(uuid.uuid4())
+        date1 = datetime.datetime.utcnow().replace(hour=10,minute=2,second=0,microsecond=0,tzinfo=pytz.utc)
+        date2 = datetime.datetime.utcnow().replace(hour=11,minute=20,second=0,microsecond=0,tzinfo=pytz.utc)
+        date3 = datetime.datetime.utcnow().replace(tzinfo=pytz.utc)
+        req = (rid,pid,'fa64fdbd-31b0-42ab-af83-818b3cbecf46',date1,date2,'APROVED',date3)
+        cur.execute('insert into assistance.justifications_requests (id,user_id,justification_id,jbegin,jend,status,created) values (%s,%s,%s,%s,%s,%s,%s)',req)
+
+
+
+
 
         con.commit()
 

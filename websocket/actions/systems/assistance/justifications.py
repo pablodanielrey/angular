@@ -8,6 +8,7 @@ from wexceptions import *
 from model.config import Config
 from model.profiles import Profiles
 
+from model.systems.assistance.date import Date
 from model.systems.assistance.justifications import Justifications
 
 
@@ -89,6 +90,7 @@ query :
   request:{
       user_id: "id del usuario",
       justification_id: "id de la justificación"
+      date: 'fecha a consultar'                         -- opcional. si no se pasa etnonces se toma la fecha actual.
   }
 
 }
@@ -110,6 +112,8 @@ class GetJustificationStock:
 
     profiles = inject.attr(Profiles)
     config = inject.attr(Config)
+    justifications = inject.attr(Justifications)
+    date = inject.attr(Date)
 
     def handleAction(self, server, message):
 
@@ -124,14 +128,15 @@ class GetJustificationStock:
         userId = message['request']['user_id']
         justificationId = message['request']['justification_id']
 
-        """
         sid = message['session']
-        self.profiles.checkAccess(sid,['ADMIN','USER'])
-        """
+        self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
 
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
-            stock = assistance.getJustificationStock(con,userId,justificationId)
+
+            date = self.date.utcNow()
+
+            stock = self.justifications.getJustificationStock(con,userId,justificationId,date)
             if stock == None:
                 response = {'id':message['id'], 'error':'No existe stock para esa justificación'}
                 server.sendMessage(response)
@@ -141,14 +146,14 @@ class GetJustificationStock:
                 'id':message['id'],
                 'ok':'',
                 'response':{
-                    'count':stock['quantity']
+                    'justificationId':justificationId,
+                    'stock':stock
                 }
             }
             server.sendMessage(response)
             return True
 
         except psycopg2.DatabaseError as e:
-            con.rollback()
             raise e
 
         finally:

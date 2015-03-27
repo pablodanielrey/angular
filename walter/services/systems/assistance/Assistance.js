@@ -98,7 +98,7 @@ app.service('Assistance', ['Utils','Messages','Session',
 
 			Messages.send(msg,
 				function(data) {
-					callbackOk(data.response);
+					callbackOk(data.response.justifications);
 				},
 				function(error) {
 					callbackError(error);
@@ -108,29 +108,24 @@ app.service('Assistance', ['Utils','Messages','Session',
 
 
 		this.getJustificationStock = function(userId, justificationId, callbackOk, callbackError) {
-			//TODO
-			switch(justificationId){
-				case "1":
-					response = 2;
-				break;
-				case "2":
-					response = 4;
-				break;
-				case "3":
-					response = 1;
-				break;
-				case "4":
-					response = 3;
-				break;
-				case "5":
-					response = 3;
-				break;
-				case "6":
-					response = 20;
-				break;
+			var msg = {
+				id: Utils.getId(),
+				action: 'getJustificationStock',
+				session: Session.getSessionId(),
+				request: {
+					user_id: userId,
+					justification_id: justificationId
+				}
 			}
 
-			callbackOk(response);
+			Messages.send(msg,
+				function(data) {
+					callbackOk(data.response);
+				},
+				function(error) {
+					callbackError(error);
+				}
+			);
 		};
 
 

@@ -91,27 +91,7 @@ app.controller('AssistanceCtrl', function($scope, $timeout, $window, Profiles, S
 		}
 	};
 
-	$scope.formatJustificationsFromServer = function(justificationsFromServer){
-		for(var i in justificationsFromServer){
-			var name = justificationsFromServer[i].name.toLowerCase();
-			var stock = justificationsFromServer[i].stock;
 
-			if((name.indexOf("ausente") > -1)|| (name.indexOf("absent") > -1)){
-				$scope.model.justificationAbsent = stock;
-			} else if((name.indexOf("comp") > -1)){
-				$scope.model.justificationCompensatory = stock;
-			} else if((name.indexOf("salida") > -1)|| (name.indexOf("out") > -1)){
-				$scope.model.justificationOut = stock;
-			} else if(name.indexOf("102") > -1){
-				$scope.model.justification102 = stock;
-			} else if(name.indexOf("lao") > -1){
-				$scope.model.justificationLao = stock;
-			} else if(name.indexOf("exam") > -1){
-				$scope.model.justificationExam = stock;
-			}
-		}
-
-	}
 
 	/**
 	 * consultar datos de asistencia
@@ -169,32 +149,75 @@ app.controller('AssistanceCtrl', function($scope, $timeout, $window, Profiles, S
 
     $scope.loadJustifications = function() {
     	Assistance.getJustifications(
-			function(justifications){
-				for(i in justifications){
-					var id = justifications[i].id;
-					$scope.model.justifications[id] = {name:justifications[i].name}
-					$scope.loadJustificationStock(id);
+				function(justifications){
+					for(var i = 0; i < justifications.length; i++){
+						var id = justifications[i].id;
+						$scope.model.justifications[id] = {name:justifications[i].name}
+						$scope.loadJustificationStock(id);
+					}
+				},
+				function(error){
+					alert(error);
 				}
-
-				$scope.formatJustificationsFromServer($scope.model.justifications);
-			},
-			function(error){
-				alert(error);
-			}
-		);
+			);
     }
+
+
+		/*
+			parsea segundos a un formato imprimible en horas.
+			para las boletas de salida.
+			lo saque de :
+			http://stackoverflow.com/questions/6312993/javascript-seconds-to-time-string-with-format-hhmmss
+		*/
+		$scope.parseSecondsToDateString = function(sec) {
+			var hours   = Math.floor(sec / 3600);
+			var minutes = Math.floor((sec - (hours * 3600)) / 60);
+			var seconds = sec - (hours * 3600) - (minutes * 60);
+
+			if (hours   < 10) {hours   = "0"+hours;}
+			if (minutes < 10) {minutes = "0"+minutes;}
+			if (seconds < 10) {seconds = "0"+seconds;}
+			var time    = hours+':'+minutes+':'+seconds;
+			return time;
+		}
+
+
+
 
     /**
 	 * Consultar datos de stock de justificacion
 	 */
     $scope.loadJustificationStock = function(justificationId) {
 	    Assistance.getJustificationStock($scope.model.session.user_id, justificationId,
-			function(justificationStock){
-				$scope.model.justifications[justificationId].stock = justificationStock;
-			},
-			function(error){
-				alert(error);
-			}
+				function(data){
+
+						id = data.justificationId;
+						stock = data.stock;
+
+						/*
+						 	codifo anterior de ema.
+						$scope.model.justifications[justificationId].stock = stock;
+						*/
+
+						// setep el stock en la justificacion correcta
+						if(id == 'e0dfcef6-98bb-4624-ae6c-960657a9a741') {
+							$scope.model.justificationAbsent = stock;
+						} else if(id == '48773fd7-8502-4079-8ad5-963618abe725'){
+							$scope.model.justificationCompensatory = stock;
+						} else if(id == 'fa64fdbd-31b0-42ab-af83-818b3cbecf46'){
+							$scope.model.justificationOut = $scope.parseSecondsToDateString(stock);
+						} else if(id == '4d7bf1d4-9e17-4b95-94ba-4ca81117a4fb'){
+							$scope.model.justification102 = stock;
+						} else if(id == '76bc064a-e8bf-4aa3-9f51-a3c4483a729a'){
+							$scope.model.justificationLao = stock;
+						} else if(id == 'b70013e3-389a-46d4-8b98-8e4ab75335d0'){
+							$scope.model.justificationExam = stock;
+						}
+
+				},
+				function(error){
+						alert(error);
+				}
 		);
     }
 

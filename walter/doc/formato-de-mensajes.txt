@@ -178,9 +178,11 @@ response :
   ok: "caso exito",
   error: "error del servidor",
   response:{
+    justificationId: 'id de la justificacion'
     count: "cantidad de justificaciones disponibles de ese tipo"
   }
 }
+
 
 ------------------------------------------------------
 --- JUSTIFICACIONES ACTUALES POSIBLES DE TOMARSE -----

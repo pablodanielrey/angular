@@ -338,16 +338,24 @@ create table assistance.justifications (
 
 
 
+
+
 create table assistance.justifications_stock (
   justification_id varchar not null references assistance.justifications (id),
   user_id varchar not null references profile.users (id),
-  quantity integer not null default 0,
+  stock integer not null default 0,
   constraint justifications_stock_unique unique (justification_id, user_id)
 );
 
 
 
+/*
+  pedidos de justificaciones
+  el estado puede ser :
 
+  status = APROVED | REJECTED | PENDING | CANCELED
+
+*/
 
 
 create table assistance.justifications_requests (

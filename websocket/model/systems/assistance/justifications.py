@@ -1,6 +1,13 @@
 # -*- coding: utf-8 -*-
 
+from model.systems.assistance.restrictions import Repetition, CJustification, LAOJustification, AAJustification, BSJustification
+
 class Justifications:
+
+
+    justifications = [
+        CJustification(), LAOJustification(), AAJustification(), BSJustification()
+    ]
 
 
     """ retorna todos los tipos de justificaciones que existan en la base """
@@ -23,48 +30,43 @@ class Justifications:
 
 
     """ retorna el stock total de la justificacion indicada """
-    def getJustificationStock(self,con,userId,justId):
-        cur = con.cursor()
-        cur.execute('select quantity from assistance.justifications_stock where user_id = %s and justification_id = %s',(userId,justId))
-        stock = cur.fetchone()
-        if stock == None:
-            return None
-        s = {'quantity':stock[0]}
-        return s
+    def getJustificationStock(self,con,userId,justId,date):
+
+        for j in self.justifications:
+            if j.isJustification(justId):
+                ad = j.availableRep(Repetition.DAILY,userId,date)
+                if ad is not None:
+                    return ad
+
+                aw = j.availableRep(Repetition.WEEKLY,userId,date)
+                if aw is not None:
+                    return aw
+
+                am = j.availableRep(Repetition.MONTHLY,userId,date)
+                if am is not None:
+                    return am
+
+                ay = j.availableRep(Repetition.YEARLY,userId,date)
+                if ay is not None:
+                    return ay
+
+                return j.available(con,userId,date)
+
+        """ justificationes desconocidas = 0 """
+        return 0
+
 
 
 
     """ retorna el stock actual posible de tomarse para la justificación indicada """
     def getJustificationActualStock(self,con,userId,justId,date):
 
-        """
-        ('e0dfcef6-98bb-4624-ae6c-960657a9a741','Ausente con aviso')
-        ('48773fd7-8502-4079-8ad5-963618abe725','Compensatorio')
-        ('fa64fdbd-31b0-42ab-af83-818b3cbecf46','Boleta de Salida')
-        ('4d7bf1d4-9e17-4b95-94ba-4ca81117a4fb','Art 102')
-        ('b70013e3-389a-46d4-8b98-8e4ab75335d0','Pre-Exámen')
-        ('76bc064a-e8bf-4aa3-9f51-a3c4483a729a','Licencia Anual Ordinaria')
-        ('50998530-10dd-4d68-8b4a-a4b7a87f3972','Resolución')
-        """
+        for j in self.justifications:
+            if j.isJustification(justId):
+                return j.available(con,userId,date)
 
-        restrictions = [
-            AARestriction(), BSRestriction(), CRestriction()
-        ]
-
-        for r in restrictions:
-            if r.isJustification(justId):
-                return r.available(self,con,userId,)
-
-        """ si no existe ninguna restricción sobre la justificación entonces se retorna el stock """
-        stock = assistance.getJustificationStock(con,userId,justId)
-        if stock == None:
-            return 0
-
-        jstock = stock['quantity']
-        if jstock <= 0:
-            return 0
-        else:
-            return jstock
+        """ justificationes desconocidas = 0 """
+        return 0
 
 
 
