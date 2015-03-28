@@ -1,14 +1,18 @@
+# -*- coding: utf-8 -*-
+
 from os.path import expanduser
+
 import configparser
+import logging
 
 class Config:
 
     configs = {}
 
-    def __init__(self):
+    def __init__(self,cfg):
         home = expanduser("~")
-        cfg = home + '/' + 'server-config.cfg'
-        print("Reading config from : " + cfg)
+        cfg = home + '/' + cfg
+        logging.info("Reading config from : " + cfg)
 
         config = configparser.ConfigParser()
         config.read(cfg)

@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import signal, sys, json, traceback, inject, time, logging
 
+sys.path.append('../python')
+
 from model.config import Config
 from model.session import Session
 
@@ -12,6 +14,7 @@ import model.systems.assistance.network
 
 
 def config_injector(binder):
+    binder.bind(Config,Config('server-config.cfg'))
     binder.bind(Session,Session())
 
 
@@ -24,6 +27,8 @@ def _checkAssistanceSchedule(assistance):
 
 
 if __name__ == '__main__':
+
+  sys.path.append('../python')
 
   logging.basicConfig(level=logging.DEBUG)
 

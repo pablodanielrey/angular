@@ -1,4 +1,11 @@
 # -*- coding: utf-8 -*-
+
+"""
+    código que realizó emanuel para comunicarse con el firmware del reloj.
+    vamos a ir por otro enfoque ahora.
+    zkSoftware
+"""
+
 from autobahn.twisted.websocket import WebSocketServerProtocol
 from autobahn.twisted.websocket import WebSocketServerFactory
 from twisted.internet import reactor
@@ -114,7 +121,6 @@ class AssistanceWebsocketServer(WebSocketServerProtocol):
       logging.debug('cliente desconectado {0}, {1}, {2}'.format(wasClean,code,reason))
 
   def connectionLost(self, reason):
-    print("----------------------connection lost--------------------------")
     WebSocketServerProtocol.connectionLost(self, reason)
     self.factory.unregister(self)
 

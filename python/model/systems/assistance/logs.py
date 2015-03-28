@@ -38,6 +38,18 @@ class Logs:
 
 
     """
+        busca un log por una fecha determinada. la fecha debe estar en utc y ser aware
+    """
+    def findLogByDate(self,con,date):
+        cur = con.cursor()
+        cur.execute('select id,device_id,user_id,verifymode,log from assistance.attlog where log = %s',(date,))
+        if cur.rowcount <= 0:
+            return None
+        return self._convertToDict(cur.fetchone())
+
+
+
+    """
         obtiene los logs
         dfrom y dto deben estar en UTC
     """
@@ -71,16 +83,14 @@ class Logs:
         return logs
 
 
+
+
     """ persiste el log solo si no existe algun log con ese id """
     def persist(self,con,data):
-        if (self.findLog(con,data['id'])) == None:
-            params = (data['id'],data['deviceId'],data['userId'],data['verifymode'],data['log'])
-            logging.debug(params)
-            cur = con.cursor()
-            cur.execute('set time zone %s',('utc',))
-            cur.execute('insert into assistance.attlog (id,device_id,user_id,verifymode,log) values (%s,%s,%s,%s,%s)',params)
-
-
+        params = (data['id'],data['deviceId'],data['userId'],data['verifymode'],data['log'])
+        cur = con.cursor()
+        cur.execute('set time zone %s',('utc',))
+        cur.execute('insert into assistance.attlog (id,device_id,user_id,verifymode,log) values (%s,%s,%s,%s,%s)',params)
 
 
 
