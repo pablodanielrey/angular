@@ -28,8 +28,6 @@ def _checkAssistanceSchedule(assistance):
 
 if __name__ == '__main__':
 
-  sys.path.append('../python')
-
   logging.basicConfig(level=logging.DEBUG)
 
   inject.configure(config_injector)
