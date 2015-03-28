@@ -124,6 +124,8 @@ if __name__ == '__main__':
 
     config = inject.instance(Config)
 
+    logging.info('Iniciando el sincronizador de logs')
+
     main = Main()
     rt = Periodic(1 * 60, _sincLogs,main)
 
