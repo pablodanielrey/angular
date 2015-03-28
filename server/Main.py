@@ -40,21 +40,17 @@ if __name__ == '__main__':
   #rt = utils.Periodic(15 * 60, _checkAssistanceSchedule,assistance)
   #_checkAssistanceSchedule(assistance)
 
-
   reactor = network.websocket.getReactor()
-  reactorAssistance = model.systems.assistance.network.getReactor()
 
   def close_sig_handler(signal,frame):
       rt.stop()
       reactor.stopListening()
-      reactorAssistance.stopListening()
       sys.exit()
 
   signal.signal(signal.SIGINT,close_sig_handler)
 
   logging.debug('Ejecutando servidor de acciones')
   reactor.run()
-  reactorAssistance.run()
 
   logging.debug('iniciando bucle infinito')
 
