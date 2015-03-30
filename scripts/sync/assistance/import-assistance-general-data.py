@@ -85,24 +85,31 @@ if __name__ == '__main__':
 
             """ agrego el mail institucional """
             if maili != '':
-                mid = str(uuid.uuid4())
-                cur.execute('insert into profile.mails (id,user_id,email,confirmed,hash) values (%s,%s,%s,%s,%s)',(mid,pid,maili,True,''))
+                cur.execute('select id from profile.mails where email = %s',(maili,))
+                if cur.rowcount <= 0:
+                    mid = str(uuid.uuid4())
+                    cur.execute('insert into profile.mails (id,user_id,email,confirmed,hash) values (%s,%s,%s,%s,%s)',(mid,pid,maili,True,''))
 
             """ agrego el mail alternativo """
             if ma != '':
-                mid = str(uuid.uuid4())
-                cur.execute('insert into profile.mails (id,user_id,email,confirmed,hash) values (%s,%s,%s,%s,%s)',(mid,pid,ma,False,''))
+                cur.execute('select id from profile.mails where email = %s',(ma,))
+                if cur.rowcount <= 0:
+                    mid = str(uuid.uuid4())
+                    cur.execute('insert into profile.mails (id,user_id,email,confirmed,hash) values (%s,%s,%s,%s,%s)',(mid,pid,ma,False,''))
 
 
             """ actualizo las credenciales """
 
+            """
             cur.execute('delete from credentials.user_password where user_id = %s',(pid,))
             cur.execute('insert into credentials.user_password (id,user_id,username,password) values (%s,%s,%s,%s)',(str(uuid.uuid4()),pid,dni,'1'))
+            """
 
             """ actualizo para asignarle el perfil de usuario dentro del sistema de asistencia """
 
-            cur.execute('delete from credentials.auth_profile where user_id = %s and profile = %s',(pid,'USER-ASSISTANCE'))
-            cur.execute('insert into credentials.auth_profile (user_id,profile) values (%s,%s)',(pid,'USER-ASSISTANCE'))
+            cur.execute('select user_id from credentials.auth_profile where user_id = %s and profile = %s',(pid,'USER-ASSISTANCE'))
+            if cur.rowcount <= 0:
+                cur.execute('insert into credentials.auth_profile (user_id,profile) values (%s,%s)',(pid,'USER-ASSISTANCE'))
 
 
             """ actualizo el tema del horario """
@@ -144,6 +151,7 @@ if __name__ == '__main__':
                 else:
                     req = (str(uuid.uuid4()),pid,cargo)
                     cur.execute('insert into assistance.positions (id,user_id,name) values (%s,%s,%s)',req)
+
 
 
             """ actualizo las oficinas """
@@ -206,8 +214,6 @@ if __name__ == '__main__':
             req = (rid,pid,'fa64fdbd-31b0-42ab-af83-818b3cbecf46',date1,date2,'APROVED',date3)
             cur.execute('insert into assistance.justifications_requests (id,user_id,justification_id,jbegin,jend,status,created) values (%s,%s,%s,%s,%s,%s,%s)',req)
             """
-
-
 
 
             con.commit()
