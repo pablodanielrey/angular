@@ -36,6 +36,11 @@ user = sys.argv[4]
 passw = sys.argv[5]
 
 
+if len(sys.argv) < 6:
+    print('debe invocar el script con los siguientes parámetros :')
+    print('cat archivo.csv | python {} host port db user pass'.format(sys.argv[0]))
+    sys.exit(1)
+
 date = datetime.datetime.now()
 dates = calendar.Calendar().monthdatescalendar(date.year,date.month)
 firstWeek = dates[0][:5]
@@ -69,6 +74,17 @@ for line in csv.reader(sys.stdin):
         else:
             pid = cur.fetchone()[0]
             print("{0} ya existe - {1}".format(dni,pid))
+
+
+        """ agrego el mail institucional """
+        if maili != '':
+            mid = str(uuid.uuid4())
+            cur.execute('insert into profile.mails (id,user_id,email,confirmed,hash) values (%s,%s,%s,%s,%s)',(mid,pid,maili,True,''))
+
+        """ agrego el mail alternativo """
+        if ma != '':
+            mid = str(uuid.uuid4())
+            cur.execute('insert into profile.mails (id,user_id,email,confirmed,hash) values (%s,%s,%s,%s,%s)',(mid,pid,ma,False,''))
 
 
         """ actualizo las credenciales """

@@ -2,7 +2,7 @@
 import ldap3
 import psycopg2
 import datetime, pytz
-import sys
+import sys, logging
 
 """ creo una cache de uuid --> dni """
 def makeUsersCache(host,port,user,passw):
@@ -19,7 +19,7 @@ def makeUsersCache(host,port,user,passw):
 
     c.unbind()
 
-    print(len(rdata))
+    logging.info('cantidad de personas leídas {}'.format(len(rdata)))
 
     return rdata
 
@@ -39,7 +39,7 @@ def copyLogs(src,dst,personCache):
 
         cdst.execute('select id from assistance.attlog where id = %s',(sl[0],))
         if cdst.rowcount > 0:
-            print("{0} log ya importado asi que lo ignoro".format(count))
+            logging.info("{0} log ya importado asi que lo ignoro".format(count))
             continue
 
         date = sl[3]
@@ -50,7 +50,7 @@ def copyLogs(src,dst,personCache):
 
         personId = sl[1]
         if personId not in personCache:
-            print("la persona {0} no existe en la cache".format(personId))
+            logging.info("la persona {0} no existe en la cache".format(personId))
             continue
 
         dni = personCache[personId]
@@ -58,14 +58,18 @@ def copyLogs(src,dst,personCache):
         cdst.execute('select id from profile.users where dni = %s',(dni,))
         person = cdst.fetchone()
         if (person == None):
-            print("no se encuentra persona con dni = {0}".format(dni))
+            logging.info("no se encuentra persona con dni = {0}".format(dni))
             continue
 
         personId = person[0]
 
-        print("{4} insertando para {0} {1} -- {2} | utc={3}".format(personId,dni,date,utcdate,count))
-        req = (sl[0],'1c5c90a3-2873-4b8f-9931-faca5808e932',personId,sl[2],utcdate)
-        cdst.execute('insert into assistance.attlog (id,device_id,user_id,verifymode,log) values (%s,%s,%s,%s,%s)',req)
+        cdst.execute('select id from assistance.attlog where log = %s',(utcdate,))
+        if cdst.rowcount > 0:
+            logging.info("{4} ya existe {0} {1} -- {2} | utc={3}".format(personId,dni,date,utcdate,count))
+        else:
+            logging.info("{4} insertando para {0} {1} -- {2} | utc={3}".format(personId,dni,date,utcdate,count))
+            req = (sl[0],'1c5c90a3-2873-4b8f-9931-faca5808e932',personId,sl[2],utcdate)
+            cdst.execute('insert into assistance.attlog (id,device_id,user_id,verifymode,log) values (%s,%s,%s,%s,%s)',req)
 
 
 if __name__ == '__main__':
@@ -74,6 +78,16 @@ if __name__ == '__main__':
         argumentos ej :
         python3 fce-logs-to-new-fce-logs.py 127.0.0.1 3389 admin pas 127.0.0.1 8181 dbuser dbpass db 127.0.0.1 5432 dbuser dbpass db2
     """
+
+    if len(sys.argv) < 15:
+        logging.info('faltan argumentos')
+        logging.info('python3 {} host-ldap port-ldap admin-ldap pass-ldap host-db-origen port-db-origen db-origen-user db-origen-pass db-orgien host-db-destino port-db-destino db-user-destino db-pass-destino db-destino'.format(sys.argv[0]))
+        logging.info('')
+        logging.info('Normalmente puede redireccionar puertos usando ssh y llamar al script usando parametros y puertos ya definidos')
+        logging.info('Ej:')
+        logging.info('ssh -L 3389:127.0.0.1:389 root@ldap; ssh -L 8181:127.0.0.1:5432 root@postgres-origen')
+        logging.info('python3 {} 127.0.0.1 3389 admin pas 127.0.0.1 8181 dbuser dbpass db 127.0.0.1 5432 dbuser dbpass db2'.format(sys.argv[0]))
+        sys.exit(1)
 
     lhost = sys.argv[1]
     lport = sys.argv[2]
@@ -92,12 +106,16 @@ if __name__ == '__main__':
     dpassw = sys.argv[13]
     ddb = sys.argv[14]
 
+    logging.basicConfig(filename='copy-logs.log',format='%(asctime)s %(levelname)s %(message)s',level=logging.DEBUG)
 
+    logging.info('generando cache de personas')
     personCache = makeUsersCache(lhost,int(lport),luser,lpassw)
 
+    logging.info('conectandose a las bases')
     src = psycopg2.connect(host=shost, port=sport, user=suser, password=spassw, dbname=sdb)
     dst = psycopg2.connect(host=dhost, port=dport, user=duser, password=dpassw, dbname=ddb)
 
+    logging.info('copiando logs')
     copyLogs(src,dst,personCache)
 
     dst.commit()

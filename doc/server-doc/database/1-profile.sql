@@ -17,7 +17,7 @@ create table profile.users (
     residence_city varchar,
     country varchar,
     address varchar,
-    CHECK(EXTRACT(TIMEZONE FROM birthdate) = '0')
+    created timestamptz default now()
 );
 
 create table profile.mails (
