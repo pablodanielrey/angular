@@ -209,10 +209,11 @@ class ZkSoftware:
         method = "<GetAttLog><ArgComKey xsi:type=\"xsd:integer\">0</ArgComKey><Arg><PIN xsi:type=\"xsd:integer\">{}</PIN></Arg></GetAttLog>"
         methodWithParams = method.format('ALL' if pin is None else pin)
         response = self._sendAndReceive(methodWithParams)
-        if response is None:
-            return []
 
-        if 'GetAttLogResponse' in response and 'Row' not in response['GetAttLogResponse']:
+        logging.debug(response)
+
+        if 'GetAttLogResponse' in response:
+            if 'Row' not in response['GetAttLogResponse']:
             """
                 el reloj no tiene logs. respuesta =
                 <GetAttLogResponse>
@@ -222,7 +223,9 @@ class ZkSoftware:
 
 
         rows = response['GetAttLogResponse']['Row']
-        logging.debug(rows)
+        if not isinstance(rows,list):
+            rows = [rows]
+            
         datedResponse = []
         for r in rows:
             d = {
