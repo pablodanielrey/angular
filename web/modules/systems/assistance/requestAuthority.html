@@ -1,16 +1,16 @@
 <div class="requestAuthority">
 
-  <div class="title">
+  <div class="title1">
     <label><i class="fa fa-plus"></i> Solicitar Hora Extra</label>
   </div>
 
   <div class="requestOvertime">
     <div class="search">
       <div class="searchTitle">
-        <p>Seleccione Usuario</p>
+        <span><i class="fa fa-user-plus"></i> Seleccione Usuario</span>
       </div>
       <div>
-        <input list="list"  placeholder="Buscar...">
+        <input class="inputSearch" list="list"  placeholder="Buscar...">
            <datalist id="list">
              <option value="juan Catulo">
              <option value="Juan Trabuco">
@@ -22,32 +22,32 @@
     </div>
     <div class="date">
       <div class="dateTitle">
-        <p>Seleccione Fecha</p>
+        <span><i class="fa fa-calendar"></i> Seleccione Fecha</span>
       </div>
-      <div class="inputDate">
-        <input type="date" name="fecha">
+      <div>
+        <input class="inputDate" type="date" name="fecha">
       </div>
     </div>
     <div class="time">
-      <div class="timeTitle">
-        <p>Seleccione Horas</p>
-      </div>
+
       <div class="inputTime">
-        De <input type="time" name="hora">
-        Hasta <input type="time" name="hora">
+        <span class="timeTitle"><i class="fa fa-clock-o"></i> Hora Inicio</span>
+        <input class="inputClock" type="time" name="hora">
+        <span class="timeTitle"><i class="fa fa-clock-o"></i> Hora Fin</span>
+        <input class="inputClock" type="time" name="hora">
       </div>
     </div>
     <div class="reason">
-      <div class="reasonTitle">
-        <p>Motivo</p>
+      <div class="searchTitle">
+        <span>Motivo</span>
       </div>
       <div class="inputReason">
-        <textarea>
+        <textarea class="inputText">
         </textarea>
       </div>
     </div>
     <div>
-      <button class="Solicitar" ng-click='update()'><i class="fa fa-reply"></i> Solicitar</button>
+      <button class="solicitar" ng-click='update()'><i class="fa fa-reply"></i> Solicitar</button>
     </div>
   </div>
 
