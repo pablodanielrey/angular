@@ -159,7 +159,7 @@ response :
 
 ---------------------------------------------
 
----- JUSTIFICACIONES TOTALES EN EL AÑO ------
+---- justificaciones posibles de tomarse ------
 
 query :
 {
@@ -179,37 +179,9 @@ response :
   error: "error del servidor",
   response:{
     justificationId: 'id de la justificacion'
-    count: "cantidad de justificaciones disponibles de ese tipo"
+    stock: "cantidad de justificaciones disponibles de ese tipo"
   }
 }
-
-
-------------------------------------------------------
---- JUSTIFICACIONES ACTUALES POSIBLES DE TOMARSE -----
-
-query :
-{
-  id:,
-  action:"getJustificationActualStock",
-  session:,
-  request:{
-      user_id: "id del usuario",
-      justification_id: "id de la justificación"
-  }
-
-}
-
-response :
-{
-  id: "id de la petición",
-  ok: "caso exito",
-  error: "error del servidor",
-  response:{
-    count: "cantidad de justificaciones disponibles de ese tipo"
-  }
-
-}
-
 
 
 

@@ -28,38 +28,8 @@ class Justifications:
         return justs
 
 
-
-    """ retorna el stock total de la justificacion indicada """
+    """ retorna el stock actual para la justificación indicada """
     def getJustificationStock(self,con,userId,justId,date):
-
-        for j in self.justifications:
-            if j.isJustification(justId):
-                ad = j.availableRep(Repetition.DAILY,userId,date)
-                if ad is not None:
-                    return ad
-
-                aw = j.availableRep(Repetition.WEEKLY,userId,date)
-                if aw is not None:
-                    return aw
-
-                am = j.availableRep(Repetition.MONTHLY,userId,date)
-                if am is not None:
-                    return am
-
-                ay = j.availableRep(Repetition.YEARLY,userId,date)
-                if ay is not None:
-                    return ay
-
-                return j.available(con,userId,date)
-
-        """ justificationes desconocidas = 0 """
-        return 0
-
-
-
-
-    """ retorna el stock actual posible de tomarse para la justificación indicada """
-    def getJustificationActualStock(self,con,userId,justId,date):
 
         for j in self.justifications:
             if j.isJustification(justId):

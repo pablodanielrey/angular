@@ -106,7 +106,7 @@ app.controller('AssistanceCtrl', function($scope, $timeout, $window, Profiles, S
 				}
 			},
 			function(error){
-				alert(error);
+				Notifications.message(error);
 			}
 		);
 	};
@@ -120,7 +120,7 @@ app.controller('AssistanceCtrl', function($scope, $timeout, $window, Profiles, S
 				$scope.formatAssistanceDataFromServer(assistanceData);
 			},
 			function(error){
-				alert(error);
+				Notifications.message(error);
 			}
 		);
 	};
@@ -131,7 +131,7 @@ app.controller('AssistanceCtrl', function($scope, $timeout, $window, Profiles, S
 				$scope.model.user = user;
 			},
 			function(error) {
-				alert(error);
+				Notifications.message(error);
 			}
 		);
     };
@@ -142,7 +142,7 @@ app.controller('AssistanceCtrl', function($scope, $timeout, $window, Profiles, S
 				$scope.formatOfficesFromServer(offices);
 			},
 			function(error){
-				alert(error);
+				Notifications.message(error);
 			}
 		);
     }
@@ -157,7 +157,7 @@ app.controller('AssistanceCtrl', function($scope, $timeout, $window, Profiles, S
 					}
 				},
 				function(error){
-					alert(error);
+					Notifications.message(error);
 				}
 			);
     }
@@ -194,11 +194,6 @@ app.controller('AssistanceCtrl', function($scope, $timeout, $window, Profiles, S
 						id = data.justificationId;
 						stock = data.stock;
 
-						/*
-						 	codifo anterior de ema.
-						$scope.model.justifications[justificationId].stock = stock;
-						*/
-
 						// setep el stock en la justificacion correcta
 						if(id == 'e0dfcef6-98bb-4624-ae6c-960657a9a741') {
 							$scope.model.justificationAbsent = stock;
@@ -216,7 +211,7 @@ app.controller('AssistanceCtrl', function($scope, $timeout, $window, Profiles, S
 
 				},
 				function(error){
-						alert(error);
+						Notifications.message(error);
 				}
 		);
     }
@@ -228,7 +223,7 @@ app.controller('AssistanceCtrl', function($scope, $timeout, $window, Profiles, S
 	$scope.initialize = function(){
 		$scope.model.session = Session.getCurrentSession();
 		if ((!$scope.model.session) || (!$scope.model.session.user_id)) {
-			alert("Error: Session no definida");
+			Notifications.message("Error: Session no definida");
 			$window.location.href = "/#/logout";
     } else {
 			Profiles.checkAccess(Session.getSessionId(),'ADMIN-ASSISTANCE,USER-ASSISTANCE',
@@ -246,13 +241,13 @@ app.controller('AssistanceCtrl', function($scope, $timeout, $window, Profiles, S
 					}
 				},
 				function (error) {
-					alert(error);
+					Notifications.message(error);
 				}
 			);
 		}
 	};
 
-    $timeout(function() {
+  $timeout(function() {
 		$scope.initialize();
-    }, 0);
+  }, 0);
 });

@@ -77,7 +77,7 @@ def copyLogs(src,dst,personCache):
             logging.debug("{4} insertando para {0} {1} -- {2} | utc={3}".format(personId,dni,date,utcdate,count))
             req = (sl[0],'1c5c90a3-2873-4b8f-9931-faca5808e932',personId,sl[2],utcdate)
             cdst.execute('insert into assistance.attlog (id,device_id,user_id,verifymode,log) values (%s,%s,%s,%s,%s)',req)
-            cdst.commit()
+            dst.commit()
 
 
     logging.info('Cantidad de logs procesados : {}'.format(count))
