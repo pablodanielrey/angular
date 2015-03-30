@@ -59,7 +59,7 @@ app.controller('RequestAssistanceCompensatoryCtrl', function($scope, Assistance,
 
         if ($scope.model.justification != null) {
             $scope.model.justification.begin = null;
-        }        
+        }
 	}
 
 
@@ -75,24 +75,12 @@ app.controller('RequestAssistanceCompensatoryCtrl', function($scope, Assistance,
     // -----------------------------------------------------------------------------------
 
 
-    // Carga el stock que se puede tomar
-    $scope.loadCompensatoryActualStock = function(id) {
-        Assistance.getJustificationActualStock($scope.model.session.user_id, id,
-			function(justificationActualStock){
-				$scope.model.compensatory.actualStock = justificationActualStock;
-			},
-			function(error){
-                Notifications.message(error);
-			}
-		);
-    }
-
 
     //Carga el stock disponible de compensatorios
     $scope.loadCompensatoryStock = function(id) {
         Assistance.getJustificationStock($scope.model.session.user_id, id,
 			function(justificationStock){
-                $scope.model.compensatory.stock = justificationStock;
+                $scope.model.compensatory.stock = justificationStock.stock;
 			},
 			function(error){
                 Notifications.message(error);
@@ -105,24 +93,22 @@ app.controller('RequestAssistanceCompensatoryCtrl', function($scope, Assistance,
     $scope.$on('findStockJustification', function(event, data) {
 
         justification = data.justification;
-        if (justification.name == 'compensatory') {
+        if (justification.id == '48773fd7-8502-4079-8ad5-963618abe725') {
             $scope.initialize(justification);
         }
     });
 
     $scope.initialize = function(justification) {
         $scope.clearSelectionsCompensatory();
-        $scope.model.compensatory = {id:justification.id, name: justification.name, stock:0, actualStock:0};
+        $scope.model.compensatory = {id:justification.id, name: justification.name, stock:0};
         $scope.loadCompensatoryStock(justification.id);
-        $scope.loadCompensatoryActualStock(justification.id);
         $scope.model.justification = {id:justification.id,begin:null,end:null};
     }
 
 
     // Envio la peticion al servidor
     $scope.save = function() {
-
-        Assistance.requestJustification($scope.model.user_id,$scope.model.justification,
+        Assistance.requestJustification($scope.model.session.user_id,$scope.model.justification,
             function(ok) {
                 Notifications.message("Guardado exitosamente");
                 $scope.model.justification.begin = null;
