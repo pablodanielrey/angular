@@ -153,7 +153,7 @@ if __name__ == '__main__':
 
     lfilename = '/var/log/firmware-sync-log'
     if 'logging_filename' in config.configs:
-        lfilename = int(config.configs['logging_filename'])
+        lfilename = config.configs['logging_filename']
 
     logging.basicConfig(filename=lfilename,format='%(asctime)s %(levelname)s %(message)s',level=llevel)
 
