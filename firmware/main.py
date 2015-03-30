@@ -143,20 +143,10 @@ if __name__ == '__main__':
         sys.exit(1)
     """
 
+    logging.basicConfig(filename='/var/log/firmware-sync.log',format='%(asctime)s %(levelname)s %(message)s',level=logging.DEBUG)
 
     inject.configure(config_injector)
     config = inject.instance(Config)
-
-    llevel = logging.INFO
-    if 'logging_level' in config.configs:
-        llevel = int(config.configs['logging_level'])
-
-    lfilename = '/var/log/firmware-sync-log'
-    if 'logging_filename' in config.configs:
-        lfilename = config.configs['logging_filename']
-
-    logging.basicConfig(filename=lfilename,format='%(asctime)s %(levelname)s %(message)s',level=llevel)
-
 
     logging.info('Iniciando el sincronizador de logs')
 
