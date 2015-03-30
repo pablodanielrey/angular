@@ -19,7 +19,7 @@ app.controller('RequestAssistanceCtrl', function($scope, $rootScope, $timeout, $
     	Assistance.getJustifications(
 			function(justifications){
 				for(i in justifications){
-					var justification = {name:justifications[i].name,id:justifications[i].id}
+					var justification = {name:justifications[i].name,id:justifications[i].id};
 					$scope.$broadcast('findStockJustification',{justification:justification});
 					$scope.model.justifications[justifications[i].id] = justifications[i];
 				}
