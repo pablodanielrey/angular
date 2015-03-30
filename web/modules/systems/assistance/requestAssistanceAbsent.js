@@ -112,10 +112,8 @@ app.controller('RequestAssistanceAbsentCtrl', function($scope, Assistance, Notif
 		}
 		Assistance.requestJustification($scope.model.session.user_id, requestedJustification,
 			function(ok){
-				$scope.model.absent = {};
 				$scope.clearSelections();
 				Notifications.message('Ausente con aviso solicitado correctamente');
-				$scope.$broadcast('requestLicenceEvent');
 			},
 			function(error){
 				Notifications.message(error);
@@ -126,7 +124,7 @@ app.controller('RequestAssistanceAbsentCtrl', function($scope, Assistance, Notif
 
 
 	$scope.initialize = function(justification){
-        $scope.model.absent = {id:justification.id, name:justification.name, stock:0, actualStock:0};
+        $scope.model.absent = {id:justification.id, name:justification.name, stock:0};
 		$scope.loadAbsentStock(justification.id);
 	}
 
