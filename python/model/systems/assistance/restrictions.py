@@ -168,7 +168,7 @@ class AAJustification(Justification):
     def available(self,con,userId,date):
         cur = con.cursor()
         req = (self.id, userId, 'PENDING', 'APROVED', date)
-        cur.execute('select jbegin assistance.justifications_requests where justification_id = %s and user_id = %s and (status = %s or status = %s) and extract(year from jbegin) = extract(year from %s)',req)
+        cur.execute('select jbegin from assistance.justifications_requests where justification_id = %s and user_id = %s and (status = %s or status = %s) and extract(year from jbegin) = extract(year from %s)',req)
         inYear = cur.rowcount
         if inYear <= 0:
             return self.availableRep(Repetition.WEEKLY,userId,date)

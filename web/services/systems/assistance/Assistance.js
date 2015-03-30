@@ -129,33 +129,6 @@ app.service('Assistance', ['Utils','Messages','Session',
 		};
 
 
-		//stock del mes que es generalmente el que le interesa visualizar al usuario
-		this.getJustificationActualStock = function(userId, justificationId, callbackOk, callbackError) {
-			//TODO
-			switch(justificationId){
-				case "1":
-					response = 1;
-				break;
-				case "2":
-					response = 2;
-				break;
-				case "3":
-					response = 0;
-				break;
-				case "4":
-					response = 2;
-				break;
-				case "5":
-					response = 2;
-				break;
-				case "6":
-					response = 10;
-				break;
-			}
-
-			callbackOk(response);
-		};
-
 
 		this.getJustificationRequests = function(status, group, callbackOk, callbackError){
 			//TODO
