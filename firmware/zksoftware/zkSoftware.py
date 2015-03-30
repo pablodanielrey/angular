@@ -214,18 +214,18 @@ class ZkSoftware:
 
         if 'GetAttLogResponse' in response:
             if 'Row' not in response['GetAttLogResponse']:
-            """
-                el reloj no tiene logs. respuesta =
-                <GetAttLogResponse>
-                </GetAttLogResponse>
-            """
-            return []
+                """
+                    el reloj no tiene logs. respuesta =
+                    <GetAttLogResponse>
+                    </GetAttLogResponse>
+                """
+                return []
 
 
         rows = response['GetAttLogResponse']['Row']
         if not isinstance(rows,list):
             rows = [rows]
-            
+
         datedResponse = []
         for r in rows:
             d = {
