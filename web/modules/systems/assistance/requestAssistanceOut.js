@@ -57,10 +57,6 @@ app.controller('RequestAssistanceOutCtrl', function($scope, Assistance, Notifica
 		$scope.model.justificationOutAvailableSelected = false;
 		$scope.model.justificationOutRequestsSelected = false;
 
-        if ($scope.model.justification != null) {
-            $scope.model.justification = {};
-        }
-
 	}
 
     $scope.isSelectedDate = function() {
