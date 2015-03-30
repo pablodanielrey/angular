@@ -40,11 +40,11 @@ class Main:
 
     def sincLogs(self):
         try:
-            logging.info('Conectandose al reloj y obteniendo logs')
+            logging.debug('Conectandose al reloj y obteniendo logs')
 
             logs = self.zk.getAttLog()
             if len(logs) <= 0:
-                logging.info('No se encontraron los a sincronizar')
+                logging.debug('No se encontraron los a sincronizar')
                 return
 
             logging.info('{} logs obtenidos del reloj'.format(len(logs)))
@@ -91,6 +91,31 @@ class Main:
                         logging.warn('{} ya existente'.format(l))
 
                 con.commit()
+
+
+                """ entre las 2 y 3 am borro los logs del reloj """
+                nowdate = datetime.datetime.now()
+                #deleteend = nowdate.replace(hour=3,minute=0,second=0,microsecond=0)
+                #deletestart = nowdate.replace(hour=2,minute=0,second=0,microsecond=0)
+                deleteend = nowdate
+                deletestart = nowdate
+                if (nowdate <= deletestart and nowdate >= deletestart):
+                    logscheck = self.zk.getAttLog()
+                    logslen = len(logs)
+                    logschecklen = len(logscheck)
+                    if logslen == logschecklen:
+
+                        logs.sort(key=lambda x: x['DateTime'])
+                        logscheck.sort(key=lambda x: x['DateTime'])
+                        equals = True
+                        for i in range(len(logs) - 1):
+                            if l[i]['DateTime'] != lc[i]['DateTime'] and l[i]['PIN'] != lc[i]['PIN']:
+                                equals = False
+                                break
+
+                        if equals:
+                            logging.info('Eliminando {} logs del reloj'.format(logslen))
+                            zk.clearAttLogs()
 
             finally:
                 con.close()
