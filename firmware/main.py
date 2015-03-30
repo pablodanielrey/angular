@@ -97,9 +97,7 @@ class Main:
                 """ entre las 2 y 3 am borro los logs del reloj """
                 nowdate = datetime.datetime.now()
                 deleteend = nowdate.replace(hour=3,minute=0,second=0,microsecond=0)
-                #deletestart = nowdate.replace(hour=2,minute=0,second=0,microsecond=0)
-                deleteend = nowdate
-                deletestart = nowdate
+                deletestart = nowdate.replace(hour=2,minute=0,second=0,microsecond=0)
                 if (nowdate <= deletestart and nowdate >= deletestart):
                     logscheck = self.zk.getAttLog()
                     logslen = len(logs)
@@ -110,7 +108,7 @@ class Main:
                         logscheck.sort(key=lambda x: x['DateTime'])
                         equals = True
                         for i in range(len(logs) - 1):
-                            if l[i]['DateTime'] != lc[i]['DateTime'] or l[i]['PIN'] != lc[i]['PIN']:
+                            if logs[i]['DateTime'] != logscheck[i]['DateTime'] or logs[i]['PIN'] != logscheck[i]['PIN']:
                                 equals = False
                                 break
 
