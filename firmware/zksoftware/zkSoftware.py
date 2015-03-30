@@ -209,6 +209,8 @@ class ZkSoftware:
         method = "<GetAttLog><ArgComKey xsi:type=\"xsd:integer\">0</ArgComKey><Arg><PIN xsi:type=\"xsd:integer\">{}</PIN></Arg></GetAttLog>"
         methodWithParams = method.format('ALL' if pin is None else pin)
         response = self._sendAndReceive(methodWithParams)
+        if response is None:
+            return []
 
         if 'GetAttLogResponse' in response and 'Row' not in response['GetAttLogResponse']:
             """
