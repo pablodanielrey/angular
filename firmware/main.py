@@ -119,7 +119,8 @@ if __name__ == '__main__':
         sys.exit(1)
     """
 
-    logging.basicConfig(level=logging.DEBUG)
+
+    logging.basicConfig(filename='/tmp/firmware-sync.log',format='%(asctime)s %(levelname)s %(message)s',level=logging.DEBUG)
     inject.configure(config_injector)
 
     config = inject.instance(Config)
