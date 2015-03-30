@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import logging, inject, time, sys, signal
 import psycopg2, uuid
+import datetime
 
 sys.path.append('../python')
 
@@ -95,7 +96,7 @@ class Main:
 
                 """ entre las 2 y 3 am borro los logs del reloj """
                 nowdate = datetime.datetime.now()
-                #deleteend = nowdate.replace(hour=3,minute=0,second=0,microsecond=0)
+                deleteend = nowdate.replace(hour=3,minute=0,second=0,microsecond=0)
                 #deletestart = nowdate.replace(hour=2,minute=0,second=0,microsecond=0)
                 deleteend = nowdate
                 deletestart = nowdate
