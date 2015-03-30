@@ -11,9 +11,9 @@ create schema assistance;
     user_id varchar not null references profile.users (id),
     verifymode bigint not null,
     log timestamptz not null,
+    created timestamptz default now(),
     CHECK(EXTRACT(TIMEZONE FROM log) = '0')
   );
-
 
 
   create table assistance.positions (
@@ -21,7 +21,6 @@ create schema assistance;
     user_id varchar not null references profile.users (id),
     name varchar not null
   );
-
 
 
   /*
@@ -103,7 +102,7 @@ create schema assistance;
       constraint justifications_stock_unique unique (justification_id, user_id)
     );
 
-      
+
 
     /*
     pedidos de justificaciones
