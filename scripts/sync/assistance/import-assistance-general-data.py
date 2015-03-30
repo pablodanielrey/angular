@@ -29,174 +29,192 @@ def insertOfficeIfNotExist(cur,of,idParent):
     return idof
 
 
-host = sys.argv[1]
-port = sys.argv[2]
-db = sys.argv[3]
-user = sys.argv[4]
-passw = sys.argv[5]
+if __name__ == '__main__':
 
 
-if len(sys.argv) < 6:
-    print('debe invocar el script con los siguientes parámetros :')
-    print('cat archivo.csv | python {} host port db user pass'.format(sys.argv[0]))
-    sys.exit(1)
-
-date = datetime.datetime.now()
-dates = calendar.Calendar().monthdatescalendar(date.year,date.month)
-firstWeek = dates[0][:5]
-
-con = psycopg2.connect(host=host, port=port, user=user, password=passw, dbname=db)
-cur = con.cursor()
-cur.execute("set time zone %s",('utc',))
-
-cur.execute('delete from assistance.schedule')
-cur.execute('delete from assistance.positions')
-cur.execute('delete from assistance.offices_users')
-cur.execute('delete from assistance.offices_roles')
-cur.execute('delete from assistance.offices')
-cur.execute('delete from assistance.justifications_stock')
-
-logging.basicConfig(level=logging.DEBUG)
-
-for line in csv.reader(sys.stdin):
-
-    try:
-        logging.debug(line)
-
-        app,func,nombre,dni,maili,e,s,of,cargo,ma = line
-        if dni == None or dni == '':
-            continue
-
-        pid = str(uuid.uuid4())
-        cur.execute('select id,dni from profile.users where dni = %s', (dni,))
-        if cur.rowcount <= 0:
-            cur.execute('insert into profile.users (id,dni,name,lastname) values (%s,%s,%s,%s)', (pid,dni,nombre,app))
-        else:
-            pid = cur.fetchone()[0]
-            print("{0} ya existe - {1}".format(dni,pid))
+    if len(sys.argv) < 6:
+        print('debe invocar el script con los siguientes parámetros :')
+        print('cat archivo.csv | python {} host port db user pass'.format(sys.argv[0]))
+        sys.exit(1)
 
 
-        """ agrego el mail institucional """
-        if maili != '':
-            mid = str(uuid.uuid4())
-            cur.execute('insert into profile.mails (id,user_id,email,confirmed,hash) values (%s,%s,%s,%s,%s)',(mid,pid,maili,True,''))
+    logging.basicConfig(filename='/tmp/import-data.log',format='%(asctime)s %(levelname)s %(message)s',level=logging.DEBUG)
 
-        """ agrego el mail alternativo """
-        if ma != '':
-            mid = str(uuid.uuid4())
-            cur.execute('insert into profile.mails (id,user_id,email,confirmed,hash) values (%s,%s,%s,%s,%s)',(mid,pid,ma,False,''))
-
-
-        """ actualizo las credenciales """
-
-        cur.execute('delete from credentials.user_password where user_id = %s',(pid,))
-        cur.execute('insert into credentials.user_password (id,user_id,username,password) values (%s,%s,%s,%s)',(str(uuid.uuid4()),pid,dni,'1'))
-
-        """ actualizo para asignarle el perfil de usuario dentro del sistema de asistencia """
-
-        cur.execute('delete from credentials.auth_profile where user_id = %s and profile = %s',(pid,'USER-ASSISTANCE'))
-        cur.execute('insert into credentials.auth_profile (user_id,profile) values (%s,%s)',(pid,'USER-ASSISTANCE'))
-
-
-        """ actualizo el tema del horario """
-
-        timeE = datetime.datetime.strptime(e,'%H:%M')
-        timeS = datetime.datetime.strptime(s,'%H:%M')
-
-
-        for date in firstWeek:
-            date = datetime.datetime.combine(date,datetime.time())
-            print(date)
-
-            awareDate = localice(date)
-
-            #awareDate = aware.replace(hour=0,minute=0,second=0,microsecond=0)
-            sstart = replaceTime(awareDate,timeE)
-            send = replaceTime(awareDate,timeS)
-
-            uaware = awareDate.astimezone(pytz.utc)
-            ustart = sstart.astimezone(pytz.utc)
-            uend = send.astimezone(pytz.utc)
-
-            req = (str(uuid.uuid4()), pid, uaware, ustart, uend, True, False, False)
-            logging.debug('Insertando schedule : {}'.format(str(req)))
-            cur.execute('insert into assistance.schedule (id,user_id,date,sstart,send,isDayOfWeek,isDayOfMonth,isDayOfYear) values (%s,%s,%s,%s,%s,%s,%s,%s)',req)
-
-
-        """ actualizo los cargos """
-
-        if cargo.strip() != '':
-            req = (str(uuid.uuid4()),pid,cargo)
-            cur.execute('insert into assistance.positions (id,user_id,name) values (%s,%s,%s)',req)
-
-
-        """ actualizo las oficinas """
-        logging.debug('Actualizando la oficina : {}'.format(of))
-        r = re.compile('(.*?)\/(.*)')
-        p = r.match(of)
-        idof = None
-        if p:
-            off1 = p.group(1)
-            off2 = p.group(2)
-
-            logging.debug('insertando oficina {}'.format(off1))
-            idoff1 = insertOfficeIfNotExist(cur,off1,None)
-
-            logging.debug('insertando oficina {}'.format(off2))
-            idof = insertOfficeIfNotExist(cur,off2,idoff1)
-        else:
-            logging.debug('insertando oficina {}'.format(of))
-            idof = insertOfficeIfNotExist(cur,of,None)
-
-        cur.execute('insert into assistance.offices_users (user_id,office_id) values (%s,%s)',(pid,idof))
-
-        if func != '':
-            cur.execute('insert into assistance.offices_roles (user_id,office_id,role) values (%s,%s,%s)',(pid,idof,'autoriza'))
-
-
-        """
-            --------------------------------
-            --------------------------------
-            ---------------------------------
-            ---------------------------------
-            esto son datos de pruebas!!! hay que sacarlo cuando se pase a produccion. son compensatorios
-            ---------------------------------
-            --------------------------------
-            ---------------------------------
-            ---------------------------------
-        """
-        req = (pid,'48773fd7-8502-4079-8ad5-963618abe725',10)
-        cur.execute('insert into assistance.justifications_stock (user_id,justification_id,stock) values (%s,%s,%s)',req)
+    host = sys.argv[1]
+    port = sys.argv[2]
+    db = sys.argv[3]
+    user = sys.argv[4]
+    passw = sys.argv[5]
 
 
 
-        """
-            --------------------------------
-            --------------------------------
-            ---------------------------------
-            ---------------------------------
-            esto son datos de pruebas!!! hay que sacarlo cuando se pase a produccion. son boletas de salida
-            ---------------------------------
-            --------------------------------
-            ---------------------------------
-            ---------------------------------
-        """
-        rid = str(uuid.uuid4())
-        date1 = datetime.datetime.utcnow().replace(hour=10,minute=2,second=0,microsecond=0,tzinfo=pytz.utc)
-        date2 = datetime.datetime.utcnow().replace(hour=11,minute=20,second=0,microsecond=0,tzinfo=pytz.utc)
-        date3 = datetime.datetime.utcnow().replace(tzinfo=pytz.utc)
-        req = (rid,pid,'fa64fdbd-31b0-42ab-af83-818b3cbecf46',date1,date2,'APROVED',date3)
-        cur.execute('insert into assistance.justifications_requests (id,user_id,justification_id,jbegin,jend,status,created) values (%s,%s,%s,%s,%s,%s,%s)',req)
+    date = datetime.datetime.now()
+    dates = calendar.Calendar().monthdatescalendar(date.year,date.month)
+    firstWeek = dates[0][:5]
+
+    con = psycopg2.connect(host=host, port=port, user=user, password=passw, dbname=db)
+    cur = con.cursor()
+    cur.execute("set time zone %s",('utc',))
+
+    cur.execute('delete from assistance.schedule')
+    cur.execute('delete from assistance.positions')
+    cur.execute('delete from assistance.offices_users')
+    cur.execute('delete from assistance.offices_roles')
+    cur.execute('delete from assistance.offices')
+    cur.execute('delete from assistance.justifications_stock')
+
+    logging.basicConfig(level=logging.DEBUG)
+
+    for line in csv.reader(sys.stdin):
+
+        try:
+            logging.debug(line)
+
+            app,func,nombre,dni,maili,e,s,of,cargo,ma = line
+            if dni == None or dni == '':
+                continue
+
+            pid = str(uuid.uuid4())
+            cur.execute('select id,dni from profile.users where dni = %s', (dni,))
+            if cur.rowcount <= 0:
+                cur.execute('insert into profile.users (id,dni,name,lastname) values (%s,%s,%s,%s)', (pid,dni,nombre,app))
+            else:
+                pid = cur.fetchone()[0]
+                print("{0} ya existe - {1}".format(dni,pid))
+
+
+            """ agrego el mail institucional """
+            if maili != '':
+                mid = str(uuid.uuid4())
+                cur.execute('insert into profile.mails (id,user_id,email,confirmed,hash) values (%s,%s,%s,%s,%s)',(mid,pid,maili,True,''))
+
+            """ agrego el mail alternativo """
+            if ma != '':
+                mid = str(uuid.uuid4())
+                cur.execute('insert into profile.mails (id,user_id,email,confirmed,hash) values (%s,%s,%s,%s,%s)',(mid,pid,ma,False,''))
+
+
+            """ actualizo las credenciales """
+
+            cur.execute('delete from credentials.user_password where user_id = %s',(pid,))
+            cur.execute('insert into credentials.user_password (id,user_id,username,password) values (%s,%s,%s,%s)',(str(uuid.uuid4()),pid,dni,'1'))
+
+            """ actualizo para asignarle el perfil de usuario dentro del sistema de asistencia """
+
+            cur.execute('delete from credentials.auth_profile where user_id = %s and profile = %s',(pid,'USER-ASSISTANCE'))
+            cur.execute('insert into credentials.auth_profile (user_id,profile) values (%s,%s)',(pid,'USER-ASSISTANCE'))
+
+
+            """ actualizo el tema del horario """
+
+            if e.strip() != '' and s.strip() != '':
+
+                timeE = datetime.datetime.strptime(e,'%H:%M')
+                timeS = datetime.datetime.strptime(s,'%H:%M')
+
+
+                for date in firstWeek:
+                    date = datetime.datetime.combine(date,datetime.time())
+                    print(date)
+
+                    awareDate = localice(date)
+
+                    #awareDate = aware.replace(hour=0,minute=0,second=0,microsecond=0)
+                    sstart = replaceTime(awareDate,timeE)
+                    send = replaceTime(awareDate,timeS)
+
+                    uaware = awareDate.astimezone(pytz.utc)
+                    ustart = sstart.astimezone(pytz.utc)
+                    uend = send.astimezone(pytz.utc)
+
+                    req = (str(uuid.uuid4()), pid, uaware, ustart, uend, True, False, False)
+                    logging.debug('Insertando schedule : {}'.format(str(req)))
+                    cur.execute('insert into assistance.schedule (id,user_id,date,sstart,send,isDayOfWeek,isDayOfMonth,isDayOfYear) values (%s,%s,%s,%s,%s,%s,%s,%s)',req)
 
 
 
 
+            """ actualizo los cargos """
 
-        con.commit()
+            if cargo.strip() != '':
+                cur.execute('select id from assistance.positions where user_id = %s',(pid,))
+                if cur.rowcount > 0:
+                    ppid = cur.fetchone()[0]
+                    cur.execute('update assistance.positions set name = %s where id = %s',(cargo,ppid))
+                else:
+                    req = (str(uuid.uuid4()),pid,cargo)
+                    cur.execute('insert into assistance.positions (id,user_id,name) values (%s,%s,%s)',req)
 
-    except Exception as e:
-        logging.debug(e)
+
+            """ actualizo las oficinas """
+            logging.debug('Actualizando la oficina : {}'.format(of))
+            r = re.compile('(.*?)\/(.*)')
+            p = r.match(of)
+            idof = None
+            if p:
+                off1 = p.group(1)
+                off2 = p.group(2)
+
+                logging.debug('insertando oficina {}'.format(off1))
+                idoff1 = insertOfficeIfNotExist(cur,off1,None)
+
+                logging.debug('insertando oficina {}'.format(off2))
+                idof = insertOfficeIfNotExist(cur,off2,idoff1)
+            else:
+                logging.debug('insertando oficina {}'.format(of))
+                idof = insertOfficeIfNotExist(cur,of,None)
+
+            cur.execute('insert into assistance.offices_users (user_id,office_id) values (%s,%s)',(pid,idof))
+
+            if func != '':
+                cur.execute('insert into assistance.offices_roles (user_id,office_id,role) values (%s,%s,%s)',(pid,idof,'autoriza'))
+
+
+            """
+                --------------------------------
+                --------------------------------
+                ---------------------------------
+                ---------------------------------
+                esto son datos de pruebas!!! hay que sacarlo cuando se pase a produccion. son compensatorios
+                ---------------------------------
+                --------------------------------
+                ---------------------------------
+                ---------------------------------
+            """
+            """
+            req = (pid,'48773fd7-8502-4079-8ad5-963618abe725',10)
+            cur.execute('insert into assistance.justifications_stock (user_id,justification_id,stock) values (%s,%s,%s)',req)
+            """
+
+
+            """
+                --------------------------------
+                --------------------------------
+                ---------------------------------
+                ---------------------------------
+                esto son datos de pruebas!!! hay que sacarlo cuando se pase a produccion. son boletas de salida
+                ---------------------------------
+                --------------------------------
+                ---------------------------------
+                ---------------------------------
+            """
+            """
+            rid = str(uuid.uuid4())
+            date1 = datetime.datetime.utcnow().replace(hour=10,minute=2,second=0,microsecond=0,tzinfo=pytz.utc)
+            date2 = datetime.datetime.utcnow().replace(hour=11,minute=20,second=0,microsecond=0,tzinfo=pytz.utc)
+            date3 = datetime.datetime.utcnow().replace(tzinfo=pytz.utc)
+            req = (rid,pid,'fa64fdbd-31b0-42ab-af83-818b3cbecf46',date1,date2,'APROVED',date3)
+            cur.execute('insert into assistance.justifications_requests (id,user_id,justification_id,jbegin,jend,status,created) values (%s,%s,%s,%s,%s,%s,%s)',req)
+            """
 
 
 
-con.close()
+
+            con.commit()
+
+        except Exception as e:
+            logging.debug(e)
+
+
+
+    con.close()
