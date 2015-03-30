@@ -9,68 +9,82 @@ var app = angular.module('mainApp');
  * El objetivo del controlador es definir solicitudes a un subordinado. Actualmente la autoridad solo puede solicitar "horas extra"
  * El controlador debe identificar el usuario al cual se le va a definir la socicitud, el usuario es definido en otro controlador, se escucha el evento de seleccion de usuario
  */
-app.controller('RequestAuthorityCtrl', function($scope, $timeout, Assistance, Notifications) {
+app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assistance", "Notifications", "Session", function($scope, $timeout, $window, Assistance, Notifications, Session) {
 
 	$scope.model = {
 		user_id: null, //id del usuario para el cual se solicita la justificacion
 		id: null, //id de la justificacion solicitada (actualmente solo se pueden solicitar horas extra que equivale a compensatorios)
-		time: null, //horas y minutos adicionales solicitados
+		startTime: null, //hora de inicio solicitada
+		endTime: null, //hora de finalizacion solicitada
 		date: null, //actualmente se define un solo dia por solicitud, posteriormente cuando se maneje el calendario se podra definir un rango de dias (para un determinado rango de dias)
-		request: false //flag para indicar que se ha definido una solicitud
-	};
-		
-	
-	/**
-	 * Esta definida la solicitud?
-	 */
-	$scope.isRequest = function(){
-		return $scope.model.request;
+		reason: null, //motivo por el cual se solicita las horas extra
+		requests: [] //solicitudes de horas extras para el usuario logueado
 	};
 	
-	/**
-	 * Modificar flag de definicion de solicitud
-	 */
-	$scope.changeRequest = function(){
-		if((id != null) && (date != null) && (hours != null) && (user_id != null)) {
-			request = true;
+	
+	
+	$scope.loadRequests = function(){
+	
+		var session = Session.getCurrentSession(); //obtengo sesión actual
+		if(session == null) {
+			Notifications.message("Error: Sesion no definida");
+			$window.location.href = "/#/logout"; 
+		}
+		else if(session.user_id == null){
+			Notifications.message("Error: Usuario de sesion no definido");
+			$window.location.href = "/#/logout";
 		} else {
-			request = false;
-		}
-	};
-	
-
-	/**
-	 * Almacenar solicitud
-	 * Para este punto se deben haber chequeado los datos
-	 */
-	$scope.request = function(){
-		var date = $scope.model.date;
-		var timeArray = $scope.mode.time.split(":");
-		
-		date.setHours(timeArray[0]);
-		date.setMinutes(timeArray[1]);
-					
-		var justification = {
-			id: $scope.model.id,			
-			begin: date,
-		}
-		
-		Assistance.requestLicence(user_id, justification, 
-			function(ok){
-				Notifications.message("Solicitud cargada con exito");
-			},
-			function(error){
-				Notifications.message(error);
-			}
 			
-		);
-	};
+			$scope.model.requests [
+				{
+					userName:"Juan", 
+					date:null,
+					startTime:null,
+					endTime:null,
+					reason:null,
+					status:null
+				},
+				{
+					userName:"Juan", 
+					date:null,
+					startTime:null,
+					endTime:null,
+					reason:null,
+					status:null
+				}
+			]
+		
+			/** TODO 
+			Assistance.getOvertimeRequests(s.user_id,
+				function callbackOk(requests){
+					var request = {}
+					for(var i = 0; i < requests.length; i++){
+						request.id = requests[i].id;
+						User.findUser(requests[i].user_id,
+							function findUserCallbackOk(user){
+								request.user = user;
+							},
+							function findUserCallbackError(error){
+								Notifications.message(error);
+								throw new Error(error);
+							}
+						);
+					}
+					$scope.model.requests.push(request);
+				},
+				function callbackError(error){
+					Notifications.message(error);
+					throw new Error(error);
+				}
+			); */
+		}
+	}
 	
-	/**
-	 * Escuchar evento de seleccion de usuario
-	 */
-	$scope.$on('UserSelectedEvent',function(event, user_id) { 
-	    $scope.model.user_id = user_id;
-	});
 	
-});
+	$timeout(function() { 
+		$scope.loadRequests();
+	},0);
+		
+
+	
+}]);
