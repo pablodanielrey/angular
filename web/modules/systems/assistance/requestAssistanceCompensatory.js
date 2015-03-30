@@ -5,60 +5,61 @@ app.controller('RequestAssistanceCompensatoryCtrl', function($scope, Assistance,
     $scope.model.justificationCompensatoryRequestSelected = false;
 	$scope.model.justificationCompensatoryAvailableSelected = false;
 	$scope.model.justificationCompensatoryRequestsSelected = false;
-    $scope.model.justification = {};
 
 
     // ------------------ Manejo de la vista ----------------------------
 
-    $scope.isSelectedJustificationCompensatory = function(){
+    $scope.isSelectedJustificationCompensatory = function() {
 		return $scope.model.justificationCompensatorySelected;
 	};
 
-	$scope.selectJustificationCompensatory = function(){
+	$scope.selectJustificationCompensatory = function() {
 		var value = !$scope.model.justificationCompensatorySelected;
 		$scope.clearSelections();
         $scope.clearSelectionsCompensatory();
 		$scope.model.justificationCompensatorySelected = value;
+
+        $scope.model.justification.id = $scope.model.justificationCompensatoryId;
 	};
 
 
-	$scope.isSelectedJustificationCompensatoryRequest = function(){
+	$scope.isSelectedJustificationCompensatoryRequest = function() {
 		return $scope.model.justificationCompensatoryRequestSelected;
 	};
 
-    $scope.isSelectedJustificationCompensatoryAvailable = function(){
+    $scope.isSelectedJustificationCompensatoryAvailable = function() {
 		return $scope.model.justificationCompensatoryAvailableSelected;
 	};
 
-	$scope.isSelectedJustificationCompensatoryRequests = function(){
+	$scope.isSelectedJustificationCompensatoryRequests = function() {
 		return $scope.model.justificationCompensatoryRequestsSelected;
 	};
 
-	$scope.selectJustificationCompensatoryRequest = function(){
+	$scope.selectJustificationCompensatoryRequest = function() {
 		$scope.clearSelectionsCompensatory();
 		$scope.model.justificationCompensatoryRequestSelected = true;
 	};
 
 
-	$scope.selectJustificationCompensatoryRequests = function(){
+	$scope.selectJustificationCompensatoryRequests = function() {
 		$scope.clearSelectionsCompensatory();
 		$scope.model.justificationCompensatoryRequestsSelected = true;
 	};
 
-	$scope.selectJustificationCompensatoryAvailable = function(){
+	$scope.selectJustificationCompensatoryAvailable = function() {
 		$scope.clearSelectionsCompensatory();
 		$scope.model.justificationCompensatoryAvailableSelected = true;
 
 	};
 
 
-	$scope.clearSelectionsCompensatory = function(){
+	$scope.clearSelectionsCompensatory = function() {
 		$scope.model.justificationCompensatoryRequestSelected = false;
 		$scope.model.justificationCompensatoryAvailableSelected = false;
 		$scope.model.justificationCompensatoryRequestsSelected = false;
 
         if ($scope.model.justification != null) {
-            $scope.model.justification.begin = null;
+            $scope.model.justification = {};
         }
 	}
 
@@ -93,7 +94,7 @@ app.controller('RequestAssistanceCompensatoryCtrl', function($scope, Assistance,
     $scope.$on('findStockJustification', function(event, data) {
 
         justification = data.justification;
-        if (justification.id == '48773fd7-8502-4079-8ad5-963618abe725') {
+        if (justification.id == $scope.model.justificationCompensatoryId) {
             $scope.initialize(justification);
         }
     });
@@ -111,7 +112,6 @@ app.controller('RequestAssistanceCompensatoryCtrl', function($scope, Assistance,
         Assistance.requestJustification($scope.model.session.user_id,$scope.model.justification,
             function(ok) {
                 Notifications.message("Guardado exitosamente");
-                $scope.model.justification.begin = null;
                 $scope.clearSelections();
             },
             function(error) {
