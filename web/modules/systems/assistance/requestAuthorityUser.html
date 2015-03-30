@@ -1,5 +1,5 @@
 
-<input list="users" ng-model="model.searchUser" ng-change="searchUsers()">
-<datalist id="users">
-	<option ng-repeat="user in model.users" value="{{user.name}}">
-</datalist>
+<input ng-model="model.searchUser" ng-change="searchUsers()">
+<ul id="users">
+	<li ng-repeat="user in model.users" ng-click="selectUser(user.id)">{{user.name}}</li>
+</ul>
