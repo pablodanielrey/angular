@@ -29,9 +29,15 @@ class ZkSoftware:
         envía el mensaje y recibe una respuesta. parsea la respuesta a dictionary para poder procesarla despues
     """
     def _sendAndReceive(self,xml):
+
+        logging.debug(xml)
+
         conn = http.client.HTTPConnection(self.host,self.port)
         conn.request("POST", "/iWsService",body=xml,headers={"Content-type":"text/xml","SOAPAction":"uri:zksoftware"})
         r1 = conn.getresponse()
+
+        logging.debug(r1)
+
         if r1.status != 200:
             raise ZkSoftwareException(r1.reason)
 
@@ -246,10 +252,10 @@ class ZkSoftware:
 
 
     def clearTemplates(self):
-        self.clearData(2)
+        self._clearData(2)
 
     def clearAttLogs(self):
-        self.clearData(3)
+        self._clearData(3)
 
     def clearUsers(self):
-        self.clearData(1)
+        self._clearData(1)

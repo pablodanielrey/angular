@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import logging, inject, time, sys, signal
 import psycopg2, uuid
+import datetime
 
 sys.path.append('../python')
 
@@ -40,11 +41,11 @@ class Main:
 
     def sincLogs(self):
         try:
-            logging.info('Conectandose al reloj y obteniendo logs')
+            logging.debug('Conectandose al reloj y obteniendo logs')
 
             logs = self.zk.getAttLog()
             if len(logs) <= 0:
-                logging.info('No se encontraron los a sincronizar')
+                logging.debug('No se encontraron los a sincronizar')
                 return
 
             logging.info('{} logs obtenidos del reloj'.format(len(logs)))
@@ -88,15 +89,38 @@ class Main:
                     if self.logs.findLogByDate(con,l['log']) is None:
                         self.logs.persist(con,l)
                     else:
-                        logging.debug('{} ya existente'.format(l))
+                        logging.warn('{} ya existente'.format(l))
 
                 con.commit()
+
+
+                """ borro los logs del reloj """
+                nowdate = datetime.datetime.now()
+                deletestart = nowdate.replace(hour=int(self.config.configs['zksoftware_hour_start_delete']),minute=int(self.config.configs['zksoftware_minute_start_delete']),second=0,microsecond=0)
+                deleteend = nowdate.replace(hour=int(self.config.configs['zksoftware_hour_end_delete']),minute=int(self.config.configs['zksoftware_minute_end_delete']),second=0,microsecond=0)
+                if (nowdate <= deleteend and nowdate >= deletestart):
+                    logscheck = self.zk.getAttLog()
+                    logslen = len(logs)
+                    logschecklen = len(logscheck)
+                    if logslen == logschecklen:
+
+                        logs.sort(key=lambda x: x['DateTime'])
+                        logscheck.sort(key=lambda x: x['DateTime'])
+                        equals = True
+                        for i in range(len(logs)):
+                            if logs[i]['DateTime'] != logscheck[i]['DateTime'] or logs[i]['PIN'] != logscheck[i]['PIN']:
+                                equals = False
+                                break
+
+                        if equals:
+                            logging.info('Eliminando {} logs del reloj'.format(logslen))
+                            self.zk.clearAttLogs()
 
             finally:
                 con.close()
 
         except Exception as e:
-            logging.info(e)
+            logging.exception(e)
 
 
 
@@ -120,10 +144,19 @@ if __name__ == '__main__':
     """
 
 
-    logging.basicConfig(filename='/tmp/firmware-sync.log',format='%(asctime)s %(levelname)s %(message)s',level=logging.DEBUG)
     inject.configure(config_injector)
-
     config = inject.instance(Config)
+
+    llevel = logging.INFO
+    if 'logging_level' in config.configs:
+        llevel = int(config.configs['logging_level'])
+
+    lfilename = '/var/log/firmware-sync-log'
+    if 'logging_filename' in config.configs:
+        lfilename = config.configs['logging_filename']
+
+    logging.basicConfig(filename=lfilename,format='%(asctime)s %(levelname)s %(message)s',level=llevel)
+
 
     logging.info('Iniciando el sincronizador de logs')
 
