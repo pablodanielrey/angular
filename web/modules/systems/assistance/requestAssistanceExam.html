@@ -25,10 +25,8 @@
           </div>
 
           <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationExamAvailable()]">
-            <p class="parrafosGreen margin">Disponibilidad MENSUAL Restante</p>
-            <p class="parrafosGreen2 margin">{{model.exam.actualStock}} Días</p>
-            <p class="parrafosGreen margin">Disponibilidad ANUAL Restante</p>
-            <p class="parrafosGreen2 margin">{{model.exam.stock}} Días</p>
+            <p class="parrafosGreen margin">Disponibilidad Restante</p>
+            <p class="parrafosGreen2 margin">{{model.exam.stock}}</p>
           </div>
 
           <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationExamRequests()]">

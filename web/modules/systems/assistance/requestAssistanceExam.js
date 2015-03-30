@@ -5,7 +5,6 @@ app.controller('RequestAssistanceExamCtrl', function($scope, Assistance, Session
     $scope.model.justificationExamRequestSelected = false;
 	$scope.model.justificationExamAvailableSelected = false;
 	$scope.model.justificationExamRequestsSelected = false;
-    $scope.model.justification = {};
 
     // ------------ Manejo de la vista -----------------
 
@@ -18,6 +17,8 @@ app.controller('RequestAssistanceExamCtrl', function($scope, Assistance, Session
 		$scope.clearSelections();
 		$scope.clearSelectionsExam();
 		$scope.model.justificationExamSelected = value;
+
+        $scope.model.justification.id = $scope.model.justificationExamId;
 	}
 
 
@@ -55,10 +56,6 @@ app.controller('RequestAssistanceExamCtrl', function($scope, Assistance, Session
 		$scope.model.justificationExamRequestSelected = false;
 		$scope.model.justificationExamAvailableSelected = false;
 		$scope.model.justificationExamRequestsSelected = false;
-
-        if ($scope.model.justification != null) {
-            $scope.model.justification.begin = null;
-        }
 	}
 
     $scope.isSelectedDate = function() {
@@ -72,24 +69,12 @@ app.controller('RequestAssistanceExamCtrl', function($scope, Assistance, Session
     }
     // -----------------------------------------------------------------------------------
 
-    // Carga el stock que se puede tomar
-    $scope.loadExamActualStock = function(id) {
-        Assistance.getJustificationActualStock($scope.model.session.user_id, id,
-			function(justificationActualStock){
-				$scope.model.exam.actualStock = justificationActualStock;
-			},
-			function(error){
-                Notifications.message(error);
-			}
-		);
-    }
-
 
     //Carga el stock disponible de compensatorios
     $scope.loadExamStock = function(id) {
         Assistance.getJustificationStock($scope.model.session.user_id, id,
 			function(justificationStock) {
-                $scope.model.exam.stock = justificationStock;
+                $scope.model.exam.stock = justificationStock.stock;
 
 			},
 			function(error) {
@@ -98,13 +83,12 @@ app.controller('RequestAssistanceExamCtrl', function($scope, Assistance, Session
 		);
     }
 
-   
+
 
     $scope.initialize = function(justification) {
         $scope.clearSelectionsExam();
         $scope.model.exam = {id:justification.id, name: justification.name, stock:0, actualStock:0};
         $scope.loadExamStock(justification.id);
-        $scope.loadExamActualStock(justification.id);
         $scope.model.justification = {id:justification.id,begin:null,end:null};
     }
 
@@ -112,10 +96,9 @@ app.controller('RequestAssistanceExamCtrl', function($scope, Assistance, Session
     // Envio la peticion al servidor
     $scope.save = function() {
 
-        Assistance.requestJustification($scope.model.user_id,$scope.model.justification,
+        Assistance.requestJustification($scope.model.session.user_id,$scope.model.justification,
             function(ok) {
                 Notifications.message("Guardado exitosamente");
-                $scope.model.justification.begin = null;
                 $scope.clearSelections();
             },
             function(error) {
@@ -128,7 +111,7 @@ app.controller('RequestAssistanceExamCtrl', function($scope, Assistance, Session
     // data.justification = {name,id}
     $scope.$on('findStockJustification', function(event, data) {
         justification = data.justification;
-        if (justification.name == 'exam') {
+        if (justification.id == $scope.model.justificationExamId) {
             $scope.initialize(justification);
         }
     });
