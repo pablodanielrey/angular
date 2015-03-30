@@ -7,9 +7,9 @@ var app = angular.module('mainApp');
 app.controller('RequestAuthorityUserCtrl', ["$scope", "$timeout", "Assistance", "Notifications", "Users", function($scope, $timeout, Assistance, Notifications, Users) {
 
 	if($scope.model == undefined){
-		$scope.model = {};
+		Notifications.message("Error: Variables del modelo sin definir");
 	}
-	
+
 	$scope.model.searchUser = null; //usuario a buscar
 	$scope.model.searchUserPromise = null //promesa de busqueda
 	$scope.model.users = [] //lista de usuarios que coinciden con la busqueda
@@ -19,7 +19,6 @@ app.controller('RequestAuthorityUserCtrl', ["$scope", "$timeout", "Assistance", 
 	 * Buscar usuarios
 	 */
 	$scope.searchUsers = function(){
-		console.log("test");
 		if($scope.model.searchUserPromise){
 			$timeout.cancel($scope.model.searchUserPromise);
 		}
