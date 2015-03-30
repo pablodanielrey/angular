@@ -72,6 +72,7 @@ if __name__ == '__main__':
 
             app,func,nombre,dni,maili,e,s,of,cargo,ma = line
             if dni == None or dni == '':
+                logging.warn('ignorando {} ya que no tiene dni'.format(line))
                 continue
 
             pid = str(uuid.uuid4())
@@ -80,7 +81,8 @@ if __name__ == '__main__':
                 cur.execute('insert into profile.users (id,dni,name,lastname) values (%s,%s,%s,%s)', (pid,dni,nombre,app))
             else:
                 pid = cur.fetchone()[0]
-                print("{0} ya existe - {1}".format(dni,pid))
+                cur.execute('update profile.users set name = %s, lastname = %s where id = %s',(nombre,app,pid))
+                logging.warn("{0} ya existe - {1}".format(dni,pid))
 
 
             """ agrego el mail institucional """
