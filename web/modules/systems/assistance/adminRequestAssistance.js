@@ -61,12 +61,7 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistan
                 $scope.justifications = new Map();
                 for (x in response) {
                     var r = response[x];
-                    switch(r.name) {
-                        case "absent": name = "Ausente con Aviso"; break;
-                        case "compensatory": name = "Compensatorio"; break;
-                        default: name = r.name; break;
-                    }
-                    $scope.justifications.set(r.id,name);
+                    $scope.justifications.set(r.id,r.name);
                     $scope.loadRequests();
                 }
             },
