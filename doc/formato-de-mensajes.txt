@@ -316,8 +316,8 @@ response :
   response:{
     requests : [ "lista de solicitudes de un determinado usuario (autoridad)"
   		{
-            id: "id de la solicitud de hora extra",
-            user_id:"id del usuario para el cual se solicito hora extra",
+        id: "id de la solicitud de hora extra",
+        user_id:"id del usuario para el cual se solicito hora extra",
     		begin: 2014-12-01 00:00:00 "fecha y hora de inicio de la hora extra"
     		end: 2014-12-02 00:00:00 "fecha y hora de finalizacion de la hora extra"
     		reason: "motivo de la solicitud"
