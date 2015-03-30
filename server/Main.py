@@ -23,6 +23,7 @@ def config_injector(binder):
     despues hay que ver donde queda mejor
 """
 def _checkAssistanceSchedule(assistance):
+    logging.info('chequeando schedules')
     assistance.checkSchedule()
 
 
@@ -36,7 +37,8 @@ if __name__ == '__main__':
 
   assistance = inject.instance(Assistance)
   #rt = utils.Periodic(15 * 60, _checkAssistanceSchedule,assistance)
-  #_checkAssistanceSchedule(assistance)
+  _checkAssistanceSchedule(assistance)
+  sys.exit(0)
 
   reactor = network.websocket.getReactor()
 

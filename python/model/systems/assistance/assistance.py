@@ -69,9 +69,8 @@ class Assistance:
             logging.debug('users: {}'.format(userIds))
 
 
-            #date = self.date.now()
-            dateIni = self.date.parse('2015-03-01 00:00:00')
-            dateFin = self.date.parse('2015-03-27 00:00:00')
+            dateIni = date = self.date.now() - datetime.timedelta(days=1)
+            dateFin = date = self.date.now() + datetime.timedelta(days=1)
             delta = dateFin - dateIni
             for i in range(delta.days):
                 date = dateIni + datetime.timedelta(days=i)
