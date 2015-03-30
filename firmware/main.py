@@ -88,7 +88,7 @@ class Main:
                     if self.logs.findLogByDate(con,l['log']) is None:
                         self.logs.persist(con,l)
                     else:
-                        logging.debug('{} ya existente'.format(l))
+                        logging.warn('{} ya existente'.format(l))
 
                 con.commit()
 
@@ -96,7 +96,7 @@ class Main:
                 con.close()
 
         except Exception as e:
-            logging.info(e)
+            logging.exception(e)
 
 
 
@@ -120,7 +120,7 @@ if __name__ == '__main__':
     """
 
 
-    logging.basicConfig(filename='/tmp/firmware-sync.log',format='%(asctime)s %(levelname)s %(message)s',level=logging.DEBUG)
+    logging.basicConfig(filename='/tmp/firmware-sync.log',format='%(asctime)s %(levelname)s %(message)s',level=logging.INFO)
     inject.configure(config_injector)
 
     config = inject.instance(Config)
