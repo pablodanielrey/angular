@@ -96,8 +96,8 @@ class Main:
 
                 """ entre las 2 y 3 am borro los logs del reloj """
                 nowdate = datetime.datetime.now()
-                deleteend = nowdate.replace(hour=int(self.config.configs['hour_start_delete']),minute=int(self.config.configs['minute_start_delete']),second=0,microsecond=0)
-                deletestart = nowdate.replace(hour=int(self.config.configs['hour_end_delete']),minute=int(self.config.configs['minute_end_delete']),second=0,microsecond=0)
+                deletestart = nowdate.replace(hour=int(self.config.configs['hour_start_delete']),minute=int(self.config.configs['minute_start_delete']),second=0,microsecond=0)
+                deleteend = nowdate.replace(hour=int(self.config.configs['hour_end_delete']),minute=int(self.config.configs['minute_end_delete']),second=0,microsecond=0)
                 if (nowdate <= deletestart and nowdate >= deletestart):
                     logscheck = self.zk.getAttLog()
                     logslen = len(logs)
