@@ -246,10 +246,10 @@ class ZkSoftware:
 
 
     def clearTemplates(self):
-        self.clearData(2)
+        self._clearData(2)
 
     def clearAttLogs(self):
-        self.clearData(3)
+        self._clearData(3)
 
     def clearUsers(self):
-        self.clearData(1)
+        self._clearData(1)
