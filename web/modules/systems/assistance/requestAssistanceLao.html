@@ -27,9 +27,7 @@
           </div>
 
           <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationLaoAvailable()]">
-            <p class="parrafosGreen margin">Disponibilidad MENSUAL Restante</p>
-            <p class="parrafosGreen2 margin">{{model.exam.actualStock}}</p>
-            <p class="parrafosGreen margin">Disponibilidad ANUAL Restante</p>
+            <p class="parrafosGreen margin">Disponibilidad Restante</p>
             <p class="parrafosGreen2 margin">{{model.exam.stock}}</p>
           </div>
 
@@ -46,7 +44,7 @@
           </div>
 
         </div>
-        
+
         <div class="margin" ng-class="{true:'visible', false:'hidden'}[isSelectedDate()]">
           <p class="parrafos">Solicitar Licencia anual para los días</p>
           <p class="parrafos2"><i class="fa fa-calendar-o"></i> {{dateFormated}} </p>

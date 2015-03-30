@@ -5,7 +5,6 @@ app.controller('RequestAssistanceLaoCtrl', function($scope, Assistance, Session,
     $scope.model.justificationLaoRequestSelected = false;
 	$scope.model.justificationLaoAvailableSelected = false;
 	$scope.model.justificationLaoRequestsSelected = false;
-    $scope.model.justification = {};
 
     // -------------- Manejo de la vista ---------------
 
@@ -18,6 +17,8 @@ app.controller('RequestAssistanceLaoCtrl', function($scope, Assistance, Session,
 		$scope.clearSelections();
 		$scope.clearSelectionsLao();
 		$scope.model.justificationLaoSelected = value;
+
+        $scope.model.justification.id = $scope.model.justificationLaoId;
 	}
 
 
@@ -55,10 +56,6 @@ app.controller('RequestAssistanceLaoCtrl', function($scope, Assistance, Session,
 		$scope.model.justificationLaoRequestSelected = false;
 		$scope.model.justificationLaoAvailableSelected = false;
 		$scope.model.justificationLaoRequestsSelected = false;
-
-        if ($scope.model.justification != null) {
-            $scope.model.justification.begin = null;
-        }
 	}
 
     $scope.isSelectedDate = function() {
@@ -74,17 +71,6 @@ app.controller('RequestAssistanceLaoCtrl', function($scope, Assistance, Session,
 
     // -----------------------------------------------------------------------------------------
 
-    // Carga el stock que se puede tomar
-    $scope.loadLaoActualStock = function(id) {
-        Assistance.getJustificationActualStock($scope.model.session.user_id, id,
-			function(justificationActualStock){
-				$scope.model.lao.actualStock = justificationActualStock;
-			},
-			function(error){
-                Notifications.message(error);
-			}
-		);
-    }
 
     //Carga el stock disponible de compensatorios
     $scope.loadLaoStock = function(id) {
@@ -103,16 +89,15 @@ app.controller('RequestAssistanceLaoCtrl', function($scope, Assistance, Session,
     $scope.$on('findStockJustification', function(event, data) {
 
         justification = data.justification;
-        if (justification.name == 'lao') {
+        if (justification.id == $scope.model.justificationLaoId) {
             $scope.initialize(justification);
         }
     });
 
     $scope.initialize = function(justification) {
         $scope.clearSelectionsLao();
-        $scope.model.lao = {id:justification.id, name: justification.name, stock:0, actualStock:0};
+        $scope.model.lao = {id:justification.id, name: justification.name, stock:0};
         $scope.loadLaoStock(justification.id);
-        $scope.loadLaoActualStock(justification.id);
         $scope.model.justification = {id:justification.id,begin:null,end:null};
     }
 
@@ -120,11 +105,9 @@ app.controller('RequestAssistanceLaoCtrl', function($scope, Assistance, Session,
     // Envio la peticion al servidor
     $scope.save = function() {
 
-        Assistance.requestJustification($scope.model.user_id,$scope.model.justification,
+        Assistance.requestJustification($scope.model.session.user_id,$scope.model.justification,
             function(ok) {
                 Notifications.message("Guardado exitosamente");
-                $scope.model.justification.begin = null;
-                $scope.model.justification.end = null;
                 $scope.clearSelections();
             },
             function(error) {

@@ -100,11 +100,9 @@ app.controller('RequestAssistanceCtrl', function($scope, $rootScope, $timeout, $
 			Profiles.checkAccess(Session.getSessionId(),'ADMIN-ASSISTANCE,USER-ASSISTANCE',
 				function(ok) {
 					if (ok == 'granted') {
-						console.log("granted");
 						$scope.loadJustifications();
 						// $scope.loadRequestedLicences();
 					} else {
-						console.log("not granted");
 						$window.location.href = "/#/logout";
 					}
 				},
