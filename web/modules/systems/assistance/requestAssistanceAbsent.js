@@ -6,8 +6,7 @@ app.controller('RequestAssistanceAbsentCtrl', function($scope, Assistance, Notif
 	$scope.model.absent = {
 		id:null,
 		name:"absent",
-		stock:0,
-		actualStock:0
+		stock:0
 	};
 
 	$scope.model.justificationAbsentRequestSelected = false;
@@ -35,7 +34,7 @@ app.controller('RequestAssistanceAbsentCtrl', function($scope, Assistance, Notif
 	$scope.isSelectedJustificationAbsent = function(){
 		return $scope.model.justificationAbsentSelected;
 	};
-	
+
 	$scope.isSelectedJustificationAbsentRequestDate = function(){
 		return $scope.model.justificationAbsentRequestDateSelected;
 	};
@@ -44,6 +43,8 @@ app.controller('RequestAssistanceAbsentCtrl', function($scope, Assistance, Notif
 		var value = !$scope.model.justificationAbsentSelected;
 		$scope.clearSelections();
 		$scope.model.justificationAbsentSelected = value;
+
+		$scope.model.absent.id = $scope.model.justificationAbsentId;
 	};
 
 	$scope.isSelectedJustificationAbsentRequest = function(){
@@ -86,23 +87,12 @@ app.controller('RequestAssistanceAbsentCtrl', function($scope, Assistance, Notif
 
 
 
-	 // Carga el stock que se puede tomar
-    $scope.loadAbsentActualStock = function(id) {
-        Assistance.getJustificationActualStock($scope.model.session.user_id, id,
-			function(justificationActualStock){
-				$scope.model.absent.actualStock = justificationActualStock;
-			},
-			function(error){
-				alert(error);
-			}
-		);
-    }
 
 	//Carga el stock disponible de los ausentes con aviso
     $scope.loadAbsentStock = function(id) {
         Assistance.getJustificationStock($scope.model.session.user_id, id,
 			function(justificationStock){
-				$scope.model.absent.stock = justificationStock;
+				$scope.model.absent.stock = justificationStock.stock;
 			},
 			function(error){
 				alert(error);
@@ -118,14 +108,12 @@ app.controller('RequestAssistanceAbsentCtrl', function($scope, Assistance, Notif
 
 		var requestedJustification = {
 			id:$scope.model.absent.id,
-			start:$scope.model.requestAbsentBegin,
-			end:$scope.model.requestAbsentBegin,
+			begin:$scope.model.requestAbsentBegin
 		}
 		Assistance.requestJustification($scope.model.session.user_id, requestedJustification,
 			function(ok){
-				$scope.model.requestAbsentBegin = null;
+				$scope.model.absent = {};
 				$scope.clearSelections();
-				$scope.clearSelectionsAbsent();
 				Notifications.message('Ausente con aviso solicitado correctamente');
 				$scope.$broadcast('requestLicenceEvent');
 			},
@@ -140,14 +128,13 @@ app.controller('RequestAssistanceAbsentCtrl', function($scope, Assistance, Notif
 	$scope.initialize = function(justification){
         $scope.model.absent = {id:justification.id, name:justification.name, stock:0, actualStock:0};
 		$scope.loadAbsentStock(justification.id);
-		$scope.loadAbsentActualStock(justification.id);
 	}
 
 	// Escuchar evento de inicializacion
     $scope.$on('findStockJustification', function(event, data) {
 
         justification = data.justification;
-        if (justification.name == 'absent') {
+        if (justification.id == $scope.model.justificationAbsentId) {
 			$scope.initialize(justification);
         }
 
