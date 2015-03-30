@@ -6,59 +6,59 @@ app.controller('RequestAssistanceOutCtrl', function($scope, Assistance, Notifica
     $scope.model.justificationOutRequestSelected = false;
     $scope.model.justificationOutAvailableSelected = false;
     $scope.model.justificationOutRequestsSelected = false;
-    $scope.model.justification = {};
 
     // ---------------- Manejo de la vista --------------------
 
-    $scope.isSelectedJustificationOut = function(){
+    $scope.isSelectedJustificationOut = function() {
 		return $scope.model.justificationOutSelected;
 	}
 
-	$scope.selectJustificationOut = function(){
+	$scope.selectJustificationOut = function() {
 		var value = !$scope.model.justificationOutSelected;
 		$scope.clearSelections();
         $scope.clearSelectionsOut();
 		$scope.model.justificationOutSelected = value;
+
+        $scope.model.justification.id = $scope.model.justificationOutId;
 	}
 
-	$scope.isSelectedJustificationOutRequest = function(){
+	$scope.isSelectedJustificationOutRequest = function() {
 		return $scope.model.justificationOutRequestSelected;
 	};
 
-    $scope.isSelectedJustificationOutAvailable = function(){
+    $scope.isSelectedJustificationOutAvailable = function() {
 		return $scope.model.justificationOutAvailableSelected;
 	};
 
-	$scope.isSelectedJustificationOutRequests = function(){
+	$scope.isSelectedJustificationOutRequests = function() {
 		return $scope.model.justificationOutRequestsSelected;
 	};
 
-	$scope.selectJustificationOutRequest = function(){
+	$scope.selectJustificationOutRequest = function() {
 		$scope.clearSelectionsOut();
 		$scope.model.justificationOutRequestSelected = true;
 	};
 
 
-	$scope.selectJustificationOutRequests = function(){
+	$scope.selectJustificationOutRequests = function() {
 		$scope.clearSelectionsOut();
 		$scope.model.justificationOutRequestsSelected = true;
 	};
 
-	$scope.selectJustificationOutAvailable = function(){
+	$scope.selectJustificationOutAvailable = function() {
 		$scope.clearSelectionsOut();
 		$scope.model.justificationOutAvailableSelected = true;
 
 	};
 
 
-	$scope.clearSelectionsOut = function(){
+	$scope.clearSelectionsOut = function() {
 		$scope.model.justificationOutRequestSelected = false;
 		$scope.model.justificationOutAvailableSelected = false;
 		$scope.model.justificationOutRequestsSelected = false;
 
         if ($scope.model.justification != null) {
-            $scope.model.justification.begin = null;
-                $scope.model.justification.end = null;
+            $scope.model.justification = {};
         }
 
 	}
@@ -94,24 +94,12 @@ app.controller('RequestAssistanceOutCtrl', function($scope, Assistance, Notifica
 
     // ------------------------------------------------------------------------
 
-    // Carga el stock que se puede tomar
-    $scope.loadOutActualStock = function(id) {
-        Assistance.getJustificationActualStock($scope.model.session.user_id, id,
-			function(justificationActualStock){
-				console.log(justificationActualStock);
-				$scope.model.out.actualStock = justificationActualStock;
-			},
-			function(error){
-                Notifications.message(error);
-			}
-		);
-    }
 
     //Carga el stock disponible
     $scope.loadOutStock = function(id) {
         Assistance.getJustificationStock($scope.model.session.user_id, id,
 			function(justificationStock) {
-                $scope.model.out.stock = justificationStock;
+                $scope.model.out.stock = justificationStock.stock;
 			},
 			function(error) {
                 Notifications.message(error);
@@ -124,16 +112,15 @@ app.controller('RequestAssistanceOutCtrl', function($scope, Assistance, Notifica
     $scope.$on('findStockJustification', function(event, data) {
 
         justification = data.justification;
-        if (justification.name == 'out') {
+        if (justification.id == $scope.model.justificationOutId) {
             $scope.initialize(justification);
         }
     });
 
     $scope.initialize = function(justification) {
         $scope.clearSelectionsOut();
-        $scope.model.out = {id:justification.id, name: justification.name, stock:0, actualStock:0};
+        $scope.model.out = {id:justification.id, name: justification.name, stock:0};
         $scope.loadOutStock(justification.id);
-        $scope.loadOutActualStock(justification.id);
         $scope.model.justification = {id:justification.id,begin:null,end:null,hours:0};
     }
 
@@ -155,11 +142,9 @@ app.controller('RequestAssistanceOutCtrl', function($scope, Assistance, Notifica
     // Envio la peticion al servidor
     $scope.save = function() {
 
-        Assistance.requestJustification($scope.model.user_id,$scope.model.justification,
+        Assistance.requestJustification($scope.model.session.user_id,$scope.model.justification,
             function(ok) {
                 Notifications.message("Guardado exitosamente");
-                $scope.model.justification.begin = null;
-                $scope.model.justification.end = null;
                 $scope.clearSelections();
             },
             function(error) {

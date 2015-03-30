@@ -5,11 +5,14 @@ app.controller('RequestAssistanceCtrl', function($scope, $rootScope, $timeout, $
 	$scope.model = {
 		justifications : [], //auxiliar para almacenar las justificaciones
 		requestedLicences : [], //solicitudes de licencias
+		justification : {}, //justificacion a guardar
 		justificationAbsentSelected	: false,
 		justificationLaoSelected	: false,
 		justificationExamSelected	: false,
 		justificationOutSelected	: false,
-		justificationCompensatorySelected : false
+		justificationCompensatorySelected : false,
+		justificationCompensatoryId : "48773fd7-8502-4079-8ad5-963618abe725", // id de la justificacion de compensatorio
+		justificationOutId : 'fa64fdbd-31b0-42ab-af83-818b3cbecf46' //id de la justificacion de boleta de salidas
 	};
 
 	/**
@@ -96,7 +99,7 @@ app.controller('RequestAssistanceCtrl', function($scope, $rootScope, $timeout, $
 					if (ok == 'granted') {
 						console.log("granted");
 						$scope.loadJustifications();
-						$scope.loadRequestedLicences();
+						// $scope.loadRequestedLicences();
 					} else {
 						console.log("not granted");
 						$window.location.href = "/#/logout";
@@ -122,6 +125,7 @@ app.controller('RequestAssistanceCtrl', function($scope, $rootScope, $timeout, $
 		$scope.model.justificationExamSelected = false;
 		$scope.model.justificationOutSelected = false;
 		$scope.model.justificationLaoSelected = false;
+		$scope.model.justification = {};
 	}
 
 
