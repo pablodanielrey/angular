@@ -109,7 +109,7 @@ class Main:
                         logscheck.sort(key=lambda x: x['DateTime'])
                         equals = True
                         for i in range(len(logs) - 1):
-                            if l[i]['DateTime'] != lc[i]['DateTime'] and l[i]['PIN'] != lc[i]['PIN']:
+                            if l[i]['DateTime'] != lc[i]['DateTime'] or l[i]['PIN'] != lc[i]['PIN']:
                                 equals = False
                                 break
 
