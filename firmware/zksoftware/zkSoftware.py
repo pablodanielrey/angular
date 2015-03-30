@@ -213,6 +213,9 @@ class ZkSoftware:
         logging.debug(response)
 
         if 'GetAttLogResponse' in response:
+            if response['GetAttLogResponse'] is None:
+                return []
+
             if 'Row' not in response['GetAttLogResponse']:
                 """
                     el reloj no tiene logs. respuesta =
