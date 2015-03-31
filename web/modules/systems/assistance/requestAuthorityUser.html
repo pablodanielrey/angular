@@ -1,5 +1,12 @@
 
-<input ng-model="model.searchUser" ng-change="searchUsers()">
-<ul id="users">
-	<li ng-repeat="user in model.users" ng-click="selectUser(user.id)">{{user.name}}</li>
-</ul>
+<div class="search">
+	<div class="searchTitle">
+		<span><i class="fa fa-user-plus"></i> Seleccione Usuario</span>
+	</div>
+	<div>
+		<input class="inputSearch" ng-model="model.searchUser" ng-change="searchUsers()" placeholder="Buscar...">
+		<ul>
+			<li ng-repeat="user in model.users" ng-click="selectUser(user)">{{user.name}} {{user.lastname}}</li>
+		</ul>
+	</div>
+</div>

@@ -1,7 +1,10 @@
+<div class="title2">
+    <label><i class="fa fa-sort-amount-asc"></i> Solicitudes de Horas Extras Relizadas </label>
+</div>
+
 <table> 
 	<tr> 
 	<th>Usuario</th>
-	<th>Fecha</th>
 	<th>Día</th>
 	<th>Inicio</th>
 	<th>Fin</th>
@@ -9,12 +12,12 @@
 	<th>Estado</th>
 	</tr>
 	<tr ng-repeat="request in model.requests">
-		<td>{{request.userName}}</td>
+		<td>{{request.user}}</td>
 		<td>{{request.date}}</td>
 		<td>{{request.startTime}}</td>
 		<td>{{request.endTime}}</td>
 		<td>{{request.reason}}</td>		
-		<td>{{request.status}}</td>
+		<td>{{request.state}}</td>
 	</tr>
 </table>
 

@@ -35,8 +35,9 @@ app.controller('RequestAuthorityUserCtrl', ["$scope", "$timeout", "Assistance", 
 	/**
  	 * Listar elementos
 	 */
-	$scope.selectUser = function(id){
-		$scope.model.user_id = id;
+	$scope.selectUser = function(user){
+		$scope.model.user_id = user.id;
+		$scope.model.searchUser = user.name + " " + user.lastname;
 	}
 	
 	/**
