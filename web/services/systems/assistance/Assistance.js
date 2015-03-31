@@ -160,16 +160,39 @@ app.service('Assistance', ['Utils','Messages','Session',
 				action: 'getOvertimeRequests',
 				session: Session.getSessionId(),
 				request: {
-					user_id: userId, //id del usuario (jefe) que solicito las horas extras
+					user_id: userId //id del usuario (jefe) que solicito las horas extras
 				}
-			}
+			};
 
 			response = [
 		  		{id:'1', user_id:"1", begin: '2015-05-13 10:00:00', end: '2015-05-13 12:00:00', state: "PENDING", reason: "Trabajo pendiente"},
 	  			{id:'2', user_id:"2", begin: '2015-06-15 12:00:00', end: '2015-06-15 15:00:00', state: "APPROVED", reason: "Adelantar trabajo"}
-			]
+			];
 
 			callbackOk(response);
-		}
+		};
+		
+		/**
+		 * Cargar nueva solicitud de horas extra
+		 * @param userId (jefe) Id de usuario que solicita la hora extra
+		 * @param request Solicitud de hora extra
+		 */
+		this.requestOvertime = function(userId, request, callbackOk, callbackError){
+			var msg = {
+				id: Utils.getId(),
+				action: 'requestOvertime',
+				session: Session.getSessionId(),
+				request: {
+					user_id: userId, //id del usuario al cual se solicita la hora extra
+					begin: request.begin,
+					end: request.end,
+					reason: request.reason
+				}
+			};
+			console.log(msg);
+			callbackOk("ok");
+		};
+		
+		
 	}]
 );

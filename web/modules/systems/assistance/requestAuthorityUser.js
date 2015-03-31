@@ -11,8 +11,8 @@ app.controller('RequestAuthorityUserCtrl', ["$scope", "$timeout", "Assistance", 
 	}
 
 	$scope.model.searchUser = null; //usuario a buscar
-	$scope.model.searchUserPromise = null //promesa de busqueda
-	$scope.model.users = [] //lista de usuarios que coinciden con la busqueda
+	$scope.model.searchUserPromise = null; //promesa de busqueda
+	$scope.model.users = []; //lista de usuarios que coinciden con la busqueda
 	
 	
 	/**
@@ -21,7 +21,7 @@ app.controller('RequestAuthorityUserCtrl', ["$scope", "$timeout", "Assistance", 
 	$scope.searchUsers = function(){
 		if($scope.model.searchUserPromise){
 			$timeout.cancel($scope.model.searchUserPromise);
-		}
+		};
 		
 		$scope.searchUserPromise = $timeout(
 			function(){
@@ -38,7 +38,7 @@ app.controller('RequestAuthorityUserCtrl', ["$scope", "$timeout", "Assistance", 
 	$scope.selectUser = function(user){
 		$scope.model.user_id = user.id;
 		$scope.model.searchUser = user.name + " " + user.lastname;
-	}
+	};
 	
 	/**
  	 * Seleccionar usuario
@@ -51,6 +51,6 @@ app.controller('RequestAuthorityUserCtrl', ["$scope", "$timeout", "Assistance", 
 			function(error){
 				Notifications.message(error);
 			}	
-		)
-	}
+		);
+	};
 }]);

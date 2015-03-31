@@ -19,7 +19,12 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
 		endTime: null, //hora de finalizacion solicitada
 		date: null, //actualmente se define un solo dia por solicitud, posteriormente cuando se maneje el calendario se podra definir un rango de dias (para un determinado rango de dias)
 		reason: null, //motivo por el cual se solicita las horas extra
-		requests: [] //solicitudes de horas extras para el usuario logueado
+		requests: [], //solicitudes de horas extras para el usuario logueado
+		
+		//variables correspondientes a la seleccion de usuario
+		searchUser: null,
+		searchUserPromise: null,
+		users: null
 	};
 	
 	/**
@@ -35,8 +40,8 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
 			Notifications.message("Error: Usuario de sesion no definido");
 			$window.location.href = "/#/logout";
 		}
-		$scope.model.session_user_id = session.user_id
-	}
+		$scope.model.session_user_id = session.user_id;
+	};
 	
 	/**
 	 * Obtener solicitudes de horas extra del usuario (jefe)
@@ -55,13 +60,13 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
 				throw new Error(error);
 			}
 		);
-	}
+	};
 
 	/**
 	 * Dar formato a la solicitud de hora extra
 	 */
 	$scope.formatRequest = function(request){
-		var requestAux = {}
+		var requestAux = {};
 		requestAux.id = request.id;
 		requestAux.reason = request.reason;
 		requestAux.state = request.state;
@@ -83,7 +88,7 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
 			}
 		);
 		return requestAux;
-	}
+	};
 	
 	/**
 	 * Inicializar
@@ -92,7 +97,107 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
 		$scope.loadSession();
 		$scope.loadRequests();
 	},0);
-		
-
 	
+	
+	
+	
+	/******************************************************
+	 * METODOS CORRESPONDIENTES A LA SELECCION DE USUARIO *
+	 ******************************************************/
+	/**
+	 * Buscar usuarios
+	 */
+	$scope.searchUsers = function(){
+		if($scope.model.searchUserPromise){
+			$timeout.cancel($scope.model.searchUserPromise);
+		};
+		
+		$scope.searchUserPromise = $timeout(
+			function(){
+				if($scope.search != "") {
+					$scope.listUsers();
+				}
+			}
+		,1000);
+	};
+
+	/**
+ 	 * Listar elementos
+	 */
+	$scope.selectUser = function(user){
+		$scope.model.user_id = user.id;
+		$scope.model.searchUser = user.name + " " + user.lastname;
+	};
+	
+	/**
+ 	 * Seleccionar usuario
+	 */
+	$scope.listUsers = function(){
+		Users.listUsers($scope.model.searchUser,
+			function(users){
+				$scope.model.users = users;
+			},
+			function(error){
+				Notifications.message(error);
+			}	
+		);
+	};
+	
+	
+	
+	
+	/***********************************************************
+	 * METODOS CORRESPONDIENTES AL PROCESAMIENTO DE FORMULARIO *
+	 ***********************************************************/
+	
+	/**
+	 * Dar formato a un timestamp
+	 * @param {input type date} date
+	 * @param {input type time} time
+	 * @returns {Date}
+	 */
+	$scope.formatTimestamp = function(date, time){
+		var timestamp = new Date(date);
+		var timeAux = new Date(time);
+		timestamp.setHours(timeAux.getHours());
+		timestamp.setMinutes(timeAux.getMinutes());
+		return timestamp;
+	};
+	
+	/**
+	 * Guardar solicitud en el servidor
+	 */
+	$scope.persistOvertime = function(){
+		var begin = $scope.formatTimestamp($scope.model.date, $scope.model.startTime);
+		var end = $scope.formatTimestamp($scope.model.date, $scope.model.endTime);
+		
+		var request = {
+			date:$scope.model.date,
+			begin:begin,
+			end:end,
+			reason:$scope.model.reason
+		};
+
+		Assistance.requestOvertime($scope.model.user_id, request,
+			function callbackOk(response){
+				Notifications.message("Registro realizado con exito");
+			},
+			function callbackError(error){
+				Notifications.message(error);
+			}
+		);
+	};
+	
+	/**
+	 * Chequear y guardar solicitud en el servidor
+	 */
+	$scope.requestOvertime = function(){
+		if(($scope.model.date != null) && ($scope.model.startTime != null) && ($scope.model.endTime != null) && ($scope.model.user_id != null)) {
+			$scope.persistOvertime();
+			
+		} else {
+			Notifications.message("Datos incorrectos: Verifique los datos ingresados");
+		}
+	};
+
 }]);

@@ -4,8 +4,55 @@
     <label><i class="fa fa-plus"></i> Solicitar Hora Extra</label>
   </div>
 
-  <div ng-controller="RequestAuthorityUserCtrl" ng-include="'modules/systems/assistance/requestAuthorityUser.html'"></div>
-  <div ng-controller="RequestAuthorityFormCtrl" ng-include="'modules/systems/assistance/requestAuthorityForm.html'"></div>  
+	<div class="requestOvertime">
+		<!-- seleccion de usuario -->
+		<div class="search">
+			<div class="searchTitle">
+				<span><i class="fa fa-user-plus"></i> Seleccione Usuario</span>
+			</div>
+			<div>
+				<input class="inputSearch" ng-model="model.searchUser" ng-change="searchUsers()" placeholder="Buscar...">
+				<ul>
+					<li ng-repeat="user in model.users" ng-click="selectUser(user)">{{user.name}} {{user.lastname}}</li>
+				</ul>
+			</div>
+		</div>
+		
+		
+		<!-- campos del formulario -->
+		<div class="date">
+			<div class="dateTitle">
+				<span><i class="fa fa-calendar"></i> Seleccione Fecha</span>
+			</div>
+			<div>
+				<input class="inputDate" type="date" ng-model="model.date">
+			</div>
+		</div>
+		<div class="time">
+			<div class="inputTime">
+				<span class="timeTitle"><i class="fa fa-clock-o"></i> Hora Inicio</span>
+				<input class="inputClock" type="time" ng-model="model.startTime">
+				<span class="timeTitle"><i class="fa fa-clock-o"></i> Hora Fin</span>
+				<input class="inputClock" type="time" ng-model="model.endTime">
+			</div>
+		</div>
+		<div class="reason">
+			<div class="searchTitle">
+			<span>Motivo</span>
+			</div>
+			<div class="inputReason">
+			<textarea class="inputText" ng-model="model.reason">
+			</textarea>
+			</div>
+		</div>
+		<div>
+			<button class="solicitar" ng-click="requestOvertime()"><i class="fa fa-reply"></i> Solicitar</button>
+		</div>
+
+		
+		
+		
+	</div>
   <div ng-controller="RequestAuthorityShowRequestsCtrl" ng-include="'modules/systems/assistance/requestAuthorityShowRequests.html'"></div>
 
 </div>
