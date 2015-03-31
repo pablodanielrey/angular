@@ -8,6 +8,8 @@ from model.session import Session
 
 from model.utils import Periodic
 from model.systems.assistance.assistance import Assistance
+from model.systems.assistance.fails import Fails
+from model.systems.assistance.date import Date
 
 import network.websocket
 import model.systems.assistance.network
@@ -22,9 +24,15 @@ def config_injector(binder):
     chequeo de horarios de asistencia.
     despues hay que ver donde queda mejor
 """
-def _checkAssistanceSchedule(assistance):
+def _checkAssistanceSchedule(assistance,f):
     logging.info('chequeando schedules')
-    assistance.checkSchedule()
+    date = inject.instance(Date)
+    (users,fails) = assistance.checkSchedule(date.parse('2015-03-25 00:00:00'), date.parse('2015-04-01 00:00:00'))
+    f.toCsv('/tmp/f.csv',users,fails)
+    for user in users:
+        ffails = f.filterUser(user['id'],fails)
+        f.toCsv('/tmp/{}-{}-{}.csv'.format(user['dni'],user['name'],user['lastname']),users,ffails)
+
 
 
 if __name__ == '__main__':
@@ -34,10 +42,11 @@ if __name__ == '__main__':
   inject.configure(config_injector)
   config = inject.instance(Config)
 
-
+  fails = inject.instance(Fails)
   assistance = inject.instance(Assistance)
   #rt = utils.Periodic(15 * 60, _checkAssistanceSchedule,assistance)
-  #_checkAssistanceSchedule(assistance)
+  _checkAssistanceSchedule(assistance,fails)
+  sys.exit(0)
 
   reactor = network.websocket.getReactor()
 
