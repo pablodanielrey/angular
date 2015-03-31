@@ -19,8 +19,8 @@ app.controller('RequestAssistanceAbsentCtrl', function($scope, Assistance, Notif
 	/**
 	 * Esta definido el dia de la solicitud?
 	 */
-	$scope.changeRequestAbsentBegin = function(){
-		if($scope.model.requestAbsentBegin != null){
+	$scope.changeRequestAbsentBegin = function() {
+		if($scope.model.requestAbsentBegin != null) {
 			$scope.model.justificationAbsentRequestDateSelected = true;
 			$scope.model.requestAbsentBeginFormated = $scope.model.requestAbsentBegin.toLocaleDateString();
 			return true;
@@ -31,15 +31,15 @@ app.controller('RequestAssistanceAbsentCtrl', function($scope, Assistance, Notif
 		}
 	};
 
-	$scope.isSelectedJustificationAbsent = function(){
+	$scope.isSelectedJustificationAbsent = function() {
 		return $scope.model.justificationAbsentSelected;
 	};
 
-	$scope.isSelectedJustificationAbsentRequestDate = function(){
+	$scope.isSelectedJustificationAbsentRequestDate = function() {
 		return $scope.model.justificationAbsentRequestDateSelected;
 	};
 
-	$scope.selectJustificationAbsent = function(){
+	$scope.selectJustificationAbsent = function() {
 		var value = !$scope.model.justificationAbsentSelected;
 		$scope.clearSelections();
 		$scope.model.justificationAbsentSelected = value;
@@ -47,37 +47,37 @@ app.controller('RequestAssistanceAbsentCtrl', function($scope, Assistance, Notif
 		$scope.model.absent.id = $scope.model.justificationAbsentId;
 	};
 
-	$scope.isSelectedJustificationAbsentRequest = function(){
+	$scope.isSelectedJustificationAbsentRequest = function() {
 		return $scope.model.justificationAbsentRequestSelected;
 	};
 
-	$scope.isSelectedJustificationAbsentAvailable = function(){
+	$scope.isSelectedJustificationAbsentAvailable = function() {
 		return $scope.model.justificationAbsentAvailableSelected;
 	};
 
-	$scope.isSelectedJustificationAbsentRequests = function(){
+	$scope.isSelectedJustificationAbsentRequests = function() {
 		return $scope.model.justificationAbsentRequestsSelected;
 	};
 
-	$scope.selectJustificationAbsentRequest = function(){
+	$scope.selectJustificationAbsentRequest = function() {
 		$scope.clearSelectionsAbsent();
 		$scope.model.justificationAbsentRequestSelected = true;
 	};
 
 
-	$scope.selectJustificationAbsentRequests = function(){
+	$scope.selectJustificationAbsentRequests = function() {
 		$scope.clearSelectionsAbsent();
 		$scope.model.justificationAbsentRequestsSelected = true;
 	};
 
-	$scope.selectJustificationAbsentAvailable = function(){
+	$scope.selectJustificationAbsentAvailable = function() {
 		$scope.clearSelectionsAbsent();
 		$scope.model.justificationAbsentAvailableSelected = true;
 
 	};
 
 
-	$scope.clearSelectionsAbsent = function(){
+	$scope.clearSelectionsAbsent = function() {
 		$scope.model.justificationAbsentRequestDateSelected = false;
 		$scope.model.justificationAbsentRequestSelected = false;
 		$scope.model.justificationAbsentAvailableSelected = false;
@@ -104,14 +104,15 @@ app.controller('RequestAssistanceAbsentCtrl', function($scope, Assistance, Notif
     /**
 	 * Actualmente solo puede solicitar un dia a la vez
 	 */
-	$scope.confirmRequestAbsent = function(){
+	$scope.confirmRequestAbsent = function() {
 
 		var requestedJustification = {
 			id:$scope.model.absent.id,
 			begin:$scope.model.requestAbsentBegin
 		}
 		Assistance.requestJustification($scope.model.session.user_id, requestedJustification,
-			function(ok){
+			function(ok) {
+                $scope.$broadcast('RequestLicenceEvent');
 				$scope.clearSelections();
 				Notifications.message('Ausente con aviso solicitado correctamente');
 			},
@@ -123,7 +124,7 @@ app.controller('RequestAssistanceAbsentCtrl', function($scope, Assistance, Notif
 	}
 
 
-	$scope.initialize = function(justification){
+	$scope.initialize = function(justification) {
         $scope.model.absent = {id:justification.id, name:justification.name, stock:0};
 		$scope.loadAbsentStock(justification.id);
 	}

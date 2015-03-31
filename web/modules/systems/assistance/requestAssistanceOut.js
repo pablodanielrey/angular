@@ -140,6 +140,7 @@ app.controller('RequestAssistanceOutCtrl', function($scope, Assistance, Notifica
 
         Assistance.requestJustification($scope.model.session.user_id,$scope.model.justification,
             function(ok) {
+                $scope.$broadcast('RequestLicenceEvent');
                 Notifications.message("Guardado exitosamente");
                 $scope.clearSelections();
             },
