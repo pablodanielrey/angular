@@ -7,9 +7,11 @@ from wexceptions import *
 
 from model import utils
 from model.systems.assistance.date import Date
+from model.systems.assistance.logs import Logs
 
 class Schedule:
 
+    logs = inject.attr(Logs)
     date = inject.attr(Date)
 
     """
@@ -79,11 +81,132 @@ class Schedule:
         return users
 
 
+    """
+        chequea el schedule de la fecha pasada como parámetro
+        los logs de agrupan por schedule, teniendo una tolerancia de 8 horas antes del siguiente schedule
+
+    """
+    def checkSchedule(self,con,userId,date):
+        date = self.date.awareToUtc(date)
+
+        schedules = self.getSchedule(con,userId,date)
+        if schedules is None:
+            return []
+
+        if len(schedules) <= 0:
+            return []
+
+        schedules2 = []
+        days = 1
+        while schedules2 == None or len(schedules2) <= 0:
+            date2 = date + datetime.timedelta(days=days)
+            schedules2 = self.getSchedule(con,userId,date + datetime.timedelta(days=days))
+            days = days + 1
+
+        start2 = schedules2[0]['start']
+
+        start = schedules[0]['start']
+        end = schedules[-1]['end']
+        deltaEnd = end + datetime.timedelta(seconds=((start2 - end).total_seconds() / 3))
+        deltaStart = start - datetime.timedelta(hours=1)
+
+
+        logging.debug('Chequeando fechas : {} -> {}'.format(deltaStart,deltaEnd))
+
+        """
+            obtengo los logs indicados para cubrir todo el schedule
+            o sea los logs comprendidos en :
+                todo el tiempo de trabajo + horas hasta el siguiente inicio de schedule - 8 horas
+        """
+        logs = self.logs.findLogs(con,userId,deltaStart,deltaEnd)
+        logging.debug(logs)
+        whs,attlogs = self.logs.getWorkedHours(logs)
+        logging.debug(whs)
+        controls = list(utils.combiner(schedules,whs))
+
+        fails = self._checkScheduleWorkedHours(userId,controls)
+        return fails
+
+
+
+
+    """ chequea los schedules contra las workedhours calculadas """
+    def _checkScheduleWorkedHours(self,userId,controls):
+        tolerancia = datetime.timedelta(minutes=15)
+        fails = []
+        for sched,wh in controls:
+
+            if sched is None:
+                """ no tiene schedule a controlar """
+                continue
+
+            date = sched['start'].replace(hour=0,minute=0,second=0,microsecond=0)
+
+            if wh is None or 'start' not in wh or 'end' not in wh:
+                """ no tiene nada trabajado!!! """
+                fails.append(
+                    {
+                        'userId':userId,
+                        'date':date,
+                        'description':'No existe ninguna marcación para esa fecha'
+                    }
+                )
+                continue
+
+
+
+            """ controlo la llegada """
+            if wh['start'] is None:
+                fails.append(
+                    {
+                        'userId':userId,
+                        'date': date,
+                        'description':'Sin horario de llegada'
+                    }
+                )
+
+            elif wh['start'] > sched['start'] + tolerancia:
+                fails.append(
+                    {
+                        'userId':userId,
+                        'date': date,
+                        'description':'Llegada tardía',
+                        'startSchedule':sched['start'],
+                        'start':wh['start'],
+                        'minutes':wh['start'] - sched['start']
+                    }
+                )
+
+
+            """ controlo la salida """
+            if wh['end'] is None:
+                fails.append(
+                    {
+                        'userId':userId,
+                        'date': date,
+                        'description':'Sin horario de salida'
+                    }
+                )
+
+            elif wh['end'] < sched['end'] - tolerancia:
+                fails.append(
+                    {
+                        'userId':userId,
+                        'date': date,
+                        'description':'Salida temprana',
+                        'endSchedule':sched['end'],
+                        'end':wh['end'],
+                        'minutes':sched['end']-wh['end']
+                    }
+                )
+
+        return fails
+
+
 
     """
         chequea los schedules contra las horas trabajadas
         las fechas están en UTC y son aware
-    """
     def checkSchedule(self,con,userId,start,end,whs):
 
         #logging.debug('---------- check schedule ---------')
@@ -117,13 +240,12 @@ class Schedule:
             for sched,wh in controls:
 
                 if sched is None:
-                    """ no tiene schedule a controlar """
                     continue
 
                 if wh is None or 'start' not in wh or 'end' not in wh:
-                    """ no tiene nada trabajado!!! """
                     fails.append(
                         {
+                            'userId':userId,
                             'date':date,
                             'description':'No existe ninguna marcación para esa fecha'
                         }
@@ -131,11 +253,10 @@ class Schedule:
                     continue
 
 
-
-                """ controlo la llegada """
                 if wh['start'] is None:
                     fails.append(
                         {
+                            'userId':userId,
                             'date': date,
                             'description':'Sin horario de llegada'
                         }
@@ -144,6 +265,7 @@ class Schedule:
                 elif wh['start'] > sched['start'] + tolerancia:
                     fails.append(
                         {
+                            'userId':userId,
                             'date': date,
                             'description':'Llegada tardía',
                             'startSchedule':sched['start'],
@@ -153,10 +275,10 @@ class Schedule:
                     )
 
 
-                """ controlo la salida """
                 if wh['end'] is None:
                     fails.append(
                         {
+                            'userId':userId,
                             'date': date,
                             'description':'Sin horario de salida'
                         }
@@ -165,6 +287,7 @@ class Schedule:
                 elif wh['end'] < sched['end'] - tolerancia:
                     fails.append(
                         {
+                            'userId':userId,
                             'date': date,
                             'description':'Salida temprana',
                             'endSchedule':sched['end'],
@@ -174,3 +297,4 @@ class Schedule:
                     )
 
             return (userId,fails)
+    """
