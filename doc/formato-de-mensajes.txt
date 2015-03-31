@@ -297,14 +297,11 @@ response :
 ---------------
 
 
-query : Obtener todas las solicitudes de horas extras solicitadas por un deterinado usuario (autoridad)
+query : Obtener todas las solicitudes de horas extras para ser administradas por una autoridad
 {
   id:,
   action:"getOvertimeRequests",
   session:,
-  request:{
-      user_id: "id del usuario (autoridad) que solicito horas extras",
-  }
 
 }
 
@@ -316,8 +313,9 @@ response :
   response:{
     requests : [ "lista de solicitudes de un determinado usuario (autoridad)"
   		{
-        id: "id de la solicitud de hora extra",
-        user_id:"id del usuario para el cual se solicito hora extra",
+	        id: "id de la solicitud de hora extra",
+        	user_id:"id del usuario para el cual se solicito hora extra",
+			user_id_requestor: "id del usuario que solicito la hora extra",
     		begin: 2014-12-01 00:00:00 "fecha y hora de inicio de la hora extra"
     		end: 2014-12-02 00:00:00 "fecha y hora de finalizacion de la hora extra"
     		reason: "motivo de la solicitud"
@@ -325,6 +323,61 @@ response :
   		}
 	]
 
+}
+
+
+---------------
+
+
+query : Obtener todas las solicitudes de horas extras para ser administradas por una autoridad
+{
+  id:,
+  action:"getOvertimeRequestsAdmin",
+  session:,
+
+}
+
+response :
+{
+  id: "id de la petición",
+  ok: "caso exito",
+  error: "error del servidor",
+  response:{
+    requests : [ "lista de solicitudes a administrar"
+  		{
+	        id: "id de la solicitud de hora extra",
+        	user_id:"id del usuario para el cual se solicito hora extra",
+			user_id_requestor: "id del usuario que solicito la hora extra",
+    		begin: 2014-12-01 00:00:00 "fecha y hora de inicio de la hora extra"
+    		end: 2014-12-02 00:00:00 "fecha y hora de finalizacion de la hora extra"
+    		reason: "motivo de la solicitud"
+    		status: "PENDING|APPROVED|REJECTED|CANCELED (estado de la solicitud)"
+  		}
+	]
+
+}
+
+
+-------------
+
+
+query : solicitud de justificaciones de un determinado usuario
+{
+  id:,
+  action:"updateRequestOvertimeStatus",
+  session:,
+  request:{
+      request_id: "id del pedido",
+      status: "PENDING|APPROVED|REJECTED|CANCELED"
+  }
+
+}
+
+response :
+{
+  id: "id de la petición",
+  ok: "caso exito",
+  error: "error del servidor"
 }
 
 
