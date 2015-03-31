@@ -37,6 +37,10 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, $l
         $scope.requestAuthority = function() {
             $location.path('/requestAuthority')
         }
+        $scope.adminRequestedOverTime = function() {
+            $location.path('/adminRequestedOverTime')
+        }
+
 
 
 
@@ -52,6 +56,7 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, $l
                     //$scope.items.push({ label:'Licencias Médicas', img:'fa-stethoscope', function: $scope.medicalLicenses});
                     $scope.items.push({ label:'Adm. Solicitudes ', img:'fa-ticket', function: $scope.adminRequestAssistance});
                     $scope.items.push({ label:'Horas Extras ', img:'fa-plus', function: $scope.requestAuthority});
+                    $scope.items.push({ label:'Admin Horas Extras ', img:'fa-plus', function: $scope.adminRequestedOverTime});
 
                     $scope.selectItem($scope.items[0]);
                 } else {
