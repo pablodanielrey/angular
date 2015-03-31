@@ -125,9 +125,9 @@ app.config(['$routeProvider', function($routeProvider) {
           templateUrl: '/modules/systems/assistance/requestAuthority.html',
           controller: 'RequestAuthorityCtrl'
       })
-      .when('/adminRequestedOverTime', {
-          templateUrl: '/modules/systems/assistance/adminRequestedOverTime.html',
-          controller: 'adminRequestedOverTime'
+      .when('/adminRequestOverTime', {
+          templateUrl: '/modules/systems/assistance/adminRequestOverTime.html',
+          controller: 'adminRequestOverTimeCtrl'
       })
 
 
