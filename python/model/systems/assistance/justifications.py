@@ -4,10 +4,11 @@ from model.systems.assistance.restrictions import Repetition, CJustification, LA
 
 class Justifications:
 
-
+    offices = inject.attr(Offices)
     justifications = [
         CJustification(), LAOJustification(), AAJustification(), BSJustification()
     ]
+
 
 
     """ retorna todos los tipos de justificaciones que existan en la base """
@@ -43,50 +44,33 @@ class Justifications:
 
 
     """
-    obtiene todas los pedidos de justificaciones.
-    los parámetros son opcionales y definen el filtro a usar para obtener
+        obtiene todas los pedidos de justificaciones con cierto estado
+        users es una lista de ids de usuarios que piden los requests, si = None entonces no lo tiene en cuenta.
     """
-    def getJustificationRequests(self,con,userId=None,justificationId=None,state=None):
+    def getJustificationRequests(self,con,status,users=None):
+
         cur = con.cursor()
+        if users is None:
+            cur.execute('select id,user_id,justification_id,jbegin,jend,status from assistance.justifications_requests where status = %s',(status,))
+        else:
+            cur.execute('select id,user_id,justification_id,jbegin,jend,status from assistance.justifications_requests where status = %s and user_id in %s',(status,tuple(users)))
 
-        if userId is None and justificationId == None and state is None:
-            cur.execute('select id,user_id,justification_id,jbegin,jend,status from assistance.justifications_requests')
+        if cur.rowcount <= 0:
+            return []
 
-        if userId != None and justificationId is None and state is None:
-            cur.execute('select id,user_id,justification_id,jbegin,jend,status from assistance.justifications_requests where user_id = %s',(userId,))
-
-        elif userId != None and justificationId != None and state is None:
-            cur.execute('select id,user_id,justification_id,jbegin,jend,status from assistance.justifications_requests where user_id = %s and justification_id = %s',(userId,justificationId))
-
-        elif userId != None and justificationId is None and state != None:
-            cur.execute('select id,user_id,justification_id,jbegin,jend,status from assistance.justifications_requests where user_id = %s and state = %s',(userId,state))
-
-        elif userId != None and justificationId != None and state != None:
-            cur.execute('select id,user_id,justification_id,jbegin,jend,status from assistance.justifications_requests where user_id = %s and state = %s and justificationId = %s',(userId,state,justificationId))
-
-        elif userId is None and justificationId != None and state is None:
-            cur.execute('select id,user_id,justification_id,jbegin,jend,status from assistance.justifications_requests where justification_id = %s',(justificationId,))
-
-        elif userId is None and justificationId != None and state != None:
-            cur.execute('select id,user_id,justification_id,jbegin,jend,status from assistance.justifications_requests where justification_id = %s and state = %s',(justificationId,state))
-
-        elif userId is None and  justificationId is None and state != None:
-            cur.execute('select id,user_id,justification_id,jbegin,jend,status from assistance.justifications_requests where state = %s',(state,))
-
-
-        req = cur.fetchall()
         requests = []
-        for r in req:
+        for j in cur:
             requests.append(
-                {
-                    'justification_id':req[2],
-                    'begin':req[3],
-                    'end':req[4],
-                    'state':req[5]
-                }
+                'id':j[0],
+                'user_id':j[1],
+                'justification_id':j[2],
+                'begin':j[3],
+                'end':j[4],
+                'status':j[5]
             )
 
         return requests
+
 
 
 

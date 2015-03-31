@@ -56,8 +56,6 @@ create schema assistance;
     left outer join assistance.schedule s on p.id = s.user_id;
 
 
-
-
     create table assistance.offices (
       id varchar primary key,
       name varchar not null,
@@ -112,16 +110,21 @@ create schema assistance;
 
     */
 
-
     create table assistance.justifications_requests (
       id varchar primary key,
       user_id varchar not null references profile.users (id),
       justification_id varchar not null references assistance.justifications (id),
       jbegin timestamptz not null,
       jend timestamptz not null,
-      status varchar not null,
       created timestamptz not null default now(),
       CHECK(EXTRACT(TIMEZONE FROM jbegin) = '0'),
-      CHECK(EXTRACT(TIMEZONE FROM jend) = '0'),
-      CHECK(EXTRACT(TIMEZONE FROM created) = '0')
+      CHECK(EXTRACT(TIMEZONE FROM jend) = '0'))
+    );
+
+
+    create table assistance.justifications_requests_status (
+      request_id varchar not null references assistance.justifications_requests (id),
+      user_id varchar not null references profile.users (id),
+      status varchar not null,
+      created timestamptz not null default now()
     );

@@ -197,6 +197,7 @@ class GetJustificationRequests:
 
     profiles = inject.attr(Profiles)
     config = inject.attr(Config)
+    assistance = inject.attr(Assistance)
 
     def handleAction(self, server, message):
 
@@ -208,20 +209,23 @@ class GetJustificationRequests:
             server.sendMessage(response)
             return True
 
-        userId = message['request']['user_id']
         status = None
         if 'status' in message['request']:
-            status = message['request']
+            status = message['request']['status']
+
+        group = None
+        if 'group' in message['request']:
+            group = message['request']['group']
 
 
-        """
         sid = message['session']
-        self.profiles.checkAccess(sid,['ADMIN','USER'])
-        """
+        self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
+
+        userId = self.profiles.getLocalUserId(sid)
 
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
-            requests = assistance.getJustificationRequests(con,userId,status)
+            requests = self.assistance.getJustificationRequests(con,userId,status,group)
 
             response = {
                 'id':message['id'],
@@ -234,7 +238,6 @@ class GetJustificationRequests:
             return True
 
         except psycopg2.DatabaseError as e:
-            con.rollback()
             raise e
 
         finally:

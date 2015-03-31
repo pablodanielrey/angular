@@ -131,6 +131,26 @@ app.service('Assistance', ['Utils','Messages','Session',
 
 
 		this.getJustificationRequests = function(status, group, callbackOk, callbackError){
+			var msg = {
+				id: Utils.getId(),
+				action: 'getJustificationRequests',
+				session: Session.getSessionId(),
+				request: {
+				 	status: status,
+					group: group
+				}
+			}
+
+			Messages.send(msg,
+				function(data) {
+					callbackOk(data.response.requests);
+				},
+				function(error) {
+					callbackError(error);
+				}
+			);
+
+			/*
 			//TODO
 			response = [
 		  		{request_id:'1',user_id:"1",justification_id: "1", begin: '2015-05-13 00:00:00', end: '2015-05-13 00:00:00', state: "Desaprobada"},
@@ -138,6 +158,7 @@ app.service('Assistance', ['Utils','Messages','Session',
 			]
 
 			callbackOk(response);
+			*/
 		}
 
 		this.updateStatusRequestJustification = function(request_id, status, callbackOk, callbackError) {
@@ -171,7 +192,7 @@ app.service('Assistance', ['Utils','Messages','Session',
 
 			callbackOk(response);
 		};
-		
+
 		/**
 		 * Cargar nueva solicitud de horas extra
 		 * @param userId (jefe) Id de usuario que solicita la hora extra
@@ -192,7 +213,7 @@ app.service('Assistance', ['Utils','Messages','Session',
 			console.log(msg);
 			callbackOk("ok");
 		};
-		
-		
+
+
 	}]
 );
