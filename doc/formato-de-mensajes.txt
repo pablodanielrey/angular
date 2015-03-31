@@ -297,11 +297,14 @@ response :
 ---------------
 
 
-query : Obtener todas las solicitudes de horas extras para ser administradas por una autoridad
+query : Obtener todas las solicitudes de horas extras solicituadas por un determinado usuario
 {
   id:,
   action:"getOvertimeRequests",
   session:,
+  request:{
+      user_id: "id del usuario al cual se le solicita el tiempo extra",
+  }
 
 }
 
@@ -315,7 +318,6 @@ response :
   		{
 	        id: "id de la solicitud de hora extra",
         	user_id:"id del usuario para el cual se solicito hora extra",
-			user_id_requestor: "id del usuario que solicito la hora extra",
     		begin: 2014-12-01 00:00:00 "fecha y hora de inicio de la hora extra"
     		end: 2014-12-02 00:00:00 "fecha y hora de finalizacion de la hora extra"
     		reason: "motivo de la solicitud"
@@ -361,7 +363,7 @@ response :
 -------------
 
 
-query : solicitud de justificaciones de un determinado usuario
+query : actualizar estado de una solicitud de hora extra
 {
   id:,
   action:"updateRequestOvertimeStatus",
