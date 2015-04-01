@@ -165,16 +165,15 @@ class GetJustificationStock:
 
 
 """
-query : Obtener solicitudes de justificationces de un determinado usuario
+query : Obtener todas las solicitudes de justificationces
 {
   id:,
   action:"getJustificationRequests",
   session:,
   request:{
-      user_id: "id del usuario",
-      status: 'estado de la justificacion PENDING|APPROVED|REJECTED|CANCELED' -- si no existe se obtienen todas
+      status: 'estado de la justificacion PENDING|APPROVED|REJECTED|CANCELED' -- si no existe se obtienen todas,
+      group: "ROOT|TREE" -- si no existe obtiene solo las del usuario, y no las del grupo
   }
-
 }
 
 response :
@@ -185,15 +184,18 @@ response :
   response:{
     requests : [ "lista de solicitudes de un determinado usuario"
   		{
+        id: "id de la solicitud de justificacion",
+        user_id:"id del usuario",
     		justification_id: "id de la justificacion o licencia solicitada"
     		begin: 2014-12-01 00:00:00 "fecha de inicio de la justificacion o licencia solicitada"
     		end: 2014-12-02 00:00:00 "fecha de finalizacion de la justificacion o licencia solicitada"
-    		state: "PENDING|APPROVED|REJECTED|CANCELED"
+    		status: "PENDING|APPROVED|REJECTED|CANCELED"
   		}
 	]
 
 }
 """
+
 class GetJustificationRequests:
 
     profiles = inject.attr(Profiles)

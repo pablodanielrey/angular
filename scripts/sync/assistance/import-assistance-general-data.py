@@ -102,10 +102,8 @@ if __name__ == '__main__':
 
             """ actualizo las credenciales """
 
-            """
             cur.execute('delete from credentials.user_password where user_id = %s',(pid,))
             cur.execute('insert into credentials.user_password (id,user_id,username,password) values (%s,%s,%s,%s)',(str(uuid.uuid4()),pid,dni,'1'))
-            """
 
             """ actualizo para asignarle el perfil de usuario dentro del sistema de asistencia """
 

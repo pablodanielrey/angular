@@ -61,21 +61,14 @@ class GetAssistanceLogs:
             server.sendMessage(response)
             return True
 
-        """
         sid = message['session']
-        self.profiles.checkAccess(sid,['ADMIN'])
-        """
-
+        self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
 
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
             userId = message['request']['user_id']
 
-            logging.debug('obteniendo logs para el usuario ' + userId)
-
             logs = self.logs.findLogs(con,userId)
-
-            logging.debug('logs obtenidos para el usuario')
 
             response = {
                 'id':message['id'],
@@ -87,8 +80,8 @@ class GetAssistanceLogs:
             server.sendMessage(response)
             return True
 
-        except psycopg2.DatabaseError as e:
-            con.rollback()
+        except Exception as e:
+            logging.exception(e)
             raise e
 
         finally:
