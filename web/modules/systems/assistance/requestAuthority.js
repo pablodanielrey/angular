@@ -35,6 +35,7 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
 			Notifications.message("Error: Sesion no definida");
 			$window.location.href = "/#/logout";
 		}
+		var session = Session.getCurrentSession();
 		$scope.model.session_user_id = session.user_id;
 	};
 	
@@ -42,7 +43,7 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
 	 * Obtener solicitudes de horas extra del usuario (jefe)
 	 */
 	$scope.loadRequests = function(){
-	
+		$scope.model.requests = [];
 		Assistance.getOvertimeRequests($scope.model.session_user_id,
 			function callbackOk(requests){
 				for(var i = 0; i < requests.length; i++){
