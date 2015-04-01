@@ -276,6 +276,7 @@ class RequestJustification:
     profiles = inject.attr(Profiles)
     config = inject.attr(Config)
     justifications = inject.attr(Justifications)
+    date = inject.attr(Date)
 
     def handleAction(self, server, message):
 
@@ -290,10 +291,12 @@ class RequestJustification:
 
         userId = message['request']['user_id']
         justificationId = message['request']['justification_id']
-        begin = message['request']['justification_id']
+        begin = message['request']['begin']
+        begin = self.date.parse(begin)
         end = None
         if 'end' in message['request']:
             end = message['request']['end']
+            end = self.date.parse(end)
 
 
         sid = message['session']
@@ -303,6 +306,8 @@ class RequestJustification:
         try:
             self.justifications.requestJustification(con,userId,justificationId,begin,end)
 
+            con.commit()
+
             response = {
                 'id':message['id'],
                 'ok':'El pedido se ha realizado correctamente'
@@ -311,7 +316,9 @@ class RequestJustification:
             return True
 
         except Exception as e:
+            logging.exception(e)
             con.rollback()
+
             response = {
                 'id':message['id'],
                 'error':'Error realizando pedido'
