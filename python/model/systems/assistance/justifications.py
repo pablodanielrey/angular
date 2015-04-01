@@ -105,16 +105,11 @@ class Justifications:
 
         cur = con.cursor()
 
-        logging.debug(status)
-
         statusR = self._getJustificationsInStatus(con,status)
         if len(statusR) <= 0:
-            logging.debug('statusR')
-            logging.debug(statusR)
             return []
 
         rids = tuple(statusR.keys())
-        logging.debug(rids)
 
         if users is None or len(users) <= 0:
             cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where id in %s',(rids,))
