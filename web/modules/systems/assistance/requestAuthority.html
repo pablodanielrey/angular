@@ -17,8 +17,8 @@
 				</ul>
 			</div>
 		</div>
-		
-		
+
+
 		<!-- campos del formulario -->
 		<div class="date">
 			<div class="dateTitle">
@@ -49,34 +49,41 @@
 			<button class="solicitar" ng-click="requestOvertime()"><i class="fa fa-reply"></i> Solicitar</button>
 		</div>
 
-		
-		
-		
+
+
+
 	</div>
- 
-	
+
+
 	<!-- solicitudes de horas extra realizadas !-->
 	<div class="title2">
 		<label><i class="fa fa-sort-amount-asc"></i> Solicitudes de Horas Extras Relizadas </label>
 	</div>
 
-	<table> 
-		<tr> 
-		<th>Usuario</th>
-		<th>Día</th>
-		<th>Inicio</th>
-		<th>Fin</th>
-		<th>Motivo</th>
-		<th>Estado</th>
+	<table>
+		<tr>
+		<th class="column t1">Usuario</th>
+		<th class="column t2">Día</th>
+		<th class="column t2">Inicio</th>
+		<th class="column t2">Fin</th>
+		<th class="column t3">Motivo</th>
+		<th class="column t2">Estado</th>
 		</tr>
 		<tr ng-repeat="request in model.requests">
-			<td>{{request.user}}</td>
-			<td>{{request.date}}</td>
-			<td>{{request.startTime}}</td>
-			<td>{{request.endTime}}</td>
-			<td>{{request.reason}}</td>		
-			<td>{{request.state}}</td>
+			<td class="file f1">{{request.user}}</td>
+			<td class="file">{{request.date}}</td>
+			<td class="file">{{request.startTime}}</td>
+			<td class="file">{{request.endTime}}</td>
+			<td class="file">{{request.reason}}</td>
+			<td class="file">
+          <span class="slope" ng-class="{true:'visible', false:'hidden'}[false]">Pendiente</span>
+          <span class="approved" ng-class="{true:'visible', false:'hidden'}[false]">Aprobada</span>
+          <span class="rejected" ng-class="{true:'visible', false:'hidden'}[true]">Rechazada</span>
+
+      </td>
+
 		</tr>
+
 	</table>
 
 
