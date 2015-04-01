@@ -198,7 +198,6 @@ query : Obtener todas las solicitudes de justificationces
       status: 'estado de la justificacion PENDING|APPROVED|REJECTED|CANCELED' -- si no existe se obtienen todas,
       group: "ROOT|TREE" -- si no existe obtiene solo las del usuario, y no las del grupo
   }
-
 }
 
 response :
@@ -246,13 +245,36 @@ response :
 }
 
 
+eventos :
+JustificationsRequestsUpdatedEvent
+{
+  justification_id
+  user_id
+}
+
+JustificationStatusChangedEvent
+{
+  justification_id
+  status
+  user_id
+  changer_id
+}
+
+JustificationStockChangedEvent
+{
+  justification_id
+  user_id
+  stock
+}
+
+
 ---------------
 
 
 query : solicitud de justificaciones de un determinado usuario
 {
   id:,
-  action:"updateStatusRequestJustification",
+  action:"updateJustificationRequestStatus",
   session:,
   request:{
       request_id: "id del pedido",
@@ -283,7 +305,6 @@ query : solicitud de horas extra de un determinado usuario
   	  end: "timestamp de fin del tiempo extra"
   	  reason: "motivo de solicitud del tiempo extra"
   }
-
 }
 
 response :
@@ -303,7 +324,8 @@ query : Obtener todas las solicitudes de horas extras solicituadas por un determ
   action:"getOvertimeRequests",
   session:,
   request:{
-      user_id: "id del usuario al cual se le solicita el tiempo extra",
+      status: 'estado del pedido PENDING|APPROVED|REJECTED|CANCELED' -- si no existe se obtienen todas,
+      group: "ROOT|TREE" -- si no existe obtiene solo las que pidio el  usuario, y no las del grupo
   }
 
 }
@@ -314,10 +336,10 @@ response :
   ok: "caso exito",
   error: "error del servidor",
   response:{
-    requests : [ "lista de solicitudes de un determinado usuario (autoridad)"
+    requests : [ "lista de solicitudes"
   		{
-	        id: "id de la solicitud de hora extra",
-        	user_id:"id del usuario para el cual se solicito hora extra",
+	      id: "id de la solicitud de hora extra",
+        user_id:"id del usuario para el cual se solicito hora extra",
     		begin: 2014-12-01 00:00:00 "fecha y hora de inicio de la hora extra"
     		end: 2014-12-02 00:00:00 "fecha y hora de finalizacion de la hora extra"
     		reason: "motivo de la solicitud"
