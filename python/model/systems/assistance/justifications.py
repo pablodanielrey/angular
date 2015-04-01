@@ -98,7 +98,7 @@ class Justifications:
 
         rids = tuple(statusR.keys())
 
-        if users is None:
+        if users is None or len(users) <= 0:
             cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where id in ',(rids,))
         else:
             cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where id = %s and user_id in %s',(rids,tuple(users)))
@@ -136,7 +136,8 @@ class Justifications:
             raise JustificationError('no existe stock disponible')
 
         jid = str(uuid.uuid4())
-        con.cursor()
+        cur = con.cursor()
+        cur.execute('set timezone to %s',('UTC',))
         if end is None:
             cur.execute('insert into assistance.justifications_requests (id,user_id,justification_id,jbegin) values (%s,%s,%s,%s)',(jid,userId,justificationId,begin))
         else:

@@ -115,10 +115,9 @@ create schema assistance;
       user_id varchar not null references profile.users (id),
       justification_id varchar not null references assistance.justifications (id),
       jbegin timestamptz not null,
-      jend timestamptz not null,
+      jend timestamptz,
       created timestamptz not null default now(),
-      CHECK(EXTRACT(TIMEZONE FROM jbegin) = '0'),
-      CHECK(EXTRACT(TIMEZONE FROM jend) = '0')
+      CHECK(EXTRACT(TIMEZONE FROM jbegin) = '0')
     );
 
 
