@@ -6,7 +6,7 @@ class Offices:
     """
         obtiene las oficinas hijas de las oficinas pasadas como parámetro
     """
-    def _getChildOffices(self,offices):
+    def _getChildOffices(self,con,offices):
 
         if len(offices) <= 0:
             return []
@@ -14,7 +14,7 @@ class Offices:
         """ obtengo todo el arbol de oficinas abajo de las offices """
         roffices = []
         pids = []
-        pids.extends(offices)
+        pids.extend(offices)
 
         while len(pids) > 0:
             toFollow = []
@@ -22,7 +22,8 @@ class Offices:
             pids = []
 
             for oId in toFollow:
-                cur.execute('select id,parent,name from asssitance.offices where parent = %s',(oId,))
+                cur = con.cursor()
+                cur.execute('select id,parent,name from assistance.offices where parent = %s',(oId,))
                 if cur.rowcount <= 0:
                     continue
 
@@ -83,7 +84,7 @@ class Offices:
             offices.append({'id':oId,'parent':off[1],'name':off[2]})
 
         if tree:
-            offices.extend(self._getChildOffices(ids))
+            offices.extend(self._getChildOffices(con,ids))
 
         return offices
 
@@ -107,6 +108,6 @@ class Offices:
             offices.append({'id':oId,'parent':off[1],'name':off[2]})
 
         if tree:
-            offices.extend(self._getChildOffices(ids))
+            offices.extend(self._getChildOffices(con,ids))
 
         return offices

@@ -97,19 +97,26 @@ class Assistance:
     """
         obtiene todos los pedidos de justificaciones de las oficinas a las que pertenece o tiene un rol asignado.
         status = estado ultimo registrado de los pedidos
-        group = ROOT|TREE --> ROOT = oficinas directas, TREE = oficinas directas y todas las hijas
+        group = ROOT|TREE --> ROOT = oficinas directas, TREE = oficinas directas y todas las hijas -- en el caso de que == None entonces retorna las justificaciones del usuario que pide
     """
 
     def getJustificationRequests(self,con,userId,status,group='ROOT'):
 
-        logging.debug(status)
+        users = None
+        if group is None:
+            users = [userId]
 
-        tree = False
-        if group == 'TREE':
-            tree = True
+        else:
+            tree = False
+            if group == 'TREE':
+                tree = True
 
-        offices = self.offices.getOfficesByUserRole(con,userId,tree)
-        users = self.offices.getOfficesUsers(con,offices)
+            offices = self.offices.getOfficesByUserRole(con,userId,tree)
+            officesIds = list(map(lambda o: o['id'], offices))
+            users = self.offices.getOfficesUsers(con,officesIds)
+
+        if users is None or len(users) <= 0:
+            return []
 
         justifications = self.justifications.getJustificationRequests(con,status,users)
 

@@ -99,7 +99,7 @@ class Justifications:
     """
         obtiene todas los pedidos de justificaciones con cierto estado
         status es el estado a obtener. en el caso de que no sea pasado entonces se obtienen todas, en su ultimo estado
-        users es una lista de ids de usuarios que piden los requests, si = None entonces no lo tiene en cuenta.
+        users es una lista de ids de usuarios que piden los requests, si = None o es vacío entonces retorna todas.
     """
     def getJustificationRequests(self,con,status=None,users=None):
 
@@ -114,7 +114,7 @@ class Justifications:
         if users is None or len(users) <= 0:
             cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where id in %s',(rids,))
         else:
-            cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where id = %s and user_id in %s',(rids,tuple(users)))
+            cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where id in %s and user_id in %s',(rids,tuple(users)))
 
         if cur.rowcount <= 0:
             return []

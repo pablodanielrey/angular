@@ -10,7 +10,7 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistan
 
     $scope.getJustificationName = function(id) {
       for (var i = 0; i < $scope.model.justifications.length; i++) {
-        if ($scope.model.justifications[i].id = id) {
+        if ($scope.model.justifications[i].id == id) {
           return $scope.model.justifications[i].name;
         }
       }
