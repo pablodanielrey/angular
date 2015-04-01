@@ -2,6 +2,17 @@
 
 from model.systems.assistance.restrictions import Repetition, CJustification, LAOJustification, AAJustification, BSJustification
 
+
+class JustificationError(Exception):
+
+    def __init__(self):
+        Exception.__init__(self)
+
+    def __init__(self,msg):
+        Exception.__init__(self,msg)
+
+
+
 class Justifications:
 
     offices = inject.attr(Offices)
@@ -29,7 +40,9 @@ class Justifications:
         return justs
 
 
-    """ retorna el stock actual para la justificación indicada """
+    """
+        retorna el stock actual para la justificación indicada
+    """
     def getJustificationStock(self,con,userId,justId,date):
 
         for j in self.justifications:
@@ -91,6 +104,21 @@ class Justifications:
 
 
 
-    """ realiza el pedido de justificación para ser aprobado """
-    def requestJustification(self,con,userId,req):
-        pass
+    """
+        realiza el pedido de justificación para ser aprobado
+        estado inicial del pedido = PENDING, con la fecha actual del servidor.
+    """
+    def requestJustification(self,con,userId,justificationId,begin,end=None):
+
+        stock = self.getJustificationStock(con,userId,justificationId,begin)
+        if stock <= 0:
+            raise JustificationError('no existe stock disponible')
+
+        jid = str(uuid.uuid4())
+        con.cursor()
+        if end is None:
+            cur.execute('insert into assistance.justifications_requests (id,user_id,justification_id,jbegin) values (%s,%s,%s,%s)',(jid,userId,justificationId,begin))
+        else:
+            cur.execute('insert into assistance.justifications_requests (id,user_id,justification_id,jbegin,jend) values (%s,%s,%s,%s,%s)',(jid,userId,justificationId,begin,end))
+
+        cur.execute('insert into assistance.justifications_requests_status (request_id,user_id,status) values (%s,%s,%s)',(jid,userId,'PENDING'))

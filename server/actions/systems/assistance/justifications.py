@@ -257,7 +257,7 @@ query : solicitud de justificaciones de un determinado usuario
       user_id: "id del usuario",
       justification_id: "id de la justificacion o licencia solicitada"
   	  begin: "fecha de inicio de la justificacion o licencia solicitada"
-  	  end: "fecha de finalizacion de la justificacion o licencia solicitada" -- si no viene en el mensaje se toma hasta el fin de turno
+  	  end: "fecha de finalizacion de la justificacion o licencia solicitada" -- algunas justificaciones no tienen fin. es el turno completo.
   }
 
 }
@@ -270,10 +270,11 @@ response :
 }
 """
 
-class requestJustification:
+class RequestJustification:
 
     profiles = inject.attr(Profiles)
     config = inject.attr(Config)
+    justifications = inject.attr(Justifications)
 
     def handleAction(self, server, message):
 
@@ -285,24 +286,21 @@ class requestJustification:
             server.sendMessage(response)
             return True
 
+
         userId = message['request']['user_id']
-
-        req = {
-            'justificationId':message['request']['justification_id'],
-            'begin':message['request']['begin']
-        }
+        justificationId = message['request']['justification_id']
+        begin = message['request']['justification_id']
+        end = None
         if 'end' in message['request']:
-            req['end'] = message['request']['end']
+            end = message['request']['end']
 
 
-        """
         sid = message['session']
-        self.profiles.checkAccess(sid,['ADMIN','USER'])
-        """
+        self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
 
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
-            assistance.requestJustification(con,userId,req)
+            self.justifications.requestJustification(con,userId,justificationId,begin,end)
 
             response = {
                 'id':message['id'],
@@ -311,9 +309,8 @@ class requestJustification:
             server.sendMessage(response)
             return True
 
-        except psycopg2.DatabaseError as e:
+        except Exception as e:
             con.rollback()
-
             response = {
                 'id':message['id'],
                 'error':'Error realizando pedido'
