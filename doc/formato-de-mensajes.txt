@@ -303,7 +303,8 @@ query : Obtener todas las solicitudes de horas extras solicituadas por un determ
   action:"getOvertimeRequests",
   session:,
   request:{
-      user_id: "id del usuario al cual se le solicita el tiempo extra",
+      status: 'estado de la justificacion PENDING|APPROVED|REJECTED|CANCELED' -- si no existe se obtienen todas,
+      group: "ROOT|TREE" -- si no existe obtiene solo las del usuario, y no las del grupo
   }
 
 }
@@ -314,42 +315,10 @@ response :
   ok: "caso exito",
   error: "error del servidor",
   response:{
-    requests : [ "lista de solicitudes de un determinado usuario (autoridad)"
+    requests : [ "lista de solicitudes"
   		{
 	        id: "id de la solicitud de hora extra",
         	user_id:"id del usuario para el cual se solicito hora extra",
-    		begin: 2014-12-01 00:00:00 "fecha y hora de inicio de la hora extra"
-    		end: 2014-12-02 00:00:00 "fecha y hora de finalizacion de la hora extra"
-    		reason: "motivo de la solicitud"
-    		status: "PENDING|APPROVED|REJECTED|CANCELED (estado de la solicitud)"
-  		}
-	]
-
-}
-
-
----------------
-
-
-query : Obtener todas las solicitudes de horas extras para ser administradas por una autoridad
-{
-  id:,
-  action:"getOvertimeRequestsAdmin",
-  session:,
-
-}
-
-response :
-{
-  id: "id de la petición",
-  ok: "caso exito",
-  error: "error del servidor",
-  response:{
-    requests : [ "lista de solicitudes a administrar"
-  		{
-	        id: "id de la solicitud de hora extra",
-        	user_id:"id del usuario para el cual se solicito hora extra",
-			user_id_requestor: "id del usuario que solicito la hora extra",
     		begin: 2014-12-01 00:00:00 "fecha y hora de inicio de la hora extra"
     		end: 2014-12-02 00:00:00 "fecha y hora de finalizacion de la hora extra"
     		reason: "motivo de la solicitud"

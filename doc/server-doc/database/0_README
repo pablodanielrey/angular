@@ -1,1 +1,17 @@
 ejecutar 2-systems antes que 2-groups!!!
+
+\i /var/www/html/angular/doc/server-doc/database/1-profile.sql
+\i /var/www/html/angular/doc/server-doc/database/1-system.sql
+\i /var/www/html/angular/doc/server-doc/database/2-credentials.sql
+\i /var/www/html/angular/doc/server-doc/database/2-systems.sql
+\i /var/www/html/angular/doc/server-doc/database/2-groups.sql
+\i /var/www/html/angular/doc/server-doc/database/2-students.sql
+\i /var/www/html/angular/doc/server-doc/database/3-account_request.sql
+\i /var/www/html/angular/doc/server-doc/database/6-assistance.sql
+\i /var/www/html/angular/doc/server-doc/database/6-au24.sql
+\i /var/www/html/angular/doc/server-doc/database/6-laboral_insertion.sql
+\i /var/www/html/angular/doc/server-doc/database/6-mail-server.sql
+\i /var/www/html/angular/doc/server-doc/database/6-ntdomain.sql
+\i /var/www/html/angular/doc/server-doc/database/6-tutors.sql
+\i /var/www/html/angular/doc/server-doc/database/99-views.sql
+\i /var/www/html/angular/doc/server-doc/insert_basic_data.sql
