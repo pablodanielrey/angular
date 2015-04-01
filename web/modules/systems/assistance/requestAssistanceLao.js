@@ -58,15 +58,31 @@ app.controller('RequestAssistanceLaoCtrl', function($scope, Assistance, Session,
 		$scope.model.justificationLaoRequestsSelected = false;
 	}
 
+    $scope.updateDate = function() {
+        $scope.dateFormated = $scope.model.justification.begin.toLocaleDateString();
+        $scope.dateFormated += "-" + $scope.model.justification.end.toLocaleDateString();
+    }
+
     $scope.isSelectedDate = function() {
         if ($scope.model.justification != null && $scope.model.justification.begin != null && $scope.model.justification.end != null) {
-            $scope.dateFormated = $scope.model.justification.begin.toLocaleDateString();
-            $scope.dateFormated += "-" + $scope.model.justification.end.toLocaleDateString();
+            $scope.updateDate();
             return true;
         } else {
             $scope.dateFormated = null;
             return false;
         }
+    }
+
+    $scope.changeDate = function() {
+        if ($scope.model.justification.end == null || $scope.model.justification.begin == null) {
+            return;
+        }
+
+        if ($scope.model.justification.begin > $scope.model.justification.end) {
+            $scope.model.justification.end = null;
+            return;
+        }
+        $scope.updateDate();
     }
 
     // -----------------------------------------------------------------------------------------
