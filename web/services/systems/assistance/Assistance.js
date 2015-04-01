@@ -158,7 +158,6 @@ app.service('Assistance', ['Utils','Messages','Session',
 
 		this.requestJustification = function(userId, justification, callbackOk, callbackError) {
 
-
 			var msg = {
 				id: Utils.getId(),
 				action: 'requestJustification',
@@ -229,7 +228,7 @@ app.service('Assistance', ['Utils','Messages','Session',
 			console.log(msg);
 			callbackOk("ok");
 		};
-	
+
 		/**
 		 * TODO
 		 * Actualizar estado de solicitud de hora extra

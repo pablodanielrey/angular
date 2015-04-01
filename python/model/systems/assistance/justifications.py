@@ -105,8 +105,12 @@ class Justifications:
 
         cur = con.cursor()
 
+        logging.debug(status)
+
         statusR = self._getJustificationsInStatus(con,status)
         if len(statusR) <= 0:
+            logging.debug('statusR')
+            logging.debug(statusR)
             return []
 
         rids = tuple(statusR.keys())

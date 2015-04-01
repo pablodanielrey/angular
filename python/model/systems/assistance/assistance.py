@@ -102,6 +102,8 @@ class Assistance:
 
     def getJustificationRequests(self,con,userId,status,group='ROOT'):
 
+        logging.debug(status)
+
         tree = False
         if group == 'TREE':
             tree = True

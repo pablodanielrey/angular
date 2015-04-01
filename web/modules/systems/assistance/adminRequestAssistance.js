@@ -5,36 +5,43 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistan
     // requests = [{id:'',license:'',user:{name:'',lastname:'',dni:''},date:''}]
     $scope.model = {
         requests : [],
-        requestMap: new Map()
+        justifications: []
     }
-    $scope.justifications = new Map();
+
+    $scope.getJustificationName = function(id) {
+      for (var i = 0; i < $scope.model.justifications.length; i++) {
+        if ($scope.model.justifications[i].id = id) {
+          return $scope.model.justifications[i].name;
+        }
+      }
+    }
+
+
+    $scope.getJustifications = function() {
+      Assistance.getJustifications(
+        function(justifications) {
+          $scope.model.justifications = justifications;
+          $scope.loadRequests();
+        },
+        function(error) {
+        }
+      );
+
+    }
 
     $scope.addRequest = function(data) {
         //data: {request_id:"1",user_id:"1",justification_id: "1", begin: '2015-05-13 00:00:00', end: '2015-05-13 00:00:00', state: "Desaprobada" },
         var r = {};
-        r.license = $scope.justifications.get(data.justification_id);
+        r.justification_id = data.justification_id;
         r.date = data.begin;
         r.user = null;
         r.id = data.request_id;
 
-        var reqs = $scope.model.requestMap.get(data.user_id);
-        if (reqs == null) {
-            reqs = [];
-        }
-        reqs.push(r);
-        $scope.model.requestMap.set(data.user_id,reqs);
-
-        Users.findUser($scope.user_id,
+        Users.findUser(data.user_id,
             function(response) {
-                var reqs = $scope.model.requestMap.get(response.id);
-                for (x in reqs) {
-                    var r = reqs[x];
-                    if (r.user == null) {
-                        r.user = response;
-                        $scope.model.requests.push(r);
-                    }
-                }
-                $scope.model.requestMap.set(response.id,[]);
+              r.user = response;
+              r.licence = $scope.getJustificationName(r.justification_id);
+              $scope.model.requests.push(r);
             },
             function(error) {
             }
@@ -42,27 +49,10 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistan
     }
 
     $scope.loadRequests = function() {
-        $scope.model.requests = [];
-        Assistance.getJustificationRequests("PENDING",null,
+        Assistance.getJustificationRequests(['PENDING'],null,
             function(response) {
-                for (x in response) {
-                    $scope.addRequest(response[x]);
-                }
-            },
-            function(error) {
-
-            }
-        );
-    }
-
-    $scope.getJustifications = function() {
-        Assistance.getJustifications(
-            function(response) {
-                $scope.justifications = new Map();
-                for (x in response) {
-                    var r = response[x];
-                    $scope.justifications.set(r.id,r.name);
-                    $scope.loadRequests();
+                for (var i = 0; i < response.length; i++) {
+                    $scope.addRequest(response[i]);
                 }
             },
             function(error) {
@@ -72,23 +62,22 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistan
     }
 
     $scope.initialize = function() {
-
         var s = Session.getCurrentSession();
         if (!s || !s.user_id) {
             Notifications.message("Error: sesion no definida");
-			$window.location.href = "/#/logout";
+			      $window.location.href = "/#/logout";
         } else {
             $scope.user_id = s.user_id;
             Profiles.checkAccess(Session.getSessionId(),'ADMIN-ASSISTANCE',
-				function(ok) {
-					if (ok == 'granted') {
-                        $scope.getJustifications();
-					}
-				},
-				function (error) {
-					Notifications.message(error);
-				}
-			);
+      				function(ok) {
+      					if (ok == 'granted') {
+                  $scope.getJustifications();
+      					}
+      				},
+      				function (error) {
+      					Notifications.message(error);
+      				}
+      			);
         }
     };
 
