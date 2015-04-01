@@ -128,3 +128,49 @@
   background-color:pink;
   height:300px;
 }
+
+/*
+SOLICITUD DE HORAS EXTRAS REALIZADAS*/
+.requestAuthority table {
+  background-color:#f5f5f5;
+}
+
+.requestAuthority .column {
+  background-color:#0066A6;
+
+  padding:5px;
+  margin-right:10px;
+  color:white;
+  border-top:3px solid #275276;
+}
+.requestAuthority .t1 {
+  width:150px;
+}
+.requestAuthority .t2 {
+  width:100px;
+}
+.requestAuthority .t3 {
+  width:250px;
+}
+.requestAuthority .file {
+  background-color:white;
+  padding-left:5px;
+}
+.requestAuthority .f1 {
+  font-weight:bold;
+}
+.requestAuthority .hidden {
+  display:none;
+}
+.requestAuthority .visible {
+  display:block;
+}
+.requestAuthority .slope {
+  color:#0066A6;
+}
+.requestAuthority .approved {
+  color:#128c78;
+}
+.requestAuthority .rejected {
+  color:#e43e46;
+}
