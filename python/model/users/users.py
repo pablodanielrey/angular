@@ -121,18 +121,17 @@ class Users:
         cur = con.cursor()
         cur.execute('select id,dni,name,lastname,city,country,address,genre,birthdate,residence_city from profile.users where id = %s', (id,))
         dataUser = cur.fetchone()
-        rdataUser = self.convertUserToDict(dataUser);
-        if dataUser != None:
-            cur.execute('SELECT id, number, type FROM profile.telephones WHERE user_id = %s',(dataUser[0],))
-            dataTelephones = cur.fetchall()
-            rdataTelephones = []
-            for dataTelephone in dataTelephones:
-                rdataTelephones.append(self.convertTelephoneToDict(dataTelephone))
-            rdataUser["telephones"] = rdataTelephones
-            return rdataUser
-
-        else:
+        if dataUser is None:
             return None
+
+        rdataUser = self.convertUserToDict(dataUser);
+        cur.execute('SELECT id, number, type FROM profile.telephones WHERE user_id = %s',(dataUser[0],))
+        dataTelephones = cur.fetchall()
+        rdataTelephones = []
+        for dataTelephone in dataTelephones:
+            rdataTelephones.append(self.convertTelephoneToDict(dataTelephone))
+        rdataUser["telephones"] = rdataTelephones
+        return rdataUser
 
     def listUsers(self, con):
         cur = con.cursor()
