@@ -60,15 +60,19 @@ app.controller('RequestAssistanceOutCtrl', function($scope, Assistance, Notifica
 	}
 
     $scope.isSelectedDate = function() {
-        if ($scope.model.justification != null && $scope.model.justification.begin != null && $scope.model.justification.end != null) {
+        if ($scope.model.justification != null && $scope.model.justification.begin != null) {
             $scope.dateFormated = $scope.model.justification.begin.toLocaleDateString();
+
             var hoursBegin = ('0'+$scope.model.justification.begin.getHours()).substr(-2);
             var minutesBegin = ('0'+$scope.model.justification.begin.getMinutes()).substr(-2);
-            var hoursEnd = ('0'+$scope.model.justification.end.getHours()).substr(-2);
-            var minutesEnd = ('0'+$scope.model.justification.end.getMinutes()).substr(-2);
-
             $scope.dateFormated += " " + hoursBegin + ":" + minutesBegin;
-            $scope.dateFormated += "-" + hoursEnd + ":" + minutesEnd;
+
+            if ($scope.model.justification.end != null) {
+                var hoursEnd = ('0'+$scope.model.justification.end.getHours()).substr(-2);
+                var minutesEnd = ('0'+$scope.model.justification.end.getMinutes()).substr(-2);
+                $scope.dateFormated += "-" + hoursEnd + ":" + minutesEnd;
+            }
+
             return true;
         } else {
             $scope.dateFormated = null;
@@ -77,10 +81,20 @@ app.controller('RequestAssistanceOutCtrl', function($scope, Assistance, Notifica
     }
 
     $scope.changeHours = function() {
-        if ($scope.model.justification.begin ==  null || $scope.model.justification.end == null) {
+        if ($scope.model.justification.begin ==  null && $scope.model.justification.end == null) {
             $scope.model.justification.totalHours = 0;
             return;
         }
+
+        if ($scope.model.justification.end == null) {
+            $scope.model.justification.totalHours = '--';
+            return;
+        }
+
+        if ($scope.model.justification.end < $scope.model.justification.begin) {
+            $scope.model.justification.end = $scope.model.justification.begin;
+        }
+
         var totalDate = $scope.model.justification.end - $scope.model.justification.begin;
         var min = ((totalDate/(1000*60))%60);
         var hours = ~~(totalDate / (1000*60*60));
@@ -125,9 +139,7 @@ app.controller('RequestAssistanceOutCtrl', function($scope, Assistance, Notifica
             return;
         }
 
-        if ($scope.model.justification.end == null) {
-            $scope.model.justification.end = $scope.model.justification.begin;
-        } else {
+        if ($scope.model.justification.end != null) {
             var aux = $scope.model.justification.end;
             $scope.model.justification.end = new Date($scope.model.justification.begin.getTime());
             $scope.model.justification.end.setHours(aux.getHours());
