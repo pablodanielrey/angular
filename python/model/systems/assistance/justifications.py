@@ -160,5 +160,3 @@ class Justifications:
         cur.execute('insert into assistance.justifications_requests_status (request_id,user_id,status) values (%s,%s,%s)',(jid,userId,'PENDING'))
 
         self._removeStockFromJustification(con,userId,justificationId,1)
-
-        
