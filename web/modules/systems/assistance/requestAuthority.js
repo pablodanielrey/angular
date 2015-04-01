@@ -31,13 +31,8 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
 	 * Cargar y chequear session
 	 */
 	$scope.loadSession = function(){
-		var session = Session.getCurrentSession(); //obtengo sesión actual
-		if(session == null) {
+		if (!Session.isLogged()){
 			Notifications.message("Error: Sesion no definida");
-			$window.location.href = "/#/logout"; 
-		}
-		else if(session.user_id == null){
-			Notifications.message("Error: Usuario de sesion no definido");
 			$window.location.href = "/#/logout";
 		}
 		$scope.model.session_user_id = session.user_id;

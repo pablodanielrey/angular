@@ -179,11 +179,11 @@ app.service('Assistance', ['Utils','Messages','Session',
 		}
 
 		/**
+		 * TODO
 		 * Obtener solicitudes de horas extra realizadas por un determinado usuario (jefe)
 		 * @param userId Id de usuario (jefe)
 		 */
 		this.getOvertimeRequests = function(userId, callbackOk, callbackError){
-			//TODO
 			var msg = {
 				id: Utils.getId(),
 				action: 'getOvertimeRequests',
@@ -202,6 +202,7 @@ app.service('Assistance', ['Utils','Messages','Session',
 		};
 
 		/**
+		 * TODO
 		 * Cargar nueva solicitud de horas extra
 		 * @param userId (jefe) Id de usuario que solicita la hora extra
 		 * @param request Solicitud de hora extra
@@ -221,6 +222,25 @@ app.service('Assistance', ['Utils','Messages','Session',
 			console.log(msg);
 			callbackOk("ok");
 		};
+		
+		/**
+		 * TODO
+		 * Obtener solicitudes de horas extra para administracion.
+		 */
+		this.getOvertimeRequestsAdmin = function(callbackOk, callbackError){
+			var msg = {
+				id: Utils.getId(),
+				action: 'getOvertimeRequestsAdmin',
+				session: Session.getSessionId(),
+			};
+			
+			response = [
+		  		{id:'1', user_id:"1", user_id_requestor:"1", begin: '2015-05-13 10:00:00', end: '2015-05-13 12:00:00', state: "PENDING", reason: "Trabajo pendiente"},
+	  			{id:'2', user_id:"2", user_id_requestor:"1", begin: '2015-06-15 12:00:00', end: '2015-06-15 15:00:00', state: "APPROVED", reason: "Adelantar trabajo"}
+			];
+
+			callbackOk(response);
+		}
 
 
 	}]

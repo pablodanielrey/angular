@@ -1,16 +1,25 @@
 
 var app = angular.module('mainApp');
 
-app.controller('AdminRequestOverTimeCtrl', ["$scope", "Notifications", "Assistance" , function($scope, Notifications, Assistance) {
+app.controller('AdminRequestOverTimeCtrl', ["$scope", "$timeout", "Notifications", "Assistance", "Session", "Users", function($scope, $timeout, Notifications, Assistance, Session, Users) {
 
 	$scope.model = {
 		requests : [] //solicitudes de horas extra
 	};
-	/*
-	  
+	
+	/**
+	 * Cargar y chequear session
+	 */
+	$scope.loadSession = function(){
+		if (!Session.isLogged()){
+			Notifications.message("Error: Sesion no definida");
+			$window.location.href = "/#/logout";
+		}
+	};
+	
 	/**
 	 * Obtener solicitudes de horas extra del usuario
-	 *
+	 */
 	$scope.loadRequests = function(){
 	
 		Assistance.getOvertimeRequestsAdmin(
@@ -26,10 +35,27 @@ app.controller('AdminRequestOverTimeCtrl', ["$scope", "Notifications", "Assistan
 			}
 		);
 	};
+	
+	
+	$scope.loadUser = function(userId){
+		var userAux;
+		Users.findUser(userId,
+			function findUserCallbackOk(user){
+				userAux = user;
+			},
+			function findUserCallbackError(error){
+				Notifications.message(error);
+				throw new Error(error);
+			}
+		);
+		return userAux;
+	}
+	
 
+	
 	/**
 	 * Dar formato a la solicitud de hora extra
-	 *
+	 */
 	$scope.formatRequest = function(request){
 		var requestAux = {};
 		requestAux.id = request.id;
@@ -43,30 +69,29 @@ app.controller('AdminRequestOverTimeCtrl', ["$scope", "Notifications", "Assistan
 		var end = new Date(request.end);
 		requestAux.endTime = end.toLocaleTimeString().substring(0, 5);
 
-		Users.findUser(request.user_id,
-			function findUserCallbackOk(user){
-				requestAux.user = user.name + " " + user.lastname;
-			},
-			function findUserCallbackError(error){
-				Notifications.message(error);
-				throw new Error(error);
-			}
-		);
-		return requestAux;
+		requestAux.user = $scope.loadUser(request.user_id);
+		requestAux.user_requestor = $scope.loadUser(request.user_id_requestor);
 		
-		Users.findUser(request.user_id_requestor,
-			function findUserCallbackOk(user){
-				requestAux.user = user.name + " " + user.lastname;
-			},
-			function findUserCallbackError(error){
-				Notifications.message(error);
-				throw new Error(error);
-			}
-		);
+		console.log(requestAux);
+		
 		return requestAux;
 	};
 
-		
+	
+	/**
+	 * Inicializar
+	 */
+	$timeout(function() { 
+		$scope.loadSession();
+		$scope.loadRequests();
+	},0);
+	
+	
+	
+
+	
+
+		/*
 	$scope.approveRequest = function(request) {
         $scope.updateStatus("APPROVED",request.id);
     };
