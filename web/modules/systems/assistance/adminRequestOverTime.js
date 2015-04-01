@@ -21,8 +21,8 @@ app.controller('AdminRequestOverTimeCtrl', ["$scope", "$timeout", "Notifications
 	 * Obtener solicitudes de horas extra del usuario
 	 */
 	$scope.loadRequests = function(){
-	
-		Assistance.getOvertimeRequestsAdmin(
+		$scope.model.requests = [];
+		Assistance.getOvertimeRequests(null, null,
 			function callbackOk(requests){
 				for(var i = 0; i < requests.length; i++){
 					var request = $scope.formatRequest(requests[i]);
@@ -70,9 +70,6 @@ app.controller('AdminRequestOverTimeCtrl', ["$scope", "$timeout", "Notifications
 		requestAux.endTime = end.toLocaleTimeString().substring(0, 5);
 
 		requestAux.user = $scope.loadUser(request.user_id);
-		requestAux.user_requestor = $scope.loadUser(request.user_id_requestor);
-		
-		console.log(requestAux);
 		
 		return requestAux;
 	};
@@ -89,29 +86,28 @@ app.controller('AdminRequestOverTimeCtrl', ["$scope", "$timeout", "Notifications
 	
 	
 
-	
-
-		/*
-	$scope.approveRequest = function(request) {
-        $scope.updateStatus("APPROVED",request.id);
-    };
-
-    $scope.refuseRequest = function(request) {
-        $scope.updateStatus("REJECTED",request.id);
-    };
-	
-	$scope.updateStatus = function(status, request_id) {
-        Assistance.updateStatusRequestOvertime(request_id, status,
+	/***************************************************************
+	 * METODOS CORRESPONDIENTES A LA ADMINISTRACION DE SOLICITUDES *
+	 ***************************************************************/
+	$scope.updateStatus = function(request_id, status) {
+        Assistance.updateRequestOvertimeStatus(request_id, status,
             function(ok) {
                 Notifications.message("El estado fue modificado correctamente");
                 $scope.loadRequests();
             },
             function(error) {
 				Notifications.message(error);
+				throw new Error(error);
             }
         );
     };
-	
-	*/
+    
+	$scope.approveRequest = function(request_id) {
+        $scope.updateStatus(request_id, "APPROVED");
+    };
+
+    $scope.refuseRequest = function(request_id) {
+        $scope.updateStatus(request_id, "REJECTED");
+    };
 
 }]);	

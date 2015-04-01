@@ -189,16 +189,17 @@ app.service('Assistance', ['Utils','Messages','Session',
 		 * Obtener solicitudes de horas extra realizadas por un determinado usuario (jefe)
 		 * @param userId Id de usuario (jefe)
 		 */
-		this.getOvertimeRequests = function(userId, callbackOk, callbackError){
+		this.getOvertimeRequests = function(status, group, callbackOk, callbackError){
 			var msg = {
 				id: Utils.getId(),
 				action: 'getOvertimeRequests',
 				session: Session.getSessionId(),
 				request: {
-					user_id: userId //id del usuario (jefe) que solicito las horas extras
+					status: status,
+					group: group
 				}
 			};
-
+			console.log(msg);
 			response = [
 		  		{id:'1', user_id:"1", begin: '2015-05-13 10:00:00', end: '2015-05-13 12:00:00', state: "PENDING", reason: "Trabajo pendiente"},
 	  			{id:'2', user_id:"2", begin: '2015-06-15 12:00:00', end: '2015-06-15 15:00:00', state: "APPROVED", reason: "Adelantar trabajo"}
@@ -210,7 +211,7 @@ app.service('Assistance', ['Utils','Messages','Session',
 		/**
 		 * TODO
 		 * Cargar nueva solicitud de horas extra
-		 * @param userId (jefe) Id de usuario que solicita la hora extra
+		 * @param userId id del usuario al cual se solicita la hora extra
 		 * @param request Solicitud de hora extra
 		 */
 		this.requestOvertime = function(userId, request, callbackOk, callbackError){
@@ -228,25 +229,27 @@ app.service('Assistance', ['Utils','Messages','Session',
 			console.log(msg);
 			callbackOk("ok");
 		};
-		
+	
 		/**
 		 * TODO
-		 * Obtener solicitudes de horas extra para administracion.
+		 * Actualizar estado de solicitud de hora extra
+		 * @param requestId Id de la solicitud
+		 * @param state Nuevo estado de la solicitud
 		 */
-		this.getOvertimeRequestsAdmin = function(callbackOk, callbackError){
+		this.updateRequestOvertimeStatus = function(requestId, state, callbackOk, callbackError) {
 			var msg = {
 				id: Utils.getId(),
-				action: 'getOvertimeRequestsAdmin',
+				action: 'updateRequestOvertimeStatus',
 				session: Session.getSessionId(),
+				request: {
+					request_id: requestId, //id del usuario al cual se solicita la hora extra
+					state: state,
+				}
 			};
-			
-			response = [
-		  		{id:'1', user_id:"1", user_id_requestor:"1", begin: '2015-05-13 10:00:00', end: '2015-05-13 12:00:00', state: "PENDING", reason: "Trabajo pendiente"},
-	  			{id:'2', user_id:"2", user_id_requestor:"1", begin: '2015-06-15 12:00:00', end: '2015-06-15 15:00:00', state: "APPROVED", reason: "Adelantar trabajo"}
-			];
-
-			callbackOk(response);
+			console.log(msg);
+			callbackOk("ok");
 		}
+
 
 
 	}]

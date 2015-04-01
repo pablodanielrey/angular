@@ -44,7 +44,7 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
 	 */
 	$scope.loadRequests = function(){
 		$scope.model.requests = [];
-		Assistance.getOvertimeRequests($scope.model.session_user_id,
+		Assistance.getOvertimeRequests(null, null,
 			function callbackOk(requests){
 				for(var i = 0; i < requests.length; i++){
 					var request = $scope.formatRequest(requests[i]);
@@ -185,6 +185,7 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
 
 		Assistance.requestOvertime($scope.model.user_id, request,
 			function callbackOk(response){
+				$scope.loadRequests();
 				Notifications.message("Registro realizado con exito");
 			},
 			function callbackError(error){
