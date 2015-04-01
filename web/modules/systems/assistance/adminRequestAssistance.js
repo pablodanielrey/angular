@@ -33,7 +33,9 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistan
         //data: {request_id:"1",user_id:"1",justification_id: "1", begin: '2015-05-13 00:00:00', end: '2015-05-13 00:00:00', state: "Desaprobada" },
         var r = {};
         r.justification_id = data.justification_id;
-        r.date = data.begin;
+
+        var d = new Date(data.begin);
+        r.date = d.toLocaleDateString();
         r.user = null;
         r.id = data.request_id;
 
