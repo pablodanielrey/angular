@@ -163,6 +163,14 @@ app.controller('AssistanceCtrl', function($scope, $timeout, $window, Profiles, S
     }
 
 
+		$scope.$on('JustificationStockChangedEvent', function(event, data) {
+			if ($scope.model.session.user_id == data.user_id) {
+				$scope.loadJustificationStock(data.justification_id);
+			}
+		});
+
+
+
 		/*
 			parsea segundos a un formato imprimible en horas.
 			para las boletas de salida.
