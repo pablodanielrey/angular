@@ -118,7 +118,7 @@ create schema assistance;
       jend timestamptz not null,
       created timestamptz not null default now(),
       CHECK(EXTRACT(TIMEZONE FROM jbegin) = '0'),
-      CHECK(EXTRACT(TIMEZONE FROM jend) = '0'))
+      CHECK(EXTRACT(TIMEZONE FROM jend) = '0')
     );
 
 
