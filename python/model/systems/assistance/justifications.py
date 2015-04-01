@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+import inject, uuid
+
+from model.systems.assistance.offices import Offices
 from model.systems.assistance.restrictions import Repetition, CJustification, LAOJustification, AAJustification, BSJustification
 
 
@@ -47,12 +50,36 @@ class Justifications:
 
         for j in self.justifications:
             if j.isJustification(justId):
-                return j.available(con,userId,date)
+                return j.available(self,con,userId,date)
 
         """ justificationes desconocidas = 0 """
         return 0
 
 
+
+    """
+        obtiene todas las justificaciones que estan como ultimo estado en la lista de estados pasada como parametro.
+        status = una lista de estados posibles.
+        retora un dict con los ids de las justificaciones como key y el estado como value
+        { id: status }
+    """
+    def _getJustificationsInStatus(self,con,status=None):
+        cur = con.cursor()
+
+        """ obtengo el ultimo estado de los pedidos de justificacion """
+        if status is None:
+            cur.execute('select jrs.request_id,jrs.status from assistance.justifications_requests_status as jrs, (select request_id,max(created) as created from assistance.justifications_requests_status group by request_id) as r where r.created = jrs.created and r.request_id = jrs.request_id')
+        else:
+            cur.execute('select jrs.request_id,jrs.status from assistance.justifications_requests_status as jrs, (select request_id,max(created) as created from assistance.justifications_requests_status group by request_id) as r where r.created = jrs.created and r.request_id = jrs.request_id and jrs.status in %s',(tuple(status),))
+
+        if cur.rowcount <= 0:
+            return {}
+
+        statusR = {}
+        for rs in cur:
+            statusR[rs[0]] = rs[1]
+
+        return statusR
 
 
 
@@ -65,18 +92,10 @@ class Justifications:
 
         cur = con.cursor()
 
-        """ obtengo el ultimo estado de los pedidos de justificacion """
-        if status is None:
-            cur.execute('select jrs.request_id,jrs.status from assistance.justifications_requests_status as jrs, (select request_id,max(created) as created from assistance.justifications_requests_status group by request_id) as r where r.created = jrs.created and r.request_id = jrs.request_id')
-        else:
-            cur.execute('select jrs.request_id,jrs.status from assistance.justifications_requests_status as jrs, (select request_id,max(created) as created from assistance.justifications_requests_status group by request_id) as r where r.created = jrs.created and r.request_id = jrs.request_id and r.status = %s',(status,))
-
-        if cur.rowcount <= 0
+        statusR = self._getJustificationsInStatus(con,status)
+        if len(statusR) <= 0:
             return []
 
-        statusR = {}
-        for rs in cur:
-            statusR[rs[0]] = rs[1]
         rids = tuple(statusR.keys())
 
         if users is None:
@@ -91,12 +110,14 @@ class Justifications:
         for j in cur:
             jid = j[0]
             requests.append(
-                'id':jid,
-                'user_id':j[1],
-                'justification_id':j[2],
-                'begin':j[3],
-                'end':j[4],
-                'status':statusR[jid]
+                {
+                    'id':jid,
+                    'user_id':j[1],
+                    'justification_id':j[2],
+                    'begin':j[3],
+                    'end':j[4],
+                    'status':statusR[jid]
+                }
             )
 
         return requests

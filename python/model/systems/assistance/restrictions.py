@@ -24,7 +24,7 @@ class Justification:
 
 
     """ Retorna la cantidad disponible """
-    def available(self,con,userId,date):
+    def available(self,justifications,con,userId,date):
         raise Exception('abstract')
 
     """ Retorna la cantidad máxima data la repetición """
@@ -105,7 +105,7 @@ class CJustification(Justification):
         return self.id == id
 
 
-    def available(self,con,userId,date):
+    def available(self,justifications,con,userId,date):
         cur = con.cursor()
         cur.execute('select stock from assistance.justifications_stock where justification_id = %s and user_id = %s',(self.id,userId))
         if cur.rowcount <= 0:
@@ -133,7 +133,7 @@ class LAOJustification(Justification):
         return self.id == id
 
 
-    def available(self,con,userId,date):
+    def available(self,justifications,con,userId,date):
         cur = con.cursor()
         cur.execute('select stock from assistance.justifications_stock where justification_id = %s and user_id = %s',(self.id,userId))
         if cur.rowcount <= 0:
@@ -165,10 +165,17 @@ class AAJustification(Justification):
     """
         Retorna las disponibles para tomarse en la fecha date
     """
-    def available(self,con,userId,date):
+    def available(self,justifications,con,userId,date):
+
+        justStatus = justifications._getJustificationsInStatus(con,['PENDING','APROVED'])
+        if len(justStatus) <= 0:
+            return self.availableRep(Repetition.WEEKLY,userId,date)
+
+        justIds = tuple(justStatus.keys())
+
         cur = con.cursor()
-        req = (self.id, userId, 'PENDING', 'APROVED', date)
-        cur.execute('select jbegin from assistance.justifications_requests where justification_id = %s and user_id = %s and (status = %s or status = %s) and extract(year from jbegin) = extract(year from %s)',req)
+        req = (self.id, userId, justIds, date)
+        cur.execute('select jbegin from assistance.justifications_requests where justification_id = %s and user_id = %s and id in %s and extract(year from jbegin) = extract(year from %s)',req)
         inYear = cur.rowcount
         if inYear <= 0:
             return self.availableRep(Repetition.WEEKLY,userId,date)
@@ -232,10 +239,17 @@ class BSJustification(Justification):
     """
         Retorna los segundos disponibles para tomarse en la fecha date
     """
-    def available(self,con,userId,date):
+    def available(self,justifications,con,userId,date):
+
+        justStatus = justifications._getJustificationsInStatus(con,['PENDING','APROVED'])
+        if len(justStatus) <= 0:
+            return self.availableRep(Repetition.MONTHLY,userId,date)
+
+        justIds = tuple(justStatus.keys())
+
         cur = con.cursor()
-        req = (self.id, userId, 'PENDING', 'APROVED', date, date)
-        cur.execute('select jbegin,jend from assistance.justifications_requests where justification_id = %s and user_id = %s and (status = %s or status = %s) and extract(year from jbegin) = extract(year from %s) and extract(month from jbegin) = extract(month from %s)',req)
+        req = (self.id, userId, justIds, date, date)
+        cur.execute('select jbegin,jend from assistance.justifications_requests where justification_id = %s and user_id = %s and id in %s and extract(year from jbegin) = extract(year from %s) and extract(month from jbegin) = extract(month from %s)',req)
         if cur.rowcount <= 0:
             return self.availableRep(Repetition.MONTHLY,userId,date)
 

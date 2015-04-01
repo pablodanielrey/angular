@@ -112,7 +112,7 @@ app.controller('RequestAssistanceAbsentCtrl', function($scope, Assistance, Notif
 		}
 		Assistance.requestJustification($scope.model.session.user_id, requestedJustification,
 			function(ok) {
-                $scope.$broadcast('RequestLicenceEvent');
+        $scope.$broadcast('RequestLicenceEvent');
 				$scope.clearSelections();
 				Notifications.message('Ausente con aviso solicitado correctamente');
 			},

@@ -17,12 +17,12 @@ app.service('Assistance', ['Utils','Messages','Session',
 
 			Messages.send(msg,
 				function(data) {
-					callbackOk(data.response);
-				},
-				function(error) {
-					callbackError(error);
-				}
-			);
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response);
+					} else {
+						callbackError(data.error);
+					}
+				});
 		};
 
 
@@ -39,12 +39,12 @@ app.service('Assistance', ['Utils','Messages','Session',
 
 			Messages.send(msg,
 				function(data) {
-					callbackOk(data.response);
-				},
-				function(error) {
-					callbackError(error);
-				}
-			);
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response);
+					} else {
+						callbackError(data.error);
+					}
+				});
 		};
 
 		this.getAssistanceData = function(userId, callbackOk, callbackError) {
@@ -59,12 +59,12 @@ app.service('Assistance', ['Utils','Messages','Session',
 
 			Messages.send(msg,
 				function(data) {
-					callbackOk(data.response);
-				},
-				function(error) {
-					callbackError(error);
-				}
-			);
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response);
+					} else {
+						callbackError(data.error);
+					}
+				});
 		};
 
 
@@ -80,12 +80,12 @@ app.service('Assistance', ['Utils','Messages','Session',
 
 			Messages.send(msg,
 				function(data) {
-					callbackOk(data.response);
-				},
-				function(error) {
-					callbackError(error);
-				}
-			);
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response);
+					} else {
+						callbackError(data.error);
+					}
+				});
 		};
 
 
@@ -98,12 +98,12 @@ app.service('Assistance', ['Utils','Messages','Session',
 
 			Messages.send(msg,
 				function(data) {
-					callbackOk(data.response.justifications);
-				},
-				function(error) {
-					callbackError(error);
-				}
-			);
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response.justifications);
+					} else {
+						callbackError(data.error);
+					}
+				});
 		};
 
 
@@ -120,17 +120,18 @@ app.service('Assistance', ['Utils','Messages','Session',
 
 			Messages.send(msg,
 				function(data) {
-					callbackOk(data.response);
-				},
-				function(error) {
-					callbackError(error);
-				}
-			);
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response);
+					} else {
+						callbackError(data.error);
+					}
+				});
 		};
 
 
 
 		this.getJustificationRequests = function(status, group, callbackOk, callbackError){
+
 			var msg = {
 				id: Utils.getId(),
 				action: 'getJustificationRequests',
@@ -143,31 +144,38 @@ app.service('Assistance', ['Utils','Messages','Session',
 
 			Messages.send(msg,
 				function(data) {
-					callbackOk(data.response.requests);
-				},
-				function(error) {
-					callbackError(error);
-				}
-			);
-
-			/*
-			//TODO
-			response = [
-		  		{request_id:'1',user_id:"1",justification_id: "1", begin: '2015-05-13 00:00:00', end: '2015-05-13 00:00:00', state: "Desaprobada"},
-	  			{request_id:'2',user_id:"1",justification_id: "2", begin: '2015-06-13 00:00:00', end: '2015-06-15 00:00:00', state: "Aprobada"}
-			]
-
-			callbackOk(response);
-			*/
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response.requests);
+					} else {
+						callbackError(data.error);
+					}
+				});
 		}
 
 		this.updateStatusRequestJustification = function(request_id, status, callbackOk, callbackError) {
 			callbackOk(null);
 		}
 
-		this.requestLicence = function(userId, justification, callbackOk, callbackError){
-			response = "ok";
-			callbackOk(response);
+		this.requestJustification = function(userId, justification, callbackOk, callbackError) {
+			var msg = {
+				id: Utils.getId(),
+				action: 'requestJustification',
+				session: Session.getSessionId(),
+				request: {
+					user_id: userId,
+					justification_id: justification.id,
+					begin: justification.begin
+				}
+			}
+
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response);
+					} else {
+						callbackError(data.error);
+					}
+				});
 		}
 
 		/**

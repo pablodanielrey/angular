@@ -13,6 +13,7 @@ from model.users.users import Users
 
 from model.systems.assistance.logs import Logs
 from model.systems.assistance.date import Date
+from model.systems.assistance.offices import Offices
 from model.systems.assistance.schedule import Schedule
 from model.systems.assistance.justifications import Justifications
 
@@ -24,6 +25,7 @@ class Assistance:
     schedule = inject.attr(Schedule)
     users = inject.attr(Users)
     justifications = inject.attr(Justifications)
+    offices = inject.attr(Offices)
 
     """
         Obtiene el estado de asistencia del usuario
@@ -98,16 +100,16 @@ class Assistance:
         group = ROOT|TREE --> ROOT = oficinas directas, TREE = oficinas directas y todas las hijas
     """
 
-    def getJustificationRequests(self,userId,status,group='ROOT'):
+    def getJustificationRequests(self,con,userId,status,group='ROOT'):
 
         tree = False
         if group == 'TREE':
             tree = True
 
-        offices = self.offices.getOfficesByUserRole(userId,tree)
-        users = self.offices.getOfficesUsers(offices)
+        offices = self.offices.getOfficesByUserRole(con,userId,tree)
+        users = self.offices.getOfficesUsers(con,offices)
 
-        justifications = self.justifications.getJustificationRequests(status,uniqueUsers)
+        justifications = self.justifications.getJustificationRequests(con,status,users)
 
         return justifications
 

@@ -8,6 +8,7 @@ from wexceptions import *
 from model.config import Config
 from model.profiles import Profiles
 
+from model.systems.assistance.assistance import Assistance
 from model.systems.assistance.date import Date
 from model.systems.assistance.justifications import Justifications
 
@@ -204,7 +205,7 @@ class GetJustificationRequests:
         if (message['action'] != 'getJustificationRequests'):
             return False
 
-        if ('request' not in message) or ('user_id' not in message['request']):
+        if 'request' not in message:
             response = {'id':message['id'], 'error':'Insuficientes parámetros'}
             server.sendMessage(response)
             return True
@@ -281,7 +282,7 @@ class RequestJustification:
         if (message['action'] != 'requestJustification'):
             return False
 
-        if ('request' not in message) or ('user_id' not in message['request']) or ('justification_id' not in message['request']) or ('begin' not in message['requesst']):
+        if ('request' not in message) or ('user_id' not in message['request']) or ('justification_id' not in message['request']) or ('begin' not in message['request']):
             response = {'id':message['id'], 'error':'Insuficientes parámetros'}
             server.sendMessage(response)
             return True

@@ -51,7 +51,7 @@ class Offices:
         retorna los ids de los usuarios que pertenecen a las oficinas pasasdas como parámetro
         offices = lista de ids de oficinas
     """
-    def getOfficesUsers(self,offices):
+    def getOfficesUsers(self,con,offices):
 
         if len(offices) <= 0:
             return []
