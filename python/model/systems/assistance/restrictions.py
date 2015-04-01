@@ -28,6 +28,15 @@ class Justification:
     def available(self,justifications,con,userId,date):
         raise Exception('abstract')
 
+    """ elimina del stock de la justificacion cierta cantidad """
+    def removeFromStock(self,justifications,con,userId,stockToRemove):
+        raise Exception('abstract')
+
+    """ agrega al stock de la justificacion cierta cantidad """
+    def addToStock(self,justifications,con,userId,stockToAdd):
+        raise Exception('abstract')
+
+
     """ Retorna la cantidad máxima data la repetición """
     def availableRep(self,rep,userId,date):
         raise Exception('abstract')
@@ -118,7 +127,15 @@ class CJustification(Justification):
     def availableRep(self,rep,userId,date):
         return None
 
+    """ elimina del stock de la justificacion cierta cantidad """
+    def removeFromStock(self,justifications,con,userId,stockToRemove):
+        cur = con.cursor()
+        cur.execute('update assistance.justifications_stock set stock = stock - %s where justification_id = %s and user_id = %s',(stockToRemove,self.id,userId))
 
+    """ agrega al stock de la justificacion cierta cantidad """
+    def addToStock(self,justifications,con,userId,stockToAdd):
+        cur = con.cursor()
+        cur.execute('update assistance.justifications_stock set stock = stock + %s where justification_id = %s and user_id = %s',(stockToAdd,self.id,userId))
 
 
 
@@ -146,6 +163,15 @@ class LAOJustification(Justification):
     def availableRep(self,rep,userId,date):
         return None
 
+    """ elimina del stock de la justificacion cierta cantidad """
+    def removeFromStock(self,justifications,con,userId,stockToRemove):
+        cur = con.cursor()
+        cur.execute('update assistance.justifications_stock set stock = stock - %s where justification_id = %s and user_id = %s',(stockToRemove,self.id,userId))
+
+    """ agrega al stock de la justificacion cierta cantidad """
+    def addToStock(self,justifications,con,userId,stockToAdd):
+        cur = con.cursor()
+        cur.execute('update assistance.justifications_stock set stock = stock + %s where justification_id = %s and user_id = %s',(stockToAdd,self.id,userId))
 
 
 
@@ -219,6 +245,13 @@ class AAJustification(Justification):
 
         return None
 
+    """ elimina del stock de la justificacion cierta cantidad """
+    def removeFromStock(self,justifications,con,userId,stockToRemove):
+        pass
+
+    """ agrega al stock de la justificacion cierta cantidad """
+    def addToStock(self,justifications,con,userId,stockToAdd):
+        pass
 
 
 
@@ -270,3 +303,12 @@ class BSJustification(Justification):
             return (13 - date.month) * datetime.timedelta(hours=3)
 
         return datetime.timedelta(hours=3).total_seconds()
+
+
+    """ elimina del stock de la justificacion cierta cantidad """
+    def removeFromStock(self,justifications,con,userId,stockToRemove):
+        pass
+
+    """ agrega al stock de la justificacion cierta cantidad """
+    def addToStock(self,justifications,con,userId,stockToAdd):
+        pass
