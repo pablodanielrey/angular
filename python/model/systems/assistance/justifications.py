@@ -76,7 +76,7 @@ class Justifications:
                 'justification_id':j[2],
                 'begin':j[3],
                 'end':j[4],
-                'status':j[5]
+                'status':status
             )
 
         return requests
