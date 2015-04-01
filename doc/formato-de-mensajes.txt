@@ -254,17 +254,13 @@ JustificationsRequestsUpdatedEvent
 
 JustificationStatusChangedEvent
 {
-  justification_id
-  status
-  user_id
-  changer_id
+  request_id
 }
 
 JustificationStockChangedEvent
 {
   justification_id
   user_id
-  stock
 }
 
 

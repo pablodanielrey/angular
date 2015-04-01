@@ -8,6 +8,8 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistan
         justifications: []
     }
 
+
+
     $scope.getJustificationName = function(id) {
       for (var i = 0; i < $scope.model.justifications.length; i++) {
         if ($scope.model.justifications[i].id == id) {
@@ -84,9 +86,6 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistan
         }
     };
 
-    $timeout(function() {
-        $scope.initialize();
-    }, 0);
 
     $scope.updateStatus = function(status, request_id) {
         Assistance.updateStatusRequestJustification(request_id, status,
@@ -107,6 +106,17 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistan
     $scope.refuseRequest = function(request) {
         $scope.updateStatus("REJECTED",request.id);
     }
+
+
+    // Escuchar evento de nuevo requerimiento de licencia
+    $scope.$on('JustificationsRequestsUpdatedEvent', function(event, data) {
+      $scope.loadRequests();
+    });
+
+
+    $timeout(function() {
+      $scope.initialize();
+    }, 0);
 
 
 })

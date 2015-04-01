@@ -7,6 +7,7 @@ from wexceptions import *
 
 from model.config import Config
 from model.profiles import Profiles
+from model.events import Events
 
 from model.systems.assistance.assistance import Assistance
 from model.systems.assistance.date import Date
@@ -279,6 +280,7 @@ class RequestJustification:
     config = inject.attr(Config)
     justifications = inject.attr(Justifications)
     date = inject.attr(Date)
+    events = inject.attr(Events)
 
     def handleAction(self, server, message):
 
@@ -306,7 +308,7 @@ class RequestJustification:
 
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
-            self.justifications.requestJustification(con,userId,justificationId,begin,end)
+            reqId = self.justifications.requestJustification(con,userId,justificationId,begin,end)
 
             con.commit()
 
@@ -315,6 +317,37 @@ class RequestJustification:
                 'ok':'El pedido se ha realizado correctamente'
             }
             server.sendMessage(response)
+
+
+            event = {
+                'type':'JustificationsRequestsUpdatedEvent',
+                'data':{
+                    'justification_id':justificationId,
+                    'user_id':userId
+                }
+            }
+            self.events.broadcast(server,event)
+
+
+            event = {
+                'type':'JustificationStockChangedEvent',
+                'data':{
+                    'justification_id':justificationId,
+                    'user_id':userId
+                }
+            }
+            self.events.broadcast(server,event)
+
+
+            event = {
+                'type':'JustificationStatusChangedEvent',
+                'data':{
+                    'request_id':reqId
+                }
+            }
+            self.events.broadcast(server,event)
+
+
             return True
 
         except Exception as e:
