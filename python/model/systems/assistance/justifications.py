@@ -57,6 +57,19 @@ class Justifications:
 
 
 
+    def _removeStockFromJustification(self,con,userId,justId,stockToRemove):
+        for j in self.justifications:
+            if j.isJustification(justId):
+                j.removeFromStock(self,con,userId,stockToRemove)
+
+
+
+    def _addStockToJustification(self,con,userId,justId,stockToAdd):
+        for j in self.justifications:
+            if j.isJustification(justId):
+                j.addToStock(self,con,userId,stockToAdd)
+
+
     """
         obtiene todas las justificaciones que estan como ultimo estado en la lista de estados pasada como parametro.
         status = una lista de estados posibles.
@@ -145,3 +158,7 @@ class Justifications:
             cur.execute('insert into assistance.justifications_requests (id,user_id,justification_id,jbegin,jend) values (%s,%s,%s,%s,%s)',(jid,userId,justificationId,begin,end))
 
         cur.execute('insert into assistance.justifications_requests_status (request_id,user_id,status) values (%s,%s,%s)',(jid,userId,'PENDING'))
+
+        self._removeStockFromJustification(con,userId,justificationId,1)
+
+        
