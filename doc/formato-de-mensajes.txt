@@ -324,8 +324,13 @@ query : Obtener todas las solicitudes de horas extras solicituadas por un determ
   action:"getOvertimeRequests",
   session:,
   request:{
+<<<<<<< HEAD
       status: 'estado del pedido PENDING|APPROVED|REJECTED|CANCELED' -- si no existe se obtienen todas,
       group: "ROOT|TREE" -- si no existe obtiene solo las que pidio el  usuario, y no las del grupo
+=======
+      status: 'estado de la justificacion PENDING|APPROVED|REJECTED|CANCELED' -- si no existe se obtienen todas,
+      group: "ROOT|TREE" -- si no existe obtiene solo las del usuario, y no las del grupo
+>>>>>>> f956a30f0c52e3dbaea13c4babe5779dd856ab43
   }
 
 }
@@ -337,6 +342,7 @@ response :
   error: "error del servidor",
   response:{
     requests : [ "lista de solicitudes"
+<<<<<<< HEAD
   		{
 	      id: "id de la solicitud de hora extra",
         user_id:"id del usuario para el cual se solicito hora extra",
@@ -368,10 +374,11 @@ response :
   error: "error del servidor",
   response:{
     requests : [ "lista de solicitudes a administrar"
+=======
+>>>>>>> f956a30f0c52e3dbaea13c4babe5779dd856ab43
   		{
 	        id: "id de la solicitud de hora extra",
         	user_id:"id del usuario para el cual se solicito hora extra",
-			user_id_requestor: "id del usuario que solicito la hora extra",
     		begin: 2014-12-01 00:00:00 "fecha y hora de inicio de la hora extra"
     		end: 2014-12-02 00:00:00 "fecha y hora de finalizacion de la hora extra"
     		reason: "motivo de la solicitud"

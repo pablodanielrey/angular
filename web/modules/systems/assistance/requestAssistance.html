@@ -20,15 +20,19 @@
         <span>{{x.begin}}</span>
       </div>
       <div class="iconsMyRequest"><i class="fa fa-bullhorn"></i></div>
-      <div class="myStateRequestSlope" ng-class="{true:'visible', false:'hidden'}[false]">
-        <span>{{x.state}}</span>
+      <div class="myStateRequestSlope" ng-class="{true:'visible', false:'hidden'}[x.status == 'PENDING']">
+        <span>Pendiente</span>
       </div>
-      <div class="myStateRequestApproved" ng-class="{true:'visible', false:'hidden'}[false]">
-        <span>{{x.state}}</span>
+      <div class="myStateRequestApproved" ng-class="{true:'visible', false:'hidden'}[x.status == 'APPROVED']">
+        <span>Aprobado</span>
       </div>
 
-      <div class="myStateRequestRejected" ng-class="{true:'visible', false:'hidden'}[true]">
-        <span>{{x.state}}</span>
+      <div class="myStateRequestRejected" ng-class="{true:'visible', false:'hidden'}[x.status == 'REJECTED']">
+        <span>Rechazado</span>
+      </div>
+      
+       <div class="myStateRequestRejected" ng-class="{true:'visible', false:'hidden'}[x.status == 'CANCELED']">
+        <span>Cancelado</span>
       </div>
 
 

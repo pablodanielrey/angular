@@ -60,7 +60,7 @@ app.controller('RequestAssistanceLaoCtrl', function($scope, Assistance, Session,
     if ($scope.model.justification != null) {
         $scope.model.justification.begin = null;
         $scope.model.justification.end = null;
-    }    
+    }
 	}
 
     $scope.updateDate = function() {
@@ -128,7 +128,6 @@ app.controller('RequestAssistanceLaoCtrl', function($scope, Assistance, Session,
 
         Assistance.requestJustification($scope.model.session.user_id,$scope.model.justification,
             function(ok) {
-                $scope.$broadcast('RequestLicenceEvent');
                 Notifications.message("Guardado exitosamente");
                 $scope.clearSelections();
             },

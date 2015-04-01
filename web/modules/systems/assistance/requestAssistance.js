@@ -40,6 +40,7 @@ app.controller('RequestAssistanceCtrl', function($scope, $rootScope, $timeout, $
     }
 
 	$scope.loadRequestedLicences = function() {
+		$scope.model.requestedLicences = [];
 		Assistance.getJustificationRequests(null,null,
 			function(requestedLicences){
 				for(i in requestedLicences){
@@ -94,8 +95,7 @@ app.controller('RequestAssistanceCtrl', function($scope, $rootScope, $timeout, $
 
 
 	// Escuchar evento de nuevo requerimiento de licencia
-	$scope.$on('RequestLicenceEvent', function(event, data) {
-		console.log("cargar licencias");
+	$scope.$on('JustificationsRequestsUpdatedEvent', function(event, data) {
 		$scope.loadRequestedLicences();
 	});
 

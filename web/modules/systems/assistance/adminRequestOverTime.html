@@ -5,7 +5,7 @@
   <div class="content" ng-repeat="request in model.requests">
     <div class="userRequest">
       <div class="userInfo">
-        <span class="userName">{{request.user.name}} {{model.user.lastname}}</span>
+        <span class="userName">{{request.user.name}} {{request.user.lastname}}</span>
         <span class="userDNI">{{request.user.dni}}</span>
       </div>
     </div>
@@ -19,10 +19,10 @@
 
     <div class="actionsRequest">
       <div class="approve">
-        <button class="approveRequest"> <i class="fa fa-check"></i>Aprobar</button>
+        <button class="approveRequest" ng-click="approveRequest(request.id)"> <i class="fa fa-check"></i>Aprobar</button>
       </div>
       <div class="denegar">
-        <button class="refuseRequest"><i class="fa fa-times"></i>Denegar</button>
+        <button class="refuseRequest" ng-click="refuseRequest(request.id)"><i class="fa fa-times"></i>Denegar</button>
       </div>
     </div>
 
