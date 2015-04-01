@@ -45,38 +45,45 @@ class Justifications:
 
     """
         obtiene todas los pedidos de justificaciones con cierto estado
+        status es el estado a obtener. en el caso de que no sea pasado entonces se obtienen todas, en su ultimo estado
         users es una lista de ids de usuarios que piden los requests, si = None entonces no lo tiene en cuenta.
     """
-    def getJustificationRequests(self,con,status,users=None):
+    def getJustificationRequests(self,con,status=None,users=None):
 
         cur = con.cursor()
 
-        """ obtengo las justificaciones que tienen como ultimo estado el estado pasado por parámetro """
-        cur.execute('select jrs.request_id from assistance.justifications_requests_status as jrs, (select request_id,max(created) as created from assistance.justifications_requests_status group by request_id) as r where r.created = jrs.created and r.request_id = jrs.request_id and r.status = %s',(status,))
+        """ obtengo el ultimo estado de los pedidos de justificacion """
+        if status is None:
+            cur.execute('select jrs.request_id,jrs.status from assistance.justifications_requests_status as jrs, (select request_id,max(created) as created from assistance.justifications_requests_status group by request_id) as r where r.created = jrs.created and r.request_id = jrs.request_id')
+        else:
+            cur.execute('select jrs.request_id,jrs.status from assistance.justifications_requests_status as jrs, (select request_id,max(created) as created from assistance.justifications_requests_status group by request_id) as r where r.created = jrs.created and r.request_id = jrs.request_id and r.status = %s',(status,))
+
         if cur.rowcount <= 0
             return []
 
-        rids = []
+        statusR = {}
         for rs in cur:
-            rids.append(rs[0])
+            statusR[rs[0]] = rs[1]
+        rids = tuple(statusR.keys())
 
         if users is None:
-            cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where id in ',(tuple(rids),))
+            cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where id in ',(rids,))
         else:
-            cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where id = %s and user_id in %s',(tuple(rids),tuple(users)))
+            cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where id = %s and user_id in %s',(rids,tuple(users)))
 
         if cur.rowcount <= 0:
             return []
 
         requests = []
         for j in cur:
+            jid = j[0]
             requests.append(
-                'id':j[0],
+                'id':jid,
                 'user_id':j[1],
                 'justification_id':j[2],
                 'begin':j[3],
                 'end':j[4],
-                'status':status
+                'status':statusR[jid]
             )
 
         return requests
