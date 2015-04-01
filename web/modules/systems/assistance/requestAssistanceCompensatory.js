@@ -57,6 +57,11 @@ app.controller('RequestAssistanceCompensatoryCtrl', function($scope, Assistance,
 		$scope.model.justificationCompensatoryRequestSelected = false;
 		$scope.model.justificationCompensatoryAvailableSelected = false;
 		$scope.model.justificationCompensatoryRequestsSelected = false;
+
+    if ($scope.model.justification != null) {
+        $scope.model.justification.begin = null;
+    }
+
 	}
 
 

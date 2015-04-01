@@ -56,6 +56,11 @@ app.controller('RequestAssistanceLaoCtrl', function($scope, Assistance, Session,
 		$scope.model.justificationLaoRequestSelected = false;
 		$scope.model.justificationLaoAvailableSelected = false;
 		$scope.model.justificationLaoRequestsSelected = false;
+
+    if ($scope.model.justification != null) {
+        $scope.model.justification.begin = null;
+        $scope.model.justification.end = null;
+    }    
 	}
 
     $scope.updateDate = function() {

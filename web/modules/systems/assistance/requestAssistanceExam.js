@@ -56,6 +56,10 @@ app.controller('RequestAssistanceExamCtrl', function($scope, Assistance, Session
 		$scope.model.justificationExamRequestSelected = false;
 		$scope.model.justificationExamAvailableSelected = false;
 		$scope.model.justificationExamRequestsSelected = false;
+
+    if ($scope.model.justification != null) {
+        $scope.model.justification.begin = null;
+    }
 	}
 
     $scope.isSelectedDate = function() {

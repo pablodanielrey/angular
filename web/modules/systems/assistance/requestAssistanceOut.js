@@ -9,17 +9,17 @@ app.controller('RequestAssistanceOutCtrl', function($scope, Assistance, Notifica
 
     // ---------------- Manejo de la vista --------------------
 
-    $scope.isSelectedJustificationOut = function() {
-		return $scope.model.justificationOutSelected;
-	}
+  $scope.isSelectedJustificationOut = function() {
+    return $scope.model.justificationOutSelected;
+  }
 
 	$scope.selectJustificationOut = function() {
-		var value = !$scope.model.justificationOutSelected;
-		$scope.clearSelections();
-        $scope.clearSelectionsOut();
-		$scope.model.justificationOutSelected = value;
+    var value = !$scope.model.justificationOutSelected;
+    $scope.clearSelections();
+    $scope.clearSelectionsOut();
+    $scope.model.justificationOutSelected = value;
 
-        $scope.model.justification.id = $scope.model.justificationOutId;
+    $scope.model.justification.id = $scope.model.justificationOutId;
 	}
 
 	$scope.isSelectedJustificationOutRequest = function() {
@@ -57,6 +57,10 @@ app.controller('RequestAssistanceOutCtrl', function($scope, Assistance, Notifica
 		$scope.model.justificationOutAvailableSelected = false;
 		$scope.model.justificationOutRequestsSelected = false;
 
+    if ($scope.model.justification != null) {
+        $scope.model.justification.begin = null;
+        $scope.model.justification.end = null;
+    }
 	}
 
     $scope.isSelectedDate = function() {
