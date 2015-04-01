@@ -21,9 +21,9 @@
         <div>
           <div class="margin" ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationLaoRequest()]">
             <p class="parrafos">Seleccione el día de comienzo de la LAO</p>
-            <input class="date" type="date" ng-model="model.justification.begin">
+            <input class="date" type="date" ng-model="model.justification.begin" ng-change="changeDate()">
             <p class="parrafos">Seleccione el día de finalización de la LAO</p>
-            <input class="date" type="date" ng-model="model.justification.end">
+            <input class="date" type="date" ng-model="model.justification.end" ng-change="changeDate()">
           </div>
 
           <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationLaoAvailable()]">
