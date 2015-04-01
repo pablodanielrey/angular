@@ -20,13 +20,13 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
 		date: null, //actualmente se define un solo dia por solicitud, posteriormente cuando se maneje el calendario se podra definir un rango de dias (para un determinado rango de dias)
 		reason: null, //motivo por el cual se solicita las horas extra
 		requests: [], //solicitudes de horas extras para el usuario logueado
-		
+
 		//variables correspondientes a la seleccion de usuario
 		searchUser: null,
 		searchUserPromise: null,
 		users: null
 	};
-	
+
 	/**
 	 * Cargar y chequear session
 	 */
@@ -38,7 +38,7 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
 		var session = Session.getCurrentSession();
 		$scope.model.session_user_id = session.user_id;
 	};
-	
+
 	/**
 	 * Obtener solicitudes de horas extra del usuario (jefe)
 	 */
@@ -85,18 +85,18 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
 		);
 		return requestAux;
 	};
-	
+
 	/**
 	 * Inicializar
 	 */
-	$timeout(function() { 
+	$timeout(function() {
 		$scope.loadSession();
 		$scope.loadRequests();
 	},0);
-	
-	
-	
-	
+
+
+
+
 	/******************************************************
 	 * METODOS CORRESPONDIENTES A LA SELECCION DE USUARIO *
 	 ******************************************************/
@@ -104,10 +104,11 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
 	 * Buscar usuarios
 	 */
 	$scope.searchUsers = function(){
+		$scope.displayListUser = true;
 		if($scope.model.searchUserPromise){
 			$timeout.cancel($scope.model.searchUserPromise);
 		};
-		
+
 		$scope.searchUserPromise = $timeout(
 			function(){
 				if($scope.search != "") {
@@ -117,14 +118,22 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
 		,1000);
 	};
 
+	$scope.displayListUser = false;
+
+	$scope.isDisplayListUser = function() {
+		console.log($scope.displayListUser);
+		return $scope.displayListUser;
+	}
+
 	/**
  	 * Listar elementos
 	 */
 	$scope.selectUser = function(user){
 		$scope.model.user_id = user.id;
 		$scope.model.searchUser = user.name + " " + user.lastname;
+		$scope.displayListUser = false;
 	};
-	
+
 	/**
  	 * Seleccionar usuario
 	 */
@@ -135,17 +144,17 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
 			},
 			function(error){
 				Notifications.message(error);
-			}	
+			}
 		);
 	};
-	
-	
-	
-	
+
+
+
+
 	/***********************************************************
 	 * METODOS CORRESPONDIENTES AL PROCESAMIENTO DE FORMULARIO *
 	 ***********************************************************/
-	
+
 	/**
 	 * Dar formato a un timestamp
 	 * @param {input type date} date
@@ -159,14 +168,14 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
 		timestamp.setMinutes(timeAux.getMinutes());
 		return timestamp;
 	};
-	
+
 	/**
 	 * Guardar solicitud en el servidor
 	 */
 	$scope.persistOvertime = function(){
 		var begin = $scope.formatTimestamp($scope.model.date, $scope.model.startTime);
 		var end = $scope.formatTimestamp($scope.model.date, $scope.model.endTime);
-		
+
 		var request = {
 			date:$scope.model.date,
 			begin:begin,
@@ -183,14 +192,14 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
 			}
 		);
 	};
-	
+
 	/**
 	 * Chequear y guardar solicitud en el servidor
 	 */
 	$scope.requestOvertime = function(){
 		if(($scope.model.date != null) && ($scope.model.startTime != null) && ($scope.model.endTime != null) && ($scope.model.user_id != null)) {
 			$scope.persistOvertime();
-			
+
 		} else {
 			Notifications.message("Datos incorrectos: Verifique los datos ingresados");
 		}

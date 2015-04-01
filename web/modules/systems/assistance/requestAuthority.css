@@ -57,6 +57,25 @@
   font-size: 14px;
 
 }
+.requestAuthority .listUsers {
+  list-style-type:none;
+  margin:0px;
+  padding-left:5px;
+  width:155px;
+  background-color:#0066A6;
+  color:white;
+  z-index:999;
+
+}
+.requestAuthority .liUsers {
+  height:25px;
+  padding-top:10px;
+  border-bottom:2px solid #275276;
+  cursor:pointer;
+  z-index:999;
+
+
+}
 .requestAuthority .dateTitle {
   background-color: #0066A6;
   color: white;
