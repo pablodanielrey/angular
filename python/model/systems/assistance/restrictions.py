@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-import calendar, datetime
+import calendar, datetime, logging
+
 from enum import Enum
 
 
@@ -197,7 +198,7 @@ class AAJustification(Justification):
             if availableInWeek <= len(sameWeek):
                 return 0
 
-            available = min(min(min(availableInYear - inYear), availableInMonth - len(sameMonth)), availableInWeek - len(sameWeek))
+            available = min(min((availableInYear - inYear), availableInMonth - len(sameMonth)), availableInWeek - len(sameWeek))
             return available
 
 

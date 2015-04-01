@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import inject, uuid
+import inject, uuid, logging
 
 from model.systems.assistance.offices import Offices
 from model.systems.assistance.restrictions import Repetition, CJustification, LAOJustification, AAJustification, BSJustification
@@ -97,9 +97,10 @@ class Justifications:
             return []
 
         rids = tuple(statusR.keys())
+        logging.debug(rids)
 
         if users is None or len(users) <= 0:
-            cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where id in ',(rids,))
+            cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where id in %s',(rids,))
         else:
             cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where id = %s and user_id in %s',(rids,tuple(users)))
 
