@@ -48,19 +48,15 @@ if __name__ == '__main__':
   #_checkAssistanceSchedule(assistance,fails)
   #sys.exit(0)
 
-  reactor = network.websocket.getReactor()
+  (reactor,port,factory) = network.websocket.getPort()
 
   def close_sig_handler(signal,frame):
       #rt.stop()
-      reactor.stopListening()
+      port.stopListening()
+      reactor.stop()
       sys.exit()
 
   signal.signal(signal.SIGINT,close_sig_handler)
 
   logging.debug('Ejecutando servidor de acciones')
   reactor.run()
-
-  logging.debug('iniciando bucle infinito')
-
-  while True:
-      time.sleep(1000)

@@ -232,10 +232,10 @@ class BroadcastServerFactory(WebSocketServerFactory):
 
 
 
-def getReactor():
+def getPort():
     config = inject.instance(Config)
     log.startLogging(sys.stdout)
     factory = BroadcastServerFactory()
     factory.protocol = ActionsServerProtocol
-    reactor.listenTCP(int(config.configs['server_port']), factory)
-    return reactor
+    port = reactor.listenTCP(int(config.configs['server_port']), factory)
+    return (reactor,port,factory)
