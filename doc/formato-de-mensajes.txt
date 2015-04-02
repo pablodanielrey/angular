@@ -34,10 +34,38 @@ response:
 }
 
 
+------
+
+obtiene todos los roles que tiene un usuario dentro de una oficina 
+
+query:
+{
+  id:
+  action:'getUserOfficeRoles'
+  session:
+  request: {
+    officeId: 'id de la oficina' -- opcional, en el caso de no existir obtiene todos los roles que tenga en las oficinas
+  }
+}
+
+response:
+{
+  id:
+  ok:
+  error:
+  response: {
+    roles: [
+      {
+        officeId: 'id de la oficina',
+        role: 'rol en la oficina'
+      }
+    ]
+  }
+}
 
 
 
-
+-------
 
 query :
 {

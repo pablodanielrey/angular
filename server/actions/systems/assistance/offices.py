@@ -15,6 +15,73 @@ from model.systems.assistance.offices import Offices
 
 
 """
+query:
+{
+  id:
+  action:'getUserOfficeRoles'
+  session:
+  request: {
+    officeId: 'id de la oficina' -- opcional, en el caso de no existir obtiene todos los roles que tenga en las oficinas
+  }
+}
+
+response:
+{
+  id:
+  ok:
+  error:
+  response: {
+    roles: [
+      {
+        officeId: 'id de la oficina',
+        role: 'rol en la oficina'
+      }
+    ]
+  }
+}
+
+"""
+class GetUserOfficeRoles:
+
+    profiles = inject.attr(Profiles)
+    config = inject.attr(Config)
+    offices = inject.attr(Offices)
+
+    def handleAction(self, server, message):
+
+        if (message['action'] != 'getUserOfficeRoles'):
+            return False
+
+        sid = message['session']
+        self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
+        userId = self.profiles.getLocalUserId(sid)
+
+        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+        try:
+            roles = self.offices.getOfficesRoles(con,userId)
+
+            response = {
+                'id':message['id'],
+                'ok':'',
+                'response':{
+                    'roles':roles
+                }
+            }
+            server.sendMessage(response)
+            return True
+
+        except Exception as e:
+            logging.exception(e)
+            raise e
+
+        finally:
+            con.close()
+
+
+
+
+
+"""
 
 query :
 {

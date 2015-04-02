@@ -91,6 +91,28 @@ class Offices:
 
 
     """
+        obtiene todos los roles que tiene un usuario dentro de las oficinas
+    """
+    def getOfficesRoles(self,con,userId):
+        cur = con.cursor()
+        cur.execute('select user_id,office_id,role from assistance.offices_roles ou where ou.user_id = %s',(userId,))
+        if cur.rowcount <= 0:
+            return []
+
+        roles = []
+        for r in cur:
+            roles.append({
+                'userId':r[0],
+                'officeId':r[1],
+                'role':r[2]
+            })
+
+        return roles
+
+
+
+
+    """
         obtiene todas las oficinas en las cuales el usuario tiene asignado un rol
         si tree=True obtiene todas las hijas también
     """

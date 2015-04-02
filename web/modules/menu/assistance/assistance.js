@@ -1,6 +1,6 @@
 var app = angular.module('mainApp');
 
-app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, $location, Session) {
+app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, Assistance, $location, Session) {
 
         $scope.visible = false;
 
@@ -53,17 +53,19 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, $l
                     $scope.items = [];
                     $scope.items.push({ label:'Inicio', img:'fa-tachometer', function: $scope.summary});
                     $scope.items.push({ label:'Solicitudes', img:'fa-ticket', function: $scope.requestAssistance});
-                    //$scope.items.push({ label:'Licencias Médicas', img:'fa-stethoscope', function: $scope.medicalLicenses});
-                    $scope.items.push({ label:'Adm. Solicitudes ', img:'fa-ticket', function: $scope.adminRequestAssistance});
-                    $scope.items.push({ label:'Horas Extras ', img:'fa-plus', function: $scope.requestAuthority});
-                    $scope.items.push({ label:'Admin Horas Extras ', img:'fa-plus', function: $scope.adminRequestOverTime});
 
-                    $scope.selectItem($scope.items[0]);
-                } else {
-                    $scope.items = [];
-                    $scope.items.push({ label:'Inicio', img:'fa-tachometer', function: $scope.summary});
-                    $scope.items.push({ label:'Solicitudes', img:'fa-ticket', function: $scope.requestAssistance});
-                    //$scope.items.push({ label:'Licencias Médicas', img:'fa-stethoscope', function: $scope.medicalLicenses});
+                    Assistance.getUserOfficeRoles(
+                      function(roles) {
+                        if (roles.length > 0) {
+                          //$scope.items.push({ label:'Licencias Médicas', img:'fa-stethoscope', function: $scope.medicalLicenses});
+                          $scope.items.push({ label:'Adm. Solicitudes ', img:'fa-ticket', function: $scope.adminRequestAssistance});
+                          $scope.items.push({ label:'Horas Extras ', img:'fa-plus', function: $scope.requestAuthority});
+                          $scope.items.push({ label:'Admin Horas Extras ', img:'fa-plus', function: $scope.adminRequestOverTime});
+                        }
+                      },
+                      function(err) {
+                        alert(error);
+                    })
 
                     $scope.selectItem($scope.items[0]);
                 }

@@ -88,6 +88,25 @@ app.service('Assistance', ['Utils','Messages','Session',
 				});
 		};
 
+		this.getUserOfficeRoles = function(callbackOk, callbackError) {
+			var msg = {
+				id: Utils.getId(),
+				action: 'getUserOfficeRoles',
+				session: Session.getSessionId(),
+				request:{
+				}
+			}
+
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response.roles);
+					} else {
+						callbackError(data.error);
+					}
+				});
+		};
+
 
 		this.getJustifications = function(callbackOk, callbackError) {
 			var msg = {
