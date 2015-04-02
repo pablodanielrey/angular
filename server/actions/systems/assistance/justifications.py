@@ -249,6 +249,103 @@ class GetJustificationRequests:
 
 
 
+"""
+query : solicitud de justificaciones de un determinado usuario
+{
+  id:,
+  action:"updateJustificationRequestStatus",
+  session:,
+  request:{
+      request_id: "id del pedido",
+      status: "PENDING|APPROVED|REJECTED|CANCELED"
+  }
+
+}
+
+response :
+{
+  id: "id de la petición",
+  ok: "caso exito",
+  error: "error del servidor"
+}
+
+"""
+class UpdateJustificationRequestStatus:
+
+    profiles = inject.attr(Profiles)
+    config = inject.attr(Config)
+    justifications = inject.attr(Justifications)
+    date = inject.attr(Date)
+    events = inject.attr(Events)
+
+    def handleAction(self, server, message):
+
+        if (message['action'] != 'updateJustificationRequestStatus'):
+            return False
+
+        if ('session' not in message) or ('request' not in message) or ('request_id' not in message['request']) or ('status' not in message['request']):
+            response = {'id':message['id'], 'error':'Insuficientes parámetros'}
+            server.sendMessage(response)
+            return True
+
+        requestId = message['request']['request_id']
+        status = message['request']['status']
+
+        sid = message['session']
+        self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
+        userId = self.profiles.getLocalUserId(sid)
+
+        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+        try:
+            (changesStock,request) = self.justifications.updateJustificationRequestStatus(con,userId,requestId,status)
+
+            con.commit()
+
+            response = {
+                'id':message['id'],
+                'ok':'El cambio se ha realizado correctamente'
+            }
+            server.sendMessage(response)
+
+            if changesStock:
+                event = {
+                    'type':'JustificationStockChangedEvent',
+                    'data':{
+                        'justification_id':request['justification_id'],
+                        'user_id':request['user_id']
+                    }
+                }
+                self.events.broadcast(server,event)
+
+
+            event = {
+                'type':'JustificationStatusChangedEvent',
+                'data':{
+                    'request_id':requestId
+                }
+            }
+            self.events.broadcast(server,event)
+
+
+            return True
+
+        except Exception as e:
+            logging.exception(e)
+            con.rollback()
+
+            response = {
+                'id':message['id'],
+                'error':'Error realizando pedido'
+            }
+            server.sendMessage(response)
+            return True
+
+        finally:
+            con.close()
+
+
+
+
 
 
 """

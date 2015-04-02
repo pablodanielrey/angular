@@ -32,14 +32,12 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistan
     }
 
     $scope.addRequest = function(data) {
-        //data: {request_id:"1",user_id:"1",justification_id: "1", begin: '2015-05-13 00:00:00', end: '2015-05-13 00:00:00', state: "Desaprobada" },
-        var r = {};
-        r.justification_id = data.justification_id;
-
+        //data: {id:"1",user_id:"1",justification_id: "1", begin: '2015-05-13 00:00:00', end: '2015-05-13 00:00:00', state: "Desaprobada" },
         var d = new Date(data.begin);
+
+        var r = data;
         r.date = d.toLocaleDateString();
         r.user = null;
-        r.id = data.request_id;
 
         Users.findUser(data.user_id,
             function(response) {
@@ -53,15 +51,15 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistan
     }
 
     $scope.loadRequests = function() {
-        $scope.model.requests = [];
         Assistance.getJustificationRequests(['PENDING'],"TREE",
             function(response) {
-                for (var i = 0; i < response.length; i++) {
-                    $scope.addRequest(response[i]);
-                }
+              $scope.model.requests = [];
+              for (var i = 0; i < response.length; i++) {
+                  $scope.addRequest(response[i]);
+              }
             },
             function(error) {
-
+              Notifications.message(error);
             }
         );
     }
@@ -88,10 +86,13 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistan
 
 
     $scope.updateStatus = function(status, request_id) {
-        Assistance.updateStatusRequestJustification(request_id, status,
+        Assistance.updateJustificationRequestStatus(request_id, status,
             function(ok) {
+                /*
+                  ya no es necesario
                 Notifications.message("El estado fue modificado correctamente");
                 $scope.loadRequests();
+                */
             },
             function(error) {
 
@@ -108,10 +109,14 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistan
     }
 
 
-    // Escuchar evento de nuevo requerimiento de licencia
     $scope.$on('JustificationsRequestsUpdatedEvent', function(event, data) {
       $scope.loadRequests();
     });
+
+    $scope.$on('JustificationStatusChangedEvent', function(event, data) {
+      $scope.loadRequests();
+    });
+
 
 
     $timeout(function() {

@@ -136,6 +136,47 @@ class Justifications:
         return requests
 
 
+    """
+        cambia el estado de un pedido al nuevo estado especificado por status.
+        retorna una tupla que contiene
+        (
+            statusChanged -- True si cambio el stock, False si no cambio el stock
+            request -- pedido original al cual se le cambia el estado
+        )
+
+        estados posibles a cambiar : PENDING|APPROVED|REJECTED|CANCELED
+
+        PENDING | APROVED = no cambian el stock
+        REJECTED | CANCELED = retornan 1 al stock
+    """
+    def updateJustificationRequestStatus(self,con,userId,requestId,status):
+        cur = con.cursor()
+        cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where id = %s',(requestId,))
+        if cur.rowcount <= 0:
+            raise JustificationError('No existe ningún pedido de justificación con id = %s'.format(requestId))
+
+        req = cur.fetchone()
+        requester = req[1]
+        justificationId = req[2]
+        request = {
+            'id':req[0],
+            'user_id':requester,
+            'justification_id':justificationId,
+            'begin':req[3],
+            'end':req[4],
+            'status':status
+        }
+
+        changesStock = (status == 'REJECTED' or status == 'CANCELED')
+        if changesStock:
+            self._removeStockFromJustification(con,requester,justificationId,1)
+
+        cur.execute('insert into assistance.justifications_requests_status (request_id,user_id,status) values (%s,%s,%s)',(requestId,userId,status))
+
+        return (changesStock,request)
+
+
+
 
 
     """

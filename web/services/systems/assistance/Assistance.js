@@ -171,8 +171,28 @@ app.service('Assistance', ['Utils','Messages','Session',
 				});
 		}
 
-		this.updateStatusRequestJustification = function(request_id, status, callbackOk, callbackError) {
-			callbackOk(null);
+
+		this.updateJustificationRequestStatus = function(requestId, status, callbackOk, callbackError) {
+			var msg = {
+				id: Utils.getId(),
+				action: 'updateJustificationRequestStatus',
+				session: Session.getSessionId(),
+				request: {
+					request_id: requestId,
+					status: status
+				}
+			}
+
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.ok);
+					} else {
+						callbackError(data.error);
+					}
+				}
+			);
+
 		}
 
 		this.requestJustification = function(userId, justification, callbackOk, callbackError) {

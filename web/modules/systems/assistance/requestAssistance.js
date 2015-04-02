@@ -94,11 +94,22 @@ app.controller('RequestAssistanceCtrl', function($scope, $rootScope, $timeout, $
 	};
 
 
-	// Escuchar evento de nuevo requerimiento de licencia
 	$scope.$on('JustificationsRequestsUpdatedEvent', function(event, data) {
-		$scope.loadRequestedLicences();
+		if ($scope.model.session.user_id == data.user_id) {
+			$scope.loadRequestedLicences();
+		}
 	});
 
+	$scope.$on('JustificationStatusChangedEvent', function(event, data) {
+		for (var i = 0; i < $scope.model.requestedLicences.length; i++) {
+			if ($scope.model.requestedLicences[i].id == data.request_id) {
+				$scope.loadRequestedLicences();
+				break;
+			}
+		}
+	});
+
+		
 
 	$scope.clearSelections = function() {
 		$scope.model.justificationAbsentSelected = false;
