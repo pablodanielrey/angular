@@ -147,7 +147,6 @@ app.controller('RequestAssistanceOutCtrl', function($scope, Assistance, Notifica
     // Cargo el stock de la justificacion
     // data.justification = {name,id}
     $scope.$on('findStockJustification', function(event, data) {
-
         justification = data.justification;
         if (justification.id == $scope.model.justificationOutId) {
             $scope.initialize(justification);
@@ -189,8 +188,7 @@ app.controller('RequestAssistanceOutCtrl', function($scope, Assistance, Notifica
 
         Assistance.requestJustification($scope.model.session.user_id,$scope.model.justification,
             function(ok) {
-                Notifications.message("Guardado exitosamente");
-                $scope.clearSelections();
+              // nada
             },
             function(error) {
                 Notifications.message(error);

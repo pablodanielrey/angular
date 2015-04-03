@@ -13,7 +13,7 @@
       <span><i class="fa fa-ticket"></i> Mis Solicitudes</span>
     </div>
 
-    <div class="myRequestInfo" ng-repeat="x in model.requestedLicences">
+    <div class="myRequestInfo" ng-repeat="x in model.requestedLicences" ng-class="{'PENDING':'pending', 'CANCELED':'canceled', 'REJECTED':'rejected', 'APPROVED':'approved'}[x.status]">
       <div class="iconsMyRequest"><i class="fa fa-ticket"></i></div>
       <div class="myRequest">
         <span>{{x.justification_name}}</span>
@@ -24,7 +24,7 @@
       </div>
       <div class="iconsMyRequest"><i class="fa fa-bullhorn"></i></div>
 
-      <div class="myStateRequestSlope pending" ng-class="{true:'visible', false:'hidden'}[x.status == 'PENDING']">
+      <div class="myStateRequestSlope request pending" ng-class="{true:'visible', false:'hidden'}[x.status == 'PENDING']">
         <span>Pendiente</span>
         <Button ng-click='cancelRequest(x)'>Cancelar</Button>
       </div>

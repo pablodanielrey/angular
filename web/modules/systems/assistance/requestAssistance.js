@@ -40,9 +40,12 @@ app.controller('RequestAssistanceCtrl', function($scope, $rootScope, $timeout, $
     }
 
 	$scope.loadRequestedLicences = function() {
-		$scope.model.requestedLicences = [];
 		Assistance.getJustificationRequests(null,null,
 			function(requestedLicences){
+				requestedLicences.sort(function(l1,l2) {
+					return (new Date(l1.begin) - (new Date(l2.begin)));
+				});
+
 				$scope.model.requestedLicences = [];
 				for (var i = 0; i < requestedLicences.length; i++) {
 					var req = requestedLicences[i];

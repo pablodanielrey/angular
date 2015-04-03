@@ -86,6 +86,11 @@
 }
 
 
+.requestAssistance .myRequestInfo.pending {
+  -webkit-transform: translate(700px,0px);
+}
+
+
 .requestAssistance .iconsMyRequest {
   padding:5px;
   margin-top:5px;
@@ -116,35 +121,38 @@
 }
 
 
-@-webkit-keyframes rpending {
+
+
+
+
+
+
+
+
+@-webkit-keyframes apending {
   0% {
     opacity: 1;
-    -webkit-transform: scale(1,1);
+    /*-webkit-transform: scale(1,1);*/
+    color: white;
   }
   50% {
     opacity: 0.5;
-    -webkit-transform: scale(1.02,1.02);
+    /*-webkit-transform: scale(1.02,1.02);*/
+    color: #12FFFF;
+    border-color: #009C75;
+    background-color:#e43e46;
   }
   100% {
     opacity: 1;
-    -webkit-transform: scale(1,1);
+    /*-webkit-transform: scale(1,1);*/
+    color: white;
   }
 }
 
 
-@-webkit-keyframes rtoggle {
-  50% { opacity: 1; } /* Turn off */
-  50.001% { opacity: 0.4; }
-
-  /* Keep off state for a short period */
-
-  52.999% { opacity: 0.4; } /* Turn back on */
-  53% { opacity: 1; }
-}
-
 .myStateRequestSlope.pending {
-  -webkit-animation-name: rpending;
-  -webkit-animation-delay: 1s;
+  -webkit-animation-name: apending;
+  /* -webkit-animation-delay: 0.5s; */
   -webkit-animation-duration: 1s;
   -webkit-animation-iteration-count: infinite;
   /*-webkit-animation-direction: alternate;*/
