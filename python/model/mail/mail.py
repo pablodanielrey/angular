@@ -25,7 +25,7 @@ class Mail:
     def createMail(self,From,To,subject):
         msg = MIMEMultipart('alternative')
         msg['Subject'] = Header(subject,'utf-8')
-        msg['From'] = Header(From,'utf-8')
+        msg['From'] = From
         msg['To'] = Header(To,'utf-8')
         return msg
 
