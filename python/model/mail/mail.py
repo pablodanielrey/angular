@@ -44,7 +44,7 @@ class Mail:
           if s == None:
               raise MailServerNotFound()
           s.login(self.config.configs['mail_user'],self.config.configs['mail_password'])
-          s.sendmail(self.__extractFrom(ffrom), tos, body)
+          s.sendmail(self.__extractFrom(ffrom).encode('utf-8'), tos, body)
 
       finally:
           s.quit()
