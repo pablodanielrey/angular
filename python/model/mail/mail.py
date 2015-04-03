@@ -45,7 +45,7 @@ class Mail:
               raise MailServerNotFound()
           s.login(self.config.configs['mail_user'],self.config.configs['mail_password'])
 
-          s.send_message(body)
+          s.send_message(body,from_addr=ffrom,to_addrs=tos)
           #From = self.__extractFrom(ffrom)
           #s.sendmail(From.encode('iso-8859-1'), tos, body)
 
