@@ -163,9 +163,15 @@ app.service('Assistance', ['Utils','Messages','Session',
 				action: 'getJustificationRequests',
 				session: Session.getSessionId(),
 				request: {
-				 	status: status,
-					group: group
 				}
+			}
+
+			if (status != null) {
+				msg.request.status = status;
+			}
+
+			if (group != null) {
+				msg.request.group = group;
 			}
 
 			Messages.send(msg,

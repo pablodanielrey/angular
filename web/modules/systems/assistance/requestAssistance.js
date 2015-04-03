@@ -40,7 +40,7 @@ app.controller('RequestAssistanceCtrl', function($scope, $rootScope, $timeout, $
     }
 
 	$scope.loadRequestedLicences = function() {
-		Assistance.getJustificationRequests(null,null,
+		Assistance.getJustificationRequests(null,'TREE',
 			function(requestedLicences){
 				requestedLicences.sort(function(l1,l2) {
 					return (new Date(l1.begin) - (new Date(l2.begin)));
