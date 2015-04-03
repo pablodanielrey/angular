@@ -90,7 +90,10 @@ class BSJustification(Justification):
         inicializa un pedido en estado pendiente de una justificación en las fechas indicadas
     """
     def requestJustification(self,utils,con,userId,begin,end):
-        if self.available(utils,con,userId,begin) <= 0:
+
+        available = self.available(utils,con,userId,begin)
+
+        if available <= (end-begin).total_seconds():
             raise RestrictionError('No existe stock disponible')
 
         jid = str(uuid.uuid4())
