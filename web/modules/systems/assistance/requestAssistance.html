@@ -24,7 +24,7 @@
       </div>
       <div class="iconsMyRequest"><i class="fa fa-bullhorn"></i></div>
 
-      <div class="myStateRequestSlope" ng-class="{true:'visible', false:'hidden'}[x.status == 'PENDING']">
+      <div class="myStateRequestSlope pending" ng-class="{true:'visible', false:'hidden'}[x.status == 'PENDING']">
         <span>Pendiente</span>
         <Button ng-click='cancelRequest(x)'>Cancelar</Button>
       </div>

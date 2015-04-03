@@ -77,13 +77,15 @@
   border-top: 3px solid #0066A6;
 
 }
+
+
 .requestAssistance .myRequestInfo {
   display:flex;
   flex-direction:row;
   background-color: #f5f5f5;
-
-
 }
+
+
 .requestAssistance .iconsMyRequest {
   padding:5px;
   margin-top:5px;
@@ -112,6 +114,42 @@
   margin-right:10px;
   background-color:white;
 }
+
+
+@-webkit-keyframes rpending {
+  0% {
+    opacity: 1;
+    -webkit-transform: scale(1,1);
+  }
+  50% {
+    opacity: 0.5;
+    -webkit-transform: scale(1.02,1.02);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: scale(1,1);
+  }
+}
+
+
+@-webkit-keyframes rtoggle {
+  50% { opacity: 1; } /* Turn off */
+  50.001% { opacity: 0.4; }
+
+  /* Keep off state for a short period */
+
+  52.999% { opacity: 0.4; } /* Turn back on */
+  53% { opacity: 1; }
+}
+
+.myStateRequestSlope.pending {
+  -webkit-animation-name: rpending;
+  -webkit-animation-delay: 1s;
+  -webkit-animation-duration: 1s;
+  -webkit-animation-iteration-count: infinite;
+  /*-webkit-animation-direction: alternate;*/
+}
+
 
 .requestAssistance .myStateRequestSlope {
   margin-top:5px;
@@ -146,6 +184,7 @@
   background-color:#e43e46;
 }
 
+
 .requestAssistance .myStateRequestCanceled {
   margin-top:5px;
   width:150px;
@@ -156,6 +195,7 @@
   margin-right:10px;
   background-color:#666633;
 }
+
 
 .requestAssistance .parrafos {
   background-color:#0066A6;
