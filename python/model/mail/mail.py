@@ -82,4 +82,4 @@ class Mail:
             msg = self.createMail(ffrom,to,subject)
             for part in parts:
                 msg.attach(part)
-            self._sendMail(ffrom,[to],msg.as_string())
+            self._sendMail(ffrom,[to],msg)
