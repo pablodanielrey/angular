@@ -2,14 +2,14 @@ var app = angular.module('mainApp');
 
 app.controller('RequestAssistanceCompensatoryCtrl', function($scope, Assistance, Session, Notifications) {
 
-    $scope.model.justificationCompensatoryRequestSelected = false;
+  $scope.model.justificationCompensatoryRequestSelected = false;
 	$scope.model.justificationCompensatoryAvailableSelected = false;
 	$scope.model.justificationCompensatoryRequestsSelected = false;
 
 
     // ------------------ Manejo de la vista ----------------------------
 
-    $scope.isSelectedJustificationCompensatory = function() {
+  $scope.isSelectedJustificationCompensatory = function() {
 		return $scope.model.justificationCompensatorySelected;
 	};
 

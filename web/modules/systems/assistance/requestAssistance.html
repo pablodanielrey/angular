@@ -20,26 +20,22 @@
       </div>
       <div class="iconsMyRequest"><i class="fa fa-calendar-o"></i></div>
       <div class="myRequestDate">
-        <span>{{x.begin}}</span>
+        <span>{{x.summary}}</span>
       </div>
       <div class="iconsMyRequest"><i class="fa fa-bullhorn"></i></div>
       <div class="myStateRequestSlope" ng-class="{true:'visible', false:'hidden'}[x.status == 'PENDING']">
         <span>Pendiente</span>
+        <Button ng-click='cancelRequest(x)'>Cancelar</Button>
       </div>
       <div class="myStateRequestApproved" ng-class="{true:'visible', false:'hidden'}[x.status == 'APPROVED']">
         <span>Aprobado</span>
       </div>
-
       <div class="myStateRequestRejected" ng-class="{true:'visible', false:'hidden'}[x.status == 'REJECTED']">
         <span>Rechazado</span>
       </div>
-
        <div class="myStateRequestRejected" ng-class="{true:'visible', false:'hidden'}[x.status == 'CANCELED']">
         <span>Cancelado</span>
       </div>
-
-
-
     </div>
 
   </div>

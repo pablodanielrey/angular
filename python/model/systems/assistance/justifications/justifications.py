@@ -159,7 +159,7 @@ class Justifications:
             raise JustificationError('No existe ningún pedido de justificación con id = %s'.format(requestId))
 
         for j in self.justifications:
-            if j.isJustification(justId):
+            if j.isJustification(req['justification_id']):
                 return j.updateJustificationRequestStatus(self,con,userId,req,status)
 
         raise JustificationError('No se puede encontrar ese tipo de justificación')

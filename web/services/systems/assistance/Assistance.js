@@ -127,7 +127,6 @@ app.service('Assistance', ['Utils','Messages','Session',
 
 
 		this.getJustificationStock = function(userId, justificationId, date, period, callbackOk, callbackError) {
-
 			var msg = {
 				id: Utils.getId(),
 				action: 'getJustificationStock',
@@ -159,7 +158,6 @@ app.service('Assistance', ['Utils','Messages','Session',
 
 
 		this.getJustificationRequests = function(status, group, callbackOk, callbackError){
-
 			var msg = {
 				id: Utils.getId(),
 				action: 'getJustificationRequests',
@@ -205,7 +203,6 @@ app.service('Assistance', ['Utils','Messages','Session',
 		}
 
 		this.requestJustification = function(userId, justification, callbackOk, callbackError) {
-
 			var msg = {
 				id: Utils.getId(),
 				action: 'requestJustification',

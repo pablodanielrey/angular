@@ -43,28 +43,92 @@ app.controller('RequestAssistanceCtrl', function($scope, $rootScope, $timeout, $
 		$scope.model.requestedLicences = [];
 		Assistance.getJustificationRequests(null,null,
 			function(requestedLicences){
-				for(i in requestedLicences){
-					var requestedLicence = requestedLicences[i]
-					var name = $scope.model.justifications[requestedLicence.justification_id].name;
-					requestedLicence.justification_name = name;
-					if(requestedLicence.begin != null){
-						var date = new Date(requestedLicence.begin);
-						requestedLicence.begin = date.toLocaleDateString();
-					}
-					if(requestedLicence.end != null){
-						var date = new Date(requestedLicence.end);
-						requestedLicence.end = date.toLocaleDateString();
-					}
-
-					$scope.model.requestedLicences.push(requestedLicence)
+				$scope.model.requestedLicences = [];
+				for (var i = 0; i < requestedLicences.length; i++) {
+					var req = requestedLicences[i];
+					$scope.formatLicenceToDisplay(req);
+					$scope.model.requestedLicences.push(req);
 				}
-
 			},
 			function(error){
 				Notifications.message(error);
 			}
 		);
 	}
+
+
+	/**
+		autor: pablo
+		TODO: SOLUCION PEDORRA QUE ENCONTRE RÁPIDO PARA CORREGIR COMO SE MUESTRA.
+		DEBERÍA HABER SIDO PENSADO BIEN ENTRE EL HTML Y EL CONTROLADOR PARA TENER DISTINTOS TIPOS DE JUSTIFICACIONES
+		AL MOSTRARSE.
+		AHORA LO SOLUCIONO ASI PERO HAY QUE MODIFICARLO POR ALGUNA SOLUCIÓN CORRECTA!!!!
+
+		el html muestra de las licencias lo siguiente :
+
+		justification_name
+		summary
+
+
+	*/
+	$scope.formatLicenceToDisplay = function(req) {
+
+		var id = req.justification_id;
+		req.justification_name = $scope.model.justifications[id].name;
+
+		// seteo el summary de acuerdo al tipo de justificación a mostrar.
+		if (id == 'e0dfcef6-98bb-4624-ae6c-960657a9a741') {
+			// absent
+			var date = new Date(req.begin);
+			req.summary = date.toLocaleDateString();
+
+		} else if (id == '48773fd7-8502-4079-8ad5-963618abe725') {
+			// compensatory
+			var date = new Date(req.begin);
+			req.summary = date.toLocaleDateString();
+
+		} else if (id == 'fa64fdbd-31b0-42ab-af83-818b3cbecf46') {
+			// boleta de salida
+			var date = new Date(req.begin);
+			var date2 = new Date(req.end);
+			req.summary = ' ' + date.toLocaleDateString() + ' ' + date.toLocaleTimeString() + ' -> ' + date2.toLocaleTimeString();
+
+		} else if (id == '4d7bf1d4-9e17-4b95-94ba-4ca81117a4fb') {
+			// 102
+			var date = new Date(req.begin);
+			var date2 = new Date(req.end);
+			req.summary = date.toLocaleDateString() + ' ' + date.toLocaleTimeString() + ' -> ' + date2.toLocaleTimeString();
+
+		} else if (id == '76bc064a-e8bf-4aa3-9f51-a3c4483a729a') {
+			// lao
+			var date = new Date(req.begin);
+			req.summary = date.toLocaleDateString();
+
+		} else if (id == 'b70013e3-389a-46d4-8b98-8e4ab75335d0') {
+			// pre-examen
+			var date = new Date(req.begin);
+			req.summary = date.toLocaleDateString();
+
+		}
+	}
+
+
+	/**
+		Cancela el pedido de una justificación.
+		Solo lo puede hacer el usuario y cuando la justificación esta en el estado de PENDING.
+	*/
+	$scope.cancelRequest = function(req) {
+		Assistance.updateJustificationRequestStatus(req['id'],'CANCELED',
+			function(ok) {
+				// nada
+			},
+			function(error) {
+				Notifications.message(error);
+			}
+		);
+	}
+
+
 
 	/**
 	 * cargar datos de la session
