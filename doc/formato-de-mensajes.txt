@@ -226,7 +226,6 @@ query : Obtener todas las solicitudes de justificationces
   session:,
   request:{
       status: 'estado de la justificacion PENDING|APPROVED|REJECTED|CANCELED' -- si no existe se obtienen todas,
-      group: "ROOT|TREE" -- si no existe obtiene solo las del usuario, y no las del grupo
   }
 }
 
@@ -248,6 +247,41 @@ response :
 	]
 
 }
+
+------------
+
+
+query : Obtener todas las solicitudes de justificationces
+{
+  id:,
+  action:"getJustificationRequestsToManage",
+  session:,
+  request:{
+      status: 'estado de la justificacion PENDING|APPROVED|REJECTED|CANCELED' -- si no existe se obtienen todas,
+      group: "ROOT|TREE" -- si no existe obtiene las de los grupos directos que maneja. sin los subgrupos.
+  }
+}
+
+response :
+{
+  id: "id de la petición",
+  ok: "caso exito",
+  error: "error del servidor",
+  response:{
+    requests : [ "lista de solicitudes de un determinado usuario"
+      {
+        id: "id de la solicitud de justificacion",
+        user_id:"id del usuario",
+        justification_id: "id de la justificacion o licencia solicitada"
+        begin: 2014-12-01 00:00:00 "fecha de inicio de la justificacion o licencia solicitada"
+        end: 2014-12-02 00:00:00 "fecha de finalizacion de la justificacion o licencia solicitada"
+        status: "PENDING|APPROVED|REJECTED|CANCELED"
+      }
+  ]
+
+}
+
+
 
 
 ---------------

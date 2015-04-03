@@ -183,11 +183,11 @@ class GetJustificationStock:
 query : Obtener todas las solicitudes de justificationces
 {
   id:,
-  action:"getJustificationRequests",
+  action:"getJustificationRequestsToManage",
   session:,
   request:{
       status: 'estado de la justificacion PENDING|APPROVED|REJECTED|CANCELED' -- si no existe se obtienen todas,
-      group: "ROOT|TREE" -- si no existe obtiene solo las del usuario, y no las del grupo
+      group: "ROOT|TREE" -- si no existe obtiene las del grupo directo que puede manejar.
   }
 }
 
@@ -211,15 +211,15 @@ response :
 }
 """
 
-class GetJustificationRequests:
+class GetJustificationRequestsToManage:
 
     profiles = inject.attr(Profiles)
     config = inject.attr(Config)
-    assistance = inject.attr(Assistance)
+    justifications = inject.attr(Justifications)
 
     def handleAction(self, server, message):
 
-        if (message['action'] != 'getJustificationRequests'):
+        if (message['action'] != 'getJustificationRequestsToManage'):
             return False
 
         if 'request' not in message:
@@ -243,7 +243,7 @@ class GetJustificationRequests:
 
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
-            requests = self.assistance.getJustificationRequests(con,userId,status,group)
+            requests = self.justifications.getJustificationRequestsToManage(con,userId,status,group)
 
             response = {
                 'id':message['id'],
@@ -260,6 +260,89 @@ class GetJustificationRequests:
 
         finally:
             con.close()
+
+
+
+
+"""
+
+query : Obtener todas las solicitudes de justificationces
+{
+  id:,
+  action:"getJustificationRequests",
+  session:,
+  request:{
+      status: 'estado de la justificacion PENDING|APPROVED|REJECTED|CANCELED' -- si no existe se obtienen todas,
+  }
+}
+
+response :
+{
+  id: "id de la petición",
+  ok: "caso exito",
+  error: "error del servidor",
+  response:{
+    requests : [ "lista de solicitudes de un determinado usuario"
+  		{
+        id: "id de la solicitud de justificacion",
+        user_id:"id del usuario",
+    		justification_id: "id de la justificacion o licencia solicitada"
+    		begin: 2014-12-01 00:00:00 "fecha de inicio de la justificacion o licencia solicitada"
+    		end: 2014-12-02 00:00:00 "fecha de finalizacion de la justificacion o licencia solicitada"
+    		status: "PENDING|APPROVED|REJECTED|CANCELED"
+  		}
+	]
+
+}
+"""
+class GetJustificationRequests:
+
+    profiles = inject.attr(Profiles)
+    config = inject.attr(Config)
+    justifications = inject.attr(Justifications)
+
+    def handleAction(self, server, message):
+
+        if (message['action'] != 'getJustificationRequests'):
+            return False
+
+        if 'request' not in message:
+            response = {'id':message['id'], 'error':'Insuficientes parámetros'}
+            server.sendMessage(response)
+            return True
+
+        status = None
+        if 'status' in message['request']:
+            status = message['request']['status']
+
+
+        sid = message['session']
+        self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
+
+        userId = self.profiles.getLocalUserId(sid)
+
+        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+        try:
+            requests = self.justifications.getJustificationRequests(con,status,[userId])
+
+            response = {
+                'id':message['id'],
+                'ok':'',
+                'response':{
+                    'requests':requests
+                }
+            }
+            server.sendMessage(response)
+            return True
+
+        except psycopg2.DatabaseError as e:
+            raise e
+
+        finally:
+            con.close()
+
+
+
 
 
 

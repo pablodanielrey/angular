@@ -38,7 +38,7 @@ from actions.requests.requests import CreateAccountRequest, ConfirmAccountReques
 from actions.systems.assistance.assistance import GetAssistanceData, GetAssistanceStatus
 from actions.systems.assistance.logs import GetAssistanceLogs
 from actions.systems.assistance.offices import GetOffices, GetUserOfficeRoles
-from actions.systems.assistance.justifications import GetJustifications, GetJustificationStock, GetJustificationRequests, RequestJustification, UpdateJustificationRequestStatus
+from actions.systems.assistance.justifications import GetJustifications, GetJustificationStock, GetJustificationRequests, GetJustificationRequestsToManage, RequestJustification, UpdateJustificationRequestStatus
 
 from actions.systems.students.students import CreateStudent, FindStudent, PersistStudent, FindAllStudents
 
@@ -68,7 +68,7 @@ actions = [
     CreateStudent(), FindStudent(), PersistStudent(), FindAllStudents(),
     PersistTutorData(), ListTutorData(),
     GetOffices(), GetUserOfficeRoles(),
-    GetAssistanceLogs(), GetAssistanceData(), GetAssistanceStatus(), GetOffices(), GetJustifications(), GetJustificationStock(), GetJustificationRequests(), RequestJustification(), UpdateJustificationRequestStatus(),
+    GetAssistanceLogs(), GetAssistanceData(), GetAssistanceStatus(), GetOffices(), GetJustifications(), GetJustificationStock(), GetJustificationRequests(), GetJustificationRequestsToManage(), RequestJustification(), UpdateJustificationRequestStatus(),
     CreateAccountRequest(), ConfirmAccountRequest(), ListAccountRequests(), ApproveAccountRequest(), RemoveAccountRequest(), RejectAccountRequest()
 ]
 

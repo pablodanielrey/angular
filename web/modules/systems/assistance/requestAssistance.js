@@ -23,25 +23,27 @@ app.controller('RequestAssistanceCtrl', function($scope, $rootScope, $timeout, $
 	 */
 	$scope.loadJustifications = function() {
     	Assistance.getJustifications(
-			function(justifications){
-				for(i in justifications){
-					var justification = {name:justifications[i].name,id:justifications[i].id};
-					$scope.$broadcast('findStockJustification',{justification:justification});
-					$scope.model.justifications[justifications[i].id] = justifications[i];
+				function(justifications) {
+					for (var i = 0; i < justifications.length; i++) {
+						var justification = {
+							name: justifications[i].name,
+							id: justifications[i].id
+						};
+						$scope.$broadcast('findStockJustification',{ justification: justification });
+						$scope.model.justifications[justifications[i].id] = justifications[i];
+					}
+					$scope.loadRequestedLicences();
+
+				},
+				function(error){
+					Notifications.message(error);
 				}
-
-				$scope.loadRequestedLicences();
-
-			},
-			function(error){
-				Notifications.message(error);
-			}
-		);
+			);
     }
 
 	$scope.loadRequestedLicences = function() {
-		Assistance.getJustificationRequests(null,'TREE',
-			function(requestedLicences){
+		Assistance.getJustificationRequests(null,
+			function(requestedLicences) {
 				requestedLicences.sort(function(l1,l2) {
 					return (new Date(l1.begin) - (new Date(l2.begin)));
 				});

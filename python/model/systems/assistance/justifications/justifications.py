@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 import calendar, datetime, logging, uuid
+import inject
 
 from model.systems.assistance.justifications.exceptions import *
+
+from model.systems.assistance.offices import Offices
 
 from model.systems.assistance.justifications.AAJustification import AAJustification
 from model.systems.assistance.justifications.BSJustification import BSJustification
@@ -11,6 +14,8 @@ from model.systems.assistance.justifications.LAOJustification import LAOJustific
 
 
 class Justifications:
+
+    offices = inject.attr(Offices)
 
     justifications = [
         CJustification(), LAOJustification(), AAJustification(), BSJustification()
@@ -132,6 +137,45 @@ class Justifications:
             )
 
         return requests
+
+
+
+    """
+        obtiene todos los pedidos de justificaciones que tiene permisos de manejar, en cierto estado.
+        group = ROOT|TREE --> ROOT = oficinas directas, TREE = oficinas directas y todas las hijas
+    """
+    def getJustificationRequestsToManage(self,con,userId,status,group='ROOT'):
+
+        tree = False
+        if group == 'TREE':
+            tree = True
+        offices = self.offices.getOfficesByUserRole(con,userId,tree)
+        logging.debug('officesByUserRole : {}'.format(offices))
+
+        if offices is None or len(offices) <= 0:
+            return []
+
+        officesIds = list(map(lambda o: o['id'], offices))
+        users = self.offices.getOfficesUsers(con,officesIds)
+        logging.debug('getOfficesUsers : {}'.format(users))
+
+        while userId in users:
+            users.remove(userId)
+
+        if users is None or len(users) <= 0:
+            return []
+
+        justifications = self.getJustificationRequests(con,status,users)
+
+        return justifications
+
+
+
+
+
+
+
+
 
 
     """

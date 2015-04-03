@@ -156,11 +156,10 @@ app.service('Assistance', ['Utils','Messages','Session',
 		};
 
 
-
-		this.getJustificationRequests = function(status, group, callbackOk, callbackError){
+		this.getJustificationRequestsToManage = function(status, group, callbackOk, callbackError){
 			var msg = {
 				id: Utils.getId(),
-				action: 'getJustificationRequests',
+				action: 'getJustificationRequestsToManage',
 				session: Session.getSessionId(),
 				request: {
 				}
@@ -172,6 +171,30 @@ app.service('Assistance', ['Utils','Messages','Session',
 
 			if (group != null) {
 				msg.request.group = group;
+			}
+
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response.requests);
+					} else {
+						callbackError(data.error);
+					}
+			});
+		}
+
+
+		this.getJustificationRequests = function(status, callbackOk, callbackError){
+			var msg = {
+				id: Utils.getId(),
+				action: 'getJustificationRequests',
+				session: Session.getSessionId(),
+				request: {
+				}
+			}
+
+			if (status != null) {
+				msg.request.status = status;
 			}
 
 			Messages.send(msg,
