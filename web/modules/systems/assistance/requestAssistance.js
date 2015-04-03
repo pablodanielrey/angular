@@ -62,6 +62,28 @@ app.controller('RequestAssistanceCtrl', function($scope, $rootScope, $timeout, $
 	}
 
 
+
+
+	/*
+	parsea segundos a un formato imprimible en horas.
+	para las boletas de salida.
+	lo saque de :
+	http://stackoverflow.com/questions/6312993/javascript-seconds-to-time-string-with-format-hhmmss
+	*/
+	$scope.parseSecondsToDateString = function(sec) {
+		var hours   = Math.floor(sec / 3600);
+		var minutes = Math.floor((sec - (hours * 3600)) / 60);
+		var seconds = sec - (hours * 3600) - (minutes * 60);
+
+		if (hours   < 10) {hours   = "0"+hours;}
+		if (minutes < 10) {minutes = "0"+minutes;}
+		if (seconds < 10) {seconds = "0"+seconds;}
+		var time    = hours+':'+minutes;
+		return time;
+	}
+
+
+
 	/**
 		autor: pablo
 		TODO: SOLUCION PEDORRA QUE ENCONTRE RÁPIDO PARA CORREGIR COMO SE MUESTRA.
@@ -96,13 +118,15 @@ app.controller('RequestAssistanceCtrl', function($scope, $rootScope, $timeout, $
 			// boleta de salida
 			var date = new Date(req.begin);
 			var date2 = new Date(req.end);
-			req.summary = ' ' + date.toLocaleDateString() + ' ' + date.toLocaleTimeString() + ' -> ' + date2.toLocaleTimeString();
+			var time = $scope.parseSecondsToDateString((date2 - date) / 1000);
+			req.summary = ' ' + date.toLocaleDateString() + ' ' + date.toLocaleTimeString() + ' -> ' + date2.toLocaleTimeString() + ' : ' + time;
 
 		} else if (id == '4d7bf1d4-9e17-4b95-94ba-4ca81117a4fb') {
 			// 102
 			var date = new Date(req.begin);
 			var date2 = new Date(req.end);
-			req.summary = date.toLocaleDateString() + ' ' + date.toLocaleTimeString() + ' -> ' + date2.toLocaleTimeString();
+			var time = $scope.parseSecondsToDateString((date2 - date) / 1000);
+			req.summary = date.toLocaleDateString() + ' ' + date.toLocaleTimeString() + ' -> ' + date2.toLocaleTimeString() + ' : ' + time;
 
 		} else if (id == '76bc064a-e8bf-4aa3-9f51-a3c4483a729a') {
 			// lao
