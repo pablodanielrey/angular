@@ -119,8 +119,7 @@ app.controller('RequestAssistanceAbsentCtrl', function($scope, Assistance, Notif
 		}
 		Assistance.requestJustification($scope.model.session.user_id, requestedJustification,
 			function(ok) {
-				$scope.clearSelections();
-				Notifications.message('Ausente con aviso solicitado correctamente');
+				//$scope.clearSelections();
 			},
 			function(error){
 				Notifications.message(error);

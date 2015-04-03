@@ -23,6 +23,7 @@
         <span>{{x.summary}}</span>
       </div>
       <div class="iconsMyRequest"><i class="fa fa-bullhorn"></i></div>
+
       <div class="myStateRequestSlope" ng-class="{true:'visible', false:'hidden'}[x.status == 'PENDING']">
         <span>Pendiente</span>
         <Button ng-click='cancelRequest(x)'>Cancelar</Button>
@@ -33,7 +34,7 @@
       <div class="myStateRequestRejected" ng-class="{true:'visible', false:'hidden'}[x.status == 'REJECTED']">
         <span>Rechazado</span>
       </div>
-       <div class="myStateRequestRejected" ng-class="{true:'visible', false:'hidden'}[x.status == 'CANCELED']">
+       <div class="myStateRequestCanceled" ng-class="{true:'visible', false:'hidden'}[x.status == 'CANCELED']">
         <span>Cancelado</span>
       </div>
     </div>

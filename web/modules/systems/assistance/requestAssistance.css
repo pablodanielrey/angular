@@ -112,6 +112,7 @@
   margin-right:10px;
   background-color:white;
 }
+
 .requestAssistance .myStateRequestSlope {
   margin-top:5px;
   width:150px;
@@ -122,6 +123,7 @@
   margin-right:10px;
   background-color:#0066A6;
 }
+
 .requestAssistance .myStateRequestApproved {
   margin-top:5px;
   width:150px;
@@ -132,6 +134,7 @@
   margin-right:10px;
   background-color:#128c78;
 }
+
 .requestAssistance .myStateRequestRejected {
   margin-top:5px;
   width:150px;
@@ -142,6 +145,18 @@
   margin-right:10px;
   background-color:#e43e46;
 }
+
+.requestAssistance .myStateRequestCanceled {
+  margin-top:5px;
+  width:150px;
+  border:1px solid #0066A6;
+  padding:5px;
+  padding-left:10px;
+  color:white;
+  margin-right:10px;
+  background-color:#666633;
+}
+
 .requestAssistance .parrafos {
   background-color:#0066A6;
   color:white;
