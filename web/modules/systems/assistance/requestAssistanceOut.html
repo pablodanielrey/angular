@@ -26,9 +26,15 @@
           </div>
 
           <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationOutAvailable()]">
-            <p class="parrafosGreen margin">Disponibilidad Restante</p>
+            <p class="parrafosGreen margin">Disponibilidad en el mes actual</p>
             <p class="parrafosGreen2 margin">{{model.out.stock}}</p>
           </div>
+
+          <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationOutAvailable()]">
+            <p class="parrafosGreen margin">Disponibilidad anual</p>
+            <p class="parrafosGreen2 margin">{{model.out.yearlyStock}}</p>
+          </div>
+
 
           <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationOutRequests()]">
             <div ng-class="{true:'visible', false:'hidden'}[true]">

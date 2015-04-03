@@ -196,7 +196,7 @@ app.controller('AssistanceCtrl', function($scope, $timeout, $window, Profiles, S
 	 * Consultar datos de stock de justificacion
 	 */
     $scope.loadJustificationStock = function(justificationId) {
-	    Assistance.getJustificationStock($scope.model.session.user_id, justificationId,
+	    Assistance.getJustificationStock($scope.model.session.user_id, justificationId, null, null,
 				function(data){
 
 						id = data.justificationId;

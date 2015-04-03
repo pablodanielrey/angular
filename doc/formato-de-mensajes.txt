@@ -197,6 +197,8 @@ query :
   request:{
       user_id: "id del usuario",
       justification_id: "id de la justificación"
+      date: "fecha en la cual es calculada la consulta"
+      period: "WEEK|MONTH|YEAR" -- período en el cual se analiza el stock disponible. -- opcional. si no se lo especifica toma el mínimo
   }
 }
 

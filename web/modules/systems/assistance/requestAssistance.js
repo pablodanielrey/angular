@@ -1,6 +1,6 @@
 var app = angular.module('mainApp');
 
-app.controller('RequestAssistanceCtrl', function($scope, $rootScope, $timeout, $window, Session, Assistance, Profiles) {
+app.controller('RequestAssistanceCtrl', function($scope, $rootScope, $timeout, $window, Session, Assistance, Profiles, Notifications) {
 
 	$scope.model = {
 		justifications : [], //auxiliar para almacenar las justificaciones
@@ -34,7 +34,7 @@ app.controller('RequestAssistanceCtrl', function($scope, $rootScope, $timeout, $
 
 			},
 			function(error){
-				alert(error);
+				Notifications.message(error);
 			}
 		);
     }
@@ -61,7 +61,7 @@ app.controller('RequestAssistanceCtrl', function($scope, $rootScope, $timeout, $
 
 			},
 			function(error){
-				alert(error);
+				Notifications.message(error);
 			}
 		);
 	}
@@ -87,7 +87,7 @@ app.controller('RequestAssistanceCtrl', function($scope, $rootScope, $timeout, $
 					}
 				},
 				function (error) {
-					alert(error);
+					Notifications.message(error);
 				}
 			);
 		}
@@ -109,7 +109,7 @@ app.controller('RequestAssistanceCtrl', function($scope, $rootScope, $timeout, $
 		}
 	});
 
-		
+
 
 	$scope.clearSelections = function() {
 		$scope.model.justificationAbsentSelected = false;

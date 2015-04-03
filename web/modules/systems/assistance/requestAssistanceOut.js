@@ -104,17 +104,45 @@ app.controller('RequestAssistanceOutCtrl', function($scope, Assistance, Notifica
     // ------------------------------------------------------------------------
 
 
+    /*
+    parsea segundos a un formato imprimible en horas.
+    para las boletas de salida.
+    lo saque de :
+    http://stackoverflow.com/questions/6312993/javascript-seconds-to-time-string-with-format-hhmmss
+    */
+    $scope.parseSecondsToDateString = function(sec) {
+      var hours   = Math.floor(sec / 3600);
+      var minutes = Math.floor((sec - (hours * 3600)) / 60);
+      var seconds = sec - (hours * 3600) - (minutes * 60);
+
+      if (hours   < 10) {hours   = "0"+hours;}
+      if (minutes < 10) {minutes = "0"+minutes;}
+      if (seconds < 10) {seconds = "0"+seconds;}
+      var time    = hours+':'+minutes;
+      return time;
+    }
+
+
     //Carga el stock disponible
     $scope.loadOutStock = function(id) {
-        Assistance.getJustificationStock($scope.model.session.user_id, id,
-			function(justificationStock) {
-                $scope.model.out.stock = justificationStock.stock;
-			},
-			function(error) {
-                Notifications.message(error);
-			}
-		);
+      Assistance.getJustificationStock($scope.model.session.user_id, id, null, null,
+        function(justification) {
+          $scope.model.out.stock = $scope.parseSecondsToDateString(justification.stock);
+        },
+        function(error) {
+          Notifications.message(error);
+        }
+      );
+      Assistance.getJustificationStock($scope.model.session.user_id, id, null, 'YEAR',
+        function(justification) {
+          $scope.model.out.yearlyStock = $scope.parseSecondsToDateString(justification.stock);
+        },
+        function(error) {
+          Notifications.message(error);
+        }
+      );
     }
+
 
     // Cargo el stock de la justificacion
     // data.justification = {name,id}
@@ -125,6 +153,14 @@ app.controller('RequestAssistanceOutCtrl', function($scope, Assistance, Notifica
             $scope.initialize(justification);
         }
     });
+
+    $scope.$on('JustificationStockChangedEvent', function(event, data) {
+      if ($scope.model.justificationOutId == data.justification_id) {
+        $scope.loadOutStock($scope.model.justificationOutId);
+      }
+    });
+
+
 
     $scope.initialize = function(justification) {
         $scope.clearSelectionsOut();

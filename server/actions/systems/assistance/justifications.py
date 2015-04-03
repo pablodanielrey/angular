@@ -11,7 +11,7 @@ from model.events import Events
 
 from model.systems.assistance.assistance import Assistance
 from model.systems.assistance.date import Date
-from model.systems.assistance.justifications import Justifications
+from model.systems.assistance.justifications.justifications import Justifications
 
 
 
@@ -92,7 +92,8 @@ query :
   request:{
       user_id: "id del usuario",
       justification_id: "id de la justificación"
-      date: 'fecha a consultar'                         -- opcional. si no se pasa etnonces se toma la fecha actual.
+      date: 'fecha a consultar'    -- opcional. si no se pasa etnonces se toma la fecha actual.
+      period: 'MONTH|YEAR'         -- opcional. período en el cual se analiza la consulta. si no se pasa se analizan todos. el stock es el minimo de todos.
   }
 
 }
@@ -103,6 +104,7 @@ response :
   ok: "caso exito",
   error: "error del servidor",
   response:{
+    justificationId: 'id de la justificación'
     count: "cantidad de justificaciones disponibles de ese tipo"
   }
 
@@ -137,8 +139,20 @@ class GetJustificationStock:
         try:
 
             date = self.date.utcNow()
+            if 'date' in message['request']:
+                date = self.date.parse(message['request']['date'])
 
-            stock = self.justifications.getJustificationStock(con,userId,justificationId,date)
+            period = None
+            if 'period' in message['request']:
+                period = message['request']['period']
+
+                if period != 'WEEK' and period != 'MONTH' and period != 'YEAR':
+                    response = {'id':message['id'], 'error':'período no válido'}
+                    server.sendMessage(response)
+                    return True
+
+
+            stock = self.justifications.getJustificationStock(con,userId,justificationId,date,period)
             if stock == None:
                 response = {'id':message['id'], 'error':'No existe stock para esa justificación'}
                 server.sendMessage(response)
@@ -297,8 +311,7 @@ class UpdateJustificationRequestStatus:
 
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
-            (changesStock,request) = self.justifications.updateJustificationRequestStatus(con,userId,requestId,status)
-
+            events = self.justifications.updateJustificationRequestStatus(con,userId,requestId,status)
             con.commit()
 
             response = {
@@ -307,25 +320,8 @@ class UpdateJustificationRequestStatus:
             }
             server.sendMessage(response)
 
-            if changesStock:
-                event = {
-                    'type':'JustificationStockChangedEvent',
-                    'data':{
-                        'justification_id':request['justification_id'],
-                        'user_id':request['user_id']
-                    }
-                }
-                self.events.broadcast(server,event)
-
-
-            event = {
-                'type':'JustificationStatusChangedEvent',
-                'data':{
-                    'request_id':requestId
-                }
-            }
-            self.events.broadcast(server,event)
-
+            for e in events:
+                self.events.broadcast(server,e)
 
             return True
 
@@ -405,7 +401,7 @@ class RequestJustification:
 
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
-            reqId = self.justifications.requestJustification(con,userId,justificationId,begin,end)
+            events = self.justifications.requestJustification(con,userId,justificationId,begin,end)
 
             con.commit()
 
@@ -415,37 +411,11 @@ class RequestJustification:
             }
             server.sendMessage(response)
 
-
-            event = {
-                'type':'JustificationsRequestsUpdatedEvent',
-                'data':{
-                    'justification_id':justificationId,
-                    'user_id':userId
-                }
-            }
-            self.events.broadcast(server,event)
-
-
-            event = {
-                'type':'JustificationStockChangedEvent',
-                'data':{
-                    'justification_id':justificationId,
-                    'user_id':userId
-                }
-            }
-            self.events.broadcast(server,event)
-
-
-            event = {
-                'type':'JustificationStatusChangedEvent',
-                'data':{
-                    'request_id':reqId
-                }
-            }
-            self.events.broadcast(server,event)
-
+            for e in events:
+                self.events.broadcast(server,e)
 
             return True
+
 
         except Exception as e:
             logging.exception(e)

@@ -23,10 +23,16 @@
             <p class="parrafos">Seleccione el día</p>
             <input class="date" type="date" ng-model="model.requestAbsentBegin" ng-change="changeRequestAbsentBegin()" >
           </div>
+
           <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationAbsentAvailable()]">
-            <p class="parrafosGreen margin"> Disponibililad Restante</p>
+            <p class="parrafosGreen margin"> Disponibililad en el mes actual</p>
             <p class="parrafosGreen2 margin">{{model.absent.stock}}</p>
           </div>
+          <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationAbsentAvailable()]">
+            <p class="parrafosGreen margin"> Disponibililad Anual</p>
+            <p class="parrafosGreen2 margin">{{model.absent.yearlyStock}}</p>
+          </div>
+
           <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationAbsentRequests()]">
             <div ng-class="{true:'visible', false:'hidden'}[false]">
               <p>No existen solicitudes pendientes</p>

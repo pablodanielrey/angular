@@ -80,25 +80,31 @@ app.controller('RequestAssistanceCompensatoryCtrl', function($scope, Assistance,
 
     //Carga el stock disponible de compensatorios
     $scope.loadCompensatoryStock = function(id) {
-        Assistance.getJustificationStock($scope.model.session.user_id, id,
-			function(justificationStock){
-                $scope.model.compensatory.stock = justificationStock.stock;
-			},
-			function(error){
-                Notifications.message(error);
-			}
-		);
+        Assistance.getJustificationStock($scope.model.session.user_id, id, null, null,
+    			function(justificationStock){
+            $scope.model.compensatory.stock = justificationStock.stock;
+    			},
+    			function(error){
+            Notifications.message(error);
+    			}
+		    );
     }
 
     // Cargo el stock de la justificacion
     // data.justification = {name,id}
     $scope.$on('findStockJustification', function(event, data) {
-
         justification = data.justification;
         if (justification.id == $scope.model.justificationCompensatoryId) {
             $scope.initialize(justification);
         }
     });
+
+    $scope.$on('JustificationStockChangedEvent', function(event, data) {
+      if ($scope.model.justificationCompensatoryId == data.justification_id) {
+        $scope.loadAbsentStock($scope.model.justificationCompensatoryId);
+      }
+    });
+
 
     $scope.initialize = function(justification) {
         $scope.clearSelectionsCompensatory();

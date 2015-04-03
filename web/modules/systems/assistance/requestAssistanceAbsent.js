@@ -2,7 +2,6 @@ var app = angular.module('mainApp');
 
 app.controller('RequestAssistanceAbsentCtrl', function($scope, Assistance, Notifications) {
 
-
 	$scope.model.absent = {
 		id:null,
 		name:"absent",
@@ -90,14 +89,22 @@ app.controller('RequestAssistanceAbsentCtrl', function($scope, Assistance, Notif
 
 	//Carga el stock disponible de los ausentes con aviso
     $scope.loadAbsentStock = function(id) {
-        Assistance.getJustificationStock($scope.model.session.user_id, id,
-			function(justificationStock){
-				$scope.model.absent.stock = justificationStock.stock;
-			},
-			function(error){
-				alert(error);
-			}
-		);
+        Assistance.getJustificationStock($scope.model.session.user_id, id, null, null,
+					function(justificationStock){
+						$scope.model.absent.stock = justificationStock.stock;
+					},
+					function(error){
+						alert(error);
+					}
+				);
+				Assistance.getJustificationStock($scope.model.session.user_id, id, null, 'YEAR',
+					function(justificationStock){
+						$scope.model.absent.yearlyStock = justificationStock.stock;
+					},
+					function(error){
+						alert(error);
+					}
+				);
     }
 
 
@@ -124,18 +131,23 @@ app.controller('RequestAssistanceAbsentCtrl', function($scope, Assistance, Notif
 
 
 	$scope.initialize = function(justification) {
-        $scope.model.absent = {id:justification.id, name:justification.name, stock:0};
+    $scope.model.absent = {id:justification.id, name:justification.name, stock:0};
 		$scope.loadAbsentStock(justification.id);
 	}
 
 	// Escuchar evento de inicializacion
-    $scope.$on('findStockJustification', function(event, data) {
-
-        justification = data.justification;
-        if (justification.id == $scope.model.justificationAbsentId) {
+	$scope.$on('findStockJustification', function(event, data) {
+	  justification = data.justification;
+	  if (justification.id == $scope.model.justificationAbsentId) {
 			$scope.initialize(justification);
-        }
+	  }
+	});
 
-    });
+	$scope.$on('JustificationStockChangedEvent', function(event, data) {
+		if ($scope.model.justificationAbsentId == data.justification_id) {
+			$scope.loadAbsentStock($scope.model.justificationAbsentId);
+		}
+	});
+
 
 });
