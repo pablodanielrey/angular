@@ -93,7 +93,7 @@ class BSJustification(Justification):
 
         available = self.available(utils,con,userId,begin)
 
-        if available <= (end-begin).total_seconds():
+        if available < (end-begin).total_seconds():
             raise RestrictionError('No existe stock disponible')
 
         jid = str(uuid.uuid4())
