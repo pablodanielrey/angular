@@ -379,8 +379,8 @@ eventos :
 OvertimesUpdatedEvent
 {
   overtime_id
-  user_id               // id del usuario (jefe) que solicito la hora extra
-  requested_user_id
+  user_id               // id del usuarioque va a hacer las hroas extras
+  requestor_id          // id del jefe que requiere las horas extras
 }
 
 
@@ -417,6 +417,7 @@ response :
   		{
 	      id: "id de la solicitud de hora extra",
         user_id:"id del usuario para el cual se solicito hora extra",
+        requestor_id: "id del que solicito el pedido"
     		begin: 2014-12-01 00:00:00 "fecha y hora de inicio de la hora extra"
     		end: 2014-12-02 00:00:00 "fecha y hora de finalizacion de la hora extra"
     		reason: "motivo de la solicitud"
