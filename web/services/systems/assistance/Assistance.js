@@ -26,15 +26,18 @@ app.service('Assistance', ['Utils','Messages','Session',
 		};
 
 
-		this.getAssistanceStatus = function(userId, callbackOk, callbackError) {
+		this.getAssistanceStatus = function(date, userId, callbackOk, callbackError) {
 			var msg = {
 				id: Utils.getId(),
 				action: 'getAssistanceStatus',
 				session: Session.getSessionId(),
 				request:{
-					user_id: userId,
-					date: new Date()
+					user_id: userId
 				}
+			}
+
+			if (date != null) {
+				msg.request.date = date;
 			}
 
 			Messages.send(msg,
