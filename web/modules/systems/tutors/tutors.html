@@ -1,24 +1,28 @@
-
-<div>
-  <div>
-    Fecha:
-    <input type='date' ng-model='model.register.date'/>
+<div class="tutors">
+  <div class="titleTutors">
+    <label><i class="fa fa-pencil-square-o"></i> Sistema de Tutorías</label>
   </div>
-  <div>
-    Alumno:
-    <select ng-model='model.register.studentNumber'>
-      <option ng-repeat='student in model.students' value="{{student.studentNumber}}">
-        {{student.studentNumber}}
-      </option>
-    </select>
+  <div class="content">
+    <div class="date">
+      <div class="button"><span>Fecha</span></div>
+      <input class="dateSelect" type='date' ng-model='model.register.date'/></div>
+    </div>
+    <div class="student">
+      <div class="button"><span>Alumno</span></div>
+      <select class="studentSelect" ng-model='model.register.studentNumber'>
+        <option ng-repeat='student in model.students' value="{{student.studentNumber}}">
+          {{student.studentNumber}}
+        </option>
+      </select>
+    </div>
+    <div class="type">
+      <div class="button"><span>Tipo</span></div>
+      <select class="typeSelect" ng-model='model.register.type'>
+        <option value='Situaciones Administrativas'>Situaciones Administrativas</option>
+        <option value='Situaciones Académicas y de Estudio'>Situaciones Académicas y de Estudio</option>
+        <option value='Situaciones Personales'>Situaciones Personales</option>
+      </select>
+    </div>
+    <button ng-click='save()'>Aceptar</button>
   </div>
-  <div>
-    Tipo:
-    <select ng-model='model.register.type'>
-      <option value='Situaciones Administrativas'>Situaciones Administrativas</option>
-      <option value='Situaciones Académicas y de Estudio'>Situaciones Académicas y de Estudio</option>
-      <option value='Situaciones Personales'>Situaciones Personales</option>
-    </select>
-  </div>
-  <button ng-click='save()'>Aceptar</button>
 </div>
