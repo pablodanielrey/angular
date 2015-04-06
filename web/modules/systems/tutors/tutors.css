@@ -58,9 +58,15 @@
 
 .tutors .student {
   display:flex;
+  flex-direction:column;
+}
+
+.tutors .student .studentItemContainer {
+  display:flex;
   flex-direction:row;
 }
-.tutors .studentSelect {
+
+.tutors .student input {
   width:238px;
   background-color:white;
   padding:10px;

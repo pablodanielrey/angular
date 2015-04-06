@@ -7,14 +7,30 @@
       <div class="button"><span><i class="fa fa-calendar-o"></i> Fecha</span></div>
       <input class="dateSelect" type='date' ng-model='model.register.date'/>
     </div>
+
     <div class="student">
-      <div class="button"><span><i class="fa fa-user"></i> Alumno</span></div>
-      <select class="studentSelect" placeholder="Seleccione..."  ng-model='model.register.studentNumber'>
-        <option ng-repeat='student in model.students' value="{{student.studentNumber}}">
-          {{student.studentNumber}}
-        </option>
-      </select>
+      <div class="studentItemContainer">
+        <div class="button"><span><i class="fa fa-user"></i>Nro de legajo</span></div>
+        <input type="text" ng-model='model.register.student.studentNumber'/>
+      </div>
+
+      <div class="studentItemContainer">
+        <div class="button"><span><i class="fa fa-user"></i>Apellido</span></div>
+        <input type="text" ng-model='model.register.student.lastname'/>
+      </div>
+
+      <div class="studentItemContainer">
+        <div class="button"><span><i class="fa fa-user"></i>Nombre</span></div>
+        <input type="text" ng-model='model.register.student.name'/>
+      </div>
+
+      <div class="studentItemContainer">
+        <div class="button"><span><i class="fa fa-user"></i>DNI</span></div>
+        <input type="text" ng-model='model.register.student.dni'/>
+      </div>
+
     </div>
+
     <div class="type">
       <div class="button"><span><i class="fa fa-tags"></i> Tipo</span></div>
       <select class="typeSelect" placeholder="Seleccione..." ng-model='model.register.type'>
