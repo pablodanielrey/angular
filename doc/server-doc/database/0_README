@@ -14,4 +14,5 @@ ejecutar 2-systems antes que 2-groups!!!
 \i /var/www/html/angular/doc/server-doc/database/6-ntdomain.sql
 \i /var/www/html/angular/doc/server-doc/database/6-tutors.sql
 \i /var/www/html/angular/doc/server-doc/database/99-views.sql
+\i /var/www/html/angular/doc/server-doc/database/views.sql
 \i /var/www/html/angular/doc/server-doc/insert_basic_data.sql

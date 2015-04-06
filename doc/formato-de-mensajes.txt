@@ -331,7 +331,7 @@ JustificationStockChangedEvent
 ---------------
 
 
-query : solicitud de justificaciones de un determinado usuario
+query : solicitud de justificaciones de un determionado usuario
 {
   id:,
   action:"updateJustificationRequestStatus",
@@ -372,6 +372,19 @@ response :
   id: "id de la petición",
   ok: "caso exito",
   error: "error del servidor"
+}
+
+eventos :
+OvertimeUpdatedEvent
+{
+  overtime_id
+  user_id //id del usuario (jefe) que solicito la hora extra
+}
+
+OvertimeStatusChangedEvent
+{
+  overtime_id
+    user_id //id del usuario (jefe) que solicito la hora extra
 }
 
 
@@ -419,7 +432,7 @@ query : actualizar estado de una solicitud de hora extra
   action:"updateRequestOvertimeStatus",
   session:,
   request:{
-      request_id: "id del pedido",
+      overtime_id: "id del pedido",
       status: "PENDING|APPROVED|REJECTED|CANCELED"
   }
 

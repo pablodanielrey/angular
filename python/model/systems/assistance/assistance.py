@@ -42,8 +42,14 @@ class Assistance:
         From = self.date.awareToUtc(From)
         To = self.date.awareToUtc(To)
 
+        logging.debug('from: {}, to: {}'.format(From,To))
+
         logs = self.logs.findLogs(con,userId,From,To)
+        logging.debug('logs {}'.format(logs))
+
         worked, attlogs = self.logs.getWorkedHours(logs)
+        logging.debug('worked : {}, attlogs: {}'.format(worked,attlogs))
+
         sdate,edate,totalSeconds = self.logs.explainWorkedHours(worked)
         inside = 'Afuera' if len(attlogs) % 2 == 0 else 'Trabajando'
 

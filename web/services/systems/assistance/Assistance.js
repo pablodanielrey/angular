@@ -33,7 +33,7 @@ app.service('Assistance', ['Utils','Messages','Session',
 				session: Session.getSessionId(),
 				request:{
 					user_id: userId,
-					date: new Date('2015-02-03T09:30:00+00:00')
+					date: new Date()
 				}
 			}
 
@@ -315,7 +315,7 @@ app.service('Assistance', ['Utils','Messages','Session',
 				action: 'updateRequestOvertimeStatus',
 				session: Session.getSessionId(),
 				request: {
-					request_id: requestId, //id del usuario al cual se solicita la hora extra
+					overtime_id: requestId, //id del usuario al cual se solicita la hora extra
 					state: state,
 				}
 			};
