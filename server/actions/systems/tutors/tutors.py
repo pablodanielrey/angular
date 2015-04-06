@@ -2,6 +2,8 @@
 import inject, psycopg2
 
 from model.systems.tutors.tutors import Tutors
+from model.systems.students.students import Students
+from model.users.users import Users
 from model.events import Events
 from model.profiles import Profiles
 from model.config import Config
@@ -22,7 +24,11 @@ peticion:
     "session":"session de usuario",
     "request": {
         "date":"fecha ingresada",
-        "studentNumber":"legajo del alumno"
+        "student": "{ studentNumber:'nro de legajo del alumno',
+                      lastname:'apellido del alumno',
+                      name:'nombre del alumno',
+                      dni:'documento del alumno'
+                    }",
         "type":"tipo de relacion"
     }
 }
@@ -42,6 +48,9 @@ class PersistTutorData:
     events = inject.attr(Events)
     profiles = inject.attr(Profiles)
     config = inject.attr(Config)
+    students = inject.attr(Students)
+    users = inject.attr(Users)
+
 
     def handleAction(self, server, message):
 
@@ -61,6 +70,26 @@ class PersistTutorData:
             con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
 
             tutor = message['request']
+
+            # obtengo la persona a ingresar
+            student = tutor['student']
+
+            # Verifico si ya existe el alumno ingresado
+            s = self.students.findStudentByNumber(con,student['studentNumber'])
+
+            if (s is not None):
+                person = self.users.findUser(con,s['id'])
+                # si existe, y no tiene los mismos datos tiro error
+                if (('dni' in student) and (student['dni'].strip()) and (student['dni'] != person['dni'])):
+                    response = {'id':message['id'], 'error':'Error: el alumno ingresado posee otro dni al ingresado (Datos del alumno existente: Dni:' + person['dni'] + ' Apellido:' + person['lastname'] +' Nombre:' + person['name'] +')'}
+                    server.sendMessage(response)
+                    return True
+
+                # sino, le actualizo los datos con los de la base
+                student['lastname'] = person['lastname']
+                student['name'] = person['name']
+                student['dni'] = person['dni']
+
             tutor['userId'] = self.profiles.getLocalUserId(sid)
             self.tutors.persist(con,tutor)
             con.commit()
