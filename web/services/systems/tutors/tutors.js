@@ -4,7 +4,7 @@ var app = angular.module('mainApp');
 
 app.service('Tutors', function(Messages, Utils, Session) {
 
-  this.persistTutorData = function(data,ok,err) {
+  this.persistTutorData = function(data,callbackOk,callbackError) {
     var msg = {
       id:Utils.getId(),
       action:'persistTutorData',
@@ -14,10 +14,11 @@ app.service('Tutors', function(Messages, Utils, Session) {
 
     Messages.send(msg,
       function(data) {
-        ok(data.ok);
-      },
-      function(error) {
-        err(data.error);
+        if (typeof data.error === 'undefined') {
+          callbackOk(data.ok);
+        } else {
+          callbackError(data.error);
+        }
       }
     );
   }

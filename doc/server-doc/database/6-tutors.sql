@@ -10,8 +10,9 @@ create schema tutors;
     user_id varchar references profile.users (id),
     "date" timestamptz not null,
     student_number varchar not null,
+    dni varchar,
+    name varchar,
+    lastname varchar,
     type varchar not null,
     created timestamptz default now()
   );
-
-  
