@@ -42,7 +42,7 @@ class Fails:
                         break
 
 
-                localDate = self.date.localizeAwareToLocal(self.localizeAwareToLocal(fail['date'])).replace(hour=0,minute=0,second=0,microsecond=0)
+                localDate = self.date.localizeAwareToLocal(self.date.localizeAwareToLocal(fail['date'])).replace(hour=0,minute=0,second=0,microsecond=0)
                 f = '{0},{1},{2},{3},{4},{5},{6},{7},{8}'.format(
                     localDate.date(),
                     user['dni'],
