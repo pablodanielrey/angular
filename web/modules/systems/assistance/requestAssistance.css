@@ -86,10 +86,11 @@
 }
 
 
+/*
 .requestAssistance .myRequestInfo.pending {
   -webkit-transform: translate(700px,0px);
 }
-
+*/
 
 .requestAssistance .iconsMyRequest {
   padding:5px;
