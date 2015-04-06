@@ -25,7 +25,7 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
     searchUser: null,
     searchUserPromise: null,
     users: null
-  };  
+  };
 
   /**
    * Cargar y chequear session
@@ -43,9 +43,9 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
    * Obtener solicitudes de horas extra del usuario (jefe)
    */
   $scope.loadRequests = function(){
-    $scope.model.requests = [];
-    Assistance.getOvertimeRequests(null, null,
+    Assistance.getOvertimeRequests(null,
       function callbackOk(requests){
+        $scope.model.requests = [];
         for(var i = 0; i < requests.length; i++){
           var request = $scope.formatRequest(requests[i]);
           $scope.model.requests.push(request);
@@ -87,10 +87,10 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
   };
 
 
-  $scope.$on('OvertimeUpdatedEvent',function(event, data) {
+  $scope.$on('OvertimesUpdatedEvent',function(event, data) {
     $scope.loadRequests();
   });
-  
+
   $scope.$on('OvertimeStatusChangedEvent',function(event, data) {
     $scope.loadRequests();
   });
@@ -217,6 +217,6 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
       Notifications.message("Datos incorrectos: Verifique los datos ingresados");
     }
   };
-  
+
 
 }]);

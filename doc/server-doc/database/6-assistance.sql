@@ -113,3 +113,24 @@ create schema assistance;
       status varchar not null,
       created timestamptz not null default now()
     );
+
+
+
+    create table assistance.overtime_requests (
+      id varchar primary key,
+      user_id varchar not null references profile.users (id),
+      requestor_id varchar not null references profile.users (id),
+      jbegin timestamptz not null,
+      jend timestamptz,
+      reason varchar not null,
+      created timestamptz not null default now(),
+      CHECK(EXTRACT(TIMEZONE FROM jbegin) = '0')
+    );
+
+
+    create table assistance.overtime_requests_status (
+      request_id varchar not null references assistance.overtime_requests (id),
+      user_id varchar not null references profile.users (id),
+      status varchar not null,
+      created timestamptz not null default now()
+    );

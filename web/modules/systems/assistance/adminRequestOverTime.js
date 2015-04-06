@@ -7,7 +7,7 @@ app.controller('AdminRequestOverTimeCtrl', ["$scope", "$timeout", "Notifications
 		requests : [], //solicitudes de horas extra
 		session_user_id : null //id del usuario de session
 	};
-	
+
 	/**
 	 * Cargar y chequear session
 	 */
@@ -19,14 +19,14 @@ app.controller('AdminRequestOverTimeCtrl', ["$scope", "$timeout", "Notifications
 		var session = Session.getCurrentSession();
 		$scope.model.session_user_id = session.user_id;
 	};
-	
+
 	/**
 	 * Obtener solicitudes de horas extra del usuario
 	 */
-	$scope.loadRequests = function(){
-		$scope.model.requests = [];
-		Assistance.getOvertimeRequests(null, null,
+	$scope.loadRequests = function() {
+		Assistance.getOvertimeRequestsToManage(null,null,
 			function callbackOk(requests){
+				$scope.model.requests = [];
 				for(var i = 0; i < requests.length; i++){
 					var request = $scope.formatRequest(requests[i]);
 					$scope.model.requests.push(request);
@@ -38,8 +38,8 @@ app.controller('AdminRequestOverTimeCtrl', ["$scope", "$timeout", "Notifications
 			}
 		);
 	};
-	
-	
+
+
 	$scope.loadUser = function(userId){
 		var userAux;
 		Users.findUser(userId,
@@ -53,9 +53,9 @@ app.controller('AdminRequestOverTimeCtrl', ["$scope", "$timeout", "Notifications
 		);
 		return userAux;
 	}
-	
 
-	
+
+
 	/**
 	 * Dar formato a la solicitud de hora extra
 	 */
@@ -73,29 +73,29 @@ app.controller('AdminRequestOverTimeCtrl', ["$scope", "$timeout", "Notifications
 		requestAux.endTime = end.toLocaleTimeString().substring(0, 5);
 
 		requestAux.user = $scope.loadUser(request.user_id);
-		
+
 		return requestAux;
 	};
 
-	
+
 	/**
 	 * Inicializar
 	 */
-	$timeout(function() { 
+	$timeout(function() {
 		$scope.loadSession();
 		$scope.loadRequests();
 	},0);
-	
-	$scope.$on('OvertimeUpdatedEvent',function(event, data) {
-      $scope.loadRequests();
+
+	$scope.$on('OvertimesUpdatedEvent',function(event, data) {
+		$scope.loadRequests();
 	});
-	
+
 	$scope.$on('OvertimeStatusChangedEvent',function(event, data) {
 			$scope.loadRequests();
 	});
-	
-	
-	
+
+
+
 
 	/***************************************************************
 	 * METODOS CORRESPONDIENTES A LA ADMINISTRACION DE SOLICITUDES *
@@ -103,19 +103,15 @@ app.controller('AdminRequestOverTimeCtrl', ["$scope", "$timeout", "Notifications
 	$scope.updateStatus = function(request_id, status) {
         Assistance.updateRequestOvertimeStatus(request_id, status,
             function(ok) {
-                Notifications.message("El estado fue modificado correctamente");
-          /** VERIFICACION DE EVENTO var data = {
-            user_id : $scope.model.session_user_id
-           }
-           $scope.$emit('OvertimeStatusChangedEvent',data);*/
+							// nada
             },
             function(error) {
-				Notifications.message(error);
-				throw new Error(error);
+							Notifications.message(error);
+							throw new Error(error);
             }
         );
     };
-    
+
 	$scope.approveRequest = function(request_id) {
         $scope.updateStatus(request_id, "APPROVED");
     };
@@ -124,4 +120,4 @@ app.controller('AdminRequestOverTimeCtrl', ["$scope", "$timeout", "Notifications
         $scope.updateStatus(request_id, "REJECTED");
     };
 
-}]);	
+}]);
