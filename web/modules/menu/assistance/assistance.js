@@ -53,9 +53,6 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, As
                     $scope.items = [];
                     $scope.items.push({ label:'Inicio', img:'fa-tachometer', function: $scope.summary});
                     $scope.items.push({ label:'Solicitudes', img:'fa-ticket', function: $scope.requestAssistance});
-                    $scope.items.push({ label:'Adm. Solicitudes ', img:'fa-ticket', function: $scope.adminRequestAssistance});
-                    $scope.items.push({ label:'Horas Extras ', img:'fa-plus', function: $scope.requestAuthority});
-                    $scope.items.push({ label:'Admin Horas Extras ', img:'fa-plus', function: $scope.adminRequestOverTime});
 
                     Assistance.getUserOfficeRoles(
                       function(roles) {
