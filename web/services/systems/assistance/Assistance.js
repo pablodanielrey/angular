@@ -33,7 +33,7 @@ app.service('Assistance', ['Utils','Messages','Session',
 				session: Session.getSessionId(),
 				request:{
 					user_id: userId,
-					date = new Date()
+					date: new Date()
 				}
 			}
 
