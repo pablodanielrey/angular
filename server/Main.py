@@ -27,7 +27,7 @@ def config_injector(binder):
 def _checkAssistanceSchedule(assistance,f):
     logging.info('chequeando schedules')
     date = inject.instance(Date)
-    (users,fails) = assistance.checkSchedule(date.parse('2015-03-25 00:00:00'), date.parse('2015-04-01 00:00:00'))
+    (users,fails) = assistance.checkSchedule(date.parse('2015-03-31 00:00:00'), date.parse('2015-04-01 00:00:00'))
     f.toCsv('/tmp/f.csv',users,fails)
     for user in users:
         ffails = f.filterUser(user['id'],fails)
