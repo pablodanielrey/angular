@@ -4,7 +4,8 @@ var app = angular.module('mainApp');
 app.controller('AdminRequestOverTimeCtrl', ["$scope", "$timeout", "Notifications", "Assistance", "Session", "Users", function($scope, $timeout, Notifications, Assistance, Session, Users) {
 
 	$scope.model = {
-		requests : [] //solicitudes de horas extra
+		requests : [], //solicitudes de horas extra
+		session_user_id : null; //id del usuario de session
 	};
 	
 	/**
@@ -15,6 +16,8 @@ app.controller('AdminRequestOverTimeCtrl', ["$scope", "$timeout", "Notifications
 			Notifications.message("Error: Sesion no definida");
 			$window.location.href = "/#/logout";
 		}
+		var session = Session.getCurrentSession();
+		$scope.model.session_user_id = session.user_id;
 	};
 	
 	/**
@@ -84,7 +87,7 @@ app.controller('AdminRequestOverTimeCtrl', ["$scope", "$timeout", "Notifications
 	},0);
 	
 	$scope.$on('OvertimeUpdatedEvent',function(event, data) {
-		$scope.loadRequests();
+      $scope.loadRequests();
 	});
 	
 	$scope.$on('OvertimeStatusChangedEvent',function(event, data) {
@@ -101,6 +104,10 @@ app.controller('AdminRequestOverTimeCtrl', ["$scope", "$timeout", "Notifications
         Assistance.updateRequestOvertimeStatus(request_id, status,
             function(ok) {
                 Notifications.message("El estado fue modificado correctamente");
+                data = {
+            user_id : $scope.model.session_user_id
+           }
+          $scope.$emit('OvertimeStatusChangedEvent',data);
             },
             function(error) {
 				Notifications.message(error);

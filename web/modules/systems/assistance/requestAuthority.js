@@ -88,15 +88,11 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
 
 
   $scope.$on('OvertimeUpdatedEvent',function(event, data) {
-    if(data.user_id == $scope.model.session_user_id){
-      $scope.loadRequests();
-    }
+    $scope.loadRequests();
   });
   
   $scope.$on('OvertimeStatusChangedEvent',function(event, data) {
-    if(data.user_id == $scope.model.session_user_id){
-      $scope.loadRequests();
-    }
+    $scope.loadRequests();
   });
 
 
