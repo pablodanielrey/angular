@@ -5,7 +5,7 @@ app.controller('AdminRequestOverTimeCtrl', ["$scope", "$timeout", "Notifications
 
 	$scope.model = {
 		requests : [], //solicitudes de horas extra
-		session_user_id : null; //id del usuario de session
+		session_user_id : null //id del usuario de session
 	};
 	
 	/**
@@ -104,10 +104,10 @@ app.controller('AdminRequestOverTimeCtrl', ["$scope", "$timeout", "Notifications
         Assistance.updateRequestOvertimeStatus(request_id, status,
             function(ok) {
                 Notifications.message("El estado fue modificado correctamente");
-                data = {
+          /** VERIFICACION DE EVENTO var data = {
             user_id : $scope.model.session_user_id
            }
-          $scope.$emit('OvertimeStatusChangedEvent',data);
+           $scope.$emit('OvertimeStatusChangedEvent',data);*/
             },
             function(error) {
 				Notifications.message(error);
