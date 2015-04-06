@@ -1,0 +1,89 @@
+.tutors {
+  width:99%;
+  margin-top:5px;
+  margin-left:5px;
+  min-width:350px;
+  font-family: calibri, Arial, Helvetica, sans-serif;
+  font-size:14px;
+  height:600px;
+  background-color:#eeeeee;
+
+
+}
+
+.tutors .content {
+  background-color:white;
+  width:100%
+  height:600px;
+  background-color:#eeeeee;
+}
+.tutors .titleTutors {
+  display:flex;
+  align-items: center;
+  background-image:linear-gradient(to right,#275276, #0066A6);
+  font-size:16px;
+  width:100%;
+  height:30px;
+  padding:5px;
+  color:white;
+  margin-bottom:20px;
+}
+
+.tutors .button {
+  width:150px;
+  background-color:#ec9122;
+  padding:10px;
+  border-top:3px solid #275276;
+  color:white;
+  font-size:18px;
+  margin-bottom:10px;
+  margin-right: 10px;
+
+}
+.tutors .date {
+  display:flex;
+  flex-direction:row;
+}
+.tutors .dateSelect {
+  width:215px;
+  background-color:white;
+  padding:10px;
+  border-top:3px solid #275276;
+  color:#0066A6;
+  font-size:18px;
+  margin-bottom:10px;
+  margin-right: 10px;
+
+}
+
+.tutors .student {
+  display:flex;
+  flex-direction:row;
+}
+.tutors .studentSelect {
+  width:238px;
+  background-color:white;
+  padding:10px;
+  border-top:3px solid #275276;
+  color:#0066A6;
+  font-size:18px;
+  margin-bottom:10px;
+  margin-right: 10px;
+
+}
+
+.tutors .type {
+  display:flex;
+  flex-direction:row;
+}
+.tutors .typeSelect {
+  width:350px;
+  background-color:white;
+  padding:10px;
+  border-top:3px solid #275276;
+  color:#0066A6;
+  font-size:18px;
+  margin-bottom:10px;
+  margin-right: 10px;
+
+}
