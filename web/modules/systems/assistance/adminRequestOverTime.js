@@ -83,6 +83,14 @@ app.controller('AdminRequestOverTimeCtrl', ["$scope", "$timeout", "Notifications
 		$scope.loadRequests();
 	},0);
 	
+	$scope.$on('OvertimeUpdatedEvent',function(event, data) {
+		$scope.loadRequests();
+	});
+	
+	$scope.$on('OvertimeStatusChangedEvent',function(event, data) {
+			$scope.loadRequests();
+	});
+	
 	
 	
 
