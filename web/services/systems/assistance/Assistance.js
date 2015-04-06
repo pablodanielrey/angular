@@ -315,7 +315,7 @@ app.service('Assistance', ['Utils','Messages','Session',
 				action: 'updateRequestOvertimeStatus',
 				session: Session.getSessionId(),
 				request: {
-					request_id: requestId, //id del usuario al cual se solicita la hora extra
+					overtime_id: requestId, //id del usuario al cual se solicita la hora extra
 					state: state,
 				}
 			};
