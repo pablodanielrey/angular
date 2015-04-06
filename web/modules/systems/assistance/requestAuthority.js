@@ -135,7 +135,6 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
   $scope.displayListUser = false;
 
   $scope.isDisplayListUser = function() {
-    console.log($scope.displayListUser);
     return $scope.displayListUser;
   }
 
@@ -199,8 +198,11 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
 
     Assistance.requestOvertime($scope.model.user_id, request,
       function callbackOk(response){
-        $scope.loadRequests();
         Notifications.message("Registro realizado con exito");
+        /* TESTEO DE EVENTO  data = {
+            user_id : $scope.model.session_user_id
+           }
+          $scope.$emit('OvertimeUpdatedEvent',data);*/
       },
       function callbackError(error){
         Notifications.message(error);

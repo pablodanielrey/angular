@@ -101,7 +101,6 @@ app.controller('AdminRequestOverTimeCtrl', ["$scope", "$timeout", "Notifications
         Assistance.updateRequestOvertimeStatus(request_id, status,
             function(ok) {
                 Notifications.message("El estado fue modificado correctamente");
-                $scope.loadRequests();
             },
             function(error) {
 				Notifications.message(error);
