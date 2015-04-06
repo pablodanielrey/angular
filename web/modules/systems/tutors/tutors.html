@@ -4,25 +4,26 @@
   </div>
   <div class="content">
     <div class="date">
-      <div class="button"><span>Fecha</span></div>
-      <input class="dateSelect" type='date' ng-model='model.register.date'/></div>
+      <div class="button"><span><i class="fa fa-calendar-o"></i> Fecha</span></div>
+      <input class="dateSelect" type='date' ng-model='model.register.date'/>
     </div>
     <div class="student">
-      <div class="button"><span>Alumno</span></div>
-      <select class="studentSelect" ng-model='model.register.studentNumber'>
+      <div class="button"><span><i class="fa fa-user"></i> Alumno</span></div>
+      <select class="studentSelect" placeholder="Seleccione..."  ng-model='model.register.studentNumber'>
         <option ng-repeat='student in model.students' value="{{student.studentNumber}}">
           {{student.studentNumber}}
         </option>
       </select>
     </div>
     <div class="type">
-      <div class="button"><span>Tipo</span></div>
-      <select class="typeSelect" ng-model='model.register.type'>
+      <div class="button"><span><i class="fa fa-tags"></i> Tipo</span></div>
+      <select class="typeSelect" placeholder="Seleccione..." ng-model='model.register.type'>
         <option value='Situaciones Administrativas'>Situaciones Administrativas</option>
         <option value='Situaciones Académicas y de Estudio'>Situaciones Académicas y de Estudio</option>
         <option value='Situaciones Personales'>Situaciones Personales</option>
       </select>
     </div>
-    <button ng-click='save()'>Aceptar</button>
+
+    <button class="buttonSave" ng-click='save()'><i class="fa fa-floppy-o"></i> Guardar</button>
   </div>
 </div>
