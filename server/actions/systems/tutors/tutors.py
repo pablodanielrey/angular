@@ -97,10 +97,10 @@ class PersistTutorData:
             if 'dni' not  in tutor['student']:
                 tutor['student']['dni'] = ''
 
-            if 'name' not in tutor:
+            if 'name' not in tutor['student']:
                 tutor['student']['name'] = ''
 
-            if 'lastname' not in tutor:
+            if 'lastname' not in tutor['student']:
                 tutor['student']['lastname'] = ''
 
             self.tutors.persist(con,tutor)
