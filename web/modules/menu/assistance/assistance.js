@@ -58,7 +58,6 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, As
                     $scope.items.push({ label:'Adm. Solicitudes ', img:'fa-ticket', function: $scope.adminRequestAssistance});
                     $scope.items.push({ label:'Horas Extras ', img:'fa-plus', function: $scope.requestAuthority});
                     $scope.items.push({ label:'Admin Horas Extras ', img:'fa-plus', function: $scope.adminRequestOverTime});
-                    $scope.items.push({ label:'Incumplimiento de horarios', img:'fa-exclamation-triangle', function: $scope.assistanceFails});
 
                     Assistance.getUserOfficeRoles(
                       function(roles) {
@@ -67,6 +66,7 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, As
                           $scope.items.push({ label:'Adm. Solicitudes ', img:'fa-ticket', function: $scope.adminRequestAssistance});
                           $scope.items.push({ label:'Horas Extras ', img:'fa-plus', function: $scope.requestAuthority});
                           $scope.items.push({ label:'Admin Horas Extras ', img:'fa-plus', function: $scope.adminRequestOverTime});
+                          $scope.items.push({ label:'Incumplimiento de horarios', img:'fa-exclamation-triangle', function: $scope.assistanceFails});
                         }
                       },
                       function(err) {

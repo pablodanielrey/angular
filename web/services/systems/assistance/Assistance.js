@@ -4,6 +4,27 @@ app.service('Assistance', ['Utils','Messages','Session',
 
 	function(Utils,Messages,Session) {
 
+		this.getFailsByDate = function(start, end, callbackOk, callbackError) {
+				var msg = {
+					id: Utils.getId(),
+					action: 'getFailsByDate',
+					session: Session.getSessionId(),
+					request: {
+						start: start,
+						end: end
+					}
+				}
+
+				Messages.send(msg,
+					function(data) {
+						if (typeof data.error === 'undefined') {
+							callbackOk(data.response);
+						} else {
+							callbackError(data.error);
+						}
+					});
+		};
+
 		this.getAssistanceStatusByDate = function(userId, date, callbackOk, callbackError) {
 			var msg = {
 				id: Utils.getId(),
