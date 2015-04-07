@@ -142,8 +142,17 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
    */
   $scope.listUsers = function(){
     Assistance.getUsersInOfficesByRole('autoriza',
-      function(users){
-        $scope.model.users = users;
+      function(users) {
+        $scope.model.users = [];
+        for (var i = 0; i < users.length; i++) {
+          Users.findUser(users[i],
+            function(user) {
+              $scope.model.users.push(user);
+            },
+            function(error) {
+              Notifications.message(error);
+            });
+        }
       },
       function(error){
         Notifications.message(error);
