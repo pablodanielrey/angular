@@ -123,25 +123,32 @@
 
 
 
+.requestAssistance .buttonpending {
+  background-color:#e43e46;
+  color:white;
+  border:none;
+  padding:3px;
+  margin-left:5px;
+  cursor:pointer;
+}
 
 
 
 
 
 
-
-@-webkit-keyframes apending {
+@-webkit-keyframes .buttonpending {
   0% {
     opacity: 1;
     /*-webkit-transform: scale(1,1);*/
     color: white;
   }
   50% {
-    opacity: 0.5;
+    opacity: 0.9;
     /*-webkit-transform: scale(1.02,1.02);*/
-    color: #12FFFF;
+    color: white;
     border-color: #009C75;
-    background-color:#e43e46;
+    background-color:##275276;
   }
   100% {
     opacity: 1;
@@ -162,7 +169,7 @@
 
 .requestAssistance .myStateRequestSlope {
   margin-top:5px;
-  width:150px;
+  width:160px;
   border:1px solid #0066A6;
   padding:5px;
   padding-left:10px;
@@ -173,7 +180,7 @@
 
 .requestAssistance .myStateRequestApproved {
   margin-top:5px;
-  width:150px;
+  width:160px;
   border:1px solid #0066A6;
   padding:5px;
   padding-left:10px;
@@ -184,7 +191,7 @@
 
 .requestAssistance .myStateRequestRejected {
   margin-top:5px;
-  width:150px;
+  width:160px;
   border:1px solid #0066A6;
   padding:5px;
   padding-left:10px;
@@ -196,13 +203,13 @@
 
 .requestAssistance .myStateRequestCanceled {
   margin-top:5px;
-  width:150px;
+  width:160px;
   border:1px solid #0066A6;
   padding:5px;
   padding-left:10px;
   color:white;
   margin-right:10px;
-  background-color:#666633;
+  background-color:#e43e46;
 }
 
 
@@ -287,9 +294,6 @@
 .requestAssistance .subcontentDisplay .titulo, .requestAssistance .subcontent .titulo{
     cursor:pointer;
 }
-
-/****FIN DE ACORDEON****/
-
 .requestAssistance .info {
   display:flex;
   flex-direction:row;
@@ -299,3 +303,27 @@
 
 
 }
+
+.requestAssistance .titlesHours {
+  display:flex;
+  flex-direction:row;
+  margin-top:5px;
+}
+.requestAssistance .hours {
+  display:flex;
+  flex-direction:row;
+
+}
+.requestAssistance .spanSE {
+  display:flex;
+  align-content:center;
+  background-color:white;
+  border: 1px inset;
+  width:76px;
+  margin-right:15px;
+  color:#0066A6;
+
+
+}
+
+/****FIN DE ACORDEON****/
