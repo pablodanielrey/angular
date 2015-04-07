@@ -4,6 +4,35 @@ app.service('Assistance', ['Utils','Messages','Session',
 
 	function(Utils,Messages,Session) {
 
+		/*
+			Obtiene los usuarios que se encuentran dentro de las oficinas a las cuales el usuario loggeado tiene
+			un rol determinado.
+		*/
+		this.getUsersInOfficesByRole = function(role, callbackOk, callbackError) {
+			var msg = {
+				id: Utils.getId(),
+				action: 'getUserInOfficesByRole',
+				session: Session.getSessionId(),
+				request: {
+					tree: true
+				}
+			}
+
+			if (role != null) {
+				msg.request.role = role;
+			}
+
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response.users);
+					} else {
+						callbackError(data.error);
+					}
+				});
+			};
+
+
 		this.getFailsByDate = function(start, end, callbackOk, callbackError) {
 				var msg = {
 					id: Utils.getId(),
@@ -280,8 +309,7 @@ app.service('Assistance', ['Utils','Messages','Session',
 
 		/**
 		 * TODO
-		 * Obtener solicitudes de horas extra realizadas por un determinado usuario (jefe)
-		 * @param userId Id de usuario (jefe)
+		 * Obtener solicitudes de horas extra realizadas por el usuario que esta logueado
 		 */
 		this.getOvertimeRequests = function(status, group, callbackOk, callbackError){
 			var msg = {
@@ -289,17 +317,25 @@ app.service('Assistance', ['Utils','Messages','Session',
 				action: 'getOvertimeRequests',
 				session: Session.getSessionId(),
 				request: {
-					status: status,
-					group: group
 				}
 			};
-			console.log(msg);
-			response = [
-		  		{id:'1', user_id:"1", begin: '2015-05-13 10:00:00', end: '2015-05-13 12:00:00', state: "PENDING", reason: "Trabajo pendiente"},
-	  			{id:'2', user_id:"2", begin: '2015-06-15 12:00:00', end: '2015-06-15 15:00:00', state: "APPROVED", reason: "Adelantar trabajo"}
-			];
 
-			callbackOk(response);
+			if (status != null) {
+				msg.request.status = status;
+			}
+
+			if (group != null) {
+				msg.request.group = group;
+			}
+
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response.requests);
+					} else {
+						callbackError(data.error);
+					}
+				});
 		};
 
 		/**

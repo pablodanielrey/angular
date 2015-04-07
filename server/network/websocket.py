@@ -37,8 +37,9 @@ from actions.requests.requests import CreateAccountRequest, ConfirmAccountReques
 
 from actions.systems.assistance.assistance import GetAssistanceData, GetAssistanceStatus, GetFailsByDate
 from actions.systems.assistance.logs import GetAssistanceLogs
-from actions.systems.assistance.offices import GetOffices, GetUserOfficeRoles
+from actions.systems.assistance.offices import GetOffices, GetUserOfficeRoles, GetUserInOfficesByRole
 from actions.systems.assistance.justifications import GetJustifications, GetJustificationStock, GetJustificationRequests, GetJustificationRequestsToManage, RequestJustification, UpdateJustificationRequestStatus
+from actions.systems.assistance.overtime import GetOvertimeRequests
 
 from actions.systems.students.students import CreateStudent, FindStudent, PersistStudent, FindAllStudents
 
@@ -54,7 +55,6 @@ from actions.systems.mail.mail import PersistInstitutionalMail, DeleteInstitutio
 
 actions = [
 #    SendEventToClients(),
-#
 #    GetStatus(),
 #    ListGroups(), FindGroup(), FindMembers(), RemoveMembers(), AddMembers(), UpdateGroup(), CreateGroup(),
 #    ListSystems(),
@@ -67,8 +67,9 @@ actions = [
     PersistInstitutionalMail(), DeleteInstitutionalMail(), FindInstitutionalMail(),
     CreateStudent(), FindStudent(), PersistStudent(), FindAllStudents(),
     PersistTutorData(), ListTutorData(),
-    GetOffices(), GetUserOfficeRoles(),
+    GetOffices(), GetUserOfficeRoles(), GetUserInOfficesByRole(),
     GetAssistanceLogs(), GetAssistanceData(), GetFailsByDate(), GetAssistanceStatus(), GetOffices(), GetJustifications(), GetJustificationStock(), GetJustificationRequests(), GetJustificationRequestsToManage(), RequestJustification(), UpdateJustificationRequestStatus(),
+    GetOvertimeRequests(),
     CreateAccountRequest(), ConfirmAccountRequest(), ListAccountRequests(), ApproveAccountRequest(), RemoveAccountRequest(), RejectAccountRequest()
 ]
 

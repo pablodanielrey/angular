@@ -63,6 +63,35 @@ response:
 
 ------
 
+retorna los usuarios que pertenecen a las oficinas y suboficinas en las cuales la persona userId tiene un rol determinado
+
+query:
+{
+  id:
+  action:'getUserInOfficesByRole'
+  session:
+  request: {
+    userId: id del usuario que tiene los roles en las oficinas -- opcional,. si no va se toma el usuario actual de la session
+    role: rol a buscar
+    tree: False|True -- retorna el arbol o solo las oficinas directas que tienen el rol.
+  }
+}
+
+response:
+{
+  id:
+  ok:
+  error:
+  response: {
+    users: [
+        userId: 'id del usuario'
+    ]
+  }
+}
+
+
+-----------
+
 obtiene todos los roles que tiene un usuario dentro de una oficina
 
 query:
@@ -152,6 +181,7 @@ response :
 }
 
 -----------
+obtiene todas las oficinas de un usuario.
 
 query :
 {
@@ -278,7 +308,7 @@ response :
 ------------
 
 
-query : Obtener todas las solicitudes de justificationces
+query : Obtener todas las solicitudes de justificationces que puede administrar
 {
   id:,
   action:"getJustificationRequestsToManage",

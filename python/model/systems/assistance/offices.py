@@ -133,3 +133,16 @@ class Offices:
             offices.extend(self._getChildOffices(con,ids))
 
         return offices
+
+
+    """
+        obtiene todos los ids de los usuarios que pertenecen a las oficinas en las cuales se tiene cierto rol.
+    """
+    def getUserInOfficesByRole(self,con,userId,tree=False,role='autoriza'):
+        offices = self.getOfficesByUserRole(con,userId,tree,role)
+        if offices is None or len(offices) <= 0:
+            return []
+
+        officesIds = list(map(lambda x : x['id'],offices))
+        users = self.getOfficesUsers(con,officesIds)
+        return users

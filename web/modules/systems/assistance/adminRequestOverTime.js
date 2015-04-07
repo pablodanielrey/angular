@@ -28,8 +28,7 @@ app.controller('AdminRequestOverTimeCtrl', ["$scope", "$timeout", "Notifications
 			function callbackOk(requests){
 				$scope.model.requests = [];
 				for(var i = 0; i < requests.length; i++){
-					var request = $scope.formatRequest(requests[i]);
-					$scope.model.requests.push(request);
+					$scope.formatRequest(requests[i]);
 				}
 			},
 			function callbackError(error){
@@ -40,41 +39,33 @@ app.controller('AdminRequestOverTimeCtrl', ["$scope", "$timeout", "Notifications
 	};
 
 
-	$scope.loadUser = function(userId){
-		var userAux;
-		Users.findUser(userId,
+	$scope.loadUser = function(request){
+		Users.findUser(request.user_id,
 			function findUserCallbackOk(user){
-				userAux = user;
+				request.user = user;
+				$scope.model.requests.push(request);
 			},
 			function findUserCallbackError(error){
 				Notifications.message(error);
 				throw new Error(error);
 			}
 		);
-		return userAux;
 	}
-
 
 
 	/**
 	 * Dar formato a la solicitud de hora extra
 	 */
 	$scope.formatRequest = function(request){
-		var requestAux = {};
-		requestAux.id = request.id;
-		requestAux.reason = request.reason;
-		requestAux.state = request.state;
-
 		var begin = new Date(request.begin);
-		requestAux.date = begin.toLocaleDateString();
-		requestAux.startTime = begin.toLocaleTimeString().substring(0, 5);
+		request.date = begin.toLocaleDateString();
+		request.startTime = begin.toLocaleTimeString().substring(0, 5);
 
 		var end = new Date(request.end);
-		requestAux.endTime = end.toLocaleTimeString().substring(0, 5);
+		request.endTime = end.toLocaleTimeString().substring(0, 5);
 
-		requestAux.user = $scope.loadUser(request.user_id);
-
-		return requestAux;
+		// carga los datos del usuario dentro del request
+		$scope.loadUser(request);
 	};
 
 

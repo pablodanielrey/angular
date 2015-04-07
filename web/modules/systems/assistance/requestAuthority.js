@@ -12,14 +12,14 @@ var app = angular.module('mainApp');
 app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assistance", "Notifications", "Users", "Session", function($scope, $timeout, $window, Assistance, Notifications, Users, Session) {
 
   $scope.model = {
-    session_user_id: null, //id del usuario de session (correspondiente al jefe que solicita las horas extra)
-    user_id: null, //id del usuario para el cual se solicita la justificacion
-    id: null, //id de la justificacion solicitada (actualmente solo se pueden solicitar horas extra que equivale a compensatorios)
-    startTime: null, //hora de inicio solicitada
-    endTime: null, //hora de finalizacion solicitada
-    date: null, //actualmente se define un solo dia por solicitud, posteriormente cuando se maneje el calendario se podra definir un rango de dias (para un determinado rango de dias)
-    reason: null, //motivo por el cual se solicita las horas extra
-    requests: [], //solicitudes de horas extras para el usuario logueado
+    session_user_id: null,        //id del usuario de session (correspondiente al jefe que solicita las horas extra)
+    user_id: null,                //id del usuario para el cual se solicita la justificacion
+    id: null,                     //id de la justificacion solicitada (actualmente solo se pueden solicitar horas extra que equivale a compensatorios)
+    startTime: null,              //hora de inicio solicitada
+    endTime: null,                //hora de finalizacion solicitada
+    date: null,                   //actualmente se define un solo dia por solicitud, posteriormente cuando se maneje el calendario se podra definir un rango de dias (para un determinado rango de dias)
+    reason: null,                 //motivo por el cual se solicita las horas extra
+    requests: [],                 //solicitudes de horas extras para el usuario logueado
 
     //variables correspondientes a la seleccion de usuario
     searchUser: null,
@@ -43,12 +43,11 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
    * Obtener solicitudes de horas extra del usuario (jefe)
    */
   $scope.loadRequests = function(){
-    Assistance.getOvertimeRequests(null,
+    Assistance.getOvertimeRequests(null,null,
       function callbackOk(requests){
         $scope.model.requests = [];
         for(var i = 0; i < requests.length; i++){
-          var request = $scope.formatRequest(requests[i]);
-          $scope.model.requests.push(request);
+          $scope.formatRequest(requests[i]);
         }
       },
       function callbackError(error){
@@ -61,29 +60,24 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
   /**
    * Dar formato a la solicitud de hora extra
    */
-  $scope.formatRequest = function(request){
-    var requestAux = {};
-    requestAux.id = request.id;
-    requestAux.reason = request.reason;
-    requestAux.state = request.state;
-
+  $scope.formatRequest = function(request) {
     var begin = new Date(request.begin);
-    requestAux.date = begin.toLocaleDateString();
-    requestAux.startTime = begin.toLocaleTimeString().substring(0, 5);
+    request.date = begin.toLocaleDateString();
+    request.startTime = begin.toLocaleTimeString().substring(0, 5);
 
     var end = new Date(request.end);
-    requestAux.endTime = end.toLocaleTimeString().substring(0, 5);
+    request.endTime = end.toLocaleTimeString().substring(0, 5);
 
     Users.findUser(request.user_id,
-      function findUserCallbackOk(user){
+      function findUserCallbackOk(user) {
         requestAux.user = user.name + " " + user.lastname;
+        $scope.model.requests.push(request);
       },
-      function findUserCallbackError(error){
+      function findUserCallbackError(error) {
         Notifications.message(error);
         throw new Error(error);
       }
     );
-    return requestAux;
   };
 
 
@@ -147,7 +141,7 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
     * Seleccionar usuario
    */
   $scope.listUsers = function(){
-    Users.listUsers($scope.model.searchUser,
+    Assistance.getUsersInOfficesByRole('autoriza',
       function(users){
         $scope.model.users = users;
       },

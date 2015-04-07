@@ -12,6 +12,7 @@ from model.events import Events
 from model.systems.assistance.assistance import Assistance
 from model.systems.assistance.date import Date
 from model.systems.assistance.justifications.justifications import Justifications
+from model.systems.assistance.overtime import Overtime
 
 
 """
