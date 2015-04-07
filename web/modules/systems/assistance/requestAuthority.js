@@ -70,7 +70,7 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
 
     Users.findUser(request.user_id,
       function findUserCallbackOk(user) {
-        requestAux.user = user.name + " " + user.lastname;
+        request.user = user.name + " " + user.lastname;
         $scope.model.requests.push(request);
       },
       function findUserCallbackError(error) {

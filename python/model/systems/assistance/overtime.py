@@ -62,17 +62,20 @@ class Overtime:
     def getOvertimeRequests(self,con,status=None,users=None):
 
         statusR = self._getOvertimesInStatus(con,status)
+        logging.debug('status {}'.format(statusR))
         if len(statusR) <= 0:
             return []
 
         rids = tuple(statusR.keys())
 
+        logging.debug(rids)
         cur = con.cursor()
         if users is None or len(users) <= 0:
             cur.execute('select id,user_id,requestor_id,jbegin,jend,reason from assistance.overtime_requests where id in %s',(rids,))
         else:
-            cur.execute('select id,user_id,requestor_id,jbegin,jend,reason from assistance.overtime_requests where id in %s and user_id in %s',(rids,tuple(users)))
+            cur.execute('select id,user_id,requestor_id,jbegin,jend,reason from assistance.overtime_requests where id in %s and requestor_id in %s',(rids,tuple(users)))
 
+        logging.debug(cur.rowcount)
         if cur.rowcount <= 0:
             return []
 
