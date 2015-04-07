@@ -350,14 +350,20 @@ app.service('Assistance', ['Utils','Messages','Session',
 				action: 'requestOvertime',
 				session: Session.getSessionId(),
 				request: {
-					user_id: userId, //id del usuario al cual se solicita la hora extra
+					user_id: userId, 						//id del usuario al cual se solicita la hora extra
 					begin: request.begin,
 					end: request.end,
 					reason: request.reason
 				}
 			};
-			console.log(msg);
-			callbackOk("ok");
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.ok);
+					} else {
+						callbackError(data.error);
+					}
+				});
 		};
 
 		/**

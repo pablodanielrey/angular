@@ -275,7 +275,7 @@ class RequestOvertime:
         if (message['action'] != 'requestOvertime'):
             return False
 
-        if ('request' not in message) or ('user_id' not in message['request']) or ('justification_id' not in message['request']) or ('begin' not in message['request']):
+        if ('request' not in message) or ('user_id' not in message['request']) or ('end' not in message['request']) or ('begin' not in message['request']) or ('reason' not in message['request']):
             response = {'id':message['id'], 'error':'Insuficientes parámetros'}
             server.sendMessage(response)
             return True
@@ -284,11 +284,9 @@ class RequestOvertime:
         userId = message['request']['user_id']
         begin = message['request']['begin']
         begin = self.date.parse(begin)
-        end = None
-        if 'end' in message['request']:
-            end = message['request']['end']
-            end = self.date.parse(end)
-
+        end = message['request']['end']
+        end = self.date.parse(end)
+        reason = message['request']['reason']
 
         sid = message['session']
         self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
@@ -297,7 +295,7 @@ class RequestOvertime:
 
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
-            events = self.overtime.requestOvertime(con,requestorId,userId,begin,end)
+            events = self.overtime.requestOvertime(con,requestorId,userId,begin,end,reason)
 
             con.commit()
 

@@ -154,12 +154,12 @@ class Overtime:
         realiza el pedido de horas extras para ser aprobado
         estado inicial del pedido = PENDING, con la fecha actual del servidor.
     """
-    def requestOvertime(self,con,requestor_id,userId,begin,end,reason):
+    def requestOvertime(self,con,requestorId,userId,begin,end,reason):
 
         oid = str(uuid.uuid4())
         cur = con.cursor()
         cur.execute('set timezone to %s',('UTC',))
-        cur.execute('insert into assistance.overtime_requests (id,requestor_id,user_id,jbegin,jend,reason) values (%s,%s,%s,%s,%s,%s)',(jid,requestorId,userId,begin,end,reason))
+        cur.execute('insert into assistance.overtime_requests (id,requestor_id,user_id,jbegin,jend,reason) values (%s,%s,%s,%s,%s,%s)',(oid,requestorId,userId,begin,end,reason))
 
         events = []
         e = {
@@ -171,6 +171,6 @@ class Overtime:
             }
         }
         events.append(e)
-        events.extend(self.updateOvertimeRequestStatus(con,requestor_id,oid,'PENDING'))
+        events.extend(self.updateOvertimeRequestStatus(con,requestorId,oid,'PENDING'))
 
         return events

@@ -82,10 +82,12 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
 
 
   $scope.$on('OvertimesUpdatedEvent',function(event, data) {
+    console.log('OvertimesUpdatedEvent');
     $scope.loadRequests();
   });
 
   $scope.$on('OvertimeStatusChangedEvent',function(event, data) {
+    console.log('OvertimeStatusChangedEvent');
     $scope.loadRequests();
   });
 
@@ -197,11 +199,7 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
 
     Assistance.requestOvertime($scope.model.user_id, request,
       function callbackOk(response){
-        Notifications.message("Registro realizado con exito");
-        /* TESTEO DE EVENTO  data = {
-            user_id : $scope.model.session_user_id
-           }
-          $scope.$emit('OvertimeUpdatedEvent',data);*/
+        // nada por ahora ya que viene un evento del lado del server
       },
       function callbackError(error){
         Notifications.message(error);
