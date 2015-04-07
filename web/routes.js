@@ -3,137 +3,143 @@ var app = angular.module('mainApp')
 
 app.config(['$routeProvider', function($routeProvider) {
 
-    $routeProvider
+  $routeProvider
 
-      .when('/main', {
-	       templateUrl: '/views/main.html',
-         controller: 'MainCtrl'
-      })
+  .when('/main', {
+     templateUrl: '/views/main.html',
+     controller: 'MainCtrl'
+  })
 
-	    .when('/logout', {
-	       templateUrl: '/modules/login/logout.html',
-         controller: 'LogoutCtrl'
-      })
+  .when('/logout', {
+     templateUrl: '/modules/login/logout.html',
+     controller: 'LogoutCtrl'
+  })
 
-      .when('/createAccountRequest', {
-        templateUrl: '/modules/account/createAccountRequest.html',
-        controller: 'CreateAccountRequestCtrl'
-      })
+  .when('/createAccountRequest', {
+    templateUrl: '/modules/account/createAccountRequest.html',
+    controller: 'CreateAccountRequestCtrl'
+  })
 
-      .when('/listAccountRequests', {
-        templateUrl: '/modules/account/accountRequestsIndex.html',
+  .when('/listAccountRequests', {
+    templateUrl: '/modules/account/accountRequestsIndex.html',
 
-      })
+  })
 
-      .when('/listUsers', {
-        templateUrl: '/modules/users/listUsers.html',
-        controller: 'ListUsersCtrl'
-      })
+  .when('/listUsers', {
+    templateUrl: '/modules/users/listUsers.html',
+    controller: 'ListUsersCtrl'
+  })
 
-      .when('/editProfile', {
-        templateUrl: '/modules/users/editProfile.html',
-        controller: 'EditProfileCtrl'
-      })
+  .when('/editProfile', {
+    templateUrl: '/modules/users/editProfile.html',
+    controller: 'EditProfileCtrl'
+  })
 
-      .when('/editUsers', {
-        templateUrl: '/modules/users/editUsers.html',
-        controller: 'EditUsersCtrl'
-      })
+  .when('/editUsers', {
+    templateUrl: '/modules/users/editUsers.html',
+    controller: 'EditUsersCtrl'
+  })
 
-      .when('/status', {
-        templateUrl: '/modules/admin/status.html',
-        controller: 'StatusCtrl'
-      })
+  .when('/status', {
+    templateUrl: '/modules/admin/status.html',
+    controller: 'StatusCtrl'
+  })
 
-      .when('/confirmMail/:hash', {
-        templateUrl: '/modules/users/confirmMail.html',
-        controller: 'ConfirmMailCtrl'
-      })
+  .when('/confirmMail/:hash', {
+    templateUrl: '/modules/users/confirmMail.html',
+    controller: 'ConfirmMailCtrl'
+  })
 
-      .when('/confirmAccountRequest/:hash?', {
-        templateUrl: '/modules/account/confirmAccountRequest.html',
-        controller: 'ConfirmAccountRequestCtrl'
-      })
+  .when('/confirmAccountRequest/:hash?', {
+    templateUrl: '/modules/account/confirmAccountRequest.html',
+    controller: 'ConfirmAccountRequestCtrl'
+  })
 
-      .when('/changePassword/:username?/:hash?', {
-        templateUrl: '/modules/account/changePassword.html',
-        controller: 'ChangePasswordCtrl'
-      })
+  .when('/changePassword/:username?/:hash?', {
+    templateUrl: '/modules/account/changePassword.html',
+    controller: 'ChangePasswordCtrl'
+  })
 
-      .when('/resetPassword', {
-        templateUrl: '/modules/account/resetPassword.html',
-        controller: 'ResetPasswordCtrl'
-      })
+  .when('/resetPassword', {
+    templateUrl: '/modules/account/resetPassword.html',
+    controller: 'ResetPasswordCtrl'
+  })
 
-      .when('/editUserProfile', {
-        templateUrl: '/modules/users/editUserProfile.html',
-        controller: 'EditUserProfileCtrl'
-      })
-
-
-      .when('/editGroups', {
-        templateUrl: '/modules/groups/editGroups.html',
-        controller: 'EditGroupsCtrl'
-      })
-
-      .when('/editStudent', {
-        templateUrl: '/modules/systems/student/editStudent.html',
-        controller: 'EditStudentCtrl'
-      })
+  .when('/editUserProfile', {
+    templateUrl: '/modules/users/editUserProfile.html',
+    controller: 'EditUserProfileCtrl'
+  })
 
 
-      .when('/editInsertion', {
-        templateUrl: '/modules/systems/insercion/editData.html',
-        controller: 'EditInsertionDataCtrl'
-      })
+  .when('/editGroups', {
+    templateUrl: '/modules/groups/editGroups.html',
+    controller: 'EditGroupsCtrl'
+  })
 
-      .when('/mainAssistance', {
-        templateUrl: '/modules/systems/assistance/assistance.html',
-        controller: 'AssistanceCtrl'
-      })
+  .when('/editStudent', {
+    templateUrl: '/modules/systems/student/editStudent.html',
+    controller: 'EditStudentCtrl'
+  })
 
-      .when('/acceptTermsAndConditionsInsertion', {
-        templateUrl: '/modules/systems/insercion/termsAndConditions.html',
-        controller: 'LaboralInsertionTermsAndConditionsCtrl'
-      })
 
-      .when('/editSystems', {
-        templateUrl: '/modules/systems/editSystems.html',
-        controller: 'EditSystemsCtrl'
-      })
+  .when('/editInsertion', {
+    templateUrl: '/modules/systems/insercion/editData.html',
+    controller: 'EditInsertionDataCtrl'
+  })
 
-      .when('/summaryAssistance', {
-          templateUrl: '/modules/systems/assistance/assistance.html',
-          controller: 'AssistanceCtrl'
-      })
+  .when('/mainAssistance', {
+    templateUrl: '/modules/systems/assistance/assistance.html',
+    controller: 'AssistanceCtrl'
+  })
 
-      .when('/assistanceFails', {
-          templateUrl: '/modules/systems/assistance/fails.html',
-          controller: 'AssistanceFailsCtrl'
-      })
+  .when('/acceptTermsAndConditionsInsertion', {
+    templateUrl: '/modules/systems/insercion/termsAndConditions.html',
+    controller: 'LaboralInsertionTermsAndConditionsCtrl'
+  })
 
-      .when('/requestAssistance', {
-          templateUrl: '/modules/systems/assistance/requestAssistance.html',
-          controller: 'RequestAssistanceCtrl'
-      })
+  .when('/editSystems', {
+    templateUrl: '/modules/systems/editSystems.html',
+    controller: 'EditSystemsCtrl'
+  })
 
-      .when('/adminRequestAssistance', {
-          templateUrl: '/modules/systems/assistance/adminRequestAssistance.html',
-          controller: 'AdminRequestAssistanceCtrl'
-      })
+  .when('/summaryAssistance', {
+      templateUrl: '/modules/systems/assistance/assistance.html',
+      controller: 'AssistanceCtrl'
+  })
 
-      .when('/medicalLicenses', {
-          templateUrl: '/modules/systems/assistance/medicalLicenses.html',
-          controller: 'MedicalLicensesCtrl'
-      })
-      .when('/requestAuthority', {
-          templateUrl: '/modules/systems/assistance/requestAuthority.html',
-          controller: 'RequestAuthorityCtrl'
-      })
-      .when('/adminRequestOverTime', {
-          templateUrl: '/modules/systems/assistance/adminRequestOverTime.html',
-          controller: 'AdminRequestOverTimeCtrl'
-      })
+  .when('/assistanceFails', {
+      templateUrl: '/modules/systems/assistance/fails.html',
+      controller: 'AssistanceFailsCtrl'
+  })
+
+  .when('/requestAssistance', {
+      templateUrl: '/modules/systems/assistance/requestAssistance.html',
+      controller: 'RequestAssistanceCtrl'
+  })
+
+  .when('/adminRequestAssistance', {
+      templateUrl: '/modules/systems/assistance/adminRequestAssistance.html',
+      controller: 'AdminRequestAssistanceCtrl'
+  })
+
+  .when('/medicalLicenses', {
+      templateUrl: '/modules/systems/assistance/medicalLicenses.html',
+      controller: 'MedicalLicensesCtrl'
+  })
+  .when('/requestAuthority', {
+      templateUrl: '/modules/systems/assistance/requestAuthority.html',
+      controller: 'RequestAuthorityCtrl'
+  })
+  
+  .when('/adminRequestOverTime', {
+      templateUrl: '/modules/systems/assistance/adminRequestOverTime.html',
+      controller: 'AdminRequestOverTimeCtrl'
+  })
+  
+  .when('/showAssistance', {
+      templateUrl: '/modules/systems/assistance/showAssistance.html',
+      controller: 'ShowAssistanceCtrl'
+  })
 
 
 	.when('/editAccountRequest', {

@@ -1,0 +1,27 @@
+<!-- seleccion de usuario -->
+<div>
+  Usuario: {{model.selectedUserName}}
+  <ul>
+    <li ng-repeat="user in model.users" ng-click="selectUser(user)">{{user.name}} {{user.lastname}}</li>
+  </ul>
+</div>
+
+<!-- fecha -->
+<div>
+  Fecha: <input type="date" ng-model="model.date" ng-change="searchAssistance()">
+</div>
+
+<!-- datos de assistance -->
+<div>
+  Entrada: {{model.start}}<br />
+  Salida: {{model.end}}<br />
+  Tiempo trabajado: {{model.workedTime}}<br />
+  Marcaciones:
+  <ul>
+    <li ng-repeat="log in model.logs"">{{log}}</li>
+  </ul>
+</div>
+
+
+
+
