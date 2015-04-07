@@ -107,6 +107,11 @@ app.config(['$routeProvider', function($routeProvider) {
           controller: 'AssistanceCtrl'
       })
 
+      .when('/assistanceFails', {
+          templateUrl: '/modules/systems/assistance/fails.html',
+          controller: 'AssistanceFailsCtrl'
+      })
+
       .when('/requestAssistance', {
           templateUrl: '/modules/systems/assistance/requestAssistance.html',
           controller: 'RequestAssistanceCtrl'

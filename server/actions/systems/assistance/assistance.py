@@ -11,12 +11,92 @@ from model.profiles import Profiles
 from model.utils import DateTimeEncoder
 
 from model.systems.assistance.assistance import Assistance
+from model.systems.assistance.fails import Fails
 from model.systems.assistance.logs import Logs
 from model.systems.assistance.schedule import Schedule
 from model.systems.assistance.positions import Positions
 from model.systems.assistance.date import Date
 
 
+
+"""
+query :
+{
+  id:,
+  action:"getFailsByDate",
+  session:,
+  request:{
+      start: "fecha de inicio"
+      end: 'fecha de fin'
+  }
+
+}
+
+response :
+{
+  id: "id de la petición",
+  ok: "caso exito",
+  error: "error del servidor",
+  response:{[
+      user: 'datos del usuario ',
+      fail: "datos correspondiente a la falla"
+  ]}
+
+}
+"""
+
+class GetFailsByDate:
+
+    profiles = inject.attr(Profiles)
+    config = inject.attr(Config)
+    assistance = inject.attr(Assistance)
+    fails = inject.attr(Fails)
+    date = inject.attr(Date)
+
+    def handleAction(self, server, message):
+
+        if(message['action'] != 'getFailsByDate'):
+            return False
+
+        if ('request' not in message) or ('start' not in message['request']) or 'end' not in message['request']:
+            response = {'id':message['id'], 'error':'Parámetros insuficientes'}
+            server.sendMessage(response)
+            return True
+
+        sid = message['session']
+        self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
+
+        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+        try:
+            start = self.date.parse(message['request']['start'])
+            end = self.date.parse(message['request']['end'])
+
+            assistanceFails = []
+            (users,fails) = self.assistance.checkSchedule(start, end)
+
+            for user in users:
+                ffails = self.fails.filterUser(user['id'],fails)
+                for f in ffails:
+                    f['date'] = self.date.localizeAwareToLocal(f['date']);
+                    data = {
+                        'user':user,
+                        'fail':f
+                    }
+                    assistanceFails.append(data)
+
+            response = {
+                'id':message['id'],
+                'ok':'',
+                'response':assistanceFails
+            }
+            server.sendMessage(response)
+            return True
+
+        except psycopg2.DatabaseError as e:
+            raise e
+
+        finally:
+            con.close()
 
 
 """

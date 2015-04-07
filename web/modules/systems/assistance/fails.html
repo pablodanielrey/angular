@@ -1,0 +1,32 @@
+<div class="assistanceFails">
+  <div class="title">
+    <label><i class="fa fa-exclamation-triangle"></i> | Incumplimiento de horarios</label>
+  </div>
+
+  <div class="content">
+    <div class="filter">
+      <input class="date" type="date" ng-model="model.begin"/>
+      <input class="date" type="date" ng-model="model.end"/>
+      <input class="button" type="button" value="Buscar" ng-click="search()">
+    </div>
+
+    <div class="fails">
+      <table>
+        <tr>
+          <th>Dni</th>
+          <th>Apellido</th>
+          <th>Nombre</th>
+          <th>Fecha</th>
+          <th>Description</th>
+        </tr>
+        <tr ng-repeat="assistanceFail in model.assistanceFails">
+          <td>{{assistanceFail.user.dni}}</td>
+          <td>{{assistanceFail.user.lastname}}</td>
+          <td>{{assistanceFail.user.name}}</td>
+          <td>{{assistanceFail.fail.dateFormat}}</td>
+          <td>{{assistanceFail.fail.description}}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>

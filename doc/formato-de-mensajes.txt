@@ -3,6 +3,33 @@
 /********** ASISTENCIA ***********
 
 
+
+query :
+{
+  id:,
+  action:"getFailsByDate",
+  session:,
+  request:{
+      start: "fecha de inicio"
+      end: 'fecha de fin'
+  }
+
+}
+
+response :
+{
+  id: "id de la petición",
+  ok: "caso exito",
+  error: "error del servidor",
+  response:{[
+      user: 'datos del usuario ',
+      fail: "datos correspondiente a la falla"
+  ]}
+
+}
+
+
+
 query :
 {
   id:,
