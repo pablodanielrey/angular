@@ -57,8 +57,8 @@ class PersistTutorData:
         if (message['action'] != 'persistTutorData'):
             return False
 
-        if 'request' not in message:
-            response = {'id':message['id'], 'error':'no existe la info correspondiente a las tutorías '}
+        if 'request' not in message or 'student' not in message['request'] or 'studentNumber' not in message['request']['student']:
+            response = {'id':message['id'], 'error':'no existe la info correspondiente a las tutorías'}
             server.sendMessage(response)
             return True
 
@@ -80,6 +80,7 @@ class PersistTutorData:
             if (s is not None):
                 person = self.users.findUser(con,s['id'])
                 # si existe, y no tiene los mismos datos tiro error
+
                 if (('dni' in student) and (student['dni'].strip()) and (student['dni'] != person['dni'])):
                     response = {'id':message['id'], 'error':'Error: el alumno ingresado posee otro dni al ingresado (Datos del alumno existente: Dni:' + person['dni'] + ' Apellido:' + person['lastname'] +' Nombre:' + person['name'] +')'}
                     server.sendMessage(response)
@@ -91,6 +92,17 @@ class PersistTutorData:
                 student['dni'] = person['dni']
 
             tutor['userId'] = self.profiles.getLocalUserId(sid)
+
+
+            if 'dni' not  in tutor:
+                tutor['dni'] = ''
+
+            if 'name' not in tutor:
+                tutor['name'] = ''
+
+            if 'lastname' not in tutor:
+                tutor['lastname'] = ''
+
             self.tutors.persist(con,tutor)
             con.commit()
 
