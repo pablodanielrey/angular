@@ -29,6 +29,7 @@ app.controller('AssistanceFailsCtrl', function($scope, $timeout, Notifications, 
           r.fail.dateFormat = new Date(r.fail.date).toLocaleDateString();
           $scope.model.assistanceFails.push(r);
         }
+        $scope.predicate = 'user.dni';
       }, function(error) {
         Notification.message(error);
       }

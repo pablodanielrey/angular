@@ -51,7 +51,7 @@ class GetFailsByDate:
     config = inject.attr(Config)
     assistance = inject.attr(Assistance)
     fails = inject.attr(Fails)
-    date = inject.attr(Date)
+    dateutils = inject.attr(Date)
 
     def handleAction(self, server, message):
 
@@ -68,8 +68,10 @@ class GetFailsByDate:
 
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
-            start = self.date.parse(message['request']['start'])
-            end = self.date.parse(message['request']['end'])
+
+            start = self.dateutils.parse(message['request']['start'])
+
+            end = self.dateutils.parse(message['request']['end'])
 
             assistanceFails = []
             (users,fails) = self.assistance.checkSchedule(start, end)
@@ -77,7 +79,7 @@ class GetFailsByDate:
             for user in users:
                 ffails = self.fails.filterUser(user['id'],fails)
                 for f in ffails:
-                    f['date'] = self.date.localizeAwareToLocal(f['date']);
+                    f['date'] = self.dateutils.localizeAwareToLocal(f['date']);
                     data = {
                         'user':user,
                         'fail':f

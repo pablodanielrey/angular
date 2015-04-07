@@ -5,21 +5,62 @@
 
   <div class="content">
     <div class="filter">
-      <input class="date" type="date" ng-model="model.begin"/>
-      <input class="date" type="date" ng-model="model.end"/>
-      <input class="button" type="button" value="Buscar" ng-click="search()">
+
+      <div class="dateContainer">
+        <div class="dateTimeTitle">
+          <p>Fecha de inicio</p>
+        </div>
+        <div class="dateInputContainer">
+          <div class="date">
+      			<div class="dateTitle">
+      				<span><i class="fa fa-calendar"></i> Seleccione Fecha</span>
+      			</div>
+      			<div>
+      				<input class="inputDate" type="date" ng-model="model.begin">
+      			</div>
+      		</div>
+          <div class="inputTime">
+            <span class="timeTitle"><i class="fa fa-clock-o"></i> Hora</span>
+            <input class="inputClock" type="time" ng-model="model.begin">
+          </div>
+        </div>
+      </div>
+
+      <div class="dateContainer">
+        <div class="dateTimeTitle">
+          <p>Fecha de finalización</p>
+        </div>
+        <div class="dateInputContainer">
+          <div class="date">
+      			<div class="dateTitle">
+      				<span><i class="fa fa-calendar"></i> Seleccione Fecha</span>
+      			</div>
+      			<div>
+      				<input class="inputDate" type="date" ng-model="model.end">
+      			</div>
+      		</div>
+          <div class="inputTime">
+            <span class="timeTitle"><i class="fa fa-clock-o"></i> Hora</span>
+            <input class="inputClock" type="time" ng-model="model.end">
+          </div>
+        </div>
+      </div>
+
+      <div class="actionsContainer">
+        <input class="button" type="button" value="Buscar" ng-click="search()">
+      </div>
     </div>
 
     <div class="fails">
       <table>
         <tr>
-          <th>Dni</th>
-          <th>Apellido</th>
-          <th>Nombre</th>
-          <th>Fecha</th>
-          <th>Description</th>
+          <th ng-click="predicate = 'user.dni'; reverse=!reverse">Dni</th>
+          <th ng-click="predicate = 'user.lastname'; reverse=!reverse">Apellido</th>
+          <th ng-click="predicate = 'user.name'; reverse=!reverse">Nombre</th>
+          <th ng-click="predicate = 'fail.dateFormat'; reverse=!reverse">Fecha</th>
+          <th ng-click="predicate = 'fail.description'; reverse=!reverse">Description</th>
         </tr>
-        <tr ng-repeat="assistanceFail in model.assistanceFails">
+        <tr ng-repeat="assistanceFail in model.assistanceFails | orderBy:predicate:reverse">
           <td>{{assistanceFail.user.dni}}</td>
           <td>{{assistanceFail.user.lastname}}</td>
           <td>{{assistanceFail.user.name}}</td>
