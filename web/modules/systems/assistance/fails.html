@@ -52,22 +52,20 @@
     </div>
 
     <div class="fails">
-      <table>
-        <tr>
-          <th ng-click="predicate = 'user.dni'; reverse=!reverse">Dni</th>
-          <th ng-click="predicate = 'user.lastname'; reverse=!reverse">Apellido</th>
-          <th ng-click="predicate = 'user.name'; reverse=!reverse">Nombre</th>
-          <th ng-click="predicate = 'fail.dateFormat'; reverse=!reverse">Fecha</th>
-          <th ng-click="predicate = 'fail.description'; reverse=!reverse">Description</th>
-        </tr>
-        <tr ng-repeat="assistanceFail in model.assistanceFails | orderBy:predicate:reverse">
-          <td>{{assistanceFail.user.dni}}</td>
-          <td>{{assistanceFail.user.lastname}}</td>
-          <td>{{assistanceFail.user.name}}</td>
-          <td>{{assistanceFail.fail.dateFormat}}</td>
-          <td>{{assistanceFail.fail.description}}</td>
-        </tr>
-      </table>
+      <div class ="headerFails">
+        <span ng-click="predicate = 'user.dni'; reverse=!reverse" class="dni">Dni</span>
+        <span ng-click="predicate = 'user.lastname'; reverse=!reverse" class="lastname">Apellido</span>
+        <span ng-click="predicate = 'user.name'; reverse=!reverse" class="name">Nombre</span>
+        <span ng-click="predicate = 'fail.dateFormat'; reverse=!reverse" class="date">Fecha</span>
+        <span ng-click="predicate = 'fail.description'; reverse=!reverse" class="description">Description</span>
+      </div>
+      <div ng-repeat="assistanceFail in model.assistanceFails | orderBy:predicate:reverse">
+        <span class="dni">{{assistanceFail.user.dni}}</span>
+        <span class="lastname">{{assistanceFail.user.lastname}}</span>
+        <span class="name">{{assistanceFail.user.name}}</span>
+        <span class="date">{{assistanceFail.fail.dateFormat}}</span>
+        <span class="description">{{assistanceFail.fail.description}}</span>
+      </div>
     </div>
   </div>
 </div>
