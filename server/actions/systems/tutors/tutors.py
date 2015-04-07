@@ -94,14 +94,14 @@ class PersistTutorData:
             tutor['userId'] = self.profiles.getLocalUserId(sid)
 
 
-            if 'dni' not  in tutor:
-                tutor['dni'] = ''
+            if 'dni' not  in tutor['student']:
+                tutor['student']['dni'] = ''
 
             if 'name' not in tutor:
-                tutor['name'] = ''
+                tutor['student']['name'] = ''
 
             if 'lastname' not in tutor:
-                tutor['lastname'] = ''
+                tutor['student']['lastname'] = ''
 
             self.tutors.persist(con,tutor)
             con.commit()
