@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import logging
+
 
 class Offices:
 
@@ -60,6 +62,8 @@ class Offices:
         users = []
         cur = con.cursor()
         cur.execute('select distinct user_id from assistance.offices_users ou where ou.office_id in %s',(tuple(offices),))
+        if cur.rowcount <= 0:
+            return []
 
         for u in cur:
             users.append(u[0])
@@ -140,6 +144,7 @@ class Offices:
     """
     def getUserInOfficesByRole(self,con,userId,tree=False,role='autoriza'):
         offices = self.getOfficesByUserRole(con,userId,tree,role)
+        logging.debug(offices)
         if offices is None or len(offices) <= 0:
             return []
 

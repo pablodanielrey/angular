@@ -51,8 +51,8 @@ class Fails:
                     fail['description'],
                     self.date.localizeAwareToLocal(fail['start']).time() if 'start' in fail else (self.date.localizeAwareToLocal(fail['end']).time() if 'end' in fail else 'no tiene'),
                     self.date.localizeAwareToLocal(fail['startSchedule']).time() if 'startSchedule' in fail else (self.date.localizeAwareToLocal(fail['endSchedule']).time() if 'endSchedule' in fail else 'no tiene'),
-                    fail['minutes'] if 'minutes' in fail else '',
-                    fail['minutes']-datetime.timedelta(minutes=15) if 'minutes' in fail else '')
+                    fail['seconds'] if 'seconds' in fail else '',
+                    fail['seconds']-(datetime.timedelta(minutes=15).total_seconds()) if 'seconds' in fail else '')
                 out.write(f)
                 out.write('\n')
 

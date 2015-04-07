@@ -173,7 +173,7 @@ class Schedule:
                         'description':'Llegada tardía',
                         'startSchedule':sched['start'],
                         'start':wh['start'],
-                        'minutes':wh['start'] - sched['start']
+                        'seconds':(wh['start'] - sched['start']).total_seconds()
                     }
                 )
 
@@ -196,7 +196,7 @@ class Schedule:
                         'description':'Salida temprana',
                         'endSchedule':sched['end'],
                         'end':wh['end'],
-                        'minutes':sched['end']-wh['end']
+                        'seconds':(sched['end']-wh['end']).total_seconds()
                     }
                 )
 
