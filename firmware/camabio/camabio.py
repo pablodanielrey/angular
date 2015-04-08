@@ -30,5 +30,8 @@ def printArray(data):
 toHex = lambda x:''.join([hex(ord(c))[2:].zfill(2) for c in x])
 
 def printHexString(data):
+    '{}'.format(data)
+    """
     h = toHex(data)
     print(h)
+    """
