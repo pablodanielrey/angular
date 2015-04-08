@@ -1,24 +1,25 @@
 <!-- seleccion de usuario -->
 <div>
-  Usuario: {{model.selectedUserName}}
+  Seleccione:
   <ul>
-    <li ng-repeat="user in model.users" ng-click="selectUser(user)">{{user.name}} {{user.lastname}}</li>
+    <li ng-repeat="user in model.users" ng-click="selectUser(user)" ng-class="{true:'selected'}[isSelectedUser(user)]">{{user.name}} {{user.lastname}}</li>
   </ul>
 </div>
 
 <!-- fecha -->
 <div>
-  Fecha: <input type="date" ng-model="model.date" ng-change="searchAssistance()">
+  Fecha: <input type="date" ng-model="model.date" >
 </div>
+<button ng-click="searchAssistance()" ng-disabled="isSearch()">Buscar</button>
 
 <!-- datos de assistance -->
-<div>
-  Entrada: {{model.start}}<br />
-  Salida: {{model.end}}<br />
-  Tiempo trabajado: {{model.workedTime}}<br />
+<div ng-repeat="assistance in model.assistances">
+  Entrada: {{assistance.start}}<br />
+  Salida: {{assistance.end}}<br />
+  Tiempo trabajado: {{assistance.workedTime}}<br />
   Marcaciones:
   <ul>
-    <li ng-repeat="log in model.logs"">{{log}}</li>
+    <li ng-repeat="log in assistance.logs">{{log}}</li>
   </ul>
 </div>
 
