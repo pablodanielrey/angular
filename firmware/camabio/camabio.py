@@ -28,10 +28,13 @@ def verifyChksum(data):
 def arrayToHex(data):
     return ''.join(format(x,'02x') for x in data[0:2])
 
+
 def printArray(data):
     prefix = arrayToHex(data[0:2])
-    cmd = arrayToHex(data[2:2])
+    cmd = arrayToHex(data[2:4])
+
     print('prefix {}\ncmd {}\n,data {}'.format(prefix,cmd,data))
+
 
 """
 toHex = lambda x:''.join([hex(ord(c))[2:].zfill(2) for c in x])
