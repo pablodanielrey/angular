@@ -35,10 +35,10 @@ class Overtime:
         retora un dict con los ids como key y el estado como value
         { id: status }
     """
-    def _getOvertimesInStatus(self,con,status=None):
+    def _getOvertimesInStatus(self,con,status=[]):
 
         cur = con.cursor()
-        if status is None:
+        if status is None or len(status) <= 0:
             cur.execute('select jrs.request_id,jrs.status from assistance.overtime_requests_status as jrs, (select request_id,max(created) as created from assistance.overtime_requests_status group by request_id) as r where r.created = jrs.created and r.request_id = jrs.request_id')
         else:
             cur.execute('select jrs.request_id,jrs.status from assistance.overtime_requests_status as jrs, (select request_id,max(created) as created from assistance.overtime_requests_status group by request_id) as r where r.created = jrs.created and r.request_id = jrs.request_id and jrs.status in %s',(tuple(status),))
@@ -60,7 +60,7 @@ class Overtime:
         users es una lista de ids de usuarios para los que se piden los requests, si = None o es vacío entonces retorna todas.
         requestors es una lista de ids de usuarios que piden los requests, si = None o es vacío entonces no se toma en cuenta.
     """
-    def getOvertimeRequests(self,con,status=None,requestors=None,users=None):
+    def getOvertimeRequests(self,con,status=[],requestors=None,users=None):
 
         statusR = self._getOvertimesInStatus(con,status)
         logging.debug('in status = {} req {}'.format(status,statusR))

@@ -61,7 +61,7 @@ class GetOvertimeRequestsToManage:
 
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
-            requests = self.overtime.getOvertimeRequestsToManage(con,userId,status,group)
+            requests = self.overtime.getOvertimeRequestsToManage(con,userId,[status],group)
 
             response = {
                 'id':message['id'],
@@ -128,9 +128,9 @@ class GetOvertimeRequests:
             server.sendMessage(response)
             return True
 
-        status = None
+        status = []
         if 'status' in message['request']:
-            status = message['request']['status']
+            status.append(message['request']['status'])
 
 
         sid = message['session']
