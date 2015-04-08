@@ -1,6 +1,6 @@
 var app = angular.module('mainApp');
 
-app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, Assistance, $location, Session) {
+app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, Assistance, $location, Session, Notifications) {
 
         $scope.visible = false;
 
@@ -50,31 +50,59 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, As
         $scope.items = [];
 
         $scope.generateItems = function() {
-            Profiles.checkAccess(Session.getSessionId(),'ADMIN-ASSISTANCE,USER-ASSISTANCE', function(ok) {
-                if (ok == 'granted') {
-                    $scope.items = [];
-                    $scope.items.push({ label:'Inicio', img:'fa-tachometer', function: $scope.summary});
-                    $scope.items.push({ label:'Solicitudes', img:'fa-ticket', function: $scope.requestAssistance});
 
-                    Assistance.getUserOfficeRoles(
+
+          Profiles.checkAccess(Session.getSessionId(),'ADMIN-ASSISTANCE,USER-ASSISTANCE',
+            function(ok) {
+              if (ok == 'granted') {
+                  $scope.items = [];
+                  $scope.items.push({ label:'Inicio', img:'fa-tachometer', function: $scope.summary});
+                  $scope.items.push({ label:'Solicitudes', img:'fa-ticket', function: $scope.requestAssistance});
+
+                  Assistance.getUserOfficeRoles(
                       function(roles) {
-                        if (roles.length > 0) {
-                          //$scope.items.push({ label:'Licencias Médicas', img:'fa-stethoscope', function: $scope.medicalLicenses});
+                        var hasApprove = false;
+                        var hasOvertime = false;
+
+                        for (var i = 0; i < roles.length; i++) {
+                          hasApprove = hasApprove || (roles[i].role == 'autoriza');
+                          hasOvertime = hasOvertime || (roles[i].role == 'horas-extras');
+                        }
+
+                        if (hasApprove) {
                           $scope.items.push({ label:'Adm. Solicitudes ', img:'fa-ticket', function: $scope.adminRequestAssistance});
                           $scope.items.push({ label:'Horas Extras ', img:'fa-plus', function: $scope.requestAuthority});
+                        }
+
+                        if (hasOvertime) {
+                          //$scope.items.push({ label:'Licencias Médicas', img:'fa-stethoscope', function: $scope.medicalLicenses});
                           $scope.items.push({ label:'Admin Horas Extras ', img:'fa-plus', function: $scope.adminRequestOverTime});
                         }
                       },
                       function(err) {
-                        alert(error);
-                    })
+                        Notifications.message(error);
+                      }
+                  );
 
-                    $scope.selectItem($scope.items[0]);
-                }
+                  $scope.selectItem($scope.items[0]);
+              }
             },
             function (error) {
-                alert(error);
-            });
+                Notifications.message(error);
+            }
+          );
+
+          Profiles.checkAccess(Session.getSessionId(),'ADMIN-ASSISTANCE',
+            function(ok) {
+              if (ok == 'granted') {
+                $scope.items.push({ label:'Chequeo de Fallas', img:'fa-ticket', function: $scope.assistanceFails});
+              }
+            },
+            function (error) {
+              Notifications.message(error);
+            }
+          );
+
         }
 
         $scope.itemSelected = null;
