@@ -137,7 +137,7 @@
 
 
 
-@-webkit-keyframes .buttonpending {
+@-webkit-keyframes apending {
   0% {
     opacity: 1;
     /*-webkit-transform: scale(1,1);*/
@@ -148,7 +148,8 @@
     /*-webkit-transform: scale(1.02,1.02);*/
     color: white;
     border-color: #009C75;
-    background-color:##275276;
+    /*background-color: #275276;*/
+    background-color:#02C19B;
   }
   100% {
     opacity: 1;
@@ -161,7 +162,7 @@
 .myStateRequestSlope.pending {
   -webkit-animation-name: apending;
   /* -webkit-animation-delay: 0.5s; */
-  -webkit-animation-duration: 1s;
+  -webkit-animation-duration: 2.5s;
   -webkit-animation-iteration-count: infinite;
   /*-webkit-animation-direction: alternate;*/
 }
