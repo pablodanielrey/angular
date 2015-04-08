@@ -1,4 +1,6 @@
 
+import codecs
+
 """ setea el checksum en el paquete de datos """
 def calcChksum(data):
     sum = 0
@@ -26,12 +28,15 @@ def printArray(data):
     string = ''.join(format(x,'02x') for x in data)
     print(string)
 
+"""
+toHex = lambda x:''.join([hex(ord(c))[2:].zfill(2) for c in x])
+
+def printHexString(data):
+    h = toHex(data)
+    print(h)
+"""
 
 toHex = lambda x:''.join([hex(ord(c))[2:].zfill(2) for c in x])
 
 def printHexString(data):
-    '{}'.format(data.encode('hex'))
-    """
-    h = toHex(data)
-    print(h)
-    """
+    print(codecs.encode(data,'hex'))

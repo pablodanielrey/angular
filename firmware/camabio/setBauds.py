@@ -14,7 +14,7 @@ data = [0x55,0xaa,0x14,0x01,0x02,0x0,bauds,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0
 camabio.setChksum(data)
 
 print('abriendo puerto seriel')
-ser = serial.Serial("/dev/ttyS1",115200,timeout=5)
+ser = serial.Serial("/dev/ttyS1",9600,timeout=5)
 
 print('escribiendo bytes en el puerto serie')
 camabio.printArray(data)
