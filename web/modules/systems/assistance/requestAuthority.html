@@ -41,17 +41,13 @@
 			<span>Motivo</span>
 			</div>
 			<div class="inputReason">
-			<textarea class="inputText" ng-model="model.reason">
+			<textarea  ng-model="model.reason">
 			</textarea>
 			</div>
 		</div>
 		<div>
 			<button class="solicitar" ng-click="requestOvertime()"><i class="fa fa-reply"></i> Solicitar</button>
 		</div>
-
-
-
-
 	</div>
 
 
@@ -60,31 +56,31 @@
 		<label><i class="fa fa-sort-amount-asc"></i> Solicitudes de Horas Extras Relizadas </label>
 	</div>
 
-	<table>
-		<tr>
-		<th class="column t1">Usuario</th>
-		<th class="column t2">Día</th>
-		<th class="column t2">Inicio</th>
-		<th class="column t2">Fin</th>
-		<th class="column t3">Motivo</th>
-		<th class="column t2">Estado</th>
-		</tr>
-		<tr ng-repeat="request in model.requests">
-			<td class="file f1">{{request.user}}</td>
-			<td class="file">{{request.date}}</td>
-			<td class="file">{{request.startTime}}</td>
-			<td class="file">{{request.endTime}}</td>
-			<td class="file">{{request.reason}}</td>
-			<td class="file">
+	<div>
+		<div class="titlesFiles">
+  		<div class="column t1">Usuario</div>
+  		<div class="column t2">Día</div>
+  		<div class="column t2">Inicio</div>
+  		<div class="column t2">Fin</div>
+  		<div class="column t3">Motivo</div>
+  		<div class="column t2">Estado</div>
+		</div>
+		<div class="titlesFiles" ng-repeat="request in model.requests">
+			<div class="file f1 t1">{{request.user}}</div>
+			<div class="file t2">{{request.date}}</div>
+			<div class="file t2">{{request.startTime}}</div>
+			<div class="file t2">{{request.endTime}}</div>
+			<div class="file t3">{{request.reason}}</div>
+			<div class="file">
           <span class="slope" ng-class="{true:'visible', false:'hidden'}[request.status == 'PENDING']">Pendiente</span>
           <span class="approved" ng-class="{true:'visible', false:'hidden'}[request.status == 'APPROVED']">Aprobada</span>
           <span class="rejected" ng-class="{true:'visible', false:'hidden'}[request.status == 'REJECTED']">Rechazada</span>
           <span class="rejected" ng-class="{true:'visible', false:'hidden'}[request.status == 'CANCELED']">Cancelada</span>
-      </td>
+      </div>
 
-		</tr>
+		</div>
 
-	</table>
+	</div>
 
 
 </div>

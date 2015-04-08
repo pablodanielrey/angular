@@ -119,13 +119,24 @@
 
 
 }
-.requestAuthority .inputText{
+.requestAuthority .reason {
+  width:148px;
+  height:300px;
+  margin-right:20px;
+
+}
+.requestAuthority .inputReason {
+  width:100%;
+  height:100%;
+}
+.requestAuthority textarea{
   width:148px;
   max-width:148;
-  height:300px;
+  height:81px;
   padding:5px;
   font-size: 14px;
-  height:16px;
+  resize:none;
+
 }
 
 .requestAuthority .solicitar {
@@ -150,15 +161,18 @@
 
 /*
 SOLICITUD DE HORAS EXTRAS REALIZADAS*/
-.requestAuthority table {
-  background-color:#f5f5f5;
+.requestAuthority .titlesFiles {
+  display:flex;
+  flex-direction:row;
+
 }
+
 
 .requestAuthority .column {
   background-color:#0066A6;
 
   padding:5px;
-  margin-right:10px;
+  margin-right:5px;
   color:white;
   border-top:3px solid #275276;
 }
