@@ -23,5 +23,5 @@ try:
     else:
         camabio.printHexString(data2)
 
-except SerialException, e:
+except SerialException as e:
     logging.exception(e)
