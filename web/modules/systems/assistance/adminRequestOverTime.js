@@ -24,7 +24,7 @@ app.controller('AdminRequestOverTimeCtrl', ["$scope", "$timeout", "Notifications
 	 * Obtener solicitudes de horas extra del usuario
 	 */
 	$scope.loadRequests = function() {
-		Assistance.getOvertimeRequestsToManage(null,null,
+		Assistance.getOvertimeRequestsToManage('PENDING',null,
 			function callbackOk(requests){
 				$scope.model.requests = [];
 				for(var i = 0; i < requests.length; i++){

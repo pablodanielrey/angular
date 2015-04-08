@@ -36,8 +36,8 @@ class Overtime:
         { id: status }
     """
     def _getOvertimesInStatus(self,con,status=None):
-        cur = con.cursor()
 
+        cur = con.cursor()
         if status is None:
             cur.execute('select jrs.request_id,jrs.status from assistance.overtime_requests_status as jrs, (select request_id,max(created) as created from assistance.overtime_requests_status group by request_id) as r where r.created = jrs.created and r.request_id = jrs.request_id')
         else:
@@ -63,6 +63,7 @@ class Overtime:
     def getOvertimeRequests(self,con,status=None,requestors=None,users=None):
 
         statusR = self._getOvertimesInStatus(con,status)
+        logging.debug('in status = {} req {}'.format(status,statusR))
         if len(statusR) <= 0:
             return []
 

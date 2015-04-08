@@ -368,7 +368,6 @@ app.service('Assistance', ['Utils','Messages','Session',
 
 
 		/**
-		 * TODO
 		 * Cargar nueva solicitud de horas extra
 		 * @param userId id del usuario al cual se solicita la hora extra
 		 * @param request Solicitud de hora extra
@@ -396,7 +395,6 @@ app.service('Assistance', ['Utils','Messages','Session',
 		};
 
 		/**
-		 * TODO
 		 * Actualizar estado de solicitud de hora extra
 		 * @param requestId Id de la solicitud
 		 * @param state Nuevo estado de la solicitud
@@ -404,15 +402,21 @@ app.service('Assistance', ['Utils','Messages','Session',
 		this.updateRequestOvertimeStatus = function(requestId, state, callbackOk, callbackError) {
 			var msg = {
 				id: Utils.getId(),
-				action: 'updateRequestOvertimeStatus',
+				action: 'updateOvertimeRequestStatus',
 				session: Session.getSessionId(),
 				request: {
-					overtime_id: requestId, //id del usuario al cual se solicita la hora extra
-					state: state,
+					request_id: requestId,
+					status: state
 				}
 			};
-			console.log(msg);
-			callbackOk("ok");
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.ok);
+					} else {
+						callbackError(data.error);
+					}
+				});
 		}
 
 
