@@ -57,25 +57,26 @@ class Overtime:
     """
         obtiene todas los pedidos de horas extras con cierto estado
         status es el estado a obtener. en el caso de que no sea pasado entonces se obtienen todas, en su ultimo estado
-        users es una lista de ids de usuarios que piden los requests, si = None o es vacío entonces retorna todas.
+        users es una lista de ids de usuarios para los que se piden los requests, si = None o es vacío entonces retorna todas.
+        requestors es una lista de ids de usuarios que piden los requests, si = None o es vacío entonces no se toma en cuenta.
     """
-    def getOvertimeRequests(self,con,status=None,users=None):
+    def getOvertimeRequests(self,con,status=None,requestors=None,users=None):
 
         statusR = self._getOvertimesInStatus(con,status)
-        logging.debug('status {}'.format(statusR))
         if len(statusR) <= 0:
             return []
 
         rids = tuple(statusR.keys())
 
-        logging.debug(rids)
         cur = con.cursor()
-        if users is None or len(users) <= 0:
+        if (users is None or len(users) <= 0) and (requestors is None or len(requestors) <= 0):
             cur.execute('select id,user_id,requestor_id,jbegin,jend,reason from assistance.overtime_requests where id in %s',(rids,))
-        else:
-            cur.execute('select id,user_id,requestor_id,jbegin,jend,reason from assistance.overtime_requests where id in %s and requestor_id in %s',(rids,tuple(users)))
+        elif (users is None or len(users) <= 0):
+            cur.execute('select id,user_id,requestor_id,jbegin,jend,reason from assistance.overtime_requests where id in %s and requestor_id in %s',(rids,tuple(requestors)))
+        elif (requestors is None or len(requestors) <= 0):
+            cur.execute('select id,user_id,requestor_id,jbegin,jend,reason from assistance.overtime_requests where id in %s and user_id in %s',(rids,tuple(users)))
 
-        logging.debug(cur.rowcount)
+
         if cur.rowcount <= 0:
             return []
 
@@ -123,7 +124,7 @@ class Overtime:
         if users is None or len(users) <= 0:
             return []
 
-        overtimes = self.getOvertimeRequests(con,status,users)
+        overtimes = self.getOvertimeRequests(con,status,users=users)
 
         return overtimes
 

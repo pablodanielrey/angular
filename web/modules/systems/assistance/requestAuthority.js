@@ -43,7 +43,7 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
    * Obtener solicitudes de horas extra del usuario (jefe)
    */
   $scope.loadRequests = function(){
-    Assistance.getOvertimeRequests(null,null,
+    Assistance.getOvertimeRequests(null,
       function callbackOk(requests){
         $scope.model.requests = [];
         for(var i = 0; i < requests.length; i++){

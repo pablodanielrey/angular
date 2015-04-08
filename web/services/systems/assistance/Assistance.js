@@ -307,14 +307,42 @@ app.service('Assistance', ['Utils','Messages','Session',
 				});
 		}
 
+
+
 		/**
-		 * TODO
 		 * Obtener solicitudes de horas extra realizadas por el usuario que esta logueado
 		 */
-		this.getOvertimeRequests = function(status, group, callbackOk, callbackError){
+		this.getOvertimeRequests = function(status, callbackOk, callbackError){
 			var msg = {
 				id: Utils.getId(),
 				action: 'getOvertimeRequests',
+				session: Session.getSessionId(),
+				request: {
+				}
+			};
+
+			if (status != null) {
+				msg.request.status = status;
+			}
+
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response.requests);
+					} else {
+						callbackError(data.error);
+					}
+				});
+		};
+
+
+		/**
+		* Obtener solicitudes de horas extra realizadas por el usuario que esta logueado
+		*/
+		this.getOvertimeRequestsToManage = function(status, group, callbackOk, callbackError){
+			var msg = {
+				id: Utils.getId(),
+				action: 'getOvertimeRequestsToManage',
 				session: Session.getSessionId(),
 				request: {
 				}
@@ -336,7 +364,8 @@ app.service('Assistance', ['Utils','Messages','Session',
 						callbackError(data.error);
 					}
 				});
-		};
+			};
+
 
 		/**
 		 * TODO

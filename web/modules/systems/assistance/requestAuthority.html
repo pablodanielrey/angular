@@ -76,11 +76,10 @@
 			<td class="file">{{request.endTime}}</td>
 			<td class="file">{{request.reason}}</td>
 			<td class="file">
-          <span class="slope" ng-class="{true:'visible', false:'hidden'}[request.state == 'PENDING']">Pendiente</span>
-          <span class="approved" ng-class="{true:'visible', false:'hidden'}[request.state == 'APPROVED']">Aprobada</span>
-          <span class="rejected" ng-class="{true:'visible', false:'hidden'}[request.state == 'REJECTED']">Rechazada</span>
-          <span class="rejected" ng-class="{true:'visible', false:'hidden'}[request.state == 'CANCELED']">Cancelada</span>
-
+          <span class="slope" ng-class="{true:'visible', false:'hidden'}[request.status == 'PENDING']">Pendiente</span>
+          <span class="approved" ng-class="{true:'visible', false:'hidden'}[request.status == 'APPROVED']">Aprobada</span>
+          <span class="rejected" ng-class="{true:'visible', false:'hidden'}[request.status == 'REJECTED']">Rechazada</span>
+          <span class="rejected" ng-class="{true:'visible', false:'hidden'}[request.status == 'CANCELED']">Cancelada</span>
       </td>
 
 		</tr>

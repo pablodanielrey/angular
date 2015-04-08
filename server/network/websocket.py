@@ -39,7 +39,7 @@ from actions.systems.assistance.assistance import GetAssistanceData, GetAssistan
 from actions.systems.assistance.logs import GetAssistanceLogs
 from actions.systems.assistance.offices import GetOffices, GetUserOfficeRoles, GetUserInOfficesByRole
 from actions.systems.assistance.justifications import GetJustifications, GetJustificationStock, GetJustificationRequests, GetJustificationRequestsToManage, RequestJustification, UpdateJustificationRequestStatus
-from actions.systems.assistance.overtime import GetOvertimeRequests, RequestOvertime
+from actions.systems.assistance.overtime import GetOvertimeRequests, GetOvertimeRequestsToManage, RequestOvertime
 
 from actions.systems.students.students import CreateStudent, FindStudent, PersistStudent, FindAllStudents
 
@@ -69,7 +69,7 @@ actions = [
     PersistTutorData(), ListTutorData(),
     GetOffices(), GetUserOfficeRoles(), GetUserInOfficesByRole(),
     GetAssistanceLogs(), GetAssistanceData(), GetFailsByDate(), GetAssistanceStatus(), GetOffices(), GetJustifications(), GetJustificationStock(), GetJustificationRequests(), GetJustificationRequestsToManage(), RequestJustification(), UpdateJustificationRequestStatus(),
-    GetOvertimeRequests(), RequestOvertime(),
+    GetOvertimeRequests(), GetOvertimeRequestsToManage(), RequestOvertime(),
     CreateAccountRequest(), ConfirmAccountRequest(), ListAccountRequests(), ApproveAccountRequest(), RemoveAccountRequest(), RejectAccountRequest()
 ]
 
@@ -88,6 +88,7 @@ class ActionsServerProtocol(WebSocketServerProtocol):
         return ejmsg
 
     def _sendEncodedMessage(self,msg):
+        logging.debug('server -> cliente {}'.format(msg))
         super(WebSocketServerProtocol,self).sendMessage(msg,False)
 
 
@@ -148,7 +149,7 @@ class ActionsServerProtocol(WebSocketServerProtocol):
                 return
 
             msg = payload.decode('utf-8')
-            print('C:' + msg)
+            logging.debug('cliente -> server {}'.format(msg))
             message = json.loads(msg)
 
             if 'action' not in message:
