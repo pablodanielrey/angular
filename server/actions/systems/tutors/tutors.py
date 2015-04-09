@@ -177,7 +177,12 @@ class ListTutorData:
 
             for t in tutors:
                 userId = t['userId']
-                t['user'] = self.users.findUser(con,userId)
+                user = self.users.findUser(con,userId)
+                t['user'] = {
+                    'dni':user['dni'],
+                    'name':user['name'],
+                    'lastname':user['lastname']
+                }
 
             response = {'id':message['id'], 'ok':'', 'response':tutors}
             server.sendMessage(response)
