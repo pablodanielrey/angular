@@ -70,11 +70,14 @@ class GetFailsByDate:
         try:
 
             start = self.dateutils.parse(message['request']['start'])
-
             end = self.dateutils.parse(message['request']['end'])
+
+            logging.debug('fecha de inicio {} y fin {}'.format(start,end))
 
             assistanceFails = []
             (users,fails) = self.assistance.checkSchedule(start, end)
+
+            logging.debug(fails)
 
             for user in users:
                 ffails = self.fails.filterUser(user['id'],fails)

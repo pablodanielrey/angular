@@ -66,25 +66,40 @@ class Assistance:
 
     """
         chequea el schedule de los usuarios.
-        las fechas start y end estan en la zona local.
+        las fechas start y end son aware
     """
     def checkSchedule(self, start, end):
 
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
-            schedulesFails = []
 
+            if self.date.isNaive(start):
+                start = self.date.localizeLocal(start)
+
+            if self.date.isNaive(end):
+                end = self.date.localizeLocal(end)
+
+
+            schedulesFails = []
             userIds = self.schedule.getUsersInSchedules(con)
-            logging.debug('users: {}'.format(userIds))
 
             users = []
             for u in userIds:
                 users.append(self.users.findUser(con,u))
 
             delta = end - start
+
+            if delta.days <= 0:
+                for userId in userIds:
+                    fails = self.schedule.checkSchedule(con,userId,start)
+                    if fails is None or len(fails) <= 0:
+                        continue
+                    schedulesFails.extend(fails)
+                return (users,schedulesFails)
+
+
             for i in range(delta.days):
                 date = start + datetime.timedelta(days=i)
-
                 for userId in userIds:
                     fails = self.schedule.checkSchedule(con,userId,date)
                     if fails is None or len(fails) <= 0:

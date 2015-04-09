@@ -37,7 +37,10 @@ app.controller('AssistanceFailsCtrl', function($scope, $timeout, Notifications, 
     Assistance.getFailsByDate($scope.model.begin, $scope.model.end,
       function(response) {
         for (var i = 0; i < response.length; i++) {
+
           var r = response[i];
+          console.log(new Date(r.fail.date));
+
           r.fail.dateFormat = new Date(r.fail.date).toLocaleDateString();
 
           if (r.fail.startSchedule || r.fail.endSchedule) {
