@@ -26,17 +26,22 @@
   padding:5px;
   color:white;
   margin-top:10px;
+  z-index: 1;
 }
+
 .requestAuthority .requestOvertime {
   display:flex;
   flex-direction:row;
   background-color:#f5f5f5;
   height:150px;
+  z-index: 999;
+  position: relative;
 }
 
 .requestAuthority .Search {
   display:flex;
   flex-direction: column;
+
 
 }
 .requestAuthority .searchTitle {
@@ -45,14 +50,14 @@
   padding:5px;
   margin-bottom: 0px;
   font-size: 13px;
-  width: 150px;
+  width: 170px;
   border-top: 3px solid #275276;
-  margin-right:10px;
+  margin-right:15px;
   margin-top:5px;
 }
 
 .requestAuthority .inputSearch{
-  width:146px;
+  width:166px;
   padding:5px;
   font-size: 14px;
 
@@ -61,12 +66,15 @@
   list-style-type:none;
   margin:0px;
   padding-left:5px;
-  width:155px;
+  width:190px;
+  max-height:310px;
   background-color:#0066A6;
   color:white;
   z-index:999;
-
+  overflow: scroll;
 }
+
+
 .requestAuthority .liUsers {
   height:25px;
   padding-top:10px;
@@ -129,8 +137,8 @@
   width:100%;
   height:100%;
 }
-.requestAuthority textarea{
-  width:148px;
+.requestAuthority .textareaReason textarea{
+  width:168px;
   max-width:148;
   height:81px;
   padding:5px;
@@ -146,6 +154,7 @@
   height:55px;
   color:white;
   margin-top:5px;
+  margin-left:20px;
   cursor:pointer;
   border-top: 3px solid #275276;
   font-weight:bold;
@@ -165,7 +174,11 @@ SOLICITUD DE HORAS EXTRAS REALIZADAS*/
   display:flex;
   flex-direction:row;
 
+
 }
+
+.requestAuthority .titlesFiles:nth-child(even) { background: white }
+.requestAuthority .titlesFiles:nth-child(odd) { background: #F2F2F2}
 
 
 .requestAuthority .column {
@@ -186,12 +199,29 @@ SOLICITUD DE HORAS EXTRAS REALIZADAS*/
   width:250px;
 }
 .requestAuthority .file {
-  background-color:white;
-  padding-left:5px;
+  margin-right:10px;
+  padding:5px
 }
 .requestAuthority .f1 {
   font-weight:bold;
 }
+
+.requestAuthority .t5 {
+  width:80px;
+}
+.requestAuthority .titlesFiles textarea{
+  width:240px;
+  max-width:240;
+  height:32px;
+  max-height:100px;
+  border: none;
+  font-size: 14px;
+  background-color: rgba(255,255,255,0.0);
+
+}
+
+
+
 .requestAuthority .hidden {
   display:none;
 }
@@ -200,10 +230,16 @@ SOLICITUD DE HORAS EXTRAS REALIZADAS*/
 }
 .requestAuthority .slope {
   color:#0066A6;
+  font-weight:bold;
+  font-size:13px;
 }
 .requestAuthority .approved {
   color:#128c78;
+  font-weight:bold;
+  font-size:13px;
 }
 .requestAuthority .rejected {
   color:#e43e46;
+  font-weight:bold;
+  font-size:13px;
 }

@@ -149,7 +149,7 @@
     color: white;
     border-color: #009C75;
     /*background-color: #275276;*/
-    background-color:#02C19B;
+    background-color:#0066A6;
   }
   100% {
     opacity: 1;
@@ -176,7 +176,7 @@
   padding-left:10px;
   color:white;
   margin-right:10px;
-  background-color:#0066A6;
+  background-color:#275276;
 }
 
 .requestAssistance .myStateRequestApproved {
