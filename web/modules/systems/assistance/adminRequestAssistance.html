@@ -20,14 +20,19 @@
     <div class="dateRequest">
       <span class="requestDate">{{request.date}}</span>
     </div>
-    <div class"actionsRequest">
-      <div class="approve">
-        <button class="approveRequest" ng-click="approveRequest(request)"><i class="fa fa-check"></i> Aprobar</button>
-      </div>
-      <div class="denegar">
-        <button class="refuseRequest" ng-click="refuseRequest(request)"><i class="fa fa-times"></i> Denegar</button>
-      </div>
+
+    <div class="iconsMyRequest"><i class="fa fa-bullhorn"></i></div>
+
+    <div class="myStateRequestSlope  pending" ng-class="{true:'visible', false:'hidden'}[request.status == 'PENDING']">
+      <span>Pendiente</span>
+      <button class="buttonpending" ng-click="approveRequest(request)"><i class="fa fa-times"></i> Aprobar</Button>
+      <button class="buttonpending" ng-click="refuseRequest(request)"><i class="fa fa-times"></i> Denegar</Button>
     </div>
+    <div class="myStateRequestApproved" ng-class="{true:'visible', false:'hidden'}[request.status == 'APPROVED']">
+      <span>Aprobado</span>
+      <button class="buttonpending" ng-click="cancelRequest(request)"><i class="fa fa-times"></i> Cancelar</Button>
+    </div>
+
   </div>
 
 </div>

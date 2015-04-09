@@ -108,6 +108,10 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistan
         $scope.updateStatus("REJECTED",request.id);
     }
 
+    $scope.cancelRequest = function(request) {
+        $scope.updateStatus("CANCELED",request.id);
+    }
+
 
     $scope.$on('JustificationsRequestsUpdatedEvent', function(event, data) {
       $scope.loadRequests();
