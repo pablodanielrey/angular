@@ -61,7 +61,7 @@ if __name__ == '__main__':
     cur.execute('delete from assistance.offices_users')
     cur.execute('delete from assistance.offices_roles')
     cur.execute('delete from assistance.offices')
-    cur.execute('delete from assistance.justifications_stock')
+    #cur.execute('delete from assistance.justifications_stock')
 
     logging.basicConfig(level=logging.DEBUG)
 

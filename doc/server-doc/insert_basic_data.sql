@@ -23,11 +23,16 @@ insert into assistance.justifications (id,name) values ('50998530-10dd-4d68-8b4a
   genera que el usuario admin tenga rol de autorizar dentro de las oficinas raiz
 */
 insert into assistance.offices_roles (user_id,role,office_id) select '1','autoriza',id from assistance.offices o where o.parent is null;
+insert into assistance.offices_roles (user_id,role,office_id) select p.id,'autoriza',o.id from assistance.offices o, profile.users p where o.parent is null and p.dni in ('1');
 
 /*
   para autorizar las horas extras que son pedidas por las personas que tienen rol autoriza en las oficinas
 */
 insert into assistance.offices_roles (user_id,role,office_id) select '1','horas-extras',id from assistance.offices o where o.parent is null;
+insert into assistance.offices_roles (user_id,role,office_id) select p.id,'horas-extras',o.id from assistance.offices o, profile.users p where o.parent is null and p.dni in ('1');
 
 
+/*
+  para agregar de prueba nuestros dnis al perfil admin-assistance
+*/
 insert into credentials.auth_profile (user_id,profile) select id,'ADMIN-ASSISTANCE' from profile.users where dni in ('27294557','31381082','30001823','29694757');
