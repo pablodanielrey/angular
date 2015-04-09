@@ -49,14 +49,20 @@ class Schedule:
 
             if schedule[2].date() == dateS:
 
-                st = schedule[0].time()
-                se = schedule[1].time()
+                sstart = schedule[0]
+                zeroTime = sstart.replace(hour=0,minute=0,second=0,microsecond=0)
+                initDelta = sstart - zeroTime
+                endDelta = initDelta + (schedule[1] - sstart)
+
+                actualZero = date.replace(hour=0,minute=0,second=0,microsecond=0)
+                st = actualZero + initDelta
+                se = actualZero + endDelta
 
                 """ retorno los schedules con la fecha actual en utc - las fechas en la base deberían estar en utc """
                 schedules.append(
                     {
-                        'start':date.replace(hour=st.hour,minute=st.minute,second=st.second,microsecond=st.microsecond),
-                        'end':date.replace(hour=se.hour,minute=se.minute,second=se.second,microsecond=se.microsecond),
+                        'start':st,
+                        'end':se
                     }
                 )
 
@@ -107,6 +113,11 @@ class Schedule:
 
         start = schedules[0]['start']
         end = schedules[-1]['end']
+
+        logging.debug(schedules);
+
+        logging.debug('start {} -- end {} '.format(start,end))
+
         deltaEnd = end + datetime.timedelta(seconds=((start2 - end).total_seconds() / 3))
         deltaStart = start - datetime.timedelta(hours=1)
 
@@ -117,6 +128,9 @@ class Schedule:
             obtengo los logs indicados para cubrir todo el schedule
         """
         logs = self.logs.findLogs(con,userId,deltaStart,deltaEnd)
+
+        logging.debug(logs)
+
         whs,attlogs = self.logs.getWorkedHours(logs)
         controls = list(utils.combiner(schedules,whs))
         fails = self._checkScheduleWorkedHours(userId,controls)
