@@ -133,9 +133,20 @@ respuesta:
     "id":"id de la peticion",
     "response":[
         {
+        "user": {
+            "dni",
+            "name",
+            "lastname"
+        }
         "date":"fecha",
-        "studentNumber":"legajo",
-        "type":"tipo"
+        "student": {
+            "studentNumber",
+            "dni",
+            "name",
+            "lastname"
+        }
+        "type":"tipo",
+        "created":"fecha de creación del registro"
         }
     ],
     "ok":""
@@ -148,6 +159,7 @@ class ListTutorData:
     tutor = inject.attr(Tutors)
     profiles = inject.attr(Profiles)
     config = inject.attr(Config)
+    users = inject.attr(Users)
 
     def handleAction(self, server, message):
 
@@ -162,6 +174,11 @@ class ListTutorData:
             con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
 
             tutors = self.tutor.list(con);
+
+            for t in tutors:
+                userId = t['userId']
+                t['user'] = self.users.findUser(con,userId)
+
             response = {'id':message['id'], 'ok':'', 'response':tutors}
             server.sendMessage(response)
             return True
