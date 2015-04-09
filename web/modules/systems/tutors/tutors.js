@@ -65,7 +65,7 @@ app.controller('TutorsCtrl', function($rootScope,$scope,$timeout,Student,Session
 
 
   $scope.exportToCsv = function(data) {
-    var csvString = "Fecha,Apellido,Nombre,Legajo,Dni,Tipo\n";
+    var csvString = "Fecha,Apellido del Alumno,Nombre del Alumno,Legajo del Alumno,Dni del Alumno,Apellido del Tutor,Nombre del Tutor,Dni del Tutor,Tipo\n";
 
     for (var i = 0; i < data.length; i++) {
       var date = new Date(data[i]["date"]);
@@ -75,6 +75,9 @@ app.controller('TutorsCtrl', function($rootScope,$scope,$timeout,Student,Session
       row += "," + data[i]["student"]["name"];
       row += "," + data[i]["student"]["studentNumber"];
       row += "," + data[i]["student"]["dni"];
+      row += "," + data[i]["user"]["lastname"];
+      row += "," + data[i]["user"]["name"];
+      row += "," + data[i]["user"]["dni"];
       row += "," + data[i]["type"];
       csvString += row + "\n";
     }
