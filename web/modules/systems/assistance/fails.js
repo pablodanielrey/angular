@@ -31,6 +31,11 @@ app.controller('AssistanceFailsCtrl', function($scope, $timeout, Notifications, 
   $scope.$watch('model.begin', $scope.correctDates);
   $scope.$watch('model.end', $scope.correctDates);
 
+
+  $scope.formatTimeString = function(timeStr) {
+    return timeStr.substring(0,timeStr.length - 3);
+  }
+
   $scope.search = function() {
     $scope.model.assistanceFails = [{}];
     $scope.initializeDate();
@@ -45,6 +50,7 @@ app.controller('AssistanceFailsCtrl', function($scope, $timeout, Notifications, 
 
           if (r.fail.startSchedule || r.fail.endSchedule) {
             r.fail.dateSchedule = (r.fail.startSchedule) ? r.fail.startSchedule : r.fail.endSchedule;
+            r.fail.dateSchedule = $scope.formatTimeString(new Date(r.fail.dateSchedule).toLocaleTimeString());
           }
 
           //esto es de prueba
@@ -52,9 +58,7 @@ app.controller('AssistanceFailsCtrl', function($scope, $timeout, Notifications, 
 
           if (r.fail.start || r.fail.end) {
             r.fail.wh = (r.fail.start) ?  new Date(r.fail.start) : new Date(r.fail.end);
-            var hs = r.fail.wh.getHours();
-            var min = r.fail.wh.getMinutes();
-            r.fail.wh = ('0' + hs).substr(-2) + ":" + ('0' + min).substr(-2);
+            r.fail.wh = $scope.formatTimeString(r.fail.wh.toLocaleTimeString());
           } else {
             r.fail.wh = "-";
           }
