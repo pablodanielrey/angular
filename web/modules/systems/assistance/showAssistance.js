@@ -5,7 +5,7 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
   $scope.model = {
     //datos de assistance correspondientes a los usuarios
     assistances: [],
-      /*{user: null, //nombre de usuario
+      /*ejemplo: {user: null, //nombre de usuario
   	  start: null, //fecha y hora de inicio
 	    end: null, //fecha y hora de finalizacion
 	    logs: [], //logs
@@ -43,7 +43,7 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
   $scope.defineUsers = function(usersId){
     for(var i = 0; i < usersId.length; i++){
       var id = usersId[i];
-      User.findUser(id,
+      Users.findUser(id,
         function(user){
           if(user != null){
             $scope.model.users.push(user);
@@ -60,17 +60,9 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
     * Cargar usuarios 
    */   
   $scope.loadUsers = function(){
-    /*Assistance.getUsersInOfficesByRole('autoriza', 
+    Assistance.getUsersInOfficesByRole('autoriza', 
       function(usersId){
         $scope.defineUsers(usersId);
-      },
-      function(error){
-        Notifications.message(error); 
-      }
-    );*/
-    Users.listUsers("",
-      function(users){
-        $scope.model.users = users;
       },
       function(error){
         Notifications.message(error); 
@@ -84,7 +76,7 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
   },0);
   
   
-  $scope.defineUsersSearchAssistance = function(){
+  $scope.initializeSearchAssistance = function(){
     var users = [];
     if($scope.model.usersIdSelected.length == 0){   
        users = $scope.model.users;
@@ -115,7 +107,7 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
     if(!$scope.isSearch()){
       if($scope.model.date != null){
         $scope.model.assistances = [];
-        var users = $scope.defineUsersSearchAssistance(); //si no existen usuarios seleccionados, se definen todos los usuarios
+        var users = $scope.initializeSearchAssistance(); //si no existen usuarios seleccionados, se definen todos los usuarios
       
         for (var i = 0; i < users.length; i++){
           var user = users[i];          
@@ -141,12 +133,12 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
   };
   
  
-  $scope.formatAssistance = function(assistance, userId) {
+  $scope.formatAssistance = function(assistance) {
     var newAssistance = {};
       
     for(var i = 0; i < $scope.model.users.length; i++){
       var user = $scope.model.users[i];
-      if(user.id == userId){
+      if(user.id == assistance.userId){
         newAssistance.user = user.name + " " + user.lastname;
         break;
       }
@@ -171,11 +163,10 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
     
     var workedHours = Math.floor(assistance.workedMinutes / 60).toString();
     if(workedHours.length == 1) workedHours = "0" + workedHours;
-    var workedMinutes = (assistance.workedMinutes % 60).toString();
+    var workedMinutes = Math.round((assistance.workedMinutes % 60)).toString();
     if(workedMinutes.length == 1) workedMinutes = "0" + workedMinutes;
     newAssistance.workedTime = workedHours + ":" + workedMinutes;
     
-    console.log(newAssistance);
     return newAssistance;
   }
   
