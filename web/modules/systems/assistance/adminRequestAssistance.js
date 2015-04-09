@@ -51,7 +51,7 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistan
     }
 
     $scope.loadRequests = function() {
-        Assistance.getJustificationRequestsToManage(['PENDING'],"TREE",
+        Assistance.getJustificationRequestsToManage(['PENDING','APPROVED'],"TREE",
             function(response) {
               $scope.model.requests = [];
               for (var i = 0; i < response.length; i++) {
