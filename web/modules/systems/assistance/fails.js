@@ -12,9 +12,10 @@ app.controller('AssistanceFailsCtrl', function($scope, $timeout, Notifications, 
     $scope.model.begin = new Date();
     $scope.model.end = new Date();
     $scope.model.assistanceFails = [{}]
+    $scope.initializeDate();
   }
 
-  $scope.initializeDate = function() {
+  $scope.correctDates = function() {
     $scope.model.begin.setHours(0);
     $scope.model.begin.setMinutes(0);
     $scope.model.begin.setSeconds(0);
@@ -22,6 +23,13 @@ app.controller('AssistanceFailsCtrl', function($scope, $timeout, Notifications, 
     $scope.model.end.setMinutes(59);
     $scope.model.end.setSeconds(59);
   }
+
+  $scope.initializeDate = function() {
+    $scope.correctDates();
+  }
+
+  $scope.$watch('model.begin', $scope.correctDates);
+  $scope.$watch('model.end', $scope.correctDates);
 
   $scope.search = function() {
     $scope.model.assistanceFails = [{}];
@@ -38,7 +46,7 @@ app.controller('AssistanceFailsCtrl', function($scope, $timeout, Notifications, 
 
           //esto es de prueba
           // r.fail.start = r.fail.date;
-          
+
           if (r.fail.start || r.fail.end) {
             r.fail.wh = (r.fail.start) ?  new Date(r.fail.start) : new Date(r.fail.end);
             var hs = r.fail.wh.getHours();
@@ -62,7 +70,8 @@ app.controller('AssistanceFailsCtrl', function($scope, $timeout, Notifications, 
           $scope.model.assistanceFails.push(r);
         }
         $scope.predicate = 'user.dni';
-      }, function(error) {
+      },
+      function(error) {
         Notification.message(error);
       }
 
