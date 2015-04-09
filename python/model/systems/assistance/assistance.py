@@ -98,7 +98,7 @@ class Assistance:
                 return (users,schedulesFails)
 
 
-            for i in range(delta.days):
+            for i in range(delta.days + 1):
                 date = start + datetime.timedelta(days=i)
                 for userId in userIds:
                     fails = self.schedule.checkSchedule(con,userId,date)
