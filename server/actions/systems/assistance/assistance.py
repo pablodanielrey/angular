@@ -274,6 +274,7 @@ class GetAssistanceData:
                 'id':message['id'],
                 'ok':'',
                 'response':{
+                    'userId': userId,
                     'position':position,
                     'schedule':schedule
                 }
@@ -281,7 +282,7 @@ class GetAssistanceData:
             server.sendMessage(response)
             return True
 
-        except psycopg2.DatabaseError as e:
+        except Exception as e:
             raise e
 
         finally:

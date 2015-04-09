@@ -140,6 +140,7 @@ response :
   ok: "caso exito",
   error: "error del servidor",
   response:{
+      userId: id del usuario consultado,
       status: 'estado del agente',
       start: "fecha y hora de inicio para el dia actual",
       end: "fecha y hora fin para el dia actual",
@@ -169,6 +170,7 @@ response :
   ok: "caso exito",
   error: "error del servidor",
   response:{
+      userId: id del usuario consultado
       position: 'cargo de la persona',
   	  schedule:[
     		{

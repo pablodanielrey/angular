@@ -54,6 +54,7 @@ class Assistance:
         inside = 'Afuera' if len(attlogs) % 2 == 0 else 'Trabajando'
 
         assistanceStatus = {
+            'userId': userId,
             'status': inside,
             'start': sdate,
             'end': edate,
