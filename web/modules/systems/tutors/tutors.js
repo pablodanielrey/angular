@@ -70,15 +70,31 @@ app.controller('TutorsCtrl', function($rootScope,$scope,$timeout,Student,Session
     for (var i = 0; i < data.length; i++) {
       var date = new Date(data[i]["date"]);
       var row = "";
+
+      var lastname = data[i]["student"]["lastname"];
+      lastname = lastname == null ? '' : lastname;
+
+      var name = data[i]["student"]["name"];
+      name = name == null ? '' : name;
+
+      var sn = data[i]["student"]["studentNumber"];
+      sn = sn == null ? '' : sn;
+
+      var dni = data[i]["student"]["dni"];
+      dni = dni == null ? '' : dni;
+
+      var type = data[i]["type"];
+      type = type == null ? '' : type;
+
       row += date.toLocaleDateString();
-      row += "," + data[i]["student"]["lastname"];
-      row += "," + data[i]["student"]["name"];
-      row += "," + data[i]["student"]["studentNumber"];
-      row += "," + data[i]["student"]["dni"];
+      row += "," + lastname;
+      row += "," + name
+      row += "," + sn
+      row += "," + dni
       row += "," + data[i]["user"]["lastname"];
       row += "," + data[i]["user"]["name"];
       row += "," + data[i]["user"]["dni"];
-      row += "," + data[i]["type"];
+      row += "," + type;
       csvString += row + "\n";
     }
 
