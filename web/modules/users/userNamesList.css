@@ -21,8 +21,14 @@
   background-repeat:no-repeat;
 }
 
+.userNamesList .list {
+  overflow: scroll;
+  height:500px;
+  overflow-x: hidden;
+}
 .userNamesList li{
   padding-left:10px;
+
 }
 
 .userNamesList li:nth-child(even) { background: #1F4464 }
