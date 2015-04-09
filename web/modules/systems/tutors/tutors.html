@@ -40,6 +40,7 @@
       </select>
     </div>
 
-    <button class="buttonSave" ng-click='save()'><i class="fa fa-floppy-o"></i> Guardar</button>
+    <button class="buttonBlue" ng-click='save()'><i class="fa fa-floppy-o"></i> Guardar</button>
+    <button type="button" class="buttonBlue" ng-click="export()" ng-class="{true:'visible',false:'hidden'}[showDisplayExport()]"><i class="fa fa-download"></i> Exportar</button>
   </div>
 </div>

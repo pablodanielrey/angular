@@ -7,8 +7,14 @@
   font-size:14px;
   height:270px;
   background-color:#eeeeee;
+}
 
+.tutors .visible {
 
+}
+
+.tutors .hidden {
+  display:none;
 }
 
 .tutors .content {
@@ -94,7 +100,7 @@
 
 }
 
-.tutors .buttonSave {
+.tutors .buttonBlue {
   width:170px;
   background-color:#0066A6;
   padding:10px;

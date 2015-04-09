@@ -23,4 +23,22 @@ app.service('Tutors', function(Messages, Utils, Session) {
     );
   }
 
+  this.listTutorData = function(callbackOk, callbackError) {
+    var msg = {
+      id:Utils.getId(),
+      action:'listTutorData',
+      session:Session.getSessionId()
+    };
+
+    Messages.send(msg,
+      function(data) {
+        if (typeof data.error === 'undefined') {
+          callbackOk(data.response);
+        } else {
+          callbackError(data.error);
+        }
+      }
+    );
+  }
+
 });

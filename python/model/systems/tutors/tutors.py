@@ -10,7 +10,7 @@ class Tutors:
         data = cur.fetchall()
         tutors = []
         for d in data:
-            tutor = convertToDict(d)
+            tutor = self.convertToDict(d)
             tutors.append(tutor)
         return tutors
 
