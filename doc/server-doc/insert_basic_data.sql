@@ -30,4 +30,7 @@ insert into assistance.offices_roles (user_id,role,office_id) select '1','autori
 insert into assistance.offices_roles (user_id,role,office_id) select '1','horas-extras',id from assistance.offices o where o.parent is null;
 
 
+/*
+  para agregar de prueba nuestros dnis al perfil admin-assistance
+*/
 insert into credentials.auth_profile (user_id,profile) select id,'ADMIN-ASSISTANCE' from profile.users where dni in ('27294557','31381082','30001823','29694757');

@@ -149,7 +149,7 @@ class Justifications:
         tree = False
         if group == 'TREE':
             tree = True
-        offices = self.offices.getOfficesByUserRole(con,userId,tree,'administra')
+        offices = self.offices.getOfficesByUserRole(con,userId,tree,'autoriza')
         logging.debug('officesByUserRole : {}'.format(offices))
 
         if offices is None or len(offices) <= 0:
