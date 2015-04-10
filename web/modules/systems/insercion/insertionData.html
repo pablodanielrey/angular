@@ -16,8 +16,8 @@
   <hr>
 
   <span class=title>Curriculum Vitae</span>
-  <!-- <a href={{model.cv.c}} ng-if='model.cv.loaded'>CV</a> -->
   <Button ng-click='downloadCV()'>Descargar CV</Button>
+  <span ng-if='model.cv.loading'><i class="loading fa fa-spinner fa-spin"></i>  Cargando CV</span>
   <input id='inputcv' type="file" on-read-file-binary-string="addCv(fileName,fileContent)"/>
   <hr>
 </div>

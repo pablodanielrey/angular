@@ -3,10 +3,16 @@ var app = angular.module('mainApp');
 
 app.controller('LaboralInsertionDataCtrl', function($scope, $timeout, LaboralInsertion, Notifications) {
 
+	$scope.model.cv = {
+		loading: false
+	};
+
 	/**
 	 * Agregar cv como base 64
 	 */
 	$scope.addCv = function(fileName,fileContent){
+		$scope.model.cv.loading = true;
+
 		var cv = window.btoa(fileContent)
 		var data = {
 			'id': $scope.model.userData.id,
@@ -15,9 +21,11 @@ app.controller('LaboralInsertionDataCtrl', function($scope, $timeout, LaboralIns
 		}
 		LaboralInsertion.updateLaboralInsertionCV(data,
 			function(ok) {
+				$scope.model.cv.loading = false;
 				Notifications.message('Cv cargado correctamente');
 			},
 			function(error){
+				$scope.model.cv.loading = false;
 				Notifications.message(error);
 			}
 		);
