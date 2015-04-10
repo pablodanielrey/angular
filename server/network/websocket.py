@@ -83,14 +83,15 @@ class ActionsServerProtocol(WebSocketServerProtocol):
 
     def _encodeMessage(self,msg):
         jmsg = json.dumps(msg, ensure_ascii = False, cls=DateTimeEncoder)
-        if (len(jmsg) < 1000):
+        if (len(jmsg) < 1024):
             logging.debug(jmsg)
 
         ejmsg = jmsg.encode('utf-8')
         return ejmsg
 
     def _sendEncodedMessage(self,msg):
-        logging.debug('server -> cliente {}'.format(msg))
+        if (len(jmsg) < 1024):
+            logging.debug('server -> cliente {}'.format(msg))
         super(WebSocketServerProtocol,self).sendMessage(msg,False)
 
 
@@ -154,7 +155,7 @@ class ActionsServerProtocol(WebSocketServerProtocol):
 
             if len(msg) < 1024:
                 logging.debug('cliente -> server {}'.format(msg))
-                
+
             message = json.loads(msg)
 
             if 'action' not in message:
