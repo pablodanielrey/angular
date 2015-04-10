@@ -99,7 +99,7 @@ class Users:
             raise Exception()
 
         #actualizar telefonos del usuario
-        rreq = (user.id)
+        rreq = (user.id,)
         cur.execute('delete from profile.telephones where user_id = %s', rreq)
 
         for i, v in enumerate(user.telephones):
