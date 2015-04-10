@@ -219,7 +219,7 @@ class ListUsers:
         rdataAux = []
         pattern = re.compile(message['search'],re.IGNORECASE)
         for user in rdata:
-      	  if pattern.search(user["name"]) or pattern.search(user["lastname"]) or pattern.search(user["dni"]):
+      	  if pattern.search(user["name"]) or pattern.search(user["name"] + " " + user["lastname"]) or pattern.search(user["lastname"] + " " + user["name"]) or pattern.search(user["lastname"]) or pattern.search(user["dni"]):
             rdataAux.append(user)
         rdata = rdataAux
 
