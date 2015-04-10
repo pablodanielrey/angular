@@ -151,7 +151,10 @@ class ActionsServerProtocol(WebSocketServerProtocol):
                 return
 
             msg = payload.decode('utf-8')
-            logging.debug('cliente -> server {}'.format(msg))
+
+            if len(msg) < 1024:
+                logging.debug('cliente -> server {}'.format(msg))
+                
             message = json.loads(msg)
 
             if 'action' not in message:
