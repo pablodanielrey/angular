@@ -27,45 +27,51 @@
   margin-bottom:10px;
 }
 
-.adminRequestAssistance .request {
+.adminRequestAssistance .solicitudes {
   display:flex;
-  align-items: center;
-  justify-content: center;
-  width:170px;
-  height:55px;
-  margin-right:10px;
-  background-color:#0066A6;
-  color:white;
-  text-shadow: 0px 1px black;
-  font-weight: bold;
-  border: 1px solid #0066A6;
+  flex-direction:row;
+
 }
+.adminRequestAssistance .column {
+    background-color:#0066A6;
+    padding:5px;
+    margin-right:5px;
+    color:white;
+    border-top:3px solid #275276;
+    margin-bottom:5px;
+}
+.adminRequestAssistance .t1 {
+  width:200px;
+}
+.adminRequestAssistance .t2 {
+  width:100px;
+}
+.adminRequestAssistance .t3 {
+  width:260px;
+}
+
 .adminRequestAssistance .userRequest {
-  display:flex;
-  align-items: center;
-  justify-content: center;
-  width:170px;
-  height:55px;
-  margin-right:10px;
+  font-size:16px;
+  font-weight:bold;
+  padding:5px;
 
+}
+.adminRequestAssistance .dniRequest {
   color:#0066A6;
+  padding:5px;
 
-  font-weight: bold;
-  border: 1px solid #0066A6;
+}
+.adminRequestAssistance .typeRequest {
+  font-size:18px;
+  color:#0066A6;
+  margin-left:18px;
+
 }
 .adminRequestAssistance .dateRequest {
-  display:flex;
-  align-items: center;
-  justify-content: center;
-  width:170px;
-  height:55px;
-  margin-right:10px;
-
-  color:#0066A6;
-
-  font-weight: bold;
-  border: 1px solid #0066A6;
+  margin-left:35px;
+  font-size:16px;
 }
+
 
 .adminRequestAssistance .approveRequest {
   background-color:#0066A6;
@@ -96,52 +102,41 @@
   border: 1px solid #0066A6;
 }
 
-.adminRequestAssistance .iconsMyRequest {
-  padding:5px;
-  margin-top:5px;
+
+
+.adminRequestAssistance .pending {
+  margin-left:50px;
+  color:#0066A6;
+  font-size:16px;
+}
+.adminRequestAssistance .approved {
+  color:#128c78;
+  font-size:16px;
+  margin-left:50px;
+}
+
+.adminRequestAssistance .buttonApproved {
   background-color:#128c78;
   color:white;
-  border:1px solid #0066A6;
-}
+  height:20px;
 
-.adminRequestAssistance .myStateRequestSlope.pending {
-  -webkit-animation-name: apending;
-  /* -webkit-animation-delay: 0.5s; */
-  -webkit-animation-duration: 2.5s;
-  -webkit-animation-iteration-count: infinite;
-  /*-webkit-animation-direction: alternate;*/
+  margin-left:10px;
+  cursor:pointer;
+  border:none;
+  border-radius:2px;
 }
-
-.adminRequestAssistance .myStateRequestSlope {
-  margin-top:5px;
-  width:160px;
-  border:1px solid #0066A6;
-  padding:5px;
-  padding-left:10px;
-  color:white;
-  margin-right:10px;
-  background-color:#275276;
-}
-
-.adminRequestAssistance .buttonpending {
+.adminRequestAssistance .buttonRefuse {
   background-color:#e43e46;
   color:white;
-  border:none;
-  padding:3px;
+  height:20px;
+
   margin-left:5px;
   cursor:pointer;
+  border:none;
+  border-radius:2px;
 }
 
-.adminRequestAssistance .myStateRequestApproved {
-  margin-top:5px;
-  width:160px;
-  border:1px solid #0066A6;
-  padding:5px;
-  padding-left:10px;
-  color:white;
-  margin-right:10px;
-  background-color:#128c78;
-}
+
 
 
 .adminRequestAssistance .hidden{
