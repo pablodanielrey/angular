@@ -71,6 +71,11 @@ if __name__ == '__main__':
             logging.debug(line)
 
             nombre,app,func,dni,maili,e,s,of,cargo,ma = line
+
+            #para elminar la cabecera
+            if nombre == 'Nombre':
+                continue
+
             if dni == None or dni == '':
                 logging.warn('ignorando {} ya que no tiene dni'.format(line))
                 continue

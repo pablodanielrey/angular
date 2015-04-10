@@ -48,7 +48,7 @@ if __name__ == '__main__':
     cur = con.cursor()
     cur.execute("set time zone %s",('utc',))
 
-    cur.execute('delete from assistance.schedule')
+    #cur.execute('delete from assistance.schedule')
 
     logging.basicConfig(level=logging.DEBUG)
 
