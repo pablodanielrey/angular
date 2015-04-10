@@ -3,6 +3,23 @@ var app = angular.module('mainApp');
 
 app.service('LaboralInsertion', function(Messages, Utils, Session) {
 
+
+	this.getLaboralInsertionData = function(ok,error) {
+		var msg = {
+			id: Utils.getId(),
+			session: Session.getSessionId(),
+			action:'getLaboralInsertionData',
+		}
+		Messages.send(msg,
+			function(data) {
+				if (typeof data.error === 'undefined') {
+					ok(data.laboralInsertion);
+				} else {
+					error(data.error);
+				}
+			});
+	}
+
 	/**
 	 * Aceptar los terminos y condiciones de insercion laboral
 	 * @param userId Id de usuario al que se modificaran los terminos y condiciones
@@ -126,7 +143,7 @@ app.service('LaboralInsertion', function(Messages, Utils, Session) {
 			}
 		});
 	}
-	
+
 
 	this.findDegreeData = function(user_id,ok,err) {
 		var msg = {

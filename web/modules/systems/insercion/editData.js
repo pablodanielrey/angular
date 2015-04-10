@@ -1,8 +1,9 @@
 var app = angular.module('mainApp');
 
-app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Session, Users, Student, LaboralInsertion, Notifications) {
+app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Session, Users, Student, LaboralInsertion, Notifications, Profiles) {
 
 	$scope.model = {
+		download: false,
 		insertionData: {},
 		degrees: [],
 		languages: [],
@@ -194,8 +195,6 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 
 
 
-
-
 	/**
 	 * procesar verificacion de terminos y condiciones
 	 */
@@ -215,6 +214,18 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 	};
 
 	$scope.initialize = function() {
+
+		Profiles.checkAccess(Session.getSessionId(),'ADMIN-LABORALINSERTION',
+			function(ok) {
+				if (ok == 'granted') {
+					$scope.model.download = true;
+				}
+			},
+			function(error) {
+					Notifications.message(error);
+			}
+		)
+
 		// seteo el usuario seleccionado dentro del scope para que lo usen las subvistas facilmente.
 		var s = Session.getCurrentSession();
 		if (s == null) {
@@ -228,6 +239,57 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 		$scope.checkTermsAndConditions();
 		$scope.$broadcast('UpdateUserDataEvent');
 	};
+
+
+	$scope.downloadDatabase = function() {
+		LaboralInsertion.getLaboralInsertionData(
+			function(data) {
+
+				var promises = [];
+
+				for (var i = 0; i < data.length; i++) {
+					var userId = data[i]['id'];
+					(function(userId) {
+						promises.push(new Promise(function(resolve,reject) {
+							Users.findUser(userId,
+								function(user) {
+									resolve(user);
+								},
+								function(error) {
+									reject(error);
+								});
+							}));
+					})(userId);
+				}
+
+
+				Promise.all(promises).then(function(results) {
+					var csv = 'dni;nombre;apellido;residir;viajar;lenguajes;carreras\n';
+					for (var i = 0; i < data.length; i++) {
+						var user = results[i];
+						var li = data[i];
+						var lils = li['languages'];
+						var lidegs = li['degrees'];
+
+						csv = csv + user['dni'] + ';' + user['name'] + ';' + user['lastname'] + ';';
+						csv = csv + li['reside'] + ';' + li['travel'] + ';';
+						for (var a = 0; a < lils.length; a++) {
+							csv = csv + lils[a]['name'] + ' ' + lils[a]['level'] + ',';
+						}
+						csv = csv + ';';
+						for (var a = 0; a < lidegs.length; a++) {
+							csv = csv + lidegs[a]['name'] + ' ' + lidegs[a]['courses'] + ' ' + lidegs[a]['average1'] + ' ' + lidegs[a]['average2'] + ' ' + lidegs[a]['work_type'] + ',';
+						}
+						csv = csv + '\n';
+					}
+					window.saveAs(new Blob([csv],{type: "text/csv;charset=utf-8;"}),'base.csv');
+				});
+			},
+			function(error) {
+				Notifications.message(error);
+			}
+		);
+	}
 
 
 	$timeout(function() {

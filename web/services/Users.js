@@ -118,7 +118,6 @@ app.service('Users', function($rootScope, Messages, Session, Utils, Cache, Confi
   }
 
 
-
   // obtiene los datos de un usuario cuyo id es el pasado por parámetro.
   this.findUser = function(id, callbackOk, callbackError) {
 

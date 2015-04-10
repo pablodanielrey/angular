@@ -13,6 +13,84 @@ from wexceptions import MalformedMessage
 """
 
 
+
+
+
+
+
+"""
+
+peticion:
+{
+    "id":"",
+    "action":"getLaboralInsertionData"
+    "session":"sesion de usuario"
+}
+
+respuesta:
+{
+    "id":"id de la peticion",
+    "laboralInsertion":[
+        {
+        "id":"id de usuario",
+        "reside":,
+        'travel':,
+        'languages':[
+                {
+                    'name':'lenguaje',
+                    'level':'nivel'
+                }
+            ]
+        'degrees':[
+                'name':'nombre de la carrera'
+                'courses':'cantidad de materias aprobadas',
+                'average1':'aprobadas con final',
+                'average2':'aprobadas sin final',
+                'work_type':'tipo de oferta'
+            ]
+        }
+    ],
+    "ok":""
+    "error":""
+}
+
+"""
+
+class GetLaboralInsertionData:
+
+    LaboralInsertion = inject.attr(LaboralInsertion)
+    profiles = inject.attr(Profiles)
+    config = inject.attr(Config)
+
+    def handleAction(self, server, message):
+
+        if (message['action'] != 'getLaboralInsertionData'):
+            return False
+
+
+        """ chequeo que exista la sesion, etc """
+        sid = message['session']
+        self.profiles.checkAccess(sid,['ADMIN-LABORALINSERTION'])
+
+        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+        try:
+            laboralInsertion = self.LaboralInsertion.getLaboralInsertionData(con)
+            response = {'id':message['id'],'ok':'','laboralInsertion':laboralInsertion}
+            server.sendMessage(response)
+            return True
+
+        finally:
+            con.close()
+
+
+
+
+
+
+
+
+
+
 """
 peticion:
 {

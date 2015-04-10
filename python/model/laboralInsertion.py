@@ -3,6 +3,22 @@ from model.objectView import ObjectView
 
 class LaboralInsertion:
 
+    """
+        método usado por los administradores para obtener la info de inserción laboral.
+    """
+    def getLaboralInsertionData(self,con):
+        data = self.findAll(con)
+        for d in data:
+            userId = d['id']
+            langs = self.listLanguages(con,userId)
+            d['languages'] = langs
+
+            degrees = self.listDegrees(con,userId)
+            d['degrees'] = degrees
+
+        return data
+        
+
     def acceptTermsAndConditions(self,con,id):
 
         cur = con.cursor()
