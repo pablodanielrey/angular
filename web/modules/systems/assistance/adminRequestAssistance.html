@@ -30,9 +30,9 @@
 
     <div ng-class="{true:'visible', false:'hidden'}[request.status == 'PENDING']">
       <span class="pending"><i class="fa fa-spinner fa-spin"></i> Pendiente</span>
+      <button class="buttonApproved"  ng-click="approveRequest(request)"><i class="fa fa-check-circle"></i> Aprobar</Button>
+      <button class="buttonRefuse" ng-click="refuseRequest(request)"><i class="fa fa-times"></i> Denegar</Button>
     </div>
-    <button class="buttonApproved"  ng-click="approveRequest(request)"><i class="fa fa-check-circle"></i> Aprobar</Button>
-    <button class="buttonRefuse" ng-click="refuseRequest(request)"><i class="fa fa-times"></i> Denegar</Button>
 
     <div class="myStateRequestApproved" ng-class="{true:'visible', false:'hidden'}[request.status == 'APPROVED']">
       <span class="approved"><i class="fa fa-check-circle"></i> Aprobado</span>
