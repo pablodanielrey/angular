@@ -90,7 +90,7 @@ class ActionsServerProtocol(WebSocketServerProtocol):
         return ejmsg
 
     def _sendEncodedMessage(self,msg):
-        if (len(jmsg) < 1024):
+        if (len(msg) < 1024):
             logging.debug('server -> cliente {}'.format(msg))
         super(WebSocketServerProtocol,self).sendMessage(msg,False)
 
