@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import inject, json, base64
+import inject, json, base64, logging
 import psycopg2
 import uuid
 from model.laboralInsertion import LaboralInsertion
@@ -21,7 +21,8 @@ peticion:
     "session":"session de usuario",
     "laboralInsertion": {
         "id":"id del usuario",
-        "cv":"curriculum vitae del usario"
+        "cv":"curriculum vitae del usario",
+        'name':'nombre del archivo original del cv'
     }
 }
 
@@ -73,8 +74,9 @@ class PersistLaboralInsertionCV:
             self.events.broadcast(server,event)
 
             return True
-        except psycopg2.DatabaseError as e:
+        except Exception as e:
             con.rollback()
+            logging.exception(e)
             raise e
 
         finally:
@@ -171,7 +173,8 @@ respuesta:
     "laboralInsertion":[
         {
         "id":"id del usuario a agregar la info de insercion laboral",
-        "cv":"curriculum vitae del usario"
+        "cv":"curriculum vitae del usario",
+        'name':'nombre del archivo original'
         }
     ],
     "ok":""
@@ -203,6 +206,7 @@ class FindLaboralInsertionCV:
 
             id = message['laboralInsertion']['id']
             laboralInsertion = self.LaboralInsertion.findLaboralInsertionCV(con,id)
+            laboralInsertion["cv"] = base64.b64encode(laboralInsertion["cv"]).decode('utf-8')
             response = {'id':message['id'],'ok':'','laboralInsertion':laboralInsertion}
             server.sendMessage(response)
             return True

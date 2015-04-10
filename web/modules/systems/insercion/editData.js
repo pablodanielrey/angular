@@ -221,7 +221,7 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 		  $location.path('/main');
 		}
 		if (s.selectedUser == undefined || s.selectedUser == null) {
-		  s.selectedUser = s.user_id;
+		  	s.selectedUser = s.user_id;
   		  Session.saveSession(s);
 		}
 		$scope.model.selectedUser = s.selectedUser;

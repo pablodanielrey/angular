@@ -90,6 +90,44 @@ app.service('LaboralInsertion', function(Messages, Utils, Session) {
     });
   }
 
+
+	this.findLaboralInsertionCV = function(user_id,ok,err) {
+		var msg = {
+			id: Utils.getId(),
+			session: Session.getSessionId(),
+			action:'findLaboralInsertionCV',
+			laboralInsertion: {
+				id: user_id
+			}
+		}
+		Messages.send(msg,
+			function(data) {
+				ok(data.laboralInsertion);
+			},
+			function(error) {
+				err(error);
+			}
+		);
+	}
+
+	this.updateLaboralInsertionCV = function(data, callbackOk, callbackError) {
+		var msg = {
+			id: Utils.getId(),
+			session: Session.getSessionId(),
+			action: 'persistLaboralInsertionCV',
+			laboralInsertion: data
+		};
+
+		Messages.send(msg,function(response){
+			if (response.error != undefined) {
+				callbackError(response.error);
+			} else {
+				callbackOk(response.ok);
+			}
+		});
+	}
+	
+
 	this.findDegreeData = function(user_id,ok,err) {
 		var msg = {
 			id:Utils.getId(),
@@ -115,7 +153,7 @@ app.service('LaboralInsertion', function(Messages, Utils, Session) {
  	 * @param error Callback en el caso de que la actualizacion se realice de forma erronea
 	 */
 	this.updateDegreeData = function(user_id,degrees,ok,err) {
-	
+
 		var msg = {
 			id:Utils.getId(),
 			action:"persistDegreeData",
@@ -132,7 +170,7 @@ app.service('LaboralInsertion', function(Messages, Utils, Session) {
 			}
 		);
 	}
-	
+
 
 	this.findLanguageData = function(user_id,ok,err) {
 		var msg = {
@@ -166,7 +204,7 @@ app.service('LaboralInsertion', function(Messages, Utils, Session) {
 			user_id:user_id,
 			languages:languages,
 		}
-		
+
 		Messages.send(msg,
 			function(data) {
 				ok(data)

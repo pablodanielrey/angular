@@ -14,6 +14,7 @@ create schema laboral_insertion;
   create table laboral_insertion.users_cv (
     id varchar not null primary key references profile.users (id),
     cv bytea,
+    name varchar not null,
     creation timestamptz default now()
   );
 

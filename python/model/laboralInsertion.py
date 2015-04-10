@@ -34,12 +34,13 @@ class LaboralInsertion:
 
     def findLaboralInsertionCV(self,con,id):
         cur = con.cursor()
-        cur.execute('select id,cv from laboral_insertion.users_cv where id = %s',(id,))
+        cur.execute('select id,name,cv from laboral_insertion.users_cv where id = %s',(id,))
         li = cur.fetchone()
         if li:
             laboralInsertion = {
                 'id':li[0],
-                'cv':li[1]
+                'name':li[1],
+                'cv':li[2]
             }
             return laboralInsertion
         else:
@@ -59,14 +60,16 @@ class LaboralInsertion:
 
 
     def persistLaboralInsertionCV(self,con,data):
-        if (self.findLaboralInsertion(con,data['id'])) == None:
-            params = (data['id'],psycopg2.Binary(data['cv']))
+        if (self.findLaboralInsertionCV(con,data['id'])) == None:
+            params = (data['id'],psycopg2.Binary(data['cv']),data['name'])
             cur = con.cursor()
-            cur.execute("insert into laboral_insertion.users_cv (id,cv) values (%s,%s)",params)
+            cur.execute("insert into laboral_insertion.users_cv (id,cv,name) values (%s,%s,%s)",params)
         else:
-            params = (psycopg2.Binary(data['cv']),data['id'])
+            params = (psycopg2.Binary(data['cv']),data['name'],data['id'])
             cur = con.cursor()
-            cur.execute('update laboral_insertion.users_cv set cv = %s where id = %s',params)
+            cur.execute('update laboral_insertion.users_cv set cv = %s, name = %s where id = %s',params)
+
+
 
 
     def findAll(self,con):
