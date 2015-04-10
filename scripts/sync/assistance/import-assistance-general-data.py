@@ -182,7 +182,7 @@ if __name__ == '__main__':
             con.commit()
 
         except Exception as e:
-            logging.debug(e)
+            logging.exception(e)
 
 
 
