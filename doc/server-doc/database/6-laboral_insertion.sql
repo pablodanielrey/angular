@@ -5,10 +5,15 @@ create schema laboral_insertion;
 
   create table laboral_insertion.users (
     id varchar not null primary key references profile.users (id),
-    cv bytea,
     reside boolean default false,
     travel boolean default false,
     accepted_conditions boolean default false,
+    creation timestamptz default now()
+  );
+
+  create table laboral_insertion.users_cv (
+    id varchar not null primary key references profile.users (id),
+    cv bytea,
     creation timestamptz default now()
   );
 

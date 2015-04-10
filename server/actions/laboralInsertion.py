@@ -13,6 +13,76 @@ from wexceptions import MalformedMessage
 """
 
 
+"""
+peticion:
+{
+    "id":"",
+    "action":"persistLaboralInsertionCV",
+    "session":"session de usuario",
+    "laboralInsertion": {
+        "id":"id del usuario",
+        "cv":"curriculum vitae del usario"
+    }
+}
+
+respuesta:
+{
+    "id":"id de la peticion",
+    "ok":"",
+    "error":""
+}
+
+"""
+
+class PersistLaboralInsertionCV:
+
+    laboralInsertion = inject.attr(LaboralInsertion)
+    events = inject.attr(Events)
+    profiles = inject.attr(Profiles)
+    config = inject.attr(Config)
+
+    def handleAction(self, server, message):
+
+        if (message['action'] != 'persistLaboralInsertionCV'):
+            return False
+
+        if 'laboralInsertion' not in message:
+            response = {'id':message['id'], 'error':'no existe la info correspondiente a insercion laboral '}
+            server.sendMessage(response)
+            return True
+
+        """ chequeo que exista la sesion, etc """
+        sid = message['session']
+        self.profiles.checkAccess(sid,['ADMIN','USER'])
+
+        try:
+            con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+
+            laboralInsertion = message['laboralInsertion']
+            laboralInsertion["cv"] = base64.b64decode(laboralInsertion["cv"])
+            self.laboralInsertion.persistLaboralInsertionCV(con,laboralInsertion)
+            con.commit()
+
+            response = {'id':message['id'], 'ok':''}
+            server.sendMessage(response)
+
+            event = {
+                'type':'UserUpdatedEvent',
+                'data':laboralInsertion['id']
+            }
+            self.events.broadcast(server,event)
+
+            return True
+        except psycopg2.DatabaseError as e:
+            con.rollback()
+            raise e
+
+        finally:
+            con.close()
+
+
+
+
 
 """
 peticion:
@@ -21,8 +91,7 @@ peticion:
     "action":"persistLaboralInsertionData",
     "session":"session de usuario",
     "laboralInsertion": {
-        "id":"id del usuario a agregar la info de insercion laboral",
-        "cv":"curriculum vitae del usario",
+        "id":"id del usuario a agregar la info de insercion laboral"
         "reside":"si esta dispuesto a residir en otro lugar,
         "travel":"si esta dispuesto a viajar"
     }
@@ -62,7 +131,6 @@ class PersistLaboralInsertion:
             con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
 
             laboralInsertion = message['laboralInsertion']
-            laboralInsertion["cv"] = base64.b64decode(laboralInsertion["cv"])
             self.laboralInsertion.persistLaboralInsertion(con,laboralInsertion)
             con.commit()
 
@@ -90,6 +158,65 @@ class PersistLaboralInsertion:
 peticion:
 {
     "id":"",
+    "action":"findLaboralInsertionCV"
+    "session":"sesion de usuario"
+    "laboralInsertion":{
+        "id":"id de insercion laboral"
+    }
+}
+
+respuesta:
+{
+    "id":"id de la peticion",
+    "laboralInsertion":[
+        {
+        "id":"id del usuario a agregar la info de insercion laboral",
+        "cv":"curriculum vitae del usario"
+        }
+    ],
+    "ok":""
+    "error":""
+}
+
+"""
+
+class FindLaboralInsertionCV:
+
+    LaboralInsertion = inject.attr(LaboralInsertion)
+    profiles = inject.attr(Profiles)
+    config = inject.attr(Config)
+
+    def handleAction(self, server, message):
+
+        if (message['action'] != 'findLaboralInsertionCV'):
+            return False
+
+
+        """ chequeo que exista la sesion, etc """
+        sid = message['session']
+        self.profiles.checkAccess(sid,['ADMIN','USER'])
+
+        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+        try:
+            if ((message['laboralInsertion'] == None) or (message['laboralInsertion']['id'] == None)):
+                raise MalformedMessage()
+
+            id = message['laboralInsertion']['id']
+            laboralInsertion = self.LaboralInsertion.findLaboralInsertionCV(con,id)
+            response = {'id':message['id'],'ok':'','laboralInsertion':laboralInsertion}
+            server.sendMessage(response)
+            return True
+
+        finally:
+            con.close()
+
+
+
+"""
+
+peticion:
+{
+    "id":"",
     "action":"findLaboralInsertion"
     "session":"sesion de usuario"
     "laboralInsertion":{
@@ -103,7 +230,6 @@ respuesta:
     "laboralInsertion":[
         {
         "id":"id del usuario a agregar la info de insercion laboral",
-        "cv":"curriculum vitae del usario",
         "residir":"si esta dispuesto a residir en otro lugar,
         "viajar":"si esta dispuesto a viajar"
         }
@@ -267,7 +393,7 @@ class PersistLanguage:
             response = {'id':messages['id'], 'error':'no existe la info del usuario'}
             server.sendMessage(response)
             return True
-            
+
         if 'languages' not in message:
             response = {'id':messages['id'], 'error':'no existe la info de los lenguajes'}
             server.sendMessage(response)
@@ -284,7 +410,7 @@ class PersistLanguage:
             #eliminar lenguajes existentes
             user_id = message['user_id']
             self.req.deleteLanguages(con,user_id)
-            
+
             #persistir nuevos lenguajes
             languages = message['languages']
             for i, language in enumerate(languages):
@@ -655,12 +781,12 @@ class PersistDegree:
     def handleAction(self, server, message):
         if message['action'] != 'persistDegreeData':
             return False
-	
+
         if 'user_id' not in message:
             response = {'id':message['id'], 'error:': 'no existe la info del usuario'}
             server.sendMessage(response)
             return True
-            
+
         if 'degrees' not in message:
             response = {'id':message['id'], 'error:': 'no existe la info de la carrera'}
             server.sendMessage(response)
@@ -672,7 +798,7 @@ class PersistDegree:
 
         try:
             con = psycopg2.connect(host=self.config.configs['database_host'],dbname=self.config.configs['database_database'],user=self.config.configs['database_user'],password=self.config.configs['database_password'])
-            
+
             #eliminar carreras existentes
             user_id = message['user_id']
             self.req.deleteDegrees(con,user_id)

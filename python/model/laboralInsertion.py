@@ -32,20 +32,46 @@ class LaboralInsertion:
         else:
             return None
 
+    def findLaboralInsertionCV(self,con,id):
+        cur = con.cursor()
+        cur.execute('select id,cv from laboral_insertion.users_cv where id = %s',(id,))
+        li = cur.fetchone()
+        if li:
+            laboralInsertion = {
+                'id':li[0],
+                'cv':li[1]
+            }
+            return laboralInsertion
+        else:
+            return None
+
+
     def persistLaboralInsertion(self,con,data):
         if (self.findLaboralInsertion(con,data['id'])) == None:
-            params = (data['id'],psycopg2.Binary(data['cv']),data['reside'],data['travel'])
+            params = (data['id'],data['reside'],data['travel'])
             cur = con.cursor()
-            cur.execute("insert into laboral_insertion.users (id,cv,reside,travel) values (%s,%s,%s,%s)",params)
+            cur.execute("insert into laboral_insertion.users (id,reside,travel) values (%s,%s,%s)",params)
         else:
-            params = (psycopg2.Binary(data['cv']),data['reside'],data['travel'],data['id'])
+            params = (data['reside'],data['travel'],data['id'])
             cur = con.cursor()
-            cur.execute('update laboral_insertion.users set cv = %s,reside = %s,travel = %s where id = %s',params)
+            cur.execute('update laboral_insertion.users set reside = %s,travel = %s where id = %s',params)
+
+
+
+    def persistLaboralInsertionCV(self,con,data):
+        if (self.findLaboralInsertion(con,data['id'])) == None:
+            params = (data['id'],psycopg2.Binary(data['cv']))
+            cur = con.cursor()
+            cur.execute("insert into laboral_insertion.users_cv (id,cv) values (%s,%s)",params)
+        else:
+            params = (psycopg2.Binary(data['cv']),data['id'])
+            cur = con.cursor()
+            cur.execute('update laboral_insertion.users_cv set cv = %s where id = %s',params)
 
 
     def findAll(self,con):
         cur = con.cursor()
-        cur.execute('select id,cv,reside,travel from laboral_insertion.users')
+        cur.execute('select id,reside,travel from laboral_insertion.users')
         data = cur.fetchall()
         laboralInsertions = []
         for li in data:
@@ -57,8 +83,7 @@ class LaboralInsertion:
         laboralInsertion = {
             'id':li[0],
             'reside':li[1],
-            'travel':li[2],
-            'cv':"",
+            'travel':li[2]
         }
         return laboralInsertion
 
