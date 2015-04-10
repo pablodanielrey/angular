@@ -6,12 +6,12 @@ class auth_plugin_fceldap extends auth_plugin_base {
 
   function __construct() {
     $this->authtype = 'fceldap';
-/*
-    foreach($this->userfields as $key) {
-      $this->config->{'field_updatelocal_' . $key} = "onlogin";
-      $this->config->{'field_lock_' . $key} = "unlockedifempty";
+
+    foreach($this->userfields as $value) {
+      $this->config->{'field_updatelocal_' . $value} = "onlogin";
+      $this->config->{'field_lock_' . $value} = "unlockedifempty";
     }
-*/
+
   }
 
 
@@ -20,15 +20,17 @@ class auth_plugin_fceldap extends auth_plugin_base {
   */
   function user_login($username, $password) {
 
-    $conn = pg_connect("host=ip dbname=base user=usuario password=clave");
+    $conn = pg_connect("host=163.10.17.80 dbname=dcsys user=dcsys password=dcsys");
     try {
-      $rs = pg_query_params($conn, "select user_id from credentials.user_password where username = $1 and password = $2", array($username,$password));
+      $rs = pg_query_params($conn, "select user_id from credentials.user_password where lower(username) = $1 and password = $2", array($username,$password));
       if (!$rs) {
+        pg_close($conn);
         return false;
       }
 
       $result = pg_fetch_all($rs);
       if (!$result) {
+        pg_close($conn);
         return false;
       }
 
@@ -38,28 +40,31 @@ class auth_plugin_fceldap extends auth_plugin_base {
         $userid = $result[0]["user_id"];
         $rs = pg_query_params($conn, "select id from au24.users where id = $1",array($userid));
         if (!$rs) {
+          pg_close($conn);
           return false;
         }
 
         $result = pg_fetch_all($rs);
         if (!$result) {
+          pg_close($conn);
           return false;
         }
 
         if (sizeof($result) > 0) {
+          pg_close($conn);
           return true;
         }
-
+        
+        pg_close($conn);
         return false;
       }
 
+      fpg_close($conn);
       return false;
 
     } catch (Exception $e) {
       throw $e;
 
-    } finally {
-      pg_close($conn);
     }
   }
 
@@ -101,9 +106,9 @@ class auth_plugin_fceldap extends auth_plugin_base {
   */
   function get_userinfo($username) {
 
-    $conn = pg_connect("host=ip dbname=base user=usuario password=clave");
+    $conn = pg_connect("host=163.10.17.80 dbname=dcsys user=dcsys password=dcsys");
     try {
-      $rs = pg_query_params($conn, "select user_id from credentials.user_password where username = $1", array($username));
+      $rs = pg_query_params($conn, "select user_id from credentials.user_password where lower(username) = $1", array($username));
       $result = pg_fetch_array($rs);
       $userid = $result["user_id"];
 
@@ -144,17 +149,22 @@ class auth_plugin_fceldap extends auth_plugin_base {
       if (sizeof($result) > 0) {
         $data["idnumber"] = $result[0]["student_number"];
       }
-
+      
+      pg_close($conn);
       return $data;
 
     } catch (Exception $e) {
+      pg_close($conn);
       throw $e;
 
-    } finally {
-      pg_close($conn);
     }
 
   }
+  
+  function is_synchronised_with_external() {
+    return true;
+  }
+
 
 
 
@@ -188,9 +198,6 @@ class auth_plugin_fceldap extends auth_plugin_base {
     return 365;
   }
 
-  function is_synchronised_with_external() {
-    return true;
-  }
 
   function user_update_password($user, $newpassword) { }
 
