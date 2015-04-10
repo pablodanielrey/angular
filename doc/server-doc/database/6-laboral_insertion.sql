@@ -8,7 +8,8 @@ create schema laboral_insertion;
     cv bytea,
     reside boolean default false,
     travel boolean default false,
-    accepted_conditions boolean default false
+    accepted_conditions boolean default false,
+    creation timestamptz default now()
   );
 
   create table laboral_insertion.languages (
@@ -27,5 +28,3 @@ create schema laboral_insertion;
     average2 real,
     work_type varchar
   );
-
-  
