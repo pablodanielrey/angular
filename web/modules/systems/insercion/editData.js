@@ -24,7 +24,7 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 	 * Escuchar evento de finalizacion de chequeo de datos. Los subcontroladores al finalizar el chequeo dispararan el evento de finalizacion de chequeo de datos.
 	 *
 	$scope.$on('EditInsertionDataCheckedEvent',function() {
-	
+
 		if($scope.model.status.profile
 		&& $scope.model.status.languages
 		&& $scope.model.status.degrees
@@ -32,14 +32,14 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 			console.log($scope.model.status);
 			$scope.save();
 		}
-		
+
 	});*/
-	
-	
+
+
 	$scope.saveUser = function(){
-		
+
 		$scope.transformProfileData();
-		
+
 		// actualizo los datos del perfil.
 		Users.updateUser($scope.model.userData,
 			function(ok) {
@@ -48,14 +48,14 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 				alert(error);
 			}
 		);
-	
+
 	};
-	
+
 	$scope.saveInsertionData = function(){
 		$scope.transformInsertionData();
-		
+
 		$scope.model.insertionData.id = $scope.model.userData.id;
-		
+
 		LaboralInsertion.updateLaboralInsertionData($scope.model.insertionData,
 			function(ok) {
 			},
@@ -63,9 +63,9 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 				alert(error);
 			}
 		);
-	
+
 	};
-	
+
 	$scope.saveLanguages = function(){
 
 		LaboralInsertion.updateLanguageData($scope.model.userData.id, $scope.model.languages,
@@ -76,13 +76,13 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 			}
 		);
 	};
-	
+
 	/**
 	 * Guardar datos de degrees
 	 * @protected
 	 */
 	$scope.saveDegrees = function(){
-	
+
 		$scope.transformDegreeData();
 
 		LaboralInsertion.updateDegreeData($scope.model.userData.id, $scope.model.degrees,
@@ -100,27 +100,27 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 	 */
 	$scope.transformDegreeData = function() {
 		for (var i = 0; i < $scope.model.degrees.length; i++) {
-			
+
 			if($scope.model.degrees[i].name == ""){
 				Notifications.message('Debe seleccionar carrera');
 				$scope.model.status = false;
 			}
-			
+
 			if(isNaN($scope.model.degrees[i].courses)){
 				$scope.model.degrees[i].courses = 0;
 			}
-			
+
 			if(isNaN($scope.model.degrees[i].average1)){
 				$scope.model.degrees[i].average1 = 0;
 			}
-			
+
 			if(isNaN($scope.model.degrees[i].average2)){
 				$scope.model.degrees[i].average2 = 0;
 			}
-			
+
 			$scope.model.degrees[i].work_type = '';
 			if ($scope.model.degrees[i].offerInternship) {
-	
+
 				$scope.model.degrees[i].work_type += 'Internship;';
 			}
 			if ($scope.model.degrees[i].offerFullTime) {
@@ -137,19 +137,19 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 	 * Transformar datos de profile
 	 */
 	$scope.transformProfileData = function(){
-		
-		
+
+
 		$scope.model.userData.telephones = [];
-		
-		if($scope.model.userData.cellPhone){
+
+		if($scope.model.userData.cellPhone && $scope.model.userData.cellPhone.number != "") {
 			var telephone = {
 				type:"cell",
 				number:$scope.model.userData.cellPhone.country + " " + $scope.model.userData.cellPhone.city + " 15 " + $scope.model.userData.cellPhone.number,
 			};
 			$scope.model.userData.telephones.push(telephone);
 		}
-		
-		if($scope.model.userData.homePhone){
+
+		if($scope.model.userData.homePhone && $scope.model.userData.homePhone.number != "") {
 			var telephone = {
 				type:"home",
 				number:$scope.model.userData.homePhone.country + " " + $scope.model.userData.homePhone.city + " " + $scope.model.userData.homePhone.number,
@@ -157,29 +157,29 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 			$scope.model.userData.telephones.push(telephone);
 		}
 	};
-	
-	
+
+
 	/**
 	 * Transformar datos de insercion
 	 */
 	$scope.transformInsertionData = function(){
-		
+
 		if($scope.model.insertionData.travel === ""){
 			$scope.model.insertionData.travel = false;
 
-		
+
 		}
 		if($scope.model.insertionData.reside === ""){
 			$scope.model.insertionData.reside = false;
 		}
-		
+
 		if($scope.model.insertionData.cv === ""){
 			Notifications.message('Debe cargar CV');
 			$scope.model.status = false
 		}
 	};
 
-	
+
 	$scope.save = function() {
 		$scope.saveUser	();
 		$scope.saveInsertionData();
@@ -188,7 +188,7 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 		if($scope.model.status){
 			Notifications.message('Sus datos han sido registrados');
 		} else {
-			$scope.model.status = true;		
+			$scope.model.status = true;
 		}
 	};
 
@@ -232,7 +232,7 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 
 	$timeout(function() {
 		$scope.initialize();
-		
+
 	});
 
 
