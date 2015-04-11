@@ -1,6 +1,5 @@
 create schema assistance;
 
-
   create table assistance.devices (
 
   );
@@ -16,28 +15,29 @@ create schema assistance;
   );
 
 
+  create table assistance.users (
+    id varchar not null references profile.users (id),
+    created timestamptz default now()
+  );
+
   create table assistance.positions (
     id varchar primary key,
-    user_id varchar not null references profile.users (id),
+    user_id varchar not null references assistance.users (id),
     name varchar not null
   );
 
 
-  /*
-  para seleccionar el schedule actual es : 2015-02-25 13:00:00-03
-
-  select sstart, send, date from assistance.schedule where
-  ((date = '2015-02-25 13:00:00-03'::timestamp) or
-  (isDayOfWeek = true and extract(dow from date) = extract(dow from '2015-02-25 13:00:00-03'::timestamp)) or
-  (isDayOfMonth = true and extract(day from date) = extract(day from '2015-02-25 13:00:00-03'::timestamp)) or
-  (isDayOfYear = true and extract(doy from date) = extract(doy from '2015-02-25 13:00:00-03'::timestamp)))
-  order by date desc
-  */
-
+  create table assistance.schedule_checks (
+    user_id varchar not null references assistance.users (id),
+    check_from timestamptz not null,
+    enable boolean not null default true,
+    created timestamptz default now(),
+    CHECK(EXTRACT(TIMEZONE FROM check_from) = '0')
+  );
 
   create table assistance.schedule (
     id varchar primary key,
-    user_id varchar not null references profile.users (id),
+    user_id varchar not null references assistance.users (id),
     date timestamptz not null,
     sstart timestamptz not null,
     send timestamptz not null,
