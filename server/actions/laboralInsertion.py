@@ -86,7 +86,7 @@ class GetLaboralInsertionData:
         return b64
 
 
-    def _arrangeForOds(self, data):
+    def _arrangeForOds(self, con,data):
         values = [['Dni','Nombre','Apellido','Residir','Viajar','Lenguajes','Carreras']]
         for l in data:
             v = []
@@ -131,7 +131,7 @@ class GetLaboralInsertionData:
         try:
             laboralInsertion = self.LaboralInsertion.getLaboralInsertionData(con)
 
-            data = self._arrangeForOds(laboralInsertion)
+            data = self._arrangeForOds(con,laboralInsertion)
             b64 = self._exportToOds(data)
 
             response = {'id':message['id'],'ok':'','base64':b64}
