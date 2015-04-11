@@ -3,6 +3,7 @@ var app = angular.module('mainApp');
 app.controller('AssistanceFailsCtrl', function($scope, $timeout, Notifications, Assistance) {
 
   $scope.model = {
+    searching = false,
     begin: new Date(),
     end: new Date(),
     assistanceFails:[{}]
@@ -37,6 +38,7 @@ app.controller('AssistanceFailsCtrl', function($scope, $timeout, Notifications, 
   }
 
   $scope.search = function() {
+    $scope.model.searching = true;
     $scope.model.assistanceFails = [{}];
     $scope.initializeDate();
     Assistance.getFailsByDate($scope.model.begin, $scope.model.end,
@@ -77,8 +79,10 @@ app.controller('AssistanceFailsCtrl', function($scope, $timeout, Notifications, 
           $scope.model.assistanceFails.push(r);
         }
         $scope.predicate = 'user.dni';
+        $scope.model.searching = false;
       },
       function(error) {
+        $scope.model.searching = false;
         Notification.message(error);
       }
 

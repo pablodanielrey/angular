@@ -47,6 +47,7 @@
       </div>
 
       <div class="actionsContainer">
+        <span ng-if='model.searching'><i class="loading fa fa-spinner fa-spin"></i>  Buscando Datos</span>
         <input class="button blue" type="button" value="Buscar" ng-click="search()">
       </div>
     </div>
