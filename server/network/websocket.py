@@ -22,7 +22,7 @@ from twisted.internet import reactor
 from model.config import Config
 from model.utils import DateTimeEncoder
 
-from wexceptions import *
+from model.exceptions import *
 
 
 """ actions del core """
