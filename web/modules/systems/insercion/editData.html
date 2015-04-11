@@ -11,6 +11,7 @@
     <div class='container' ng-controller='DegreeLaboralInsertionCtrl' ng-include="'modules/systems/insercion/degreeData.html'"></div>
     <div>
       <button class="save" type="submit" ng-click="save()">Guardar</button>
+      <span ng-if='model.downloading'><i class="fa fa-spinner fa-spin"></i>  Descargando</span>
       <button class='save' ng-click='downloadDatabase()' ng-if='model.download'>Descargar Base</button>
     </div>
   </div>

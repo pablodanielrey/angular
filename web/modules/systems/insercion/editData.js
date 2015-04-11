@@ -242,6 +242,9 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 
 
 	$scope.downloadDatabase = function() {
+
+		$scope.model.downloading = true;
+
 		LaboralInsertion.getLaboralInsertionData(
 			function(data) {
 
@@ -264,29 +267,41 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 
 
 				Promise.all(promises).then(function(results) {
-					var csv = 'dni;nombre;apellido;residir;viajar;lenguajes;carreras\n';
-					for (var i = 0; i < data.length; i++) {
-						var user = results[i];
-						var li = data[i];
-						var lils = li['languages'];
-						var lidegs = li['degrees'];
+					$scope.$apply(function() {
+						$scope.model.downloading = false;
+						var csv = 'dni;nombre;apellido;residir;viajar;lenguajes;carreras\n';
+						for (var i = 0; i < data.length; i++) {
+							var user = results[i];
+							var li = data[i];
+							var lils = li['languages'];
+							var lidegs = li['degrees'];
 
-						csv = csv + user['dni'] + ';' + user['name'] + ';' + user['lastname'] + ';';
-						csv = csv + li['reside'] + ';' + li['travel'] + ';';
-						for (var a = 0; a < lils.length; a++) {
-							csv = csv + lils[a]['name'] + ' ' + lils[a]['level'] + ',';
+							csv = csv + user['dni'] + ';' + user['name'] + ';' + user['lastname'] + ';';
+							csv = csv + li['reside'] + ';' + li['travel'] + ';';
+							for (var a = 0; a < lils.length; a++) {
+								csv = csv + lils[a]['name'] + ' ' + lils[a]['level'] + ',';
+							}
+							csv = csv + ';';
+							for (var a = 0; a < lidegs.length; a++) {
+								csv = csv + lidegs[a]['name'] + ' ' + lidegs[a]['courses'] + ' ' + lidegs[a]['average1'] + ' ' + lidegs[a]['average2'] + ' ' + lidegs[a]['work_type'] + ',';
+							}
+							csv = csv + '\n';
 						}
-						csv = csv + ';';
-						for (var a = 0; a < lidegs.length; a++) {
-							csv = csv + lidegs[a]['name'] + ' ' + lidegs[a]['courses'] + ' ' + lidegs[a]['average1'] + ' ' + lidegs[a]['average2'] + ' ' + lidegs[a]['work_type'] + ',';
-						}
-						csv = csv + '\n';
-					}
-					window.saveAs(new Blob([csv],{type: "text/csv;charset=utf-8;"}),'base.csv');
+						window.saveAs(new Blob([csv],{type: "text/csv;charset=utf-8;"}),'base.csv');
+					});
+				},
+				function(err) {
+					$scope.apply(function() {
+						$scope.model.downloading = false;
+						Notifications.message(err);
+					});
 				});
 			},
 			function(error) {
-				Notifications.message(error);
+				$scope.apply(function() {
+					$scope.model.downloading = false;
+					Notifications.message(error);
+				});
 			}
 		);
 	}
