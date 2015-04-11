@@ -13,7 +13,7 @@ app.service('LaboralInsertion', function(Messages, Utils, Session) {
 		Messages.send(msg,
 			function(data) {
 				if (typeof data.error === 'undefined') {
-					ok(data.laboralInsertion);
+					ok(data.base64);
 				} else {
 					error(data.error);
 				}

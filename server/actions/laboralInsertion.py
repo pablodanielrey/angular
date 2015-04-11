@@ -6,6 +6,12 @@ from model.laboralInsertion import LaboralInsertion
 from model.events import Events
 from model.profiles import Profiles
 from model.config import Config
+from model.users.users import Users
+
+from collections import OrderedDict
+import io
+from pyexcel_ods3 import ODSWriter
+
 
 from model.exceptions import *
 
@@ -51,6 +57,7 @@ respuesta:
             ]
         }
     ],
+    'base64':'ods en base64'
     "ok":""
     "error":""
 }
@@ -62,6 +69,53 @@ class GetLaboralInsertionData:
     LaboralInsertion = inject.attr(LaboralInsertion)
     profiles = inject.attr(Profiles)
     config = inject.attr(Config)
+    users = inject.attr(Users)
+
+    def _exportToOds(self,data):
+        ods = OrderedDict()
+        ods.update({"Datos": data})
+        filename = '/tmp/{}.tmp'.format(str(uuid.uuid4()))
+        writer = ODSWriter(filename)
+        writer.write(ods)
+        writer.close()
+
+        b64 = ''
+        with open(filename,'rb') as f:
+            b64 = base64.b64encode(f.read()).decode('utf-8')
+
+        return b64
+
+
+    def _arrangeForOds(self, data):
+        values = [['Dni','Nombre','Apellido','Residir','Viajar','Lenguajes','Carreras']]
+        for l in data:
+            v = []
+
+            userId = l['id']
+            user = self.users.findUser(con,userId)
+
+            v.append(user['dni'])
+            v.append(user['name'])
+            v.append(user['lastname'])
+
+            v.append(l['reside'])
+            v.append(l['travel'])
+
+            lang = ''
+            for la in l['languages']:
+                lang = lang + '{} - {}, '.format(la['name'],la['level'])
+            v.append(lang)
+
+            deg = ''
+            for d in l['degrees']:
+                deg = deg + '{} - {} - {} - {}, '.format(d['name'],d['courses'],d['average1'],d['average2'])
+            v.append(deg)
+
+            values.append(v)
+
+        return values
+
+
 
     def handleAction(self, server, message):
 
@@ -76,7 +130,11 @@ class GetLaboralInsertionData:
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
             laboralInsertion = self.LaboralInsertion.getLaboralInsertionData(con)
-            response = {'id':message['id'],'ok':'','laboralInsertion':laboralInsertion}
+
+            data = self._arrangeForOds(laboralInsertion)
+            b64 = self._exportToOds(data)
+
+            response = {'id':message['id'],'ok':'','base64':b64}
             server.sendMessage(response)
             return True
 

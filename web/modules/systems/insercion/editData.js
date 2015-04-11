@@ -1,6 +1,6 @@
 var app = angular.module('mainApp');
 
-app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Session, Users, Student, LaboralInsertion, Notifications, Profiles) {
+app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Session, Users, Student, LaboralInsertion, Notifications, Profiles, Utils) {
 
 	$scope.model = {
 		download: false,
@@ -248,6 +248,7 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 		LaboralInsertion.getLaboralInsertionData(
 			function(data) {
 
+				/*
 				var promises = [];
 
 				for (var i = 0; i < data.length; i++) {
@@ -269,6 +270,7 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 				Promise.all(promises).then(function(results) {
 					$scope.$apply(function() {
 						$scope.model.downloading = false;
+
 						var csv = 'dni;nombre;apellido;residir;viajar;lenguajes;carreras\n';
 						for (var i = 0; i < data.length; i++) {
 							var user = results[i];
@@ -296,16 +298,20 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 						Notifications.message(err);
 					});
 				});
+				*/
+
+				$scope.model.downloading = false;
+				var blob = Utils.base64ToBlob(data);
+				window.saveAs(blob,'base.ods');
 			},
 			function(error) {
-				$scope.apply(function() {
+				$scope.$apply(function() {
 					$scope.model.downloading = false;
 					Notifications.message(error);
 				});
 			}
 		);
 	}
-
 
 	$timeout(function() {
 		$scope.initialize();
