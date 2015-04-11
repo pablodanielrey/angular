@@ -1,7 +1,9 @@
 
 import json
 import inject
-from wexceptions import MalformedMessage
+
+from model.exceptions import *
+
 from model.profiles import Profiles
 from model.session import Session
 from model.config import Config

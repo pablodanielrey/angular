@@ -5,7 +5,7 @@ from email.mime.text import MIMEText
 from email.header import Header
 
 from model.config import Config
-from wexceptions import *
+from model.exceptions import *
 
 
 class Mail:

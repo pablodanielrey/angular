@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import uuid, hashlib, psycopg2
 
-from wexceptions import *
+from model.exceptions import *
 from model.objectView import ObjectView
 
 """

@@ -15,7 +15,7 @@ import inject
 import datetime
 import traceback
 import logging
-from wexceptions import MalformedMessage
+from model.exceptions import MalformedMessage
 from model.profiles import AccessDenied
 from model.utils import DateTimeEncoder
 from model.config import Config

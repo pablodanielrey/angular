@@ -4,7 +4,7 @@ import inject, psycopg2, logging
 from model.config import Config
 from model.session import Session
 
-from wexceptions import *
+from model.exceptions import *
 
 
 

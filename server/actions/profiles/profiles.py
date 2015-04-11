@@ -3,7 +3,7 @@ import inject
 
 from model.profiles import Profiles
 from model.config import Config
-from wexceptions import *
+from model.exceptions import *
 
 """
     Modulo de acceso al manejo de perfiles/roles

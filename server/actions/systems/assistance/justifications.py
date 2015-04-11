@@ -3,7 +3,7 @@ import json, base64, datetime, traceback, logging
 import inject
 import psycopg2
 
-from wexceptions import *
+from model.exceptions import *
 
 from model.config import Config
 from model.profiles import Profiles

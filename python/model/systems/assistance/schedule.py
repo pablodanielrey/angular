@@ -3,7 +3,7 @@ import psycopg2, inject
 import datetime, pytz
 import logging
 
-from wexceptions import *
+from model.exceptions import *
 
 from model import utils
 from model.systems.assistance.date import Date

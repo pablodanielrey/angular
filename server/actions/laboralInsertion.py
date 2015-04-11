@@ -6,7 +6,8 @@ from model.laboralInsertion import LaboralInsertion
 from model.events import Events
 from model.profiles import Profiles
 from model.config import Config
-from wexceptions import MalformedMessage
+
+from model.exceptions import *
 
 """
     Modulo de acceso a los datos de insercion laboral

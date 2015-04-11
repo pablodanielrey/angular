@@ -4,7 +4,7 @@ import inject, psycopg2
 import pytz, datetime
 import dateutil.parser
 
-from wexceptions import *
+from model.exceptions import *
 
 from model.config import Config
 from model.profiles import Profiles

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import json, base64, datetime, traceback, logging, inject, psycopg2
 
-from wexceptions import *
+from model.exceptions import *
 
 from model.config import Config
 from model.profiles import AccessDenied, Profiles

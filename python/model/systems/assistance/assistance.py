@@ -1,16 +1,14 @@
 # -*- coding: utf-8 -*-
-import json, base64, psycopg2, datetime, traceback, logging
+import json, base64, psycopg2, datetime, traceback, logging, sys
 import inject
 import datetime
 import itertools
 
-from wexceptions import *
-
-from model.profiles import AccessDenied
 from model.utils import DateTimeEncoder
 from model.config import Config
 from model.users.users import Users
 
+from model.systems.assistance.fails import Fails
 from model.systems.assistance.logs import Logs
 from model.systems.assistance.date import Date
 from model.systems.assistance.schedule import Schedule
@@ -173,3 +171,35 @@ class Assistance:
         finally:
             con.close()
     """
+
+
+
+if __name__ == '__main__':
+
+    if len(sys.argv) < 3:
+        logging.warn('llamar el script con la fecha de inicio del chequeo y la de fin del chequeo')
+        sys.exit(1)
+
+
+    def config_injector(binder):
+        binder.bind(Config,Config('server-config.cfg'))
+
+
+    logging.basicConfig(level=logging.DEBUG)
+    inject.configure(config_injector)
+    config = inject.instance(Config)
+
+    dateutils = inject.instance(Date)
+
+    start = dateutils.parse(sys.argv[1])
+    end = dateutils.parse(sys.argv[2])
+
+    logging.info('\n\nChequeando schedule en {} --> {}'.format(start,end))
+
+    assistance = inject.instance(Assistance)
+    (users,sfails) = assistance.checkSchedule(start,end)
+
+    logging.info("\n\n\n")
+
+    fails = inject.instance(Fails)
+    fails.toCsv('/tmp/p.csv',users,sfails)

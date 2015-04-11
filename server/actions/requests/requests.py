@@ -15,7 +15,7 @@ from model.mail.mail import Mail
 from model.config import Config
 from model.credentials.credentials import UserPassword
 
-from wexceptions import *
+from model.exceptions import *
 
 
 """

@@ -13,7 +13,7 @@ from model.users.users import Users
 from model.credentials.credentials import UserPassword
 from model.session import Session, SessionNotFound
 
-from wexceptions import *
+from model.exceptions import *
 
 
 """
