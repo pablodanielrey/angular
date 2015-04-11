@@ -14,11 +14,37 @@ app.controller('DegreeLaboralInsertionCtrl', function($scope, $timeout, LaboralI
 
 	});
 
+
+  $scope.onDegreeChange = function(degree) {
+    $scope.onCoursesChange(degree);
+  }
+
+
   /*
     para implementar el chequeo que quiere lucas de las ofertas.
   */
   $scope.onCoursesChange = function(degree) {
+    var show = false;
+    if (degree.name == 'Contador Público') {
+      show = (degree.courses >= 29);
+
+    } else if (degree.name == 'Licenciado en Administración') {
+      show = (degree.courses >= 32);
+
+    } else if (degree.name == 'Licenciado en Turismo') {
+      show = (degree.courses >= 20);
+
+    } else if (degree.name == 'Licenciado en Economía') {
+      show = (degree.courses >= 30);
+
+    } else if (degree.name == 'Técnico en Cooperativas') {
+      show = (degree.courses >= 15);
+    }
+
+    if (!show) {
       degree.offerYoungProfessionals = false;
+    }
+    degree.showOfferYoungProfessionals = show;
   }
 
 
@@ -29,7 +55,8 @@ app.controller('DegreeLaboralInsertionCtrl', function($scope, $timeout, LaboralI
       name: '',
       courses: 0,
       average1: 0,
-      average2: 0
+      average2: 0,
+      showOfferYoungProfessionals: false
     }
     $scope.model.degrees.push(degree);
   }
@@ -69,6 +96,8 @@ app.controller('DegreeLaboralInsertionCtrl', function($scope, $timeout, LaboralI
 			$scope.model.degrees[i].offerInternship = false;
 			$scope.model.degrees[i].offerFullTime = false;
 			$scope.model.degrees[i].offerYoungProfessionals = false;
+      $scope.model.degrees[i].showOfferYoungProfessionals = false;
+
 			if($scope.model.degrees[i].work_type.indexOf("Internship") > -1){
 				$scope.model.degrees[i].offerInternship = true;
 			}
@@ -77,6 +106,7 @@ app.controller('DegreeLaboralInsertionCtrl', function($scope, $timeout, LaboralI
 			}
 			if($scope.model.degrees[i].work_type.indexOf("YoungProfessionals") > -1){
 				$scope.model.degrees[i].offerYoungProfessionals = true;
+        $scope.model.degrees[i].showOfferYoungProfessionals = true;
 			}
 		}
 	};
@@ -88,7 +118,7 @@ app.controller('DegreeLaboralInsertionCtrl', function($scope, $timeout, LaboralI
 
 	$scope.showOfferYoungProffesionals = function(degree){
 
-
+    return degree.showOfferYoungProfessionals;
     /*
     Contador Público >= 28
     Licenciado en Administración >= 30
@@ -98,13 +128,13 @@ app.controller('DegreeLaboralInsertionCtrl', function($scope, $timeout, LaboralI
 
     cantidad de materias como máximo 37
     */
-
+    /*
 		if(degree.courses > 29){
 			return true;
 		} else {
 			return false;
 		}
-
+    */
 	};
 
 });

@@ -4,7 +4,7 @@
 
     <div>
       <span>Carrera</span>
-  		<select ng-model="degree.name"  >
+  		<select ng-model="degree.name" ng-change='onDegreeChange(degree)'>
   			<option value="">Seleccione...</option>
   			<option value="Contador Público">Contador Público</option>
   			<option value="Licenciado en Administración">Licenciado en Administración</option>
@@ -31,7 +31,7 @@
         <div>
           <input class="check" type="checkbox" ng-model="degree.offerFullTime">Full-Time</input>
         </div>
-        <div ng-class="{true:'visible', false:'hidden'}[showOfferYoungProffesionals(degree)]">
+        <div ng-class="{true:'visible', false:'hidden'}[ showOfferYoungProffesionals(degree) ]">
           <input class="check" type="checkbox" ng-model="degree.offerYoungProfessionals">Prog. Jóvenes Profesionales</input>
         </div>
 
