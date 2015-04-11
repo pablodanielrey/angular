@@ -3,7 +3,7 @@ var app = angular.module('mainApp');
 app.controller('AssistanceFailsCtrl', function($scope, $timeout, Notifications, Assistance) {
 
   $scope.model = {
-    searching = false,
+    searching: false,
     begin: new Date(),
     end: new Date(),
     assistanceFails:[{}]
