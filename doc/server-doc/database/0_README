@@ -1,5 +1,6 @@
 ejecutar 2-systems antes que 2-groups!!!
 
+\i /var/www/html/angular/doc/server-doc/drop_schemas.sql
 \i /var/www/html/angular/doc/server-doc/database/1-profile.sql
 \i /var/www/html/angular/doc/server-doc/database/1-system.sql
 \i /var/www/html/angular/doc/server-doc/database/2-credentials.sql

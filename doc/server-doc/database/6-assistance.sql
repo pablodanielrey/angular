@@ -4,7 +4,7 @@ create schema assistance;
 
   );
 
-  create table assistance.attlog (
+  create table assistance.attlog (  
     id varchar not null primary key,
     device_id varchar not null,
     user_id varchar not null references profile.users (id),
@@ -17,7 +17,8 @@ create schema assistance;
 
   create table assistance.users (
     id varchar not null references profile.users (id),
-    created timestamptz default now()
+    created timestamptz default now(),
+    UNIQUE(id)
   );
 
   create table assistance.positions (
