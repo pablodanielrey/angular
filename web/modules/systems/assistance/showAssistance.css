@@ -1,4 +1,23 @@
+.showAssistance {
+  width:99%;
+  height:100%;
+  margin:5px;
+  font-family: calibri, Arial, Helvetica, sans-serif;
+  font-size:14px;
+}
 
-.selected {
+.showAssistance .title {
+  display:flex;
+  align-items: center;
+  background-image:linear-gradient(to right,#275276, #0066A6);
+  font-size:16px;
+  width:99%;
+  height:30px;
+  padding:5px;
+  color:white;
+  margin-bottom:10px;
+}
+
+.showAssistance .selected {
   color:green;
 }
