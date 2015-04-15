@@ -4,28 +4,61 @@
     <label><i class="fa fa-clock-o"></i> Control de Horario</label>
   </div>
   <div class="content">
+    <div class="contentLeft">
+      <div class="navTitleUser">Usuario</div>
+      <input class="navTitleUser2" type="text" >
 
-    <div "searchList">
-      <div ng-repeat="user in model.users" ng-click="selectUser(user)" ng-class="{true:'selected'}[isSelectedUser(user)]">{{user.name}} {{user.lastname}}</div>
+      <div class="searchList">
+        <div class="navSearchList">Seleccione</div>
+        <div class="listUsers" ng-repeat="user in model.users" ng-click="selectUser(user)" ng-class="{true:'selected'}[isSelectedUser(user)]">{{user.name}} {{user.lastname}}</div>
+      </div>
     </div>
+    <div class="contentRight">
+      <div class="nav">
+        <div>
+          <div class="navTitle">Oficina</div>
+          <input class="navTitle1" list="office">
+          <datalist id="office">
+            <option value="Alumnos">
+            <option value="Financiero">
+            <option value="Personal">
+            <option value="Detise">
+            <option value="Graduados">
+          </datalist>
+       </div>
+        <div>
+          <div class="navTitle">Fecha Inicio</div>
+          <input class="navTitle2" type="date" ng-model="model.date" >
+        </div>
+        <div>
+          <div class="navTitle">Fecha Fin</div>
+          <input class="navTitle2" type="date">
+        </div>
 
-    <div class="subContent">
-      <div>
-        Fecha: <input type="date" ng-model="model.date" >
-      </div>
-      <div>
-      <button ng-click="searchAssistance()" ng-disabled="isSearch()">Buscar</button>
-      </div>
-  </div>
 
-  <div ng-repeat="assistance in model.assistances">
-    Usuario: {{assistance.user}}<br />
-    Entrada: {{assistance.start}}<br />
-    Salida: {{assistance.end}}<br />
-    Tiempo trabajado: {{assistance.workedTime}}<br />
-    Marcaciones:
-    <ul>
-      <li ng-repeat="log in assistance.logs">{{log}}</li>
-    </ul>
+        <div>
+          <button ng-click="searchAssistance()" ng-disabled="isSearch()">Buscar</button>
+        </div>
+      </div>
+      <div class="nav2">
+        <div class="tam1">Fecha</div>
+        <div class="tam2">Usuario</div>
+        <div Class="tam1">Entrada</div>
+        <div class="tam1">Salida</div>
+        <div class="tam1">Total</div>
+        <div class="tam3">Observaciones</div>
+      </div>
+      <div class="results" ng-repeat="assistance in model.assistances">
+        <div class="tam1">22/08/2015</div>
+        <div class="tam2 textBlue">{{assistance.user}}</div>
+        <div class="tam1">{{assistance.start}}</div>
+        <div class="tam1">{{assistance.end}}</div>
+        <div class="tam1">{{assistance.workedTime}}</div>
+        <div class="tam3">Sin observaciones</div>
+        <!-- <ul>
+          <li ng-repeat="log in assistance.logs">{{log}}</li>
+        </ul> -->
+      </div>
+    </div>
   </div>
 </div>

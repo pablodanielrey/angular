@@ -15,9 +15,123 @@
   height:30px;
   padding:5px;
   color:white;
-  margin-bottom:10px;
+  margin-bottom:5px;
 }
 
+
+.showAssistance .content {
+  display: flex;
+  flex-direction:row;
+}
+.showAssistance .contentLeft {
+  display: flex;
+  flex-direction:column;
+
+  width:225px;
+  height:530px;
+  color:white;
+}
+.showAssistance .contentRight {
+  display:flex;
+  flex-direction:column;
+  margin-left:5px;
+  width:99%;
+  
+
+}
+.showAssistance .nav {
+  display:flex;
+  flex-direction:row;
+}
+
+.showAssistance .navTitle {
+  border-top: 3px solid #275276;
+  background: #0066A6;
+  color:white;
+  padding:5px;
+  width:177px;
+  margin-right:5px;
+}
+.showAssistance .navTitle1 {
+  font-size:16px;
+  padding:2px;
+  width:179px;
+  height:23px;
+
+}
+.showAssistance .navTitleUser {
+  border-top: 3px solid #275276;
+  background: #0066A6;
+  color:white;
+  padding:5px;
+  width:94%;
+}
+
+.showAssistance .navTitleUser2 {
+  padding:5px;
+  font-size:16px;
+}
+
+.showAssistance .navTitle2 {
+  font-size:16px;
+  padding:2px;
+  width:180px;
+}
+
+.showAssistance .searchList {
+  margin-top:5px;
+  color:#0066A6;
+  background-color:white;
+  margin-top:5px;
+
+}
+.showAssistance .navSearchList {
+  background-color:#0066A6;
+  color:white;
+  padding:5px;
+  margin-top:5px;
+  margin-bottom:10px;
+
+}
+.showAssistance .listUsers {
+  padding:5px;
+  cursor:pointer;
+}
 .showAssistance .selected {
-  color:green;
+  background-color:#0066A6;
+  color:white;
+}
+.showAssistance .nav2 {
+  display:flex;
+  flex-direcction:row;
+  background-color:#0066A6;
+  color:white;
+  padding:5px;
+  margin-top:10px;
+}
+.showAssistance .tam1 {
+  width:80px;
+  margin-right:5px;
+}
+.showAssistance .tam2 {
+  width:200px;
+  margin-right:5px;
+}
+.showAssistance .tam3 {
+  width:150px;
+  margin-right:5px;
+}
+.showAssistance .results {
+  display:flex;
+  flex-direcction:row;
+  margin-top:5px;
+
+}
+.showAssistance .results:nth-child(even) { background: #F2F2F2 }
+.showAssistance .results:nth-child(odd) { background: white}
+
+.showAssistance .textBlue {
+  color:#0066A6;
+  font-weight:bold;
+
 }
