@@ -1,7 +1,7 @@
 
 var app = angular.module('mainApp');
 
-app.controller('LogoutCtrl', function($scope, $location, Session, Credentials) {
+app.controller('LogoutCtrl', function($scope, $window, Session, Credentials) {
 
   $scope.logout = function() {
 
@@ -9,7 +9,7 @@ app.controller('LogoutCtrl', function($scope, $location, Session, Credentials) {
       function(ok) {
         Session.destroy();
         $scope.$emit('logoutOk','');
-        $location.path('/');
+         $window.location.href = "/systems/login/indexLogin.html";
       },
       function(error) {
           alert(error);
