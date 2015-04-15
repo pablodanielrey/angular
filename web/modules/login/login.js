@@ -39,7 +39,7 @@ app.controller("LoginCtrl", ['$rootScope','$scope', '$window', 'Session','Creden
 					$scope.user.username = '';
 					$scope.user.password = '';
 
-					$window.location.href = "index.html";
+					$window.location.href = "/index.html";
 				},
 				function(error) {
 					Notifications.message(error);
