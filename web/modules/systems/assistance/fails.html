@@ -7,62 +7,50 @@
     <div class="filter">
 
       <div class="dateContainer">
-        <div class="dateTimeTitle">
-          <p>Fecha de inicio</p>
-        </div>
         <div class="dateInputContainer">
           <div class="date">
       			<div class="dateTitle">
-      				<span><i class="fa fa-calendar"></i> Seleccione Fecha</span>
+      				<span><i class="fa fa-calendar"></i> Seleccione Fecha de Inicio</span>
       			</div>
       			<div>
       				<input class="inputDate" type="date" ng-model="model.begin">
       			</div>
       		</div>
-          <div class="inputTime">
-            <span class="timeTitle"><i class="fa fa-clock-o"></i> Hora</span>
-            <input class="inputClock" type="time" ng-model="model.begin">
-          </div>
         </div>
       </div>
 
       <div class="dateContainer">
-        <div class="dateTimeTitle">
-          <p>Fecha de finalización</p>
-        </div>
         <div class="dateInputContainer">
           <div class="date">
       			<div class="dateTitle">
-      				<span><i class="fa fa-calendar"></i> Seleccione Fecha</span>
+      				<span><i class="fa fa-calendar"></i> Seleccione Fecha de Fin</span>
       			</div>
       			<div>
       				<input class="inputDate" type="date" ng-model="model.end">
       			</div>
       		</div>
-          <div class="inputTime">
-            <span class="timeTitle"><i class="fa fa-clock-o"></i> Hora</span>
-            <input class="inputClock" type="time" ng-model="model.end">
-          </div>
         </div>
       </div>
 
       <div class="actionsContainer">
-        <span ng-if='model.searching'><i class="loading fa fa-spinner fa-spin"></i>  Buscando Datos</span>
-        <input class="button blue" type="button" value="Buscar" ng-click="search()">
+        <button class="button blue"  ng-click="search()"><i class="fa fa-search"></i> Buscar</Button>
+        <span class="searchDate" ng-if='model.searching'><i class="loading fa fa-spinner fa-spin"></i>  Buscando Datos</span>
       </div>
     </div>
+    <div class ="headerFails">
 
+        <div ng-click="predicate = 'fail.dateFormat'; reverse=!reverse" class="date"><i class="fa fa-sort"></i> Fecha</div>
+        <div ng-click="predicate = 'user.dni'; reverse=!reverse" class="dni"><i class="fa fa-sort"></i> DNI</div>
+        <div ng-click="predicate = 'user.lastname'; reverse=!reverse" class="lastname"><i class="fa fa-sort"></i> Apellido</div>
+        <div ng-click="predicate = 'user.name'; reverse=!reverse" class="name"><i class="fa fa-sort"></i> Nombre</div>
+        <div ng-click="predicate = 'fail.dateSchedule'; reverse=!reverse" class="dateSchedule"><i class="fa fa-sort"></i> Hora declarada </div>
+        <div ng-click="predicate = 'fail.wh'; reverse=!reverse" class="workingHours"><i class="fa fa-sort"></i> Hora de marcación</div>
+        <div ng-click="predicate = 'fail.diff'; reverse=!reverse" class="diff"><i class="fa fa-sort"></i> Diferencia </div>
+        <div ng-click="predicate = 'fail.description'; reverse=!reverse" class="description"><i class="fa fa-sort"></i> Description</div>
+
+    </div>
     <div class="fails">
-      <div class ="headerFails">
-        <div ng-click="predicate = 'fail.dateFormat'; reverse=!reverse" class="date">Fecha</div>
-        <div ng-click="predicate = 'user.dni'; reverse=!reverse" class="dni">Dni</div>
-        <div ng-click="predicate = 'user.lastname'; reverse=!reverse" class="lastname">Apellido</div>
-        <div ng-click="predicate = 'user.name'; reverse=!reverse" class="name">Nombre</div>
-        <div ng-click="predicate = 'fail.dateSchedule'; reverse=!reverse" class="dateSchedule">Hora declarada</div>
-        <div ng-click="predicate = 'fail.wh'; reverse=!reverse" class="workingHours">Hora de marcación</div>
-        <div ng-click="predicate = 'fail.diff'; reverse=!reverse" class="diff">Diferencia</div>
-        <div ng-click="predicate = 'fail.description'; reverse=!reverse" class="description">Description</div>
-      </div>
+
       <div class="fail" ng-repeat="assistanceFail in model.assistanceFails | orderBy:predicate:reverse">
         <div class="date">{{assistanceFail.fail.dateFormat}}</time></div>
         <div class="dni">{{assistanceFail.user.dni}}</div>

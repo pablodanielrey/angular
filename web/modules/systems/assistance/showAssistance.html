@@ -1,29 +1,31 @@
-<!-- seleccion de usuario -->
-<div>
-  Seleccione:
-  <ul>
-    <li ng-repeat="user in model.users" ng-click="selectUser(user)" ng-class="{true:'selected'}[isSelectedUser(user)]">{{user.name}} {{user.lastname}}</li>
-  </ul>
+<div class="showAssistance">
+  <!-- seleccion de usuario -->
+  <div class="title">
+    <label><i class="fa fa-clock-o"></i> Control de Horario</label>
+  </div>
+  <div class="content">
+
+    <div "searchList">
+      <div ng-repeat="user in model.users" ng-click="selectUser(user)" ng-class="{true:'selected'}[isSelectedUser(user)]">{{user.name}} {{user.lastname}}</div>
+    </div>
+
+    <div class="subContent">
+      <div>
+        Fecha: <input type="date" ng-model="model.date" >
+      </div>
+      <div>
+      <button ng-click="searchAssistance()" ng-disabled="isSearch()">Buscar</button>
+      </div>
+  </div>
+
+  <div ng-repeat="assistance in model.assistances">
+    Usuario: {{assistance.user}}<br />
+    Entrada: {{assistance.start}}<br />
+    Salida: {{assistance.end}}<br />
+    Tiempo trabajado: {{assistance.workedTime}}<br />
+    Marcaciones:
+    <ul>
+      <li ng-repeat="log in assistance.logs">{{log}}</li>
+    </ul>
+  </div>
 </div>
-
-<!-- fecha -->
-<div>
-  Fecha: <input type="date" ng-model="model.date" >
-</div>
-<button ng-click="searchAssistance()" ng-disabled="isSearch()">Buscar</button>
-
-<!-- datos de assistance -->
-<div ng-repeat="assistance in model.assistances">
-  Usuario: {{assistance.user}}<br />
-  Entrada: {{assistance.start}}<br />
-  Salida: {{assistance.end}}<br />
-  Tiempo trabajado: {{assistance.workedTime}}<br />
-  Marcaciones:
-  <ul>
-    <li ng-repeat="log in assistance.logs">{{log}}</li>
-  </ul>
-</div>
-
-
-
-

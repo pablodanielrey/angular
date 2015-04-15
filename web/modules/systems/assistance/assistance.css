@@ -10,6 +10,11 @@
   height:20px;
   font-size:18px;
 }
+.assistanceHome .header {
+  width:100%;
+  background-color:#F5F5F5;
+  border-bottom:5px solid #0066A6;
+}
 .assistanceHome .subtitle {
   width:100%;
   height:20px;
@@ -23,6 +28,12 @@
 .assistanceHome .data {
   color:#0066A6;
   font-size:22px;
+  font-weight:bold;
+}
+.assistanceHome .data1 {
+  color:black;
+  font-size:16px;
+  font-weight:bold;
 }
 .assistanceHome .data3 {
   color:#0066A6;
@@ -34,18 +45,25 @@
 }
 .assistanceHome .spanBlue {
   color:#0066A6;
-  font-size:18px;
+  font-size:20px;
+  font-weight:bold;
 }
 .assistanceHome .spanWhite {
   color:white;
-  font-size:16px;
+  font-size:18px;
 }
 
 .assistanceHome .summaryUser {
   display:flex;
   flex-direction:row;
   justify-content: space-around;
-  margin-bottom:20px;
+  padding-top:20px;
+  padding-bottom:20px;
+  background-color:#F5F5F5;
+
+  background-color: #F5F5F5;
+
+
 
 }
 .assistanceHome .name {
@@ -74,9 +92,13 @@
   display:flex;
   flex-direction:row;
   justify-content: space-around;
-  margin-bottom:20px;
+
+  background-image: url("/views/img/Huella2.png");
+
   background-color:#0066A6;
   align-items:center;
+  padding-top:10px;
+  padding-bottom:10px;
 }
 .assistanceHome .entryTime {
   display:flex;
@@ -105,7 +127,8 @@
   flex-direction:row;
   justify-content: space-around;
 
-  margin-bottom:20px;
+  padding-bottom:20px;
+  padding-top:20px;
 }
 .assistanceHome .missing {
   display:flex;

@@ -24,15 +24,57 @@
   flex-direction:row;
   margin-bottom:5px;
 }
-.adminRequestOverTime .userInfo {
+.adminRequestOverTime .titlesFiles {
   display:flex;
-  flex-direction:column;
-  background-color:#0066A6;
+  flex-direction:row;
+
+
+}
+.adminRequestOverTime .t1 {
   width:150px;
-  padding:10px;
+  margin-bottom: 5px;
+}
+.adminRequestOverTime .t2 {
+  width:136px;
+  margin-bottom: 5px;
+}
+.adminRequestOverTime .t3 {
+  width:266px;
+  margin-bottom: 5px;
+}
+.adminRequestOverTime .t4 {
+  width:80px;
+  margin-bottom: 5px;
+}
+
+.adminRequestOverTime .column {
+  background-color:#0066A6;
+
+  padding:5px;
   margin-right:10px;
   color:white;
   border-top:3px solid #275276;
+  font-weight:bold;
+}
+.adminRequestOverTime .userInfo {
+  display:flex;
+  flex-direction:column;
+
+  width:134px;
+  padding:10px;
+  margin-right:10px;
+  color:white;
+
+  color:#0066A6;
+  border:1px solid #0066A6;
+  border-left:5px solid #0066A6;
+
+}
+.adminRequestOverTime .userName {
+  font-weight:bold;
+}
+.adminRequestOverTime .userDNI {
+  color:black;
 }
 .adminRequestOverTime .userName{
   font-weight:bold;
@@ -41,55 +83,54 @@
   display:flex;
   flex-direction:column;
   background-color:white;
-  width:150px;
+  width:120px;
   padding:10px;
   margin-right:10px;
-  color:#0066A6;
+  color:black;
   border:1px solid #0066A6;
   border-left:5px solid #0066A6;
-  font-weight:bold;
+
 }
 
 .adminRequestOverTime .reasonRequest {
   display:flex;
   flex-direction:column;
   background-color:white;
-  width:260px;
+  width:250px;
   padding:10px;
   margin-right:10px;
-  color:#0066A6;
+  color:black;
   border:1px solid #0066A6;
   border-left:5px solid #0066A6;
-  font-weight:bold;
+
 }
 .adminRequestOverTime .reasonRefuse {
-  width:260px;
+  width:250px;
   border: none;
   resize:none;
-  color:#0066A6;
-  font-weight:bold;
+  color:black;
+
 
 }
 .adminRequestOverTime .approveRequest {
-  background-color:#0066A6;
-  color:white;
-  padding:3px;
-  text-shadow: 0px 1px black;
-  font-weight: bold;
-  margin-right:10px;
-  font-size:13px;
-  width:100px;
-  margin-bottom:5px;
+  background-color: #128c78;
+  color: white;
+  height: 20px;
+  margin-left: 5px;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  cursor: pointer;
+  border: none;
+  border-radius: 2px;
 
 }
 .adminRequestOverTime .refuseRequest {
-  background-color:#e43e46;
-  color:white;
-  padding:3px;
-  width:100px;
-  text-shadow: 0px 1px black;
-  font-weight: bold;
-  margin-right:10px;
-  font-size:13px;
+  background-color: #e43e46;
+  color: white;
+  height: 20px;
+  margin-left: 5px;
+  cursor: pointer;
+  border: none;
+  border-radius: 2px;
 
 }
