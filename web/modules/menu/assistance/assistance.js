@@ -44,6 +44,9 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, As
         $scope.assistanceFails = function() {
           $location.path('/assistanceFails')
         }
+        $scope.showAssistance = function() {
+          $location.path('/showAssistance')
+        }
 
 
 
@@ -72,11 +75,13 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, As
                         if (hasApprove) {
                           $scope.items.push({ label:'Adm. Solicitudes ', img:'fa-ticket', function: $scope.adminRequestAssistance});
                           $scope.items.push({ label:'Horas Extras ', img:'fa-plus', function: $scope.requestAuthority});
+                          $scope.items.push({ label:'Control de Horario', img:'fa-clock-o', function: $scope.showAssistance});
                         }
 
                         if (hasOvertime) {
                           //$scope.items.push({ label:'Licencias Médicas', img:'fa-stethoscope', function: $scope.medicalLicenses});
                           $scope.items.push({ label:'Admin Horas Extras ', img:'fa-plus', function: $scope.adminRequestOverTime});
+
                         }
                       },
                       function(err) {

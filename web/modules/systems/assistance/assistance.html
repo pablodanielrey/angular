@@ -1,29 +1,32 @@
 <div class="assistanceHome">
-
+  <div class="header">
+    <img src="../views/img/AssitenciaHeader.jpg">
+    
+  </div>
 
   <div class="summaryUser">
     <div class="name">
       <span class="data">{{model.user.name}}&nbsp;{{model.user.lastname}}</span>
-      <span>{{model.user.dni}}</span>
+      <span class="data1">{{model.user.dni}}</span>
     </div>
     <hr>
     <div class="turn">
-      <span><i class="fa fa-clock-o"></i> <b>Turno</b></span>
+      <span class="data1"><i class="fa fa-clock-o"></i> Turno</span>
       <div class="spanBlue" ng-repeat="time in model.assistanceData.schedule">{{time}}</div>
     </div>
     <hr>
     <div class="oficce">
-      <span><i class="fa fa-building-o"></i> <b>Oficina</b></span>
+      <span class="data1"><i class="fa fa-building-o"></i> Oficina</span>
       <div class="spanBlue" ng-repeat="office in model.offices">{{office}}</div>
     </div>
     <hr>
     <div class="job">
-      <span><i class="fa fa-bookmark-o"></i> <b>Cargo</b></span>
+      <span class="data1"><i class="fa fa-bookmark-o"></i> Cargo</span>
       <span class="spanBlue">{{model.assistanceData.position}}</span>
     </div>
     <hr>
     <div class="job">
-      <span><i class="fa fa-map-marker"></i> <b>Estado</b></span>
+      <span class="data1"><i class="fa fa-map-marker"></i> Estado</span>
       <span class="spanBlue">{{model.assistanceStatus.status}}</span>
     </div>
   </div>
@@ -32,7 +35,7 @@
 
   <div class="schedule">
     <div class="entryTime">
-      <span class="spanWhite"><b><i class="fa fa-clock-o"></i>Hora de Entrada</b></span>
+      <span class="spanWhite"><b><i class="fa fa-clock-o"></i> Hora de Entrada</b></span>
       <span class="boxes">{{model.assistanceStatus.start}}</span>
 
     </div>
@@ -80,21 +83,21 @@
 
   <div class="license">
     <div class="missing">
-      <span>Ausentes con Aviso</span>
+      <span class="data1">Ausentes con Aviso</span>
       <span class="boxes2">{{model.justificationAbsent}}</span>
-      <span>Disponibles</span>
+      <span class="data1">Disponibles</span>
     </div>
     <hr>
     <div class="compensatory">
-      <span>Compensatorios</span>
+      <span class="data1">Compensatorios</span>
       <span class="boxes2">{{model.justificationCompensatory}}</span>
-      <span>Disponibles</span>
+      <span class="data1">Disponibles</span>
     </div>
     <hr>
     <div class="departures">
-      <span>S. Eventuales</span>
+      <span class="data1">S. Eventuales</span>
       <span class="boxes2">{{model.justificationOut}}</span>
-      <span>Hs. Disponibles</span>
+      <span class="data1">Hs. Disponibles</span>
     </div>
     <hr>
     <!--

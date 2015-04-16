@@ -1,5 +1,5 @@
 .assistanceFails {
-  width:100%;
+  width:99%;
   height:100%;
   display:flex;
   flex-direction:column;
@@ -14,7 +14,7 @@
   align-items: center;
   background-image:linear-gradient(to right,#275276, #0066A6);
   font-size:16px;
-  width:100%;
+  width:99%;
   height:30px;
   padding:5px;
   color:white;
@@ -22,53 +22,105 @@
 }
 
 .assistanceFails .fails {
-    margin-top:1em;
-    display:flex;
-    flex-direction:column;
+
+    overflow: scroll;
+    height:385px;
+    overflow-x: hidden;
 }
 
-.assistanceFails .fails .headerFails {
+
+.assistanceFails  .headerFails {
   cursor:pointer;
-  font-weight: bold;
+
   display:flex;
   flex-direction:row;
+
+  background-color:#0066A6;
+  color:white;
+  padding-top:5px;
+  padding-bottom:5px;
+  margin-bottom:5px;
+  margin-top:10px;
+
 }
+
+.assistanceFails .headerFails .dni {
+    width:80px;
+}
+
+.assistanceFails .headerFails .name {
+    width:100px;
+}
+
+.assistanceFails .headerFails .lastname {
+    width:90px;
+}
+
+.assistanceFails .headerFails .date {
+    width:80px;
+}
+
+.assistanceFails .headerFails .dateSchedule {
+    width:80px;
+}
+
+.assistanceFails .headerFails .workingHours {
+    width:80px;
+}
+
+.assistanceFails .headerFails .diff {
+    width:90px;
+}
+
+.assistanceFails .headerFails .description {
+    width:200px;
+}
+
+
+
 
 .assistanceFails .fails .fail {
   display:flex;
   flex-direction:row;
 }
+.assistanceFails .fail:nth-child(even) { background: white }
+.assistanceFails .fail:nth-child(odd) { background: #F2F2F2}
+
 
 .assistanceFails .fails .dni {
-    width:6em;
+    width:80px;
 }
 
 .assistanceFails .fails .name {
-    width:10em;
+    width:100px;
+    color:#0066A6;
+    font-weight:bold;
 }
 
 .assistanceFails .fails .lastname {
-    width:10em;
+    width:90px;
+    color:#0066A6;
+    font-weight:bold;
 }
 
 .assistanceFails .fails .date {
-    width:7em;
+    width:80px;
 }
 
 .assistanceFails .fails .dateSchedule {
-    width:6em;
+    width:80px;
 }
 
 .assistanceFails .fails .workingHours {
-    width:6em;
+    width:80px;
 }
 
 .assistanceFails .fails .diff {
-    width:6em;
+    width:90px;
 }
 
 .assistanceFails .fails .description {
-    width:12em;
+    width:200px;
 }
 
 .assistanceFails .filter {
@@ -101,18 +153,18 @@
 .assistanceFails .dateTitle {
   background-color: #0066A6;
   color: white;
-  padding:5px;
+  padding:10px;
   text-align:center;
   margin-bottom: 0px;
-  font-size: 13px;
-  width: 150px;
+  font-size: 16px;
+  width: 240px;
   border-top: 3px solid #275276;
 }
 
 .assistanceFails .inputDate {
-  width:146px;
-  padding:5px;
-  font-size: 14px;
+  width:236px;
+  padding:10px;
+  font-size: 16px;
   height:16px;
 }
 
@@ -134,6 +186,10 @@
   height:16px;
 }
 
+.assistanceFails .searchDate {
+  margin-left: 10px;
+  color:#0066A6;
+}
 .assistanceFails .inputTime {
   display:flex;
   flex-direction:column;
@@ -150,6 +206,7 @@
   width: 150px;
   height:50px;
   cursor: pointer;
+  border: 1px solid #0066A6;
 }
 
 .assistanceFails .blue {
@@ -157,4 +214,5 @@
   color:white;
   text-shadow: 0px 1px black;
   font-weight: bold;
+  font-size:18px;
 }

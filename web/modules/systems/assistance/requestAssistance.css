@@ -82,7 +82,7 @@
 .requestAssistance .myRequestInfo {
   display:flex;
   flex-direction:row;
-  background-color: #f5f5f5;
+  background-color: white;
 }
 
 
@@ -92,16 +92,42 @@
 }
 */
 
-.requestAssistance .iconsMyRequest {
-  padding:5px;
-  margin-top:5px;
-  background-color:#128c78;
-  color:white;
-  border:1px solid #0066A6;
+
+.requestAssistance .titlesFiles {
+  display:flex;
+  flex-direction:row;
+
+
 }
+.requestAssistance .t1 {
+  width:200px;
+  margin-top:10px;
+
+}
+
+.requestAssistance .t3 {
+  width:200px;
+  margin-bottom: 5px;
+}
+.requestAssistance .t4 {
+  width:100px;
+  margin-top:10px;
+}
+
+.requestAssistance .column {
+  background-color:#0066A6;
+
+  padding:5px;
+  margin-right:10px;
+  color:white;
+  border-top:3px solid #275276;
+  font-weight:bold;
+}
+
+
 .requestAssistance .myRequest {
   margin-top:5px;
-  width:150px;
+  width:190px;
   background-color:white;
   padding:5px;
   padding-left:10px;
@@ -109,16 +135,18 @@
   border:1px solid #0066A6;
   margin-right:10px;
   font-weight: bold;
+  border-left: 5px solid #0066A6;
 }
 .requestAssistance .myRequestDate {
   margin-top:5px;
-  width:150px;
+  width:189px;
   border:1px solid #0066A6;
   padding:5px;
   padding-left:10px;
   color:black;
   margin-right:10px;
   background-color:white;
+  border-left: 5px solid #0066A6;
 }
 
 
@@ -130,6 +158,25 @@
   padding:3px;
   margin-left:5px;
   cursor:pointer;
+  border-radius: 2px;
+}
+.requestAssistance .buttonApproved {
+  background-color:#128c78;
+  color:white;
+  border:none;
+  padding:3px;
+
+  font-size:14px;
+  border-radius: 2px;
+}
+.requestAssistance .buttonCancel {
+  background-color:#e43e46;
+  color:white;
+  border:none;
+  padding:3px;
+
+  font-size:14px;
+  border-radius: 2px;
 }
 
 
@@ -137,26 +184,6 @@
 
 
 
-@-webkit-keyframes apending {
-  0% {
-    opacity: 1;
-    /*-webkit-transform: scale(1,1);*/
-    color: white;
-  }
-  50% {
-    opacity: 0.9;
-    /*-webkit-transform: scale(1.02,1.02);*/
-    color: white;
-    border-color: #009C75;
-    /*background-color: #275276;*/
-    background-color:#0066A6;
-  }
-  100% {
-    opacity: 1;
-    /*-webkit-transform: scale(1,1);*/
-    color: white;
-  }
-}
 
 
 .myStateRequestSlope.pending {
@@ -170,47 +197,47 @@
 
 .requestAssistance .myStateRequestSlope {
   margin-top:5px;
-  width:160px;
-  border:1px solid #0066A6;
+  width:200px;
+
   padding:5px;
   padding-left:10px;
-  color:white;
-  margin-right:10px;
-  background-color:#275276;
+  color:#0066A6;
+
+  background-color:white;
 }
 
 .requestAssistance .myStateRequestApproved {
   margin-top:5px;
-  width:160px;
-  border:1px solid #0066A6;
+  width:200px;
+
   padding:5px;
   padding-left:10px;
   color:white;
-  margin-right:10px;
-  background-color:#128c78;
+  margin-right:5px;
+
 }
 
 .requestAssistance .myStateRequestRejected {
   margin-top:5px;
-  width:160px;
-  border:1px solid #0066A6;
+  width:200px;
+
   padding:5px;
   padding-left:10px;
   color:white;
   margin-right:10px;
-  background-color:#e43e46;
+
 }
 
 
 .requestAssistance .myStateRequestCanceled {
   margin-top:5px;
-  width:160px;
-  border:1px solid #0066A6;
+  width:200px;
+
   padding:5px;
   padding-left:10px;
   color:white;
   margin-right:10px;
-  background-color:#e43e46;
+
 }
 
 

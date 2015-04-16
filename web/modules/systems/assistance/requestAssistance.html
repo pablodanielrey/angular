@@ -12,30 +12,34 @@
     <div class="myRequests">
       <span><i class="fa fa-ticket"></i> Mis Solicitudes</span>
     </div>
+    <div class="titlesFiles">
+      <div class="column t1"><i class="fa fa-ticket"></i> Solicitud</div>
+      <div class="column t1"><i class="fa fa-calendar"></i> Día</div>
+      <div class="column t1"><i class="fa fa-info-circle"></i> Estado</div>
+    </div>
 
     <div class="myRequestInfo" ng-repeat="x in model.requestedLicences" ng-class="{'PENDING':'pending', 'CANCELED':'canceled', 'REJECTED':'rejected', 'APPROVED':'approved'}[x.status]">
-      <div class="iconsMyRequest"><i class="fa fa-ticket"></i></div>
+
       <div class="myRequest">
         <span>{{x.justification_name}}</span>
       </div>
-      <div class="iconsMyRequest"><i class="fa fa-calendar-o"></i></div>
       <div class="myRequestDate">
         <span>{{x.summary}}</span>
       </div>
-      <div class="iconsMyRequest"><i class="fa fa-bullhorn"></i></div>
+
 
       <div class="myStateRequestSlope  pending" ng-class="{true:'visible', false:'hidden'}[x.status == 'PENDING']">
-        <span>Pendiente</span>
+        <span><i class="fa fa-spinner fa-spin"></i> Pendiente</span>
         <Button class="buttonpending" ng-click='cancelRequest(x)'><i class="fa fa-times"></i> Cancelar</Button>
       </div>
       <div class="myStateRequestApproved" ng-class="{true:'visible', false:'hidden'}[x.status == 'APPROVED']">
-        <span>Aprobado</span>
+        <span class="buttonApproved"><i class="fa fa-check-circle"></i> Aprobado</span>
       </div>
       <div class="myStateRequestRejected" ng-class="{true:'visible', false:'hidden'}[x.status == 'REJECTED']">
-        <span>Rechazado</span>
+        <span class="buttonCancel"><i class="fa fa-times"></i> Rechazado</span>
       </div>
        <div class="myStateRequestCanceled" ng-class="{true:'visible', false:'hidden'}[x.status == 'CANCELED']">
-        <span>Cancelado</span>
+        <span class="buttonCancel"><i class="fa fa-times"></i> Cancelado</span>
       </div>
     </div>
 
