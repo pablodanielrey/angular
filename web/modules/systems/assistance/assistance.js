@@ -44,7 +44,7 @@ app.controller('AssistanceCtrl', function($scope, $timeout, $window, Profiles, S
 	/**
 	 * Dar formato a los datos del estado de asistencia recibidos del servidor
 	 */
-	$scope.formatAssistanceStatusFromServer = function(assistanceStatusFromServer){
+  $scope.formatAssistanceStatusFromServer = function(assistanceStatusFromServer){
 		$scope.model.assistanceStatus.status = assistanceStatusFromServer.status;
 
 		if (assistanceStatusFromServer.start != null) {
@@ -63,7 +63,13 @@ app.controller('AssistanceCtrl', function($scope, $timeout, $window, Profiles, S
 
 		var workedMinutes = assistanceStatusFromServer.workedMinutes;
 		var workedH = Math.floor(workedMinutes/60);
+    if(workedH < 10){
+      workedH = "0"+workedH;
+    }
 		var workedM = Math.floor(workedMinutes % 60);
+    if(workedM < 10){
+      workedM = "0"+workedM;
+    }
 		$scope.model.assistanceStatus.workedTime = workedH + ":" + workedM;
 
 
