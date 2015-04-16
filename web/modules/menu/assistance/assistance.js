@@ -101,6 +101,7 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, As
             function(ok) {
               if (ok == 'granted') {
                 $scope.items.push({ label:'Chequeo de Fallas', img:'fa-ticket', function: $scope.assistanceFails});
+
               }
             },
             function (error) {
