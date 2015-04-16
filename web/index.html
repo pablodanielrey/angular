@@ -204,6 +204,7 @@
 </head>
 <body>
 
+
 <div ng-controller="IndexCtrl" class="principal">
 
 <div class="screen">
@@ -226,16 +227,12 @@
       </footer>
     </div>
 
-    <div class='login-container' ng-class="{false:'visible',true:'hidden'}[isLogged()]" ng-controller="LoginCtrl" ng-include="'modules/login/login.html'">
-    </div>
-
     <div class='connection-container' ng-class="{false:'visible',true:'hidden'}[isConnected()]" ng-controller="ConnectionCtrl" ng-include="'modules/connection/con.html'">
     </div>
 
 
     <div class='messages-container' ng-controller="MessagesCtrl" ng-include="'modules/messages/messages.html'" ng-class="{false: 'hidden', true: 'visible'}[ isVisible() ]">
     </div>
-
 
 </div>
 

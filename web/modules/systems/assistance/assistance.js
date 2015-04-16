@@ -44,7 +44,7 @@ app.controller('AssistanceCtrl', function($scope, $timeout, $window, Profiles, S
 	/**
 	 * Dar formato a los datos del estado de asistencia recibidos del servidor
 	 */
-	$scope.formatAssistanceStatusFromServer = function(assistanceStatusFromServer){
+  $scope.formatAssistanceStatusFromServer = function(assistanceStatusFromServer){
 		$scope.model.assistanceStatus.status = assistanceStatusFromServer.status;
 
 		if (assistanceStatusFromServer.start != null) {
@@ -63,7 +63,13 @@ app.controller('AssistanceCtrl', function($scope, $timeout, $window, Profiles, S
 
 		var workedMinutes = assistanceStatusFromServer.workedMinutes;
 		var workedH = Math.floor(workedMinutes/60);
+    if(workedH < 10){
+      workedH = "0"+workedH;
+    }
 		var workedM = Math.floor(workedMinutes % 60);
+    if(workedM < 10){
+      workedM = "0"+workedM;
+    }
 		$scope.model.assistanceStatus.workedTime = workedH + ":" + workedM;
 
 
@@ -80,12 +86,11 @@ app.controller('AssistanceCtrl', function($scope, $timeout, $window, Profiles, S
 		$scope.model.assistanceData.position = assistanceDataFromServer.position;
 
 		for (var time in assistanceDataFromServer.schedule) {
-			console.log(time);
 			var start = new Date(assistanceDataFromServer.schedule[time].start);
-			var startHour = start.getHours() + ":" + start.getMinutes();
+			var startHour = start.toTimeString().substring(0, 5);
 
 			var end = new Date(assistanceDataFromServer.schedule[time].end);
-			var endHour = end.getHours() + ":" + end.getMinutes()
+			var endHour = end.toTimeString().substring(0, 5);
 
 			$scope.model.assistanceData.schedule.push(startHour + " / " + endHour);
 		}

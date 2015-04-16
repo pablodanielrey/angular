@@ -59,10 +59,10 @@ app.controller('AdminRequestOverTimeCtrl', ["$scope", "$timeout", "Notifications
 	$scope.formatRequest = function(request){
 		var begin = new Date(request.begin);
 		request.date = begin.toLocaleDateString();
-		request.startTime = begin.toLocaleTimeString().substring(0, 5);
+		request.startTime = begin.toTimeString().substring(0, 5);
 
 		var end = new Date(request.end);
-		request.endTime = end.toLocaleTimeString().substring(0, 5);
+		request.endTime = end.toTimeString().substring(0, 5);
 
 		// carga los datos del usuario dentro del request
 		$scope.loadUser(request);
