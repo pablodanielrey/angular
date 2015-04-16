@@ -86,12 +86,11 @@ app.controller('AssistanceCtrl', function($scope, $timeout, $window, Profiles, S
 		$scope.model.assistanceData.position = assistanceDataFromServer.position;
 
 		for (var time in assistanceDataFromServer.schedule) {
-			console.log(time);
 			var start = new Date(assistanceDataFromServer.schedule[time].start);
-			var startHour = start.getHours() + ":" + start.getMinutes();
+			var startHour = start.toTimeString().substring(0, 5);
 
 			var end = new Date(assistanceDataFromServer.schedule[time].end);
-			var endHour = end.getHours() + ":" + end.getMinutes()
+			var endHour = end.toTimeString().substring(0, 5);
 
 			$scope.model.assistanceData.schedule.push(startHour + " / " + endHour);
 		}
