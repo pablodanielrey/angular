@@ -114,10 +114,8 @@ app.controller('MenuCtrl', function($rootScope, $scope, $location, $timeout, Ses
 		return ($scope.itemSelected == i);
 	}
 
+	$scope.generateItems();
 
-	$scope.$on('LoginEvent',function(event,data) {
-		$scope.generateItems();
-	});
 
 
 

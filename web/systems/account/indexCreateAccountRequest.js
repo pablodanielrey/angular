@@ -1,25 +1,15 @@
 
 // defino el módulo principal.
-var app = angular.module('mainApp',['ngRoute', 'pickadate']);
-
+var app = angular.module('mainApp',['ngRoute']);
 
 /**
  * controlador principal. Funciones principales:
  * 		Verificar la conexión y autentificación de usuarios.
  * 		Recibir eventos del socket y transferirlo a los controladores secundarios
  */
-app.controller('IndexCtrl', function ($rootScope, $scope, $location, $timeout, $window, Session, Cache, WebSocket) {
+app.controller('IndexCreateAccountRequestCtrl', ["$rootScope", "$location", "$timeout", "$window", "Notifications", "Session", "WebSocket", function ($rootScope, $location, $timeout, $window, Notifications, Session, WebSocket) {
 
-    $rootScope.isLogged = function() {
-      return Session.isLogged();
-    }
-
-    $rootScope.isConnected = function() {
-      return WebSocket.isConnected();
-    }
-
-
-    // mensajes que vienen del socket. solo me interesan los eventos, las respuestas son procesadas por otro lado.
+  // mensajes que vienen del socket. solo me interesan los eventos, las respuestas son procesadas por otro lado.
     $rootScope.$on('onSocketMessage', function(event, data) {
       var response = JSON.parse(data);
 
@@ -47,8 +37,7 @@ app.controller('IndexCtrl', function ($rootScope, $scope, $location, $timeout, $
         $window.location.reload();
         return;
       } else if(e.name == "NotImplemented"){
-      	console.log("Mensaje no implementado en el servidor");
-		$location.path("/main");
+		    Notifications.message("Mensaje no implementado en el servidor");
       }
 
 
@@ -63,17 +52,9 @@ app.controller('IndexCtrl', function ($rootScope, $scope, $location, $timeout, $
     $rootScope.$on('routeEvent', function(event, data) {
       $location.path(data);
     });
-
-
+    
     $timeout(function() {
       WebSocket.registerHandlers();
-       if(!Session.isLogged()){
-        $window.location.href = "/systems/login/indexLogin.html";
-      }
     }, 0);
 
-
-    // la vista por defecto.
-//    $location.path('/main');
-
-});
+}]);
