@@ -1,6 +1,6 @@
 
 var app = angular.module('mainApp');
-app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifications" , "Session", "Assistance", "Users", function($scope, $timeout, $window, Notifications, Session, Assistance, Users) {
+app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifications" , "Session", "Assistance", "Users", "Utils", function($scope, $timeout, $window, Notifications, Session, Assistance, Users, Utils) {
 
   $scope.model = {
     //datos de assistance correspondientes a los usuarios
@@ -11,18 +11,19 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
 	    logs: [], //logs
 	    workedTime: null,} //tiempo trabajado*/
 
-
 	  date: null, //fecha de busqueda
+	  start: null, //fecha inicial de busqueda
+    end: null, //fecha final de busqueda
+    searchDates: [], //almacena las fechas para las cuales actualmente se esta definiendo la asistencia
 
 	  session_user_id: null, //id del usuario de session
 
     users: [],
     usersIdSelected: [],
-    search: [] //almacena los usuarios que para los cuales actualmente se esta definiendo la asistencia
+    search: [], //almacena los usuarios que para los cuales actualmente se esta definiendo la asistencia
+    searchUser: null //string con el usuario buscado, posteriormente sera almacenado en searchDates
+  };
 
-  }
-
-  
   /**
    * Cargar y chequear session
    */
@@ -35,7 +36,6 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
       $scope.model.session_user_id = session.user_id;
     }
   };
-
 
   /**
    * Definir usuarios
@@ -55,11 +55,19 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
         }
       );
     }
+<<<<<<< HEAD
   }
 
   /**
     * Cargar usuarios
    */
+=======
+  };
+
+  /**
+    * Cargar usuarios
+   */
+>>>>>>> origin/ivan
   $scope.loadUsers = function(){
     Assistance.getUsersInOfficesByRole('autoriza',
       function(usersId){
@@ -75,8 +83,12 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
     $scope.loadSession();
     $scope.loadUsers();
   },0);
+<<<<<<< HEAD
 
 
+=======
+
+>>>>>>> origin/ivan
   $scope.initializeSearchAssistance = function(){
     var users = [];
     if($scope.model.usersIdSelected.length == 0){
@@ -102,18 +114,56 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
 
 
     return users;
+<<<<<<< HEAD
   }
 
+=======
+  };
+
+  $scope.initializeSearchDates = function(){
+    var dates = [];
+
+    if($scope.model.start != null){
+      if($scope.model.end != null){
+        dates = Utils.getDates($scope.model.start, $scope.model.end);
+      } else {
+        dates.push($scope.model.start);
+      }
+
+    } else if($scope.model.end != null) {
+      dates.push($scope.model.end);
+
+    } else {
+      dates.push(new Date());
+    }
+
+    for(var i = 0; i < dates.length; i++){
+      $scope.model.searchDates.push(dates[i].getTime());
+    }
+
+  };
+
+
+>>>>>>> origin/ivan
   $scope.searchAssistance = function(){
     if(!$scope.isSearch()){
-      if($scope.model.date != null){
+      var searchDates = $scope.initializeSearchDates();
+
+      if($scope.model.start != null){
         $scope.model.assistances = [];
         var users = $scope.initializeSearchAssistance(); //si no existen usuarios seleccionados, se definen todos los usuarios
+<<<<<<< HEAD
 
         for (var i = 0; i < users.length; i++){
           var user = users[i];
 
           Assistance.getAssistanceStatusByDate(user.id, $scope.model.date,
+=======
+        for (var i = 0; i < users.length; i++){
+          var user = users[i];
+
+          Assistance.getAssistanceStatusByDate(user.id, $scope.model.start,
+>>>>>>> origin/ivan
             function ok(assistance){
               var newAssistance = $scope.formatAssistance(assistance, user.id);
               $scope.model.assistances.push(newAssistance);
@@ -147,21 +197,24 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
 
     if(assistance.start != null){
       var start = new Date(assistance.start);
-      newAssistance.start = start.toLocaleTimeString();
+      newAssistance.date = Utils.formatDate(start);
+      newAssistance.dateSort = Utils.formatDateExtend(start);
+      newAssistance.start = Utils.formatTime(start);
     };
 
     if(assistance.end != null){
       var end = new Date(assistance.end);
-      newAssistance.end = end.toLocaleTimeString();
+      newAssistance.end = Utils.formatTime(end);
     };
 
     newAssistance.logs = [];
 
     for(var i = 0; i < assistance.logs.length; i++){
       var log = new Date(assistance.logs[i]);
-      newAssistance.logs.push(log.toLocaleTimeString());
+      newAssistance.logs.push(Utils.formatTime(log));
     }
 
+<<<<<<< HEAD
     var workedHours = Math.floor(assistance.workedMinutes / 60).toString();
     if(workedHours.length == 1) workedHours = "0" + workedHours;
     var workedMinutes = Math.round((assistance.workedMinutes % 60)).toString();
@@ -170,6 +223,13 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
 
     return newAssistance;
   }
+=======
+    newAssistance.workedTime = Utils.getTimeFromMinutes(assistance.workedMinutes);
+
+    return newAssistance;
+  };
+
+>>>>>>> origin/ivan
 
 
   /**
@@ -191,11 +251,21 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
     } else {
       return false;
     }
+<<<<<<< HEAD
   }
 
   $scope.isSearch = function(){
     return ($scope.model.search.length > 0);
   }
+=======
+  };
+
+  $scope.isSearch = function(){
+    return ($scope.model.search.length > 0);
+  };
+
+}]);
+>>>>>>> origin/ivan
 
 
 

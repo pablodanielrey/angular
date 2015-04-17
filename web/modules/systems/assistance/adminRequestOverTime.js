@@ -1,7 +1,7 @@
 
 var app = angular.module('mainApp');
 
-app.controller('AdminRequestOverTimeCtrl', ["$scope", "$timeout", "Notifications", "Assistance", "Session", "Users", function($scope, $timeout, Notifications, Assistance, Session, Users) {
+app.controller('AdminRequestOverTimeCtrl', ["$scope", "$timeout", "Notifications", "Assistance", "Session", "Users", "Utils", function($scope, $timeout, Notifications, Assistance, Session, Users, Utils) {
 
 	$scope.model = {
 		requests : [], //solicitudes de horas extra
@@ -59,10 +59,10 @@ app.controller('AdminRequestOverTimeCtrl', ["$scope", "$timeout", "Notifications
 	$scope.formatRequest = function(request){
 		var begin = new Date(request.begin);
 		request.date = begin.toLocaleDateString();
-		request.startTime = begin.toTimeString().substring(0, 5);
+		request.startTime = Utils.formatTime(begin);
 
 		var end = new Date(request.end);
-		request.endTime = end.toTimeString().substring(0, 5);
+		request.endTime = Utils.formatTime(end);
 
 		// carga los datos del usuario dentro del request
 		$scope.loadUser(request);

@@ -23,6 +23,57 @@ app.service('Utils', function() {
       }
     }
     return r;
-  }
+  };
+  
+  
+   /**
+   * Dar formato date de la forma DD/MM/YYYY, completa con ceros!!!
+   * @param {type} date
+   * @returns {string} formato de datos
+   */
+	this.formatDate = function(date) {
+    var dateArray = date.toLocaleDateString().split("/");
+
+    if(parseInt(dateArray[0]) < 10 ){
+      dateArray[0] = "0" + dateArray[0]; 
+    } 
+    
+    if(parseInt(dateArray[1]) < 10 ){
+      dateArray[1] = "0" + dateArray[1]; 
+    } 
+
+    return dateArray[0] + "/" + dateArray[1] + "/" + dateArray[2];
+  };
+  
+  /**
+   * Dar formato date de la forma YYYY-MM-DD, completa con ceros!!!
+   * @returns {undefined}
+   */
+  this.formatDateExtend = function(date){
+    return date.toJSON().substring(0,10);
+  };
+  
+  this.formatTime = function(date){
+    return date.toTimeString().substring(0, 5);
+  };
+  
+  this.getTimeFromMinutes = function(minutes){
+    var hours = Math.floor(minutes / 60).toString();
+    if(hours.length === 1) hours = "0" + hours;
+    var minutes = Math.round((minutes % 60)).toString();
+    if(minutes.length === 1) minutes = "0" + minutes;
+    return hours + ":" + minutes;
+  };
+  
+  this.getDates = function(startDate, endDate){
+    var s = new Date(startDate);
+    var dates = new Array();
+    while (s <= endDate) {
+        dates.push(new Date(s));
+        s.setDate(s.getDate() + 1);
+    }
+    return dates;
+  };
+  
 
 });
