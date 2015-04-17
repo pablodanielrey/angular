@@ -57,6 +57,23 @@ app.service('Utils', function() {
     return date.toTimeString().substring(0, 5);
   };
   
+  this.getTimeFromMinutes = function(minutes){
+    var hours = Math.floor(minutes / 60).toString();
+    if(hours.length === 1) hours = "0" + hours;
+    var minutes = Math.round((minutes % 60)).toString();
+    if(minutes.length === 1) minutes = "0" + minutes;
+    return hours + ":" + minutes;
+  };
+  
+  this.getDates = function(startDate, endDate){
+    var s = new Date(startDate);
+    var dates = new Array();
+    while (s <= endDate) {
+        dates.push(new Date(s));
+        s.setDate(s.getDate() + 1);
+    }
+    return dates;
+  };
   
 
 });

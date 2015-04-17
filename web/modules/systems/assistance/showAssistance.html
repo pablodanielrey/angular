@@ -6,11 +6,11 @@
   <div class="content">
     <div class="contentLeft">
       <div class="navTitleUser">Usuario</div>
-      <input class="navTitleUser2" type="text" >
+      <input class="navTitleUser2" type="text" ng-model="model.searchUser" >
 
       <div class="searchList">
         <div class="navSearchList">Seleccione</div>
-        <div class="listUsers" ng-repeat="user in model.users" ng-click="selectUser(user)" ng-class="{true:'selected'}[isSelectedUser(user)]">{{user.name}} {{user.lastname}}</div>
+        <div class="listUsers" ng-repeat="user in model.users | filter:model.searchUser | orderBy:['name','lastname']" ng-click="selectUser(user)" ng-class="{true:'selected'}[isSelectedUser(user)]">{{user.name}} {{user.lastname}}</div>
       </div>
     </div>
     <div class="contentRight">
@@ -28,11 +28,11 @@
        </div>
         <div>
           <div class="navTitle">Fecha Inicio</div>
-          <input class="navTitle2" type="date" ng-model="model.date" >
+          <input class="navTitle2" type="date" ng-model="model.start" >
         </div>
         <div>
           <div class="navTitle">Fecha Fin</div>
-          <input class="navTitle2" type="date">
+          <input class="navTitle2" type="date" ng-model="model.end">
         </div>
 
 
@@ -49,7 +49,7 @@
         <div class="tam3">Observaciones</div>
       </div>
       <div class="results" ng-repeat="assistance in model.assistances">
-        <div class="tam1">22/08/2015</div>
+        <div class="tam1">{{assistance.date}}</div>
         <div class="tam2 textBlue">{{assistance.user}}</div>
         <div class="tam1">{{assistance.start}}</div>
         <div class="tam1">{{assistance.end}}</div>
