@@ -55,19 +55,11 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
         }
       );
     }
-<<<<<<< HEAD
-  }
-
-  /**
-    * Cargar usuarios
-   */
-=======
   };
 
   /**
     * Cargar usuarios
    */
->>>>>>> origin/ivan
   $scope.loadUsers = function(){
     Assistance.getUsersInOfficesByRole('autoriza',
       function(usersId){
@@ -83,12 +75,7 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
     $scope.loadSession();
     $scope.loadUsers();
   },0);
-<<<<<<< HEAD
 
-
-=======
-
->>>>>>> origin/ivan
   $scope.initializeSearchAssistance = function(){
     var users = [];
     if($scope.model.usersIdSelected.length == 0){
@@ -114,10 +101,6 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
 
 
     return users;
-<<<<<<< HEAD
-  }
-
-=======
   };
 
   $scope.initializeSearchDates = function(){
@@ -144,7 +127,6 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
   };
 
 
->>>>>>> origin/ivan
   $scope.searchAssistance = function(){
     if(!$scope.isSearch()){
       var searchDates = $scope.initializeSearchDates();
@@ -152,18 +134,11 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
       if($scope.model.start != null){
         $scope.model.assistances = [];
         var users = $scope.initializeSearchAssistance(); //si no existen usuarios seleccionados, se definen todos los usuarios
-<<<<<<< HEAD
 
-        for (var i = 0; i < users.length; i++){
-          var user = users[i];
-
-          Assistance.getAssistanceStatusByDate(user.id, $scope.model.date,
-=======
         for (var i = 0; i < users.length; i++){
           var user = users[i];
 
           Assistance.getAssistanceStatusByDate(user.id, $scope.model.start,
->>>>>>> origin/ivan
             function ok(assistance){
               var newAssistance = $scope.formatAssistance(assistance, user.id);
               $scope.model.assistances.push(newAssistance);
@@ -214,22 +189,10 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
       newAssistance.logs.push(Utils.formatTime(log));
     }
 
-<<<<<<< HEAD
-    var workedHours = Math.floor(assistance.workedMinutes / 60).toString();
-    if(workedHours.length == 1) workedHours = "0" + workedHours;
-    var workedMinutes = Math.round((assistance.workedMinutes % 60)).toString();
-    if(workedMinutes.length == 1) workedMinutes = "0" + workedMinutes;
-    newAssistance.workedTime = workedHours + ":" + workedMinutes;
-
-    return newAssistance;
-  }
-=======
     newAssistance.workedTime = Utils.getTimeFromMinutes(assistance.workedMinutes);
 
     return newAssistance;
   };
-
->>>>>>> origin/ivan
 
 
   /**
@@ -251,22 +214,10 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
     } else {
       return false;
     }
-<<<<<<< HEAD
-  }
-
-  $scope.isSearch = function(){
-    return ($scope.model.search.length > 0);
-  }
-=======
   };
 
   $scope.isSearch = function(){
     return ($scope.model.search.length > 0);
   };
-
-}]);
->>>>>>> origin/ivan
-
-
 
 }]);
