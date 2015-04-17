@@ -1,6 +1,6 @@
 var app = angular.module('mainApp');
 
-app.controller('AssistanceCtrl', function($scope, $timeout, $window, Profiles, Session, Users, Assistance, Notifications) {
+app.controller('AssistanceCtrl', ["$scope", "$timeout", "$window", "Profiles", "Session", "Users", "Assistance", "Notifications", "Utils", function($scope, $timeout, $window, Profiles, Session, Users, Assistance, Notifications, Utils) {
 
 	$scope.model = {
 		session : null,
@@ -87,10 +87,10 @@ app.controller('AssistanceCtrl', function($scope, $timeout, $window, Profiles, S
 
 		for (var time in assistanceDataFromServer.schedule) {
 			var start = new Date(assistanceDataFromServer.schedule[time].start);
-			var startHour = start.toTimeString().substring(0, 5);
+			var startHour = Utils.formatTime(start);
 
 			var end = new Date(assistanceDataFromServer.schedule[time].end);
-			var endHour = end.toTimeString().substring(0, 5);
+			var endHour = Utils.formatTime(end);
 
 			$scope.model.assistanceData.schedule.push(startHour + " / " + endHour);
 		}
@@ -263,4 +263,4 @@ app.controller('AssistanceCtrl', function($scope, $timeout, $window, Profiles, S
   $timeout(function() {
 		$scope.initialize();
   }, 0);
-});
+}]);

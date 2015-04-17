@@ -9,7 +9,7 @@ var app = angular.module('mainApp');
  * El objetivo del controlador es definir solicitudes a un subordinado. Actualmente la autoridad solo puede solicitar "horas extra"
  * El controlador debe identificar el usuario al cual se le va a definir la socicitud, el usuario es definido en otro controlador, se escucha el evento de seleccion de usuario
  */
-app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assistance", "Notifications", "Users", "Session", function($scope, $timeout, $window, Assistance, Notifications, Users, Session) {
+app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assistance", "Notifications", "Users", "Session", "Utils", function($scope, $timeout, $window, Assistance, Notifications, Users, Session, Utils) {
 
   $scope.model = {
     session_user_id: null,        //id del usuario de session (correspondiente al jefe que solicita las horas extra)
@@ -63,10 +63,10 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
   $scope.formatRequest = function(request) {
     var begin = new Date(request.begin);
     request.date = begin.toLocaleDateString();
-    request.startTime = begin.toTimeString().substring(0, 5);
+    request.startTime = Utils.formatTime(begin);
 
     var end = new Date(request.end);
-    request.endTime = end.toTimeString().substring(0, 5);
+    request.endTime = Utils.formatTime(end);
 
     Users.findUser(request.user_id,
       function findUserCallbackOk(user) {
