@@ -87,16 +87,25 @@ class GetLaboralInsertionData:
 
 
     def _arrangeForOds(self, con,data):
-        values = [['Dni','Nombre','Apellido','Residir','Viajar','Ingles','Portugués','Otro','Carrera','Materias con Final','Promedio','Promedio con aplazos']]
+        values = [['Dni','Nombre','Apellido','Fecha de Nacimiento','Género','Ciudad de residencia','e-Mail','Residir','Viajar','Ingles','Portugués','Otro','Carrera','Materias con Final','Promedio','Promedio con aplazos']]
         for l in data:
             v = []
 
             userId = l['id']
             user = self.users.findUser(con,userId)
+            mails = self.users.listMails(con,user['id'])
 
             v.append(user['dni'])
             v.append(user['name'])
             v.append(user['lastname'])
+            v.append(user['birthdate'] if user['birthdate'] != None else '')
+            v.append(user['genre'] if user['genre'] != None else '')
+            v.append(user['residence_city'] if user['residence_city'] else '')
+
+            if len(mails) > 0:
+                v.append(mails[0]['email'])
+            else:
+                v.append('')
 
             if l['reside']:
                 v.append('Sí')
