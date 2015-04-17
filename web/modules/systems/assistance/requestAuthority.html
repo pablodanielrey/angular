@@ -65,21 +65,21 @@
   		<div class="column t3"><i class="fa fa-pencil-square-o"></i> Motivo</div>
   		<div class="column t2"><i class="fa fa-info-circle"></i> Estado</div>
 		</div>
-		<div class="titlesFiles" ng-repeat="request in model.requests">
-			<div class="file f1 t1">{{request.user}}</div>
-			<div class="file t2">{{request.date}}</div>
-			<div class="file t2">{{request.startTime}}</div>
-			<div class="file t5">{{request.endTime}}</div>
-			<div class="file t3"><textarea readonly>{{request.reason}}</textarea></div>
-			<div class="file">
-          <span class="slope" ng-class="{true:'visible', false:'hidden'}[request.status == 'PENDING']"><i class="fa fa-spinner fa-spin"></i> Pendiente</span>
-          <span class="approved" ng-class="{true:'visible', false:'hidden'}[request.status == 'APPROVED']"><i class="fa fa-check-circle"></i> Aprobada</span>
-          <span class="rejected" ng-class="{true:'visible', false:'hidden'}[request.status == 'REJECTED']"><i class="fa fa-times-circle"></i> Rechazada</span>
-          <span class="rejected" ng-class="{true:'visible', false:'hidden'}[request.status == 'CANCELED']">Cancelada</span>
-      </div>
-
-		</div>
-
+    <div class="titlesFilesContent">
+      <div class="titlesFiles" ng-repeat="request in model.requests">
+  			<div class="file f1 t1">{{request.user}}</div>
+  			<div class="file t2">{{request.date}}</div>
+  			<div class="file t2">{{request.startTime}}</div>
+  			<div class="file t5">{{request.endTime}}</div>
+  			<div class="file t3"><textarea readonly>{{request.reason}}</textarea></div>
+  			<div class="file">
+            <span class="slope" ng-class="{true:'visible', false:'hidden'}[request.status == 'PENDING']"><i class="fa fa-spinner fa-spin"></i> Pendiente</span>
+            <span class="approved" ng-class="{true:'visible', false:'hidden'}[request.status == 'APPROVED']"><i class="fa fa-check-circle"></i> Aprobada</span>
+            <span class="rejected" ng-class="{true:'visible', false:'hidden'}[request.status == 'REJECTED']"><i class="fa fa-times-circle"></i> Rechazada</span>
+            <span class="rejected" ng-class="{true:'visible', false:'hidden'}[request.status == 'CANCELED']">Cancelada</span>
+        </div>
+  		</div>
+    </div>
 	</div>
 
 

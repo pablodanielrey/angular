@@ -149,16 +149,16 @@
 }
 
 .requestAuthority .solicitar {
-  background-color: #128c78;
-  padding:10px;
-  width:100px;
-  height:55px;
-  color:white;
+
   margin-top:5px;
   margin-left:20px;
+  padding:20px;
+  background-color:#0066A6;
+  color:white;
+  font-size:16px;
+  border-radius:5px;
   cursor:pointer;
-  border-top: 3px solid #275276;
-  font-weight:bold;
+
 }
 
 
@@ -171,6 +171,13 @@
 
 /*
 SOLICITUD DE HORAS EXTRAS REALIZADAS*/
+
+.requestAuthority .titlesFilesContent {
+  height:300px;
+  overflow:scroll;
+  overflow-x:hidden;
+}
+
 .requestAuthority .titlesFiles {
   display:flex;
   flex-direction:row;

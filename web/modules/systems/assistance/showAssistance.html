@@ -1,22 +1,25 @@
 <div class="showAssistance">
+
   <!-- seleccion de usuario -->
   <div class="title">
     <label><i class="fa fa-clock-o"></i> Control de Horario</label>
   </div>
   <div class="content">
     <div class="contentLeft">
-      <div class="navTitleUser">Usuario</div>
+      <div class="navTitleUser"><i class="fa fa-user"></i> Usuario</div>
       <input class="navTitleUser2" type="text" >
 
       <div class="searchList">
-        <div class="navSearchList">Seleccione</div>
-        <div class="listUsers" ng-repeat="user in model.users" ng-click="selectUser(user)" ng-class="{true:'selected'}[isSelectedUser(user)]">{{user.name}} {{user.lastname}}</div>
+        <div class="navSearchList"><i class="fa fa-user"></i> Seleccione</div>
+        <div class="listUsersContent">
+          <div class="listUsers" ng-repeat="user in model.users" ng-click="selectUser(user)" ng-class="{true:'selected'}[isSelectedUser(user)]">{{user.name}} {{user.lastname}}</div>
+        </div>
       </div>
     </div>
     <div class="contentRight">
       <div class="nav">
         <div>
-          <div class="navTitle">Oficina</div>
+          <div class="navTitle"><i class="fa fa-building-o"></i> Oficina</div>
           <input class="navTitle1" list="office">
           <datalist id="office">
             <option value="Alumnos">
@@ -27,38 +30,47 @@
           </datalist>
        </div>
         <div>
-          <div class="navTitle">Fecha Inicio</div>
+          <div class="navTitle"><i class="fa fa-calendar-o"></i> Fecha Inicio</div>
           <input class="navTitle2" type="date" ng-model="model.date" >
         </div>
         <div>
-          <div class="navTitle">Fecha Fin</div>
+          <div class="navTitle"><i class="fa fa-calendar-o"></i> Fecha Fin</div>
           <input class="navTitle2" type="date">
         </div>
 
 
         <div>
-          <button ng-click="searchAssistance()" ng-disabled="isSearch()">Buscar</button>
+          <button class="searchButtom" ng-click="searchAssistance()" ng-disabled="isSearch()"><i class="fa fa-search"></i> Buscar</button>
         </div>
       </div>
       <div class="nav2">
-        <div class="tam1">Fecha</div>
-        <div class="tam2">Usuario</div>
-        <div Class="tam1">Entrada</div>
-        <div class="tam1">Salida</div>
-        <div class="tam1">Total</div>
-        <div class="tam3">Observaciones</div>
+        <div class="tam1"><i class="fa fa-calendar-o"></i> Fecha</div>
+        <div class="tam2"><i class="fa fa-user"></i> Usuario</div>
+        <div Class="tam1"><i class="fa fa-clock-o"></i> Entrada</div>
+        <div class="tam1"><i class="fa fa-clock-o"></i> Salida</div>
+        <div class="tam1"><i class="fa fa-clock-o"></i> Total</div>
+        <div class="tam3"><i class="fa fa-exclamation"></i> Observaciones</div>
       </div>
-      <div class="results" ng-repeat="assistance in model.assistances">
-        <div class="tam1">22/08/2015</div>
-        <div class="tam2 textBlue">{{assistance.user}}</div>
-        <div class="tam1">{{assistance.start}}</div>
-        <div class="tam1">{{assistance.end}}</div>
-        <div class="tam1">{{assistance.workedTime}}</div>
-        <div class="tam3">Sin observaciones</div>
-        <!-- <ul>
-          <li ng-repeat="log in assistance.logs">{{log}}</li>
-        </ul> -->
+      <div class="resultsContent">
+        <div class="results" ng-repeat="assistance in model.assistances">
+          <div class="tam1">22/08/2015</div>
+          <div class="tam2 textBlue">{{assistance.user}}</div>
+          <div class="tam1">{{assistance.start}}</div>
+          <div class="tam1">{{assistance.end}}</div>
+          <div class="tam1">{{assistance.workedTime}}</div>
+          <div class="tam3">
+            Sin Observaciones
+          </div>
+
+
+          <!-- <ul>
+            <li ng-repeat="log in assistance.logs">{{log}}</li>
+          </ul> -->
+        </div>
       </div>
     </div>
   </div>
+
+  
+
 </div>
