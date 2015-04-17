@@ -36,12 +36,15 @@
 }
 
 .tutors .button {
-  width:150px;
-  background-color:#ec9122;
+  width:100px;
+  background-color:white;
   padding:10px;
   border-top:3px solid #275276;
-  color:white;
-  font-size:18px;
+  border-left:1px solid #0066A6;
+  border-right:1px solid #0066A6;
+  border-bottom:1px solid #0066A6;
+  color:#275276;
+  font-size:16px;
   margin-bottom:10px;
   margin-right: 10px;
 
@@ -51,12 +54,12 @@
   flex-direction:row;
 }
 .tutors .dateSelect {
-  width:215px;
+  width:200px;
   background-color:white;
   padding:10px;
   border-top:3px solid #275276;
   color:#0066A6;
-  font-size:18px;
+  font-size:16px;
   margin-bottom:10px;
   margin-right: 10px;
 
@@ -73,7 +76,7 @@
 }
 
 .tutors .student input {
-  width:238px;
+  width:200px;
   background-color:white;
   padding:10px;
   border-top:3px solid #275276;
@@ -89,12 +92,12 @@
   flex-direction:row;
 }
 .tutors .typeSelect {
-  width:350px;
+  width:300px;
   background-color:white;
   padding:10px;
   border-top:3px solid #275276;
   color:#0066A6;
-  font-size:18px;
+  font-size:14px;
   margin-bottom:10px;
   margin-right: 10px;
 
