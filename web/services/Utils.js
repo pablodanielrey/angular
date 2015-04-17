@@ -23,6 +23,40 @@ app.service('Utils', function() {
       }
     }
     return r;
-  }
+  };
+  
+  
+   /**
+   * Dar formato date de la forma DD/MM/YYYY, completa con ceros!!!
+   * @param {type} date
+   * @returns {string} formato de datos
+   */
+	this.formatDate = function(date) {
+    var dateArray = date.toLocaleDateString().split("/");
+
+    if(parseInt(dateArray[0]) < 10 ){
+      dateArray[0] = "0" + dateArray[0]; 
+    } 
+    
+    if(parseInt(dateArray[1]) < 10 ){
+      dateArray[1] = "0" + dateArray[1]; 
+    } 
+
+    return dateArray[0] + "/" + dateArray[1] + "/" + dateArray[2];
+  };
+  
+  /**
+   * Dar formato date de la forma YYYY-MM-DD, completa con ceros!!!
+   * @returns {undefined}
+   */
+  this.formatDateExtend = function(date){
+    return date.toJSON().substring(0,10);
+  };
+  
+  this.formatTime = function(date){
+    return date.toTimeString().substring(0, 5);
+  };
+  
+  
 
 });
