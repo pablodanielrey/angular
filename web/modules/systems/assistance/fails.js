@@ -1,20 +1,20 @@
 var app = angular.module('mainApp');
 
-app.controller('AssistanceFailsCtrl', function($scope, $timeout, Notifications, Assistance) {
+app.controller('AssistanceFailsCtrl', ["$scope", "$timeout", "Assistance", "Notifications", "Utils", function($scope, $timeout, Assistance, Notifications, Utils) {
 
   $scope.model = {
     searching: false,
     begin: new Date(),
     end: new Date(),
     assistanceFails:[{}]
-  }
+  };
 
   $scope.initialize = function() {
     $scope.model.begin = new Date();
     $scope.model.end = new Date();
-    $scope.model.assistanceFails = [{}]
+    $scope.model.assistanceFails = [{}];
     $scope.initializeDate();
-  }
+  };
 
   $scope.correctDates = function() {
     $scope.model.begin.setHours(0);
@@ -23,19 +23,15 @@ app.controller('AssistanceFailsCtrl', function($scope, $timeout, Notifications, 
     $scope.model.end.setHours(23);
     $scope.model.end.setMinutes(59);
     $scope.model.end.setSeconds(59);
-  }
+  };
 
   $scope.initializeDate = function() {
     $scope.correctDates();
-  }
+  };
 
   $scope.$watch('model.begin', $scope.correctDates);
   $scope.$watch('model.end', $scope.correctDates);
 
-
-  $scope.formatTimeString = function(timeStr) {
-    return timeStr.substring(0,timeStr.length - 3);
-  }
 
   $scope.search = function() {
     $scope.model.searching = true;
@@ -46,13 +42,13 @@ app.controller('AssistanceFailsCtrl', function($scope, $timeout, Notifications, 
         for (var i = 0; i < response.length; i++) {
 
           var r = response[i];
-          console.log(new Date(r.fail.date));
-
-          r.fail.dateFormat = new Date(r.fail.date).toLocaleDateString();
-
+          var date = new Date(r.fail.date);
+          r.fail.dateFormat = Utils.formatDate(date);
+          r.fail.dateExtend = Utils.formatDateExtend(date);
+  
           if (r.fail.startSchedule || r.fail.endSchedule) {
             r.fail.dateSchedule = (r.fail.startSchedule) ? r.fail.startSchedule : r.fail.endSchedule;
-            r.fail.dateSchedule = $scope.formatTimeString(new Date(r.fail.dateSchedule).toLocaleTimeString());
+            r.fail.dateSchedule = Utils.formatTime(new Date(r.fail.dateSchedule));
           }
 
           //esto es de prueba
@@ -60,11 +56,9 @@ app.controller('AssistanceFailsCtrl', function($scope, $timeout, Notifications, 
 
           if (r.fail.start || r.fail.end) {
             r.fail.wh = (r.fail.start) ?  new Date(r.fail.start) : new Date(r.fail.end);
-            r.fail.wh = $scope.formatTimeString(r.fail.wh.toLocaleTimeString());
-          } else {
-            r.fail.wh = "-";
+            r.fail.wh =  Utils.formatTime(r.fail.wh);
           }
-
+          
           // esto es de prueba
           // r.fail.seconds = 3825;
 
@@ -72,8 +66,6 @@ app.controller('AssistanceFailsCtrl', function($scope, $timeout, Notifications, 
             var hoursDiff = Math.floor((r.fail.seconds / 60) / 60);
             var minutesDiff = Math.floor((r.fail.seconds / 60) % 60);
             r.fail.diff = ('0' + hoursDiff).substr(-2) + ":" + ('0' + minutesDiff).substr(-2);
-          } else {
-            r.fail.diff = "-";
           }
 
           $scope.model.assistanceFails.push(r);
@@ -83,14 +75,14 @@ app.controller('AssistanceFailsCtrl', function($scope, $timeout, Notifications, 
       },
       function(error) {
         $scope.model.searching = false;
-        Notification.message(error);
+        Notifications.message(error);
       }
 
     );
-  }
+  };
 
   $timeout(function() {
     $scope.initialize();
   }, 0);
 
-});
+}]);
