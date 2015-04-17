@@ -87,7 +87,7 @@ class GetLaboralInsertionData:
 
 
     def _arrangeForOds(self, con,data):
-        values = [['Dni','Nombre','Apellido','Residir','Viajar','Lenguajes','Carreras']]
+        values = [['Dni','Nombre','Apellido','Residir','Viajar','Ingles','Portugués','Otro','Carrera','Materias con Final','Promedio','Promedio con aplazos']]
         for l in data:
             v = []
 
@@ -98,20 +98,46 @@ class GetLaboralInsertionData:
             v.append(user['name'])
             v.append(user['lastname'])
 
-            v.append(l['reside'])
-            v.append(l['travel'])
+            if l['reside']:
+                v.append('Sí')
+            else:
+                v.append('No')
 
-            lang = ''
+            if l['travel']:
+                v.append('Sí')
+            else:
+                v.append('No')
+
+            langIng = ''
+            langPort = ''
+            langOtro = ''
             for la in l['languages']:
-                lang = lang + '{} - {}, '.format(la['name'],la['level'])
-            v.append(lang)
+                if la['name'] != None and (la['name'].lower() == 'inglés' or la['name'].lower() == 'ingles'):
+                    langIng = '{} - {}, '.format(la['name'],la['level'])
 
-            deg = ''
-            for d in l['degrees']:
-                deg = deg + '{} - {} - {} - {}, '.format(d['name'],d['courses'],d['average1'],d['average2'])
-            v.append(deg)
+                if la['name'] == 'Portugués':
+                    langPort = '{} - {}, '.format(la['name'],la['level'])
 
-            values.append(v)
+                langOtro = '{} - {}, '.format(la['name'],la['level'])
+
+            v.append(langIng)
+            v.append(langPort)
+            v.append(langOtro)
+
+            if len(l['degrees']) > 0:
+                for d in l['degrees']:
+                    vaux = list(v)
+                    vaux.append(d['name'])
+                    vaux.append(d['courses'])
+                    vaux.append(d['average1'])
+                    vaux.append(d['average2'])
+                    values.append(vaux)
+            else:
+                v.append('')
+                v.append('')
+                v.append('')
+                v.append('')
+                values.append(v)
 
         return values
 
