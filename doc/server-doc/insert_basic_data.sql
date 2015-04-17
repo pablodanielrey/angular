@@ -8,6 +8,15 @@ insert into credentials.auth_profile (user_id,profile) values ('1','ADMIN-ASSIST
 
 
 /*
+  datos de econo
+*/
+insert into profile.users (id,dni,name,lastname) values ('c96efd7c-ca72-422a-b618-0509c86014de','30057880','Carlos','Villalba');
+insert into assistance.offices_roles (user_id,role,office_id) select p.id,'autoriza',o.id from assistance.offices o, profile.users p where o.parent is null and p.dni in ('30057880');
+insert into credentials.auth_profile (user_id,profile) select id,'ADMIN-ASSISTANCE' from profile.users where dni in ('30057880');
+
+
+
+/*
   justificaciones de la facultad de económicas
 */
 insert into assistance.justifications (id,name) values ('e0dfcef6-98bb-4624-ae6c-960657a9a741','Ausente con aviso');
@@ -23,6 +32,7 @@ insert into assistance.justifications (id,name) values ('50998530-10dd-4d68-8b4a
   genera que el usuario admin tenga rol de autorizar dentro de las oficinas raiz
 */
 insert into assistance.offices_roles (user_id,role,office_id) select '1','autoriza',id from assistance.offices o where o.parent is null;
+insert into assistance.offices_roles (user_id,role,office_id) select p.id,'autoriza',o.id from assistance.offices o, profile.users p where o.parent is null and p.dni in ('1');
 insert into assistance.offices_roles (user_id,role,office_id) select p.id,'autoriza',o.id from assistance.offices o, profile.users p where o.parent is null and p.dni in ('1');
 
 /*
