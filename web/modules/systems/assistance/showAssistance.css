@@ -106,13 +106,13 @@
   height:422px;
   background-color:#DEDEDE;
   padding-top:10px;
+  overflow: scroll;
 }
 .showAssistance .listUsers {
   padding:5px;
   cursor:pointer;
-
-
 }
+
 .showAssistance .selected {
   background-color:#0066A6;
   color:white;

@@ -11,7 +11,9 @@
 
       <div class="searchList">
         <div class="navSearchList">Seleccione</div>
-        <div class="listUsers" ng-repeat="user in model.users | filter:model.searchUser | orderBy:['name','lastname']" ng-click="selectUser(user)" ng-class="{true:'selected'}[isSelectedUser(user)]">{{user.name}} {{user.lastname}}</div>
+        <div clasS='listUsersContent'>
+          <div class="listUsers" ng-repeat="user in model.users | filter:model.searchUser | orderBy:['name','lastname']" ng-click="selectUser(user)" ng-class="{true:'selected'}[isSelectedUser(user)]">{{user.name}} {{user.lastname}}</div>
+        </div>
       </div>
     </div>
     <div class="contentRight">
