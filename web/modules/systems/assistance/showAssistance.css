@@ -102,12 +102,19 @@
 
 
 }
+
 .showAssistance .listUsersContent {
   height:422px;
   background-color:#DEDEDE;
   padding-top:10px;
   overflow: scroll;
 }
+
+.showAssistance .dataUsersContent {
+  height:422px;
+  overflow: scroll;
+}
+
 .showAssistance .listUsers {
   padding:5px;
   cursor:pointer;

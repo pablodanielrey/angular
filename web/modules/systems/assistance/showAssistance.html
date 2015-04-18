@@ -51,16 +51,18 @@
         <div class="tam1"><i class="fa fa-clock-o"></i> Total</div>
         <div class="tam3"><i class="fa fa-exclamation"></i> Observaciones</div>
       </div>
-      <div class="results" ng-repeat="assistance in model.assistances">
-        <div class="tam1">{{assistance.date}}</div>
-        <div class="tam2 textBlue">{{assistance.user}}</div>
-        <div class="tam1">{{assistance.start}}</div>
-        <div class="tam1">{{assistance.end}}</div>
-        <div class="tam1">{{assistance.workedTime}}</div>
-        <div class="tam3">Sin observaciones</div>
-        <!-- <ul>
-          <li ng-repeat="log in assistance.logs">{{log}}</li>
-s        </ul> -->
+      <div class='dataUsersContent'>
+        <div class="results" ng-repeat="assistance in model.assistances">
+          <div class="tam1">{{assistance.date}}</div>
+          <div class="tam2 textBlue">{{assistance.user}}</div>
+          <div class="tam1">{{assistance.start}}</div>
+          <div class="tam1">{{assistance.end}}</div>
+          <div class="tam1">{{assistance.workedTime}}</div>
+          <div class="tam3">Sin observaciones</div>
+          <!-- <ul>
+            <li ng-repeat="log in assistance.logs">{{log}}</li>
+  s        </ul> -->
+        </div>
       </div>
     </div>
   </div>
