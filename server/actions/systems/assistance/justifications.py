@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import json, base64, datetime, traceback, logging
-import inject
+import inject, re
 import psycopg2
 
 from model.exceptions import *
@@ -8,10 +8,95 @@ from model.exceptions import *
 from model.config import Config
 from model.profiles import Profiles
 from model.events import Events
+from model.users.users import Users
+from model.mail.mail import Mail
 
 from model.systems.assistance.assistance import Assistance
 from model.systems.assistance.date import Date
 from model.systems.assistance.justifications.justifications import Justifications
+from model.systems.assistance.offices import Offices
+
+
+
+class BossesNotifier:
+
+    config = inject.attr(Config)
+    date = inject.attr(Date)
+    events = inject.attr(Events)
+    mail = inject.attr(Mail)
+    users = inject.attr(Users)
+    offices = inject.attr(Offices)
+
+    def _sendEmail(self, Tos, config, request):
+
+        """
+            variables a reemplazar :
+            ###NAME###
+            ###LASTNAME###
+        """
+
+        From = self.config.configs['{}_from'.format(config)]
+        subject = self.config.configs['{}_subject'.format(config)]
+        template = self.config.configs['{}_template'.format(config)]
+
+        subject = re.sub('###NAME###', request['name'], subject)
+        subject = re.sub('###LASTNAME###', request['lastname'], subject)
+
+        replace = [
+            ('###NAME###',request['name']),
+            ('###LASTNAME###',request['lastname'])
+        ]
+
+        self.mail.sendMail(From,Tos,subject,replace,html=template)
+
+
+
+
+    """
+        notifica a los jefes y al usuario de un pedido.
+    """
+    def notifyBosses(self,con,userId,config):
+
+        emails = []
+
+        logging.debug('notifyBosses')
+
+        uemails = self.users.listMails(con,userId)
+        if uemails != None and len(uemails) > 0:
+            emails.extend(list(map(lambda x: x['email'],uemails)))
+
+        logging.debug('emails {}'.format(emails))
+
+        user = self.users.findUser(con,userId)
+        request = {
+            'name': user['name'],
+            'lastname': user['lastname']
+        }
+
+        offices = self.offices.getOfficesByUser(con,userId,parents=True)
+        officesIds = list(map(lambda x: x['id'], offices))
+        bossesIds = self.offices.getUsersWithRoleInOffices(con,officesIds,role='autoriza')
+
+
+        logging.debug('oficinas {}\nids {}\n jefes {}'.format(offices,officesIds,bossesIds))
+
+        for bid in bossesIds:
+            logging.debug('buscando mail para : {}'.format(bid))
+            bemails = self.users.listMails(con,bid)
+            if bemails != None and len(bemails) > 0:
+                logging.debug('añadiendo {}'.format(bemails))
+                emails.extend(list(map(lambda x: x['email'],bemails)))
+
+        logging.debug('emails {}'.format(emails))
+
+        self._sendEmail(emails,config,request)
+
+
+
+
+
+
+
 
 
 
@@ -374,6 +459,8 @@ class UpdateJustificationRequestStatus:
     justifications = inject.attr(Justifications)
     date = inject.attr(Date)
     events = inject.attr(Events)
+    notifier = inject.attr(BossesNotifier)
+
 
     def handleAction(self, server, message):
 
@@ -396,6 +483,10 @@ class UpdateJustificationRequestStatus:
         try:
             events = self.justifications.updateJustificationRequestStatus(con,userId,requestId,status)
             con.commit()
+
+            logging.debug('llamando a notify')
+            self.notifier.notifyBosses(con,userId,'justifications_update_request_status')
+
 
             response = {
                 'id':message['id'],
@@ -457,6 +548,7 @@ class RequestJustification:
     justifications = inject.attr(Justifications)
     date = inject.attr(Date)
     events = inject.attr(Events)
+    notifier = inject.attr(BossesNotifier)
 
     def handleAction(self, server, message):
 
@@ -485,8 +577,9 @@ class RequestJustification:
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
             events = self.justifications.requestJustification(con,userId,justificationId,begin,end)
-
             con.commit()
+
+            self.notifier.notifyBosses(con,userId,'justifications_request')
 
             response = {
                 'id':message['id'],

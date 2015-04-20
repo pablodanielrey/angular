@@ -120,10 +120,10 @@ class Users:
     def findUser(self,con,id):
         cur = con.cursor()
         cur.execute('select id,dni,name,lastname,city,country,address,genre,birthdate,residence_city from profile.users where id = %s', (id,))
-        dataUser = cur.fetchone()
-        if dataUser is None:
+        if cur.rowcount <= 0:
             return None
 
+        dataUser = cur.fetchone()
         rdataUser = self.convertUserToDict(dataUser);
         cur.execute('SELECT id, number, type FROM profile.telephones WHERE user_id = %s',(dataUser[0],))
         dataTelephones = cur.fetchall()
@@ -132,6 +132,7 @@ class Users:
             rdataTelephones.append(self.convertTelephoneToDict(dataTelephone))
         rdataUser["telephones"] = rdataTelephones
         return rdataUser
+
 
     def listUsers(self, con):
         cur = con.cursor()
