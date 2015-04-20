@@ -126,6 +126,7 @@
 .assistanceFailsFilters .filter {
   display:flex;
   flex-direction:row;
+  flex-wrap: wrap
 }
 
 .assistanceFailsFilters .dateContainer {
@@ -143,6 +144,24 @@
   font-size: 13px;
   width: 100%;
   border-top: 3px solid #275276;
+}
+
+.assistanceFailsFilters .typeFailsContainer {
+  display:flex;
+  flex-direction:column;
+  margin-right:1em;
+}
+
+.assistanceFailsFilters .countFilter {
+  display:flex;
+  flex-direction:column;
+  margin-right:1em;
+}
+
+.assistanceFailsFilters .hoursFilter {
+  display:flex;
+  flex-direction:column;
+  margin-right:1em;
 }
 
 .assistanceFailsFilters .dateInputContainer {
@@ -185,6 +204,7 @@
   font-size: 14px;
   height:16px;
 }
+
 
 .assistanceFailsFilters .searchDate {
   margin-left: 10px;

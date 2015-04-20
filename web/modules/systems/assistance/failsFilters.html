@@ -32,7 +32,7 @@
         </div>
       </div>
 
-      <div class="typeFails">
+      <div class="typeFailsContainer">
         <div class="typeFailsTitle">
           <span><i class="fa fa-ticket"></i>Seleccione el tipo de falla</span>
         </div>
@@ -49,6 +49,16 @@
   			</div>
   			<div class="countFilterInput">
   				<input class="input" type="text" ng-model="model.filter.count">
+  			</div>
+      </div>
+
+      <div class="hoursFilter">
+        <div class="hoursFilterTitle">
+  				<span><i class="fa fa-ticket"></i> Horas</span>
+  			</div>
+  			<div class="hoursFilterInput">
+  				<input class="input" type="text" ng-model="model.filter.hours">:
+    			<input class="input" type="text" ng-model="model.filter.minutes">
   			</div>
       </div>
 

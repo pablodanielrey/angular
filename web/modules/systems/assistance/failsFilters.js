@@ -34,6 +34,8 @@ app.controller('AssistanceFailsFiltersCtrl', ["$scope", "$timeout", "Assistance"
 
   $scope.initializeFilter = function() {
     $scope.model.filter.count = 1;
+    $scope.model.filter.minutes = 0;
+    $scope.model.filter.hours = 0;
     $scope.initializeTypeFails();
   }
 
@@ -85,11 +87,17 @@ app.controller('AssistanceFailsFiltersCtrl', ["$scope", "$timeout", "Assistance"
     var failsFilters = [];
     var failsCountByUser = [{}]; // {userId:id,count:0,fails:[]}
 
+    var diffInput = parseInt($scope.model.filter.hours * 60) + parseInt($scope.model.filter.minutes);
+    console.log("DiffInput:" + diffInput);
+
     for (var i = 0; i < fails.length; i++) {
       var r = fails[i];
       if ($scope.model.filter.failType == null || $scope.model.filter.failType.description == r.fail.description) {
-          // failsFilters.push(r);
-          $scope.addFailToUser(r,failsCountByUser);
+          //chequeo la cantidad de horas de diferencia
+          var diffMin = r.fail.seconds / 60;
+          if (diffInput < diffMin) {
+            $scope.addFailToUser(r,failsCountByUser);
+          }
       }
     }
 
