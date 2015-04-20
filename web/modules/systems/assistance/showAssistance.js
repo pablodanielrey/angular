@@ -156,8 +156,6 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
   
   
   $scope.searchAssistance = function(){
-   
-
     if(!$scope.isSearch()){
       $scope.model.assistances = [];
       var searchDates = $scope.initializeSearchDates();
@@ -170,10 +168,12 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
             var date = searchDates[i];
             var user = searchUsers[j];
             Assistance.getAssistanceStatusByDate(user.id, date,
-              function ok(assistance){              
+              function ok(assistance){
                 var newAssistance = $scope.formatAssistance(assistance);
                 $scope.removeIsSearchValue(assistance);
-                $scope.model.assistances.push(newAssistance);
+                if(assistance.start != null && assistance.userId != null){
+                  $scope.model.assistances.push(newAssistance);
+                }
                 
               },
               function error(){
@@ -186,6 +186,7 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
       }
     }
   };
+
 
 
   $scope.formatAssistance = function(assistance) {
@@ -245,6 +246,10 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
       return false;
     }
   };
+  
+  $scope.resetSearchUser = function(){
+    $scope.model.usersIdSelected = [];
+  }
 
   $scope.isSearch = function(){
     return ($scope.model.isSearch.length > 0);
