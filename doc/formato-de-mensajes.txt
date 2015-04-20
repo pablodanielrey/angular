@@ -3,6 +3,37 @@
 /********** ASISTENCIA ***********
 
 
+query :
+{
+  id:,
+  action:"getFailsByDate",
+  session:,
+  request:{
+      filter: {
+                failType:"es el valor que posee las fallas en la description (f.description)",
+                count:"cantidad",
+                minutes:"diferencia en minutos",
+                periodicity:'Semanal|Mensual|Anual', "si es null no tiene que incluir la periodicidad"
+                hoursOperator:">|<|=",
+                begin: "fecha de inicio",
+                end: "fecha de fin"
+              }
+  }
+
+}
+
+response :
+{
+  id: "id de la petición",
+  ok: "caso exito",
+  error: "error del servidor",
+  response:{[
+      user: 'datos del usuario ',
+      fail: "datos correspondiente a la falla"
+  ]}
+
+}
+
 
 query :
 {
