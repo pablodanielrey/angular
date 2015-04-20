@@ -4,11 +4,20 @@ app.controller('AssistanceFailsFiltersCtrl', ["$scope", "$timeout", "Assistance"
 
   $scope.model = {
     searching: false,
-    begin: new Date(),
-    end: new Date(),
     assistanceFails:[{}],
     typeFails:[{}],
-    filter:{failType:{}}
+    periodicities:[],
+    hoursOperators:[{}],
+    filter:{
+      failType:{},
+      count:0,
+      minutes:0,
+      hours:0,
+      periodicity:'',
+      hoursOperator:null,
+      begin: new Date(),
+      end: new Date()
+    }
   };
 
   $scope.initializeTypeFails = function() {
@@ -32,37 +41,50 @@ app.controller('AssistanceFailsFiltersCtrl', ["$scope", "$timeout", "Assistance"
     $scope.model.filter.failType = null;
   }
 
+  $scope.initializeHoursOperator = function() {
+    $scope.model.filter.hoursOperator = null;
+    $scope.model.hoursOperators = [];
+    $scope.model.hoursOperators.push({value:'>',name:'Mayor a'});
+    $scope.model.hoursOperators.push({value:'=',name:'Igual a'});
+    $scope.model.hoursOperators.push({value:'<',name:'Menor a'});
+  }
+
   $scope.initializeFilter = function() {
+    $scope.model.filter.begin = new Date();
+    $scope.model.filter.end = new Date();
     $scope.model.filter.count = 1;
     $scope.model.filter.minutes = 0;
     $scope.model.filter.hours = 0;
+    $scope.initializeHoursOperator();
     $scope.initializeTypeFails();
+    $scope.model.periodicities = ['Semanal','Mensual','Anual'];
+    $scope.model.periodicity = null;
   }
 
   $scope.initialize = function() {
-    $scope.model.begin = new Date();
-    $scope.model.end = new Date();
     $scope.model.assistanceFails = [{}];
     $scope.initializeDate();
     $scope.initializeFilter();
   };
 
   $scope.correctDates = function() {
-    $scope.model.begin.setHours(0);
-    $scope.model.begin.setMinutes(0);
-    $scope.model.begin.setSeconds(0);
-    $scope.model.end.setHours(23);
-    $scope.model.end.setMinutes(59);
-    $scope.model.end.setSeconds(59);
+    $scope.model.filter.begin.setHours(0);
+    $scope.model.filter.begin.setMinutes(0);
+    $scope.model.filter.begin.setSeconds(0);
+    $scope.model.filter.end.setHours(23);
+    $scope.model.filter.end.setMinutes(59);
+    $scope.model.filter.end.setSeconds(59);
   };
 
   $scope.initializeDate = function() {
     $scope.correctDates();
   };
 
-  $scope.$watch('model.begin', $scope.correctDates);
-  $scope.$watch('model.end', $scope.correctDates);
+  $scope.$watch('model.filter.begin', $scope.correctDates);
+  $scope.$watch('model.filter.end', $scope.correctDates);
 
+
+// ---------------------- INICIO de filtro --------------------
 
   $scope.addFailToUser = function(fail, failsCountByUser) {
     var fu = null;
@@ -73,14 +95,36 @@ app.controller('AssistanceFailsFiltersCtrl', ["$scope", "$timeout", "Assistance"
       }
     }
     if (fu == null) {
-      fu = {userId:fail.user.id,
-            count:0,
-            fails:[]};
+      fu = {userId:fail.user.id,fails:[]};
       failsCountByUser.push(fu);
     }
-
-    fu.count = fu.count + 1;
     fu.fails.push(fail);
+  }
+
+  // failsByUser {userId,count:0,fails:[]}
+  $scope.filterWeekly = function(failsByUser) {
+    // for (var i = 0; i < failsByUser)
+    // console.log();
+
+
+    if (f.count >= $scope.model.filter.count) {
+          return f.fails;
+    }
+  }
+
+  $scope.filterPeriodicity = function(failByUser) {
+    var fails = [];
+
+    if ($scope.model.filter.periodicity == null) {
+      if ($scope.model.filter.count < r.fails.length) {
+        return f.fails;
+      }
+    }
+
+    if ($scope.model.filter.periodicity == 'Semanal') {
+      // failsFilters = failsFilters.concat($scope.filterWeekly(f));
+    }
+    return [];
   }
 
   $scope.filter = function(fails) {
@@ -88,7 +132,6 @@ app.controller('AssistanceFailsFiltersCtrl', ["$scope", "$timeout", "Assistance"
     var failsCountByUser = [{}]; // {userId:id,count:0,fails:[]}
 
     var diffInput = parseInt($scope.model.filter.hours * 60) + parseInt($scope.model.filter.minutes);
-    console.log("DiffInput:" + diffInput);
 
     for (var i = 0; i < fails.length; i++) {
       var r = fails[i];
@@ -103,21 +146,22 @@ app.controller('AssistanceFailsFiltersCtrl', ["$scope", "$timeout", "Assistance"
 
     for (var i = 0; i < failsCountByUser.length; i++) {
       var f = failsCountByUser[i];
-      if (f.count >= $scope.model.filter.count) {
-        failsFilters = failsFilters.concat(f.fails);
-      }
+      failsFilters = failsFilters.concat($scope.filterPeriodicity(f));
     }
 
     return failsFilters;
   }
 
+  // ------------------------- Fin del filtro -----------------------------
+
   $scope.search = function() {
     $scope.model.searching = true;
     $scope.model.assistanceFails = [{}];
     $scope.initializeDate();
-    Assistance.getFailsByDate($scope.model.begin, $scope.model.end,
+    Assistance.getFailsByDate($scope.model.filter.begin, $scope.model.filter.end,
       function(response) {
-        var fails = $scope.filter(response);
+        // var fails = $scope.filter(response);
+        var fails = response;
         for (var i = 0; i < fails.length; i++) {
           var r = fails[i];
 

@@ -13,7 +13,7 @@
       				<span><i class="fa fa-calendar"></i> Seleccione Fecha de Inicio</span>
       			</div>
       			<div>
-      				<input class="inputDate" type="date" ng-model="model.begin">
+      				<input class="inputDate" type="date" ng-model="model.filter.begin">
       			</div>
       		</div>
         </div>
@@ -26,10 +26,21 @@
       				<span><i class="fa fa-calendar"></i> Seleccione Fecha de Fin</span>
       			</div>
       			<div>
-      				<input class="inputDate" type="date" ng-model="model.end">
+      				<input class="inputDate" type="date" ng-model="model.filter.end">
       			</div>
       		</div>
         </div>
+      </div>
+
+      <div class="periodicityFilterContainer">
+        <div class="periodicityTitle">
+  				<span><i class="fa fa-ticket"></i> Periodicidad</span>
+  			</div>
+  			<div class="periodicityInput">
+          <select ng-model="model.filter.periodicity"  ng-options="periodicity for periodicity in model.periodicities">
+            <option value="">-- Sin periodicidad --</option>
+          </select>
+  			</div>
       </div>
 
       <div class="typeFailsContainer">
@@ -56,6 +67,11 @@
         <div class="hoursFilterTitle">
   				<span><i class="fa fa-ticket"></i> Horas</span>
   			</div>
+        <div class="hoursOperatorsInput">
+          <select ng-model="model.filter.hoursOperator"  ng-options="op.name for op in model.hoursOperators">
+            <option value="">-- Seleccione ... --</option>
+          </select>
+        </div>
   			<div class="hoursFilterInput">
   				<input class="input" type="text" ng-model="model.filter.hours">:
     			<input class="input" type="text" ng-model="model.filter.minutes">
