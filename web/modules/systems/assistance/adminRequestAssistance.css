@@ -9,12 +9,24 @@
   font-size:14px;
 }
 
+.adminRequestAssistance .scroll {
+  height:500px;
+  width:850px;
+  overflow:scroll;
+  overflow-x:hidden;
+  margin-right:25px;
+}
 .adminRequestAssistance .content {
   display:flex;
   flex-direction:row;
   justify-content: flex-start;
 
+
 }
+
+.adminRequestAssistance .content:nth-child(even) { background: white }
+.adminRequestAssistance .content:nth-child(odd) { background: #F2F2F2}
+
 .adminRequestAssistance .title{
   display:flex;
   align-items: center;
@@ -41,24 +53,37 @@
     margin-bottom:5px;
 }
 .adminRequestAssistance .t1 {
-  width:200px;
+  width:220px;
 }
 .adminRequestAssistance .t2 {
-  width:100px;
+  width:150px;
 }
 .adminRequestAssistance .t3 {
   width:260px;
 }
+.adminRequestAssistance .t6 {
+  width:285px;
+}
+.adminRequestAssistance .t4 {
+  width:140px;
+}
+
+.adminRequestAssistance .margins {
+  margin-top:5px;
+  margin-bottom:5px;
+}
 
 .adminRequestAssistance .userRequest {
-  font-size:16px;
-  font-weight:bold;
+  font-size:18px;
+
   padding:5px;
 
 }
 .adminRequestAssistance .dniRequest {
   color:#0066A6;
-  padding:5px;
+  margin-left:5px;
+
+
 
 }
 .adminRequestAssistance .typeRequest {
@@ -67,9 +92,19 @@
   margin-left:18px;
 
 }
+.adminRequestAssistance .timeRequest {
+  font-size:18px;
+  color:#0066A6;
+  margin-left:30px;
+
+}
+.adminRequestAssistance .timesRequest {
+  margin-left:30px;
+
+}
 .adminRequestAssistance .dateRequest {
-  margin-left:35px;
-  font-size:16px;
+  margin-left:20px;
+  font-size:14px;
 }
 
 
@@ -92,7 +127,7 @@
   width:100px;
   text-shadow: 0px 1px black;
   font-weight: bold;
-  margin-right:10px;
+
   font-size:13px;
 
 }
