@@ -31,10 +31,10 @@
       </div>
       <div ng-class="{true:'visible',false:'hidden'}[request.displayHours]">
         <div class="t4">
-          <span class="timeRequest">3 Horas</span>
+          <span class="timeRequest">{{request.time}} Horas</span>
         </div>
         <div class="t4">
-          <span class="timesRequest">de 11:00 a 14:00</span>
+          <span class="timesRequest">{{request.start}} a {{request.end}}</span>
         </div>
     </div>
     </div>

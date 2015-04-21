@@ -1,6 +1,6 @@
 var app = angular.module('mainApp');
 
-app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistance, Users, Profiles, Session, Notifications) {
+app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistance, Users, Profiles, Session, Notifications, Utils) {
 
     // requests = [{id:'',license:'',user:{name:'',lastname:'',dni:''},date:''}]
     $scope.model = {
@@ -38,6 +38,14 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistan
         var r = data;
         r.date = d.toLocaleDateString();
         r.user = null;
+        
+        if(r.displayHours){
+          var begin = new Date(r.begin);
+          var end = new Date(r.end);
+          r.time = Utils.getDifferenceTimeFromDates(begin, end);
+          r.start = Utils.formatTime(begin);
+          r.end = Utils.formatTime(end);
+        }
 
         Users.findUser(data.user_id,
             function(response) {
