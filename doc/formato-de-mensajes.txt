@@ -6,7 +6,7 @@
 query :
 {
   id:,
-  action:"getFailsByDate",
+  action:"getFailsByFilter",
   session:,
   request:{
       filter: {
