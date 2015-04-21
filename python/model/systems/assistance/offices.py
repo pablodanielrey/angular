@@ -5,6 +5,10 @@ import logging
 class Offices:
 
 
+    def _convertToDict(self,off):
+        return {'id':off[0],'parent':off[1],'name':off[2]}
+
+
     """
         obtiene las oficinas hijas de las oficinas pasadas como parámetro
     """
@@ -39,6 +43,69 @@ class Offices:
 
 
 
+    """
+        obtiene las oficinas padres de las oficinas pasadas como parametro
+    """
+    def _getParentOffices(self,con,offices):
+
+        if len(offices) <= 0:
+            return []
+
+
+        cur = con.cursor()
+        cur.execute('select id,parent,name from assistance.offices')
+        if cur.rowcount <= 0:
+            return []
+
+        offrs = cur.fetchall()
+        data = []
+
+        """ agrego las oficinas pasadas como parametro """
+        for oid in offices:
+            for x in offrs:
+                if x[0] == oid:
+                    data.append(self._convertToDict(x))
+                    break
+
+
+        parents = []
+        parentsIds = []
+        for office in data:
+            pid = office['parent']
+            while (pid != None) and (pid not in parentsIds):
+                for parent in offrs:
+                    if parent[0] == pid:
+                        parentsIds.append(pid)
+                        parents.append(self._convertToDict(parent))
+                        pid = parent[1]
+                        break
+
+        return parents
+
+
+
+    """
+        obtiene los datos de las oficinas pasadas como parámetro
+    """
+    def _getOfficesData(self,con,officesIds):
+
+        if len(offices) <= 0:
+            return []
+
+        cur = con.cursor()
+        cur.execute('select id,parent,name from assistance.offices where id in %s',(tuple(officesIds),))
+        if cur.rowcount <= 0:
+            return []
+
+        offices = []
+        for off in cur:
+            offices.append(self._convertToDict(off))
+
+        return offices
+
+
+
+
     """ obtiene todas las oficinas """
     def getOffices(self,con):
         cur = con.cursor()
@@ -46,7 +113,7 @@ class Offices:
         offs = cur.fetchall()
         offices = []
         for off in offs:
-            offices.append({'id':off[0],'parent':off[1],'name':off[2]})
+            offices.append(self._convertToDict(off))
         return offices
 
 
@@ -74,7 +141,7 @@ class Offices:
 
 
     """ obtiene todas las oficinas a las que pertenece un usuario y si tree=True obtiene todas las hijas también """
-    def getOfficesByUser(self,con,userId,tree=False):
+    def getOfficesByUser(self,con,userId,tree=False,parents=False):
         cur = con.cursor()
         cur.execute('select id,parent,name from assistance.offices o, assistance.offices_users ou where ou.user_id = %s and o.id = ou.office_id',(userId,))
         if cur.rowcount <= 0:
@@ -85,10 +152,13 @@ class Offices:
         for off in cur:
             oId = off[0]
             ids.append(oId)
-            offices.append({'id':oId,'parent':off[1],'name':off[2]})
+            offices.append(self._convertToDict(off))
 
         if tree:
             offices.extend(self._getChildOffices(con,ids))
+
+        if parents:
+            offices.extend(self._getParentOffices(con,ids))
 
         return offices
 
@@ -140,7 +210,7 @@ class Offices:
 
 
     """
-        obtiene todos los ids de los usuarios que pertenecen a las oficinas en las cuales se tiene cierto rol.
+        obtiene todos los ids de los usuarios que pertenecen a las oficinas en las cuales un usuario tiene cierto rol.
     """
     def getUserInOfficesByRole(self,con,userId,tree=False,role='autoriza'):
         offices = self.getOfficesByUserRole(con,userId,tree,role)
@@ -150,4 +220,21 @@ class Offices:
 
         officesIds = list(map(lambda x : x['id'],offices))
         users = self.getOfficesUsers(con,officesIds)
+        return users
+
+
+
+    """
+        obtiene todos los ids de los usuarios que tienen cierto rol en las oficinas pasadas como parámetro
+    """
+    def getUsersWithRoleInOffices(self,con,officesIds,role='autoriza'):
+        cur = con.cursor()
+        cur.execute('select user_id from assistance.offices_roles where office_id in %s and role = %s',(tuple(officesIds),role))
+        if cur.rowcount <= 0:
+            return []
+
+        users = []
+        for uid in cur:
+            users.append(uid)
+
         return users

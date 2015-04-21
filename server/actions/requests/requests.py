@@ -201,7 +201,7 @@ class RejectAccountRequest:
 
       return True
 
-    except psycopg2.DatabaseError as e:
+    except Exception as e:
 
         con.rollback()
         raise e

@@ -112,6 +112,11 @@ app.config(['$routeProvider', function($routeProvider) {
       controller: 'AssistanceFailsCtrl'
   })
 
+  .when('/assistanceFailsFilters', {
+      templateUrl: '/modules/systems/assistance/failsFilters.html',
+      controller: 'AssistanceFailsFiltersCtrl'
+  })
+
   .when('/requestAssistance', {
       templateUrl: '/modules/systems/assistance/requestAssistance.html',
       controller: 'RequestAssistanceCtrl'
@@ -130,12 +135,12 @@ app.config(['$routeProvider', function($routeProvider) {
       templateUrl: '/modules/systems/assistance/requestAuthority.html',
       controller: 'RequestAuthorityCtrl'
   })
-  
+
   .when('/adminRequestOverTime', {
       templateUrl: '/modules/systems/assistance/adminRequestOverTime.html',
       controller: 'AdminRequestOverTimeCtrl'
   })
-  
+
   .when('/showAssistance', {
       templateUrl: '/modules/systems/assistance/showAssistance.html',
       controller: 'ShowAssistanceCtrl'

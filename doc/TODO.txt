@@ -1,0 +1,57 @@
+- login - enter
+- olvide clave -- volver a pantalla principal
+- crear cuenta -- volver a pantalla principal
+
+-- boleta de salidas -- 
+	-- al solicitar una boleta de salida hay que explicar mejor antes de confirmar. o sea en el boton de confirmación falta explicar mejor lo 
+	que se esta pidiendo.
+
+-- chequeo de fallas -- 
+	-- chequear que se retorne lo correcto desde el server
+	-- exportación de los datos a ods. armar plantilla ods
+	-- ajustar codigo en el server de los distintos chequeos en el servidor 
+		-- jefe marca 1 sola vez
+		-- cantidad de horas solamente
+		-- chequear horario a partir de una fecha.
+
+-- filtro de fallas 2 --
+	-- falta estilo
+	-- falta llamada al servidor.
+
+
+-- administración de solicitudes --
+	-- acomodar css.
+	-- desabilitar el boton aceptar cuando se esta aceptando una solicitud.
+	-- si se cancela hay que desabilitar el botoin hasta que se cancele ok o haya un erro.
+	-- no mosrtar las de fechas pasadas.
+	-- ordenar por fecha.
+
+
+-- solcitar horas extras --
+	-- modificar la busqueda de usuarios con flecha para abajo
+	-- cargarle un dato por defecto a las horas y no dejar que sea null nunca.
+	-- controlar que la hora fin sea mayor que la hora inicial.
+	-- ordenar horas extras por fecha
+
+
+-- servidor 
+	-- agregar opción de config para que envie mails o no.
+
+
+-- control de horario -- 
+	-- ajustar para que una persona pueda ver su propia historia.
+	-- agregar que se vea el logs de marcaciones.
+	-- agregar que se vea si existe alguna justificación en esa fecha.
+	-- no anda el filtro de oficinas.
+	-- exportar los datos a ods
+
+
+
+
+secudnarias -
+
+- agreguar al lado del menu de administracion de solicitudes un globito con las pentiendes. asi se ve en el menu.
+
+
+
+

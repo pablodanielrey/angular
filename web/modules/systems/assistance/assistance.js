@@ -49,28 +49,22 @@ app.controller('AssistanceCtrl', ["$scope", "$timeout", "$window", "Profiles", "
 
 		if (assistanceStatusFromServer.start != null) {
 			var start = new Date(assistanceStatusFromServer.start);
-			$scope.model.assistanceStatus.start = start.getHours() + ":" + start.getMinutes();
+			var minutes = (start.getHours() * 60) + start.getMinutes();
+			$scope.model.assistanceStatus.start = Utils.getTimeFromMinutes(minutes);
 		} else {
 			$scope.model.assistanceStatus.start = '00:00';
 		}
 
 		if (assistanceStatusFromServer.end != null) {
 			var end = new Date(assistanceStatusFromServer.end);
-			$scope.model.assistanceStatus.end = end.getHours() + ":" + end.getMinutes();
+			var minutes = (end.getHours() * 60) + end.getMinutes();
+			$scope.model.assistanceStatus.end = Utils.getTimeFromMinutes(minutes);
 		} else {
 			$scope.model.assistanceStatus.end = '00:00';
 		}
 
 		var workedMinutes = assistanceStatusFromServer.workedMinutes;
-		var workedH = Math.floor(workedMinutes/60);
-    if(workedH < 10){
-      workedH = "0"+workedH;
-    }
-		var workedM = Math.floor(workedMinutes % 60);
-    if(workedM < 10){
-      workedM = "0"+workedM;
-    }
-		$scope.model.assistanceStatus.workedTime = workedH + ":" + workedM;
+		$scope.model.assistanceStatus.workedTime = Utils.getTimeFromMinutes(workedMinutes);
 
 
 		for (var i in assistanceStatusFromServer.logs) {
@@ -183,15 +177,8 @@ app.controller('AssistanceCtrl', ["$scope", "$timeout", "$window", "Profiles", "
 			http://stackoverflow.com/questions/6312993/javascript-seconds-to-time-string-with-format-hhmmss
 		*/
 		$scope.parseSecondsToDateString = function(sec) {
-			var hours   = Math.floor(sec / 3600);
-			var minutes = Math.floor((sec - (hours * 3600)) / 60);
-			var seconds = sec - (hours * 3600) - (minutes * 60);
-
-			if (hours   < 10) {hours   = "0"+hours;}
-			if (minutes < 10) {minutes = "0"+minutes;}
-			if (seconds < 10) {seconds = "0"+seconds;}
-			var time    = hours+':'+minutes;
-			return time;
+			var minutes   = Math.floor(sec / 60);
+			return Utils.getTimeFromMinutes(minutes);
 		}
 
 
