@@ -55,7 +55,14 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistan
             function(response) {
               $scope.model.requests = [];
               for (var i = 0; i < response.length; i++) {
-                  $scope.addRequest(response[i]);
+                  var r = response[i];
+                  r.displayHours = false;
+                  id = r.justification_id;
+                  if (id == 'fa64fdbd-31b0-42ab-af83-818b3cbecf46') {
+                    // boleta de salida
+                    r.displayHours = true;
+                  }
+                  $scope.addRequest(r);
               }
             },
             function(error) {
