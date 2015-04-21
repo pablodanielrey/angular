@@ -37,6 +37,7 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, As
         $scope.requestAuthority = function() {
             $location.path('/requestAuthority')
         }
+
         $scope.adminRequestOverTime = function() {
             $location.path('/adminRequestOverTime')
         }
@@ -44,6 +45,11 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, As
         $scope.assistanceFails = function() {
           $location.path('/assistanceFails')
         }
+
+        $scope.assistanceFailsFilters = function() {
+          $location.path('/assistanceFailsFilters')
+        }
+
         $scope.showAssistance = function() {
           $location.path('/showAssistance')
         }
@@ -101,6 +107,7 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, As
             function(ok) {
               if (ok == 'granted') {
                 $scope.items.push({ label:'Chequeo de Fallas', img:'fa-ticket', function: $scope.assistanceFails});
+                $scope.items.push({ label:'Filtro de Fallas', img:'fa-ticket', function: $scope.assistanceFailsFilters});
               }
             },
             function (error) {
