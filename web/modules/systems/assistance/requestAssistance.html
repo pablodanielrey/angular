@@ -21,14 +21,18 @@
       <div class="column t1"><i class="fa fa-calendar"></i> Día</div>
       <div class="column t1"><i class="fa fa-info-circle"></i> Estado</div>
     </div>
-
+<div class="scroll">
     <div class="myRequestInfo" ng-repeat="x in model.requestedLicences" ng-class="{'PENDING':'pending', 'CANCELED':'canceled', 'REJECTED':'rejected', 'APPROVED':'approved'}[x.status]">
 
       <div class="myRequest">
         <span>{{x.justification_name}}</span>
       </div>
       <div class="myRequestDate">
-        <span>{{x.summary}}</span>
+        <span><i class="fa fa-calendar"></i> 17/04/2015</span>
+        <span><i class="fa fa-clock-o"></i> 3 Horas</span>
+        <div>
+          <span>de 11:00 a 14:00
+        </div>
       </div>
 
 
@@ -46,6 +50,6 @@
         <span class="buttonCancel"><i class="fa fa-times"></i> Cancelado</span>
       </div>
     </div>
-
+</div>
   </div>
 </div>

@@ -98,6 +98,14 @@
   background-color: white;
 }
 
+.requestAssistance .scroll {
+  height:270px;
+
+  overflow:scroll;
+  overflow-x:hidden;
+
+}
+
 
 /*
 .requestAssistance .myRequestInfo.pending {
