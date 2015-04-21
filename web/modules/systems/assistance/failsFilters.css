@@ -1,0 +1,248 @@
+.assistanceFailsFilters {
+  width:99%;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  background-color: #f5f5f5;
+  margin:5px;
+  font-family: calibri, Arial, Helvetica, sans-serif;
+  font-size:14px;
+}
+
+.assistanceFailsFilters .title{
+  display:flex;
+  align-items: center;
+  background-image:linear-gradient(to right,#275276, #0066A6);
+  font-size:16px;
+  width:99%;
+  height:30px;
+  padding:5px;
+  color:white;
+  margin-bottom:10px;
+}
+
+.assistanceFailsFilters .fails {
+
+    overflow: scroll;
+    height:385px;
+    overflow-x: hidden;
+}
+
+
+.assistanceFailsFilters  .headerFails {
+  cursor:pointer;
+
+  display:flex;
+  flex-direction:row;
+
+  background-color:#0066A6;
+  color:white;
+  padding-top:5px;
+  padding-bottom:5px;
+  margin-bottom:5px;
+  margin-top:10px;
+
+}
+
+.assistanceFailsFilters .hoursFilter.hidden {
+  display:none;
+}
+
+.assistanceFailsFilters .headerFails .dni {
+    width:80px;
+}
+
+.assistanceFailsFilters .headerFails .name {
+    width:100px;
+}
+
+.assistanceFailsFilters .headerFails .lastname {
+    width:90px;
+}
+
+.assistanceFailsFilters .headerFails .date {
+    width:80px;
+}
+
+.assistanceFailsFilters .headerFails .dateSchedule {
+    width:80px;
+}
+
+.assistanceFailsFilters .headerFails .workingHours {
+    width:80px;
+}
+
+.assistanceFailsFilters .headerFails .diff {
+    width:90px;
+}
+
+.assistanceFailsFilters .headerFails .description {
+    width:200px;
+}
+
+
+
+
+.assistanceFailsFilters .fails .fail {
+  display:flex;
+  flex-direction:row;
+}
+.assistanceFailsFilters .fail:nth-child(even) { background: white }
+.assistanceFailsFilters .fail:nth-child(odd) { background: #F2F2F2}
+
+
+.assistanceFailsFilters .fails .dni {
+    width:80px;
+}
+
+.assistanceFailsFilters .fails .name {
+    width:100px;
+    color:#0066A6;
+    font-weight:bold;
+}
+
+.assistanceFailsFilters .fails .lastname {
+    width:90px;
+    color:#0066A6;
+    font-weight:bold;
+}
+
+.assistanceFailsFilters .fails .date {
+    width:80px;
+}
+
+.assistanceFailsFilters .fails .dateSchedule {
+    width:80px;
+}
+
+.assistanceFailsFilters .fails .workingHours {
+    width:80px;
+}
+
+.assistanceFailsFilters .fails .diff {
+    width:90px;
+}
+
+.assistanceFailsFilters .fails .description {
+    width:200px;
+}
+
+.assistanceFailsFilters .filter {
+  display:flex;
+  flex-direction:row;
+  flex-wrap: wrap
+}
+
+.assistanceFailsFilters .dateContainer {
+  display:flex;
+  flex-direction:column;
+  margin-right:1em;
+}
+
+.assistanceFailsFilters .dateTimeTitle {
+  background-color: #0066A6;
+  color: white;
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 0px;
+  font-size: 13px;
+  width: 100%;
+  border-top: 3px solid #275276;
+}
+
+.assistanceFailsFilters .failsTypeContainer {
+  display:flex;
+  flex-direction:column;
+  margin-right:1em;
+}
+
+.assistanceFailsFilters .countFilter {
+  display:flex;
+  flex-direction:column;
+  margin-right:1em;
+}
+
+.assistanceFailsFilters .periodicityFilterContainer {
+  display:flex;
+  flex-direction:column;
+  margin-right:1em;
+}
+
+.assistanceFailsFilters .hoursFilter {
+  display:flex;
+  flex-direction:column;
+  margin-right:1em;
+}
+
+.assistanceFailsFilters .dateInputContainer {
+  display:flex;
+  flex-direction:row;
+}
+
+.assistanceFailsFilters .dateTitle {
+  background-color: #0066A6;
+  color: white;
+  padding:10px;
+  text-align:center;
+  margin-bottom: 0px;
+  font-size: 16px;
+  width: 240px;
+  border-top: 3px solid #275276;
+}
+
+.assistanceFailsFilters .inputDate {
+  width:236px;
+  padding:10px;
+  font-size: 16px;
+  height:16px;
+}
+
+.assistanceFailsFilters .timeTitle {
+  background-color: #0066A6;
+  color: white;
+  padding:5px;
+  margin-bottom: 0px;
+  text-align:center;
+  font-size: 13px;
+  width: 104px;
+  border-top: 3px solid #275276;
+}
+
+.assistanceFailsFilters .inputClock{
+  width:100px;
+  padding:5px;
+  font-size: 14px;
+  height:16px;
+}
+
+
+.assistanceFailsFilters .searchDate {
+  margin-left: 10px;
+  color:#0066A6;
+}
+.assistanceFailsFilters .inputTime {
+  display:flex;
+  flex-direction:column;
+  margin-left: 0.25em;
+}
+
+.assistanceFailsFilters .actionsContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.assistanceFailsFilters .button {
+  width: 150px;
+  height:50px;
+  cursor: pointer;
+  border: 1px solid #0066A6;
+}
+
+.assistanceFailsFilters .blue {
+  background-color:#0066A6;
+  color:white;
+  text-shadow: 0px 1px black;
+  font-weight: bold;
+  font-size:18px;
+}
