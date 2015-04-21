@@ -43,12 +43,12 @@
   			</div>
       </div>
 
-      <div class="typeFailsContainer">
-        <div class="typeFailsTitle">
+      <div class="failsTypeContainer">
+        <div class="failsTypeTitle">
           <span><i class="fa fa-ticket"></i>Seleccione el tipo de falla</span>
         </div>
-        <div class="typeFailsInput">
-          <select ng-model="model.filter.failType"  ng-options="type.name for type in model.typeFails | orderBy:['name']">
+        <div class="failsTypeInput">
+          <select ng-model="model.filter.failType"  ng-options="type.name for type in model.failsType | orderBy:['name']">
             <option value="">-- Seleccione el tipo de falla --</option>
           </select>
         </div>
@@ -63,7 +63,7 @@
   			</div>
       </div>
 
-      <div class="hoursFilter">
+      <div class="hoursFilter" ng-class="{true:'visible',false:'hidden'}[model.filter.failType != null && model.filter.failType.isHours]">
         <div class="hoursFilterTitle">
   				<span><i class="fa fa-ticket"></i> Horas</span>
   			</div>

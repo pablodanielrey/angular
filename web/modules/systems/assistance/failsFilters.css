@@ -44,6 +44,10 @@
 
 }
 
+.assistanceFailsFilters .hoursFilter.hidden {
+  display:none;
+}
+
 .assistanceFailsFilters .headerFails .dni {
     width:80px;
 }
@@ -146,7 +150,7 @@
   border-top: 3px solid #275276;
 }
 
-.assistanceFailsFilters .typeFailsContainer {
+.assistanceFailsFilters .failsTypeContainer {
   display:flex;
   flex-direction:column;
   margin-right:1em;

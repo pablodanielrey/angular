@@ -5,7 +5,7 @@ app.controller('AssistanceFailsFiltersCtrl', ["$scope", "$timeout", "Assistance"
   $scope.model = {
     searching: false,
     assistanceFails:[{}],
-    typeFails:[{}],
+    failsType:[{}],
     periodicities:[],
     hoursOperators:[{}],
     filter:{
@@ -20,23 +20,23 @@ app.controller('AssistanceFailsFiltersCtrl', ["$scope", "$timeout", "Assistance"
     }
   };
 
-  $scope.initializeTypeFails = function() {
-    $scope.model.typeFails = [];
+  $scope.initializeFailsType = function() {
+    $scope.model.failsType = [];
 
-    var t = {name:'No posee marcación',description:'No existe ninguna marcación para esa fecha'};
-    $scope.model.typeFails.push(t);
+    var t = {name:'No posee marcación',description:'No existe ninguna marcación para esa fecha',isHours:false};
+    $scope.model.failsType.push(t);
 
-    t = {name:'Sin horario de llegada',description:'Sin horario de llegada'};
-    $scope.model.typeFails.push(t);
+    t = {name:'Sin horario de llegada',description:'Sin horario de llegada',isHours:false};
+    $scope.model.failsType.push(t);
 
-    t = {name:'Llegada tardía',description:'Llegada tardía'};
-    $scope.model.typeFails.push(t);
+    t = {name:'Llegada tardía',description:'Llegada tardía',isHours:true};
+    $scope.model.failsType.push(t);
 
-    t = {name:'Sin horario de salida',description:'Sin horario de salida'};
-    $scope.model.typeFails.push(t);
+    t = {name:'Sin horario de salida',description:'Sin horario de salida',isHours:false};
+    $scope.model.failsType.push(t);
 
-    t = {name:'Salida temprana',description:'Salida temprana'};
-    $scope.model.typeFails.push(t);
+    t = {name:'Salida temprana',description:'Salida temprana',isHours:true};
+    $scope.model.failsType.push(t);
 
     $scope.model.filter.failType = null;
   }
@@ -56,7 +56,7 @@ app.controller('AssistanceFailsFiltersCtrl', ["$scope", "$timeout", "Assistance"
     $scope.model.filter.minutes = 0;
     $scope.model.filter.hours = 0;
     $scope.initializeHoursOperator();
-    $scope.initializeTypeFails();
+    $scope.initializeFailsType();
     $scope.model.periodicities = ['Semanal','Mensual','Anual'];
     $scope.model.periodicity = null;
   }
@@ -158,6 +158,30 @@ app.controller('AssistanceFailsFiltersCtrl', ["$scope", "$timeout", "Assistance"
     $scope.model.searching = true;
     $scope.model.assistanceFails = [{}];
     $scope.initializeDate();
+
+    // seteo los parametros del filtro
+    var filterSearch = {};
+    // Tipo de falla
+    if ($scope.model.filter.failType == null) {
+      filterSearch.failType = null;
+    } else {
+      filterSearch.failType = $scope.model.filter.failType.description;
+    }
+    // Cantidad
+    filterSearch.count = $scope.model.filter.count;
+    // Minutos totales
+    filterSearch.minutes = (parseInt($scope.model.filter.hours) * 60) + parseInt($scope.model.filter.minutes);
+    // Operador de las horas (<,>, =)
+    filterSearch.hoursOperator = $scope.model.filter.hoursOperator.value;
+    // Periodicidad
+    filterSearch.periodicity = $scope.model.filter.periodicity;
+    // Fecha de inicio
+    filterSearch.begin = $scope.model.filter.begin;
+    // Fecha de finalización
+    filterSearch.end = $scope.model.filter.end;
+
+    console.log(filterSearch);
+
     Assistance.getFailsByDate($scope.model.filter.begin, $scope.model.filter.end,
       function(response) {
         // var fails = $scope.filter(response);
