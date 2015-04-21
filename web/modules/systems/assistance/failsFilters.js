@@ -42,11 +42,11 @@ app.controller('AssistanceFailsFiltersCtrl', ["$scope", "$timeout", "Assistance"
   }
 
   $scope.initializeHoursOperator = function() {
-    $scope.model.filter.hoursOperator = null;
     $scope.model.hoursOperators = [];
     $scope.model.hoursOperators.push({value:'>',name:'Mayor a'});
     $scope.model.hoursOperators.push({value:'=',name:'Igual a'});
     $scope.model.hoursOperators.push({value:'<',name:'Menor a'});
+      $scope.model.filter.hoursOperator = $scope.model.hoursOperators[0];
   }
 
   $scope.initializeFilter = function() {
@@ -172,7 +172,9 @@ app.controller('AssistanceFailsFiltersCtrl', ["$scope", "$timeout", "Assistance"
     // Minutos totales
     filterSearch.minutes = (parseInt($scope.model.filter.hours) * 60) + parseInt($scope.model.filter.minutes);
     // Operador de las horas (<,>, =)
-    filterSearch.hoursOperator = $scope.model.filter.hoursOperator.value;
+    if ($scope.model.filter.failType != null && $scope.model.filter.failType.isHours) {
+      filterSearch.hoursOperator = $scope.model.filter.hoursOperator.value;
+    }
     // Periodicidad
     filterSearch.periodicity = $scope.model.filter.periodicity;
     // Fecha de inicio
