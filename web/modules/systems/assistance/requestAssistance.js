@@ -102,6 +102,7 @@ app.controller('RequestAssistanceCtrl', function($scope, $rootScope, $timeout, $
 
 		var id = req.justification_id;
 		req.justification_name = $scope.model.justifications[id].name;
+		req.displayHours = false;
 
 		// seteo el summary de acuerdo al tipo de justificación a mostrar.
 		if (id == 'e0dfcef6-98bb-4624-ae6c-960657a9a741') {
@@ -120,6 +121,7 @@ app.controller('RequestAssistanceCtrl', function($scope, $rootScope, $timeout, $
 			var date2 = new Date(req.end);
 			var time = $scope.parseSecondsToDateString((date2 - date) / 1000);
 			req.summary = ' ' + date.toLocaleDateString() + ' ' + date.toLocaleTimeString() + ' -> ' + date2.toLocaleTimeString() + ' : ' + time;
+			req.displayHours = true;
 
 		} else if (id == '4d7bf1d4-9e17-4b95-94ba-4ca81117a4fb') {
 			// 102

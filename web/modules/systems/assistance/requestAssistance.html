@@ -29,9 +29,11 @@
       </div>
       <div class="myRequestDate">
         <span><i class="fa fa-calendar"></i> 17/04/2015</span>
-        <span><i class="fa fa-clock-o"></i> 3 Horas</span>
-        <div>
-          <span>de 11:00 a 14:00
+        <div ng-class="{true:'visible', false:'hidden'}[x.displayHours]">
+          <span><i class="fa fa-clock-o"></i> 3 Horas</span>
+          <div>
+            <span>de 11:00 a 14:00
+          </div>
         </div>
       </div>
 
