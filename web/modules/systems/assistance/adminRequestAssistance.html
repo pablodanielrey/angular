@@ -24,17 +24,19 @@
       <div  class="t2">
         <span class="typeRequest">{{request.licence}}</span>
       </div>
-      <div class="t2">
-        <span class="dateRequest"><i class="fa fa-calendar"></i> {{request.date}}</span>
-      </div>
     </div>
     <div class="margins">
-      <div class="t4">
-        <span class="timeRequest">3 Horas</span>
+      <div class="t3">
+        <span class="dateRequest"><i class="fa fa-calendar"></i> {{request.date}}</span>
       </div>
-      <div class="t4">
-        <span class="timesRequest">de 11:00 a 14:00</span>
-      </div>
+      <div ng-class="{true:'visible',false:'hidden'}[request.displayHours]">
+        <div class="t4">
+          <span class="timeRequest">3 Horas</span>
+        </div>
+        <div class="t4">
+          <span class="timesRequest">de 11:00 a 14:00</span>
+        </div>
+    </div>
     </div>
 
 
