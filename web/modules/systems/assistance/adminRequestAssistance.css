@@ -67,11 +67,16 @@
 .adminRequestAssistance .t4 {
   width:140px;
 }
+.adminRequestAssistance .t7 {
+  width:170px;
+}
+
 
 .adminRequestAssistance .margins {
   margin-top:5px;
   margin-bottom:5px;
 }
+
 
 .adminRequestAssistance .userRequest {
   font-size:18px;
@@ -95,16 +100,17 @@
 .adminRequestAssistance .timeRequest {
   font-size:18px;
   color:#0066A6;
-  margin-left:30px;
+  margin-left:20px;
 
 }
 .adminRequestAssistance .timesRequest {
-  margin-left:30px;
+  margin-left:20px;
 
 }
 .adminRequestAssistance .dateRequest {
   margin-left:20px;
-  font-size:14px;
+  font-size:18px;
+  color:#0066A6;
 }
 
 
@@ -140,14 +146,14 @@
 
 
 .adminRequestAssistance .pending {
-  margin-left:50px;
+  margin-left:30px;
   color:#0066A6;
   font-size:16px;
 }
 .adminRequestAssistance .approved {
   color:#128c78;
   font-size:16px;
-  margin-left:50px;
+  margin-left:30px;
 }
 
 .adminRequestAssistance .buttonApproved {

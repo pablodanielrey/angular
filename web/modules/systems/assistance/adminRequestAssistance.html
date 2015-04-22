@@ -7,7 +7,7 @@
     <div class="column t1"><i class="fa fa-user"></i> Usuario</div>
     <div class="column t2"><i class="fa fa-ticket"></i> Solicitud</div>
 
-    <div class="column t4"><i class="fa fa-calendar"></i> Hora</div>
+    <div class="column t4"><i class="fa fa-calendar"></i> Fecha / <i class="fa fa-clock-o"></i> Hora</div>
     <div class="column t6"><i class="fa fa-info-circle"></i> Estado</div>
   </div>
   <div class="scroll">
@@ -21,20 +21,20 @@
       </div>
     </div>
     <div class="margins">
-      <div  class="t2">
+      <div  class="t7">
         <span class="typeRequest">{{request.licence}}</span>
       </div>
     </div>
     <div class="margins">
-      <div class="t3">
+      <div class="t4">
         <span class="dateRequest"><i class="fa fa-calendar"></i> {{request.date}}</span>
       </div>
       <div ng-class="{true:'visible',false:'hidden'}[request.displayHours]">
         <div class="t4">
-          <span class="timeRequest">{{request.time}} Horas</span>
+          <span class="timeRequest"><i class="fa fa-clock-o"></i> {{request.time}} Horas</span>
         </div>
         <div class="t4">
-          <span class="timesRequest">{{request.start}} a {{request.end}}</span>
+          <span class="timesRequest">De {{request.start}} a {{request.end}}</span>
         </div>
     </div>
     </div>
