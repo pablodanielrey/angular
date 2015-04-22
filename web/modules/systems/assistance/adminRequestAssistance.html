@@ -11,7 +11,7 @@
     <div class="column t6"><i class="fa fa-info-circle"></i> Estado</div>
   </div>
   <div class="scroll">
-  <div class="content" ng-repeat="request in model.requests">
+  <div class="content" ng-repeat="request in model.requests | orderBy:request.date">
     <div class="margins">
       <div class="t1">
         <span class="userRequest ">{{request.user.lastname}}, {{request.user.name}}</span>
@@ -43,13 +43,13 @@
     <div class="margins">
     <div ng-class="{true:'visible', false:'hidden'}[request.status == 'PENDING']">
       <span class="pending"><i class="fa fa-spinner fa-spin"></i> Pendiente</span>
-      <button class="buttonApproved"  ng-click="approveRequest(request)"><i class="fa fa-check-circle"></i> Aprobar</Button>
-      <button class="buttonRefuse" ng-click="refuseRequest(request)"><i class="fa fa-times"></i> Denegar</Button>
+      <button class="buttonApproved"  ng-click="approveRequest(request)" ng-disabled="disabled"><i class="fa fa-check-circle"></i> Aprobar</Button>
+      <button class="buttonRefuse" ng-click="refuseRequest(request)" ng-disabled="disabled"><i class="fa fa-times"></i> Denegar</Button>
     </div>
 
     <div class="myStateRequestApproved" ng-class="{true:'visible', false:'hidden'}[request.status == 'APPROVED']">
       <span class="approved"><i class="fa fa-check-circle"></i> Aprobado</span>
-      <button class="buttonRefuse" ng-click="cancelRequest(request)"><i class="fa fa-times"></i> Cancelar</Button>
+      <button class="buttonRefuse" ng-click="cancelRequest(request)" ng-disabled="disabled"><i class="fa fa-times"></i> Cancelar</Button>
     </div>
   </div>
   </div>

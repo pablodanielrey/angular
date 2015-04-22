@@ -8,14 +8,14 @@
 	-- ej chrome versión xxxx o superior.
 
 
--- boleta de salidas -- 
-	-- al solicitar una boleta de salida hay que explicar mejor antes de confirmar. o sea en el boton de confirmación falta explicar mejor lo 
+-- boleta de salidas --
+	-- al solicitar una boleta de salida hay que explicar mejor antes de confirmar. o sea en el boton de confirmación falta explicar mejor lo
 	que se esta pidiendo.
 
--- chequeo de fallas -- 
+-- chequeo de fallas --
 	-- chequear que se retorne lo correcto desde el server
 	-- exportación de los datos a ods. armar plantilla ods
-	-- ajustar codigo en el server de los distintos chequeos en el servidor 
+	-- ajustar codigo en el server de los distintos chequeos en el servidor
 		-- jefe marca 1 sola vez
 		-- cantidad de horas solamente
 		-- chequear horario a partir de una fecha.
@@ -27,10 +27,7 @@
 
 -- administración de solicitudes --
 	-- acomodar css.
-	-- desabilitar el boton aceptar cuando se esta aceptando una solicitud.
-	-- si se cancela hay que desabilitar el botoin hasta que se cancele ok o haya un erro.
-	-- no mosrtar las de fechas pasadas.
-	-- ordenar por fecha.
+	-- mientras se este enviando una mail mostrar una pantalla en modal que diga "enviando mail"
 
 
 
@@ -42,11 +39,11 @@
 	-- ordenar horas extras por fecha
 
 
--- servidor 
+-- servidor
 	-- agregar opción de config para que envie mails o no.
 
 
--- control de horario -- 
+-- control de horario --
 	-- ajustar para que una persona pueda ver su propia historia.
 	-- agregar que se vea el logs de marcaciones.
 	-- agregar que se vea si existe alguna justificación en esa fecha.
@@ -56,7 +53,7 @@
 
 
 -- cambio de horario --
-	-- falta toda la pantalla. para ver el schedule actual y para cambiar el schedule de un empleado. 
+	-- falta toda la pantalla. para ver el schedule actual y para cambiar el schedule de un empleado.
 	-- por ahora solo es accesible a los jefes de todo su personal.
 
 
@@ -64,7 +61,3 @@
 secudnarias -
 
 - agreguar al lado del menu de administracion de solicitudes un globito con las pentiendes. asi se ve en el menu.
-
-
-
-
