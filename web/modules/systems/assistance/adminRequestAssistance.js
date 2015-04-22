@@ -8,8 +8,6 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistan
         justifications: []
     }
 
-
-
     $scope.getJustificationName = function(id) {
       for (var i = 0; i < $scope.model.justifications.length; i++) {
         if ($scope.model.justifications[i].id == id) {
@@ -39,6 +37,8 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistan
         r.date = d.toLocaleDateString();
         r.user = null;
 
+        r.disabled = false;
+
         Users.findUser(data.user_id,
             function(response) {
               r.user = response;
@@ -65,6 +65,7 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistan
     }
 
     $scope.initialize = function() {
+        $scope.disabled = false;
         var s = Session.getCurrentSession();
         if (!s || !s.user_id) {
             Notifications.message("Error: sesion no definida");
@@ -85,9 +86,11 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistan
     };
 
 
-    $scope.updateStatus = function(status, request_id) {
-        Assistance.updateJustificationRequestStatus(request_id, status,
+    $scope.updateStatus = function(status, request) {
+        $scope.disabled = true;
+        Assistance.updateJustificationRequestStatus(request.id, status,
             function(ok) {
+              $scope.disabled = false;
                 /*
                   ya no es necesario
                 Notifications.message("El estado fue modificado correctamente");
@@ -95,21 +98,21 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistan
                 */
             },
             function(error) {
-
+              $scope.disabled = false;
             }
         );
     };
 
     $scope.approveRequest = function(request) {
-        $scope.updateStatus("APPROVED",request.id);
+        $scope.updateStatus("APPROVED",request);
     };
 
     $scope.refuseRequest = function(request) {
-        $scope.updateStatus("REJECTED",request.id);
+        $scope.updateStatus("REJECTED",request);
     }
 
     $scope.cancelRequest = function(request) {
-        $scope.updateStatus("CANCELED",request.id);
+        $scope.updateStatus("CANCELED",request);
     }
 
 
