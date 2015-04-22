@@ -1,6 +1,10 @@
 - olvide clave -- volver a pantalla principal
 - crear cuenta -- volver a pantalla principal
 
+- agregar en el login tema de los exporadores que se necesitan y las versiones.
+	-- ej chrome versión xxxx o superior.
+
+
 -- boleta de salidas -- 
 	-- al solicitar una boleta de salida hay que explicar mejor antes de confirmar. o sea en el boton de confirmación falta explicar mejor lo 
 	que se esta pidiendo.
