@@ -8,6 +8,14 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistan
         justifications: []
     }
 
+    $scope.today =  new Date();
+
+    $scope.initializeToday = function() {
+      $scope.today.setHours(0);
+      $scope.today.setMinutes(0);
+      $scope.today.setSeconds(0);
+    }
+
     $scope.getJustificationName = function(id) {
       for (var i = 0; i < $scope.model.justifications.length; i++) {
         if ($scope.model.justifications[i].id == id) {
@@ -55,7 +63,9 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistan
             function(response) {
               $scope.model.requests = [];
               for (var i = 0; i < response.length; i++) {
-                  $scope.addRequest(response[i]);
+                  if ($scope.today <= new Date(response[i].begin)) {
+                    $scope.addRequest(response[i]);
+                  }
               }
             },
             function(error) {
@@ -66,6 +76,7 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistan
 
     $scope.initialize = function() {
         $scope.disabled = false;
+        $scope.initializeToday();
         var s = Session.getCurrentSession();
         if (!s || !s.user_id) {
             Notifications.message("Error: sesion no definida");
