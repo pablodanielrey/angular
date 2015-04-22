@@ -1,4 +1,3 @@
-- login - enter
 - olvide clave -- volver a pantalla principal
 - crear cuenta -- volver a pantalla principal
 
