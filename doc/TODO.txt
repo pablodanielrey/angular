@@ -1,6 +1,9 @@
-- login - enter
 - olvide clave -- volver a pantalla principal
 - crear cuenta -- volver a pantalla principal
+
+- agregar en el login tema de los exporadores que se necesitan y las versiones.
+	-- ej chrome versión xxxx o superior.
+
 
 -- boleta de salidas -- 
 	-- al solicitar una boleta de salida hay que explicar mejor antes de confirmar. o sea en el boton de confirmación falta explicar mejor lo 
@@ -27,11 +30,14 @@
 	-- ordenar por fecha.
 
 
--- solcitar horas extras --
+
+
+-- solcitar horas extras -- (lo esta haciendo ivan)
 	-- modificar la busqueda de usuarios con flecha para abajo
 	-- cargarle un dato por defecto a las horas y no dejar que sea null nunca.
 	-- controlar que la hora fin sea mayor que la hora inicial.
 	-- ordenar horas extras por fecha
+	-- no esta funcionando las oficinas, no se obtienen ni se filtra por eso. hay que acomodar eso para que funcione y obtenga ok las oficinas
 
 
 -- servidor 
