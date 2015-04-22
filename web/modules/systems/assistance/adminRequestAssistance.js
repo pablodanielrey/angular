@@ -1,6 +1,6 @@
 var app = angular.module('mainApp');
 
-app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistance, Users, Profiles, Session, Notifications) {
+app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistance, Users, Profiles, Session, Notifications, Utils) {
 
     // requests = [{id:'',license:'',user:{name:'',lastname:'',dni:''},date:''}]
     $scope.model = {
@@ -45,6 +45,14 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistan
         r.date = d.toLocaleDateString();
         r.user = null;
 
+        if(r.displayHours){
+          var begin = new Date(r.begin);
+          var end = new Date(r.end);
+          r.time = Utils.getDifferenceTimeFromDates(begin, end);
+          r.start = Utils.formatTime(begin);
+          r.end = Utils.formatTime(end);
+        }
+
         r.disabled = false;
 
         Users.findUser(data.user_id,
@@ -64,7 +72,15 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistan
               $scope.model.requests = [];
               for (var i = 0; i < response.length; i++) {
                   if ($scope.today <= new Date(response[i].begin)) {
-                    $scope.addRequest(response[i]);
+
+                    var r = response[i];
+                    r.displayHours = false;
+                    id = r.justification_id;
+                    if (id == 'fa64fdbd-31b0-42ab-af83-818b3cbecf46') {
+                      // boleta de salida
+                      r.displayHours = true;
+                    }
+                    $scope.addRequest(r);
                   }
               }
             },
