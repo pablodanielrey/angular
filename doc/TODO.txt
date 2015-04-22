@@ -46,6 +46,10 @@
 	-- exportar los datos a ods
 
 
+-- cambio de horario --
+	-- falta toda la pantalla. para ver el schedule actual y para cambiar el schedule de un empleado. 
+	-- por ahora solo es accesible a los jefes de todo su personal.
+
 
 
 secudnarias -
