@@ -63,33 +63,39 @@ app.controller('RequestAssistanceOutCtrl', ["$scope", "Assistance", "Notificatio
     }
 	};
 
-    $scope.isSelectedDate = function() {
-        if ($scope.model.justification != null && $scope.model.justification.begin != null && $scope.model.justification.end != null) {
-            $scope.date = Utils.formatDate($scope.model.justification.begin);
-            $scope.start = Utils.formatTime($scope.model.justification.begin);
-            $scope.end = Utils.formatTime($scope.model.justification.end);
-            $scope.time = Utils.getDifferenceTimeFromDates($scope.model.justification.begin, $scope.model.justification.end);
-            return true;
-        } else {
-            return false;
+
+
+    $scope.isOutDefined = function(){
+      if ($scope.model.date && $scope.model.begin && $scope.model.end) {
+          return true;
+      } else {
+         return false;
+      }  
+    };
+
+    /**
+     * Define una salida eventual en funcion de los datos ingresados por el usuario
+     * @returns {Boolean}
+     */
+    $scope.defineOut = function() {
+        if ($scope.model.date) $scope.model.dateFormated = Utils.formatDate($scope.model.date);
+        if ($scope.model.begin) $scope.model.beginFormated = Utils.formatTime($scope.model.begin);
+        if ($scope.model.begin && $scope.model.end) {
+          if($scope.model.begin > $scope.model.end) $scope.model.end = $scope.model.begin;
+        }
+        if ($scope.model.end) $scope.model.endFormated = Utils.formatTime($scope.model.end);
+        if ($scope.model.begin && $scope.model.end) $scope.model.timeFormated = Utils.getDifferenceTimeFromDates($scope.model.begin, $scope.model.end);
+        
+        
+        if($scope.isOutDefined()){
+            $scope.model.justification.begin = new Date($scope.model.date);
+            $scope.model.justification.begin.setHours($scope.model.begin.getHours(), $scope.model.begin.getMinutes());
+            $scope.model.justification.end = new Date($scope.model.date);
+            $scope.model.justification.end.setHours($scope.model.end.getHours(), $scope.model.end.getMinutes());
         }
     };
 
-    $scope.changeHours = function() {
-        if ($scope.model.justification.begin ==  null && $scope.model.justification.end == null) {
-            $scope.model.justification.totalHours = 0;
-            return;
-        }
 
-        if (($scope.model.justification.end == null) || ($scope.model.justification.end < $scope.model.justification.begin)) {
-            $scope.model.justification.end = $scope.model.justification.begin;
-        }
-
-        var totalDate = $scope.model.justification.end - $scope.model.justification.begin;
-        var min = ((totalDate/(1000*60))%60);
-        var hours = ~~(totalDate / (1000*60*60));
-        $scope.model.justification.totalHours =  ('0'+hours).substr(-2) + ":" + ('0'+min).substr(-2);
-    };
 
 
     // ------------------------------------------------------------------------
@@ -159,21 +165,7 @@ app.controller('RequestAssistanceOutCtrl', ["$scope", "Assistance", "Notificatio
         $scope.model.justification = {id:justification.id,begin:null,end:null,hours:0};
     };
 
-    $scope.changeDate = function() {
-        if ($scope.model.justification.begin == null) {
-            return;
-        }
-
-        if ($scope.model.justification.end == null) {
-          $scope.model.justification.end = $scope.model.justification.begin;
-        } else {
-            var aux = $scope.model.justification.end;
-            $scope.model.justification.end = new Date($scope.model.justification.begin.getTime());
-            $scope.model.justification.end.setHours(aux.getHours());
-            $scope.model.justification.end.setMinutes(aux.getMinutes());
-        }
-    };
-
+   
     // Envio la peticion al servidor
     $scope.save = function() {
 

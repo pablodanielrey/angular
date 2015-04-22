@@ -19,7 +19,7 @@
         <div>
           <div class="margin" ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationOutRequest()]">
             <p class="parrafos">Seleccione el día</p>
-            <input class="date" type="date" ng-model="model.justification.begin" ng-change="changeDate()">
+            <input type="date" class="date" ng-model="model.date" ng-change="defineOut()" >
             <p class="parrafos">Seleccione Horas</p>
 
             <div class="titlesHours">
@@ -28,9 +28,9 @@
               <div class="spanSE"><span>Total <i class="fa fa-sort-desc"></i></span></div>
             </div>
             <div class="hours">
-              <div class="spanSE"><input type="time" name="hora" ng-model="model.justification.begin" ng-change="changeHours()"></div>
-              <div class="spanSE"><input type="time" name="hora" ng-model="model.justification.end" ng-change="changeHours()"></div>
-              <div class="spanSE"><span>{{model.justification.totalHours}}</span></div>
+              <div class="spanSE"><input type="time" ng-model="model.begin" ng-change="defineOut()"></div>
+              <div class="spanSE"><input type="time" ng-model="model.end" ng-change="defineOut()"></div>
+              <div class="spanSE"><span>{{model.timeFormated}}</span></div>
             </div>
           </div>
 
@@ -58,10 +58,10 @@
           </div>
         </div>
 
-        <div class="margin" ng-class="{true:'visible', false:'hidden'}[isSelectedDate()]">
+        <div class="margin" ng-class="{true:'visible', false:'hidden'}[isOutDefined()]">
           <p class="parrafos">Solicitar Boleta de salida para el día</p>
-          <p class="parrafos3"><i class="fa fa-calendar-o"></i> {{date}} / <i class="fa fa-clock-o"></i> {{time}} Horas </p>
-          <p class="parrafos4"><i class="fa fa-clock-o"></i> De {{start}} a {{end}} Horas </p>
+          <p class="parrafos3"><i class="fa fa-calendar-o"></i> {{model.dateFormated}} / <i class="fa fa-clock-o"></i> {{model.timeFormated}} Horas </p>
+          <p class="parrafos4"><i class="fa fa-clock-o"></i> De {{model.beginFormated}} a {{model.endFormated}} Horas </p>
           <input class="button2 blue2" type="button" value="Confirmar" ng-click="save()">
         </div>
       </div>
