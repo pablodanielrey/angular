@@ -117,9 +117,7 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
 
     $scope.searchUserPromise = $timeout(
       function(){
-        if($scope.search != "") {
-          $scope.listUsers();
-        }
+        $scope.listUsers();
       }
     ,1000);
   };
