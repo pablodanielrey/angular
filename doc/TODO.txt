@@ -24,8 +24,6 @@
 
 -- administración de solicitudes --
 	-- acomodar css.
-	-- no mosrtar las de fechas pasadas.
-	-- ordenar por fecha.
 	-- mientras se este enviando una mail mostrar una pantalla en modal que diga "enviando mail"
 
 
