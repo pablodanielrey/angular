@@ -25,15 +25,15 @@
 				<span><i class="fa fa-calendar"></i> Seleccione Fecha</span>
 			</div>
 			<div>
-				<input class="inputDate" type="date" ng-model="model.date">
+				<input class="inputDate" type="date" ng-model="model.date" ng-blur="checkDate()">
 			</div>
 		</div>
 		<div class="time">
 			<div class="inputTime">
 				<span class="timeTitle"><i class="fa fa-clock-o"></i> Hora Inicio</span>
-				<input class="inputClock" type="time" ng-model="model.startTime">
+				<input class="inputClock" type="time" ng-model="model.startTime" ng-blur="checkStartTime()">
 				<span class="timeTitle"><i class="fa fa-clock-o"></i> Hora Fin</span>
-				<input class="inputClock" type="time" ng-model="model.endTime">
+				<input class="inputClock" type="time" ng-model="model.endTime" ng-blur="checkEndTime()">
 			</div>
 		</div>
 		<div class="reason">

@@ -26,7 +26,59 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
     searchUserPromise: null,
     users: null
   };
-
+  
+  $scope.clearVars = function(){
+    $scope.model.user_id = null;
+    $scope.model.reason = null;
+    $scope.model.searchUser = null;
+    $scope.clearDate();
+    $scope.clearStartTime();
+    $scope.clearEndTime();
+  };
+  
+  $scope.clearDate = function(){
+    $scope.model.date = new Date();
+    $scope.model.date.setSeconds(0);
+    $scope.model.date.setMilliseconds(0);
+  };
+  
+  $scope.clearStartTime = function(){
+    $scope.model.startTime = new Date();
+    $scope.model.startTime.setSeconds(0);
+    $scope.model.startTime.setMilliseconds(0);
+  };
+  
+  $scope.clearEndTime = function(){
+    $scope.model.endTime = new Date();
+    $scope.model.endTime.setSeconds(0);
+    $scope.model.endTime.setMilliseconds(0);
+  };
+  
+  $scope.checkDate = function(){
+    if($scope.model.date === null){
+      $scope.clearDate();
+    }
+  };
+  
+  $scope.checkStartTime = function(){
+    if($scope.model.startTime === null){
+      $scope.clearStartTime();
+    }
+    if($scope.model.startTime > $scope.model.endTime){
+      $scope.model.endTime = $scope.model.startTime;
+    }
+  };
+  
+  $scope.checkEndTime = function(){
+    if($scope.model.endTime === null){
+      $scope.clearEndTime();
+    }
+    if($scope.model.startTime > $scope.model.endTime){
+      $scope.model.endTime = $scope.model.startTime;
+    }
+  };
+  
+  
   /**
    * Cargar y chequear session
    */
@@ -98,6 +150,7 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
   $timeout(function() {
     $scope.loadSession();
     $scope.loadRequests();
+    $scope.clearVars();
   },0);
 
 
@@ -126,7 +179,7 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
 
   $scope.isDisplayListUser = function() {
     return $scope.displayListUser;
-  }
+  };
 
   /**
     * Listar elementos
@@ -197,7 +250,7 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
 
     Assistance.requestOvertime($scope.model.user_id, request,
       function callbackOk(response){
-        // nada por ahora ya que viene un evento del lado del server
+        $scope.clearVars();
       },
       function callbackError(error){
         Notifications.message(error);
@@ -209,7 +262,7 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
    * Chequear y guardar solicitud en el servidor
    */
   $scope.requestOvertime = function(){
-    if(($scope.model.date != null) && ($scope.model.startTime != null) && ($scope.model.endTime != null) && ($scope.model.user_id != null)) {
+    if(($scope.model.date != null) && ($scope.model.startTime != null) && ($scope.model.endTime != null) && ($scope.model.user_id != null) && ($scope.model.reason != null)) {
       $scope.persistOvertime();
 
     } else {
