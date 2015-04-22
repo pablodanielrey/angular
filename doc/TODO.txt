@@ -40,7 +40,6 @@
 	-- cargarle un dato por defecto a las horas y no dejar que sea null nunca.
 	-- controlar que la hora fin sea mayor que la hora inicial.
 	-- ordenar horas extras por fecha
-	-- no esta funcionando las oficinas, no se obtienen ni se filtra por eso. hay que acomodar eso para que funcione y obtenga ok las oficinas
 
 
 -- servidor 
