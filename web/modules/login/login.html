@@ -13,27 +13,31 @@
 		<img src="/views/img/logo.jpg" />
 	</div>
 
-	<div>
-		<div class="margin_div_login">
-			<label class="text"> Usuario (DNI)</label>
-			<input class="name" type="text" ng-model="user.username"/>
+	<form ng-submit="login()">
+
+		<div>
+			<div class="margin_div_login">
+				<label class="text"> Usuario (DNI)</label>
+				<input class="name" type="text" ng-model="user.username"/>
+			</div>
+
+			<div class="margin_div_login">
+				<label class="text"> Contraseña</label>
+				<input class="password" type="password" ng-model="user.password"/>
+			</div>
 		</div>
 
-		<div class="margin_div_login">
-			<label class="text"> Contraseña</label>
-			<input class="password" type="password" ng-model="user.password"/>
+		<div>
+			<input type="submit" class="loginAction" value="Enviar" />
 		</div>
-	</div>
 
-	<div>
-		<button class="loginAction" ng-click="login()" autofocus>Entrar</button>
-	</div>
+		<div class="option">
+			<span><a class="links" href="/systems/pass/indexResetPassword.html"> Olvidé mi contraseña </a></span>
+			<span>|</span>
+			<span><a class="links" href="/systems/account/indexCreateAccountRequest.html"> Crear cuenta </a></span>
+		<div>
 
-	<div class="option">
-		<span><a class="links" href="/systems/pass/indexResetPassword.html"> Olvidé mi contraseña </a></span>
-		<span>|</span>
-		<span><a class="links" href="/systems/account/indexCreateAccountRequest.html"> Crear cuenta </a></span>
-	<div>
+	</form>
 
 <!--
 		<div class="disclaimer">
