@@ -27,7 +27,9 @@
 	-- ordenar por fecha.
 
 
--- solcitar horas extras --
+
+
+-- solcitar horas extras -- (lo esta haciendo ivan)
 	-- modificar la busqueda de usuarios con flecha para abajo
 	-- cargarle un dato por defecto a las horas y no dejar que sea null nunca.
 	-- controlar que la hora fin sea mayor que la hora inicial.
