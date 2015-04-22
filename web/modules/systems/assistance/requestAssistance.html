@@ -28,11 +28,11 @@
         <span>{{x.justification_name}}</span>
       </div>
       <div class="myRequestDate">
-        <span><i class="fa fa-calendar"></i> 17/04/2015</span>
+        <span><i class="fa fa-calendar"></i>{{x.date}}</span>
         <div ng-class="{true:'visible', false:'hidden'}[x.displayHours]">
-          <span><i class="fa fa-clock-o"></i> 3 Horas</span>
+          <span><i class="fa fa-clock-o"></i>{{x.time}} Horas</span>
           <div>
-            <span>de 11:00 a 14:00
+            <span>de {{x.start}} a {{x.end}}</span>
           </div>
         </div>
       </div>

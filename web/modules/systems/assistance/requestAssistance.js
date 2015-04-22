@@ -1,6 +1,6 @@
 var app = angular.module('mainApp');
 
-app.controller('RequestAssistanceCtrl', function($scope, $rootScope, $timeout, $window, Session, Assistance, Profiles, Notifications) {
+app.controller('RequestAssistanceCtrl', ["$scope", "$rootScope", "$timeout", "$window", "Session", "Assistance", "Profiles", "Notifications", "Utils", function($scope, $rootScope, $timeout, $window, Session, Assistance, Profiles, Notifications, Utils) {
 
 	$scope.model = {
 		justifications : [], //auxiliar para almacenar las justificaciones
@@ -62,28 +62,6 @@ app.controller('RequestAssistanceCtrl', function($scope, $rootScope, $timeout, $
 	}
 
 
-
-
-	/*
-	parsea segundos a un formato imprimible en horas.
-	para las boletas de salida.
-	lo saque de :
-	http://stackoverflow.com/questions/6312993/javascript-seconds-to-time-string-with-format-hhmmss
-	*/
-	$scope.parseSecondsToDateString = function(sec) {
-		var hours   = Math.floor(sec / 3600);
-		var minutes = Math.floor((sec - (hours * 3600)) / 60);
-		var seconds = sec - (hours * 3600) - (minutes * 60);
-
-		if (hours   < 10) {hours   = "0"+hours;}
-		if (minutes < 10) {minutes = "0"+minutes;}
-		if (seconds < 10) {seconds = "0"+seconds;}
-		var time    = hours+':'+minutes;
-		return time;
-	}
-
-
-
 	/**
 		autor: pablo
 		TODO: SOLUCION PEDORRA QUE ENCONTRE RÁPIDO PARA CORREGIR COMO SE MUESTRA.
@@ -108,40 +86,42 @@ app.controller('RequestAssistanceCtrl', function($scope, $rootScope, $timeout, $
 		if (id == 'e0dfcef6-98bb-4624-ae6c-960657a9a741') {
 			// absent
 			var date = new Date(req.begin);
-			req.summary = date.toLocaleDateString();
+      req.date = Utils.formatDate(date);
 
 		} else if (id == '48773fd7-8502-4079-8ad5-963618abe725') {
 			// compensatory
 			var date = new Date(req.begin);
-			req.summary = date.toLocaleDateString();
+      req.date = Utils.formatDate(date);
 
 		} else if (id == 'fa64fdbd-31b0-42ab-af83-818b3cbecf46') {
 			// boleta de salida
 			var date = new Date(req.begin);
 			var date2 = new Date(req.end);
-			var time = $scope.parseSecondsToDateString((date2 - date) / 1000);
-			req.summary = ' ' + date.toLocaleDateString() + ' ' + date.toLocaleTimeString() + ' -> ' + date2.toLocaleTimeString() + ' : ' + time;
+      req.date = Utils.formatDate(date);
+      req.time = Utils.getDifferenceTimeFromDates(date, date2)
+      req.start = Utils.formatTime(date);
+      req.end = Utils.formatTime(date2);
 			req.displayHours = true;
 
 		} else if (id == '4d7bf1d4-9e17-4b95-94ba-4ca81117a4fb') {
 			// 102
 			var date = new Date(req.begin);
 			var date2 = new Date(req.end);
-			var time = $scope.parseSecondsToDateString((date2 - date) / 1000);
-			req.summary = date.toLocaleDateString() + ' ' + date.toLocaleTimeString() + ' -> ' + date2.toLocaleTimeString() + ' : ' + time;
+      req.date = Utils.formatDate(date);
 
 		} else if (id == '76bc064a-e8bf-4aa3-9f51-a3c4483a729a') {
 			// lao
 			var date = new Date(req.begin);
-			req.summary = date.toLocaleDateString();
+      req.date = Utils.formatDate(date);
 
 		} else if (id == 'b70013e3-389a-46d4-8b98-8e4ab75335d0') {
 			// pre-examen
 			var date = new Date(req.begin);
-			req.summary = date.toLocaleDateString();
+      req.date = Utils.formatDate(date);
 
 		}
-	}
+	};
+  
 
 
 	/**
@@ -221,4 +201,4 @@ app.controller('RequestAssistanceCtrl', function($scope, $rootScope, $timeout, $
         $scope.initialize();
     }, 0);
 
-});
+}]);
