@@ -1,6 +1,6 @@
 var app = angular.module('mainApp');
 
-app.controller('RequestAssistanceOutCtrl', function($scope, Assistance, Notifications) {
+app.controller('RequestAssistanceOutCtrl', ["$scope", "Assistance", "Notifications", "Utils", function($scope, Assistance, Notifications, Utils) {
 
 
     $scope.model.justificationOutRequestSelected = false;
@@ -11,7 +11,7 @@ app.controller('RequestAssistanceOutCtrl', function($scope, Assistance, Notifica
 
   $scope.isSelectedJustificationOut = function() {
     return $scope.model.justificationOutSelected;
-  }
+  };
 
 	$scope.selectJustificationOut = function() {
     var value = !$scope.model.justificationOutSelected;
@@ -20,7 +20,7 @@ app.controller('RequestAssistanceOutCtrl', function($scope, Assistance, Notifica
     $scope.model.justificationOutSelected = value;
 
     $scope.model.justification.id = $scope.model.justificationOutId;
-	}
+	};
 
 	$scope.isSelectedJustificationOutRequest = function() {
 		return $scope.model.justificationOutRequestSelected;
@@ -61,28 +61,19 @@ app.controller('RequestAssistanceOutCtrl', function($scope, Assistance, Notifica
         $scope.model.justification.begin = null;
         $scope.model.justification.end = null;
     }
-	}
+	};
 
     $scope.isSelectedDate = function() {
-        if ($scope.model.justification != null && $scope.model.justification.begin != null) {
-            $scope.dateFormated = $scope.model.justification.begin.toLocaleDateString();
-
-            var hoursBegin = ('0'+$scope.model.justification.begin.getHours()).substr(-2);
-            var minutesBegin = ('0'+$scope.model.justification.begin.getMinutes()).substr(-2);
-            $scope.dateFormated += " " + hoursBegin + ":" + minutesBegin;
-
-            if ($scope.model.justification.end != null) {
-                var hoursEnd = ('0'+$scope.model.justification.end.getHours()).substr(-2);
-                var minutesEnd = ('0'+$scope.model.justification.end.getMinutes()).substr(-2);
-                $scope.dateFormated += "-" + hoursEnd + ":" + minutesEnd;
-            }
-
+        if ($scope.model.justification != null && $scope.model.justification.begin != null && $scope.model.justification.end != null) {
+            $scope.date = Utils.formatDate($scope.model.justification.begin);
+            $scope.start = Utils.formatTime($scope.model.justification.begin);
+            $scope.end = Utils.formatTime($scope.model.justification.end);
+            $scope.time = Utils.getDifferenceTimeFromDates($scope.model.justification.begin, $scope.model.justification.end);
             return true;
         } else {
-            $scope.dateFormated = null;
             return false;
         }
-    }
+    };
 
     $scope.changeHours = function() {
         if ($scope.model.justification.begin ==  null && $scope.model.justification.end == null) {
@@ -98,7 +89,7 @@ app.controller('RequestAssistanceOutCtrl', function($scope, Assistance, Notifica
         var min = ((totalDate/(1000*60))%60);
         var hours = ~~(totalDate / (1000*60*60));
         $scope.model.justification.totalHours =  ('0'+hours).substr(-2) + ":" + ('0'+min).substr(-2);
-    }
+    };
 
 
     // ------------------------------------------------------------------------
@@ -120,7 +111,7 @@ app.controller('RequestAssistanceOutCtrl', function($scope, Assistance, Notifica
       if (seconds < 10) {seconds = "0"+seconds;}
       var time    = hours+':'+minutes;
       return time;
-    }
+    };
 
 
     //Carga el stock disponible
@@ -141,7 +132,7 @@ app.controller('RequestAssistanceOutCtrl', function($scope, Assistance, Notifica
           Notifications.message(error);
         }
       );
-    }
+    };
 
 
     // Cargo el stock de la justificacion
@@ -166,7 +157,7 @@ app.controller('RequestAssistanceOutCtrl', function($scope, Assistance, Notifica
         $scope.model.out = {id:justification.id, name: justification.name, stock:0};
         $scope.loadOutStock(justification.id);
         $scope.model.justification = {id:justification.id,begin:null,end:null,hours:0};
-    }
+    };
 
     $scope.changeDate = function() {
         if ($scope.model.justification.begin == null) {
@@ -181,7 +172,7 @@ app.controller('RequestAssistanceOutCtrl', function($scope, Assistance, Notifica
             $scope.model.justification.end.setHours(aux.getHours());
             $scope.model.justification.end.setMinutes(aux.getMinutes());
         }
-    }
+    };
 
     // Envio la peticion al servidor
     $scope.save = function() {
@@ -194,6 +185,6 @@ app.controller('RequestAssistanceOutCtrl', function($scope, Assistance, Notifica
                 Notifications.message(error);
             }
         );
-    }
+    };
 
-});
+}]);

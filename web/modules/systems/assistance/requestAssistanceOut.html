@@ -60,8 +60,8 @@
 
         <div class="margin" ng-class="{true:'visible', false:'hidden'}[isSelectedDate()]">
           <p class="parrafos">Solicitar Boleta de salida para el día</p>
-          <p class="parrafos3"><i class="fa fa-calendar-o"></i> 22/04/217 / <i class="fa fa-clock-o"></i> 2:00 Horas </p>
-          <p class="parrafos4"><i class="fa fa-clock-o"></i> De 12:00 a 2:00 Horas </p>
+          <p class="parrafos3"><i class="fa fa-calendar-o"></i> {{date}} / <i class="fa fa-clock-o"></i> {{time}} Horas </p>
+          <p class="parrafos4"><i class="fa fa-clock-o"></i> De {{start}} a {{end}} Horas </p>
           <input class="button2 blue2" type="button" value="Confirmar" ng-click="save()">
         </div>
       </div>
