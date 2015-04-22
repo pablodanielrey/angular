@@ -10,7 +10,7 @@
     <div class="column t3"><i class="fa fa-info-circle"></i> Estado</div>
   </div>
 
-  <div class="content" ng-repeat="request in model.requests">
+  <div class="content" ng-repeat="request in model.requests | orderBy:request.date">
     <div>
       <div class="t1">
         <span class="userRequest ">{{request.user.lastname}}, {{request.user.name}}</span>
