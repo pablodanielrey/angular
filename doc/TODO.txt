@@ -1,6 +1,9 @@
 - olvide clave -- volver a pantalla principal
 - crear cuenta -- volver a pantalla principal
 
+-- pantalla de inicio --
+	estan mal calculadas las justificaciones que estan aprobadas.
+
 - agregar en el login tema de los exporadores que se necesitan y las versiones.
 	-- ej chrome versión xxxx o superior.
 
