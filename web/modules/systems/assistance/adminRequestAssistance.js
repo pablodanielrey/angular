@@ -1,6 +1,6 @@
 var app = angular.module('mainApp');
 
-app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistance, Users, Profiles, Session, Notifications) {
+app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistance, Users, Profiles, Session, Notifications, Utils) {
 
     // requests = [{id:'',license:'',user:{name:'',lastname:'',dni:''},date:''}]
     $scope.model = {
@@ -8,7 +8,13 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistan
         justifications: []
     }
 
+    $scope.today =  new Date();
 
+    $scope.initializeToday = function() {
+      $scope.today.setHours(0);
+      $scope.today.setMinutes(0);
+      $scope.today.setSeconds(0);
+    }
 
     $scope.getJustificationName = function(id) {
       for (var i = 0; i < $scope.model.justifications.length; i++) {
@@ -39,6 +45,16 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistan
         r.date = d.toLocaleDateString();
         r.user = null;
 
+        if(r.displayHours){
+          var begin = new Date(r.begin);
+          var end = new Date(r.end);
+          r.time = Utils.getDifferenceTimeFromDates(begin, end);
+          r.start = Utils.formatTime(begin);
+          r.end = Utils.formatTime(end);
+        }
+
+        r.disabled = false;
+
         Users.findUser(data.user_id,
             function(response) {
               r.user = response;
@@ -55,7 +71,16 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistan
             function(response) {
               $scope.model.requests = [];
               for (var i = 0; i < response.length; i++) {
-                  $scope.addRequest(response[i]);
+                if ($scope.today <= new Date(response[i].begin)) {
+                  var r = response[i];
+                  r.displayHours = false;
+                  id = r.justification_id;
+                  if (id == 'fa64fdbd-31b0-42ab-af83-818b3cbecf46') {
+                    // boleta de salida
+                    r.displayHours = true;
+                  }
+                  $scope.addRequest(r);
+                }
               }
             },
             function(error) {
@@ -65,6 +90,8 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistan
     }
 
     $scope.initialize = function() {
+        $scope.disabled = false;
+        $scope.initializeToday();
         var s = Session.getCurrentSession();
         if (!s || !s.user_id) {
             Notifications.message("Error: sesion no definida");
@@ -85,9 +112,11 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistan
     };
 
 
-    $scope.updateStatus = function(status, request_id) {
-        Assistance.updateJustificationRequestStatus(request_id, status,
+    $scope.updateStatus = function(status, request) {
+        $scope.disabled = true;
+        Assistance.updateJustificationRequestStatus(request.id, status,
             function(ok) {
+              $scope.disabled = false;
                 /*
                   ya no es necesario
                 Notifications.message("El estado fue modificado correctamente");
@@ -95,21 +124,21 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistan
                 */
             },
             function(error) {
-
+              $scope.disabled = false;
             }
         );
     };
 
     $scope.approveRequest = function(request) {
-        $scope.updateStatus("APPROVED",request.id);
+        $scope.updateStatus("APPROVED",request);
     };
 
     $scope.refuseRequest = function(request) {
-        $scope.updateStatus("REJECTED",request.id);
+        $scope.updateStatus("REJECTED",request);
     }
 
     $scope.cancelRequest = function(request) {
-        $scope.updateStatus("CANCELED",request.id);
+        $scope.updateStatus("CANCELED",request);
     }
 
 

@@ -75,5 +75,10 @@ app.service('Utils', function() {
     return dates;
   };
   
+  this.getDifferenceTimeFromDates = function(date1, date2){
+    var diffMin = ((Math.abs(date2 - date1) / 1000) / 60); //minutos entre date 1 y date 2
+    return this.getTimeFromMinutes(diffMin);
+  };
+  
 
 });

@@ -1,0 +1,92 @@
+
+prioridades (solo ema las puede hacer) :
+
+	-- configurar para que cuando se obtienen los mails de los jefes para enviarles mails debe ser de @econo.... o configurable mediante el archivo de config del servidor.
+		para solo enviar a cuentas de un determinado dominio
+
+	-- agegar una opción dentro del archivo de config del server para enviar mails o no. globalmente para la sección de justificaciones --
+		con esto se logra eliminar el envío de mails cuando se hacen pruebas 
+
+
+
+
+----
+
+otros temas :
+
+
+- olvide clave -- volver a pantalla principal
+- crear cuenta -- volver a pantalla principal
+
+-- pantalla de inicio --
+	estan mal calculadas las justificaciones que estan aprobadas.
+
+- agregar en el login tema de los exporadores que se necesitan y las versiones.
+	-- ej chrome versión xxxx o superior.
+
+
+-- boleta de salidas --
+	-- al solicitar una boleta de salida hay que explicar mejor antes de confirmar. o sea en el boton de confirmación falta explicar mejor lo
+	que se esta pidiendo.
+
+-- chequeo de fallas --
+	-- chequear que se retorne lo correcto desde el server
+	-- exportación de los datos a ods. armar plantilla ods
+	-- ajustar codigo en el server de los distintos chequeos en el servidor
+		-- jefe marca 1 sola vez
+		-- cantidad de horas solamente
+		-- chequear horario a partir de una fecha.
+
+-- filtro de fallas 2 --
+	-- falta estilo
+	-- falta llamada al servidor.
+
+
+-- administración de solicitudes --
+	-- acomodar css.
+	-- mientras se este enviando una mail mostrar una pantalla en modal que diga "enviando mail"
+
+
+
+
+-- solcitar horas extras -- (lo esta haciendo ivan)
+	-- modificar la busqueda de usuarios con flecha para abajo
+	-- cargarle un dato por defecto a las horas y no dejar que sea null nunca.
+	-- controlar que la hora fin sea mayor que la hora inicial.
+	-- ordenar horas extras por fecha
+
+
+-- servidor
+	-- agregar opción de config para que envie mails o no.
+
+
+-- control de horario --
+	-- ajustar para que una persona pueda ver su propia historia.
+	-- agregar que se vea el logs de marcaciones.
+	-- agregar que se vea si existe alguna justificación en esa fecha.
+	-- no anda el filtro de oficinas.
+	-- exportar los datos a ods
+	-- cuando se consulta una fecha donde no existe schedule, entonces no hay que retornar ni start, ni end, ni nada. solo el usuario (servidor)
+
+
+-- cambio de horario --
+	-- falta toda la pantalla. para ver el schedule actual y para cambiar el schedule de un empleado.
+	-- por ahora solo es accesible a los jefes de todo su personal.
+
+
+
+secudnarias -
+
+- agreguar al lado del menu de administracion de solicitudes un globito con las pentiendes. asi se ve en el menu.
+
+
+
+-------------------
+
+
+tutorias ..
+
+
+	... dejar como opción predeterminada : Académicas y de Estudio.
+	... dejar la ultima fecha que deja cargada como predeterminada para las próximas cargas
+
