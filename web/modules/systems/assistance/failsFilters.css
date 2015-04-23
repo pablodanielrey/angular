@@ -368,3 +368,7 @@
   font-weight: bold;
   font-size:18px;
 }
+
+.assistanceFailsFilters .hidden {
+  visibility: hidden;
+}

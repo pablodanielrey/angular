@@ -1,6 +1,6 @@
 var app = angular.module('mainApp');
 
-app.controller('AssistanceFailsFiltersCtrl', ["$scope", "$timeout", "Assistance", "Notifications", "Utils", function($scope, $timeout, Assistance, Notifications, Utils) {
+app.controller('AssistanceFailsFiltersCtrl', ["$scope", "$timeout", "Assistance", "Notifications", "Users", "Utils", function($scope, $timeout, Assistance, Notifications, Users, Utils) {
 
   $scope.model = {
     searching: false,
@@ -17,9 +17,97 @@ app.controller('AssistanceFailsFiltersCtrl', ["$scope", "$timeout", "Assistance"
       hoursOperator:null,
       begin: new Date(),
       end: new Date()
-    }
+    },
+    
+    //variables correspondientes a la seleccion de usuario
+    searchUser: null,
+    searchUserPromise: null,
+    users: null,
+    displayListUser: false
+  };
+  
+  
+
+
+  /******************************************************
+   * METODOS CORRESPONDIENTES A LA SELECCION DE USUARIO *
+   ******************************************************/
+  /**
+   * Buscar usuarios
+   */
+  $scope.searchUsers = function(){
+    $scope.model.displayListUser = true;
+    if($scope.model.searchUserPromise){
+      $timeout.cancel($scope.model.searchUserPromise);
+    };
+
+    $scope.model.searchUserPromise = $timeout(
+      function(){
+        $scope.listUsers();
+      }
+    ,1000);
+  };
+  
+  /**
+   * Debe ser mostrada la lista de usuarios?
+   */
+  $scope.isDisplayListUser = function() {
+    return $scope.model.displayListUser;
+
+  };  
+  
+  /**
+   * Esconder lista de usuarios
+   */
+  $scope.hideListUser = function(){
+     $timeout(
+      function(){
+        $scope.model.displayListUser = false;
+      }
+    ,100);
+  };
+  
+   /**
+    * Listar elementos
+   */
+  $scope.selectUser = function(user){
+    $scope.model.user_id = user.id;
+    $scope.model.searchUser = user.name + " " + user.lastname;
   };
 
+  
+
+  /**
+   * Seleccionar usuario
+   */
+  $scope.listUsers = function(){
+    Assistance.getUsersInOfficesByRole('autoriza',
+      function(users) {
+        $scope.model.users = [];
+        for (var i = 0; i < users.length; i++) {
+          Users.findUser(users[i],
+            function(user) {
+              $scope.model.users.push(user);
+            },
+            function(error) {
+              Notifications.message(error);
+            });
+        }
+      },
+      function(error){
+        Notifications.message(error);
+      }
+    );
+  };
+  
+  
+  
+  
+  
+  
+  
+  
+  
   $scope.initializeFailsType = function() {
     $scope.model.failsType = [];
 
@@ -39,7 +127,7 @@ app.controller('AssistanceFailsFiltersCtrl', ["$scope", "$timeout", "Assistance"
     $scope.model.failsType.push(t);
 
     $scope.model.filter.failType = null;
-  }
+  };
 
   $scope.initializeHoursOperator = function() {
     $scope.model.hoursOperators = [];
