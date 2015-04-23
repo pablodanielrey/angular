@@ -280,4 +280,8 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
     assistance.displayLogs = v;
   }
 
+  $scope.isDisabled = function() {
+    return ($scope.disabled) || ($scope.model.start == null) || ($scope.model.end == null);
+  }
+
 }]);
