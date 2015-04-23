@@ -11,7 +11,7 @@
 				<span><i class="fa fa-user-plus"></i> Seleccione Usuario</span>
 			</div>
 			<div>
-				<input class="inputSearch" ng-model="model.searchUser" ng-change="searchUsers()" placeholder="Buscar...">
+				<input class="inputSearch" ng-model="model.searchUser" ng-click="searchUsers()" ng-change="searchUsers()" placeholder="Buscar...">
         <ul class="listUsers" ng-class="{true:'visible', false:'hidden'}[isDisplayListUser()]">
 					<li class="liUsers" ng-repeat="user in model.users | filter:model.searchUser | orderBy : 'name'" ng-click="selectUser(user)">{{user.name}} {{user.lastname}}</li>
 				</ul>
@@ -25,15 +25,15 @@
 				<span><i class="fa fa-calendar"></i> Seleccione Fecha</span>
 			</div>
 			<div>
-				<input class="inputDate" type="date" ng-model="model.date">
+				<input class="inputDate" type="date" ng-model="model.date" ng-blur="checkDate()">
 			</div>
 		</div>
 		<div class="time">
 			<div class="inputTime">
 				<span class="timeTitle"><i class="fa fa-clock-o"></i> Hora Inicio</span>
-				<input class="inputClock" type="time" ng-model="model.startTime">
+				<input class="inputClock" type="time" ng-model="model.startTime" ng-blur="checkStartTime()">
 				<span class="timeTitle"><i class="fa fa-clock-o"></i> Hora Fin</span>
-				<input class="inputClock" type="time" ng-model="model.endTime">
+				<input class="inputClock" type="time" ng-model="model.endTime" ng-blur="checkEndTime()">
 			</div>
 		</div>
 		<div class="reason">
@@ -58,20 +58,20 @@
 
 	<div class="solicitudes">
 		<div class="titlesFiles">
-  		<div class="column t1"><i class="fa fa-user"></i> Usuario</div>
-  		<div class="column t2"><i class="fa fa-calendar"></i> Día</div>
-  		<div class="column t2"><i class="fa fa-clock-o"></i> Inicio</div>
-  		<div class="column t2"><i class="fa fa-clock-o"></i> Fin</div>
-  		<div class="column t3"><i class="fa fa-pencil-square-o"></i> Motivo</div>
-  		<div class="column t2"><i class="fa fa-info-circle"></i> Estado</div>
+			<div class="column t1" ng-click="sort = 'user'; reverse=!reverse" ><i class="fa fa-user"></i> Usuario</div>
+			<div class="column t2" ng-click="sort = 'dateSort'; reverse=!reverse"><i class="fa fa-calendar"></i> Día</div>
+			<div class="column t2" ng-click="sort = 'startTime'; reverse=!reverse"><i class="fa fa-clock-o"></i> Inicio</div>
+			<div class="column t2" ng-click="sort = 'endTime'; reverse=!reverse"><i class="fa fa-clock-o"></i> Fin</div>
+			<div class="column t3" ng-click="sort = 'reason'; reverse=!reverse"><i class="fa fa-pencil-square-o"></i> Motivo</div>
+			<div class="column t2" ng-click="sort = 'status'; reverse=!reverse"><i class="fa fa-info-circle"></i> Estado</div>
 		</div>
     <div class="titlesFilesContent">
-      <div class="titlesFiles" ng-repeat="request in model.requests">
+      <div class="titlesFiles" ng-repeat="request in model.requests | orderBy:sort:reverse">
   			<div class="file f1 t1">{{request.user}}</div>
   			<div class="file t2">{{request.date}}</div>
   			<div class="file t2">{{request.startTime}}</div>
   			<div class="file t5">{{request.endTime}}</div>
-  			<div class="file t3"><textarea readonly>{{request.reason}}</textarea></div>
+  			<div class="file t3">{{request.reason}}</div>
   			<div class="file">
             <span class="slope" ng-class="{true:'visible', false:'hidden'}[request.status == 'PENDING']"><i class="fa fa-spinner fa-spin"></i> Pendiente</span>
             <span class="approved" ng-class="{true:'visible', false:'hidden'}[request.status == 'APPROVED']"><i class="fa fa-check-circle"></i> Aprobada</span>

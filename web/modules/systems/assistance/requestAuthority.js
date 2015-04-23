@@ -20,13 +20,67 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
     date: null,                   //actualmente se define un solo dia por solicitud, posteriormente cuando se maneje el calendario se podra definir un rango de dias (para un determinado rango de dias)
     reason: null,                 //motivo por el cual se solicita las horas extra
     requests: [],                 //solicitudes de horas extras para el usuario logueado
-
+    sort: null,                   //ordenamiento de la lista de overtime
+    reverse: false,               //definir ordenamiento en reversa de la lista de overtime
+    
     //variables correspondientes a la seleccion de usuario
     searchUser: null,
     searchUserPromise: null,
     users: null
   };
-
+  
+  $scope.clearVars = function(){
+    $scope.model.user_id = null;
+    $scope.model.reason = null;
+    $scope.model.searchUser = null;
+    $scope.clearDate();
+    $scope.clearStartTime();
+    $scope.clearEndTime();
+  };
+  
+  $scope.clearDate = function(){
+    $scope.model.date = new Date();
+    $scope.model.date.setSeconds(0);
+    $scope.model.date.setMilliseconds(0);
+  };
+  
+  $scope.clearStartTime = function(){
+    $scope.model.startTime = new Date();
+    $scope.model.startTime.setSeconds(0);
+    $scope.model.startTime.setMilliseconds(0);
+  };
+  
+  $scope.clearEndTime = function(){
+    $scope.model.endTime = new Date();
+    $scope.model.endTime.setSeconds(0);
+    $scope.model.endTime.setMilliseconds(0);
+  };
+  
+  $scope.checkDate = function(){
+    if($scope.model.date === null){
+      $scope.clearDate();
+    }
+  };
+  
+  $scope.checkStartTime = function(){
+    if($scope.model.startTime === null){
+      $scope.clearStartTime();
+    }
+    if($scope.model.startTime > $scope.model.endTime){
+      $scope.model.endTime = $scope.model.startTime;
+    }
+  };
+  
+  $scope.checkEndTime = function(){
+    if($scope.model.endTime === null){
+      $scope.clearEndTime();
+    }
+    if($scope.model.startTime > $scope.model.endTime){
+      $scope.model.endTime = $scope.model.startTime;
+    }
+  };
+  
+  
   /**
    * Cargar y chequear session
    */
@@ -49,6 +103,7 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
         for(var i = 0; i < requests.length; i++){
           $scope.formatRequest(requests[i]);
         }
+        $scope.sort = "dateSort";
       },
       function callbackError(error){
         Notifications.message(error);
@@ -58,11 +113,12 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
   };
 
   /**
-   * Dar formato a la solicitud de hora extra
+   * Dar formato a la solicitud de hora extra y almacenarla en el array $scope.model.requests
    */
   $scope.formatRequest = function(request) {
     var begin = new Date(request.begin);
-    request.date = begin.toLocaleDateString();
+    request.date = Utils.formatDate(begin);
+    request.dateSort = Utils.formatDateExtend(begin);
     request.startTime = Utils.formatTime(begin);
 
     var end = new Date(request.end);
@@ -77,7 +133,7 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
         Notifications.message(error);
         throw new Error(error);
       }
-    );
+    );  
   };
 
 
@@ -98,6 +154,7 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
   $timeout(function() {
     $scope.loadSession();
     $scope.loadRequests();
+    $scope.clearVars();
   },0);
 
 
@@ -117,9 +174,7 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
 
     $scope.searchUserPromise = $timeout(
       function(){
-        if($scope.search != "") {
-          $scope.listUsers();
-        }
+        $scope.listUsers();
       }
     ,1000);
   };
@@ -128,7 +183,7 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
 
   $scope.isDisplayListUser = function() {
     return $scope.displayListUser;
-  }
+  };
 
   /**
     * Listar elementos
@@ -169,26 +224,14 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
    * METODOS CORRESPONDIENTES AL PROCESAMIENTO DE FORMULARIO *
    ***********************************************************/
 
-  /**
-   * Dar formato a un timestamp
-   * @param {input type date} date
-   * @param {input type time} time
-   * @returns {Date}
-   */
-  $scope.formatTimestamp = function(date, time){
-    var timestamp = new Date(date);
-    var timeAux = new Date(time);
-    timestamp.setHours(timeAux.getHours());
-    timestamp.setMinutes(timeAux.getMinutes());
-    return timestamp;
-  };
+  
 
   /**
    * Guardar solicitud en el servidor
    */
   $scope.persistOvertime = function(){
-    var begin = $scope.formatTimestamp($scope.model.date, $scope.model.startTime);
-    var end = $scope.formatTimestamp($scope.model.date, $scope.model.endTime);
+    var begin = Utils.getTimestampFromDateAndTime($scope.model.date, $scope.model.startTime);
+    var end = Utils.getTimestampFromDateAndTime($scope.model.date, $scope.model.endTime);
 
     var request = {
       date:$scope.model.date,
@@ -199,7 +242,7 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
 
     Assistance.requestOvertime($scope.model.user_id, request,
       function callbackOk(response){
-        // nada por ahora ya que viene un evento del lado del server
+        $scope.clearVars();
       },
       function callbackError(error){
         Notifications.message(error);
@@ -211,7 +254,7 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
    * Chequear y guardar solicitud en el servidor
    */
   $scope.requestOvertime = function(){
-    if(($scope.model.date != null) && ($scope.model.startTime != null) && ($scope.model.endTime != null) && ($scope.model.user_id != null)) {
+    if(($scope.model.date != null) && ($scope.model.startTime != null) && ($scope.model.endTime != null) && ($scope.model.user_id != null) && ($scope.model.reason != null)) {
       $scope.persistOvertime();
 
     } else {
