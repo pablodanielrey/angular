@@ -20,7 +20,9 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
     date: null,                   //actualmente se define un solo dia por solicitud, posteriormente cuando se maneje el calendario se podra definir un rango de dias (para un determinado rango de dias)
     reason: null,                 //motivo por el cual se solicita las horas extra
     requests: [],                 //solicitudes de horas extras para el usuario logueado
-
+    sort: null,                   //ordenamiento de la lista de overtime
+    reverse: false,               //definir ordenamiento en reversa de la lista de overtime
+    
     //variables correspondientes a la seleccion de usuario
     searchUser: null,
     searchUserPromise: null,
@@ -101,6 +103,7 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
         for(var i = 0; i < requests.length; i++){
           $scope.formatRequest(requests[i]);
         }
+        $scope.sort = "dateSort";
       },
       function callbackError(error){
         Notifications.message(error);
@@ -110,11 +113,12 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
   };
 
   /**
-   * Dar formato a la solicitud de hora extra
+   * Dar formato a la solicitud de hora extra y almacenarla en el array $scope.model.requests
    */
   $scope.formatRequest = function(request) {
     var begin = new Date(request.begin);
-    request.date = begin.toLocaleDateString();
+    request.date = Utils.formatDate(begin);
+    request.dateSort = Utils.formatDateExtend(begin);
     request.startTime = Utils.formatTime(begin);
 
     var end = new Date(request.end);
@@ -129,7 +133,7 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
         Notifications.message(error);
         throw new Error(error);
       }
-    );
+    );  
   };
 
 
@@ -220,26 +224,14 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
    * METODOS CORRESPONDIENTES AL PROCESAMIENTO DE FORMULARIO *
    ***********************************************************/
 
-  /**
-   * Dar formato a un timestamp
-   * @param {input type date} date
-   * @param {input type time} time
-   * @returns {Date}
-   */
-  $scope.formatTimestamp = function(date, time){
-    var timestamp = new Date(date);
-    var timeAux = new Date(time);
-    timestamp.setHours(timeAux.getHours());
-    timestamp.setMinutes(timeAux.getMinutes());
-    return timestamp;
-  };
+  
 
   /**
    * Guardar solicitud en el servidor
    */
   $scope.persistOvertime = function(){
-    var begin = $scope.formatTimestamp($scope.model.date, $scope.model.startTime);
-    var end = $scope.formatTimestamp($scope.model.date, $scope.model.endTime);
+    var begin = Utils.getTimestampFromDateAndTime($scope.model.date, $scope.model.startTime);
+    var end = Utils.getTimestampFromDateAndTime($scope.model.date, $scope.model.endTime);
 
     var request = {
       date:$scope.model.date,

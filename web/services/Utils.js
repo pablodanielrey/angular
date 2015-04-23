@@ -80,5 +80,18 @@ app.service('Utils', function() {
     return this.getTimeFromMinutes(diffMin);
   };
   
+  /**
+   * Definir un timestamp extrayendo el date de un parametro y el time de otro
+   * @param {Date} date Parametro desde el cual se obtendra el date
+   * @param {type} time Parametro desde el cual se obtendra el time
+   * @returns {string} timestamp, ejemplo '2000-01-01 10:00:00'
+   */
+  this.getTimestampFromDateAndTime = function(date, time){
+    var timestamp = new Date(date);
+    timestamp.setHours(time.getHours());
+    timestamp.setMinutes(time.getMinutes());
+    return timestamp;
+  };
+  
 
 });
