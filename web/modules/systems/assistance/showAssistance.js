@@ -240,7 +240,7 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
 
     for(var i = 0; i < assistance.logs.length; i++){
       var log = new Date(assistance.logs[i]);
-      newAssistance.logs.push(Utils.formatTime(log));
+      newAssistance.logs.push(Utils.formatDate(log) + ' ' + Utils.formatTime(log));
     }
 
     newAssistance.workedTime = Utils.getTimeFromMinutes(assistance.workedMinutes);
