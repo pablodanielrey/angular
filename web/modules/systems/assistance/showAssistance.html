@@ -49,7 +49,7 @@
         <div ng-click="predicate = 'start'; reverse=!reverse" Class="tam1"><i class="fa fa-clock-o"></i> Entrada</div>
         <div ng-click="predicate = 'end'; reverse=!reverse" class="tam1"><i class="fa fa-clock-o"></i> Salida</div>
         <div ng-click="predicate = 'workedTime'; reverse=!reverse" class="tam1"><i class="fa fa-clock-o"></i> Total</div>
-        <div ng-click="predicate = 'status'; reverse=!reverse" class="tam3"><i class="fa fa-exclamation"></i> Observaciones</div>
+        <div class="tam3"><i class="fa fa-exclamation"></i> Observaciones</div>
       </div>
       <div class='dataUsersContent'>
         <div class="results" ng-repeat="assistance in model.assistances | orderBy:predicate:reverse">
@@ -58,10 +58,17 @@
           <div class="tam1">{{assistance.start}}</div>
           <div class="tam1">{{assistance.end}}</div>
           <div class="tam1">{{assistance.workedTime}}</div>
-          <div class="tam3">{{assistance.status}}</div>
-          <!-- <ul>
-            <li ng-repeat="log in assistance.logs">{{log}}</li>
-  s        </ul> -->
+          <div class="tam3">
+            <div ng-class="{true:'visible',false:'hidden'}[!assistance.displayLogs]">
+              <span ng-click="showLogs(true,assistance)" class="link">Mostrar marcaciones</span>
+            </div>
+            <div class="logs" ng-class="{true:'visible',false:'hidden'}[assistance.displayLogs]">
+              <span ng-click="showLogs(false,assistance)" class="link">Ocultar marcaciones</span>
+              <ul>
+                <li ng-repeat="log in assistance.logs">{{log}}</li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </div>

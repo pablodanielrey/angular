@@ -145,6 +145,15 @@
   margin-right:5px;
 }
 
+.showAssistance .tam3 .hidden {
+  display:none;
+}
+
+.showAssistance .tam3 .link {
+  text-decoration:underline;
+  cursor:pointer;
+}
+
 .showAssistance .resultsContent {
   height:432px;
 

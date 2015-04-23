@@ -173,6 +173,7 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
             Assistance.getAssistanceStatusByDate(user.id, date,
               function ok(assistance){
                 var newAssistance = $scope.formatAssistance(assistance);
+                newAssistance.displayLogs = false;
                 $scope.removeIsSearchValue(assistance);
                 if(assistance.start != null && assistance.userId != null){
                   $scope.model.assistances.push(newAssistance);
@@ -257,5 +258,9 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
   $scope.isSearch = function(){
     return ($scope.model.isSearch.length > 0);
   };
+
+  $scope.showLogs = function(v,assistance) {
+    assistance.displayLogs = v;
+  }
 
 }]);
