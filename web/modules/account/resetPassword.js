@@ -2,7 +2,7 @@
 var app = angular.module('mainApp');
 
 
-app.controller('ResetPasswordCtrl', function($rootScope, $scope, Credentials, Notifications) {
+app.controller('ResetPasswordCtrl', function($rootScope, $scope, Credentials, Notifications,$window) {
 
   $scope.user = { username:'' };
 
@@ -23,6 +23,10 @@ app.controller('ResetPasswordCtrl', function($rootScope, $scope, Credentials, No
       function(error) {
         Notifications.message(['Se ha producido un error al resetear su clave','Por favor intentelo nuevamente']);
       });
+  }
+
+  $scope.back = function() {
+    $window.location.href = "/systems/login/indexLogin.html";
   }
 
 });

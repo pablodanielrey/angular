@@ -98,6 +98,14 @@
   background-color: white;
 }
 
+.requestAssistance .scroll {
+  height:270px;
+
+  overflow:scroll;
+  overflow-x:hidden;
+
+}
+
 
 /*
 .requestAssistance .myRequestInfo.pending {
@@ -280,6 +288,33 @@
   padding:5px;
   color:#128c78;
 }
+.requestAssistance .parrafos3 {
+  background-color:white;
+  color:white;
+  height:15px;
+  margin-top:0px;
+  margin-bottom:0px;
+  margin-right:10px;
+  font-size:18px;
+  font-weight: bold;
+  width:252px;
+  padding:5px;
+  color:#128c78;
+}
+.requestAssistance .parrafos4 {
+  background-color:white;
+  color:white;
+  height:15px;
+  margin-top:0px;
+  margin-bottom:0px;
+  margin-right:10px;
+  font-size:18px;
+  
+  width:252px;
+  padding:5px;
+  color:#128c78;
+}
+
 
 
 .requestAssistance .parrafosGreen {

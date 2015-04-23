@@ -22,9 +22,25 @@
   -webkit-background-clip: padding-box;
 
 }
+
+.headerCreateAccount {
+  background-color:#0066A6;
+}
+.headerCreateAccount p {
+  font-family: calibri, Arial, Helvetica, sans-serif;
+  width:100px;
+  margin:0px;
+  padding:10px;
+  color:white;
+  cursor:pointer;
+  font-size:18px;
+
+}
+
 .createAccountRequest label {
   font-family:Arial, Helvetica, sans-serif;
   font-size:14px;
+
 
 }
 
@@ -56,11 +72,12 @@
   border:1px solid;
   border-color:#E7DDE9;
   width: 268px;
-  height:25px;
+  height:20px;
   background-color: #F2F2F2;
   padding-left:5px;
-  font-size: 18px;
+  font-size: 16px;
   margin-bottom:3px;
+
 
 }
 .createAccountRequest .lastname {
@@ -74,10 +91,10 @@
   border:1px solid;
   border-color:#E7DDE9;
   width: 268px;
-  height:25px;
+  height:20px;
   background-color: #F2F2F2;
   padding-left:5px;
-  font-size: 18px;
+  font-size: 16px;
   margin-bottom:3px;
 
 }
@@ -92,10 +109,10 @@
   border:1px solid;
   border-color:#E7DDE9;
   width: 268px;
-  height:25px;
+  height:20px;
   background-color: #F2F2F2;
   padding-left:5px;
-  font-size: 18px;
+  font-size: 16px;
   margin-bottom:3px;
 }
 
@@ -110,10 +127,10 @@
   border:1px solid;
   border-color:#E7DDE9;
   width: 268px;
-  height:25px;
+  height:20px;
   background-color: #F2F2F2;
   padding-left:5px;
-  font-size: 18px;
+  font-size: 16px;
   margin-bottom:3px;
 }
 
@@ -128,10 +145,10 @@
   border:1px solid;
   border-color:#E7DDE9;
   width: 268px;
-  height:25px;
+  height:20px;
   background-color: #F2F2F2;
   padding-left:5px;
-  font-size: 18px;
+  font-size: 16px;
   margin-bottom:3px;
 }
 .createAccountRequest .password {
@@ -145,10 +162,10 @@
   border:1px solid;
   border-color:#E7DDE9;
   width: 268px;
-  height:25px;
+  height:20px;
   background-color: #F2F2F2;
   padding-left:5px;
-  font-size: 18px;
+  font-size: 16px;
   margin-bottom:3px;
 }
 
@@ -163,20 +180,21 @@
   border:1px solid;
   border-color:#E7DDE9;
   width: 268px;
-  height:40px;
+  height:20px;
 
   overflow: hidden;
   text-overflow: ellipsis;
 
   background-color: #F2F2F2;
   padding-left:5px;
-  font-size: 18px;
+  font-size: 16px;
   resize:none;
 }
 
 .createAccountRequest .reason option {
   white-space: nowrap;
   width: 100%;
+  font-size: 16px;
 }
 
 
@@ -192,7 +210,7 @@
   border:0px;
   width: 275px;
   height:30px;
-  margin-top:20px;
+  margin-top:10px;
   font-size: 15px;
   font-weight: bold;
   font-family:Arial, Helvetica, sans-serif;
@@ -210,7 +228,7 @@
   border:0px;
   width: 275px;
   height:30px;
-  margin-top:20px;
+  margin-top:10px;
   box-shadow: 0px 0px 8px #0066A6;
   font-size: 15px;
   font-weight: bold;

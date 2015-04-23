@@ -226,15 +226,17 @@ class Offices:
 
     """
         obtiene todos los ids de los usuarios que tienen cierto rol en las oficinas pasadas como parámetro
+        retorna :
+            [(userId,sendMail)]
     """
     def getUsersWithRoleInOffices(self,con,officesIds,role='autoriza'):
         cur = con.cursor()
-        cur.execute('select user_id from assistance.offices_roles where office_id in %s and role = %s',(tuple(officesIds),role))
+        cur.execute('select user_id,send_mail from assistance.offices_roles where office_id in %s and role = %s',(tuple(officesIds),role))
         if cur.rowcount <= 0:
             return []
 
         users = []
-        for uid in cur:
-            users.append(uid)
+        for data in cur:
+            users.append((data[0],data[1]))
 
         return users

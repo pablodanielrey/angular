@@ -55,6 +55,8 @@ class Mail:
 
     """ envía un mail con partes en html y partes en texto """
     def sendMail(self,ffrom,tos,subject,replace=[],html=None,text=None):
+        if (self.config.configs['mail_enabled'].lower() == 'false'):
+            return;
 
         parts = []
 
