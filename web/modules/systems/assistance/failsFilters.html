@@ -6,11 +6,41 @@
   <div class="content">
     <div class="dates">
 
+      <div class="search">
+        <div class="searchTitle">
+          <span><i class="fa fa-user-plus"></i> Seleccione Usuario</span>
+        </div>
+        <div>
+          <input class="inputSearch" ng-model="model.searchUser" ng-change="searchUsers()" placeholder="Buscar...">
+          <ul class="listUsers" ng-class="{true:'visible', false:'hidden'}[isDisplayListUser()]">
+            <li class="liUsers" ng-repeat="user in model.users | filter:model.searchUser | orderBy : 'name'" ng-click="selectUser(user)">{{user.name}} {{user.lastname}}</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="search">
+        <div class="searchTitle2">
+          <span><i class="fa fa-building-o"></i> Oficina</span>
+        </div>
+        <div>
+          <input class="inputSearch2" list="office">
+          <datalist id="office">
+            <option value="Alumnos">
+            <option value="Financiero">
+            <option value="Personal">
+            <option value="Detise">
+            <option value="Graduados">
+          </datalist>
+        </div>
+      </div>
+
+
+
       <div class="dateContainer">
         <div class="dateInputContainer">
           <div class="date">
             <div class="dateTitle">
-              <span><i class="fa fa-calendar"></i> Seleccione Usuario</span>
+              <span><i class="fa fa-calendar"></i> Fecha de Inicio</span>
             </div>
             <div>
               <input class="inputDate" type="date" ng-model="model.filter.begin">
@@ -23,20 +53,7 @@
         <div class="dateInputContainer">
           <div class="date">
             <div class="dateTitle">
-              <span><i class="fa fa-calendar"></i> Seleccione Fecha de Inicio</span>
-            </div>
-            <div>
-              <input class="inputDate" type="date" ng-model="model.filter.begin">
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="dateContainer">
-        <div class="dateInputContainer">
-          <div class="date">
-            <div class="dateTitle">
-              <span><i class="fa fa-calendar"></i> Seleccione Fecha de Fin</span>
+              <span><i class="fa fa-calendar"></i> Fecha de Fin</span>
             </div>
             <div>
               <input class="inputDate" type="date" ng-model="model.filter.end">
@@ -47,6 +64,7 @@
 
       <div class="actionsContainer">
         <button class="button blue"  ng-click="search()"><i class="fa fa-search"></i> Buscar</Button>
+        <span></span>
         <span class="searchDate" ng-if='model.searching'><i class="loading fa fa-spinner fa-spin"></i>  Buscando Datos</span>
       </div>
     </div>
@@ -54,7 +72,7 @@
     <div class="filters">
 
       <div class="filterTittle">
-        <span><i class="fa fa-filter"></i> Filtros </span>
+        <span><i class="fa fa-filter"></i> Filtros | </span>
       </div>
 
       <div class="filter">
@@ -84,17 +102,19 @@
           <input class="input t1" class="input" type="text" ng-model="model.filter.count">
         </div>
 
-        <div class="hoursOperatorsInput margin" ng-class="{true:'visible',false:'hidden'}[model.filter.failType != null && model.filter.failType.isHours]">
-          <div>
-    				<span class="margin"> Horas</span>
-    			</div>
-          <div>
-            <select class="input" ng-model="model.filter.hoursOperator"  ng-options="op.name for op in model.hoursOperators"></select>
+        <div class=" margin" ng-class="{true:'visible',false:'hidden'}[model.filter.failType != null && model.filter.failType.isHours]">
+          <div class="hoursOperatorsInput">
+            <div>
+      				<span class="margin"> Horas</span>
+      			</div>
+            <div>
+              <select class="input" ng-model="model.filter.hoursOperator"  ng-options="op.name for op in model.hoursOperators"></select>
+            </div>
+      			<div class="hoursFilterInput">
+      				<input class="input t1" type="text" ng-model="model.filter.hours">:
+        			<input class="input t1" type="text" ng-model="model.filter.minutes">
+      			</div>
           </div>
-    			<div class="hoursFilterInput">
-    				<input class="input t1" type="text" ng-model="model.filter.hours">:
-      			<input class="input t1" type="text" ng-model="model.filter.minutes">
-    			</div>
         </div>
 
 
