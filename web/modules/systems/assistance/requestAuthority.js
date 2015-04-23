@@ -26,7 +26,8 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
     //variables correspondientes a la seleccion de usuario
     searchUser: null,
     searchUserPromise: null,
-    users: null
+    users: null,
+    displayListUser: false
   };
   
   $scope.clearVars = function(){
@@ -167,31 +168,40 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
    * Buscar usuarios
    */
   $scope.searchUsers = function(){
-    $scope.displayListUser = true;
+    $scope.model.displayListUser = true;
     if($scope.model.searchUserPromise){
       $timeout.cancel($scope.model.searchUserPromise);
     };
 
-    $scope.searchUserPromise = $timeout(
+    $scope.model.searchUserPromise = $timeout(
       function(){
         $scope.listUsers();
       }
     ,1000);
   };
 
-  $scope.displayListUser = false;
 
   $scope.isDisplayListUser = function() {
-    return $scope.displayListUser;
+    return $scope.model.displayListUser;
   };
 
+ /**
+   * Esconder lista de usuarios
+   */
+  $scope.hideListUser = function(){
+     $timeout(
+      function(){
+        $scope.model.displayListUser = false;
+      }
+    ,100);
+  };
+  
   /**
     * Listar elementos
    */
   $scope.selectUser = function(user){
     $scope.model.user_id = user.id;
     $scope.model.searchUser = user.name + " " + user.lastname;
-    $scope.displayListUser = false;
   };
 
   /**
