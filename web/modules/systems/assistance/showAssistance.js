@@ -23,6 +23,9 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
     isSearch: [], //este array se utiliza para definir si se esta realizando una busqueda y en caso afirmativo deshabilitar una nueva busqueda. Los valores del array resultaran de una combinacion de los usuarios a buscar y las fechas a buscar. A medida que el servidor retorne datos para un usuario y fecha dadas, se iran eliminando los valores del array. CUando el array se encuentre vacio, significa que ya se realizaron todas las busquedas posibles.
   };
 
+  $scope.count = 0;
+
+  $scope.disabled = false;
   /**
    * Cargar y chequear session
    */
@@ -159,13 +162,20 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
 
 
   $scope.searchAssistance = function(){
-    if(!$scope.isSearch()){
+    if(!$scope.disabled){
+
       $scope.model.assistances = [];
       var searchDates = $scope.initializeSearchDates();
 
       if(searchDates.length){
         var searchUsers = $scope.initializeSearchUsers(searchDates); //si no existen usuarios seleccionados, se definen todos los usuarios
         $scope.defineIsSearch(searchDates, searchUsers);
+
+        // cantidad de elementos a buscar, es para deshabilitar el buscador
+        $scope.count = searchDates.length * searchUsers.length;
+        $scope.disabled = true;
+
+
         for (var i = 0; i < searchDates.length; i++){
           for (var j = 0; j < searchUsers.length; j++){
             var date = searchDates[i];
@@ -173,13 +183,24 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
             Assistance.getAssistanceStatusByDate(user.id, date,
               function ok(assistance){
                 var newAssistance = $scope.formatAssistance(assistance);
+                newAssistance.displayLogs = false;
                 $scope.removeIsSearchValue(assistance);
                 if(assistance.start != null && assistance.userId != null){
                   $scope.model.assistances.push(newAssistance);
                 }
 
+                // decremento el contador
+                $scope.count --;
+                if ($scope.count <= 0) {
+                  $scope.disabled = false;
+                }
               },
               function error(){
+                // decremento el contador
+                $scope.count --;
+                if ($scope.count <= 0) {
+                  $scope.disabled = false;
+                }
                 Notifications.message(error);
                 throw new Error(error);
               }
@@ -254,8 +275,13 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
     $scope.model.usersIdSelected = [];
   }
 
-  $scope.isSearch = function(){
-    return ($scope.model.isSearch.length > 0);
-  };
+
+  $scope.showLogs = function(v,assistance) {
+    assistance.displayLogs = v;
+  }
+
+  $scope.isDisabled = function() {
+    return ($scope.disabled) || ($scope.model.start == null) || ($scope.model.end == null);
+  }
 
 }]);
