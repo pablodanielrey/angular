@@ -17,6 +17,10 @@ app.controller("LoginCtrl", ['$rootScope','$scope', '$window', 'Session','Creden
 			return (!Credentials.isLogged());
 		}
 
+		$scope.myFunc= function() {
+			console.log("Enterr");
+		}
+
 		$scope.login = function() {
 
 			var creds = {
