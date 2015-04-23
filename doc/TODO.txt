@@ -49,11 +49,9 @@ otros temas :
 
 
 
--- solcitar horas extras -- (lo esta haciendo ivan)
-	-- modificar la busqueda de usuarios con flecha para abajo
-	-- cargarle un dato por defecto a las horas y no dejar que sea null nunca.
-	-- controlar que la hora fin sea mayor que la hora inicial.
-	-- ordenar horas extras por fecha
+-- solcitar horas extras -- 
+ 	-- modificar la busqueda de usuarios con flecha para abajo (al hacer clic en el campo de texto de busqueda se visualizan las personas sin necesidad de hacer busqueda, faltaría agregarle un icono para que el usuario se de cuenta de que puede buscar)
+	-- ordenar horas extras por fecha (por defecto ordena por fecha, y si se hace click en los encabezados se ordena por la columna deseada, se puede mejorar agregando un iconito de ordenamiento para que el usuario se de cuenta de que puede ordenar)
 
 
 -- servidor
