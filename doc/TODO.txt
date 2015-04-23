@@ -4,19 +4,11 @@ prioridades (solo ema las puede hacer) :
 	-- configurar para que cuando se obtienen los mails de los jefes para enviarles mails debe ser de @econo.... o configurable mediante el archivo de config del servidor.
 		para solo enviar a cuentas de un determinado dominio
 
-	-- agegar una opción dentro del archivo de config del server para enviar mails o no. globalmente para la sección de justificaciones --
-		con esto se logra eliminar el envío de mails cuando se hacen pruebas 
-
-
-
 
 ----
 
 otros temas :
 
-
-- olvide clave -- volver a pantalla principal
-- crear cuenta -- volver a pantalla principal
 
 -- pantalla de inicio --
 	estan mal calculadas las justificaciones que estan aprobadas.
@@ -49,7 +41,7 @@ otros temas :
 
 
 
--- solcitar horas extras -- 
+-- solcitar horas extras --
  	-- modificar la busqueda de usuarios con flecha para abajo (al hacer clic en el campo de texto de busqueda se visualizan las personas sin necesidad de hacer busqueda, faltaría agregarle un icono para que el usuario se de cuenta de que puede buscar)
 	-- ordenar horas extras por fecha (por defecto ordena por fecha, y si se hace click en los encabezados se ordena por la columna deseada, se puede mejorar agregando un iconito de ordenamiento para que el usuario se de cuenta de que puede ordenar)
 
@@ -59,12 +51,10 @@ otros temas :
 
 
 -- control de horario --
-	-- ajustar para que una persona pueda ver su propia historia.
 	-- agregar que se vea el logs de marcaciones.
 	-- agregar que se vea si existe alguna justificación en esa fecha.
 	-- no anda el filtro de oficinas.
 	-- exportar los datos a ods
-	-- cuando se consulta una fecha donde no existe schedule, entonces no hay que retornar ni start, ni end, ni nada. solo el usuario (servidor)
 
 
 -- cambio de horario --
@@ -87,4 +77,3 @@ tutorias ..
 
 	... dejar como opción predeterminada : Académicas y de Estudio.
 	... dejar la ultima fecha que deja cargada como predeterminada para las próximas cargas
-

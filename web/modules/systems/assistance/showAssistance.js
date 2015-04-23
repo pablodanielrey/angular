@@ -65,7 +65,6 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
         if (usersId == null || usersId.length == 0) {
           usersId = [$scope.model.session_user_id];
         }
-        console.log(usersId);
         $scope.defineUsers(usersId);
       },
       function(error){
