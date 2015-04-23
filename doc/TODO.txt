@@ -61,3 +61,15 @@
 secudnarias -
 
 - agreguar al lado del menu de administracion de solicitudes un globito con las pentiendes. asi se ve en el menu.
+
+
+
+-------------------
+
+
+tutorias ..
+
+
+	... dejar como opción predeterminada : Académicas y de Estudio.
+	... dejar la ultima fecha que deja cargada como predeterminada para las próximas cargas
+
