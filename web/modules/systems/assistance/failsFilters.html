@@ -10,12 +10,12 @@
         <div class="searchTitle">
           <span><i class="fa fa-user-plus"></i> Seleccione Usuario</span>
         </div>
-        <div>
-			<input class="inputSearch" ng-model="model.searchUser" ng-click="searchUsers()" ng-change="searchUsers()" ng-blur="hideListUser()" placeholder="Buscar...">
+
+          <input class="inputSearch" ng-model="model.searchUser" ng-change="searchUsers()" placeholder="Buscar...">
           <ul class="listUsers" ng-class="{true:'visible', false:'hidden'}[isDisplayListUser()]">
             <li class="liUsers" ng-repeat="user in model.users | filter:model.searchUser | orderBy : 'name'" ng-click="selectUser(user)">{{user.name}} {{user.lastname}}</li>
           </ul>
-        </div>
+
       </div>
 
       <div class="search">
@@ -99,7 +99,7 @@
     			<span class="margin"> Cantidad</span>
     		</div>
         <div>
-          <input class="input t1" type="text" ng-model="model.filter.count">
+          <input class="input t1" class="input" type="text" ng-model="model.filter.count">
         </div>
 
         <div class=" margin" ng-class="{true:'visible',false:'hidden'}[model.filter.failType != null && model.filter.failType.isHours]">
