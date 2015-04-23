@@ -96,6 +96,7 @@ create schema assistance;
     user_id varchar not null references profile.users (id),
     office_id varchar references assistance.offices (id),
     role varchar not null,
+    send_mail boolean default true,
     constraint unique_office_roles unique (user_id,office_id,role)
   );
 
