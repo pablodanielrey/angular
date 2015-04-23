@@ -19,7 +19,7 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
     users: [], //usuarios consultados
     usersIdSelected: [], //ids de usuarios seleccionados
     searchUser: null, // string con el usuario buscado
-    
+
     isSearch: [], //este array se utiliza para definir si se esta realizando una busqueda y en caso afirmativo deshabilitar una nueva busqueda. Los valores del array resultaran de una combinacion de los usuarios a buscar y las fechas a buscar. A medida que el servidor retorne datos para un usuario y fecha dadas, se iran eliminando los valores del array. CUando el array se encuentre vacio, significa que ya se realizaron todas las busquedas posibles.
   };
 
@@ -62,6 +62,10 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
   $scope.loadUsers = function(){
     Assistance.getUsersInOfficesByRole('autoriza',
       function(usersId){
+        if (usersId == null || usersId.length == 0) {
+          usersId = [$scope.model.session_user_id];
+        }
+        console.log(usersId);
         $scope.defineUsers(usersId);
       },
       function(error){
@@ -74,10 +78,10 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
     $scope.loadSession();
     $scope.loadUsers();
   },0);
-  
-    
-    
-  
+
+
+
+
 
   $scope.initializeSearchUsers = function(searchDates){
 
@@ -85,7 +89,7 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
     if (searchDates.length < 1){
       return users;
     }
-   
+
     if($scope.model.usersIdSelected.length == 0){
        users = $scope.model.users;
     } else {
@@ -100,9 +104,9 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
         }
       }
     }
-    
-   
-    
+
+
+
     return users;
   };
 
@@ -123,8 +127,8 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
       dates.push(new Date());
     }
 
-    
-    
+
+
     return dates;
 
   };
@@ -139,29 +143,29 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
       }
     }
   };
-  
+
   $scope.removeIsSearchValue = function(assistance){
     if(assistance.start == null || assistance.userId == null || $scope.model.isSearch.length === 0){
       $scope.model.isSearch = [];
       return;
     }
-    
+
     var start = new Date(assistance.start);
     var userId = assistance.userId;
-   
+
     var isSearch = start.toLocaleDateString()+userId;
     var index = $scope.model.isSearch.indexOf(isSearch);
     $scope.model.isSearch.splice(index, 1);
   };
-  
-  
+
+
   $scope.searchAssistance = function(){
     if(!$scope.isSearch()){
       $scope.model.assistances = [];
       var searchDates = $scope.initializeSearchDates();
-      
+
       if(searchDates.length){
-        var searchUsers = $scope.initializeSearchUsers(searchDates); //si no existen usuarios seleccionados, se definen todos los usuarios       
+        var searchUsers = $scope.initializeSearchUsers(searchDates); //si no existen usuarios seleccionados, se definen todos los usuarios
         $scope.defineIsSearch(searchDates, searchUsers);
         for (var i = 0; i < searchDates.length; i++){
           for (var j = 0; j < searchUsers.length; j++){
@@ -174,7 +178,7 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
                 if(assistance.start != null && assistance.userId != null){
                   $scope.model.assistances.push(newAssistance);
                 }
-                
+
               },
               function error(){
                 Notifications.message(error);
@@ -246,7 +250,7 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
       return false;
     }
   };
-  
+
   $scope.resetSearchUser = function(){
     $scope.model.usersIdSelected = [];
   }
