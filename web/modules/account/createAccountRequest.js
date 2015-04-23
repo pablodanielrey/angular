@@ -66,4 +66,8 @@ app.controller('CreateAccountRequestCtrl', function($rootScope, $scope, $window,
     $scope.clearRequest();
   },0)
 
+  $scope.back = function() {
+    $window.location.href = "/systems/login/indexLogin.html";
+  }
+
 });
