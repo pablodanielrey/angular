@@ -1,10 +1,6 @@
 
 prioridades (solo ema las puede hacer) :
 
-	-- agregar dentro de la relación de autoriza dentro de las oficinas si se envía mail o no a la persona cuando ocurren cambios --
-			esto da la opción de tener la funcionalidad, etc pero no que te lleguen los 90 mails diarios.
-			por defecto esta a TRUE. tiene que llegar mail.
-
 	-- configurar para que cuando se obtienen los mails de los jefes para enviarles mails debe ser de @econo.... o configurable mediante el archivo de config del servidor.
 		para solo enviar a cuentas de un determinado dominio
 
