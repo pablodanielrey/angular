@@ -51,12 +51,10 @@ otros temas :
 
 
 -- control de horario --
-	-- ajustar para que una persona pueda ver su propia historia.
 	-- agregar que se vea el logs de marcaciones.
 	-- agregar que se vea si existe alguna justificación en esa fecha.
 	-- no anda el filtro de oficinas.
 	-- exportar los datos a ods
-	-- cuando se consulta una fecha donde no existe schedule, entonces no hay que retornar ni start, ni end, ni nada. solo el usuario (servidor)
 
 
 -- cambio de horario --
