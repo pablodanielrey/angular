@@ -188,7 +188,6 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
 
               for (var i = 0; i < assistances.length; i++) {
                 var assistance = assistances[i];
-                console.log(assistance);
                 var newAssistance = $scope.formatAssistance(assistance);
                 newAssistance.displayLogs = false;
                 if(assistance.start != null && assistance.userId != null){
