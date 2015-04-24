@@ -65,14 +65,6 @@ app.controller('IndexCtrl', function ($rootScope, $scope, $location, $timeout, $
     });
 
 
-    $timeout(function() {
-      WebSocket.registerHandlers();
-       if(!Session.isLogged()) {
-        $window.location.href = "/systems/login/indexLogin.html";
-      }
-    }, 0);
-
-
     // la vista por defecto.
 //    $location.path('/main');
 
