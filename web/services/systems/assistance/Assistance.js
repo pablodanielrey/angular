@@ -227,6 +227,41 @@ app.service('Assistance', ['Utils','Messages','Session',
 		};
 
 
+		this.getJustificationRequestsToManageByDate = function(status, group, start, end, callbackOk, callbackError){
+			var msg = {
+				id: Utils.getId(),
+				action: 'getJustificationRequestsToManageByDate',
+				session: Session.getSessionId(),
+				request: {
+				}
+			}
+
+			if (status != null) {
+				msg.request.status = status;
+			}
+
+			if (group != null) {
+				msg.request.group = group;
+			}
+
+			if (start != null) {
+				msg.request.start = start;
+			}
+
+			if (end != null) {
+				msg.request.end = end;
+			}
+
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response.requests);
+					} else {
+						callbackError(data.error);
+					}
+			});
+		}
+
 		this.getJustificationRequestsToManage = function(status, group, callbackOk, callbackError){
 			var msg = {
 				id: Utils.getId(),

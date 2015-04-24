@@ -168,6 +168,22 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
     return ids;
   }
 
+  $scope.getJustifications = function() {
+    // requestJustification buscar la justificacion
+    var group = null;
+    var status = null;
+    var start = $scope.model.start;
+    var end = $scope.model.end;
+    Assistance.getJustificationRequestsToManageByDate(status, group, start, end,
+      function ok(requests) {
+        console.log(requests)
+      },
+      function error() {
+
+      }
+    );
+  }
+
   $scope.searchAssistance = function(){
     if(!$scope.disabled){
 
@@ -191,10 +207,9 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
                 var newAssistance = $scope.formatAssistance(assistance);
                 newAssistance.displayLogs = false;
                 if(assistance.start != null && assistance.userId != null){
+                  $scope.getJusitificacions(newAssistance);
                   $scope.model.assistances.push(newAssistance);
                 }
-
-                // requestJustification buscar la justificacion
 
               }
 
