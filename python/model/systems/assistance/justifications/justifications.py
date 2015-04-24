@@ -10,12 +10,14 @@ from model.systems.assistance.justifications.AAJustification import AAJustificat
 from model.systems.assistance.justifications.BSJustification import BSJustification
 from model.systems.assistance.justifications.CJustification import CJustification
 from model.systems.assistance.justifications.LAOJustification import LAOJustification
+from model.systems.assistance.date import Date
 
 
 
 class Justifications:
 
     offices = inject.attr(Offices)
+    date = inject.attr(Date)
 
     justifications = [
         CJustification(), LAOJustification(), AAJustification(), BSJustification()
@@ -98,7 +100,6 @@ class Justifications:
         return justs
 
 
-
     """
         obtiene todas los pedidos de justificaciones con cierto estado
         status es el estado a obtener. en el caso de que no sea pasado entonces se obtienen todas, en su ultimo estado
@@ -137,6 +138,95 @@ class Justifications:
             )
 
         return requests
+
+
+    """
+        obtiene todas los pedidos de justificaciones con cierto estado y que se encuentre entre esas dos fechas
+        start es la fecha de inicio de la busqueda. en el caso de que no sea pasado entonces no se pone como restriccion el inicio
+        end es la fecha de limite de la busqueda. en el caso de que no sea pasado entonces no se pone como restriccion el end
+        status es el estado a obtener. en el caso de que no sea pasado entonces se obtienen todas, en su ultimo estado
+        users es una lista de ids de usuarios que piden los requests, si = None o es vacío entonces retorna todas.
+    """
+    def getJustificationRequestsByDate(self,con,status=None,users=None,start=None,end=None):
+
+        cur = con.cursor()
+        cur.execute('set timezone to %s',('UTC',))
+
+        statusR = self._getJustificationsInStatus(con,status)
+        if len(statusR) <= 0:
+            return []
+
+        rids = tuple(statusR.keys())
+
+        where = "";
+        if start is not None:
+            start = self.date.awareToUtc(start)
+            where += " jbegin >= %s",(start,)
+
+        if end is not None:
+            end = self.date.awareToUtc(end)
+            where += " jbegin <= %s",(end,)
+
+        if users is None or len(users) <= 0:
+            if where != '':
+                where += ' and'
+            where += ' id in %s',(rids,)
+        else:
+            if where != '':
+                where += ' and'
+            where += ' id in %s and user_id in %s',(rids,tuple(users))
+
+        cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where %s',(where,))
+
+        if cur.rowcount <= 0:
+            return []
+
+        requests = []
+        for j in cur:
+            jid = j[0]
+            requests.append(
+                {
+                    'id':jid,
+                    'user_id':j[1],
+                    'justification_id':j[2],
+                    'begin':j[3],
+                    'end':j[4],
+                    'status':statusR[jid]
+                }
+            )
+
+        return requests
+
+
+
+    """
+        obtiene todos los pedidos de justificaciones que tiene permisos de manejar, en cierto estado y ciertas fechas.
+        group = ROOT|TREE --> ROOT = oficinas directas, TREE = oficinas directas y todas las hijas
+    """
+    def getJustificationRequestsToManageByDate(self,con,userId,status,group='ROOT',start=None,end=None):
+
+        tree = False
+        if group == 'TREE':
+            tree = True
+        offices = self.offices.getOfficesByUserRole(con,userId,tree,'autoriza')
+        logging.debug('officesByUserRole : {}'.format(offices))
+
+        if offices is None or len(offices) <= 0:
+            return []
+
+        officesIds = list(map(lambda o: o['id'], offices))
+        users = self.offices.getOfficesUsers(con,officesIds)
+        logging.debug('getOfficesUsers : {}'.format(users))
+
+        while userId in users:
+            users.remove(userId)
+
+        if users is None or len(users) <= 0:
+            return []
+
+        justifications = self.getJustificationRequestsByDate(con,status,users,start,end)
+
+        return justifications
 
 
 
