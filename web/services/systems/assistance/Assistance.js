@@ -81,7 +81,7 @@ app.service('Assistance', ['Utils','Messages','Session',
 				action: 'getAssistanceStatusByUsers',
 				session: Session.getSessionId(),
 				request:{
-					usersIds: usesrIds,
+					usersIds: usersIds,
 					dates: dates
 				}
 			}

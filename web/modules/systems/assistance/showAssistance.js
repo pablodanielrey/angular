@@ -160,6 +160,13 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
     $scope.model.isSearch.splice(index, 1);
   };
 
+  $scope.getUsersIds = function(users) {
+    var ids = [];
+    for (var i = 0; i < users.length; i++) {
+      ids.push(users[i].id);
+    }
+    return ids;
+  }
 
   $scope.searchAssistance = function(){
     if(!$scope.disabled){
@@ -175,40 +182,30 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
         $scope.count = searchDates.length * searchUsers.length;
         $scope.disabled = true;
 
-
-        for (var i = 0; i < searchDates.length; i++){
-          for (var j = 0; j < searchUsers.length; j++){
-            var date = searchDates[i];
-            var user = searchUsers[j];
-            Assistance.getAssistanceStatusByDate(user.id, date,
-              function ok(assistance){
-                var newAssistance = $scope.formatAssistance(assistance);
-                newAssistance.displayLogs = false;
-                $scope.removeIsSearchValue(assistance);
-                if(assistance.start != null && assistance.userId != null){
-                  $scope.model.assistances.push(newAssistance);
-                }
-
-                // requestJustification buscar la justificacion
-
-                // decremento el contador
-                $scope.count --;
-                if ($scope.count <= 0) {
-                  $scope.disabled = false;
-                }
-              },
-              function error(){
-                // decremento el contador
-                $scope.count --;
-                if ($scope.count <= 0) {
-                  $scope.disabled = false;
-                }
-                Notifications.message(error);
-                throw new Error(error);
+        var usersIds = $scope.getUsersIds(searchUsers);
+        Assistance.getAssistanceStatusByUsers(usersIds, searchDates,
+            function ok(assistance){
+              var newAssistance = $scope.formatAssistance(assistance);
+              newAssistance.displayLogs = false;
+              $scope.removeIsSearchValue(assistance);
+              if(assistance.start != null && assistance.userId != null){
+                $scope.model.assistances.push(newAssistance);
               }
-            );
-          }
-        }
+
+              // requestJustification buscar la justificacion
+
+              // decremento el contador
+              $scope.count = 0;
+              $scope.disabled = false;
+            },
+            function error(){
+              // decremento el contador
+              $scope.count = 0;
+              $scope.disabled = false;
+              Notifications.message(error);
+              throw new Error(error);
+            }
+          );
       }
     }
   };
@@ -240,11 +237,13 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
 
     newAssistance.logs = [];
 
-    for(var i = 0; i < assistance.logs.length; i++){
-      var log = new Date(assistance.logs[i]);
-      newAssistance.logs.push(Utils.formatDate(log) + ' ' + Utils.formatTime(log));
+    if (assistance.logs != null) {
+      for(var i = 0; i < assistance.logs.length; i++){
+        var log = new Date(assistance.logs[i]);
+        newAssistance.logs.push(Utils.formatDate(log) + ' ' + Utils.formatTime(log));
+      }
     }
-
+    
     newAssistance.workedTime = Utils.getTimeFromMinutes(assistance.workedMinutes);
     newAssistance.status = assistance.status;
 
