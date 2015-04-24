@@ -66,7 +66,7 @@ app.controller('IndexCtrl', function ($rootScope, $scope, $location, $timeout, $
 
     $timeout(function() {
       WebSocket.registerHandlers();
-    }
+    });
 
     // la vista por defecto.
 //    $location.path('/main');

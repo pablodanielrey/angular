@@ -2,7 +2,7 @@
 var app = angular.module('mainApp');
 
 
-app.controller('ConfirmMailCtrl',function($scope,$routeParams,Users) {
+app.controller('ConfirmMailCtrl',function($scope,$routeParams,Users,$timeout,Notifications,$window) {
 
   $scope.message = '';
 
@@ -14,10 +14,18 @@ app.controller('ConfirmMailCtrl',function($scope,$routeParams,Users) {
   var hash = $routeParams['hash'];
   Users.confirmMail(hash,
     function(ok) {
-      $scope.message = 'Requerimiento procesado correctamente';
+      Notifications.message('Requerimiento procesado correctamente');
+      $timeout(function() {
+        $window.location.href = "/systems/login/indexLogin.html";
+      }, 3000);
     },
     function(error) {
-      alert(error);
+      Notificactions.message(error);
+      $timeout(function() {
+        $window.location.href = "/systems/login/indexLogin.html";
+      }, 3000);
   });
+
+
 
 });
