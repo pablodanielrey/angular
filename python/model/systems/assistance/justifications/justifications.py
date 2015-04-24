@@ -199,36 +199,6 @@ class Justifications:
 
 
 
-    """
-        obtiene todos los pedidos de justificaciones que tiene permisos de manejar, en cierto estado y ciertas fechas.
-        group = ROOT|TREE --> ROOT = oficinas directas, TREE = oficinas directas y todas las hijas
-    """
-    def getJustificationRequestsToManageByDate(self,con,userId,status,group='ROOT',start=None,end=None):
-
-        tree = False
-        if group == 'TREE':
-            tree = True
-        offices = self.offices.getOfficesByUserRole(con,userId,tree,'autoriza')
-        logging.debug('officesByUserRole : {}'.format(offices))
-
-        if offices is None or len(offices) <= 0:
-            return []
-
-        officesIds = list(map(lambda o: o['id'], offices))
-        users = self.offices.getOfficesUsers(con,officesIds)
-        logging.debug('getOfficesUsers : {}'.format(users))
-
-        while userId in users:
-            users.remove(userId)
-
-        if users is None or len(users) <= 0:
-            return []
-
-        justifications = self.getJustificationRequestsByDate(con,status,users,start,end)
-
-        return justifications
-
-
 
     """
         obtiene todos los pedidos de justificaciones que tiene permisos de manejar, en cierto estado.

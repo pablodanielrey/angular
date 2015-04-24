@@ -374,13 +374,13 @@ response :
 query : Obtener todas las solicitudes de justificationces
 {
   id:,
-  action:"getJustificationRequestsToManageByDate",
+  action:"getJustificationRequestsByDate",
   session:,
   request:{
       status: 'estado de la justificacion PENDING|APPROVED|REJECTED|CANCELED' -- si no existe se obtienen todas,
       start: 'fecha de inicio de la busqueda'
       end: 'fecha limite de busqueda'
-      group: "ROOT|TREE" -- si no existe obtiene las del grupo directo que puede manejar.
+      usersIds: ids de los usuarios a buscar
   }
 }
 
