@@ -189,6 +189,8 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
                   $scope.model.assistances.push(newAssistance);
                 }
 
+                // requestJustification buscar la justificacion
+
                 // decremento el contador
                 $scope.count --;
                 if ($scope.count <= 0) {
