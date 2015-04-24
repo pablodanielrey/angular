@@ -67,6 +67,7 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, As
                   $scope.items = [];
                   $scope.items.push({ label:'Inicio', img:'fa-tachometer', function: $scope.summary});
                   $scope.items.push({ label:'Solicitudes', img:'fa-ticket', function: $scope.requestAssistance});
+                  $scope.items.push({ label:'Control de Horario', img:'fa-clock-o', function: $scope.showAssistance});
 
                   Assistance.getUserOfficeRoles(
                       function(roles) {
@@ -81,7 +82,6 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, As
                         if (hasApprove) {
                           $scope.items.push({ label:'Adm. Solicitudes ', img:'fa-ticket', function: $scope.adminRequestAssistance});
                           $scope.items.push({ label:'Horas Extras ', img:'fa-plus', function: $scope.requestAuthority});
-                          $scope.items.push({ label:'Control de Horario', img:'fa-clock-o', function: $scope.showAssistance});
                         }
 
                         if (hasOvertime) {
@@ -106,8 +106,8 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, As
           Profiles.checkAccess(Session.getSessionId(),'ADMIN-ASSISTANCE',
             function(ok) {
               if (ok == 'granted') {
-                $scope.items.push({ label:'Chequeo de Fallas', img:'fa-ticket', function: $scope.assistanceFails});
-                $scope.items.push({ label:'Filtro de Fallas', img:'fa-ticket', function: $scope.assistanceFailsFilters});
+                $scope.items.push({ label:'Incumplimientos', img:'fa-ticket', function: $scope.assistanceFails});
+                $scope.items.push({ label:'Filtro de Fallas (testing todavía no terminado)', img:'fa-ticket', function: $scope.assistanceFailsFilters});
               }
             },
             function (error) {
