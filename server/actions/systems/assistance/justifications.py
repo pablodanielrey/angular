@@ -54,6 +54,7 @@ class BossesNotifier:
 
     """
         notifica a los jefes y al usuario de un pedido.
+        solo a los que tienen configurado que debería enviarles mails.
     """
     def notifyBosses(self,con,userId,config):
 
@@ -80,16 +81,18 @@ class BossesNotifier:
 
         logging.debug('oficinas {}\nids {}\n jefes {}'.format(offices,officesIds,bossesIds))
 
-        for bid in bossesIds:
-            logging.debug('buscando mail para : {}'.format(bid))
-            bemails = self.users.listMails(con,bid)
-            if bemails != None and len(bemails) > 0:
-                logging.debug('añadiendo {}'.format(bemails))
-                emails.extend(list(map(lambda x: x['email'],bemails)))
+        for bid,sendMail in bossesIds:
+            if sendMail:
+                logging.debug('buscando mail para : {}'.format(bid))
+                bemails = self.users.listMails(con,bid)
+                if bemails != None and len(bemails) > 0:
+                    logging.debug('añadiendo {}'.format(bemails))
+                    emails.extend(list(map(lambda x: x['email'],bemails)))
 
         logging.debug('emails {}'.format(emails))
 
-        self._sendEmail(emails,config,request)
+        if len(emails) > 0:
+            self._sendEmail(emails,config,request)
 
 
 
