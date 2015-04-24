@@ -171,7 +171,11 @@ app.controller('RequestAssistanceOutCtrl', ["$scope", "Assistance", "Notificatio
 
         Assistance.requestJustification($scope.model.session.user_id,$scope.model.justification,
             function(ok) {
-              // nada
+              $scope.model.date = null;
+              $scope.model.begin = null;
+              $scope.model.end = null;
+              $scope.model.timeFormated = null;
+              Notifications.message("Salida eventual cargada correctamente");
             },
             function(error) {
                 Notifications.message(error);
