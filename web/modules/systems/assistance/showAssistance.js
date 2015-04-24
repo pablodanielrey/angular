@@ -11,8 +11,8 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
 	    logs: [], //logs
 	    workedTime: null,} //tiempo trabajado*/
 
-	  start: null, //fecha inicial de busqueda
-    end: null, //fecha final de busqueda
+	  start: new Date(), //fecha inicial de busqueda
+    end: new Date(), //fecha final de busqueda
 
 	  session_user_id: null, //id del usuario de session
 
