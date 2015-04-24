@@ -184,15 +184,20 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
 
         var usersIds = $scope.getUsersIds(searchUsers);
         Assistance.getAssistanceStatusByUsers(usersIds, searchDates,
-            function ok(assistance){
-              var newAssistance = $scope.formatAssistance(assistance);
-              newAssistance.displayLogs = false;
-              $scope.removeIsSearchValue(assistance);
-              if(assistance.start != null && assistance.userId != null){
-                $scope.model.assistances.push(newAssistance);
-              }
+            function ok(assistances) {
 
-              // requestJustification buscar la justificacion
+              for (var i = 0; i < assistances.length; i++) {
+                var assistance = assistances[i];
+                console.log(assistance);
+                var newAssistance = $scope.formatAssistance(assistance);
+                newAssistance.displayLogs = false;
+                if(assistance.start != null && assistance.userId != null){
+                  $scope.model.assistances.push(newAssistance);
+                }
+
+                // requestJustification buscar la justificacion
+
+              }
 
               // decremento el contador
               $scope.count = 0;
@@ -243,7 +248,7 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
         newAssistance.logs.push(Utils.formatDate(log) + ' ' + Utils.formatTime(log));
       }
     }
-    
+
     newAssistance.workedTime = Utils.getTimeFromMinutes(assistance.workedMinutes);
     newAssistance.status = assistance.status;
 
