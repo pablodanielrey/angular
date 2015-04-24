@@ -106,8 +106,8 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, As
           Profiles.checkAccess(Session.getSessionId(),'ADMIN-ASSISTANCE',
             function(ok) {
               if (ok == 'granted') {
-                $scope.items.push({ label:'Chequeo de Fallas', img:'fa-ticket', function: $scope.assistanceFails});
-                $scope.items.push({ label:'Filtro de Fallas', img:'fa-ticket', function: $scope.assistanceFailsFilters});
+                $scope.items.push({ label:'Incumplimientos', img:'fa-ticket', function: $scope.assistanceFails});
+                $scope.items.push({ label:'Filtro de Fallas (testing todavía no terminado)', img:'fa-ticket', function: $scope.assistanceFailsFilters});
               }
             },
             function (error) {
