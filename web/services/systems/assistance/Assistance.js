@@ -75,6 +75,27 @@ app.service('Assistance', ['Utils','Messages','Session',
 				});
 		};
 
+		this.getAssistanceStatusByUsers = function(usersIds, dates, callbackOk, callbackError) {
+			var msg = {
+				id: Utils.getId(),
+				action: 'getAssistanceStatusByUsers',
+				session: Session.getSessionId(),
+				request:{
+					usersIds: usesrIds,
+					dates: dates
+				}
+			}
+
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response);
+					} else {
+						callbackError(data.error);
+					}
+				});
+		};
+
 
 		this.getAssistanceStatus = function(userId, callbackOk, callbackError) {
 			var msg = {
