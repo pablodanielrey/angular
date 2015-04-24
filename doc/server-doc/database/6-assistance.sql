@@ -39,12 +39,13 @@ create schema assistance;
     SCHEDULE = que cumplan el horario
   */
   create table assistance.checks (
+    id varchar primary key,
     user_id varchar not null references profile.users (id),
     date timestamptz not null,
     enable boolean not null default true,
     type varchar not null,
     created timestamptz default now(),
-    CHECK(EXTRACT(TIMEZONE FROM check_from) = '0')
+    CHECK(EXTRACT(TIMEZONE FROM date) = '0')
   );
 
   create table assistance.presence (

@@ -73,6 +73,22 @@ class Schedule:
 
 
     """
+        obtiene los usuarios que tienen configurado algún chequeo
+    """
+    def getUsersWithConstraints(self,con):
+        cur = con.cursor()
+        cur.execute('select distinct user_id from assistance.checks')
+        if cur.rowcount <= 0:
+            return []
+
+        users = []
+        for c in cur:
+            users.append(c[0])
+        return users
+
+
+
+    """
         reotnra los ids de los usuarios que tiene algun contról de horario
     """
     def getUsersInSchedules(self,con):
@@ -88,9 +104,17 @@ class Schedule:
 
 
     """
-        chequea el schedule de la fecha pasada como parámetro (se supone aware)
-        los logs de agrupan por schedule, teniendo una tolerancia de 8 horas antes del siguiente schedule
+        chequea la restricción del usuario en cierta fecha.
+        la fecha es aware.
+    """
+    def checkConstraints(self,con,userId,date):
+        pass
 
+
+    """
+        chequea el schedule de la fecha pasada como parámetro (se supone aware)
+        los logs de agrupan por schedule.
+        teneiendo en cuenta la diferencia entre 2 schedules consecutivos dividido en 2.
     """
     def checkSchedule(self,con,userId,date):
         date = self.date.awareToUtc(date)
@@ -118,7 +142,7 @@ class Schedule:
 
         logging.debug('start {} -- end {} '.format(start,end))
 
-        deltaEnd = end + datetime.timedelta(seconds=((start2 - end).total_seconds() / 3))
+        deltaEnd = end + datetime.timedelta(seconds=((start2 - end).total_seconds() / 2))
         deltaStart = start - datetime.timedelta(hours=1)
 
 

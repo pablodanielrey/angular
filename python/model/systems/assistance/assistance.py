@@ -79,7 +79,7 @@ class Assistance:
 
 
             schedulesFails = []
-            userIds = self.schedule.getUsersInSchedules(con)
+            userIds = self.schedule.getUsersWithConstraints(con)
 
             users = []
             for u in userIds:
