@@ -235,10 +235,11 @@ class GetAssistanceStatusByUsers:
             dates = message['request']['dates']
 
             status = []
-            for user_id in usersIds:
+            for userId in usersIds:
                 for d in dates:
                     date = self.date.parse(d)
-                    status.append(self.assistance.getAssistanceStatus(con,userId,date))
+                    s = self.assistance.getAssistanceStatus(con,userId,date)
+                    status.append(s)
 
             response = {
                 'id':message['id'],
