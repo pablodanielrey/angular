@@ -170,16 +170,21 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
 
   $scope.getJustifications = function() {
     // requestJustification buscar la justificacion
-    var group = null;
     var status = null;
     var start = $scope.model.start;
     var end = $scope.model.end;
-    Assistance.getJustificationRequestsToManageByDate(status, group, start, end,
+    console.log("------------ Justifications --------------------");
+    Assistance.getJustificationRequestsByDate(status, $scope.usersIds, start, end,
       function ok(requests) {
-        console.log(requests)
+        console.log(requests);
+        // decremento el contador
+        $scope.count = 0;
+        $scope.disabled = false;
       },
       function error() {
-
+        // decremento el contador
+        $scope.count = 0;
+        $scope.disabled = false;
       }
     );
   }
@@ -188,18 +193,18 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
     if(!$scope.disabled){
 
       $scope.model.assistances = [];
-      var searchDates = $scope.initializeSearchDates();
+      $scope.searchDates = $scope.initializeSearchDates();
 
-      if(searchDates.length){
-        var searchUsers = $scope.initializeSearchUsers(searchDates); //si no existen usuarios seleccionados, se definen todos los usuarios
-        $scope.defineIsSearch(searchDates, searchUsers);
+      if($scope.searchDates.length){
+        var searchUsers = $scope.initializeSearchUsers($scope.searchDates); //si no existen usuarios seleccionados, se definen todos los usuarios
+        $scope.defineIsSearch($scope.searchDates, searchUsers);
 
         // cantidad de elementos a buscar, es para deshabilitar el buscador
-        $scope.count = searchDates.length * searchUsers.length;
+        $scope.count = $scope.searchDates.length * searchUsers.length;
         $scope.disabled = true;
 
-        var usersIds = $scope.getUsersIds(searchUsers);
-        Assistance.getAssistanceStatusByUsers(usersIds, searchDates,
+        $scope.usersIds = $scope.getUsersIds(searchUsers);
+        Assistance.getAssistanceStatusByUsers($scope.usersIds, $scope.searchDates,
             function ok(assistances) {
 
               for (var i = 0; i < assistances.length; i++) {
@@ -207,15 +212,13 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
                 var newAssistance = $scope.formatAssistance(assistance);
                 newAssistance.displayLogs = false;
                 if(assistance.start != null && assistance.userId != null){
-                  $scope.getJusitificacions(newAssistance);
                   $scope.model.assistances.push(newAssistance);
                 }
 
               }
 
-              // decremento el contador
-              $scope.count = 0;
-              $scope.disabled = false;
+              $scope.getJustifications();
+
             },
             function error(){
               // decremento el contador

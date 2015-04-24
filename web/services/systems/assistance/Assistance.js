@@ -227,10 +227,10 @@ app.service('Assistance', ['Utils','Messages','Session',
 		};
 
 
-		this.getJustificationRequestsToManageByDate = function(status, group, start, end, callbackOk, callbackError){
+		this.getJustificationRequestsByDate = function(status, usersIds, start, end, callbackOk, callbackError){
 			var msg = {
 				id: Utils.getId(),
-				action: 'getJustificationRequestsToManageByDate',
+				action: 'getJustificationRequestsByDate',
 				session: Session.getSessionId(),
 				request: {
 				}
@@ -240,8 +240,8 @@ app.service('Assistance', ['Utils','Messages','Session',
 				msg.request.status = status;
 			}
 
-			if (group != null) {
-				msg.request.group = group;
+			if (usersIds != null) {
+				msg.request.usersIds = usersIds;
 			}
 
 			if (start != null) {

@@ -150,7 +150,6 @@ class Justifications:
     def getJustificationRequestsByDate(self,con,status=None,users=None,start=None,end=None):
 
         cur = con.cursor()
-        cur.execute('set timezone to %s',('UTC',))
 
         statusR = self._getJustificationsInStatus(con,status)
         if len(statusR) <= 0:
@@ -160,11 +159,9 @@ class Justifications:
 
         where = "";
         if start is not None:
-            start = self.date.awareToUtc(start)
             where += " jbegin >= %s",(start,)
 
         if end is not None:
-            end = self.date.awareToUtc(end)
             where += " jbegin <= %s",(end,)
 
         if users is None or len(users) <= 0:
