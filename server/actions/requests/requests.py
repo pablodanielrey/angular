@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import json, uuid, psycopg2, inject, re, hashlib
+import logging
 
 
 from model.objectView import ObjectView
@@ -22,6 +23,127 @@ from model.exceptions import *
     Modulo de acceso a la capa de las peticiones de cuentas.
 
 """
+
+
+
+class AccountRequestMailer:
+
+    config = inject.attr(Config)
+    mail = inject.attr(Mail)
+
+    def sendCreateEmail(self, request):
+
+      """
+        variables a reemplazar :
+        ###NAME###
+        ###LASTNAME###
+        ###DNI###
+        ###URL###
+        y dentro de la url config se pueden usar variable :
+        ###HASH###
+      """
+
+      From = self.config.configs['mail_create_account_request_from']
+      To = request['email']
+      subject = self.config.configs['mail_create_account_request_subject']
+      template = self.config.configs['mail_create_account_request_template']
+
+      url = self.config.configs['mail_create_account_request_url']
+      url = re.sub('###HASH###', request['hash'], url)
+
+      replace = [
+        ('###NAME###',request['name']),
+        ('###LASTNAME###',request['lastname']),
+        ('###DNI###', request['dni']),
+        ('###URL###', url)
+      ]
+
+      self.mail.sendMail(From,[To],subject,replace,html=template)
+
+      return True
+
+
+
+
+
+
+
+
+
+"""
+peticion:
+{
+  "id":"id de la peticion"
+  "action":"resendAccountRequest",
+  "session":"id de session obtenido en el login",
+  "requests":"requests a reenviar"
+}
+
+respuesta:
+{
+  "id":"id de la peticion"
+  O "ok":""
+  O "error":""
+}
+
+"""
+
+
+class ResendAccountRequest:
+
+  req = inject.attr(Requests)
+  events = inject.attr(Events)
+  profiles = inject.attr(Profiles)
+  config = inject.attr(Config)
+  mailer = inject.attr(AccountRequestMailer)
+
+
+  def handleAction(self, server, message):
+
+    if message['action'] != 'resendAccountRequest':
+      return False
+
+    """ chequeo que exista la sesion, etc """
+    sid = message['session']
+    self.profiles.checkAccess(sid,['ADMIN'])
+
+    if 'id' not in message:
+        raise MalformedMessage()
+
+    if 'requests' not in message:
+        raise MalformedMessage()
+
+    pid = message['id']
+    requests = message['requests']
+
+    con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+    try:
+
+        for request in requests:
+            rid = request['id'];
+            req = self.req.findRequest(con,rid)
+            self.mailer.sendCreateEmail(req)
+
+        response = {'id':pid, 'ok':'reenviado correctamente'}
+        server.sendMessage(response)
+
+    except Exception as e:
+        logging.exception(e)
+        response = {'id':pid, 'error':'Error reenviando el eMail'}
+        server.sendMessage(response)
+
+    finally:
+        con.close()
+        return True
+
+
+
+
+
+
+
+
+
 
 
 """
@@ -322,7 +444,7 @@ class CreateAccountRequest:
       server.sendMessage(response)
 
       event = {
-        'type':'NewAccountRequestEvent',
+        'type':'AccountRequestCreatedEvent',
         'data': data['id']
       }
       self.events.broadcast(server,event)
