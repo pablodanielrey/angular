@@ -1,6 +1,6 @@
 
 // defino el módulo principal.
-var app = angular.module('mainApp',['ngRoute']);
+var app = angular.module('mainApp',['ngRoute', 'pickadate']);
 
 
 /**
@@ -8,7 +8,7 @@ var app = angular.module('mainApp',['ngRoute']);
  * 		Verificar la conexión y autentificación de usuarios.
  * 		Recibir eventos del socket y transferirlo a los controladores secundarios
  */
-app.controller('IndexResetPasswordCtrl', function ($rootScope, $scope, $location, $timeout, $window, Session, Cache, WebSocket) {
+app.controller('IndexCtrl', function ($rootScope, $scope, $location, $timeout, $window, Session, Cache, WebSocket) {
 
     $rootScope.isLogged = function() {
       return Session.isLogged();
@@ -64,11 +64,9 @@ app.controller('IndexResetPasswordCtrl', function ($rootScope, $scope, $location
       $location.path(data);
     });
 
-
     $timeout(function() {
       WebSocket.registerHandlers();
-    }, 0);
-
+    });
 
     // la vista por defecto.
 //    $location.path('/main');

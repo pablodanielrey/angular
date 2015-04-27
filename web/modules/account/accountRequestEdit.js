@@ -1,5 +1,5 @@
 
-app.controller("AccountRequestEditCtrl", function($rootScope, $scope, $timeout, Utils, Account, Session) {
+app.controller("AccountRequestEditCtrl", function($rootScope, $scope, $timeout, Utils, Account, Session, Notifications) {
 
 	$scope.accountRequests = [];
 	$scope.accountRequest = {};
@@ -19,14 +19,25 @@ app.controller("AccountRequestEditCtrl", function($rootScope, $scope, $timeout, 
 		$scope.accountRequest = [];
 	}
 
-	$scope.approveAccountRequest = function(){
+
+	$scope.resendAccountRequest = function() {
+		Account.resendAccountRequest($scope.accountRequests,
+			function(response) {
+			},
+			function(error) {
+				Notifications.message(error);
+			}
+		);
+	}
+
+	$scope.approveAccountRequest = function() {
 
 		Account.approveAccountsRequest($scope.accountRequests,
 			function(response) {
 				$rootScope.$broadcast('AccountRequestUpdated');
 			},
 			function(error) {
-				alert(error);
+				Notifications.message(error);
 			}
 		);
 
@@ -39,7 +50,7 @@ app.controller("AccountRequestEditCtrl", function($rootScope, $scope, $timeout, 
 				$rootScope.$broadcast('AccountRequestUpdated');
 			},
 			function(error) {
-				alert(error);
+				Notifications.message(error);
 			}
 		);
 
@@ -55,7 +66,7 @@ app.controller("AccountRequestEditCtrl", function($rootScope, $scope, $timeout, 
 				$rootScope.$broadcast('AccountRequestUpdated');
 			},
 			function(error) {
-				alert(error);
+				Notifications.message(error);
 			}
 		);
 
