@@ -2,9 +2,9 @@ var app = angular.module('mainApp');
 
 app.controller('RequestAssistanceAbsentCtrl', function($scope, Assistance, Notifications, Utils) {
 
-	$scope.model.absent = { //datos correspondientes al ausente con aviso que seran mostrados al usuario
+	$scope.model.absent = { //datos correspondientes al ausente con aviso que seran inicializados y mostrados al usuario
 		id:null,       //identificacion de la justificacion
-		name:"absent", //nombre del la justificacion
+		name:null, //nombre del la justificacion
 		stock:0,       //stock mensual
     yearlyStock:0  //stock anual
 	};
@@ -71,9 +71,8 @@ app.controller('RequestAssistanceAbsentCtrl', function($scope, Assistance, Notif
 	$scope.selectJustificationAbsent = function() {
 		var value = !$scope.model.justificationAbsentSelected;
 		$scope.clearSelections();
+    $scope.clearAbsent();
 		$scope.model.justificationAbsentSelected = value;
-
-		$scope.model.absent.id = $scope.model.justificationAbsentId;
 	};
 
   /**
@@ -161,9 +160,8 @@ app.controller('RequestAssistanceAbsentCtrl', function($scope, Assistance, Notif
 
 	// Escuchar evento de inicializacion
 	$scope.$on('findStockJustification', function(event, data) {
-	  var justification = data.justification;
-	  if (justification.id == $scope.model.justificationAbsentId) {
-			$scope.initialize(justification);
+	  if (data.justification.id == $scope.model.justificationAbsentId) {
+			$scope.initialize(data.justification);
 	  }
 	});
 

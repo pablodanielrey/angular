@@ -44,18 +44,6 @@
             <p class="parrafosGreen2 margin">{{model.out.yearlyStock}}</p>
           </div>
 
-
-          <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationOutRequests()]">
-            <div ng-class="{true:'visible', false:'hidden'}[true]">
-              <p>No existen solicitudes pendientes</p>
-            </div>
-            <div ng-class="{true:'visible', false:'hidden'}[true]">
-              <p>Solicitud reciente</p>
-              <input type="text" placeholder="Solicitud">
-              <p>Estado</p>
-              <input type="text" placeholder="Aprobada">
-            </div>
-          </div>
         </div>
 
         <div class="margin" ng-class="{true:'visible', false:'hidden'}[isOutDefined()]">

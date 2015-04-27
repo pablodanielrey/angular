@@ -3,68 +3,104 @@ var app = angular.module('mainApp');
 app.controller('RequestAssistanceOutCtrl', ["$scope", "Assistance", "Notifications", "Utils", function($scope, Assistance, Notifications, Utils) {
 
 
-    $scope.model.justificationOutRequestSelected = false;
-    $scope.model.justificationOutAvailableSelected = false;
-    $scope.model.justificationOutRequestsSelected = false;
+  $scope.model.out = {  //datos correspondientes a la salida eventual que seran mostrados al usuario
+    id:null,       //identificacion de la justificacion
+    name:null,
+		stock:0,       //stock mensual
+    yearlyStock:0  //stock anual
+  };
+  
+  $scope.model.justificationOutRequestSelected = false;   //flag para indicar si esta seleccionado el formulario para solicitar una salida eventual
+  $scope.model.justificationOutAvailableSelected = false; //flag para indicar si esta seleccionada la seccion para visualizar las salidas eventuales disponibles
+  $scope.model.date = null;           //fecha de la salida eventual a solicitar
+  $scope.model.begin = null;          //hora de inicio de la salida eventual a solicitar
+  $scope.model.end = null;            //hora de fin de la salida eventual a solicitar
+  $scope.model.dateFormated = null;   //fecha de la salida eventual a solicitar en un formato amigable para el usuario
+  $scope.model.beginFormated = null;  //hora de inicio de la salida eventual a solicitar en un formato amigable para el usuario
+  $scope.model.endFormated = null;    //hora de fin de la salida eventual a solicitar en un formato amigable para el usuario
+  $scope.model.timeFormated = null;   //diferencia de tiempo para ser mostrada al usuario
 
     // ---------------- Manejo de la vista --------------------
 
+  /**
+   * Esta seleccionada la seccion correspondiente a salidas eventuales
+   * @returns {Boolean}
+   */
   $scope.isSelectedJustificationOut = function() {
     return $scope.model.justificationOutSelected;
   };
 
+  /**
+   * Modificar seleccion de opcion desplegable correspondiente a salidas eventuales
+   * @returns {Boolean}
+   */
 	$scope.selectJustificationOut = function() {
     var value = !$scope.model.justificationOutSelected;
     $scope.clearSelections();
-    $scope.clearSelectionsOut();
+    $scope.clearOut();
     $scope.model.justificationOutSelected = value;
-
-    $scope.model.justification.id = $scope.model.justificationOutId;
 	};
 
+ /**
+   * Esta seleccionada el formulario para definir una salida eventual?
+   * @returns {Boolean}
+   */
 	$scope.isSelectedJustificationOutRequest = function() {
 		return $scope.model.justificationOutRequestSelected;
 	};
 
-    $scope.isSelectedJustificationOutAvailable = function() {
+  /**
+   * Esta seleccionada la seccion para ver las salidas eventuales disponibles
+   * @returns {Boolean}
+   */
+  $scope.isSelectedJustificationOutAvailable = function() {
 		return $scope.model.justificationOutAvailableSelected;
 	};
 
-	$scope.isSelectedJustificationOutRequests = function() {
-		return $scope.model.justificationOutRequestsSelected;
-	};
 
+  /**
+   * Seleccionar formulario para definir una solicitud de salida eventual
+   * @returns {Boolean}
+   */
 	$scope.selectJustificationOutRequest = function() {
-		$scope.clearSelectionsOut();
+		$scope.clearOut();
 		$scope.model.justificationOutRequestSelected = true;
 	};
 
 
-	$scope.selectJustificationOutRequests = function() {
-		$scope.clearSelectionsOut();
-		$scope.model.justificationOutRequestsSelected = true;
-	};
-
+  /**
+   * Seleccionar seccion para ver las salidas eventuales disponibles
+   * @returns {Boolean}
+   */
 	$scope.selectJustificationOutAvailable = function() {
-		$scope.clearSelectionsOut();
+		$scope.clearOut();
 		$scope.model.justificationOutAvailableSelected = true;
 
 	};
 
-
-	$scope.clearSelectionsOut = function() {
+  /**
+   * Limpiar opciones correspondientes a la seccion de salida eventual
+   * @returns {Boolean}
+   */
+	$scope.clearOut = function() {
 		$scope.model.justificationOutRequestSelected = false;
 		$scope.model.justificationOutAvailableSelected = false;
-		$scope.model.justificationOutRequestsSelected = false;
-
-    if ($scope.model.justification != null) {
-        $scope.model.justification.begin = null;
-        $scope.model.justification.end = null;
-    }
+    $scope.model.date = null;
+    $scope.model.begin = null;
+    $scope.model.end = null;
+    $scope.model.dateFormated = null;
+    $scope.model.beginFormated = null;
+    $scope.model.endFormated = null;
+    $scope.model.timeFormated = null;
+      
+  
 	};
 
 
-
+    /**
+     * Esta definida la solicitud de salida eventual correctamente?
+     * @returns {Boolean}
+     */
     $scope.isOutDefined = function(){
       if ($scope.model.date && $scope.model.begin && $scope.model.end) {
           return true;
@@ -74,7 +110,7 @@ app.controller('RequestAssistanceOutCtrl', ["$scope", "Assistance", "Notificatio
     };
 
     /**
-     * Define una salida eventual en funcion de los datos ingresados por el usuario
+     * Define los datos de salida eventual a medida que el usuario va completando el formulario
      * @returns {Boolean}
      */
     $scope.defineOut = function() {
@@ -85,14 +121,6 @@ app.controller('RequestAssistanceOutCtrl', ["$scope", "Assistance", "Notificatio
         }
         if ($scope.model.end) $scope.model.endFormated = Utils.formatTime($scope.model.end);
         if ($scope.model.begin && $scope.model.end) $scope.model.timeFormated = Utils.getDifferenceTimeFromDates($scope.model.begin, $scope.model.end);
-        
-        
-        if($scope.isOutDefined()){
-            $scope.model.justification.begin = new Date($scope.model.date);
-            $scope.model.justification.begin.setHours($scope.model.begin.getHours(), $scope.model.begin.getMinutes());
-            $scope.model.justification.end = new Date($scope.model.date);
-            $scope.model.justification.end.setHours($scope.model.end.getHours(), $scope.model.end.getMinutes());
-        }
     };
 
 
@@ -144,13 +172,13 @@ app.controller('RequestAssistanceOutCtrl', ["$scope", "Assistance", "Notificatio
     // Cargo el stock de la justificacion
     // data.justification = {name,id}
     $scope.$on('findStockJustification', function(event, data) {
-        justification = data.justification;
-        if (justification.id == $scope.model.justificationOutId) {
-            $scope.initialize(justification);
+        if (data.justification.id == $scope.model.justificationOutId) {
+            $scope.initialize(data.justification);
         }
     });
 
     $scope.$on('JustificationStockChangedEvent', function(event, data) {
+ 
       if ($scope.model.justificationOutId == data.justification_id) {
         $scope.loadOutStock($scope.model.justificationOutId);
       }
@@ -159,28 +187,34 @@ app.controller('RequestAssistanceOutCtrl', ["$scope", "Assistance", "Notificatio
 
 
     $scope.initialize = function(justification) {
-        $scope.clearSelectionsOut();
-        $scope.model.out = {id:justification.id, name: justification.name, stock:0};
+        $scope.model.out = {id:justification.id, name: justification.name, stock:0, yearlyStock:0};
         $scope.loadOutStock(justification.id);
-        $scope.model.justification = {id:justification.id,begin:null,end:null,hours:0};
     };
 
    
     // Envio la peticion al servidor
     $scope.save = function() {
 
-        Assistance.requestJustification($scope.model.session.user_id,$scope.model.justification,
-            function(ok) {
-              $scope.model.date = null;
-              $scope.model.begin = null;
-              $scope.model.end = null;
-              $scope.model.timeFormated = null;
-              Notifications.message("Salida eventual cargada correctamente");
-            },
-            function(error) {
-                Notifications.message(error);
-            }
-        );
+      var requestedJustification = {
+        id:$scope.model.out.id,
+        begin: new Date($scope.model.date),
+        end: new Date($scope.model.date)
+      };
+      
+      requestedJustification.begin.setHours($scope.model.begin.getHours(), $scope.model.begin.getMinutes());
+      requestedJustification.end.setHours($scope.model.end.getHours(), $scope.model.end.getMinutes());
+
+      
+      Assistance.requestJustification($scope.model.session.user_id,requestedJustification,
+          function(ok) {
+            $scope.clearOut();
+            $scope.clearSelections(); //limpiar selecciones de todas las justificaciones
+            Notifications.message("Salida eventual cargada correctamente");
+          },
+          function(error) {
+              Notifications.message(error + ": Verifique correctamente la disponibilidad");
+          }
+      );
     };
 
 }]);
