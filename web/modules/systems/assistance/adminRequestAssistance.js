@@ -72,7 +72,7 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistan
             function(response) {
               $scope.model.requests = [];
               for (var i = 0; i < response.length; i++) {
-                  console.log(response[i].begin);
+                  console.log(new Date(response[i].begin));
                   console.log($scope.today);
                   if ($scope.today <= new Date(response[i].begin)) {
 
