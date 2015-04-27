@@ -15,6 +15,7 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistan
       $scope.today.setHours(0);
       $scope.today.setMinutes(0);
       $scope.today.setSeconds(0);
+      $scope.today.setMilliseconds(0);
     }
 
     $scope.getJustificationName = function(id) {
