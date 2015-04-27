@@ -59,15 +59,49 @@
           <div class="tam1">{{assistance.end}}</div>
           <div class="tam1">{{assistance.workedTime}}</div>
           <div class="tam3">
-            <div ng-class="{true:'visible',false:'hidden'}[!assistance.displayLogs]">
-              <span ng-click="showLogs(true,assistance)" class="link">Mostrar marcaciones</span>
+            <div class="obs"  ng-class="{true:'visible',false:'hidden'}[!assistance.displayLogs]">
+              <span ng-click="showLogs(true,assistance)" class="link"> <i class="fa fa-plus-circle"></i></span>
             </div>
-            <div class="logs" ng-class="{true:'visible',false:'hidden'}[assistance.displayLogs]">
-              <span ng-click="showLogs(false,assistance)" class="link">Ocultar marcaciones</span>
-              <ul>
-                <li ng-repeat="log in assistance.logs">{{log}}</li>
+
+            <!-- MARCACIONES -->
+            <div class="logs obs" ng-class="{true:'visible',false:'hidden'}[assistance.displayLogs]">
+              <span ng-click="showLogs(false,assistance)" class="link"><i class="fa fa-minus-circle"></i> Marcaciones</span>
+              <ul class="ULlogs">
+                <li><i class="fa fa-calendar-o"></i> Fecha</li>
+                <li><i class="fa fa-clock-o"></i> Hora</li>
               </ul>
             </div>
+            <!-- SOLICITUDES -->
+            <div ng-class="{true:'visible',false:'hidden'}[false]">
+              <span class="obs"> <i class="fa fa-ticket"></i> Ausente CA</span>
+            </div>
+            <div ng-class="{true:'visible',false:'hidden'}[false]">
+              <span class="obs"> <i class="fa fa-ticket"></i> Compensatorio</span>
+            </div>
+            <div ng-class="{true:'visible',false:'hidden'}[false]">
+              <span class="obs"> <i class="fa fa-ticket"></i> Compensatorio</span>
+            </div>
+            <!-- PRE-EXAMEN -->
+            <div ng-class="{true:'visible',false:'hidden'}[false]">
+              <span class="obs"> <i class="fa fa-book"></i> Pre-Exámen</span>
+            </div>
+            <!-- LICENCIA MEDICA -->
+            <div ng-class="{true:'visible',false:'hidden'}[false]">
+              <span class="obsMedical"> <i class="fa fa-medkit"></i> Lic. Médica</span>
+              <ul class="ULlogs">
+                <li><i class="fa fa-calendar-o"></i> Desde 01/01/2016</li>
+                <li><i class="fa fa-calendar-o"></i> Hasta 25/01/2016</li>
+              </ul>
+            </div>
+            <!-- VACACIONES -->
+            <div ng-class="{true:'visible',false:'hidden'}[false]">
+              <span class="obsMedical"> <i class="fa fa-plane"></i> Vacaciones</span>
+              <ul class="ULlogs">
+                <li><i class="fa fa-calendar-o"></i> Desde 01/01/2016</li>
+                <li><i class="fa fa-calendar-o"></i> Hasta 25/01/2016</li>
+              </ul>
+            </div>
+
           </div>
         </div>
       </div>
