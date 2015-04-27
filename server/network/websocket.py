@@ -32,7 +32,7 @@ from actions.login.password import ChangePassword, ResetPassword
 from actions.profiles.profiles import CheckAccess
 from actions.users.users import UpdateUser, FindUser, ListUsers
 from actions.users.mail import ListMails, PersistMail, ConfirmMail, RemoveMail
-from actions.requests.requests import CreateAccountRequest, ConfirmAccountRequest, ListAccountRequests, ApproveAccountRequest, RemoveAccountRequest, RejectAccountRequest
+from actions.requests.requests import CreateAccountRequest, ResendAccountRequest, ConfirmAccountRequest, ListAccountRequests, ApproveAccountRequest, RemoveAccountRequest, RejectAccountRequest
 
 
 """ sistemas """
@@ -72,7 +72,7 @@ actions = [
     GetOffices(), GetUserOfficeRoles(), GetUserInOfficesByRole(),
     GetAssistanceLogs(), GetAssistanceData(), GetFailsByDate(), GetAssistanceStatus(), GetAssistanceStatusByUsers(), GetOffices(), GetJustifications(), GetJustificationStock(), GetJustificationRequests(), GetJustificationRequestsToManage(), GetJustificationRequestsByDate(), RequestJustification(), UpdateJustificationRequestStatus(),
     GetOvertimeRequests(), GetOvertimeRequestsToManage(), RequestOvertime(), UpdateOvertimeRequestStatus(),
-    CreateAccountRequest(), ConfirmAccountRequest(), ListAccountRequests(), ApproveAccountRequest(), RemoveAccountRequest(), RejectAccountRequest()
+    CreateAccountRequest(), ResendAccountRequest(), ConfirmAccountRequest(), ListAccountRequests(), ApproveAccountRequest(), RemoveAccountRequest(), RejectAccountRequest()
 ]
 
 
