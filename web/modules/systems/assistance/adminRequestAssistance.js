@@ -8,9 +8,10 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistan
         justifications: []
     }
 
-    $scope.today =  new Date();
+    $scope.today;
 
     $scope.initializeToday = function() {
+      $scope.today =  new Date();
       $scope.today.setHours(0);
       $scope.today.setMinutes(0);
       $scope.today.setSeconds(0);
