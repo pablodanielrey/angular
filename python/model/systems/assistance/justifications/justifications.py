@@ -157,23 +157,24 @@ class Justifications:
 
         rids = tuple(statusR.keys())
 
-        where = "";
-        if start is not None:
-            where += " jbegin >= %s",(start,)
 
-        if end is not None:
-            where += " jbegin <= %s",(end,)
 
-        if users is None or len(users) <= 0:
-            if where != '':
-                where += ' and'
-            where += ' id in %s',(rids,)
+        if start is not None and end is not None:
+            if users is None or len(users) <= 0:
+                cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where jbegin >= %s and jbegin <= %s and id in %s',(start,end,rids))
+            else:
+                cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where jbegin >= %s and jbegin <= %s and id in %s and user_id in %s',(start,end,rids,tuple(users)))
         else:
-            if where != '':
-                where += ' and'
-            where += ' id in %s and user_id in %s',(rids,tuple(users))
-
-        cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where %s',(where,))
+            if start is None:
+                if users is None or len(users) <= 0:
+                    cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where jbegin <= %s and id in %s',(end,rids))
+                else:
+                    cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where jbegin <= %s and id in %s and user_id in %s',(start,end,rids,tuple(users)))
+            else:
+                if users is None or len(users) <= 0:
+                    cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where jbegin >= %s and id in %s',(end,rids))
+                else:
+                    cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where jbegin >= %s and id in %s and user_id in %s',(start,end,rids,tuple(users)))                
 
         if cur.rowcount <= 0:
             return []
