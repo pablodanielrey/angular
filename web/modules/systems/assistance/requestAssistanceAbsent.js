@@ -1,88 +1,108 @@
 var app = angular.module('mainApp');
 
-app.controller('RequestAssistanceAbsentCtrl', function($scope, Assistance, Notifications) {
+app.controller('RequestAssistanceAbsentCtrl', function($scope, Assistance, Notifications, Utils) {
 
-	$scope.model.absent = {
-		id:null,
-		name:"absent",
-		stock:0
+	$scope.model.absent = { //datos correspondientes al ausente con aviso que seran inicializados y mostrados al usuario
+		id:null,       //identificacion de la justificacion
+		name:null, //nombre del la justificacion
+		stock:0,       //stock mensual
+    yearlyStock:0  //stock anual
 	};
 
-	$scope.model.justificationAbsentRequestSelected = false;
-	$scope.model.justificationAbsentRequestDateSelected = false; //flag para indicar que se ha definido el dia de la solicitud
-	$scope.model.justificationAbsentAvailableSelected = false;
-	$scope.model.justificationAbsentRequestsSelected = false;
-	$scope.model.requestAbsentBegin = null;
-	$scope.model.requestAbsentBeginFormated = null;
+	$scope.model.justificationAbsentRequestSelected = false;   //flag para indicar que se ha seleccionado el formulario para solicitar un ausente con aviso
+	$scope.model.justificationAbsentRequestDefined = false;    //flag para indicar que se ha definido el dia de la solicitud
+	$scope.model.justificationAbsentAvailableSelected = false; //flag para indicar que se ha seleccionado la seccion para ver los ausentes con aviso disponibles
+	$scope.model.requestAbsentBegin = null;                    //fecha definida para la solicitud de ausente con aviso
+	$scope.model.requestAbsentBeginFormated = null;            //fecha definida para la solicitud de ausente con aviso con formato amigable para el usuario
 
 	/**
-	 * Esta definido el dia de la solicitud?
+	 * Codigo a ejecutarse una vez definido el dia de la solicitud de ausente con aviso
 	 */
 	$scope.changeRequestAbsentBegin = function() {
 		if($scope.model.requestAbsentBegin != null) {
-			$scope.model.justificationAbsentRequestDateSelected = true;
-			$scope.model.requestAbsentBeginFormated = $scope.model.requestAbsentBegin.toLocaleDateString();
+			$scope.model.justificationAbsentRequestDefined = true;
+			$scope.model.requestAbsentBeginFormated = Utils.formatDate($scope.model.requestAbsentBegin);
 			return true;
 		} else {
-			$scope.model.justificationAbsentRequestDateSelected = false;
+			$scope.model.justificationAbsentRequestDefined = false;
 			$scope.model.requestAbsentBeginFormated = null;
 			return false;
 		}
 	};
 
+  /**
+   * Esta seleccionada la opcion desplegable Ausente con aviso?
+   * El flag de seleccion se define en el controlador padre
+   * @returns {Boolean}
+   */
 	$scope.isSelectedJustificationAbsent = function() {
 		return $scope.model.justificationAbsentSelected;
 	};
 
-	$scope.isSelectedJustificationAbsentRequestDate = function() {
-		return $scope.model.justificationAbsentRequestDateSelected;
+  /**
+   * Esta definida la fecha de solicitud de ausente con aviso?
+   * @returns {Boolean}
+   */
+	$scope.isDefinedJustificationAbsentRequest = function() {
+		return $scope.model.justificationAbsentRequestDefined;
 	};
-
-	$scope.selectJustificationAbsent = function() {
-		var value = !$scope.model.justificationAbsentSelected;
-		$scope.clearSelections();
-		$scope.model.justificationAbsentSelected = value;
-
-		$scope.model.absent.id = $scope.model.justificationAbsentId;
-	};
-
-	$scope.isSelectedJustificationAbsentRequest = function() {
+  
+  /**
+   * Esta seleccionado el formulario para definir un ausente con aviso?
+   * @returns {Boolean}
+   */
+  $scope.isSelectedJustificationAbsentRequest = function() {
 		return $scope.model.justificationAbsentRequestSelected;
 	};
 
+  /**
+   * Esta seleccionado la seccion para ver los ausentes con aviso disponibles?
+   * @returns {Boolean}
+   */
 	$scope.isSelectedJustificationAbsentAvailable = function() {
 		return $scope.model.justificationAbsentAvailableSelected;
 	};
+  
 
-	$scope.isSelectedJustificationAbsentRequests = function() {
-		return $scope.model.justificationAbsentRequestsSelected;
+  /**
+   * Seleccionar y desplegar la opcion ausente con aviso
+   * El flag de seleccion se define en el controlador padre
+   */
+	$scope.selectJustificationAbsent = function() {
+		var value = !$scope.model.justificationAbsentSelected;
+		$scope.clearSelections();
+    $scope.clearAbsent();
+		$scope.model.justificationAbsentSelected = value;
 	};
 
+  /**
+   * Seleccionar y desplegar el formulario para solicitar ausente con aviso
+   */
 	$scope.selectJustificationAbsentRequest = function() {
-		$scope.clearSelectionsAbsent();
+		$scope.clearAbsent();
 		$scope.model.justificationAbsentRequestSelected = true;
 	};
 
 
-	$scope.selectJustificationAbsentRequests = function() {
-		$scope.clearSelectionsAbsent();
-		$scope.model.justificationAbsentRequestsSelected = true;
-	};
-
+  /**
+   * Seleccionar y desplegar la seccion para ver los ausentes con aviso disponibles
+   */
 	$scope.selectJustificationAbsentAvailable = function() {
-		$scope.clearSelectionsAbsent();
+		$scope.clearAbsent();
 		$scope.model.justificationAbsentAvailableSelected = true;
 
 	};
 
-
-	$scope.clearSelectionsAbsent = function() {
-		$scope.model.justificationAbsentRequestDateSelected = false;
+  /**
+   * Limpiar formulario
+   */
+	$scope.clearAbsent = function() {
+		$scope.model.justificationAbsentRequestDefined = false;
 		$scope.model.justificationAbsentRequestSelected = false;
 		$scope.model.justificationAbsentAvailableSelected = false;
-		$scope.model.justificationAbsentRequestsSelected = false;
-
-	}
+    $scope.model.requestAbsentBegin = null;                    
+    $scope.model.requestAbsentBeginFormated = null;
+	};
 
 
 
@@ -105,40 +125,43 @@ app.controller('RequestAssistanceAbsentCtrl', function($scope, Assistance, Notif
 						alert(error);
 					}
 				);
-    }
+    };
 
 
-    /**
-	 * Actualmente solo puede solicitar un dia a la vez
+  /**
+	 * Confirmar solicitud
+   * Actualmente solo puede solicitar un dia a la vez
 	 */
 	$scope.confirmRequestAbsent = function() {
 
 		var requestedJustification = {
 			id:$scope.model.absent.id,
 			begin:$scope.model.requestAbsentBegin
-		}
+		};
+    
 		Assistance.requestJustification($scope.model.session.user_id, requestedJustification,
 			function(ok) {
-				//$scope.clearSelections();
+				$scope.clearAbsent(); //limpiar seccion de ausente con aviso
+        $scope.clearSelections(); //limpiar selecciones de todas las justificaciones
+        Notifications.message("Ausente con aviso cargado correctamente");
 			},
 			function(error){
-				Notifications.message(error);
+				Notifications.message(error + ": Verifique correctamente la disponibilidad");
 			}
 
 		);
-	}
+	};
 
 
 	$scope.initialize = function(justification) {
-    $scope.model.absent = {id:justification.id, name:justification.name, stock:0};
+    $scope.model.absent = {id:justification.id, name:justification.name, stock:0, yearlyStock:0};
 		$scope.loadAbsentStock(justification.id);
-	}
+	};
 
 	// Escuchar evento de inicializacion
 	$scope.$on('findStockJustification', function(event, data) {
-	  justification = data.justification;
-	  if (justification.id == $scope.model.justificationAbsentId) {
-			$scope.initialize(justification);
+	  if (data.justification.id == $scope.model.justificationAbsentId) {
+			$scope.initialize(data.justification);
 	  }
 	});
 

@@ -8,12 +8,14 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistan
         justifications: []
     }
 
-    $scope.today =  new Date();
+    $scope.today;
 
     $scope.initializeToday = function() {
+      $scope.today =  new Date();
       $scope.today.setHours(0);
       $scope.today.setMinutes(0);
       $scope.today.setSeconds(0);
+      $scope.today.setMilliseconds(0);
     }
 
     $scope.getJustificationName = function(id) {
@@ -71,16 +73,18 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistan
             function(response) {
               $scope.model.requests = [];
               for (var i = 0; i < response.length; i++) {
-                if ($scope.today <= new Date(response[i].begin)) {
-                  var r = response[i];
-                  r.displayHours = false;
-                  id = r.justification_id;
-                  if (id == 'fa64fdbd-31b0-42ab-af83-818b3cbecf46') {
-                    // boleta de salida
-                    r.displayHours = true;
+                  var show = $scope.today <= new Date(response[i].begin);
+                  if (show) {
+
+                    var r = response[i];
+                    r.displayHours = false;
+                    id = r.justification_id;
+                    if (id == 'fa64fdbd-31b0-42ab-af83-818b3cbecf46') {
+                      // boleta de salida
+                      r.displayHours = true;
+                    }
+                    $scope.addRequest(r);
                   }
-                  $scope.addRequest(r);
-                }
               }
             },
             function(error) {

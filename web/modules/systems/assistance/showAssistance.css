@@ -60,6 +60,9 @@
   border-radius:5px;
   cursor:pointer;
 }
+.showAssistance .searchButtom.disabled {
+    background-color:grey;
+}
 .showAssistance .navTitle1 {
   font-size:16px;
   padding:2px;
@@ -143,6 +146,15 @@
 .showAssistance .tam3 {
   width:150px;
   margin-right:5px;
+}
+
+.showAssistance .tam3 .hidden {
+  display:none;
+}
+
+.showAssistance .tam3 .link {
+  text-decoration:underline;
+  cursor:pointer;
 }
 
 .showAssistance .resultsContent {

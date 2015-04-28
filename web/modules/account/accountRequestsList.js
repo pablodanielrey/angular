@@ -14,7 +14,7 @@ app.controller("AccountRequestsListCtrl", function($rootScope, $scope, Utils, Ac
 	$scope.accountRequestSelected = [];
 
 
-	$scope.$on('NewAccountRequestEvent', function(event,data) {
+	$scope.$on('AccountRequestCreatedEvent', function(event,data) {
 		$scope.listAccountRequests();
 	});
 
