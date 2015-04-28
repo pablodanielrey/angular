@@ -202,6 +202,7 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
       newAssistance.date = Utils.formatDate(new Date(j.begin));
       newAssistance.dateSort = Utils.formatDateExtend(new Date(j.begin));
       newAssistance.displayLogs = false;
+      newAssistance.displayJustification = false;
 
       newAssistance.justification = j;
       $scope.formatJustification(j);
@@ -255,6 +256,7 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
                 var assistance = assistances[i];
                 var newAssistance = $scope.formatAssistance(assistance);
                 newAssistance.displayLogs = false;
+                newAssistance.displayJustification = false;
                 if(assistance.start != null && assistance.userId != null){
                   $scope.model.assistances.push(newAssistance);
                 }
@@ -351,9 +353,13 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
     $scope.model.usersIdSelected = [];
   }
 
-
   $scope.showLogs = function(v,assistance) {
     assistance.displayLogs = v;
+    assistance.displayJustification = v;
+  }
+
+  $scope.showJustifications = function(assistance) {
+    assistance.displayJustification = !assistance.displayJustification;
   }
 
   $scope.isDisabled = function() {
