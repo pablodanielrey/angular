@@ -84,7 +84,21 @@
 }
 
 /*CONTENEDOR DE SOLICITUDES REALIZADAS + HISTORIAL*/
+
+.mySchedule .textBlue {
+  color:#275276;
+  padding:5px;
+}
+
 .mySchedule .contentSecond {
   background-color:blue;
   margin:5px;
+}
+.mySchedule .save {
+  background-color:#0066A6;
+  padding:10px;
+  margin:5px;
+  color:white;
+  border:none;
+  width:95%;
 }
