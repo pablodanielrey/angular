@@ -145,6 +145,11 @@ app.config(['$routeProvider', function($routeProvider) {
       templateUrl: '/modules/systems/assistance/showAssistance.html',
       controller: 'ShowAssistanceCtrl'
   })
+  .when('/mySchedule', {
+      templateUrl: '/modules/systems/assistance/mySchedule.html',
+      controller: 'myScheduleCtrl'
+  })
+
 
 
 	.when('/editAccountRequest', {

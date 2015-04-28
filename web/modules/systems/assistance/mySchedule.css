@@ -1,0 +1,90 @@
+.mySchedule {
+  display:flex;
+  flex-direction:column;
+  font-family: helvetica;
+  font-size:14px;
+
+}
+/*TITULO*/
+.mySchedule .title {
+  display:flex;
+  align-items: center;
+  background-image:linear-gradient(to right,#275276, #0066A6);
+  font-size:16px;
+  width:98%;
+  height:30px;
+  padding:5px;
+  color:white;
+  margin-bottom:10px;
+  margin:5px;
+}
+/*CONTENEDOR DE MIS HORARIOS*/
+.mySchedule .contentFirst {
+  display:flex;
+  flex-direction:row;
+  wrap:nowrap;
+
+  margin:5px;
+
+}
+/*MODULO DE HORARIO SEMANAL*/
+.mySchedule .myScheduleWeekly {
+  display:flex;
+  flex-direction:column;
+  border:2px solid #275276;
+
+}
+.mySchedule .titleMyScheduleWeekly {
+  background-color:#0066A6;
+  color:white;
+  padding:5px;
+}
+.mySchedule .weekly {
+  display:flex;
+  flex-direction:row;
+  wrap:nowrap;
+  background-color:white;
+}
+.mySchedule .days {
+  background-color:#275276;
+  color:white;
+  padding:8px;
+}
+.mySchedule .hours {
+
+
+  padding:5px;
+}
+.mySchedule .fa-caret-right {
+  color:#0066A6;
+}
+.mySchedule .fa-caret-left {
+  color:#d9534f;
+}
+
+
+
+/*MODULO SOLICITAR NUEVO HORARIO SEMANAL*/
+.mySchedule .newScheduleWeekly {
+  border:2px solid #275276;
+  margin-left: 20px;
+}
+.mySchedule .selectDays {
+  display:flex;
+  flex-direction:row;
+  wrap:nowrap;
+  font-size:13px;
+}
+/*MODULO SOLICITAR HORARIO PARA UN DIA ESPECIAL*/
+.mySchedule .myScheduleSpecial {
+  border:2px solid #275276;
+  margin-left: 20px;
+
+
+}
+
+/*CONTENEDOR DE SOLICITUDES REALIZADAS + HISTORIAL*/
+.mySchedule .contentSecond {
+  background-color:blue;
+  margin:5px;
+}
