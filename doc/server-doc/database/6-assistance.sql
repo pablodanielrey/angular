@@ -48,18 +48,11 @@ create schema assistance;
     CHECK(EXTRACT(TIMEZONE FROM date) = '0')
   );
 
-  create table assistance.presence (
-    id varchar primary key,
-    user_id varchar not null references profile.users (id),
-    date timestamptz not null
-  );
-
-  create table assistance.hours (
-    id varchar primary key,
-    user_id varchar not null references profile.users (id),
-    date timestamptz not null,
+  create table assistance.hours_check (
+    id varchar primary key references assistance.checks (id),
     count int default 0
   );
+  
 
   create table assistance.schedule (
     id varchar primary key,
