@@ -3,9 +3,9 @@ var app = angular.module('mainApp');
 app.controller('RequestAssistanceCtrl', ["$scope", "$rootScope", "$timeout", "$window", "Session", "Assistance", "Profiles", "Notifications", "Utils", function($scope, $rootScope, $timeout, $window, Session, Assistance, Profiles, Notifications, Utils) {
 
 	$scope.model = {
-		justifications : [], //auxiliar para almacenar las justificaciones
+		justifications : [], //auxiliar para almacenar las justificaciones que seran mostradas al usuario
 		requestedLicences : [], //solicitudes de licencias
-		justification : {}, //justificacion a guardar
+		justification : {}, //justificacion a guardar OBSOLETO, las justificaciones a guardar deben definirse en cada subcontrolador!!!
 		justificationAbsentSelected	: false,
 		justificationLaoSelected	: false,
 		justificationExamSelected	: false,
