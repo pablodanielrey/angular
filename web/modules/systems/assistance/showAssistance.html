@@ -28,6 +28,9 @@
             <option value="Detise">
             <option value="Graduados">
           </datalist>
+          <select class="input" ng-model="model.selectedGroup"  ng-options="op.name for op in model.groups | orderBy:['name']">
+            <option value="">Todos</option>
+          </select>
        </div>
         <div>
           <div class="navTitle">Fecha Inicio</div>

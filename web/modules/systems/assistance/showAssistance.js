@@ -2,6 +2,9 @@
 var app = angular.module('mainApp');
 app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifications" , "Session", "Assistance", "Users", "Utils", function($scope, $timeout, $window, Notifications, Session, Assistance, Users, Utils) {
 
+
+// Variables
+
   $scope.model = {
     //datos de assistance correspondientes a los usuarios
     assistances: [],
@@ -15,6 +18,9 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
 	  start: new Date(), //fecha inicial de busqueda
     end: new Date(), //fecha final de busqueda
 
+    groups: [],
+    groupSelected:{},
+
     users: [], //usuarios consultados
     usersIdSelected: [], //ids de usuarios seleccionados
     searchUser: null, // string con el usuario buscado
@@ -23,8 +29,21 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
   };
 
   $scope.count = 0;
-
   $scope.disabled = false;
+
+
+// ----------- INICIALIZACION --------------------
+
+  $scope.initialize = function() {
+    $scope.loadSession();
+    $scope.loadUsers();
+  }
+
+  $timeout(function() {
+    $scope.initialize();
+  },0);
+
+
   /**
    * Cargar y chequear session
    */
@@ -36,6 +55,24 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
       var session = Session.getCurrentSession();
       $scope.model.session_user_id = session.user_id;
     }
+  };
+
+  /**
+    * Cargar usuarios
+   */
+  $scope.loadUsers = function() {
+    Assistance.getUsersInOfficesByRole('autoriza',
+      function(usersId) {
+        if (usersId == null || usersId.length == 0) {
+          usersId = [$scope.model.session_user_id];
+        }
+        $scope.loadGroups(usersId);
+        $scope.defineUsers(usersId);
+      },
+      function(error){
+        Notifications.message(error);
+      }
+    );
   };
 
   /**
@@ -59,27 +96,31 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
   };
 
   /**
-    * Cargar usuarios
-   */
-  $scope.loadUsers = function(){
-    Assistance.getUsersInOfficesByRole('autoriza',
-      function(usersId){
-        if (usersId == null || usersId.length == 0) {
-          usersId = [$scope.model.session_user_id];
-        }
-        $scope.defineUsers(usersId);
+    * Cargar todos los grupos
+  */
+  $scope.loadGroups = function(usersId) {
+    $scope.model.groupSelected = {};
+    $scope.model.groups = [];
+
+    var userId = $scope.model.session_user_id;
+    var tree = true;
+    var role = null;
+
+    Assistance.getOfficesByUserRole(userId,role,tree,
+      function(groups) {
+        $scope.model.groups = groups;
+
+        console.log(groups);
       },
-      function(error){
+      function(error) {
         Notifications.message(error);
       }
     );
-  };
 
-  $timeout(function() {
-    $scope.loadSession();
-    $scope.loadUsers();
-  },0);
 
+  }
+
+// ------------------------------------------------------------------------------------------------------------
 
 
 
@@ -365,8 +406,6 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
   $scope.isDisabled = function() {
     return ($scope.disabled) || ($scope.model.start == null) || ($scope.model.end == null);
   }
-
-
 
 
 }]);

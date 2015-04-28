@@ -138,6 +138,32 @@ app.service('Assistance', ['Utils','Messages','Session',
 				});
 		};
 
+		
+		this.getOfficesByUserRole = function(userId,role,tree, callbackOk, callbackError) {
+			var msg = {
+				id: Utils.getId(),
+				action: 'getOfficesByUserRole',
+				session: Session.getSessionId(),
+
+				request:{
+					user_id: userId,
+					tree:tree
+				}
+			}
+
+			if (role != null) {
+				msg.request.role = role;
+			}
+
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response);
+					} else {
+						callbackError(data.error);
+					}
+				});
+		};
 
 		this.getOfficesByUser = function(userId, callbackOk, callbackError) {
 			var msg = {
