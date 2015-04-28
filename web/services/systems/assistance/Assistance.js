@@ -138,7 +138,7 @@ app.service('Assistance', ['Utils','Messages','Session',
 				});
 		};
 
-		
+
 		this.getOfficesByUserRole = function(userId,role,tree, callbackOk, callbackError) {
 			var msg = {
 				id: Utils.getId(),
@@ -158,7 +158,7 @@ app.service('Assistance', ['Utils','Messages','Session',
 			Messages.send(msg,
 				function(data) {
 					if (typeof data.error === 'undefined') {
-						callbackOk(data.response);
+						callbackOk(data.response.offices);
 					} else {
 						callbackError(data.error);
 					}

@@ -104,7 +104,7 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
 
     var userId = $scope.model.session_user_id;
     var tree = true;
-    var role = null;
+    var role = 'autoriza';
 
     Assistance.getOfficesByUserRole(userId,role,tree,
       function(groups) {
