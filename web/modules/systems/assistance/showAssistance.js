@@ -9,12 +9,11 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
   	  start: null, //fecha y hora de inicio
 	    end: null, //fecha y hora de finalizacion
 	    logs: [], //logs
+      justification: null,
 	    workedTime: null,} //tiempo trabajado*/
 
 	  start: new Date(), //fecha inicial de busqueda
     end: new Date(), //fecha final de busqueda
-
-	  session_user_id: null, //id del usuario de session
 
     users: [], //usuarios consultados
     usersIdSelected: [], //ids de usuarios seleccionados
@@ -168,18 +167,61 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
     return ids;
   }
 
+  $scope.formatJustification = function(justification) {
+    console.log(justification);
+    justification.startDate = Utils.formatTime(new Date(justification.begin));
+    justification.startTime = Utils.formatTime(new Date(justification.begin));
+    justification.endDate = Utils.formatDate(new Date(justification.end));
+    justification.endTime = Utils.formatTime(new Date(justification.end));
+  }
+
+  $scope.setJustifications = function(justifications) {
+
+    // tiene las justificaciones que no machean con ninguna asistencia
+    var auxJustifications = justifications.slice();
+    for (var $i = 0; $i < justifications.length; $i++) {
+      var j = justifications[$i];
+      j.date = new Date(j.begin);
+      j.date = Utils.formatDate(j.date);
+      for (var $k = 0; $k < $scope.model.assistances.length; $k++) {
+        var a = $scope.model.assistances[$k];
+        if (j != null && a.date == j.date) {
+          var index = auxJustifications.indexOf(j);
+          auxJustifications.splice(index,1);
+          a.justification = j;
+          $scope.formatJustification(a.justification);
+        }
+      }
+    }
+
+    for (var $i = 0; $i < auxJustifications.length; $i++) {
+      var j = auxJustifications[$i];
+      var newAssistance = {};
+      newAssistance.userId = j.user_id;
+      newAssistance = $scope.formatAssistance(newAssistance);
+      newAssistance.date = Utils.formatDate(new Date(j.begin));
+      newAssistance.dateSort = Utils.formatDateExtend(new Date(j.begin));
+      newAssistance.displayLogs = false;
+
+      newAssistance.justification = j;
+      $scope.formatJustification(j);
+      $scope.model.assistances.push(newAssistance);
+    }
+
+
+    // decremento el contador
+    $scope.count = 0;
+    $scope.disabled = false;
+  }
+
   $scope.getJustifications = function() {
     // requestJustification buscar la justificacion
     var status = null;
     var start = $scope.model.start;
     var end = $scope.model.end;
-    console.log("------------ Justifications --------------------");
     Assistance.getJustificationRequestsByDate(status, $scope.usersIds, start, end,
       function ok(requests) {
-        console.log(requests);
-        // decremento el contador
-        $scope.count = 0;
-        $scope.disabled = false;
+        $scope.setJustifications(requests);
       },
       function error() {
         // decremento el contador
@@ -190,7 +232,9 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
   }
 
   $scope.searchAssistance = function(){
-    if(!$scope.disabled){
+    if(!$scope.disabled) {
+
+      $scope.predicate = 'dateSort';
 
       $scope.model.assistances = [];
       $scope.searchDates = $scope.initializeSearchDates();
@@ -239,7 +283,8 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
 
     for(var i = 0; i < $scope.model.users.length; i++){
       var user = $scope.model.users[i];
-      if(user.id == assistance.userId){
+      if(user.id == assistance.userId) {
+        newAssistance.userId = assistance.userId;
         newAssistance.user = user.name + " " + user.lastname;
         break;
       }
@@ -261,13 +306,21 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
 
     if (assistance.logs != null) {
       for(var i = 0; i < assistance.logs.length; i++){
-        var log = new Date(assistance.logs[i]);
-        newAssistance.logs.push(Utils.formatDate(log) + ' ' + Utils.formatTime(log));
+        var date = new Date(assistance.logs[i]);
+        var log = {};
+        log.date = Utils.formatDate(date);
+        log.time = Utils.formatTime(date);
+        newAssistance.logs.push(log);
       }
     }
 
-    newAssistance.workedTime = Utils.getTimeFromMinutes(assistance.workedMinutes);
-    newAssistance.status = assistance.status;
+    if (assistance.workedMinutes != null) {
+      newAssistance.workedTime = Utils.getTimeFromMinutes(assistance.workedMinutes);
+    }
+
+    if (assistance.status != null) {
+      newAssistance.status = assistance.status;
+    }
 
     return newAssistance;
   };
@@ -306,5 +359,8 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
   $scope.isDisabled = function() {
     return ($scope.disabled) || ($scope.model.start == null) || ($scope.model.end == null);
   }
+
+
+
 
 }]);

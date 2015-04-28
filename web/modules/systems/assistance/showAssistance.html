@@ -67,38 +67,44 @@
             <div class="logs obs" ng-class="{true:'visible',false:'hidden'}[assistance.displayLogs]">
               <span ng-click="showLogs(false,assistance)" class="link"><i class="fa fa-minus-circle"></i> Marcaciones</span>
               <ul class="ULlogs">
-                <li><i class="fa fa-calendar-o"></i> Fecha</li>
-                <li><i class="fa fa-clock-o"></i> Hora</li>
+                <div ng-repeat="log in assistance.logs">
+                  <li><i class="fa fa-calendar-o"></i> {{log.date}}</li>
+                  <li><i class="fa fa-clock-o"></i> {{log.time}}</li>
+                </div>
               </ul>
             </div>
             <!-- SOLICITUDES -->
-            <div ng-class="{true:'visible',false:'hidden'}[false]">
+            <div ng-class="{true:'visible',false:'hidden'}[assistance.justification.id == 'e0dfcef6-98bb-4624-ae6c-960657a9a741']">
               <span class="obs"> <i class="fa fa-ticket"></i> Ausente CA</span>
             </div>
-            <div ng-class="{true:'visible',false:'hidden'}[false]">
+            <div ng-class="{true:'visible',false:'hidden'}[assistance.justification.id == '48773fd7-8502-4079-8ad5-963618abe725']">
               <span class="obs"> <i class="fa fa-ticket"></i> Compensatorio</span>
             </div>
-            <div ng-class="{true:'visible',false:'hidden'}[false]">
-              <span class="obs"> <i class="fa fa-ticket"></i> Compensatorio</span>
+            <div ng-class="{true:'visible',false:'hidden'}[assistance.displayLogs && assistance.justification.justification_id == 'fa64fdbd-31b0-42ab-af83-818b3cbecf46']">
+              <span class="obs"> <i class="fa fa-ticket"></i> Boleta de salida</span>
+              <ul class="ULlogs">
+                <li><i class="fa fa-calendar-o"></i> Desde {{assistance.justification.startTime}}</li>
+                <li><i class="fa fa-calendar-o"></i> Hasta {{assistance.justification.endTime}}</li>
+              </ul>
             </div>
             <!-- PRE-EXAMEN -->
-            <div ng-class="{true:'visible',false:'hidden'}[false]">
+            <div ng-class="{true:'visible',false:'hidden'}[assistance.justification.id == 'b70013e3-389a-46d4-8b98-8e4ab75335d0']">
               <span class="obs"> <i class="fa fa-book"></i> Pre-Exámen</span>
             </div>
             <!-- LICENCIA MEDICA -->
             <div ng-class="{true:'visible',false:'hidden'}[false]">
               <span class="obsMedical"> <i class="fa fa-medkit"></i> Lic. Médica</span>
               <ul class="ULlogs">
-                <li><i class="fa fa-calendar-o"></i> Desde 01/01/2016</li>
-                <li><i class="fa fa-calendar-o"></i> Hasta 25/01/2016</li>
+                <li><i class="fa fa-calendar-o"></i> Desde {{assistance.justification.startDate}}</li>
+                <li><i class="fa fa-calendar-o"></i> Hasta {{assistance.justification.endDate}}</li>
               </ul>
             </div>
             <!-- VACACIONES -->
-            <div ng-class="{true:'visible',false:'hidden'}[false]">
+            <div ng-class="{true:'visible',false:'hidden'}[assistance.justification.id == '76bc064a-e8bf-4aa3-9f51-a3c4483a729a']">
               <span class="obsMedical"> <i class="fa fa-plane"></i> Vacaciones</span>
               <ul class="ULlogs">
-                <li><i class="fa fa-calendar-o"></i> Desde 01/01/2016</li>
-                <li><i class="fa fa-calendar-o"></i> Hasta 25/01/2016</li>
+                <li><i class="fa fa-calendar-o"></i> Desde {{assistance.justification.startDate}}</li>
+                <li><i class="fa fa-calendar-o"></i> Hasta {{assistance.justification.endDate}}</li>
               </ul>
             </div>
 
