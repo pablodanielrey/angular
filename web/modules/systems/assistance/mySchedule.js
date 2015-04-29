@@ -62,7 +62,7 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
    * @returns {undefined}
    */
   $scope.loadSchedule = function(){
-    
+    //TODO IMPLEMENTAR USO DE METODO
     Assistance.getSchedule($scope.model.sessionUserId,
       function callbackOk(requests){
         $scope.model.requests = [];
@@ -76,6 +76,39 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
         throw new Error(error);
       }
     );
+  };
+  
+  
+  $scope.loadScheduleTest = function(){
+    var result = [
+      {day:'monday', start:'10:00:00', end:'12:00:00'},
+      {day:'monday', start:'15:00:00', end:'18:00:00'},
+      {day:'tuesday', start:'09:00:00', end:'18:00:00'},
+      {day:'wednesday', start:'15:00:00', end:'18:00:00'}
+    ];
+    
+    $scope.setModelSchedule(result);
+  };
+  
+  $scope.setModelSchedule = function(schedule){    
+    $scope.model.schedule = {
+      monday:[],
+      tuesday:[],
+      wednesday:[],
+      thursday:[],
+      friday:[],
+      saturday:[],
+      sunday:[]
+    };
+    
+    for(var day in $scope.model.schedule){
+      for(var i = 0; i < schedule.length; i++){
+        if(day === schedule[i].day){
+          var time = {start:schedule[i].start, end:schedule[i].end};
+          $scope.model.schedule[day].push(time);
+        }
+      } 
+    }
   };
 
 
@@ -123,7 +156,7 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
   $timeout(function() {
     $scope.loadSession();
     $scope.loadUsers();
-    //$scope.loadSchedule();
+    $scope.loadScheduleTest();
     
   },0);
   
