@@ -5,7 +5,9 @@
   font-family: calibri, Arial, Helvetica, sans-serif;
   font-size:14px;
 }
-
+.showAssistance .disabled {
+  display:none;
+}
 .showAssistance .title {
   display:flex;
   align-items: center;
@@ -65,9 +67,11 @@
 }
 .showAssistance .navTitle1 {
   font-size:16px;
-  padding:2px;
-  width:179px;
-  height:23px;
+  padding:5px;
+  width:187px;
+  background-color:white;
+
+
 
 }
 .showAssistance .navTitleUser {
@@ -105,17 +109,33 @@
 
 
 }
+.showAssistance .cleanse {
+  background-color:#D9534F;
+  color:white;
+  padding:5px;
+  width:163px;
+  cursor:pointer;
+}
+.showAssistance .cleanse:hover {
+  background-color:#275276;
+  color:white;
+  padding:5px;
+  width:163px;
+  cursor:pointer;
+}
 
 .showAssistance .listUsersContent {
-  height:422px;
+  height:395px;
   background-color:#DEDEDE;
   padding-top:10px;
   overflow: scroll;
+  overflow-x: hidden;
 }
 
 .showAssistance .dataUsersContent {
   height:422px;
   overflow: scroll;
+  overflow-x: hidden;
 }
 
 .showAssistance .listUsers {

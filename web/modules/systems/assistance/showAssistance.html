@@ -7,12 +7,17 @@
   <div class="content">
     <div class="contentLeft">
       <div class="navTitleUser">Usuario</div>
+
       <input class="navTitleUser2" type="text" ng-model="model.searchUser" >
 
       <div class="searchList">
         <div class="navSearchList">Seleccione</div>
         <div clasS='listUsersContent'>
+
           <div class="listUsers" ng-repeat="user in model.usersFilters | filter:model.searchUser | orderBy:['name','lastname']" ng-click="selectUser(user)" ng-class="{true:'selected'}[isSelectedUser(user)]">{{user.name}} {{user.lastname}}</div>
+        </div>
+        <div class="cleanse" ng-class="{false:'enabled',true:'disabled'}[model.usersIdSelected.length == 0]">
+          <span ng-click="clearUsersSelected()" ><i class="fa fa-eraser"></i> Borrar Selección</span>
         </div>
       </div>
     </div>
@@ -38,9 +43,7 @@
           <button class="searchButtom" ng-click="searchAssistance()" ng-class="{false:'enabled',true:'disabled'}[isDisabled()]" ng-disabled="isDisabled()"><i class="fa fa-search"></i> Buscar</button>
         </div>
 
-        <div>
-          <span ng-click="clearUsersSelected()">Limpiar Selección</span>
-        </div>
+
       </div>
       <div class="nav2">
         <div ng-click="predicate = 'dateSort'; reverse=!reverse"  class="tam1"><i class="fa fa-calendar-o"></i> Fecha</div>
