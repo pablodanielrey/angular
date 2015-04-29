@@ -37,6 +37,10 @@
         <div>
           <button class="searchButtom" ng-click="searchAssistance()" ng-class="{false:'enabled',true:'disabled'}[isDisabled()]" ng-disabled="isDisabled()"><i class="fa fa-search"></i> Buscar</button>
         </div>
+
+        <div>
+          <span ng-click="clearUsersSelected()">Limpiar Selección</span>
+        </div>
       </div>
       <div class="nav2">
         <div ng-click="predicate = 'dateSort'; reverse=!reverse"  class="tam1"><i class="fa fa-calendar-o"></i> Fecha</div>

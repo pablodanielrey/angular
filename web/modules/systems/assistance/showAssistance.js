@@ -38,6 +38,11 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
   $scope.initialize = function() {
     $scope.loadSession();
     $scope.loadUsers();
+    $scope.clearUsersSelected();
+  }
+
+  $scope.clearUsersSelected = function() {
+    $scope.model.usersIdSelected = [];
   }
 
   $timeout(function() {
