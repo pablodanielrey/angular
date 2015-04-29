@@ -147,7 +147,7 @@ app.config(['$routeProvider', function($routeProvider) {
   })
   .when('/mySchedule', {
       templateUrl: '/modules/systems/assistance/mySchedule.html',
-      controller: 'myScheduleCtrl'
+      controller: 'MyScheduleCtrl'
   })
 
 
