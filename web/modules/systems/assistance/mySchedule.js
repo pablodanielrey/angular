@@ -36,6 +36,27 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
   /*************************************
    * METODOS DE CARGA E INICIALIZACION *
    *************************************/
+  $scope.initializeFieldsetNewSchedule = function(){
+    //variables del fieldset de horario semanal
+    $scope.model.date = new Date();      //fecha seleccionada
+    $scope.model.startHour = new Date(); //hora de inicio seleccionada
+    $scope.model.sundayCheck = false;    //domingo
+    $scope.model.mondayCheck = false;    //lunes
+    $scope.model.tuesdayCheck = false;   //martes
+    $scope.model.wednesdayCheck = false; //miercoles
+    $scope.model.thursdayCheck = false;  //jueves
+    $scope.model.fridayCheck = false;    //viernes
+    $scope.model.saturdayCheck = false;  //sabado
+    $scope.model.hours = 7;              //cantidad de horas seleccionadas
+  };
+  
+  $scope.initializeFieldsetNewSpecialSchedule = function(){
+    $scope.model.specialDate = new Date();      //fecha especial seleccionada
+    $scope.model.startSpecialHour = new Date(); //hora de inicio especial
+    $scope.model.specialHours = 7;              //cantidad de horas especiales
+  };
+  
+  
   /**
    * Cargar la programacion del usuario
    * @returns {undefined}
