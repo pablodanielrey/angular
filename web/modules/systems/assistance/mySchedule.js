@@ -1,14 +1,13 @@
 
-app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Notifications", "Session", function ($scope, $window, $timeout, Notifications, Session) { 
+app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance", "Notifications", "Session", function ($scope, $window, $timeout, Assistance, Notifications, Session) { 
   
   //***** Definir variables *****
   if(!$scope.model) $scope.model = {};
   
   $scope.model.sessionUserId = null; //id de usuario conectado
   
-  //variables del formulario
+  //variables del fieldset de horario semanal
   $scope.model.date = new Date(); //fecha seleccionada
-  $scope.model.specialDate = new Date(); //fecha especial seleccionada
   $scope.model.startHour = new Date(); //hora de inicio seleccionada
   $scope.model.sundayCheck = false;
   $scope.model.mondayCheck = false;
@@ -18,8 +17,40 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Notification
   $scope.model.fridayCheck = false;
   $scope.model.saturdayCheck = false; 
   $scope.model.hours = 7; //cantidad de horas seleccionadas
+
+  //variables del fieldset de horario especial
+  $scope.model.specialDate = new Date(); //fecha especial seleccionada
   $scope.model.startSpecialHour = new Date(); //hora de inicio especial
   $scope.model.specialHours = 7; //cantidad de horas especiales
+  
+  
+  
+  
+  /*************************************
+   * METODOS DE CARGA E INICIALIZACION *
+   *************************************/
+  /**
+   * Cargar la programacion del usuario
+   * @returns {undefined}
+   */
+  $scope.loadSchedule = function(){
+    
+    Assistance.getSchedule($scope.model.sessionUserId,
+      function callbackOk(requests){
+        $scope.model.requests = [];
+        for(var i = 0; i < requests.length; i++){
+          $scope.formatRequest(requests[i]);
+        }
+        $scope.sort = "dateSort";
+      },
+      function callbackError(error){
+        Notifications.message(error);
+        throw new Error(error);
+      }
+    );
+  };
+
+
   
   
   /**
@@ -42,6 +73,7 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Notification
    */
   $timeout(function() {
     $scope.loadSession();
+    $scope.loadSchedule();
     
   },0);
 
