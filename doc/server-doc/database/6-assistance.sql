@@ -34,6 +34,7 @@ create schema assistance;
     los tipos de chequeo son mutualmente excluyentes y pueden ser:
     PRESENCE | HOURS | SCHEDULE
 
+    NULL = no se chequea nada
     PRESENCE = que marque una sola vez dentro del horario del schedule
     HOURS = no importa el horario si no que cumplan en el día la cantidad de horas
     SCHEDULE = que cumplan el horario
@@ -52,7 +53,7 @@ create schema assistance;
     id varchar primary key references assistance.checks (id),
     count int default 0
   );
-  
+
 
   create table assistance.schedule (
     id varchar primary key,

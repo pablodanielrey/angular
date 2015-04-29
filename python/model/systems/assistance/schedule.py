@@ -31,7 +31,7 @@ class Schedule:
     """
     def _getCheckData(self,con,userId):
         cur = con.cursor()
-        cur.execute('select id,user_id,date,type,created from assistance.checks order by date asc')
+        cur.execute('select id,user_id,date,type,created from assistance.checks where user_id = %s order by date asc',(userId,))
         if cur.rowcount <= 0:
             return
 
@@ -57,7 +57,7 @@ class Schedule:
             last = current
 
         checks.append(last)
-
+        return checks
 
 
     """
@@ -192,6 +192,10 @@ class Schedule:
     """
     def checkConstraints(self,con,userId,start,end):
         checks = self._getCheckData(con,userId)
+        logging.debug('checks %s',(checks,))
+
+        if (checks is None) or (len(checks) <= 0):
+            return []
 
         fails = []
 
@@ -200,9 +204,13 @@ class Schedule:
 
             check = None
             for c in checks:
-                if (actual >= c['start']) and (actual < c['end']):
-                    check = c
-                    break
+                if (actual >= c['start']):
+                    if c['end'] is None:
+                        check = c
+                        break
+                    elif actual < c['end']:
+                        check = c
+                        break
 
             nextDay = actual + datetime.timedelta(days=1)
 
@@ -211,7 +219,8 @@ class Schedule:
                 continue
 
             if check['type'] == 'PRESENCE':
-                logs = self.logs.findLogs(con,userId,actual,nextDay)
+                logging.debug('chequeando presencia')
+                logs = self.logs.findLogs(con,userId                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        ,actual,nextDay)
                 if (logs is None) or (len(logs) <= 0):
                     fails.append(
                         {
@@ -244,7 +253,7 @@ class Schedule:
 
 
         return fails
-        
+
 
 
 
