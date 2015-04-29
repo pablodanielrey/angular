@@ -63,10 +63,10 @@ class Assistance:
 
 
     """
-        chequea el schedule de los usuarios.
+        chequea el schedule de los usuarios pasados como parametro.
         las fechas start y end son aware
     """
-    def checkSchedule(self, start, end):
+    def checkSchedule(self, userIds, start, end):
 
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
@@ -77,10 +77,7 @@ class Assistance:
             if self.date.isNaive(end):
                 end = self.date.localizeLocal(end)
 
-
             schedulesFails = []
-            userIds = self.schedule.getUsersWithConstraints(con)
-
             users = []
             for u in userIds:
                 logging.debug('chequeando usuario %s',(u,))

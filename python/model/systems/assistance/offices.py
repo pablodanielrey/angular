@@ -209,6 +209,8 @@ class Offices:
         return offices
 
 
+
+
     """
         obtiene todos los ids de los usuarios que pertenecen a las oficinas en las cuales un usuario tiene cierto rol.
     """

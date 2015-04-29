@@ -25,6 +25,8 @@ from model.utils import DateTimeEncoder
 from model.exceptions import *
 
 
+from model.session import Session
+
 """ actions del core """
 
 from actions.login.login import Login, Logout
@@ -79,6 +81,9 @@ actions = [
 
 
 class ActionsServerProtocol(WebSocketServerProtocol):
+
+
+    session = inject.attr(Session)
 
 
     def _encodeMessage(self,msg):
@@ -163,6 +168,11 @@ class ActionsServerProtocol(WebSocketServerProtocol):
 
             if 'id' not in message:
                 raise MalformedMessage()
+
+            if 'session' in message:
+                sid = message['session']
+                self.session.touch(sid)
+
 
             try:
                 managed = False

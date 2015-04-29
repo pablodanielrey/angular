@@ -56,7 +56,9 @@ class Schedule:
                 checks.append(last)
             last = current
 
-        checks.append(last)
+        if last is not None:
+            checks.append(last)
+
         return checks
 
 
@@ -202,8 +204,10 @@ class Schedule:
         actual = start
         while actual <= end:
 
+            """ elijo el check indicado para la fecha actual """
             check = None
             for c in checks:
+                check = c
                 if (actual >= c['start']):
                     if c['end'] is None:
                         check = c
@@ -226,7 +230,7 @@ class Schedule:
                         {
                             'userId':userId,
                             'date':actual,
-                            'description':'No existe ninguna marcación para la fecha %s'.format(actual)
+                            'description':'Sin marcación'
                         }
                     )
 
@@ -243,7 +247,7 @@ class Schedule:
                         {
                             'userId':userId,
                             'date':actual,
-                            'description':'No trabajó la cantidad mínima de minutos requeridos (%s < %s)'.format(count / 60, check['hours'] * 60)
+                            'description':'No trabajó la cantidad mínima de minutos requeridos ({} < {})'.format(count / 60, check['hours'] * 60)
                         }
                     )
 
@@ -251,6 +255,7 @@ class Schedule:
                 fail = self.checkSchedule(con,userId,actual)
                 fails.extend(fail)
 
+            actual = nextDay
 
         return fails
 

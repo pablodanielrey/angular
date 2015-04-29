@@ -14,6 +14,7 @@ from model.systems.assistance.assistance import Assistance
 from model.systems.assistance.fails import Fails
 from model.systems.assistance.logs import Logs
 from model.systems.assistance.schedule import Schedule
+from model.systems.assistance.offices import Offices
 from model.systems.assistance.positions import Positions
 from model.systems.assistance.date import Date
 
@@ -53,6 +54,10 @@ class GetFailsByDate:
     fails = inject.attr(Fails)
     dateutils = inject.attr(Date)
 
+    offices = inject.attr(Offices)
+    schedule = inject.attr(Schedule)
+
+
     def handleAction(self, server, message):
 
         if(message['action'] != 'getFailsByDate'):
@@ -65,6 +70,7 @@ class GetFailsByDate:
 
         sid = message['session']
         self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
+        userId = self.profiles.getLocalUserId(sid)
 
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
@@ -74,8 +80,19 @@ class GetFailsByDate:
 
             logging.debug('fecha de inicio {} y fin {}'.format(start,end))
 
+            userIds = self.schedule.getUsersWithConstraints(con)
+            logging.debug('usuarios con chequeos : %s',(userIds,))
+            offices = self.offices.getOfficesByUserRole(con,userId,tree=True,role='autoriza')
+            logging.debug('officinas que autoriza : %s',(offices,))
+            officesIds = list(map(lambda x : x['id'], offices))
+            ousersIds = self.offices.getOfficesUsers(con,officesIds)
+            logging.debug('usuarios en las oficinas : %s',(ousersIds,))
+            authorizedUsers = list(filter(lambda x : x in ousersIds, userIds))
+            logging.debug('usuarios que se pueden autorizar : %s',(authorizedUsers,))
+
+
             assistanceFails = []
-            (users,fails) = self.assistance.checkSchedule(start, end)
+            (users,fails) = self.assistance.checkSchedule(authorizedUsers,start,end)
 
             logging.debug(fails)
 
@@ -97,7 +114,8 @@ class GetFailsByDate:
             server.sendMessage(response)
             return True
 
-        except psycopg2.DatabaseError as e:
+        except Exception as e:
+            logging.exception(e)
             raise e
 
         finally:
