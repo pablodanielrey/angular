@@ -222,9 +222,17 @@ class Schedule:
                 actual = nextDay
                 continue
 
+            actualUtc = self.date.awareToUtc(actual)
+            scheds = self.getSchedule(con,userId,actualUtc)
+            if (scheds is None) or (len(scheds) <= 0):
+                """ no tiene horario declarado asi que no se chequea nada """
+                actual = nextDay
+                continue
+
+
             if check['type'] == 'PRESENCE':
                 logging.debug('chequeando presencia')
-                logs = self.logs.findLogs(con,userId                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        ,actual,nextDay)
+                logs = self._getLogsForSchedule(con,userId,actualUtc)
                 if (logs is None) or (len(logs) <= 0):
                     fails.append(
                         {
@@ -235,7 +243,6 @@ class Schedule:
                     )
 
             elif check['type'] == 'HOURS':
-                actualUtc = self.date.awareToUtc(date)
                 logs = self._getLogsForSchedule(con,userId,actualUtc)
                 whs,attlogs = self.logs.getWorkedHours(logs)
                 count = 0
@@ -252,7 +259,7 @@ class Schedule:
                     )
 
             elif check['type'] == 'SCHEDULE':
-                fail = self.checkSchedule(con,userId,actual)
+                fail = self.checkSchedule(con,userId,actualUtc)
                 fails.extend(fail)
 
             actual = nextDay
