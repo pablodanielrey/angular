@@ -7,12 +7,12 @@
   <div class="content">
     <div class="contentLeft">
       <div class="navTitleUser">Usuario</div>
-      <input class="navTitleUser2" type="text" ng-model="model.searchUser" ng-change="resetSearchUser()" >
+      <input class="navTitleUser2" type="text" ng-model="model.searchUser" >
 
       <div class="searchList">
         <div class="navSearchList">Seleccione</div>
         <div clasS='listUsersContent'>
-          <div class="listUsers" ng-repeat="user in model.users | filter:model.searchUser | orderBy:['name','lastname']" ng-click="selectUser(user)" ng-class="{true:'selected'}[isSelectedUser(user)]">{{user.name}} {{user.lastname}}</div>
+          <div class="listUsers" ng-repeat="user in model.usersFilters | filter:model.searchUser | orderBy:['name','lastname']" ng-click="selectUser(user)" ng-class="{true:'selected'}[isSelectedUser(user)]">{{user.name}} {{user.lastname}}</div>
         </div>
       </div>
     </div>
@@ -20,7 +20,7 @@
       <div class="nav">
         <div>
           <div class="navTitle"><i class="fa fa-building-o"></i> Oficina</div>
-          <select class="navTitle1" ng-model="model.selectedGroup"  ng-options="op.name for op in model.groups | orderBy:['name']">
+          <select class="navTitle1" ng-change="filterUsers()" ng-model="model.groupSelected"  ng-options="op.name for op in model.groups | orderBy:['name']">
             <option value="">Todos</option>
           </select>
        </div>

@@ -64,6 +64,7 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
    */
   $scope.loadUsers = function() {
     $scope.model.users = [];
+    $scope.model.usersFilters = [];
 
     Assistance.getUsersInOfficesByRole('autoriza',
       function(usersId) {
@@ -91,6 +92,7 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
         function(user){
           if(user != null) {
             $scope.model.users.push(user);
+            $scope.model.usersFilters.push(user);
           }
         },
         function(error){
@@ -122,7 +124,15 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
     );
   }
 
-  $scope.$watch('model.groupSelected', $scope.filterUsers);
+
+  $scope.include = function(users,uid) {
+    for (var $i = 0; $i < users.length; $i++) {
+      if (users[$i].id == uid) {
+        return true;
+      }
+    }
+    return false;
+  }
 
   $scope.filterUsers = function() {
     $scope.model.usersFilters = $scope.model.users.slice();
@@ -130,7 +140,25 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
       return;
     }
 
+    offices = [$scope.model.groupSelected.id];
+    $scope.model.usersFilters = [];
 
+    Assistance.getOfficesUsers(offices,
+      function(users) {
+        for (var $i = 0; $i < users.length; $i++) {
+          var uid = users[$i];
+          for (var $k = 0; $k < $scope.model.users.length; $k++) {
+            var user = $scope.model.users[$k];
+            if (uid == user.id && !$scope.include($scope.model.usersFilters,uid)) {
+              $scope.model.usersFilters.push(user);
+            }
+          }
+        }
+      },
+      function(error) {
+        Notification.message(error);
+      }
+    );
 
   }
 
@@ -142,12 +170,12 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
   $scope.initializeSearchUsers = function(searchDates){
 
     var users = [];
-    if (searchDates.length < 1){
+    if (searchDates.length < 1) {
       return users;
     }
 
     if($scope.model.usersIdSelected.length == 0){
-       users = $scope.model.users;
+       users = $scope.model.usersFilters;
     } else {
        for(var i = 0; i < $scope.model.usersIdSelected.length; i++){
         var id = $scope.model.usersIdSelected[i];
@@ -400,10 +428,6 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
       return false;
     }
   };
-
-  $scope.resetSearchUser = function(){
-    $scope.model.usersIdSelected = [];
-  }
 
   $scope.showLogs = function(v,assistance) {
     assistance.displayLogs = v;

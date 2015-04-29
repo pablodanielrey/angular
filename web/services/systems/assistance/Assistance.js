@@ -5,6 +5,30 @@ app.service('Assistance', ['Utils','Messages','Session',
 	function(Utils,Messages,Session) {
 
 		/*
+		Obtiene todos los usuarios de las oficinas pasadas como parametro
+		*/
+
+		this.getOfficesUsers = function(offices, callbackOk, callbackError) {
+			var msg = {
+				id: Utils.getId(),
+				action: 'getOfficesUsers',
+				session: Session.getSessionId(),
+				request: {
+					offices: offices
+				}
+			}
+
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response.users);
+					} else {
+						callbackError(data.error);
+					}
+				});
+		}
+
+		/*
 			Obtiene los usuarios que se encuentran dentro de las oficinas a las cuales el usuario loggeado tiene
 			un rol determinado.
 		*/
