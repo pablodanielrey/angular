@@ -20,15 +20,7 @@
       <div class="nav">
         <div>
           <div class="navTitle"><i class="fa fa-building-o"></i> Oficina</div>
-          <input class="navTitle1" list="office">
-          <datalist id="office">
-            <option value="Alumnos">
-            <option value="Financiero">
-            <option value="Personal">
-            <option value="Detise">
-            <option value="Graduados">
-          </datalist>
-          <select class="input" ng-model="model.selectedGroup"  ng-options="op.name for op in model.groups | orderBy:['name']">
+          <select class="navTitle1" ng-model="model.selectedGroup"  ng-options="op.name for op in model.groups | orderBy:['name']">
             <option value="">Todos</option>
           </select>
        </div>

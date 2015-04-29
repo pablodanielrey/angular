@@ -22,6 +22,7 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
     groupSelected:{},
 
     users: [], //usuarios consultados
+    usersFilters:[], //usuarios fitlrados
     usersIdSelected: [], //ids de usuarios seleccionados
     searchUser: null, // string con el usuario buscado
 
@@ -57,15 +58,19 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
     }
   };
 
+
   /**
     * Cargar usuarios
    */
   $scope.loadUsers = function() {
-    Assistance.getUsersInOfficesByRole('autoriza',
+    $scope.model.users = [];
+
+    Assistance.getUsersInOfficesByRole(null,'autoriza',
       function(usersId) {
         if (usersId == null || usersId.length == 0) {
           usersId = [$scope.model.session_user_id];
         }
+
         $scope.loadGroups(usersId);
         $scope.defineUsers(usersId);
       },
@@ -84,7 +89,7 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
       var id = usersId[i];
       Users.findUser(id,
         function(user){
-          if(user != null){
+          if(user != null) {
             $scope.model.users.push(user);
           }
         },
@@ -109,13 +114,22 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
     Assistance.getOfficesByUserRole(userId,role,tree,
       function(groups) {
         $scope.model.groups = groups;
-
         console.log(groups);
       },
       function(error) {
         Notifications.message(error);
       }
     );
+  }
+
+  $scope.$watch('model.groupSelected', $scope.filterUsers);
+
+  $scope.filterUsers = function() {
+    $scope.model.usersFilters = $scope.model.users.slice();
+    if ($scope.model.groupSelected == null) {
+      return;
+    }
+
 
 
   }
@@ -146,8 +160,6 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
         }
       }
     }
-
-
 
     return users;
   };
@@ -209,7 +221,6 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
   }
 
   $scope.formatJustification = function(justification) {
-    console.log(justification);
     justification.startDate = Utils.formatTime(new Date(justification.begin));
     justification.startTime = Utils.formatTime(new Date(justification.begin));
     justification.endDate = Utils.formatDate(new Date(justification.end));

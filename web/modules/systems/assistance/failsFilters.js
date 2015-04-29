@@ -18,15 +18,15 @@ app.controller('AssistanceFailsFiltersCtrl', ["$scope", "$timeout", "Assistance"
       begin: new Date(),
       end: new Date()
     },
-    
+
     //variables correspondientes a la seleccion de usuario
     searchUser: null,
     searchUserPromise: null,
     users: null,
     displayListUser: false
   };
-  
-  
+
+
 
 
   /******************************************************
@@ -47,15 +47,15 @@ app.controller('AssistanceFailsFiltersCtrl', ["$scope", "$timeout", "Assistance"
       }
     ,1000);
   };
-  
+
   /**
    * Debe ser mostrada la lista de usuarios?
    */
   $scope.isDisplayListUser = function() {
     return $scope.model.displayListUser;
 
-  };  
-  
+  };
+
   /**
    * Esconder lista de usuarios
    */
@@ -66,7 +66,7 @@ app.controller('AssistanceFailsFiltersCtrl', ["$scope", "$timeout", "Assistance"
       }
     ,100);
   };
-  
+
    /**
     * Listar elementos
    */
@@ -75,13 +75,13 @@ app.controller('AssistanceFailsFiltersCtrl', ["$scope", "$timeout", "Assistance"
     $scope.model.searchUser = user.name + " " + user.lastname;
   };
 
-  
+
 
   /**
    * Seleccionar usuario
    */
   $scope.listUsers = function(){
-    Assistance.getUsersInOfficesByRole('autoriza',
+    Assistance.getUsersInOfficesByRole(null,'autoriza',
       function(users) {
         $scope.model.users = [];
         for (var i = 0; i < users.length; i++) {
@@ -99,15 +99,15 @@ app.controller('AssistanceFailsFiltersCtrl', ["$scope", "$timeout", "Assistance"
       }
     );
   };
-  
-  
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
+
+
   $scope.initializeFailsType = function() {
     $scope.model.failsType = [];
 
