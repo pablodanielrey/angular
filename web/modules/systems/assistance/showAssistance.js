@@ -436,7 +436,6 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
 
   $scope.showLogs = function(v,assistance) {
     assistance.displayLogs = v;
-    assistance.displayJustification = v;
   }
 
   $scope.showJustifications = function(assistance) {
