@@ -330,3 +330,67 @@ class GetOfficesByUserRole:
 
         finally:
             con.close()
+
+
+
+"""
+retorna los usuarios que pertenecen a las oficinas y suboficinas en las cuales la persona userId tiene un rol determinado
+
+query:
+{
+  id:
+  action:'getOfficesUsers'
+  session:
+  request: {
+    offices:[] lista de ids de oficinas
+  }
+}
+
+response:
+{
+  id:
+  ok:
+  error:
+  response: {
+    users: [
+        userId: 'id del usuario'
+    ]
+  }
+}
+
+"""
+
+class GetOfficesUsers:
+
+    config = inject.attr(Config)
+    offices = inject.attr(Offices)
+
+    def handleAction(self, server, message):
+
+        if (message['action'] != 'getOfficesUsers'):
+            return False
+
+        if 'offices' not in message['request']:
+            raise MalformedMessage()
+
+
+        offices = message['request']['offices']
+        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+        try:
+            users = self.offices.getOfficesUsers(con,offices)
+
+            response = {
+                'id':message['id'],
+                'ok':'',
+                'response': {
+                    'users':users
+                }
+            }
+            server.sendMessage(response)
+            return True
+        except Exception as e:
+            logging.exception(e)
+            raise e
+
+        finally:
+            con.close()
