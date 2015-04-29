@@ -81,7 +81,7 @@ app.controller('AssistanceFailsFiltersCtrl', ["$scope", "$timeout", "Assistance"
    * Seleccionar usuario
    */
   $scope.listUsers = function(){
-    Assistance.getUsersInOfficesByRole(null,'autoriza',
+    Assistance.getUsersInOfficesByRole('autoriza',
       function(users) {
         $scope.model.users = [];
         for (var i = 0; i < users.length; i++) {

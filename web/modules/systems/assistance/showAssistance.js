@@ -65,7 +65,7 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
   $scope.loadUsers = function() {
     $scope.model.users = [];
 
-    Assistance.getUsersInOfficesByRole(null,'autoriza',
+    Assistance.getUsersInOfficesByRole('autoriza',
       function(usersId) {
         if (usersId == null || usersId.length == 0) {
           usersId = [$scope.model.session_user_id];

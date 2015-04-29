@@ -8,7 +8,7 @@ app.service('Assistance', ['Utils','Messages','Session',
 			Obtiene los usuarios que se encuentran dentro de las oficinas a las cuales el usuario loggeado tiene
 			un rol determinado.
 		*/
-		this.getUsersInOfficesByRole = function(userId, role, callbackOk, callbackError) {
+		this.getUsersInOfficesByRole = function(role, callbackOk, callbackError) {
 			var msg = {
 				id: Utils.getId(),
 				action: 'getUserInOfficesByRole',
@@ -20,10 +20,6 @@ app.service('Assistance', ['Utils','Messages','Session',
 
 			if (role != null) {
 				msg.request.role = role;
-			}
-
-			if (userId != null) {
-				msg.request.userId = userId;				
 			}
 
 			Messages.send(msg,
