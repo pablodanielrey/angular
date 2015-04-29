@@ -18,15 +18,91 @@
   margin-bottom:10px;
   margin:5px;
 }
+.mySchedule .title2 {
+  display:flex;
+  align-items: center;
+  background-image:linear-gradient(to right,#275276, #0066A6);
+  font-size:16px;
+  width:98%;
+  height:20px;
+  padding:5px;
+  color:white;
+  margin-bottom:10px;
+  margin:5px;
+}
 /*CONTENEDOR DE MIS HORARIOS*/
 .mySchedule .contentFirst {
   display:flex;
   flex-direction:row;
   wrap:nowrap;
+  background-color:#DEDEDE;
 
-  margin:5px;
+  z-index: 999;
+  position: relative;
+  padding:10px;
+}
+/*USUARIOS*/
+
+
+.mySchedule .SearchUser {
+  display:flex;
+  flex-direction: column;
+}
+.mySchedule .searchTitle {
+  background-color: #0066A6;
+  color: white;
+  padding:5px;
+  margin-bottom: 0px;
+  font-size: 13px;
+  width:170px;
+  border-top: 3px solid #275276;
+  margin-right:20px;
 
 }
+.mySchedule .inputSearch{
+  width:166px;
+  padding:5px;
+  font-size: 14px;
+
+}
+.mySchedule .listUsers {
+  list-style-type:none;
+  margin:0px;
+  padding-left:5px;
+  width:190px;
+  max-height:300px;
+  background-color:#0066A6;
+  color:white;
+  z-index:999;
+  overflow: scroll;
+  overflow-x: hidden;
+  z-index: 999;
+  position: absolute;
+}
+.mySchedule .liUsers {
+  height:25px;
+  padding-top:10px;
+  border-bottom:2px solid #275276;
+  cursor:pointer;
+  z-index:999;
+
+}
+
+.mySchedule .selectUser {
+  display:flex;
+  flex-direction:column;
+}
+.mySchedule .userSelect {
+  width:160px;
+  background-color:#0066A6;
+  color:white;
+  padding:10px;
+  margin-top:2px;
+  font-size:14px;
+  border-top: 3px solid #275276;
+}
+
+
 /*MODULO DE HORARIO SEMANAL*/
 .mySchedule .myScheduleWeekly {
   display:flex;
@@ -67,7 +143,7 @@
 /*MODULO SOLICITAR NUEVO HORARIO SEMANAL*/
 .mySchedule .newScheduleWeekly {
   border:2px solid #275276;
-  margin-left: 20px;
+
 }
 .mySchedule .selectDays {
   display:flex;
@@ -75,12 +151,35 @@
   wrap:nowrap;
   font-size:13px;
 }
+.mySchedule .timeScheduleWeekly {
+
+  display:flex;
+  flex-direction:row;
+  wrap:nowrap;
+}
+.mySchedule .timeMyScheduleWeekly {
+
+  display:flex;
+  flex-direction:row;
+  wrap:nowrap;
+  margin-top:20px;
+}
+.mySchedule .margin {
+  margin-left:5px;
+  margin-bottom:5px;
+}
 /*MODULO SOLICITAR HORARIO PARA UN DIA ESPECIAL*/
 .mySchedule .myScheduleSpecial {
+  width:240px;
   border:2px solid #275276;
-  margin-left: 20px;
+  margin-left: 15px;
 
 
+
+}
+.mySchedule .margin2 {
+  margin-left:0px;
+  margin-bottom:5px;
 }
 
 /*CONTENEDOR DE SOLICITUDES REALIZADAS + HISTORIAL*/
@@ -91,7 +190,10 @@
 }
 
 .mySchedule .contentSecond {
-  background-color:blue;
+  display:flex;
+  flex-direction:row;
+  wrap:nowrap;
+  padding:5px;
   margin:5px;
 }
 .mySchedule .save {
@@ -101,4 +203,26 @@
   color:white;
   border:none;
   width:95%;
+  cursor:pointer;
+}
+.mySchedule .save2 {
+  background-color:#0066A6;
+  padding:10px;
+  margin:5px;
+  color:white;
+  border:none;
+  width:95%;
+  cursor:pointer;
+  margin-top:14px;
+}
+
+/*HISTORIAL*/
+
+.mySchedule .historySchedule {
+  width:280px;
+  border:2px solid #275276;
+  margin-left: 15px;
+
+
+
 }

@@ -1,10 +1,32 @@
 <div class="mySchedule">
   <!-- TITULO -->
   <div class="title">
-    <label><i class="fa fa-clock-o"></i> | Mis Horarios</label>
+    <label><i class="fa fa-clock-o"></i> | Consulta de Horarios</label>
   </div>
   <!-- CONTENEDOR DE MIS HORARIOS -->
   <div class="contentFirst">
+    <!-- BUSCADOR DE USUARIOS -->
+    <div class="selectUser">
+      <div class="searchUser">
+        <div class="searchTitle">
+          <span><i class="fa fa-user-plus"></i> Seleccione Usuario</span>
+        </div>
+        <div>
+          <input class="inputSearch" placeholder="Buscar...">
+          <!-- <ul class="listUsers" >
+            <li class="liUsers">Walter Blanco</li>
+            <li class="liUsers">Pablo Rey</li>
+            <li class="liUsers">Emanuel Pais</li>
+            <li class="liUsers">Alejandro Oporto</li>
+            <li class="liUsers">Ivan Castañeda</li>
+          </ul> -->
+        </div>
+      </div>
+      <div class="userSelect">
+        <div><b>Walter Blanco</b></div>
+        <div>30001823</div>
+      </div>
+    </div>
     <!-- MODULO DE HORARIO SEMANAL -->
     <div class="myScheduleWeekly">
       <div class="titleMyScheduleWeekly">
@@ -15,8 +37,6 @@
           <div class="days">Lun</div>
           <div class="hours"><i class="fa fa-caret-right"></i> 8:00</div>
           <div class="hours"><i class="fa fa-caret-left"></i> 11:00</div>
-          <div class="hours"><i class="fa fa-caret-right"></i> 14:00</div>
-          <div class="hours"><i class="fa fa-caret-left"></i> 16:00</div>
         </div>
         <div>
           <div class="days">Mar</div>
@@ -49,12 +69,20 @@
       </div>
 
     </div>
+
+
+  </div>
+  <!-- CONTENEDOR DE SOLICITUDES REALIZADAS + HISTORIAL -->
+  <div class="title2">
+    <label><i class="fa fa-clock-o"></i> | Modificar Horario</label>
+  </div>
+  <div class="contentSecond">
     <!-- MODULO SOLICITAR NUEVO HORARIO SEMANAL -->
     <div class="newScheduleWeekly">
       <div class="titleMyScheduleWeekly">
-        <span>Nuevo Horario Semanal</span>
+        <span><i class="fa fa-clock-o"></i> Nuevo Horario Semanal</span>
       </div>
-      <div class="textBlue">Desde el Día <input type=date></div>
+      <div class="textBlue"><i class="fa fa-calendar-o"></i> Desde el Día <input type=date></div>
       <div class="selectDays textBlue">
         <div><input type="checkbox">Lun</div>
         <div><input type="checkbox">Mar</div>
@@ -64,26 +92,45 @@
         <div><input type="checkbox">Sab</div>
         <div><input type="checkbox">Dom</div>
       </div>
-      <div>
-        <div class="textBlue">Entrada <input type=time></div>
-        <div class="textBlue">Salida <input type=time></div>
+      <div class="timeScheduleWeekly">
+        <div>
+          <div class="textBlue" ><i class="fa fa-clock-o"></i> Entrada</div>
+          <div class="textBlue" ><i class="fa fa-clock-o"></i> Salida</div>
+        </div>
+        <div>
+          <div><input class="margin" type="time"></div>
+          <div><input class="margin" type="time"></div>
+        </div>
+
       </div>
-      <button class="save" <i class="fa fa-search"></i> Guardar</Button>
+      <button class="save"> <i class="fa fa-floppy-o"></i> Guardar</Button>
     </div>
     <!-- MODULO SOLICITAR HORARIO PARA UN DIA ESPECIAL -->
     <div class="myScheduleSpecial">
       <div class="titleMyScheduleWeekly">
-        <span>Nuevo Horario Especial</span>
+        <span><i class="fa fa-clock-o"></i> Nuevo Horario Especial</span>
       </div>
-      <div>Día <input type=date></div>
-      <div>Entrada<input type=time></div>
-      <div>Salida<input type=time></div>
-      <button class="save" <i class="fa fa-search"></i> Guardar</Button>
+      <div class="timeMyScheduleWeekly">
+        <div>
+          <div class="textBlue margin2"><i class="fa fa-calendar-o"></i> Día</div>
+          <div class="textBlue margin2"><i class="fa fa-clock-o"></i> Entrada</div>
+          <div class="textBlue margin2"><i class="fa fa-clock-o"></i> Salida</div>
+        </div>
+        <div>
+          <div><input class="margin" type=date></div>
+          <div><input class="margin" type=time></div>
+          <div><input class="margin" type=time></div>
+        </div>
+      </div>
+      <button class="save2"> <i class="fa fa-floppy-o"></i> Guardar</Button>
     </div>
 
-  </div>
-  <!-- CONTENEDOR DE SOLICITUDES REALIZADAS + HISTORIAL -->
-  <div class="contentSecond">
+    <div class="historySchedule">
+      <div class="titleMyScheduleWeekly">
+        <span><i class="fa fa-history"></i> Historial de Horarios</span>
+      </div>
+
+    </div>
 
   </div>
 </div>
