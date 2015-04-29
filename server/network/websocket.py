@@ -37,10 +37,10 @@ from actions.requests.requests import CreateAccountRequest, ResendAccountRequest
 
 """ sistemas """
 
-from actions.systems.assistance.assistance import GetAssistanceData, GetAssistanceStatus, GetFailsByDate
+from actions.systems.assistance.assistance import GetAssistanceData, GetAssistanceStatus, GetAssistanceStatusByUsers, GetFailsByDate
 from actions.systems.assistance.logs import GetAssistanceLogs
-from actions.systems.assistance.offices import GetOffices, GetUserOfficeRoles, GetUserInOfficesByRole
-from actions.systems.assistance.justifications import GetJustifications, GetJustificationStock, GetJustificationRequests, GetJustificationRequestsToManage, RequestJustification, UpdateJustificationRequestStatus
+from actions.systems.assistance.offices import GetOffices, GetUserOfficeRoles, GetUserInOfficesByRole, GetOfficesByUserRole, GetOfficesUsers
+from actions.systems.assistance.justifications import GetJustifications, GetJustificationStock, GetJustificationRequests, GetJustificationRequestsToManage, GetJustificationRequestsByDate, RequestJustification, UpdateJustificationRequestStatus
 from actions.systems.assistance.overtime import GetOvertimeRequests, GetOvertimeRequestsToManage, RequestOvertime, UpdateOvertimeRequestStatus
 
 from actions.systems.students.students import CreateStudent, FindStudent, PersistStudent, FindAllStudents
@@ -69,8 +69,8 @@ actions = [
     PersistInstitutionalMail(), DeleteInstitutionalMail(), FindInstitutionalMail(),
     CreateStudent(), FindStudent(), PersistStudent(), FindAllStudents(),
     PersistTutorData(), ListTutorData(),
-    GetOffices(), GetUserOfficeRoles(), GetUserInOfficesByRole(),
-    GetAssistanceLogs(), GetAssistanceData(), GetFailsByDate(), GetAssistanceStatus(), GetOffices(), GetJustifications(), GetJustificationStock(), GetJustificationRequests(), GetJustificationRequestsToManage(), RequestJustification(), UpdateJustificationRequestStatus(),
+    GetOffices(), GetUserOfficeRoles(), GetUserInOfficesByRole(), GetOfficesByUserRole(), GetOfficesUsers(),
+    GetAssistanceLogs(), GetAssistanceData(), GetFailsByDate(), GetAssistanceStatus(), GetAssistanceStatusByUsers(), GetOffices(), GetJustifications(), GetJustificationStock(), GetJustificationRequests(), GetJustificationRequestsToManage(), GetJustificationRequestsByDate(), RequestJustification(), UpdateJustificationRequestStatus(),
     GetOvertimeRequests(), GetOvertimeRequestsToManage(), RequestOvertime(), UpdateOvertimeRequestStatus(),
     CreateAccountRequest(), ResendAccountRequest(), ConfirmAccountRequest(), ListAccountRequests(), ApproveAccountRequest(), RemoveAccountRequest(), RejectAccountRequest()
 ]

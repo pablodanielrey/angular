@@ -178,6 +178,83 @@ class GetAssistanceStatus:
         finally:
             con.close()
 
+"""
+query :
+{
+  id:,
+  action:"getAssistanceStatusByUsers",
+  session:,
+  request:{
+      usersIds: "listado de ids de los usuarios a buscar",
+      dates: "fechas a buscar"
+  }
+
+}
+
+response :
+{
+  id: "id de la petición",
+  ok: "caso exito",
+  error: "error del servidor",
+  response:{[
+      userId: id del usuario consultado,
+      status: 'estado del agente',
+      start: "fecha y hora de inicio para el dia actual",
+      end: "fecha y hora fin para el dia actual",
+      logs: [ date1, date2, date3, .... ]       // son todas las marcaciones en bruto del dia actual
+      workedMinutes: 'minutos trabajados dentro del dia actual'
+  ]}
+
+}
+"""
+
+
+class GetAssistanceStatusByUsers:
+
+    profiles = inject.attr(Profiles)
+    config = inject.attr(Config)
+    assistance = inject.attr(Assistance)
+    date = inject.attr(Date)
+
+    def handleAction(self, server, message):
+
+        if (message['action'] != 'getAssistanceStatusByUsers'):
+            return False
+
+        if ('request' not in message) or ('usersIds' not in message['request']) or ('dates' not in message['request']):
+            response = {'id':message['id'], 'error':'Insuficientes parámetros'}
+            server.sendMessage(response)
+            return True
+
+        sid = message['session']
+        self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
+
+        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+        try:
+            usersIds = message['request']['usersIds']
+            dates = message['request']['dates']
+
+            status = []
+            for userId in usersIds:
+                for d in dates:
+                    date = self.date.parse(d)
+                    s = self.assistance.getAssistanceStatus(con,userId,date)
+                    status.append(s)
+
+            response = {
+                'id':message['id'],
+                'ok':'',
+                'response':status
+            }
+            server.sendMessage(response)
+            return True
+
+        except psycopg2.DatabaseError as e:
+            raise e
+
+        finally:
+            con.close()
+
 
 """
 
