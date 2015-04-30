@@ -1,13 +1,13 @@
 
-app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance", "Notifications", "Session", "Users", "Utils", function ($scope, $window, $timeout, Assistance, Notifications, Session, Users, Utils) { 
-  
+app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance", "Notifications", "Session", "Users", "Utils", function ($scope, $window, $timeout, Assistance, Notifications, Session, Users, Utils) {
+
   /********************************
    * DEFINIR VARIABLES DEL MODELO *
    ********************************/
   if(!$scope.model) $scope.model = {};
-  
+
   $scope.model.sessionUserId = null; //id de usuario conectado
-  
+
   //variables del fieldset de horario semanal
   $scope.model.date = null;      //fecha seleccionada
   $scope.model.hour = null; //hora de inicio seleccionada
@@ -27,7 +27,7 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
   $scope.model.specialDate = null;      //fecha especial seleccionada
   $scope.model.specialHour = null; //hora de inicio especial
   $scope.model.specialTime = null;            //cantidad de horas especiales
-  
+
   //variables de seleccion de usuario
   $scope.model.searchUser = null;        //nombre del usuario a buscar
   $scope.model.searchUserPromise = null; //promesa de busqueda del usuario
@@ -35,9 +35,9 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
   $scope.model.displayListUser = false;  //flag para indicar si se debe visualizar la lista de usuarios consultados
   $scope.model.user = null;              //usuario seleccionado
   $scope.model.userSelected = false;     //flag para indicar que se ha seleccionado un usuario
-   
-  
-  
+
+
+
   /*************************************
    * METODOS DE CARGA E INICIALIZACION *
    *************************************/
@@ -54,23 +54,23 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
       saturday:false,
       sunday:false
     };
-        
+
     $scope.model.hour = null;
-    
+
     $scope.model.time = new Date();
     $scope.model.time.setHours(7,0,0,0);
 
   };
-  
+
   $scope.initializeFormNewSpecialSchedule = function(){
     $scope.model.specialDate = new Date();      //fecha especial seleccionada
     $scope.model.specialHour = null; //hora de inicio especial
-    
+
     $scope.model.specialTime = new Date();
     $scope.model.specialTime.setHours(7,0,0,0);
   };
-  
-  
+
+
   /**
    * Cargar la programacion del usuario
    * @returns {undefined}
@@ -86,25 +86,41 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
         throw new Error(error);
       }
     );*/
-    
-    //DATOS DE PRUEBA, DEBEN SER BORRADOS AL IMPLEMENTAR EL METODO ANTERIOR
-     var schedule = [
-      {day:'monday', start:'2015-01-01 15:00:00', end:'2015-01-01 18:00:00'},
-      {day:'wednesday', start:'2015-01-01 15:00:00', end:'2015-01-01 18:00:00'},
-      {day:'monday', start:'2015-01-01 10:00:00', end:'2015-01-01 12:00:00'},
-      {day:'thursday', start:'2015-01-01 18:00:00', end:null},
-      {day:'friday', start:null, end:'2015-01-01 04:00:00'},
-      {day:'tuesday', start:'2015-01-01 09:00:00', end:'2015-01-01 18:00:00'}
-    ];
-    
-    $scope.setModelSchedule(schedule);
-  };
-  
-  
 
-  
-  $scope.setModelSchedule = function(schedule){    
-    
+    $scope.getDayOfWeek = function(date) {
+      weekday = ["sunday","monday","tuesday","wednesday","thursday","friday","saturday"]
+      return weekday[date.getDay()];
+    }
+
+    Assistance.getSchedules($scope.model.user.id,
+      function ok(response) {
+        var schedules = response.schedule;
+        schedule = [];
+        for (var $i = 0; $i < schedules.length; $i++) {
+          var d = new Date(schedules[$i].start);
+          var s = {};
+          s.day = $scope.getDayOfWeek(d);
+          s.start = schedules[$i].start;
+          s.end = schedules[$i].end;
+          schedule.push(s);
+        }
+        $scope.setModelSchedule(schedule);
+      },
+      function error(error) {
+        Notification.message(error);
+      }
+
+    )
+
+
+
+  };
+
+
+
+
+  $scope.setModelSchedule = function(schedule){
+
     $scope.model.schedule = {
       monday:[],
       tuesday:[],
@@ -114,7 +130,7 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
       saturday:[],
       sunday:[]
     };
-    
+
     for(var day in $scope.model.schedule){
       for(var i = 0; i < schedule.length; i++){
         if(day === schedule[i].day){
@@ -129,13 +145,13 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
             $scope.model.schedule[day].push(time);
           }
         }
-      } 
+      }
     }
-    
+
   };
-  
-  $scope.setModelHistory = function(history){       
-  
+
+  $scope.setModelHistory = function(history){
+
   };
 
 
@@ -151,16 +167,16 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
         throw new Error(error);
       }
     );*/
-    
+
     //DATOS DE PRUEBA, DEBEN SER BORRADOS AL IMPLEMENTAR EL METODO ANTERIOR
      var history = [
       {date:'2015-01-01 15:00:00', description:'Nuevo horario semanal', start:'2015-01-01 18:00:00', end:'', days:''},
       {date:'2015-05-01 19:00:00', description:'Nuevo horario especial', start:'2015-01-01 18:00:00', end:'', days:null},
     ];
-    
-    $scope.setModelHistory(history);  
+
+    $scope.setModelHistory(history);
   };
-  
+
    /**
    * Cargar usuarios
    */
@@ -183,7 +199,7 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
       }
     );
   };
-  
+
   /**
    * Cargar y chequear session
    */
@@ -198,7 +214,7 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
       $window.location.href = "/#/logout";
     }
   };
-  
+
   /**
    * Inicializar
    */
@@ -207,11 +223,11 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
     $scope.loadUsers();
     $scope.initializeFormNewSchedule();
     $scope.initializeFormNewSpecialSchedule();
-    
+
   },0);
-  
-  
- 
+
+
+
 
   /******************************************************
    * METODOS CORRESPONDIENTES A LA SELECCION DE USUARIO *
@@ -222,8 +238,8 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
   $scope.isDisplayListUser = function() {
     return $scope.model.displayListUser;
 
-  };  
-  
+  };
+
   /**
    * Mostrar lista de usuarios
    */
@@ -231,7 +247,7 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
     $scope.model.userSelected = false;
     $scope.model.displayListUser = true;
   };
-  
+
    /**
    * Esconder lista de usuarios
    */
@@ -249,9 +265,9 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
         }
       }
     ,100);
-    
+
   };
-  
+
   /**
    * Seleccionar usuario
    * @param {usuario} user Usuario seleccionado
@@ -264,8 +280,8 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
     $scope.loadHistory();
 
   };
-  
-  
+
+
   $scope.isDaySelected = function(){
     for(var day in $scope.model.checkDay){
       if($scope.model.checkDay[day]){
@@ -274,16 +290,16 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
     }
     return false;
   };
-  
+
   /*****************************
    * METODOS DE ADMINISTRACION *
    *****************************/
   $scope.saveNewSchedule = function(){
     if(!$scope.isDaySelected()){
       return;
-    } 
-    
-    
+    }
+
+
     /*TODO IMPLEMENTAR USO DE METODO
     Assistance.saveNewSchedule($scope.model.user.id,
       function callbackOk(schedule){
@@ -294,20 +310,20 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
         throw new Error(error);
       }
     );*/
-   
+
     $scope.initializeFormNewSchedule();
     $scope.loadHistory();
     $scope.loadSchedule();
     Notifications.message("Horario almacenado con exito");
 
   };
-  
+
   $scope.saveNewSpecialSchedule = function(){
      /*TODO IMPLEMENTAR USO DE METODO
     Assistance.saveNewSpecialSchedule($scope.model.user.id,
       function callbackOk(schedule){
         $scope.initializeFormNewSpecialSchedule();
-        $scope.loadHistory();  
+        $scope.loadHistory();
       },
       function callbackError(error){
         Notifications.message(error);
@@ -315,11 +331,11 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
       }
     )    $scope.initializeFormNewSpecialSchedule();;*/
     $scope.initializeFormNewSpecialSchedule();
-    $scope.loadHistory();  
+    $scope.loadHistory();
      $scope.loadSchedule();
     Notifications.message("Horario especial almacenado con exito");
   };
-  
-  
-  
+
+
+
 }]);

@@ -13,7 +13,7 @@
         </div>
         <div>
           <input class="inputSearch" ng-model="model.searchUser" ng-click="displayListUser()" ng-blur="hideListUser()" placeholder="Buscar...">
-          <ul class="listUsers" ng-class="{true:'visible', false:'hidden'}[isDisplayListUser()]">
+          <ul class="listUsers" ng-class="{true:'visible', false:'hidden'}[true]">
             <li class="liUsers" ng-repeat="user in model.users | filter:model.searchUser | orderBy : 'name'" ng-click="selectUser(user)">{{user.name}} {{user.lastname}}</li>
           </ul>
         </div>
@@ -23,7 +23,7 @@
         <div>{{model.user.dni}}</div>
       </div>
     </div>
-    
+
     <!-- MODULO DE HORARIO SEMANAL -->
     <div class="myScheduleWeekly">
       <div class="titleMyScheduleWeekly">
