@@ -52,6 +52,12 @@ app.controller('MenuCtrl', function($rootScope, $scope, $location, $timeout, Ses
 		$location.path('/tutors');
 	}
 
+	$scope.digesto = function() {
+		$rootScope.$broadcast("MenuOptionSelectedEvent",'digestoOption');
+		$location.path('/digesto');
+	}
+
+
 	$scope.items = [];
 
 	// se generan por los distintos perfiles de usuarios.
@@ -65,6 +71,7 @@ app.controller('MenuCtrl', function($rootScope, $scope, $location, $timeout, Ses
 				$scope.items.push({ label:'Cambiar clave', img:'fa-lock', function: $scope.changePassword });
 				$scope.items.push({ label:'Editar usuarios', img:'fa-users', function: $scope.editUsers });
 				$scope.items.push({ label:'Pedidos de cuentas', img:'fa-inbox', function: $scope.accountRequests });
+				$scope.items.push({ label:'Digesto', img:'fa-digg', function: $scope.digesto });
 				$scope.items.push({ label:'Salir', img:'fa-sign-out', function: $scope.exit });
 
 			} else {
