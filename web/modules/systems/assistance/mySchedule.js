@@ -167,6 +167,7 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
    * METODOS CORRESPONDIENTES A LA SELECCION DE USUARIO *
    ******************************************************/
  
+  
   /**
    * Debe ser mostrada la lista de usuarios?
    */

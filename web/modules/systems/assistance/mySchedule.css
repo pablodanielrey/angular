@@ -222,7 +222,6 @@
   width:280px;
   border:2px solid #275276;
   margin-left: 15px;
-
-
-
 }
+
+.mySchedule .hidden {visibility:hidden;}
