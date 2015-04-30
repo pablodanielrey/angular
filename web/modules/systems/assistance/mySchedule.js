@@ -41,7 +41,7 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
   /*************************************
    * METODOS DE CARGA E INICIALIZACION *
    *************************************/
-  $scope.initializeFieldsetNewSchedule = function(){
+  $scope.initializeFormNewSchedule = function(){
     //variables del fieldset de horario semanal
     $scope.model.date = new Date();      //fecha seleccionada
 
@@ -62,7 +62,7 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
 
   };
   
-  $scope.initializeFieldsetNewSpecialSchedule = function(){
+  $scope.initializeFormNewSpecialSchedule = function(){
     $scope.model.specialDate = new Date();      //fecha especial seleccionada
     $scope.model.specialHour = null; //hora de inicio especial
     
@@ -205,8 +205,8 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
   $timeout(function() {
     $scope.loadSession();
     $scope.loadUsers();
-    $scope.initializeFieldsetNewSchedule();
-    $scope.initializeFieldsetNewSpecialSchedule();
+    $scope.initializeFormNewSchedule();
+    $scope.initializeFormNewSpecialSchedule();
     
   },0);
   
@@ -287,7 +287,7 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
     /*TODO IMPLEMENTAR USO DE METODO
     Assistance.saveNewSchedule($scope.model.user.id,
       function callbackOk(schedule){
-        $scope.initializeFieldsetNewSchedule();
+        $scope.initializeFormNewSchedule();
       },
       function callbackError(error){
         Notifications.message(error);
@@ -295,7 +295,7 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
       }
     );*/
    
-    $scope.initializeFieldsetNewSchedule();
+    $scope.initializeFormNewSchedule();
     $scope.loadHistory();
     $scope.loadSchedule();
     Notifications.message("Horario almacenado con exito");
@@ -306,15 +306,15 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
      /*TODO IMPLEMENTAR USO DE METODO
     Assistance.saveNewSpecialSchedule($scope.model.user.id,
       function callbackOk(schedule){
-        $scope.initializeFieldsetNewSpecialSchedule();
+        $scope.initializeFormNewSpecialSchedule();
         $scope.loadHistory();  
       },
       function callbackError(error){
         Notifications.message(error);
         throw new Error(error);
       }
-    )    $scope.initializeFieldsetNewSpecialSchedule();;*/
-    $scope.initializeFieldsetNewSpecialSchedule();
+    )    $scope.initializeFormNewSpecialSchedule();;*/
+    $scope.initializeFormNewSpecialSchedule();
     $scope.loadHistory();  
      $scope.loadSchedule();
     Notifications.message("Horario especial almacenado con exito");
