@@ -152,6 +152,19 @@ class GetLaboralInsertionData:
 
 
 
+    def _prepareCvs(self,cvs):
+        b64s = []
+        for c in cvs:
+            b64 = base64.b64encode(c['cv']).decode('utf-8')
+            b64s.append({
+                'data':b64,
+                'name':c['name'],
+                'username':c['username'],
+                'lastname':c['lastname']
+            })
+        return b64s
+
+
     def handleAction(self, server, message):
 
         if (message['action'] != 'getLaboralInsertionData'):
@@ -169,7 +182,10 @@ class GetLaboralInsertionData:
             data = self._arrangeForOds(con,laboralInsertion)
             b64 = self._exportToOds(data)
 
-            response = {'id':message['id'],'ok':'','base64':b64}
+            cvs = self.LaboralInsertion.findAllCvs(con)
+            bcvs = self._prepareCvs(cvs)
+
+            response = {'id':message['id'],'ok':'','base64':b64, 'cvs':bcvs}
             server.sendMessage(response)
             return True
 
