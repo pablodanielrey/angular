@@ -121,7 +121,6 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
     Assistance.getOfficesByUserRole(userId,role,tree,
       function(groups) {
         $scope.model.groups = groups;
-        console.log(groups);
       },
       function(error) {
         Notifications.message(error);
@@ -286,6 +285,7 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
       newAssistance = $scope.formatAssistance(newAssistance);
       newAssistance.date = Utils.formatDate(new Date(j.begin));
       newAssistance.dateSort = Utils.formatDateExtend(new Date(j.begin));
+
       newAssistance.displayLogs = false;
       newAssistance.displayJustification = false;
 
@@ -380,7 +380,7 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
     if(assistance.start != null){
       var start = new Date(assistance.start);
       newAssistance.date = Utils.formatDate(start);
-      newAssistance.dateSort = Utils.formatDateExtend(start);
+      newAssistance.dateSort = start;
       newAssistance.start = Utils.formatTime(start);
     };
 

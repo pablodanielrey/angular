@@ -20,6 +20,10 @@
   margin-bottom:5px;
 }
 
+.showAssistance .searchDate {
+  margin-left: 10px;
+  color:#0066A6;
+}
 
 .showAssistance .content {
   display: flex;

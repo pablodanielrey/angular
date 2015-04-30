@@ -41,6 +41,7 @@
 
         <div>
           <button class="searchButtom" ng-click="searchAssistance()" ng-class="{false:'enabled',true:'disabled'}[isDisabled()]" ng-disabled="isDisabled()"><i class="fa fa-search"></i> Buscar</button>
+          <span class="searchDate" ng-if='isDisabled()'><i class="loading fa fa-spinner fa-spin"></i>  Buscando Datos</span>
         </div>
 
 
