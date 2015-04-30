@@ -80,7 +80,6 @@ app.service('Utils', function() {
     var s = new Date(startDate);
     var dates = new Array();
     while (s <= endDate) {
-        console.log(s);
         dates.push(new Date(s));
         s.setDate(s.getDate() + 1);
     }

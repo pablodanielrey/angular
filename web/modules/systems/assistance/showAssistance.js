@@ -263,13 +263,16 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
 
     // tiene las justificaciones que no machean con ninguna asistencia
     var auxJustifications = justifications.slice();
+
     for (var $i = 0; $i < justifications.length; $i++) {
       var j = justifications[$i];
       j.date = new Date(j.begin);
       j.date = Utils.formatDate(j.date);
       for (var $k = 0; $k < $scope.model.assistances.length; $k++) {
         var a = $scope.model.assistances[$k];
-        if (j != null && a.date == j.date) {
+
+        //verifico que la fecha de la justificacion sea igual a la de la asistencia y que tenga el mismo usuario
+        if (j != null && a.date == j.date && j.user_id == a.userId) {
           var index = auxJustifications.indexOf(j);
           auxJustifications.splice(index,1);
           a.justification = j;
@@ -278,6 +281,7 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
       }
     }
 
+    //creo una asistencia por cada justificacion que quedo pendiente, es decir que no corresponde a ninguna marcacion
     for (var $i = 0; $i < auxJustifications.length; $i++) {
       var j = auxJustifications[$i];
       var newAssistance = {};
