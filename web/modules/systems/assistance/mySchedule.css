@@ -216,6 +216,8 @@
   margin-top:14px;
 }
 
+.mySchedule .disabled{background-color:gray;}
+
 /*HISTORIAL*/
 
 .mySchedule .historySchedule {
