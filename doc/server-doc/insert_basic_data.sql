@@ -29,6 +29,12 @@ insert into assistance.justifications (id,name) values ('50998530-10dd-4d68-8b4a
 
 
 /*
+  creo los checks para todos los usuarios.
+*/
+insert into assistance.checks (id,user_id,type,date,enabled) select id,id,'PRESENCE','2015-01-01 00:00:00',true from profile.users; 
+
+
+/*
   genera que el usuario admin tenga rol de autorizar dentro de las oficinas raiz
 */
 insert into assistance.offices_roles (user_id,role,office_id) select '1','autoriza',id from assistance.offices o where o.parent is null;

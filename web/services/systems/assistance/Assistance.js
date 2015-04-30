@@ -5,6 +5,30 @@ app.service('Assistance', ['Utils','Messages','Session',
 	function(Utils,Messages,Session) {
 
 		/*
+		Obtiene todos los usuarios de las oficinas pasadas como parametro
+		*/
+
+		this.getOfficesUsers = function(offices, callbackOk, callbackError) {
+			var msg = {
+				id: Utils.getId(),
+				action: 'getOfficesUsers',
+				session: Session.getSessionId(),
+				request: {
+					offices: offices
+				}
+			}
+
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response.users);
+					} else {
+						callbackError(data.error);
+					}
+				});
+		}
+
+		/*
 			Obtiene los usuarios que se encuentran dentro de las oficinas a las cuales el usuario loggeado tiene
 			un rol determinado.
 		*/
@@ -75,6 +99,27 @@ app.service('Assistance', ['Utils','Messages','Session',
 				});
 		};
 
+		this.getAssistanceStatusByUsers = function(usersIds, dates, callbackOk, callbackError) {
+			var msg = {
+				id: Utils.getId(),
+				action: 'getAssistanceStatusByUsers',
+				session: Session.getSessionId(),
+				request:{
+					usersIds: usersIds,
+					dates: dates
+				}
+			}
+
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response);
+					} else {
+						callbackError(data.error);
+					}
+				});
+		};
+
 
 		this.getAssistanceStatus = function(userId, callbackOk, callbackError) {
 			var msg = {
@@ -117,6 +162,32 @@ app.service('Assistance', ['Utils','Messages','Session',
 				});
 		};
 
+
+		this.getOfficesByUserRole = function(userId,role,tree, callbackOk, callbackError) {
+			var msg = {
+				id: Utils.getId(),
+				action: 'getOfficesByUserRole',
+				session: Session.getSessionId(),
+
+				request:{
+					user_id: userId,
+					tree:tree
+				}
+			}
+
+			if (role != null) {
+				msg.request.role = role;
+			}
+
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response.offices);
+					} else {
+						callbackError(data.error);
+					}
+				});
+		};
 
 		this.getOfficesByUser = function(userId, callbackOk, callbackError) {
 			var msg = {
@@ -205,6 +276,41 @@ app.service('Assistance', ['Utils','Messages','Session',
 				});
 		};
 
+
+		this.getJustificationRequestsByDate = function(status, usersIds, start, end, callbackOk, callbackError){
+			var msg = {
+				id: Utils.getId(),
+				action: 'getJustificationRequestsByDate',
+				session: Session.getSessionId(),
+				request: {
+				}
+			}
+
+			if (status != null) {
+				msg.request.status = status;
+			}
+
+			if (usersIds != null) {
+				msg.request.usersIds = usersIds;
+			}
+
+			if (start != null) {
+				msg.request.start = start;
+			}
+
+			if (end != null) {
+				msg.request.end = end;
+			}
+
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response.requests);
+					} else {
+						callbackError(data.error);
+					}
+			});
+		}
 
 		this.getJustificationRequestsToManage = function(status, group, callbackOk, callbackError){
 			var msg = {

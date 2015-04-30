@@ -47,6 +47,7 @@
         <div ng-click="predicate = 'fail.wh'; reverse=!reverse" class="workingHours"><i class="fa fa-sort"></i> Hora de marcación</div>
         <div ng-click="predicate = 'fail.diff'; reverse=!reverse" class="diff"><i class="fa fa-sort"></i> Diferencia </div>
         <div ng-click="predicate = 'fail.description'; reverse=!reverse" class="description"><i class="fa fa-sort"></i> Description</div>
+        <div ng-click="predicate = 'justification.id'; reverse=!reverse" class="justification"><i class="fa fa-sort"></i> Justificación</div>
 
     </div>
     <div class="fails">
@@ -60,6 +61,8 @@
         <div class="workingHours">{{assistanceFail.fail.wh}}</div>
         <div class="diff">{{assistanceFail.fail.diff}}</div>
         <div class="description">{{assistanceFail.fail.description}}</div>
+        <div class="justification">{{assistanceFail.justification.name}} -- {{assistanceFail.justification.begin}}</div>
+
       </div>
     </div>
   </div>

@@ -63,8 +63,40 @@ class Assistance:
 
 
     """
+        chequea el schedule de los usuarios pasados como parametro.
+        las fechas start y end son aware
+    """
+    def checkSchedule(self, userIds, start, end):
+
+        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+        try:
+
+            if self.date.isNaive(start):
+                start = self.date.localizeLocal(start)
+
+            if self.date.isNaive(end):
+                end = self.date.localizeLocal(end)
+
+            schedulesFails = []
+            users = []
+            for u in userIds:
+                logging.debug('chequeando usuario %s',(u,))
+                users.append(self.users.findUser(con,u))
+                schedulesFails.extend(self.schedule.checkConstraints(con,u,start,end))
+
+            justifications = self.justifications.getJustificationRequestsByDate(con,status=['APPROVED'],users=userIds,start=start,end=end)
+
+            return (users,schedulesFails,justifications)
+
+        finally:
+            con.close()
+
+
+
+    """
         chequea el schedule de los usuarios.
         las fechas start y end son aware
+    """
     """
     def checkSchedule(self, start, end):
 
@@ -79,7 +111,7 @@ class Assistance:
 
 
             schedulesFails = []
-            userIds = self.schedule.getUsersInSchedules(con)
+            userIds = self.schedule.getUsersWithConstraints(con)
 
             users = []
             for u in userIds:
@@ -109,6 +141,7 @@ class Assistance:
 
         finally:
             con.close()
+    """
 
 
 

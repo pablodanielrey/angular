@@ -120,6 +120,21 @@ class Session:
             con.close()
 
 
+    """
+        actualiza el tiempo de expiración
+    """
+    def touch(self,id):
+        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+        try:
+            cur = con.cursor()
+            cur.execute('update system.sessions set expire = %s where id = %s',(datetime.datetime.now() + self.expire,id))
+            self.removeExpired(con)
+            con.commit()
+
+        finally:
+            con.close()
+
+
 
     def destroy(self, id):
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])

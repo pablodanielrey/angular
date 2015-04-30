@@ -242,3 +242,155 @@ class GetOffices:
 
         finally:
             con.close()
+
+
+"""
+
+query :
+{
+  id:,
+  action:"getOfficesByUserRole",
+  session:,
+  request:{
+      user_id: "id del usuario" -- opcional. si no existe el parámetro entonces retorna todas las oficinas.
+      role: "por defecto es administra"
+      tree: "True|False" -- obtiene todo el arbol de las oficinas abajo de las que la persona pertenece.
+  }
+
+}
+
+response :
+{
+  id: "id de la petición",
+  ok: "caso exito",
+  error: "error del servidor",
+  response:{
+    offices: [
+      {
+        id: 'id de la oficina',
+        name: 'nombre de la oficina',
+        parent: 'id de la oficina padre' -- o no existente en el caso de ser oficina de primer nivel.
+      }
+    ]
+  }
+
+}
+
+
+"""
+
+class GetOfficesByUserRole:
+
+    profiles = inject.attr(Profiles)
+    config = inject.attr(Config)
+    offices = inject.attr(Offices)
+
+    def handleAction(self, server, message):
+
+        if (message['action'] != 'getOfficesByUserRole'):
+            return False
+
+        userId = None
+        if 'request' in message and 'user_id' in message['request']:
+            userId = message['request']['user_id']
+
+        else:
+            response = {'id':message['id'], 'error':'Parámetros insuficientes'}
+            server.sendMessage(response)
+            return True
+
+        tree = False
+        if 'tree' in message['request']:
+            tree = message['request']['tree']
+
+        role = 'administra'
+        if 'role' in message['request']:
+            role = message['request']['role']
+
+
+        sid = message['session']
+        self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
+
+        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+        try:
+            offices = self.offices.getOfficesByUserRole(con,userId,tree,role)
+
+            response = {
+                'id':message['id'],
+                'ok':'',
+                'response':{
+                    'offices':offices
+                }
+            }
+            server.sendMessage(response)
+            return True
+
+        except psycopg2.DatabaseError as e:
+            raise e
+
+        finally:
+            con.close()
+
+
+
+"""
+retorna los usuarios que pertenecen a las oficinas y suboficinas en las cuales la persona userId tiene un rol determinado
+
+query:
+{
+  id:
+  action:'getOfficesUsers'
+  session:
+  request: {
+    offices:[] lista de ids de oficinas
+  }
+}
+
+response:
+{
+  id:
+  ok:
+  error:
+  response: {
+    users: [
+        userId: 'id del usuario'
+    ]
+  }
+}
+
+"""
+
+class GetOfficesUsers:
+
+    config = inject.attr(Config)
+    offices = inject.attr(Offices)
+
+    def handleAction(self, server, message):
+
+        if (message['action'] != 'getOfficesUsers'):
+            return False
+
+        if 'offices' not in message['request']:
+            raise MalformedMessage()
+
+
+        offices = message['request']['offices']
+        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+        try:
+            users = self.offices.getOfficesUsers(con,offices)
+
+            response = {
+                'id':message['id'],
+                'ok':'',
+                'response': {
+                    'users':users
+                }
+            }
+            server.sendMessage(response)
+            return True
+        except Exception as e:
+            logging.exception(e)
+            raise e
+
+        finally:
+            con.close()
