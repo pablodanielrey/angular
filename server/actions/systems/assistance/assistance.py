@@ -58,6 +58,17 @@ class GetFailsByDate:
     schedule = inject.attr(Schedule)
 
 
+
+
+    def _filterJustificationsByUser(self,justifications,userId):
+        result = []
+        for j in justifications:
+            if j['user_id'] == userId:
+                result.append(j)
+        return result
+
+
+
     def handleAction(self, server, message):
 
         if(message['action'] != 'getFailsByDate'):
@@ -92,17 +103,18 @@ class GetFailsByDate:
 
 
             assistanceFails = []
-            (users,fails) = self.assistance.checkSchedule(authorizedUsers,start,end)
+            (users,fails,justifications) = self.assistance.checkSchedule(authorizedUsers,start,end)
 
-            logging.debug(fails)
 
             for user in users:
                 ffails = self.fails.filterUser(user['id'],fails)
+                jjust = self._filterJustificationsByUser(justifications,user['id'])
                 for f in ffails:
                     f['date'] = self.dateutils.localizeAwareToLocal(f['date']);
                     data = {
                         'user':user,
-                        'fail':f
+                        'fail':f,
+                        'justification': jjust
                     }
                     assistanceFails.append(data)
 

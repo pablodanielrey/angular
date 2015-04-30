@@ -84,7 +84,9 @@ class Assistance:
                 users.append(self.users.findUser(con,u))
                 schedulesFails.extend(self.schedule.checkConstraints(con,u,start,end))
 
-            return (users,schedulesFails)
+            justifications = self.justifications.getJustificationRequestsByDate(con,status=['APPROVED'],users=userIds,start=start,end=end)
+
+            return (users,schedulesFails,justifications)
 
         finally:
             con.close()

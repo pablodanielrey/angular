@@ -6,14 +6,39 @@ app.controller('AssistanceFailsCtrl', ["$scope", "$timeout", "Assistance", "Noti
     searching: false,
     begin: new Date(),
     end: new Date(),
-    assistanceFails:[{}]
+    assistanceFails:[{}],
+    justifications:[]
   };
+
+
+  $scope.loadJustifications = function() {
+    Assistance.getJustifications(
+      function(justifications) {
+        $scope.model.justifications = justifications;
+      },
+      function(err) {
+        Notifications.message(err);
+      }
+    );
+  }
+
+  $scope.getJustificationById = function(id) {
+    for (var i = 0; i < $scope.model.justifications.length; i++) {
+      var j = $scope.model.justifications[i];
+      console.log(j);
+      if (j.id == id) {
+        return j;
+      }
+    }
+  }
+
 
   $scope.initialize = function() {
     $scope.model.begin = new Date();
     $scope.model.end = new Date();
     $scope.model.assistanceFails = [{}];
     $scope.initializeDate();
+    $scope.loadJustifications();
   };
 
   $scope.correctDates = function() {
@@ -42,10 +67,18 @@ app.controller('AssistanceFailsCtrl', ["$scope", "$timeout", "Assistance", "Noti
         for (var i = 0; i < response.length; i++) {
 
           var r = response[i];
+
+          if (r.justification.length > 0) {
+            var j = $scope.getJustificationById(r.justification[0].justification_id);
+            var just = r.justification[0];
+            just.name = j.name;
+            r.justification = just;
+          }
+
           var date = new Date(r.fail.date);
           r.fail.dateFormat = Utils.formatDate(date);
           r.fail.dateExtend = Utils.formatDateExtend(date);
-  
+
           if (r.fail.startSchedule || r.fail.endSchedule) {
             r.fail.dateSchedule = (r.fail.startSchedule) ? r.fail.startSchedule : r.fail.endSchedule;
             r.fail.dateSchedule = Utils.formatTime(new Date(r.fail.dateSchedule));
@@ -58,7 +91,7 @@ app.controller('AssistanceFailsCtrl', ["$scope", "$timeout", "Assistance", "Noti
             r.fail.wh = (r.fail.start) ?  new Date(r.fail.start) : new Date(r.fail.end);
             r.fail.wh =  Utils.formatTime(r.fail.wh);
           }
-          
+
           // esto es de prueba
           // r.fail.seconds = 3825;
 

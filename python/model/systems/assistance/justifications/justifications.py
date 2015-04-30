@@ -149,6 +149,8 @@ class Justifications:
     """
     def getJustificationRequestsByDate(self,con,status=None,users=None,start=None,end=None):
 
+        logging.debug('buscando justifications : {}, {}, {}, {}'.format(status,users,start,end))
+
         cur = con.cursor()
 
         statusR = self._getJustificationsInStatus(con,status)
@@ -174,7 +176,7 @@ class Justifications:
                 if users is None or len(users) <= 0:
                     cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where jbegin >= %s and id in %s',(end,rids))
                 else:
-                    cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where jbegin >= %s and id in %s and user_id in %s',(start,end,rids,tuple(users)))                
+                    cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where jbegin >= %s and id in %s and user_id in %s',(start,end,rids,tuple(users)))
 
         if cur.rowcount <= 0:
             return []
@@ -193,7 +195,11 @@ class Justifications:
                 }
             )
 
+        logging.debug('justifications : {}'.format(requests))
+
+
         return requests
+
 
 
 
