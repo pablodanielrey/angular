@@ -1,5 +1,5 @@
 
-app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance", "Notifications", "Session", "Users", function ($scope, $window, $timeout, Assistance, Notifications, Session, Users) { 
+app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance", "Notifications", "Session", "Users", "Utils", function ($scope, $window, $timeout, Assistance, Notifications, Session, Users, Utils) { 
   
   //***** Definir variables *****
   if(!$scope.model) $scope.model = {};
@@ -81,16 +81,18 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
   
   $scope.loadScheduleTest = function(){
     var result = [
-      {day:'monday', start:'10:00:00', end:'12:00:00'},
-      {day:'monday', start:'15:00:00', end:'18:00:00'},
-      {day:'tuesday', start:'09:00:00', end:'18:00:00'},
-      {day:'wednesday', start:'15:00:00', end:'18:00:00'}
+      {day:'monday', start:'2015-01-01 10:00:00', end:'2015-01-01 12:00:00'},
+      {day:'monday', start:'2015-01-01 15:00:00', end:'2015-01-01 18:00:00'},
+      {day:'tuesday', start:'2015-01-01 09:00:00', end:'2015-01-01 18:00:00'},
+      {day:'wednesday', start:'2015-01-01 15:00:00', end:'2015-01-01 18:00:00'},
+      {day:'thursday', start:'2015-01-01 18:00:00', end:null},
+      {day:'friday', start:null, end:'2015-01-01 04:00:00'}     
     ];
     
     $scope.setModelSchedule(result);
   };
   
-  $scope.setModelSchedule = function(schedule){    
+  $scope.setModelSchedule = function(schedule){       
     $scope.model.schedule = {
       monday:[],
       tuesday:[],
@@ -104,8 +106,16 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
     for(var day in $scope.model.schedule){
       for(var i = 0; i < schedule.length; i++){
         if(day === schedule[i].day){
-          var time = {start:schedule[i].start, end:schedule[i].end};
-          $scope.model.schedule[day].push(time);
+          if(schedule[i].start){
+            var date = new Date(schedule[i].start);
+            var time = {hour:Utils.formatTime(date), type:"start"};
+            $scope.model.schedule[day].push(time);
+          }
+          if(schedule[i].end){
+            var date = new Date(schedule[i].end);
+            var time = {hour:Utils.formatTime(date), type:"end"};
+            $scope.model.schedule[day].push(time);
+          }
         }
       } 
     }
