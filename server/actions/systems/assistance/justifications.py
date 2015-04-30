@@ -410,6 +410,7 @@ class GetJustificationRequestsByDate:
         status = None
         if 'status' in message['request']:
             status = message['request']['status']
+            status = status.split('|')
 
 
 
