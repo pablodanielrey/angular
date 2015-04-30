@@ -309,7 +309,7 @@
   margin-bottom:0px;
   margin-right:10px;
   font-size:18px;
-  
+
   width:252px;
   padding:5px;
   color:#128c78;
@@ -364,7 +364,7 @@
   -webkit-transition: height 0.2s;
 }
 .requestAssistance .subcontentDisplay div.info{
-  height:150px;
+  height:160px;
 }
 
 .requestAssistance .subcontentDisplay .titulo, .requestAssistance .subcontent .titulo{
@@ -394,12 +394,26 @@
   display:flex;
   align-content:center;
   background-color:white;
-  border: 1px inset;
-  width:76px;
-  margin-right:15px;
+
+
+  margin-right:10px;
   color:#0066A6;
 
 
+}
+.requestAssistance .spanSE2 {
+  display:flex;
+  align-content:center;
+  background-color:white;
+
+
+  margin-right:14px;
+  color:#0066A6;
+
+
+}
+.requestAssistance .timeMargin {
+  margin-bottom:2px;
 }
 
 /****FIN DE ACORDEON****/
