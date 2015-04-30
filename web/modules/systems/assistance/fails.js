@@ -68,11 +68,9 @@ app.controller('AssistanceFailsCtrl', ["$scope", "$timeout", "Assistance", "Noti
 
           var r = response[i];
 
-          if (r.justification.length > 0) {
-            var j = $scope.getJustificationById(r.justification[0].justification_id);
-            var just = r.justification[0];
-            just.name = j.name;
-            r.justification = just;
+          if ((r.justification != undefined) && (r.justification != null)) {
+            var j = $scope.getJustificationById(r.justification.justification_id);
+            r.justification.name = j.name;
           }
 
           var date = new Date(r.fail.date);

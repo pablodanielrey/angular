@@ -302,7 +302,7 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
 
   $scope.getJustifications = function() {
     // requestJustification buscar la justificacion
-    var status = null;
+    var status = "APPROVED";
     var start = $scope.model.start;
     var end = $scope.model.end;
     Assistance.getJustificationRequestsByDate(status, $scope.usersIds, start, end,
