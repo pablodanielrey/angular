@@ -157,6 +157,49 @@ class Schedule:
 
 
     """
+        obtiene tods los schedules para un usuario, incluyendo el historial
+    """
+    def getScheduleHistory(self,con,userId):
+
+        cur = con.cursor()
+        cur.execute('set time zone %s',('utc',))
+
+        """ obtengo todos los schedules"""
+        cur.execute("select sstart, send, date, isDayOfWeek, isDayOfMonth, isDayOfYear from assistance.schedule where \
+                    user_id = %s \
+                    order by date desc",(userId,))
+        scheduless = cur.fetchall()
+        if scheduless is None or len(scheduless) <= 0:
+            return []
+
+        schedules = []
+
+        if not self.date.isUTC(scheduless[0][2]):
+            raise FailedConstraints('date in database not in UTC')
+
+        for schedule in scheduless:
+
+            """ controlo que las fechas estén en utc """
+            if not (self.date.isUTC(schedule[0]) and self.date.isUTC(schedule[1])):
+                raise FailedConstraints('date in database not in UTC')
+
+
+            """ retorno los schedules con la fecha actual en utc - las fechas en la base deberían estar en utc """
+            schedules.append(
+                {
+                    'start':schedule[0],
+                    'end':schedule[1],
+                    'isDayOfWeek':schedule[3],
+                    'isDayOfMonth':schedule[4],
+                    'isDayOfYear':schedule[5]
+                }
+            )
+
+
+        return schedules
+
+
+    """
         obtiene los usuarios que tienen configurado algún chequeo
     """
     def getUsersWithConstraints(self,con):

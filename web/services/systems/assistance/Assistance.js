@@ -163,6 +163,27 @@ app.service('Assistance', ['Utils','Messages','Session',
 		};
 
 
+		this.getSchedules = function(userId, callbackOk, callbackError) {
+			var msg = {
+				id: Utils.getId(),
+				action: 'getSchedules',
+				session: Session.getSessionId(),
+				request:{
+					user_id: userId
+				}
+			}
+
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response);
+					} else {
+						callbackError(data.error);
+					}
+				});
+		};
+
+
 		this.getOfficesByUserRole = function(userId,role,tree, callbackOk, callbackError) {
 			var msg = {
 				id: Utils.getId(),

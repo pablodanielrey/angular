@@ -405,3 +405,96 @@ class GetAssistanceData:
 
         finally:
             con.close()
+
+
+
+"""
+
+{
+  id:,
+  action:"getSchedules",
+  session:,
+  request:{
+    user_id: "id del usuario",
+  }
+
+}
+
+response :
+{
+  id: "id de la petición",
+  ok: "caso exito",
+  error: "error del servidor",
+  response:{
+  	  schedule:[
+    		{
+    	       start: "fecha y hora de inicio del turno",
+    		   end: "fecha y hora de fin de turno",
+               isDayOfWeek:,
+               isDayOfMonth:,
+               isDayOfYear:
+    		}
+  	  ]
+  }
+
+}
+
+"""
+
+class GetSchedules:
+
+    profiles = inject.attr(Profiles)
+    config = inject.attr(Config)
+    schedule = inject.attr(Schedule)
+    positions = inject.attr(Positions)
+    dateutils = inject.attr(Date)
+
+
+
+
+    def handleAction(self, server, message):
+
+        if (message['action'] != 'getSchedules'):
+            return False
+
+        if 'request' not in message:
+            response = {'id':message['id'], 'error':'Insuficientes parámetros'}
+            server.sendMessage(response)
+            return True
+
+
+        """ precondiciones del request """
+        request = message['request']
+
+        if 'user_id' not in request:
+            response = {'id':message['id'], 'error':'Insuficientes parámetros'}
+            server.sendMessage(response)
+            return True
+
+        userId = request['user_id']
+
+
+        sid = message['session']
+        self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
+
+        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+        try:
+
+            schedule = self.schedule.getScheduleHistory(con,userId)
+
+            response = {
+                'id':message['id'],
+                'ok':'',
+                'response':{
+                    'userId': userId,
+                    'schedule':schedule
+                }
+            }
+            server.sendMessage(response)
+            return True
+
+        except Exception as e:
+            raise e
+
+        finally:
+            con.close()

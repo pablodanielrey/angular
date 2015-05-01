@@ -53,6 +53,9 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, As
         $scope.showAssistance = function() {
           $location.path('/showAssistance')
         }
+        $scope.mySchedule = function() {
+          $location.path('/mySchedule')
+        }
 
 
 
@@ -68,6 +71,7 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, As
                   $scope.items.push({ label:'Inicio', img:'fa-tachometer', function: $scope.summary});
                   $scope.items.push({ label:'Solicitudes', img:'fa-ticket', function: $scope.requestAssistance});
                   $scope.items.push({ label:'Control de Horario', img:'fa-clock-o', function: $scope.showAssistance});
+                  $scope.items.push({ label:'Mi Horario', img:'fa-clock-o', function: $scope.mySchedule});
 
                   Assistance.getUserOfficeRoles(
                       function(roles) {
