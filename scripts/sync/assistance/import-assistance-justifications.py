@@ -99,7 +99,7 @@ if __name__ == '__main__':
 
             """ busco la justificacion """
 
-            cur.execute('select id,name from assistance.justifications where name = %s',(just,))
+            cur.execute('select id,name from assistance.justifications where lower(name) = lower(%s)',(just,))
             if cur.rowcount != 1:
                 logging.warn('fecha {} ignorando {} ya que no se encuentra la justificacion {}'.format(fecha,dni,just))
                 continue
