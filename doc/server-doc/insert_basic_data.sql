@@ -25,13 +25,13 @@ insert into assistance.justifications (id,name) values ('fa64fdbd-31b0-42ab-af83
 insert into assistance.justifications (id,name) values ('4d7bf1d4-9e17-4b95-94ba-4ca81117a4fb','Art 102');
 insert into assistance.justifications (id,name) values ('b70013e3-389a-46d4-8b98-8e4ab75335d0','Pre-Exámen');
 insert into assistance.justifications (id,name) values ('76bc064a-e8bf-4aa3-9f51-a3c4483a729a','Licencia Anual Ordinaria');
-insert into assistance.justifications (id,name) values ('50998530-10dd-4d68-8b4a-a4b7a87f3972','Resolución');
+insert into assistance.justifications (id,name) values ('50998530-10dd-4d68-8b4a-a4b7a87f3972','Art. 102');
 
 
 /*
   creo los checks para todos los usuarios.
 */
-insert into assistance.checks (id,user_id,type,date,enabled) select id,id,'PRESENCE','2015-01-01 00:00:00',true from profile.users; 
+insert into assistance.checks (id,user_id,type,date,enabled) select id,id,'PRESENCE','2015-01-01 00:00:00',true from profile.users;
 
 
 /*
