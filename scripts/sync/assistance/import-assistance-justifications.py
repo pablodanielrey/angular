@@ -111,10 +111,14 @@ if __name__ == '__main__':
                 continue
 
 
-            cur.execute('select id from assistance.justifications_requests where jbegin::date = %s',(ffecha,))
+            cur.execute('select id from assistance.justifications_requests where jbegin::date = %s and user_id = %s',(ffecha,pid))
             if cur.rowcount > 0:
-                logging.warn('{} ya tiene un pedido de justificatión para la fecha {}'.format(dni,fecha))
+                jid = cur.fetchone()[0]
+                logging.warn('{} ya tiene un pedido de justificatión para la fecha {}, id {}'.format(dni,fecha,jid))
                 continue
+
+
+            logging.warn('insertando {}'.format(line))
 
             fid = str(uuid.uuid4())
             cur.execute('insert into assistance.justifications_requests (id,user_id,justification_id,jbegin) values (%s,%s,%s,%s)',(fid,pid,jId,fecha))
