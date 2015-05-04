@@ -234,6 +234,7 @@ response :
   id: "id de la petición",
   ok: "caso exito",
   error: "error del servidor",
+  base64:'response en formato base64',
   response:[{
           userId: id del usuario consultado,
           status: 'estado del agente',

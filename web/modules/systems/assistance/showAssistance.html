@@ -42,10 +42,12 @@
         <div>
           <button class="searchButtom" ng-click="searchAssistance()" ng-class="{false:'enabled',true:'disabled'}[isDisabled()]" ng-disabled="isDisabled()"><i class="fa fa-search"></i> Buscar</button>
           <span class="searchDate" ng-if='isDisabled()'><i class="loading fa fa-spinner fa-spin"></i>  Buscando Datos</span>
-          <button class='save' ng-click='download()' ng-if='model.download'>Descargar datos</button>
         </div>
 
 
+      </div>
+      <div>
+        <button class='save' ng-click='download()' ng-if='model.download'>Descargar datos</button>
       </div>
       <div class="nav2">
         <div ng-click="reverseDate=!reverseDate;order(['dateSort'],reverseDate)"  class="tam1"><i class="fa fa-calendar-o"></i> Fecha</div>
