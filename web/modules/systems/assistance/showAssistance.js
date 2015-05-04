@@ -28,7 +28,7 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
 
   };
 
-  $scope.disabled = false;
+  $scope.disabled = false; //flag para deshabilitar busqueda
 
 
 // ----------- INICIALIZACION --------------------
@@ -287,13 +287,14 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
    * @returns {undefined}
    */
   $scope.getJustifications = function() {
-    var status = null; //se establece un valor de null para obtener todas las justificaciones
+    var status = "APPROVED"; //se establece un valor de null para obtener todas las justificaciones
     var start = $scope.model.start; //fecha de inicio de la busqueda
     var end = $scope.model.end; //fecha de fin de la busqueda
     var usersId = $scope.usersIds; //id de usuarios a buscar
-    Assistance.getJustificationRequestsByDate(null, $scope.usersIds, $scope.model.start, $scope.model.end,
+    Assistance.getJustificationRequestsByDate(status, $scope.usersIds, $scope.model.start, $scope.model.end,
       
       function ok(requests) {
+        console.log(requests);
         $scope.setJustifications(requests);
       },
       
@@ -302,7 +303,7 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
         $scope.disabled = false;
       }
     );
-  }
+  };
 
 
   /**
@@ -322,7 +323,7 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
         $scope.usersIds = $scope.getUsersIds(searchUsers);
         Assistance.getAssistanceStatusByUsers($scope.usersIds, $scope.searchDates,
             function ok(assistances) {
-
+  console.log(assistances);
               for (var i = 0; i < assistances.length; i++) {
                 var assistance = assistances[i];
                 var newAssistance = $scope.formatAssistance(assistance);
@@ -423,15 +424,15 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
 
   $scope.showLogs = function(v,assistance) {
     assistance.displayLogs = v;
-  }
+  };
 
   $scope.showJustifications = function(assistance) {
     assistance.displayJustification = !assistance.displayJustification;
-  }
+  };
 
   $scope.isDisabled = function() {
     return ($scope.disabled) ;
-  }
+  };
 
 
 }]);
