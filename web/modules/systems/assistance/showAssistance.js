@@ -11,6 +11,10 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
 
 
   $scope.model = {
+
+    base64:'',
+
+    download:false,
     //datos de assistance correspondientes a los usuarios
     assistances: [],
       /*ejemplo: {user: null, //nombre de usuario
@@ -50,6 +54,8 @@ $scope.order = function(predicate, reverse) {
     $scope.loadSession();
     $scope.loadUsers();
     $scope.clearUsersSelected();
+    $scope.model.download = false;
+
   }
 
   $scope.clearUsersSelected = function() {
@@ -295,6 +301,10 @@ $scope.order = function(predicate, reverse) {
     }
 
     $scope.disabled = false;
+
+
+    $scope.order('dateSort',false);//ordenamiento por defecto
+    $scope.model.download = true;
   }
 
 
@@ -337,7 +347,9 @@ $scope.order = function(predicate, reverse) {
 
         $scope.usersIds = $scope.getUsersIds(searchUsers);
         Assistance.getAssistanceStatusByUsers($scope.usersIds, $scope.searchDates,
-            function ok(assistances) {
+            function ok(response) {
+              var assistances = response.assistances;
+              $scope.model.base64 = response.base64;
               for (var i = 0; i < assistances.length; i++) {
                 var assistance = assistances[i];
                 var newAssistance = $scope.formatAssistance(assistance);
@@ -347,7 +359,6 @@ $scope.order = function(predicate, reverse) {
                 }
 
               }
-              $scope.order('dateSort',false);//ordenamiento por defecto
 
               $scope.getJustifications();
 
@@ -453,6 +464,18 @@ $scope.order = function(predicate, reverse) {
   $scope.isDisabled = function() {
     return ($scope.disabled) ;
   };
+
+
+// ---------- EXPORTAR DATOS --------
+
+  $scope.download = function() {
+    console.log($scope.model.base64);
+    if ($scope.model.base64 == null || $scope.model.base64 == '') {
+      return;
+    }
+    var blob = Utils.base64ToBlob($scope.model.base64);
+    window.saveAs(blob,'controlDeHorario.ods');
+  }
 
 
 }]);
