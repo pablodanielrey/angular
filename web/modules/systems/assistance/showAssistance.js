@@ -28,7 +28,6 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
 
   };
 
-  $scope.count = 0;
   $scope.disabled = false;
 
 
@@ -228,12 +227,16 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
   }
 
   $scope.formatJustification = function(justification) {
-    justification.startDate = Utils.formatTime(new Date(justification.begin));
+    justification.startDate = Utils.formatDate(new Date(justification.begin));
     justification.startTime = Utils.formatTime(new Date(justification.begin));
     justification.endDate = Utils.formatDate(new Date(justification.end));
     justification.endTime = Utils.formatTime(new Date(justification.end));
-  }
+  };
 
+
+  /**
+   * Asignar "justifications" a los "assistances" previamente consultados
+   */
   $scope.setJustifications = function(justifications) {
 
     // tiene las justificaciones que no machean con ninguna asistencia
@@ -241,11 +244,9 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
 
     for (var $i = 0; $i < justifications.length; $i++) {
       var j = justifications[$i];
-      j.date = new Date(j.begin);
-      j.date = Utils.formatDate(j.date);
+      j.date = Utils.formatDate(new Date(j.begin));
       for (var $k = 0; $k < $scope.model.assistances.length; $k++) {
-        var a = $scope.model.assistances[$k];
-
+        var a = $scope.model.assistances[$k]
         //verifico que la fecha de la justificacion sea igual a la de la asistencia y que tenga el mismo usuario
         if (j != null && a.date == j.date && j.user_id == a.userId) {
           var index = auxJustifications.indexOf(j);
@@ -261,55 +262,55 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
       var j = auxJustifications[$i];
       var newAssistance = {};
       newAssistance.userId = j.user_id;
+      newAssistance.start = new Date(j.begin);
       newAssistance = $scope.formatAssistance(newAssistance);
-      newAssistance.date = Utils.formatDate(new Date(j.begin));
-      newAssistance.dateSort = Utils.formatDateExtend(new Date(j.begin));
-
-      newAssistance.displayLogs = false;
-      newAssistance.displayJustification = false;
+      newAssistance.start = null; //redefino en null la hora de inicio
 
       newAssistance.justification = j;
       $scope.formatJustification(j);
       $scope.model.assistances.push(newAssistance);
     }
 
-
-    // decremento el contador
-    $scope.count = 0;
     $scope.disabled = false;
   }
 
+
+  /**
+   * En funcion de los datos del formulario se consultaran las justificaciones
+   * @returns {undefined}
+   */
   $scope.getJustifications = function() {
-    // requestJustification buscar la justificacion
-    var status = null;
-    var start = $scope.model.start;
-    var end = $scope.model.end;
-    Assistance.getJustificationRequestsByDate(status, $scope.usersIds, start, end,
+    var status = null; //se establece un valor de null para obtener todas las justificaciones
+    var start = $scope.model.start; //fecha de inicio de la busqueda
+    var end = $scope.model.end; //fecha de fin de la busqueda
+    var usersId = $scope.usersIds; //id de usuarios a buscar
+    Assistance.getJustificationRequestsByDate(null, $scope.usersIds, $scope.model.start, $scope.model.end,
+      
       function ok(requests) {
         $scope.setJustifications(requests);
       },
+      
+      //en caso de error se vuelve a habilitar la busqueda
       function error() {
-        // decremento el contador
-        $scope.count = 0;
         $scope.disabled = false;
       }
     );
   }
 
+
+  /**
+   * Metodo principal de busqueda de datos
+   */
   $scope.searchAssistance = function(){
     if(!$scope.disabled) {
-
-      $scope.predicate = 'dateSort';
+      $scope.disabled = true; //deshabilitar nuevas busquedas hasta no completar la actual
+      $scope.predicate = 'dateSort';  //ordenamiento por defecto
 
       $scope.model.assistances = [];
       $scope.searchDates = $scope.initializeSearchDates();
 
       if($scope.searchDates.length){
         var searchUsers = $scope.initializeSearchUsers($scope.searchDates); //si no existen usuarios seleccionados, se definen todos los usuarios
-
-        // cantidad de elementos a buscar, es para deshabilitar el buscador
-        $scope.count = $scope.searchDates.length * searchUsers.length;
-        $scope.disabled = true;
 
         $scope.usersIds = $scope.getUsersIds(searchUsers);
         Assistance.getAssistanceStatusByUsers($scope.usersIds, $scope.searchDates,
@@ -318,8 +319,7 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
               for (var i = 0; i < assistances.length; i++) {
                 var assistance = assistances[i];
                 var newAssistance = $scope.formatAssistance(assistance);
-                newAssistance.displayLogs = false;
-                newAssistance.displayJustification = false;
+                
                 if(assistance.start != null && assistance.userId != null){
                   $scope.model.assistances.push(newAssistance);
                 }
@@ -331,7 +331,6 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
             },
             function error(){
               // decremento el contador
-              $scope.count = 0;
               $scope.disabled = false;
               Notifications.message(error);
               throw new Error(error);
@@ -346,6 +345,9 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
   $scope.formatAssistance = function(assistance) {
     var newAssistance = {};
 
+    newAssistance.displayLogs = false;
+    newAssistance.displayJustification = false;
+                
     for(var i = 0; i < $scope.model.users.length; i++){
       var user = $scope.model.users[i];
       if(user.id == assistance.userId) {
