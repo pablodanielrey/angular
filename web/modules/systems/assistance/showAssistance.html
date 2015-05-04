@@ -31,11 +31,11 @@
        </div>
         <div>
           <div class="navTitle">Fecha Inicio</div>
-          <input class="navTitle2" type="date" ng-model="model.start" >
+          <input class="navTitle2" type="date" ng-model="model.start" ng-blur="checkDates()" >
         </div>
         <div>
           <div class="navTitle">Fecha Fin</div>
-          <input class="navTitle2" type="date" ng-model="model.end">
+          <input class="navTitle2" type="date" ng-model="model.end" ng-blur="checkDates()">
         </div>
 
 

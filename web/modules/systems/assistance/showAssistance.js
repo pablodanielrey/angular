@@ -211,12 +211,19 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
       dates.push(new Date());
     }
 
-
-
     return dates;
 
   };
-
+  
+  $scope.checkDates = function(){
+    if($scope.model.start == null){
+      $scope.model.start = new Date();
+    }
+    
+    if(($scope.model.end === null) || ($scope.model.start > $scope.model.end)){
+      $scope.model.end = $scope.model.start;
+    }    
+  };
 
   $scope.getUsersIds = function(users) {
     var ids = [];
@@ -423,7 +430,7 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
   }
 
   $scope.isDisabled = function() {
-    return ($scope.disabled) || ($scope.model.start == null) || ($scope.model.end == null);
+    return ($scope.disabled) ;
   }
 
 
