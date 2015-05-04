@@ -442,9 +442,11 @@ $scope.order = function(predicate, reverse) {
 
   $scope.showLogs = function(v,assistance) {
     assistance.displayLogs = v;
+    assistance.displayJustification = false;
   };
 
   $scope.showJustifications = function(assistance) {
+    assistance.displayLogs = false;
     assistance.displayJustification = !assistance.displayJustification;
   };
 
