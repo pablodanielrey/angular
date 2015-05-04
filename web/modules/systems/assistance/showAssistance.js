@@ -221,8 +221,11 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
     }
     
     if(($scope.model.end === null) || ($scope.model.start > $scope.model.end)){
-      $scope.model.end = $scope.model.start;
+      $scope.model.end =  new Date($scope.model.start);
     }    
+    
+    $scope.model.start.setHours(0,0,0,0);
+    $scope.model.end.setHours(23,59,59,999);    
   };
 
   $scope.getUsersIds = function(users) {
@@ -294,6 +297,7 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
     Assistance.getJustificationRequestsByDate(status, $scope.usersIds, $scope.model.start, $scope.model.end,
       
       function ok(requests) {
+        console.log("REQUEST");
         console.log(requests);
         $scope.setJustifications(requests);
       },
@@ -311,6 +315,7 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
    */
   $scope.searchAssistance = function(){
     if(!$scope.disabled) {
+      $scope.checkDates();
       $scope.disabled = true; //deshabilitar nuevas busquedas hasta no completar la actual
       $scope.predicate = 'dateSort';  //ordenamiento por defecto
 
@@ -323,6 +328,7 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
         $scope.usersIds = $scope.getUsersIds(searchUsers);
         Assistance.getAssistanceStatusByUsers($scope.usersIds, $scope.searchDates,
             function ok(assistances) {
+              console.log("ASSISTANCE");
   console.log(assistances);
               for (var i = 0; i < assistances.length; i++) {
                 var assistance = assistances[i];
