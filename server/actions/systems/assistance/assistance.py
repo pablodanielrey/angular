@@ -234,14 +234,15 @@ response :
   id: "id de la petición",
   ok: "caso exito",
   error: "error del servidor",
-  response:{[
-      userId: id del usuario consultado,
-      status: 'estado del agente',
-      start: "fecha y hora de inicio para el dia actual",
-      end: "fecha y hora fin para el dia actual",
-      logs: [ date1, date2, date3, .... ]       // son todas las marcaciones en bruto del dia actual
-      workedMinutes: 'minutos trabajados dentro del dia actual'
-  ]}
+  base64:'response en formato base64',
+  response:[{
+          userId: id del usuario consultado,
+          status: 'estado del agente',
+          start: "fecha y hora de inicio para el dia actual",
+          end: "fecha y hora fin para el dia actual",
+          logs: [ date1, date2, date3, .... ]       // son todas las marcaciones en bruto del dia actual
+          workedMinutes: 'minutos trabajados dentro del dia actual'
+        }]
 
 }
 """
@@ -277,7 +278,8 @@ class GetAssistanceStatusByUsers:
                 for d in dates:
                     date = self.date.parse(d)
                     s = self.assistance.getAssistanceStatus(con,userId,date)
-                    status.append(s)
+                    if (s != None):
+                        status.append(s)
 
             response = {
                 'id':message['id'],

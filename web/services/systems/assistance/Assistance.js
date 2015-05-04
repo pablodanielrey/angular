@@ -113,7 +113,8 @@ app.service('Assistance', ['Utils','Messages','Session',
 			Messages.send(msg,
 				function(data) {
 					if (typeof data.error === 'undefined') {
-						callbackOk(data.response);
+						var response = {base64:data.base64,assistances:data.response};
+						callbackOk(response);
 					} else {
 						callbackError(data.error);
 					}
