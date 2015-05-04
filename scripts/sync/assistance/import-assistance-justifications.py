@@ -6,6 +6,7 @@ from dateutil import parser
 import uuid, calendar
 import logging
 import re
+import time
 
 
 def localice(date):
@@ -78,7 +79,12 @@ if __name__ == '__main__':
 
 
             fecha = parser.parse(sfecha)
-            ffecha = fecha.date()
+
+            import pytz, datetime
+            local = pytz.timezone ("America/Buenos_Aires")
+            local_dt = local.localize(fecha, is_dst=None)
+            ffecha = local_dt.astimezone(pytz.utc)
+
 
             pid = str(uuid.uuid4())
             cur.execute('select id,dni from profile.users where dni = %s', (dni,))
@@ -110,21 +116,26 @@ if __name__ == '__main__':
                 logging.warn('No se procesan todavía las boletas de salida')
                 continue
 
-
             cur.execute('select id from assistance.justifications_requests where jbegin::date = %s and user_id = %s',(ffecha,pid))
             if cur.rowcount > 0:
                 jid = cur.fetchone()[0]
+                """
+                cur.execute('delete from assistance.justifications_requests_status where request_id = %s',(jid,))
+                cur.execute('delete from assistance.justifications_requests where id = %s',(jid,))
+                """
                 logging.warn('{} ya tiene un pedido de justificatión para la fecha {}, id {}'.format(dni,fecha,jid))
                 continue
 
 
             logging.warn('insertando {}'.format(line))
 
-            fid = str(uuid.uuid4())
-            cur.execute('insert into assistance.justifications_requests (id,user_id,justification_id,jbegin) values (%s,%s,%s,%s)',(fid,pid,jId,fecha))
-            cur.execute('insert into assistance.justifications_requests_status (request_id,user_id,status) values (%s,%s,%s)',(fid,pid,'PENDING'))
-            cur.execute('insert into assistance.justifications_requests_status (request_id,user_id,status) values (%s,%s,%s)',(fid,'1','APPROVED'))
+            ffecha2 = datetime.datetime.now()
+            ffecha3 = ffecha2 + datetime.timedelta(seconds=5)
 
+            fid = str(uuid.uuid4())
+            cur.execute('insert into assistance.justifications_requests (id,user_id,justification_id,jbegin) values (%s,%s,%s,%s)',(fid,pid,jId,ffecha))
+            cur.execute('insert into assistance.justifications_requests_status (request_id,user_id,status,created) values (%s,%s,%s,%s)',(fid,pid,'PENDING',ffecha2))
+            cur.execute('insert into assistance.justifications_requests_status (request_id,user_id,status,created) values (%s,%s,%s,%s)',(fid,'1','APPROVED',ffecha3))
             con.commit()
 
     except Exception as e:
