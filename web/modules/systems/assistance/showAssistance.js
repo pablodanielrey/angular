@@ -297,8 +297,6 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
     Assistance.getJustificationRequestsByDate(status, $scope.usersIds, $scope.model.start, $scope.model.end,
       
       function ok(requests) {
-        console.log("REQUEST");
-        console.log(requests);
         $scope.setJustifications(requests);
       },
       
@@ -328,13 +326,11 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
         $scope.usersIds = $scope.getUsersIds(searchUsers);
         Assistance.getAssistanceStatusByUsers($scope.usersIds, $scope.searchDates,
             function ok(assistances) {
-              console.log("ASSISTANCE");
-  console.log(assistances);
               for (var i = 0; i < assistances.length; i++) {
                 var assistance = assistances[i];
                 var newAssistance = $scope.formatAssistance(assistance);
                 
-                if(assistance.start != null && assistance.userId != null){
+                if(assistance.userId != null){
                   $scope.model.assistances.push(newAssistance);
                 }
 
@@ -361,6 +357,10 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
 
     newAssistance.displayLogs = false;
     newAssistance.displayJustification = false;
+    
+    var date = new Date(assistance.date);
+    newAssistance.date = Utils.formatDate(date);
+    newAssistance.dateSort = date;
                 
     for(var i = 0; i < $scope.model.users.length; i++){
       var user = $scope.model.users[i];
@@ -373,8 +373,6 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
 
     if(assistance.start != null){
       var start = new Date(assistance.start);
-      newAssistance.date = Utils.formatDate(start);
-      newAssistance.dateSort = start;
       newAssistance.start = Utils.formatTime(start);
     };
 
