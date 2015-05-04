@@ -26,7 +26,6 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
     usersIdSelected: [], //ids de usuarios seleccionados
     searchUser: null, // string con el usuario buscado
 
-    isSearch: [], //este array se utiliza para definir si se esta realizando una busqueda y en caso afirmativo deshabilitar una nueva busqueda. Los valores del array resultaran de una combinacion de los usuarios a buscar y las fechas a buscar. A medida que el servidor retorne datos para un usuario y fecha dadas, se iran eliminando los valores del array. CUando el array se encuentre vacio, significa que ya se realizaron todas las busquedas posibles.
   };
 
   $scope.count = 0;
@@ -220,30 +219,6 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
   };
 
 
-  $scope.defineIsSearch = function(searchDates, searchUsers){
-    for(var i = 0; i < searchDates.length; i++){
-      for(var j = 0; j < searchUsers.length; j++){
-        var strDate = searchDates[i].toLocaleDateString();
-        var strUserId = searchUsers[j].id;
-        $scope.model.isSearch.push(strDate + strUserId);
-      }
-    }
-  };
-
-  $scope.removeIsSearchValue = function(assistance){
-    if(assistance.start == null || assistance.userId == null || $scope.model.isSearch.length === 0){
-      $scope.model.isSearch = [];
-      return;
-    }
-
-    var start = new Date(assistance.start);
-    var userId = assistance.userId;
-
-    var isSearch = start.toLocaleDateString()+userId;
-    var index = $scope.model.isSearch.indexOf(isSearch);
-    $scope.model.isSearch.splice(index, 1);
-  };
-
   $scope.getUsersIds = function(users) {
     var ids = [];
     for (var i = 0; i < users.length; i++) {
@@ -331,7 +306,6 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
 
       if($scope.searchDates.length){
         var searchUsers = $scope.initializeSearchUsers($scope.searchDates); //si no existen usuarios seleccionados, se definen todos los usuarios
-        $scope.defineIsSearch($scope.searchDates, searchUsers);
 
         // cantidad de elementos a buscar, es para deshabilitar el buscador
         $scope.count = $scope.searchDates.length * searchUsers.length;
