@@ -42,6 +42,12 @@ class Assistance:
 
         logging.debug('from: {}, to: {}'.format(From,To))
 
+        # Chequeo que tenga horario
+        scheds = self.schedule.getSchedule(con,userId,From)
+        if (scheds is None) or (len(scheds) <= 0):
+            """ no tiene horario declarado asi que no se chequea nada """
+            return None
+
         logs = self.logs.findLogs(con,userId,From,To)
         logging.debug('logs {}'.format(logs))
 

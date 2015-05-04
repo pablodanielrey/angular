@@ -277,7 +277,8 @@ class GetAssistanceStatusByUsers:
                 for d in dates:
                     date = self.date.parse(d)
                     s = self.assistance.getAssistanceStatus(con,userId,date)
-                    status.append(s)
+                    if (s != None):
+                        status.append(s)
 
             response = {
                 'id':message['id'],
