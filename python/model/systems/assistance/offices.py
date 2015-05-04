@@ -128,6 +128,19 @@ class Offices:
 
         users = []
         cur = con.cursor()
+
+        # Obtengo las suboficinas
+        logging.debug("------------------------")
+        logging.debug(offices)
+
+        logging.debug("------------------------")
+        child = self._getChildOffices(con,offices)
+
+        for o in child:
+            offices.append(o['id'])
+
+        logging.debug(offices)
+
         cur.execute('select distinct user_id from assistance.offices_users ou where ou.office_id in %s',(tuple(offices),))
         if cur.rowcount <= 0:
             return []
