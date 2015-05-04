@@ -1,9 +1,14 @@
 
 var app = angular.module('mainApp');
-app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifications" , "Session", "Assistance", "Users", "Utils", function($scope, $timeout, $window, Notifications, Session, Assistance, Users, Utils) {
+app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifications" , "Session", "Assistance", "Users", "Utils","$filter", function($scope, $timeout, $window, Notifications, Session, Assistance, Users, Utils,$filter) {
+
+
+
+
 
 
 // Variables
+
 
   $scope.model = {
     //datos de assistance correspondientes a los usuarios
@@ -29,6 +34,14 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
   };
 
   $scope.disabled = false; //flag para deshabilitar busqueda
+
+
+// ------------ ORDENACION ///////////////////
+$scope.orderBy = $filter('orderBy');
+
+$scope.order = function(predicate, reverse) {
+  $scope.model.assistances = $scope.orderBy($scope.model.assistances, predicate, reverse);
+};
 
 
 // ----------- INICIALIZACION --------------------
@@ -214,18 +227,18 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
     return dates;
 
   };
-  
+
   $scope.checkDates = function(){
     if($scope.model.start == null){
       $scope.model.start = new Date();
     }
-    
+
     if(($scope.model.end === null) || ($scope.model.start > $scope.model.end)){
       $scope.model.end =  new Date($scope.model.start);
-    }    
-    
+    }
+
     $scope.model.start.setHours(0,0,0,0);
-    $scope.model.end.setHours(23,59,59,999);    
+    $scope.model.end.setHours(23,59,59,999);
   };
 
   $scope.getUsersIds = function(users) {
@@ -295,11 +308,11 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
     var end = $scope.model.end; //fecha de fin de la busqueda
     var usersId = $scope.usersIds; //id de usuarios a buscar
     Assistance.getJustificationRequestsByDate(status, $scope.usersIds, $scope.model.start, $scope.model.end,
-      
+
       function ok(requests) {
         $scope.setJustifications(requests);
       },
-      
+
       //en caso de error se vuelve a habilitar la busqueda
       function error() {
         $scope.disabled = false;
@@ -315,7 +328,6 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
     if(!$scope.disabled) {
       $scope.checkDates();
       $scope.disabled = true; //deshabilitar nuevas busquedas hasta no completar la actual
-      $scope.predicate = 'dateSort';  //ordenamiento por defecto
 
       $scope.model.assistances = [];
       $scope.searchDates = $scope.initializeSearchDates();
@@ -329,12 +341,13 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
               for (var i = 0; i < assistances.length; i++) {
                 var assistance = assistances[i];
                 var newAssistance = $scope.formatAssistance(assistance);
-                
+
                 if(assistance.userId != null){
                   $scope.model.assistances.push(newAssistance);
                 }
 
               }
+              $scope.order('dateSort',false);//ordenamiento por defecto
 
               $scope.getJustifications();
 
@@ -357,11 +370,10 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
 
     newAssistance.displayLogs = false;
     newAssistance.displayJustification = false;
-    
+
     var date = new Date(assistance.date);
     newAssistance.date = Utils.formatDate(date);
-    newAssistance.dateSort = date;
-                
+
     for(var i = 0; i < $scope.model.users.length; i++){
       var user = $scope.model.users[i];
       if(user.id == assistance.userId) {
@@ -371,8 +383,10 @@ app.controller('ShowAssistanceCtrl', ["$scope", "$timeout", "$window", "Notifica
       }
     }
 
+    newAssistance.dateSort = date;
     if(assistance.start != null){
       var start = new Date(assistance.start);
+      newAssistance.dateSort = start;
       newAssistance.start = Utils.formatTime(start);
     };
 

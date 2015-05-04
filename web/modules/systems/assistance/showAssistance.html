@@ -47,15 +47,15 @@
 
       </div>
       <div class="nav2">
-        <div ng-click="predicate = 'dateSort'; reverse=!reverse"  class="tam1"><i class="fa fa-calendar-o"></i> Fecha</div>
-        <div ng-click="predicate = 'user'; reverse=!reverse" class="tam2"><i class="fa fa-user"></i> Usuario</div>
-        <div ng-click="predicate = 'start'; reverse=!reverse" Class="tam1"><i class="fa fa-clock-o"></i> Entrada</div>
-        <div ng-click="predicate = 'end'; reverse=!reverse" class="tam1"><i class="fa fa-clock-o"></i> Salida</div>
-        <div ng-click="predicate = 'workedTime'; reverse=!reverse" class="tam1"><i class="fa fa-clock-o"></i> Total</div>
+        <div ng-click="reverseDate=!reverseDate;order(['dateSort'],reverseDate)"  class="tam1"><i class="fa fa-calendar-o"></i> Fecha</div>
+        <div ng-click="reverseUser=!reverseUser;order(['user','dateSort'],reverseUser)" class="tam2"><i class="fa fa-user"></i> Usuario</div>
+        <div ng-click="reverseStart=!reverseStart;order(['start','dateSort'],reverseStart)" Class="tam1"><i class="fa fa-clock-o"></i> Entrada</div>
+        <div ng-click="reverseEnd=!reverseEnd;order(['end','dateSort'],reverseEnd)" class="tam1"><i class="fa fa-clock-o"></i> Salida</div>
+        <div ng-click="reverseWT=!reverseWT;order(['workedTime','dateSort'],reverseWT)" class="tam1"><i class="fa fa-clock-o"></i> Total</div>
         <div class="tam3"><i class="fa fa-exclamation"></i> Observaciones</div>
       </div>
       <div class='dataUsersContent'>
-        <div class="results" ng-repeat="assistance in model.assistances | orderBy:predicate:reverse">
+        <div class="results" ng-repeat="assistance in model.assistances">
           <div class="tam1">{{assistance.date}}</div>
           <div class="tam2 textBlue">{{assistance.user}}</div>
           <div class="tam1">{{assistance.start}}</div>
