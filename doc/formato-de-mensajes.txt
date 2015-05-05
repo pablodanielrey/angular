@@ -160,7 +160,8 @@ query :
   action:"getAssistanceStatus",
   session:,
   request:{
-      user_id: "id del usuario"
+      user_id: "id del usuario",
+      date: "fecha a buscar"
   }
 
 }
@@ -180,6 +181,34 @@ response :
   }
 }
 
+-------
+
+query :
+{
+  id:,
+  action:"getAssistanceStatusByUsers",
+  session:,
+  request:{
+      usersIds: "listado de ids de los usuarios a buscar",
+      dates: "fechas a buscar"
+  }
+
+}
+
+response :
+{
+  id: "id de la petición",
+  ok: "caso exito",
+  error: "error del servidor",
+  response:{[
+      userId: id del usuario consultado,
+      status: 'estado del agente',
+      start: "fecha y hora de inicio para el dia actual",
+      end: "fecha y hora fin para el dia actual",
+      logs: [ date1, date2, date3, .... ]       // son todas las marcaciones en bruto del dia actual
+      workedMinutes: 'minutos trabajados dentro del dia actual'
+  ]}
+}
 
 -----
 
@@ -212,6 +241,8 @@ response :
   }
 
 }
+
+
 
 -----------
 obtiene todas las oficinas de un usuario.
@@ -337,6 +368,41 @@ response :
 	]
 
 }
+
+------------------------------
+"""
+query : Obtener todas las solicitudes de justificationces
+{
+  id:,
+  action:"getJustificationRequestsByDate",
+  session:,
+  request:{
+      status: 'estado de la justificacion PENDING|APPROVED|REJECTED|CANCELED' -- si no existe se obtienen todas,
+      start: 'fecha de inicio de la busqueda'
+      end: 'fecha limite de busqueda'
+      usersIds: ids de los usuarios a buscar
+  }
+}
+
+response :
+{
+  id: "id de la petición",
+  ok: "caso exito",
+  error: "error del servidor",
+  response:{
+    requests : [ "lista de solicitudes de un determinado usuario"
+  		{
+        id: "id de la solicitud de justificacion",
+        user_id:"id del usuario",
+    		justification_id: "id de la justificacion o licencia solicitada"
+    		begin: 2014-12-01 00:00:00 "fecha de inicio de la justificacion o licencia solicitada"
+    		end: 2014-12-02 00:00:00 "fecha de finalizacion de la justificacion o licencia solicitada"
+    		status: "PENDING|APPROVED|REJECTED|CANCELED"
+  		}
+	]
+
+}
+"""
 
 ------------
 

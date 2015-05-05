@@ -352,6 +352,109 @@ class GetJustificationRequestsToManage:
 
 
 
+
+"""
+query : Obtener todas las solicitudes de justificationces
+{
+  id:,
+  action:"getJustificationRequestsByDate",
+  session:,
+  request:{
+      status: 'estado de la justificacion PENDING|APPROVED|REJECTED|CANCELED' -- si no existe se obtienen todas,
+      start: 'fecha de inicio de la busqueda'
+      end: 'fecha limite de busqueda'
+      usersIds: 'ids de usuarios'
+  }
+}
+
+response :
+{
+  id: "id de la petición",
+  ok: "caso exito",
+  error: "error del servidor",
+  response:{
+    requests : [ "lista de solicitudes de un determinado usuario"
+  		{
+        id: "id de la solicitud de justificacion",
+        user_id:"id del usuario",
+    		justification_id: "id de la justificacion o licencia solicitada"
+    		begin: 2014-12-01 00:00:00 "fecha de inicio de la justificacion o licencia solicitada"
+    		end: 2014-12-02 00:00:00 "fecha de finalizacion de la justificacion o licencia solicitada"
+    		status: "PENDING|APPROVED|REJECTED|CANCELED"
+  		}
+	]
+
+}
+"""
+class GetJustificationRequestsByDate:
+
+    profiles = inject.attr(Profiles)
+    config = inject.attr(Config)
+    justifications = inject.attr(Justifications)
+
+    def handleAction(self, server, message):
+
+        if (message['action'] != 'getJustificationRequestsByDate'):
+            return False
+
+        if 'request' not in message:
+            response = {'id':message['id'], 'error':'Insuficientes parámetros'}
+            server.sendMessage(response)
+            return True
+
+        if 'usersIds' not in message['request']:
+            response = {'id':message['id'], 'error':'Insuficientes parámetros'}
+            server.sendMessage(response)
+            return True
+
+        status = None
+        if 'status' in message['request']:
+            status = message['request']['status']
+            status = status.split('|')
+
+
+
+        sid = message['session']
+        self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
+
+        userId = self.profiles.getLocalUserId(sid)
+
+        usersIds = message['request']['usersIds']
+
+
+
+        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+        try:
+
+            start = None
+            if 'start' in message['request']:
+                start = message['request']['start']
+
+            end = None
+            if 'end' in message['request']:
+                end = message['request']['end']
+
+            requests = []
+            if len(usersIds) > 0:
+                requests = self.justifications.getJustificationRequestsByDate(con,status,usersIds,start,end)
+
+            response = {
+                'id':message['id'],
+                'ok':'',
+                'response':{
+                    'requests':requests
+                }
+            }
+            server.sendMessage(response)
+            return True
+
+        except psycopg2.DatabaseError as e:
+            raise e
+
+        finally:
+            con.close()
+
+
 """
 
 query : Obtener todas las solicitudes de justificationces

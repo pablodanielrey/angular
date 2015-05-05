@@ -14,6 +14,90 @@ class Schedule:
     logs = inject.attr(Logs)
     date = inject.attr(Date)
 
+
+
+    """
+        retorna una lista cronológica de los chequeos a realizar para el usuario.
+        en el caso del chequeo de horas retora la cantidad de horas a chequear.
+
+        checks [
+            {
+                'start':fecha
+                'end':fecha
+                'type': 'NULL|PRESENCE|HOURS|SCHEDULE'
+            }
+        ]
+
+    """
+    def _getCheckData(self,con,userId):
+        cur = con.cursor()
+        cur.execute('select id,user_id,date,type,created from assistance.checks where user_id = %s order by date asc',(userId,))
+        if cur.rowcount <= 0:
+            return
+
+        data = cur.fetchall()
+        checks = []
+        last = None
+        current = None
+        for c in data:
+            current = {
+                'start':c[2],
+                'end':None,
+                'type':c[3]
+            }
+
+            if current['type'] == 'HOURS':
+                cur.execute('select hours from assistance.hours_check where id = %s',(c[0],))
+                h = cur.fetchone()
+                current['hours'] = h[0]
+
+            if last is not None:
+                last['end'] = current['start']
+                checks.append(last)
+            last = current
+
+        if last is not None:
+            checks.append(last)
+
+        return checks
+
+
+    """
+        Retorna la lista de logs determinada que debería tener un usuario para una fecha específica,
+        se tiene en cuenta el horario de la persona en la fecha y la fecha siguiente para obtener los logs correctos.
+    """
+    def _getLogsForSchedule(self,con,userId,date):
+
+        schedules = self.getSchedule(con,userId,date)
+        if schedules is None:
+            return []
+
+        if len(schedules) <= 0:
+            return []
+
+        schedules2 = []
+        days = 1
+        while schedules2 == None or len(schedules2) <= 0:
+            date2 = date + datetime.timedelta(days=days)
+            schedules2 = self.getSchedule(con,userId,date2)
+            days = days + 1
+
+        start2 = schedules2[0]['start']
+
+        start = schedules[0]['start']
+        end = schedules[-1]['end']
+
+        deltaEnd = end + datetime.timedelta(seconds=((start2 - end).total_seconds() / 2))
+        deltaStart = start - datetime.timedelta(hours=1)
+
+        logs = self.logs.findLogs(con,userId,deltaStart,deltaEnd)
+
+        return logs
+
+
+
+
+
     """
         obtiene tods los schedules para un usuario en determinada fecha, solo deja los actuales, tiene en cuenta el historial ordenado por date
         la fecha esta en UTC
@@ -73,6 +157,65 @@ class Schedule:
 
 
     """
+        obtiene tods los schedules para un usuario, incluyendo el historial
+    """
+    def getScheduleHistory(self,con,userId):
+
+        cur = con.cursor()
+        cur.execute('set time zone %s',('utc',))
+
+        """ obtengo todos los schedules"""
+        cur.execute("select sstart, send, date, isDayOfWeek, isDayOfMonth, isDayOfYear from assistance.schedule where \
+                    user_id = %s \
+                    order by date desc",(userId,))
+        scheduless = cur.fetchall()
+        if scheduless is None or len(scheduless) <= 0:
+            return []
+
+        schedules = []
+
+        if not self.date.isUTC(scheduless[0][2]):
+            raise FailedConstraints('date in database not in UTC')
+
+        for schedule in scheduless:
+
+            """ controlo que las fechas estén en utc """
+            if not (self.date.isUTC(schedule[0]) and self.date.isUTC(schedule[1])):
+                raise FailedConstraints('date in database not in UTC')
+
+
+            """ retorno los schedules con la fecha actual en utc - las fechas en la base deberían estar en utc """
+            schedules.append(
+                {
+                    'start':schedule[0],
+                    'end':schedule[1],
+                    'isDayOfWeek':schedule[3],
+                    'isDayOfMonth':schedule[4],
+                    'isDayOfYear':schedule[5]
+                }
+            )
+
+
+        return schedules
+
+
+    """
+        obtiene los usuarios que tienen configurado algún chequeo
+    """
+    def getUsersWithConstraints(self,con):
+        cur = con.cursor()
+        cur.execute('select distinct user_id from assistance.checks')
+        if cur.rowcount <= 0:
+            return []
+
+        users = []
+        for c in cur:
+            users.append(c[0])
+        return users
+
+
+
+    """
         reotnra los ids de los usuarios que tiene algun contról de horario
     """
     def getUsersInSchedules(self,con):
@@ -87,50 +230,97 @@ class Schedule:
         return users
 
 
+
+    """
+        chequea la restricción del usuario entre determinadas fechas
+        las fechas son aware.
+    """
+    def checkConstraints(self,con,userId,start,end):
+        checks = self._getCheckData(con,userId)
+        logging.debug('checks %s',(checks,))
+
+        if (checks is None) or (len(checks) <= 0):
+            return []
+
+        fails = []
+
+        actual = start
+        while actual <= end:
+
+            """ elijo el check indicado para la fecha actual """
+            check = None
+            for c in checks:
+                check = c
+                if (actual >= c['start']):
+                    if c['end'] is None:
+                        check = c
+                        break
+                    elif actual < c['end']:
+                        check = c
+                        break
+
+            nextDay = actual + datetime.timedelta(days=1)
+
+            if check is None:
+                actual = nextDay
+                continue
+
+            actualUtc = self.date.awareToUtc(actual)
+            scheds = self.getSchedule(con,userId,actualUtc)
+            if (scheds is None) or (len(scheds) <= 0):
+                """ no tiene horario declarado asi que no se chequea nada """
+                actual = nextDay
+                continue
+
+
+            if check['type'] == 'PRESENCE':
+                logging.debug('chequeando presencia')
+                logs = self._getLogsForSchedule(con,userId,actualUtc)
+                if (logs is None) or (len(logs) <= 0):
+                    fails.append(
+                        {
+                            'userId':userId,
+                            'date':actual,
+                            'description':'Sin marcación'
+                        }
+                    )
+
+            elif check['type'] == 'HOURS':
+                logs = self._getLogsForSchedule(con,userId,actualUtc)
+                whs,attlogs = self.logs.getWorkedHours(logs)
+                count = 0
+                for wh in whs:
+                    count = count + wh['seconds']
+
+                if count < (check['hours'] * 60 * 60):
+                    fails.append(
+                        {
+                            'userId':userId,
+                            'date':actual,
+                            'description':'No trabajó la cantidad mínima de minutos requeridos ({} < {})'.format(count / 60, check['hours'] * 60)
+                        }
+                    )
+
+            elif check['type'] == 'SCHEDULE':
+                fail = self.checkSchedule(con,userId,actualUtc)
+                fails.extend(fail)
+
+            actual = nextDay
+
+        return fails
+
+
+
+
     """
         chequea el schedule de la fecha pasada como parámetro (se supone aware)
-        los logs de agrupan por schedule, teniendo una tolerancia de 8 horas antes del siguiente schedule
-
+        los logs de agrupan por schedule.
+        teneiendo en cuenta la diferencia entre 2 schedules consecutivos dividido en 2.
     """
     def checkSchedule(self,con,userId,date):
         date = self.date.awareToUtc(date)
 
-        schedules = self.getSchedule(con,userId,date)
-        if schedules is None:
-            return []
-
-        if len(schedules) <= 0:
-            return []
-
-        schedules2 = []
-        days = 1
-        while schedules2 == None or len(schedules2) <= 0:
-            date2 = date + datetime.timedelta(days=days)
-            schedules2 = self.getSchedule(con,userId,date2)
-            days = days + 1
-
-        start2 = schedules2[0]['start']
-
-        start = schedules[0]['start']
-        end = schedules[-1]['end']
-
-        logging.debug(schedules);
-
-        logging.debug('start {} -- end {} '.format(start,end))
-
-        deltaEnd = end + datetime.timedelta(seconds=((start2 - end).total_seconds() / 3))
-        deltaStart = start - datetime.timedelta(hours=1)
-
-
-        logging.debug('Chequeando fechas : {} -> {}'.format(deltaStart,deltaEnd))
-
-        """
-            obtengo los logs indicados para cubrir todo el schedule
-        """
-        logs = self.logs.findLogs(con,userId,deltaStart,deltaEnd)
-
-        logging.debug(logs)
-
+        logs = self._getLogsForSchedule(con,userId,date)
         whs,attlogs = self.logs.getWorkedHours(logs)
         controls = list(utils.combiner(schedules,whs))
         fails = self._checkScheduleWorkedHours(userId,controls)
@@ -210,100 +400,3 @@ class Schedule:
                 )
 
         return fails
-
-
-
-    """
-        chequea los schedules contra las horas trabajadas
-        las fechas están en UTC y son aware
-    def checkSchedule(self,con,userId,start,end,whs):
-
-        #logging.debug('---------- check schedule ---------')
-        #logging.debug('start : {0}, end: {1}'.format(start,end))
-        #logging.debug('whs: {}'.format(whs))
-
-        fails = []
-
-        tolerancia = datetime.timedelta(minutes=15)
-
-        delta = end - start
-        dates = [ start ]
-        for i in range(delta.days):
-            dates.append(start + datetime.timedelta(days=i))
-
-        for date in dates:
-
-            #logging.debug('date: {}'.format(date))
-
-
-            whsInDate = list(filter(lambda wh: wh['start'].date() == date.date(),whs))
-            schedules = self.getSchedule(con,userId,date)
-            controls = list(utils.combiner(schedules,whsInDate))
-
-            date = self.date.localizeUtc(datetime.datetime.combine(date,datetime.time(0)))
-
-            #logging.debug('whsInDate: {}'.format(whsInDate))
-            #logging.debug('schedules: {}'.format(schedules))
-            #logging.debug('controls: {}'.format(controls))
-
-            for sched,wh in controls:
-
-                if sched is None:
-                    continue
-
-                if wh is None or 'start' not in wh or 'end' not in wh:
-                    fails.append(
-                        {
-                            'userId':userId,
-                            'date':date,
-                            'description':'No existe ninguna marcación para esa fecha'
-                        }
-                    )
-                    continue
-
-
-                if wh['start'] is None:
-                    fails.append(
-                        {
-                            'userId':userId,
-                            'date': date,
-                            'description':'Sin horario de llegada'
-                        }
-                    )
-
-                elif wh['start'] > sched['start'] + tolerancia:
-                    fails.append(
-                        {
-                            'userId':userId,
-                            'date': date,
-                            'description':'Llegada tardía',
-                            'startSchedule':sched['start'],
-                            'start':wh['start'],
-                            'minutes':wh['start'] - sched['start']
-                        }
-                    )
-
-
-                if wh['end'] is None:
-                    fails.append(
-                        {
-                            'userId':userId,
-                            'date': date,
-                            'description':'Sin horario de salida'
-                        }
-                    )
-
-                elif wh['end'] < sched['end'] - tolerancia:
-                    fails.append(
-                        {
-                            'userId':userId,
-                            'date': date,
-                            'description':'Salida temprana',
-                            'endSchedule':sched['end'],
-                            'end':wh['end'],
-                            'minutes':sched['end']-wh['end']
-                        }
-                    )
-
-            return (userId,fails)
-    """

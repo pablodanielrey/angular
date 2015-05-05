@@ -25,6 +25,8 @@ from model.utils import DateTimeEncoder
 from model.exceptions import *
 
 
+from model.session import Session
+
 """ actions del core """
 
 from actions.login.login import Login, Logout
@@ -32,15 +34,15 @@ from actions.login.password import ChangePassword, ResetPassword
 from actions.profiles.profiles import CheckAccess
 from actions.users.users import UpdateUser, FindUser, ListUsers
 from actions.users.mail import ListMails, PersistMail, ConfirmMail, RemoveMail
-from actions.requests.requests import CreateAccountRequest, ConfirmAccountRequest, ListAccountRequests, ApproveAccountRequest, RemoveAccountRequest, RejectAccountRequest
+from actions.requests.requests import CreateAccountRequest, ResendAccountRequest, ConfirmAccountRequest, ListAccountRequests, ApproveAccountRequest, RemoveAccountRequest, RejectAccountRequest
 
 
 """ sistemas """
 
-from actions.systems.assistance.assistance import GetAssistanceData, GetAssistanceStatus, GetFailsByDate
+from actions.systems.assistance.assistance import GetAssistanceData, GetAssistanceStatus, GetAssistanceStatusByUsers, GetFailsByDate, GetSchedules
 from actions.systems.assistance.logs import GetAssistanceLogs
-from actions.systems.assistance.offices import GetOffices, GetUserOfficeRoles, GetUserInOfficesByRole
-from actions.systems.assistance.justifications import GetJustifications, GetJustificationStock, GetJustificationRequests, GetJustificationRequestsToManage, RequestJustification, UpdateJustificationRequestStatus
+from actions.systems.assistance.offices import GetOffices, GetUserOfficeRoles, GetUserInOfficesByRole, GetOfficesByUserRole, GetOfficesUsers
+from actions.systems.assistance.justifications import GetJustifications, GetJustificationStock, GetJustificationRequests, GetJustificationRequestsToManage, GetJustificationRequestsByDate, RequestJustification, UpdateJustificationRequestStatus
 from actions.systems.assistance.overtime import GetOvertimeRequests, GetOvertimeRequestsToManage, RequestOvertime, UpdateOvertimeRequestStatus
 
 from actions.systems.students.students import CreateStudent, FindStudent, PersistStudent, FindAllStudents
@@ -69,16 +71,19 @@ actions = [
     PersistInstitutionalMail(), DeleteInstitutionalMail(), FindInstitutionalMail(),
     CreateStudent(), FindStudent(), PersistStudent(), FindAllStudents(),
     PersistTutorData(), ListTutorData(),
-    GetOffices(), GetUserOfficeRoles(), GetUserInOfficesByRole(),
-    GetAssistanceLogs(), GetAssistanceData(), GetFailsByDate(), GetAssistanceStatus(), GetOffices(), GetJustifications(), GetJustificationStock(), GetJustificationRequests(), GetJustificationRequestsToManage(), RequestJustification(), UpdateJustificationRequestStatus(),
+    GetOffices(), GetUserOfficeRoles(), GetUserInOfficesByRole(), GetOfficesByUserRole(), GetOfficesUsers(),
+    GetAssistanceLogs(), GetAssistanceData(), GetSchedules(), GetFailsByDate(), GetAssistanceStatus(), GetAssistanceStatusByUsers(), GetOffices(), GetJustifications(), GetJustificationStock(), GetJustificationRequests(), GetJustificationRequestsToManage(), GetJustificationRequestsByDate(), RequestJustification(), UpdateJustificationRequestStatus(),
     GetOvertimeRequests(), GetOvertimeRequestsToManage(), RequestOvertime(), UpdateOvertimeRequestStatus(),
-    CreateAccountRequest(), ConfirmAccountRequest(), ListAccountRequests(), ApproveAccountRequest(), RemoveAccountRequest(), RejectAccountRequest()
+    CreateAccountRequest(), ResendAccountRequest(), ConfirmAccountRequest(), ListAccountRequests(), ApproveAccountRequest(), RemoveAccountRequest(), RejectAccountRequest()
 ]
 
 
 
 
 class ActionsServerProtocol(WebSocketServerProtocol):
+
+
+    session = inject.attr(Session)
 
 
     def _encodeMessage(self,msg):
@@ -163,6 +168,11 @@ class ActionsServerProtocol(WebSocketServerProtocol):
 
             if 'id' not in message:
                 raise MalformedMessage()
+
+            if 'session' in message:
+                sid = message['session']
+                self.session.touch(sid)
+
 
             try:
                 managed = False

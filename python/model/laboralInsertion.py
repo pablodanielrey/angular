@@ -1,4 +1,5 @@
 import psycopg2
+import logging
 from model.objectView import ObjectView
 
 class LaboralInsertion:
@@ -17,7 +18,7 @@ class LaboralInsertion:
             d['degrees'] = degrees
 
         return data
-        
+
 
     def acceptTermsAndConditions(self,con,id):
 
@@ -86,6 +87,25 @@ class LaboralInsertion:
             cur.execute('update laboral_insertion.users_cv set cv = %s, name = %s where id = %s',params)
 
 
+    def findAllCvs(self,con):
+        cur = con.cursor()
+        cur.execute('select cv.cv,cv.name,u.name,u.lastname from laboral_insertion.users_cv as cv, profile.users as u where u.id = cv.id')
+        if cur.rowcount <= 0:
+            return []
+
+        cvs = []
+        for c in cur:
+            if c[0] is None:
+                continue
+
+            cvs.append({
+                'cv':c[0],
+                'name':c[1],
+                'username':c[2],
+                'lastname':c[3]
+            })
+
+        return cvs
 
 
     def findAll(self,con):

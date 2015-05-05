@@ -128,6 +128,19 @@ class Offices:
 
         users = []
         cur = con.cursor()
+
+        # Obtengo las suboficinas
+        logging.debug("------------------------")
+        logging.debug(offices)
+
+        logging.debug("------------------------")
+        child = self._getChildOffices(con,offices)
+
+        for o in child:
+            offices.append(o['id'])
+
+        logging.debug(offices)
+
         cur.execute('select distinct user_id from assistance.offices_users ou where ou.office_id in %s',(tuple(offices),))
         if cur.rowcount <= 0:
             return []
@@ -190,7 +203,7 @@ class Offices:
         obtiene todas las oficinas en las cuales el usuario tiene asignado un rol
         si tree=True obtiene todas las hijas también
     """
-    def getOfficesByUserRole(self,con,userId,tree=False,role='administra'):
+    def getOfficesByUserRole(self,con,userId,tree=False,role='autoriza'):
         cur = con.cursor()
         cur.execute('select id,parent,name from assistance.offices o, assistance.offices_roles ou where ou.user_id = %s and o.id = ou.office_id and ou.role = %s',(userId,role))
         if cur.rowcount <= 0:
@@ -207,6 +220,8 @@ class Offices:
             offices.extend(self._getChildOffices(con,ids))
 
         return offices
+
+
 
 
     """

@@ -61,6 +61,7 @@ if __name__ == '__main__':
     cur.execute('delete from assistance.offices_users')
     cur.execute('delete from assistance.offices_roles')
     cur.execute('delete from assistance.offices')
+    cur.execute('delete from assistance.checks')
     #cur.execute('delete from assistance.justifications_stock')
 
     logging.basicConfig(level=logging.DEBUG)
@@ -117,6 +118,13 @@ if __name__ == '__main__':
             cur.execute('select user_id from credentials.auth_profile where user_id = %s and profile = %s',(pid,'USER-ASSISTANCE'))
             if cur.rowcount <= 0:
                 cur.execute('insert into credentials.auth_profile (user_id,profile) values (%s,%s)',(pid,'USER-ASSISTANCE'))
+
+
+            """ actualizo lo de los chequeos para que chequee el schedule de todos por ahora """
+
+            check_id = str(uuid.uuid4())
+            check_date = datetime.datetime.now() - datetime.timedelta(days = 60)
+            cur.execute('insert into assistance.checks (id,user_id,date,enable,type) values (%s,%s,%s,%s,%s)',(check_id,pid,check_date,True,'PRESENCE'))
 
 
             """ actualizo el tema del horario """

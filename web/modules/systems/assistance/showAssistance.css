@@ -5,7 +5,9 @@
   font-family: calibri, Arial, Helvetica, sans-serif;
   font-size:14px;
 }
-
+.showAssistance .disabled {
+  display:none;
+}
 .showAssistance .title {
   display:flex;
   align-items: center;
@@ -18,6 +20,23 @@
   margin-bottom:5px;
 }
 
+.showAssistance .save {
+ text-align: center;
+ cursor: pointer;
+ border: 1px solid transparent;
+ color:white;
+ padding: 6px 12px;
+ margin:10px;
+ font-size: 14px;
+ line-height: 1.42857143;
+ border-radius: 4px;
+ background-color:#275276;
+}
+
+.showAssistance .searchDate {
+  margin-left: 10px;
+  color:#0066A6;
+}
 
 .showAssistance .content {
   display: flex;
@@ -65,9 +84,11 @@
 }
 .showAssistance .navTitle1 {
   font-size:16px;
-  padding:2px;
-  width:179px;
-  height:23px;
+  padding:5px;
+  width:187px;
+  background-color:white;
+
+
 
 }
 .showAssistance .navTitleUser {
@@ -105,17 +126,33 @@
 
 
 }
+.showAssistance .cleanse {
+  background-color:#D9534F;
+  color:white;
+  padding:5px;
+  width:163px;
+  cursor:pointer;
+}
+.showAssistance .cleanse:hover {
+  background-color:#275276;
+  color:white;
+  padding:5px;
+  width:163px;
+  cursor:pointer;
+}
 
 .showAssistance .listUsersContent {
-  height:422px;
+  height:395px;
   background-color:#DEDEDE;
   padding-top:10px;
   overflow: scroll;
+  overflow-x: hidden;
 }
 
 .showAssistance .dataUsersContent {
   height:422px;
   overflow: scroll;
+  overflow-x: hidden;
 }
 
 .showAssistance .listUsers {
@@ -144,8 +181,30 @@
   margin-right:5px;
 }
 .showAssistance .tam3 {
-  width:150px;
+  width:300px;
+  display:flex;
+  flex-direction:row;
+
+}
+.showAssistance .obs {
+  margin-left:10px;
   margin-right:5px;
+  color:#0066A6;
+}
+.showAssistance .obsMedical {
+  margin-left:5px;
+  margin-right:5px;
+  color:#d9534f;
+}
+.showAssistance .ULlogs {
+  list-style-type:none;
+  padding-left:5px;
+  margin-top:5px;
+  margin-bottom:5px;
+  color:black;
+}
+.showAssistance .link {
+  text-decoration:none;
 }
 
 .showAssistance .tam3 .hidden {
