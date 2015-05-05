@@ -107,6 +107,10 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, As
             }
           );
 
+          /*
+            Lo comento porque hasta que no este terminado prefiero que no lo vean en producción.
+            para testing descomentar todo.
+
           Profiles.checkAccess(Session.getSessionId(),'ADMIN-ASSISTANCE',
             function(ok) {
               if (ok == 'granted') {
@@ -118,6 +122,7 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, As
               Notifications.message(error);
             }
           );
+          */
 
         }
 
