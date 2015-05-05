@@ -98,9 +98,7 @@ app.controller('AssistanceCtrl', ["$scope", "$timeout", "$window", "Profiles", "
 	$scope.loadAssistanceStatus = function(){
 		Assistance.getAssistanceStatus($scope.model.session.user_id,
 			function(assistanceStatus){
-				if(assistanceStatus == undefined){
-					Notifications.message('Error al consultar estado');
-				} else {
+				if ((assistanceStatus != undefined) && (assistanceStatus != null)) {
 					$scope.formatAssistanceStatusFromServer(assistanceStatus);
 				}
 			},
