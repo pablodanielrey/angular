@@ -389,6 +389,8 @@ $scope.order = function(predicate, reverse) {
       $scope.checkDates();
       $scope.disabled = true; //deshabilitar nuevas busquedas hasta no completar la actual
 
+      var status = "APPROVED"; //bsuca solo las justificaciones aprobadas
+
       $scope.model.assistances = [];
       $scope.searchDates = $scope.initializeSearchDates();
 
@@ -396,20 +398,29 @@ $scope.order = function(predicate, reverse) {
         var searchUsers = $scope.initializeSearchUsers($scope.searchDates); //si no existen usuarios seleccionados, se definen todos los usuarios
 
         $scope.usersIds = $scope.getUsersIds(searchUsers);
-        Assistance.getAssistanceStatusByUsers($scope.usersIds, $scope.searchDates,
+        Assistance.getAssistanceStatusByUsers($scope.usersIds, $scope.searchDates, status,
             function ok(response) {
               var assistances = response.assistances;
               $scope.model.base64 = response.base64;
               for (var i = 0; i < assistances.length; i++) {
                 var assistance = assistances[i];
                 var newAssistance = $scope.formatAssistance(assistance);
-
                 if(assistance.userId != null){
+                  if (assistance.justifications != null && assistance.justifications.length > 0) {
+                    console.log(assistance);
+                    newAssistance.justification = assistance.justifications[0];
+                    $scope.formatJustification(assistance.justifications[0]);
+                  }
                   $scope.model.assistances.push(newAssistance);
                 }
 
               }
-              $scope.getJustifications();
+
+              $scope.order('dateSort',false);//ordenamiento por defecto
+              $scope.model.download = true;
+              $scope.disabled = false;
+              console.log($scope.model.assistances);
+              // $scope.getJustifications();
 
             },
             function error(){

@@ -224,7 +224,8 @@ query :
   session:,
   request:{
       usersIds: "listado de ids de los usuarios a buscar",
-      dates: "fechas a buscar"
+      dates: "fechas a buscar",
+      status:[]
   }
 
 }
@@ -265,6 +266,11 @@ class GetAssistanceStatusByUsers:
             server.sendMessage(response)
             return True
 
+        status = None
+        if 'status' in message['request']:
+            status = message['request']['status']
+            status = status.split('|')
+
         sid = message['session']
         self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
 
@@ -273,18 +279,14 @@ class GetAssistanceStatusByUsers:
             usersIds = message['request']['usersIds']
             dates = message['request']['dates']
 
-            status = []
-            for userId in usersIds:
-                for d in dates:
-                    date = self.date.parse(d)
-                    s = self.assistance.getAssistanceStatus(con,userId,date)
-                    if (s != None):
-                        status.append(s)
+
+            resp = self.assistance.getAssistanceStatusByUsers(con,usersIds,dates,status)
 
             response = {
                 'id':message['id'],
                 'ok':'',
-                'response':status
+                'base64':'',
+                'response':resp
             }
             server.sendMessage(response)
             return True

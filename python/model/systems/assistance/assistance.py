@@ -64,9 +64,70 @@ class Assistance:
             'start': sdate,
             'end': edate,
             'logs': attlogs,
+            'justifications':[],
             'workedMinutes': totalSeconds / 60
         }
         return assistanceStatus
+
+
+
+
+    def equalsTime(self,d1,d2):
+        d1Aux = self.date.awareToUtc(d1)
+        d1Aux = d1Aux.replace(hour=0, minute=0, second=0, microsecond=0)
+        d2Aux = d2.replace(hour=0, minute=0, second=0, microsecond=0)
+        return d1Aux == d2Aux
+
+
+    """
+        Obtiene los estados de asistencia de los usuarios entre las fechas pasadas
+    """
+
+    def getAssistanceStatusByUsers(self,con,usersIds,dates,status):
+        resp = []
+        if (dates == None or len(dates) <= 0):
+            return resp
+
+        start = dates[0]
+        end = dates[len(dates) - 1]
+        # obtengo las justificaciones
+        justifications = self.justifications.getJustificationRequestsByDate(con,status,usersIds,start,end)
+
+        for userId in usersIds:
+            for d in dates:
+                date = self.date.parse(d)
+                s = self.getAssistanceStatus(con,userId,date)
+                if (s != None):
+                    # verifico si coincide alguna justificacion con el userId y el date
+                    just = list(filter(lambda j: j['user_id']  == userId and self.equalsTime(j["begin"],date), justifications))
+                    logging.debug("*********")
+                    logging.debug(just)
+                    logging.debug(date)
+                    logging.debug(userId)
+                    s["justifications"] = just;
+                    for j in just:
+                        justifications.remove(j)
+                    resp.append(s)
+
+        logging.debug("---------Justificaciones--------------")
+        logging.debug(justifications)
+        # falta agrupar las justificaciones
+        for j in justifications:
+            a = {
+                'date':j['begin'],
+                'userId': j['user_id'],
+                'status': "",
+                'start': None,
+                'end': None,
+                'logs': [],
+                'justifications':[j],
+                'workedMinutes': 0
+            }
+            resp.append(a)
+
+        logging.debug("---------RESP--------------")
+        logging.debug(resp)
+        return resp
 
 
     """
