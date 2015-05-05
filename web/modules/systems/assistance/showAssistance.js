@@ -286,8 +286,9 @@ $scope.order = function(predicate, reverse) {
       }
     }
 
+
     //creo una asistencia por cada justificacion que quedo pendiente, es decir que no corresponde a ninguna marcacion
-  /*  for (var $i = 0; $i < auxJustifications.length; $i++) {
+    for (var $i = 0; $i < auxJustifications.length; $i++) {
       var j = auxJustifications[$i];
       var newAssistance = {};
       newAssistance.userId = j.user_id;
@@ -300,7 +301,7 @@ $scope.order = function(predicate, reverse) {
       newAssistance.justification = j;
       $scope.formatJustification(j);
       $scope.model.assistances.push(newAssistance);
-    }*/
+    }
 
     $scope.disabled = false;
 
