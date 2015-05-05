@@ -129,8 +129,7 @@ class Assistance:
             v.append('{:02d}:{:02d}'.format(int(l['workedMinutes'] / 60), int(l['workedMinutes'] % 60)))
 
             if l['justifications'] != None and len(l['justifications']) > 0:
-                jid = l['justifications'][0]['justification_id']
-                jname = self.justifications.getJustificationById(con,jid)['name']
+                jname = l['justifications'][0]['name']
                 v.append(jname)
             else:
                 v.append('')
@@ -157,10 +156,16 @@ class Assistance:
         return d1Aux == d2Aux
 
 
+
+    def _resolveJustificationsNames(self,con,justifications):
+        for j in justifications:
+            jid = j['justification_id']
+            j['name'] = self.justifications.getJustificationById(con,jid)['name']
+
+
     """
         Obtiene los estados de asistencia de los usuarios entre las fechas pasadas
     """
-
     def getAssistanceStatusByUsers(self,con,usersIds,dates,status):
         resp = []
         if (dates == None or len(dates) <= 0):
@@ -170,6 +175,7 @@ class Assistance:
         end = dates[len(dates) - 1]
         # obtengo las justificaciones
         justifications = self.justifications.getJustificationRequestsByDate(con,status,usersIds,start,end)
+        self._resolveJustificationsNames(con,justifications)
 
         for userId in usersIds:
             for d in dates:
