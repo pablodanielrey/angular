@@ -281,11 +281,12 @@ class GetAssistanceStatusByUsers:
 
 
             resp = self.assistance.getAssistanceStatusByUsers(con,usersIds,dates,status)
+            b64 = self.assistance.arrangeAssistanceStatusByUsers(con,resp)
 
             response = {
                 'id':message['id'],
                 'ok':'',
-                'base64':'',
+                'base64':b64,
                 'response':resp
             }
             server.sendMessage(response)

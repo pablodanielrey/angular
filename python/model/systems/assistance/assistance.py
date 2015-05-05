@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
-import json, base64, psycopg2, datetime, traceback, logging, sys
+import json, base64, psycopg2, datetime, traceback, logging, sys, uuid
 import inject
 import datetime
 import itertools
+from collections import OrderedDict
+import io
+from pyexcel_ods3 import ODSWriter
 
 from model.utils import DateTimeEncoder
 from model.config import Config
@@ -22,6 +25,8 @@ class Assistance:
     schedule = inject.attr(Schedule)
     users = inject.attr(Users)
     justifications = inject.attr(Justifications)
+
+
 
     """
         Obtiene el estado de asistencia del usuario
@@ -70,6 +75,79 @@ class Assistance:
         return assistanceStatus
 
 
+
+
+
+
+    """
+    //////////////////////////////////////////////////
+    //////////////
+    ////////////// codigo para exportar a ods los resultados
+    //////////////
+    //////////////////////////////////////////////////
+    """
+
+    def _exportToOds(self,data):
+        ods = OrderedDict()
+        ods.update({"Datos": data})
+        filename = '/tmp/{}.tmp'.format(str(uuid.uuid4()))
+        writer = ODSWriter(filename)
+        writer.write(ods)
+        writer.close()
+
+        b64 = ''
+        with open(filename,'rb') as f:
+            b64 = base64.b64encode(f.read()).decode('utf-8')
+
+        return b64
+
+
+    def _arrangeForOds(self, con, data):
+
+        values = [['Fecha','Dni','Nombre','Apellido','Hora de Entrada','Hora de Salida','Cantidad de Horas','Justificación']]
+        for l in data:
+            v = []
+
+            userId = l['userId']
+            user = self.users.findUser(con,userId)
+
+            v.append(l['date'].astimezone(tz=None).date())
+            v.append(user['dni'])
+            v.append(user['name'])
+            v.append(user['lastname'])
+
+            if l['start'] != None and l['start'] != '':
+                v.append(l['start'].astimezone(tz=None).time())
+            else:
+                v.append('')
+
+            if l['end'] != None and l['end'] != '':
+                v.append(l['end'].astimezone(tz=None).time())
+            else:
+                v.append('')
+
+            v.append('{:02d}:{:02d}'.format(int(l['workedMinutes'] / 60), int(l['workedMinutes'] % 60)))
+
+            if l['justifications'] != None and len(l['justifications']) > 0:
+                jid = l['justifications'][0]['justification_id']
+                jname = self.justifications.getJustificationById(con,jid)['name']
+                v.append(jname)
+            else:
+                v.append('')
+
+            values.append(v)
+
+        return values
+
+
+    def arrangeAssistanceStatusByUsers(self, con, data):
+        odata = self._arrangeForOds(con,data)
+        return self._exportToOds(odata)
+
+
+    """
+    /////////////////////////////////////////////////////
+    """
 
 
     def equalsTime(self,d1,d2):
@@ -128,6 +206,20 @@ class Assistance:
         logging.debug("---------RESP--------------")
         logging.debug(resp)
         return resp
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     """
