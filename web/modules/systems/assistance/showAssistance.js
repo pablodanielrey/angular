@@ -287,18 +287,20 @@ $scope.order = function(predicate, reverse) {
     }
 
     //creo una asistencia por cada justificacion que quedo pendiente, es decir que no corresponde a ninguna marcacion
-    for (var $i = 0; $i < auxJustifications.length; $i++) {
+  /*  for (var $i = 0; $i < auxJustifications.length; $i++) {
       var j = auxJustifications[$i];
       var newAssistance = {};
       newAssistance.userId = j.user_id;
       newAssistance.start = new Date(j.begin);
+      newAssistance.date = new Date(j.begin);
+      newAssistance.workedMinutes = 0;
       newAssistance = $scope.formatAssistance(newAssistance);
       newAssistance.start = null; //redefino en null la hora de inicio
 
       newAssistance.justification = j;
       $scope.formatJustification(j);
       $scope.model.assistances.push(newAssistance);
-    }
+    }*/
 
     $scope.disabled = false;
 
@@ -406,7 +408,6 @@ $scope.order = function(predicate, reverse) {
                 }
 
               }
-
               $scope.getJustifications();
 
             },
@@ -516,7 +517,6 @@ $scope.order = function(predicate, reverse) {
 // ---------- EXPORTAR DATOS --------
 
   $scope.download = function() {
-    console.log($scope.model.base64);
     if ($scope.model.base64 == null || $scope.model.base64 == '') {
       return;
     }
