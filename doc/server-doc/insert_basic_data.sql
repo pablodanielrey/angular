@@ -39,7 +39,7 @@ insert into assistance.justifications (id,name) values ('e8019f0e-5a70-4ef3-922c
 /*
   creo los checks para todos los usuarios.
 */
-insert into assistance.checks (id,user_id,type,date,enabled) select id,id,'PRESENCE','2015-01-01 00:00:00',true from profile.users;
+insert into assistance.checks (id,user_id,type,date,enable) select id,id,'PRESENCE','2015-04-01 00:00:00',true from profile.users;
 
 
 /*
