@@ -313,6 +313,7 @@ $scope.order = function(predicate, reverse) {
 
 
   /**
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
   * CODIGO PORONGA A ARREGLAR. LO METO AHORA PORQUE ESTOY CANSADO Y PARA SOLUCIONAR EL TEMA DE LAS JUSTIFICAIONES
   */
 
@@ -340,7 +341,11 @@ $scope.order = function(predicate, reverse) {
     return $scope.model.justificationNames[id];
   }
 
-
+  /*
+    //////////////////////////////////////////////
+    hasta aca es el codigo poronga que agregueee
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  */
 
 
 
