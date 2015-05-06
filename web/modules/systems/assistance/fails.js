@@ -63,9 +63,11 @@ app.controller('AssistanceFailsCtrl', ["$scope", "$timeout", "Assistance", "Noti
   };
 
   $scope.correctDates = function() {
+    if(!$scope.model.begin) $scope.model.begin = new Date();
     $scope.model.begin.setHours(0);
     $scope.model.begin.setMinutes(0);
     $scope.model.begin.setSeconds(0);
+    if((!$scope.model.end) || ($scope.model.end < $scope.model.begin)) $scope.model.end = new Date($scope.model.begin);
     $scope.model.end.setHours(23);
     $scope.model.end.setMinutes(59);
     $scope.model.end.setSeconds(59);
