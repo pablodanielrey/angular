@@ -103,28 +103,18 @@ class GetFailsByDate:
 
 
             assistanceFails = []
-            (users,fails,justifications) = self.assistance.checkSchedule(authorizedUsers,start,end)
+            (users,fails) = self.assistance.checkSchedule(authorizedUsers,start,end)
 
 
             for user in users:
                 ffails = self.fails.filterUser(user['id'],fails)
-                jjusts = self._filterJustificationsByUser(justifications,user['id'])
                 for f in ffails:
-                    f['date'] = self.dateutils.localizeAwareToLocal(f['date']);
-
-                    """ busco la justificacion para la fecha dada """
-                    jjust = None
-                    for j in jjusts:
-                        if j['begin'].date() == f['date'].date():
-                            jjust = j
-                            break
-
                     data = {
                         'user':user,
-                        'fail':f,
-                        'justification': jjust
+                        'fail':f
                     }
                     assistanceFails.append(data)
+
 
             response = {
                 'id':message['id'],

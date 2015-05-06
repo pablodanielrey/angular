@@ -8,11 +8,13 @@ from model.exceptions import *
 from model import utils
 from model.systems.assistance.date import Date
 from model.systems.assistance.logs import Logs
+from model.systems.assistance.justifications.justifications import Justifications
 
 class Schedule:
 
     logs = inject.attr(Logs)
     date = inject.attr(Date)
+    justifications = inject.attr(Justifications)
 
 
 
@@ -231,6 +233,15 @@ class Schedule:
 
 
 
+    def _findJustificationsForDate(self,justifications,date):
+        justs = []
+        for j in justifications:
+            logging.debug('chequeando fecha : {} == {}'.format(j['begin'].date(),date.date()))
+            if j['begin'].date() == date.date():
+                justs.append(j)
+        return justs
+
+
     """
         chequea la restricción del usuario entre determinadas fechas
         las fechas son aware.
@@ -241,6 +252,10 @@ class Schedule:
 
         if (checks is None) or (len(checks) <= 0):
             return []
+
+
+        justifications = self.justifications.getJustificationRequestsByDate(con,status=['APPROVED'],users=[userId],start=start,end=end + datetime.timedelta(days=1))
+        logging.debug('justificaciones encontradas : {} '.format(justifications))
 
         fails = []
 
@@ -274,16 +289,19 @@ class Schedule:
 
 
             if check['type'] == 'PRESENCE':
-                logging.debug('chequeando presencia')
+                logging.debug('presencia {} {}'.format(userId,actualUtc))
                 logs = self._getLogsForSchedule(con,userId,actualUtc)
                 if (logs is None) or (len(logs) <= 0):
+                    justs = self._findJustificationsForDate(justifications,actual)
                     fails.append(
                         {
                             'userId':userId,
                             'date':actual,
-                            'description':'Sin marcación'
+                            'description':'Sin marcación',
+                            'justifications':justs
                         }
                     )
+
 
             elif check['type'] == 'HOURS':
                 logs = self._getLogsForSchedule(con,userId,actualUtc)
@@ -293,16 +311,22 @@ class Schedule:
                     count = count + wh['seconds']
 
                 if count < (check['hours'] * 60 * 60):
+
+                    justs = self._findJustificationsForDate(justifications,actual)
                     fails.append(
                         {
                             'userId':userId,
                             'date':actual,
-                            'description':'No trabajó la cantidad mínima de minutos requeridos ({} < {})'.format(count / 60, check['hours'] * 60)
+                            'description':'No trabajó la cantidad mínima de minutos requeridos ({} < {})'.format(count / 60, check['hours'] * 60),
+                            'justifications':justs
                         }
                     )
 
             elif check['type'] == 'SCHEDULE':
+                justs = self._findJustificationsForDate(justifications,actual)
                 fail = self.checkSchedule(con,userId,actualUtc)
+                for f in fail:
+                    f['justifications'] = justs
                 fails.extend(fail)
 
             actual = nextDay

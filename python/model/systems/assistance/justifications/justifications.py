@@ -100,6 +100,8 @@ class Justifications:
         return justs
 
 
+
+
     """ retorna todos los tipos de justificaciones que existan en la base """
     def getJustificationById(self,con,id):
         cur = con.cursor()
@@ -115,6 +117,7 @@ class Justifications:
             return justification
 
         return None
+
 
 
     """

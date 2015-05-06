@@ -39,6 +39,7 @@
     </div>
     <div class ="headerFails">
 
+        <div class="date"><i class="fa"></i> Día</div>
         <div ng-click="predicate = 'fail.dateExtend'; reverse=!reverse" class="date"><i class="fa fa-sort"></i> Fecha</div>
         <div ng-click="predicate = 'user.dni'; reverse=!reverse" class="dni"><i class="fa fa-sort"></i> DNI</div>
         <div ng-click="predicate = 'user.lastname'; reverse=!reverse" class="lastname"><i class="fa fa-sort"></i> Apellido</div>
@@ -53,6 +54,7 @@
     <div class="fails">
 
       <div class="fail" ng-repeat="assistanceFail in model.assistanceFails | orderBy:predicate:reverse">
+        <div class="date">{{assistanceFail.fail.dayOfWeek}}</div>
         <div class="date">{{assistanceFail.fail.dateFormat}}</div>
         <div class="dni">{{assistanceFail.user.dni}}</div>
         <div class="lastname">{{assistanceFail.user.lastname}}</div>

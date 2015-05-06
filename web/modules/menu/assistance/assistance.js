@@ -110,19 +110,19 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, As
           /*
             Lo comento porque hasta que no este terminado prefiero que no lo vean en producción.
             para testing descomentar todo.
-
+            */
           Profiles.checkAccess(Session.getSessionId(),'ADMIN-ASSISTANCE',
             function(ok) {
               if (ok == 'granted') {
                 $scope.items.push({ label:'Incumplimientos', img:'fa-ticket', function: $scope.assistanceFails});
-                $scope.items.push({ label:'Filtro de Fallas (testing todavía no terminado)', img:'fa-ticket', function: $scope.assistanceFailsFilters});
+                //$scope.items.push({ label:'Filtro de Fallas (testing todavía no terminado)', img:'fa-ticket', function: $scope.assistanceFailsFilters});
               }
             },
             function (error) {
               Notifications.message(error);
             }
           );
-          */
+
 
         }
 

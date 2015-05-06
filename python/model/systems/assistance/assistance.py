@@ -102,7 +102,7 @@ class Assistance:
         return b64
 
 
-    def _arrangeForOds(self, con, data):
+    def _arrangeForOdsAssistanceStatus(self, con, data):
 
         values = [['Fecha','Dni','Nombre','Apellido','Hora de Entrada','Hora de Salida','Cantidad de Horas','Justificación']]
         for l in data:
@@ -140,7 +140,7 @@ class Assistance:
 
 
     def arrangeAssistanceStatusByUsers(self, con, data):
-        odata = self._arrangeForOds(con,data)
+        odata = self._arrangeForOdsAssistanceStatus(con,data)
         return self._exportToOds(odata)
 
 
@@ -149,7 +149,7 @@ class Assistance:
     """
 
 
-    def equalsTime(self,d1,d2):
+    def _equalsTime(self,d1,d2):
         d1Aux = self.date.awareToUtc(d1)
         d1Aux = d1Aux.replace(hour=0, minute=0, second=0, microsecond=0)
         d2Aux = d2.replace(hour=0, minute=0, second=0, microsecond=0)
@@ -183,7 +183,7 @@ class Assistance:
                 s = self.getAssistanceStatus(con,userId,date)
                 if (s != None):
                     # verifico si coincide alguna justificacion con el userId y el date
-                    just = list(filter(lambda j: j['user_id']  == userId and self.equalsTime(j["begin"],date), justifications))
+                    just = list(filter(lambda j: j['user_id']  == userId and self._equalsTime(j["begin"],date), justifications))
                     logging.debug("*********")
                     logging.debug(just)
                     logging.debug(date)
@@ -250,9 +250,7 @@ class Assistance:
                 users.append(self.users.findUser(con,u))
                 schedulesFails.extend(self.schedule.checkConstraints(con,u,start,end))
 
-            justifications = self.justifications.getJustificationRequestsByDate(con,status=['APPROVED'],users=userIds,start=start,end=end)
-
-            return (users,schedulesFails,justifications)
+            return (users,schedulesFails)
 
         finally:
             con.close()

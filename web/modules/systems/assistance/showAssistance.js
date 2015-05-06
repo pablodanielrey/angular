@@ -400,7 +400,7 @@ $scope.order = function(predicate, reverse) {
     var date = new Date(assistance.date);
     newAssistance.date = Utils.formatDate(date);
 
-    newAssistance.dayOfWeek = $scope.getDayString(date);
+    newAssistance.dayOfWeek = Utils.getDayString(date);
 
     for(var i = 0; i < $scope.model.users.length; i++){
       var user = $scope.model.users[i];
@@ -482,20 +482,6 @@ $scope.order = function(predicate, reverse) {
     return ($scope.disabled) ;
   };
 
-
-  // -------- funcion adicional que me pidió charly para ver el día de la semana ----
-
-  $scope.getDayString = function(date) {
-    var weekday = new Array(7);
-    weekday[0]=  "Domingo";
-    weekday[1] = "Lunes";
-    weekday[2] = "Martes";
-    weekday[3] = "Miércoles";
-    weekday[4] = "Jueves";
-    weekday[5] = "Viernes";
-    weekday[6] = "Sábado";
-    return weekday[date.getDay()];
-  }
 
 
 // ---------- EXPORTAR DATOS --------

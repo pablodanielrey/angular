@@ -68,30 +68,30 @@ app.controller('AssistanceFailsCtrl', ["$scope", "$timeout", "Assistance", "Noti
 
           var r = response[i];
 
-          if ((r.justification != undefined) && (r.justification != null)) {
-              var j = $scope.getJustificationById(r.justification.justification_id);
-              r.justification.name = j.name;
+          r.justification = {name:''};
+          if ((r.fail.justifications != undefined) && (r.fail.justifications != null) && (r.fail.justifications.length > 0)) {
+            var just = r.fail.justifications[0];
+            var j = $scope.getJustificationById(r.fail.justifications[0].justification_id);
+            just.name = j.name;
+            r.justification = just;
           }
 
           var date = new Date(r.fail.date);
           r.fail.dateFormat = Utils.formatDate(date);
           r.fail.dateExtend = Utils.formatDateExtend(date);
+          r.fail.dayOfWeek = Utils.getDayString(date);
+
+
 
           if (r.fail.startSchedule || r.fail.endSchedule) {
             r.fail.dateSchedule = (r.fail.startSchedule) ? r.fail.startSchedule : r.fail.endSchedule;
             r.fail.dateSchedule = Utils.formatTime(new Date(r.fail.dateSchedule));
           }
 
-          //esto es de prueba
-          // r.fail.start = r.fail.date;
-
           if (r.fail.start || r.fail.end) {
             r.fail.wh = (r.fail.start) ?  new Date(r.fail.start) : new Date(r.fail.end);
             r.fail.wh =  Utils.formatTime(r.fail.wh);
           }
-
-          // esto es de prueba
-          // r.fail.seconds = 3825;
 
           if (r.fail.seconds) {
             var hoursDiff = Math.floor((r.fail.seconds / 60) / 60);
