@@ -114,7 +114,7 @@ app.controller('AssistanceFailsCtrl', ["$scope", "$timeout", "Assistance", "Noti
 
           $scope.model.assistanceFails.push(r);
         }
-        $scope.order('dateSort',false);//ordenamiento por defecto
+        $scope.order('fail.dateExtend',false);//ordenamiento por defecto
         $scope.model.searching = false;
       },
       function(error) {
