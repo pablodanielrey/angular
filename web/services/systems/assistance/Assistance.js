@@ -71,7 +71,7 @@ app.service('Assistance', ['Utils','Messages','Session',
 				Messages.send(msg,
 					function(data) {
 						if (typeof data.error === 'undefined') {
-							callbackOk(data.response);
+							callbackOk(data);
 						} else {
 							callbackError(data.error);
 						}
