@@ -48,19 +48,19 @@
       </div>
 
       <div class="nav2">
-        <div ng-click="reverseDay=!reverseDay;order(['dayOfWeek'],reverseDay)" class="tam0T"><i class="fa fa-calendar-o"></i> Día</div>
+        <div ng-click="reverseDay=!reverseDay;order(['dayOfWeek.number','dateSort'],reverseDay)" class="tam0T"><i class="fa fa-calendar-o"></i> Día</div>
 
         <div ng-click="reverseDate=!reverseDate;order(['dateSort'],reverseDate)"  class="tam0T"><i class="fa fa-calendar-o"></i> Fecha</div>
         <div ng-click="reverseUser=!reverseUser;order(['user','dateSort'],reverseUser)" class="tam2T"><i class="fa fa-user"></i> Usuario</div>
         <div ng-click="reverseStart=!reverseStart;order(['start','dateSort'],reverseStart)" Class="tam1T"> Entrada</div>
         <div ng-click="reverseEnd=!reverseEnd;order(['end','dateSort'],reverseEnd)" class="tam3T"> Salida</div>
         <div ng-click="reverseWT=!reverseWT;order(['workedTime','dateSort'],reverseWT)" class="tam1T"> Total</div>
-        <div class="tam3" ng-click="reverseObs=!reverseObs;order(['justification','dateSort'],reverseObs)"><i class="fa fa-exclamation"></i> Observaciones</div>
+        <div class="tam3" ng-click="reverseObs=!reverseObs;order(['justification.name','dateSort'],reverseObs)"><i class="fa fa-exclamation"></i> Observaciones</div>
       </div>
       <div class='dataUsersContent'>
         <div class="results" ng-repeat="assistance in model.assistances">
 
-          <div class="tam1">{{assistance.dayOfWeek}}</div>
+          <div class="tam1">{{assistance.dayOfWeek.name}}</div>
 
           <div class="tam1">{{assistance.date}}</div>
           <div class="tam2 textBlue">{{assistance.user}}</div>
