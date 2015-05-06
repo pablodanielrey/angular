@@ -9,6 +9,11 @@
 .showAssistance .disabled {
   display:none;
 }
+
+.showAssistance .nav2 {
+    cursor:pointer;
+}
+
 .showAssistance .title {
   display:flex;
   align-items: center;
