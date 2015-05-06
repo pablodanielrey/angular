@@ -400,7 +400,9 @@ $scope.order = function(predicate, reverse) {
     var date = new Date(assistance.date);
     newAssistance.date = Utils.formatDate(date);
 
-    newAssistance.dayOfWeek = Utils.getDayString(date);
+    newAssistance.dayOfWeek = {};
+    newAssistance.dayOfWeek.name = Utils.getDayString(date);
+    newAssistance.dayOfWeek.number = date.getDay();
 
     for(var i = 0; i < $scope.model.users.length; i++){
       var user = $scope.model.users[i];
