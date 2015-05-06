@@ -7,8 +7,19 @@ app.controller('AssistanceFailsCtrl', ["$scope", "$timeout", "Assistance", "Noti
     begin: new Date(),
     end: new Date(),
     assistanceFails:[{}],
-    justifications:[]
+    justifications:[],
+    base64:''
   };
+
+
+
+  $scope.download = function() {
+    if ($scope.model.base64 == null || $scope.model.base64 == '') {
+      return;
+    }
+    var blob = Utils.base64ToBlob($scope.model.base64);
+    window.saveAs(blob,'incumplimientos.ods');
+  }
 
 
   // ordenacion
@@ -75,9 +86,11 @@ app.controller('AssistanceFailsCtrl', ["$scope", "$timeout", "Assistance", "Noti
     $scope.initializeDate();
     Assistance.getFailsByDate($scope.model.begin, $scope.model.end,
       function(response) {
-        for (var i = 0; i < response.length; i++) {
+        $scope.model.base64 = response.base64;
 
-          var r = response[i];
+        for (var i = 0; i < response.response.length; i++) {
+
+          var r = response.response[i];
 
           r.justification = {name:''};
           if ((r.fail.justifications != undefined) && (r.fail.justifications != null) && (r.fail.justifications.length > 0)) {
