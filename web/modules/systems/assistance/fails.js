@@ -6,7 +6,7 @@ app.controller('AssistanceFailsCtrl', ["$scope", "$timeout", "Assistance", "Noti
     searching: false,
     begin: new Date(),
     end: new Date(),
-    assistanceFails:[{}],
+    assistanceFails:[],
     justifications:[],
     base64:''
   };
@@ -57,7 +57,7 @@ app.controller('AssistanceFailsCtrl', ["$scope", "$timeout", "Assistance", "Noti
   $scope.initialize = function() {
     $scope.model.begin = new Date();
     $scope.model.end = new Date();
-    $scope.model.assistanceFails = [{}];
+    $scope.model.assistanceFails = [];
     $scope.initializeDate();
     $scope.loadJustifications();
   };
@@ -81,7 +81,7 @@ app.controller('AssistanceFailsCtrl', ["$scope", "$timeout", "Assistance", "Noti
 
   $scope.search = function() {
     $scope.model.searching = true;
-    $scope.model.assistanceFails = [{}];
+    $scope.model.assistanceFails = [];
     $scope.initializeDate();
     Assistance.getFailsByDate($scope.model.begin, $scope.model.end,
       function(response) {
