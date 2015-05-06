@@ -87,6 +87,7 @@ class GetFailsByDate:
         try:
 
             start = self.dateutils.parse(message['request']['start'])
+            start = start.replace(microsecond=0)
             end = self.dateutils.parse(message['request']['end'])
 
             logging.debug('fecha de inicio {} y fin {}'.format(start,end))
