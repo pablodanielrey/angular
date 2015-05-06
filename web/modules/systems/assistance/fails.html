@@ -39,14 +39,14 @@
     </div>
     <div class ="headerFails">
 
-        <div ng-click="reverseDay=!reverseDay;order(['fail.dayOfWeek.number','fail.dateExtend','user.lastname','user.name'],reverseDay) " class="date"><i class="fa"></i> Día</div>
+        <div ng-click="reverseDay=!reverseDay;order(['fail.dayOfWeek.number','fail.dateExtend','user.lastname','user.name'],reverseDay) " class="date"><i class="fa fa-sort"></i> Día</div>
         <div ng-click="reverseDate=!reverseDate;order(['fail.dateExtend','user.lastname','user.name'],reverseDate) " class="date"><i class="fa fa-sort"></i> Fecha</div>
         <div ng-click="reverseName=!reverseName;order(['user.lastname','user.name','fail.dateExtend'],reverseName)" class="name"><i class="fa fa-sort"></i> Nombre</div>
         <div ng-click="reverseDateSchedule=!reverseDateSchedule;order(['fail.dateSchedule','user.lastname','user.name','fail.dateExtend'],reverseDateSchedule)" class="dateSchedule"><i class="fa fa-sort"></i> Hora declarada </div>
         <div ng-click="reverseWh=!reverseWh;order(['fail.wh','user.lastname','user.name','fail.dateExtend'],reverseWh)" class="workingHours"><i class="fa fa-sort"></i> Hora de marcación</div>
         <div ng-click="reverseDiff=!reverseDiff;order(['fail.diff','user.lastname','user.name','fail.dateExtend'],reverseDiff)" class="diff"><i class="fa fa-sort"></i> Diferencia </div>
         <div ng-click="reverseDesc=!reverseDesc;order(['fail.description','user.lastname','user.name','fail.dateExtend'],reverseDesc)" class="description"><i class="fa fa-sort"></i> Description</div>
-        <div ng-click="reverseJust=!reverseJust;order(['justification.name','user.lastname','user.name','fail.dateExtend'],reverseJust)" class="justification"><i class="fa fa-sort"></i> Justificación</div>
+        <div ng-click="reverseJust=!reverseJust;order(['justification.shortName','user.lastname','user.name','fail.dateExtend'],reverseJust)" class="justification"><i class="fa fa-sort"></i> Justificación</div>
 
     </div>
     <div class="fails">
@@ -54,12 +54,12 @@
       <div class="fail" ng-repeat="assistanceFail in model.assistanceFails">
         <div class="date">{{assistanceFail.fail.dayOfWeek.name}}</div>
         <div class="date">{{assistanceFail.fail.dateFormat}}</div>
-        <div class="name">{{assistanceFail.user.lastname}},{{assistanceFail.user.name}}</div>
+        <div class="name">{{assistanceFail.user.lastname}}, {{assistanceFail.user.name}}</div>
         <div class="dateSchedule">{{assistanceFail.fail.dateSchedule}}</div>
         <div class="workingHours">{{assistanceFail.fail.wh}}</div>
         <div class="diff">{{assistanceFail.fail.diff}}</div>
         <div class="description">{{assistanceFail.fail.description}}</div>
-        <div class="justification">{{assistanceFail.justification.name}} -- {{assistanceFail.justification.begin}}</div>
+        <div class="justification" ><i class="fa {{assistanceFail.justification.icon}}"></i> <span title="{{assistanceFail.justification.name}}" class="pointer">{{assistanceFail.justification.shortName}}</span> -- {{assistanceFail.justification.begin}}</div>
 
       </div>
     </div>
