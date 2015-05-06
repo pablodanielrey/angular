@@ -36,7 +36,6 @@ app.controller('AssistanceFailsCtrl', ["$scope", "$timeout", "Assistance", "Noti
   $scope.getJustificationById = function(id) {
     for (var i = 0; i < $scope.model.justifications.length; i++) {
       var j = $scope.model.justifications[i];
-      console.log(j);
       if (j.id == id) {
         return j;
       }
