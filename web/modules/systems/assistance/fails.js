@@ -1,6 +1,6 @@
 var app = angular.module('mainApp');
 
-app.controller('AssistanceFailsCtrl', ["$scope", "$timeout", "Assistance", "Notifications", "Utils", function($scope, $timeout, Assistance, Notifications, Utils) {
+app.controller('AssistanceFailsCtrl', ["$scope", "$timeout", "Assistance", "Notifications", "Utils","$filter", function($scope, $timeout, Assistance, Notifications, Utils, $filter) {
 
   $scope.model = {
     searching: false,
@@ -9,6 +9,17 @@ app.controller('AssistanceFailsCtrl', ["$scope", "$timeout", "Assistance", "Noti
     assistanceFails:[{}],
     justifications:[]
   };
+
+
+  // ordenacion
+
+  $scope.orderBy = $filter('orderBy');
+
+  $scope.order = function(predicate, reverse) {
+    $scope.model.assistanceFails = $scope.orderBy($scope.model.assistanceFails, predicate, reverse);
+  };
+
+  //
 
 
   $scope.loadJustifications = function() {
@@ -79,7 +90,9 @@ app.controller('AssistanceFailsCtrl', ["$scope", "$timeout", "Assistance", "Noti
           var date = new Date(r.fail.date);
           r.fail.dateFormat = Utils.formatDate(date);
           r.fail.dateExtend = Utils.formatDateExtend(date);
-          r.fail.dayOfWeek = Utils.getDayString(date);
+          r.fail.dayOfWeek = {};
+          r.fail.dayOfWeek.name = Utils.getDayString(date);
+          r.fail.dayOfWeek.number = date.getDay();
 
 
 
@@ -101,7 +114,7 @@ app.controller('AssistanceFailsCtrl', ["$scope", "$timeout", "Assistance", "Noti
 
           $scope.model.assistanceFails.push(r);
         }
-        $scope.predicate = 'user.dni';
+        $scope.order('dateSort',false);//ordenamiento por defecto
         $scope.model.searching = false;
       },
       function(error) {
