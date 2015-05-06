@@ -93,9 +93,8 @@ app.controller('AssistanceFailsCtrl', ["$scope", "$timeout", "Assistance", "Noti
 
           r.justification = {name:''};
           if ((r.fail.justifications != undefined) && (r.fail.justifications != null) && (r.fail.justifications.length > 0)) {
-            var just = r.fail.justifications[0];
-            var j = $scope.getJustificationById(r.fail.justifications[0].justification_id);
-            just.name = j.name;
+            var just = Utils.getJustification(r.fail.justifications[0].justification_id);
+            just.begin = r.fail.justifications[0].begin;
             r.justification = just;
           }
 
