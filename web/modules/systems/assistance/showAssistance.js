@@ -263,78 +263,6 @@ $scope.order = function(predicate, reverse) {
   };
 
 
-  /**
-   * Asignar "justifications" a los "assistances" previamente consultados
-   */
-  $scope.setJustifications = function(justifications) {
-
-    // tiene las justificaciones que no machean con ninguna asistencia
-    var auxJustifications = justifications.slice();
-
-    for (var $i = 0; $i < justifications.length; $i++) {
-      var j = justifications[$i];
-      j.date = Utils.formatDate(new Date(j.begin));
-      for (var $k = 0; $k < $scope.model.assistances.length; $k++) {
-        var a = $scope.model.assistances[$k]
-        //verifico que la fecha de la justificacion sea igual a la de la asistencia y que tenga el mismo usuario
-        if (j != null && a.date == j.date && j.user_id == a.userId) {
-          var index = auxJustifications.indexOf(j);
-          auxJustifications.splice(index,1);
-          a.justification = j;
-          $scope.formatJustification(a.justification);
-        }
-      }
-    }
-
-
-    //creo una asistencia por cada justificacion que quedo pendiente, es decir que no corresponde a ninguna marcacion
-    for (var $i = 0; $i < auxJustifications.length; $i++) {
-      var j = auxJustifications[$i];
-      var newAssistance = {};
-      newAssistance.userId = j.user_id;
-      newAssistance.start = new Date(j.begin);
-      newAssistance.date = new Date(j.begin);
-      newAssistance.workedMinutes = 0;
-      newAssistance = $scope.formatAssistance(newAssistance);
-      newAssistance.start = null; //redefino en null la hora de inicio
-
-      newAssistance.justification = j;
-      $scope.formatJustification(j);
-      $scope.model.assistances.push(newAssistance);
-    }
-
-    $scope.disabled = false;
-
-
-    $scope.order('dateSort',false);//ordenamiento por defecto
-    $scope.model.download = true;
-  }
-
-
-
-
-  /**
-   * En funcion de los datos del formulario se consultaran las justificaciones
-   * @returns {undefined}
-   */
-  $scope.getJustifications = function() {
-    var status = "APPROVED"; //se establece un valor de null para obtener todas las justificaciones
-    var start = $scope.model.start; //fecha de inicio de la busqueda
-    var end = $scope.model.end; //fecha de fin de la busqueda
-    var usersId = $scope.usersIds; //id de usuarios a buscar
-    Assistance.getJustificationRequestsByDate(status, $scope.usersIds, $scope.model.start, $scope.model.end,
-
-      function ok(requests) {
-        $scope.setJustifications(requests);
-      },
-
-      //en caso de error se vuelve a habilitar la busqueda
-      function error() {
-        $scope.disabled = false;
-      }
-    );
-  };
-
 
   /**
    * Metodo principal de busqueda de datos
@@ -362,8 +290,12 @@ $scope.order = function(predicate, reverse) {
                 var newAssistance = $scope.formatAssistance(assistance);
                 if(assistance.userId != null){
                   if (assistance.justifications != null && assistance.justifications.length > 0) {
-                    newAssistance.justification = assistance.justifications[0];
-                    $scope.formatJustification(assistance.justifications[0]);
+                    var j = assistance.justifications[0];
+                    newAssistance.justification = Utils.getJustification(j.justification_id);
+                    newAssistance.justification.begin = j.begin;
+                    newAssistance.justification.end = j.end;
+                    $scope.formatJustification(newAssistance.justification);
+                    console.log(newAssistance.justification);
                   }
                   $scope.model.assistances.push(newAssistance);
                 }
@@ -373,7 +305,6 @@ $scope.order = function(predicate, reverse) {
               $scope.order('dateSort',false);//ordenamiento por defecto
               $scope.model.download = true;
               $scope.disabled = false;
-              // $scope.getJustifications();
 
             },
             function error(){
