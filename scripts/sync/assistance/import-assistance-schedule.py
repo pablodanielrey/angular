@@ -52,10 +52,17 @@ if __name__ == '__main__':
 
     logging.basicConfig(level=logging.DEBUG)
 
+    lines = 0
+
     for line in csv.reader(sys.stdin):
 
         try:
             logging.debug(line)
+
+            """ salto el titulo """
+            if lines < 2:
+                lines = lines + 1
+                continue
 
             nombre,app,dni,le,ls,me,ms,mme,mms,je,js,ve,vs,se,ss,de,ds = line
 
