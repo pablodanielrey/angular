@@ -228,7 +228,7 @@ class Assistance:
 
     def _arrangeForOdsChecks(self, con, data):
 
-        values = [['Fecha','Dni','Nombre','Apellido','Hora Declarada','Hora de Marcación','Error','Descripción','Justificación']]
+        values = [['Fecha','Dni','Nombre','Apellido','Hora Declarada','Hora de Marcación','Diferencia','Descripción','Horas Trabajadas','Justificación']]
         for l in data:
             v = []
 
@@ -263,6 +263,13 @@ class Assistance:
 
 
             v.append(l['description'])
+
+
+            if 'whSeconds' in l:
+                v.append('{:02d}:{:02d}'.format(int(l['whSeconds'] / 60 / 60), int(l['whSeconds'] / 60 % 60)))
+            else:
+                v.append('')
+
 
 
             if 'justifications' in l:

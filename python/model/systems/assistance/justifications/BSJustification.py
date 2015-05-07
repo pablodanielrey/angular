@@ -28,7 +28,6 @@ class BSJustification(Justification):
 
 
         justStatus = utils._getJustificationsInStatus(con,['PENDING','APPROVED'])
-
         if len(justStatus) <= 0:
             """ no se tomo ninguna todavia """
             if period is None:
