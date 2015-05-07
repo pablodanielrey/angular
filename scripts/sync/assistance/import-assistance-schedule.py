@@ -41,7 +41,7 @@ if __name__ == '__main__':
 
 
     date = datetime.datetime.now()
-    dates = calendar.Calendar().monthdatescalendar(date.year,date.month)
+    dates = calendar.Calendar().monthdatescalendar(date.year,date.month-1)
     firstWeek = dates[0][:7]
 
     con = psycopg2.connect(host=host, port=port, user=user, password=passw, dbname=db)
@@ -92,6 +92,8 @@ if __name__ == '__main__':
 
 
             """ actualizo el tema del horario """
+
+            cur.execute('delete from assistance.schedule where user_id = %s',(pid,))
 
             entradas = [le,me,mme,je,ve,se,de]
             salidas = [ls,ms,mms,js,vs,ss,ds]
