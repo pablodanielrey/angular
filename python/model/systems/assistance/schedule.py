@@ -358,6 +358,7 @@ class Schedule:
     def _checkScheduleWorkedHours(self,userId,controls):
         tolerancia = datetime.timedelta(minutes=16)
         fails = []
+
         for sched,wh in controls:
 
             if sched is None:
@@ -366,13 +367,13 @@ class Schedule:
 
             date = sched['start']
 
-            if wh is None or 'start' not in wh or 'end' not in wh:
+            if (wh is None) or ('start' not in wh and 'end' not in wh):
                 """ no tiene nada trabajado!!! """
                 fails.append(
                     {
                         'userId':userId,
                         'date':date,
-                        'description':'No existe ninguna marcación para esa fecha'
+                        'description':'Sin marcación'
                     }
                 )
                 continue
@@ -385,7 +386,7 @@ class Schedule:
                     {
                         'userId':userId,
                         'date': date,
-                        'description':'Sin horario de llegada'
+                        'description':'Sin entrada'
                     }
                 )
 
@@ -409,7 +410,7 @@ class Schedule:
                     {
                         'userId':userId,
                         'date': date,
-                        'description':'Sin horario de salida'
+                        'description':'Sin salida'
                     }
                 )
 
