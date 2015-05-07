@@ -355,7 +355,7 @@ class Schedule:
 
     """ chequea los schedules contra las workedhours calculadas """
     def _checkScheduleWorkedHours(self,userId,controls):
-        tolerancia = datetime.timedelta(minutes=15)
+        tolerancia = datetime.timedelta(minutes=16)
         fails = []
         for sched,wh in controls:
 
@@ -396,7 +396,8 @@ class Schedule:
                         'description':'Llegada tardía',
                         'startSchedule':sched['start'],
                         'start':wh['start'],
-                        'seconds':(wh['start'] - sched['start']).total_seconds()
+                        'seconds':(wh['start'] - sched['start']).total_seconds(),
+                        'whSeconds':wh['seconds']
                     }
                 )
 
@@ -419,7 +420,8 @@ class Schedule:
                         'description':'Salida temprana',
                         'endSchedule':sched['end'],
                         'end':wh['end'],
-                        'seconds':(sched['end']-wh['end']).total_seconds()
+                        'seconds':(sched['end']-wh['end']).total_seconds(),
+                        'whSeconds':wh['seconds']
                     }
                 )
 

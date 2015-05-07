@@ -125,6 +125,14 @@ app.controller('AssistanceFailsCtrl', ["$scope", "$timeout", "Assistance", "Noti
             r.fail.diff = ('0' + hoursDiff).substr(-2) + ":" + ('0' + minutesDiff).substr(-2);
           }
 
+          if (r.fail.whSeconds) {
+            var hours = Math.floor((r.fail.whSeconds / 60) / 60);
+            var minutes = Math.floor((r.fail.whSeconds / 60) % 60);
+            r.fail.wh = ('0' + hours).substr(-2) + ":" + ('0' + minutes).substr(-2);
+          } else {
+            r.fail.wh = '00:00';
+          }
+
           $scope.model.assistanceFails.push(r);
         }
         $scope.order(['fail.dateExtend','user.lastname','user.name'],false);//ordenamiento por defecto
