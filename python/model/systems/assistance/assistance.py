@@ -265,6 +265,13 @@ class Assistance:
             v.append(l['description'])
 
 
+            if 'whSeconds' in l:
+                v.append('{:02d}:{:02d}'.format(int(l['whSeconds'] / 60 / 60), int(l['whSeconds'] / 60 % 60)))
+            else:
+                v.append('')
+
+
+
             if 'justifications' in l:
                 self._resolveJustificationsNames(con,l['justifications'])
                 for j in l['justifications']:
