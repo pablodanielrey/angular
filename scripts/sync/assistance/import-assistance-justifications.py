@@ -78,7 +78,7 @@ if __name__ == '__main__':
                 continue
 
 
-            fecha = parser.parse(sfecha)
+            fecha = datetime.datetime.strptime(sfecha,'%d/%m/%y')
 
             import pytz, datetime
             local = pytz.timezone ("America/Buenos_Aires")

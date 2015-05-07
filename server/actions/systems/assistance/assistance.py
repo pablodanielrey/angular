@@ -211,6 +211,8 @@ class GetAssistanceStatus:
         finally:
             con.close()
 
+
+
 """
 query :
 {
