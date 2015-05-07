@@ -1,124 +1,181 @@
 var app = angular.module('mainApp');
 
-app.controller('RequestAssistanceExamCtrl', function($scope, Assistance, Session, Notifications) {
+app.controller('RequestAssistanceExamCtrl', ["$scope", "Assistance", "Notifications", "Utils", function($scope, Assistance, Notifications, Utils) {
 
-    $scope.model.justificationExamRequestSelected = false;
-	$scope.model.justificationExamAvailableSelected = false;
-	$scope.model.justificationExamRequestsSelected = false;
+  if(!$scope.model) Notifications.message("No esta definido el modelo");
 
-    // ------------ Manejo de la vista -----------------
-
-    $scope.isSelectedJustificationExam = function(){
-		return $scope.model.justificationExamSelected;
-	}
-
-	$scope.selectJustificationExam = function(){
-		var value = !$scope.model.justificationExamSelected;
-		$scope.clearSelections();
-		$scope.clearSelectionsExam();
-		$scope.model.justificationExamSelected = value;
-
-        $scope.model.justification.id = $scope.model.justificationExamId;
-	}
-
-
-	$scope.isSelectedJustificationExamRequest = function(){
-		return $scope.model.justificationExamRequestSelected;
-	};
-
-    $scope.isSelectedJustificationExamAvailable = function(){
-		return $scope.model.justificationExamAvailableSelected;
-	};
-
-	$scope.isSelectedJustificationExamRequests = function(){
-		return $scope.model.justificationExamRequestsSelected;
-	};
-
-	$scope.selectJustificationExamRequest = function(){
-		$scope.clearSelectionsExam();
-		$scope.model.justificationExamRequestSelected = true;
-	};
-
-
-	$scope.selectJustificationExamRequests = function(){
-		$scope.clearSelectionsExam();
-		$scope.model.justificationExamRequestsSelected = true;
-	};
-
-	$scope.selectJustificationExamAvailable = function(){
-		$scope.clearSelectionsExam();
-		$scope.model.justificationExamAvailableSelected = true;
-
-	};
-
-
-	$scope.clearSelectionsExam = function() {
-		$scope.model.justificationExamRequestSelected = false;
-		$scope.model.justificationExamAvailableSelected = false;
-		$scope.model.justificationExamRequestsSelected = false;
-
-    if ($scope.model.justification != null) {
-        $scope.model.justification.begin = null;
+  //***** datos de la justificacion *****
+  $scope.justification = { 
+    id:'b70013e3-389a-46d4-8b98-8e4ab75335d0', //id de la justificacion.
+    name:Utils.getJustificationName('b70013e3-389a-46d4-8b98-8e4ab75335d0'),
+    stock:0,
+    yearlyStock:0,
+    selectedName:"justificationExamSelected", //Nombre de la seleccion en el controlador padre
+  };
+  
+  //***** variables de seleccion de la seccion *****
+  $scope.model.requestSelected = false; //flag para indicar la seleccion del formulario de solicitud del articulo 102
+  $scope.model.availableSelected = false; //flag para indicar la seleccion de la visualizacion de disponibilidad del articulo 102
+  
+  //***** variables del formulario *****  
+  $scope.model.date = null;         //fecha seleccionada
+  $scope.model.dateFormated = null; //fecha en formato amigable para el usuario
+  
+  $scope.model.processingRequest = false;
+  
+  
+  //***** METODOS DE CARGA E INICIALIZACION *****
+  /**
+   * Consultar stock de la justificacion
+   */
+  $scope.loadStock = function(){
+    Assistance.getJustificationStock($scope.model.session.user_id, $scope.justification.id, null, null,
+      function(justification) {
+        $scope.justification.stock = justification.stock;
+      },
+      function(error) {
+        Notifications.message(error);
+      }
+    );
+    Assistance.getJustificationStock($scope.model.session.user_id, $scope.justification.id, null, 'YEAR',
+      function(justification) {
+        $scope.justification.yearlyStock = justification.stock;
+      },
+      function(error) {
+        Notifications.message(error);
+      }
+    );
+  };
+  
+  
+  $scope.$on('findStockJustification', function(event, data) {
+    if (data.justification.id == $scope.justification.id) {
+        $scope.loadStock();
     }
-	}
+  });
 
-    $scope.isSelectedDate = function() {
-        if ($scope.model.justification != null && $scope.model.justification.begin != null) {
-            $scope.dateFormated = $scope.model.justification.begin.toLocaleDateString();
-            return true;
-        } else {
-            $scope.dateFormated = null;
-            return false;
-        }
+  $scope.$on('JustificationStockChangedEvent', function(event, data) {
+    if ($scope.justification.id == data.justification_id) {
+      $scope.loadStock();
     }
-    // -----------------------------------------------------------------------------------
+  });
+
+  
+  
+  
+  
+  //***** METODOS DE SELECCION DE LA SECCION CORRESPONDIENTE A LA JUSTIFICACION 102 *****
+  /**
+   * Esta seleccionada la seccion correspondiente a la justificacion 102
+   * @returns {Boolean}
+   */
+  $scope.isSelectedJustification = function() {
+    return $scope.model[$scope.justification.selectedName];
+  };
+
+  /**
+   * Modificar seleccion de opcion desplegable correspondiente a salidas eventuales
+   * @returns {Boolean}
+   */
+	$scope.selectJustification = function() {
+    var value = !$scope.model[$scope.justification.selectedName];
+    $scope.clearSelections();
+    $scope.clearContent();
+    $scope.model[$scope.justification.selectedName] = value;
+	};
+  
+  
+  /**
+   * Esta seleccionado el formulario para solicitar articulo 102?
+   * @returns {Boolean}
+   */
+	$scope.isSelectedRequest = function() {
+		return $scope.model.requestSelected;
+	};
+
+  /**
+   * Esta seleccionada la seccion para ver la disponibilidad del articulo 102?
+   * @returns {Boolean}
+   */
+  $scope.isSelectedAvailable = function() {
+		return $scope.model.availableSelected;
+	};
 
 
-    //Carga el stock disponible de compensatorios
-    $scope.loadExamStock = function(id) {
-        Assistance.getJustificationStock($scope.model.session.user_id, id,
-			function(justificationStock) {
-                $scope.model.exam.stock = justificationStock.stock;
 
+  /**
+   * Seleccionar formulario para definir una solicitud del articulo 102
+   * @returns {Boolean}
+   */
+	$scope.selectRequest = function() {
+  	$scope.clearContent();
+		$scope.model.requestSelected = true;
+	};
+
+
+  /**
+   * Seleccionar seccion para ver la disponibilidad correspondiente al articulo 102
+   * @returns {Boolean}
+   */
+	$scope.selectAvailable = function() {
+		$scope.clearContent();
+		$scope.model.availableSelected = true;
+
+	};
+  
+  /**
+   * Inicializar variables correspondientes al contenido de la seccion del articulo 102
+   * @returns {undefined}
+   */
+  $scope.clearContent = function(){
+    $scope.model.requestSelected = false;
+    $scope.model.availableSelected = false;
+    $scope.model.date = null;
+		$scope.model.dateFormated = null;
+    $scope.model.processingRequest = false;
+    
+  };
+  
+    
+    
+  //***** METODOS DEl FORMULARIO DE SOLICITUD DE JUSTIFICACION 102 *****
+  $scope.selectDate = function(){
+		$scope.model.dateFormated = null;
+    if($scope.model.date !== null){
+			$scope.model.dateFormated = Utils.formatDate($scope.model.date);
+    }
+  };
+  
+  
+  $scope.isDateDefined = function(){
+    return ($scope.model.date !== null);    
+  };
+  
+  $scope.isStock = function(){
+    return ($scope.justification.stock !== 0);
+  };
+  
+  
+  // Envio la peticion al servidor
+  $scope.save = function() {
+    $scope.model.processingRequest = true;
+    var request = {
+			id:$scope.justification.id,
+			begin:$scope.model.date
+		};
+
+  	Assistance.requestJustification($scope.model.session.user_id, request,
+			function(ok) {
+				$scope.clearContent();    //limpiar contenido
+        $scope.clearSelections(); //limpiar selecciones
+        Notifications.message("Solicitud de " + $scope.justification.name + " registrada correctamente");
 			},
-			function(error) {
-                Notifications.message(error);
+			function(error){
+				Notifications.message(error);
 			}
+
 		);
-    }
 
+  };
 
-
-    $scope.initialize = function(justification) {
-        $scope.clearSelectionsExam();
-        $scope.model.exam = {id:justification.id, name: justification.name, stock:0, actualStock:0};
-        $scope.loadExamStock(justification.id);
-        $scope.model.justification = {id:justification.id,begin:null,end:null};
-    }
-
-
-    // Envio la peticion al servidor
-    $scope.save = function() {
-
-        Assistance.requestJustification($scope.model.session.user_id,$scope.model.justification,
-            function(ok) {
-                Notifications.message("Guardado exitosamente");
-                $scope.clearSelections();
-            },
-            function(error) {
-                Notifications.message(error);
-            }
-        );
-    }
-
- 	// Cargo el stock de la justificacion
-    // data.justification = {name,id}
-    $scope.$on('findStockJustification', function(event, data) {
-        justification = data.justification;
-        if (justification.id == $scope.model.justificationExamId) {
-            $scope.initialize(justification);
-        }
-    });
-
-
-});
+}]);
