@@ -362,7 +362,6 @@ $scope.order = function(predicate, reverse) {
                 var newAssistance = $scope.formatAssistance(assistance);
                 if(assistance.userId != null){
                   if (assistance.justifications != null && assistance.justifications.length > 0) {
-                    console.log(assistance);
                     newAssistance.justification = assistance.justifications[0];
                     $scope.formatJustification(assistance.justifications[0]);
                   }
@@ -374,7 +373,6 @@ $scope.order = function(predicate, reverse) {
               $scope.order('dateSort',false);//ordenamiento por defecto
               $scope.model.download = true;
               $scope.disabled = false;
-              console.log($scope.model.assistances);
               // $scope.getJustifications();
 
             },
