@@ -71,6 +71,7 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, As
                   $scope.items.push({ label:'Inicio', img:'fa-tachometer', function: $scope.summary});
                   $scope.items.push({ label:'Solicitudes', img:'fa-ticket', function: $scope.requestAssistance});
                   $scope.items.push({ label:'Control de Horario', img:'fa-clock-o', function: $scope.showAssistance});
+                  $scope.items.push({ label:'Incumplimientos', img:'fa-ticket', function: $scope.assistanceFails});
                   // hasta que no este terminado en producción no va
                   //$scope.items.push({ label:'Mi Horario', img:'fa-clock-o', function: $scope.mySchedule});
 
@@ -85,7 +86,6 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, As
                         }
 
                         if (hasApprove) {
-                          $scope.items.push({ label:'Incumplimientos', img:'fa-ticket', function: $scope.assistanceFails});
                           $scope.items.push({ label:'Adm. Solicitudes ', img:'fa-ticket', function: $scope.adminRequestAssistance});
                           $scope.items.push({ label:'Horas Extras ', img:'fa-plus', function: $scope.requestAuthority});
                         }
