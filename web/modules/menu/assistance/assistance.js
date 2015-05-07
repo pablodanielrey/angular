@@ -85,6 +85,7 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, As
                         }
 
                         if (hasApprove) {
+                          $scope.items.push({ label:'Incumplimientos', img:'fa-ticket', function: $scope.assistanceFails});
                           $scope.items.push({ label:'Adm. Solicitudes ', img:'fa-ticket', function: $scope.adminRequestAssistance});
                           $scope.items.push({ label:'Horas Extras ', img:'fa-plus', function: $scope.requestAuthority});
                         }
