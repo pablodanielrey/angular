@@ -137,7 +137,8 @@ app.service('Utils', function() {
     var j = this.getJustification(justificationId);
     return j.icon;
   };
-
+  
+  
 
   this.getJustification = function(justificationId){
     switch(justificationId){
@@ -193,6 +194,42 @@ app.service('Utils', function() {
         return {id:justificationId, name:'No definido', shortName:'-', icon:'fa-ticket'};
     }
   };
-
+  
+  
+  /**
+   * Dar formato a una solicitud de justificacion
+   */
+  this.formatRequestJustification = function(req) {
+    var request = {
+      id:null,
+      justificationName:null,
+      date:null,
+      time:null,
+      start:null,
+      end:null,
+      status:null
+    };
+    
+    request.id = req.id;
+    request.justificationName = this.getJustificationName(req.justification_id);
+    request.status = req.status;
+    
+    if(req.begin !== null){
+      var date = new Date(req.begin);
+      request.date = this.formatDate(date);
+    }
+    
+    if(req.end !== null){
+      var date2 = new Date(req.end);
+    }
+    
+    if(date && date2){
+      request.time = this.getDifferenceTimeFromDates(date, date2);
+      request.start = this.formatTime(date);
+      request.end = this.formatTime(date2);
+    }
+    
+    return request;
+  };
 
 });

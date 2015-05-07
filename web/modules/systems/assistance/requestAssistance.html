@@ -22,14 +22,14 @@
       <div class="column t1"><i class="fa fa-info-circle"></i> Estado</div>
     </div>
 <div class="scroll">
-    <div class="myRequestInfo" ng-repeat="x in model.requestedLicences" ng-class="{'PENDING':'pending', 'CANCELED':'canceled', 'REJECTED':'rejected', 'APPROVED':'approved'}[x.status]">
+    <div class="myRequestInfo" ng-repeat="x in model.requestedLicences" >
 
       <div class="myRequest">
-        <span>{{x.justification_name}}</span>
+        <span>{{x.justificationName}}</span>
       </div>
       <div class="myRequestDate">
         <span><i class="fa fa-calendar"></i> {{x.date}}</span>
-        <div ng-class="{true:'visible', false:'hidden'}[x.displayHours]">
+        <div ng-class="{true:'visible', false:'hidden'}[x.time != null]">
           <span><i class="fa fa-clock-o"></i> {{x.time}} Horas</span>
           <div>
             <span>De {{x.start}} a {{x.end}}</span>
