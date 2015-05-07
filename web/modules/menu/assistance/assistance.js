@@ -71,7 +71,10 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, As
                   $scope.items.push({ label:'Inicio', img:'fa-tachometer', function: $scope.summary});
                   $scope.items.push({ label:'Solicitudes', img:'fa-ticket', function: $scope.requestAssistance});
                   $scope.items.push({ label:'Control de Horario', img:'fa-clock-o', function: $scope.showAssistance});
-                  $scope.items.push({ label:'Mi Horario', img:'fa-clock-o', function: $scope.mySchedule});
+                  $scope.items.push({ label:'Incumplimientos', img:'fa-ticket', function: $scope.assistanceFails});
+                  //$scope.items.push({ label:'Filtro de Fallas (testing todavía no terminado)', img:'fa-ticket', function: $scope.assistanceFailsFilters});
+                  // hasta que no este terminado en producción no va
+                  //$scope.items.push({ label:'Mi Horario', img:'fa-clock-o', function: $scope.mySchedule});
 
                   Assistance.getUserOfficeRoles(
                       function(roles) {
@@ -106,23 +109,6 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, As
                 Notifications.message(error);
             }
           );
-
-          /*
-            Lo comento porque hasta que no este terminado prefiero que no lo vean en producción.
-            para testing descomentar todo.
-            */
-          Profiles.checkAccess(Session.getSessionId(),'ADMIN-ASSISTANCE',
-            function(ok) {
-              if (ok == 'granted') {
-                $scope.items.push({ label:'Incumplimientos', img:'fa-ticket', function: $scope.assistanceFails});
-                //$scope.items.push({ label:'Filtro de Fallas (testing todavía no terminado)', img:'fa-ticket', function: $scope.assistanceFailsFilters});
-              }
-            },
-            function (error) {
-              Notifications.message(error);
-            }
-          );
-
 
         }
 

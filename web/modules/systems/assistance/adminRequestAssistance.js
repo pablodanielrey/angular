@@ -44,7 +44,7 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistan
         var d = new Date(data.begin);
 
         var r = data;
-        r.date = d.toLocaleDateString();
+        r.date = Utils.formatDate(d);
         r.user = null;
 
         if(r.displayHours){

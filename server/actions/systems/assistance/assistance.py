@@ -87,24 +87,32 @@ class GetFailsByDate:
         try:
 
             start = self.dateutils.parse(message['request']['start'])
+            start = start.replace(microsecond=0)
             end = self.dateutils.parse(message['request']['end'])
 
             logging.debug('fecha de inicio {} y fin {}'.format(start,end))
 
+            authorizedUsers = [userId]
+
             userIds = self.schedule.getUsersWithConstraints(con)
             logging.debug('usuarios con chequeos : %s',(userIds,))
+
             offices = self.offices.getOfficesByUserRole(con,userId,tree=True,role='autoriza')
-            logging.debug('officinas que autoriza : %s',(offices,))
-            officesIds = list(map(lambda x : x['id'], offices))
-            ousersIds = self.offices.getOfficesUsers(con,officesIds)
-            logging.debug('usuarios en las oficinas : %s',(ousersIds,))
-            authorizedUsers = list(filter(lambda x : x in ousersIds, userIds))
+            if offices is not None and len(offices) > 0:
+                logging.debug('officinas que autoriza : %s',(offices,))
+
+                officesIds = list(map(lambda x : x['id'], offices))
+                ousersIds = self.offices.getOfficesUsers(con,officesIds)
+                logging.debug('usuarios en las oficinas : %s',(ousersIds,))
+
+                if ousersIds is not None and len(ousersIds) > 0:
+                    authorizedUsers.extend(list(filter(lambda x : x in ousersIds, userIds)))
+
             logging.debug('usuarios que se pueden autorizar : %s',(authorizedUsers,))
 
 
             assistanceFails = []
             (users,fails) = self.assistance.checkSchedule(authorizedUsers,start,end)
-
 
             for user in users:
                 ffails = self.fails.filterUser(user['id'],fails)
@@ -116,10 +124,14 @@ class GetFailsByDate:
                     assistanceFails.append(data)
 
 
+            b64 = self.assistance.arrangeCheckSchedule(con,fails)
+
+
             response = {
                 'id':message['id'],
                 'ok':'',
-                'response':assistanceFails
+                'response':assistanceFails,
+                'base64':b64
             }
             server.sendMessage(response)
             return True
@@ -205,6 +217,8 @@ class GetAssistanceStatus:
 
         finally:
             con.close()
+
+
 
 """
 query :
