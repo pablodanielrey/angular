@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
-import json, base64, psycopg2, datetime, traceback, logging, sys
+import json, base64, psycopg2, datetime, traceback, logging, sys, uuid
 import inject
 import datetime
 import itertools
+from collections import OrderedDict
+import io
+from pyexcel_ods3 import ODSWriter
 
 from model.utils import DateTimeEncoder
 from model.config import Config
@@ -22,6 +25,8 @@ class Assistance:
     schedule = inject.attr(Schedule)
     users = inject.attr(Users)
     justifications = inject.attr(Justifications)
+
+
 
     """
         Obtiene el estado de asistencia del usuario
@@ -64,9 +69,217 @@ class Assistance:
             'start': sdate,
             'end': edate,
             'logs': attlogs,
+            'justifications':[],
             'workedMinutes': totalSeconds / 60
         }
         return assistanceStatus
+
+
+
+
+
+
+    """
+    //////////////////////////////////////////////////
+    //////////////
+    ////////////// codigo para exportar a ods los resultados
+    //////////////
+    //////////////////////////////////////////////////
+    """
+
+    def _exportToOds(self,data):
+        ods = OrderedDict()
+        ods.update({"Datos": data})
+        filename = '/tmp/{}.tmp'.format(str(uuid.uuid4()))
+        writer = ODSWriter(filename)
+        writer.write(ods)
+        writer.close()
+
+        b64 = ''
+        with open(filename,'rb') as f:
+            b64 = base64.b64encode(f.read()).decode('utf-8')
+
+        return b64
+
+
+    def _arrangeForOdsAssistanceStatus(self, con, data):
+
+        values = [['Fecha','Dni','Nombre','Apellido','Hora de Entrada','Hora de Salida','Cantidad de Horas','Justificación']]
+        for l in data:
+            v = []
+
+            userId = l['userId']
+            user = self.users.findUser(con,userId)
+
+            v.append(l['date'].astimezone(tz=None).date())
+            v.append(user['dni'])
+            v.append(user['name'])
+            v.append(user['lastname'])
+
+            if l['start'] != None and l['start'] != '':
+                v.append(l['start'].astimezone(tz=None).time())
+            else:
+                v.append('')
+
+            if l['end'] != None and l['end'] != '':
+                v.append(l['end'].astimezone(tz=None).time())
+            else:
+                v.append('')
+
+            v.append('{:02d}:{:02d}'.format(int(l['workedMinutes'] / 60), int(l['workedMinutes'] % 60)))
+
+            if l['justifications'] != None and len(l['justifications']) > 0:
+                jname = l['justifications'][0]['name']
+                v.append(jname)
+            else:
+                v.append('')
+
+            values.append(v)
+
+        return values
+
+
+    def arrangeAssistanceStatusByUsers(self, con, data):
+        odata = self._arrangeForOdsAssistanceStatus(con,data)
+        return self._exportToOds(odata)
+
+
+    """
+    /////////////////////////////////////////////////////
+    """
+
+
+    def _equalsTime(self,d1,d2):
+        d1Aux = self.date.awareToUtc(d1)
+        d1Aux = d1Aux.replace(hour=0, minute=0, second=0, microsecond=0)
+        d2Aux = d2.replace(hour=0, minute=0, second=0, microsecond=0)
+        return d1Aux == d2Aux
+
+
+
+    def _resolveJustificationsNames(self,con,justifications):
+        for j in justifications:
+            jid = j['justification_id']
+            j['name'] = self.justifications.getJustificationById(con,jid)['name']
+
+
+    """
+        Obtiene los estados de asistencia de los usuarios entre las fechas pasadas
+    """
+    def getAssistanceStatusByUsers(self,con,usersIds,dates,status):
+        resp = []
+        if (dates == None or len(dates) <= 0):
+            return resp
+
+        start = dates[0]
+        end = dates[len(dates) - 1]
+        # obtengo las justificaciones
+        justifications = self.justifications.getJustificationRequestsByDate(con,status,usersIds,start,end)
+        self._resolveJustificationsNames(con,justifications)
+
+        for userId in usersIds:
+            for d in dates:
+                date = self.date.parse(d)
+                s = self.getAssistanceStatus(con,userId,date)
+                if (s != None):
+                    # verifico si coincide alguna justificacion con el userId y el date
+                    just = list(filter(lambda j: j['user_id']  == userId and self._equalsTime(j["begin"],date), justifications))
+                    logging.debug("*********")
+                    logging.debug(just)
+                    logging.debug(date)
+                    logging.debug(userId)
+                    s["justifications"] = just;
+                    for j in just:
+                        justifications.remove(j)
+                    resp.append(s)
+
+        logging.debug("---------Justificaciones--------------")
+        logging.debug(justifications)
+        # falta agrupar las justificaciones
+        for j in justifications:
+            a = {
+                'date':j['begin'],
+                'userId': j['user_id'],
+                'status': "",
+                'start': None,
+                'end': None,
+                'logs': [],
+                'justifications':[j],
+                'workedMinutes': 0
+            }
+            resp.append(a)
+
+        logging.debug("---------RESP--------------")
+        logging.debug(resp)
+        return resp
+
+
+
+
+
+
+
+
+
+    """
+        ////////////////////////////////////////// chequeo del tema de incumplimientos ////////////////////
+    """
+
+
+    def _arrangeForOdsChecks(self, con, data):
+
+        values = [['Fecha','Dni','Nombre','Apellido','Hora Declarada','Hora de Marcación','Error','Descripción','Justificación']]
+        for l in data:
+            v = []
+
+            userId = l['userId']
+            user = self.users.findUser(con,userId)
+
+            v.append(l['date'].astimezone(tz=None).date())
+            v.append(user['dni'])
+            v.append(user['name'])
+            v.append(user['lastname'])
+
+            if 'startSchedule' in l:
+                v.append(l['startSchedule'])
+            elif 'endSchedule' in l:
+                v.append(['endSchedule'])
+            else:
+                v.append('')
+
+
+            if 'start' in l:
+                v.append(l['start'])
+            elif 'end' in l:
+                v.append(['end'])
+            else:
+                v.append('')
+
+
+            if 'seconds' in l:
+                v.append('{:02d}:{:02d}'.format(int(l['seconds'] / 60 / 60), int(l['seconds'] / 60 % 60)))
+            else:
+                v.append('')
+
+
+            v.append(l['description'])
+
+
+            if 'justifications' in l:
+                self._resolveJustificationsNames(con,l['justifications'])
+                for j in l['justifications']:
+                    v.append(j['name'])
+            else:
+                v.append('')
+
+            values.append(v)
+
+        return values
+
+
+    def arrangeCheckSchedule(self, con, data):
+        odata = self._arrangeForOdsChecks(con,data)
+        return self._exportToOds(odata)
 
 
     """
@@ -91,9 +304,7 @@ class Assistance:
                 users.append(self.users.findUser(con,u))
                 schedulesFails.extend(self.schedule.checkConstraints(con,u,start,end))
 
-            justifications = self.justifications.getJustificationRequestsByDate(con,status=['APPROVED'],users=userIds,start=start,end=end)
-
-            return (users,schedulesFails,justifications)
+            return (users,schedulesFails)
 
         finally:
             con.close()

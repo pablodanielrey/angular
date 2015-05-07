@@ -286,12 +286,15 @@ $scope.order = function(predicate, reverse) {
       }
     }
 
+
     //creo una asistencia por cada justificacion que quedo pendiente, es decir que no corresponde a ninguna marcacion
     for (var $i = 0; $i < auxJustifications.length; $i++) {
       var j = auxJustifications[$i];
       var newAssistance = {};
       newAssistance.userId = j.user_id;
       newAssistance.start = new Date(j.begin);
+      newAssistance.date = new Date(j.begin);
+      newAssistance.workedMinutes = 0;
       newAssistance = $scope.formatAssistance(newAssistance);
       newAssistance.start = null; //redefino en null la hora de inicio
 
@@ -306,51 +309,6 @@ $scope.order = function(predicate, reverse) {
     $scope.order('dateSort',false);//ordenamiento por defecto
     $scope.model.download = true;
   }
-
-
-
-
-
-
-  /**
-  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  * CODIGO PORONGA A ARREGLAR. LO METO AHORA PORQUE ESTOY CANSADO Y PARA SOLUCIONAR EL TEMA DE LAS JUSTIFICAIONES
-  */
-
-  $scope.model.justificationNames = {
-    'e0dfcef6-98bb-4624-ae6c-960657a9a741':'Ausente con aviso',
-    '48773fd7-8502-4079-8ad5-963618abe725':'Compensatorio',
-    'fa64fdbd-31b0-42ab-af83-818b3cbecf46':'Boleta de Salida',
-    '4d7bf1d4-9e17-4b95-94ba-4ca81117a4fb':'Art 102',
-    'b70013e3-389a-46d4-8b98-8e4ab75335d0':'Pre-Exámen',
-    '76bc064a-e8bf-4aa3-9f51-a3c4483a729a':'Licencia Anual Ordinaria',
-    '50998530-10dd-4d68-8b4a-a4b7a87f3972':'Resolución',
-    'f9baed8a-a803-4d7f-943e-35c436d5db46':'Licencia Médica Corta Duración',
-    'a93d3af3-4079-4e93-a891-91d5d3145155':'Licencia Médica Largo Tratamiento',
-    'b80c8c0e-5311-4ad1-94a7-8d294888d770':'Licencia Médica Atención Familiar',
-    '478a2e35-51b8-427a-986e-591a9ee449d8':'Justificado por Médico',
-    '5ec903fb-ddaf-4b6c-a2e8-929c77d8256f':'Feriado',
-    '874099dc-42a2-4941-a2e1-17398ba046fc':'Paro',
-    'b309ea53-217d-4d63-add5-80c47eb76820':'Cumpleaños',
-    '0cd276aa-6d6b-4752-abe5-9258dbfd6f09':'Duelo',
-    'e8019f0e-5a70-4ef3-922c-7c70c2ce0f8b':'Donación de Sangre'
-  };
-
-
-  $scope.getJustificationName = function(id) {
-    return $scope.model.justificationNames[id];
-  }
-
-  /*
-    //////////////////////////////////////////////
-    hasta aca es el codigo poronga que agregueee
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  */
-
-
-
-
-
 
 
 
@@ -386,6 +344,8 @@ $scope.order = function(predicate, reverse) {
       $scope.checkDates();
       $scope.disabled = true; //deshabilitar nuevas busquedas hasta no completar la actual
 
+      var status = "APPROVED"; //bsuca solo las justificaciones aprobadas
+
       $scope.model.assistances = [];
       $scope.searchDates = $scope.initializeSearchDates();
 
@@ -393,21 +353,29 @@ $scope.order = function(predicate, reverse) {
         var searchUsers = $scope.initializeSearchUsers($scope.searchDates); //si no existen usuarios seleccionados, se definen todos los usuarios
 
         $scope.usersIds = $scope.getUsersIds(searchUsers);
-        Assistance.getAssistanceStatusByUsers($scope.usersIds, $scope.searchDates,
+        Assistance.getAssistanceStatusByUsers($scope.usersIds, $scope.searchDates, status,
             function ok(response) {
               var assistances = response.assistances;
               $scope.model.base64 = response.base64;
               for (var i = 0; i < assistances.length; i++) {
                 var assistance = assistances[i];
                 var newAssistance = $scope.formatAssistance(assistance);
-
                 if(assistance.userId != null){
+                  if (assistance.justifications != null && assistance.justifications.length > 0) {
+                    console.log(assistance);
+                    newAssistance.justification = assistance.justifications[0];
+                    $scope.formatJustification(assistance.justifications[0]);
+                  }
                   $scope.model.assistances.push(newAssistance);
                 }
 
               }
 
-              $scope.getJustifications();
+              $scope.order('dateSort',false);//ordenamiento por defecto
+              $scope.model.download = true;
+              $scope.disabled = false;
+              console.log($scope.model.assistances);
+              // $scope.getJustifications();
 
             },
             function error(){
@@ -431,6 +399,10 @@ $scope.order = function(predicate, reverse) {
 
     var date = new Date(assistance.date);
     newAssistance.date = Utils.formatDate(date);
+
+    newAssistance.dayOfWeek = {};
+    newAssistance.dayOfWeek.name = Utils.getDayString(date);
+    newAssistance.dayOfWeek.number = date.getDay();
 
     for(var i = 0; i < $scope.model.users.length; i++){
       var user = $scope.model.users[i];
@@ -513,10 +485,10 @@ $scope.order = function(predicate, reverse) {
   };
 
 
+
 // ---------- EXPORTAR DATOS --------
 
   $scope.download = function() {
-    console.log($scope.model.base64);
     if ($scope.model.base64 == null || $scope.model.base64 == '') {
       return;
     }

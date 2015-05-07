@@ -11,7 +11,7 @@
           <div>
             <input class="button green" type="button" value="Disponibles" ng-click="selectJustificationAbsentAvailable()">
           </div>
-     
+
 
         </div>
 
@@ -31,13 +31,13 @@
             <p class="parrafosGreen2 margin">{{model.absent.yearlyStock}}</p>
           </div>
 
-  
+
         </div>
 
         <div class="margin" ng-class="{true:'visible', false:'hidden'}[isDefinedJustificationAbsentRequest()]">
           <p class="parrafos">Solicitar Ausente con aviso para el día</p>
-		  <p class="parrafos2"><i class="fa fa-calendar-o"></i> {{model.requestAbsentBeginFormated}}</p>
-          <input class="button2 blue2" type="button" value="Confirmar" ng-click="confirmRequestAbsent()">
+		      <p class="parrafos2"><i class="fa fa-calendar-o"></i> {{model.requestAbsentBeginFormated}}</p>
+          <input class="button2 blue2" type="button" value="Confirmar" ng-click="confirmRequestAbsent()" ng-disabled='model.processingRequest'>
         </div>
       </div>
     </div>

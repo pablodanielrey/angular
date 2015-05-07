@@ -100,6 +100,26 @@ class Justifications:
         return justs
 
 
+
+
+    """ retorna todos los tipos de justificaciones que existan en la base """
+    def getJustificationById(self,con,id):
+        cur = con.cursor()
+        cur.execute('select id,name from assistance.justifications where id = %s',(id,))
+        if cur.rowcount <= 0:
+            return []
+
+        for j in cur:
+            justification = {
+                    'id':j[0],
+                    'name':j[1]
+                }
+            return justification
+
+        return None
+
+
+
     """
         obtiene todas los pedidos de justificaciones con cierto estado
         status es el estado a obtener. en el caso de que no sea pasado entonces se obtienen todas, en su ultimo estado

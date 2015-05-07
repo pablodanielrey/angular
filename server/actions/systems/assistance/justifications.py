@@ -86,6 +86,7 @@ class BossesNotifier:
                 logging.debug('buscando mail para : {}'.format(bid))
                 bemails = self.users.listMails(con,bid)
                 if bemails != None and len(bemails) > 0:
+                    bemails = list(filter(lambda x: 'econo.unlp.edu.ar' in x['email'],bemails))
                     logging.debug('añadiendo {}'.format(bemails))
                     emails.extend(list(map(lambda x: x['email'],bemails)))
 

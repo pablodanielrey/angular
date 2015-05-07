@@ -71,7 +71,7 @@ app.service('Assistance', ['Utils','Messages','Session',
 				Messages.send(msg,
 					function(data) {
 						if (typeof data.error === 'undefined') {
-							callbackOk(data.response);
+							callbackOk(data);
 						} else {
 							callbackError(data.error);
 						}
@@ -99,21 +99,24 @@ app.service('Assistance', ['Utils','Messages','Session',
 				});
 		};
 
-		this.getAssistanceStatusByUsers = function(usersIds, dates, callbackOk, callbackError) {
+		this.getAssistanceStatusByUsers = function(usersIds, dates, status, callbackOk, callbackError) {
 			var msg = {
 				id: Utils.getId(),
 				action: 'getAssistanceStatusByUsers',
 				session: Session.getSessionId(),
 				request:{
 					usersIds: usersIds,
-					dates: dates
+					dates: dates,
+					status: status
 				}
 			}
 
 			Messages.send(msg,
 				function(data) {
 					if (typeof data.error === 'undefined') {
-						var response = {base64:data.base64,assistances:data.response};
+						var response = {};
+						response.assistances = data.response;
+						response.base64 = data.base64;
 						callbackOk(response);
 					} else {
 						callbackError(data.error);

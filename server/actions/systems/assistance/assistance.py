@@ -87,49 +87,51 @@ class GetFailsByDate:
         try:
 
             start = self.dateutils.parse(message['request']['start'])
+            start = start.replace(microsecond=0)
             end = self.dateutils.parse(message['request']['end'])
 
             logging.debug('fecha de inicio {} y fin {}'.format(start,end))
 
+            authorizedUsers = [userId]
+
             userIds = self.schedule.getUsersWithConstraints(con)
             logging.debug('usuarios con chequeos : %s',(userIds,))
+
             offices = self.offices.getOfficesByUserRole(con,userId,tree=True,role='autoriza')
-            logging.debug('officinas que autoriza : %s',(offices,))
-            officesIds = list(map(lambda x : x['id'], offices))
-            ousersIds = self.offices.getOfficesUsers(con,officesIds)
-            logging.debug('usuarios en las oficinas : %s',(ousersIds,))
-            authorizedUsers = list(filter(lambda x : x in ousersIds, userIds))
+            if offices is not None and len(offices) > 0:
+                logging.debug('officinas que autoriza : %s',(offices,))
+
+                officesIds = list(map(lambda x : x['id'], offices))
+                ousersIds = self.offices.getOfficesUsers(con,officesIds)
+                logging.debug('usuarios en las oficinas : %s',(ousersIds,))
+
+                if ousersIds is not None and len(ousersIds) > 0:
+                    authorizedUsers.extend(list(filter(lambda x : x in ousersIds, userIds)))
+
             logging.debug('usuarios que se pueden autorizar : %s',(authorizedUsers,))
 
 
             assistanceFails = []
-            (users,fails,justifications) = self.assistance.checkSchedule(authorizedUsers,start,end)
-
+            (users,fails) = self.assistance.checkSchedule(authorizedUsers,start,end)
 
             for user in users:
                 ffails = self.fails.filterUser(user['id'],fails)
-                jjusts = self._filterJustificationsByUser(justifications,user['id'])
                 for f in ffails:
-                    f['date'] = self.dateutils.localizeAwareToLocal(f['date']);
-
-                    """ busco la justificacion para la fecha dada """
-                    jjust = None
-                    for j in jjusts:
-                        if j['begin'].date() == f['date'].date():
-                            jjust = j
-                            break
-
                     data = {
                         'user':user,
-                        'fail':f,
-                        'justification': jjust
+                        'fail':f
                     }
                     assistanceFails.append(data)
+
+
+            b64 = self.assistance.arrangeCheckSchedule(con,fails)
+
 
             response = {
                 'id':message['id'],
                 'ok':'',
-                'response':assistanceFails
+                'response':assistanceFails,
+                'base64':b64
             }
             server.sendMessage(response)
             return True
@@ -216,6 +218,8 @@ class GetAssistanceStatus:
         finally:
             con.close()
 
+
+
 """
 query :
 {
@@ -224,7 +228,8 @@ query :
   session:,
   request:{
       usersIds: "listado de ids de los usuarios a buscar",
-      dates: "fechas a buscar"
+      dates: "fechas a buscar",
+      status:[]
   }
 
 }
@@ -265,6 +270,11 @@ class GetAssistanceStatusByUsers:
             server.sendMessage(response)
             return True
 
+        status = None
+        if 'status' in message['request']:
+            status = message['request']['status']
+            status = status.split('|')
+
         sid = message['session']
         self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
 
@@ -273,18 +283,15 @@ class GetAssistanceStatusByUsers:
             usersIds = message['request']['usersIds']
             dates = message['request']['dates']
 
-            status = []
-            for userId in usersIds:
-                for d in dates:
-                    date = self.date.parse(d)
-                    s = self.assistance.getAssistanceStatus(con,userId,date)
-                    if (s != None):
-                        status.append(s)
+
+            resp = self.assistance.getAssistanceStatusByUsers(con,usersIds,dates,status)
+            b64 = self.assistance.arrangeAssistanceStatusByUsers(con,resp)
 
             response = {
                 'id':message['id'],
                 'ok':'',
-                'response':status
+                'base64':b64,
+                'response':resp
             }
             server.sendMessage(response)
             return True

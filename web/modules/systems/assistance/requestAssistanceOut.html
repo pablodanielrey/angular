@@ -50,7 +50,7 @@
           <p class="parrafos">Solicitar Boleta de salida para el día</p>
           <p class="parrafos3"><i class="fa fa-calendar-o"></i> {{model.dateFormated}} / <i class="fa fa-clock-o"></i> {{model.timeFormated}} Horas </p>
           <p class="parrafos4"><i class="fa fa-clock-o"></i> De {{model.beginFormated}} a {{model.endFormated}} Horas </p>
-          <input class="button2 blue2" type="button" value="Confirmar" ng-click="save()">
+          <input class="button2 blue2" type="button" value="Confirmar" ng-click="save()" ng-disabled='model.processingRequest'>
         </div>
       </div>
     </div>
