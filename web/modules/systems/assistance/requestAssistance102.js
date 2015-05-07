@@ -6,19 +6,22 @@ app.controller('RequestAssistance102Ctrl', ["$scope", "Assistance", "Notificatio
 
   //***** datos de la justificacion *****
   $scope.justification = { 
-    id: '4d7bf1d4-9e17-4b95-94ba-4ca81117a4fb', //id de la justificacion
+    id: '4d7bf1d4-9e17-4b95-94ba-4ca81117a4fb', //id de la justificacion.
+    name:Utils.getJustificationName('4d7bf1d4-9e17-4b95-94ba-4ca81117a4fb'),
     stock:0,
-    yearlyStock:0
+    yearlyStock:0,
+    selectedName:"justification102Selected", //Nombre de la seleccion en el controlador padre
   };
   
   //***** variables de seleccion de la seccion *****
-  $scope.model.justification102Selected = false; //flag para indicar la seleccion de la seccion del articulo 102
   $scope.model.requestSelected = false; //flag para indicar la seleccion del formulario de solicitud del articulo 102
   $scope.model.availableSelected = false; //flag para indicar la seleccion de la visualizacion de disponibilidad del articulo 102
   
   //***** variables del formulario *****  
   $scope.model.date = null;         //fecha seleccionada
   $scope.model.dateFormated = null; //fecha en formato amigable para el usuario
+  
+  $scope.model.processingRequest = false;
   
   
   //***** METODOS DE CARGA E INICIALIZACION *****
@@ -66,19 +69,19 @@ app.controller('RequestAssistance102Ctrl', ["$scope", "Assistance", "Notificatio
    * Esta seleccionada la seccion correspondiente a la justificacion 102
    * @returns {Boolean}
    */
-  $scope.isSelectedJustification102 = function() {
-    return $scope.model.justification102Selected;
+  $scope.isSelectedJustification = function() {
+    return $scope.model[$scope.justification.selectedName];
   };
 
   /**
    * Modificar seleccion de opcion desplegable correspondiente a salidas eventuales
    * @returns {Boolean}
    */
-	$scope.selectJustification102 = function() {
-    var value = !$scope.model.justification102Selected;
+	$scope.selectJustification = function() {
+    var value = !$scope.model[$scope.justification.selectedName];
     $scope.clearSelections();
     $scope.clearContent();
-    $scope.model.justification102Selected = value;
+    $scope.model[$scope.justification.selectedName] = value;
 	};
   
   
@@ -129,6 +132,7 @@ app.controller('RequestAssistance102Ctrl', ["$scope", "Assistance", "Notificatio
     $scope.model.availableSelected = false;
     $scope.model.date = null;
 		$scope.model.dateFormated = null;
+    $scope.model.processingRequest = false;
     
   };
   
@@ -154,7 +158,7 @@ app.controller('RequestAssistance102Ctrl', ["$scope", "Assistance", "Notificatio
   
   // Envio la peticion al servidor
   $scope.save = function() {
-    console.log("estoy");
+    $scope.model.processingRequest = true;
     var request = {
 			id:$scope.justification.id,
 			begin:$scope.model.date
@@ -164,7 +168,7 @@ app.controller('RequestAssistance102Ctrl', ["$scope", "Assistance", "Notificatio
 			function(ok) {
 				$scope.clearContent();    //limpiar contenido
         $scope.clearSelections(); //limpiar selecciones
-        Notifications.message("Solicitud de artículo 102 registrada correctamente");
+        Notifications.message("Solicitud de " + $scope.justification.name + " registrada correctamente");
 			},
 			function(error){
 				Notifications.message(error);
