@@ -228,7 +228,7 @@ class Assistance:
 
     def _arrangeForOdsChecks(self, con, data):
 
-        values = [['Fecha','Dni','Nombre','Apellido','Hora Declarada','Hora de Marcación','Error','Descripción','Justificación']]
+        values = [['Fecha','Dni','Nombre','Apellido','Hora Declarada','Hora de Marcación','Diferencia','Descripción','Horas Trabajadas','Justificación']]
         for l in data:
             v = []
 
