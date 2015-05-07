@@ -25,7 +25,7 @@
       <div class="nav">
         <div>
           <div class="navTitle"><i class="fa fa-building-o"></i> Oficina</div>
-          <select class="navTitle1" ng-change="filterUsers()" ng-model="model.groupSelected"  ng-options="op.name for op in model.groups | orderBy:['name']">
+          <select class="navTitle1" ng-change="filterUsers()" ng-model="model.groupSelected"  ng-options="op.name group by op.parentName  for op in model.groups | orderBy:['parentName','order','name']">
             <option value="">Todos</option>
           </select>
        </div>

@@ -124,6 +124,18 @@ $scope.order = function(predicate, reverse) {
     }
   };
 
+  $scope.setParentGroup = function(group, groups) {
+    for (var i = 0; i < groups.length; i++) {
+      if (group.parent == groups[i].id) {
+        group.parentName = groups[i].name;
+        group.order = 1;
+        return ;
+      }
+    }
+    group.parentName = group.name;
+    group.order = 0;
+  }
+
   /**
     * Cargar todos los grupos
   */
@@ -138,6 +150,9 @@ $scope.order = function(predicate, reverse) {
     Assistance.getOfficesByUserRole(userId,role,tree,
       function(groups) {
         $scope.model.groups = groups;
+        for (var i = 0; i < groups.length; i++) {
+          $scope.setParentGroup(groups[i], groups);
+        }
       },
       function(error) {
         Notifications.message(error);
