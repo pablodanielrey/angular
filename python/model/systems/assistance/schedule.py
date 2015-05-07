@@ -77,20 +77,43 @@ class Schedule:
         if len(schedules) <= 0:
             return []
 
-        schedules2 = []
-        days = 1
-        while schedules2 == None or len(schedules2) <= 0:
-            date2 = date + datetime.timedelta(days=days)
-            schedules2 = self.getSchedule(con,userId,date2)
-            days = days + 1
-
-        start2 = schedules2[0]['start']
-
         start = schedules[0]['start']
         end = schedules[-1]['end']
 
+        count = 0
+        schedules2 = []
+        days = 1
+        while (count < 10) and (schedules2 is None or len(schedules2) <= 0):
+            date2 = date + datetime.timedelta(days=days)
+            schedules2 = self.getSchedule(con,userId,date2)
+            days = days + 1
+            count = count + 1
+
+        if schedules2 is None or len(schedules2) <= 0:
+            start2 = end + datetime.timedelta(hours=24)
+        else:
+            start2 = schedules2[0]['start']
+
+
+
+        schedules2 = []
+        days = 1
+        count = 0
+        while (count < 10) or (schedules2 is None or len(schedules2) <= 0):
+            date2 = date - datetime.timedelta(days=days)
+            schedules2 = self.getSchedule(con,userId,date2)
+            days = days + 1
+            count = count + 1
+
+        if schedules2 is None or len(schedules2) <= 0:
+            end2 = start - datetime.timedelta(hours=24)
+        else:
+            end2 = schedules2[0]['end']
+
+
+
         deltaEnd = end + datetime.timedelta(seconds=((start2 - end).total_seconds() / 2))
-        deltaStart = start - datetime.timedelta(hours=1)
+        deltaStart = start - datetime.timedelta(seconds=((start - end2).total_seconds() / 2))
 
         logs = self.logs.findLogs(con,userId,deltaStart,deltaEnd)
 
