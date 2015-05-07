@@ -161,7 +161,7 @@ app.service('Utils', function() {
         return {id:justificationId, name:'Licencia Anual Ordinaria', shortName:'LAO', icon:'fa-plane'};
       break;
       case '50998530-10dd-4d68-8b4a-a4b7a87f3972':
-        return {id:justificationId, name:'Resolución', shortName:'R', icon:'fa-file-text-o'};
+        return {id:justificationId, name:'Resolución 638', shortName:'R', icon:'fa-file-text-o'};
       break;
       case 'f9baed8a-a803-4d7f-943e-35c436d5db46':
         return {id:justificationId, name:'Licencia Médica Corta Duración', shortName:'MCD', icon:'fa-medkit'};
