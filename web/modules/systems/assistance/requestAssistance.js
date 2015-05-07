@@ -12,10 +12,10 @@ app.controller('RequestAssistanceCtrl', ["$scope", "$rootScope", "$timeout", "$w
 		justificationOutSelected	: false,
 		justificationCompensatorySelected : false,
     justification102Selected : false,
-		justificationAbsentId : 'e0dfcef6-98bb-4624-ae6c-960657a9a741', // id de la justificacion de ausente con aviso
+    justificationBirthdaySelected : false,
+    justificationDSSelected: false,
 		justificationCompensatoryId : "48773fd7-8502-4079-8ad5-963618abe725", // id de la justificacion de compensatorio
 		justificationOutId : 'fa64fdbd-31b0-42ab-af83-818b3cbecf46', //id de la justificacion de boleta de salidas
-		justificationExamId : 'b70013e3-389a-46d4-8b98-8e4ab75335d0', // id de la justificacion de prexamen
 		justificationLaoId : '76bc064a-e8bf-4aa3-9f51-a3c4483a729a' // id de la justificacion de la licencia anual ordinaria
 	};
 
@@ -132,6 +132,11 @@ app.controller('RequestAssistanceCtrl', ["$scope", "$rootScope", "$timeout", "$w
 		$scope.model.justificationOutSelected = false;
 		$scope.model.justificationLaoSelected = false;
     $scope.model.justification102Selected = false;
+    $scope.model.justificationMltSelected = false;
+    $scope.model.justificationMafSelected = false;
+    $scope.model.justificationBirthdaySelected = false;
+    $scope.model.justificationJMSelected = false;
+    $scope.model.justificationDSSelected = false;
 		$scope.model.justification = {};
 	}
 
