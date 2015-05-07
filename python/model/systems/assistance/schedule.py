@@ -95,7 +95,7 @@ class Schedule:
             start2 = schedules2[0]['start']
 
 
-
+        """
         schedules2 = []
         days = 1
         count = 0
@@ -109,11 +109,14 @@ class Schedule:
             end2 = start - datetime.timedelta(hours=24)
         else:
             end2 = schedules2[0]['end']
-
+        """
 
 
         deltaEnd = end + datetime.timedelta(seconds=((start2 - end).total_seconds() / 2))
+        """
         deltaStart = start - datetime.timedelta(seconds=((start - end2).total_seconds() / 2))
+        """
+        deltaStart = start - datetime.timedelta(hours=3)
 
         logs = self.logs.findLogs(con,userId,deltaStart,deltaEnd)
 
