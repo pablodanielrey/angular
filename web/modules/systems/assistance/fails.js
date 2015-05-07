@@ -128,9 +128,9 @@ app.controller('AssistanceFailsCtrl', ["$scope", "$timeout", "Assistance", "Noti
           if (r.fail.whSeconds) {
             var hours = Math.floor((r.fail.whSeconds / 60) / 60);
             var minutes = Math.floor((r.fail.whSeconds / 60) % 60);
-            r.fail.wh = ('0' + hours).substr(-2) + ":" + ('0' + minutes).substr(-2);
+            r.fail.whs = ('0' + hours).substr(-2) + ":" + ('0' + minutes).substr(-2);
           } else {
-            r.fail.wh = '00:00';
+            r.fail.whs = '00:00';
           }
 
           $scope.model.assistanceFails.push(r);

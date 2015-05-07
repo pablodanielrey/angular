@@ -241,17 +241,17 @@ class Assistance:
             v.append(user['lastname'])
 
             if 'startSchedule' in l:
-                v.append(l['startSchedule'])
+                v.append(l['startSchedule'].astimezone(tz=None).time())
             elif 'endSchedule' in l:
-                v.append(['endSchedule'])
+                v.append(l['endSchedule'].astimezone(tz=None).time())
             else:
                 v.append('')
 
 
             if 'start' in l:
-                v.append(l['start'])
+                v.append(l['start'].astimezone(tz=None).time())
             elif 'end' in l:
-                v.append(['end'])
+                v.append(l['end'].astimezone(tz=None).time())
             else:
                 v.append('')
 

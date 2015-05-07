@@ -344,6 +344,7 @@ class Schedule:
     def checkSchedule(self,con,userId,date):
         date = self.date.awareToUtc(date)
 
+        schedules = self.getSchedule(con,userId,date)
         logs = self._getLogsForSchedule(con,userId,date)
         whs,attlogs = self.logs.getWorkedHours(logs)
         controls = list(utils.combiner(schedules,whs))
