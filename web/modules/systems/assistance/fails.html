@@ -46,7 +46,7 @@
         <div ng-click="reverseWh=!reverseWh;order(['fail.wh','user.lastname','user.name','fail.dateExtend'],reverseWh)" class="workingHours"><i class="fa fa-sort"></i> Hora de marcación</div>
         <div ng-click="reverseDiff=!reverseDiff;order(['fail.diff','user.lastname','user.name','fail.dateExtend'],reverseDiff)" class="diff"><i class="fa fa-sort"></i> Diferencia </div>
         <div ng-click="reverseDesc=!reverseDesc;order(['fail.description','user.lastname','user.name','fail.dateExtend'],reverseDesc)" class="description"><i class="fa fa-sort"></i> Description</div>
-        <div class="wh"><i class="fa fa-sort"></i> Horas Trabajadas</div>
+        <div ng-click="reverseWhs=!reverseWhs;order(['fail.whs','user.lastname','user.name','fail.dateExtend'],reverseWhs)" class="wh"><i class="fa fa-sort"></i> Horas Trabajadas</div>
         <div ng-click="reverseJust=!reverseJust;order(['justification.shortName','user.lastname','user.name','fail.dateExtend'],reverseJust)" class="justification"><i class="fa fa-sort"></i> Justificación</div>
 
     </div>
@@ -60,7 +60,7 @@
         <div class="workingHours">{{assistanceFail.fail.wh}}</div>
         <div class="diff">{{assistanceFail.fail.diff}}</div>
         <div class="description">{{assistanceFail.fail.description}}</div>
-        <div class="description">{{assistanceFail.fail.wh}}</div>
+        <div class="description">{{assistanceFail.fail.whs}}</div>
         <div class="justification" ><i class="fa {{assistanceFail.justification.icon}}"></i> <span title="{{assistanceFail.justification.name}}" class="pointer">{{assistanceFail.justification.shortName}}</span></div>
 
       </div>
