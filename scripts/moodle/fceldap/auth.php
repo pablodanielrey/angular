@@ -146,6 +146,8 @@ class auth_plugin_fceldap extends auth_plugin_base {
       $result = pg_fetch_all($rs);
       if (sizeof($result) > 0) {
         $data["idnumber"] = $result[0]["student_number"];
+      } else {
+        $data["idNumber"] = $data["numero_documento"];
       }
 
       pg_close($conn);
