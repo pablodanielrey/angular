@@ -77,20 +77,46 @@ class Schedule:
         if len(schedules) <= 0:
             return []
 
-        schedules2 = []
-        days = 1
-        while schedules2 == None or len(schedules2) <= 0:
-            date2 = date + datetime.timedelta(days=days)
-            schedules2 = self.getSchedule(con,userId,date2)
-            days = days + 1
-
-        start2 = schedules2[0]['start']
-
         start = schedules[0]['start']
         end = schedules[-1]['end']
 
+        count = 0
+        schedules2 = []
+        days = 1
+        while (count < 10) and (schedules2 is None or len(schedules2) <= 0):
+            date2 = date + datetime.timedelta(days=days)
+            schedules2 = self.getSchedule(con,userId,date2)
+            days = days + 1
+            count = count + 1
+
+        if schedules2 is None or len(schedules2) <= 0:
+            start2 = end + datetime.timedelta(hours=24)
+        else:
+            start2 = schedules2[0]['start']
+
+
+        """
+        schedules2 = []
+        days = 1
+        count = 0
+        while (count < 10) or (schedules2 is None or len(schedules2) <= 0):
+            date2 = date - datetime.timedelta(days=days)
+            schedules2 = self.getSchedule(con,userId,date2)
+            days = days + 1
+            count = count + 1
+
+        if schedules2 is None or len(schedules2) <= 0:
+            end2 = start - datetime.timedelta(hours=24)
+        else:
+            end2 = schedules2[0]['end']
+        """
+
+
         deltaEnd = end + datetime.timedelta(seconds=((start2 - end).total_seconds() / 2))
-        deltaStart = start - datetime.timedelta(hours=1)
+        """
+        deltaStart = start - datetime.timedelta(seconds=((start - end2).total_seconds() / 2))
+        """
+        deltaStart = start - datetime.timedelta(hours=3)
 
         logs = self.logs.findLogs(con,userId,deltaStart,deltaEnd)
 
@@ -344,6 +370,7 @@ class Schedule:
     def checkSchedule(self,con,userId,date):
         date = self.date.awareToUtc(date)
 
+        schedules = self.getSchedule(con,userId,date)
         logs = self._getLogsForSchedule(con,userId,date)
         whs,attlogs = self.logs.getWorkedHours(logs)
         controls = list(utils.combiner(schedules,whs))
@@ -355,8 +382,9 @@ class Schedule:
 
     """ chequea los schedules contra las workedhours calculadas """
     def _checkScheduleWorkedHours(self,userId,controls):
-        tolerancia = datetime.timedelta(minutes=15)
+        tolerancia = datetime.timedelta(minutes=16)
         fails = []
+
         for sched,wh in controls:
 
             if sched is None:
@@ -365,13 +393,13 @@ class Schedule:
 
             date = sched['start']
 
-            if wh is None or 'start' not in wh or 'end' not in wh:
+            if (wh is None) or ('start' not in wh and 'end' not in wh):
                 """ no tiene nada trabajado!!! """
                 fails.append(
                     {
                         'userId':userId,
                         'date':date,
-                        'description':'No existe ninguna marcación para esa fecha'
+                        'description':'Sin marcación'
                     }
                 )
                 continue
@@ -384,7 +412,7 @@ class Schedule:
                     {
                         'userId':userId,
                         'date': date,
-                        'description':'Sin horario de llegada'
+                        'description':'Sin entrada'
                     }
                 )
 
@@ -396,7 +424,8 @@ class Schedule:
                         'description':'Llegada tardía',
                         'startSchedule':sched['start'],
                         'start':wh['start'],
-                        'seconds':(wh['start'] - sched['start']).total_seconds()
+                        'seconds':(wh['start'] - sched['start']).total_seconds(),
+                        'whSeconds':wh['seconds']
                     }
                 )
 
@@ -407,7 +436,7 @@ class Schedule:
                     {
                         'userId':userId,
                         'date': date,
-                        'description':'Sin horario de salida'
+                        'description':'Sin salida'
                     }
                 )
 
@@ -419,7 +448,8 @@ class Schedule:
                         'description':'Salida temprana',
                         'endSchedule':sched['end'],
                         'end':wh['end'],
-                        'seconds':(sched['end']-wh['end']).total_seconds()
+                        'seconds':(sched['end']-wh['end']).total_seconds(),
+                        'whSeconds':wh['seconds']
                     }
                 )
 

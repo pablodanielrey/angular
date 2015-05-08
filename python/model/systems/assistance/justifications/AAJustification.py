@@ -25,7 +25,7 @@ class AAJustification(Justification):
     """
     def available(self,utils,con,userId,date,period=None):
 
-        justStatus = utils._getJustificationsInStatus(con,['PENDING','APROVED'])
+        justStatus = utils._getJustificationsInStatus(con,['PENDING','APPROVED'])
         if len(justStatus) <= 0:
             """ no se tomo ninguna todavia """
             if period is None:

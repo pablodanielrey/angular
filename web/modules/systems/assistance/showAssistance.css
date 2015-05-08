@@ -14,6 +14,10 @@
     cursor:pointer;
 }
 
+.showAssistance .obs {
+  cursor:pointer;
+}
+
 .showAssistance .title {
   display:flex;
   align-items: center;

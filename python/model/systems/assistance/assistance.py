@@ -38,9 +38,13 @@ class Assistance:
         if date is None:
             date = self.date.now()
 
+        if self.date.isNaive(date) or self.date.isUTC(date):
+            date = self.date.localizeLocal(date)
+
         """ el cero y el fin del día son de la zona local """
         From = date.replace(hour=0,minute=0,second=0,microsecond=0)
         To = date.replace(hour=23,minute=59,second=59,microsecond=0)
+
 
         From = self.date.awareToUtc(From)
         To = self.date.awareToUtc(To)
@@ -171,6 +175,7 @@ class Assistance:
         if (dates == None or len(dates) <= 0):
             return resp
 
+
         start = dates[0]
         end = dates[len(dates) - 1]
         # obtengo las justificaciones
@@ -180,22 +185,18 @@ class Assistance:
         for userId in usersIds:
             for d in dates:
                 date = self.date.parse(d)
+
                 s = self.getAssistanceStatus(con,userId,date)
                 if (s != None):
                     # verifico si coincide alguna justificacion con el userId y el date
                     just = list(filter(lambda j: j['user_id']  == userId and self._equalsTime(j["begin"],date), justifications))
-                    logging.debug("*********")
-                    logging.debug(just)
-                    logging.debug(date)
-                    logging.debug(userId)
                     s["justifications"] = just;
                     for j in just:
                         justifications.remove(j)
                     resp.append(s)
 
-        logging.debug("---------Justificaciones--------------")
-        logging.debug(justifications)
-        # falta agrupar las justificaciones
+        # falta agrupar las justificaciones que quedaron
+        # creo un assistance status por cada justificacion que quedaron sin matchear
         for j in justifications:
             a = {
                 'date':j['begin'],
@@ -209,8 +210,6 @@ class Assistance:
             }
             resp.append(a)
 
-        logging.debug("---------RESP--------------")
-        logging.debug(resp)
         return resp
 
 
@@ -228,7 +227,7 @@ class Assistance:
 
     def _arrangeForOdsChecks(self, con, data):
 
-        values = [['Fecha','Dni','Nombre','Apellido','Hora Declarada','Hora de Marcación','Error','Descripción','Justificación']]
+        values = [['Fecha','Dni','Nombre','Apellido','Hora Declarada','Hora de Marcación','Diferencia','Descripción','Horas Trabajadas','Justificación']]
         for l in data:
             v = []
 
@@ -241,17 +240,17 @@ class Assistance:
             v.append(user['lastname'])
 
             if 'startSchedule' in l:
-                v.append(l['startSchedule'])
+                v.append(l['startSchedule'].astimezone(tz=None).time())
             elif 'endSchedule' in l:
-                v.append(['endSchedule'])
+                v.append(l['endSchedule'].astimezone(tz=None).time())
             else:
                 v.append('')
 
 
             if 'start' in l:
-                v.append(l['start'])
+                v.append(l['start'].astimezone(tz=None).time())
             elif 'end' in l:
-                v.append(['end'])
+                v.append(l['end'].astimezone(tz=None).time())
             else:
                 v.append('')
 
@@ -263,6 +262,13 @@ class Assistance:
 
 
             v.append(l['description'])
+
+
+            if 'whSeconds' in l:
+                v.append('{:02d}:{:02d}'.format(int(l['whSeconds'] / 60 / 60), int(l['whSeconds'] / 60 % 60)))
+            else:
+                v.append('')
+
 
 
             if 'justifications' in l:

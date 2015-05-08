@@ -232,21 +232,19 @@ class BroadcastServerFactory(WebSocketServerFactory):
 
     def register(self, client):
         if client not in self.clients:
-            print("registered client {}".format(client.peer))
+            logging.debug("registered client {}".format(client.peer))
             self.clients.append(client)
 
     def unregister(self, client):
         if client in self.clients:
-            print("unregistered client {}".format(client.peer))
+            logging.debug("unregistered client {}".format(client.peer))
             self.clients.remove(client)
 
     def broadcast(self, msg):
-        print("broadcasting message '{}' ..".format(msg))
+        logging.debug("broadcasting message '{}' ..".format(msg))
         for c in self.clients:
             c._sendEncodedMessage(msg)
-            print("message sent to {}".format(c.peer))
-
-
+            logging.debug("message sent to {}".format(c.peer))
 
 
 
@@ -254,6 +252,7 @@ def getPort():
     config = inject.instance(Config)
     log.startLogging(sys.stdout)
     factory = BroadcastServerFactory()
+    factory.protocol = ActionsServerProtocol
     factory.protocol = ActionsServerProtocol
     port = reactor.listenTCP(int(config.configs['server_port']), factory=factory, interface=config.configs['server_ip'])
     return (reactor,port,factory)
