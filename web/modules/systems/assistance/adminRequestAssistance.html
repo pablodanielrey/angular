@@ -3,15 +3,25 @@
     <label><i class="fa fa-ticket"></i> | Administrar Solicitudes</label>
   </div>
 
-  <div class="solicitudes">
-    <div class="column t1"><i class="fa fa-user"></i> Usuario</div>
-    <div class="column t2"><i class="fa fa-ticket"></i> Solicitud</div>
+  <div class="filter">
+    <span><b>Filtros | </b></span>
+    <span class="textSpan">Buscar por </span>
+    <select class="selectFilters" ng-change="filter()" ng-model="filterSelected">
+      <option value='PENDING'>Pendientes</option>
+      <option value='APPROVED'>Aprobadas</option>
+      <option value=''>Todas</option>
+    </select>
+  </div>
 
-    <div class="column t4"><i class="fa fa-calendar"></i> Fecha / <i class="fa fa-clock-o"></i> Hora</div>
-    <div class="column t6"><i class="fa fa-info-circle"></i> Estado</div>
+  <div class="solicitudes">
+    <div class="column t1 pointer" ng-click="reverseUser=!reverseUser;order(['user.lastname','user.name','date'],reverseUser)" ><i class="fa fa-user"></i> Usuario</div>
+    <div class="column t2 pointer" ng-click="reverseLic=!reverseLic;order(['license.shortName','date','user.lastname','user.name'],reverseLic)"><i class="fa fa-ticket"></i> Solicitud</div>
+
+    <div class="column t4 pointer" ng-click="reverseDate=!reverseDate;order(['date','user.lastname','user.name'],reverseDate)"><i class="fa fa-calendar"></i> Fecha / <i class="fa fa-clock-o"></i> Hora</div>
+    <div class="column t6 pointer" ng-click="reverseStatus=!reverseStatus;order(['status','date','user.lastname','user.name'],reverseStatus)"><i class="fa fa-info-circle"></i> Estado</div>
   </div>
   <div class="scroll">
-  <div class="content" ng-repeat="request in model.requests | orderBy:request.date">
+  <div class="content" ng-repeat="request in model.requestsFilters">
     <div class="margins">
       <div class="t1">
         <span class="userRequest ">{{request.user.lastname}}, {{request.user.name}}</span>
@@ -22,7 +32,7 @@
     </div>
     <div class="margins">
       <div  class="t7">
-        <span class="typeRequest">{{request.licence}}</span>
+        <span class="typeRequest" title="{{request.license.name}}"><i class="fa {{request.license.icon}}"></i> {{request.license.shortName}}</span>
       </div>
     </div>
     <div class="margins">
