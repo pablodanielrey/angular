@@ -1,6 +1,6 @@
 var app = angular.module('mainApp');
 
-app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistance, Users, Profiles, Session, Notifications, Utils) {
+app.controller('AdminRequestAssistanceCtrl', function($scope, $filter,$timeout, Assistance, Users, Profiles, Session, Notifications, Utils) {
 
     // requests = [{id:'',license:'',user:{name:'',lastname:'',dni:''},date:''}]
     $scope.model = {
@@ -17,6 +17,22 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistan
       $scope.today.setSeconds(0);
       $scope.today.setMilliseconds(0);
     }
+
+
+    // ------------ ORDENACION ///////////////////
+
+    $scope.order = function(predicate, reverse) {
+      $scope.model.requestsFilters = $filter('orderBy')($scope.model.requestsFilters, predicate, reverse);
+    };
+
+    // ------------- FILTRO //////////////////////
+    $scope.filter = function() {
+      expr = ($scope.filterSelected == null)?'':$scope.filterSelected;
+      $scope.model.requestsFilters = $scope.model.requests;
+      $scope.model.requestsFilters = $filter('filter')($scope.model.requestsFilters,expr,status);
+    }
+
+
 
     $scope.getJustificationName = function(id) {
       for (var i = 0; i < $scope.model.justifications.length; i++) {
@@ -86,6 +102,9 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistan
                     $scope.addRequest(r);
                   }
               }
+              $scope.model.requestsFilters = $scope.model.requests;
+              $scope.filter();
+              $scope.order(['date','user.lastname','user.name'],false);
             },
             function(error) {
               Notifications.message(error);
@@ -95,6 +114,7 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistan
 
     $scope.initialize = function() {
         $scope.disabled = false;
+        $scope.filterSelected = 'PENDING';
         $scope.initializeToday();
         var s = Session.getCurrentSession();
         if (!s || !s.user_id) {

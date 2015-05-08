@@ -9,6 +9,10 @@
   font-size:14px;
 }
 
+.adminRequestAssistance .pointer {
+  cursor:pointer;
+}
+
 .adminRequestAssistance .scroll {
   height:500px;
   width:850px;
