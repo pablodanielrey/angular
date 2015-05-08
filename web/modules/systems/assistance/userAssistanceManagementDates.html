@@ -1,54 +1,30 @@
- <!-- LICENCIA ANUAL -->
-    <div ng-class="{true:'subcontentDisplay', false:'subcontent'}[isSelectedJustificationLao()]" ng-click="select('justificationLaoSelected')">
-      <div class="titulo" ng-click="selectJustificationLao()">
-        <p class="titulo"><i class="fa fa-ticket"></i> Licencia Anual (LAO)</p>
-      </div>
-      <div class="info">
-        <div class="subInfo">
-          <div>
-            <input class="button blue" type="button" value="Solicitar" ng-click="selectJustificationLaoRequest()">
-          </div>
-          <div>
-            <input class="button green" type="button" value="Disponibles" ng-click="selectJustificationLaoAvailable()">
-          </div>
-          <!--
-          <div>
-            <input class="button orange" type="button" value="Solicitudes" ng-click="selectJustificationLaoRequests()">
-          </div>
-           -->
+    <!-- SOLICITUD DE ARTICULO 102 -->
+    <div  ng-class="{true:'subcontentDisplay', false:'subcontent'}[isSelectedJustification()]" >
+
+        <!-- TITULO DE LA SECCION -->
+        <div class="titulo" ng-click="selectJustification()">
+          <p class="titulo"><i class="fa fa-ticket"></i>{{justification.name}}</p>
         </div>
 
-        <div>
-          <div class="margin" ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationLaoRequest()]">
-            <p class="parrafos">Seleccione el día de comienzo de la LAO</p>
-            <input class="date" type="date" ng-model="model.justification.begin" ng-change="changeDate()">
-            <p class="parrafos">Seleccione el día de finalización de la LAO</p>
-            <input class="date" type="date" ng-model="model.justification.end" ng-change="changeDate()">
-          </div>
+        <!-- CONTENIDO DE LA SECCION -->
+        <div class="info">
 
-          <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationLaoAvailable()]">
-            <p class="parrafosGreen margin">Disponibilidad Restante</p>
-            <p class="parrafosGreen2 margin">{{model.exam.stock}}</p>
-          </div>
-
-          <div ng-class="{true:'visible', false:'hidden'}[isSelectedJustificationLaoRequests()]">
-            <div ng-class="{true:'visible', false:'hidden'}[true]">
-              <p>No existen solicitudes pendientes</p>
-            </div>
-            <div ng-class="{true:'visible', false:'hidden'}[false]">
-              <p>Solicitud reciente</p>
-              <input type="text" placeholder="Solicitud">
-              <p>Estado</p>
-              <input type="text" placeholder="Aprobada">
+          <!-- FORMULARIO DE SOLICITUD -->
+          <div ng-class="{true:'visible', false:'hidden'}[isSelectedRequest()]">
+            <div class="margin">
+              <p class="parrafos">Seleccione el día de inicio</p>
+              <input class="date" type="date" ng-model="model.begin" ng-change="selectDates()" >
+              <p class="parrafos">Seleccione el día de inicio</p>
+              <input class="date" type="date" ng-model="model.end" ng-change="selectDates()" >
             </div>
           </div>
 
+          <!-- CONFIRMACION DE SOLICITUD -->
+          <div class="margin" ng-class="{true:'visible', false:'hidden'}[isDateDefined()]">
+            <p class="parrafos">Solicitar {{justification.name}}:</p>
+            <p class="parrafos2"><i class="fa fa-calendar-o"></i>Desde {{model.beginFormated}} hasta {{model.endFormated}}</p>
+            <input class="button2 blue2" type="button" value="Confirmar" ng-click="save()" ng-disabled="model.processingRequest">
+          </div>
         </div>
 
-        <div class="margin" ng-class="{true:'visible', false:'hidden'}[isSelectedDate()]">
-          <p class="parrafos">Solicitar Licencia anual para los días</p>
-          <p class="parrafos2"><i class="fa fa-calendar-o"></i> {{dateFormated}} </p>
-          <input class="button2 blue2" type="button" value="Confirmar" ng-click="save()">
-        </div>
-      </div>
     </div>

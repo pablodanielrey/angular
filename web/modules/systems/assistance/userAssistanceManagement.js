@@ -3,142 +3,13 @@ var app = angular.module('mainApp');
 app.controller('UserAssistanceManagementCtrl', ["$scope", "$rootScope", "$timeout", "$window", "Session", "Assistance", "Profiles", "Notifications", "Utils", function($scope, $rootScope, $timeout, $window, Session, Assistance, Profiles, Notifications, Utils) {
 
 	$scope.model = {
-		justifications : [], //auxiliar para almacenar las justificaciones que seran mostradas al usuario
-		requestedLicences : [], //solicitudes de licencias
-		justification : {}, //justificacion a guardar OBSOLETO, las justificaciones a guardar deben definirse en cada subcontrolador!!!
-		justificationAbsentSelected	: false,
-		justificationLaoSelected	: false,
-		justificationExamSelected	: false,
-		justificationOutSelected	: false,
-		justificationCompensatorySelected : false,
-		justificationAbsentId : 'e0dfcef6-98bb-4624-ae6c-960657a9a741', // id de la justificacion de ausente con aviso
-		justificationCompensatoryId : "48773fd7-8502-4079-8ad5-963618abe725", // id de la justificacion de compensatorio
-		justificationOutId : 'fa64fdbd-31b0-42ab-af83-818b3cbecf46', //id de la justificacion de boleta de salidas
-		justificationExamId : 'b70013e3-389a-46d4-8b98-8e4ab75335d0', // id de la justificacion de prexamen
-		justificationLaoId : '76bc064a-e8bf-4aa3-9f51-a3c4483a729a' // id de la justificacion de la licencia anual ordinaria
+		justification102Selected: false,
 	};
 
-	/**
-	 * Obtener justificaciones del servidor
-	 */
-	$scope.loadJustifications = function() {
-    	Assistance.getJustifications(
-				function(justifications) {
-					for (var i = 0; i < justifications.length; i++) {
-						var justification = {
-							name: justifications[i].name,
-							id: justifications[i].id
-						};
-						$scope.$broadcast('findStockJustification',{ justification: justification });
-						$scope.model.justifications[justifications[i].id] = justifications[i];
-					}
-					$scope.loadRequestedLicences();
-
-				},
-				function(error){
-					Notifications.message(error);
-				}
-			);
-    }
-
-	$scope.loadRequestedLicences = function() {
-		Assistance.getJustificationRequests(null,
-			function(requestedLicences) {
-				requestedLicences.sort(function(l1,l2) {
-					return (new Date(l1.begin) - (new Date(l2.begin)));
-				});
-
-				$scope.model.requestedLicences = [];
-				for (var i = 0; i < requestedLicences.length; i++) {
-					var req = requestedLicences[i];
-					$scope.formatLicenceToDisplay(req);
-					$scope.model.requestedLicences.push(req);
-				}
-			},
-			function(error){
-				Notifications.message(error);
-			}
-		);
-	}
-
-
-	/**
-		autor: pablo
-		TODO: SOLUCION PEDORRA QUE ENCONTRE RÁPIDO PARA CORREGIR COMO SE MUESTRA.
-		DEBERÍA HABER SIDO PENSADO BIEN ENTRE EL HTML Y EL CONTROLADOR PARA TENER DISTINTOS TIPOS DE JUSTIFICACIONES
-		AL MOSTRARSE.
-		AHORA LO SOLUCIONO ASI PERO HAY QUE MODIFICARLO POR ALGUNA SOLUCIÓN CORRECTA!!!!
-
-		el html muestra de las licencias lo siguiente :
-
-		justification_name
-		summary
-
-
-	*/
-	$scope.formatLicenceToDisplay = function(req) {
-
-		var id = req.justification_id;
-		req.justification_name = $scope.model.justifications[id].name;
-		req.displayHours = false;
-
-		// seteo el summary de acuerdo al tipo de justificación a mostrar.
-		if (id == 'e0dfcef6-98bb-4624-ae6c-960657a9a741') {
-			// absent
-			var date = new Date(req.begin);
-      req.date = Utils.formatDate(date);
-
-		} else if (id == '48773fd7-8502-4079-8ad5-963618abe725') {
-			// compensatory
-			var date = new Date(req.begin);
-      req.date = Utils.formatDate(date);
-
-		} else if (id == 'fa64fdbd-31b0-42ab-af83-818b3cbecf46') {
-			// boleta de salida
-			var date = new Date(req.begin);
-			var date2 = new Date(req.end);
-      req.date = Utils.formatDate(date);
-      req.time = Utils.getDifferenceTimeFromDates(date, date2)
-      req.start = Utils.formatTime(date);
-      req.end = Utils.formatTime(date2);
-			req.displayHours = true;
-
-		} else if (id == '4d7bf1d4-9e17-4b95-94ba-4ca81117a4fb') {
-			// 102
-			var date = new Date(req.begin);
-			var date2 = new Date(req.end);
-      req.date = Utils.formatDate(date);
-
-		} else if (id == '76bc064a-e8bf-4aa3-9f51-a3c4483a729a') {
-			// lao
-			var date = new Date(req.begin);
-      req.date = Utils.formatDate(date);
-
-		} else if (id == 'b70013e3-389a-46d4-8b98-8e4ab75335d0') {
-			// pre-examen
-			var date = new Date(req.begin);
-      req.date = Utils.formatDate(date);
-
-		}
+	
+  $scope.clearSelections = function() {
+		$scope.model.justification102Selected = false;
 	};
-  
-
-
-	/**
-		Cancela el pedido de una justificación.
-		Solo lo puede hacer el usuario y cuando la justificación esta en el estado de PENDING.
-	*/
-	$scope.cancelRequest = function(req) {
-		Assistance.updateJustificationRequestStatus(req['id'],'CANCELED',
-			function(ok) {
-				// nada
-			},
-			function(error) {
-				Notifications.message(error);
-			}
-		);
-	}
-
 
 
 	/**
@@ -155,9 +26,7 @@ app.controller('UserAssistanceManagementCtrl', ["$scope", "$rootScope", "$timeou
         } else {
 			Profiles.checkAccess(Session.getSessionId(),'ADMIN-ASSISTANCE,USER-ASSISTANCE',
 				function(ok) {
-					if (ok == 'granted') {
-						$scope.loadJustifications();
-					} else {
+					if (ok != 'granted') {
 						$window.location.href = "/#/logout";
 					}
 				},
@@ -186,14 +55,6 @@ app.controller('UserAssistanceManagementCtrl', ["$scope", "$rootScope", "$timeou
 
 
 
-	$scope.clearSelections = function() {
-		$scope.model.justificationAbsentSelected = false;
-		$scope.model.justificationCompensatorySelected = false;
-		$scope.model.justificationExamSelected = false;
-		$scope.model.justificationOutSelected = false;
-		$scope.model.justificationLaoSelected = false;
-		$scope.model.justification = {};
-	}
 
 
 
