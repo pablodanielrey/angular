@@ -20,7 +20,7 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
     friday:false,
     saturday:false
   };
-  $scope.model.daySelected = null //flag para indicar que se ha seleccionado al menos un dia
+  $scope.model.daySelected = null; //flag para indicar que se ha seleccionado al menos un dia
   $scope.model.time = null;              //cantidad de horas seleccionadas
 
   //variables del fieldset de horario especial
@@ -34,7 +34,6 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
   $scope.model.users = [];               //lista de usuarios consultados para los cuales el usuario logueado puede consultar
   $scope.model.displayListUser = false;  //flag para indicar si se debe visualizar la lista de usuarios consultados
   $scope.model.user = null;              //usuario seleccionado
-  $scope.model.userSelected = false;     //flag para indicar que se ha seleccionado un usuario
 
 
 
@@ -88,14 +87,14 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
     );*/
 
     $scope.getDayOfWeek = function(date) {
-      weekday = ["sunday","monday","tuesday","wednesday","thursday","friday","saturday"]
+      var weekday = ["sunday","monday","tuesday","wednesday","thursday","friday","saturday"]
       return weekday[date.getDay()];
     }
 
     Assistance.getSchedules($scope.model.user.id,
       function ok(response) {
         var schedules = response.schedule;
-        schedule = [];
+        var schedule = [];
         for (var $i = 0; $i < schedules.length; $i++) {
           var d = new Date(schedules[$i].start);
           var s = {};
@@ -107,7 +106,7 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
         $scope.setModelSchedule(schedule);
       },
       function error(error) {
-        Notification.message(error);
+        Notifications.message(error);
       }
 
     )
@@ -244,28 +243,8 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
    * Mostrar lista de usuarios
    */
   $scope.displayListUser = function(){
-    $scope.model.userSelected = false;
+    $scope.model.searchUser = null;
     $scope.model.displayListUser = true;
-  };
-
-   /**
-   * Esconder lista de usuarios
-   */
-  $scope.hideListUser = function(){
-     $timeout(
-      function(){
-        $scope.model.displayListUser = false;
-        if(!$scope.model.userSelected){
-          if((!$scope.model.searchUser) || ($scope.model.searchUser === "")){
-            $scope.model.user = null;
-            $scope.model.schedule = []
-          } else if($scope.model.user){
-            $scope.model.searchUser = $scope.model.user.name + " " + $scope.model.user.lastname;
-          }
-        }
-      }
-    ,100);
-
   };
 
   /**
@@ -273,9 +252,9 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
    * @param {usuario} user Usuario seleccionado
    */
   $scope.selectUser = function(user){
-    $scope.model.userSelected = true;
     $scope.model.user = user;
     $scope.model.searchUser = $scope.model.user.name + " " + $scope.model.user.lastname;
+    $scope.model.displayListUser = false;
     $scope.loadSchedule();
     $scope.loadHistory();
 

@@ -12,7 +12,7 @@
           <span><i class="fa fa-user-plus"></i> Seleccione Usuario</span>
         </div>
         <div>
-          <input class="inputSearch" ng-model="model.searchUser" ng-click="displayListUser()" ng-blur="hideListUser()" placeholder="Buscar...">
+          <input class="inputSearch" ng-model="model.searchUser" ng-click="displayListUser()"  placeholder="Buscar...">
           <ul class="listUsers" ng-class="{true:'visible', false:'hidden'}[true]">
             <li class="liUsers" ng-repeat="user in model.users | filter:model.searchUser | orderBy : 'name'" ng-click="selectUser(user)">{{user.name}} {{user.lastname}}</li>
           </ul>
