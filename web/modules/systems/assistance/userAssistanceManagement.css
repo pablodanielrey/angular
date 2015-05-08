@@ -1,0 +1,419 @@
+.userAssistanceManagement {
+  width:100%;
+  height:100%;
+  font-family: helvetica;
+}
+/****ACORDEEON****/
+.userAssistanceManagement .content{
+  margin:5px auto;
+  width:98%;
+  min-height:50px;
+  overflow: hidden;
+}
+.userAssistanceManagement .titulo{
+  width:100%;
+  height:50px;
+  background-color: #0066A6;
+  overflow: hidden;
+  border-bottom: 1px solid #275276;
+
+}
+.userAssistanceManagement p.titulo{
+  margin:13px;
+  color: white;
+}
+
+.userAssistanceManagement .info {
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+}
+
+.userAssistanceManagement .button {
+  width: 150px;
+  height:50px;
+  margin-left:0px;
+  margin-top:10px;
+}
+.userAssistanceManagement .button2 {
+  width:265px;
+  height:50px;
+  margin-left:0px;
+  margin-top:10px;
+}
+.userAssistanceManagement .blue{
+  background-color:#0066A6;
+  color:white;
+  text-shadow: 0px 1px black;
+  font-weight: bold;
+}
+.userAssistanceManagement .blue2{
+  background-color:#0066A6;
+  color:white;
+  text-shadow: 0px 1px black;
+
+  font-size:20px;
+}
+.userAssistanceManagement .orange{
+  background-color:#ec9122;
+  color:white;
+  text-shadow: 0px 1px black;
+  font-weight: bold;
+}
+
+.userAssistanceManagement .green{
+  background-color:#128c78;
+  color:white;
+  text-shadow: 0px 1px black;
+  font-weight: bold;
+}
+
+.userAssistanceManagement .title {
+  display:flex;
+  align-items: center;
+  background-image:linear-gradient(to right,#275276, #0066A6);
+  font-size:16px;
+  width:98%;
+  height:30px;
+  padding:5px;
+  color:white;
+  margin-bottom:10px;
+  margin:5px;
+
+}
+.userAssistanceManagement .myRequests {
+  padding:7px;
+  background-color: #275276;
+  margin-top:15px;
+  padding-left:15px;
+  color:white;
+  border-top: 3px solid #0066A6;
+
+}
+
+
+.userAssistanceManagement .myRequestInfo {
+  display:flex;
+  flex-direction:row;
+  background-color: white;
+}
+
+.userAssistanceManagement .scroll {
+  height:270px;
+
+  overflow:scroll;
+  overflow-x:hidden;
+
+}
+
+
+/*
+.userAssistanceManagement .myRequestInfo.pending {
+  -webkit-transform: translate(700px,0px);
+}
+*/
+
+
+.userAssistanceManagement .titlesFiles {
+  display:flex;
+  flex-direction:row;
+
+
+}
+.userAssistanceManagement .t1 {
+  width:200px;
+  margin-top:10px;
+
+}
+
+.userAssistanceManagement .t3 {
+  width:200px;
+  margin-bottom: 5px;
+}
+.userAssistanceManagement .t4 {
+  width:100px;
+  margin-top:10px;
+}
+
+.userAssistanceManagement .column {
+  background-color:#0066A6;
+
+  padding:5px;
+  margin-right:10px;
+  color:white;
+  border-top:3px solid #275276;
+  font-weight:bold;
+}
+
+
+.userAssistanceManagement .myRequest {
+  margin-top:5px;
+  width:190px;
+  background-color:white;
+  padding:5px;
+  padding-left:10px;
+  color:#0066A6;
+  border:1px solid #0066A6;
+  margin-right:10px;
+  font-weight: bold;
+  border-left: 5px solid #0066A6;
+}
+.userAssistanceManagement .myRequestDate {
+  margin-top:5px;
+  width:189px;
+  border:1px solid #0066A6;
+  padding:5px;
+  padding-left:10px;
+  color:black;
+  margin-right:10px;
+  background-color:white;
+  border-left: 5px solid #0066A6;
+}
+
+
+
+.userAssistanceManagement .buttonpending {
+  background-color:#e43e46;
+  color:white;
+  border:none;
+  padding:3px;
+  margin-left:5px;
+  cursor:pointer;
+  border-radius: 2px;
+}
+.userAssistanceManagement .buttonApproved {
+  background-color:#128c78;
+  color:white;
+  border:none;
+  padding:3px;
+
+  font-size:14px;
+  border-radius: 2px;
+}
+.userAssistanceManagement .buttonCancel {
+  background-color:#e43e46;
+  color:white;
+  border:none;
+  padding:3px;
+
+  font-size:14px;
+  border-radius: 2px;
+}
+
+
+
+
+
+
+
+
+.myStateRequestSlope.pending {
+  -webkit-animation-name: apending;
+  /* -webkit-animation-delay: 0.5s; */
+  -webkit-animation-duration: 2.5s;
+  -webkit-animation-iteration-count: infinite;
+  /*-webkit-animation-direction: alternate;*/
+}
+
+
+.userAssistanceManagement .myStateRequestSlope {
+  margin-top:5px;
+  width:200px;
+
+  padding:5px;
+  padding-left:10px;
+  color:#0066A6;
+
+  background-color:white;
+}
+
+.userAssistanceManagement .myStateRequestApproved {
+  margin-top:5px;
+  width:200px;
+
+  padding:5px;
+  padding-left:10px;
+  color:white;
+  margin-right:5px;
+
+}
+
+.userAssistanceManagement .myStateRequestRejected {
+  margin-top:5px;
+  width:200px;
+
+  padding:5px;
+  padding-left:10px;
+  color:white;
+  margin-right:10px;
+
+}
+
+
+.userAssistanceManagement .myStateRequestCanceled {
+  margin-top:5px;
+  width:200px;
+
+  padding:5px;
+  padding-left:10px;
+  color:white;
+  margin-right:10px;
+
+}
+
+
+.userAssistanceManagement .parrafos {
+  background-color:#0066A6;
+  color:white;
+  height:15px;
+  margin-top:11px;
+  margin-bottom:0px;
+
+  margin-right:10px;
+  font-size:13px;
+  width:252px;
+  padding:5px;
+}
+
+.userAssistanceManagement .parrafos2 {
+  background-color:white;
+  color:white;
+  height:15px;
+  margin-top:0px;
+  margin-bottom:0px;
+  margin-right:10px;
+  font-size:20px;
+  font-weight: bold;
+  width:252px;
+  padding:5px;
+  color:#128c78;
+}
+.userAssistanceManagement .parrafos3 {
+  background-color:white;
+  color:white;
+  height:15px;
+  margin-top:0px;
+  margin-bottom:0px;
+  margin-right:10px;
+  font-size:18px;
+  font-weight: bold;
+  width:252px;
+  padding:5px;
+  color:#128c78;
+}
+.userAssistanceManagement .parrafos4 {
+  background-color:white;
+  color:white;
+  height:15px;
+  margin-top:0px;
+  margin-bottom:0px;
+  margin-right:10px;
+  font-size:18px;
+
+  width:252px;
+  padding:5px;
+  color:#128c78;
+}
+
+
+
+.userAssistanceManagement .parrafosGreen {
+  background-color:#128c78;
+  color:white;
+  height:15px;
+  margin-top:11px;
+  margin-bottom:0px;
+
+  margin-right:10px;
+  font-size:13px;
+  width:252px;
+  padding:5px;
+}
+
+.userAssistanceManagement .parrafosGreen2 {
+  background-color:white;
+  color:white;
+  height:15px;
+  margin-top:0px;
+  margin-bottom:0px;
+  margin-right:10px;
+  font-size:20px;
+  font-weight: bold;
+  width:252px;
+  padding:5px;
+  color:#0066A6;
+}
+
+.userAssistanceManagement .date {
+  width:257px;
+}
+
+.userAssistanceManagement .hidden{
+  display:none;
+}
+
+
+.userAssistanceManagement .visible{
+  display:block;
+}
+.userAssistanceManagement div.info{
+  width:100%;
+  height:0px;
+  background-color: #f5f5f5;
+  overflow: hidden;
+  -webkit-transition: height 0.2s;
+}
+.userAssistanceManagement .subcontentDisplay div.info{
+  height:160px;
+}
+
+.userAssistanceManagement .subcontentDisplay .titulo, .userAssistanceManagement .subcontent .titulo{
+    cursor:pointer;
+}
+.userAssistanceManagement .info {
+  display:flex;
+  flex-direction:row;
+}
+.userAssistanceManagement .margin {
+  margin-left:50px;
+
+
+}
+
+.userAssistanceManagement .titlesHours {
+  display:flex;
+  flex-direction:row;
+  margin-top:5px;
+}
+.userAssistanceManagement .hours {
+  display:flex;
+  flex-direction:row;
+
+}
+.userAssistanceManagement .spanSE {
+  display:flex;
+  align-content:center;
+  background-color:white;
+
+
+  margin-right:10px;
+  color:#0066A6;
+
+
+}
+.userAssistanceManagement .spanSE2 {
+  display:flex;
+  align-content:center;
+  background-color:white;
+
+
+  margin-right:14px;
+  color:#0066A6;
+
+
+}
+.userAssistanceManagement .timeMargin {
+  margin-bottom:2px;
+}
+
+/****FIN DE ACORDEON****/
