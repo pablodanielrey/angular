@@ -507,3 +507,124 @@ class GetSchedules:
 
         finally:
             con.close()
+
+
+"""
+{
+    id:'',
+    action:"newSchedule",
+    session:,
+    request:{
+        user_id:"id del Usuario",
+        date:"fecha de que se empieza a utilizar el schedule, si no se envia se toma la fecha actual",
+        start:"hora de inicio del turno",
+        end:"hora de fin de turno",
+        daysOfWeek:[],
+        isDayOfWeek:"es dia de la semana, si no se envia se toma como false",
+        isDayOfMonth:"es dia un dia del mes, si no se envia se toma como false",
+        isDayOfYear:"es dia del año, si no se envia se toma como false"
+    }
+}
+
+response :
+{
+  id: "id de la petición",
+  ok: "caso exito",
+  error: "error del servidor",
+}
+"""
+
+class NewSchedule:
+
+    profiles = inject.attr(Profiles)
+    config = inject.attr(Config)
+    schedule = inject.attr(Schedule)
+    dateutils = inject.attr(Date)
+
+    def handleAction(self, server, message):
+
+        if (message['action'] != 'newSchedule'):
+            return False
+
+        if 'request' not in message:
+            response = {'id':message['id'],'error':'Parámetros insuficientes'}
+            server.sendMessage(response)
+            return True
+
+        """ precondiciones del request """
+        request = message['request']
+
+        if 'user_id' not in request:
+            response = {'id':message['id'], 'error':'Parámetros insuficientes'}
+            server.sendMessage(response)
+            return True
+        userId = request['user_id']
+
+        if 'start' not in request or 'end' not in request:
+            response = {'id':message['id'], 'error':'Parámetros insuficientes'}
+            server.sendMessage(response)
+            return True
+
+        start = request['start']
+        end = request['end']
+
+        sid = message['session']
+        self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
+
+        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+        try:
+            import pdb
+            pdb.set_trace()
+
+            # seteo el isDayOfWeek
+            if 'isDayOfWeek' not in request:
+                isDayOfWeek = False
+            else:
+                isDayOfWeek = request['isDayOfWeek']
+
+            # seteo el isDayOfMonth
+            if 'isDayOfMonth' not in request:
+                isDayOfMonth = False
+            else:
+                isDayOfMonth = request['isDayOfMonth']
+
+            # seteo el isDayOfYear
+            if 'isDayOfYear' not in request:
+                isDayOfYear = False
+            else:
+                isDayOfYear = request['isDayOfYear']
+
+
+            if 'date' not in request:
+                date = self.dateutil.now()
+            else:
+                date = self.dateutil.parse(request['date'])
+
+
+            # seteo el date a las 00:00:00
+            date = date.replace(hour=0,minute=0,second=0,microsecond=0)
+
+            # si es un dia de la semana
+            if isDayOfWeek:
+                # obtengo la fecha correspondiente al dia de la semana a partir del date
+                dWeek = date.weekday()
+
+                # seteo el start con el date mas el incremento
+
+            # seteo los segundos y los millis en 0
+            start = start.replace(second=0,microsecond=0)
+
+            # seteo el end con el dia del start
+            end = end.replace(year=start.year,month=start.month,day=start.day,microsecond=0)
+
+
+            self.schedule.newSchedule(con,userId,date,start,end,isDayOfWeek,isDayOfMonth,isDayOfYear)
+
+            con.commit()
+
+        except Exception as e:
+            con.rollback()
+            raise e
+
+        finally:
+            con.close()

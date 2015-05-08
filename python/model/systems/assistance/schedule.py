@@ -334,6 +334,16 @@ class Schedule:
         return fails
 
 
+    """
+        genera un nuevo schedule las fechas pasadas como parámetro (se supone aware)
+    """
+    def newSchedule(self,con,userId,date,start,end,isDayOfWeek,isDayOfMonth,isDayOfYear):
+        uaware = date.astimezone(pytz.utc)
+        ustart = start.astimezone(pytz.utc)
+        uend = end.astimezone(pytz.utc)
+
+        req = (str(uuid.uuid4()), userId, uaware, ustart, uend, isDayOfWeek, isDayOfMonth, isDayOfYear)
+        cur.execute('insert into assistance.schedule (id,user_id,date,sstart,send,isDayOfWeek,isDayOfMonth,isDayOfYear) values (%s,%s,%s,%s,%s,%s,%s,%s)',req)
 
 
     """
