@@ -20,10 +20,7 @@ app.controller('UserAssistanceManagementDatesCtrl', ["$scope", "Assistance", "No
     
   };
   
-  //***** variables de seleccion de la seccion *****
-  $scope.model.requestSelected = false; //flag para indicar la seleccion del formulario de solicitud del articulo 102
-  $scope.model.availableSelected = false; //flag para indicar la seleccion de la visualizacion de disponibilidad del articulo 102
-  
+
   //***** variables del formulario *****  
   $scope.model.begin = null;         //fecha seleccionada
   $scope.model.beginFormated = null; //fecha en formato amigable para el usuario
