@@ -34,27 +34,6 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $filter,$timeout, 
 
 
 
-    $scope.getJustificationName = function(id) {
-      for (var i = 0; i < $scope.model.justifications.length; i++) {
-        if ($scope.model.justifications[i].id == id) {
-          return $scope.model.justifications[i].name;
-        }
-      }
-    }
-
-
-    $scope.getJustifications = function() {
-      Assistance.getJustifications(
-        function(justifications) {
-          $scope.model.justifications = justifications;
-          $scope.loadRequests();
-        },
-        function(error) {
-        }
-      );
-
-    }
-
     $scope.addRequest = function(data) {
         //data: {id:"1",user_id:"1",justification_id: "1", begin: '2015-05-13 00:00:00', end: '2015-05-13 00:00:00', state: "Desaprobada" },
         var d = new Date(data.begin);
@@ -76,7 +55,7 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $filter,$timeout, 
         Users.findUser(data.user_id,
             function(response) {
               r.user = response;
-              r.licence = $scope.getJustificationName(r.justification_id);
+              r.license = Utils.getJustification(r.justification_id);
               $scope.model.requests.push(r);
             },
             function(error) {
@@ -125,7 +104,7 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $filter,$timeout, 
             Profiles.checkAccess(Session.getSessionId(),'ADMIN-ASSISTANCE,USER-ASSISTANCE',
       				function(ok) {
       					if (ok == 'granted') {
-                  $scope.getJustifications();
+                  $scope.loadRequests();
       					}
       				},
       				function (error) {
