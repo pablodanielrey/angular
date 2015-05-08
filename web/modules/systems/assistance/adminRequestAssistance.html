@@ -4,8 +4,9 @@
   </div>
 
   <div class="filter">
-    <span>Buscar:</span>
-    <select ng-change="filter()" ng-model="filterSelected">
+    <span><b>Filtros | </b></span>
+    <span class="textSpan">Buscar por </span>
+    <select class="selectFilters" ng-change="filter()" ng-model="filterSelected">
       <option value='PENDING'>Pendientes</option>
       <option value='APPROVED'>Aprobadas</option>
       <option value=''>Todas</option>
@@ -31,7 +32,7 @@
     </div>
     <div class="margins">
       <div  class="t7">
-        <span class="typeRequest" title="{{request.license.name}}"><i class="fa {{request.license.icon}}"></i>{{request.license.shortName}}</span>
+        <span class="typeRequest" title="{{request.license.name}}"><i class="fa {{request.license.icon}}"></i> {{request.license.shortName}}</span>
       </div>
     </div>
     <div class="margins">
