@@ -64,7 +64,7 @@ app.controller('RequestAssistance102Ctrl', ["$scope", "Assistance", "Notificatio
   
   
   
-  //***** METODOS DE SELECCION DE LA SECCION CORRESPONDIENTE A LA JUSTIFICACION 102 *****
+  //***** METODOS DE SELECCION DE LA SECCION *****
   /**
    * Esta seleccionada la seccion correspondiente a la justificacion 102
    * @returns {Boolean}
@@ -138,7 +138,7 @@ app.controller('RequestAssistance102Ctrl', ["$scope", "Assistance", "Notificatio
   
     
     
-  //***** METODOS DEl FORMULARIO DE SOLICITUD DE JUSTIFICACION 102 *****
+  //***** METODOS DEl FORMULARIO DE SOLICITUD *****
   $scope.selectDate = function(){
 		$scope.model.dateFormated = null;
     if($scope.model.date !== null){

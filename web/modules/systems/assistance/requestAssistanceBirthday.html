@@ -21,13 +21,10 @@
 
               <!-- FORMULARIO DE SOLICITUD -->
               <div ng-class="{true:'visible', false:'hidden'}[isSelectedRequest()]">
-                <div class="margin" ng-class="{true:'visible', false:'hidden'}[isStock()]">
+                <div class="margin">
                   <p class="parrafos">Seleccione el día</p>
                   <input class="date" type="date" ng-model="model.date" ng-change="selectDate()" >
-                </div>
-                <div class="margin" ng-class="{true:'visible', false:'hidden'}[!isStock()]">
-                  <p class="parrafos">No existe disponibilidad</p>
-                </div>
+                </div>                
               </div>
 
               <!-- CONFIRMACION DE SOLICITUD -->
