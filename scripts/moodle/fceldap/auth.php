@@ -54,7 +54,7 @@ class auth_plugin_fceldap extends auth_plugin_base {
           pg_close($conn);
           return true;
         }
-        
+
         pg_close($conn);
         return false;
       }
@@ -73,17 +73,16 @@ class auth_plugin_fceldap extends auth_plugin_base {
     return true;
   }
 
-/*
+
   function edit_profile_url() {
     return "http://www.fce.econo.unlp.edu.ar";
   }
-*/
 
   function is_internal() {
     return false;
   }
 
-/*
+
   function can_change_password() {
     return true;
   }
@@ -91,7 +90,6 @@ class auth_plugin_fceldap extends auth_plugin_base {
   function change_password_url() {
     return "http://www.fce.econo.unlp.edu.ar";
   }
-*/
 
 
   /**
@@ -149,7 +147,7 @@ class auth_plugin_fceldap extends auth_plugin_base {
       if (sizeof($result) > 0) {
         $data["idnumber"] = $result[0]["student_number"];
       }
-      
+
       pg_close($conn);
       return $data;
 
@@ -160,7 +158,7 @@ class auth_plugin_fceldap extends auth_plugin_base {
     }
 
   }
-  
+
   function is_synchronised_with_external() {
     return true;
   }
