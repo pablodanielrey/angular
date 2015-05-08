@@ -417,3 +417,81 @@
 }
 
 /****FIN DE ACORDEON****/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* SELECCION DE USUARIO */
+
+.userAssistanceManagement .searchTitle {
+  background-color: #0066A6;
+  color: white;
+  padding:5px;
+  margin-bottom: 0px;
+  font-size: 13px;
+  width:170px;
+  border-top: 3px solid #275276;
+  margin-right:20px;
+
+}
+
+
+.userAssistanceManagement .inputSearch{
+  width:166px;
+  padding:5px;
+  font-size: 14px;
+
+}
+.userAssistanceManagement .listUsers {
+  list-style-type:none;
+  margin:0px;
+  padding-left:5px;
+  width:190px;
+  max-height:300px;
+  background-color:#0066A6;
+  color:white;
+  z-index:999;
+  overflow: scroll;
+  overflow-x: hidden;
+  z-index: 999;
+  position: absolute;
+}
+.userAssistanceManagement .liUsers {
+  height:25px;
+  padding-top:10px;
+  border-bottom:2px solid #275276;
+  cursor:pointer;
+  z-index:999;
+
+}
+
+.userAssistanceManagement .selectUser {
+  display:flex;
+  flex-direction:column;
+}
+.userAssistanceManagement .userSelect {
+  width:160px;
+  background-color:#0066A6;
+  color:white;
+  padding:10px;
+  margin-top:2px;
+  font-size:14px;
+  border-top: 3px solid #275276;
+}

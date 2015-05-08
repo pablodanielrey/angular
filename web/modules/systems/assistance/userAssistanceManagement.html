@@ -4,16 +4,31 @@
     <label><i class="fa fa-ticket"></i> | Administración de asistencia de un usuario</label>
   </div>
   
-  <div>
-    <input class="inputSearch" ng-model="model.searchUser" ng-click="displayListUser()" ng-blur="hideListUser()" placeholder="Buscar...">
-    <ul class="listUsers" ng-class="{true:'visible', false:'hidden'}[true]">
-      <li class="liUsers" ng-repeat="user in model.users | filter:model.searchUser | orderBy : 'name'" ng-click="selectUser(user)">{{user.name}} {{user.lastname}}</li>
-    </ul>
-  </div>
+  <div class="selectUser">
+      <div class="searchUser">
+        <div class="searchTitle">
+          <span><i class="fa fa-user-plus"></i> Seleccione Usuario</span>
+        </div>
+        <div>
+          <input class="inputSearch" ng-model="model.searchUser" ng-click="displayListUser()" placeholder="Buscar...">
+          <ul class="listUsers" ng-class="{true:'visible', false:'hidden'}[isDisplayListUser()]">
+            <li class="liUsers" ng-repeat="user in model.users | filter:model.searchUser | orderBy : 'name'" ng-click="selectUser(user)">{{user.name}} {{user.lastname}}</li>
+          </ul>
+        </div>
+      </div>
+      <div class="userSelect">
+        <div><b>{{model.user.name}} {{model.user.lastname}}</b></div>
+        <div>{{model.user.dni}}</div>
+      </div>
+    </div>
   
   <div class="content">
-
-   	<div ng-controller="UserAssistanceManagementDatesCtrl" ng-include="'modules/systems/assistance/userAssistanceManagementDates.html'"></div>
+     	<div ng-controller="UserAssistanceManagementDatesCtrl" ng-include="'modules/systems/assistance/userAssistanceManagementDates.html'" ng-init="init('478a2e35-51b8-427a-986e-591a9ee449d8', 'jmSelected')"></div>
+    <div ng-controller="UserAssistanceManagementDatesCtrl" ng-include="'modules/systems/assistance/userAssistanceManagementDates.html'" ng-init="init('f9baed8a-a803-4d7f-943e-35c436d5db46', 'mcdSelected')"></div>
+    <div ng-controller="UserAssistanceManagementDatesCtrl" ng-include="'modules/systems/assistance/userAssistanceManagementDates.html'" ng-init="init('a93d3af3-4079-4e93-a891-91d5d3145155', 'mltSelected')"></div>
+    <div ng-controller="UserAssistanceManagementDatesCtrl" ng-include="'modules/systems/assistance/userAssistanceManagementDates.html'" ng-init="init('b80c8c0e-5311-4ad1-94a7-8d294888d770', 'mafSelected')"></div>
+    <div ng-controller="UserAssistanceManagementDatesCtrl" ng-include="'modules/systems/assistance/userAssistanceManagementDates.html'" ng-init="init('0cd276aa-6d6b-4752-abe5-9258dbfd6f09', 'dSelected')"></div>
+    
 
   </div>
 </div>

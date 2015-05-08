@@ -4,13 +4,20 @@ app.controller('UserAssistanceManagementDatesCtrl', ["$scope", "Assistance", "No
 
   if(!$scope.model) Notifications.message("No esta definido el modelo");
 
-  //***** datos de la justificacion *****
-  $scope.justification = { 
-    id: '4d7bf1d4-9e17-4b95-94ba-4ca81117a4fb', //id de la justificacion.
-    name:Utils.getJustificationName('4d7bf1d4-9e17-4b95-94ba-4ca81117a4fb'),
-    stock:0,
-    yearlyStock:0,
-    selectedName:"justification102Selected", //Nombre de la seleccion en el controlador padre
+
+  $scope.init = function(justificationId, justificationSelectedName){
+    //***** inicializar datos de la justificacion *****
+    $scope.justification = { 
+      id: justificationId, //id de la justificacion
+      name:Utils.getJustificationName(justificationId),
+      stock:0,
+      yearlyStock:0,
+      selectedName:justificationSelectedName
+    };
+    
+    $scope.model[justificationSelectedName] = false; //inicializar flag para indicar la seleccion de la justificacion
+    
+    
   };
   
   //***** variables de seleccion de la seccion *****
@@ -32,6 +39,7 @@ app.controller('UserAssistanceManagementDatesCtrl', ["$scope", "Assistance", "No
    * @returns {Boolean}
    */
   $scope.isSelectedJustification = function() {
+    
     return $scope.model[$scope.justification.selectedName];
   };
 
