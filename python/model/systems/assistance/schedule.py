@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import psycopg2, inject
+import psycopg2, inject, uuid
 import datetime, pytz
 import logging
 
@@ -367,6 +367,9 @@ class Schedule:
         uaware = date.astimezone(pytz.utc)
         ustart = start.astimezone(pytz.utc)
         uend = end.astimezone(pytz.utc)
+
+        cur = con.cursor()
+        cur.execute('set time zone %s',('utc',))
 
         req = (str(uuid.uuid4()), userId, uaware, ustart, uend, isDayOfWeek, isDayOfMonth, isDayOfYear)
         cur.execute('insert into assistance.schedule (id,user_id,date,sstart,send,isDayOfWeek,isDayOfMonth,isDayOfYear) values (%s,%s,%s,%s,%s,%s,%s,%s)',req)

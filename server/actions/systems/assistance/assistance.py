@@ -541,6 +541,24 @@ class NewSchedule:
     schedule = inject.attr(Schedule)
     dateutils = inject.attr(Date)
 
+    def getDate(self,day,date):
+        # date.weekday=Monday is 0 and Sunday is 6.
+        weekday = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
+        # Monday is 0 and Sunday is 6.
+        dateWeek = date.weekday()
+
+        dayWeek = None;
+        for x in range(0, 6):
+            if (day == weekday[x]):
+                dayWeek = x;
+                break;
+
+        # calculo la cantidad de dias a incrementar
+        inc = (dayWeek - dateWeek) if (dateWeek <= dayWeek) else ((7 - dateWeek) + dayWeek);
+
+        date += datetime.timedelta(days=inc)
+        return date
+
     def handleAction(self, server, message):
 
         if (message['action'] != 'newSchedule'):
@@ -565,17 +583,14 @@ class NewSchedule:
             server.sendMessage(response)
             return True
 
-        start = request['start']
-        end = request['end']
+        start = self.dateutils.parse(request['start'])
+        end = self.dateutils.parse(request['end'])
 
         sid = message['session']
         self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
 
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
-            import pdb
-            pdb.set_trace()
-
             # seteo el isDayOfWeek
             if 'isDayOfWeek' not in request:
                 isDayOfWeek = False
@@ -596,31 +611,60 @@ class NewSchedule:
 
 
             if 'date' not in request:
-                date = self.dateutil.now()
+                date = self.dateutils.now()
             else:
-                date = self.dateutil.parse(request['date'])
+                date = self.dateutils.parse(request['date'])
 
+            # lo paso a formato local
+            if self.dateutils.isNaive(date) or self.dateutils.isUTC(date):
+                date = self.dateutils.localizeAwareToLocal(date)
+
+            if self.dateutils.isNaive(start) or self.dateutils.isUTC(start):
+                start = self.dateutils.localizeAwareToLocal(start)
+
+            if self.dateutils.isNaive(end) or self.dateutils.isUTC(end):
+                end = self.dateutils.localizeAwareToLocal(end)
 
             # seteo el date a las 00:00:00
             date = date.replace(hour=0,minute=0,second=0,microsecond=0)
 
-            # si es un dia de la semana
+            # fechas a agregar
+            dates = []
+
             if isDayOfWeek:
-                # obtengo la fecha correspondiente al dia de la semana a partir del date
-                dWeek = date.weekday()
+                # si no se le envia los dias de la semana devuelvo error
+                if 'daysOfWeek' not in request or len(request['daysOfWeek'])<= 0:
+                    response = {'id':message['id'], 'error':'Parámetros insuficientes'}
+                    server.sendMessage(response)
+                    return True
 
-                # seteo el start con el date mas el incremento
+                # obtengo las fechas correspondiente al dia de la semana a partir del date
 
-            # seteo los segundos y los millis en 0
-            start = start.replace(second=0,microsecond=0)
+                daysOfWeek = request['daysOfWeek']
 
-            # seteo el end con el dia del start
-            end = end.replace(year=start.year,month=start.month,day=start.day,microsecond=0)
+                for day in daysOfWeek:
+                    dates.append(self.getDate(day,date))
+
+            else:
+                dates.append(date);
 
 
-            self.schedule.newSchedule(con,userId,date,start,end,isDayOfWeek,isDayOfMonth,isDayOfYear)
+            for d in dates:
+                logging.debug(d)
+                # seteo el start
+                logging.debug(start)
+                dStart = d.replace(hour=start.time().hour,minute=start.time().minute,second=0,microsecond=0)
+
+                # seteo el end
+                dEnd = d.replace(hour=end.time().hour,minute=end.time().minute,second=0,microsecond=0)
+
+                self.schedule.newSchedule(con,userId,date,dStart,dEnd,isDayOfWeek,isDayOfMonth,isDayOfYear)
 
             con.commit()
+            response = {'id':message['id'], 'ok':'datos almacenados correctamente'}
+            server.sendMessage(response)
+            return True
+
 
         except Exception as e:
             con.rollback()
