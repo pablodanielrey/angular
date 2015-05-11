@@ -310,7 +310,9 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 					var bcv = cvs[i];
 					var blobcv = Utils.base64ToBlob(bcv.data);
 					var ext = bcv.name.split('.');
-					window.saveAs(blobcv,bcv.lastname + ', ' + bcv.username + '.' + ext[ext.length]);
+					var filename = bcv.lastname + ', ' + bcv.username + '.' + ext[ext.length - 1];
+					console.log(filename);
+					//window.saveAs(blobcv,bcv.lastname + ', ' + bcv.username + '.' + ext[ext.length - 1]);
 				}
 
 			},
