@@ -87,7 +87,7 @@ class GetLaboralInsertionData:
 
 
     def _arrangeForOds(self, con,data):
-        values = [['Fecha de Inscripción','Apellido','Nombre','Sexo','Fecha Nacimiento','Edad','Dni','e-Mail','País','Ciudad de Origen','Ciudad de residencia','Legajo','Viajar','Residir','Ingles','Portugués','Otro'.'Carrera','Cantidad de materias','Promedio con aplazos','Promedio','Pasantía','Tiempo Completo','Jóvenes Profesionales']]
+        values = [['Fecha de Inscripción','Apellido','Nombre','Sexo','Fecha Nacimiento','Edad','Dni','e-Mail','País','Ciudad de Origen','Ciudad de residencia','Legajo','Viajar','Residir','Ingles','Portugués','Otro','Carrera','Cantidad de materias','Promedio con aplazos','Promedio','Pasantía','Tiempo Completo','Jóvenes Profesionales']]
         for l in data:
             v = []
 
