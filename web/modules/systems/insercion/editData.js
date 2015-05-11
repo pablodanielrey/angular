@@ -311,8 +311,8 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 					var blobcv = Utils.base64ToBlob(bcv.data);
 					var ext = bcv.name.split('.');
 					var filename = bcv.lastname + ', ' + bcv.username + '.' + ext[ext.length - 1];
-					console.log(filename);
-					//window.saveAs(blobcv,bcv.lastname + ', ' + bcv.username + '.' + ext[ext.length - 1]);
+					//console.log(filename);
+					window.saveAs(blobcv,bcv.lastname + ', ' + bcv.username + '.' + ext[ext.length - 1]);
 				}
 
 			},
