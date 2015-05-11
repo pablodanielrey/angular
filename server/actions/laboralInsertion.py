@@ -115,8 +115,8 @@ class GetLaboralInsertionData:
                     vaux = list(v)
                     vaux.append(d['name'])
                     vaux.append(d['courses'])
-                    vaux.append(d['average1'])
                     vaux.append(d['average2'])
+                    vaux.append(d['average1'])
 
                     workType = d['work_type']
                     if 'intership' in workType:
