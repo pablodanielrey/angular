@@ -87,7 +87,7 @@ class GetLaboralInsertionData:
 
 
     def _arrangeForOds(self, con,data):
-        values = [['Dni','Nombre','Apellido','Fecha de Nacimiento','Género','Ciudad de residencia','e-Mail','Residir','Viajar','Ingles','Portugués','Otro','Carrera','Materias con Final','Promedio','Promedio con aplazos']]
+        values = [['Fecha de Inscripción','Apellido','Nombre','Sexo','Fecha Nacimiento','Edad','Dni','e-Mail','Carrera','Cantidad de materias','Promedio con aplazos','Promedio','Pasantía','Tiempo Completo','Jóvenes Profesionales','País','Ciudad de Origen','Ciudad de residencia','Legajo','Viajar','Residir','Ingles','Portugués','Otro']]
         for l in data:
             v = []
 
@@ -95,24 +95,70 @@ class GetLaboralInsertionData:
             user = self.users.findUser(con,userId)
             mails = self.users.listMails(con,user['id'])
 
-            v.append(user['dni'])
-            v.append(user['name'])
+            v.append(l['creation'].date())
+
             v.append(user['lastname'])
-            v.append(user['birthdate'] if user['birthdate'] != None else '')
+            v.append(user['name'])
             v.append(user['genre'] if user['genre'] != None else '')
-            v.append(user['residence_city'] if user['residence_city'] else '')
+            v.append(user['birthdate'] if user['birthdate'] != None else '')
+            v.append('')
+            v.append(user['dni'])
+
 
             if len(mails) > 0:
                 v.append(mails[0]['email'])
             else:
                 v.append('')
 
-            if l['reside']:
+            if len(l['degrees']) > 0:
+                for d in l['degrees']:
+                    vaux = list(v)
+                    vaux.append(d['name'])
+                    vaux.append(d['courses'])
+                    vaux.append(d['average1'])
+                    vaux.append(d['average2'])
+
+                    workType = d['work_type']
+                    if 'intership' in workType:
+                        vaux.append('Sí')
+                    else:
+                        vaux.append('No')
+
+                    if 'FullTime' in workType:
+                        vaux.append('Sí')
+                    else:
+                        vaux.append('No')
+
+                    if 'YoungProfessionals' in workType:
+                        vaux.append('Sí')
+                    else:
+                        vaux.append('No')
+
+                    values.append(vaux)
+            else:
+                v.append('')
+                v.append('')
+                v.append('')
+                v.append('')
+                v.append('')
+                v.append('')
+                v.append('')
+                values.append(v)
+
+            v.append('')
+
+            v.append('')
+            v.append(user['residence_city'] if user['residence_city'] else '')
+
+            v.append('')
+
+            if l['travel']:
                 v.append('Sí')
             else:
                 v.append('No')
 
-            if l['travel']:
+
+            if l['reside']:
                 v.append('Sí')
             else:
                 v.append('No')
@@ -133,20 +179,6 @@ class GetLaboralInsertionData:
             v.append(langPort)
             v.append(langOtro)
 
-            if len(l['degrees']) > 0:
-                for d in l['degrees']:
-                    vaux = list(v)
-                    vaux.append(d['name'])
-                    vaux.append(d['courses'])
-                    vaux.append(d['average1'])
-                    vaux.append(d['average2'])
-                    values.append(vaux)
-            else:
-                v.append('')
-                v.append('')
-                v.append('')
-                v.append('')
-                values.append(v)
 
         return values
 

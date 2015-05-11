@@ -110,7 +110,7 @@ class LaboralInsertion:
 
     def findAll(self,con):
         cur = con.cursor()
-        cur.execute('select id,reside,travel from laboral_insertion.users')
+        cur.execute('select id,reside,travel,creation from laboral_insertion.users')
         data = cur.fetchall()
         laboralInsertions = []
         for li in data:
@@ -122,7 +122,8 @@ class LaboralInsertion:
         laboralInsertion = {
             'id':li[0],
             'reside':li[1],
-            'travel':li[2]
+            'travel':li[2],
+            'creation':li[3]
         }
         return laboralInsertion
 
