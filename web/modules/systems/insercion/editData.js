@@ -309,7 +309,7 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 					console.log(i);
 					var bcv = cvs[i];
 					var blobcv = Utils.base64ToBlob(bcv.data);
-					window.saveAs(blobcv,bcv.lastname + ',' + bcv.username + '_' + bcv.name);
+					//window.saveAs(blobcv,bcv.lastname + ',' + bcv.username + '_' + bcv.name);
 				}
 
 			},
