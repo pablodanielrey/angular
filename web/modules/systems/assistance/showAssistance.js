@@ -345,6 +345,7 @@ $scope.order = function(predicate, reverse) {
     newAssistance.date = Utils.formatDate(date);
 
     newAssistance.dayOfWeek = {};
+    newAssistance.dayOfWeek.shortName = Utils.getDayShortName(date);
     newAssistance.dayOfWeek.name = Utils.getDayString(date);
     newAssistance.dayOfWeek.number = date.getDay();
 
