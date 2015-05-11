@@ -9,7 +9,8 @@ app.controller('UserAssistanceManagementCtrl', ["$scope", "$rootScope", "$timeou
     users: [], //usuarios consultados para seleccionar
     
     //***** Cargar justificaciones para seleccion de secciones *****
-    justifications: []
+    justifications: [],
+    requestedJustifications: []
 	};
 
 	
@@ -83,18 +84,48 @@ app.controller('UserAssistanceManagementCtrl', ["$scope", "$rootScope", "$timeou
 
   };
   
-  
-   /**
-   * Cargar justificaciones que puede autorizar el usuario
-   */
-  $scope.loadUserJustifications = function(){
-    
 
-  };
+
+  $scope.loadUserRequestedJustifications = function() {
+    console.log("TODO: VER METODO ASSISTANCE.GETJUSTIFICATIONREQUEST PARA QUE DEVUELVE LAS DE UN DETERMINADO USUARIO")
+		Assistance.getJustificationRequests(null,
+			function(requestedJustifications) {
+				requestedJustifications.sort(function(l1,l2) {
+					return (new Date(l1.begin) - (new Date(l2.begin)));
+				});
+
+				$scope.model.requestedJustifications = [];
+				for (var i = 0; i < requestedJustifications.length; i++) {
+					var req = Utils.formatRequestJustification(requestedJustifications[i]);
+					$scope.model.requestedJustifications.push(req);
+				}
+        
+       
+			},
+			function(error){
+				Notifications.message(error);
+			}
+		);
+	};
   
   
   
   
+  
+  $scope.$on('JustificationsRequestsUpdatedEvent', function(event, requestUpdated) {
+		if ($scope.model.user.id == requestUpdated.user_id) {
+			$scope.loadUserRequestedJustifications();
+		}
+	});
+
+	$scope.$on('JustificationStatusChangedEvent', function(event, requestChanged) {
+		for (var i = 0; i < $scope.model.requestedJustifications.length; i++) {
+			if ($scope.model.requestedJustifications[i].id == requestChanged.request_id) {
+				$scope.loadUserRequestedJustifications();
+				break;
+			}
+		}
+	});
   
   
   
@@ -137,6 +168,7 @@ app.controller('UserAssistanceManagementCtrl', ["$scope", "$rootScope", "$timeou
   $scope.displayListUser = function(){
     $scope.model.user = null;
     $scope.model.searchUser = null;
+    $scope.model.requestedJustifications = [];
     $scope.model.displayListUser = true;
   };
 
@@ -154,7 +186,7 @@ app.controller('UserAssistanceManagementCtrl', ["$scope", "$rootScope", "$timeou
     $scope.model.displayListUser = false;
     $scope.model.user = user;
     $scope.model.searchUser = $scope.model.user.name + " " + $scope.model.user.lastname;
-    //$scope.loadUserJustifications();
+    $scope.loadUserRequestedJustifications();
   };
 
 
