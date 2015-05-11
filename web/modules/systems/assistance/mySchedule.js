@@ -25,8 +25,8 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
 
   //variables del fieldset de horario especial
   $scope.model.specialDate = null;      //fecha especial seleccionada
-  $scope.model.specialHour = null; //hora de inicio especial
-  $scope.model.specialTime = null;            //cantidad de horas especiales
+  $scope.model.specialStart = null; //hora de inicio especial
+  $scope.model.specialEnd = null;            //cantidad de horas especiales
 
   //variables de seleccion de usuario
   $scope.model.searchUser = null;        //nombre del usuario a buscar
@@ -62,10 +62,9 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
 
   $scope.initializeFormNewSpecialSchedule = function(){
     $scope.model.specialDate = new Date();      //fecha especial seleccionada
-    $scope.model.specialHour = null; //hora de inicio especial
+    $scope.model.specialStart = null; //hora de inicio especial
 
-    $scope.model.specialTime = new Date();
-    $scope.model.specialTime.setHours(7,0,0,0);
+    $scope.model.specialEnd = null;
   };
 
 
@@ -356,24 +355,26 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
     isDayOfYear:"es dia del año, si no se envia se toma como false"
   }
   */
-  $scope.saveNewSpecialSchedule = function(){
-/*
+  $scope.saveNewSpecialSchedule = function() {
 
-    Assistance.saveNewSpecialSchedule($scope.model.user.id,
+    var request = {};
+    request.user_id = $scope.model.user.id;
+    request.date = $scope.model.specialDate;
+    request.start = $scope.model.specialStart;
+    request.end = $scope.model.specialEnd;
+
+    Assistance.newSchedule(request,
       function callbackOk(schedule){
         $scope.initializeFormNewSpecialSchedule();
         $scope.loadHistory();
+        $scope.loadSchedule();
+        Notifications.message("Horario especial almacenado con exito");
       },
       function callbackError(error){
         Notifications.message(error);
         throw new Error(error);
       }
-    )
-         $scope.initializeFormNewSpecialSchedule();;
-    $scope.initializeFormNewSpecialSchedule();
-    $scope.loadHistory();
-     $scope.loadSchedule();
-    Notifications.message("Horario especial almacenado con exito");*/
+    );
   };
 
 

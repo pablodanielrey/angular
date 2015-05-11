@@ -109,12 +109,12 @@
         <div>
           <div class="textBlue margin2"><i class="fa fa-calendar-o"></i> Día</div>
           <div class="textBlue margin2"><i class="fa fa-clock-o"></i> Entrada</div>
-          <div class="textBlue margin2"><i class="fa fa-clock-o"></i> Tiempo</div>
+          <div class="textBlue margin2"><i class="fa fa-clock-o"></i> Salida</div>
         </div>
         <div>
           <div><input class="margin" type="date" ng-model="model.specialDate" required></div>
-          <div><input class="margin" type="time" ng-model="model.specialHour" required></div>
-          <div><input class="margin" type="time" ng-model="model.specialTime" required></div>
+          <div><input class="margin" type="time" ng-model="model.specialStart" required></div>
+          <div><input class="margin" type="time" ng-model="model.specialEnd" required></div>
         </div>
       </div>
       <button type="submit" class="save2" ng-disabled="model.user==null" ng-class="{true:'disabled'}[model.user==null]"> <i class="fa fa-floppy-o"></i> Guardar</Button>
