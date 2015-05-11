@@ -87,7 +87,7 @@ class GetLaboralInsertionData:
 
 
     def _arrangeForOds(self, con,data):
-        values = [['Fecha de Inscripción','Apellido','Nombre','Sexo','Fecha Nacimiento','Edad','Dni','e-Mail','Carrera','Cantidad de materias','Promedio con aplazos','Promedio','Pasantía','Tiempo Completo','Jóvenes Profesionales','País','Ciudad de Origen','Ciudad de residencia','Legajo','Viajar','Residir','Ingles','Portugués','Otro']]
+        values = [['Fecha de Inscripción','Apellido','Nombre','Sexo','Fecha Nacimiento','Edad','Dni','e-Mail','País','Ciudad de Origen','Ciudad de residencia','Legajo','Viajar','Residir','Ingles','Portugués','Otro'.'Carrera','Cantidad de materias','Promedio con aplazos','Promedio','Pasantía','Tiempo Completo','Jóvenes Profesionales']]
         for l in data:
             v = []
 
@@ -110,40 +110,6 @@ class GetLaboralInsertionData:
             else:
                 v.append('')
 
-            if len(l['degrees']) > 0:
-                for d in l['degrees']:
-                    vaux = list(v)
-                    vaux.append(d['name'])
-                    vaux.append(d['courses'])
-                    vaux.append(d['average2'])
-                    vaux.append(d['average1'])
-
-                    workType = d['work_type']
-                    if 'intership' in workType:
-                        vaux.append('Sí')
-                    else:
-                        vaux.append('No')
-
-                    if 'FullTime' in workType:
-                        vaux.append('Sí')
-                    else:
-                        vaux.append('No')
-
-                    if 'YoungProfessionals' in workType:
-                        vaux.append('Sí')
-                    else:
-                        vaux.append('No')
-
-                    values.append(vaux)
-            else:
-                v.append('')
-                v.append('')
-                v.append('')
-                v.append('')
-                v.append('')
-                v.append('')
-                v.append('')
-                values.append(v)
 
             v.append('')
 
@@ -179,6 +145,41 @@ class GetLaboralInsertionData:
             v.append(langPort)
             v.append(langOtro)
 
+
+            if len(l['degrees']) > 0:
+                for d in l['degrees']:
+                    vaux = list(v)
+                    vaux.append(d['name'])
+                    vaux.append(d['courses'])
+                    vaux.append(d['average2'])
+                    vaux.append(d['average1'])
+
+                    workType = d['work_type']
+                    if 'intership' in workType:
+                        vaux.append('Sí')
+                    else:
+                        vaux.append('No')
+
+                    if 'FullTime' in workType:
+                        vaux.append('Sí')
+                    else:
+                        vaux.append('No')
+
+                    if 'YoungProfessionals' in workType:
+                        vaux.append('Sí')
+                    else:
+                        vaux.append('No')
+
+                    values.append(vaux)
+            else:
+                v.append('')
+                v.append('')
+                v.append('')
+                v.append('')
+                v.append('')
+                v.append('')
+                v.append('')
+                values.append(v)
 
         return values
 
