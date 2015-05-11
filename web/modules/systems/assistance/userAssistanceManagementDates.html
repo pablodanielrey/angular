@@ -11,7 +11,10 @@
 
           <!-- FORMULARIO DE SOLICITUD -->
           <div ng-class="{true:'visible', false:'hidden'}[isSelectedRequest()]">
-            <div class="margin">
+            <div class="margin" ng-class="{true:'visible', false:'hidden'}[!isSelectedUser()]">
+              <p class="parrafos">Seleccione usuario</p>
+            </div>
+            <div class="margin" ng-class="{true:'visible', false:'hidden'}[isSelectedUser()]">
               <p class="parrafos">Seleccione el día de inicio</p>
               <input class="date" type="date" ng-model="model.begin" ng-change="selectDates()" >
               <p class="parrafos">Seleccione el día de inicio</p>
@@ -20,7 +23,7 @@
           </div>
 
           <!-- CONFIRMACION DE SOLICITUD -->
-          <div class="margin" ng-class="{true:'visible', false:'hidden'}[isDateDefined()]">
+          <div class="margin" ng-class="{true:'visible', false:'hidden'}[isDatesDefined()]">
             <p class="parrafos">Solicitar {{justification.name}}:</p>
             <p class="parrafos2"><i class="fa fa-calendar-o"></i>Desde {{model.beginFormated}} hasta {{model.endFormated}}</p>
             <input class="button2 blue2" type="button" value="Confirmar" ng-click="save()" ng-disabled="model.processingRequest">

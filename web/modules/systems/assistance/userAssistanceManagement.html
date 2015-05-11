@@ -23,12 +23,7 @@
     </div>
   
   <div class="content">
-   	<div ng-controller="UserAssistanceManagementDatesCtrl" ng-include="'modules/systems/assistance/userAssistanceManagementDates.html'" ng-init="init('478a2e35-51b8-427a-986e-591a9ee449d8', 'jmSelected')"></div>
-    <div ng-controller="UserAssistanceManagementDatesCtrl" ng-include="'modules/systems/assistance/userAssistanceManagementDates.html'" ng-init="init('f9baed8a-a803-4d7f-943e-35c436d5db46', 'mcdSelected')"></div>
-    <div ng-controller="UserAssistanceManagementDatesCtrl" ng-include="'modules/systems/assistance/userAssistanceManagementDates.html'" ng-init="init('a93d3af3-4079-4e93-a891-91d5d3145155', 'mltSelected')"></div>
-    <div ng-controller="UserAssistanceManagementDatesCtrl" ng-include="'modules/systems/assistance/userAssistanceManagementDates.html'" ng-init="init('b80c8c0e-5311-4ad1-94a7-8d294888d770', 'mafSelected')"></div>
-    <div ng-controller="UserAssistanceManagementDatesCtrl" ng-include="'modules/systems/assistance/userAssistanceManagementDates.html'" ng-init="init('0cd276aa-6d6b-4752-abe5-9258dbfd6f09', 'dSelected')"></div>
-    
+    <div ng-repeat="justification in model.justifications" ng-controller="UserAssistanceManagementDatesCtrl" ng-include="'modules/systems/assistance/userAssistanceManagementDates.html'" ng-init="init(justification.id)"></div>
 
   </div>
 </div>

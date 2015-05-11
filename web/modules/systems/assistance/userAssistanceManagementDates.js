@@ -5,19 +5,14 @@ app.controller('UserAssistanceManagementDatesCtrl', ["$scope", "Assistance", "No
   if(!$scope.model) Notifications.message("No esta definido el modelo");
 
 
-  $scope.init = function(justificationId, justificationSelectedName){
+  $scope.init = function(justificationId){
     //***** inicializar datos de la justificacion *****
-    $scope.justification = { 
+    $scope.justification = {
       id: justificationId, //id de la justificacion
       name:Utils.getJustificationName(justificationId),
       stock:0,
-      yearlyStock:0,
-      selectedName:justificationSelectedName
+      yearlyStock:0
     };
-    
-    $scope.model[justificationSelectedName] = false; //inicializar flag para indicar la seleccion de la justificacion
-    
-    
   };
   
 
@@ -30,14 +25,15 @@ app.controller('UserAssistanceManagementDatesCtrl', ["$scope", "Assistance", "No
   $scope.model.processingRequest = false;
   
   
+
   //***** METODOS DE SELECCION DE LA SECCION *****
   /**
-   * Esta seleccionada la seccion correspondiente a la justificacion 102
+   * Esta seleccionada la seccion correspondiente a la justificacion?
    * @returns {Boolean}
    */
   $scope.isSelectedJustification = function() {
-    
-    return $scope.model[$scope.justification.selectedName];
+    var i = $scope.getJustificationIndex($scope.justification.id);
+    return $scope.model.justifications[i].selected;
   };
 
   /**
@@ -45,10 +41,11 @@ app.controller('UserAssistanceManagementDatesCtrl', ["$scope", "Assistance", "No
    * @returns {Boolean}
    */
 	$scope.selectJustification = function() {
-    var value = !$scope.model[$scope.justification.selectedName];
+    var i = $scope.getJustificationIndex($scope.justification.id);
+    var value = !$scope.model.justifications[i].selected;
     $scope.clearSelections();
     $scope.clearContent();
-    $scope.model[$scope.justification.selectedName] = value;
+    $scope.model.justifications[i].selected = value;
 	};
   
   
@@ -59,6 +56,8 @@ app.controller('UserAssistanceManagementDatesCtrl', ["$scope", "Assistance", "No
   $scope.clearContent = function(){
     $scope.model.begin = null;
 		$scope.model.beginFormated = null;
+    $scope.model.end = null;
+		$scope.model.endFormated = null;
     $scope.model.processingRequest = false;
     
   };
@@ -67,9 +66,16 @@ app.controller('UserAssistanceManagementDatesCtrl', ["$scope", "Assistance", "No
     
   //***** METODOS DEl FORMULARIO DE SOLICITUD *****
   $scope.selectDates = function(){
-		$scope.model.dateFormated = null;
-    if($scope.model.date !== null){
-			$scope.model.dateFormated = Utils.formatDate($scope.model.date);
+		$scope.model.beginFormated = null;
+    if($scope.model.begin !== null){
+			$scope.model.beginFormated = Utils.formatDate($scope.model.begin);
+    }
+    if($scope.model.end !== null){
+      if(($scope.model.begin !== null) && ($scope.model.begin > $scope.model.end)){
+        $scope.model.end = new Date($scope.model.begin);
+      }
+      $scope.model.endFormated = Utils.formatDate($scope.model.end);
+
     }
   };
   
@@ -88,14 +94,18 @@ app.controller('UserAssistanceManagementDatesCtrl', ["$scope", "Assistance", "No
 			begin:$scope.model.begin,
       end:$scope.model.end
 		};
-
-  	Assistance.requestJustification($scope.model.session.user_id, request,
+    console.log(request);
+    console.log($scope.model.user.id);
+    
+  	Assistance.requestJustification($scope.model.user.id, request,
 			function(ok) {
 				$scope.clearContent();    //limpiar contenido
         $scope.clearSelections(); //limpiar selecciones
         Notifications.message("Solicitud de " + $scope.justification.name + " registrada correctamente");
 			},
 			function(error){
+        $scope.clearContent();    //limpiar contenido
+        $scope.clearSelections(); //limpiar selecciones
 				Notifications.message(error);
 			}
 

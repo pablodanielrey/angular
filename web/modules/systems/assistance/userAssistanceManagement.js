@@ -8,24 +8,16 @@ app.controller('UserAssistanceManagementCtrl', ["$scope", "$rootScope", "$timeou
     searchUser: null, //usuario buscado
     users: [], //usuarios consultados para seleccionar
     
-    //***** seleccion de modulos *****
-		jmSelected: false,
-    mcdSelected: false,
-    mltSelected: false, 
-    mafSelected: false,
-    dSelected: false
+    //***** Cargar justificaciones para seleccion de secciones *****
+    justifications: []
 	};
 
 	
-  $scope.clearSelections = function() {
-		$scope.model.jmSelected = false;
-    $scope.model.mcdSelected = false;
-    $scope.model.mltSelected = false;
-    $scope.model.mafSelected = false;
-    $scope.model.dSelected = false;
-	};
   
   
+  /*************************************
+   * METODOS DE CARGA E INICIALIZACION *
+   *************************************/  
   /**
    * Cargar y chequear session
    */
@@ -41,7 +33,7 @@ app.controller('UserAssistanceManagementCtrl', ["$scope", "$rootScope", "$timeou
     }
     Profiles.checkAccess(Session.getSessionId(),'ADMIN-ASSISTANCE,USER-ASSISTANCE',
       function(ok) {
-        if (ok != 'granted') {
+        if (ok !== 'granted') {
           Notifications.message("Acceso no autorizado");
           $window.location.href = "/#/logout";
         }
@@ -52,10 +44,10 @@ app.controller('UserAssistanceManagementCtrl', ["$scope", "$rootScope", "$timeou
     );
   };
   
-   /**
-   * Cargar usuarios
+  /**
+   * Cargar usuarios autorizados para aplicar justificaciones
    */
-  $scope.loadUsers = function(){
+  $scope.loadAuthorizedUsers = function(){
     Assistance.getUsersInOfficesByRole('autoriza',
       function(users) {
         $scope.model.users = [];
@@ -75,6 +67,30 @@ app.controller('UserAssistanceManagementCtrl', ["$scope", "$rootScope", "$timeou
     );
   };
   
+  /**
+   * Cargar justificaciones que puede autorizar el usuario
+   */
+  $scope.loadAuthorizedJustifications = function(){
+    
+    $scope.model.justifications = [
+      {id:'478a2e35-51b8-427a-986e-591a9ee449d8', selected: false},
+      {id:'f9baed8a-a803-4d7f-943e-35c436d5db46', selected: false},
+      {id:'a93d3af3-4079-4e93-a891-91d5d3145155', selected: false},
+      {id:'b80c8c0e-5311-4ad1-94a7-8d294888d770', selected: false},
+      {id:'0cd276aa-6d6b-4752-abe5-9258dbfd6f09', selected: false}
+    ];
+    $scope.clearSelections();
+
+  };
+  
+  
+   /**
+   * Cargar justificaciones que puede autorizar el usuario
+   */
+  $scope.loadUserJustifications = function(){
+    
+
+  };
   
   
   
@@ -82,14 +98,28 @@ app.controller('UserAssistanceManagementCtrl', ["$scope", "$rootScope", "$timeou
   
   
   
+   /*********************************************
+   * METODOS CORRESPONDIENTES A JUSTIFICACIONES *
+   **********************************************/
+  
+  $scope.getJustificationIndex = function(justificationId){
+    for(var i = 0; i < $scope.model.justifications.length; i++){
+      if(justificationId === $scope.model.justifications[i].id){
+        return i;
+        break;
+      }
+    }
+  };
+  
+  $scope.clearSelections = function() {
+    for(var i = 0; i < $scope.model.justifications.length; i++){
+      $scope.model.justifications[i].selected = false;
+    }
+
+	};
   
   
-  
-  
-  
-  
-  
-  
+
   /******************************************************
    * METODOS CORRESPONDIENTES A LA SELECCION DE USUARIO *
    ******************************************************/
@@ -110,6 +140,10 @@ app.controller('UserAssistanceManagementCtrl', ["$scope", "$rootScope", "$timeou
     $scope.model.displayListUser = true;
   };
 
+
+  $scope.isSelectedUser = function(){
+    return ($scope.model.user !== null);
+  };
   
 
   /**
@@ -120,8 +154,7 @@ app.controller('UserAssistanceManagementCtrl', ["$scope", "$rootScope", "$timeou
     $scope.model.displayListUser = false;
     $scope.model.user = user;
     $scope.model.searchUser = $scope.model.user.name + " " + $scope.model.user.lastname;
-    //$scope.loadJustifications();
-
+    //$scope.loadUserJustifications();
   };
 
 
@@ -132,9 +165,9 @@ app.controller('UserAssistanceManagementCtrl', ["$scope", "$rootScope", "$timeou
 
 
   $timeout(function() {
-    $scope.clearSelections();
     $scope.loadSession();
-    $scope.loadUsers();
+    $scope.loadAuthorizedJustifications();
+    $scope.loadAuthorizedUsers();
   }, 0);
 
 }]);
