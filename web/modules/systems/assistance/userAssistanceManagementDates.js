@@ -92,7 +92,7 @@ app.controller('UserAssistanceManagementDatesCtrl', ["$scope", "Assistance", "No
     var request = {
 			id:$scope.justification.id,
 			begin:$scope.model.begin,
-      end:$scope.model.end
+      end:$scope.model.end,
 		};
     console.log(request);
     console.log($scope.model.user.id);
