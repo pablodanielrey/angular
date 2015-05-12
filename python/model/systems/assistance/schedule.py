@@ -267,6 +267,15 @@ class Schedule:
                 justs.append(j)
         return justs
 
+    def _findGeneralJustificationsForDate(self,justifications,date):
+        justs = []
+        for j in justifications:
+            logging.debug('chequeando fecha : {} == {}'.format(j['begin'].date(),date.date()))
+            if j['begin'].date() == date.date():
+                justs.append(j)
+        return justs
+
+
 
     """
         chequea la restricción del usuario entre determinadas fechas
@@ -280,6 +289,7 @@ class Schedule:
             return []
 
 
+        gjustifications = self.justifications.getGeneralJustifications(con)
         justifications = self.justifications.getJustificationRequestsByDate(con,status=['APPROVED'],users=[userId],start=start,end=end + datetime.timedelta(days=1))
         logging.debug('justificaciones encontradas : {} '.format(justifications))
 
@@ -319,6 +329,13 @@ class Schedule:
                 logs = self._getLogsForSchedule(con,userId,actualUtc)
                 if (logs is None) or (len(logs) <= 0):
                     justs = self._findJustificationsForDate(justifications,actual)
+
+                    gjusts = self._findGeneralJustificationsForDate(gjustifications,actual)
+                    if len(gjusts) > 0:
+                        for j in gjusts:
+                            j['user_id'] = userId
+                            justs.append(j)
+
                     fails.append(
                         {
                             'userId':userId,
@@ -339,6 +356,14 @@ class Schedule:
                 if count < (check['hours'] * 60 * 60):
 
                     justs = self._findJustificationsForDate(justifications,actual)
+
+                    gjusts = self._findGeneralJustificationsForDate(gjustifications,actual)
+                    if len(gjusts) > 0:
+                        for j in gjusts:
+                            j['user_id'] = userId
+                            justs.append(j)
+
+
                     fails.append(
                         {
                             'userId':userId,
@@ -350,6 +375,14 @@ class Schedule:
 
             elif check['type'] == 'SCHEDULE':
                 justs = self._findJustificationsForDate(justifications,actual)
+
+                gjusts = self._findGeneralJustificationsForDate(gjustifications,actual)
+                if len(gjusts) > 0:
+                    for j in gjusts:
+                        j['user_id'] = userId
+                        justs.append(j)
+                
+
                 fail = self.checkSchedule(con,userId,actualUtc)
                 for f in fail:
                     f['justifications'] = justs
