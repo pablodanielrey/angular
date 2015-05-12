@@ -114,6 +114,8 @@ class GetFailsByDate:
             assistanceFails = []
             (users,fails) = self.assistance.checkSchedule(authorizedUsers,start,end)
 
+            b64 = self.assistance.arrangeCheckSchedule(con,fails)
+
             for user in users:
                 ffails = self.fails.filterUser(user['id'],fails)
                 for f in ffails:
@@ -126,7 +128,7 @@ class GetFailsByDate:
                         assistanceFails.append(data)
 
 
-            b64 = self.assistance.arrangeCheckSchedule(con,assistanceFails)
+
 
 
             response = {
