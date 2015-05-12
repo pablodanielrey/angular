@@ -31,12 +31,12 @@
     <span><i class="fa fa-ticket"></i>Solicitudes del usuario</span>
   </div>
   <div class="titlesFiles">
-    <div class="column t1"><i class="fa fa-ticket"></i> Solicitud</div>
-    <div class="column t1"><i class="fa fa-calendar"></i> Día</div>
-    <div class="column t1"><i class="fa fa-info-circle"></i> Estado</div>
+    <div class="column t1" ng-click="sortRequestedJustifications('justificationName')"><i  class="fa fa-ticket"></i> Solicitud</div>
+    <div class="column t1" ng-click="sortRequestedJustifications('dateSort')"><i  class="fa fa-calendar"></i> Día</div>
+    <div class="column t1" ><i class="fa fa-info-circle"></i> Estado</div>
   </div>
   <div class="scroll">
-    <div class="myRequestInfo" ng-repeat="req in model.requestedJustifications" >
+    <div class="myRequestInfo" ng-repeat="req in model.requestedJustifications | orderBy:model.rjSort:model.rjReversed" >
 
       <div class="myRequest">
         <span>{{req.justificationName}}</span>
@@ -52,20 +52,9 @@
       </div>
 
 
-      <div class="myStateRequestSlope  pending" ng-class="{true:'visible', false:'hidden'}[req.status == 'PENDING']">
-        <span><i class="fa fa-spinner fa-spin"></i> Pendiente</span>
-        <button class="buttonApproved"  ng-click="approveRequest(req)"><i class="fa fa-check-circle"></i> Aprobar</Button>
-        <button class="buttonRefuse" ng-click="refuseRequest(req)"><i class="fa fa-times"></i> Denegar</Button>
-      </div>
       <div class="myStateRequestApproved" ng-class="{true:'visible', false:'hidden'}[req.status == 'APPROVED']">
         <span class="buttonApproved"><i class="fa fa-check-circle"></i> Aprobado</span>
         <button class="buttonRefuse" ng-click="cancelRequest(req)"><i class="fa fa-times"></i> Cancelar</button>
-      </div>
-      <div class="myStateRequestRejected" ng-class="{true:'visible', false:'hidden'}[req.status == 'REJECTED']">
-        <span class="buttonCancel"><i class="fa fa-times"></i> Rechazado</span>
-      </div>
-       <div class="myStateRequestCanceled" ng-class="{true:'visible', false:'hidden'}[req.status == 'CANCELED']">
-        <span class="buttonCancel"><i class="fa fa-times"></i> Cancelado</span>
       </div>
     </div>
   </div>

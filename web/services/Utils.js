@@ -204,6 +204,7 @@ app.service('Utils', function() {
       id:null,
       justificationName:null,
       date:null,
+      dateSort:null,
       time:null,
       start:null,
       end:null,
@@ -217,6 +218,7 @@ app.service('Utils', function() {
     if(req.begin !== null){
       var date = new Date(req.begin);
       request.date = this.formatDate(date);
+      request.dateSort = date;
     }
     
     if(req.end !== null){

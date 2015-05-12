@@ -10,7 +10,9 @@ app.controller('UserAssistanceManagementCtrl', ["$scope", "$rootScope", "$timeou
     
     //***** Cargar justificaciones para seleccion de secciones *****
     justifications: [],
-    requestedJustifications: []
+    requestedJustifications: [],
+    rjSort: "justificationName",
+    rjReversed: false
 	};
 
 	
@@ -84,15 +86,29 @@ app.controller('UserAssistanceManagementCtrl', ["$scope", "$rootScope", "$timeou
 
   };
   
+  /**
+   * Verificar si la justificacion enviada como parametro es una justificacion autorizada
+   * @param {type} justificationId Id de la justificacion
+   * @returns {undefined}
+   */
+  $scope.isAuthorizedJustification = function(justificationId){
+    for(var i = 0; i < $scope.model.justifications.length; i++){
+      if($scope.model.justifications[i].id === justificationId) return true;
+    }
+    return false;
+  };
+  
 
 
   $scope.loadUserRequestedJustifications = function() {
-    Assistance.getJustificationRequestsToManage(['PENDING','APPROVED'],"TREE",
+    Assistance.getJustificationRequestsToManage(['APPROVED'],"TREE",
       function(requestedJustifications) {
         $scope.model.requestedJustifications = [];
 				for (var i = 0; i < requestedJustifications.length; i++) {
-					var req = Utils.formatRequestJustification(requestedJustifications[i]);
-					$scope.model.requestedJustifications.push(req);
+          if((requestedJustifications[i].user_id === $scope.model.user.id) && ($scope.isAuthorizedJustification(requestedJustifications[i].justification_id))){
+            var req = Utils.formatRequestJustification(requestedJustifications[i]);
+            $scope.model.requestedJustifications.push(req);
+          }
 				}
 
       },
@@ -146,32 +162,25 @@ app.controller('UserAssistanceManagementCtrl', ["$scope", "$rootScope", "$timeou
 	};
   
   
-  $scope.updateStatus = function(status, request) {
-    console.log(request);
-        $scope.disabled = true;
-        Assistance.updateJustificationRequestStatus(request.id, status,
-            function(ok) {
-              console.log("ok")
-              $scope.disabled = false;
-            },
-            function(error) {
-              console.log("error");
-              $scope.disabled = false;
-            }
-        );
-    };
-  
-  $scope.approveRequest = function(request) {
-    $scope.updateStatus("APPROVED",request);
-  };
-
-  $scope.refuseRequest = function(request) {
-    $scope.updateStatus("REJECTED",request);
-  };
-
   $scope.cancelRequest = function(request) {
-    $scope.updateStatus("CANCELED",request);
-  }
+    Assistance.updateJustificationRequestStatus(request.id, status,
+      function(ok) {
+        console.log("ok")
+      },
+      function(error) {
+        console.log("error");
+      }
+    );
+  };
+  
+  $scope.sortRequestedJustifications = function(sort){
+    if($scope.model.rjSort === sort){
+      $scope.model.rjReversed = !$scope.model.rjReversed;
+    } else {
+      $scope.model.rjSort = sort;
+      $scope.model.rjReversed = false;
+    }
+  };
   
   
 
