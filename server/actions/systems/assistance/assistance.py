@@ -114,7 +114,7 @@ class GetFailsByDate:
             assistanceFails = []
             (users,fails) = self.assistance.checkSchedule(authorizedUsers,start,end)
 
-            filteredFails = list(filter(lambda x: len(x['fail']['justifications']) <= 0,fails))
+            filteredFails = list(filter(lambda x: len(x['justifications']) <= 0,fails))
             b64 = self.assistance.arrangeCheckSchedule(con,filteredFails)
 
             for user in users:
