@@ -12,8 +12,8 @@
           <span><i class="fa fa-user-plus"></i> Seleccione Usuario</span>
         </div>
         <div>
-          <input class="inputSearch" ng-model="model.searchUser" ng-click="displayListUser()" ng-blur="hideListUser()" placeholder="Buscar...">
-          <ul class="listUsers" ng-class="{true:'visible', false:'hidden'}[true]">
+          <input class="inputSearch" ng-model="model.searchUser" ng-click="displayListUser()"  placeholder="Buscar...">
+          <ul class="listUsers" ng-class="{true:'visible', false:'hidden'}[isDisplayListUser()]">
             <li class="liUsers" ng-repeat="user in model.users | filter:model.searchUser | orderBy : 'name'" ng-click="selectUser(user)">{{user.name}} {{user.lastname}}</li>
           </ul>
         </div>
@@ -26,37 +26,41 @@
 
     <!-- MODULO DE HORARIO SEMANAL -->
     <div class="myScheduleWeekly">
+      <div>
+        <span class="textBlue margin2"><i class="fa fa-calendar-o"></i> Semana:</span>
+        <input type="date" ng-model="model.dateOfWeek">
+      </div>
       <div class="titleMyScheduleWeekly">
-        <span>Horario Semanal</span>
+        <span>Semana: {{model.dateOfWeekStr}}</span>
       </div>
       <div class="weekly">
         <div>
           <div class="days">Lun</div>
-          <div ng-repeat="time in model.schedule.monday | orderBy:time.hour"><i ng-class="{true:'fa fa-caret-right', false:'fa fa-caret-left'}[time.type == 'start']"></i> {{time.hour}}</div>
+          <div ng-repeat="time in model.schedule.monday | orderBy:'hour'"><i ng-class="{true:'fa fa-caret-right', false:'fa fa-caret-left'}[time.type == 'start']"></i> {{time.hour}}</div>
         </div>
         <div>
           <div class="days">Mar</div>
-          <div ng-repeat="time in model.schedule.tuesday"><i ng-class="{true:'fa fa-caret-right', false:'fa fa-caret-left'}[time.type == 'start']"></i> {{time.hour}}</div>
+          <div ng-repeat="time in model.schedule.tuesday | orderBy:'hour'"><i ng-class="{true:'fa fa-caret-right', false:'fa fa-caret-left'}[time.type == 'start']"></i> {{time.hour}}</div>
         </div>
         <div>
           <div class="days">Mie</div>
-          <div ng-repeat="time in model.schedule.wednesday"><i ng-class="{true:'fa fa-caret-right', false:'fa fa-caret-left'}[time.type == 'start']"></i> {{time.hour}}</div>
+          <div ng-repeat="time in model.schedule.wednesday | orderBy:'hour'"><i ng-class="{true:'fa fa-caret-right', false:'fa fa-caret-left'}[time.type == 'start']"></i> {{time.hour}}</div>
         </div>
         <div>
           <div class="days">Jue</div>
-          <div ng-repeat="time in model.schedule.thursday"><i ng-class="{true:'fa fa-caret-right', false:'fa fa-caret-left'}[time.type == 'start']"></i> {{time.hour}}</div>
+          <div ng-repeat="time in model.schedule.thursday | orderBy:'hour'"><i ng-class="{true:'fa fa-caret-right', false:'fa fa-caret-left'}[time.type == 'start']"></i> {{time.hour}}</div>
         </div>
         <div>
           <div class="days">Vie</div>
-          <div ng-repeat="time in model.schedule.friday"><i ng-class="{true:'fa fa-caret-right', false:'fa fa-caret-left'}[time.type == 'start']"></i> {{time.hour}}</div>
+          <div ng-repeat="time in model.schedule.friday | orderBy:'hour'"><i ng-class="{true:'fa fa-caret-right', false:'fa fa-caret-left'}[time.type == 'start']"></i> {{time.hour}}</div>
         </div>
         <div>
           <div class="days">Sab</div>
-          <div ng-repeat="time in model.schedule.saturday"><i ng-class="{true:'fa fa-caret-right', false:'fa fa-caret-left'}[time.type == 'start']"></i> {{time.hour}}</div>
+          <div ng-repeat="time in model.schedule.saturday | orderBy:'hour'"><i ng-class="{true:'fa fa-caret-right', false:'fa fa-caret-left'}[time.type == 'start']"></i> {{time.hour}}</div>
         </div>
         <div>
           <div class="days">Dom</div>
-          <div ng-repeat="time in model.schedule.sunday"><i ng-class="{true:'fa fa-caret-right', false:'fa fa-caret-left'}[time.type == 'start']"></i> {{time.hour}}</div>
+          <div ng-repeat="time in model.schedule.sunday | orderBy:'hour'"><i ng-class="{true:'fa fa-caret-right', false:'fa fa-caret-left'}[time.type == 'start']"></i> {{time.hour}}</div>
         </div>
       </div>
 
@@ -90,11 +94,11 @@
       <div class="timeScheduleWeekly">
         <div>
           <div class="textBlue" ><i class="fa fa-clock-o"></i> Entrada</div>
-          <div class="textBlue" ><i class="fa fa-clock-o"></i> Tiempo</div>
+          <div class="textBlue" ><i class="fa fa-clock-o"></i> Salida</div>
         </div>
         <div>
-          <div><input class="margin" type="time" ng-model="model.hour" required></div>
-          <div><input class="margin" type="time" ng-model="model.time" required></div>
+          <div><input class="margin" type="time" ng-model="model.start" required></div>
+          <div><input class="margin" type="time" ng-model="model.end" required></div>
         </div>
 
       </div>
@@ -109,20 +113,41 @@
         <div>
           <div class="textBlue margin2"><i class="fa fa-calendar-o"></i> Día</div>
           <div class="textBlue margin2"><i class="fa fa-clock-o"></i> Entrada</div>
-          <div class="textBlue margin2"><i class="fa fa-clock-o"></i> Tiempo</div>
+          <div class="textBlue margin2"><i class="fa fa-clock-o"></i> Salida</div>
         </div>
         <div>
           <div><input class="margin" type="date" ng-model="model.specialDate" required></div>
-          <div><input class="margin" type="time" ng-model="model.specialHour" required></div>
-          <div><input class="margin" type="time" ng-model="model.specialTime" required></div>
+          <div><input class="margin" type="time" ng-model="model.specialStart" required></div>
+          <div><input class="margin" type="time" ng-model="model.specialEnd" required></div>
         </div>
       </div>
       <button type="submit" class="save2" ng-disabled="model.user==null" ng-class="{true:'disabled'}[model.user==null]"> <i class="fa fa-floppy-o"></i> Guardar</Button>
     </form>
-
+    <!-- MODULO HISTORIAL DE HORARIO -->
     <div class="historySchedule">
       <div class="titleMyScheduleWeekly">
         <span><i class="fa fa-history"></i> Historial de Horarios</span>
+      </div>
+      <div class="contentHistory">
+          <div class="ContentRepeat" ng-repeat="schedule in model.history | orderBy:['-date','start']">
+              <div>
+                <div class="t2">Nuevo Horario Semanal</div>
+              </div>
+              <div class="dateHistory2">
+                <div class="t">Desde</div>
+                <div class="t3">{{schedule.dateStr}}</div>
+              </div>
+              <div class="dateHistory2">
+                <div class="t">Día</div>
+                <div class="t4"> {{schedule.day}}, {{schedule.startDate}} <span ng-if="!schedule.isDayOfWeek">(Horario Especial)</span></div>
+              </div>
+              <div class="timeHistory">
+                <div class="t">Entrada</div>
+                <div>{{schedule.startTime}}</div>
+                <div class="t t5">Salida</div>
+                <div>{{schedule.end}}</div>
+              </div>
+          </div>
       </div>
 
     </div>
