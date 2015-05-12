@@ -136,6 +136,16 @@ create schema assistance;
     );
 
 
+    create table assistance.general_justifications (
+      id varchar primary key,
+      justification_id varchar not null references assistance.justifications (id),
+      jbegin timestamptz not null,
+      jend timestamptz,
+      created timestamptz not null default now(),
+      CHECK(EXTRACT(TIMEZONE FROM jbegin) = '0')
+    );
+
+
 
     create table assistance.overtime_requests (
       id varchar primary key,

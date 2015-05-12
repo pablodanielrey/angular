@@ -114,17 +114,20 @@ class GetFailsByDate:
             assistanceFails = []
             (users,fails) = self.assistance.checkSchedule(authorizedUsers,start,end)
 
+            filteredFails = list(filter(lambda x: len(x['justifications']) <= 0,fails))
+            b64 = self.assistance.arrangeCheckSchedule(con,filteredFails)
+
             for user in users:
                 ffails = self.fails.filterUser(user['id'],fails)
                 for f in ffails:
-                    data = {
-                        'user':user,
-                        'fail':f
-                    }
-                    assistanceFails.append(data)
+                    #solo agrego las que no tienen justificaciones
+                    if ('justifications' not in f) or (len(f['justifications']) <= 0):
+                        data = {
+                            'user':user,
+                            'fail':f
+                        }
+                        assistanceFails.append(data)
 
-
-            b64 = self.assistance.arrangeCheckSchedule(con,fails)
 
 
             response = {
