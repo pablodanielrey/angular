@@ -201,7 +201,7 @@ class Assistance:
                 s = self.getAssistanceStatus(con,userId,date)
                 if (s != None):
                     # verifico si coincide alguna justificacion con el userId y el date
-                    just = list(filter(lambda j: j['user_id']  == userId and self._equalsTime(j["begin"],date), justifications))
+                    just = list(filter(lambda j: j['user_id'] == userId and self._equalsTime(j["begin"],date), justifications))
                     s["justifications"] = just;
                     for j in just:
                         justifications.remove(j)
