@@ -157,10 +157,6 @@ app.config(['$routeProvider', function($routeProvider) {
 		controller: 'Au24Ctrl'
 	})
 
-  .when('/digesto', {
-    templateUrl: '/modules/systems/digesto/digesto.html',
-    controller: 'digestoCtrl'
-  })
 
 	.when('/test', {
 		templateUrl: '/modules/test/test.html',
