@@ -10,8 +10,9 @@ app.controller('UserAssistanceManagementCtrl', ["$scope", "$rootScope", "$timeou
     
     //***** Cargar justificaciones para seleccion de secciones *****
     justifications: [],
-    requestedJustifications: [],
-    rjSort: "justificationName",
+    requestedJustifications: [], //se consultan todas las requestedJustifications aprobadas de todos los usuarios.
+    userRequestedJustifications: [], //se filtran las requestedJustifications del usuario seleccionada y de las justificaciones que se pueden autorizar
+    rjSort: null,
     rjReversed: false
 	};
 
@@ -103,22 +104,28 @@ app.controller('UserAssistanceManagementCtrl', ["$scope", "$rootScope", "$timeou
   $scope.loadUserRequestedJustifications = function() {
     Assistance.getJustificationRequestsToManage(['APPROVED'],"TREE",
       function(requestedJustifications) {
-        $scope.model.requestedJustifications = [];
-				for (var i = 0; i < requestedJustifications.length; i++) {
-          if((requestedJustifications[i].user_id === $scope.model.user.id) && ($scope.isAuthorizedJustification(requestedJustifications[i].justification_id))){
-            var req = Utils.formatRequestJustification(requestedJustifications[i]);
-            $scope.model.requestedJustifications.push(req);
-          }
-				}
-
+        $scope.model.requestedJustifications = requestedJustifications;
+        if($scope.model.user != null) $scope.filterUserRequestedJustifications();
       },
       function(error) {
         Notifications.message(error);
       }
-  );
-      
-	
-	};
+    );
+  };
+
+
+  $scope.filterUserRequestedJustifications = function(){
+    $scope.model.rjSort = ["dateSort", "justificationName"];
+    $scope.model.rjReversed = false;
+    $scope.model.userRequestedJustifications = [];
+    for (var i = 0; i < $scope.model.requestedJustifications.length; i++) {
+      if(($scope.model.user.id === $scope.model.requestedJustifications[i].user_id) && ($scope.isAuthorizedJustification($scope.model.requestedJustifications[i].justification_id))){
+        var req = Utils.formatRequestJustification($scope.model.requestedJustifications[i]);
+        $scope.model.userRequestedJustifications.push(req);
+      }
+    }
+  };
+    
   
   
   
@@ -127,6 +134,7 @@ app.controller('UserAssistanceManagementCtrl', ["$scope", "$rootScope", "$timeou
   $scope.$on('JustificationsRequestsUpdatedEvent', function(event, requestUpdated) {
 		if ($scope.model.user.id == requestUpdated.user_id) {
 			$scope.loadUserRequestedJustifications();
+     
 		}
 	});
 
@@ -174,10 +182,17 @@ app.controller('UserAssistanceManagementCtrl', ["$scope", "$rootScope", "$timeou
   };
   
   $scope.sortRequestedJustifications = function(sort){
-    if($scope.model.rjSort === sort){
+    if($scope.model.rjSort[0] === sort){
       $scope.model.rjReversed = !$scope.model.rjReversed;
     } else {
-      $scope.model.rjSort = sort;
+      switch($scope.model.rjSort[0]){
+        case "dateSort":
+          $scope.model.rjSort = ["dateSort", "justificationName"]
+        break;
+        case "justificationName":
+          $scope.model.rjSort = ["justificationName", "dateSort"]
+        break;
+      }
       $scope.model.rjReversed = false;
     }
   };
@@ -201,7 +216,7 @@ app.controller('UserAssistanceManagementCtrl', ["$scope", "$rootScope", "$timeou
   $scope.displayListUser = function(){
     $scope.model.user = null;
     $scope.model.searchUser = null;
-    $scope.model.requestedJustifications = [];
+    $scope.model.userRequestedJustifications = [];
     $scope.model.displayListUser = true;
   };
 
@@ -219,7 +234,7 @@ app.controller('UserAssistanceManagementCtrl', ["$scope", "$rootScope", "$timeou
     $scope.model.displayListUser = false;
     $scope.model.user = user;
     $scope.model.searchUser = $scope.model.user.name + " " + $scope.model.user.lastname;
-    $scope.loadUserRequestedJustifications();
+    $scope.filterUserRequestedJustifications();
   };
 
 
@@ -233,6 +248,7 @@ app.controller('UserAssistanceManagementCtrl', ["$scope", "$rootScope", "$timeou
     $scope.loadSession();
     $scope.loadAuthorizedJustifications();
     $scope.loadAuthorizedUsers();
+    $scope.loadUserRequestedJustifications()
   }, 0);
 
 }]);

@@ -36,7 +36,7 @@
     <div class="column t1" ><i class="fa fa-info-circle"></i> Estado</div>
   </div>
   <div class="scroll">
-    <div class="myRequestInfo" ng-repeat="req in model.requestedJustifications | orderBy:model.rjSort:model.rjReversed" >
+    <div class="myRequestInfo" ng-repeat="req in model.userRequestedJustifications | orderBy:model.rjSort:model.rjReversed" >
 
       <div class="myRequest">
         <span>{{req.justificationName}}</span>
