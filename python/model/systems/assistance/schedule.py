@@ -242,7 +242,7 @@ class Schedule:
 
         schedules = []
 
-        for x in range(0, 6):
+        for x in range(0, 7):
             sch = self.getSchedule(con,userId,date)
             schedules.append(sch)
             date += datetime.timedelta(days=1)
