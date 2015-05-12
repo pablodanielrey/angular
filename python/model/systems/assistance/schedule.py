@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import psycopg2, inject, uuid
-import datetime, pytz
+import datetime, pytz, calendar
 import logging
 
 from model.exceptions import *
@@ -138,11 +138,11 @@ class Schedule:
         """ obtengo todos los schedules que son en la fecha date del parámetro """
         cur.execute("select sstart, send, date from assistance.schedule where \
                     ((date = %s) or \
-                    (isDayOfWeek = true and extract(dow from date) = extract(dow from %s)) or \
+                    (isDayOfWeek = true and date <= %s and extract(dow from date) = extract(dow from %s)) or \
                     (isDayOfMonth = true and extract(day from date) = extract(day from %s)) or \
                     (isDayOfYear = true and extract(doy from date) = extract(doy from %s))) and \
                     user_id = %s \
-                    order by date desc",(date,date,date,date,userId))
+                    order by date desc",(date,date,date,date,date,userId))
         scheduless = cur.fetchall()
         if scheduless is None or len(scheduless) <= 0:
             return []
@@ -229,52 +229,23 @@ class Schedule:
     """
     def getSchedulesOfWeek(self,con,userId,date):
 
-        cur = con.cursor()
-        cur.execute('set time zone %s',('utc',))
-
         if date is None:
             date = self.date.now()
             date = date.replace(hour=0,minute=0,second=0,microsecond=0)
 
-        # lo paso a utc
-        udate = date.astimezone(pytz.utc)
+        # paso la fecha a utc
+        date = self.date.awareToUtc(date)
 
-        cur.execute("select sstart, send, date, isDayOfWeek, isDayOfMonth, isDayOfYear from assistance.schedule where \
-                user_id = %s \
-                and date <= %s \
-                order by date desc",(userId,udate))
-        scheduless = cur.fetchall()
-        if scheduless is None or len(scheduless) <= 0:
-            return []
+        # obtengo el primer dia de la semana del date (L-0 .. D-6)
+        weekday = datetime.date.weekday(date)
+        date -= datetime.timedelta(days=weekday)
 
         schedules = []
 
-        if not self.date.isUTC(scheduless[0][2]):
-            raise FailedConstraints('date in database not in UTC')
-
-        # obtengo la primer fecha y me quedo con los schedules que correspondan a ese date
-        dateS = scheduless[0][2]
-        for schedule in scheduless:
-
-            """ controlo que las fechas estén en utc """
-            if not (self.date.isUTC(schedule[0]) and self.date.isUTC(schedule[1])):
-                raise FailedConstraints('date in database not in UTC')
-
-            """ retorno los schedules con la fecha actual en utc - las fechas en la base deberían estar en utc """
-            if dateS == schedule[2]:
-                schedules.append(
-                    {
-                        'start':schedule[0],
-                        'end':schedule[1],
-                        'date':schedule[2],
-                        'isDayOfWeek':schedule[3],
-                        'isDayOfMonth':schedule[4],
-                        'isDayOfYear':schedule[5]
-                    }
-                )
-            else:
-                break;
-
+        for x in range(0, 6):
+            sch = self.getSchedule(con,userId,date)
+            schedules.append(sch)
+            date += datetime.timedelta(days=1)
 
         return schedules
 

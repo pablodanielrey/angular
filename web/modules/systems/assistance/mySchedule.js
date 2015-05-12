@@ -86,14 +86,19 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
       function ok(response) {
         var schedules = response.schedule;
         var schedule = [];
+        console.log(schedules);
         for (var $i = 0; $i < schedules.length; $i++) {
-          var d = new Date(schedules[$i].start);
-          var s = {};
-          s.day = $scope.getDayOfWeek(d);
-          s.start = schedules[$i].start;
-          s.end = schedules[$i].end;
-          schedule.push(s);
+          var sDay = schedules[$i];
+          for(var $j = 0; $j < sDay.length; $j++) {
+            var d = new Date(sDay[$j].start);
+            var s = {};
+            s.day = $scope.getDayOfWeek(d);
+            s.start = sDay[$j].start;
+            s.end = sDay[$j].end;
+            schedule.push(s);
+          }
         }
+        console.log(schedule);
         $scope.setModelSchedule(schedule);
       },
       function error(error) {

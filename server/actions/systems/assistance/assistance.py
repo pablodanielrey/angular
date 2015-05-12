@@ -503,6 +503,7 @@ class GetSchedules:
             else:
                 schedule = self.schedule.getSchedulesHistory(con,userId)
 
+
             response = {
                 'id':message['id'],
                 'ok':'',
@@ -660,17 +661,16 @@ class NewSchedule:
             else:
                 dates.append(date);
 
-
+            import pdb
+            pdb.set_trace()
             for d in dates:
-                logging.debug(d)
                 # seteo el start
-                logging.debug(start)
                 dStart = d.replace(hour=start.time().hour,minute=start.time().minute,second=0,microsecond=0)
 
                 # seteo el end
                 dEnd = d.replace(hour=end.time().hour,minute=end.time().minute,second=0,microsecond=0)
-
-                self.schedule.newSchedule(con,userId,date,dStart,dEnd,isDayOfWeek,isDayOfMonth,isDayOfYear)
+                
+                self.schedule.newSchedule(con,userId,d,dStart,dEnd,isDayOfWeek,isDayOfMonth,isDayOfYear)
 
             con.commit()
             response = {'id':message['id'], 'ok':'datos almacenados correctamente'}
