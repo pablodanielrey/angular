@@ -87,25 +87,21 @@ app.controller('UserAssistanceManagementCtrl', ["$scope", "$rootScope", "$timeou
 
 
   $scope.loadUserRequestedJustifications = function() {
-    console.log("TODO: VER METODO ASSISTANCE.GETJUSTIFICATIONREQUEST PARA QUE DEVUELVE LAS DE UN DETERMINADO USUARIO")
-		Assistance.getJustificationRequests(null,
-			function(requestedJustifications) {
-				requestedJustifications.sort(function(l1,l2) {
-					return (new Date(l1.begin) - (new Date(l2.begin)));
-				});
-
-				$scope.model.requestedJustifications = [];
+    Assistance.getJustificationRequestsToManage(['PENDING','APPROVED'],"TREE",
+      function(requestedJustifications) {
+        $scope.model.requestedJustifications = [];
 				for (var i = 0; i < requestedJustifications.length; i++) {
 					var req = Utils.formatRequestJustification(requestedJustifications[i]);
 					$scope.model.requestedJustifications.push(req);
 				}
-        
-       
-			},
-			function(error){
-				Notifications.message(error);
-			}
-		);
+
+      },
+      function(error) {
+        Notifications.message(error);
+      }
+  );
+      
+	
 	};
   
   
@@ -148,6 +144,34 @@ app.controller('UserAssistanceManagementCtrl', ["$scope", "$rootScope", "$timeou
     }
 
 	};
+  
+  
+  $scope.updateStatus = function(status, request) {
+    console.log(request);
+        $scope.disabled = true;
+        Assistance.updateJustificationRequestStatus(request.id, status,
+            function(ok) {
+              console.log("ok")
+              $scope.disabled = false;
+            },
+            function(error) {
+              console.log("error");
+              $scope.disabled = false;
+            }
+        );
+    };
+  
+  $scope.approveRequest = function(request) {
+    $scope.updateStatus("APPROVED",request);
+  };
+
+  $scope.refuseRequest = function(request) {
+    $scope.updateStatus("REJECTED",request);
+  };
+
+  $scope.cancelRequest = function(request) {
+    $scope.updateStatus("CANCELED",request);
+  }
   
   
 

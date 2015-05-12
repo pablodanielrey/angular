@@ -36,33 +36,35 @@
     <div class="column t1"><i class="fa fa-info-circle"></i> Estado</div>
   </div>
   <div class="scroll">
-    <div class="myRequestInfo" ng-repeat="x in model.requestedJustifications" >
+    <div class="myRequestInfo" ng-repeat="req in model.requestedJustifications" >
 
       <div class="myRequest">
-        <span>{{x.justificationName}}</span>
+        <span>{{req.justificationName}}</span>
       </div>
       <div class="myRequestDate">
-        <span><i class="fa fa-calendar"></i> {{x.date}}</span>
-        <div ng-class="{true:'visible', false:'hidden'}[x.time != null]">
-          <span><i class="fa fa-clock-o"></i> {{x.time}} Horas</span>
+        <span><i class="fa fa-calendar"></i> {{req.date}}</span>
+        <div ng-class="{true:'visible', false:'hidden'}[req.time != null]">
+          <span><i class="fa fa-clock-o"></i> {{req.time}} Horas</span>
           <div>
-            <span>De {{x.start}} a {{x.end}}</span>
+            <span>De {{req.start}} a {{req.end}}</span>
           </div>
         </div>
       </div>
 
 
-      <div class="myStateRequestSlope  pending" ng-class="{true:'visible', false:'hidden'}[x.status == 'PENDING']">
+      <div class="myStateRequestSlope  pending" ng-class="{true:'visible', false:'hidden'}[req.status == 'PENDING']">
         <span><i class="fa fa-spinner fa-spin"></i> Pendiente</span>
-        <Button class="buttonpending" ng-click='cancelRequest(x)'><i class="fa fa-times"></i> Cancelar</Button>
+        <button class="buttonApproved"  ng-click="approveRequest(req)"><i class="fa fa-check-circle"></i> Aprobar</Button>
+        <button class="buttonRefuse" ng-click="refuseRequest(req)"><i class="fa fa-times"></i> Denegar</Button>
       </div>
-      <div class="myStateRequestApproved" ng-class="{true:'visible', false:'hidden'}[x.status == 'APPROVED']">
+      <div class="myStateRequestApproved" ng-class="{true:'visible', false:'hidden'}[req.status == 'APPROVED']">
         <span class="buttonApproved"><i class="fa fa-check-circle"></i> Aprobado</span>
+        <button class="buttonRefuse" ng-click="cancelRequest(req)"><i class="fa fa-times"></i> Cancelar</button>
       </div>
-      <div class="myStateRequestRejected" ng-class="{true:'visible', false:'hidden'}[x.status == 'REJECTED']">
+      <div class="myStateRequestRejected" ng-class="{true:'visible', false:'hidden'}[req.status == 'REJECTED']">
         <span class="buttonCancel"><i class="fa fa-times"></i> Rechazado</span>
       </div>
-       <div class="myStateRequestCanceled" ng-class="{true:'visible', false:'hidden'}[x.status == 'CANCELED']">
+       <div class="myStateRequestCanceled" ng-class="{true:'visible', false:'hidden'}[req.status == 'CANCELED']">
         <span class="buttonCancel"><i class="fa fa-times"></i> Cancelado</span>
       </div>
     </div>
