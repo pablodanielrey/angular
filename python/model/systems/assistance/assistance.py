@@ -180,6 +180,16 @@ class Assistance:
         end = dates[len(dates) - 1]
         # obtengo las justificaciones
         justifications = self.justifications.getJustificationRequestsByDate(con,status,usersIds,start,end)
+
+        gjustifications = self.justifications.getGeneralJustifications(con)
+        for j in gjustifications:
+            if j['begin'] >= start and j['begin'] <= end:
+                for uid in usersIds:
+                    jnew = dict(j)
+                    jnew['user_id'] = uid
+                    justifications.append(jnew)
+                    
+
         self._resolveJustificationsNames(con,justifications)
 
         for userId in usersIds:
