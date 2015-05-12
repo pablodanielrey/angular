@@ -425,6 +425,7 @@ class GetAssistanceData:
   session:,
   request:{
     user_id: "id del usuario",
+    date:"date(opcional, si no le pasa retorna todos)"
   }
 
 }
@@ -489,7 +490,18 @@ class GetSchedules:
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
 
-            schedule = self.schedule.getScheduleHistory(con,userId)
+            date = None
+            if 'date' in request:
+                date = self.dateutils.parse(request['date'])
+                # verifico que este en formato local
+                if self.dateutils.isNaive(date) or self.dateutils.isUTC(date):
+                    date = self.dateutils.localizeAwareToLocal(date)
+                # le seteo la hora al inicio del dia
+                date = date.replace(hour=0,minute=0,second=0,microsecond=0)
+
+                schedule = self.schedule.getSchedulesOfWeek(con,userId,date)
+            else:
+                schedule = self.schedule.getSchedulesHistory(con,userId)
 
             response = {
                 'id':message['id'],

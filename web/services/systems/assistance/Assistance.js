@@ -167,14 +167,18 @@ app.service('Assistance', ['Utils','Messages','Session',
 		};
 
 
-		this.getSchedules = function(userId, callbackOk, callbackError) {
+		this.getSchedules = function(userId,date, callbackOk, callbackError) {
 			var msg = {
 				id: Utils.getId(),
 				action: 'getSchedules',
 				session: Session.getSessionId(),
 				request:{
-					user_id: userId
+					user_id: userId,
 				}
+			}
+
+			if (date != null) {
+				msg.request.date = date;
 			}
 
 			Messages.send(msg,

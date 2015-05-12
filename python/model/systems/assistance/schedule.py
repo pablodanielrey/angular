@@ -183,19 +183,16 @@ class Schedule:
 
         return schedules
 
-
     """
-        obtiene tods los schedules para un usuario, incluyendo el historial
+        obtiene todos los schedules para un usuario
     """
-    def getScheduleHistory(self,con,userId):
-
+    def getSchedulesHistory(self,con,userId):
         cur = con.cursor()
         cur.execute('set time zone %s',('utc',))
 
-        """ obtengo todos los schedules"""
         cur.execute("select sstart, send, date, isDayOfWeek, isDayOfMonth, isDayOfYear from assistance.schedule where \
-                    user_id = %s \
-                    order by date desc",(userId,))
+                user_id = %s \
+                order by date desc",(userId,))
         scheduless = cur.fetchall()
         if scheduless is None or len(scheduless) <= 0:
             return []
@@ -211,17 +208,72 @@ class Schedule:
             if not (self.date.isUTC(schedule[0]) and self.date.isUTC(schedule[1])):
                 raise FailedConstraints('date in database not in UTC')
 
-
             """ retorno los schedules con la fecha actual en utc - las fechas en la base deberían estar en utc """
             schedules.append(
                 {
                     'start':schedule[0],
                     'end':schedule[1],
+                    'date':schedule[2],
                     'isDayOfWeek':schedule[3],
                     'isDayOfMonth':schedule[4],
                     'isDayOfYear':schedule[5]
                 }
             )
+
+
+        return schedules
+
+
+    """
+        obtiene los schedules de la semana pasada en el date para un usuario
+    """
+    def getSchedulesOfWeek(self,con,userId,date):
+
+        cur = con.cursor()
+        cur.execute('set time zone %s',('utc',))
+
+        if date is None:
+            date = self.date.now()
+            date = date.replace(hour=0,minute=0,second=0,microsecond=0)
+
+        # lo paso a utc
+        udate = date.astimezone(pytz.utc)
+
+        cur.execute("select sstart, send, date, isDayOfWeek, isDayOfMonth, isDayOfYear from assistance.schedule where \
+                user_id = %s \
+                and date <= %s \
+                order by date desc",(userId,udate))
+        scheduless = cur.fetchall()
+        if scheduless is None or len(scheduless) <= 0:
+            return []
+
+        schedules = []
+
+        if not self.date.isUTC(scheduless[0][2]):
+            raise FailedConstraints('date in database not in UTC')
+
+        # obtengo la primer fecha y me quedo con los schedules que correspondan a ese date
+        dateS = scheduless[0][2]
+        for schedule in scheduless:
+
+            """ controlo que las fechas estén en utc """
+            if not (self.date.isUTC(schedule[0]) and self.date.isUTC(schedule[1])):
+                raise FailedConstraints('date in database not in UTC')
+
+            """ retorno los schedules con la fecha actual en utc - las fechas en la base deberían estar en utc """
+            if dateS == schedule[2]:
+                schedules.append(
+                    {
+                        'start':schedule[0],
+                        'end':schedule[1],
+                        'date':schedule[2],
+                        'isDayOfWeek':schedule[3],
+                        'isDayOfMonth':schedule[4],
+                        'isDayOfYear':schedule[5]
+                    }
+                )
+            else:
+                break;
 
 
         return schedules
