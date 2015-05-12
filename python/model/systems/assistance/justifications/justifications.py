@@ -247,19 +247,35 @@ class Justifications:
         if cur.rowcount <= 0:
             return []
 
+        users = []
         requests = []
         for j in cur:
+            userId = j[1]
             jid = j[0]
             requests.append(
                 {
                     'id':jid,
-                    'user_id':j[1],
+                    'user_id':userId,
                     'justification_id':j[2],
                     'begin':j[3],
                     'end':j[4],
                     'status':statusR[jid]
                 }
             )
+
+
+        #agrego las justificaciones generales, como justificacion de cada usuario.
+        gj = self.getGeneralJustifications(con)
+
+        if len(gj) > 0:
+            for userId in users:
+                for j in gj:
+                    if (start is None or j['begin'] >= start) and (end is None or j['begin'] <= end):
+                        gju = dict(j)
+                        gju['user_id'] = userId
+                        requests.append(gju)
+
+
 
         logging.debug('justifications : {}'.format(requests))
 
