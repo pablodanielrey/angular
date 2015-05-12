@@ -262,6 +262,8 @@ class Justifications:
                     'status':statusR[jid]
                 }
             )
+            if userId not in users:
+                users.append(userId)
 
 
         #agrego las justificaciones generales, como justificacion de cada usuario.
