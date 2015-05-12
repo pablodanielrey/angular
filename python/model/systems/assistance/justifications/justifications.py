@@ -121,6 +121,33 @@ class Justifications:
 
 
     """
+        obtiene las justificaciones generales
+        siempre están en estado APPROVED
+    """
+    def getGeneralJustifications(self,con):
+        cur = con.cursor()
+        cur.execute('select id,justification_id,jbegin,jend from assistance.general_justifications')
+        if cur.rowcount <= 0:
+            return []
+
+        justs = []
+        for j in cur:
+            justs.append(
+                {
+                    'id':j[0],
+                    'justification_id':j[1],
+                    'begin':j[2],
+                    'end':j[3],
+                    'status':'APPROVED'
+                }
+            )
+
+        return justs
+
+
+
+
+    """
         obtiene todas los pedidos de justificaciones con cierto estado
         status es el estado a obtener. en el caso de que no sea pasado entonces se obtienen todas, en su ultimo estado
         users es una lista de ids de usuarios que piden los requests, si = None o es vacío entonces retorna todas.
@@ -145,11 +172,12 @@ class Justifications:
 
         requests = []
         for j in cur:
+            userId = j[1]
             jid = j[0]
             requests.append(
                 {
                     'id':jid,
-                    'user_id':j[1],
+                    'user_id':userId,
                     'justification_id':j[2],
                     'begin':j[3],
                     'end':j[4],
@@ -158,6 +186,8 @@ class Justifications:
             )
 
         return requests
+
+
 
 
     """
@@ -203,20 +233,18 @@ class Justifications:
 
         requests = []
         for j in cur:
+            userId = j[1]
             jid = j[0]
             requests.append(
                 {
                     'id':jid,
-                    'user_id':j[1],
+                    'user_id':userId,
                     'justification_id':j[2],
                     'begin':j[3],
                     'end':j[4],
                     'status':statusR[jid]
                 }
             )
-
-        logging.debug('justifications : {}'.format(requests))
-
 
         return requests
 
