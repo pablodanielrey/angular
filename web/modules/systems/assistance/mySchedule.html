@@ -26,8 +26,12 @@
 
     <!-- MODULO DE HORARIO SEMANAL -->
     <div class="myScheduleWeekly">
+      <div>
+        <span class="textBlue margin2"><i class="fa fa-calendar-o"></i> Semana:</span>
+        <input type="date" ng-model="model.dateOfWeek">
+      </div>
       <div class="titleMyScheduleWeekly">
-        <span>Horario Semanal</span>
+        <span>Semana: {{model.dateOfWeekStr}}</span>
       </div>
       <div class="weekly">
         <div>

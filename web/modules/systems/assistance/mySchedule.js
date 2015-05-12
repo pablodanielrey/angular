@@ -82,11 +82,10 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
    * @returns {undefined}
    */
   $scope.loadSchedule = function(){
-    Assistance.getSchedules($scope.model.user.id, new Date(),
+    Assistance.getSchedules($scope.model.user.id, $scope.model.dateOfWeek,
       function ok(response) {
         var schedules = response.schedule;
         var schedule = [];
-        console.log(schedules);
         for (var $i = 0; $i < schedules.length; $i++) {
           var sDay = schedules[$i];
           for(var $j = 0; $j < sDay.length; $j++) {
@@ -98,7 +97,6 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
             schedule.push(s);
           }
         }
-        console.log(schedule);
         $scope.setModelSchedule(schedule);
       },
       function error(error) {
@@ -195,7 +193,7 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
       },
       function(error){
         Notifications.message(error);
-      }
+        }
     );
   };
 
@@ -218,12 +216,40 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
    * Inicializar
    */
   $timeout(function() {
+
+    $scope.model.dateOfWeek = new Date();
+
     $scope.loadSession();
     $scope.loadUsers();
     $scope.initializeFormNewSchedule();
     $scope.initializeFormNewSpecialSchedule();
 
   },0);
+
+  $scope.getFirstWeekDay = function(date) {
+    var day = date.getDay();
+    //el getDay comienza con Dom, le resto uno para que empiece desde el lunes
+    day = (day == 0) ? day = 6 : day = day - 1;
+    date = new Date(date.getTime() - (day*24*60*60*1000));
+    return date;
+  }
+
+  $scope.setWeekStr = function() {
+    var firstDate = $scope.getFirstWeekDay($scope.model.dateOfWeek);
+    var endDate = new Date(firstDate.getTime() + (6*24*60*60*1000));
+    $scope.model.dateOfWeekStr = Utils.formatDate(firstDate) + ' - ' + Utils.formatDate(endDate);
+  }
+
+  $scope.$watch('model.dateOfWeek', function(newValue, oldValue) {
+    if (newValue == null) {
+      $scope.model.dateOfWeek = oldValue;
+      return;
+    }
+    $scope.setWeekStr();
+    if ($scope.model.user != null) {
+      $scope.loadSchedule();
+    }
+  });
 
 
 
