@@ -266,6 +266,7 @@ class Justifications:
 
         #agrego las justificaciones generales, como justificacion de cada usuario.
         gj = self.getGeneralJustifications(con)
+        logging.debug(gj)
 
         if len(gj) > 0:
             for userId in users:
