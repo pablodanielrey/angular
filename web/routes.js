@@ -172,6 +172,10 @@ app.config(['$routeProvider', function($routeProvider) {
     controller: 'TutorsCtrl'
   })
 
+  .when('/usersAssistanceManagementMediator', {
+    templateUrl: '/modules/systems/assistance/usersAssistanceManagementMediator/index.html',
+    controller: 'UsersAssistanceManagementMediatorCtrl'
+  })
       .otherwise({
  	      redirectTo: '/main'
       });
