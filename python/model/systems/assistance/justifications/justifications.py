@@ -30,7 +30,7 @@ class Justifications:
 
 
     """ obtiene un requerimiento de justificacion dado el id """
-    def _findJustificationRequestById(self,con,id):
+    def findJustificationRequestById(self,con,id):
         cur = con.cursor()
         cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where id = %s',(id,))
         if cur.rowcount <= 0:
@@ -315,7 +315,7 @@ class Justifications:
     """
     def updateJustificationRequestStatus(self,con,userId,requestId,status):
 
-        req = self._findJustificationRequestById(con,requestId)
+        req = self.findJustificationRequestById(con,requestId)
         if req is None:
             raise JustificationError('No existe ningún pedido de justificación con id = %s'.format(requestId))
 

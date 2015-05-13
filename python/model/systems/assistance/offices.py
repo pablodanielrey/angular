@@ -245,7 +245,6 @@ class Offices:
             [(userId,sendMail)]
     """
     def getUsersWithRoleInOffices(self,con,officesIds,role='autoriza'):
-
         if officesIds is None or len(officesIds) <= 0:
             return []
 
