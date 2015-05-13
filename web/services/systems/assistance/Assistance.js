@@ -474,6 +474,29 @@ app.service('Assistance', ['Utils','Messages','Session',
 				});
 		}
 
+		this.requestJustificationRange = function(userId, justification, callbackOk, callbackError) {
+			var msg = {
+				id: Utils.getId(),
+				action: 'requestJustificationRange',
+				session: Session.getSessionId(),
+				request: {
+					user_id: userId,
+					justification_id: justification.id,
+					begin: justification.begin,
+					end: justification.end
+				}
+			}
+
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response);
+					} else {
+						callbackError(data.error);
+					}
+				});
+		}
+
 
 
 		/**
