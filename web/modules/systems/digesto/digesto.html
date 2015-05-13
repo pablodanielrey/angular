@@ -1,1 +1,30 @@
-hola
+
+
+<html ng-app='digestoApp'>
+<head>
+  <meta charset="utf-8"/>
+  <script type="text/javascript" src="../../../angular/angular-1.3.8/angular.js"></script>
+  <script type="text/javascript" src="digesto.js"></script>
+  <link rel="stylesheet" type="text/css" href="digesto.css"/>
+</head>
+<body>
+
+
+  <div class='screen' ng-controller="MenuCtrl">
+
+    <nav class='menu' ng-class="{false:'menu_oculto', true:'menu_visible'}[menuVisible()]">
+      <ul>
+        <li>walter</li>
+      </ul>
+    </nav>
+
+    <section class='content' ng-controller='DigestoCtrl'>
+      esto es el contenido
+      <button ng-click='toogleMenu()'>m</button>
+    </section>
+
+
+  </div>
+
+</body>
+</html>

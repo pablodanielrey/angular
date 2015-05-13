@@ -1,0 +1,31 @@
+
+.menu {
+  background-color: red;
+  height: 100%;
+  width: 0px;
+  top:0;
+  left:0px;
+  transition: all 1s;
+}
+
+.content {
+  background-color: blue;
+  height: 100%;
+  width: 100%;
+}
+
+.screen {
+  display:flex;
+  flex-direction:row;
+  wrap: nowrap;
+  height: 100%;
+  width: 100%;
+}
+
+.menu_oculto {
+}
+
+
+.menu_visible {
+  width: 300px;
+}
