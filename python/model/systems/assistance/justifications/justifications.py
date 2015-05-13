@@ -352,7 +352,7 @@ class Justifications:
                 diff = (end-begin).days
                 # incremento en 1 para que tome el ultimo dia
                 for x in range(0, diff + 1):
-                    events.append(j.requestJustification(self,con,userId,date,None))
+                    events.extend(j.requestJustification(self,con,userId,date,None))
                     date = date + datetime.timedelta(days=1)
 
                 return events
