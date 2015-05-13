@@ -88,7 +88,7 @@
   padding-left:15px;
   color:white;
   border-top: 3px solid #0066A6;
-
+  margin-left:5px;
 }
 
 
@@ -117,6 +117,7 @@
 .userAssistanceManagement .titlesFiles {
   display:flex;
   flex-direction:row;
+  margin-left:10px;
 
 
 }
@@ -152,6 +153,7 @@
   background-color:white;
   padding:5px;
   padding-left:10px;
+
   color:#0066A6;
   border:1px solid #0066A6;
   margin-right:10px;
@@ -484,7 +486,8 @@
 
 .userAssistanceManagement .selectUser {
   display:flex;
-  flex-direction:column;
+  flex-direction:row;
+  margin:10px;
 }
 .userAssistanceManagement .userSelect {
   width:160px;

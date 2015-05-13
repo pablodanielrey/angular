@@ -1,9 +1,9 @@
 
 <div class="userAssistanceManagement">
   <div class="title">
-    <label><i class="fa fa-ticket"></i> | Administración de asistencia de un usuario</label>
+    <label><i class="fa fa-ticket"></i> | Administración de solicitudes de un usuario</label>
   </div>
-  
+
   <div class="selectUser">
       <div class="searchUser">
         <div class="searchTitle">
@@ -16,19 +16,19 @@
           </ul>
         </div>
       </div>
-      <div class="userSelect">
+      <!-- <div class="userSelect">
         <div><b>{{model.user.name}} {{model.user.lastname}}</b></div>
         <div>{{model.user.dni}}</div>
-      </div>
+      </div> -->
     </div>
-  
+
   <div class="content">
     <div ng-repeat="justification in model.justifications" ng-controller="UserAssistanceManagementDatesCtrl" ng-include="'modules/systems/assistance/userAssistanceManagementDates.html'" ng-init="init(justification.id)"></div>
 
   </div>
-  
+
   <div class="myRequests">
-    <span><i class="fa fa-ticket"></i>Solicitudes del usuario</span>
+    <span><i class="fa fa-ticket"></i> Solicitudes del Usuario</span>
   </div>
   <div class="titlesFiles">
     <div class="column t1" ng-click="sortRequestedJustifications('justificationName')"><i  class="fa fa-ticket"></i> Solicitud</div>
