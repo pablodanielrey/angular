@@ -1,6 +1,6 @@
 var app = angular.module('mainApp');
 
-app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistance, Users, Profiles, Session, Notifications, Utils) {
+app.controller('AdminRequestAssistanceCtrl', function($scope, $filter,$timeout, Assistance, Users, Profiles, Session, Notifications, Utils) {
 
     // requests = [{id:'',license:'',user:{name:'',lastname:'',dni:''},date:''}]
     $scope.model = {
@@ -18,26 +18,21 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistan
       $scope.today.setMilliseconds(0);
     }
 
-    $scope.getJustificationName = function(id) {
-      for (var i = 0; i < $scope.model.justifications.length; i++) {
-        if ($scope.model.justifications[i].id == id) {
-          return $scope.model.justifications[i].name;
-        }
-      }
+
+    // ------------ ORDENACION ///////////////////
+
+    $scope.order = function(predicate, reverse) {
+      $scope.model.requestsFilters = $filter('orderBy')($scope.model.requestsFilters, predicate, reverse);
+    };
+
+    // ------------- FILTRO //////////////////////
+    $scope.filter = function() {
+      expr = ($scope.filterSelected == null)?'':$scope.filterSelected;
+      $scope.model.requestsFilters = $scope.model.requests;
+      $scope.model.requestsFilters = $filter('filter')($scope.model.requestsFilters,expr,status);
     }
 
 
-    $scope.getJustifications = function() {
-      Assistance.getJustifications(
-        function(justifications) {
-          $scope.model.justifications = justifications;
-          $scope.loadRequests();
-        },
-        function(error) {
-        }
-      );
-
-    }
 
     $scope.addRequest = function(data) {
         //data: {id:"1",user_id:"1",justification_id: "1", begin: '2015-05-13 00:00:00', end: '2015-05-13 00:00:00', state: "Desaprobada" },
@@ -60,7 +55,7 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistan
         Users.findUser(data.user_id,
             function(response) {
               r.user = response;
-              r.licence = $scope.getJustificationName(r.justification_id);
+              r.license = Utils.getJustification(r.justification_id);
               $scope.model.requests.push(r);
             },
             function(error) {
@@ -86,6 +81,9 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistan
                     $scope.addRequest(r);
                   }
               }
+              $scope.model.requestsFilters = $scope.model.requests;
+              $scope.filter();
+              $scope.order(['date','user.lastname','user.name'],false);
             },
             function(error) {
               Notifications.message(error);
@@ -95,6 +93,7 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistan
 
     $scope.initialize = function() {
         $scope.disabled = false;
+        $scope.filterSelected = 'PENDING';
         $scope.initializeToday();
         var s = Session.getCurrentSession();
         if (!s || !s.user_id) {
@@ -105,7 +104,7 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $timeout, Assistan
             Profiles.checkAccess(Session.getSessionId(),'ADMIN-ASSISTANCE,USER-ASSISTANCE',
       				function(ok) {
       					if (ok == 'granted') {
-                  $scope.getJustifications();
+                  $scope.loadRequests();
       					}
       				},
       				function (error) {

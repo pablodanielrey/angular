@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-import psycopg2, inject
-import datetime, pytz
+import psycopg2, inject, uuid
+import datetime, pytz, calendar
 import logging
 
 from model.exceptions import *
@@ -77,20 +77,46 @@ class Schedule:
         if len(schedules) <= 0:
             return []
 
-        schedules2 = []
-        days = 1
-        while schedules2 == None or len(schedules2) <= 0:
-            date2 = date + datetime.timedelta(days=days)
-            schedules2 = self.getSchedule(con,userId,date2)
-            days = days + 1
-
-        start2 = schedules2[0]['start']
-
         start = schedules[0]['start']
         end = schedules[-1]['end']
 
+        count = 0
+        schedules2 = []
+        days = 1
+        while (count < 10) and (schedules2 is None or len(schedules2) <= 0):
+            date2 = date + datetime.timedelta(days=days)
+            schedules2 = self.getSchedule(con,userId,date2)
+            days = days + 1
+            count = count + 1
+
+        if schedules2 is None or len(schedules2) <= 0:
+            start2 = end + datetime.timedelta(hours=24)
+        else:
+            start2 = schedules2[0]['start']
+
+
+        """
+        schedules2 = []
+        days = 1
+        count = 0
+        while (count < 10) or (schedules2 is None or len(schedules2) <= 0):
+            date2 = date - datetime.timedelta(days=days)
+            schedules2 = self.getSchedule(con,userId,date2)
+            days = days + 1
+            count = count + 1
+
+        if schedules2 is None or len(schedules2) <= 0:
+            end2 = start - datetime.timedelta(hours=24)
+        else:
+            end2 = schedules2[0]['end']
+        """
+
+
         deltaEnd = end + datetime.timedelta(seconds=((start2 - end).total_seconds() / 2))
-        deltaStart = start - datetime.timedelta(hours=1)
+        """
+        deltaStart = start - datetime.timedelta(seconds=((start - end2).total_seconds() / 2))
+        """
+        deltaStart = start - datetime.timedelta(hours=3)
 
         logs = self.logs.findLogs(con,userId,deltaStart,deltaEnd)
 
@@ -112,11 +138,11 @@ class Schedule:
         """ obtengo todos los schedules que son en la fecha date del parámetro """
         cur.execute("select sstart, send, date from assistance.schedule where \
                     ((date = %s) or \
-                    (isDayOfWeek = true and extract(dow from date) = extract(dow from %s)) or \
+                    (isDayOfWeek = true and date <= %s and extract(dow from date) = extract(dow from %s)) or \
                     (isDayOfMonth = true and extract(day from date) = extract(day from %s)) or \
                     (isDayOfYear = true and extract(doy from date) = extract(doy from %s))) and \
                     user_id = %s \
-                    order by date desc",(date,date,date,date,userId))
+                    order by date desc",(date,date,date,date,date,userId))
         scheduless = cur.fetchall()
         if scheduless is None or len(scheduless) <= 0:
             return []
@@ -157,19 +183,16 @@ class Schedule:
 
         return schedules
 
-
     """
-        obtiene tods los schedules para un usuario, incluyendo el historial
+        obtiene todos los schedules para un usuario
     """
-    def getScheduleHistory(self,con,userId):
-
+    def getSchedulesHistory(self,con,userId):
         cur = con.cursor()
         cur.execute('set time zone %s',('utc',))
 
-        """ obtengo todos los schedules"""
         cur.execute("select sstart, send, date, isDayOfWeek, isDayOfMonth, isDayOfYear from assistance.schedule where \
-                    user_id = %s \
-                    order by date desc",(userId,))
+                user_id = %s \
+                order by date desc",(userId,))
         scheduless = cur.fetchall()
         if scheduless is None or len(scheduless) <= 0:
             return []
@@ -185,18 +208,44 @@ class Schedule:
             if not (self.date.isUTC(schedule[0]) and self.date.isUTC(schedule[1])):
                 raise FailedConstraints('date in database not in UTC')
 
-
             """ retorno los schedules con la fecha actual en utc - las fechas en la base deberían estar en utc """
             schedules.append(
                 {
                     'start':schedule[0],
                     'end':schedule[1],
+                    'date':schedule[2],
                     'isDayOfWeek':schedule[3],
                     'isDayOfMonth':schedule[4],
                     'isDayOfYear':schedule[5]
                 }
             )
 
+
+        return schedules
+
+
+    """
+        obtiene los schedules de la semana pasada en el date para un usuario
+    """
+    def getSchedulesOfWeek(self,con,userId,date):
+
+        if date is None:
+            date = self.date.now()
+            date = date.replace(hour=0,minute=0,second=0,microsecond=0)
+
+        # paso la fecha a utc
+        date = self.date.awareToUtc(date)
+
+        # obtengo el primer dia de la semana del date (L-0 .. D-6)
+        weekday = datetime.date.weekday(date)
+        date -= datetime.timedelta(days=weekday)
+
+        schedules = []
+
+        for x in range(0, 7):
+            sch = self.getSchedule(con,userId,date)
+            schedules.append(sch)
+            date += datetime.timedelta(days=1)
 
         return schedules
 
@@ -241,6 +290,15 @@ class Schedule:
                 justs.append(j)
         return justs
 
+    def _findGeneralJustificationsForDate(self,justifications,date):
+        justs = []
+        for j in justifications:
+            logging.debug('chequeando fecha : {} == {}'.format(j['begin'].date(),date.date()))
+            if j['begin'].date() == date.date():
+                justs.append(j)
+        return justs
+
+
 
     """
         chequea la restricción del usuario entre determinadas fechas
@@ -254,6 +312,7 @@ class Schedule:
             return []
 
 
+        gjustifications = self.justifications.getGeneralJustifications(con)
         justifications = self.justifications.getJustificationRequestsByDate(con,status=['APPROVED'],users=[userId],start=start,end=end + datetime.timedelta(days=1))
         logging.debug('justificaciones encontradas : {} '.format(justifications))
 
@@ -293,6 +352,13 @@ class Schedule:
                 logs = self._getLogsForSchedule(con,userId,actualUtc)
                 if (logs is None) or (len(logs) <= 0):
                     justs = self._findJustificationsForDate(justifications,actual)
+
+                    gjusts = self._findGeneralJustificationsForDate(gjustifications,actual)
+                    if len(gjusts) > 0:
+                        for j in gjusts:
+                            j['user_id'] = userId
+                            justs.append(j)
+
                     fails.append(
                         {
                             'userId':userId,
@@ -313,6 +379,14 @@ class Schedule:
                 if count < (check['hours'] * 60 * 60):
 
                     justs = self._findJustificationsForDate(justifications,actual)
+
+                    gjusts = self._findGeneralJustificationsForDate(gjustifications,actual)
+                    if len(gjusts) > 0:
+                        for j in gjusts:
+                            j['user_id'] = userId
+                            justs.append(j)
+
+
                     fails.append(
                         {
                             'userId':userId,
@@ -324,6 +398,14 @@ class Schedule:
 
             elif check['type'] == 'SCHEDULE':
                 justs = self._findJustificationsForDate(justifications,actual)
+
+                gjusts = self._findGeneralJustificationsForDate(gjustifications,actual)
+                if len(gjusts) > 0:
+                    for j in gjusts:
+                        j['user_id'] = userId
+                        justs.append(j)
+                
+
                 fail = self.checkSchedule(con,userId,actualUtc)
                 for f in fail:
                     f['justifications'] = justs
@@ -334,6 +416,19 @@ class Schedule:
         return fails
 
 
+    """
+        genera un nuevo schedule las fechas pasadas como parámetro (se supone aware)
+    """
+    def newSchedule(self,con,userId,date,start,end,isDayOfWeek,isDayOfMonth,isDayOfYear):
+        uaware = date.astimezone(pytz.utc)
+        ustart = start.astimezone(pytz.utc)
+        uend = end.astimezone(pytz.utc)
+
+        cur = con.cursor()
+        cur.execute('set time zone %s',('utc',))
+
+        req = (str(uuid.uuid4()), userId, uaware, ustart, uend, isDayOfWeek, isDayOfMonth, isDayOfYear)
+        cur.execute('insert into assistance.schedule (id,user_id,date,sstart,send,isDayOfWeek,isDayOfMonth,isDayOfYear) values (%s,%s,%s,%s,%s,%s,%s,%s)',req)
 
 
     """
