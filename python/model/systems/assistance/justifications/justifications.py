@@ -53,7 +53,7 @@ class Justifications:
     """
     def _getJustificationRequestStatus(self,con,reqId):
         cur = con.cursor()
-        cur.execute('select jrs.status from assistance.justifications_requests_status as jrs, (select request_id,max(created) as created from assistance.justifications_requests_status group by request_id) as r where r.created = jrs.created and r.request_id = jrs.request_id')
+        cur.execute('select jrs.status from assistance.justifications_requests_status as jrs, (select request_id,max(created) as created from assistance.justifications_requests_status group by request_id) as r where r.created = jrs.created and r.request_id = jrs.request_id and r.request_id = %s',(reqId,))
         if cur.rowcount <= 0:
             return None
 
@@ -336,5 +336,25 @@ class Justifications:
         for j in self.justifications:
             if j.isJustification(justificationId):
                 return j.requestJustification(self,con,userId,begin,end)
+
+        raise JustificationError('No se puede encontrar ese tipo de justificación')
+
+
+    """
+        realiza el pedido de justificación para ser aprobado entre un rango de fechas
+        estado inicial del pedido = PENDING, con la fecha actual del servidor.
+    """
+    def requestJustificationRange(self,con,userId,justificationId,begin,end):
+        events = []
+        for j in self.justifications:
+            if j.isJustification(justificationId) and (j.__class__.__name__ == 'LAOJustification' or j.__class__.__name__  == 'R638Justification'):
+                date = begin
+                diff = (end-begin).days
+                # incremento en 1 para que tome el ultimo dia
+                for x in range(0, diff + 1):
+                    events.append(j.requestJustification(self,con,userId,date,None))
+                    date = date + datetime.timedelta(days=1)
+
+                return events
 
         raise JustificationError('No se puede encontrar ese tipo de justificación')

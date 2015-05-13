@@ -713,3 +713,91 @@ class RequestJustification:
 
         finally:
             con.close()
+
+
+"""
+query : solicitud de justificaciones de un determinado usuario
+{
+  id:,
+  action:"requestJustificationRange",
+  session:,
+  request:{
+      user_id: "id del usuario",
+      justification_id: "id de la justificacion o licencia solicitada"
+  	  begin: "fecha de inicio de la justificacion o licencia solicitada"
+  	  end: "fecha de finalizacion de la justificacion o licencia solicitada"
+  }
+
+}
+
+response :
+{
+  id: "id de la petición",
+  ok: "caso exito",
+  error: "error del servidor"
+}
+"""
+
+class RequestJustificationRange:
+
+    profiles = inject.attr(Profiles)
+    config = inject.attr(Config)
+    justifications = inject.attr(Justifications)
+    date = inject.attr(Date)
+    events = inject.attr(Events)
+    notifier = inject.attr(BossesNotifier)
+
+    def handleAction(self, server, message):
+
+        if (message['action'] != 'requestJustificationRange'):
+            return False
+
+        if ('request' not in message) or ('user_id' not in message['request']) or ('justification_id' not in message['request']) or ('begin' not in message['request']) or ('end' not in message['request']):
+            response = {'id':message['id'], 'error':'Insuficientes parámetros'}
+            server.sendMessage(response)
+            return True
+
+
+        userId = message['request']['user_id']
+        justificationId = message['request']['justification_id']
+        begin = message['request']['begin']
+        begin = self.date.parse(begin)
+        end = message['request']['end']
+        end = self.date.parse(end)
+
+
+        sid = message['session']
+        self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
+
+        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+        try:
+            events = self.justifications.requestJustificationRange(con,userId,justificationId,begin,end)
+            con.commit()
+
+            self.notifier.notifyBosses(con,userId,'justifications_request')
+
+            response = {
+                'id':message['id'],
+                'ok':'El pedido se ha realizado correctamente'
+            }
+            server.sendMessage(response)
+
+            for e in events:
+                self.events.broadcast(server,e)
+
+            return True
+
+
+        except Exception as e:
+            logging.exception(e)
+            con.rollback()
+
+            response = {
+                'id':message['id'],
+                'error':'Error realizando pedido'
+            }
+            server.sendMessage(response)
+            return True
+
+        finally:
+            con.close()
