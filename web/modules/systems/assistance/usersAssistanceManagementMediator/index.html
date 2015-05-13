@@ -32,7 +32,7 @@
     <div class="column t1" ><i class="fa fa-info-circle"></i> Estado</div>
   </div>
   <div class="scroll">
-    <div class="myRequestInfo" ng-repeat="req in justifications.filtered | orderBy:justifications.sort:justifications.reversed" >
+    <div class="myRequestInfo" ng-repeat="req in model.requestedJustificationsFiltered | orderBy:model.rjSort:model.rjReversed" >
 
       <div class="myRequest">
         <span>{{req.justificationName}}</span>

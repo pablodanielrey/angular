@@ -94,8 +94,8 @@ app.controller('UsersAssistanceManagementMediatorCtrl', ["$scope", "$timeout", "
     $scope.model.requestedJustificationsFiltered = [];
     for (var i = 0; i < $scope.model.requestedJustifications.length; i++) {
       if(($scope.model.selectedUser.id === $scope.model.requestedJustifications[i].user_id) && ($scope.isAuthorizedJustification($scope.model.requestedJustifications[i].justification_id))){
-//var req = Utils.formatRequestJustification($scope.model.requestedJustifications[i]);
-        //$scope.model.requestedJustificationsFiltered.push(req);
+        var req = Utils.formatRequestJustification($scope.model.requestedJustifications[i]);
+        $scope.model.requestedJustificationsFiltered.push(req);
       }
     }
   };
