@@ -1,4 +1,4 @@
-
+# -*- coding: utf-8 -*-
 import codecs
 
 """ setea el checksum en el paquete de datos """
