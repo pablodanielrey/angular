@@ -102,6 +102,12 @@
   border-top: 3px solid #275276;
 }
 
+.mySchedule .weeklySelect {
+  display:flex;
+  flex-direction:column;
+  margin-left:20px;
+}
+
 
 /*MODULO DE HORARIO SEMANAL*/
 .mySchedule .myScheduleWeekly {
@@ -114,6 +120,14 @@
   background-color:#0066A6;
   color:white;
   padding:5px;
+
+}
+.mySchedule .titleMyScheduleWeekly2 {
+  background-color:#0066A6;
+  color:white;
+  padding:5px;
+  font-size:10px;
+  width:170px;
 }
 .mySchedule .weekly {
   display:flex;
