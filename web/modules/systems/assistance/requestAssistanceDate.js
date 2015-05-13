@@ -1,17 +1,27 @@
 var app = angular.module('mainApp');
 
-app.controller('RequestAssistanceExamCtrl', ["$scope", "Assistance", "Notifications", "Utils", function($scope, Assistance, Notifications, Utils) {
+app.controller('RequestAssistanceDateCtrl', ["$scope", "Assistance", "Notifications", "Utils", function($scope, Assistance, Notifications, Utils) {
 
   if(!$scope.model) Notifications.message("No esta definido el modelo");
 
-  //***** datos de la justificacion *****
-  $scope.justification = { 
-    id:'b70013e3-389a-46d4-8b98-8e4ab75335d0', //id de la justificacion.
-    name:Utils.getJustificationName('b70013e3-389a-46d4-8b98-8e4ab75335d0'),
-    stock:0,
-    yearlyStock:0,
-    selectedName:"justificationExamSelected", //Nombre de la seleccion en el controlador padre
+
+  $scope.init = function(justificationId, justificationSelectedName){
+    //***** inicializar datos de la justificacion *****
+    $scope.justification = { 
+      id: justificationId, //id de la justificacion
+      name:Utils.getJustificationName(justificationId),
+      stock:0,
+      yearlyStock:0,
+      selectedName:justificationSelectedName
+    };
+    
+    $scope.model[justificationSelectedName] = false; //inicializar flag para indicar la seleccion de la justificacion
+    
+    
   };
+  
+  
+  
   
   //***** variables de seleccion de la seccion *****
   $scope.model.requestSelected = false; //flag para indicar la seleccion del formulario de solicitud del articulo 102
@@ -20,8 +30,6 @@ app.controller('RequestAssistanceExamCtrl', ["$scope", "Assistance", "Notificati
   //***** variables del formulario *****  
   $scope.model.date = null;         //fecha seleccionada
   $scope.model.dateFormated = null; //fecha en formato amigable para el usuario
-  
-  $scope.model.processingRequest = false;
   
   
   //***** METODOS DE CARGA E INICIALIZACION *****
@@ -70,7 +78,7 @@ app.controller('RequestAssistanceExamCtrl', ["$scope", "Assistance", "Notificati
    * @returns {Boolean}
    */
   $scope.isSelectedJustification = function() {
-    return $scope.model[$scope.justification.selectedName];
+    return $scope.model[$scope.justification.selectedName] ;
   };
 
   /**
@@ -132,7 +140,6 @@ app.controller('RequestAssistanceExamCtrl', ["$scope", "Assistance", "Notificati
     $scope.model.availableSelected = false;
     $scope.model.date = null;
 		$scope.model.dateFormated = null;
-    $scope.model.processingRequest = false;
     
   };
   
@@ -158,7 +165,7 @@ app.controller('RequestAssistanceExamCtrl', ["$scope", "Assistance", "Notificati
   
   // Envio la peticion al servidor
   $scope.save = function() {
-    $scope.model.processingRequest = true;
+    console.log("estoy");
     var request = {
 			id:$scope.justification.id,
 			begin:$scope.model.date

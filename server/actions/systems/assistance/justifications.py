@@ -76,25 +76,24 @@ class BossesNotifier:
 
         offices = self.offices.getOfficesByUser(con,userId,parents=True)
         officesIds = list(map(lambda x: x['id'], offices))
-        bossesIds = self.offices.getUsersWithRoleInOffices(con,officesIds,role='autoriza')
 
+        if officesIds is not None and len(officesIds) > 0:
+            bossesIds = self.offices.getUsersWithRoleInOffices(con,officesIds,role='autoriza')
+            logging.debug('oficinas {}\nids {}\n jefes {}'.format(offices,officesIds,bossesIds))
 
-        logging.debug('oficinas {}\nids {}\n jefes {}'.format(offices,officesIds,bossesIds))
-
-        for bid,sendMail in bossesIds:
-            if sendMail:
-                logging.debug('buscando mail para : {}'.format(bid))
-                bemails = self.users.listMails(con,bid)
-                if bemails != None and len(bemails) > 0:
-                    bemails = list(filter(lambda x: 'econo.unlp.edu.ar' in x['email'],bemails))
-                    logging.debug('añadiendo {}'.format(bemails))
-                    emails.extend(list(map(lambda x: x['email'],bemails)))
+            for bid,sendMail in bossesIds:
+                if sendMail:
+                    logging.debug('buscando mail para : {}'.format(bid))
+                    bemails = self.users.listMails(con,bid)
+                    if bemails != None and len(bemails) > 0:
+                        bemails = list(filter(lambda x: 'econo.unlp.edu.ar' in x['email'],bemails))
+                        logging.debug('añadiendo {}'.format(bemails))
+                        emails.extend(list(map(lambda x: x['email'],bemails)))
 
         logging.debug('emails {}'.format(emails))
 
         if len(emails) > 0:
             self._sendEmail(emails,config,request)
-
 
 
 
@@ -591,8 +590,10 @@ class UpdateJustificationRequestStatus:
             events = self.justifications.updateJustificationRequestStatus(con,userId,requestId,status)
             con.commit()
 
-            logging.debug('llamando a notify')
-            self.notifier.notifyBosses(con,userId,'justifications_update_request_status')
+            """ se debe notificar a los jefes del usuaro del pedido original """
+            req = self.justifications.findJustificationRequestById(con,requestId)
+            if req['user_id'] is not None:
+                self.notifier.notifyBosses(con,req['user_id'],'justifications_update_request_status')
 
 
             response = {
@@ -693,6 +694,97 @@ class RequestJustification:
                 'ok':'El pedido se ha realizado correctamente'
             }
             server.sendMessage(response)
+
+            for e in events:
+                self.events.broadcast(server,e)
+
+            return True
+
+
+        except Exception as e:
+            logging.exception(e)
+            con.rollback()
+
+            response = {
+                'id':message['id'],
+                'error':'Error realizando pedido'
+            }
+            server.sendMessage(response)
+            return True
+
+        finally:
+            con.close()
+
+
+"""
+query : solicitud de justificaciones de un determinado usuario
+{
+  id:,
+  action:"requestJustificationRange",
+  session:,
+  request:{
+      user_id: "id del usuario",
+      justification_id: "id de la justificacion o licencia solicitada"
+  	  begin: "fecha de inicio de la justificacion o licencia solicitada"
+  	  end: "fecha de finalizacion de la justificacion o licencia solicitada"
+  }
+
+}
+
+response :
+{
+  id: "id de la petición",
+  ok: "caso exito",
+  error: "error del servidor"
+}
+"""
+
+class RequestJustificationRange:
+
+    profiles = inject.attr(Profiles)
+    config = inject.attr(Config)
+    justifications = inject.attr(Justifications)
+    date = inject.attr(Date)
+    events = inject.attr(Events)
+    notifier = inject.attr(BossesNotifier)
+
+    def handleAction(self, server, message):
+
+        if (message['action'] != 'requestJustificationRange'):
+            return False
+
+        if ('request' not in message) or ('user_id' not in message['request']) or ('justification_id' not in message['request']) or ('begin' not in message['request']) or ('end' not in message['request']):
+            response = {'id':message['id'], 'error':'Insuficientes parámetros'}
+            server.sendMessage(response)
+            return True
+
+
+        userId = message['request']['user_id']
+        justificationId = message['request']['justification_id']
+        begin = message['request']['begin']
+        begin = self.date.parse(begin)
+        end = message['request']['end']
+        end = self.date.parse(end)
+
+
+        sid = message['session']
+        self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
+
+        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+        try:
+            events = self.justifications.requestJustificationRange(con,userId,justificationId,begin,end)
+            con.commit()
+
+            self.notifier.notifyBosses(con,userId,'justifications_request')
+
+            response = {
+                'id':message['id'],
+                'ok':'El pedido se ha realizado correctamente'
+            }
+            server.sendMessage(response)
+
+            import pdb
+            pdb.set_trace()
 
             for e in events:
                 self.events.broadcast(server,e)

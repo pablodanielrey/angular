@@ -74,7 +74,7 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, As
                   $scope.items.push({ label:'Incumplimientos', img:'fa-ticket', function: $scope.assistanceFails});
                   //$scope.items.push({ label:'Filtro de Fallas (testing todavía no terminado)', img:'fa-ticket', function: $scope.assistanceFailsFilters});
                   // hasta que no este terminado en producción no va
-                  //$scope.items.push({ label:'Mi Horario', img:'fa-clock-o', function: $scope.mySchedule});
+                  $scope.items.push({ label:'Mi Horario', img:'fa-clock-o', function: $scope.mySchedule});
 
                   Assistance.getUserOfficeRoles(
                       function(roles) {

@@ -167,14 +167,50 @@ app.service('Assistance', ['Utils','Messages','Session',
 		};
 
 
-		this.getSchedules = function(userId, callbackOk, callbackError) {
+		this.getSchedules = function(userId,date, callbackOk, callbackError) {
 			var msg = {
 				id: Utils.getId(),
 				action: 'getSchedules',
 				session: Session.getSessionId(),
 				request:{
-					user_id: userId
+					user_id: userId,
 				}
+			}
+
+			if (date != null) {
+				msg.request.date = date;
+			}
+
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response);
+					} else {
+						callbackError(data.error);
+					}
+				});
+		};
+
+
+		/*
+		request:{
+			user_id:"id del Usuario",
+			date:"fecha de que se empieza a utilizar el schedule, si no se envia se toma la fecha actual",
+			start:"hora de inicio del turno",
+			end:"hora de fin de turno",
+			daysOfWeek:[],
+			isDayOfWeek:"es dia de la semana, si no se envia se toma como false",
+			isDayOfMonth:"es dia un dia del mes, si no se envia se toma como false",
+			isDayOfYear:"es dia del año, si no se envia se toma como false"
+		}
+		*/
+
+		this.newSchedule = function(request, callbackOk, callbackError) {
+			var msg = {
+				id: Utils.getId(),
+				action: 'newSchedule',
+				session: Session.getSessionId(),
+				request:request
 			}
 
 			Messages.send(msg,
@@ -426,6 +462,29 @@ app.service('Assistance', ['Utils','Messages','Session',
 
 			if (!(typeof justification.end === 'undefined')) {
 				msg.request.end = justification.end;
+			}
+
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response);
+					} else {
+						callbackError(data.error);
+					}
+				});
+		}
+
+		this.requestJustificationRange = function(userId, justification, callbackOk, callbackError) {
+			var msg = {
+				id: Utils.getId(),
+				action: 'requestJustificationRange',
+				session: Session.getSessionId(),
+				request: {
+					user_id: userId,
+					justification_id: justification.id,
+					begin: justification.begin,
+					end: justification.end
+				}
 			}
 
 			Messages.send(msg,
