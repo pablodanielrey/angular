@@ -10,6 +10,10 @@ from model.systems.assistance.justifications.AAJustification import AAJustificat
 from model.systems.assistance.justifications.BSJustification import BSJustification
 from model.systems.assistance.justifications.CJustification import CJustification
 from model.systems.assistance.justifications.LAOJustification import LAOJustification
+from model.systems.assistance.justifications.A102Justification import A102Justification
+from model.systems.assistance.justifications.CumpJustification import CumpJustification
+from model.systems.assistance.justifications.PEJustification import PEJustification
+from model.systems.assistance.justifications.R638Justification import R638Justification
 from model.systems.assistance.date import Date
 
 
@@ -20,7 +24,8 @@ class Justifications:
     date = inject.attr(Date)
 
     justifications = [
-        CJustification(), LAOJustification(), AAJustification(), BSJustification()
+        CJustification(), LAOJustification(), AAJustification(), BSJustification(), R638Justification(),
+        PEJustification(), CumpJustification(), A102Justification()
     ]
 
 
