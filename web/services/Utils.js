@@ -195,4 +195,44 @@ app.service('Utils', function() {
   };
 
 
+
+  /**
+   * Dar formato a una solicitud de justificacion
+   */
+  this.formatRequestJustification = function(req) {
+    var request = {
+      id:null,
+      justificationName:null,
+      date:null,
+      dateSort:null,
+      time:null,
+      start:null,
+      end:null,
+      status:null
+    };
+    
+    request.id = req.id;
+    request.justificationName = this.getJustificationName(req.justification_id);
+    request.status = req.status;
+    
+    if(req.begin !== null){
+      var date = new Date(req.begin);
+      request.date = this.formatDate(date);
+      request.dateSort = date;
+    }
+    
+    if(req.end !== null){
+      var date2 = new Date(req.end);
+    }
+    
+    if(date && date2){
+      request.time = this.getDifferenceTimeFromDates(date, date2);
+      request.start = this.formatTime(date);
+      request.end = this.formatTime(date2);
+    }
+    
+    return request;
+  };
+
 });
+
