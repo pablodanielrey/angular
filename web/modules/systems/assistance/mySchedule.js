@@ -10,7 +10,7 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
 
   //variables del fieldset de horario semanal
   $scope.model.date = null;      //fecha seleccionada
-  $scope.model.hour = null; //hora de inicio seleccionada
+  $scope.model.start = null; //hora de inicio seleccionada
   $scope.model.checkDay = {
     sunday:false,
     monday:false,
@@ -20,13 +20,13 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
     friday:false,
     saturday:false
   };
-  $scope.model.daySelected = null //flag para indicar que se ha seleccionado al menos un dia
-  $scope.model.time = null;              //cantidad de horas seleccionadas
+  $scope.model.daySelected = null; //flag para indicar que se ha seleccionado al menos un dia
+  $scope.model.end = null;              //horario de salida
 
   //variables del fieldset de horario especial
   $scope.model.specialDate = null;      //fecha especial seleccionada
-  $scope.model.specialHour = null; //hora de inicio especial
-  $scope.model.specialTime = null;            //cantidad de horas especiales
+  $scope.model.specialStart = null; //hora de inicio especial
+  $scope.model.specialEnd = null;            //cantidad de horas especiales
 
   //variables de seleccion de usuario
   $scope.model.searchUser = null;        //nombre del usuario a buscar
@@ -34,7 +34,6 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
   $scope.model.users = [];               //lista de usuarios consultados para los cuales el usuario logueado puede consultar
   $scope.model.displayListUser = false;  //flag para indicar si se debe visualizar la lista de usuarios consultados
   $scope.model.user = null;              //usuario seleccionado
-  $scope.model.userSelected = false;     //flag para indicar que se ha seleccionado un usuario
 
 
 
@@ -55,59 +54,53 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
       sunday:false
     };
 
-    $scope.model.hour = null;
+    $scope.model.start = null;
 
-    $scope.model.time = new Date();
-    $scope.model.time.setHours(7,0,0,0);
+    $scope.model.end = null;
 
   };
 
   $scope.initializeFormNewSpecialSchedule = function(){
     $scope.model.specialDate = new Date();      //fecha especial seleccionada
-    $scope.model.specialHour = null; //hora de inicio especial
+    $scope.model.specialStart = null; //hora de inicio especial
 
-    $scope.model.specialTime = new Date();
-    $scope.model.specialTime.setHours(7,0,0,0);
+    $scope.model.specialEnd = null;
   };
 
+  $scope.getDayOfWeek = function(date) {
+    var weekday = ["sunday","monday","tuesday","wednesday","thursday","friday","saturday"]
+    return weekday[date.getDay()];
+  }
+
+  $scope.getDayOfWeekSpanish = function(date) {
+    var weekday = ["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"]
+    return weekday[date.getDay()];
+  }
 
   /**
    * Cargar la programacion del usuario
    * @returns {undefined}
    */
   $scope.loadSchedule = function(){
-    /*TODO IMPLEMENTAR USO DE METODO
-    Assistance.getSchedule($scope.model.user.id,
-      function callbackOk(schedule){
-        $scope.setModelSchedule(schedule);
-      },
-      function callbackError(error){
-        Notifications.message(error);
-        throw new Error(error);
-      }
-    );*/
-
-    $scope.getDayOfWeek = function(date) {
-      weekday = ["sunday","monday","tuesday","wednesday","thursday","friday","saturday"]
-      return weekday[date.getDay()];
-    }
-
-    Assistance.getSchedules($scope.model.user.id,
+    Assistance.getSchedules($scope.model.user.id, $scope.model.dateOfWeek,
       function ok(response) {
         var schedules = response.schedule;
-        schedule = [];
+        var schedule = [];
         for (var $i = 0; $i < schedules.length; $i++) {
-          var d = new Date(schedules[$i].start);
-          var s = {};
-          s.day = $scope.getDayOfWeek(d);
-          s.start = schedules[$i].start;
-          s.end = schedules[$i].end;
-          schedule.push(s);
+          var sDay = schedules[$i];
+          for(var $j = 0; $j < sDay.length; $j++) {
+            var d = new Date(sDay[$j].start);
+            var s = {};
+            s.day = $scope.getDayOfWeek(d);
+            s.start = sDay[$j].start;
+            s.end = sDay[$j].end;
+            schedule.push(s);
+          }
         }
         $scope.setModelSchedule(schedule);
       },
       function error(error) {
-        Notification.message(error);
+        Notifications.message(error);
       }
 
     )
@@ -150,31 +143,35 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
 
   };
 
-  $scope.setModelHistory = function(history){
-
-  };
-
-
 
   $scope.loadHistory = function(){
-   /*TODO IMPLEMENTAR USO DE METODO
-    Assistance.getHistory($scope.model.user.id,
-      function callbackOk(schedule){
-        $scope.setModelHistory(history);
+    $scope.model.history = [];
+    Assistance.getSchedules($scope.model.user.id, null,
+      function ok(response) {
+        var schedules = response.schedule;
+        var schedule = [];
+        for (var $i = 0; $i < schedules.length; $i++) {
+
+          var s = {};
+          s.start = new Date(schedules[$i].start);
+          s.startDate =  Utils.formatDate(s.start);
+          s.startTime = Utils.formatTime(s.start);
+          s.day = $scope.getDayOfWeekSpanish(s.start);
+          s.end = Utils.formatTime(new Date(schedules[$i].end));
+          s.date = new Date(schedules[$i].date);
+          s.dateStr = Utils.formatDate(s.date);
+          s.isDayOfWeek = schedules[$i].isDayOfWeek;
+          schedule.push(s);
+        }
+
+        $scope.model.history = schedule;
       },
-      function callbackError(error){
+      function error(error) {
         Notifications.message(error);
-        throw new Error(error);
       }
-    );*/
 
-    //DATOS DE PRUEBA, DEBEN SER BORRADOS AL IMPLEMENTAR EL METODO ANTERIOR
-     var history = [
-      {date:'2015-01-01 15:00:00', description:'Nuevo horario semanal', start:'2015-01-01 18:00:00', end:'', days:''},
-      {date:'2015-05-01 19:00:00', description:'Nuevo horario especial', start:'2015-01-01 18:00:00', end:'', days:null},
-    ];
+    )
 
-    $scope.setModelHistory(history);
   };
 
    /**
@@ -196,7 +193,7 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
       },
       function(error){
         Notifications.message(error);
-      }
+        }
     );
   };
 
@@ -219,12 +216,40 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
    * Inicializar
    */
   $timeout(function() {
+
+    $scope.model.dateOfWeek = new Date();
+
     $scope.loadSession();
     $scope.loadUsers();
     $scope.initializeFormNewSchedule();
     $scope.initializeFormNewSpecialSchedule();
 
   },0);
+
+  $scope.getFirstWeekDay = function(date) {
+    var day = date.getDay();
+    //el getDay comienza con Dom, le resto uno para que empiece desde el lunes
+    day = (day == 0) ? day = 6 : day = day - 1;
+    date = new Date(date.getTime() - (day*24*60*60*1000));
+    return date;
+  }
+
+  $scope.setWeekStr = function() {
+    var firstDate = $scope.getFirstWeekDay($scope.model.dateOfWeek);
+    var endDate = new Date(firstDate.getTime() + (6*24*60*60*1000));
+    $scope.model.dateOfWeekStr = Utils.formatDate(firstDate) + ' - ' + Utils.formatDate(endDate);
+  }
+
+  $scope.$watch('model.dateOfWeek', function(newValue, oldValue) {
+    if (newValue == null) {
+      $scope.model.dateOfWeek = oldValue;
+      return;
+    }
+    $scope.setWeekStr();
+    if ($scope.model.user != null) {
+      $scope.loadSchedule();
+    }
+  });
 
 
 
@@ -244,28 +269,8 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
    * Mostrar lista de usuarios
    */
   $scope.displayListUser = function(){
-    $scope.model.userSelected = false;
+    $scope.model.searchUser = null;
     $scope.model.displayListUser = true;
-  };
-
-   /**
-   * Esconder lista de usuarios
-   */
-  $scope.hideListUser = function(){
-     $timeout(
-      function(){
-        $scope.model.displayListUser = false;
-        if(!$scope.model.userSelected){
-          if((!$scope.model.searchUser) || ($scope.model.searchUser === "")){
-            $scope.model.user = null;
-            $scope.model.schedule = []
-          } else if($scope.model.user){
-            $scope.model.searchUser = $scope.model.user.name + " " + $scope.model.user.lastname;
-          }
-        }
-      }
-    ,100);
-
   };
 
   /**
@@ -273,9 +278,9 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
    * @param {usuario} user Usuario seleccionado
    */
   $scope.selectUser = function(user){
-    $scope.model.userSelected = true;
     $scope.model.user = user;
     $scope.model.searchUser = $scope.model.user.name + " " + $scope.model.user.lastname;
+    $scope.model.displayListUser = false;
     $scope.loadSchedule();
     $scope.loadHistory();
 
@@ -294,46 +299,110 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
   /*****************************
    * METODOS DE ADMINISTRACION *
    *****************************/
+   /*
+   request:{
+     user_id:"id del Usuario",
+     date:"fecha de que se empieza a utilizar el schedule, si no se envia se toma la fecha actual",
+     start:"hora de inicio del turno",
+     end:"hora de fin de turno",
+     daysOfWeek:[],
+     isDayOfWeek:"es dia de la semana, si no se envia se toma como false",
+     isDayOfMonth:"es dia un dia del mes, si no se envia se toma como false",
+     isDayOfYear:"es dia del año, si no se envia se toma como false"
+   }
+   */
+
+  $scope.getDaysOfWeek = function() {
+    days = [];
+
+    if ($scope.model.checkDay.sunday) {
+      days.push("Sunday");
+    }
+    if ($scope.model.checkDay.monday) {
+      days.push("Monday");
+    }
+    if ($scope.model.checkDay.tuesday) {
+      days.push("Tuesday");
+    }
+    if ($scope.model.checkDay.wednesday) {
+      days.push("Wednesday");
+    }
+    if ($scope.model.checkDay.thursday) {
+      days.push("Thursday");
+    }
+    if ($scope.model.checkDay.friday) {
+      days.push("Friday");
+    }
+    if ($scope.model.checkDay.saturday) {
+      days.push("Saturday");
+    }
+
+    return days;
+  }
+
   $scope.saveNewSchedule = function(){
     if(!$scope.isDaySelected()){
       return;
     }
 
+    var request = {};
+    request.user_id = $scope.model.user.id;
+    request.date = $scope.model.date;
+    request.start = $scope.model.start;
+    request.end = $scope.model.end;
+    request.daysOfWeek = $scope.getDaysOfWeek();
+    request.isDayOfWeek = true;
 
-    /*TODO IMPLEMENTAR USO DE METODO
-    Assistance.saveNewSchedule($scope.model.user.id,
+
+    Assistance.newSchedule(request,
       function callbackOk(schedule){
         $scope.initializeFormNewSchedule();
+        $scope.loadHistory();
+        $scope.loadSchedule();
+        Notifications.message("Horario almacenado con exito");
       },
       function callbackError(error){
         Notifications.message(error);
         throw new Error(error);
       }
-    );*/
+    );
 
-    $scope.initializeFormNewSchedule();
-    $scope.loadHistory();
-    $scope.loadSchedule();
-    Notifications.message("Horario almacenado con exito");
 
   };
 
-  $scope.saveNewSpecialSchedule = function(){
-     /*TODO IMPLEMENTAR USO DE METODO
-    Assistance.saveNewSpecialSchedule($scope.model.user.id,
+
+  /*
+  request:{
+    user_id:"id del Usuario",
+    date:"fecha de que se empieza a utilizar el schedule, si no se envia se toma la fecha actual",
+    start:"hora de inicio del turno",
+    end:"hora de fin de turno",
+    daysOfWeek:[],
+    isDayOfWeek:"es dia de la semana, si no se envia se toma como false",
+    isDayOfMonth:"es dia un dia del mes, si no se envia se toma como false",
+    isDayOfYear:"es dia del año, si no se envia se toma como false"
+  }
+  */
+  $scope.saveNewSpecialSchedule = function() {
+
+    var request = {};
+    request.user_id = $scope.model.user.id;
+    request.date = $scope.model.specialDate;
+    request.start = $scope.model.specialStart;
+    request.end = $scope.model.specialEnd;
+
+    Assistance.newSchedule(request,
       function callbackOk(schedule){
         $scope.initializeFormNewSpecialSchedule();
         $scope.loadHistory();
+        $scope.loadSchedule();
+        Notifications.message("Horario especial almacenado con exito");
       },
       function callbackError(error){
         Notifications.message(error);
         throw new Error(error);
       }
-    )    $scope.initializeFormNewSpecialSchedule();;*/
-    $scope.initializeFormNewSpecialSchedule();
-    $scope.loadHistory();
-     $scope.loadSchedule();
-    Notifications.message("Horario especial almacenado con exito");
+    );
   };
 
 
