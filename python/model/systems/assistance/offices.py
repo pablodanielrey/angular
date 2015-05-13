@@ -245,6 +245,10 @@ class Offices:
             [(userId,sendMail)]
     """
     def getUsersWithRoleInOffices(self,con,officesIds,role='autoriza'):
+
+        if officesIds is None or len(officesIds) <= 0:
+            return []
+
         cur = con.cursor()
         cur.execute('select user_id,send_mail from assistance.offices_roles where office_id in %s and role = %s',(tuple(officesIds),role))
         if cur.rowcount <= 0:
