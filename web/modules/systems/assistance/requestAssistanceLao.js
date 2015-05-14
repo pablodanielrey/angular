@@ -1,139 +1,203 @@
 var app = angular.module('mainApp');
 
-app.controller('RequestAssistanceLaoCtrl', function($scope, Assistance, Session, Notifications) {
-
-    $scope.model.justificationLaoRequestSelected = false;
-	$scope.model.justificationLaoAvailableSelected = false;
-	$scope.model.justificationLaoRequestsSelected = false;
-
-    // -------------- Manejo de la vista ---------------
-
-    $scope.isSelectedJustificationLao = function(){
-		return $scope.model.justificationLaoSelected;
-	}
-
-	$scope.selectJustificationLao = function(){
-		var value = !$scope.model.justificationLaoSelected;
-		$scope.clearSelections();
-		$scope.clearSelectionsLao();
-		$scope.model.justificationLaoSelected = value;
-
-        $scope.model.justification.id = $scope.model.justificationLaoId;
-	}
+app.controller('RequestAssistanceLaoCtrl', function($scope, Assistance, Session, Notifications, Utils) {
 
 
-	$scope.isSelectedJustificationLaoRequest = function(){
-		return $scope.model.justificationLaoRequestSelected;
-	};
+  if(!$scope.model) Notifications.message("No esta definido el modelo");
 
-    $scope.isSelectedJustificationLaoAvailable = function(){
-		return $scope.model.justificationLaoAvailableSelected;
-	};
-
-	$scope.isSelectedJustificationLaoRequests = function(){
-		return $scope.model.justificationLaoRequestsSelected;
-	};
-
-	$scope.selectJustificationLaoRequest = function(){
-		$scope.clearSelectionsLao();
-		$scope.model.justificationLaoRequestSelected = true;
-	};
+  //***** datos de la justificacion *****
+  $scope.justification = {
+    id: '76bc064a-e8bf-4aa3-9f51-a3c4483a729a', //id de la justificacion.
+    name:Utils.getJustificationName('76bc064a-e8bf-4aa3-9f51-a3c4483a729a'),
+    stock:0,
+    yearlyStock:0,
+    selectedName:"justificationLaoSelected", //Nombre de la seleccion en el controlador padre
+  };
 
 
-	$scope.selectJustificationLaoRequests = function(){
-		$scope.clearSelectionsLao();
-		$scope.model.justificationLaoRequestsSelected = true;
-	};
+   //***** variables de seleccion de la seccion *****
+  $scope.model.requestSelected = false; //flag para indicar la seleccion del formulario de solicitud del articulo 102
+  $scope.model.availableSelected = false; //flag para indicar la seleccion de la visualizacion de disponibilidad del articulo 102
 
-	$scope.selectJustificationLaoAvailable = function(){
-		$scope.clearSelectionsLao();
-		$scope.model.justificationLaoAvailableSelected = true;
+  //***** variables del formulario *****
+  $scope.model.begin = null;         //fecha de inicio seleccionada
+  $scope.model.beginFormated = null; //fecha en formato amigable para el usuario
+  $scope.model.end = null;         //fecha de fin seleccionada
+  $scope.model.endFormated = null; //fecha en formato amigable para el usuario
 
-	};
+  $scope.model.processingRequest = false;
 
 
-	$scope.clearSelectionsLao = function(){
-		$scope.model.justificationLaoRequestSelected = false;
-		$scope.model.justificationLaoAvailableSelected = false;
-		$scope.model.justificationLaoRequestsSelected = false;
 
-    if ($scope.model.justification != null) {
-        $scope.model.justification.begin = null;
-        $scope.model.justification.end = null;
+
+  //***** METODOS DE CARGA E INICIALIZACION *****
+   /**
+   * Consultar stock de la justificacion
+   */
+  $scope.loadStock = function(){
+    Assistance.getJustificationStock($scope.model.session.user_id, $scope.justification.id, null, null,
+      function(justification) {
+        $scope.justification.stock = justification.stock;
+      },
+      function(error) {
+        Notifications.message(error);
+      }
+    );
+  };
+
+
+  $scope.$on('findStockJustification', function(event, data) {
+    if (data.justification.id === $scope.justification.id) {
+        $scope.loadStock();
     }
-	}
+  });
 
-    $scope.updateDate = function() {
-        $scope.dateFormated = $scope.model.justification.begin.toLocaleDateString();
-        $scope.dateFormated += "-" + $scope.model.justification.end.toLocaleDateString();
+  $scope.$on('JustificationStockChangedEvent', function(event, data) {
+    if ($scope.justification.id === data.justification_id) {
+      $scope.loadStock();
     }
+  });
 
-    $scope.isSelectedDate = function() {
-        if ($scope.model.justification != null && $scope.model.justification.begin != null && $scope.model.justification.end != null) {
-            $scope.updateDate();
-            return true;
-        } else {
-            $scope.dateFormated = null;
-            return false;
-        }
+
+
+  //***** METODOS DE SELECCION DE LA SECCION *****
+  /**
+   * Esta seleccionada la seccion correspondiente a la justificacion 102
+   * @returns {Boolean}
+   */
+  $scope.isSelectedJustification = function() {
+    return $scope.model[$scope.justification.selectedName];
+  };
+
+  /**
+   * Modificar seleccion de opcion desplegable correspondiente a salidas eventuales
+   * @returns {Boolean}
+   */
+	$scope.selectJustification = function() {
+    var value = !$scope.model[$scope.justification.selectedName];
+    $scope.clearSelections();
+    $scope.clearContent();
+    $scope.model[$scope.justification.selectedName] = value;
+	};
+
+
+  /**
+   * Esta seleccionado el formulario para solicitar articulo 102?
+   * @returns {Boolean}
+   */
+	$scope.isSelectedRequest = function() {
+		return $scope.model.requestSelected;
+	};
+
+  /**
+   * Esta seleccionada la seccion para ver la disponibilidad del articulo 102?
+   * @returns {Boolean}
+   */
+  $scope.isSelectedAvailable = function() {
+		return $scope.model.availableSelected;
+	};
+
+
+
+  /**
+   * Seleccionar formulario para definir una solicitud del articulo 102
+   * @returns {Boolean}
+   */
+	$scope.selectRequest = function() {
+  	$scope.clearContent();
+		$scope.model.requestSelected = true;
+	};
+
+
+  /**
+   * Seleccionar seccion para ver la disponibilidad correspondiente al articulo 102
+   * @returns {Boolean}
+   */
+	$scope.selectAvailable = function() {
+		$scope.clearContent();
+		$scope.model.availableSelected = true;
+
+	};
+
+  /**
+   * Inicializar variables correspondientes al contenido de la seccion del articulo 102
+   * @returns {undefined}
+   */
+  $scope.clearContent = function(){
+    $scope.model.requestSelected = false;
+    $scope.model.availableSelected = false;
+    $scope.model.begin = null;
+		$scope.model.beginFormated = null;
+    $scope.model.end = null;
+		$scope.model.endFormated = null;
+    $scope.model.processingRequest = false;
+
+  };
+
+
+
+
+
+  //***** METODOS DEl FORMULARIO DE SOLICITUD *****
+  $scope.selectDates = function(){
+		$scope.model.beginFormated = null;
+    $scope.model.endFormated = null;
+    if($scope.model.begin !== null){
+			$scope.model.beginFormated = Utils.formatDate($scope.model.begin);
     }
-
-    $scope.changeDate = function() {
-        if ($scope.model.justification.end == null || $scope.model.justification.begin == null) {
-            return;
-        }
-
-        if ($scope.model.justification.begin > $scope.model.justification.end) {
-            $scope.model.justification.end = null;
-            return;
-        }
-        $scope.updateDate();
+    if($scope.model.end !== null){
+      if($scope.model.begin > $scope.model.end){
+        $scope.model.end = new Date($scope.model.begin);
+      }
+      $scope.model.endFormated = Utils.formatDate($scope.model.end);
     }
+  };
 
-    // -----------------------------------------------------------------------------------------
+
+  $scope.isDatesDefined = function(){
+    return (($scope.model.begin !== null) && ($scope.model.end !== null));
+  };
+
+  $scope.isStock = function(){
+    return ($scope.justification.stock !== 0);
+  };
 
 
-    //Carga el stock disponible de compensatorios
-    $scope.loadLaoStock = function(id) {
-        Assistance.getJustificationStock($scope.model.session.user_id, id,
-			function(justificationStock) {
-                $scope.model.lao.stock = justificationStock;
+  // Envio la peticion al servidor
+  $scope.save = function() {
+    $scope.model.processingRequest = true;
+    var request = {
+			id:$scope.justification.id,
+			begin:$scope.model.begin,
+      end:$scope.model.end
+		};
+
+  	Assistance.requestJustificationRange($scope.model.session.user_id, request,
+			function(ok) {
+				$scope.clearContent();    //limpiar contenido
+        $scope.clearSelections(); //limpiar selecciones
+        Notifications.message("Solicitud de " + $scope.justification.name + " registrada correctamente");
 			},
-			function(error) {
-                Notifications.message(error);
+			function(error){
+				Notifications.message(error);
 			}
+
 		);
-    }
 
-    // Cargo el stock de la justificacion
-    // data.justification = {name,id}
-    $scope.$on('findStockJustification', function(event, data) {
-
-        justification = data.justification;
-        if (justification.id == $scope.model.justificationLaoId) {
-            $scope.initialize(justification);
-        }
-    });
-
-    $scope.initialize = function(justification) {
-        $scope.clearSelectionsLao();
-        $scope.model.lao = {id:justification.id, name: justification.name, stock:0};
-        $scope.loadLaoStock(justification.id);
-        $scope.model.justification = {id:justification.id,begin:null,end:null};
-    }
+  };
 
 
-    // Envio la peticion al servidor
-    $scope.save = function() {
 
-        Assistance.requestJustification($scope.model.session.user_id,$scope.model.justification,
-            function(ok) {
-                Notifications.message("Guardado exitosamente");
-                $scope.clearSelections();
-            },
-            function(error) {
-                Notifications.message(error);
-            }
-        );
-    }
+
+
+
+
+
+
+
+
+
+
+
+
 });

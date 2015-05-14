@@ -11,10 +11,13 @@ app.controller('RequestAssistanceCtrl', ["$scope", "$rootScope", "$timeout", "$w
 		justificationExamSelected	: false,
 		justificationOutSelected	: false,
 		justificationCompensatorySelected : false,
-		justificationAbsentId : 'e0dfcef6-98bb-4624-ae6c-960657a9a741', // id de la justificacion de ausente con aviso
+    justification102Selected : false,
+    justificationBirthdaySelected : false,
+    justification638Selected : false,
+    
+    
 		justificationCompensatoryId : "48773fd7-8502-4079-8ad5-963618abe725", // id de la justificacion de compensatorio
 		justificationOutId : 'fa64fdbd-31b0-42ab-af83-818b3cbecf46', //id de la justificacion de boleta de salidas
-		justificationExamId : 'b70013e3-389a-46d4-8b98-8e4ab75335d0', // id de la justificacion de prexamen
 		justificationLaoId : '76bc064a-e8bf-4aa3-9f51-a3c4483a729a' // id de la justificacion de la licencia anual ordinaria
 	};
 
@@ -50,8 +53,7 @@ app.controller('RequestAssistanceCtrl', ["$scope", "$rootScope", "$timeout", "$w
 
 				$scope.model.requestedLicences = [];
 				for (var i = 0; i < requestedLicences.length; i++) {
-					var req = requestedLicences[i];
-					$scope.formatLicenceToDisplay(req);
+					var req = Utils.formatRequestJustification(requestedLicences[i]);
 					$scope.model.requestedLicences.push(req);
 				}
 			},
@@ -59,69 +61,8 @@ app.controller('RequestAssistanceCtrl', ["$scope", "$rootScope", "$timeout", "$w
 				Notifications.message(error);
 			}
 		);
-	}
-
-
-	/**
-		autor: pablo
-		TODO: SOLUCION PEDORRA QUE ENCONTRE RÁPIDO PARA CORREGIR COMO SE MUESTRA.
-		DEBERÍA HABER SIDO PENSADO BIEN ENTRE EL HTML Y EL CONTROLADOR PARA TENER DISTINTOS TIPOS DE JUSTIFICACIONES
-		AL MOSTRARSE.
-		AHORA LO SOLUCIONO ASI PERO HAY QUE MODIFICARLO POR ALGUNA SOLUCIÓN CORRECTA!!!!
-
-		el html muestra de las licencias lo siguiente :
-
-		justification_name
-		summary
-
-
-	*/
-	$scope.formatLicenceToDisplay = function(req) {
-
-		var id = req.justification_id;
-		req.justification_name = $scope.model.justifications[id].name;
-		req.displayHours = false;
-
-		// seteo el summary de acuerdo al tipo de justificación a mostrar.
-		if (id == 'e0dfcef6-98bb-4624-ae6c-960657a9a741') {
-			// absent
-			var date = new Date(req.begin);
-      req.date = Utils.formatDate(date);
-
-		} else if (id == '48773fd7-8502-4079-8ad5-963618abe725') {
-			// compensatory
-			var date = new Date(req.begin);
-      req.date = Utils.formatDate(date);
-
-		} else if (id == 'fa64fdbd-31b0-42ab-af83-818b3cbecf46') {
-			// boleta de salida
-			var date = new Date(req.begin);
-			var date2 = new Date(req.end);
-      req.date = Utils.formatDate(date);
-      req.time = Utils.getDifferenceTimeFromDates(date, date2)
-      req.start = Utils.formatTime(date);
-      req.end = Utils.formatTime(date2);
-			req.displayHours = true;
-
-		} else if (id == '4d7bf1d4-9e17-4b95-94ba-4ca81117a4fb') {
-			// 102
-			var date = new Date(req.begin);
-			var date2 = new Date(req.end);
-      req.date = Utils.formatDate(date);
-
-		} else if (id == '76bc064a-e8bf-4aa3-9f51-a3c4483a729a') {
-			// lao
-			var date = new Date(req.begin);
-      req.date = Utils.formatDate(date);
-
-		} else if (id == 'b70013e3-389a-46d4-8b98-8e4ab75335d0') {
-			// pre-examen
-			var date = new Date(req.begin);
-      req.date = Utils.formatDate(date);
-
-		}
 	};
-  
+
 
 
 	/**
@@ -192,6 +133,9 @@ app.controller('RequestAssistanceCtrl', ["$scope", "$rootScope", "$timeout", "$w
 		$scope.model.justificationExamSelected = false;
 		$scope.model.justificationOutSelected = false;
 		$scope.model.justificationLaoSelected = false;
+    $scope.model.justification102Selected = false;
+    $scope.model.justification638Selected = false;
+    $scope.model.justificationBirthdaySelected = false;
 		$scope.model.justification = {};
 	}
 

@@ -7,11 +7,12 @@
    	<div ng-controller="RequestAssistanceAbsentCtrl" ng-include="'modules/systems/assistance/requestAssistanceAbsent.html'"></div>
    	<div ng-controller="RequestAssistanceCompensatoryCtrl" ng-include="'modules/systems/assistance/requestAssistanceCompensatory.html'"></div>
   	<div ng-controller="RequestAssistanceOutCtrl" ng-include="'modules/systems/assistance/requestAssistanceOut.html'"></div>
-
-    <!--
-  	<div ng-controller="RequestAssistanceExamCtrl" ng-include="'modules/systems/assistance/requestAssistanceExam.html'"></div>
-  	<div ng-controller="RequestAssistanceLaoCtrl" ng-include="'modules/systems/assistance/requestAssistanceLao.html'"></div>
-  -->
+    <div ng-controller="RequestAssistance102Ctrl" ng-include="'modules/systems/assistance/requestAssistance102.html'"></div>
+    <div ng-controller="RequestAssistanceExamCtrl" ng-include="'modules/systems/assistance/requestAssistanceExam.html'"></div>
+    <div ng-controller="RequestAssistanceBirthdayCtrl" ng-include="'modules/systems/assistance/requestAssistanceBirthday.html'"></div>
+    <div ng-controller="RequestAssistanceLaoCtrl" ng-include="'modules/systems/assistance/requestAssistanceLao.html'"></div>
+    <div ng-controller="RequestAssistance638Ctrl" ng-include="'modules/systems/assistance/requestAssistance638.html'"></div>
+    
 
     <div class="myRequests">
       <span><i class="fa fa-ticket"></i> Mis Solicitudes</span>
@@ -22,14 +23,14 @@
       <div class="column t1"><i class="fa fa-info-circle"></i> Estado</div>
     </div>
 <div class="scroll">
-    <div class="myRequestInfo" ng-repeat="x in model.requestedLicences" ng-class="{'PENDING':'pending', 'CANCELED':'canceled', 'REJECTED':'rejected', 'APPROVED':'approved'}[x.status]">
+    <div class="myRequestInfo" ng-repeat="x in model.requestedLicences" >
 
       <div class="myRequest">
-        <span>{{x.justification_name}}</span>
+        <span>{{x.justificationName}}</span>
       </div>
       <div class="myRequestDate">
         <span><i class="fa fa-calendar"></i> {{x.date}}</span>
-        <div ng-class="{true:'visible', false:'hidden'}[x.displayHours]">
+        <div ng-class="{true:'visible', false:'hidden'}[x.time != null]">
           <span><i class="fa fa-clock-o"></i> {{x.time}} Horas</span>
           <div>
             <span>De {{x.start}} a {{x.end}}</span>
