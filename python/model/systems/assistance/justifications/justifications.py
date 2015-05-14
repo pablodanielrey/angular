@@ -10,6 +10,10 @@ from model.systems.assistance.justifications.AAJustification import AAJustificat
 from model.systems.assistance.justifications.BSJustification import BSJustification
 from model.systems.assistance.justifications.CJustification import CJustification
 from model.systems.assistance.justifications.LAOJustification import LAOJustification
+from model.systems.assistance.justifications.A102Justification import A102Justification
+from model.systems.assistance.justifications.CumpJustification import CumpJustification
+from model.systems.assistance.justifications.PEJustification import PEJustification
+from model.systems.assistance.justifications.R638Justification import R638Justification
 from model.systems.assistance.date import Date
 
 
@@ -20,12 +24,13 @@ class Justifications:
     date = inject.attr(Date)
 
     justifications = [
-        CJustification(), LAOJustification(), AAJustification(), BSJustification()
+        CJustification(), LAOJustification(), AAJustification(), BSJustification(), R638Justification(),
+        PEJustification(), CumpJustification(), A102Justification()
     ]
 
 
     """ obtiene un requerimiento de justificacion dado el id """
-    def _findJustificationRequestById(self,con,id):
+    def findJustificationRequestById(self,con,id):
         cur = con.cursor()
         cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where id = %s',(id,))
         if cur.rowcount <= 0:
@@ -48,7 +53,7 @@ class Justifications:
     """
     def _getJustificationRequestStatus(self,con,reqId):
         cur = con.cursor()
-        cur.execute('select jrs.status from assistance.justifications_requests_status as jrs, (select request_id,max(created) as created from assistance.justifications_requests_status group by request_id) as r where r.created = jrs.created and r.request_id = jrs.request_id')
+        cur.execute('select jrs.status from assistance.justifications_requests_status as jrs, (select request_id,max(created) as created from assistance.justifications_requests_status group by request_id) as r where r.created = jrs.created and r.request_id = jrs.request_id and r.request_id = %s',(reqId,))
         if cur.rowcount <= 0:
             return None
 
@@ -310,7 +315,7 @@ class Justifications:
     """
     def updateJustificationRequestStatus(self,con,userId,requestId,status):
 
-        req = self._findJustificationRequestById(con,requestId)
+        req = self.findJustificationRequestById(con,requestId)
         if req is None:
             raise JustificationError('No existe ningún pedido de justificación con id = %s'.format(requestId))
 
@@ -331,5 +336,25 @@ class Justifications:
         for j in self.justifications:
             if j.isJustification(justificationId):
                 return j.requestJustification(self,con,userId,begin,end)
+
+        raise JustificationError('No se puede encontrar ese tipo de justificación')
+
+
+    """
+        realiza el pedido de justificación para ser aprobado entre un rango de fechas
+        estado inicial del pedido = PENDING, con la fecha actual del servidor.
+    """
+    def requestJustificationRange(self,con,userId,justificationId,begin,end):
+        events = []
+        for j in self.justifications:
+            if j.isJustification(justificationId) and (j.__class__.__name__ == 'LAOJustification' or j.__class__.__name__  == 'R638Justification'):
+                date = begin
+                diff = (end-begin).days
+                # incremento en 1 para que tome el ultimo dia
+                for x in range(0, diff + 1):
+                    events.extend(j.requestJustification(self,con,userId,date,None))
+                    date = date + datetime.timedelta(days=1)
+
+                return events
 
         raise JustificationError('No se puede encontrar ese tipo de justificación')
