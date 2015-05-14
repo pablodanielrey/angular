@@ -9,7 +9,7 @@ app.controller('UsersAssistanceManagementMediatorCtrl', ["$scope", "$timeout", "
     
     //justificaciones
     justifications: [],
-    justificationSelectedId: [],
+    justificationSelectedId: null,   //flag para indicar el id de la justificacion seleccionada si se debe mostrar la lista de usuarios
         
     //seleccion de usuario
     displayUserList: false,  //flag para controlar si se debe mostrar la lista de usuarios
@@ -68,13 +68,21 @@ app.controller('UsersAssistanceManagementMediatorCtrl', ["$scope", "$timeout", "
       {id:'b80c8c0e-5311-4ad1-94a7-8d294888d770', selected: false},
       {id:'0cd276aa-6d6b-4752-abe5-9258dbfd6f09', selected: false}
     ];
-    $scope.clearJustificationSelected();
+    $scope.model.justificationSelectedId = null;
 
   };
   
-  $scope.clearJustificationSelected = function() {
-    $scope.model.justificationSelectedId = null;
-	};
+  $scope.getJustificationIndex = function(justificationId){
+    for(var i = 0; i < $scope.model.justifications.length; i++){
+      if(justificationId === $scope.model.justifications[i].id){
+        return i;
+        break;
+      }
+    }
+  };
+  
+  
+  
   
   $scope.loadRequestedJustifications = function() {
     Assistance.getJustificationRequestsToManage(['APPROVED'],"TREE",
