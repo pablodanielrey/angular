@@ -4,7 +4,21 @@ app.controller('UsersAssistanceManagementMediatorRequestJustificationCtrl', ["$s
 
   if(!$scope.model) Notifications.message("No esta definido el modelo");
   
+ 
+  $scope.init = function(justificationId){
 
+    //***** inicializar datos de la justificacion *****
+    $scope.justification = {
+       id: justificationId,
+       name: Utils.getJustificationName(justificationId),
+       requestMode: Utils.getJustificationRequestMode(justificationId),
+       stockMode: Utils.getJustificationStockMode(justificationId),
+       mode:  Utils.getJustificationRequestMode(justificationId) + "," + Utils.getJustificationStockMode(justificationId),
+    };
+  
+      
+  };
+   
   
   
   //***** METODOS DE SELECCION DE LA SECCION *****
@@ -37,23 +51,7 @@ app.controller('UsersAssistanceManagementMediatorRequestJustificationCtrl', ["$s
 
 
 
-  //***** INICIALIZACION *****
-  $scope.init = function(justificationId){
-
-    //***** inicializar datos de la justificacion *****
-    $scope.justification = {
-       id: justificationId,
-       name: Utils.getJustificationName(justificationId),
-       requestMode: Utils.getJustificationRequestMode(justificationId),
-       stockMode: Utils.getJustificationStockMode(justificationId),
-       mode:  Utils.getJustificationRequestMode(justificationId) + "," + Utils.getJustificationStockMode(justificationId),
-    };
-    
-    $scope.justification.stock = null;
-    if($scope.justification.stockMode === "year") $scope.justification.yearlyStock = null;
-      
-  };
-   
+  //***** DEFINIR STOCK ***** 
    
   $scope.loadStockTotal = function(){
     Assistance.getJustificationStock($scope.model.selectedUser.id, $scope.justification.id, null, null,
@@ -78,19 +76,7 @@ app.controller('UsersAssistanceManagementMediatorRequestJustificationCtrl', ["$s
     );
   };
   
-  $scope.$watch('model.selectedUser', function() {
-    if($scope.model.selectedUser){
-      $scope.loadStockTotal();
-      if($scope.justification.stockMode === "year") $scope.loadStockYear();
-    }
-  }); 
-   
-  
-  
-  
-  
-
-
+ 
 
 
 }]);

@@ -10,6 +10,18 @@ app.controller('UsersAssistanceManagementMediatorRequestJustificationDateTotalCt
   $scope.model.date = null;
   $scope.model.dateFormated = null;
   
+  $scope.justification.stock = null;
+  
+  
+  $scope.$watch('model.selectedUser', function() {
+    if($scope.model.selectedUser){
+      $scope.loadStockTotal();
+    } else {
+      $scope.clearContent();
+      $scope.model.justificationSelectedId = null;
+    }
+  }); 
+  
   /***
    * METODOS DE SELECCION
    */
