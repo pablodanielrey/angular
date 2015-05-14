@@ -94,10 +94,8 @@ app.controller('UserAssistanceManagementDatesCtrl', ["$scope", "Assistance", "No
 			begin:$scope.model.begin,
       end:$scope.model.end,
 		};
-    console.log(request);
-    console.log($scope.model.user.id);
     
-  	Assistance.requestJustification($scope.model.user.id, request,
+  	Assistance.requestJustificationRange($scope.model.user.id, request,
 			function(ok) {
 				$scope.clearContent();    //limpiar contenido
         $scope.clearSelections(); //limpiar selecciones
