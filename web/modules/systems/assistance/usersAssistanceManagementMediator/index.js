@@ -7,8 +7,7 @@ app.controller('UsersAssistanceManagementMediatorCtrl', ["$scope", "$timeout", "
   $scope.model = {
     sessionUserId: null, //id de sesion de usuario
     
-    //justificaciones
-    justifications: [],
+    justificationsId: [],            //id de las justificaciones que el usuario tiene autorizadas
     justificationSelectedId: null,   //flag para indicar el id de la justificacion seleccionada si se debe mostrar la lista de usuarios
         
     //seleccion de usuario
@@ -30,10 +29,76 @@ app.controller('UsersAssistanceManagementMediatorCtrl', ["$scope", "$timeout", "
   
   
   
-  /********************
-   * METODOS DE CARGA *
-   ********************/
+
+  
+  
+  /**************************************
+   * METODOS DE REQUESTED JUSTIFICACION *
+   **************************************/
+  $scope.loadRequestedJustifications = function() {
+    Assistance.getJustificationRequestsToManage(['APPROVED'],"TREE",
+      function(requestedJustifications) {
+        $scope.model.requestedJustifications = requestedJustifications;
+        if($scope.model.selectedUser !== null) $scope.filterUserRequestedJustifications();
+      },
+      function(error) {
+        Notifications.message(error);
+      }
+    );
+  };
+  
+   $scope.filterUserRequestedJustifications = function(){
+    $scope.model.rjSort = ["dateSort", "justificationName"];
+    $scope.model.rjReversed = false;
+    $scope.model.requestedJustificationsFiltered = [];
+
+    for (var i = 0; i < $scope.model.requestedJustifications.length; i++) {
+      if(($scope.model.selectedUser.id === $scope.model.requestedJustifications[i].user_id) && ($scope.isAuthorizedJustification($scope.model.requestedJustifications[i].justification_id))){
+        var req = Utils.formatRequestJustification($scope.model.requestedJustifications[i]);
+        $scope.model.requestedJustificationsFiltered.push(req);
+      }
+    }
+  };
+
+
+
+
+
+  /****************************
+   * METODOS DE JUSTIFICACION *
+   ****************************/
+  /**
+   * Verificar si la justificacion enviada como parametro es una justificacion autorizada
+   * @param {type} justificationId Id de la justificacion
+   * @returns {undefined}
+   */
+  $scope.isAuthorizedJustification = function(justificationId){
+    return ($scope.model.justificationsId.indexOf(justificationId) > -1);
+  };
+  
    /**
+   * Cargar justificaciones que puede autorizar el usuario
+   */
+  $scope.loadAuthorizedJustifications = function(){
+    
+    $scope.model.justificationsId = [
+      'e0dfcef6-98bb-4624-ae6c-960657a9a741',
+      'b309ea53-217d-4d63-add5-80c47eb76820'
+    ];
+
+  };
+  
+  
+
+
+
+
+
+
+  /******************************************************
+   * METODOS CORRESPONDIENTES A LA SELECCION DE USUARIO *
+   ******************************************************/
+  /**
    * Cargar usuarios autorizados para aplicar justificaciones
    */
   $scope.loadAuthorizedUsers = function(){
@@ -56,79 +121,6 @@ app.controller('UsersAssistanceManagementMediatorCtrl', ["$scope", "$timeout", "
     );
   };  
   
-  /**
-   * Cargar justificaciones que puede autorizar el usuario
-   */
-  $scope.loadAuthorizedJustifications = function(){
-    
-    $scope.model.justifications = [
-      {id:'478a2e35-51b8-427a-986e-591a9ee449d8', selected: false},
-      {id:'f9baed8a-a803-4d7f-943e-35c436d5db46', selected: false},
-      {id:'a93d3af3-4079-4e93-a891-91d5d3145155', selected: false},
-      {id:'b80c8c0e-5311-4ad1-94a7-8d294888d770', selected: false},
-      {id:'0cd276aa-6d6b-4752-abe5-9258dbfd6f09', selected: false}
-    ];
-    $scope.model.justificationSelectedId = null;
-
-  };
-  
-  $scope.getJustificationIndex = function(justificationId){
-    for(var i = 0; i < $scope.model.justifications.length; i++){
-      if(justificationId === $scope.model.justifications[i].id){
-        return i;
-        break;
-      }
-    }
-  };
-  
-  
-  
-  
-  $scope.loadRequestedJustifications = function() {
-    Assistance.getJustificationRequestsToManage(['APPROVED'],"TREE",
-      function(requestedJustifications) {
-        $scope.model.requestedJustifications = requestedJustifications;
-        if($scope.model.selectedUser !== null) $scope.filterUserRequestedJustifications();
-      },
-      function(error) {
-        Notifications.message(error);
-      }
-    );
-  };
-  
-   $scope.filterUserRequestedJustifications = function(){
-    $scope.model.rjSort = ["dateSort", "justificationName"];
-    $scope.model.rjReversed = false;
-    $scope.model.requestedJustificationsFiltered = [];
-    for (var i = 0; i < $scope.model.requestedJustifications.length; i++) {
-      if(($scope.model.selectedUser.id === $scope.model.requestedJustifications[i].user_id) && ($scope.isAuthorizedJustification($scope.model.requestedJustifications[i].justification_id))){
-        var req = Utils.formatRequestJustification($scope.model.requestedJustifications[i]);
-        $scope.model.requestedJustificationsFiltered.push(req);
-      }
-    }
-  };
-
-
-
-  /****************************
-   * METODOS DE JUSTIFICACION *
-   ****************************/
-  /**
-   * Verificar si la justificacion enviada como parametro es una justificacion autorizada
-   * @param {type} justificationId Id de la justificacion
-   * @returns {undefined}
-   */
-  $scope.isAuthorizedJustification = function(justificationId){
-    for(var i = 0; i < $scope.model.justifications.length; i++){
-      if($scope.model.justifications[i].id === justificationId) return true;
-    }
-    return false;
-  };
-
-
-  /******************************************************
-   * METODOS CORRESPONDIENTES A LA SELECCION DE USUARIO *
-   ******************************************************/
   /**
    * Debe ser mostrada la lista de usuarios?
    */
@@ -169,12 +161,29 @@ app.controller('UsersAssistanceManagementMediatorCtrl', ["$scope", "$timeout", "
   };
   
   
+  
+  
+    
+  /******************
+   * INICIALIZACION *
+   ******************/
+  $scope.model.clearIndex = function(){
+    $scope.model.displayUserList = false;
+    $scope.model.selectedUser = null;
+    $scope.model.searchUser = null;
+    $scope.model.requestedJustificationsFiltered = [];
+    $scope.model.rjSort = ["dateSort", "justificationName"];;
+    $scope.model.rjReversed = false;
+  };
+  
+  
   $timeout(function() {
     Module.authorize('ADMIN-ASSISTANCE,USER-ASSISTANCE');
     $scope.model.sessionUserId = Module.getSessionUserId();
     $scope.loadAuthorizedUsers();
     $scope.loadAuthorizedJustifications();
     $scope.loadRequestedJustifications();
+    $scope.model.clearIndex();
   }, 0);
 
 }]);
