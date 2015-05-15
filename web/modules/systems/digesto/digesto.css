@@ -1,15 +1,51 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+.menuAction {
+  background-color:black;
+  padding:10px;
 
-.menu {
-  background-color: red;
-  height: 100%;
-  width: 0px;
-  top:0;
-  left:0px;
-  transition: all 1s;
 }
 
+@media screen {
+  .menu {
+    background-color: red;
+    height: 100%;
+    width: 300px;
+    top:0;
+    left:0px;
+    transition: all 0.2s;
+  }
+  .content {
+    background-color: green;
+  }
+  .menu_visible {
+    width: 0%;
+  }
+}
+
+@media handheld and (max-device-width:1280px) {
+  .menu {
+    background-color: blue;
+    height: 100%;
+    width: 300px;
+    top:0;
+    left:0px;
+    transition: all 0.2s;
+  }
+  .content {
+    background-color: green;
+  }
+  .menu_visible {
+    width: 0%;
+  }
+}
+
+
+
 .content {
-  background-color: blue;
+
   height: 100%;
   width: 100%;
 }
@@ -23,9 +59,4 @@
 }
 
 .menu_oculto {
-}
-
-
-.menu_visible {
-  width: 300px;
 }
