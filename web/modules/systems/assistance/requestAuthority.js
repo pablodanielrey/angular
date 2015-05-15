@@ -181,20 +181,20 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
   };
 
 
+  /**
+   * Mostrar lista de usuarios
+   */
+  $scope.displayListUser = function(){
+    $scope.model.user_id = null;
+    $scope.model.searchUser = null;
+    $scope.model.displayListUser = true;
+    $scope.searchUsers();
+  };
+
   $scope.isDisplayListUser = function() {
     return $scope.model.displayListUser;
   };
 
- /**
-   * Esconder lista de usuarios
-   */
-  $scope.hideListUser = function(){
-     $timeout(
-      function(){
-        $scope.model.displayListUser = false;
-      }
-    ,100);
-  };
 
   /**
     * Listar elementos
@@ -202,7 +202,10 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
   $scope.selectUser = function(user){
     $scope.model.user_id = user.id;
     $scope.model.searchUser = user.name + " " + user.lastname;
+    $scope.model.displayListUser = false;
   };
+  
+
 
   /**
     * Seleccionar usuario
