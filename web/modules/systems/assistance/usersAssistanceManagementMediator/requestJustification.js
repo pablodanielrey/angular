@@ -14,9 +14,10 @@ app.controller('UsersAssistanceManagementMediatorRequestJustificationCtrl', ["$s
        requestMode: Utils.getJustificationRequestMode(justificationId),
        stockMode: Utils.getJustificationStockMode(justificationId),
        mode:  Utils.getJustificationRequestMode(justificationId) + "," + Utils.getJustificationStockMode(justificationId),
+       stock: null,
+       stockYear: null
     };
-  
-      
+
   };
    
   
@@ -51,8 +52,9 @@ app.controller('UsersAssistanceManagementMediatorRequestJustificationCtrl', ["$s
 
 
 
-  //***** DEFINIR STOCK ***** 
-   
+  /********************************
+   * SOLICITUD DE STOCK AL SERVER *
+   ********************************/
   $scope.loadStockTotal = function(){
     Assistance.getJustificationStock($scope.model.selectedUser.id, $scope.justification.id, null, null,
       function(justification) {
@@ -68,13 +70,20 @@ app.controller('UsersAssistanceManagementMediatorRequestJustificationCtrl', ["$s
 
     Assistance.getJustificationStock($scope.model.selectedUser.id, $scope.justification.id, null, 'YEAR',
       function(justification) {
-        $scope.justification.yearlyStock = justification.stock;
+        $scope.justification.stockYear = justification.stock;
       },
       function(error) {
         Notifications.message(error);
       }
     );
   };
+  
+  
+  
+  
+  
+  
+  
   
  
 

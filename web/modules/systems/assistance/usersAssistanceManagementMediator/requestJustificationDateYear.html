@@ -15,7 +15,6 @@
           <p class="parrafos">Seleccione el día</p>
           <input class="date" type="date" ng-model="model.date" ng-change="selectDate()" >
         </div>
-
       </div>
 
       <!-- CONFIRMACION DE SOLICITUD -->
@@ -31,6 +30,11 @@
         <div>
           <p class="parrafosGreen margin"> Disponibililad total</p>
           <p class="parrafosGreen2 margin">{{justification.stock}}</p>
+        </div>
+        
+        <div>
+          <p class="parrafosGreen margin"> Disponibililad anual</p>
+          <p class="parrafosGreen2 margin">{{justification.stockYear}}</p>
         </div>
       </div>
 

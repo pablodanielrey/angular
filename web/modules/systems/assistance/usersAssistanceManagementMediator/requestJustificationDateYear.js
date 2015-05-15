@@ -1,5 +1,5 @@
 
-app.controller('UsersAssistanceManagementMediatorRequestJustificationDateTotalCtrl', ["$scope", "Assistance", "Notifications", "Utils", function($scope, Assistance, Notifications, Utils) {
+app.controller('UsersAssistanceManagementMediatorRequestJustificationDateYearCtrl', ["$scope", "Assistance", "Notifications", "Utils", function($scope, Assistance, Notifications, Utils) {
 
   if(!$scope.model) Notifications.message("No esta definido el modelo");
 
@@ -13,13 +13,9 @@ app.controller('UsersAssistanceManagementMediatorRequestJustificationDateTotalCt
   $scope.model.processingRequest = false;  //flag para indicar que se esta procesando el formulario de solicitud
 
   
-  
   //***** variables de la visualizacion de stock *****
   $scope.justification.stock = null;
-  
-  
-  
-  
+  $scope.justification.stockYear = null;
   
   
   
@@ -34,34 +30,28 @@ app.controller('UsersAssistanceManagementMediatorRequestJustificationDateTotalCt
     $scope.model.processingRequest = false;
   };
   
-  
   $scope.loadStock = function(){
     $scope.loadStockTotal();
+    $scope.loadStockYear()
   };
-    
   
-
-  $scope.$on('JustificationsRequestsUpdatedEvent', function(event, data) {
+  
+   $scope.$on('JustificationsRequestsUpdatedEvent', function(event, data) {
     $scope.loadRequestedJustifications();
-		if ($scope.model.selectedUser === data.user_id) {
-      $scope.loadStock();
-		}
+		$scope.loadStock();
+
 	});
 
 	$scope.$on('JustificationStatusChangedEvent', function(event, data) {
     $scope.loadRequestedJustifications();
-		for (var i = 0; i < $scope.model.requestedJustifications.length; i++) {
-			if ($scope.model.requestedJustifications[i].id === data.request_id) {
-        $scope.loadStock();
-				break;
-			}
-		}
+		$scope.loadStock();
 	});
-  
+    
+    
   $scope.$watch('model.selectedUser', function() {
     if($scope.model.selectedUser){
-      $scope.clearContent();
-      $scope.loadStock();
+       $scope.clearContent();
+      $scope.loadStock()
     } else {
       $scope.clearContent();
       $scope.model.justificationSelectedId = null;
@@ -76,7 +66,6 @@ app.controller('UsersAssistanceManagementMediatorRequestJustificationDateTotalCt
   /*************************************
    * METODOS DE SELECCION DE SECCIONES *
    *************************************/
-  
   /**
    * Esta seleccionado el formulario para solicitar justificaicion?
    * @returns {Boolean}
@@ -116,10 +105,6 @@ app.controller('UsersAssistanceManagementMediatorRequestJustificationDateTotalCt
 	};
 
 
-
-
-
-
   /**************************************
    * DEFINICION DE DATOS DEL FORMULARIO *
    **************************************/
@@ -134,8 +119,7 @@ app.controller('UsersAssistanceManagementMediatorRequestJustificationDateTotalCt
     }
   };
   
-  
- $scope.save = function() {
+  $scope.save = function() {
    
    $scope.model.processingRequest = true;
     var request = {
@@ -159,13 +143,11 @@ app.controller('UsersAssistanceManagementMediatorRequestJustificationDateTotalCt
   };
   
   
+ 
   
   
   
   
-  
-  
-
  
   
 
