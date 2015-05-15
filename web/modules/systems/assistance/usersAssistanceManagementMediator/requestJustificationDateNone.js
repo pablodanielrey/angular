@@ -4,7 +4,7 @@ app.controller('UsersAssistanceManagementMediatorRequestJustificationDateNoneCtr
   if(!$scope.model) Notifications.message("No esta definido el modelo");
 
   //***** variables de seleccion de la seccion *****
-  $scope.model.requestSelected = true; //flag para indicar la seleccion del formulario de solicitud
+  $scope.model.requestSelected = false; //flag para indicar la seleccion del formulario de solicitud
   
   //***** variables del formulario de solicitud *****
   $scope.model.date = null;
@@ -19,7 +19,7 @@ app.controller('UsersAssistanceManagementMediatorRequestJustificationDateNoneCtr
    * INICIALIZACION *
    ******************/
   $scope.clearContent = function(){
-    $scope.model.requestSelected = true;
+    $scope.model.requestSelected = false;
     $scope.model.date = null;
     $scope.model.dateFormated = null;
     $scope.model.processingRequest = false;
@@ -55,6 +55,10 @@ app.controller('UsersAssistanceManagementMediatorRequestJustificationDateNoneCtr
       $scope.model.justificationSelectedId = null;
     }
   }); 
+  
+  $scope.$watch('model.justificationSelectedId', function() {
+    $scope.clearContent();
+  });
   
   
 

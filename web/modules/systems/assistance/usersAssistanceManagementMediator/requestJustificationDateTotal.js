@@ -72,6 +72,10 @@ app.controller('UsersAssistanceManagementMediatorRequestJustificationDateTotalCt
     }
   }); 
   
+  $scope.$watch('model.justificationSelectedId', function() {
+    $scope.clearContent();
+  });
+  
   
 
   

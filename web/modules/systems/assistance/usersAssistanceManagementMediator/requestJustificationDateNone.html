@@ -1,6 +1,11 @@
+      <div>
+        <div>
+          <input class="button blue" type="button" value="Solicitar" ng-click="selectRequest()">
+        </div>
+      </div>
 
       <!-- FORMULARIO DE SOLICITUD -->
-      <div ng-class="{true:'visible', false:'hidden'}[isSelectedRequest()]">
+      <div  ng-class="{true:'visible', false:'hidden'}[isSelectedRequest()]">
         <div class="margin" >
           <p class="parrafos">Seleccione el día</p>
           <input class="date" type="date" ng-model="model.date" ng-change="selectDate()" >
@@ -14,3 +19,5 @@
         <p class="parrafos2"><i class="fa fa-calendar-o"></i> {{model.dateFormated}}</p>
         <input class="button2 blue2" type="button" value="Confirmar" ng-click="save()" ng-disabled="model.processingRequest">
       </div>
+      
+      
