@@ -95,7 +95,7 @@ app.controller('UserAssistanceManagementDatesCtrl', ["$scope", "Assistance", "No
       end:$scope.model.end,
 		};
 
-  	Assistance.requestJustificationRange($scope.model.user.id, request, null,
+  	Assistance.requestJustificationRange($scope.model.user.id, request, 'APPROVED',
 			function(ok) {
 				$scope.clearContent();    //limpiar contenido
         $scope.clearSelections(); //limpiar selecciones
