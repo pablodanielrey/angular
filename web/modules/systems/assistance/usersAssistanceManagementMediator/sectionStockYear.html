@@ -1,0 +1,13 @@
+
+         <!-- VISUALIZACION DE DISPONIBILIDAD -->
+      <div ng-class="{true:'visible', false:'hidden'}[isSelectedAvailable()]">
+        <div>
+          <p class="parrafosGreen margin"> Disponibililad total</p>
+          <p class="parrafosGreen2 margin">{{justification.stock}}</p>
+        </div>
+        
+        <div>
+          <p class="parrafosGreen margin"> Disponibililad anual</p>
+          <p class="parrafosGreen2 margin">{{justification.stockYear}}</p>
+        </div>
+      </div>

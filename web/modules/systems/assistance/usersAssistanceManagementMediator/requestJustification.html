@@ -9,8 +9,16 @@
         
        
         <!-- CONTENIDO DE LA SECCION -->
-        <div class="info" ng-if="justification.mode==='date,total'" ng-controller="UsersAssistanceManagementMediatorRequestJustificationDateTotalCtrl" ng-include="'modules/systems/assistance/usersAssistanceManagementMediator/requestJustificationDateTotal.html'"  ng-class="{true:'visible', false:'hidden'}[(model.selectedUser !== null)]"></div>
-        <div class="info" ng-if="justification.mode==='date,year'" ng-controller="UsersAssistanceManagementMediatorRequestJustificationDateYearCtrl" ng-include="'modules/systems/assistance/usersAssistanceManagementMediator/requestJustificationDateYear.html'"  ng-class="{true:'visible', false:'hidden'}[(model.selectedUser !== null)]"></div>
+        <div class="info" ng-if="justification.mode==='date,total'" ng-controller="UsersAssistanceManagementMediatorRequestJustificationDateTotalCtrl" ng-class="{true:'visible', false:'hidden'}[(model.selectedUser !== null)]">
+          <div ng-include="'modules/systems/assistance/usersAssistanceManagementMediator/sectionSelection.html'"></div>
+          <div ng-include="'modules/systems/assistance/usersAssistanceManagementMediator/sectionDate.html'"></div>
+          <div ng-include="'modules/systems/assistance/usersAssistanceManagementMediator/sectionStockTotal.html'"></div>          
+        </div>
+        <div class="info" ng-if="justification.mode==='date,year'" ng-controller="UsersAssistanceManagementMediatorRequestJustificationDateYearCtrl" ng-class="{true:'visible', false:'hidden'}[(model.selectedUser !== null)]">
+          <div ng-include="'modules/systems/assistance/usersAssistanceManagementMediator/sectionSelection.html'"></div>
+          <div ng-include="'modules/systems/assistance/usersAssistanceManagementMediator/sectionDate.html'"></div>
+          <div ng-include="'modules/systems/assistance/usersAssistanceManagementMediator/sectionStockYear.html'"></div>          
+        </div>
 
         
         

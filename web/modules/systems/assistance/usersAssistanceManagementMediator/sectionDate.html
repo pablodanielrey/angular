@@ -1,14 +1,4 @@
 
-      <!-- SELECCION DE LA SECCION -->
-      <div>
-        <div>
-          <input class="button blue" type="button" value="Solicitar" ng-click="selectRequest()">
-        </div>
-        <div>
-          <input class="button green" type="button" value="Disponibles" ng-click="selectAvailable()">
-        </div>
-      </div>
-
       <!-- FORMULARIO DE SOLICITUD -->
       <div ng-class="{true:'visible', false:'hidden'}[isSelectedRequest()]">
         <div class="margin" >
@@ -24,14 +14,3 @@
         <p class="parrafos2"><i class="fa fa-calendar-o"></i> {{model.dateFormated}}</p>
         <input class="button2 blue2" type="button" value="Confirmar" ng-click="save()" ng-disabled="model.processingRequest">
       </div>
-
-
-      <!-- VISUALIZACION DE DISPONIBILIDAD -->
-      <div ng-class="{true:'visible', false:'hidden'}[isSelectedAvailable()]">
-        <div>
-          <p class="parrafosGreen margin"> Disponibililad total</p>
-          <p class="parrafosGreen2 margin">{{justification.stock}}</p>
-        </div>
-      </div>
-
-  
