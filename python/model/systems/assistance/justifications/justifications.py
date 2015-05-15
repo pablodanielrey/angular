@@ -14,6 +14,7 @@ from model.systems.assistance.justifications.A102Justification import A102Justif
 from model.systems.assistance.justifications.CumpJustification import CumpJustification
 from model.systems.assistance.justifications.PEJustification import PEJustification
 from model.systems.assistance.justifications.R638Justification import R638Justification
+from model.systems.assistance.justifications.LMCDJustification import LMCDJustification
 from model.systems.assistance.date import Date
 
 
@@ -25,7 +26,7 @@ class Justifications:
 
     justifications = [
         CJustification(), LAOJustification(), AAJustification(), BSJustification(), R638Justification(),
-        PEJustification(), CumpJustification(), A102Justification()
+        PEJustification(), CumpJustification(), A102Justification(),LMCDJustification()
     ]
 
 
@@ -347,7 +348,7 @@ class Justifications:
     def requestJustificationRange(self,con,userId,justificationId,begin,end):
         events = []
         for j in self.justifications:
-            if j.isJustification(justificationId) and (j.__class__.__name__ == 'LAOJustification' or j.__class__.__name__  == 'R638Justification'):
+            if j.isJustification(justificationId): #and (j.__class__.__name__ == 'LAOJustification' or j.__class__.__name__  == 'R638Justification'):
                 date = begin
                 diff = (end-begin).days
                 # incremento en 1 para que tome el ultimo dia
