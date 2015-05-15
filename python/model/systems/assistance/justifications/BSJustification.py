@@ -90,7 +90,7 @@ class BSJustification(Justification):
     """
         inicializa un pedido en estado pendiente de una justificación en las fechas indicadas
     """
-    def requestJustification(self,utils,con,userId,begin,end):
+    def requestJustification(self,utils,con,userId,begin,end,status):
 
         available = self.available(utils,con,userId,begin)
 
@@ -121,7 +121,7 @@ class BSJustification(Justification):
             'end':end
         }
 
-        events.extend(self.updateJustificationRequestStatus(utils,con,userId,req,'PENDING'))
+        events.extend(self.updateJustificationRequestStatus(utils,con,userId,req,status))
         return events
 
 

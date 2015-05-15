@@ -32,7 +32,7 @@ class CJustification(Justification):
         inicializa un pedido en estado pendiente de una justificación en las fechas indicadas
         solo se tiene en cuenta begin, end = None en el caso de los compensatorios
     """
-    def requestJustification(self,utils,con,userId,begin,end):
+    def requestJustification(self,utils,con,userId,begin,end,status):
         if self.available(utils,con,userId,begin) <= 0:
             raise RestrictionError('No existe stock disponible')
 
@@ -59,7 +59,7 @@ class CJustification(Justification):
             'end':end
         }
 
-        events.extend(self.updateJustificationRequestStatus(utils,con,userId,req,'PENDING'))
+        events.extend(self.updateJustificationRequestStatus(utils,con,userId,req,status))
         return events
 
 

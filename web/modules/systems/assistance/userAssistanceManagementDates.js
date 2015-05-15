@@ -14,17 +14,17 @@ app.controller('UserAssistanceManagementDatesCtrl', ["$scope", "Assistance", "No
       yearlyStock:0
     };
   };
-  
 
-  //***** variables del formulario *****  
+
+  //***** variables del formulario *****
   $scope.model.begin = null;         //fecha seleccionada
   $scope.model.beginFormated = null; //fecha en formato amigable para el usuario
   $scope.model.end = null;         //fecha seleccionada
   $scope.model.endFormated = null; //fecha en formato amigable para el usuario
-  
+
   $scope.model.processingRequest = false;
-  
-  
+
+
 
   //***** METODOS DE SELECCION DE LA SECCION *****
   /**
@@ -47,8 +47,8 @@ app.controller('UserAssistanceManagementDatesCtrl', ["$scope", "Assistance", "No
     $scope.clearContent();
     $scope.model.justifications[i].selected = value;
 	};
-  
-  
+
+
   /**
    * Inicializar variables correspondientes al contenido de la seccion del articulo 102
    * @returns {undefined}
@@ -59,11 +59,11 @@ app.controller('UserAssistanceManagementDatesCtrl', ["$scope", "Assistance", "No
     $scope.model.end = null;
 		$scope.model.endFormated = null;
     $scope.model.processingRequest = false;
-    
+
   };
-  
-    
-    
+
+
+
   //***** METODOS DEl FORMULARIO DE SOLICITUD *****
   $scope.selectDates = function(){
 		$scope.model.beginFormated = null;
@@ -78,14 +78,14 @@ app.controller('UserAssistanceManagementDatesCtrl', ["$scope", "Assistance", "No
 
     }
   };
-  
-  
+
+
   $scope.isDatesDefined = function(){
-    return (($scope.model.begin !== null) && ($scope.model.end !== null));  
+    return (($scope.model.begin !== null) && ($scope.model.end !== null));
   };
-  
-  
-  
+
+
+
   // Envio la peticion al servidor
   $scope.save = function() {
     $scope.model.processingRequest = true;
@@ -94,8 +94,8 @@ app.controller('UserAssistanceManagementDatesCtrl', ["$scope", "Assistance", "No
 			begin:$scope.model.begin,
       end:$scope.model.end,
 		};
-    
-  	Assistance.requestJustificationRange($scope.model.user.id, request,
+
+  	Assistance.requestJustificationRange($scope.model.user.id, request, null,
 			function(ok) {
 				$scope.clearContent();    //limpiar contenido
         $scope.clearSelections(); //limpiar selecciones

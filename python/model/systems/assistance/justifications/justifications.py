@@ -332,11 +332,11 @@ class Justifications:
         realiza el pedido de justificación para ser aprobado
         estado inicial del pedido = PENDING, con la fecha actual del servidor.
     """
-    def requestJustification(self,con,userId,justificationId,begin,end=None):
+    def requestJustification(self,con,userId,justificationId,begin,end=None,status='PENDING'):
 
         for j in self.justifications:
             if j.isJustification(justificationId):
-                return j.requestJustification(self,con,userId,begin,end)
+                return j.requestJustification(self,con,userId,begin,end,status)
 
         raise JustificationError('No se puede encontrar ese tipo de justificación')
 

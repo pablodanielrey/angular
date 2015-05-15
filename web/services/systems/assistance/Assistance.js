@@ -448,7 +448,7 @@ app.service('Assistance', ['Utils','Messages','Session',
 
 		}
 
-		this.requestJustification = function(userId, justification, callbackOk, callbackError) {
+		this.requestJustification = function(userId, justification, status, callbackOk, callbackError) {
 			var msg = {
 				id: Utils.getId(),
 				action: 'requestJustification',
@@ -462,6 +462,10 @@ app.service('Assistance', ['Utils','Messages','Session',
 
 			if (!(typeof justification.end === 'undefined')) {
 				msg.request.end = justification.end;
+			}
+
+			if (!(typeof status === 'undefined')) {
+				msg.request.status = status;
 			}
 
 			Messages.send(msg,

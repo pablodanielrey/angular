@@ -29,7 +29,7 @@ class LMCDJustification(Justification):
         inicializa un pedido en estado pendiente de una justificación en las fechas indicadas
         solo se tiene en cuenta begin
     """
-    def requestJustification(self,utils,con,userId,begin,end):
+    def requestJustification(self,utils,con,userId,begin,end,status):
 
         jid = str(uuid.uuid4())
         cur = con.cursor()
@@ -54,7 +54,7 @@ class LMCDJustification(Justification):
             'end':end
         }
 
-        events.extend(self.updateJustificationRequestStatus(utils,con,userId,req,'PENDING'))
+        events.extend(self.updateJustificationRequestStatus(utils,con,userId,req,status))
         return events
 
 

@@ -113,7 +113,7 @@ class AAJustification(Justification):
         inicializa un pedido en estado pendiente de una justificación en las fechas indicadas
         solo se tiene en cuenta begin
     """
-    def requestJustification(self,utils,con,userId,begin,end):
+    def requestJustification(self,utils,con,userId,begin,end,status):
         if self.available(utils,con,userId,begin) <= 0:
             raise RestrictionError('No existe stock disponible')
 
@@ -140,7 +140,7 @@ class AAJustification(Justification):
             'end':end
         }
 
-        events.extend(self.updateJustificationRequestStatus(utils,con,userId,req,'PENDING'))
+        events.extend(self.updateJustificationRequestStatus(utils,con,userId,req,status))
         return events
 
 
