@@ -85,7 +85,6 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, As
                         var hasApprove = false;
                         var hasOvertime = false;
                         var hasJustification = false;
-                        console.log(roles);
                         for (var i = 0; i < roles.length; i++) {
                           hasApprove = hasApprove || (roles[i].role == 'autoriza');
                           hasOvertime = hasOvertime || (roles[i].role == 'horas-extras');

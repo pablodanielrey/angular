@@ -805,3 +805,103 @@ class RequestJustificationRange:
 
         finally:
             con.close()
+
+
+
+"""
+
+query : Obtener todas las justificationces especiales que puede solicitar el usuario logueado
+{
+  id:,
+  action:"getSpecialJustifications",
+  session:,
+  request:{
+
+  }
+}
+
+response :
+{
+  id: "id de la petición",
+  ok: "caso exito",
+  error: "error del servidor",
+  response:{
+    justifications: [
+      {
+        id: 'id de la justificacion',
+        name:''
+      }
+    ]
+
+}
+"""
+class GetSpecialJustifications:
+
+    profiles = inject.attr(Profiles)
+    config = inject.attr(Config)
+    offices = inject.attr(Offices)
+    justifications = inject.attr(Justifications)
+
+    def handleAction(self, server, message):
+
+        if (message['action'] != 'getSpecialJustifications'):
+            return False
+
+        if 'request' not in message:
+            response = {'id':message['id'], 'error':'Insuficientes parámetros'}
+            server.sendMessage(response)
+            return True
+
+
+        sid = message['session']
+        self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
+
+        userId = self.profiles.getLocalUserId(sid)
+
+        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+        try:
+            role = 'realizar-solicitud'
+            tree = False
+            offices = self.offices.getUserInOfficesByRole(con,userId,tree,role);
+
+            ids = []
+
+            if (offices != None and len(offices) > 0):
+                # 'f9baed8a-a803-4d7f-943e-35c436d5db46','Licencia Médica Corta Duración'
+                # 'a93d3af3-4079-4e93-a891-91d5d3145155','Licencia Médica Largo Tratamiento'
+                # 'b80c8c0e-5311-4ad1-94a7-8d294888d770','Licencia Médica Atención Familiar'
+                # '478a2e35-51b8-427a-986e-591a9ee449d8','Justificado por Médico'
+                # '5ec903fb-ddaf-4b6c-a2e8-929c77d8256f','Feriado'
+                # '874099dc-42a2-4941-a2e1-17398ba046fc','Paro'
+                # 'b309ea53-217d-4d63-add5-80c47eb76820','Cumpleaños'
+                # '0cd276aa-6d6b-4752-abe5-9258dbfd6f09','Duelo'
+                # 'e8019f0e-5a70-4ef3-922c-7c70c2ce0f8b','Donación de Sangre'
+                ids.extend(['f9baed8a-a803-4d7f-943e-35c436d5db46','a93d3af3-4079-4e93-a891-91d5d3145155','b80c8c0e-5311-4ad1-94a7-8d294888d770',
+                        '478a2e35-51b8-427a-986e-591a9ee449d8','5ec903fb-ddaf-4b6c-a2e8-929c77d8256f','874099dc-42a2-4941-a2e1-17398ba046fc',
+                        'b309ea53-217d-4d63-add5-80c47eb76820','0cd276aa-6d6b-4752-abe5-9258dbfd6f09','e8019f0e-5a70-4ef3-922c-7c70c2ce0f8b'])
+
+            role = 'realizar-solicitud-admin'
+            offices = self.offices.getUserInOfficesByRole(con,userId,tree,role);
+            if (offices != None or len(offices) > 0):
+                # por ahora no existe la justificacion "Justificado por autoridad"
+                ids.extend([])
+
+            justifications = []
+            for idJ in ids:
+                justifications.append(self.justifications.getJustificationById(con,idJ))
+
+            response = {
+                'id':message['id'],
+                'ok':'',
+                'response':{
+                    'justifications':justifications
+                }
+            }
+            server.sendMessage(response)
+            return True
+
+        except psycopg2.DatabaseError as e:
+            raise e
+
+        finally:
+            con.close()

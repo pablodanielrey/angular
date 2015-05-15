@@ -7,7 +7,7 @@ app.controller('UserAssistanceManagementCtrl', ["$scope", "$rootScope", "$timeou
     user: null, //usuario seleccionado
     searchUser: null, //usuario buscado
     users: [], //usuarios consultados para seleccionar
-    
+
     //***** Cargar justificaciones para seleccion de secciones *****
     justifications: [],
     requestedJustifications: [], //se consultan todas las requestedJustifications aprobadas de todos los usuarios.
@@ -16,12 +16,12 @@ app.controller('UserAssistanceManagementCtrl', ["$scope", "$rootScope", "$timeou
     rjReversed: false
 	};
 
-	
-  
-  
+
+
+
   /*************************************
    * METODOS DE CARGA E INICIALIZACION *
-   *************************************/  
+   *************************************/
   /**
    * Cargar y chequear session
    */
@@ -47,12 +47,12 @@ app.controller('UserAssistanceManagementCtrl', ["$scope", "$rootScope", "$timeou
       }
     );
   };
-  
+
   /**
    * Cargar usuarios autorizados para aplicar justificaciones
    */
   $scope.loadAuthorizedUsers = function(){
-    Assistance.getUsersInOfficesByRole('autoriza',
+    Assistance.getUsersInOfficesByRole('realizar-solicitud',
       function(users) {
         $scope.model.users = [];
         for (var i = 0; i < users.length; i++) {
@@ -70,23 +70,29 @@ app.controller('UserAssistanceManagementCtrl', ["$scope", "$rootScope", "$timeou
       }
     );
   };
-  
+
   /**
    * Cargar justificaciones que puede autorizar el usuario
    */
   $scope.loadAuthorizedJustifications = function(){
-    
-    $scope.model.justifications = [
-      {id:'478a2e35-51b8-427a-986e-591a9ee449d8', selected: false},
-      {id:'f9baed8a-a803-4d7f-943e-35c436d5db46', selected: false},
-      {id:'a93d3af3-4079-4e93-a891-91d5d3145155', selected: false},
-      {id:'b80c8c0e-5311-4ad1-94a7-8d294888d770', selected: false},
-      {id:'0cd276aa-6d6b-4752-abe5-9258dbfd6f09', selected: false}
-    ];
-    $scope.clearSelections();
+
+		$scope.clearSelections();
+		$scope.model.justifications = [];
+
+		Assistance.getSpecialJustifications(
+      function(justifications) {
+				if (justifications != null && justifications.length > 0) {
+					$scope.model.justifications = justifications;
+				}
+      },
+      function(error){
+        Notifications.message(error);
+      }
+    );
+
 
   };
-  
+
   /**
    * Verificar si la justificacion enviada como parametro es una justificacion autorizada
    * @param {type} justificationId Id de la justificacion
@@ -98,7 +104,7 @@ app.controller('UserAssistanceManagementCtrl', ["$scope", "$rootScope", "$timeou
     }
     return false;
   };
-  
+
 
 
   $scope.loadUserRequestedJustifications = function() {
@@ -125,16 +131,16 @@ app.controller('UserAssistanceManagementCtrl', ["$scope", "$rootScope", "$timeou
       }
     }
   };
-    
-  
-  
-  
-  
-  
+
+
+
+
+
+
   $scope.$on('JustificationsRequestsUpdatedEvent', function(event, requestUpdated) {
 		if ($scope.model.user.id == requestUpdated.user_id) {
 			$scope.loadUserRequestedJustifications();
-     
+
 		}
 	});
 
@@ -146,13 +152,13 @@ app.controller('UserAssistanceManagementCtrl', ["$scope", "$rootScope", "$timeou
 			}
 		}
 	});
-  
-  
-  
+
+
+
    /*********************************************
    * METODOS CORRESPONDIENTES A JUSTIFICACIONES *
    **********************************************/
-  
+
   $scope.getJustificationIndex = function(justificationId){
     for(var i = 0; i < $scope.model.justifications.length; i++){
       if(justificationId === $scope.model.justifications[i].id){
@@ -161,15 +167,15 @@ app.controller('UserAssistanceManagementCtrl', ["$scope", "$rootScope", "$timeou
       }
     }
   };
-  
+
   $scope.clearSelections = function() {
     for(var i = 0; i < $scope.model.justifications.length; i++){
       $scope.model.justifications[i].selected = false;
     }
 
 	};
-  
-  
+
+
   $scope.cancelRequest = function(request) {
     Assistance.updateJustificationRequestStatus(request.id, status,
       function(ok) {
@@ -180,7 +186,7 @@ app.controller('UserAssistanceManagementCtrl', ["$scope", "$rootScope", "$timeou
       }
     );
   };
-  
+
   $scope.sortRequestedJustifications = function(sort){
     if($scope.model.rjSort[0] === sort){
       $scope.model.rjReversed = !$scope.model.rjReversed;
@@ -196,8 +202,8 @@ app.controller('UserAssistanceManagementCtrl', ["$scope", "$rootScope", "$timeou
       $scope.model.rjReversed = false;
     }
   };
-  
-  
+
+
 
   /******************************************************
    * METODOS CORRESPONDIENTES A LA SELECCION DE USUARIO *
@@ -224,7 +230,7 @@ app.controller('UserAssistanceManagementCtrl', ["$scope", "$rootScope", "$timeou
   $scope.isSelectedUser = function(){
     return ($scope.model.user !== null);
   };
-  
+
 
   /**
    * Seleccionar usuario

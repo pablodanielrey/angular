@@ -610,6 +610,28 @@ app.service('Assistance', ['Utils','Messages','Session',
 		}
 
 
+		/**
+		*	Obtiene las justificaciones especiales que puede solicitar
+		*/
+		this.getSpecialJustifications = function(callbackOk, callbackError) {
+			var msg = {
+				id: Utils.getId(),
+				action: 'getSpecialJustifications',
+				session: Session.getSessionId(),
+				request: {
+				}
+			};
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response.justifications);
+					} else {
+						callbackError(data.error);
+					}
+				});
+		}
+
+
 
 	}]
 );
