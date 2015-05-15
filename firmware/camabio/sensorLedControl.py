@@ -1,27 +1,22 @@
-import array
-import serial
-import camabio
+import array, serial, camabio, sys, codecs, time
 
-on = 0x01
+if len(sys.argv) <= 1:
+    sys.exit(1)
+
+
+on = int(sys.argv[1])
 data = [0x55,0xaa,0x24,0x01,0x02,0x0,on,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x00,0x00]
 camabio.setChksum(data)
 
 print('abriendo puerto seriel')
-ser = serial.Serial("/dev/ttyS1",9600,timeout=5)
-try:
-
-    print('escribiendo bytes en el puerto serie')
-    camabio.printArray(data)
-    setBauds = array.array('B', data).tostring()
-    ser.write(setBauds);
-    ser.flush()
-
-    print('tratando de leer bytes desde el puerto serie: {}'.format(len(data)))
-    data2 = ser.read(len(data))
-    if data2 == None:
-        print('No se leyo ningun byte')
-    else:
-        camabio.printHexString(data2)
-
-except SerialException as e:
-    logging.exception(e)
+ser = serial.Serial(port="/dev/ttyUSB0",baudrate=9600,timeout=5,parity=serial.PARITY_NONE,stopbits=serial.STOPBITS_ONE,bytesize=serial.EIGHTBITS)
+ser.flush()
+print(bytes(data))
+ser.write(bytes(data));
+time.sleep(1)
+data2 = ser.read(ser.inWaiting())
+if data2 == None:
+    print('No se leyo ningun byte')
+else:
+    print(data2)
+ser.close()
