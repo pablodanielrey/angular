@@ -205,6 +205,14 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
     $scope.model.displayListUser = false;
   };
   
+  /**
+   * Mostrar lista de usuarios
+   */
+  $scope.restartSearchUser = function(){
+    if($scope.model.user_id === null){
+      $scope.model.searchUser = "";
+    }
+  };
 
 
   /**
