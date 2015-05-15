@@ -14,7 +14,7 @@ app.controller('RequestAssistanceCtrl', ["$scope", "$rootScope", "$timeout", "$w
     justification102Selected : false,
     justificationBirthdaySelected : false,
     justification638Selected : false,
-
+		justificationExamId : 'b70013e3-389a-46d4-8b98-8e4ab75335d0', // id de la justificacion de prexamen
 		justificationAbsentId : "e0dfcef6-98bb-4624-ae6c-960657a9a741", // id de ausente con aviso
 		justificationCompensatoryId : "48773fd7-8502-4079-8ad5-963618abe725", // id de la justificacion de compensatorio
 		justificationOutId : 'fa64fdbd-31b0-42ab-af83-818b3cbecf46', //id de la justificacion de boleta de salidas
