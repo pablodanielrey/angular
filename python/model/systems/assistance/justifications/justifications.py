@@ -15,6 +15,14 @@ from model.systems.assistance.justifications.CumpJustification import CumpJustif
 from model.systems.assistance.justifications.PEJustification import PEJustification
 from model.systems.assistance.justifications.R638Justification import R638Justification
 from model.systems.assistance.justifications.LMCDJustification import LMCDJustification
+from model.systems.assistance.justifications.LMLTJustification import LMLTJustification
+from model.systems.assistance.justifications.LMAFJustification import LMAFJustification
+from model.systems.assistance.justifications.JMJustification import JMJustification
+from model.systems.assistance.justifications.HolidayJustification import HolidayJustification
+from model.systems.assistance.justifications.ParoJustification import ParoJustification
+
+
+
 from model.systems.assistance.date import Date
 
 
@@ -26,7 +34,8 @@ class Justifications:
 
     justifications = [
         CJustification(), LAOJustification(), AAJustification(), BSJustification(), R638Justification(),
-        PEJustification(), CumpJustification(), A102Justification(),LMCDJustification()
+        PEJustification(), CumpJustification(), A102Justification(),LMCDJustification(),LMLTJustification()
+        LMAFJustification(), JMJustification(), HolidayJustification(), ParoJustification()
     ]
 
 
@@ -352,7 +361,7 @@ class Justifications:
     def requestJustificationRange(self,con,userId,justificationId,begin,end,status):
         if status is None:
             status = 'PENDING'
-                    
+
         events = []
         for j in self.justifications:
             if j.isJustification(justificationId): #and (j.__class__.__name__ == 'LAOJustification' or j.__class__.__name__  == 'R638Justification'):
