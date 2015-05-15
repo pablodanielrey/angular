@@ -732,6 +732,7 @@ query : solicitud de justificaciones de un determinado usuario
       justification_id: "id de la justificacion o licencia solicitada"
   	  begin: "fecha de inicio de la justificacion o licencia solicitada"
   	  end: "fecha de finalizacion de la justificacion o licencia solicitada"
+      status:estado por defecto de la nueva solicitud -- por defecto PENDING
   }
 
 }
@@ -771,13 +772,17 @@ class RequestJustificationRange:
         end = message['request']['end']
         end = self.date.parse(end)
 
+        status = None
+        if 'status' in message['request']:
+            status = message['request']['status']
+
 
         sid = message['session']
         self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
 
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
-            events = self.justifications.requestJustificationRange(con,userId,justificationId,begin,end)
+            events = self.justifications.requestJustificationRange(con,userId,justificationId,begin,end,status)
             con.commit()
 
             self.notifier.notifyBosses(con,userId,'justifications_request')

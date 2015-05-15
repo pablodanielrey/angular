@@ -335,6 +335,9 @@ class Justifications:
     """
     def requestJustification(self,con,userId,justificationId,begin,end=None,status='PENDING'):
 
+        if status is None:
+            status = 'PENDING'
+
         for j in self.justifications:
             if j.isJustification(justificationId):
                 return j.requestJustification(self,con,userId,begin,end,status)
@@ -346,7 +349,10 @@ class Justifications:
         realiza el pedido de justificación para ser aprobado entre un rango de fechas
         estado inicial del pedido = PENDING, con la fecha actual del servidor.
     """
-    def requestJustificationRange(self,con,userId,justificationId,begin,end):
+    def requestJustificationRange(self,con,userId,justificationId,begin,end,status):
+        if status is None:
+            status = 'PENDING'
+                    
         events = []
         for j in self.justifications:
             if j.isJustification(justificationId): #and (j.__class__.__name__ == 'LAOJustification' or j.__class__.__name__  == 'R638Justification'):
@@ -354,7 +360,7 @@ class Justifications:
                 diff = (end-begin).days
                 # incremento en 1 para que tome el ultimo dia
                 for x in range(0, diff + 1):
-                    events.extend(j.requestJustification(self,con,userId,date,None))
+                    events.extend(j.requestJustification(self,con,userId,date,None,status))
                     date = date + datetime.timedelta(days=1)
 
                 return events

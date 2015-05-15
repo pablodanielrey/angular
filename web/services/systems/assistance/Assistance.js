@@ -478,7 +478,7 @@ app.service('Assistance', ['Utils','Messages','Session',
 				});
 		}
 
-		this.requestJustificationRange = function(userId, justification, callbackOk, callbackError) {
+		this.requestJustificationRange = function(userId, justification, status, callbackOk, callbackError) {
 			var msg = {
 				id: Utils.getId(),
 				action: 'requestJustificationRange',
@@ -489,6 +489,10 @@ app.service('Assistance', ['Utils','Messages','Session',
 					begin: justification.begin,
 					end: justification.end
 				}
+			}
+
+			if (!(typeof status === 'undefined')) {
+				msg.request.status = status;
 			}
 
 			Messages.send(msg,
