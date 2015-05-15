@@ -43,6 +43,8 @@ class AAJustification(Justification):
         cur.execute('select jbegin from assistance.justifications_requests where justification_id = %s and user_id = %s and id in %s and extract(year from jbegin) = extract(year from %s)',req)
         taken = cur.rowcount
 
+
+
         if taken <= 0:
 
             """ no se tomo ninguna todavia """

@@ -301,6 +301,7 @@ class Justifications:
     """
     def getJustificationStock(self,con,userId,justId,date,period=None):
 
+
         for j in self.justifications:
             if j.isJustification(justId):
                 return j.available(self,con,userId,date,period)
