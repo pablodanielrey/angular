@@ -783,9 +783,6 @@ class RequestJustificationRange:
             }
             server.sendMessage(response)
 
-            import pdb
-            pdb.set_trace()
-
             for e in events:
                 self.events.broadcast(server,e)
 
