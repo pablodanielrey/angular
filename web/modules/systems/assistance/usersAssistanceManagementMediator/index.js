@@ -83,7 +83,8 @@ app.controller('UsersAssistanceManagementMediatorCtrl', ["$scope", "$timeout", "
     
     $scope.model.justificationsId = [
       'e0dfcef6-98bb-4624-ae6c-960657a9a741',
-      'b309ea53-217d-4d63-add5-80c47eb76820'
+      'b309ea53-217d-4d63-add5-80c47eb76820',
+      'e8019f0e-5a70-4ef3-922c-7c70c2ce0f8b'
     ];
 
   };

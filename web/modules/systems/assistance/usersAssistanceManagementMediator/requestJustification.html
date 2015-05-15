@@ -19,6 +19,12 @@
           <div ng-include="'modules/systems/assistance/usersAssistanceManagementMediator/sectionDate.html'"></div>
           <div ng-include="'modules/systems/assistance/usersAssistanceManagementMediator/sectionStockYear.html'"></div>          
         </div>
+        
+        <div class="info" ng-if="justification.mode==='date,none'" ng-controller="UsersAssistanceManagementMediatorRequestJustificationDateNoneCtrl" ng-class="{true:'visible', false:'hidden'}[(model.selectedUser !== null)]">
+          <div ng-include="'modules/systems/assistance/usersAssistanceManagementMediator/sectionDate.html'"></div>
+        </div>
+        
+        
 
         
         

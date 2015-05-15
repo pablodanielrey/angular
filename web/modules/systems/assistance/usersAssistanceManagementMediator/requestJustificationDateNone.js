@@ -1,21 +1,17 @@
 
-app.controller('UsersAssistanceManagementMediatorRequestJustificationDateYearCtrl', ["$scope", "Assistance", "Notifications", "Utils", function($scope, Assistance, Notifications, Utils) {
+app.controller('UsersAssistanceManagementMediatorRequestJustificationDateNoneCtrl', ["$scope", "Assistance", "Notifications", "Utils", function($scope, Assistance, Notifications, Utils) {
 
   if(!$scope.model) Notifications.message("No esta definido el modelo");
 
   //***** variables de seleccion de la seccion *****
-  $scope.model.requestSelected = false; //flag para indicar la seleccion del formulario de solicitud
-  $scope.model.availableSelected = false; //flag para indicar la seleccion de la visualizacion de disponibilidad
+  $scope.model.requestSelected = true; //flag para indicar la seleccion del formulario de solicitud
   
   //***** variables del formulario de solicitud *****
   $scope.model.date = null;
   $scope.model.dateFormated = null;
   $scope.model.processingRequest = false;  //flag para indicar que se esta procesando el formulario de solicitud
 
-  
-  //***** variables de la visualizacion de stock *****
-  $scope.justification.stock = null;
-  $scope.justification.stockYear = null;
+
   
   
   
@@ -23,24 +19,19 @@ app.controller('UsersAssistanceManagementMediatorRequestJustificationDateYearCtr
    * INICIALIZACION *
    ******************/
   $scope.clearContent = function(){
-    $scope.model.availableSelected = false;
-    $scope.model.requestSelected = false;
+    $scope.model.requestSelected = true;
     $scope.model.date = null;
     $scope.model.dateFormated = null;
     $scope.model.processingRequest = false;
   };
   
-  $scope.loadStock = function(){
-    $scope.loadStockTotal();
-    $scope.loadStockYear()
-  };
+
   
   
   $scope.$on('JustificationsRequestsUpdatedEvent', function(event, data){
     if ($scope.model.selectedUser.id === data.user_id) {
       $scope.clearContent();
       $scope.loadRequestedJustifications();
-      $scope.loadStock();
       $scope.model.justificationSelectedId = null; //limpiar seleccion de justificacion
     }
 	});
@@ -50,7 +41,6 @@ app.controller('UsersAssistanceManagementMediatorRequestJustificationDateYearCtr
       if ($scope.model.requestedJustificationsFiltered[i].id === data.request_id) {
         $scope.clearContent();
         $scope.loadRequestedJustifications();
-        $scope.loadStock();
         $scope.model.justificationSelectedId = null; //limpiar seleccion de justificacion
       }
     }
@@ -60,7 +50,6 @@ app.controller('UsersAssistanceManagementMediatorRequestJustificationDateYearCtr
   $scope.$watch('model.selectedUser', function() {
     if($scope.model.selectedUser){
        $scope.clearContent();
-      $scope.loadStock()
     } else {
       $scope.clearContent();
       $scope.model.justificationSelectedId = null;
@@ -83,16 +72,7 @@ app.controller('UsersAssistanceManagementMediatorRequestJustificationDateYearCtr
 		return $scope.model.requestSelected;
 	};
 
-  /**
-   * Esta seleccionada la seccion para ver la disponibilidad?
-   * @returns {Boolean}
-   */
-  $scope.isSelectedAvailable = function() {
-		return $scope.model.availableSelected;
-	};
-
-
-
+  
   /**
    * Seleccionar formulario para definir una solicitud del articulo 102
    * @returns {Boolean}
@@ -103,15 +83,6 @@ app.controller('UsersAssistanceManagementMediatorRequestJustificationDateYearCtr
 	};
 
 
-  /**
-   * Seleccionar seccion para ver la disponibilidad correspondiente al articulo 102
-   * @returns {Boolean}
-   */
-	$scope.selectAvailable = function() {
-		$scope.clearContent();
-		$scope.model.availableSelected = true;
-
-	};
 
 
   /**************************************
