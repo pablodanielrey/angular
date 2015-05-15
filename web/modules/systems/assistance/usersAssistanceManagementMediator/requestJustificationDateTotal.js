@@ -38,25 +38,29 @@ app.controller('UsersAssistanceManagementMediatorRequestJustificationDateTotalCt
   $scope.loadStock = function(){
     $scope.loadStockTotal();
   };
-    
-  
 
-  $scope.$on('JustificationsRequestsUpdatedEvent', function(event, data) {
-    $scope.loadRequestedJustifications();
-		if ($scope.model.selectedUser === data.user_id) {
+
+  $scope.$on('JustificationsRequestsUpdatedEvent', function(event, data){
+    if ($scope.model.selectedUser.id === data.user_id) {
+      $scope.clearContent();
+      $scope.loadRequestedJustifications();
       $scope.loadStock();
-		}
+      $scope.model.justificationSelectedId = null; //limpiar seleccion de justificacion
+    }
 	});
 
 	$scope.$on('JustificationStatusChangedEvent', function(event, data) {
-    $scope.loadRequestedJustifications();
-		for (var i = 0; i < $scope.model.requestedJustifications.length; i++) {
-			if ($scope.model.requestedJustifications[i].id === data.request_id) {
+    for (var i = 0; i < $scope.model.requestedJustificationsFiltered.length; i++) {
+      if ($scope.model.requestedJustificationsFiltered[i].id === data.request_id) {
+        $scope.clearContent();
+        $scope.loadRequestedJustifications();
         $scope.loadStock();
-				break;
-			}
-		}
+        $scope.model.justificationSelectedId = null; //limpiar seleccion de justificacion
+      }
+    }
 	});
+  
+  
   
   $scope.$watch('model.selectedUser', function() {
     if($scope.model.selectedUser){
@@ -140,24 +144,29 @@ app.controller('UsersAssistanceManagementMediatorRequestJustificationDateTotalCt
    $scope.model.processingRequest = true;
     var request = {
 			id:$scope.justification.id,
-			begin:$scope.model.date
+			begin:$scope.model.date,
+      status:"APPROVED"
 		};
 
     Assistance.requestJustification($scope.model.selectedUser.id, request,
 			function(ok) {
-				$scope.clearContent();    //limpiar contenido
-        $scope.model.processingRequest = false; //habilitar formulario
-        $scope.model.justificationSelectedId = null;
+     
+				$scope.clearContent(); //limpiar contenido
+        $scope.model.justificationSelectedId = null; //limpiar seleccion de justificacion
         Notifications.message("Solicitud de " + $scope.justification.name + " registrada correctamente");
 			},
 			function(error){
+        $scope.clearContent();    //limpiar contenido
+        $scope.model.justificationSelectedId = null; //limpiar seleccion de justificacion
 				Notifications.message(error);
 			}
-
 		);
-
   };
   
+  
+  
+  
+    
   
   
   

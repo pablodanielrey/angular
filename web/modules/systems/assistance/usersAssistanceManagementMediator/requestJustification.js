@@ -52,9 +52,9 @@ app.controller('UsersAssistanceManagementMediatorRequestJustificationCtrl', ["$s
 
 
 
-  /********************************
-   * SOLICITUD DE STOCK AL SERVER *
-   ********************************/
+  /*******************************
+   * METODOS DE ACCESO AL SERVER *
+   *******************************/
   $scope.loadStockTotal = function(){
     Assistance.getJustificationStock($scope.model.selectedUser.id, $scope.justification.id, null, null,
       function(justification) {
@@ -78,6 +78,7 @@ app.controller('UsersAssistanceManagementMediatorRequestJustificationCtrl', ["$s
     );
   };
   
+
   
   
   

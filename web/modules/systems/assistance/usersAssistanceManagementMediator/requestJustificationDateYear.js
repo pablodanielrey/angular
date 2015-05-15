@@ -36,15 +36,24 @@ app.controller('UsersAssistanceManagementMediatorRequestJustificationDateYearCtr
   };
   
   
-   $scope.$on('JustificationsRequestsUpdatedEvent', function(event, data) {
-    $scope.loadRequestedJustifications();
-		$scope.loadStock();
-
+  $scope.$on('JustificationsRequestsUpdatedEvent', function(event, data){
+    if ($scope.model.selectedUser.id === data.user_id) {
+      $scope.clearContent();
+      $scope.loadRequestedJustifications();
+      $scope.loadStock();
+      $scope.model.justificationSelectedId = null; //limpiar seleccion de justificacion
+    }
 	});
 
 	$scope.$on('JustificationStatusChangedEvent', function(event, data) {
-    $scope.loadRequestedJustifications();
-		$scope.loadStock();
+    for (var i = 0; i < $scope.model.requestedJustificationsFiltered.length; i++) {
+      if ($scope.model.requestedJustificationsFiltered[i].id === data.request_id) {
+        $scope.clearContent();
+        $scope.loadRequestedJustifications();
+        $scope.loadStock();
+        $scope.model.justificationSelectedId = null; //limpiar seleccion de justificacion
+      }
+    }
 	});
     
     
@@ -124,7 +133,8 @@ app.controller('UsersAssistanceManagementMediatorRequestJustificationDateYearCtr
    $scope.model.processingRequest = true;
     var request = {
 			id:$scope.justification.id,
-			begin:$scope.model.date
+			begin:$scope.model.date,
+      status:"APPROVED"
 		};
 
     Assistance.requestJustification($scope.model.selectedUser.id, request,
