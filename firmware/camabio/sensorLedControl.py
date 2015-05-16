@@ -10,13 +10,8 @@ camabio.setChksum(data)
 
 print('abriendo puerto seriel')
 ser = serial.Serial(port="/dev/ttyUSB0",baudrate=115200,timeout=5,parity=serial.PARITY_NONE,stopbits=serial.STOPBITS_ONE,bytesize=serial.EIGHTBITS)
-ser.flush()
-print(bytes(data))
-ser.write(bytes(data));
-time.sleep(1)
-data2 = ser.read(ser.inWaiting())
-if data2 == None:
-    print('No se leyo ningun byte')
-else:
-    print(data2)
+print(codecs.encode(bytes(data),'hex'))
+ser.write(bytes(data))
+time.sleep(0.5)
+print(codecs.encode(ser.read(24),'hex'))
 ser.close()
