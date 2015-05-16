@@ -1,6 +1,8 @@
 import array
 import serial
 import camabio
+import sys
+import time
 
 """
 	 * 1 - 9600
@@ -9,22 +11,17 @@ import camabio
 	 * 4 - 57600
 	 * 5 - 115200 (por defecto)
 """
-bauds = 0x01
+
+if len(sys.argv) <= 1:
+	sys.exit(1)
+
+bauds = int(sys.argv[1])
 data = [0x55,0xaa,0x14,0x01,0x02,0x0,bauds,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x00,0x00]
 camabio.setChksum(data)
 
-print('abriendo puerto seriel')
-ser = serial.Serial("/dev/ttyS1",9600,timeout=5)
+ser = serial.Serial(port="/dev/ttyUSB0",baudrate=9600,timeout=5,parity=serial.PARITY_NONE,stopbits=serial.STOPBITS_ONE,bytesize=serial.EIGHTBITS)
 
 print('escribiendo bytes en el puerto serie')
-camabio.printArray(data)
-setBauds = array.array('B', data).tostring()
-ser.write(setBauds);
-ser.flush()
-
-print('tratando de leer bytes desde el puerto serie: ')
-data2 = ser.read(len(data))
-if data2 == None:
-    print('No se leyo ningun byte')
-else:
-    camabio.printHexString(data2)
+ser.write(bytes(data));
+time.sleep(1)
+print(ser.read(ser.inWaiting()))
