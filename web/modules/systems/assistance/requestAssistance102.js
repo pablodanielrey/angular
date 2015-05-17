@@ -1,16 +1,16 @@
 var app = angular.module('mainApp');
 
-app.controller('RequestAssistanceExamCtrl', ["$scope", "Assistance", "Notifications", "Utils", function($scope, Assistance, Notifications, Utils) {
+app.controller('RequestAssistance102Ctrl', ["$scope", "Assistance", "Notifications", "Utils", function($scope, Assistance, Notifications, Utils) {
 
   if(!$scope.model) Notifications.message("No esta definido el modelo");
 
   //***** datos de la justificacion *****
   $scope.justification = { 
-    id:'b70013e3-389a-46d4-8b98-8e4ab75335d0', //id de la justificacion.
-    name:Utils.getJustificationName('b70013e3-389a-46d4-8b98-8e4ab75335d0'),
+    id: '4d7bf1d4-9e17-4b95-94ba-4ca81117a4fb', //id de la justificacion.
+    name:Utils.getJustificationName('4d7bf1d4-9e17-4b95-94ba-4ca81117a4fb'),
     stock:0,
     yearlyStock:0,
-    selectedName:"justificationExamSelected", //Nombre de la seleccion en el controlador padre
+    selectedName:"justification102Selected", //Nombre de la seleccion en el controlador padre
   };
   
   //***** variables de seleccion de la seccion *****
@@ -64,7 +64,7 @@ app.controller('RequestAssistanceExamCtrl', ["$scope", "Assistance", "Notificati
   
   
   
-  //***** METODOS DE SELECCION DE LA SECCION CORRESPONDIENTE A LA JUSTIFICACION 102 *****
+  //***** METODOS DE SELECCION DE LA SECCION *****
   /**
    * Esta seleccionada la seccion correspondiente a la justificacion 102
    * @returns {Boolean}
@@ -138,7 +138,7 @@ app.controller('RequestAssistanceExamCtrl', ["$scope", "Assistance", "Notificati
   
     
     
-  //***** METODOS DEl FORMULARIO DE SOLICITUD DE JUSTIFICACION 102 *****
+  //***** METODOS DEl FORMULARIO DE SOLICITUD *****
   $scope.selectDate = function(){
 		$scope.model.dateFormated = null;
     if($scope.model.date !== null){

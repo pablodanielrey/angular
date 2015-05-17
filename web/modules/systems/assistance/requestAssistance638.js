@@ -1,31 +1,37 @@
 var app = angular.module('mainApp');
 
-app.controller('RequestAssistanceExamCtrl', ["$scope", "Assistance", "Notifications", "Utils", function($scope, Assistance, Notifications, Utils) {
+app.controller('RequestAssistance638Ctrl', function($scope, Assistance, Session, Notifications, Utils) {
+
 
   if(!$scope.model) Notifications.message("No esta definido el modelo");
 
   //***** datos de la justificacion *****
-  $scope.justification = { 
-    id:'b70013e3-389a-46d4-8b98-8e4ab75335d0', //id de la justificacion.
-    name:Utils.getJustificationName('b70013e3-389a-46d4-8b98-8e4ab75335d0'),
+  $scope.justification = {
+    id: '50998530-10dd-4d68-8b4a-a4b7a87f3972', //id de la justificacion.
+    name:Utils.getJustificationName('50998530-10dd-4d68-8b4a-a4b7a87f3972'),
     stock:0,
     yearlyStock:0,
-    selectedName:"justificationExamSelected", //Nombre de la seleccion en el controlador padre
+    selectedName:"justification638Selected", //Nombre de la seleccion en el controlador padre
   };
-  
-  //***** variables de seleccion de la seccion *****
+
+
+   //***** variables de seleccion de la seccion *****
   $scope.model.requestSelected = false; //flag para indicar la seleccion del formulario de solicitud del articulo 102
   $scope.model.availableSelected = false; //flag para indicar la seleccion de la visualizacion de disponibilidad del articulo 102
-  
-  //***** variables del formulario *****  
-  $scope.model.date = null;         //fecha seleccionada
-  $scope.model.dateFormated = null; //fecha en formato amigable para el usuario
-  
+
+  //***** variables del formulario *****
+  $scope.model.begin = null;         //fecha de inicio seleccionada
+  $scope.model.beginFormated = null; //fecha en formato amigable para el usuario
+  $scope.model.end = null;         //fecha de fin seleccionada
+  $scope.model.endFormated = null; //fecha en formato amigable para el usuario
+
   $scope.model.processingRequest = false;
-  
-  
+
+
+
+
   //***** METODOS DE CARGA E INICIALIZACION *****
-  /**
+   /**
    * Consultar stock de la justificacion
    */
   $scope.loadStock = function(){
@@ -37,34 +43,24 @@ app.controller('RequestAssistanceExamCtrl', ["$scope", "Assistance", "Notificati
         Notifications.message(error);
       }
     );
-    Assistance.getJustificationStock($scope.model.session.user_id, $scope.justification.id, null, 'YEAR',
-      function(justification) {
-        $scope.justification.yearlyStock = justification.stock;
-      },
-      function(error) {
-        Notifications.message(error);
-      }
-    );
   };
-  
-  
+
+
   $scope.$on('findStockJustification', function(event, data) {
-    if (data.justification.id == $scope.justification.id) {
+    if (data.justification.id === $scope.justification.id) {
         $scope.loadStock();
     }
   });
 
   $scope.$on('JustificationStockChangedEvent', function(event, data) {
-    if ($scope.justification.id == data.justification_id) {
+    if ($scope.justification.id === data.justification_id) {
       $scope.loadStock();
     }
   });
 
-  
-  
-  
-  
-  //***** METODOS DE SELECCION DE LA SECCION CORRESPONDIENTE A LA JUSTIFICACION 102 *****
+
+
+  //***** METODOS DE SELECCION DE LA SECCION *****
   /**
    * Esta seleccionada la seccion correspondiente a la justificacion 102
    * @returns {Boolean}
@@ -83,8 +79,8 @@ app.controller('RequestAssistanceExamCtrl', ["$scope", "Assistance", "Notificati
     $scope.clearContent();
     $scope.model[$scope.justification.selectedName] = value;
 	};
-  
-  
+
+
   /**
    * Esta seleccionado el formulario para solicitar articulo 102?
    * @returns {Boolean}
@@ -122,7 +118,7 @@ app.controller('RequestAssistanceExamCtrl', ["$scope", "Assistance", "Notificati
 		$scope.model.availableSelected = true;
 
 	};
-  
+
   /**
    * Inicializar variables correspondientes al contenido de la seccion del articulo 102
    * @returns {undefined}
@@ -130,41 +126,53 @@ app.controller('RequestAssistanceExamCtrl', ["$scope", "Assistance", "Notificati
   $scope.clearContent = function(){
     $scope.model.requestSelected = false;
     $scope.model.availableSelected = false;
-    $scope.model.date = null;
-		$scope.model.dateFormated = null;
+    $scope.model.begin = null;
+		$scope.model.beginFormated = null;
+    $scope.model.end = null;
+		$scope.model.endFormated = null;
     $scope.model.processingRequest = false;
-    
+
   };
-  
-    
-    
-  //***** METODOS DEl FORMULARIO DE SOLICITUD DE JUSTIFICACION 102 *****
-  $scope.selectDate = function(){
-		$scope.model.dateFormated = null;
-    if($scope.model.date !== null){
-			$scope.model.dateFormated = Utils.formatDate($scope.model.date);
+
+
+
+
+
+  //***** METODOS DEl FORMULARIO DE SOLICITUD *****
+  $scope.selectDates = function(){
+		$scope.model.beginFormated = null;
+    $scope.model.endFormated = null;
+    if($scope.model.begin !== null){
+			$scope.model.beginFormated = Utils.formatDate($scope.model.begin);
+    }
+    if($scope.model.end !== null){
+      if($scope.model.begin > $scope.model.end){
+        $scope.model.end = new Date($scope.model.begin);
+      }
+      $scope.model.endFormated = Utils.formatDate($scope.model.end);
     }
   };
-  
-  
-  $scope.isDateDefined = function(){
-    return ($scope.model.date !== null);    
+
+
+  $scope.isDatesDefined = function(){
+    return (($scope.model.begin !== null) && ($scope.model.end !== null));
   };
-  
+
   $scope.isStock = function(){
     return ($scope.justification.stock !== 0);
   };
-  
-  
+
+
   // Envio la peticion al servidor
   $scope.save = function() {
     $scope.model.processingRequest = true;
     var request = {
 			id:$scope.justification.id,
-			begin:$scope.model.date
+			begin:$scope.model.begin,
+      end:$scope.model.end
 		};
 
-  	Assistance.requestJustification($scope.model.session.user_id, request,
+  	Assistance.requestJustificationRange($scope.model.session.user_id, request,
 			function(ok) {
 				$scope.clearContent();    //limpiar contenido
         $scope.clearSelections(); //limpiar selecciones
@@ -178,4 +186,18 @@ app.controller('RequestAssistanceExamCtrl', ["$scope", "Assistance", "Notificati
 
   };
 
-}]);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+});

@@ -1,16 +1,16 @@
 var app = angular.module('mainApp');
 
-app.controller('RequestAssistanceExamCtrl', ["$scope", "Assistance", "Notifications", "Utils", function($scope, Assistance, Notifications, Utils) {
+app.controller('RequestAssistanceBirthdayCtrl', ["$scope", "Assistance", "Notifications", "Utils", function($scope, Assistance, Notifications, Utils) {
 
   if(!$scope.model) Notifications.message("No esta definido el modelo");
 
   //***** datos de la justificacion *****
   $scope.justification = { 
-    id:'b70013e3-389a-46d4-8b98-8e4ab75335d0', //id de la justificacion.
-    name:Utils.getJustificationName('b70013e3-389a-46d4-8b98-8e4ab75335d0'),
+    id: 'b309ea53-217d-4d63-add5-80c47eb76820', //id de la justificacion.
+    name:Utils.getJustificationName('b309ea53-217d-4d63-add5-80c47eb76820'),
     stock:0,
     yearlyStock:0,
-    selectedName:"justificationExamSelected", //Nombre de la seleccion en el controlador padre
+    selectedName:"justificationBirthdaySelected", //Nombre de la seleccion en el controlador padre
   };
   
   //***** variables de seleccion de la seccion *****
