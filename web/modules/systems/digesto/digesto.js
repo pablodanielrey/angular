@@ -18,8 +18,5 @@ app.controller('MenuCtrl', function($scope) {
 
 app.controller('DigestoCtrl',function($scope) {
 
-  $scope.mostrarMenu = function() {
-    alert('jano jano');
-  }
 
 });
