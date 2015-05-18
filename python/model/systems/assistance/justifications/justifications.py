@@ -20,6 +20,11 @@ from model.systems.assistance.justifications.LMAFJustification import LMAFJustif
 from model.systems.assistance.justifications.JMJustification import JMJustification
 from model.systems.assistance.justifications.HolidayJustification import HolidayJustification
 from model.systems.assistance.justifications.ParoJustification import ParoJustification
+from model.systems.assistance.justifications.MourningJustification import MourningJustification
+from model.systems.assistance.justifications.BloodDonationJustification import BloodDonationJustification
+
+
+
 
 
 
@@ -33,9 +38,9 @@ class Justifications:
     date = inject.attr(Date)
 
     justifications = [
-        CJustification(), LAOJustification(), AAJustification(), BSJustification(), R638Justification(),
-        PEJustification(), CumpJustification(), A102Justification(),LMCDJustification(),LMLTJustification(),
-        LMAFJustification(), JMJustification(), HolidayJustification(), ParoJustification()
+        CJustification(), LAOJustification(), AAJustification(), BSJustification(), R638Justification(), PEJustification(),
+        CumpJustification(), A102Justification(), LMCDJustification(), LMLTJustification(), BloodDonationJustification(),
+        LMAFJustification(), JMJustification(), HolidayJustification(), ParoJustification(), MourningJustification()
     ]
 
 
