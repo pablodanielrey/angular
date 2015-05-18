@@ -210,7 +210,7 @@ app.controller('RequestAssistanceOutCtrl', ["$scope", "Assistance", "Notificatio
 
       $scope.model.processingRequest = true;
 
-      Assistance.requestJustification($scope.model.session.user_id,requestedJustification,
+      Assistance.requestJustification($scope.model.session.user_id,requestedJustification, null,
           function(ok) {
             $scope.model.processingRequest = false;
 

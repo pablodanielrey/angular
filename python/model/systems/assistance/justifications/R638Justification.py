@@ -5,17 +5,17 @@ from model.systems.assistance.justifications.justification import Justification,
 from model.systems.assistance.justifications.exceptions import *
 
 
-"""
-    Compensatorio
-    no existe limite salvo el stock que se tenga
-"""
-class CJustification(Justification):
 
-    id = '48773fd7-8502-4079-8ad5-963618abe725'
+"""
+    Resolución 638
+    no tiene límite, solo el stock actual.
+"""
+class R638Justification(Justification):
+
+    id = '50998530-10dd-4d68-8b4a-a4b7a87f3972'
 
     def isJustification(self,id):
         return self.id == id
-
 
     """
         retorna la cantidad de justificaciones que se tienen disponibles dentro de un período de tiempo.
@@ -28,9 +28,10 @@ class CJustification(Justification):
 
         return cur.fetchone()[0]
 
+
     """
         inicializa un pedido en estado pendiente de una justificación en las fechas indicadas
-        solo se tiene en cuenta begin, end = None en el caso de los compensatorios
+        solo se tiene en cuenta begin
     """
     def requestJustification(self,utils,con,userId,requestor_id,begin,end):
         if self.available(utils,con,userId,begin) <= 0:

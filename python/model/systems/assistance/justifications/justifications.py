@@ -10,6 +10,24 @@ from model.systems.assistance.justifications.AAJustification import AAJustificat
 from model.systems.assistance.justifications.BSJustification import BSJustification
 from model.systems.assistance.justifications.CJustification import CJustification
 from model.systems.assistance.justifications.LAOJustification import LAOJustification
+from model.systems.assistance.justifications.A102Justification import A102Justification
+from model.systems.assistance.justifications.CumpJustification import CumpJustification
+from model.systems.assistance.justifications.PEJustification import PEJustification
+from model.systems.assistance.justifications.R638Justification import R638Justification
+from model.systems.assistance.justifications.LMCDJustification import LMCDJustification
+from model.systems.assistance.justifications.LMLTJustification import LMLTJustification
+from model.systems.assistance.justifications.LMAFJustification import LMAFJustification
+from model.systems.assistance.justifications.JMJustification import JMJustification
+from model.systems.assistance.justifications.HolidayJustification import HolidayJustification
+from model.systems.assistance.justifications.ParoJustification import ParoJustification
+from model.systems.assistance.justifications.MourningJustification import MourningJustification
+from model.systems.assistance.justifications.BloodDonationJustification import BloodDonationJustification
+
+
+
+
+
+
 from model.systems.assistance.date import Date
 
 
@@ -20,12 +38,14 @@ class Justifications:
     date = inject.attr(Date)
 
     justifications = [
-        CJustification(), LAOJustification(), AAJustification(), BSJustification()
+        CJustification(), LAOJustification(), AAJustification(), BSJustification(), R638Justification(), PEJustification(),
+        CumpJustification(), A102Justification(), LMCDJustification(), LMLTJustification(), BloodDonationJustification(),
+        LMAFJustification(), JMJustification(), HolidayJustification(), ParoJustification(), MourningJustification()
     ]
 
 
     """ obtiene un requerimiento de justificacion dado el id """
-    def _findJustificationRequestById(self,con,id):
+    def findJustificationRequestById(self,con,id):
         cur = con.cursor()
         cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where id = %s',(id,))
         if cur.rowcount <= 0:
@@ -48,7 +68,7 @@ class Justifications:
     """
     def _getJustificationRequestStatus(self,con,reqId):
         cur = con.cursor()
-        cur.execute('select jrs.status from assistance.justifications_requests_status as jrs, (select request_id,max(created) as created from assistance.justifications_requests_status group by request_id) as r where r.created = jrs.created and r.request_id = jrs.request_id')
+        cur.execute('select jrs.status from assistance.justifications_requests_status as jrs, (select request_id,max(created) as created from assistance.justifications_requests_status group by request_id) as r where r.created = jrs.created and r.request_id = jrs.request_id and r.request_id = %s',(reqId,))
         if cur.rowcount <= 0:
             return None
 
@@ -58,7 +78,7 @@ class Justifications:
     """
         obtiene todas las justificaciones que estan como ultimo estado en la lista de estados pasada como parametro.
         status = una lista de estados posibles.
-        retora un dict con los ids de las justificaciones como key y el estado como value
+        retora un dict con los ids de las justificaciones como key y un array de el estado y el user_id como value
         { id: status }
     """
     def _getJustificationsInStatus(self,con,status=None):
@@ -66,16 +86,16 @@ class Justifications:
 
         """ obtengo el ultimo estado de los pedidos de justificacion """
         if status is None:
-            cur.execute('select jrs.request_id,jrs.status from assistance.justifications_requests_status as jrs, (select request_id,max(created) as created from assistance.justifications_requests_status group by request_id) as r where r.created = jrs.created and r.request_id = jrs.request_id')
+            cur.execute('select jrs.request_id,jrs.status,jrs.user_id from assistance.justifications_requests_status as jrs, (select request_id,max(created) as created from assistance.justifications_requests_status group by request_id) as r where r.created = jrs.created and r.request_id = jrs.request_id')
         else:
-            cur.execute('select jrs.request_id,jrs.status from assistance.justifications_requests_status as jrs, (select request_id,max(created) as created from assistance.justifications_requests_status group by request_id) as r where r.created = jrs.created and r.request_id = jrs.request_id and jrs.status in %s',(tuple(status),))
+            cur.execute('select jrs.request_id,jrs.status,jrs.user_id from assistance.justifications_requests_status as jrs, (select request_id,max(created) as created from assistance.justifications_requests_status group by request_id) as r where r.created = jrs.created and r.request_id = jrs.request_id and jrs.status in %s',(tuple(status),))
 
         if cur.rowcount <= 0:
             return {}
 
         statusR = {}
         for rs in cur:
-            statusR[rs[0]] = rs[1]
+            statusR[rs[0]] = [rs[1],rs[2]]
 
         return statusR
 
@@ -181,7 +201,8 @@ class Justifications:
                     'justification_id':j[2],
                     'begin':j[3],
                     'end':j[4],
-                    'status':statusR[jid]
+                    'status':statusR[jid][0],
+                    'requestor_id':statusR[jid][1]
                 }
             )
 
@@ -242,7 +263,8 @@ class Justifications:
                     'justification_id':j[2],
                     'begin':j[3],
                     'end':j[4],
-                    'status':statusR[jid]
+                    'status':statusR[jid][0],
+                    'requestor_id':statusR[jid][1]
                 }
             )
 
@@ -295,6 +317,7 @@ class Justifications:
     """
     def getJustificationStock(self,con,userId,justId,date,period=None):
 
+
         for j in self.justifications:
             if j.isJustification(justId):
                 return j.available(self,con,userId,date,period)
@@ -310,7 +333,7 @@ class Justifications:
     """
     def updateJustificationRequestStatus(self,con,userId,requestId,status):
 
-        req = self._findJustificationRequestById(con,requestId)
+        req = self.findJustificationRequestById(con,requestId)
         if req is None:
             raise JustificationError('No existe ningún pedido de justificación con id = %s'.format(requestId))
 
@@ -324,12 +347,33 @@ class Justifications:
 
     """
         realiza el pedido de justificación para ser aprobado
-        estado inicial del pedido = PENDING, con la fecha actual del servidor.
     """
-    def requestJustification(self,con,userId,justificationId,begin,end=None):
+    def requestJustification(self,con,userId,requestor_id,justificationId,begin,end=None):
+
 
         for j in self.justifications:
             if j.isJustification(justificationId):
-                return j.requestJustification(self,con,userId,begin,end)
+                return j.requestJustification(self,con,userId,requestor_id,begin,end)
+
+        raise JustificationError('No se puede encontrar ese tipo de justificación')
+
+
+    """
+        realiza el pedido de justificación para ser aprobado entre un rango de fechas
+        estado inicial del pedido = PENDING, con la fecha actual del servidor.
+    """
+    def requestJustificationRange(self,con,userId,requestor_id,justificationId,begin,end):
+
+        events = []
+        for j in self.justifications:
+            if j.isJustification(justificationId): #and (j.__class__.__name__ == 'LAOJustification' or j.__class__.__name__  == 'R638Justification'):
+                date = begin
+                diff = (end-begin).days
+                # incremento en 1 para que tome el ultimo dia
+                for x in range(0, diff + 1):
+                    events.extend(j.requestJustification(self,con,userId,requestor_id,date,None))
+                    date = date + datetime.timedelta(days=1)
+
+                return events
 
         raise JustificationError('No se puede encontrar ese tipo de justificación')

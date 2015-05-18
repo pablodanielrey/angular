@@ -57,6 +57,10 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, As
           $location.path('/mySchedule')
         }
 
+        $scope.userAssistanceManagement = function() {
+          $location.path('/userAssistanceManagement')
+        }
+
 
 
         $scope.items = [];
@@ -80,10 +84,11 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, As
                       function(roles) {
                         var hasApprove = false;
                         var hasOvertime = false;
-
+                        var hasJustification = false;
                         for (var i = 0; i < roles.length; i++) {
                           hasApprove = hasApprove || (roles[i].role == 'autoriza');
                           hasOvertime = hasOvertime || (roles[i].role == 'horas-extras');
+                          hasJustification = hasJustification || (roles[i].role == 'realizar-solicitud') || (roles[i].role == 'realizar-solicitud-admin');
                         }
 
                         if (hasApprove) {
@@ -94,7 +99,10 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, As
                         if (hasOvertime) {
                           //$scope.items.push({ label:'Licencias Médicas', img:'fa-stethoscope', function: $scope.medicalLicenses});
                           $scope.items.push({ label:'Admin Horas Extras ', img:'fa-plus', function: $scope.adminRequestOverTime});
+                        }
 
+                        if (hasJustification) {
+                          $scope.items.push({ label:'Solicitudes Especiales ', img:'fa-plus', function: $scope.userAssistanceManagement});
                         }
                       },
                       function(err) {

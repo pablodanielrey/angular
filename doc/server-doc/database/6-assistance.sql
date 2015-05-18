@@ -115,11 +115,22 @@ create schema assistance;
 
     status = APROVED | REJECTED | PENDING | CANCELED
 
+    --------------------------------------------------------------------------
+
+    agregar la columna requestor_id con el valor por defecto del user_id
+
+    set timezone to utc;
+    begin;
+    alter table assistance.justifications_requests add column requestor_id varchar references profile.users (id);
+    update assistance.justifications_requests set requestor_id = user_id;
+    end;
+
     */
 
     create table assistance.justifications_requests (
       id varchar primary key,
       user_id varchar not null references profile.users (id),
+      requestor_id varchar not null references profile.users (id),
       justification_id varchar not null references assistance.justifications (id),
       jbegin timestamptz not null,
       jend timestamptz,

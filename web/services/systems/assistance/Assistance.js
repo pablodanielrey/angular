@@ -448,7 +448,7 @@ app.service('Assistance', ['Utils','Messages','Session',
 
 		}
 
-		this.requestJustification = function(userId, justification, callbackOk, callbackError) {
+		this.requestJustification = function(userId, justification, status, callbackOk, callbackError) {
 			var msg = {
 				id: Utils.getId(),
 				action: 'requestJustification',
@@ -462,6 +462,37 @@ app.service('Assistance', ['Utils','Messages','Session',
 
 			if (!(typeof justification.end === 'undefined')) {
 				msg.request.end = justification.end;
+			}
+
+			if (!(typeof status === 'undefined')) {
+				msg.request.status = status;
+			}
+
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response);
+					} else {
+						callbackError(data.error);
+					}
+				});
+		}
+
+		this.requestJustificationRange = function(userId, justification, status, callbackOk, callbackError) {
+			var msg = {
+				id: Utils.getId(),
+				action: 'requestJustificationRange',
+				session: Session.getSessionId(),
+				request: {
+					user_id: userId,
+					justification_id: justification.id,
+					begin: justification.begin,
+					end: justification.end
+				}
+			}
+
+			if (!(typeof status === 'undefined')) {
+				msg.request.status = status;
 			}
 
 			Messages.send(msg,
@@ -580,6 +611,28 @@ app.service('Assistance', ['Utils','Messages','Session',
 				function(data) {
 					if (typeof data.error === 'undefined') {
 						callbackOk(data.ok);
+					} else {
+						callbackError(data.error);
+					}
+				});
+		}
+
+
+		/**
+		*	Obtiene las justificaciones especiales que puede solicitar
+		*/
+		this.getSpecialJustifications = function(callbackOk, callbackError) {
+			var msg = {
+				id: Utils.getId(),
+				action: 'getSpecialJustifications',
+				session: Session.getSessionId(),
+				request: {
+				}
+			};
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response.justifications);
 					} else {
 						callbackError(data.error);
 					}

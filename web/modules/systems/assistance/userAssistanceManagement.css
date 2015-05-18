@@ -1,16 +1,16 @@
-.requestAssistance {
+.userAssistanceManagement {
   width:100%;
   height:100%;
   font-family: helvetica;
 }
 /****ACORDEEON****/
-.requestAssistance .content{
+.userAssistanceManagement .content{
   margin:5px auto;
   width:98%;
   min-height:50px;
   overflow: hidden;
 }
-.requestAssistance .titulo{
+.userAssistanceManagement .titulo{
   width:100%;
   height:50px;
   background-color: #0066A6;
@@ -18,57 +18,57 @@
   border-bottom: 1px solid #275276;
 
 }
-.requestAssistance p.titulo{
+.userAssistanceManagement p.titulo{
   margin:13px;
   color: white;
 }
 
-.requestAssistance .info {
+.userAssistanceManagement .info {
     display:flex;
     flex-direction:column;
     align-items:flex-start;
 }
 
-.requestAssistance .button {
+.userAssistanceManagement .button {
   width: 150px;
   height:50px;
   margin-left:0px;
   margin-top:10px;
 }
-.requestAssistance .button2 {
+.userAssistanceManagement .button2 {
   width:265px;
   height:50px;
   margin-left:0px;
   margin-top:10px;
 }
-.requestAssistance .blue{
+.userAssistanceManagement .blue{
   background-color:#0066A6;
   color:white;
   text-shadow: 0px 1px black;
   font-weight: bold;
 }
-.requestAssistance .blue2{
+.userAssistanceManagement .blue2{
   background-color:#0066A6;
   color:white;
   text-shadow: 0px 1px black;
 
   font-size:20px;
 }
-.requestAssistance .orange{
+.userAssistanceManagement .orange{
   background-color:#ec9122;
   color:white;
   text-shadow: 0px 1px black;
   font-weight: bold;
 }
 
-.requestAssistance .green{
+.userAssistanceManagement .green{
   background-color:#128c78;
   color:white;
   text-shadow: 0px 1px black;
   font-weight: bold;
 }
 
-.requestAssistance .title {
+.userAssistanceManagement .title {
   display:flex;
   align-items: center;
   background-image:linear-gradient(to right,#275276, #0066A6);
@@ -81,24 +81,24 @@
   margin:5px;
 
 }
-.requestAssistance .myRequests {
+.userAssistanceManagement .myRequests {
   padding:7px;
   background-color: #275276;
   margin-top:15px;
   padding-left:15px;
   color:white;
   border-top: 3px solid #0066A6;
-
+  margin-left:5px;
 }
 
 
-.requestAssistance .myRequestInfo {
+.userAssistanceManagement .myRequestInfo {
   display:flex;
   flex-direction:row;
   background-color: white;
 }
 
-.requestAssistance .scroll {
+.userAssistanceManagement .scroll {
   height:270px;
 
   overflow:scroll;
@@ -108,34 +108,35 @@
 
 
 /*
-.requestAssistance .myRequestInfo.pending {
+.userAssistanceManagement .myRequestInfo.pending {
   -webkit-transform: translate(700px,0px);
 }
 */
 
 
-.requestAssistance .titlesFiles {
+.userAssistanceManagement .titlesFiles {
   display:flex;
   flex-direction:row;
+  margin-left:10px;
 
 
 }
-.requestAssistance .t1 {
+.userAssistanceManagement .t1 {
   width:200px;
   margin-top:10px;
 
 }
 
-.requestAssistance .t3 {
+.userAssistanceManagement .t3 {
   width:200px;
   margin-bottom: 5px;
 }
-.requestAssistance .t4 {
+.userAssistanceManagement .t4 {
   width:100px;
   margin-top:10px;
 }
 
-.requestAssistance .column {
+.userAssistanceManagement .column {
   background-color:#0066A6;
 
   padding:5px;
@@ -146,33 +147,20 @@
 }
 
 
-.requestAssistance .myRequest {
+.userAssistanceManagement .myRequest {
   margin-top:5px;
   width:190px;
   background-color:white;
   padding:5px;
   padding-left:10px;
+
   color:#0066A6;
   border:1px solid #0066A6;
   margin-right:10px;
   font-weight: bold;
   border-left: 5px solid #0066A6;
 }
-
-
-.requestAssistance .userRequest {
-  margin-top:5px;
-  width:190px;
-  background-color:white;
-  padding:5px;
-  padding-left:10px;
-  color:#0066A6;
-  border:1px solid #0066A6;
-  margin-right:10px;
-  font-weight: bold;
-  border-left: 5px solid #0066A6;
-}
-.requestAssistance .myRequestDate {
+.userAssistanceManagement .myRequestDate {
   margin-top:5px;
   width:189px;
   border:1px solid #0066A6;
@@ -186,7 +174,7 @@
 
 
 
-.requestAssistance .buttonpending {
+.userAssistanceManagement .buttonpending {
   background-color:#e43e46;
   color:white;
   border:none;
@@ -195,7 +183,7 @@
   cursor:pointer;
   border-radius: 2px;
 }
-.requestAssistance .buttonApproved {
+.userAssistanceManagement .buttonApproved {
   background-color:#128c78;
   color:white;
   border:none;
@@ -204,7 +192,7 @@
   font-size:14px;
   border-radius: 2px;
 }
-.requestAssistance .buttonCancel {
+.userAssistanceManagement .buttonCancel {
   background-color:#e43e46;
   color:white;
   border:none;
@@ -230,7 +218,7 @@
 }
 
 
-.requestAssistance .myStateRequestSlope {
+.userAssistanceManagement .myStateRequestSlope {
   margin-top:5px;
   width:200px;
 
@@ -241,7 +229,7 @@
   background-color:white;
 }
 
-.requestAssistance .myStateRequestApproved {
+.userAssistanceManagement .myStateRequestApproved {
   margin-top:5px;
   width:200px;
 
@@ -252,7 +240,7 @@
 
 }
 
-.requestAssistance .myStateRequestRejected {
+.userAssistanceManagement .myStateRequestRejected {
   margin-top:5px;
   width:200px;
 
@@ -264,7 +252,7 @@
 }
 
 
-.requestAssistance .myStateRequestCanceled {
+.userAssistanceManagement .myStateRequestCanceled {
   margin-top:5px;
   width:200px;
 
@@ -276,7 +264,7 @@
 }
 
 
-.requestAssistance .parrafos {
+.userAssistanceManagement .parrafos {
   background-color:#0066A6;
   color:white;
   height:15px;
@@ -289,7 +277,7 @@
   padding:5px;
 }
 
-.requestAssistance .parrafos2 {
+.userAssistanceManagement .parrafos2 {
   background-color:white;
   color:white;
   height:15px;
@@ -302,7 +290,7 @@
   padding:5px;
   color:#128c78;
 }
-.requestAssistance .parrafos3 {
+.userAssistanceManagement .parrafos3 {
   background-color:white;
   color:white;
   height:15px;
@@ -315,7 +303,7 @@
   padding:5px;
   color:#128c78;
 }
-.requestAssistance .parrafos4 {
+.userAssistanceManagement .parrafos4 {
   background-color:white;
   color:white;
   height:15px;
@@ -331,7 +319,7 @@
 
 
 
-.requestAssistance .parrafosGreen {
+.userAssistanceManagement .parrafosGreen {
   background-color:#128c78;
   color:white;
   height:15px;
@@ -344,7 +332,7 @@
   padding:5px;
 }
 
-.requestAssistance .parrafosGreen2 {
+.userAssistanceManagement .parrafosGreen2 {
   background-color:white;
   color:white;
   height:15px;
@@ -358,53 +346,53 @@
   color:#0066A6;
 }
 
-.requestAssistance .date {
+.userAssistanceManagement .date {
   width:257px;
 }
 
-.requestAssistance .hidden{
+.userAssistanceManagement .hidden{
   display:none;
 }
 
 
-.requestAssistance .visible{
+.userAssistanceManagement .visible{
   display:block;
 }
-.requestAssistance div.info{
+.userAssistanceManagement div.info{
   width:100%;
   height:0px;
   background-color: #f5f5f5;
   overflow: hidden;
   -webkit-transition: height 0.2s;
 }
-.requestAssistance .subcontentDisplay div.info{
+.userAssistanceManagement .subcontentDisplay div.info{
   height:160px;
 }
 
-.requestAssistance .subcontentDisplay .titulo, .requestAssistance .subcontent .titulo{
+.userAssistanceManagement .subcontentDisplay .titulo, .userAssistanceManagement .subcontent .titulo{
     cursor:pointer;
 }
-.requestAssistance .info {
+.userAssistanceManagement .info {
   display:flex;
   flex-direction:row;
 }
-.requestAssistance .margin {
+.userAssistanceManagement .margin {
   margin-left:50px;
 
 
 }
 
-.requestAssistance .titlesHours {
+.userAssistanceManagement .titlesHours {
   display:flex;
   flex-direction:row;
   margin-top:5px;
 }
-.requestAssistance .hours {
+.userAssistanceManagement .hours {
   display:flex;
   flex-direction:row;
 
 }
-.requestAssistance .spanSE {
+.userAssistanceManagement .spanSE {
   display:flex;
   align-content:center;
   background-color:white;
@@ -415,7 +403,7 @@
 
 
 }
-.requestAssistance .spanSE2 {
+.userAssistanceManagement .spanSE2 {
   display:flex;
   align-content:center;
   background-color:white;
@@ -426,8 +414,87 @@
 
 
 }
-.requestAssistance .timeMargin {
+.userAssistanceManagement .timeMargin {
   margin-bottom:2px;
 }
 
 /****FIN DE ACORDEON****/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* SELECCION DE USUARIO */
+
+.userAssistanceManagement .searchTitle {
+  background-color: #0066A6;
+  color: white;
+  padding:5px;
+  margin-bottom: 0px;
+  font-size: 13px;
+  width:170px;
+  border-top: 3px solid #275276;
+  margin-right:20px;
+
+}
+
+
+.userAssistanceManagement .inputSearch{
+  width:166px;
+  padding:5px;
+  font-size: 14px;
+
+}
+.userAssistanceManagement .listUsers {
+  list-style-type:none;
+  margin:0px;
+  padding-left:5px;
+  width:190px;
+  max-height:300px;
+  background-color:#0066A6;
+  color:white;
+  z-index:999;
+  overflow: scroll;
+  overflow-x: hidden;
+  z-index: 999;
+  position: absolute;
+}
+.userAssistanceManagement .liUsers {
+  height:25px;
+  padding-top:10px;
+  border-bottom:2px solid #275276;
+  cursor:pointer;
+  z-index:999;
+
+}
+
+.userAssistanceManagement .selectUser {
+  display:flex;
+  flex-direction:row;
+  margin:10px;
+}
+.userAssistanceManagement .userSelect {
+  width:160px;
+  background-color:#0066A6;
+  color:white;
+  padding:10px;
+  margin-top:2px;
+  font-size:14px;
+  border-top: 3px solid #275276;
+}

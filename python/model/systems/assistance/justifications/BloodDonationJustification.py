@@ -5,36 +5,31 @@ from model.systems.assistance.justifications.justification import Justification,
 from model.systems.assistance.justifications.exceptions import *
 
 
-"""
-    Compensatorio
-    no existe limite salvo el stock que se tenga
-"""
-class CJustification(Justification):
 
-    id = '48773fd7-8502-4079-8ad5-963618abe725'
+"""
+    Donación de sangre
+    no tiene límite
+"""
+class BloodDonationJustification(Justification):
+
+    id = 'e8019f0e-5a70-4ef3-922c-7c70c2ce0f8b'
 
     def isJustification(self,id):
         return self.id == id
-
 
     """
         retorna la cantidad de justificaciones que se tienen disponibles dentro de un período de tiempo.
     """
     def available(self,utils,con,userId,date=None,period=None):
-        cur = con.cursor()
-        cur.execute('select stock from assistance.justifications_stock where justification_id = %s and user_id = %s',(self.id,userId))
-        if cur.rowcount <= 0:
-            return 0
 
-        return cur.fetchone()[0]
+        return 365
+
 
     """
         inicializa un pedido en estado pendiente de una justificación en las fechas indicadas
-        solo se tiene en cuenta begin, end = None en el caso de los compensatorios
+        solo se tiene en cuenta begin
     """
     def requestJustification(self,utils,con,userId,requestor_id,begin,end):
-        if self.available(utils,con,userId,begin) <= 0:
-            raise RestrictionError('No existe stock disponible')
 
         jid = str(uuid.uuid4())
         cur = con.cursor()
@@ -83,28 +78,5 @@ class CJustification(Justification):
         }
         events.append(e)
 
-        if (previousStatus == 'PENDING' or previousStatus == 'ACCEPTED') and (status == 'CANCELED' or status == 'REJECTED'):
-
-            cur.execute('update assistance.justifications_stock set stock = stock + %s where justification_id = %s and user_id = %s',(1,self.id,req['user_id']))
-            e = {
-                'type':'JustificationStockChangedEvent',
-                'data':{
-                    'justification_id':self.id,
-                    'user_id':req['user_id']
-                }
-            }
-            events.append(e)
-
-        if (previousStatus is None or previousStatus == 'CANCELED' or previousStatus == 'REJECTED') and (status == 'PENDING' or status == 'APPROVED'):
-
-            cur.execute('update assistance.justifications_stock set stock = stock - %s where justification_id = %s and user_id = %s',(1,self.id,req['user_id']))
-            e = {
-                'type':'JustificationStockChangedEvent',
-                'data':{
-                    'justification_id':self.id,
-                    'user_id':req['user_id']
-                }
-            }
-            events.append(e)
 
         return events

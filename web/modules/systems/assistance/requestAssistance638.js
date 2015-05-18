@@ -1,17 +1,17 @@
 var app = angular.module('mainApp');
 
-app.controller('RequestAssistanceLaoCtrl', function($scope, Assistance, Session, Notifications, Utils) {
+app.controller('RequestAssistance638Ctrl', function($scope, Assistance, Session, Notifications, Utils) {
 
 
   if(!$scope.model) Notifications.message("No esta definido el modelo");
 
   //***** datos de la justificacion *****
   $scope.justification = {
-    id: '76bc064a-e8bf-4aa3-9f51-a3c4483a729a', //id de la justificacion.
-    name:Utils.getJustificationName('76bc064a-e8bf-4aa3-9f51-a3c4483a729a'),
+    id: '50998530-10dd-4d68-8b4a-a4b7a87f3972', //id de la justificacion.
+    name:Utils.getJustificationName('50998530-10dd-4d68-8b4a-a4b7a87f3972'),
     stock:0,
     yearlyStock:0,
-    selectedName:"justificationLaoSelected", //Nombre de la seleccion en el controlador padre
+    selectedName:"justification638Selected", //Nombre de la seleccion en el controlador padre
   };
 
 
