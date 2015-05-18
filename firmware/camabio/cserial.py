@@ -4,7 +4,7 @@ import serial, codecs, time
 port = None
 
 def writeAndRead(port,data):
-  ser = serial.Serial(port=port,baudrate=9600,timeout=5,parity=serial.PARITY_NONE,stopbits=serial.STOPBITS_ONE,bytesize=serial.EIGHTBITS)
+  ser = serial.Serial(port=port,baudrate=9600,timeout=0,parity=serial.PARITY_NONE,stopbits=serial.STOPBITS_ONE,bytesize=serial.EIGHTBITS)
   ser.flush()
   print(codecs.encode(bytes(data),'hex'))
   ser.write(bytes(data))
@@ -17,7 +17,7 @@ def writeAndRead(port,data):
 
 def open(p):
     global port
-    port = serial.Serial(port=p,baudrate=9600,timeout=5,parity=serial.PARITY_NONE,stopbits=serial.STOPBITS_ONE,bytesize=serial.EIGHTBITS)
+    port = serial.Serial(port=p,baudrate=9600,parity=serial.PARITY_NONE,stopbits=serial.STOPBITS_ONE,bytesize=serial.EIGHTBITS)
     port.flush()
 
 def close():
