@@ -18,6 +18,10 @@ DATA 2byte Success:Total number of deleted template Fail:Error code
 CKS Check Sum
 """
 
+"""
+data = [0x55,0xaa,0x06,0x01,0x00,0x00,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x00]
+"""
+
 
 if len(sys.argv) <= 1:
     sys.exit(1)
@@ -36,23 +40,3 @@ data = camabio.getAttrFromPackage(camabio.DATA,resp)
 print('ret : {}, data : {}'.format(ret,data))
 
 cserial.close()
-
-"""
-data = [0x55,0xaa,0x06,0x01,0x00,0x00,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x00]
-
-print('abriendo puerto seriel')
-ser = serial.Serial("/dev/ttyS1",9600,timeout=5)
-
-print('escribiendo bytes en el puerto serie')
-camabio.printArray(data)
-bytesToWrite = array.array('B', data).tostring()
-ser.write(bytesToWrite);
-ser.flush()
-
-print('tratando de leer bytes desde el puerto serie: ')
-data2 = ser.read(len(data))
-if data2 == None:
-    print('No se leyo ningun byte')
-else:
-    camabio.printHexString(data2)
-"""

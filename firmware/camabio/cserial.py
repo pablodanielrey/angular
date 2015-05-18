@@ -1,10 +1,10 @@
-
+# -*- coding: utf-8 -*-
 import serial, codecs, time
 
 port = None
 
 def writeAndRead(port,data):
-  ser = serial.Serial(port=port,baudrate=9600,timeout=0,parity=serial.PARITY_NONE,stopbits=serial.STOPBITS_ONE,bytesize=serial.EIGHTBITS)
+  ser = serial.Serial(port=port,baudrate=9600,parity=serial.PARITY_NONE,stopbits=serial.STOPBITS_ONE,bytesize=serial.EIGHTBITS)
   ser.flush()
   print(codecs.encode(bytes(data),'hex'))
   ser.write(bytes(data))
