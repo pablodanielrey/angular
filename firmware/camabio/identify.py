@@ -11,45 +11,52 @@ port = sys.argv[1]
 cserial.open(port)
 try:
 
-    data = camabio.createPackage(0x102,0,0)
-    cserial.write(data)
-    time.sleep(0.5)
+    identify = True
+    while identify:
 
-    huella = None
-    exit = False
-    while not exit:
-        resp = cserial.readS(24)
-        ret = camabio.getAttrFromPackage(camabio.RET,resp)
-        data = camabio.getAttrFromPackage(camabio.DATA,resp)
-        exit = True
+        data = camabio.createPackage(0x102,0,0)
+        cserial.write(data)
+        time.sleep(0.5)
 
-        if ret == camabio.ERR_FAIL:
-            if data == camabio.ERR_IDENTIFY:
-                logging.warn('no existe ninguna persona con esa huella')
+        huella = None
+        exit = False
+        while not exit:
+            resp = cserial.readS(24)
+            ret = camabio.getAttrFromPackage(camabio.RET,resp)
+            data = camabio.getAttrFromPackage(camabio.DATA,resp)
+            exit = True
 
-            if data == camabio.ERR_ALL_TMPL_EMPTY:
-                logging.warn('no existen huellas en el lector')
+            if ret == camabio.ERR_FAIL:
+                if data == camabio.ERR_IDENTIFY:
+                    logging.warn('no existe ninguna persona con esa huella')
+                    identify = False
 
-            if data == camabio.ERR_TIME_OUT:
-                logging.warn('timeout')
+                if data == camabio.ERR_ALL_TMPL_EMPTY:
+                    logging.warn('no existen huellas en el lector')
+                    identify = False
 
-            if data == camabio.ERR_BAD_QUALITY:
-                logging.warn('mala calidad de la huella')
+                if data == camabio.ERR_TIME_OUT:
+                    logging.warn('timeout')
 
-        elif ret == camabio.ERR_SUCCESS:
+                if data == camabio.ERR_BAD_QUALITY:
+                    logging.warn('mala calidad de la huella')
 
-            if data == camabio.GD_NEED_RELEASE_FINGER:
-                exit = False
+            elif ret == camabio.ERR_SUCCESS:
+
+                if data == camabio.GD_NEED_RELEASE_FINGER:
+                    exit = False
+                else:
+                    huella = data
+
             else:
-                huella = data
-
-        else:
-            logging.warn('respuesta desconocida')
-            logging.warn(codecs.encode(resp,'hex'))
+                logging.warn('respuesta desconocida')
+                logging.warn(codecs.encode(resp,'hex'))
 
 
-    if huella:
-        logging.info('Huella identificada número : {}'.format(huella))
+        if huella:
+            logging.info('Huella identificada número : {}'.format(huella))
+
+
 
 finally:
     logging.info('cerrando puerto serie')
