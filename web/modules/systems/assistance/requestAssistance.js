@@ -1,6 +1,6 @@
 var app = angular.module('mainApp');
 
-app.controller('RequestAssistanceCtrl', ["$scope", "$rootScope", "$timeout", "$window", "Session", "Assistance", "Profiles", "Notifications", "Utils", function($scope, $rootScope, $timeout, $window, Session, Assistance, Profiles, Notifications, Utils) {
+app.controller('RequestAssistanceCtrl', ["$scope", "$rootScope", "$timeout", "$window", "Session", "Assistance", "Users", "Profiles", "Notifications", "Utils", function($scope, $rootScope, $timeout, $window, Session, Assistance, Users, Profiles, Notifications, Utils) {
 
 	$scope.model = {
 		justifications : [], //auxiliar para almacenar las justificaciones que seran mostradas al usuario
@@ -44,6 +44,17 @@ app.controller('RequestAssistanceCtrl', ["$scope", "$rootScope", "$timeout", "$w
 			);
     }
 
+	$scope.loadUser = function(req) {
+		Users.findUser(req.requestor_id,
+			function(person) {
+				req.user = person;
+			},
+			function(error) {
+				Notifications.message(error);
+			}
+		);
+	}
+
 	$scope.loadRequestedLicences = function() {
 		Assistance.getJustificationRequests(null,
 			function(requestedLicences) {
@@ -54,6 +65,8 @@ app.controller('RequestAssistanceCtrl', ["$scope", "$rootScope", "$timeout", "$w
 				$scope.model.requestedLicences = [];
 				for (var i = 0; i < requestedLicences.length; i++) {
 					var req = Utils.formatRequestJustification(requestedLicences[i]);
+					req.requestor_id = requestedLicences[i]['requestor_id'];
+					$scope.loadUser(req);
 					$scope.model.requestedLicences.push(req);
 				}
 			},

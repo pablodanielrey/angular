@@ -12,7 +12,7 @@
     <div ng-controller="RequestAssistanceBirthdayCtrl" ng-include="'modules/systems/assistance/requestAssistanceBirthday.html'"></div>
     <div ng-controller="RequestAssistanceLaoCtrl" ng-include="'modules/systems/assistance/requestAssistanceLao.html'"></div>
     <div ng-controller="RequestAssistance638Ctrl" ng-include="'modules/systems/assistance/requestAssistance638.html'"></div>
-    
+
 
     <div class="myRequests">
       <span><i class="fa fa-ticket"></i> Mis Solicitudes</span>
@@ -21,6 +21,7 @@
       <div class="column t1"><i class="fa fa-ticket"></i> Solicitud</div>
       <div class="column t1"><i class="fa fa-calendar"></i> Día</div>
       <div class="column t1"><i class="fa fa-info-circle"></i> Estado</div>
+      <div class="column t1"><i class="fa fa-user"></i> Modificado por</div>
     </div>
 <div class="scroll">
     <div class="myRequestInfo" ng-repeat="x in model.requestedLicences" >
@@ -51,6 +52,10 @@
       </div>
        <div class="myStateRequestCanceled" ng-class="{true:'visible', false:'hidden'}[x.status == 'CANCELED']">
         <span class="buttonCancel"><i class="fa fa-times"></i> Cancelado</span>
+      </div>
+
+      <div class="userRequest">
+        <span>{{x.user.lastname}}, {{x.user.name}}</span>
       </div>
     </div>
 </div>
