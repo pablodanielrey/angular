@@ -2,6 +2,7 @@
 import json, base64, datetime, traceback, logging
 import inject, re
 import psycopg2
+import time
 
 from model.exceptions import *
 
@@ -687,10 +688,25 @@ class RequestJustification:
         sid = message['session']
         self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
 
+        requestor_id = self.profiles.getLocalUserId(sid)
+
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
-            events = self.justifications.requestJustification(con,userId,justificationId,begin,end,status)
+            events = self.justifications.requestJustification(con,userId,requestor_id,justificationId,begin,end)
             con.commit()
+
+            if status != None and status != 'PENDING':
+                # obtengo el id del request del evento de updateStatus que tiene por defecto
+                reqId = None
+                for ev in events:
+                    if 'data' in ev and 'request_id' in ev['data']:
+                        reqId.append(ev['data']['request_id'])
+
+                for reqId in reqIds:
+                    e = self.justifications.updateJustificationRequestStatus(con,requestor_id,reqId,status)
+                    events.extend(e)
+
+                con.commit()
 
             self.notifier.notifyBosses(con,userId,'justifications_request')
 
@@ -780,10 +796,27 @@ class RequestJustificationRange:
         sid = message['session']
         self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
 
+        requestor_id = self.profiles.getLocalUserId(sid)
+
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
-            events = self.justifications.requestJustificationRange(con,userId,justificationId,begin,end,status)
+            events = self.justifications.requestJustificationRange(con,userId,requestor_id,justificationId,begin,end)
+
             con.commit()
+
+            if status != None and status != 'PENDING':
+                # obtengo el id del request del evento de updateStatus que tiene por defecto
+                reqIds = []
+                for ev in events:
+                    if 'data' in ev and 'request_id' in ev['data']:
+                        reqIds.append(ev['data']['request_id'])
+
+                for reqId in reqIds:
+                    e = self.justifications.updateJustificationRequestStatus(con,requestor_id,reqId,status)
+                    events.extend(e)
+
+                con.commit()
+
 
             self.notifier.notifyBosses(con,userId,'justifications_request')
 

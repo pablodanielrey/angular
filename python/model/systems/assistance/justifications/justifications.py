@@ -34,7 +34,7 @@ class Justifications:
 
     justifications = [
         CJustification(), LAOJustification(), AAJustification(), BSJustification(), R638Justification(),
-        PEJustification(), CumpJustification(), A102Justification(),LMCDJustification(),LMLTJustification()
+        PEJustification(), CumpJustification(), A102Justification(),LMCDJustification(),LMLTJustification(),
         LMAFJustification(), JMJustification(), HolidayJustification(), ParoJustification()
     ]
 
@@ -340,16 +340,13 @@ class Justifications:
 
     """
         realiza el pedido de justificación para ser aprobado
-        estado inicial del pedido = PENDING, con la fecha actual del servidor.
     """
-    def requestJustification(self,con,userId,justificationId,begin,end=None,status='PENDING'):
+    def requestJustification(self,con,userId,requestor_id,justificationId,begin,end=None):
 
-        if status is None:
-            status = 'PENDING'
 
         for j in self.justifications:
             if j.isJustification(justificationId):
-                return j.requestJustification(self,con,userId,begin,end,status)
+                return j.requestJustification(self,con,userId,requestor_id,begin,end)
 
         raise JustificationError('No se puede encontrar ese tipo de justificación')
 
@@ -358,9 +355,7 @@ class Justifications:
         realiza el pedido de justificación para ser aprobado entre un rango de fechas
         estado inicial del pedido = PENDING, con la fecha actual del servidor.
     """
-    def requestJustificationRange(self,con,userId,justificationId,begin,end,status):
-        if status is None:
-            status = 'PENDING'
+    def requestJustificationRange(self,con,userId,requestor_id,justificationId,begin,end):
 
         events = []
         for j in self.justifications:
@@ -369,7 +364,7 @@ class Justifications:
                 diff = (end-begin).days
                 # incremento en 1 para que tome el ultimo dia
                 for x in range(0, diff + 1):
-                    events.extend(j.requestJustification(self,con,userId,date,None,status))
+                    events.extend(j.requestJustification(self,con,userId,requestor_id,date,None))
                     date = date + datetime.timedelta(days=1)
 
                 return events
