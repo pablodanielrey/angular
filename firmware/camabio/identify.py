@@ -2,6 +2,7 @@
 import sys, logging, time, codecs
 import camabio, cserial
 
+
 logging.getLogger().setLevel(logging.INFO)
 
 if len(sys.argv) <= 1:
