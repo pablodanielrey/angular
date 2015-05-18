@@ -78,7 +78,7 @@ class Justifications:
     """
         obtiene todas las justificaciones que estan como ultimo estado en la lista de estados pasada como parametro.
         status = una lista de estados posibles.
-        retora un dict con los ids de las justificaciones como key y el estado como value
+        retora un dict con los ids de las justificaciones como key y un array de el estado y el user_id como value
         { id: status }
     """
     def _getJustificationsInStatus(self,con,status=None):
@@ -86,16 +86,16 @@ class Justifications:
 
         """ obtengo el ultimo estado de los pedidos de justificacion """
         if status is None:
-            cur.execute('select jrs.request_id,jrs.status from assistance.justifications_requests_status as jrs, (select request_id,max(created) as created from assistance.justifications_requests_status group by request_id) as r where r.created = jrs.created and r.request_id = jrs.request_id')
+            cur.execute('select jrs.request_id,jrs.status,jrs.user_id from assistance.justifications_requests_status as jrs, (select request_id,max(created) as created from assistance.justifications_requests_status group by request_id) as r where r.created = jrs.created and r.request_id = jrs.request_id')
         else:
-            cur.execute('select jrs.request_id,jrs.status from assistance.justifications_requests_status as jrs, (select request_id,max(created) as created from assistance.justifications_requests_status group by request_id) as r where r.created = jrs.created and r.request_id = jrs.request_id and jrs.status in %s',(tuple(status),))
+            cur.execute('select jrs.request_id,jrs.status,jrs.user_id from assistance.justifications_requests_status as jrs, (select request_id,max(created) as created from assistance.justifications_requests_status group by request_id) as r where r.created = jrs.created and r.request_id = jrs.request_id and jrs.status in %s',(tuple(status),))
 
         if cur.rowcount <= 0:
             return {}
 
         statusR = {}
         for rs in cur:
-            statusR[rs[0]] = rs[1]
+            statusR[rs[0]] = [rs[1],rs[2]]
 
         return statusR
 
@@ -201,7 +201,8 @@ class Justifications:
                     'justification_id':j[2],
                     'begin':j[3],
                     'end':j[4],
-                    'status':statusR[jid]
+                    'status':statusR[jid][0],
+                    'requestor_id':statusR[jid][1]
                 }
             )
 
@@ -262,7 +263,8 @@ class Justifications:
                     'justification_id':j[2],
                     'begin':j[3],
                     'end':j[4],
-                    'status':statusR[jid]
+                    'status':statusR[jid][0],
+                    'requestor_id':statusR[jid][1]
                 }
             )
 
