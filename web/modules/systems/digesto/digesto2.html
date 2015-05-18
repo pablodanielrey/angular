@@ -1,21 +1,38 @@
 <html>
 <head>
-  <meta charset="utf-8"/>
-  <meta name='viewport' content='width=device-width'/>
-  <link rel="stylesheet" type="text/css" href="digesto2.css"/>
+    <meta charset="utf-8"/>
+    <meta name='viewport' content='width=device-width'/>
+    <script type="text/javascript" src="../../../angular/angular-1.3.8/angular.js"></script>
+    <script type="text/javascript" src="digesto.js"></script>
+    <link rel="stylesheet" type="text/css" href="digesto2.css"/>
 </head>
 <body>
-  <div class="pantalla">
-      <div class="menu">
-        :::::MENU::::::
-      </div>
-      <div class="subMenu">
-        menu 2
-      </div>
+  <!-- ::: PANTALLA ::: -->
+  <div class="screen ng-controller="MenuCtrl"">
 
+      <!-- MENU PARA MOVILES -->
+      <nav class="menuMovil">
+          <ul>
+                <li>Perdil</li>
+                <li>Admin Usuarios</li>
+                <li>Pedido de Cuntas</li>
+                <li>Asistencia</li>
+          </ul>
+      </nav>
 
+      <!-- MENU PARA PC -->
+      <nav class="menuPc">
+          <ul>
+                <li>Perdil</li>
+                <li>Admin Usuarios</li>
+                <li>Pedido de Cuntas</li>
+                <li>Asistencia</li>
+          </ul>
+      </nav>
+
+      <!-- ::: CONTENEDOR ::: -->
       <div class="content">
-        este es el contenido pedazo de puto
+        Contenido - Contenido - Contenido - Contenido - Contenido - Contenido -
       </div>
   </div>
 </body>

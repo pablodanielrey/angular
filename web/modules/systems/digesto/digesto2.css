@@ -2,7 +2,7 @@
   margin:0;
 }
 
-.pantalla {
+.screen {
     display:flex;
     flex-direction:row;
     wrap:nowrap;
@@ -11,25 +11,38 @@
     overflow-y: hidden;
 }
 
-.menu {
+@media screen and (min-width: 640px) {
+    .menuMovil {
+        display:none;
+    }
+}
+
+@media screen and (max-width: 640px) {
+    .menuPc{
+        display:none;
+    }
+}
+
+.menuMovil {
     background-color:red;
-    opacity: 0.4;
-    width:10%;
+    opacity: 0.8;
+    width:90%;
     height:100%;
+    color:white;
+    font-size: 2em;
     position:absolute;
     z-index:998;
     /*transform: translate3d(-100%, 0, 0);*/
 }
-.subMenu {
-  background-color:red;
-  color:white;
-  width:5%;
-  height:100%;
-  position:absolute;
-  z-index:999;
-  /*transform: translate3d(-100%, 0, 0);*/
-}
 
+.menuPc {
+    background-color:black;
+    opacity: 0.8;
+    width:20%;
+    height:100%;
+    color:white;
+
+}
 .content {
     background-color:blue;
     width: 100%;
