@@ -81,7 +81,9 @@ app.service('Utils', function() {
   };
 
   this.formatTime = function(date){
-    return date.toTimeString().substring(0, 5);
+    var dateAux = new Date(date);
+    var timeFormated = dateAux.toTimeString().substring(0, 5)
+    return timeFormated;
   };
 
   this.getTimeFromMinutes = function(minutes){

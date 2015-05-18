@@ -4,6 +4,9 @@ app.controller('UsersAssistanceManagementMediatorRequestJustificationCtrl', ["$s
 
   if(!$scope.model) Notifications.message("No esta definido el modelo");
   
+  //***** variables de seleccion de la seccion *****
+  $scope.model.requestSelected = false; //flag para indicar la seleccion del formulario de solicitud
+  $scope.model.availableSelected = false; //flag para indicar la seleccion de la visualizacion de disponibilidad
  
   $scope.init = function(justificationId){
 
@@ -20,6 +23,36 @@ app.controller('UsersAssistanceManagementMediatorRequestJustificationCtrl', ["$s
 
   };
    
+  
+  
+  $scope.clearSections = function(){
+    $scope.model.requestSelected = false;
+    $scope.model.availableSelected = false;
+  };
+  
+  
+  $scope.$on('JustificationsRequestsUpdatedEvent', function(event, data){
+    $scope.model.justificationSelectedId = null;
+    $scope.clearSections();
+
+	});
+
+	$scope.$on('JustificationStatusChangedEvent', function(event, data) {
+    $scope.model.justificationSelectedId = null;
+    $scope.clearSections();
+	});
+  
+  
+  $scope.$watch('model.selectedUser', function() {
+    $scope.model.justificationSelectedId = null;
+    $scope.clearSections();
+  }); 
+  
+  $scope.$watch('model.justificationSelectedId', function() {
+    $scope.clearSections();
+  });
+  
+  
   
   
   //***** METODOS DE SELECCION DE LA SECCION *****
@@ -80,13 +113,46 @@ app.controller('UsersAssistanceManagementMediatorRequestJustificationCtrl', ["$s
   
 
   
+  /*************************************
+   * METODOS DE SELECCION DE SECCIONES *
+   *************************************/
   
-  
-  
-  
-  
-  
- 
+  /**
+   * Esta seleccionado el formulario para solicitar justificaicion?
+   * @returns {Boolean}
+   */
+	$scope.isSelectedRequest = function() {
+		return $scope.model.requestSelected;
+	};
+
+  /**
+   * Esta seleccionada la seccion para ver la disponibilidad?
+   * @returns {Boolean}
+   */
+  $scope.isSelectedAvailable = function() {
+		return $scope.model.availableSelected;
+	};
 
 
+
+  /**
+   * Seleccionar formulario para definir una solicitud del articulo 102
+   * @returns {Boolean}
+   */
+	$scope.selectRequest = function() {
+    $scope.model.availableSelected = false;
+		$scope.model.requestSelected = true;
+	};
+
+
+  /**
+   * Seleccionar seccion para ver la disponibilidad correspondiente al articulo 102
+   * @returns {Boolean}
+   */
+	$scope.selectAvailable = function() {
+		$scope.model.requestSelected = false;
+		$scope.model.availableSelected = true;
+
+	};
+  
 }]);
