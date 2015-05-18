@@ -75,10 +75,10 @@
 
   </div>
   <!-- CONTENEDOR DE SOLICITUDES REALIZADAS + HISTORIAL -->
-  <div class="title2">
+  <div class="title2" ng-class="{true:'hidden'}[model.readOnly]">
     <label><i class="fa fa-clock-o"></i> | Modificar Horario</label>
   </div>
-  <div class="contentSecond">
+  <div class="contentSecond" ng-class="{true:'hidden'}[model.readOnly]">
     <!-- MODULO SOLICITAR NUEVO HORARIO SEMANAL -->
     <form name="form" class="newScheduleWeekly" ng-submit="form.$valid && saveNewSchedule()">
       <div class="titleMyScheduleWeekly">

@@ -295,3 +295,5 @@
 .mySchedule .ContentRepeat:nth-child(even) { background: white }
 .mySchedule .ContentRepeat:nth-child(odd) { background: #F2F2F2}
 .mySchedule .hidden {visibility:hidden;}
+.mySchedule .title2.hidden {display:none;}
+.mySchedule .contentSecond.hidden {display:none;}
