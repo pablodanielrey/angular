@@ -9,8 +9,10 @@ def writeAndRead(port,data):
   print(codecs.encode(bytes(data),'hex'))
   ser.write(bytes(data))
   time.sleep(0.5)
-  print(codecs.encode(ser.read(24),'hex'))
+  response = ser.read(24)
+  print(codecs.encode(response,'hex'))
   ser.close()
+  return response
 
 
 def open(p):

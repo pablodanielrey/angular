@@ -100,6 +100,8 @@ PREFIX = 0
 CMD = 2
 LEN = 4
 PARAM = 6
+RET = 6
+DATA = 8
 CHKSUM = 22
 
 def getAttrFromPackage(att,data):
