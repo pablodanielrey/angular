@@ -191,7 +191,7 @@ app.service('Utils', function() {
         return {id:justificationId, name:'Compensatorio', shortName:'C', icon:'fa-ticket', requestMode:'dates', stockMode:'total'};
       break;
       case 'fa64fdbd-31b0-42ab-af83-818b3cbecf46':
-        return {id:justificationId, name:'Boleta de Salida', shortName:'BS', icon:'fa-ticket', requestMode:'times', stockMode:'totalTime'};
+        return {id:justificationId, name:'Boleta de Salida', shortName:'BS', icon:'fa-ticket', requestMode:'times', stockMode:'yearTime'};
       break;
       case '4d7bf1d4-9e17-4b95-94ba-4ca81117a4fb':
         return {id:justificationId, name:'Art 102', shortName:'102', icon:'fa-ticket', requestMode:'date', stockMode:'year'};
