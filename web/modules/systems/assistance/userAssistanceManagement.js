@@ -191,7 +191,7 @@ app.controller('UserAssistanceManagementCtrl', ["$scope", "$rootScope", "$timeou
     if($scope.model.rjSort[0] === sort){
       $scope.model.rjReversed = !$scope.model.rjReversed;
     } else {
-      switch($scope.model.rjSort[0]){
+      switch(sort){
         case "dateSort":
           $scope.model.rjSort = ["dateSort", "justificationName"]
         break;
@@ -201,6 +201,7 @@ app.controller('UserAssistanceManagementCtrl', ["$scope", "$rootScope", "$timeou
       }
       $scope.model.rjReversed = false;
     }
+    
   };
 
 
