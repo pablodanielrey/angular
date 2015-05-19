@@ -50,7 +50,7 @@
 
       <div class="myStateRequestApproved" ng-class="{true:'visible', false:'hidden'}[req.status == 'APPROVED']">
         <span class="buttonApproved"><i class="fa fa-check-circle"></i> Aprobado</span>
-        <button class="buttonRefuse" ng-click="cancelRequest(req)"><i class="fa fa-times"></i> Cancelar</button>
+        <button class="buttonRefuse" ng-click="cancelRequest(req)" ng-disabled="model.processingRequestedJustifications"><i class="fa fa-times"></i> Cancelar</button>
       </div>
     </div>
   </div>

@@ -87,13 +87,15 @@ app.controller('UsersAssistanceManagementMediatorRequestJustificationFormTimesCo
 			id:$scope.justification.id,
 			begin:new Date($scope.model.date),
       end:new Date($scope.model.date),
-      status:"APPROVED"
 		};    
     
     request.begin.setHours($scope.model.begin.getHours(), $scope.model.begin.getMinutes());
     request.end.setHours($scope.model.end.getHours(), $scope.model.end.getMinutes());
+    
+    console.log(request);
+    console.log($scope.model.selectedUser);
 
-    Assistance.requestJustificationRange($scope.model.selectedUser.id, request,
+    Assistance.requestJustificationRange($scope.model.selectedUser.id, request, "APPROVED",
 			function(ok) {
 				$scope.clearConfirmation(); //limpiar contenido
         $scope.clearSections();

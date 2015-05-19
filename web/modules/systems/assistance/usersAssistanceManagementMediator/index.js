@@ -20,7 +20,8 @@ app.controller('UsersAssistanceManagementMediatorCtrl', ["$scope", "$timeout", "
     requestedJustifications: [],    //requerimientos del usuario seleccionado
     requestedJustificationsFiltered: null,   //requerimientos filtrados del usuario seleccionado
     rjSort: null,       //ordenamiento de la lista de justificaciones
-    rjReversed: null   //flag para indicar el ordenamiento reverso de la lista de justificaciones
+    rjReversed: null,   //flag para indicar el ordenamiento reverso de la lista de justificaciones
+    processingRequestedJustifications: false  //flag para indicar que se esta procesando
 
   };
   
@@ -36,8 +37,10 @@ app.controller('UsersAssistanceManagementMediatorCtrl', ["$scope", "$timeout", "
    * METODOS DE REQUESTED JUSTIFICACION *
    **************************************/
   $scope.loadRequestedJustifications = function() {
+    $scope.model.processingRequestedJustifications = true;
     Assistance.getJustificationRequestsToManage(['APPROVED'],"TREE",
       function(requestedJustifications) {
+        $scope.model.processingRequestedJustifications = false;
         $scope.model.requestedJustifications = requestedJustifications;
         if($scope.model.selectedUser !== null) $scope.filterUserRequestedJustifications();
       },
@@ -58,6 +61,20 @@ app.controller('UsersAssistanceManagementMediatorCtrl', ["$scope", "$timeout", "
         $scope.model.requestedJustificationsFiltered.push(req);
       }
     }
+  };
+  
+  
+  $scope.cancelRequest = function(request) {
+    $scope.model.processingRequestedJustifications = true;
+    Assistance.updateJustificationRequestStatus(request.id, 'CANCELED',
+      function(ok) {
+        $scope.model.processingRequestedJustifications = false;
+      },
+      function(error) {
+        $scope.model.processingRequestedJustifications = false;
+        Notifications.message(error);
+      }
+    );
   };
 
 
@@ -199,5 +216,15 @@ app.controller('UsersAssistanceManagementMediatorCtrl', ["$scope", "$timeout", "
     $scope.loadRequestedJustifications();
     $scope.model.clearIndex();
   }, 0);
+  
+  
+  $scope.$on('JustificationsRequestsUpdatedEvent', function(event, data){
+    $scope.loadRequestedJustifications();
+
+	});
+
+	$scope.$on('JustificationStatusChangedEvent', function(event, data) {
+    $scope.loadRequestedJustifications();
+	});
 
 }]);
