@@ -36,7 +36,10 @@
           
           <div ng-if="justification.stockMode==='year'" ng-controller="UsersAssistanceManagementMediatorRequestJustificationStockYearCtrl" ng-include="'modules/systems/assistance/usersAssistanceManagementMediator/requestJustificationStockYear.html'" ng-class="{true:'visible', false:'hidden'}[isSelectedAvailable()]"></div>
           
+          <div ng-if="justification.stockMode==='totalTime'" ng-controller="UsersAssistanceManagementMediatorRequestJustificationStockTotalTimeCtrl" ng-include="'modules/systems/assistance/usersAssistanceManagementMediator/requestJustificationStockTotal.html'" ng-class="{true:'visible', false:'hidden'}[isSelectedAvailable()]"></div>
+
           <div ng-if="justification.stockMode==='none'" ng-include="'modules/systems/assistance/usersAssistanceManagementMediator/requestJustificationStockNone.html'" ng-class="{true:'visible', false:'hidden'}[isSelectedAvailable()]"></div>
+          
 
 
         </div>

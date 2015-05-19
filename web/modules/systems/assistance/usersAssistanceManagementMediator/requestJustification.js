@@ -99,6 +99,21 @@ app.controller('UsersAssistanceManagementMediatorRequestJustificationCtrl', ["$s
     );
   };
   
+  
+  $scope.loadStockTotalTime = function(){
+    Assistance.getJustificationStock($scope.model.selectedUser.id, $scope.justification.id, null, null,
+      function(justification) {
+        $scope.justification.stock = Utils.getTimeFromSeconds(justification.stock);
+      },
+      function(error) {
+        Notifications.message(error);
+      }
+    );
+  };
+  
+ 
+  
+  
   $scope.loadStockYear = function(){
 
     Assistance.getJustificationStock($scope.model.selectedUser.id, $scope.justification.id, null, 'YEAR',

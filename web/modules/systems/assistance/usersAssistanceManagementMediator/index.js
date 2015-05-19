@@ -78,6 +78,24 @@ app.controller('UsersAssistanceManagementMediatorCtrl', ["$scope", "$timeout", "
   };
 
 
+  $scope.sortRequestedJustifications = function(sort){
+    if($scope.model.rjSort[0] === sort){
+      $scope.model.rjReversed = !$scope.model.rjReversed;
+    } else {
+      switch(sort){
+        case "dateSort":
+          $scope.model.rjSort = ["dateSort", "justificationName"]
+        break;
+        case "justificationName":
+          $scope.model.rjSort = ["justificationName", "dateSort"]
+        break;
+      }
+      $scope.model.rjReversed = false;
+    }
+    console.log(sort);
+    console.log($scope.model.rjSort)
+    console.log($scope.model.rjReversed)
+  };
 
 
 

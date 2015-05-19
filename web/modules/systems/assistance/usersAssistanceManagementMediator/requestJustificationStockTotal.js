@@ -16,7 +16,7 @@ app.controller('UsersAssistanceManagementMediatorRequestJustificationStockTotalC
    * INICIALIZACION *
    ******************/
   $scope.clearStock = function(){
-    $scope.model.stock = null;
+    $scope.justification.stock = null;
   };
   
   
