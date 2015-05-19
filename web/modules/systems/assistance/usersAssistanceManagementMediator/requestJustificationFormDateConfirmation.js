@@ -57,7 +57,6 @@ app.controller('UsersAssistanceManagementMediatorRequestJustificationFormDateCon
     var request = {
 			id:$scope.justification.id,
 			begin:$scope.model.date,
-      status:"APPROVED"
 		};
     
     
@@ -65,7 +64,7 @@ app.controller('UsersAssistanceManagementMediatorRequestJustificationFormDateCon
     console.log(request);
     
 
-    Assistance.requestJustification($scope.model.selectedUser.id, request,
+    Assistance.requestJustification($scope.model.selectedUser.id, request, 'APPROVED',
 			function(ok) {
 				$scope.clearConfirmation(); //limpiar contenido
         $scope.clearSections();

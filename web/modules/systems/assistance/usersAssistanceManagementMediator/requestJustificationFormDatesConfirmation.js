@@ -66,10 +66,9 @@ app.controller('UsersAssistanceManagementMediatorRequestJustificationFormDatesCo
 			id:$scope.justification.id,
 			begin:$scope.model.begin,
       end:$scope.model.end,
-      status:"APPROVED"
 		};    
 
-    Assistance.requestJustificationRange($scope.model.selectedUser.id, request,
+    Assistance.requestJustificationRange($scope.model.selectedUser.id, request, "APPROVED",
 			function(ok) {
      
 				$scope.clearConfirmation(); //limpiar contenido
