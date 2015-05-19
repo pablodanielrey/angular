@@ -1,11 +1,15 @@
 # -*- coding: utf-8 -*-
 import cserial, camabio
 import time, codecs, logging
+from threading import Lock
 
-class Firmware:
+class FirmwareReader:
 
     def __init__(self,port):
         self.port = port
+        self.cmd_processing = Lock()
+        self.status = None
+        self.status_lock = Lock()
 
 
     def start(self):
@@ -73,6 +77,112 @@ class Firmware:
 
 
 
+    """
+        cancela un comando en curso.
+        en el caso del comando en curso que se pueda cancelar se tiene :
+            self.status != None
+            y adquirido el lock cmd_processing
+    """
+    def cancel(self):
+
+        self.status_lock.acquire()
+        try:
+            if self.status is None:
+                return True
+
+            data = camabio.createPackage(0x130,0,0)
+            cserial.write(data)
+            time.sleep(0.5)
+
+            self.cmd_processing.acquire()
+            try:
+                resp = cserial.readS(24)
+                ret = camabio.getAttrFromPackage(camabio.RET,resp)
+                if ret == camabio.ERR_SUCCESS:
+                    return True
+                else:
+                    logging.warn('se cancelo {} pero se leyo del serie {}'.format(self.status,codecs.encode(resp,'hex')))
+                    return False
+
+            finally:
+                self.cmd_processing.release()
+
+        finally:
+            self.status_lock.release()
+
+
+
+
+
+    """
+        identifica la huella de una persona
+    """
+    def identify(self):
+
+        self.status_lock.acquire()
+        try:
+            if self.status != None:
+                return None
+            self.status = 'identifiying'
+
+            data = camabio.createPackage(0x102,0,0)
+            cserial.write(data)
+            self.cmd_processing.acquire()
+        finally:
+            self.status_lock.release()
+
+        try:
+            time.sleep(0.5)
+
+            huella = None
+            exit = False
+            while not exit:
+                resp = cserial.readS(24)
+                ret = camabio.getAttrFromPackage(camabio.RET,resp)
+                data = camabio.getAttrFromPackage(camabio.DATA,resp)
+                exit = True
+
+                if ret == camabio.ERR_FAIL:
+                    if data == camabio.ERR_IDENTIFY:
+                        logging.warn('no existe ninguna persona con esa huella')
+
+                    if data == camabio.ERR_ALL_TMPL_EMPTY:
+                        logging.warn('no existen huellas en el lector')
+
+                    if data == camabio.ERR_TIME_OUT:
+                        logging.warn('timeout')
+
+                    if data == camabio.ERR_BAD_QUALITY:
+                        logging.warn('mala calidad de la huella')
+
+                    if data == camabio.ERR_FP_CANCEL:
+                        logging.warn('identificación cancelada')
+
+                elif ret == camabio.ERR_SUCCESS:
+
+                    if data == camabio.GD_NEED_RELEASE_FINGER:
+                        exit = False
+                    else:
+                        huella = data
+
+                else:
+                    logging.warn('respuesta desconocida')
+                    logging.warn(codecs.encode(resp,'hex'))
+
+
+            return huella
+
+        finally:
+            self.cmd_processing.release()
+
+            self.status_lock.acquire()
+            try:
+                self.status = None
+            finally:
+                self.status_lock.release()
+
+
+
 
     """
         retorna la (huella,template) despues de haber sido enrolada en el lector
@@ -80,85 +190,107 @@ class Firmware:
         template = template de la huella
     """
     def enroll(self):
-        empty = self.getEmptyId()
 
-        data = camabio.createPackage(0x0103,0x02,empty)
-        cserial.write(data)
-        time.sleep(0.5)
+        self.status_lock.acquire()
+        try:
+            if self.status != None:
+                return (None,None)
+            self.status = 'enrolling'
 
-        fase = 0
-        huella = None
-        while huella is None:
-            resp = cserial.readS(24)
+            empty = self.getEmptyId()
+            data = camabio.createPackage(0x0103,0x02,empty)
+            cserial.write(data)
+            self.cmd_processing.acquire()
+        finally:
+            self.status_lock.release()
 
-            logging.debug(codecs.encode(resp,'hex'))
+        try:
+            time.sleep(0.5)
 
-            err = camabio.getAttrFromPackage(camabio.RET,resp)
-            rdata = camabio.getAttrFromPackage(camabio.DATA,resp)
-            if err == camabio.ERR_FAIL:
-                """ error, proceso el error """
-                if rdata == camabio.ERR_INVALID_TMPL_NO:
-                    logging.warn('error en el número de huella')
+            fase = 0
+            huella = None
+            while huella is None:
+                resp = cserial.readS(24)
+
+                logging.debug(codecs.encode(resp,'hex'))
+
+                err = camabio.getAttrFromPackage(camabio.RET,resp)
+                rdata = camabio.getAttrFromPackage(camabio.DATA,resp)
+                if err == camabio.ERR_FAIL:
+                    """ error, proceso el error """
+                    if rdata == camabio.ERR_INVALID_TMPL_NO:
+                        logging.warn('error en el número de huella')
+                        return (None,None)
+
+                    if rdata == camabio.ERR_TMPL_NOT_EMPTY:
+                        logging.warn('el número de huella no esta vacío')
+                        return (None,None)
+
+                    if rdata == camabio.ERR_TIME_OUT:
+                        logging.warn('timeout')
+                        continue
+
+                    if rdata == camabio.ERR_BAD_QUALITY:
+                        logging.warn('mala calidad')
+                        continue
+
+                    if rdata == camabio.ERR_GENERALIZE:
+                        logging.warn('error generalizando las huellas')
+                        return (None,None)
+
+                    if rdata == camabio.ERR_DUPLICATION_ID:
+                        pos = camabio.getIntFromPackage(camabio.DATA + 2,resp)
+                        logging.warn('error, huella duplicada en la posición {}'.format(pos))
+                        return (None,None)
+
+                    if rdata == camabio.ERR_FP_CANCEL:
+                        logging.warn('Se ha cancelado el comando de enrolado')
+                        return (None,None)
+
+                    logging.warn('error desconocido')
+                    logging.warn(codecs.encode(resp,'hex'))
                     return (None,None)
 
-                if rdata == camabio.ERR_TMPL_NOT_EMPTY:
-                    logging.warn('el número de huella no esta vacío')
+                elif err == camabio.ERR_SUCCESS:
+
+                    """ ok es un resultado """
+                    if rdata == camabio.GD_NEED_FIRST_SWEEP:
+                        logging.debug('Necesita primera huella')
+                        fase = 1
+                        continue
+
+                    if rdata == camabio.GD_NEED_SECOND_SWEEP:
+                        logging.debug('Necesita segunda huella')
+                        fase = 2
+                        continue
+
+                    if rdata == camabio.GD_NEED_THIRD_SWEEP:
+                        logging.debug('Necesita tercera huella')
+                        fase = 3
+                        continue
+
+                    if rdata == camabio.GD_NEED_RELEASE_FINGER:
+                        logging.debug('levante el dedo del lector')
+                        continue
+
+                    huella = rdata
+
+                else:
+                    logging.warn('estado desconocido')
+                    logging.warn(codecs.encode(resp,'hex'))
                     return (None,None)
 
-                if rdata == camabio.ERR_TIME_OUT:
-                    logging.warn('timeout')
-                    continue
-
-                if rdata == camabio.ERR_BAD_QUALITY:
-                    logging.warn('mala calidad')
-                    continue
-
-                if rdata == camabio.ERR_GENERALIZE:
-                    logging.warn('error generalizando las huellas')
-                    return (None,None)
-
-                if rdata == camabio.ERR_DUPLICATION_ID:
-                    pos = camabio.getIntFromPackage(camabio.DATA + 2,resp)
-                    logging.warn('error, huella duplicada en la posición {}'.format(pos))
-                    return (None,None)
-
-
-                logging.warn('error desconocido')
-                logging.warn(codecs.encode(resp,'hex'))
+            if huella is None:
                 return (None,None)
 
-            elif err == camabio.ERR_SUCCESS:
+            (number,template) = self.readTemplate(huella)
+            return (huella,template)
 
-                """ ok es un resultado """
-                if rdata == camabio.GD_NEED_FIRST_SWEEP:
-                    logging.debug('Necesita primera huella')
-                    fase = 1
-                    continue
+        finally:
+            self.cmd_processing.release()
 
-                if rdata == camabio.GD_NEED_SECOND_SWEEP:
-                    logging.debug('Necesita segunda huella')
-                    fase = 2
-                    continue
-
-                if rdata == camabio.GD_NEED_THIRD_SWEEP:
-                    logging.debug('Necesita tercera huella')
-                    fase = 3
-                    continue
-
-                if rdata == camabio.GD_NEED_RELEASE_FINGER:
-                    logging.debug('levante el dedo del lector')
-                    continue
-
-                huella = rdata
-
-            else:
-                logging.warn('estado desconocido')
-                logging.warn(codecs.encode(resp,'hex'))
-                return (None,None)
-
-
-        if huella is None:
-            return (None,None)
-
-        (number,template) = self.readTemplate(huella)
-        return (huella,template)
+            self.status_lock.acquire()
+            try:
+                self.status = None
+            finally:
+                self.status_lock.release()
