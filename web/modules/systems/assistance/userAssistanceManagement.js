@@ -198,6 +198,9 @@ app.controller('UserAssistanceManagementCtrl', ["$scope", "$rootScope", "$timeou
         case "justificationName":
           $scope.model.rjSort = ["justificationName", "dateSort"]
         break;
+        case "status":
+          $scope.model.rjSort = ["status","justificationName", "dateSort"]
+        break;
       }
       $scope.model.rjReversed = false;
     }
