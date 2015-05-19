@@ -464,7 +464,7 @@ app.service('Assistance', ['Utils','Messages','Session',
 				msg.request.end = justification.end;
 			}
 
-			if (!(typeof status === 'undefined')) {
+			if (status != null && !(typeof status === 'undefined')) {
 				msg.request.status = status;
 			}
 
