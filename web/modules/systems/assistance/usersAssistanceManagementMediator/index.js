@@ -92,9 +92,7 @@ app.controller('UsersAssistanceManagementMediatorCtrl', ["$scope", "$timeout", "
       }
       $scope.model.rjReversed = false;
     }
-    console.log(sort);
-    console.log($scope.model.rjSort)
-    console.log($scope.model.rjReversed)
+
   };
 
 
