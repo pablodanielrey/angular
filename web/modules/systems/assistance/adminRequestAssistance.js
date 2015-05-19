@@ -30,6 +30,7 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $filter,$timeout, 
       expr = ($scope.filterSelected == null)?'':$scope.filterSelected;
       $scope.model.requestsFilters = $scope.model.requests;
       $scope.model.requestsFilters = $filter('filter')($scope.model.requestsFilters,expr,status);
+      $scope.order(['date','user.lastname','user.name'],false);
     }
 
 
