@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import codecs
+from itertools import zip_longest
 
 
 ERR_SUCCESS = 0x00
@@ -39,6 +40,22 @@ GD_NO_DETECT_FINGER = 0x00
 GD_TEMPLATE_NOT_EMPTY = 0x01
 GD_TEMPLATE_EMPTY = 0x00
 
+
+"""
+    calcula el checksum de un template de acuerdo al manual de camabio
+    los 2 ultimos bytes del template son el checksum.
+    el checksum = d[0] + d[1] + .... + d[n - 1] + d[n]
+    leidos del lector los, el template esta formado por enteros de 2 bytes en little endian.
+    retorna :
+    (sumaCalculada,sumaDelTemplate)
+"""
+def calcCheckSumTemplate(template):
+    templ = zip_longest(*[iter(template[-2:])]*2,fillvalue=None)
+    s = 0
+    for b in templ:
+        s = s + int.from_bytes(b,byteorder='little')
+    s2 = int.from_bytes(template[-2:],byteorder='little')
+    return (s,s2)
 
 
 
@@ -92,12 +109,29 @@ def getIntFromPackage(i,data):
     return n
 
 
+def extractResponseDataPackage(data):
+    r = {}
+    r['PREFIX'] = getIntFromPackage(0,data)
+    r['RCM'] = getIntFromPackage(2,data)
+    r['LEN'] = getIntFromPackage(4,data)
+    r['RET'] = getIntFromPackage(6,data)
+    r['DATA'] = data[8:len(data)-2]
+    r['CHKSUM'] = getIntFromPackage(len(data)-2,data)
+    return r
+
+
+
+
+
+
+
 """
     ej:
         getAttrFromPackage(CMD,pkg) --> 0x010a
 """
 PREFIX = 0
 CMD = 2
+RCM = 2
 LEN = 4
 PARAM = 6
 RET = 6
