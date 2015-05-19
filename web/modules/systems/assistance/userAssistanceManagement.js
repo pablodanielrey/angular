@@ -108,7 +108,7 @@ app.controller('UserAssistanceManagementCtrl', ["$scope", "$rootScope", "$timeou
 
 
   $scope.loadUserRequestedJustifications = function() {
-    Assistance.getJustificationRequestsToManage(['APPROVED'],"TREE",
+    Assistance.getJustificationRequestsToManage(['CANCELED','APPROVED'],"TREE",
       function(requestedJustifications) {
         $scope.model.requestedJustifications = requestedJustifications;
         if($scope.model.user != null) $scope.filterUserRequestedJustifications();
@@ -201,7 +201,7 @@ app.controller('UserAssistanceManagementCtrl', ["$scope", "$rootScope", "$timeou
       }
       $scope.model.rjReversed = false;
     }
-    
+
   };
 
 

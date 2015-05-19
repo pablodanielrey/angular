@@ -56,6 +56,12 @@
         <span class="buttonApproved"><i class="fa fa-check-circle"></i> Aprobado</span>
         <button class="buttonRefuse" ng-click="cancelRequest(req)"><i class="fa fa-times"></i> Cancelar</button>
       </div>
+
+
+      <div class="myStateRequestCanceled" ng-class="{true:'visible', false:'hidden'}[req.status == 'CANCELED']">
+       <span class="buttonCancel"><i class="fa fa-times"></i> Cancelado</span>
+     </div>
+
     </div>
   </div>
 </div>
