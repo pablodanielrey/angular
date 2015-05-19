@@ -113,14 +113,14 @@ class CumpJustification(Justification):
         inicializa un pedido en estado pendiente de una justificación en las fechas indicadas
         solo se tiene en cuenta begin
     """
-    def requestJustification(self,utils,con,userId,begin,end):
+    def requestJustification(self,utils,con,userId,requestor_id,begin,end):
         if self.available(utils,con,userId,begin) <= 0:
             raise RestrictionError('No existe stock disponible')
 
         jid = str(uuid.uuid4())
         cur = con.cursor()
         cur.execute('set timezone to %s',('UTC',))
-        cur.execute('insert into assistance.justifications_requests (id,user_id,justification_id,jbegin) values (%s,%s,%s,%s)',(jid,userId,self.id,begin))
+        cur.execute('insert into assistance.justifications_requests (id,user_id,requestor_id,justification_id,jbegin) values (%s,%s,%s,%s,%s)',(jid,userId,requestor_id,self.id,begin))
 
         events = []
         e = {

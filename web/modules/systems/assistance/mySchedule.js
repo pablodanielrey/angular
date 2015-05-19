@@ -174,6 +174,21 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
 
   };
 
+  $scope.setProfileReadOnly = function() {
+
+    $scope.model.readOnly = true;
+    userId = $scope.model.sessionUserId;
+
+    Users.findUser(userId,
+      function(user) {
+        $scope.model.users.push(user);
+        $scope.selectUser(user);
+      },
+      function(error) {
+        Notifications.message(error);
+      });
+  }
+
    /**
    * Cargar usuarios
    */
@@ -181,6 +196,13 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
     Assistance.getUsersInOfficesByRole('autoriza',
       function(users) {
         $scope.model.users = [];
+
+        if (users == null || users.length <= 0) {
+          $scope.setProfileReadOnly();
+          return;
+        }
+
+        $scope.model.readOnly = false;
         for (var i = 0; i < users.length; i++) {
           Users.findUser(users[i],
             function(user) {
@@ -218,6 +240,7 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
   $timeout(function() {
 
     $scope.model.dateOfWeek = new Date();
+    $scope.model.readOnly = true;
 
     $scope.loadSession();
     $scope.loadUsers();
@@ -269,6 +292,9 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
    * Mostrar lista de usuarios
    */
   $scope.displayListUser = function(){
+    if ($scope.model.readOnly) {
+      return;
+    }
     $scope.model.searchUser = null;
     $scope.model.displayListUser = true;
   };
@@ -341,7 +367,7 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
   }
 
   $scope.saveNewSchedule = function(){
-    if(!$scope.isDaySelected()){
+    if(!$scope.isDaySelected() || $scope.model.readOnly){
       return;
     }
 
@@ -384,6 +410,10 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
   }
   */
   $scope.saveNewSpecialSchedule = function() {
+
+    if ($scope.model.readOnly) {
+      return;
+    }
 
     var request = {};
     request.user_id = $scope.model.user.id;

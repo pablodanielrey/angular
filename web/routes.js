@@ -171,6 +171,11 @@ app.config(['$routeProvider', function($routeProvider) {
     templateUrl: '/modules/systems/tutors/tutors.html',
     controller: 'TutorsCtrl'
   })
+  
+  .when('/userAssistanceManagement', {
+      templateUrl: '/modules/systems/assistance/userAssistanceManagement.html',
+      controller: 'UserAssistanceManagementCtrl'
+  })
 
   .when('/usersAssistanceManagementMediator', {
     templateUrl: '/modules/systems/assistance/usersAssistanceManagementMediator/index.html',
