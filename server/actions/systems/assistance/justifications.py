@@ -700,13 +700,15 @@ class RequestJustification:
                 reqId = None
                 for ev in events:
                     if 'data' in ev and 'request_id' in ev['data']:
-                        reqId.append(ev['data']['request_id'])
+                        reqId = ev['data']['request_id']
 
-                for reqId in reqIds:
+                if reqId != None:
                     e = self.justifications.updateJustificationRequestStatus(con,requestor_id,reqId,status)
                     events.extend(e)
 
                 con.commit()
+
+
 
             self.notifier.notifyBosses(con,userId,'justifications_request')
 
