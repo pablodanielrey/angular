@@ -19,13 +19,11 @@ app.controller('UsersAssistanceManagementMediatorCtrl', ["$scope", "$timeout", "
     //requestedJustifications
     requestedJustifications: [],    //requerimientos del usuario seleccionado
     requestedJustificationsFiltered: null,   //requerimientos filtrados del usuario seleccionado
-    rjSort: null,       //ordenamiento de la lista de justificaciones
-    rjReversed: null,   //flag para indicar el ordenamiento reverso de la lista de justificaciones
+    rjSort: ["dateSort", "justificationName"],       //ordenamiento de la lista de justificaciones
+    rjReversed: false,   //flag para indicar el ordenamiento reverso de la lista de justificaciones
     processingRequestedJustifications: false  //flag para indicar que se esta procesando
 
   };
-  
-
   
   
   
@@ -51,8 +49,7 @@ app.controller('UsersAssistanceManagementMediatorCtrl', ["$scope", "$timeout", "
   };
   
    $scope.filterUserRequestedJustifications = function(){
-    $scope.model.rjSort = ["dateSort", "justificationName"];
-    $scope.model.rjReversed = false;
+   
     $scope.model.requestedJustificationsFiltered = [];
 
     for (var i = 0; i < $scope.model.requestedJustifications.length; i++) {
@@ -115,22 +112,22 @@ app.controller('UsersAssistanceManagementMediatorCtrl', ["$scope", "$timeout", "
   $scope.loadAuthorizedJustifications = function(){
     
     $scope.model.justificationsId = [
-      'e0dfcef6-98bb-4624-ae6c-960657a9a741',
-      '48773fd7-8502-4079-8ad5-963618abe725',
-      'fa64fdbd-31b0-42ab-af83-818b3cbecf46',
-      '4d7bf1d4-9e17-4b95-94ba-4ca81117a4fb',
-      'b70013e3-389a-46d4-8b98-8e4ab75335d0',
-      '76bc064a-e8bf-4aa3-9f51-a3c4483a729a',
-      '50998530-10dd-4d68-8b4a-a4b7a87f3972',
-      'f9baed8a-a803-4d7f-943e-35c436d5db46',
-      'a93d3af3-4079-4e93-a891-91d5d3145155',
-      'b80c8c0e-5311-4ad1-94a7-8d294888d770',
-      '478a2e35-51b8-427a-986e-591a9ee449d8',
-      '5ec903fb-ddaf-4b6c-a2e8-929c77d8256f',
-      '874099dc-42a2-4941-a2e1-17398ba046fc',
-      'b309ea53-217d-4d63-add5-80c47eb76820',
-      '0cd276aa-6d6b-4752-abe5-9258dbfd6f09',
-      'e8019f0e-5a70-4ef3-922c-7c70c2ce0f8b'
+      'e0dfcef6-98bb-4624-ae6c-960657a9a741', //AA
+      '48773fd7-8502-4079-8ad5-963618abe725', //Comp
+      'fa64fdbd-31b0-42ab-af83-818b3cbecf46', //BS
+      '4d7bf1d4-9e17-4b95-94ba-4ca81117a4fb', //art 102
+      'b70013e3-389a-46d4-8b98-8e4ab75335d0', //pre examen
+      '76bc064a-e8bf-4aa3-9f51-a3c4483a729a', //licencia anual ordinaria
+      '50998530-10dd-4d68-8b4a-a4b7a87f3972', //res 638
+      //'f9baed8a-a803-4d7f-943e-35c436d5db46', //lm corta duracion
+      //'a93d3af3-4079-4e93-a891-91d5d3145155', //lm lt
+      //'b80c8c0e-5311-4ad1-94a7-8d294888d770', //lm af
+      //'478a2e35-51b8-427a-986e-591a9ee449d8', //justificado medico
+      //'5ec903fb-ddaf-4b6c-a2e8-929c77d8256f', //feriado
+      //'874099dc-42a2-4941-a2e1-17398ba046fc', //paro
+      'b309ea53-217d-4d63-add5-80c47eb76820', //cumple
+      //'0cd276aa-6d6b-4752-abe5-9258dbfd6f09', //duelo
+      //'e8019f0e-5a70-4ef3-922c-7c70c2ce0f8b' //donacion sangre
     ];
 
   };

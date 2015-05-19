@@ -92,8 +92,7 @@ app.controller('UsersAssistanceManagementMediatorRequestJustificationFormTimesCo
     request.begin.setHours($scope.model.begin.getHours(), $scope.model.begin.getMinutes());
     request.end.setHours($scope.model.end.getHours(), $scope.model.end.getMinutes());
 
-    console.log(request);
-    console.log($scope.model.selectedUser);
+ 
 
     Assistance.requestJustification($scope.model.selectedUser.id, request, "APPROVED",
 			function(ok) {
