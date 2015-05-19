@@ -177,12 +177,12 @@ app.controller('UserAssistanceManagementCtrl', ["$scope", "$rootScope", "$timeou
 
 
   $scope.cancelRequest = function(request) {
-    Assistance.updateJustificationRequestStatus(request.id, status,
+    Assistance.updateJustificationRequestStatus(request.id, 'CANCELED',
       function(ok) {
-        console.log("ok")
+
       },
       function(error) {
-        console.log("error");
+        Notifications.message(error);
       }
     );
   };
