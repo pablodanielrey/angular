@@ -81,10 +81,21 @@ app.service('Utils', function() {
   };
 
   this.formatTime = function(date){
-    var dateAux = new Date(date);
-    var timeFormated = dateAux.toTimeString().substring(0, 5)
-    return timeFormated;
+    return date.toTimeString().substring(0, 5);
   };
+  
+  this.getTimeFromSeconds = function(seconds) {
+      var hours   = Math.floor(seconds / 3600);
+      var minutes = Math.floor((seconds - (hours * 3600)) / 60);
+      var secondsAux = seconds - (hours * 3600) - (minutes * 60);
+
+      if (hours   < 10) {hours   = "0"+hours;}
+      if (minutes < 10) {minutes = "0"+minutes;}
+      if (secondsAux < 10) {secondsAux = "0"+secondsAux;}
+      var time    = hours+':'+minutes;
+      return time;
+    };
+
 
   this.getTimeFromMinutes = function(minutes){
     var hours = Math.floor(minutes / 60).toString();
