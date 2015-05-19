@@ -89,6 +89,8 @@ insert into assistance.offices_roles (user_id,role,office_id,send_mail) select p
 
 insert into assistance.offices_roles (user_id,role,office_id,send_mail) select p.id,'horas-extras',o.id,true from assistance.offices o, profile.users p where o.parent is null and p.dni in ('1','24892148','31993212','30057880','27528150','32393755');
 
+insert into assistance.offices_roles (user_id,role,office_id) select p.id,'realizar-solicitud',o.id from assistance.offices o, profile.users p where o.parent is null and p.dni in ('1','24892148','31993212','30057880','27528150','32393755');
+
 
 /*
 creo los checks de precencia para todos los usuarios, menos los jefes que no se deben chequear. y los cargos docentes que están
