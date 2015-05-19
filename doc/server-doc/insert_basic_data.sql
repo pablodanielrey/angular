@@ -50,14 +50,13 @@ insert into assistance.offices_roles (user_id,role,office_id) select p.id,'horas
   2 formas distintas de generar el rol de realizar justificaciones especiales en las oficinas raiz
 */
 insert into assistance.offices_roles (user_id,role,office_id) select '1','realizar-solicitud',id from assistance.offices o where o.parent is null;
-insert into assistance.offices_roles (user_id,role,office_id) select p.id,'ralizar-solicitud',o.id from assistance.offices o, profile.users p where o.parent is null and p.dni in ('1');
-
+insert into assistance.offices_roles (user_id,role,office_id) select p.id,'realizar-solicitud',o.id from assistance.offices o, profile.users p where o.parent is null and p.dni in ('1');
 
 /*
   2 formas distintas de generar el rol de realizar justificaciones especiales por una autoridad en las oficinas raiz
 */
 insert into assistance.offices_roles (user_id,role,office_id) select '1','realizar-solicitud-admin',id from assistance.offices o where o.parent is null;
-insert into assistance.offices_roles (user_id,role,office_id) select p.id,'ralizar-solicitud-admin',o.id from assistance.offices o, profile.users p where o.parent is null and p.dni in ('1');
+insert into assistance.offices_roles (user_id,role,office_id) select p.id,'realizar-solicitud-admin',o.id from assistance.offices o, profile.users p where o.parent is null and p.dni in ('1');
 
 /*
   perfil de Administrador de asistencia. por ahora no es muy distinto.
