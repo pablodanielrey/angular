@@ -28,6 +28,7 @@ app.controller('UsersAssistanceManagementMediatorCtrl', ["$scope", "$timeout", "
   
   
   
+  
 
   
   
@@ -239,5 +240,16 @@ app.controller('UsersAssistanceManagementMediatorCtrl', ["$scope", "$timeout", "
 	$scope.$on('JustificationStatusChangedEvent', function(event, data) {
     $scope.loadRequestedJustifications();
 	});
+
+
+
+
+
+
+
+
+
+
+
 
 }]);

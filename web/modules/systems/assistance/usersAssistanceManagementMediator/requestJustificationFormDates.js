@@ -38,7 +38,7 @@ app.controller('UsersAssistanceManagementMediatorRequestJustificationFormDatesCt
   
   
   
-  $scope.checkDates = function(){
+  $scope.selectDate = function(){
     if($scope.model.end !== null){
       if(($scope.model.begin !== null) && ($scope.model.begin > $scope.model.end)){
         $scope.model.end = new Date($scope.model.begin);
