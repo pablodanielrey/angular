@@ -1,0 +1,124 @@
+.digesto {
+  width:100%;
+  height:100%;
+}
+body {
+  background-color:#eeeeee;
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+section {
+
+  background-color:white;
+  -webkit-box-shadow: 1px 1px 5px #5c5f69;
+  -moz-box-shadow: 5px 5px 5px #5c5f69;
+  border-radius:2px;
+  -webkit-border-radius:2px;
+  -moz-border-radius:2px;
+  margin:20px;
+
+}
+article {
+  padding:20px;
+
+}
+i {
+  margin-bottom:5px;
+}
+
+/*GENERRAR NUEVA ORDENZA, RESOLUCION, DISPOSICION*/
+
+.normas {
+  display:flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+
+  color:#5c5f69;
+
+}
+.normasBoton {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:column;
+  -webkit-flex-direction:column; /* Safari */
+  -moz-flex-direction:column; /* mozilla */
+  align-items:center;
+  -webkit-align-items:column; /* Safari */
+  -moz-align-items:column; /* mozilla */
+  border-radius:2px;
+  -webkit-border-radius:2px;
+  -moz-border-radius:2px;
+  border-top:1px solid #ECECEC;
+  border-left:1px solid #ECECEC;
+  border-right:1px solid #ECECEC;
+  cursor:pointer;
+  font-size:0.8em;
+  padding:20px;
+  margin-right:20px;
+
+}
+.cO {
+  background-color:#eeeeee;
+  border-bottom:3px solid #ec9122;
+}
+.cR {
+  background-color:#eeeeee;
+  border-bottom:3px solid #e43e46;
+}
+.cD {
+  background-color:#eeeeee;
+  border-bottom:3px solid #128c78;
+}
+.cO:hover {
+  color:white;
+  background-color:#ec9122;
+  border-bottom:3px solid #ec9122;
+}
+.cR:hover {
+  color:white;
+  background-color:#e43e46;
+  border-bottom:3px solid #e43e46;
+}
+.cD:hover {
+  color:white;
+  background-color:#128c78;
+  border-bottom:3px solid #128c78;
+}
+
+/*NUEVA ORDENZA*/
+
+.nuevaNorma {
+  display:flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items:center;
+
+}
+.nuevaOrdenza {
+  background-color:#ec9122;
+  color:white;
+  padding:5px;
+  margin-left:10px;
+  margin-right:10px;
+
+}
+.nN {
+  background-color:#5c5f69;
+  padding:5px;
+  margin-left:5px;
+  border:1px solid #ECECEC;
+  color:white;
+}
+.nO {
+  background-color:#eeeeee;
+  padding:5px;
+
+  margin-right:5px;
+  border:1px solid #ECECEC;
+}
