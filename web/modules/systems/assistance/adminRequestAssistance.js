@@ -30,16 +30,17 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $filter,$timeout, 
       expr = ($scope.filterSelected == null)?'':$scope.filterSelected;
       $scope.model.requestsFilters = $scope.model.requests;
       $scope.model.requestsFilters = $filter('filter')($scope.model.requestsFilters,expr,status);
+      $scope.order(['date','user.lastname','user.name'],false);
     }
 
 
 
     $scope.addRequest = function(data) {
         //data: {id:"1",user_id:"1",justification_id: "1", begin: '2015-05-13 00:00:00', end: '2015-05-13 00:00:00', state: "Desaprobada" },
-        var d = new Date(data.begin);
-
         var r = data;
-        r.date = Utils.formatDate(d);
+
+        r.date = new Date(data.begin);
+        r.dateStr = Utils.formatDate(r.date);
         r.user = null;
 
         if(r.displayHours){

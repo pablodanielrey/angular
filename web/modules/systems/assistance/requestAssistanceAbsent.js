@@ -147,7 +147,7 @@ app.controller('RequestAssistanceAbsentCtrl', function($scope, Assistance, Notif
 
 		$scope.model.processingRequest = true;
 
-		Assistance.requestJustification($scope.model.session.user_id, requestedJustification,
+		Assistance.requestJustification($scope.model.session.user_id, requestedJustification,null,
 			function(ok) {
 				$scope.model.processingRequest = false;
 
