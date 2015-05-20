@@ -108,7 +108,7 @@ app.controller('UserAssistanceManagementCtrl', ["$scope", "$rootScope", "$timeou
 
 
   $scope.loadUserRequestedJustifications = function() {
-    Assistance.getJustificationRequestsToManage(['CANCELED','APPROVED'],"TREE",
+    Assistance.getJustificationRequestsToManage(['APPROVED','PENDING', 'CANCELED','REJECTED'],"TREE",
       function(requestedJustifications) {
         $scope.model.requestedJustifications = requestedJustifications;
         if($scope.model.user != null) $scope.filterUserRequestedJustifications();
@@ -130,6 +130,7 @@ app.controller('UserAssistanceManagementCtrl', ["$scope", "$rootScope", "$timeou
         $scope.model.userRequestedJustifications.push(req);
       }
     }
+    console.log($scope.model.userRequestedJustifications);
   };
 
 
@@ -176,16 +177,34 @@ app.controller('UserAssistanceManagementCtrl', ["$scope", "$rootScope", "$timeou
 	};
 
 
-  $scope.cancelRequest = function(request) {
-    Assistance.updateJustificationRequestStatus(request.id, 'CANCELED',
-      function(ok) {
-
-      },
-      function(error) {
-        Notifications.message(error);
-      }
-    );
+    
+  $scope.approveRequest = function(request) {
+    $scope.updateStatus("APPROVED",request);
   };
+    
+  $scope.refuseRequest = function(request) {
+    $scope.updateStatus("REJECTED",request);
+  };
+
+  $scope.cancelRequest = function(request) {
+    $scope.updateStatus("CANCELED",request);
+  };
+    
+
+  
+   $scope.updateStatus = function(status, request) {
+        $scope.model.processingRequestedJustifications = true;
+
+        Assistance.updateJustificationRequestStatus(request.id, status,
+          function(ok) {
+              $scope.model.processingRequestedJustifications = false;
+            },
+            function(error) {
+              $scope.model.processingRequestedJustifications = false;
+              Notifications.message(error);
+            }
+        );
+    };
 
   $scope.sortRequestedJustifications = function(sort){
     if($scope.model.rjSort[0] === sort){
