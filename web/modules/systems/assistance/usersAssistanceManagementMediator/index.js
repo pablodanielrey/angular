@@ -37,7 +37,7 @@ app.controller('UsersAssistanceManagementMediatorCtrl', ["$scope", "$timeout", "
    **************************************/
   $scope.loadRequestedJustifications = function() {
     $scope.model.processingRequestedJustifications = true;
-    Assistance.getJustificationRequestsToManage(['APPROVED'],"TREE",
+    Assistance.getJustificationRequestsToManage(['APPROVED','PENDING'],"TREE",
       function(requestedJustifications) {
         $scope.model.processingRequestedJustifications = false;
         $scope.model.requestedJustifications = requestedJustifications;
@@ -62,18 +62,33 @@ app.controller('UsersAssistanceManagementMediatorCtrl', ["$scope", "$timeout", "
   };
   
   
-  $scope.cancelRequest = function(request) {
-    $scope.model.processingRequestedJustifications = true;
-    Assistance.updateJustificationRequestStatus(request.id, 'CANCELED',
-      function(ok) {
-        $scope.model.processingRequestedJustifications = false;
-      },
-      function(error) {
-        $scope.model.processingRequestedJustifications = false;
-        Notifications.message(error);
-      }
-    );
+  $scope.approveRequest = function(request) {
+    $scope.updateStatus("APPROVED",request);
   };
+    
+  $scope.refuseRequest = function(request) {
+    $scope.updateStatus("REJECTED",request);
+  };
+
+  $scope.cancelRequest = function(request) {
+    $scope.updateStatus("CANCELED",request);
+  };
+    
+
+  
+   $scope.updateStatus = function(status, request) {
+        $scope.model.processingRequestedJustifications = true;
+
+        Assistance.updateJustificationRequestStatus(request.id, status,
+          function(ok) {
+              $scope.model.processingRequestedJustifications = false;
+            },
+            function(error) {
+              $scope.model.processingRequestedJustifications = false;
+              Notifications.message(error);
+            }
+        );
+    };
 
 
   $scope.sortRequestedJustifications = function(sort){
