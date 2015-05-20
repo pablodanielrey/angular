@@ -6,16 +6,16 @@ app.controller('UsersAssistanceManagementMediatorCtrl', ["$scope", "$timeout", "
    */
   $scope.model = {
     sessionUserId: null, //id de sesion de usuario
-    
+
     justificationsId: [],            //id de las justificaciones que el usuario tiene autorizadas
     justificationSelectedId: null,   //flag para indicar el id de la justificacion seleccionada si se debe mostrar la lista de usuarios
-        
+
     //seleccion de usuario
     displayUserList: false,  //flag para controlar si se debe mostrar la lista de usuarios
     selectedUser: null,  //usuario seleccionado
     searchUser: null,  //usuario buscado
     users: [],        //usuarios consultados para seleccionar
-    
+
     //requestedJustifications
     requestedJustifications: [],    //requerimientos del usuario seleccionado
     requestedJustificationsFiltered: null,   //requerimientos filtrados del usuario seleccionado
@@ -24,14 +24,14 @@ app.controller('UsersAssistanceManagementMediatorCtrl', ["$scope", "$timeout", "
     processingRequestedJustifications: false  //flag para indicar que se esta procesando
 
   };
-  
-  
-  
-  
-  
 
-  
-  
+
+
+
+
+
+
+
   /**************************************
    * METODOS DE REQUESTED JUSTIFICACION *
    **************************************/
@@ -48,9 +48,9 @@ app.controller('UsersAssistanceManagementMediatorCtrl', ["$scope", "$timeout", "
       }
     );
   };
-  
+
    $scope.filterUserRequestedJustifications = function(){
-   
+
     $scope.model.requestedJustificationsFiltered = [];
 
     for (var i = 0; i < $scope.model.requestedJustifications.length; i++) {
@@ -60,12 +60,12 @@ app.controller('UsersAssistanceManagementMediatorCtrl', ["$scope", "$timeout", "
       }
     }
   };
-  
-  
+
+
   $scope.approveRequest = function(request) {
     $scope.updateStatus("APPROVED",request);
   };
-    
+
   $scope.refuseRequest = function(request) {
     $scope.updateStatus("REJECTED",request);
   };
@@ -73,9 +73,9 @@ app.controller('UsersAssistanceManagementMediatorCtrl', ["$scope", "$timeout", "
   $scope.cancelRequest = function(request) {
     $scope.updateStatus("CANCELED",request);
   };
-    
 
-  
+
+
    $scope.updateStatus = function(status, request) {
         $scope.model.processingRequestedJustifications = true;
 
@@ -105,7 +105,7 @@ app.controller('UsersAssistanceManagementMediatorCtrl', ["$scope", "$timeout", "
         case "status":
           $scope.model.rjSort = ["status", "justificationName", "dateSort"]
         break;
-        
+
       }
       $scope.model.rjReversed = false;
     }
@@ -125,12 +125,12 @@ app.controller('UsersAssistanceManagementMediatorCtrl', ["$scope", "$timeout", "
   $scope.isAuthorizedJustification = function(justificationId){
     return ($scope.model.justificationsId.indexOf(justificationId) > -1);
   };
-  
+
    /**
    * Cargar justificaciones que puede autorizar el usuario
    */
   $scope.loadAuthorizedJustifications = function(){
-    
+
     $scope.model.justificationsId = [
       'e0dfcef6-98bb-4624-ae6c-960657a9a741', //AA
       '48773fd7-8502-4079-8ad5-963618abe725', //Comp
@@ -151,8 +151,8 @@ app.controller('UsersAssistanceManagementMediatorCtrl', ["$scope", "$timeout", "
     ];
 
   };
-  
-  
+
+
 
 
 
@@ -169,6 +169,13 @@ app.controller('UsersAssistanceManagementMediatorCtrl', ["$scope", "$timeout", "
     Assistance.getUsersInOfficesByRole('autoriza',
       function(users) {
         $scope.model.users = [];
+
+        // eliminamos el usuario jefe asi no se autoautoriza pedidos.
+        var ind = users.indexOf($scope.model.sessionUserId)
+        if (ind > -1) {
+          users.splice(ind,1)
+        }
+
         for (var i = 0; i < users.length; i++) {
           Users.findUser(users[i],
             function(user) {
@@ -183,8 +190,8 @@ app.controller('UsersAssistanceManagementMediatorCtrl', ["$scope", "$timeout", "
         Notifications.message(error);
       }
     );
-  };  
-  
+  };
+
   /**
    * Debe ser mostrada la lista de usuarios?
    */
@@ -211,7 +218,7 @@ app.controller('UsersAssistanceManagementMediatorCtrl', ["$scope", "$timeout", "
   $scope.isSelectedUser = function(){
     return ($scope.model.selectedUser !== null);
   };
-  
+
 
   /**
    * Seleccionar usuario
@@ -223,11 +230,11 @@ app.controller('UsersAssistanceManagementMediatorCtrl', ["$scope", "$timeout", "
     $scope.model.searchUser = $scope.model.selectedUser.name + " " + $scope.model.selectedUser.lastname;
     $scope.filterUserRequestedJustifications();
   };
-  
-  
-  
-  
-    
+
+
+
+
+
   /******************
    * INICIALIZACION *
    ******************/
@@ -239,8 +246,8 @@ app.controller('UsersAssistanceManagementMediatorCtrl', ["$scope", "$timeout", "
     $scope.model.rjSort = ["dateSort", "justificationName"];;
     $scope.model.rjReversed = false;
   };
-  
-  
+
+
   $timeout(function() {
     Module.authorize('ADMIN-ASSISTANCE,USER-ASSISTANCE');
     $scope.model.sessionUserId = Module.getSessionUserId();
@@ -249,8 +256,8 @@ app.controller('UsersAssistanceManagementMediatorCtrl', ["$scope", "$timeout", "
     $scope.loadRequestedJustifications();
     $scope.model.clearIndex();
   }, 0);
-  
-  
+
+
   $scope.$on('JustificationsRequestsUpdatedEvent', function(event, data){
     $scope.loadRequestedJustifications();
 
