@@ -39,7 +39,7 @@
   <div class="titlesFiles">
     <div class="column t1" ng-click="sortRequestedJustifications('justificationName')"><i  class="fa fa-ticket"></i> Solicitud</div>
     <div class="column t1" ng-click="sortRequestedJustifications('dateSort')"><i  class="fa fa-calendar"></i> Día</div>
-    <div class="column t1" ><i class="fa fa-info-circle"></i> Estado</div>
+    <div class="column t1" ng-click="sortRequestedJustifications('status')"><i class="fa fa-info-circle"></i> Estado</div>
   </div>
   <div class="scroll">
     <div class="myRequestInfo" ng-repeat="req in model.requestedJustificationsFiltered | orderBy:model.rjSort:model.rjReversed" >

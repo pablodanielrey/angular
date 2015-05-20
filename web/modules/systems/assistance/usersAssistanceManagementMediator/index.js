@@ -102,6 +102,10 @@ app.controller('UsersAssistanceManagementMediatorCtrl', ["$scope", "$timeout", "
         case "justificationName":
           $scope.model.rjSort = ["justificationName", "dateSort"]
         break;
+        case "status":
+          $scope.model.rjSort = ["status", "justificationName", "dateSort"]
+        break;
+        
       }
       $scope.model.rjReversed = false;
     }
