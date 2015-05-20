@@ -108,7 +108,7 @@ app.controller('UserAssistanceManagementCtrl', ["$scope", "$rootScope", "$timeou
 
 
   $scope.loadUserRequestedJustifications = function() {
-    Assistance.getJustificationRequestsToManage(['APPROVED'],"TREE",
+    Assistance.getJustificationRequestsToManage(['CANCELED','APPROVED'],"TREE",
       function(requestedJustifications) {
         $scope.model.requestedJustifications = requestedJustifications;
         if($scope.model.user != null) $scope.filterUserRequestedJustifications();
@@ -191,16 +191,20 @@ app.controller('UserAssistanceManagementCtrl', ["$scope", "$rootScope", "$timeou
     if($scope.model.rjSort[0] === sort){
       $scope.model.rjReversed = !$scope.model.rjReversed;
     } else {
-      switch($scope.model.rjSort[0]){
+      switch(sort){
         case "dateSort":
           $scope.model.rjSort = ["dateSort", "justificationName"]
         break;
         case "justificationName":
           $scope.model.rjSort = ["justificationName", "dateSort"]
         break;
+        case "status":
+          $scope.model.rjSort = ["status","justificationName", "dateSort"]
+        break;
       }
       $scope.model.rjReversed = false;
     }
+
   };
 
 
