@@ -18,9 +18,6 @@ class FirmwareReader:
         self.ni = 0
         self.di = 0
 
-        self.c = Semaphore(0)
-        self.nc = 0
-        self.dc = 0
 
     def start(self):
         cserial.open(self.port)
@@ -179,7 +176,7 @@ class FirmwareReader:
         huella = número asignado dentro del lector a la huella
         template = template de la huella
     """
-    def enroll(self):
+    def enroll(self, need_first=None, need_second=None, need_third=None, need_release=None):
 
         canceled = False
 
@@ -268,21 +265,29 @@ class FirmwareReader:
 
                     """ ok es un resultado """
                     if rdata == camabio.GD_NEED_FIRST_SWEEP:
+                        if need_first:
+                            need_first()
                         logging.debug('Necesita primera huella')
                         fase = 1
                         continue
 
                     if rdata == camabio.GD_NEED_SECOND_SWEEP:
+                        if need_second:
+                            need_second()
                         logging.debug('Necesita segunda huella')
                         fase = 2
                         continue
 
                     if rdata == camabio.GD_NEED_THIRD_SWEEP:
+                        if need_third:
+                            need_third()
                         logging.debug('Necesita tercera huella')
                         fase = 3
                         continue
 
                     if rdata == camabio.GD_NEED_RELEASE_FINGER:
+                        if need_release:
+                            need_release()
                         logging.debug('levante el dedo del lector')
                         continue
 
@@ -303,3 +308,39 @@ class FirmwareReader:
             self.entry.acquire()
             self.ne = self.ne - 1
             self._signal()
+
+
+
+class Firmware:
+
+    def need_first(self):
+        logging.info('1')
+
+    def need_second(self):
+        logging.info('2')
+
+    def need_third(self):
+        logging.info('3')
+
+    def need_release(self):
+        logging.info('r')
+
+
+    def __init__(self,port):
+        self.reader = FirmwareReader(port)
+
+
+    def start(self):
+        self.reader.start()
+
+    def stop(self):
+        self.reader.stop()
+        
+
+    def enroll(self,pin):
+        (n,t) = self.reader.enroll(self.need_first,self.need_second,self.need_third,self.need_release)
+        logging.info(n)
+        logging.info(t)
+
+    def identify(self):
+        h = self.reader.identify()

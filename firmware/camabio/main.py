@@ -1,5 +1,5 @@
 import sys, logging, time
-from firmware import FirmwareReader
+from firmware import FirmwareReader, Firmware
 from itertools import zip_longest
 import threading
 import camabio
@@ -55,19 +55,17 @@ class Enroller(threading.Thread):
                     logging.info('huella {} - {}'.format(h,t))
 
 
-lend = threading.Lock()
-lend.acquire()
 
 def signal_handler(signal,frame):
-    global end, lend
+    global end
     logging.info('ctrl+c')
     end = True
-    lend.release()
 
 signal.signal(signal.SIGINT,signal_handler)
 
 logging.getLogger().setLevel(logging.DEBUG)
 port = sys.argv[1]
+"""
 f = FirmwareReader(port)
 f.start()
 try:
@@ -79,6 +77,14 @@ try:
 
     e.join()
     i.join()
+
+finally:
+    f.stop()
+"""
+f = Firmware(port)
+f.start()
+try:
+    f.enroll('27294557')
 
 finally:
     f.stop()
