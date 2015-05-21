@@ -641,5 +641,37 @@ app.service('Assistance', ['Utils','Messages','Session',
 
 
 
+
+    this.requestGeneralJustification = function(userId, justification, status, callbackOk, callbackError) {
+			var msg = {
+				id: Utils.getId(),
+				action: 'requestGeneralJustification',
+				session: Session.getSessionId(),
+				request: {
+					user_id: userId,
+					justification_id: justification.id,
+					begin: justification.begin
+				}
+			};
+
+			if (!(typeof justification.end === 'undefined')) {
+				msg.request.end = justification.end;
+			}
+
+			if (!(typeof status === 'undefined')) {
+				msg.request.status = status;
+			}
+
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response);
+					} else {
+						callbackError(data.error);
+					}
+				});
+		};
+
+
 	}]
 );
