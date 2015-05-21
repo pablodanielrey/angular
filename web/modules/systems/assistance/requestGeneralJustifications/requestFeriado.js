@@ -90,8 +90,8 @@ app.controller('RequestFeriadoCtrl', ["$scope", "Assistance", "Notifications", "
 			begin:$scope.rjModel.date,
 		};
     
-    /*
-    Assistance.requestJustification($scope.model.selectedUser.id, request, 'APPROVED',
+   
+    Assistance.requestGeneralJustification(request, 'APPROVED',
 			function(ok) {
 				$scope.clear(); //limpiar contenido
         $scope.model.justificationSelectedId = null; //limpiar seleccion de justificacion
@@ -102,7 +102,7 @@ app.controller('RequestFeriadoCtrl', ["$scope", "Assistance", "Notifications", "
         $scope.model.justificationSelectedId = null; //limpiar seleccion de justificacion
 				Notifications.message(error);
 			}
-		);*/
+		);
   };
 
 }]);

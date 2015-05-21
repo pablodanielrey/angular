@@ -642,13 +642,12 @@ app.service('Assistance', ['Utils','Messages','Session',
 
 
 
-    this.requestGeneralJustification = function(userId, justification, status, callbackOk, callbackError) {
+    this.requestGeneralJustification = function(justification, status, callbackOk, callbackError) {
 			var msg = {
 				id: Utils.getId(),
 				action: 'requestGeneralJustification',
 				session: Session.getSessionId(),
 				request: {
-					user_id: userId,
 					justification_id: justification.id,
 					begin: justification.begin
 				}
