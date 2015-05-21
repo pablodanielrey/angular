@@ -1,16 +1,26 @@
 # -*- coding: utf-8 -*-
 import cserial, camabio
 import time, codecs, logging
-from threading import Lock
+from threading import Semaphore
 
 class FirmwareReader:
 
     def __init__(self,port):
         self.port = port
-        self.cmd_processing = Lock()
-        self.status = None
-        self.status_lock = Lock()
 
+        """ passing the baton """
+        self.entry = Semaphore(1)
+        self.e = Semaphore(0)
+        self.ne = 0
+        self.de = 0
+
+        self.i = Semaphore(0)
+        self.ni = 0
+        self.di = 0
+
+        self.c = Semaphore(0)
+        self.nc = 0
+        self.dc = 0
 
     def start(self):
         cserial.open(self.port)
@@ -78,39 +88,24 @@ class FirmwareReader:
 
 
     """
-        cancela un comando en curso.
-        en el caso del comando en curso que se pueda cancelar se tiene :
-            self.status != None
-            y adquirido el lock cmd_processing
+        el SIGNAL de la técnica passing the baton
     """
-    def cancel(self):
+    def _signal(self):
 
-        self.status_lock.acquire()
-        try:
-            if self.status is None:
-                return True
+        if self.de > 0 and self.di == 0:
+            self.de = self.de - 1
+            self.e.release()
 
-            data = camabio.createPackage(0x130,0,0)
-            cserial.write(data)
-            time.sleep(0.5)
+        elif self.di > 0 and self.de == 0:
+            self.di = self.di - 1
+            self.i.release()
 
-            self.cmd_processing.acquire()
-            try:
-                resp = cserial.readS(24)
-                ret = camabio.getAttrFromPackage(camabio.RET,resp)
-                if ret == camabio.ERR_SUCCESS:
-                    return True
-                else:
-                    logging.warn('se cancelo {} pero se leyo del serie {}'.format(self.status,codecs.encode(resp,'hex')))
-                    return False
+        elif self.di > 0 and self.de > 0:
+            self.de = self.de - 1
+            self.e.release()
 
-            finally:
-                self.cmd_processing.release()
-
-        finally:
-            self.status_lock.release()
-
-
+        else:
+            self.entry.release()
 
 
 
@@ -119,19 +114,20 @@ class FirmwareReader:
     """
     def identify(self):
 
-        self.status_lock.acquire()
-        try:
-            if self.status != None:
-                return None
-            self.status = 'identifiying'
+        """ <await (ne == 0 and ni == 0) ni = ni + 1> """
+        self.entry.acquire()
+        if (self.ne > 0 or self.ni > 0 or self.nc > 0):
+            self.di = self.di + 1
+            self.entry.release()
+            logging.debug('identify esperando')
+            self.i.acquire()
+        self.ni = self.ni + 1
+        self._signal()
 
+        logging.debug('identify')
+        try:
             data = camabio.createPackage(0x102,0,0)
             cserial.write(data)
-            self.cmd_processing.acquire()
-        finally:
-            self.status_lock.release()
-
-        try:
             time.sleep(0.5)
 
             huella = None
@@ -169,18 +165,12 @@ class FirmwareReader:
                     logging.warn('respuesta desconocida')
                     logging.warn(codecs.encode(resp,'hex'))
 
-
             return huella
 
         finally:
-            self.cmd_processing.release()
-
-            self.status_lock.acquire()
-            try:
-                self.status = None
-            finally:
-                self.status_lock.release()
-
+            self.entry.acquire()
+            self.ni = self.ni - 1
+            self._signal()
 
 
 
@@ -191,20 +181,43 @@ class FirmwareReader:
     """
     def enroll(self):
 
-        self.status_lock.acquire()
-        try:
-            if self.status != None:
-                return (None,None)
-            self.status = 'enrolling'
+        canceled = False
 
+        """   <await (ne == 0 and ni == 0) ne = ne + 1> """
+        self.entry.acquire()
+        if (self.ne > 0 or self.de > 0):
+            logging.debug('ya existe en ejecución/espera un enrolado')
+            self._signal()
+            return
+
+        elif (self.ni > 0):
+            self.de = self.de + 1
+            self.entry.release()
+            logging.debug('enroll esperando')
+
+            """ disparo un cancel """
+            canceled = True
+            data = camabio.createPackage(0x130,0,0)
+            cserial.write(data)
+
+            self.e.acquire()
+
+        self.ne = self.ne + 1
+        self._signal()
+
+
+        if canceled:
+            resp = cserial.readS(24)
+            ret = camabio.getAttrFromPackage(camabio.RET,resp)
+            if ret != camabio.ERR_SUCCESS:
+                logging.warn('se cancelo {} pero se leyo del serie {}'.format(self.status,codecs.encode(resp,'hex')))
+
+        logging.debug('enroll')
+        try:
             empty = self.getEmptyId()
             data = camabio.createPackage(0x0103,0x02,empty)
             cserial.write(data)
-            self.cmd_processing.acquire()
-        finally:
-            self.status_lock.release()
 
-        try:
             time.sleep(0.5)
 
             fase = 0
@@ -287,10 +300,6 @@ class FirmwareReader:
             return (huella,template)
 
         finally:
-            self.cmd_processing.release()
-
-            self.status_lock.acquire()
-            try:
-                self.status = None
-            finally:
-                self.status_lock.release()
+            self.entry.acquire()
+            self.ne = self.ne - 1
+            self._signal()

@@ -43,12 +43,11 @@ class Enroller(threading.Thread):
             logging.info('linea leida {}'.format(line))
 
             if line == 'exit\n':
-                logging.info('cerrando enrolador')
+                logging.info('cerrando programa')
+                end = True
                 return
 
             if line == 'e\n':
-                logging.info('c')
-                self.firmware.cancel()
                 logging.info('e')
                 (h,t) = self.firmware.enroll()
                 logging.info('ee')
@@ -67,7 +66,7 @@ def signal_handler(signal,frame):
 
 signal.signal(signal.SIGINT,signal_handler)
 
-logging.getLogger().setLevel(logging.INFO)
+logging.getLogger().setLevel(logging.DEBUG)
 port = sys.argv[1]
 f = FirmwareReader(port)
 f.start()
@@ -78,9 +77,6 @@ try:
     i.start()
     e.start()
 
-    lend.acquire()
-
-    f.cancel()
     e.join()
     i.join()
 
