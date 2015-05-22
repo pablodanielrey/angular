@@ -739,6 +739,66 @@ class RequestJustification:
             con.close()
 
 
+
+""" 
+peticion: 
+{ 
+	"id":"", 
+	"action":"requestGeneralJustification", 
+	"session":"session de usuario", 
+	request:{
+        justificationId:"id de la justificacion",
+        begin:"fecha de inicio"
+        end:"fecha de fin" (opcional)
+        status: "estado" (opcional)
+    }
+} 
+
+respuesta: 
+{ 
+	"id":"id de la peticion", 
+	"ok":"", 
+	"error":"" 
+} 
+
+"""
+class RequestGeneralJustification:
+
+  profiles = inject.attr(Profiles)
+  config = inject.attr(Config)
+  justifications = inject.attr(Justifications)
+  date = inject.attr(Date)
+  events = inject.attr(Events)
+  notifier = inject.attr(BossesNotifier)
+
+
+
+  """ manejar accion """
+  def handleAction(self, server, message): 
+
+    if (message['action'] != 'requestGeneralJustification'): 
+        return False
+
+    """ chequeo de datos """
+     if ('id' not in message) or ('session' not in message) or ('request' not in message) or ('justification_id' not in message['request']) or ('begin' not in message['request']):
+       response = {'id':message['id'], 'error':'Insuficientes parámetros'}
+       server.sendMessage(response)
+       return True
+    
+    """ chequeo de permisos """
+    sid = message['session'] 
+    self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
+    
+    
+    response = {'id':message['id'], 'error':'Prueba'}
+   server.sendMessage(response)
+   return True
+    
+    
+    
+    
+    
+
 """
 query : solicitud de justificaciones de un determinado usuario
 {
