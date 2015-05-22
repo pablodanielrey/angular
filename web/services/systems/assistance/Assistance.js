@@ -637,12 +637,18 @@ app.service('Assistance', ['Utils','Messages','Session',
 						callbackError(data.error);
 					}
 				});
-		}
+		};
 
 
 
-
-    this.requestGeneralJustification = function(justification, status, callbackOk, callbackError) {
+    /**
+     * solicitar justificacion general
+     * @param {type} justification Datos de la justificacion
+     * @param {type} callbackOk
+     * @param {type} callbackError
+     * @returns {undefined}
+     */
+    this.requestGeneralJustification = function(justification, callbackOk, callbackError) {
 			var msg = {
 				id: Utils.getId(),
 				action: 'requestGeneralJustification',
@@ -657,10 +663,6 @@ app.service('Assistance', ['Utils','Messages','Session',
 				msg.request.end = justification.end;
 			}
 
-			if (!(typeof status === 'undefined')) {
-				msg.request.status = status;
-			}
-
 			Messages.send(msg,
 				function(data) {
 					if (typeof data.error === 'undefined') {
@@ -670,6 +672,30 @@ app.service('Assistance', ['Utils','Messages','Session',
 					}
 				});
 		};
+    
+    /**
+     * solicitar justificaciones generales
+     * @param {type} callbackOk
+     * @param {type} callbackError
+     * @returns {undefined}
+     */
+    this.getGeneralJustificationRequests = function(callbackOk, callbackError){
+      var msg = {
+				id: Utils.getId(),
+				action: 'getGeneralJustificationRequests',
+				session: Session.getSessionId()
+			};
+      
+      Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response.requests);
+					} else {
+						callbackError(data.error);
+					}
+				});
+      
+    };
 
 
 	}]
