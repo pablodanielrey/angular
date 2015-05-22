@@ -913,13 +913,15 @@ class GetSpecialJustifications:
                 # 'a93d3af3-4079-4e93-a891-91d5d3145155','Licencia Médica Largo Tratamiento'
                 # 'b80c8c0e-5311-4ad1-94a7-8d294888d770','Licencia Médica Atención Familiar'
                 # '478a2e35-51b8-427a-986e-591a9ee449d8','Justificado por Médico'
-                # '5ec903fb-ddaf-4b6c-a2e8-929c77d8256f','Feriado'
-                # '874099dc-42a2-4941-a2e1-17398ba046fc','Paro'
                 # '0cd276aa-6d6b-4752-abe5-9258dbfd6f09','Duelo'
                 # 'e8019f0e-5a70-4ef3-922c-7c70c2ce0f8b','Donación de Sangre'
-                ids.extend(['f9baed8a-a803-4d7f-943e-35c436d5db46','a93d3af3-4079-4e93-a891-91d5d3145155','b80c8c0e-5311-4ad1-94a7-8d294888d770',
-                        '478a2e35-51b8-427a-986e-591a9ee449d8','5ec903fb-ddaf-4b6c-a2e8-929c77d8256f','874099dc-42a2-4941-a2e1-17398ba046fc',
-                         '0cd276aa-6d6b-4752-abe5-9258dbfd6f09','e8019f0e-5a70-4ef3-922c-7c70c2ce0f8b'])
+                ids.extend([
+                    'f9baed8a-a803-4d7f-943e-35c436d5db46',
+                    'a93d3af3-4079-4e93-a891-91d5d3145155',
+                    'b80c8c0e-5311-4ad1-94a7-8d294888d770',
+                    '478a2e35-51b8-427a-986e-591a9ee449d8',
+                    '0cd276aa-6d6b-4752-abe5-9258dbfd6f09',
+                    'e8019f0e-5a70-4ef3-922c-7c70c2ce0f8b'])
 
             role = 'realizar-solicitud-admin'
             offices = self.offices.getUserInOfficesByRole(con,userId,tree,role);
