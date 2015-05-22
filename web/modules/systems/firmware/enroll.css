@@ -1,6 +1,7 @@
 .container {
   width:10em;
   overflow:hidden;
+  border:2px solid black;
 }
 
 .wrap {
@@ -33,16 +34,41 @@
 
 .box {
   width:10em;
+  align-self: center;
+  display:flex;
+  flex-direction:row;
+  flex-wrap: wrap;
+  justify-content:center;
 }
+
 
 
 /*
  * DNI
  */
 
+
  .dniContainer input{
    width:4.5em;
    text-align:center;
+ }
+
+ .dniContainer * {
+   margin-right:0.5em;
+   margin-top:0.5em;
+ }
+
+/*
+ * FINGER CONTAINER
+ */
+
+ .fingerContainer *{
+   padding:0.5em;
+   margin:0;
+ }
+
+ .loading {
+   color:#0066A6;
  }
 
 /*
