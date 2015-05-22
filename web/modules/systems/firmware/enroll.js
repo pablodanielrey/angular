@@ -12,13 +12,14 @@ app.controller("EnrollCtrl", function($scope, $rootScope, $timeout, Session, Not
     $scope.model.item = ($scope.model.item < 4) ? $scope.model.item+1 : 1;
   }
 
-  $scope.cancel = function() {
-    $scope.model.item = 1;
-    $scope.model.dni = null;
+  $scope.isVisibleSave = function() {
+    return $scope.model.item == 4
   }
 
   $scope.save = function() {
     Notifications.message("Se ha enrolado correctamente al usuario " + $scope.model.dni);
+    $scope.model.item = 1;
   }
+
 
 });
