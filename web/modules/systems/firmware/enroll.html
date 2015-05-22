@@ -1,0 +1,27 @@
+<form>
+
+<div class="container">
+	<div class="wrap">
+	    <div class="box itemSelected{{model.item}}">
+				<label class="labelDni">Ingrese su dni:</label>
+				<input class="inputDni" type="number" ng-model="model.dni"/>
+			</div>
+
+			<div class="box itemSelected{{model.item}}">
+				<p>Coloque su dedo en el lector de huellas</p>
+			</div>
+			<div class="box itemSelected{{model.item}}">
+				<p>Coloque nuevamente el mismo dedo para obtener la segunda huella</p>
+			</div>
+			<div class="box itemSelected{{model.item}}">
+				<p>Coloque nuevamente el mismo dedo para obtener la tercer huella</p>
+			</div>
+		</div>
+</div>
+
+<div class="actions">
+	<input type="button" ng-click="cancel()" value="Cancelar"/>
+	<input type="submit" ng-click="next()" value="Aceptar" ng-class="{true:'visible',false:'hidden'}[model.item != 4]" ng-disabled="model.dni==null"/>
+	<input type="submit" ng-click="save()" value="Guardar" ng-class="{true:'visible',false:'hidden'}[model.item == 4]"/>
+</div>
+</form>

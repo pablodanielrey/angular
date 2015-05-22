@@ -1,0 +1,76 @@
+/*
+ * Transicion entre los campos del formulario
+*/
+
+.container{
+    width:10em;
+    overflow-x:hidden;
+}
+
+.wrap {
+  width:400%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+
+}
+
+.box{
+    position:relative;
+    overflow:auto;
+    left:0;
+    top:0;
+    width:10em;
+    height:100%;
+    -moz-transition-duration: 0s;
+    -moz-transition-timing-function: cubic-bezier(0.3, -0.3, 0.7, 1.3);
+	  -webkit-transition-duration: 0s;
+	  -webkit-transition-timing-function: cubic-bezier(0.3, -0.3, 0.7, 1.3);
+    -o-transition-duration: 0s;
+    -o-transition-timing-function: cubic-bezier(0.3, -0.3, 0.7, 1.3);
+}
+
+
+.box.itemSelected1, .box.itemSelected2, .box.itemSelected3, .box.itemSelected4,
+.box.itemSelected5, .box.itemSelected6, .box.itemSelected7, .box.itemSelected8,.box.itemSelected9 {
+  -moz-transition: 2s;
+	-webkit-transition: 2s;
+	-o-transition: 2s;
+
+}
+
+
+.box.itemSelected1 {
+  left:0;
+}
+
+.box.itemSelected2 {
+  left:-10em;
+}
+
+.box.itemSelected3 {
+  left:-20em;
+}
+
+.box.itemSelected4 {
+  left:-30em;
+}
+
+
+/*
+ * Campos del formulario
+*/
+
+.labelDni {
+  display:block;
+}
+
+.inputDni {
+  display:block;
+  width:80%;
+
+}
+
+.actions .hidden {
+  display:none;
+}
