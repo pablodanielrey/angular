@@ -22,14 +22,14 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
     requests: [],                 //solicitudes de horas extras para el usuario logueado
     sort: null,                   //ordenamiento de la lista de overtime
     reverse: false,               //definir ordenamiento en reversa de la lista de overtime
-    
+
     //variables correspondientes a la seleccion de usuario
     searchUser: null,
     searchUserPromise: null,
     users: null,
     displayListUser: false
   };
-  
+
   $scope.clearVars = function(){
     $scope.model.user_id = null;
     $scope.model.reason = null;
@@ -38,31 +38,31 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
     $scope.clearStartTime();
     $scope.clearEndTime();
   };
-  
+
   $scope.clearDate = function(){
     $scope.model.date = new Date();
     $scope.model.date.setSeconds(0);
     $scope.model.date.setMilliseconds(0);
   };
-  
+
   $scope.clearStartTime = function(){
     $scope.model.startTime = new Date();
     $scope.model.startTime.setSeconds(0);
     $scope.model.startTime.setMilliseconds(0);
   };
-  
+
   $scope.clearEndTime = function(){
     $scope.model.endTime = new Date();
     $scope.model.endTime.setSeconds(0);
     $scope.model.endTime.setMilliseconds(0);
   };
-  
+
   $scope.checkDate = function(){
     if($scope.model.date === null){
       $scope.clearDate();
     }
   };
-  
+
   $scope.checkStartTime = function(){
     if($scope.model.startTime === null){
       $scope.clearStartTime();
@@ -71,7 +71,7 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
       $scope.model.endTime = $scope.model.startTime;
     }
   };
-  
+
   $scope.checkEndTime = function(){
     if($scope.model.endTime === null){
       $scope.clearEndTime();
@@ -80,8 +80,8 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
       $scope.model.endTime = $scope.model.startTime;
     }
   };
-  
-  
+
+
   /**
    * Cargar y chequear session
    */
@@ -134,7 +134,7 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
         Notifications.message(error);
         throw new Error(error);
       }
-    );  
+    );
   };
 
 
@@ -195,7 +195,7 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
       }
     ,100);
   };
-  
+
   /**
     * Listar elementos
    */
@@ -234,7 +234,7 @@ app.controller('RequestAuthorityCtrl', ["$scope", "$timeout", "$window", "Assist
    * METODOS CORRESPONDIENTES AL PROCESAMIENTO DE FORMULARIO *
    ***********************************************************/
 
-  
+
 
   /**
    * Guardar solicitud en el servidor

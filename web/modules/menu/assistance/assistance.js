@@ -53,6 +53,17 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, As
         $scope.showAssistance = function() {
           $location.path('/showAssistance')
         }
+        $scope.mySchedule = function() {
+          $location.path('/mySchedule')
+        }
+
+        $scope.userAssistanceManagement = function() {
+          $location.path('/userAssistanceManagement')
+        };
+        
+        $scope.userAssistanceManagementMediator = function() {
+          $location.path('/usersAssistanceManagementMediator')
+        }
 
 
 
@@ -68,27 +79,37 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, As
                   $scope.items.push({ label:'Inicio', img:'fa-tachometer', function: $scope.summary});
                   $scope.items.push({ label:'Solicitudes', img:'fa-ticket', function: $scope.requestAssistance});
                   $scope.items.push({ label:'Control de Horario', img:'fa-clock-o', function: $scope.showAssistance});
+                  $scope.items.push({ label:'Incumplimientos', img:'fa-ticket', function: $scope.assistanceFails});
+                  //$scope.items.push({ label:'Filtro de Fallas (testing todavía no terminado)', img:'fa-ticket', function: $scope.assistanceFailsFilters});
+                  // hasta que no este terminado en producción no va
+                  $scope.items.push({ label:'Mi Horario', img:'fa-clock-o', function: $scope.mySchedule});
 
                   Assistance.getUserOfficeRoles(
                       function(roles) {
                         var hasApprove = false;
                         var hasOvertime = false;
-
+                        var hasJustification = false;
                         for (var i = 0; i < roles.length; i++) {
                           hasApprove = hasApprove || (roles[i].role == 'autoriza');
                           hasOvertime = hasOvertime || (roles[i].role == 'horas-extras');
+                          hasJustification = hasJustification || (roles[i].role == 'realizar-solicitud') || (roles[i].role == 'realizar-solicitud-admin');
                         }
 
                         if (hasApprove) {
                           $scope.items.push({ label:'Adm. Solicitudes ', img:'fa-ticket', function: $scope.adminRequestAssistance});
                           $scope.items.push({ label:'Horas Extras ', img:'fa-plus', function: $scope.requestAuthority});
+                          $scope.items.push({ label:'Solicitudes a Empleados', img:'fa-plus', function: $scope.userAssistanceManagementMediator});
                         }
 
                         if (hasOvertime) {
                           //$scope.items.push({ label:'Licencias Médicas', img:'fa-stethoscope', function: $scope.medicalLicenses});
                           $scope.items.push({ label:'Admin Horas Extras ', img:'fa-plus', function: $scope.adminRequestOverTime});
-
                         }
+
+                        if (hasJustification) {
+                          $scope.items.push({ label:'Solicitudes Especiales ', img:'fa-plus', function: $scope.userAssistanceManagement});
+                        }
+                        
                       },
                       function(err) {
                         Notifications.message(error);
@@ -100,18 +121,6 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, As
             },
             function (error) {
                 Notifications.message(error);
-            }
-          );
-
-          Profiles.checkAccess(Session.getSessionId(),'ADMIN-ASSISTANCE',
-            function(ok) {
-              if (ok == 'granted') {
-                $scope.items.push({ label:'Incumplimientos', img:'fa-ticket', function: $scope.assistanceFails});
-                $scope.items.push({ label:'Filtro de Fallas (testing todavía no terminado)', img:'fa-ticket', function: $scope.assistanceFailsFilters});
-              }
-            },
-            function (error) {
-              Notifications.message(error);
             }
           );
 

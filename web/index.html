@@ -30,6 +30,7 @@
 	<script type="text/javascript" src="services/Session.js"></script>
 	<script type="text/javascript" src="services/WebSocket.js"></script>
 	<script type="text/javascript" src="services/Messages.js"></script>
+  <script type="text/javascript" src="services/Module.js"></script>
 	<script type="text/javascript" src="services/Notifications.js"></script>
 	<script type="text/javascript" src="services/Systems.js"></script>
 	<script type="text/javascript" src="services/Groups.js"></script>
@@ -62,8 +63,8 @@
   <script type="text/javascript" src="modules/admin/status.js"></script>
 <!--  <link rel="stylesheet" type="text/css" href="modules/admin/status.css"/> -->
 
-  <script type="text/javascript" src="modules/connection/con.js"></script>
-  <link rel="stylesheet" type="text/css" href="modules/connection/con.css"/>
+  <script type="text/javascript" src="modules/connection/conn.js"></script>
+  <link rel="stylesheet" type="text/css" href="modules/connection/conn.css"/>
 
   <script type="text/javascript" src="modules/messages/messages.js"></script>
   <link rel="stylesheet" type="text/css" href="modules/messages/messages.css"/>
@@ -101,17 +102,47 @@
   <script type="text/javascript" src="modules/systems/assistance/requestAssistanceExam.js"></script>
   <script type="text/javascript" src="modules/systems/assistance/requestAssistanceLao.js"></script>
   <script type="text/javascript" src="modules/systems/assistance/requestAssistanceOut.js"></script>
+  <script type="text/javascript" src="modules/systems/assistance/requestAssistance102.js"></script>
+  <script type="text/javascript" src="modules/systems/assistance/requestAssistanceBirthday.js"></script>
+  <script type="text/javascript" src="modules/systems/assistance/requestAssistanceLao.js"></script>
+  <script type="text/javascript" src="modules/systems/assistance/requestAssistance638.js"></script>
   <script type="text/javascript" src="modules/systems/assistance/adminRequestAssistance.js"></script>
   <link rel="stylesheet" type="text/css" href="modules/systems/assistance/adminRequestAssistance.css"/>
 
+
+  <script type="text/javascript" src="modules/systems/assistance/showAssistance.js"></script> 
+
+  <script type="text/javascript" src="modules/systems/assistance/userAssistanceManagement.js"></script>
+  <link rel="stylesheet" type="text/css" href="modules/systems/assistance/userAssistanceManagement.css"/>
+  <script type="text/javascript" src="modules/systems/assistance/userAssistanceManagementDates.js"></script>
+  
   <script type="text/javascript" src="modules/systems/assistance/showAssistance.js"></script> <!--visualizacion del estado de asistencia -->
+
   <link rel="stylesheet" type="text/css" href="modules/systems/assistance/showAssistance.css"/>
+
+  
+   <!--archivos del modulo usersAssistanceManagementMediator -->
+  <script type="text/javascript" src="modules/systems/assistance/usersAssistanceManagementMediator/index.js"></script>
+  <link rel="stylesheet" type="text/css" href="modules/systems/assistance/usersAssistanceManagementMediator/index.css"/> 
+  <script type="text/javascript" src="modules/systems/assistance/usersAssistanceManagementMediator/requestJustificationAA.js"></script>
+  <script type="text/javascript" src="modules/systems/assistance/usersAssistanceManagementMediator/requestJustificationC.js"></script>
+  <script type="text/javascript" src="modules/systems/assistance/usersAssistanceManagementMediator/requestJustification102.js"></script>
+  <script type="text/javascript" src="modules/systems/assistance/usersAssistanceManagementMediator/requestJustificationPE.js"></script>
+  <script type="text/javascript" src="modules/systems/assistance/usersAssistanceManagementMediator/requestJustificationLAO.js"></script>
+  <script type="text/javascript" src="modules/systems/assistance/usersAssistanceManagementMediator/requestJustification638.js"></script>
+  <script type="text/javascript" src="modules/systems/assistance/usersAssistanceManagementMediator/requestJustificationCU.js"></script>
+  <script type="text/javascript" src="modules/systems/assistance/usersAssistanceManagementMediator/requestJustificationBS.js"></script>
+  
+
+    
 
 
   <script type="text/javascript" src="modules/systems/assistance/requestAuthority.js"></script>
   <script type="text/javascript" src="modules/systems/assistance/adminRequestOverTime.js"></script>
+  <script type="text/javascript" src="modules/systems/assistance/mySchedule.js"></script>
   <link rel="stylesheet" type="text/css" href="modules/systems/assistance/requestAuthority.css"/>
   <link rel="stylesheet" type="text/css" href="modules/systems/assistance/adminRequestOverTime.css"/>
+  <link rel="stylesheet" type="text/css" href="modules/systems/assistance/mySchedule.css"/>
 
 
   <script type="text/javascript" src="modules/systems/editSystems.js"></script>
@@ -229,7 +260,7 @@
       </footer>
     </div>
 
-    <div class='connection-container' ng-class="{false:'visible',true:'hidden'}[isConnected()]" ng-controller="ConnectionCtrl" ng-include="'modules/connection/con.html'">
+    <div class='connection-container' ng-class="{false:'visible',true:'hidden'}[isConnected()]" ng-controller="ConnectionCtrl" ng-include="'modules/connection/conn.html'">
     </div>
 
 

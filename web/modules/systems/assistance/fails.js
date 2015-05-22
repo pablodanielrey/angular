@@ -1,25 +1,73 @@
 var app = angular.module('mainApp');
 
-app.controller('AssistanceFailsCtrl', ["$scope", "$timeout", "Assistance", "Notifications", "Utils", function($scope, $timeout, Assistance, Notifications, Utils) {
+app.controller('AssistanceFailsCtrl', ["$scope", "$timeout", "Assistance", "Notifications", "Utils","$filter", function($scope, $timeout, Assistance, Notifications, Utils, $filter) {
 
   $scope.model = {
     searching: false,
     begin: new Date(),
     end: new Date(),
-    assistanceFails:[{}]
+    assistanceFails:[],
+    justifications:[],
+    base64:''
   };
+
+
+
+  $scope.download = function() {
+    if ($scope.model.base64 == null || $scope.model.base64 == '') {
+      return;
+    }
+    var blob = Utils.base64ToBlob($scope.model.base64);
+    window.saveAs(blob,'incumplimientos.ods');
+  }
+
+
+  // ordenacion
+
+  $scope.orderBy = $filter('orderBy');
+
+  $scope.order = function(predicate, reverse) {
+    $scope.model.assistanceFails = $scope.orderBy($scope.model.assistanceFails, predicate, reverse);
+  };
+
+  //
+
+
+  $scope.loadJustifications = function() {
+    Assistance.getJustifications(
+      function(justifications) {
+        $scope.model.justifications = justifications;
+      },
+      function(err) {
+        Notifications.message(err);
+      }
+    );
+  }
+
+  $scope.getJustificationById = function(id) {
+    for (var i = 0; i < $scope.model.justifications.length; i++) {
+      var j = $scope.model.justifications[i];
+      if (j.id == id) {
+        return j;
+      }
+    }
+  }
+
 
   $scope.initialize = function() {
     $scope.model.begin = new Date();
     $scope.model.end = new Date();
-    $scope.model.assistanceFails = [{}];
+    $scope.model.assistanceFails = [];
     $scope.initializeDate();
+    $scope.loadJustifications();
   };
 
   $scope.correctDates = function() {
+    if(!$scope.model.begin) $scope.model.begin = new Date();
     $scope.model.begin.setHours(0);
     $scope.model.begin.setMinutes(0);
     $scope.model.begin.setSeconds(0);
+    if((!$scope.model.end) || ($scope.model.end < $scope.model.begin)) $scope.model.end = new Date($scope.model.begin);
     $scope.model.end.setHours(23);
     $scope.model.end.setMinutes(59);
     $scope.model.end.setSeconds(59);
@@ -35,32 +83,41 @@ app.controller('AssistanceFailsCtrl', ["$scope", "$timeout", "Assistance", "Noti
 
   $scope.search = function() {
     $scope.model.searching = true;
-    $scope.model.assistanceFails = [{}];
+    $scope.model.assistanceFails = [];
     $scope.initializeDate();
     Assistance.getFailsByDate($scope.model.begin, $scope.model.end,
       function(response) {
-        for (var i = 0; i < response.length; i++) {
+        $scope.model.base64 = response.base64;
 
-          var r = response[i];
+        for (var i = 0; i < response.response.length; i++) {
+
+          var r = response.response[i];
+
+          r.justification = {name:''};
+          if ((r.fail.justifications != undefined) && (r.fail.justifications != null) && (r.fail.justifications.length > 0)) {
+            var just = Utils.getJustification(r.fail.justifications[0].justification_id);
+            just.begin = r.fail.justifications[0].begin;
+            r.justification = just;
+          }
+
           var date = new Date(r.fail.date);
           r.fail.dateFormat = Utils.formatDate(date);
           r.fail.dateExtend = Utils.formatDateExtend(date);
-  
+          r.fail.dayOfWeek = {};
+          r.fail.dayOfWeek.name = Utils.getDayString(date);
+          r.fail.dayOfWeek.number = date.getDay();
+
+
+
           if (r.fail.startSchedule || r.fail.endSchedule) {
             r.fail.dateSchedule = (r.fail.startSchedule) ? r.fail.startSchedule : r.fail.endSchedule;
             r.fail.dateSchedule = Utils.formatTime(new Date(r.fail.dateSchedule));
           }
 
-          //esto es de prueba
-          // r.fail.start = r.fail.date;
-
           if (r.fail.start || r.fail.end) {
             r.fail.wh = (r.fail.start) ?  new Date(r.fail.start) : new Date(r.fail.end);
             r.fail.wh =  Utils.formatTime(r.fail.wh);
           }
-          
-          // esto es de prueba
-          // r.fail.seconds = 3825;
 
           if (r.fail.seconds) {
             var hoursDiff = Math.floor((r.fail.seconds / 60) / 60);
@@ -68,9 +125,17 @@ app.controller('AssistanceFailsCtrl', ["$scope", "$timeout", "Assistance", "Noti
             r.fail.diff = ('0' + hoursDiff).substr(-2) + ":" + ('0' + minutesDiff).substr(-2);
           }
 
+          if (r.fail.whSeconds) {
+            var hours = Math.floor((r.fail.whSeconds / 60) / 60);
+            var minutes = Math.floor((r.fail.whSeconds / 60) % 60);
+            r.fail.whs = ('0' + hours).substr(-2) + ":" + ('0' + minutes).substr(-2);
+          } else {
+            r.fail.whs = '00:00';
+          }
+
           $scope.model.assistanceFails.push(r);
         }
-        $scope.predicate = 'user.dni';
+        $scope.order(['fail.dateExtend','user.lastname','user.name'],false);//ordenamiento por defecto
         $scope.model.searching = false;
       },
       function(error) {

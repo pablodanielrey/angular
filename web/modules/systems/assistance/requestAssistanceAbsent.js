@@ -15,6 +15,12 @@ app.controller('RequestAssistanceAbsentCtrl', function($scope, Assistance, Notif
 	$scope.model.requestAbsentBegin = null;                    //fecha definida para la solicitud de ausente con aviso
 	$scope.model.requestAbsentBeginFormated = null;            //fecha definida para la solicitud de ausente con aviso con formato amigable para el usuario
 
+
+	$scope.model.processingRequest = false;
+
+
+
+
 	/**
 	 * Codigo a ejecutarse una vez definido el dia de la solicitud de ausente con aviso
 	 */
@@ -46,7 +52,7 @@ app.controller('RequestAssistanceAbsentCtrl', function($scope, Assistance, Notif
 	$scope.isDefinedJustificationAbsentRequest = function() {
 		return $scope.model.justificationAbsentRequestDefined;
 	};
-  
+
   /**
    * Esta seleccionado el formulario para definir un ausente con aviso?
    * @returns {Boolean}
@@ -62,7 +68,7 @@ app.controller('RequestAssistanceAbsentCtrl', function($scope, Assistance, Notif
 	$scope.isSelectedJustificationAbsentAvailable = function() {
 		return $scope.model.justificationAbsentAvailableSelected;
 	};
-  
+
 
   /**
    * Seleccionar y desplegar la opcion ausente con aviso
@@ -100,7 +106,7 @@ app.controller('RequestAssistanceAbsentCtrl', function($scope, Assistance, Notif
 		$scope.model.justificationAbsentRequestDefined = false;
 		$scope.model.justificationAbsentRequestSelected = false;
 		$scope.model.justificationAbsentAvailableSelected = false;
-    $scope.model.requestAbsentBegin = null;                    
+    $scope.model.requestAbsentBegin = null;
     $scope.model.requestAbsentBeginFormated = null;
 	};
 
@@ -138,14 +144,19 @@ app.controller('RequestAssistanceAbsentCtrl', function($scope, Assistance, Notif
 			id:$scope.model.absent.id,
 			begin:$scope.model.requestAbsentBegin
 		};
-    
-		Assistance.requestJustification($scope.model.session.user_id, requestedJustification,
+
+		$scope.model.processingRequest = true;
+
+		Assistance.requestJustification($scope.model.session.user_id, requestedJustification,null,
 			function(ok) {
+				$scope.model.processingRequest = false;
+
 				$scope.clearAbsent(); //limpiar seccion de ausente con aviso
         $scope.clearSelections(); //limpiar selecciones de todas las justificaciones
         Notifications.message("Ausente con aviso cargado correctamente");
 			},
 			function(error){
+				$scope.model.processingRequest = false;
 				Notifications.message(error + ": Verifique correctamente la disponibilidad");
 			}
 

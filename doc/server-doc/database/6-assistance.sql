@@ -34,31 +34,26 @@ create schema assistance;
     los tipos de chequeo son mutualmente excluyentes y pueden ser:
     PRESENCE | HOURS | SCHEDULE
 
+    NULL = no se chequea nada
     PRESENCE = que marque una sola vez dentro del horario del schedule
     HOURS = no importa el horario si no que cumplan en el día la cantidad de horas
     SCHEDULE = que cumplan el horario
   */
   create table assistance.checks (
+    id varchar primary key,
     user_id varchar not null references profile.users (id),
     date timestamptz not null,
     enable boolean not null default true,
     type varchar not null,
     created timestamptz default now(),
-    CHECK(EXTRACT(TIMEZONE FROM check_from) = '0')
+    CHECK(EXTRACT(TIMEZONE FROM date) = '0')
   );
 
-  create table assistance.presence (
-    id varchar primary key,
-    user_id varchar not null references profile.users (id),
-    date timestamptz not null
-  );
-
-  create table assistance.hours (
-    id varchar primary key,
-    user_id varchar not null references profile.users (id),
-    date timestamptz not null,
+  create table assistance.hours_check (
+    id varchar primary key references assistance.checks (id),
     count int default 0
   );
+
 
   create table assistance.schedule (
     id varchar primary key,
@@ -120,11 +115,22 @@ create schema assistance;
 
     status = APROVED | REJECTED | PENDING | CANCELED
 
+    --------------------------------------------------------------------------
+
+    agregar la columna requestor_id con el valor por defecto del user_id
+
+    set timezone to utc;
+    begin;
+    alter table assistance.justifications_requests add column requestor_id varchar references profile.users (id);
+    update assistance.justifications_requests set requestor_id = user_id;
+    end;
+
     */
 
     create table assistance.justifications_requests (
       id varchar primary key,
       user_id varchar not null references profile.users (id),
+      requestor_id varchar not null references profile.users (id),
       justification_id varchar not null references assistance.justifications (id),
       jbegin timestamptz not null,
       jend timestamptz,
@@ -138,6 +144,16 @@ create schema assistance;
       user_id varchar not null references profile.users (id),
       status varchar not null,
       created timestamptz not null default now()
+    );
+
+
+    create table assistance.general_justifications (
+      id varchar primary key,
+      justification_id varchar not null references assistance.justifications (id),
+      jbegin timestamptz not null,
+      jend timestamptz,
+      created timestamptz not null default now(),
+      CHECK(EXTRACT(TIMEZONE FROM jbegin) = '0')
     );
 
 

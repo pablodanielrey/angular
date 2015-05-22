@@ -25,6 +25,8 @@ from model.utils import DateTimeEncoder
 from model.exceptions import *
 
 
+from model.session import Session
+
 """ actions del core """
 
 from actions.login.login import Login, Logout
@@ -37,10 +39,10 @@ from actions.requests.requests import CreateAccountRequest, ResendAccountRequest
 
 """ sistemas """
 
-from actions.systems.assistance.assistance import GetAssistanceData, GetAssistanceStatus, GetFailsByDate
+from actions.systems.assistance.assistance import GetAssistanceData, GetAssistanceStatus, GetAssistanceStatusByUsers, GetFailsByDate, GetSchedules, NewSchedule
 from actions.systems.assistance.logs import GetAssistanceLogs
-from actions.systems.assistance.offices import GetOffices, GetUserOfficeRoles, GetUserInOfficesByRole
-from actions.systems.assistance.justifications import GetJustifications, GetJustificationStock, GetJustificationRequests, GetJustificationRequestsToManage, RequestJustification, UpdateJustificationRequestStatus
+from actions.systems.assistance.offices import GetOffices, GetUserOfficeRoles, GetUserInOfficesByRole, GetOfficesByUserRole, GetOfficesUsers
+from actions.systems.assistance.justifications import GetJustifications, GetJustificationStock, GetJustificationRequests, GetJustificationRequestsToManage, GetJustificationRequestsByDate, RequestJustification,  RequestJustificationRange, UpdateJustificationRequestStatus,GetSpecialJustifications
 from actions.systems.assistance.overtime import GetOvertimeRequests, GetOvertimeRequestsToManage, RequestOvertime, UpdateOvertimeRequestStatus
 
 from actions.systems.students.students import CreateStudent, FindStudent, PersistStudent, FindAllStudents
@@ -69,8 +71,8 @@ actions = [
     PersistInstitutionalMail(), DeleteInstitutionalMail(), FindInstitutionalMail(),
     CreateStudent(), FindStudent(), PersistStudent(), FindAllStudents(),
     PersistTutorData(), ListTutorData(),
-    GetOffices(), GetUserOfficeRoles(), GetUserInOfficesByRole(),
-    GetAssistanceLogs(), GetAssistanceData(), GetFailsByDate(), GetAssistanceStatus(), GetOffices(), GetJustifications(), GetJustificationStock(), GetJustificationRequests(), GetJustificationRequestsToManage(), RequestJustification(), UpdateJustificationRequestStatus(),
+    GetOffices(), GetUserOfficeRoles(), GetUserInOfficesByRole(), GetOfficesByUserRole(), GetOfficesUsers(),
+    GetAssistanceLogs(), GetAssistanceData(), GetSchedules(), NewSchedule(), GetFailsByDate(), GetAssistanceStatus(), GetAssistanceStatusByUsers(), GetOffices(), GetJustifications(), GetJustificationStock(), GetJustificationRequests(), GetJustificationRequestsToManage(), GetJustificationRequestsByDate(), RequestJustification(),  RequestJustificationRange(), UpdateJustificationRequestStatus(),GetSpecialJustifications(),
     GetOvertimeRequests(), GetOvertimeRequestsToManage(), RequestOvertime(), UpdateOvertimeRequestStatus(),
     CreateAccountRequest(), ResendAccountRequest(), ConfirmAccountRequest(), ListAccountRequests(), ApproveAccountRequest(), RemoveAccountRequest(), RejectAccountRequest()
 ]
@@ -79,6 +81,9 @@ actions = [
 
 
 class ActionsServerProtocol(WebSocketServerProtocol):
+
+
+    session = inject.attr(Session)
 
 
     def _encodeMessage(self,msg):
@@ -164,6 +169,11 @@ class ActionsServerProtocol(WebSocketServerProtocol):
             if 'id' not in message:
                 raise MalformedMessage()
 
+            if 'session' in message:
+                sid = message['session']
+                self.session.touch(sid)
+
+
             try:
                 managed = False
                 for action in actions:
@@ -222,21 +232,19 @@ class BroadcastServerFactory(WebSocketServerFactory):
 
     def register(self, client):
         if client not in self.clients:
-            print("registered client {}".format(client.peer))
+            logging.debug("registered client {}".format(client.peer))
             self.clients.append(client)
 
     def unregister(self, client):
         if client in self.clients:
-            print("unregistered client {}".format(client.peer))
+            logging.debug("unregistered client {}".format(client.peer))
             self.clients.remove(client)
 
     def broadcast(self, msg):
-        print("broadcasting message '{}' ..".format(msg))
+        logging.debug("broadcasting message '{}' ..".format(msg))
         for c in self.clients:
             c._sendEncodedMessage(msg)
-            print("message sent to {}".format(c.peer))
-
-
+            logging.debug("message sent to {}".format(c.peer))
 
 
 
@@ -244,6 +252,7 @@ def getPort():
     config = inject.instance(Config)
     log.startLogging(sys.stdout)
     factory = BroadcastServerFactory()
+    factory.protocol = ActionsServerProtocol
     factory.protocol = ActionsServerProtocol
     port = reactor.listenTCP(int(config.configs['server_port']), factory=factory, interface=config.configs['server_ip'])
     return (reactor,port,factory)

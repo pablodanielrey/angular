@@ -9,8 +9,12 @@
   font-size:14px;
 }
 
+.adminRequestAssistance .pointer {
+  cursor:pointer;
+}
+
 .adminRequestAssistance .scroll {
-  height:500px;
+  height:440px;
   width:850px;
   overflow:scroll;
   overflow-x:hidden;
@@ -71,6 +75,20 @@
   width:170px;
 }
 
+.adminRequestAssistance .filter {
+  background-color:#DEDEDE;
+  padding:5px;
+  color:#0066A6;
+  margin-bottom:5px;
+}
+
+.adminRequestAssistance .textSpan {
+  margin-left:10px;
+}
+.adminRequestAssistance .selectFilters {
+  background-color:white;
+  color:#0066A6;
+}
 
 .adminRequestAssistance .margins {
   margin-top:5px;
@@ -79,7 +97,7 @@
 
 
 .adminRequestAssistance .userRequest {
-  font-size:18px;
+  font-size:16px;
 
   padding:5px;
 
@@ -92,13 +110,13 @@
 
 }
 .adminRequestAssistance .typeRequest {
-  font-size:18px;
+  font-size:16px;
   color:#0066A6;
   margin-left:18px;
 
 }
 .adminRequestAssistance .timeRequest {
-  font-size:18px;
+  font-size:16px;
   color:#0066A6;
   margin-left:20px;
 
@@ -109,7 +127,7 @@
 }
 .adminRequestAssistance .dateRequest {
   margin-left:20px;
-  font-size:18px;
+  font-size:16px;
   color:#0066A6;
 }
 

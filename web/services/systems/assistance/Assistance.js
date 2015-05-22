@@ -5,6 +5,30 @@ app.service('Assistance', ['Utils','Messages','Session',
 	function(Utils,Messages,Session) {
 
 		/*
+		Obtiene todos los usuarios de las oficinas pasadas como parametro
+		*/
+
+		this.getOfficesUsers = function(offices, callbackOk, callbackError) {
+			var msg = {
+				id: Utils.getId(),
+				action: 'getOfficesUsers',
+				session: Session.getSessionId(),
+				request: {
+					offices: offices
+				}
+			}
+
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response.users);
+					} else {
+						callbackError(data.error);
+					}
+				});
+		}
+
+		/*
 			Obtiene los usuarios que se encuentran dentro de las oficinas a las cuales el usuario loggeado tiene
 			un rol determinado.
 		*/
@@ -47,7 +71,7 @@ app.service('Assistance', ['Utils','Messages','Session',
 				Messages.send(msg,
 					function(data) {
 						if (typeof data.error === 'undefined') {
-							callbackOk(data.response);
+							callbackOk(data);
 						} else {
 							callbackError(data.error);
 						}
@@ -69,6 +93,31 @@ app.service('Assistance', ['Utils','Messages','Session',
 				function(data) {
 					if (typeof data.error === 'undefined') {
 						callbackOk(data.response);
+					} else {
+						callbackError(data.error);
+					}
+				});
+		};
+
+		this.getAssistanceStatusByUsers = function(usersIds, dates, status, callbackOk, callbackError) {
+			var msg = {
+				id: Utils.getId(),
+				action: 'getAssistanceStatusByUsers',
+				session: Session.getSessionId(),
+				request:{
+					usersIds: usersIds,
+					dates: dates,
+					status: status
+				}
+			}
+
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						var response = {};
+						response.assistances = data.response;
+						response.base64 = data.base64;
+						callbackOk(response);
 					} else {
 						callbackError(data.error);
 					}
@@ -117,6 +166,89 @@ app.service('Assistance', ['Utils','Messages','Session',
 				});
 		};
 
+
+		this.getSchedules = function(userId,date, callbackOk, callbackError) {
+			var msg = {
+				id: Utils.getId(),
+				action: 'getSchedules',
+				session: Session.getSessionId(),
+				request:{
+					user_id: userId,
+				}
+			}
+
+			if (date != null) {
+				msg.request.date = date;
+			}
+
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response);
+					} else {
+						callbackError(data.error);
+					}
+				});
+		};
+
+
+		/*
+		request:{
+			user_id:"id del Usuario",
+			date:"fecha de que se empieza a utilizar el schedule, si no se envia se toma la fecha actual",
+			start:"hora de inicio del turno",
+			end:"hora de fin de turno",
+			daysOfWeek:[],
+			isDayOfWeek:"es dia de la semana, si no se envia se toma como false",
+			isDayOfMonth:"es dia un dia del mes, si no se envia se toma como false",
+			isDayOfYear:"es dia del año, si no se envia se toma como false"
+		}
+		*/
+
+		this.newSchedule = function(request, callbackOk, callbackError) {
+			var msg = {
+				id: Utils.getId(),
+				action: 'newSchedule',
+				session: Session.getSessionId(),
+				request:request
+			}
+
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response);
+					} else {
+						callbackError(data.error);
+					}
+				});
+		};
+
+
+		this.getOfficesByUserRole = function(userId,role,tree, callbackOk, callbackError) {
+			var msg = {
+				id: Utils.getId(),
+				action: 'getOfficesByUserRole',
+				session: Session.getSessionId(),
+
+				request:{
+					user_id: userId,
+					tree:tree
+				}
+			}
+
+			if (role != null) {
+				msg.request.role = role;
+			}
+
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response.offices);
+					} else {
+						callbackError(data.error);
+					}
+				});
+		};
 
 		this.getOfficesByUser = function(userId, callbackOk, callbackError) {
 			var msg = {
@@ -206,6 +338,41 @@ app.service('Assistance', ['Utils','Messages','Session',
 		};
 
 
+		this.getJustificationRequestsByDate = function(status, usersIds, start, end, callbackOk, callbackError){
+			var msg = {
+				id: Utils.getId(),
+				action: 'getJustificationRequestsByDate',
+				session: Session.getSessionId(),
+				request: {
+				}
+			}
+
+			if (status != null) {
+				msg.request.status = status;
+			}
+
+			if (usersIds != null) {
+				msg.request.usersIds = usersIds;
+			}
+
+			if (start != null) {
+				msg.request.start = start;
+			}
+
+			if (end != null) {
+				msg.request.end = end;
+			}
+
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response.requests);
+					} else {
+						callbackError(data.error);
+					}
+			});
+		}
+
 		this.getJustificationRequestsToManage = function(status, group, callbackOk, callbackError){
 			var msg = {
 				id: Utils.getId(),
@@ -281,7 +448,7 @@ app.service('Assistance', ['Utils','Messages','Session',
 
 		}
 
-		this.requestJustification = function(userId, justification, callbackOk, callbackError) {
+		this.requestJustification = function(userId, justification, status, callbackOk, callbackError) {
 			var msg = {
 				id: Utils.getId(),
 				action: 'requestJustification',
@@ -295,6 +462,37 @@ app.service('Assistance', ['Utils','Messages','Session',
 
 			if (!(typeof justification.end === 'undefined')) {
 				msg.request.end = justification.end;
+			}
+
+			if (!(typeof status === 'undefined')) {
+				msg.request.status = status;
+			}
+
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response);
+					} else {
+						callbackError(data.error);
+					}
+				});
+		}
+
+		this.requestJustificationRange = function(userId, justification, status, callbackOk, callbackError) {
+			var msg = {
+				id: Utils.getId(),
+				action: 'requestJustificationRange',
+				session: Session.getSessionId(),
+				request: {
+					user_id: userId,
+					justification_id: justification.id,
+					begin: justification.begin,
+					end: justification.end
+				}
+			}
+
+			if (!(typeof status === 'undefined')) {
+				msg.request.status = status;
 			}
 
 			Messages.send(msg,
@@ -413,6 +611,28 @@ app.service('Assistance', ['Utils','Messages','Session',
 				function(data) {
 					if (typeof data.error === 'undefined') {
 						callbackOk(data.ok);
+					} else {
+						callbackError(data.error);
+					}
+				});
+		}
+
+
+		/**
+		*	Obtiene las justificaciones especiales que puede solicitar
+		*/
+		this.getSpecialJustifications = function(callbackOk, callbackError) {
+			var msg = {
+				id: Utils.getId(),
+				action: 'getSpecialJustifications',
+				session: Session.getSessionId(),
+				request: {
+				}
+			};
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response.justifications);
 					} else {
 						callbackError(data.error);
 					}

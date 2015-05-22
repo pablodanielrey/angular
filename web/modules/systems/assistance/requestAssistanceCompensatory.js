@@ -6,6 +6,7 @@ app.controller('RequestAssistanceCompensatoryCtrl', function($scope, Assistance,
 	$scope.model.justificationCompensatoryAvailableSelected = false;
 	$scope.model.justificationCompensatoryRequestsSelected = false;
 
+  $scope.model.processingRequest = false;
 
     // ------------------ Manejo de la vista ----------------------------
 
@@ -116,15 +117,21 @@ app.controller('RequestAssistanceCompensatoryCtrl', function($scope, Assistance,
 
     // Envio la peticion al servidor
     $scope.save = function() {
-        Assistance.requestJustification($scope.model.session.user_id,$scope.model.justification,
-            function(ok) {
-                Notifications.message("Guardado exitosamente");
-                $scope.clearSelections();
-            },
-            function(error) {
-                Notifications.message(error);
-            }
-        );
+      $scope.model.processingRequest = true;
+
+      Assistance.requestJustification($scope.model.session.user_id,$scope.model.justification,null,
+          function(ok) {
+            $scope.model.processingRequest = false;
+
+            Notifications.message("Guardado exitosamente");
+            $scope.clearSelections();
+          },
+          function(error) {
+            $scope.model.processingRequest = false;
+
+            Notifications.message(error);
+          }
+      );
     }
 
 

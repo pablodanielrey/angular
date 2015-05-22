@@ -2,6 +2,7 @@
 import json, base64, datetime, traceback, logging
 import inject, re
 import psycopg2
+import time
 
 from model.exceptions import *
 
@@ -76,24 +77,24 @@ class BossesNotifier:
 
         offices = self.offices.getOfficesByUser(con,userId,parents=True)
         officesIds = list(map(lambda x: x['id'], offices))
-        bossesIds = self.offices.getUsersWithRoleInOffices(con,officesIds,role='autoriza')
 
+        if officesIds is not None and len(officesIds) > 0:
+            bossesIds = self.offices.getUsersWithRoleInOffices(con,officesIds,role='autoriza')
+            logging.debug('oficinas {}\nids {}\n jefes {}'.format(offices,officesIds,bossesIds))
 
-        logging.debug('oficinas {}\nids {}\n jefes {}'.format(offices,officesIds,bossesIds))
-
-        for bid,sendMail in bossesIds:
-            if sendMail:
-                logging.debug('buscando mail para : {}'.format(bid))
-                bemails = self.users.listMails(con,bid)
-                if bemails != None and len(bemails) > 0:
-                    logging.debug('añadiendo {}'.format(bemails))
-                    emails.extend(list(map(lambda x: x['email'],bemails)))
+            for bid,sendMail in bossesIds:
+                if sendMail:
+                    logging.debug('buscando mail para : {}'.format(bid))
+                    bemails = self.users.listMails(con,bid)
+                    if bemails != None and len(bemails) > 0:
+                        bemails = list(filter(lambda x: 'econo.unlp.edu.ar' in x['email'],bemails))
+                        logging.debug('añadiendo {}'.format(bemails))
+                        emails.extend(list(map(lambda x: x['email'],bemails)))
 
         logging.debug('emails {}'.format(emails))
 
         if len(emails) > 0:
             self._sendEmail(emails,config,request)
-
 
 
 
@@ -352,6 +353,109 @@ class GetJustificationRequestsToManage:
 
 
 
+
+"""
+query : Obtener todas las solicitudes de justificationces
+{
+  id:,
+  action:"getJustificationRequestsByDate",
+  session:,
+  request:{
+      status: 'estado de la justificacion PENDING|APPROVED|REJECTED|CANCELED' -- si no existe se obtienen todas,
+      start: 'fecha de inicio de la busqueda'
+      end: 'fecha limite de busqueda'
+      usersIds: 'ids de usuarios'
+  }
+}
+
+response :
+{
+  id: "id de la petición",
+  ok: "caso exito",
+  error: "error del servidor",
+  response:{
+    requests : [ "lista de solicitudes de un determinado usuario"
+  		{
+        id: "id de la solicitud de justificacion",
+        user_id:"id del usuario",
+    		justification_id: "id de la justificacion o licencia solicitada"
+    		begin: 2014-12-01 00:00:00 "fecha de inicio de la justificacion o licencia solicitada"
+    		end: 2014-12-02 00:00:00 "fecha de finalizacion de la justificacion o licencia solicitada"
+    		status: "PENDING|APPROVED|REJECTED|CANCELED"
+  		}
+	]
+
+}
+"""
+class GetJustificationRequestsByDate:
+
+    profiles = inject.attr(Profiles)
+    config = inject.attr(Config)
+    justifications = inject.attr(Justifications)
+
+    def handleAction(self, server, message):
+
+        if (message['action'] != 'getJustificationRequestsByDate'):
+            return False
+
+        if 'request' not in message:
+            response = {'id':message['id'], 'error':'Insuficientes parámetros'}
+            server.sendMessage(response)
+            return True
+
+        if 'usersIds' not in message['request']:
+            response = {'id':message['id'], 'error':'Insuficientes parámetros'}
+            server.sendMessage(response)
+            return True
+
+        status = None
+        if 'status' in message['request']:
+            status = message['request']['status']
+            status = status.split('|')
+
+
+
+        sid = message['session']
+        self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
+
+        userId = self.profiles.getLocalUserId(sid)
+
+        usersIds = message['request']['usersIds']
+
+
+
+        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+        try:
+
+            start = None
+            if 'start' in message['request']:
+                start = message['request']['start']
+
+            end = None
+            if 'end' in message['request']:
+                end = message['request']['end']
+
+            requests = []
+            if len(usersIds) > 0:
+                requests = self.justifications.getJustificationRequestsByDate(con,status,usersIds,start,end)
+
+            response = {
+                'id':message['id'],
+                'ok':'',
+                'response':{
+                    'requests':requests
+                }
+            }
+            server.sendMessage(response)
+            return True
+
+        except psycopg2.DatabaseError as e:
+            raise e
+
+        finally:
+            con.close()
+
+
 """
 
 query : Obtener todas las solicitudes de justificationces
@@ -487,8 +591,10 @@ class UpdateJustificationRequestStatus:
             events = self.justifications.updateJustificationRequestStatus(con,userId,requestId,status)
             con.commit()
 
-            logging.debug('llamando a notify')
-            self.notifier.notifyBosses(con,userId,'justifications_update_request_status')
+            """ se debe notificar a los jefes del usuaro del pedido original """
+            req = self.justifications.findJustificationRequestById(con,requestId)
+            if req['user_id'] is not None:
+                self.notifier.notifyBosses(con,req['user_id'],'justifications_update_request_status')
 
 
             response = {
@@ -532,6 +638,7 @@ query : solicitud de justificaciones de un determinado usuario
       justification_id: "id de la justificacion o licencia solicitada"
   	  begin: "fecha de inicio de la justificacion o licencia solicitada"
   	  end: "fecha de finalizacion de la justificacion o licencia solicitada" -- algunas justificaciones no tienen fin. es el turno completo.
+      status: estado por defecto de la nueva solicitud -- por defecto PENDING
   }
 
 }
@@ -573,14 +680,35 @@ class RequestJustification:
             end = message['request']['end']
             end = self.date.parse(end)
 
+        status = None
+        if 'status' in message['request']:
+            status = message['request']['status']
+
 
         sid = message['session']
         self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
 
+        requestor_id = self.profiles.getLocalUserId(sid)
+
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
-            events = self.justifications.requestJustification(con,userId,justificationId,begin,end)
+            events = self.justifications.requestJustification(con,userId,requestor_id,justificationId,begin,end)
             con.commit()
+
+            if status != None and status != 'PENDING':
+                # obtengo el id del request del evento de updateStatus que tiene por defecto
+                reqId = None
+                for ev in events:
+                    if 'data' in ev and 'request_id' in ev['data']:
+                        reqId = ev['data']['request_id']
+
+                if reqId != None:
+                    e = self.justifications.updateJustificationRequestStatus(con,requestor_id,reqId,status)
+                    events.extend(e)
+
+                con.commit()
+
+
 
             self.notifier.notifyBosses(con,userId,'justifications_request')
 
@@ -606,6 +734,217 @@ class RequestJustification:
             }
             server.sendMessage(response)
             return True
+
+        finally:
+            con.close()
+
+
+"""
+query : solicitud de justificaciones de un determinado usuario
+{
+  id:,
+  action:"requestJustificationRange",
+  session:,
+  request:{
+      user_id: "id del usuario",
+      justification_id: "id de la justificacion o licencia solicitada"
+  	  begin: "fecha de inicio de la justificacion o licencia solicitada"
+  	  end: "fecha de finalizacion de la justificacion o licencia solicitada"
+      status:estado por defecto de la nueva solicitud -- por defecto PENDING
+  }
+
+}
+
+response :
+{
+  id: "id de la petición",
+  ok: "caso exito",
+  error: "error del servidor"
+}
+"""
+
+class RequestJustificationRange:
+
+    profiles = inject.attr(Profiles)
+    config = inject.attr(Config)
+    justifications = inject.attr(Justifications)
+    date = inject.attr(Date)
+    events = inject.attr(Events)
+    notifier = inject.attr(BossesNotifier)
+
+    def handleAction(self, server, message):
+
+        if (message['action'] != 'requestJustificationRange'):
+            return False
+
+        if ('request' not in message) or ('user_id' not in message['request']) or ('justification_id' not in message['request']) or ('begin' not in message['request']) or ('end' not in message['request']):
+            response = {'id':message['id'], 'error':'Insuficientes parámetros'}
+            server.sendMessage(response)
+            return True
+
+
+        userId = message['request']['user_id']
+        justificationId = message['request']['justification_id']
+        begin = message['request']['begin']
+        begin = self.date.parse(begin)
+        end = message['request']['end']
+        end = self.date.parse(end)
+
+        status = None
+        if 'status' in message['request']:
+            status = message['request']['status']
+
+
+        sid = message['session']
+        self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
+
+        requestor_id = self.profiles.getLocalUserId(sid)
+
+        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+        try:
+            events = self.justifications.requestJustificationRange(con,userId,requestor_id,justificationId,begin,end)
+
+            con.commit()
+
+            if status != None and status != 'PENDING':
+                # obtengo el id del request del evento de updateStatus que tiene por defecto
+                reqIds = []
+                for ev in events:
+                    if 'data' in ev and 'request_id' in ev['data']:
+                        reqIds.append(ev['data']['request_id'])
+
+                for reqId in reqIds:
+                    e = self.justifications.updateJustificationRequestStatus(con,requestor_id,reqId,status)
+                    events.extend(e)
+
+                con.commit()
+
+
+            self.notifier.notifyBosses(con,userId,'justifications_request')
+
+            response = {
+                'id':message['id'],
+                'ok':'El pedido se ha realizado correctamente'
+            }
+            server.sendMessage(response)
+
+            for e in events:
+                self.events.broadcast(server,e)
+
+            return True
+
+
+        except Exception as e:
+            logging.exception(e)
+            con.rollback()
+
+            response = {
+                'id':message['id'],
+                'error':'Error realizando pedido'
+            }
+            server.sendMessage(response)
+            return True
+
+        finally:
+            con.close()
+
+
+
+"""
+
+query : Obtener todas las justificationces especiales que puede solicitar el usuario logueado
+{
+  id:,
+  action:"getSpecialJustifications",
+  session:,
+  request:{
+
+  }
+}
+
+response :
+{
+  id: "id de la petición",
+  ok: "caso exito",
+  error: "error del servidor",
+  response:{
+    justifications: [
+      {
+        id: 'id de la justificacion',
+        name:''
+      }
+    ]
+
+}
+"""
+class GetSpecialJustifications:
+
+    profiles = inject.attr(Profiles)
+    config = inject.attr(Config)
+    offices = inject.attr(Offices)
+    justifications = inject.attr(Justifications)
+
+    def handleAction(self, server, message):
+
+        if (message['action'] != 'getSpecialJustifications'):
+            return False
+
+        if 'request' not in message:
+            response = {'id':message['id'], 'error':'Insuficientes parámetros'}
+            server.sendMessage(response)
+            return True
+
+
+        sid = message['session']
+        self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
+
+        userId = self.profiles.getLocalUserId(sid)
+
+        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+        try:
+            role = 'realizar-solicitud'
+            tree = False
+            offices = self.offices.getUserInOfficesByRole(con,userId,tree,role);
+
+            ids = []
+
+            if (offices != None and len(offices) > 0):
+                # 'f9baed8a-a803-4d7f-943e-35c436d5db46','Licencia Médica Corta Duración'
+                # 'a93d3af3-4079-4e93-a891-91d5d3145155','Licencia Médica Largo Tratamiento'
+                # 'b80c8c0e-5311-4ad1-94a7-8d294888d770','Licencia Médica Atención Familiar'
+                # '478a2e35-51b8-427a-986e-591a9ee449d8','Justificado por Médico'
+                # '0cd276aa-6d6b-4752-abe5-9258dbfd6f09','Duelo'
+                # 'e8019f0e-5a70-4ef3-922c-7c70c2ce0f8b','Donación de Sangre'
+                ids.extend([
+                    'f9baed8a-a803-4d7f-943e-35c436d5db46',
+                    'a93d3af3-4079-4e93-a891-91d5d3145155',
+                    'b80c8c0e-5311-4ad1-94a7-8d294888d770',
+                    '478a2e35-51b8-427a-986e-591a9ee449d8',
+                    '0cd276aa-6d6b-4752-abe5-9258dbfd6f09',
+                    'e8019f0e-5a70-4ef3-922c-7c70c2ce0f8b'])
+
+            role = 'realizar-solicitud-admin'
+            offices = self.offices.getUserInOfficesByRole(con,userId,tree,role);
+            if (offices != None or len(offices) > 0):
+                # por ahora no existe la justificacion "Justificado por autoridad"
+                ids.extend([])
+
+            justifications = []
+            for idJ in ids:
+                justifications.append(self.justifications.getJustificationById(con,idJ))
+
+            response = {
+                'id':message['id'],
+                'ok':'',
+                'response':{
+                    'justifications':justifications
+                }
+            }
+            server.sendMessage(response)
+            return True
+
+        except psycopg2.DatabaseError as e:
+            raise e
 
         finally:
             con.close()

@@ -41,7 +41,7 @@ if __name__ == '__main__':
 
 
     date = datetime.datetime.now()
-    dates = calendar.Calendar().monthdatescalendar(date.year,date.month)
+    dates = calendar.Calendar().monthdatescalendar(date.year,date.month-1)
     firstWeek = dates[0][:7]
 
     con = psycopg2.connect(host=host, port=port, user=user, password=passw, dbname=db)
@@ -52,10 +52,17 @@ if __name__ == '__main__':
 
     logging.basicConfig(level=logging.DEBUG)
 
+    lines = 0
+
     for line in csv.reader(sys.stdin):
 
         try:
             logging.debug(line)
+
+            """ salto el titulo """
+            if lines < 2:
+                lines = lines + 1
+                continue
 
             nombre,app,dni,le,ls,me,ms,mme,mms,je,js,ve,vs,se,ss,de,ds = line
 
@@ -85,6 +92,8 @@ if __name__ == '__main__':
 
 
             """ actualizo el tema del horario """
+
+            cur.execute('delete from assistance.schedule where user_id = %s',(pid,))
 
             entradas = [le,me,mme,je,ve,se,de]
             salidas = [ls,ms,mms,js,vs,ss,ds]

@@ -9,7 +9,7 @@ app.controller('RequestAssistanceOutCtrl', ["$scope", "Assistance", "Notificatio
 		stock:0,       //stock mensual
     yearlyStock:0  //stock anual
   };
-  
+
   $scope.model.justificationOutRequestSelected = false;   //flag para indicar si esta seleccionado el formulario para solicitar una salida eventual
   $scope.model.justificationOutAvailableSelected = false; //flag para indicar si esta seleccionada la seccion para visualizar las salidas eventuales disponibles
   $scope.model.date = null;           //fecha de la salida eventual a solicitar
@@ -19,6 +19,10 @@ app.controller('RequestAssistanceOutCtrl', ["$scope", "Assistance", "Notificatio
   $scope.model.beginFormated = null;  //hora de inicio de la salida eventual a solicitar en un formato amigable para el usuario
   $scope.model.endFormated = null;    //hora de fin de la salida eventual a solicitar en un formato amigable para el usuario
   $scope.model.timeFormated = null;   //diferencia de tiempo para ser mostrada al usuario
+
+
+  $scope.model.processingRequest = false;
+
 
     // ---------------- Manejo de la vista --------------------
 
@@ -92,8 +96,8 @@ app.controller('RequestAssistanceOutCtrl', ["$scope", "Assistance", "Notificatio
     $scope.model.beginFormated = null;
     $scope.model.endFormated = null;
     $scope.model.timeFormated = null;
-      
-  
+
+
 	};
 
 
@@ -106,7 +110,7 @@ app.controller('RequestAssistanceOutCtrl', ["$scope", "Assistance", "Notificatio
           return true;
       } else {
          return false;
-      }  
+      }
     };
 
     /**
@@ -178,7 +182,7 @@ app.controller('RequestAssistanceOutCtrl', ["$scope", "Assistance", "Notificatio
     });
 
     $scope.$on('JustificationStockChangedEvent', function(event, data) {
- 
+
       if ($scope.model.justificationOutId == data.justification_id) {
         $scope.loadOutStock($scope.model.justificationOutId);
       }
@@ -191,7 +195,7 @@ app.controller('RequestAssistanceOutCtrl', ["$scope", "Assistance", "Notificatio
         $scope.loadOutStock(justification.id);
     };
 
-   
+
     // Envio la peticion al servidor
     $scope.save = function() {
 
@@ -200,19 +204,24 @@ app.controller('RequestAssistanceOutCtrl', ["$scope", "Assistance", "Notificatio
         begin: new Date($scope.model.date),
         end: new Date($scope.model.date)
       };
-      
+
       requestedJustification.begin.setHours($scope.model.begin.getHours(), $scope.model.begin.getMinutes());
       requestedJustification.end.setHours($scope.model.end.getHours(), $scope.model.end.getMinutes());
 
-      
-      Assistance.requestJustification($scope.model.session.user_id,requestedJustification,
+      $scope.model.processingRequest = true;
+
+      Assistance.requestJustification($scope.model.session.user_id,requestedJustification, null,
           function(ok) {
+            $scope.model.processingRequest = false;
+
             $scope.clearOut();
             $scope.clearSelections(); //limpiar selecciones de todas las justificaciones
             Notifications.message("Salida eventual cargada correctamente");
           },
           function(error) {
-              Notifications.message(error + ": Verifique correctamente la disponibilidad");
+            $scope.model.processingRequest = false;
+
+            Notifications.message(error + ": Verifique correctamente la disponibilidad");
           }
       );
     };

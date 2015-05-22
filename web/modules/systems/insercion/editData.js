@@ -301,8 +301,20 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 				*/
 
 				$scope.model.downloading = false;
-				var blob = Utils.base64ToBlob(data);
+				var blob = Utils.base64ToBlob(data.base64);
 				window.saveAs(blob,'base.ods');
+
+				var cvs = data.cvs;
+				for (var i = 0; i < cvs.length; i++) {
+					console.log(i);
+					var bcv = cvs[i];
+					var blobcv = Utils.base64ToBlob(bcv.data);
+					var ext = bcv.name.split('.');
+					var filename = bcv.lastname + ', ' + bcv.username + '.' + ext[ext.length - 1];
+					//console.log(filename);
+					window.saveAs(blobcv,bcv.lastname + ', ' + bcv.username + '.' + ext[ext.length - 1]);
+				}
+
 			},
 			function(error) {
 				$scope.$apply(function() {

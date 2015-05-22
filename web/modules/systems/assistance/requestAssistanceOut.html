@@ -23,14 +23,14 @@
             <p class="parrafos">Seleccione Horas</p>
 
             <div class="titlesHours">
-              <div class="spanSE"><span>Desde <i class="fa fa-sort-desc"></i></span></div>
-              <div class="spanSE"><span>Hasta <i class="fa fa-sort-desc"></i></span></div>
+              <div class="spanSE"><span>Desde</span></div>
+              <div class="spanSE"><input class="timeMargin" type="time" ng-model="model.begin" ng-change="defineOut()"></div>
               <div class="spanSE"><span>Total <i class="fa fa-sort-desc"></i></span></div>
             </div>
             <div class="hours">
-              <div class="spanSE"><input type="time" ng-model="model.begin" ng-change="defineOut()"></div>
+              <div class="spanSE2"><span> Hasta</span></div>
               <div class="spanSE"><input type="time" ng-model="model.end" ng-change="defineOut()"></div>
-              <div class="spanSE"><span>{{model.timeFormated}}</span></div>
+              <div class="spanSE"><span><b>{{model.timeFormated}}</b></span></div>
             </div>
           </div>
 
@@ -50,7 +50,7 @@
           <p class="parrafos">Solicitar Boleta de salida para el día</p>
           <p class="parrafos3"><i class="fa fa-calendar-o"></i> {{model.dateFormated}} / <i class="fa fa-clock-o"></i> {{model.timeFormated}} Horas </p>
           <p class="parrafos4"><i class="fa fa-clock-o"></i> De {{model.beginFormated}} a {{model.endFormated}} Horas </p>
-          <input class="button2 blue2" type="button" value="Confirmar" ng-click="save()">
+          <input class="button2 blue2" type="button" value="Confirmar" ng-click="save()" ng-disabled='model.processingRequest'>
         </div>
       </div>
     </div>
