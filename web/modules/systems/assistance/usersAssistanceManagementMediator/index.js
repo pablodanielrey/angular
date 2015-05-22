@@ -249,14 +249,25 @@ app.controller('UsersAssistanceManagementMediatorCtrl', ["$scope", "$timeout", "
 
 
   $timeout(function() {
-    Module.authorize('ADMIN-ASSISTANCE,USER-ASSISTANCE');
-    $scope.model.sessionUserId = Module.getSessionUserId();
-    $scope.loadAuthorizedUsers();
-    $scope.loadAuthorizedJustifications();
-    $scope.loadRequestedJustifications();
-    $scope.model.clearIndex();
-  }, 0);
+     Module.authorize('ADMIN-ASSISTANCE,USER-ASSISTANCE',
+      function(response){
+        if (response !== 'granted') {
+          Notifications.message("Acceso no autorizado");
+          $window.location.href = "/#/logout";
+        }
+        $scope.model.sessionUserId = Module.getSessionUserId();
+        $scope.loadAuthorizedUsers();
+        $scope.loadAuthorizedJustifications();
+        $scope.loadRequestedJustifications();
+        $scope.model.clearIndex();
+      },
+      function(error){
+        Notifications.message(error);
+        $window.location.href = "/#/logout";
+      }
+    );
 
+  }, 0);
 
   $scope.$on('JustificationsRequestsUpdatedEvent', function(event, data){
     $scope.loadRequestedJustifications();
