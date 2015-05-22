@@ -91,7 +91,7 @@ app.controller('RequestFeriadoCtrl', ["$scope", "Assistance", "Notifications", "
 		};
     
    
-    Assistance.requestGeneralJustification(request, 'APPROVED',
+    Assistance.requestGeneralJustification(request,
 			function(ok) {
 				$scope.clear(); //limpiar contenido
         $scope.model.justificationSelectedId = null; //limpiar seleccion de justificacion
