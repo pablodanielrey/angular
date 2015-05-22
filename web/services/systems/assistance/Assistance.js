@@ -697,6 +697,24 @@ app.service('Assistance', ['Utils','Messages','Session',
       
     };
 
-
+    this.deleteGeneralJustificationRequest = function(requestId, callbackOk, callbackError){
+      var msg = {
+				id: Utils.getId(),
+				action: 'deleteGeneralJustificationRequest',
+				session: Session.getSessionId(),
+        request: {
+					request_id: requestId
+				}
+			};
+      
+      Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.ok);
+					} else {
+						callbackError(data.error);
+					}
+		  });
+    };
 	}]
 );

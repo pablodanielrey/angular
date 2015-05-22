@@ -833,6 +833,82 @@ class RequestGeneralJustification:
 
 
 
+""" 
+peticion: 
+{ 
+	"id":"", 
+	"action":"deleteGeneralJustificationRequest", 
+	"session":"session de usuario", 
+	request:{
+    request_id:"id de la justificacionRequest",
+  }
+} 
+
+respuesta: 
+{ 
+	"id":"id de la peticion", 
+	"ok":"", 
+	"error":"" 
+} 
+
+"""
+class DeleteGeneralJustificationRequest:
+  profiles = inject.attr(Profiles)
+  config = inject.attr(Config)
+  
+  justifications = inject.attr(Justifications)
+
+  """ manejar accion """
+  def handleAction(self, server, message): 
+  
+
+    if (message['action'] != 'deleteGeneralJustificationRequest'): 
+      return False
+      
+    """ chequeo de datos """
+    if ('id' not in message) or ('session' not in message) or ('request' not in message) or ('request_id' not in message["request"]):
+      response = {'id':message['id'], 'error':'Insuficientes parámetros'}
+      server.sendMessage(response)
+      return True
+      
+    """ chequeo de permisos """
+    sid = message['session'] 
+    self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
+    
+    """ definir datos """
+    request_id = message['request']['request_id']
+    
+    """ conexion con base de datos """
+    con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+    try:
+      events = self.justifications.deleteGeneralJustificationRequest(con, request_id)
+      con.commit()
+      
+      """ enviar mensaje de respuesta """
+      response = {
+          'id':message['id'],
+          'ok':'Solicitud eliminada correctamente',
+      }
+      server.sendMessage(response)
+
+      """ disparar eventos """
+      for e in events:
+       self.events.broadcast(server,e)
+
+     
+    except Exception as e:
+      logging.exception(e)
+
+      response = {
+        'id':message['id'],
+        'error':'Error realizando pedido'
+      }
+      
+      server.sendMessage(response)
+
+    finally:
+      con.close()
+      return True;
  
 """ 
 peticion: 

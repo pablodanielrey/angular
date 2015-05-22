@@ -372,6 +372,23 @@ class Justifications:
       events.append(e)
       
       return events
+      
+    def deleteGeneralJustificationRequest(self, con, requestId):
+      cur = con.cursor()
+      sql = "DELETE FROM assistance.general_justifications WHERE id = '" + requestId + "'"
+      cur.execute(sql)
+      
+      events = []
+      e = {
+        'type':'JustificationsRequestsDeletedEvent',
+        'data':{
+           'request_id':requestId,
+         }
+      }
+      events.append(e)
+      
+      return events
+    
     
     
     

@@ -44,7 +44,14 @@ app.controller('RequestGeneralJustificationsCtrl', ["$scope", "$timeout", "$wind
 
 
   $scope.cancelRequest = function(request) {
-
+    Assistance.deleteGeneralJustificationRequest(request.id,
+      function(ok) {
+        $scope.loadRequestedJustifications();
+      },
+      function(error) {
+        Notifications.message(error);
+      }
+    );
   };
 
   $scope.sortRequestedJustifications = function(sort){
@@ -94,6 +101,11 @@ app.controller('RequestGeneralJustificationsCtrl', ["$scope", "$timeout", "$wind
 
 
   $scope.$on('JustificationsRequestsUpdatedEvent', function(event, data){
+    $scope.loadRequestedJustifications();
+
+	});
+  
+  $scope.$on('JustificationsRequestsDeletedEvent', function(event, data){
     $scope.loadRequestedJustifications();
 
 	});
