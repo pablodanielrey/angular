@@ -59,8 +59,8 @@
  */
 
 .container {
-  width: 200px;
-  height: 200px;
+  width: 12.5em;
+  height: 12.5em;
   position: relative;
   margin: 0 auto 40px;
   border: 1px solid #CCC;
@@ -92,8 +92,8 @@
   margin:0;
   display: block;
   position: absolute;
-  width: 196px;
-  height: 196px;
+  width: 99%;
+  height: 99%;
   border: 2px solid black;
   color: black;
   text-align: center;
