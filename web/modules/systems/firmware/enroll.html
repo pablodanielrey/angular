@@ -1,7 +1,7 @@
 <div class="container">
-	<form>
 	<div class="wrap {{model.class}}" ng-class="{true:'transition'}[model.isTransition]">
 		<div class="item dniContainer" ng-class="model.classItem1">
+			<form>
 				<label>Ingrese su dni:</label>
 				<input type="text" ng-model="model.dni" autofocus/>
 				<input type="submit" ng-click="next()" value="Aceptar" ng-disabled="model.dni==null"/>
@@ -28,6 +28,7 @@
 					  <button ng-click="deleteNumber()">&lt;-----</button>
 					</div>
 				</div>
+			</form>
 		</div>
 
 		<div class="item fingerContainer" ng-class="model.classItem2">
@@ -45,5 +46,4 @@
 			<i class="loading fa fa-spinner fa-spin"></i>
 		</div>
 	</div>
-	</form>
 </div>
