@@ -11,6 +11,8 @@
 .keyboard {
   border:2px solid black;
   width: 7em;
+  align-self:center;
+  margin:0 auto;
 }
 
 .keyboard .row {
@@ -37,7 +39,6 @@
 }
 
 .dniContainer * {
-  margin-right:0.5em;
   margin-top:0.5em;
 }
 
