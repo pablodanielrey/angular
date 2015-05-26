@@ -25,9 +25,10 @@ app.controller('RequestGeneralJustificationsCtrl', ["$scope", "$timeout", "$wind
    **************************************/
   $scope.loadRequestedJustifications = function() {   
     $scope.model.loadRequestedJustifications = true;
-    $scope.model.requestedJustifications = [];
+
     Assistance.getGeneralJustificationRequests(
       function(requestedJustifications) {
+        $scope.model.requestedJustifications = [];
         for (var i = 0; i < requestedJustifications.length; i++) {
           var req = Utils.formatRequestJustification(requestedJustifications[i]);
           $scope.model.requestedJustifications.push(req);

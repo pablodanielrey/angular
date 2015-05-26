@@ -855,6 +855,7 @@ respuesta:
 class DeleteGeneralJustificationRequest:
   profiles = inject.attr(Profiles)
   config = inject.attr(Config)
+  events = inject.attr(Events)
   
   justifications = inject.attr(Justifications)
 
