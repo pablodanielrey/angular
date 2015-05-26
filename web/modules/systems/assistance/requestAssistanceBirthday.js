@@ -5,25 +5,25 @@ app.controller('RequestAssistanceBirthdayCtrl', ["$scope", "Assistance", "Notifi
   if(!$scope.model) Notifications.message("No esta definido el modelo");
 
   //***** datos de la justificacion *****
-  $scope.justification = { 
+  $scope.justification = {
     id: 'b309ea53-217d-4d63-add5-80c47eb76820', //id de la justificacion.
     name:Utils.getJustificationName('b309ea53-217d-4d63-add5-80c47eb76820'),
     stock:0,
     yearlyStock:0,
     selectedName:"justificationBirthdaySelected", //Nombre de la seleccion en el controlador padre
   };
-  
+
   //***** variables de seleccion de la seccion *****
   $scope.model.requestSelected = false; //flag para indicar la seleccion del formulario de solicitud del articulo 102
   $scope.model.availableSelected = false; //flag para indicar la seleccion de la visualizacion de disponibilidad del articulo 102
-  
-  //***** variables del formulario *****  
+
+  //***** variables del formulario *****
   $scope.model.date = null;         //fecha seleccionada
   $scope.model.dateFormated = null; //fecha en formato amigable para el usuario
-  
+
   $scope.model.processingRequest = false;
-  
-  
+
+
   //***** METODOS DE CARGA E INICIALIZACION *****
   /**
    * Consultar stock de la justificacion
@@ -46,8 +46,8 @@ app.controller('RequestAssistanceBirthdayCtrl', ["$scope", "Assistance", "Notifi
       }
     );
   };
-  
-  
+
+
   $scope.$on('findStockJustification', function(event, data) {
     if (data.justification.id == $scope.justification.id) {
         $scope.loadStock();
@@ -60,10 +60,10 @@ app.controller('RequestAssistanceBirthdayCtrl', ["$scope", "Assistance", "Notifi
     }
   });
 
-  
-  
-  
-  
+
+
+
+
   //***** METODOS DE SELECCION DE LA SECCION CORRESPONDIENTE A LA JUSTIFICACION 102 *****
   /**
    * Esta seleccionada la seccion correspondiente a la justificacion 102
@@ -83,8 +83,8 @@ app.controller('RequestAssistanceBirthdayCtrl', ["$scope", "Assistance", "Notifi
     $scope.clearContent();
     $scope.model[$scope.justification.selectedName] = value;
 	};
-  
-  
+
+
   /**
    * Esta seleccionado el formulario para solicitar articulo 102?
    * @returns {Boolean}
@@ -122,7 +122,7 @@ app.controller('RequestAssistanceBirthdayCtrl', ["$scope", "Assistance", "Notifi
 		$scope.model.availableSelected = true;
 
 	};
-  
+
   /**
    * Inicializar variables correspondientes al contenido de la seccion del articulo 102
    * @returns {undefined}
@@ -133,11 +133,11 @@ app.controller('RequestAssistanceBirthdayCtrl', ["$scope", "Assistance", "Notifi
     $scope.model.date = null;
 		$scope.model.dateFormated = null;
     $scope.model.processingRequest = false;
-    
+
   };
-  
-    
-    
+
+
+
   //***** METODOS DEl FORMULARIO DE SOLICITUD DE JUSTIFICACION 102 *****
   $scope.selectDate = function(){
 		$scope.model.dateFormated = null;
@@ -145,17 +145,17 @@ app.controller('RequestAssistanceBirthdayCtrl', ["$scope", "Assistance", "Notifi
 			$scope.model.dateFormated = Utils.formatDate($scope.model.date);
     }
   };
-  
-  
+
+
   $scope.isDateDefined = function(){
-    return ($scope.model.date !== null);    
+    return ($scope.model.date !== null);
   };
-  
+
   $scope.isStock = function(){
     return ($scope.justification.stock !== 0);
   };
-  
-  
+
+
   // Envio la peticion al servidor
   $scope.save = function() {
     $scope.model.processingRequest = true;
@@ -164,7 +164,7 @@ app.controller('RequestAssistanceBirthdayCtrl', ["$scope", "Assistance", "Notifi
 			begin:$scope.model.date
 		};
 
-  	Assistance.requestJustification($scope.model.session.user_id, request,
+  	Assistance.requestJustification($scope.model.session.user_id, request, null,
 			function(ok) {
 				$scope.clearContent();    //limpiar contenido
         $scope.clearSelections(); //limpiar selecciones

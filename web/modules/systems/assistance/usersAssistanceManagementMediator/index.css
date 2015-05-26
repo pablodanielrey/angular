@@ -1,0 +1,479 @@
+
+.usersAssistanceManagementMediator {
+  width:100%;
+  height:100%;
+  font-family: helvetica;
+}
+/****ACORDEEON****/
+.usersAssistanceManagementMediator .content{
+  margin:5px auto;
+  width:98%;
+  min-height:50px;
+  overflow: hidden;
+}
+.usersAssistanceManagementMediator .titulo{
+  width:100%;
+  height:50px;
+  background-color: #0066A6;
+  overflow: hidden;
+  border-bottom: 1px solid #275276;
+
+}
+.usersAssistanceManagementMediator p.titulo{
+  margin:13px;
+  color: white;
+}
+
+.usersAssistanceManagementMediator .info {
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+}
+
+
+
+.usersAssistanceManagementMediator .button {
+  width: 150px;
+  height:50px;
+  margin-left:0px;
+  margin-top:10px;
+}
+.usersAssistanceManagementMediator .button2 {
+  width:265px;
+  height:50px;
+  margin-left:0px;
+  margin-top:10px;
+}
+.usersAssistanceManagementMediator .blue{
+  background-color:#0066A6;
+  color:white;
+  text-shadow: 0px 1px black;
+  font-weight: bold;
+}
+.usersAssistanceManagementMediator .blue2{
+  background-color:#0066A6;
+  color:white;
+  text-shadow: 0px 1px black;
+
+  font-size:20px;
+}
+.usersAssistanceManagementMediator .orange{
+  background-color:#ec9122;
+  color:white;
+  text-shadow: 0px 1px black;
+  font-weight: bold;
+}
+
+.usersAssistanceManagementMediator .green{
+  background-color:#128c78;
+  color:white;
+  text-shadow: 0px 1px black;
+  font-weight: bold;
+}
+
+.usersAssistanceManagementMediator .title {
+  display:flex;
+  align-items: center;
+  background-image:linear-gradient(to right,#275276, #0066A6);
+  font-size:16px;
+  width:98%;
+  height:30px;
+  padding:5px;
+  color:white;
+  margin-bottom:10px;
+  margin:5px;
+
+}
+.usersAssistanceManagementMediator .myRequests {
+  padding:7px;
+  background-color: #275276;
+  margin-top:15px;
+  padding-left:15px;
+  color:white;
+  border-top: 3px solid #0066A6;
+  margin-left:5px;
+}
+
+
+.usersAssistanceManagementMediator .myRequestInfo {
+  display:flex;
+  flex-direction:row;
+  background-color: white;
+}
+
+.usersAssistanceManagementMediator .scroll {
+  height:270px;
+
+  overflow:scroll;
+  overflow-x:hidden;
+
+}
+
+
+
+
+
+.usersAssistanceManagementMediator .titlesFiles {
+  display:flex;
+  flex-direction:row;
+  margin-left:10px;
+
+
+}
+.usersAssistanceManagementMediator .t1 {
+  width:200px;
+  margin-top:10px;
+
+}
+
+.usersAssistanceManagementMediator .t3 {
+  width:200px;
+  margin-bottom: 5px;
+}
+.usersAssistanceManagementMediator .t4 {
+  width:100px;
+  margin-top:10px;
+}
+
+.usersAssistanceManagementMediator .column {
+  background-color:#0066A6;
+
+  padding:5px;
+  margin-right:10px;
+  color:white;
+  border-top:3px solid #275276;
+  font-weight:bold;
+}
+
+
+.usersAssistanceManagementMediator .myRequest {
+  margin-top:5px;
+  width:190px;
+  background-color:white;
+  padding:5px;
+  padding-left:10px;
+
+  color:#0066A6;
+  border:1px solid #0066A6;
+  margin-right:10px;
+  font-weight: bold;
+  border-left: 5px solid #0066A6;
+}
+.usersAssistanceManagementMediator .myRequestDate {
+  margin-top:5px;
+  width:189px;
+  border:1px solid #0066A6;
+  padding:5px;
+  padding-left:10px;
+  color:black;
+  margin-right:10px;
+  background-color:white;
+  border-left: 5px solid #0066A6;
+}
+
+
+
+.usersAssistanceManagementMediator .buttonpending {
+  background-color:#e43e46;
+  color:white;
+  border:none;
+  padding:3px;
+  margin-left:5px;
+  cursor:pointer;
+  border-radius: 2px;
+}
+.usersAssistanceManagementMediator .buttonApproved {
+  background-color:#128c78;
+  color:white;
+  border:none;
+  padding:3px;
+
+  font-size:14px;
+  border-radius: 2px;
+}
+.usersAssistanceManagementMediator .buttonCancel {
+  background-color:#e43e46;
+  color:white;
+  border:none;
+  padding:3px;
+
+  font-size:14px;
+  border-radius: 2px;
+}
+
+
+.myStateRequestSlope.pending {
+  -webkit-animation-name: apending;
+  /* -webkit-animation-delay: 0.5s; */
+  -webkit-animation-duration: 2.5s;
+  -webkit-animation-iteration-count: infinite;
+  /*-webkit-animation-direction: alternate;*/
+}
+
+
+.usersAssistanceManagementMediator .myStateRequestSlope {
+  margin-top:5px;
+  width:200px;
+
+  padding:5px;
+  padding-left:10px;
+  color:#0066A6;
+
+  background-color:white;
+}
+
+.usersAssistanceManagementMediator .myStateRequestApproved {
+  margin-top:5px;
+  width:200px;
+
+  padding:5px;
+  padding-left:10px;
+  color:white;
+  margin-right:5px;
+
+}
+
+.usersAssistanceManagementMediator .myStateRequestRejected {
+  margin-top:5px;
+  width:200px;
+
+  padding:5px;
+  padding-left:10px;
+  color:white;
+  margin-right:10px;
+
+}
+
+
+.usersAssistanceManagementMediator .myStateRequestCanceled {
+  margin-top:5px;
+  width:200px;
+
+  padding:5px;
+  padding-left:10px;
+  color:white;
+  margin-right:10px;
+
+}
+
+
+.usersAssistanceManagementMediator .parrafos {
+  background-color:#0066A6;
+  color:white;
+  height:15px;
+  margin-top:11px;
+  margin-bottom:0px;
+
+  margin-right:10px;
+  font-size:13px;
+  width:252px;
+  padding:5px;
+}
+
+.usersAssistanceManagementMediator .parrafos2 {
+  background-color:white;
+  color:white;
+  height:15px;
+  margin-top:0px;
+  margin-bottom:0px;
+  margin-right:10px;
+  font-size:20px;
+  font-weight: bold;
+  width:252px;
+  padding:5px;
+  color:#128c78;
+}
+.usersAssistanceManagementMediator .parrafos3 {
+  background-color:white;
+  color:white;
+  height:15px;
+  margin-top:0px;
+  margin-bottom:0px;
+  margin-right:10px;
+  font-size:18px;
+  font-weight: bold;
+  width:252px;
+  padding:5px;
+  color:#128c78;
+}
+.usersAssistanceManagementMediator .parrafos4 {
+  background-color:white;
+  color:white;
+  height:15px;
+  margin-top:0px;
+  margin-bottom:0px;
+  margin-right:10px;
+  font-size:18px;
+
+  width:252px;
+  padding:5px;
+  color:#128c78;
+}
+
+
+
+.usersAssistanceManagementMediator .parrafosGreen {
+  background-color:#128c78;
+  color:white;
+  height:15px;
+  margin-top:11px;
+  margin-bottom:0px;
+
+  margin-right:10px;
+  font-size:13px;
+  width:252px;
+  padding:5px;
+}
+
+.usersAssistanceManagementMediator .parrafosGreen2 {
+  background-color:white;
+  color:white;
+  height:15px;
+  margin-top:0px;
+  margin-bottom:0px;
+  margin-right:10px;
+  font-size:20px;
+  font-weight: bold;
+  width:252px;
+  padding:5px;
+  color:#0066A6;
+}
+
+.usersAssistanceManagementMediator .date {
+  width:257px;
+}
+
+.usersAssistanceManagementMediator .hidden{
+  display:none;
+}
+
+
+.usersAssistanceManagementMediator .visible{
+  display:block;
+}
+.usersAssistanceManagementMediator div.info{
+  width:100%;
+  height:0px;
+  background-color: #f5f5f5;
+  overflow: hidden;
+  -webkit-transition: height 0.2s;
+}
+.usersAssistanceManagementMediator .subcontentDisplay div.info{
+  height:160px;
+}
+
+.usersAssistanceManagementMediator .subcontentDisplay .titulo, .usersAssistanceManagementMediator .subcontent .titulo{
+    cursor:pointer;
+}
+.usersAssistanceManagementMediator .info {
+  display:flex;
+  flex-direction:row;
+}
+.usersAssistanceManagementMediator .margin {
+  margin-left:50px;
+
+
+}
+
+.usersAssistanceManagementMediator .titlesHours {
+  display:flex;
+  flex-direction:row;
+  margin-top:5px;
+}
+.usersAssistanceManagementMediator .hours {
+  display:flex;
+  flex-direction:row;
+
+}
+.usersAssistanceManagementMediator .spanSE {
+  display:flex;
+  align-content:center;
+  background-color:white;
+
+
+  margin-right:10px;
+  color:#0066A6;
+
+
+}
+.usersAssistanceManagementMediator .spanSE2 {
+  display:flex;
+  align-content:center;
+  background-color:white;
+
+
+  margin-right:14px;
+  color:#0066A6;
+
+
+}
+.usersAssistanceManagementMediator .timeMargin {
+  margin-bottom:2px;
+}
+
+/****FIN DE ACORDEON****/
+
+
+
+
+
+
+
+/* SELECCION DE USUARIO */
+
+.usersAssistanceManagementMediator .searchTitle {
+  background-color: #0066A6;
+  color: white;
+  padding:5px;
+  margin-bottom: 0px;
+  font-size: 13px;
+  width:170px;
+  border-top: 3px solid #275276;
+  margin-right:20px;
+
+}
+
+
+.usersAssistanceManagementMediator .inputSearch{
+  width:166px;
+  padding:5px;
+  font-size: 14px;
+
+}
+.usersAssistanceManagementMediator .listUsers {
+  list-style-type:none;
+  margin:0px;
+  padding-left:5px;
+  width:190px;
+  max-height:300px;
+  background-color:#0066A6;
+  color:white;
+  z-index:999;
+  overflow: scroll;
+  overflow-x: hidden;
+  z-index: 999;
+  position: absolute;
+}
+.usersAssistanceManagementMediator .liUsers {
+  height:25px;
+  padding-top:10px;
+  border-bottom:2px solid #275276;
+  cursor:pointer;
+  z-index:999;
+
+}
+
+.usersAssistanceManagementMediator .selectUser {
+  display:flex;
+  flex-direction:row;
+  margin:10px;
+}
+.usersAssistanceManagementMediator .userSelect {
+  width:160px;
+  background-color:#0066A6;
+  color:white;
+  padding:10px;
+  margin-top:2px;
+  font-size:14px;
+  border-top: 3px solid #275276;
+}

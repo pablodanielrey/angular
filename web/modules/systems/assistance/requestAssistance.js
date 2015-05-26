@@ -1,6 +1,6 @@
 var app = angular.module('mainApp');
 
-app.controller('RequestAssistanceCtrl', ["$scope", "$rootScope", "$timeout", "$window", "Session", "Assistance", "Profiles", "Notifications", "Utils", function($scope, $rootScope, $timeout, $window, Session, Assistance, Profiles, Notifications, Utils) {
+app.controller('RequestAssistanceCtrl', ["$scope", "$rootScope", "$timeout", "$window", "Session", "Assistance", "Users", "Profiles", "Notifications", "Utils", function($scope, $rootScope, $timeout, $window, Session, Assistance, Users, Profiles, Notifications, Utils) {
 
 	$scope.model = {
 		justifications : [], //auxiliar para almacenar las justificaciones que seran mostradas al usuario
@@ -14,8 +14,8 @@ app.controller('RequestAssistanceCtrl', ["$scope", "$rootScope", "$timeout", "$w
     justification102Selected : false,
     justificationBirthdaySelected : false,
     justification638Selected : false,
-    
-    
+		justificationExamId : 'b70013e3-389a-46d4-8b98-8e4ab75335d0', // id de la justificacion de prexamen
+		justificationAbsentId : "e0dfcef6-98bb-4624-ae6c-960657a9a741", // id de ausente con aviso
 		justificationCompensatoryId : "48773fd7-8502-4079-8ad5-963618abe725", // id de la justificacion de compensatorio
 		justificationOutId : 'fa64fdbd-31b0-42ab-af83-818b3cbecf46', //id de la justificacion de boleta de salidas
 		justificationLaoId : '76bc064a-e8bf-4aa3-9f51-a3c4483a729a' // id de la justificacion de la licencia anual ordinaria
@@ -44,6 +44,17 @@ app.controller('RequestAssistanceCtrl', ["$scope", "$rootScope", "$timeout", "$w
 			);
     }
 
+	$scope.loadUser = function(req) {
+		Users.findUser(req.requestor_id,
+			function(person) {
+				req.user = person;
+			},
+			function(error) {
+				Notifications.message(error);
+			}
+		);
+	}
+
 	$scope.loadRequestedLicences = function() {
 		Assistance.getJustificationRequests(null,
 			function(requestedLicences) {
@@ -54,6 +65,8 @@ app.controller('RequestAssistanceCtrl', ["$scope", "$rootScope", "$timeout", "$w
 				$scope.model.requestedLicences = [];
 				for (var i = 0; i < requestedLicences.length; i++) {
 					var req = Utils.formatRequestJustification(requestedLicences[i]);
+					req.requestor_id = requestedLicences[i]['requestor_id'];
+					$scope.loadUser(req);
 					$scope.model.requestedLicences.push(req);
 				}
 			},

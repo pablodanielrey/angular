@@ -448,7 +448,7 @@ app.service('Assistance', ['Utils','Messages','Session',
 
 		}
 
-		this.requestJustification = function(userId, justification, callbackOk, callbackError) {
+		this.requestJustification = function(userId, justification, status, callbackOk, callbackError) {
 			var msg = {
 				id: Utils.getId(),
 				action: 'requestJustification',
@@ -464,6 +464,10 @@ app.service('Assistance', ['Utils','Messages','Session',
 				msg.request.end = justification.end;
 			}
 
+			if (!(typeof status === 'undefined')) {
+				msg.request.status = status;
+			}
+
 			Messages.send(msg,
 				function(data) {
 					if (typeof data.error === 'undefined') {
@@ -474,7 +478,7 @@ app.service('Assistance', ['Utils','Messages','Session',
 				});
 		}
 
-		this.requestJustificationRange = function(userId, justification, callbackOk, callbackError) {
+		this.requestJustificationRange = function(userId, justification, status, callbackOk, callbackError) {
 			var msg = {
 				id: Utils.getId(),
 				action: 'requestJustificationRange',
@@ -485,6 +489,10 @@ app.service('Assistance', ['Utils','Messages','Session',
 					begin: justification.begin,
 					end: justification.end
 				}
+			}
+
+			if (!(typeof status === 'undefined')) {
+				msg.request.status = status;
 			}
 
 			Messages.send(msg,
@@ -603,6 +611,28 @@ app.service('Assistance', ['Utils','Messages','Session',
 				function(data) {
 					if (typeof data.error === 'undefined') {
 						callbackOk(data.ok);
+					} else {
+						callbackError(data.error);
+					}
+				});
+		}
+
+
+		/**
+		*	Obtiene las justificaciones especiales que puede solicitar
+		*/
+		this.getSpecialJustifications = function(callbackOk, callbackError) {
+			var msg = {
+				id: Utils.getId(),
+				action: 'getSpecialJustifications',
+				session: Session.getSessionId(),
+				request: {
+				}
+			};
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response.justifications);
 					} else {
 						callbackError(data.error);
 					}

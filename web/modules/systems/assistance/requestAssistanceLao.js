@@ -172,7 +172,7 @@ app.controller('RequestAssistanceLaoCtrl', function($scope, Assistance, Session,
       end:$scope.model.end
 		};
 
-  	Assistance.requestJustificationRange($scope.model.session.user_id, request,
+  	Assistance.requestJustificationRange($scope.model.session.user_id, request, null,
 			function(ok) {
 				$scope.clearContent();    //limpiar contenido
         $scope.clearSelections(); //limpiar selecciones

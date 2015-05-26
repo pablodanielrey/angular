@@ -45,6 +45,19 @@ insert into assistance.offices_roles (user_id,role,office_id) select p.id,'autor
 insert into assistance.offices_roles (user_id,role,office_id) select '1','horas-extras',id from assistance.offices o where o.parent is null;
 insert into assistance.offices_roles (user_id,role,office_id) select p.id,'horas-extras',o.id from assistance.offices o, profile.users p where o.parent is null and p.dni in ('1');
 
+
+/*
+  2 formas distintas de generar el rol de realizar justificaciones especiales en las oficinas raiz
+*/
+insert into assistance.offices_roles (user_id,role,office_id) select '1','realizar-solicitud',id from assistance.offices o where o.parent is null;
+insert into assistance.offices_roles (user_id,role,office_id) select p.id,'realizar-solicitud',o.id from assistance.offices o, profile.users p where o.parent is null and p.dni in ('1');
+
+/*
+  2 formas distintas de generar el rol de realizar justificaciones especiales por una autoridad en las oficinas raiz
+*/
+insert into assistance.offices_roles (user_id,role,office_id) select '1','realizar-solicitud-admin',id from assistance.offices o where o.parent is null;
+insert into assistance.offices_roles (user_id,role,office_id) select p.id,'realizar-solicitud-admin',o.id from assistance.offices o, profile.users p where o.parent is null and p.dni in ('1');
+
 /*
   perfil de Administrador de asistencia. por ahora no es muy distinto.
 */
@@ -75,6 +88,8 @@ insert into assistance.offices_roles (user_id,role,office_id,send_mail) select p
 insert into assistance.offices_roles (user_id,role,office_id,send_mail) select p.id,'autoriza',o.id,true from assistance.offices o, profile.users p where o.parent is null and p.dni in ('27528150','32393755');
 
 insert into assistance.offices_roles (user_id,role,office_id,send_mail) select p.id,'horas-extras',o.id,true from assistance.offices o, profile.users p where o.parent is null and p.dni in ('1','24892148','31993212','30057880','27528150','32393755');
+
+insert into assistance.offices_roles (user_id,role,office_id) select p.id,'realizar-solicitud',o.id from assistance.offices o, profile.users p where o.parent is null and p.dni in ('1','24892148','31993212','30057880','27528150','32393755');
 
 
 /*

@@ -119,7 +119,7 @@ app.controller('RequestAssistanceCompensatoryCtrl', function($scope, Assistance,
     $scope.save = function() {
       $scope.model.processingRequest = true;
 
-      Assistance.requestJustification($scope.model.session.user_id,$scope.model.justification,
+      Assistance.requestJustification($scope.model.session.user_id,$scope.model.justification,null,
           function(ok) {
             $scope.model.processingRequest = false;
 

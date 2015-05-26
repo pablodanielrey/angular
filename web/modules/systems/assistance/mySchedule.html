@@ -18,21 +18,15 @@
           </ul>
         </div>
       </div>
-      <div class="userSelect">
+      <!-- <div class="userSelect">
         <div><b>{{model.user.name}} {{model.user.lastname}}</b></div>
         <div>{{model.user.dni}}</div>
-      </div>
+      </div> -->
     </div>
 
     <!-- MODULO DE HORARIO SEMANAL -->
     <div class="myScheduleWeekly">
-      <div>
-        <span class="textBlue margin2"><i class="fa fa-calendar-o"></i> Semana:</span>
-        <input type="date" ng-model="model.dateOfWeek">
-      </div>
-      <div class="titleMyScheduleWeekly">
-        <span>Semana: {{model.dateOfWeekStr}}</span>
-      </div>
+
       <div class="weekly">
         <div>
           <div class="days">Lun</div>
@@ -64,15 +58,27 @@
         </div>
       </div>
 
-    </div>
 
+
+    </div>
+    <div class="weeklySelect">
+        <div class="searchTitle">
+          <span class=" margin2"><i class="fa fa-calendar-o"></i> Ver otra semana</span>
+        </div>
+        <div>
+          <input class="inputSearch" type="date" ng-model="model.dateOfWeek">
+        </div>
+        <div class="titleMyScheduleWeekly2">
+          <span>Semana {{model.dateOfWeekStr}}</span>
+        </div>
+    </div>
 
   </div>
   <!-- CONTENEDOR DE SOLICITUDES REALIZADAS + HISTORIAL -->
-  <div class="title2">
+  <div class="title2" ng-class="{true:'hidden'}[model.readOnly]">
     <label><i class="fa fa-clock-o"></i> | Modificar Horario</label>
   </div>
-  <div class="contentSecond">
+  <div class="contentSecond" ng-class="{true:'hidden'}[model.readOnly]">
     <!-- MODULO SOLICITAR NUEVO HORARIO SEMANAL -->
     <form name="form" class="newScheduleWeekly" ng-submit="form.$valid && saveNewSchedule()">
       <div class="titleMyScheduleWeekly">

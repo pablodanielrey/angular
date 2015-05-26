@@ -1,0 +1,67 @@
+
+<div class="userAssistanceManagement">
+  <div class="title">
+    <label><i class="fa fa-ticket"></i> | Administración de solicitudes de un usuario</label>
+  </div>
+
+  <div class="selectUser">
+      <div class="searchUser">
+        <div class="searchTitle">
+          <span><i class="fa fa-user-plus"></i> Seleccione Usuario</span>
+        </div>
+        <div>
+          <input class="inputSearch" ng-model="model.searchUser" ng-click="displayListUser()" placeholder="Buscar...">
+          <ul class="listUsers" ng-class="{true:'visible', false:'hidden'}[isDisplayListUser()]">
+            <li class="liUsers" ng-repeat="user in model.users | filter:model.searchUser | orderBy : 'name'" ng-click="selectUser(user)">{{user.name}} {{user.lastname}}</li>
+          </ul>
+        </div>
+      </div>
+      <!-- <div class="userSelect">
+        <div><b>{{model.user.name}} {{model.user.lastname}}</b></div>
+        <div>{{model.user.dni}}</div>
+      </div> -->
+    </div>
+
+  <div class="content">
+    <div ng-repeat="justification in model.justifications" ng-controller="UserAssistanceManagementDatesCtrl" ng-include="'modules/systems/assistance/userAssistanceManagementDates.html'" ng-init="init(justification.id)"></div>
+
+  </div>
+
+  <div class="myRequests">
+    <span><i class="fa fa-ticket"></i> Solicitudes del Usuario</span>
+  </div>
+  <div class="titlesFiles">
+    <div class="column t1" ng-click="sortRequestedJustifications('justificationName')"><i  class="fa fa-ticket"></i> Solicitud</div>
+    <div class="column t1" ng-click="sortRequestedJustifications('dateSort')"><i  class="fa fa-calendar"></i> Día</div>
+    <div class="column t1" ng-click="sortRequestedJustifications('status')"><i class="fa fa-info-circle"></i> Estado</div>
+  </div>
+  <div class="scroll">
+    <div class="myRequestInfo" ng-repeat="req in model.userRequestedJustifications | orderBy:model.rjSort:model.rjReversed" >
+
+      <div class="myRequest">
+        <span>{{req.justificationName}}</span>
+      </div>
+      <div class="myRequestDate">
+        <span><i class="fa fa-calendar"></i> {{req.date}}</span>
+        <div ng-class="{true:'visible', false:'hidden'}[req.time != null]">
+          <span><i class="fa fa-clock-o"></i> {{req.time}} Horas</span>
+          <div>
+            <span>De {{req.start}} a {{req.end}}</span>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="myStateRequestApproved" ng-class="{true:'visible', false:'hidden'}[req.status == 'APPROVED']">
+        <span class="buttonApproved"><i class="fa fa-check-circle"></i> Aprobado</span>
+        <button class="buttonRefuse" ng-click="cancelRequest(req)"><i class="fa fa-times"></i> Cancelar</button>
+      </div>
+
+
+      <div class="myStateRequestCanceled" ng-class="{true:'visible', false:'hidden'}[req.status == 'CANCELED']">
+       <span class="buttonCancel"><i class="fa fa-times"></i> Cancelado</span>
+     </div>
+
+    </div>
+  </div>
+</div>

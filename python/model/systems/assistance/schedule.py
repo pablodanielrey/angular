@@ -139,10 +139,10 @@ class Schedule:
         cur.execute("select sstart, send, date from assistance.schedule where \
                     ((date = %s) or \
                     (isDayOfWeek = true and date <= %s and extract(dow from date) = extract(dow from %s)) or \
-                    (isDayOfMonth = true and extract(day from date) = extract(day from %s)) or \
-                    (isDayOfYear = true and extract(doy from date) = extract(doy from %s))) and \
+                    (isDayOfMonth = true and date <= %s and extract(day from date) = extract(day from %s)) or \
+                    (isDayOfYear = true and date <= %s and extract(doy from date) = extract(doy from %s))) and \
                     user_id = %s \
-                    order by date desc",(date,date,date,date,date,userId))
+                    order by date desc",(date,date,date,date,date,date,date,userId))
         scheduless = cur.fetchall()
         if scheduless is None or len(scheduless) <= 0:
             return []
@@ -404,7 +404,7 @@ class Schedule:
                     for j in gjusts:
                         j['user_id'] = userId
                         justs.append(j)
-                
+
 
                 fail = self.checkSchedule(con,userId,actualUtc)
                 for f in fail:

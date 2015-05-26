@@ -555,6 +555,7 @@ class NewSchedule:
     profiles = inject.attr(Profiles)
     config = inject.attr(Config)
     schedule = inject.attr(Schedule)
+    offices = inject.attr(Offices)
     dateutils = inject.attr(Date)
 
     def getDate(self,day,date):
@@ -605,8 +606,24 @@ class NewSchedule:
         sid = message['session']
         self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
 
+
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
+
+            # verifico que el usuario logueado pueda modificar los datos para el usuario user_id
+            exist = False
+            session_user_id = self.profiles.getLocalUserId(sid)
+            users = self.offices.getUserInOfficesByRole(con,session_user_id,True,'autoriza')
+            if users != None and len(users) > 0:
+                for u in users:
+                    if u == userId:
+                        exist = True
+
+            if not exist:
+                response = {'id':message['id'], 'error':'No tiene permisos para modificar el horario'}
+                server.sendMessage(response)
+                return True
+
             # seteo el isDayOfWeek
             if 'isDayOfWeek' not in request:
                 isDayOfWeek = False
