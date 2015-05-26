@@ -14,6 +14,7 @@ app.controller("EnrollCtrl", function($scope, $rootScope, $timeout, Session, Not
     selectItem:1
   }
 
+
   $scope.initialize = function() {
     $scope.model.dni = null;
     $scope.model.class = 'show-front';
@@ -25,6 +26,28 @@ app.controller("EnrollCtrl", function($scope, $rootScope, $timeout, Session, Not
     $scope.model.selectItem = 1;
 
   }
+
+  /* -------------------------------------------
+   * ---------- TECLADO NUMERICO ---------------
+   * -------------------------------------------
+   */
+
+  $scope.addNumber = function(n) {
+    if (n == '0' && ($scope.model.dni == null || $scope.model.dni.length == 0)) {
+        return;
+    }
+
+    $scope.model.dni = ($scope.model.dni == null) ? n : $scope.model.dni + n;
+  }
+
+  $scope.deleteNumber = function() {
+    $scope.model.dni = ($scope.model.dni == null || $scope.model.dni.length == 0) ? null : $scope.model.dni.substring(0, $scope.model.dni.length-1);
+  }
+
+  /* -------------------------------------------
+   * -------- FUNCIONES VISUALIZACION ----------
+   * -------------------------------------------
+   */
 
   $scope.next = function() {
     $scope.selectRight();

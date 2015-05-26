@@ -1,3 +1,36 @@
+.keyboard input {
+  size:1em;
+  margin-top: 0.5em;
+  margin-right:0.5em;
+}
+
+.keyboard input:last-child {
+  margin-right:0;
+}
+
+.keyboard {
+  border:2px solid black;
+  width: 7em;
+}
+
+.keyboard .row {
+  margin:0;
+  width:100%;
+}
+
+.keyboard .row:last-child {
+    margin-bottom:0.5em;
+}
+
+.hidden {
+  display:none;
+}
+
+/* -----------------------------------
+ * --------- FORMULARIO --------------
+ * -----------------------------------
+ */
+
 .dniContainer input{
   width:4.5em;
   text-align:center;
@@ -21,7 +54,7 @@
 
 /* -----------------------------------
  * -------- EFECTO CUBO --------------
-   -----------------------------------
+ * -----------------------------------
  */
 
 .container {
