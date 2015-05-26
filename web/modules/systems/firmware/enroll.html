@@ -1,28 +1,26 @@
-<form>
-
 <div class="container">
-	<div class="wrap item{{model.item}}">
-
-			<div class="box dniContainer">
+	<div class="wrap {{model.class}}" ng-class="{true:'transition'}[model.isTransition]">
+		<div class="item dniContainer" ng-class="model.classItem1">
+			<form>
 				<label>Ingrese su dni:</label>
 				<input type="text" ng-model="model.dni" autofocus/>
-				<input type="submit" ng-click="model.item = 2" value="Aceptar" ng-disabled="model.dni==null"/>
-			</div>
-
-			<div class="box fingerContainer" ng-click="next()">
-				<p>Coloque su dedo en el lector de huellas</p>
-				<i class="loading fa fa-spinner fa-spin"></i>
-			</div>
-
-			<div class="box fingerContainer" ng-click="next()">
-				<p>Coloque nuevamente el mismo dedo para obtener la segunda huella</p>
-				<i class="loading fa fa-spinner fa-spin"></i>
-			</div>
-
-			<div class="box fingerContainer" >
-				<p>Coloque nuevamente el mismo dedo para obtener la tercer huella</p>
-				<i class="loading fa fa-spinner fa-spin"></i>
-			</div>
+				<input type="submit" ng-click="next()" value="Aceptar" ng-disabled="model.dni==null"/>
+			</form>
 		</div>
+
+		<div class="item fingerContainer" ng-class="model.classItem2">
+			<p>Coloque su dedo en el lector de huellas</p>
+			<i class="loading fa fa-spinner fa-spin"></i>
+		</div>
+
+		<div class="item fingerContainer" ng-class="model.classItem3">
+			<p>Coloque nuevamente el mismo dedo para obtener la segunda huella</p>
+			<i class="loading fa fa-spinner fa-spin"></i>
+		</div>
+
+		<div class="item fingerContainer" ng-class="model.classItem4">
+			<p>Coloque nuevamente el mismo dedo para obtener la tercer huella</p>
+			<i class="loading fa fa-spinner fa-spin"></i>
+		</div>
+	</div>
 </div>
-</form>
