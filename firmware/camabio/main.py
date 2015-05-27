@@ -4,9 +4,12 @@ from itertools import zip_longest
 import threading
 import camabio
 import signal
+import inject
 
 sys.path.append('../../python')
-import network.websocket
+from network import websocket
+
+from model.config import Config
 
 end = False
 
@@ -58,6 +61,14 @@ class Enroller(threading.Thread):
 
 
 
+
+
+
+def config_injector(binder):
+    binder.bind(Config,Config('firmware-config.cfg'))
+
+inject.configure(config_injector)
+
 def signal_handler(signal,frame):
     global end
     logging.info('ctrl+c')
@@ -86,10 +97,21 @@ finally:
 
 
 
-f = Firmware(port)
-f.start()
+#f = Firmware(port)
+#f.start()
 try:
-    f.enroll('27294557')
+    (reactor,port,factory) = websocket.getPort()
+
+    def close_sig_handler(signal,frame):
+      port.stopListening()
+      reactor.stop()
+      sys.exit()
+
+    signal.signal(signal.SIGINT,close_sig_handler)
+
+    logging.debug('Ejecutando servidor de acciones')
+    reactor.run()
 
 finally:
-    f.stop()
+    #f.stop()
+    pass

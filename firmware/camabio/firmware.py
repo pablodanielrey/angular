@@ -53,7 +53,6 @@ class Firmware:
             else:
                 userId = user['id']
 
-            self.templates.
 
 
     def identify(self):

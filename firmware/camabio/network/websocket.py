@@ -1,7 +1,7 @@
 import inject, logging, json, sys, traceback
 
 
-from actions import Enroll
+from network.actions import Enroll
 
 from autobahn.twisted.websocket import WebSocketServerProtocol
 from autobahn.twisted.websocket import WebSocketServerFactory
