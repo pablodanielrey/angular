@@ -1,6 +1,6 @@
 var app = angular.module('mainApp');
 
-app.controller("EnrollCtrl", function($scope, $rootScope, $timeout, Session, Notifications) {
+app.controller("EnrollCtrl", ['$scope','$timeout','Notifications', 'Firmware',function($scope, $timeout, Notifications, Firmware) {
 
 
   $scope.model = {
@@ -11,7 +11,8 @@ app.controller("EnrollCtrl", function($scope, $rootScope, $timeout, Session, Not
     classItem2:'right',
     classItem3:'hidden',
     classItem4:'left',
-    selectItem:1
+    selectItem:1,
+    fingers:0
   }
 
 
@@ -24,6 +25,7 @@ app.controller("EnrollCtrl", function($scope, $rootScope, $timeout, Session, Not
     $scope.model.classItem3 = 'hidden';
     $scope.model.classItem4 = 'left';
     $scope.model.selectItem = 1;
+    $scope.model.fingers = 0;
 
   }
 
@@ -51,12 +53,6 @@ app.controller("EnrollCtrl", function($scope, $rootScope, $timeout, Session, Not
 
   $scope.next = function() {
     $scope.selectRight();
-  }
-
-  $scope.save = function() {
-    Notifications.message("Se ha enrolado correctamente al usuario " + $scope.model.dni);
-    $scope.model.selectItem = 1;
-    $scope.initialize();
   }
 
 
@@ -124,4 +120,45 @@ app.controller("EnrollCtrl", function($scope, $rootScope, $timeout, Session, Not
   }
 
 
-});
+  /* -------------------------------------------
+   * -------- Mensajes del Servidor ------------
+   * -------------------------------------------
+   */
+
+   $scope.save = function() {
+     Notifications.message("Se ha enrolado correctamente al usuario " + $scope.model.dni);
+     $scope.model.selectItem = 1;
+     $scope.initialize();
+   }
+
+
+   $scope.addUser = function() {
+     Firmware.enroll($scope.model.dni,
+       function(response) {
+         $scope.next();
+       },
+       function(error) {
+          Notifications.message(error);
+       }
+     );
+   }
+
+   $scope.$on('FingerUpdatedEvent', function(event, data) {
+
+     if (typeof data.error === 'undefined') {
+       $scope.model.fingers = $scope.model.fingers + 1;
+       
+       if ($scope.model.fingers == 3) {
+          $scope.save();
+       } else {
+         $scope.next();
+       }
+     } else {
+       Notification.message(data.error);
+     }
+   });
+
+
+
+
+}]);
