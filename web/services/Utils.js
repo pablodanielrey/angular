@@ -216,48 +216,15 @@ app.service('Utils', function() {
       case 'e8019f0e-5a70-4ef3-922c-7c70c2ce0f8b':
         return {id:justificationId, name:'Donación de Sangre', shortName:'DS', icon:'fa-tint'};
       break;
+      case 'cb2b4583-2f44-4db0-808c-4e36ee059efe':
+        return {id:justificationId, name:'Boleta en Comisión', shortName:'BC', icon:'fa-tint'};
+      break;
+      
       default:
         return {id:justificationId, name:null, shortName:null, icon:null};
     }
   };
   
-  
-  /**
-   * Dar formato a una solicitud de justificacion
-   */
-  this.formatRequestJustification = function(req) {
-    var request = {
-      id:null,
-      justificationName:null,
-      date:null,
-      time:null,
-      start:null,
-      end:null,
-      status:null
-    };
-    
-    request.id = req.id;
-    request.justificationName = this.getJustificationName(req.justification_id);
-    request.status = req.status;
-    
-    if(req.begin !== null){
-      var date = new Date(req.begin);
-      request.date = this.formatDate(date);
-    }
-    
-    if(req.end !== null){
-      var date2 = new Date(req.end);
-    }
-    
-    if(date && date2){
-      request.time = this.getDifferenceTimeFromDates(date, date2);
-      request.start = this.formatTime(date);
-      request.end = this.formatTime(date2);
-    }
-    
-    return request;
-  };
-
 
   /**
    * Dar formato a una solicitud de justificacion
@@ -292,6 +259,10 @@ app.service('Utils', function() {
       request.time = this.getDifferenceTimeFromDates(date, date2);
       request.start = this.formatTime(date);
       request.end = this.formatTime(date2);
+    }
+    
+    if(date && !date2){
+      request.start = this.formatTime(date);
     }
     
     return request;

@@ -146,6 +146,7 @@ app.controller('UsersAssistanceManagementMediatorCtrl', ["$scope", "$timeout", "
       //'5ec903fb-ddaf-4b6c-a2e8-929c77d8256f', //feriado
       //'874099dc-42a2-4941-a2e1-17398ba046fc', //paro
       'b309ea53-217d-4d63-add5-80c47eb76820', //cumple
+      'cb2b4583-2f44-4db0-808c-4e36ee059efe', //boleta en comision
       //'0cd276aa-6d6b-4752-abe5-9258dbfd6f09', //duelo
       //'e8019f0e-5a70-4ef3-922c-7c70c2ce0f8b' //donacion sangre
     ];

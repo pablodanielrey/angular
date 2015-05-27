@@ -29,6 +29,8 @@ insert into assistance.justifications (id,name) values ('874099dc-42a2-4941-a2e1
 insert into assistance.justifications (id,name) values ('b309ea53-217d-4d63-add5-80c47eb76820','Cumpleaños');
 insert into assistance.justifications (id,name) values ('0cd276aa-6d6b-4752-abe5-9258dbfd6f09','Duelo');
 insert into assistance.justifications (id,name) values ('e8019f0e-5a70-4ef3-922c-7c70c2ce0f8b','Donación de Sangre');
+INSERT INTO assistance.justifications (id,name) VALUES ('cb2b4583-2f44-4db0-808c-4e36ee059efe','Boleta en Comisión');
+
 /*FALTA BOLETA EN COMISION*/
 
 

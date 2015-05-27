@@ -8,6 +8,7 @@ from model.systems.assistance.offices import Offices
 
 from model.systems.assistance.justifications.AAJustification import AAJustification
 from model.systems.assistance.justifications.BSJustification import BSJustification
+from model.systems.assistance.justifications.BCJustification import BCJustification
 from model.systems.assistance.justifications.CJustification import CJustification
 from model.systems.assistance.justifications.LAOJustification import LAOJustification
 from model.systems.assistance.justifications.A102Justification import A102Justification
@@ -40,7 +41,7 @@ class Justifications:
     justifications = [
         CJustification(), LAOJustification(), AAJustification(), BSJustification(), R638Justification(), PEJustification(),
         CumpJustification(), A102Justification(), LMCDJustification(), LMLTJustification(), BloodDonationJustification(),
-        LMAFJustification(), JMJustification(), HolidayJustification(), ParoJustification(), MourningJustification()
+        LMAFJustification(), JMJustification(), HolidayJustification(), ParoJustification(), MourningJustification(), BCJustification()
     ]
 
 

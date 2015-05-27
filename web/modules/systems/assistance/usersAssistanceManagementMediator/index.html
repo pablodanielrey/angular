@@ -28,9 +28,10 @@
        <div ng-if="justificationId === '50998530-10dd-4d68-8b4a-a4b7a87f3972'" ng-controller="UsersAssistanceManagementMediatorRequestJustification638Ctrl" ng-include="'modules/systems/assistance/usersAssistanceManagementMediator/requestJustification638.html'"></div> 
        <div ng-if="justificationId === 'b309ea53-217d-4d63-add5-80c47eb76820'" ng-controller="UsersAssistanceManagementMediatorRequestJustificationCUCtrl" ng-include="'modules/systems/assistance/usersAssistanceManagementMediator/requestJustificationCU.html'"></div> 
        <div ng-if="justificationId === 'fa64fdbd-31b0-42ab-af83-818b3cbecf46'" ng-controller="UsersAssistanceManagementMediatorRequestJustificationBSCtrl" ng-include="'modules/systems/assistance/usersAssistanceManagementMediator/requestJustificationBS.html'"></div> 
-    
-    </div> 
+       <div ng-if="justificationId === 'cb2b4583-2f44-4db0-808c-4e36ee059efe'" ng-controller="UsersAssistanceManagementMediatorRequestJustificationBCCtrl" ng-include="'modules/systems/assistance/usersAssistanceManagementMediator/requestJustificationBC.html'"></div> 
 
+       
+    </div> 
   </div>
 
   <div class="myRequests">
@@ -49,6 +50,9 @@
       </div>
       <div class="myRequestDate">
         <span><i class="fa fa-calendar"></i> {{req.date}}</span>
+        <div ng-class="{true:'visible', false:'hidden'}[req.time == null && req.date != null]">
+          <span><i class="fa fa-clock-o"></i> Hora de inicio {{req.start}}</span>
+        </div>
         <div ng-class="{true:'visible', false:'hidden'}[req.time != null]">
           <span><i class="fa fa-clock-o"></i> {{req.time}} Horas</span>
           <div>
@@ -57,7 +61,6 @@
         </div>
       </div>
 
-
       <div class="myStateRequestApproved" ng-class="{true:'visible', false:'hidden'}[req.status == 'APPROVED']">
         <span class="buttonApproved"><i class="fa fa-check-circle"></i> Aprobado</span>
         <button  ng-click="cancelRequest(req)" ng-disabled="model.processingRequestedJustifications"> Cancelar</button>
@@ -65,7 +68,7 @@
       <div class="myStateRequestApproved" ng-class="{true:'visible', false:'hidden'}[req.status == 'PENDING']">
         <span class="buttonApproved"><i class="fa fa-spinner fa-spin"></i> Pendiente</span>
         <button  ng-click="approveRequest(req)" ng-disabled="model.processingRequestedJustifications">Aprobar</Button>
-        <button  ng-click="refuseRequest(req)" ng-disabled="model.processingRequestedJustifications"">Denegar</Button>
+        <button  ng-click="refuseRequest(req)" ng-disabled="model.processingRequestedJustifications">Denegar</Button>
       </div>
     </div>
   </div>
