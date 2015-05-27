@@ -232,6 +232,7 @@ app.service('Utils', function() {
   this.formatRequestJustification = function(req) {
     var request = {
       id:null,
+      justificationId:null,
       justificationName:null,
       date:null,
       dateSort:null,
@@ -243,6 +244,7 @@ app.service('Utils', function() {
     
     request.id = req.id;
     request.justificationName = this.getJustificationName(req.justification_id);
+    request.justificationId = req.justification_id;
     request.status = req.status;
     
     if(req.begin !== null){
@@ -261,7 +263,7 @@ app.service('Utils', function() {
       request.end = this.formatTime(date2);
     }
     
-    if(date && !date2){
+    if(request.justificationId=== 'cb2b4583-2f44-4db0-808c-4e36ee059efe'){
       request.start = this.formatTime(date);
     }
     
