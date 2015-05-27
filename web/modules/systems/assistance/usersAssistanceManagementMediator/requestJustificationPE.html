@@ -15,7 +15,7 @@
               <input class="button green" type="button" value="Disponibles" ng-click="selectAvailable()">
             </div>
           </div>
-          
+
       <div ng-class="{true:'visible', false:'hidden'}[isSelectedRequest()]">
         <div class="margin" >
            <p class="parrafos">Seleccione el día de inicio</p>
@@ -23,12 +23,13 @@
            <p class="parrafos">Seleccione el día de fin</p>
            <input class="date" type="date" ng-model="rjModel.end" ng-change="selectDate()" >
         </div>
-       
+
       </div>
 
       <div ng-class="{true:'visible', false:'hidden'}[isSelectedRequest() && isDataDefined()]">
         <p class="parrafos">Solicitar {{rjModel.name}}:</p>
-        <p class="parrafos2"><i class="fa fa-calendar-o"></i>Desde {{rjModel.beginFormated}} hasta {{rjModel.endFormated}}</p>
+        <p class="parrafos2"><i class="fa fa-calendar-o"></i> Desde el {{rjModel.beginFormated}}</p>
+        <p class="parrafos2"><i class="fa fa-calendar-o"></i> Hasta el {{rjModel.endFormated}}</p>
         <input class="button2 blue2" type="button" value="Confirmar" ng-click="save()" ng-disabled="rjModel.processingRequest">
       </div>
 
@@ -37,12 +38,12 @@
           <p class="parrafosGreen margin"> Disponibililad total</p>
           <p class="parrafosGreen2 margin">{{rjModel.stock}}</p>
         </div>
-       
+
         <div>
           <p class="parrafosGreen margin"> Disponibililad anual</p>
           <p class="parrafosGreen2 margin">{{rjModel.stockYear}}</p>
         </div>
       </div>
    </div>
-        
+
     </div>
