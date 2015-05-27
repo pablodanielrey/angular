@@ -5,6 +5,8 @@ import threading
 import camabio
 import signal
 
+sys.path.append('../../python')
+import network.websocket
 
 end = False
 
@@ -81,6 +83,9 @@ try:
 finally:
     f.stop()
 """
+
+
+
 f = Firmware(port)
 f.start()
 try:
