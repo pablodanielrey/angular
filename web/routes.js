@@ -176,13 +176,19 @@ app.config(['$routeProvider', function($routeProvider) {
       templateUrl: '/modules/systems/assistance/userAssistanceManagement.html',
       controller: 'UserAssistanceManagementCtrl'
   })
+  
+  .when('/requestGeneralJustifications', {
+      templateUrl: '/modules/systems/assistance/requestGeneralJustifications/index.html',
+      controller: 'RequestGeneralJustificationsCtrl'
+  })
 
   .when('/usersAssistanceManagementMediator', {
     templateUrl: '/modules/systems/assistance/usersAssistanceManagementMediator/index.html',
     controller: 'UsersAssistanceManagementMediatorCtrl'
   })
-      .otherwise({
- 	      redirectTo: '/main'
-      });
-  }
-])
+  
+  .otherwise({
+    redirectTo: '/main'
+  });
+
+}]);

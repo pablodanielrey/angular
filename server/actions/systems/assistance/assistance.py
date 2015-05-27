@@ -702,3 +702,4 @@ class NewSchedule:
 
         finally:
             con.close()
+            
