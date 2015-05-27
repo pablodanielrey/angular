@@ -142,9 +142,8 @@ class Justifications:
 
     """
         obtiene las justificaciones generales
-        siempre están en estado APPROVED
     """
-    def getGeneralJustifications(self,con):
+    def getGeneralJustificationRequests(self,con):
         cur = con.cursor()
         cur.execute('select id,justification_id,jbegin,jend from assistance.general_justifications')
         if cur.rowcount <= 0:
@@ -158,12 +157,10 @@ class Justifications:
                     'justification_id':j[1],
                     'begin':j[2],
                     'end':j[3],
-                    'status':'APPROVED'
                 }
             )
 
         return justs
-
 
 
 
@@ -358,6 +355,44 @@ class Justifications:
         raise JustificationError('No se puede encontrar ese tipo de justificación')
 
 
+
+    def requestGeneralJustification(self, con, justificationId, begin):
+      jid = str(uuid.uuid4())
+      cur = con.cursor()
+      cur.execute('set timezone to %s',('UTC',))
+      cur.execute('insert into assistance.general_justifications (id,justification_id,jbegin) values (%s,%s,%s)',(jid,justificationId,begin))
+      
+      events = []
+      e = {
+        'type':'JustificationsRequestsUpdatedEvent',
+        'data':{
+           'justification_id':justificationId,
+         }
+      }
+      events.append(e)
+      
+      return events
+      
+    def deleteGeneralJustificationRequest(self, con, requestId):
+      cur = con.cursor()
+      sql = "DELETE FROM assistance.general_justifications WHERE id = '" + requestId + "'"
+      cur.execute(sql)
+      
+      events = []
+      e = {
+        'type':'JustificationsRequestsDeletedEvent',
+        'data':{
+           'request_id':requestId,
+         }
+      }
+      events.append(e)
+      
+      return events
+    
+    
+    
+    
+    
     """
         realiza el pedido de justificación para ser aprobado entre un rango de fechas
         estado inicial del pedido = PENDING, con la fecha actual del servidor.
