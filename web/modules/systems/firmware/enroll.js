@@ -68,7 +68,7 @@ app.controller("EnrollCtrl", ['$scope','$timeout','Notifications', 'Firmware',fu
         $scope.model.classItem4 = $scope.item4;
         $scope.model.isTransition = 'false';
         $scope.model.class = 'show-front';
-    }, 1000);
+    }, 3000);
   }
 
   $scope.selectLeft = function() {
@@ -147,7 +147,7 @@ app.controller("EnrollCtrl", ['$scope','$timeout','Notifications', 'Firmware',fu
 
      if (typeof data.error === 'undefined') {
        $scope.model.fingers = $scope.model.fingers + 1;
-       
+
        if ($scope.model.fingers == 3) {
           $scope.save();
        } else {

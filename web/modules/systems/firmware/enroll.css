@@ -33,16 +33,42 @@
  * -----------------------------------
  */
 
+.title {
+  display: flex;
+  align-items: center;
+  background-image: linear-gradient(to right,#275276, #0066A6);
+  font-size: 16px;
+  height: 30px;
+  padding: 5px;
+  color: white;
+  margin-bottom: 10px;
+  margin-top:0;
+  justify-content:center;
+}
+
+.title span:first-child {
+  margin-right:0.5em;
+}
+
 .dniContainer input{
   width:4.5em;
   text-align:center;
 }
 
-.dniContainer * {
+.dniContainer .keyboard {
   margin-top:0.5em;
 }
 
-.fingerContainer *{
+.dniContainer .keyboard button {
+  margin:0.25em;
+}
+
+.fingerContainer p {
+  padding:0.5em;
+  margin:0;
+}
+
+.fingerContainer i {
   padding:0.5em;
   margin:0;
 }
@@ -59,15 +85,15 @@
  */
 
 .container {
-  width: 12.5em;
-  height: 12.5em;
+  width: 15em;
+  height: 15em;
   position: relative;
   margin: 0 auto 40px;
   border: 1px solid #CCC;
-  -webkit-perspective: 62.5em;
-     -moz-perspective: 62.5em;
-       -o-perspective: 62.5em;
-          perspective: 62.5em;
+  -webkit-perspective: 75em;
+     -moz-perspective: 75em;
+       -o-perspective: 75em;
+          perspective: 75em;
 }
 
 .wrap {
@@ -115,39 +141,39 @@
 }
 
 .wrap .front  {
-  -webkit-transform: translateZ( 6.25em );
-     -moz-transform: translateZ( 6.25em );
-       -o-transform: translateZ( 6.25em );
-          transform: translateZ( 6.25em );
+  -webkit-transform: translateZ( 7.5em );
+     -moz-transform: translateZ( 7.5em );
+       -o-transform: translateZ( 7.5em );
+          transform: translateZ( 7.5em );
 }
 .wrap .right {
-  -webkit-transform: rotateY(   90deg ) translateZ( 6.25em );
-     -moz-transform: rotateY(   90deg ) translateZ( 6.25em );
-       -o-transform: rotateY(   90deg ) translateZ( 6.25em );
-          transform: rotateY(   90deg ) translateZ( 6.25em );
+  -webkit-transform: rotateY(   90deg ) translateZ( 7.5em );
+     -moz-transform: rotateY(   90deg ) translateZ( 7.5em );
+       -o-transform: rotateY(   90deg ) translateZ( 7.5em );
+          transform: rotateY(   90deg ) translateZ( 7.5em );
 }
 .wrap .left {
-  -webkit-transform: rotateY(  -90deg ) translateZ( 6.25em );
-     -moz-transform: rotateY(  -90deg ) translateZ( 6.25em );
-       -o-transform: rotateY(  -90deg ) translateZ( 6.25em );
-          transform: rotateY(  -90deg ) translateZ( 6.25em );
+  -webkit-transform: rotateY(  -90deg ) translateZ( 7.5em );
+     -moz-transform: rotateY(  -90deg ) translateZ( 7.5em );
+       -o-transform: rotateY(  -90deg ) translateZ( 7.5em );
+          transform: rotateY(  -90deg ) translateZ( 7.5em );
 }
 
 .wrap.show-front {
-  -webkit-transform: translateZ( -6.25em );
-     -moz-transform: translateZ( -6.25em );
-       -o-transform: translateZ( -6.25em );
-          transform: translateZ( -6.25em );
+  -webkit-transform: translateZ( -7.5em );
+     -moz-transform: translateZ( -7.5em );
+       -o-transform: translateZ( -7.5em );
+          transform: translateZ( -7.5em );
 }
 .wrap.show-right {
-  -webkit-transform: translateZ( -6.25em ) rotateY(  -90deg );
-     -moz-transform: translateZ( -6.25em ) rotateY(  -90deg );
-       -o-transform: translateZ( -6.25em ) rotateY(  -90deg );
-          transform: translateZ( -6.25em ) rotateY(  -90deg );
+  -webkit-transform: translateZ( -7.5em ) rotateY(  -90deg );
+     -moz-transform: translateZ( -7.5em ) rotateY(  -90deg );
+       -o-transform: translateZ( -7.5em ) rotateY(  -90deg );
+          transform: translateZ( -7.5em ) rotateY(  -90deg );
 }
 .wrap.show-left {
-  -webkit-transform: translateZ( -6.25em ) rotateY(   90deg );
-     -moz-transform: translateZ( -6.25em ) rotateY(   90deg );
-       -o-transform: translateZ( -6.25em ) rotateY(   90deg );
-          transform: translateZ( -6.25em ) rotateY(   90deg );
+  -webkit-transform: translateZ( -7.5em ) rotateY(   90deg );
+     -moz-transform: translateZ( -7.5em ) rotateY(   90deg );
+       -o-transform: translateZ( -7.5em ) rotateY(   90deg );
+          transform: translateZ( -7.5em ) rotateY(   90deg );
 }
