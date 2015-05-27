@@ -23,7 +23,7 @@ app.controller('RequestGeneralJustificationsCtrl', ["$scope", "$timeout", "$wind
   /**************************************
    * METODOS DE REQUESTED JUSTIFICACION *
    **************************************/
-  $scope.loadRequestedJustifications = function() {   
+  $scope.loadRequestedJustifications = function() {
     $scope.model.loadRequestedJustifications = true;
 
     Assistance.getGeneralJustificationRequests(
@@ -33,9 +33,9 @@ app.controller('RequestGeneralJustificationsCtrl', ["$scope", "$timeout", "$wind
           var req = Utils.formatRequestJustification(requestedJustifications[i]);
           $scope.model.requestedJustifications.push(req);
         }
-        
+
         $scope.model.loadRequestedJustifications = false;
-      }, 
+      },
       function(error) {
         Notifications.message(error);
       }
@@ -77,7 +77,7 @@ app.controller('RequestGeneralJustificationsCtrl', ["$scope", "$timeout", "$wind
   };
 
 
-  
+
   /******************
    * INICIALIZACION *
    ******************/
@@ -96,8 +96,6 @@ app.controller('RequestGeneralJustificationsCtrl', ["$scope", "$timeout", "$wind
         $window.location.href = "/#/logout";
       }
     );
-
-    
   }, 0);
 
 
@@ -105,7 +103,7 @@ app.controller('RequestGeneralJustificationsCtrl', ["$scope", "$timeout", "$wind
     $scope.loadRequestedJustifications();
 
 	});
-  
+
   $scope.$on('JustificationsRequestsDeletedEvent', function(event, data){
     $scope.loadRequestedJustifications();
 
