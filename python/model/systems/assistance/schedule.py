@@ -312,7 +312,7 @@ class Schedule:
             return []
 
 
-        gjustifications = self.justifications.getGeneralJustifications(con)
+        gjustifications = self.justifications.getGeneralJustificationRequests(con)
         justifications = self.justifications.getJustificationRequestsByDate(con,status=['APPROVED'],users=[userId],start=start,end=end + datetime.timedelta(days=1))
         logging.debug('justificaciones encontradas : {} '.format(justifications))
 
