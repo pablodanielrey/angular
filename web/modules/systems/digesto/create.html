@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" ng-app='createApp'>
 <head>
     <title>Digesto FCE</title>
     <meta charset="utf-8" />
@@ -7,31 +7,37 @@
     <link rel="shortcut icon" href="/img/favicon.ico" />
     <link rel="stylesheet" href="http://fortawesome.github.io/Font-Awesome/assets/font-awesome/css/font-awesome.css">
     <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+    <script type="text/javascript" src="../../../angular/angular-1.3.8/angular.js"></script>
+    <script type="text/javascript" src="create.js"></script>
 </head>
 
 <body>
     <header>
     </header>
-    <section>
+    <section class="solicitudes"  ng-controller='CreateCtrl' ng-class="{true:'botonApretado',false:''}[apretasteElBoton]">
         <article>
             <div><h1>GENERAR NUEVA</h1></div>
             <div class="normas">
-                <div class="normasBoton cO">
+                <div class="normasBoton cO" ng-click="actionButton()">
                     <div><i class="fa fa-file-text fa-3x" ></i></div>
                     <div>ORDENANZA</div>
                 </div>
-                <div class="normasBoton cR">
+                <div class="normasBoton cR" ng-click="actionButton()">
                     <div><i class="fa fa-file-text fa-3x"></i></div>
                     <div>RESOLUCIÓN</div>
                 </div>
-                <div class="normasBoton cD">
+                <div class="normasBoton cD" ng-click="actionButton()">
                     <div><i class="fa fa-file-text fa-3x"></i></div>
                     <div>DISPOSICIÓN</div>
                 </div>
-            <div>
+
+
+            </div>
         </article>
+
+
     </section>
-    <section>
+    <section class="nuevasSolicitudes" ng-controller='CreateCtrl' ng-class="{true:'nuevasSolicitudes',false:'ocultarNuevasSolicitudes'}[apretasteElBoton]">
         <article>
             <div class="nuevaNorma">
                 <div>NUEVA</div>

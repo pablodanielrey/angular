@@ -17,10 +17,17 @@ section {
   margin:20px;
 
 }
-article {
+.solicitudes {
   padding:20px;
+  transform: translate3d(0,0,0);
+  -webkit-transition: all 0.2s ease-in-out;
+}
+
+.botonApretado {
+  transform: translate3d(0,-250px,0);
 
 }
+
 i {
   margin-bottom:5px;
 }
@@ -88,9 +95,26 @@ i {
   border-bottom:3px solid #128c78;
 }
 
+
+
+
+.nuevasSolicitudes {
+  transform: translate3d(0,-250px,0);
+  -webkit-transition: all 0.2s ease-in-out;
+
+}
+
+.ocultarNuevasSolicitudes {
+
+  transform: translate3d(0,250px,0);
+  -webkit-transition: all 0.2s ease-in-out;
+
+}
+
 /*NUEVA ORDENZA*/
 
 .nuevaNorma {
+  padding:20px;
   display:flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
