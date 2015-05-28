@@ -3,15 +3,20 @@ import inject
 
 from model.exceptions import *
 
-from model.config import Config
 from model.events import Events
 
 from firmware import Firmware
 
 class Enroll:
 
-    config = inject.attr(Config)
     firmware = inject.attr(Firmware)
+
+    def broadcast(self,server,msg,response):
+        server.broadcast(
+            {
+                
+            }
+        )
 
     def handleAction(self, server, message):
 
@@ -30,8 +35,15 @@ class Enroll:
 
         dni = message['request']['dni']
 
+
+
         try:
-            requests = self.firmware.enroll(dni)
+            requests = self.firmware.enroll(dni,
+                lambda: server.broadcast('primera huella'),
+                lambda: server.broadcast('segunda huella'),
+                lambda: server.broadcast('tercera huella'),
+                lambda: server.broadcast('liberar dedo')
+                )
 
             response = {
                 'id':message['id'],

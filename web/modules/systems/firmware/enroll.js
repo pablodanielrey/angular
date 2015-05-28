@@ -143,6 +143,44 @@ app.controller("EnrollCtrl", ['$scope','$location','$timeout','Notifications', '
      );
    }
 
+
+   /*
+      FingerRequestedEvent {
+          type: FingerRequestedEvent,
+          data: {
+                fingerNumber:numero_de_dedo
+          }
+      }
+
+      ErrorEvent {
+          type:ErrorEvent,
+          data: {
+            error: mensaje_de_error
+          }
+      }
+
+      MsgEvent {
+        type:MsgEvent,
+        data: {
+          msg: mensaje_a_mostrar
+        }
+      }
+
+   */
+
+
+   $scope.$on('FingerRequestedEvent', function(event, data) {
+   }
+
+   $scope.$on('ErrorEvent', function(event, data) {
+   }
+
+   $scope.$on('MsgEvent', function(event, data) {
+   }
+
+   /*
+    finger updated event no va mas. este codigo no va mas.
+   */
    $scope.$on('FingerUpdatedEvent', function(event, data) {
 
      if (typeof data.error === 'undefined') {

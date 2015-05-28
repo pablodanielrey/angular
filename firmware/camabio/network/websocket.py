@@ -173,6 +173,5 @@ def getPort():
     log.startLogging(sys.stdout)
     factory = BroadcastServerFactory()
     factory.protocol = ActionsServerProtocol
-    factory.protocol = ActionsServerProtocol
     port = reactor.listenTCP(int(config.configs['server_port']), factory=factory, interface=config.configs['server_ip'])
     return (reactor,port,factory)

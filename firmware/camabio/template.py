@@ -20,7 +20,7 @@ class Templates:
         tmpl = {
             'id': id,
             'template':template,
-            'algorithm':self.config.configs['device_algorithm'],
+            'algorithm':self.config.configs['reader_algorithm'],
             'userId':userId
         }
         return (mapping,tmpl)
