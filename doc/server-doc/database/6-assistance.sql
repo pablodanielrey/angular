@@ -2,8 +2,8 @@ create schema assistance;
 
   create table assistance.devices (
     id varchar not null primary key,
-    device varchar not null
-    ip varchar not null
+    device varchar not null,
+    ip varchar not null,
     enabled boolean default true,
     timezone varchar not null default 'America/Buenos_Aires',
     created timestampz default now()
