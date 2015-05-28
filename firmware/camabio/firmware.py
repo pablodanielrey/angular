@@ -2,6 +2,7 @@
 import codecs, logging, uuid
 import psycopg2
 import inject
+
 from reader import FirmwareReader
 from template import Templates
 
@@ -12,38 +13,24 @@ from model.systems.assistance.date import Date
 
 class Firmware:
 
+    reader = inject.attr(FirmwareReader)
     config = inject.attr(Config)
     date = inject.attr(Date)
     logs = inject.attr(Logs)
     devices = inject.attr(Devices)
     templates = inject.attr(Templates)
 
-    def need_first(self):
-        logging.info('1')
-
-    def need_second(self):
-        logging.info('2')
-
-    def need_third(self):
-        logging.info('3')
-
-    def need_release(self):
-        logging.info('r')
-
-
-
-    def __init__(self,port):
-        self.reader = FirmwareReader(port)
+    def __init__(self):
         self.conn = None
 
-    def __get_database__(self):
-        return psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
-
+    def __get_database(self):
+        if self.conn:
+            return self.conn
+        else:
+            return psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
 
     def start(self):
         self.reader.start()
-        self.conn = self.__get_database__()
-
 
     def stop(self):
         self.reader.stop()
@@ -51,9 +38,12 @@ class Firmware:
             self.conn.close()
 
 
-    def enroll(self,pin):
-        (n,t) = self.reader.enroll(self.need_first,self.need_second,self.need_third,self.need_release)
+    def enroll(self, pin, need_first=None, need_second=None, need_third=None, need_release=None):
+
+        (n,t) = self.reader.enroll(need_first,need_second,need_third,need_release)
         if n:
+            conn = self.__get_database()
+
             """ se tiene la huella con el id, hay que asignarle le usuario """
             userId = None
             user = self.users.findUserByDni(self.conn,pin)
@@ -63,16 +53,19 @@ class Firmware:
                     'name':'autorgenerado',
                     'lastname':'autogenerado'
                 }
-                userId = self.users.createUser(self.conn,user)
+                userId = self.users.createUser(conn,user)
             else:
                 userId = user['id']
 
             self.templates.persist(self.conn,userId,n,t)
+            conn.commit()
 
 
     def identify(self):
         h = self.reader.identify()
         if h:
+            conn = self.__get_database()
+
             userId = self.templates.findUserIdByIndex(h)
             if userId:
                 log = {
@@ -83,6 +76,7 @@ class Firmware:
                     'log': self.date.utcNow()
                 }
                 self.logs.persist(self.conn,log)
+                conn.commit()
 
             else:
                 logging.critical('{} - huella identificada en el indice {}, pero no se encuentra ningún mapeo con un usuario'.format(self.date.now(),h))
