@@ -13,13 +13,34 @@ body {
 
 }
 
-.contenedor {
-  position: relative;
-  height: 100%;
-  background-color: green;
-  color: white;
+.otro {
+  position: absolute;
+  top:10px;
+  right: 10px;
+  z-index: 999;
+
 }
-.contenedor:hover {
+
+
+
+.content {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  wrap:nowrap;
+  justify-content: space-around;
+  align-content: stretch;
+  transform: translate3d(0,0,0);
+  -webkit-transition: all 0.2s ease-in-out;
+
+}
+
+.botonApretado {
+  transform: translate3d(0,500px,0);
+
+}
+
+/*.contenedor:hover {
   position: relative;
   height: 100%;
   background-color: green;
@@ -28,6 +49,15 @@ body {
   -webkit-transition: all 1s ease-in-out;
 
 
+}*/
+
+.contenedor {
+
+  display: flex;
+  width: 100%
+  height: 100%;
+  background-color: green;
+  color: white;
 }
 .contenedor2 {
   position: relative;
@@ -39,6 +69,6 @@ body {
 .contenedor3 {
   position: relative;
   height: 100%;
-  background-color: red;
+  background-color: orange;
   color: white;
 }
