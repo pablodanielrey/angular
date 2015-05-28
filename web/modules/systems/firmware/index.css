@@ -1,0 +1,42 @@
+h1 {
+  color:red;
+}
+
+.hidden {
+  display:none;
+}
+
+
+.index-container {
+  width: 15em;
+  height: 15em;
+  position: relative;
+  margin: 0 auto 40px;
+  border: 1px solid #CCC;
+  display:flex;
+  flex-direction:column;
+}
+
+.index-container .info-container {
+  height:50%;
+  width:100%;
+  background-color:blue;
+  color:white;
+}
+
+.index-container .info-container .date {
+  text-transform: capitalize;
+}
+
+.index-container .info-container .hours {
+    font-size:3em;
+}
+
+.index-container .keyboard-container {
+  height:50%;
+  width:100%;
+  background-color:red;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

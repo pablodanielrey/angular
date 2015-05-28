@@ -1,39 +1,51 @@
-.keyboard input {
+.enroll-container .cancel-container {
+  text-align: center;
+  margin-top: 0.5em;
+}
+
+
+.enroll-container .hidden {
+  display:none;
+}
+
+
+/* -----------------------------------
+ * ---------- TECLADO ----------------
+ * -----------------------------------
+ */
+.enroll-container .keyboard input {
   size:1em;
   margin-top: 0.5em;
   margin-right:0.5em;
 }
 
-.keyboard input:last-child {
+.enroll-container .keyboard input:last-child {
   margin-right:0;
 }
 
-.keyboard {
+.enroll-container .keyboard {
   border:2px solid black;
   width: 7em;
   align-self:center;
   margin:0 auto;
 }
 
-.keyboard .row {
+.enroll-container .keyboard .row {
   margin:0;
   width:100%;
 }
 
-.keyboard .row:last-child {
+.enroll-container .keyboard .row:last-child {
     margin-bottom:0.5em;
 }
 
-.hidden {
-  display:none;
-}
 
 /* -----------------------------------
  * --------- FORMULARIO --------------
  * -----------------------------------
  */
 
-.title {
+.enroll-container .title {
   display: flex;
   align-items: center;
   background-image: linear-gradient(to right,#275276, #0066A6);
@@ -46,34 +58,34 @@
   justify-content:center;
 }
 
-.title span:first-child {
+.enroll-container .title span:first-child {
   margin-right:0.5em;
 }
 
-.dniContainer input{
+.enroll-container .dniContainer input{
   width:4.5em;
   text-align:center;
 }
 
-.dniContainer .keyboard {
+.enroll-container .dniContainer .keyboard {
   margin-top:0.5em;
 }
 
-.dniContainer .keyboard button {
+.enroll-container .dniContainer .keyboard button {
   margin:0.25em;
 }
 
-.fingerContainer p {
+.enroll-container .fingerContainer p {
   padding:0.5em;
   margin:0;
 }
 
-.fingerContainer i {
+.enroll-container .fingerContainer i {
   padding:0.5em;
   margin:0;
 }
 
-.loading {
+.enroll-container .loading {
   color:#0066A6;
 }
 
@@ -84,7 +96,7 @@
  * -----------------------------------
  */
 
-.container {
+.enroll-container {
   width: 15em;
   height: 15em;
   position: relative;
@@ -96,10 +108,9 @@
           perspective: 75em;
 }
 
-.wrap {
+.enroll-container .wrap {
   width: 100%;
   height: 100%;
-  position: absolute;
 
   -webkit-transform-style: preserve-3d;
      -moz-transform-style: preserve-3d;
@@ -107,14 +118,14 @@
           transform-style: preserve-3d;
 }
 
-.wrap.transition {
+.enroll-container .wrap.transition {
   -webkit-transition: -webkit-transform 1s;
      -moz-transition: -moz-transform 1s;
        -o-transition: -o-transform 1s;
           transition: transform 1s;
 }
 
-.wrap .item {
+.enroll-container .wrap .item {
   margin:0;
   display: block;
   position: absolute;
@@ -125,53 +136,53 @@
   text-align: center;
 }
 
-.wrap.panels-backface-invisible .item {
+.enroll-container .wrap.panels-backface-invisible .item {
   -webkit-backface-visibility: hidden;
      -moz-backface-visibility: hidden;
        -o-backface-visibility: hidden;
           backface-visibility: hidden;
 }
 
-.wrap .front  { background: hsla( 0, 0%, 80%, 1 ); }
-.wrap .right  { background: hsla( 0, 0%, 80%, 1 ); }
-.wrap .left   { background: hsla( 0, 0%, 80%, 1 ); }
+.enroll-container .wrap .front  { background: hsla( 0, 0%, 80%, 1 ); }
+.enroll-container .wrap .right  { background: hsla( 0, 0%, 80%, 1 ); }
+.enroll-container .wrap .left   { background: hsla( 0, 0%, 80%, 1 ); }
 
-.wrap .hidden {
+.enroll-container .wrap .hidden {
   display:none;
 }
 
-.wrap .front  {
+.enroll-container .wrap .front  {
   -webkit-transform: translateZ( 7.5em );
      -moz-transform: translateZ( 7.5em );
        -o-transform: translateZ( 7.5em );
           transform: translateZ( 7.5em );
 }
-.wrap .right {
+.enroll-container .wrap .right {
   -webkit-transform: rotateY(   90deg ) translateZ( 7.5em );
      -moz-transform: rotateY(   90deg ) translateZ( 7.5em );
        -o-transform: rotateY(   90deg ) translateZ( 7.5em );
           transform: rotateY(   90deg ) translateZ( 7.5em );
 }
-.wrap .left {
+.enroll-container .wrap .left {
   -webkit-transform: rotateY(  -90deg ) translateZ( 7.5em );
      -moz-transform: rotateY(  -90deg ) translateZ( 7.5em );
        -o-transform: rotateY(  -90deg ) translateZ( 7.5em );
           transform: rotateY(  -90deg ) translateZ( 7.5em );
 }
 
-.wrap.show-front {
+.enroll-container .wrap.show-front {
   -webkit-transform: translateZ( -7.5em );
      -moz-transform: translateZ( -7.5em );
        -o-transform: translateZ( -7.5em );
           transform: translateZ( -7.5em );
 }
-.wrap.show-right {
+.enroll-container .wrap.show-right {
   -webkit-transform: translateZ( -7.5em ) rotateY(  -90deg );
      -moz-transform: translateZ( -7.5em ) rotateY(  -90deg );
        -o-transform: translateZ( -7.5em ) rotateY(  -90deg );
           transform: translateZ( -7.5em ) rotateY(  -90deg );
 }
-.wrap.show-left {
+.enroll-container .wrap.show-left {
   -webkit-transform: translateZ( -7.5em ) rotateY(   90deg );
      -moz-transform: translateZ( -7.5em ) rotateY(   90deg );
        -o-transform: translateZ( -7.5em ) rotateY(   90deg );

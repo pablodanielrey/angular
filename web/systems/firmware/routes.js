@@ -4,13 +4,19 @@ app.config(['$routeProvider', function($routeProvider) {
 
   $routeProvider
 
-  .when('/firmware/', {
+  .when('/firmware', {
+    templateUrl: '/modules/systems/firmware/index.html',
+    controller: 'IndexCtrl'
+  })
+
+
+  .when('/enroll', {
     templateUrl: '/modules/systems/firmware/enroll.html',
     controller: 'EnrollCtrl'
   })
 
   .otherwise({
-      redirectTo: '/error'
+      redirectTo: '/firmware'
   });
 
   }
