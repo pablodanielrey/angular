@@ -1,6 +1,6 @@
 var app = angular.module('mainApp');
 
-app.controller("EnrollCtrl", ['$scope','$timeout','Notifications', 'Firmware',function($scope, $timeout, Notifications, Firmware) {
+app.controller("EnrollCtrl", ['$scope','$location','$timeout','Notifications', 'Firmware',function($scope, $location, $timeout, Notifications, Firmware) {
 
 
   $scope.model = {
@@ -157,6 +157,11 @@ app.controller("EnrollCtrl", ['$scope','$timeout','Notifications', 'Firmware',fu
        Notification.message(data.error);
      }
    });
+
+
+   $scope.cancel = function() {
+     $location.path('/firmware')
+   }
 
 
 

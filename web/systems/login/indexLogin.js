@@ -52,7 +52,7 @@ app.controller('IndexLoginCtrl', ["$rootScope", "$location", "$timeout", "$windo
     $rootScope.$on('routeEvent', function(event, data) {
       $location.path(data);
     });
-    
+
     $timeout(function() {
       WebSocket.registerHandlers();
     }, 0);

@@ -37,6 +37,10 @@
   <script type="text/javascript" src="/modules/systems/firmware/enroll.js"></script>
   <link rel="stylesheet" type="text/css" href="/modules/systems/firmware/enroll.css"/>
 
+
+    <script type="text/javascript" src="/modules/systems/firmware/index.js"></script>
+    <link rel="stylesheet" type="text/css" href="/modules/systems/firmware/index.css"/>
+
   <script type="text/javascript" src="/modules/messages/messages.js"></script>
   <link rel="stylesheet" type="text/css" href="/modules/messages/messages.css"/>
 
@@ -45,8 +49,7 @@
 
 <body>
   <div ng-controller="IndexCtrl" class="principal">
-    <div class='enroll-container'  ng-controller="EnrollCtrl" ng-include="'/modules/systems/firmware/enroll.html'">
-    </div>
+    <div ng-view></div>
 
     <div class='messages-container' ng-controller="MessagesCtrl" ng-include="'/modules/messages/messages.html'" ng-class="{false: 'hidden', true: 'visible'}[ isVisible() ]">
     </div>
