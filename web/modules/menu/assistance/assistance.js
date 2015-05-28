@@ -59,6 +59,14 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, As
 
         $scope.userAssistanceManagement = function() {
           $location.path('/userAssistanceManagement')
+        };
+
+        $scope.userAssistanceManagementMediator = function() {
+          $location.path('/usersAssistanceManagementMediator')
+        }
+
+        $scope.requestGeneralJustifications = function() {
+          $location.path('/requestGeneralJustifications')
         }
 
 
@@ -94,6 +102,7 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, As
                         if (hasApprove) {
                           $scope.items.push({ label:'Adm. Solicitudes ', img:'fa-ticket', function: $scope.adminRequestAssistance});
                           $scope.items.push({ label:'Horas Extras ', img:'fa-plus', function: $scope.requestAuthority});
+                          $scope.items.push({ label:'Solicitudes a Empleados', img:'fa-plus', function: $scope.userAssistanceManagementMediator});
                         }
 
                         if (hasOvertime) {
@@ -103,7 +112,9 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, As
 
                         if (hasJustification) {
                           $scope.items.push({ label:'Solicitudes Especiales ', img:'fa-plus', function: $scope.userAssistanceManagement});
+                          $scope.items.push({ label:'Solicitudes Generales ', img:'fa-plus', function: $scope.requestGeneralJustifications});
                         }
+
                       },
                       function(err) {
                         Notifications.message(error);

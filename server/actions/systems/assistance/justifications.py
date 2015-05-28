@@ -739,6 +739,250 @@ class RequestJustification:
             con.close()
 
 
+
+""" 
+peticion: 
+{ 
+	"id":"", 
+	"action":"requestGeneralJustification", 
+	"session":"session de usuario", 
+	request:{
+        justificationId:"id de la justificacion",
+        begin:"fecha de inicio"
+        end:"fecha de fin" (opcional)
+        status: "estado" (opcional)
+    }
+} 
+
+respuesta: 
+{ 
+	"id":"id de la peticion", 
+	"ok":"", 
+	"error":"" 
+} 
+
+"""
+class RequestGeneralJustification:
+
+  profiles = inject.attr(Profiles)
+  config = inject.attr(Config)
+  date = inject.attr(Date)
+  events = inject.attr(Events)
+  
+  justifications = inject.attr(Justifications)
+
+
+
+  """ manejar accion """
+  def handleAction(self, server, message): 
+  
+    
+
+    if (message['action'] != 'requestGeneralJustification'): 
+        return False
+
+    """ chequeo de datos """
+    if ('id' not in message) or ('session' not in message) or ('request' not in message) or ('justification_id' not in message['request']) or ('begin' not in message['request']):
+      response = {'id':message['id'], 'error':'Insuficientes parámetros'}
+      server.sendMessage(response)
+      return True
+    
+    """ chequeo de permisos """
+    sid = message['session'] 
+    self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
+    
+    """ definir datos a insertar """
+    justificationId = message['request']['justification_id']
+    begin = message['request']['begin']
+    begin = self.date.parse(begin)
+    end = None
+    if 'end' in message['request']:
+      end = message['request']['end']
+      end = self.date.parse(end)
+            
+    """ insertar datos """
+    con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+    
+    try:
+      events = self.justifications.requestGeneralJustification(con,justificationId,begin)
+      con.commit()
+      
+      response = {
+       'id':message['id'],
+       'ok':'El pedido se ha realizado correctamente'
+      }
+      server.sendMessage(response)
+
+      for e in events:
+        self.events.broadcast(server,e)
+     
+    except Exception as e:
+      logging.exception(e)
+      con.rollback()
+
+      response = {
+        'id':message['id'],
+        'error':'Error realizando pedido'
+      }
+      
+      server.sendMessage(response)
+
+    finally:
+      con.close()
+      return True
+
+
+
+""" 
+peticion: 
+{ 
+	"id":"", 
+	"action":"deleteGeneralJustificationRequest", 
+	"session":"session de usuario", 
+	request:{
+    request_id:"id de la justificacionRequest",
+  }
+} 
+
+respuesta: 
+{ 
+	"id":"id de la peticion", 
+	"ok":"", 
+	"error":"" 
+} 
+
+"""
+class DeleteGeneralJustificationRequest:
+  profiles = inject.attr(Profiles)
+  config = inject.attr(Config)
+  events = inject.attr(Events)
+  
+  justifications = inject.attr(Justifications)
+
+  """ manejar accion """
+  def handleAction(self, server, message): 
+  
+
+    if (message['action'] != 'deleteGeneralJustificationRequest'): 
+      return False
+      
+    """ chequeo de datos """
+    if ('id' not in message) or ('session' not in message) or ('request' not in message) or ('request_id' not in message["request"]):
+      response = {'id':message['id'], 'error':'Insuficientes parámetros'}
+      server.sendMessage(response)
+      return True
+      
+    """ chequeo de permisos """
+    sid = message['session'] 
+    self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
+    
+    """ definir datos """
+    request_id = message['request']['request_id']
+    
+    """ conexion con base de datos """
+    con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+    try:
+      events = self.justifications.deleteGeneralJustificationRequest(con, request_id)
+      con.commit()
+      
+      """ enviar mensaje de respuesta """
+      response = {
+          'id':message['id'],
+          'ok':'Solicitud eliminada correctamente',
+      }
+      server.sendMessage(response)
+
+      """ disparar eventos """
+      for e in events:
+       self.events.broadcast(server,e)
+
+     
+    except Exception as e:
+      logging.exception(e)
+
+      response = {
+        'id':message['id'],
+        'error':'Error realizando pedido'
+      }
+      
+      server.sendMessage(response)
+
+    finally:
+      con.close()
+      return True;
+ 
+""" 
+peticion: 
+{ 
+	"id":"", 
+	"action":"getGeneralJustificationRequests", 
+	"session":"session de usuario", 
+
+} 
+
+respuesta: 
+{ 
+	"id":"id de la peticion", 
+	"ok":"", 
+	"error":"" 
+} 
+
+"""
+class GetGeneralJustificationRequests:
+  profiles = inject.attr(Profiles)
+  config = inject.attr(Config)
+  
+  justifications = inject.attr(Justifications)
+
+  """ manejar accion """
+  def handleAction(self, server, message): 
+  
+
+    if (message['action'] != 'getGeneralJustificationRequests'): 
+        return False
+
+    """ chequeo de datos """
+    if ('id' not in message) or ('session' not in message):
+      response = {'id':message['id'], 'error':'Insuficientes parámetros'}
+      server.sendMessage(response)
+      return True
+    
+    """ chequeo de permisos """
+    sid = message['session'] 
+    self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
+    
+
+    """ conexion con base de datos """
+    con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+    try:
+      requests = self.justifications.getGeneralJustificationRequests(con)
+      
+      response = {
+          'id':message['id'],
+          'ok':'',
+          'response':{
+              'requests':requests
+          }
+      }
+      server.sendMessage(response)
+
+     
+    except Exception as e:
+      logging.exception(e)
+
+      response = {
+        'id':message['id'],
+        'error':'Error realizando pedido'
+      }
+      
+      server.sendMessage(response)
+
+    finally:
+      con.close()
+      return True;
+    
+    
+
 """
 query : solicitud de justificaciones de un determinado usuario
 {
@@ -913,13 +1157,15 @@ class GetSpecialJustifications:
                 # 'a93d3af3-4079-4e93-a891-91d5d3145155','Licencia Médica Largo Tratamiento'
                 # 'b80c8c0e-5311-4ad1-94a7-8d294888d770','Licencia Médica Atención Familiar'
                 # '478a2e35-51b8-427a-986e-591a9ee449d8','Justificado por Médico'
-                # '5ec903fb-ddaf-4b6c-a2e8-929c77d8256f','Feriado'
-                # '874099dc-42a2-4941-a2e1-17398ba046fc','Paro'
                 # '0cd276aa-6d6b-4752-abe5-9258dbfd6f09','Duelo'
                 # 'e8019f0e-5a70-4ef3-922c-7c70c2ce0f8b','Donación de Sangre'
-                ids.extend(['f9baed8a-a803-4d7f-943e-35c436d5db46','a93d3af3-4079-4e93-a891-91d5d3145155','b80c8c0e-5311-4ad1-94a7-8d294888d770',
-                        '478a2e35-51b8-427a-986e-591a9ee449d8','5ec903fb-ddaf-4b6c-a2e8-929c77d8256f','874099dc-42a2-4941-a2e1-17398ba046fc',
-                         '0cd276aa-6d6b-4752-abe5-9258dbfd6f09','e8019f0e-5a70-4ef3-922c-7c70c2ce0f8b'])
+                ids.extend([
+                    'f9baed8a-a803-4d7f-943e-35c436d5db46',
+                    'a93d3af3-4079-4e93-a891-91d5d3145155',
+                    'b80c8c0e-5311-4ad1-94a7-8d294888d770',
+                    '478a2e35-51b8-427a-986e-591a9ee449d8',
+                    '0cd276aa-6d6b-4752-abe5-9258dbfd6f09',
+                    'e8019f0e-5a70-4ef3-922c-7c70c2ce0f8b'])
 
             role = 'realizar-solicitud-admin'
             offices = self.offices.getUserInOfficesByRole(con,userId,tree,role);

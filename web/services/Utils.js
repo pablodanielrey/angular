@@ -83,6 +83,19 @@ app.service('Utils', function() {
   this.formatTime = function(date){
     return date.toTimeString().substring(0, 5);
   };
+  
+  this.getTimeFromSeconds = function(seconds) {
+      var hours   = Math.floor(seconds / 3600);
+      var minutes = Math.floor((seconds - (hours * 3600)) / 60);
+      var secondsAux = seconds - (hours * 3600) - (minutes * 60);
+
+      if (hours   < 10) {hours   = "0"+hours;}
+      if (minutes < 10) {minutes = "0"+minutes;}
+      if (secondsAux < 10) {secondsAux = "0"+secondsAux;}
+      var time    = hours+':'+minutes;
+      return time;
+    };
+
 
   this.getTimeFromMinutes = function(minutes){
     var hours = Math.floor(minutes / 60).toString();
@@ -138,8 +151,21 @@ app.service('Utils', function() {
     return j.icon;
   };
   
-  
 
+  
+  
+  /**
+   * Obtener datos de la justificacion.
+   * El metodo recibe como parametro el id de la justificacion y retorna los siguientes datos de la misma:
+   *  id: Id
+   *  name: Nombre
+   *  shortName: Nombre corto
+   *  icon: Icono
+   *    
+   * Consideracion  importante, para facilitar la administracion todos estos datos deberian ser posteriormente almacenados en la base de datos
+   * 
+   * @param {type} justificationId
+   */
   this.getJustification = function(justificationId){
     switch(justificationId){
       case 'e0dfcef6-98bb-4624-ae6c-960657a9a741':
@@ -190,48 +216,15 @@ app.service('Utils', function() {
       case 'e8019f0e-5a70-4ef3-922c-7c70c2ce0f8b':
         return {id:justificationId, name:'Donación de Sangre', shortName:'DS', icon:'fa-tint'};
       break;
+      case 'cb2b4583-2f44-4db0-808c-4e36ee059efe':
+        return {id:justificationId, name:'Boleta en Comisión', shortName:'BC', icon:'fa-tint'};
+      break;
+      
       default:
-        return {id:justificationId, name:'No definido', shortName:'-', icon:'fa-ticket'};
+        return {id:justificationId, name:null, shortName:null, icon:null};
     }
   };
   
-  
-  /**
-   * Dar formato a una solicitud de justificacion
-   */
-  this.formatRequestJustification = function(req) {
-    var request = {
-      id:null,
-      justificationName:null,
-      date:null,
-      time:null,
-      start:null,
-      end:null,
-      status:null
-    };
-    
-    request.id = req.id;
-    request.justificationName = this.getJustificationName(req.justification_id);
-    request.status = req.status;
-    
-    if(req.begin !== null){
-      var date = new Date(req.begin);
-      request.date = this.formatDate(date);
-    }
-    
-    if(req.end !== null){
-      var date2 = new Date(req.end);
-    }
-    
-    if(date && date2){
-      request.time = this.getDifferenceTimeFromDates(date, date2);
-      request.start = this.formatTime(date);
-      request.end = this.formatTime(date2);
-    }
-    
-    return request;
-  };
-
 
   /**
    * Dar formato a una solicitud de justificacion
@@ -239,6 +232,7 @@ app.service('Utils', function() {
   this.formatRequestJustification = function(req) {
     var request = {
       id:null,
+      justificationId:null,
       justificationName:null,
       date:null,
       dateSort:null,
@@ -250,6 +244,7 @@ app.service('Utils', function() {
     
     request.id = req.id;
     request.justificationName = this.getJustificationName(req.justification_id);
+    request.justificationId = req.justification_id;
     request.status = req.status;
     
     if(req.begin !== null){
@@ -268,7 +263,12 @@ app.service('Utils', function() {
       request.end = this.formatTime(date2);
     }
     
+    if(request.justificationId=== 'cb2b4583-2f44-4db0-808c-4e36ee059efe'){
+      request.start = this.formatTime(date);
+    }
+    
     return request;
   };
 
 });
+

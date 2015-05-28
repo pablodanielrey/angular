@@ -1,6 +1,6 @@
 
 .menuContainerFull {
-  width:450px;
+  width:400px;
   height: 580px;
   display: flex;
   flex-direction: row;
@@ -8,7 +8,7 @@
 
 
 .menuContainerComprimed {
-  width:225px;
+  width:200px;
   height: 580px;
   display: flex;
   flex-direction: row;
@@ -25,13 +25,13 @@
 
 .menu-item {
     float:left;
-    margin-left:10px;
+    margin-left:5px;
 }
 
 .menu-item-ico{
     width:20px;
     float:left;
-    margin-left:20px;
+    margin-left:10px;
 }
 
 .menu.first {

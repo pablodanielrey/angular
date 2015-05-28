@@ -16,7 +16,6 @@ app.controller('AssistanceCtrl', ["$scope", "$timeout", "$window", "Profiles", "
 				schedule:[], //fracciones horarias del dia actual
     	},
     	offices : [], //oficinas del usuario
-    	justifications : [], //auxiliar para almacenar los datos de las justificaciones
 		justificationAbsent : null, //stock de justificaciones ausentes con aviso
 		justificationCompensatory : null, //stock de justificaciones compensatorios
 		justificationOut : null, //stock de justificaciones salidas eventuales
@@ -145,18 +144,16 @@ app.controller('AssistanceCtrl', ["$scope", "$timeout", "$window", "Profiles", "
     }
 
     $scope.loadJustifications = function() {
-    	Assistance.getJustifications(
-				function(justifications){
-					for(var i = 0; i < justifications.length; i++){
-						var id = justifications[i].id;
-						$scope.model.justifications[id] = {name:justifications[i].name}
-						$scope.loadJustificationStock(id);
-					}
-				},
-				function(error){
-					Notifications.message(error);
-				}
-			);
+      //consultamos el stock de las justificaciones que poseen stock
+      $scope.loadJustificationStock('e0dfcef6-98bb-4624-ae6c-960657a9a741'); //AA
+			$scope.loadJustificationStock('48773fd7-8502-4079-8ad5-963618abe725'); //C
+      $scope.loadJustificationStock('fa64fdbd-31b0-42ab-af83-818b3cbecf46'); //BS
+      $scope.loadJustificationStock('4d7bf1d4-9e17-4b95-94ba-4ca81117a4fb'); //102
+      $scope.loadJustificationStock('b70013e3-389a-46d4-8b98-8e4ab75335d0'); //PE
+      $scope.loadJustificationStock('76bc064a-e8bf-4aa3-9f51-a3c4483a729a'); //LAO
+      $scope.loadJustificationStock('50998530-10dd-4d68-8b4a-a4b7a87f3972'); //R
+      $scope.loadJustificationStock('b309ea53-217d-4d63-add5-80c47eb76820'); //CU
+
     }
 
 
