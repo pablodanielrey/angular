@@ -1,8 +1,0 @@
-
-
-se deben crear las tablas :
-
-profile.users
-assistance.devices
-assistance.templates
-assistance.attlog
