@@ -10,13 +10,6 @@ app.controller('IndexCtrl', function($rootScope) {
     if (response.type == undefined) {
       return;
     }
-
-    if (response.type == 'Exception') {
-
-      $rootScope.processGeneralExceptions(response);
-      return;
-    }
-
     console.log(response.type);
     $rootScope.$broadcast(response.type,response.data);
   });

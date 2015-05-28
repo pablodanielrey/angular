@@ -3,7 +3,7 @@ import codecs, logging, uuid
 import psycopg2
 import inject
 
-from reader import FirmwareReader
+import reader
 from template import Templates
 
 from model.config import Config
@@ -13,7 +13,7 @@ from model.systems.assistance.date import Date
 
 class Firmware:
 
-    reader = inject.attr(FirmwareReader)
+    reader = reader.getReader()
     config = inject.attr(Config)
     date = inject.attr(Date)
     logs = inject.attr(Logs)
