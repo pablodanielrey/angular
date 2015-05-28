@@ -31,10 +31,10 @@ insert into assistance.justifications (id,name) values ('0cd276aa-6d6b-4752-abe5
 insert into assistance.justifications (id,name) values ('e8019f0e-5a70-4ef3-922c-7c70c2ce0f8b','Donación de Sangre');
 insert into assistance.justifications (id,name) values ('cb2b4583-2f44-4db0-808c-4e36ee059efe','Boleta en Comisión');
 insert into assistance.justifications (id,name) values ('70e0951f-d378-44fb-9c43-f402cbfc63c8','Art');
-insert into assistance.justifications (id,name) values ('3d486aa0-745a-4914-a46d-bc559853d367','Inbumbencias Climáticas');
+insert into assistance.justifications (id,name) values ('3d486aa0-745a-4914-a46d-bc559853d367','Incumbencias Climáticas');
+insert into assistance.justifications (id,name) values ('5c548eab-b8fc-40be-bb85-ef53d594dca9','Día del Bibliotecario');
+insert into assistance.justifications (id,name) values ('508a9b3a-e326-4b77-a103-3399cb65f82a','Asistencia a Congresos/Capacitación - art 97 dec 366');
 
-
-/*FALTA BOLETA EN COMISION*/
 
 
 
