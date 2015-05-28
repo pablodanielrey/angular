@@ -36,8 +36,6 @@ insert into assistance.justifications (id,name) values ('5c548eab-b8fc-40be-bb85
 insert into assistance.justifications (id,name) values ('508a9b3a-e326-4b77-a103-3399cb65f82a','Asistencia a Congresos/Capacitación - art 97 dec 366');
 
 
-/*FALTA BOLETA EN COMISION*/
-
 
 
 /*
