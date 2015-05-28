@@ -1,0 +1,46 @@
+
+<div class="requestGeneralJustifications">
+  <div class="title">
+    <label><i class="fa fa-ticket"></i> | Administración de justificaciones generales</label>
+  </div>
+
+  <div class="content">
+    <div ng-controller="RequestFeriadoCtrl" ng-include="'modules/systems/assistance/requestGeneralJustifications/requestFeriado.html'"></div>
+    <div ng-controller="RequestParoCtrl" ng-include="'modules/systems/assistance/requestGeneralJustifications/requestParo.html'"></div>
+
+ </div> 
+  
+
+
+  <div class="myRequests">
+    <span><i class="fa fa-ticket"></i> Solicitudes</span>
+  </div>
+  <div class="titlesFiles">
+    <div class="column t1" ng-click="sortRequestedJustifications('justificationName')"><i  class="fa fa-ticket"></i> Solicitud</div>
+    <div class="column t1" ng-click="sortRequestedJustifications('dateSort')"><i  class="fa fa-calendar"></i> Día</div>
+    <div class="column t1" ng-click="sortRequestedJustifications('status')"><i class="fa fa-info-circle"></i> Opción</div>
+  </div>
+  <div class="scroll">
+    <div class="myRequestInfo" ng-repeat="req in model.requestedJustifications | orderBy:model.rjSort:model.rjReversed" >
+
+      <div class="myRequest">
+        <span>{{req.justificationName}}</span>
+      </div>
+      <div class="myRequestDate">
+        <span><i class="fa fa-calendar"></i> {{req.date}}</span>
+        <div ng-class="{true:'visible', false:'hidden'}[req.time != null]">
+          <span><i class="fa fa-clock-o"></i> {{req.time}} Horas</span>
+          <div>
+            <span>De {{req.start}} a {{req.end}}</span>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="myStateRequestApproved">
+        <button  ng-click="cancelRequest(req)" ng-disabled="model.loadRequestedJustifications"> Eliminar</button>
+      </div>
+      
+    </div>
+  </div>
+</div>

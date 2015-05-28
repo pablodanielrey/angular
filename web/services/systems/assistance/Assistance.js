@@ -637,9 +637,84 @@ app.service('Assistance', ['Utils','Messages','Session',
 						callbackError(data.error);
 					}
 				});
-		}
+		};
 
 
 
+    /**
+     * solicitar justificacion general
+     * @param {type} justification Datos de la justificacion
+     * @param {type} callbackOk
+     * @param {type} callbackError
+     * @returns {undefined}
+     */
+    this.requestGeneralJustification = function(justification, callbackOk, callbackError) {
+			var msg = {
+				id: Utils.getId(),
+				action: 'requestGeneralJustification',
+				session: Session.getSessionId(),
+				request: {
+					justification_id: justification.id,
+					begin: justification.begin
+				}
+			};
+
+			if (!(typeof justification.end === 'undefined')) {
+				msg.request.end = justification.end;
+			}
+
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response);
+					} else {
+						callbackError(data.error);
+					}
+				});
+		};
+    
+    /**
+     * solicitar justificaciones generales
+     * @param {type} callbackOk
+     * @param {type} callbackError
+     * @returns {undefined}
+     */
+    this.getGeneralJustificationRequests = function(callbackOk, callbackError){
+      var msg = {
+				id: Utils.getId(),
+				action: 'getGeneralJustificationRequests',
+				session: Session.getSessionId()
+			};
+      
+      Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response.requests);
+					} else {
+						callbackError(data.error);
+					}
+				});
+      
+    };
+
+    this.deleteGeneralJustificationRequest = function(requestId, callbackOk, callbackError){
+      var msg = {
+				id: Utils.getId(),
+				action: 'deleteGeneralJustificationRequest',
+				session: Session.getSessionId(),
+        request: {
+					request_id: requestId
+				}
+			};
+      
+      Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.ok);
+					} else {
+						callbackError(data.error);
+					}
+		  });
+    };
 	}]
 );

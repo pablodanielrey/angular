@@ -1,17 +1,17 @@
 
-.usersAssistanceManagementMediator {
+.requestGeneralJustifications {
   width:100%;
   height:100%;
   font-family: helvetica;
 }
 /****ACORDEEON****/
-.usersAssistanceManagementMediator .content{
+.requestGeneralJustifications .content{
   margin:5px auto;
   width:98%;
   min-height:50px;
   overflow: hidden;
 }
-.usersAssistanceManagementMediator .titulo{
+.requestGeneralJustifications .titulo{
   width:100%;
   height:50px;
   background-color: #0066A6;
@@ -19,12 +19,12 @@
   border-bottom: 1px solid #275276;
 
 }
-.usersAssistanceManagementMediator p.titulo{
+.requestGeneralJustifications p.titulo{
   margin:13px;
   color: white;
 }
 
-.usersAssistanceManagementMediator .info {
+.requestGeneralJustifications .info {
     display:flex;
     flex-direction:column;
     align-items:flex-start;
@@ -32,46 +32,46 @@
 
 
 
-.usersAssistanceManagementMediator .button {
+.requestGeneralJustifications .button {
   width: 150px;
   height:50px;
   margin-left:0px;
   margin-top:10px;
 }
-.usersAssistanceManagementMediator .button2 {
+.requestGeneralJustifications .button2 {
   width:265px;
   height:50px;
   margin-left:0px;
   margin-top:10px;
 }
-.usersAssistanceManagementMediator .blue{
+.requestGeneralJustifications .blue{
   background-color:#0066A6;
   color:white;
   text-shadow: 0px 1px black;
   font-weight: bold;
 }
-.usersAssistanceManagementMediator .blue2{
+.requestGeneralJustifications .blue2{
   background-color:#0066A6;
   color:white;
   text-shadow: 0px 1px black;
 
   font-size:20px;
 }
-.usersAssistanceManagementMediator .orange{
+.requestGeneralJustifications .orange{
   background-color:#ec9122;
   color:white;
   text-shadow: 0px 1px black;
   font-weight: bold;
 }
 
-.usersAssistanceManagementMediator .green{
+.requestGeneralJustifications .green{
   background-color:#128c78;
   color:white;
   text-shadow: 0px 1px black;
   font-weight: bold;
 }
 
-.usersAssistanceManagementMediator .title {
+.requestGeneralJustifications .title {
   display:flex;
   align-items: center;
   background-image:linear-gradient(to right,#275276, #0066A6);
@@ -84,7 +84,7 @@
   margin:5px;
 
 }
-.usersAssistanceManagementMediator .myRequests {
+.requestGeneralJustifications .myRequests {
   padding:7px;
   background-color: #275276;
   margin-top:15px;
@@ -95,13 +95,13 @@
 }
 
 
-.usersAssistanceManagementMediator .myRequestInfo {
+.requestGeneralJustifications .myRequestInfo {
   display:flex;
   flex-direction:row;
   background-color: white;
 }
 
-.usersAssistanceManagementMediator .scroll {
+.requestGeneralJustifications .scroll {
   height:270px;
 
   overflow:scroll;
@@ -113,29 +113,29 @@
 
 
 
-.usersAssistanceManagementMediator .titlesFiles {
+.requestGeneralJustifications .titlesFiles {
   display:flex;
   flex-direction:row;
   margin-left:10px;
 
 
 }
-.usersAssistanceManagementMediator .t1 {
+.requestGeneralJustifications .t1 {
   width:200px;
   margin-top:10px;
 
 }
 
-.usersAssistanceManagementMediator .t3 {
+.requestGeneralJustifications .t3 {
   width:200px;
   margin-bottom: 5px;
 }
-.usersAssistanceManagementMediator .t4 {
+.requestGeneralJustifications .t4 {
   width:100px;
   margin-top:10px;
 }
 
-.usersAssistanceManagementMediator .column {
+.requestGeneralJustifications .column {
   background-color:#0066A6;
 
   padding:5px;
@@ -146,7 +146,7 @@
 }
 
 
-.usersAssistanceManagementMediator .myRequest {
+.requestGeneralJustifications .myRequest {
   margin-top:5px;
   width:190px;
   background-color:white;
@@ -154,26 +154,26 @@
   padding-left:10px;
 
   color:#0066A6;
-
+  border:1px solid #0066A6;
   margin-right:10px;
   font-weight: bold;
-
+  border-left: 5px solid #0066A6;
 }
-.usersAssistanceManagementMediator .myRequestDate {
+.requestGeneralJustifications .myRequestDate {
   margin-top:5px;
   width:189px;
-  margin-left: 10px;
+  border:1px solid #0066A6;
   padding:5px;
   padding-left:10px;
   color:black;
   margin-right:10px;
   background-color:white;
-
+  border-left: 5px solid #0066A6;
 }
 
 
 
-.usersAssistanceManagementMediator .buttonpending {
+.requestGeneralJustifications .buttonpending {
   background-color:#e43e46;
   color:white;
   border:none;
@@ -182,7 +182,7 @@
   cursor:pointer;
   border-radius: 2px;
 }
-.usersAssistanceManagementMediator .buttonApproved {
+.requestGeneralJustifications .buttonApproved {
   background-color:#128c78;
   color:white;
   border:none;
@@ -191,7 +191,7 @@
   font-size:14px;
   border-radius: 2px;
 }
-.usersAssistanceManagementMediator .buttonCancel {
+.requestGeneralJustifications .buttonCancel {
   background-color:#e43e46;
   color:white;
   border:none;
@@ -211,7 +211,7 @@
 }
 
 
-.usersAssistanceManagementMediator .myStateRequestSlope {
+.requestGeneralJustifications .myStateRequestSlope {
   margin-top:5px;
   width:200px;
 
@@ -222,7 +222,7 @@
   background-color:white;
 }
 
-.usersAssistanceManagementMediator .myStateRequestApproved {
+.requestGeneralJustifications .myStateRequestApproved {
   margin-top:5px;
   width:200px;
 
@@ -233,7 +233,7 @@
 
 }
 
-.usersAssistanceManagementMediator .myStateRequestRejected {
+.requestGeneralJustifications .myStateRequestRejected {
   margin-top:5px;
   width:200px;
 
@@ -245,7 +245,7 @@
 }
 
 
-.usersAssistanceManagementMediator .myStateRequestCanceled {
+.requestGeneralJustifications .myStateRequestCanceled {
   margin-top:5px;
   width:200px;
 
@@ -257,7 +257,7 @@
 }
 
 
-.usersAssistanceManagementMediator .parrafos {
+.requestGeneralJustifications .parrafos {
   background-color:#0066A6;
   color:white;
   height:15px;
@@ -270,7 +270,7 @@
   padding:5px;
 }
 
-.usersAssistanceManagementMediator .parrafos2 {
+.requestGeneralJustifications .parrafos2 {
   background-color:white;
   color:white;
   height:15px;
@@ -283,7 +283,7 @@
   padding:5px;
   color:#128c78;
 }
-.usersAssistanceManagementMediator .parrafos3 {
+.requestGeneralJustifications .parrafos3 {
   background-color:white;
   color:white;
   height:15px;
@@ -296,7 +296,7 @@
   padding:5px;
   color:#128c78;
 }
-.usersAssistanceManagementMediator .parrafos4 {
+.requestGeneralJustifications .parrafos4 {
   background-color:white;
   color:white;
   height:15px;
@@ -312,7 +312,7 @@
 
 
 
-.usersAssistanceManagementMediator .parrafosGreen {
+.requestGeneralJustifications .parrafosGreen {
   background-color:#128c78;
   color:white;
   height:15px;
@@ -325,7 +325,7 @@
   padding:5px;
 }
 
-.usersAssistanceManagementMediator .parrafosGreen2 {
+.requestGeneralJustifications .parrafosGreen2 {
   background-color:white;
   color:white;
   height:15px;
@@ -339,53 +339,53 @@
   color:#0066A6;
 }
 
-.usersAssistanceManagementMediator .date {
+.requestGeneralJustifications .date {
   width:257px;
 }
 
-.usersAssistanceManagementMediator .hidden{
+.requestGeneralJustifications .hidden{
   display:none;
 }
 
 
-.usersAssistanceManagementMediator .visible{
+.requestGeneralJustifications .visible{
   display:block;
 }
-.usersAssistanceManagementMediator div.info{
+.requestGeneralJustifications div.info{
   width:100%;
   height:0px;
   background-color: #f5f5f5;
   overflow: hidden;
   -webkit-transition: height 0.2s;
 }
-.usersAssistanceManagementMediator .subcontentDisplay div.info{
+.requestGeneralJustifications .subcontentDisplay div.info{
   height:160px;
 }
 
-.usersAssistanceManagementMediator .subcontentDisplay .titulo, .usersAssistanceManagementMediator .subcontent .titulo{
+.requestGeneralJustifications .subcontentDisplay .titulo, .requestGeneralJustifications .subcontent .titulo{
     cursor:pointer;
 }
-.usersAssistanceManagementMediator .info {
+.requestGeneralJustifications .info {
   display:flex;
   flex-direction:row;
 }
-.usersAssistanceManagementMediator .margin {
+.requestGeneralJustifications .margin {
   margin-left:50px;
 
 
 }
 
-.usersAssistanceManagementMediator .titlesHours {
+.requestGeneralJustifications .titlesHours {
   display:flex;
   flex-direction:row;
   margin-top:5px;
 }
-.usersAssistanceManagementMediator .hours {
+.requestGeneralJustifications .hours {
   display:flex;
   flex-direction:row;
 
 }
-.usersAssistanceManagementMediator .spanSE {
+.requestGeneralJustifications .spanSE {
   display:flex;
   align-content:center;
   background-color:white;
@@ -396,7 +396,7 @@
 
 
 }
-.usersAssistanceManagementMediator .spanSE2 {
+.requestGeneralJustifications .spanSE2 {
   display:flex;
   align-content:center;
   background-color:white;
@@ -407,7 +407,7 @@
 
 
 }
-.usersAssistanceManagementMediator .timeMargin {
+.requestGeneralJustifications .timeMargin {
   margin-bottom:2px;
 }
 
@@ -421,7 +421,7 @@
 
 /* SELECCION DE USUARIO */
 
-.usersAssistanceManagementMediator .searchTitle {
+.requestGeneralJustifications .searchTitle {
   background-color: #0066A6;
   color: white;
   padding:5px;
@@ -434,13 +434,13 @@
 }
 
 
-.usersAssistanceManagementMediator .inputSearch{
+.requestGeneralJustifications .inputSearch{
   width:166px;
   padding:5px;
   font-size: 14px;
 
 }
-.usersAssistanceManagementMediator .listUsers {
+.requestGeneralJustifications .listUsers {
   list-style-type:none;
   margin:0px;
   padding-left:5px;
@@ -454,7 +454,7 @@
   z-index: 999;
   position: absolute;
 }
-.usersAssistanceManagementMediator .liUsers {
+.requestGeneralJustifications .liUsers {
   height:25px;
   padding-top:10px;
   border-bottom:2px solid #275276;
@@ -463,12 +463,12 @@
 
 }
 
-.usersAssistanceManagementMediator .selectUser {
+.requestGeneralJustifications .selectUser {
   display:flex;
   flex-direction:row;
   margin:10px;
 }
-.usersAssistanceManagementMediator .userSelect {
+.requestGeneralJustifications .userSelect {
   width:160px;
   background-color:#0066A6;
   color:white;
