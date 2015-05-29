@@ -217,7 +217,19 @@ app.service('Utils', function() {
         return {id:justificationId, name:'Donación de Sangre', shortName:'DS', icon:'fa-tint'};
       break;
       case 'cb2b4583-2f44-4db0-808c-4e36ee059efe':
-        return {id:justificationId, name:'Boleta en Comisión', shortName:'BC', icon:'fa-tint'};
+        return {id:justificationId, name:'Boleta en Comisión', shortName:'BC', icon:'fa-ticket'};
+      break;
+      case '5c548eab-b8fc-40be-bb85-ef53d594dca9':
+        return {id:justificationId, name:'Día del Bibliotecario', shortName:'B', icon:'fa-calendar'};
+      break;
+      case '508a9b3a-e326-4b77-a103-3399cb65f82a':
+        return {id:justificationId, name:'Congresos / Capacitación', shortName:'CC', icon:'fa-ticket'};
+      break;
+      case '70e0951f-d378-44fb-9c43-f402cbfc63c8':
+        return {id:justificationId, name:'ART', shortName:'ART', icon:'fa-ticket'};
+      break;
+      case '3d486aa0-745a-4914-a46d-bc559853d367':
+        return {id:justificationId, name:'Incumbencias Climáticas', shortName:'IC', icon:'fa-ticket'};
       break;
       
       default:
