@@ -234,7 +234,8 @@ app.service('Utils', function() {
       id:null,
       justificationId:null,
       justificationName:null,
-      date:null,
+      requestorId:null,
+      userId:null,
       dateSort:null,
       time:null,
       start:null,
@@ -245,6 +246,8 @@ app.service('Utils', function() {
     request.id = req.id;
     request.justificationName = this.getJustificationName(req.justification_id);
     request.justificationId = req.justification_id;
+    request.requestorId = req.requestor_id;
+    request.userId = req.user_id;
     request.status = req.status;
     
     if(req.begin !== null){
