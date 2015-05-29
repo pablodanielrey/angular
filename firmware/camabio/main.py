@@ -1,17 +1,13 @@
-import sys, logging, time, threading, signal
-import inject
-
-from firmware import FirmwareReader, Firmware
-from itertools import zip_longest
-import camabio
-
+import sys
 sys.path.append('../../python')
 
-from network import websocket
+import logging, time, threading, signal
+import inject
+
+from itertools import zip_longest
+
+import model
 from model.config import Config
-
-
-logging.getLogger().setLevel(logging.DEBUG)
 
 """ configuro el injector con las variables apropiadas """
 def config_injector(binder):
@@ -19,7 +15,15 @@ def config_injector(binder):
 
 inject.configure(config_injector)
 
-f = inject.instance(Firmare)
+import camabio
+from firmware import Firmware
+from network import websocket
+
+logging.getLogger().setLevel(logging.DEBUG)
+
+
+
+f = inject.instance(Firmware)
 f.start()
 try:
     """ inicializo la parte de red """

@@ -20,7 +20,12 @@ class Config:
             options = config.options(section)
             for option in options:
                 try:
-                    self.configs[section + '_' + option] = config.get(section,option)
+                    value = config.get(section,option)
+                    if value == 'True' or value == 'true':
+                        value = True
+                    elif value == 'False' or value == 'false':
+                        value = False
+                    self.configs[section + '_' + option] = value
                 except:
                     self.configs[section + '_' + option] = None
 

@@ -5,6 +5,7 @@ import inject
 
 from threading import Semaphore
 
+import model
 from model.config import Config
 
 
@@ -338,6 +339,8 @@ class FirmwareReader(Reader):
             self.entry.acquire()
             self.ne = self.ne - 1
             self._signal()
+
+
 
 
 """
