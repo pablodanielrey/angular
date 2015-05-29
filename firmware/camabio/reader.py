@@ -5,6 +5,7 @@ import inject
 
 from threading import Semaphore
 
+import model
 from model.config import Config
 
 

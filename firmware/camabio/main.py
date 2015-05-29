@@ -1,15 +1,17 @@
-import sys, logging, time, threading, signal
+import sys
+sys.path.append('../../python')
+
+import logging, time, threading, signal
 import inject
 
-from firmware import FirmwareReader, Firmware
 from itertools import zip_longest
 import camabio
 
-sys.path.append('../../python')
-
-from network import websocket
+import model
 from model.config import Config
 
+from firmware import FirmwareReader, Firmware
+from network import websocket
 
 logging.getLogger().setLevel(logging.DEBUG)
 
