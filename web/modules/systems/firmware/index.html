@@ -1,16 +1,17 @@
 <div class="index-container">
 
-  <div class="info-container">
-    <div class="date">{{model.day}}</div>
-    <div class="hours">{{model.hours}}</div>
+  <div class="displayContainer">
+    <div ng-class="{true:'info-container',false:'hidden'}[isDisplayInfoContainer()]">
+      <div class="date">{{model.day}}</div>
+      <div class="hours">{{model.hours}}</div>
+    </div>
+
+    <div class="code-container" ng-class="{false:'hidden'}[isDisplayCodeContainer()]">
+      <input type='text' ng-model='model.code'  ng-class="{true:'code',false:'hidden'}[isDisplayInputCode()]"/>
+      <input type='password' ng-model='model.password' ng-class="{true:'password',false:'hidden'}[isDisplayPassword()]"/>
+    </div>
   </div>
 
-  <!--
-  <div class="dni-container">
-    <div class="date">{{model.day}}</div>
-    <div class="hours">{{model.hours}}</div>
-  </div>
--->
 
   <div class="keyboard-container">
     <div class="row">
@@ -32,7 +33,7 @@
     </div>
     <div class="row">
       <input type="submit" ng-click="cancel()" value="Cancelar"  class="action"/>
-      <input type="button" ng-click="enterCode()" value="Aceptar" ng-disabled="model.dni==null" class="action"/>
+      <input type="button" ng-click="enterCode()" value="Aceptar" ng-disabled="!isEnabledCommit()" class="action"/>
     </div>
 
   </div>

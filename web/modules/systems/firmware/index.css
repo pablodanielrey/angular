@@ -1,8 +1,8 @@
-h1 {
-  color:red;
+body {
+  background-color:black;
 }
 
-.hidden {
+.index-container .hidden {
   display:none;
 }
 
@@ -17,15 +17,37 @@ h1 {
   flex-direction:column;
 }
 
+
+.index-container .displayContainer {
+  height:35%;
+  width:100%;
+}
+
+/* -----------------------------------
+ * ------- INPUT CODE ----------------
+ * -----------------------------------
+ */
+
+.index-container .code-container {
+   background-color:white;
+   height:100%;
+}
+
+.index-container .code-container input {
+    width:100%;
+    height:100%;
+    text-align:center;
+    font-size: 3em;
+    border:0;
+}
+
 /* -----------------------------------
  * ------- DIA Y HORARIO -------------
  * -----------------------------------
  */
 
 .index-container .info-container {
-  height:35%;
-  width:100%;
-  background-color:blue;
+  background: -webkit-linear-gradient(left, #1e5799 0%,#207cca 100%);
   color:white;
   display:flex;
   flex-direction:column;
