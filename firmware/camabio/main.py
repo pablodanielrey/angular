@@ -23,7 +23,7 @@ logging.getLogger().setLevel(logging.DEBUG)
 
 
 
-f = inject.instance(Firmare)
+f = inject.instance(Firmware)
 f.start()
 try:
     """ inicializo la parte de red """
