@@ -341,6 +341,8 @@ class FirmwareReader(Reader):
             self._signal()
 
 
+
+
 """
     el provider del reader
 """
