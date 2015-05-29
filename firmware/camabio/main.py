@@ -5,21 +5,23 @@ import logging, time, threading, signal
 import inject
 
 from itertools import zip_longest
-import camabio
 
 import model
 from model.config import Config
-
-from firmware import FirmwareReader, Firmware
-from network import websocket
-
-logging.getLogger().setLevel(logging.DEBUG)
 
 """ configuro el injector con las variables apropiadas """
 def config_injector(binder):
     binder.bind(Config,Config('firmware-config.cfg'))
 
 inject.configure(config_injector)
+
+import camabio
+from firmware import Firmware
+from network import websocket
+
+logging.getLogger().setLevel(logging.DEBUG)
+
+
 
 f = inject.instance(Firmare)
 f.start()
