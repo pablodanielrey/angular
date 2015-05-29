@@ -37,9 +37,9 @@ if __name__ == '__main__':
     data = cur.fetchall()
     for id,date,sstart,send in data:
         logging.debug('{}, {}, {}, {}'.format(id,date,sstart,send))
-        ndate = date - relativedelta(months=2)
-        nstart = sstart - relativedelta(months=2)
-        nend = send - relativedelta(months=2)
+        ndate = date - relativedelta(days=4)
+        nstart = sstart - relativedelta(days=4)
+        nend = send - relativedelta(days=4)
         logging.debug('{}, {}, {}, {}'.format(id,ndate,nstart,nend))
         cur.execute('update assistance.schedule set date = %s, sstart = %s, send = %s where id = %s',(ndate,nstart,nend,id))
     con.commit()
