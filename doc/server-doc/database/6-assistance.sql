@@ -6,7 +6,7 @@ create schema assistance;
     ip varchar not null,
     enabled boolean default true,
     timezone varchar not null default 'America/Buenos_Aires',
-    created timestampz default now()
+    created timestamptz default now()
   );
 
   create table assistance.templates (
@@ -14,7 +14,7 @@ create schema assistance;
     template varchar not null,
     algorithm varchar not null,
     user_id varchar not null references profile.users (id),
-    created timestampz default now()
+    created timestamptz default now()
   );
 
 
