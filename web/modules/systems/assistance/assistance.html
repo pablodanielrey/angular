@@ -48,44 +48,47 @@
       <span class="spanWhite"><b><i class="fa fa-clock-o"></i> Horas Trabajadas </b></span>
       <span class="boxes">{{model.assistanceStatus.workedTime}}</span>
     </div>
-    <!--
-    <div class="weeklySummary">
-      <span class="data2"><b><i class="fa fa-clock-o"></i> Resumen Semanal</b></span>
 
-
-      <TABLE  class="table" >
-        <TR>
-          <TH>Fecha</TH> <TH>Entrada</TH> <TH>Salida</TH> <TH>Horas</TH>
-        </TR>
-        <TR>
-          <TD>22/02</TD> <TD>8:15</TD> <TD>15:02</TD> <TD>6:58</TD>
-        </TR>
-        <TR>
-          <TD>23/02</TD> <TD>8:18</TD> <TD>15:06</TD> <TD>7:02</TD>
-        </TR>
-        <TR>
-          <TD>24/02</TD> <TD>8:05</TD> <TD>15:21</TD> <TD>6:35</TD>
-        </TR>
-        <TR>
-          <TD>25/02</TD> <TD>8:25</TD> <TD>15:25</TD> <TD>7:03</TD>
-        </TR>
-        <TR>
-          <TD>26/02</TD> <TD>8:01</TD> <TD>15:09</TD> <TD>6:45</TD>
-        </TR>
-
-      </TABLE>
-
-    </div>
-    -->
   </div>
 
 
 
   <div class="license">
+    <div class="departures">
+      <span class="data1">S. Eventuales</span>
+      <span class="boxes2">{{model.justificationOut}}</span>
+      <span class="data1">Hs. Disponibles</span>
+    </div>
+    <hr>
     <div class="missing">
       <span class="data1">Ausentes con Aviso</span>
       <span class="boxes2">{{model.justificationAbsent}}</span>
       <span class="data1">Disponibles</span>
+    </div>
+    <hr>
+    <div class="article">
+      <span class="data1">Art. 102</span>
+      <span class="boxes2">{{model.justification102}}</span>
+      <span class="data1">Disponibles</span>
+    </div>
+    <hr>
+    <div class="preEvaluation">
+      <span class="data1">Pre-Exámen</span>
+      <span class="boxes2">{{model.justificationExam}}</span>
+      <span class="data1">Disponibles</span>
+    </div>
+  </div>
+  <div class="license">
+    <div class="lao">
+      <span class="data1">LAO</span>
+      <span class="boxes2">{{model.justificationLao}}</span>
+      <span class="data1">Días</span>
+    </div>
+    <hr>
+    <div class="lao">
+      <span class="data1">Resolución 638</span>
+      <span class="boxes2">{{model.justification638}}</span>
+      <span class="data1">Días</span>
     </div>
     <hr>
     <div class="compensatory">
@@ -93,32 +96,6 @@
       <span class="boxes2">{{model.justificationCompensatory}}</span>
       <span class="data1">Disponibles</span>
     </div>
-    <hr>
-    <div class="departures">
-      <span class="data1">S. Eventuales</span>
-      <span class="boxes2">{{model.justificationOut}}</span>
-      <span class="data1">Hs. Disponibles</span>
-    </div>
-    <hr>
-    <!--
-    <div class="article">
-      <span>Art. 102</span>
-      <span class="boxes2">{{model.justification102}}</span>
-      <span>Disponibles</span>
-    </div>
-    <hr>
-    <div class="preEvaluation">
-      <span>Pre-Exámen</span>
-      <span class="boxes2">{{model.justificationExam}}</span>
-      <span>Disponibles</span>
-    </div>
-    <hr>
-    <div class="lao">
-      <span>LAO</span>
-      <span class="boxes2">{{model.justificationLao}}</span>
-      <span>Días</span>
-    </div>
-  -->
   </div>
 
 
