@@ -3,7 +3,7 @@
   <div class="displayContainer">
     <div ng-class="{true:'info-container',false:'hidden'}[isDisplayInfoContainer()]">
       <div class="date">{{model.day}}</div>
-      <div class="hours">{{model.hours}}</div>
+      <div class="hours">{{model.hours}}<span class="seconds">:{{model.seconds}}</span></div>
     </div>
 
     <div class="code-container" ng-class="{false:'hidden'}[isDisplayCodeContainer()]">

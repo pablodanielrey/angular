@@ -6,6 +6,7 @@ app.controller("IndexCtrl", ['$scope','$timeout','$location','Notifications', 'F
     date:new Date(),
     day:'',
     hours:'',
+    seconds:'',
     displayCodeContainer: false,
     displayInfoContainer: true,
     enabledCommit: false,
@@ -65,7 +66,8 @@ app.controller("IndexCtrl", ['$scope','$timeout','$location','Notifications', 'F
     var hs = ('0' + $scope.model.date.getHours()).slice(-2);
     var min = ('0' + $scope.model.date.getMinutes()).slice(-2);
     var sec = ('0' + $scope.model.date.getSeconds()).slice(-2);
-    $scope.model.hours = hs + ":" + min + ":" + sec;
+    $scope.model.hours = hs + ":" + min;
+    $scope.model.seconds = sec;
   }
 
   $scope.updateDate = function() {

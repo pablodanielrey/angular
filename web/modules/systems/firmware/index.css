@@ -72,6 +72,10 @@ body {
     align-items: center;
 }
 
+.index-container .info-container .hours .seconds {
+  font-size:0.6em;
+}
+
 
 /* -----------------------------------
  * ---------- TECLADO ----------------
