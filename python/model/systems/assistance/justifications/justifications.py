@@ -23,6 +23,10 @@ from model.systems.assistance.justifications.HolidayJustification import Holiday
 from model.systems.assistance.justifications.ParoJustification import ParoJustification
 from model.systems.assistance.justifications.MourningJustification import MourningJustification
 from model.systems.assistance.justifications.BloodDonationJustification import BloodDonationJustification
+from model.systems.assistance.justifications.ARTJustification import ARTJustification
+from model.systems.assistance.justifications.BJustification import BJustification
+from model.systems.assistance.justifications.CCJustification import CCJustification
+from model.systems.assistance.justifications.ICJustification import ICJustification
 
 
 
@@ -41,7 +45,8 @@ class Justifications:
     justifications = [
         CJustification(), LAOJustification(), AAJustification(), BSJustification(), R638Justification(), PEJustification(),
         CumpJustification(), A102Justification(), LMCDJustification(), LMLTJustification(), BloodDonationJustification(),
-        LMAFJustification(), JMJustification(), HolidayJustification(), ParoJustification(), MourningJustification(), BCJustification()
+        LMAFJustification(), JMJustification(), HolidayJustification(), ParoJustification(), MourningJustification(), BCJustification(),
+        ARTJustification(), BJustification(), CCJustification(), ICJustification()
     ]
 
 

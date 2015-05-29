@@ -143,7 +143,6 @@ app.controller('UsersAssistanceManagementCtrl', ["$scope", "$timeout", "$window"
             $scope.model.justificationsId.push(justifications[i].id);
           }
 				}
-  
       },
       function(error){
         Notifications.message(error);

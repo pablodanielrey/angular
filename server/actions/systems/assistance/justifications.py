@@ -1165,7 +1165,13 @@ class GetSpecialJustifications:
                     'b80c8c0e-5311-4ad1-94a7-8d294888d770',
                     '478a2e35-51b8-427a-986e-591a9ee449d8',
                     '0cd276aa-6d6b-4752-abe5-9258dbfd6f09',
-                    'e8019f0e-5a70-4ef3-922c-7c70c2ce0f8b'])
+                    'e8019f0e-5a70-4ef3-922c-7c70c2ce0f8b',
+                    '70e0951f-d378-44fb-9c43-f402cbfc63c8', #ART
+                    '3d486aa0-745a-4914-a46d-bc559853d367', #incumbencias climaticas
+                    '5c548eab-b8fc-40be-bb85-ef53d594dca9', #dia del bibliotecario
+                    '508a9b3a-e326-4b77-a103-3399cb65f82a', #cursos / capacitacion
+                    
+                ])
 
             role = 'realizar-solicitud-admin'
             offices = self.offices.getUserInOfficesByRole(con,userId,tree,role);
