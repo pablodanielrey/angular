@@ -186,7 +186,14 @@ app.controller("IndexCtrl", ['$scope','$timeout','$location','Notifications', 'F
    }
 
    $scope.enterPassword = function() {
-    //  $scope.redirect();
+    Firmawre.sendCode($scope.model.code,$scope.model.password,
+      function(response) {
+
+      },
+      function(error) {
+        Notifications.message(error);
+      }
+    );
     Notifications.message('Usuario:' + $scope.model.code + ' password:' + $scope.model.password);
    }
 
@@ -246,5 +253,14 @@ app.controller("IndexCtrl", ['$scope','$timeout','$location','Notifications', 'F
     $scope.initialize();
   },0);
 
+
+  /* ----------------------------------------------------------
+   * ----------------------- EVENTOS --------------------------
+   * ----------------------------------------------------------
+   */
+
+   $scope.$on('HomeEvent', function(event, data) {
+     $scope.initialize();
+   })
 
 }]);
