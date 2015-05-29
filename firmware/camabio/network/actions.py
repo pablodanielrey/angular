@@ -11,12 +11,37 @@ class Enroll:
 
     firmware = inject.attr(Firmware)
 
-    def broadcast(self,server,msg,response):
+    def requestFinger(self,server,number):
         server.broadcast(
             {
-                
+                'type':'FingerRequestedEvent',
+                'data':{
+                    'fingerNumber':number
+                }
             }
         )
+
+
+    def sendError(self,server,error):
+        server.broadcast(
+            {
+                'type':'ErrorEvent',
+                'data':{
+                    'error':error
+                }
+            }
+        )
+
+    def sendMsg(self,server,msg):
+        server.broadcast(
+            {
+                'type':'MsgEvent',
+                'data':{
+                    'msg':msg
+                }
+            }
+        )
+
 
     def handleAction(self, server, message):
 
@@ -36,14 +61,13 @@ class Enroll:
         dni = message['request']['dni']
 
 
-
         try:
             requests = self.firmware.enroll(dni,
-                lambda: server.broadcast('primera huella'),
-                lambda: server.broadcast('segunda huella'),
-                lambda: server.broadcast('tercera huella'),
-                lambda: server.broadcast('liberar dedo')
-                )
+                lambda: self.requestFinger(server,1),
+                lambda: self.requestFinger(server,2),
+                lambda: self.requestFinger(server,3),
+                lambda: self.sendMsg(server,'Levante el dedo')
+            )
 
             response = {
                 'id':message['id'],
@@ -54,4 +78,5 @@ class Enroll:
             return True
 
         except Exception as e:
+            server.sendError(message,e)
             raise e

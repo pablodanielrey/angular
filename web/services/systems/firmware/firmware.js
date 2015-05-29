@@ -5,7 +5,7 @@ app.service('Firmware', ['Utils','Messages','Session',
   function(Utils,Message,Session) {
 
     this.enroll = function(dni, callbackOk, callbackError) {
-      /*var msg = {
+      var msg = {
         id: Utils.getId(),
         action: 'enroll',
         request: {
@@ -16,13 +16,11 @@ app.service('Firmware', ['Utils','Messages','Session',
       Messages.send(msg,
         function(data) {
           if (typeof data.error === 'undefined') {
-              callbackOk(data.ok);
+              callbackOk(data);
           } else {
             callbackError(data.error)
           }
-        });*/
-
-        callbackOk('ok');
+        });
     }
 
 

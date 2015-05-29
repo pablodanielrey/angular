@@ -1,12 +1,41 @@
 # -*- coding: utf-8 -*-
 import cserial, camabio
 import time, codecs, logging
+import inject
+
 from threading import Semaphore
 
-class FirmwareReader:
+from model.config import Config
 
-    def __init__(self,port):
-        self.port = port
+
+
+"""
+    Reader nulo
+    usado cuando se desactiva el reader en la config
+"""
+class Reader:
+
+    def start(self):
+        pass
+
+    def stop(self):
+        pass
+
+    def identify(self):
+        return None
+
+    def enroll(self, need_first=None, need_second=None, need_third=None, need_release=None):
+        return (None,None)
+
+
+
+
+class FirmwareReader(Reader):
+
+    config = inject.attr(Config)
+
+
+    def __init__(self):
 
         """ passing the baton """
         self.entry = Semaphore(1)
@@ -20,7 +49,8 @@ class FirmwareReader:
 
 
     def start(self):
-        cserial.open(self.port)
+        port = self.config.configs['reader_port']
+        cserial.open(port)
 
     def stop(self):
         cserial.close()
@@ -308,3 +338,14 @@ class FirmwareReader:
             self.entry.acquire()
             self.ne = self.ne - 1
             self._signal()
+
+
+"""
+    el provider del reader
+"""
+def getReader():
+    config = inject.instance(Config)
+    if config.configs['reader_enable']:
+        return inject.instance(FirmwareReader)
+    else:
+        return inject.instance(Reader)
