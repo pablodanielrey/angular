@@ -8,7 +8,7 @@ body {
 
 
 .index-container {
-  width: 15em;
+  width: 17em;
   height: 15em;
   position: relative;
   margin: 0 auto 40px;
@@ -103,4 +103,64 @@ body {
 
 .index-container .keyboard-container .action{
   width:45%
+}
+
+
+/* -----------------------------------
+ * ----- TECLADO  EXTENDIDO ----------
+ * -----------------------------------
+ */
+
+.index-container .keyboard-container-extends {
+  height:65%;
+  width:100%;
+  background-color:black;
+}
+
+.index-container .keyboard-container-extends .keyboard-letters {
+  width:100%;
+  height:100%;
+  display: flex;
+  flex-direction:column;
+  align-items: center;
+  justify-content: center;
+}
+
+.index-container .keyboard-container-extends .row {
+  width: 97%;
+  margin-bottom:0.5em;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.index-container .keyboard-container-extends .keyboard-letters .letter {
+  width:9%;
+}
+
+.index-container .keyboard-container-extends .keyboard-letters .backspace {
+  width:13.5%;
+}
+
+.index-container .keyboard-container-extends .keyboard-letters .shift {
+  width:13.5%;
+}
+
+.index-container .keyboard-container-extends .capitalize {
+  text-transform:capitalize;
+}
+
+.index-container .keyboard-container-extends .keyboard-letters .down {
+  color:red;
+}
+
+
+
+.index-container .keyboard-container-extends .keyboard-special {
+  width:100%;
+  height:100%;
+  display: flex;
+  flex-direction:column;
+  align-items: center;
+  justify-content: center;
 }

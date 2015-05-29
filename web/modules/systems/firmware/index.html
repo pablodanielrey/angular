@@ -13,7 +13,7 @@
   </div>
 
 
-  <div class="keyboard-container">
+  <div ng-class="{true:'keyboard-container',false:'hidden'}[displayKeyboard()]">
     <div class="row">
       <button ng-click="addNumber('6')" class="number">6</button>
       <button ng-click="addNumber('7')" class="number">7</button>
@@ -29,13 +29,114 @@
     <div class="row">
       <button ng-click="addNumber('0')" class="number">0</button>
       <button ng-click="addNumber('1')" class="number">1</button>
-      <button ng-click="deleteNumber()" class="action">&lt;-----</button>
+      <button ng-click="deleteNumber()" class="action fa fa-long-arrow-left"></button>
     </div>
     <div class="row">
       <input type="submit" ng-click="cancel()" value="Cancelar"  class="action"/>
       <input type="button" ng-click="enterCode()" value="Aceptar" ng-disabled="!isEnabledCommit()" class="action"/>
     </div>
 
+  </div>
+
+  <div ng-class="{true:'keyboard-container-extends',false:'hidden'}[displayKeyboardExtends()]">
+
+    <div ng-class="{true:'keyboard-letters',false:'hidden'}[displayKeyboardLetters()]">
+      <div class="row">
+        <button class="letter" ng-class="{true:'capitalize'}[model.capitalize]" ng-click="enterChar('q',model.capitalize)">q</button>
+        <button class="letter" ng-class="{true:'capitalize'}[model.capitalize]" ng-click="enterChar('w',model.capitalize)">w</button>
+        <button class="letter" ng-class="{true:'capitalize'}[model.capitalize]" ng-click="enterChar('e',model.capitalize)">e</button>
+        <button class="letter" ng-class="{true:'capitalize'}[model.capitalize]" ng-click="enterChar('r',model.capitalize)">r</button>
+        <button class="letter" ng-class="{true:'capitalize'}[model.capitalize]" ng-click="enterChar('t',model.capitalize)">t</button>
+        <button class="letter" ng-class="{true:'capitalize'}[model.capitalize]" ng-click="enterChar('y',model.capitalize)">y</button>
+        <button class="letter" ng-class="{true:'capitalize'}[model.capitalize]" ng-click="enterChar('u',model.capitalize)">u</button>
+        <button class="letter" ng-class="{true:'capitalize'}[model.capitalize]" ng-click="enterChar('i',model.capitalize)">i</button>
+        <button class="letter" ng-class="{true:'capitalize'}[model.capitalize]" ng-click="enterChar('o',model.capitalize)">o</button>
+        <button class="letter" ng-class="{true:'capitalize'}[model.capitalize]" ng-click="enterChar('p',model.capitalize)">p</button>
+      </div>
+      <div class="row">
+        <button class="letter" ng-class="{true:'capitalize'}[model.capitalize]" ng-click="enterChar('a',model.capitalize)">a</button>
+        <button class="letter" ng-class="{true:'capitalize'}[model.capitalize]" ng-click="enterChar('s',model.capitalize)">s</button>
+        <button class="letter" ng-class="{true:'capitalize'}[model.capitalize]" ng-click="enterChar('d',model.capitalize)">d</button>
+        <button class="letter" ng-class="{true:'capitalize'}[model.capitalize]" ng-click="enterChar('f',model.capitalize)">f</button>
+        <button class="letter" ng-class="{true:'capitalize'}[model.capitalize]" ng-click="enterChar('g',model.capitalize)">g</button>
+        <button class="letter" ng-class="{true:'capitalize'}[model.capitalize]" ng-click="enterChar('h',model.capitalize)">h</button>
+        <button class="letter" ng-class="{true:'capitalize'}[model.capitalize]" ng-click="enterChar('j',model.capitalize)">j</button>
+        <button class="letter" ng-class="{true:'capitalize'}[model.capitalize]" ng-click="enterChar('k',model.capitalize)">k</button>
+        <button class="letter" ng-class="{true:'capitalize'}[model.capitalize]" ng-click="enterChar('l',model.capitalize)">l</button>
+        <button class="letter" ng-class="{true:'capitalize'}[model.capitalize]" ng-click="enterChar('ñ',model.capitalize)">ñ</button>
+      </div>
+      <div class="row">
+        <button class="shift fa fa-arrow-up" ng-click="model.capitalize = !model.capitalize" ng-class="{true:'down'}[model.capitalize]"></butto>
+        <button class="letter" ng-class="{true:'capitalize'}[model.capitalize]" ng-click="enterChar('z',model.capitalize)">z</button>
+        <button class="letter" ng-class="{true:'capitalize'}[model.capitalize]" ng-click="enterChar('x',model.capitalize)">x</button>
+        <button class="letter" ng-class="{true:'capitalize'}[model.capitalize]" ng-click="enterChar('c',model.capitalize)">c</button>
+        <button class="letter" ng-class="{true:'capitalize'}[model.capitalize]" ng-click="enterChar('v',model.capitalize)">v</button>
+        <button class="letter" ng-class="{true:'capitalize'}[model.capitalize]" ng-click="enterChar('b',model.capitalize)">b</button>
+        <button class="letter" ng-class="{true:'capitalize'}[model.capitalize]" ng-click="enterChar('n',model.capitalize)">n</button>
+        <button class="letter" ng-class="{true:'capitalize'}[model.capitalize]" ng-click="enterChar('m',model.capitalize)">m</button>
+        <button class="backspace fa fa-long-arrow-left" ng-click="deleteChar()"></button>
+      </div>
+      <div class="row">
+        <button ng-click="changeKeyboardSpecial()">.?123</button>
+        <input type="submit" ng-click="cancelPassword()" value="Cancelar"  class="action"/>
+        <input type="button" ng-click="enterPassword()" value="Aceptar" ng-disabled="!isEnabledCommitPassowrd()" class="action"/>
+      </div>
+    </div>
+
+    <div ng-class="{true:'keyboard-special',false:'hidden'}[displayKeyboardSpecial()]">
+      <div class="row">
+        <button class="letter" ng-click="enterChar('1',false)">1</button>
+        <button class="letter" ng-click="enterChar('2',false)">2</button>
+        <button class="letter" ng-click="enterChar('3',false)">3</button>
+        <button class="letter" ng-click="enterChar('4',false)">4</button>
+        <button class="letter" ng-click="enterChar('5',false)">5</button>
+        <button class="letter" ng-click="enterChar('6',false)">6</button>
+        <button class="letter" ng-click="enterChar('7',false)">7</button>
+        <button class="letter" ng-click="enterChar('8',false)">8</button>
+        <button class="letter" ng-click="enterChar('9',false)">9</button>
+        <button class="letter" ng-click="enterChar('0',false)">0</button>
+      </div>
+      <div class="row">
+        <button class="letter" ng-click="enterChar('!',false)">!</button>
+        <button class="letter" ng-click="enterChar('@',false)">@</button>
+        <button class="letter" ng-click="enterChar('#',false)">#</button>
+        <button class="letter" ng-click="enterChar('$',false)">$</button>
+        <button class="letter" ng-click="enterChar('&',false)">&</button>
+        <button class="letter" ng-click="enterChar('/',false)">/</button>
+        <button class="letter" ng-click="enterChar('(',false)">(</button>
+        <button class="letter" ng-click="enterChar(')',false)">)</button>
+        <button class="letter" ng-click="enterChar('=',false)">=</button>
+        <button class="letter" ng-click="enterChar('?',false)">?</button>
+      </div>
+      <div class="row">
+        <button class="letter" ng-click="enterChar('¿',false)">¿</button>
+        <button class="letter" ng-click="enterChar('¡',false)">¡</button>
+        <button class="letter" ng-click="enterChar('*',false)">*</button>
+        <button class="letter" ng-click="enterChar('-',false)">-</button>
+        <button class="letter" ng-click="enterChar('+',false)">+</button>
+        <button class="letter" ng-click="enterChar('.',false)">.</button>
+        <button class="letter" ng-click="enterChar(',',false)">,</button>
+        <button class="letter" ng-click="enterChar(':',false)">:</button>
+        <button class="letter" ng-click="enterChar('_',false)">_</button>
+      </div>
+      <div class="row">
+        <button class="letter" ng-click="enterChar('<',false)">&lt;</button>
+        <button class="letter" ng-click="enterChar('>',false)">&gt;</button>
+        <button class="letter" ng-click="enterChar('[',false)">&#91;</button>
+        <button class="letter" ng-click="enterChar(']',false)">&#93;</button>
+        <button class="letter" ng-click="enterChar('{',false)">&#123;</button>
+        <button class="letter" ng-click="enterChar('}',false)">&#125;</button>
+        <button class="letter" ng-click="enterChar('º',false)">&deg;</button>
+        <button class="letter" ng-click="enterChar('\\',false)">&#92;</button>
+        <button class="letter" ng-click="enterChar('ª',false)">&ordf;</button>
+      </div>
+      <div class="row">
+        <button ng-click="changeKeyboardLetters()">ABC</button>
+        <input type="submit" ng-click="cancelPassword()" value="Cancelar"  class="action"/>
+        <input type="button" ng-click="enterPassword()" value="Aceptar" ng-disabled="!isEnabledCommitPassowrd()" class="action"/>
+        <button class="backspace fa fa-long-arrow-left" ng-click="deleteChar()"></button>
+      </div>
+    </div>
   </div>
 
 </div>
