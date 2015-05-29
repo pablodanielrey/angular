@@ -163,7 +163,7 @@ if __name__ == '__main__':
             logging.debug('insert into assistance.justifications_requests_status (request_id,user_id,status,created) values ({},{},{},{})'.format(fid,'1','APPROVED',ffecha3))
             cur.execute('insert into assistance.justifications_requests_status (request_id,user_id,status,created) values (%s,%s,%s,%s)',(fid,'1','APPROVED',ffecha3))
 
-            """con.commit()"""
+            con.commit()
 
     except Exception as e:
         logging.exception(e)
