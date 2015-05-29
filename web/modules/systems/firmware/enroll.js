@@ -170,13 +170,16 @@ app.controller("EnrollCtrl", ['$scope','$location','$timeout','Notifications', '
 
 
    $scope.$on('FingerRequestedEvent', function(event, data) {
-   }
+     console.log('FingerRequestedEvent');
+   })
 
    $scope.$on('ErrorEvent', function(event, data) {
-   }
+     console.log('ErrorEvent');
+   })
 
    $scope.$on('MsgEvent', function(event, data) {
-   }
+     console.log('MsgEvent');
+   })
 
    /*
     finger updated event no va mas. este codigo no va mas.
