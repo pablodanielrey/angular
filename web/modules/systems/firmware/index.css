@@ -41,6 +41,7 @@ body {
   flex-direction: row;
   align-items: center;
   justify-content: center;
+  border-top: 1px solid;
 }
 
 .index-container .mode-admin-container .label {
