@@ -8,8 +8,8 @@
     <div ng-controller="RequestFeriadoCtrl" ng-include="'modules/systems/assistance/requestGeneralJustifications/requestFeriado.html'"></div>
     <div ng-controller="RequestParoCtrl" ng-include="'modules/systems/assistance/requestGeneralJustifications/requestParo.html'"></div>
 
- </div> 
-  
+ </div>
+
 
 
   <div class="myRequests">
@@ -38,9 +38,9 @@
 
 
       <div class="myStateRequestApproved">
-        <button  ng-click="cancelRequest(req)" ng-disabled="model.loadRequestedJustifications"> Eliminar</button>
+        <button class="buttonRefuse"  ng-click="cancelRequest(req)" ng-disabled="model.loadRequestedJustifications"><i class="fa fa-times"></i>  Eliminar</button>
       </div>
-      
+
     </div>
   </div>
 </div>
