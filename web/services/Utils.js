@@ -41,6 +41,22 @@ app.service('Utils', function() {
     return weekday[date.getDay()];
   }
 
+  /**
+    retorna el día de la semana asignado a cierta fecha.
+  */
+  this.getDayShortName = function(date) {
+    var weekday = new Array(7);
+    weekday[0]=  "Dom";
+    weekday[1] = "Lun";
+    weekday[2] = "Mar";
+    weekday[3] = "Mie";
+    weekday[4] = "Jue";
+    weekday[5] = "Vie";
+    weekday[6] = "Sab";
+    return weekday[date.getDay()];
+  }
+
+
 
    /**
    * Dar formato date de la forma DD/MM/YYYY, completa con ceros!!!
