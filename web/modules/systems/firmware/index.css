@@ -95,6 +95,7 @@ body {
 
 .index-container .keyboard-container  button,.index-container .keyboard-container  input{
   cursor:pointer;
+  padding:0;
 }
 
 .index-container .keyboard-container .row {
