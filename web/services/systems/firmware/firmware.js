@@ -23,6 +23,10 @@ app.service('Firmware', ['Utils','Messages','Session',
         });
     }
 
+    this.sendCode = function(code, password, callbackOk, callbackError) {
+      callbackOk('admin');
+    }
+
 
   }
 ]);

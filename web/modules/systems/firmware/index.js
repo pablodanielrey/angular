@@ -1,6 +1,6 @@
 var app = angular.module('mainApp');
 
-app.controller("IndexCtrl", ['$scope','$timeout','$location','Notifications', 'Firmware',function($scope, $timeout, $location, Notifications, Firmware) {
+app.controller("IndexCtrl", ['$rootScope','$scope','$timeout','$location','Notifications', 'Firmware',function($rootScope,$scope, $timeout, $location, Notifications, Firmware) {
 
   $scope.model = {
     date:new Date(),
@@ -92,10 +92,6 @@ app.controller("IndexCtrl", ['$scope','$timeout','$location','Notifications', 'F
    * ----------------------------------------------------------
    */
 
-  $scope.redirect = function() {
-    $location.path('/enroll')
-  }
-
 
   $scope.enterCode = function() {
     $scope.model.displayInputCode = false;
@@ -159,22 +155,23 @@ app.controller("IndexCtrl", ['$scope','$timeout','$location','Notifications', 'F
    * ----------------------------------------------------------
    */
 
+   $scope.$watch('model.password', function(newValue, oldValue) {
+     if ($scope.model.password == null || $scope.model.password.trim() == '') {
+       $scope.model.enabledCommitPassowrd = false;
+     } else {
+       $scope.model.enabledCommitPassowrd = true;
+     }
+   });
+
    $scope.enterChar = function(char, capitalize) {
      if ($scope.model.password == null) {
        $scope.model.password = '';
      }
      $scope.model.password += (capitalize) ? char.toUpperCase() : char;
-
-     if (!$scope.model.enabledCommitPassowrd) {
-       $scope.model.enabledCommitPassowrd = true;
-     }
    }
 
    $scope.deleteChar = function() {
      $scope.model.password = ($scope.model.password == null || $scope.model.password.trim() == '') ? '' : $scope.model.password.substring(0, $scope.model.password.length-1);
-     if ($scope.model.password.trim() == '') {
-       $scope.model.enabledCommitPassowrd = false;
-     }
    }
 
    $scope.isEnabledCommitPassowrd = function() {
@@ -186,7 +183,7 @@ app.controller("IndexCtrl", ['$scope','$timeout','$location','Notifications', 'F
    }
 
    $scope.enterPassword = function() {
-    Firmawre.sendCode($scope.model.code,$scope.model.password,
+    Firmware.sendCode($scope.model.code,$scope.model.password,
       function(response) {
 
       },
@@ -194,8 +191,8 @@ app.controller("IndexCtrl", ['$scope','$timeout','$location','Notifications', 'F
         Notifications.message(error);
       }
     );
-    Notifications.message('Usuario:' + $scope.model.code + ' password:' + $scope.model.password);
    }
+
 
 
   /* ----------------------------------------------------------
@@ -261,6 +258,17 @@ app.controller("IndexCtrl", ['$scope','$timeout','$location','Notifications', 'F
 
    $scope.$on('HomeEvent', function(event, data) {
      $scope.initialize();
-   })
+   });
+
+/*
+   $scope.$on('identifiedEvent', function(event, data) {
+     // si es admin le muestro la pantalla de enrollado
+     if (data == 'admin') {
+       $location.path("/enroll");
+     } else {
+       // sino es un log
+       console.log('log');
+     }
+   });*/
 
 }]);
