@@ -11,10 +11,10 @@
     <script type="text/javascript" src="create.js"></script>
 </head>
 
-<body>
+<body ng-controller='CreateCtrl'>
     <header>
     </header>
-    <section class="solicitudes"  ng-controller='CreateCtrl' ng-class="{true:'botonApretado',false:''}[apretasteElBoton]">
+    <section class="solicitudes"   ng-class="{true:'botonApretado',false:''}[apretasteElBoton]">
         <article>
             <div><h1>GENERAR NUEVA</h1></div>
             <div class="normas">
@@ -37,7 +37,7 @@
 
 
     </section>
-    <section class="nuevasSolicitudes" ng-controller='CreateCtrl' ng-class="{true:'nuevasSolicitudes',false:'ocultarNuevasSolicitudes'}[apretasteElBoton]">
+    <section class="ocultarNuevasSolicitudes"  ng-class="{true:'nuevasSolicitudes',false:'ocultarNuevasSolicitudes'}[apretasteElBoton]">
         <article>
             <div class="nuevaNorma">
                 <div>NUEVA</div>

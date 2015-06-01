@@ -99,15 +99,20 @@ i {
 
 
 .nuevasSolicitudes {
-  transform: translate3d(0,-250px,0);
+  transform: translate3d(0,-230px,0);
   -webkit-transition: all 0.2s ease-in-out;
+  transition-duration: 0.5s;
+  opacity: 0.5;
+  transition-property: opacity;
+  transition-duration: 3s, 5s;
+
 
 }
 
 .ocultarNuevasSolicitudes {
-
-  transform: translate3d(0,250px,0);
-  -webkit-transition: all 0.2s ease-in-out;
+  display: none;
+  /*transform: translate3d(0,250px,0);
+  -webkit-transition: all 0.2s ease-in-out;*/
 
 }
 
