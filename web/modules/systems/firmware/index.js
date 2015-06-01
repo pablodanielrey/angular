@@ -19,7 +19,9 @@ app.controller("IndexCtrl", ['$rootScope','$scope','$timeout','$location','Notif
     displayKeyboardLetters:false,
     displayKeyboardExtends:false,
     displayKeyboard:true,
-    enabledCommitPassowrd:false
+    enabledCommitPassowrd:false,
+
+    adminMode:false
   }
 
   $scope.initialize = function() {
@@ -33,6 +35,8 @@ app.controller("IndexCtrl", ['$rootScope','$scope','$timeout','$location','Notif
     $scope.model.displayInputCode = false;
     $scope.model.displayPassword = false;
     $scope.initializeKeyboard();
+
+    $scope.model.adminMode = false;
 
   }
 
