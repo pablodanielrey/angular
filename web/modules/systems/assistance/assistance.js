@@ -21,7 +21,8 @@ app.controller('AssistanceCtrl', ["$scope", "$timeout", "$window", "Profiles", "
 		justificationOut : null, //stock de justificaciones salidas eventuales
 		justification102 : null, //stock de justificaciones articulo 102
 		justificationExam : null, //stock de justificaciones pre examen
-		justificationLao : null //stock de justificaciones licencia anual ordinaria
+		justificationLao : null, //stock de justificaciones licencia anual ordinaria
+    justification638 : null //stock de justificaciones la resolucion 638
   };
 
 	/**
@@ -153,6 +154,7 @@ app.controller('AssistanceCtrl', ["$scope", "$timeout", "$window", "Profiles", "
       $scope.loadJustificationStock('76bc064a-e8bf-4aa3-9f51-a3c4483a729a'); //LAO
       $scope.loadJustificationStock('50998530-10dd-4d68-8b4a-a4b7a87f3972'); //R
       $scope.loadJustificationStock('b309ea53-217d-4d63-add5-80c47eb76820'); //CU
+      $scope.loadJustificationStock('50998530-10dd-4d68-8b4a-a4b7a87f3972'); //638
 
     }
 
@@ -186,8 +188,8 @@ app.controller('AssistanceCtrl', ["$scope", "$timeout", "$window", "Profiles", "
 	    Assistance.getJustificationStock($scope.model.session.user_id, justificationId, null, null,
 				function(data){
 
-						id = data.justificationId;
-						stock = data.stock;
+						var id = data.justificationId;
+						var stock = data.stock;
 
 						// setep el stock en la justificacion correcta
 						if(id == 'e0dfcef6-98bb-4624-ae6c-960657a9a741') {
@@ -202,7 +204,9 @@ app.controller('AssistanceCtrl', ["$scope", "$timeout", "$window", "Profiles", "
 							$scope.model.justificationLao = stock;
 						} else if(id == 'b70013e3-389a-46d4-8b98-8e4ab75335d0'){
 							$scope.model.justificationExam = stock;
-						}
+						} else if(id == '50998530-10dd-4d68-8b4a-a4b7a87f3972'){
+              $scope.model.justification638 = stock;
+            }
 
 				},
 				function(error){
