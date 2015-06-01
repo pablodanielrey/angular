@@ -6,7 +6,7 @@ app.config(['$routeProvider', function($routeProvider) {
 
   .when('/firmware', {
     templateUrl: '/modules/systems/firmware/index.html',
-    controller: 'IndexCtrl'
+    controller: 'MainFirmwareCtrl'
   })
 
 

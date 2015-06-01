@@ -1,6 +1,6 @@
 var app = angular.module('mainApp');
 
-app.controller("IndexCtrl", ['$rootScope','$scope','$timeout','$location','Notifications', 'Firmware',function($rootScope,$scope, $timeout, $location, Notifications, Firmware) {
+app.controller("MainFirmwareCtrl", ['$rootScope','$scope','$timeout','$location','Notifications', 'Firmware',function($rootScope,$scope, $timeout, $location, Notifications, Firmware) {
 
   $scope.model = {
     date:new Date(),
@@ -264,15 +264,17 @@ app.controller("IndexCtrl", ['$rootScope','$scope','$timeout','$location','Notif
      $scope.initialize();
    });
 
-/*
+
    $scope.$on('identifiedEvent', function(event, data) {
-     // si es admin le muestro la pantalla de enrollado
-     if (data == 'admin') {
+     console.log('---------------');
+     console.log($scope.model.adminMode);
+     if ($scope.model.adminMode) {
+       $rootScope.$broadcast('enrollOptionSelectedEvent');
        $location.path("/enroll");
      } else {
        // sino es un log
-       console.log('log');
+       console.log('log identify');
      }
-   });*/
+   });
 
 }]);

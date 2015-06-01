@@ -1,8 +1,8 @@
 var app = angular.module('mainApp');
 
-app.service('Firmware', ['Utils','Messages','Session',
+app.service('Firmware', ['Utils','Messages','Session','$rootScope',
 
-  function(Utils,Message,Session) {
+  function(Utils,Message,Session,$rootScope) {
 
     this.enroll = function(dni, callbackOk, callbackError) {
       var msg = {
@@ -25,6 +25,7 @@ app.service('Firmware', ['Utils','Messages','Session',
 
     this.sendCode = function(code, password, callbackOk, callbackError) {
       callbackOk('admin');
+      $rootScope.$broadcast('identifiedEvent');
     }
 
 
