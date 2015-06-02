@@ -15,6 +15,12 @@ app.config(['$routeProvider', function($routeProvider) {
     controller: 'EnrollCtrl'
   })
 
+
+  .when('/log', {
+    templateUrl: '/modules/systems/firmware/log.html',
+    controller: 'LogCtrl'
+  })
+
   .otherwise({
       redirectTo: '/firmware'
   });

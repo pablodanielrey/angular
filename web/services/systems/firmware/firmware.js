@@ -12,7 +12,7 @@ app.service('Firmware', ['Utils','Messages','Session','$rootScope',
           dni: dni
         }
       }
-
+      /*
       Messages.send(msg,
         function(data) {
           if (typeof data.error === 'undefined') {
@@ -20,12 +20,17 @@ app.service('Firmware', ['Utils','Messages','Session','$rootScope',
           } else {
             callbackError(data.error)
           }
-        });
+      });
+      */
+
+      $rootScope.$broadcast('MsgEvent',null);
     }
 
     this.sendCode = function(code, password, callbackOk, callbackError) {
       callbackOk('admin');
-      $rootScope.$broadcast('identifiedEvent');
+      var data = {};
+      data.user = {name:'Emanuel',lastname:'Pais',dni:code};
+      $rootScope.$broadcast('identifiedEvent',data);
     }
 
 
