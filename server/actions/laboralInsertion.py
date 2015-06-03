@@ -149,10 +149,10 @@ class GetLaboralInsertionData:
             if len(l['degrees']) > 0:
                 for d in l['degrees']:
                     vaux = list(v)
-                    vaux.append(d['name'])
-                    vaux.append(d['courses'])
-                    vaux.append(d['average2'])
-                    vaux.append(d['average1'])
+                    vaux.append(d['name'] if d['name'] else '')
+                    vaux.append(d['courses'] if d['courses'] else '')
+                    vaux.append(d['average2'] if d['average2'] else '')
+                    vaux.append(d['average1'] if d['average1'] else '')
 
                     workType = d['work_type']
                     if 'intership' in workType:
