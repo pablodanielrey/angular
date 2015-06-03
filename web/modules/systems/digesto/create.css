@@ -101,19 +101,15 @@ i {
 .nuevasSolicitudes {
   transform: translate3d(0,-230px,0);
   -webkit-transition: all 0.2s ease-in-out;
-  transition-duration: 0.5s;
-  opacity: 0.5;
-  transition-property: opacity;
-  transition-duration: 3s, 5s;
+
 
 
 }
 
 .ocultarNuevasSolicitudes {
-  display: none;
-  /*transform: translate3d(0,250px,0);
-  -webkit-transition: all 0.2s ease-in-out;*/
-
+  
+  transform: translate3d(0,0,0);
+  opacity: 0;
 }
 
 /*NUEVA ORDENZA*/
@@ -126,7 +122,7 @@ i {
   flex-direction:row;
   -webkit-flex-direction:row; /* Safari */
   -moz-flex-direction:row; /* mozilla */
-  align-items:center;
+
 
 }
 .nuevaOrdenza {
@@ -150,4 +146,28 @@ i {
 
   margin-right:5px;
   border:1px solid #ECECEC;
+}
+
+.newOrdenanza {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: baseline;
+  -webkit-align-items:baseline; /* Safari */
+  -moz-align-items:baseline; /* mozilla */
+
+
+}
+
+.expediente {
+  display:flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+
 }
