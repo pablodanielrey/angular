@@ -53,8 +53,8 @@ i {
   -webkit-flex-direction:column; /* Safari */
   -moz-flex-direction:column; /* mozilla */
   align-items:center;
-  -webkit-align-items:column; /* Safari */
-  -moz-align-items:column; /* mozilla */
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
   border-radius:2px;
   -webkit-border-radius:2px;
   -moz-border-radius:2px;
@@ -107,7 +107,7 @@ i {
 }
 
 .ocultarNuevasSolicitudes {
-  
+
   transform: translate3d(0,0,0);
   opacity: 0;
 }
@@ -119,9 +119,9 @@ i {
   display:flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
-  flex-direction:row;
-  -webkit-flex-direction:row; /* Safari */
-  -moz-flex-direction:row; /* mozilla */
+  flex-direction:column;
+  -webkit-flex-direction:column; /* Safari */
+  -moz-flex-direction:column; /* mozilla */
 
 
 }
@@ -169,5 +169,83 @@ i {
   flex-direction:row;
   -webkit-flex-direction:row; /* Safari */
   -moz-flex-direction:row; /* mozilla */
+
+
+}
+.inputText1 {
+  font-size: 1.2em;
+  background-color: white;
+  padding: 3px;
+  width: 100%;
+  border:1px solid #b3b5bc;
+
+}
+
+
+.divText1 {
+  width: 3em;
+}
+.divText2 {
+  font-size: 0.8em;
+}
+.separador {
+  margin-left: 10px;
+  margin-right: 10px;
+  font-size: 1.2em;
+}
+
+.datos1 {
+  display:flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  margin-top: 25px;
+  justify-content: space-between;
+  -webkit-flex-justify-content: space-between;
+  -moz-flex-justify-content: space-between;
+  background-color: #d5dbdf;
+  padding: 10px;
+  border-bottom:3px solid #b3b5bc;
+
+}
+
+.datos2 {
+  display:flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:column;
+  -webkit-flex-direction:column; /* Safari */
+  -moz-flex-direction:column; /* mozilla */
+  margin-top: 20px;
+  background-color: #d5dbdf;
+  padding: 10px;
+  border-bottom:3px solid #b3b5bc;
+
+}
+
+.titulo {
+  display:flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  lign-items:center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+
+
+}
+.title {
+  margin: 10px;
+  margin-bottom: 10px;
+}
+.tam {
+  width: 50%;
+}
+p {
+  margin: 0px;
 
 }
