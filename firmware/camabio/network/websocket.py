@@ -7,7 +7,7 @@ from autobahn.twisted.websocket import WebSocketServerProtocol
 from autobahn.twisted.websocket import WebSocketServerFactory
 from twisted.python import log
 from twisted.internet import reactor
-
+from twisted.internet.defer import inlineCallbacks, returnValue
 
 from model.config import Config
 from model.utils import DateTimeEncoder
@@ -68,8 +68,10 @@ class ActionsServerProtocol(WebSocketServerProtocol):
         self.factory.broadcast(msg)
 
 
-
+    @inlineCallbacks
     def onMessage(self, payload, isBinary):
+
+        logging.debug('mensaje recibido')
 
         try:
             if isBinary:
@@ -97,9 +99,13 @@ class ActionsServerProtocol(WebSocketServerProtocol):
             try:
                 managed = False
                 for action in actions:
-                    managed = action.handleAction(self,message)
+                    logging.debug('ejecutando {}'.format(action))
+                    managed = yield action.handleAction(self,message)
+                    logging.debug('retorno {}'.format(managed))
                     if managed:
                         break
+
+                logging.debug('finalinzando ejecucion')
 
             except AccessDenied as e:
                 print(e.__class__.__name__ + ' ' + str(e))

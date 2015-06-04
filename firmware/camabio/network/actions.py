@@ -1,6 +1,8 @@
 import json, base64, datetime, traceback, logging
 import inject
 
+from twisted.internet.defer import inlineCallbacks, returnValue
+
 from model.exceptions import *
 
 from model.events import Events
@@ -43,6 +45,7 @@ class Enroll:
         )
 
 
+    @inlineCallbacks
     def handleAction(self, server, message):
 
         if (message['action'] != 'enroll'):
@@ -62,7 +65,7 @@ class Enroll:
 
 
         try:
-            requests = self.firmware.enroll(dni,
+            requests = yield self.firmware.enroll(dni,
                 lambda: self.requestFinger(server,1),
                 lambda: self.requestFinger(server,2),
                 lambda: self.requestFinger(server,3),
@@ -75,7 +78,7 @@ class Enroll:
             }
 
             server.sendMessage(response)
-            return True
+            returnValue(True)
 
         except Exception as e:
             server.sendError(message,e)
