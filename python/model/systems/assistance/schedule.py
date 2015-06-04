@@ -127,6 +127,9 @@ class Schedule:
                 assert st.tzinfo is not None
                 assert se.tzinfo is not None
 
+                logging.debug(st)
+                logging.debug(se)
+
 
                 """ retorno los schedules con la fecha actual en utc - las fechas en la base deber�an estar en utc """
                 schedules.append(
