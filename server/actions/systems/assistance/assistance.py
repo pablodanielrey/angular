@@ -14,6 +14,7 @@ from model.systems.assistance.assistance import Assistance
 from model.systems.assistance.fails import Fails
 from model.systems.assistance.logs import Logs
 from model.systems.assistance.schedule import Schedule
+from model.systems.assistance.checks import ScheduleChecks
 from model.systems.assistance.offices import Offices
 from model.systems.assistance.positions import Positions
 from model.systems.assistance.date import Date
@@ -53,6 +54,7 @@ class GetFailsByDate:
     assistance = inject.attr(Assistance)
     fails = inject.attr(Fails)
     dateutils = inject.attr(Date)
+    checks = inject.attr(ScheduleChecks)
 
     offices = inject.attr(Offices)
     schedule = inject.attr(Schedule)
@@ -94,7 +96,7 @@ class GetFailsByDate:
 
             authorizedUsers = [userId]
 
-            userIds = self.schedule.getUsersWithConstraints(con)
+            userIds = self.checks.getUsersWithConstraints(con)
             logging.debug('usuarios con chequeos : %s',(userIds,))
 
             offices = self.offices.getOfficesByUserRole(con,userId,tree=True,role='autoriza')
@@ -702,4 +704,3 @@ class NewSchedule:
 
         finally:
             con.close()
-            
