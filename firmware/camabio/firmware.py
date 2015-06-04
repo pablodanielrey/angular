@@ -7,6 +7,7 @@ import reader
 from template import Templates
 
 from model.config import Config
+from model.users.users import Users
 from model.systems.assistance.devices import Devices
 from model.systems.assistance.logs import Logs
 from model.systems.assistance.date import Date
@@ -14,6 +15,7 @@ from model.systems.assistance.date import Date
 class Firmware:
 
     reader = reader.getReader()
+    users = inject.attr(Users)
     config = inject.attr(Config)
     date = inject.attr(Date)
     logs = inject.attr(Logs)
@@ -44,7 +46,7 @@ class Firmware:
         if n:
             conn = self.__get_database()
 
-            """ se tiene la huella con el id, hay que asignarle le usuario """
+            """ se tiene la huella con el id, hay que asignarle el usuario """
             userId = None
             user = self.users.findUserByDni(self.conn,pin)
             if not user:
@@ -77,6 +79,8 @@ class Firmware:
                 }
                 self.logs.persist(self.conn,log)
                 conn.commit()
+
+                logging.debug('persona identificada {}'.format(log))
 
             else:
                 logging.critical('{} - huella identificada en el indice {}, pero no se encuentra ningún mapeo con un usuario'.format(self.date.now(),h))

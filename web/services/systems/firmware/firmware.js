@@ -2,7 +2,7 @@ var app = angular.module('mainApp');
 
 app.service('Firmware', ['Utils','Messages','Session','$rootScope',
 
-  function(Utils,Message,Session,$rootScope) {
+  function(Utils,Messages,Session,$rootScope) {
 
     this.enroll = function(dni, callbackOk, callbackError) {
       var msg = {
@@ -12,7 +12,7 @@ app.service('Firmware', ['Utils','Messages','Session','$rootScope',
           dni: dni
         }
       }
-      /*
+
       Messages.send(msg,
         function(data) {
           if (typeof data.error === 'undefined') {
@@ -21,12 +21,9 @@ app.service('Firmware', ['Utils','Messages','Session','$rootScope',
             callbackError(data.error)
           }
       });
-      */
-
-      $rootScope.$broadcast('MsgEvent',null);
     }
 
-    this.sendCode = function(code, password, callbackOk, callbackError) {
+    this.identify = function(code, password, callbackOk, callbackError) {
       callbackOk('admin');
       var data = {};
       data.user = {name:'Emanuel',lastname:'Pais',dni:code};

@@ -51,16 +51,15 @@ app.service('WebSocket', function($rootScope, Config) {
 			if($rootScope.socket == null){
 				return false;
 			}
-			
+
 			return ($rootScope.socket.readyState == 1);
-			
 		}
-		
+
 		this.isConnecting = function() {
 			if($rootScope.socket == null){
 				return false;
 			}
-			
+
 			return ($rootScope.socket.readyState == 0);
 		}
 
@@ -71,7 +70,7 @@ app.service('WebSocket', function($rootScope, Config) {
 				$rootScope.$on('onSocketOpened',function(event,data){
 					$rootScope.socket.send(msg);
 			    });
-			} 
+			}
 		}
 
 		this.close = function() {

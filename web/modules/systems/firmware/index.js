@@ -187,7 +187,7 @@ app.controller("MainFirmwareCtrl", ['$rootScope','$scope','$timeout','$location'
    }
 
    $scope.enterPassword = function() {
-    Firmware.sendCode($scope.model.code,$scope.model.password,
+    Firmware.identify($scope.model.code,$scope.model.password,
       function(response) {
 
       },

@@ -17,15 +17,34 @@ from model.config import Config
 class Reader:
 
     def start(self):
-        pass
+        logging.debug('Reader Start')
 
     def stop(self):
-        pass
+        logging.debug('Reader Stop')
 
     def identify(self):
-        return None
+        logging.debug('reader identify')
 
     def enroll(self, need_first=None, need_second=None, need_third=None, need_release=None):
+
+        if need_first is not None:
+            need_first()
+            time.sleep(5)
+            if need_release is not None:
+                need_release()
+
+        if need_second is not None:
+            need_second()
+            time.sleep(5)
+            if need_release is not None:
+                need_release()
+
+        if need_third is not None:
+            need_third()
+            time.sleep(5)
+            if need_release is not None:
+                need_release()
+
         return (None,None)
 
 
