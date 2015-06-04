@@ -62,13 +62,23 @@ class BSJustification(Justification):
 
       requestJustifications = cur.fetchall();
 
-
       for rj in requestJustifications:
         sch = Schedule()
         schedule = sch.getSchedule(con, userId, rj[0])
-        print(schedule)
+        for log in schedule:
+          print("aaaaaaaaaaaaaaaaaa")
+          print(log["start"])
+          print(log["end"])          
+          print(rj[0])
+          print(rj[1])
+          if log["start"] <= rj[0] and log["end"] >= rj[1]:
+            print("log related")
+            logRelated = log
+            break
+            
         
-      return cur.rowcount * 2000
+        
+      return cur.rowcount * 20000
 
     """
      " Calcular stock anual
@@ -79,7 +89,7 @@ class BSJustification(Justification):
       if len(justStatus) <= 0:
         _availableRep(self,Repetition.YEARLY,userId,date);
       
-      return 1000
+      return 10000
        
 
 
