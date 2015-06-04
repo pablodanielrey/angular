@@ -2,6 +2,7 @@
 import calendar, datetime, logging, uuid
 
 from model.systems.assistance.justifications.justification import Justification, Repetition
+from model.systems.assistance.schedule import Schedule
 from model.systems.assistance.justifications.exceptions import *
 
 
@@ -25,57 +26,61 @@ class BSJustification(Justification):
         period = 'MONTH|YEAR|WEEK'
     """
     def available(self,utils,con,userId,date,period=None):
+      date = datetime.datetime(2015, 5, 15)
+      if period == 'YEAR':
+        return self._availableYear(utils,con,userId,date)
+      else:
+        return self._availableMonth(utils,con,userId,date)
 
 
-        justStatus = utils._getJustificationsInStatus(con,['PENDING','APPROVED'])
-        if len(justStatus) <= 0:
-            """ no se tomo ninguna todavia """
-            if period is None:
-                return self._availableRep(Repetition.DAILY,userId,date)
-            elif period == 'WEEK':
-                return self._availableRep(Repetition.WEEKLY,userId,date)
-            elif period == 'MONTH':
-                return self._availableRep(Repetition.MONTHLY,userId,date)
-            elif period == 'YEAR':
-                return self._availableRep(Repetition.YEARLY,userId,date)
+    """
+     " Calcular stock mensual
+     """
+    def _availableMonth(self,utils,con,userId,date):
+      ##### chequeo rapido inicial: Se verifican si existen solicitudes de justificaciones pendientes o aprobadas #####
+      justStatus = utils._getJustificationsInStatus(con,['PENDING','APPROVED'])
+      if len(justStatus) <= 0:
+        return _availableRep(self,Repetition.MONTH,userId,date);
+      
+      ##### consultar solicitudes de justificaciones del usuario en el mes #####
+      justIds = tuple(justStatus.keys())
 
-        justIds = tuple(justStatus.keys())
+      cur = con.cursor()
+      req = (self.id, userId, justIds, date, date)
+      cur.execute("""
+        SELECT jbegin,jend 
+        FROM assistance.justifications_requests 
+        WHERE justification_id = %s 
+        AND user_id = %s 
+        AND id IN %s 
+        AND extract(year from jbegin) = extract(year from %s) 
+        AND extract(month from jbegin) = extract(month from %s)
+      """,req)
+      
+      if(cur.rowcount <= 0):
+        return _availableRep(self,Repetition.MONTH,userId,date);
 
-        cur = con.cursor()
-        req = (self.id, userId, justIds, date, date)
-        cur.execute('select jbegin,jend from assistance.justifications_requests where justification_id = %s and user_id = %s and id in %s and extract(year from jbegin) = extract(year from %s) and extract(month from jbegin) >= extract(month from %s)',req)
-        takenInRestOfYear = cur.rowcount
-
-        if takenInRestOfYear <= 0:
-            """ no se tomo ninguna todavia """
-            if period is None:
-                return self._availableRep(Repetition.DAILY,userId,date)
-            elif period == 'WEEK':
-                return self._availableRep(Repetition.WEEKLY,userId,date)
-            elif period == 'MONTH':
-                return self._availableRep(Repetition.MONTHLY,userId,date)
-            elif period == 'YEAR':
-                return self._availableRep(Repetition.YEARLY,userId,date)
-
-
-        datesC = cur.fetchall()
-        dates = map(lambda x: x[0],datesC)
-        sameMonthDates = self._filterInSameMonth(date,dates)
-
-        secondsInYear = 0
-        secondsInMonth = 0
-        for bs in datesC:
-            secondsInYear = secondsInYear + (bs[1]-bs[0]).total_seconds()
-            if bs[0] in sameMonthDates:
-                secondsInMonth = secondsInMonth + (bs[1]-bs[0]).total_seconds()
+      requestJustifications = cur.fetchall();
 
 
-        if period == 'YEAR':
-            return self._availableRep(Repetition.YEARLY,userId,date) - secondsInYear
+      for rj in requestJustifications:
+        sch = Schedule()
+        schedule = sch.getSchedule(con, userId, rj[0])
+        print(schedule)
+        
+      return cur.rowcount * 2000
 
-        available = self._availableRep(Repetition.MONTHLY,userId,date) - secondsInMonth
-        return available
-
+    """
+     " Calcular stock anual
+     """      
+    def _availableYear(self,utils,con,userId,date):
+      ##### chequeo rapido inicial: Se verifican si existen solicitudes de justificaciones pendientes o aprobadas #####
+      justStatus = utils._getJustificationsInStatus(con,['PENDING','APPROVED'])
+      if len(justStatus) <= 0:
+        _availableRep(self,Repetition.YEARLY,userId,date);
+      
+      return 1000
+       
 
 
     """ retorna las disponibles por restricciones en la fecha date """
