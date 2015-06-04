@@ -15,6 +15,7 @@ from model.systems.assistance.fails import Fails
 from model.systems.assistance.logs import Logs
 from model.systems.assistance.date import Date
 from model.systems.assistance.schedule import Schedule
+from model.systems.assistance.checks import ScheduleChecks
 from model.systems.assistance.justifications.justifications import Justifications
 
 class Assistance:
@@ -25,7 +26,7 @@ class Assistance:
     schedule = inject.attr(Schedule)
     users = inject.attr(Users)
     justifications = inject.attr(Justifications)
-
+    checks = inject.attr(ScheduleChecks)
 
 
     """
@@ -300,6 +301,8 @@ class Assistance:
         return self._exportToOds(odata)
 
 
+
+
     """
         chequea el schedule de los usuarios pasados como parametro.
         las fechas start y end son aware
@@ -320,7 +323,7 @@ class Assistance:
             for u in userIds:
                 logging.debug('chequeando usuario %s',(u,))
                 users.append(self.users.findUser(con,u))
-                schedulesFails.extend(self.schedule.checkConstraints(con,u,start,end))
+                schedulesFails.extend(self.checks.checkConstraints(con,u,start,end))
 
             return (users,schedulesFails)
 
