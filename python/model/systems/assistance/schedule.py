@@ -121,6 +121,13 @@ class Schedule:
                 st = actualZero + initDelta
                 se = actualZero + endDelta
 
+
+
+                """ me aseguro de que las fechas tengan si o si un timezone """
+                assert st.tzinfo is not None
+                assert se.tzinfo is not None
+
+
                 """ retorno los schedules con la fecha actual en utc - las fechas en la base deber�an estar en utc """
                 schedules.append(
                     {
