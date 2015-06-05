@@ -121,7 +121,7 @@ body {
 }
 .inputText2 {
 
-  height: 200px;
+  height: 80px;
   font-size: 1.2em;
   background-color: white;
   padding: 3px;
@@ -158,13 +158,21 @@ body {
   border-bottom:3px solid #b3b5bc;
 
 }
+.contIzq {
+  width: 50%;
+
+}
+
+.contDer {
+  width: 50%;
+}
 
 .title {
   margin: 10px;
   margin-bottom: 10px;
 }
 .tam {
-  width: 50%;
+  width: 100%;
 }
 p {
   margin: 0px;

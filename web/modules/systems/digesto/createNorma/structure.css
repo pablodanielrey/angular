@@ -76,12 +76,28 @@ body {
   display:flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+
+}
+
+.contIzq {
+  display:flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
   flex-direction:column;
   -webkit-flex-direction:column; /* Safari */
   -moz-flex-direction:column; /* mozilla */
 
 }
-.titulo {
 
+.contDer {
+  display:flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:column;
+  -webkit-flex-direction:column; /* Safari */
+  -moz-flex-direction:column; /* mozilla */
 
 }
