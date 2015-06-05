@@ -5,7 +5,9 @@ import logging
 
 from model.exceptions import *
 
+from model import utils
 from model.systems.assistance.date import Date
+from model.systems.assistance.logs import Logs
 from model.systems.assistance.schedule import Schedule
 from model.systems.assistance.justifications.justifications import Justifications
 
@@ -15,6 +17,7 @@ class ScheduleChecks:
     date = inject.attr(Date)
     schedule = inject.attr(Schedule)
     justifications = inject.attr(Justifications)
+    logs = inject.attr(Logs)
 
 
     """
@@ -137,7 +140,7 @@ class ScheduleChecks:
                 continue
 
             actualUtc = self.date.awareToUtc(actual)
-            scheds = self.getSchedule(con,userId,actualUtc)
+            scheds = self.schedule.getSchedule(con,userId,actualUtc)
             if (scheds is None) or (len(scheds) <= 0):
                 """ no tiene horario declarado asi que no se chequea nada """
                 actual = nextDay
@@ -299,7 +302,7 @@ class ScheduleChecks:
     def checkSchedule(self,con,userId,date):
         date = self.date.awareToUtc(date)
 
-        schedules = self.getSchedule(con,userId,date)
+        schedules = self.schedule.getSchedule(con,userId,date)
         logs = self.schedule.getLogsForSchedule(con,userId,date)
         whs,attlogs = self.logs.getWorkedHours(logs)
         controls = list(utils.combiner(schedules,whs))
