@@ -9,6 +9,12 @@ from twisted.python import log
 from twisted.internet import reactor
 from twisted.internet.defer import inlineCallbacks, returnValue
 
+#http://code.activestate.com/recipes/439358-twisted-from-blocking-functions-to-deferred-functi/
+from twisted.internet.threads import deferToThread
+deferred = deferToThread.__get__
+
+
+
 from model.config import Config
 from model.utils import DateTimeEncoder
 
@@ -28,6 +34,10 @@ actions = [
 ]
 
 
+""" la transformo en un deferred para que sea procesada en otro thread """
+@deferred
+def dispatch(protocol,message):
+    protocol.dispatch(message)
 
 
 class ActionsServerProtocol(WebSocketServerProtocol):
@@ -67,8 +77,19 @@ class ActionsServerProtocol(WebSocketServerProtocol):
         msg = self._encodeMessage(msg)
         self.factory.broadcast(msg)
 
+    def dispatch(self,message):
+        managed = False
+        for action in actions:
+            logging.debug('ejecutando {}'.format(action))
+            managed = action.handleAction(self,message)
+            logging.debug('retorno {}'.format(managed))
+            if managed:
+                break
 
-    @inlineCallbacks
+        logging.debug('finalinzando ejecucion')
+
+
+
     def onMessage(self, payload, isBinary):
 
         logging.debug('mensaje recibido')
@@ -97,30 +118,18 @@ class ActionsServerProtocol(WebSocketServerProtocol):
 
 
             try:
-                managed = False
-                for action in actions:
-                    logging.debug('ejecutando {}'.format(action))
-                    managed = yield action.handleAction(self,message)
-                    logging.debug('retorno {}'.format(managed))
-                    if managed:
-                        break
-
-                logging.debug('finalinzando ejecucion')
+                dispatch(self,message)
 
             except AccessDenied as e:
                 print(e.__class__.__name__ + ' ' + str(e))
                 traceback.print_exc()
                 self.sendError(message,e)
-                managed = True
 
             except Exception as e:
                 print(e.__class__.__name__ + ' ' + str(e))
                 traceback.print_exc()
                 self.sendError(message,e)
                 raise e
-
-            if not managed:
-                raise NotImplemented(message['action'])
 
         except Exception as e:
             print(e.__class__.__name__ + ' ' + str(e))

@@ -45,7 +45,6 @@ class Enroll:
         )
 
 
-    @inlineCallbacks
     def handleAction(self, server, message):
 
         if (message['action'] != 'enroll'):
@@ -65,7 +64,7 @@ class Enroll:
 
 
         try:
-            requests = yield self.firmware.enroll(dni,
+            requests = self.firmware.enroll(dni,
                 lambda: self.requestFinger(server,1),
                 lambda: self.requestFinger(server,2),
                 lambda: self.requestFinger(server,3),
@@ -78,7 +77,7 @@ class Enroll:
             }
 
             server.sendMessage(response)
-            returnValue(True)
+            return True
 
         except Exception as e:
             server.sendError(message,e)
