@@ -7,7 +7,6 @@ from autobahn.twisted.websocket import WebSocketServerProtocol
 from autobahn.twisted.websocket import WebSocketServerFactory
 from twisted.python import log
 from twisted.internet import reactor
-from twisted.internet.defer import inlineCallbacks, returnValue
 
 #http://code.activestate.com/recipes/439358-twisted-from-blocking-functions-to-deferred-functi/
 from twisted.internet.threads import deferToThread
@@ -34,10 +33,14 @@ actions = [
 ]
 
 
+
 """ la transformo en un deferred para que sea procesada en otro thread """
 @deferred
 def dispatch(protocol,message):
     protocol.dispatch(message)
+
+def sendMessage(protocol,message):
+    protocol.sendMessage(message,False)
 
 
 class ActionsServerProtocol(WebSocketServerProtocol):
@@ -57,8 +60,8 @@ class ActionsServerProtocol(WebSocketServerProtocol):
     def _sendEncodedMessage(self,msg):
         if (len(msg) < 1024):
             logging.debug('server -> cliente {}'.format(msg))
-        super(WebSocketServerProtocol,self).sendMessage(msg,False)
-
+            """ super(WebSocketServerProtocol,self).sendMessage(msg,False)"""
+            reactor.callFromThread(sendMessage,super(WebSocketServerProtocol,self),msg)
 
 
     def sendException(self,e):
@@ -69,6 +72,7 @@ class ActionsServerProtocol(WebSocketServerProtocol):
         mmsg = {'id':msg['id'],'error':e.__class__.__name__}
         self.sendMessage(mmsg)
 
+
     def sendMessage(self,msg):
         ejmsg = self._encodeMessage(msg)
         self._sendEncodedMessage(ejmsg)
@@ -76,6 +80,9 @@ class ActionsServerProtocol(WebSocketServerProtocol):
     def broadcast(self,msg):
         msg = self._encodeMessage(msg)
         self.factory.broadcast(msg)
+
+
+
 
     def dispatch(self,message):
         managed = False
