@@ -123,7 +123,6 @@ class ActionsServerProtocol(WebSocketServerProtocol):
                 sid = message['session']
                 self.session.touch(sid)
 
-
             try:
                 dispatch(self,message)
 
