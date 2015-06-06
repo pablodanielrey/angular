@@ -1,0 +1,72 @@
+*{
+    margin: 0px;
+    padding: 0px;
+  }*
+
+
+.sMenu {
+      margin: 10px;
+      display: flex; /* Chrome */
+      flex-direction: row; /*direccion fila*/
+      flex-flow: row wrap; /*los elementos hijo pueden ubicarse en varias filas*/
+		}
+
+.sMenu li { /*todo li dentro el objeto .sMenu toma estos atributos*/
+      margin: 10px;
+      width: 200px;
+      flex:auto;
+		}
+
+.sMenu li img {/*todo objeto img dentro de .sMenu li toma estos atributos*/
+		  width: 100%;
+		  height: auto;
+		}
+
+.sMenu li:hover {/*opacidad al pararme sobre un boton*/
+
+		}
+
+@media screen and (max-width: 720px) { /*si el ancho es menos que 720px*/
+		  .sMenu li { margin: 5px; }
+		}
+
+@media all and (orientation:portrait) { /*posicion horizontal de la ventana*/
+     .sMenu { padding: 1px;}
+    }
+
+@media all and (orientation:landscape) { /*posicion vertical de la ventana*/
+     .sMenu { padding: 1px;}
+    }
+
+
+.sContent {
+      visibility: visible;
+      margin: 10px;
+      display: flex; /* Chrome */
+      flex-direction: row; /*direccion fila*/
+      flex-flow: row wrap; /*los elementos hijo pueden ubicarse en varias filas*/
+    }
+
+.sContent div { /*todo div dentro el objeto .sContent toma estos atributos*/
+      margin: 10px;
+      width: 200px;
+      flex:auto;
+    }
+
+.sContent div img {/*todo objeto img dentro de .sContent div toma estos atributos*/
+      width: 100%;
+      height: auto;
+    }
+
+
+@media screen and (max-width: 720px) { /*si el ancho es menos que 720px*/
+      .sContent div { margin: 5px; }
+    }
+
+@media all and (orientation:portrait) { /*posicion vertical de la ventana*/
+     .sContent { padding: 1px; }
+    }
+
+@media all and (orientation:landscape) { /*posicion horizontal de la ventana*/
+     .sContent { padding: 1px; visibility: hidden;}
+    }

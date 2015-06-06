@@ -1,0 +1,57 @@
+body {
+      background: SlateBlue;
+		}
+
+.vMenu {
+      list-style:none;
+      background: DarkOrange;
+		}
+
+.vMenu li { /*todo li dentro el objeto .vMenu toma estos atributos*/
+      background: red;
+		}
+
+.vMenu li img {/*todo objeto img dentro de .vMenu li toma estos atributos*/
+      background: DarkGoldenRod;
+		}
+
+.vMenu li:hover {/*opacidad al pararme sobre un boton*/
+      opacity: .8;
+		}
+
+@media screen and (max-width: 720px) { /*si el ancho es menos que 720px*/
+
+		}
+
+@media all and (orientation:portrait) { /*posicion horizontal de la ventana*/
+     .vMenu { background: yellow;}
+    }
+
+@media all and (orientation:landscape) { /*posicion vertical de la ventana*/
+     .vMenu { background: white;}
+    }
+
+.vContent {
+      background: DarkOrange;
+    }
+
+.vContent div { /*todo div dentro el objeto .Content toma estos atributos*/
+      background: red;
+    }
+
+.vContent div img {/*todo objeto img dentro de .Content div toma estos atributos*/
+      background: DarkGoldenRod;
+    }
+
+
+@media screen and (max-width: 720px) { /*si el ancho es menos que 720px*/
+
+    }
+
+@media all and (orientation:portrait) { /*posicion horizontal de la ventana*/
+     .vContent { background: yellow;}
+    }
+
+@media all and (orientation:landscape) { /*posicion vertical de la ventana*/
+     .vContent { background: white;}
+    }
