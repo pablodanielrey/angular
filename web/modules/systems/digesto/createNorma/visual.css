@@ -1,7 +1,8 @@
 *{
-margin: 0px;
-padding: 0px;
-  }*
+  margin: 0px;
+  padding: 0px;
+}
+
 .createNorma {
   max-width:1200px;
   min-width: 1000px;
@@ -215,6 +216,7 @@ p {
 
 
 }
+
 .enviarOrdenanza:hover {
   background-color:#ec9122;
   color:white;
@@ -235,6 +237,7 @@ p {
   -moz-border-radius:2px;
   margin:20px;
 }
+
 .datos3 {
   color: white;
 
