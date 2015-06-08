@@ -19,39 +19,34 @@
 
 		}
 
-@media all and (orientation:portrait) { /*posicion horizontal de la ventana*/
+@media all and (orientation:portrait) { /*posicion vertical de la ventana*/
 
     }
 
-@media all and (orientation:landscape) { /*posicion vertical de la ventana*/
+@media all and (orientation:landscape) { /*posicion horizontal de la ventana*/
 
     }
 
 
 
 
-.nGaleria {
+.nContent {
 
     }
 
-.nGaleria div { /*todo div dentro el objeto .galeria toma estos atributos*/
+.nContent div { /*todo div dentro el objeto .Content toma estos atributos*/
 
 
     }
-
-.nGaleria div img {/*todo objeto img dentro de .galeria div toma estos atributos*/
-
-    }
-
 
 @media screen and (max-width: 720px) { /*si el ancho es menos que 720px*/
 
     }
 
-@media all and (orientation:portrait) { /*posicion horizontal de la ventana*/
-
+@media all and (orientation:portrait) { /*posicion vertical de la ventana*/
+			.nContent.sContent.vContent { visibility: hidden;}
     }
 
-@media all and (orientation:landscape) { /*posicion vertical de la ventana*/
+@media all and (orientation:landscape) { /*posicion horizontal de la ventana*/
 
     }

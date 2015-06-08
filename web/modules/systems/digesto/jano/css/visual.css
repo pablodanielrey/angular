@@ -1,10 +1,10 @@
 body {
-      background: SlateBlue;
+      background: blue;
 		}
 
 .vMenu {
       list-style:none;
-      background: DarkOrange;
+      background: orange;
 		}
 
 .vMenu li { /*todo li dentro el objeto .vMenu toma estos atributos*/
@@ -12,7 +12,7 @@ body {
 		}
 
 .vMenu li img {/*todo objeto img dentro de .vMenu li toma estos atributos*/
-      background: DarkGoldenRod;
+      background: green;
 		}
 
 .vMenu li:hover {/*opacidad al pararme sobre un boton*/
@@ -23,11 +23,11 @@ body {
 
 		}
 
-@media all and (orientation:portrait) { /*posicion horizontal de la ventana*/
+@media all and (orientation:portrait) { /*posicion vertical de la ventana*/
      .vMenu { background: yellow;}
     }
 
-@media all and (orientation:landscape) { /*posicion vertical de la ventana*/
+@media all and (orientation:landscape) { /*posicion horizontal de la ventana*/
      .vMenu { background: white;}
     }
 
@@ -39,7 +39,7 @@ body {
       background: red;
     }
 
-.vContent div img {/*todo objeto img dentro de .Content div toma estos atributos*/
+.vContent div {/*todo objeto img dentro de .Content div toma estos atributos*/
       background: DarkGoldenRod;
     }
 
