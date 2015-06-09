@@ -61,13 +61,13 @@ class BSJustification(Justification):
 
         schedule = Schedule()
         userSchedule = schedule.getSchedule(con, userId, rj[0])
-        for schLog in userSchedule:
+        for index, usrSch in enumerate(userSchedule):
           if (stock <= 0):
             break;
             
           #si existe un schLog asociado al rj se deben verificar los logs realizados por el usuario para efectuar el calculo
-          if schLog["start"] <= rj[0] and schLog["end"] >= rj[1]:
-            stock = self._getStockFromLogs(stock, rj, schLog, userSchedule);
+          if usrSch["start"] <= rj[0] and usrSch["end"] >= rj[1]:
+            stock = self._getStockFromLogs(con, userId, stock, rj, index, userSchedule);
 
           #si no existe un schLog asociado al rj se resta del stock las fechas del rj
           else:
@@ -75,6 +75,8 @@ class BSJustification(Justification):
           
 
       return stock
+
+
 
 
     """
@@ -96,18 +98,55 @@ class BSJustification(Justification):
      
     """
      " Calcular stock a partir de un valor inicial y el chequeo del logs
+     " @param con Conexion
+     " @param userId Id de usuario
+     " @param stock Stock inicial
+     " @param requestedJustification Solicitud de justificacion
+     " @param schLogIndex indice del schedule asociado a la requestedJustification
+     " @param userSchedule schedule del usuario
     """
-    def _getStockFromLogs(self, stock, rj, schLog, userSchedule):
-      #obtener fechas mas inicial y fecha mas final del userSchedule
-      #calcular logs totales en base a los schedules     
-      #consultar logs a traves de la fecha inicial y fecha mas final
-      #...
+    def _getStockFromLogs(self, con, userId, stock, rj, schIndex, userSchedule):     
+      #definir cantidad de "user worked hours" que deberia tener el usuario
+      uwhLen = len(userSchedule)
+      if isRequestedJustificationBetweenWorkedHour(rj, userSchedule[schIndex]):
+        uwhLen += 1
       
+      #obtener fechas mas inicial y mas final del userSchedule (se supone que el userSchedule esta ordenado!)
+      start = userSchedule[0]["start"]
+      end = userSchedule[len(userSchedule)-1]["end"]
+
+      logs = Logs()      
+      userLogs = logs.findLogs(con, userId, start, end)
+      uwhInfo = logs.getWorkedHours(userLogs)
+      uwh = uwhInfo[0]
       
+      if uwhLen != len(uwh):
+        return  self._getStockFromDates(stock, rj[0], rj[1])
+       
+      #definir fechas para calculo del tiempo trabajado en la worked hour correspondiente
+      if isRequestedJustificationBetweenWorkedHour(rj, userSchedule[schIndex]):
+        bsStart = uwh[schIndex]["end"]
+        bsEnd =  uwh[schIndex+1]["start"]
+      else:
+        if(es igual al start):
+          bsStart = uwh[schIndex]["end"]
+          bsEnd =  userSchedule[schIndex]["end"]
+        else:
+          bsStart = userSchedule[schIndex]["start"]
+          bsEnd =  uwh[schIndex]["start"]
+        
+        
+        
+
       
-      logs = Logs()
     
       return 1000
+      
+    def _isRequestedJustificationBetweenWorkedHour(requestedJustification, workedHour):
+      if requestedJustification[0] != workedHour["start"] and requestedJustification[1] != workedHour["end"]:
+        return true
+        
+      return false
       
       
     """
