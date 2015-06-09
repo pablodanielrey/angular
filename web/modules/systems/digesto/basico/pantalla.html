@@ -15,25 +15,25 @@
 
 <body ng-controller='pantallaCtrl'>
 
-    {{pantallaActual}}
+
 
     <div class="contenedor">
 
-        <div class="contenido1" ng-class="{true:'clickButton',false:''}[pantallaActual >= 0]">
+        <div class="contenido1" ng-class="{true:'',false:''}[pantallaActual >= -1]">
             <button ng-click="siguiente()">Boton 1 </button>
             <button>Boton 2</button>
             <button>Boton 3</button>
         </div>
 
-        <div class="contenido2" ng-class="{true:'clickButton2',false:''}[pantallaActual >= 1]">
+        <div class="contenido2" ng-class="{true:'clickButton2',false:''}[pantallaActual >= 0]">
             <input type="text"> Texto 1</input>
             <input type="text"> Texto 2</input>
             <input type="text"> Texto 3</input>
             <button ng-click='siguiente()'>Continuar</button>
-            <button>Cancelar</button>
+            <button ng-click='finalizar()'>Cancelar</button>
         </div>
 
-        <div class="contenido3" ng-class="{true:'clickButton2',false:''}[pantallaActual >= 2]">
+        <div class="contenido3" ng-class="{true:'clickButton3',false:''}[pantallaActual >= 1]">
             <p>Solicitud Realizada Correctamente</p>
             <button ng-click='finalizar()'>finalizar</button>
             <button ng-click='volver()'>Volver</button>
