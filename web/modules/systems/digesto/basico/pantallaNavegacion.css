@@ -1,0 +1,11 @@
+.contenido1 {
+  transform: translate3d(0,0,0);
+  -moz-transform: translate3d(0,0,0);
+  -webkit-transition: all 0.2s;
+  -moz-transition: all 0.2s;
+}
+
+.clickButton {
+  transform: translate3d(0,-250px,0);
+  -moz-transform: translate3d(0,-250px,0);
+}

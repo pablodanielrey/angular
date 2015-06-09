@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app='pantallaApp'>
 <head>
     <title>:: Pantalla :: </title>
     <meta charset="utf-8" />
@@ -13,27 +13,30 @@
     <script type="text/javascript" src="pantalla.js"></script>
 </head>
 
-<body>
+<body ng-controller='pantallaCtrl'>
+
+    {{pantallaActual}}
 
     <div class="contenedor">
 
-        <div class="contenido1">
-            <button>Boton 1</button>
+        <div class="contenido1" ng-class="{true:'clickButton',false:''}[pantallaActual >= 0]">
+            <button ng-click="siguiente()">Boton 1 </button>
             <button>Boton 2</button>
             <button>Boton 3</button>
         </div>
 
-        <div class="contenido2">
+        <div class="contenido2" ng-class="{true:'clickButton2',false:''}[pantallaActual >= 1]">
             <input type="text"> Texto 1</input>
             <input type="text"> Texto 2</input>
             <input type="text"> Texto 3</input>
-            <button>Continuar</button>
+            <button ng-click='siguiente()'>Continuar</button>
             <button>Cancelar</button>
         </div>
 
-        <div class="contenido3">
+        <div class="contenido3" ng-class="{true:'clickButton2',false:''}[pantallaActual >= 2]">
             <p>Solicitud Realizada Correctamente</p>
-            <button>Volver</button>
+            <button ng-click='finalizar()'>finalizar</button>
+            <button ng-click='volver()'>Volver</button>
         </div>
 
     </div>

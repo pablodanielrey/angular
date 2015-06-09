@@ -7,19 +7,22 @@
   height: 100%;
   position: absolute;
   background-color:grey;
+  overflow-y: hidden;
 }
 
 .contenido1 {
-  
+  height: 33%;
   padding: 10px;
   background-color: blue;
 }
 
 .contenido2 {
+  height: 33%;
   padding: 10px;
   background-color: green;
 }
 .contenido3 {
+  height: 33%;
   padding: 10px;
   background-color: purple;
 }
