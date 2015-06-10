@@ -28,7 +28,7 @@ class BSJustification(Justification):
         period = 'MONTH|YEAR|WEEK'
     """
     def available(self,utils,con,userId,date,period=None):
-      date = datetime.datetime(2015, 5, 1) #dato de prueba para el mes anterior que tiene mas logs
+      #date = datetime.datetime(2015, 5, 1) #dato de prueba para el mes anterior que tiene mas logs
       if period == 'YEAR':
         return self._availableYear(utils,con,userId,date)
       else:
