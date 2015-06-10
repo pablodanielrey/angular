@@ -92,7 +92,7 @@ def copyjusts(src,dst):
 
 if __name__ == '__main__':
 
-    if len(sys.argv) < 15:
+    if len(sys.argv) < 11:
         logging.info('faltan argumentos')
         logging.info('python3 {} host-db-origen port-db-origen db-origen-user db-origen-pass db-orgien host-db-destino port-db-destino db-user-destino db-pass-destino db-destino'.format(sys.argv[0]))
         sys.exit(1)
