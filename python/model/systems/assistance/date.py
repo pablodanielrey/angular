@@ -42,10 +42,12 @@ class Date:
         return date.astimezone(pytz.utc)
 
 
+    """ retorna la fecha/hora en zona local """
     def now(self):
         date = datetime.datetime.now()
         return self.localizeLocal(date)
 
+    """ retorna la fecha/hora corregida y con zona utc """
     def utcNow(self):
         return datetime.datetime.now(pytz.utc)
 

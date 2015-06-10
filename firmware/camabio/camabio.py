@@ -1,7 +1,65 @@
-
+# -*- coding: utf-8 -*-
 import codecs
+from itertools import zip_longest
 
-""" setea el checksum en el paquete de datos """
+
+ERR_SUCCESS = 0x00
+ERR_FAIL = 0x01
+ERR_VERIFY = 0x11
+ERR_IDENTIFY = 0x12
+ERR_TMPL_EMPTY = 0x13
+ERR_TMPL_NOT_EMPTY = 0x14
+ERR_ALL_TMPL_EMPTY = 0x015
+ERR_EMPTY_ID_NOEXIST = 0x16
+ERR_BROKEN_ID_NOEXIST = 0x017
+ERR_INVALID_TMPL_DATA = 0x18
+ERR_DUPLICATION_ID = 0x19
+ERR_BAD_QUALITY = 0x21
+ERR_TIME_OUT = 0x23
+ERR_NOT_AUTHORIZED = 0x24
+ERR_GENERALIZE = 0x30
+ERR_FP_CANCEL = 0x41
+ERR_INTERNAL = 0x50
+ERR_MEMORY = 0x51
+ERR_EXCEPTION = 0x52
+ERR_INVALID_TMPL_NO = 0x60
+ERR_INVALID_SEC_VAL = 0x61
+ERR_INVALID_TIME_OUT = 0x62
+ERR_INVALID_BAUDRATE = 0x63
+ERR_DEVICE_ID_EMPTY = 0x64
+ERR_INVALID_DUP_VAL = 0x65
+ERR_INVALID_PARAM = 0x70
+ERR_NO_RELEASE = 0x71
+GD_DOWNLOAD_SUCCESS = 0xa1
+GD_NEED_FIRST_SWEEP = 0xfff1
+GD_NEED_SECOND_SWEEP = 0xfff2
+GD_NEED_THIRD_SWEEP = 0xfff3
+GD_NEED_RELEASE_FINGER = 0xfff4
+GD_DETECT_FINGER = 0x01
+GD_NO_DETECT_FINGER = 0x00
+GD_TEMPLATE_NOT_EMPTY = 0x01
+GD_TEMPLATE_EMPTY = 0x00
+
+
+"""
+    calcula el checksum de un template de acuerdo al manual de camabio
+    los 2 ultimos bytes del template son el checksum.
+    el checksum = d[0] + d[1] + .... + d[n - 1] + d[n]
+    leidos del lector los, el template esta formado por enteros de 2 bytes en little endian.
+    retorna :
+    (sumaCalculada,sumaDelTemplate)
+"""
+def calcCheckSumTemplate(template):
+    templ = zip_longest(*[iter(template[-2:])]*2,fillvalue=None)
+    s = 0
+    for b in templ:
+        s = s + int.from_bytes(b,byteorder='little')
+    s2 = int.from_bytes(template[-2:],byteorder='little')
+    return (s,s2)
+
+
+
+""" calcula el checksum en el paquete de datos """
 def calcChksum(data):
     sum = 0
     for i in range(len(data) - 2):
@@ -20,31 +78,75 @@ def verifyChksum(data):
     sum = calcChksum(data)
     l = len(data)
     sump = ((data[l - 1] << 8) + data[l - 2])
-    print('suma calculada %s' % sum)
-    print('suma del paquete %s' % sump)
     return (sum == sump)
 
 
-def arrayToHex(data):
-    return ''.join(format(x,'02x') for x in data[0:2])
+
+def getHex2(h):
+    return h.to_bytes(2,byteorder='little')
+
+"""
+    genera el paquete de comando.
+    toma los datos como enteros, en hex o en base10
+    ej :
+    createPackage(0x10a,0x2,datos)
+"""
+def createPackage(cmd,l,d):
+    pref = getHex2(0xaa55)
+    cmd = getHex2(cmd)
+    l = getHex2(l)
+    d = int(d).to_bytes(2,byteorder='little')
+    data = pref + cmd + l + d
+    data = list(data) + [0 for _ in range(24 - len(data))]
+    setChksum(data)
+    return data
 
 
-def printArray(data):
-    prefix = arrayToHex(data[0:2])
-    cmd = arrayToHex(data[2:4])
 
-    print('prefix {}\ncmd {}\n,data {}'.format(prefix,cmd,data))
+def getIntFromPackage(i,data):
+    t = data[i:i+2]
+    n = int.from_bytes(t,byteorder='little')
+    return n
+
+
+def extractResponseDataPackage(data):
+    r = {}
+    r['PREFIX'] = getIntFromPackage(0,data)
+    r['RCM'] = getIntFromPackage(2,data)
+    r['LEN'] = getIntFromPackage(4,data)
+    r['RET'] = getIntFromPackage(6,data)
+    r['DATA'] = data[8:len(data)-2]
+    r['CHKSUM'] = getIntFromPackage(len(data)-2,data)
+    return r
+
+
+
+
+
 
 
 """
-toHex = lambda x:''.join([hex(ord(c))[2:].zfill(2) for c in x])
-
-def printHexString(data):
-    h = toHex(data)
-    print(h)
+    ej:
+        getAttrFromPackage(CMD,pkg) --> 0x010a
 """
+PREFIX = 0
+CMD = 2
+RCM = 2
+LEN = 4
+PARAM = 6
+RET = 6
+DATA = 8
+CHKSUM = 22
 
-toHex = lambda x:''.join([hex(ord(c))[2:].zfill(2) for c in x])
+def getAttrFromPackage(att,data):
+    return getIntFromPackage(att,data)
 
-def printHexString(data):
-    print(codecs.encode(data,'hex'))
+
+def printPackage(data):
+    print('prefix {}, cmd {}, len {}, param {}, chksum {}'.format(
+        hex(getAttrFromPackage(PREFIX,data)),
+        hex(getAttrFromPackage(CMD,data)),
+        hex(getAttrFromPackage(LEN,data)),
+        getAttrFromPackage(PARAM,data),
+        hex(getAttrFromPackage(CHKSUM,data)))
+    )

@@ -1,0 +1,336 @@
+body {
+  background-color:black;
+}
+
+.index-container .hidden {
+  display:none;
+}
+
+
+.index-container {
+  width: 17em;
+  height: 17em;
+  position: relative;
+  margin: 0 auto 40px;
+  border: 1px solid #CCC;
+  display:flex;
+  flex-direction:column;
+}
+
+.index-container .keyboard-container {
+  height: 65%;
+  width: 100%;
+}
+
+
+.index-container .displayContainer {
+  height:30%;
+  width:100%;
+}
+
+/* -----------------------------------
+ * ------ MODO ADMINISTRADOR ---------
+ * -----------------------------------
+ */
+
+.index-container .mode-admin-container {
+  height: 5%;
+  min-height:2em;
+  color:white;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  border-top: 1px solid;
+}
+
+.index-container .mode-admin-container .label {
+  margin-right:0.5em;
+}
+
+.index-container .mode-admin-container .switch {
+  position: relative;
+  display: inline-block;
+  align-items: center;
+  vertical-align: top;
+  width: 56px;
+  height: 20px;
+  padding: 3px;
+  background-color: white;
+  border-radius: 18px;
+  box-shadow: inset 0 -1px white, inset 0 1px 1px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  background-image: -webkit-linear-gradient(top, #eeeeee, white 25px);
+  background-image: -moz-linear-gradient(top, #eeeeee, white 25px);
+  background-image: -o-linear-gradient(top, #eeeeee, white 25px);
+  background-image: linear-gradient(to bottom, #eeeeee, white 25px);
+}
+
+.index-container .mode-admin-container .switch-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+}
+
+.index-container .mode-admin-container .switch-label {
+  position: relative;
+  display: block;
+  height: inherit;
+  font-size: 10px;
+  text-transform: uppercase;
+  background: #eceeef;
+  border-radius: inherit;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.12), inset 0 0 2px rgba(0, 0, 0, 0.15);
+  -webkit-transition: 0.15s ease-out;
+  -moz-transition: 0.15s ease-out;
+  -o-transition: 0.15s ease-out;
+  transition: 0.15s ease-out;
+  -webkit-transition-property: opacity background;
+  -moz-transition-property: opacity background;
+  -o-transition-property: opacity background;
+  transition-property: opacity background;
+}
+
+.index-container .mode-admin-container .switch-label:before, .index-container .mode-admin-container .switch-label:after {
+  position: absolute;
+  top: 50%;
+  margin-top: -.5em;
+  line-height: 1;
+  -webkit-transition: inherit;
+  -moz-transition: inherit;
+  -o-transition: inherit;
+  transition: inherit;
+}
+
+.index-container .mode-admin-container .switch-label:before {
+  content: attr(data-off);
+  right: 11px;
+  color: #aaa;
+  text-shadow: 0 1px rgba(255, 255, 255, 0.5);
+}
+
+.index-container .mode-admin-container .switch-label:after {
+  content: attr(data-on);
+  left: 11px;
+  color: white;
+  text-shadow: 0 1px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+}
+
+.index-container .mode-admin-container .switch-input:checked ~ .switch-label {
+  background: #0066A6;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.15), inset 0 0 3px rgba(0, 0, 0, 0.2);
+}
+
+.index-container .mode-admin-container .switch-input:checked ~ .switch-label:before {
+  opacity: 0;
+}
+
+.index-container .mode-admin-container .switch-input:checked ~ .switch-label:after {
+  opacity: 1;
+}
+
+.index-container .mode-admin-container .switch-handle {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 18px;
+  height: 18px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+  background-image: -webkit-linear-gradient(top, white 40%, #f0f0f0);
+  background-image: -moz-linear-gradient(top, white 40%, #f0f0f0);
+  background-image: -o-linear-gradient(top, white 40%, #f0f0f0);
+  background-image: linear-gradient(to bottom, white 40%, #f0f0f0);
+  -webkit-transition: left 0.15s ease-out;
+  -moz-transition: left 0.15s ease-out;
+  -o-transition: left 0.15s ease-out;
+  transition: left 0.15s ease-out;
+}
+
+.index-container .mode-admin-container .switch-handle:before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -6px 0 0 -6px;
+  width: 12px;
+  height: 12px;
+  background: #f9f9f9;
+  border-radius: 6px;
+  box-shadow: inset 0 1px rgba(0, 0, 0, 0.02);
+  background-image: -webkit-linear-gradient(top, #eeeeee, white);
+  background-image: -moz-linear-gradient(top, #eeeeee, white);
+  background-image: -o-linear-gradient(top, #eeeeee, white);
+  background-image: linear-gradient(to bottom, #eeeeee, white);
+}
+
+.index-container .mode-admin-container .switch-input:checked ~ .switch-handle {
+  left: 40px;
+  box-shadow: -1px 1px 5px rgba(0, 0, 0, 0.2);
+}
+
+
+
+
+
+/* -----------------------------------
+ * ------- INPUT CODE ----------------
+ * -----------------------------------
+ */
+
+.index-container .code-container {
+   background-color:white;
+   height:100%;
+}
+
+.index-container .code-container input {
+    width:100%;
+    height:100%;
+    text-align:center;
+    font-size: 3em;
+    border:0;
+}
+
+/* -----------------------------------
+ * ------- DIA Y HORARIO -------------
+ * -----------------------------------
+ */
+
+.index-container .info-container {
+  background: -webkit-linear-gradient(left, #1e5799 0%,#207cca 100%);
+  color:white;
+  display:flex;
+  flex-direction:column;
+  align-items: center;
+}
+
+.index-container .info-container .date {
+  text-transform: capitalize;
+  width:100%;
+  height:25%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.index-container .info-container .hours {
+    font-size:3em;
+    width:100%;
+    display: flex;
+    justify-content: center;
+    height: 75%;
+    align-items: center;
+}
+
+.index-container .info-container .hours .seconds {
+  font-size:0.6em;
+}
+
+
+/* -----------------------------------
+ * ---------- TECLADO ----------------
+ * -----------------------------------
+ */
+
+.index-container .keyboard-number-container {
+  height:100%;
+  width:100%;
+  background-color:black;
+  display: flex;
+  flex-direction:column;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.index-container .keyboard-number-container  button,.index-container .keyboard-number-container  input{
+  cursor:pointer;
+  padding:0;
+}
+
+.index-container .keyboard-number-container .row {
+  width: 90%;
+  margin-bottom:0.5em;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.index-container .keyboard-number-container .number {
+  width:20%;
+}
+
+.index-container .keyboard-number-container .action{
+  width:45%
+}
+
+
+/* -----------------------------------
+ * ----- TECLADO  EXTENDIDO ----------
+ * -----------------------------------
+ */
+
+.index-container .keyboard-extends-container {
+  height:100%;
+  width:100%;
+  background-color:black;
+}
+
+.index-container .keyboard-extends-container .keyboard-letters {
+  width:100%;
+  height:100%;
+  display: flex;
+  flex-direction:column;
+  align-items: center;
+  justify-content: center;
+}
+
+.index-container .keyboard-extends-container .row {
+  width: 97%;
+  margin-bottom:0.5em;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.index-container .keyboard-extends-container  button,.index-container .keyboard-extends-container  input{
+  cursor:pointer;
+}
+
+.index-container .keyboard-extends-container .keyboard-letters .letter {
+  width:9%;
+}
+
+.index-container .keyboard-extends-container .keyboard-letters .backspace {
+  width:13.5%;
+}
+
+.index-container .keyboard-extends-container .keyboard-letters .shift {
+  width:13.5%;
+}
+
+.index-container .keyboard-extends-container .capitalize {
+  text-transform:capitalize;
+}
+
+.index-container .keyboard-extends-container .keyboard-letters .down {
+  color:red;
+}
+
+
+
+.index-container .keyboard-extends-container .keyboard-special {
+  width:100%;
+  height:100%;
+  display: flex;
+  flex-direction:column;
+  align-items: center;
+  justify-content: center;
+}
+
+.index-container .keyboard-extends-container .keyboard-special .letter {
+  width:9%;
+}

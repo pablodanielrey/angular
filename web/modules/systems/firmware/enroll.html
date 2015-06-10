@@ -1,0 +1,60 @@
+<div class="enroll-container">
+	<div class="wrap {{model.class}}" ng-class="{true:'transition'}[model.isTransition]">
+		<div class="item dniContainer" ng-class="model.classItem1">
+			<div class="title"><span class="fa fa-user"></span><span>Crear usuario</span></div>
+			<form>
+				<span class="fa fa-credit-card"></span>
+				<label>DNI:</label>
+				<input type="text" ng-model="model.dni" autofocus/>
+
+				<div class="keyboard">
+
+					<div class="row">
+						<button ng-click="addNumber('7')">7</button>
+					  <button ng-click="addNumber('8')">8</button>
+						<button ng-click="addNumber('9')">9</button>
+					</div>
+					<div class="row">
+						<button ng-click="addNumber('4')">4</button>
+						<button ng-click="addNumber('5')">5</button>
+						<button ng-click="addNumber('6')">6</button>
+					</div>
+					<div class="row">
+						<button ng-click="addNumber('1')">1</button>
+						<button ng-click="addNumber('2')">2</button>
+						<button ng-click="addNumber('3')">3</button>
+					</div>
+					<div class="row">
+						<button ng-click="addNumber('0')">0</button>
+					  <button ng-click="deleteNumber()">&lt;-----</button>
+					</div>
+					<div class="row">
+						<input type="submit" ng-click="addUser()" value="Aceptar" ng-disabled="model.dni==null"/>
+					</div>
+				</div>
+			</form>
+		</div>
+
+		<div class="item fingerContainer" ng-class="model.classItem2">
+			<div class="title"><span class="fa fa-forumbee"></span><span>Huella 1</span></div>
+			<p>Coloque su dedo en el lector de huellas</p>
+			<i class="loading fa fa-spinner fa-spin"></i>
+		</div>
+
+		<div class="item fingerContainer" ng-class="model.classItem3">
+			<div class="title"><span class="fa fa-forumbee"></span><span>Huella 2</span></div>
+			<p>Coloque nuevamente el mismo dedo para obtener la segunda huella</p>
+			<i class="loading fa fa-spinner fa-spin"></i>
+		</div>
+
+		<div class="item fingerContainer" ng-class="model.classItem4">
+			<div class="title"><span class="fa fa-forumbee"></span><span>Huella 3</span></div>
+			<p>Coloque nuevamente el mismo dedo para obtener la tercer huella</p>
+			<i class="loading fa fa-spinner fa-spin"></i>
+		</div>
+	</div>
+
+	<div class="cancel-container">
+		<input type="button" value="Cancelar" ng-click="cancel()"/>
+	</div>
+</div>

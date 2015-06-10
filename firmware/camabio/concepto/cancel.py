@@ -6,7 +6,7 @@ data = [0x55,0xaa,0x30,0x01,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,
 camabio.setChksum(data)
 
 print('abriendo puerto seriel')
-ser = serial.Serial("/dev/ttyS1",9600,timeout=5)
+ser = serial.Serial(port="/dev/ttyUSB0",baudrate=9600,timeout=5,parity=serial.PARITY_NONE,stopbits=serial.STOPBITS_ONE,bytesize=serial.EIGHTBITS)
 
 print('escribiendo bytes en el puerto serie')
 camabio.printArray(data)
