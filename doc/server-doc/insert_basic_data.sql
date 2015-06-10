@@ -36,6 +36,21 @@ insert into assistance.justifications (id,name) values ('5c548eab-b8fc-40be-bb85
 insert into assistance.justifications (id,name) values ('508a9b3a-e326-4b77-a103-3399cb65f82a','Asistencia a Congresos/Capacitación - art 97 dec 366');
 
 
+insert into assistance.justifications (id,name) values ('7e180d9d-0ef1-48a7-9f3f-26a0170cc2f7','Entrada Tarde Justificada');
+insert into assistance.justifications (id,name) values ('c32eb2eb-882b-4905-8e8f-c03405cee727','Justificado Por Autoridad');
+insert into assistance.justifications (id,name) values ('aa41a39e-c20e-4cc4-942c-febe95569499','Licencia Médica Pre-Natal. Art 106P');
+insert into assistance.justifications (id,name) values ('f7464e86-8b9e-4415-b370-b44b624951ca','Receso de Invierno');
+insert into assistance.justifications (id,name) values ('e249bfce-5af3-4d99-8509-9adc2330700b','Nacimiento');
+insert into assistance.justifications (id,name) values ('5289eac5-9221-4a09-932c-9f1e3d099a47','Concurso');
+insert into assistance.justifications (id,name) values ('68bf4c98-984d-4b71-98b0-4165c69d62ce','Licencia Médica Por Maternidad');
+insert into assistance.justifications (id,name) values ('30a249d5-f90c-4666-aec6-34c53b62a447','Matrimonio');
+insert into assistance.justifications (id,name) values ('1c14a13c-2358-424f-89d3-d639a9404579','Licencia Sin Goce De Sueldo');
+insert into assistance.justifications (id,name) values ('3fb52f24-3eff-4ca2-8133-c7a3abfc7262','Justificado Horario');
+insert into assistance.justifications (id,name) values ('bfaebb07-8d08-4551-b264-85eb4cab6ef1','Suspención');
+insert into assistance.justifications (id,name) values ('7747e3ff-bbe2-4f2e-88f7-9cc624a242a9','Viaje');
+
+
+
 
 
 /*
