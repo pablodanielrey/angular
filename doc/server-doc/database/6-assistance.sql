@@ -104,6 +104,7 @@ create schema assistance;
     justification_id varchar not null references assistance.justifications (id),
     user_id varchar not null references profile.users (id),
     stock integer not null default 0,
+    calculated timestamptz not null default now(),
     constraint justifications_stock_unique unique (justification_id, user_id)
   );
 

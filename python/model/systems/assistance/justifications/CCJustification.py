@@ -7,7 +7,6 @@ from model.systems.assistance.justifications.exceptions import *
 
 
 """
-    Paro
     no tiene límite
 """
 class CCJustification(Justification):
