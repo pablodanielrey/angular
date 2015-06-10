@@ -57,6 +57,10 @@ def copyjusts(src,dst):
 
     for jrid, jid, userId, jbegin in csrc:
 
+        if jid = '0b9f73c1-6f9b-4dfa-a168-2512651316aa':
+            """ es la de prueba, la ignoro """
+            continue
+
         jbegin = localice(jbegin)
 
         """ realizo el mapeo a las nuestas """
