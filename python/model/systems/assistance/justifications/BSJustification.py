@@ -28,7 +28,7 @@ class BSJustification(Justification):
         period = 'MONTH|YEAR|WEEK'
     """
     def available(self,utils,con,userId,date,period=None):
-      #date = datetime.datetime(2015, 5, 15) #dato de prueba para el mes anterior que tiene mas logs
+      date = datetime.datetime(2015, 5, 1) #dato de prueba para el mes anterior que tiene mas logs
       if period == 'YEAR':
         return self._availableYear(utils,con,userId,date)
       else:
@@ -186,6 +186,7 @@ class BSJustification(Justification):
       if rj[0] != userSchedule[schIndex]["start"] and rj[1] != userSchedule[schIndex]["end"]:
         uwhLen += 1
       
+
       #obtener fechas mas inicial y mas final del userSchedule (se supone que el userSchedule esta ordenado!)
       start = userSchedule[0]["start"]
       end = userSchedule[len(userSchedule)-1]["end"]
@@ -204,11 +205,11 @@ class BSJustification(Justification):
         calcEnd =  uwh[schIndex+1]["start"]
       else:
         if(rj[0] == userSchedule[schIndex]["start"]):
+          calcStart = userSchedule[schIndex]["start"]
+          calcEnd = uwh[schIndex]["start"]
+        else:
           calcStart = uwh[schIndex]["end"]
           calcEnd =  userSchedule[schIndex]["end"]
-        else:
-          calcStart = userSchedule[schIndex]["start"]
-          calcEnd =  uwh[schIndex]["start"]
         
       #comparar diferencias de log y diferencia de boleta de salida, se restara la menor al stock
       differenceLog = (calcEnd - calcStart).total_seconds()
