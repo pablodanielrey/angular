@@ -69,7 +69,7 @@ def copyjusts(src,dst):
 
         dcur.execute('select id from profile.users where id = %s',(userId,))
         if dcur.rowcount <= 0:
-            logging.wanr('{}'.format(jrid))
+            logging.warn('{}'.format(jrid))
             logging.warn('usuario {} no existe en el destino'.format(userId))
             continue
 
