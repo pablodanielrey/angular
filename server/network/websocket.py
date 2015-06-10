@@ -19,6 +19,17 @@ from autobahn.twisted.websocket import WebSocketServerFactory
 from twisted.python import log
 from twisted.internet import reactor
 
+
+
+#http://code.activestate.com/recipes/439358-twisted-from-blocking-functions-to-deferred-functi/
+from twisted.internet.threads import deferToThread
+deferred = deferToThread.__get__
+
+
+
+
+
+
 from model.config import Config
 from model.utils import DateTimeEncoder
 
@@ -80,6 +91,20 @@ actions = [
 
 
 
+
+""" la transformo en un deferred para que sea procesada en otro thread """
+@deferred
+def dispatch(protocol,message):
+    protocol._dispatch(message)
+
+""" esto es necesario en funcion para usar .callFromThread """
+def sendMessage(protocol,message):
+    protocol.sendMessage(message,False)
+
+
+
+
+
 class ActionsServerProtocol(WebSocketServerProtocol):
 
 
@@ -97,7 +122,8 @@ class ActionsServerProtocol(WebSocketServerProtocol):
     def _sendEncodedMessage(self,msg):
         if (len(msg) < 1024):
             logging.debug('server -> cliente {}'.format(msg))
-        super(WebSocketServerProtocol,self).sendMessage(msg,False)
+        #super(WebSocketServerProtocol,self).sendMessage(msg,False)
+        reactor.callFromThread(sendMessage,super(WebSocketServerProtocol,self),msg)
 
 
 
@@ -148,6 +174,18 @@ class ActionsServerProtocol(WebSocketServerProtocol):
     """
 
 
+    def _dispatch(self,message):
+        managed = False
+        for action in actions:
+            logging.debug('ejecutando {}'.format(action))
+            managed = action.handleAction(self,message)
+            logging.debug('retorno {}'.format(managed))
+            if managed:
+                break
+
+        logging.debug('finalinzando ejecucion')
+
+
 
     def onMessage(self, payload, isBinary):
 
@@ -173,13 +211,19 @@ class ActionsServerProtocol(WebSocketServerProtocol):
                 sid = message['session']
                 self.session.touch(sid)
 
+            try:
+                dispatch(self,message)
 
+            """
+            codigo viejo
             try:
                 managed = False
                 for action in actions:
                     managed = action.handleAction(self,message)
                     if managed:
                         break
+            """
+
 
             except AccessDenied as e:
                 print(e.__class__.__name__ + ' ' + str(e))
@@ -193,8 +237,11 @@ class ActionsServerProtocol(WebSocketServerProtocol):
                 self.sendError(message,e)
                 raise e
 
+            """
+            con el thread nuevo ya no se tiene mas.
             if not managed:
                 raise NotImplemented(message['action'])
+            """
 
         except Exception as e:
             print(e.__class__.__name__ + ' ' + str(e))
