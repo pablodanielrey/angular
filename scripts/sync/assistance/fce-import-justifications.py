@@ -67,7 +67,7 @@ def copyjusts(src,dst):
             logging.warn('No se procesan las boletas de salida')
             continue
 
-        dcur = csdt.cursor()
+        dcur = cdst.cursor()
         dcur.execute('select id from profile.users where id = %s',(userId,))
         if dcur.rowcount <= 0:
             logging.wanr('{}'.format(jrid))
