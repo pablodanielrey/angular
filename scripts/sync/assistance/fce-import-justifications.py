@@ -117,7 +117,7 @@ if __name__ == '__main__':
     dst = psycopg2.connect(host=dhost, port=dport, user=duser, password=dpassw, dbname=ddb)
 
     logging.info('copiando justificaciones')
-    copyjusts(src,dst,personCache)
+    copyjusts(src,dst)
 
     dst.commit()
 
