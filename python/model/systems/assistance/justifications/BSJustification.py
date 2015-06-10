@@ -30,8 +30,6 @@ class BSJustification(Justification):
     """
     def available(self,utils,con,userId,date,period=None):
 
-      pdb.set_trace()
-
       #date = datetime.datetime(2015, 5, 1) #dato de prueba para el mes anterior que tiene mas logs
       if period == 'YEAR':
         return self._availableYear(utils,con,userId,date)
@@ -139,37 +137,21 @@ class BSJustification(Justification):
 
 
     """
-     " Consultar solicitudes del usuario en el mes de la fecha pasada como parametro
-     """
+    " Consultar solicitudes del usuario en el mes de la fecha pasada como parametro
+    """
     def _getCursorUserRequestedJustificationMonth(self, con, userId, justIds, date):
       cur = con.cursor()
       req = (self.id, userId, justIds, date, date)
-      cur.execute("""
-        SELECT jbegin,jend
-        FROM assistance.justifications_requests
-        WHERE justification_id = %s
-        AND user_id = %s
-        AND id IN %s
-        AND extract(year from jbegin) = extract(year from %s)
-        AND extract(month from jbegin) = extract(month from %s)
-      """,req)
+      cur.execute("SELECT jbegin,jend FROM assistance.justifications_requests WHERE justification_id = %s AND user_id = %s AND id IN %s AND extract(year from jbegin) = extract(year from %s) AND extract(month from jbegin) = extract(month from %s)",req)
       return cur
 
     """
-     " Consultar solicitudes del usuario a partir del mes de la fecha pasada como parametro y los meses restantes
-     """
+    " Consultar solicitudes del usuario a partir del mes de la fecha pasada como parametro y los meses restantes
+    """
     def _getCursorUserRequestedJustificationYear(self, con, userId, justIds, date):
       cur = con.cursor()
       req = (self.id, userId, justIds, date, date)
-      cur.execute("""
-        SELECT jbegin,jend
-        FROM assistance.justifications_requests
-        WHERE justification_id = %s
-        AND user_id = %s
-        AND id IN %s
-        AND extract(year from jbegin) = extract(year from %s)
-        AND extract(month from jbegin) >= extract(month from %s)
-      """,req)
+      cur.execute("SELECT jbegin,jend FROM assistance.justifications_requests WHERE justification_id = %s AND user_id = %s AND id IN %s AND extract(year from jbegin) = extract(year from %s) AND extract(month from jbegin) >= extract(month from %s)",req)
       return cur
 
 
