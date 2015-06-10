@@ -28,6 +28,7 @@ class BSJustification(Justification):
         period = 'MONTH|YEAR|WEEK'
     """
     def available(self,utils,con,userId,date,period=None):
+      #date = datetime.datetime(2015, 5, 15) #dato de prueba para el mes anterior que tiene mas logs
       if period == 'YEAR':
         return self._availableYear(utils,con,userId,date)
       else:
@@ -47,16 +48,25 @@ class BSJustification(Justification):
       
       ##### chequeo rapido inicial: Se verifican si existen solicitudes de justificaciones pendientes o aprobadas #####
       justStatus = utils._getJustificationsInStatus(con,['PENDING','APPROVED'])
+      
       if len(justStatus) <= 0:
         return stock
-        
+
+      
       ##### consultar solicitudes de justificaciones del usuario en restantes #####
       justIds = tuple(justStatus.keys())
       cur = self._getCursorUserRequestedJustificationYear(con, userId, justIds, date)
       
+      ##### chequeo de solicitudes de justificaciones del usuario en el mes #####
+      if(cur.rowcount <= 0):
+        return stock
+        
       ##### procesar las solicitudes de justificaciones del usuario #####
       requestJustifications = cur.fetchall();
-      return self._availableRequestedJustifications(self, requestedJustifications, stock, userId, con)
+      
+       
+      return self._availableRequestedJustifications(requestJustifications, stock, userId, con)
+
       
       
     """
@@ -88,7 +98,7 @@ class BSJustification(Justification):
 
       ##### procesar las solicitudes de justificaciones del usuario #####
       requestJustifications = cur.fetchall();
-      return self._availableRequestedJustifications(self, requestedJustifications, stock, userId, con)
+      return self._availableRequestedJustifications(requestJustifications, stock, userId, con)
 
 
     """
@@ -98,18 +108,21 @@ class BSJustification(Justification):
      " @param userId Identificacion de usuario
      " @param con Conexion con la base de datos
      """
-    def _availableRequestedJustifications(self, requestedJustifications, stock, userId, con):
+    def _availableRequestedJustifications(self, requestJustifications, stock, userId, con):
       for rj in requestJustifications:
         if (stock <= 0):
           break;
+          
 
         ##### comparar las solicitud de boleta con los elementos del schedule para determinar el schedule asociado a la solicitud #####
-        schedule = Schedule()
+        schedule = Schedule() 
         userSchedule = schedule.getSchedule(con, userId, rj[0])
+        
+        
         for index, usrSch in enumerate(userSchedule):
           if (stock <= 0):
-            break;
-            
+            break;          
+          
           #si existe un elemento del schedule asociado a la solicitud de boleta se deben verificar los logs realizados por el usuario para efectuar el calculo
           if usrSch["start"] <= rj[0] and usrSch["end"] >= rj[1]:
             stock = self._getStockFromLogs(con, userId, stock, rj, index, userSchedule);
@@ -117,6 +130,8 @@ class BSJustification(Justification):
           #si no existe un schLog asociado a la solicitud de boleta se resta del stock las fechas de la solicitud
           else:
             stock = self._getStockFromDates(stock, rj[0], rj[1])
+            
+      return stock
     
 
     """
@@ -168,7 +183,7 @@ class BSJustification(Justification):
 
       #definir cantidad de "user worked hours" que deberia tener el usuario
       uwhLen = len(userSchedule)
-      if requestedJustification[0] != workedHour["start"] and requestedJustification[1] != workedHour["end"]:
+      if rj[0] != userSchedule[schIndex]["start"] and rj[1] != userSchedule[schIndex]["end"]:
         uwhLen += 1
       
       #obtener fechas mas inicial y mas final del userSchedule (se supone que el userSchedule esta ordenado!)
@@ -184,7 +199,7 @@ class BSJustification(Justification):
         return  self._getStockFromDates(stock, rj[0], rj[1])
        
       #definir fechas para calculo del tiempo trabajado en la worked hour correspondiente
-      if requestedJustification[0] != workedHour["start"] and requestedJustification[1] != workedHour["end"]:        
+      if rj[0] != userSchedule[schIndex]["start"] and rj[1] != userSchedule[schIndex]["end"]:        
         calcStart = uwh[schIndex]["end"]
         calcEnd =  uwh[schIndex+1]["start"]
       else:
