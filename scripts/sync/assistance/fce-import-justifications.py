@@ -112,8 +112,8 @@ if __name__ == '__main__':
     dpassw = sys.argv[9]
     ddb = sys.argv[10]
 
-    #logging.basicConfig(filename='/tmp/copy-justs.log',format='%(asctime)s %(levelname)s %(message)s',level=logging.DEBUG)
-    logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',level=logging.DEBUG)
+    logging.basicConfig(filename='/tmp/copy-justs.log',format='%(asctime)s %(levelname)s %(message)s',level=logging.DEBUG)
+    #logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',level=logging.DEBUG)
 
     logging.info('conectandose a las bases')
     src = psycopg2.connect(host=shost, port=sport, user=suser, password=spassw, dbname=sdb)
