@@ -46,8 +46,8 @@ def localice(date):
 
 def copyjusts(src,dst):
 
-    cdst = dst.cursor()
-    cdst.execute("set timezone to 'UTC'")
+    dcur = dst.cursor()
+    dcur.execute("set timezone to 'UTC'")
 
     csrc = src.cursor()
     csrc.execute('select id,justification_id,person_id,jstart from justificationdate order by jstart asc')
@@ -67,7 +67,6 @@ def copyjusts(src,dst):
             logging.warn('No se procesan las boletas de salida')
             continue
 
-        dcur = cdst.cursor()
         dcur.execute('select id from profile.users where id = %s',(userId,))
         if dcur.rowcount <= 0:
             logging.wanr('{}'.format(jrid))
