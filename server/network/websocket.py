@@ -214,15 +214,15 @@ class ActionsServerProtocol(WebSocketServerProtocol):
             try:
                 dispatch(self,message)
 
-            """
-            codigo viejo
-            try:
-                managed = False
-                for action in actions:
-                    managed = action.handleAction(self,message)
-                    if managed:
-                        break
-            """
+                """
+                codigo viejo
+                try:
+                    managed = False
+                    for action in actions:
+                        managed = action.handleAction(self,message)
+                        if managed:
+                            break
+                """
 
 
             except AccessDenied as e:
