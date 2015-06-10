@@ -28,7 +28,6 @@ class BSJustification(Justification):
         period = 'MONTH|YEAR|WEEK'
     """
     def available(self,utils,con,userId,date,period=None):
-      date = datetime.datetime(2015, 5, 15)
       if period == 'YEAR':
         return self._availableYear(utils,con,userId,date)
       else:
@@ -36,51 +35,92 @@ class BSJustification(Justification):
 
 
     """
+     " Calcular stock anual
+     " @param utils Herramientas
+     " @param con Conexion con la base de datos
+     " @param userId Identificacion de usuario
+     " @param date Fecha de consulta
+     """      
+    def _availableYear(self,utils,con,userId,date):
+      ##### definir stock inicial con el total restante ##### 
+      stock =  (13 - date.month) * self.totalStock
+      
+      ##### chequeo rapido inicial: Se verifican si existen solicitudes de justificaciones pendientes o aprobadas #####
+      justStatus = utils._getJustificationsInStatus(con,['PENDING','APPROVED'])
+      if len(justStatus) <= 0:
+        return stock
+        
+      ##### consultar solicitudes de justificaciones del usuario en restantes #####
+      justIds = tuple(justStatus.keys())
+      cur = self._getCursorUserRequestedJustificationYear(con, userId, justIds, date)
+      
+      ##### procesar las solicitudes de justificaciones del usuario #####
+      requestJustifications = cur.fetchall();
+      return self._availableRequestedJustifications(self, requestedJustifications, stock, userId, con)
+      
+      
+    """
      " Calcular stock mensual
+     " @param utils Herramientas
+     " @param con Conexion con la base de datos
+     " @param userId Identificacion de usuario
+     " @param date Fecha de consulta
      """
     def _availableMonth(self,utils,con,userId,date):
+      ##### definir stock inicial con el total ##### 
+      stock = self.totalStock
+      
       ##### chequeo inicial: Se verifican si existen solicitudes de justificaciones pendientes o aprobadas #####
       justStatus = utils._getJustificationsInStatus(con,['PENDING','APPROVED'])
       if len(justStatus) <= 0:
-        return self.totalStock
+        return stock
+      
       
       ##### consultar solicitudes de justificaciones del usuario en el mes #####
       justIds = tuple(justStatus.keys())
-
       cur = self._getCursorUserRequestedJustificationMonth(con, userId, justIds, date)
       
+      
+      ##### chequeo de solicitudes de justificaciones del usuario en el mes #####
       if(cur.rowcount <= 0):
-        return self.totalStock
+        return stock
 
+
+      ##### procesar las solicitudes de justificaciones del usuario #####
       requestJustifications = cur.fetchall();
+      return self._availableRequestedJustifications(self, requestedJustifications, stock, userId, con)
 
-      stock = self.totalStock
+
+    """
+     " Procesar las solicitudes de justificaciones del usuario
+     " @param requestedJustifications Solicitudes de justificaciones del usuario
+     " @param stock Stock inicial
+     " @param userId Identificacion de usuario
+     " @param con Conexion con la base de datos
+     """
+    def _availableRequestedJustifications(self, requestedJustifications, stock, userId, con):
       for rj in requestJustifications:
         if (stock <= 0):
           break;
 
+        ##### comparar las solicitud de boleta con los elementos del schedule para determinar el schedule asociado a la solicitud #####
         schedule = Schedule()
         userSchedule = schedule.getSchedule(con, userId, rj[0])
         for index, usrSch in enumerate(userSchedule):
           if (stock <= 0):
             break;
             
-          #si existe un schLog asociado al rj se deben verificar los logs realizados por el usuario para efectuar el calculo
+          #si existe un elemento del schedule asociado a la solicitud de boleta se deben verificar los logs realizados por el usuario para efectuar el calculo
           if usrSch["start"] <= rj[0] and usrSch["end"] >= rj[1]:
             stock = self._getStockFromLogs(con, userId, stock, rj, index, userSchedule);
 
-          #si no existe un schLog asociado al rj se resta del stock las fechas del rj
+          #si no existe un schLog asociado a la solicitud de boleta se resta del stock las fechas de la solicitud
           else:
             stock = self._getStockFromDates(stock, rj[0], rj[1])
-          
-
-      return stock
-
-
-
+    
 
     """
-     "
+     " Consultar solicitudes del usuario en el mes de la fecha pasada como parametro
      """
     def _getCursorUserRequestedJustificationMonth(self, con, userId, justIds, date):
       cur = con.cursor()
@@ -95,6 +135,25 @@ class BSJustification(Justification):
         AND extract(month from jbegin) = extract(month from %s)
       """,req)
       return cur
+      
+    """
+     " Consultar solicitudes del usuario a partir del mes de la fecha pasada como parametro y los meses restantes
+     """
+    def _getCursorUserRequestedJustificationYear(self, con, userId, justIds, date):
+      cur = con.cursor()
+      req = (self.id, userId, justIds, date, date)
+      cur.execute("""
+        SELECT jbegin,jend 
+        FROM assistance.justifications_requests 
+        WHERE justification_id = %s 
+        AND user_id = %s 
+        AND id IN %s 
+        AND extract(year from jbegin) = extract(year from %s) 
+        AND extract(month from jbegin) >= extract(month from %s)
+      """,req)
+      return cur
+     
+     
      
     """
      " Calcular stock a partir de un valor inicial y el chequeo del logs
@@ -106,9 +165,10 @@ class BSJustification(Justification):
      " @param userSchedule schedule del usuario
     """
     def _getStockFromLogs(self, con, userId, stock, rj, schIndex, userSchedule):     
+
       #definir cantidad de "user worked hours" que deberia tener el usuario
       uwhLen = len(userSchedule)
-      if isRequestedJustificationBetweenWorkedHour(rj, userSchedule[schIndex]):
+      if requestedJustification[0] != workedHour["start"] and requestedJustification[1] != workedHour["end"]:
         uwhLen += 1
       
       #obtener fechas mas inicial y mas final del userSchedule (se supone que el userSchedule esta ordenado!)
@@ -124,29 +184,26 @@ class BSJustification(Justification):
         return  self._getStockFromDates(stock, rj[0], rj[1])
        
       #definir fechas para calculo del tiempo trabajado en la worked hour correspondiente
-      if isRequestedJustificationBetweenWorkedHour(rj, userSchedule[schIndex]):
-        bsStart = uwh[schIndex]["end"]
-        bsEnd =  uwh[schIndex+1]["start"]
+      if requestedJustification[0] != workedHour["start"] and requestedJustification[1] != workedHour["end"]:        
+        calcStart = uwh[schIndex]["end"]
+        calcEnd =  uwh[schIndex+1]["start"]
       else:
-        if(es igual al start):
-          bsStart = uwh[schIndex]["end"]
-          bsEnd =  userSchedule[schIndex]["end"]
+        if(rj[0] == userSchedule[schIndex]["start"]):
+          calcStart = uwh[schIndex]["end"]
+          calcEnd =  userSchedule[schIndex]["end"]
         else:
-          bsStart = userSchedule[schIndex]["start"]
-          bsEnd =  uwh[schIndex]["start"]
+          calcStart = userSchedule[schIndex]["start"]
+          calcEnd =  uwh[schIndex]["start"]
         
-        
-        
+      #comparar diferencias de log y diferencia de boleta de salida, se restara la menor al stock
+      differenceLog = (calcEnd - calcStart).total_seconds()
+      differenceRj = (rj[1] - rj[0]).total_seconds()
+      difference = differenceLog if (differenceLog <= differenceRj) else differenceRj
 
+      return stock - difference
       
-    
-      return 1000
       
-    def _isRequestedJustificationBetweenWorkedHour(requestedJustification, workedHour):
-      if requestedJustification[0] != workedHour["start"] and requestedJustification[1] != workedHour["end"]:
-        return true
-        
-      return false
+
       
       
     """
@@ -158,27 +215,7 @@ class BSJustification(Justification):
       newStock = (stock-diff)
       return newStock if (newStock > 0) else 0
 
-    
-    
-    """
-     " Calcular stock anual
-     """      
-    def _availableYear(self,utils,con,userId,date):
-      ##### chequeo rapido inicial: Se verifican si existen solicitudes de justificaciones pendientes o aprobadas #####
-      justStatus = utils._getJustificationsInStatus(con,['PENDING','APPROVED'])
-      if len(justStatus) <= 0:
-        self._availableRep(Repetition.YEARLY,userId,date);
-      
-      return 10000
-       
 
-
-    """ retorna las disponibles por restricciones en la fecha date """
-    def _availableRep(self,rep,userId,date):
-        if rep is Repetition.YEARLY:
-            return ((13 - date.month) * datetime.timedelta(hours=3)).total_seconds()
-
-        return datetime.timedelta(hours=3).total_seconds()
 
 
 
