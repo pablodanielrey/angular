@@ -1,6 +1,6 @@
 
 // defino el módulo principal.
-var app = angular.module('mainApp',['ngRoute','autofill']);
+var app = angular.module('mainApp',['ngRoute']);
 
 /**
  * controlador principal. Funciones principales:
