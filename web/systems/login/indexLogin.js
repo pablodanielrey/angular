@@ -36,6 +36,7 @@ app.controller('IndexLoginCtrl', ["$rootScope", "$location", "$timeout", "$windo
         Session.destroy();
         $window.location.reload();
         return;
+      }
 
       if (e.name == "NotImplemented") {
 		    Notifications.message("Mensaje no implementado en el servidor");
