@@ -1,6 +1,6 @@
 var app = angular.module('mainApp');
 
-app.controller("EnrollCtrl", ['$scope','$location','$timeout','Notifications', 'Firmware',function($scope, $location, $timeout, Notifications, Firmware) {
+app.controller("EnrollCtrl", ['$rootScope','$scope','$location','$timeout','Notifications', 'Firmware',function($rootScope,$scope, $location, $timeout, Notifications, Firmware) {
 
 
   $scope.model = {
@@ -12,6 +12,8 @@ app.controller("EnrollCtrl", ['$scope','$location','$timeout','Notifications', '
     classItem3:'hidden',
     classItem4:'left',
     selectItem:1,
+    fingerNumber:0,
+    msg:'',
     fingers:0
   }
 
@@ -26,8 +28,15 @@ app.controller("EnrollCtrl", ['$scope','$location','$timeout','Notifications', '
     $scope.model.classItem4 = 'left';
     $scope.model.selectItem = 1;
     $scope.model.fingers = 0;
+    $scope.model.fingerNumber = 0;
+    $scope.model.msg = '';
 
   }
+
+  $rootScope.$on('enrollOptionSelectedEvent', function(event, data) {
+    console.log('enroll');
+    $scope.initialize();
+  });
 
   /* -------------------------------------------
    * ---------- TECLADO NUMERICO ---------------
@@ -102,9 +111,9 @@ app.controller("EnrollCtrl", ['$scope','$location','$timeout','Notifications', '
     }
 
     // esto es temporal, simula la escucha de eventos
-    if ($scope.model.selectItem > 1) {
+    /*if ($scope.model.selectItem > 1) {
       $timeout(function() { $scope.next();}, 3500);
-    }
+    }*/
 
     //
 
@@ -135,12 +144,15 @@ app.controller("EnrollCtrl", ['$scope','$location','$timeout','Notifications', '
    $scope.addUser = function() {
      Firmware.enroll($scope.model.dni,
        function(response) {
-         $scope.next();
+          Notifications.message("El usuario " + $scope.model.dni + " se ha creado exitosamente");
+          $scope.initialize();
        },
        function(error) {
           Notifications.message(error);
        }
      );
+
+     $scope.next();
    }
 
 
@@ -170,21 +182,29 @@ app.controller("EnrollCtrl", ['$scope','$location','$timeout','Notifications', '
 
 
    $scope.$on('FingerRequestedEvent', function(event, data) {
-     console.log('FingerRequestedEvent');
+     // mostrar la pantalla del pedido de dedo
+     $scope.changeItem('left','front','right','hidden');
+     $scope.model.fingerNumber = data.fingerNumber;
    })
 
    $scope.$on('ErrorEvent', function(event, data) {
-     console.log('ErrorEvent');
+     Notifications.message(data.msg);
    })
 
    $scope.$on('MsgEvent', function(event, data) {
-     console.log('MsgEvent');
+     // mostrar el mensaje
+
+     if (data && data.msg) {
+       Notifications.message(data.msg);
+       return;
+     }
+
    })
 
    /*
     finger updated event no va mas. este codigo no va mas.
    */
-   $scope.$on('FingerUpdatedEvent', function(event, data) {
+  /* $scope.$on('FingerUpdatedEvent', function(event, data) {
 
      if (typeof data.error === 'undefined') {
        $scope.model.fingers = $scope.model.fingers + 1;
@@ -197,7 +217,7 @@ app.controller("EnrollCtrl", ['$scope','$location','$timeout','Notifications', '
      } else {
        Notification.message(data.error);
      }
-   });
+   });*/
 
 
    $scope.cancel = function() {

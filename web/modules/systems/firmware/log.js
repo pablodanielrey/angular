@@ -27,8 +27,6 @@ app.controller("LogCtrl",["$rootScope","$scope","$timeout", "$location", functio
   },0);
 
   $rootScope.$on('logEvent', function(event, data) {
-    console.log(data);
-    console.log("logEvent");
     $scope.model.date = data.date;
     $scope.model.user = data.user;
   });
