@@ -28,7 +28,6 @@ app.controller("LoginCtrl", ['$rootScope','$scope', '$window', 'Session','Creden
 				password: $scope.user.password
 			};
 
-
 			Credentials.login(creds,
 				function(s) {
 					var data = {
@@ -48,6 +47,7 @@ app.controller("LoginCtrl", ['$rootScope','$scope', '$window', 'Session','Creden
 				function(error) {
 					Notifications.message(error);
 				});
+
 		};
 
 }]);
