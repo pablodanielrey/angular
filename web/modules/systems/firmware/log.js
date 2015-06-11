@@ -15,12 +15,11 @@ app.controller("LogCtrl",["$rootScope","$scope","$timeout", "$location", functio
   }
 
   $scope.initialize = function() {
-      $rootScope.logData
-      $scope.model.date = ($rootScope.logData && $rootScope.logData.date) ? $rootScope.logData.date : new Date();
-      $scope.model.user = ($rootScope.logData && $rootScope.logData.user) ? $rootScope.logData.user : {};
+      $scope.model.date = ($scope.$parent.logData && $scope.$parent.logData.date) ? $scope.$parent.logData.date : new Date();
+      $scope.model.user = ($scope.$parent.logData && $scope.$parent.logData.user) ? $scope.$parent.logData.user : {};
 
       $scope.setDate();
-      
+
       $timeout(function() {
         $location.path('/firmware');
       }, 5000);

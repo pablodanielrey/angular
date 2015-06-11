@@ -268,12 +268,12 @@ app.controller("MainFirmwareCtrl", ['$rootScope','$scope','$timeout','$location'
    $scope.$on('identifiedEvent', function(event, data) {
      if ($scope.model.adminMode) {
        $location.path("/enroll");
-       $rootScope.$broadcast('enrollOptionSelectedEvent');
      } else {
-       $rootScope.logData  = {
+       $scope.$parent.logData  = {
           date:$scope.model.date,
           user:data.user
        }
+
        $location.path('/log');
      }
    });

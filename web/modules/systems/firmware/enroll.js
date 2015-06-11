@@ -33,8 +33,7 @@ app.controller("EnrollCtrl", ['$rootScope','$scope','$location','$timeout','Noti
 
   }
 
-  $rootScope.$on('enrollOptionSelectedEvent', function(event, data) {
-    console.log('enroll');
+  $scope.$on('$viewContentLoaded', function(event) {
     $scope.initialize();
   });
 
@@ -110,12 +109,6 @@ app.controller("EnrollCtrl", ['$rootScope','$scope','$location','$timeout','Noti
       $scope.model.selectItem = $scope.model.selectItem + 1;
     }
 
-    // esto es temporal, simula la escucha de eventos
-    /*if ($scope.model.selectItem > 1) {
-      $timeout(function() { $scope.next();}, 3500);
-    }*/
-
-    //
 
     $scope.model.isTransition = 'true';
     $scope.model.class = 'show-right';
@@ -156,30 +149,6 @@ app.controller("EnrollCtrl", ['$rootScope','$scope','$location','$timeout','Noti
    }
 
 
-   /*
-      FingerRequestedEvent {
-          type: FingerRequestedEvent,
-          data: {
-                fingerNumber:numero_de_dedo
-          }
-      }
-
-      ErrorEvent {
-          type:ErrorEvent,
-          data: {
-            error: mensaje_de_error
-          }
-      }
-
-      MsgEvent {
-        type:MsgEvent,
-        data: {
-          msg: mensaje_a_mostrar
-        }
-      }
-
-   */
-
 
    $scope.$on('FingerRequestedEvent', function(event, data) {
      // mostrar la pantalla del pedido de dedo
@@ -200,25 +169,6 @@ app.controller("EnrollCtrl", ['$rootScope','$scope','$location','$timeout','Noti
      }
 
    })
-
-   /*
-    finger updated event no va mas. este codigo no va mas.
-   */
-  /* $scope.$on('FingerUpdatedEvent', function(event, data) {
-
-     if (typeof data.error === 'undefined') {
-       $scope.model.fingers = $scope.model.fingers + 1;
-
-       if ($scope.model.fingers == 3) {
-          $scope.save();
-       } else {
-         $scope.next();
-       }
-     } else {
-       Notification.message(data.error);
-     }
-   });*/
-
 
    $scope.cancel = function() {
      $location.path('/firmware')
