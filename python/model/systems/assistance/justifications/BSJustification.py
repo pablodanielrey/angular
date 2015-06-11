@@ -176,9 +176,13 @@ class BSJustification(Justification):
       #obtener fechas mas inicial y mas final del userSchedule (se supone que el userSchedule esta ordenado!)
       start = userSchedule[0]["start"]
       end = userSchedule[len(userSchedule)-1]["end"]
-
+      
+      start = start.replace(hour=0, minute=0, second=0, microsecond=0)
+      end = end.replace(hour=23, minute=59, second=59, microsecond=999999)
+      
       logs = Logs()
       userLogs = logs.findLogs(con, userId, start, end)
+
       uwhInfo = logs.getWorkedHours(userLogs)
       uwh = uwhInfo[0]
 
@@ -199,7 +203,7 @@ class BSJustification(Justification):
 
       #comparar diferencias de log y diferencia de boleta de salida, se restara la menor al stock
       differenceLog = (calcEnd - calcStart).total_seconds()
-      differenceRj = (rj[1] - rj[0]).total_seconds()
+      differenceRj = (rj[1] - rj[0]).total_seconds()      
       difference = differenceLog if (differenceLog <= differenceRj) else differenceRj
 
       return stock - difference
