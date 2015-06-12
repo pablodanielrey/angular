@@ -1,6 +1,4 @@
-body {
-  background-color:black;
-}
+
 
 .index-container .hidden {
   display:none;
@@ -36,7 +34,7 @@ body {
 .index-container .mode-admin-container {
   height: 5%;
   min-height:2em;
-  color:white;
+  color:blue;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -238,7 +236,7 @@ body {
 .index-container .keyboard-number-container {
   height:100%;
   width:100%;
-  background-color:black;
+  /*background-color:black;*/
   display: flex;
   flex-direction:column;
   align-items: center;
@@ -276,7 +274,7 @@ body {
 .index-container .keyboard-extends-container {
   height:100%;
   width:100%;
-  background-color:black;
+  /*background-color:black;*/
 }
 
 .index-container .keyboard-extends-container .keyboard-letters {
