@@ -30,5 +30,5 @@
 
 .clickButton3 {
   transform: translate3d(0,-200%,0);
-  -moz-transform: translate3d(0,-100%,0);
+  -moz-transform: translate3d(0,200%,0);
 }
