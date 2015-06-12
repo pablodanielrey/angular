@@ -50,6 +50,7 @@ app.controller("EnrollCtrl", ['$rootScope','$scope','$location','$timeout','Noti
       Firmware.enroll($scope.model.dni,
         function(response) {
            Notifications.message("El usuario " + $scope.model.dni + " se ha creado exitosamente");
+           //$scope.model.msg = "El usuario " + $scope.model.dni + " se ha creado exitosamente";
            $scope.initialize();
         },
         function(error) {
@@ -61,7 +62,20 @@ app.controller("EnrollCtrl", ['$rootScope','$scope','$location','$timeout','Noti
 
 
     $scope.$on('FingerRequestedEvent', function(event, data) {
-      $scope.model.fingerNumber = data.fingerNumber;
+      var t = '';
+      if (data.fingerNumber == 1) {
+        t = 'primera';
+      }
+
+      if (data.fingerNumber == 2) {
+        t = 'segunda';
+      }
+
+      if (data.fingerNumber == 3) {
+        t = 'tercera';
+      }
+
+      $scope.model.msg = 'Presione el dedo por ' + t + ' vez';
     })
 
     $scope.$on('ErrorEvent', function(event, data) {
@@ -70,7 +84,8 @@ app.controller("EnrollCtrl", ['$rootScope','$scope','$location','$timeout','Noti
 
     $scope.$on('MsgEvent', function(event, data) {
       if (data && data.msg) {
-        Notifications.message(data.msg);
+        //Notifications.message(data.msg);
+        $scope.model.msg = data.msg;
         return;
       }
     })
