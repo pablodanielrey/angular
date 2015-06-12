@@ -2,37 +2,40 @@
 app.controller('UsersAssistanceManagementRequestJustificationARTCtrl', ["$scope", "Assistance", "Notifications", "Utils", function($scope, Assistance, Notifications, Utils) {
 
   if(!$scope.model) Notifications.message("No esta definido el modelo");
-  
+
 
   $scope.rjModel = {
     id: '70e0951f-d378-44fb-9c43-f402cbfc63c8',
     name: Utils.getJustificationName('70e0951f-d378-44fb-9c43-f402cbfc63c8'),
     section: null,
-      
-    date: null,
-    dateFormated: null,
+
+    begin: null,
+    beginFormated: null,
+    end: null,
+    endFormated: null,
     processingRequest: null,
-    
+
     stock: null,
     stockYear: null
   };
-  
-  
-  
 
 
-  
+
+
+
+
   /******************
    * INICIALIZACION *
    ******************/
   $scope.clear = function(){
-    $scope.rjModel.date = null;
-    $scope.rjModel.dateFormated = null;
+    $scope.rjModel.begin = null;
+    $scope.rjModel.beginFormated = null;
+    $scope.rjModel.end = null;
+    $scope.rjModel.endFormated = null;
     $scope.rjModel.processingRequest = false;
     $scope.rjModel.section = null;
 
   };
-  
 
   $scope.$on('JustificationsRequestsUpdatedEvent', function(event, data){
     $scope.model.justificationSelectedId = null;
@@ -44,18 +47,18 @@ app.controller('UsersAssistanceManagementRequestJustificationARTCtrl', ["$scope"
     $scope.clear();
 
 	});
-  
-  
+
+
   $scope.$watch('model.selectedUser', function() {
     $scope.model.justificationSelectedId = null;
     $scope.clear();
-  }); 
-  
+  });
+
   $scope.$watch('model.justificationSelectedId', function() {
     $scope.clear();
   });
-  
-  
+
+
 
 
   //***** METODOS DE SELECCION DE LA SECCION *****
@@ -85,47 +88,58 @@ app.controller('UsersAssistanceManagementRequestJustificationARTCtrl', ["$scope"
     }
 	};
 
-  
-  
-  /********
-   * DATE *
-   ********/
-  
-  $scope.isDataDefined = function(){
-    return ($scope.rjModel.date !== null);    
-  };
-  
-  $scope.defineData = function() {
-    $scope.rjModel.dateFormated = null;
-    if($scope.rjModel.date !== null){
-			$scope.rjModel.dateFormated = Utils.formatDate($scope.rjModel.date);
-    }
-  }; 
-  
-  
-  
-  $scope.save = function() {
-   
-   $scope.rjModel.processingRequest = true;
-   
-    var request = {
-			id:$scope.rjModel.id,
-			begin:$scope.rjModel.date,
-		};
 
-    Assistance.requestJustification($scope.model.selectedUser.id, request, 'APPROVED',
-			function(ok) {
-				$scope.clear(); //limpiar contenido
-        $scope.model.justificationSelectedId = null; //limpiar seleccion de justificacion
-        Notifications.message("Solicitud de " + $scope.rjModel.name + " registrada correctamente");
-			},
-			function(error){
-        $scope.clear();    //limpiar contenido
-        $scope.model.justificationSelectedId = null; //limpiar seleccion de justificacion
-				Notifications.message(error);
-			}
-		);
-  };
-  
-  
+
+  /********
+   * DATA *
+   ********/
+   $scope.isDataDefined = function(){
+     return (($scope.rjModel.begin !== null) && ($scope.rjModel.end !== null));
+   };
+
+   $scope.selectDate = function(){
+     if($scope.rjModel.end !== null){
+       if(($scope.rjModel.begin !== null) && ($scope.rjModel.begin > $scope.rjModel.end)){
+         $scope.rjModel.end = new Date($scope.rjModel.begin);
+       }
+     }
+
+     $scope.rjModel.beginFormated = null;
+     if($scope.rjModel.begin !== null){
+       $scope.rjModel.beginFormated = Utils.formatDate($scope.rjModel.begin);
+     }
+
+     $scope.rjModel.endFormated = null;
+     if($scope.rjModel.end !== null){
+       $scope.rjModel.endFormated = Utils.formatDate($scope.rjModel.end);
+     }
+   };
+
+
+
+   $scope.save = function() {
+
+    $scope.rjModel.processingRequest = true;
+
+     var request = {
+ 			id:$scope.rjModel.id,
+ 			begin:$scope.rjModel.begin,
+       end:$scope.rjModel.end,
+ 		};
+
+     Assistance.requestJustificationRange($scope.model.selectedUser.id, request, 'APPROVED',
+ 			function(ok) {
+ 				$scope.clear(); //limpiar contenido
+         $scope.model.justificationSelectedId = null; //limpiar seleccion de justificacion
+         Notifications.message("Solicitud de " + $scope.rjModel.name + " registrada correctamente");
+ 			},
+ 			function(error){
+         $scope.clear();    //limpiar contenido
+         $scope.model.justificationSelectedId = null; //limpiar seleccion de justificacion
+ 				Notifications.message(error);
+ 			}
+ 		);
+   };
+
+
 }]);
