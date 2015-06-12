@@ -1,10 +1,10 @@
 angular
     .module('mainApp')
-    .controller('LogCtrl',LogCtrl);
+    .controller('LogController',LogController);
 
-LogCtrl.$inject = ["$rootScope","$scope","$timeout", "$location"];
+LogController.$inject = ["$rootScope","$scope","$timeout", "$location"];
 
-function LogCtrl($rootScope, $scope, $timeout, $location) {
+function LogController($rootScope, $scope, $timeout, $location) {
 
   var vm = this;
 

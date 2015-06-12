@@ -22,7 +22,7 @@ function config($routeProvider) {
 
     .when('/log', {
       templateUrl: '/modules/systems/firmware/log.html',
-      controller: 'LogCtrl',
+      controller: 'LogController',
       controllerAs: 'vm'
     })
 
