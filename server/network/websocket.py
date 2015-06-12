@@ -192,7 +192,7 @@ class ActionsServerProtocol(WebSocketServerProtocol):
             print(e.__class__.__name__ + ' ' + str(e))
             traceback.print_exc()
             self.sendError(message,e)
-            raise e
+            self.sendException(e)
 
 
 
