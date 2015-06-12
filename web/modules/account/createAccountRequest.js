@@ -18,7 +18,7 @@ app.controller('CreateAccountRequestCtrl', function($rootScope, $scope, $window,
 
 		if ($scope.request.password != $scope.request.password2) {
       Notifications.message(['Las claves ingresadas no son iguales','Ingrese nuevamente la información de la clave']);
-//			alert('las claves ingresadas no son iguales');
+//			//alert('las claves ingresadas no son iguales');
 			$scope.request.password = '';
 			$scope.request.password2 = '';
 			return;

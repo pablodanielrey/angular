@@ -72,7 +72,7 @@ app.controller('EditSystemsCtrl', function($scope, $timeout, Domain, Mail, Sessi
 
                         },
                         function(error) {
-                            alert(error);
+                            //alert(error);
                         }
                     );
                 } else {
@@ -81,7 +81,7 @@ app.controller('EditSystemsCtrl', function($scope, $timeout, Domain, Mail, Sessi
 
                         },
                         function(error) {
-                            alert(error)
+                            //alert(error)
                         }
                     );
                 }
@@ -96,7 +96,7 @@ app.controller('EditSystemsCtrl', function($scope, $timeout, Domain, Mail, Sessi
 
                         },
                         function(error) {
-                            alert(error);
+                            //alert(error);
                         }
                     );
                 } else {
@@ -105,7 +105,7 @@ app.controller('EditSystemsCtrl', function($scope, $timeout, Domain, Mail, Sessi
 
                         },
                         function(error) {
-                            alert(error)
+                            //alert(error)
                         }
                     );
                 }

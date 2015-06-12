@@ -145,7 +145,7 @@ class ActionsServerProtocol(WebSocketServerProtocol):
 
 
 
-    """
+    '''
 
             este codigo implementa el framming de los mensajes en esta capa. pero aparentemente no se necesita mas
             usando autobahn. lo dejo comentado por ahora para tenerlo a mano.
@@ -171,19 +171,31 @@ class ActionsServerProtocol(WebSocketServerProtocol):
               #logging.debug(jmsg);
               #super(WebsocketServer,self).sendMessage(jmsg)
 
-    """
+    '''
 
 
     def _dispatch(self,message):
-        managed = False
-        for action in actions:
-            logging.debug('ejecutando {}'.format(action))
-            managed = action.handleAction(self,message)
-            logging.debug('retorno {}'.format(managed))
-            if managed:
-                break
 
-        logging.debug('finalinzando ejecucion')
+        try:
+
+            managed = False
+            for action in actions:
+                managed = action.handleAction(self,message)
+                if managed:
+                    break
+        except AccessDenied as e:
+            print(e.__class__.__name__ + ' ' + str(e))
+            traceback.print_exc()
+            self.sendError(message,e)
+
+        except Exception as e:
+            print(e.__class__.__name__ + ' ' + str(e))
+            traceback.print_exc()
+            self.sendError(message,e)
+            self.sendException(e)
+
+
+
 
 
 
@@ -211,37 +223,7 @@ class ActionsServerProtocol(WebSocketServerProtocol):
                 sid = message['session']
                 self.session.touch(sid)
 
-            try:
-                dispatch(self,message)
-
-                """
-                codigo viejo
-                try:
-                    managed = False
-                    for action in actions:
-                        managed = action.handleAction(self,message)
-                        if managed:
-                            break
-                """
-
-
-            except AccessDenied as e:
-                print(e.__class__.__name__ + ' ' + str(e))
-                traceback.print_exc()
-                self.sendError(message,e)
-                managed = True
-
-            except Exception as e:
-                print(e.__class__.__name__ + ' ' + str(e))
-                traceback.print_exc()
-                self.sendError(message,e)
-                raise e
-
-            """
-            con el thread nuevo ya no se tiene mas.
-            if not managed:
-                raise NotImplemented(message['action'])
-            """
+            dispatch(self,message)
 
         except Exception as e:
             print(e.__class__.__name__ + ' ' + str(e))

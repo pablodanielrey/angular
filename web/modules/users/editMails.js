@@ -17,7 +17,7 @@ app.controller('EditMailsCtrl', function($scope, $timeout, Users, Session) {
         }
       },
       function(error) {
-        alert(error);
+        //alert(error);
       });
   };
 
@@ -71,7 +71,7 @@ app.controller('EditMailsCtrl', function($scope, $timeout, Users, Session) {
         // no hago nada ya que voy a recibir un evento : UserUpdatedEvent
       },
       function(error) {
-        alert(error);
+        //alert(error);
       }
     );
   }
@@ -85,7 +85,7 @@ app.controller('EditMailsCtrl', function($scope, $timeout, Users, Session) {
         $scope.findMails($scope.selected);
       },
       function(error) {
-        alert(error);
+        //alert(error);
       });
   }
 
@@ -95,7 +95,7 @@ app.controller('EditMailsCtrl', function($scope, $timeout, Users, Session) {
         // no hago nada ya que se dispara un evento de UserUpdatedEvent
       },
       function(error) {
-        alert(error);
+        //alert(error);
       });
 
   }

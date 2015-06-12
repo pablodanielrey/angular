@@ -55,7 +55,7 @@ app.controller('ListUsersCtrl',function($rootScope, $scope, $timeout, Session, U
 				$scope.model.users = users;
 			},
 			function(error){
-				alert(error);
+				//alert(error);
 			}
 		);
 	};

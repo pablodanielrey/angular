@@ -22,12 +22,16 @@ app.controller("LoginCtrl", ['$rootScope','$scope', '$window', 'Session','Creden
 		}
 
 		$scope.login = function() {
+			/*
+				bug de angular.
+				http://stackoverflow.com/questions/14965968/angularjs-browser-autofill-workaround-by-using-a-directive
+			*/
+			$scope.$broadcast("autofill:update");
 
 			var creds = {
 				username: $scope.user.username,
 				password: $scope.user.password
 			};
-
 
 			Credentials.login(creds,
 				function(s) {
@@ -48,6 +52,7 @@ app.controller("LoginCtrl", ['$rootScope','$scope', '$window', 'Session','Creden
 				function(error) {
 					Notifications.message(error);
 				});
+
 		};
 
 }]);

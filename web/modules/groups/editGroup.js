@@ -30,7 +30,7 @@ app.controller('EditGroupCtrl', function($rootScope,$scope,Groups) {
         // nada ya que se dispara el evento
       },
       function(err) {
-        alert(err);
+        //alert(err);
       });
   }
 
@@ -40,7 +40,7 @@ app.controller('EditGroupCtrl', function($rootScope,$scope,Groups) {
         $scope.group = group;
       },
       function(error) {
-        alert(error);
+        //alert(error);
       }
     );
   }

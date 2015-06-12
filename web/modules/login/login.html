@@ -13,22 +13,22 @@
 		<img src="/views/img/logo.jpg" />
 	</div>
 
-	<form ng-submit="login()">
+	<form ng-submit='login()'>
 
 		<div>
 			<div class="margin_div_login">
 				<label class="text"> Usuario (DNI)</label>
-				<input class="name" type="text" ng-model="user.username"/>
+				<input class="name" type="text" ng-model="user.username" autofill='autofill'/>
 			</div>
 
 			<div class="margin_div_login">
 				<label class="text"> Contraseña</label>
-				<input class="password" type="password" ng-model="user.password"/>
+				<input class="password" type="password" ng-model="user.password" autofill='autofill'/>
 			</div>
 		</div>
 
 		<div>
-			<input type="submit" class="loginAction" value="Enviar" />
+			<input type="submit" class="loginAction" value="Enviar"/>
 		</div>
 
 		<div class="option">

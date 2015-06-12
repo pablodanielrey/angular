@@ -27,7 +27,7 @@ app.controller('LanguagesLaboralInsertionCtrl', function($scope, $timeout, Labor
 				$scope.addLanguageIfNone()
 			},
 			function(err) {
-				alert(err);
+				//alert(err);
 			}
 		);
 	};

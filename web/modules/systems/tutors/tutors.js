@@ -58,7 +58,7 @@ app.controller('TutorsCtrl', function($rootScope,$scope,$timeout,Student,Session
         $scope.exportToCsv(data);
 			},
 			function(error){
-				alert(error);
+				//alert(error);
 			}
 		);
   }
