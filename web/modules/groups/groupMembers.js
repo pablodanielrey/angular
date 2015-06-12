@@ -30,7 +30,7 @@ app.controller('GroupMembersCtrl', function($rootScope, $scope, Groups, Users) {
       return;
     }
     if ($scope.selectedToAdd.length <= 0) {
-      alert('Debe seleccionar al menos una persona');
+      //alert('Debe seleccionar al menos una persona');
       return;
     }
     Groups.addMembers(
@@ -46,7 +46,7 @@ app.controller('GroupMembersCtrl', function($rootScope, $scope, Groups, Users) {
           },0);
         },
         function(err) {
-          alert(err);
+          //alert(err);
         });
   }
 
@@ -69,7 +69,7 @@ app.controller('GroupMembersCtrl', function($rootScope, $scope, Groups, Users) {
           }
       },
       function(error) {
-        alert(error);
+        //alert(error);
         $scope.adding = false;
       }
     );
@@ -103,7 +103,7 @@ app.controller('GroupMembersCtrl', function($rootScope, $scope, Groups, Users) {
               },0);
             },
             function(err) {
-              alert(err);
+              //alert(err);
             });
   }
 
@@ -248,7 +248,7 @@ app.controller('GroupMembersCtrl', function($rootScope, $scope, Groups, Users) {
           }
         },
         function(error) {
-          alert(error);
+          //alert(error);
         }
       );
   }

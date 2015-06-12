@@ -21,7 +21,7 @@ app.controller('StatusCtrl',function($scope, Utils, Session, Messages) {
         $scope.status = { 'sessions':response.sessions};
       },
       function(error) {
-        alert(error);
+        //alert(error);
       });
   }
 

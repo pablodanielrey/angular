@@ -12,7 +12,7 @@ app.controller('LogoutCtrl', function($scope, $window, Session, Credentials) {
          $window.location.href = "/systems/login/indexLogin.html";
       },
       function(error) {
-          alert(error);
+          //alert(error);
       });
   };
 

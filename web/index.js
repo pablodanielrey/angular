@@ -45,23 +45,26 @@ app.controller('IndexCtrl', function ($rootScope, $scope, $location, $timeout, $
         Session.destroy();
         $window.location.reload();
         return;
-      } else if(e.name == "NotImplemented"){
+      }
+
+      if(e.name == "NotImplemented"){
       	console.log("Mensaje no implementado en el servidor");
 		    $location.path("/main");
       }
 
     }
 
+    /*
     // errores de applicacion
     $rootScope.$on('onAppError', function(event, data) {
-      alert("error de aplicacion " + data);
+      ////////alert("error de aplicacion " + data);
     });
 
     // cambia la url de la pagina en base al evento.
     $rootScope.$on('routeEvent', function(event, data) {
       $location.path(data);
     });
-
+    */
 
     $timeout(function() {
       WebSocket.registerHandlers();

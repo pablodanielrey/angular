@@ -20,7 +20,7 @@ app.controller("Au24Ctrl", function($scope, $rootScope, $timeout, Au24, Session)
 
 			},
 			function(error) {
-				alert(error);
+				//alert(error);
 			}
 	  );
 

@@ -67,7 +67,7 @@ app.controller('MyDataOptionCtrl', function($scope, $rootScope, Profiles, $locat
       }
     },
     function(error){
-      alert(error);
+      //alert(error);
     });
   }
 

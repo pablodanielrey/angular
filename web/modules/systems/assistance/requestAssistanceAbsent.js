@@ -120,7 +120,7 @@ app.controller('RequestAssistanceAbsentCtrl', function($scope, Assistance, Notif
 						$scope.model.absent.stock = justificationStock.stock;
 					},
 					function(error){
-						alert(error);
+						//alert(error);
 					}
 				);
 				Assistance.getJustificationStock($scope.model.session.user_id, id, null, 'YEAR',
@@ -128,7 +128,7 @@ app.controller('RequestAssistanceAbsentCtrl', function($scope, Assistance, Notif
 						$scope.model.absent.yearlyStock = justificationStock.stock;
 					},
 					function(error){
-						alert(error);
+						//alert(error);
 					}
 				);
     };

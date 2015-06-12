@@ -14,10 +14,10 @@ no la voy a usar por ahora
     $http.get('config.json').
     success(function(data, status, headers, config) {
       instance.websocket = data;
-      alert(instance.websocket);
+      //alert(instance.websocket);
     }).
     error(function(data, status, headers, config) {
-      alert('el sistema no pudo obtener la configuración, algunas funciones no estarán disponibles');
+      //alert('el sistema no pudo obtener la configuración, algunas funciones no estarán disponibles');
     })
   }
 */

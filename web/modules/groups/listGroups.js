@@ -20,7 +20,7 @@ app.controller('ListGroupsCtrl',function($rootScope,$scope,Groups) {
       $scope.groups = gps;
     },
     function(error) {
-      alert(error);
+      //alert(error);
     });
   }
 

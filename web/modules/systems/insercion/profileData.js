@@ -11,7 +11,7 @@ app.controller('ProfileLaboralInsertionCtrl', function($scope,$timeout, Session,
 				$scope.formatUser();
 			},
 			function(error) {
-				alert(error);
+				//alert(error);
 			}
 		);
 
@@ -20,7 +20,7 @@ app.controller('ProfileLaboralInsertionCtrl', function($scope,$timeout, Session,
 				$scope.model.studentData = student;
 			},
 			function(error) {
-				alert(error);
+				//alert(error);
 			}
 		);
 	};
@@ -96,7 +96,7 @@ app.controller('ProfileLaboralInsertionCtrl', function($scope,$timeout, Session,
 	});*/
 
 	$scope.test = function(){
-		alert("test");
+		//alert("test");
 	};
 
 	$scope.$on('UpdateUserDataEvent',function(event,data) {

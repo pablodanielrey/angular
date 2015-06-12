@@ -104,7 +104,7 @@ app.controller('RequestAssistanceCtrl', ["$scope", "$rootScope", "$timeout", "$w
 
 		$scope.model.session = Session.getCurrentSession();
 		if ((!$scope.model.session) || (!$scope.model.session.user_id)) {
-			alert("Error: Session no definida");
+			//alert("Error: Session no definida");
 			$window.location.href = "/#/logout";
         } else {
 			Profiles.checkAccess(Session.getSessionId(),'ADMIN-ASSISTANCE,USER-ASSISTANCE',
