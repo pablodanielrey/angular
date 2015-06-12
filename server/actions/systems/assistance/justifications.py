@@ -1160,28 +1160,34 @@ class GetSpecialJustifications:
                 # '0cd276aa-6d6b-4752-abe5-9258dbfd6f09','Duelo'
                 # 'e8019f0e-5a70-4ef3-922c-7c70c2ce0f8b','Donación de Sangre'
                 ids.extend([
-                    'f9baed8a-a803-4d7f-943e-35c436d5db46',
-                    'a93d3af3-4079-4e93-a891-91d5d3145155',
-                    'b80c8c0e-5311-4ad1-94a7-8d294888d770',
-                    '478a2e35-51b8-427a-986e-591a9ee449d8',
-                    '0cd276aa-6d6b-4752-abe5-9258dbfd6f09',
-                    'e8019f0e-5a70-4ef3-922c-7c70c2ce0f8b',
-                    '70e0951f-d378-44fb-9c43-f402cbfc63c8', #ART
-                    '3d486aa0-745a-4914-a46d-bc559853d367', #incumbencias climaticas
-                    '5c548eab-b8fc-40be-bb85-ef53d594dca9', #dia del bibliotecario
+                    'f9baed8a-a803-4d7f-943e-35c436d5db46', #medica corta duracion
+                    'b80c8c0e-5311-4ad1-94a7-8d294888d770', #medica atencion familiar
+                    'a93d3af3-4079-4e93-a891-91d5d3145155', #medica largo tratamiento
+                  
+                    '478a2e35-51b8-427a-986e-591a9ee449d8', #justificado por medico
+                    'e8019f0e-5a70-4ef3-922c-7c70c2ce0f8b', #donacion sangre
+                    
+                    '70e0951f-d378-44fb-9c43-f402cbfc63c8', #ART                    
+                    '0cd276aa-6d6b-4752-abe5-9258dbfd6f09', #duelo
+                    
+                    '30a249d5-f90c-4666-aec6-34c53b62a447', #matrimonio
+                    'aa41a39e-c20e-4cc4-942c-febe95569499', #Pre natal
+                    '68bf4c98-984d-4b71-98b0-4165c69d62ce', #pos natal
+                    'e249bfce-5af3-4d99-8509-9adc2330700b', #nacimiento
+                    
+                    '7747e3ff-bbe2-4f2e-88f7-9cc624a242a9', #viaje
                     '508a9b3a-e326-4b77-a103-3399cb65f82a', #cursos / capacitacion
+                    '5289eac5-9221-4a09-932c-9f1e3d099a47', #concurso
+                    
                     '7e180d9d-0ef1-48a7-9f3f-26a0170cc2f7', #entrada tarde justificada
                     'c32eb2eb-882b-4905-8e8f-c03405cee727', #justificado por autoridad
-                    'aa41a39e-c20e-4cc4-942c-febe95569499', #Pre natal
-                    'f7464e86-8b9e-4415-b370-b44b624951ca', #invierno
-                    'e249bfce-5af3-4d99-8509-9adc2330700b', #nacimiento
-                    '5289eac5-9221-4a09-932c-9f1e3d099a47', #concurso
-                    '68bf4c98-984d-4b71-98b0-4165c69d62ce', #pos natal
-                    '30a249d5-f90c-4666-aec6-34c53b62a447', #matrimonio
                     '1c14a13c-2358-424f-89d3-d639a9404579', #licencia sin goce de sueldo
-                    '3fb52f24-3eff-4ca2-8133-c7a3abfc7262', #justificado horario
                     'bfaebb07-8d08-4551-b264-85eb4cab6ef1', #suspensión
-                    '7747e3ff-bbe2-4f2e-88f7-9cc624a242a9', #viaje
+                    
+                    
+                    '5c548eab-b8fc-40be-bb85-ef53d594dca9', #dia del bibliotecario
+                    '3d486aa0-745a-4914-a46d-bc559853d367', #incumbencias climaticas
+                    
                 ])
 
             role = 'realizar-solicitud-admin'
