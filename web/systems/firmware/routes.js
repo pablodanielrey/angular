@@ -10,7 +10,8 @@ function config($routeProvider) {
 
     .when('/firmware', {
       templateUrl: '/modules/systems/firmware/index.html',
-      controller: 'MainFirmwareCtrl'
+      controller: 'MainFirmwareController',
+      controllerAs: 'vm'
     })
 
 
