@@ -147,9 +147,7 @@ app.controller('UsersAssistanceManagementCtrl', ["$scope", "$timeout", "$window"
     return ($scope.model.justificationsId.indexOf(justificationId) > -1);
   };
 
-   /**
-   * Cargar justificaciones que puede autorizar el usuario
-   */
+
   /**
    * Cargar justificaciones que puede autorizar el usuario
    */
@@ -172,8 +170,8 @@ app.controller('UsersAssistanceManagementCtrl', ["$scope", "$timeout", "$window"
 
 
   };
-  
-  
+
+
 
 
 

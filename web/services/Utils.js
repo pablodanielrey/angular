@@ -293,10 +293,6 @@ app.service('Utils', function() {
       break;
 
 
-
-
-
-
       default:
         return {id:justificationId, name:null, shortName:null, icon:null};
     }
