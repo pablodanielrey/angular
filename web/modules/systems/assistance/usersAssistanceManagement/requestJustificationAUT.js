@@ -1,5 +1,5 @@
 
-app.controller('UsersAssistanceManagementRequestJustificationETCtrl', ["$scope", "Assistance", "Notifications", "Utils", function($scope, Assistance, Notifications, Utils) {
+app.controller('UsersAssistanceManagementRequestJustificationAUTCtrl', ["$scope", "Assistance", "Notifications", "Utils", function($scope, Assistance, Notifications, Utils) {
 
   if(!$scope.model) Notifications.message("No esta definido el modelo");
 
