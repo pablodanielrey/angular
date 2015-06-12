@@ -9,7 +9,8 @@
   <!-- esto es el estilo de font awesome para tener los iconos -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
-  <script type="text/javascript" src="/systems/firmware/index.js"></script>
+  <script type="text/javascript" src="/systems/firmware/index.module.js"></script>
+  <script type="text/javascript" src="/systems/firmware/index.controller.js"></script>
   <script type="text/javascript" src="/systems/firmware/routes.js"></script>
 
   <link rel="stylesheet" type="text/css" href="/systems/firmware/index.css"/>
@@ -50,7 +51,7 @@
 </head>
 
 <body>
-  <div ng-controller="IndexCtrl" class="principal">
+  <div ng-controller="IndexController" class="principal">
     <div ng-view></div>
 
     <div class='messages-container' ng-controller="MessagesCtrl" ng-include="'/modules/messages/messages.html'" ng-class="{false: 'hidden', true: 'visible'}[ isVisible() ]">

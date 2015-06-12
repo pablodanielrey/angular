@@ -1,6 +1,10 @@
-var app = angular.module('mainApp',['ngRoute']);
+angular
+    .module('mainApp')
+    .controller('IndexController',IndexController);
 
-app.controller('IndexCtrl', function($rootScope,$location,$timeout,WebSocket) {
+IndexController.$inject = ['$rootScope','$location','$timeout','WebSocket'];
+
+function IndexController($rootScope,$location,$timeout,WebSocket) {
 
   // mensajes que vienen del socket. solo me interesan los eventos, las respuestas son procesadas por otro lado.
   $rootScope.$on('onSocketMessage', function(event, data) {
@@ -26,4 +30,4 @@ app.controller('IndexCtrl', function($rootScope,$location,$timeout,WebSocket) {
   },0);
 
 
-});
+}
