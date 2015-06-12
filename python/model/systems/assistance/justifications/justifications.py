@@ -28,6 +28,18 @@ from model.systems.assistance.justifications.BJustification import BJustificatio
 from model.systems.assistance.justifications.CCJustification import CCJustification
 from model.systems.assistance.justifications.ICJustification import ICJustification
 
+from model.systems.assistance.justifications.ETJustification import ETJustification
+from model.systems.assistance.justifications.AUTJustification import AUTJustification
+from model.systems.assistance.justifications.CONJustification import CONJustification
+from model.systems.assistance.justifications.VJEJustification import VJEJustification
+from model.systems.assistance.justifications.SUSJustification import SUSJustification
+from model.systems.assistance.justifications.SGSJustification import SGSJustification
+from model.systems.assistance.justifications.MATJustification import MATJustification
+from model.systems.assistance.justifications.INVJustification import INVJustification
+from model.systems.assistance.justifications.NACJustification import NACJustification
+from model.systems.assistance.justifications.PONJustification import PONJustification
+from model.systems.assistance.justifications.PRNJustification import PRNJustification
+
 
 
 
@@ -46,7 +58,9 @@ class Justifications:
         CJustification(), LAOJustification(), AAJustification(), BSJustification(), R638Justification(), PEJustification(),
         CumpJustification(), A102Justification(), LMCDJustification(), LMLTJustification(), BloodDonationJustification(),
         LMAFJustification(), JMJustification(), HolidayJustification(), ParoJustification(), MourningJustification(), BCJustification(),
-        ARTJustification(), BJustification(), CCJustification(), ICJustification()
+        ARTJustification(), BJustification(), CCJustification(), ICJustification(), ETJustification(), AUTJustification(), CONJustification(),
+        VJEJustification(), SUSJustification(), SGSJustification(), MATJustification(), INVJustification(), NACJustification(), PONJustification(),
+        PRNJustification(),
     ]
 
 
@@ -367,7 +381,7 @@ class Justifications:
       cur = con.cursor()
       cur.execute('set timezone to %s',('UTC',))
       cur.execute('insert into assistance.general_justifications (id,justification_id,jbegin) values (%s,%s,%s)',(jid,justificationId,begin))
-      
+
       events = []
       e = {
         'type':'JustificationsRequestsUpdatedEvent',
@@ -376,14 +390,14 @@ class Justifications:
          }
       }
       events.append(e)
-      
+
       return events
-      
+
     def deleteGeneralJustificationRequest(self, con, requestId):
       cur = con.cursor()
       sql = "DELETE FROM assistance.general_justifications WHERE id = '" + requestId + "'"
       cur.execute(sql)
-      
+
       events = []
       e = {
         'type':'JustificationsRequestsDeletedEvent',
@@ -392,13 +406,13 @@ class Justifications:
          }
       }
       events.append(e)
-      
+
       return events
-    
-    
-    
-    
-    
+
+
+
+
+
     """
         realiza el pedido de justificación para ser aprobado entre un rango de fechas
         estado inicial del pedido = PENDING, con la fecha actual del servidor.
