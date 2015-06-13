@@ -185,6 +185,10 @@
     background-color: red;
   }
 
+  .enroll-container .home .dni {
+    height: 20%;
+  }
+
   .enroll-container .home .inputDNI {
     font-size: 1.5em;
   }
