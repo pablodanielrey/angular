@@ -29,17 +29,14 @@ app.service('Module', ["$window", "Notifications", "Profiles", "Session",  funct
    * Se inicializan los parametros de session del modulo y se verifican los "profiles"
    * @returns {undefined}
    */
-  this.authorize = function(profiles){
+  this.authorize = function(profiles, callbackOk, callbackError){
     this.load();
     Profiles.checkAccess(Session.getSessionId(),profiles,
-      function(ok) {
-        if (ok !== 'granted') {
-          Notifications.message("Acceso no autorizado");
-          $window.location.href = "/#/logout";
-        }
+      function(response) {
+        callbackOk(response);
       },
       function (error) {
-        Notifications.message(error);
+        callbackError(error);
       }
     );  
   };

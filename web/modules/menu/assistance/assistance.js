@@ -60,9 +60,13 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, As
         $scope.userAssistanceManagement = function() {
           $location.path('/userAssistanceManagement')
         };
-        
+
         $scope.userAssistanceManagementMediator = function() {
           $location.path('/usersAssistanceManagementMediator')
+        }
+
+        $scope.requestGeneralJustifications = function() {
+          $location.path('/requestGeneralJustifications')
         }
 
 
@@ -108,8 +112,9 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, As
 
                         if (hasJustification) {
                           $scope.items.push({ label:'Solicitudes Especiales ', img:'fa-plus', function: $scope.userAssistanceManagement});
+                          $scope.items.push({ label:'Solicitudes Generales ', img:'fa-plus', function: $scope.requestGeneralJustifications});
                         }
-                        
+
                       },
                       function(err) {
                         Notifications.message(error);

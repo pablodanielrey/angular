@@ -183,7 +183,7 @@ class Assistance:
 
         dstart = self.date.parse(start)
         dend = self.date.parse(end)
-        gjustifications = self.justifications.getGeneralJustifications(con)
+        gjustifications = self.justifications.getGeneralJustificationRequests(con)
         for j in gjustifications:
             if j['begin'] >= dstart and j['begin'] <= dend:
                 for uid in usersIds:

@@ -1,0 +1,120 @@
+*{
+  margin: 0px;
+  padding: 0px;
+}
+
+
+.enroll-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: black;
+  color: white;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+  /*background: linear-gradient(45deg, #0066A6, #174b6b);*/
+
+}
+
+
+.enroll-container .home {
+
+}
+
+.enroll-container .home .KeyboardComplete {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.enroll-container .home .contentRight {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+}
+
+.enroll-container .home .btn {
+  background-color: #45444c;
+  color:white;
+  width: 60px;
+  height: 60px;
+  border:none;
+  font-size: 30px;
+  margin:5px;
+
+}
+
+.enroll-container .home .btn2 {
+  background-color: #1d1c21;
+  color:white;
+  width: 130px;
+  height: 60px;
+  border:none;
+
+  font-size: 30px;
+  margin:5px;
+
+}
+
+.enroll-container .home .btn:active {
+  background-color: #0066a6;
+  color:white;
+  width: 60px;
+  height: 60px;
+  border:none;
+  font-size: 30px;
+  margin:5px;
+
+}
+
+.enroll-container .home .btn2:active {
+  background-color: #0066a6;
+  color:white;
+  width: 130px;
+  height: 60px;
+  border:none;
+
+  font-size: 30px;
+  margin:5px;
+
+}
+
+.enroll-container .home .dni {
+  width: 400px;
+  height: 100px;
+  background-color: #45444c;
+  margin: 5px;
+}
+
+
+.enroll-container .home .inputDNI {
+  font-size: 50px;
+  background-color: #1d1c21;
+  border: none;
+  color:#0066a6;
+  width: 360px;
+  padding: 10px;
+  margin: 10px;
+  font-weight: bold;
+}
+
+.enroll-container .home .action {
+  margin: 5px;
+}
+
+.enroll-container .home .btnAceptar {
+  background-color: #0066a6;
+  border: none;
+  color:white;
+  font-size: 50px;
+  padding: 10px;
+}
+
+
+
+.enroll-container .message {
+
+}

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html ng-app="mainApp">
+<head>
+  <meta charset="utf-8"/>
+  <meta name='viewport' content='width=device-width'/>
+
+
+  <script type="text/javascript" src="/angular/angular-1.3.8/angular.js"></script>
+  <script type="text/javascript" src="/angular/angular-1.3.8/angular-route.js"></script>
+  <script type="text/javascript" src="/angular/angular-1.3.8/angular-cookies.js"></script>
+
+  <!-- esto es el estilo de font awesome para tener los iconos -->
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  <script type="text/javascript" src="/systems/firmware/index.module.js"></script>
+  <script type="text/javascript" src="/systems/firmware/index.controller.js"></script>
+  <script type="text/javascript" src="/systems/firmware/routes.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="/systems/firmware/index.css"/>
+
+  <!-- servicios -->
+	<script type="text/javascript" src="/config-firmware.json"></script>
+	<script type="text/javascript" src="/services/Config.js"></script>
+	<script type="text/javascript" src="/services/Credentials.js"></script>
+	<script type="text/javascript" src="/services/Utils.js"></script>
+	<script type="text/javascript" src="/services/Cache.js"></script>
+	<script type="text/javascript" src="/services/Session.js"></script>
+	<script type="text/javascript" src="/services/WebSocket.js"></script>
+	<script type="text/javascript" src="/services/Messages.js"></script>
+	<script type="text/javascript" src="/services/Notifications.js"></script>
+	<script type="text/javascript" src="/services/Systems.js"></script>
+	<script type="text/javascript" src="/services/Groups.js"></script>
+	<script type="text/javascript" src="/services/Users.js"></script>
+	<script type="text/javascript" src="/services/Profiles.js"></script>
+
+	<script type="text/javascript" src="/services/systems/firmware/firmware.js"></script>
+
+
+  <!-- modulos -->
+
+  <script type="text/javascript" src="/modules/systems/firmware/enroll.js"></script>
+  <link rel="stylesheet" type="text/css" href="/modules/systems/firmware/enroll.css"/>
+
+  <script type="text/javascript" src="/modules/systems/firmware/log.controller.js"></script>
+  <link rel="stylesheet" type="text/css" href="/modules/systems/firmware/log.css"/>
+
+  <script type="text/javascript" src="/modules/systems/firmware/index.controller.js"></script>
+  <link rel="stylesheet" type="text/css" href="/modules/systems/firmware/index.css"/>
+
+  <script type="text/javascript" src="/modules/messages/messages.js"></script>
+  <link rel="stylesheet" type="text/css" href="/modules/messages/messages.css"/>
+
+
+</head>
+
+<body>
+  <div ng-controller="IndexController" class="principal">
+    <div ng-view></div>
+
+    <div class='messages-container' ng-controller="MessagesCtrl" ng-include="'/modules/messages/messages.html'" ng-class="{false: 'hidden', true: 'visible'}[ isVisible() ]">
+    </div>
+
+
+  </div>
+</body>
+
+</html>
