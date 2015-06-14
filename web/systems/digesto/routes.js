@@ -8,6 +8,7 @@ function config($routeProvider) {
 
   $routeProvider
 
+  /*
     .when('/digesto', {
       templateUrl: '/modules/systems/digesto/index.html',
       controller: '..Controller',
@@ -20,8 +21,9 @@ function config($routeProvider) {
       controllerAs: 'vm'
     })
 
+*/
     .otherwise({
-        redirectTo: '/digesto'
+        redirectTo: '/'
     });
 
 }

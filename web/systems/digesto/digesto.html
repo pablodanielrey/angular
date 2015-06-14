@@ -10,6 +10,8 @@
   <!-- esto es el estilo de font awesome para tener los iconos -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
+
+
   <!--archivos principales-->
   <link rel="stylesheet" href="/systems/digesto/digesto.css">
   <script type="text/javascript" src="/systems/digesto/digesto.js"></script>
@@ -37,16 +39,27 @@
 
   <!-- módulos del digesto -->
 
+  <script type="text/javascript" src="/systems/digesto/menu/menu.js"></script>
+
+<!--
   <script type="text/javascript" src="/systems/digesto/modules/search/searchRegulation.js"></script>
   <link rel="stylesheet" type="text/css" href="/systems/digesto/modules/search/searchRegulation.css" />
 
   <script type="text/javascript" src="/systems/digesto/modules/create/createRegulation.js"></script>
   <link rel="stylesheet" type="text/css" href="/systems/digesto/modules/create/createRegulation.css" />
-
+-->
 
 <body>
 
 <div ng-controller="DigestoCtrl" class="principal">
+
+  <!-- <nav ng-class="{true:'visible',false:'hidden'}[isLogged()]"> -->
+  <nav>
+    <div class='menu-digesto-container' ng-controller="MenuDigestoCtrl" ng-include="'/systems/digesto/menu/menu.html'">
+    </div>
+  </nav>
+
+
   <div ng-view></div>
 
   <div class='messages-container' ng-controller="MessagesCtrl" ng-include="'/modules/messages/messages.html'" ng-class="{false: 'hidden', true: 'visible'}[ isVisible() ]"></div>
