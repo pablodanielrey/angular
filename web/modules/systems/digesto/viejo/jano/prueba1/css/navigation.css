@@ -1,0 +1,52 @@
+.nMenu {
+
+		}
+
+.nMenu li { /*todo li dentro el objeto .nMenu toma estos atributos*/
+
+		}
+
+.nMenu li img {/*todo objeto img dentro de .nMenu li toma estos atributos*/
+
+		}
+
+.nMenu li:hover {
+      cursor: pointer;
+		}
+
+
+@media screen and (max-width: 720px) { /*si el ancho es menos que 720px*/
+
+		}
+
+@media all and (orientation:portrait) { /*posicion vertical de la ventana*/
+
+    }
+
+@media all and (orientation:landscape) { /*posicion horizontal de la ventana*/
+
+    }
+
+
+
+
+.nContent {
+
+    }
+
+.nContent div { /*todo div dentro el objeto .Content toma estos atributos*/
+
+
+    }
+
+@media screen and (max-width: 720px) { /*si el ancho es menos que 720px*/
+
+    }
+
+@media all and (orientation:portrait) { /*posicion vertical de la ventana*/
+			.nContent.sContent.vContent { visibility: hidden;}
+    }
+
+@media all and (orientation:landscape) { /*posicion horizontal de la ventana*/
+
+    }

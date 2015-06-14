@@ -1,0 +1,85 @@
+*{
+    margin: 0px;
+    padding: 0px;
+  }*
+
+body {
+      background: SlateBlue;
+		}
+
+.menu {
+      list-style:none;
+      background: DarkOrange;
+      margin: 10px;
+      display: flex; /* Chrome */
+      flex-direction: row; /*direccion fila*/
+      flex-flow: row wrap; /*los elementos hijo pueden ubicarse en varias filas*/
+		}
+
+.menu li { /*todo div dentro el objeto .galeria toma estos atributos*/
+      background: red;
+      margin: 10px;
+      width: 200px;
+      flex:auto;
+
+		}
+
+.menu li img {/*todo objeto img dentro de .galeria div toma estos atributos*/
+      background: DarkGoldenRod;
+		  width: 100%;
+		  height: auto;
+		}
+
+.menu li:hover {/*opacidad al pararme sobre un boton*/
+      opacity: .8;
+      cursor: pointer;
+		}
+
+
+@media screen and (max-width: 720px) { /*si el ancho es menos que 720px*/
+		  .menu li { margin: 5px; }
+		}
+
+@media all and (orientation:portrait) { /*posicion horizontal de la ventana*/
+     .menu { padding: 1px; background: yellow;}
+    }
+
+@media all and (orientation:landscape) { /*posicion vertical de la ventana*/
+     .menu { padding: 1px; background: white;}
+    }
+
+    .galeria {
+          visibility: visible;
+          background: DarkOrange;
+          margin: 10px;
+          display: flex; /* Chrome */
+          flex-direction: row; /*direccion fila*/
+          flex-flow: row wrap; /*los elementos hijo pueden ubicarse en varias filas*/
+    		}
+
+    .galeria div { /*todo div dentro el objeto .galeria toma estos atributos*/
+          background: red;
+          margin: 10px;
+          width: 200px;
+          flex:auto;
+
+    		}
+
+    .galeria div img {/*todo objeto img dentro de .galeria div toma estos atributos*/
+          background: DarkGoldenRod;
+    		  width: 100%;
+    		  height: auto;
+    		}
+
+
+    @media screen and (max-width: 720px) { /*si el ancho es menos que 720px*/
+    		  .galeria div { margin: 5px; }
+    		}
+
+    @media all and (orientation:portrait) { /*posicion horizontal de la ventana*/
+         .galeria { padding: 1px; background: yellow; visibility: hidden;}
+        }
+
+    @media all and (orientation:landscape) { /*posicion vertical de la ventana*/
+         .galeria { padding: 1px; background: white;}
+        }

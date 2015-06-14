@@ -1,0 +1,58 @@
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+
+.screen {
+  display:flex;
+  flex-direction:row;
+  wrap: nowrap;
+  height: 100%;
+  width: 100%;
+}
+
+.content {
+  height: 100%;
+}
+
+.menu {
+  height: 100%;
+  left:0;
+  top:0
+  transition: all 0.2s;
+}
+
+.menu.estado {
+  width: 20%;
+}
+
+.content.estado {
+  width: 80%;
+}
+
+
+
+.menu.oculto {
+  transform: scale(0,0);
+}
+
+.menu.visible {
+
+}
+
+
+
+
+@media screen and (max-device-width:640px) {
+
+  .menu.estado {
+    width: 100%;
+  }
+
+  .content.estado {
+    width: 0%;
+  }
+
+}
