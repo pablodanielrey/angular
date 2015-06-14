@@ -1,16 +1,17 @@
-.userAssistanceManagement {
+
+.usersAssistanceManagement {
   width:100%;
   height:100%;
   font-family: helvetica;
 }
 /****ACORDEEON****/
-.userAssistanceManagement .content{
+.usersAssistanceManagement .content{
   margin:5px auto;
   width:98%;
   min-height:50px;
   overflow: hidden;
 }
-.userAssistanceManagement .titulo{
+.usersAssistanceManagement .titulo{
   width:100%;
   height:50px;
   background-color: #0066A6;
@@ -18,57 +19,59 @@
   border-bottom: 1px solid #275276;
 
 }
-.userAssistanceManagement p.titulo{
+.usersAssistanceManagement p.titulo{
   margin:13px;
   color: white;
 }
 
-.userAssistanceManagement .info {
+.usersAssistanceManagement .info {
     display:flex;
     flex-direction:column;
     align-items:flex-start;
 }
 
-.userAssistanceManagement .button {
+
+
+.usersAssistanceManagement .button {
   width: 150px;
   height:50px;
   margin-left:0px;
   margin-top:10px;
 }
-.userAssistanceManagement .button2 {
+.usersAssistanceManagement .button2 {
   width:265px;
   height:50px;
   margin-left:0px;
   margin-top:10px;
 }
-.userAssistanceManagement .blue{
+.usersAssistanceManagement .blue{
   background-color:#0066A6;
   color:white;
   text-shadow: 0px 1px black;
   font-weight: bold;
 }
-.userAssistanceManagement .blue2{
+.usersAssistanceManagement .blue2{
   background-color:#0066A6;
   color:white;
   text-shadow: 0px 1px black;
 
   font-size:20px;
 }
-.userAssistanceManagement .orange{
+.usersAssistanceManagement .orange{
   background-color:#ec9122;
   color:white;
   text-shadow: 0px 1px black;
   font-weight: bold;
 }
 
-.userAssistanceManagement .green{
+.usersAssistanceManagement .green{
   background-color:#128c78;
   color:white;
   text-shadow: 0px 1px black;
   font-weight: bold;
 }
 
-.userAssistanceManagement .title {
+.usersAssistanceManagement .title {
   display:flex;
   align-items: center;
   background-image:linear-gradient(to right,#275276, #0066A6);
@@ -81,7 +84,7 @@
   margin:5px;
 
 }
-.userAssistanceManagement .myRequests {
+.usersAssistanceManagement .myRequests {
   padding:7px;
   background-color: #275276;
   margin-top:15px;
@@ -92,13 +95,13 @@
 }
 
 
-.userAssistanceManagement .myRequestInfo {
+.usersAssistanceManagement .myRequestInfo {
   display:flex;
   flex-direction:row;
   background-color: white;
 }
 
-.userAssistanceManagement .scroll {
+.usersAssistanceManagement .scroll {
   height:270px;
 
   overflow:scroll;
@@ -107,36 +110,32 @@
 }
 
 
-/*
-.userAssistanceManagement .myRequestInfo.pending {
-  -webkit-transform: translate(700px,0px);
-}
-*/
 
 
-.userAssistanceManagement .titlesFiles {
+
+.usersAssistanceManagement .titlesFiles {
   display:flex;
   flex-direction:row;
   margin-left:10px;
 
 
 }
-.userAssistanceManagement .t1 {
+.usersAssistanceManagement .t1 {
   width:200px;
   margin-top:10px;
 
 }
 
-.userAssistanceManagement .t3 {
+.usersAssistanceManagement .t3 {
   width:200px;
   margin-bottom: 5px;
 }
-.userAssistanceManagement .t4 {
+.usersAssistanceManagement .t4 {
   width:100px;
   margin-top:10px;
 }
 
-.userAssistanceManagement .column {
+.usersAssistanceManagement .column {
   background-color:#0066A6;
 
   padding:5px;
@@ -147,34 +146,34 @@
 }
 
 
-.userAssistanceManagement .myRequest {
+.usersAssistanceManagement .myRequest {
   margin-top:5px;
   width:190px;
   background-color:white;
   padding:5px;
-  padding-left:10px;
+  padding-left:20px;
 
   color:#0066A6;
-  border:1px solid #0066A6;
+
   margin-right:10px;
   font-weight: bold;
-  border-left: 5px solid #0066A6;
+
 }
-.userAssistanceManagement .myRequestDate {
+.usersAssistanceManagement .myRequestDate {
   margin-top:5px;
   width:189px;
-  border:1px solid #0066A6;
+  margin-left: 10px;
   padding:5px;
   padding-left:10px;
   color:black;
   margin-right:10px;
   background-color:white;
-  border-left: 5px solid #0066A6;
+
 }
 
 
 
-.userAssistanceManagement .buttonpending {
+.usersAssistanceManagement .buttonpending {
   background-color:#e43e46;
   color:white;
   border:none;
@@ -183,7 +182,7 @@
   cursor:pointer;
   border-radius: 2px;
 }
-.userAssistanceManagement .buttonApproved {
+.usersAssistanceManagement .buttonApproved {
   background-color:#128c78;
   color:white;
   border:none;
@@ -192,7 +191,7 @@
   font-size:14px;
   border-radius: 2px;
 }
-.userAssistanceManagement .buttonCancel {
+.usersAssistanceManagement .buttonCancel {
   background-color:#e43e46;
   color:white;
   border:none;
@@ -201,12 +200,6 @@
   font-size:14px;
   border-radius: 2px;
 }
-
-
-
-
-
-
 
 
 .myStateRequestSlope.pending {
@@ -218,7 +211,7 @@
 }
 
 
-.userAssistanceManagement .myStateRequestSlope {
+.usersAssistanceManagement .myStateRequestSlope {
   margin-top:5px;
   width:200px;
 
@@ -229,7 +222,7 @@
   background-color:white;
 }
 
-.userAssistanceManagement .myStateRequestApproved {
+.usersAssistanceManagement .myStateRequestApproved {
   margin-top:5px;
   width:200px;
 
@@ -240,7 +233,7 @@
 
 }
 
-.userAssistanceManagement .myStateRequestRejected {
+.usersAssistanceManagement .myStateRequestRejected {
   margin-top:5px;
   width:200px;
 
@@ -252,7 +245,7 @@
 }
 
 
-.userAssistanceManagement .myStateRequestCanceled {
+.usersAssistanceManagement .myStateRequestCanceled {
   margin-top:5px;
   width:200px;
 
@@ -264,7 +257,7 @@
 }
 
 
-.userAssistanceManagement .parrafos {
+.usersAssistanceManagement .parrafos {
   background-color:#0066A6;
   color:white;
   height:15px;
@@ -277,7 +270,7 @@
   padding:5px;
 }
 
-.userAssistanceManagement .parrafos2 {
+.usersAssistanceManagement .parrafos2 {
   background-color:white;
   color:white;
   height:15px;
@@ -290,7 +283,7 @@
   padding:5px;
   color:#128c78;
 }
-.userAssistanceManagement .parrafos3 {
+.usersAssistanceManagement .parrafos3 {
   background-color:white;
   color:white;
   height:15px;
@@ -303,7 +296,7 @@
   padding:5px;
   color:#128c78;
 }
-.userAssistanceManagement .parrafos4 {
+.usersAssistanceManagement .parrafos4 {
   background-color:white;
   color:white;
   height:15px;
@@ -319,7 +312,7 @@
 
 
 
-.userAssistanceManagement .parrafosGreen {
+.usersAssistanceManagement .parrafosGreen {
   background-color:#128c78;
   color:white;
   height:15px;
@@ -332,7 +325,7 @@
   padding:5px;
 }
 
-.userAssistanceManagement .parrafosGreen2 {
+.usersAssistanceManagement .parrafosGreen2 {
   background-color:white;
   color:white;
   height:15px;
@@ -346,53 +339,53 @@
   color:#0066A6;
 }
 
-.userAssistanceManagement .date {
+.usersAssistanceManagement .date {
   width:257px;
 }
 
-.userAssistanceManagement .hidden{
+.usersAssistanceManagement .hidden{
   display:none;
 }
 
 
-.userAssistanceManagement .visible{
+.usersAssistanceManagement .visible{
   display:block;
 }
-.userAssistanceManagement div.info{
+.usersAssistanceManagement div.info{
   width:100%;
   height:0px;
   background-color: #f5f5f5;
   overflow: hidden;
   -webkit-transition: height 0.2s;
 }
-.userAssistanceManagement .subcontentDisplay div.info{
+.usersAssistanceManagement .subcontentDisplay div.info{
   height:160px;
 }
 
-.userAssistanceManagement .subcontentDisplay .titulo, .userAssistanceManagement .subcontent .titulo{
+.usersAssistanceManagement .subcontentDisplay .titulo, .usersAssistanceManagement .subcontent .titulo{
     cursor:pointer;
 }
-.userAssistanceManagement .info {
+.usersAssistanceManagement .info {
   display:flex;
   flex-direction:row;
 }
-.userAssistanceManagement .margin {
+.usersAssistanceManagement .margin {
   margin-left:50px;
 
 
 }
 
-.userAssistanceManagement .titlesHours {
+.usersAssistanceManagement .titlesHours {
   display:flex;
   flex-direction:row;
   margin-top:5px;
 }
-.userAssistanceManagement .hours {
+.usersAssistanceManagement .hours {
   display:flex;
   flex-direction:row;
 
 }
-.userAssistanceManagement .spanSE {
+.usersAssistanceManagement .spanSE {
   display:flex;
   align-content:center;
   background-color:white;
@@ -403,7 +396,7 @@
 
 
 }
-.userAssistanceManagement .spanSE2 {
+.usersAssistanceManagement .spanSE2 {
   display:flex;
   align-content:center;
   background-color:white;
@@ -414,7 +407,7 @@
 
 
 }
-.userAssistanceManagement .timeMargin {
+.usersAssistanceManagement .timeMargin {
   margin-bottom:2px;
 }
 
@@ -426,23 +419,9 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* SELECCION DE USUARIO */
 
-.userAssistanceManagement .searchTitle {
+.usersAssistanceManagement .searchTitle {
   background-color: #0066A6;
   color: white;
   padding:5px;
@@ -455,13 +434,13 @@
 }
 
 
-.userAssistanceManagement .inputSearch{
+.usersAssistanceManagement .inputSearch{
   width:166px;
   padding:5px;
   font-size: 14px;
 
 }
-.userAssistanceManagement .listUsers {
+.usersAssistanceManagement .listUsers {
   list-style-type:none;
   margin:0px;
   padding-left:5px;
@@ -475,7 +454,7 @@
   z-index: 999;
   position: absolute;
 }
-.userAssistanceManagement .liUsers {
+.usersAssistanceManagement .liUsers {
   height:25px;
   padding-top:10px;
   border-bottom:2px solid #275276;
@@ -484,12 +463,12 @@
 
 }
 
-.userAssistanceManagement .selectUser {
+.usersAssistanceManagement .selectUser {
   display:flex;
   flex-direction:row;
   margin:10px;
 }
-.userAssistanceManagement .userSelect {
+.usersAssistanceManagement .userSelect {
   width:160px;
   background-color:#0066A6;
   color:white;

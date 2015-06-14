@@ -44,7 +44,7 @@ app.controller('EditProfileCtrl', function($scope, $log, $timeout, Session, Mess
         $scope.user = user;
       },
       function(error) {
-        alert(error);
+        //alert(error);
         $scope.clearUser();
       }
     );
@@ -61,7 +61,7 @@ app.controller('EditProfileCtrl', function($scope, $log, $timeout, Session, Mess
 				$scope.user = user;
 			},
 			function(error) {
-				alert(error);
+				//alert(error);
 			}
 		);
 */
@@ -83,7 +83,7 @@ app.controller('EditProfileCtrl', function($scope, $log, $timeout, Session, Mess
         $scope.user = user;
       },
       function(error) {
-        alert(error);
+        //alert(error);
       });
 */
   });
@@ -102,7 +102,7 @@ app.controller('EditProfileCtrl', function($scope, $log, $timeout, Session, Mess
 				// nada
 			},
 			function(error) {
-				alert(error);
+				//alert(error);
 			}
 		);
 	}

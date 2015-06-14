@@ -21,7 +21,7 @@ app.controller('AddGroupCtrl', function($scope, Groups, Systems) {
         $scope.clear();
       },
       function(error) {
-        alert(error);
+        //alert(error);
       });
   }
 
@@ -32,7 +32,7 @@ app.controller('AddGroupCtrl', function($scope, Groups, Systems) {
         $scope.systems = systems;
       },
       function(err) {
-        alert(err);
+        //alert(err);
       });
   }
 

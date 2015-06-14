@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import signal, sys, json, traceback, inject, time, logging
 
-sys.path.append('../python')
+#sys.path.append('../python')
+sys.path.insert(0,'../python')
+
 
 from model.config import Config
 from model.session import Session

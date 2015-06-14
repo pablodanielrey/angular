@@ -1,6 +1,10 @@
 config = {
   host: "127.0.0.1",
+<<<<<<< HEAD
   port: "80",
+=======
+  port: "8001",
+>>>>>>> origin/prod
   ssl_host: "127.0.0.1",
   ssl_port: "8002"
 }

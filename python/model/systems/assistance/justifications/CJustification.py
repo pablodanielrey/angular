@@ -83,6 +83,7 @@ class CJustification(Justification):
         }
         events.append(e)
 
+
         if (previousStatus == 'PENDING' or previousStatus == 'ACCEPTED') and (status == 'CANCELED' or status == 'REJECTED'):
 
             cur.execute('update assistance.justifications_stock set stock = stock + %s where justification_id = %s and user_id = %s',(1,self.id,req['user_id']))

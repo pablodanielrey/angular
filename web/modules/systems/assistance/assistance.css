@@ -32,7 +32,7 @@
 }
 .assistanceHome .data1 {
   color:black;
-  font-size:16px;
+  font-size:14px;
   font-weight:bold;
 }
 .assistanceHome .data3 {
@@ -42,6 +42,16 @@
 .assistanceHome .data2 {
   color:white;
   font-size:14px;
+}
+.assistanceHome .data4 {
+  color:black;
+  font-size:12px;
+  font-weight:bold;
+}
+.assistanceHome .data5 {
+  color:black;
+  font-size:12px;
+  font-weight:bold;
 }
 .assistanceHome .spanBlue {
   color:#0066A6;
@@ -125,6 +135,7 @@
 .assistanceHome .license {
   display:flex;
   flex-direction:row;
+  wrap:nowrap;
   justify-content: space-around;
 
   padding-bottom:20px;
@@ -176,7 +187,7 @@
   border: 1px solid grey ;
 }
 .assistanceHome .boxes2 {
-  padding:10px 25px 10px 25px;
+  padding:5px 20px 5px 20px;
   margin:5px;
   color:white;
   background-color:#0066A6;

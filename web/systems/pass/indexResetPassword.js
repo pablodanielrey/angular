@@ -42,7 +42,7 @@ app.controller('IndexResetPasswordCtrl', function ($rootScope, $scope, $location
 
       if (e.name == 'SessionNotFound') {
         // no se encontro la session en el server asi que la destruyo y vuelvo a la pantlla principal.
-        alert("no se encontro la sesion en el servidor, debe loguearse nuevamente");
+        //alert("no se encontro la sesion en el servidor, debe loguearse nuevamente");
         Session.destroy();
         $window.location.reload();
         return;
@@ -56,7 +56,7 @@ app.controller('IndexResetPasswordCtrl', function ($rootScope, $scope, $location
 
     // errores de applicacion
     $rootScope.$on('onAppError', function(event, data) {
-      alert("error de aplicacion " + data);
+      //alert("error de aplicacion " + data);
     });
 
     // cambia la url de la pagina en base al evento.

@@ -19,6 +19,17 @@ from autobahn.twisted.websocket import WebSocketServerFactory
 from twisted.python import log
 from twisted.internet import reactor
 
+
+
+#http://code.activestate.com/recipes/439358-twisted-from-blocking-functions-to-deferred-functi/
+from twisted.internet.threads import deferToThread
+deferred = deferToThread.__get__
+
+
+
+
+
+
 from model.config import Config
 from model.utils import DateTimeEncoder
 
@@ -80,6 +91,20 @@ actions = [
 
 
 
+
+""" la transformo en un deferred para que sea procesada en otro thread """
+@deferred
+def dispatch(protocol,message):
+    protocol._dispatch(message)
+
+""" esto es necesario en funcion para usar .callFromThread """
+def sendMessage(protocol,message):
+    protocol.sendMessage(message,False)
+
+
+
+
+
 class ActionsServerProtocol(WebSocketServerProtocol):
 
 
@@ -97,7 +122,8 @@ class ActionsServerProtocol(WebSocketServerProtocol):
     def _sendEncodedMessage(self,msg):
         if (len(msg) < 1024):
             logging.debug('server -> cliente {}'.format(msg))
-        super(WebSocketServerProtocol,self).sendMessage(msg,False)
+        #super(WebSocketServerProtocol,self).sendMessage(msg,False)
+        reactor.callFromThread(sendMessage,super(WebSocketServerProtocol,self),msg)
 
 
 
@@ -119,7 +145,7 @@ class ActionsServerProtocol(WebSocketServerProtocol):
 
 
 
-    """
+    '''
 
             este codigo implementa el framming de los mensajes en esta capa. pero aparentemente no se necesita mas
             usando autobahn. lo dejo comentado por ahora para tenerlo a mano.
@@ -145,7 +171,31 @@ class ActionsServerProtocol(WebSocketServerProtocol):
               #logging.debug(jmsg);
               #super(WebsocketServer,self).sendMessage(jmsg)
 
-    """
+    '''
+
+
+    def _dispatch(self,message):
+
+        try:
+
+            managed = False
+            for action in actions:
+                managed = action.handleAction(self,message)
+                if managed:
+                    break
+        except AccessDenied as e:
+            print(e.__class__.__name__ + ' ' + str(e))
+            traceback.print_exc()
+            self.sendError(message,e)
+
+        except Exception as e:
+            print(e.__class__.__name__ + ' ' + str(e))
+            traceback.print_exc()
+            self.sendError(message,e)
+            self.sendException(e)
+
+
+
 
 
 
@@ -173,28 +223,7 @@ class ActionsServerProtocol(WebSocketServerProtocol):
                 sid = message['session']
                 self.session.touch(sid)
 
-
-            try:
-                managed = False
-                for action in actions:
-                    managed = action.handleAction(self,message)
-                    if managed:
-                        break
-
-            except AccessDenied as e:
-                print(e.__class__.__name__ + ' ' + str(e))
-                traceback.print_exc()
-                self.sendError(message,e)
-                managed = True
-
-            except Exception as e:
-                print(e.__class__.__name__ + ' ' + str(e))
-                traceback.print_exc()
-                self.sendError(message,e)
-                raise e
-
-            if not managed:
-                raise NotImplemented(message['action'])
+            dispatch(self,message)
 
         except Exception as e:
             print(e.__class__.__name__ + ' ' + str(e))

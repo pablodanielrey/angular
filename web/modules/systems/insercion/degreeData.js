@@ -82,7 +82,7 @@ app.controller('DegreeLaboralInsertionCtrl', function($scope, $timeout, LaboralI
 		}
       },
       function(err) {
-        alert(err);
+        //alert(err);
       });
 
   }

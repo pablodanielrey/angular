@@ -174,8 +174,8 @@ app.config(['$routeProvider', function($routeProvider) {
   })
 
   .when('/userAssistanceManagement', {
-      templateUrl: '/modules/systems/assistance/userAssistanceManagement.html',
-      controller: 'UserAssistanceManagementCtrl'
+      templateUrl: '/modules/systems/assistance/usersAssistanceManagement/index.html',
+      controller: 'UsersAssistanceManagementCtrl'
   })
 
   .when('/requestGeneralJustifications', {

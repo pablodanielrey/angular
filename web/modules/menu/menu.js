@@ -76,7 +76,7 @@ app.controller('MenuCtrl', function($rootScope, $scope, $location, $timeout, Ses
 
 		},
 		function(error) {
-			alert(error);
+			// nada por ahora
 		});
 
 		Profiles.checkAccess(Session.getSessionId(),'ADMIN-TUTOR,USER-TUTOR', function(ok) {
@@ -85,7 +85,7 @@ app.controller('MenuCtrl', function($rootScope, $scope, $location, $timeout, Ses
 			}
 		},
 		function(error) {
-			alert(error);
+			//alert(error);
 		});
 
 		Profiles.checkAccess(Session.getSessionId(),'ADMIN-ASSISTANCE,USER-ASSISTANCE', function(ok) {
@@ -94,7 +94,7 @@ app.controller('MenuCtrl', function($rootScope, $scope, $location, $timeout, Ses
 			}
 		},
 		function(error) {
-			alert(error);
+			//alert(error);
 		});
 
 	}

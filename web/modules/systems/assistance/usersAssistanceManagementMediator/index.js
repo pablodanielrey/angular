@@ -49,14 +49,29 @@ app.controller('UsersAssistanceManagementMediatorCtrl', ["$scope", "$timeout", "
     );
   };
 
-   $scope.filterUserRequestedJustifications = function(){
+  $scope.filterUserRequestedJustifications = function(){
 
     $scope.model.requestedJustificationsFiltered = [];
-
     for (var i = 0; i < $scope.model.requestedJustifications.length; i++) {
       if(($scope.model.selectedUser.id === $scope.model.requestedJustifications[i].user_id) && ($scope.isAuthorizedJustification($scope.model.requestedJustifications[i].justification_id))){
         var req = Utils.formatRequestJustification($scope.model.requestedJustifications[i]);
-        $scope.model.requestedJustificationsFiltered.push(req);
+        Users.findUser(req.userId,
+          function(user){
+            req.userName = user.name + " " + user.lastname;
+            Users.findUser(req.requestorId,
+              function(user){
+                req.requestorName = user.name + " " + user.lastname;
+                $scope.model.requestedJustificationsFiltered.push(req);
+              },
+              function(error) {
+                Notifications.message(error);
+              }
+            );
+          },
+          function(error) {
+            Notifications.message(error);
+          }
+        );
       }
     }
   };
@@ -96,8 +111,14 @@ app.controller('UsersAssistanceManagementMediatorCtrl', ["$scope", "$timeout", "
       $scope.model.rjReversed = !$scope.model.rjReversed;
     } else {
       switch(sort){
+        case "userName":
+          $scope.model.rjSort = ["userName", "justificationName", "dateSort"]
+        break;
+        case "requestorName":
+          $scope.model.rjSort = ["requestorName", "justificationName", "dateSort"]
+        break;
         case "dateSort":
-          $scope.model.rjSort = ["dateSort", "justificationName"]
+          $scope.model.rjSort = ["dateSort", "justificationName", "dateSort"]
         break;
         case "justificationName":
           $scope.model.rjSort = ["justificationName", "dateSort"]
@@ -111,7 +132,6 @@ app.controller('UsersAssistanceManagementMediatorCtrl', ["$scope", "$timeout", "
     }
 
   };
-
 
 
   /****************************

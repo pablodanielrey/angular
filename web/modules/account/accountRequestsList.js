@@ -101,7 +101,7 @@ app.controller("AccountRequestsListCtrl", function($rootScope, $scope, Utils, Ac
 			},
 			function(error) {
 				$scope.requests = [];
-				alert(error);
+				//alert(error);
 			});
 	};
 

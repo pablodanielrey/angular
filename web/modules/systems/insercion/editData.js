@@ -46,7 +46,7 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 			function(ok) {
 			},
 			function(error) {
-				alert(error);
+				//alert(error);
 			}
 		);
 
@@ -61,7 +61,7 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 			function(ok) {
 			},
 			function(error) {
-				alert(error);
+				//alert(error);
 			}
 		);
 
@@ -73,7 +73,7 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 			function(ok) {
 			},
 			function(error) {
-				alert(error);
+				//alert(error);
 			}
 		);
 	};
@@ -90,7 +90,7 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 			function(ok) {
 			},
 			function(error) {
-				alert(error);
+				//alert(error);
 			}
 		);
 	};

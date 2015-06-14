@@ -38,13 +38,17 @@
     <span><i class="fa fa-ticket"></i> Solicitudes del Usuario</span>
   </div>
   <div class="titlesFiles">
+    <div class="column t1" ng-click="sortRequestedJustifications('userName')"><i  class="fa fa-ticket"></i> Usuario</div>
     <div class="column t1" ng-click="sortRequestedJustifications('justificationName')"><i  class="fa fa-ticket"></i> Solicitud</div>
     <div class="column t1" ng-click="sortRequestedJustifications('dateSort')"><i  class="fa fa-calendar"></i> Día</div>
+    <div class="column t1" ng-click="sortRequestedJustifications('requestorName')"><i  class="fa fa-ticket"></i> Solicitado por</div>
     <div class="column t1" ng-click="sortRequestedJustifications('status')"><i class="fa fa-info-circle"></i> Estado</div>
   </div>
   <div class="scroll">
     <div class="myRequestInfo" ng-repeat="req in model.requestedJustificationsFiltered | orderBy:model.rjSort:model.rjReversed" >
-
+      <div class="myRequest">
+        <span>{{req.userName}}</span>
+      </div>
       <div class="myRequest">
         <span>{{req.justificationName}}</span>
       </div>
@@ -60,7 +64,9 @@
           </div>
         </div>
       </div>
-
+      <div class="myRequest">
+        <span>{{req.requestorName}}</span>
+      </div>
       <div class="myStateRequestApproved" ng-class="{true:'visible', false:'hidden'}[req.status == 'APPROVED']">
         <span class="buttonApproved"><i class="fa fa-check-circle"></i> Aprobado</span>
         <button  ng-click="cancelRequest(req)" ng-disabled="model.processingRequestedJustifications"> Cancelar</button>
