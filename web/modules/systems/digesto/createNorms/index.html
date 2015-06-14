@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html ng-app='createNormsApp'>
+<head>
+    <title> Nueva Norma </title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="structure.css" />
+    <link rel="stylesheet" href="visual.css" />
+    <link rel="stylesheet" href="navigation.css" />
+    <link rel="shortcut icon" href="/img/favicon.ico" />
+    <link rel="stylesheet" href="http://fortawesome.github.io/Font-Awesome/assets/font-awesome/css/font-awesome.css">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+    <script type="text/javascript" src="../../../../angular/angular-1.3.8/angular.js"></script>
+    <script type="text/javascript" src="createNorms.js"></script>
+</head>
+
+<body ng-controller='createNormsCtrl'>
+
+    <!-- CONTENEDOR PRINCIPAL -->
+    <section class="createNormsContainer">
+
+        <!-- CONTENEDOR DE LAS 3 PANTALLAS -->
+        <section class="contenedor">
+
+            <!-- PRIMERA PANTALLLA (Selección de Norma) -->
+            <article class="contenido1" >
+                <div class="marco">
+                    <div><h1>GENERAR NUEVA</h1></div>
+                    <div class="normas">
+                        <div class="boton cO">
+                            <div><i class="fa fa-file-text fa-3x"></i></div>
+                            <div>ORDENANZA</div>
+                        </div>
+                        <div class="boton cR">
+                            <div><i class="fa fa-file-text fa-3x"></i></div>
+                            <div>RESOLUCIÓN</div>
+                        </div>
+                        <div class="boton cD">
+                            <div><i class="fa fa-file-text fa-3x"></i></div>
+                            <div>DISPOSICIÓN</div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- SEGUNDA PANTALLA (Carga de Datos) -->
+            <article class="contenido2">
+                <div class="marco">
+                      <div class="newOrdenanza">
+                          <div>NUEVA</div>
+                          <div class="nuevaOrdenza">ORDENANZA</div>
+                          <button ng-click='finalizar()'>Cancelar</button>
+                      </div>
+                      <div class="datos1">
+                          <div class="fecha">
+                              <div>
+                                  <input class="inputText1" type="date">
+                              </div>
+                              <div>
+                                  <span class="divText2">Fecha</span>
+                              </div>
+                          </div>
+
+
+                          <div class="expediente">
+                                  <div class="codFacultad">
+                                          <div class="divText1">
+                                              <input class="inputText1" type="number" placeholder="900"></input>
+                                          </div>
+                                          <div>
+                                              <span class="divText2">Cod. Fac.</span>
+                                          </div>
+                                  </div>
+                                  <div class="separador"> - </div>
+                                  <div class="nExp">
+                                          <div>
+                                              <input class="inputText1" type="number"></input>
+                                          </div>
+                                          <div>
+                                              <span class="divText2">Nº de Expediente</span>
+                                          </div>
+                                  </div>
+                          </div>
+
+                          <div class="expedido">
+                                <div>
+                                    <select class="inputText1">
+                                          <option> Decano</option>
+                                          <option> Vicedecano</option>
+                                          <option> Sec. Asuntos Estudiantiles</option>
+                                          <option> Sec. Supervición Administrativa</option>
+                                          <option> Sec. Investigación y Postgrado</option>
+                                          <option> Sec. Investigación y Transferencia</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <span class="divText2">Emisor</span>
+                                </div>
+                          </div>
+                          <div class="expedido">
+                                <div>
+                                    <select class="inputText1">
+                                          <option> Pendiente</option>
+                                          <option> Aprobado</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <span class="divText2">Estado</span>
+                                </div>
+                          </div>
+                          <div class="expedido">
+                                <div>
+                                    <select class="inputText1">
+                                          <option> Pública</option>
+                                          <option> Privada</option>
+                                          <option> Privada de Grupos</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <span class="divText2">Visibilidad</span>
+                                </div>
+                          </div>
+
+
+                      </div>
+                      <div class="datos2">
+
+                          <div class="contIzq">
+                                <div class="titulo">
+                                    <div class="title">
+                                      <p> TITULO</p>
+                                    </div>
+                                    <div class="tam">
+                                      <input class="inputText1" type="text">
+                                    </div>
+                                </div>
+                                <div class="titulo">
+                                    <div class="title">
+                                      <p> EXTRACTO</p>
+                                    </div>
+                                    <div class="tam">
+                                      <input class="inputText2" type="text">
+                                    </div>
+                                </div>
+                          </div>
+                          <div class="contD">
+                            <div class="titulo">
+                                <div class="title">
+                                  <p> CARGAR PDF </p>
+                                  <div>
+                                    <input type="file"/>
+                                  </div>
+                                </div>
+                            </div>
+                            <div class="enviarOrdenanza">
+                                <div><i class="fa fa-floppy-o fa-3x"></i></div>
+                                <div class="titleCO"> CREAR ORDENANZA</div>
+                            </div>
+                          </div>
+
+
+                      </div>
+
+
+                </div>
+            </article>
+
+            <!-- TERCER PANTALLA (Proceso Finalizado) -->
+            <article class="contenido3">
+                <div class="marco">
+                  <div class="datos3">
+                        <div><i class="fa fa-check-circle fa-5x"></i></div>
+                        <div class="titleOC"> ORDENANZA CREADA CON ÉXITO !</div>
+                        <button ng-click='finalizar()'>finalizar</button>
+                  </div>
+
+            </article>
+
+        </section>
+
+    </section>
+
+</body>
+</html>
