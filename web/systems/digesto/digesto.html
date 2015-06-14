@@ -41,6 +41,13 @@
 
   <script type="text/javascript" src="/systems/digesto/menu/menu.js"></script>
 
+  <link rel="stylesheet" type="text/css" href="/systems/digesto/modules/commonCss/button.css" />
+
+  <script type="text/javascript" src="/systems/digesto/modules/create/create.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/digesto/modules/create/navigation.css" />
+  <link rel="stylesheet" type="text/css" href="/systems/digesto/modules/create/structure.css" />
+  <link rel="stylesheet" type="text/css" href="/systems/digesto/modules/create/visual.css" />
+
 <!--
   <script type="text/javascript" src="/systems/digesto/modules/search/searchRegulation.js"></script>
   <link rel="stylesheet" type="text/css" href="/systems/digesto/modules/search/searchRegulation.css" />
@@ -54,11 +61,11 @@
 <div ng-controller="DigestoCtrl" class="principal">
 
   <!-- <nav ng-class="{true:'visible',false:'hidden'}[isLogged()]"> -->
+  
   <nav>
     <div class='menu-digesto-container' ng-controller="MenuDigestoCtrl" ng-include="'/systems/digesto/menu/menu.html'">
     </div>
   </nav>
-
 
   <div ng-view></div>
 

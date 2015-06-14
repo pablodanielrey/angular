@@ -1,6 +1,8 @@
 
 <div>
   <ul ng-repeat='item in model.items'>
-    <li>{{item}}</li>
+    <li>
+      <a href={{item.url}}>{{item.item}}</a>
+    </li>
   </ul>
 </div>

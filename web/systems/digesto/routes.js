@@ -8,20 +8,16 @@ function config($routeProvider) {
 
   $routeProvider
 
-  /*
-    .when('/digesto', {
-      templateUrl: '/modules/systems/digesto/index.html',
-      controller: '..Controller',
-      controllerAs: 'vm'
+    .when('/load', {
+      templateUrl: '/systems/digesto/modules/create/index.html',
+      controller: 'CreateDigestoController'
     })
 
-    .when('/digesto2', {
-      templateUrl: '/modules/systems/digesto/index2.html',
-      controller: '..Controller',
-      controllerAs: 'vm'
+    .when('/search', {
+      templateUrl: '/systems/digesto/modules/search/index.html',
+      controller: 'SearchDigestoController',
     })
 
-*/
     .otherwise({
         redirectTo: '/'
     });
