@@ -10,17 +10,13 @@ app.controller('MenuDigestoCtrl', ["$rootScope", '$scope', "$location", "$timeou
         { item: 'Cargar', url: '#/load' },
         { item: 'Buscar', url: '#/search' }
 
-      ]
+      ],
+      cerrado : false
     }
 
-    $scope.changeContent = function(content) {
-      if ($scope.model.class =='') {
-        $scope.model.class = content;
-      } else {
-        $scope.model.class = '';
-      }
-
-      console.log(content);
+    $scope.toggleMenu = function() {
+      $scope.model.cerrado = !$scope.model.cerrado;
     }
+
   }
 ]);

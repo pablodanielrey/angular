@@ -5,45 +5,23 @@
 
 
 .principal {
-  background-color: red;
   width: 100%;
   height: 100%;
-  position: absolute;
   display: flex;
   flex-direction: row;
   wrap: nowrap;
 }
 
-
-.menu {
-  width: 250px;
+.principal.ng-scope {
   height: 100%;
-  background-color: green;
-  position: absolute;
-
 }
 
-.contentActionMenu{
-  background-color: yellow;
+
+.screen {
+  width: 100%;
+  height: 100%;
+  -webkit-transition: all 1s;
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-}
-
-.closeMenu {
-  transform: translate3d(-220px,0,0);
-}
-
-
-.openMenu {
-  transform: translate3d(0,0,0);
-}
-
-
-.item1Seleccionado{
-
-}
-
-.screem{
-  -webkit-transition: all 5s;
+  flex-direction: row;
+  justify-content: flex-start;
 }
