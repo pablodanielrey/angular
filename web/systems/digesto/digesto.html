@@ -56,20 +56,25 @@
   <link rel="stylesheet" type="text/css" href="/systems/digesto/modules/create/createRegulation.css" />
 -->
 
-<body>
+<body ng-controller="DigestoCtrl">
 
-<div ng-controller="DigestoCtrl" class="principal">
+<div  class="principal" ng-controller="MenuDigestoCtrl" >
 
-  <!-- <nav ng-class="{true:'visible',false:'hidden'}[isLogged()]"> -->
+    <div class="screem {{model.class}}" >
+        <!-- <nav ng-class="{true:'visible',false:'hidden'}[isLogged()]"> -->
+          <div  class="menu">
+            <nav >
+              <div class='menu-digesto-container' ng-include="'/systems/digesto/menu/menu.html'">
 
-  <nav>
-    <div class='menu-digesto-container' ng-controller="MenuDigestoCtrl" ng-include="'/systems/digesto/menu/menu.html'">
+              </div>
+            </nav>
+          </div>
+
+          <div ng-view>
+          </div>
     </div>
-  </nav>
-
-  <div ng-view></div>
-
-  <div class='messages-container' ng-controller="MessagesCtrl" ng-include="'/modules/messages/messages.html'" ng-class="{false: 'hidden', true: 'visible'}[ isVisible() ]"></div>
+  <div class='messages-container' ng-controller="MessagesCtrl" ng-include="'/modules/messages/messages.html'" ng-class="{false: 'hidden', true: 'visible'}[ isVisible() ]">
+  </div>
 </div>
 
 </body>

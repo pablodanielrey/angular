@@ -1,5 +1,10 @@
 
 <div>
+
+  <div class="contentActionMenu">
+    <button class="openMenu" ng-click = "changeContent('closeMenu')"> Chupala </button>
+  </div>
+
   <ul ng-repeat='item in model.items'>
     <li>
       <a href={{item.url}}>{{item.item}}</a>
