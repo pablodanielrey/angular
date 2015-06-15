@@ -2,12 +2,14 @@
 
 
 .enroll-container {
-  position: absolute;
-  width: 1024px;
-  height: 768px;
-  background: black;
-  color: white;
-
+  width: 17em;
+  height: 19em;
+  position: relative;
+  margin: 0 auto 40px;
+  border: 1px solid #CCC;
+  display:flex;
+  flex-direction:column;
+  margin-top:1em;
   /*
   display: flex;
   flex-direction: row;
@@ -27,9 +29,16 @@
 }
 
 .enroll-container .dni {
-  flex: 1 100%;
+  width: 100%;
   display: flex;
   justify-content: center;
+  margin-top:0.5em;
+}
+
+.enroll-container .dni input {
+  width:80%;
+  margin: auto;
+  height:2em;
 }
 
 .enroll-container .KeyboardComplete {
@@ -48,25 +57,35 @@
 }
 
 .enroll-container .row {
-  flex: 1 100%;
+  width: 90%;
+  margin-bottom:0.5em;
   display: flex;
-  flex-flow: row wrap;
-  justify-content: space-between;
+  flex-direction: row;
+  justify-content: space-around;
 }
 
 .enroll-container .btn {
-  flex: 1 20%;
-  height: 100%;
+  width: 30%;
   margin: auto;
+  height:2em;
 }
 
+.enroll-container .btn2 {
+  width: 62%;
+  margin: auto;
+  height:2em;
+}
 
 .enroll-container .action {
-  flex: 1 100%;
+  width: 100%;
   display: flex;
   justify-content: center;
 }
 
+.enroll-container .action .btnAceptar {
+  width: 90%;
+  height: 2em;
+}
 
 
 .enroll-container .message {
