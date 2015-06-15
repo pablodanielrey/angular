@@ -9,20 +9,20 @@ function config($routeProvider) {
   $routeProvider
 
     .when('/firmware', {
-      templateUrl: '/modules/systems/firmware/index.html',
+      templateUrl: '/systems/firmware/modules/index.html',
       controller: 'MainFirmwareController',
       controllerAs: 'vm'
     })
 
 
     .when('/enroll', {
-      templateUrl: '/modules/systems/firmware/enroll.html',
+      templateUrl: '/systems/firmware/modules/enroll.html',
       controller: 'EnrollCtrl'
     })
 
 
     .when('/log', {
-      templateUrl: '/modules/systems/firmware/log.html',
+      templateUrl: '/systems/firmware/modules/log.html',
       controller: 'LogController',
       controllerAs: 'vm'
     })
