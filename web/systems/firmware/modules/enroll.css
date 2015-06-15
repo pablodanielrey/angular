@@ -39,6 +39,7 @@
   width:80%;
   margin: auto;
   height:2em;
+  text-align:center;
 }
 
 .enroll-container .KeyboardComplete {
@@ -89,7 +90,9 @@
 
 
 .enroll-container .message {
-
+  text-align: center;
+  color: rgb(229, 26, 26);
+  font-weight: bold;
 }
 
 
