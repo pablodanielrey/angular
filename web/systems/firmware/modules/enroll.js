@@ -7,7 +7,8 @@ app.controller("EnrollCtrl", ['$rootScope','$scope','$location','$timeout','Noti
       dni:null,
       fingerNumber:0,
       msg:'',
-      fingers:0
+      fingers:0,
+      enabled : false
     }
 
 
@@ -16,7 +17,7 @@ app.controller("EnrollCtrl", ['$rootScope','$scope','$location','$timeout','Noti
       $scope.model.fingers = 0;
       $scope.model.fingerNumber = 0;
       $scope.model.msg = '';
-
+      $scope.model.model.enabled = false;
     }
 
     $scope.$on('$viewContentLoaded', function(event) {
@@ -36,10 +37,12 @@ app.controller("EnrollCtrl", ['$rootScope','$scope','$location','$timeout','Noti
       }
 
       $scope.model.dni = ($scope.model.dni == null) ? n : $scope.model.dni + n;
+      $scope.model.enabled = !($scope.model.dni == null || $scope.model.dni.trim() == '');
     }
 
     $scope.deleteNumber = function() {
       $scope.model.dni = ($scope.model.dni == null || $scope.model.dni.length == 0) ? null : $scope.model.dni.substring(0, $scope.model.dni.length-1);
+      $scope.model.enabled = !($scope.model.dni == null || $scope.model.dni.trim() == '');
     }
 
 
@@ -47,6 +50,7 @@ app.controller("EnrollCtrl", ['$rootScope','$scope','$location','$timeout','Noti
 
 
     $scope.addUser = function() {
+      $scope.model.enabled = false;
       Firmware.enroll($scope.model.dni,
         function(response) {
            Notifications.message("Las huellas del usuario " + $scope.model.dni + " se han guardado exitosamente");
@@ -55,6 +59,7 @@ app.controller("EnrollCtrl", ['$rootScope','$scope','$location','$timeout','Noti
         },
         function(error) {
            Notifications.message(error);
+           $scope.initialize();
         }
       );
     }
