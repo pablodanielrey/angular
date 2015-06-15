@@ -31,6 +31,7 @@
 
 .enroll-container .dni {
   width: 100%;
+  height: 20%;
   display: flex;
   justify-content: center;
   margin-top:0.5em;
@@ -46,7 +47,7 @@
 
 .enroll-container .KeyboardComplete {
   flex: 1 100%;
-  height: 100%;
+  height: 80%;
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
@@ -86,14 +87,16 @@
 .enroll-container .action {
   width: 100%;
   display: flex;
+  flex-direction:column;
   justify-content: center;
 }
 
-.enroll-container .action .btnAceptar {
-  width: 90%;
+.enroll-container .action .btnAction {
+  width: 100%;
   height: 2em;
   background-color:white;
   font-weight: bold;
+  margin-bottom: 0.5em;
 }
 
 

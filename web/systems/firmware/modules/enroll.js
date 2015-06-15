@@ -8,7 +8,8 @@ app.controller("EnrollCtrl", ['$rootScope','$scope','$location','$timeout','Noti
       fingerNumber:0,
       msg:'',
       fingers:0,
-      enabled : false
+      enabled : false,
+      cancel : true
     }
 
 
@@ -18,6 +19,7 @@ app.controller("EnrollCtrl", ['$rootScope','$scope','$location','$timeout','Noti
       $scope.model.fingerNumber = 0;
       $scope.model.msg = '';
       $scope.model.enabled = false;
+      $scope.model.cancel = true;
     }
 
     $scope.$on('$viewContentLoaded', function(event) {
@@ -51,6 +53,7 @@ app.controller("EnrollCtrl", ['$rootScope','$scope','$location','$timeout','Noti
 
     $scope.addUser = function() {
       $scope.model.enabled = false;
+      $scope.model.cancel = false;
       Firmware.enroll($scope.model.dni,
         function(response) {
            Notifications.message("Las huellas del usuario " + $scope.model.dni + " se han guardado exitosamente");
