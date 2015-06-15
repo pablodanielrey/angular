@@ -10,6 +10,7 @@
   display:flex;
   flex-direction:column;
   margin-top:1em;
+  background-color: #eee;
   /*
   display: flex;
   flex-direction: row;
@@ -39,6 +40,8 @@
   width:80%;
   margin: auto;
   height:2em;
+  text-align:center;
+  font-weight: bold;
 }
 
 .enroll-container .KeyboardComplete {
@@ -68,12 +71,16 @@
   width: 30%;
   margin: auto;
   height:2em;
+  background-color:white;
+  font-weight: bold;
 }
 
 .enroll-container .btn2 {
   width: 62%;
   margin: auto;
   height:2em;
+  background-color:white;
+  font-weight: bold;
 }
 
 .enroll-container .action {
@@ -85,14 +92,40 @@
 .enroll-container .action .btnAceptar {
   width: 90%;
   height: 2em;
+  background-color:white;
+  font-weight: bold;
 }
 
 
 .enroll-container .message {
-
+  position: absolute;
+  top: 40%;
+  z-index: 999;
+  height: 5em;
+  background-color: white;
+  text-align: center;
+  color: rgb(229, 26, 26);
+  font-weight: bold;
+  display: flex;
+  flex-direction:row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  border:1px solid rgb(229, 26, 26);
 }
 
+.enroll-container .message .finger {
+  width: 15%;
+  color: #777;
+  font-size: 1.5em;
+}
 
+.enroll-container .message .text {
+  width:80%;
+}
+.enroll-container .hidden {
+  display:none;
+}
 
 @media (max-width: 800px) {
 

@@ -1,6 +1,11 @@
 
 <div class="enroll-container">
 
+  <div class='message' ng-class="{true:'hidden'}[model.msg == '']">
+    <i class="finger fa fa-hand-o-up"></i>
+    <label class="text">{{model.msg}}</label>
+  </div>
+
   <div class='home'>
 
     <div class="dni">
@@ -35,7 +40,7 @@
 
 
       <div class="action">
-          <button class="btnAceptar" ng-click="addUser()" ng-disabled="model.dni==null"><i class="fa fa-sign-in"></i> Enviar </button>
+          <button class="btnAceptar" ng-click="addUser()" ng-disabled="!model.enabled"><i class="fa fa-sign-in"></i> Enviar </button>
       </div>
 
 
@@ -43,8 +48,5 @@
 
   </div>
 
-  <div class='message'>
-    <label>{{model.msg}}</label>
-  </div>
 
 </div>
