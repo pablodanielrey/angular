@@ -672,7 +672,39 @@ app.service('Assistance', ['Utils','Messages','Session',
 					}
 				});
 		};
-    
+
+
+		/**
+     * solicitar justificacion general en un rango
+     * @param {type} justification Datos de la justificacion
+     * @param {type} callbackOk
+     * @param {type} callbackError
+     * @returns {undefined}
+     */
+    this.requestGeneralJustificationRange = function(justification, callbackOk, callbackError) {
+			var msg = {
+				id: Utils.getId(),
+				action: 'requestGeneralJustificationRange',
+				session: Session.getSessionId(),
+				request: {
+					justification_id: justification.id,
+					begin: justification.begin,
+					end: justification.end
+				}
+			};
+
+
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response);
+					} else {
+						callbackError(data.error);
+					}
+				});
+		};
+
+
     /**
      * solicitar justificaciones generales
      * @param {type} callbackOk
@@ -685,7 +717,7 @@ app.service('Assistance', ['Utils','Messages','Session',
 				action: 'getGeneralJustificationRequests',
 				session: Session.getSessionId()
 			};
-      
+
       Messages.send(msg,
 				function(data) {
 					if (typeof data.error === 'undefined') {
@@ -694,7 +726,7 @@ app.service('Assistance', ['Utils','Messages','Session',
 						callbackError(data.error);
 					}
 				});
-      
+
     };
 
     this.deleteGeneralJustificationRequest = function(requestId, callbackOk, callbackError){
@@ -706,7 +738,7 @@ app.service('Assistance', ['Utils','Messages','Session',
 					request_id: requestId
 				}
 			};
-      
+
       Messages.send(msg,
 				function(data) {
 					if (typeof data.error === 'undefined') {

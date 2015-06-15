@@ -837,6 +837,94 @@ class RequestGeneralJustification:
 peticion:
 {
 	"id":"",
+	"action":"requestGeneralJustificationRange",
+	"session":"session de usuario",
+	request:{
+        justificationId:"id de la justificacion",
+        begin:"fecha de inicio"
+        end:"fecha de fin" (opcional)
+        status: "estado" (opcional)
+    }
+}
+
+respuesta:
+{
+	"id":"id de la peticion",
+	"ok":"",
+	"error":""
+}
+
+"""
+class RequestGeneralJustificationRange:
+  profiles = inject.attr(Profiles)
+  config = inject.attr(Config)
+  date = inject.attr(Date)
+  events = inject.attr(Events)
+
+  justifications = inject.attr(Justifications)
+
+
+
+  """ manejar accion """
+  def handleAction(self, server, message):
+    if (message['action'] != 'requestGeneralJustificationRange'):
+        return False
+
+    """ chequeo de datos """
+    if ('id' not in message) or ('session' not in message) or ('request' not in message) or ('justification_id' not in message['request']) or ('begin' not in message['request']) or ('end' not in message['request']):
+      response = {'id':message['id'], 'error':'Insuficientes parámetros'}
+      server.sendMessage(response)
+      return True
+
+    """ chequeo de permisos """
+    sid = message['session']
+    self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
+
+    """ definir datos a insertar """
+    justificationId = message['request']['justification_id']
+    begin = message['request']['begin']
+    begin = self.date.parse(begin)
+    end = message['request']['end']
+    end = self.date.parse(end)
+
+
+    """ insertar datos """
+    con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+
+    try:
+      events = self.justifications.requestGeneralJustificationRange(con,justificationId,begin,end)
+      con.commit()
+
+      response = {
+       'id':message['id'],
+       'ok':'El pedido se ha realizado correctamente'
+      }
+      server.sendMessage(response)
+
+      for e in events:
+        self.events.broadcast(server,e)
+
+    except Exception as e:
+      logging.exception(e)
+      con.rollback()
+
+      response = {
+        'id':message['id'],
+        'error':'Error realizando pedido'
+      }
+
+      server.sendMessage(response)
+
+    finally:
+      con.close()
+      return True
+
+
+
+"""
+peticion:
+{
+	"id":"",
 	"action":"deleteGeneralJustificationRequest",
 	"session":"session de usuario",
 	request:{
@@ -1163,31 +1251,31 @@ class GetSpecialJustifications:
                     'f9baed8a-a803-4d7f-943e-35c436d5db46', #medica corta duracion
                     'b80c8c0e-5311-4ad1-94a7-8d294888d770', #medica atencion familiar
                     'a93d3af3-4079-4e93-a891-91d5d3145155', #medica largo tratamiento
-                  
+
                     '478a2e35-51b8-427a-986e-591a9ee449d8', #justificado por medico
                     'e8019f0e-5a70-4ef3-922c-7c70c2ce0f8b', #donacion sangre
-                    
-                    '70e0951f-d378-44fb-9c43-f402cbfc63c8', #ART                    
+
+                    '70e0951f-d378-44fb-9c43-f402cbfc63c8', #ART
                     '0cd276aa-6d6b-4752-abe5-9258dbfd6f09', #duelo
-                    
+
                     '30a249d5-f90c-4666-aec6-34c53b62a447', #matrimonio
                     'aa41a39e-c20e-4cc4-942c-febe95569499', #Pre natal
                     '68bf4c98-984d-4b71-98b0-4165c69d62ce', #pos natal
                     'e249bfce-5af3-4d99-8509-9adc2330700b', #nacimiento
-                    
+
                     '7747e3ff-bbe2-4f2e-88f7-9cc624a242a9', #viaje
                     '508a9b3a-e326-4b77-a103-3399cb65f82a', #cursos / capacitacion
                     '5289eac5-9221-4a09-932c-9f1e3d099a47', #concurso
-                    
+
                     '7e180d9d-0ef1-48a7-9f3f-26a0170cc2f7', #entrada tarde justificada
                     'c32eb2eb-882b-4905-8e8f-c03405cee727', #justificado por autoridad
                     '1c14a13c-2358-424f-89d3-d639a9404579', #licencia sin goce de sueldo
                     'bfaebb07-8d08-4551-b264-85eb4cab6ef1', #suspensión
-                    
-                    
+
+
                     '5c548eab-b8fc-40be-bb85-ef53d594dca9', #dia del bibliotecario
                     '3d486aa0-745a-4914-a46d-bc559853d367', #incumbencias climaticas
-                    
+
                 ])
 
             role = 'realizar-solicitud-admin'

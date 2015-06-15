@@ -393,6 +393,19 @@ class Justifications:
 
       return events
 
+    def requestGeneralJustificationRange(self, con, justificationId, begin, end):
+      date = begin
+      diff = (end-begin).days
+      events = []
+
+      # incremento en 1 para que tome el ultimo dia
+      for x in range(0, diff + 1):
+        events.extend(self.requestGeneralJustification(con,justificationId,date))
+        date = date + datetime.timedelta(days=1)      
+
+      return events
+
+
     def deleteGeneralJustificationRequest(self, con, requestId):
       cur = con.cursor()
       sql = "DELETE FROM assistance.general_justifications WHERE id = '" + requestId + "'"
