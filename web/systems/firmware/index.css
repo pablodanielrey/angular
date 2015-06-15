@@ -1,0 +1,13 @@
+
+*{
+  margin: 0px;
+  padding: 0px;
+}
+
+/*
+ porque angular agrega ng-scope a varios divs
+*/
+.ng-scope {
+  width: 100%;
+  height: 100%;
+}
