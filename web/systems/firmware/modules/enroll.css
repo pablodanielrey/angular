@@ -54,34 +54,28 @@
 }
 
 .enroll-container .keyboard {
-  flex: 1 100%;
   display: flex;
   flex-flow: row wrap;
-  justify-content: center;
-}
-
-.enroll-container .row {
-  width: 90%;
-  margin-bottom:0.5em;
-  display: flex;
-  flex-direction: row;
   justify-content: space-around;
+  align-content: space-around;
+  align-items: center;
+  width: 100%;
 }
 
 .enroll-container .btn {
-  width: 30%;
-  margin: auto;
-  height:2em;
-  background-color:white;
-  font-weight: bold;
+  order: 1;
+  flex: 1 1 30%;
+  align-self: auto;
+  min-width: auto;
+  min-height: 2em;
 }
 
 .enroll-container .btn2 {
-  width: 62%;
-  margin: auto;
-  height:2em;
-  background-color:white;
-  font-weight: bold;
+  order: 1;
+  flex: 1 1 30%;
+  align-self: auto;
+  min-width: auto;
+  min-height: 2em;
 }
 
 .enroll-container .action {
