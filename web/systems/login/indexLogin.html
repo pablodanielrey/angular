@@ -20,7 +20,7 @@
 
   <!-- directivas -->
   <script type="text/javascript" src="/directives/autofill.js"></script>
-  
+
 
 	<!-- ***** SERVICIOS ***** -->
 	<script type="text/javascript" src="/config.json"></script>
@@ -41,16 +41,18 @@
 	<!-- ***** MODULOS ***** -->
   <script type="text/javascript" src="/modules/messages/messages.js"></script>
   <link rel="stylesheet" type="text/css" href="/modules/messages/messages.css"/>
-  <script type="text/javascript" src="/modules/login/login.js"></script>
-  <link rel="stylesheet" type="text/css" href="/modules/login/login.css" />
+
+  <script type="text/javascript" src="/systems/login/modules/login.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/login/modules/login.css" />
+
 <body>
 
-<div ng-controller="IndexLoginCtrl" class="principal">
-  <div class='login-container' ng-controller="LoginCtrl" ng-include="'/modules/login/login.html'">
-  </div>
+  <div ng-controller="IndexLoginCtrl" class="principal">
+    <div class='login-container' ng-controller="LoginCtrl" ng-include="'/systems/login/modules/login.html'">
+    </div>
 
-   <div class='messages-container' ng-controller="MessagesCtrl" ng-include="'/modules/messages/messages.html'" ng-class="{false: 'hidden', true: 'visible'}[ isVisible() ]"></div>
-</div>
+     <div class='messages-container' ng-controller="MessagesCtrl" ng-include="'/modules/messages/messages.html'" ng-class="{false: 'hidden', true: 'visible'}[ isVisible() ]"></div>
+  </div>
 
 </body>
 </html>

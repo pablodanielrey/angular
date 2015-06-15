@@ -11,7 +11,7 @@ app.config(['$routeProvider', function($routeProvider) {
   })
 
   .when('/logout', {
-     templateUrl: '/modules/login/logout.html',
+     templateUrl: '/systems/login/modules/logout.html',
      controller: 'LogoutCtrl'
   })
 
