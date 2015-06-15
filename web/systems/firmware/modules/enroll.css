@@ -10,6 +10,7 @@
   display:flex;
   flex-direction:column;
   margin-top:1em;
+  background-color: #eee;
   /*
   display: flex;
   flex-direction: row;
@@ -69,12 +70,14 @@
   width: 30%;
   margin: auto;
   height:2em;
+  background-color:white;
 }
 
 .enroll-container .btn2 {
   width: 62%;
   margin: auto;
   height:2em;
+  background-color:white;
 }
 
 .enroll-container .action {
@@ -86,6 +89,7 @@
 .enroll-container .action .btnAceptar {
   width: 90%;
   height: 2em;
+  background-color:white;
 }
 
 
