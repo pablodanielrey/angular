@@ -49,7 +49,7 @@ app.controller("EnrollCtrl", ['$rootScope','$scope','$location','$timeout','Noti
     $scope.addUser = function() {
       Firmware.enroll($scope.model.dni,
         function(response) {
-           Notifications.message("El usuario " + $scope.model.dni + " se ha creado exitosamente");
+           Notifications.message("Las huellas del usuario " + $scope.model.dni + " se han guardado exitosamente");
            //$scope.model.msg = "El usuario " + $scope.model.dni + " se ha creado exitosamente";
            $scope.initialize();
         },
@@ -75,7 +75,7 @@ app.controller("EnrollCtrl", ['$rootScope','$scope','$location','$timeout','Noti
         t = 'tercera';
       }
 
-      $scope.model.msg = 'Presione el dedo por ' + t + ' vez';
+      $scope.model.msg = 'Coloque el dedo en el lector de huellas por ' + t + ' vez';
     })
 
     $scope.$on('ErrorEvent', function(event, data) {
