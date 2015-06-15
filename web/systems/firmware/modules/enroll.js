@@ -17,7 +17,7 @@ app.controller("EnrollCtrl", ['$rootScope','$scope','$location','$timeout','Noti
       $scope.model.fingers = 0;
       $scope.model.fingerNumber = 0;
       $scope.model.msg = '';
-      $scope.model.model.enabled = false;
+      $scope.model.enabled = false;
     }
 
     $scope.$on('$viewContentLoaded', function(event) {
