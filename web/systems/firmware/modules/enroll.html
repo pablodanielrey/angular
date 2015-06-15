@@ -1,6 +1,10 @@
 
 <div class="enroll-container">
 
+  <div class='message' ng-class="{true:'hidden'}[model.msg == '']">
+    <label>{{model.msg}}</label>
+  </div>
+
   <div class='home'>
 
     <div class="dni">
@@ -43,8 +47,5 @@
 
   </div>
 
-  <div class='message'>
-    <label>{{model.msg}}</label>
-  </div>
 
 </div>
