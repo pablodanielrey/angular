@@ -32,15 +32,11 @@
 
 .closeMenu {
   transform: translate3d(-220px,0,0);
-  -webkit-transition: all 0.4s;
-
 }
 
 
 .openMenu {
   transform: translate3d(0,0,0);
-  webkit-transition: all 5s ease-in-out;
-
 }
 
 
@@ -49,6 +45,5 @@
 }
 
 .screem{
-
-
+  -webkit-transition: all 5s;
 }
