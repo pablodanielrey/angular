@@ -41,6 +41,7 @@
   margin: auto;
   height:2em;
   text-align:center;
+  font-weight: bold;
 }
 
 .enroll-container .KeyboardComplete {
@@ -71,6 +72,7 @@
   margin: auto;
   height:2em;
   background-color:white;
+  font-weight: bold;
 }
 
 .enroll-container .btn2 {
@@ -78,6 +80,7 @@
   margin: auto;
   height:2em;
   background-color:white;
+  font-weight: bold;
 }
 
 .enroll-container .action {
@@ -90,6 +93,7 @@
   width: 90%;
   height: 2em;
   background-color:white;
+  font-weight: bold;
 }
 
 
