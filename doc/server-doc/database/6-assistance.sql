@@ -43,6 +43,12 @@ create schema assistance;
   );
 
 
+  create table assistance.positions_justifications (
+    position_id varchar not null references assistance.positions (id),
+    justification_id varchar not null references assistance.justifications (id)
+  );
+
+
   /*
     define si se hace el chequeo o no.
     los tipos de chequeo son mutualmente excluyentes y pueden ser:
