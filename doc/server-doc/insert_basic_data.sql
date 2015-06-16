@@ -131,8 +131,10 @@ insert into credentials.auth_profile (user_id,profile) select id,'ADMIN-ASSISTAN
 
 
 
-
-
+/*
+  prefiles para el sistema de oficinas
+*/
+insert into credentials.auth_profile (user_id,profile) select id,'ADMIN-OFFICES' from profile.users where dni in ('1');
 
 
 /*
