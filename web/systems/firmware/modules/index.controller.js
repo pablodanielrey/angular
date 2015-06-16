@@ -317,10 +317,15 @@ function MainFirmwareController($rootScope,$scope, $timeout, $location, Notifica
 
    $scope.$on('identifiedEvent', function(event, data) {
      if (vm.model.adminMode) {
-       $location.path("/enroll");
+       if (data.profile == 'admin') {
+         $location.path("/enroll");
+       } else {
+         Notifications.message('Error, usted no tiene permisos de administrador');
+         vm.initialize();
+       }
      } else {
        $scope.$parent.logData  = {
-          date:vm.model.date,
+          date:data.date,
           user:data.user
        }
 

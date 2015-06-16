@@ -1,0 +1,15 @@
+
+*{
+  margin: 0px;
+  padding: 0px;
+
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+/*
+ porque angular agrega ng-scope a varios divs
+*/
+.ng-scope {
+  /*width: 100%;*/
+  /*height: 100%;*/
+}

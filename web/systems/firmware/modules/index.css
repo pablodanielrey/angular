@@ -34,15 +34,17 @@
 .index-container .mode-admin-container {
   height: 5%;
   min-height:2em;
-  color:blue;
+  color: #1e5799 ;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  border-top: 1px solid;
+  border-top: 1px solid #1e5799 ;
 }
 
 .index-container .mode-admin-container .label {
+  font-size: small;
+  font-weight: bold;
   margin-right:0.5em;
 }
 
@@ -190,6 +192,7 @@
     text-align:center;
     font-size: 3em;
     border:0;
+    border-bottom:1px solid #ccc;
 }
 
 /* -----------------------------------
@@ -296,6 +299,8 @@
 
 .index-container .keyboard-extends-container  button,.index-container .keyboard-extends-container  input{
   cursor:pointer;
+  flex: 1;
+  margin: 0.1em;
 }
 
 .index-container .keyboard-extends-container .keyboard-letters .letter {
