@@ -27,6 +27,8 @@ app.service('Firmware', ['Utils','Messages','Session','$rootScope',
       callbackOk('admin');
       var data = {};
       data.user = {name:'Emanuel',lastname:'Pais',dni:code};
+      data.profile = 'admin';
+      data.date = new Date();
       $rootScope.$broadcast('identifiedEvent',data);
     }
 
