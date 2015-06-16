@@ -299,6 +299,8 @@
 
 .index-container .keyboard-extends-container  button,.index-container .keyboard-extends-container  input{
   cursor:pointer;
+  flex: 1;
+  margin: 0.1em;
 }
 
 .index-container .keyboard-extends-container .keyboard-letters .letter {
