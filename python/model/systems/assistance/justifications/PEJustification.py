@@ -91,19 +91,19 @@ class PEJustification(Justification):
     """ retorna las disponibles por restricciones en la fecha date """
     def _availableRep(self,rep,userId,date):
         if rep is Repetition.DAILY:
-            return 3
+            return 5
 
         if rep is Repetition.WEEKLY:
             if self._weekChangesMonth(date):
-                return 6
+                return 10
             else:
-                return 3
+                return 5
 
         if rep is Repetition.MONTHLY:
-            return 3
+            return 5
 
         if rep is Repetition.YEARLY:
-            return 12
+            return 24
 
         return None
 
