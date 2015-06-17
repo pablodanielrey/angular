@@ -272,6 +272,18 @@ class Offices:
         cur.execute('insert into offices.offices_users (user_id,office_id) values (%s,%s)',params)
 
 
+    '''
+        elimina un usuario de una oficina
+    '''
+    def removeUser(self,con,officeId,userId):
+        if officeId is None or userId is None:
+            return
+
+        params = (userId,officeId)
+        cur = con.cursor
+        cur.execute('delete from offices.offices_users where user_id = %s and office_id = %s',params)
+
+
 
     '''
         crea una nueva oficina si no existe o sino actualiza los datos
