@@ -278,6 +278,8 @@ class Offices:
     '''
     def persist(self,con,office):
         if office is None or 'name' not in office:
+            return
+
         cur = con.cursor()
 
         parent = (None,office['parent'])['parent' in office]
