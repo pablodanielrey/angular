@@ -64,7 +64,7 @@ class Justifications:
     ]
 
 
-    """ obtiene un requerimiento de justificacion dado el id """
+    ''' obtiene un requerimiento de justificacion dado el id '''
     def findJustificationRequestById(self,con,id):
         cur = con.cursor()
         cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where id = %s',(id,))
@@ -83,9 +83,9 @@ class Justifications:
         return req
 
 
-    """
+    '''
         obtiene el ultimo estado del pedido de justificación indicado por reqId
-    """
+    '''
     def _getJustificationRequestStatus(self,con,reqId):
         cur = con.cursor()
         cur.execute('select jrs.status from assistance.justifications_requests_status as jrs, (select request_id,max(created) as created from assistance.justifications_requests_status group by request_id) as r where r.created = jrs.created and r.request_id = jrs.request_id and r.request_id = %s',(reqId,))
@@ -95,16 +95,16 @@ class Justifications:
         return cur.fetchone()[0]
 
 
-    """
+    '''
         obtiene todas las justificaciones que estan como ultimo estado en la lista de estados pasada como parametro.
         status = una lista de estados posibles.
         retora un dict con los ids de las justificaciones como key y un array de el estado y el user_id como value
         { id: status }
-    """
+    '''
     def _getJustificationsInStatus(self,con,status=None):
         cur = con.cursor()
 
-        """ obtengo el ultimo estado de los pedidos de justificacion """
+        ''' obtengo el ultimo estado de los pedidos de justificacion '''
         if status is None:
             cur.execute('select jrs.request_id,jrs.status,jrs.user_id from assistance.justifications_requests_status as jrs, (select request_id,max(created) as created from assistance.justifications_requests_status group by request_id) as r where r.created = jrs.created and r.request_id = jrs.request_id')
         else:
@@ -122,7 +122,7 @@ class Justifications:
 
 
 
-    """ retorna todos los tipos de justificaciones que existan en la base """
+    ''' retorna todos los tipos de justificaciones que existan en la base '''
     def getJustifications(self,con):
         cur = con.cursor()
         cur.execute('select id,name from assistance.justifications')
@@ -139,10 +139,33 @@ class Justifications:
             )
         return justs
 
+    ''' retorna todos los tipos de justificaciones que existan en la base '''
+    def getJustificationsByUser(self,con,userId):
+        cur = con.cursor()
+        cur.execute("""
+         SELECT j.id, j.name
+         FROM assistance.justifications AS j
+         INNER JOIN positions_justifications AS p ON (j.id = p.justification_id)
+         WHERE p.user_id = %s;
+         """,(userId,))
+
+        if cur.rowcount <= 0:
+            return []
+
+        justs = []
+        for j in cur:
+            justs.append(
+                {
+                    'id':j[0],
+                    'name':j[1]
+                }
+            )
+        return justs
 
 
 
-    """ retorna todos los tipos de justificaciones que existan en la base """
+
+    ''' retorna todos los tipos de justificaciones que existan en la base '''
     def getJustificationById(self,con,id):
         cur = con.cursor()
         cur.execute('select id,name from assistance.justifications where id = %s',(id,))
@@ -160,9 +183,9 @@ class Justifications:
 
 
 
-    """
+    '''
         obtiene las justificaciones generales
-    """
+    '''
     def getGeneralJustificationRequests(self,con):
         cur = con.cursor()
         cur.execute('select id,justification_id,jbegin,jend from assistance.general_justifications')
@@ -184,11 +207,11 @@ class Justifications:
 
 
 
-    """
+    '''
         obtiene todas los pedidos de justificaciones con cierto estado
         status es el estado a obtener. en el caso de que no sea pasado entonces se obtienen todas, en su ultimo estado
         users es una lista de ids de usuarios que piden los requests, si = None o es vacío entonces retorna todas.
-    """
+    '''
     def getJustificationRequests(self,con,status=None,users=None):
 
         cur = con.cursor()
@@ -228,13 +251,13 @@ class Justifications:
 
 
 
-    """
+    '''
         obtiene todas los pedidos de justificaciones con cierto estado y que se encuentre entre esas dos fechas
         start es la fecha de inicio de la busqueda. en el caso de que no sea pasado entonces no se pone como restriccion el inicio
         end es la fecha de limite de la busqueda. en el caso de que no sea pasado entonces no se pone como restriccion el end
         status es el estado a obtener. en el caso de que no sea pasado entonces se obtienen todas, en su ultimo estado
         users es una lista de ids de usuarios que piden los requests, si = None o es vacío entonces retorna todas.
-    """
+    '''
     def getJustificationRequestsByDate(self,con,status=None,users=None,start=None,end=None):
 
         logging.debug('buscando justifications : {}, {}, {}, {}'.format(status,users,start,end))
@@ -291,10 +314,10 @@ class Justifications:
 
 
 
-    """
+    '''
         obtiene todos los pedidos de justificaciones que tiene permisos de manejar, en cierto estado.
         group = ROOT|TREE --> ROOT = oficinas directas, TREE = oficinas directas y todas las hijas
-    """
+    '''
     def getJustificationRequestsToManage(self,con,userId,status,group='ROOT'):
 
         tree = False
@@ -329,9 +352,9 @@ class Justifications:
 
 
 
-    """
+    '''
         retorna el stock actual para la justificación indicada
-    """
+    '''
     def getJustificationStock(self,con,userId,justId,date,period=None):
 
 
@@ -339,15 +362,15 @@ class Justifications:
             if j.isJustification(justId):
                 return j.available(self,con,userId,date,period)
 
-        """ justificationes desconocidas = 0 """
+        ''' justificationes desconocidas = 0 '''
         return 0
 
 
-    """
+    '''
         cambia el estado de un pedido al nuevo estado especificado por status.
         retorna los eventos a ser disparados
         estados posibles a cambiar : PENDING|APPROVED|REJECTED|CANCELED
-    """
+    '''
     def updateJustificationRequestStatus(self,con,userId,requestId,status):
 
         req = self.findJustificationRequestById(con,requestId)
@@ -362,9 +385,9 @@ class Justifications:
 
 
 
-    """
+    '''
         realiza el pedido de justificación para ser aprobado
-    """
+    '''
     def requestJustification(self,con,userId,requestor_id,justificationId,begin,end=None):
 
 
@@ -401,7 +424,7 @@ class Justifications:
       # incremento en 1 para que tome el ultimo dia
       for x in range(0, diff + 1):
         events.extend(self.requestGeneralJustification(con,justificationId,date))
-        date = date + datetime.timedelta(days=1)      
+        date = date + datetime.timedelta(days=1)
 
       return events
 
@@ -426,10 +449,10 @@ class Justifications:
 
 
 
-    """
+    '''
         realiza el pedido de justificación para ser aprobado entre un rango de fechas
         estado inicial del pedido = PENDING, con la fecha actual del servidor.
-    """
+    '''
     def requestJustificationRange(self,con,userId,requestor_id,justificationId,begin,end):
 
         events = []

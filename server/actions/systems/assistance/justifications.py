@@ -30,11 +30,11 @@ class BossesNotifier:
 
     def _sendEmail(self, Tos, config, request):
 
-        """
+        '''
             variables a reemplazar :
             ###NAME###
             ###LASTNAME###
-        """
+        '''
 
         From = self.config.configs['{}_from'.format(config)]
         subject = self.config.configs['{}_subject'.format(config)]
@@ -53,10 +53,10 @@ class BossesNotifier:
 
 
 
-    """
+    '''
         notifica a los jefes y al usuario de un pedido.
         solo a los que tienen configurado que debería enviarles mails.
-    """
+    '''
     def notifyBosses(self,con,userId,config):
 
         emails = []
@@ -104,7 +104,7 @@ class BossesNotifier:
 
 
 
-"""
+'''
 
 query :
 {
@@ -128,7 +128,7 @@ response :
   }
 
 }
-"""
+'''
 
 
 class GetJustifications:
@@ -169,10 +169,51 @@ class GetJustifications:
 
 
 
+class GetJustificationsByUser:
+
+    profiles = inject.attr(Profiles)
+    config = inject.attr(Config)
+    justifications = inject.attr(Justifications)
+
+    def handleAction(self, server, message):
+
+        if (message['action'] != 'getJustificationsByUser'):
+            return False
+
+        #chequear parametros
+        if ('id' not in message) or ('session' not in message) or ('request' not in message) or ('user_id' not in message['request']):
+            response = {'id':message['id'], 'error':'Insuficientes parámetros'}
+            server.sendMessage(response)
+            return True
+
+        sid = message['session']
+        self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
+
+        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+        try:
+            justs = self.justifications.getJustificationsByUser(con, user, message['request']['user_id'])
+
+            response = {
+                'id':message['id'],
+                'ok':'',
+                'response':{
+                    'justifications':justs
+                }
+            }
+            server.sendMessage(response)
+            return True
+
+        except psycopg2.DatabaseError as e:
+            con.rollback()
+            raise e
+
+        finally:
+            con.close()
 
 
 
-"""
+
+'''
 query :
 {
   id:,
@@ -199,7 +240,7 @@ response :
 
 }
 
-"""
+'''
 
 class GetJustificationStock:
 
@@ -268,7 +309,7 @@ class GetJustificationStock:
 
 
 
-"""
+'''
 query : Obtener todas las solicitudes de justificationces
 {
   id:,
@@ -298,7 +339,7 @@ response :
 	]
 
 }
-"""
+'''
 
 class GetJustificationRequestsToManage:
 
@@ -354,7 +395,7 @@ class GetJustificationRequestsToManage:
 
 
 
-"""
+'''
 query : Obtener todas las solicitudes de justificationces
 {
   id:,
@@ -386,7 +427,7 @@ response :
 	]
 
 }
-"""
+'''
 class GetJustificationRequestsByDate:
 
     profiles = inject.attr(Profiles)
@@ -456,7 +497,7 @@ class GetJustificationRequestsByDate:
             con.close()
 
 
-"""
+'''
 
 query : Obtener todas las solicitudes de justificationces
 {
@@ -486,7 +527,7 @@ response :
 	]
 
 }
-"""
+'''
 class GetJustificationRequests:
 
     profiles = inject.attr(Profiles)
@@ -538,7 +579,7 @@ class GetJustificationRequests:
 
 
 
-"""
+'''
 query : solicitud de justificaciones de un determinado usuario
 {
   id:,
@@ -558,7 +599,7 @@ response :
   error: "error del servidor"
 }
 
-"""
+'''
 class UpdateJustificationRequestStatus:
 
     profiles = inject.attr(Profiles)
@@ -591,7 +632,7 @@ class UpdateJustificationRequestStatus:
             events = self.justifications.updateJustificationRequestStatus(con,userId,requestId,status)
             con.commit()
 
-            """ se debe notificar a los jefes del usuaro del pedido original """
+            ''' se debe notificar a los jefes del usuaro del pedido original '''
             req = self.justifications.findJustificationRequestById(con,requestId)
             if req['user_id'] is not None:
                 self.notifier.notifyBosses(con,req['user_id'],'justifications_update_request_status')
@@ -627,7 +668,7 @@ class UpdateJustificationRequestStatus:
 
 
 
-"""
+'''
 query : solicitud de justificaciones de un determinado usuario
 {
   id:,
@@ -649,7 +690,7 @@ response :
   ok: "caso exito",
   error: "error del servidor"
 }
-"""
+'''
 
 class RequestJustification:
 
@@ -740,7 +781,7 @@ class RequestJustification:
 
 
 
-"""
+'''
 peticion:
 {
 	"id":"",
@@ -761,7 +802,7 @@ respuesta:
 	"error":""
 }
 
-"""
+'''
 class RequestGeneralJustification:
 
   profiles = inject.attr(Profiles)
@@ -773,7 +814,7 @@ class RequestGeneralJustification:
 
 
 
-  """ manejar accion """
+  ''' manejar accion '''
   def handleAction(self, server, message):
 
 
@@ -781,17 +822,17 @@ class RequestGeneralJustification:
     if (message['action'] != 'requestGeneralJustification'):
         return False
 
-    """ chequeo de datos """
+    ''' chequeo de datos '''
     if ('id' not in message) or ('session' not in message) or ('request' not in message) or ('justification_id' not in message['request']) or ('begin' not in message['request']):
       response = {'id':message['id'], 'error':'Insuficientes parámetros'}
       server.sendMessage(response)
       return True
 
-    """ chequeo de permisos """
+    ''' chequeo de permisos '''
     sid = message['session']
     self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
 
-    """ definir datos a insertar """
+    ''' definir datos a insertar '''
     justificationId = message['request']['justification_id']
     begin = message['request']['begin']
     begin = self.date.parse(begin)
@@ -800,7 +841,7 @@ class RequestGeneralJustification:
       end = message['request']['end']
       end = self.date.parse(end)
 
-    """ insertar datos """
+    ''' insertar datos '''
     con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
 
     try:
@@ -833,7 +874,7 @@ class RequestGeneralJustification:
 
 
 
-"""
+'''
 peticion:
 {
 	"id":"",
@@ -854,7 +895,7 @@ respuesta:
 	"error":""
 }
 
-"""
+'''
 class RequestGeneralJustificationRange:
   profiles = inject.attr(Profiles)
   config = inject.attr(Config)
@@ -865,22 +906,22 @@ class RequestGeneralJustificationRange:
 
 
 
-  """ manejar accion """
+  ''' manejar accion '''
   def handleAction(self, server, message):
     if (message['action'] != 'requestGeneralJustificationRange'):
         return False
 
-    """ chequeo de datos """
+    ''' chequeo de datos '''
     if ('id' not in message) or ('session' not in message) or ('request' not in message) or ('justification_id' not in message['request']) or ('begin' not in message['request']) or ('end' not in message['request']):
       response = {'id':message['id'], 'error':'Insuficientes parámetros'}
       server.sendMessage(response)
       return True
 
-    """ chequeo de permisos """
+    ''' chequeo de permisos '''
     sid = message['session']
     self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
 
-    """ definir datos a insertar """
+    ''' definir datos a insertar '''
     justificationId = message['request']['justification_id']
     begin = message['request']['begin']
     begin = self.date.parse(begin)
@@ -888,7 +929,7 @@ class RequestGeneralJustificationRange:
     end = self.date.parse(end)
 
 
-    """ insertar datos """
+    ''' insertar datos '''
     con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
 
     try:
@@ -921,7 +962,7 @@ class RequestGeneralJustificationRange:
 
 
 
-"""
+'''
 peticion:
 {
 	"id":"",
@@ -939,7 +980,7 @@ respuesta:
 	"error":""
 }
 
-"""
+'''
 class DeleteGeneralJustificationRequest:
   profiles = inject.attr(Profiles)
   config = inject.attr(Config)
@@ -947,40 +988,40 @@ class DeleteGeneralJustificationRequest:
 
   justifications = inject.attr(Justifications)
 
-  """ manejar accion """
+  ''' manejar accion '''
   def handleAction(self, server, message):
 
 
     if (message['action'] != 'deleteGeneralJustificationRequest'):
       return False
 
-    """ chequeo de datos """
+    ''' chequeo de datos '''
     if ('id' not in message) or ('session' not in message) or ('request' not in message) or ('request_id' not in message["request"]):
       response = {'id':message['id'], 'error':'Insuficientes parámetros'}
       server.sendMessage(response)
       return True
 
-    """ chequeo de permisos """
+    ''' chequeo de permisos '''
     sid = message['session']
     self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
 
-    """ definir datos """
+    ''' definir datos '''
     request_id = message['request']['request_id']
 
-    """ conexion con base de datos """
+    ''' conexion con base de datos '''
     con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
     try:
       events = self.justifications.deleteGeneralJustificationRequest(con, request_id)
       con.commit()
 
-      """ enviar mensaje de respuesta """
+      ''' enviar mensaje de respuesta '''
       response = {
           'id':message['id'],
           'ok':'Solicitud eliminada correctamente',
       }
       server.sendMessage(response)
 
-      """ disparar eventos """
+      ''' disparar eventos '''
       for e in events:
        self.events.broadcast(server,e)
 
@@ -999,7 +1040,7 @@ class DeleteGeneralJustificationRequest:
       con.close()
       return True;
 
-"""
+'''
 peticion:
 {
 	"id":"",
@@ -1015,32 +1056,32 @@ respuesta:
 	"error":""
 }
 
-"""
+'''
 class GetGeneralJustificationRequests:
   profiles = inject.attr(Profiles)
   config = inject.attr(Config)
 
   justifications = inject.attr(Justifications)
 
-  """ manejar accion """
+  ''' manejar accion '''
   def handleAction(self, server, message):
 
 
     if (message['action'] != 'getGeneralJustificationRequests'):
         return False
 
-    """ chequeo de datos """
+    ''' chequeo de datos '''
     if ('id' not in message) or ('session' not in message):
       response = {'id':message['id'], 'error':'Insuficientes parámetros'}
       server.sendMessage(response)
       return True
 
-    """ chequeo de permisos """
+    ''' chequeo de permisos '''
     sid = message['session']
     self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
 
 
-    """ conexion con base de datos """
+    ''' conexion con base de datos '''
     con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
     try:
       requests = self.justifications.getGeneralJustificationRequests(con)
@@ -1071,7 +1112,7 @@ class GetGeneralJustificationRequests:
 
 
 
-"""
+'''
 query : solicitud de justificaciones de un determinado usuario
 {
   id:,
@@ -1093,7 +1134,7 @@ response :
   ok: "caso exito",
   error: "error del servidor"
 }
-"""
+'''
 
 class RequestJustificationRange:
 
@@ -1182,7 +1223,7 @@ class RequestJustificationRange:
 
 
 
-"""
+'''
 
 query : Obtener todas las justificationces especiales que puede solicitar el usuario logueado
 {
@@ -1208,7 +1249,7 @@ response :
     ]
 
 }
-"""
+'''
 class GetSpecialJustifications:
 
     profiles = inject.attr(Profiles)
