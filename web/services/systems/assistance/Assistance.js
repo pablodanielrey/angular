@@ -307,6 +307,26 @@ app.service('Assistance', ['Utils','Messages','Session',
 				});
 		};
 
+		this.getJustificationsByUser = function(userId, callbackOk, callbackError) {
+			var msg = {
+				id: Utils.getId(),
+				action: 'getJustificationsByUser',
+				session: Session.getSessionId(),
+				request:{
+					user_id: userId
+				}
+			}
+
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response.justifications);
+					} else {
+						callbackError(data.error);
+					}
+				});
+		};
+
 
 		this.getJustificationStock = function(userId, justificationId, date, period, callbackOk, callbackError) {
 			var msg = {
