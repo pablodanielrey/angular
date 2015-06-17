@@ -48,7 +48,7 @@ app.controller('IndexResetPasswordCtrl', function ($rootScope, $scope, $location
         return;
       } else if(e.name == "NotImplemented"){
       	console.log("Mensaje no implementado en el servidor");
-		$location.path("/main");
+		    $location.path("/main");
       }
 
 
