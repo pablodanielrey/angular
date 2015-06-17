@@ -394,3 +394,72 @@ class GetOfficesUsers:
 
         finally:
             con.close()
+
+
+'''
+elimina el rol para usuario oficina
+
+query:{
+    id:,
+    action:'deleteOfficeRole',
+    session:,
+    request:{
+        userId: "id del usuario a eliminar el rol",
+        officeId: "id de la oficina de la cual se desea eliminar el rol",
+        role: "rol que se desea eliminar"
+    }
+}
+
+response: {
+    id: "id de la petición",
+    ok: "caso exito",
+    error: "error del servidor"
+}
+
+'''
+
+class DeleteOfficeRole:
+
+    profiles = inject.attr(Profiles)
+    config = inject.attr(Config)
+    offices = inject.attr(Offices)
+
+    def handleAction(self, server, message):
+
+        if (message['action'] != 'deleteOfficeRole'):
+            return False
+
+        if ('session' not in message) or ('request' not in message) or ('userId' not in message['request']) or ('role' not in message['request']) or ('officeId' not in message['request']):
+            response = {'id':message['id'], 'error':'Insuficientes parámetros'}
+            server.sendMessage(response)
+            return True
+
+        sid = message['session']
+        self.profiles.checkAccess(sid,['ADMIN-OFFICES','USER-OFFICES'])
+
+        req = message['request']
+        officeId = req['officeId']
+        userId = req['userId']
+        role = req['role']
+
+        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+        try:
+            # verifico si el usuario de session tiene el rol autoriza para la oficina de la cual se desean eliminar el rol
+            localUserId = self.profiles.getLocalUserId(sid)
+            offices = self.offices.getOfficesByUserRole(con,localUserId,True,'autoriza')
+            if len(map(lambda x: x.id == officeId, offices)) == 0:
+                response = {'id':message['id'], 'error':'No tiene permiso para realizar esta operación'}
+                server.sendMessage(response)
+                return True
+
+            # elimino el rol
+            self.offices.deleteRole(con,userId,officeId,role)
+            response = {'id':message['id'], 'ok':'El rol se ha eliminado correctamente'}
+            server.sendMessage(response)
+            return True
+
+        except psycopg2.DatabaseError as e:
+            raise e
+
+        finally:
+            con.close()
