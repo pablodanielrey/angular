@@ -10,7 +10,7 @@ from model.profiles import Profiles
 
 from model.utils import DateTimeEncoder
 
-from model.systems.assistance.offices import Offices
+from model.systems.offices.offices import Offices
 
 
 
