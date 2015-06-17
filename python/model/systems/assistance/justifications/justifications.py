@@ -145,7 +145,8 @@ class Justifications:
         cur.execute("""
          SELECT j.id, j.name
          FROM assistance.justifications AS j
-         INNER JOIN positions_justifications AS p ON (j.id = p.justification_id)
+         INNER JOIN assistance.positions_justifications AS pj ON (j.id = pj.justification_id)
+         INNER JOIN assistance.positions AS p ON (p.name = jp.position)
          WHERE p.user_id = %s;
          """,(userId,))
 

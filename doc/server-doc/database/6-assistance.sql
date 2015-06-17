@@ -44,7 +44,7 @@ create schema assistance;
 
 
   create table assistance.positions_justifications (
-    position_id varchar not null references assistance.positions (id),
+    position varchar not null,
     justification_id varchar not null references assistance.justifications (id)
   );
 
