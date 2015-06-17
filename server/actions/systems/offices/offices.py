@@ -463,3 +463,268 @@ class DeleteOfficeRole:
 
         finally:
             con.close()
+
+
+'''
+setea el rol role al usuario userId para la oficina officeId
+
+query:{
+    id:,
+    action:'addOfficeRole',
+    session:,
+    request:{
+        userId: "id del usuario",
+        officeId: "id de la oficina",
+        role: "rol",
+        sendMail: ""
+    }
+}
+
+response: {
+    id: "id de la petición",
+    ok: "caso exito",
+    error: "error del servidor"
+}
+'''
+class AddOfficeRole:
+    profiles = inject.attr(Profiles)
+    config = inject.attr(Config)
+    offices = inject.attr(Offices)
+
+    def handleAction(self, server, message):
+
+        if (message['action'] != 'addOfficeRole'):
+            return False
+
+        if ('session' not in message) or ('request' not in message) or ('userId' not in message['request']) or ('role' not in message['request']) or ('officeId' not in message['request']):
+            response = {'id':message['id'], 'error':'Insuficientes parámetros'}
+            server.sendMessage(response)
+            return True
+
+        sid = message['session']
+        self.profiles.checkAccess(sid,['ADMIN-OFFICES','USER-OFFICES'])
+
+        req = message['request']
+        officeId = req['officeId']
+        userId = req['userId']
+        role = req['role']
+        sendMail = (True,req['sendMail'])['sendMail' in req]
+
+        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+        try:
+            # verifico si el usuario de session tiene el rol autoriza para la oficina de la cual se desea agregar el rol
+            localUserId = self.profiles.getLocalUserId(sid)
+            offices = self.offices.getOfficesByUserRole(con,localUserId,True,'autoriza')
+            if len(map(lambda x: x.id == officeId, offices)) == 0:
+                response = {'id':message['id'], 'error':'No tiene permiso para realizar esta operación'}
+                server.sendMessage(response)
+                return True
+
+            # agrego el rol
+            self.offices.addRole(con,userId,officeId,role,sendMail)
+            response = {'id':message['id'], 'ok':'El rol se ha creado correctamente'}
+            server.sendMessage(response)
+            return True
+
+        except psycopg2.DatabaseError as e:
+            raise e
+
+        finally:
+            con.close()
+
+
+'''
+crea una nueva oficina si no existe o sino actualiza los datos
+
+query:{
+    id:,
+    action:'persistOffice',
+    session:,
+    request:{
+        office: {
+            id: "",
+            name: "",
+            parent: "",
+            telephone: "",
+            email: ""
+        }
+    }
+}
+
+response: {
+    id: "id de la petición",
+    ok: "caso exito",
+    error: "error del servidor"
+}
+'''
+class PersistOffice:
+    profiles = inject.attr(Profiles)
+    config = inject.attr(Config)
+    offices = inject.attr(Offices)
+
+    def handleAction(self, server, message):
+
+        if (message['action'] != 'persistOffice'):
+            return False
+
+        if ('session' not in message) or ('request' not in message) or ('office' not in message['request']):
+            response = {'id':message['id'], 'error':'Insuficientes parámetros'}
+            server.sendMessage(response)
+            return True
+
+        sid = message['session']
+        self.profiles.checkAccess(sid,['ADMIN-OFFICES','USER-OFFICES'])
+
+        req = message['request']
+        office = req['office']
+
+        if office is None:
+            response = {'id':message['id'], 'error':'Oficina es null'}
+            server.sendMessage(response)
+            return True
+
+        if 'name' not in office or office['name'].strip() == '':
+            response = {'id':message['id'], 'error':'La oficina no posee nombre'}
+            server.sendMessage(response)
+            return True
+
+        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+        try:
+            self.offices.persist(con,office)
+            response = {'id':message['id'], 'ok':'La oficina se ha actualizado correctamente'}
+            server.sendMessage(response)
+            return True
+
+        except psycopg2.DatabaseError as e:
+            raise e
+
+        finally:
+            con.close()
+
+
+'''
+elimina un usuario de una oficina
+
+query:{
+    id:,
+    action:'removeUserFromOffice',
+    session:,
+    request:{
+        userId: "id del usuario",
+        officeId: "id de la oficina"
+    }
+}
+
+response: {
+    id: "id de la petición",
+    ok: "caso exito",
+    error: "error del servidor"
+}
+
+'''
+class RemoveUserFromOffice:
+
+    profiles = inject.attr(Profiles)
+    config = inject.attr(Config)
+    offices = inject.attr(Offices)
+
+    def handleAction(self, server, message):
+
+        if (message['action'] != 'removeUserFromOffice'):
+            return False
+
+        if ('session' not in message) or ('request' not in message) or ('userId' not in message['request']) or ('officeId' not in message['request']):
+            response = {'id':message['id'], 'error':'Insuficientes parámetros'}
+            server.sendMessage(response)
+            return True
+
+        sid = message['session']
+        self.profiles.checkAccess(sid,['ADMIN-OFFICES','USER-OFFICES'])
+
+        req = message['request']
+        officeId = req['officeId']
+        userId = req['userId']
+        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+        try:
+            # verifico si el usuario de session tiene el rol autoriza para la oficina de la cual se desea eliminar el usuario
+            localUserId = self.profiles.getLocalUserId(sid)
+            offices = self.offices.getOfficesByUserRole(con,localUserId,True,'autoriza')
+            if len(map(lambda x: x.id == officeId, offices)) == 0:
+                response = {'id':message['id'], 'error':'No tiene permiso para realizar esta operación'}
+                server.sendMessage(response)
+                return True
+
+            # elimino el usuario de la oficina
+            self.offices.removeUser(con,userId,officeId)
+            response = {'id':message['id'], 'ok':'El usuario se ha eliminado correctamente'}
+            server.sendMessage(response)
+            return True
+
+        except psycopg2.DatabaseError as e:
+            raise e
+
+        finally:
+            con.close()
+
+'''
+    agrega un usuario (userId) a una oficina (officeId)
+
+query:{
+    id:,
+    action:'addUserToOffices',
+    session:,
+    request:{
+        userId: "id del usuario",
+        officeId: "id de la oficina"
+    }
+}
+
+response: {
+    id: "id de la petición",
+    ok: "caso exito",
+    error: "error del servidor"
+}
+'''
+class AddUserToOffices:
+
+    profiles = inject.attr(Profiles)
+    config = inject.attr(Config)
+    offices = inject.attr(Offices)
+
+    def handleAction(self, server, message):
+
+        if (message['action'] != 'addUserToOffices'):
+            return False
+
+        if ('session' not in message) or ('request' not in message) or ('userId' not in message['request']) or ('officeId' not in message['request']):
+            response = {'id':message['id'], 'error':'Insuficientes parámetros'}
+            server.sendMessage(response)
+            return True
+
+        sid = message['session']
+        self.profiles.checkAccess(sid,['ADMIN-OFFICES','USER-OFFICES'])
+
+        req = message['request']
+        officeId = req['officeId']
+        userId = req['userId']
+        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+        try:
+            # verifico si el usuario de session tiene el rol autoriza para la oficina de la cual se desea agregar el usuario
+            localUserId = self.profiles.getLocalUserId(sid)
+            offices = self.offices.getOfficesByUserRole(con,localUserId,True,'autoriza')
+            if len(map(lambda x: x.id == officeId, offices)) == 0:
+                response = {'id':message['id'], 'error':'No tiene permiso para realizar esta operación'}
+                server.sendMessage(response)
+                return True
+
+            # agrego el usuario de la oficina
+            self.offices.addUserToOffices(con,userId,officeId)
+            response = {'id':message['id'], 'ok':'El usuario se ha eliminado correctamente'}
+            server.sendMessage(response)
+            return True
+
+        except psycopg2.DatabaseError as e:
+            raise e
+
+        finally:
+            con.close()
