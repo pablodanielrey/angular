@@ -11,11 +11,11 @@ function UsersOfficesController($scope, $location, Notifications) {
   vm.initialize = initialize;
 
   function initialize() {
-
   }
 
   $scope.$on('$viewContentLoaded', function(event) {
+    $scope.$parent.itemSelected('usersOffices');
     vm.initialize();
   });
-    
+
 }

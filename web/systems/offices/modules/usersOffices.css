@@ -1,0 +1,44 @@
+/*
+  Contenedor general
+*/
+.users-offices-container {
+  width:100%;
+  min-height:20em;
+  display:flex;
+  flex-flow: row wrap;
+}
+
+/*
+  Listado de todos los usuarios
+*/
+
+.users-offices-container .all-users-container {
+  display: flex;
+  flex-flow: column;
+  flex: 2;
+}
+
+.users-offices-container .all-users-container .title {
+  background: linear-gradient(to right,#275276, #4897C8);
+  color:white;
+  text-align:center;
+  font-weight: bold;
+}
+
+/*
+  Listado de los usuarios de la oficina
+*/
+
+.users-offices-container .users-offices-container {
+  display: flex;
+  flex-flow: column;
+  flex: 3;
+  margin-left: 1em;
+}
+
+.users-offices-container .users-offices-container .title {
+  background: linear-gradient(to left,#275276, #4897C8);
+  color:white;
+  text-align:center;
+  font-weight: bold;
+}
