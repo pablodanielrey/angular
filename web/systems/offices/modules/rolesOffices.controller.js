@@ -15,7 +15,8 @@ function RolesOfficesController($scope, $lcoation, Notifcations) {
   }
 
   $scope.$on('$viewContentLoaded', function(event) {
+    $scope.$parent.itemSelected('rolesOffices');
     vm.initialize();
-  });  
+  });
 
 }

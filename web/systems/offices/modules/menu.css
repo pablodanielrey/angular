@@ -1,0 +1,31 @@
+.menu-container {
+  display: flex;
+  flex-flow: row wrap;
+  font-weight: bold;
+  font-size: large;
+  background-color: #0066A6;
+}
+
+.menu-container .item {
+  cursor:pointer;
+  background-color: #0066A6;
+  color: white;
+  border-left: 0.25em solid white;
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
+.menu-container .item.first {
+  border-left: 0;
+}
+
+
+.menu-container .item:hover {
+  background-color: white;
+  color: black;
+}
+
+.menu-container .item.selected {
+  background-color: white;
+  color: black;
+}

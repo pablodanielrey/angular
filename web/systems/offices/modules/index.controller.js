@@ -15,6 +15,7 @@ function MainOfficeController($scope, $location, Notifications) {
   }
 
   $scope.$on('$viewContentLoaded', function(event) {
+    $scope.$parent.itemSelected('index');
     vm.initialize();
   });
 

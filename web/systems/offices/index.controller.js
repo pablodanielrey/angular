@@ -35,4 +35,10 @@ function IndexController($rootScope, $scope, $location, $window, $timeout, WebSo
     }
   });
 
+
+  $scope.itemSelected = itemSelected;
+  function itemSelected(item) {
+    $scope.$broadcast('ItemSelected',item);
+  }
+
 }
