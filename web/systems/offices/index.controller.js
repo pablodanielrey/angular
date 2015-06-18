@@ -2,9 +2,9 @@ angular
     .module('mainApp')
     .controller('IndexController',IndexController);
 
-IndexController.$inject = ['$rootScope','$location','$timeout','WebSocket'];
+IndexController.$inject = ['$rootScope', '$scope', '$location', '$window', '$timeout','WebSocket', 'Session', 'Cache'];
 
-function IndexController($rootScope,$location,$timeout,WebSocket) {
+function IndexController($rootScope, $scope, $location, $window, $timeout, WebSocket, Session, Cache) {
 
   // mensajes que vienen del socket. solo me interesan los eventos, las respuestas son procesadas por otro lado.
   $rootScope.$on('onSocketMessage', function(event, data) {
@@ -27,6 +27,12 @@ function IndexController($rootScope,$location,$timeout,WebSocket) {
 
   $timeout(function() {
     WebSocket.registerHandlers();
-  },0);
+  }, 0);
+
+  $scope.$on('$viewContentLoaded', function(event) {
+    if(!Session.isLogged()) {
+     $window.location.href = "/systems/login/indexLogin.html";
+    }
+  });
 
 }
