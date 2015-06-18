@@ -6,7 +6,18 @@
     </div>
 
     <div class="content">
-      Usersssss
+      <div class="office">
+        Filtro por Oficina:
+        <select class="officeSelect" ng-change="vm.filterUsers()" ng-model="vm.model.officeSelected"  ng-options="op.name group by op.parentName  for op in vm.model.allOffices | orderBy:['parentName','order','name']">
+          <option value="">Todos</option>
+        </select>
+      </div>
+
+      <div class="users">
+        <div class="listUsers" ng-repeat="user in vm.model.users | orderBy:['name','lastname']">{{user.name}} {{user.lastname}}</div>
+
+         <!-- | filter:vm.model.searchUser | orderBy:['name','lastname']" ng-click="selectUser(user)" ng-class="{true:'selected'}[isSelectedUser(user)]">{{user.name}} {{user.lastname}}</div> -->
+      </div>
     </div>
   </div>
 
