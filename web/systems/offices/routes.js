@@ -14,6 +14,18 @@ function config($routeProvider) {
       controllerAs: 'vm'
     })
 
+    .when('/usersOffices', {
+      templateUrl: '/systems/offices/modules/usersOffices.html',
+      controller: 'UsersOfficesController',
+      controllerAs: 'vm'
+    })
+
+    .when('/rolesOffices', {
+      templateUrl: '/systems/offices/modules/rolesOffices.html',
+      controller: 'RolesOfficesController',
+      controllerAs: 'vm'
+    })
+
     .otherwise({
         redirectTo: '/offices'
     });
