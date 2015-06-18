@@ -4,6 +4,7 @@
   font-weight: bold;
   font-size: large;
   background-color: #0066A6;
+  border-bottom:2px solid white;
 }
 
 .menu-container .item {
