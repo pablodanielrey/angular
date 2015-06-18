@@ -25,6 +25,10 @@
   font-weight: bold;
 }
 
+.users-offices-container .all-users-container .deleted {
+  display: none;
+}
+
 /*
   Listado de los usuarios de la oficina
 */
