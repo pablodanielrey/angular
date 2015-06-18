@@ -313,7 +313,7 @@ app.service('Assistance', ['Utils','Messages','Session',
 				action: 'getJustificationsByUser',
 				session: Session.getSessionId(),
 				request:{
-					user_id: userId
+					userId: userId
 				}
 			}
 

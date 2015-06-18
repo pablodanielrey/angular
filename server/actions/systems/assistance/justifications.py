@@ -181,7 +181,7 @@ class GetJustificationsByUser:
             return False
 
         #chequear parametros
-        if ('id' not in message) or ('session' not in message) or ('request' not in message) or ('user_id' not in message['request']):
+        if ('id' not in message) or ('session' not in message) or ('request' not in message) or ('userId' not in message['request']):
             response = {'id':message['id'], 'error':'Insuficientes parámetros'}
             server.sendMessage(response)
             return True
@@ -191,7 +191,7 @@ class GetJustificationsByUser:
 
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
-            justs = self.justifications.getJustificationsByUser(con, user, message['request']['user_id'])
+            justs = self.justifications.getJustificationsByUser(con, message['request']['userId'])
 
             response = {
                 'id':message['id'],

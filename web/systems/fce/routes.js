@@ -118,8 +118,8 @@ app.config(['$routeProvider', function($routeProvider) {
   })
 
   .when('/requestAssistance', {
-      templateUrl: '/modules/systems/assistance/requestAssistance.html',
-      controller: 'RequestAssistanceCtrl'
+      templateUrl: '/modules/systems/assistance/requestJustifications/index.html',
+      controller: 'RequestJustificationsCtrl'
   })
 
   .when('/adminRequestAssistance', {
