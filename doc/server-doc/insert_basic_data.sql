@@ -51,32 +51,37 @@ insert into assistance.justifications (id,name) values ('7747e3ff-bbe2-4f2e-88f7
 
 
 
+/*
+  oficina donde se asignan los usuarios importados desde los relojes
+*/
+insert into offices.offices (id,name) values ('45cc065a-7033-4f00-9b19-d7d097129db3','Asistencia Usuarios Nuevos');
+
 
 
 /*
   2 formas de generar el rol de autorizar en las oficinas raiz
 */
-insert into assistance.offices_roles (user_id,role,office_id) select '1','autoriza',id from assistance.offices o where o.parent is null;
-insert into assistance.offices_roles (user_id,role,office_id) select p.id,'autoriza',o.id from assistance.offices o, profile.users p where o.parent is null and p.dni in ('1');
+insert into offices.offices_roles (user_id,role,office_id) select '1','autoriza',id from assistance.offices o where o.parent is null;
+insert into offices.offices_roles (user_id,role,office_id) select p.id,'autoriza',o.id from assistance.offices o, profile.users p where o.parent is null and p.dni in ('1');
 
 /*
   2 formas distintas de generar autorizaciones para las horas extras que son pedidas por las personas
 */
-insert into assistance.offices_roles (user_id,role,office_id) select '1','horas-extras',id from assistance.offices o where o.parent is null;
-insert into assistance.offices_roles (user_id,role,office_id) select p.id,'horas-extras',o.id from assistance.offices o, profile.users p where o.parent is null and p.dni in ('1');
+insert into offices.offices_roles (user_id,role,office_id) select '1','horas-extras',id from assistance.offices o where o.parent is null;
+insert into offices.offices_roles (user_id,role,office_id) select p.id,'horas-extras',o.id from assistance.offices o, profile.users p where o.parent is null and p.dni in ('1');
 
 
 /*
   2 formas distintas de generar el rol de realizar justificaciones especiales en las oficinas raiz
 */
-insert into assistance.offices_roles (user_id,role,office_id) select '1','realizar-solicitud',id from assistance.offices o where o.parent is null;
-insert into assistance.offices_roles (user_id,role,office_id) select p.id,'realizar-solicitud',o.id from assistance.offices o, profile.users p where o.parent is null and p.dni in ('1');
+insert into offices.offices_roles (user_id,role,office_id) select '1','realizar-solicitud',id from assistance.offices o where o.parent is null;
+insert into offices.offices_roles (user_id,role,office_id) select p.id,'realizar-solicitud',o.id from assistance.offices o, profile.users p where o.parent is null and p.dni in ('1');
 
 /*
   2 formas distintas de generar el rol de realizar justificaciones especiales por una autoridad en las oficinas raiz
 */
-insert into assistance.offices_roles (user_id,role,office_id) select '1','realizar-solicitud-admin',id from assistance.offices o where o.parent is null;
-insert into assistance.offices_roles (user_id,role,office_id) select p.id,'realizar-solicitud-admin',o.id from assistance.offices o, profile.users p where o.parent is null and p.dni in ('1');
+insert into offices.offices_roles (user_id,role,office_id) select '1','realizar-solicitud-admin',id from assistance.offices o where o.parent is null;
+insert into offices.offices_roles (user_id,role,office_id) select p.id,'realizar-solicitud-admin',o.id from assistance.offices o, profile.users p where o.parent is null and p.dni in ('1');
 
 /*
   perfil de Administrador de asistencia. por ahora no es muy distinto.
@@ -103,20 +108,20 @@ insert into credentials.auth_profile (user_id,profile) select id,'ADMIN-ASSISTAN
   32393755 - Pablo Lozada
 
 */
-delete from assistance.offices_roles where user_id in (select id from profile.users where dni in ('1','24892148','31993212','30057880','27528150','32393755'));
-insert into assistance.offices_roles (user_id,role,office_id,send_mail) select p.id,'autoriza',o.id,false from assistance.offices o, profile.users p where o.parent is null and p.dni in ('1','24892148','31993212','30057880');
-insert into assistance.offices_roles (user_id,role,office_id,send_mail) select p.id,'autoriza',o.id,true from assistance.offices o, profile.users p where o.parent is null and p.dni in ('27528150','32393755');
+delete from offices.offices_roles where user_id in (select id from profile.users where dni in ('1','24892148','31993212','30057880','27528150','32393755'));
+insert into offices.offices_roles (user_id,role,office_id,send_mail) select p.id,'autoriza',o.id,false from assistance.offices o, profile.users p where o.parent is null and p.dni in ('1','24892148','31993212','30057880');
+insert into offices.offices_roles (user_id,role,office_id,send_mail) select p.id,'autoriza',o.id,true from assistance.offices o, profile.users p where o.parent is null and p.dni in ('27528150','32393755');
 
-insert into assistance.offices_roles (user_id,role,office_id,send_mail) select p.id,'horas-extras',o.id,true from assistance.offices o, profile.users p where o.parent is null and p.dni in ('1','24892148','31993212','30057880','27528150','32393755');
+insert into offices.offices_roles (user_id,role,office_id,send_mail) select p.id,'horas-extras',o.id,true from assistance.offices o, profile.users p where o.parent is null and p.dni in ('1','24892148','31993212','30057880','27528150','32393755');
 
-insert into assistance.offices_roles (user_id,role,office_id) select p.id,'realizar-solicitud',o.id from assistance.offices o, profile.users p where o.parent is null and p.dni in ('1','24892148','31993212','30057880','27528150','32393755');
+insert into offices.offices_roles (user_id,role,office_id) select p.id,'realizar-solicitud',o.id from assistance.offices o, profile.users p where o.parent is null and p.dni in ('1','24892148','31993212','30057880','27528150','32393755');
 
 
 /*
 creo los checks de precencia para todos los usuarios, menos los jefes que no se deben chequear. y los cargos docentes que están
 solo para autorizar dentro del sistema.
 */
-insert into assistance.checks (id,user_id,type,date,enable) select id,id,'PRESENCE','2015-04-01 00:00:00',true from profile.users as u where u.id in (select user_id from credentials.auth_profile as ap where ap.profile like 'USER-ASSISTANCE');
+insert into assistance.checks (id,user_id,type,date,enable) select id,id,'PRESENCE','2015-02-01 00:00:00',true from profile.users as u where u.id in (select user_id from credentials.auth_profile as ap where ap.profile like 'USER-ASSISTANCE');
 delete from assistance.checks where user_id in (select id from profile.users where dni in ('1','24892148','31993212','30057880'));
 delete from assistance.checks where user_id in (select id from profile.users where dni in ('27294557'));
 /*

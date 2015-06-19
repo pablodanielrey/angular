@@ -5,7 +5,7 @@ create schema offices;
     name varchar not null,
     telephone varchar,
     email varchar,
-    parent varchar,
+    parent varchar references offices.offices (id),
     constraint unique_office unique (name,parent)
   );
 
