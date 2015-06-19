@@ -26,6 +26,7 @@ function UsersOfficesController($scope, $location, Notifications, Office, Users,
   vm.removeUser = removeUser;
   vm.officeChange = officeChange;
   vm.save = save;
+  vm.cancel = cancel;
 
   function initialize() {
     var session = Session.getCurrentSession();
@@ -182,7 +183,7 @@ function UsersOfficesController($scope, $location, Notifications, Office, Users,
         vm.model.usersOffice.push(user);
 
         // actualizo el listado de usuarios
-        if (vm.model.officeSelected == null || vm.model.officeChange.id != vm.model.officeSelected.id) {
+        if (vm.model.officeSelected == null) {
           return;
         }
 
@@ -198,15 +199,12 @@ function UsersOfficesController($scope, $location, Notifications, Office, Users,
 
   function clearUsers(users,usersUpdate) {
     for (var i = 0; i < users.length; i++) {
-      var u = getUser(usersUpdate,users[i]);
-      if (u != null) {
-        u.deleted   = false;
-      }
+      users[i].deleted = false;
     }
   }
 
   function officeChange() {
-    clearUsers(vm.model.usersOffice, vm.model.users);
+    clearUsers(vm.model.users);
     vm.model.usersOffice = [];
     if (vm.model.officeChange == null) {
       return;
@@ -238,8 +236,12 @@ function UsersOfficesController($scope, $location, Notifications, Office, Users,
       return;
     }
 
+    var u = getUser(vm.model.usersOffice,user.id);
+    if (u == null) {
+      vm.model.usersOffice.push(user);
+    }
+
     user.deleted = true;
-    vm.model.usersOffice.push(user);
   }
 
   function removeUser(user) {
@@ -270,10 +272,15 @@ function UsersOfficesController($scope, $location, Notifications, Office, Users,
       }
     }
 
+    vm.itemsModify =  newUsers.length + removeUsers.length;
+
     for (var i = 0; i < newUsers.length; i++) {
       Office.addUserToOffices(newUsers[i].id,vm.model.officeChange.id,
         function(ok) {
-          console.log(ok);
+          vm.itemsModify = vm.itemsModify -1;
+          if (vm.itemsModify == 0) {
+            Notifications.message("Se han guardados los cambios exitosamente");
+          }
         },
         function(error) {
           Notifications.message(error);
@@ -285,7 +292,10 @@ function UsersOfficesController($scope, $location, Notifications, Office, Users,
     for (var i = 0; i < removeUsers.length; i++) {
       Office.removeUserFromOffice(removeUsers[i],vm.model.officeChange.id,
         function(ok) {
-          console.log(ok);
+          vm.itemsModify = vm.itemsModify -1;
+          if (vm.itemsModify == 0) {
+            Notifications.message("Se han guardados los cambios exitosamente");
+          }
         },
         function(error) {
           Notifications.message(error);
@@ -293,7 +303,10 @@ function UsersOfficesController($scope, $location, Notifications, Office, Users,
 
       );
     }
+  }
 
+  function cancel() {
+    officeChange();
   }
 
 }

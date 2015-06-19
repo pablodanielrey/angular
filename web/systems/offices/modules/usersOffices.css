@@ -26,7 +26,7 @@
 }
 
 .users-offices-container .all-users-container .deleted {
-  display: none;
+  color:grey;
 }
 
 /*
