@@ -51,6 +51,11 @@ insert into assistance.justifications (id,name) values ('7747e3ff-bbe2-4f2e-88f7
 
 
 
+/*
+  oficina donde se asignan los usuarios importados desde los relojes
+*/
+insert into offices.offices (id,name) values ('45cc065a-7033-4f00-9b19-d7d097129db3','Asistencia Usuarios Nuevos');
+
 
 
 /*
