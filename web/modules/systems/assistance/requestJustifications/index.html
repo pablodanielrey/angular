@@ -14,9 +14,6 @@
       <div ng-if="justificationId === '50998530-10dd-4d68-8b4a-a4b7a87f3972'" ng-controller="RequestJustification638Ctrl" ng-include="'/modules/systems/assistance/requestJustifications/requestJustification638.html'"></div>
       <div ng-if="justificationId === 'b309ea53-217d-4d63-add5-80c47eb76820'" ng-controller="RequestJustificationCUCtrl" ng-include="'/modules/systems/assistance/requestJustifications/requestJustificationCU.html'"></div>
       <div ng-if="justificationId === 'fa64fdbd-31b0-42ab-af83-818b3cbecf46'" ng-controller="RequestJustificationBSCtrl" ng-include="'/modules/systems/assistance/requestJustifications/requestJustificationBS.html'"></div>
-      <div ng-if="justificationId === 'cb2b4583-2f44-4db0-808c-4e36ee059efe'" ng-controller="RequestJustificationBCCtrl" ng-include="'/modules/systems/assistance/requestJustifications/requestJustificationBC.html'"></div>
-
-
     </div>
   </div>
 
@@ -57,13 +54,13 @@
         <span class="buttonApproved"><i class="fa fa-check-circle"></i> Aprobado</span>
       </div>
       <div class="myStateRequestApproved" ng-class="{true:'visible', false:'hidden'}[req.status == 'CANCELED']">
-        <span class="buttonApproved"><i class="fa fa-times"></i>Cancelado</span>
+        <span class="buttonCancel"><i class="fa fa-times"></i>Cancelado</span>
       </div>
       <div class="myStateRequestApproved" ng-class="{true:'visible', false:'hidden'}[req.status == 'REJECTED']">
-        <span class="buttonApproved"><i class="fa fa-times"></i>Rechazado</span>
+        <span class="buttonCancel"><i class="fa fa-times"></i>Rechazado</span>
       </div>
       <div class="myStateRequestApproved" ng-class="{true:'visible', false:'hidden'}[req.status == 'PENDING']">
-        <span class="buttonApproved"><i class="fa fa-spinner fa-spin"></i> Pendiente</span>
+        <span class="buttonpending"><i class="fa fa-spinner fa-spin"></i> Pendiente</span>
         <button  ng-click="cancelRequest(req)" ng-disabled="model.processingRequestedJustifications">Cancelar</Button>
       </div>
     </div>

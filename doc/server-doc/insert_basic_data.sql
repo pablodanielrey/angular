@@ -163,6 +163,7 @@ INSERT INTO assistance.positions_justifications (position, justification_id) VAL
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('A2', '76bc064a-e8bf-4aa3-9f51-a3c4483a729a'); /* Licencia anual ordinaria */
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('A2', '50998530-10dd-4d68-8b4a-a4b7a87f3972'); /* Resolucion 638 */
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('A2', 'b309ea53-217d-4d63-add5-80c47eb76820'); /* Cumpleaños */
+INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('A2', 'cb2b4583-2f44-4db0-808c-4e36ee059efe'); /* Boleta en comision */
 
 /* a3 */
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('A3', 'e0dfcef6-98bb-4624-ae6c-960657a9a741'); /* Ausente con aviso */
@@ -173,6 +174,7 @@ INSERT INTO assistance.positions_justifications (position, justification_id) VAL
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('A3', '76bc064a-e8bf-4aa3-9f51-a3c4483a729a'); /* Licencia anual ordinaria */
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('A3', '50998530-10dd-4d68-8b4a-a4b7a87f3972'); /* Resolucion 638 */
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('A3', 'b309ea53-217d-4d63-add5-80c47eb76820'); /* Cumpleaños */
+INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('A3', 'cb2b4583-2f44-4db0-808c-4e36ee059efe'); /* Boleta en comision */
 
 /* a4 */
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('A4', 'e0dfcef6-98bb-4624-ae6c-960657a9a741'); /* Ausente con aviso */
@@ -183,6 +185,7 @@ INSERT INTO assistance.positions_justifications (position, justification_id) VAL
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('A4', '76bc064a-e8bf-4aa3-9f51-a3c4483a729a'); /* Licencia anual ordinaria */
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('A4', '50998530-10dd-4d68-8b4a-a4b7a87f3972'); /* Resolucion 638 */
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('A4', 'b309ea53-217d-4d63-add5-80c47eb76820'); /* Cumpleaños */
+INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('A4', 'cb2b4583-2f44-4db0-808c-4e36ee059efe'); /* Boleta en comision */
 
 /* a5 */
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('A5', 'e0dfcef6-98bb-4624-ae6c-960657a9a741'); /* Ausente con aviso */
@@ -193,6 +196,7 @@ INSERT INTO assistance.positions_justifications (position, justification_id) VAL
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('A5', '76bc064a-e8bf-4aa3-9f51-a3c4483a729a'); /* Licencia anual ordinaria */
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('A5', '50998530-10dd-4d68-8b4a-a4b7a87f3972'); /* Resolucion 638 */
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('A5', 'b309ea53-217d-4d63-add5-80c47eb76820'); /* Cumpleaños */
+INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('A5', 'cb2b4583-2f44-4db0-808c-4e36ee059efe'); /* Boleta en comision */
 
 /* a6 */
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('A6', 'e0dfcef6-98bb-4624-ae6c-960657a9a741'); /* Ausente con aviso */
@@ -203,6 +207,7 @@ INSERT INTO assistance.positions_justifications (position, justification_id) VAL
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('A6', '76bc064a-e8bf-4aa3-9f51-a3c4483a729a'); /* Licencia anual ordinaria */
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('A6', '50998530-10dd-4d68-8b4a-a4b7a87f3972'); /* Resolucion 638 */
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('A6', 'b309ea53-217d-4d63-add5-80c47eb76820'); /* Cumpleaños */
+INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('A6', 'cb2b4583-2f44-4db0-808c-4e36ee059efe'); /* Boleta en comision */
 
 /* a7 */
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('A7', 'e0dfcef6-98bb-4624-ae6c-960657a9a741'); /* Ausente con aviso */
@@ -213,6 +218,7 @@ INSERT INTO assistance.positions_justifications (position, justification_id) VAL
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('A7', '76bc064a-e8bf-4aa3-9f51-a3c4483a729a'); /* Licencia anual ordinaria */
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('A7', '50998530-10dd-4d68-8b4a-a4b7a87f3972'); /* Resolucion 638 */
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('A7', 'b309ea53-217d-4d63-add5-80c47eb76820'); /* Cumpleaños */
+INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('A7', 'cb2b4583-2f44-4db0-808c-4e36ee059efe'); /* Boleta en comision */
 
 /* e2 */
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('E2', 'e0dfcef6-98bb-4624-ae6c-960657a9a741'); /* Ausente con aviso */
@@ -223,6 +229,7 @@ INSERT INTO assistance.positions_justifications (position, justification_id) VAL
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('E2', '76bc064a-e8bf-4aa3-9f51-a3c4483a729a'); /* Licencia anual ordinaria */
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('E2', '50998530-10dd-4d68-8b4a-a4b7a87f3972'); /* Resolucion 638 */
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('E2', 'b309ea53-217d-4d63-add5-80c47eb76820'); /* Cumpleaños */
+INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('E2', 'cb2b4583-2f44-4db0-808c-4e36ee059efe'); /* Boleta en comision */
 
 /* e3 */
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('E3', 'e0dfcef6-98bb-4624-ae6c-960657a9a741'); /* Ausente con aviso */
@@ -233,6 +240,7 @@ INSERT INTO assistance.positions_justifications (position, justification_id) VAL
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('E3', '76bc064a-e8bf-4aa3-9f51-a3c4483a729a'); /* Licencia anual ordinaria */
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('E3', '50998530-10dd-4d68-8b4a-a4b7a87f3972'); /* Resolucion 638 */
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('E3', 'b309ea53-217d-4d63-add5-80c47eb76820'); /* Cumpleaños */
+INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('E3', 'cb2b4583-2f44-4db0-808c-4e36ee059efe'); /* Boleta en comision */
 
 /* e4 */
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('E4', 'e0dfcef6-98bb-4624-ae6c-960657a9a741'); /* Ausente con aviso */
@@ -243,6 +251,7 @@ INSERT INTO assistance.positions_justifications (position, justification_id) VAL
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('E4', '76bc064a-e8bf-4aa3-9f51-a3c4483a729a'); /* Licencia anual ordinaria */
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('E4', '50998530-10dd-4d68-8b4a-a4b7a87f3972'); /* Resolucion 638 */
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('E4', 'b309ea53-217d-4d63-add5-80c47eb76820'); /* Cumpleaños */
+INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('E4', 'cb2b4583-2f44-4db0-808c-4e36ee059efe'); /* Boleta en comision */
 
 /* e5 */
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('E5', 'e0dfcef6-98bb-4624-ae6c-960657a9a741'); /* Ausente con aviso */
@@ -253,6 +262,7 @@ INSERT INTO assistance.positions_justifications (position, justification_id) VAL
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('E5', '76bc064a-e8bf-4aa3-9f51-a3c4483a729a'); /* Licencia anual ordinaria */
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('E5', '50998530-10dd-4d68-8b4a-a4b7a87f3972'); /* Resolucion 638 */
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('E5', 'b309ea53-217d-4d63-add5-80c47eb76820'); /* Cumpleaños */
+INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('E5', 'cb2b4583-2f44-4db0-808c-4e36ee059efe'); /* Boleta en comision */
 
 /* e6 */
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('E6', 'e0dfcef6-98bb-4624-ae6c-960657a9a741'); /* Ausente con aviso */
@@ -263,6 +273,7 @@ INSERT INTO assistance.positions_justifications (position, justification_id) VAL
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('E6', '76bc064a-e8bf-4aa3-9f51-a3c4483a729a'); /* Licencia anual ordinaria */
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('E6', '50998530-10dd-4d68-8b4a-a4b7a87f3972'); /* Resolucion 638 */
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('E6', 'b309ea53-217d-4d63-add5-80c47eb76820'); /* Cumpleaños */
+INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('E6', 'cb2b4583-2f44-4db0-808c-4e36ee059efe'); /* Boleta en comision */
 
 /* e7 */
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('E7', 'e0dfcef6-98bb-4624-ae6c-960657a9a741'); /* Ausente con aviso */
@@ -273,6 +284,8 @@ INSERT INTO assistance.positions_justifications (position, justification_id) VAL
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('E7', '76bc064a-e8bf-4aa3-9f51-a3c4483a729a'); /* Licencia anual ordinaria */
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('E7', '50998530-10dd-4d68-8b4a-a4b7a87f3972'); /* Resolucion 638 */
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('E7', 'b309ea53-217d-4d63-add5-80c47eb76820'); /* Cumpleaños */
+INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('E7', 'cb2b4583-2f44-4db0-808c-4e36ee059efe'); /* Boleta en comision */
+
 
 /* gestion */
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('Contrato de Gestion', 'e0dfcef6-98bb-4624-ae6c-960657a9a741'); /* Ausente con aviso */
@@ -283,6 +296,7 @@ INSERT INTO assistance.positions_justifications (position, justification_id) VAL
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('Contrato de Gestion', '50998530-10dd-4d68-8b4a-a4b7a87f3972'); /* Resolucion 638 */
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('Contrato de Gestion', 'b309ea53-217d-4d63-add5-80c47eb76820'); /* Cumpleaños */
 
+
 /* obra */
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('Contrato de Obra', 'e0dfcef6-98bb-4624-ae6c-960657a9a741'); /* Ausente con aviso */
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('Contrato de Obra', '48773fd7-8502-4079-8ad5-963618abe725'); /* Compensatorio */
@@ -291,3 +305,13 @@ INSERT INTO assistance.positions_justifications (position, justification_id) VAL
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('Contrato de Obra', '76bc064a-e8bf-4aa3-9f51-a3c4483a729a'); /* Licencia anual ordinaria */
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('Contrato de Obra', '50998530-10dd-4d68-8b4a-a4b7a87f3972'); /* Resolucion 638 */
 INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('Contrato de Obra', 'b309ea53-217d-4d63-add5-80c47eb76820'); /* Cumpleaños */
+
+
+/* Beca */
+INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('Beca', 'e0dfcef6-98bb-4624-ae6c-960657a9a741'); /* Ausente con aviso */
+INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('Beca', '48773fd7-8502-4079-8ad5-963618abe725'); /* Compensatorio */
+INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('Beca', 'fa64fdbd-31b0-42ab-af83-818b3cbecf46'); /* Boleta de salida */
+INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('Beca', 'b70013e3-389a-46d4-8b98-8e4ab75335d0'); /* Pre examen */
+INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('Beca', '76bc064a-e8bf-4aa3-9f51-a3c4483a729a'); /* Licencia anual ordinaria */
+INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('Beca', '50998530-10dd-4d68-8b4a-a4b7a87f3972'); /* Resolucion 638 */
+INSERT INTO assistance.positions_justifications (position, justification_id) VALUES ('Beca', 'b309ea53-217d-4d63-add5-80c47eb76820'); /* Cumpleaños */
