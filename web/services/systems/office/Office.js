@@ -46,7 +46,30 @@ function Office($rootScope, Messages, Session, Utils, Cache, Config) {
 
   }
 
-  function getOfficesByUserRole() {}
+  function getOfficesByUserRole(userId,role,tree, callbackOk, callbackError) {
+    var msg = {
+      id: Utils.getId(),
+      action: 'getOfficesByUserRole',
+      session: Session.getSessionId(),
+      request:{
+        user_id: userId,
+        tree:tree
+      }
+    }
+
+    if (role != null) {
+      msg.request.role = role;
+    }
+
+    Messages.send(msg,
+      function(data) {
+        if (typeof data.error === 'undefined') {
+          callbackOk(data.response.offices);
+        } else {
+          callbackError(data.error);
+        }
+    });
+  }
 
   /*
   Obtiene todos los usuarios de las oficinas pasadas como parametro
@@ -68,7 +91,7 @@ function Office($rootScope, Messages, Session, Utils, Cache, Config) {
         } else {
           callbackError(data.error);
         }
-      });    
+      });
   }
 
   function deleteOfficeRole() {}
