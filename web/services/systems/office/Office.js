@@ -100,7 +100,54 @@ function Office($rootScope, Messages, Session, Utils, Cache, Config) {
 
   function persistOffice() {}
 
-  function removeUserFromOffice() {}
+  function removeUserFromOffice(userId, officeId, callbackOk,callbackError) {
+    if (userId == null || officeId == null) {
+        return;
+    }
 
-  function addUserToOffices() {}
+    var msg = {
+      id: Utils.getId(),
+      action: 'removeUserFromOffice',
+      session: Session.getSessionId(),
+      request: {
+        userId: userId,
+        officeId: officeId
+      }
+    }
+
+    Messages.send(msg,
+      function(data) {
+        if (typeof data.error === 'undefined') {
+          callbackOk(data.ok);
+        } else {
+          callbackError(data.error);
+        }
+    });
+
+  }
+
+  function addUserToOffices(userId, officeId, callbackOk,callbackError) {
+    if (userId == null || officeId == null) {
+        return;
+    }
+
+    var msg = {
+      id: Utils.getId(),
+      action: 'addUserToOffices',
+      session: Session.getSessionId(),
+      request: {
+        userId: userId,
+        officeId: officeId
+      }
+    }
+
+    Messages.send(msg,
+      function(data) {
+        if (typeof data.error === 'undefined') {
+          callbackOk(data.ok);
+        } else {
+          callbackError(data.error);
+        }
+    });
+  }
 }

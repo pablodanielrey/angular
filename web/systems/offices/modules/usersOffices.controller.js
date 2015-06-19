@@ -25,6 +25,7 @@ function UsersOfficesController($scope, $location, Notifications, Office, Users,
   vm.addUser = addUser;
   vm.removeUser = removeUser;
   vm.officeChange = officeChange;
+  vm.save = save;
 
   function initialize() {
     var session = Session.getCurrentSession();
@@ -77,7 +78,7 @@ function UsersOfficesController($scope, $location, Notifications, Office, Users,
   }
 
   function updateUsers(user,users) {
-    var u = getUser(users,user);
+    var u = getUser(users,user.id);
     if (u != null) {
       user.deleted = true;
       removeItem(users, u);
@@ -85,13 +86,13 @@ function UsersOfficesController($scope, $location, Notifications, Office, Users,
     }
   }
 
-  function getUser(users,user) {
+  function getUser(users,userId) {
     if (users == null || users.length == 0) {
       return null;
     }
 
     for (var i = 0; i < users.length; i++) {
-      if (user.id == users[i].id) {
+      if (userId == users[i].id) {
         return users[i];
       }
     }
@@ -215,6 +216,7 @@ function UsersOfficesController($scope, $location, Notifications, Office, Users,
 
     Office.getOfficesUsers([oid],
       function(users) {
+        vm.model.officeChange.users = users;
         for (var i = 0; i < users.length; i++) {
           loadUserDataOffice(users[i]);
         }
@@ -251,6 +253,47 @@ function UsersOfficesController($scope, $location, Notifications, Office, Users,
     if (index > -1) {
       array.splice(index, 1);
     }
+  }
+
+
+  function save() {
+    var newUsers = vm.model.usersOffice.slice();
+    var removeUsers = [];
+
+    for (var i = 0; i < vm.model.officeChange.users.length; i++) {
+      var userId = vm.model.officeChange.users[i];
+      var u = getUser(vm.model.usersOffice, userId);
+      if (u == null) {
+        removeUsers.push(userId);
+      } else {
+        removeItem(newUsers,u);
+      }
+    }
+
+    for (var i = 0; i < newUsers.length; i++) {
+      Office.addUserToOffices(newUsers[i].id,vm.model.officeChange.id,
+        function(ok) {
+          console.log(ok);
+        },
+        function(error) {
+          Notifications.message(error);
+        }
+
+      );
+    }
+
+    for (var i = 0; i < removeUsers.length; i++) {
+      Office.removeUserFromOffice(removeUsers[i],vm.model.officeChange.id,
+        function(ok) {
+          console.log(ok);
+        },
+        function(error) {
+          Notifications.message(error);
+        }
+
+      );
+    }
+
   }
 
 }
