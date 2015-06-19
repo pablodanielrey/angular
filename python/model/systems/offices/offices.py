@@ -266,9 +266,9 @@ class Offices:
     def addUserToOffices(self,con,officeId,userId):
         if officeId is None or userId is None:
             return
-
+            
         params = (userId,officeId)
-        cur = con.cursor
+        cur = con.cursor()
         cur.execute('insert into offices.offices_users (user_id,office_id) values (%s,%s)',params)
 
 

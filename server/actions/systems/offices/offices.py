@@ -712,14 +712,16 @@ class AddUserToOffices:
             # verifico si el usuario de session tiene el rol autoriza para la oficina de la cual se desea agregar el usuario
             localUserId = self.profiles.getLocalUserId(sid)
             offices = self.offices.getOfficesByUserRole(con,localUserId,True,'autoriza')
-            if len(map(lambda x: x.id == officeId, offices)) == 0:
+            listOff = list(map(lambda x: x == officeId, offices))
+            if len(listOff) == 0:
                 response = {'id':message['id'], 'error':'No tiene permiso para realizar esta operación'}
                 server.sendMessage(response)
                 return True
 
             # agrego el usuario de la oficina
-            self.offices.addUserToOffices(con,userId,officeId)
-            response = {'id':message['id'], 'ok':'El usuario se ha eliminado correctamente'}
+            self.offices.addUserToOffices(con,officeId,userId)
+            con.commit()
+            response = {'id':message['id'], 'ok':'El usuario se ha guardado correctamente'}
             server.sendMessage(response)
             return True
 
