@@ -121,7 +121,7 @@ insert into offices.offices_roles (user_id,role,office_id) select p.id,'realizar
 creo los checks de precencia para todos los usuarios, menos los jefes que no se deben chequear. y los cargos docentes que están
 solo para autorizar dentro del sistema.
 */
-insert into assistance.checks (id,user_id,type,date,enable) select id,id,'PRESENCE','2015-04-01 00:00:00',true from profile.users as u where u.id in (select user_id from credentials.auth_profile as ap where ap.profile like 'USER-ASSISTANCE');
+insert into assistance.checks (id,user_id,type,date,enable) select id,id,'PRESENCE','2015-02-01 00:00:00',true from profile.users as u where u.id in (select user_id from credentials.auth_profile as ap where ap.profile like 'USER-ASSISTANCE');
 delete from assistance.checks where user_id in (select id from profile.users where dni in ('1','24892148','31993212','30057880'));
 delete from assistance.checks where user_id in (select id from profile.users where dni in ('27294557'));
 /*
