@@ -142,10 +142,9 @@ class Justifications:
     ''' retorna todos los tipos de justificaciones que existan en la base '''
     def getJustificationsByUser(self,con,userId):
         cur = con.cursor()
-        print("AAAAAAAAAAAAAAAAAAAAA")
-        print(userId);
+       
         cur.execute("""
-         SELECT j.id, j.name
+         SELECT DISTINCT j.id, j.name
          FROM assistance.justifications AS j
          INNER JOIN assistance.positions_justifications AS pj ON (j.id = pj.justification_id)
          INNER JOIN assistance.positions AS p ON (p.name = pj.position)
