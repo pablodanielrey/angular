@@ -45,7 +45,8 @@ create schema assistance;
 
   create table assistance.positions_justifications (
     position varchar not null,
-    justification_id varchar not null references assistance.justifications (id)
+    justification_id varchar not null references assistance.justifications (id),
+    constraint positions_justifications_unique unique (position,justification_id) 
   );
 
 
