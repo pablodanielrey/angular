@@ -2,7 +2,7 @@
 
 var app = angular.module('mainApp');
 
-app.controller('MenuCtrl', function($rootScope, $scope, $location, $timeout, Session, Utils, Profiles) {
+app.controller('MenuCtrl', function($rootScope, $scope, $window, $location, $timeout, Session, Utils, Profiles) {
 
 	$scope.showSubOptions = false;
 
@@ -40,6 +40,12 @@ app.controller('MenuCtrl', function($rootScope, $scope, $location, $timeout, Ses
 	$scope.assistance = function() {
 		$scope.showSubOptions = true;
 		$rootScope.$broadcast("MenuOptionSelectedEvent",'AssistanceOption');
+	}
+
+	$scope.office = function() {
+		$scope.showSubOptions = false;
+		$rootScope.$broadcast("MenuOptionSelectedEvent",'OfficesOption');
+		$window.open('http://offices.econo.unlp.edu.ar/systems/offices/', '_blank');
 	}
 
 	$scope.exit = function() {
@@ -91,6 +97,15 @@ app.controller('MenuCtrl', function($rootScope, $scope, $location, $timeout, Ses
 		Profiles.checkAccess(Session.getSessionId(),'ADMIN-ASSISTANCE,USER-ASSISTANCE', function(ok) {
 			if (ok == 'granted') {
 				$scope.items.push({ label:'Asistencia', img:'fa-clock-o', function: $scope.assistance });
+			}
+		},
+		function(error) {
+			//alert(error);
+		});
+
+		Profiles.checkAccess(Session.getSessionId(),'ADMIN-OFFICES,USER-OFFICES', function(ok) {
+			if (ok == 'granted') {
+				$scope.items.push({ label:'Oficinas', img:'fa-clock-o', function: $scope.office });
 			}
 		},
 		function(error) {

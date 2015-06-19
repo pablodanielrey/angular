@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import inject, logging, json, sys, traceback
 
 """

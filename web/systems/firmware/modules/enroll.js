@@ -7,7 +7,9 @@ app.controller("EnrollCtrl", ['$rootScope','$scope','$location','$timeout','Noti
       dni:null,
       fingerNumber:0,
       msg:'',
-      fingers:0
+      fingers:0,
+      enabled : false,
+      cancel : true
     }
 
 
@@ -16,7 +18,8 @@ app.controller("EnrollCtrl", ['$rootScope','$scope','$location','$timeout','Noti
       $scope.model.fingers = 0;
       $scope.model.fingerNumber = 0;
       $scope.model.msg = '';
-
+      $scope.model.enabled = false;
+      $scope.model.cancel = true;
     }
 
     $scope.$on('$viewContentLoaded', function(event) {
@@ -36,10 +39,12 @@ app.controller("EnrollCtrl", ['$rootScope','$scope','$location','$timeout','Noti
       }
 
       $scope.model.dni = ($scope.model.dni == null) ? n : $scope.model.dni + n;
+      $scope.model.enabled = !($scope.model.dni == null || $scope.model.dni.trim() == '');
     }
 
     $scope.deleteNumber = function() {
       $scope.model.dni = ($scope.model.dni == null || $scope.model.dni.length == 0) ? null : $scope.model.dni.substring(0, $scope.model.dni.length-1);
+      $scope.model.enabled = !($scope.model.dni == null || $scope.model.dni.trim() == '');
     }
 
 
@@ -47,14 +52,17 @@ app.controller("EnrollCtrl", ['$rootScope','$scope','$location','$timeout','Noti
 
 
     $scope.addUser = function() {
+      $scope.model.enabled = false;
+      $scope.model.cancel = false;
       Firmware.enroll($scope.model.dni,
         function(response) {
-           Notifications.message("El usuario " + $scope.model.dni + " se ha creado exitosamente");
+           Notifications.message("Las huellas del usuario " + $scope.model.dni + " se han guardado exitosamente");
            //$scope.model.msg = "El usuario " + $scope.model.dni + " se ha creado exitosamente";
            $scope.initialize();
         },
         function(error) {
            Notifications.message(error);
+           $scope.initialize();
         }
       );
     }
@@ -75,7 +83,7 @@ app.controller("EnrollCtrl", ['$rootScope','$scope','$location','$timeout','Noti
         t = 'tercera';
       }
 
-      $scope.model.msg = 'Presione el dedo por ' + t + ' vez';
+      $scope.model.msg = 'Coloque el dedo en el lector de huellas por ' + t + ' vez';
     })
 
     $scope.$on('ErrorEvent', function(event, data) {

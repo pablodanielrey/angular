@@ -6,7 +6,7 @@ app.config(['$routeProvider', function($routeProvider) {
   $routeProvider
 
     .when('/changePassword/:username?/:hash?', {
-      templateUrl: '/modules/account/changePassword.html',
+      templateUrl: '/systems/pass/modules/change/changePassword.html',
       controller: 'ChangePasswordCtrl'
     })
 

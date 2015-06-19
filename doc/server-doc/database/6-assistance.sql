@@ -91,30 +91,6 @@ create schema assistance;
   );
 
 
-  create table assistance.offices (
-    id varchar primary key,
-    name varchar not null,
-    telephone varchar,
-    email varchar,
-    parent varchar,
-    constraint unique_office unique (name,parent)
-  );
-
-  create table assistance.offices_users (
-    user_id varchar not null references profile.users (id),
-    office_id varchar references assistance.offices (id),
-    constraint unique_office_user unique (user_id,office_id)
-  );
-
-
-  create table assistance.offices_roles (
-    user_id varchar not null references profile.users (id),
-    office_id varchar references assistance.offices (id),
-    role varchar not null,
-    send_mail boolean default true,
-    constraint unique_office_roles unique (user_id,office_id,role)
-  );
-
   create table assistance.justifications (
     id varchar primary key,
     name varchar not null unique

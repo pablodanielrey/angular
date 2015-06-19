@@ -1,0 +1,40 @@
+
+
+.enroll-container .inputDNI {
+  background-color: #1d1c21;
+  border: none;
+  color:#0066a6;
+  font-weight: bold;
+}
+
+.enroll-container .keyboard .btn {
+  background-color: #45444c;
+  color: white;
+}
+
+.enroll-container .keyboard .btn:active {
+  background-color: #0066a6;
+  color:white;
+}
+
+
+.enroll-container .keyboard .btn2 {
+  background-color: #1d1c21;
+  color:white;
+  border:none;
+  margin:5px;
+}
+
+
+.enroll-container .keyboard .btn2:active {
+  background-color: #0066a6;
+  color:white;
+  border:none;
+}
+
+
+.enroll-container .btnAceptar {
+  background-color: #0066a6;
+  border: none;
+  color:white;
+}

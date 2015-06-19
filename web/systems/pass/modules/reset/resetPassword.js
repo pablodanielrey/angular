@@ -21,7 +21,7 @@ app.controller('ResetPasswordCtrl', function($rootScope, $scope, Credentials, No
         Notifications.message(['Se ha enviado un mail de confirmación a sus cuentas de email','Por favor chequee bandeja de entrada y correo no deseado']);
       },
       function(error) {
-        Notifications.message(['Se ha producido un error al resetear su clave','Por favor intentelo nuevamente']);
+        Notifications.message(['Se ha producido un error al resetear su clave','Por favor llame a 4236769 interno 123']);
       });
   }
 

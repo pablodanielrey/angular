@@ -39,7 +39,8 @@ app.controller("LoginCtrl", ['$rootScope','$scope', '$window', 'Session','Creden
 						session_id: s.session,
 						user_id: s.user_id,
 						login: {
-							username: creds.username
+							username: creds.username,
+							password: creds.password
 						}
 					}
 
