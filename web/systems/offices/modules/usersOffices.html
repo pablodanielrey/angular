@@ -28,6 +28,14 @@
     </div>
 
     <div class="content">
+      <div class="office">
+        Oficina a modificar:
+        <select class="officeSelect" ng-change="vm.officeChange()" ng-model="vm.model.officeChange"  ng-options="op.name group by op.parentName  for op in vm.model.officesAdmin | orderBy:['parentName','order','name']">
+          <option value="">Seleccione una oficina</option>
+        </select>
+      </div>
+
+
       <div class="users">
         <div class="listUsers" ng-click="vm.removeUser(user)" ng-repeat="user in vm.model.usersOffice | orderBy:['name','lastname']">{{user.name}} {{user.lastname}}</div>
 
