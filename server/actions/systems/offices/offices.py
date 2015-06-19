@@ -447,7 +447,8 @@ class DeleteOfficeRole:
             # verifico si el usuario de session tiene el rol autoriza para la oficina de la cual se desean eliminar el rol
             localUserId = self.profiles.getLocalUserId(sid)
             offices = self.offices.getOfficesByUserRole(con,localUserId,True,'autoriza')
-            if len(map(lambda x: x.id == officeId, offices)) == 0:
+            listOff = list(map(lambda x: x == officeId, offices))
+            if len(listOff) == 0:
                 response = {'id':message['id'], 'error':'No tiene permiso para realizar esta operación'}
                 server.sendMessage(response)
                 return True
@@ -515,7 +516,8 @@ class AddOfficeRole:
             # verifico si el usuario de session tiene el rol autoriza para la oficina de la cual se desea agregar el rol
             localUserId = self.profiles.getLocalUserId(sid)
             offices = self.offices.getOfficesByUserRole(con,localUserId,True,'autoriza')
-            if len(map(lambda x: x.id == officeId, offices)) == 0:
+            listOff = list(map(lambda x: x == officeId, offices))
+            if len(listOff) == 0:
                 response = {'id':message['id'], 'error':'No tiene permiso para realizar esta operación'}
                 server.sendMessage(response)
                 return True
@@ -649,13 +651,14 @@ class RemoveUserFromOffice:
             # verifico si el usuario de session tiene el rol autoriza para la oficina de la cual se desea eliminar el usuario
             localUserId = self.profiles.getLocalUserId(sid)
             offices = self.offices.getOfficesByUserRole(con,localUserId,True,'autoriza')
-            if len(map(lambda x: x.id == officeId, offices)) == 0:
+            listOff = list(map(lambda x: x == officeId, offices))
+            if len(listOff) == 0:
                 response = {'id':message['id'], 'error':'No tiene permiso para realizar esta operación'}
                 server.sendMessage(response)
                 return True
 
             # elimino el usuario de la oficina
-            self.offices.removeUser(con,userId,officeId)
+            self.offices.removeUser(con,officeId,userId)
             response = {'id':message['id'], 'ok':'El usuario se ha eliminado correctamente'}
             server.sendMessage(response)
             return True
