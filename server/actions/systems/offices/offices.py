@@ -455,6 +455,7 @@ class DeleteOfficeRole:
 
             # elimino el rol
             self.offices.deleteRole(con,userId,officeId,role)
+            con.commit()
             response = {'id':message['id'], 'ok':'El rol se ha eliminado correctamente'}
             server.sendMessage(response)
             return True
@@ -524,6 +525,7 @@ class AddOfficeRole:
 
             # agrego el rol
             self.offices.addRole(con,userId,officeId,role,sendMail)
+            con.commit()
             response = {'id':message['id'], 'ok':'El rol se ha creado correctamente'}
             server.sendMessage(response)
             return True
@@ -593,6 +595,7 @@ class PersistOffice:
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
             self.offices.persist(con,office)
+            con.commit()
             response = {'id':message['id'], 'ok':'La oficina se ha actualizado correctamente'}
             server.sendMessage(response)
             return True
@@ -659,6 +662,7 @@ class RemoveUserFromOffice:
 
             # elimino el usuario de la oficina
             self.offices.removeUser(con,officeId,userId)
+            con.commit()
             response = {'id':message['id'], 'ok':'El usuario se ha eliminado correctamente'}
             server.sendMessage(response)
             return True
