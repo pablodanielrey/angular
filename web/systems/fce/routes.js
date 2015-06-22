@@ -187,6 +187,11 @@ app.config(['$routeProvider', function($routeProvider) {
     templateUrl: '/modules/systems/assistance/usersAssistanceManagementMediator/index.html',
     controller: 'UsersAssistanceManagementMediatorCtrl'
   })
+  
+  .when('/manageJustificationsStock', {
+    templateUrl: '/modules/systems/assistance/manageJustificationsStock/index.html',
+    controller: 'ManageJustificationsStockCtrl'
+  })
 
   .otherwise({
     redirectTo: '/main'
