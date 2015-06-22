@@ -271,6 +271,14 @@ class Offices:
         cur = con.cursor()
         cur.execute('insert into offices.offices_users (user_id,office_id) values (%s,%s)',params)
 
+        """
+            Esto hay que verlo bien, es una solucion provisaria
+            Es para cuando se agrega un usuario y pertenecia al grupo nuevo usuario asistencia
+            lo elimino del grupo nuevo usuario de asistencia
+        """
+        params = (userId,'45cc065a-7033-4f00-9b19-d7d097129db3')
+        cur = con.cursor()
+        cur.execute('delete from offices.offices_users where user_id = %s and office_id = %s',params)
 
     '''
         elimina un usuario de una oficina
@@ -282,6 +290,17 @@ class Offices:
         params = (userId,officeId)
         cur = con.cursor()
         cur.execute('delete from offices.offices_users where user_id = %s and office_id = %s',params)
+
+        """
+            Esto hay que verlo bien, es una solucion provisaria
+            Es para cuando se elimina un usuario y queda sin grupo
+            lo agrego en el grupo nuevo usuario de asistencia
+        """
+        offices = self.getOfficesByUser(con,userId,False,False)
+        if offices == None or len(offices) == 0:
+            params = (userId,'45cc065a-7033-4f00-9b19-d7d097129db3')
+            cur.execute('insert into offices.offices_users (user_id,office_id) values (%s,%s)',params)
+
 
 
 

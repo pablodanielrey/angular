@@ -279,6 +279,8 @@ function UsersOfficesController($scope, $location, Notifications, Office, Users,
         function(ok) {
           vm.itemsModify = vm.itemsModify -1;
           if (vm.itemsModify == 0) {
+            vm.filterUsers();
+            vm.officeChange();
             Notifications.message("Se han guardados los cambios exitosamente");
           }
         },
@@ -294,6 +296,8 @@ function UsersOfficesController($scope, $location, Notifications, Office, Users,
         function(ok) {
           vm.itemsModify = vm.itemsModify -1;
           if (vm.itemsModify == 0) {
+            vm.filterUsers();
+            vm.officeChange();
             Notifications.message("Se han guardados los cambios exitosamente");
           }
         },
