@@ -38,6 +38,24 @@
 }
 
 
+
+.users-offices-container .all-users-container .listUsers .add.hidden  {
+    display:none;
+}
+
+.users-offices-container .all-users-container .listUsers:hover {
+  background-color: rgb(65, 210, 65);
+}
+
+.users-offices-container .all-users-container .listUsers {
+  display:flex;
+  flex-flow:row;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+
 .users-offices-container .all-users-container .listUsers.deleted {
   color:grey;
 }
