@@ -7,18 +7,24 @@
 
     <div class="content">
       <div class="office">
-        Filtro por Oficina:
+        <span>Filtro por Oficina:</span>
         <select class="officeSelect" ng-change="vm.filterUsers()" ng-model="vm.model.officeSelected"  ng-options="op.name group by op.parentName  for op in vm.model.allOffices | orderBy:['parentName','order','name']">
           <option value="">Todos</option>
         </select>
       </div>
 
       <div class="users">
-        <div class="listUsers {{((($index+1) %2) == 0)?'par':'impar'}}" ng-class="{true:'deleted'}[user.deleted]" ng-click="vm.addUser(user)" ng-repeat="user in vm.model.users | orderBy:['name','lastname']" ng-mouseover="vm.hover[$index] = true" ng-mouseleave="vm.hover[$index] = false">
-          <div>{{user.name}} {{user.lastname}}</div>
-          <div ng-class="{true:'hidden'}[vm.hover[$index] == null || vm.hover[$index] == false]" class="add fa fa-plus"> Agregar Usuario</div>
+        <div class="search">
+          <span>Buscar: </span>
+          <input type="text" class="searchUserOffices" ng-model="vm.model.searchUser"/>
         </div>
-         <!-- | filter:vm.model.searchUser | orderBy:['name','lastname']" ng-click="selectUser(user)" ng-class="{true:'selected'}[isSelectedUser(user)]">{{user.name}} {{user.lastname}}</div> -->
+        <div class="list-users-container">
+          <div class="listUsers {{((($index+1) %2) == 0)?'par':'impar'}}" ng-class="{true:'deleted'}[user.deleted]" ng-click="vm.addUser(user)" ng-repeat="user in vm.model.users | filter:vm.model.searchUser | orderBy:['name','lastname']" ng-mouseover="vm.hover[$index] = true" ng-mouseleave="vm.hover[$index] = false">
+            <div>{{user.name}} {{user.lastname}}</div>
+            <div ng-class="{true:'hidden'}[vm.hover[$index] == null || vm.hover[$index] == false]" class="add fa fa-plus"> Agregar Usuario</div>
+          </div>
+        </div>
+         <!--  | orderBy:['name','lastname']" ng-click="selectUser(user)" ng-class="{true:'selected'}[isSelectedUser(user)]">{{user.name}} {{user.lastname}}</div> -->
       </div>
     </div>
   </div>
@@ -31,7 +37,7 @@
 
     <div class="content">
       <div class="office">
-        Oficina a modificar:
+        <span>Oficina a modificar:</span>
         <select class="officeSelect" ng-change="vm.officeChange()" ng-model="vm.model.officeChange"  ng-options="op.name group by op.parentName  for op in vm.model.officesAdmin | orderBy:['parentName','order','name']">
           <option value="">Seleccione una oficina</option>
         </select>
@@ -39,11 +45,16 @@
 
 
       <div class="users">
-        <div class="listUsers {{((($index+1) %2) == 0)?'par':'impar'}}" ng-click="vm.removeUser(user)" ng-repeat="user in vm.model.usersOffice | orderBy:['name','lastname']" ng-mouseover="vm.hoverOffice[$index] = true" ng-mouseleave="vm.hoverOffice[$index] = false">
-          <div>{{user.name}} {{user.lastname}}</div>
-          <div ng-class="{true:'hidden'}[vm.hoverOffice[$index] == null || vm.hoverOffice[$index] == false]" class="delete fa fa-minus"> Eliminar Usuario</div>
+        <div class="search">
+          <span>Buscar: </span>
+          <input type="text" class="searchUserOffices" ng-model="vm.model.searchUserOffice"/>
         </div>
-
+        <div class="list-users-container">
+          <div class="listUsers {{((($index+1) %2) == 0)?'par':'impar'}}" ng-click="vm.removeUser(user)" ng-repeat="user in vm.model.usersOffice | filter: vm.model.searchUserOffice | orderBy:['name','lastname']" ng-mouseover="vm.hoverOffice[$index] = true" ng-mouseleave="vm.hoverOffice[$index] = false">
+            <div>{{user.name}} {{user.lastname}}</div>
+            <div ng-class="{true:'hidden'}[vm.hoverOffice[$index] == null || vm.hoverOffice[$index] == false]" class="delete fa fa-minus"> Eliminar Usuario</div>
+          </div>
+        </div>
          <!-- | filter:vm.model.searchUser | orderBy:['name','lastname']" ng-click="selectUser(user)" ng-class="{true:'selected'}[isSelectedUser(user)]">{{user.name}} {{user.lastname}}</div> -->
       </div>
     </div>

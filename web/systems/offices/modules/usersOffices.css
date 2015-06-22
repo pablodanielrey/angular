@@ -8,6 +8,21 @@
   flex-flow: row wrap;
 }
 
+.users-offices-container .content .office {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.users-offices-container .content .users {
+  display: flex;
+  flex-flow: column wrap;
+}
+
+.users-offices-container .content .users .search {
+  display: flex;
+  flex-flow: row wrap;
+}
+
 /*
   Listado de todos los usuarios
 */
@@ -15,7 +30,7 @@
 .users-offices-container .all-users-container {
   display: flex;
   flex-flow: column;
-  flex: 2;
+  flex: 1;
 }
 
 .users-offices-container .all-users-container .title {
@@ -67,7 +82,7 @@
 .users-offices-container .users-offices-container {
   display: flex;
   flex-flow: column;
-  flex: 3;
+  flex: 1;
   margin-left: 1em;
 }
 
@@ -112,7 +127,7 @@
 
 .users-offices-container .actions {
   display:flex;
-  flex-flow: row;
+  flex-flow: row wrap;
 }
 
 .users-offices-container .actions button {
