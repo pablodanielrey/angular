@@ -25,7 +25,20 @@
   font-weight: bold;
 }
 
-.users-offices-container .all-users-container .deleted {
+.users-offices-container .all-users-container .users .par {
+  background-color: white;
+  padding-left: 1em;
+  color: black;
+}
+
+.users-offices-container .all-users-container .users .impar {
+  background-color: #E0DDDD;
+  color: black;
+  padding-left: 1em;
+}
+
+
+.users-offices-container .all-users-container .listUsers.deleted {
   color:grey;
 }
 
@@ -45,4 +58,30 @@
   color:white;
   text-align:center;
   font-weight: bold;
+}
+
+.users-offices-container .users-offices-container .users .par {
+  background-color: white;
+  padding-left: 1em;
+  color: black;
+}
+
+.users-offices-container .users-offices-container .users .impar {
+  background-color: #E0DDDD;
+  color: black;
+  padding-left: 1em;
+}
+
+
+/*
+  Boton de acciones
+*/
+
+.users-offices-container .actions {
+  display:flex;
+  flex-flow: row;
+}
+
+.users-offices-container .actions button {
+  flex:1;
 }

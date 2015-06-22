@@ -14,7 +14,7 @@
       </div>
 
       <div class="users">
-        <div class="listUsers" ng-class="{true:'deleted'}[user.deleted]" ng-click="vm.addUser(user)" ng-repeat="user in vm.model.users | orderBy:['name','lastname']">{{user.name}} {{user.lastname}}</div>
+        <div class="listUsers {{((($index+1) %2) == 0)?'par':'impar'}}" ng-class="{true:'deleted'}[user.deleted]" ng-click="vm.addUser(user)" ng-repeat="user in vm.model.users | orderBy:['name','lastname']">{{user.name}} {{user.lastname}}</div>
 
          <!-- | filter:vm.model.searchUser | orderBy:['name','lastname']" ng-click="selectUser(user)" ng-class="{true:'selected'}[isSelectedUser(user)]">{{user.name}} {{user.lastname}}</div> -->
       </div>
@@ -37,7 +37,7 @@
 
 
       <div class="users">
-        <div class="listUsers" ng-click="vm.removeUser(user)" ng-repeat="user in vm.model.usersOffice | orderBy:['name','lastname']">{{user.name}} {{user.lastname}}</div>
+        <div class="listUsers {{((($index+1) %2) == 0)?'par':'impar'}}" ng-click="vm.removeUser(user)" ng-repeat="user in vm.model.usersOffice | orderBy:['name','lastname']">{{user.name}} {{user.lastname}}</div>
 
          <!-- | filter:vm.model.searchUser | orderBy:['name','lastname']" ng-click="selectUser(user)" ng-class="{true:'selected'}[isSelectedUser(user)]">{{user.name}} {{user.lastname}}</div> -->
       </div>
