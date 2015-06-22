@@ -11,6 +11,28 @@
 .users-offices-container .content .office {
   display: flex;
   flex-flow: row wrap;
+  padding-bottom: 0.25em;
+  margin-top: 0.25em;
+  border-bottom: 0.25em solid #0066A6;
+}
+
+.users-offices-container .content .office .title{
+    margin-right: 1em;
+    background: white;
+    color: black;
+}
+
+.users-offices-container .content .users .search {
+  display: flex;
+  flex-flow: row wrap;
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+}
+
+.users-offices-container .content .search .title{
+    margin-right: 1em;
+    background: white;
+    color: black;
 }
 
 .users-offices-container .content .users {
@@ -132,4 +154,5 @@
 
 .users-offices-container .actions button {
   flex:1;
+  cursor: pointer;
 }

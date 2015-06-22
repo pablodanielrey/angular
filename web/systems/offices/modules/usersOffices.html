@@ -7,7 +7,7 @@
 
     <div class="content">
       <div class="office">
-        <span>Filtro por Oficina:</span>
+        <span class="title">Filtro por Oficina:</span>
         <select class="officeSelect" ng-change="vm.filterUsers()" ng-model="vm.model.officeSelected"  ng-options="op.name group by op.parentName  for op in vm.model.allOffices | orderBy:['parentName','order','name']">
           <option value="">Todos</option>
         </select>
@@ -15,7 +15,7 @@
 
       <div class="users">
         <div class="search">
-          <span>Buscar: </span>
+          <span class="title">Buscar: </span>
           <input type="text" class="searchUserOffices" ng-model="vm.model.searchUser"/>
         </div>
         <div class="list-users-container">
@@ -37,7 +37,7 @@
 
     <div class="content">
       <div class="office">
-        <span>Oficina a modificar:</span>
+        <span class="title">Oficina a modificar:</span>
         <select class="officeSelect" ng-change="vm.officeChange()" ng-model="vm.model.officeChange"  ng-options="op.name group by op.parentName  for op in vm.model.officesAdmin | orderBy:['parentName','order','name']">
           <option value="">Seleccione una oficina</option>
         </select>
@@ -46,7 +46,7 @@
 
       <div class="users">
         <div class="search">
-          <span>Buscar: </span>
+          <span class="title">Buscar: </span>
           <input type="text" class="searchUserOffices" ng-model="vm.model.searchUserOffice"/>
         </div>
         <div class="list-users-container">
