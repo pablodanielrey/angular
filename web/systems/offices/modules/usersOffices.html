@@ -39,7 +39,10 @@
 
 
       <div class="users">
-        <div class="listUsers {{((($index+1) %2) == 0)?'par':'impar'}}" ng-click="vm.removeUser(user)" ng-repeat="user in vm.model.usersOffice | orderBy:['name','lastname']">{{user.name}} {{user.lastname}}</div>
+        <div class="listUsers {{((($index+1) %2) == 0)?'par':'impar'}}" ng-click="vm.removeUser(user)" ng-repeat="user in vm.model.usersOffice | orderBy:['name','lastname']" ng-mouseover="vm.hoverOffice[$index] = true" ng-mouseleave="vm.hoverOffice[$index] = false">
+          <div>{{user.name}} {{user.lastname}}</div>
+          <div ng-class="{true:'hidden'}[vm.hoverOffice[$index] == null || vm.hoverOffice[$index] == false]" class="delete fa fa-minus"> Eliminar Usuario</div>
+        </div>
 
          <!-- | filter:vm.model.searchUser | orderBy:['name','lastname']" ng-click="selectUser(user)" ng-class="{true:'selected'}[isSelectedUser(user)]">{{user.name}} {{user.lastname}}</div> -->
       </div>

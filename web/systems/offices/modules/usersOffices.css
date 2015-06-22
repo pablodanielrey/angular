@@ -90,7 +90,22 @@
   padding-left: 1em;
 }
 
+.users-offices-container .users-offices-container .listUsers .delete.hidden  {
+    display:none;
+}
 
+.users-offices-container .users-offices-container .listUsers:hover {
+  background-color: red;
+  color:white;
+}
+
+.users-offices-container .users-offices-container .listUsers {
+  display:flex;
+  flex-flow:row;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
 /*
   Boton de acciones
 */
