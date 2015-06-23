@@ -11,12 +11,16 @@ function ModifyOfficeController($scope, Session, Notifications, Office) {
     sessionUserId: {},
     offices: [],
     searchOffice: '',
-    selectedOffice: null
+    selectedOffice: null,
+    action: '',
+    office: null
   }
 
   vm.initialize = initialize;
   vm.loadOffices = loadOffices;
   vm.selectOffice = selectOffice;
+  vm.create = create;
+  vm.modify = modify;
 
   function initialize() {
     var session = Session.getCurrentSession();
@@ -25,6 +29,9 @@ function ModifyOfficeController($scope, Session, Notifications, Office) {
     vm.loadOffices();
     vm.model.searchOffice = '';
     vm.model.selectedOffice = null;
+
+    vm.model.action = null;
+    vm.model.office = null;
   }
 
   $scope.$on('$viewContentLoaded', function(event) {
@@ -47,9 +54,6 @@ function ModifyOfficeController($scope, Session, Notifications, Office) {
       function(offices) {
         if (offices != null) {
           vm.model.offices = offices;
-          for (var i = 0; i < offices.length; i++) {
-            setParentOffice(offices[i], offices);
-          }
         }
       },
       function(error) {
@@ -61,21 +65,54 @@ function ModifyOfficeController($scope, Session, Notifications, Office) {
   function setParentOffice(office, offices) {
     for (var i = 0; i < offices.length; i++) {
       if (office.parent == offices[i].id) {
-        office.parentName = offices[i].name;
+        office.parentObj = offices[i];
         office.order = 1;
         return ;
       }
     }
-    office.parentName = office.name;
+    office.parentObj = office;
     office.order = 0;
   }
 
   function selectOffice(office) {
     if (vm.model.selectedOffice == office) {
       vm.model.selectedOffice = null;
+      vm.model.action = null;
     } else {
       vm.model.selectedOffice = office;
     }
+  }
+
+
+  // ----------------------------------------------
+  // ---------------- ACTIONS ---------------------
+  // ----------------------------------------------
+
+  function create() {
+    vm.model.action = 'create';
+    vm.model.office = {};
+    vm.model.selectedOffice = null;
+  }
+
+  function modify() {
+    vm.model.action = 'modify';
+    vm.model.officesModify = angular.copy(vm.model.offices);
+    for (var i = 0; i < vm.model.officesModify.length; i ++) {
+      setParentOffice(vm.model.officesModify[i], vm.model.officesModify);
+      if (vm.model.selectedOffice.id == vm.model.officesModify[i].id) {
+        vm.model.office = vm.model.officesModify[i];
+      }
+    }
+
+    if (vm.model.office.id == vm.model.office.parentObj.id ) {
+      vm.model.office.parentObj = null;
+    }
+
+    var index = vm.model.officesModify.indexOf(vm.model.office);
+    if (index > -1) {
+      vm.model.officesModify.splice(index, 1);
+    }
+
   }
 
 }

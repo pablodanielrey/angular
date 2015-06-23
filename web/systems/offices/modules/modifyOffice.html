@@ -23,8 +23,47 @@
     </div>
   </div>
 
-  <div class="content">
-    content
+  <div class="content" ng-class="{true:'hidden'}[vm.model.action == null]">
+    <div class="title">
+
+      <div ng-class="{false:'hidden'}[vm.model.action == 'modify']">
+        Modificar la oficina: {{vm.model.office.name}}
+      </div>
+
+      <div ng-class="{false:'hidden'}[vm.model.action == 'create']">
+        Crear Oficina
+      </div>
+    </div>
+
+    <div class="form">
+
+      <div class="name">
+        <span class="title">Nombre:</span>
+        <input type="text" ng-model="vm.model.office.name"/>
+      </div>
+
+      <div class="parent">
+        <span class="title">Depende de:</span>
+        <select class="" ng-change="" ng-model="vm.model.office.parentObj"  ng-options="op.name group by op.parentObj.name  for op in vm.model.officesModify | orderBy:['parentObj.name','order','name']">
+          <option value="">Nadie</option>
+        </select>
+      </div>
+
+      <div class="telephone">
+        <span class="title">Interno:</span>
+        <input type="text" ng-model="vm.model.office.telephone"/>
+      </div>
+
+      <div class="email">
+        <span class="title">Email:</span>
+        <input type="text" ng-model="vm.model.office.email"/>
+      </div>
+
+      <div class="actions">
+        <button>Cancelar</button>
+        <button>Guardar</button>
+      </div>
+    </div>
   </div>
 
 </div>

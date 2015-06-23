@@ -26,6 +26,7 @@
   flex-flow: row wrap;
   margin-top: 0.25em;
   margin-bottom: 0.25em;
+  padding-left:0.5em;
 }
 
 .modify-office-container .list-offices-container .search .title {
@@ -37,18 +38,17 @@
 .modify-office-container .list-offices-container .list-offices {
   display: flex;
   flex-flow: column wrap;
+  padding-left:0.5em;
 }
 
-.modify-office-container .list-offices-container .list-offices:nth-child(even)  {
+.modify-office-container .list-offices-container .list-offices .item-office:nth-child(even)  {
   background-color: white;
-  padding-left: 1em;
   color: black;
 }
 
-.modify-office-container .list-offices-container .list-offices:nth-child(odd)  {
+.modify-office-container .list-offices-container .list-offices .item-office:nth-child(odd)  {
   background-color: #E0DDDD;
   color: black;
-  padding-left: 1em;
 }
 
 .modify-office-container .list-offices-container .list-offices .item-office {
@@ -85,4 +85,58 @@
 
 .modify-office-container .content {
   flex: 3;
+  margin-left: 1em;
+}
+
+.modify-office-container .content.hidden {
+  visibility: hidden;
+}
+
+.modify-office-container .content .title {
+  background: linear-gradient(to left,#275276, #4897C8);
+  color:white;
+  text-align:center;
+  font-weight: bold;
+}
+
+.modify-office-container .content .title .hidden {
+  display: none;
+}
+
+.modify-office-container .content .form {
+  display:flex;
+  flex-flow:column;
+}
+
+
+.modify-office-container .content .form .title {
+  margin-right: 1em;
+  background: white;
+  color: black;
+}
+
+.modify-office-container .content .form .name {
+    margin-top:0.25em;
+}
+
+.modify-office-container .content .form .parent {
+    margin-top:0.25em;
+}
+
+.modify-office-container .content .form .telephone {
+    margin-top:0.25em;
+}
+
+.modify-office-container .content .form .email {
+    margin-top:0.25em;
+}
+
+.modify-office-container .content .form .actions {
+  display: flex;
+  flex-flow: row wrap;
+  margin-top:0.25em;
+}
+
+.modify-office-container .content .form .actions button{
+  flex: 1;
 }
