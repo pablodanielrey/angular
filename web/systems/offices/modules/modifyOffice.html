@@ -19,7 +19,6 @@
 
     <div class="actions">
       <button ng-click="vm.create()">Crear nueva</button>
-      <button ng-click="vm.modify()" ng-class="{true:'hidden'}[vm.model.selectedOffice == null]">Modificar</button>
     </div>
   </div>
 
@@ -44,7 +43,7 @@
 
       <div class="parent">
         <span class="title">Depende de:</span>
-        <select class="" ng-change="" ng-model="vm.model.office.parentObj"  ng-options="op.name group by op.parentObj.name  for op in vm.model.officesModify | orderBy:['parentObj.name','order','name']">
+        <select class="" ng-change="" ng-model="vm.model.office.parentObj"  ng-options="op.name group by op.parentName  for op in vm.model.officesModify | orderBy:['parentName','order','name']">
           <option value="">Nadie</option>
         </select>
       </div>
@@ -60,8 +59,8 @@
       </div>
 
       <div class="actions">
-        <button>Cancelar</button>
-        <button>Guardar</button>
+        <button ng-click="vm.cancel()">Cancelar</button>
+        <button ng-click="vm.save()">Guardar</button>
       </div>
     </div>
   </div>
