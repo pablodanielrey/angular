@@ -209,7 +209,9 @@ class GetJustificationsByUser:
 
         finally:
             con.close()
-
+            
+            
+            
 
 
 
@@ -304,6 +306,98 @@ class GetJustificationStock:
 
         finally:
             con.close()
+            
+            
+            
+            
+            
+            
+
+'''
+query :
+{
+  id:,
+  action:"updateJustificationStock",
+  session:,
+  request:{
+      user_id: "id del usuario",
+      justification_id: "id de la justificación"
+      stock: stock
+  }
+
+}
+
+response :
+{
+  id: "id de la petición",
+  ok: "caso exito",
+  error: "error del servidor",
+  response:{
+  }
+
+}
+
+'''
+class UpdateJustificationStock:
+
+    profiles = inject.attr(Profiles)
+    config = inject.attr(Config)
+    justifications = inject.attr(Justifications)
+
+
+    def handleAction(self, server, message):
+
+        if (message['action'] != 'updateJustificationStock'):
+            return False
+
+        if ('request' not in message) or ('session' not in message) or ('userId' not in message['request']) or ('justificationId' not in message['request']) or ('stock' not in message['request']):
+            response = {'id':message['id'], 'error':'Insuficientes parámetros'}
+            server.sendMessage(response)
+            return True
+
+        userId = message['request']['userId']
+        justificationId = message['request']['justificationId']
+        stock = message['request']['stock']
+        sid = message['session']
+        
+        self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
+
+
+        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+        try:
+
+            """ insertar datos """
+            events = self.justifications.updateJustificationStock(con,userId,justificationId,stock) 
+            con.commit()
+
+            response = {
+                'id':message['id'],
+                'ok':'',
+                'response':{
+                    'userId':userId,
+                    'justificationId':justificationId,
+                    'stock':stock
+                }
+            }
+            server.sendMessage(response)
+
+            """ disparar eventos """
+            for e in events: 
+                self.events.broadcast(server,e)
+
+        except psycopg2.DatabaseError as e:
+            logging.exception(e) 
+            con.rollback() 
+
+            response = { 
+                'id':message['id'], 
+                'error':'Error actualizando stock' 
+            } 
+            server.sendMessage(response) 
+
+        finally:
+            con.close()
+            
 
 
 

@@ -295,7 +295,7 @@ app.service('Assistance', ['Utils','Messages','Session',
 				id: Utils.getId(),
 				action: 'getJustifications',
 				session: Session.getSessionId(),
-			}
+			};
 
 			Messages.send(msg,
 				function(data) {
@@ -357,6 +357,33 @@ app.service('Assistance', ['Utils','Messages','Session',
 				});
 		};
 
+    /**
+     * Actualizar stock de la justificacion de un usuario
+     * @param {userId} userId
+     * @param {justificationId} justificationId
+     * @param {stock} stock
+     */
+    this.updateJustificationStock = function(userId, justificationId, stock,callbackOk,callbackError) {
+			var msg = {
+				id: Utils.getId(),
+				action: 'updateJustificationStock',
+				session: Session.getSessionId(),
+				request: {
+					userId: userId,
+ 					justificationId: justificationId,
+					stock: stock
+				}
+			};
+
+      Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response);
+					} else {
+						callbackError(data.error);
+					}
+				});
+		};
 
 		this.getJustificationRequestsByDate = function(status, usersIds, start, end, callbackOk, callbackError){
 			var msg = {
@@ -465,8 +492,7 @@ app.service('Assistance', ['Utils','Messages','Session',
 					}
 				}
 			);
-
-		}
+		};
 
 		this.requestJustification = function(userId, justification, status, callbackOk, callbackError) {
 			var msg = {
@@ -769,4 +795,8 @@ app.service('Assistance', ['Utils','Messages','Session',
 		  });
     };
 	}]
+  
+  
+  
+  
 );

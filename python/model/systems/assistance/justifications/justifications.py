@@ -348,6 +348,41 @@ class Justifications:
 
 
 
+    '''
+        actualizar el stock actual para la justificación indicada
+    '''
+    def updateJustificationStock(self,con,userId,justId,stock):
+        cur = con.cursor()
+        cur.execute('''
+          SELECT user_id,justification_id
+          FROM assistance.justifications_stock
+          WHERE user_id = %s AND justification_id = %s;
+        ''',(userId,justId))
+
+        if cur.rowcount <= 0:
+            cur.execute('''
+                INSERT INTO assistance.justifications_stock (user_id, justification_id, stock, calculated) 
+                VALUES (%s,%s,%s,now())
+            ''',(userId,justId,stock)) 
+        else:
+            cur.execute('''
+                UPDATE assistance.justifications_stock 
+                SET stock = %s, calculated = now()
+                WHERE user_id = %s AND justification_id = %s
+            ''',(stock,userId,justId)) 
+     
+        events = [] 
+        e = { 
+          'type':'JustificationsStockUpdatedEvent', 
+          'data':{ 
+             'justificationId':justId, 
+             'userId':userId, 
+             'stock':stock
+           } 
+        } 
+        events.append(e) 
+
+        return events
 
 
 

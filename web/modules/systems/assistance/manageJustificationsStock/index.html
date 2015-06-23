@@ -3,45 +3,47 @@
 <h2>Administración de Justificaciones</h2>
 
 <form>
-  <div class="selectUser">
-    <div class="searchUser">
+  <div class="input">
+    <div>
       <div class="searchTitle">
         <span><i class="fa fa-user-plus"></i> Seleccione Usuario</span>
       </div>
       <div>
         <input class="inputSearch" ng-model="model.searchUser" ng-click="displayUsersList()" ng-disabled="model.usersSelectionDisable" placeholder="Buscar...">
-        <ul class="listUsers" ng-class="{true:'visible', false:'hidden'}[isUsersListDisplayed()]">
-          <li class="liUsers" ng-repeat="user in model.users | filter:model.searchUser | orderBy : 'name'" ng-click="selectUser(user)">{{user.name}} {{user.lastname}}</li>
+        <ul class="list" ng-class="{true:'visible', false:'hidden'}[isUsersListDisplayed()]">
+          <li class="item" ng-repeat="user in model.users | filter:model.searchUser | orderBy : 'name'" ng-click="selectUser(user)">{{user.name}} {{user.lastname}}</li>
         </ul>
       </div>
     </div>
   </div>
   
-  <div class="selectUser">
-    <div class="searchUser">
+  <div class="input">
+    <div>
       <div class="searchTitle">
-        <span><i class="fa fa-user-plus"></i> Seleccione Justificacion</span>
+        <span><i class="fa fa-calendar"></i> Seleccione Justificacion</span>
       </div>
       <div>
         <input class="inputSearch" ng-model="model.searchJustification" ng-click="displayJustificationsList()" ng-disabled="model.justificationsSelectionDisable" placeholder="Buscar...">
-        <ul class="listUsers" ng-class="{true:'visible', false:'hidden'}[isJustificationsListDisplayed()]">
-          <li class="liUsers" ng-repeat="justification in model.justifications | filter:model.searchJustification | orderBy : 'name'" ng-click="selectJustification(justification)">{{justification.name}}</li>
+        <ul class="list" ng-class="{true:'visible', false:'hidden'}[isJustificationsListDisplayed()]">
+          <li class="item" ng-repeat="justification in model.justifications | filter:model.searchJustification | orderBy : 'name'" ng-click="selectJustification(justification)">{{justification.name}}</li>
         </ul>
       </div>
     </div>
   </div>
   
-  <div>
-    <div class="searchTitle">
-        <span><i class="fa fa-user-plus"></i> Stock </span>
-    </div>
+  <div class="input">
     <div>
-      <input ng-model="model.stock" type="number" ng-disabled="model.stockDisable" />
+      <div class="searchTitle">
+          <span><i class="fa fa-calculator"></i> Stock </span>
+      </div>
+      <div>
+        <input class="inputSearch" ng-model="model.stock" ng-change="checkStock()" type="number" ng-disabled="model.stockDisable" />
+      </div>
     </div>
   </div>
   
-  <div >
-        <button><i class="fa fa-times"></i>Aceptar</button>
+  <div class="input" >
+    <button ng-click="updateJustificationStock()"  ng-disabled="model.submitButtonDisable">Aceptar</button>
   </div>
 </form>
 </div>

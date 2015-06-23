@@ -23,6 +23,8 @@ app.controller('ManageJustificationsStockCtrl', ["$scope", "$timeout", "$window"
     
     stock: null,        //stock
     stockDisable: true, //flag para indicar que se debe deshabilitar el campo
+    
+    submitButtonDisable: true
   };
 
 
@@ -129,7 +131,9 @@ app.controller('ManageJustificationsStockCtrl', ["$scope", "$timeout", "$window"
     $scope.model.selectedUser = user;
     $scope.model.searchUser = $scope.model.selectedUser.name + " " + $scope.model.selectedUser.lastname;
     $scope.model.usersSelectionDisable = true;
+    
     $scope.loadJustifications();
+    $scope.displayJustificationsList();
   };
   
   
@@ -139,12 +143,36 @@ app.controller('ManageJustificationsStockCtrl', ["$scope", "$timeout", "$window"
   /**
    * Cargar usuarios de la lista
    */
-  $scope.loadJustifications = function(){        
+  $scope.loadJustifications = function(){
+    $scope.model.justifications = [];
+    $scope.model.selectedJustification = null;
+    
     Assistance.getJustificationsByUser($scope.model.selectedUser.id,
       function(justifications) {
-        $scope.model.justifications = justifications;
+        /** filtrar las justificaciones para incluir solo aquellas a las que se puede editar el stock **/
+        for(var i = 0; i < justifications.length; i++){
+          switch(justifications[i].id){
+            /**
+             * AGREGAR ACA LAS JUSTIFICACIONES QUE SE PUEDE CAMBIAR EL STOCK.
+             */
+            case "48773fd7-8502-4079-8ad5-963618abe725": //compensatorio
+            case "b70013e3-389a-46d4-8b98-8e4ab75335d0": //pre examen
+            case "50998530-10dd-4d68-8b4a-a4b7a87f3972": //res 638
+            case "76bc064a-e8bf-4aa3-9f51-a3c4483a729a": //licencia anual ordinaria
+              $scope.model.justifications.push(justifications[i]);
+            break;
+            
+          }
+        
+        }
+
         $scope.model.usersSelectionDisable = false;
-        $scope.model.justificationsSelectionDisable = false;
+  
+        if($scope.model.justifications.length <= 0){
+          $scope.model.justificationsSelectionDisable = true;
+          $scope.model.searchJustification = "No existen justificaciones";
+
+        }
       },
       function(error){
         Notifications.message(error);
@@ -168,6 +196,7 @@ app.controller('ManageJustificationsStockCtrl', ["$scope", "$timeout", "$window"
   $scope.displayJustificationsList = function(){
     $scope.model.selectedJustification = null;
     $scope.model.searchJustification = null;
+    $scope.model.submitButtonDisable = true;
     $scope.model.displayJustificationsList = true;
     $scope.model.justificationsSelectionDisable = false;
     
@@ -185,23 +214,53 @@ app.controller('ManageJustificationsStockCtrl', ["$scope", "$timeout", "$window"
 
   /**
    * Seleccionar justificacion
-   * @param {justificacion} justificacion seleccionada
+   * @param {justificacion} justification seleccionada
    */
   $scope.selectJustification = function(justification){
     $scope.model.displayJustificationsList = false;
     $scope.model.selectedJustification = justification;
     $scope.model.searchJustification = $scope.model.selectedJustification.name;
-    $scope.model.stockDisable = false;
     $scope.loadStock();
   };
   
+  
+  $scope.checkStock = function(){
+    if($scope.model.stock < 0){
+      $scope.model.stock = 0;
+    }
+  }
   
   
   /*****************************************************
    * METODOS CORRESPONDIENTES A LA DEFINICION DE STOCK *
    *****************************************************/
   $scope.loadStock = function(){
-    $scope.model.stock = 10;
+    $scope.model.submitButtonDisable = true;
+    $scope.model.stockDisable = true;
+
+    Assistance.getJustificationStock($scope.model.selectedUser.id, $scope.model.selectedJustification.id, null, null,
+				function(data){
+            $scope.model.stock = data.stock;
+            $scope.model.submitButtonDisable = false;
+            $scope.model.stockDisable = false;
+				},
+				function(error){
+						Notifications.message(error);
+				}
+		);
+    
   };
+  
+  
+  $scope.updateJustificationStock = function(){
+    Assistance.updateJustificationStock($scope.model.selectedUser.id, $scope.model.selectedJustification.id, $scope.model.stock,
+				function(data){
+            Notifications.message("Stock Actualizado");
+				},
+				function(error){
+						Notifications.message(error);
+				}
+		);
+  }
   
 }]);
