@@ -1,0 +1,30 @@
+<div class="modify-office-container">
+
+  <div class="list-offices-container">
+
+    <div class="title">
+      Seleccione oficina a modificar
+    </div>
+
+    <div class="search">
+      <span class="title">Buscar</span>
+      <input type="text" class="searchOffice" ng-model="vm.model.searchOffice">
+    </div>
+
+    <div class="list-offices">
+      <div class="item-office {{((($index+1) %2) == 0)?'par':'impar'}}" ng-class="{true:'selected'}[vm.model.selectedOffice == office]" ng-click="vm.selectOffice(office)" ng-repeat="office in vm.model.offices | filter:vm.model.searchOffice | orderBy:['name']">
+        <div>{{office.name}}</div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button ng-click="vm.create()">Crear nueva</button>
+      <button ng-click="vm.modify()" ng-class="{true:'hidden'}[vm.model.selectedOffice == null]">Modificar</button>
+    </div>
+  </div>
+
+  <div class="content">
+    content
+  </div>
+
+</div>

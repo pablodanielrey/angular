@@ -28,6 +28,7 @@ function MenuOfficeController($scope, $timeout, $location, Notifications) {
   vm.usersOffices = usersOffices;
   vm.index = index;
   vm.rolesOffices = rolesOffices;
+  vm.modifyOffice = modifyOffice;
 
   function usersOffices() {
     vm.selected = 'usersOffices';
@@ -42,6 +43,11 @@ function MenuOfficeController($scope, $timeout, $location, Notifications) {
   function rolesOffices() {
     vm.selected = 'rolesOffices';
     $location.path('/rolesOffices');
+  }
+
+  function modifyOffice() {
+    vm.selected = 'modifyOffice';
+    $location.path('/modifyOffice');
   }
 
 }

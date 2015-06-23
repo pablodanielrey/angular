@@ -14,6 +14,12 @@ function config($routeProvider) {
       controllerAs: 'vm'
     })
 
+    .when('/modifyOffice', {
+      templateUrl: '/systems/offices/modules/modifyOffice.html',
+      controller: 'ModifyOfficeController',
+      controllerAs: 'vm'
+    })
+
     .when('/usersOffices', {
       templateUrl: '/systems/offices/modules/usersOffices.html',
       controller: 'UsersOfficesController',

@@ -1,0 +1,88 @@
+.modify-office-container {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+
+/*
+  Listado de oficinas a modificar
+*/
+
+.modify-office-container .list-offices-container {
+  flex: 1;
+  display: flex;
+  flex-flow: column wrap;
+}
+
+.modify-office-container .list-offices-container .title {
+  background: linear-gradient(to right,#275276, #4897C8);
+  color:white;
+  text-align:center;
+  font-weight: bold;
+}
+
+.modify-office-container .list-offices-container .search {
+  display: flex;
+  flex-flow: row wrap;
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+}
+
+.modify-office-container .list-offices-container .search .title {
+  margin-right: 1em;
+  background: white;
+  color: black;
+}
+
+.modify-office-container .list-offices-container .list-offices {
+  display: flex;
+  flex-flow: column wrap;
+}
+
+.modify-office-container .list-offices-container .list-offices .par {
+  background-color: white;
+  padding-left: 1em;
+  color: black;
+}
+
+.modify-office-container .list-offices-container .list-offices .impar {
+  background-color: #E0DDDD;
+  color: black;
+  padding-left: 1em;
+}
+
+.modify-office-container .list-offices-container .list-offices .item-office {
+  cursor: pointer;
+}
+
+.modify-office-container .list-offices-container .list-offices .item-office:hover {
+  background-color: #4897C8;
+  color: white;
+}
+
+.modify-office-container .list-offices-container .list-offices .item-office.selected {
+  background-color: #4897C8;
+  color: white;
+}
+
+.modify-office-container .list-offices-container .actions {
+  display:flex;
+  flex-flow: column wrap;
+}
+
+.modify-office-container .list-offices-container .actions button {
+    flex: 1;
+    cursor:pointer;
+}
+
+.modify-office-container .list-offices-container .actions .hidden {
+  display: none;
+}
+
+/*
+  Formulario de la oficina
+*/
+
+.modify-office-container .content {
+  flex: 3;
+}
