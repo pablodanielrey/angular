@@ -98,7 +98,51 @@ function Office($rootScope, Messages, Session, Utils, Cache, Config) {
 
   function addOfficeRole() {}
 
-  function persistOffice() {}
+  function persistOffice(office, callbackOk, callbackError) {
+    if (office == null) {
+      return;
+    }
+
+    if (office.name == null || office.name.trim() == '') {
+      return;
+    }
+
+    var msg = {
+      id: Utils.getId(),
+      action: 'persistOffice',
+      session: Session.getSessionId(),
+      request: {
+        office: {}
+      }
+    }
+
+    msg.request.office.name = office.name;
+
+    if (office.telephone != null && office.telephone.trim() != '') {
+      msg.request.office.telephone = office.telephone;
+    }
+
+    if (office.email != null && office.email.trim() != '') {
+      msg.request.office.email = office.email;
+    }
+
+    if (office.parent != null && office.parent.trim() != '') {
+      msg.request.office.parent = office.parent;
+    }
+
+    if (office.id != null) {
+      msg.request.office.id = office.id;
+    }
+
+    Messages.send(msg,
+      function(data) {
+        if (typeof data.error === 'undefined') {
+          callbackOk(data.ok);
+        } else {
+          callbackError(data.error);
+        }
+      });
+  }
 
   function removeUserFromOffice(userId, officeId, callbackOk,callbackError) {
     if (userId == null || officeId == null) {
