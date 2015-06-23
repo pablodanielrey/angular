@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import logging
+import logging, uuid
 
 
 class Offices:
@@ -36,7 +36,7 @@ class Offices:
                 for cOff in cur:
                     cId = cOff[0]
                     if cId not in pids:
-                        roffices.append({'id':cId,'parent':cOff[1],'name':cOff[2]})
+                        roffices.append({'id':cId,'parent':cOff[1],'name':cOff[2], 'telephone':cOff[3], 'email': cOff[4]})
                         pids.append(cId)
 
         return roffices
@@ -313,20 +313,29 @@ class Offices:
 
         cur = con.cursor()
 
-        parent = (None,office['parent'])['parent' in office]
-        telephone = (None,office['telephone'])['telephone' in office]
-        email = (None,office['email'])['email' in office]
+        parent = None
+        if 'parent' in office:
+            parent = office['parent']
+
+        telephone = None
+        if 'telephone' in office:
+            telephone = office['telephone']
+
+        email = None
+        if 'email' in office:
+            email = office['email']
+
         name = office['name']
 
-        params = (parent,name,telephone,email,id)
+        params = [parent,name,telephone,email]
 
         if 'id' not in office:
             id = str(uuid.uuid4())
-            params.append(id)
+            params.extend([id])
             cur.execute('insert into offices.offices (parent,name,telephone,email,id) values(%s,%s,%s,%s,%s)',params)
         else:
             id = office['id']
-            params.append(id)
+            params.extend([id])
             cur.execute('update offices.offices set parent = %s, name = %s, telephone = %s, email = %s where id = %s',params)
 
 
