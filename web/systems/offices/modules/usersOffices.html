@@ -19,7 +19,7 @@
           <input type="text" class="searchUserOffices" ng-model="vm.model.searchUser"/>
         </div>
         <div class="list-users-container">
-          <div class="listUsers {{((($index+1) %2) == 0)?'par':'impar'}}" ng-class="{true:'deleted'}[user.deleted]" ng-click="vm.addUser(user)" ng-repeat="user in vm.model.users | filter:vm.model.searchUser | orderBy:['name','lastname']" ng-mouseover="vm.hover[$index] = true" ng-mouseleave="vm.hover[$index] = false">
+          <div class="listUsers" ng-class="{true:'deleted'}[user.deleted]" ng-click="vm.addUser(user)" ng-repeat="user in vm.model.users | filter:vm.model.searchUser | orderBy:['name','lastname']" ng-mouseover="vm.hover[$index] = true" ng-mouseleave="vm.hover[$index] = false">
             <div>{{user.name}} {{user.lastname}}</div>
             <div ng-class="{true:'hidden'}[vm.hover[$index] == null || vm.hover[$index] == false]" class="add fa fa-plus"> Agregar Usuario</div>
           </div>
@@ -50,7 +50,7 @@
           <input type="text" class="searchUserOffices" ng-model="vm.model.searchUserOffice"/>
         </div>
         <div class="list-users-container">
-          <div class="listUsers {{((($index+1) %2) == 0)?'par':'impar'}}" ng-click="vm.removeUser(user)" ng-repeat="user in vm.model.usersOffice | filter: vm.model.searchUserOffice | orderBy:['name','lastname']" ng-mouseover="vm.hoverOffice[$index] = true" ng-mouseleave="vm.hoverOffice[$index] = false">
+          <div class="listUsers" ng-click="vm.removeUser(user)" ng-repeat="user in vm.model.usersOffice | filter: vm.model.searchUserOffice | orderBy:['name','lastname']" ng-mouseover="vm.hoverOffice[$index] = true" ng-mouseleave="vm.hoverOffice[$index] = false">
             <div>{{user.name}} {{user.lastname}}</div>
             <div ng-class="{true:'hidden'}[vm.hoverOffice[$index] == null || vm.hoverOffice[$index] == false]" class="delete fa fa-minus"> Eliminar Usuario</div>
           </div>

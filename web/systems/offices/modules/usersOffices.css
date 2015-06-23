@@ -62,13 +62,15 @@
   font-weight: bold;
 }
 
-.users-offices-container .all-users-container .users .par {
+.users-offices-container .all-users-container .listUsers:nth-child(even) {
   background-color: white;
   padding-left: 1em;
   color: black;
+
 }
 
-.users-offices-container .all-users-container .users .impar {
+
+.users-offices-container .all-users-container .listUsers:nth-child(odd) {
   background-color: #E0DDDD;
   color: black;
   padding-left: 1em;
@@ -115,7 +117,22 @@
   font-weight: bold;
 }
 
-.users-offices-container .users-offices-container .users .par {
+
+.users-offices-container .users-offices-container .listUsers:nth-child(odd) {
+  background-color: white;
+  padding-left: 1em;
+  color: black;
+
+}
+
+
+.users-offices-container .users-offices-container .listUsers:nth-child(even) {
+  background-color: #E0DDDD;
+  color: black;
+  padding-left: 1em;
+}
+
+/*.users-offices-container .users-offices-container .users .par {
   background-color: white;
   padding-left: 1em;
   color: black;
@@ -125,7 +142,7 @@
   background-color: #E0DDDD;
   color: black;
   padding-left: 1em;
-}
+}*/
 
 .users-offices-container .users-offices-container .listUsers .delete.hidden  {
     display:none;
@@ -143,6 +160,7 @@
   align-items: center;
   cursor: pointer;
 }
+
 /*
   Boton de acciones
 */

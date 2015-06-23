@@ -39,13 +39,13 @@
   flex-flow: column wrap;
 }
 
-.modify-office-container .list-offices-container .list-offices .par {
+.modify-office-container .list-offices-container .list-offices:nth-child(even)  {
   background-color: white;
   padding-left: 1em;
   color: black;
 }
 
-.modify-office-container .list-offices-container .list-offices .impar {
+.modify-office-container .list-offices-container .list-offices:nth-child(odd)  {
   background-color: #E0DDDD;
   color: black;
   padding-left: 1em;
