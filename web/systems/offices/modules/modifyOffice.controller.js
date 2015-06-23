@@ -78,7 +78,6 @@ function ModifyOfficeController($scope, Session, Notifications, Office) {
   }
 
   function selectOffice(office) {
-    console.log(office);
     if (vm.model.selectedOffice == office) {
       vm.model.selectedOffice = null;
       vm.model.action = null;
@@ -113,11 +112,7 @@ function ModifyOfficeController($scope, Session, Notifications, Office) {
   function modify() {
     vm.model.action = 'modify';
     copyOffices();
-
-    if (vm.model.office.id == vm.model.office.parentObj.id ) {
-      vm.model.office.parentObj = null;
-    }
-
+    
     var index = vm.model.officesModify.indexOf(vm.model.office);
     if (index > -1) {
       vm.model.officesModify.splice(index, 1);
