@@ -69,6 +69,9 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, As
           $location.path('/requestGeneralJustifications')
         }
 
+        $scope.manageJustificationsStock = function() {
+          $location.path('/manageJustificationsStock')
+        }
 
 
         $scope.items = [];
@@ -113,6 +116,7 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, As
                         if (hasJustification) {
                           $scope.items.push({ label:'Solicitudes Especiales ', img:'fa-plus', function: $scope.userAssistanceManagement});
                           $scope.items.push({ label:'Solicitudes Generales ', img:'fa-plus', function: $scope.requestGeneralJustifications});
+                          $scope.items.push({ label:'Administrar Stock de Solicitudes ', img:'fa-plus', function: $scope.manageJustificationsStock});
                         }
 
                       },
