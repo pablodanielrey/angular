@@ -19,7 +19,39 @@ function Office($rootScope, Messages, Session, Utils, Cache, Config) {
   services.removeUserFromOffice = removeUserFromOffice;
   services.addUserToOffices = addUserToOffices;
 
-  function getUserInOfficesByRole() {}
+  function getUserInOfficesByRole(userId, role, tree, callbackOk, callbackError) {
+    if (role == null) {
+      return;
+    }
+
+    if (tree == null) {
+      tree = true;
+    }
+
+    var msg = {
+      id: Utils.getId(),
+      action: 'getUserInOfficesByRole',
+      session: Session.getSessionId(),
+      request: {
+        tree: tree,
+        role: role
+      }
+    }
+
+    if (userId != null) {
+      msg.request.userId = userId;
+    }
+
+    Messages.send(msg,
+      function(data) {
+        if (typeof data.error === 'undefined') {
+          callbackOk(data.response.users);
+        } else {
+          callbackError(data.error);
+        }
+      });
+
+  }
 
   function getUserOfficeRoles() {}
 
