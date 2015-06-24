@@ -48,6 +48,15 @@
   cursor: pointer;
 }
 
+.roles-office-container .offices-container .list-offices .item-office.child{
+  padding-left:2em;
+}
+
+.roles-office-container .offices-container .list-offices .item-office.child i {
+  margin-right:0.25em;
+}
+
+
 .roles-office-container .offices-container .list-offices .item-office:nth-child(even)  {
   background-color: white;
   color: black;

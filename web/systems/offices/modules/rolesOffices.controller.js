@@ -61,13 +61,28 @@ function RolesOfficesController($scope, $lcoation, Notifcations, Session, Office
   }
 
   function selectOffice(office) {
+
+
     if (vm.isSelectedOffice(office)) {
-      // la deselecciono
-      removeItem(vm.model.selectedOffices,office);
+      if (!vm.isSelectedOffice(office.parentObj)) {
+        // la deselecciono
+        removeItem(vm.model.selectedOffices,office);
+        for (var i = 0; i < office.childrens.length; i++) {
+          removeItem(vm.model.selectedOffices,office.childrens[i]);
+        }
+      }
     } else {
       // la selecciono
       vm.model.selectedOffices.push(office);
+      console.log(office);
+      for (var i = 0; i < office.childrens.length; i++) {
+        var child = office.childrens[i];
+        if (!vm.isSelectedOffice(child)) {
+          vm.model.selectedOffices.push(child);
+        }
+      }
     }
+
   }
 
   function loadOffices() {
@@ -79,13 +94,33 @@ function RolesOfficesController($scope, $lcoation, Notifcations, Session, Office
     Office.getOfficesByUserRole(userId,role,tree,
       function(offices) {
         if (offices != null) {
-          vm.model.offices = offices;
+          //  seteo los hijos
+          for (var i = 0; i < offices.length; i ++) {
+            offices[i].childrens = [];
+            setChildrens(offices,offices[i]);
+          }
+
+          // agrego solo los que no tienen padre
+          for (var i = 0; i < offices.length; i ++) {
+            if (offices[i].parentObj === undefined) {
+              vm.model.offices.push(offices[i]);
+            }
+          }
         }
       },
       function(error) {
           Notification.message(error);
       }
     );
+  }
+
+  function setChildrens(offices, office) {
+    for (var i = 0; i < offices.length; i ++) {
+      if (offices[i].parent == office.id) {
+        office.childrens.push(offices[i]);
+        offices[i].parentObj = office;
+      }
+    }
   }
 
   // ----------------------------------
