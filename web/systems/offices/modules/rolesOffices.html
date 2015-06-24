@@ -1,1 +1,34 @@
-Roles por oficina
+<div class="roles-office-container">
+
+  <div class="offices-container">
+    <div class="title">
+      Oficina
+    </div>
+
+    <div class="search">
+      <span class="title">Buscar</span>
+      <input type="text" class="searchOffice" ng-model="vm.model.searchOffice"/>
+    </div>
+
+    <div class="list-offices">
+      <div class="item-office" ng-class="{true:'selected'}[vm.isSelectedOffice(office)]" ng-click="vm.selectOffice(office)" ng-repeat="office in vm.model.offices | filter:vm.model.searchOffice | orderBy:['name']">
+        <div>{{office.name}}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="users-container">
+    users
+  </div>
+
+  <div class="content">
+    <div class="roles-container">
+      roles
+    </div>
+
+    <div class="actions-container">
+      guardar
+    </div>
+  </div>
+
+</div>

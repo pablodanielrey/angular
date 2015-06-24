@@ -1,0 +1,102 @@
+.roles-office-container {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+/*
+  Oficinas
+*/
+
+.roles-office-container .offices-container {
+  flex: 1;
+  display: flex;
+  flex-flow: column wrap;
+}
+
+.roles-office-container .offices-container .title {
+  background: linear-gradient(to right,#275276, #4897C8);
+  color:white;
+  text-align:center;
+  font-weight: bold;
+}
+
+.roles-office-container .offices-container .search {
+  display: flex;
+  flex-flow: row wrap;
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+  padding-left:0.5em;
+}
+
+.roles-office-container .offices-container .search .title {
+  margin-right: 1em;
+  background: white;
+  color: black;
+}
+
+.roles-office-container .offices-container .search .searchOffice {
+
+}
+
+.roles-office-container .offices-container .list-offices {
+  display: flex;
+  flex-flow: column wrap;
+  padding-left:0.5em;
+}
+
+.roles-office-container .offices-container .list-offices .item-office {
+  cursor: pointer;
+}
+
+.roles-office-container .offices-container .list-offices .item-office:nth-child(even)  {
+  background-color: white;
+  color: black;
+}
+
+.roles-office-container .offices-container .list-offices .item-office:nth-child(odd)  {
+  background-color: #E0DDDD;
+  color: black;
+}
+
+.roles-office-container .offices-container .list-offices .item-office.selected {
+  background-color: #4897C8;
+  color: white;
+}
+
+.roles-office-container .offices-container .list-offices .item-office:hover {
+  background-color: #4897C8;
+  color: white;
+}
+
+/*
+  Usuarios
+*/
+
+.roles-office-container .users-container {
+  flex: 1;
+}
+
+
+
+/*
+  Roles
+*/
+
+.roles-office-container .content {
+  flex: 1;
+  display: flex;
+  flex-flow: column wrap;
+}
+
+.roles-office-container .content .roles-container{
+
+}
+
+
+/*
+  Acciones
+*/
+
+.roles-office-container .content .actions {
+
+}
