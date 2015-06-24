@@ -152,28 +152,18 @@ app.controller('RequestJustificationLAOCtrl', ["$scope", "Assistance", "Notifica
   /********
    * DATE *
    ********/
-
-
   $scope.isDataDefined = function(){
-    return (($scope.rjModel.begin !== null) && ($scope.rjModel.end !== null));
-  };
-
-  $scope.selectDate = function(){
-    if($scope.rjModel.end !== null){
-      if(($scope.rjModel.begin !== null) && ($scope.rjModel.begin > $scope.rjModel.end)){
-        $scope.rjModel.end = new Date($scope.rjModel.begin);
-      }
-    }
-
-    $scope.rjModel.beginFormated = null;
-    if($scope.rjModel.begin !== null){
-			$scope.rjModel.beginFormated = Utils.formatDate($scope.rjModel.begin);
-    }
-
-    $scope.rjModel.endFormated = null;
-    if($scope.rjModel.end !== null){
-			$scope.rjModel.endFormated = Utils.formatDate($scope.rjModel.end);
-    }
+    if (($scope.rjModel.begin === null) 
+      || ($scope.rjModel.end === null) 
+      || !($scope.rjModel.begin instanceof Date) 
+      || !($scope.rjModel.end instanceof Date) 
+      || ($scope.rjModel.begin > $scope.rjModel.end)) 
+      return false;
+    
+    $scope.rjModel.beginFormated = Utils.formatDate($scope.rjModel.begin);
+    $scope.rjModel.endFormated = Utils.formatDate($scope.rjModel.end);
+    return true;
+    
   };
 
 

@@ -1,12 +1,12 @@
 
-app.controller('RequestInviernoCtrl', ["$scope", "Assistance", "Notifications", "Utils", function($scope, Assistance, Notifications, Utils) {
+app.controller('RequestVeranoCtrl', ["$scope", "Assistance", "Notifications", "Utils", function($scope, Assistance, Notifications, Utils) {
 
   if(!$scope.model) Notifications.message("No esta definido el modelo");
 
 
   $scope.rjModel = {
-    id: 'f7464e86-8b9e-4415-b370-b44b624951ca',
-    name: Utils.getJustificationName('f7464e86-8b9e-4415-b370-b44b624951ca'),
+    id: '6300ad65-537e-41f2-b932-e5a758d22381',
+    name: Utils.getJustificationName('6300ad65-537e-41f2-b932-e5a758d22381'),
     section: null,
 
     begin: null,

@@ -291,6 +291,10 @@ app.service('Utils', function() {
       case '7747e3ff-bbe2-4f2e-88f7-9cc624a242a9':
         return {id:justificationId, name:'Viaje', shortName:'VJE', icon:'fa-ticket'};
       break;
+      
+      case '6300ad65-537e-41f2-b932-e5a758d22381':
+        return {id:justificationId, name:'Receso de Verano', shortName:'VER', icon:'fa-ticket'};
+      break;
 
 
       default:
