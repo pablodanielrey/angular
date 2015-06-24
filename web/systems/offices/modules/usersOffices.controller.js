@@ -22,6 +22,7 @@ function UsersOfficesController($scope, $location, Notifications, Office, Users,
   vm.initalizeAllUsers = initializeAllUsers;
   vm.initializeUsersOffice = initializeUsersOffice;
   vm.loadOffices = loadOffices;
+  vm.loadOfficesAdmin = loadOfficesAdmin;
   vm.addUser = addUser;
   vm.removeUser = removeUser;
   vm.officeChange = officeChange;
@@ -120,15 +121,23 @@ function UsersOfficesController($scope, $location, Notifications, Office, Users,
   function loadOffices() {
     vm.model.officeSelected = null;
     vm.model.allOffices = [];
-    Office.getOffices(null,
+
+    var userId = vm.model.sessionUserId;
+    var tree = true;
+    var role = 'autoriza';
+
+    Office.getOfficesByUserRole(userId,role,tree,
       function(offices) {
-        vm.model.allOffices = offices;
-        for (var i = 0; i < offices.length; i++) {
-          setParentOffice(offices[i], offices);
+        if (offices != null) {
+          vm.model.allOffices = offices;
+          for (var i = 0; i < offices.length; i++) {
+            setParentOffice(offices[i], offices);
+          }
+          vm.loadOfficesAdmin();
         }
       },
       function(error) {
-        Notifications.message(error);
+          Notification.message(error);
       }
     );
   }
@@ -153,28 +162,10 @@ function UsersOfficesController($scope, $location, Notifications, Office, Users,
   function initializeUsersOffice() {
     vm.model.usersOffice = [];
     vm.model.officeChange = null;
-    loadOfficesAdmin();
   }
 
   function loadOfficesAdmin() {
-    vm.model.officesAdmin = [];
-    var userId = vm.model.sessionUserId;
-    var tree = true;
-    var role = 'autoriza';
-
-    Office.getOfficesByUserRole(userId,role,tree,
-      function(offices) {
-        if (offices != null) {
-          vm.model.officesAdmin = offices;
-          for (var i = 0; i < offices.length; i++) {
-            setParentOffice(offices[i], offices);
-          }
-        }
-      },
-      function(error) {
-          Notification.message(error);
-      }
-    );
+    vm.model.officesAdmin = angular.copy(vm.model.allOffices);;
   }
 
   function loadUserDataOffice(uid) {
