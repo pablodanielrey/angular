@@ -74,8 +74,64 @@
 
 .roles-office-container .users-container {
   flex: 1;
+  display: flex;
+  flex-flow: column wrap;
 }
 
+.roles-office-container .users-container .title {
+  background: linear-gradient(to right,#275276, #4897C8);
+  color:white;
+  text-align:center;
+  font-weight: bold;
+}
+
+.roles-office-container .users-container .search {
+  display: flex;
+  flex-flow: row wrap;
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+  padding-left:0.5em;
+}
+
+.roles-office-container .users-container .search .title {
+  margin-right: 1em;
+  background: white;
+  color: black;
+}
+
+.roles-office-container .users-container .search .searchUser {
+
+}
+
+.roles-office-container .users-container .list-users {
+  display: flex;
+  flex-flow: column wrap;
+  padding-left:0.5em;
+}
+
+.roles-office-container .users-container .list-users .item-user {
+  cursor: pointer;
+}
+
+.roles-office-container .users-container .list-users .item-user:nth-child(even)  {
+  background-color: white;
+  color: black;
+}
+
+.roles-office-container .users-container .list-users .item-user:nth-child(odd)  {
+  background-color: #E0DDDD;
+  color: black;
+}
+
+.roles-office-container .users-container .list-users .item-user.selected {
+  background-color: #4897C8;
+  color: white;
+}
+
+.roles-office-container .users-container .list-users .item-user:hover {
+  background-color: #4897C8;
+  color: white;
+}
 
 
 /*

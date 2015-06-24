@@ -18,7 +18,20 @@
   </div>
 
   <div class="users-container">
-    users
+    <div class="title">
+      Usuarios
+    </div>
+
+    <div class="search">
+      <span class="title">Buscar</span>
+      <input type="text" class="searchUser" ng-model="vm.model.searchUser"/>
+    </div>
+
+    <div class="list-users">
+      <div class="item-user" ng-class="{true:'selected'}[vm.isSelectedUser(user)]" ng-click="vm.selectUser(user)" ng-repeat="user in vm.model.users | filter: vm.model.searchUser | orderBy:['lastname','name']">
+        <div>{{user.lastname}}, {{user.name}}</div>
+      </div>
+    </div>
   </div>
 
   <div class="content">
