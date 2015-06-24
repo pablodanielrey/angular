@@ -44,6 +44,14 @@
   padding-left:0.5em;
 }
 
+.roles-office-container .offices-container .list-offices .item {
+    border-top: 0.25em solid white;
+}
+
+.roles-office-container .offices-container .list-offices :first-child {
+    border-top: 0;
+}
+
 .roles-office-container .offices-container .list-offices .item-office {
   cursor: pointer;
 }
@@ -57,12 +65,12 @@
 }
 
 
-.roles-office-container .offices-container .list-offices .item-office:nth-child(even)  {
+.roles-office-container .offices-container .list-offices .item-office.child  {
   background-color: white;
   color: black;
 }
 
-.roles-office-container .offices-container .list-offices .item-office:nth-child(odd)  {
+.roles-office-container .offices-container .list-offices .item-office.parent {
   background-color: #E0DDDD;
   color: black;
 }
