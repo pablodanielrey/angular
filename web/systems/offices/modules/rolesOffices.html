@@ -37,13 +37,21 @@
     </div>
   </div>
 
-  <div class="content">
+  <div class="content" ng-class="{false:'hidden'}[vm.isDisplayContentRole()]">
     <div class="roles-container">
-      roles
+      <div class="title">
+        Asignar roles
+      </div>
+      <div class="list-roles">
+        <div class="item-role" ng-class="{true:'selected'}[vm.isSelectedRole(role)]" ng-click="vm.selectRole(role)" ng-repeat="role in vm.model.roles | orderBy:['name']">
+          <div>{{role.name}}</div>
+        </div>
+      </div>
     </div>
 
     <div class="actions-container">
-      guardar
+      <button>Cancelar</button>
+      <button>Guardar</button>
     </div>
   </div>
 

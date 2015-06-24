@@ -14,8 +14,14 @@ function RolesOfficesController($scope, $lcoation, Notifcations, Session, Office
     selectedOffices: [],
     searchUser: '',
     users: [],
-    selectedUsers: []
-  }
+    selectedUsers: [],
+    roles: [],
+    selectedRoles: []
+  };
+
+  vm.view = {
+    displayContentRole: false
+  };
 
   vm.initialize = initialize;
 
@@ -30,6 +36,11 @@ function RolesOfficesController($scope, $lcoation, Notifcations, Session, Office
   vm.loadUsers = loadUsers;
   vm.loadUserData = loadUserData;
 
+  vm.initializeRole = initializeRole;
+  vm.isDisplayContentRole = isDisplayContentRole;
+  vm.isSelectedRole = isSelectedRole;
+  vm.selectRole = selectRole;
+  vm.loadRoles = loadRoles;
 
   function initialize() {
     var session = Session.getCurrentSession();
@@ -37,6 +48,8 @@ function RolesOfficesController($scope, $lcoation, Notifcations, Session, Office
 
     vm.initializeOffices();
     vm.initializeUsers();
+
+    vm.initializeRole();
   }
 
   $scope.$on('$viewContentLoaded', function(event) {
@@ -74,7 +87,6 @@ function RolesOfficesController($scope, $lcoation, Notifcations, Session, Office
     } else {
       // la selecciono
       vm.model.selectedOffices.push(office);
-      console.log(office);
       for (var i = 0; i < office.childrens.length; i++) {
         var child = office.childrens[i];
         if (!vm.isSelectedOffice(child)) {
@@ -175,6 +187,61 @@ function RolesOfficesController($scope, $lcoation, Notifcations, Session, Office
         Notifications.message(error);
       }
     );
+  }
+
+  // -----------------------------------------------
+  // ----------------- ROLES -----------------------
+  // -----------------------------------------------
+
+  function initializeRole() {
+    vm.view.displayContentRole = false;
+    vm.loadRoles();
+  }
+
+  function clearRole() {
+    vm.model.roles = [];
+    vm.model.selectedRoles = [];
+  }
+
+  $scope.$watch('vm.model.selectedUsers.length',function(newValue, oldValue) {
+    if (newValue > 0 && vm.model.selectedOffices.length > 0) {
+      vm.view.displayContentRole = true;
+      clearRole();
+    } else {
+      vm.view.displayContentRole = false;
+    }
+  });
+
+  $scope.$watch('vm.model.selectedOffices.length',function(newValue, oldValue) {
+    if (newValue > 0 && vm.model.selectedUsers.length > 0) {
+      vm.view.displayContentRole = true;
+      clearRole();
+    } else {
+      vm.view.displayContentRole = false;
+    }
+  });
+
+  function isDisplayContentRole() {
+    return vm.view.displayContentRole;
+  }
+
+  function isSelectedRole(role) {
+    return include(vm.model.selecteRoles,role);
+  }
+
+  function selectRole(role) {
+    if (vm.isSelectedRole(role)) {
+      // la deselecciono
+      removeItem(vm.model.selectedRoles,role);
+    } else {
+      // la selecciono
+      vm.model.selectedRoles.push(role);
+    }
+  }
+
+  function loadRoles() {
+    clearRole();
+    Office.
   }
 
 

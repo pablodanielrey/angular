@@ -93,6 +93,7 @@
   flex: 1;
   display: flex;
   flex-flow: column wrap;
+  margin-left:0.5em;
 }
 
 .roles-office-container .users-container .title {
@@ -159,10 +160,22 @@
   flex: 1;
   display: flex;
   flex-flow: column wrap;
+  margin-left:0.5em;
 }
 
-.roles-office-container .content .roles-container{
+.roles-office-container .content.hidden {
+  display:none;
+}
 
+.roles-office-container .content .roles-container {
+
+}
+
+.roles-office-container .content .roles-container .title {
+  background: linear-gradient(to left,#275276, #4897C8);
+  color:white;
+  text-align:center;
+  font-weight: bold;
 }
 
 
@@ -170,6 +183,12 @@
   Acciones
 */
 
-.roles-office-container .content .actions {
+.roles-office-container .content .actions-container {
+  display:flex;
+  flex-flow: row wrap;
+}
 
+
+.roles-office-container .content .actions-container button {
+  flex: 1;
 }
