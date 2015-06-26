@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import logging, uuid
 
+from itertools import groupby
 
 class Offices:
 
@@ -389,16 +390,19 @@ class Offices:
             return []
 
         rolesAssigned = []
-        params = (usersId, offficesId, roles)
         cur = con.cursor()
-        rows = cur.execute('select role, send_mail from offices.offices_roles where user_id in %s and office_id in %s and role in %s group by role,send_mail',params)
 
-        for key,value in groupby(rows,lambda x: x[0]):
-            listSendMail = list(value)
-            if len(listSendMail) == 1:
-                role = [{'name':key,'send_mail':listSendMail[0][1]}]
-            else:
-                role = [{'name':key,'send_mail':'f'}]
-            rolesAssigned.extend(role)
+        cur.execute('select role, send_mail from offices.offices_roles where user_id in %s and office_id in %s and role in %s group by role,send_mail',(tuple(usersId),tuple(officesId),tuple(roles)))
+        rows = cur.fetchall()
 
-        print (rolesAssigned)
+        if rows != None:
+
+            for key,value in groupby(rows,lambda x: x[0]):
+                listSendMail = list(value)
+                if len(listSendMail) == 1:
+                    role = [{'name':key,'send_mail':listSendMail[0][1]}]
+                else:
+                    role = [{'name':key,'send_mail':'f'}]
+                rolesAssigned.extend(role)
+
+        return rolesAssigned

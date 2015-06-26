@@ -144,7 +144,7 @@ class GetRolesAdmin:
 
         req = message['request']
         officesId = req['officesId']
-        usersId = req['userIds']
+        usersId = req['usersId']
 
         if 'userId' in req:
             userId = req['userId']
