@@ -368,9 +368,9 @@ class Offices:
 
 
     '''
-        Obtiene los roles que puede asignar el usuario (userId) para las oficinas (officesId)
+        Obtiene los roles que puede asignar el usuario (userId) para las oficinas (officesId) y usuarios (usersId)
     '''
-    def getRolesAdmin(self, con, userId, officesId):
+    def getRolesAdmin(self, con, userId, officesId, usersId):
         if officesId is None or len(officesId) == 0:
             return []
 
@@ -380,3 +380,25 @@ class Offices:
         '''
         roles = ['autoriza','horas-extras','realizar-solicitud','realizar-solicitud-admin']
         return roles
+
+    '''
+        Obtiene los roles que esten en 'roles' que estan asignados los usuarios (usersId) para las oficinas (officesId)
+    '''
+    def getAssignedRoles(self, con, officesId, usersId, roles):
+        if (officesId is None or len(officesId) == 0) or (usersId is None or len(usersId) == 0) or (roles is None or len(roles) == 0):
+            return []
+
+        rolesAssigned = []
+        params = (usersId, offficesId, roles)
+        cur = con.cursor()
+        rows = cur.execute('select role, send_mail from offices.offices_roles where user_id in %s and office_id in %s and role in %s group by role,send_mail',params)
+
+        for key,value in groupby(rows,lambda x: x[0]):
+            listSendMail = list(value)
+            if len(listSendMail) == 1:
+                role = [{'name':key,'send_mail':listSendMail[0][1]}]
+            else:
+                role = [{'name':key,'send_mail':'f'}]
+            rolesAssigned.extend(role)
+
+        print (rolesAssigned)

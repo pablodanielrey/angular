@@ -94,7 +94,8 @@ class GetUserInOfficesByRole:
 
 
 '''
-Retorna los roles que puede asignar el usuario (userId) para las oficinas (officesId)
+Retorna los roles que puede asignar el usuario (userId) para las oficinas (officesId) y para los usuarios (usersId)
+Ademas retorna los roles que ya poseen lso usarios
 query:
 {
   id:
@@ -102,7 +103,8 @@ query:
   session:
   request: {
     userId: 'id del usuario -- opcional, en el caso de no existir se toma el usuario de sesión'
-    officesId: []'ids de la oficina'
+    officesId: [] 'ids de la oficina'
+    usersId: [] 'listado de usarios'
   }
 }
 
@@ -112,7 +114,11 @@ response:
   ok:
   error:
   response: {
-    roles: []
+    roles: [],
+    assignedRoles: [{
+        name:'',
+        send_mail: '' --- 't' | 'f'   si tiene mas de un valor retorno false
+    }]
   }
 }
 
@@ -128,7 +134,7 @@ class GetRolesAdmin:
         if (message['action'] != 'getRolesAdmin'):
             return False
 
-        if ('session' not in message) or ('request' not in message) or ('officesId' not in message['request']):
+        if ('session' not in message) or ('request' not in message) or ('officesId' not in message['request']) or ('usersId' not in message['request']):
             response = {'id':message['id'], 'error': 'Insuficientes parámetros'}
             server.sendMessage(response)
             return True
@@ -138,6 +144,7 @@ class GetRolesAdmin:
 
         req = message['request']
         officesId = req['officesId']
+        usersId = req['userIds']
 
         if 'userId' in req:
             userId = req['userId']
@@ -146,12 +153,14 @@ class GetRolesAdmin:
 
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
-            roles = self.offices.getRolesAdmin(con, userId, officesId)
+            roles = self.offices.getRolesAdmin(con, userId, officesId, usersId)
+            assignedRoles = self.offices.getAssignedRoles(con, officesId, usersId, roles)
             response = {
                 'id':message['id'],
                 'ok':'',
                 'response': {
-                    'roles':roles
+                    'roles':roles,
+                    'assignedRoles':assignedRoles
                 }
             }
             server.sendMessage(response)
