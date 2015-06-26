@@ -365,3 +365,18 @@ class Offices:
         params = (userId,officeId,role)
         cur = con.cursor()
         cur.execute('delete from offices.offices where user_id = %s and office_id = %s and role = %s',params)
+
+
+    '''
+        Obtiene los roles que puede asignar el usuario (userId) para las oficinas (officesId)
+    '''
+    def getRolesAdmin(self, con, userId, officesId):
+        if officesId is None or len(officesId) == 0:
+            return []
+
+        '''
+            Esto es momentaneo, devuelvo los roles de asistencia
+            Esto hay cambiarlo!!!!!!!
+        '''
+        roles = ['autoriza','horas-extras','realizar-solicitud','realizar-solicitud-admin']
+        return roles

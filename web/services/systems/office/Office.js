@@ -18,6 +18,7 @@ function Office($rootScope, Messages, Session, Utils, Cache, Config) {
   services.persistOffice = persistOffice;
   services.removeUserFromOffice = removeUserFromOffice;
   services.addUserToOffices = addUserToOffices;
+  services.getRolesAdmin = getRolesAdmin;
 
   function getUserInOfficesByRole(userId, role, tree, callbackOk, callbackError) {
     if (role == null) {
@@ -54,6 +55,34 @@ function Office($rootScope, Messages, Session, Utils, Cache, Config) {
   }
 
   function getUserOfficeRoles() {}
+
+  function getRolesAdmin(userId, officesId, callbackOk, callbackError) {
+    if (officesId == null) {
+      return;
+    }
+
+    var msg = {
+      id: Utils.getId(),
+      action:'getRolesAdmin',
+      session: Session.getSessionId(),
+      request: {
+        officesId: officesId
+      }
+    };
+
+    if (userId != null) {
+      msg.request.userId = userId;
+    }
+
+    Messages.send(msg,
+      function(data) {
+        if (typeof data.error === 'undefined') {
+          callbackOk(data.response.roles);
+        } else {
+          callbackError(data.error);
+        }
+    });
+  }
 
   function getOffices(userId, callbackOk, callbackError) {
     var msg = {

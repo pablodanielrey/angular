@@ -93,6 +93,76 @@ class GetUserInOfficesByRole:
 
 
 
+'''
+Retorna los roles que puede asignar el usuario (userId) para las oficinas (officesId)
+query:
+{
+  id:
+  action:'getRolesAdmin'
+  session:
+  request: {
+    userId: 'id del usuario -- opcional, en el caso de no existir se toma el usuario de sesión'
+    officesId: []'ids de la oficina'
+  }
+}
+
+response:
+{
+  id:
+  ok:
+  error:
+  response: {
+    roles: []
+  }
+}
+
+'''
+class GetRolesAdmin:
+
+    profiles = inject.attr(Profiles)
+    config = inject.attr(Config)
+    offices = inject.attr(Offices)
+
+    def handleAction(self, server, message):
+
+        if (message['action'] != 'getRolesAdmin'):
+            return False
+
+        if ('session' not in message) or ('request' not in message) or ('officesId' not in message['request']):
+            response = {'id':message['id'], 'error': 'Insuficientes parámetros'}
+            server.sendMessage(response)
+            return True
+
+        sid = message['session']
+        self.profiles.checkAccess(sid,['ADMIN-OFFICES','USER-OFFICES'])
+
+        req = message['request']
+        officesId = req['officesId']
+
+        if 'userId' in req:
+            userId = req['userId']
+        else:
+            userId = self.profiles.getLocalUserId(sid)
+
+        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+        try:
+            roles = self.offices.getRolesAdmin(con, userId, officesId)
+            response = {
+                'id':message['id'],
+                'ok':'',
+                'response': {
+                    'roles':roles
+                }
+            }
+            server.sendMessage(response)
+            return True
+        except Exception as e:
+            logging.exception(e)
+            raise e
+        finally:
+            con.close()
+
+
 
 """
 query:
