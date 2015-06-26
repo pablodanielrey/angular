@@ -178,6 +178,35 @@
   font-weight: bold;
 }
 
+.roles-office-container .content .roles-container .list-roles {
+  display: flex;
+  flex-flow: column wrap;
+  padding-left:0.5em;
+}
+
+.roles-office-container .content .roles-container .list-roles .item-role {
+  cursor: pointer;
+}
+
+.roles-office-container .content .roles-container .list-roles .item-role:nth-child(even) {
+  background-color: white;
+  color:black;
+}
+
+.roles-office-container .content .roles-container .list-roles .item-role:nth-child(odd) {
+  background-color: #E0DDDD;
+  color: black;
+}
+
+.roles-office-container .content .roles-container .list-roles .item-role.selected {
+  background-color: #4897C8;
+  color: white;
+}
+
+.roles-office-container .content .roles-container .list-roles .item-role:hover {
+  background-color: #4897C8;
+  color: white;
+}
 
 /*
   Acciones
@@ -191,4 +220,5 @@
 
 .roles-office-container .content .actions-container button {
   flex: 1;
+  cursor: pointer;
 }

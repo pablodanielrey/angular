@@ -4,7 +4,7 @@ angular
 
 RolesOfficesController.$inject = ['$scope','$location','Notifications', 'Session', 'Office', 'Users'];
 
-function RolesOfficesController($scope, $lcoation, Notifcations, Session, Office, Users) {
+function RolesOfficesController($scope, $lcoation, Notifications, Session, Office, Users) {
 
   var vm = this;
   vm.model = {
@@ -41,6 +41,9 @@ function RolesOfficesController($scope, $lcoation, Notifcations, Session, Office
   vm.isSelectedRole = isSelectedRole;
   vm.selectRole = selectRole;
   vm.loadRoles = loadRoles;
+
+  vm.cancel = cancel;
+  vm.save =  save;
 
   function initialize() {
     var session = Session.getCurrentSession();
@@ -195,7 +198,6 @@ function RolesOfficesController($scope, $lcoation, Notifcations, Session, Office
 
   function initializeRole() {
     vm.view.displayContentRole = false;
-    vm.loadRoles();
   }
 
   function clearRole() {
@@ -206,7 +208,7 @@ function RolesOfficesController($scope, $lcoation, Notifcations, Session, Office
   $scope.$watch('vm.model.selectedUsers.length',function(newValue, oldValue) {
     if (newValue > 0 && vm.model.selectedOffices.length > 0) {
       vm.view.displayContentRole = true;
-      clearRole();
+      loadRoles();
     } else {
       vm.view.displayContentRole = false;
     }
@@ -215,7 +217,7 @@ function RolesOfficesController($scope, $lcoation, Notifcations, Session, Office
   $scope.$watch('vm.model.selectedOffices.length',function(newValue, oldValue) {
     if (newValue > 0 && vm.model.selectedUsers.length > 0) {
       vm.view.displayContentRole = true;
-      clearRole();
+      loadRoles();
     } else {
       vm.view.displayContentRole = false;
     }
@@ -226,7 +228,7 @@ function RolesOfficesController($scope, $lcoation, Notifcations, Session, Office
   }
 
   function isSelectedRole(role) {
-    return include(vm.model.selecteRoles,role);
+    return include(vm.model.selectedRoles,role);
   }
 
   function selectRole(role) {
@@ -241,9 +243,54 @@ function RolesOfficesController($scope, $lcoation, Notifcations, Session, Office
 
   function loadRoles() {
     clearRole();
-    Office.
+    var officesId = [];
+    var offices = vm.model.selectedOffices;
+
+    for (var i = 0; i < offices.length; i++) {
+      officesId.push(offices[i].id);
+    }
+
+    var usersId = [];
+    var users = vm.model.selectedUsers;
+    for (var i = 0; i < users.length; i++) {
+      usersId.push(users[i].id);
+    }
+
+    Office.getRolesAdmin(null, officesId, usersId,
+      function(data) {
+        var assignedRoles = data.assignedRoles;
+
+        for (var i = 0; i < data.roles.length; i++) {
+          var role = {};
+          role.name = data.roles[i];
+          for (var j = 0; j < assignedRoles.length; j++) {
+            if (role.name == assignedRoles[j].name) {
+              role.send_mail = assignedRoles[j].send_mail;
+              vm.model.selectedRoles.push(role);
+            }
+          }
+          vm.model.roles.push(role);
+        }
+
+      },
+      function(error) {
+        Notifications.message(error);
+      }
+    );
   }
 
+
+  // ----------------------------------
+  // ------------- ACTIONS ------------
+  // ----------------------------------
+
+  function cancel() {
+
+  }
+
+  function save() {
+
+  }
 
   // ----------------------------------
   // -------------- UTILS -------------
