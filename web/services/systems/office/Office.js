@@ -56,8 +56,8 @@ function Office($rootScope, Messages, Session, Utils, Cache, Config) {
 
   function getUserOfficeRoles() {}
 
-  function getRolesAdmin(userId, officesId, callbackOk, callbackError) {
-    if (officesId == null) {
+  function getRolesAdmin(userId, officesId, usersId, callbackOk, callbackError) {
+    if (officesId == null || usersId == null) {
       return;
     }
 
@@ -66,7 +66,8 @@ function Office($rootScope, Messages, Session, Utils, Cache, Config) {
       action:'getRolesAdmin',
       session: Session.getSessionId(),
       request: {
-        officesId: officesId
+        officesId: officesId,
+        usersId: usersId
       }
     };
 
@@ -77,7 +78,7 @@ function Office($rootScope, Messages, Session, Utils, Cache, Config) {
     Messages.send(msg,
       function(data) {
         if (typeof data.error === 'undefined') {
-          callbackOk(data.response.roles);
+          callbackOk(data.response);
         } else {
           callbackError(data.error);
         }
