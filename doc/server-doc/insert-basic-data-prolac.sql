@@ -48,6 +48,6 @@ insert into offices.offices (id,name) values ('45cc065a-7033-4f00-9b19-d7d097129
   Doy permisos de administrador al admin sobre todas las oficinas raiz.
 */
 
-insert into assistance.offices_roles (user_id,role,office_id) select '1','autoriza',id from assistance.offices o where o.parent is null;
-insert into assistance.offices_roles (user_id,role,office_id) select '1','realizar-solicitud',id from assistance.offices o where o.parent is null;
-insert into assistance.offices_roles (user_id,role,office_id) select '1','realizar-solicitud-admin',id from assistance.offices o where o.parent is null;
+insert into offices.offices_roles (user_id,role,office_id) select '1','autoriza',id from offices.offices o where o.parent is null;
+insert into offices.offices_roles (user_id,role,office_id) select '1','realizar-solicitud',id from offices.offices o where o.parent is null;
+insert into offices.offices_roles (user_id,role,office_id) select '1','realizar-solicitud-admin',id from offices.offices o where o.parent is null;
