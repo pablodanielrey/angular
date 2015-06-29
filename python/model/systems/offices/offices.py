@@ -386,23 +386,42 @@ class Offices:
         Obtiene los roles que esten en 'roles' que estan asignados los usuarios (usersId) para las oficinas (officesId)
     '''
     def getAssignedRoles(self, con, officesId, usersId, roles):
+
         if (officesId is None or len(officesId) == 0) or (usersId is None or len(usersId) == 0) or (roles is None or len(roles) == 0):
             return []
 
         rolesAssigned = []
         cur = con.cursor()
 
-        cur.execute('select role, send_mail from offices.offices_roles where user_id in %s and office_id in %s and role in %s group by role,send_mail',(tuple(usersId),tuple(officesId),tuple(roles)))
+        cur.execute('select role, office_id, user_id, send_mail from offices.offices_roles where user_id in %s and office_id in %s and role in %s order by role,office_id, send_mail',(tuple(usersId),tuple(officesId),tuple(roles)))
         rows = cur.fetchall()
 
         if rows != None:
+            rolesDict = {}
+            for row in rows:
+                if row[0] not in rolesDict:
+                    rolesDict[row[0]] = {'count':0}
 
-            for key,value in groupby(rows,lambda x: x[0]):
-                listSendMail = list(value)
-                if len(listSendMail) == 1:
-                    role = [{'name':key,'send_mail':listSendMail[0][1]}]
-                else:
-                    role = [{'name':key,'send_mail':'f'}]
-                rolesAssigned.extend(role)
+                role = rolesDict[row[0]]
+                # seteo el send_mail setSendMail(role,row[3])
+                self._setSendMail(role,row[3])
+                # incremento la cantidad de usuarios que se encuentran con dicho rol
+                role["count"] = role["count"] + 1
+
+            print(rolesDict)
+
+            for role in rolesDict.keys():
+                count = rolesDict[role]["count"]
+                if count == (len(officesId) * len(usersId)):
+                    r = {'name':role,'send_mail':rolesDict[role]["send_mail"]}
+                    rolesAssigned.append(r)
 
         return rolesAssigned
+
+    '''
+    setea el valor de sendMail a role. Predomina  False sobre True
+    v = 't'|'f'
+    '''
+    def _setSendMail(self,role,v):
+        if 'send_mail' not in role or not v:
+            role['send_mail'] = v
