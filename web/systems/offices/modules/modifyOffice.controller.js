@@ -50,7 +50,7 @@ function ModifyOfficeController($scope, Session, Notifications, Office) {
     vm.model.offices = [];
     var userId = vm.model.sessionUserId;
     var tree = true;
-    var role = 'autoriza';
+    var role = 'admin-office';
 
     Office.getOfficesByUserRole(userId,role,tree,
       function(offices) {
@@ -112,7 +112,7 @@ function ModifyOfficeController($scope, Session, Notifications, Office) {
   function modify() {
     vm.model.action = 'modify';
     copyOffices();
-    
+
     var index = vm.model.officesModify.indexOf(vm.model.office);
     if (index > -1) {
       vm.model.officesModify.splice(index, 1);

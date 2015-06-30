@@ -119,7 +119,7 @@ function RolesOfficesController($scope, $lcoation, Notifications, Session, Offic
     vm.model.offices = [];
     var userId = vm.model.sessionUserId;
     var tree = true;
-    var role = 'autoriza';
+    var role = 'admin-office';
 
     Office.getOfficesByUserRole(userId,role,tree,
       function(offices) {
@@ -193,7 +193,7 @@ function RolesOfficesController($scope, $lcoation, Notifications, Session, Offic
     vm.model.users = [];
     var userId = vm.model.sessionUserId;
     var tree = true;
-    var role = 'autoriza';
+    var role = 'admin-office';
 
     Office.getUserInOfficesByRole(userId, role, tree,
       function(users) {
