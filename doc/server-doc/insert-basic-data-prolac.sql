@@ -7,7 +7,7 @@ insert into credentials.user_password (id,user_id,username,password) values ('1'
 */
 insert into credentials.auth_profile (user_id,profile) values ('1','ADMIN');
 insert into credentials.auth_profile (user_id,profile) values ('1','ADMIN-ASSISTANCE');
--- insert into credentials.auth_profile (user_id,profile) values ('1','ADMIN-OFFICES');
+insert into credentials.auth_profile (user_id,profile) values ('1','ADMIN-OFFICES');
 
 insert into assistance.justifications (id,name) values ('76bc064a-e8bf-4aa3-9f51-a3c4483a729a','Licencia Anual Ordinaria');
 
