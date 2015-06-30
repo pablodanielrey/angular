@@ -43,11 +43,6 @@ create schema assistance;
   );
 
 
-  create table assistance.positions_justifications (
-    position varchar not null,
-    justification_id varchar not null references assistance.justifications (id),
-    constraint positions_justifications_unique unique (position,justification_id)
-  );
 
 
   /*
@@ -96,6 +91,15 @@ create schema assistance;
     id varchar primary key,
     name varchar not null unique
   );
+
+
+  create table assistance.positions_justifications (
+    position varchar not null,
+    justification_id varchar not null references assistance.justifications (id),
+    constraint positions_justifications_unique unique (position,justification_id)
+  );
+
+
 
   create table assistance.justifications_stock (
     justification_id varchar not null references assistance.justifications (id),

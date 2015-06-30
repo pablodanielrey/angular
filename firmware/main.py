@@ -151,7 +151,7 @@ if __name__ == '__main__':
     logging.info('Iniciando el sincronizador de logs')
 
     main = Main()
-    rt = Periodic(1 * 60, _sincLogs,main)
+    rt = Periodic(10 * 60, _sincLogs,main)
 
     def close_sig_handler(signal,frame):
         logging.info('Cerrando sistema sincronizador')
