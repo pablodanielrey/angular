@@ -11,9 +11,9 @@
     </div>
 
     <div class="list-offices">
-      <div class="item" ng-repeat="office in vm.model.offices | filter:vm.model.searchOffice | orderBy:['name']">
-        <div class="item-office parent" ng-class="{true:'selected'}[vm.isSelectedOffice(office)]" ng-click="vm.selectOffice(office)">{{office.name}}</div>
-        <div class="item-office child" ng-class="{true:'selected'}[vm.isSelectedOffice(child)]" ng-click="vm.selectOffice(child)" ng-repeat="child in office.childrens | filter:vm.model.searchOffice | orderBy:['name']">
+      <div class="item" ng-repeat="office in vm.model.offices  | orderBy:['name']">
+        <div class="item-office parent" ng-class="{true:'selected'}[vm.isSelectedOffice(office)]" ng-click="vm.selectOffice(office)" ng-if="!office.hidden">{{office.name}}</div>
+        <div class="item-office child" ng-class="{true:'selected'}[vm.isSelectedOffice(child)]" ng-click="vm.selectOffice(child)" ng-repeat="child in office.childrens | filter:{name:vm.model.searchOffice} | orderBy:['name']">
           <div><i class="fa fa-arrow-right"></i>{{child.name}}</div>
         </div>
       </div>

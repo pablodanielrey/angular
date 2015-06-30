@@ -2,9 +2,9 @@ angular
     .module('mainApp')
     .controller('RolesOfficesController',RolesOfficesController);
 
-RolesOfficesController.$inject = ['$scope','$location','Notifications', 'Session', 'Office', 'Users'];
+RolesOfficesController.$inject = ['$scope','$location','Notifications', 'Session', 'Office', 'Users', 'filterFilter'];
 
-function RolesOfficesController($scope, $lcoation, Notifications, Session, Office, Users) {
+function RolesOfficesController($scope, $lcoation, Notifications, Session, Office, Users, filterFilter) {
 
   var vm = this;
   vm.model = {
@@ -65,6 +65,19 @@ function RolesOfficesController($scope, $lcoation, Notifications, Session, Offic
   // -----------------------------------------------
   // ---------------- OFICINAS ---------------------
   // -----------------------------------------------
+
+  $scope.$watch('vm.model.searchOffice',function(newValue, oldValue) {
+
+    var filtered = filterFilter(vm.model.offices, {name:newValue});
+    for (var i = 0; i < vm.model.offices.length; i++) {
+      var office = vm.model.offices[i];
+      if (!include(filtered,office)) {
+        office.hidden = true;
+      } else {
+        office.hidden = false;
+      }
+    }
+  });
 
   function initializeOffices() {
     vm.model.searchOffice = '';
