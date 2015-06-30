@@ -29,7 +29,7 @@ class Offices:
 
             for oId in toFollow:
                 cur = con.cursor()
-                cur.execute('select id,parent,name from assistance.offices where parent = %s',(oId,))
+                cur.execute('select id,parent,name from offices.offices where parent = %s',(oId,))
                 if cur.rowcount <= 0:
                     continue
 
@@ -53,7 +53,7 @@ class Offices:
 
 
         cur = con.cursor()
-        cur.execute('select id,parent,name from assistance.offices')
+        cur.execute('select id,parent,name from offices.offices')
         if cur.rowcount <= 0:
             return []
 
@@ -93,7 +93,7 @@ class Offices:
             return []
 
         cur = con.cursor()
-        cur.execute('select id,parent,name from assistance.offices where id in %s',(tuple(officesIds),))
+        cur.execute('select id,parent,name from offices.offices where id in %s',(tuple(officesIds),))
         if cur.rowcount <= 0:
             return []
 
@@ -109,7 +109,7 @@ class Offices:
     """ obtiene todas las oficinas """
     def getOffices(self,con):
         cur = con.cursor()
-        cur.execute('select id,parent,name from assistance.offices')
+        cur.execute('select id,parent,name from offices.offices')
         offs = cur.fetchall()
         offices = []
         for off in offs:
@@ -141,7 +141,7 @@ class Offices:
 
         logging.debug(offices)
 
-        cur.execute('select distinct user_id from assistance.offices_users ou where ou.office_id in %s',(tuple(offices),))
+        cur.execute('select distinct user_id from offices.offices_users ou where ou.office_id in %s',(tuple(offices),))
         if cur.rowcount <= 0:
             return []
 
@@ -156,7 +156,7 @@ class Offices:
     """ obtiene todas las oficinas a las que pertenece un usuario y si tree=True obtiene todas las hijas también """
     def getOfficesByUser(self,con,userId,tree=False,parents=False):
         cur = con.cursor()
-        cur.execute('select id,parent,name from assistance.offices o, assistance.offices_users ou where ou.user_id = %s and o.id = ou.office_id',(userId,))
+        cur.execute('select id,parent,name from offices.offices o, offices.offices_users ou where ou.user_id = %s and o.id = ou.office_id',(userId,))
         if cur.rowcount <= 0:
             return []
 
@@ -182,7 +182,7 @@ class Offices:
     """
     def getOfficesRoles(self,con,userId):
         cur = con.cursor()
-        cur.execute('select user_id,office_id,role from assistance.offices_roles ou where ou.user_id = %s',(userId,))
+        cur.execute('select user_id,office_id,role from offices.offices_roles ou where ou.user_id = %s',(userId,))
         if cur.rowcount <= 0:
             return []
 
@@ -205,7 +205,7 @@ class Offices:
     """
     def getOfficesByUserRole(self,con,userId,tree=False,role='autoriza'):
         cur = con.cursor()
-        cur.execute('select id,parent,name from assistance.offices o, assistance.offices_roles ou where ou.user_id = %s and o.id = ou.office_id and ou.role = %s',(userId,role))
+        cur.execute('select id,parent,name from offices.offices o, offices.offices_roles ou where ou.user_id = %s and o.id = ou.office_id and ou.role = %s',(userId,role))
         if cur.rowcount <= 0:
             return []
 
@@ -249,7 +249,7 @@ class Offices:
             return []
 
         cur = con.cursor()
-        cur.execute('select user_id,send_mail from assistance.offices_roles where office_id in %s and role = %s',(tuple(officesIds),role))
+        cur.execute('select user_id,send_mail from offices.offices_roles where office_id in %s and role = %s',(tuple(officesIds),role))
         if cur.rowcount <= 0:
             return []
 
