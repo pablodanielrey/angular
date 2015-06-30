@@ -10,6 +10,7 @@ from model.utils import Periodic
 from model.users.users import Users
 from model.systems.assistance.logs import Logs
 from model.systems.assistance.date import Date
+from model.systems.assistance.offices.offices import Offices
 
 from zksoftware.zkSoftware import ZkSoftware
 
@@ -21,6 +22,7 @@ class Main:
     logs = inject.attr(Logs)
     users = inject.attr(Users)
     date = inject.attr(Date)
+    offices = inject.attr(Offices)
 
     def __init__(self):
         host = self.config.configs['zksoftware_host']
@@ -63,10 +65,13 @@ class Main:
                     if user is None:
                         newUser = {
                                 'dni':l['PIN'],
-                                'name':'auto generado asistencia',
+                                'name':'autogenerado asistencia',
                                 'lastname':'autogenerado asistencia'
                         }
                         userId = self.users.createUser(con,newUser)
+
+                        ''' agrego la persona a la oficina de asistencia autogenerados - el id esta en insert_basic_data.sql '''
+                        self.offices.addUserToOffices(con,'45cc065a-7033-4f00-9b19-d7d097129db3',userId)
                     else:
                         userId = user['id']
 

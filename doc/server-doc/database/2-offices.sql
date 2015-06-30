@@ -5,7 +5,7 @@ create schema offices;
     name varchar not null,
     telephone varchar,
     email varchar,
-    parent varchar,
+    parent varchar references offices.offices (id),
     constraint unique_office unique (name,parent)
   );
 
@@ -23,3 +23,10 @@ create schema offices;
     send_mail boolean default true,
     constraint unique_office_roles unique (user_id,office_id,role)
   );
+
+-- Para migrar de la tablas de assistance al esquema offices solo hay que crear
+-- el esquema offices y luego correr las consultas
+-- select * into offices.offices from assistance.offices;
+-- select * into offices.offices_users from assistance.offices_users;
+-- select * into offices.offices_roles from assistance.offices_roles;
+-- estas consultas crean las tablas y copian el contenido

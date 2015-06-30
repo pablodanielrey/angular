@@ -1,0 +1,176 @@
+/*
+  Contenedor general
+*/
+.users-offices-container {
+  width:100%;
+  min-height:20em;
+  display:flex;
+  flex-flow: row wrap;
+}
+
+.users-offices-container .content .office {
+  display: flex;
+  flex-flow: row wrap;
+  padding-bottom: 0.25em;
+  margin-top: 0.25em;
+  border-bottom: 0.25em solid #0066A6;
+}
+
+.users-offices-container .content .office .title{
+    margin-right: 1em;
+    background: white;
+    color: black;
+}
+
+.users-offices-container .content .users .search {
+  display: flex;
+  flex-flow: row wrap;
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+}
+
+.users-offices-container .content .search .title{
+    margin-right: 1em;
+    background: white;
+    color: black;
+}
+
+.users-offices-container .content .users {
+  display: flex;
+  flex-flow: column wrap;
+}
+
+.users-offices-container .content .users .search {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+/*
+  Listado de todos los usuarios
+*/
+
+.users-offices-container .all-users-container {
+  display: flex;
+  flex-flow: column;
+  flex: 1;
+}
+
+.users-offices-container .all-users-container .title {
+  background: linear-gradient(to right,#275276, #4897C8);
+  color:white;
+  text-align:center;
+  font-weight: bold;
+}
+
+.users-offices-container .all-users-container .listUsers:nth-child(even) {
+  background-color: white;
+  padding-left: 1em;
+  color: black;
+
+}
+
+
+.users-offices-container .all-users-container .listUsers:nth-child(odd) {
+  background-color: #E0DDDD;
+  color: black;
+  padding-left: 1em;
+}
+
+
+
+.users-offices-container .all-users-container .listUsers .add.hidden  {
+    display:none;
+}
+
+.users-offices-container .all-users-container .listUsers:hover {
+  background-color: rgb(65, 210, 65);
+}
+
+.users-offices-container .all-users-container .listUsers {
+  display:flex;
+  flex-flow:row;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+
+.users-offices-container .all-users-container .listUsers.deleted {
+  color:grey;
+}
+
+/*
+  Listado de los usuarios de la oficina
+*/
+
+.users-offices-container .users-offices-container {
+  display: flex;
+  flex-flow: column;
+  flex: 1;
+  margin-left: 1em;
+}
+
+.users-offices-container .users-offices-container .title {
+  background: linear-gradient(to left,#275276, #4897C8);
+  color:white;
+  text-align:center;
+  font-weight: bold;
+}
+
+
+.users-offices-container .users-offices-container .listUsers:nth-child(odd) {
+  background-color: white;
+  padding-left: 1em;
+  color: black;
+
+}
+
+
+.users-offices-container .users-offices-container .listUsers:nth-child(even) {
+  background-color: #E0DDDD;
+  color: black;
+  padding-left: 1em;
+}
+
+/*.users-offices-container .users-offices-container .users .par {
+  background-color: white;
+  padding-left: 1em;
+  color: black;
+}
+
+.users-offices-container .users-offices-container .users .impar {
+  background-color: #E0DDDD;
+  color: black;
+  padding-left: 1em;
+}*/
+
+.users-offices-container .users-offices-container .listUsers .delete.hidden  {
+    display:none;
+}
+
+.users-offices-container .users-offices-container .listUsers:hover {
+  background-color: red;
+  color:white;
+}
+
+.users-offices-container .users-offices-container .listUsers {
+  display:flex;
+  flex-flow:row;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+/*
+  Boton de acciones
+*/
+
+.users-offices-container .actions {
+  display:flex;
+  flex-flow: row wrap;
+}
+
+.users-offices-container .actions button {
+  flex:1;
+  cursor: pointer;
+}
