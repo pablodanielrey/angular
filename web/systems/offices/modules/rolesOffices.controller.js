@@ -292,8 +292,11 @@ function RolesOfficesController($scope, $lcoation, Notifications, Session, Offic
   // ----------------------------------
 
   function cancel() {
-    vm.model.selectedOffices = [];
-    vm.model.selectedUsers = [];
+    vm.model.selectedRoles = [];
+    for (var i = 0; i < vm.model.rolesInit.length; i++) {
+      vm.model.selectedRoles.push(vm.model.rolesInit[i]);
+    }
+    console.log(vm.model.selectedRoles);
   }
 
   function save() {
