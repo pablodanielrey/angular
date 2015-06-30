@@ -347,12 +347,12 @@ class Offices:
     '''
     def addRole(self,con,userId,officeId,role,sendMail=True):
 
-        if userId is None or officeId in None or role is None:
+        if userId is None or officeId is None or role is None:
             return
 
         params = (userId,officeId,role,sendMail)
         cur = con.cursor()
-        cur.execute('insert into offices.offices (user_id,office_id,role,sendMail) values(%s,%s,%s,%s)',params)
+        cur.execute('insert into offices.offices_roles (user_id,office_id,role,send_mail) values(%s,%s,%s,%s)',params)
 
 
 
@@ -360,12 +360,12 @@ class Offices:
         elimina el rol para usuario oficina
     '''
     def deleteRole(self,con,userId,officeId,role):
-        if userId is None or officeId in None or role is None:
+        if userId is None or officeId is None or role is None:
             return
 
         params = (userId,officeId,role)
         cur = con.cursor()
-        cur.execute('delete from offices.offices where user_id = %s and office_id = %s and role = %s',params)
+        cur.execute('delete from offices.offices_roles where user_id = %s and office_id = %s and role = %s',params)
 
 
     '''

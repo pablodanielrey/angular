@@ -554,10 +554,12 @@ query:{
     action:'addOfficeRole',
     session:,
     request:{
-        userId: "id del usuario",
-        officeId: "id de la oficina",
-        role: "rol",
-        sendMail: ""
+        usersId: [],
+        officesId: [],
+        role: {
+            name: '',
+            send_mail: ''
+        }
     }
 }
 
@@ -577,33 +579,48 @@ class AddOfficeRole:
         if (message['action'] != 'addOfficeRole'):
             return False
 
-        if ('session' not in message) or ('request' not in message) or ('userId' not in message['request']) or ('role' not in message['request']) or ('officeId' not in message['request']):
+        if ('session' not in message) or ('request' not in message) or ('usersId' not in message['request']) or ('role' not in message['request']) or ('officesId' not in message['request']):
             response = {'id':message['id'], 'error':'Insuficientes parámetros'}
             server.sendMessage(response)
             return True
+
 
         sid = message['session']
         self.profiles.checkAccess(sid,['ADMIN-OFFICES','USER-OFFICES'])
 
         req = message['request']
-        officeId = req['officeId']
-        userId = req['userId']
+
         role = req['role']
-        sendMail = (True,req['sendMail'])['sendMail' in req]
+        if ('name' not in role) or role["name"].strip() == "":
+            response = {'id':message['id'], 'error':'El rol no tiene nombre'}
+            server.sendMessage(response)
+            return True
+
+        roleName = req['role']['name']
+
+        officesId = req['officesId']
+
+        usersId = req['usersId']
+
+        sendMail = (True,role['send_mail'])['send_mail' in role]
 
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
             # verifico si el usuario de session tiene el rol autoriza para la oficina de la cual se desea agregar el rol
             localUserId = self.profiles.getLocalUserId(sid)
             offices = self.offices.getOfficesByUserRole(con,localUserId,True,'autoriza')
-            listOff = list(map(lambda x: x == officeId, offices))
-            if len(listOff) == 0:
-                response = {'id':message['id'], 'error':'No tiene permiso para realizar esta operación'}
-                server.sendMessage(response)
-                return True
+            for officeId in officesId:
+                listOff = list(map(lambda x: x == officeId, offices))
+                if len(listOff) == 0:
+                    response = {'id':message['id'], 'error':'No tiene permiso para realizar esta operación'}
+                    server.sendMessage(response)
+                    return True
 
             # agrego el rol
-            self.offices.addRole(con,userId,officeId,role,sendMail)
+            for userId in usersId:
+                for officeId in officesId:
+                    self.offices.addRole(con,userId,officeId,roleName,sendMail)
+
             con.commit()
             response = {'id':message['id'], 'ok':'El rol se ha creado correctamente'}
             server.sendMessage(response)
