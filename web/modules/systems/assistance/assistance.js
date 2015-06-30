@@ -233,7 +233,7 @@ app.controller('AssistanceCtrl', ["$scope", "$timeout", "$window", "Profiles", "
 						$scope.loadAssistanceStatus();
 						$scope.loadAssistanceData();
 						$scope.loadOffices();
-						$scope.loadJustifications();
+						//$scope.loadJustifications();
 					} else {
 						console.log("not granted");
 						$window.location.href = "/#/logout";
