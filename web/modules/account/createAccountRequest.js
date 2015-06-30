@@ -24,11 +24,12 @@ app.controller('CreateAccountRequestCtrl', function($rootScope, $scope, $window,
 			return;
 		}
 
-
+    /*
     if ($scope.request.reason == '') {
       Notifications.message(['Debe seleccionar un motivo para crear la cuenta']);
       return
     }
+    */
 
 		var msg = {
 			id: Utils.getId(),
