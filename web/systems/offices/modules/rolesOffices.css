@@ -78,6 +78,7 @@
 .roles-office-container .offices-container .list-offices .item-office.selected {
   background-color: #4897C8;
   color: white;
+  border-bottom: 1px solid white;
 }
 
 .roles-office-container .offices-container .list-offices .item-office:hover {

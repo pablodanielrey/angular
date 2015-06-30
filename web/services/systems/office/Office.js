@@ -156,9 +156,61 @@ function Office($rootScope, Messages, Session, Utils, Cache, Config) {
       });
   }
 
-  function deleteOfficeRole() {}
+  function deleteOfficeRole(officesId, usersId, role, callbackOk, callbackError) {
+    if (officesId == null || usersId == null || role == null) {
+      return;
+    }
 
-  function addOfficeRole() {}
+    var msg = {
+      id: Utils.getId(),
+      action: 'deleteOfficeRole',
+      session: Session.getSessionId(),
+      request: {
+        usersId: usersId,
+        officesId: officesId,
+        role: role
+      }
+    }
+
+    Messages.send(msg,
+      function(data) {
+        if (typeof data.error === 'undefined') {
+          callbackOk(data.ok);
+        } else {
+          callbackError(data.error);
+        }
+      }
+    );
+
+  }
+
+  function addOfficeRole(officesId, usersId, role, callbackOk, callbackError) {
+    if (officesId == null || usersId == null || role == null) {
+      return;
+    }
+
+    var msg = {
+      id: Utils.getId(),
+      action: 'addOfficeRole',
+      session: Session.getSessionId(),
+      request: {
+        usersId: usersId,
+        officesId: officesId,
+        role: role
+      }
+    }
+
+    Messages.send(msg,
+      function(data) {
+        if (typeof data.error === 'undefined') {
+          callbackOk(data.ok);
+        } else {
+          callbackError(data.error);
+        }
+      }
+    );
+
+  }
 
   function persistOffice(office, callbackOk, callbackError) {
     if (office == null) {

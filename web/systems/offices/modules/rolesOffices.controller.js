@@ -16,6 +16,7 @@ function RolesOfficesController($scope, $lcoation, Notifications, Session, Offic
     users: [],
     selectedUsers: [],
     roles: [],
+    rolesInit: [],
     selectedRoles: []
   };
 
@@ -80,22 +81,23 @@ function RolesOfficesController($scope, $lcoation, Notifications, Session, Offic
 
 
     if (vm.isSelectedOffice(office)) {
-      if (!vm.isSelectedOffice(office.parentObj)) {
+      removeItem(vm.model.selectedOffices,office);
+      /*if (!vm.isSelectedOffice(office.parentObj)) {
         // la deselecciono
         removeItem(vm.model.selectedOffices,office);
         for (var i = 0; i < office.childrens.length; i++) {
           removeItem(vm.model.selectedOffices,office.childrens[i]);
         }
-      }
+      }*/
     } else {
       // la selecciono
       vm.model.selectedOffices.push(office);
-      for (var i = 0; i < office.childrens.length; i++) {
+      /*for (var i = 0; i < office.childrens.length; i++) {
         var child = office.childrens[i];
         if (!vm.isSelectedOffice(child)) {
           vm.model.selectedOffices.push(child);
         }
-      }
+      }*/
     }
 
   }
@@ -202,6 +204,7 @@ function RolesOfficesController($scope, $lcoation, Notifications, Session, Offic
 
   function clearRole() {
     vm.model.roles = [];
+    vm.model.rolesInit = [];
     vm.model.selectedRoles = [];
   }
 
@@ -267,7 +270,11 @@ function RolesOfficesController($scope, $lcoation, Notifications, Session, Offic
             if (role.name == assignedRoles[j].name) {
               role.send_mail = assignedRoles[j].send_mail;
               vm.model.selectedRoles.push(role);
+              vm.model.rolesInit.push(role);
             }
+          }
+          if (role['send_mail'] === undefined) {
+            role.send_mail = false;
           }
           vm.model.roles.push(role);
         }
@@ -285,10 +292,55 @@ function RolesOfficesController($scope, $lcoation, Notifications, Session, Offic
   // ----------------------------------
 
   function cancel() {
-
+    vm.model.selectedOffices = [];
+    vm.model.selectedUsers = [];
   }
 
   function save() {
+    var officesId = [];
+    for (var i = 0; i < vm.model.selectedOffices.length; i++) {
+      officesId.push(vm.model.selectedOffices[i].id);
+    }
+
+    var usersId = []
+    for (var i = 0; i < vm.model.selectedUsers.length; i++) {
+      usersId.push(vm.model.selectedUsers[i].id);
+    }
+
+    // obtengo los roles a agregar
+    var addRoles = [];
+    for (var i = 0; i < vm.model.selectedRoles.length; i++) {
+      if (!include(vm.model.rolesInit,vm.model.selectedRoles[i])) {
+        addRoles.push(vm.model.selectedRoles[i]);
+      }
+    }
+
+    // obtengo los roles a eliminar
+    var removeRoles = [];
+    for (var i = 0; i < vm.model.rolesInit.length; i++) {
+      if (!include(vm.model.selectedRoles, vm.model.rolesInit[i])) {
+        removeRoles.push(vm.model.rolesInit[i]);
+      }
+    }
+
+    // cantidad de roles a modificar
+    vm.model.cantRoles = addRoles.length;
+
+    // envio al servidor los mensajes de agregar role
+    for (var i = 0; i < addRoles.length; i++) {
+      var role = addRoles[i];
+      Office.addOfficeRole(officesId, usersId, role,
+        function(ok) {
+          vm.model.cantRoles = vm.model.cantRoles - 1;
+          if (vm.model.cantRoles == 0) {
+            Notifications.message('Se ha modificado exitósamente');
+          }
+        },
+        function(error) {
+          Notifications.message(error);
+        }
+      );
+    }
 
   }
 
