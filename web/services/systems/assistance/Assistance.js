@@ -794,9 +794,55 @@ app.service('Assistance', ['Utils','Messages','Session',
 					}
 		  });
     };
-	}]
+    
+    
+     
+  this.getPosition = function(userId, callbackOk, callbackError){
+    var msg = {
+				id: Utils.getId(),
+				action: 'getPosition',
+				session: Session.getSessionId(),
+        request: {
+					userId: userId
+				}
+			};
+
+      Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response);
+					} else {
+						callbackError(data.error);
+					}
+		  });
+  };
+  
+  /**
+   * Actualizar cargo del usuario
+   * @param {userId} userId
+   * @param {justificationId} justificationId
+   * @param {stock} stock
+   */
+  this.updatePosition = function(userId, position, callbackOk,callbackError) {
+    var msg = {
+      id: Utils.getId(),
+      action: 'updatePosition',
+      session: Session.getSessionId(),
+      request: {
+        userId: userId,
+        position: position
+      }
+    };
+
+    Messages.send(msg,
+      function(data) {
+        if (typeof data.error === 'undefined') {
+          callbackOk(data.response);
+        } else {
+          callbackError(data.error);
+        }
+      });
+  };
   
   
-  
-  
-);
+}]);

@@ -192,6 +192,11 @@ app.config(['$routeProvider', function($routeProvider) {
     templateUrl: '/modules/systems/assistance/manageJustificationsStock/index.html',
     controller: 'ManageJustificationsStockCtrl'
   })
+  
+  .when('/managePositions', {
+    templateUrl: '/systems/fce/modules/managePositions/index.html',
+    controller: 'ManagePositionsCtrl'
+  })
 
   .otherwise({
     redirectTo: '/main'
