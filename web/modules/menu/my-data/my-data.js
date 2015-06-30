@@ -48,19 +48,20 @@ app.controller('MyDataOptionCtrl', function($scope, $rootScope, Profiles, $locat
       if (ok == 'granted') {
         $scope.items = [];
         $scope.items.push({ label:'Perfil', img:'fa-user', url:'editUserProfile', function: $scope.myProfile });
-        $scope.items.push({ label:'Datos de Alumno', img:'fa-university', url:'editStudent', function: $scope.studentData });
-        $scope.items.push({ label:'Sistemas', img:'fa-user', url:'editSystems', function: $scope.systemData });
+
+        //$scope.items.push({ label:'Datos de Alumno', img:'fa-university', url:'editStudent', function: $scope.studentData });
+        //$scope.items.push({ label:'Sistemas', img:'fa-user', url:'editSystems', function: $scope.systemData });
         //{ label:'Au24', img:'fa-th-large', url:'#', function: $scope.au24 }
-        $scope.items.push({ label:'Inserción Laboral', img:'fa-th-large', url:'editInsertion', function: $scope.laboralInsertion });
+        //$scope.items.push({ label:'Inserción Laboral', img:'fa-th-large', url:'editInsertion', function: $scope.laboralInsertion });
 
         // selecciono por defecto el primer item.
         $scope.selectItem($scope.items[0]);
       } else {
         $scope.items = [];
         $scope.items.push({ label:'Perfil', img:'fa-user', url:'editUserProfile', function: $scope.myProfile });
-        $scope.items.push({ label:'Datos de Alumno', img:'fa-university', url:'editStudent', function: $scope.studentData });
+        //$scope.items.push({ label:'Datos de Alumno', img:'fa-university', url:'editStudent', function: $scope.studentData });
         //{ label:'Au24', img:'fa-th-large', url:'#', function: $scope.au24 }
-        $scope.items.push({ label:'Inserción Laboral', img:'fa-th-large', url:'editInsertion', function: $scope.laboralInsertion });
+        //$scope.items.push({ label:'Inserción Laboral', img:'fa-th-large', url:'editInsertion', function: $scope.laboralInsertion });
 
         // selecciono por defecto el primer item.
         $scope.selectItem($scope.items[0]);
