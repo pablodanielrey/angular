@@ -22,10 +22,12 @@
 			<label>DNI</label>
 			<input class="dni" type="text" ng-model="request.dni" required>
 		</div>
+		<!--
 		<div>
 			<label>Legajo (solo alumnos)</label>
 			<input class="studentNumber" type="text" ng-model="request.studentNumber">
 		</div>
+		-->
 		<div>
 			<label>Email</label>
 			<input class="email" type="email" ng-model="request.email" required>
@@ -38,6 +40,7 @@
 			<label>Repetir Contraseña</label>
 			<input class="password" type="password" ng-model="request.password2" required>
 		</div>
+		<!--
 		<div>
 			<label>Motivo de la solicitud</label>
 		</div>
@@ -54,6 +57,7 @@
 				<option value='Cooperativa'>Necesito acceder a los cursos de Cooperativas</option>
 			</select>
 		</div>
+		-->
 		<div>
 			<button class="action" type='submit' ng-click="createRequest()">Enviar</button>
 		</div>

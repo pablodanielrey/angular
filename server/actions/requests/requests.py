@@ -423,6 +423,9 @@ class CreateAccountRequest:
     if 'studentNumber' not in data:
         data['studentNumber'] = ''
 
+    if 'reason' not in data:
+        data['reason'] = ''
+
     con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
     try:
       if (self.users.findUserByDni(con,data['dni']) != None):
