@@ -63,7 +63,7 @@ from actions.systems.tutors.tutors import PersistTutorData, ListTutorData
 from actions.systems.ntdomain.domain import PersistDomain, DeleteDomain, FindDomain
 from actions.systems.mail.mail import PersistInstitutionalMail, DeleteInstitutionalMail, FindInstitutionalMail
 
-from actions.systems.offices.offices import GetOffices, GetUserOfficeRoles, GetUserInOfficesByRole, GetOfficesByUserRole, GetOfficesUsers, DeleteOfficeRole, AddOfficeRole, PersistOffice, RemoveUserFromOffice, AddUserToOffices, GetRolesAdmin
+from actions.systems.offices.offices import GetOffices, GetUserOfficeRoles, GetUserInOfficesByRole, GetOfficesByUserRole, GetOfficesUsers, DeleteOfficeRole, AddOfficeRole, PersistOfficeRole, PersistOffice, RemoveUserFromOffice, AddUserToOffices, GetRolesAdmin
 
 
 
@@ -83,7 +83,7 @@ actions = [
     PersistInstitutionalMail(), DeleteInstitutionalMail(), FindInstitutionalMail(),
     CreateStudent(), FindStudent(), PersistStudent(), FindAllStudents(),
     PersistTutorData(), ListTutorData(),
-    GetOffices(), GetUserOfficeRoles(), GetUserInOfficesByRole(), GetOfficesByUserRole(), GetOfficesUsers(), DeleteOfficeRole(), AddOfficeRole(), PersistOffice(), RemoveUserFromOffice(), AddUserToOffices(), GetRolesAdmin(),
+    GetOffices(), GetUserOfficeRoles(), GetUserInOfficesByRole(), GetOfficesByUserRole(), GetOfficesUsers(), DeleteOfficeRole(), AddOfficeRole(), PersistOfficeRole(), PersistOffice(), RemoveUserFromOffice(), AddUserToOffices(), GetRolesAdmin(),
     GetAssistanceLogs(), GetAssistanceData(), GetSchedules(), NewSchedule(), GetFailsByDate(), GetAssistanceStatus(), GetAssistanceStatusByUsers(), GetOffices(), GetJustifications(), GetJustificationStock(), GetJustificationRequests(), GetJustificationRequestsToManage(), GetJustificationRequestsByDate(), RequestJustification(),  RequestJustificationRange(), UpdateJustificationRequestStatus(),GetSpecialJustifications(), RequestGeneralJustification(), GetGeneralJustificationRequests(), DeleteGeneralJustificationRequest(), RequestGeneralJustificationRange(),
     GetOvertimeRequests(), GetOvertimeRequestsToManage(), RequestOvertime(), UpdateOvertimeRequestStatus(),
     CreateAccountRequest(), ResendAccountRequest(), ConfirmAccountRequest(), ListAccountRequests(), ApproveAccountRequest(), RemoveAccountRequest(), RejectAccountRequest()

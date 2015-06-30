@@ -483,9 +483,9 @@ query:{
     action:'deleteOfficeRole',
     session:,
     request:{
-        userId: "id del usuario a eliminar el rol",
-        officeId: "id de la oficina de la cual se desea eliminar el rol",
-        role: "rol que se desea eliminar"
+        usersId: [],
+        officesId: [],
+        role: "nombre del rol que se desea eliminar"
     }
 }
 
@@ -508,7 +508,7 @@ class DeleteOfficeRole:
         if (message['action'] != 'deleteOfficeRole'):
             return False
 
-        if ('session' not in message) or ('request' not in message) or ('userId' not in message['request']) or ('role' not in message['request']) or ('officeId' not in message['request']):
+        if ('session' not in message) or ('request' not in message) or ('usersId' not in message['request']) or ('role' not in message['request']) or ('officesId' not in message['request']):
             response = {'id':message['id'], 'error':'Insuficientes parámetros'}
             server.sendMessage(response)
             return True
@@ -517,8 +517,8 @@ class DeleteOfficeRole:
         self.profiles.checkAccess(sid,['ADMIN-OFFICES','USER-OFFICES'])
 
         req = message['request']
-        officeId = req['officeId']
-        userId = req['userId']
+        officesId = req['officesId']
+        usersId = req['usersId']
         role = req['role']
 
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
@@ -526,14 +526,18 @@ class DeleteOfficeRole:
             # verifico si el usuario de session tiene el rol autoriza para la oficina de la cual se desean eliminar el rol
             localUserId = self.profiles.getLocalUserId(sid)
             offices = self.offices.getOfficesByUserRole(con,localUserId,True,'autoriza')
-            listOff = list(map(lambda x: x == officeId, offices))
-            if len(listOff) == 0:
-                response = {'id':message['id'], 'error':'No tiene permiso para realizar esta operación'}
-                server.sendMessage(response)
-                return True
+            for officeId in officesId:
+                listOff = list(map(lambda x: x == officeId, offices))
+                if len(listOff) == 0:
+                    response = {'id':message['id'], 'error':'No tiene permiso para realizar esta operación'}
+                    server.sendMessage(response)
+                    return True
 
             # elimino el rol
-            self.offices.deleteRole(con,userId,officeId,role)
+            for officeId in officesId:
+                for userId in usersId:
+                    self.offices.deleteRole(con,userId,officeId,role)
+
             con.commit()
             response = {'id':message['id'], 'ok':'El rol se ha eliminado correctamente'}
             server.sendMessage(response)
@@ -623,6 +627,102 @@ class AddOfficeRole:
 
             con.commit()
             response = {'id':message['id'], 'ok':'El rol se ha creado correctamente'}
+            server.sendMessage(response)
+            return True
+
+        except psycopg2.DatabaseError as e:
+            raise e
+
+        finally:
+            con.close()
+
+
+
+'''
+actualiza los roles para todos los usersId en officesId
+
+query:{
+    id:,
+    action:'persistOfficeRole',
+    session:,
+    request:{
+        usersId: [],
+        officesId: [],
+        roles: [{
+            name: '',
+            send_mail: ''
+        }],
+        oldRoles: [{
+            name: '',
+            send_mail: ''
+        }]
+    }
+}
+
+response: {
+    id: "id de la petición",
+    ok: "caso exito",
+    error: "error del servidor"
+}
+'''
+class PersistOfficeRole:
+    profiles = inject.attr(Profiles)
+    config = inject.attr(Config)
+    offices = inject.attr(Offices)
+
+    def handleAction(self, server, message):
+
+        if (message['action'] != 'persistOfficeRole'):
+            return False
+
+        if ('session' not in message) or ('request' not in message) or ('usersId' not in message['request']) or ('roles' not in message['request']) or ('oldRoles' not in message['request'])  or ('officesId' not in message['request']):
+            response = {'id':message['id'], 'error':'Insuficientes parámetros'}
+            server.sendMessage(response)
+            return True
+
+
+        sid = message['session']
+        self.profiles.checkAccess(sid,['ADMIN-OFFICES','USER-OFFICES'])
+
+        req = message['request']
+
+        roles = req['roles']
+
+        oldRoles = req['oldRoles']
+
+        officesId = req['officesId']
+
+        usersId = req['usersId']
+
+        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+        try:
+            # verifico si el usuario de session tiene el rol autoriza para la oficina de la cual se desea agregar el rol
+            localUserId = self.profiles.getLocalUserId(sid)
+            offices = self.offices.getOfficesByUserRole(con,localUserId,True,'autoriza')
+            for officeId in officesId:
+                listOff = list(map(lambda x: x == officeId, offices))
+                if len(listOff) == 0:
+                    response = {'id':message['id'], 'error':'No tiene permiso para realizar esta operación'}
+                    server.sendMessage(response)
+                    return True
+
+
+            # elimino los roles que tenia antes
+            for userId in usersId:
+                for officeId in officesId:
+                    for role in oldRoles:
+                        roleName = role['name']
+                        self.offices.deleteRole(con,userId,officeId,roleName)
+
+            # agrego los nuevos roles
+            for userId in usersId:
+                for officeId in officesId:
+                    for role in roles:
+                        sendMail = (True,role['send_mail'])['send_mail' in role]
+                        self.offices.addRole(con,userId,officeId,role['name'],sendMail)
+
+            con.commit()
+            response = {'id':message['id'], 'ok':'Los roles se han modificado correctamente'}
             server.sendMessage(response)
             return True
 

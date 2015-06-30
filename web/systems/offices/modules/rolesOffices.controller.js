@@ -307,40 +307,15 @@ function RolesOfficesController($scope, $lcoation, Notifications, Session, Offic
       usersId.push(vm.model.selectedUsers[i].id);
     }
 
-    // obtengo los roles a agregar
-    var addRoles = [];
-    for (var i = 0; i < vm.model.selectedRoles.length; i++) {
-      if (!include(vm.model.rolesInit,vm.model.selectedRoles[i])) {
-        addRoles.push(vm.model.selectedRoles[i]);
+
+    Office.persistOfficeRole(officesId, usersId, vm.model.selectedRoles, vm.model.rolesInit,
+      function(ok) {
+        Notifications.message('Se ha modificado exitósamente');
+      },
+      function(error) {
+        Notifications.message(error);
       }
-    }
-
-    // obtengo los roles a eliminar
-    var removeRoles = [];
-    for (var i = 0; i < vm.model.rolesInit.length; i++) {
-      if (!include(vm.model.selectedRoles, vm.model.rolesInit[i])) {
-        removeRoles.push(vm.model.rolesInit[i]);
-      }
-    }
-
-    // cantidad de roles a modificar
-    vm.model.cantRoles = addRoles.length;
-
-    // envio al servidor los mensajes de agregar role
-    for (var i = 0; i < addRoles.length; i++) {
-      var role = addRoles[i];
-      Office.addOfficeRole(officesId, usersId, role,
-        function(ok) {
-          vm.model.cantRoles = vm.model.cantRoles - 1;
-          if (vm.model.cantRoles == 0) {
-            Notifications.message('Se ha modificado exitósamente');
-          }
-        },
-        function(error) {
-          Notifications.message(error);
-        }
-      );
-    }
+    );
 
   }
 

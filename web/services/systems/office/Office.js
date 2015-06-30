@@ -15,6 +15,7 @@ function Office($rootScope, Messages, Session, Utils, Cache, Config) {
   services.getOfficesUsers = getOfficesUsers;
   services.deleteOfficeRole = deleteOfficeRole;
   services.addOfficeRole = addOfficeRole;
+  services.persistOfficeRole = persistOfficeRole;
   services.persistOffice = persistOffice;
   services.removeUserFromOffice = removeUserFromOffice;
   services.addUserToOffices = addUserToOffices;
@@ -155,6 +156,36 @@ function Office($rootScope, Messages, Session, Utils, Cache, Config) {
         }
       });
   }
+
+  function persistOfficeRole(officesId, usersId, roles, oldRoles, callbackOk, callbackError) {
+    if (officesId == null || usersId == null || roles == null || oldRoles == null) {
+      return;
+    }
+
+    var msg = {
+      id: Utils.getId(),
+      action: 'persistOfficeRole',
+      session: Session.getSessionId(),
+      request: {
+        usersId: usersId,
+        officesId: officesId,
+        roles: roles,
+        oldRoles: oldRoles
+      }
+    }
+
+    Messages.send(msg,
+      function(data) {
+        if (typeof data.error === 'undefined') {
+          callbackOk(data.ok);
+        } else {
+          callbackError(data.error);
+        }
+      }
+    );
+
+  }
+
 
   function deleteOfficeRole(officesId, usersId, role, callbackOk, callbackError) {
     if (officesId == null || usersId == null || role == null) {

@@ -352,9 +352,22 @@ class Offices:
 
         params = (userId,officeId,role,sendMail)
         cur = con.cursor()
-        cur.execute('insert into offices.offices_roles (user_id,office_id,role,send_mail) values(%s,%s,%s,%s)',params)
+        if not(self._includeRole(con,userId,officeId,role)):
+            cur.execute('insert into offices.offices_roles (user_id,office_id,role,send_mail) values(%s,%s,%s,%s)',params)
 
 
+    '''
+        verifica si ya existe el rol para user_id en office_id
+    '''
+    def _includeRole(self,con,userId,officeId,role):
+        if userId is None or officeId is None or role is None:
+            return False
+
+        params = (userId,officeId,role)
+        cur = con.cursor()
+        cur.execute('select role from offices.offices_roles where user_id = %s and office_id = %s and role = %s',params)
+        rows = cur.fetchall()
+        return rows is not None and len(rows) > 0
 
     '''
         elimina el rol para usuario oficina
