@@ -1,0 +1,39 @@
+
+<div class="managePositions">
+<h2>Administración de Stock</h2>
+
+<form>
+  <div class="input">
+    <div>
+      <div class="searchTitle">
+        <span><i class="fa fa-user-plus"></i> Seleccione Usuario</span>
+      </div>
+      <div>
+        <input class="inputSearch" ng-model="model.searchUser" ng-click="displayUsersList()" ng-disabled="model.usersSelectionDisable" placeholder="Buscar...">
+        <ul class="list" ng-class="{true:'visible', false:'hidden'}[isUsersListDisplayed()]">
+          <li class="item" ng-repeat="user in model.users | filter:model.searchUser | orderBy : 'name'" ng-click="selectUser(user)">{{user.name}} {{user.lastname}}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="input">
+    <div>
+      <div class="searchTitle">
+        <span><i class="fa fa-calendar"></i> Seleccione Cargo</span>
+      </div>
+      <div>
+        <select ng-disabled="model.positionsSelectionDisable" ng-model="model.selectedPosition" ng-options="position for position in model.positions"> 
+          <option value="">-- Cargo --</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  
+
+  <div class="input" >
+    <button ng-click="updateUserPosition()"  ng-disabled="model.submitButtonDisable">Aceptar</button>
+  </div>
+</form>
+</div>
