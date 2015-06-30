@@ -57,7 +57,7 @@ class GetUserInOfficesByRole:
             raise MalformedMessage()
 
         sid = message['session']
-        self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
+        self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE','ADMIN-OFFICES','USER-OFFICES'])
 
         userId = self.profiles.getLocalUserId(sid)
         if 'userId' in message['request']:
@@ -212,7 +212,7 @@ class GetUserOfficeRoles:
             return False
 
         sid = message['session']
-        self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
+        self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE','ADMIN-OFFICES','USER-OFFICES'])
         userId = self.profiles.getLocalUserId(sid)
 
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
@@ -296,7 +296,7 @@ class GetOffices:
 
 
         sid = message['session']
-        self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
+        self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE','ADMIN-OFFICES','USER-OFFICES'])
 
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
@@ -388,7 +388,7 @@ class GetOfficesByUserRole:
 
 
         sid = message['session']
-        self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
+        self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE','ADMIN-OFFICES','USER-OFFICES'])
 
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
@@ -523,9 +523,9 @@ class DeleteOfficeRole:
 
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
-            # verifico si el usuario de session tiene el rol autoriza para la oficina de la cual se desean eliminar el rol
+            # verifico si el usuario de session tiene el rol admin-office para la oficina de la cual se desean eliminar el rol
             localUserId = self.profiles.getLocalUserId(sid)
-            offices = self.offices.getOfficesByUserRole(con,localUserId,True,'autoriza')
+            offices = self.offices.getOfficesByUserRole(con,localUserId,True,'admin-office')
             for officeId in officesId:
                 listOff = list(map(lambda x: x == officeId, offices))
                 if len(listOff) == 0:
@@ -610,9 +610,9 @@ class AddOfficeRole:
 
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
-            # verifico si el usuario de session tiene el rol autoriza para la oficina de la cual se desea agregar el rol
+            # verifico si el usuario de session tiene el rol admin-office para la oficina de la cual se desea agregar el rol
             localUserId = self.profiles.getLocalUserId(sid)
-            offices = self.offices.getOfficesByUserRole(con,localUserId,True,'autoriza')
+            offices = self.offices.getOfficesByUserRole(con,localUserId,True,'admin-office')
             for officeId in officesId:
                 listOff = list(map(lambda x: x == officeId, offices))
                 if len(listOff) == 0:
@@ -696,9 +696,9 @@ class PersistOfficeRole:
 
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
-            # verifico si el usuario de session tiene el rol autoriza para la oficina de la cual se desea agregar el rol
+            # verifico si el usuario de session tiene el rol admin-office para la oficina de la cual se desea agregar el rol
             localUserId = self.profiles.getLocalUserId(sid)
-            offices = self.offices.getOfficesByUserRole(con,localUserId,True,'autoriza')
+            offices = self.offices.getOfficesByUserRole(con,localUserId,True,'admin-office')
             for officeId in officesId:
                 listOff = list(map(lambda x: x == officeId, offices))
                 if len(listOff) == 0:
@@ -847,9 +847,9 @@ class RemoveUserFromOffice:
         userId = req['userId']
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
-            # verifico si el usuario de session tiene el rol autoriza para la oficina de la cual se desea eliminar el usuario
+            # verifico si el usuario de session tiene el rol admin-office para la oficina de la cual se desea eliminar el usuario
             localUserId = self.profiles.getLocalUserId(sid)
-            offices = self.offices.getOfficesByUserRole(con,localUserId,True,'autoriza')
+            offices = self.offices.getOfficesByUserRole(con,localUserId,True,'admin-office')
             listOff = list(map(lambda x: x == officeId, offices))
             if len(listOff) == 0:
                 response = {'id':message['id'], 'error':'No tiene permiso para realizar esta operación'}
@@ -912,9 +912,9 @@ class AddUserToOffices:
         userId = req['userId']
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
-            # verifico si el usuario de session tiene el rol autoriza para la oficina de la cual se desea agregar el usuario
+            # verifico si el usuario de session tiene el rol admin-office para la oficina de la cual se desea agregar el usuario
             localUserId = self.profiles.getLocalUserId(sid)
-            offices = self.offices.getOfficesByUserRole(con,localUserId,True,'autoriza')
+            offices = self.offices.getOfficesByUserRole(con,localUserId,True,'admin-office')
             listOff = list(map(lambda x: x == officeId, offices))
             if len(listOff) == 0:
                 response = {'id':message['id'], 'error':'No tiene permiso para realizar esta operación'}

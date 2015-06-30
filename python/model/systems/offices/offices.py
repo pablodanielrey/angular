@@ -392,7 +392,7 @@ class Offices:
             Esto es momentaneo, devuelvo los roles de asistencia
             Esto hay cambiarlo!!!!!!!
         '''
-        roles = ['autoriza','horas-extras','realizar-solicitud','realizar-solicitud-admin']
+        roles = ['autoriza','horas-extras','realizar-solicitud','realizar-solicitud-admin','admin-office']
         return roles
 
     '''

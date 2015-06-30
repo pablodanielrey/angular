@@ -45,7 +45,8 @@ app.controller('MenuCtrl', function($rootScope, $scope, $window, $location, $tim
 	$scope.office = function() {
 		$scope.showSubOptions = false;
 		$rootScope.$broadcast("MenuOptionSelectedEvent",'OfficesOption');
-		$window.open('http://offices.econo.unlp.edu.ar/systems/offices/', '_blank');
+		// $window.open('http://offices.econo.unlp.edu.ar/systems/offices/', '_blank');
+		$window.open('http://127.0.0.1:8000/systems/offices/', '_blank');
 	}
 
 	$scope.exit = function() {
