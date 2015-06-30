@@ -53,12 +53,7 @@ from actions.requests.requests import CreateAccountRequest, ResendAccountRequest
 
 from actions.systems.assistance.assistance import GetAssistanceData, GetAssistanceStatus, GetAssistanceStatusByUsers, GetFailsByDate, GetSchedules, NewSchedule, GetPosition, UpdatePosition
 from actions.systems.assistance.logs import GetAssistanceLogs
-<<<<<<< HEAD
-from actions.systems.assistance.offices import GetOffices, GetUserOfficeRoles, GetUserInOfficesByRole, GetOfficesByUserRole, GetOfficesUsers
-from actions.systems.assistance.justifications import GetJustifications, GetJustificationsByUser, GetJustificationStock, UpdateJustificationStock, GetJustificationRequests, GetJustificationRequestsToManage, GetJustificationRequestsByDate, RequestJustification,  RequestJustificationRange, UpdateJustificationRequestStatus, GetSpecialJustifications, RequestGeneralJustification, GetGeneralJustificationRequests, DeleteGeneralJustificationRequest, RequestGeneralJustificationRange
-=======
 from actions.systems.assistance.justifications import GetJustifications, GetJustificationStock, GetJustificationRequests, GetJustificationRequestsToManage, GetJustificationRequestsByDate, RequestJustification,  RequestJustificationRange, UpdateJustificationRequestStatus, GetSpecialJustifications, RequestGeneralJustification, GetGeneralJustificationRequests, DeleteGeneralJustificationRequest, RequestGeneralJustificationRange
->>>>>>> origin/grupos
 from actions.systems.assistance.overtime import GetOvertimeRequests, GetOvertimeRequestsToManage, RequestOvertime, UpdateOvertimeRequestStatus
 
 from actions.systems.students.students import CreateStudent, FindStudent, PersistStudent, FindAllStudents
