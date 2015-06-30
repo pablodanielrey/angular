@@ -6,7 +6,7 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, As
 
         $scope.isVisible = function() {
             return $scope.visible;
-        }
+        };
 
         $scope.$on('MenuOptionSelectedEvent', function(event,data) {
                 $scope.visible = false;
@@ -20,58 +20,63 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, As
 
         $scope.summary = function() {
             $location.path('/summaryAssistance');
-        }
+        };
 
         $scope.requestAssistance = function() {
-            $location.path('/requestAssistance')
-        }
+            $location.path('/requestAssistance');
+        };
 
         $scope.adminRequestAssistance = function() {
-            $location.path('/adminRequestAssistance')
-        }
+            $location.path('/adminRequestAssistance');
+        };
 
         $scope.medicalLicenses = function() {
-            $location.path('/medicalLicenses')
-        }
+            $location.path('/medicalLicenses');
+        };
 
         $scope.requestAuthority = function() {
-            $location.path('/requestAuthority')
-        }
+            $location.path('/requestAuthority');
+        };
 
         $scope.adminRequestOverTime = function() {
-            $location.path('/adminRequestOverTime')
-        }
+            $location.path('/adminRequestOverTime');
+        };
 
         $scope.assistanceFails = function() {
-          $location.path('/assistanceFails')
-        }
+          $location.path('/assistanceFails');
+        };
 
         $scope.assistanceFailsFilters = function() {
-          $location.path('/assistanceFailsFilters')
-        }
+          $location.path('/assistanceFailsFilters');
+        };
 
         $scope.showAssistance = function() {
-          $location.path('/showAssistance')
-        }
+          $location.path('/showAssistance');
+        };
+        
         $scope.mySchedule = function() {
-          $location.path('/mySchedule')
-        }
+          $location.path('/mySchedule');
+        };
 
         $scope.userAssistanceManagement = function() {
-          $location.path('/userAssistanceManagement')
+          $location.path('/userAssistanceManagement');
         };
 
         $scope.userAssistanceManagementMediator = function() {
-          $location.path('/usersAssistanceManagementMediator')
-        }
+          $location.path('/usersAssistanceManagementMediator');
+        };
 
         $scope.requestGeneralJustifications = function() {
-          $location.path('/requestGeneralJustifications')
-        }
+          $location.path('/requestGeneralJustifications');
+        };
 
         $scope.manageJustificationsStock = function() {
-          $location.path('/manageJustificationsStock')
-        }
+          $location.path('/manageJustificationsStock');
+        };
+        
+        $scope.managePositions = function() {
+          $location.path('/managePositions');
+        };
 
 
         $scope.items = [];
@@ -117,6 +122,7 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, As
                           $scope.items.push({ label:'Solicitudes Especiales ', img:'fa-plus', function: $scope.userAssistanceManagement});
                           $scope.items.push({ label:'Solicitudes Generales ', img:'fa-plus', function: $scope.requestGeneralJustifications});
                           $scope.items.push({ label:'Stock de Solicitudes ', img:'fa-plus', function: $scope.manageJustificationsStock});
+                          $scope.items.push({ label:'Administrar Cargos', img:'fa-plus', function: $scope.managePositions});
                         }
 
                       },
