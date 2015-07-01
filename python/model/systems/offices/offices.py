@@ -333,7 +333,7 @@ class Offices:
         parent = None
         if 'parent' in office:
             parent = office['parent']
-            if parent != None:
+            if parent != None and parent != '':
                 # verifico que el parent no sea uno de sus hijos
                 childrens = self._getChildOffices(con,[office['id']])
                 for child in childrens:
