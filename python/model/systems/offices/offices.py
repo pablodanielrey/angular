@@ -222,7 +222,8 @@ class Offices:
             offices.append({'id':oId,'parent':off[1],'name':off[2],'telephone':off[3],'email':off[4]})
 
         if tree:
-            offices.extend(self._getChildOffices(con,ids))
+            childrens = self._getChildOffices(con,ids)
+            offices.extend(x for x in childrens if x not in offices)
 
         return offices
 
