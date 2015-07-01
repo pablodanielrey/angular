@@ -544,6 +544,7 @@ class DeleteOfficeRole:
             return True
 
         except psycopg2.DatabaseError as e:
+            con.rollback()
             raise e
 
         finally:
@@ -631,6 +632,7 @@ class AddOfficeRole:
             return True
 
         except psycopg2.DatabaseError as e:
+            con.rollback()
             raise e
 
         finally:
@@ -727,6 +729,7 @@ class PersistOfficeRole:
             return True
 
         except psycopg2.DatabaseError as e:
+            con.rollback()
             raise e
 
         finally:
@@ -797,7 +800,19 @@ class PersistOffice:
             return True
 
         except psycopg2.DatabaseError as e:
+            con.rollback()
             raise e
+
+        except Exception as e:
+            logging.exception(e)
+            con.rollback()
+
+            response = {
+                'id':message['id'],
+                'error':str(e)
+            }
+            server.sendMessage(response)
+            return True
 
         finally:
             con.close()
@@ -929,6 +944,7 @@ class AddUserToOffices:
             return True
 
         except psycopg2.DatabaseError as e:
+            con.rollback()
             raise e
 
         finally:

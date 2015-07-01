@@ -15,6 +15,8 @@ class Offices:
     '''
     def _getChildOffices(self,con,offices):
 
+
+
         if len(offices) <= 0:
             return []
 
@@ -205,6 +207,8 @@ class Offices:
         si tree=True obtiene todas las hijas también
     '''
     def getOfficesByUserRole(self,con,userId,tree=False,role='autoriza'):
+
+
         cur = con.cursor()
         cur.execute('select id,parent,name,telephone,email from offices.offices o, offices.offices_roles ou where ou.user_id = %s and o.id = ou.office_id and ou.role = %s',(userId,role))
         if cur.rowcount <= 0:
@@ -218,7 +222,8 @@ class Offices:
             offices.append({'id':oId,'parent':off[1],'name':off[2],'telephone':off[3],'email':off[4]})
 
         if tree:
-            offices.extend(self._getChildOffices(con,ids))
+            childrens = self._getChildOffices(con,ids)
+            offices.extend(x for x in childrens if x not in offices)
 
         return offices
 
@@ -317,6 +322,12 @@ class Offices:
         parent = None
         if 'parent' in office:
             parent = office['parent']
+            if parent != None:
+                # verifico que el parent no sea uno de sus hijos
+                childrens = self._getChildOffices(con,[office['id']])
+                for child in childrens:
+                    if child['id'] == parent:
+                        raise Exception('Error: la oficina padre es al mismo tiempo un hijo')
 
         telephone = None
         if 'telephone' in office:

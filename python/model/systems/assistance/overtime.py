@@ -4,7 +4,7 @@ import inject
 
 from model.systems.assistance.justifications.exceptions import *
 
-from model.systems.assistance.offices import Offices
+from model.systems.offices.offices import Offices
 
 from model.systems.assistance.justifications.AAJustification import AAJustification
 from model.systems.assistance.justifications.BSJustification import BSJustification

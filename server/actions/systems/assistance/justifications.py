@@ -15,7 +15,7 @@ from model.mail.mail import Mail
 from model.systems.assistance.assistance import Assistance
 from model.systems.assistance.date import Date
 from model.systems.assistance.justifications.justifications import Justifications
-from model.systems.assistance.offices import Offices
+from model.systems.offices.offices import Offices
 
 
 
@@ -209,9 +209,9 @@ class GetJustificationsByUser:
 
         finally:
             con.close()
-            
-            
-            
+
+
+
 
 
 
@@ -306,12 +306,12 @@ class GetJustificationStock:
 
         finally:
             con.close()
-            
-            
-            
-            
-            
-            
+
+
+
+
+
+
 
 '''
 query :
@@ -359,7 +359,7 @@ class UpdateJustificationStock:
         justificationId = message['request']['justificationId']
         stock = message['request']['stock']
         sid = message['session']
-        
+
         self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
 
 
@@ -367,7 +367,7 @@ class UpdateJustificationStock:
         try:
 
             """ insertar datos """
-            events = self.justifications.updateJustificationStock(con,userId,justificationId,stock) 
+            events = self.justifications.updateJustificationStock(con,userId,justificationId,stock)
             con.commit()
 
             response = {
@@ -382,22 +382,22 @@ class UpdateJustificationStock:
             server.sendMessage(response)
 
             """ disparar eventos """
-            for e in events: 
+            for e in events:
                 self.events.broadcast(server,e)
 
         except psycopg2.DatabaseError as e:
-            logging.exception(e) 
-            con.rollback() 
+            logging.exception(e)
+            con.rollback()
 
-            response = { 
-                'id':message['id'], 
-                'error':'Error actualizando stock' 
-            } 
-            server.sendMessage(response) 
+            response = {
+                'id':message['id'],
+                'error':'Error actualizando stock'
+            }
+            server.sendMessage(response)
 
         finally:
             con.close()
-            
+
 
 
 

@@ -4,7 +4,7 @@ import inject
 
 from model.systems.assistance.justifications.exceptions import *
 
-from model.systems.assistance.offices import Offices
+from model.systems.offices.offices import Offices
 
 from model.systems.assistance.justifications.AAJustification import AAJustification
 from model.systems.assistance.justifications.BSJustification import BSJustification
@@ -142,7 +142,7 @@ class Justifications:
     ''' retorna todos los tipos de justificaciones que existan en la base '''
     def getJustificationsByUser(self,con,userId):
         cur = con.cursor()
-       
+
         cur.execute("""
          SELECT DISTINCT j.id, j.name
          FROM assistance.justifications AS j
@@ -361,26 +361,26 @@ class Justifications:
 
         if cur.rowcount <= 0:
             cur.execute('''
-                INSERT INTO assistance.justifications_stock (user_id, justification_id, stock, calculated) 
+                INSERT INTO assistance.justifications_stock (user_id, justification_id, stock, calculated)
                 VALUES (%s,%s,%s,now())
-            ''',(userId,justId,stock)) 
+            ''',(userId,justId,stock))
         else:
             cur.execute('''
-                UPDATE assistance.justifications_stock 
+                UPDATE assistance.justifications_stock
                 SET stock = %s, calculated = now()
                 WHERE user_id = %s AND justification_id = %s
-            ''',(stock,userId,justId)) 
-     
-        events = [] 
-        e = { 
-          'type':'JustificationsStockUpdatedEvent', 
-          'data':{ 
-             'justificationId':justId, 
-             'userId':userId, 
+            ''',(stock,userId,justId))
+
+        events = []
+        e = {
+          'type':'JustificationsStockUpdatedEvent',
+          'data':{
+             'justificationId':justId,
+             'userId':userId,
              'stock':stock
-           } 
-        } 
-        events.append(e) 
+           }
+        }
+        events.append(e)
 
         return events
 
