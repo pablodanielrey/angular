@@ -793,15 +793,14 @@ class PersistOffice:
 
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
-            import pdb
-            pdb.set_trace()
-
             if 'parent' not in office or office['parent'] == '':
                 parent = None
                 if 'parent' in office:
                     parent = office['parent']
                 # verifico si se modifico el padre
-                actualOffice = self.offices.findOffice(con,office['id'])
+                actualOffice = None
+                if 'id' in office:
+                    actualOffice = self.offices.findOffice(con,office['id'])
                 if actualOffice == None or actualOffice['parent'] != parent:
                     # en dicho caso verifico que tenga el perfil de super admin
                     self.profiles.checkAccess(sid,['SUPER-ADMIN-OFFICES'])
