@@ -15,7 +15,7 @@ from model.systems.assistance.fails import Fails
 from model.systems.assistance.logs import Logs
 from model.systems.assistance.schedule import Schedule
 from model.systems.assistance.checks import ScheduleChecks
-from model.systems.assistance.offices import Offices
+from model.systems.offices.offices import Offices
 from model.systems.assistance.positions import Positions
 from model.systems.assistance.date import Date
 
@@ -704,53 +704,53 @@ class NewSchedule:
 
         finally:
             con.close()
-            
-            
-""" 
-peticion: 
-{ 
-	"id":"", 
-	"action":"getPosition", 
-	"session":"session de usuario", 
-	"request":{ 
-         userId: identificacion del usuario
-     } 
-} 
 
-respuesta: 
-{ 
-	"id":"id de la peticion", 
-	"ok":"", 
-	"error":"" 
+
+"""
+peticion:
+{
+	"id":"",
+	"action":"getPosition",
+	"session":"session de usuario",
+	"request":{
+         userId: identificacion del usuario
+     }
+}
+
+respuesta:
+{
+	"id":"id de la peticion",
+	"ok":"",
+	"error":""
 	response:{
   	  position: Cargo del usuario
   	  userId: Id del usuario
     }
-} 
+}
 
 """
 
-class GetPosition: 
+class GetPosition:
 
     profiles = inject.attr(Profiles)
     config = inject.attr(Config)
     positions = inject.attr(Positions)
-    
+
 
     """ manejar accion """
-    def handleAction(self, server, message): 
+    def handleAction(self, server, message):
 
-        if (message['action'] != 'getPosition'): 
+        if (message['action'] != 'getPosition'):
             return False
 
         #chequear parametros
-        if ('id' not in message) or ('session' not in message) or ('request' not in message) or ('userId' not in message['request']): 
-            response = {'id':message['id'], 'error':'Insuficientes parámetros'} 
-            server.sendMessage(response) 
-            return True 
-        
+        if ('id' not in message) or ('session' not in message) or ('request' not in message) or ('userId' not in message['request']):
+            response = {'id':message['id'], 'error':'Insuficientes parámetros'}
+            server.sendMessage(response)
+            return True
+
         #chequear permisos
-        sid = message['session'] 
+        sid = message['session']
         self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
 
         """ definir datos """
@@ -758,10 +758,10 @@ class GetPosition:
 
         """ definir conexión con la base de datos """
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
-        try: 
+        try:
 
             """ consultar datos """
-            positions = self.positions.find(con,userId) 
+            positions = self.positions.find(con,userId)
             position = None
             if len(positions) > 0:
                position = positions[0]['name']
@@ -777,21 +777,21 @@ class GetPosition:
             }
             server.sendMessage(response)
 
-        except Exception as e: 
-            logging.exception(e) 
-            con.rollback() 
+        except Exception as e:
+            logging.exception(e)
+            con.rollback()
 
-            response = { 
-              'id':message['id'], 
-              'error':'Error realizando la consulta' 
-            } 
-            server.sendMessage(response) 
+            response = {
+              'id':message['id'],
+              'error':'Error realizando la consulta'
+            }
+            server.sendMessage(response)
 
-        finally: 
+        finally:
             con.close()
-            return True             
-            
-            
+            return True
+
+
 
 '''
 query :
@@ -837,7 +837,7 @@ class UpdatePosition:
         userId = message['request']['userId']
         position = message['request']['position']
         sid = message['session']
-        
+
         self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
 
 
@@ -845,7 +845,7 @@ class UpdatePosition:
         try:
 
             """ insertar datos """
-            events = self.positions.update(con,userId,position) 
+            events = self.positions.update(con,userId,position)
             con.commit()
 
             response = {
@@ -859,19 +859,18 @@ class UpdatePosition:
             server.sendMessage(response)
 
             """ disparar eventos """
-            for e in events: 
+            for e in events:
                 self.events.broadcast(server,e)
 
         except psycopg2.DatabaseError as e:
-            logging.exception(e) 
-            con.rollback() 
+            logging.exception(e)
+            con.rollback()
 
-            response = { 
-                'id':message['id'], 
-                'error':'Error actualizando cargo' 
-            } 
-            server.sendMessage(response) 
+            response = {
+                'id':message['id'],
+                'error':'Error actualizando cargo'
+            }
+            server.sendMessage(response)
 
         finally:
             con.close()
-                        

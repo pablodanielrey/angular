@@ -1,19 +1,15 @@
 # -*- coding: utf-8 -*-
 import inject, logging, json, sys, traceback
 
-'''
+"""
 from actions.chat import SendEventToClients
 from actions.status import GetStatus
-
 from actions.groups import ListGroups, FindGroup, FindMembers, RemoveMembers, AddMembers, UpdateGroup, CreateGroup
 from actions.systems import ListSystems
 from actions.laboralInsertion import PersistLaboralInsertion, FindLaboralInsertion, CreateLanguages,PersistLanguage, DeleteLanguage, FindLanguage, ListLanguages, CreateDegrees, PersistDegree, DeleteDegree, FindDegree, ListDegree, AcceptTermsAndConditions, CheckTermsAndConditions
+"""
 
-
-
-'''
-
-
+from actions.laboralInsertion import PersistLaboralInsertion, FindLaboralInsertion, CreateLanguages,PersistLanguage, DeleteLanguage, FindLanguage, ListLanguages, CreateDegrees, PersistDegree, DeleteDegree, FindDegree, ListDegree, AcceptTermsAndConditions, CheckTermsAndConditions, PersistLaboralInsertionCV, FindLaboralInsertionCV, GetLaboralInsertionData
 
 from autobahn.twisted.websocket import WebSocketServerProtocol
 from autobahn.twisted.websocket import WebSocketServerFactory
@@ -36,31 +32,35 @@ from model.utils import DateTimeEncoder
 
 from model.exceptions import *
 
-from model.session import *
+
+from model.session import Session
 
 """ actions del core """
 
-from actions.login.login import *
-from actions.login.password import *
-from actions.profiles.profiles import *
-from actions.users.users import *
-from actions.users.mail import *
-from actions.requests.requests import *
+from actions.login.login import Login, Logout
+from actions.login.password import ChangePassword, ResetPassword
+from actions.profiles.profiles import CheckAccess
+from actions.users.users import UpdateUser, FindUser, ListUsers
+from actions.users.mail import ListMails, PersistMail, ConfirmMail, RemoveMail
+from actions.requests.requests import CreateAccountRequest, ResendAccountRequest, ConfirmAccountRequest, ListAccountRequests, ApproveAccountRequest, RemoveAccountRequest, RejectAccountRequest
 
 
 """ sistemas """
 
-from actions.systems.assistance.assistance import *
-from actions.systems.assistance.logs import *
-from actions.systems.assistance.justifications import *
-from actions.systems.assistance.overtime import *
-from actions.systems.students.students import *
-from actions.systems.tutors.tutors import *
-from actions.systems.ntdomain.domain import *
-from actions.systems.mail.mail import *
-from actions.systems.offices.offices import *
+from actions.systems.assistance.assistance import GetAssistanceData, GetAssistanceStatus, GetAssistanceStatusByUsers, GetFailsByDate, GetSchedules, NewSchedule
+from actions.systems.assistance.logs import GetAssistanceLogs
+from actions.systems.assistance.justifications import GetJustifications, GetJustificationStock, GetJustificationRequests, GetJustificationRequestsToManage, GetJustificationRequestsByDate, RequestJustification,  RequestJustificationRange, UpdateJustificationRequestStatus, GetSpecialJustifications, RequestGeneralJustification, GetGeneralJustificationRequests, DeleteGeneralJustificationRequest, RequestGeneralJustificationRange
+from actions.systems.assistance.overtime import GetOvertimeRequests, GetOvertimeRequestsToManage, RequestOvertime, UpdateOvertimeRequestStatus
 
-from actions.laboralInsertion import *
+from actions.systems.students.students import CreateStudent, FindStudent, PersistStudent, FindAllStudents
+
+from actions.systems.tutors.tutors import PersistTutorData, ListTutorData
+
+from actions.systems.ntdomain.domain import PersistDomain, DeleteDomain, FindDomain
+from actions.systems.mail.mail import PersistInstitutionalMail, DeleteInstitutionalMail, FindInstitutionalMail
+
+from actions.systems.offices.offices import GetOffices, GetUserOfficeRoles, GetUserInOfficesByRole, GetOfficesByUserRole, GetOfficesUsers, DeleteOfficeRole, AddOfficeRole, PersistOfficeRole, PersistOffice, RemoveUserFromOffice, AddUserToOffices, GetRolesAdmin
+
 
 
 ''' aca se definen las acciones a ser manejadas por el server de websocket '''
@@ -80,7 +80,7 @@ actions = [
     CreateStudent(), FindStudent(), PersistStudent(), FindAllStudents(),
     PersistTutorData(), ListTutorData(),
     GetOffices(), GetUserOfficeRoles(), GetUserInOfficesByRole(), GetOfficesByUserRole(), GetOfficesUsers(), DeleteOfficeRole(), AddOfficeRole(), PersistOfficeRole(), PersistOffice(), RemoveUserFromOffice(), AddUserToOffices(), GetRolesAdmin(),
-    GetAssistanceLogs(), GetAssistanceData(), GetSchedules(), NewSchedule(), GetPosition(), UpdatePosition(), GetFailsByDate(), GetAssistanceStatus(), GetAssistanceStatusByUsers(), GetOffices(), GetJustifications(), GetJustificationsByUser(), GetJustificationStock(), UpdateJustificationStock(), GetJustificationRequests(), GetJustificationRequestsToManage(), GetJustificationRequestsByDate(), RequestJustification(),  RequestJustificationRange(), UpdateJustificationRequestStatus(),GetSpecialJustifications(), RequestGeneralJustification(), GetGeneralJustificationRequests(), DeleteGeneralJustificationRequest(), RequestGeneralJustificationRange(),
+    GetAssistanceLogs(), GetAssistanceData(), GetSchedules(), NewSchedule(), GetFailsByDate(), GetAssistanceStatus(), GetAssistanceStatusByUsers(), GetOffices(), GetJustifications(), GetJustificationStock(), GetJustificationRequests(), GetJustificationRequestsToManage(), GetJustificationRequestsByDate(), RequestJustification(),  RequestJustificationRange(), UpdateJustificationRequestStatus(),GetSpecialJustifications(), RequestGeneralJustification(), GetGeneralJustificationRequests(), DeleteGeneralJustificationRequest(), RequestGeneralJustificationRange(),
     GetOvertimeRequests(), GetOvertimeRequestsToManage(), RequestOvertime(), UpdateOvertimeRequestStatus(),
     CreateAccountRequest(), ResendAccountRequest(), ConfirmAccountRequest(), ListAccountRequests(), ApproveAccountRequest(), RemoveAccountRequest(), RejectAccountRequest()
 ]
@@ -89,12 +89,12 @@ actions = [
 
 
 
-''' la transformo en un deferred para que sea procesada en otro thread '''
+""" la transformo en un deferred para que sea procesada en otro thread """
 @deferred
 def dispatch(protocol,message):
     protocol._dispatch(message)
 
-''' esto es necesario en funcion para usar .callFromThread '''
+""" esto es necesario en funcion para usar .callFromThread """
 def sendMessage(protocol,message):
     protocol.sendMessage(message,False)
 
@@ -143,19 +143,15 @@ class ActionsServerProtocol(WebSocketServerProtocol):
 
 
     '''
-
             este codigo implementa el framming de los mensajes en esta capa. pero aparentemente no se necesita mas
             usando autobahn. lo dejo comentado por ahora para tenerlo a mano.
-
           #maxMessageSize = 1000
           #if len(jmsg) > maxMessageSize:
               #data = self.chunks(jmsg,maxMessageSize)
-
               #msg2 = {'id': msg['id'], 'parts': len(data), 'ok':''}
               #jmsg2 = json.dumps(msg2)
               #logging.debug(jmsg2);
               #super(WebsocketServer,self).sendMessage(jmsg2)
-
               #index = 0
               #for d in data:
                   #msg2 = { 'id': msg['id'], 'part_number':index, 'part_data': base64.b64encode(d), 'ok':'' }
@@ -163,11 +159,9 @@ class ActionsServerProtocol(WebSocketServerProtocol):
                   #logging.debug(jmsg2);
                   #super(WebsocketServer,self).sendMessage(jmsg2)
                   #index = index + 1
-
           #else:
               #logging.debug(jmsg);
               #super(WebsocketServer,self).sendMessage(jmsg)
-
     '''
 
 

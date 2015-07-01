@@ -15,6 +15,8 @@ class Offices:
     '''
     def _getChildOffices(self,con,offices):
 
+
+
         if len(offices) <= 0:
             return []
 
@@ -205,6 +207,8 @@ class Offices:
         si tree=True obtiene todas las hijas también
     '''
     def getOfficesByUserRole(self,con,userId,tree=False,role='autoriza'):
+
+
         cur = con.cursor()
         cur.execute('select id,parent,name,telephone,email from offices.offices o, offices.offices_roles ou where ou.user_id = %s and o.id = ou.office_id and ou.role = %s',(userId,role))
         if cur.rowcount <= 0:
