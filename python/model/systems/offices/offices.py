@@ -321,6 +321,12 @@ class Offices:
         parent = None
         if 'parent' in office:
             parent = office['parent']
+            if parent != None:
+                # verifico que el parent no sea uno de sus hijos
+                childrens = self._getChildOffices(con,[office['id']])
+                for child in childrens:
+                    if child['id'] == parent:
+                        raise Exception('Error: la oficina padre es al mismo tiempo un hijo')
 
         telephone = None
         if 'telephone' in office:
