@@ -106,7 +106,18 @@ class Offices:
 
         return offices
 
+    '''
+    Busca una oficina
+    '''
 
+    def findOffice(self,con,id):
+        cur = con.cursor()
+        cur.execute('select id,parent,name,telephone,email from offices.offices where id = %s',(id,))
+        off = cur.fetchone()
+        if off:
+            return self._convertToDict(off)
+        else:
+            return None
 
 
     ''' obtiene todas las oficinas '''
