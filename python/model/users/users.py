@@ -102,10 +102,12 @@ class Users:
         rreq = (user.id,)
         cur.execute('delete from profile.telephones where user_id = %s', rreq)
 
-        for i, v in enumerate(user.telephones):
-             telephone_id = str(uuid.uuid4())
-             rreq = (telephone_id, user.id, v["number"], v["type"])
-             cur.execute('INSERT INTO profile.telephones (id, user_id, number, type) VALUES (%s, %s, %s, %s);', rreq)
+        if 'telephones' in data:
+            for i, v in enumerate(user.telephones):
+                 telephone_id = str(uuid.uuid4())
+                 rreq = (telephone_id, user.id, v["number"], v["type"])
+                 cur.execute('INSERT INTO profile.telephones (id, user_id, number, type) VALUES (%s, %s, %s, %s);', rreq)
+
 
     def findUserByDni(self,con,dni):
         cur = con.cursor()
