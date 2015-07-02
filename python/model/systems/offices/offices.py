@@ -106,7 +106,18 @@ class Offices:
 
         return offices
 
+    '''
+    Busca una oficina
+    '''
 
+    def findOffice(self,con,id):
+        cur = con.cursor()
+        cur.execute('select id,parent,name,telephone,email from offices.offices where id = %s',(id,))
+        off = cur.fetchone()
+        if off:
+            return self._convertToDict(off)
+        else:
+            return None
 
 
     ''' obtiene todas las oficinas '''
@@ -322,7 +333,7 @@ class Offices:
         parent = None
         if 'parent' in office:
             parent = office['parent']
-            if parent != None:
+            if parent != None and parent != '' and 'id' in office:
                 # verifico que el parent no sea uno de sus hijos
                 childrens = self._getChildOffices(con,[office['id']])
                 for child in childrens:

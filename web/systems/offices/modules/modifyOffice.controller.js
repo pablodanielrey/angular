@@ -145,6 +145,8 @@ function ModifyOfficeController($scope, Session, Notifications, Office) {
         Notifications.message('Se ha guardado exitósamente');
       },
       function(error) {
+        vm.model.action = null;
+        vm.model.selectedOffice = null;
         Notifications.message(error);
       }
     );

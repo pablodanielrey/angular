@@ -6,7 +6,7 @@ import psycopg2
 from model.exceptions import *
 
 from model.config import Config
-from model.profiles import Profiles
+from model.profiles import AccessDenied, Profiles
 
 from model.utils import DateTimeEncoder
 
@@ -776,7 +776,7 @@ class PersistOffice:
             return True
 
         sid = message['session']
-        self.profiles.checkAccess(sid,['ADMIN-OFFICES','USER-OFFICES'])
+        self.profiles.checkAccess(sid,['SUPER-ADMIN-OFFICES','ADMIN-OFFICES','USER-OFFICES'])
 
         req = message['request']
         office = req['office']
@@ -793,6 +793,18 @@ class PersistOffice:
 
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
+            if 'parent' not in office or office['parent'] == '':
+                parent = None
+                if 'parent' in office:
+                    parent = office['parent']
+                # verifico si se modifico el padre
+                actualOffice = None
+                if 'id' in office:
+                    actualOffice = self.offices.findOffice(con,office['id'])
+                if actualOffice == None or actualOffice['parent'] != parent:
+                    # en dicho caso verifico que tenga el perfil de super admin
+                    self.profiles.checkAccess(sid,['SUPER-ADMIN-OFFICES'])
+
             self.offices.persist(con,office)
             con.commit()
             response = {'id':message['id'], 'ok':'La oficina se ha actualizado correctamente'}
@@ -802,6 +814,17 @@ class PersistOffice:
         except psycopg2.DatabaseError as e:
             con.rollback()
             raise e
+
+        except AccessDenied as e:
+            logging.exception(e)
+            con.rollback()
+
+            response = {
+                'id':message['id'],
+                'error':'No tiene permisos necesarios para realizar esta operacion'
+            }
+            server.sendMessage(response)
+            return True
 
         except Exception as e:
             logging.exception(e)
