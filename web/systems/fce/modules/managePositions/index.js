@@ -54,7 +54,7 @@ app.controller('ManagePositionsCtrl', ["$scope", "$timeout", "$window", "Assista
    * Cargar usuarios de la lista
    */
   $scope.loadUsers = function(){
-    Assistance.getUsersInOfficesByRole('autoriza',
+    Assistance.getUsersInOfficesByRole('manage-positions',
       function(users) {
         $scope.model.users = [];
 
