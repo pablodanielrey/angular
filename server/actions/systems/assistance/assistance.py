@@ -9,6 +9,7 @@ from model.exceptions import *
 from model.config import Config
 from model.profiles import Profiles
 from model.utils import DateTimeEncoder
+from model.events import Events
 
 from model.systems.assistance.assistance import Assistance
 from model.systems.assistance.fails import Fails
@@ -822,7 +823,7 @@ class UpdatePosition:
     profiles = inject.attr(Profiles)
     config = inject.attr(Config)
     positions = inject.attr(Positions)
-
+    events = inject.attr(Events)
 
     def handleAction(self, server, message):
 
