@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 import inject, logging, json, sys, traceback
 
-"""
+'''
 from actions.chat import SendEventToClients
 from actions.status import GetStatus
 from actions.groups import ListGroups, FindGroup, FindMembers, RemoveMembers, AddMembers, UpdateGroup, CreateGroup
 from actions.systems import ListSystems
 from actions.laboralInsertion import PersistLaboralInsertion, FindLaboralInsertion, CreateLanguages,PersistLanguage, DeleteLanguage, FindLanguage, ListLanguages, CreateDegrees, PersistDegree, DeleteDegree, FindDegree, ListDegree, AcceptTermsAndConditions, CheckTermsAndConditions
-"""
+'''
 
 from actions.laboralInsertion import PersistLaboralInsertion, FindLaboralInsertion, CreateLanguages,PersistLanguage, DeleteLanguage, FindLanguage, ListLanguages, CreateDegrees, PersistDegree, DeleteDegree, FindDegree, ListDegree, AcceptTermsAndConditions, CheckTermsAndConditions, PersistLaboralInsertionCV, FindLaboralInsertionCV, GetLaboralInsertionData
 
@@ -35,7 +35,7 @@ from model.exceptions import *
 
 from model.session import Session
 
-""" actions del core """
+''' actions del core '''
 
 from actions.login.login import Login, Logout
 from actions.login.password import ChangePassword, ResetPassword
@@ -45,7 +45,7 @@ from actions.users.mail import ListMails, PersistMail, ConfirmMail, RemoveMail
 from actions.requests.requests import CreateAccountRequest, ResendAccountRequest, ConfirmAccountRequest, ListAccountRequests, ApproveAccountRequest, RemoveAccountRequest, RejectAccountRequest
 
 
-""" sistemas """
+''' sistemas '''
 
 from actions.systems.assistance.assistance import GetAssistanceData, GetAssistanceStatus, GetAssistanceStatusByUsers, GetFailsByDate, GetSchedules, NewSchedule
 from actions.systems.assistance.logs import GetAssistanceLogs
@@ -89,12 +89,12 @@ actions = [
 
 
 
-""" la transformo en un deferred para que sea procesada en otro thread """
+''' la transformo en un deferred para que sea procesada en otro thread '''
 @deferred
 def dispatch(protocol,message):
     protocol._dispatch(message)
 
-""" esto es necesario en funcion para usar .callFromThread """
+''' esto es necesario en funcion para usar .callFromThread '''
 def sendMessage(protocol,message):
     protocol.sendMessage(message,False)
 
