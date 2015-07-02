@@ -53,7 +53,7 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, As
         $scope.showAssistance = function() {
           $location.path('/showAssistance');
         };
-        
+
         $scope.mySchedule = function() {
           $location.path('/mySchedule');
         };
@@ -73,7 +73,7 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, As
         $scope.manageJustificationsStock = function() {
           $location.path('/manageJustificationsStock');
         };
-        
+
         $scope.managePositions = function() {
           $location.path('/managePositions');
         };
@@ -101,10 +101,12 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, As
                         var hasApprove = false;
                         var hasOvertime = false;
                         var hasJustification = false;
+                        var hasPositions = false;
                         for (var i = 0; i < roles.length; i++) {
                           hasApprove = hasApprove || (roles[i].role == 'autoriza');
                           hasOvertime = hasOvertime || (roles[i].role == 'horas-extras');
                           hasJustification = hasJustification || (roles[i].role == 'realizar-solicitud') || (roles[i].role == 'realizar-solicitud-admin');
+                          hasPositions = hasPositions || roles[i].role == 'manage-positions';
                         }
 
                         if (hasApprove) {
@@ -122,6 +124,9 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, As
                           $scope.items.push({ label:'Solicitudes Especiales ', img:'fa-plus', function: $scope.userAssistanceManagement});
                           $scope.items.push({ label:'Solicitudes Generales ', img:'fa-plus', function: $scope.requestGeneralJustifications});
                           $scope.items.push({ label:'Stock de Solicitudes ', img:'fa-plus', function: $scope.manageJustificationsStock});
+                        }
+
+                        if (hasPositions) {
                           $scope.items.push({ label:'Administrar Cargos', img:'fa-plus', function: $scope.managePositions});
                         }
 
