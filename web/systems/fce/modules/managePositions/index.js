@@ -18,7 +18,7 @@ app.controller('ManagePositionsCtrl', ["$scope", "$timeout", "$window", "Assista
     selectedPosition: null,     //justificacion seleccionada
     positions: [],              //justificaciones consultadas para seleccionar
     positionsSelectionDisable: true, //flag para indicar que se debe deshabilitar la seleccion
-    
+
     submitButtonDisable: true
   };
 
@@ -73,7 +73,7 @@ app.controller('ManagePositionsCtrl', ["$scope", "$timeout", "$window", "Assista
               Notifications.message(error);
             });
         }
-        
+
         $scope.model.usersSelectionDisable = false;
       },
       function(error){
@@ -81,16 +81,16 @@ app.controller('ManagePositionsCtrl', ["$scope", "$timeout", "$window", "Assista
       }
     );
   };
-  
-  
+
+
   /**
    * Debe ser mostrada la lista de usuarios?
    */
   $scope.isUsersListDisplayed = function() {
     return $scope.model.displayUsersList;
   };
-  
-  
+
+
   /**
    * Mostrar lista de usuarios
    */
@@ -105,7 +105,7 @@ app.controller('ManagePositionsCtrl', ["$scope", "$timeout", "$window", "Assista
     $scope.model.submitButtonDisable = true;
 
   };
-  
+
   /**
    * Esta seleccionado un usuario?
    * @returns {Boolean}
@@ -124,11 +124,11 @@ app.controller('ManagePositionsCtrl', ["$scope", "$timeout", "$window", "Assista
     $scope.model.selectedUser = user;
     $scope.model.searchUser = $scope.model.selectedUser.name + " " + $scope.model.selectedUser.lastname;
     $scope.model.usersSelectionDisable = true;
-    
+
     $scope.loadUserPosition();
   };
-  
-  
+
+
   /**************************************************************
    * METODOS CORRESPONDIENTES A LA SELECCION DE JUSTIFICACIONES *
    **************************************************************/
@@ -143,6 +143,18 @@ app.controller('ManagePositionsCtrl', ["$scope", "$timeout", "$window", "Assista
       "A5",
       "A6",
       "A7",
+      "B2",
+      "B3",
+      "B4",
+      "B5",
+      "B6",
+      "B7",
+      "C2",
+      "C3",
+      "C4",
+      "C5",
+      "C6",
+      "C7",
       "E2",
       "E3",
       "E4",
@@ -169,7 +181,7 @@ app.controller('ManagePositionsCtrl', ["$scope", "$timeout", "$window", "Assista
     $scope.model.submitButtonDisable = false;
     $scope.model.usersSelectionDisable = false;
   };
-  
+
   /**
    * Esta seleccionado la justificacion?
    * @returns {Boolean}
@@ -178,8 +190,8 @@ app.controller('ManagePositionsCtrl', ["$scope", "$timeout", "$window", "Assista
     return ($scope.model.selectedPosition !== null);
   };
 
- 
-  
+
+
   $scope.updateUserPosition = function(){
     Assistance.updatePosition($scope.model.selectedUser.id, $scope.model.selectedPosition,
 				function(data){
@@ -190,5 +202,5 @@ app.controller('ManagePositionsCtrl', ["$scope", "$timeout", "$window", "Assista
 				}
 		);
   }
-  
+
 }]);
