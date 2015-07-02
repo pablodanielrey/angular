@@ -90,6 +90,11 @@ insert into offices.offices_roles (user_id,role,office_id) select p.id,'realizar
 insert into offices.offices_roles (user_id,role,office_id) select '1','realizar-solicitud-admin',id from offices.offices o where o.parent is null;
 insert into offices.offices_roles (user_id,role,office_id) select p.id,'realizar-solicitud-admin',o.id from offices.offices o, profile.users p where o.parent is null and p.dni in ('1');
 
+
+insert into offices.offices_roles (user_id,role,office_id) select '1','manage-positions',id from offices.offices o where o.parent is null;
+insert into offices.offices_roles (user_id,role,office_id) select p.id,'manage-positions',o.id from offices.offices o, profile.users p where o.parent is null and p.dni in ('1');
+
+
 /*
   perfil de Administrador de asistencia. por ahora no es muy distinto.
 */
