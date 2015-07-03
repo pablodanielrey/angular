@@ -11,6 +11,11 @@ from model.systems.assistance.logs import Logs
 from model.systems.assistance.schedule import Schedule
 from model.systems.assistance.justifications.justifications import Justifications
 
+from model.systems.assistance.scheduleCheck import ScheduleCheck
+from model.systems.assistance.hoursCheck import HoursCheck
+from model.systems.assistance.presenceCheck import PresenceCheck
+
+
 
 class ScheduleChecks:
 
@@ -19,6 +24,7 @@ class ScheduleChecks:
     justifications = inject.attr(Justifications)
     logs = inject.attr(Logs)
 
+    typesCheck = [ScheduleCheck, HoursCheck, PresenceCheck]
 
     """
         retorna una lista cronológica de los chequeos a realizar para el usuario.
@@ -44,19 +50,15 @@ class ScheduleChecks:
         last = None
         current = None
         for c in data:
-            current = {
-                'start':c[2],
-                'end':None,
-                'type':c[3]
-            }
 
-            if current['type'] == 'HOURS':
-                cur.execute('select hours from assistance.hours_check where id = %s',(c[0],))
-                h = cur.fetchone()
-                current['hours'] = h[0]
+            for t in self.typesCheck:
+                if t.isTypeCheck(c[3]):
+                    current = t.create(c[0],c[1],c[2],cur)
+                    break
+
 
             if last is not None:
-                last['end'] = current['start']
+                last.check['end'] = current.check['start']
                 checks.append(last)
             last = current
 
@@ -125,13 +127,9 @@ class ScheduleChecks:
             check = None
             for c in checks:
                 check = c
-                if (actual >= c['start']):
-                    if c['end'] is None:
-                        check = c
-                        break
-                    elif actual < c['end']:
-                        check = c
-                        break
+                if c.isActualCheck(actual):
+                    check = c
+                    break
 
             nextDay = actual + datetime.timedelta(days=1)
 
@@ -146,71 +144,17 @@ class ScheduleChecks:
                 actual = nextDay
                 continue
 
+            justs = self._findJustificationsForDate(justifications,actual)
 
-            if check['type'] == 'PRESENCE':
-                logging.debug('presencia {} {}'.format(userId,actualUtc))
-                logs = self.schedule.getLogsForSchedule(con,userId,actualUtc)
-                if (logs is None) or (len(logs) <= 0):
-                    justs = self._findJustificationsForDate(justifications,actual)
+            gjusts = self._findGeneralJustificationsForDate(gjustifications,actual)
+            if len(gjusts) > 0:
+                for j in gjusts:
+                    j['user_id'] = userId
+                    justs.append(j)
 
-                    gjusts = self._findGeneralJustificationsForDate(gjustifications,actual)
-                    if len(gjusts) > 0:
-                        for j in gjusts:
-                            j['user_id'] = userId
-                            justs.append(j)
-
-                    fails.append(
-                        {
-                            'userId':userId,
-                            'date':actual,
-                            'description':'Sin marcación',
-                            'justifications':justs
-                        }
-                    )
-
-
-            elif check['type'] == 'HOURS':
-                logs = self.schedule.getLogsForSchedule(con,userId,actualUtc)
-                whs,attlogs = self.logs.getWorkedHours(logs)
-                count = 0
-                for wh in whs:
-                    count = count + wh['seconds']
-
-                if count < (check['hours'] * 60 * 60):
-
-                    justs = self._findJustificationsForDate(justifications,actual)
-
-                    gjusts = self._findGeneralJustificationsForDate(gjustifications,actual)
-                    if len(gjusts) > 0:
-                        for j in gjusts:
-                            j['user_id'] = userId
-                            justs.append(j)
-
-
-                    fails.append(
-                        {
-                            'userId':userId,
-                            'date':actual,
-                            'description':'No trabajó la cantidad mínima de minutos requeridos ({} < {})'.format(count / 60, check['hours'] * 60),
-                            'justifications':justs
-                        }
-                    )
-
-            elif check['type'] == 'SCHEDULE':
-                justs = self._findJustificationsForDate(justifications,actual)
-
-                gjusts = self._findGeneralJustificationsForDate(gjustifications,actual)
-                if len(gjusts) > 0:
-                    for j in gjusts:
-                        j['user_id'] = userId
-                        justs.append(j)
-
-
-                fail = self.checkSchedule(con,userId,actualUtc)
-                for f in fail:
-                    f['justifications'] = justs
-                fails.extend(fail)
-
+            auxFails = c.getFails(self,userId,actual,justs,con)
+            if len(auxFails) > 0:
+                fails.extend(auxFails)
             actual = nextDay
 
         return fails
@@ -218,6 +162,7 @@ class ScheduleChecks:
 
 
     """ chequea los schedules contra las workedhours calculadas """
+    '''
     def _checkScheduleWorkedHours(self,userId,controls):
         tolerancia = datetime.timedelta(minutes=16)
         fails = []
@@ -291,7 +236,7 @@ class ScheduleChecks:
                 )
 
         return fails
-
+    '''
 
 
     """
@@ -306,5 +251,5 @@ class ScheduleChecks:
         logs = self.schedule.getLogsForSchedule(con,userId,date)
         whs,attlogs = self.logs.getWorkedHours(logs)
         controls = list(utils.combiner(schedules,whs))
-        fails = self._checkScheduleWorkedHours(userId,controls)
+        fails = ScheduleCheck.checkWorkedHours(userId,controls)
         return fails
