@@ -1,0 +1,134 @@
+<div class="filterFails">
+  <div class="title">
+    <label><i class="fa fa-exclamation-triangle"></i> | Incumplimiento de horarios</label>
+  </div>
+  
+  <form>
+    <div class="input">
+      <div>
+        <div class="searchTitle">
+          <span><i class="fa fa-user-plus"></i> Seleccione Usuario</span>
+        </div>
+        <div>
+          <input class="inputSearch" ng-model="model.searchUser" ng-click="displayUsersList()" ng-disabled="model.usersSelectionDisable" placeholder="Buscar...">
+          <ul class="list" ng-class="{true:'visible', false:'hidden'}[isUsersListDisplayed()]">
+            <li class="item" ng-repeat="user in model.users | filter:model.searchUser | orderBy : 'name'" ng-click="selectUser(user)">{{user.name}} {{user.lastname}}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    <div class="input">
+      <div>
+        <div class="searchTitle">
+          <span><i class="fa fa-user-plus"></i> Seleccione Oficina</span>
+        </div>
+        <div>
+          <input class="inputSearch" ng-model="model.searchOffice" ng-click="displayOfficesList()" ng-disabled="model.officesSelectionDisable" placeholder="Buscar...">
+          <ul class="list" ng-class="{true:'visible', false:'hidden'}[isOfficesListDisplayed()]">
+            <li class="item" ng-repeat="office in model.offices | filter:model.searchOffice | orderBy : 'name'" ng-click="selectOffice(office)">{{office.name}}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    <div class="input">
+      <div>
+        <div class="searchTitle">
+          <span><i class="fa fa-user-plus"></i> Tipo de falla </span>
+        </div>
+        <div>
+          <select class="inputSearch" ng-model="model.failType">
+            <option value=""> Todas </option>
+            <option value="?">Llegada tarde</option>
+            <option value="?">Salida temprana</option>
+            <option value="?">Sin marcación</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    
+    <div class="input">
+      <div>
+        <div class="searchTitle">
+          <span><i class="fa fa-user-plus"></i> Fecha inicial</span>
+        </div>
+        <div>
+          <input class="inputSearch" type="date" ng-model="model.begin">
+        </div>
+      </div>
+    </div>
+    
+    <div class="input">
+      <div>
+        <div class="searchTitle">
+          <span><i class="fa fa-user-plus"></i> Fecha final </span>
+        </div>
+        <div>
+          <input class="inputSearch" type="date" ng-model="model.end">
+        </div>
+      </div>
+    </div>
+    
+    <div class="input">
+      <div>
+        <div class="searchTitle">
+          <span><i class="fa fa-user-plus"></i> Periodicidad </span>
+        </div>
+        <div>
+          <select class="inputSearch" ng-model="model.periodicity">
+            <option value=""> Seleccione...</option>
+            <option value="semanal">Semanal</option>
+            <option value="mensual">Mensual</option>
+            <option value="anual">Anual</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    
+    <div class="input">
+      <div>
+        <div class="searchTitle">
+          <span><i class="fa fa-user-plus"></i> Cantidad </span>
+        </div>
+        <div>
+          <input class="inputSearch" type="number" ng-model="model.count">
+        </div>
+      </div>
+    </div>
+    
+    <button ng-click="search()"><i class="fa fa-search"></i> Buscar</Button>
+  </form>  
+  
+  
+  
+  
+   <div class ="headerFails">
+
+        <div ng-click="reverseDay=!reverseDay;order(['fail.dayOfWeek.number','fail.dateExtend','user.lastname','user.name'],reverseDay) " class="date"><i class="fa fa-sort"></i> Día</div>
+        <div ng-click="reverseDate=!reverseDate;order(['fail.dateExtend','user.lastname','user.name'],reverseDate) " class="date"><i class="fa fa-sort"></i> Fecha</div>
+        <div ng-click="reverseName=!reverseName;order(['user.lastname','user.name','fail.dateExtend'],reverseName)" class="name"><i class="fa fa-sort"></i> Nombre</div>
+        <div ng-click="reverseDateSchedule=!reverseDateSchedule;order(['fail.dateSchedule','user.lastname','user.name','fail.dateExtend'],reverseDateSchedule)" class="dateSchedule"><i class="fa fa-sort"></i> Hora declarada </div>
+        <div ng-click="reverseWh=!reverseWh;order(['fail.wh','user.lastname','user.name','fail.dateExtend'],reverseWh)" class="workingHours"><i class="fa fa-sort"></i> Hora de marcación</div>
+        <div ng-click="reverseDiff=!reverseDiff;order(['fail.diff','user.lastname','user.name','fail.dateExtend'],reverseDiff)" class="diff"><i class="fa fa-sort"></i> Diferencia </div>
+        <div ng-click="reverseDesc=!reverseDesc;order(['fail.description','user.lastname','user.name','fail.dateExtend'],reverseDesc)" class="description"><i class="fa fa-sort"></i> Description</div>
+        <div ng-click="reverseWhs=!reverseWhs;order(['fail.whs','user.lastname','user.name','fail.dateExtend'],reverseWhs)" class="wh"><i class="fa fa-sort"></i> Horas Trabajadas</div>
+        <div ng-click="reverseJust=!reverseJust;order(['justification.shortName','user.lastname','user.name','fail.dateExtend'],reverseJust)" class="justification"><i class="fa fa-sort"></i> Justificación</div>
+
+    </div>
+    <div class="fails">
+
+      <div class="fail" ng-repeat="assistanceFail in model.assistanceFails">
+        <div class="date">{{assistanceFail.fail.dayOfWeek.name}}</div>
+        <div class="date">{{assistanceFail.fail.dateFormat}}</div>
+        <div class="name">{{assistanceFail.user.lastname}}, {{assistanceFail.user.name}}</div>
+        <div class="dateSchedule">{{assistanceFail.fail.dateSchedule}}</div>
+        <div class="workingHours">{{assistanceFail.fail.wh}}</div>
+        <div class="diff">{{assistanceFail.fail.diff}}</div>
+        <div class="description">{{assistanceFail.fail.description}}</div>
+        <div class="description">{{assistanceFail.fail.whs}}</div>
+        <div class="justification" ><i class="fa {{assistanceFail.justification.icon}}"></i> <span title="{{assistanceFail.justification.name}}" class="pointer">{{assistanceFail.justification.shortName}}</span></div>
+
+      </div>
+    </div>
+</div>

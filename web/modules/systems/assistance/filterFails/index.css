@@ -1,0 +1,195 @@
+/* FORMULARIO */
+.filterFails {
+  width:100%;
+  height:100%;
+  font-family: helvetica;
+}
+.filterFails .hidden{
+  display:none;
+}
+
+
+.filterFails .visible{
+  display:block;
+}
+
+
+.filterFails h2 {
+  display:flex;
+  align-items: center;
+  background-image:linear-gradient(to right,#275276, #0066A6);
+  font-size:16px;
+  width:98%;
+  height:30px;
+  padding:5px;
+  color:white;
+  margin-bottom:10px;
+  margin:5px;
+}
+
+
+
+.filterFails .input {
+  display:flex;
+  flex-direction:row;
+  margin:10px;
+}
+
+
+
+
+
+/* LISTAS DE SELECCION */
+.filterFails .searchTitle {
+  background-color: #0066A6;
+  color: white;
+  padding:5px;
+  margin-bottom: 0px;
+  font-size: 13px;
+  width:170px;
+  border-top: 3px solid #275276;
+  margin-right:20px;
+
+}
+
+
+.filterFails .inputSearch{
+  width:166px;
+  padding:5px;
+  font-size: 14px;
+
+}
+.filterFails .list {
+  list-style-type:none;
+  margin:0px;
+  padding-left:5px;
+  width:190px;
+  max-height:300px;
+  background-color:#0066A6;
+  color:white;
+  z-index:999;
+  overflow: scroll;
+  overflow-x: hidden;
+  z-index: 999;
+  position: absolute;
+}
+.filterFails .item {
+  height:25px;
+  padding-top:10px;
+  border-bottom:2px solid #275276;
+  cursor:pointer;
+  z-index:999;
+
+}
+
+
+
+
+
+/* GRILLA */
+.filterFails .fails {
+
+    overflow: scroll;
+    height:338px;
+    overflow-x: hidden;
+}
+
+
+.filterFails  .headerFails {
+  cursor:pointer;
+
+  display:flex;
+  flex-direction:row;
+
+  background-color:#0066A6;
+  color:white;
+  padding-top:5px;
+  padding-bottom:5px;
+  margin-bottom:5px;
+  margin-top:10px;
+
+}
+
+.filterFails .headerFails .dni {
+    width:80px;
+}
+
+.filterFails .headerFails .name {
+    width:200px;
+}
+
+.filterFails .headerFails .lastname {
+    width:90px;
+}
+
+.filterFails .headerFails .date {
+    width:80px;
+}
+
+.filterFails .headerFails .dateSchedule {
+    width:80px;
+}
+
+.filterFails .headerFails .workingHours {
+    width:80px;
+}
+
+.filterFails .headerFails .diff {
+    width:90px;
+}
+
+.filterFails .headerFails .description {
+    width:130px;
+}
+
+
+
+
+.filterFails .fails .fail {
+  display:flex;
+  flex-direction:row;
+}
+
+.filterFails .fail {
+  padding-top:2px;
+  padding-bottom:2px;
+}
+.filterFails .fail:nth-child(even) { background: white }
+.filterFails .fail:nth-child(odd) { background: #F2F2F2}
+
+
+.filterFails .fails .dni {
+    width:80px;
+}
+
+.filterFails .fails .name {
+    width:200px;
+    color:#0066A6;
+    font-weight:bold;
+}
+
+.filterFails .fails .lastname {
+    width:90px;
+    color:#0066A6;
+    font-weight:bold;
+}
+
+.filterFails .fails .date {
+    width:80px;
+}
+
+.filterFails .fails .dateSchedule {
+    width:80px;
+}
+
+.filterFails .fails .workingHours {
+    width:80px;
+}
+
+.filterFails .fails .diff {
+    width:90px;
+}
+
+.filterFails .fails .description {
+    width:130px;
+}

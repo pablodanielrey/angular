@@ -193,9 +193,9 @@ app.config(['$routeProvider', function($routeProvider) {
     controller: 'ManageJustificationsStockCtrl'
   })
   
-  .when('/managePositions', {
-    templateUrl: '/systems/fce/modules/managePositions/index.html',
-    controller: 'ManagePositionsCtrl'
+  .when('/filterFails', {
+    templateUrl: '/modules/systems/assistance/filterFails/index.html',
+    controller: 'FilterFailsCtrl'
   })
 
   .otherwise({

@@ -77,6 +77,34 @@ app.service('Assistance', ['Utils','Messages','Session',
 						}
 					});
 		};
+    
+    this.getFailsByFilter = function(filter, callbackOk, callbackError){
+      var msg = {
+					id: Utils.getId(),
+					action: 'getFailsFilter',
+					session: Session.getSessionId(),
+					request: {
+						userId: filter.userId,
+            officeId: filter.officeId,
+            begin: filter.begin,
+            end: filter.end,
+            type: filter.type,
+            count: filter.count,
+            periodicity: filter.periodicity
+					}
+				};
+
+				Messages.send(msg,
+					function(data) {
+						if (typeof data.error === 'undefined') {
+							callbackOk(data);
+						} else {
+							callbackError(data.error);
+						}
+					});
+    }
+    
+    
 
 		this.getAssistanceStatusByDate = function(userId, date, callbackOk, callbackError) {
 			var msg = {
