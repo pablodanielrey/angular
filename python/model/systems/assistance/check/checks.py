@@ -11,9 +11,9 @@ from model.systems.assistance.logs import Logs
 from model.systems.assistance.schedule import Schedule
 from model.systems.assistance.justifications.justifications import Justifications
 
-from model.systems.assistance.scheduleCheck import ScheduleCheck
-from model.systems.assistance.hoursCheck import HoursCheck
-from model.systems.assistance.presenceCheck import PresenceCheck
+from model.systems.assistance.check.scheduleCheck import ScheduleCheck
+from model.systems.assistance.check.hoursCheck import HoursCheck
+from model.systems.assistance.check.presenceCheck import PresenceCheck
 
 
 
@@ -24,7 +24,7 @@ class ScheduleChecks:
     justifications = inject.attr(Justifications)
     logs = inject.attr(Logs)
 
-    typesCheck = [ScheduleCheck, HoursCheck, PresenceCheck]
+    typesCheck = [ScheduleCheck(), HoursCheck(), PresenceCheck()]
 
     """
         retorna una lista cronológica de los chequeos a realizar para el usuario.
@@ -32,6 +32,7 @@ class ScheduleChecks:
 
         checks [
             {
+                'id': id
                 'start':fecha
                 'end':fecha
                 'type': 'NULL|PRESENCE|HOURS|SCHEDULE'
@@ -58,7 +59,7 @@ class ScheduleChecks:
 
 
             if last is not None:
-                last.check['end'] = current.check['start']
+                last['end'] = current['start']
                 checks.append(last)
             last = current
 
@@ -127,7 +128,7 @@ class ScheduleChecks:
             check = None
             for c in checks:
                 check = c
-                if c.isActualCheck(actual):
+                if c.isActualCheck(actual,c):
                     check = c
                     break
 

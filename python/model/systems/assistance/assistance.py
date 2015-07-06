@@ -15,7 +15,7 @@ from model.systems.assistance.fails import Fails
 from model.systems.assistance.logs import Logs
 from model.systems.assistance.date import Date
 from model.systems.assistance.schedule import Schedule
-from model.systems.assistance.checks import ScheduleChecks
+from model.systems.assistance.check.checks import ScheduleChecks
 from model.systems.assistance.justifications.justifications import Justifications
 
 class Assistance:

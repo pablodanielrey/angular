@@ -2,41 +2,37 @@ import logging,inject
 import datetime
 from model.systems.assistance.date import Date
 from model.systems.assistance.schedule import Schedule
+from model.systems.asssitance.check.check import Check
 
 '''
 Tipo de chequeo PRESENCE
 '''
-class PresenceCheck:
+class PresenceCheck(Check):
 
     date = inject.attr(Date)
     schedule = inject.attr(Schedule)
 
     type = 'PRESENCE'
-    check = None
 
-    def __init__(self, userId, start):
-        self.check = {
+    def create(self,id,userId,start,cur):
+        check = {
+            'userId': userId,
             'start':start,
             'end':None,
             'type':self.type
         }
+        return check
 
+    def isTypeCheck(self,type):
+        return self.type == type
 
-    @classmethod
-    def create(cls,id,userId,start,cur):
-        return cls(userId,start)
-
-    @classmethod
-    def isTypeCheck(cls,type):
-        return cls.type == type
-
-    def isActualCheck(self,date):
-        if (date >= self.check['start']):
-            if self.check['end'] is None:
+    def isActualCheck(self,date,start,end):
+        if (date >= start):
+            if end is None:
                 return True
-            elif date < self.check['end']:
+            elif date < end:
                 return True
-        return False
+        return false
 
 
     '''

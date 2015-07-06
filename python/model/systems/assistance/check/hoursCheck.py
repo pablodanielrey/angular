@@ -3,46 +3,44 @@ import datetime
 from model.systems.assistance.date import Date
 from model.systems.assistance.schedule import Schedule
 from model.systems.assistance.logs import Logs
+from model.systems.asssitance.check.check import Check
 
 '''
 Tipo de chequeo HOURS
 '''
-class HoursCheck:
+class HoursCheck(Check):
 
     date = inject.attr(Date)
     schedule = inject.attr(Schedule)
     logs = inject.attr(Logs)
 
     type = 'HOURS'
-    check = None
 
-    def __init__(self, userId, start, hours):
-        self.check = {
+    def create(self,id,userId,start,cur):
+        check = {
+            'userId': userId,
             'start':start,
             'end':None,
-            'type':self.type,
-            'hours': hours
+            'type':self.type
         }
+        check['hours'] = self.getHoursCheck(id,cur)
+        return check
 
+    def isTypeCheck(self,type):
+        return self.type == type
 
-    @classmethod
-    def create(cls,id,userId,start,cur):
+    def isActualCheck(self,date,start,end):
+        if (date >= start):
+            if end is None:
+                return True
+            elif date < end:
+                return True
+        return false
+
+    def getHoursCheck(self,id,cur):
         cur.execute('select hours from assistance.hours_check where id = %s',(c[0],))
         h = cur.fetchone()
-        return cls(userId,start,h[0])
-
-    @classmethod
-    def isTypeCheck(cls,type):
-        return cls.type == type
-
-    def isActualCheck(self,date):
-        if (date >= self.check['start']):
-            if self.check['end'] is None:
-                return True
-            elif date < self.check['end']:
-                return True
-        return False
-
+        return h[0]
 
     '''
         return
