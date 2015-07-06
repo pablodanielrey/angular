@@ -1,0 +1,68 @@
+<div class="users-offices-container">
+
+  <div class="all-users-container">
+    <div class="title">
+      Listado de todos los usuarios
+    </div>
+
+    <div class="content">
+      <div class="office">
+        <span class="title">Filtro por Oficina:</span>
+        <select class="officeSelect" ng-change="vm.filterUsers()" ng-model="vm.model.officeSelected"  ng-options="op.name group by op.parentName  for op in vm.model.allOffices | orderBy:['parentName','order','name']">
+          <option value="">Todos</option>
+        </select>
+      </div>
+
+      <div class="users">
+        <div class="search">
+          <span class="title">Buscar: </span>
+          <input type="text" class="searchUserOffices" ng-model="vm.model.searchUser"/>
+        </div>
+        <div class="list-users-container">
+          <div class="listUsers" ng-class="{true:'deleted'}[user.deleted]" ng-click="vm.addUser(user)" ng-repeat="user in vm.model.users | filter:vm.model.searchUser | orderBy:['name','lastname']" ng-mouseover="vm.hover[$index] = true" ng-mouseleave="vm.hover[$index] = false">
+            <div>{{user.name}} {{user.lastname}}</div>
+            <div ng-class="{true:'hidden'}[vm.hover[$index] == null || vm.hover[$index] == false]" class="add fa fa-plus"> Agregar Usuario</div>
+          </div>
+        </div>
+         <!--  | orderBy:['name','lastname']" ng-click="selectUser(user)" ng-class="{true:'selected'}[isSelectedUser(user)]">{{user.name}} {{user.lastname}}</div> -->
+      </div>
+    </div>
+  </div>
+
+
+  <div class="users-offices-container">
+    <div class="title">
+      Listado de usuarios por oficina
+    </div>
+
+    <div class="content">
+      <div class="office">
+        <span class="title">Oficina a modificar:</span>
+        <select class="officeSelect" ng-change="vm.officeChange()" ng-model="vm.model.officeChange"  ng-options="op.name group by op.parentName  for op in vm.model.officesAdmin | orderBy:['parentName','order','name']">
+          <option value="">Seleccione una oficina</option>
+        </select>
+      </div>
+
+
+      <div class="users">
+        <div class="search">
+          <span class="title">Buscar: </span>
+          <input type="text" class="searchUserOffices" ng-model="vm.model.searchUserOffice"/>
+        </div>
+        <div class="list-users-container">
+          <div class="listUsers" ng-click="vm.removeUser(user)" ng-repeat="user in vm.model.usersOffice | filter: vm.model.searchUserOffice | orderBy:['name','lastname']" ng-mouseover="vm.hoverOffice[$index] = true" ng-mouseleave="vm.hoverOffice[$index] = false">
+            <div>{{user.name}} {{user.lastname}}</div>
+            <div ng-class="{true:'hidden'}[vm.hoverOffice[$index] == null || vm.hoverOffice[$index] == false]" class="delete fa fa-minus"> Eliminar Usuario</div>
+          </div>
+        </div>
+         <!-- | filter:vm.model.searchUser | orderBy:['name','lastname']" ng-click="selectUser(user)" ng-class="{true:'selected'}[isSelectedUser(user)]">{{user.name}} {{user.lastname}}</div> -->
+      </div>
+    </div>
+    <div class="actions">
+      <button ng-click="vm.cancel()">Cancelar</button>
+      <button ng-click="vm.save()">Guardar</button>
+    </div>
+  </div>
+
+
+</div>

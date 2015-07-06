@@ -295,6 +295,26 @@ app.service('Assistance', ['Utils','Messages','Session',
 				id: Utils.getId(),
 				action: 'getJustifications',
 				session: Session.getSessionId(),
+			};
+
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response.justifications);
+					} else {
+						callbackError(data.error);
+					}
+				});
+		};
+
+		this.getJustificationsByUser = function(userId, callbackOk, callbackError) {
+			var msg = {
+				id: Utils.getId(),
+				action: 'getJustificationsByUser',
+				session: Session.getSessionId(),
+				request:{
+					userId: userId
+				}
 			}
 
 			Messages.send(msg,
@@ -337,6 +357,33 @@ app.service('Assistance', ['Utils','Messages','Session',
 				});
 		};
 
+    /**
+     * Actualizar stock de la justificacion de un usuario
+     * @param {userId} userId
+     * @param {justificationId} justificationId
+     * @param {stock} stock
+     */
+    this.updateJustificationStock = function(userId, justificationId, stock,callbackOk,callbackError) {
+			var msg = {
+				id: Utils.getId(),
+				action: 'updateJustificationStock',
+				session: Session.getSessionId(),
+				request: {
+					userId: userId,
+ 					justificationId: justificationId,
+					stock: stock
+				}
+			};
+
+      Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response);
+					} else {
+						callbackError(data.error);
+					}
+				});
+		};
 
 		this.getJustificationRequestsByDate = function(status, usersIds, start, end, callbackOk, callbackError){
 			var msg = {
@@ -445,8 +492,7 @@ app.service('Assistance', ['Utils','Messages','Session',
 					}
 				}
 			);
-
-		}
+		};
 
 		this.requestJustification = function(userId, justification, status, callbackOk, callbackError) {
 			var msg = {
@@ -672,7 +718,39 @@ app.service('Assistance', ['Utils','Messages','Session',
 					}
 				});
 		};
-    
+
+
+		/**
+     * solicitar justificacion general en un rango
+     * @param {type} justification Datos de la justificacion
+     * @param {type} callbackOk
+     * @param {type} callbackError
+     * @returns {undefined}
+     */
+    this.requestGeneralJustificationRange = function(justification, callbackOk, callbackError) {
+			var msg = {
+				id: Utils.getId(),
+				action: 'requestGeneralJustificationRange',
+				session: Session.getSessionId(),
+				request: {
+					justification_id: justification.id,
+					begin: justification.begin,
+					end: justification.end
+				}
+			};
+
+
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response);
+					} else {
+						callbackError(data.error);
+					}
+				});
+		};
+
+
     /**
      * solicitar justificaciones generales
      * @param {type} callbackOk
@@ -685,7 +763,7 @@ app.service('Assistance', ['Utils','Messages','Session',
 				action: 'getGeneralJustificationRequests',
 				session: Session.getSessionId()
 			};
-      
+
       Messages.send(msg,
 				function(data) {
 					if (typeof data.error === 'undefined') {
@@ -694,7 +772,7 @@ app.service('Assistance', ['Utils','Messages','Session',
 						callbackError(data.error);
 					}
 				});
-      
+
     };
 
     this.deleteGeneralJustificationRequest = function(requestId, callbackOk, callbackError){
@@ -706,7 +784,7 @@ app.service('Assistance', ['Utils','Messages','Session',
 					request_id: requestId
 				}
 			};
-      
+
       Messages.send(msg,
 				function(data) {
 					if (typeof data.error === 'undefined') {
@@ -716,5 +794,55 @@ app.service('Assistance', ['Utils','Messages','Session',
 					}
 		  });
     };
-	}]
-);
+    
+    
+     
+  this.getPosition = function(userId, callbackOk, callbackError){
+    var msg = {
+				id: Utils.getId(),
+				action: 'getPosition',
+				session: Session.getSessionId(),
+        request: {
+					userId: userId
+				}
+			};
+
+      Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response);
+					} else {
+						callbackError(data.error);
+					}
+		  });
+  };
+  
+  /**
+   * Actualizar cargo del usuario
+   * @param {userId} userId
+   * @param {justificationId} justificationId
+   * @param {stock} stock
+   */
+  this.updatePosition = function(userId, position, callbackOk,callbackError) {
+    var msg = {
+      id: Utils.getId(),
+      action: 'updatePosition',
+      session: Session.getSessionId(),
+      request: {
+        userId: userId,
+        position: position
+      }
+    };
+
+    Messages.send(msg,
+      function(data) {
+        if (typeof data.error === 'undefined') {
+          callbackOk(data.response);
+        } else {
+          callbackError(data.error);
+        }
+      });
+  };
+  
+  
+}]);

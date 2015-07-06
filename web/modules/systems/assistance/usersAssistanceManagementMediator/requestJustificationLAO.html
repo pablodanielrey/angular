@@ -19,9 +19,9 @@
       <div ng-class="{true:'visible', false:'hidden'}[isSelectedRequest()]">
         <div class="margin" >
            <p class="parrafos">Seleccione el día de inicio</p>
-           <input class="date" type="date" ng-model="rjModel.begin" ng-change="selectDate()" >
+           <input class="date" type="date" ng-model="rjModel.begin" ng-change="isDataDefined()">
            <p class="parrafos">Seleccione el día de fin</p>
-           <input class="date" type="date" ng-model="rjModel.end" ng-change="selectDate()" >
+           <input class="date" type="date" ng-model="rjModel.end" ng-change="isDataDefined()">
         </div>
 
       </div>

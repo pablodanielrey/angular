@@ -1,0 +1,225 @@
+.roles-office-container {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+/*
+  Oficinas
+*/
+
+.roles-office-container .offices-container {
+  flex: 1;
+  display: flex;
+  flex-flow: column wrap;
+}
+
+.roles-office-container .offices-container .title {
+  background: linear-gradient(to right,#275276, #4897C8);
+  color:white;
+  text-align:center;
+  font-weight: bold;
+}
+
+.roles-office-container .offices-container .search {
+  display: flex;
+  flex-flow: row wrap;
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+  padding-left:0.5em;
+}
+
+.roles-office-container .offices-container .search .title {
+  margin-right: 1em;
+  background: white;
+  color: black;
+}
+
+.roles-office-container .offices-container .search .searchOffice {
+
+}
+
+.roles-office-container .offices-container .list-offices {
+  display: flex;
+  flex-flow: column wrap;
+  padding-left:0.5em;
+}
+
+.roles-office-container .offices-container .list-offices .item {
+    border-top: 0.25em solid white;
+}
+
+.roles-office-container .offices-container .list-offices :first-child {
+    border-top: 0;
+}
+
+.roles-office-container .offices-container .list-offices .item-office {
+  cursor: pointer;
+}
+
+.roles-office-container .offices-container .list-offices .item-office.child{
+  padding-left:2em;
+}
+
+.roles-office-container .offices-container .list-offices .item-office.child i {
+  margin-right:0.25em;
+}
+
+
+.roles-office-container .offices-container .list-offices .item-office.child  {
+  background-color: white;
+  color: black;
+}
+
+.roles-office-container .offices-container .list-offices .item-office.parent {
+  background-color: #E0DDDD;
+  color: black;
+}
+
+.roles-office-container .offices-container .list-offices .item-office.selected {
+  background-color: #4897C8;
+  color: white;
+  border-bottom: 1px solid white;
+}
+
+.roles-office-container .offices-container .list-offices .item-office:hover {
+  background-color: #4897C8;
+  color: white;
+}
+
+/*
+  Usuarios
+*/
+
+.roles-office-container .users-container {
+  flex: 1;
+  display: flex;
+  flex-flow: column wrap;
+  margin-left:0.5em;
+}
+
+.roles-office-container .users-container .title {
+  background: linear-gradient(to right,#275276, #4897C8);
+  color:white;
+  text-align:center;
+  font-weight: bold;
+}
+
+.roles-office-container .users-container .search {
+  display: flex;
+  flex-flow: row wrap;
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+  padding-left:0.5em;
+}
+
+.roles-office-container .users-container .search .title {
+  margin-right: 1em;
+  background: white;
+  color: black;
+}
+
+.roles-office-container .users-container .search .searchUser {
+
+}
+
+.roles-office-container .users-container .list-users {
+  display: flex;
+  flex-flow: column wrap;
+  padding-left:0.5em;
+}
+
+.roles-office-container .users-container .list-users .item-user {
+  cursor: pointer;
+}
+
+.roles-office-container .users-container .list-users .item-user:nth-child(even)  {
+  background-color: white;
+  color: black;
+}
+
+.roles-office-container .users-container .list-users .item-user:nth-child(odd)  {
+  background-color: #E0DDDD;
+  color: black;
+}
+
+.roles-office-container .users-container .list-users .item-user.selected {
+  background-color: #4897C8;
+  color: white;
+}
+
+.roles-office-container .users-container .list-users .item-user:hover {
+  background-color: #4897C8;
+  color: white;
+}
+
+
+/*
+  Roles
+*/
+
+.roles-office-container .content {
+  flex: 1;
+  display: flex;
+  flex-flow: column wrap;
+  margin-left:0.5em;
+}
+
+.roles-office-container .content.hidden {
+  display:none;
+}
+
+.roles-office-container .content .roles-container {
+
+}
+
+.roles-office-container .content .roles-container .title {
+  background: linear-gradient(to left,#275276, #4897C8);
+  color:white;
+  text-align:center;
+  font-weight: bold;
+}
+
+.roles-office-container .content .roles-container .list-roles {
+  display: flex;
+  flex-flow: column wrap;
+  padding-left:0.5em;
+}
+
+.roles-office-container .content .roles-container .list-roles .item-role {
+  cursor: pointer;
+}
+
+.roles-office-container .content .roles-container .list-roles .item-role:nth-child(even) {
+  background-color: white;
+  color:black;
+}
+
+.roles-office-container .content .roles-container .list-roles .item-role:nth-child(odd) {
+  background-color: #E0DDDD;
+  color: black;
+}
+
+.roles-office-container .content .roles-container .list-roles .item-role.selected {
+  background-color: #4897C8;
+  color: white;
+}
+
+.roles-office-container .content .roles-container .list-roles .item-role:hover {
+  background-color: #4897C8;
+  color: white;
+}
+
+/*
+  Acciones
+*/
+
+.roles-office-container .content .actions-container {
+  display:flex;
+  flex-flow: row wrap;
+}
+
+
+.roles-office-container .content .actions-container button {
+  flex: 1;
+  cursor: pointer;
+}

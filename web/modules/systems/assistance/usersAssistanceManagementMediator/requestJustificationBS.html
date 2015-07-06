@@ -19,16 +19,16 @@
 
         <div class="margin" ng-class="{true:'visible', false:'hidden'}[isSelectedRequest()]">
            <p class="parrafos">Seleccione el día</p>
-            <input type="date" class="date" ng-model="rjModel.date" ng-change="defineData()" >
+            <input type="date" class="date" ng-model="rjModel.date" ng-change="isDataDefined()">
             <p class="parrafos">Seleccione Horas</p>
 
             <div class="titlesHours">
               <div class="spanSE"><span>Desde</span></div>
-              <div class="spanSE"><input class="timeMargin" type="time" ng-model="rjModel.begin" ng-change="defineData()"></div>
+              <div class="spanSE"><input class="timeMargin" type="time" ng-model="rjModel.begin" ng-change="isDataDefined()"></div>
             </div>
             <div class="hours">
               <div class="spanSE2"><span> Hasta</span></div>
-              <div class="spanSE"><input type="time" ng-model="rjModel.end" ng-change="defineData()"></div>
+              <div class="spanSE"><input type="time" ng-model="rjModel.end" ng-change="isDataDefined()"></div>
             </div>
         </div>
 

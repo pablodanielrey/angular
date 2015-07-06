@@ -1,0 +1,6 @@
+config = {
+  host: "ws1.econo.unlp.edu.ar",
+  port: "80",
+  ssl_host: "127.0.0.1",
+  ssl_port: "8002"
+}

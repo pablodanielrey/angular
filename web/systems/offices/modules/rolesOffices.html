@@ -1,0 +1,58 @@
+<div class="roles-office-container">
+
+  <div class="offices-container">
+    <div class="title">
+      Oficina
+    </div>
+
+    <div class="search">
+      <span class="title">Buscar</span>
+      <input type="text" class="searchOffice" ng-model="vm.model.searchOffice"/>
+    </div>
+
+    <div class="list-offices">
+      <div class="item" ng-repeat="office in vm.model.offices  | orderBy:['name']">
+        <div class="item-office parent" ng-class="{true:'selected'}[vm.isSelectedOffice(office)]" ng-click="vm.selectOffice(office)" ng-if="!office.hidden">{{office.name}}</div>
+        <div class="item-office child" ng-class="{true:'selected'}[vm.isSelectedOffice(child)]" ng-click="vm.selectOffice(child)" ng-repeat="child in office.childrens | filter:{name:vm.model.searchOffice} | orderBy:['name']">
+          <div><i class="fa fa-arrow-right"></i>{{child.name}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="users-container">
+    <div class="title">
+      Usuarios
+    </div>
+
+    <div class="search">
+      <span class="title">Buscar</span>
+      <input type="text" class="searchUser" ng-model="vm.model.searchUser"/>
+    </div>
+
+    <div class="list-users">
+      <div class="item-user" ng-class="{true:'selected'}[vm.isSelectedUser(user)]" ng-click="vm.selectUser(user)" ng-repeat="user in vm.model.users | filter: vm.model.searchUser | orderBy:['lastname','name']">
+        <div>{{user.lastname}}, {{user.name}}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content" ng-class="{false:'hidden'}[vm.isDisplayContentRole()]">
+    <div class="roles-container">
+      <div class="title">
+        Asignar roles
+      </div>
+      <div class="list-roles">
+        <div class="item-role" ng-class="{true:'selected'}[vm.isSelectedRole(role)]" ng-click="vm.selectRole(role)" ng-repeat="role in vm.model.roles | orderBy:['name']">
+          <div>{{role.name}}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions-container">
+      <button ng-click="vm.cancel()">Cancelar</button>
+      <button ng-click="vm.save()">Guardar</button>
+    </div>
+  </div>
+
+</div>

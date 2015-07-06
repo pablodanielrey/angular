@@ -173,7 +173,7 @@ class BSJustification(Justification):
         uwhLen += 1
 
 
-      #obtener fechas mas inicial y mas final del userSchedule (se supone que el userSchedule esta ordenado!)
+      #obtener fecha mas inicial del userSchedule (se supone que el userSchedule esta ordenado!)
       start = userSchedule[0]["start"]
 
       schedule = Schedule()
@@ -190,6 +190,7 @@ class BSJustification(Justification):
       if rj[0] != userSchedule[schIndex]["start"] and rj[1] != userSchedule[schIndex]["end"]:
         calcStart = uwh[schIndex]["end"]
         calcEnd =  uwh[schIndex+1]["start"]
+
       else:
         if(rj[0] == userSchedule[schIndex]["start"]):
           calcStart = userSchedule[schIndex]["start"]
@@ -198,6 +199,10 @@ class BSJustification(Justification):
           calcStart = uwh[schIndex]["end"]
           calcEnd =  userSchedule[schIndex]["end"]
 
+      #chequear si calcStart y calcEnd son distintos de None
+      if calcStart is None or calcEnd is None:
+          return  self._getStockFromDates(stock, rj[0], rj[1])
+          
       #comparar diferencias de log y diferencia de boleta de salida, se restara la menor al stock
       differenceLog = (calcEnd - calcStart).total_seconds()
       differenceRj = (rj[1] - rj[0]).total_seconds()      
