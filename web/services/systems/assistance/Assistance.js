@@ -81,7 +81,7 @@ app.service('Assistance', ['Utils','Messages','Session',
     this.getFailsByFilter = function(filter, callbackOk, callbackError){
       var msg = {
 					id: Utils.getId(),
-					action: 'getFailsFilter',
+					action: 'getFailsByFilter',
 					session: Session.getSessionId(),
 					request: {
 						userId: filter.userId,

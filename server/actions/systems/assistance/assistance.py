@@ -22,7 +22,7 @@ from model.systems.assistance.date import Date
 
 
 
-"""
+'''
 query :
 {
   id:,
@@ -46,7 +46,7 @@ response :
   ]}
 
 }
-"""
+'''
 
 class GetFailsByDate:
 
@@ -150,7 +150,159 @@ class GetFailsByDate:
             con.close()
 
 
-"""
+'''
+query :
+{
+  id:,
+  action:"getFailsByFilter",
+  session:,
+  request:{
+      userId: "Id de usuario"
+      officeId: "Id de oficina"
+      begin: "fecha de inicio"
+      end: "fecha de finalizacion"
+      type: "tipo de filtro"
+      count: "cantidad de veces que se produce la falla"
+      periodicity: "periodicidad solicitada"
+  }
+
+}
+
+response :
+{
+  id: "id de la petición",
+  ok: "caso exito",
+  error: "error del servidor",
+  response:[
+    {user: 'datos del usuario ', fail: "datos correspondiente a la falla"}
+  ]
+
+}
+'''
+
+class GetFailsByFilter:
+
+    profiles = inject.attr(Profiles)
+    config = inject.attr(Config)
+    date = inject.attr(Date)
+    
+    checks = inject.attr(ScheduleChecks)
+    offices = inject.attr(Offices)
+    schedule = inject.attr(Schedule)
+    assistance = inject.attr(Assistance)
+    
+    #manejar accion
+    def handleAction(self, server, message):
+        if (message['action'] != 'getFailsByFilter'): 
+            return False
+            
+        #chequear parametros
+        if ('id' not in message) or ('session' not in message) or ('request' not in message) or ('begin' not in message['request']) or ('end' not in message['request']) or (('userId' not in message['request']) or ('officeId' not in message['request'])): 
+            response = {'id':message['id'], 'error':'Insuficientes parámetros'} 
+            server.sendMessage(response) 
+            return True
+
+
+        #chequear permisos
+        sid = message['session'] 
+        self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
+        
+        
+        #definir datos
+        sessionUserId = self.profiles.getLocalUserId(sid)
+                            
+        begin = message['request']['begin'] 
+        begin = self.date.parse(begin)
+
+        end = message['request']['end'] 
+        end = self.date.parse(end)
+
+
+        userId = None
+        if 'userId' in message['request']: userId = message['request']['userId'] 
+
+        officeId = None
+        if 'officeId' in message['request']: userId = message['request']['officeId'] 
+
+        type = None
+        if 'type' in message['request']: userId = message['request']['type'] 
+
+        count = None
+        if 'count' in message['request']: userId = message['request']['count']
+
+        periodicity = None
+        if 'periodicity' in message['request']: userId = message['request']['periodicity']
+        
+        
+        #definir conexion con la base de datos
+        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+        
+        
+        
+        try:
+            assistanceFails = [] #lista con los valores de retorno
+            officesIds = []      #id de oficinas a las cuales se consularan los fallos
+            usersId = []        #id de los usuarios a los cuales se consultaran los fallos
+            
+            #definir oficinas que el usuario de sesion tiene autorizadas a consultar
+            offices = self.offices.getOfficesByUserRole(con,sessionUserId,tree=True,role='autoriza')
+            officesIds = list(map(lambda x : x['id'], offices))
+
+            if officeId != None:
+                if officeId in officesIds:
+                    officesIds = [officeId]
+                else:
+                    officesIds = []
+                    
+            if officesIds:
+                usersIds = self.offices.getOfficesUsers(con,officesIds)
+                
+                if usersIds:
+                
+                    if(userId != None):
+                        if userId in userIds:
+                            userIds = [userId]
+                        else:
+                            userIds = []
+
+                    
+                    (users,fails) = self.assistance.checkSchedule(usersIds,begin,end)
+
+                    filteredFails = list(filter(lambda x: len(x['justifications']) <= 0,fails))
+                    b64 = self.assistance.arrangeCheckSchedule(con,filteredFails)
+
+                    for user in users:
+                        ffails = self.fails.filterUser(user['id'],fails)
+                        
+                        for f in ffails:
+                            #solo agrego las que no tienen justificaciones
+                            if ('justifications' not in f) or (len(f['justifications']) <= 0):
+                                data = {
+                                    'user':user,
+                                    'fail':f
+                                }
+                                assistanceFails.append(data)
+
+            response = {
+                'id':message['id'],
+                'ok':'',
+                'response':assistanceFails,
+                'base64':b64
+            }
+            
+            server.sendMessage(response)
+            return True
+
+        except Exception as e:
+            logging.exception(e)
+            raise e
+
+        finally:
+            con.close()
+               
+               
+
+'''
 query :
 {
   id:,
@@ -177,7 +329,7 @@ response :
   }
 
 }
-"""
+'''
 
 
 class GetAssistanceStatus:
@@ -226,7 +378,7 @@ class GetAssistanceStatus:
 
 
 
-"""
+'''
 query :
 {
   id:,
@@ -256,7 +408,7 @@ response :
         }]
 
 }
-"""
+'''
 
 
 class GetAssistanceStatusByUsers:
@@ -309,7 +461,7 @@ class GetAssistanceStatusByUsers:
             con.close()
 
 
-"""
+'''
 
 {
   id:,
@@ -339,7 +491,7 @@ response :
 
 }
 
-"""
+'''
 
 class GetAssistanceData:
 
@@ -350,14 +502,14 @@ class GetAssistanceData:
     dateutils = inject.attr(Date)
 
 
-    """ todas las fechas deben ser tratadas en UTC dentro del sistema """
+    ''' todas las fechas deben ser tratadas en UTC dentro del sistema '''
     def adjustTimeZone(self,request):
 
         date = datetime.datetime.now()
         if 'date' in request:
             date = dateutil.parser.parse(request['date'])
 
-        """ asumo que es fecha local si no vino con tzinfo, no se hace corrección de horario """
+        ''' asumo que es fecha local si no vino con tzinfo, no se hace corrección de horario '''
         if self.dateutils.isNaive(date):
             date = date.replace(tzinfo=dateutil.tz.tzlocal())
 
@@ -379,7 +531,7 @@ class GetAssistanceData:
             return True
 
 
-        """ precondiciones del request """
+        ''' precondiciones del request '''
         request = message['request']
 
         if 'user_id' not in request:
@@ -423,7 +575,7 @@ class GetAssistanceData:
 
 
 
-"""
+'''
 
 {
   id:,
@@ -455,7 +607,7 @@ response :
 
 }
 
-"""
+'''
 
 class GetSchedules:
 
@@ -479,7 +631,7 @@ class GetSchedules:
             return True
 
 
-        """ precondiciones del request """
+        ''' precondiciones del request '''
         request = message['request']
 
         if 'user_id' not in request:
@@ -528,7 +680,7 @@ class GetSchedules:
             con.close()
 
 
-"""
+'''
 {
     id:'',
     action:"newSchedule",
@@ -551,7 +703,7 @@ response :
   ok: "caso exito",
   error: "error del servidor",
 }
-"""
+'''
 
 class NewSchedule:
 
@@ -589,7 +741,7 @@ class NewSchedule:
             server.sendMessage(response)
             return True
 
-        """ precondiciones del request """
+        ''' precondiciones del request '''
         request = message['request']
 
         if 'user_id' not in request:
@@ -707,7 +859,7 @@ class NewSchedule:
             con.close()
 
 
-"""
+'''
 peticion:
 {
 	"id":"",
@@ -729,7 +881,7 @@ respuesta:
     }
 }
 
-"""
+'''
 
 class GetPosition:
 
@@ -738,7 +890,7 @@ class GetPosition:
     positions = inject.attr(Positions)
 
 
-    """ manejar accion """
+    ''' manejar accion '''
     def handleAction(self, server, message):
 
         if (message['action'] != 'getPosition'):
@@ -754,20 +906,20 @@ class GetPosition:
         sid = message['session']
         self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
 
-        """ definir datos """
+        ''' definir datos '''
         userId = message['request']['userId']
 
-        """ definir conexión con la base de datos """
+        ''' definir conexión con la base de datos '''
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
 
-            """ consultar datos """
+            ''' consultar datos '''
             positions = self.positions.find(con,userId)
             position = None
             if len(positions) > 0:
                position = positions[0]['name']
 
-            """ enviar mensaje de respuesta """
+            ''' enviar mensaje de respuesta '''
             response = {
                'id':message['id'],
                'ok':'',
@@ -845,7 +997,7 @@ class UpdatePosition:
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
 
-            """ insertar datos """
+            ''' insertar datos '''
             events = self.positions.update(con,userId,position)
             con.commit()
 
@@ -859,7 +1011,7 @@ class UpdatePosition:
             }
             server.sendMessage(response)
 
-            """ disparar eventos """
+            ''' disparar eventos '''
             for e in events:
                 self.events.broadcast(server,e)
 

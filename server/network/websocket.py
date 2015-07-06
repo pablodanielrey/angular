@@ -47,7 +47,7 @@ from actions.requests.requests import CreateAccountRequest, ResendAccountRequest
 
 ''' sistemas '''
 
-from actions.systems.assistance.assistance import GetAssistanceData, GetAssistanceStatus, GetAssistanceStatusByUsers, GetFailsByDate, GetSchedules, NewSchedule, GetPosition, UpdatePosition
+from actions.systems.assistance.assistance import GetAssistanceData, GetAssistanceStatus, GetAssistanceStatusByUsers, GetFailsByDate, GetFailsByFilter, GetSchedules, NewSchedule, GetPosition, UpdatePosition
 from actions.systems.assistance.logs import GetAssistanceLogs
 from actions.systems.assistance.justifications import GetJustifications, GetJustificationStock, GetJustificationRequests, GetJustificationRequestsToManage, GetJustificationRequestsByDate, RequestJustification,  RequestJustificationRange, UpdateJustificationRequestStatus, GetSpecialJustifications, RequestGeneralJustification, GetGeneralJustificationRequests, DeleteGeneralJustificationRequest, RequestGeneralJustificationRange, GetJustificationsByUser, UpdateJustificationStock
 from actions.systems.assistance.overtime import GetOvertimeRequests, GetOvertimeRequestsToManage, RequestOvertime, UpdateOvertimeRequestStatus
@@ -80,7 +80,7 @@ actions = [
     CreateStudent(), FindStudent(), PersistStudent(), FindAllStudents(),
     PersistTutorData(), ListTutorData(),
     GetOffices(), GetUserOfficeRoles(), GetUserInOfficesByRole(), GetOfficesByUserRole(), GetOfficesUsers(), DeleteOfficeRole(), AddOfficeRole(), PersistOfficeRole(), PersistOffice(), RemoveUserFromOffice(), AddUserToOffices(), GetRolesAdmin(),
-    GetAssistanceLogs(), GetAssistanceData(), GetSchedules(), NewSchedule(), GetPosition(), UpdatePosition(), GetFailsByDate(), GetAssistanceStatus(), GetAssistanceStatusByUsers(), GetOffices(), GetJustifications(), GetJustificationsByUser(), GetJustificationStock(), UpdateJustificationStock(), GetJustificationRequests(), GetJustificationRequestsToManage(), GetJustificationRequestsByDate(), RequestJustification(),  RequestJustificationRange(), UpdateJustificationRequestStatus(),GetSpecialJustifications(), RequestGeneralJustification(), GetGeneralJustificationRequests(), DeleteGeneralJustificationRequest(), RequestGeneralJustificationRange(),
+    GetAssistanceLogs(), GetAssistanceData(), GetSchedules(), NewSchedule(), GetPosition(), UpdatePosition(), GetFailsByDate(), GetFailsByFilter(), GetAssistanceStatus(), GetAssistanceStatusByUsers(), GetOffices(), GetJustifications(), GetJustificationsByUser(), GetJustificationStock(), UpdateJustificationStock(), GetJustificationRequests(), GetJustificationRequestsToManage(), GetJustificationRequestsByDate(), RequestJustification(),  RequestJustificationRange(), UpdateJustificationRequestStatus(),GetSpecialJustifications(), RequestGeneralJustification(), GetGeneralJustificationRequests(), DeleteGeneralJustificationRequest(), RequestGeneralJustificationRange(),
     GetOvertimeRequests(), GetOvertimeRequestsToManage(), RequestOvertime(), UpdateOvertimeRequestStatus(),
     CreateAccountRequest(), ResendAccountRequest(), ConfirmAccountRequest(), ListAccountRequests(), ApproveAccountRequest(), RemoveAccountRequest(), RejectAccountRequest()
 ]

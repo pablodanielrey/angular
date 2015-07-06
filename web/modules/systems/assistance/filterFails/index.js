@@ -21,6 +21,11 @@ app.controller('FilterFailsCtrl', ["$scope", "$timeout", "$window", "Assistance"
     offices: [],        //usuarios consultados para seleccionar
     officesSelectionDisable: true, //flag para indicar que se debe deshabilitar la seleccion
     
+    begin:new Date(),
+    end:new Date(),
+    type:null,
+    count:null,
+    periodicity:null
   };
 
   /******************
@@ -175,7 +180,7 @@ app.controller('FilterFailsCtrl', ["$scope", "$timeout", "$window", "Assistance"
   
   
   
-  $scope.initializeDate = function() {
+  $scope.formatDates = function() {
     if(!$scope.model.begin) $scope.model.begin = new Date();
     $scope.model.begin.setHours(0);
     $scope.model.begin.setMinutes(0);
@@ -188,14 +193,30 @@ app.controller('FilterFailsCtrl', ["$scope", "$timeout", "$window", "Assistance"
   
   
   
+  $scope.checkSubmit = function(){
+    return false;
+  };
+  
+  
   
   
   
   $scope.search = function() {
     $scope.model.searching = true;
     $scope.model.assistanceFails = [];
-    $scope.initializeDate();
-    Assistance.getFailsByDate($scope.model.begin, $scope.model.end,
+    $scope.formatDates();
+    
+    var filter = {
+      userId: ($scope.model.selectedUser !== null) ? $scope.model.selectedUser.id : null,
+      officeId: ($scope.model.selectedOffice !== null) ? $scope.model.selectedOffice.id : null,
+      begin: $scope.model.begin,
+      end: $scope.model.end,
+      type: $scope.model.type,
+      count: $scope.model.count,
+      periodicity: $scope.model.periodicity
+    };
+    
+    Assistance.getFailsByFilter(filter,
       function(response) {
         $scope.model.base64 = response.base64;
 
@@ -216,8 +237,6 @@ app.controller('FilterFailsCtrl', ["$scope", "$timeout", "$window", "Assistance"
           r.fail.dayOfWeek = {};
           r.fail.dayOfWeek.name = Utils.getDayString(date);
           r.fail.dayOfWeek.number = date.getDay();
-
-
 
           if (r.fail.startSchedule || r.fail.endSchedule) {
             r.fail.dateSchedule = (r.fail.startSchedule) ? r.fail.startSchedule : r.fail.endSchedule;

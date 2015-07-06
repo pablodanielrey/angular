@@ -54,7 +54,7 @@
           <span><i class="fa fa-user-plus"></i> Fecha inicial</span>
         </div>
         <div>
-          <input class="inputSearch" type="date" ng-model="model.begin">
+          <input class="inputSearch" type="date" ng-model="model.begin" ng-change="formatDates()">
         </div>
       </div>
     </div>
@@ -65,7 +65,7 @@
           <span><i class="fa fa-user-plus"></i> Fecha final </span>
         </div>
         <div>
-          <input class="inputSearch" type="date" ng-model="model.end">
+          <input class="inputSearch" type="date" ng-model="model.end" ng-change="formatDates()">
         </div>
       </div>
     </div>
@@ -97,7 +97,7 @@
       </div>
     </div>
     
-    <button ng-click="search()"><i class="fa fa-search"></i> Buscar</Button>
+    <button ng-click="search()" ng-disabled="checkSubmit()"><i class="fa fa-search"></i> Buscar</Button>
   </form>  
   
   
