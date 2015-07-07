@@ -341,18 +341,17 @@ function MainFirmwareController($rootScope,$scope, $timeout, $location, Notifica
        return;
      }
 
-
-     if (vm.model.adminMode && data.profile != undefined && data.profile == 'admin') {
-       $location.path("/enroll");
-       return;
-     }
-
-     // muestro la info de login del usuario
+     // registro los datos del usuario logueado
      $scope.$parent.logData = {
         date:new Date(data.log.log),
         user:data.user
      }
-     $location.path('/log');
+
+     if (vm.model.adminMode && data.profile != undefined && data.profile == 'admin') {
+       $location.path("/enroll");
+     } else {
+       $location.path('/log');
+     }
 
    });
 
