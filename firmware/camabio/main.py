@@ -33,10 +33,13 @@ class Identifier(threading.Thread):
     def run(self):
         global finalize
         while not finalize:
-            logging.debug('iniciando identificación')
-            self.firmware.identify()
-            logging.debug('finalizando identificación')
-
+            try:
+                logging.debug('iniciando identificación')
+                self.firmware.identify()
+            except Exception as e:
+                logging.critical(e)
+            finally:
+                logging.debug('finalizando identificación')
 
 
 f = inject.instance(Firmware)
