@@ -33,7 +33,9 @@ class Identifier(threading.Thread):
     def run(self):
         global finalize
         while not finalize:
+            logging.debug('iniciando identificación')
             self.firmware.identify()
+            logging.debug('finalizando identificación')
 
 
 
