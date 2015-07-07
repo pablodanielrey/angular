@@ -60,8 +60,8 @@ class ActionsServerProtocol(WebSocketServerProtocol):
     def _sendEncodedMessage(self,msg):
         if (len(msg) < 1024):
             logging.debug('server -> cliente {}'.format(msg))
-            """ super(WebSocketServerProtocol,self).sendMessage(msg,False)"""
-            reactor.callFromThread(sendMessage,super(WebSocketServerProtocol,self),msg)
+        """ super(WebSocketServerProtocol,self).sendMessage(msg,False)"""
+        reactor.callFromThread(sendMessage,super(WebSocketServerProtocol,self),msg)
 
 
     def sendException(self,e):
@@ -169,6 +169,15 @@ class BroadcastServerFactory(WebSocketServerFactory):
     def __init__(self, debug=False, debugCodePaths=False):
         WebSocketServerFactory.__init__(self, debug=debug, debugCodePaths=debugCodePaths)
         self.clients = []
+
+
+    def _encodeMessage(self,msg):
+        jmsg = json.dumps(msg, ensure_ascii = False, cls=DateTimeEncoder)
+        if (len(jmsg) < 1024):
+            logging.debug(jmsg)
+
+        ejmsg = jmsg.encode('utf-8')
+        return ejmsg
 
 
     def register(self, client):

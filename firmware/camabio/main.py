@@ -32,34 +32,33 @@ class Identifier(threading.Thread):
         self.factory = factory
 
     def _error(self,h):
-        self.factory.broadcast(
-            {
-                'type':'ErrorEvent',
-                'data':{
-                    'error':'La huella {} no esta asignada a ninguna persona'.format(h)
-                }
+        msg = {
+            'type':'ErrorEvent',
+            'data':{
+                'error':'La huella {} no esta asignada a ninguna persona'.format(h)
             }
-        )
+        }
+        emsg = self.factory._encodeMessage(msg)
+        self.factory.broadcast(emsg)
 
     def _identified(self,log):
+        msg = None
         if log:
-            self.factory.broadcast(
-                {
-                    'type':'MsgEvent',
-                    'data':{
-                        'msg':log
-                    }
+            msg = {
+                'type':'MsgEvent',
+                'data':{
+                    'msg':log
                 }
-            )
+            }
         else:
-            self.factory.broadcast(
-                {
-                    'type':'MsgEvent',
-                    'data':{
-                        'msg':'No se encuentra la huella'
-                    }
+            msg = {
+                'type':'MsgEvent',
+                'data':{
+                    'msg':'No se encuentra la huella'
                 }
-            )
+            }
+        emsg = self.factory._encodeMessage(msg)
+        self.factory.broadcast(emsg)
 
 
     def run(self):
@@ -72,6 +71,8 @@ class Identifier(threading.Thread):
                 logging.critical(e)
             finally:
                 logging.debug('finalizando identificación')
+
+
 
 
 f = inject.instance(Firmware)
