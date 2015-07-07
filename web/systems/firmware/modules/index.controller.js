@@ -328,8 +328,8 @@ function MainFirmwareController($rootScope,$scope, $timeout, $location, Notifica
        }
      } else {
        $scope.$parent.logData = {
-          date:data.data.log.log,
-          user:data.data.user
+          date:data.log.log,
+          user:data.user
        }
 
        $location.path('/log');
