@@ -53,7 +53,7 @@ app.controller("EnrollCtrl", ['$rootScope','$scope','$location','$timeout','Noti
 
     $scope.addUser = function() {
 
-      if ($scope.$parent.logData == undefined || $scope.$parent.sid == undefined) {
+      if ($scope.$parent.logData == undefined || $scope.$parent.logData.sid == undefined) {
         Notifications.message('Error de Sistema');
         $scope.cancel()
       }
