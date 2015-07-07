@@ -48,6 +48,7 @@ class Profiles:
             return False
 
         except Exception as e:
+            logging.exception(e)
             return False
 
 
