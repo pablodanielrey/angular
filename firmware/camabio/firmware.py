@@ -7,6 +7,7 @@ import reader
 from template import Templates
 
 from model.config import Config
+from model.session import Session
 from model.users.users import Users
 from model.systems.assistance.devices import Devices
 from model.systems.assistance.logs import Logs
