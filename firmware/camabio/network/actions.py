@@ -70,7 +70,11 @@ class Enroll:
 
         ''' chequeo el nivel de acceso que tiene la persona '''
         sid = message['sid']
-        self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE'])
+        if not self.profiles._checkAccess(sid,['ADMIN-ASSISTANCE']):
+            response = {'id':message['id'], 'error':'Insuficiente nivel de acceso'}
+            server.sendMessage(response)
+            return True
+
         ''' userId = self.profiles.getLocalUserId(sid) '''
 
 
@@ -95,4 +99,3 @@ class Enroll:
         except Exception as e:
             server.sendError(message,e)
             return True
-            
