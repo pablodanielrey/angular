@@ -64,7 +64,9 @@ class Firmware:
 
 
     def identify(self):
+        logging.debug('reader.identify')
         h = self.reader.identify()
+        logging.debug('reader identify = {}'.format(h))
         if h:
             self.conn = self.__get_database()
 

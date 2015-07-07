@@ -171,7 +171,7 @@ class FirmwareReader(Reader):
         self.ni = self.ni + 1
         self._signal()
 
-        logging.debug('identify')
+        logging.debug('reader.identify')
         try:
             data = camabio.createPackage(0x102,0,0)
             cserial.write(data)
@@ -180,6 +180,7 @@ class FirmwareReader(Reader):
             huella = None
             exit = False
             while not exit:
+                logggin.debug('readding serial')
                 resp = cserial.readS(24)
                 ret = camabio.getAttrFromPackage(camabio.RET,resp)
                 data = camabio.getAttrFromPackage(camabio.DATA,resp)
