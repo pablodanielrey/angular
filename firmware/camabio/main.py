@@ -32,10 +32,34 @@ class Identifier(threading.Thread):
         self.factory = factory
 
     def _error(self,h):
-        self.factory.broadcast('huella {} no asignada a persona'.format(h))
+        self.factory.broadcast(
+            {
+                'type':'ErrorEvent',
+                'data':{
+                    'error':'La huella {} no esta asignada a ninguna persona'.format(h)
+                }
+            }
+        )
 
     def _identified(self,log):
-        self.factory.broadcast(log)
+        if log:
+            self.factory.broadcast(
+                {
+                    'type':'MsgEvent',
+                    'data':{
+                        'msg':log
+                    }
+                }
+            )
+        else:
+            self.factory.broadcast(
+                {
+                    'type':'MsgEvent',
+                    'data':{
+                        'msg':'No se encuentra la huella'
+                    }
+                }
+            )
 
 
     def run(self):
