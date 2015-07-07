@@ -55,7 +55,7 @@ class Firmware:
                     'name':'autorgenerado',
                     'lastname':'autogenerado'
                 }
-                userId = self.users.createUser(conn,user)
+                userId = self.users.createUser(self.conn,user)
             else:
                 userId = user['id']
 
