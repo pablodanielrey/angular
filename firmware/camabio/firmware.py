@@ -90,6 +90,10 @@ class Firmware:
                 }
                 sid = self.session._create(self.conn,sess)
 
+                roles = None
+                if self.profiles.__checkAccess(con,sid,['ADMIN-ASSISTANCE']):
+                    roles = 'admin'
+
                 self.conn.commit()
 
 
@@ -97,7 +101,7 @@ class Firmware:
                 logging.debug('log {} persona {}'.format(log,user))
 
                 if notifier:
-                    notifier._identified(log,user,sid)
+                    notifier._identified(log,user,sid,roles)
 
             else:
                 logging.critical('{} - huella identificada en el indice {}, pero no se encuentra ningún mapeo con un usuario'.format(self.date.now(),h))

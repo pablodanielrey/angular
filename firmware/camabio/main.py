@@ -42,7 +42,7 @@ class Identifier(threading.Thread):
         emsg = self.factory._encodeMessage(msg)
         self.factory.broadcast(emsg)
 
-    def _identified(self,log=None,user=None,sid=None):
+    def _identified(self,log=None,user=None,sid=None,roles=None):
         msg = None
         if log:
             msg = {
@@ -53,6 +53,9 @@ class Identifier(threading.Thread):
                     'sid':sid
                 }
             }
+            if roles:
+                msg['data']['profile'] = 'admin'
+
         else:
             msg = {
                 'type':'IdentifiedEvent',

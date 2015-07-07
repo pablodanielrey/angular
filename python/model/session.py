@@ -61,17 +61,21 @@ class Session:
         return s
 
 
+    def _findSession(self,con,id):
+        self.removeExpired(con)
+        cur = con.cursor()
+        cur.execute('select id,data,expire from system.sessions where id = %s',(id,))
+        s = cur.fetchone()
+        if s:
+            return self.convertToDict(s)
+        else:
+            raise SessionNotFound()
+
+
     def findSession(self,id):
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
-            self.removeExpired(con)
-            cur = con.cursor()
-            cur.execute('select id,data,expire from system.sessions where id = %s',(id,))
-            s = cur.fetchone()
-            if s:
-                return self.convertToDict(s)
-            else:
-                raise SessionNotFound()
+            return self._findSession(con,id)
 
         finally:
             con.close()
@@ -154,6 +158,16 @@ class Session:
             con.close()
 
 
-    def getSession(self,id):
-        s = self.findSession(id)
+
+    def _getSession(self,con,id):
+        s = self._findSession(con,id)
         return s['data']
+
+
+    def getSession(self,id):
+        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+        try:
+            return self._getSession(con,id)
+
+        finally:
+            con.close()
