@@ -9,6 +9,29 @@ insert into credentials.auth_profile (user_id,profile) values ('1','ADMIN');
 insert into credentials.auth_profile (user_id,profile) values ('1','ADMIN-ASSISTANCE');
 insert into credentials.auth_profile (user_id,profile) values ('1','ADMIN-OFFICES');
 
+  /*
+    oficina donde se asignan los usuarios importados desde los relojes
+  */
+insert into offices.offices (id,name) values ('45cc065a-7033-4f00-9b19-d7d097129db3','Asistencia Usuarios Nuevos');
+
+
+/*
+  manejo de los cargos de las personas que estan dentro de estas oficinas
+*/
+insert into offices.offices_roles (user_id,role,office_id) select p.id,'manage-positions',o.id from offices.offices o, profile.users p where o.parent is null and p.dni in ('1');
+
+/*
+  manejo de las oficinas
+*/
+insert into offices.offices_roles (user_id,role,office_id) select p.id,'admin-office',o.id from offices.offices o, profile.users p where o.parent is null and p.dni in ('1');
+
+
+
+
+
+
+
+
 insert into assistance.justifications (id,name) values ('76bc064a-e8bf-4aa3-9f51-a3c4483a729a','Licencia Anual Ordinaria');
 
 insert into assistance.justifications (id,name) values ('b309ea53-217d-4d63-add5-80c47eb76820','Cumpleaños');
@@ -38,10 +61,7 @@ insert into assistance.positions_justifications (position, justification_id) sel
 insert into assistance.positions_justifications (position, justification_id) select 'Contrato', id as justification_id from assistance.justifications;
 
 
-  /*
-    oficina donde se asignan los usuarios importados desde los relojes
-  */
-insert into offices.offices (id,name) values ('45cc065a-7033-4f00-9b19-d7d097129db3','Asistencia Usuarios Nuevos');
+
 
 
 /*
