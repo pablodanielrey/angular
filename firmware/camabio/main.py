@@ -31,7 +31,8 @@ class Identifier(threading.Thread):
         self.firmware = firmware
 
     def run(self):
-        While not finalize:
+        global finalize
+        while not finalize:
             self.firmware.identify()
 
 
