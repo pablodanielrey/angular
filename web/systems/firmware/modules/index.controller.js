@@ -322,7 +322,7 @@ function MainFirmwareController($rootScope,$scope, $timeout, $location, Notifica
        Notifications.message(data.error);
        return;
      }
-   }
+   });
 
 
 
