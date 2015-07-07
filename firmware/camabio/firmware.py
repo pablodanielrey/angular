@@ -82,7 +82,7 @@ class Firmware:
                 self.logs.persist(self.conn,log)
                 self.conn.commit()
 
-                user = self.users.findUserById(self.conn,userId)
+                user = self.users.findUser(self.conn,userId)
 
                 logging.debug('log {} persona {}'.format(log,user))
 
