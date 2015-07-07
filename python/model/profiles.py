@@ -14,7 +14,7 @@ class Profiles:
     config = inject.attr(Config)
 
 
-    def __checkAccess(self,con,sid,roles):
+    def _checkAccessWithCon(self,con,sid,roles):
 
         if sid is None:
             return False
@@ -65,7 +65,7 @@ class Profiles:
 
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
-            return self.__checkAccess(con,sid,roles)
+            return self.__checkAccessWithCon(con,sid,roles)
 
         except Exception as e:
             logging.exception(e)
