@@ -19,7 +19,14 @@ class Profiles:
         en caso de no tener ninguno o error dispara AccessDenied
     """
     def checkAccess(self,sid,roles):
+
+        if sid is None:
+            raise AccessDenied()
+
         s = self.session.getSession(sid)
+        if s is None:
+            raise AccessDenied()
+
         user_id = s[self.config.configs['session_user_id']]
         if user_id == None:
             logging.debug('no se encuenta user_id con el id de sesión %s' % sid)

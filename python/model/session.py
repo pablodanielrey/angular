@@ -101,23 +101,29 @@ class Session:
 
 
 
+    def _create(self,con,data):
+        self.removeExpired(con)
+        id = str(uuid.uuid4());
+        actual = datetime.datetime.now()
+        expire = actual + self.expire
+        session = (id,self.sessionToJson(data),expire)
+
+        cur = con.cursor()
+        cur.execute('insert into system.sessions (id,data,expire) values (%s,%s,%s)',session)
+
+        return id
+
+
     def create(self,data):
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
-            self.removeExpired(con)
-            id = str(uuid.uuid4());
-            actual = datetime.datetime.now()
-            expire = actual + self.expire
-            session = (id,self.sessionToJson(data),expire)
-
-            cur = con.cursor()
-            cur.execute('insert into system.sessions (id,data,expire) values (%s,%s,%s)',session)
-
+            id = self._create(con,data)
             con.commit()
             return id
 
         finally:
             con.close()
+
 
 
     """
