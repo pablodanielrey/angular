@@ -342,21 +342,18 @@ function MainFirmwareController($rootScope,$scope, $timeout, $location, Notifica
      }
 
 
-     if (vm.model.adminMode) {
-       if (data.profile == 'admin') {
-         $location.path("/enroll");
-       } else {
-         Notifications.message('Error, usted no tiene permisos de administrador');
-         vm.initialize();
-       }
-     } else {
-       $scope.$parent.logData = {
-          date:new Date(data.log.log),
-          user:data.user
-       }
-
-       $location.path('/log');
+     if (vm.model.adminMode && data.profile != undefined && data.profile == 'admin') {
+       $location.path("/enroll");
+       return;
      }
+
+     // muestro la info de login del usuario
+     $scope.$parent.logData = {
+        date:new Date(data.log.log),
+        user:data.user
+     }
+     $location.path('/log');
+
    });
 
    $scope.$on('$viewContentLoaded', function(event) {
