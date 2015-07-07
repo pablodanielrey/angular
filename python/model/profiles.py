@@ -66,7 +66,7 @@ class Profiles:
 
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
-            return self.__checkAccessWithCon(con,sid,roles)
+            return self._checkAccessWithCon(con,sid,roles)
 
         except Exception as e:
             logging.exception(e)
