@@ -52,9 +52,15 @@ app.controller("EnrollCtrl", ['$rootScope','$scope','$location','$timeout','Noti
 
 
     $scope.addUser = function() {
+
+      if ($scope.$parent.logData == undefined || $scope.$parent.sid == undefined) {
+        Notifications.message('Error de Sistema');
+        $scope.cancel()
+      }
+
       $scope.model.enabled = false;
       $scope.model.cancel = false;
-      Firmware.enroll($scope.model.dni,
+      Firmware.enroll($scope.$parent.logData.sid, $scope.model.dni,
         function(response) {
            Notifications.message("Las huellas del usuario " + $scope.model.dni + " se han guardado exitosamente");
            //$scope.model.msg = "El usuario " + $scope.model.dni + " se ha creado exitosamente";
@@ -99,6 +105,9 @@ app.controller("EnrollCtrl", ['$rootScope','$scope','$location','$timeout','Noti
     })
 
     $scope.cancel = function() {
+      if ($scope.$parent.logData) {
+        $scope.$parent.logData = null;
+      }
       $location.path('/firmware')
     }
 

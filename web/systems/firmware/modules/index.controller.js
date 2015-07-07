@@ -344,7 +344,8 @@ function MainFirmwareController($rootScope,$scope, $timeout, $location, Notifica
      // registro los datos del usuario logueado
      $scope.$parent.logData = {
         date:new Date(data.log.log),
-        user:data.user
+        user:data.user,
+        sid:data.sid
      }
 
      if (vm.model.adminMode && data.profile != undefined && data.profile == 'admin') {

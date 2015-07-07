@@ -42,14 +42,15 @@ class Identifier(threading.Thread):
         emsg = self.factory._encodeMessage(msg)
         self.factory.broadcast(emsg)
 
-    def _identified(self,log=None,user=None):
+    def _identified(self,log=None,user=None,sid=None):
         msg = None
         if log:
             msg = {
                 'type':'IdentifiedEvent',
                 'data':{
                     'log':log,
-                    'user':user
+                    'user':user,
+                    'sid':sid
                 }
             }
         else:

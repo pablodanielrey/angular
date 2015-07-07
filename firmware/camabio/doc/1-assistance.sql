@@ -4,6 +4,7 @@
   debe incluirse primero las tablas del sistema
 
   profile.users
+  system.sessions
   assistance.devices
   assistance.templates
   assistance.attlog

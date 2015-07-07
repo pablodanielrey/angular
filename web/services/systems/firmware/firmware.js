@@ -4,10 +4,11 @@ app.service('Firmware', ['Utils','Messages','Session','$rootScope',
 
   function(Utils,Messages,Session,$rootScope) {
 
-    this.enroll = function(dni, callbackOk, callbackError) {
+    this.enroll = function(sid, dni, callbackOk, callbackError) {
       var msg = {
         id: Utils.getId(),
         action: 'enroll',
+        sid: sid,
         request: {
           dni: dni
         }
