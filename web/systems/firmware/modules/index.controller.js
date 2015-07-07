@@ -319,6 +319,18 @@ function MainFirmwareController($rootScope,$scope, $timeout, $location, Notifica
 
      console.log(data);
 
+     if (data.msg != undefined) {
+       // se envía un mensaje desde el servidor indicando un mensaje a mostrar.
+       Notifications.message(data.msg);
+       return;
+     }
+
+     if (data.log == undefined || data.user == undefined) {
+       Notifications.message('No se pudo identicar a la persona');
+       return;
+     }
+
+
      if (vm.model.adminMode) {
        if (data.profile == 'admin') {
          $location.path("/enroll");
