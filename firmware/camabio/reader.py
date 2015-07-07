@@ -180,8 +180,10 @@ class FirmwareReader(Reader):
             huella = None
             exit = False
             while not exit:
-                logggin.debug('readding serial')
+                logging.debug('readding serial')
                 resp = cserial.readS(24)
+                logging.debug('paquete leido {}'.format(resp))
+                
                 ret = camabio.getAttrFromPackage(camabio.RET,resp)
                 data = camabio.getAttrFromPackage(camabio.DATA,resp)
                 exit = True
