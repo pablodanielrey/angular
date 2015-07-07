@@ -68,7 +68,7 @@ class Firmware:
         if h:
             self.conn = self.__get_database()
 
-            userId = self.templates.findUserIdByIndex(h)
+            userId = self.templates.findUserIdByIndex(self.conn,h)
             if userId:
                 log = {
                     'id':str(uuid.uuid4()),
