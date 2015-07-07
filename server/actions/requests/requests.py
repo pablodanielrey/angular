@@ -753,8 +753,10 @@ class ApproveAccountRequest:
 
 
                 'esto hay que pasarlo a un model - es para habilitar a todo el mundo a au24'
+                '''
                 cur = con.cursor()
                 cur.execute('insert into au24.users (id) values (%s)',(user_id,))
+                '''
 
                 self.req.removeRequest(con,reqId)
 
