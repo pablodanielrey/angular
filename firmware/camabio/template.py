@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import codecs, logging
-import inject
+import inject, uuid
 
 from model.config import Config
 from model.systems.assistance import templates
