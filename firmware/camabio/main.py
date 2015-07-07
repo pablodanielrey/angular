@@ -53,7 +53,7 @@ class Identifier(threading.Thread):
             }
         else:
             msg = {
-                'type':'IdentifierEvent',
+                'type':'IdentifiedEvent',
                 'data':{
                     'msg':'No se encuentra la huella'
                 }
