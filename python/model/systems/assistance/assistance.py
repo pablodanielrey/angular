@@ -177,13 +177,17 @@ class Assistance:
             return resp
 
 
+        import pdb
+        pdb.set_trace()
+
         start = dates[0]
-        end = dates[len(dates) - 1]
+
+        dend = self.date.parse(dates[len(dates) - 1]) + datetime.timedelta(days=1)
         # obtengo las justificaciones
-        justifications = self.justifications.getJustificationRequestsByDate(con,status,usersIds,start,end)
+        justifications = self.justifications.getJustificationRequestsByDate(con,status,usersIds,start,dend)
 
         dstart = self.date.parse(start)
-        dend = self.date.parse(end)
+
         gjustifications = self.justifications.getGeneralJustificationRequests(con)
         for j in gjustifications:
             if j['begin'] >= dstart and j['begin'] <= dend:
