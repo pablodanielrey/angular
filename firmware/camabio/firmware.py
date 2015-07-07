@@ -94,8 +94,10 @@ class Firmware:
                 sid = self.session._create(self.conn,sess)
 
                 roles = None
+                '''
                 if self.profiles._checkAccessWithCon(self.conn,sid,['ADMIN-ASSISTANCE']):
                     roles = 'admin'
+                '''
 
                 self.conn.commit()
 
