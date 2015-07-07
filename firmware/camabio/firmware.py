@@ -21,6 +21,7 @@ class Firmware:
     logs = inject.attr(Logs)
     devices = inject.attr(Devices)
     templates = inject.attr(Templates)
+    session = inject.attr(Session)
 
     def __init__(self):
         self.conn = None
@@ -72,6 +73,8 @@ class Firmware:
 
             userId = self.templates.findUserIdByIndex(self.conn,h)
             if userId:
+
+                ''' creo el log '''
                 log = {
                     'id':str(uuid.uuid4()),
                     'deviceId':self.config.configs['device_id'],
@@ -80,14 +83,21 @@ class Firmware:
                     'log': self.date.utcNow()
                 }
                 self.logs.persist(self.conn,log)
+
+                ''' logueo al usuario creandole una sesion '''
+                sess = {
+                    self.config.configs['session_user_id']:userId
+                }
+                sid = self.session._create(self.conn,sess)
+
                 self.conn.commit()
 
-                user = self.users.findUser(self.conn,userId)
 
+                user = self.users.findUser(self.conn,userId)
                 logging.debug('log {} persona {}'.format(log,user))
 
                 if notifier:
-                    notifier._identified(log,user)
+                    notifier._identified(log,user,sid)
 
             else:
                 logging.critical('{} - huella identificada en el indice {}, pero no se encuentra ningún mapeo con un usuario'.format(self.date.now(),h))
