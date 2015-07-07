@@ -63,7 +63,7 @@ class Firmware:
             self.conn.commit()
 
 
-    def identify(self):
+    def identify(self, notifier=None):
         logging.debug('reader.identify')
         h = self.reader.identify()
         logging.debug('reader identify = {}'.format(h))
@@ -84,5 +84,14 @@ class Firmware:
 
                 logging.debug('persona identificada {}'.format(log))
 
+                if notifier:
+                    notifier._identified(log)
+
             else:
                 logging.critical('{} - huella identificada en el indice {}, pero no se encuentra ningún mapeo con un usuario'.format(self.date.now(),h))
+                if notifier:
+                    notifier._error(h)
+
+        else:
+            if notifier:
+                notifier._identified(None)

@@ -26,9 +26,17 @@ finalize = False
 
 class Identifier(threading.Thread):
 
-    def __init__(self,firmware):
+    def __init__(self,firmware,factory):
         super(Identifier,self).__init__()
         self.firmware = firmware
+        self.factory = factory
+
+    def _error(self,h):
+        self.factory.broadcast('huella {} no asignada a persona'.format(h))
+
+    def _identified(self,log):
+        self.factory.broadcast(log)
+
 
     def run(self):
         global finalize
@@ -45,8 +53,6 @@ class Identifier(threading.Thread):
 f = inject.instance(Firmware)
 f.start()
 
-identifier = Identifier(f)
-identifier.start()
 
 try:
     """ inicializo la parte de red """
@@ -57,13 +63,23 @@ try:
       finalize = True
       port.stopListening()
       reactor.stop()
-      sys.exit()
+      ' sys.exit() '
 
     signal.signal(signal.SIGINT,close_sig_handler)
 
 
+    ''' inicializo el tema del identificador '''
+    identifier = Identifier(f,factory)
+    identifier.start()
+
+
     logging.debug('Ejecutando servidor de acciones')
     reactor.run()
+
+    try:
+        identifier.join()
+    except Exception as e:
+        logging.critical(e)
 
 finally:
     f.stop()
