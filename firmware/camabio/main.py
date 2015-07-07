@@ -44,6 +44,7 @@ class Identifier(threading.Thread):
     def _identified(self,log=None,user=None):
         msg = None
         if log:
+            log.log = datetime.datetime(log.log)
             msg = {
                 'type':'IdentifiedEvent',
                 'data':{
