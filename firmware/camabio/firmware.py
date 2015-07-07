@@ -8,6 +8,7 @@ from template import Templates
 
 from model.config import Config
 from model.session import Session
+from model.profiles import Profiles
 from model.users.users import Users
 from model.systems.assistance.devices import Devices
 from model.systems.assistance.logs import Logs
@@ -23,6 +24,7 @@ class Firmware:
     devices = inject.attr(Devices)
     templates = inject.attr(Templates)
     session = inject.attr(Session)
+    profiles = inject.attr(Profiles)
 
     def __init__(self):
         self.conn = None
