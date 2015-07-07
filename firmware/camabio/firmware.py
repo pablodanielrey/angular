@@ -44,7 +44,7 @@ class Firmware:
 
         (n,t) = self.reader.enroll(need_first,need_second,need_third,need_release)
         if n:
-            conn = self.__get_database()
+            self.conn = self.__get_database()
 
             """ se tiene la huella con el id, hay que asignarle el usuario """
             userId = None
@@ -60,13 +60,13 @@ class Firmware:
                 userId = user['id']
 
             self.templates.persist(self.conn,userId,n,t)
-            conn.commit()
+            self.conn.commit()
 
 
     def identify(self):
         h = self.reader.identify()
         if h:
-            conn = self.__get_database()
+            self.conn = self.__get_database()
 
             userId = self.templates.findUserIdByIndex(h)
             if userId:
@@ -78,7 +78,7 @@ class Firmware:
                     'log': self.date.utcNow()
                 }
                 self.logs.persist(self.conn,log)
-                conn.commit()
+                self.conn.commit()
 
                 logging.debug('persona identificada {}'.format(log))
 
