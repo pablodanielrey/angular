@@ -12,6 +12,6 @@
 create table assistance.template_mapping (
   template_id varchar not null references assistance.templates (id),
   user_id varchar not null references profile.users (id),
-  reader_index varchar not null,
+  reader_index bigint not null,
   created timestamptz default now()
 );
