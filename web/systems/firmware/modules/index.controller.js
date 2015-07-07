@@ -328,7 +328,7 @@ function MainFirmwareController($rootScope,$scope, $timeout, $location, Notifica
        }
      } else {
        $scope.$parent.logData = {
-          date:data.log.log,
+          date:new Date(data.log.log),
           user:data.user
        }
 
