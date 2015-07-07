@@ -69,6 +69,7 @@ class Enroll:
 
 
         ''' chequeo el nivel de acceso que tiene la persona '''
+        sid = message['sid']
         self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE'])
         ''' userId = self.profiles.getLocalUserId(sid) '''
 
@@ -93,4 +94,5 @@ class Enroll:
 
         except Exception as e:
             server.sendError(message,e)
-            raise e
+            return True
+            
