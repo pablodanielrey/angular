@@ -41,5 +41,9 @@ try:
     logging.debug('Ejecutando servidor de acciones')
     reactor.run()
 
+
+    while True:
+        f.identify()
+
 finally:
     f.stop()
