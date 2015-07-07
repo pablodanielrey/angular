@@ -315,6 +315,17 @@ function MainFirmwareController($rootScope,$scope, $timeout, $location, Notifica
    });
 
 
+   $scope.$on('ErrorEvent', function(event, data) {
+     console.log(data);
+     if (data.error != undefined) {
+       // se envía un mensaje desde el servidor indicando un mensaje a mostrar.
+       Notifications.message(data.error);
+       return;
+     }
+   }
+
+
+
    $scope.$on('IdentifiedEvent', function(event, data) {
 
      console.log(data);
