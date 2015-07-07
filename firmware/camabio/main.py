@@ -41,18 +41,19 @@ class Identifier(threading.Thread):
         emsg = self.factory._encodeMessage(msg)
         self.factory.broadcast(emsg)
 
-    def _identified(self,log):
+    def _identified(self,log=None,user=None):
         msg = None
         if log:
             msg = {
-                'type':'MsgEvent',
+                'type':'IdentifiedEvent',
                 'data':{
-                    'msg':log
+                    'log':log,
+                    'user':user
                 }
             }
         else:
             msg = {
-                'type':'MsgEvent',
+                'type':'IdentifierEvent',
                 'data':{
                     'msg':'No se encuentra la huella'
                 }

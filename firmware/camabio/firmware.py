@@ -82,10 +82,12 @@ class Firmware:
                 self.logs.persist(self.conn,log)
                 self.conn.commit()
 
-                logging.debug('persona identificada {}'.format(log))
+                user = self.users.findUserById(self.conn,userId)
+
+                logging.debug('log {} persona {}'.format(log,user))
 
                 if notifier:
-                    notifier._identified(log)
+                    notifier._identified(log,user)
 
             else:
                 logging.critical('{} - huella identificada en el indice {}, pero no se encuentra ningún mapeo con un usuario'.format(self.date.now(),h))

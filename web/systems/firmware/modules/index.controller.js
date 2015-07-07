@@ -315,7 +315,10 @@ function MainFirmwareController($rootScope,$scope, $timeout, $location, Notifica
    });
 
 
-   $scope.$on('identifiedEvent', function(event, data) {
+   $scope.$on('IdentifiedEvent', function(event, data) {
+
+     console.log(data);
+
      if (vm.model.adminMode) {
        if (data.profile == 'admin') {
          $location.path("/enroll");
@@ -324,9 +327,9 @@ function MainFirmwareController($rootScope,$scope, $timeout, $location, Notifica
          vm.initialize();
        }
      } else {
-       $scope.$parent.logData  = {
-          date:data.date,
-          user:data.user
+       $scope.$parent.logData = {
+          date:data.data.log.log,
+          user:data.data.user
        }
 
        $location.path('/log');
