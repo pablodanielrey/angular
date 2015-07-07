@@ -163,7 +163,7 @@ class FirmwareReader(Reader):
 
         """ <await (ne == 0 and ni == 0) ni = ni + 1> """
         self.entry.acquire()
-        if (self.ne > 0 or self.ni > 0 or self.nc > 0):
+        if (self.ne > 0 or self.ni > 0):
             self.di = self.di + 1
             self.entry.release()
             logging.debug('identify esperando')
