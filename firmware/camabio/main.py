@@ -43,7 +43,7 @@ class Identifier(threading.Thread):
         while not finalize:
             try:
                 logging.debug('iniciando identificación')
-                self.firmware.identify()
+                self.firmware.identify(self)
             except Exception as e:
                 logging.critical(e)
             finally:
