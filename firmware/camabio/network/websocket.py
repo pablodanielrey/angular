@@ -2,6 +2,7 @@ import inject, logging, json, sys, traceback
 
 
 from network.actions import Enroll
+from network.actions import Login
 
 from autobahn.twisted.websocket import WebSocketServerProtocol
 from autobahn.twisted.websocket import WebSocketServerFactory
@@ -29,7 +30,7 @@ from model.session import Session
 ''' aca se definen las acciones a ser manejadas por el server de websocket '''
 
 actions = [
-    Enroll()
+    Enroll(), Login()
 ]
 
 

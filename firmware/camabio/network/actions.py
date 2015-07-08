@@ -69,7 +69,7 @@ class Login:
             self.firmware.login(dni,password,self,server)
 
             response = {
-                'id':message['id']
+                'id':message['id'],
                 'ok':'OK'
             }
             server.sendMessage(response)
