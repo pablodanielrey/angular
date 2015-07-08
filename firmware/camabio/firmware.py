@@ -44,6 +44,8 @@ class Firmware:
             self.conn.close()
 
 
+
+
     def enroll(self, pin, need_first=None, need_second=None, need_third=None, need_release=None):
 
         (n,t) = self.reader.enroll(need_first,need_second,need_third,need_release)
@@ -67,41 +69,46 @@ class Firmware:
             self.conn.commit()
 
 
+    ''' genera lo necesario para loguear una persona dentro del firmware '''
+    def _identify(self, userId, verifyMode=1):
+
+        ''' creo el log '''
+        log = {
+            'id':str(uuid.uuid4()),
+            'deviceId':self.config.configs['device_id'],
+            'userId':userId,
+            'verifymode':verifyMode,
+            'log': self.date.utcNow()
+        }
+        self.logs.persist(self.conn,log)
+
+        ''' logueo al usuario creandole una sesion '''
+        sess = {
+            self.config.configs['session_user_id']:userId
+        }
+        sid = self.session._create(self.conn,sess)
+
+        roles = None
+        if self.profiles._checkAccessWithCon(self.conn,sid,['ADMIN-ASSISTANCE']):
+            roles = 'admin'
+
+        user = self.users.findUser(self.conn,userId)
+
+        return (log,user,sid,roles)
+
+
+
+    ''' llamado cuando se trata de identificar una persona por huella '''
     def identify(self, notifier=None):
-        logging.debug('reader.identify')
         h = self.reader.identify()
-        logging.debug('reader identify = {}'.format(h))
         if h:
             self.conn = self.__get_database()
 
             userId = self.templates.findUserIdByIndex(self.conn,h)
             if userId:
-
-                ''' creo el log '''
-                log = {
-                    'id':str(uuid.uuid4()),
-                    'deviceId':self.config.configs['device_id'],
-                    'userId':userId,
-                    'verifymode':1,
-                    'log': self.date.utcNow()
-                }
-                self.logs.persist(self.conn,log)
-
-                ''' logueo al usuario creandole una sesion '''
-                sess = {
-                    self.config.configs['session_user_id']:userId
-                }
-                sid = self.session._create(self.conn,sess)
+                (log,user,sid,roles) = self._identify(userId)
 
                 self.conn.commit()
-
-                roles = None
-                if self.profiles._checkAccessWithCon(self.conn,sid,['ADMIN-ASSISTANCE']):
-                    roles = 'admin'
-
-
-                user = self.users.findUser(self.conn,userId)
-                logging.debug('log {} persona {}'.format(log,user))
 
                 if notifier:
                     notifier._identified(log,user,sid,roles)
@@ -114,3 +121,24 @@ class Firmware:
         else:
             if notifier:
                 notifier._identified(None)
+
+
+
+
+    ''' llamado cuando se trata de identificar una persona usando el teclado '''
+    def login(self, pin, password, notifier, server):
+        self.conn = self.__get_database()
+
+        creds = {
+            'username':pin,
+            'password':password
+        }
+        userData = self.userPassword.findUserPassword(self.conn,creds)
+        if userData is None:
+            notifier._identified(server,None)
+
+        (log,user,sid,roles) = self._identify(userData['user_id'],0)
+
+        self.conn.commit()
+
+        notifier._identified(server,log,user,sid,roles)

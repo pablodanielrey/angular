@@ -250,7 +250,7 @@ function MainFirmwareController($rootScope,$scope, $timeout, $location, Notifica
    }
 
    function enterPassword() {
-    Firmware.identify(vm.model.code,vm.model.password,
+    Firmware.login(vm.model.code,vm.model.password,
       function(response) {
 
       },

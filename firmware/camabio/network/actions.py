@@ -7,8 +7,81 @@ from model.exceptions import *
 
 from model.events import Events
 from model.profiles import Profiles
+from model.credentials.credentials import UserPassword
 
 from firmware import Firmware
+
+
+class Login:
+
+    firmware = inject.attr(Firmware)
+
+    def _identified(self,server,log=None,user=None,sid=None,roles=None):
+        msg = None
+        if log:
+            msg = {
+                'type':'IdentifiedEvent',
+                'data':{
+                    'log':log,
+                    'user':user,
+                    'sid':sid
+                }
+            }
+            if roles:
+                msg['data']['profile'] = 'admin'
+
+        else:
+            msg = {
+                'type':'IdentifiedEvent',
+                'data':{
+                    'msg':'Credenciales Incorrectas'
+                }
+            }
+
+        server.broadcast(msg)
+
+
+
+    def handleAction(self, server, message):
+
+        if (message['action'] != 'login'):
+            return False
+
+        if 'request' not in message:
+            response = {'id':message['id'], 'error':'Insuficientes parámetros'}
+            server.sendMessage(response)
+            return True
+
+        if 'dni' not in message['request']:
+            response = {'id':message['id'], 'error':'Insuficientes parámetros, falta el dni'}
+            server.sendMessage(response)
+            return True
+
+        if 'password' not in message['request']:
+            response = {'id':message['id'], 'error':'Insuficientes parámetros, falta la clave'}
+            server.sendMessage(response)
+            return True
+
+        dni = message['request']['dni']
+        password = message['request']['password']
+
+        try:
+            self.firmware.login(dni,password,self,server)
+
+            response = {
+                'id':message['id']
+                'ok':'OK'
+            }
+            server.sendMessage(response)
+            return True
+
+        except Exception as e:
+            server.sendError(message,e)
+            return True
+
+
+
+
 
 class Enroll:
 
