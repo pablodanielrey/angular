@@ -64,7 +64,7 @@ class ActionsServerProtocol(WebSocketServerProtocol):
                 logging.debug('server -> cliente {}'.format(msg))
                 ''' super(WebSocketServerProtocol,self).sendMessage(msg,False) '''
             reactor.callFromThread(sendMessage,super(WebSocketServerProtocol,self),msg)
-            
+
         except Exception as e:
             logging.exception(e)
 
@@ -208,5 +208,5 @@ def getPort():
     log.startLogging(sys.stdout)
     factory = BroadcastServerFactory()
     factory.protocol = ActionsServerProtocol
-    port = reactor.listenTCP(int(config.configs['server_port']), factory=factory, interface=config.configs['server_ip'])
+    port = reactor.listenTCP(int(config.configs['firmware_port']), factory=factory, interface=config.configs['firmware_ip'])
     return (reactor,port,factory)
