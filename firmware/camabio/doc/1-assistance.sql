@@ -4,7 +4,8 @@
   debe incluirse primero las tablas del sistema
 
   profile.users
-  system.sessions
+  credentails -- todo el esquema
+  system -- todo el esquema
   assistance.devices
   assistance.templates
   assistance.attlog

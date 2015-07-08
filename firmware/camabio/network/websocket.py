@@ -59,11 +59,14 @@ class ActionsServerProtocol(WebSocketServerProtocol):
         return ejmsg
 
     def _sendEncodedMessage(self,msg):
-        if (len(msg) < 1024):
-            logging.debug('server -> cliente {}'.format(msg))
-        """ super(WebSocketServerProtocol,self).sendMessage(msg,False)"""
-        reactor.callFromThread(sendMessage,super(WebSocketServerProtocol,self),msg)
-
+        try:
+            if (len(msg) < 1024):
+                logging.debug('server -> cliente {}'.format(msg))
+                ''' super(WebSocketServerProtocol,self).sendMessage(msg,False) '''
+            reactor.callFromThread(sendMessage,super(WebSocketServerProtocol,self),msg)
+            
+        except Exception as e:
+            logging.exception(e)
 
     def sendException(self,e):
         msg = {'type':'Exception','name':e.__class__.__name__}
@@ -192,8 +195,9 @@ class BroadcastServerFactory(WebSocketServerFactory):
             self.clients.remove(client)
 
     def broadcast(self, msg):
-        logging.debug("broadcasting message '{}' ..".format(msg))
+        logging.debug("broadcasting message {} ..".format(msg))
         for c in self.clients:
+            logging.debug("sending message to {}".format(c.peer))
             c._sendEncodedMessage(msg)
             logging.debug("message sent to {}".format(c.peer))
 
