@@ -84,9 +84,9 @@ class Schedule:
     def getSchedule(self,con,userId,date):
         if self.date.isNaive(date):
           raise Exception('date is naive')
-          
+
         date = self.date.awareToUtc(date) #trabajo con las fechas en utc
-          
+
         cur = con.cursor()
         cur.execute('set time zone %s',('utc',))
 
@@ -141,6 +141,9 @@ class Schedule:
 
             else:
                 break
+                
+        # ordeno los schedules por el start
+        schedules = sorted(schedules, key=lambda schedule: schedule['start'])
 
         return schedules
 
