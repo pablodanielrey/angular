@@ -29,14 +29,43 @@ from model.credentials.credentials import UserPassword
 
 if __name__ == '__main__':
 
+    if (len(sys.argv) < 3):
+        logging.warn('python3 {} dni clave'.format(sys.argv[0]))
+        sys.exit(1)
+
+    dni = sys.argv[1]
+    password = sys.argv[2]
+
     conn = getDb()
     try:
         users = inject.instance(Users)
-        us = users.listUsers(conn)
-        for u in us:
-            logging.info(u)
+        user = users.findUserByDni(conn,dni)
+        if not user:
+            logging.warn('No existe ese usuario')
+            sys.exit(1)
 
-        ''' conn.commit() '''
+        logging.info(user)
+        userId = user['id']
+
+        creds = {
+            'user_id':userId,
+            'password':password,
+            'username':dni
+        }
+        userPassword = inject.instance(UserPassword)
+
+        ud = userPassword.findUserPassword(conn,creds)
+        if ud:
+            userPassword.updateUserPassword(conn,creds)
+        else:
+            userPassword.createUserPassword(conn,creds)
+
+        conn.commit()
+
+        ''' busco nuevamente la info '''
+        ud = userPassword.findUserPassword(conn,creds)
+        logging.info(ud)
+
 
     finally:
         conn.close()
