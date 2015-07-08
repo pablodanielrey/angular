@@ -6,8 +6,15 @@ class Check:
     '''
         verifica si el tipo de chequeo es el que corresponde con el date
     '''
-    def isActualCheck(self,date,start,end):
-        raise Exception('abstract')
+    @classmethod
+    def isActualCheck(cls,date,check):
+        if (date >= check['start']):
+            if check['end'] is None:
+                return True
+            elif date < c['end']:
+                return True
+        return False
+
 
 
     '''

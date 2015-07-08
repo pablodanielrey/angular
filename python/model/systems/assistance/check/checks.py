@@ -11,6 +11,7 @@ from model.systems.assistance.logs import Logs
 from model.systems.assistance.schedule import Schedule
 from model.systems.assistance.justifications.justifications import Justifications
 
+from model.systems.assistance.check.check import Check
 from model.systems.assistance.check.scheduleCheck import ScheduleCheck
 from model.systems.assistance.check.hoursCheck import HoursCheck
 from model.systems.assistance.check.presenceCheck import PresenceCheck
@@ -24,7 +25,8 @@ class ScheduleChecks:
     justifications = inject.attr(Justifications)
     logs = inject.attr(Logs)
 
-    typesCheck = [ScheduleCheck(), HoursCheck(), PresenceCheck()]
+    scheduleCheck = ScheduleCheck()
+    typesCheck = [scheduleCheck, HoursCheck(), PresenceCheck()]
 
     """
         retorna una lista cronológica de los chequeos a realizar para el usuario.
@@ -128,7 +130,7 @@ class ScheduleChecks:
             check = None
             for c in checks:
                 check = c
-                if c.isActualCheck(actual,c):
+                if Check.isActualCheck(actual,c):
                     check = c
                     break
 
@@ -153,7 +155,12 @@ class ScheduleChecks:
                     j['user_id'] = userId
                     justs.append(j)
 
-            auxFails = c.getFails(self,userId,actual,justs,con)
+            auxFails = []
+            for tcheck in self.typesCheck:
+                if tcheck.isTypeCheck(check["type"]):
+                    auxFails = tcheck.getFails(self,userId,actual,con)
+                    break
+
             if len(auxFails) > 0:
                 fails.extend(auxFails)
             actual = nextDay
@@ -252,5 +259,5 @@ class ScheduleChecks:
         logs = self.schedule.getLogsForSchedule(con,userId,date)
         whs,attlogs = self.logs.getWorkedHours(logs)
         controls = list(utils.combiner(schedules,whs))
-        fails = ScheduleCheck.checkWorkedHours(userId,controls)
+        fails = self.scheduleCheck.checkWorkedHours(con,userId,controls)
         return fails

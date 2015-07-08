@@ -15,7 +15,7 @@ from model.systems.assistance.assistance import Assistance
 from model.systems.assistance.fails import Fails
 from model.systems.assistance.logs import Logs
 from model.systems.assistance.schedule import Schedule
-from model.systems.assistance.checks import ScheduleChecks
+from model.systems.assistance.check.checks import ScheduleChecks
 from model.systems.offices.offices import Offices
 from model.systems.assistance.positions import Positions
 from model.systems.assistance.date import Date
@@ -117,20 +117,26 @@ class GetFailsByDate:
             assistanceFails = []
             (users,fails) = self.assistance.checkSchedule(authorizedUsers,start,end)
 
-            filteredFails = list(filter(lambda x: len(x['justifications']) <= 0,fails))
-            b64 = self.assistance.arrangeCheckSchedule(con,filteredFails)
+            # filteredFails = list(filter(lambda x: len(x['justifications']) <= 0,fails))
+            b64 = self.assistance.arrangeCheckSchedule(con,fails)
 
             for user in users:
                 ffails = self.fails.filterUser(user['id'],fails)
                 for f in ffails:
                     #solo agrego las que no tienen justificaciones
+                    '''
                     if ('justifications' not in f) or (len(f['justifications']) <= 0):
                         data = {
                             'user':user,
                             'fail':f
                         }
                         assistanceFails.append(data)
-
+                    '''
+                    data = {
+                        'user':user,
+                        'fail':f
+                    }
+                    assistanceFails.append(data)
 
 
             response = {
@@ -288,7 +294,6 @@ class GetAssistanceStatusByUsers:
         try:
             usersIds = message['request']['usersIds']
             dates = message['request']['dates']
-
 
             resp = self.assistance.getAssistanceStatusByUsers(con,usersIds,dates,status)
             b64 = self.assistance.arrangeAssistanceStatusByUsers(con,resp)

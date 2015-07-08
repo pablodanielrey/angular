@@ -177,9 +177,6 @@ class Assistance:
             return resp
 
 
-        import pdb
-        pdb.set_trace()
-
         start = dates[0]
 
         dend = self.date.parse(dates[len(dates) - 1]) + datetime.timedelta(days=1)

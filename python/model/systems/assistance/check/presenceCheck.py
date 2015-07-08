@@ -2,7 +2,7 @@ import logging,inject
 import datetime
 from model.systems.assistance.date import Date
 from model.systems.assistance.schedule import Schedule
-from model.systems.asssitance.check.check import Check
+from model.systems.assistance.check.check import Check
 
 '''
 Tipo de chequeo PRESENCE
@@ -25,14 +25,6 @@ class PresenceCheck(Check):
 
     def isTypeCheck(self,type):
         return self.type == type
-
-    def isActualCheck(self,date,start,end):
-        if (date >= start):
-            if end is None:
-                return True
-            elif date < end:
-                return True
-        return false
 
 
     '''
