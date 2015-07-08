@@ -138,6 +138,7 @@ class Firmware:
         userData = self.userPassword.findUserPassword(self.conn,creds)
         if userData is None:
             notifier._identified(server,None)
+            return
 
         (log,user,sid,roles) = self._identify(userData['user_id'],0)
 
