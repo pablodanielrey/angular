@@ -10,6 +10,7 @@ from model.config import Config
 from model.session import Session
 from model.profiles import Profiles
 from model.users.users import Users
+from model.credentials.credentials import UserPassword
 from model.systems.assistance.devices import Devices
 from model.systems.assistance.logs import Logs
 from model.systems.assistance.date import Date
@@ -25,6 +26,7 @@ class Firmware:
     templates = inject.attr(Templates)
     session = inject.attr(Session)
     profiles = inject.attr(Profiles)
+    userPassword = inject.attr(UserPassword)
 
     def __init__(self):
         self.conn = None
