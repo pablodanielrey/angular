@@ -19,6 +19,7 @@ def getDb():
     global config
     return psycopg2.connect(host=config.configs['database_host'], dbname=config.configs['database_database'], user=config.configs['database_user'], password=config.configs['database_password'])
 
+logging.getLogger().setLevel(logging.INFO)
 
 
 from model.users.users import Users
