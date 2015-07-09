@@ -12,22 +12,39 @@ from autobahn.twisted.websocket import WebSocketClientProtocol
 
 
 
-class MyClientProtocol(WebSocketClientProtocol):
+class WsClientProtocol(WebSocketClientProtocol):
+
+    protocols = []
+
+    @classmethod
+    def register(cls,instance):
+        if instance not in cls.protocols:
+            cls.protocols.append(instance)
+
+    @classmethod
+    def unregister(cls,instance):
+        if instance in cls.protocols:
+            cls.protocols.remove(instance)
+
 
     def __init__(self):
         super(WebSocketClientProtocol,self).__init__()
         self.messages = {}
         self.connected = False
 
+
     def onOpen(self):
         self.connected = True
         logging.debug('client connected to server')
+        self.__class__.register(self)
 
 
     def onClose(self):
         self.connected = False
         self.messages = {}
         logging.debug('client disconnected from server')
+        self.__class__.unregister(self)
+
 
     def isConnected(self):
         return self.connected
@@ -63,11 +80,13 @@ class MyClientProtocol(WebSocketClientProtocol):
                 del self.messages[message['id']]
 
 
-
-
     def sendMessage(self,msg,callback):
         if not self.connected:
             raise Exception()
+
+        ''' genero un id si no tiene '''
+        if 'id' not in message:
+            msg['id'] = str(uuid.uuid4())
 
         self.messages[msg['id']] = callback
         emsj = self._encodeMessage(msg)
@@ -90,12 +109,12 @@ class MyClientProtocol(WebSocketClientProtocol):
 
 
 
-def getReactor():
+def getReactor(protocol):
     config = inject.instance(Config)
     log.startLogging(sys.stdout)
 
     factory = WebSocketClientFactory()
-    factory.protocol = MyClientProtocol
+    factory.protocol = protocol
 
     reactor.connectTCP(config.configs['server_ip'], int(config.configs['server_port']), factory=factory)
     return reactor
