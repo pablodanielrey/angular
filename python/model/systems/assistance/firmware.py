@@ -20,7 +20,7 @@ class Firmware:
         self.passwords = []
         while True:
             p = 'firmware_password{}'.format(i)
-            i++
+            i = i + 1
             if p in self.config.configs:
                 self.passwords.append(self.config.configs[p])
             else:
