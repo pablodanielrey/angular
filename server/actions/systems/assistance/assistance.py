@@ -713,6 +713,56 @@ class NewSchedule:
 
 
 """
+{
+    id:'',
+    action:"deleteSchedule",
+    session:,
+    request:{
+        schedule_id:"id del Usuario"
+    }
+}
+
+response :
+{
+  id: "id de la petición",
+  ok: "caso exito",
+  error: "error del servidor",
+}
+"""
+class DeleteSchedule:
+    profiles = inject.attr(Profiles)
+    config = inject.attr(Config)
+    schedule = inject.attr(Schedule)
+
+    def handleAction(self, server, message):
+
+        if message['action'] != 'deleteSchedule':
+            return False
+
+        if 'request' not in message or 'schedule_id' not in message['request']:
+            response = {'id':message['id'],'error':'Parámetros insuficientes'}
+            server.sendMessage(response)
+            return True
+
+        sid = message['session']
+        self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
+        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+        try:
+            self.schedule.deleteSchedule(con,message['request']['schedule_id'])
+            con.commit()
+            response = {'id':message['id'], 'ok':'datos almacenados correctamente'}
+            server.sendMessage(response)
+            return True
+
+        except Exception as e:
+            con.rollback()
+            raise e
+
+        finally:
+            con.close()
+
+
+"""
 peticion:
 {
 	"id":"",
