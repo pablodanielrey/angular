@@ -254,6 +254,9 @@
 
 }
 
+.assistanceFailsFilters .listUsers.hidden {
+  display:none;
+}
 
 .assistanceFailsFilters .liUsers {
   height:25px;
