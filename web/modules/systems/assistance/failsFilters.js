@@ -1,5 +1,168 @@
-var app = angular.module('mainApp');
+angular
+    .module('mainApp')
+    .controller('AssistanceFailsFiltersCtrl',AssistanceFailsFiltersCtrl);
 
+AssistanceFailsFiltersCtrl.$inject = ['$scope', '$timeout', 'Notifications', 'Assistance', 'Users', 'Utils', 'Session'];
+
+function AssistanceFailsFiltersCtrl($scope, $timeout, Notifications, Assistance, Users, Utils, Session) {
+
+  var vm = this;
+
+  vm.model = {
+    sessionUserId: null,
+    searchUser: null,
+    users: [],
+    officeSelected: null,
+    offices: []
+  }
+
+  vm.view = {
+    displayListUser: false
+  }
+
+  vm.initialize = initialize;
+
+  vm.initializeUsers = initializeUsers;
+  vm.isDisplayListUser = isDisplayListUser;
+  vm.displayListUser = displayListUser;
+  vm.selectUser = selectUser;
+  vm.hideListUser = hideListUser;
+
+  vm.initializeOffices = initializeOffices;
+  vm.changeOffice = changeOffice;
+
+  /* ------------------------------------------
+   * -------------- INICIALIZACION ------------
+   * ------------------------------------------
+   */
+
+  function initialize() {
+    var session = Session.getCurrentSession();
+    vm.model.sessionUserId = session.user_id;
+
+    vm.initializeUsers();
+    vm.initializeOffices();
+  }
+
+  $scope.$on('$viewContentLoaded', function(event) {
+    vm.initialize();
+  });
+
+
+  /* ------------------------------------------
+   * --------------- USUARIOS -----------------
+   * ------------------------------------------
+   */
+
+   function initializeUsers() {
+     vm.model.searchUser = null;
+     vm.model.users = [];
+     vm.view.displayListUser = false;
+     loadUsers();
+   }
+
+   function loadUser(id) {
+     Users.findUser(id,
+       function(user) {
+         vm.model.users.push(user);
+       },
+       function (error) {
+         Notifications.message(error);
+       }
+     );
+   }
+
+   function loadUsers() {
+     Assistance.getUsersInOfficesByRole('autoriza',
+      function(users) {
+        vm.model.users = [];
+        for (var i = 0; i < users.length; i++) {
+          loadUser(users[i]);
+        }
+      },
+      function(error) {
+        Notifications.message(error);
+      }
+    );
+   }
+
+   function displayListUser() {
+     vm.model.searchUser = null;
+     vm.view.displayListUser = true;
+   }
+
+   function isDisplayListUser() {
+     return vm.view.displayListUser;
+   }
+
+   function selectUser(user) {
+     vm.model.user = user;
+     vm.model.searchUser = vm.model.user.name + " " + vm.model.user.lastname;
+     vm.view.displayListUser = false;
+   }
+
+   function hideListUser() {
+     $timeout(function() {
+       vm.view.displayListUser = false;
+     },300);
+   }
+
+
+   /* ------------------------------------------
+    * --------------- OFICINAS -----------------
+    * ------------------------------------------
+    */
+
+    vm.setParentOffice = setParentOffice;
+    vm.loadOffices = loadOffices;
+
+    function initializeOffices() {
+      vm.model.officeSelected = null,
+      vm.model.offices = []
+      vm.loadOffices();
+    }
+
+    function loadOffices() {
+      var userId = vm.model.sessionUserId;
+      var tree = true;
+      var role = 'autoriza';
+
+      Assistance.getOfficesByUserRole(userId,role,tree,
+        function(offices) {
+          vm.model.offices = offices;
+          for (var i = 0; i < offices.length; i++) {
+            vm.setParentOffice(offices[i], offices);
+          }
+        },
+        function(error) {
+          Notifications.message(error);
+        }
+      );
+    }
+
+    function setParentOffice(office, offices) {
+      for (var i = 0; i < offices.length; i++) {
+        if (office.parent == offices[i].id) {
+          office.parentName = offices[i].name;
+          office.order = 1;
+          return ;
+        }
+      }
+      office.parentName = office.name;
+      office.order = 0;
+    }
+
+
+    function changeOffice() {
+
+    }
+
+
+}
+
+
+
+/*
 app.controller('AssistanceFailsFiltersCtrl', ["$scope", "$timeout", "Assistance", "Notifications", "Users", "Utils", function($scope, $timeout, Assistance, Notifications, Users, Utils) {
 
   $scope.model = {
@@ -19,13 +182,16 @@ app.controller('AssistanceFailsFiltersCtrl', ["$scope", "$timeout", "Assistance"
       end: new Date()
     },
 
+    // variables correspondientes a la oficina
+    offices:[],
+
     //variables correspondientes a la seleccion de usuario
     searchUser: null,
     searchUserPromise: null,
     users: null,
     displayListUser: false
   };
-
+*/
 
 
 
@@ -35,7 +201,7 @@ app.controller('AssistanceFailsFiltersCtrl', ["$scope", "$timeout", "Assistance"
   /**
    * Buscar usuarios
    */
-  $scope.searchUsers = function(){
+/*  $scope.searchUsers = function(){
     $scope.model.displayListUser = true;
     if($scope.model.searchUserPromise){
       $timeout.cancel($scope.model.searchUserPromise);
@@ -48,17 +214,11 @@ app.controller('AssistanceFailsFiltersCtrl', ["$scope", "$timeout", "Assistance"
     ,1000);
   };
 
-  /**
-   * Debe ser mostrada la lista de usuarios?
-   */
   $scope.isDisplayListUser = function() {
     return $scope.model.displayListUser;
 
   };
 
-  /**
-   * Esconder lista de usuarios
-   */
   $scope.hideListUser = function(){
      $timeout(
       function(){
@@ -67,20 +227,13 @@ app.controller('AssistanceFailsFiltersCtrl', ["$scope", "$timeout", "Assistance"
     ,100);
   };
 
-   /**
-    * Listar elementos
-   */
   $scope.selectUser = function(user){
     $scope.model.user_id = user.id;
     $scope.model.searchUser = user.name + " " + user.lastname;
   };
 
 
-
-  /**
-   * Seleccionar usuario
-   */
-  $scope.listUsers = function(){
+$scope.listUsers = function(){
     Assistance.getUsersInOfficesByRole('autoriza',
       function(users) {
         $scope.model.users = [];
@@ -99,9 +252,28 @@ app.controller('AssistanceFailsFiltersCtrl', ["$scope", "$timeout", "Assistance"
       }
     );
   };
+*/
 
+  /******************************************************
+   * METODOS CORRESPONDIENTES A LA SELECCION DE OFICINA *
+   ******************************************************/
+/*   $scope.initializeOffices = function() {
+     $scope.model.offices = [];
+     $scope.model.officeSelected = null;
+     $scope.searchOffices();
+   }
 
+   $scope.searchOffices = function() {
+     o = {name:'Informatica'}
+     $scope.model.offices.push(o);
+   }
 
+   $scope.selectOffice = function() {
+     var of = $scope.model.officeSelected;
+     if (of != null) {
+       $scope.model.searchUser = null;
+     }
+   }
 
 
 
@@ -153,6 +325,7 @@ app.controller('AssistanceFailsFiltersCtrl', ["$scope", "$timeout", "Assistance"
     $scope.model.assistanceFails = [{}];
     $scope.initializeDate();
     $scope.initializeFilter();
+    $scope.initializeOffices();
   };
 
   $scope.correctDates = function() {
@@ -170,11 +343,11 @@ app.controller('AssistanceFailsFiltersCtrl', ["$scope", "$timeout", "Assistance"
 
   $scope.$watch('model.filter.begin', $scope.correctDates);
   $scope.$watch('model.filter.end', $scope.correctDates);
-
+*/
 
 // ---------------------- INICIO de filtro --------------------
 
-  $scope.addFailToUser = function(fail, failsCountByUser) {
+/*  $scope.addFailToUser = function(fail, failsCountByUser) {
     var fu = null;
     for (var i = 0; i < failsCountByUser.length; i++) {
       var f = failsCountByUser[i];
@@ -239,10 +412,10 @@ app.controller('AssistanceFailsFiltersCtrl', ["$scope", "$timeout", "Assistance"
 
     return failsFilters;
   }
-
+*/
   // ------------------------- Fin del filtro -----------------------------
 
-  $scope.search = function() {
+/*  $scope.search = function() {
     $scope.model.searching = true;
     $scope.model.assistanceFails = [{}];
     $scope.initializeDate();
@@ -323,3 +496,4 @@ app.controller('AssistanceFailsFiltersCtrl', ["$scope", "$timeout", "Assistance"
   }, 0);
 
 }]);
+*/

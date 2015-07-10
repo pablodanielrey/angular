@@ -224,6 +224,27 @@ app.service('Assistance', ['Utils','Messages','Session',
 		};
 
 
+    this.deleteSchedule = function(scheduleId, callbackOk, callbackError) {
+      var msg = {
+				id: Utils.getId(),
+				action: 'deleteSchedule',
+				session: Session.getSessionId(),
+        request: {
+					schedule_id: scheduleId
+				}
+			};
+
+      Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.ok);
+					} else {
+						callbackError(data.error);
+					}
+		  });
+    };
+
+
 		this.getOfficesByUserRole = function(userId,role,tree, callbackOk, callbackError) {
 			var msg = {
 				id: Utils.getId(),
@@ -794,9 +815,9 @@ app.service('Assistance', ['Utils','Messages','Session',
 					}
 		  });
     };
-    
-    
-     
+
+
+
   this.getPosition = function(userId, callbackOk, callbackError){
     var msg = {
 				id: Utils.getId(),
@@ -816,7 +837,7 @@ app.service('Assistance', ['Utils','Messages','Session',
 					}
 		  });
   };
-  
+
   /**
    * Actualizar cargo del usuario
    * @param {userId} userId
@@ -843,6 +864,6 @@ app.service('Assistance', ['Utils','Messages','Session',
         }
       });
   };
-  
-  
+
+
 }]);

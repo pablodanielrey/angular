@@ -84,9 +84,9 @@ class Schedule:
     def getSchedule(self,con,userId,date):
         if self.date.isNaive(date):
           raise Exception('date is naive')
-          
+
         date = self.date.awareToUtc(date) #trabajo con las fechas en utc
-          
+
         cur = con.cursor()
         cur.execute('set time zone %s',('utc',))
 
@@ -142,6 +142,9 @@ class Schedule:
             else:
                 break
 
+        # ordeno los schedules por el start
+        schedules = sorted(schedules, key=lambda schedule: schedule['start'])
+
         return schedules
 
     """
@@ -151,7 +154,7 @@ class Schedule:
         cur = con.cursor()
         cur.execute('set time zone %s',('utc',))
 
-        cur.execute("select sstart, send, date, isDayOfWeek, isDayOfMonth, isDayOfYear from assistance.schedule where \
+        cur.execute("select sstart, send, date, isDayOfWeek, isDayOfMonth, isDayOfYear, id from assistance.schedule where \
                 user_id = %s \
                 order by date desc",(userId,))
         scheduless = cur.fetchall()
@@ -172,6 +175,7 @@ class Schedule:
             """ retorno los schedules con la fecha actual en utc - las fechas en la base deber�an estar en utc """
             schedules.append(
                 {
+                    'id':schedule[6],
                     'start':schedule[0],
                     'end':schedule[1],
                     'date':schedule[2],
@@ -240,3 +244,10 @@ class Schedule:
 
         req = (str(uuid.uuid4()), userId, uaware, ustart, uend, isDayOfWeek, isDayOfMonth, isDayOfYear)
         cur.execute('insert into assistance.schedule (id,user_id,date,sstart,send,isDayOfWeek,isDayOfMonth,isDayOfYear) values (%s,%s,%s,%s,%s,%s,%s,%s)',req)
+
+    '''
+        elimina un schedule
+    '''
+    def deleteSchedule(self,con,id):
+        cur = con.cursor()
+        cur.execute('delete from assistance.schedule where id = %s',(id,))

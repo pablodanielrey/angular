@@ -15,7 +15,7 @@ from model.systems.assistance.assistance import Assistance
 from model.systems.assistance.fails import Fails
 from model.systems.assistance.logs import Logs
 from model.systems.assistance.schedule import Schedule
-from model.systems.assistance.checks import ScheduleChecks
+from model.systems.assistance.check.checks import ScheduleChecks
 from model.systems.offices.offices import Offices
 from model.systems.assistance.positions import Positions
 from model.systems.assistance.date import Date
@@ -117,20 +117,26 @@ class GetFailsByDate:
             assistanceFails = []
             (users,fails) = self.assistance.checkSchedule(authorizedUsers,start,end)
 
-            filteredFails = list(filter(lambda x: len(x['justifications']) <= 0,fails))
-            b64 = self.assistance.arrangeCheckSchedule(con,filteredFails)
+            # filteredFails = list(filter(lambda x: len(x['justifications']) <= 0,fails))
+            b64 = self.assistance.arrangeCheckSchedule(con,fails)
 
             for user in users:
                 ffails = self.fails.filterUser(user['id'],fails)
                 for f in ffails:
                     #solo agrego las que no tienen justificaciones
+                    '''
                     if ('justifications' not in f) or (len(f['justifications']) <= 0):
                         data = {
                             'user':user,
                             'fail':f
                         }
                         assistanceFails.append(data)
-
+                    '''
+                    data = {
+                        'user':user,
+                        'fail':f
+                    }
+                    assistanceFails.append(data)
 
 
             response = {
@@ -288,7 +294,6 @@ class GetAssistanceStatusByUsers:
         try:
             usersIds = message['request']['usersIds']
             dates = message['request']['dates']
-
 
             resp = self.assistance.getAssistanceStatusByUsers(con,usersIds,dates,status)
             b64 = self.assistance.arrangeAssistanceStatusByUsers(con,resp)
@@ -698,6 +703,56 @@ class NewSchedule:
             server.sendMessage(response)
             return True
 
+
+        except Exception as e:
+            con.rollback()
+            raise e
+
+        finally:
+            con.close()
+
+
+"""
+{
+    id:'',
+    action:"deleteSchedule",
+    session:,
+    request:{
+        schedule_id:"id del Usuario"
+    }
+}
+
+response :
+{
+  id: "id de la petición",
+  ok: "caso exito",
+  error: "error del servidor",
+}
+"""
+class DeleteSchedule:
+    profiles = inject.attr(Profiles)
+    config = inject.attr(Config)
+    schedule = inject.attr(Schedule)
+
+    def handleAction(self, server, message):
+
+        if message['action'] != 'deleteSchedule':
+            return False
+
+        if 'request' not in message or 'schedule_id' not in message['request']:
+            response = {'id':message['id'],'error':'Parámetros insuficientes'}
+            server.sendMessage(response)
+            return True
+
+        sid = message['session']
+        self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
+        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+        try:
+            self.schedule.deleteSchedule(con,message['request']['schedule_id'])
+            con.commit()
+            response = {'id':message['id'], 'ok':'datos almacenados correctamente'}
+            server.sendMessage(response)
+            return True
 
         except Exception as e:
             con.rollback()
