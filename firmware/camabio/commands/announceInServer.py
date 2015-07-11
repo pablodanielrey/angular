@@ -4,6 +4,7 @@ import sys
 sys.path.append('../../../python')
 sys.path.append('../../../apis')
 
+import signal
 import inject, logging
 import psycopg2
 
@@ -22,10 +23,14 @@ def config_injector(binder):
     binder.bind(Config,Config('firmware-config.cfg'))
 
 inject.configure(config_injector)
+reactor = client.network.websocket.getReactor()
 
 
-def announceOk():
+def announceOk(protocol,message):
+    global reactor
     logging.info('Anuncio correctamente transmitido')
+    protocol.sendClose()
+    reactor.stop()
 
 def announce(protocol):
     logging.info('announce')
@@ -33,9 +38,15 @@ def announce(protocol):
     firmware.firmwareDeviceAnnounce(protocol,announceOk)
 
 
+def close_sig_handler(signal,frame):
+    global reactor
+    reactor.stop()
+    sys.exit()
+
+
 if __name__ == '__main__':
 
-    MyWsClientProtocol.addCallback(announce)
+    signal.signal(signal.SIGINT,close_sig_handler)
 
-    reactor = client.network.websocket.getReactor()
+    MyWsClientProtocol.addCallback(announce)
     reactor.run()

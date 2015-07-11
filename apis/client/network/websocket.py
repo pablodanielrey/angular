@@ -84,7 +84,7 @@ class MyWsClientProtocol(WebSocketClientProtocol):
                 found = True
                 logging.debug('llamando a callback para el mensaje con id {}'.format(id))
                 callback = self.messages[id]
-                callback(message)
+                callback(self,message)
             else:
                 logging.debug('No se encontro ningún callback para el mensaje con id {}'.format(id))
 
