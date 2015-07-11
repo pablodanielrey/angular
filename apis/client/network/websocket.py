@@ -134,7 +134,7 @@ def getReactor():
         url = 'ws://{}:{}'.format(config.configs['server_ip'],config.configs['server_port'])
         logging.info('conectando a {}'.format(url))
 
-        factory = WebSocketClientFactory(url=url,debug=True,debugCodePaths=True)
+        factory = WebSocketClientFactory(url=url,debug=False,debugCodePaths=False)
         factory.protocol = MyWsClientProtocol
 
         connectWS(factory)

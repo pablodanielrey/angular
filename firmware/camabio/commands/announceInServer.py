@@ -28,7 +28,7 @@ reactor = client.network.websocket.getReactor()
 
 def announceOk(protocol,message):
     global reactor
-    logging.info('Anuncio correctamente transmitido')
+    logging.info(message)
     protocol.sendClose()
     reactor.stop()
 
