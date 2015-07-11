@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-import inject
+import inject, logging
+import psycopg2
 
 from model.config import Config
 from model.systems.assistance.firmware import Firmware

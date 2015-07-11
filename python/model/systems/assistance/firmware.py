@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-import inject
-import uuid
+import inject, uuid
+
+
 
 from model.config import Config
 from model.systems.assistance.devices import Devices
@@ -15,7 +16,7 @@ class Firmware:
         self._loadPasswordsFromConfig()
 
 
-    def _loadPasswordsFromConfig():
+    def _loadPasswordsFromConfig(self):
         i = 1
         self.passwords = []
         while True:
@@ -32,6 +33,6 @@ class Firmware:
         if password not in self.passwords:
             return None
 
-        devices.persistOrUpdate(device)
+        self.devices.persistOrUpdate(conn,device)
 
         return device['id']

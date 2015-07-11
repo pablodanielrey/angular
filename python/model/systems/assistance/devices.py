@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+import datetime
 
 class Devices:
 
@@ -29,14 +29,14 @@ class Devices:
     def update(self,con,device):
         timezone = self._getTimeZone(device)
 
-        req = (device['id'],device['device'],device['ip'],device['enabled'],timezone, datetime.datetime.now())
+        req = (device['device'],device['ip'],device['enabled'],timezone, datetime.datetime.now(),device['id'])
         cur = con.cursor()
-        cur.execute('insert into assistance.devices (id,device,ip,enabled,timezone,created) values (%s,%s,%s,%s,%s,%s)',req)
+        cur.execute('update assistance.devices set device = %s, ip = %s, enabled = %s, timezone = %s, created = %s where id = %s',req)
 
 
     def find(self,con,id):
         cur = con.cursor()
-        cur.execute('select id,device,ip,enabled,timezone where id = %s',(id,))
+        cur.execute('select id,device,ip,enabled,timezone from assistance.devices where id = %s',(id,))
         if (cur.rowcount <= 0):
             return None
         else:
@@ -44,7 +44,7 @@ class Devices:
 
 
     def persistOrUpdate(self,con,device):
-        d = self.find(con,device[id])
+        d = self.find(con,device['id'])
         if d:
             self.update(con,device)
         else:
