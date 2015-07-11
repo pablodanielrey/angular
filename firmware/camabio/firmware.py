@@ -5,6 +5,7 @@ import inject
 
 import reader
 from template import Templates
+from sync import Sync
 
 from model.config import Config
 from model.session import Session
@@ -27,6 +28,7 @@ class Firmware:
     session = inject.attr(Session)
     profiles = inject.attr(Profiles)
     userPassword = inject.attr(UserPassword)
+    sync = inject.attr(Sync)
 
     def __init__(self):
         self.conn = None
@@ -68,7 +70,10 @@ class Firmware:
                 userId = user['id']
 
             self.templates.persist(self.conn,userId,n,t)
+            self.sync.addPerson(self.conn,userId)
             self.conn.commit()
+
+
 
 
     ''' genera lo necesario para loguear una persona dentro del firmware '''
@@ -83,6 +88,7 @@ class Firmware:
             'log': self.date.utcNow()
         }
         self.logs.persist(self.conn,log)
+        self.sync.addLog(self.conn,log['id'])
 
         ''' logueo al usuario creandole una sesion '''
         sess = {

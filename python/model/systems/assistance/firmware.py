@@ -36,3 +36,7 @@ class Firmware:
         self.devices.persistOrUpdate(conn,device)
 
         return device['id']
+
+
+    def checkSid(self,conn,sid):
+        return self.devices.isEnabled(sid)

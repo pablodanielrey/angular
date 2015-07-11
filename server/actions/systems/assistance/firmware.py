@@ -89,3 +89,161 @@ class FirmwareDeviceAnnounce:
 
         finally:
             con.close()
+
+
+
+
+
+'''
+query :
+{
+  id:,
+ 'action':'FirmwareSyncUser',
+ 'session':sid,
+ 'request':{
+     'user':user,
+     'templates':templates
+ }
+}
+
+response :
+{
+  id: "id de la petición",
+  ok: "caso exito",
+  error: "error del servidor"
+}
+'''
+
+class FirmwareSyncUser:
+
+    firmware = inject.attr(Firmware)
+    config = inject.attr(Config)
+
+    def handleAction(self, server, message):
+
+        if message['action'] != 'FirmwareSyncUser':
+            return False
+
+        if 'session' not in message:
+            response = {'id':message['id'], 'error':'Parámetros insuficientes'}
+            server.sendMessage(response)
+            return True
+
+        if 'request' not in message:
+            response = {'id':message['id'], 'error':'Parámetros insuficientes'}
+            server.sendMessage(response)
+            return True
+
+        request = message['request']
+
+        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+        try:
+
+            if not self.firmware.checkSid(con,message['session']):
+                response = {'id':message['id'], 'error':'Session de acceso incorrecta'}
+                server.sendMessage(response)
+                return True
+
+
+            '''
+                aca se realiza la accion
+            '''
+            logging.debug('actualizando {}'.format(request['user']))
+            if 'templates' in request:
+                logging.debug('actualizando templates {}'.format(request['templates']))
+
+
+
+            con.commit()
+
+            response = {
+                'id':message['id'],
+                'ok':''
+            }
+            server.sendMessage(response)
+            return True
+
+
+        except Exception as e:
+            logging.exception(e)
+            response = {'id':message['id'], 'error':'Excepción'}
+
+        finally:
+            con.close()
+
+
+
+
+
+'''
+query :
+{
+  id:,
+ 'action':'FirmwareSyncLog',
+ 'session':sid,
+ 'request':{
+     'attlog':attlog
+ }
+}
+
+response :
+{
+  id: "id de la petición",
+  ok: "caso exito",
+  error: "error del servidor"
+}
+'''
+
+class FirmwareSyncLog:
+
+    firmware = inject.attr(Firmware)
+    config = inject.attr(Config)
+
+    def handleAction(self, server, message):
+
+        if message['action'] != 'FirmwareSyncLog':
+            return False
+
+        if 'session' not in message:
+            response = {'id':message['id'], 'error':'Parámetros insuficientes'}
+            server.sendMessage(response)
+            return True
+
+        if 'request' not in message:
+            response = {'id':message['id'], 'error':'Parámetros insuficientes'}
+            server.sendMessage(response)
+            return True
+
+        request = message['request']
+
+        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+        try:
+
+            if not self.firmware.checkSid(con,message['session']):
+                response = {'id':message['id'], 'error':'Session de acceso incorrecta'}
+                server.sendMessage(response)
+                return True
+
+
+            '''
+                aca se realiza la accion
+            '''
+            logging.debug('actualizando log {}'.format(attlog))
+            
+
+            con.commit()
+
+            response = {
+                'id':message['id'],
+                'ok':''
+            }
+            server.sendMessage(response)
+            return True
+
+
+        except Exception as e:
+            logging.exception(e)
+            response = {'id':message['id'], 'error':'Excepción'}
+
+        finally:
+            con.close()

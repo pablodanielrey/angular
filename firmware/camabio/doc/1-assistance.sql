@@ -17,3 +17,12 @@ create table assistance.template_mapping (
   reader_index bigint not null,
   created timestamptz default now()
 );
+
+
+create table assistance.sync_user (
+  user_id varchar primary key not null references profile.users (id)
+);
+
+create table assistance.sync_logs (
+  attlog_id varchar primary key not null references assistance.attlog (id)
+);

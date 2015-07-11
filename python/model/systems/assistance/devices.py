@@ -34,6 +34,17 @@ class Devices:
         cur.execute('update assistance.devices set device = %s, ip = %s, enabled = %s, timezone = %s, created = %s where id = %s',req)
 
 
+
+    def isEnabled(self,con,id):
+        cur = con.cursor()
+        cur.execute('select enabled from assistance.devices where id = %s',(id,))
+        if (cur.rowcount <= 0):
+            return False
+        else:
+            return cur.fetchone()[0]
+
+
+
     def find(self,con,id):
         cur = con.cursor()
         cur.execute('select id,device,ip,enabled,timezone from assistance.devices where id = %s',(id,))
