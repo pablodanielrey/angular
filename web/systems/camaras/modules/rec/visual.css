@@ -1,0 +1,76 @@
+/****************** Estilos comunes ******************************/
+/****************************************************************/
+
+*{
+  margin: 0px;
+  padding: 0px;
+}
+
+.inputSearchContent {
+  padding: 10px;
+  margin-bottom: 20px;
+  background-color: #5c5f69;
+  width: 50%;
+
+
+}
+
+.inputSearch {
+
+  margin-left: 20px;
+  width: 250%;
+  padding: 3px;
+  font-size: 1em;
+  border:none
+}
+
+.recContainer {
+  height:100%;
+  width:100%;
+  position:absolute;
+  overflow:hidden;
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.contentRec {
+  padding: 20px;
+}
+
+.menuRec {
+  background-color:white;
+  -webkit-box-shadow: 1px 1px 5px #5c5f69;
+  -moz-box-shadow: 5px 5px 5px #5c5f69;
+  border-radius:2px;
+  -webkit-border-radius:2px;
+  -moz-border-radius:2px;
+  padding: 20px;
+  width: 82%;
+  margin-bottom: 20px;
+}
+
+.contentItem {
+  border-radius:2px;
+  -webkit-border-radius:2px;
+  -moz-border-radius:2px;
+  border:1px solid #ECECEC;
+
+  padding:5px;
+
+  color:#5c5f69;
+  background-color:#eeeeee;
+}
+
+.contentItem input {
+  border: none;
+  padding: 2px;
+  margin: 2px;
+  color: #0066A6;
+}
+
+.menuRec button {
+  border: none;
+  padding:10px;
+
+  background-color: #0066A6;
+  color: white;
+}

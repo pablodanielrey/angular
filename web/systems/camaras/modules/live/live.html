@@ -1,0 +1,90 @@
+<div class='createRegulationContainer' >
+    <div class='contentScreens'>
+        <!-- <div class="openFilters" ng-click="toggleFilters()" ng-class="{true:'closeFilters',false:'openfilters'}[model.cerrado]">
+          <button><i class="fa fa-cogs"></i> FILTROS</button>
+        </div> -->
+        <div class="buttonFilters" ng-click='model.contentFiltersView = !model.contentFiltersView'>
+          <i class="fa fa-cogs" ></i>
+        </div>
+        <div class="contentFilters  " ng-class="{false:'hidden'}[model.contentFiltersView]">
+            <div class="subContentFilters">
+                <!-- <div>
+                  FILTROS
+                </div> -->
+                <div class="subContent">
+                  <h4>Subsuelo</h4> <br>
+                  <input type="checkbox"> <i class="fa fa-video-camera"></i> Todas<br>
+                  <input type="checkbox"> <i class="fa fa-video-camera"></i> 1<br>
+                  <input type="checkbox"> <i class="fa fa-video-camera"></i> 2<br>
+                  <input type="checkbox"> <i class="fa fa-video-camera"></i> 3<br>
+                  <input type="checkbox"> <i class="fa fa-video-camera"></i> 4<br>
+                  <input type="checkbox"> <i class="fa fa-video-camera"></i> 5<br>
+                </div>
+                <div class="subContent">
+                  <h4>P. Baja</h4> <br>
+                  <input type="checkbox"> <i class="fa fa-video-camera"></i> Todas<br>
+                  <input type="checkbox"> <i class="fa fa-video-camera"></i> 1<br>
+                  <input type="checkbox"> <i class="fa fa-video-camera"></i> 2<br>
+                  <input type="checkbox"> <i class="fa fa-video-camera"></i> 3<br>
+                  <input type="checkbox"> <i class="fa fa-video-camera"></i> 4<br>
+                  <input type="checkbox"> <i class="fa fa-video-camera"></i> 5<br>
+                </div>
+                <div class="subContent">
+                  <h4>1er Piso</h4> <br>
+                  <input type="checkbox"> <i class="fa fa-video-camera"></i> Todas<br>
+                  <input type="checkbox"> <i class="fa fa-video-camera"></i> 1<br>
+                  <input type="checkbox"> <i class="fa fa-video-camera"></i> 2<br>
+                  <input type="checkbox"> <i class="fa fa-video-camera"></i> 3<br>
+                  <input type="checkbox"> <i class="fa fa-video-camera"></i> 4<br>
+                  <input type="checkbox"> <i class="fa fa-video-camera"></i> 5<br>
+                </div>
+                <div class="subContent">
+                  <h4>2do Piso</h4> <br>
+                  <input type="checkbox"> <i class="fa fa-video-camera"></i> Todas<br>
+                  <input type="checkbox"> <i class="fa fa-video-camera"></i> 1<br>
+                  <input type="checkbox"> <i class="fa fa-video-camera"></i> 2<br>
+                  <input type="checkbox"> <i class="fa fa-video-camera"></i> 3<br>
+                  <input type="checkbox"> <i class="fa fa-video-camera"></i> 4<br>
+                  <input type="checkbox"> <i class="fa fa-video-camera"></i> 5<br>
+                </div>
+                <div class="subContent">
+                  <h4>3er Piso</h4> <br>
+                  <input type="checkbox"> <i class="fa fa-video-camera"></i> Todas<br>
+                  <input type="checkbox"> <i class="fa fa-video-camera"></i> 1<br>
+                  <input type="checkbox"> <i class="fa fa-video-camera"></i> 2<br>
+                  <input type="checkbox"> <i class="fa fa-video-camera"></i> 3<br>
+                  <input type="checkbox"> <i class="fa fa-video-camera"></i> 4<br>
+                  <input type="checkbox"> <i class="fa fa-video-camera"></i> 5<br>
+                </div>
+                <div class="subContent">
+                  <h4>4to Piso</h4> <br>
+                  <input type="checkbox"> <i class="fa fa-video-camera"></i> Todas<br>
+                  <input type="checkbox"> <i class="fa fa-video-camera"></i> 1<br>
+                  <input type="checkbox"> <i class="fa fa-video-camera"></i> 2<br>
+                  <input type="checkbox"> <i class="fa fa-video-camera"></i> 3<br>
+                  <input type="checkbox"> <i class="fa fa-video-camera"></i> 4<br>
+                  <input type="checkbox"> <i class="fa fa-video-camera"></i> 5<br>
+                </div>
+                <div class="subContent">
+                  <h4>5to Piso</h4> <br>
+                  <input type="checkbox"> <i class="fa fa-video-camera"></i> Todas<br>
+                  <input type="checkbox"> <i class="fa fa-video-camera"></i> 1<br>
+                  <input type="checkbox"> <i class="fa fa-video-camera"></i> 2<br>
+                  <input type="checkbox"> <i class="fa fa-video-camera"></i> 3<br>
+                  <input type="checkbox"> <i class="fa fa-video-camera"></i> 4<br>
+                  <input type="checkbox"> <i class="fa fa-video-camera"></i> 5<br>
+                </div>
+            </div>
+        </div>
+        <div class="contentCameras">
+            <div class="content">
+                <video  width='auto' height='auto' controls autoplay><source src='http://163.10.56.194:8000/camara3.ogg'/></video>
+                <div><i class="fa fa-video-camera"></i> 1 | Subsuelo </div>
+            </div>
+            <div class="content">
+                <video  width='auto' height='auto' controls autoplay><source src='http://163.10.56.194:8000/camara4.ogg'/></video>
+                <div><i class="fa fa-video-camera"></i> 2 | Subsuelo </div>
+            </div>
+        </div>
+    </div>
+</div>
