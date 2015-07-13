@@ -18,14 +18,14 @@
 
       </div>
 
+
       <div class="search">
-        <div class="searchTitle2">
-          <span><i class="fa fa-building-o"></i> Oficina</span>
+        <div class="searchTitle">
+          <span><i class="fa fa-building-o"></i> Seleccione Oficina</span>
         </div>
-        <div>
-          <select ng-change="vm.changeOffice()" ng-model="vm.model.officeSelected" ng-options="op.name group by op.parentName  for op in vm.model.offices | orderBy:['parentName','order','name']">
-            <option value="">---</option>
-          </select>
+        <input class="inputSearch" ng-blur="vm.hideListOffice()" ng-model="vm.model.searchOffice" ng-click="vm.displayListOffice()" placeholder="Buscar...">
+        <div class="listOfficesContainer">
+          <tree family="vm.model.offices" class="listOffices" ng-class="{true:'visible', false:'hidden'}[vm.isDisplayListOffice()]"></tree>
         </div>
       </div>
 
