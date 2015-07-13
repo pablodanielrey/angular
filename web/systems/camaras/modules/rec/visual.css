@@ -64,13 +64,66 @@
   border: none;
   padding: 2px;
   margin: 2px;
-  color: #0066A6;
+  color: #5c5f69;
+  font-weight: bold;
 }
 
 .menuRec button {
   border: none;
   padding:10px;
-
   background-color: #0066A6;
   color: white;
+}
+
+.menuRec button:hover {
+  border: none;
+  padding:10px;
+  background-color: #275276;
+  color: white;
+}
+
+.imgFilters {
+  background: url(../../img/filtros.png) no-repeat;
+  height: 100%;
+  width:50%;
+  margin: 0 auto;
+
+
+}
+
+.contentRecordings {
+  position: absolute;
+  z-index: 999;
+  background-color:white;
+  -webkit-box-shadow: 1px 1px 5px #5c5f69;
+  -moz-box-shadow: 5px 5px 5px #5c5f69;
+  border-radius:2px;
+  -webkit-border-radius:2px;
+  -moz-border-radius:2px;
+  padding: 10px;
+  margin-left: 20px;
+  width: 81%;
+  height: 50%;
+  transform: translate3d(0,-195%,0);
+  transition: all 0.4s ease-in-out;
+  -webkit-transition: all 500ms cubic-bezier(0.390, 0.575, 0.265, 1); /* older webkit */
+-webkit-transition: all 500ms cubic-bezier(0.390, 0.575, 0.265, 1.185);
+   -moz-transition: all 500ms cubic-bezier(0.390, 0.575, 0.265, 1.185);
+     -o-transition: all 500ms cubic-bezier(0.390, 0.575, 0.265, 1.185);
+        transition: all 500ms cubic-bezier(0.390, 0.575, 0.265, 1.185); /* custom */
+}
+.contentRecordings.hidden {
+  position: absolute;
+  transform: translate3d(0,0,0);
+  transition: all 0.4s ease-in-out;
+  background-color:white;
+  -webkit-box-shadow: 1px 1px 5px #5c5f69;
+  -moz-box-shadow: 5px 5px 5px #5c5f69;
+  border-radius:2px;
+  -webkit-border-radius:2px;
+  -moz-border-radius:2px;
+  padding: 10px;
+  margin-left: 20px;
+  opacity:0.0;
+
 }
