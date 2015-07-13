@@ -111,6 +111,8 @@ function AssistanceFailsFiltersCtrl($scope, $timeout, Notifications, Assistance,
      vm.model.user = user;
      vm.model.searchUser = vm.model.user.name + " " + vm.model.user.lastname;
      vm.view.displayListUser = false;
+     vm.model.office = null;
+     vm.model.searchOffice = null;
    }
 
    function hideListUser() {
@@ -136,6 +138,8 @@ function AssistanceFailsFiltersCtrl($scope, $timeout, Notifications, Assistance,
       vm.model.office = office;
       vm.model.searchOffice = vm.model.office.name;
       vm.view.displayListOffice = false;
+      vm.model.user = null;
+      vm.model.searchUser = null;
     }
 
     function isDisplayListOffice() {
