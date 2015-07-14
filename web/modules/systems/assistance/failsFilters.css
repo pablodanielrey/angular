@@ -404,6 +404,12 @@
 
 }
 
+.assistanceFailsFilters .searchOffices {
+  display:flex;
+  flex-direction: column;
+}
+
+
 .assistanceFailsFilters .listOffices .item{
   cursor:pointer;
 }
@@ -419,4 +425,16 @@
 .assistanceFailsFilters .treeElem {
   padding: 0.5em;
   border-bottom: 2px solid white;
+}
+
+.assistanceFailsFilters .input-group-addon {
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 1;
+  color: #555555;
+  text-align: center;
+  background-color: #eeeeee;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
 }

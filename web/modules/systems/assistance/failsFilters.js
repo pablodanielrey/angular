@@ -1,7 +1,6 @@
 angular
     .module('mainApp')
-    .controller('AssistanceFailsFiltersCtrl',AssistanceFailsFiltersCtrl)
-    .directive('tree', tree);
+    .controller('AssistanceFailsFiltersCtrl',AssistanceFailsFiltersCtrl);
 
 
 AssistanceFailsFiltersCtrl.$inject = ['$scope', '$timeout', 'Notifications', 'Assistance', 'Users', 'Utils', 'Session','filterFilter'];
@@ -19,7 +18,11 @@ function AssistanceFailsFiltersCtrl($scope, $timeout, Notifications, Assistance,
     users: [],
     office: null,
     searchOffice: null,
-    offices: []
+    offices: [],
+    filter:{
+      begin:new Date(),
+      end:new Date()
+    }
   }
 
   vm.view = {
@@ -41,6 +44,8 @@ function AssistanceFailsFiltersCtrl($scope, $timeout, Notifications, Assistance,
   vm.groupSelected = groupSelected;
   vm.hideListOffice = hideListOffice;
 
+  vm.initializeFilter = initializeFilter;
+  vm.correctDates = correctDates;
 
 
   /* ------------------------------------------
@@ -54,6 +59,7 @@ function AssistanceFailsFiltersCtrl($scope, $timeout, Notifications, Assistance,
 
     vm.initializeUsers();
     vm.initializeOffices();
+    vm.initializeFilter();
   }
 
   $scope.$on('$viewContentLoaded', function(event) {
@@ -257,25 +263,32 @@ function AssistanceFailsFiltersCtrl($scope, $timeout, Notifications, Assistance,
       }
     }
 
-}
+    /* ------------------------------------------
+     * ---------------- FILTROS -----------------
+     * ------------------------------------------
+     */
 
-tree.$inject = ['$compile'];
-function tree($compile) {
-  return {
-      restrict: "E",
-      scope: {family: '='},
-      templateUrl: '/modules/systems/assistance/tree.html',
-      compile: function(tElement, tAttr) {
-          var contents = tElement.contents().remove();
-          var compiledContents;
-          return function(scope, iElement, iAttr) {
-              if(!compiledContents) {
-                  compiledContents = $compile(contents);
-              }
-              compiledContents(scope, function(clone, scope) {
-                       iElement.append(clone);
-              });
-          };
-      }
-  };
+    function initializeFilter() {
+      vm.model.filter = {};
+      vm.correctDates();
+    }
+
+    function correctDates() {
+      if(!vm.model.filter.begin) vm.model.filter.begin = new Date();
+      vm.model.filter.begin.setHours(0);
+      vm.model.filter.begin.setMinutes(0);
+      vm.model.filter.begin.setSeconds(0);
+      if((!vm.model.filter.end) || (vm.model.filter.end < vm.model.filter.begin)) vm.model.filter.end = new Date(vm.model.filter.begin);
+      vm.model.filter.end.setHours(23);
+      vm.model.filter.end.setMinutes(59);
+      vm.model.filter.end.setSeconds(59);
+    };
+
+    $scope.$watch('vm.model.filter.begin', vm.correctDates);
+    $scope.$watch('vm.model.filter.end', vm.correctDates);
+
+    /* ------------------------------------------
+     * ---------------- BUSCAR ------------------
+     * ------------------------------------------
+     */
 }

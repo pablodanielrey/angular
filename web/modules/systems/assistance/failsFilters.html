@@ -19,11 +19,11 @@
       </div>
 
 
-      <div class="search">
+      <div class="searchOffices">
         <div class="searchTitle">
           <span><i class="fa fa-building-o"></i> Seleccione Oficina</span>
         </div>
-        <input class="inputSearch" ng-blur="vm.hideListOffice()" ng-model="vm.model.searchOffice" ng-click="vm.displayListOffice()" placeholder="Buscar...">
+        <input  class="inputSearch" ng-blur="vm.hideListOffice()" ng-model="vm.model.searchOffice" ng-click="vm.displayListOffice()" placeholder="Buscar...">
         <div class="listOfficesContainer">
           <tree family="vm.model.offices" class="listOffices" ng-class="{true:'visible', false:'hidden'}[vm.isDisplayListOffice()]"></tree>
         </div>
@@ -38,7 +38,7 @@
               <span><i class="fa fa-calendar"></i> Fecha de Inicio</span>
             </div>
             <div>
-              <input class="inputDate" type="date" ng-model="model.filter.begin">
+              <input class="inputDate" type="date" ng-model="vm.model.filter.begin">
             </div>
           </div>
         </div>
@@ -51,7 +51,7 @@
               <span><i class="fa fa-calendar"></i> Fecha de Fin</span>
             </div>
             <div>
-              <input class="inputDate" type="date" ng-model="model.filter.end">
+              <input class="inputDate" type="date" ng-model="vm.model.filter.end">
             </div>
           </div>
         </div>
