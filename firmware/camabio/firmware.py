@@ -155,20 +155,7 @@ class Firmware:
 
 
     ''' sincroniza los usuarios que tuvieron cambios en la base del firmware '''
-    def syncUsers(self, client):
+    def syncUsers(self):
 
         self.conn = self.__get_database()
-
-        cur = conn.cursor()
-        cur.execute('select user_id from assistance.sync_user')
-        if cur.rowcount < 0:
-            return
-
-        for u in cur:
-            userId = u[0]
-            user = self.users.findUser(self.conn,userId)
-            if user:
-                templates = self.templates.findByUser(self.conn,userId)
-                self.client.syncUser()
-
-        self.conn.commit()
+        self.sync.syncUsers(self.conn)

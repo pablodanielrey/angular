@@ -125,7 +125,26 @@ class MyWsClientProtocol(WebSocketClientProtocol):
 
 
 
-def getReactor():
+
+class MyWebSocketClientFactory(WebSocketClientFactory):
+
+    def __init__(self,myLifeCycleAdapter=None,url=None,debug=False,debugCodePaths=False):
+        super(WebSocketClientFactory,self).__init__(url=url,debug=debug,debugCodePaths=debugCodePaths)
+        self.myLifeCycleAdapter = myLifeCycleAdapter
+
+    def clientConnectionFailed(self, connector, reason):
+        super(WebSocketClientFactory,self).clientConnectionFailed(connector,reason)
+        if self.myLifeCycleAdapter:
+            myLifeCycleAdapter.clientConnectionFailed(self,connector,reason)
+
+
+
+
+def getProtocol():
+    return MyWsClientProtocol
+
+
+def connectClient(myFactory=None):
 
     try:
         config = inject.instance(Config)
@@ -134,14 +153,24 @@ def getReactor():
         url = 'ws://{}:{}'.format(config.configs['server_ip'],config.configs['server_port'])
         logging.info('conectando a {}'.format(url))
 
-        factory = WebSocketClientFactory(url=url,debug=False,debugCodePaths=False)
-        factory.protocol = MyWsClientProtocol
+        factory = None
+        if myFactory is None:
+            factory = WebSocketClientFactory(url=url,debug=False,debugCodePaths=False)
+        else:
+            factory = myFactory
+
+        factory.protocol = getProtocol()
 
         connectWS(factory)
         ''' reactor.connectTCP(config.configs['server_ip'], int(config.configs['server_port']), factory=factory) '''
 
-        return reactor
+        return factory
 
     except Exception as e:
         logging.exception(e)
         raise e
+
+
+
+def getReactor():
+    return reactor

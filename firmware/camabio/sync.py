@@ -1,7 +1,15 @@
 # -*- coding: utf-8 -*-
 
+import inject
+from model.users.users import Users
+from model.systems.assistance.templates import Templates
+
+import client.network.websocket
 
 class Sync:
+
+    users = inject.attr(Users)
+    templates = inject.attr(Templates)
 
     def addPerson(self,conn,id):
         cur = conn.cursor()
@@ -10,3 +18,45 @@ class Sync:
     def addLog(self,conn,id):
         cur = conn.cursor()
         cur.execute('insert into assistance.sync_logs (attlog_id) values (%s)',(id,))
+
+    def syncUsers(self,conn):
+
+        cur = conn.cursor()
+        cur.execute('select user_id from assistance.sync_user')
+        if cur.rowcount < 0:
+            logging.info('No existe usuario a sincronizar')
+            return
+
+        toSync = []
+        for u in cur:
+            userId = u[0]
+            user = self.users.findUser(self.conn,userId)
+            if user:
+                templates = self.templates.findByUser(self.conn,userId)
+                toSync.append({
+                    'user':user,
+                    'templates':templates
+                })
+
+
+        def callbackSync(protocol,message):
+            if 'ok' in message:
+                logging.debug('OK : '.format(message))
+            else:
+                logging.debug('ERROR : '.format(message))
+
+
+        def callbackAnnounce(protocol,message):
+
+            if 'error' in message:
+                logging.error('ERROR en announce : {}'.format(message))
+                return
+
+            firmware = inject.instance(client.systems.assistance.Firmware)
+
+            sid = message['response']['sid']
+            for u in toSync:
+                firmware.syncUser(protocol,sid,u['user'],u['templates'],callbackSync)
+
+        client.network.websocket.getProtocol().addCallback(callbackAnnounce)
+        client.network.websocket.connectClient()

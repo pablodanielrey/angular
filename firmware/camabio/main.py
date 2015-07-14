@@ -1,5 +1,7 @@
+# -*- coding: utf-8 -*-
 import sys
 sys.path.append('../../python')
+sys.path.append('../../apis')
 
 import logging, time, threading, signal
 import inject

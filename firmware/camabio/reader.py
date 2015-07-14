@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-import cserial, camabio
+import cserial
+import camabio
+
 import time, codecs, logging
 import inject
 
@@ -24,6 +26,8 @@ class Reader:
 
     def identify(self):
         logging.debug('reader identify')
+        while True:
+            time.sleep(100)
 
     def enroll(self, need_first=None, need_second=None, need_third=None, need_release=None):
 
@@ -183,7 +187,7 @@ class FirmwareReader(Reader):
                 logging.debug('readding serial')
                 resp = cserial.readS(24)
                 logging.debug('paquete leido {}'.format(resp))
-                
+
                 ret = camabio.getAttrFromPackage(camabio.RET,resp)
                 data = camabio.getAttrFromPackage(camabio.DATA,resp)
                 exit = True

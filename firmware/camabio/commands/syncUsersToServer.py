@@ -1,31 +1,26 @@
 # -*- coding: utf-8 -*-
 
 import sys
+sys.path.append('../../../firmware/camabio')
 sys.path.append('../../../python')
 sys.path.append('../../../apis')
 
-import signal
-import inject, logging
-import psycopg2
-
-
-from model.config import Config
-from model.users.users import Users
-
-
-from client.network.websocket import MyWsClientProtocol
-from client.systems.assistance.firmware import Firmware
-
-import client.network.websocket
-
-
+import signal, logging
 logging.getLogger().setLevel(logging.DEBUG)
+
+import inject
+from model.config import Config
 
 ''' configuro el injector con las variables apropiadas '''
 def config_injector(binder):
     binder.bind(Config,Config('firmware-config.cfg'))
 
 inject.configure(config_injector)
+
+
+import client.network.websocket
+from firmware import Firmware
+
 reactor = client.network.websocket.getReactor()
 
 def close_sig_handler(signal,frame):
@@ -33,41 +28,19 @@ def close_sig_handler(signal,frame):
     reactor.stop()
     sys.exit()
 
-
-
-
-
-''' en el ok del announce '''
-def announceOk(protocol,message):
-    global reactor
-    logging.info(message)
-
-    message['']
-
-    users = inject.instance(Users)
-    users.listUsers()
-
-
-
-    protocol.sendClose()
-    reactor.stop()
-
-
-''' llamado cuando se ejecuta un open en la conexión del websocket '''
-def initSync(protocol):
-    logging.info('iniciando sincronización')
-
-    firmware = inject.instance(Firmware)
-    firmware.firmwareDeviceAnnounce(protocol,announceOk)
-
-
-
-
+class LifeCycleAdapter:
+    def clientConnectionFailed(self,connector,reason):
+        close_sig_handler(None,None)
 
 
 if __name__ == '__main__':
 
     signal.signal(signal.SIGINT,close_sig_handler)
 
-    MyWsClientProtocol.addCallback(announce)
+    lca = LifeCycleAdapter()
+    client.network.websocket.connectClient()
+
+    firmware = inject.instance(Firmware)
+    firmware.syncUsers()
+
     reactor.run()
