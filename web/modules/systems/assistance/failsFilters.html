@@ -38,7 +38,7 @@
               <span><i class="fa fa-calendar"></i> Fecha de Inicio</span>
             </div>
             <div>
-              <input class="inputDate" type="date" ng-model="vm.model.filter.begin">
+              <input class="inputDate" type="date" ng-model="vm.model.begin">
             </div>
           </div>
         </div>
@@ -51,16 +51,16 @@
               <span><i class="fa fa-calendar"></i> Fecha de Fin</span>
             </div>
             <div>
-              <input class="inputDate" type="date" ng-model="vm.model.filter.end">
+              <input class="inputDate" type="date" ng-model="vm.model.end">
             </div>
           </div>
         </div>
       </div>
 
       <div class="actionsContainer">
-        <button class="button blue"  ng-click="search()"><i class="fa fa-search"></i> Buscar</Button>
+        <button class="button blue"  ng-if='!vm.model.searching' ng-click="vm.search()"><i class="fa fa-search"></i> Buscar</Button>
         <span></span>
-        <span class="searchDate" ng-if='model.searching'><i class="loading fa fa-spinner fa-spin"></i>  Buscando Datos</span>
+        <span class="searchDate" ng-if='vm.model.searching'><i class="loading fa fa-spinner fa-spin"></i>  Buscando Datos</span>
       </div>
     </div>
 
@@ -76,7 +76,7 @@
     			<span class="margin"> Periodicidad</span>
     		</div>
     		<div>
-          <select class="input" ng-model="model.filter.periodicity"  ng-options="periodicity for periodicity in model.periodicities">
+          <select class="input" ng-model="vm.model.filter.periodicitySelected"  ng-options="periodicity for periodicity in vm.model.filter.periodicities">
             <option value=""> Sin periodicidad</option>
           </select>
     		</div>
@@ -85,7 +85,7 @@
           <span class="margin"> Tipo</span>
         </div>
         <div>
-          <select class="input" ng-model="model.filter.failType"  ng-options="type.name for type in model.failsType | orderBy:['name']">
+          <select class="input" ng-model="vm.model.filter.failTypeSelected"  ng-options="type.name for type in vm.model.filter.failsType | orderBy:['name']">
             <option value=""> Seleccione...</option>
           </select>
         </div>
@@ -94,20 +94,20 @@
     			<span class="margin"> Cantidad</span>
     		</div>
         <div>
-          <input class="input t1" class="input" type="text" ng-model="model.filter.count">
+          <input class="input t1" class="input" type="text" ng-model="vm.model.filter.count">
         </div>
 
-        <div class=" margin" ng-class="{true:'visible',false:'hidden'}[model.filter.failType != null && model.filter.failType.isHours]">
+        <div class=" margin" ng-class="{true:'visible',false:'hidden'}[vm.model.filter.failTypeSelected != null && vm.model.filter.failTypeSelected.isHours]">
           <div class="hoursOperatorsInput">
             <div>
       				<span class="margin"> Horas</span>
       			</div>
             <div>
-              <select class="input" ng-model="model.filter.hoursOperator"  ng-options="op.name for op in model.hoursOperators"></select>
+              <select class="input" ng-model="vm.model.filter.hoursOperator"  ng-options="op.name for op in vm.model.filter.hoursOperators"></select>
             </div>
       			<div class="hoursFilterInput">
-      				<input class="input t1" type="text" ng-model="model.filter.hours">:
-        			<input class="input t1" type="text" ng-model="model.filter.minutes">
+      				<input class="input t1" type="text" ng-model="vm.model.filter.hours">:
+        			<input class="input t1" type="text" ng-model="vm.model.filter.minutes">
       			</div>
           </div>
         </div>
@@ -130,7 +130,7 @@
     </div>
     <div class="fails">
 
-      <div class="fail" ng-repeat="assistanceFail in model.assistanceFails | orderBy:predicate:reverse">
+      <div class="fail" ng-repeat="assistanceFail in vm.model.assistanceFails | orderBy:predicate:reverse">
         <div class="date">{{assistanceFail.fail.dateFormat}}</div>
         <div class="dni">{{assistanceFail.user.dni}}</div>
         <div class="lastname">{{assistanceFail.user.lastname}}</div>
