@@ -10,6 +10,9 @@ import psycopg2
 
 
 from model.config import Config
+from model.users.users import Users
+
+
 from client.network.websocket import MyWsClientProtocol
 from client.systems.assistance.firmware import Firmware
 
@@ -34,13 +37,23 @@ def close_sig_handler(signal,frame):
 
 
 
-
+''' en el ok del announce '''
 def announceOk(protocol,message):
     global reactor
     logging.info(message)
+
+    message['']
+
+    users = inject.instance(Users)
+    users.listUsers()
+
+
+
     protocol.sendClose()
     reactor.stop()
 
+
+''' llamado cuando se ejecuta un open en la conexión del websocket '''
 def initSync(protocol):
     logging.info('iniciando sincronización')
 
