@@ -1,9 +1,11 @@
 
 
 app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "Notifications", "Issue", function ($scope, $timeout, $window, Module, Notifications, Issue) {
- 
- 
+
+
   $scope.data = [
+
+    /*
   {
     "id": "sasdfiasdpfiasdfasdñfj",
     "title": "Reacondicionar oficina ",
@@ -25,7 +27,7 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
             "title": "2.1.1. spooky-giraffe",
             "expanded":false,
             "nodes": []
-            
+
           },
           {
             "id": 212,
@@ -54,7 +56,7 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
     "title": "4. romantic-transclusion",
     "expanded":false,
     "nodes": []
-  }
+  }*/
 ];
 
 
@@ -62,7 +64,12 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
       var nodeData = model.$modelValue;
       nodeData.expanded = !nodeData.expanded ;
   };
-  
+
+  $scope.expandDescription = function(model){
+      var nodeData = model.$modelValue;
+      nodeData.descriptionExpanded = !nodeData.descriptionExpanded ;
+  };
+
   $scope.toggleItem = function (model) {
     model.toggle();
   };
@@ -73,12 +80,27 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
     nodeData.nodes.push({
       "id": (nodeData["id"]+1),
       "title": "new" + (nodeData["id"]+1),
-      "nodes": []
+      "nodes": [],
+      "expanded":false,
+      "descriptionExpanded":false
     });
   };
 
-  
-    
+
+  $scope.comment = function(model) {
+    model.expand();
+    var nodeData = model.$modelValue;
+    nodeData.nodes.push({
+      "id": (nodeData["id"]+1),
+      "title": "comentario",
+      "nodes": [],
+      "expanded":false,
+      "descriptionExpanded":false
+    });
+  };
+
+
+
 
   $scope.request = {
     id: null,
@@ -90,32 +112,44 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
     priority:null,
     visibility:null
   };
-  
+
   /*$scope.requestState = {
     created: new Date(),
     state: "PENDING",
     request_id:null,
     user_id:$scope.global.sessionUserId,
   };*/
-  
+
   $scope.errors = {
     request: null
   };
-  
-  
+
+
   $scope.checkRequest = function(){
     $scope.errors.request = null;
     if(!$scope.request.request) $scope.errors.request =  'No puede estar vacío';
   };
-  
-  
-  
-  
+
+
+
+
   /**
    * Enviar formulario
    * @returns {undefined}
    */
   $scope.submit = function(){
+
+    $scope.data.push(
+      {
+        "id": "sasdfiasdpfiasdfasdñfj",
+        "title": $scope.request.request,
+        "nodes": [],
+        "expanded":false,
+        "descriptionExpanded":false
+      }
+    )
+
+    /*
     $scope.checkRequest();
     for(var i in $scope.errors){
       if($scope.errors[i] !== null){
@@ -123,20 +157,20 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
         return;
       }
     }
-    
+
     $scope.request.requestorId = $scope.global.sessionUserId;
-    
+
     Issue.newRequest($scope.request,
       function(data) { Notifications.message("Registro agregado exitosamente"); },
       function(error) { Notifications.message(error); }
     );
-    
+    */
   };
-  
-  
-  
-  
-  
+
+
+
+
+
   /******************
    * INICIALIZACION *
    ******************/
@@ -155,5 +189,5 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
       }
     );
   }, 0);
-  
+
 }]);

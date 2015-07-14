@@ -6,15 +6,22 @@
     <textarea ng-model="request.request" placeholder="Escriba su pedido" ng-blur="checkRequest()"></textarea>
     <span ng-show="errors.request != null">{{errors.request}}</span>
     <button ng-click="submit()">Aceptar</button>
-      
+
   </form>
 </div>
+
+
+
+
+
 
 
 <!-- Nested node template -->
 <script type="text/ng-template" id="nodes_renderer.html">
   <div ui-tree-handle>
+    <button ng-click="expandDescription(this)">A</button>
     <input ng-model="node.title" ng-class="{'tree': node.expanded}"  ng-click="expandInput(this)"/>
+
     <select>
       <option>ESTADO</option>
       <option>comentario</option>
@@ -22,26 +29,47 @@
       <option>cerrado</option>
     </select>
     <select>
+      <option>PRIORIDAD</option>
+      <option>Alta</option>
+    </select>
+    <button ng-if="collapsed" ng-click="toggleItem(this)">S</button>
+    <button ng-if="!collapsed" ng-click="toggleItem(this)">H</button>
+    <button ng-click="comment(this)">C</button>
+    <button ng-click="newSubItem(this)">+</button>
+    <button ng-click="remove(this)">X</button>
+  </div>
+
+  <div ng-class="{true:'descriptionExpanded',false:'descriptionClosed'}[node.descriptionExpanded]" >
+  <div>
+    datos del pedido
+    <div>
+    <select>
       <option>OFICINA</option>
       <option>Mantenimiento</option>
     </select>
+    </div>
+    <div>
     <select>
       <option>USUARIO</option>
       <option>Jose</option>
     </select>
-    <select>
-      <option>PRIORIDAD</option>
-      <option>Alta</option>
-    </select>
+    </div>
+    <div>
     <select>
       <option>VISIBILIDAD</option>
       <option>Privado</option>
     </select>
-    <button ng-if="collapsed" ng-click="toggleItem(this)">S</button>
-    <button ng-if="!collapsed" ng-click="toggleItem(this)">H</button>
-    <button ng-click="newSubItem(this)">+</button>
-    <button ng-click="remove(this)">X</button>
+    </div>
   </div>
+
+  <div>
+    quien pide
+    <div>Fecha</div><div><date/></div>
+    <div>Oficina</div><div>Informática</div>
+    <div>Usuario</div><div>Pablo Rey</div>
+  </div>
+  </div>
+
   <ol ui-tree-nodes="" ng-model="node.nodes" ng-class="{'angular-ui-tree-hidden': collapsed}">
     <li  ng-repeat="node in node.nodes" ui-tree-node ng-include="'nodes_renderer.html'">
     </li>
