@@ -18,7 +18,7 @@ import client.network.websocket
 
 logging.getLogger().setLevel(logging.DEBUG)
 
-""" configuro el injector con las variables apropiadas """
+''' configuro el injector con las variables apropiadas '''
 def config_injector(binder):
     binder.bind(Config,Config('firmware-config.cfg'))
 

@@ -8,7 +8,7 @@ import psycopg2
 
 from model.config import Config
 
-""" configuro el injector con las variables apropiadas """
+''' configuro el injector con las variables apropiadas '''
 def config_injector(binder):
     binder.bind(Config,Config('firmware-config.cfg'))
 
