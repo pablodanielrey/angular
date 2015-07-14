@@ -136,6 +136,8 @@ class ScheduleCheck(Check):
         for j in justifications:
             if 'end' in j and j['end'] is not None and (j['begin']-self.tolerancia) <= start and (j['end']+self.tolerancia) >= end:
                 return True
+            if start is not None and j['justification_id'] == '4d7bf1d4-9e17-4b95-94ba-4ca81117a4fb':
+                return True
 
     def _initDay(self,date):
         # paso el date a formato local y seteo a las 00:00:00:000
@@ -222,8 +224,11 @@ class ScheduleCheck(Check):
                 )
 
             elif wh['end'] < sched['end'] - self.tolerancia:
-                # busco las justificaciones que tenga desde la hora de entrada
-                justifications = self._getJustifications(con,userId,wh['start'],sched['end'])
+                # busco las justificaciones que tenga desde la hora las 00:00
+                import pdb
+                pdb.set_trace()
+                initDay = self._initDay(wh['start'])
+                justifications = self._getJustifications(con,userId,initDay,sched['end'])
                 if self._isJustifiedTime(con,userId,wh['end'],sched['end'],justifications):
                     continue
 
