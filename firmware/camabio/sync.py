@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 
-import inject
+import inject, logging
 from model.users.users import Users
 from model.systems.assistance.templates import Templates
 
 import client.network.websocket
+from client.systems.assistance.firmware import Firmware
 
 class Sync:
 
@@ -38,6 +39,11 @@ class Sync:
                     'templates':templates
                 })
 
+        if len(toSync) <= 0:
+            return
+
+        logging.debug('iniciando sincronización para los usuarios {}'.format(toSync))
+        firmware = inject.instance(client.systems.assistance.firmware.Firmware)
 
         def callbackSync(protocol,message):
             if 'ok' in message:
@@ -47,16 +53,21 @@ class Sync:
 
 
         def callbackAnnounce(protocol,message):
+            logging.debug('callbackAnnounce {}'.format(message))
 
             if 'error' in message:
                 logging.error('ERROR en announce : {}'.format(message))
                 return
 
-            firmware = inject.instance(client.systems.assistance.Firmware)
-
             sid = message['response']['sid']
+            logging.debug('sincronizando {} con el sid {}'.format(toSync,sid))
+
             for u in toSync:
                 firmware.syncUser(protocol,sid,u['user'],u['templates'],callbackSync)
 
-        client.network.websocket.getProtocol().addCallback(callbackAnnounce)
+        def callbackConnect(protocol):
+            firmware.firmwareDeviceAnnounce(protocol,callbackAnnounce)
+
+
+        client.network.websocket.getProtocol().addCallback(callbackConnect)
         client.network.websocket.connectClient()
