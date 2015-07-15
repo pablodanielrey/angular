@@ -24,9 +24,13 @@ class Justification:
     def isJustification(self,id):
         raise Exception('abstract')
 
-    ''' retorna True si la justificacion justifica la falla, por defecto, todos retornan False '''
+    ''' retorna True si la justificacion justifica la falla en un periodo de tiempo, por defecto, todos retornan False '''
     ''' minutes es el tiempro que lleva trabajado '''
     def _isJustifiedTime(self,start,end,justification,minutes,tolerancia):
+        return False
+
+    ''' retorna True si la justificacion justifica la falla para todo el dia, por defecto, todos retornan False '''
+    def _isJustifiedDay(self,date):
         return False
 
     """

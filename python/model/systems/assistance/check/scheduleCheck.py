@@ -11,6 +11,35 @@ from model.systems.assistance.justifications.BCJustification import BCJustificat
 from model.systems.assistance.justifications.BSJustification import BSJustification
 from model.systems.assistance.justifications.ETJustification import ETJustification
 
+from model.systems.assistance.justifications.AAJustification import AAJustification
+from model.systems.assistance.justifications.ARTJustification import ARTJustification
+from model.systems.assistance.justifications.AUTJustification import AUTJustification
+from model.systems.assistance.justifications.BJustification import BJustification
+from model.systems.assistance.justifications.BloodDonationJustification import BloodDonationJustification
+from model.systems.assistance.justifications.CCJustification import CCJustification
+from model.systems.assistance.justifications.CJustification import CJustification
+from model.systems.assistance.justifications.CONJustification import CONJustification
+from model.systems.assistance.justifications.CumpJustification import CumpJustification
+from model.systems.assistance.justifications.HolidayJustification import HolidayJustification
+from model.systems.assistance.justifications.ICJustification import ICJustification
+from model.systems.assistance.justifications.INVJustification import INVJustification
+from model.systems.assistance.justifications.JMJustification import JMJustification
+from model.systems.assistance.justifications.LAOJustification import LAOJustification
+from model.systems.assistance.justifications.LMAFJustification import LMAFJustification
+from model.systems.assistance.justifications.LMCDJustification import LMCDJustification
+from model.systems.assistance.justifications.LMLTJustification import LMLTJustification
+from model.systems.assistance.justifications.MATJustification import MATJustification
+from model.systems.assistance.justifications.MourningJustification import MourningJustification
+from model.systems.assistance.justifications.NACJustification import NACJustification
+from model.systems.assistance.justifications.ParoJustification import ParoJustification
+from model.systems.assistance.justifications.PEJustification import PEJustification
+from model.systems.assistance.justifications.PONJustification import PONJustification
+from model.systems.assistance.justifications.PRNJustification import PRNJustification
+from model.systems.assistance.justifications.R638Justification import R638Justification
+from model.systems.assistance.justifications.SGSJustification import SGSJustification
+from model.systems.assistance.justifications.SUSJustification import SUSJustification
+from model.systems.assistance.justifications.VJEJustification import VJEJustification
+
 '''
 Tipo de chequeo SCHEDULE
 '''
@@ -19,7 +48,37 @@ class ScheduleCheck(Check):
     date = inject.attr(Date)
     schedule = inject.attr(Schedule)
     logs = inject.attr(Logs)
-    justificationsTime = A102Justification(), BCJustification(), BSJustification(), ETJustification()
+    justificationsTime = [A102Justification(), BCJustification(), BSJustification(), ETJustification()]
+    justificationsDay = [
+        AAJustification(),
+        ARTJustification(),
+        AUTJustification(),
+        BJustification(),
+        BloodDonationJustification(),
+        CCJustification(),
+        CJustification(),
+        CONJustification(),
+        CumpJustification(),
+        HolidayJustification(),
+        ICJustification(),
+        INVJustification(),
+        JMJustification(),
+        LAOJustification(),
+        LMAFJustification(),
+        LMCDJustification(),
+        LMLTJustification(),
+        MATJustification(),
+        MourningJustification(),
+        NACJustification(),
+        ParoJustification(),
+        PEJustification(),
+        PONJustification(),
+        PRNJustification(),
+        R638Justification(),
+        SGSJustification(),
+        SUSJustification(),
+        VJEJustification()
+    ]
     justificationsReq = inject.attr(Justifications)
     justificationIds = [
         'e0dfcef6-98bb-4624-ae6c-960657a9a741',#Ausente con aviso
@@ -130,8 +189,10 @@ class ScheduleCheck(Check):
     def _isJustifiedDay(self,con,date,userId, justifications):
 
         for j in justifications:
-            if 'end' not in j or j['end'] is None:
-                return True
+            for just in self.justificationsDay:
+                if just.isJustification(j['justification_id']):
+                    return just._isJustifiedDay(date)
+        return False
 
 
     '''
