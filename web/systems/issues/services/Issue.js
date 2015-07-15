@@ -17,7 +17,6 @@ app.service('Issue', ['Utils','Messages','Session', function(Utils,Messages,Sess
     };
 
 
-  console.log(msg);
     Messages.send(msg,
       function(data) {
         if (typeof data.error === 'undefined') {
@@ -27,6 +26,31 @@ app.service('Issue', ['Utils','Messages','Session', function(Utils,Messages,Sess
         }
       });
   };
+  
+  
+  /**
+   * Retornar todas las issues solicitadas por el usuario o aquellas cuyo responsable es el usuario
+   * @param {type} userId
+   * @param {type} callbackOk
+   * @param {type} callbackError
+   * @returns {undefined}
+   */
+  this.getIssuesByUser = function (userId, callbackOk, callbackError) {
+    var msg = {
+      id: Utils.getId(),
+      action: 'getIssuesByUser',
+      session: Session.getSessionId(),
+      request: userId
+    };
 
+    Messages.send(msg,
+      function (data) {
+        if (typeof data.error === 'undefined') {
+          callbackOk(data.response);
+        } else {
+          callbackError(data.error);
+        }
+      });
+    };
 
 }]);
