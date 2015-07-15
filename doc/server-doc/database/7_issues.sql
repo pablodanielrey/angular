@@ -8,6 +8,7 @@ CREATE SCHEMA issues;
     requestor_id VARCHAR NOT NULL REFERENCES profile.users (id),
     office_id VARCHAR NOT NULL REFERENCES offices.offices (id),
     related_request_id VARCHAR REFERENCES issues.request (id),
+    assigned_id VARCHAR REFERENCES profile.users (id), 
     priority INTEGER NOT NULL default 0,
     visibility VARCHAR default 'AUTHENTICATED'
   );
