@@ -1,13 +1,19 @@
 
 <div class="contentScreens">
-  <h2>Pedido</h2>
-  <form>
+  <div class="order">
+    <!-- <i class="fa fa-tag"></i> -->
+      <h2>NUEVO PEDIDO </h2>
+      <form class="formOrder">
+        <div>
+          <textarea class="newOrder"  ng-model="request.request"  ng-blur="checkRequest()"></textarea>
+        </div>
+        <!-- <span ng-show="errors.request != null">{{errors.request}}</span> -->
 
-    <textarea ng-model="request.request" placeholder="Escriba su pedido" ng-blur="checkRequest()"></textarea>
-    <span ng-show="errors.request != null">{{errors.request}}</span>
-    <button ng-click="submit()">Aceptar</button>
-
-  </form>
+        <div>
+          <button class="buttonOrder" ng-click="submit()">SOLICITAR</button>
+        </div>
+      </form>
+  </div>
 </div>
 
 
@@ -18,25 +24,46 @@
 
 <!-- Nested node template -->
 <script type="text/ng-template" id="nodes_renderer.html">
-  <div ui-tree-handle>
-    <button ng-click="expandDescription(this)">A</button>
-    <input ng-model="node.title" ng-class="{'tree': node.expanded}"  ng-click="expandInput(this)"/>
-
-    <select>
-      <option>ESTADO</option>
-      <option>comentario</option>
-      <option>pendiente</option>
-      <option>cerrado</option>
-    </select>
-    <select>
-      <option>PRIORIDAD</option>
-      <option>Alta</option>
-    </select>
-    <button ng-if="collapsed" ng-click="toggleItem(this)">S</button>
-    <button ng-if="!collapsed" ng-click="toggleItem(this)">H</button>
-    <button ng-click="comment(this)">C</button>
-    <button ng-click="newSubItem(this)">+</button>
-    <button ng-click="remove(this)">X</button>
+  <div class="orderItems" ui-tree-handle>
+    <div class="orderItem">
+        <div>
+            <button class="btn cB" title="Datos del Pedido" ng-click="expandDescription(this)"><i class="fa fa-caret-square-o-down"></i></button>
+        </div>
+        <div>
+            <textarea class="orderText" ng-model="node.title" ng-class="{'tree': node.expanded}"  ng-click="expandInput(this)"></textarea>
+        </div>
+    </div>
+    <div class="orderIcons">
+        <div>
+            <select>
+              <option>ESTADO</option>
+              <option>comentario</option>
+              <option>pendiente</option>
+              <option>cerrado</option>
+            </select>
+        </div>
+        <!--<div>
+            <select>
+              <option>PRIORIDAD</option>
+              <option>Alta</option>
+            </select>
+        </div>-->
+        <div>
+            <button class="btn cB" ng-if="collapsed" ng-click="toggleItem(this)"><i class="fa fa-minus-square"></i></button>
+        </div>
+        <div>
+            <button class="btn cB" title="Expandir Pedido" ng-if="!collapsed" ng-click="toggleItem(this)"><i class="fa fa-plus-square"></i></button>
+        </div>
+        <div>
+            <button class="btn cO" title="Realizar Comentario" ng-click="comment(this)"><i class="fa fa-comment"></i></button>
+        </div>
+        <div>
+            <button class="btn cG" title="Crear sub-Tarea" ng-click="newSubItem(this)"><i class="fa fa-tag"></i></button>
+        </div>
+        <div>
+            <button class="btn cR" title="Eliminar Pedido" ng-click="remove(this)"><i class="fa fa-trash"></i> </button>
+        </div>
+    </div>
   </div>
 
   <div ng-class="{true:'descriptionExpanded',false:'descriptionClosed'}[node.descriptionExpanded]" >
@@ -75,9 +102,13 @@
     </li>
   </ol>
 </script>
-
+<div class="order">
+  <h3>MIS PEDIDOS <i class="fa fa-tags"></i> </h3>
 <div  ui-tree>
-  <ol ui-tree-nodes="" ng-model="data" id="tree-root">
-    <li ng-repeat="node in data" ui-tree-node ng-include="'nodes_renderer.html'"></li>
+  <ol  ui-tree-nodes="" ng-model="data" id="tree-root">
+    <li class="hola" ng-repeat="node in data" ui-tree-node ng-include="'nodes_renderer.html'"></li>
   </ol>
+</div>
+
+
 </div>
