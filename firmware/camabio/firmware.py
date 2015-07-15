@@ -87,6 +87,7 @@ class Firmware:
             'verifymode':verifyMode,
             'log': self.date.utcNow()
         }
+
         self.logs.persist(self.conn,log)
         self.sync.addLog(self.conn,log['id'])
 

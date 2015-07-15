@@ -75,8 +75,9 @@ class Identifier(threading.Thread):
             try:
                 logging.debug('iniciando identificación')
                 self.firmware.identify(self)
+
             except Exception as e:
-                logging.critical(e)
+                logging.exception(e)
             finally:
                 logging.debug('finalizando identificación')
 
