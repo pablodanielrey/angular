@@ -88,8 +88,80 @@ class NewRequest:
 
         finally:
             con.close()
-        
-      
-       
 
+
+       
+""" 
+peticion: 
+{ 
+	  "id":"", 
+	  "action":"getIssuesByUser", 
+	  "session":"session de usuario", 
+	  "request":{ 
+       userId: Id de usuario
+    } 
+} 
+
+respuesta: 
+{ 
+	  "id":"id de la peticion", 
+	  "ok":"", 
+	  "error":"" 
+} 
+
+"""
+class GetIssuesByUser:
+    profiles = inject.attr(Profiles)
+    config = inject.attr(Config)
+    
+    issue = inject.attr(Issue)
+
+    def handleAction(self, server, message):
+        if (message['action'] != 'getIssuesByUser'): 
+            return False
+            
+    #chequear parametros
+    if ('id' not in message) or ('session' not in message) or ('request' not in message) or ('userId' not in message['request']): 
+       response = {'id':message['id'], 'error':'Insuficientes parámetros'} 
+       server.sendMessage(response) 
+       return True 
+       
+    #chequear permisos
+    sid = message['session'] 
+    self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
+    
+    
+    #definir datos
+    userId = message['request']['userId']
+    
+    
+    #definir conexion con la base de datos
+    con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+    try: 
+        data = self.issue.getIssuesByUser(con,userId)
+        
+        #enviar mensaje de respuesta
+        response = { 
+            'id':message['id'], 
+            'ok':'' 
+            'response':data,
+        } 
+        server.sendMessage(response)
+        
+    except Exception as e: 
+        logging.exception(e) 
+        con.rollback() 
+
+        response = { 
+         'id':message['id'], 
+         'error':'Error realizando pedido' 
+        } 
+        server.sendMessage(response) 
+
+    finally: 
+        con.close()
+        return True 
+      
+        
+        
 
