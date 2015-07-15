@@ -18,6 +18,11 @@ class A102Justification(Justification):
     def isJustification(self,id):
         return self.id == id
 
+    def _isJustifiedTime(self,start,end,justification,minutes,tolerancia):
+        if minutes >= 120:
+            return True
+        return False
+
     """
         retorna la cantidad de justificaciones que se tienen disponibles dentro de un período de tiempo.
         si period = None entonces tiene en cuenta todos los períodos y toma el mínimo.

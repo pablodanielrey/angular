@@ -7,7 +7,7 @@ from model.systems.assistance.justifications.exceptions import *
 
 
 """
-    Donación de sangre
+    Entrada tarde justificada
     no tiene límite
 """
 class ETJustification(Justification):
@@ -24,6 +24,10 @@ class ETJustification(Justification):
 
         return 365
 
+    def _isJustifiedTime(self,start,end,justification,minutes,tolerancia):
+        if start is not None:
+            return True
+        return False
 
     """
         inicializa un pedido en estado pendiente de una justificación en las fechas indicadas

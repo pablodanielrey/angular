@@ -253,7 +253,11 @@ class ScheduleChecks:
         teneiendo en cuenta la diferencia entre 2 schedules consecutivos dividido en 2.
     """
     def checkSchedule(self,con,userId,date):
+
+        import pdb
+        pdb.set_trace()
         date = self.date.awareToUtc(date)
+
 
         schedules = self.schedule.getSchedule(con,userId,date)
         logs = self.schedule.getLogsForSchedule(con,userId,date)

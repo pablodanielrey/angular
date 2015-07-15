@@ -16,6 +16,11 @@ class BCJustification(Justification):
         return self.id == id
 
 
+    def _isJustifiedTime(self,start,end,justification,minutes,tolerancia):
+        if 'end' in justification and justification['end'] is not None and (justification['begin']-tolerancia) <= start and (justification['end']+tolerancia) >= end:
+            return True
+        return False
+
     """
         inicializa un pedido en estado pendiente de una justificación en las fechas indicadas
     """

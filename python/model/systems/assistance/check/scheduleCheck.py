@@ -6,6 +6,11 @@ from model.systems.assistance.logs import Logs
 from model.systems.assistance.check.check import Check
 from model.systems.assistance.justifications.justifications import Justifications
 
+from model.systems.assistance.justifications.A102Justification import A102Justification
+from model.systems.assistance.justifications.BCJustification import BCJustification
+from model.systems.assistance.justifications.BSJustification import BSJustification
+from model.systems.assistance.justifications.ETJustification import ETJustification
+
 '''
 Tipo de chequeo SCHEDULE
 '''
@@ -14,6 +19,7 @@ class ScheduleCheck(Check):
     date = inject.attr(Date)
     schedule = inject.attr(Schedule)
     logs = inject.attr(Logs)
+    justificationsTime = A102Justification(), BCJustification(), BSJustification(), ETJustification()
     justificationsReq = inject.attr(Justifications)
     justificationIds = [
         'e0dfcef6-98bb-4624-ae6c-960657a9a741',#Ausente con aviso
@@ -79,11 +85,10 @@ class ScheduleCheck(Check):
         actualDate es aware.
     '''
     def getFails(self, utils, userId, actualDate, con):
-        actualDateUtc = self.date.awareToUtc(actualDate)
 
-        logging.debug('schedule {} {}'.format(userId,actualDateUtc))
+        logging.debug('schedule {} {}'.format(userId,actualDate))
 
-        fails = utils.checkSchedule(con,userId,actualDateUtc)
+        fails = utils.checkSchedule(con,userId,actualDate)
         return fails
 
 
@@ -132,12 +137,12 @@ class ScheduleCheck(Check):
     '''
         Verifica si  hay alguna justificacion que justifique un lapso del dia
     '''
-    def _isJustifiedTime(self,con,userId,start,end, justifications):
+    def _isJustifiedTime(self,con,userId,start,end, justifications,minutes):
         for j in justifications:
-            if 'end' in j and j['end'] is not None and (j['begin']-self.tolerancia) <= start and (j['end']+self.tolerancia) >= end:
-                return True
-            if start is not None and j['justification_id'] == '4d7bf1d4-9e17-4b95-94ba-4ca81117a4fb':
-                return True
+            for just in self.justificationsTime:
+                if just.isJustification(j['justification_id']):
+                    return just._isJustifiedTime(start,end,j,minutes,self.tolerancia)
+        return False
 
     def _initDay(self,date):
         # paso el date a formato local y seteo a las 00:00:00:000
@@ -152,6 +157,7 @@ class ScheduleCheck(Check):
     '''
     def checkWorkedHours(self,con,userId,controls):
         fails = []
+        minutes = 0
 
         for sched,wh in controls:
 
@@ -180,7 +186,10 @@ class ScheduleCheck(Check):
 
                 continue
 
-
+            ''' obtengo el tiempo trabajado hasta el momento '''
+            if 'start' in wh and wh['start'] is not None and 'end' in wh and wh['end'] is not None:
+                diff = wh['end'] - wh['start']
+                minutes = minutes + (diff.seconds / 60)
 
             ''' controlo la llegada '''
             if wh['start'] is None:
@@ -195,21 +204,19 @@ class ScheduleCheck(Check):
 
             elif wh['start'] > sched['start'] + self.tolerancia:
                 justifications = self._getJustifications(con,userId,sched['start'],wh['start'])
-                if self._isJustifiedTime(con,userId,sched['start'],wh['start'],justifications):
-                    continue
-
-                fails.append(
-                    {
-                        'userId':userId,
-                        'date': date,
-                        'description':'Llegada tardía',
-                        'startSchedule':sched['start'],
-                        'start':wh['start'],
-                        'seconds':(wh['start'] - sched['start']).total_seconds(),
-                        'whSeconds':wh['seconds'],
-                        'justifications':justifications
-                    }
-                )
+                if not self._isJustifiedTime(con,userId,sched['start'],wh['start'],justifications,minutes):
+                    fails.append(
+                        {
+                            'userId':userId,
+                            'date': date,
+                            'description':'Llegada tardía',
+                            'startSchedule':sched['start'],
+                            'start':wh['start'],
+                            'seconds':(wh['start'] - sched['start']).total_seconds(),
+                            'whSeconds':wh['seconds'],
+                            'justifications':justifications
+                        }
+                    )
 
 
             ''' controlo la salida '''
@@ -225,24 +232,21 @@ class ScheduleCheck(Check):
 
             elif wh['end'] < sched['end'] - self.tolerancia:
                 # busco las justificaciones que tenga desde la hora las 00:00
-                import pdb
-                pdb.set_trace()
                 initDay = self._initDay(wh['start'])
                 justifications = self._getJustifications(con,userId,initDay,sched['end'])
-                if self._isJustifiedTime(con,userId,wh['end'],sched['end'],justifications):
-                    continue
+                if not self._isJustifiedTime(con,userId,wh['end'],sched['end'],justifications,minutes):
+                    fails.append(
+                        {
+                            'userId':userId,
+                            'date': date,
+                            'description':'Salida temprana',
+                            'endSchedule':sched['end'],
+                            'end':wh['end'],
+                            'seconds':(sched['end']-wh['end']).total_seconds(),
+                            'whSeconds':wh['seconds'],
+                            'justifications':justifications
+                        }
+                    )
 
-                fails.append(
-                    {
-                        'userId':userId,
-                        'date': date,
-                        'description':'Salida temprana',
-                        'endSchedule':sched['end'],
-                        'end':wh['end'],
-                        'seconds':(sched['end']-wh['end']).total_seconds(),
-                        'whSeconds':wh['seconds'],
-                        'justifications':justifications
-                    }
-                )
 
         return fails
