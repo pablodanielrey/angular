@@ -254,8 +254,6 @@ class ScheduleChecks:
     """
     def checkSchedule(self,con,userId,date):
 
-        import pdb
-        pdb.set_trace()
         date = self.date.awareToUtc(date)
 
 
