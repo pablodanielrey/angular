@@ -1,6 +1,6 @@
 
 
-app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "Notifications", "Issue", function ($scope, $timeout, $window, Module, Notifications, Issue) {
+app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "Notifications", "Issue", "IssueClient", function ($scope, $timeout, $window, Module, Notifications, Issue, IssueClient) {
 
 
   $scope.data = [
@@ -131,6 +131,10 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
   };
 
 
+  $scope.$on('IssueUpdatedEvent', function(event,data) { 
+    console.log(data);
+  });
+
 
 
   /**
@@ -138,18 +142,8 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
    * @returns {undefined}
    */
   $scope.submit = function(){
-
-    $scope.data.push(
-      {
-        "id": "sasdfiasdpfiasdfasdñfj",
-        "title": $scope.request.request,
-        "nodes": [],
-        "expanded":false,
-        "descriptionExpanded":false
-      }
-    )
-
-    /*
+ 
+    
     $scope.checkRequest();
     for(var i in $scope.errors){
       if($scope.errors[i] !== null){
@@ -161,15 +155,29 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
     $scope.request.requestorId = $scope.global.sessionUserId;
 
     Issue.newRequest($scope.request,
-      function(data) { Notifications.message("Registro agregado exitosamente"); },
+      function(data) { 
+        Notifications.message("Registro agregado exitosamente"); 
+        $scope.getIssues();
+      },
       function(error) { Notifications.message(error); }
     );
-    */
+  
   };
 
 
-
-
+  /**
+   * Obtener lista de tareas
+   */
+  $scope.getIssues = function(){
+    Issue.getIssuesByUser($scope.global.sessionUserId,
+      function(data) {
+        $scope.data = IssueClient.generateTree(data);
+      },
+      function(error) { 
+        Notifications.message(error); 
+      }
+    );
+  };
 
   /******************
    * INICIALIZACION *
@@ -182,12 +190,15 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
           $window.location.href = "/#/logout";
         }
         $scope.global.sessionUserId = Module.getSessionUserId();
+        $scope.getIssues();
       },
       function(error){
         Notifications.message(error);
         $window.location.href = "/#/logout";
       }
     );
+  
+  
   }, 0);
 
 }]);

@@ -40,7 +40,9 @@ app.service('Issue', ['Utils','Messages','Session', function(Utils,Messages,Sess
       id: Utils.getId(),
       action: 'getIssuesByUser',
       session: Session.getSessionId(),
-      request: userId
+      request: {
+        userId: userId
+      }
     };
 
     Messages.send(msg,
@@ -50,7 +52,27 @@ app.service('Issue', ['Utils','Messages','Session', function(Utils,Messages,Sess
         } else {
           callbackError(data.error);
         }
-      });
+    });
+  };
+  
+  this.getChildren = function(id){
+     var msg = {
+      id: Utils.getId(),
+      action: 'getChildren',
+      session: Session.getSessionId(),
+      request: {
+        id: id
+      }
     };
+
+    Messages.send(msg,
+      function (data) {
+        if (typeof data.error === 'undefined') {
+          callbackOk(data.response);
+        } else {
+          callbackError(data.error);
+        }
+    });
+  };
 
 }]);
