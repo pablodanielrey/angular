@@ -7,15 +7,16 @@
   height:100%;
   width:100%;
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  /*position:absolute;*/
-  /*overflow:hidden;*/
+  position:absolute;
+  overflow:hidden;
 
 }
 
 
-.contentScreens {
-  height:100%;
-  width:100%;
+
+
+.ContentOrders {
+  
 }
 
 .tree {
@@ -35,9 +36,10 @@
  -webkit-border-radius:2px;
  -moz-border-radius:2px;
  padding: 20px;
- width: 100%;
+ width: 80%;
  margin: 20px;
  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
 
 }
 .formOrder {
@@ -147,7 +149,8 @@
   padding: 5px;
   margin-top: 10px;
   border:1px solid #E3DFDF;
-  
+
+
 
 }
 
