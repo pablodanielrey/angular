@@ -25,35 +25,10 @@ body {
 
 .screen {
   height: 100%;
+  width: 100%;
   -webkit-transition: all 1s;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-
-}
-.systems {
-  background-color: blue;
-  width: 10%;
-}
-
-
-
-.container {
-  height: 100%;
-  width: 100%;
-  position: absolute;
-  overflow: hidden;
-  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-}
-
-
-
-.contentScreens {
-  height:100%;
-  width:100%;
-}
-
-.tree {
-	height:50px;
 
 }

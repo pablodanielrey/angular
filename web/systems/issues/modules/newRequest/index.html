@@ -14,32 +14,81 @@
         </div>
       </form>
   </div>
+
+
+  <div class="order">
+      <h3>MIS PEDIDOS <i class="fa fa-tags"></i> </h3>
+      <div  ui-tree>
+          <ol  ui-tree-nodes="" ng-model="data" id="tree-root">
+              <li class="hola" ng-repeat="node in data" ui-tree-node ng-include="'nodes_renderer.html'"></li>
+          </ol>
+      </div>
+  </div>
+
+
 </div>
-
-
-
-
-
 
 
 <!-- Nested node template -->
 <script type="text/ng-template" id="nodes_renderer.html">
-  <div class="orderItems" ui-tree-handle>
+  <div class="orderItems commentOrder" ui-tree-handle>
     <div class="orderItem">
         <div>
-            <button class="btn cB" title="Datos del Pedido" ng-click="expandDescription(this)"><i class="fa fa-caret-square-o-down"></i></button>
+          <div ng-if="collapsed">
+              <button class="btn cB fa fa-plus-square"  ng-click="toggleItem(this)" ></button>
+          </div>
+          <div ng-if="!collapsed">
+              <button class="btn cB fa fa-minus-square" title="Expandir Pedido" ng-click="toggleItem(this)" ></button>
+          </div>
         </div>
+
         <div>
             <textarea class="orderText" ng-model="node.title" ng-class="{'tree': node.expanded}"  ng-click="expandInput(this)"></textarea>
+
+            <div ng-class="{true:'descriptionExpanded',false:'descriptionClosed'}[node.descriptionExpanded]">
+              <!-- <div ng-if="node.descriptionExpanded" > -->
+              <!-- <div ng-class="{true:'descriptionExpanded',false:'descriptionClosed'}[node.descriptionExpanded]" > -->
+                <div>
+                  datos del pedido
+                  <div>
+                  <select>
+                    <option>OFICINA</option>
+                    <option>Mantenimiento</option>
+                  </select>
+                  </div>
+                  <div>
+                  <select>
+                    <option>USUARIO</option>
+                    <option>Jose</option>
+                  </select>
+                  </div>
+                  <div>
+                  <select>
+                    <option>VISIBILIDAD</option>
+                    <option>Privado</option>
+                  </select>
+                  </div>
+                </div>
+
+                <div>
+                  quien pide
+                  <div>Fecha</div><div><date/></div>
+                  <div>Oficina</div><div>Informática</div>
+                  <div>Usuario</div><div>Pablo Rey</div>
+                </div>
+              <!-- </div> -->
+            </div>
+
+
         </div>
     </div>
     <div class="orderIcons">
-        <div>
+        <div class="btnState">
             <select>
               <option>ESTADO</option>
               <option>comentario</option>
               <option>pendiente</option>
-              <option>cerrado</option>
+              <option class="cR">cerrado</option>
             </select>
         </div>
         <!--<div>
@@ -48,16 +97,15 @@
               <option>Alta</option>
             </select>
         </div>-->
+
         <div>
-            <button class="btn cB" ng-if="collapsed" ng-click="toggleItem(this)"><i class="fa fa-minus-square"></i></button>
+            <button class="btn cB" title="Datos del Pedido" ng-click="expandDescription(this)"><i class="fa fa-caret-square-o-down"></i></button>
         </div>
-        <div>
-            <button class="btn cB" title="Expandir Pedido" ng-if="!collapsed" ng-click="toggleItem(this)"><i class="fa fa-plus-square"></i></button>
-        </div>
+
         <div>
             <button class="btn cO" title="Realizar Comentario" ng-click="comment(this)"><i class="fa fa-comment"></i></button>
         </div>
-        <div>
+        <div class="btnSubTarea">
             <button class="btn cG" title="Crear sub-Tarea" ng-click="newSubItem(this)"><i class="fa fa-tag"></i></button>
         </div>
         <div>
@@ -66,49 +114,9 @@
     </div>
   </div>
 
-  <div ng-class="{true:'descriptionExpanded',false:'descriptionClosed'}[node.descriptionExpanded]" >
-  <div>
-    datos del pedido
-    <div>
-    <select>
-      <option>OFICINA</option>
-      <option>Mantenimiento</option>
-    </select>
-    </div>
-    <div>
-    <select>
-      <option>USUARIO</option>
-      <option>Jose</option>
-    </select>
-    </div>
-    <div>
-    <select>
-      <option>VISIBILIDAD</option>
-      <option>Privado</option>
-    </select>
-    </div>
-  </div>
-
-  <div>
-    quien pide
-    <div>Fecha</div><div><date/></div>
-    <div>Oficina</div><div>Informática</div>
-    <div>Usuario</div><div>Pablo Rey</div>
-  </div>
-  </div>
 
   <ol ui-tree-nodes="" ng-model="node.nodes" ng-class="{'angular-ui-tree-hidden': collapsed}">
     <li  ng-repeat="node in node.nodes" ui-tree-node ng-include="'nodes_renderer.html'">
     </li>
   </ol>
 </script>
-<div class="order">
-  <h3>MIS PEDIDOS <i class="fa fa-tags"></i> </h3>
-<div  ui-tree>
-  <ol  ui-tree-nodes="" ng-model="data" id="tree-root">
-    <li class="hola" ng-repeat="node in data" ui-tree-node ng-include="'nodes_renderer.html'"></li>
-  </ol>
-</div>
-
-
-</div>
