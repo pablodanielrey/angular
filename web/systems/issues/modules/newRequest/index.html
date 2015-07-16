@@ -10,7 +10,7 @@
         <!-- <span ng-show="errors.request != null">{{errors.request}}</span> -->
 
         <div>
-          <button class="buttonOrder" ng-click="submit()">SOLICITAR</button>
+          <button class="buttonOrder" ng-click="submit()"><h3>SOLICITAR</h3></button>
         </div>
       </form>
   </div>
@@ -31,14 +31,23 @@
 
 <!-- Nested node template -->
 <script type="text/ng-template" id="nodes_renderer.html">
-  <div class="orderItems commentOrder" ui-tree-handle>
+  <div class="orderItems" ng-class='[getIssueCssClass(this)]' ui-tree-handle>
     <div class="orderItem">
-        <div>
+        <div class="btnExpOrder">
           <div ng-if="collapsed">
               <button class="btn cB fa fa-plus-square"  ng-click="toggleItem(this)" ></button>
           </div>
           <div ng-if="!collapsed">
               <button class="btn cB fa fa-minus-square" title="Expandir Pedido" ng-click="toggleItem(this)" ></button>
+          </div>
+        </div>
+
+        <div class="btnExpComment">
+          <div ng-if="collapsed">
+              <button class="btn cO fa fa-plus-square"  ng-click="toggleItem(this)" ></button>
+          </div>
+          <div ng-if="!collapsed">
+              <button class="btn cO fa fa-minus-square" title="Expandir Pedido" ng-click="toggleItem(this)" ></button>
           </div>
         </div>
 
@@ -84,11 +93,11 @@
     </div>
     <div class="orderIcons">
         <div class="btnState">
-            <select>
+            <select ng-model='this.$modelValue.status'>
               <option>ESTADO</option>
-              <option>comentario</option>
-              <option>pendiente</option>
-              <option class="cR">cerrado</option>
+              <option value='comment'>comentario</option>
+              <option value='pending'>pendiente</option>
+              <option value='closed' class="cR">cerrado</option>
             </select>
         </div>
         <!--<div>
@@ -98,18 +107,18 @@
             </select>
         </div>-->
 
-        <div>
-            <button class="btn cB" title="Datos del Pedido" ng-click="expandDescription(this)"><i class="fa fa-caret-square-o-down"></i></button>
+        <div class="btnDataOrder">
+            <button class="btn cB fa fa-caret-square-o-down" title="Datos del Pedido" ng-click="expandDescription(this)"></button>
         </div>
 
         <div>
-            <button class="btn cO" title="Realizar Comentario" ng-click="comment(this)"><i class="fa fa-comment"></i></button>
+            <button class="btn cO fa fa-comment" title="Realizar Comentario" ng-click="comment(this)"></button>
         </div>
         <div class="btnSubTarea">
-            <button class="btn cG" title="Crear sub-Tarea" ng-click="newSubItem(this)"><i class="fa fa-tag"></i></button>
+            <button class="btn cG fa fa-tag" title="Crear sub-Tarea" ng-click="newSubItem(this)"></button>
         </div>
         <div>
-            <button class="btn cR" title="Eliminar Pedido" ng-click="remove(this)"><i class="fa fa-trash"></i> </button>
+            <button class="btn cR fa fa-trash" title="Eliminar Pedido" ng-click="remove(this)"></button>
         </div>
     </div>
   </div>

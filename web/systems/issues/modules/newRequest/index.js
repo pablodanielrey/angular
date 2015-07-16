@@ -60,6 +60,18 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
 ];
 
 
+  $scope.getIssueCssClass = function(model) {
+    var nodeData = model.$modelValue;
+    var status = nodeData.status;
+
+    if (status == 'comment') {
+      return 'commentOrder';
+    } else {
+      return 'normal';
+    }
+
+  }
+
   $scope.expandInput = function(model){
       var nodeData = model.$modelValue;
       nodeData.expanded = !nodeData.expanded ;
@@ -78,11 +90,12 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
     model.expand();
     var nodeData = model.$modelValue;
     nodeData.nodes.push({
-      "id": (nodeData["id"]+1),
-      "title": "new" + (nodeData["id"]+1),
+      "id": 'aasdqw3dqwdwqdwqwqw',
+      "title": 'ingrese aquí su pedido',
       "nodes": [],
       "expanded":false,
-      "descriptionExpanded":false
+      "descriptionExpanded":false,
+      'status':'pending'
     });
   };
 
@@ -91,11 +104,12 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
     model.expand();
     var nodeData = model.$modelValue;
     nodeData.nodes.push({
-      "id": (nodeData["id"]+1),
+      "id": 'asdsadsadsaqdqwdwq',
       "title": "comentario",
       "nodes": [],
       "expanded":false,
-      "descriptionExpanded":false
+      "descriptionExpanded":false,
+      'status':'comment'
     });
   };
 
@@ -145,7 +159,8 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
         "title": $scope.request.request,
         "nodes": [],
         "expanded":false,
-        "descriptionExpanded":false
+        "descriptionExpanded":false,
+        'status':'pending'
       }
     )
 

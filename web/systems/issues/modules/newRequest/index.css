@@ -53,12 +53,24 @@
 
 .order .buttonOrder {
   border: none;
-  padding: 10px;
+  padding: 17px;
   margin: 2px;
   background-color: #0066A6;
   color: white;
   margin-top: 10px;
   margin-left: 20px;
+  cursor: pointer;
+}
+
+.order .buttonOrder:hover {
+  border: none;
+  padding: 17px;
+  margin: 2px;
+  background-color: #275276;
+  color: white;
+  margin-top: 10px;
+  margin-left: 20px;
+  cursor: pointer;
 }
 
 .order .newOrder {
@@ -135,6 +147,8 @@
   padding: 5px;
   margin-top: 10px;
   border:1px solid #E3DFDF;
+  
+
 }
 
 .descriptionExpanded {
@@ -158,7 +172,20 @@
 
 }
 
+.orderItems.normal .btnExpComment {
+  display: none;
+}
 
-.orderItems.commentOrder .btnState {
+.orderItems.commentOrder .btnExpOrder  {
+  display:none;
+}
+
+.orderItems.commentOrder .btnState  {
+  display:none;
+}
+.orderItems.commentOrder .btnSubTarea  {
+  display:none;
+}
+.orderItems.commentOrder .btnDataOrder  {
   display:none;
 }

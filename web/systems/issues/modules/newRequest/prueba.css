@@ -43,7 +43,8 @@ pantalla principal
 
 .order.commentOrder .agregar {
   display: none;
-  background-color: red;
+
+
 }
 
 .order.commentOrder .estado {
