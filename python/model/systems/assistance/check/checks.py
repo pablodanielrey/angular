@@ -251,6 +251,8 @@ class ScheduleChecks:
         chequea el schedule de la fecha pasada como parámetro (se supone aware)
         los logs de agrupan por schedule.
         teneiendo en cuenta la diferencia entre 2 schedules consecutivos dividido en 2.
+
+        controls = [{schdule:{},whs:[]}]
     """
     def checkSchedule(self,con,userId,date):
 
@@ -260,6 +262,8 @@ class ScheduleChecks:
         schedules = self.schedule.getSchedule(con,userId,date)
         logs = self.schedule.getLogsForSchedule(con,userId,date)
         whs,attlogs = self.logs.getWorkedHours(logs)
-        controls = list(utils.combiner(schedules,whs))
+        controls = self.schedule.combiner(schedules,whs)
+        # controls = list(utils.combiner(schedules,whs))
+
         fails = self.scheduleCheck.checkWorkedHours(con,userId,controls)
         return fails

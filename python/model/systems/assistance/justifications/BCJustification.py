@@ -16,9 +16,15 @@ class BCJustification(Justification):
         return self.id == id
 
 
-    def _isJustifiedTime(self,start,end,justification,minutes,tolerancia):
-        if 'end' in justification and justification['end'] is not None and (justification['begin']-tolerancia) <= start and (justification['end']+tolerancia) >= end:
+    def _isJustifiedTimeStart(self,whStart,schedStart,justification,minutes,tolerancia):
+        if minutes <= 0:
+            return False
+        if whStart >= justification['begin'] and ('end' not in justification or whStart - tolerancia <= justification['end']):
             return True
+        return False
+
+    def _isJustifiedTimeEnd(self,whEnd,schedEnd,justification,minutes,tolerancia):
+
         return False
 
     """

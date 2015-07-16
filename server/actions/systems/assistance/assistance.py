@@ -223,6 +223,17 @@ class GetFailsByFilter:
                 return True
         return False
 
+    def _filter(self, fails,filter):
+        import pdb
+        pdb.set_trace()
+        if 'failType' in filter:
+            ffails = []
+            # las agrupo por tipo y user Id
+            for f in fails:
+                if f['description'] == filter['failType']:
+                    ffails.append(f)
+            fails = ffails
+        return fails
 
     def handleAction(self, server, message):
 
@@ -287,7 +298,9 @@ class GetFailsByFilter:
             (users,fails) = self.assistance.checkSchedule(authorizedUsers,start,end)
 
             # filtro las fallas por los filtros pasados como parametro
-                # ---------- falta implementarlo -----------
+
+            if 'filter' in req:
+                fails = self._filter(fails,req['filter'])
 
             b64 = self.assistance.arrangeCheckSchedule(con,fails)
 
