@@ -33,4 +33,24 @@ class Issue:
         events.append(e) 
   
         return events 
+        
+        
+    def getIssuesByUser(self, con, userId):
+        cur = con.cursor() 
+        cur.execute('''
+          SELECT r.*, s.*
+          FROM issues.request AS r
+          INNER JOIN issues.state AS s ON (r.id = s.request_id)
+          INNER JOIN (
+            SELECT request_id, max(created) AS created 
+            FROM issues.state
+            GROUP BY request_id
+          ) AS s2 ON (s.request_id = s2.request_id AND s.created = s2.created);
+        ''') 
+        if cur.rowcount <= 0: 
+            return [] 
+
+        return cur
+    
+    
   

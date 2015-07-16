@@ -61,7 +61,7 @@ from actions.systems.mail.mail import PersistInstitutionalMail, DeleteInstitutio
 
 from actions.systems.offices.offices import GetOffices, GetUserOfficeRoles, GetUserInOfficesByRole, GetOfficesByUserRole, GetOfficesUsers, DeleteOfficeRole, AddOfficeRole, PersistOfficeRole, PersistOffice, RemoveUserFromOffice, AddUserToOffices, GetRolesAdmin
 
-from actions.systems.issue.issue import NewRequest
+from actions.systems.issue.issue import NewRequest, GetIssuesByUser
 
 
 
@@ -86,7 +86,7 @@ actions = [
     GetOvertimeRequests(), GetOvertimeRequestsToManage(), RequestOvertime(), UpdateOvertimeRequestStatus(),
     CreateAccountRequest(), ResendAccountRequest(), ConfirmAccountRequest(), ListAccountRequests(), ApproveAccountRequest(), RemoveAccountRequest(), RejectAccountRequest(),
 
-    NewRequest()
+    NewRequest(), GetIssuesByUser()
 ]
 
 
