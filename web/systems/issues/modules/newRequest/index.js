@@ -142,7 +142,15 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
    * @returns {undefined}
    */
   $scope.submit = function(){
- 
+    $scope.data.push(
+      {
+        "id": "sasdfiasdpfiasdfasdñfj",
+        "title": $scope.request.request,
+        "nodes": [],
+        "expanded":false,
+        "descriptionExpanded":false
+      }
+    );
     
     $scope.checkRequest();
     for(var i in $scope.errors){
@@ -171,7 +179,7 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
   $scope.getIssues = function(){
     Issue.getIssuesByUser($scope.global.sessionUserId,
       function(data) {
-        $scope.data = IssueClient.generateTree(data);
+        //$scope.data = IssueClient.generateTree(data);
       },
       function(error) { 
         Notifications.message(error); 
