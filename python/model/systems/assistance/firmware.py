@@ -39,4 +39,4 @@ class Firmware:
 
 
     def checkSid(self,conn,sid):
-        return self.devices.isEnabled(sid)
+        return self.devices.isEnabled(conn,sid)
