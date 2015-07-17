@@ -17,7 +17,7 @@ create table profile.users (
     residence_city varchar,
     country varchar,
     address varchar,
-    version bigint default = 0,
+    version bigint default 0,
     created timestamptz default now()
 );
 

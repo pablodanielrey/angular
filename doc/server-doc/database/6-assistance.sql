@@ -14,6 +14,7 @@ create schema assistance;
     template varchar not null,
     algorithm varchar not null,
     user_id varchar not null references profile.users (id),
+    version bigint default 0,
     created timestamptz default now()
   );
 
