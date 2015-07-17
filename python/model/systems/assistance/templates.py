@@ -43,7 +43,7 @@ class Templates:
 
         cur = con.cursor()
         cur.execute('select version from assistance.templates where id = %s',(id,))
-        cur.rowcount <= 0:
+        if cur.rowcount <= 0:
             return True
 
         version = cur.fetchone()[0]
