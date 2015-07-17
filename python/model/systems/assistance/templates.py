@@ -21,7 +21,7 @@ class Templates:
 
     def findByUser(self,con,userId):
         cur = con.cursor()
-        cur.execute('select id,template,algorithm,user_id from assistance.templates where user_id = %s',(userId,))
+        cur.execute('select id,template,algorithm,user_id,version from assistance.templates where user_id = %s',(userId,))
         if cur.rowcount <= 0:
             return []
 
@@ -38,7 +38,8 @@ class Templates:
             'id':t[0],
             'template':t[1],
             'algorithm':t[2],
-            'userId':t[3]
+            'userId':t[3],
+            'version':t[4]
         }
         return template
 
