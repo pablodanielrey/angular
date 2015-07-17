@@ -31,9 +31,9 @@ class Sync:
         toSync = []
         for u in cur:
             userId = u[0]
-            user = self.users.findUser(self.conn,userId)
+            user = self.users.findUser(conn,userId)
             if user:
-                templates = self.templates.findByUser(self.conn,userId)
+                templates = self.templates.findByUser(conn,userId)
                 toSync.append({
                     'user':user,
                     'templates':templates
