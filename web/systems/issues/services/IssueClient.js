@@ -54,5 +54,15 @@ app.service('IssueClient', [function() {
     return false;
   
   };
+  
+  
+  this.deleteNode = function(data, node){
+    for(var i in data){
+      if((("nodes" in data[i])) && (data[i]["nodes"].length > 0)){
+      
+      }
+    }
+    
+  }
 
 }]);

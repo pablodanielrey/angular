@@ -55,6 +55,14 @@ app.service('Issue', ['Utils','Messages','Session', function(Utils,Messages,Sess
     });
   };
   
+  
+  /**
+   * Elimina el arbol de nodos a partir del nodo id
+   * @param {type} id
+   * @param {type} callbackOk
+   * @param {type} callbackError
+   * @returns {undefined}
+   */
   this.deleteIssue = function(id, callbackOk, callbackError){
     var msg = {
       id: Utils.getId(),

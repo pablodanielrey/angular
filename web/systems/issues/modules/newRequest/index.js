@@ -75,14 +75,9 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
   
   
   $scope.deleteNode = function(node){
-    if((("nodes" in node)) && (node["nodes"].length > 0)){
-     this.deleteNode(node["nodes"][i]);
-    }      
     
-    Issue.delete(node.id,
-      function(data){ 
-        Notifications.message("No implmenetado")
-      },
+    Issue.deleteIssue(node.id,
+      function(data){ },
       function(error) { Notifications.message(error); }
     );
   };
@@ -119,6 +114,13 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
       $scope.data.push(node);
     }
   });
+  
+  
+  $scope.$on('IssueDeletedEvent', function(event, node) { 
+    IssueClient.deleteNode($scope.data, node);
+    
+  });
+
 
 
 
