@@ -55,24 +55,5 @@ app.service('Issue', ['Utils','Messages','Session', function(Utils,Messages,Sess
     });
   };
   
-  this.getChildren = function(id){
-     var msg = {
-      id: Utils.getId(),
-      action: 'getChildren',
-      session: Session.getSessionId(),
-      request: {
-        id: id
-      }
-    };
-
-    Messages.send(msg,
-      function (data) {
-        if (typeof data.error === 'undefined') {
-          callbackOk(data.response);
-        } else {
-          callbackError(data.error);
-        }
-    });
-  };
-
+  
 }]);

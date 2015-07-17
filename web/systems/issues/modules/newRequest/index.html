@@ -5,12 +5,12 @@
       <h2>NUEVO PEDIDO </h2>
       <form class="formOrder">
         <div>
-          <textarea class="newOrder"  ng-model="request.request"  ng-blur="checkRequest()"></textarea>
+          <textarea class="newOrder"  ng-model="request"></textarea>
         </div>
         <!-- <span ng-show="errors.request != null">{{errors.request}}</span> -->
 
         <div>
-          <button class="buttonOrder" ng-click="submit()"><h3>SOLICITAR</h3></button>
+          <button class="buttonOrder" ng-click="createNode()"><h3>SOLICITAR</h3></button>
         </div>
       </form>
   </div>
@@ -115,7 +115,7 @@
             <button class="btn cO fa fa-comment" title="Realizar Comentario" ng-click="comment(this)"></button>
         </div>
         <div class="btnSubTarea">
-            <button class="btn cG fa fa-tag" title="Crear sub-Tarea" ng-click="newSubItem(this)"></button>
+            <button class="btn cG fa fa-tag" title="Crear sub-Tarea" ng-click="addNode(this)"></button>
         </div>
         <div>
             <button class="btn cR fa fa-trash" title="Eliminar Pedido" ng-click="remove(this)"></button>
