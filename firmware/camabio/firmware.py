@@ -113,7 +113,7 @@ class Firmware:
 
                 userId = self.templates.findUserIdByIndex(conn,h)
                 if userId:
-                    (log,user,sid,roles) = self._identify(userId)
+                    (log,user,sid,roles) = self._identify(conn,userId)
 
                     conn.commit()
 
@@ -165,6 +165,6 @@ class Firmware:
         conn = self._get_database()
         try:
             self.sync.syncUsers(conn)
-            
+
         finally:
             conn.close()
