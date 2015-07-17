@@ -44,7 +44,7 @@ class Firmware:
 
 
 
-    def enroll(self, pin, need_first=None, need_second=None, need_third=None, need_release=None):
+    def enroll(self, pin, need_first=None, need_second=None, need_third=None, need_release=None, error=None, fatal_error=None):
 
         (n,t) = self.reader.enroll(need_first,need_second,need_third,need_release)
         if n:

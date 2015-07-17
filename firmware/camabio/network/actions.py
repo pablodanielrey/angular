@@ -159,7 +159,9 @@ class Enroll:
                 lambda: self.requestFinger(server,1),
                 lambda: self.requestFinger(server,2),
                 lambda: self.requestFinger(server,3),
-                lambda: self.sendMsg(server,'Levante el dedo')
+                lambda: self.sendMsg(server,'Levante el dedo'),
+                lambda msg: self.sendError(server,msg),
+                lambda msg: self.sendError(server,msg)
             )
 
             response = {

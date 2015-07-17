@@ -233,7 +233,7 @@ class FirmwareReader(Reader):
         huella = número asignado dentro del lector a la huella
         template = template de la huella
     """
-    def enroll(self, need_first=None, need_second=None, need_third=None, need_release=None):
+    def enroll(self, need_first=None, need_second=None, need_third=None, need_release=None, error=None, fatal_error=None):
 
         canceled = False
 
@@ -286,36 +286,60 @@ class FirmwareReader(Reader):
                 if err == camabio.ERR_FAIL:
                     """ error, proceso el error """
                     if rdata == camabio.ERR_INVALID_TMPL_NO:
-                        logging.warn('error en el número de huella')
+                        msg = 'error en el número de huella'
+                        logging.warn(msg)
+                        if fatal_error:
+                            fatal_error(msg)
                         return (None,None)
 
                     if rdata == camabio.ERR_TMPL_NOT_EMPTY:
-                        logging.warn('el número de huella no esta vacío')
+                        msg = 'el número de huella no esta vacío'
+                        logging.warn(msg)
+                        if fatal_error:
+                            fatal_error(msg)
                         return (None,None)
 
                     if rdata == camabio.ERR_TIME_OUT:
-                        logging.warn('timeout')
+                        msg = 'timeout'
+                        logging.warn(msg)
+                        if error:
+                            error(msg)
                         continue
 
                     if rdata == camabio.ERR_BAD_QUALITY:
-                        logging.warn('mala calidad')
+                        msg = 'mala calidad'
+                        logging.warn(msg)
+                        if error:
+                            error(msg)
                         continue
 
                     if rdata == camabio.ERR_GENERALIZE:
-                        logging.warn('error generalizando las huellas')
+                        msg = 'error generalizando las huellas'
+                        logging.warn(msg)
+                        if fatal_error:
+                            fatal_error(msg)
                         return (None,None)
 
                     if rdata == camabio.ERR_DUPLICATION_ID:
                         pos = camabio.getIntFromPackage(camabio.DATA + 2,resp)
-                        logging.warn('error, huella duplicada en la posición {}'.format(pos))
+                        msg = 'error, huella duplicada en la posición {}'.format(pos)
+                        logging.warn(msg)
+                        if fatal_error:
+                            fatal_error(msg)
                         return (None,None)
 
                     if rdata == camabio.ERR_FP_CANCEL:
-                        logging.warn('Se ha cancelado el comando de enrolado')
+                        msg = 'Se ha cancelado el comando de enrolado'
+                        logging.warn(msg)
+                        if fatal_error:
+                            fatal_error(msg)
                         return (None,None)
 
-                    logging.warn('error desconocido')
+                    msg = 'error desconocido'
+                    logging.warn(msg)
                     logging.warn(codecs.encode(resp,'hex'))
+                    if fatal_error:
+                        fatal_error(msg)
                     return (None,None)
 
                 elif err == camabio.ERR_SUCCESS:
@@ -351,8 +375,11 @@ class FirmwareReader(Reader):
                     huella = rdata
 
                 else:
-                    logging.warn('estado desconocido')
+                    msg = 'estado desconocido'
+                    logging.warn(msg)
                     logging.warn(codecs.encode(resp,'hex'))
+                    if fatal_error:
+                        fatal_error(msg)
                     return (None,None)
 
             if huella is None:
