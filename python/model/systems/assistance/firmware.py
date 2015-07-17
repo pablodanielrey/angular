@@ -4,12 +4,17 @@ import inject, uuid
 
 
 from model.config import Config
+from model.users.users import Users
 from model.systems.assistance.devices import Devices
+from model.systems.assistance.templates import Templates
+
 
 class Firmware:
 
     config = inject.attr(Config)
     devices = inject.attr(Devices)
+    users = inject.attr(Users)
+    templates = inject.attr(Templates)
 
     def __init__(self):
         self.passwords = []
@@ -40,3 +45,12 @@ class Firmware:
 
     def checkSid(self,conn,sid):
         return self.devices.isEnabled(conn,sid)
+
+
+    def syncUser(self,conn,user,templates):
+        if self.users.needSync(conn,user):
+            self.users.updateUser(conn,user)
+
+        for t in templates:
+            if self.templates.needSync(conn,t):
+                self.templates.update(conn,t)

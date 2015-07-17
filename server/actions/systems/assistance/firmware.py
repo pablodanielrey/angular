@@ -145,10 +145,8 @@ class FirmwareSyncUser:
                 return True
 
 
-            '''
-                aca se realiza la accion
-            '''
             logging.debug('actualizando {}'.format(request['user']))
+            
             if 'templates' in request:
                 logging.debug('actualizando templates {}'.format(request['templates']))
 
@@ -229,7 +227,7 @@ class FirmwareSyncLog:
                 aca se realiza la accion
             '''
             logging.debug('actualizando log {}'.format(attlog))
-            
+
 
             con.commit()
 

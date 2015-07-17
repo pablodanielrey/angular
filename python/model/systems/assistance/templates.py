@@ -8,6 +8,11 @@ class Templates:
         req = (template['id'],template['template'],template['algorithm'],template['userId'])
         cur.execute('insert into assistance.templates (id,template,algorithm,user_id) values (%s,%s,%s,%s)',req)
 
+    def update(self,con,template):
+        cur = con.cursor()
+        req = (template['template'],template['algorithm'],template['userId'],template['id'])
+        cur.execute('update assistance.templates set template = %s, algorithm = %s, user_id = %s where id = %s values (%s,%s,%s,%s)',req)
+
 
     def findByUser(self,con,userId):
         cur = con.cursor()
