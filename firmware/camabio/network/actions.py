@@ -76,6 +76,7 @@ class Login:
             return True
 
         except Exception as e:
+            logging.exception(e)
             server.sendError(message,e)
             return True
 
