@@ -330,13 +330,13 @@ function AssistanceFailsFiltersCtrl($scope, $timeout, Notifications, Assistance,
       vm.model.filter.failTypeSelected = null;
 
       vm.model.filter.failsType = [];
-      var t = {name:'No posee marcación',description:'No existe ninguna marcación para esa fecha',isHours:false};
+      var t = {name:'Sin marcación',description:'No existe ninguna marcación para esa fecha',isHours:false};
       vm.model.filter.failsType.push(t);
-      t = {name:'Sin horario de llegada',description:'Sin horario de llegada',isHours:false};
+      t = {name:'Sin entrada',description:'Sin horario de llegada',isHours:false};
       vm.model.filter.failsType.push(t);
       t = {name:'Llegada tardía',description:'Llegada tardía',isHours:true};
       vm.model.filter.failsType.push(t);
-      t = {name:'Sin horario de salida',description:'Sin horario de salida',isHours:false};
+      t = {name:'Sin salida',description:'Sin horario de salida',isHours:false};
       vm.model.filter.failsType.push(t);
       t = {name:'Salida temprana',description:'Salida temprana',isHours:true};
       vm.model.filter.failsType.push(t);
@@ -429,7 +429,7 @@ function AssistanceFailsFiltersCtrl($scope, $timeout, Notifications, Assistance,
              } else {
                r.fail.whs = '00:00';
              }
-
+             
              vm.model.assistanceFails.push(r);
            }
            vm.model.searching = false;

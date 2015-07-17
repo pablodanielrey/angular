@@ -85,7 +85,7 @@
           <span class="margin"> Tipo</span>
         </div>
         <div>
-          <select class="input" ng-model="vm.model.filter.failTypeSelected"  ng-options="type.name for type in vm.model.filter.failsType | orderBy:['name']">
+          <select class="input" ng-model="vm.model.filter.failTypeSelected"  ng-options="type.description for type in vm.model.filter.failsType | orderBy:['name']">
             <option value=""> Seleccione...</option>
           </select>
         </div>

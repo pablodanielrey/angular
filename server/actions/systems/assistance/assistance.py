@@ -224,8 +224,6 @@ class GetFailsByFilter:
         return False
 
     def _filter(self, fails,filter):
-        import pdb
-        pdb.set_trace()
         if 'failType' in filter:
             ffails = []
             # las agrupo por tipo y user Id
