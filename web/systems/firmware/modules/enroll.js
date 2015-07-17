@@ -93,6 +93,7 @@ app.controller("EnrollCtrl", ['$rootScope','$scope','$location','$timeout','Noti
     })
 
     $scope.$on('ErrorEvent', function(event, data) {
+      console.log(data);
       Notifications.message(data.error);
     })
 
