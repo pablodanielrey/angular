@@ -72,6 +72,20 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
       function(error) { Notifications.message(error); }
     );
   };
+  
+  
+  $scope.deleteNode = function(node){
+    if((("nodes" in node)) && (node["nodes"].length > 0)){
+     this.deleteNode(node["nodes"][i]);
+    }      
+    
+    Issue.delete(node.id,
+      function(data){ 
+        Notifications.message("No implmenetado")
+      },
+      function(error) { Notifications.message(error); }
+    );
+  };
 
   /*
   $scope.comment = function(model) {

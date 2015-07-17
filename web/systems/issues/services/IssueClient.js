@@ -1,6 +1,6 @@
 
 
-app.service('IssueClient', ['Utils','Messages','Session', function(Utils,Messages,Session) {
+app.service('IssueClient', [function() {
 	
   
   /**
@@ -33,6 +33,7 @@ app.service('IssueClient', ['Utils','Messages','Session', function(Utils,Message
     
     return issues;
   };
+  
   
   
   

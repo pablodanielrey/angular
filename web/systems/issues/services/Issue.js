@@ -55,5 +55,25 @@ app.service('Issue', ['Utils','Messages','Session', function(Utils,Messages,Sess
     });
   };
   
+  this.deleteIssue = function(id, callbackOk, callbackError){
+    var msg = {
+      id: Utils.getId(),
+      action: 'deleteIssue',
+      session: Session.getSessionId(),
+      request: {
+        id: id
+      }
+    };
+
+    Messages.send(msg,
+      function (data) {
+        if (typeof data.error === 'undefined') {
+          callbackOk(data.response);
+        } else {
+          callbackError(data.error);
+        }
+    });
+  };
+  
   
 }]);
