@@ -34,12 +34,10 @@ class Firmware:
 
 
     def firmwareDeviceAnnounce(self,conn,password,device):
-
         if password not in self.passwords:
             return None
 
         self.devices.persistOrUpdate(conn,device)
-
         return device['id']
 
 
@@ -51,6 +49,7 @@ class Firmware:
         if self.users.needSync(conn,user):
             self.users.updateUser(conn,user)
 
-        for t in templates:
-            if self.templates.needSync(conn,t):
-                self.templates.update(conn,t)
+        if templates is not None:
+            for t in templates:
+                if self.templates.needSync(conn,t):
+                    self.templates.update(conn,t)

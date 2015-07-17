@@ -75,6 +75,9 @@ class Users:
 
     def createUser(self,con,data):
         uid = str(uuid.uuid4())
+        if 'id' in data:
+            uid = data['id']
+
         rreq = ( uid,
                 data['dni'],
                 data['name'],
@@ -89,23 +92,31 @@ class Users:
         cur.execute('insert into profile.users (id,dni,name,lastname,city,country,address,genre,birthdate,residence_city) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)', rreq)
         return uid
 
-    def updateUser(self,con,data):
-
-        user = ObjectView(data)
-        rreq = (user.dni,user.name,user.lastname,user.city,user.country,user.address,user.genre,user.birthdate,user.residence_city, user.id)
+    def updateUser(self,con,user):
         cur = con.cursor()
-        cur.execute('update profile.users set dni = %s, name = %s, lastname = %s, city = %s, country = %s, address = %s, genre = %s, birthdate = %s, residence_city = %s, version = version + 1 where id = %s', rreq)
-        if cur.rowcount <= 0:
-            raise Exception()
+
+        ''' si no exite lo creo '''
+        userId = None
+        if 'id' not in user:
+            userId = self.createUser(con,user)
+        else:
+            userId = user['id']
+            cur.execute('select id from profile.users where id = %s',(user['id'],))
+            if cur.rowcount <= 0:
+                userId = self.createUser(con,user)
+            else:
+                rreq = (user['dni'],user['name'],user['lastname'],user['city'],user['country'],user['address'],user['genre'],user['birthdate'],user['residence_city'], user['id'])
+                cur.execute('update profile.users set dni = %s, name = %s, lastname = %s, city = %s, country = %s, address = %s, genre = %s, birthdate = %s, residence_city = %s, version = version + 1 where id = %s', rreq)
+                if cur.rowcount <= 0:
+                    raise Exception()
 
         #actualizar telefonos del usuario
-        rreq = (user.id,)
-        cur.execute('delete from profile.telephones where user_id = %s', rreq)
+        cur.execute('delete from profile.telephones where user_id = %s', (userId,))
 
-        if 'telephones' in data:
-            for i, v in enumerate(user.telephones):
+        if 'telephones' in user:
+            for i, v in enumerate(user['telephones']):
                  telephone_id = str(uuid.uuid4())
-                 rreq = (telephone_id, user.id, v["number"], v["type"])
+                 rreq = (telephone_id, user['id'], v["number"], v["type"])
                  cur.execute('INSERT INTO profile.telephones (id, user_id, number, type) VALUES (%s, %s, %s, %s);', rreq)
 
 

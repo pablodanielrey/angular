@@ -144,13 +144,9 @@ class FirmwareSyncUser:
                 server.sendMessage(response)
                 return True
 
-
-            logging.debug('actualizando {}'.format(request['user']))
-            
-            if 'templates' in request:
-                logging.debug('actualizando templates {}'.format(request['templates']))
-
-
+            user = request['user']
+            templates = request['templates']
+            self.firmware.syncUser(con,user,templates)
 
             con.commit()
 
