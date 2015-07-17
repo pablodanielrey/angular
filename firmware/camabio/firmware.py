@@ -149,7 +149,7 @@ class Firmware:
                 notifier._identified(server,None)
                 return
 
-            (log,user,sid,roles) = self._identify(userData['user_id'],0)
+            (log,user,sid,roles) = self._identify(conn,userData['user_id'],0)
             conn.commit()
 
         finally:
