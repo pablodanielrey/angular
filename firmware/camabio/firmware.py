@@ -30,14 +30,8 @@ class Firmware:
     userPassword = inject.attr(UserPassword)
     sync = inject.attr(Sync)
 
-    def __init__(self):
-        self.conn = None
-
-    def __get_database(self):
-        if self.conn:
-            return self.conn
-        else:
-            return psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+    def _get_database(self):
+        return psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
 
     def start(self):
         self.reader.start()
@@ -54,30 +48,33 @@ class Firmware:
 
         (n,t) = self.reader.enroll(need_first,need_second,need_third,need_release)
         if n:
-            self.conn = self.__get_database()
+            conn = self._get_database()
+            try:
 
-            """ se tiene la huella con el id, hay que asignarle el usuario """
-            userId = None
-            user = self.users.findUserByDni(self.conn,pin)
-            if not user:
-                user = {
-                    'dni':pin,
-                    'name':'autorgenerado',
-                    'lastname':'autogenerado'
-                }
-                userId = self.users.createUser(self.conn,user)
-            else:
-                userId = user['id']
+                """ se tiene la huella con el id, hay que asignarle el usuario """
+                userId = None
+                user = self.users.findUserByDni(conn,pin)
+                if not user:
+                    user = {
+                        'dni':pin,
+                        'name':'autorgenerado',
+                        'lastname':'autogenerado'
+                    }
+                    userId = self.users.createUser(conn,user)
+                else:
+                    userId = user['id']
 
-            self.templates.persist(self.conn,userId,n,t)
-            self.sync.addPerson(self.conn,userId)
-            self.conn.commit()
+                self.templates.persist(conn,userId,n,t)
+                self.sync.addPerson(conn,userId)
+                conn.commit()
 
+            finally:
+                conn.close()
 
 
 
     ''' genera lo necesario para loguear una persona dentro del firmware '''
-    def _identify(self, userId, verifyMode=1):
+    def _identify(self, conn, userId, verifyMode=1):
 
         ''' creo el log '''
         log = {
@@ -88,20 +85,20 @@ class Firmware:
             'log': self.date.utcNow()
         }
 
-        self.logs.persist(self.conn,log)
-        self.sync.addLog(self.conn,log['id'])
+        self.logs.persist(conn,log)
+        self.sync.addLog(conn,log['id'])
 
         ''' logueo al usuario creandole una sesion '''
         sess = {
             self.config.configs['session_user_id']:userId
         }
-        sid = self.session._create(self.conn,sess)
+        sid = self.session._create(conn,sess)
 
         roles = None
-        if self.profiles._checkAccessWithCon(self.conn,sid,['ADMIN-ASSISTANCE']):
+        if self.profiles._checkAccessWithCon(conn,sid,['ADMIN-ASSISTANCE']):
             roles = 'admin'
 
-        user = self.users.findUser(self.conn,userId)
+        user = self.users.findUser(conn,userId)
 
         return (log,user,sid,roles)
 
@@ -111,21 +108,25 @@ class Firmware:
     def identify(self, notifier=None):
         h = self.reader.identify()
         if h:
-            self.conn = self.__get_database()
+            conn = self._get_database()
+            try:
 
-            userId = self.templates.findUserIdByIndex(self.conn,h)
-            if userId:
-                (log,user,sid,roles) = self._identify(userId)
+                userId = self.templates.findUserIdByIndex(conn,h)
+                if userId:
+                    (log,user,sid,roles) = self._identify(userId)
 
-                self.conn.commit()
+                    conn.commit()
 
-                if notifier:
-                    notifier._identified(log,user,sid,roles)
+                    if notifier:
+                        notifier._identified(log,user,sid,roles)
 
-            else:
-                logging.critical('{} - huella identificada en el indice {}, pero no se encuentra ningún mapeo con un usuario'.format(self.date.now(),h))
-                if notifier:
-                    notifier._error(h)
+                else:
+                    logging.critical('{} - huella identificada en el indice {}, pero no se encuentra ningún mapeo con un usuario'.format(self.date.now(),h))
+                    if notifier:
+                        notifier._error(h)
+
+            finally:
+                conn.close()
 
         else:
             if notifier:
@@ -136,20 +137,23 @@ class Firmware:
 
     ''' llamado cuando se trata de identificar una persona usando el teclado '''
     def login(self, pin, password, notifier, server):
-        self.conn = self.__get_database()
+        conn = self._get_database()
+        try:
 
-        creds = {
-            'username':pin,
-            'password':password
-        }
-        userData = self.userPassword.findUserPassword(self.conn,creds)
-        if userData is None:
-            notifier._identified(server,None)
-            return
+            creds = {
+                'username':pin,
+                'password':password
+            }
+            userData = self.userPassword.findUserPassword(conn,creds)
+            if userData is None:
+                notifier._identified(server,None)
+                return
 
-        (log,user,sid,roles) = self._identify(userData['user_id'],0)
+            (log,user,sid,roles) = self._identify(userData['user_id'],0)
+            conn.commit()
 
-        self.conn.commit()
+        finally:
+            conn.close()
 
         notifier._identified(server,log,user,sid,roles)
 
@@ -158,5 +162,9 @@ class Firmware:
     ''' sincroniza los usuarios que tuvieron cambios en la base del firmware '''
     def syncUsers(self):
 
-        self.conn = self.__get_database()
-        self.sync.syncUsers(self.conn)
+        conn = self._get_database()
+        try:
+            self.sync.syncUsers(conn)
+            
+        finally:
+            conn.close()
