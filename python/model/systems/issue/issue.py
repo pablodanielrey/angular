@@ -25,7 +25,7 @@ class Issue:
         
         events = []
         e = { 
-            'type':'IssueUpdatedEvent', 
+            'type':'IssueInsertedEvent', 
             'data':{ 
                'id':id, 
                'request':request,
@@ -35,7 +35,8 @@ class Issue:
                'priority':priority,
                'visibility':visibility,
                'relatedRequestId':relatedRequestId,
-               'state':'PENDING'
+               'state':'PENDING',
+               'nodes':[],
              } 
         }
         events.append(e)
@@ -75,6 +76,9 @@ class Issue:
             )
             
         return issues;
+        
+        
+   
     
     
   

@@ -4,7 +4,7 @@ CREATE SCHEMA issues;
   CREATE TABLE issues.request (
     id VARCHAR NOT NULL PRIMARY KEY,
     created TIMESTAMPTZ NOT NULL default now(),
-  	request TEXT NOT NULL,
+  	request TEXT ,
     requestor_id VARCHAR NOT NULL REFERENCES profile.users (id),
     office_id VARCHAR NOT NULL REFERENCES offices.offices (id),
     related_request_id VARCHAR REFERENCES issues.request (id),
