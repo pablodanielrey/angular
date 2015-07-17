@@ -11,7 +11,7 @@ class Templates:
     def update(self,con,template):
         cur = con.cursor()
         req = (template['template'],template['algorithm'],template['userId'],template['id'])
-        cur.execute('update assistance.templates set template = %s, algorithm = %s, user_id = %s where id = %s values (%s,%s,%s,%s)',req)
+        cur.execute('update assistance.templates set template = %s, algorithm = %s, user_id = %s, version = version + 1 where id = %s values (%s,%s,%s,%s)',req)
 
 
     def findByUser(self,con,userId):
