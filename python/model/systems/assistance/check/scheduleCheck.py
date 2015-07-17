@@ -198,26 +198,43 @@ class ScheduleCheck(Check):
     '''
         Verifica si  hay alguna justificacion que justifique la falla en la entrada
     '''
-    def _isJustifiedTimeStart(self,con,userId,schedStart,whStart,justifications,minutes):
+    def _isJustifiedTimeStart(self,justifications,sched,whs,fail,isFirstSchedule):
 
+        if not isFirstSchedule or fail['whAnt'] is not None:
+            start = sched['start'] if fail['whAnt'] is None else fail['whAnt']['end']
+            end = fail['wh']['start']
+            return self._isJustifiedTime(justifications,start,end)
         for j in justifications:
             for just in self.justificationsTime:
                 if just.isJustification(j['justification_id']):
-                    return just._isJustifiedTimeStart(whStart,schedStart,j,minutes,self.tolerancia)
+                    return just._isJustifiedTimeStart(sched,whs,j,self.tolerancia)
 
         return False
 
     '''
         Verifica si  hay alguna justificacion que justifique la falla en la salida
     '''
-    def _isJustifiedTimeEnd(self,con,userId,schedEnd,whEnd,justifications,minutes):
+    def _isJustifiedTimeEnd(self,justifications,sched,whs,fail,isLastSchedule):
+        if isLastSchedule and fail['whNext'] is None:
+            for j in justifications:
+                for just in self.justificationsTime:
+                    if just.isJustification(j['justification_id']):
+                        return just._isJustifiedTimeEnd(sched,whs,j,self.tolerancia)
+        else:
+            start = wh['end']
+            end = sched['end'] if fail['whNext'] is None else fail['whNext']['start']
+            return self._isJustifiedTime(justifications,start,end)
 
+        return False
+
+
+    def _isJustifiedTime(self,justifications,start,end):
         for j in justifications:
             for just in self.justificationsTime:
                 if just.isJustification(j['justification_id']):
-                    return just._isJustifiedTimeEnd(whEnd,schedEnd,j,minutes,self.tolerancia)
-
+                    return just._isJustifiedTime(start,end,j)
         return False
+
 
     def _initDay(self,date):
         # paso el date a formato local y seteo a las 00:00:00:000
@@ -228,103 +245,151 @@ class ScheduleCheck(Check):
 
 
     '''
+    ---------------- FALTA IMPLEMENTAR ----------------------
+    '''
+    def _combinerJustifications(self, controls, justifications):
+        justifications = sorted(justifications, key=lambda j: j['begin'])
+        # elimino las justificaciones generales
+        js = []
+        for j in justifications:
+            for just in self.justificationsTime:
+                if just.isJustification(j['justification_id']):
+                    js.append(j)
+                    break
+
+        for elem in controls:
+            sched = elem['schedule']
+            justs = []
+            for j in js:
+                if ('end' not in j or j['end'] is None) and j['begin'] < sched['end']:
+                    justs.append(j)
+                elif 'end' in j and j['end'] is not None and j['end'] > sched['start'] and j['begin'] < sched['end']:
+                    justs.append(j)
+
+            elem['justifications'] = justs
+
+    '''
         chequea los schedules contra las workedhours calculadas
     '''
     def checkWorkedHours(self,con,userId,controls):
         fails = []
-        minutes = 0
+
+        firstSched = controls[0]['schedule']
+        lastSched = controls[-1]['schedule']
+
+        # si no tiene schedule no controlo nada
+        if firstSched == None:
+            return []
+
+        allWhs = []
+        # obtengo todos los whs
+        for e in controls:
+            allWhs.extend(e['whs'])
+
+        # busco si tiene justificacion, si no tiene la agrego como falla
+        date = firstSched['start']
+        beginDate = self._initDay(date)
+        endDate = lastSched['end']
+        justifications = self._getJustifications(con,userId,beginDate,endDate)
+
+        # verifico si falto
+        if len(allWhs) <= 0:
+            if not self._isJustifiedDay(con,date,userId,justifications):
+                fails.append(self._createFail(userId,date,'Sin marcación',justifications))
+            return fails
+
+        self._combinerJustifications(controls, justifications)
+
         for elem in controls:
 
             sched = elem['schedule']
-            whs = elem['whs']
-
-            if sched is None:
-                ''' no tiene schedule a controlar '''
-                continue
+            whs = sorted(elem['whs'], key=lambda wh: wh['start'])
+            justs = elem['justifications']
 
             date = sched['start']
 
-            for wh in whs:
-                if (wh is None) or ('start' not in wh and 'end' not in wh):
-                    date = self._initDay(date)
-                    justifications = self._getJustifications(con,userId,date,date)
+            failsBySched = self._getFails(whs,sched)
 
-                    if self._isJustifiedDay(con,date,userId,justifications):
+            isFirstSchedule = sched == firstSched
+            isLastSchedule = sched == lastSched
+
+            for f in failsBySched:
+                #  ------------ SIN MARCACION -----------
+                if f['name'] == 'Sin marcación':
+                    if self._isJustifiedTime(justs,sched['begin'],sched['end']):
                         continue
+                    else:
+                        fails.append(self._createFail(userId,date,f['name'],justs))
 
-                    ''' no tiene nada trabajado!!! '''
-                    fails.append(
-                        {
-                            'userId':userId,
-                            'date':date,
-                            'description':'Sin marcación',
-                            'justifications':justifications
-                        }
-                    )
+                #  ---------- LLEGADA TARDIA -------------
+                if f['name'] == 'Llegada tardía':
+                    if self._isJustifiedTimeStart(justs,sched,whs,f,isFirstSchedule):
+                        continue
+                    else:
+                        fail = self._createFail(userId,date,f['name'],justs)
+                        fail['startSchedule'] = sched['start']
+                        fail['start'] = f['wh']['start']
+                        fail['seconds'] =(f['wh']['start'] - sched['start']).total_seconds()
+                        fail['whSeconds'] = f['wh']['seconds']
+                        fails.append(fail)
 
-                    continue
-
-                ''' obtengo el tiempo trabajado hasta el momento '''
-                if 'start' in wh and wh['start'] is not None and 'end' in wh and wh['end'] is not None:
-                    diff = wh['end'] - wh['start']
-                    minutes = minutes + (diff.seconds / 60)
-
-                ''' controlo la llegada '''
-                if wh['start'] is None:
+                # ------------- Sin salida ---------------
+                if f['name'] == 'Sin salida':
                     # no hay justificacion que justifique este tipo de falla
-                    fails.append(
-                        {
-                            'userId':userId,
-                            'date': date,
-                            'description':'Sin entrada'
-                        }
-                    )
+                    fails.append(self._createFail(userId,date,f['name'],justs))
 
-                elif wh['start'] > sched['start'] + self.tolerancia:
-                    justifications = self._getJustifications(con,userId,sched['start'],wh['start'])
-                    if not self._isJustifiedTimeStart(con,userId,sched['start'],wh['start'],justifications,minutes):
-                        fails.append(
-                            {
-                                'userId':userId,
-                                'date': date,
-                                'description':'Llegada tardía',
-                                'startSchedule':sched['start'],
-                                'start':wh['start'],
-                                'seconds':(wh['start'] - sched['start']).total_seconds(),
-                                'whSeconds':wh['seconds'],
-                                'justifications':justifications
-                            }
-                        )
-
-
-                ''' controlo la salida '''
-                if wh['end'] is None:
-                    # no hay justificacion que justifique este tipo de falla
-                    fails.append(
-                        {
-                            'userId':userId,
-                            'date': date,
-                            'description':'Sin salida'
-                        }
-                    )
-
-                elif wh['end'] < sched['end'] - self.tolerancia:
-                    # busco las justificaciones que tenga desde la hora las 00:00
-                    initDay = self._initDay(wh['start'])
-                    justifications = self._getJustifications(con,userId,initDay,sched['end'])
-                    if not self._isJustifiedTimeEnd(con,userId,sched['end'],wh['end'],justifications,minutes):
-                        fails.append(
-                            {
-                                'userId':userId,
-                                'date': date,
-                                'description':'Salida temprana',
-                                'endSchedule':sched['end'],
-                                'end':wh['end'],
-                                'seconds':(sched['end']-wh['end']).total_seconds(),
-                                'whSeconds':wh['seconds'],
-                                'justifications':justifications
-                            }
-                        )
-
+                # ------------ Salida temprana ---------------
+                if f['name'] == 'Salida temprana':
+                    if self._isJustifiedTimeEnd(justs,sched,whs,f,isLastSchedule):
+                        continue
+                    else:
+                        fail = self._createFail(userId,date,f['name'],justs)
+                        fail['endSchedule'] = sched['end']
+                        fail['end'] = f['wh']['end']
+                        fail['seconds'] =(sched['end'] - f['wh']['end']).total_seconds()
+                        fail['whSeconds'] = f['wh']['seconds']
+                        fails.append(fail)
 
         return fails
+
+
+
+    def _getFails(self,whs,sched):
+        if len(whs) == 0:
+            # sin marcacion
+            return [{'name':'Sin marcación','wh':None}]
+
+        if len(whs) == 1:
+            wh = whs[0]
+            if wh['start'] - self.tolerancia <= sched['start'] and ('end' in wh and wh['end'] is not None) and ('end' in sched and sched['end'] is not None) and wh['end'] + self.tolerancia >= sched['end']:
+                return []
+
+        fails = []
+        whAnt = None
+        iNext = 1
+
+
+        for wh in whs:
+            whNext = whs[iNext] if iNext < len(whs) else None
+            # Llegada tardía
+            if wh['start'] - self.tolerancia > sched['start']:
+                fails.append({'name':'Llegada tardía','wh':wh,'whAnt':whAnt,'whNext':whNext})
+            # 'Sin salida'
+            if 'end' not in wh or wh['end'] is None:
+                fails.append({'name':'Sin salida','wh':wh,'whAnt':whAnt,'whNext':whNext})
+            # 'Salida temprana'
+            elif wh['end'] + self.tolerancia < sched['end']:
+                fails.append({'name':'Salida temprana','wh':wh,'whAnt':whAnt,'whNext':whNext})
+            whAnt = wh
+            iNext = iNext + 1
+
+        return fails
+
+    def _createFail(self,userId,date,description,justs):
+        fail =  {
+                    'userId':userId,
+                    'date':date,
+                    'description':description,
+                    'justifications':justs
+                }
+        return fail

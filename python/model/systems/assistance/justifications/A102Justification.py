@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 import calendar, datetime, logging, uuid
-
+import inject
 from model.systems.assistance.justifications.justification import Justification, Repetition
 from model.systems.assistance.justifications.exceptions import *
+from model.systems.assistance.logs import Logs
 
 
 """
@@ -12,15 +13,20 @@ from model.systems.assistance.justifications.exceptions import *
     semanales 5
 """
 class A102Justification(Justification):
+    logs = inject.attr(Logs)
 
     id = '4d7bf1d4-9e17-4b95-94ba-4ca81117a4fb'
 
     def isJustification(self,id):
         return self.id == id
 
-    def _isJustifiedTime(self,start,end,justification,minutes,tolerancia):
-        if minutes >= 120:
+    def _isJustifiedTimeEnd(self,sched,whs,justification,tolerancia):
+        (sdate,edate,totalSeconds) = self.logs.explainWorkedHours(whs)
+        if (totalSeconds/60) >= 120:
             return True
+        return False
+
+    def _isJustifiedTime(self,justification,start,end):
         return False
 
     """
