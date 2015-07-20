@@ -23,24 +23,26 @@ from firmware import Firmware
 
 reactor = client.network.websocket.getReactor()
 
+
 def close_sig_handler(signal,frame):
     global reactor
     reactor.stop()
     sys.exit()
 
 
-def logEvent(e):
-    logging.debug('Server -> Client : EVENTO : {}'.format(e))
 
 
 if __name__ == '__main__':
 
     signal.signal(signal.SIGINT,close_sig_handler)
 
-    client.network.websocket.getProtocol().addEventHandler(logEvent)
-    client.network.websocket.connectClient()
 
     firmware = inject.instance(Firmware)
-    firmware.syncLogs()
 
+    protocol = client.network.websocket.getProtocol()
+    protocol.addEventHandler(firmware.syncLogEventHandler())
+
+    firmware.syncLogs(protocol)
+
+    client.network.websocket.connectClient()
     reactor.run()

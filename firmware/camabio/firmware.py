@@ -158,14 +158,32 @@ class Firmware:
         notifier._identified(server,log,user,sid,roles)
 
 
+    ''' retorna un handler para manejar los eventos de sincronizacion '''
+    def syncLogEventHandler(self):
+        def eventHandler(event):
+            conn = self._get_database()
+            try:
+                self.sync.syncLogEventHandler(conn,event)
 
-    def syncLogs(self):
+            except Exception as e:
+                logging.exception(e)
+
+            finally:
+                conn.close()
+
+        return eventHandler
+
+
+    ''' inicia el proceso de sincronización de los logs hacia el server '''
+    def syncLogs(self,protocol):
         conn = self._get_database()
         try:
-            self.sync.syncLogs(conn)
+            self.sync.syncLogs(protocol,conn)
 
         finally:
             conn.close()
+
+
 
 
     ''' sincroniza los usuarios que tuvieron cambios en la base del firmware '''

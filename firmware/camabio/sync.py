@@ -23,7 +23,11 @@ class Sync:
         cur.execute('insert into assistance.sync_logs (attlog_id) values (%s)',(id,))
 
 
-    def syncLogs(self,conn):
+    def syncLogEventHandler(self,con,event):
+        logging.debug('EVENTO: {} - {} - {}'.format(self,con,event))
+
+
+    def syncLogs(self,protocol,conn):
         cur = conn.cursor()
         cur.execute('select attlog_id from assistance.sync_logs')
         if cur.rowcount < 0:
@@ -50,7 +54,6 @@ class Sync:
             else:
                 logging.debug('ERROR : '.format(message))
 
-
         def callbackAnnounce(protocol,message):
             logging.debug('callbackAnnounce {}'.format(message))
 
@@ -63,13 +66,10 @@ class Sync:
 
             firmware.syncLogs(protocol,sid,toSync,callbackSync)
 
-
         def callbackConnect(protocol):
             firmware.firmwareDeviceAnnounce(protocol,callbackAnnounce)
 
-
-        client.network.websocket.getProtocol().addCallback(callbackConnect)
-        client.network.websocket.connectClient()
+        protocol.addCallback(callbackConnect)
 
 
 

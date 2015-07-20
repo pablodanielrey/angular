@@ -32,8 +32,6 @@ if __name__ == '__main__':
 
     signal.signal(signal.SIGINT,close_sig_handler)
 
-    client.network.websocket.connectClient()
-
     firmware = inject.instance(Firmware)
     firmware.syncUsers()
 
