@@ -36,7 +36,6 @@ if __name__ == '__main__':
 
     signal.signal(signal.SIGINT,close_sig_handler)
 
-
     firmware = inject.instance(Firmware)
 
     protocol = client.network.websocket.getProtocol()

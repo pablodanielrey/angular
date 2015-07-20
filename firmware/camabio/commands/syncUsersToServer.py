@@ -28,11 +28,18 @@ def close_sig_handler(signal,frame):
     reactor.stop()
     sys.exit()
 
+
 if __name__ == '__main__':
 
     signal.signal(signal.SIGINT,close_sig_handler)
 
     firmware = inject.instance(Firmware)
-    firmware.syncUsers()
+
+    protocol = client.network.websocket.getProtocol()
+    protocol.addEventHandler(firmware.syncUsersEventHandler())
+
+    firmware.syncUsers(protocol)
+
+    client.network.websocket.connectClient()
 
     reactor.run()

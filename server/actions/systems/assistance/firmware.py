@@ -155,6 +155,26 @@ class FirmwareSyncUser:
                 'ok':''
             }
             server.sendMessage(response)
+
+
+            event = {
+                'type':'UserSynchedEvent',
+                'data': {
+                    'user':user['id']
+                }
+            }
+            server.broadcast(event)
+
+            tids = [t['id'] for t in templates]
+            event = {
+                'type':'TemplatesSynchedEvent',
+                'data': {
+                    'templates':tids
+                }
+            }
+            server.broadcast(event)
+
+
             return True
 
 

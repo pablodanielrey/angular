@@ -24,7 +24,7 @@ class Sync:
 
 
     def syncLogEventHandler(self,con,event):
-        logging.debug('EVENTO: {} - {} - {}'.format(self,con,event))
+        logging.debug('EVENTO LOGS: {} - {} - {}'.format(self,con,event))
 
 
     def syncLogs(self,protocol,conn):
@@ -74,8 +74,13 @@ class Sync:
 
 
 
+
+    def syncUsersEventHandler(self,con,event):
+        logging.debug('EVENTO USUARIO: {} - {} - {}'.format(self,con,event))
+
+
     ''' envía al servidor los logs cuyo id esta dentro de assistance.sync_user '''
-    def syncUsers(self,conn):
+    def syncUsers(self,protocol,conn):
 
         cur = conn.cursor()
         cur.execute('select user_id from assistance.sync_user')
@@ -123,6 +128,4 @@ class Sync:
         def callbackConnect(protocol):
             firmware.firmwareDeviceAnnounce(protocol,callbackAnnounce)
 
-
-        client.network.websocket.getProtocol().addCallback(callbackConnect)
-        client.network.websocket.connectClient()
+        protocol.addCallback(callbackConnect)

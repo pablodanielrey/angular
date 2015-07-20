@@ -184,13 +184,27 @@ class Firmware:
             conn.close()
 
 
+    ''' retorna un hanlder para manejar los eventos de sincronización de los usuarios '''
+    def syncUsersEventHandler(self):
+        def eventHandler(event):
+            conn = self._get_database()
+            try:
+                self.sync.syncUsersEventHandler(conn,event)
+
+            except Exception as e:
+                logging.exception(e)
+
+            finally:
+                conn.close()
+
+        return eventHandler
 
 
     ''' sincroniza los usuarios que tuvieron cambios en la base del firmware '''
-    def syncUsers(self):
+    def syncUsers(self,protocol):
         conn = self._get_database()
         try:
-            self.sync.syncUsers(conn)
+            self.sync.syncUsers(protocol,conn)
 
         finally:
             conn.close()
