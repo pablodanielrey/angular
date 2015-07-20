@@ -54,13 +54,13 @@ class Firmware:
         Se envía un mensaje de actualización de log dentro del servidor.
         el sid usado es el obtenido en la llamada a firmwareDeviceAnnounce
     '''
-    def syncLog(self,protocol,sid,attlog,callback):
+    def syncLogs(self,protocol,sid,attlogs,callback):
 
         msg = {
-            'action':'FirmwareSyncLog',
+            'action':'FirmwareSyncLogs',
             'session':sid,
             'request':{
-                'attlog':attlog
+                'attlogs':attlogs
             }
         }
 

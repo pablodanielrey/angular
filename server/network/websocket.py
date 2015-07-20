@@ -53,7 +53,7 @@ from actions.systems.assistance.justifications import GetJustifications, GetJust
 from actions.systems.assistance.overtime import GetOvertimeRequests, GetOvertimeRequestsToManage, RequestOvertime, UpdateOvertimeRequestStatus
 
 ''' firmware asistencia '''
-from actions.systems.assistance.firmware import FirmwareDeviceAnnounce, FirmwareSyncUser, FirmwareSyncLog
+from actions.systems.assistance.firmware import FirmwareDeviceAnnounce, FirmwareSyncUser, FirmwareSyncLogs
 
 
 
@@ -85,7 +85,7 @@ actions = [
     CreateStudent(), FindStudent(), PersistStudent(), FindAllStudents(),
     PersistTutorData(), ListTutorData(),
     GetOffices(), GetUserOfficeRoles(), GetUserInOfficesByRole(), GetOfficesByUserRole(), GetOfficesUsers(), DeleteOfficeRole(), AddOfficeRole(), PersistOfficeRole(), PersistOffice(), RemoveUserFromOffice(), AddUserToOffices(), GetRolesAdmin(),
-    FirmwareDeviceAnnounce(), FirmwareSyncUser(), FirmwareSyncLog(),
+    FirmwareDeviceAnnounce(), FirmwareSyncUser(), FirmwareSyncLogs(),
     GetAssistanceLogs(), GetAssistanceData(), GetSchedules(), NewSchedule(), DeleteSchedule(), GetPosition(), UpdatePosition(), GetFailsByDate(), GetAssistanceStatus(), GetAssistanceStatusByUsers(), GetOffices(), GetJustifications(), GetJustificationsByUser(), GetJustificationStock(), UpdateJustificationStock(), GetJustificationRequests(), GetJustificationRequestsToManage(), GetJustificationRequestsByDate(), RequestJustification(),  RequestJustificationRange(), UpdateJustificationRequestStatus(),GetSpecialJustifications(), RequestGeneralJustification(), GetGeneralJustificationRequests(), DeleteGeneralJustificationRequest(), RequestGeneralJustificationRange(),
     GetOvertimeRequests(), GetOvertimeRequestsToManage(), RequestOvertime(), UpdateOvertimeRequestStatus(),
     CreateAccountRequest(), ResendAccountRequest(), ConfirmAccountRequest(), ListAccountRequests(), ApproveAccountRequest(), RemoveAccountRequest(), RejectAccountRequest()

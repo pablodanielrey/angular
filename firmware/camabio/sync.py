@@ -3,6 +3,7 @@
 import inject, logging
 from model.users.users import Users
 from model.systems.assistance.templates import Templates
+from model.systems.assistance.logs  import Logs
 
 import client.network.websocket
 from client.systems.assistance.firmware import Firmware
@@ -10,6 +11,7 @@ from client.systems.assistance.firmware import Firmware
 class Sync:
 
     users = inject.attr(Users)
+    logs = inject.attr(Logs)
     templates = inject.attr(Templates)
 
     def addPerson(self,conn,id):
@@ -20,6 +22,59 @@ class Sync:
         cur = conn.cursor()
         cur.execute('insert into assistance.sync_logs (attlog_id) values (%s)',(id,))
 
+
+    def syncLogs(self,conn):
+        cur = conn.cursor()
+        cur.execute('select attlog_id from assistance.sync_logs')
+        if cur.rowcount < 0:
+            logging.info('No existe log a sincronizar')
+            return
+
+        toSync = []
+        for l in cur:
+            logId = l[0]
+            log = self.logs.findLog(conn,logId)
+            if log:
+                toSync.append(log)
+
+        if len(toSync) <= 0:
+            logging.info('No existe log a sincronizar')
+            return
+
+        logging.debug('iniciando sincronización de los logs {}'.format(toSync))
+        firmware = inject.instance(client.systems.assistance.firmware.Firmware)
+
+        def callbackSync(protocol,message):
+            if 'ok' in message:
+                logging.debug('OK : '.format(message))
+            else:
+                logging.debug('ERROR : '.format(message))
+
+
+        def callbackAnnounce(protocol,message):
+            logging.debug('callbackAnnounce {}'.format(message))
+
+            if 'error' in message:
+                logging.error('ERROR en announce : {}'.format(message))
+                return
+
+            sid = message['response']['sid']
+            logging.debug('sincronizando {} con el sid {}'.format(toSync,sid))
+
+            firmware.syncLogs(protocol,sid,toSync,callbackSync)
+
+
+        def callbackConnect(protocol):
+            firmware.firmwareDeviceAnnounce(protocol,callbackAnnounce)
+
+
+        client.network.websocket.getProtocol().addCallback(callbackConnect)
+        client.network.websocket.connectClient()
+
+
+
+
+    ''' envía al servidor los logs cuyo id esta dentro de assistance.sync_user '''
     def syncUsers(self,conn):
 
         cur = conn.cursor()

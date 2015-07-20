@@ -159,9 +159,17 @@ class Firmware:
 
 
 
+    def syncLogs(self):
+        conn = self._get_database()
+        try:
+            self.sync.syncLogs(conn)
+
+        finally:
+            conn.close()
+
+
     ''' sincroniza los usuarios que tuvieron cambios en la base del firmware '''
     def syncUsers(self):
-
         conn = self._get_database()
         try:
             self.sync.syncUsers(conn)

@@ -173,10 +173,10 @@ class FirmwareSyncUser:
 query :
 {
   id:,
- 'action':'FirmwareSyncLog',
+ 'action':'FirmwareSyncLogs',
  'session':sid,
  'request':{
-     'attlog':attlog
+     'attlogs': [ attlog ]
  }
 }
 
@@ -188,14 +188,14 @@ response :
 }
 '''
 
-class FirmwareSyncLog:
+class FirmwareSyncLogs:
 
     firmware = inject.attr(Firmware)
     config = inject.attr(Config)
 
     def handleAction(self, server, message):
 
-        if message['action'] != 'FirmwareSyncLog':
+        if message['action'] != 'FirmwareSyncLogs':
             return False
 
         if 'session' not in message:
@@ -210,6 +210,12 @@ class FirmwareSyncLog:
 
         request = message['request']
 
+        if 'attlogs' not in request:
+            response = {'id':message['id'], 'error':'Parámetros insuficientes'}
+            server.sendMessage(response)
+            return True
+
+
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
 
@@ -219,11 +225,8 @@ class FirmwareSyncLog:
                 return True
 
 
-            '''
-                aca se realiza la accion
-            '''
-            logging.debug('actualizando log {}'.format(attlog))
-
+            logs = request['attlogs']
+            self.firmware.syncLogs(con,logs)
 
             con.commit()
 
