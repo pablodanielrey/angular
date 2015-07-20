@@ -122,8 +122,6 @@ class Logs:
 
 
 
-
-
     ''' a partir de una lista de datetime obtiene los grupos de worked '''
     def _getWorkedTimetable(self, dateList):
         worked = []

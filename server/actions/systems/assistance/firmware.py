@@ -235,6 +235,16 @@ class FirmwareSyncLogs:
                 'ok':''
             }
             server.sendMessage(response)
+
+            lids = [l['id'] for l in logs]
+            event = {
+                'type':'LogsSynchedEvent',
+                'data': {
+                    'logs':lids
+                }
+            }
+            server.broadcast(event)
+
             return True
 
 

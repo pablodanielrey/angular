@@ -51,7 +51,6 @@ class Firmware:
     def syncLogs(self,conn,logs):
         if logs is None or len(logs) <= 0:
             return
-
         self.logs.persistLogs(conn,logs)
 
 

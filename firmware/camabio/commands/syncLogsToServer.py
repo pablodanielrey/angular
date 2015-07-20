@@ -29,10 +29,15 @@ def close_sig_handler(signal,frame):
     sys.exit()
 
 
+def logEvent(e):
+    logging.debug('Server -> Client : EVENTO : {}'.format(e))
+
+
 if __name__ == '__main__':
 
     signal.signal(signal.SIGINT,close_sig_handler)
 
+    client.network.websocket.getProtocol().addEventHandler(logEvent)
     client.network.websocket.connectClient()
 
     firmware = inject.instance(Firmware)

@@ -19,6 +19,13 @@ class MyWsClientProtocol(WebSocketClientProtocol):
 
     protocols = []
     callbacks = []
+    eventHandlers = []
+
+    @classmethod
+    def addEventHandler(cls,callback):
+        if callback not in cls.eventHandlers:
+            cls.eventHandlers.append(callback)
+
 
     @classmethod
     def addCallback(cls,callback):
@@ -40,6 +47,8 @@ class MyWsClientProtocol(WebSocketClientProtocol):
     def unregister(cls,instance):
         if instance in cls.protocols:
             cls.protocols.remove(instance)
+
+
 
     def __init__(self):
         logging.info('instanciando protocolo')
@@ -66,16 +75,9 @@ class MyWsClientProtocol(WebSocketClientProtocol):
         self.__class__.unregister(self)
 
 
-    def onMessage(self, payload, isBinary):
-        msg = payload.decode('utf-8')
 
-        if len(msg) < 1024:
-            logging.debug('server -> client {}'.format(msg))
 
-        message = json.loads(msg)
-
-        if 'id' not in message:
-            return
+    def _processMessage(self,message):
         id = message['id']
         found = False
 
@@ -91,10 +93,45 @@ class MyWsClientProtocol(WebSocketClientProtocol):
 
         except Exception as e:
             logging.exception(e)
+            raise e
 
         finally:
             if found:
                 del self.messages[message['id']]
+
+
+    def _processEvent(self,message):
+        e = None
+        for eh in self.__class__.eventHandlers:
+            try:
+                eh(message)
+            except Exception as ex:
+                logging.exception(ex)
+                e = ex
+        if e:
+            raise e
+
+
+    def onMessage(self, payload, isBinary):
+        msg = payload.decode('utf-8')
+
+        if len(msg) < 1024:
+            logging.debug('server -> client {}'.format(msg))
+
+        message = json.loads(msg)
+
+        try:
+            if 'type' in message:
+                self._processEvent(message)
+                return
+
+            if 'id' in message:
+                self._processMessage(message)
+                return
+
+        except Exception as e:
+            logging.exception(e)
+
 
 
     def sendMessage(self,msg,callback):
