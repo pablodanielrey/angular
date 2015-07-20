@@ -161,9 +161,15 @@ class Firmware:
     ''' retorna un handler para manejar los eventos de sincronizacion '''
     def syncLogEventHandler(self):
         def eventHandler(event):
+
+            if 'LogsSynchedEvent' != event['type']:
+                return
+
+
             conn = self._get_database()
             try:
                 self.sync.syncLogEventHandler(conn,event)
+                conn.commit()
 
             except Exception as e:
                 logging.exception(e)
@@ -187,9 +193,15 @@ class Firmware:
     ''' retorna un hanlder para manejar los eventos de sincronización de los usuarios '''
     def syncUsersEventHandler(self):
         def eventHandler(event):
+
+            if 'UserSynchedEvent' != event['type']:
+                return
+
+
             conn = self._get_database()
             try:
                 self.sync.syncUsersEventHandler(conn,event)
+                conn.commit()
 
             except Exception as e:
                 logging.exception(e)

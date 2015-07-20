@@ -24,7 +24,11 @@ class Sync:
 
 
     def syncLogEventHandler(self,con,event):
-        logging.debug('EVENTO LOGS: {} - {} - {}'.format(self,con,event))
+        logs = event['data']['logs']
+
+        cur = con.cursor()
+        cur.execute('delete from assistance.sync_logs where attlog_id in %s',(tuple(logs),))
+
 
 
     def syncLogs(self,protocol,conn):
@@ -76,7 +80,11 @@ class Sync:
 
 
     def syncUsersEventHandler(self,con,event):
-        logging.debug('EVENTO USUARIO: {} - {} - {}'.format(self,con,event))
+        user = event['data']['user']
+
+        cur = con.cursor()
+        cur.execute('delete from assistance.sync_user where user_id = %s',(user,))
+
 
 
     ''' envía al servidor los logs cuyo id esta dentro de assistance.sync_user '''
