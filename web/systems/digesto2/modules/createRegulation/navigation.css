@@ -1,0 +1,14 @@
+.item1Seleccionado{
+  transform: translate3d(0,0px,0);
+  transition: all 0.4s ease-in-out;
+}
+
+.item2Seleccionado{
+  transform: translate3d(0,-100%,0);
+  transition: all 0.4s ease-in-out;
+}
+
+.item3Seleccionado{
+  transform: translate3d(0,-200%,0);
+  transition: all 0.4s ease-in-out;
+}

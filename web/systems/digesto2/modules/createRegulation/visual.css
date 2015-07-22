@@ -1,0 +1,295 @@
+/****************** Estilos comunes ******************************/
+/****************************************************************/
+
+*{
+  margin: 0px;
+  padding: 0px;
+}
+
+.createRegulationContainer {
+  height:100%;
+  width:100%;
+  position:absolute;
+  overflow:hidden;
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.contentScreens {
+  height:100%;
+  width:100%;
+  background-color: yellow;
+}
+
+.container {
+  padding: 20px;
+}
+
+.content {
+  background-color:white;
+  -webkit-box-shadow: 1px 1px 5px #5c5f69;
+  -moz-box-shadow: 5px 5px 5px #5c5f69;
+  border-radius:2px;
+  -webkit-border-radius:2px;
+  -moz-border-radius:2px;
+  padding: 20px;
+  width: 82%;
+}
+
+h1 {
+  font-size: 1em;
+  margin-bottom: 1em;
+}
+
+button{
+  cursor: pointer;
+}
+
+
+/******************screenOne*************************************/
+/*PANTALLA PRINCIPAL DONDE SE ELIJE ENTRE NORMA, DISPOSIION, ETC*/
+
+.contentdataImput {
+  margin: 10px auto;
+}
+.tam1 {
+  width: 120px;
+}
+.tam2 {
+  width: 50px;
+}
+.tam3 {
+  width: 150px;
+}
+.screenOne {
+  /*top:0;*/
+  height:100%;
+  width:100%;
+  background-color: #eeeeee;
+}
+
+.regulations {
+  color:#5c5f69;
+  margin-top: 20px;
+}
+
+
+
+/******************screenTwo*************************************/
+/***********PANTALLA DE CARGA DE DATOS!!!!!**********************/
+
+.screenTwo {
+  /*top:768px;*/
+  height:100%;
+  width:100%;
+  background-color: #eeeeee;
+}
+
+
+.titleNewRegulation {
+  background-color:#ec9122;
+  color:white;
+  padding:5px;
+  margin-left:10px;
+  margin-right:10px;
+}
+
+.sendRegulation {
+  background-color:#d5dbdf;
+
+  padding:1em;
+  border: none;
+  margin-right: 1em;
+  border-bottom: 3px solid #128c78;
+}
+
+.sendRegulation:hover {
+  background-color:#128c78;
+  color:white;
+  padding:1em;
+  border: none;
+  margin-right: 1em;
+  border-bottom: 3px solid #128c78;
+}
+
+.cancelRegulation {
+  background-color:#d5dbdf;
+
+  padding:1em;
+  border: none;
+  border-bottom: 3px solid #e43e46;
+}
+
+.cancelRegulation:hover {
+  background-color:#e43e46;
+  color:white;
+  padding:1em;
+  border: none;
+  border-bottom: 3px solid #e43e46;
+}
+
+.dataOne {
+  margin-top: 25px;
+  background-color: #d5dbdf;
+  padding: 10px;
+
+
+}
+
+.titleInputRegulation {
+  font-size: 0.8em;
+}
+
+.inputCodeUniversity {
+  width: 3em;
+}
+
+.inputExpediente {
+  width: 3.6em;
+}
+
+.inputyearRegulation{
+  width: 2.2em;
+}
+
+.inputCorrespondRegulation {
+  width: 3em;
+}
+
+.tamInputRegulation {
+  width: 3em;
+}
+
+.titleRCD {
+  font-size: 0.8em;
+}
+
+.inputRegulationOne {
+  font-size: 0.9em;
+  background-color: white;
+  padding: 3px;
+  width: 100%;
+  border:1px solid #b3b5bc;
+}
+
+.dash {
+  margin-left: 2px;
+  margin-right: 2px;
+  font-size: 1.2em;
+}
+
+.dataTwo {
+  margin-top: 20px;
+  background-color: #d5dbdf;
+  padding: 10px;
+  border-bottom:3px solid #b3b5bc;
+}
+
+.contentLeft {
+  width: 100%;
+  margin-right: 20px;
+}
+
+.tamInputRegulationOne {
+  width: 100%;
+}
+
+.inputRegulationTwo {
+  height: 80px;
+  font-size: 1.2em;
+  background-color: white;
+  padding: 3px;
+  width: 100%;
+  border:1px solid #b3b5bc;
+}
+
+
+
+.titleImputData {
+  margin: 10px;
+  margin-bottom: 10px;
+}
+
+.inputFile {
+  margin-top: 2%;
+  background-color: white;
+  padding: 0.4%;
+  border:1px solid #b3b5bc;
+  width: 100%;
+}
+
+.inputRelation {
+  margin-top: 2%;
+  background-color: white;
+  padding: 0.4%;
+  border:1px solid #b3b5bc;
+  width: 50%;
+  font-size: 1.2em;
+}
+
+
+
+
+/******************screenThree*************************************/
+/******************CREACION FINALIZADA!!!!!***********************/
+
+.screenThree {
+  /*top:20em;*/
+  height:100%;
+  width:100%;
+  background-color: #eeeeee;
+}
+
+.dataThree {
+  color: white;
+  height: 100%;
+  background-color: #ec9122;
+  padding: 100px;
+  border-bottom:3px solid #b3b5bc;
+}
+
+.btnRegulationFinished {
+  background-color: white;
+  margin-top: 5%;
+  padding: 1%;
+  color:#5c5f69;
+  border-radius: 2px;
+  border: none;
+  border-bottom:3px solid #b3b5bc;
+
+}
+
+.btnRegulationFinished:hover {
+  background-color: #b3b5bc;
+  margin-top: 5%;
+  padding: 1%;
+  color:white;
+  border-radius: 2px;
+  border: none;
+  border-bottom:3px solid #b3b5bc;
+
+}
+
+
+/*si el ancho es menos que 720px*/
+/*@media screen and (max-width: 720px) {
+}*/
+/*posicion vertical de la ventana*/
+/*@media all and (orientation:portrait) {
+}*/
+/*posicion horizontal de la ventana*/
+/*@media all and (orientation:landscape) {
+  .button {
+    display: flex;
+    flex-direction: row;
+    align-items:center;
+    border-radius:2px;
+    font-size:0.8em;
+    padding:20px;
+    margin-right:20px;
+  }
+  .button:hover {
+    color:white;
+    background-color:#128c78;
+    border-bottom:3px solid #128c78;
+  }
+}*/

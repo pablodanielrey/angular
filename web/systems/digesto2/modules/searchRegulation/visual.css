@@ -1,0 +1,158 @@
+/****************** Estilos comunes ******************************/
+/****************************************************************/
+
+*{
+  margin: 0px;
+  padding: 0px;
+}
+
+.inputSearchContent {
+  padding: 10px;
+  margin-bottom: 20px;
+  background-color: #5c5f69;
+  width: 50%;
+
+
+}
+
+.inputSearch {
+
+  margin-left: 20px;
+  width: 250%;
+  padding: 3px;
+  font-size: 1em;
+  border:none
+}
+
+.searchRegulationContainer {
+  height:100%;
+  width:100%;
+  position:absolute;
+  overflow:hidden;
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.contentSearchRegulation {
+  padding: 20px;
+}
+
+.contentSearch {
+  background-color:white;
+  -webkit-box-shadow: 1px 1px 5px #5c5f69;
+  -moz-box-shadow: 5px 5px 5px #5c5f69;
+  border-radius:2px;
+  -webkit-border-radius:2px;
+  -moz-border-radius:2px;
+  padding: 20px;
+  width: 82%;
+  margin-bottom: 20px;
+}
+
+
+
+.filters {
+  background-color: #eeeeee;
+}
+
+
+
+
+
+.row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  background-color: #eeeeee;
+
+
+}
+.row1 {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  background-color: #5c5f69;
+  margin-bottom: 1%;
+
+}
+.row2 {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  margin-bottom: 1%;
+
+}
+.row3 {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  background-color: #eeeeee;
+
+
+}
+.row4 {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  background-color: #FFFFFF;
+  margin-bottom: 1%;
+
+}
+
+.col {
+  flex: 1 1 8%;
+  margin: 0 0 0 0;
+  padding: 0.5em ;
+  box-sizing: border-box;
+  background-clip: content-box;
+  border: 1px solid rgba(0,0,0,0.1);
+}
+
+.col3 {
+  flex: 1 1 8%;
+  margin: 0 0 0 0;
+  padding: 0.5em ;
+  background-color: #e43e46;
+  box-sizing: border-box;
+  background-clip: content-box;
+  border: 1px solid rgba(0,0,0,0.1);
+}
+.col4 {
+  flex: 1 1 8%;
+  margin: 0 0 0 0;
+  padding: 0.5em ;
+  background-color: #ec9122;
+  box-sizing: border-box;
+  background-clip: content-box;
+  border: 1px solid rgba(0,0,0,0.1);
+}
+.col5 {
+  flex: 1 1 8%;
+  margin: 0 0 0 0;
+  padding: 0.5em ;
+  background-color: #128c78;
+  box-sizing: border-box;
+  background-clip: content-box;
+  border: 1px solid rgba(0,0,0,0.1);
+}
+
+.col1 {
+  flex: 1 1 8%;
+  margin: 0 0 0 0;
+  padding: 0.5em;
+  box-sizing: border-box;
+  color: white;
+  background-clip: content-box;
+  border: 1px solid rgba(0,0,0,0.1);
+}
+
+.col-span-1 {
+  flex-basis: 8.3333%;
+}
+.col-span-2 {
+  flex-basis: 10px;
+}
+.results {
+  overflow-y: scroll;
+  height: 360px;
+}
