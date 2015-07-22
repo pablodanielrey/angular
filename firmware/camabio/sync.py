@@ -78,17 +78,33 @@ class Sync:
 
 
 
-
-    def syncUsersEventHandler(self,con,event):
+    ''' se ha sincronizado el usuario en el server, se elimina de la lista a sincronizar '''
+    def syncChangedUsersEventHandler(self,con,event):
         user = event['data']['user']
-
         cur = con.cursor()
         cur.execute('delete from assistance.sync_user where user_id = %s',(user,))
 
 
+    ''' el servidor envia un los datos de un usuario para ser sincronizado '''
+    def syncServerUserEventHandler(self,con,event):
+        user = event['data']['user']
+        creds = event['data']['credentials']
 
-    ''' envía al servidor los logs cuyo id esta dentro de assistance.sync_user '''
-    def syncUsers(self,protocol,conn):
+        if user:
+            if self.users.needSync(conn,user):
+                self.users.updateUser(conn,user)
+
+        if creds:
+            if self.credentials.findCredentials(con,creds['username']) is None:
+                self.credentials.createUserPassword(con,creds)
+            else:
+                self.credentials.updateUserPassword(con,creds)
+
+
+
+
+    ''' envía al servidor los usuarios cuyo id esta dentro de assistance.sync_user '''
+    def syncChangedUsers(self,protocol,conn):
 
         cur = conn.cursor()
         cur.execute('select user_id from assistance.sync_user')
