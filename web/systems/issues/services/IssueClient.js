@@ -1,6 +1,6 @@
 
 
-app.service('IssueClient', ['Utils','Messages','Session', function(Utils,Messages,Session) {
+app.service('IssueClient', [function() {
 	
   
   /**
@@ -35,14 +35,34 @@ app.service('IssueClient', ['Utils','Messages','Session', function(Utils,Message
   };
   
   
-  this.deleteIssue = function (id, tree){
+  
+  
+  this.addChild = function(data, node){
+  
+    for(var i in data){
+      if(data[i].id == node.relatedRequestId) {
+        data[i].nodes.push(node);
+        return true;
+      }
+
+      if((("nodes" in data[i])) && (data[i]["nodes"].length > 0)){
+        var add = this.addChild(data[i]["nodes"], node);
+        if(add) return true;
+      }
+    }
     
+    return false;
+  
+  };
+  
+  
+  this.deleteNode = function(data, node){
+    for(var i in data){
+      if((("nodes" in data[i])) && (data[i]["nodes"].length > 0)){
+      
+      }
+    }
     
   }
-  
-  
-  
-
-
 
 }]);

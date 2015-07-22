@@ -55,10 +55,18 @@ app.service('Issue', ['Utils','Messages','Session', function(Utils,Messages,Sess
     });
   };
   
-  this.getChildren = function(id){
-     var msg = {
+  
+  /**
+   * Elimina el arbol de nodos a partir del nodo id
+   * @param {type} id
+   * @param {type} callbackOk
+   * @param {type} callbackError
+   * @returns {undefined}
+   */
+  this.deleteIssue = function(id, callbackOk, callbackError){
+    var msg = {
       id: Utils.getId(),
-      action: 'getChildren',
+      action: 'deleteIssue',
       session: Session.getSessionId(),
       request: {
         id: id
@@ -74,5 +82,6 @@ app.service('Issue', ['Utils','Messages','Session', function(Utils,Messages,Sess
         }
     });
   };
-
+  
+  
 }]);
