@@ -1,0 +1,39 @@
+el sistema consta de 2 pantallas por ahora.
+1 - hacer pedido
+2 - ver pedidos y modificar pedido.
+
+
+la pantalla 1 tiene los siguientes datos :
+
+usuario que realiza el pedido (se toma del usuario logueado)
+pedido (area de texto donde se puede escribir)
+aceptar - enviar el pedido - esto almacena en la base de datos un pedido. (posiblemente envíe un mail)
+
+a esta funcionalidad la puede realizar cualquier usuario logueado que tenga el perfil  USER-REQUESTS
+
+- en la base del pedido se deben guardar los siguientes datos.
+
+id - uuid del pedido.
+fecha de creación - default now()
+texto - texto del pedido
+requestor_id - id del usuario que realiza el pedido (es el usuario logueado al sistema)
+related_request_id - (abajo se va a ver para que sirve. es el id de un pedido relacionado original - puede ser null)
+office_id - id a la oficina que va destinado el pedido (por ahora siempre va a ser el id de manteniminento)
+priority - prioridad numérica asignada (un número) default = 0
+visibilidad - PUBLIC, AUTHENTICATED, GROUPS
+
+y el pedido tiene asociado un estado. este estado tiene
+
+fecha- fecha de creación de estado - default now()
+estado = PENDING (estado inicial), CLOSED, ASSIGNED, WAITING, COMMENT (posible estado inicial)
+request_id - id del pedido relacionado con este estado
+user_id - quien cambia el estado.
+
+
+cuando se crea un pedido por primera vez, en la base se crea el pedido y se le crea el estado PENDIENTE
+y en user_id se carga el usuario que realiza el pedido.
+por lo que :
+
+requestor_id = user_id
+fecha_pedido = fecha_estado
+

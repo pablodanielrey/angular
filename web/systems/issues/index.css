@@ -1,0 +1,34 @@
+*{
+  padding: 0px;
+  margin: 0px;
+
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+.principal {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  wrap: nowrap;
+}
+
+
+/*.principal.ng-scope {
+  height: 100%;
+}*/
+
+
+.screen {
+  height: 100%;
+  width: 100%;
+  -webkit-transition: all 1s;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+
+}
