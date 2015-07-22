@@ -78,7 +78,7 @@ class Users:
         if 'id' in data:
             uid = data['id']
 
-        rreq = ( uid,
+        rreq = (uid,
                 data['dni'],
                 data['name'],
                 data['lastname'],
@@ -87,9 +87,10 @@ class Users:
                 data['address'] if 'address' in data else '',
                 data['genre'] if 'genre' in data else '',
                 data['birthdate'] if 'birthdate' in data else None,
-                data['residence_city'] if 'residence_city' in data else '')
+                data['residence_city'] if 'residence_city' in data else '',
+                data['version'] if 'version' in data else 0)
         cur = con.cursor()
-        cur.execute('insert into profile.users (id,dni,name,lastname,city,country,address,genre,birthdate,residence_city) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)', rreq)
+        cur.execute('insert into profile.users (id,dni,name,lastname,city,country,address,genre,birthdate,residence_city,version) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)', rreq)
         return uid
 
     def updateUser(self,con,user):
@@ -105,8 +106,8 @@ class Users:
             if cur.rowcount <= 0:
                 userId = self.createUser(con,user)
             else:
-                rreq = (user['dni'],user['name'],user['lastname'],user['city'],user['country'],user['address'],user['genre'],user['birthdate'],user['residence_city'], user['id'])
-                cur.execute('update profile.users set dni = %s, name = %s, lastname = %s, city = %s, country = %s, address = %s, genre = %s, birthdate = %s, residence_city = %s, version = version + 1 where id = %s', rreq)
+                rreq = (user['dni'],user['name'],user['lastname'],user['city'],user['country'],user['address'],user['genre'],user['birthdate'],user['residence_city'], user['version'], user['id'])
+                cur.execute('update profile.users set dni = %s, name = %s, lastname = %s, city = %s, country = %s, address = %s, genre = %s, birthdate = %s, residence_city = %s, version = %s where id = %s', rreq)
                 if cur.rowcount <= 0:
                     raise Exception()
 

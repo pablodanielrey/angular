@@ -5,18 +5,17 @@ class Templates:
 
     def persist(self,con,template):
         cur = con.cursor()
-        req = (template['id'],template['template'],template['algorithm'],template['userId'])
-        cur.execute('insert into assistance.templates (id,template,algorithm,user_id) values (%s,%s,%s,%s)',req)
+        req = (template['id'],template['template'],template['algorithm'],template['userId'],template['version'])
+        cur.execute('insert into assistance.templates (id,template,algorithm,user_id,version) values (%s,%s,%s,%s,%s)',req)
 
     def update(self,con,template):
-
         cur = con.cursor()
         cur.execute('select id from assistance.templates where id = %s',(template['id'],))
         if cur.rowcount <= 0:
             self.persist(con,template)
         else:
-            req = (template['template'],template['algorithm'],template['userId'],template['id'])
-            cur.execute('update assistance.templates set template = %s, algorithm = %s, user_id = %s, version = version + 1 where id = %s values (%s,%s,%s,%s)',req)
+            req = (template['template'],template['algorithm'],template['userId'],template['version'],template['id'])
+            cur.execute('update assistance.templates set template = %s, algorithm = %s, user_id = %s, version where id = %s values (%s,%s,%s,%s,%s)',req)
 
 
     def findByUser(self,con,userId):
