@@ -11,6 +11,7 @@
 
   <!-- esto es el estilo de font awesome para tener los iconos -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 
 
 
@@ -44,20 +45,20 @@
   <script type="text/javascript" src="/systems/digesto/menu/menu.js"></script>
   <link rel="stylesheet" type="text/css" href="/systems/digesto/menu/menu.css"/>
 
-  <!-- <link rel="stylesheet" type="text/css" href="/systems/digesto/modules/commonCss/button.css" /> -->
+  <link rel="stylesheet" type="text/css" href="/systems/digesto/modules/commonCSS/button.css" />
 
-  <script type="text/javascript" src="/systems/digesto/modules/create/create.js"></script>
-  <!-- <link rel="stylesheet" type="text/css" href="/systems/digesto/modules/create/navigation.css" /> -->
-  <!--  <link rel="stylesheet" type="text/css" href="/systems/digesto/modules/create/structure.css" /> -->
-  <!-- <link rel="stylesheet" type="text/css" href="/systems/digesto/modules/create/visual.css" /> -->
+  <!-- **** PANTALLA CREAR NORMA **** -->
+  <script type="text/javascript" src="/systems/digesto/modules/createRegulation/createRegulation.controller.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/digesto/modules/createRegulation/structure.css" />
+  <link rel="stylesheet" type="text/css" href="/systems/digesto/modules/createRegulation/visual.css" />
+  <link rel="stylesheet" type="text/css" href="/systems/digesto/modules/createRegulation/navigation.css" />
 
-<!--
-  <script type="text/javascript" src="/systems/digesto/modules/search/searchRegulation.js"></script>
-  <link rel="stylesheet" type="text/css" href="/systems/digesto/modules/search/searchRegulation.css" />
+  <!-- **** PANTALLA BUSCAR NORMAS **** -->
+  <!-- <script type="text/javascript" src="/systems/digesto/modules/search/searchRegulation.js"></script> -->
+  <link rel="stylesheet" type="text/css" href="/systems/digesto/modules/searchRegulation/structure.css" />
+  <link rel="stylesheet" type="text/css" href="/systems/digesto/modules/searchRegulation/visual.css" />
+  <link rel="stylesheet" type="text/css" href="/systems/digesto/modules/searchRegulation/navigation.css" />
 
-  <script type="text/javascript" src="/systems/digesto/modules/create/createRegulation.js"></script>
-  <link rel="stylesheet" type="text/css" href="/systems/digesto/modules/create/createRegulation.css" />
--->
 
 <body ng-controller="DigestoCtrl">
 
@@ -72,11 +73,16 @@
         <div ng-view>
         </div>
 
+
     </div>
+
+
+
 
     <div class='messages-container' ng-controller="MessagesCtrl" ng-include="'/modules/messages/messages.html'" ng-class="{false: 'hidden', true: 'visible'}[ isVisible() ]">
     </div>
 </div>
+
 
 </body>
 </html>

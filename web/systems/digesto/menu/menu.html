@@ -1,12 +1,13 @@
 
 <div class='menu'>
     <div class="contentActionMenu">
-      <button class="openMenu" ng-click="toggleMenu()"> Chupala </button>
+      <div class="openMenu" ng-click="toggleMenu()"> <i class="fa fa-bars fa-2x"></i> </div>
     </div>
 
     <ul>
       <li ng-repeat='item in model.items'>
-        <a href={{item.url}}>{{item.item}}</a>
+        <div><a href={{item.url}}>{{item.name}}</a></div>
+        <div class="{{item.img}}"></div>
       </li>
     </ul>
 </div>
