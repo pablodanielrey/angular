@@ -312,12 +312,15 @@ class Assistance:
 
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
-
             if self.date.isNaive(start):
                 start = self.date.localizeLocal(start)
+            elif self.date.isUTC(start):
+                start = self.date.localizeAwareToLocal(start)
 
             if self.date.isNaive(end):
                 end = self.date.localizeLocal(end)
+            elif self.date.isUTC(end):
+                end = self.date.localizeAwareToLocal(end)
 
             schedulesFails = []
             users = []
