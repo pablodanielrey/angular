@@ -6,7 +6,7 @@ create schema digesto;
   create table digesto.normative (
     id varchar not null primary key,
     issuer_id varchar not null references offices.offices (id),
-    file_id varchar not null references file.file (id),
+    file_id varchar references file.file (id),
     type varchar,
     file_number varchar not null,
     normative_number varchar not null,
