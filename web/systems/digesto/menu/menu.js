@@ -7,8 +7,10 @@ app.controller('MenuDigestoCtrl', ["$rootScope", '$scope', "$location", "$timeou
     $scope.model = {
       class:'',
       items: [
-        { item: 'Cargar', url: '#/load' },
-        { item: 'Buscar', url: '#/search' }
+        { name: 'Crear Norma',img:'fa fa-file-text', url: '#/load' },
+        { name: 'Buscar Norma',img:'fa fa fa-search', url: '#/search' },
+      
+
 
       ],
       cerrado : false
