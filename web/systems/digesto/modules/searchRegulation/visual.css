@@ -6,6 +6,12 @@
   padding: 0px;
 }
 
+.searchRegulationContainer h1 {
+  font-size: 1em;
+  margin-bottom: 1em;
+}
+
+
 .inputSearchContent {
   padding: 10px;
   margin-bottom: 20px;

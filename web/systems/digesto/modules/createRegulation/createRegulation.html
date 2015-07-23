@@ -1,162 +1,174 @@
 <!-- <div class='createRegulationContainer' ng-controller='createRegulation'> -->
-<div class='createRegulationContainer'>
-    <div class='contentScreens {{getStyleName()}}'>
+<div class="createRegulation">
+  <div class='createRegulationContainer'>
+      <div class='contentScreens screenResolucion {{getStyleName()}}'>
 
-        <div class='screenOne'>
+          <div class='screenOne'>
+                <div class="container">
+                    <div class="content">
+                        <div><h1>CREAR NUEVA</h1></div>
+                        <div class="regulations">
+                            <div class="btc3x c2" ng-click = "selectRegulation(1)">
+                                <div><i class="fa fa-file-text fa-3x"></i></div>
+                                <div>ORDENANZA</div>
+                            </div>
+
+                            <div class="btc3x c3" ng-click = "selectRegulation(2)">
+                                <div><i class="fa fa-file-text fa-3x"></i></div>
+                                <div>RESOLUCIÓN</div>
+                            </div>
+                            <div class="btc3x c4" ng-click = "selectRegulation(3)">
+                                <div><i class="fa fa-file-text fa-3x"></i></div>
+                                <div>DISPOSICIÓN</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+          </div>
+
+          <div class='screenTwo '>
               <div class="container">
                   <div class="content">
-                      <div><h1>CREAR NUEVA</h1></div>
-                      <div class="regulations">
-                          <div class="btc3x c2" ng-click = "selectRegulation(1)">
-                              <div><i class="fa fa-file-text fa-3x"></i></div>
-                              <div>ORDENANZA</div>
+                      <div class="contentNewRegulation">
+                          <div class="newRegulation">
+                            <div><b>NUEVA</b></div>
+                            <div class="titleNewRegulation">{{getRegulationName()}}</div>
                           </div>
-                          <div class="btc3x c3" ng-click = "selectRegulation(2)">
-                              <div><i class="fa fa-file-text fa-3x"></i></div>
-                              <div>RESOLUCIÓN</div>
+
+                          <div class="saveCancel">
+                              <div>
+                                <button class="sendRegulation" ng-click = "selectRegulation(4)"><i class="fa fa-floppy-o"></i> <b>GUARDAR</b></button>
+                              </div>
+                              <div>
+                                <button class="cancelRegulation" ng-click = "selectRegulation(0)"><i class="fa fa-reply"></i> CANCELAR</button>
+                              </div>
                           </div>
-                          <div class="btc3x c4" ng-click = "selectRegulation(3)">
-                              <div><i class="fa fa-file-text fa-3x"></i></div>
-                              <div>DISPOSICIÓN</div>
+                      </div>
+                      <div class="dataOne">
+                           <div class="contentdataImput tam1">
+                              <div>
+                                  <input class="inputRegulationOne" type="date">
+                              </div>
+                              <div>
+                                  <span class="titleInputRegulation">Fecha</span>
+                              </div>
                           </div>
+                          <div class="contentdataImput tam2">
+                              <div>
+                                  <input class="inputRegulationOne" type="number" min="0">
+                              </div>
+                              <div>
+                                  <span class="titleInputRegulation"> Número</span>
+                              </div>
+                          </div>
+                          <div class="contentdataImput tam3">
+                              <div>
+                                  <input class="inputRegulationOne" type="number"  placeholder="ej: 900-11111/15">
+                              </div>
+                              <div>
+                                  <span class="titleInputRegulation"> Expediente</span>
+                              </div>
+                          </div>
+
+                          <div class="contentdataImput">
+                              <div>
+                                  <select class="inputRegulationOne">
+                                      <option> Decano</option>
+                                      <option> Vicedecano</option>
+                                      <option> Sec. Asuntos Estudiantiles</option>
+                                      <option> Sec. Supervición Administrativa</option>
+                                      <option> Sec. Investigación y Postgrado</option>
+                                      <option> Sec. Investigación y Transferencia</option>
+                                  </select>
+                              </div>
+                              <div>
+                                  <span class="titleInputRegulation">Emisor</span>
+                              </div>
+                          </div>
+                          <div class="ContentEstado">
+                              <div>
+                                  <select class="inputRegulationOne">
+                                      <option> Pendiente</option>
+                                      <option> Aprobado</option>
+                                  </select>
+                              </div>
+                              <div>
+                                  <span class="titleInputRegulation">Estado</span>
+                              </div>
+                          </div>
+                          <div class="contentAprobado tam1">
+                             <div>
+                                 <input class="inputRegulationOne" type="date">
+                             </div>
+                             <div>
+                                 <span class="titleInputRegulation">Aprobado el</span>
+                             </div>
+                         </div>
+                          <div class="ContentVisivilidad">
+                              <div>
+                                  <select class="inputRegulationOne" ng-model='model.visibility'>
+                                      <option value='public'> Pública</option>
+                                      <option value='private'> Privada</option>
+                                      <option value='groupPrivate'> Privada de Grupos</option>
+                                  </select>
+                              </div>
+                              <div>
+                                  <span class="titleInputRegulation">Visibilidad</span>
+                              </div>
+                          </div>
+
+
+                      </div>
+                      <div class="dataTwo">
+                        <div class="contentLeft">
+
+                            <div class="contentImputDataOne">
+                                <div>
+                                    <div >
+                                      <input class="inputFile" type="file"/>
+                                    </div>
+                                    <div class="titleImputData">
+                                        <p class="titleRCD"> Cargar PDF</p>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="contentImputData">
+                                <div class="titleImputData">
+                                  <p> EXTRACTO</p>
+                                </div>
+                                <div class="tamInputRegulationOne">
+                                  <input class="inputRegulationTwo" type="text">
+                                </div>
+                            </div>
+                        </div>
+
                       </div>
                   </div>
               </div>
-        </div>
+          </div>
 
-        <div class='screenTwo'>
-            <div class="container">
-                <div class="content">
-                    <div class="contentNewRegulation">
-                        <div class="newRegulation">
-                          <div><b>NUEVA</b></div>
-                          <div class="titleNewRegulation">{{getRegulationName()}}</div>
-                        </div>
-
-                        <div class="saveCancel">
-                            <div>
-                              <button class="sendRegulation" ng-click = "selectRegulation(4)"><i class="fa fa-floppy-o"></i> <b>GUARDAR</b></button>
-                            </div>
-                            <div>
-                              <button class="cancelRegulation" ng-click = "selectRegulation(0)"><i class="fa fa-reply"></i> CANCELAR</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="dataOne">
-                         <div class="contentdataImput tam1">
-                            <div>
-                                <input class="inputRegulationOne" type="date">
-                            </div>
-                            <div>
-                                <span class="titleInputRegulation">Fecha</span>
-                            </div>
-                        </div>
-                        <div class="contentdataImput tam2">
-                            <div>
-                                <input class="inputRegulationOne" type="number">
-                            </div>
-                            <div>
-                                <span class="titleInputRegulation"> Número</span>
-                            </div>
-                        </div>
-                        <div class="contentdataImput tam3">
-                            <div>
-                                <input class="inputRegulationOne" type="number"  placeholder="ej: 900-11111/15">
-                            </div>
-                            <div>
-                                <span class="titleInputRegulation"> Expediente</span>
-                            </div>
-                        </div>
-
-                        <div class="contentdataImput">
-                            <div>
-                                <select class="inputRegulationOne">
-                                    <option> Decano</option>
-                                    <option> Vicedecano</option>
-                                    <option> Sec. Asuntos Estudiantiles</option>
-                                    <option> Sec. Supervición Administrativa</option>
-                                    <option> Sec. Investigación y Postgrado</option>
-                                    <option> Sec. Investigación y Transferencia</option>
-                                </select>
-                            </div>
-                            <div>
-                                <span class="titleInputRegulation">Emisor</span>
-                            </div>
-                        </div>
-                        <div class="contentdataImput">
-                            <div>
-                                <select class="inputRegulationOne">
-                                    <option> Pendiente</option>
-                                    <option> Aprobado</option>
-                                </select>
-                            </div>
-                            <div>
-                                <span class="titleInputRegulation">Estado</span>
-                            </div>
-                        </div>
-                        <div class="contentdataImput tam1">
-                           <div>
-                               <input class="inputRegulationOne" type="date">
-                           </div>
-                           <div>
-                               <span class="titleInputRegulation">Aprobado el</span>
-                           </div>
-                       </div>
-                        <div class="contentdataImput">
-                            <div>
-                                <select class="inputRegulationOne">
-                                    <option> Pública</option>
-                                    <option> Privada</option>
-                                    <option> Privada de Grupos</option>
-                                </select>
-                            </div>
-                            <div>
-                                <span class="titleInputRegulation">Visibilidad</span>
-                            </div>
-                        </div>
-
-
-                    </div>
-                    <div class="dataTwo">
-                      <div class="contentLeft">
-
-                          <div class="contentImputDataOne">
-                              <div>
-                                  <div >
-                                    <input class="inputFile" type="file"/>
-                                  </div>
-                                  <div class="titleImputData">
-                                      <p class="titleRCD"> Cargar PDF</p>
-                                  </div>
-                              </div>
-
-                          </div>
-                          <div class="contentImputData">
-                              <div class="titleImputData">
-                                <p> EXTRACTO</p>
-                              </div>
-                              <div class="tamInputRegulationOne">
-                                <input class="inputRegulationTwo" type="text">
-                              </div>
-                          </div>
+          <div class='screenThree'>
+              <div class="container">
+                  <div class="content">
+                      <div class="dataThree">
+                          <div><i class="fa fa-check-circle fa-5x"></i></div>
+                          <div class="titleCreatedRegulation"> ORDENANZA CREADA CON ÉXITO !</div>
+                          <button class="btnRegulationFinished " ng-click = "selectRegulation(0)"><h2>FINALIZAR</h2></button>
                       </div>
+                  </div>
+              </div>
+          </div>
 
-                    </div>
-                </div>
-            </div>
-        </div>
+      </div>
 
-        <div class='screenThree'>
-            <div class="container">
-                <div class="content">
-                    <div class="dataThree">
-                        <div><i class="fa fa-check-circle fa-5x"></i></div>
-                        <div class="titleCreatedRegulation"> ORDENANZA CREADA CON ÉXITO !</div>
-                        <button class="btnRegulationFinished " ng-click = "selectRegulation(0)"><h2>FINALIZAR</h2></button>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-    </div>
+      <div class="pantallaNegra" ng-class="{false:'hidden'}[model.visibility == 'groupPrivate']">
+          <div class="container">
+              <div class="content">
+                  holaaaa
+              </div>
+          </div>
+      </div>
+  </div>
 </div>

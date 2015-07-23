@@ -25,4 +25,8 @@ function CreateRegulationCtrl($rootScope, $scope, $location, $window, $timeout, 
       return $scope.model.styleNames[$scope.model.regulationIndex];
     }
 
+    $scope.$on('$viewContentLoaded', function(event){
+      $scope.model.contentGroupsView = false;
+    });
+
 };
