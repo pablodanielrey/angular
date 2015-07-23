@@ -67,6 +67,7 @@ class MyWsClientProtocol(WebSocketClientProtocol):
 
         for c in self.__class__.callbacks:
             c(self)
+            self.__class__.callbacks.remove(c)
 
 
     def onClose(self, wasClean, code, reason):
@@ -181,26 +182,33 @@ class MyWebSocketClientFactory(WebSocketClientFactory):
 def getProtocol():
     return MyWsClientProtocol
 
+def getServerUrl():
+    config = inject.instance(Config)
+    url = 'ws://{}:{}'.format(config.configs['server_ip'],config.configs['server_port'])
+    return url
+
+def getFactory(url):
+    factory = WebSocketClientFactory(url=url,debug=False,debugCodePaths=False)
+    factory.protocol = getProtocol()
+    return factory
+
 
 def connectClient(myFactory=None):
 
     try:
-        config = inject.instance(Config)
         log.startLogging(sys.stdout)
 
-        url = 'ws://{}:{}'.format(config.configs['server_ip'],config.configs['server_port'])
+        url = getServerUrl()
         logging.info('conectando a {}'.format(url))
 
         factory = None
         if myFactory is None:
-            factory = WebSocketClientFactory(url=url,debug=False,debugCodePaths=False)
+            factory = getFactory()
         else:
             factory = myFactory
 
-        factory.protocol = getProtocol()
-
-        connectWS(factory)
-        ''' reactor.connectTCP(config.configs['server_ip'], int(config.configs['server_port']), factory=factory) '''
+        ''' connectWS(factory) '''
+        reactor.connectTCP(config.configs['server_ip'], int(config.configs['server_port']), factory=factory)
 
         return factory
 

@@ -97,13 +97,6 @@ def initializeNetwork():
 
 
 
-
-
-
-
-
-
-
 f = inject.instance(Firmware)
 f.start()
 

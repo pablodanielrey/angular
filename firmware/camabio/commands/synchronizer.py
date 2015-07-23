@@ -8,6 +8,10 @@ sys.path.append('../../../apis')
 import signal, logging, threading, time
 logging.getLogger().setLevel(logging.DEBUG)
 
+from twisted.internet import task
+from twisted.internet import reactor
+
+
 import inject
 from model.config import Config
 
@@ -24,23 +28,9 @@ from firmware import Firmware
 reactor = client.network.websocket.getReactor()
 protocol = client.network.websocket.getProtocol()
 
-class Synchro(threading.Thread):
 
-    def __init__(self,firmware):
-        super().__init__()
-        self.firmware = firmware
-
-
-    def run(self):
-        while True:
-            logging.info('Sincronizando usuarios')
-            self.firmware.syncChangedUsers(protocol)
-
-            logging.info('Sincronizando logs')
-            self.firmware.syncLogs(protocol)
-
-            time.sleep(60)
-
+url = client.network.websocket.getServerUrl()
+factory = client.network.websocket.getFactory(url)
 
 
 def close_sig_handler(signal,frame):
@@ -55,11 +45,19 @@ if __name__ == '__main__':
 
     firmware = inject.instance(Firmware)
 
+    def syncLogs():
+        firmware.syncLogs(protocol)
+        reactor.connectTCP(factory.host, factory.port, factory)
+
+
     protocol.addEventHandler(firmware.syncUsersEventHandler())
     protocol.addEventHandler(firmware.syncChangedUsersEventHandler())
     protocol.addEventHandler(firmware.syncLogEventHandler())
 
-    synchro = Synchro(firmware)
-    synchro.start()
+    #synchro = Synchro(firmware)
+    #synchro.start()
+
+    t = task.LoopingCall(syncLogs)
+    t.start(10)
 
     reactor.run()
