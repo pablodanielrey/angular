@@ -1,0 +1,162 @@
+
+
+
+
+
+.div1 .div2 {
+  color: red;
+}
+
+.menu {
+
+}
+
+.seleccionado-relacionados {
+
+}
+
+.seleccionado-grupos-estado {
+
+}
+
+.nueva-ordenanza {
+
+}
+
+
+
+.div1.seleccionado-grupos .div2 {
+  backgorund: black;
+}
+
+.div1.seleccionado-grupos-estado .seleccion-de-relacionados {
+  display:none;
+}
+
+.div1.selecionando-grupos-estado .seleccionado-grupos {
+  height: 100%;
+  width: 50%;
+}
+
+
+<div class='div1 nueva-ordenanza'>
+
+  <div class='div2'>
+  </div>
+
+  <div class='seleccionando-grupos'>
+  </div>
+
+  <div class='seleccion-de-relacionados'>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+.digesto {
+
+}
+
+.digesto * {
+
+}
+
+.digersto .label {
+  color: orange;
+}
+
+.digesto .fecha {
+
+}
+
+.digesto .number {
+
+}
+
+.digesto .expNumber {
+
+}
+
+.digesto .sender {
+
+}
+
+.digesto .status {
+
+}
+
+
+/*
+  estados visuales posibles de la pantalla
+*/
+
+.menu-principal {
+
+}
+
+.final {
+
+}
+
+.ordenanza-pendiente {
+
+}
+
+.ordenanza-aprobada {
+
+}
+
+.ordenanza-visual-grupo {
+
+}
+
+
+.resolucion {
+
+}
+
+.disposicion {
+
+}
+
+.nueva-visual {
+
+}
+
+
+
+/*
+  estilos aplicados
+*/
+
+
+.digesto.nueva-ordenanza .label {
+
+}
+
+.digesto.nueva-ordenanza .estado {
+
+}
+
+.digesto.nueva-ordenanza .date {
+  display:none;
+}
+
+.digesto.nueva-ordenanza .elem {
+
+}
+
+
+/*
+  resolucion
+*/
+
+.digesto.resolucion .label {
+  color: red;
+}
