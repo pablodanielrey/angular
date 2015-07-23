@@ -34,12 +34,12 @@ class Synchro(threading.Thread):
     def run(self):
         while True:
             logging.info('Sincronizando usuarios')
-            self.firmware.syncUsers(protocol)
+            self.firmware.syncChangedUsers(protocol)
 
             logging.info('Sincronizando logs')
             self.firmware.syncLogs(protocol)
 
-            time.sleep(10)
+            time.sleep(60)
 
 
 
@@ -57,7 +57,7 @@ if __name__ == '__main__':
 
     protocol.addEventHandler(firmware.syncUsersEventHandler())
     protocol.addEventHandler(firmware.syncChangedUsersEventHandler())
-    protocol.addEventhandler(firmware.syncLogEventHandler())
+    protocol.addEventHandler(firmware.syncLogEventHandler())
 
     synchro = Synchro(firmware)
     synchro.start()
