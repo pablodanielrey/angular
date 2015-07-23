@@ -21,7 +21,7 @@ create schema digesto;
     state varchar not null,
     created timestamptz default now(),
     creator_id varchar not null references profile.users (id),
-    normative_id varchar not null references profile.users (id),
+    normative_id varchar not null references profile.users (id)
   );
 
   create table digesto.visibility (
