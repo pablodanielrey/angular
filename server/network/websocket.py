@@ -106,8 +106,6 @@ def sendMessage(protocol,message):
 
 
 
-
-
 class ActionsServerProtocol(WebSocketServerProtocol):
 
 
@@ -252,7 +250,7 @@ class ActionsServerProtocol(WebSocketServerProtocol):
 class BroadcastServerFactory(WebSocketServerFactory):
 
     def __init__(self, debug=False, debugCodePaths=False):
-        super().__init__(self, debug=debug, debugCodePaths=debugCodePaths)
+        super().__init__(debug=debug, debugCodePaths=debugCodePaths)
         self.clients = []
 
 
