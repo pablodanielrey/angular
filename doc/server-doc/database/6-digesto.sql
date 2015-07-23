@@ -16,6 +16,15 @@ create schema digesto;
     extract text
   );
 
+  create table digesto.related (
+    id varchar not null primary key,
+    normative_id varchar not null,
+    realated_id varchar not null,
+    created timestamptz default now(),
+    creator_id varchar not null references profile.users (id),
+    type varchar
+  );
+
   create table digesto.state_normative (
     id varchar not null primary key,
     state varchar not null,
