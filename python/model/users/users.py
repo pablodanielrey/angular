@@ -94,7 +94,7 @@ class Users:
         user = ObjectView(data)
         rreq = (user.dni,user.name,user.lastname,user.city,user.country,user.address,user.genre,user.birthdate,user.residence_city, user.id)
         cur = con.cursor()
-        cur.execute('update profile.users set dni = %s, name = %s, lastname = %s, city = %s, country = %s, address = %s, genre = %s, birthdate = %s, residence_city = %s where id = %s', rreq)
+        cur.execute('update profile.users set dni = %s, name = %s, lastname = %s, city = %s, country = %s, address = %s, genre = %s, birthdate = %s, residence_city = %s, version = version + 1 where id = %s', rreq)
         if cur.rowcount <= 0:
             raise Exception()
 
@@ -111,7 +111,7 @@ class Users:
 
     def findUserByDni(self,con,dni):
         cur = con.cursor()
-        cur.execute('select id,dni,name,lastname,city,country,address,genre,birthdate,residence_city from profile.users where dni = %s', (dni,))
+        cur.execute('select id,dni,name,lastname,city,country,address,genre,birthdate,residence_city,version from profile.users where dni = %s', (dni,))
         data = cur.fetchone()
 
         if data != None:
@@ -121,7 +121,7 @@ class Users:
 
     def findUser(self,con,id):
         cur = con.cursor()
-        cur.execute('select id,dni,name,lastname,city,country,address,genre,birthdate,residence_city from profile.users where id = %s', (id,))
+        cur.execute('select id,dni,name,lastname,city,country,address,genre,birthdate,residence_city,version from profile.users where id = %s', (id,))
         if cur.rowcount <= 0:
             return None
 
@@ -138,12 +138,26 @@ class Users:
 
     def listUsers(self, con):
         cur = con.cursor()
-        cur.execute('select id,dni,name,lastname,city,country,address,genre,birthdate,residence_city from profile.users')
+        cur.execute('select id,dni,name,lastname,city,country,address,genre,birthdate,residence_city,version from profile.users')
         data = cur.fetchall()
         rdata = []
         for d in data:
             rdata.append(self.convertUserToDict(d))
         return rdata
+
+
+    ''' retorna true en el caso de que el usuario pasado como parámetro tenga una version mayor al de la base '''
+    def needSync(self,con,user):
+        id = user['id']
+
+        cur = con.cursor()
+        cur.execute('select version from profile.users where id = %s',(id,))
+        cur.rowcount <= 0:
+            return True
+
+        version = cur.fetchone()[0]
+        return user['version'] > version
+
 
 
     ''' transformo a diccionario las respuestas de psycopg2'''
@@ -158,7 +172,8 @@ class Users:
                 'address':d[6],
                 'genre':d[7],
                 'birthdate':d[8],
-                'residence_city':d[9]
+                'residence_city':d[9],
+                'version':d[10]
             }
         return rdata
 
