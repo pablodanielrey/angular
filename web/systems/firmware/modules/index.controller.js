@@ -250,7 +250,7 @@ function MainFirmwareController($rootScope,$scope, $timeout, $location, Notifica
    }
 
    function enterPassword() {
-    Firmware.identify(vm.model.code,vm.model.password,
+    Firmware.login(vm.model.code,vm.model.password,
       function(response) {
 
       },
@@ -315,22 +315,45 @@ function MainFirmwareController($rootScope,$scope, $timeout, $location, Notifica
    });
 
 
-   $scope.$on('identifiedEvent', function(event, data) {
-     if (vm.model.adminMode) {
-       if (data.profile == 'admin') {
-         $location.path("/enroll");
-       } else {
-         Notifications.message('Error, usted no tiene permisos de administrador');
-         vm.initialize();
-       }
-     } else {
-       $scope.$parent.logData  = {
-          date:data.date,
-          user:data.user
-       }
+   $scope.$on('ErrorEvent', function(event, data) {
+     console.log(data);
+     if (data.error != undefined) {
+       // se envía un mensaje desde el servidor indicando un mensaje a mostrar.
+       Notifications.message(data.error);
+       return;
+     }
+   });
 
+
+
+   $scope.$on('IdentifiedEvent', function(event, data) {
+
+     console.log(data);
+
+     if (data.msg != undefined) {
+       // se envía un mensaje desde el servidor indicando un mensaje a mostrar.
+       Notifications.message(data.msg);
+       return;
+     }
+
+     if (data.log == undefined || data.user == undefined) {
+       Notifications.message('No se pudo identicar a la persona');
+       return;
+     }
+
+     // registro los datos del usuario logueado
+     $scope.$parent.logData = {
+        date:new Date(data.log.log),
+        user:data.user,
+        sid:data.sid
+     }
+
+     if (vm.model.adminMode && data.profile != undefined && data.profile == 'admin') {
+       $location.path("/enroll");
+     } else {
        $location.path('/log');
      }
+
    });
 
    $scope.$on('$viewContentLoaded', function(event) {

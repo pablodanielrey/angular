@@ -135,34 +135,10 @@ app.controller('ManagePositionsCtrl', ["$scope", "$timeout", "$window", "Assista
   /**
    * Cargar posiciones
    */
-  $scope.loadPositions = function(){
+  $scope.loadPositions = function() {
     $scope.model.positions= [
-      "A2",
-      "A3",
-      "A4",
-      "A5",
-      "A6",
-      "A7",
-      "B2",
-      "B3",
-      "B4",
-      "B5",
-      "B6",
-      "B7",
-      "C2",
-      "C3",
-      "C4",
-      "C5",
-      "C6",
-      "C7",
-      "E2",
-      "E3",
-      "E4",
-      "E5",
-      "E6",
-      "E7",
-      "Contrato de Gestion",
-      "Contrato de Obra",
+      "Plata Permanente",
+      "Contrato",
       "Beca"
     ];
   };

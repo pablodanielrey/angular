@@ -11,14 +11,10 @@ create schema account_requests;
     student_number varchar,
     lastname varchar default '',
     name varchar default '',
-    email varchar not null,
+    email varchar,
     reason varchar,
     password varchar not null,
     hash varchar default '',
     confirmed boolean default false,
-    created timestamptz default now(),
-    CHECK(EXTRACT(TIMEZONE FROM created) = '0')
+    created timestamptz default now()
   );
-
-
-  

@@ -13,6 +13,73 @@ class Profiles:
     session = inject.attr(Session)
     config = inject.attr(Config)
 
+
+    def _checkAccessWithCon(self,con,sid,roles):
+
+        if sid is None:
+            return False
+
+        s = self.session._getSession(con,sid)
+        if s is None:
+            return False
+
+        user_id = s[self.config.configs['session_user_id']]
+        if user_id == None:
+            logging.debug('no se encuenta user_id con el id de sesión %s' % sid)
+            return False
+
+        """ por ahora cualquier usuario logueado exitósamente es usuario """
+        if 'USER' in roles:
+            return True;
+
+        try:
+            cur = con.cursor()
+            cur.execute('select profile from credentials.auth_profile where user_id = %s',(user_id,))
+            rdata = cur.fetchall()
+            if rdata == None:
+                logging.debug('el usuario con id %s no tiene ningun rol asignado' % user_id)
+                return False
+
+            for role in rdata:
+                if role[0] in roles:
+                  return True
+
+            logging.debug('no se encuentan los roles asignados al usuario (%s) en la lista de roles pedidos %s' % (rdata,tuple(roles)))
+            return False
+
+        except Exception as e:
+            logging.exception(e)
+            return False
+
+
+
+
+    """
+        chequeo si el usuario identificado con la sesion = sid, tiene alguno de los roles pasados dentro de la lista roles
+        en el caso de que tenga alguno retorno true.
+        en caso de no tener ninguno tiro false
+    """
+    def _checkAccess(self,sid,roles):
+
+        if sid is None:
+            return False
+
+        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+        try:
+            return self._checkAccessWithCon(con,sid,roles)
+
+        except Exception as e:
+            logging.exception(e)
+            return False
+
+        finally:
+            if con:
+                con.close()
+
+
+
+
+
     """
         chequeo si el usuario identificado con la sesion = sid, tiene alguno de los roles pasados dentro de la lista roles
         en el caso de que tenga alguno retorno true.
@@ -20,45 +87,11 @@ class Profiles:
     """
     def checkAccess(self,sid,roles):
 
-        if sid is None:
+        if self._checkAccess(sid,roles):
+            return True
+        else:
             raise AccessDenied()
 
-        s = self.session.getSession(sid)
-        if s is None:
-            raise AccessDenied()
-
-        user_id = s[self.config.configs['session_user_id']]
-        if user_id == None:
-            logging.debug('no se encuenta user_id con el id de sesión %s' % sid)
-            raise AccessDenied()
-
-        """ por ahora cualquier usuario logueado exitósamente es usuario """
-        if 'USER' in roles:
-            return True;
-
-        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
-        try:
-          cur = con.cursor()
-          cur.execute('select profile from credentials.auth_profile where user_id = %s',(user_id,))
-          rdata = cur.fetchall()
-          if rdata == None:
-              logging.debug('el usuario con id %s no tiene ningun rol asignado' % user_id)
-              raise AccessDenied()
-
-          for role in rdata:
-              if role[0] in roles:
-                  return True
-
-          logging.debug('no se encuentan los roles asignados al usuario (%s) en la lista de roles pedidos %s' % (rdata,tuple(roles)))
-          raise AccessDenied()
-
-        except Exception as e:
-            logging.exception(e)
-            raise AccessDenied()
-
-        finally:
-            if con:
-                con.close()
 
 
     def getLocalUserId(self,sid):

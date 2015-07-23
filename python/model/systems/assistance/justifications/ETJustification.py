@@ -7,7 +7,7 @@ from model.systems.assistance.justifications.exceptions import *
 
 
 """
-    Donación de sangre
+    Entrada tarde justificada
     no tiene límite
 """
 class ETJustification(Justification):
@@ -17,13 +17,20 @@ class ETJustification(Justification):
     def isJustification(self,id):
         return self.id == id
 
+    def _isJustifiedTimeStart(self,sched,whs,justification,tolerancia):
+        if len(whs) > 0:
+            return True
+        return False
+
+    def _isJustifiedTime(self,justification,start,end):
+        return False
+
     """
         retorna la cantidad de justificaciones que se tienen disponibles dentro de un período de tiempo.
     """
     def available(self,utils,con,userId,date=None,period=None):
 
         return 365
-
 
     """
         inicializa un pedido en estado pendiente de una justificación en las fechas indicadas
