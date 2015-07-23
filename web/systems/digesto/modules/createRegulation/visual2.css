@@ -1,162 +1,366 @@
-
-
-
-
-
-.div1 .div2 {
-  color: red;
-}
-
-.menu {
+.createRegulation {
 
 }
 
-.seleccionado-relacionados {
-
+.createRegulation .createRegulationContainer {
+  height:100%;
+  width:100%;
+  position:absolute;
+  overflow:hidden;
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
-.seleccionado-grupos-estado {
-
+.createRegulation .contentScreens {
+  height:100%;
+  width:100%;
+  background-color: yellow;
 }
 
-.nueva-ordenanza {
-
+.createRegulation  .container {
+  padding: 20px;
 }
 
-
-
-.div1.seleccionado-grupos .div2 {
-  backgorund: black;
+.createRegulation .content {
+  background-color:white;
+  -webkit-box-shadow: 1px 1px 5px #5c5f69;
+  -moz-box-shadow: 5px 5px 5px #5c5f69;
+  border-radius:2px;
+  -webkit-border-radius:2px;
+  -moz-border-radius:2px;
+  padding: 20px;
+  width: 82%;
 }
 
-.div1.seleccionado-grupos-estado .seleccion-de-relacionados {
-  display:none;
+.createRegulation h1 {
+  font-size: 1em;
+  margin-bottom: 1em;
 }
 
-.div1.selecionando-grupos-estado .seleccionado-grupos {
+.createRegulation button{
+  cursor: pointer;
+}
+
+.createRegulation .pantallaNegra {
+  width: 100%;
   height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);;
+
+  position: absolute;
+  top: 0px;
+}
+
+.createRegulation .pantallaNegra.hidden {
+  display: none;
+}
+
+/******************screenOne*************************************/
+/*PANTALLA PRINCIPAL DONDE SE ELIJE ENTRE NORMA, DISPOSIION, ETC*/
+
+.createRegulation .contentdataImput {
+  margin: 10px auto;
+}
+.createRegulation .tam1 {
+  width: 120px;
+}
+.createRegulation .tam2 {
+  width: 50px;
+}
+.createRegulation .tam3 {
+  width: 150px;
+}
+.createRegulation .screenOne {
+  /*top:0;*/
+  height:100%;
+  width:100%;
+  background-color: #eeeeee;
+}
+
+.createRegulation .regulations {
+  color:#5c5f69;
+  margin-top: 20px;
+}
+
+
+
+/******************screenTwo*************************************/
+/***********PANTALLA DE CARGA DE DATOS!!!!!**********************/
+
+.createRegulation .screenTwo {
+  /*top:768px;*/
+  height:100%;
+  width:100%;
+  background-color: #eeeeee;
+}
+
+
+.createRegulation .titleNewRegulation {
+  background-color:#ec9122;
+  color:white;
+  padding:5px;
+  margin-left:10px;
+  margin-right:10px;
+}
+
+.createRegulation .sendRegulation {
+  background-color:#d5dbdf;
+
+  padding:1em;
+  border: none;
+  margin-right: 1em;
+  border-bottom: 3px solid #128c78;
+}
+
+.createRegulation .sendRegulation:hover {
+  background-color:#128c78;
+  color:white;
+  padding:1em;
+  border: none;
+  margin-right: 1em;
+  border-bottom: 3px solid #128c78;
+}
+
+.createRegulation .cancelRegulation {
+  background-color:#d5dbdf;
+
+  padding:1em;
+  border: none;
+  border-bottom: 3px solid #e43e46;
+}
+
+.createRegulation .cancelRegulation:hover {
+  background-color:#e43e46;
+  color:white;
+  padding:1em;
+  border: none;
+  border-bottom: 3px solid #e43e46;
+}
+
+.createRegulation .dataOne {
+  margin-top: 25px;
+  background-color: #d5dbdf;
+  padding: 10px;
+
+
+}
+
+.createRegulation .titleInputRegulation {
+  font-size: 0.8em;
+}
+
+.createRegulation .inputCodeUniversity {
+  width: 3em;
+}
+
+.createRegulation .inputExpediente {
+  width: 3.6em;
+}
+
+.createRegulation .inputyearRegulation{
+  width: 2.2em;
+}
+
+.createRegulation .inputCorrespondRegulation {
+  width: 3em;
+}
+
+.createRegulation .tamInputRegulation {
+  width: 3em;
+}
+
+.createRegulation .titleRCD {
+  font-size: 0.8em;
+}
+
+.createRegulation .inputRegulationOne {
+  font-size: 0.9em;
+  background-color: white;
+  padding: 3px;
+  width: 100%;
+  border:1px solid #b3b5bc;
+}
+
+.createRegulation .dash {
+  margin-left: 2px;
+  margin-right: 2px;
+  font-size: 1.2em;
+}
+
+.createRegulation .dataTwo {
+  margin-top: 20px;
+  background-color: #d5dbdf;
+  padding: 10px;
+  border-bottom:3px solid #b3b5bc;
+}
+
+.createRegulation .contentLeft {
+  width: 100%;
+  margin-right: 20px;
+}
+
+.createRegulation .tamInputRegulationOne {
+  width: 100%;
+}
+
+.createRegulation .inputRegulationTwo {
+  height: 80px;
+  font-size: 1.2em;
+  background-color: white;
+  padding: 3px;
+  width: 100%;
+  border:1px solid #b3b5bc;
+}
+
+
+
+.createRegulation .titleImputData {
+  margin: 10px;
+  margin-bottom: 10px;
+}
+
+.createRegulation .inputFile {
+  margin-top: 2%;
+  background-color: white;
+  padding: 0.4%;
+  border:1px solid #b3b5bc;
+  width: 100%;
+}
+
+.createRegulation .inputRelation {
+  margin-top: 2%;
+  background-color: white;
+  padding: 0.4%;
+  border:1px solid #b3b5bc;
   width: 50%;
-}
-
-
-<div class='div1 nueva-ordenanza'>
-
-  <div class='div2'>
-  </div>
-
-  <div class='seleccionando-grupos'>
-  </div>
-
-  <div class='seleccion-de-relacionados'>
-  </div>
-</div>
-
-
-
-
-
-
-
-
-
-.digesto {
-
-}
-
-.digesto * {
-
-}
-
-.digersto .label {
-  color: orange;
-}
-
-.digesto .fecha {
-
-}
-
-.digesto .number {
-
-}
-
-.digesto .expNumber {
-
-}
-
-.digesto .sender {
-
-}
-
-.digesto .status {
-
-}
-
-
-/*
-  estados visuales posibles de la pantalla
-*/
-
-.menu-principal {
-
-}
-
-.final {
-
-}
-
-.ordenanza-pendiente {
-
-}
-
-.ordenanza-aprobada {
-
-}
-
-.ordenanza-visual-grupo {
-
-}
-
-
-.resolucion {
-
-}
-
-.disposicion {
-
-}
-
-.nueva-visual {
-
+  font-size: 1.2em;
 }
 
 
 
-/*
-  estilos aplicados
-*/
 
+/******************screenThree*************************************/
+/******************CREACION FINALIZADA!!!!!***********************/
 
-.digesto.nueva-ordenanza .label {
-
-}
-
-.digesto.nueva-ordenanza .estado {
-
-}
-
-.digesto.nueva-ordenanza .date {
-  display:none;
-}
-
-.digesto.nueva-ordenanza .elem {
-
+.createRegulation .screenThree {
+  /*top:20em;*/
+  height:100%;
+  width:100%;
+  background-color: #eeeeee;
 }
 
 
-/*
-  resolucion
-*/
 
-.digesto.resolucion .label {
-  color: red;
+.createRegulation .btnRegulationFinished {
+  background-color: white;
+  margin-top: 5%;
+  padding: 1%;
+  color:#5c5f69;
+  border-radius: 2px;
+  border: none;
+  border-bottom:3px solid #b3b5bc;
+
+}
+
+.createRegulation .btnRegulationFinished:hover {
+  background-color: #b3b5bc;
+  margin-top: 5%;
+  padding: 1%;
+  color:white;
+  border-radius: 2px;
+  border: none;
+  border-bottom:3px solid #b3b5bc;
+
+}
+
+.createRegulation .ContentEstado, .contentAprobado, .ContentVisivilidad {
+  margin: 10px auto;
+}
+
+
+
+
+
+
+/*KJLDSHDUKHKJFHDSJKFHDSKJFHJDKSFHJKDSHFKJDSHFKJDSHKFJHDSKJFHDJKF*/
+.createRegulation .screenOrdenanza  .ContentEstado{
+  display: none;
+}
+
+.createRegulation .screenOrdenanza  .ContentVisivilidad{
+  display: none;
+}
+
+.createRegulation .screenOrdenanza  .contentAprobado{
+  display: none;
+}
+
+.createRegulation .screenOrdenanza .dataThree  {
+  color: white;
+  height: 100%;
+  background-color: #ec9122;
+  padding: 100px;
+  border-bottom:3px solid #b3b5bc;
+
+}
+.createRegulation .screenOrdenanza .titleNewRegulation  {
+  background-color:#ec9122;
+  color:white;
+  padding:5px;
+  margin-left:10px;
+  margin-right:10px;
+}
+
+
+
+
+.createRegulation.screenResolucion {
+
+}
+
+.createRegulation .screenResolucion .dataThree  {
+  color: white;
+  height: 100%;
+  background-color: #e43e46;
+  padding: 100px;
+  border-bottom:3px solid #b3b5bc;
+
+}
+
+.createRegulation .screenResolucion .titleNewRegulation  {
+  background-color:#e43e46;
+  color:white;
+  padding:5px;
+  margin-left:10px;
+  margin-right:10px;
+}
+
+
+
+
+.createRegulation .screenDisposicion  .ContentEstado{
+  display: none;
+}
+
+.createRegulation .screenDisposicion  .ContentVisivilidad{
+  display: none;
+}
+
+.createRegulation .screenDisposicion  .contentAprobado{
+  display: none;
+}
+
+
+.createRegulation .screenDisposicion .dataThree  {
+  color: white;
+  height: 100%;
+  background-color: #128c78;
+  padding: 100px;
+  border-bottom:3px solid #b3b5bc;
+
+}
+.createRegulation .screenDisposicion .titleNewRegulation  {
+  background-color:#128c78;
+  color:white;
+  padding:5px;
+  margin-left:10px;
+  margin-right:10px;
 }
