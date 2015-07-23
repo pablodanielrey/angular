@@ -52,7 +52,7 @@ class MyWsClientProtocol(WebSocketClientProtocol):
 
     def __init__(self):
         logging.info('instanciando protocolo')
-        super(WebSocketClientProtocol,self).__init__()
+        super().__init__()
         self.messages = {}
         logging.info('protocolo instanciado')
 

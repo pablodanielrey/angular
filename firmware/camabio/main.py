@@ -13,7 +13,7 @@ from itertools import zip_longest
 import model
 from model.config import Config
 
-""" configuro el injector con las variables apropiadas """
+''' configuro el injector con las variables apropiadas '''
 def config_injector(binder):
     binder.bind(Config,Config('firmware-config.cfg'))
 
@@ -30,7 +30,7 @@ finalize = False
 class Identifier(threading.Thread):
 
     def __init__(self,firmware,factory):
-        super(Identifier,self).__init__()
+        super().__init__()
         self.firmware = firmware
         self.factory = factory
 
@@ -84,6 +84,26 @@ class Identifier(threading.Thread):
 
 
 
+def initializeNetwork():
+    config = inject.instance(Config)
+    log.startLogging(sys.stdout)
+    factory = BroadcastServerFactory()
+    factory.protocol = ActionsServerProtocol
+    port = reactor.listenTCP(int(config.configs['firmware_port']), factory=factory, interface=config.configs['firmware_ip'])
+    return (reactor,port,factory)
+
+
+
+
+
+
+
+
+
+
+
+
+
 f = inject.instance(Firmware)
 f.start()
 
@@ -113,7 +133,7 @@ try:
     try:
         identifier.join()
     except Exception as e:
-        logging.critical(e)
+        logging.exception(e)
 
 finally:
     f.stop()

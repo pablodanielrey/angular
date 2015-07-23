@@ -5,7 +5,7 @@ sys.path.append('../../../firmware/camabio')
 sys.path.append('../../../python')
 sys.path.append('../../../apis')
 
-import signal, logging
+import signal, logging, threading, time
 logging.getLogger().setLevel(logging.DEBUG)
 
 import inject
@@ -22,6 +22,26 @@ import client.network.websocket
 from firmware import Firmware
 
 reactor = client.network.websocket.getReactor()
+protocol = client.network.websocket.getProtocol()
+
+class Synchro(threading.Thread):
+
+    def __init__(self,firmware):
+        super().__init__()
+        self.firmware = firmware
+
+
+    def run(self):
+        while True:
+            logging.info('Sincronizando usuarios')
+            self.firmware.syncUsers(protocol)
+
+            logging.info('Sincronizando logs')
+            self.firmware.syncLogs(protocol)
+
+            time.sleep(10)
+
+
 
 def close_sig_handler(signal,frame):
     global reactor
@@ -35,11 +55,11 @@ if __name__ == '__main__':
 
     firmware = inject.instance(Firmware)
 
-    protocol = client.network.websocket.getProtocol()
+    protocol.addEventHandler(firmware.syncUsersEventHandler())
     protocol.addEventHandler(firmware.syncChangedUsersEventHandler())
+    protocol.addEventhandler(firmware.syncLogEventHandler())
 
-    firmware.syncUsers(protocol)
-
-    client.network.websocket.connectClient()
+    synchro = Synchro(firmware)
+    synchro.start()
 
     reactor.run()
