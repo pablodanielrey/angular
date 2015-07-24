@@ -25,6 +25,7 @@ from network import websocket
 
 logging.getLogger().setLevel(logging.DEBUG)
 
+'''
 finalize = False
 
 class Identifier(threading.Thread):
@@ -96,16 +97,13 @@ def initializeNetwork():
 
 
 
-
 f = inject.instance(Firmware)
 f.start()
 
 
 try:
-    """ inicializo la parte de red """
     (reactor,port,factory) = websocket.getPort()
 
-    """ inicializo el cierre del programa """
     def close_sig_handler(signal,frame):
       finalize = True
       port.stopListening()
@@ -115,7 +113,6 @@ try:
     signal.signal(signal.SIGINT,close_sig_handler)
 
 
-    ''' inicializo el tema del identificador '''
     identifier = Identifier(f,factory)
     identifier.start()
 
@@ -130,3 +127,14 @@ try:
 
 finally:
     f.stop()
+'''
+
+if __name__ == '__main__':
+
+
+    #from autobahn.twisted.wamp import ApplicationRunner
+    from autobahn.asyncio.wamp import ApplicationRunner
+    from network.wampFirmware import WampFirmware
+
+    runner = ApplicationRunner(url='ws://localhost:8000/ws',realm='assistance',debug=True, debug_wamp=True, debug_app=True)
+    runner.run(WampFirmware)

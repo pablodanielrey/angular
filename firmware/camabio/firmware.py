@@ -38,11 +38,6 @@ class Firmware:
 
     def stop(self):
         self.reader.stop()
-        if self.conn:
-            self.conn.close()
-
-
-
 
     def enroll(self, pin, need_first=None, need_second=None, need_third=None, need_release=None, error=None, fatal_error=None):
 
@@ -105,38 +100,36 @@ class Firmware:
 
 
     ''' llamado cuando se trata de identificar una persona por huella '''
-    def identify(self, notifier=None):
+    def identify(self):
         h = self.reader.identify()
         if h:
             conn = self._get_database()
             try:
-
                 userId = self.templates.findUserIdByIndex(conn,h)
                 if userId:
-                    (log,user,sid,roles) = self._identify(conn,userId)
-
+                    data = self._identify(conn,userId)
                     conn.commit()
-
-                    if notifier:
-                        notifier._identified(log,user,sid,roles)
+                    return data
 
                 else:
                     logging.critical('{} - huella identificada en el indice {}, pero no se encuentra ningún mapeo con un usuario'.format(self.date.now(),h))
-                    if notifier:
-                        notifier._error(h)
+                    return None
+
+            except Exception as e:
+                logging.exception(e)
+                raise e
 
             finally:
                 conn.close()
 
         else:
-            if notifier:
-                notifier._identified(None)
+            return None
 
 
 
 
     ''' llamado cuando se trata de identificar una persona usando el teclado '''
-    def login(self, pin, password, notifier, server):
+    def login(self, pin, password):
         conn = self._get_database()
         try:
 
@@ -146,16 +139,22 @@ class Firmware:
             }
             userData = self.userPassword.findUserPassword(conn,creds)
             if userData is None:
-                notifier._identified(server,None)
-                return
+                return None
 
             (log,user,sid,roles) = self._identify(conn,userData['user_id'],0)
             conn.commit()
 
+        except Exception as e:
+            logging.exception(e)
+            raise e
+
         finally:
             conn.close()
 
-        notifier._identified(server,log,user,sid,roles)
+
+
+
+
 
 
     ''' retorna un handler para manejar los eventos de sincronizacion '''
