@@ -25,9 +25,9 @@ create schema digesto;
     type varchar
   );
 
-  create table digesto.state_normative (
+  create table digesto.status (
     id varchar not null primary key,
-    state varchar not null,
+    status varchar not null,
     created timestamptz default now(),
     creator_id varchar not null references profile.users (id),
     normative_id varchar not null references digesto.normative (id)
