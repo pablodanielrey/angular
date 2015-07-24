@@ -32,3 +32,14 @@ wget https://bootstrap.pypa.io/get-pip.py
 ./pypy-2.6-linux_x86_64-portable/bin/crossbar init
 
 # en node1 ya existe una instancia de crossbar pelada con realm configurada
+
+
+
+# para instalar en cubieboard usando cubian tengo el siguiente history
+
+sudo apt-get install python-pip
+sudo apt-get install python2.7-dev
+pip install --update six
+sudo pip install --upgrade twisted
+pip install --upgrade requests
+sudo pip install crossbar[all]

@@ -83,10 +83,10 @@ class WampFirmware(ApplicationSession):
         proceso de identificación de una persona -- llamado normalmente por un bulce en main
         //////////////////////////////////
     '''
-    @coroutine
     def identify(self):
-        data = yield from self.firmware.identify()
+        data = self.firmware.identify()
         self._sendIdentifyEvent(data)
+        return data
 
     '''
         //////////////////////////////////
