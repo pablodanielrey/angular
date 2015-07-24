@@ -5,6 +5,7 @@ import logging, inject
 #from autobahn.twisted.wamp import ApplicationSession
 from autobahn.asyncio.wamp import ApplicationSession
 
+from asyncio import coroutine
 
 from firmware import Firmware
 
@@ -18,12 +19,23 @@ class WampFirmware(ApplicationSession):
 
     def __init__(self,config=None):
         logging.debug('instanciando WampFirmware')
+        ApplicationSession.__init__(self, config)
         self.firmware = inject.instance(Firmware)
+
+    '''
+    como referencia tambien se puede sobreeescribir el onConnect
+    def onConnect(self):
+        logging.debug('transport connected')
+        self.join(self.config.realm)
+    '''
+
 
     def onJoin(self, details):
         logging.debug('session joined')
 
         self.firmware.start()
+
+        self.register(self.identify, 'assistance.firmware.identify')
         self.register(self.enroll, 'assistance.firmware.enroll')
         self.register(self.login, 'assistance.firmware.login')
 
@@ -34,14 +46,15 @@ class WampFirmware(ApplicationSession):
 
 
 
+
+
     '''
-        //////////////////////////////////
-        proceso de login mediante credenciales de una persona
-        //////////////////////////////////
+        ///////////////
+        evento de identificación de una persona para otros componentes del sistema
+        /////////////
     '''
 
-    def login(self,dni,password):
-        data = self.firmware.login(dni,password)
+    def _sendIdentifyEvent(self, data):
         if data:
             (log,user,sid,roles) = data
 
@@ -62,6 +75,28 @@ class WampFirmware(ApplicationSession):
             }
             self.publish('assistance.firmware.identify',msg)
 
+
+
+
+    '''
+        //////////////////////////////////
+        proceso de identificación de una persona -- llamado normalmente por un bulce en main
+        //////////////////////////////////
+    '''
+    @coroutine
+    def identify(self):
+        data = yield from self.firmware.identify()
+        self._sendIdentifyEvent(data)
+
+    '''
+        //////////////////////////////////
+        proceso de login mediante credenciales de una persona
+        //////////////////////////////////
+    '''
+
+    def login(self,dni,password):
+        data = self.firmware.login(dni,password)
+        self._sendIdentifyEvent(data)
 
 
     '''

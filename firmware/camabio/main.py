@@ -21,9 +21,34 @@ inject.configure(config_injector)
 
 import camabio
 from firmware import Firmware
-from network import websocket
+#from network import websocket
 
 logging.getLogger().setLevel(logging.DEBUG)
+
+from autobahn.asyncio.wamp import ApplicationSession
+from asyncio import coroutine
+
+class WampMain(ApplicationSession):
+
+    def __init__(self,config=None):
+        logging.debug('instanciando WampMain')
+        ApplicationSession.__init__(self, config)
+
+
+    @coroutine
+    def onJoin(self, details):
+        logging.debug('session joined')
+
+        while True:
+            try:
+                yield from self.call('assistance.firmware.identify')
+
+            except Exception as e:
+                logging.exception(e)
+
+
+
+
 
 '''
 finalize = False
@@ -137,4 +162,4 @@ if __name__ == '__main__':
     from network.wampFirmware import WampFirmware
 
     runner = ApplicationRunner(url='ws://localhost:8000/ws',realm='assistance',debug=True, debug_wamp=True, debug_app=True)
-    runner.run(WampFirmware)
+    runner.run(WampMain)
