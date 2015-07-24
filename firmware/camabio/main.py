@@ -41,7 +41,9 @@ class WampMain(ApplicationSession):
 
         while True:
             try:
-                yield from self.call('assistance.firmware.identify')
+                date = yield from self.call('assistance.firmware.testDate',datetime.datetime.now())
+                logging.info('fecha obtenida {}'.format(date))
+                #yield from self.call('assistance.firmware.identify')
 
             except Exception as e:
                 logging.exception(e)

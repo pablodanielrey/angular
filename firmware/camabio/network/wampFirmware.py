@@ -38,6 +38,7 @@ class WampFirmware(ApplicationSession):
         self.register(self.identify, 'assistance.firmware.identify')
         self.register(self.enroll, 'assistance.firmware.enroll')
         self.register(self.login, 'assistance.firmware.login')
+        self.register(self.testDate, 'assistance.firmware.testDate')
 
 
     def onLeave(self, details):
@@ -46,6 +47,11 @@ class WampFirmware(ApplicationSession):
 
 
 
+
+    ''' para testear si el datetime se puede serializar '''
+    def testDate(self,date):
+        logging.info('fecha obtenida : {}'.format(date))
+        return date
 
 
     '''

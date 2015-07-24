@@ -43,3 +43,57 @@ pip install --update six
 sudo pip install --upgrade twisted
 pip install --upgrade requests
 sudo pip install crossbar[all]
+
+########################################################
+####### LO SIGUIENTE NO FUNCIONO!!!! ###################
+
+#para hacer funcionar la serializacion de datetime
+###
+sudo apt-get install libsnappy-dev
+sudo pip install autobahn[twisted,accelerate,compress,serialization]
+
+apt-get install gcc-4.9 g++-4.9
+#hay que cambiar el link simbolico del compilador de gcc
+sudo rm /usr/bin/arm-linux-gnueabihf-gcc
+sudo ln -s /usr/bin/gcc-4.9 /usr/bin/arm-linux-gnueabihf-gcc
+
+sudo pip3 install autobahn[asyncio,accelerate,compress,serialization]
+#############################################################################
+#############################################################################
+
+# el problema de la fecha se soluciona simplemente configurando un class encoder en json.
+# se debe editar el archivo serializer.py de autobahn.
+# ej:
+
+nano /usr/local/lib/python3.4/dist-packages/autobahn/wamp/serializer.py
+
+y dejar para que la parte de importación del json sea algo parecido a esto :
+
+
+
+..... codigo de importación de ujson .....
+
+except ImportError:
+# fallback to stdlib implementation
+##
+  import json
+  import datetime
+
+  class DateTimeEncoder(json.JSONEncoder):
+    def default(self, obj):
+      if isinstance(obj, datetime.datetime):
+        return obj.isoformat()
+
+      if isinstance(obj, datetime.date):
+        return obj.isoformat()
+
+      return json.JSONEncoder.default(self, obj)
+
+  _json = json
+
+  _loads = json.loads
+
+  def _dumps(obj):
+    return json.dumps(obj, separators=(',', ':'), ensure_ascii=False, cls=DateTimeEncoder)
+
+..... mas codigo de importacion de mpack ...
