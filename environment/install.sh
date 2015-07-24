@@ -27,3 +27,8 @@ wget https://bootstrap.pypa.io/get-pip.py
 
 # puedo cheqeuar la version de crossbar instalada
 ./pypy-2.6-linux_x86_64-portable/bin/crossbar version
+
+# para crear un crossbar sin app ni nada se puede hacer :
+./pypy-2.6-linux_x86_64-portable/bin/crossbar init
+
+# en node1 ya existe una instancia de crossbar pelada con realm configurada
