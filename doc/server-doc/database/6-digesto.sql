@@ -34,7 +34,7 @@ create schema digesto;
   );
 
   create table digesto.visibility (
-    visibility_id varchar not null primary key,
+    id varchar not null primary key,
     normative_id varchar not null references digesto.normative (id),
     type varchar,
     additional_data varchar
