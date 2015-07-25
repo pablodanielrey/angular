@@ -4,7 +4,6 @@ import logging, inject
 
 #from autobahn.twisted.wamp import ApplicationSession
 from autobahn.asyncio.wamp import ApplicationSession
-
 from asyncio import coroutine
 
 from firmware import Firmware
@@ -29,22 +28,22 @@ class WampFirmware(ApplicationSession):
         self.join(self.config.realm)
     '''
 
-
+    @coroutine
     def onJoin(self, details):
         logging.debug('session joined')
 
         self.firmware.start()
 
-        self.register(self.identify, 'assistance.firmware.identify')
-        self.register(self.enroll, 'assistance.firmware.enroll')
-        self.register(self.login, 'assistance.firmware.login')
-        self.register(self.testDate, 'assistance.firmware.testDate')
+        yield from self.register(self.identify, 'assistance.firmware.identify')
+        yield from self.register(self.enroll, 'assistance.firmware.enroll')
+        yield from self.register(self.login, 'assistance.firmware.login')
+
+        yield from self.register(self.testDate, 'assistance.firmware.testDate')
 
 
     def onLeave(self, details):
         logging.debug('session left')
         self.firmware.stop()
-
 
 
 
@@ -89,6 +88,7 @@ class WampFirmware(ApplicationSession):
         proceso de identificación de una persona -- llamado normalmente por un bulce en main
         //////////////////////////////////
     '''
+    @coroutine
     def identify(self):
         data = self.firmware.identify()
         self._sendIdentifyEvent(data)
@@ -100,6 +100,7 @@ class WampFirmware(ApplicationSession):
         //////////////////////////////////
     '''
 
+    @coroutine
     def login(self,dni,password):
         data = self.firmware.login(dni,password)
         self._sendIdentifyEvent(data)

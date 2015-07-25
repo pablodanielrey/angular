@@ -36,5 +36,5 @@ if __name__ == '__main__':
     from autobahn.asyncio.wamp import ApplicationRunner
     from network.wampFirmware import WampFirmware
 
-    runner = ApplicationRunner(url='ws://localhost:8000/ws',realm='assistance',debug=True, debug_wamp=True, debug_app=True)
+    runner = ApplicationRunner(url='ws://localhost:8000/ws',realm='assistance',debug=False, debug_wamp=True, debug_app=False)
     runner.run(WampFirmware)

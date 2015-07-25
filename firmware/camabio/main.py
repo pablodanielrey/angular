@@ -3,7 +3,7 @@ import sys
 sys.path.append('../../python')
 sys.path.append('../../apis')
 
-import logging, time, threading, signal
+import logging, time, signal
 import inject
 import threading
 import datetime

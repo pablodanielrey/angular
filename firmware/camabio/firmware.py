@@ -83,7 +83,9 @@ class Firmware:
         self.logs.persist(conn,log)
         self.sync.addLog(conn,log['id'])
 
+
         ''' logueo al usuario creandole una sesion '''
+        '''
         sess = {
             self.config.configs['session_user_id']:userId
         }
@@ -93,6 +95,9 @@ class Firmware:
         if self.profiles._checkAccessWithCon(conn,sid,['ADMIN-ASSISTANCE']):
             roles = 'admin'
 
+        '''
+        roles = None
+        sid = ''
         user = self.users.findUser(conn,userId)
 
         return (log,user,sid,roles)
@@ -132,7 +137,6 @@ class Firmware:
     def login(self, pin, password):
         conn = self._get_database()
         try:
-
             creds = {
                 'username':pin,
                 'password':password
@@ -141,8 +145,10 @@ class Firmware:
             if userData is None:
                 return None
 
-            (log,user,sid,roles) = self._identify(conn,userData['user_id'],0)
+            data = self._identify(conn,userData['user_id'],0)
             conn.commit()
+
+            return data
 
         except Exception as e:
             logging.exception(e)
