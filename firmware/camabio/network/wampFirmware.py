@@ -4,6 +4,8 @@ import logging, inject
 
 #from autobahn.twisted.wamp import ApplicationSession
 from autobahn.asyncio.wamp import ApplicationSession
+
+import asyncio
 from asyncio import coroutine
 
 from firmware import Firmware
@@ -34,9 +36,9 @@ class WampFirmware(ApplicationSession):
 
         self.firmware.start()
 
-        yield from self.register(self.identify, 'assistance.firmware.identify')
-        yield from self.register(self.enroll, 'assistance.firmware.enroll')
-        yield from self.register(self.login, 'assistance.firmware.login')
+        yield from self.register(self.identify_async, 'assistance.firmware.identify')
+        yield from self.register(self.enroll_async, 'assistance.firmware.enroll')
+        yield from self.register(self.login_async, 'assistance.firmware.login')
 
         yield from self.register(self.testDate, 'assistance.firmware.testDate')
 
@@ -88,11 +90,17 @@ class WampFirmware(ApplicationSession):
         proceso de identificación de una persona -- llamado normalmente por un bulce en main
         //////////////////////////////////
     '''
-    @coroutine
+
     def identify(self):
         data = self.firmware.identify()
         self._sendIdentifyEvent(data)
         return data
+
+    @coroutine
+    def identify_async(self):
+        loop = asyncio.get_event_loop()
+        yield from loop.run_in_executor(None,self.identify)
+
 
     '''
         //////////////////////////////////
@@ -100,10 +108,14 @@ class WampFirmware(ApplicationSession):
         //////////////////////////////////
     '''
 
-    @coroutine
     def login(self,dni,password):
         data = self.firmware.login(dni,password)
         self._sendIdentifyEvent(data)
+
+    @coroutine
+    def login_async(self,dni,password):
+        loop = asyncio.get_event_loop()
+        yield from loop.run_in_executor(None,self.login,dni,password)
 
 
     '''
@@ -142,6 +154,12 @@ class WampFirmware(ApplicationSession):
                 self._enroll_error,
                 self._enroll_fatal_error
             )
+
+
+    @coroutine
+    def enroll_async(self, dni):
+        loop = asyncio.get_event_loop()
+        yield from loop.run_in_executor(None,self.enroll,dni)
 
 
     '''
