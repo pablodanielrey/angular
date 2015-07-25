@@ -42,8 +42,40 @@ class Digesto:
     def _convertRelatedToDict(self,related):
         return {'id':related[0],'normative_id':related[1],'related_id':related[2],'created':related[3],'creator_id':related[4],'type':related[5]}
 
-    # relateds 
-    def addRelateds(self,con,relateds,creator_id):
+    # relateds [{'related_id':'','type':''}]
+    def addRelateds(self,con,relateds,creator_id,normative_id):
+        if relateds is None or len(relateds) <= 0:
+            return
+
+        cur = con.cursor()
+        for r in relateds:
+            if 'related_id' not in r or 'type' not in r:
+                continue
+            id = str(uuid.uuid4())
+            params = (id,normative_id,r['related_id'],creator_id,r['type'])
+            cur.execute('insert into digesto.related (id,normative_id,related_id,creator_id,type) values(%s,%s,%s,%s,%s)',params)
+
+
+    def deleteRelateds(self,con,ids):
+        if len(ids) <= 0:
+            return
+
+        cur = con.cursor()
+        cur.execute('delete from digesto.related where id in %s',(tuple(ids),))
+
+    def findRelateds(self,con,id):
+        if id is None:
+            return []
+
+        cur = con.cursor()
+        cur.execute('select id,normative_id,related_id,created,creator_id,type from digesto.related where normative_id = %s',(id,))
+
+        relateds = []
+        for r in cur:
+            relateds.append(self._convertRelatedToDict(r))
+
+        return relateds
+        
     # -----------------------------------------------------------------------------------
     # --------------------- VISIBILIDAD DE LA NORMATIVA ---------------------------------
     # -----------------------------------------------------------------------------------
