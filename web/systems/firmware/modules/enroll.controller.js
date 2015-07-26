@@ -65,7 +65,7 @@ function EnrollCtrl($rootScope, $scope, $location, $timeout, Notifications, Firm
 
       $scope.model.enabled = false;
       $scope.model.cancel = false;
-      Firmware.enroll($scope.$parent.logData.sid, $scope.model.dni,
+      Firmware.enroll($scope.model.dni,
         function(response) {
            Notifications.message("Las huellas del usuario " + $scope.model.dni + " se han guardado exitosamente");
            //$scope.model.msg = "El usuario " + $scope.model.dni + " se ha creado exitosamente";
@@ -99,12 +99,12 @@ function EnrollCtrl($rootScope, $scope, $location, $timeout, Notifications, Firm
 
     $scope.errorEvent = function(msg) {
       console.log(msg);
-      Notifications.message(msg);
+      Notifications.message(msg[0]);
     }
 
     $scope.messageEvent = function(msg) {
       console.log(msg);
-      $scope.model.msg = msg;
+      $scope.model.msg = msg[0];
     }
 
 

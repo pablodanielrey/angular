@@ -50,8 +50,8 @@ function Firmware($rootScope, $wamp) {
     */
 
     this.enroll = function(dni, callbackOk, callbackError) {
-      $wamp.call('assistance.firmware.enroll', [dni]).then(
-        function() {
+      $wamp.call('assistance.firmware.enroll', [dni])
+      .then(function() {
           callbackOk();
         }
       ),function(err) {
