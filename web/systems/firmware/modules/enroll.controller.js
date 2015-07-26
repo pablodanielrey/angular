@@ -1,7 +1,12 @@
-var app = angular.module('mainApp');
+angular
+  .module('mainApp')
+  .controller('EnrollCtrl',EnrollCtrl);
 
-app.controller("EnrollCtrl", ['$rootScope','$scope','$location','$timeout','Notifications', 'Firmware',
-  function($rootScope,$scope, $location, $timeout, Notifications, Firmware) {
+EnrollCtrl.$inject = ['$rootScope','$scope','$location','$timeout','Notifications', 'Firmware'];
+
+function EnrollCtrl($rootScope, $scope, $location, $timeout, Notifications, Firmware) {
+
+    var vm = this;
 
     $scope.model = {
       dni:null,
@@ -75,35 +80,38 @@ app.controller("EnrollCtrl", ['$rootScope','$scope','$location','$timeout','Noti
 
 
 
-    $scope.$on('FingerRequestedEvent', function(event, data) {
+    $scope.fingerRequested = function(data) {
       var t = '';
-      if (data.fingerNumber == 1) {
+      if (data == 1) {
         t = 'primera';
       }
 
-      if (data.fingerNumber == 2) {
+      if (data == 2) {
         t = 'segunda';
       }
 
-      if (data.fingerNumber == 3) {
+      if (data == 3) {
         t = 'tercera';
       }
 
       $scope.model.msg = 'Coloque el dedo en el lector de huellas por ' + t + ' vez';
-    })
+    };
 
-    $scope.$on('ErrorEvent', function(event, data) {
-      console.log(data);
-      Notifications.message(data.error);
-    })
+    $scope.errorEvent = function(msg) {
+      console.log(msg);
+      Notifications.message(msg);
+    }
 
-    $scope.$on('MsgEvent', function(event, data) {
-      if (data && data.msg) {
-        //Notifications.message(data.msg);
-        $scope.model.msg = data.msg;
-        return;
-      }
-    })
+    $scope.messageEvent = function(msg) {
+      console.log(msg);
+      $scope.model.msg = msg;
+    }
+
+
+    // registro los eventos en el Firmware
+    Firmware.onEnrollEvents($scope.fingerRequested,$scope.messageEvent,$scope.errorEvent,$scope.errorEvent);
+
+
 
     $scope.cancel = function() {
       if ($scope.$parent.logData) {
@@ -112,5 +120,4 @@ app.controller("EnrollCtrl", ['$rootScope','$scope','$location','$timeout','Noti
       $location.path('/firmware')
     }
 
-  }
-])
+};

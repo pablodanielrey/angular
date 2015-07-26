@@ -2,12 +2,11 @@ angular
     .module('mainApp')
     .controller('MainFirmwareController',MainFirmwareController);
 
-MainFirmwareController.$inject = ['$rootScope','$scope','$timeout','$location','$wamp','Notifications', 'Firmware'];
+MainFirmwareController.$inject = ['$rootScope','$scope','$timeout','$location', 'Notifications', 'Firmware'];
 
-function MainFirmwareController($rootScope,$scope, $timeout, $location, $wamp, Notifications, Firmware) {
+function MainFirmwareController($rootScope, $scope, $timeout, $location, Notifications, Firmware) {
 
   var vm = this;
-
 
   vm.view = {
     inputCode : false,
@@ -314,7 +313,7 @@ function MainFirmwareController($rootScope,$scope, $timeout, $location, $wamp, N
      vm.initialize();
    });
 
-
+   /*
    $scope.$on('ErrorEvent', function(event, data) {
      console.log(data);
      if (data.error != undefined) {
@@ -323,17 +322,17 @@ function MainFirmwareController($rootScope,$scope, $timeout, $location, $wamp, N
        return;
      }
    });
+   */
 
 
-   $scope.identifiedEvent = function(data) {
+   /*
+    Se produce un evento de identificación
+   */
+   $scope.identifiedEvent = function(res) {
+
+     var data = res[0];
 
      console.log(data);
-
-     if (data.msg != undefined) {
-       // se envía un mensaje desde el servidor indicando un mensaje a mostrar.
-       Notifications.message(data.msg);
-       return;
-     }
 
      if (data.log == undefined || data.user == undefined) {
        Notifications.message('No se pudo identicar a la persona');
@@ -355,10 +354,8 @@ function MainFirmwareController($rootScope,$scope, $timeout, $location, $wamp, N
 
    };
 
-   $wamp.subscribe('assistance.firmware.identify',$scope.identifiedEvent);
-
-
-   //$scope.$on('IdentifiedEvent',$scope.IdentifiedEvent);
+   // registro los manejadores de eventos
+   Firmware.onIdentified($scope.identifiedEvent);
 
    $scope.$on('$viewContentLoaded', function(event) {
      vm.initialize();

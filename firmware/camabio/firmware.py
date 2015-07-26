@@ -85,19 +85,15 @@ class Firmware:
 
 
         ''' logueo al usuario creandole una sesion '''
-        '''
         sess = {
             self.config.configs['session_user_id']:userId
         }
         sid = self.session._create(conn,sess)
 
         roles = None
-        if self.profiles._checkAccessWithCon(conn,sid,['ADMIN-ASSISTANCE']):
+        if self.profiles._checkUserProfile(conn,sid,['ADMIN-ASSISTANCE']):
             roles = 'admin'
 
-        '''
-        roles = None
-        sid = ''
         user = self.users.findUser(conn,userId)
 
         return (log,user,sid,roles)
