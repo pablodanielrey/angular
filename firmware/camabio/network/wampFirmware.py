@@ -116,6 +116,7 @@ class WampFirmware(ApplicationSession):
     def login_async(self,dni,password):
         loop = asyncio.get_event_loop()
         yield from loop.run_in_executor(None,self.login,dni,password)
+        return 'ok-resultado';
 
 
     '''

@@ -1,10 +1,24 @@
 angular
-    .module('mainApp')
-    .controller('IndexController',IndexController);
+    .module('mainApp',['ngRoute','vxWamp'])
+    .controller('IndexController',IndexController)
+    .config(function($wampProvider) {
 
-IndexController.$inject = ['$rootScope','$location','$timeout','WebSocket'];
+      var conn = {
+        url: config_firmware.url,
+        realm: config_firmware.realm
+      };
+      console.log(conn);
+      $wampProvider.init(conn);
+    });
+    /*
+    .run(function($wamp) {
+      $wamp.open();
+    });
+    */
 
-function IndexController($rootScope,$location,$timeout,WebSocket) {
+IndexController.$inject = ['$rootScope','$scope','$location','$timeout','$wamp'];
+
+function IndexController($rootScope,$scope,$location,$timeout,$wamp) {
 
   // mensajes que vienen del socket. solo me interesan los eventos, las respuestas son procesadas por otro lado.
   $rootScope.$on('onSocketMessage', function(event, data) {
@@ -25,9 +39,15 @@ function IndexController($rootScope,$location,$timeout,WebSocket) {
   });
 
 
+  /*
   $timeout(function() {
     WebSocket.registerHandlers();
   },0);
+*/
+
+  $scope.$on('$viewContentLoaded', function(event) {
+    $wamp.open();
+  });
 
 
 }

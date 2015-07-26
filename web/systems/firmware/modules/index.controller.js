@@ -2,9 +2,9 @@ angular
     .module('mainApp')
     .controller('MainFirmwareController',MainFirmwareController);
 
-MainFirmwareController.$inject = ['$rootScope','$scope','$timeout','$location','Notifications', 'Firmware'];
+MainFirmwareController.$inject = ['$rootScope','$scope','$timeout','$location','$wamp','Notifications', 'Firmware'];
 
-function MainFirmwareController($rootScope,$scope, $timeout, $location, Notifications, Firmware) {
+function MainFirmwareController($rootScope,$scope, $timeout, $location, $wamp, Notifications, Firmware) {
 
   var vm = this;
 
@@ -325,8 +325,7 @@ function MainFirmwareController($rootScope,$scope, $timeout, $location, Notifica
    });
 
 
-
-   $scope.$on('IdentifiedEvent', function(event, data) {
+   $scope.identifiedEvent = function(data) {
 
      console.log(data);
 
@@ -354,7 +353,12 @@ function MainFirmwareController($rootScope,$scope, $timeout, $location, Notifica
        $location.path('/log');
      }
 
-   });
+   };
+
+   $wamp.subscribe('assistance.firmware.identify',$scope.identifiedEvent);
+
+
+   //$scope.$on('IdentifiedEvent',$scope.IdentifiedEvent);
 
    $scope.$on('$viewContentLoaded', function(event) {
      vm.initialize();

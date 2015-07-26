@@ -1,8 +1,8 @@
 var app = angular.module('mainApp');
 
-app.service('Firmware', ['Utils','Messages','Session','$rootScope',
+app.service('Firmware', ['Utils','Messages','Session','$rootScope','$wamp',
 
-  function(Utils,Messages,Session,$rootScope) {
+  function(Utils,Messages,Session,$rootScope, $wamp) {
 
     this.enroll = function(sid, dni, callbackOk, callbackError) {
       var msg = {
@@ -24,6 +24,7 @@ app.service('Firmware', ['Utils','Messages','Session','$rootScope',
       });
     }
 
+    /*
     this.login = function(code, password, callbackOk, callbackError) {
       var msg = {
         id: Utils.getId(),
@@ -43,7 +44,16 @@ app.service('Firmware', ['Utils','Messages','Session','$rootScope',
           }
       });
     }
+    */
 
+    this.login = function(code, password, callbackOk, callbackError) {
+      $wamp.call('assistance.firmware.login', [code,password]).then(
+        function(res) {
+          console.log(res);
+          callbackOk(res);
+        }
+      );
+    }
 
   }
 ]);
