@@ -91,7 +91,7 @@ class Firmware:
         sid = self.session._create(conn,sess)
 
         roles = None
-        if self.profiles._checkUserProfile(conn,sid,['ADMIN-ASSISTANCE']):
+        if self.profiles._checkUserProfile(conn,userId,['ADMIN-ASSISTANCE']):
             roles = 'admin'
 
         user = self.users.findUser(conn,userId)
