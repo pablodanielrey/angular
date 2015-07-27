@@ -50,15 +50,15 @@ class Sync:
 
 
 
-
-    ''' se ha sincronizado el usuario en el server, se elimina de la lista a sincronizar '''
-    def syncChangedUsersEventHandler(self,con,event):
-        user = event['data']['user']
+    '''
+        Elimina el usuario de la lista a sincronizar
+    '''
+    def _removeSynchedUser(self,con,userId):
         cur = con.cursor()
-        cur.execute('delete from assistance.sync_user where user_id = %s',(user,))
+        cur.execute('delete from assistance.sync_user where user_id = %s',(userId,))
 
 
-    ''' el servidor envia un los datos de un usuario para ser sincronizado '''
+    ''' el servidor envia un los datos de un usuario para ser sincronizado
     def syncServerUserEventHandler(self,con,event):
         user = event['data']['user']
         creds = event['data']['credentials']
@@ -72,18 +72,20 @@ class Sync:
                 self.credentials.createUserPassword(con,creds)
             else:
                 self.credentials.updateUserPassword(con,creds)
+    '''
 
 
 
-
-    ''' envía al servidor los usuarios cuyo id esta dentro de assistance.sync_user '''
-    def syncChangedUsers(self,protocol,conn):
+    '''
+        Obtiene los usuarios que son tienen cambios a sincronizar
+    '''
+    def _getUsersToSync(self,conn):
 
         cur = conn.cursor()
         cur.execute('select user_id from assistance.sync_user')
-        if cur.rowcount < 0:
-            logging.info('No existe usuario a sincronizar')
-            return
+        if cur.rowcount <= 0:
+            logging.debug('No existe usuario a sincronizar')
+            return []
 
         toSync = []
         for u in cur:
@@ -96,37 +98,7 @@ class Sync:
                     'templates':templates
                 })
 
-        if len(toSync) <= 0:
-            return
-
-        logging.debug('iniciando sincronización para los usuarios {}'.format(toSync))
-        firmware = inject.instance(client.systems.assistance.firmware.Firmware)
-
-        def callbackSync(protocol,message):
-            if 'ok' in message:
-                logging.debug('OK : '.format(message))
-            else:
-                logging.debug('ERROR : '.format(message))
-
-
-        def callbackAnnounce(protocol,message):
-            logging.debug('callbackAnnounce {}'.format(message))
-
-            if 'error' in message:
-                logging.error('ERROR en announce : {}'.format(message))
-                return
-
-            sid = message['response']['sid']
-            logging.debug('sincronizando {} con el sid {}'.format(toSync,sid))
-
-            for u in toSync:
-                firmware.syncUser(protocol,sid,u['user'],u['templates'],callbackSync)
-
-        def callbackConnect(protocol):
-            firmware.firmwareDeviceAnnounce(protocol,callbackAnnounce)
-
-        protocol.addCallback(callbackConnect)
-
+        return toSync
 
 
 
@@ -164,6 +136,10 @@ class WampSync(ApplicationSession):
         try:
             while True:
                 try:
+
+                    '''
+                        Sincronización de los logs hacia el server
+                    '''
                     logging.debug('Obteniendo los logs a sincronizar')
                     logs = self.sync._getLogsToSync(conn)
 
@@ -177,6 +153,33 @@ class WampSync(ApplicationSession):
                             logging.debug('Eliminando logs del sincronizador {}'.format(ids))
                             self.sync._removeSynchedLogs(conn,ids)
                             conn.commit()
+
+
+                    '''
+                        Sincronización de los usuarios hacia el server
+                    '''
+                    logging.debug('Obteniendo los usuarios a sincronizar')
+                    users = self.sync._getUsersToSync(conn)
+
+                    if len(users) > 0:
+
+                        for u in users:
+                            try:
+                                user = u['user']
+                                templates = u['templates']
+
+                                logging.debug('Enviando al servidor usuario {} template {} a sincronizar'.format(user,templates))
+                                uid = yield from self.call('assistance.server.firmware.syncUser',user,templates)
+
+                                if uid:
+                                    logging.debug('Eliminando el usuario {} del sincronizador'.format(uid))
+                                    self.sync._removeSynchedUser(conn,uid)
+                                    conn.commit()
+
+                            except Exception as ee:
+                                logging.exception(e)
+
+
 
                 except Exception as e:
                     logging.exception(e)

@@ -56,7 +56,9 @@ class Firmware:
         return self.logs.persistLogs(conn,logs)
 
 
-    ''' actualiza los datos de los usuarios que tienen versión mayor a la del usuario en la base '''
+    '''
+        Actualiza los datos del usuario y sus templates
+    '''
     def syncUser(self,conn,user,templates):
         if self.users.needSync(conn,user):
             self.users.updateUser(conn,user)
