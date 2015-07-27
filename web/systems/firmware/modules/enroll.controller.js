@@ -54,8 +54,6 @@ function EnrollCtrl($rootScope, $scope, $location, $timeout, Notifications, Firm
 
 
 
-
-
     $scope.addUser = function() {
 
       if ($scope.$parent.logData == undefined || $scope.$parent.logData.sid == undefined) {
@@ -77,7 +75,6 @@ function EnrollCtrl($rootScope, $scope, $location, $timeout, Notifications, Firm
         }
       );
     }
-
 
 
     $scope.fingerRequested = function(data) {
@@ -112,11 +109,8 @@ function EnrollCtrl($rootScope, $scope, $location, $timeout, Notifications, Firm
       $scope.model.msg = msg[0];
     }
 
-
     // registro los eventos en el Firmware
     Firmware.onEnrollEvents($scope.fingerRequested, $scope.messageEvent, $scope.templateEnrolled, $scope.errorEvent, $scope.errorEvent);
-
-
 
     $scope.cancel = function() {
       if ($scope.$parent.logData) {
