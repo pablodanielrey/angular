@@ -21,7 +21,10 @@ class WampFirmware(ApplicationSession):
     def __init__(self,config=None):
         logging.debug('instanciando WampFirmware')
         ApplicationSession.__init__(self, config)
+
         self.firmware = inject.instance(Firmware)
+        self.enrolling = False
+
 
     '''
     como referencia tambien se puede sobreeescribir el onConnect
@@ -99,7 +102,8 @@ class WampFirmware(ApplicationSession):
     @coroutine
     def identify_async(self):
         loop = asyncio.get_event_loop()
-        yield from loop.run_in_executor(None,self.identify)
+        r = yield from loop.run_in_executor(None,self.identify)
+        return r
 
 
     '''
@@ -115,8 +119,8 @@ class WampFirmware(ApplicationSession):
     @coroutine
     def login_async(self,dni,password):
         loop = asyncio.get_event_loop()
-        yield from loop.run_in_executor(None,self.login,dni,password)
-        return 'ok-resultado';
+        r = yield from loop.run_in_executor(None,self.login,dni,password)
+        return r;
 
 
     '''
@@ -144,23 +148,37 @@ class WampFirmware(ApplicationSession):
     def _enroll_fatal_error(self,msg):
         self.publish('assistance.firmware.enroll_fatal_error',msg)
 
+    def _enroll_template_enrolled(self,user,template):
+        self.publish('assistance.firmware.enroll_template_enrolled',user,template)
 
     def enroll(self,dni):
-        self.firmware.enroll(
+        r = self.firmware.enroll(
                 dni,
                 self._enroll_need_first,
                 self._enroll_need_second,
                 self._enroll_need_third,
                 self._enroll_need_release,
+                self._enroll_template_enrolled,
                 self._enroll_error,
                 self._enroll_fatal_error
             )
+        return r
 
 
     @coroutine
     def enroll_async(self, dni):
-        loop = asyncio.get_event_loop()
-        yield from loop.run_in_executor(None,self.enroll,dni)
+
+        if self.enrolling:
+            return None
+
+        self.enrolling = True
+        try:
+            loop = asyncio.get_event_loop()
+            r = yield from loop.run_in_executor(None,self.enroll,dni)
+            return r
+
+        finally:
+            self.enrolling = False
 
 
     '''

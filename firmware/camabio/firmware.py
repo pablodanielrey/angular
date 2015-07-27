@@ -16,6 +16,22 @@ from model.systems.assistance.devices import Devices
 from model.systems.assistance.logs import Logs
 from model.systems.assistance.date import Date
 
+'''
+    Implementa el modelo del firmware.
+    Es sincrónico y no thread-safe.
+    Controla el acceso al reader para que solo se pueda estar ejecutnaod una operación a la vez.
+    O identificación o enrolamiento de un usuario
+    Forma de uso :
+
+        f = Firmware()
+        f.start()
+        try:
+
+        ...
+
+        finally:
+            f.stop()
+'''
 class Firmware:
 
     reader = reader.getReader()
@@ -39,7 +55,14 @@ class Firmware:
     def stop(self):
         self.reader.stop()
 
-    def enroll(self, pin, need_first=None, need_second=None, need_third=None, need_release=None, error=None, fatal_error=None):
+
+    '''
+        Enrola un usuario con determinado pin
+        retorna:
+            None en caso de error
+            userId del usuario enrolado
+    '''
+    def enroll(self, pin, need_first=None, need_second=None, need_third=None, need_release=None, template_enrolled=None, error=None, fatal_error=None):
 
         (n,t) = self.reader.enroll(need_first,need_second,need_third,need_release,error,fatal_error)
         if n:
@@ -63,12 +86,34 @@ class Firmware:
                 self.sync.addPerson(conn,userId)
                 conn.commit()
 
+                try:
+                    if template_enrolled:
+                        template_enrolled(user,template)
+                except Exception as ee:
+                    logging.exception(ee)
+
+                return userId
+
+            except Exception as e:
+                logging.exception(e)
+                raise e
+
             finally:
                 conn.close()
 
+        else:
+            return None
 
 
-    ''' genera lo necesario para loguear una persona dentro del firmware '''
+    '''
+        Genera lo necesario para loguear una persona dentro del firmware
+        retorna:
+            El log generado
+            El usuario
+            El sid de la session creada
+            Los roles del usuario
+        TODO: corregir los roles para que sean una lista y no un solo rol.
+    '''
     def _identify(self, conn, userId, verifyMode=1):
 
         ''' creo el log '''
@@ -100,7 +145,12 @@ class Firmware:
 
 
 
-    ''' llamado cuando se trata de identificar una persona por huella '''
+    '''
+        Identifica a una persona por la huella
+        retorna:
+            None en caso de que no se haya podido identificar a la persona
+            Lo retornado por _identify en caso que se haya podido identificar a la persona
+    '''
     def identify(self):
         h = self.reader.identify()
         if h:
@@ -129,7 +179,12 @@ class Firmware:
 
 
 
-    ''' llamado cuando se trata de identificar una persona usando el teclado '''
+    '''
+        Identificar una persona mediante usuario y clave
+        retorna:
+            None en caso de que no se pueda identificar a una persona
+            Lo retornado por _identify
+    '''
     def login(self, pin, password):
         conn = self._get_database()
         try:

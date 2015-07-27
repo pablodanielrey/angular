@@ -97,6 +97,11 @@ function EnrollCtrl($rootScope, $scope, $location, $timeout, Notifications, Firm
       $scope.model.msg = 'Coloque el dedo en el lector de huellas por ' + t + ' vez';
     };
 
+    $scope.templateEnrolled = function(data) {
+      console.log(data);
+      $scope.messageEvent(['Usuario correctamente enrolado']);
+    }
+
     $scope.errorEvent = function(msg) {
       console.log(msg);
       Notifications.message(msg[0]);
@@ -109,7 +114,7 @@ function EnrollCtrl($rootScope, $scope, $location, $timeout, Notifications, Firm
 
 
     // registro los eventos en el Firmware
-    Firmware.onEnrollEvents($scope.fingerRequested,$scope.messageEvent,$scope.errorEvent,$scope.errorEvent);
+    Firmware.onEnrollEvents($scope.fingerRequested, $scope.messageEvent, $scope.templateEnrolled, $scope.errorEvent, $scope.errorEvent);
 
 
 

@@ -51,8 +51,13 @@ function Firmware($rootScope, $wamp) {
 
     this.enroll = function(dni, callbackOk, callbackError) {
       $wamp.call('assistance.firmware.enroll', [dni])
-      .then(function() {
-          callbackOk();
+      .then(function(userId) {
+          if (userId != null) {
+            callbackOk(userId);
+          } else {
+            callbackError('Error!!');
+          }
+
         }
       ),function(err) {
         callbackError(err);
@@ -73,9 +78,10 @@ function Firmware($rootScope, $wamp) {
     }
 
 
-    this.onEnrollEvents = function(needFingerEventHandler,msgEventHandler,errorEventHandler,fatalErrorEventHandler) {
+    this.onEnrollEvents = function(needFingerEventHandler,msgEventHandler,templateEnrolledEventHandler, errorEventHandler,fatalErrorEventHandler) {
       $wamp.subscribe('assistance.firmware.enroll_need_finger',needFingerEventHandler);
       $wamp.subscribe('assistance.firmware.enroll_show_message',msgEventHandler);
+      $wamp.subscribe('assistance.firmware.enroll_template_enrolled',templateEnrolledEventHandler);
       $wamp.subscribe('assistance.firmware.enroll_error',errorEventHandler);
       $wamp.subscribe('assistance.firmware.enroll_fatal_error',fatalErrorEventHandler);
     }
