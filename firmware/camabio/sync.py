@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 
 import inject, logging
+
+from model.config import Config
 from model.users.users import Users
 from model.systems.assistance.templates import Templates
 from model.systems.assistance.logs  import Logs
-
-import client.network.websocket
-from client.systems.assistance.firmware import Firmware
 
 class Sync:
 
@@ -23,20 +22,17 @@ class Sync:
         cur.execute('insert into assistance.sync_logs (attlog_id) values (%s)',(id,))
 
 
-    def syncLogEventHandler(self,con,event):
-        logs = event['data']['logs']
-
+    def _removeSynchedLogs(self,con,logs):
         cur = con.cursor()
         cur.execute('delete from assistance.sync_logs where attlog_id in %s',(tuple(logs),))
 
 
-
-    def syncLogs(self,protocol,conn):
+    def _getLogsToSync(self,conn):
         cur = conn.cursor()
         cur.execute('select attlog_id from assistance.sync_logs')
         if cur.rowcount < 0:
             logging.info('No existe log a sincronizar')
-            return
+            return []
 
         toSync = []
         for l in cur:
@@ -47,33 +43,10 @@ class Sync:
 
         if len(toSync) <= 0:
             logging.info('No existe log a sincronizar')
-            return
+            return []
 
-        logging.debug('iniciando sincronización de los logs {}'.format(toSync))
-        firmware = inject.instance(client.systems.assistance.firmware.Firmware)
+        return toSync
 
-        def callbackSync(protocol,message):
-            if 'ok' in message:
-                logging.debug('OK : '.format(message))
-            else:
-                logging.debug('ERROR : '.format(message))
-
-        def callbackAnnounce(protocol,message):
-            logging.debug('callbackAnnounce {}'.format(message))
-
-            if 'error' in message:
-                logging.error('ERROR en announce : {}'.format(message))
-                return
-
-            sid = message['response']['sid']
-            logging.debug('sincronizando {} con el sid {}'.format(toSync,sid))
-
-            firmware.syncLogs(protocol,sid,toSync,callbackSync)
-
-        def callbackConnect(protocol):
-            firmware.firmwareDeviceAnnounce(protocol,callbackAnnounce)
-
-        protocol.addCallback(callbackConnect)
 
 
 
@@ -153,3 +126,66 @@ class Sync:
             firmware.firmwareDeviceAnnounce(protocol,callbackAnnounce)
 
         protocol.addCallback(callbackConnect)
+
+
+
+
+
+from asyncio import sleep
+from asyncio import coroutine
+from autobahn.asyncio.wamp import ApplicationSession
+
+import psycopg2
+
+class WampSync(ApplicationSession):
+
+    delay = 10
+
+    def __init__(self,config=None):
+        ApplicationSession.__init__(self, config)
+
+        self.sync = inject.instance(Sync)
+        self.firmwareConfig = inject.instance(Config)
+
+
+    def _getDatabase(self):
+        host = self.firmwareConfig.configs['database_host']
+        dbname = self.firmwareConfig.configs['database_database']
+        user = self.firmwareConfig.configs['database_user']
+        passw = self.firmwareConfig.configs['database_password']
+        return psycopg2.connect(host=host, dbname=dbname, user=user, password=passw)
+
+
+    @coroutine
+    def onJoin(self, details):
+        logging.debug('WampSync synchronizing')
+
+        conn = self._getDatabase()
+        try:
+            while True:
+                try:
+                    logging.debug('Obteniendo los logs a sincronizar')
+                    logs = self.sync._getLogsToSync(conn)
+
+                    if len(logs) > 0:
+                        logging.debug('Enviando al servidor logs {} a sincronizar'.format(logs))
+                        synchedLogs = yield from self.call('assistance.server.firmware.syncLogs',logs)
+                        logging.debug('Se sincronizaron {} logs'.format(synchedLogs))
+
+                        if logs:
+                            ids = [l['id'] for l in logs]
+                            logging.debug('Eliminando logs del sincronizador {}'.format(ids))
+                            self.sync._removeSynchedLogs(conn,ids)
+                            conn.commit()
+
+                except Exception as e:
+                    logging.exception(e)
+
+                try:
+                    yield from sleep(self.delay)
+
+                except Exception as e:
+                    logging.exception(e)
+
+        finally:
+            conn.close()

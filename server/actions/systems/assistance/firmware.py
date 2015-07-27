@@ -2,275 +2,71 @@
 import inject, logging
 import psycopg2
 
+import asyncio
+from asyncio import coroutine
+from autobahn.asyncio.wamp import ApplicationSession
+
 from model.config import Config
 from model.systems.assistance.firmware import Firmware
 
+
 '''
-query :
-{
-  id:,
-  action:"FirmwareDeviceAnnounce",
-  password:,            --- clave compartida leida desde la config
-  request:{
-    id:'',
-    device:'',
-    ip:'',
-    enabled:'',
-    timezone:''
-  }
-
-}
-
-response :
-{
-  id: "id de la petición",
-  ok: "caso exito",
-  error: "error del servidor",
-  response:{
-    sid:''                --- id de sesion para comunicarse con la api del sistema en los demas métodos
-  }
-
-}
+    Clase que da acceso mediante wamp a los métodos del firmware
 '''
+class WampFirmware(ApplicationSession):
 
-class FirmwareDeviceAnnounce:
+    def __init__(self,config=None):
+        logging.debug('instanciando WampFirmware')
+        ApplicationSession.__init__(self, config)
 
-    firmware = inject.attr(Firmware)
-    config = inject.attr(Config)
+        self.firmware = inject.instance(Firmware)
+        self.serverConfig = inject.instance(Config)
 
-    def handleAction(self, server, message):
 
-        if message['action'] != 'FirmwareDeviceAnnounce':
-            return False
+    '''
+    como referencia tambien se puede sobreeescribir el onConnect
+    def onConnect(self):
+        logging.debug('transport connected')
+        self.join(self.config.realm)
+    '''
 
-        if 'password' not in message:
-            response = {'id':message['id'], 'error':'Parámetros insuficientes'}
-            server.sendMessage(response)
-            return True
+    @coroutine
+    def onJoin(self, details):
+        logging.debug('registering methods')
+        yield from self.register(self.syncLogs_async, 'assistance.server.firmware.syncLogs')
 
-        if 'request' not in message:
-            response = {'id':message['id'], 'error':'Parámetros insuficientes'}
-            server.sendMessage(response)
-            return True
+        '''
+        yield from self.register(self.deviceAnnounce, 'assistance.server.firmware.deviceAnnounce')
+        yield from self.register(self.login_async, 'assistance.server.firmware.syncUser')
+        '''
 
-        request = message['request']
-        if ('id' not in request) or ('device' not in request) or ('ip' not in request) or ('timezone' not in request):
-            response = {'id':message['id'], 'error':'Parámetros insuficientes'}
-            server.sendMessage(response)
-            return True
+    def _getDatabase(self):
+        host = self.serverConfig.configs['database_host']
+        dbname = self.serverConfig.configs['database_database']
+        user = self.serverConfig.configs['database_user']
+        passw = self.serverConfig.configs['database_password']
+        return psycopg2.connect(host=host, dbname=dbname, user=user, password=passw)
 
-        password = message['password']
 
-        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+    def deviceAnnounce(self,device):
+        pass
+
+
+    def syncLogs(self,attlogs):
+        con = self._getDatabase()
         try:
-
-            sid = self.firmware.firmwareDeviceAnnounce(con,password,request)
-            if sid is None:
-                response = {'id':message['id'], 'error':'Clave de acceso incorrecta'}
-                server.sendMessage(response)
-                return True
-
+            synchedLogs = self.firmware.syncLogs(con,attlogs)
             con.commit()
-
-            response = {
-                'id':message['id'],
-                'ok':'',
-                'response': {
-                    'sid':sid
-                }
-            }
-            server.sendMessage(response)
-            return True
-
-
-        except Exception as e:
-            logging.exception(e)
-            response = {'id':message['id'], 'error':'Excepción'}
+            return synchedLogs
 
         finally:
             con.close()
 
+    @coroutine
+    def syncLogs_async(self,attlogs):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None,self.syncLogs,attlogs)
+        return r
 
-
-
-
-'''
-query :
-{
-  id:,
- 'action':'FirmwareSyncUser',
- 'session':sid,
- 'request':{
-     'user':user,
-     'templates':templates
- }
-}
-
-response :
-{
-  id: "id de la petición",
-  ok: "caso exito",
-  error: "error del servidor"
-}
-'''
-
-class FirmwareSyncUser:
-
-    firmware = inject.attr(Firmware)
-    config = inject.attr(Config)
-
-    def handleAction(self, server, message):
-
-        if message['action'] != 'FirmwareSyncUser':
-            return False
-
-        if 'session' not in message:
-            response = {'id':message['id'], 'error':'Parámetros insuficientes'}
-            server.sendMessage(response)
-            return True
-
-        if 'request' not in message:
-            response = {'id':message['id'], 'error':'Parámetros insuficientes'}
-            server.sendMessage(response)
-            return True
-
-        request = message['request']
-
-        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
-        try:
-
-            if not self.firmware.checkSid(con,message['session']):
-                response = {'id':message['id'], 'error':'Session de acceso incorrecta'}
-                server.sendMessage(response)
-                return True
-
-            user = request['user']
-            templates = request['templates']
-            self.firmware.syncUser(con,user,templates)
-
-            con.commit()
-
-            response = {
-                'id':message['id'],
-                'ok':''
-            }
-            server.sendMessage(response)
-
-
-            event = {
-                'type':'UserSynchedEvent',
-                'data': {
-                    'user':user['id']
-                }
-            }
-            server.broadcast(event)
-
-            tids = [t['id'] for t in templates]
-            event = {
-                'type':'TemplatesSynchedEvent',
-                'data': {
-                    'templates':tids
-                }
-            }
-            server.broadcast(event)
-
-
-            return True
-
-
-        except Exception as e:
-            logging.exception(e)
-            response = {'id':message['id'], 'error':'Excepción'}
-
-        finally:
-            con.close()
-
-
-
-
-
-'''
-query :
-{
-  id:,
- 'action':'FirmwareSyncLogs',
- 'session':sid,
- 'request':{
-     'attlogs': [ attlog ]
- }
-}
-
-response :
-{
-  id: "id de la petición",
-  ok: "caso exito",
-  error: "error del servidor"
-}
-'''
-
-class FirmwareSyncLogs:
-
-    firmware = inject.attr(Firmware)
-    config = inject.attr(Config)
-
-    def handleAction(self, server, message):
-
-        if message['action'] != 'FirmwareSyncLogs':
-            return False
-
-        if 'session' not in message:
-            response = {'id':message['id'], 'error':'Parámetros insuficientes'}
-            server.sendMessage(response)
-            return True
-
-        if 'request' not in message:
-            response = {'id':message['id'], 'error':'Parámetros insuficientes'}
-            server.sendMessage(response)
-            return True
-
-        request = message['request']
-
-        if 'attlogs' not in request:
-            response = {'id':message['id'], 'error':'Parámetros insuficientes'}
-            server.sendMessage(response)
-            return True
-
-
-        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
-        try:
-
-            if not self.firmware.checkSid(con,message['session']):
-                response = {'id':message['id'], 'error':'Session de acceso incorrecta'}
-                server.sendMessage(response)
-                return True
-
-
-            logs = request['attlogs']
-            self.firmware.syncLogs(con,logs)
-
-            con.commit()
-
-            response = {
-                'id':message['id'],
-                'ok':''
-            }
-            server.sendMessage(response)
-
-            lids = [l['id'] for l in logs]
-            event = {
-                'type':'LogsSynchedEvent',
-                'data': {
-                    'logs':lids
-                }
-            }
-            server.broadcast(event)
-
-            return True
-
-
-        except Exception as e:
-            logging.exception(e)
-            response = {'id':message['id'], 'error':'Excepción'}
-
-        finally:
-            con.close()
+    def syncUser(self,user,template):
+        pass

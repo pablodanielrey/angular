@@ -2,7 +2,7 @@
 
 
 '''
-    Ejecuta el protocolo Wamp del modelo del firmware
+    Ejecuta el protocolo Wamp del sincronizador
 '''
 if __name__ == '__main__':
 
@@ -12,7 +12,7 @@ if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
 
     from autobahn.asyncio.wamp import ApplicationRunner
-    from network.wampFirmware import WampFirmware
+    from sync import WampSync
     from model.config import Config
 
     def config_injector(binder):
@@ -21,9 +21,9 @@ if __name__ == '__main__':
     inject.configure(config_injector)
     config = inject.instance(Config)
 
-    url = config.configs['firmware_url']
-    realm = config.configs['firmware_realm']
-    debug = config.configs['firmware_debug']
+    url = config.configs['server_url']
+    realm = config.configs['server_realm']
+    debug = config.configs['server_debug']
 
     runner = ApplicationRunner(url=url,realm=realm,debug=debug, debug_wamp=debug, debug_app=debug)
-    runner.run(WampFirmware)
+    runner.run(WampSync)

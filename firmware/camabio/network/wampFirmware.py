@@ -35,7 +35,7 @@ class WampFirmware(ApplicationSession):
 
     @coroutine
     def onJoin(self, details):
-        logging.debug('session joined')
+        logging.debug('WampFirmware registering')
 
         self.firmware.start()
 

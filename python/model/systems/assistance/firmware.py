@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 import inject, uuid
 
-
-
 from model.config import Config
 from model.users.users import Users
 from model.systems.assistance.devices import Devices
@@ -47,11 +45,15 @@ class Firmware:
         return self.devices.isEnabled(conn,sid)
 
 
-    ''' sincroniza los logs enviados como parámetro que no existen en la base '''
+    '''
+        Sincroniza los logs enviados como parámetro que no existen en la base
+        retorna:
+            Lista de logs sincronizados
+    '''
     def syncLogs(self,conn,logs):
         if logs is None or len(logs) <= 0:
-            return
-        self.logs.persistLogs(conn,logs)
+            return []
+        return self.logs.persistLogs(conn,logs)
 
 
     ''' actualiza los datos de los usuarios que tienen versión mayor a la del usuario en la base '''
