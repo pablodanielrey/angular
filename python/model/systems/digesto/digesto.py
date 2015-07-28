@@ -138,8 +138,8 @@ class Digesto:
         chequeo precondiciones, campos obligatorios
         '''
         if ('issuer_id' not in normative or normative['issuer_id'] is None or
-            'file_number' not in normative or normative['file_number'] is None
-            'normative_number' not in normative or normative['normative_number'] is None
+            'file_number' not in normative or normative['file_number'] is None or
+            'normative_number' not in normative or normative['normative_number'] is None or
             'creator_id' not in normative or normative['creator_id'] is None):
 
             return
@@ -166,16 +166,20 @@ class Digesto:
         cur.execute('set timezone to %s',('UTC',))
         cur.execute('insert into digesto.normative (id,issuer_id,file_id,type,file_number,normative_number,date,created,creator_id,extract) values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,)',params)
 
-        if 'status' in normative and normative['status'] is not None and 'status' in normative['status']:
+        if status in None:
             self.updateStatus(con,id,normative['creator_id'])
+        else:
+            self.updateStatus(con,id,normative['creator_id'],status)
 
-        if 'visibility' in normative and normative['visibility'] is not None:
+        if visibility is None:
+            self.persistVisibility(con,id)
+        else:
             type = visibility['type'] if 'type' in visibility else None
             additonal_data = visibility['additonal_data'] if 'additonal_data' in visibility else None
             self.persistVisibility(con,id,type,additional_data)
 
-        if 'relateds' in normative and normative['relateds'] is not None:
-            self.addRelateds(con,normative['relateds'],normative['creator_id'],id)
+        if relateds is not None:
+            self.addRelateds(con,relateds,normative['creator_id'],id)
 
 
     def updateNormative(con,normative,file=None,visibility=None):
@@ -187,9 +191,9 @@ class Digesto:
         '''
         if ('id' not in normative or normative['id'] is None or
             'issuer_id' not in normative or normative['issuer_id'] is None or
-            'file_number' not in normative or normative['file_number'] is None
-            'normative_number' not in normative or normative['normative_number'] is None
-            'creator_id' not in normative or normative['creator_id'] is None
+            'file_number' not in normative or normative['file_number'] is None or
+            'normative_number' not in normative or normative['normative_number'] is None or
+            'creator_id' not in normative or normative['creator_id'] is None or
             'status' not in normative or normative['status'] is None):
 
             return
@@ -237,7 +241,7 @@ class Digesto:
             self.persistVisibility(con,id,visibility['type'],visibility['additional_data'])
 
 
-    
+
     def findNormativeById(con,id):
         cur = con.cursor()
         cur.execute('select id,issuer_id,file_id,type,file_number,date,created,creator_id,extract from digesto.normative where id = %s',(id,))
