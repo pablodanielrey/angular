@@ -13,6 +13,27 @@ class Profiles:
     session = inject.attr(Session)
     config = inject.attr(Config)
 
+    def _checkUserProfile(self,con,userId,roles):
+
+        try:
+            cur = con.cursor()
+            cur.execute('select profile from credentials.auth_profile where user_id = %s',(userId,))
+            rdata = cur.fetchall()
+            if rdata == None:
+                logging.debug('el usuario con id %s no tiene ningun rol asignado' % userId)
+                return False
+
+            for role in rdata:
+                if role[0] in roles:
+                  return True
+
+            logging.debug('no se encuentan los roles asignados al usuario (%s) en la lista de roles pedidos %s' % (rdata,tuple(roles)))
+            return False
+
+        except Exception as e:
+            logging.exception(e)
+            return False
+
 
     def _checkAccessWithCon(self,con,sid,roles):
 
@@ -32,25 +53,7 @@ class Profiles:
         if 'USER' in roles:
             return True;
 
-        try:
-            cur = con.cursor()
-            cur.execute('select profile from credentials.auth_profile where user_id = %s',(user_id,))
-            rdata = cur.fetchall()
-            if rdata == None:
-                logging.debug('el usuario con id %s no tiene ningun rol asignado' % user_id)
-                return False
-
-            for role in rdata:
-                if role[0] in roles:
-                  return True
-
-            logging.debug('no se encuentan los roles asignados al usuario (%s) en la lista de roles pedidos %s' % (rdata,tuple(roles)))
-            return False
-
-        except Exception as e:
-            logging.exception(e)
-            return False
-
+        self._checkUserProfile(con,user_id,roles)
 
 
 

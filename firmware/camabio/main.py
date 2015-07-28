@@ -3,7 +3,7 @@ import sys
 sys.path.append('../../python')
 sys.path.append('../../apis')
 
-import logging, time, threading, signal
+import logging, time, signal
 import inject
 import threading
 import datetime
@@ -13,7 +13,7 @@ from itertools import zip_longest
 import model
 from model.config import Config
 
-""" configuro el injector con las variables apropiadas """
+''' configuro el injector con las variables apropiadas '''
 def config_injector(binder):
     binder.bind(Config,Config('firmware-config.cfg'))
 
@@ -21,16 +21,43 @@ inject.configure(config_injector)
 
 import camabio
 from firmware import Firmware
-from network import websocket
+#from network import websocket
 
 logging.getLogger().setLevel(logging.DEBUG)
 
+from autobahn.asyncio.wamp import ApplicationSession
+from asyncio import coroutine
+
+class WampMain(ApplicationSession):
+
+    def __init__(self,config=None):
+        logging.debug('instanciando WampMain')
+        ApplicationSession.__init__(self, config)
+
+
+    @coroutine
+    def onJoin(self, details):
+        logging.debug('session joined')
+
+        while True:
+            try:
+                logging.info('identificando')
+                yield from self.call('assistance.firmware.identify')
+
+            except Exception as e:
+                logging.exception(e)
+
+
+
+
+
+'''
 finalize = False
 
 class Identifier(threading.Thread):
 
     def __init__(self,firmware,factory):
-        super(Identifier,self).__init__()
+        super().__init__()
         self.firmware = firmware
         self.factory = factory
 
@@ -84,15 +111,25 @@ class Identifier(threading.Thread):
 
 
 
+def initializeNetwork():
+    config = inject.instance(Config)
+    log.startLogging(sys.stdout)
+    factory = BroadcastServerFactory()
+    factory.protocol = ActionsServerProtocol
+    port = reactor.listenTCP(int(config.configs['firmware_port']), factory=factory, interface=config.configs['firmware_ip'])
+    return (reactor,port,factory)
+
+
+
+
+
 f = inject.instance(Firmware)
 f.start()
 
 
 try:
-    """ inicializo la parte de red """
     (reactor,port,factory) = websocket.getPort()
 
-    """ inicializo el cierre del programa """
     def close_sig_handler(signal,frame):
       finalize = True
       port.stopListening()
@@ -102,7 +139,6 @@ try:
     signal.signal(signal.SIGINT,close_sig_handler)
 
 
-    ''' inicializo el tema del identificador '''
     identifier = Identifier(f,factory)
     identifier.start()
 
@@ -113,7 +149,18 @@ try:
     try:
         identifier.join()
     except Exception as e:
-        logging.critical(e)
+        logging.exception(e)
 
 finally:
     f.stop()
+'''
+
+if __name__ == '__main__':
+
+
+    #from autobahn.twisted.wamp import ApplicationRunner
+    from autobahn.asyncio.wamp import ApplicationRunner
+    from network.wampFirmware import WampFirmware
+
+    runner = ApplicationRunner(url='ws://localhost:8000/ws',realm='assistance',debug=True, debug_wamp=True, debug_app=True)
+    runner.run(WampMain)

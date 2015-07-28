@@ -93,32 +93,37 @@ class Logs:
         cur.execute('insert into assistance.attlog (id,device_id,user_id,verifymode,log) values (%s,%s,%s,%s,%s)',params)
 
 
-    ''' persiste los logs que no existan en la base pasados como parámetro '''
+    '''
+        Persiste los logs que no existan en la base pasados como parámetro
+        retorna:
+            Lista de logs sincronizados
+    '''
     def persistLogs(self,con,logs):
         lenLogs = len(logs)
         if lenLogs <= 0:
-            return
+            return []
 
         ids = [l['id'] for l in logs]
         cur = con.cursor()
         cur.execute('select id from assistance.attlog where id in %s',(tuple(ids),))
         if cur.rowcount == lenLogs:
             logging.debug('Ya existen todos los logs enviados dentro de la base')
-            return
+            return []
 
         logsToRemove = []
         if cur.rowcount > 0:
             logsToRemove = [l[0] for l in cur.fetchall()]
-
         logging.debug('ya existen estos logs {}'.format(logsToRemove))
 
         logsToSync = [l for l in logs if l['id'] not in logsToRemove]
-        logging.debug('solo se sincronizan {}'.format(logsToSync))
+        logging.debug('logs a sincronizar {}'.format(logsToSync))
 
         cur.execute('set time zone %s',('utc',))
         for l in logsToSync:
             params = (l['id'],l['deviceId'],l['userId'],l['verifymode'],l['log'])
             cur.execute('insert into assistance.attlog (id,device_id,user_id,verifymode,log) values (%s,%s,%s,%s,%s)',params)
+
+        return logsToSync
 
 
 

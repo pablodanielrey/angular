@@ -16,6 +16,22 @@ from model.systems.assistance.devices import Devices
 from model.systems.assistance.logs import Logs
 from model.systems.assistance.date import Date
 
+'''
+    Implementa el modelo del firmware.
+    Es sincrónico y no thread-safe.
+    Controla el acceso al reader para que solo se pueda estar ejecutnaod una operación a la vez.
+    O identificación o enrolamiento de un usuario
+    Forma de uso :
+
+        f = Firmware()
+        f.start()
+        try:
+
+        ...
+
+        finally:
+            f.stop()
+'''
 class Firmware:
 
     reader = reader.getReader()
@@ -38,13 +54,15 @@ class Firmware:
 
     def stop(self):
         self.reader.stop()
-        if self.conn:
-            self.conn.close()
 
 
-
-
-    def enroll(self, pin, need_first=None, need_second=None, need_third=None, need_release=None, error=None, fatal_error=None):
+    '''
+        Enrola un usuario con determinado pin
+        retorna:
+            None en caso de error
+            userId del usuario enrolado
+    '''
+    def enroll(self, pin, need_first=None, need_second=None, need_third=None, need_release=None, template_enrolled=None, error=None, fatal_error=None):
 
         (n,t) = self.reader.enroll(need_first,need_second,need_third,need_release,error,fatal_error)
         if n:
@@ -68,12 +86,34 @@ class Firmware:
                 self.sync.addPerson(conn,userId)
                 conn.commit()
 
+                try:
+                    if template_enrolled:
+                        template_enrolled(user,template)
+                except Exception as ee:
+                    logging.exception(ee)
+
+                return userId
+
+            except Exception as e:
+                logging.exception(e)
+                raise e
+
             finally:
                 conn.close()
 
+        else:
+            return None
 
 
-    ''' genera lo necesario para loguear una persona dentro del firmware '''
+    '''
+        Genera lo necesario para loguear una persona dentro del firmware
+        retorna:
+            El log generado
+            El usuario
+            El sid de la session creada
+            Los roles del usuario
+        TODO: corregir los roles para que sean una lista y no un solo rol.
+    '''
     def _identify(self, conn, userId, verifyMode=1):
 
         ''' creo el log '''
@@ -88,6 +128,7 @@ class Firmware:
         self.logs.persist(conn,log)
         self.sync.addLog(conn,log['id'])
 
+
         ''' logueo al usuario creandole una sesion '''
         sess = {
             self.config.configs['session_user_id']:userId
@@ -95,7 +136,7 @@ class Firmware:
         sid = self.session._create(conn,sess)
 
         roles = None
-        if self.profiles._checkAccessWithCon(conn,sid,['ADMIN-ASSISTANCE']):
+        if self.profiles._checkUserProfile(conn,userId,['ADMIN-ASSISTANCE']):
             roles = 'admin'
 
         user = self.users.findUser(conn,userId)
@@ -104,140 +145,65 @@ class Firmware:
 
 
 
-    ''' llamado cuando se trata de identificar una persona por huella '''
-    def identify(self, notifier=None):
+    '''
+        Identifica a una persona por la huella
+        retorna:
+            None en caso de que no se haya podido identificar a la persona
+            Lo retornado por _identify en caso que se haya podido identificar a la persona
+    '''
+    def identify(self):
         h = self.reader.identify()
         if h:
             conn = self._get_database()
             try:
-
                 userId = self.templates.findUserIdByIndex(conn,h)
                 if userId:
-                    (log,user,sid,roles) = self._identify(conn,userId)
-
+                    data = self._identify(conn,userId)
                     conn.commit()
-
-                    if notifier:
-                        notifier._identified(log,user,sid,roles)
+                    return data
 
                 else:
                     logging.critical('{} - huella identificada en el indice {}, pero no se encuentra ningún mapeo con un usuario'.format(self.date.now(),h))
-                    if notifier:
-                        notifier._error(h)
+                    return None
+
+            except Exception as e:
+                logging.exception(e)
+                raise e
 
             finally:
                 conn.close()
 
         else:
-            if notifier:
-                notifier._identified(None)
+            return None
 
 
 
 
-    ''' llamado cuando se trata de identificar una persona usando el teclado '''
-    def login(self, pin, password, notifier, server):
+    '''
+        Identificar una persona mediante usuario y clave
+        retorna:
+            None en caso de que no se pueda identificar a una persona
+            Lo retornado por _identify
+    '''
+    def login(self, pin, password):
         conn = self._get_database()
         try:
-
             creds = {
                 'username':pin,
                 'password':password
             }
             userData = self.userPassword.findUserPassword(conn,creds)
             if userData is None:
-                notifier._identified(server,None)
-                return
+                return None
 
-            (log,user,sid,roles) = self._identify(conn,userData['user_id'],0)
+            data = self._identify(conn,userData['user_id'],0)
             conn.commit()
 
-        finally:
-            conn.close()
+            return data
 
-        notifier._identified(server,log,user,sid,roles)
-
-
-    ''' retorna un handler para manejar los eventos de sincronizacion '''
-    def syncLogEventHandler(self):
-        def eventHandler(event):
-
-            if 'LogsSynchedEvent' != event['type']:
-                return
-
-
-            conn = self._get_database()
-            try:
-                self.sync.syncLogEventHandler(conn,event)
-                conn.commit()
-
-            except Exception as e:
-                logging.exception(e)
-
-            finally:
-                conn.close()
-
-        return eventHandler
-
-
-    ''' inicia el proceso de sincronización de los logs hacia el server '''
-    def syncLogs(self,protocol):
-        conn = self._get_database()
-        try:
-            self.sync.syncLogs(protocol,conn)
-
-        finally:
-            conn.close()
-
-
-    ''' retorna un hanlder para manejar los eventos de sincronización de los usuarios '''
-    def syncChangedUsersEventHandler(self):
-        def eventHandler(event):
-
-            if 'UserSynchedEvent' != event['type']:
-                return
-
-            conn = self._get_database()
-            try:
-                self.sync.syncChangedUsersEventHandler(conn,event)
-                conn.commit()
-
-            except Exception as e:
-                logging.exception(e)
-
-            finally:
-                conn.close()
-
-        return eventHandler
-
-
-    ''' retorna un hanlder para manejar los eventos de sincronización de los ususuarios enviados por el servidor '''
-    def syncUsersEventHandler(self):
-        def eventHandler(event):
-
-            if 'SynchUserEvent' != event['type']:
-                return
-
-            conn = self._get_database()
-            try:
-                self.sync.syncServerUserEventHandler(conn,event)
-                conn.commit()
-
-            except Exception as e:
-                logging.exception(e)
-
-            finally:
-                conn.close()
-
-        return eventHandler
-
-
-
-    ''' sincroniza los usuarios que tuvieron cambios en la base del firmware '''
-    def syncChangedUsers(self,protocol):
-        conn = self._get_database()
-        try:
-            self.sync.syncChangedUsers(protocol,conn)
+        except Exception as e:
+            logging.exception(e)
+            raise e
 
         finally:
             conn.close()

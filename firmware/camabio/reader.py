@@ -29,7 +29,7 @@ class Reader:
         while True:
             time.sleep(100)
 
-    def enroll(self, need_first=None, need_second=None, need_third=None, need_release=None):
+    def enroll(self, need_first=None, need_second=None, need_third=None, need_release=None, error=None, fatal_error=None):
 
         if need_first is not None:
             need_first()

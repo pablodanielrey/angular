@@ -36,7 +36,7 @@ if __name__ == '__main__':
     firmware = inject.instance(Firmware)
 
     protocol = client.network.websocket.getProtocol()
-    protocol.addEventHandler(firmware.syncUsersEventHandler())
+    protocol.addEventHandler(firmware.syncChangedUsersEventHandler())
 
     firmware.syncUsers(protocol)
 

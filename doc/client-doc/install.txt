@@ -1,0 +1,28 @@
+
+# instrucciones de como instalar un manejador de paquetes como npm de javascript
+
+#instalar node.js
+#referencias :
+#    https://nodesource.com/blog/nodejs-v012-iojs-and-the-nodesource-linux-repositories
+
+# Note the new setup script name for Node.js v0.12
+curl -sL https://deb.nodesource.com/setup_0.12 | sudo bash -
+
+# Then install with:
+sudo apt-get install -y nodejs
+
+
+##################################################
+####### una vez instalado node.js ###############
+# instalar el npm para linux. para manejar los paqetes
+# referencias :
+#      https://www.npmjs.com/package/npm
+
+curl -L https://npmjs.org/install.sh | sudo sh
+
+
+####
+### tambien se debe instalar bower (otro manejador de paquetes)
+###
+
+sudo npm install -g bower
