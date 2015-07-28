@@ -9,6 +9,9 @@ class File:
     )
     '''
 
+    '''
+        Retorna el id del archivo
+    '''
     def persist(self,con,file):
 
 
@@ -16,3 +19,5 @@ class File:
 
 
     def search(self,con,text):
+
+    def delete(self,con,id):

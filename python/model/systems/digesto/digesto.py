@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
-import uuid, datetime
+import uuid, datetime,psycopg2,inject
+from model.systems.file.file import File
 
 class Digesto:
+
+    file = inject.attr(File)
 
     # -----------------------------------------------------------------------------------
     # --------------------- ESTADO DE LA NORMATIVA --------------------------------------
@@ -75,7 +78,7 @@ class Digesto:
             relateds.append(self._convertRelatedToDict(r))
 
         return relateds
-        
+
     # -----------------------------------------------------------------------------------
     # --------------------- VISIBILIDAD DE LA NORMATIVA ---------------------------------
     # -----------------------------------------------------------------------------------
@@ -101,6 +104,11 @@ class Digesto:
         if 'normative_id' is None:
             return
 
+        if type is None:
+            type = 'PRIVATE'
+        if additional_data is None:
+            additional_data = ''
+
         cur = con.cursor()
 
         visibility = self.getVisibility(con,normative_id)
@@ -123,72 +131,9 @@ class Digesto:
 
 
     def createNormative(self,con,normative,status,visibility,relateds,file):
-
-
-
-
-
-    def createStateNormative(con,state):
-        if state is None:
-            return
-
-        if ('state' not in state or state['state'] is None or
-            'creator_id' not in state or state['creator_id'] is None or
-            'normative_id' not in state or state['normative_id'] is None):
-            return
-
-
-        cur = con.cursor()
-
-        idState = str(uuid.uuid4())
-        params = (idState,
-                  state['state'],
-                  state['created'] if 'created' in state and state['created'] is not None else datetime.datetime.now(),
-                  state['creator_id'],
-                  state['normative_id'])
-
-        cur.execute('insert into digesto.state_normative (id,state,created,creator_id,normative_id) values(%s,%s,%s,%s,%s)',params)
-
-
-    def _createNormative(self,con,normative):
-        id = str(uuid.uuid4())
-
-        params = (id,
-                  normative['issuer_id'],
-                  normative['file_id'] if 'file_id' in normative else None,
-                  normative['type'] if 'type' in normative else None,
-                  normative['file_number'],
-                  normative['normative_number']
-                  normative['year'] if 'year' in normative and normative['year'] is not None else datetime.datetime.now(),
-                  normative['created'] if 'created' in normative and normative['created'] is not None else datetime.datetime.now(),
-                  normative['creator_id'],
-                  normative['extract'] if 'extract' in normative else '')
-
-        cur = con.cursor
-        cur.execute('set timezone to %s',('UTC',))
-        cur.execute('insert into digesto.normative (id,issuer_id,file_id,type,file_number,normative_number,date,created,creator_id,extract) values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,)',params)
-
-        if 'state' in normative and normative['state'] is not None and 'state' in normative['state']:
-            state = normative['state']
-            state['creator_id'] = normative['creator_id']
-            state['normative_id'] = id
-            self.createStateNormative(con,state)
-
-        if 'visibility' in normative and normative['visibility'] is not None:
-            visibility = normative['visibility']
-            visibility['normative_id'] = id
-            self._persistVisibility(con,visibility)
-
-        if 'relateds' in normative:
-            # agrego los relacionados
-
-    #  -------------- falta implemntar ---------------------
-    def _updateNormative(con,normative):
-
-
-    def persist(self,con,normative):
         if normative is None:
             return
+
         '''
         chequeo precondiciones, campos obligatorios
         '''
@@ -199,35 +144,131 @@ class Digesto:
 
             return
 
-        if 'id' not in normative:
-            self._createNormative(con,normative)
-        else:
-            self._updateNormative(con,normative)
+        id = str(uuid.uuid4())
+
+        # creo el archivo
+        fileId = None
+        if file is not None:
+            fileId = self.file.persist(con,file)
+
+        params = (id,
+                  normative['issuer_id'],
+                  fileId,
+                  normative['type'] if 'type' in normative else None,
+                  normative['file_number'],
+                  normative['normative_number'],
+                  normative['year'] if 'year' in normative and normative['year'] is not None else datetime.datetime.now(),
+                  normative['created'] if 'created' in normative and normative['created'] is not None else datetime.datetime.now(),
+                  normative['creator_id'],
+                  normative['extract'] if 'extract' in normative else '')
+
+        cur = con.cursor
+        cur.execute('set timezone to %s',('UTC',))
+        cur.execute('insert into digesto.normative (id,issuer_id,file_id,type,file_number,normative_number,date,created,creator_id,extract) values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,)',params)
+
+        if 'status' in normative and normative['status'] is not None and 'status' in normative['status']:
+            self.updateStatus(con,id,normative['creator_id'])
+
+        if 'visibility' in normative and normative['visibility'] is not None:
+            type = visibility['type'] if 'type' in visibility else None
+            additonal_data = visibility['additonal_data'] if 'additonal_data' in visibility else None
+            self.persistVisibility(con,id,type,additional_data)
+
+        if 'relateds' in normative and normative['relateds'] is not None:
+            self.addRelateds(con,normative['relateds'],normative['creator_id'],id)
 
 
-    # falta implementar
+    def updateNormative(con,normative,file=None,visibility=None):
+        if normative is None:
+            return
+
+        '''
+        chequeo precondiciones, campos obligatorios
+        '''
+        if ('id' not in normative or normative['id'] is None or
+            'issuer_id' not in normative or normative['issuer_id'] is None or
+            'file_number' not in normative or normative['file_number'] is None
+            'normative_number' not in normative or normative['normative_number'] is None
+            'creator_id' not in normative or normative['creator_id'] is None
+            'status' not in normative or normative['status'] is None):
+
+            return
+
+        id = normative['id']
+
+        # busca la normativa en la bd
+        oldNormative = self.findNormativeById(con,id)
+        if oldNormative is None:
+            return
+
+        # actualizo el archivo en caso de que sea necesario
+        fileId = normative['file_id']
+        if file is not None:
+            if 'id' not in file:
+                fileId = self.file.persist(con,file)
+            elif file['id'] != fileId:
+                fileId = file['id']
+
+
+        # actualizo la normativa
+        params = (normative['issuer_id'],
+                  fileId,
+                  normative['type'] if 'type' in normative else None,
+                  normative['file_number'],
+                  normative['normative_number'],
+                  normative['year'] if 'year' in normative and normative['year'] is not None else datetime.datetime.now(),
+                  normative['created'] if 'created' in normative and normative['created'] is not None else datetime.datetime.now(),
+                  normative['creator_id'],
+                  normative['extract'] if 'extract' in normative else '',
+                  id)
+
+        cur = con.cursor
+        cur.execute('set timezone to %s',('UTC',))
+        cur.execute('update from digesto.normative set issuer_id = %s,file_id = %s,type = %s,file_number = %s,normative_number = %s,date = %s,created = %s,creator_id = %s, extract = %s where id = %s',params)
+
+        # actualizo el estado en caso de ser necesario
+        status = normative['status']
+        s = self.getStatus(con,id)
+        if s is None or s['status'] != status['status']:
+            self.updateStatus(con,id,normative['creator_id'],status['status'])
+
+        # actualizo la visibilidad
+        if visibility is not None:
+            self.persistVisibility(con,id,visibility['type'],visibility['additional_data'])
+
+
+    
     def findNormativeById(con,id):
+        cur = con.cursor()
+        cur.execute('select id,issuer_id,file_id,type,file_number,date,created,creator_id,extract from digesto.normative where id = %s',(id,))
+        if (cur.rowcount <= 0):
+            return None
+        else:
+            status = self.getStatus(con,id)
+            visibility = self.getVisibility(con,id)
+            relateds = self.findRelateds(con,id)
+            return self._convertNormativeToDict(cur.fetchone(),status, visibility, relateds)
 
 
-    # falta implementar
-    def removeAllRelated(con,id):
-
-
-    # falta implementar
-    def addRelated(con,related):
-
-
-    # falta implementar
-    def stateUpdate(con,state):
-
-
-    # falta implementar
-    def changeVisibility(con,visibility):
-
-
-    # falta implementar
     def deleteNormative(con,id):
+        if id is None:
+            return
 
+        normative = self.findNormativeById(con,id)
+        if normative is None:
+            return
 
-    # falta implementar
-    def changeFileToNormative(con,file,normative):
+        fileId = normative['file_id']
+
+        cur = con.cursor()
+        # elimino el archivo
+        if fileId is not None:
+            self.file.delete(con,fileId)
+        # elimino el estado
+        cur.execute('delete from digesto.status where normative_id = %s',(id,))
+        # elimino la visibilidad
+        cur.execute('delete from digesto.visibility where normative_id = %s',(id,))
+        # elimino los relacionados
+        cur.execute('delete from digesto.related where normative_id = %s',(id,))
+        # elimino la normativa
+        cur.execute('delete from digesto.normative where id = %s',(id,))
