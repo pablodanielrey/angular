@@ -132,7 +132,7 @@ class Digesto:
 
     def createNormative(self,con,normative,status,visibility,relateds,file):
         if normative is None:
-            return
+            return None
 
         '''
         chequeo precondiciones, campos obligatorios
@@ -142,7 +142,7 @@ class Digesto:
             'normative_number' not in normative or normative['normative_number'] is None or
             'creator_id' not in normative or normative['creator_id'] is None):
 
-            return
+            return None
 
         id = str(uuid.uuid4())
 
@@ -181,6 +181,7 @@ class Digesto:
         if relateds is not None:
             self.addRelateds(con,relateds,normative['creator_id'],id)
 
+        return id
 
     def updateNormative(con,normative,file=None,visibility=None):
         if normative is None:
