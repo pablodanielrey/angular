@@ -131,6 +131,11 @@ class Digesto:
 
 
     def createNormative(self,con,normative,status,visibility,relateds,file):
+
+
+        import pdb
+        pdb.set_trace()
+
         if normative is None:
             return None
 
