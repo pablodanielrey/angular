@@ -1,0 +1,8 @@
+config_digesto = {
+  url: "ws://127.0.0.1:8000/ws",
+  realm: "assistance",
+  host: "127.0.0.1",
+  port: "8001",
+  ssl_host: "127.0.0.1",
+  ssl_port: "8002"
+}

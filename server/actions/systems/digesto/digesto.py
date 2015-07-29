@@ -32,7 +32,7 @@ class WampDigesto(ApplicationSession):
     @coroutine
     def onJoin(self, details):
         logging.debug('registering methods')
-        yield from self.register(self.createNormative_async,'digesto.server.digesto.createNormative')
+        yield from self.register(self.createNormative_async,'digesto.digesto.createNormative')
 
     def _getDatabase(self):
         host = self.serverConfig.configs['database_host']
@@ -45,8 +45,9 @@ class WampDigesto(ApplicationSession):
     def createNormative(self,normative,status,visibility,relateds,file):
         con = self._getDatabase()
         try:
-            self.digesto.createNormative(con,normative,status,visibility,relateds,file)
+            id = self.digesto.createNormative(con,normative,status,visibility,relateds,file)
             con.commit()
+            return id
         finally:
             con.close()
 
