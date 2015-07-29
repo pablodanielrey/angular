@@ -8,21 +8,31 @@ function CreateRegulationCtrl($rootScope, $scope, $location, $window, $timeout, 
 
     $scope.model = {
       regulationIndex: 0,
-      regulationName: ['','ORDENANZA','RESOLUCIÓN','DISPOSICIÓN',''],
-      styleNames: ['item1Seleccionado','item2Seleccionado','item2Seleccionado','item2Seleccionado','item3Seleccionado']
+      regulationName: ['','ORDENANZA','RESOLUCIÓN','DISPOSICIÓN','ORDENANZA','RESOLUCIÓN','DISPOSICIÓN',''],
+      styleNames: ['menu','screenOrdenanza','screenResolucion','screenDisposicion','screenOrdenanzaFinal','screenResolucionFinal','screenDisposicionFinal']
     };
 
 
     $scope.selectRegulation = function(i) {
         $scope.model.regulationIndex = i;
+        console.log($scope.model.regulationIndex);
     }
 
     $scope.getRegulationName = function() {
-      return $scope.model.regulationName[$scope.model.regulationIndex];
+      var t = $scope.model.regulationName[$scope.model.regulationIndex];
+      console.log(t);
+      return t;
     }
 
     $scope.getStyleName = function() {
-      return $scope.model.styleNames[$scope.model.regulationIndex];
+      var t = $scope.model.styleNames[$scope.model.regulationIndex];
+      console.log(t);
+      return t;
+    }
+
+    $scope.save = function() {
+      $scope.model.regulationIndex = $scope.model.regulationIndex + 3;
+      console.log($scope.model.regulationIndex);
     }
 
     $scope.$on('$viewContentLoaded', function(event){

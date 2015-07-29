@@ -279,8 +279,10 @@
 
 
 
-
-/*KJLDSHDUKHKJFHDSJKFHDSKJFHJDKSFHJKDSHFKJDSHFKJDSHKFJHDSKJFHDJKF*/
+/*  ------------------------------------------------------------------------
+    -------------------- ORDENANZA -----------------------------------------
+    ------------------------------------------------------------------------
+*/
 .createRegulation .screenOrdenanza  .ContentEstado{
   display: none;
 }
@@ -293,7 +295,7 @@
   display: none;
 }
 
-.createRegulation .screenOrdenanza .dataThree  {
+.createRegulation .screenOrdenanzaFinal .dataThree  {
   color: white;
   height: 100%;
   background-color: #ec9122;

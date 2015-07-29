@@ -8,7 +8,7 @@
 }
 
 
-.barraBusqueda {
+.searchBar {
   display:flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
@@ -22,7 +22,7 @@
 }
 
 
-.barraFiltros {
+.filterBar {
   display:flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */

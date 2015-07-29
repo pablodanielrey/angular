@@ -1,0 +1,105 @@
+
+.pantalla {
+
+}
+
+.pantalla .translatable {
+
+}
+
+.pantalla .menu {
+
+}
+
+.pantalla .m-nueva-disposicion {
+
+}
+
+.pantalla .m-nueva-resolucion {
+
+}
+
+.pantalla .m-nueva-ordenanza {
+
+}
+
+.patanlla .nueva-norma {
+
+}
+
+.patanlla  .texto {
+
+}
+
+.patanlla .estado {
+
+}
+
+.patanlla .relacionados {
+
+}
+
+
+.pantalla .texto-de-nueva-disposicion {
+
+}
+
+
+
+
+
+/*
+  pantalla del menu
+*/
+
+
+.pantalla.item0 .translatable {
+  translate: 0px;
+}
+
+/*
+  patalla de nueva ordenanza
+*/
+
+.pantalla.cargaOrdenanza .translatable {
+  translate: -100%;
+}
+
+
+.pantalla.cargaDisposicion .translatable {
+  translate: -100%;
+}
+
+.pantalla.cargaResolucion .translatable {
+  translate: -100%;
+}
+
+.pantalla.cargaResolucion .etiqueta {
+    content: 'Resolucion';
+}
+
+
+
+.pantalla.cargaDisposicion .estado {
+    display:none;
+}
+
+.pantalla.cargaDisposicion .etiqueta {
+    content: 'Disposicion';
+}
+
+
+
+
+/*
+  finalizar
+*/
+
+
+.pantalla.item2 .translatable {
+  translate: -100%
+}
+
+.pantalla.item2 .nueva-norma {
+  display: none;
+}

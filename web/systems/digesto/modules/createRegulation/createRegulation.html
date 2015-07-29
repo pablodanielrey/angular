@@ -1,7 +1,7 @@
 <!-- <div class='createRegulationContainer' ng-controller='createRegulation'> -->
-<div class="createRegulation">
+<div class="createRegulation {{getStyleName()}}">
   <div class='createRegulationContainer'>
-      <div class='contentScreens screenResolucion {{getStyleName()}}'>
+      <div class='contentScreens'>
 
           <div class='screenOne'>
                 <div class="container">
@@ -37,7 +37,7 @@
 
                           <div class="saveCancel">
                               <div>
-                                <button class="sendRegulation" ng-click = "selectRegulation(4)"><i class="fa fa-floppy-o"></i> <b>GUARDAR</b></button>
+                                <button class="sendRegulation" ng-click = "save()"><i class="fa fa-floppy-o"></i> <b>GUARDAR</b></button>
                               </div>
                               <div>
                                 <button class="cancelRegulation" ng-click = "selectRegulation(0)"><i class="fa fa-reply"></i> CANCELAR</button>
@@ -153,7 +153,7 @@
                   <div class="content">
                       <div class="dataThree">
                           <div><i class="fa fa-check-circle fa-5x"></i></div>
-                          <div class="titleCreatedRegulation"> ORDENANZA CREADA CON ÉXITO !</div>
+                          <div class="titleCreatedRegulation"> {{getRegulationName()}} CREADA CON ÉXITO !</div>
                           <button class="btnRegulationFinished " ng-click = "selectRegulation(0)"><h2>FINALIZAR</h2></button>
                       </div>
                   </div>
@@ -162,13 +162,13 @@
 
       </div>
 
+      <!--  <div class="pantallaNegra" ng-class="{false:'hidden'}[model.visibility == 'groupPrivate']">
+            <div class="container">
+                <div class="content">
+                    holaaaa
+                </div>
+            </div>
+        </div>-->
 
-      <div class="pantallaNegra" ng-class="{false:'hidden'}[model.visibility == 'groupPrivate']">
-          <div class="container">
-              <div class="content">
-                  holaaaa
-              </div>
-          </div>
-      </div>
   </div>
 </div>

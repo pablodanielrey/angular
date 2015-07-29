@@ -1,0 +1,73 @@
+
+
+<div class='pantalla c-nueva-ordenanza-con-relacinodaso' ng-class='getStyleName()'>
+
+  <div class='translatable'>
+
+    <div class='menu'>
+        <div class='m-nueva-resolucion'>
+          <button ng-click='nuevaOrdenanza()'>
+        </div>
+        <div class='m-nueva-ordenanza'>
+          <button ng-click='nuevaOrdenanza()'>
+        </div>
+        <div class='m-nueva-disposicion'>
+          <button ng-click='nuevaDispocion()'>
+        </div>
+    </div>
+
+    <div class='nueva-ordenanza'>
+      <div>
+        <label>Nueva Ordenanza</label>
+        <div class='texto'>
+          <textarea ng-model='model.texto'></textarea>
+        </div>
+
+        <select class='estado'></select>
+
+        <div class='relacionadas'>
+          si mira los relaciondos
+          <button>
+        </div>
+      </div>
+  </div>
+
+
+
+    <div class='nueva-resolucion'>
+      <div>
+        <label>Nueva Resolucion</label>
+        <div class='texto'>
+          <textarea ng-model='model.texto'></textarea>
+        </div>
+
+        <select class='estado'></select>
+
+        <div class='relacionadas'>
+          ....
+        </div>
+      </div>
+
+    </div>
+
+    <div class='nueva-disposicion'>
+      <div>
+        <label>Nueva Disposicion</label>
+        <div class='texto'>
+          <textarea ng-model='model.texto'></textarea>
+        </div>
+        <div class='relacionadas'>
+          ....
+        </div>
+      </div>
+
+    </div>
+
+    <div class='finalizar'>
+      <label>FINALIZADO</label>
+      <button>aceptar</button>
+    </div>
+
+  </div>
+
+</div>

@@ -1,0 +1,38 @@
+
+
+<div class='pantalla imte2' ng-class='getStyleName()'>
+
+  <div class='translatable'>
+
+    <div class='menu'>
+        <div class='m-nueva-resolucion'>
+          <button ng-click='nuevaOrdenanza()'>
+        </div>
+        <div class='m-nueva-ordenanza'>
+          <button ng-click='nuevaOrdenanza()'>
+        </div>
+        <div class='m-nueva-disposicion'>
+          <button ng-click='nuevaDispocion()'>
+        </div>
+    </div>
+
+    <div class='nueva-norma'>
+      <div>
+        <label class='etiqueta'></label>
+        <div class='texto' ng-class='getNuevaDisposicionStyle()'>
+          <textarea ng-model='model.texto'></textarea>
+        </div>
+        <select class='estado'></select>
+        <div class='relacionadas'>
+        </div>
+      </div>
+    </div>
+
+    <div class='finalizar'>
+      <label>FINALIZADO</label>
+      <button>aceptar</button>
+    </div>
+
+  </div>
+
+</div>
