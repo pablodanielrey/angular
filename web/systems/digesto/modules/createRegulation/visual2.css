@@ -283,19 +283,19 @@
     -------------------- ORDENANZA -----------------------------------------
     ------------------------------------------------------------------------
 */
-.createRegulation .screenOrdenanza  .ContentEstado{
+.createRegulation.screenOrdenanza  .ContentEstado{
   display: none;
 }
 
-.createRegulation .screenOrdenanza  .ContentVisivilidad{
+.createRegulation.screenOrdenanza  .ContentVisivilidad{
   display: none;
 }
 
-.createRegulation .screenOrdenanza  .contentAprobado{
+.createRegulation.screenOrdenanza  .contentAprobado{
   display: none;
 }
 
-.createRegulation .screenOrdenanzaFinal .dataThree  {
+.createRegulation.screenOrdenanzaFinal .dataThree  {
   color: white;
   height: 100%;
   background-color: #ec9122;
@@ -303,7 +303,7 @@
   border-bottom:3px solid #b3b5bc;
 
 }
-.createRegulation .screenOrdenanza .titleNewRegulation  {
+.createRegulation.screenOrdenanza .titleNewRegulation  {
   background-color:#ec9122;
   color:white;
   padding:5px;
@@ -318,7 +318,7 @@
 
 }
 
-.createRegulation .screenResolucion .dataThree  {
+.createRegulation.screenResolucionFinal .dataThree  {
   color: white;
   height: 100%;
   background-color: #e43e46;
@@ -327,7 +327,7 @@
 
 }
 
-.createRegulation .screenResolucion .titleNewRegulation  {
+.createRegulation.screenResolucion .titleNewRegulation  {
   background-color:#e43e46;
   color:white;
   padding:5px;
@@ -338,20 +338,20 @@
 
 
 
-.createRegulation .screenDisposicion  .ContentEstado{
+.createRegulation.screenDisposicion  .ContentEstado{
   display: none;
 }
 
-.createRegulation .screenDisposicion  .ContentVisivilidad{
+.createRegulation.screenDisposicion  .ContentVisivilidad{
   display: none;
 }
 
-.createRegulation .screenDisposicion  .contentAprobado{
+.createRegulation.screenDisposicion  .contentAprobado{
   display: none;
 }
 
 
-.createRegulation .screenDisposicion .dataThree  {
+.createRegulation.screenDisposicionFinal .dataThree  {
   color: white;
   height: 100%;
   background-color: #128c78;
@@ -359,7 +359,7 @@
   border-bottom:3px solid #b3b5bc;
 
 }
-.createRegulation .screenDisposicion .titleNewRegulation  {
+.createRegulation.screenDisposicion .titleNewRegulation  {
   background-color:#128c78;
   color:white;
   padding:5px;

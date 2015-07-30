@@ -35,21 +35,21 @@ function CreateRegulationCtrl($rootScope, $scope, $location, $window, $timeout, 
       console.log($scope.model.regulationIndex);
     }
 
-    $scope.save = function() {
-      normative = {};
-      status = "";
-      visibility = {};
-      relateds = [];
-      file = {};
-      Digesto.createNormative(normative,status,visibility,relateds,file,
-        function(response) {
-          Notifications.message(response);
-        },
-        function(error) {
-            Notifications.message(error);
-        }
-      );
-    }
+    // $scope.save = function() {
+    //   normative = {};
+    //   status = "";
+    //   visibility = {};
+    //   relateds = [];
+    //   file = {};
+    //   Digesto.createNormative(normative,status,visibility,relateds,file,
+    //     function(response) {
+    //       Notifications.message(response);
+    //     },
+    //     function(error) {
+    //         Notifications.message(error);
+    //     }
+    //   );
+    // }
 
     $scope.$on('$viewContentLoaded', function(event){
       $scope.model.contentGroupsView = false;
