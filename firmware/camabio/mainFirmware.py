@@ -19,6 +19,7 @@ config = inject.instance(Config)
 if __name__ == '__main__':
 
     from autobahn.asyncio.wamp import ApplicationRunner
+    from autobahn.wamp.serializer import JsonSerializer
     from network.wampFirmware import WampFirmware
 
 
@@ -28,5 +29,6 @@ if __name__ == '__main__':
     realm = config.configs['firmware_realm']
     debug = config.configs['firmware_debug']
 
-    runner = ApplicationRunner(url=url,realm=realm,debug=debug, debug_wamp=debug, debug_app=debug)
+    json = JsonSerializer()
+    runner = ApplicationRunner(url=url,realm=realm,debug=debug, debug_wamp=debug, debug_app=debug, serializers=[json])
     runner.run(WampFirmware)
