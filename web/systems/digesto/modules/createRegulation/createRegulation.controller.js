@@ -9,7 +9,7 @@ function CreateRegulationCtrl($rootScope, $scope, $location, $window, $timeout, 
     $scope.model = {
       regulationIndex: 0,
       regulationName: ['','ORDENANZA','RESOLUCIÓN','DISPOSICIÓN','ORDENANZA','RESOLUCIÓN','DISPOSICIÓN',''],
-      styleNames: ['menu','screenOrdenanza','screenResolucion','screenDisposicion','screenOrdenanzaFinal','screenResolucionFinal','screenDisposicionFinal']
+      styleNames: ['menu','screenOrdenanza','screenResolucion','screenDisposicion','screenOrdenanzaFinal','screenResolucionFinal','screenDisposicionFinal','screenPrivadaDeGrupos','screenRelacionDeNorma']
     };
 
 
@@ -35,6 +35,9 @@ function CreateRegulationCtrl($rootScope, $scope, $location, $window, $timeout, 
       console.log($scope.model.regulationIndex);
     }
 
+
+
+
     // $scope.save = function() {
     //   normative = {};
     //   status = "";
@@ -51,8 +54,6 @@ function CreateRegulationCtrl($rootScope, $scope, $location, $window, $timeout, 
     //   );
     // }
 
-    $scope.$on('$viewContentLoaded', function(event){
-      $scope.model.contentGroupsView = false;
-    });
+
 
 };
