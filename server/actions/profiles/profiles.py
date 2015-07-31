@@ -45,6 +45,8 @@ class CheckAccess:
     profile_list = message['profiles']
     role_list = profile_list.split(',')
 
+    import pdb
+    pdb.set_trace()
     try:
         """ chequeo tener permiso como usuario como minimo """
         sid = message['session']
