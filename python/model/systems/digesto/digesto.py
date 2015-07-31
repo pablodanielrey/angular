@@ -1,10 +1,19 @@
 # -*- coding: utf-8 -*-
 import uuid, datetime,psycopg2,inject
 from model.systems.file.file import File
+from model.systems.offices.offices import Offices
 
 class Digesto:
 
     file = inject.attr(File)
+    offices = inject.attr(Offices)
+    '''
+        Tipos de normativa:
+        ordenanza => ordinance
+        resolución => resolution
+        disposicion => regulation
+    '''
+    issuers = {'REGULATION':[],'RESOLUTION':[],'ORDINANCE':[]}
 
     # -----------------------------------------------------------------------------------
     # --------------------- ESTADO DE LA NORMATIVA --------------------------------------
@@ -282,3 +291,22 @@ class Digesto:
         cur.execute('delete from digesto.related where normative_id = %s',(id,))
         # elimino la normativa
         cur.execute('delete from digesto.normative where id = %s',(id,))
+
+
+    # -----------------------------------------------------------------------------------
+    # ---------------------------------- OTROS ------------------------------------------
+    # -----------------------------------------------------------------------------------
+
+    '''
+        Retorna los tipos de emisores posibles de acuerdo al tipo de normativa: ORDINANCE | RESOLUTION | REGULATION
+    '''
+    def loadIssuers(self,con,type):
+        if type is None:
+            return []
+        ids = issuers.get(type, [])
+        offices = []
+        for id in ids:
+            o = self.offices.findOffice(con,id)
+            if o is not None:
+                offices.append(o)
+        return offices
