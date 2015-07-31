@@ -15,6 +15,8 @@ class Profiles:
 
     def _checkUserProfile(self,con,userId,roles):
 
+        logging.debug('chequeando permisos del userId = {}, roles = {}'.format(userId,roles))
+
         try:
             cur = con.cursor()
             cur.execute('select profile from credentials.auth_profile where user_id = %s',(userId,))
