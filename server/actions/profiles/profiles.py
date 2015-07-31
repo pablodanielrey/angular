@@ -45,11 +45,12 @@ class CheckAccess:
     profile_list = message['profiles']
     role_list = profile_list.split(',')
 
-    import pdb
-    pdb.set_trace()
     try:
         """ chequeo tener permiso como usuario como minimo """
         sid = message['session']
+
+        loggin.debug('chequeando permisos para el sid = {}, lista de roles a chequear = {}'.format(sid,role_list))
+
         self.profiles.checkAccess(sid,role_list)
 
         response = {'id':message['id'], 'ok':'', 'response':'granted'}
