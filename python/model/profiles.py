@@ -55,7 +55,7 @@ class Profiles:
         if 'USER' in roles:
             return True;
 
-        self._checkUserProfile(con,user_id,roles)
+        return self._checkUserProfile(con,user_id,roles)
 
 
 
