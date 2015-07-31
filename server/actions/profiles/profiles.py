@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import inject
+import inject, logging
 
 from model.profiles import Profiles
 from model.config import Config
@@ -49,7 +49,7 @@ class CheckAccess:
         """ chequeo tener permiso como usuario como minimo """
         sid = message['session']
 
-        loggin.debug('chequeando permisos para el sid = {}, lista de roles a chequear = {}'.format(sid,role_list))
+        logging.debug('chequeando permisos para el sid = {}, lista de roles a chequear = {}'.format(sid,role_list))
 
         self.profiles.checkAccess(sid,role_list)
 
