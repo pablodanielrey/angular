@@ -1,5 +1,6 @@
 <!-- <div class='createRegulationContainer' ng-controller='createRegulation'>  -->
 <div class="createRegulation {{getStyleName()}}">
+
   <div class='createRegulationContainer'>
       <div class='contentScreens'>
 
@@ -162,15 +163,208 @@
 
       </div>
 
-       <div class="privadaDeGrupos">
-            <div class="container">
-                <div class="content">
-                    PANTALLA PARA SELECCIONAR LAS OFICINAS
-                </div>
-            </div>
-      </div>
+      <!-- *******************************************************************
+      ***************** PANTALLA PRIVADA DE GRUPOS ***************************
+      ******************************************************************** -->
+       <div class="relacionDeNorma">
+         <div class="contentSearchRegulation">
+             <div class="contentSearch">
+                 <div class=search>
+                     <div class="inputSearchContent">
+                       <form class="form-wrapper cf">
+                           <input type="text" placeholder="Buscar norma..." required>
+                           <button type="submit">Buscar</button>
+                       </form>
+                   </div>
 
-      <div class="relacionDeNorma">
+                     <!-- <div>
+                         <h1>BUSCAR NORMA</h1>
+                     </div> -->
+                     <!-- <div class="inputSearchContent">
+                         <div class="iconSearch"><i class="fa fa-search"></i></div>
+                         <div><input class="inputSearch" type="search"></div>
+                         <div><button class="btnSearch">BUSCAR</button></div>
+                     </div>
+                     <div>
+
+                     </div> -->
+                 </div>
+                 <div class="filters">
+                     <div class="iconFilters">
+                         <i class="fa fa-sliders"></i>
+                     </div>
+
+                     <div class="itemsFilters">
+                         <div>
+                             <select>
+                               <option>Ordenanza</option>
+                               <option>Resolución</option>
+                               <option>Dispocición</option>
+                             </select>
+                         </div>
+                         <div>
+                           Norma
+                         </div>
+                     </div>
+
+                     <div class="itemsFilters">
+                         <div>
+                           <select>
+                             <option>2015</option>
+                             <option>2014</option>
+                             <option>2013</option>
+                             <option>2012</option>
+                             <option>2011</option>
+                             <option>2010</option>
+                           </select>
+                         </div>
+                         <div>
+                           Año
+                         </div>
+                     </div>
+
+                     <div class="itemsFilters">
+                         <div>
+                           <input type="text"></input>
+                         </div>
+                         <div>
+                           Nº Norma
+                         </div>
+                     </div>
+
+                     <div class="itemsFilters">
+                         <div>
+                             <input type="text"></input>
+                         </div>
+                         <div>
+                           Nº Expediente
+                         </div>
+                     </div>
+
+                     <div class="itemsFilters">
+                     <div>
+                         <select>
+                           <option>Decano</option>
+                           <option>Vicedecano</option>
+                         </select>
+                     </div>
+                     <div>
+                       Emisor
+                     </div>
+                     </div>
+
+                     <div class="itemsFilters">
+                         <div>
+                             <select>
+                               <option>Aprobada</option>
+                               <option>Pendiente</option>
+                             </select>
+                         </div>
+                         <div>
+                           Estado
+                         </div>
+                     </div>
+
+                     <div class="itemsFilters">
+                         <div>
+                             <select>
+                               <option>Público</option>
+                               <option>Privado</option>
+                             </select>
+                         </div>
+                         <div>
+                           Visibilidad
+                         </div>
+                     </div>
+
+
+               </div>
+             </div>
+             <div class="contentSearch2">
+               <div>
+                   <h1>RESULTADOS DE BUSQUEDA</h1>
+               </div>
+               <div class="row1">
+                   <div class="col1 col-span-1">TIPO</div>
+                   <div class="col1 col-span-1">NÚMERO</div>
+                   <div class="col1 col-span-1">EXPEDIENTE</div>
+                   <div class="col1 col-span-1">EMISOR</div>
+                   <div class="col1 col-span-1">ACCION</div>
+               </div>
+
+               <div class="results">
+
+                     <div>
+                         <div class="row3">
+
+                             <div class="col3 col-span-1"><i class="fa fa-file-text"></i>&nbsp; Resolución</div>
+                             <div class="col col-span-1">025/15</div>
+                             <div class="col col-span-1">900-1236/15</div>
+                             <div class="col col-span-1">Decanato</div>
+                             <div class="col6 col-span-1"><button class="btnSeleccionar"><i class="fa fa-hand-o-left"></i>&nbsp; SELECCIONAR</button></div>
+                         </div>
+                         <div class="row4">
+                             <div class="col col-span-2">Curso de Capacitación en Informática para el personal no docente de la Facultad</div>
+                         </div>
+                     </div>
+                     <div>
+                         <div class="row">
+                             <div class="col4 col-span-1"><i class="fa fa-file-text"></i>&nbsp; Ordenanza</div>
+                             <div class="col col-span-1">025/15</div>
+                             <div class="col col-span-1">900-1236/15</div>
+                             <div class="col col-span-1">Decanato</div>
+                             <div class="col6 col-span-1"><button class="btnSeleccionar"><i class="fa fa-hand-o-left"></i>&nbsp; SELECCIONAR</button></div>
+                         </div>
+                         <div class="row2">
+                             <div class="col col-span-2">Curso de Capacitación en Informática para el personal no docente de la Facultad</div>
+                         </div>
+                     </div>
+                     <div>
+                         <div class="row3">
+                             <div class="col5 col-span-1"><i class="fa fa-file-text"></i>&nbsp; Disposición</div>
+                             <div class="col col-span-1">025/15</div>
+                             <div class="col col-span-1">900-1236/15</div>
+                             <div class="col col-span-1">Decanato</div>
+                             <div class="col6 col-span-1"><button class="btnSeleccionar"><i class="fa fa-hand-o-left"></i>&nbsp; SELECCIONAR</button></div>
+                         </div>
+                         <div class="row4">
+                             <div class="col col-span-2">Curso de Capacitación en Informática para el personal no docente de la Facultad</div>
+                         </div>
+                     </div>
+                     <div>
+                         <div class="row">
+                             <div class="col4 col-span-1"><i class="fa fa-file-text"></i>&nbsp; Odenanza</div>
+                             <div class="col col-span-1">025/15</div>
+                             <div class="col col-span-1">900-1236/15</div>
+                             <div class="col col-span-1">Decanato</div>
+                             <div class="col6 col-span-1"><button class="btnSeleccionar"><i class="fa fa-hand-o-left"></i>&nbsp; SELECCIONAR</button></div>
+                         </div>
+                         <div class="row2">
+                             <div class="col col-span-2">Curso de Capacitación en Informática para el personal no docente de la Facultad</div>
+                         </div>
+                     </div>
+                     <div>
+                         <div class="row">
+                             <div class="col4 col-span-1"><i class="fa fa-file-text"></i>&nbsp; Odenanza</div>
+                             <div class="col col-span-1">025/15</div>
+                             <div class="col col-span-1">900-1236/15</div>
+                             <div class="col col-span-1">Decanato</div>
+                             <div class="col6 col-span-1"><button class="btnSeleccionar"><i class="fa fa-hand-o-left"></i>&nbsp; SELECCIONAR</button></div>
+                         </div>
+                         <div class="row2">
+                             <div class="col col-span-2">Curso de Capacitación en Informática para el personal no docente de la Facultad</div>
+                         </div>
+                     </div>
+               </div>
+             </div>
+         </div>
+       </div>
+
+      <!-- *******************************************************************
+      ***************** PANTALLA RELACION DE NORMA ***************************
+      ******************************************************************** -->
+
+      <div class="privadaDeGrupos">
            <div class="container">
                <div class="content">
                    PANTALLA PARA HACER RELACION DE NORMA

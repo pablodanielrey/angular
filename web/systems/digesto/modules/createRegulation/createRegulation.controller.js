@@ -19,7 +19,7 @@ function CreateRegulationCtrl($rootScope, $scope, $location, $window, $timeout, 
     $scope.visual = {
       regulationIndex: 0,
       regulationName: ['','ORDENANZA','RESOLUCIÓN','DISPOSICIÓN','ORDENANZA','RESOLUCIÓN','DISPOSICIÓN',''],
-      styleNames: ['menu','screenOrdenanza','screenResolucion','screenDisposicion','screenOrdenanzaFinal','screenResolucionFinal','screenDisposicionFinal','screenPrivadaDeGrupos','screenRelacionDeNorma']
+      styleNames: ['menu','screenOrdenanza','screenResolucion','screenDisposicion','screenOrdenanzaFinal','screenResolucionFinal','screenDisposicionFinal','screenPrivadaDeGrupos','screenRelacionDeNorma','screenRelacionDeNormaFinal']
     };
 
     /*ordenanza => ordinance

@@ -58,6 +58,16 @@
   top: 0px;
 }
 
+.createRegulation.screenRelacionDeNormaFinal .relacionDeNorma{
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);;
+
+  position: absolute;
+  top: 0px;
+}
+
+
 
 
 
@@ -373,4 +383,379 @@
   padding:5px;
   margin-left:10px;
   margin-right:10px;
+}
+
+
+
+
+/***********************************************************************
+***********************************************************************
+******** pantalla seleccionar norma  **************************
+***************************************************************/
+
+.createRegulation .searchRegulationContainer h1 {
+  font-size: 1em;
+  margin-bottom: 1em;
+}
+
+
+.createRegulation .inputSearchContent {
+  padding: 10px;
+  margin-bottom: 20px;
+  /*background-color: #5c5f69;*/
+  width: 100%;
+
+
+}
+
+.createRegulation .iconSearch {
+  color:white;
+  padding: 3px;
+}
+.createRegulation .inputSearch {
+
+  margin-left: 20px;
+  width: 400px;
+  padding: 5px;
+  font-size: 1.2em;
+  border:none;
+}
+
+.createRegulation .searchRegulationContainer {
+  height:100%;
+  width:100%;
+  position:absolute;
+  overflow:hidden;
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.createRegulation .btnSearch {
+  margin-left: 10px;
+  padding: 7px;
+  background-color: #0066A6;
+  color:white;
+  border: none;
+  border-radius: 2px;
+  border:solid 1px grey;
+  cursor: pointer;
+}
+
+.createRegulation .btnSeleccionar {
+  margin-left: 0px;
+
+  background-color: #0066A6;
+  color:white;
+  border: none;
+  padding: 5px;
+
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+}
+
+
+.createRegulation .contentSearchRegulation {
+  padding: 20px;
+}
+
+
+.createRegulation .contentSearch {
+
+  background-color:white;
+  -webkit-box-shadow: 1px 1px 5px #5c5f69;
+  -moz-box-shadow: 5px 5px 5px #5c5f69;
+  border-radius:2px;
+  -webkit-border-radius:2px;
+  -moz-border-radius:2px;
+  padding: 20px;
+  width: 82%;
+  margin-bottom: 20px;
+}
+
+.createRegulation .contentSearch2 {
+
+  background-color:white;
+  -webkit-box-shadow: 1px 1px 5px #5c5f69;
+  -moz-box-shadow: 5px 5px 5px #5c5f69;
+  border-radius:2px;
+  -webkit-border-radius:2px;
+  -moz-border-radius:2px;
+  padding: 20px;
+  width: 82%;
+  margin-bottom: 20px;
+}
+
+.createRegulation.screenRelacionDeNorma .contentSearch2 {
+  /*display: none;*/
+}
+
+
+.createRegulation .filters {
+  background-color: #eeeeee;
+  padding: 5px;
+}
+
+.createRegulation .iconFilters {
+
+}
+
+
+
+
+.createRegulation .row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  background-color: #eeeeee;
+
+
+}
+.createRegulation .row1 {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  background-color: #5c5f69;
+  margin-bottom: 1%;
+
+}
+.createRegulation .row2 {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  margin-bottom: 1%;
+
+}
+.createRegulation .row3 {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  background-color: #eeeeee;
+
+
+}
+.createRegulation .row4 {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  background-color: #FFFFFF;
+  margin-bottom: 1%;
+
+}
+
+.createRegulation .col {
+
+  flex: 1 1 8%;
+  margin: 0 0 0 0;
+  padding: 0.5em ;
+  box-sizing: border-box;
+  background-clip: content-box;
+  border: 1px solid rgba(0,0,0,0.1);
+  align-items: center;
+  justify-content: center;
+}
+
+.createRegulation .col2 {
+  display: flex;
+  flex: 1 1 8%;
+  margin: 10 0 0 0;
+  color: white;
+
+  box-sizing: border-box;
+  background-clip: content-box;
+  border: 1px solid rgba(0,0,0,0.1);
+  align-items: center;
+  justify-content: center;
+
+}
+
+.createRegulation .col3 {
+  display: flex;
+  flex: 1 1 8%;
+  margin: 0 0 0 0;
+  color: white;
+  background-color: #e43e46;
+  box-sizing: border-box;
+  background-clip: content-box;
+  border: 1px solid rgba(0,0,0,0.1);
+  align-items: center;
+  justify-content: center;
+
+}
+.createRegulation .col4 {
+  display: flex;
+  flex: 1 1 8%;
+  margin: 0 0 0 0;
+
+  color: white;
+  background-color: #ec9122;
+  box-sizing: border-box;
+  background-clip: content-box;
+  border: 1px solid rgba(0,0,0,0.1);
+  align-items: center;
+  justify-content: center;
+
+}
+.createRegulation .col5 {
+  display: flex;
+  flex: 1 1 8%;
+  margin: 0 0 0 0;
+
+  color: white;
+  background-color: #128c78;
+  box-sizing: border-box;
+  background-clip: content-box;
+  border: 1px solid rgba(0,0,0,0.1);
+  align-items: center;
+  justify-content: center;
+}
+
+.createRegulation .col6 {
+  display: flex;
+  flex: 1 1 8%;
+  margin: 0 0 0 0;
+  background-color: #0066A6;
+  box-sizing: border-box;
+  background-clip: content-box;
+  border: 1px solid rgba(0,0,0,0.1);
+  align-items: center;
+  justify-content: center;
+}
+
+
+.createRegulation .col1 {
+  flex: 1 1 8%;
+  margin: 0 0 0 0;
+  padding: 0.5em;
+  box-sizing: border-box;
+  color: white;
+  background-clip: content-box;
+  border: 1px solid rgba(0,0,0,0.1);
+}
+
+.createRegulation .col-span-1 {
+  flex-basis: 8.3333%;
+}
+.createRegulation .col-span-2 {
+  flex-basis: 10px;
+}
+.createRegulation .results {
+  overflow-y: scroll;
+  height: 360px;
+}
+
+
+
+
+.createRegulation .cf:before, .cf:after{
+    content:"";
+    display:table;
+}
+
+.createRegulation .cf:after{
+    clear:both;
+}
+
+.createRegulation .cf{
+    zoom:1;
+}
+
+/* Form wrapper styling */
+.createRegulation .form-wrapper {
+    width: 450px;
+    padding: 15px;
+    margin: 10px auto 10px auto;
+    background: #5c5f69;
+    background: rgba(0,0,0);
+    border-radius: 10px;
+    box-shadow: 0 1px 1px rgba(0,0,0,.4) inset, 0 1px 0 rgba(255,255,255,.2);
+}
+
+/* Form text input */
+
+.createRegulation .form-wrapper input {
+    width: 330px;
+    height: 20px;
+    padding: 10px 5px;
+    float: left;
+    font: bold 15px 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    border: 0;
+    background: #eee;
+    border-radius: 3px 0 0 3px;
+}
+
+.createRegulation .form-wrapper input:focus {
+    outline: 0;
+    background: #fff;
+    box-shadow: 0 0 2px rgba(0,0,0,.8) inset;
+}
+
+.createRegulation .form-wrapper input::-webkit-input-placeholder {
+   color: #999;
+   font-weight: normal;
+   font-style: italic;
+}
+
+.createRegulation .form-wrapper input:-moz-placeholder {
+    color: #999;
+    font-weight: normal;
+    font-style: italic;
+}
+
+.createRegulation .form-wrapper input:-ms-input-placeholder {
+    color: #999;
+    font-weight: normal;
+    font-style: italic;
+}
+
+/* Form submit button */
+.createRegulation .form-wrapper button {
+    overflow: visible;
+    position: relative;
+    float: right;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    height: 40px;
+    width: 110px;
+    font: bold 15px/40px 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    color: #fff;
+    text-transform: uppercase;
+    background: #0066A6;
+    border-radius: 0 3px 3px 0;
+    text-shadow: 0 -1px 0 rgba(0, 0 ,0, .3);
+}
+
+.createRegulation .form-wrapper button:hover{
+    background: #0066A6;
+}
+
+.createRegulation .form-wrapper button:active,
+.createRegulation .form-wrapper button:focus{
+    background: #0066A6;
+    outline: 0;
+}
+
+.createRegulation .form-wrapper button:before { /* left arrow */
+    content: '';
+    position: absolute;
+    border-width: 8px 8px 8px 0;
+    border-style: solid solid solid none;
+    border-color: transparent #0066A6 transparent;
+    top: 12px;
+    left: -6px;
+}
+
+.createRegulation .form-wrapper button:hover:before{
+    border-right-color: #0066A6;
+}
+
+.createRegulation .form-wrapper button:focus:before,
+.createRegulation .form-wrapper button:active:before{
+        border-right-color: #0066A6;
+}
+
+.createRegulation .form-wrapper button::-moz-focus-inner { /* remove extra button spacing for Mozilla Firefox */
+    border: 0;
+    padding: 0;
 }
