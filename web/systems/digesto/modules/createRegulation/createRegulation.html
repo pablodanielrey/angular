@@ -9,16 +9,16 @@
                     <div class="content">
                         <div><h1>CREAR NUEVA</h1></div>
                         <div class="regulations">
-                            <div class="btc3x c2" ng-click = "selectRegulation(1)">
+                            <div class="btc3x c2" ng-click = "createOrdinance()">
                                 <div><i class="fa fa-file-text fa-3x"></i></div>
                                 <div>ORDENANZA</div>
                             </div>
 
-                            <div class="btc3x c3" ng-click = "selectRegulation(2)">
+                            <div class="btc3x c3" ng-click = "createResolution()">
                                 <div><i class="fa fa-file-text fa-3x"></i></div>
                                 <div>RESOLUCIÓN</div>
                             </div>
-                            <div class="btc3x c4" ng-click = "selectRegulation(3)">
+                            <div class="btc3x c4" ng-click = "createRegulation()">
                                 <div><i class="fa fa-file-text fa-3x"></i></div>
                                 <div>DISPOSICIÓN</div>
                             </div>
@@ -88,16 +88,14 @@
                           </div>
                           <div class="ContentEstado">
                               <div>
-                                  <select class="inputRegulationOne">
-                                      <option> Pendiente</option>
-                                      <option> Aprobado</option>
+                                  <select class="inputRegulationOne" ng-model='model.normative.status' ng-options='item.name for item in model.status'>
                                   </select>
                               </div>
                               <div>
                                   <span class="titleInputRegulation">Estado</span>
                               </div>
                           </div>
-                          <div class="contentAprobado tam1">
+                          <div class="contentAprobado tam1" ng-if="viewDateStatus()">
                              <div>
                                  <input class="inputRegulationOne" type="date">
                              </div>
@@ -107,10 +105,7 @@
                          </div>
                           <div class="ContentVisivilidad">
                               <div>
-                                  <select class="inputRegulationOne" ng-model='model.visibility'>
-                                      <option value='public'> Pública</option>
-                                      <option value='private'> Privada</option>
-                                      <option value='groupPrivate'> Privada de Grupos</option>
+                                  <select class="inputRegulationOne" ng-model='model.normative.visibility' ng-options='item.name for item in model.visibilities' ng-change='changeVisibility()'>
                                   </select>
                               </div>
                               <div>

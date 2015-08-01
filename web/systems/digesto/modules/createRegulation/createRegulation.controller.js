@@ -16,7 +16,7 @@ function CreateRegulationCtrl($rootScope, $scope, $location, $window, $timeout, 
       status:[]
     }
 
-    $scope.visual = {
+    $scope.view = {
       regulationIndex: 0,
       regulationName: ['','ORDENANZA','RESOLUCIÓN','DISPOSICIÓN','ORDENANZA','RESOLUCIÓN','DISPOSICIÓN',''],
       styleNames: ['menu','screenOrdenanza','screenResolucion','screenDisposicion','screenOrdenanzaFinal','screenResolucionFinal','screenDisposicionFinal','screenPrivadaDeGrupos','screenRelacionDeNorma','screenRelacionDeNormaFinal']
@@ -32,6 +32,8 @@ function CreateRegulationCtrl($rootScope, $scope, $location, $window, $timeout, 
     $scope.selectRegulation = selectRegulation;
     $scope.getRegulationName = getRegulationName;
     $scope.getStyleName = getStyleName;
+    $scope.changeVisibility = changeVisibility;
+    $scope.viewDateStatus = viewDateStatus;
 
     $scope.initialize = initialize;
     $scope.initializeOrdinance = initializeOrdinance;
@@ -47,17 +49,30 @@ function CreateRegulationCtrl($rootScope, $scope, $location, $window, $timeout, 
     // ----------------------------------------------------------
 
     function selectRegulation(i) {
-        $scope.visual.regulationIndex = i;
+        $scope.view.regulationIndex = i;
     }
 
     function getRegulationName() {
-      var t = $scope.model.regulationName[$scope.model.regulationIndex];
+      var t = $scope.view.regulationName[$scope.view.regulationIndex];
       return t;
     }
 
     function getStyleName() {
-      var t = $scope.model.styleNames[$scope.model.regulationIndex];
+      var t = $scope.view.styleNames[$scope.view.regulationIndex];
       return t;
+    }
+
+    function changeVisibility() {
+      if ($scope.model.normative.visibility.value == 'GROUPPRIVATE') {
+        $scope.selectRegulation(7);
+      }
+    }
+
+    function viewDateStatus() {
+      if (($scope.model.normative == null) || !($scope.model.normative.status)) {
+        return false;
+      }
+      return $scope.model.normative.status.value == 'APPROVED';
     }
 
     // -------------------------------------------------------------
@@ -71,7 +86,7 @@ function CreateRegulationCtrl($rootScope, $scope, $location, $window, $timeout, 
     // -------------------------------------------------------------
     function initialize() {
       $scope.model.visibilities = [{value:'PUBLIC',name:'Pública'},{value:'PRIVATE',name:'Privada'},{value:'GROUPPRIVATE',name:'Privada de Grupos'}];
-      $scome.model.status = [{value:'APPROVED',name:'Aprobado'},{value:'PENDING',name:'Pendiente'}]
+      $scope.model.status = [{value:'APPROVED',name:'Aprobado'},{value:'PENDING',name:'Pendiente'}]
     }
 
     function initializeOrdinance() {
@@ -110,18 +125,42 @@ function CreateRegulationCtrl($rootScope, $scope, $location, $window, $timeout, 
     // ----------------- CREACION DE NORMATIVAS --------------------
     // -------------------------------------------------------------
 
+    function findVisibility(v) {
+      for (var i = 0; i < $scope.model.visibilities.length; i++) {
+        if ($scope.model.visibilities[i].value == v) {
+          return $scope.model.visibilities[i];
+        }
+      }
+      return null;
+    }
+
+    function findStatus(s) {
+      for (var i = 0; i < $scope.model.status.length; i++) {
+        if ($scope.model.status[i].value == s) {
+          return $scope.model.status[i];
+        }
+      }
+      return null;
+    }
+
     function createOrdinance() {
-      loadDataNormative($scope.model.issuersOrdinance,'ORDINANCE','APPROVED','PUBLIC');
+      var status = findStatus('APPROVED');
+      var visibility = findVisibility('PUBLIC');
+      loadDataNormative($scope.model.issuersOrdinance,'ORDINANCE',status,visibility);
       $scope.selectRegulation(1);
     }
 
-    function createRegulation() {
-      loadDataNormative($scope.model.issuersRegulation,'REGULATION','APPROVED','PUBLIC');
+    function createResolution() {
+      var status = findStatus('PENDING');
+      var visibility = findVisibility('PRIVATE');
+      loadDataNormative($scope.model.issuersResolution,'RESOLUTION',status,visibility);
       $scope.selectRegulation(2);
     }
 
-    function createResolution() {
-      loadDataNormative($scope.model.issuersResolution,'RESOLUTION','PENDING','PRIVATE');
+    function createRegulation() {
+      var status = findStatus('APPROVED');
+      var visibility = findVisibility('PUBLIC');
+      loadDataNormative($scope.model.issuersRegulation,'REGULATION',status,visibility);
       $scope.selectRegulation(3);
     }
 
@@ -143,7 +182,7 @@ function CreateRegulationCtrl($rootScope, $scope, $location, $window, $timeout, 
 
 
     $scope.save = function() {
-      $scope.model.regulationIndex = $scope.model.regulationIndex + 3;
+      $scope.view.regulationIndex = $scope.view.regulationIndex + 3;
       console.log($scope.model.regulationIndex);
     }
 
