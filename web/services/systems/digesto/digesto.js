@@ -18,4 +18,18 @@ function Digesto($rootScope,$wamp) {
       callbackError('Error!!!');
     };
   };
+
+
+  this.loadIssuers = function(type,callbackOk,callbackError) {
+    $wamp.call('digesto.digesto.loadIssuers',[type])
+    .then(function(issuers) {
+      if (issuers != null) {
+        callbackOk(issuers);
+      } else {
+        callbackError('Error');
+      }
+    }),function(error) {
+      callbackError('Error')
+    };
+  };
 }

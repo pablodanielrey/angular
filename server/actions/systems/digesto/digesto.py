@@ -33,6 +33,7 @@ class WampDigesto(ApplicationSession):
     def onJoin(self, details):
         logging.debug('registering methods')
         yield from self.register(self.createNormative_async,'digesto.digesto.createNormative')
+        yield from self.register(self.loadIssuers_async,'digesto.digesto.loadIssuers')
 
     def _getDatabase(self):
         host = self.serverConfig.configs['database_host']
@@ -56,6 +57,23 @@ class WampDigesto(ApplicationSession):
         try:
             loop = asyncio.get_event_loop()
             yield from loop.run_in_executor(None,self.createNormative,normative,status,visibility,relateds,file)
+
+        except Exception as e:
+            logging.exception(e)
+            return None
+
+    def loadIssuers(self,type):
+        con = self._getDatabase()
+        try:
+            return self.digesto.loadIssuers(con,type)
+        finally:
+            con.close()
+
+    @coroutine
+    def loadIssuers_async(self,type):
+        try:
+            loop = asyncio.get_event_loop()
+            yield from loop.run_in_executor(None,self.loadIssuers,type)
 
         except Exception as e:
             logging.exception(e)
