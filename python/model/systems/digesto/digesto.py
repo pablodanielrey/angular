@@ -13,7 +13,27 @@ class Digesto:
         resolución => resolution
         disposicion => regulation
     '''
-    issuers = {'REGULATION':[],'RESOLUTION':[],'ORDINANCE':[]}
+    issuers = {
+        'REGULATION':[
+                '0bf25a58-15b0-40cc-861c-789480728d79',
+                '2d0e035b-7cbd-4008-a3bc-13f101478de3',
+                '47e03cc7-6c6e-425b-ad9b-f2fa60b2b2a1',
+                '7ed358ce-208f-409f-99ca-96f971aa5400',
+                '79a1ac02-70fb-487d-9727-2771aff2c5f5',
+                '769ca706-c5e7-4b76-b16a-cec933cfb4f3',
+                '9ad5cdaf-a323-4c88-a030-cf901ffe341f',
+                'f34f0917-f1af-4cbc-8ce8-e4b6dfd77b5d',
+                'a645e297-cc8e-43eb-a0a9-ce3484cc80d6'
+                ],
+        'RESOLUTION':[
+                '0bf25a58-15b0-40cc-861c-789480728d79',
+                'a07fbca6-d068-4bfb-94d7-9699d864d4c3'
+                ],
+        'ORDINANCE':[
+                '0bf25a58-15b0-40cc-861c-789480728d79',
+                'a07fbca6-d068-4bfb-94d7-9699d864d4c3'
+            ]
+        }
 
     # -----------------------------------------------------------------------------------
     # --------------------- ESTADO DE LA NORMATIVA --------------------------------------
@@ -140,10 +160,6 @@ class Digesto:
 
 
     def createNormative(self,con,normative,status,visibility,relateds,file):
-
-
-        import pdb
-        pdb.set_trace()
 
         if normative is None:
             return None
@@ -303,10 +319,10 @@ class Digesto:
     def loadIssuers(self,con,type):
         if type is None:
             return []
-        ids = issuers.get(type, [])
+        ids = self.issuers.get(type, [])
         offices = []
         for id in ids:
-            o = self.offices.findOffice(con,id)
-            if o is not None:
-                offices.append(o)
+            office = self.offices.findOffice(con,id)
+            if office is not None:
+                offices.append(office)
         return offices

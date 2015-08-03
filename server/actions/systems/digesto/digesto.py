@@ -56,8 +56,8 @@ class WampDigesto(ApplicationSession):
     def createNormative_async(self,normative,status,visibility,relateds,file):
         try:
             loop = asyncio.get_event_loop()
-            yield from loop.run_in_executor(None,self.createNormative,normative,status,visibility,relateds,file)
-
+            r = yield from loop.run_in_executor(None,self.createNormative,normative,status,visibility,relateds,file)
+            return r
         except Exception as e:
             logging.exception(e)
             return None
@@ -73,7 +73,8 @@ class WampDigesto(ApplicationSession):
     def loadIssuers_async(self,type):
         try:
             loop = asyncio.get_event_loop()
-            yield from loop.run_in_executor(None,self.loadIssuers,type)
+            r = yield from loop.run_in_executor(None,self.loadIssuers,type)
+            return r
 
         except Exception as e:
             logging.exception(e)
