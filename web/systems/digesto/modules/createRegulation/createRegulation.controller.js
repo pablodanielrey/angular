@@ -34,6 +34,7 @@ function CreateRegulationCtrl($rootScope, $scope, $location, $window, $timeout, 
     $scope.getStyleName = getStyleName;
     $scope.changeVisibility = changeVisibility;
     $scope.viewDateStatus = viewDateStatus;
+    $scope.back = back;
 
     $scope.initialize = initialize;
     $scope.initializeOrdinance = initializeOrdinance;
@@ -73,6 +74,18 @@ function CreateRegulationCtrl($rootScope, $scope, $location, $window, $timeout, 
         return false;
       }
       return $scope.model.normative.status.value == 'APPROVED';
+    }
+
+    function back() {
+      if ($scope.model.normative == null || !$scope.model.normative.type) {
+        return;
+      }
+      switch ($scope.model.normative.type) {
+        case 'ORDINANCE':$scope.selectRegulation(1);break;
+        case 'RESOLUTION':$scope.selectRegulation(2);break;
+        case 'REGULATION':$scope.selectRegulation(3);break;
+        default:$scope.selectRegulation(0);break;
+      }
     }
 
     // -------------------------------------------------------------

@@ -299,6 +299,8 @@
 
 
 
+
+
 /*  ------------------------------------------------------------------------
     -------------------- ORDENANZA -----------------------------------------
     ------------------------------------------------------------------------
@@ -336,6 +338,15 @@
 
 .createRegulation.screenResolucion {
 
+}
+
+.createRegulation .contentAprobado.hidden {
+  visibility: hidden;
+  /*display:none;*/
+}
+
+.createRegulation .contentAprobado {
+  visibility: visible;
 }
 
 .createRegulation.screenResolucionFinal .dataThree  {
