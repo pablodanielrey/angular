@@ -48,7 +48,7 @@
                       <div class="dataOne">
                            <div class="contentdataImput tam1">
                               <div>
-                                  <input class="inputRegulationOne" type="date">
+                                  <input class="inputRegulationOne" type="date" ng-model="model.normative.created">
                               </div>
                               <div>
                                   <span class="titleInputRegulation">Fecha</span>
@@ -56,7 +56,7 @@
                           </div>
                           <div class="contentdataImput tam2">
                               <div>
-                                  <input class="inputRegulationOne" type="number" min="0">
+                                  <input class="inputRegulationOne" type="number" min="0" ng-model="model.normative.file_number">
                               </div>
                               <div>
                                   <span class="titleInputRegulation"> Número</span>
@@ -64,7 +64,7 @@
                           </div>
                           <div class="contentdataImput tam3">
                               <div>
-                                  <input class="inputRegulationOne" type="number"  placeholder="ej: 900-11111/15">
+                                  <input class="inputRegulationOne" type="text" ng-model="model.normative.normative_number_full"  placeholder="ej: 900-11111/15">
                               </div>
                               <div>
                                   <span class="titleInputRegulation"> Expediente</span>
@@ -116,7 +116,7 @@
                             <div class="contentImputDataOne">
                                 <div>
                                     <div >
-                                      <input class="inputFile" type="file"/>
+                                      <input class="inputFile" type="file" ng-model="model.normative.file"/>
                                     </div>
                                     <div class="titleImputData">
                                         <p class="titleRCD"> Cargar PDF</p>

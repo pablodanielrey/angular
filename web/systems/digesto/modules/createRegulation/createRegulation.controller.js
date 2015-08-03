@@ -108,7 +108,6 @@ function CreateRegulationCtrl($rootScope, $scope, $location, $window, $timeout, 
     function initializeOrdinance() {
       Digesto.loadIssuers('ORDINANCE',
           function(issuers) {
-            console.log(issuers);
             $scope.model.issuersOrdinance = issuers;
           },
           function(error) {
@@ -185,22 +184,29 @@ function CreateRegulationCtrl($rootScope, $scope, $location, $window, $timeout, 
       $scope.model.issuers = issuers;
       $scope.model.normative = {};
       $scope.model.normative.issuer = (issuers.length > 0)?issuers[0]:null;
+      $scope.model.normative.issuer_id = (issuers.length > 0)?issuers[0].id:null;
       $scope.model.normative.type = type;
       $scope.model.normative.file_number = null;
-      $scope.model.normative.normative_number = null;
-      $scope.model.normative.year = null;
+      $scope.model.normative.normative_number_full = null;
       $scope.model.normative.created = new Date();
       $scope.model.normative.extract = '';
       $scope.model.normative.status = status;
       $scope.model.normative.visibility = visibility;
       $scope.model.normative.relateds = [];
+      $scope.model.normative.file = "";
     }
 
 
 
     $scope.save = function() {
+      // falta verificar que este bien formateado el expediente
+      var number = $scope.model.normative.normative_number_full;
+      var array = number.split('/');
+      $scope.model.normative.normative_number = array[0]
+      $scope.model.normative.year = array[1]
+
       $scope.view.regulationIndex = $scope.view.regulationIndex + 3;
-      console.log($scope.model.regulationIndex);
+      console.log($scope.model.normative);
     }
 
 
