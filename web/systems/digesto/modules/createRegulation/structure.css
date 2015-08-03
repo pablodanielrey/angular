@@ -205,3 +205,55 @@
   -webkit-flex-direction:column; /* Safari */
   -moz-flex-direction:column; /* mozilla */
 }
+
+/********************************************
+******** PANTALLA PERMISO DE GRUPOS *********
+********************************************/
+
+.createRegulation .contentOffices {
+  display:flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  justify-content: space-between;
+  -webkit-flex-justify-content: space-between;
+  -moz-flex-justify-content: space-between;
+}
+
+.createRegulation .itmesOffices {
+  display:flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  justify-content: space-between;
+  -webkit-flex-justify-content: space-between;
+  -moz-flex-justify-content: space-between;
+}
+
+.createRegulation .titlesPermission {
+  display:flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  justify-content: space-between;
+  -webkit-flex-justify-content: space-between;
+  -moz-flex-justify-content: space-between;
+}
+
+.createRegulation .officesPermission {
+  display:flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  justify-content: space-between;
+  -webkit-flex-justify-content: space-between;
+  -moz-flex-justify-content: space-between;
+}

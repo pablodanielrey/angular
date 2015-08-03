@@ -1,3 +1,5 @@
+
+
 .createRegulation {
 
 }
@@ -758,4 +760,81 @@
 .createRegulation .form-wrapper button::-moz-focus-inner { /* remove extra button spacing for Mozilla Firefox */
     border: 0;
     padding: 0;
+}
+
+
+
+/********************************************
+******** PANTALLA PERMISO DE GRUPOS *********
+********************************************/
+
+.createRegulation .contentOffices {
+  width: 70%;
+  margin: 0 auto;
+}
+
+.createRegulation .contentInt {
+  background-color: #eeeeee;
+  padding: 10px;
+  border-top: 3px solid #5c5f69;
+
+}
+
+.createRegulation .btnVolver {
+  border: none;
+  padding: 17px;
+  background-color: #0066A6;
+  color: white;
+  cursor: pointer;
+}
+
+.createRegulation .btnVolver:hover {
+  background-color: #275276;
+  border: none;
+  padding: 17px;
+  color: white;
+  cursor: pointer;
+}
+
+.createRegulation .inputSearchOffices {
+  padding: 2px;
+  font-size: 1.1em;
+  margin-bottom: 15px;
+}
+
+.createRegulation .listOffices {
+}
+
+.createRegulation .itmesOffices {
+  background-color: white;
+  padding: 5px;
+  margin-bottom: 3px;
+  cursor: pointer;
+}
+
+.createRegulation .itmesOffices:hover {
+  background-color: #0066A6;
+  color:white;
+  padding: 5px;
+
+}
+
+.createRegulation .titlesPermission {
+  font-size: 0.8em;
+  color:#5c5f69;
+  margin-bottom: 5px;
+}
+
+.createRegulation .officesPermission {
+  background-color: white;
+  padding: 5px;
+  margin-bottom: 3px;
+  cursor: pointer;
+}
+
+.createRegulation .officesPermission:hover {
+  background-color: #0066A6;
+  color:white;
+  padding: 5px;
+
 }
