@@ -100,11 +100,15 @@ function CreateRegulationCtrl($rootScope, $scope, $location, $window, $timeout, 
     function initialize() {
       $scope.model.visibilities = [{value:'PUBLIC',name:'Pública'},{value:'PRIVATE',name:'Privada'},{value:'GROUPPRIVATE',name:'Privada de Grupos'}];
       $scope.model.status = [{value:'APPROVED',name:'Aprobado'},{value:'PENDING',name:'Pendiente'}]
+      initializeOrdinance();
+      initializeResolution();
+      initializeRegulation();
     }
 
     function initializeOrdinance() {
       Digesto.loadIssuers('ORDINANCE',
           function(issuers) {
+            console.log(issuers);
             $scope.model.issuersOrdinance = issuers;
           },
           function(error) {

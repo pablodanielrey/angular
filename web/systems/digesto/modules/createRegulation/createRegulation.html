@@ -73,13 +73,7 @@
 
                           <div class="contentdataImput">
                               <div>
-                                  <select class="inputRegulationOne">
-                                      <option> Decano</option>
-                                      <option> Vicedecano</option>
-                                      <option> Sec. Asuntos Estudiantiles</option>
-                                      <option> Sec. Supervición Administrativa</option>
-                                      <option> Sec. Investigación y Postgrado</option>
-                                      <option> Sec. Investigación y Transferencia</option>
+                                  <select class="inputRegulationOne" ng-model='model.normative.issuer' ng-options='item.name for item in model.issuers'>
                                   </select>
                               </div>
                               <div>
