@@ -1,5 +1,9 @@
 
-
+/**
+ * Controlador asociado a la interfaz para agregar y visualizar issues
+ * @param {type} param1
+ * @param {type} param2
+ */
 app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "Notifications", "Issue", "IssueClient", function ($scope, $timeout, $window, Module, Notifications, Issue, IssueClient) {
 
   $scope.request = null; //descripcion de un nuevo nodo que sera agregado a la raiz
@@ -104,9 +108,9 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
 
 
 
-
-
-
+  /**
+   * IssueDeletedEvent
+   */
   $scope.$on('IssueInsertedEvent', function(event, node) { 
     if(node.relatedRequestId){
       IssueClient.addChild($scope.data, node);
@@ -115,10 +119,13 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
     }
   });
   
+
   
-  $scope.$on('IssueDeletedEvent', function(event, node) { 
-    IssueClient.deleteNode($scope.data, node);
-    
+  /**
+   * IssueDeletedEvent
+   */
+  $scope.$on('IssueDeletedEvent', function(event, id) {    
+    IssueClient.deleteNode($scope.data, id);
   });
 
 

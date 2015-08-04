@@ -84,9 +84,7 @@ class Issue:
         events = []
         e = {
             'type':'IssueDeletedEvent', 
-            'data':{
-                 'id':id, 
-             }
+            'data':id, 
         }
         events.append(e)
         return events

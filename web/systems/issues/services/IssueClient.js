@@ -1,5 +1,9 @@
 
-
+/**
+ * Metodos de uso general para visualizar y reorganizar el arbol de nodos de Issue
+ * @param {type} param1
+ * @param {type} param2
+ */
 app.service('IssueClient', [function() {
 	
   
@@ -36,7 +40,12 @@ app.service('IssueClient', [function() {
   
   
   
-  
+  /**
+   * Agregar nodo
+   * @param {type} data
+   * @param {type} node
+   * @returns {Boolean}
+   */
   this.addChild = function(data, node){
   
     for(var i in data){
@@ -55,14 +64,31 @@ app.service('IssueClient', [function() {
   
   };
   
-  
-  this.deleteNode = function(data, node){
+  /**
+   * Eliminar nodo
+   * @param {type} data
+   * @param {type} node
+   * @returns {undefined}
+   */
+  this.deleteNode = function(data, id){
+
     for(var i in data){
+      if(data[i].id == id) {
+        data.splice(i, 1);
+        return true;
+      }
+
       if((("nodes" in data[i])) && (data[i]["nodes"].length > 0)){
-      
+        var add = this.deleteNode(data[i]["nodes"], id);
+        if(add) return true;
       }
     }
     
-  }
+    return false;
+  };
+  
+  
+  
+
 
 }]);
