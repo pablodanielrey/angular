@@ -80,7 +80,7 @@
                                   <span class="titleInputRegulation">Emisor</span>
                               </div>
                           </div>
-                          <div class="ContentVisivilidad">
+                          <div class="contentdataImput">
                               <div>
                                   <select class="inputRegulationOne" ng-model='model.normative.visibility' ng-options='item.name for item in model.visibilities' ng-change='changeVisibility()'>
                                   </select>
@@ -89,7 +89,7 @@
                                   <span class="titleInputRegulation">Visibilidad</span>
                               </div>
                           </div>
-                          <div class="ContentEstado">
+                          <div class="contentdataImput">
                               <div>
                                   <select class="inputRegulationOne" ng-model='model.normative.status' ng-options='item.name for item in model.status'>
                                   </select>
@@ -98,7 +98,7 @@
                                   <span class="titleInputRegulation">Estado</span>
                               </div>
                           </div>
-                          <div class="contentAprobado tam1" ng-class="{false:'hidden'}[viewDateStatus()]">
+                          <div class="contentdataImput tam1" ng-class="{false:'hidden'}[viewDateStatus()]">
                           <!-- <div class="contentAprobado tam1" ng-if="viewDateStatus()"> -->
                              <div>
                                  <input class="inputRegulationOne" type="date">
@@ -114,25 +114,44 @@
                         <div class="contentLeft">
 
                             <div class="contentImputDataOne">
-                                <div>
-                                    <div >
-                                      <input class="inputFile" type="file" ng-model="model.normative.file"/>
-                                    </div>
-                                    <div class="titleImputData">
-                                        <p class="titleRCD"> Cargar PDF</p>
+
+                                <div class="contentdataImput">
+                                    <div>
+                                        <div class="uploadPDF">
+                                  			   <p class="textBtnPDF"><i class="fa fa-file-pdf-o iconPDF"></i> Subir PDF</p>
+                                  			   <input type="file" class="btnInputFile" ng-model="model.normative.file">
+                                  		  </div>
+                                  	</div>
+                                    <div>
+                                        <span class="titleInputRegulation">Normativa en pdf</span>
                                     </div>
                                 </div>
 
-                                <div>
-                                    <div >
-                                      <button ng-click="selectRegulation(8)">Seleccionar</button>
+                                <div class="contentdataImput">
+                                  <div>
+                                    <i class="fa fa-file-pdf-o iconPDF"></i> pabloGay.pdf
+                                  </div>
+                                </div>
+
+
+                                <div class="contentdataImput">
+                                    <div class="uploadPDF">
+                                       <p class="textBtnPDF" ng-click="selectRegulation(8)"><i class="fa fa-file-text-o"></i> Norma Relacionada</p>
                                     </div>
-                                    <div class="titleImputData">
-                                        <p class="titleRCD"> Relación de Norma</p>
+                                    <div>
+                                        <span class="titleInputRegulation">Norma Relacionada</span>
                                     </div>
                                 </div>
+
+                                <div class="contentdataImput">
+                                  <div>
+                                    <i class="fa fa-file-text-o iconPDF"></i> 900-56224/14
+                                  </div>
+                                </div>
+
 
                             </div>
+
                             <div class="contentImputData">
                                 <div class="titleImputData">
                                   <p> EXTRACTO</p>

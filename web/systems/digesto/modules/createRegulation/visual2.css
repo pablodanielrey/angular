@@ -77,7 +77,8 @@
 /*PANTALLA PRINCIPAL DONDE SE ELIJE ENTRE NORMA, DISPOSIION, ETC*/
 
 .createRegulation .contentdataImput {
-  margin: 10px auto;
+  /*margin: 10px auto;*/
+  margin-right: 25px;
 }
 .createRegulation .tam1 {
   width: 120px;
@@ -159,6 +160,8 @@
   margin-top: 25px;
   background-color: #d5dbdf;
   padding: 10px;
+  border-bottom:3px solid #b3b5bc;
+
 
 
 }
@@ -196,7 +199,11 @@
   background-color: white;
   padding: 3px;
   width: 100%;
-  border:1px solid #b3b5bc;
+  border: none;
+  /*border:1px solid #b3b5bc;*/
+  border-radius: 3px;
+  -webkit-box-shadow: 1px 1px 1px #5c5f69;
+  -moz-box-shadow: 1px 1px 1px #5c5f69;
 }
 
 .createRegulation .dash {
@@ -219,10 +226,11 @@
 
 .createRegulation .tamInputRegulationOne {
   width: 100%;
+
 }
 
 .createRegulation .inputRegulationTwo {
-  height: 80px;
+
   font-size: 1.2em;
   background-color: white;
   padding: 3px;
@@ -233,16 +241,19 @@
 
 
 .createRegulation .titleImputData {
-  margin: 10px;
+
   margin-bottom: 10px;
 }
 
 .createRegulation .inputFile {
-  margin-top: 2%;
+
   background-color: white;
   padding: 0.4%;
   border:1px solid #b3b5bc;
   width: 100%;
+  -webkit-box-shadow: 1px 1px 1px #5c5f69;
+  -moz-box-shadow: 1px 1px 1px #5c5f69;
+
 }
 
 .createRegulation .inputRelation {
@@ -297,6 +308,41 @@
 
 
 
+.createRegulation .textBtnPDF{
+	text-align: center;
+	color:black;
+}
+
+.createRegulation .uploadPDF {
+	position:relative;
+
+	padding:3px;
+	width:180px;
+	background-color: white;
+	-webkit-border-radius:3px;
+  -webkit-box-shadow: 1px 1px 1px #5c5f69;
+  -moz-box-shadow: 1px 1px 1px #5c5f69;
+  cursor: pointer;
+
+}
+
+.createRegulation .btnInputFile {
+	position:absolute;
+	top:0px;
+	left:0px;
+	right:0px;
+	bottom:0px;
+	width:100%;
+	height:100%;
+	opacity: 0;
+  cursor: pointer;
+}
+
+.iconPDF {
+  background-color: white;
+  color:#e43e46;
+  border-radius: 0 5px 0 0;
+}
 
 
 

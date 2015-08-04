@@ -6,7 +6,7 @@
 /******************screenOne*************************************/
 /*PANTALLA PRINCIPAL DONDE SE ELIJE ENTRE NORMA, DISPOSIION, ETC*/
 
-.regulations {
+.createRegulation .regulations {
   display:flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
@@ -19,7 +19,7 @@
 /******************screenTwo*************************************/
 /***********PANTALLA DE CARGA DE DATOS!!!!!**********************/
 
-.contentNewRegulation {
+.createRegulation .contentNewRegulation {
   display: flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
@@ -34,7 +34,7 @@
   -moz-justify-content: space-between;
 }
 
-.newRegulation {
+.createRegulation .newRegulation {
   display: flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
@@ -47,7 +47,7 @@
 }
 
 
-.dataOne {
+.createRegulation .dataOne {
   display:flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
@@ -55,12 +55,10 @@
   -webkit-flex-direction:row; /* Safari */
   -moz-flex-direction:row; /* mozilla */
   flex-wrap: wrap;
-  /*justify-content: space-between;
-  -webkit-flex-justify-content: space-between;
-  -moz-flex-justify-content: space-between;*/
+
 }
 
-.saveCancel {
+.createRegulation .saveCancel {
   display: flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
@@ -72,7 +70,7 @@
 
 
 
-.numberCodeUniversity {
+.createRegulation .numberCodeUniversity {
   display:flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
@@ -83,7 +81,7 @@
 
 }
 
-.dataTwo {
+.createRegulation .dataTwo {
   display:flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
@@ -93,7 +91,7 @@
 
 }
 
-.contentLeft {
+.createRegulation .contentLeft {
   display:flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
@@ -103,7 +101,7 @@
 
 }
 
-.contentImputDataOne {
+.createRegulation .contentImputDataOne {
   display:flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
@@ -113,9 +111,6 @@
   align-items: baseline;
   -webkit-align-items:baseline; /* Safari */
   -moz-align-items:baseline; /* mozilla */
-  justify-content: space-between;
-  -webkit-flex-justify-content: space-between;
-  -moz-flex-justify-content: space-between;
 
 
 
@@ -130,7 +125,7 @@
 /******************screenThree*************************************/
 /******************CREACION FINALIZADA!!!!!***********************/
 
-.dataThree {
+.createRegulation .dataThree {
   display:flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
@@ -153,7 +148,7 @@
 /******************contentSearch*************************************/
 /*CONTENEDOR DEL INPUT DE BUSQUEDA Y LOS FILTROS*/
 
-.contentSearch {
+.createRegulation .contentSearch {
   display:flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
@@ -162,7 +157,7 @@
   -moz-flex-direction:column; /* mozilla */
 }
 
-.inputSearchContent {
+.createRegulation .inputSearchContent {
   display:flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
@@ -171,20 +166,7 @@
   -moz-flex-direction:row; /* mozilla */
 }
 
-.search {
-  display:flex;
-  display: -webkit-flex; /* Safari */
-  display: -moz-flex; /* mozilla */
-  flex-direction:row;
-  -webkit-flex-direction:row; /* Safari */
-  -moz-flex-direction:row; /* mozilla */
-  justify-content: space-between;
-  -webkit-flex-justify-content: space-between;
-  -moz-flex-justify-content: space-between;
-
-}
-
-.filters {
+.createRegulation .search {
   display:flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
@@ -197,7 +179,20 @@
 
 }
 
-.itemsFilters {
+.createRegulation .filters {
+  display:flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  justify-content: space-between;
+  -webkit-flex-justify-content: space-between;
+  -moz-flex-justify-content: space-between;
+
+}
+
+.createRegulation .itemsFilters {
   display:flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
