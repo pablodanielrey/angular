@@ -4,7 +4,7 @@ angular
 
       if (config_firmware.url == undefined || config_firmware.url == 'autodetect') {
         var conn = {
-          url: location.host,
+          url: "ws://" + location.host + "/ws",
           realm: config_firmware.realm
         };
         console.log(conn);
