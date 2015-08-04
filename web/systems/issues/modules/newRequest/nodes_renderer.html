@@ -1,0 +1,97 @@
+<div class="orderItems" ng-class='[getIssueCssClass(this)]'  ui-tree-handle>
+    <div class="orderItem">
+        <div class="btnExpOrder">
+          <div ng-if="collapsed">
+              <button class="btn cB fa fa-plus-square"  ng-click="toggleItem(this)" ></button>
+          </div>
+          <div ng-if="!collapsed">
+              <button class="btn cB fa fa-minus-square" title="Expandir Pedido" ng-click="toggleItem(this)" ></button>
+          </div>
+        </div>
+
+        <div class="btnExpComment">
+          <div ng-if="collapsed">
+              <button class="btn cO fa fa-plus-square"  ng-click="toggleItem(this)" ></button>
+          </div>
+          <div ng-if="!collapsed">
+              <button class="btn cO fa fa-minus-square" title="Expandir Pedido" ng-click="toggleItem(this)" ></button>
+          </div>
+        </div>
+
+        <div>
+            <textarea class="orderText"  ng-model="node.title" ng-class="{'tree': node.expanded}"  ng-click="expandInput(this)"></textarea>
+
+            <div ng-class="{true:'descriptionExpanded',false:'descriptionClosed'}[node.descriptionExpanded]">
+              <!-- <div ng-if="node.descriptionExpanded" > -->
+              <!-- <div ng-class="{true:'descriptionExpanded',false:'descriptionClosed'}[node.descriptionExpanded]" > -->
+                <div>
+                  datos del pedido
+                  <div>
+                  <select>
+                    <option>OFICINA</option>
+                    <option>Mantenimiento</option>
+                  </select>
+                  </div>
+                  <div>
+                  <select>
+                    <option>USUARIO</option>
+                    <option>Jose</option>
+                  </select>
+                  </div>
+                  <div>
+                  <select>
+                    <option>VISIBILIDAD</option>
+                    <option>Privado</option>
+                  </select>
+                  </div>
+                </div>
+
+                <div>
+                  quien pide
+                  <div>Fecha</div><div><date/></div>
+                  <div>Oficina</div><div>Informática</div>
+                  <div>Usuario</div><div>Pablo Rey</div>
+                </div>
+              <!-- </div> -->
+            </div>
+
+
+        </div>
+    </div>
+    <div class="orderIcons">
+        <div class="btnState">
+            <select ng-model='this.$modelValue.status'>
+              <option>ESTADO</option>
+              <option value='comment'>comentario</option>
+              <option value='pending'>pendiente</option>
+              <option value='closed' class="cR">cerrado</option>
+            </select>
+        </div>
+        <!--<div>
+            <select>
+              <option>PRIORIDAD</option>
+              <option>Alta</option>
+            </select>
+        </div>-->
+
+        <div class="btnDataOrder">
+            <button class="btn cB fa fa-caret-square-o-down" title="Datos del Pedido" ng-click="expandDescription(this)"></button>
+        </div>
+
+        <div>
+            <button class="btn cO fa fa-comment" title="Realizar Comentario" ng-click="comment(this)"></button>
+        </div>
+        <div class="btnSubTarea">
+            <button class="btn cG fa fa-tag" title="Crear sub-Tarea" ng-click="addNode(this)"></button>
+        </div>
+        <div>
+            <button class="btn cR fa fa-trash" title="Eliminar Pedido" ng-click="deleteNode(this)"></button>
+        </div>
+    </div>
+  </div>
+
+
+  <ol ui-tree-nodes="" ng-model="node.nodes" ng-class="{'angular-ui-tree-hidden': collapsed}">
+    <li  ng-repeat="node in node.nodes" ui-tree-node ng-include="'modules/newRequest/nodes_renderer.html'">
+    </li>
+  </ol>
