@@ -1,12 +1,22 @@
 angular
     .module('mainApp',['ngRoute','vxWamp'])
     .config(function($wampProvider) {
-      var conn = {
-        url: config_firmware.url,
-        realm: config_firmware.realm
-      };
-      console.log(conn);
-      $wampProvider.init(conn);
+
+      if (config_firmware.url == undefined || config_firmware.url == 'autodetect') {
+        var conn = {
+          url: location.host,
+          realm: config_firmware.realm
+        };
+        console.log(conn);
+        $wampProvider.init(conn);
+      } else {
+        var conn = {
+          url: config_firmware.url,
+          realm: config_firmware.realm
+        };
+        console.log(conn);
+        $wampProvider.init(conn);
+      }
     });
     /*
     .run(function($wamp) {
