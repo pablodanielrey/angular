@@ -77,8 +77,43 @@ class Issue:
             
         return issues;
         
+    
+    
+    def deleteIssue(self, con, id):
+        self.__deleteIssue(con, id)
+        events = []
+        e = {
+            'type':'IssueDeletedEvent', 
+            'data':{
+                 'id':id, 
+             }
+        }
+        events.append(e)
+        return events
+    
+    
+    def __deleteIssue(self, con, id):
+        cur = con.cursor()
+        cur.execute('''
+          SELECT r.id
+          FROM issues.request AS r
+          WHERE r.related_request_id = %s
+        ''',(id,))
+    
+        for issue in cur:
+            self.__deleteIssue(con, issue[0])
+
+        cur.execute('''
+          DELETE FROM issues.state
+          WHERE request_id = %s
+        ''',(id,))       
+
+        cur.execute('''
+          DELETE FROM issues.request
+          WHERE id = %s
+        ''',(id,))       
+         
         
-   
-    
-    
-  
+        
+
+

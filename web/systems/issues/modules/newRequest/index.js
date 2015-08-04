@@ -74,9 +74,9 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
   };
   
   
-  $scope.deleteNode = function(node){
-    
-    Issue.deleteIssue(node.id,
+  $scope.deleteNode = function(model){
+    var nodeData = model.$modelValue;
+    Issue.deleteIssue(nodeData.id,
       function(data){ },
       function(error) { Notifications.message(error); }
     );
