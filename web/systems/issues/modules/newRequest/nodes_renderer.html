@@ -1,15 +1,15 @@
 <div class="orderItems" ng-class='[getIssueCssClass(this)]'  ui-tree-handle>
     <div class="orderItem">
-        <div class="btnExpOrder">
-          <div ng-if="collapsed">
-              <button class="btn cB fa fa-plus-square"  ng-click="toggleItem(this)" ></button>
+        <div ng-show="node.state != 'COMMENT'" class="btnExpOrder">
+          <div  ng-if="collapsed">
+              <button class="btn cB fa fa-plus-square"  ng-click="toggleNode(this)" ></button>
           </div>
           <div ng-if="!collapsed">
-              <button class="btn cB fa fa-minus-square" title="Expandir Pedido" ng-click="toggleItem(this)" ></button>
+              <button class="btn cB fa fa-minus-square" title="Expandir Pedido" ng-click="toggleNode(this)" ></button>
           </div>
         </div>
 
-        <div class="btnExpComment">
+      <div ng-show="node.state == 'COMMENT'" class="btnExpComment">
           <div ng-if="collapsed">
               <button class="btn cO fa fa-plus-square"  ng-click="toggleItem(this)" ></button>
           </div>
@@ -22,60 +22,24 @@
             <textarea class="orderText"  ng-model="node.title" ng-class="{'tree': node.expanded}"  ng-click="expandInput(this)"></textarea>
 
             <div ng-class="{true:'descriptionExpanded',false:'descriptionClosed'}[node.descriptionExpanded]">
-              <!-- <div ng-if="node.descriptionExpanded" > -->
-              <!-- <div ng-class="{true:'descriptionExpanded',false:'descriptionClosed'}[node.descriptionExpanded]" > -->
-                <div>
-                  datos del pedido
-                  <div>
-                  <select>
-                    <option>OFICINA</option>
-                    <option>Mantenimiento</option>
-                  </select>
-                  </div>
-                  <div>
-                  <select>
-                    <option>USUARIO</option>
-                    <option>Jose</option>
-                  </select>
-                  </div>
-                  <div>
-                  <select>
-                    <option>VISIBILIDAD</option>
-                    <option>Privado</option>
-                  </select>
-                  </div>
-                </div>
-
-                <div>
-                  quien pide
-                  <div>Fecha</div><div><date/></div>
-                  <div>Oficina</div><div>Informática</div>
-                  <div>Usuario</div><div>Pablo Rey</div>
-                </div>
-              <!-- </div> -->
+              {{node.created | date:"MM/dd/yyyy hh:mm" }}
+              {{node.requestor}}              
             </div>
 
 
         </div>
     </div>
     <div class="orderIcons">
-        <div class="btnState">
-            <select ng-model='this.$modelValue.status'>
-              <option>ESTADO</option>
-              <option value='comment'>comentario</option>
-              <option value='pending'>pendiente</option>
-              <option value='closed' class="cR">cerrado</option>
+        <div ng-show="node.state != 'COMMENT'" class="btnState">
+            <select ng-model='node.state' ng-change="updateNodeData(this)">
+              <option value='COMMENT'>comentario</option>
+              <option value='PENDING'>pendiente</option>
+              <option value='CLOSED' class="cR">cerrado</option>
             </select>
         </div>
-        <!--<div>
-            <select>
-              <option>PRIORIDAD</option>
-              <option>Alta</option>
-            </select>
-        </div>-->
 
         <div class="btnDataOrder">
-            <button class="btn cB fa fa-caret-square-o-down" title="Datos del Pedido" ng-click="expandDescription(this)"></button>
+            <button class="btn cB fa fa-caret-square-o-down" title="Datos del Pedido" ng-click="toggleNodeData(this)"></button>
         </div>
 
         <div>
@@ -91,7 +55,7 @@
   </div>
 
 
-  <ol ui-tree-nodes="" ng-model="node.nodes" ng-class="{'angular-ui-tree-hidden': collapsed}">
+  <ol ui-tree-nodes="treeNodesOptions" ng-model="node.nodes" ng-class="{'angular-ui-tree-hidden': collapsed}">
     <li  ng-repeat="node in node.nodes" ui-tree-node ng-include="'modules/newRequest/nodes_renderer.html'">
     </li>
   </ol>

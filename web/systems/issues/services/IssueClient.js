@@ -4,7 +4,7 @@
  * @param {type} param1
  * @param {type} param2
  */
-app.service('IssueClient', [function() {
+app.service('IssueClient', ["Users", function(Users) {
 	
   
   /**
@@ -14,9 +14,17 @@ app.service('IssueClient', [function() {
    * @param {function} callbackError
    */
   this.generateTree = function(data) {
-    
     var issues = [];
     for(var i in data){
+      
+      Users.findUser(data[i].requestor_id, 
+        function(response){ data[i].requestor = response.name + " " + response.lastname; },
+        function(error){ console.log(error); }
+      );
+     
+      data[i].collapsedDescription = false;
+      
+      
       if(!("nodes" in data[i])) data[i]["nodes"] = [];
       var assigned = false;
       

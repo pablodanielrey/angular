@@ -4,13 +4,16 @@
  * @param {type} param1
  * @param {type} param2
  */
-app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "Notifications", "Issue", "IssueClient", function ($scope, $timeout, $window, Module, Notifications, Issue, IssueClient) {
+app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "Notifications", "Issue", "IssueClient", "Users", function ($scope, $timeout, $window, Module, Notifications, Issue, IssueClient, Users) {
+
 
   $scope.request = null; //descripcion de un nuevo nodo que sera agregado a la raiz
-  $scope.data = []; //todos los nodos
+  $scope.data = []; //raiz del arbol de nodos
   
+
+    
   /**
-   * Inicializar nodo
+   * Inicializar nodo. Cuando se crea un nuevo nodo en el arbol se inicializa y guarda en la base con los siguientes parametros
    */
   $scope.initializeNode = function(){
     return {
@@ -21,41 +24,65 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
       officeId: "8407abb2-33c2-46e7-bef6-d00bab573306",
       relatedRequestId:null,
       priority:null,
-      visibility:null
+      visibility:null,
+      collapsedDescription: false
     };
   };
  
-
-  $scope.expandInput = function(model){
-      var nodeData = model.$modelValue;
+ 
+  /**
+   * Incrementar espacio de la descripcion del nodo al hacer click (textarea) para facilitar el ingreso de datos
+   * @param {scope del nodo} nodeScope
+   */
+  $scope.expandTextarea = function(nodeScope){
+      var nodeData = nodeScope.$modelValue;
       nodeData.expanded = !nodeData.expanded ;
   };
-
-  $scope.expandDescription = function(model){
-      var nodeData = model.$modelValue;
-      nodeData.descriptionExpanded = !nodeData.descriptionExpanded ;
-  };
-
-  $scope.toggleItem = function (model) {
-    model.toggle();
-  };
-
-  /*
-  $scope.newSubItem = function(model) {
-    model.expand();
-    var nodeData = model.$modelValue;
-    nodeData.nodes.push({
-      "id": (nodeData["id"]+1),
-      "title": "new" + (nodeData["id"]+1),
-      "nodes": [],
-      "expanded":false,
-      "descriptionExpanded":false
-    });
-  };*/
   
   
-  $scope.addNode = function(model){
-    var nodeData = model.$modelValue;
+  
+  /**
+   * Interruptor para visualizar subnodos
+   * @param {type} nodeScope
+   */
+  $scope.toggleNode = function (nodeScope) {
+    nodeScope.toggle();
+  };
+  
+  
+  
+  /**
+   * Interruptor para visualizar descripcion del nodo
+   * @param {type} nodeScope
+   */
+  $scope.toggleNodeData = function (nodeScope) {
+    var nodeData = nodeScope.$modelValue;
+    nodeData.collapsedDescription = !nodeData.collapsedDescription
+  };
+  
+  
+  
+
+  $scope.expandDescription = function(nodeScope){
+    var nodeData = nodeScope.$modelValue;
+    nodeData.descriptionExpanded = !nodeData.descriptionExpanded ;
+  };
+
+
+
+  $scope.updateNodeData = function(nodeScope){
+    var nodeData = nodeScope.$modelValue;
+
+     Issue.updateRequest(nodeData,
+      function(data) { },
+      function(error) { Notifications.message(error); }
+    );
+  };
+  
+
+  
+  $scope.addNode = function(nodeScope){
+    var nodeData = nodeScope.$modelValue;
 
     var newNode = $scope.initializeNode();
     newNode.relatedRequestId = nodeData.id;
@@ -86,26 +113,7 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
     );
   };
 
-  /*
-  $scope.comment = function(model) {
-    model.expand();
-    var nodeData = model.$modelValue;
-    nodeData.nodes.push({
-      "id": (nodeData["id"]+1),
-      "title": "comentario",
-      "nodes": [],
-      "expanded":false,
-      "descriptionExpanded":false
-    });
-  };*/
-
-  /*$scope.requestState = {
-    created: new Date(),
-    state: "PENDING",
-    request_id:null,
-    user_id:$scope.global.sessionUserId,
-  };*/
-
+ 
 
 
   /**
@@ -144,6 +152,16 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
       }
     );
   };
+
+
+
+
+  $scope.treeNodesOptions = {
+    beforeDrop: function (event) {
+      alert("test");
+    }
+  };
+
 
 
 
