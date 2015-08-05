@@ -272,6 +272,16 @@
   margin-top: 15px;
 }
 
+.createRegulation .selectRelacionDeNoma {
+  background-color: #eeeeee;
+  margin-left: 10px;
+  padding: 1px;
+  -webkit-box-shadow: 1px 1px 1px #5c5f69;
+  -moz-box-shadow: 1px 1px 1px #5c5f69;
+  border: none;
+
+}
+
 
 
 
