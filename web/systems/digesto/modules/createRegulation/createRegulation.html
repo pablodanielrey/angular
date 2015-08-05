@@ -115,10 +115,12 @@
 
                             <div class="contentImputDataOne">
 
-                                <div class="contentdataImput">
+                                <!----------------- cargar PDF ---------------->
+
+                                <div class="contentUploadPDF">
                                     <div>
                                         <div class="uploadPDF">
-                                  			   <p class="textBtnPDF"><i class="fa fa-file-pdf-o iconPDF"></i> Subir PDF</p>
+                                  			   <p class="textBtnPDF"><i class="fa fa-arrow-circle-up"></i> Subir PDF</p>
                                   			   <input type="file" class="btnInputFile" ng-model="model.normative.file">
                                   		  </div>
                                   	</div>
@@ -128,36 +130,45 @@
                                 </div>
 
                                 <div class="contentdataImput">
-                                  <div>
-                                    <i class="fa fa-file-pdf-o iconPDF"></i> pabloGay.pdf
+                                  <div class="uploadPDF2">
+                                    <div><i class="fa fa-file-pdf-o iconPDF"></i> Ord25151/14.pdf</div>
+                                    <!-- <div><i class="fa fa-file-pdf-o"></i> no se cargo el archivo...</div> -->
                                   </div>
                                 </div>
 
+                                <!----------------- cargar Relacion de Norma ---------------->
 
-                                <div class="contentdataImput">
-                                    <div class="uploadPDF">
-                                       <p class="textBtnPDF" ng-click="selectRegulation(8)"><i class="fa fa-file-text-o"></i> Norma Relacionada</p>
+                                <div class="contentUploadPDF">
+                                    <div>
+                                        <div class="uploadPDF">
+                                           <p class="textBtnPDF"><i class="fa fa-search-plus"></i> Burcar Norma</p>
+                                           <input type="file" class="btnInputFile" ng-model="model.normative.file">
+                                        </div>
                                     </div>
                                     <div>
-                                        <span class="titleInputRegulation">Norma Relacionada</span>
+                                        <span class="titleInputRegulation">Relación de Norma</span>
                                     </div>
                                 </div>
 
                                 <div class="contentdataImput">
-                                  <div>
-                                    <i class="fa fa-file-text-o iconPDF"></i> 900-56224/14
+                                  <div class="uploadPDF2">
+                                    <div><i class="fa fa-file-text-o iconPDF"></i> 900-5624/15 </div>
+                                    <!-- <div><i class="fa fa-file-text-o"></i> sin relación...</div> -->
                                   </div>
                                 </div>
+
+
 
 
                             </div>
 
                             <div class="contentImputData">
                                 <div class="titleImputData">
-                                  <p> EXTRACTO</p>
+                                  Extracto
                                 </div>
                                 <div class="tamInputRegulationOne">
-                                  <input class="inputRegulationTwo" type="text">
+                                  <textarea class="inputRegulationTwo" no></textarea>
+
                                 </div>
                             </div>
                         </div>

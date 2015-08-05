@@ -236,13 +236,16 @@
   padding: 3px;
   width: 100%;
   border:1px solid #b3b5bc;
+  height: 50px;
+  resize: none;
+
 }
 
 
 
 .createRegulation .titleImputData {
 
-  margin-bottom: 10px;
+
 }
 
 .createRegulation .inputFile {
@@ -263,6 +266,10 @@
   border:1px solid #b3b5bc;
   width: 50%;
   font-size: 1.2em;
+}
+
+.createRegulation .contentImputData {
+  margin-top: 15px;
 }
 
 
@@ -308,21 +315,42 @@
 
 
 
+.createRegulation .contentUploadPDF {
+  cursor: pointer;
+}
+
 .createRegulation .textBtnPDF{
 	text-align: center;
 	color:black;
+  cursor: pointer;
 }
 
 .createRegulation .uploadPDF {
 	position:relative;
-
-	padding:3px;
-	width:180px;
-	background-color: white;
-	-webkit-border-radius:3px;
+  border: 1px solid #bec3c6;
+  padding:3px 10px 3px 10px;
+	/*width:180px;*/
+	background-color: #bec3c6;
+  border-radius: 3px 0 0 3px;
+	-webkit-border-radius:3px 0 0 3px;
   -webkit-box-shadow: 1px 1px 1px #5c5f69;
   -moz-box-shadow: 1px 1px 1px #5c5f69;
   cursor: pointer;
+
+}
+
+.createRegulation .uploadPDF2 {
+	position:relative;
+  border: 1px solid #b1b9bf;
+	padding:3px 10px 3px 10px;
+	/*width:180px;*/
+	background-color: white;
+  border-radius: 0 3px 3px 0;
+	-webkit-border-radius:0 3px 3px 0;
+  -webkit-box-shadow: 1px 1px 1px #5c5f69;
+  -moz-box-shadow: 1px 1px 1px #5c5f69;
+
+  margin-right: 50px;
 
 }
 
@@ -341,7 +369,7 @@
 .iconPDF {
   background-color: white;
   color:#e43e46;
-  border-radius: 0 5px 0 0;
+
 }
 
 
