@@ -132,7 +132,6 @@
 .createRegulation .tam3 {
   width: 150px;
 }
-
 /*******************************************************
 *********** SCREEN TWO (Carga de Datos) ****************
 ********************************************************/
@@ -645,12 +644,46 @@
 
 .createRegulation .filters {
   background-color: #eeeeee;
-  padding: 5px;
+  padding: 10px 5px 5px 5px;
+  border-top: 3px solid #b3b5bc;
 }
+
 
 .createRegulation .iconFilters {
-
+  color:#b3b5bc;
 }
+
+.createRegulation .inputFilters {
+  font-size: 0.9em;
+  background-color: white;
+  padding: 3px;
+  width: 100%;
+  border: none;
+  /*border:1px solid #b3b5bc;*/
+  border-radius: 3px;
+  -webkit-box-shadow: 1px 1px 1px #5c5f69;
+  -moz-box-shadow: 1px 1px 1px #5c5f69;
+}
+
+.createRegulation .titleInputFilters {
+  font-size: 0.8em;
+}
+
+.createRegulation .tam1 {
+  width: 80px;
+}
+.createRegulation .tam2 {
+  width: 110px;
+}
+.createRegulation .tam3 {
+  width: 150px;
+}
+
+/*******************************************************
+********* CONTENEDOR RESULTADOS DE BUSQUEDA ************
+********************************************************/
+
+/************ FORMATO DE FILAS Y COLUMNAS **************/
 
 .createRegulation .row {
   display: flex;
@@ -663,7 +696,7 @@
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  background-color: #5c5f69;
+  background-color: #b3b5bc;
   margin-bottom: 1%;
 }
 
@@ -784,7 +817,7 @@
 
 .createRegulation .results {
   overflow-y: scroll;
-  height: 360px;
+  height: 270px;
 }
 
 .createRegulation .cf:before, .cf:after{

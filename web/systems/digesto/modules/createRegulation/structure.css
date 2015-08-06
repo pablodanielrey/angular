@@ -198,9 +198,9 @@
   flex-direction:row;
   -webkit-flex-direction:row; /* Safari */
   -moz-flex-direction:row; /* mozilla */
-  justify-content: space-between;
-  -webkit-flex-justify-content: space-between;
-  -moz-flex-justify-content: space-between;
+  justify-content: space-around;
+  -webkit-flex-justify-content: space-around;
+  -moz-flex-justify-content: space-around;
 
 }
 
