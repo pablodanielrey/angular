@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 '''
-    Se conecta al router wamp y hace correr el Wamp del Firmware
+    Se conecta al router wamp y hace correr el Wamp
 '''
 if __name__ == '__main__':
 
@@ -13,7 +13,7 @@ if __name__ == '__main__':
 
     from autobahn.asyncio.wamp import ApplicationRunner
     from model.config import Config
-    from actions.systems.assistance.firmware import WampFirmware
+    from actions.login.login import LoginWamp
 
     def config_injector(binder):
         binder.bind(Config, Config('server-config.cfg'))
@@ -26,4 +26,4 @@ if __name__ == '__main__':
     debug = config.configs['server_debug']
 
     runner = ApplicationRunner(url=url, realm=realm, debug=debug, debug_wamp=debug, debug_app=debug)
-    runner.run(WampFirmware)
+    runner.run(LoginWamp)
