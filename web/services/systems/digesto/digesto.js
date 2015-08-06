@@ -2,12 +2,13 @@ angular
   .module('mainApp')
   .service('Digesto',Digesto);
 
-Digesto.inject = ['$rootScope','$wamp']
+Digesto.inject = ['$rootScope','$wamp','Session']
 
-function Digesto($rootScope,$wamp) {
+function Digesto($rootScope,$wamp,Session) {
 
-  this.createNormative = function(normative,status,visibility,relateds,file,callbackOk,callbackError) {
-    $wamp.call('digesto.digesto.createNormative',[normative,status,visibility,relateds,file])
+  this.createNormative = function(normative,callbackOk,callbackError) {
+    sessionId = Session.getSessionId();
+    $wamp.call('digesto.digesto.createNormative',[sessionId,normative,normative.status.value,normative.visibility,normative.relateds,normative.file])
     .then(function(normativeId) {
       if (normativeId != null) {
         callbackOk(normativeId);

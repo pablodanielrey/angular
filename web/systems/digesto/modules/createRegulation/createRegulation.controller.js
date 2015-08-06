@@ -2,9 +2,9 @@ angular
     .module('mainApp')
     .controller('CreateRegulationCtrl',CreateRegulationCtrl);
 
-CreateRegulationCtrl.$inject = ['$rootScope', '$scope', '$location', '$window', '$timeout','WebSocket', 'Session', 'Cache', 'Notifications', 'Digesto'];
+CreateRegulationCtrl.$inject = ['$rootScope', '$scope', '$location', '$window', '$timeout','WebSocket', 'Session', 'Cache', 'Notifications', 'Digesto','Session'];
 
-function CreateRegulationCtrl($rootScope, $scope, $location, $window, $timeout, WebSocket, Session, Cache, Notifications, Digesto) {
+function CreateRegulationCtrl($rootScope, $scope, $location, $window, $timeout, WebSocket, Session, Cache, Notifications, Digesto, Session) {
 
     $scope.model = {
       issuersRegulation: [],
@@ -64,7 +64,7 @@ function CreateRegulationCtrl($rootScope, $scope, $location, $window, $timeout, 
     }
 
     function changeVisibility() {
-      if ($scope.model.normative.visibility.value == 'GROUPPRIVATE') {
+      if ($scope.model.normative.visibility.type == 'GROUPPRIVATE') {
         $scope.selectRegulation(7);
       }
     }
@@ -98,7 +98,12 @@ function CreateRegulationCtrl($rootScope, $scope, $location, $window, $timeout, 
     // ----------------- CARGA DE DATOS INICIALES ------------------
     // -------------------------------------------------------------
     function initialize() {
-      $scope.model.visibilities = [{value:'PUBLIC',name:'Pública'},{value:'PRIVATE',name:'Privada'},{value:'GROUPPRIVATE',name:'Privada de Grupos'}];
+      // verifico que este logueado
+      if(!Session.isLogged()) {
+       $window.location.href = "/systems/login/indexLogin.html";
+      }
+
+      $scope.model.visibilities = [{type:'PUBLIC',name:'Pública'},{type:'PRIVATE',name:'Privada'},{type:'GROUPPRIVATE',name:'Privada de Grupos'}];
       $scope.model.status = [{value:'APPROVED',name:'Aprobado'},{value:'PENDING',name:'Pendiente'}]
       initializeOrdinance();
       initializeResolution();
@@ -143,7 +148,7 @@ function CreateRegulationCtrl($rootScope, $scope, $location, $window, $timeout, 
 
     function findVisibility(v) {
       for (var i = 0; i < $scope.model.visibilities.length; i++) {
-        if ($scope.model.visibilities[i].value == v) {
+        if ($scope.model.visibilities[i].type == v) {
           return $scope.model.visibilities[i];
         }
       }
@@ -193,20 +198,24 @@ function CreateRegulationCtrl($rootScope, $scope, $location, $window, $timeout, 
       $scope.model.normative.status = status;
       $scope.model.normative.visibility = visibility;
       $scope.model.normative.relateds = [];
-      $scope.model.normative.file = "";
+      $scope.model.normative.file = null;
     }
 
 
 
     $scope.save = function() {
       // falta verificar que este bien formateado el expediente
-      var number = $scope.model.normative.normative_number_full;
-      var array = number.split('/');
-      $scope.model.normative.normative_number = array[0]
-      $scope.model.normative.year = array[1]
-
-      $scope.view.regulationIndex = $scope.view.regulationIndex + 3;
       console.log($scope.model.normative);
+
+      Digesto.createNormative($scope.model.normative,
+        function(response) {
+          $scope.view.regulationIndex = $scope.view.regulationIndex + 3;
+        },
+        function(error) {
+            Notifications.message(error);
+        }
+      );
+
     }
 
 

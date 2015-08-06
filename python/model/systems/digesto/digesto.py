@@ -2,9 +2,11 @@
 import uuid, datetime,psycopg2,inject
 from model.systems.file.file import File
 from model.systems.offices.offices import Offices
+from model.systems.assistance.date import Date
 
 class Digesto:
 
+    date = inject.attr(Date)
     file = inject.attr(File)
     offices = inject.attr(Offices)
     '''
@@ -55,16 +57,20 @@ class Digesto:
         return self._convertStatusToDict(cur.fetchone())
 
     # crea un nuevo estado, por defecto lo pone como pendiente
-    def updateStatus(self,con,normative_id,creator_id,status='PENDING'):
+    def updateStatus(self,con,normative_id,creator_id,created,status='PENDING'):
         if normative_id is None or creator_id is None:
             return
 
         cur = con.cursor()
 
         id = str(uuid.uuid4())
-        created = datetime.datetime.now()
-        params = (id,status,created,creator_id,normative_id)
+        if created is None:
+            created = self.date.now()
 
+        createdUtc = self.date.awareToUtc(created)
+        params = (id,status,createdUtc,creator_id,normative_id)
+
+        cur.execute('set timezone to %s',('UTC',))
         cur.execute('insert into digesto.status (id,status,created,creator_id,normative_id) values(%s,%s,%s,%s,%s)',params)
 
     # -----------------------------------------------------------------------------------
@@ -159,7 +165,10 @@ class Digesto:
 
 
 
-    def createNormative(self,con,normative,status,visibility,relateds,file):
+    def createNormative(self,con,normative,status,visibility,relateds,file,userId):
+
+        import pdb
+        pdb.set_trace()
 
         if normative is None:
             return None
@@ -169,10 +178,29 @@ class Digesto:
         '''
         if ('issuer_id' not in normative or normative['issuer_id'] is None or
             'file_number' not in normative or normative['file_number'] is None or
-            'normative_number' not in normative or normative['normative_number'] is None or
-            'creator_id' not in normative or normative['creator_id'] is None):
+            'normative_number_full' not in normative or normative['normative_number_full'] is None or
+            userId is None):
 
             return None
+
+        # tengo que hacer el split de normative['normative_number_full']
+        array = normative['normative_number_full'].split('/')
+        if len(array) != 2:
+            return None
+
+        # creo el normative['normative_number']
+        normative['normative_number'] = array[0]
+        # creo el normative['year']
+        today = self.date.now()
+        normative['year'] = self.date.now()
+        yearStr = array[1]
+        yearToday = int(today.strftime('%y'))
+        if int(yearStr) > yearToday:
+          year = 1900 + int(yearStr)
+        else:
+          year = 2000 + int(yearStr)
+
+        normative['year'] = normative['year'].replace(year=year)
 
         id = str(uuid.uuid4())
 
@@ -181,35 +209,40 @@ class Digesto:
         if file is not None:
             fileId = self.file.persist(con,file)
 
+        if 'created' in normative and normative['created'] is not None:
+            normative['created'] = self.date.parse(normative['created'])
+        else:
+            normative['created'] = self.date.now()
         params = (id,
                   normative['issuer_id'],
                   fileId,
                   normative['type'] if 'type' in normative else None,
                   normative['file_number'],
                   normative['normative_number'],
-                  normative['year'] if 'year' in normative and normative['year'] is not None else datetime.datetime.now(),
-                  normative['created'] if 'created' in normative and normative['created'] is not None else datetime.datetime.now(),
-                  normative['creator_id'],
+                  normative['year'] if 'year' in normative and normative['year'] is not None else self.date.now(),
+                  normative['created'],
+                  userId,
                   normative['extract'] if 'extract' in normative else '')
 
-        cur = con.cursor
+        cur = con.cursor()
         cur.execute('set timezone to %s',('UTC',))
-        cur.execute('insert into digesto.normative (id,issuer_id,file_id,type,file_number,normative_number,date,created,creator_id,extract) values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,)',params)
+        cur.execute('insert into digesto.normative (id,issuer_id,file_id,type,file_number,normative_number,date,created,creator_id,extract) values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',params)
 
-        if status in None:
-            self.updateStatus(con,id,normative['creator_id'])
-        else:
-            self.updateStatus(con,id,normative['creator_id'],status)
+        created = normative['created']
+        d2 = created - datetime.timedelta(seconds=1)
+        self.updateStatus(con,id,userId,d2)
+        if status is not None:
+            self.updateStatus(con,id,userId,created,status)
 
         if visibility is None:
             self.persistVisibility(con,id)
         else:
             type = visibility['type'] if 'type' in visibility else None
             additonal_data = visibility['additonal_data'] if 'additonal_data' in visibility else None
-            self.persistVisibility(con,id,type,additional_data)
+            self.persistVisibility(con,id,type,additonal_data)
 
         if relateds is not None:
-            self.addRelateds(con,relateds,normative['creator_id'],id)
+            self.addRelateds(con,relateds,userId,id)
 
         return id
 
@@ -257,7 +290,7 @@ class Digesto:
                   normative['extract'] if 'extract' in normative else '',
                   id)
 
-        cur = con.cursor
+        cur = con.cursor()
         cur.execute('set timezone to %s',('UTC',))
         cur.execute('update from digesto.normative set issuer_id = %s,file_id = %s,type = %s,file_number = %s,normative_number = %s,date = %s,created = %s,creator_id = %s, extract = %s where id = %s',params)
 

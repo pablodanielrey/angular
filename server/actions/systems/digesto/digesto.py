@@ -8,7 +8,7 @@ from autobahn.asyncio.wamp import ApplicationSession
 
 from model.config import Config
 from model.systems.digesto.digesto import Digesto
-
+from model.profiles import Profiles
 
 '''
     Clase de acceso mediante wamp a los métodos del digesto
@@ -21,6 +21,7 @@ class WampDigesto(ApplicationSession):
 
         self.digesto = inject.instance(Digesto)
         self.serverConfig = inject.instance(Config)
+        self.profiles = inject.instance(Profiles)
 
     '''
     como referencia tambien se puede sobreeescribir el onConnect
@@ -43,20 +44,21 @@ class WampDigesto(ApplicationSession):
         return psycopg2.connect(host=host, dbname=dbname, user=user, password=passw)
 
 
-    def createNormative(self,normative,status,visibility,relateds,file):
+    def createNormative(self,session,normative,status,visibility,relateds,file):
         con = self._getDatabase()
         try:
-            id = self.digesto.createNormative(con,normative,status,visibility,relateds,file)
+            userId = self.profiles.getLocalUserId(session)
+            id = self.digesto.createNormative(con,normative,status,visibility,relateds,file,userId)
             con.commit()
             return id
         finally:
             con.close()
 
     @coroutine
-    def createNormative_async(self,normative,status,visibility,relateds,file):
+    def createNormative_async(self,session,normative,status,visibility,relateds,file):
         try:
             loop = asyncio.get_event_loop()
-            r = yield from loop.run_in_executor(None,self.createNormative,normative,status,visibility,relateds,file)
+            r = yield from loop.run_in_executor(None,self.createNormative,session,normative,status,visibility,relateds,file)
             return r
         except Exception as e:
             logging.exception(e)
