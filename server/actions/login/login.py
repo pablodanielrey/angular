@@ -39,7 +39,7 @@ class LoginWamp(ApplicationSession):
     def login(self, username, password, info=None):
         con = self._getDatabase()
         try:
-            self.login.login(username, password)
+            return self.login.login(username, password)
 
         except Exception as e:
             logging.exception(e)

@@ -1,24 +1,29 @@
 
-var app = angular.module('mainApp');
-/**
- * Controlador para realizar login
- * @param $scope Scope
- * Supone la existencia de un elemento padre que maneja los eventos dontShowMessage y showMessage para administrar mensajes
- */
-app.controller("LoginCtrl", ['$rootScope','$scope', '$window', 'Session','Credentials','Notifications',
-	function($rootScope,$scope, $window, Session, Credentials, Notifications) {
+angular
+  .module('mainApp')
+  .controller('LoginCtrl',LoginCtrl);
 
-		$scope.user = {
+LoginCtrl.$inject = ['$rootScope','$scope','$location','Notifications'];
+
+function LoginCtrl($rootScope, $scope, $location, Notifications) {
+
+    var vm = this;
+
+    $scope.model = {
 			username: '',
 			password: ''
-		};
+    }
+
+    $scope.initialize = function() {
+    }
+
+    $scope.$on('$viewContentLoaded', function(event) {
+      $scope.initialize();
+    });
+
 
 		$scope.hasToLogin = function() {
 			return (!Credentials.isLogged());
-		}
-
-		$scope.myFunc= function() {
-			console.log("Enterr");
 		}
 
 		$scope.login = function() {
@@ -29,8 +34,8 @@ app.controller("LoginCtrl", ['$rootScope','$scope', '$window', 'Session','Creden
 			$scope.$broadcast("autofill:update");
 
 			var creds = {
-				username: $scope.user.username,
-				password: $scope.user.password
+				username: $scope.model.username,
+				password: $scope.model.password
 			};
 
 			Credentials.login(creds,

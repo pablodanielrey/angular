@@ -32,7 +32,7 @@ app.service('Session', function(Cache) {
 		var data = Cache.getItem(sid);
 		return data;
 	}
-  
+
   /**
    * Obtener id de usuario de sesion
    */
@@ -49,17 +49,5 @@ app.service('Session', function(Cache) {
 		Cache.setItem(id,data);
 	}
 
-	this.isLogged = function() {
-		var sid = this.getSessionId();
-		if (sid == null) {
-			return false;
-		}
-
-		var data = Cache.getItem(sid);
-		if (data == null) {
-			return false;
-		}
-		return (data.user_id != undefined);
-	}
 
 });
