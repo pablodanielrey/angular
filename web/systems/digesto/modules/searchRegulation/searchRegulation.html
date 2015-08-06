@@ -1,47 +1,39 @@
 <div class="searchRegulationContainer" ng-controller='searchRegulation'>
-    <div class="contentSearchRegulation">
+    <div class="searchRegulation">
+
+        <!-- *** CONTENEDOR DEL BUSCADOR Y LOS FILTROS *** -->
         <div class="contentSearch">
             <div class=search>
                 <div class="inputSearchContent">
                   <form class="form-wrapper cf">
                       <input type="text" placeholder="Buscar norma..." required>
-                      <button type="submit">Buscar</button>
+                      <button type="submit"><i class="fa fa-search"></i> BUSCAR </button>
                   </form>
-              </div>
-
-                <!-- <div>
-                    <h1>BUSCAR NORMA</h1>
-                </div> -->
-                <!-- <div class="inputSearchContent">
-                    <div class="iconSearch"><i class="fa fa-search"></i></div>
-                    <div><input class="inputSearch" type="search"></div>
-                    <div><button class="btnSearch">BUSCAR</button></div>
                 </div>
-                <div>
-
-                </div> -->
             </div>
+            <!-- **** FILTROS *** -->
             <div class="filters">
-                <div class="iconFilters">
-                    <i class="fa fa-sliders"></i>
+
+                <div class="iconFilters ">
+                    <i class="fa fa-sliders fa-2x"></i>
                 </div>
 
                 <div class="itemsFilters">
                     <div>
-                        <select>
+                        <select class="inputFilters">
                           <option>Ordenanza</option>
                           <option>Resolución</option>
                           <option>Dispocición</option>
                         </select>
                     </div>
                     <div>
-                      Norma
+                      <span class="titleInputFilters"> Norma </span>
                     </div>
                 </div>
 
                 <div class="itemsFilters">
                     <div>
-                      <select>
+                      <select class="inputFilters">
                         <option>2015</option>
                         <option>2014</option>
                         <option>2013</option>
@@ -51,67 +43,69 @@
                       </select>
                     </div>
                     <div>
-                      Año
+                      <span class="titleInputFilters"> Año </span>
+                    </div>
+                </div>
+
+                <div class="itemsFilters tam1">
+                    <div>
+                      <input class="inputFilters" type="text"></input>
+                    </div>
+                    <div>
+                      <span class="titleInputFilters"> Nº Norma </span>
+                    </div>
+                </div>
+
+                <div class="itemsFilters tam2">
+                    <div>
+                        <input class="inputFilters" type="text"></input>
+                    </div>
+                    <div>
+                      <span class="titleInputFilters"> Nº Expediente </span>
                     </div>
                 </div>
 
                 <div class="itemsFilters">
                     <div>
-                      <input type="text"></input>
+                        <select class="inputFilters">
+                          <option>Decano</option>
+                          <option>Vicedecano</option>
+                        </select>
                     </div>
                     <div>
-                      Nº Norma
-                    </div>
-                </div>
-
-                <div class="itemsFilters">
-                    <div>
-                        <input type="text"></input>
-                    </div>
-                    <div>
-                      Nº Expediente
+                      <span class="titleInputFilters"> Emisor </span>
                     </div>
                 </div>
 
                 <div class="itemsFilters">
-                <div>
-                    <select>
-                      <option>Decano</option>
-                      <option>Vicedecano</option>
-                    </select>
-                </div>
-                <div>
-                  Emisor
-                </div>
-                </div>
-
-                <div class="itemsFilters">
                     <div>
-                        <select>
+                        <select class="inputFilters">
                           <option>Aprobada</option>
                           <option>Pendiente</option>
                         </select>
                     </div>
                     <div>
-                      Estado
+                      <span class="titleInputFilters"> Estado </span>
                     </div>
                 </div>
 
                 <div class="itemsFilters">
                     <div>
-                        <select>
+                        <select class="inputFilters">
                           <option>Público</option>
                           <option>Privado</option>
                         </select>
                     </div>
                     <div>
-                      Visibilidad
+                      <span class="titleInputFilters"> Visibilidad </span>
                     </div>
                 </div>
 
-
-          </div>
+            </div>
         </div>
+
+
+        <!-- **** RESULTADOS DE BUSQUEDA **** -->
         <div class="contentSearch">
           <div>
               <h1>RESULTADOS DE BUSQUEDA</h1>
@@ -189,21 +183,7 @@
                       	<div class="col col-span-2">Curso de Capacitación en Informática para el personal no docente de la Facultad</div>
                     </div>
                 </div>
-                <div>
-                    <div class="row">
-                      	<div class="col2 col-span-2"><input type="checkbox"></div>
-                      	<div class="col4 col-span-1"><i class="fa fa-file-text"></i>&nbsp; Odenanza</div>
-                      	<div class="col col-span-1">025/15</div>
-                      	<div class="col col-span-1">900-1236/15</div>
-                      	<div class="col col-span-1">Decanato</div>
-                      	<div class="col col-span-1">Aprobada</div>
-                      	<div class="col col-span-1">Público</div>
-                      	<div class="col col-span-1"><button class="btnVer">VER</button> <button class="btnEditar">EDITAR</button></div>
-                    </div>
-                    <div class="row2">
-                      	<div class="col col-span-2">Curso de Capacitación en Informática para el personal no docente de la Facultad</div>
-                    </div>
-                </div>
+
           </div>
         </div>
     </div>
