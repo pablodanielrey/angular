@@ -3,9 +3,9 @@ angular
   .module('mainApp')
   .controller('LoginCtrl',LoginCtrl);
 
-LoginCtrl.$inject = ['$rootScope','$scope','$location','Notifications'];
+LoginCtrl.$inject = ['$rootScope','$scope','$location','Notifications','Login'];
 
-function LoginCtrl($rootScope, $scope, $location, Notifications) {
+function LoginCtrl($rootScope, $scope, $location, Notifications, Login) {
 
     var vm = this;
 
@@ -23,7 +23,7 @@ function LoginCtrl($rootScope, $scope, $location, Notifications) {
 
 
 		$scope.hasToLogin = function() {
-			return (!Credentials.isLogged());
+			return (!Login.isLogged());
 		}
 
 		$scope.login = function() {
@@ -33,31 +33,14 @@ function LoginCtrl($rootScope, $scope, $location, Notifications) {
 			*/
 			$scope.$broadcast("autofill:update");
 
-			var creds = {
-				username: $scope.model.username,
-				password: $scope.model.password
-			};
+      Login.login($scope.model.username, $scope.model.password,
+        function(sid) {
+            // usuario logueado correctamente
+            $window.location.href = "/index.html";
 
-			Credentials.login(creds,
-				function(s) {
-					var data = {
-						session_id: s.session,
-						user_id: s.user_id,
-						login: {
-							username: creds.username,
-							password: creds.password
-						}
-					}
-
-					Session.create(s.session, data);
-					$scope.user.username = '';
-					$scope.user.password = '';
-
-					$window.location.href = "/index.html";
-				},
-				function(error) {
-					Notifications.message(error);
-				});
+        }, function(err) {
+            Notifications.message(err);
+        });
 
 		};
 

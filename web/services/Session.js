@@ -10,13 +10,13 @@ app.service('Session', function(Cache) {
 		Cache.setItem(session,data);
 	}
 
-	this.destroy = function(){
+	this.destroy = function() {
 		var sid = Cache.getItem(this.sessionIdentifier);
 		Cache.removeItem(sid);
 		Cache.removeItem(this.sessionIdentifier);
 	};
 
-	this.getSessionId = function(){
+	this.getSessionId = function() {
 		return Cache.getItem(this.sessionIdentifier);
 	}
 

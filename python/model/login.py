@@ -27,7 +27,7 @@ class Login:
         sid = self.session._create(con, sess)
         con.commit()
 
-        response = {'session': sid, 'user_id': rdata['user_id']}
+        response = {'session_id': sid, 'user_id': rdata['user_id']}
         return response
 
     def logout(self, con, sid):

@@ -14,13 +14,30 @@ function Login($rootScope, $wamp, Session) {
 		return (data.user_id != undefined);
 	}
 
+	/*
+		Loguea al usuario en el servidor y genera tambien la sesion dentro de la cache local
+	*/
 	this.login = function(username, password, cok, cerr) {
 		$wamp.call('system.login', [username,password])
-		.then(function(sid) {
+		.then(function(s) {
+
 			if (sid == null) {
 				cerr('');
+
 			} else {
-				cok(sid);
+
+				var data = {
+					session_id: s.session_id,
+					user_id: s.user_id,
+					login: {
+						username: username,
+						password: password
+					}
+				}
+
+				Session.create(s.session_id, data);
+
+				cok(s.session_id);
 			}
 		}),function(err) {
 			cerr(err);
@@ -33,6 +50,7 @@ function Login($rootScope, $wamp, Session) {
 			if (ok == null) {
 				cerr('');
 			} else {
+				Session.destroy();
 				cok();
 			}
 		}),function(err) {
