@@ -167,9 +167,6 @@ class Digesto:
 
     def createNormative(self,con,normative,status,visibility,relateds,file,userId):
 
-        import pdb
-        pdb.set_trace()
-
         if normative is None:
             return None
 
@@ -231,7 +228,7 @@ class Digesto:
         created = normative['created']
         d2 = created - datetime.timedelta(seconds=1)
         self.updateStatus(con,id,userId,d2)
-        if status is not None:
+        if status is not None and status != 'PENDING':
             self.updateStatus(con,id,userId,created,status)
 
         if visibility is None:
