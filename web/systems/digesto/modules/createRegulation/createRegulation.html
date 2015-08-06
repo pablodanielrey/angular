@@ -80,7 +80,7 @@
                                   <span class="titleInputRegulation">Emisor</span>
                               </div>
                           </div>
-                          <div class="contentdataImput">
+                          <div class="ContentVisivilidad contentdataImput">
                               <div>
                                   <select class="inputRegulationOne" ng-model='model.normative.visibility' ng-options='item.name for item in model.visibilities' ng-change='changeVisibility()'>
                                   </select>
@@ -89,7 +89,7 @@
                                   <span class="titleInputRegulation">Visibilidad</span>
                               </div>
                           </div>
-                          <div class="contentdataImput">
+                          <div class="ContentEstado contentdataImput">
                               <div>
                                   <select class="inputRegulationOne" ng-model='model.normative.status' ng-options='item.name for item in model.status'>
                                   </select>
@@ -98,7 +98,7 @@
                                   <span class="titleInputRegulation">Estado</span>
                               </div>
                           </div>
-                          <div class="contentdataImput tam1" ng-class="{false:'hidden'}[viewDateStatus()]">
+                          <div class="contentAprobado contentdataImput tam1" ng-class="{false:'hidden'}[viewDateStatus()]">
                           <!-- <div class="contentAprobado tam1" ng-if="viewDateStatus()"> -->
                              <div>
                                  <input class="inputRegulationOne" type="date">
@@ -204,29 +204,19 @@
        <div class="relacionDeNorma">
          <div class="contentSearchRegulation">
              <div class="contentSearch">
-                 <div>
-                   <button class="btnVolver" ng-click="back()">VOLVER <i class="fa fa-share"></i> </button>
-                 </div>
+
                  <div class=search>
-                     <div class="inputSearchContent">
+                    <div class="inputSearchContent">
                        <form class="form-wrapper cf">
                            <input type="text" placeholder="Buscar norma..." required>
                            <button type="submit" ng-click="selectRegulation(9)">Buscar</button>
                        </form>
-                   </div>
+                       <div>
+                         <button class="btnVolver" ng-click="back()">VOLVER <i class="fa fa-share"></i> </button>
+                       </div>
+                    </div>
+                </div>
 
-                     <!-- <div>
-                         <h1>BUSCAR NORMA</h1>
-                     </div> -->
-                     <!-- <div class="inputSearchContent">
-                         <div class="iconSearch"><i class="fa fa-search"></i></div>
-                         <div><input class="inputSearch" type="search"></div>
-                         <div><button class="btnSearch">BUSCAR</button></div>
-                     </div>
-                     <div>
-
-                     </div> -->
-                 </div>
                  <div class="filters">
                      <div class="iconFilters">
                          <i class="fa fa-sliders"></i>

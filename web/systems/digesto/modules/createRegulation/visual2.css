@@ -1,4 +1,6 @@
-
+/*******************************************************
+********* CONTENEDOR PRINCIPAL DE LA PAGINA ************
+********************************************************/
 
 .createRegulation {
 
@@ -12,11 +14,19 @@
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
+/*******************************************************
+************** CONTENEDOR DE NAVEGACION ****************
+********************************************************/
+
 .createRegulation .contentScreens {
   height:100%;
   width:100%;
   background-color: yellow;
 }
+
+/*******************************************************
+********* CONTENEDORES COMUNES EN LA PAGINA ************
+********************************************************/
 
 .createRegulation  .container {
   padding: 20px;
@@ -33,6 +43,13 @@
   width: 82%;
 }
 
+.createRegulation .regulations {
+  color:#5c5f69;
+  margin-top: 20px;
+}
+
+/***** ESTILOS COMUNES *****/
+
 .createRegulation h1 {
   font-size: 1em;
   margin-bottom: 1em;
@@ -42,53 +59,56 @@
   cursor: pointer;
 }
 
-.createRegulation.screenPrivadaDeGrupos .privadaDeGrupos{
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.9);;
+/*******************************************************
+** QUE MOSTRAR U OCULTAR SEGUN DONDE UNO SE ENCUENTRA **
+********************************************************/
 
-  position: absolute;
-  top: 0px;
+/*.createRegulation .ContentEstado, .contentAprobado, .ContentVisivilidad {
+  margin: 10px auto;
+}*/
+
+/**** SI ESTAS EN ORDENZA SE OCULTAN LOS SIGUIENTES ****/
+
+.createRegulation.screenOrdenanza  .ContentEstado{
+  display: none;
 }
 
-.createRegulation.screenRelacionDeNorma .relacionDeNorma{
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.9);;
-
-  position: absolute;
-  top: 0px;
+.createRegulation.screenOrdenanza  .ContentVisivilidad{
+  display: none;
 }
 
-.createRegulation.screenRelacionDeNormaFinal .relacionDeNorma{
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.9);;
+.createRegulation.screenOrdenanza  .contentAprobado{
+  display: none;
+}
 
-  position: absolute;
-  top: 0px;
+.createRegulation .contentAprobado.hidden {
+  visibility: hidden;
+  /*display:none;*/
+}
+
+.createRegulation .contentAprobado {
+  visibility: visible;
 }
 
 
+/*** SI ESTAS EN DISPOSICION SE OCULTAN LOS SIGUIENTES ***/
 
+.createRegulation.screenDisposicion  .ContentEstado{
+  display: none;
+}
 
+.createRegulation.screenDisposicion  .ContentVisivilidad{
+  display: none;
+}
 
-/******************screenOne*************************************/
-/*PANTALLA PRINCIPAL DONDE SE ELIJE ENTRE NORMA, DISPOSIION, ETC*/
+.createRegulation.screenDisposicion  .contentAprobado{
+  display: none;
+}
 
-.createRegulation .contentdataImput {
-  /*margin: 10px auto;*/
-  margin-right: 25px;
-}
-.createRegulation .tam1 {
-  width: 120px;
-}
-.createRegulation .tam2 {
-  width: 50px;
-}
-.createRegulation .tam3 {
-  width: 150px;
-}
+/*******************************************************
+******** SCREEN ONE (Selección de Norma) ***************
+********************************************************/
+
 .createRegulation .screenOne {
   /*top:0;*/
   height:100%;
@@ -96,15 +116,26 @@
   background-color: #eeeeee;
 }
 
-.createRegulation .regulations {
-  color:#5c5f69;
-  margin-top: 20px;
+.createRegulation .contentdataImput {
+  /*margin: 10px auto;*/
+  margin-right: 25px;
 }
 
+.createRegulation .tam1 {
+  width: 120px;
+}
 
+.createRegulation .tam2 {
+  width: 50px;
+}
 
-/******************screenTwo*************************************/
-/***********PANTALLA DE CARGA DE DATOS!!!!!**********************/
+.createRegulation .tam3 {
+  width: 150px;
+}
+
+/*******************************************************
+*********** SCREEN TWO (Carga de Datos) ****************
+********************************************************/
 
 .createRegulation .screenTwo {
   /*top:768px;*/
@@ -122,9 +153,10 @@
   margin-right:10px;
 }
 
+/***** BOTENES GUARDAR Y CANCELAR ******/
+
 .createRegulation .sendRegulation {
   background-color:#d5dbdf;
-
   padding:1em;
   border: none;
   margin-right: 1em;
@@ -142,7 +174,6 @@
 
 .createRegulation .cancelRegulation {
   background-color:#d5dbdf;
-
   padding:1em;
   border: none;
   border-bottom: 3px solid #e43e46;
@@ -156,14 +187,13 @@
   border-bottom: 3px solid #e43e46;
 }
 
+/**** PRIMER CONTENEDOR DE CARGA DE DATOS ****/
+
 .createRegulation .dataOne {
   margin-top: 25px;
   background-color: #d5dbdf;
   padding: 10px;
   border-bottom:3px solid #b3b5bc;
-
-
-
 }
 
 .createRegulation .titleInputRegulation {
@@ -206,11 +236,7 @@
   -moz-box-shadow: 1px 1px 1px #5c5f69;
 }
 
-.createRegulation .dash {
-  margin-left: 2px;
-  margin-right: 2px;
-  font-size: 1.2em;
-}
+/**** SEGUNDO CONTENEDOR DE CARGA DE DATOS ****/
 
 .createRegulation .dataTwo {
   margin-top: 20px;
@@ -226,25 +252,6 @@
 
 .createRegulation .tamInputRegulationOne {
   width: 100%;
-
-}
-
-.createRegulation .inputRegulationTwo {
-
-  font-size: 1.2em;
-  background-color: white;
-  padding: 3px;
-  width: 100%;
-  border:1px solid #b3b5bc;
-  height: 50px;
-  resize: none;
-
-}
-
-
-
-.createRegulation .titleImputData {
-
 
 }
 
@@ -282,30 +289,15 @@
 
 }
 
+.createRegulation .inputRegulationTwo {
 
-
-
-/******************screenThree*************************************/
-/******************CREACION FINALIZADA!!!!!***********************/
-
-.createRegulation .screenThree {
-  /*top:20em;*/
-  height:100%;
-  width:100%;
-  background-color: #eeeeee;
-}
-
-
-
-.createRegulation .btnRegulationFinished {
+  font-size: 1.2em;
   background-color: white;
-  margin-top: 5%;
-  padding: 1%;
-  color:#5c5f69;
-  border-radius: 2px;
-  border: none;
-  border-bottom:3px solid #b3b5bc;
-
+  padding: 3px;
+  width: 100%;
+  border:1px solid #b3b5bc;
+  height: 50px;
+  resize: none;
 }
 
 .createRegulation .btnRegulationFinished:hover {
@@ -318,11 +310,6 @@
   border-bottom:3px solid #b3b5bc;
 
 }
-
-.createRegulation .ContentEstado, .contentAprobado, .ContentVisivilidad {
-  margin: 10px auto;
-}
-
 
 
 .createRegulation .contentUploadPDF {
@@ -346,7 +333,6 @@
   -webkit-box-shadow: 1px 1px 1px #5c5f69;
   -moz-box-shadow: 1px 1px 1px #5c5f69;
   cursor: pointer;
-
 }
 
 .createRegulation .uploadPDF2 {
@@ -359,9 +345,7 @@
 	-webkit-border-radius:0 3px 3px 0;
   -webkit-box-shadow: 1px 1px 1px #5c5f69;
   -moz-box-shadow: 1px 1px 1px #5c5f69;
-
   margin-right: 50px;
-
 }
 
 .createRegulation .btnInputFile {
@@ -379,26 +363,42 @@
 .iconPDF {
   background-color: white;
   color:#e43e46;
+}
+
+/*******************************************************
+************* SCREEN THREE (Finalizar) *****************
+********************************************************/
+
+.createRegulation .screenThree {
+  /*top:20em;*/
+  height:100%;
+  width:100%;
+  background-color: #eeeeee;
+}
+
+.createRegulation .btnRegulationFinished {
+  background-color: white;
+  margin-top: 5%;
+  padding: 1%;
+  color:#5c5f69;
+  border-radius: 2px;
+  border: none;
+  border-bottom:3px solid #b3b5bc;
 
 }
 
+/*******************************************************
+***** COLORES DE TITULOS Y FONDO SEGUN PANTALLA ********
+********************************************************/
 
+/**** EN ORDENANZA ****/
 
-
-/*  ------------------------------------------------------------------------
-    -------------------- ORDENANZA -----------------------------------------
-    ------------------------------------------------------------------------
-*/
-.createRegulation.screenOrdenanza  .ContentEstado{
-  display: none;
-}
-
-.createRegulation.screenOrdenanza  .ContentVisivilidad{
-  display: none;
-}
-
-.createRegulation.screenOrdenanza  .contentAprobado{
-  display: none;
+.createRegulation.screenOrdenanza .titleNewRegulation  {
+  background-color:#ec9122;
+  color:white;
+  padding:5px;
+  margin-left:10px;
+  margin-right:10px;
 }
 
 .createRegulation.screenOrdenanzaFinal .dataThree  {
@@ -409,38 +409,8 @@
   border-bottom:3px solid #b3b5bc;
 
 }
-.createRegulation.screenOrdenanza .titleNewRegulation  {
-  background-color:#ec9122;
-  color:white;
-  padding:5px;
-  margin-left:10px;
-  margin-right:10px;
-}
 
-
-
-
-.createRegulation.screenResolucion {
-
-}
-
-.createRegulation .contentAprobado.hidden {
-  visibility: hidden;
-  /*display:none;*/
-}
-
-.createRegulation .contentAprobado {
-  visibility: visible;
-}
-
-.createRegulation.screenResolucionFinal .dataThree  {
-  color: white;
-  height: 100%;
-  background-color: #e43e46;
-  padding: 100px;
-  border-bottom:3px solid #b3b5bc;
-
-}
+/**** EN RESOLUCIÓN ****/
 
 .createRegulation.screenResolucion .titleNewRegulation  {
   background-color:#e43e46;
@@ -450,30 +420,16 @@
   margin-right:10px;
 }
 
-
-
-
-.createRegulation.screenDisposicion  .ContentEstado{
-  display: none;
-}
-
-.createRegulation.screenDisposicion  .ContentVisivilidad{
-  display: none;
-}
-
-.createRegulation.screenDisposicion  .contentAprobado{
-  display: none;
-}
-
-
-.createRegulation.screenDisposicionFinal .dataThree  {
+.createRegulation.screenResolucionFinal .dataThree  {
   color: white;
   height: 100%;
-  background-color: #128c78;
+  background-color: #e43e46;
   padding: 100px;
   border-bottom:3px solid #b3b5bc;
-
 }
+
+/**** EN DISPOCICIÓN ****/
+
 .createRegulation.screenDisposicion .titleNewRegulation  {
   background-color:#128c78;
   color:white;
@@ -482,14 +438,121 @@
   margin-right:10px;
 }
 
+.createRegulation.screenDisposicionFinal .dataThree  {
+  color: white;
+  height: 100%;
+  background-color: #128c78;
+  padding: 100px;
+  border-bottom:3px solid #b3b5bc;
+}
 
+/*******************************************************
+************* PANTALLA PRIVADA DE GRUPOS ***************
+********************************************************/
 
+.createRegulation.screenPrivadaDeGrupos .privadaDeGrupos{
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);;
+  position: absolute;
+  top: 0px;
+}
 
-/**************************************************************
-***************************************************************
-******** pantalla seleccionar norma  **************************
-***************************************************************
-***************************************************************/
+.createRegulation .contentOffices {
+  width: 70%;
+  margin: 0 auto;
+}
+
+.createRegulation .contentInt {
+  background-color: #eeeeee;
+  padding: 10px;
+  border-top: 3px solid #5c5f69;
+}
+
+.createRegulation .btnVolver {
+  margin-top: 6px;
+  border: none;
+  padding: 10px;
+  background-color: #5c5f69;
+  color: white;
+  cursor: pointer;
+  border-radius: 3px;
+  border-bottom: 3px solid #c9262b;
+}
+
+.createRegulation .btnVolver:hover {
+  margin-top: 6px;
+  background-color: #c9262b;
+  border: none;
+  padding: 10px;
+  color: white;
+  cursor: pointer;
+  border-radius: 3px;
+  border-bottom: 3px solid #c9262b;
+}
+
+.createRegulation .inputSearchOffices {
+  padding: 2px;
+  font-size: 1.1em;
+  margin-bottom: 15px;
+}
+
+.createRegulation .listOffices {
+}
+
+.createRegulation .itmesOffices {
+  background-color: white;
+  padding: 5px;
+  margin-bottom: 3px;
+  cursor: pointer;
+}
+
+.createRegulation .itmesOffices:hover {
+  background-color: #0066A6;
+  color:white;
+  padding: 5px;
+}
+
+.createRegulation .titlesPermission {
+  font-size: 0.8em;
+  color:#5c5f69;
+  margin-bottom: 5px;
+}
+
+.createRegulation .officesPermission {
+  background-color: white;
+  padding: 5px;
+  margin-bottom: 3px;
+  cursor: pointer;
+}
+
+.createRegulation .officesPermission:hover {
+  background-color: #0066A6;
+  color:white;
+  padding: 5px;
+
+}
+
+/********************************************
+******** PANTALLA RELACION DE NORMA *********
+********************************************/
+
+.createRegulation.screenRelacionDeNorma .relacionDeNorma{
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);;
+  position: absolute;
+  top: 0px;
+}
+
+.createRegulation.screenRelacionDeNormaFinal .relacionDeNorma{
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);;
+  position: absolute;
+  top: 0px;
+}
+
 
 .createRegulation .searchRegulationContainer h1 {
   font-size: 1em;
@@ -503,15 +566,14 @@
   /*background-color: #5c5f69;*/
   width: 100%;
 
-
 }
 
 .createRegulation .iconSearch {
   color:white;
   padding: 3px;
 }
-.createRegulation .inputSearch {
 
+.createRegulation .inputSearch {
   margin-left: 20px;
   width: 400px;
   padding: 5px;
@@ -540,25 +602,20 @@
 
 .createRegulation .btnSeleccionar {
   margin-left: 0px;
-
   background-color: #0066A6;
   color:white;
   border: none;
   padding: 5px;
-
   cursor: pointer;
   width: 100%;
   height: 100%;
 }
 
-
 .createRegulation .contentSearchRegulation {
   padding: 20px;
 }
 
-
 .createRegulation .contentSearch {
-
   background-color:white;
   -webkit-box-shadow: 1px 1px 5px #5c5f69;
   -moz-box-shadow: 5px 5px 5px #5c5f69;
@@ -571,7 +628,6 @@
 }
 
 .createRegulation .contentSearch2 {
-
   background-color:white;
   -webkit-box-shadow: 1px 1px 5px #5c5f69;
   -moz-box-shadow: 5px 5px 5px #5c5f69;
@@ -587,7 +643,6 @@
   /*display: none;*/
 }
 
-
 .createRegulation .filters {
   background-color: #eeeeee;
   padding: 5px;
@@ -597,52 +652,44 @@
 
 }
 
-
-
-
 .createRegulation .row {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   background-color: #eeeeee;
-
-
 }
+
 .createRegulation .row1 {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   background-color: #5c5f69;
   margin-bottom: 1%;
-
 }
+
 .createRegulation .row2 {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-
   margin-bottom: 1%;
-
 }
+
 .createRegulation .row3 {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   background-color: #eeeeee;
-
-
 }
+
 .createRegulation .row4 {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   background-color: #FFFFFF;
   margin-bottom: 1%;
-
 }
 
 .createRegulation .col {
-
   flex: 1 1 8%;
   margin: 0 0 0 0;
   padding: 0.5em ;
@@ -658,7 +705,6 @@
   flex: 1 1 8%;
   margin: 10 0 0 0;
   color: white;
-
   box-sizing: border-box;
   background-clip: content-box;
   border: 1px solid rgba(0,0,0,0.1);
@@ -678,13 +724,12 @@
   border: 1px solid rgba(0,0,0,0.1);
   align-items: center;
   justify-content: center;
-
 }
+
 .createRegulation .col4 {
   display: flex;
   flex: 1 1 8%;
   margin: 0 0 0 0;
-
   color: white;
   background-color: #ec9122;
   box-sizing: border-box;
@@ -692,13 +737,12 @@
   border: 1px solid rgba(0,0,0,0.1);
   align-items: center;
   justify-content: center;
-
 }
+
 .createRegulation .col5 {
   display: flex;
   flex: 1 1 8%;
   margin: 0 0 0 0;
-
   color: white;
   background-color: #128c78;
   box-sizing: border-box;
@@ -720,7 +764,6 @@
   justify-content: center;
 }
 
-
 .createRegulation .col1 {
   flex: 1 1 8%;
   margin: 0 0 0 0;
@@ -734,42 +777,40 @@
 .createRegulation .col-span-1 {
   flex-basis: 8.3333%;
 }
+
 .createRegulation .col-span-2 {
   flex-basis: 10px;
 }
+
 .createRegulation .results {
   overflow-y: scroll;
   height: 360px;
 }
 
-
-
-
 .createRegulation .cf:before, .cf:after{
-    content:"";
-    display:table;
+  content:"";
+  display:table;
 }
 
 .createRegulation .cf:after{
-    clear:both;
+  clear:both;
 }
 
 .createRegulation .cf{
-    zoom:1;
+  zoom:1;
 }
 
-/* Form wrapper styling */
+
+/* INICIO FORMULARIO DE BUSQUEDA */
 .createRegulation .form-wrapper {
     width: 450px;
-    padding: 15px;
-    margin: 10px auto 10px auto;
+    /*padding: 15px;*/
+    margin: 5px auto 5px auto;
     background: #5c5f69;
-    background: rgba(0,0,0);
+    /*background: rgba(0,0,0);*/
     border-radius: 10px;
     box-shadow: 0 1px 1px rgba(0,0,0,.4) inset, 0 1px 0 rgba(255,255,255,.2);
 }
-
-/* Form text input */
 
 .createRegulation .form-wrapper input {
     width: 330px;
@@ -780,12 +821,13 @@
     border: 0;
     background: #eee;
     border-radius: 3px 0 0 3px;
+    box-shadow: 0 0 2px rgba(0,0,0,.5) inset;
 }
 
 .createRegulation .form-wrapper input:focus {
     outline: 0;
     background: #fff;
-    box-shadow: 0 0 2px rgba(0,0,0,.8) inset;
+    box-shadow: 0 0 2px rgba(0,0,0,.5) inset;
 }
 
 .createRegulation .form-wrapper input::-webkit-input-placeholder {
@@ -806,7 +848,7 @@
     font-style: italic;
 }
 
-/* Form submit button */
+/* BOTON DE BUSQUEDA */
 .createRegulation .form-wrapper button {
     overflow: visible;
     position: relative;
@@ -834,7 +876,7 @@
     outline: 0;
 }
 
-.createRegulation .form-wrapper button:before { /* left arrow */
+.createRegulation .form-wrapper button:before { /* FLECHITA IZQUIERDA*/
     content: '';
     position: absolute;
     border-width: 8px 8px 8px 0;
@@ -849,88 +891,13 @@
 }
 
 .createRegulation .form-wrapper button:focus:before,
-.createRegulation .form-wrapper button:active:before{
+.searchRegulation .form-wrapper button:active:before{
         border-right-color: #0066A6;
 }
 
-.createRegulation .form-wrapper button::-moz-focus-inner { /* remove extra button spacing for Mozilla Firefox */
+/* quitar espacio extra del botón para Mozilla Firefox */
+.createRegulation .form-wrapper button::-moz-focus-inner {
     border: 0;
     padding: 0;
 }
-
-
-
-/********************************************
-******** PANTALLA PERMISO DE GRUPOS *********
-********************************************/
-
-.createRegulation .contentOffices {
-  width: 70%;
-  margin: 0 auto;
-}
-
-.createRegulation .contentInt {
-  background-color: #eeeeee;
-  padding: 10px;
-  border-top: 3px solid #5c5f69;
-
-}
-
-.createRegulation .btnVolver {
-  border: none;
-  padding: 17px;
-  background-color: #0066A6;
-  color: white;
-  cursor: pointer;
-}
-
-.createRegulation .btnVolver:hover {
-  background-color: #275276;
-  border: none;
-  padding: 17px;
-  color: white;
-  cursor: pointer;
-}
-
-.createRegulation .inputSearchOffices {
-  padding: 2px;
-  font-size: 1.1em;
-  margin-bottom: 15px;
-}
-
-.createRegulation .listOffices {
-}
-
-.createRegulation .itmesOffices {
-  background-color: white;
-  padding: 5px;
-  margin-bottom: 3px;
-  cursor: pointer;
-}
-
-.createRegulation .itmesOffices:hover {
-  background-color: #0066A6;
-  color:white;
-  padding: 5px;
-
-}
-
-.createRegulation .titlesPermission {
-  font-size: 0.8em;
-  color:#5c5f69;
-  margin-bottom: 5px;
-}
-
-.createRegulation .officesPermission {
-  background-color: white;
-  padding: 5px;
-  margin-bottom: 3px;
-  cursor: pointer;
-}
-
-.createRegulation .officesPermission:hover {
-  background-color: #0066A6;
-  color:white;
-  padding: 5px;
-
-}
+/* FIN FORMULARIO DE BUSQUEDA */
