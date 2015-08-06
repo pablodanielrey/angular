@@ -1,3 +1,4 @@
 web/config.json
 *.pyc
 nbproject
+doc/config/.directory
