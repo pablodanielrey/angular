@@ -215,9 +215,9 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 
 	$scope.initialize = function() {
 
-		Profiles.checkAccess(Session.getSessionId(),'ADMIN-LABORALINSERTION',
+		Profiles.checkAccess(Session.getSessionId(),['ADMIN-LABORALINSERTION'],
 			function(ok) {
-				if (ok == 'granted') {
+				if (ok) {
 					$scope.model.download = true;
 				}
 			},

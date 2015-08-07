@@ -5,6 +5,7 @@ import logging
 
 from model.config import Config
 from model.login import Login
+from model.profiles import Profiles
 
 import asyncio
 from asyncio import coroutine
@@ -19,6 +20,7 @@ class LoginWamp(ApplicationSession):
 
         self.serverConfig = inject.instance(Config)
         self.login = inject.instance(Login)
+        self.profiles = inject.instance(Profiles)
 
     @coroutine
     def onJoin(self, details):
@@ -27,6 +29,7 @@ class LoginWamp(ApplicationSession):
         yield from self.register(self.logout_async, 'system.logout')
         yield from self.register(self.generateResetPasswordHash_async, 'system.password.generateResetPasswordHash')
         yield from self.register(self.changePasswordWithHash_async, 'system.password.changePasswordWithHash')
+        yield from self.register(self.checkProfileAccess_async, 'system.profiles.checkProfileAccess')
 
     def _getDatabase(self):
         host = self.serverConfig.configs['database_host']
@@ -34,6 +37,18 @@ class LoginWamp(ApplicationSession):
         user = self.serverConfig.configs['database_user']
         passw = self.serverConfig.configs['database_password']
         return psycopg2.connect(host=host, dbname=dbname, user=user, password=passw)
+
+    '''
+        Chequea que el usuario logeado en la sesion sid tenga alguno de los perfiles enviados en la lista de perfiles
+    '''
+    def checkProfileAccess(self, sid, roles):
+        con = self._getDatabase()
+        try:
+            r = self.profiles._checkAccessWithCon(con, sid, roles)
+            return r
+
+        finally:
+            con.close()
 
     '''
         Genera el hash para reseteo de la clave
@@ -123,4 +138,10 @@ class LoginWamp(ApplicationSession):
     def logout_async(self, sid):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.logout, sid)
+        return r
+
+    @coroutine
+    def checkProfileAccess_async(self, sid, roles):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.checkProfileAccess, sid, roles)
         return r
