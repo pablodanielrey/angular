@@ -1,15 +1,17 @@
 <header>
 	<div class="content">
 		<div>
-			
+
 		</div>
 		<div>
 			<ul  class="navigation" ng-controller="ConnectionCtrl" ng-class="{display:isLogged(), nodisplay:!isLogged()}">
 				<li><span ng-click='goHome()'><i class="fa fa-home"></i> Inicio</span></li>
 				<li><a <i class="fa fa-user">&nbsp;</i>{{getConnectedUserName()}}</a></li>
+				<!--
 				<li ng-class="{display:isConnected(), nodisplay:!isConnected()}"><a><i class="fa fa-check">&nbsp;</i>Conectado</a></li>
 				<li ng-class="{display:!isConnected(), nodisplay:isConnected()}"><a><i class="fa fa-bolt">&nbsp;</i>No conectado</a></li>
 				<li ng-class="{display:!isConnected(), nodisplay:isConnected()}"><button class="conect" ng-click='connect()'><i class="fa fa-cog fa-spin"></i> Conectar</button></li>
+				-->
 				<li><span ng-click='logout()'><i class="fa fa-power-off"></i> Salir&nbsp;</span>&nbsp;</li>
 			</ul>
 		</div>

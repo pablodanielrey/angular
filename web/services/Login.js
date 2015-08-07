@@ -14,6 +14,24 @@ function Login($rootScope, $wamp, Session) {
 		return (data.user_id != undefined);
 	}
 
+  /*
+    Chequea que la session actual sea valida
+  */
+  this.validateSession = function(cok,cerr) {
+    var sid = Session.getCurrentSession();
+    if (sid == null) {
+      return false;
+    }
+    $wamp.call('system.session.validate', [sid])
+      .then(function(v) {
+        cok(v);
+      },function(err) {
+        cerr(err);
+      }
+    );
+  }
+
+
 	/*
 		Loguea al usuario en el servidor y genera tambien la sesion dentro de la cache local
 	*/
