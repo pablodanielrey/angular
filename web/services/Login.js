@@ -26,6 +26,9 @@ function Login($rootScope, $wamp, Session) {
 
 			} else {
 
+        /*
+          Creo la sesion dentro de la cache cliente
+        */
 				var data = {
 					session_id: s.session_id,
 					user_id: s.user_id,
@@ -34,7 +37,6 @@ function Login($rootScope, $wamp, Session) {
 						password: password
 					}
 				}
-
 				Session.create(s.session_id, data);
 
 				cok(s.session_id);
