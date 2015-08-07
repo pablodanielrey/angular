@@ -69,11 +69,16 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
   };
 
 
-
-  $scope.updateNodeData = function(nodeScope){
+  /**
+   * Actualizar los datos de un nodo (solo se actualizan los datos y no la posicion en el arbol)
+   * @param {type} nodeScope
+   * @returns {undefined}
+   */
+  $scope.updateIssueData = function(nodeScope){
+    
     var nodeData = nodeScope.$modelValue;
 
-     Issue.updateRequest(nodeData,
+    Issue.updateIssueData(nodeData,
       function(data) { },
       function(error) { Notifications.message(error); }
     );

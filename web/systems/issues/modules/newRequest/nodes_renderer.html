@@ -19,7 +19,7 @@
         </div>
 
         <div>
-            <textarea class="orderText"  ng-model="node.title" ng-class="{'tree': node.expanded}"  ng-click="expandInput(this)"></textarea>
+            <textarea class="orderText"  ng-model="node.request" ng-blur="updateIssueData(this)" ng-class="{'tree': node.expanded}"  ng-click="expandInput(this)"></textarea>
 
             <div ng-class="{true:'descriptionExpanded',false:'descriptionClosed'}[node.descriptionExpanded]">
               {{node.created | date:"MM/dd/yyyy hh:mm" }}
@@ -31,7 +31,7 @@
     </div>
     <div class="orderIcons">
         <div ng-show="node.state != 'COMMENT'" class="btnState">
-            <select ng-model='node.state' ng-change="updateNodeData(this)">
+            <select ng-model='node.state' ng-change="updateIssueData(this)">
               <option value='COMMENT'>comentario</option>
               <option value='PENDING'>pendiente</option>
               <option value='CLOSED' class="cR">cerrado</option>
@@ -55,7 +55,7 @@
   </div>
 
 
-  <ol ui-tree-nodes="treeNodesOptions" ng-model="node.nodes" ng-class="{'angular-ui-tree-hidden': collapsed}">
+  <ol ui-tree-nodes ng-model="node.nodes" ng-class="{'angular-ui-tree-hidden': collapsed}">
     <li  ng-repeat="node in node.nodes" ui-tree-node ng-include="'modules/newRequest/nodes_renderer.html'">
     </li>
   </ol>

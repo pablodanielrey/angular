@@ -252,3 +252,84 @@ class DeleteIssue:
             con.close()
             return True
 
+
+
+"""
+query :
+{
+  id:,
+  action:"updateIssueData",
+  session:,
+  issue:{  "Datos del pedido"
+
+  }
+}
+
+response :
+{
+  id: "id de la petición",
+  ok: "caso exito",
+  error: "error del servidor",
+  response:{[
+      user: 'datos del usuario ',
+      fail: "datos correspondiente a la falla"
+  ]}
+
+}
+"""
+class UpdateIssueData: 
+
+    profiles = inject.attr(Profiles)
+    config = inject.attr(Config)
+    date = inject.attr(Date)
+    events = inject.attr(Events)
+    
+    issue = inject.attr(Issue)
+
+
+    """ manejar accion """
+    def handleAction(self, server, message): 
+
+        if (message['action'] != 'updateIssueData'): 
+            return False
+
+
+        #chequear parametros
+        if ('id' not in message) or ('session' not in message) or ('issue' not in message) or ('id' not in message['issue']) or ('request' not in message['issue']): 
+            response = {'id':message['id'], 'error':'Insuficientes parámetros'} 
+            server.sendMessage(response) 
+            return True 
+
+    
+        #chequear permisos
+        sid = message['session'] 
+        self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
+
+
+        #definir datos
+        id = message['issue']['id']
+        request = message['issue']['request']
+        priority = 0 if (('priority' not in message['issue']) or (message['issue']['priority'] is None)) else message['issue']['priority']
+        visibility = 'AUTHENTICATED' if (('visibility' not in message['issue']) or (message['issue']['visibility'] is None)) else message['issue']['visibility']
+ 
+        
+        #definir conexion con la base de datos
+        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+      
+        try:
+        
+            #abcm datos
+            events = self.issue.updateData(con, id, request, priority, visibility)
+            con.commit()
+            
+            #disparar eventos
+            for e in events: 
+                self.events.broadcast(server,e) 
+
+            
+        except Exception as e:
+            logging.exception(e)
+            raise e;
+
+        finally:
+            con.close()

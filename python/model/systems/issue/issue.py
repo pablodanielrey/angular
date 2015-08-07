@@ -113,5 +113,31 @@ class Issue:
          
         
         
+    
+    '''
+     ' Insertar datos
+     '''
+    def updateData(self,con,id,request,priority,visibility):
+        cur = con.cursor() 
+
+        cur.execute("""
+            UPDATE issues.request SET request = %s, priority = %s, visibility = %s
+            WHERE issues.request.id = %s;
+        """,(request, priority, visibility, id))
+       
+        
+        events = []
+        e = { 
+            'type':'IssueUpdatedData', 
+            'data':{ 
+               'id':id, 
+               'request':request,
+               'priority':priority,
+               'visibility':visibility,
+             } 
+        }
+        events.append(e)
+        return events 
+        
 
 

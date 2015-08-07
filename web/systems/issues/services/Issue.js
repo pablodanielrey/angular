@@ -84,4 +84,26 @@ app.service('Issue', ['Utils','Messages','Session', function(Utils,Messages,Sess
   };
   
   
+  
+  
+  this.updateIssueData = function(issue, callbackOk, callbackError){
+    var msg = {
+      id: Utils.getId(),
+      action: 'updateIssueData',
+      session: Session.getSessionId(),
+      issue: issue
+    };
+    
+    Messages.send(msg,
+      function (data) {
+        if (typeof data.error === 'undefined') {
+          callbackOk(data.response);
+        } else {
+          callbackError(data.error);
+        }
+    });
+    
+  };
+  
+  
 }]);
