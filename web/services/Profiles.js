@@ -11,10 +11,9 @@ app.service('Profiles', function($wamp) {
         } else {
           cok(res);
         }
-      }
-      ),function(err) {
+      },function(err) {
         cerr(err);
-      };
+      });
   }
 
 });

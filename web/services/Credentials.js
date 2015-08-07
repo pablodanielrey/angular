@@ -31,9 +31,9 @@ app.service('Credentials', ['$rootScope','$wamp',
   			} else {
   				cok(hash);
   			}
-  		}),function(err) {
+  		},function(err) {
   			cerr(err);
-  		};
+  		});
     }
 
     this.changePasswordWithHash = function(creds, hash, cok, cerr) {
@@ -44,9 +44,9 @@ app.service('Credentials', ['$rootScope','$wamp',
          } else {
   				cerr('');
   			}
-  		}),function(err) {
+  		},function(err) {
   			cerr(err);
-  		};
+  		});
     }
 
     this.changePassword = function(sid, creds, cok, cerr) {
@@ -57,9 +57,9 @@ app.service('Credentials', ['$rootScope','$wamp',
          } else {
   				cerr('');
   			}
-  		}),function(err) {
+  		},function(err) {
   			cerr(err);
-  		};
+  		});
     }
 
 }])

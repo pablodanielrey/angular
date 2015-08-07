@@ -17,9 +17,7 @@ angular
         console.log(conn);
         $wampProvider.init(conn);
       }
-    });
-    /*
+    })
     .run(function($wamp) {
       $wamp.open();
     });
-    */

@@ -20,12 +20,9 @@ function Login($rootScope, $wamp, Session) {
 	this.login = function(username, password, cok, cerr) {
 		$wamp.call('system.login', [username,password])
 		.then(function(s) {
-
-			if (sid == null) {
-				cerr('');
-
+			if (s == null) {
+				cerr('Datos Incorrectos');
 			} else {
-
         /*
           Creo la sesion dentro de la cache cliente
         */
@@ -38,12 +35,11 @@ function Login($rootScope, $wamp, Session) {
 					}
 				}
 				Session.create(s.session_id, data);
-
 				cok(s.session_id);
 			}
-		}),function(err) {
+		},function(err) {
 			cerr(err);
-		};
+		});
 	}
 
 	this.logout = function(sid, cok, cerr) {
@@ -55,9 +51,9 @@ function Login($rootScope, $wamp, Session) {
 				Session.destroy();
 				cok();
 			}
-		}),function(err) {
+		},function(err) {
 			cerr(err);
-		};
+		});
 	}
 
-});
+};

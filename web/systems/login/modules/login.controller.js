@@ -3,9 +3,9 @@ angular
   .module('mainApp')
   .controller('LoginCtrl',LoginCtrl);
 
-LoginCtrl.$inject = ['$rootScope','$scope','$location','Notifications','Login'];
+LoginCtrl.$inject = ['$rootScope','$scope','$location','$window','Notifications','Login'];
 
-function LoginCtrl($rootScope, $scope, $location, Notifications, Login) {
+function LoginCtrl($rootScope, $scope, $location, $window, Notifications, Login) {
 
     var vm = this;
 
@@ -44,4 +44,4 @@ function LoginCtrl($rootScope, $scope, $location, Notifications, Login) {
 
 		};
 
-}]);
+};

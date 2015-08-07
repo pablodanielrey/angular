@@ -19,7 +19,7 @@ class LoginWamp(ApplicationSession):
         ApplicationSession.__init__(self, config)
 
         self.serverConfig = inject.instance(Config)
-        self.login = inject.instance(Login)
+        self.loginModel = inject.instance(Login)
         self.profiles = inject.instance(Profiles)
 
     @coroutine
@@ -56,7 +56,7 @@ class LoginWamp(ApplicationSession):
     def generateResetPasswordHash(self, username):
         con = self._getDatabase()
         try:
-            hash = self.login.generateResetPasswordHash(con, username)
+            hash = self.loginModel.generateResetPasswordHash(con, username)
             con.commit()
             return hash
 
@@ -73,7 +73,7 @@ class LoginWamp(ApplicationSession):
     def changePasswordWithHash(self, username, password, hash):
         con = self._getDatabase()
         try:
-            r = self.login.changePasswordWithHash(con, username, password, hash)
+            r = self.loginModel.changePasswordWithHash(con, username, password, hash)
             con.commit()
             return r
 
@@ -87,10 +87,10 @@ class LoginWamp(ApplicationSession):
     '''
         Loguea al usuario dentro del sistema y genera una sesion
     '''
-    def login(self, username, password, info=None):
+    def login(self, username, password):
         con = self._getDatabase()
         try:
-            return self.login.login(username, password)
+            return self.loginModel.login(con, username, password)
 
         except Exception as e:
             logging.exception(e)
@@ -105,7 +105,7 @@ class LoginWamp(ApplicationSession):
     def logout(self, sid):
         con = self._getDatabase()
         try:
-            self.login.logout(con, sid)
+            self.loginModel.logout(con, sid)
             con.commit()
             return True
 
@@ -129,9 +129,9 @@ class LoginWamp(ApplicationSession):
         return r
 
     @coroutine
-    def login_async(self, username, password, info=None):
+    def login_async(self, username, password):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.login, username, password, info)
+        r = yield from loop.run_in_executor(None, self.login, username, password)
         return r
 
     @coroutine
