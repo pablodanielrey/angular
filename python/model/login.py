@@ -33,3 +33,10 @@ class Login:
     def logout(self, con, sid):
         ''' sess = self.session._findSession(con, sid) '''
         self.session._destroy(con, sid)
+
+    def generateResetPasswordHash(self, con, username):
+        hash = ''
+        return hash
+
+    def changePasswordWithHash(con, username, password, hash):
+        return True
