@@ -1,8 +1,15 @@
 config = {
+<<<<<<< HEAD
   url: "ws://127.0.0.1:8001/ws",
   host: "127.0.0.1",
   port: "8081",
   realm: "assistance",
+=======
+  url: "ws://192.168.0.3:8000/ws",
+  realm: "assistance",
+  host: "192.168.0.3",
+  port: "8001",
+>>>>>>> origin/master
   ssl_host: "127.0.0.1",
   ssl_port: "8002"
 }

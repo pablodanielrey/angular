@@ -43,9 +43,9 @@ app.controller('MyDataOptionCtrl', function($scope, $rootScope, Profiles, $locat
 
   // se generan por los distintos perfiles de usuario
   $scope.generateItems = function() {
-    Profiles.checkAccess(Session.getSessionId(),'ADMIN', function(ok) {
+    Profiles.checkAccess(Session.getSessionId(),['ADMIN'], function(ok) {
 
-      if (ok == 'granted') {
+      if (ok) {
         $scope.items = [];
         $scope.items.push({ label:'Perfil', img:'fa-user', url:'editUserProfile', function: $scope.myProfile });
 

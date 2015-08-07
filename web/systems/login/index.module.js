@@ -2,24 +2,22 @@ angular
     .module('mainApp',['ngRoute','vxWamp'])
     .config(function($wampProvider) {
 
-      if (config_firmware.url == undefined || config_firmware.url == 'autodetect') {
+      if (config.url == undefined || config.url == 'autodetect') {
         var conn = {
-          url: "ws://" + location.host + ":8000/ws",
-          realm: config_firmware.realm
+          url: "ws://" + location.host + ":80/ws",
+          realm: config.realm
         };
         console.log(conn);
         $wampProvider.init(conn);
       } else {
         var conn = {
-          url: config_firmware.url,
-          realm: config_firmware.realm
+          url: config.url,
+          realm: config.realm
         };
         console.log(conn);
         $wampProvider.init(conn);
       }
-    });
-    /*
+    })
     .run(function($wamp) {
       $wamp.open();
     });
-    */

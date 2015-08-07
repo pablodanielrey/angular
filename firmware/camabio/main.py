@@ -160,7 +160,9 @@ if __name__ == '__main__':
 
     #from autobahn.twisted.wamp import ApplicationRunner
     from autobahn.asyncio.wamp import ApplicationRunner
+    from autobahn.wamp.serializer import JsonSerializer
     from network.wampFirmware import WampFirmware
 
-    runner = ApplicationRunner(url='ws://localhost:8000/ws',realm='assistance',debug=True, debug_wamp=True, debug_app=True)
+    json = JsonSerializer()
+    runner = ApplicationRunner(url='ws://localhost:8000/ws',realm='assistance',debug=True, debug_wamp=True, debug_app=True, serializers=[json])
     runner.run(WampMain)
