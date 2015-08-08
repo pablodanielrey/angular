@@ -7,10 +7,14 @@ IndexCtrl.$inject = ['$rootScope','$scope','$wamp','$window', 'Notifications', '
 
 function IndexCtrl($rootScope, $scope, $wamp, $window, Notifications, Login) {
 
-    var vm = this;
-
     $scope.model = {
+      hideMenu: false
+    };
+
+    $scope.hideMenu = function() {
+      return $scope.model.hideMenu;
     }
+
 
     $scope.initialize = function() {
       if (!Login.isLogged()) {

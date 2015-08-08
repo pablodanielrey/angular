@@ -42,6 +42,9 @@
   <script type="text/javascript" src="/systems/fce/modules/footer/footer.js"></script>
   <link rel="stylesheet" type="text/css" href="/systems/fce/modules/footer/footer.css"/>
 
+  <script type="text/javascript" src="/systems/fce/menu/menu.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/fce/menu/menu.css"/>
+
   <script type="text/javascript" src="/modules/messages/messages.js"></script>
   <link rel="stylesheet" type="text/css" href="/modules/messages/messages.css"/>
 
@@ -51,12 +54,14 @@
 
 <div ng-controller="IndexCtrl" class="principal">
 
-<div class="screen">
-	<div class="header-container" ng-controller="HeaderCtrl" ng-include="'/systems/fce/modules/header/header.html'"></div>
+<div class="screen" ng-class="{true:'closeMenu', false:'openMenu'}[hideMenu()]">
+      <!--
+	    <div class="header-container" ng-controller="HeaderCtrl" ng-include="'/systems/fce/modules/header/header.html'"></div>
+      -->
 
       <div id='main'>
         <nav ng-class="{true:'visible',false:'hidden'}[isLogged()]">
-          <div class='menu-container' ng-controller="MenuCtrl" ng-include="'/modules/menu/menu.html'">
+          <div class='menu-container' ng-controller="MenuCtrl" ng-include="'/systems/fce/menu/menu.html'">
           </div>
         </nav>
 
@@ -65,10 +70,12 @@
         </article>
       </div>
 
+      <!--
       <footer>
         <div class='footer-container' ng-controller='FooterCtrl' ng-include="'/systems/fce/modules/footer/footer.html'">
         </div>
       </footer>
+      -->
     </div>
 
     <div class='messages-container' ng-controller="MessagesCtrl" ng-include="'/modules/messages/messages.html'" ng-class="{false: 'hidden', true: 'visible'}[ isVisible() ]">

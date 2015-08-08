@@ -11,7 +11,7 @@ function Login($rootScope, $wamp, Session) {
 		if (sid == null) {
 			return false;
 		}
-		return (data.user_id != undefined);
+		return (sid.user_id != undefined);
 	}
 
   /*
