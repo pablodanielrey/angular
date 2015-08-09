@@ -1,8 +1,8 @@
 var app = angular.module('mainApp');
 
-app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', '$window', 'Profiles', 'Session', 'Notifications',
+app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', '$window', '$http','Profiles', 'Session', 'Notifications',
 
-  function ($rootScope, $scope, $location, $window, Profiles, Session, Notifications) {
+  function ($rootScope, $scope, $location, $window, $http, Profiles, Session, Notifications) {
 
     $scope.model = {
       class:'',
@@ -30,7 +30,46 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', '$window', 'Pro
   		$location.path('/changePassword');
   	}
 
+    $scope.webmail = function() {
+        //$window.open('http://webmail.econo.unlp.edu.ar', 'nnt');
+/*        $http(
+        {
+          method:'POST',
+          url: 'https://webmail.econo.unlp.edu.ar/src/redirect.php',
+          transformRequest: function(obj) {
+              var str = [];
+              for(var p in obj)
+              str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+              return str.join("&");
+          },
+          data: {
+              login_username: '27294557',
+              secretkey: 'pscysfab3',
+              js_autodetect_results: '0',
+              just_logged_in: '0'
+            },
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        }, 'nnt'
+      ).success(function(response) {
+
+          console.log(response);
+      });
+      */
+
+      $window.open('http://webmail.econo.unlp.edu.ar', 'nnt');
+      setTimeout( function() {
+        $window.document.getElementById('nnt').contentWindow.document.getElementsByName('login_username').value = '27294557';
+        $window.document.getElementById('nnt').contentWindow.document.getElementsByName('secretkey').value = 'pscysfab3';
+        $window.document.getElementById('nnt').contentWindow.document.getElementsByName('login_form')[0].submit();
+      }, 5000);
+    }
+
+    $scope.au24 = function() {
+        $window.open('http://www.au24.econo.unlp.edu.ar', 'nnt');
+  	}
+
   	$scope.editUsers = function() {
+
   	}
 
   	$scope.accountRequests = function() {
@@ -63,6 +102,9 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', '$window', 'Pro
     $scope.initialize = function() {
 
       $scope.model.items = [];
+
+      $scope.model.items.push({ n:40, label:'WebMail', img:'fa fa-lock', function: $scope.webmail });
+      $scope.model.items.push({ n:30, label:'Au24', img:'fa fa-lock', function: $scope.au24 });
 
   		Profiles.checkAccess(Session.getSessionId(),['ADMIN'], function(ok) {
 
