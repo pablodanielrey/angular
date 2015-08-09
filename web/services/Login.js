@@ -18,7 +18,7 @@ function Login($rootScope, $wamp, Session) {
     Chequea que la session actual sea valida
   */
   this.validateSession = function(cok,cerr) {
-    var sid = Session.getCurrentSession();
+    var sid = Session.getSessionId();
     if (sid == null) {
       return false;
     }

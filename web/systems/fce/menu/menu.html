@@ -6,7 +6,8 @@
 
     <ul>
       <li ng-repeat='item in model.items'>
-        <div><a href={{item.url}}>{{item.name}}</a></div>
+        <!-- <div><a href={{item.url}}>{{item.label}}</a></div> -->
+        <div><a ng-click='item.function()'>{{item.label}}</a></div>
         <div class="{{item.img}}"></div>
       </li>
     </ul>

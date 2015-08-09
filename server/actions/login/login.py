@@ -6,6 +6,7 @@ import logging
 from model.config import Config
 from model.login import Login
 from model.profiles import Profiles
+from model.session import Session
 
 import asyncio
 from asyncio import coroutine
@@ -21,6 +22,7 @@ class LoginWamp(ApplicationSession):
         self.serverConfig = inject.instance(Config)
         self.loginModel = inject.instance(Login)
         self.profiles = inject.instance(Profiles)
+        self.session = inject.instance(Session)
 
     @coroutine
     def onJoin(self, details):
@@ -57,7 +59,7 @@ class LoginWamp(ApplicationSession):
     def validateSession(self, sid):
         con = self._getDatabase()
         try:
-            ''' .... codigo aca ... '''
+            self.session._findSession(con, sid)
             return True
 
         except Exception as e:
