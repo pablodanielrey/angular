@@ -6,6 +6,7 @@ import logging
 from model.config import Config
 from model.login import Login
 from model.profiles import Profiles
+from model.session import Session
 
 import asyncio
 from asyncio import coroutine
@@ -21,12 +22,14 @@ class LoginWamp(ApplicationSession):
         self.serverConfig = inject.instance(Config)
         self.loginModel = inject.instance(Login)
         self.profiles = inject.instance(Profiles)
+        self.session = inject.instance(Session)
 
     @coroutine
     def onJoin(self, details):
         logging.debug('registering methods')
         yield from self.register(self.login_async, 'system.login')
         yield from self.register(self.logout_async, 'system.logout')
+        yield from self.register(self.validateSession_async, 'system.session.validate')
         yield from self.register(self.generateResetPasswordHash_async, 'system.password.generateResetPasswordHash')
         yield from self.register(self.changePasswordWithHash_async, 'system.password.changePasswordWithHash')
         yield from self.register(self.checkProfileAccess_async, 'system.profiles.checkProfileAccess')
@@ -46,6 +49,22 @@ class LoginWamp(ApplicationSession):
         try:
             r = self.profiles._checkAccessWithCon(con, sid, roles)
             return r
+
+        finally:
+            con.close()
+
+    '''
+        valida que la session sid exista
+    '''
+    def validateSession(self, sid):
+        con = self._getDatabase()
+        try:
+            self.session._findSession(con, sid)
+            return True
+
+        except Exception as e:
+            logging.exception(e)
+            return False
 
         finally:
             con.close()
@@ -144,4 +163,10 @@ class LoginWamp(ApplicationSession):
     def checkProfileAccess_async(self, sid, roles):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.checkProfileAccess, sid, roles)
+        return r
+
+    @coroutine
+    def validateSession_async(self, sid):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.validateSession, sid)
         return r
