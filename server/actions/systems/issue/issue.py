@@ -295,7 +295,7 @@ class UpdateIssueData:
 
 
         #chequear parametros
-        if ('id' not in message) or ('session' not in message) or ('issue' not in message) or ('id' not in message['issue']) or ('request' not in message['issue']): 
+        if ('id' not in message) or ('session' not in message) or ('issue' not in message) or ('id' not in message['issue']) or ('request' not in message['issue']) or ('state' not in message['issue']) or ('userId' not in message):
             response = {'id':message['id'], 'error':'Insuficientes parámetros'} 
             server.sendMessage(response) 
             return True 
@@ -309,9 +309,10 @@ class UpdateIssueData:
         #definir datos
         id = message['issue']['id']
         request = message['issue']['request']
+        state = message['issue']['state']
         priority = 0 if (('priority' not in message['issue']) or (message['issue']['priority'] is None)) else message['issue']['priority']
         visibility = 'AUTHENTICATED' if (('visibility' not in message['issue']) or (message['issue']['visibility'] is None)) else message['issue']['visibility']
- 
+        userId = message["userId"]
         
         #definir conexion con la base de datos
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
@@ -319,7 +320,7 @@ class UpdateIssueData:
         try:
         
             #abcm datos
-            events = self.issue.updateData(con, id, request, priority, visibility)
+            events = self.issue.updateData(con, id, request, priority, visibility, state, userId)
             con.commit()
             
             #disparar eventos

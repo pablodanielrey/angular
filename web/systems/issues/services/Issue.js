@@ -86,12 +86,21 @@ app.service('Issue', ['Utils','Messages','Session', function(Utils,Messages,Sess
   
   
   
-  this.updateIssueData = function(issue, callbackOk, callbackError){
+  
+  /**
+   * @param {type} issue Datos del issue
+   * @param {type} userId Id del usuario que solicita la actualizacion de datos (quiza sea alguien diferente a quien solicito el issue)
+   * @param {type} callbackOk
+   * @param {type} callbackError
+   * @returns {undefined}
+   */
+  this.updateIssueData = function(issue, userId, callbackOk, callbackError){
     var msg = {
       id: Utils.getId(),
       action: 'updateIssueData',
       session: Session.getSessionId(),
-      issue: issue
+      issue: issue,
+      userId: userId
     };
     
     Messages.send(msg,

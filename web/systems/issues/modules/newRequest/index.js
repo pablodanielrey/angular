@@ -6,29 +6,21 @@
  */
 app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "Notifications", "Issue", "IssueClient", "Users", function ($scope, $timeout, $window, Module, Notifications, Issue, IssueClient, Users) {
 
+  /***** MANIPULACION DE ESTILOS ******/
+  $scope.style = null;
+  $scope.styles = [];
+  
+  $scope.setStyle = function($index) {
+    $scope.style = $scope.styles[$index];
+  };
+
 
   $scope.request = null; //descripcion de un nuevo nodo que sera agregado a la raiz
   $scope.data = []; //raiz del arbol de nodos
   
 
     
-  /**
-   * Inicializar nodo. Cuando se crea un nuevo nodo en el arbol se inicializa y guarda en la base con los siguientes parametros
-   */
-  $scope.initializeNode = function(){
-    return {
-      id: null,
-      request: null,
-      created: new Date(),
-      requestorId: $scope.global.sessionUserId,
-      officeId: "8407abb2-33c2-46e7-bef6-d00bab573306",
-      relatedRequestId:null,
-      priority:null,
-      visibility:null,
-      collapsedDescription: false
-    };
-  };
- 
+
  
   /**
    * Incrementar espacio de la descripcion del nodo al hacer click (textarea) para facilitar el ingreso de datos
@@ -77,8 +69,7 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
   $scope.updateIssueData = function(nodeScope){
     
     var nodeData = nodeScope.$modelValue;
-
-    Issue.updateIssueData(nodeData,
+    Issue.updateIssueData(nodeData, $scope.global.sessionUserId,
       function(data) { },
       function(error) { Notifications.message(error); }
     );
@@ -89,7 +80,7 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
   $scope.addNode = function(nodeScope){
     var nodeData = nodeScope.$modelValue;
 
-    var newNode = $scope.initializeNode();
+    var newNode = IssueClient.initializeNode($scope.global.sessionUserId, "PENDING");
     newNode.relatedRequestId = nodeData.id;
 
     Issue.newRequest(newNode,
@@ -98,9 +89,24 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
     );
   };
   
+  $scope.addComment = function(nodeScope){
+    var nodeData = nodeScope.$modelValue;
+
+    var newNode = IssueClient.initializeNode($scope.global.sessionUserId, "COMMENT");
+    newNode.relatedRequestId = nodeData.id;
+    console.log(newNode);
+
+    Issue.newRequest(newNode,
+      function(data) { },
+      function(error) { Notifications.message(error); }
+    );
+  };
+  
+  
+  
   
   $scope.createNode = function(){
-    var newNode = $scope.initializeNode();
+    var newNode = IssueClient.initializeNode($scope.global.sessionUserId, "PENDING");
     newNode.request = $scope.request;
  
     Issue.newRequest(newNode,

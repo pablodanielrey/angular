@@ -7,6 +7,36 @@
 app.service('IssueClient', ["Users", function(Users) {
 	
   
+  this.defineStyle = function(state){
+     switch(state){
+      case "COMMENT": return "commen"; 
+      default: return "task";
+        
+    }
+  };
+  
+  /**
+   * Inicializar nodo. Cuando se crea un nuevo nodo en el arbol se inicializa y guarda en la base con los siguientes parametros
+   */
+  this.initializeNode = function(userId, status){
+    var style = this.defineStyle(status);
+
+    return {
+      id: null,
+      request: null,
+      created: new Date(),
+      requestorId: userId,
+      officeId: "8407abb2-33c2-46e7-bef6-d00bab573306",
+      relatedRequestId:null,
+      priority:null,
+      visibility:null,
+      collapsedDescription: false,
+      state: status,
+      style: style
+    };
+  };
+  
+  
   /**
    * Generar arbol de pedidos
    * @param {Object} request Datos del pedido
@@ -23,7 +53,7 @@ app.service('IssueClient', ["Users", function(Users) {
       );
      
       data[i].collapsedDescription = false;
-      
+      data[i].style = this.defineStyle(data[i].state);
       
       if(!("nodes" in data[i])) data[i]["nodes"] = [];
       var assigned = false;
@@ -40,7 +70,7 @@ app.service('IssueClient', ["Users", function(Users) {
       
       if(!assigned){
         issues.push(data[i]);
-      }      
+      }
     }    
     
     return issues;
@@ -94,9 +124,5 @@ app.service('IssueClient', ["Users", function(Users) {
     
     return false;
   };
-  
-  
-  
-
 
 }]);

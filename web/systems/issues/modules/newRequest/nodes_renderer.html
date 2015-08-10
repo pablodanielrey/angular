@@ -1,4 +1,4 @@
-<div class="orderItems" ng-class='[getIssueCssClass(this)]'  ui-tree-handle>
+<div class="orderItems" ui-tree-handle>
     <div class="orderItem">
         <div ng-show="node.state != 'COMMENT'" class="btnExpOrder">
           <div  ng-if="collapsed">
@@ -32,7 +32,6 @@
     <div class="orderIcons">
         <div ng-show="node.state != 'COMMENT'" class="btnState">
             <select ng-model='node.state' ng-change="updateIssueData(this)">
-              <option value='COMMENT'>comentario</option>
               <option value='PENDING'>pendiente</option>
               <option value='CLOSED' class="cR">cerrado</option>
             </select>
@@ -43,7 +42,7 @@
         </div>
 
         <div>
-            <button class="btn cO fa fa-comment" title="Realizar Comentario" ng-click="comment(this)"></button>
+            <button class="btn cO fa fa-comment" title="Realizar Comentario" ng-click="addComment(this)"></button>
         </div>
         <div class="btnSubTarea">
             <button class="btn cG fa fa-tag" title="Crear sub-Tarea" ng-click="addNode(this)"></button>
@@ -56,6 +55,6 @@
 
 
   <ol ui-tree-nodes ng-model="node.nodes" ng-class="{'angular-ui-tree-hidden': collapsed}">
-    <li  ng-repeat="node in node.nodes" ui-tree-node ng-include="'modules/newRequest/nodes_renderer.html'">
+    <li  ng-repeat="node in node.nodes" class="{{node.style}}" ui-tree-node ng-include="'modules/newRequest/nodes_renderer.html'">
     </li>
   </ol>
