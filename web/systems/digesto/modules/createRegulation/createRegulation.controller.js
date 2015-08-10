@@ -2,9 +2,9 @@ angular
     .module('mainApp')
     .controller('CreateRegulationCtrl',CreateRegulationCtrl);
 
-CreateRegulationCtrl.$inject = ['$rootScope', '$scope', '$location', '$window', '$timeout','WebSocket', 'Session', 'Cache', 'Notifications', 'Digesto','Session'];
+CreateRegulationCtrl.$inject = ['$rootScope', '$scope', '$location', '$window', '$timeout', 'Cache', 'Notifications', 'Digesto','Session'];
 
-function CreateRegulationCtrl($rootScope, $scope, $location, $window, $timeout, WebSocket, Session, Cache, Notifications, Digesto, Session) {
+function CreateRegulationCtrl($rootScope, $scope, $location, $window, $timeout, Cache, Notifications, Digesto, Session) {
 
     $scope.model = {
       issuersRegulation: [],
@@ -97,12 +97,7 @@ function CreateRegulationCtrl($rootScope, $scope, $location, $window, $timeout, 
     // -------------------------------------------------------------
     // ----------------- CARGA DE DATOS INICIALES ------------------
     // -------------------------------------------------------------
-    function initialize() {
-      // verifico que este logueado
-      if(!Session.isLogged()) {
-       $window.location.href = "/systems/login/indexLogin.html";
-      }
-
+    function initialize() {      
       $scope.model.visibilities = [{type:'PUBLIC',name:'Pública'},{type:'PRIVATE',name:'Privada'},{type:'GROUPPRIVATE',name:'Privada de Grupos'}];
       $scope.model.status = [{value:'APPROVED',name:'Aprobado'},{value:'PENDING',name:'Pendiente'}]
       initializeOrdinance();
