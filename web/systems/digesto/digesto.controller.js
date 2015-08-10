@@ -2,11 +2,17 @@ angular
     .module('mainApp')
     .controller('DigestoCtrl',DigestoCtrl)
 
-DigestoCtrl.$inject = ['$rootScope','$scope','$location','$timeout','$wamp','Login'];
+DigestoCtrl.$inject = ['$rootScope','$scope','$location','$window','$wamp','Login'];
 
-function DigestoCtrl($rootScope,$scope,$location,$timeout,$wamp,Login) {
+function DigestoCtrl($rootScope,$scope,$location,$window,$wamp,Login) {
 
-  $scope.initialize = function() {
+  $scope.initialize = initialize;
+
+  $scope.$on('$viewContentLoaded', function(event) {
+    $scope.initialize();
+  });
+
+  function initialize() {
     if (!Login.isLogged()) {
       $window.location.href = "/systems/login/index.html";
     }
@@ -21,11 +27,6 @@ function DigestoCtrl($rootScope,$scope,$location,$timeout,$wamp,Login) {
         Notifications.message(err);
     })
   }
-
-  $scope.$on('$viewContentLoaded', function(event) {
-    // $wamp.open();
-    $scope.initialize();
-  });
 
 
 }

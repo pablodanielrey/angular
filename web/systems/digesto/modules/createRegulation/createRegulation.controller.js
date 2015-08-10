@@ -2,9 +2,9 @@ angular
     .module('mainApp')
     .controller('CreateRegulationCtrl',CreateRegulationCtrl);
 
-CreateRegulationCtrl.$inject = ['$rootScope', '$scope', '$location', '$window', '$timeout', 'Cache', 'Notifications', 'Digesto','Session'];
+CreateRegulationCtrl.$inject = ['$rootScope', '$scope', 'Notifications', 'Digesto'];
 
-function CreateRegulationCtrl($rootScope, $scope, $location, $window, $timeout, Cache, Notifications, Digesto, Session) {
+function CreateRegulationCtrl($rootScope, $scope, Notifications, Digesto) {
 
     $scope.model = {
       issuersRegulation: [],
@@ -97,7 +97,7 @@ function CreateRegulationCtrl($rootScope, $scope, $location, $window, $timeout, 
     // -------------------------------------------------------------
     // ----------------- CARGA DE DATOS INICIALES ------------------
     // -------------------------------------------------------------
-    function initialize() {      
+    function initialize() {
       $scope.model.visibilities = [{type:'PUBLIC',name:'Pública'},{type:'PRIVATE',name:'Privada'},{type:'GROUPPRIVATE',name:'Privada de Grupos'}];
       $scope.model.status = [{value:'APPROVED',name:'Aprobado'},{value:'PENDING',name:'Pendiente'}]
       initializeOrdinance();
@@ -212,25 +212,6 @@ function CreateRegulationCtrl($rootScope, $scope, $location, $window, $timeout, 
       );
 
     }
-
-
-
-
-    // $scope.save = function() {
-    //   normative = {};
-    //   status = "";
-    //   visibility = {};
-    //   relateds = [];
-    //   file = {};
-    //   Digesto.createNormative(normative,status,visibility,relateds,file,
-    //     function(response) {
-    //       Notifications.message(response);
-    //     },
-    //     function(error) {
-    //         Notifications.message(error);
-    //     }
-    //   );
-    // }
 
 
 

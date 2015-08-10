@@ -19,7 +19,7 @@
   <!--archivos principales-->
   <link rel="stylesheet" href="/systems/digesto/digesto.css">
   <script type="text/javascript" src="/systems/digesto/digesto.module.js"></script>
-  <script type="text/javascript" src="/systems/digesto/digesto.js"></script>
+  <script type="text/javascript" src="/systems/digesto/digesto.controller.js"></script>
   <script type="text/javascript" src="/systems/digesto/routes.js"></script>
 
   <!-- directivas -->
@@ -44,7 +44,7 @@
 
   <!-- módulos del digesto -->
 
-  <script type="text/javascript" src="/systems/digesto/menu/menu.js"></script>
+  <script type="text/javascript" src="/systems/digesto/menu/menu.controller.js"></script>
   <link rel="stylesheet" type="text/css" href="/systems/digesto/menu/menu.css"/>
 
   <link rel="stylesheet" type="text/css" href="/systems/digesto/modules/commonCSS/button.css" />
@@ -56,7 +56,7 @@
   <link rel="stylesheet" type="text/css" href="/systems/digesto/modules/createRegulation/navigation.css" />
 
   <!-- **** PANTALLA BUSCAR NORMAS **** -->
-  <!-- <script type="text/javascript" src="/systems/digesto/modules/search/searchRegulation.js"></script> -->
+  <script type="text/javascript" src="/systems/digesto/modules/searchRegulation/searchRegulation.js"></script>
   <link rel="stylesheet" type="text/css" href="/systems/digesto/modules/searchRegulation/structure.css" />
   <link rel="stylesheet" type="text/css" href="/systems/digesto/modules/searchRegulation/visual.css" />
   <link rel="stylesheet" type="text/css" href="/systems/digesto/modules/searchRegulation/navigation.css" />
@@ -69,7 +69,7 @@
     <div class="screen" ng-class="{true:'closeMenu',false:'openMenu'}[model.cerrado]" >
 
       <!-- <nav ng-class="{true:'visible',false:'hidden'}[isLogged()]"> -->
-        <div class="menu-container" ng-include="'/systems/digesto/menu/menu.html'">
+        <div class="menu-container" ng-controller="MenuDigestoCtrl" ng-include="'/systems/digesto/menu/menu.html'">
         </div>
 
         <div ng-view>
