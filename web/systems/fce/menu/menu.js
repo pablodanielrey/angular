@@ -43,8 +43,8 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', '$window', '$ht
               return str.join("&");
           },
           data: {
-              login_username: '27294557',
-              secretkey: 'pscysfab3',
+              login_username: 'usuario',
+              secretkey: 'clave',
               js_autodetect_results: '0',
               just_logged_in: '0'
             },
@@ -58,8 +58,8 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', '$window', '$ht
 
       $window.open('http://webmail.econo.unlp.edu.ar', 'nnt');
       setTimeout( function() {
-        $window.document.getElementById('nnt').contentWindow.document.getElementsByName('login_username').value = '27294557';
-        $window.document.getElementById('nnt').contentWindow.document.getElementsByName('secretkey').value = 'pscysfab3';
+        $window.document.getElementById('nnt').contentWindow.document.getElementsByName('login_username').value = 'usuario';
+        $window.document.getElementById('nnt').contentWindow.document.getElementsByName('secretkey').value = 'clave';
         $window.document.getElementById('nnt').contentWindow.document.getElementsByName('login_form')[0].submit();
       }, 5000);
     }
