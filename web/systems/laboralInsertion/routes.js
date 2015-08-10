@@ -6,12 +6,12 @@ app.config(['$routeProvider', function($routeProvider) {
   $routeProvider
 
   .when('/main', {
-     templateUrl: '/systems/fce/modules/home/home.html'
+     templateUrl: '/systems/laboralInsertion/modules/main.html'
   })
 
-  .when('/logout', {
-     templateUrl: '/systems/login/modules/logout.html',
-     controller: 'LogoutCtrl'
+  .when('/download', {
+     templateUrl: '/systems/laboralInsertion/modules/download/download.html',
+     controller: 'DownloadCtrl'
   })
 
   .otherwise({

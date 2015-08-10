@@ -2,3 +2,4 @@ web/config.json
 *.pyc
 nbproject
 **/.directory
+tmp/*

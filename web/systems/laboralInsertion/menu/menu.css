@@ -4,16 +4,16 @@
   width: 200px;
 }
 
-.ng-scope {
+.menu-container .ng-scope {
   height: 100%;
 }
 
-.fa:hover {
+.menu-container .fa:hover {
   cursor: pointer;
 
 }
 
-.menuDigesto {
+.menu-container .menuDigesto {
   display: flex;
   flex-direction: column;
 
@@ -102,7 +102,8 @@
 
 
 }
-a:link, a:visited, a:active{
+
+.menu-container a:link, a:visited, a:active{
   text-decoration: none;
   color:white;
 }
