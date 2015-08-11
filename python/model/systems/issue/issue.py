@@ -55,7 +55,7 @@ class Issue:
             FROM issues.state
             GROUP BY request_id
           ) AS s2 ON (s.request_id = s2.request_id AND s.created = s2.created)
-          ORDER BY r.created DESC;
+          ORDER BY r.created ASC;
         ''') 
         if cur.rowcount <= 0: 
             return [] 
@@ -98,6 +98,7 @@ class Issue:
           SELECT r.id
           FROM issues.request AS r
           WHERE r.related_request_id = %s
+          ORDER BY r.created ASC;
         ''',(id,))
     
         for issue in cur:

@@ -131,11 +131,10 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
    * IssueDeletedEvent
    */
   $scope.$on('IssueInsertedEvent', function(event, node) { 
-    if(node.relatedRequestId){
-      IssueClient.addChild($scope.data, node);
-    } else {
-      $scope.data.push(node);
-    }
+    IssueClient.addChild($scope.data, node);
+
+    
+
   });
   
 

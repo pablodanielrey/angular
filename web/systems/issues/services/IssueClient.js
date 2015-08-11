@@ -89,6 +89,11 @@ app.service('IssueClient', ["Users", "Utils", function(Users, Utils) {
       
     Utils.joinObjects(node, newNode);
     
+    if(!node.relatedRequestId){
+      data.push(node);
+      return true;
+    }
+    
     //var nodeAux = this.initializeNode(node)
     for(var i in data){
       if(data[i].id == node.relatedRequestId) {
