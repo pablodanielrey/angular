@@ -8,7 +8,7 @@ class Issue:
     '''
      ' Insertar datos
      '''
-    def insert(self,con,request,officeId,requestorId,created,priority,visibility,relatedRequestId):
+    def insert(self,con,request,officeId,requestorId,created,priority,visibility,relatedRequestId, state):
         createdutc = created.astimezone(pytz.utc)
 
         id = str(uuid.uuid4()) 
@@ -21,8 +21,8 @@ class Issue:
         
         cur.execute("""
             INSERT INTO issues.state (state, created, user_id, request_id)
-            VALUES ('PENDING', %s, %s, %s);
-        """,(createdutc, requestorId, id))
+            VALUES (%s, %s, %s, %s);
+        """,(state, createdutc, requestorId, id))
         
         events = []
         e = { 
@@ -36,7 +36,7 @@ class Issue:
                'priority':priority,
                'visibility':visibility,
                'relatedRequestId':relatedRequestId,
-               'state':'PENDING',
+               'state':state,
                'nodes':[],
              } 
         }

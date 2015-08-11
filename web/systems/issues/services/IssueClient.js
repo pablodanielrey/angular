@@ -4,13 +4,13 @@
  * @param {type} param1
  * @param {type} param2
  */
-app.service('IssueClient', ["Users", function(Users) {
+app.service('IssueClient', ["Users", "Utils", function(Users, Utils) {
 	
   
   this.defineStyle = function(state){
      switch(state){
-      case "COMMENT": return "commen"; 
-      default: return "task";
+      case "COMMENT": return "commentOrder"; 
+      default: return "normal";
         
     }
   };
@@ -85,7 +85,11 @@ app.service('IssueClient', ["Users", function(Users) {
    * @returns {Boolean}
    */
   this.addChild = function(data, node){
-  
+    var newNode = this.initializeNode(node.requestorId, node.state);
+      
+    Utils.joinObjects(node, newNode);
+    
+    //var nodeAux = this.initializeNode(node)
     for(var i in data){
       if(data[i].id == node.relatedRequestId) {
         data[i].nodes.push(node);

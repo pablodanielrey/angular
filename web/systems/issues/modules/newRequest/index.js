@@ -167,11 +167,7 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
 
 
 
-  $scope.treeNodesOptions = {
-    beforeDrop: function (event) {
-      alert("test");
-    }
-  };
+
 
 
 

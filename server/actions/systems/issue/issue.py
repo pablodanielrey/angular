@@ -74,6 +74,7 @@ class NewRequest:
         created = self.utcNow() if (('created' not in message['request']) or (message['request']['created'] is None)) else self.date.parse(message['request']['created'])
         priority = 0 if (('priority' not in message['request']) or (message['request']['priority'] is None)) else message['request']['priority']
         visibility = 'AUTHENTICATED' if (('visibility' not in message['request']) or (message['request']['visibility'] is None)) else message['request']['visibility']
+        state = 'PENDING' if (('state' not in message['request']) or (message['request']['state'] is None)) else message['request']['state']
         relatedRequestId = None if (('relatedRequestId' not in message['request']) or (message['request']['relatedRequestId'] is None)) else message['request']['relatedRequestId']
         
         #definir conexion con la base de datos
@@ -82,7 +83,7 @@ class NewRequest:
         try:
         
             #abcm datos
-            events = self.issue.insert(con, request, officeId, requestorId, created, priority, visibility, relatedRequestId)
+            events = self.issue.insert(con, request, officeId, requestorId, created, priority, visibility, relatedRequestId, state)
             con.commit()
             
             #disparar eventos

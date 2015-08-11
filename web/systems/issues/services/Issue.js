@@ -9,6 +9,9 @@ app.service('Issue', ['Utils','Messages','Session', function(Utils,Messages,Sess
    * @param {function} callbackError
    */
   this.newRequest = function(request, callbackOk, callbackError) {
+    
+  
+    
     var msg = {
       id: Utils.getId(),
       action: 'newIssueRequest',

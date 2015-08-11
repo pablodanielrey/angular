@@ -1,7 +1,7 @@
-<div class="orderItems" ui-tree-handle>
+<div  class="orderItems {{node.style}}" ui-tree-handle>
     <div class="orderItem">
-        <div ng-show="node.state != 'COMMENT'" class="btnExpOrder">
-          <div  ng-if="collapsed">
+        <div class="btnExpOrder">
+          <div ng-if="collapsed">
               <button class="btn cB fa fa-plus-square"  ng-click="toggleNode(this)" ></button>
           </div>
           <div ng-if="!collapsed">
@@ -9,12 +9,12 @@
           </div>
         </div>
 
-      <div ng-show="node.state == 'COMMENT'" class="btnExpComment">
+      <div class="btnExpComment">
           <div ng-if="collapsed">
-              <button class="btn cO fa fa-plus-square"  ng-click="toggleItem(this)" ></button>
+              <button class="btn cO fa fa-plus-square"  ng-click="toggleNode(this)" ></button>
           </div>
           <div ng-if="!collapsed">
-              <button class="btn cO fa fa-minus-square" title="Expandir Pedido" ng-click="toggleItem(this)" ></button>
+              <button class="btn cO fa fa-minus-square" title="Expandir Pedido" ng-click="toggleNode(this)" ></button>
           </div>
         </div>
 
@@ -30,7 +30,7 @@
         </div>
     </div>
     <div class="orderIcons">
-        <div ng-show="node.state != 'COMMENT'" class="btnState">
+        <div class="btnState">
             <select ng-model='node.state' ng-change="updateIssueData(this)">
               <option value='PENDING'>pendiente</option>
               <option value='CLOSED' class="cR">cerrado</option>
@@ -55,6 +55,6 @@
 
 
   <ol ui-tree-nodes ng-model="node.nodes" ng-class="{'angular-ui-tree-hidden': collapsed}">
-    <li  ng-repeat="node in node.nodes" class="{{node.style}}" ui-tree-node ng-include="'modules/newRequest/nodes_renderer.html'">
+    <li  ng-repeat="node in node.nodes" ui-tree-node ng-include="'modules/newRequest/nodes_renderer.html'">
     </li>
   </ol>
