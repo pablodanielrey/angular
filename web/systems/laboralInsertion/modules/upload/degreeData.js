@@ -1,6 +1,5 @@
 var app = angular.module('mainApp');
 
-
 app.controller('DegreeLaboralInsertionCtrl', function($scope, $timeout, LaboralInsertion) {
 
   $scope.$on('UpdateUserDataEvent',function(event,data) {
@@ -9,9 +8,7 @@ app.controller('DegreeLaboralInsertionCtrl', function($scope, $timeout, LaboralI
 
 	$scope.$on('EditInsertionCheckDataEvent',function() {
 		$scope.model.status.degrees = true;
-
 		$scope.$emit("EditInsertionDataCheckedEvent");
-
 	});
 
 
@@ -72,14 +69,14 @@ app.controller('DegreeLaboralInsertionCtrl', function($scope, $timeout, LaboralI
 
     LaboralInsertion.findDegreeData($scope.model.selectedUser,
       function(data) {
-		if ((data != undefined) && (data != null) && (data.length > 0)) {
-			$scope.model.degrees = data;
-			$scope.extendWorkType();
+    		if ((data != undefined) && (data != null) && (data.length > 0)) {
+    			$scope.model.degrees = data;
+    			$scope.extendWorkType();
 
-		}
-		if ($scope.model.degrees.length == 0) {
-			$scope.addDegree()
-		}
+    		}
+    		if ($scope.model.degrees.length == 0) {
+    			$scope.addDegree()
+    		}
       },
       function(err) {
         //alert(err);

@@ -3,7 +3,6 @@ var app = angular.module('mainApp');
 app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Session, Users, Student, LaboralInsertion, Notifications, Profiles, Utils) {
 
 	$scope.model = {
-		download: false,
 		insertionData: {},
 		degrees: [],
 		languages: [],
@@ -240,90 +239,6 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 		$scope.$broadcast('UpdateUserDataEvent');
 	};
 
-
-	$scope.downloadDatabase = function() {
-
-		$scope.model.downloading = true;
-
-		LaboralInsertion.getLaboralInsertionData(
-			function(data) {
-
-				/*
-				var promises = [];
-
-				for (var i = 0; i < data.length; i++) {
-					var userId = data[i]['id'];
-					(function(userId) {
-						promises.push(new Promise(function(resolve,reject) {
-							Users.findUser(userId,
-								function(user) {
-									resolve(user);
-								},
-								function(error) {
-									reject(error);
-								});
-							}));
-					})(userId);
-				}
-
-
-				Promise.all(promises).then(function(results) {
-					$scope.$apply(function() {
-						$scope.model.downloading = false;
-
-						var csv = 'dni;nombre;apellido;residir;viajar;lenguajes;carreras\n';
-						for (var i = 0; i < data.length; i++) {
-							var user = results[i];
-							var li = data[i];
-							var lils = li['languages'];
-							var lidegs = li['degrees'];
-
-							csv = csv + user['dni'] + ';' + user['name'] + ';' + user['lastname'] + ';';
-							csv = csv + li['reside'] + ';' + li['travel'] + ';';
-							for (var a = 0; a < lils.length; a++) {
-								csv = csv + lils[a]['name'] + ' ' + lils[a]['level'] + ',';
-							}
-							csv = csv + ';';
-							for (var a = 0; a < lidegs.length; a++) {
-								csv = csv + lidegs[a]['name'] + ' ' + lidegs[a]['courses'] + ' ' + lidegs[a]['average1'] + ' ' + lidegs[a]['average2'] + ' ' + lidegs[a]['work_type'] + ',';
-							}
-							csv = csv + '\n';
-						}
-						window.saveAs(new Blob([csv],{type: "text/csv;charset=utf-8;"}),'base.csv');
-					});
-				},
-				function(err) {
-					$scope.apply(function() {
-						$scope.model.downloading = false;
-						Notifications.message(err);
-					});
-				});
-				*/
-
-				$scope.model.downloading = false;
-				var blob = Utils.base64ToBlob(data.base64);
-				window.saveAs(blob,'base.ods');
-
-				var cvs = data.cvs;
-				for (var i = 0; i < cvs.length; i++) {
-					console.log(i);
-					var bcv = cvs[i];
-					var blobcv = Utils.base64ToBlob(bcv.data);
-					var ext = bcv.name.split('.');
-					var filename = bcv.lastname + ', ' + bcv.username + '.' + ext[ext.length - 1];
-					//console.log(filename);
-					window.saveAs(blobcv,bcv.lastname + ', ' + bcv.username + '.' + ext[ext.length - 1]);
-				}
-
-			},
-			function(error) {
-				$scope.$apply(function() {
-					$scope.model.downloading = false;
-					Notifications.message(error);
-				});
-			}
-		);
-	}
 
 	$timeout(function() {
 		$scope.initialize();

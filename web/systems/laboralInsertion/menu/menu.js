@@ -17,6 +17,10 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Notifications'
       $location.path('/download');
     }
 
+    $scope.upload = function() {
+      $location.path('/upload');
+    }
+
   	$scope.exit = function() {
   		$location.path('/logout');
   	}
@@ -28,6 +32,7 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Notifications'
     $scope.initialize = function() {
       $scope.model.items = [];
       $scope.model.items.push({ n:1, label:'Descargar', img:'fa fa-lock', function: $scope.download });
+      $scope.model.items.push({ n:1, label:'Inscribirse', img:'fa fa-lock', function: $scope.download });
     }
 
     $rootScope.$on('$viewContentLoaded', function(event) {
