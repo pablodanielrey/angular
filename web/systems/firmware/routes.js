@@ -17,7 +17,8 @@ function config($routeProvider) {
 
     .when('/enroll', {
       templateUrl: '/systems/firmware/modules/enroll.html',
-      controller: 'EnrollCtrl'
+      controller: 'EnrollCtrl',
+      controllerAs: 'vm'
     })
 
 

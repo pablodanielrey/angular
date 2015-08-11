@@ -153,6 +153,7 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
         for (var $i = 0; $i < schedules.length; $i++) {
 
           var s = {};
+          s.id = schedules[$i].id;
           s.start = new Date(schedules[$i].start);
           s.startDate =  Utils.formatDate(s.start);
           s.startTime = Utils.formatTime(s.start);
@@ -436,5 +437,20 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
   };
 
 
+  $scope.delete = function(id) {
+    if ($scope.model.readOnly) {
+      return;
+    }
+    Assistance.deleteSchedule(id,
+      function callbackOk(ok) {
+        $scope.loadHistory();
+        $scope.loadSchedule();
+        Notifications.message("Se ha eliminado correctamente")
+      },
+      function callbackError(error){
+        Notifications.message(error);
+      }
+    );
+  }
 
 }]);

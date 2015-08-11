@@ -1,0 +1,458 @@
+<!-- <div class='createRegulationContainer' ng-controller='createRegulation'>  -->
+<div class="createRegulation {{getStyleName()}}">
+
+  <div class='createRegulationContainer'>
+      <div class='contentScreens'>
+
+          <div class='screenOne'>
+                <div class="container">
+                    <div class="content">
+                        <div><h1>CREAR NUEVA</h1></div>
+                        <div class="regulations">
+                            <div class="btc3x c2" ng-click = "createOrdinance()">
+                                <div><i class="fa fa-file-text fa-3x"></i></div>
+                                <div>ORDENANZA</div>
+                            </div>
+
+                            <div class="btc3x c3" ng-click = "createResolution()">
+                                <div><i class="fa fa-file-text fa-3x"></i></div>
+                                <div>RESOLUCIÓN</div>
+                            </div>
+                            <div class="btc3x c4" ng-click = "createRegulation()">
+                                <div><i class="fa fa-file-text fa-3x"></i></div>
+                                <div>DISPOSICIÓN</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+          </div>
+
+          <div class='screenTwo '>
+              <div class="container">
+                  <div class="content">
+                      <div class="contentNewRegulation">
+                          <div class="newRegulation">
+                            <div><b>NUEVA</b></div>
+                            <div class="titleNewRegulation">{{getRegulationName()}}</div>
+                          </div>
+
+                          <div class="saveCancel">
+                              <div>
+                                <button class="sendRegulation" ng-click = "save()"><i class="fa fa-floppy-o"></i> <b>GUARDAR</b></button>
+                              </div>
+                              <div>
+                                <button class="cancelRegulation" ng-click = "selectRegulation(0)"><i class="fa fa-reply"></i> CANCELAR</button>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="dataOne">
+                           <div class="contentdataImput tam1">
+                              <div>
+                                  <input class="inputRegulationOne" type="date" ng-model="model.normative.created">
+                              </div>
+                              <div>
+                                  <span class="titleInputRegulation">Fecha</span>
+                              </div>
+                          </div>
+                          <div class="contentdataImput tam2">
+                              <div>
+                                  <input class="inputRegulationOne" type="number" min="0" ng-model="model.normative.file_number">
+                              </div>
+                              <div>
+                                  <span class="titleInputRegulation"> Número</span>
+                              </div>
+                          </div>
+                          <div class="contentdataImput tam3">
+                              <div>
+                                  <input class="inputRegulationOne" type="text" ng-model="model.normative.normative_number_full"  placeholder="ej: 900-11111/15">
+                              </div>
+                              <div>
+                                  <span class="titleInputRegulation"> Expediente</span>
+                              </div>
+                          </div>
+
+                          <div class="contentdataImput">
+                              <div>
+                                  <select class="inputRegulationOne" ng-model='model.normative.issuer' ng-options='item.name for item in model.issuers'>
+                                  </select>
+                              </div>
+                              <div>
+                                  <span class="titleInputRegulation">Emisor</span>
+                              </div>
+                          </div>
+                          <div class="ContentVisivilidad contentdataImput">
+                              <div>
+                                  <select class="inputRegulationOne" ng-model='model.normative.visibility' ng-options='item.name for item in model.visibilities' ng-change='changeVisibility()'>
+                                  </select>
+                              </div>
+                              <div>
+                                  <span class="titleInputRegulation">Visibilidad</span>
+                              </div>
+                          </div>
+                          <div class="ContentEstado contentdataImput">
+                              <div>
+                                  <select class="inputRegulationOne" ng-model='model.normative.status' ng-options='item.name for item in model.status'>
+                                  </select>
+                              </div>
+                              <div>
+                                  <span class="titleInputRegulation">Estado</span>
+                              </div>
+                          </div>
+                          <div class="contentAprobado contentdataImput tam1" ng-class="{false:'hidden'}[viewDateStatus()]">
+                          <!-- <div class="contentAprobado tam1" ng-if="viewDateStatus()"> -->
+                             <div>
+                                 <input class="inputRegulationOne" type="date">
+                             </div>
+                             <div>
+                                 <span class="titleInputRegulation">Aprobado el</span>
+                             </div>
+                         </div>
+
+
+                      </div>
+                      <div class="dataTwo">
+                        <div class="contentLeft">
+
+                            <div class="contentImputDataOne">
+
+                                <!----------------- cargar PDF ---------------->
+
+                                <div class="contentUploadPDF">
+                                    <div>
+                                        <div class="uploadPDF">
+                                  			   <p class="textBtnPDF"><i class="fa fa-arrow-circle-up"></i> Subir PDF</p>
+                                  			   <input type="file" class="btnInputFile" ng-model="model.normative.file">
+                                  		  </div>
+                                  	</div>
+                                    <div>
+                                        <span class="titleInputRegulation">Normativa en pdf</span>
+                                    </div>
+                                </div>
+
+                                <div class="contentdataImput">
+                                  <div class="uploadPDF2">
+                                    <div><i class="fa fa-file-pdf-o iconPDF"></i> Ord25151/14.pdf</div>
+                                    <!-- <div><i class="fa fa-file-pdf-o"></i> no se cargo el archivo...</div> -->
+                                  </div>
+                                </div>
+
+                                <!----------------- cargar Relacion de Norma ---------------->
+
+                                <div class="contentUploadPDF">
+                                    <div>
+                                        <div class="uploadPDF">
+                                           <p class="textBtnPDF"><i class="fa fa-search-plus"></i> Burcar Norma</p>
+                                           <div class="btnInputFile" ng-click = "selectRegulation(8)"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <span class="titleInputRegulation">Relación de Norma</span>
+                                    </div>
+                                </div>
+
+                                <div class="contentdataImput">
+                                  <div class="uploadPDF2">
+                                    <div>
+                                      <i class="fa fa-file-text-o iconPDF"></i> 900-5624/15
+                                      <select class="selectRelacionDeNoma">
+                                          <option>Deja sin efecto</option>
+                                          <option>Complementa</option>
+                                      </select>
+                                    </div>
+                                    <!-- <div><i class="fa fa-file-text-o"></i> sin relación...</div> -->
+                                  </div>
+                                </div>
+
+
+
+
+                            </div>
+
+                            <div class="contentImputData">
+                                <div class="titleImputData">
+                                  Extracto
+                                </div>
+                                <div class="tamInputRegulationOne">
+                                  <textarea class="inputRegulationTwo" no></textarea>
+
+                                </div>
+                            </div>
+                        </div>
+
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          <div class='screenThree'>
+              <div class="container">
+                  <div class="content">
+                      <div class="dataThree">
+                          <div><i class="fa fa-check-circle fa-5x"></i></div>
+                          <div class="titleCreatedRegulation"> {{getRegulationName()}} CREADA CON ÉXITO !</div>
+                          <button class="btnRegulationFinished " ng-click = "selectRegulation(0)"><h2>FINALIZAR</h2></button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+      </div>
+
+      <!-- *******************************************************************
+      ***************** PANTALLA RELACION DE NORMA ***************************
+      ******************************************************************** -->
+       <div class="relacionDeNorma">
+         <div class="contentSearchRegulation">
+             <div class="contentSearch">
+
+                 <div class=search>
+                    <div class="inputSearchContent">
+                       <form class="form-wrapper cf">
+                           <input type="text" placeholder="Buscar norma..." required>
+                           <button type="submit" ng-click="selectRegulation(9)">Buscar</button>
+                       </form>
+                       <div>
+                         <button class="btnVolver" ng-click="back()">VOLVER <i class="fa fa-share"></i> </button>
+                       </div>
+                    </div>
+                </div>
+
+                 <div class="filters">
+
+                     <div class="iconFilters">
+                         <i class="fa fa-sliders fa-2x"></i>
+                     </div>
+
+                     <div class="itemsFilters">
+                         <div>
+                             <select class="inputFilters">
+                               <option>Ordenanza</option>
+                               <option>Resolución</option>
+                               <option>Dispocición</option>
+                             </select>
+                         </div>
+                         <div>
+                           <span class="titleInputFilters"> Norma </span>
+                         </div>
+                     </div>
+
+                     <div class="itemsFilters">
+                         <div>
+                           <select class="inputFilters">
+                             <option>2015</option>
+                             <option>2014</option>
+                             <option>2013</option>
+                             <option>2012</option>
+                             <option>2011</option>
+                             <option>2010</option>
+                           </select>
+                         </div>
+                         <div>
+                           <span class="titleInputFilters"> Año </span>
+                         </div>
+                     </div>
+
+                     <div class="itemsFilters tam1">
+                         <div>
+                           <input class="inputFilters" type="text"></input>
+                         </div>
+                         <div>
+                           <span class="titleInputFilters"> Nº Norma </span>
+                         </div>
+                     </div>
+
+                     <div class="itemsFilters tam2">
+                         <div>
+                             <input class="inputFilters" type="text"></input>
+                         </div>
+                         <div>
+                           <span class="titleInputFilters"> Nº Expediente </span>
+                         </div>
+                     </div>
+
+                     <div class="itemsFilters">
+                     <div>
+                         <select class="inputFilters">
+                           <option>Decano</option>
+                           <option>Vicedecano</option>
+                         </select>
+                     </div>
+                     <div>
+                       <span class="titleInputFilters"> Emisor </span>
+                     </div>
+                     </div>
+
+                     <div class="itemsFilters">
+                         <div>
+                             <select class="inputFilters">
+                               <option>Aprobada</option>
+                               <option>Pendiente</option>
+                             </select>
+                         </div>
+                         <div>
+                           <span class="titleInputFilters"> Estado </span>
+                         </div>
+                     </div>
+
+                     <div class="itemsFilters">
+                         <div>
+                             <select class="inputFilters">
+                               <option>Público</option>
+                               <option>Privado</option>
+                             </select>
+                         </div>
+                         <div>
+                           <span class="titleInputFilters"> Visibilidad </span>
+                         </div>
+                     </div>
+
+
+               </div>
+             </div>
+             <div class="contentSearch2">
+               <div>
+                   <h1>RESULTADOS DE BUSQUEDA</h1>
+               </div>
+               <div class="row1">
+                   <div class="col1 col-span-1">TIPO</div>
+                   <div class="col1 col-span-1">NÚMERO</div>
+                   <div class="col1 col-span-1">EXPEDIENTE</div>
+                   <div class="col1 col-span-1">EMISOR</div>
+                   <div class="col1 col-span-1">ACCION</div>
+               </div>
+
+               <div class="results">
+
+                     <div>
+                         <div class="row3">
+
+                             <div class="col3 col-span-1"><i class="fa fa-file-text"></i>&nbsp; Resolución</div>
+                             <div class="col col-span-1">025/15</div>
+                             <div class="col col-span-1">900-1236/15</div>
+                             <div class="col col-span-1">Decanato</div>
+                             <div class="col6 col-span-1"><button class="btnSeleccionar"><i class="fa fa-hand-o-left"></i>&nbsp; SELECCIONAR</button></div>
+                         </div>
+                         <div class="row4">
+                             <div class="col col-span-2">Curso de Capacitación en Informática para el personal no docente de la Facultad</div>
+                         </div>
+                     </div>
+                     <div>
+                         <div class="row">
+                             <div class="col4 col-span-1"><i class="fa fa-file-text"></i>&nbsp; Ordenanza</div>
+                             <div class="col col-span-1">025/15</div>
+                             <div class="col col-span-1">900-1236/15</div>
+                             <div class="col col-span-1">Decanato</div>
+                             <div class="col6 col-span-1"><button class="btnSeleccionar"><i class="fa fa-hand-o-left"></i>&nbsp; SELECCIONAR</button></div>
+                         </div>
+                         <div class="row2">
+                             <div class="col col-span-2">Curso de Capacitación en Informática para el personal no docente de la Facultad</div>
+                         </div>
+                     </div>
+                     <div>
+                         <div class="row3">
+                             <div class="col5 col-span-1"><i class="fa fa-file-text"></i>&nbsp; Disposición</div>
+                             <div class="col col-span-1">025/15</div>
+                             <div class="col col-span-1">900-1236/15</div>
+                             <div class="col col-span-1">Decanato</div>
+                             <div class="col6 col-span-1"><button class="btnSeleccionar"><i class="fa fa-hand-o-left"></i>&nbsp; SELECCIONAR</button></div>
+                         </div>
+                         <div class="row4">
+                             <div class="col col-span-2">Curso de Capacitación en Informática para el personal no docente de la Facultad</div>
+                         </div>
+                     </div>
+                     <div>
+                         <div class="row">
+                             <div class="col4 col-span-1"><i class="fa fa-file-text"></i>&nbsp; Odenanza</div>
+                             <div class="col col-span-1">025/15</div>
+                             <div class="col col-span-1">900-1236/15</div>
+                             <div class="col col-span-1">Decanato</div>
+                             <div class="col6 col-span-1"><button class="btnSeleccionar"><i class="fa fa-hand-o-left"></i>&nbsp; SELECCIONAR</button></div>
+                         </div>
+                         <div class="row2">
+                             <div class="col col-span-2">Curso de Capacitación en Informática para el personal no docente de la Facultad</div>
+                         </div>
+                     </div>
+                     <div>
+                         <div class="row">
+                             <div class="col4 col-span-1"><i class="fa fa-file-text"></i>&nbsp; Odenanza</div>
+                             <div class="col col-span-1">025/15</div>
+                             <div class="col col-span-1">900-1236/15</div>
+                             <div class="col col-span-1">Decanato</div>
+                             <div class="col6 col-span-1"><button class="btnSeleccionar"><i class="fa fa-hand-o-left"></i>&nbsp; SELECCIONAR</button></div>
+                         </div>
+                         <div class="row2">
+                             <div class="col col-span-2">Curso de Capacitación en Informática para el personal no docente de la Facultad</div>
+                         </div>
+                     </div>
+               </div>
+             </div>
+         </div>
+       </div>
+
+      <!-- *******************************************************************
+      ***************** PANTALLA PRIVADA DE GRUPOS ***************************
+      ******************************************************************** -->
+
+      <div class="privadaDeGrupos">
+           <div class="container">
+               <div class="content">
+                  <div class="contentOffices">
+                   <div class="contentInt">
+                      <div>
+                        <input class="inputSearchOffices" type="search" placeholder="Buscar..."> Buscar Oficina </input>
+                      </div>
+                      <div class="listOffices">
+                        <div class="itmesOffices">
+                            <div>
+                              Despacho
+                            </div>
+                            <div>
+                               <i class="fa fa-arrow-circle-right"></i>
+                            </div>
+                        </div>
+                        <div class="itmesOffices">
+                            <div>
+                              Mesa de Entradas
+                            </div>
+                            <div>
+                              <i class="fa fa-arrow-circle-right"></i>
+                            </div>
+                        </div>
+                      </div>
+                   </div>
+
+                   <div class="contentInt">
+                      <div>
+                        <i class="fa fa-cogs"></i> Permisos Asignados por oficina
+                      </div>
+
+                      <div class="titlesPermission">
+                          <div>
+                            Oficina
+                          </div>
+                          <div>
+                            Borrar
+                          </div>
+                      </div>
+
+                      <div class="officesPermission">
+                        <div>
+                          Despacho
+                        </div>
+                        <div>
+                          <i class="fa fa-trash"></i>
+                        </div>
+                      </div>
+                   </div>
+
+
+                   <div>
+                     <button class="btnVolver" ng-click="back()">VOLVER <i class="fa fa-share"></i> </button>
+                   </div>
+                  </div>
+               </div>
+           </div>
+     </div>
+
+  </div>
+</div>

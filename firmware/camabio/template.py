@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import codecs, logging
-import inject
+import inject, uuid
 
 from model.config import Config
 from model.systems.assistance import templates
@@ -40,7 +40,7 @@ class Templates:
 
     def findUserIdByIndex(self,conn,number):
         cur = conn.cursor()
-        cur.execute('select user_id from assistance.template_mapping where number = %s',(number,))
+        cur.execute('select user_id from assistance.template_mapping where reader_index = %s',(number,))
         if cur.rowcount <= 0:
             return None
         return cur.fetchone()[0]

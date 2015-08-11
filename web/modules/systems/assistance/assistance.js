@@ -225,15 +225,15 @@ app.controller('AssistanceCtrl', ["$scope", "$timeout", "$window", "Profiles", "
 			Notifications.message("Error: Session no definida");
 			$window.location.href = "/#/logout";
     } else {
-			Profiles.checkAccess(Session.getSessionId(),'ADMIN-ASSISTANCE,USER-ASSISTANCE',
+			Profiles.checkAccess(Session.getSessionId(),['ADMIN-ASSISTANCE','USER-ASSISTANCE'],
 				function(ok) {
-					if (ok == 'granted') {
+					if (ok) {
 						console.log("granted");
 						$scope.loadUser();
 						$scope.loadAssistanceStatus();
 						$scope.loadAssistanceData();
 						$scope.loadOffices();
-						$scope.loadJustifications();
+						//$scope.loadJustifications();
 					} else {
 						console.log("not granted");
 						$window.location.href = "/#/logout";

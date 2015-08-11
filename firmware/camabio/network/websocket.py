@@ -2,6 +2,7 @@ import inject, logging, json, sys, traceback
 
 
 from network.actions import Enroll
+from network.actions import Login
 
 from autobahn.twisted.websocket import WebSocketServerProtocol
 from autobahn.twisted.websocket import WebSocketServerFactory
@@ -29,7 +30,7 @@ from model.session import Session
 ''' aca se definen las acciones a ser manejadas por el server de websocket '''
 
 actions = [
-    Enroll()
+    Enroll(), Login()
 ]
 
 
@@ -58,11 +59,14 @@ class ActionsServerProtocol(WebSocketServerProtocol):
         return ejmsg
 
     def _sendEncodedMessage(self,msg):
-        if (len(msg) < 1024):
-            logging.debug('server -> cliente {}'.format(msg))
-            """ super(WebSocketServerProtocol,self).sendMessage(msg,False)"""
+        try:
+            if (len(msg) < 1024):
+                logging.debug('server -> cliente {}'.format(msg))
+                ''' super(WebSocketServerProtocol,self).sendMessage(msg,False) '''
             reactor.callFromThread(sendMessage,super(WebSocketServerProtocol,self),msg)
 
+        except Exception as e:
+            logging.exception(e)
 
     def sendException(self,e):
         msg = {'type':'Exception','name':e.__class__.__name__}
@@ -171,6 +175,15 @@ class BroadcastServerFactory(WebSocketServerFactory):
         self.clients = []
 
 
+    def _encodeMessage(self,msg):
+        jmsg = json.dumps(msg, ensure_ascii = False, cls=DateTimeEncoder)
+        if (len(jmsg) < 1024):
+            logging.debug(jmsg)
+
+        ejmsg = jmsg.encode('utf-8')
+        return ejmsg
+
+
     def register(self, client):
         if client not in self.clients:
             logging.debug("registered client {}".format(client.peer))
@@ -182,8 +195,9 @@ class BroadcastServerFactory(WebSocketServerFactory):
             self.clients.remove(client)
 
     def broadcast(self, msg):
-        logging.debug("broadcasting message '{}' ..".format(msg))
+        logging.debug("broadcasting message {} ..".format(msg))
         for c in self.clients:
+            logging.debug("sending message to {}".format(c.peer))
             c._sendEncodedMessage(msg)
             logging.debug("message sent to {}".format(c.peer))
 
@@ -194,5 +208,5 @@ def getPort():
     log.startLogging(sys.stdout)
     factory = BroadcastServerFactory()
     factory.protocol = ActionsServerProtocol
-    port = reactor.listenTCP(int(config.configs['server_port']), factory=factory, interface=config.configs['server_ip'])
+    port = reactor.listenTCP(int(config.configs['firmware_port']), factory=factory, interface=config.configs['firmware_ip'])
     return (reactor,port,factory)

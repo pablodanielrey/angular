@@ -7,7 +7,7 @@ from model.systems.assistance.justifications.exceptions import *
 
 
 """
-    Donación de sangre
+    Concurso
     no tiene límite
 """
 class CONJustification(Justification):
@@ -16,6 +16,9 @@ class CONJustification(Justification):
 
     def isJustification(self,id):
         return self.id == id
+
+    def _isJustifiedDay(self,date):
+        return True
 
     """
         retorna la cantidad de justificaciones que se tienen disponibles dentro de un período de tiempo.

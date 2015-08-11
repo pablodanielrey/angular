@@ -84,9 +84,9 @@ app.controller('AssistanceOptionCtrl', function($scope, $rootScope, Profiles, As
         $scope.generateItems = function() {
 
 
-          Profiles.checkAccess(Session.getSessionId(),'ADMIN-ASSISTANCE,USER-ASSISTANCE',
+          Profiles.checkAccess(Session.getSessionId(),["ADMIN-ASSISTANCE","USER-ASSISTANCE"],
             function(ok) {
-              if (ok == 'granted') {
+              if (ok) {
                   $scope.items = [];
                   $scope.items.push({ label:'Inicio', img:'fa-tachometer', function: $scope.summary});
                   $scope.items.push({ label:'Solicitudes', img:'fa-ticket', function: $scope.requestAssistance});

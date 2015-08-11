@@ -15,7 +15,7 @@ from model.systems.assistance.fails import Fails
 from model.systems.assistance.logs import Logs
 from model.systems.assistance.date import Date
 from model.systems.assistance.schedule import Schedule
-from model.systems.assistance.checks import ScheduleChecks
+from model.systems.assistance.check.checks import ScheduleChecks
 from model.systems.assistance.justifications.justifications import Justifications
 
 class Assistance:
@@ -178,12 +178,13 @@ class Assistance:
 
 
         start = dates[0]
-        end = dates[len(dates) - 1]
+
+        dend = self.date.parse(dates[len(dates) - 1]) + datetime.timedelta(days=1)
         # obtengo las justificaciones
-        justifications = self.justifications.getJustificationRequestsByDate(con,status,usersIds,start,end)
+        justifications = self.justifications.getJustificationRequestsByDate(con,status,usersIds,start,dend)
 
         dstart = self.date.parse(start)
-        dend = self.date.parse(end)
+
         gjustifications = self.justifications.getGeneralJustificationRequests(con)
         for j in gjustifications:
             if j['begin'] >= dstart and j['begin'] <= dend:
@@ -311,12 +312,15 @@ class Assistance:
 
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
-
             if self.date.isNaive(start):
                 start = self.date.localizeLocal(start)
+            elif self.date.isUTC(start):
+                start = self.date.localizeAwareToLocal(start)
 
             if self.date.isNaive(end):
                 end = self.date.localizeLocal(end)
+            elif self.date.isUTC(end):
+                end = self.date.localizeAwareToLocal(end)
 
             schedulesFails = []
             users = []

@@ -84,9 +84,9 @@ class Schedule:
     def getSchedule(self,con,userId,date):
         if self.date.isNaive(date):
           raise Exception('date is naive')
-          
+
         date = self.date.awareToUtc(date) #trabajo con las fechas en utc
-          
+
         cur = con.cursor()
         cur.execute('set time zone %s',('utc',))
 
@@ -142,6 +142,9 @@ class Schedule:
             else:
                 break
 
+        # ordeno los schedules por el start
+        schedules = sorted(schedules, key=lambda schedule: schedule['start'])
+
         return schedules
 
     """
@@ -151,7 +154,7 @@ class Schedule:
         cur = con.cursor()
         cur.execute('set time zone %s',('utc',))
 
-        cur.execute("select sstart, send, date, isDayOfWeek, isDayOfMonth, isDayOfYear from assistance.schedule where \
+        cur.execute("select sstart, send, date, isDayOfWeek, isDayOfMonth, isDayOfYear, id from assistance.schedule where \
                 user_id = %s \
                 order by date desc",(userId,))
         scheduless = cur.fetchall()
@@ -172,6 +175,7 @@ class Schedule:
             """ retorno los schedules con la fecha actual en utc - las fechas en la base deber�an estar en utc """
             schedules.append(
                 {
+                    'id':schedule[6],
                     'start':schedule[0],
                     'end':schedule[1],
                     'date':schedule[2],
@@ -240,3 +244,43 @@ class Schedule:
 
         req = (str(uuid.uuid4()), userId, uaware, ustart, uend, isDayOfWeek, isDayOfMonth, isDayOfYear)
         cur.execute('insert into assistance.schedule (id,user_id,date,sstart,send,isDayOfWeek,isDayOfMonth,isDayOfYear) values (%s,%s,%s,%s,%s,%s,%s,%s)',req)
+
+    '''
+        elimina un schedule
+    '''
+    def deleteSchedule(self,con,id):
+        cur = con.cursor()
+        cur.execute('delete from assistance.schedule where id = %s',(id,))
+
+    '''
+        combina los whs con los schedules
+        retorna [{schdule:{},whs:[]}]
+    '''
+    def combiner(self,schedules,whs):
+        controls = []
+
+        if schedules is None or len(schedules) == 0:
+            return controls
+
+        # ordeno los schedules y los whs por horario ascendente
+        schedules = sorted(schedules, key=lambda schedule: schedule['start'])
+        whs = sorted(whs, key=lambda wh: wh['start'])
+
+        for sched in schedules:
+            elem = {'schedule':sched,'whs':[]}
+            if len(schedules) == 1:
+                elem['whs'].extend(whs)
+                whsAppends = whs
+            else:
+                whsAppends = []
+                for wh in whs:
+                    if 'start' in wh and wh['start'] <= sched['end']:
+                        elem['whs'].append(wh)
+                        whsAppends.append(wh)
+
+                for w in whsAppends:
+                    whs.remove(w)
+
+            controls.append(elem)
+
+        return controls

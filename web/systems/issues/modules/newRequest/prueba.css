@@ -1,0 +1,54 @@
+
+/*
+pantalla principal
+*/
+.order {
+
+}
+
+.agregar {
+
+}
+
+.borrar {
+
+}
+
+.eliminar {
+
+}
+
+.texto {
+
+}
+
+
+
+/*
+  vistas de los elementos
+*/
+
+.normalOrder {
+
+}
+
+.extendedOrder {
+
+}
+
+.commentOrder {
+
+}
+
+
+.order.commentOrder .agregar {
+  display: none;
+
+
+}
+
+.order.commentOrder .estado {
+  display: none;
+}
+
+.order

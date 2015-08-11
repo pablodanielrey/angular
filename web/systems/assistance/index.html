@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html ng-app="mainApp">
+<head>
+  <meta charset="utf-8"/>
+  <meta name='viewport' content='width=device-width'/>
+
+  <script>
+    AUTOBAHN_DEBUG = true;
+  </script>
+
+  <script src="/libs/bower_components/angularjs/angular.js"></script>
+  <script src="/libs/bower_components/angular-route/angular-route.js"></script>
+  <script src="/libs/bower_components/autobahn/autobahn.js"></script>
+  <script src="/libs/bower_components/angular-wamp/release/angular-wamp.js"></script>
+
+  <!-- esto es el estilo de font awesome para tener los iconos -->
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+
+  <script type="text/javascript" src="/config.json"></script>
+
+  <script type="text/javascript" src="/systems/fce/index.module.js"></script>
+  <script type="text/javascript" src="/systems/fce/index.controller.js"></script>
+  <script type="text/javascript" src="/systems/fce/routes.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/fce/index.css"/>
+
+	<!-- filtros -->
+  <script type="text/javascript" src="/filters/account/filterAccountRequestByConfirmed.js"></script>
+
+
+	<!-- servicios -->
+	<script type="text/javascript" src="/services/Credentials.js"></script>
+	<script type="text/javascript" src="/services/Utils.js"></script>
+	<script type="text/javascript" src="/services/Cache.js"></script>
+	<script type="text/javascript" src="/services/Session.js"></script>
+  <script type="text/javascript" src="/services/Module.js"></script>
+	<script type="text/javascript" src="/services/Notifications.js"></script>
+	<script type="text/javascript" src="/services/Systems.js"></script>
+	<script type="text/javascript" src="/services/Users.js"></script>
+	<script type="text/javascript" src="/services/Profiles.js"></script>
+  <script type="text/javascript" src="/services/Login.js"></script>
+
+<!--	<script type="text/javascript" src="/services/systems/student/Student.js"></script>
+	<script type="text/javascript" src="/services/systems/account/Account.js"></script>
+	<script type="text/javascript" src="/services/systems/laboralInsertion/LaboralInsertion.js"></script>
+	<script type="text/javascript" src="/services/systems/au24/Au24.js"></script>
+	<script type="text/javascript" src="/services/systems/domain/Domain.js"></script>
+	<script type="text/javascript" src="/services/systems/email/Mail.js"></script> -->
+	<script type="text/javascript" src="/services/systems/assistance/Assistance.js"></script>
+<!--  <script type="text/javascript" src="/services/systems/tutors/tutors.js"></script> -->
+
+
+	<!-- modules -->
+  <link rel="stylesheet" type="text/css" href="/systems/fce/modules/home/home.css"/>
+
+<!--
+	<script type="text/javascript" src="/modules/systems/au24/au24.js"></script>
+	<link rel="stylesheet" type="text/css" href="/modules/systems/au24/au24.css"/>
+-->
+
+  <script type="text/javascript" src="/systems/fce/modules/header/header.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/fce/modules/header/header.css"/>
+
+  <script type="text/javascript" src="/systems/fce/modules/footer/footer.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/fce/modules/footer/footer.css"/>
+
+  <script type="text/javascript" src="/modules/admin/status.js"></script>
+<!--  <link rel="stylesheet" type="text/css" href="/modules/admin/status.css"/> -->
+
+  <script type="text/javascript" src="/modules/connection/conn.js"></script>
+  <link rel="stylesheet" type="text/css" href="/modules/connection/conn.css"/>
+
+  <script type="text/javascript" src="/modules/messages/messages.js"></script>
+  <link rel="stylesheet" type="text/css" href="/modules/messages/messages.css"/>
+
+<!--
+  <script type="text/javascript" src="/modules/groups/groupMembers.js"></script>
+  <script type="text/javascript" src="/modules/groups/listGroups.js"></script>
+  <script type="text/javascript" src="/modules/groups/editGroup.js"></script>
+  <script type="text/javascript" src="/modules/groups/editGroups.js"></script>
+  <script type="text/javascript" src="/modules/groups/addGroup.js"></script>
+-->
+
+
+<!--  <link rel="stylesheet" type="text/css" href="/modules/groups/listGroups.css"/>
+  <link rel="stylesheet" type="text/css" href="/modules/groups/editGroup.css"/>
+  <link rel="stylesheet" type="text/css" href="/modules/groups/editGroups.css"/>
+  <link rel="stylesheet" type="text/css" href="/modules/groups/groupMembers.css"/>
+  <link rel="stylesheet" type="text/css" href="/modules/groups/addGroup.css"/>
+-->
+
+  <script type="text/javascript" src="/modules/users/editMails.js"></script>
+  <script type="text/javascript" src="/modules/users/confirmMail.js"></script>
+  <script type="text/javascript" src="/modules/users/editUserProfile.js"></script>
+  <link rel="stylesheet" type="text/css" href="/modules/users/editMails.css"/>
+  <link rel="stylesheet" type="text/css" href="/modules/users/confirmMail.css"/>
+
+  <script type="text/javascript" src="/modules/systems/assistance/assistance.js"></script>
+  <link rel="stylesheet" type="text/css" href="/modules/systems/assistance/assistance.css"/>
+
+  <link rel="stylesheet" type="text/css" href="/modules/systems/assistance/fails.css"/>
+  <script type="text/javascript" src="/modules/systems/assistance/fails.js"></script>
+  <link rel="stylesheet" type="text/css" href="/modules/systems/assistance/failsFilters.css"/>
+  <script type="text/javascript" src="/modules/systems/assistance/failsFilters.js"></script>
+  <script type="text/javascript" src="/modules/systems/assistance/tree.directive.js"></script>
+  <script type="text/javascript" src="/modules/systems/assistance/adminRequestAssistance.js"></script>
+  <link rel="stylesheet" type="text/css" href="/modules/systems/assistance/adminRequestAssistance.css"/>
+
+  <script type="text/javascript" src="/modules/systems/assistance/showAssistance.js"></script>
+
+  <script type="text/javascript" src="/modules/systems/assistance/showAssistance.js"></script> <!--visualizacion del estado de asistencia -->
+
+  <link rel="stylesheet" type="text/css" href="/modules/systems/assistance/showAssistance.css"/>
+
+  <!--archivos del modulo requestJustifications -->
+  <script type="text/javascript" src="/modules/systems/assistance/requestJustifications/index.js"></script>
+  <link rel="stylesheet" type="text/css" href="/modules/systems/assistance/requestJustifications/index.css"/>
+  <script type="text/javascript" src="/modules/systems/assistance/requestJustifications/requestJustificationAA.js"></script>
+  <script type="text/javascript" src="/modules/systems/assistance/requestJustifications/requestJustificationC.js"></script>
+  <script type="text/javascript" src="/modules/systems/assistance/requestJustifications/requestJustification102.js"></script>
+  <script type="text/javascript" src="/modules/systems/assistance/requestJustifications/requestJustificationPE.js"></script>
+  <script type="text/javascript" src="/modules/systems/assistance/requestJustifications/requestJustificationLAO.js"></script>
+  <script type="text/javascript" src="/modules/systems/assistance/requestJustifications/requestJustification638.js"></script>
+  <script type="text/javascript" src="/modules/systems/assistance/requestJustifications/requestJustificationCU.js"></script>
+  <script type="text/javascript" src="/modules/systems/assistance/requestJustifications/requestJustificationBS.js"></script>
+  <script type="text/javascript" src="/modules/systems/assistance/requestJustifications/requestJustificationBC.js"></script>
+
+
+  <!--archivos del modulo usersAssistanceManagementMediator -->
+  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagementMediator/index.js"></script>
+  <link rel="stylesheet" type="text/css" href="/modules/systems/assistance/usersAssistanceManagementMediator/index.css"/>
+  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagementMediator/requestJustificationAA.js"></script>
+  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagementMediator/requestJustificationC.js"></script>
+  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagementMediator/requestJustification102.js"></script>
+  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagementMediator/requestJustificationPE.js"></script>
+  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagementMediator/requestJustificationLAO.js"></script>
+  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagementMediator/requestJustification638.js"></script>
+  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagementMediator/requestJustificationCU.js"></script>
+  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagementMediator/requestJustificationBS.js"></script>
+  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagementMediator/requestJustificationBC.js"></script>
+
+
+  <!--archivos del modulo usersAssistanceManagement -->
+  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagement/index.js"></script>
+  <link rel="stylesheet" type="text/css" href="/modules/systems/assistance/usersAssistanceManagement/index.css"/>
+  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagement/requestJustificationART.js"></script>
+  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagement/requestJustificationB.js"></script>
+  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagement/requestJustificationCC.js"></script>
+  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagement/requestJustificationD.js"></script>
+  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagement/requestJustificationDS.js"></script>
+  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagement/requestJustificationIC.js"></script>
+  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagement/requestJustificationJM.js"></script>
+  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagement/requestJustificationMAF.js"></script>
+  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagement/requestJustificationMCD.js"></script>
+  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagement/requestJustificationMLT.js"></script>
+  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagement/requestJustificationET.js"></script>
+  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagement/requestJustificationAUT.js"></script>
+  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagement/requestJustificationCON.js"></script>
+  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagement/requestJustificationPRN.js"></script>
+  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagement/requestJustificationPON.js"></script>
+  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagement/requestJustificationNAC.js"></script>
+  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagement/requestJustificationINV.js"></script>
+  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagement/requestJustificationMAT.js"></script>
+  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagement/requestJustificationSGS.js"></script>
+  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagement/requestJustificationSUS.js"></script>
+  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagement/requestJustificationVJE.js"></script>
+
+
+  <!--archivos del modulo requestGeneralJustifications -->
+  <script type="text/javascript" src="/modules/systems/assistance/requestGeneralJustifications/index.js"></script>
+  <link rel="stylesheet" type="text/css" href="/modules/systems/assistance/requestGeneralJustifications/index.css"/>
+  <script type="text/javascript" src="/modules/systems/assistance/requestGeneralJustifications/requestFeriado.js"></script>
+  <script type="text/javascript" src="/modules/systems/assistance/requestGeneralJustifications/requestParo.js"></script>
+  <script type="text/javascript" src="/modules/systems/assistance/requestGeneralJustifications/requestInvierno.js"></script>
+  <script type="text/javascript" src="/modules/systems/assistance/requestGeneralJustifications/requestVerano.js"></script>
+
+
+  <!--archivos del modulo manageJustificationsStock -->
+  <script type="text/javascript" src="/modules/systems/assistance/manageJustificationsStock/index.js"></script>
+  <link rel="stylesheet" type="text/css" href="/modules/systems/assistance/manageJustificationsStock/index.css"/>
+
+   <!--archivos del modulo managePositions -->
+  <script type="text/javascript" src="/systems/fce/modules/managePositions/index.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/fce/modules/managePositions/index.css"/>
+
+  <script type="text/javascript" src="/modules/systems/assistance/requestAuthority.js"></script>
+  <script type="text/javascript" src="/modules/systems/assistance/adminRequestOverTime.js"></script>
+  <script type="text/javascript" src="/modules/systems/assistance/mySchedule.js"></script>
+  <link rel="stylesheet" type="text/css" href="/modules/systems/assistance/requestAuthority.css"/>
+  <link rel="stylesheet" type="text/css" href="/modules/systems/assistance/adminRequestOverTime.css"/>
+  <link rel="stylesheet" type="text/css" href="/modules/systems/assistance/mySchedule.css"/>
+
+
+  <script type="text/javascript" src="/modules/systems/editSystems.js"></script>
+  <link rel="stylesheet" type="text/css" href="/modules/systems/editSystems.css"/>
+
+  <script type="text/javascript" src="/modules/systems/systems.js"></script>
+<!--  <link rel="stylesheet" type="text/css" href="/modules/systems/systems.css" /> -->
+
+  <script type="text/javascript" src="/modules/systems/student/editStudent.js"></script>
+  <link rel="stylesheet" type="text/css" href="/modules/systems/student/editStudent.css" />
+
+  <script type="text/javascript" src="/services/systems/tutors/tutors.js"></script>
+  <script type="text/javascript" src="/modules/systems/tutors/tutors.js"></script>
+  <link rel="stylesheet" type="text/css" href="/modules/systems/tutors/tutors.css" />
+
+  <!-- para el saveAs -->
+  <script type="text/javascript" src="/modules/systems/insercion/FileSaver.js"></script>
+  <script type="text/javascript" src="/modules/systems/insercion/editData.js"></script>
+  <script type="text/javascript" src="/modules/systems/insercion/degreeData.js"></script>
+  <script type="text/javascript" src="/modules/systems/insercion/languages.js"></script>
+  <script type="text/javascript" src="/modules/systems/insercion/profileData.js"></script>
+  <script type="text/javascript" src="/modules/systems/insercion/insertionData.js"></script>
+  <script type="text/javascript" src="/modules/systems/insercion/termsAndConditions.js"></script>
+  <link rel="stylesheet" type="text/css" href="/modules/systems/insercion/editData.css" />
+  <link rel="stylesheet" type="text/css" href="/modules/systems/insercion/degreeData.css" />
+  <link rel="stylesheet" type="text/css" href="/modules/systems/insercion/languages.css" />
+  <link rel="stylesheet" type="text/css" href="/modules/systems/insercion/profileData.css" />
+  <link rel="stylesheet" type="text/css" href="/modules/systems/insercion/insertionData.css" />
+  <link rel="stylesheet" type="text/css" href="/modules/systems/insercion/termsAndConditions.css" />
+
+
+<!--  <script type="text/javascript" src="libs/cryptojs/rollups/sha1.js"></script> -->
+
+<!--
+  <script type="text/javascript" src="/systems/login/modules/login.js"></script>
+  <script type="text/javascript" src="/systems/login/modules/logout.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/login/modules/login.css" />
+-->
+
+<!--  <link rel="stylesheet" type="text/css" href="/modules/login/logout.css" />
+-->
+
+
+	<script type="text/javascript" src="/modules/account/accountRequestEdit.js"></script>
+  <script type="text/javascript" src="/modules/account/createAccountRequest.js"></script>
+  <script type="text/javascript" src="/modules/account/confirmAccountRequest.js"></script>
+  <script type="text/javascript" src="/modules/account/listAccountRequests.js"></script>
+	<script type="text/javascript" src="/modules/account/accountRequestsList.js"></script>
+  <script type="text/javascript" src="/modules/account/changePassword.js"></script>
+  <!--<script type="text/javascript" src="/modules/account/resetPassword.js"></script>-->
+  <link rel="stylesheet" type="text/css" href="/modules/account/changePassword.css"/>
+  <link rel="stylesheet" type="text/css" href="/modules/account/confirmAccountRequest.css"/>
+  <link rel="stylesheet" type="text/css" href="/modules/account/accountRequestsList.css"/>
+  <link rel="stylesheet" type="text/css" href="/modules/account/accountRequestEdit.css"/>
+
+
+  <script type="text/javascript" src="/modules/menu/menu.js" charset="UTF-8"></script>
+  <script type="text/javascript" src="/modules/menu/my-data/my-data.js" charset="UTF-8"></script>
+  <script type="text/javascript" src="/modules/menu/account-requests/account-request.js" charset="UTF-8"></script>
+  <script type="text/javascript" src="/modules/menu/edit-users/edit-users.js" charset="UTF-8"></script>
+  <link rel="stylesheet" type="text/css" href="/modules/menu/menu.css"/>
+  <link rel="stylesheet" type="text/css" href="/modules/menu/my-data/my-data.css"/>
+  <link rel="stylesheet" type="text/css" href="/modules/menu/account-requests/account-request.css"/>
+  <link rel="stylesheet" type="text/css" href="/modules/menu/edit-users/edit-users.css"/>
+
+
+  <script type="text/javascript" src="/modules/menu/assistance/assistance.js" charset="UTF-8"></script>
+  <link rel="stylesheet" type="text/css" href="/modules/menu/assistance/assistance.css"/>
+
+  <script type="text/javascript" src="/modules/chat/chat.js"></script>
+
+  <script type="text/javascript" src="/modules/users/editProfile.js"></script>
+  <script type="text/javascript" src="/modules/users/editUsers.js"></script>
+  <script type="text/javascript" src="/modules/users/listUsers.js"></script>
+  <link rel="stylesheet" type="text/css" href="/modules/users/editProfile.css" />
+  <link rel="stylesheet" type="text/css" href="/modules/users/editUsers.css" />
+  <link rel="stylesheet" type="text/css" href="/modules/users/editUserProfile.css" />
+  <link rel="stylesheet" type="text/css" href="/modules/users/listUsers.css" />
+  <link rel="stylesheet" type="text/css" href="/modules/users/userNamesList.css" />
+<!--
+  <link rel="stylesheet" type="text/css" href="/modules/chat/chat.css" />
+-->
+
+  <script type="text/javascript" src="/controllers/main.js"></script>
+
+<!--
+	<script type="text/javascript" src="/modules/angular-pickadate/angular-pickadate.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="/modules/angular-pickadate/angular-pickadate.css" />
+-->
+
+	<!-- directives -->
+	<script type="text/javascript" src="/directives/onReadFileBinaryString.js"></script>
+
+</head>
+<body>
+
+
+<div ng-controller="IndexCtrl" class="principal">
+
+<div class="screen">
+	<div class="header-container" ng-controller="HeaderCtrl" ng-include="'/systems/fce/modules/header/header.html'"></div>
+
+      <div id='main'>
+        <nav ng-class="{true:'visible',false:'hidden'}[isLogged()]">
+          <div class='menu-container' ng-controller="MenuCtrl" ng-include="'/modules/menu/menu.html'">
+          </div>
+        </nav>
+
+        <article>
+            <div ng-view></div>
+        </article>
+      </div>
+
+      <footer>
+        <div class='footer-container' ng-controller='FooterCtrl' ng-include="'/systems/fce/modules/footer/footer.html'">
+        </div>
+      </footer>
+    </div>
+
+<!--
+    <div class='connection-container' ng-class="{false:'visible',true:'hidden'}[isConnected()]" ng-controller="ConnectionCtrl" ng-include="'/modules/connection/conn.html'">
+    </div>
+-->
+
+    <div class='messages-container' ng-controller="MessagesCtrl" ng-include="'/modules/messages/messages.html'" ng-class="{false: 'hidden', true: 'visible'}[ isVisible() ]">
+    </div>
+
+</div>
+
+</body>
+</html>

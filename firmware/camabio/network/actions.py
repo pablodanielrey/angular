@@ -6,11 +6,87 @@ from twisted.internet.defer import inlineCallbacks, returnValue
 from model.exceptions import *
 
 from model.events import Events
+from model.profiles import Profiles
+from model.credentials.credentials import UserPassword
 
 from firmware import Firmware
 
+
+class Login:
+
+    firmware = inject.attr(Firmware)
+
+    def _identified(self,server,log=None,user=None,sid=None,roles=None):
+        msg = None
+        if log:
+            msg = {
+                'type':'IdentifiedEvent',
+                'data':{
+                    'log':log,
+                    'user':user,
+                    'sid':sid
+                }
+            }
+            if roles:
+                msg['data']['profile'] = 'admin'
+
+        else:
+            msg = {
+                'type':'IdentifiedEvent',
+                'data':{
+                    'msg':'Credenciales Incorrectas'
+                }
+            }
+
+        server.broadcast(msg)
+
+
+
+    def handleAction(self, server, message):
+
+        if (message['action'] != 'login'):
+            return False
+
+        if 'request' not in message:
+            response = {'id':message['id'], 'error':'Insuficientes parámetros'}
+            server.sendMessage(response)
+            return True
+
+        if 'dni' not in message['request']:
+            response = {'id':message['id'], 'error':'Insuficientes parámetros, falta el dni'}
+            server.sendMessage(response)
+            return True
+
+        if 'password' not in message['request']:
+            response = {'id':message['id'], 'error':'Insuficientes parámetros, falta la clave'}
+            server.sendMessage(response)
+            return True
+
+        dni = message['request']['dni']
+        password = message['request']['password']
+
+        try:
+            self.firmware.login(dni,password,self,server)
+
+            response = {
+                'id':message['id'],
+                'ok':'OK'
+            }
+            server.sendMessage(response)
+            return True
+
+        except Exception as e:
+            logging.exception(e)
+            server.sendError(message,e)
+            return True
+
+
+
+
+
 class Enroll:
 
+    profiles = inject.attr(Profiles)
     firmware = inject.attr(Firmware)
 
     def requestFinger(self,server,number):
@@ -55,20 +131,37 @@ class Enroll:
             server.sendMessage(response)
             return True
 
+        if 'sid' not in message:
+            response = {'id':message['id'], 'error':'No se ha iniciado la sesión'}
+            server.sendMessage(response)
+            return True
+
         if 'dni' not in message['request']:
             response = {'id':message['id'], 'error':'Insuficientes parámetros, falta el dni'}
             server.sendMessage(response)
             return True
 
-        dni = message['request']['dni']
 
+        ''' chequeo el nivel de acceso que tiene la persona '''
+        sid = message['sid']
+        if not self.profiles._checkAccess(sid,['ADMIN-ASSISTANCE']):
+            response = {'id':message['id'], 'error':'Insuficiente nivel de acceso'}
+            server.sendMessage(response)
+            return True
+
+        ''' userId = self.profiles.getLocalUserId(sid) '''
+
+
+        dni = message['request']['dni']
 
         try:
             requests = self.firmware.enroll(dni,
                 lambda: self.requestFinger(server,1),
                 lambda: self.requestFinger(server,2),
                 lambda: self.requestFinger(server,3),
-                lambda: self.sendMsg(server,'Levante el dedo')
+                lambda: self.sendMsg(server,'Levante el dedo'),
+                lambda msg: self.sendError(server,msg),
+                lambda msg: self.sendError(server,msg)
             )
 
             response = {
@@ -81,4 +174,4 @@ class Enroll:
 
         except Exception as e:
             server.sendError(message,e)
-            raise e
+            return True

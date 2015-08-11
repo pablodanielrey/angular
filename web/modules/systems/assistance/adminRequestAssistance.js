@@ -102,9 +102,9 @@ app.controller('AdminRequestAssistanceCtrl', function($scope, $filter,$timeout, 
 			      $window.location.href = "/#/logout";
         } else {
             $scope.user_id = s.user_id;
-            Profiles.checkAccess(Session.getSessionId(),'ADMIN-ASSISTANCE,USER-ASSISTANCE',
+            Profiles.checkAccess(Session.getSessionId(),['ADMIN-ASSISTANCE','USER-ASSISTANCE'],
       				function(ok) {
-      					if (ok == 'granted') {
+      					if (ok) {
                   $scope.loadRequests();
       					}
       				},

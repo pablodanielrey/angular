@@ -23,6 +23,25 @@ class BSJustification(Justification):
     def isJustification(self,id):
         return self.id == id
 
+    def _isJustifiedTimeStart(self,sched,whs,justification,tolerancia):
+        start = whs[0]['start']
+        if sched['start'] >= justification['begin'] and start <= justification['end']:
+            return True
+        return False
+
+    def _isJustifiedTimeEnd(self,sched,whs, justification, tolerancia):
+        whEnd = whs[-1]['end']
+        if whEnd >= justification['begin'] and sched['end'] <= justification['end']:
+            return True
+        return False
+
+    def _isJustifiedTime(self,justification,start,end):
+        if 'begin' not in justification or 'end' not in justification or start is None or end is None:
+            return False
+        if start >= justification['begin'] and end <= justification['end']:
+            return True
+        return False
+
     """
         retorna la cantidad de justificaciones que se tienen disponibles dentro de un período de tiempo.
         si period = None entonces tiene en cuenta todos los períodos y toma el mínimo.
@@ -202,10 +221,10 @@ class BSJustification(Justification):
       #chequear si calcStart y calcEnd son distintos de None
       if calcStart is None or calcEnd is None:
           return  self._getStockFromDates(stock, rj[0], rj[1])
-          
+
       #comparar diferencias de log y diferencia de boleta de salida, se restara la menor al stock
       differenceLog = (calcEnd - calcStart).total_seconds()
-      differenceRj = (rj[1] - rj[0]).total_seconds()      
+      differenceRj = (rj[1] - rj[0]).total_seconds()
       difference = differenceLog if (differenceLog <= differenceRj) else differenceRj
 
       return stock - difference

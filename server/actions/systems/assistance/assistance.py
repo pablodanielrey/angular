@@ -15,7 +15,7 @@ from model.systems.assistance.assistance import Assistance
 from model.systems.assistance.fails import Fails
 from model.systems.assistance.logs import Logs
 from model.systems.assistance.schedule import Schedule
-from model.systems.assistance.checks import ScheduleChecks
+from model.systems.assistance.check.checks import ScheduleChecks
 from model.systems.offices.offices import Offices
 from model.systems.assistance.positions import Positions
 from model.systems.assistance.date import Date
@@ -117,20 +117,26 @@ class GetFailsByDate:
             assistanceFails = []
             (users,fails) = self.assistance.checkSchedule(authorizedUsers,start,end)
 
-            filteredFails = list(filter(lambda x: len(x['justifications']) <= 0,fails))
-            b64 = self.assistance.arrangeCheckSchedule(con,filteredFails)
+            # filteredFails = list(filter(lambda x: len(x['justifications']) <= 0,fails))
+            b64 = self.assistance.arrangeCheckSchedule(con,fails)
 
             for user in users:
                 ffails = self.fails.filterUser(user['id'],fails)
                 for f in ffails:
                     #solo agrego las que no tienen justificaciones
+                    '''
                     if ('justifications' not in f) or (len(f['justifications']) <= 0):
                         data = {
                             'user':user,
                             'fail':f
                         }
                         assistanceFails.append(data)
-
+                    '''
+                    data = {
+                        'user':user,
+                        'fail':f
+                    }
+                    assistanceFails.append(data)
 
 
             response = {
@@ -141,6 +147,180 @@ class GetFailsByDate:
             }
             server.sendMessage(response)
             return True
+
+        except Exception as e:
+            logging.exception(e)
+            raise e
+
+        finally:
+            con.close()
+
+
+
+'''
+ Descp: busqueda de fallas con filtros
+
+ query :
+ {
+    id:,
+    action:'getFailsByFilter',
+    session:,
+    request: {
+        start: 'fecha de inicio',
+        end:'fecha fin',
+        users: 'id de los usuarios a buscar',
+        offices: 'id de las oficinas a buscar',
+        filter: {
+            failType: 'tipo de filtro' -- No posee marcación | Sin horario de llegada | Llegada tardía | Sin horario de salida | Salida temprana,
+            periodicity: 'periodicidad', -- Semanal | Mensual | Anual
+            count: 'cantidad de periodicidad',
+            hoursOperator: 'tipo de operador' --  = | > | <,
+            hours: 'horas del operador',
+            minutes: 'minutos del operador'
+        }
+    }
+ }
+
+
+response :
+{
+  id: "id de la petición",
+  ok: "caso exito",
+  error: "error del servidor",
+  base64:'datos del response en base64',
+  response:{[
+      user: 'datos del usuario ',
+      fail: "datos correspondiente a la falla"
+  ]}
+
+}
+'''
+
+class GetFailsByFilter:
+
+    profiles = inject.attr(Profiles)
+    config = inject.attr(Config)
+    dateutils = inject.attr(Date)
+
+    offices = inject.attr(Offices)
+    checks = inject.attr(ScheduleChecks)
+    fails = inject.attr(Fails)
+    assistance = inject.attr(Assistance)
+
+    def _checkParameters(self,message):
+        if ('request' not in message):
+            return False
+
+        req = message['request']
+        if ('start' not in req or 'end' not in req):
+            return False
+
+        return True
+
+    def _include(self,id,ids):
+        for i in ids:
+            if i == id:
+                return True
+        return False
+
+    def _filter(self, fails,filter):
+        if 'failType' in filter:
+            ffails = []
+            # las agrupo por tipo y user Id
+            for f in fails:
+                if f['description'] == filter['failType']:
+                    ffails.append(f)
+            fails = ffails
+        return fails
+
+    def handleAction(self, server, message):
+
+        if (message['action'] != 'getFailsByFilter'):
+            return False
+
+        # chequeo los parametros
+        if (not self._checkParameters(message)):
+            response = {'id':message['id'], 'error':'Parámetros insuficientes'}
+            server.sendMessage(response)
+            return True
+
+
+        req = message['request']
+
+        sid = message['session']
+        self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
+        userId = self.profiles.getLocalUserId(sid)
+
+        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+
+        try:
+            # parseo las fechas
+            start = self.dateutils.parse(message['request']['start'])
+            start = start.replace(microsecond=0)
+            end = self.dateutils.parse(message['request']['end'])
+
+            # --- usuarios ----
+            authorizedUsers = [userId]
+
+            # usuarios que poseen algun tipo de chequeo
+            usersIds = self.checks.getUsersWithConstraints(con)
+
+            # obtengo las oficinas que tiene el rol autoriza
+            offices = self.offices.getOfficesByUserRole(con,userId,tree=True,role='autoriza')
+            officesIds = list(map(lambda x : x['id'], offices))
+            # filtro las oficinas anteriores con las que se pasaron como parametro
+            if ('offices' in req and req['offices'] != None):
+                officesAux = []
+                for o in req['offices']:
+                    if self._include(o,officesIds):
+                        officesAux.append(o)
+                officesIds = officesAux
+
+
+            # filtro los usuarios con los que se pasaron como parametro
+            if ('users' in req and req['users'] != None):
+                uids = []
+                for u in req['users']:
+                    if self._include(u,usersIds):
+                        uids.append(u)
+                usersIds = uids
+
+            # obtengo los usuarios
+            ousersIds = self.offices.getOfficesUsers(con,officesIds)
+
+            # filtro los usuarios
+            if ousersIds is not None and len(ousersIds) > 0:
+                authorizedUsers.extend(list(filter(lambda x : x in ousersIds, usersIds)))
+
+            assistanceFails = []
+            (users,fails) = self.assistance.checkSchedule(authorizedUsers,start,end)
+
+            # filtro las fallas por los filtros pasados como parametro
+
+            if 'filter' in req:
+                fails = self._filter(fails,req['filter'])
+
+            b64 = self.assistance.arrangeCheckSchedule(con,fails)
+
+            for user in users:
+                ffails = self.fails.filterUser(user['id'],fails)
+                for f in ffails:
+                    data = {
+                        'user':user,
+                        'fail':f
+                    }
+                    assistanceFails.append(data)
+
+
+            response = {
+                'id':message['id'],
+                'ok':'',
+                'response':assistanceFails,
+                'base64':b64
+            }
+            server.sendMessage(response)
+            return True
+
 
         except Exception as e:
             logging.exception(e)
@@ -288,7 +468,6 @@ class GetAssistanceStatusByUsers:
         try:
             usersIds = message['request']['usersIds']
             dates = message['request']['dates']
-
 
             resp = self.assistance.getAssistanceStatusByUsers(con,usersIds,dates,status)
             b64 = self.assistance.arrangeAssistanceStatusByUsers(con,resp)
@@ -698,6 +877,56 @@ class NewSchedule:
             server.sendMessage(response)
             return True
 
+
+        except Exception as e:
+            con.rollback()
+            raise e
+
+        finally:
+            con.close()
+
+
+"""
+{
+    id:'',
+    action:"deleteSchedule",
+    session:,
+    request:{
+        schedule_id:"id del Usuario"
+    }
+}
+
+response :
+{
+  id: "id de la petición",
+  ok: "caso exito",
+  error: "error del servidor",
+}
+"""
+class DeleteSchedule:
+    profiles = inject.attr(Profiles)
+    config = inject.attr(Config)
+    schedule = inject.attr(Schedule)
+
+    def handleAction(self, server, message):
+
+        if message['action'] != 'deleteSchedule':
+            return False
+
+        if 'request' not in message or 'schedule_id' not in message['request']:
+            response = {'id':message['id'],'error':'Parámetros insuficientes'}
+            server.sendMessage(response)
+            return True
+
+        sid = message['session']
+        self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
+        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+        try:
+            self.schedule.deleteSchedule(con,message['request']['schedule_id'])
+            con.commit()
+            response = {'id':message['id'], 'ok':'datos almacenados correctamente'}
+            server.sendMessage(response)
+            return True
 
         except Exception as e:
             con.rollback()

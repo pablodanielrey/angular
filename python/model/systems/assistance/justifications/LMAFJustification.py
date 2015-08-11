@@ -17,6 +17,9 @@ class LMAFJustification(Justification):
     def isJustification(self,id):
         return self.id == id
 
+    def _isJustifiedDay(self,date):
+        return True
+
     """
         retorna la cantidad de justificaciones que se tienen disponibles dentro de un período de tiempo.
     """

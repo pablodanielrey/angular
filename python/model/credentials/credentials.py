@@ -65,15 +65,13 @@ class UserPassword:
         password:''
     }
     """
-    def createUserPassword(self,con,data):
+    def createUserPassword(self,con,user):
         try:
-            user = ObjectView(data)
-            rreq = (str(uuid.uuid4()),user.user_id,user.username,user.password)
+            rreq = (str(uuid.uuid4()),user['user_id'],user['username'],user['password'])
             cur = con.cursor()
             cur.execute('insert into credentials.user_password (id,user_id,username,password) values (%s,%s,%s,%s)', rreq)
 
         except psycopg2.DatabaseError as e:
-            con.rollback()
             raise e
 
 
@@ -85,15 +83,13 @@ class UserPassword:
         user_id: ''
     }
     """
-    def updateUserPassword(self,con,data):
+    def updateUserPassword(self,con,user):
         try:
-            user = ObjectView(data)
-            rreq = (user.user_id, user.username, user.password, user.id)
+            rreq = (user['user_id'], user['username'], user['password'], user['id'])
             cur = con.cursor()
             cur.execute('update credentials.user_password set user_id = %s, username = %s, password = %s where id = %s', rreq)
 
         except psycopg2.DatabaseError as e:
-            con.rollback()
             raise e
 
 

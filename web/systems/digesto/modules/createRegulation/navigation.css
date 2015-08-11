@@ -1,0 +1,103 @@
+
+
+/*.createRegulation .screenOrdenanzaFinal,.screenResolucionFinal,.screenDisposicionFinal{
+  transform: translate3d(0,-200%,0);
+  transition: all 0.4s ease-in-out;
+}*/
+
+
+.createRegulation .contentScreens {
+  transition: all 0.4s ease-in-out;
+  -webkit-transition: all 0.4s ease-in-out;
+}
+
+.createRegulationContainer .contentScreens {
+  transition: all 0.4s ease-in-out;
+  -webkit-transition: all 0.4s ease-in-out;
+}
+
+
+.createRegulation .contentScreens {
+  transform: translate3d(0,0px,0);
+  -webkit-transform: translate3d(0,0px,0);
+  transition: all 0.4s ease-in-out;
+  -webkit-transition: all 0.4s ease-in-out;
+}
+
+.createRegulation.menu .contentScreens {
+}
+
+.createRegulation.screenOrdenanza .contentScreens {
+  transform: translate3d(0,-100%,0);
+  -webkit-transform: translate3d(0,-100%,0);
+}
+
+.createRegulation.screenOrdenanzaFinal .contentScreens{
+  transform: translate3d(0,-200%,0);
+  -webkit-transform: translate3d(0,-200%,0);
+  transition: all 0.4s ease-in-out;
+  -webkit-transition: all 0.4s ease-in-out;
+}
+
+.createRegulation.screenResolucion .contentScreens {
+  transform: translate3d(0,-100%,0);
+  -webkit-transform: translate3d(0,-100%,0);
+  transition: all 0.4s ease-in-out;
+  -webkit-transition: all 0.4s ease-in-out;
+}
+
+.createRegulation.screenResolucionFinal .contentScreens{
+  transform: translate3d(0,-200%,0);
+  -webkit-transform: translate3d(0,-200%,0);
+  transition: all 0.4s ease-in-out;
+  -webkit-transition: all 0.4s ease-in-out;
+}
+
+.createRegulation.screenDisposicion .contentScreens {
+  transform: translate3d(0,-100%,0);
+  -webkit-transform: translate3d(0,-100%,0);
+  transition: all 0.4s ease-in-out;
+  -webkit-transition: all 0.4s ease-in-out;
+}
+
+.createRegulation.screenDisposicionFinal .contentScreens{
+  transform: translate3d(0,-200%,0);
+  -webkit-transform: translate3d(0,-200%,0);
+  transition: all 0.4s ease-in-out;
+  -webkit-transition: all 0.4s ease-in-out;
+}
+
+.createRegulation.screenRelacionDeNorma .contentSearch2 {
+  transform: translate3d(0,200%,0);
+  -webkit-transform: translate3d(0,200%,0);
+
+
+}
+
+.createRegulation.screenRelacionDeNormaFinal .contentSearch2{
+  transform: translate3d(0,0,0);
+  -webkit-transform: translate3d(0,0,0);
+  transition: all 0.4s ease-in-out;
+  -webkit-transition: all 0.4s ease-in-out;
+}
+
+.createRegulation.screenPrivadaDeGrupos .contentScreens {
+  transform: translate3d(0,-100%,0);
+  -webkit-transform: translate3d(0,-100%,0);
+  transition: all 0.4s ease-in-out;
+  -webkit-transition: all 0.4s ease-in-out;
+}
+
+.createRegulation.screenRelacionDeNorma .contentScreens {
+  transform: translate3d(0,-100%,0);
+  -webkit-transform: translate3d(0,-100%,0);
+  transition: all 0.4s ease-in-out;
+  -webkit-transition: all 0.4s ease-in-out;
+}
+
+.createRegulation.screenRelacionDeNormaFinal .contentScreens {
+  transform: translate3d(0,-100%,0);
+  -webkit-transform: translate3d(0,-100%,0);
+  transition: all 0.4s ease-in-out;
+  -webkit-transition: all 0.4s ease-in-out;
+}

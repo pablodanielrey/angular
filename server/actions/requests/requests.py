@@ -423,6 +423,9 @@ class CreateAccountRequest:
     if 'studentNumber' not in data:
         data['studentNumber'] = ''
 
+    if 'reason' not in data:
+        data['reason'] = ''
+
     con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
     try:
       if (self.users.findUserByDni(con,data['dni']) != None):
@@ -750,8 +753,10 @@ class ApproveAccountRequest:
 
 
                 'esto hay que pasarlo a un model - es para habilitar a todo el mundo a au24'
+                '''
                 cur = con.cursor()
                 cur.execute('insert into au24.users (id) values (%s)',(user_id,))
+                '''
 
                 self.req.removeRequest(con,reqId)
 

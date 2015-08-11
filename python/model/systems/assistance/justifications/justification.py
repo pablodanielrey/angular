@@ -24,6 +24,22 @@ class Justification:
     def isJustification(self,id):
         raise Exception('abstract')
 
+    ''' retorna True si la justificacion justifica la falla en la entrada, por defecto, todos retornan False '''
+    def _isJustifiedTimeStart(self,sched,whs,justification,tolerancia):
+        return False
+
+    ''' retorna True si la justificacion justifica la falla en la salida, por defecto, todos retornan False '''
+    def _isJustifiedTimeEnd(self,sched,whs, justification, tolerancia):
+        return False
+
+    ''' retorna True si justifica la falla por un periodo de tiempo, por defecto, todos retornan False '''
+    def _isJustifiedTime(self,justification,start,end):
+        return False
+
+    ''' retorna True si la justificacion justifica la falla para todo el dia, por defecto, todos retornan False '''
+    def _isJustifiedDay(self,date):
+        return False
+
     """
         retorna la cantidad de justificaciones que se tienen disponibles dentro de un período de tiempo.
         si period = None entonces tiene en cuenta todos los períodos y toma el mínimo.
