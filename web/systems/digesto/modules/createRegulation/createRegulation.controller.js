@@ -2,9 +2,9 @@ angular
     .module('mainApp')
     .controller('CreateRegulationCtrl',CreateRegulationCtrl);
 
-CreateRegulationCtrl.$inject = ['$rootScope', '$scope', 'Notifications', 'Digesto'];//, 'Office'];
+CreateRegulationCtrl.$inject = ['$rootScope', '$scope', 'Notifications', 'Digesto', 'Office'];
 
-function CreateRegulationCtrl($rootScope, $scope, Notifications, Digesto){//, Office) {
+function CreateRegulationCtrl($rootScope, $scope, Notifications, Digesto, Office) {
 
     $scope.model = {
       offices: [],
@@ -113,14 +113,14 @@ function CreateRegulationCtrl($rootScope, $scope, Notifications, Digesto){//, Of
     }
 
     function initializeOffices() {
-      /*Office.getOffices(null,
+      Office.getOffices(
           function(offices) {
             $scope.model.offices = offices;
           },
           function(error) {
             Notifications.message(error);
           }
-      );*/
+      );
     }
 
     function initializeOrdinance() {
