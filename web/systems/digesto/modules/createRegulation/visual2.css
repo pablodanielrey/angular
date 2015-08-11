@@ -458,7 +458,7 @@
 }
 
 .createRegulation .contentOffices {
-  width: 70%;
+  width: 80%;
   margin: 0 auto;
 }
 
@@ -466,6 +466,7 @@
   background-color: #eeeeee;
   padding: 10px;
   border-top: 3px solid #5c5f69;
+  width: 350px;
 }
 
 .createRegulation .btnVolver {
@@ -491,9 +492,26 @@
 }
 
 .createRegulation .inputSearchOffices {
-  padding: 2px;
   font-size: 1.1em;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
+  background-color: white;
+  padding: 3px;
+  border: none;
+  border-radius: 3px;
+  -webkit-box-shadow: 1px 1px 1px #5c5f69;
+  -moz-box-shadow: 1px 1px 1px #5c5f69;
+}
+
+.createRegulation .textSearchOffices {
+  background-color: #0066A6;
+
+  color: white;
+  width: 100%;
+  padding: 2px 10px 3px 3px;
+  border: none;
+  border-radius: 3px;
+  -webkit-box-shadow: 1px 1px 1px #5c5f69;
+  -moz-box-shadow: 1px 1px 1px #5c5f69;
 }
 
 .createRegulation .listOffices {
