@@ -132,7 +132,7 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
    */
   $scope.$on('IssueInsertedEvent', function(event, node) { 
     IssueClient.addChild($scope.data, node);
-
+    $scope.request = null; 
     
 
   });
