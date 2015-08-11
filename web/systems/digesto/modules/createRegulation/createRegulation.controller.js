@@ -2,11 +2,12 @@ angular
     .module('mainApp')
     .controller('CreateRegulationCtrl',CreateRegulationCtrl);
 
-CreateRegulationCtrl.$inject = ['$rootScope', '$scope', 'Notifications', 'Digesto'];
+CreateRegulationCtrl.$inject = ['$rootScope', '$scope', 'Notifications', 'Digesto'];//, 'Office'];
 
-function CreateRegulationCtrl($rootScope, $scope, Notifications, Digesto) {
+function CreateRegulationCtrl($rootScope, $scope, Notifications, Digesto){//, Office) {
 
     $scope.model = {
+      offices: [],
       issuersRegulation: [],
       issuersOrdinance: [],
       issuersResolution: [],
@@ -40,6 +41,7 @@ function CreateRegulationCtrl($rootScope, $scope, Notifications, Digesto) {
     $scope.initializeOrdinance = initializeOrdinance;
     $scope.initializeResolution = initializeResolution;
     $scope.initializeRegulation = initializeRegulation;
+    $scope.initializeOffices = initializeOffices;
 
     $scope.createOrdinance = createOrdinance;
     $scope.createResolution = createResolution;
@@ -65,7 +67,7 @@ function CreateRegulationCtrl($rootScope, $scope, Notifications, Digesto) {
 
     function changeVisibility() {
       if ($scope.model.normative.visibility.type == 'GROUPPRIVATE') {
-        $scope.selectRegulation(7);
+        $scope.$broadcast('openPrivateGroupEvent');
       }
     }
 
@@ -94,6 +96,10 @@ function CreateRegulationCtrl($rootScope, $scope, Notifications, Digesto) {
     $scope.$on('$viewContentLoaded', function(event) {
       $scope.initialize();
     });
+
+    $scope.$on('viewPrivateGroupLoad',function(event) {
+      $scope.selectRegulation(7);
+    });
     // -------------------------------------------------------------
     // ----------------- CARGA DE DATOS INICIALES ------------------
     // -------------------------------------------------------------
@@ -103,6 +109,18 @@ function CreateRegulationCtrl($rootScope, $scope, Notifications, Digesto) {
       initializeOrdinance();
       initializeResolution();
       initializeRegulation();
+      initializeOffices();
+    }
+
+    function initializeOffices() {
+      /*Office.getOffices(null,
+          function(offices) {
+            $scope.model.offices = offices;
+          },
+          function(error) {
+            Notifications.message(error);
+          }
+      );*/
     }
 
     function initializeOrdinance() {
@@ -192,6 +210,7 @@ function CreateRegulationCtrl($rootScope, $scope, Notifications, Digesto) {
       $scope.model.normative.extract = '';
       $scope.model.normative.status = status;
       $scope.model.normative.visibility = visibility;
+      $scope.model.normative.offices = [];
       $scope.model.normative.relateds = [];
       $scope.model.normative.file = null;
     }
