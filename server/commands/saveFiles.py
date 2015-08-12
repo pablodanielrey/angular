@@ -39,7 +39,7 @@ class WampMain(ApplicationSession):
 
                 ''' el contenido del archivo esta en base64 '''
                 content = base64.b64decode(f['content'])
-                with open('/tmp/ff/{}-{}'.format(f['id'], f['name']), 'wb') as ff:
+                with open('/tmp/{}-{}'.format(f['id'], f['name']), 'wb') as ff:
                     ff.write(content)
 
         except Exception as e:
