@@ -35,11 +35,11 @@
                </div>
            </div>
 
-           <div class="officesPermission"  ng-repeat="office in model.normative.offices | orderBy: 'name'">>
+           <div class="officesPermission"  ng-repeat="office in model.normative.offices | orderBy: 'name'" ng-click="removeOffice(office)">
              <div>
                {{office.name}}
              </div>
-             <div ng-click="removeOffice(office)">
+             <div>
                <i class="fa fa-trash"></i>
              </div>
            </div>
