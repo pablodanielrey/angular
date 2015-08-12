@@ -14,7 +14,10 @@ function CreateRegulationCtrl($rootScope, $scope, Notifications, Digesto, Office
       issuers: [],
       normative: {},
       visibilities: [],
-      status:[]
+      status:[],
+      search:{
+        searchAllOffice:''
+      }
     }
 
     $scope.view = {

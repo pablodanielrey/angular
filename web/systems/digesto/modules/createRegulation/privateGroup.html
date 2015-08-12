@@ -3,25 +3,21 @@
        <div class="contentOffices">
         <div class="contentInt">
            <div>
-             <input class="inputSearchOffices" type="search" placeholder="Buscar..."> <span class="textSearchOffices"> <i class="fa fa-arrow-circle-left"></i> Buscar Oficina</span> </input>
+             <input class="inputSearchOffices" ng-model="model.search.allOffice" type="search" placeholder="Buscar..."> <span class="textSearchOffices"> <i class="fa fa-arrow-circle-left"></i> Buscar Oficina</span> </input>
            </div>
            <div class="listOffices">
-             <div class="itmesOffices">
+             <div class="itmesOffices" ng-repeat="office in model.filteredOffices | orderBy: 'name' | filter: model.search.allOffice as results" ng-click="addOffice(office)">
                  <div>
-                   Despacho
+                   {{office.name}}
                  </div>
                  <div>
                     <i class="fa fa-arrow-circle-right"></i>
                  </div>
              </div>
-             <div class="itmesOffices">
-                 <div>
-                   Mesa de Entradas
-                 </div>
-                 <div>
-                   <i class="fa fa-arrow-circle-right"></i>
-                 </div>
+             <div ng-if="results.length == 0">
+               <strong>No se encontró la oficina...</strong>
              </div>
+
            </div>
         </div>
 
@@ -39,11 +35,11 @@
                </div>
            </div>
 
-           <div class="officesPermission">
+           <div class="officesPermission"  ng-repeat="office in model.normative.offices | orderBy: 'name'">>
              <div>
-               Despacho
+               {{office.name}}
              </div>
-             <div>
+             <div ng-click="removeOffice(office)">
                <i class="fa fa-trash"></i>
              </div>
            </div>
