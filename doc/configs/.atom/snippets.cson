@@ -194,4 +194,54 @@
 
           runner = ApplicationRunner(url=url, realm=realm, debug=debug, debug_wamp=debug, debug_app=debug)
           runner.run($3)
-    """
+      """
+
+  'main wamp client':
+    'prefix': 'mwc'
+    'body': """
+        # -*- coding: utf-8 -*-
+        import sys
+        sys.path.append('../../python')
+
+        import logging
+        import inject
+
+        import model
+        from model.config import Config
+
+        ''' configuro el injector con las variables apropiadas '''
+        def config_injector(binder):
+            binder.bind(Config,Config('server-config.cfg'))
+
+        inject.configure(config_injector)
+
+        logging.getLogger().setLevel(logging.DEBUG)
+
+        from autobahn.asyncio.wamp import ApplicationSession
+        from asyncio import coroutine
+
+        class WampMain(ApplicationSession):
+
+            def __init__(self,config=None):
+                logging.debug('instanciando wampClient')
+                ApplicationSession.__init__(self, config)
+
+
+            @coroutine
+            def onJoin(self, details):
+                logging.debug('session joined')
+
+                ''' aca se ejecutan las llamadas wamp '''
+                try:
+                    yield from self.call('system.files.find')
+                except Exception as e:
+                    logging.exception(e)
+
+
+        if __name__ == '__main__':
+            from autobahn.asyncio.wamp import ApplicationRunner
+
+            config = inject.instance(Config)
+            runner = ApplicationRunner(url=config.configs['server_url'], realm=config.configs['server_realm'], debug=True, debug_wamp=True, debug_app=True)
+            runner.run(WampMain)
+      """
