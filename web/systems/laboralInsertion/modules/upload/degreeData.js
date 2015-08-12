@@ -1,21 +1,10 @@
 var app = angular.module('mainApp');
 
-app.controller('DegreeLaboralInsertionCtrl', function($scope, $timeout, LaboralInsertion) {
-
-  $scope.$on('UpdateUserDataEvent',function(event,data) {
-    $scope.loadData();
-  });
-
-	$scope.$on('EditInsertionCheckDataEvent',function() {
-		$scope.model.status.degrees = true;
-		$scope.$emit("EditInsertionDataCheckedEvent");
-	});
-
+app.controller('DegreeLaboralInsertionCtrl', function($scope, LaboralInsertion) {
 
   $scope.onDegreeChange = function(degree) {
     $scope.onCoursesChange(degree);
   }
-
 
   /*
     para implementar el chequeo que quiere lucas de las ofertas.
@@ -60,29 +49,47 @@ app.controller('DegreeLaboralInsertionCtrl', function($scope, $timeout, LaboralI
 
   $scope.deleteDegree = function($index) {
 		$scope.model.degrees.splice($index, 1);
-		if ($scope.model.degrees.length == 0) {
-      		$scope.addDegree()
-    	}
 	}
 
-  $scope.loadData = function() {
 
-    LaboralInsertion.findDegreeData($scope.model.selectedUser,
-      function(data) {
-    		if ((data != undefined) && (data != null) && (data.length > 0)) {
-    			$scope.model.degrees = data;
-    			$scope.extendWorkType();
+  /**
+	 * Transformar datos de degree. La oferta seleccionada se transfora en su correspondiente valor string
+	 * @private
+	 */
+	$scope.transformDegreeData = function() {
+		for (var i = 0; i < $scope.model.degrees.length; i++) {
 
-    		}
-    		if ($scope.model.degrees.length == 0) {
-    			$scope.addDegree()
-    		}
-      },
-      function(err) {
-        //alert(err);
-      });
+			if($scope.model.degrees[i].name == ""){
+				Notifications.message('Debe seleccionar carrera');
+				$scope.model.status = false;
+			}
 
-  }
+			if(isNaN($scope.model.degrees[i].courses)){
+				$scope.model.degrees[i].courses = 0;
+			}
+
+			if(isNaN($scope.model.degrees[i].average1)){
+				$scope.model.degrees[i].average1 = 0;
+			}
+
+			if(isNaN($scope.model.degrees[i].average2)){
+				$scope.model.degrees[i].average2 = 0;
+			}
+
+			$scope.model.degrees[i].work_type = '';
+			if ($scope.model.degrees[i].offerInternship) {
+
+				$scope.model.degrees[i].work_type += 'Internship;';
+			}
+			if ($scope.model.degrees[i].offerFullTime) {
+				$scope.model.degrees[i].work_type += 'FullTime;';
+			}
+			if ($scope.model.degrees[i].offerYoungProfessionals) {
+				$scope.model.degrees[i].work_type += 'YoungProfessionals;';
+			}
+		}
+	};
+
 
  	 /**
 	 * Transformar datos de degree. La oferta seleccionada se transfora en su correspondiente valor string
@@ -108,30 +115,17 @@ app.controller('DegreeLaboralInsertionCtrl', function($scope, $timeout, LaboralI
 		}
 	};
 
-  $timeout(function() {
-    $scope.loadData();
-  });
-
 
 	$scope.showOfferYoungProffesionals = function(degree){
-
     return degree.showOfferYoungProfessionals;
-    /*
-    Contador Público >= 28
-    Licenciado en Administración >= 30
-    Licenciado en Turismo >= 24
-    Licenciado en Economía >= 29
-    Técnico en Cooperativas >= 16
-
-    cantidad de materias como máximo 37
-    */
-    /*
-		if(degree.courses > 29){
-			return true;
-		} else {
-			return false;
-		}
-    */
 	};
+
+  $scope.initialize = function() {
+    $scope.$parent.transformations.push($scope.transformDegreeData);
+  };
+
+  $scope.$parent.$on('$viewContentLoaded', function(event) {
+		$scope.initialize();
+	});
 
 });

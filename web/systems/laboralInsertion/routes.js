@@ -14,6 +14,11 @@ app.config(['$routeProvider', function($routeProvider) {
      controller: 'DownloadCtrl'
   })
 
+  .when('/upload', {
+     templateUrl: '/systems/laboralInsertion/modules/upload/editData.html',
+     controller: 'EditInsertionDataCtrl'
+  })
+
   .otherwise({
     redirectTo: '/main'
   });

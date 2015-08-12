@@ -1,136 +1,18 @@
 var app = angular.module('mainApp');
 
-app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Session, Users, Student, LaboralInsertion, Notifications, Profiles, Utils) {
+app.controller('EditInsertionDataCtrl',function($rootScope, $scope, Login, LaboralInsertion, Notifications, Utils) {
 
 	$scope.model = {
 		insertionData: {},
 		degrees: [],
 		languages: [],
 		userData: {},
-		studentData : {},
-		selectedUser: null,
-		status : true,
+		studentData : {}
 	};
+	$scope.transformations = [];
 
 
-	/**
-	 * Al guardar datos se debe disparar un evento de chequeo que sera escuchado por cada subcontrolador
-	 *
-	$scope.check = function() {
-		$scope.$broadcast('EditInsertionCheckDataEvent');
-	};*/
 
-	/**
-	 * Escuchar evento de finalizacion de chequeo de datos. Los subcontroladores al finalizar el chequeo dispararan el evento de finalizacion de chequeo de datos.
-	 *
-	$scope.$on('EditInsertionDataCheckedEvent',function() {
-
-		if($scope.model.status.profile
-		&& $scope.model.status.languages
-		&& $scope.model.status.degrees
-		&& $scope.model.status.insertion){
-			console.log($scope.model.status);
-			$scope.save();
-		}
-
-	});*/
-
-
-	$scope.saveUser = function(){
-
-		$scope.transformProfileData();
-
-		// actualizo los datos del perfil.
-		Users.updateUser($scope.model.userData,
-			function(ok) {
-			},
-			function(error) {
-				//alert(error);
-			}
-		);
-
-	};
-
-	$scope.saveInsertionData = function(){
-		$scope.transformInsertionData();
-
-		$scope.model.insertionData.id = $scope.model.userData.id;
-
-		LaboralInsertion.updateLaboralInsertionData($scope.model.insertionData,
-			function(ok) {
-			},
-			function(error) {
-				//alert(error);
-			}
-		);
-
-	};
-
-	$scope.saveLanguages = function(){
-
-		LaboralInsertion.updateLanguageData($scope.model.userData.id, $scope.model.languages,
-			function(ok) {
-			},
-			function(error) {
-				//alert(error);
-			}
-		);
-	};
-
-	/**
-	 * Guardar datos de degrees
-	 * @protected
-	 */
-	$scope.saveDegrees = function(){
-
-		$scope.transformDegreeData();
-
-		LaboralInsertion.updateDegreeData($scope.model.userData.id, $scope.model.degrees,
-			function(ok) {
-			},
-			function(error) {
-				//alert(error);
-			}
-		);
-	};
-
-	/**
-	 * Transformar datos de degree. La oferta seleccionada se transfora en su correspondiente valor string
-	 * @private
-	 */
-	$scope.transformDegreeData = function() {
-		for (var i = 0; i < $scope.model.degrees.length; i++) {
-
-			if($scope.model.degrees[i].name == ""){
-				Notifications.message('Debe seleccionar carrera');
-				$scope.model.status = false;
-			}
-
-			if(isNaN($scope.model.degrees[i].courses)){
-				$scope.model.degrees[i].courses = 0;
-			}
-
-			if(isNaN($scope.model.degrees[i].average1)){
-				$scope.model.degrees[i].average1 = 0;
-			}
-
-			if(isNaN($scope.model.degrees[i].average2)){
-				$scope.model.degrees[i].average2 = 0;
-			}
-
-			$scope.model.degrees[i].work_type = '';
-			if ($scope.model.degrees[i].offerInternship) {
-
-				$scope.model.degrees[i].work_type += 'Internship;';
-			}
-			if ($scope.model.degrees[i].offerFullTime) {
-				$scope.model.degrees[i].work_type += 'FullTime;';
-			}
-			if ($scope.model.degrees[i].offerYoungProfessionals) {
-				$scope.model.degrees[i].work_type += 'YoungProfessionals;';
-			}
-		}
-	};
 
 
 	/**
@@ -166,8 +48,6 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 
 		if($scope.model.insertionData.travel === ""){
 			$scope.model.insertionData.travel = false;
-
-
 		}
 		if($scope.model.insertionData.reside === ""){
 			$scope.model.insertionData.reside = false;
@@ -175,21 +55,35 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 
 		if($scope.model.insertionData.cv === ""){
 			Notifications.message('Debe cargar CV');
-			$scope.model.status = false
 		}
 	};
 
 
 	$scope.save = function() {
-		$scope.saveUser	();
-		$scope.saveInsertionData();
-		$scope.saveLanguages();
-		$scope.saveDegrees();
-		if($scope.model.status){
-			Notifications.message('Sus datos han sido registrados');
-		} else {
-			$scope.model.status = true;
+
+		for (var i; i <= $scope.transformations.length; i++) {
+			$scope.transformations[i]();
 		}
+
+		var data = {
+			insertionData: $scope.model.insertionData,
+			degrees: $scope.model.degrees,
+			languages: $scope.model.languages,
+			userData: $scope.model.userData,
+			studentData : $scope.model.studentData
+		}
+		LaboralInsertion.update(data,
+			function(ok) {
+				if (ok) {
+					Notifications.message('Datos actualizados correctamente');
+				} else {
+					Notifications.message('Error actualizando datos');
+				}
+			},
+			function(err) {
+				Notifications.message(err);
+			});
+
 	};
 
 
@@ -197,6 +91,7 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 	/**
 	 * procesar verificacion de terminos y condiciones
 	 */
+	 /*
 	$scope.checkTermsAndConditions = function() {
 
 		LaboralInsertion.isTermsAndConditionsAccepted($scope.model.selectedUser,
@@ -211,39 +106,29 @@ app.controller('EditInsertionDataCtrl',function($scope, $timeout, $location, Ses
 		);
 
 	};
+	*/
 
-	$scope.initialize = function() {
-
-		Profiles.checkAccess(Session.getSessionId(),['ADMIN-LABORALINSERTION'],
-			function(ok) {
-				if (ok) {
-					$scope.model.download = true;
-				}
+	$scope.loadData = function() {
+		var userId = Login.getUserId();
+		LaboralInsertion.find(userId,
+			function(data) {
+				console.log(data);
+				$scope.$emit('UpdateLaboralInsertionDataEvent');
 			},
-			function(error) {
-					Notifications.message(error);
+			function(err) {
+				Notifications.message(err);
 			}
 		)
+	}
 
-		// seteo el usuario seleccionado dentro del scope para que lo usen las subvistas facilmente.
-		var s = Session.getCurrentSession();
-		if (s == null) {
-		  $location.path('/main');
-		}
-		if (s.selectedUser == undefined || s.selectedUser == null) {
-		  	s.selectedUser = s.user_id;
-  		  Session.saveSession(s);
-		}
-		$scope.model.selectedUser = s.selectedUser;
-		$scope.checkTermsAndConditions();
-		$scope.$broadcast('UpdateUserDataEvent');
+
+	$scope.initialize = function() {
+		$scope.loadData();
 	};
 
 
-	$timeout(function() {
+	$scope.$on('$viewContentLoaded', function(event) {
 		$scope.initialize();
-
 	});
-
 
 });

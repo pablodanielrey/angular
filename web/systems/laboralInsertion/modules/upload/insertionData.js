@@ -1,7 +1,7 @@
 
 var app = angular.module('mainApp');
 
-app.controller('LaboralInsertionDataCtrl', function($scope, $timeout, LaboralInsertion, Notifications) {
+app.controller('LaboralInsertionDataCtrl', function($scope, $timeout, LaboralInsertion, Files, Notifications) {
 
 	$scope.model.cv = {
 		loading: false
@@ -10,25 +10,20 @@ app.controller('LaboralInsertionDataCtrl', function($scope, $timeout, LaboralIns
 	/**
 	 * Agregar cv como base 64
 	 */
-	$scope.addCv = function(fileName,fileContent){
+	$scope.addCv = function(fileName, fileContent) {
 		$scope.model.cv.loading = true;
 
 		var cv = window.btoa(fileContent)
-		var data = {
-			'id': $scope.model.userData.id,
-			'cv':cv,
-			'name': fileName
-		}
-		LaboralInsertion.updateLaboralInsertionCV(data,
-			function(ok) {
-				$scope.model.cv.loading = false;
-				Notifications.message('Cv cargado correctamente');
+		Files.upload(null, fileName, cv,
+			function(id) {
+				console.log('archivo subido correctamente con el id : ' + id);
+				Notifications.message('archivo : ' + id);
 			},
-			function(error){
-				$scope.model.cv.loading = false;
-				Notifications.message(error);
+			function(err) {
+				Notifications.message(err);
 			}
 		);
+
 	};
 
 
@@ -55,38 +50,15 @@ app.controller('LaboralInsertionDataCtrl', function($scope, $timeout, LaboralIns
 	}
 
 
-  $scope.loadData = function() {
 
-    LaboralInsertion.findLaboralInsertionData($scope.model.selectedUser,
-      function(data) {
-        $scope.model.insertionData = data;
-      },
-      function(err) {
-        Notifications.message(err);
-      });
+	$scope.initialize = function() {
+    $scope.model.cv = {
+			loading: false
+		};
+  };
 
-
-			/*
-			LaboralInsertion.findLaboralInsertionCV($scope.model.selectedUser,
-				function(data) {
-					//$scope.model.cv.c = 'data:application/octet-stream;base64,' + data.cv;
-					$scope.model.cv.c = window.URL.createObjectURL(new Blob([data.cv],{type: "octet/stream", encoding: 'base64'}));
-					$scope.model.cv.loaded = true;
-				},
-				function(err) {
-					Notifications.message(err);
-				});
-			*/
-
-  }
-
-  $scope.$on('UpdateUserDataEvent',function(event,data) {
-    $scope.loadData();
-  });
-
-
-  $timeout(function() {
-    $scope.loadData();
-  });
+  $scope.$parent.$on('$viewContentLoaded', function(event) {
+		$scope.initialize();
+	});
 
 });

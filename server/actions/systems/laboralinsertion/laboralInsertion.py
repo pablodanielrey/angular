@@ -5,7 +5,7 @@ import logging
 import psycopg2
 import uuid
 import os
-from model.laboralInsertion import LaboralInsertion
+from model.systems.laboralInsertion.laboralInsertion import LaboralInsertion
 from model.config import Config
 from model.users.users import Users
 
@@ -157,6 +157,8 @@ class LaboralInsertionWamp(ApplicationSession):
     def onJoin(self, details):
         logging.debug('registering methods')
         yield from self.register(self.download_async, 'system.laboralInsertion.download')
+        yield from self.register(self.find_async, 'system.laboralInsertion.find')
+        yield from self.register(self.update_async, 'system.laboralInsertion.update')
 
     def _getDatabase(self):
         host = self.serverConfig.configs['database_host']
@@ -165,10 +167,28 @@ class LaboralInsertionWamp(ApplicationSession):
         passw = self.serverConfig.configs['database_password']
         return psycopg2.connect(host=host, dbname=dbname, user=user, password=passw)
 
+    def update(self, data):
+        con = self._getDatabase()
+        try:
+            logging.debug('actualizando : {}'.format(data))
+            con.commit()
+            return True
+
+        finally:
+            con.close()
+
+    def find(self, userId):
+        con = self._getDatabase()
+        try:
+            data = self.laboralInsertion.getLaboralInsertionDataByUser(con, userId)
+            return data
+
+        finally:
+            con.close()
+
     def download(self):
         con = self._getDatabase()
         try:
-
             path = '{}/tmp'.format(os.getcwd())
             zipName = '{}.zip'.format(str(uuid.uuid4()))
             with ZipFile('{}/{}'.format(path, zipName), 'w') as myzip:
@@ -207,4 +227,16 @@ class LaboralInsertionWamp(ApplicationSession):
     def download_async(self):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.download)
+        return r
+
+    @coroutine
+    def find_async(self, userId):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.find, userId)
+        return r
+
+    @coroutine
+    def update_async(self, data):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.update, data)
         return r
