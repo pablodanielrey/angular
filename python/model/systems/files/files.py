@@ -12,7 +12,7 @@ class Files:
         id varchar not null primary key,
         name varchar not null,
         hash varchar,
-        content bytea,
+        content text,
         created timestamptz default now()
     )
     '''
@@ -24,9 +24,9 @@ class Files:
         cur = con.cursor()
         if id is None:
             id = str(uuid.uuid4())
-            cur.execute('insert into files.files (id, name, content) values (%s,%s,%s)', (id, name, psycopg2.Binary(data)))
+            cur.execute('insert into files.files (id, name, content) values (%s,%s,%s)', (id, name, data))
         else:
-            cur.execute('update files.files set (name = %s, content = %s) where id = %s', (name, psycopg2.Binary(data), id))
+            cur.execute('update files.files set (name = %s, content = %s) where id = %s', (name, data, id))
         return id
 
     def findAllIds(self, con):
@@ -53,7 +53,7 @@ class Files:
         return {
             'id': d[0],
             'name': d[1],
-            'content': bytes(d[2]).decode('utf-8')
+            'content': d[2]
         }
 
     def search(self, con, text):
