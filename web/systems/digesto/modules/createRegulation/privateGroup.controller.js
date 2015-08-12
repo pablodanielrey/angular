@@ -75,7 +75,6 @@ function PrivateGroupCtrl($rootScope,$scope) {
    function removeOffice(office) {
      var index = $scope.model.normative.offices.indexOf(office);
      $scope.model.normative.offices.splice(index,1);
-     console.log($scope.model.normative.offices);
      loadFilteredOffices();
    }
 }

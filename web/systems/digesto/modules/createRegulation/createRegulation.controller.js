@@ -224,6 +224,15 @@ function CreateRegulationCtrl($rootScope, $scope, Notifications, Digesto, Office
       // falta verificar que este bien formateado el expediente
       console.log($scope.model.normative);
 
+      var normative = $scope.model.normative;
+      if (normative.visibility.type == 'GROUPPRIVATE') {
+        ids = []
+        for (var i = 0; i < $scope.model.normative.offices.length; i++) {
+          ids.push($scope.model.normative.offices[i].id);
+        }
+        normative.visibility.additional_data = ids;
+      }
+
       Digesto.createNormative($scope.model.normative,
         function(response) {
           $scope.view.regulationIndex = $scope.view.regulationIndex + 3;

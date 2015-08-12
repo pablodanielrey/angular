@@ -124,7 +124,9 @@ class Digesto:
         ADDITIONAL_DATA: son los ids separados por coma de las oficinas
     '''
     def _convertVisibilityToDict(self,v):
-        return {'id':v[0],'normative_id':v[1],'type':v[2],'additional_data':v[3]}
+        adStr = v[3]
+        additional_data  = dStr.split(',')
+        return {'id':v[0],'normative_id':v[1],'type':v[2],'additional_data':additional_data}
 
 
     def getVisibility(self,con,normative_id):
@@ -141,19 +143,26 @@ class Digesto:
 
         if type is None:
             type = 'PRIVATE'
-        if additional_data is None:
-            additional_data = ''
+
+        additional_dataStr = ''
+        if additional_data is not None:
+            i = 0
+            for a in additional_data:
+                if i != 0:
+                    additional_dataStr = additional_dataStr + ','
+                additional_dataStr = additional_dataStr + a
+                i = i +1
 
         cur = con.cursor()
 
         visibility = self.getVisibility(con,normative_id)
         if visibility is None:
             id = str(uuid.uuid4())
-            params = (normative_id,type,additional_data,id)
+            params = (normative_id,type,additional_dataStr,id)
             cur.execute('insert into digesto.visibility (normative_id,type,additional_data,id) values(%s,%s,%s,%s)',params)
 
         else:
-            params = (type,additional_data,visibility['id'])
+            params = (type,additional_dataStr,visibility['id'])
             cur.execute('update digesto.visibility set type = %s, additional_data = %s where id = %s',params)
 
     # -----------------------------------------------------------------------------------
@@ -235,8 +244,8 @@ class Digesto:
             self.persistVisibility(con,id)
         else:
             type = visibility['type'] if 'type' in visibility else None
-            additonal_data = visibility['additonal_data'] if 'additonal_data' in visibility else None
-            self.persistVisibility(con,id,type,additonal_data)
+            additional_data = visibility['additional_data'] if 'additional_data' in visibility else None
+            self.persistVisibility(con,id,type,additional_data)
 
         if relateds is not None:
             self.addRelateds(con,relateds,userId,id)
