@@ -6,7 +6,7 @@ from model.systems.assistance.date import Date
 class Issue:
 
     '''
-     ' Insertar datos
+     ' Insertar datos, se insertan los datos del request y el estado
      '''
     def insert(self,con,request,officeId,requestorId,created,priority,visibility,relatedRequestId, state):
         createdutc = created.astimezone(pytz.utc)
@@ -43,7 +43,9 @@ class Issue:
         events.append(e)
         return events 
         
-        
+    '''
+     ' Obtener peticiones relacionadas en funcion de los ids
+     '''
     def __getIssuesRelated(self, con, ids, relatedRequestIds):
         cur = con.cursor()
         cur.execute('''
@@ -89,6 +91,9 @@ class Issue:
         }
             
 
+    '''
+     ' Obtener peticiones asociadas a un determinado usuario
+     '''
     def getIssuesByUser(self, con, userId):
         ids = []
         relatedRequestIds = []
@@ -133,10 +138,7 @@ class Issue:
             )
 
         while True:
-        
-          print("AAAAAAAAAAAAAAA")
-          print(ids)
-          print(relatedRequestIds)
+       
           
           data = self.__getIssuesRelated(con, ids, relatedRequestIds)
           print(data)
@@ -153,7 +155,9 @@ class Issue:
         
     
     
-    
+    '''
+     ' Eliminar peticion y sus hijos
+     '''
     def deleteIssue(self, con, id):
         self.__deleteIssue(con, id)
         events = []
@@ -164,7 +168,9 @@ class Issue:
         events.append(e)
         return events
     
-    
+    '''
+     ' Metodo recursivo de eliminacion de peticiones y sus hijos
+     '''
     def __deleteIssue(self, con, id):
         cur = con.cursor()
         cur.execute('''
@@ -191,7 +197,7 @@ class Issue:
         
     
     '''
-     ' Insertar datos
+     ' Actualizar los datos de un pedido, solo los datos y no las relaciones
      '''
     def updateData(self,con,id,request,priority,visibility,state,userId):
         cur = con.cursor()
