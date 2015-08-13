@@ -121,7 +121,7 @@
                                     <div>
                                         <div class="uploadPDF">
                                   			   <p class="textBtnPDF"><i class="fa fa-arrow-circle-up"></i> Subir PDF</p>
-                                  			   <input type="file" class="btnInputFile" ng-model="model.normative.file">
+                                  			   <input type="file" class="btnInputFile" id="" on-read-file-binary-string="addFile(fileName,fileContent)">
                                   		  </div>
                                   	</div>
                                     <div>
@@ -131,8 +131,8 @@
 
                                 <div class="contentdataImput">
                                   <div class="uploadPDF2">
-                                    <div><i class="fa fa-file-pdf-o iconPDF"></i> Ord25151/14.pdf</div>
-                                    <!-- <div><i class="fa fa-file-pdf-o"></i> no se cargo el archivo...</div> -->
+                                    <div ng-if="model.normative.file != null"><i class="fa fa-file-pdf-o iconPDF"></i> {{model.normative.file.name}}<i class="fa fa-trash" ng-click="removeFile()"></i></div>
+                                    <div ng-if="model.normative.file == null"><i class="fa fa-file-pdf-o"></i> no se cargo el archivo...</div>
                                   </div>
                                 </div>
 
@@ -156,6 +156,7 @@
                                       <i class="fa fa-file-text-o iconPDF"></i> {{r.normative_number_full}}
                                       <select class="selectRelacionDeNoma" ng-model='r.type' ng-options="type for type in model.typeRelateds">
                                       </select>
+                                      <i class="fa fa-trash" ng-click="removeRelated(r)"></i>
                                     </div>
                                     <div ng-if="results.length == 0"><i class="fa fa-file-text-o"></i> sin relación...</div>
                                   </div>

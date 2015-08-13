@@ -52,6 +52,10 @@ function CreateRegulationCtrl($rootScope, $scope, Notifications, Digesto, Office
     $scope.createResolution = createResolution;
     $scope.createRegulation = createRegulation;
 
+    $scope.removeRelated = removeRelated;
+    $scope.addFile = addFile;
+    $scope.removeFile = removeFile;
+
     // ----------------------------------------------------------
     // ---------------- PARTE VISUAL ----------------------------
     // ----------------------------------------------------------
@@ -261,5 +265,22 @@ function CreateRegulationCtrl($rootScope, $scope, Notifications, Digesto, Office
     }
 
 
+    // ----------------------------------------------------------
+    // -------------------- ACCIONES ----------------------------
+    // ----------------------------------------------------------
 
+    function removeRelated(r) {
+      var index = $scope.model.normative.relateds.indexOf(r);
+      $scope.model.normative.relateds.splice(index,1);
+    }
+
+    function addFile(fileName,fileContent) {
+      $scope.model.normative.file = {};
+      $scope.model.normative.file.name = fileName;
+      $scope.model.normative.file.binary = window.btoa(fileContent);
+    }
+
+    function removeFile() {
+      $scope.model.normative.file = null;
+    }
 };
