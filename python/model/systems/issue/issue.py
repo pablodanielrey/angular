@@ -44,8 +44,8 @@ class Issue:
         return events 
         
         
-    def getIssuesByUser(self, con, userId):
-        cur = con.cursor() 
+    def __getIssuesRelated(self, con, ids, relatedRequestIds):
+        cur = con.cursor()
         cur.execute('''
           SELECT r.id, r.created, r.request, r.requestor_id, r.office_id, r.related_request_id, r.assigned_id, r.priority, r.visibility, s.state
           FROM issues.request AS r
@@ -55,13 +55,18 @@ class Issue:
             FROM issues.state
             GROUP BY request_id
           ) AS s2 ON (s.request_id = s2.request_id AND s.created = s2.created)
+          WHERE ((r.related_request_id = ANY(%s)) OR (r.related_request_id = ANY(%s))) AND NOT (r.id = ANY(%s))
           ORDER BY r.created ASC;
-        ''') 
-        if cur.rowcount <= 0: 
-            return [] 
+        ''', (ids, relatedRequestIds, ids))
+        print(cur.query)
         
-        issues = [] 
+        issues = []  
+        ids = []
+        relatedRequestIds = []
         for issue in cur: 
+            ids.append(issue[0])
+            if issue[5] != None:
+              relatedRequestIds.append(issue[5])
             issues.append( 
                 { 
                     'id':issue[0], 
@@ -76,9 +81,77 @@ class Issue:
                     'state':issue[9],
                 } 
             )
+        
+        return {
+          "ids":ids,
+          "relatedRequestIds":relatedRequestIds,
+          "issues":issues
+        }
             
+
+    def getIssuesByUser(self, con, userId):
+        ids = []
+        relatedRequestIds = []
+        
+        cur = con.cursor() 
+        cur.execute('''
+          SELECT r.id, r.created, r.request, r.requestor_id, r.office_id, r.related_request_id, r.assigned_id, r.priority, r.visibility, s.state
+          FROM issues.request AS r
+          INNER JOIN issues.state AS s ON (r.id = s.request_id)
+          INNER JOIN (
+            SELECT request_id, max(created) AS created 
+            FROM issues.state
+            GROUP BY request_id
+          ) AS s2 ON (s.request_id = s2.request_id AND s.created = s2.created)
+          WHERE r.requestor_id = %s OR r.assigned_id = %s
+          ORDER BY r.created ASC;
+        ''', (userId, userId)) 
+        if cur.rowcount <= 0: 
+            return [] 
+        
+
+        issues = []         
+        ids = []
+        relatedRequestIds = []
+        for issue in cur: 
+            ids.append(issue[0])
+            if issue[5] != None:
+              relatedRequestIds.append(issue[5])
+            issues.append( 
+                { 
+                    'id':issue[0], 
+                    'created':issue[1], 
+                    'request':issue[2], 
+                    'requestor_id':issue[3], 
+                    'office_id':issue[4],
+                    'related_request_id':issue[5],
+                    'assigned_id':issue[6],
+                    'priority':issue[7],
+                    'visibility':issue[8],
+                    'state':issue[9],
+                } 
+            )
+
+        while True:
+        
+          print("AAAAAAAAAAAAAAA")
+          print(ids)
+          print(relatedRequestIds)
+          
+          data = self.__getIssuesRelated(con, ids, relatedRequestIds)
+          print(data)
+          
+          if(len(data["ids"]) == 0):
+            break;
+            
+          ids = list(set(ids + data["ids"]))
+          relatedRequestIds = data["relatedRequestIds"]
+          issues = issues + data["issues"]
+         
         return issues;
         
+        
+    
     
     
     def deleteIssue(self, con, id):
