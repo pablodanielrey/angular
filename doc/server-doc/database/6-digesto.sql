@@ -19,7 +19,7 @@ create schema digesto;
   create table digesto.related (
     id varchar not null primary key,
     normative_id varchar not null references digesto.normative (id),
-    realated_id varchar not null references digesto.normative (id),
+    related_id varchar not null references digesto.normative (id),
     created timestamptz default now(),
     creator_id varchar not null references profile.users (id),
     type varchar
