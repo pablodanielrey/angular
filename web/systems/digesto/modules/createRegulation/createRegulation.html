@@ -152,11 +152,9 @@
 
                                 <div class="contentdataImput">
                                   <div class="uploadPDF2">
-                                    <div ng-repeat="r in model.normative.relatedsObj as results">
+                                    <div ng-repeat="r in model.normative.relateds as results">
                                       <i class="fa fa-file-text-o iconPDF"></i> {{r.normative_number_full}}
-                                      <select class="selectRelacionDeNoma">
-                                          <option>Deja sin efecto</option>
-                                          <option>Complementa</option>
+                                      <select class="selectRelacionDeNoma" ng-model='r.type' ng-options="type for type in model.typeRelateds">
                                       </select>
                                     </div>
                                     <div ng-if="results.length == 0"><i class="fa fa-file-text-o"></i> sin relación...</div>

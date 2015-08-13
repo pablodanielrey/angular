@@ -17,7 +17,8 @@ function CreateRegulationCtrl($rootScope, $scope, Notifications, Digesto, Office
       status:[],
       search:{
         searchAllOffice:''
-      }
+      },
+      typeRelateds:['Deja sin efecto','Complementa']
     }
 
     $scope.view = {
@@ -115,8 +116,8 @@ function CreateRegulationCtrl($rootScope, $scope, Notifications, Digesto, Office
     })
 
     $scope.$on('selectRelated',function(event,normative) {
-      $scope.model.normative.relateds.push(normative.id);
-      $scope.model.normative.relatedsObj.push(normative);
+      var r = {'related_id':normative.id,'type':$scope.model.typeRelateds[0],'normative_number_full':normative['normative_number_full']};
+      $scope.model.normative.relateds.push(r);
       $scope.back();
     })
     // -------------------------------------------------------------
