@@ -149,6 +149,9 @@
   padding: 5px;
   margin-top: 10px;
   border:1px solid #E3DFDF;
+
+
+
 }
 
 .descriptionExpanded {
@@ -189,7 +192,6 @@
 .orderItems.commentOrder .btnDataOrder  {
   display:none;
 }
-
 
 
 

@@ -4,16 +4,25 @@
  * @param {type} param1
  * @param {type} param2
  */
-app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "Notifications", "Issue", "IssueClient", "Users", function ($scope, $timeout, $window, Module, Notifications, Issue, IssueClient, Users) {
+app.controller('ManageIssuesCtrl', ["$scope", "$timeout", "$window", "Module", "Notifications", "Issue", "IssueClient", "Users", function ($scope, $timeout, $window, Module, Notifications, Issue, IssueClient, Users) {
 
   /***** MANIPULACION DE ESTILOS ******/
   $scope.style = null;
-  $scope.styles = [];
+  $scope.styles = []
+  $scope.nodeStyles = [
+    "comment expanded",
+    "normal expanded",
+    "comment",
+    "normal",
+  ];
   
   $scope.setStyle = function($index) {
     $scope.style = $scope.styles[$index];
   };
-  
+
+  $scope.setNodeStyle = function($index) {
+    $scope.style = $scope.nodeStyles[$index];
+  };
 
   $scope.request = null; //descripcion de un nuevo nodo que sera agregado a la raiz
   $scope.data = []; //raiz del arbol de nodos
@@ -153,7 +162,7 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
    * Obtener lista de tareas
    */
   $scope.getIssues = function(){
-    Issue.getIssuesByUser($scope.global.sessionUserId,
+    Issue.getIssues($scope.global.sessionUserId,
       function(data) {
         $scope.data = IssueClient.generateTree(data);
       },
