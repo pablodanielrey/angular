@@ -24,6 +24,9 @@ function RelatedsCtrl($rootScope,$scope,Digesto,Notifications) {
 
   function find() {
     text = $scope.model.searchText;
+    if (text.trim() == "") {
+      return
+    }
     $scope.model.normatives = [];
     Digesto.findNormative(text,null,
         function(normatives) {
