@@ -30,7 +30,6 @@ function PrivateGroupCtrl($rootScope,$scope) {
 
   function initialize() {
     $scope.model.search.allOffice = '';
-    console.log($scope.model.offices);
     loadFilteredOffices();
     $scope.$emit('viewPrivateGroupLoad');
   }

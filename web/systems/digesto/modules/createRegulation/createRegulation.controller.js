@@ -38,6 +38,7 @@ function CreateRegulationCtrl($rootScope, $scope, Notifications, Digesto, Office
     $scope.getStyleName = getStyleName;
     $scope.changeVisibility = changeVisibility;
     $scope.viewDateStatus = viewDateStatus;
+    $scope.loadFindRelatedView = loadFindRelatedView;
     $scope.back = back;
 
     $scope.initialize = initialize;
@@ -74,6 +75,11 @@ function CreateRegulationCtrl($rootScope, $scope, Notifications, Digesto, Office
       }
     }
 
+    function loadFindRelatedView() {
+      $scope.selectRegulation(8);
+      $scope.$broadcast('openRelatedsViewEvent');
+    }
+
     function viewDateStatus() {
       if (($scope.model.normative == null) || !($scope.model.normative.status)) {
         return false;
@@ -103,6 +109,16 @@ function CreateRegulationCtrl($rootScope, $scope, Notifications, Digesto, Office
     $scope.$on('viewPrivateGroupLoad',function(event) {
       $scope.selectRegulation(7);
     });
+
+    $scope.$on('viewSearchResultRelatedsLoad',function(event) {
+      $scope.selectRegulation(9);
+    })
+
+    $scope.$on('selectRelated',function(event,normative) {
+      $scope.model.normative.relateds.push(normative.id);
+      $scope.model.normative.relatedsObj.push(normative);
+      $scope.back();
+    })
     // -------------------------------------------------------------
     // ----------------- CARGA DE DATOS INICIALES ------------------
     // -------------------------------------------------------------
@@ -215,14 +231,13 @@ function CreateRegulationCtrl($rootScope, $scope, Notifications, Digesto, Office
       $scope.model.normative.visibility = visibility;
       $scope.model.normative.offices = [];
       $scope.model.normative.relateds = [];
+      $scope.model.normative.relatedsObj = [];
       $scope.model.normative.file = null;
     }
 
 
 
     $scope.save = function() {
-      // falta verificar que este bien formateado el expediente
-      console.log($scope.model.normative);
 
       var normative = $scope.model.normative;
       if (normative.visibility.type == 'GROUPPRIVATE') {

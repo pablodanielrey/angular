@@ -142,7 +142,7 @@
                                     <div>
                                         <div class="uploadPDF">
                                            <p class="textBtnPDF"><i class="fa fa-search-plus"></i> Burcar Norma</p>
-                                           <div class="btnInputFile" ng-click = "selectRegulation(8)"></div>
+                                           <div class="btnInputFile" ng-click="loadFindRelatedView()"></div>
                                         </div>
                                     </div>
                                     <div>
@@ -152,8 +152,8 @@
 
                                 <div class="contentdataImput">
                                   <div class="uploadPDF2">
-                                    <div>
-                                      <i class="fa fa-file-text-o iconPDF"></i> 900-5624/15
+                                    <div ng-repeat="r in model.normative.relatedsObj">
+                                      <i class="fa fa-file-text-o iconPDF"></i> {{r.normative_number_full}}
                                       <select class="selectRelacionDeNoma">
                                           <option>Deja sin efecto</option>
                                           <option>Complementa</option>

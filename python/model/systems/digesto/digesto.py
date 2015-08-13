@@ -125,7 +125,7 @@ class Digesto:
     '''
     def _convertVisibilityToDict(self,v):
         adStr = v[3]
-        additional_data  = dStr.split(',')
+        additional_data  = adStr.split(',')
         return {'id':v[0],'normative_id':v[1],'type':v[2],'additional_data':additional_data}
 
 
@@ -252,7 +252,7 @@ class Digesto:
 
         return id
 
-    def updateNormative(con,normative,file=None,visibility=None):
+    def updateNormative(self,con,normative,file=None,visibility=None):
         if normative is None:
             return
 
@@ -312,9 +312,9 @@ class Digesto:
 
 
 
-    def findNormativeById(con,id):
+    def findNormativeById(self,con,id):
         cur = con.cursor()
-        cur.execute('select id,issuer_id,file_id,type,file_number,date,created,creator_id,extract from digesto.normative where id = %s',(id,))
+        cur.execute('select id,issuer_id,file_id,type,file_number,normative_number,date,created,creator_id,extract from digesto.normative where id = %s',(id,))
         if (cur.rowcount <= 0):
             return None
         else:
@@ -324,7 +324,7 @@ class Digesto:
             return self._convertNormativeToDict(cur.fetchone(),status, visibility, relateds)
 
 
-    def deleteNormative(con,id):
+    def deleteNormative(self,con,id):
         if id is None:
             return
 
@@ -365,3 +365,52 @@ class Digesto:
             if office is not None:
                 offices.append(office)
         return offices
+
+
+    # -----------------------------------------------------------------------------------
+    # ---------------------------- BUSQUEDA DE NORMATIVAS -------------------------------
+    # -----------------------------------------------------------------------------------
+
+    '''
+        Busca las normativas por numero de expediente
+    '''
+    def _findNormativeByNormativeNumber(self,con,number):
+        cur = con.cursor()
+        cur.execute('select id from digesto.normative where normative_number like %s',('%' + number + '%',))
+        data = cur.fetchall()
+        normatives = []
+        for d in data:
+            n = self.findNormativeById(con,d[0])
+            normatives.append(n)
+        return normatives
+
+    '''
+        Busca las normativas por el extracto
+    '''
+    def _findNormativeByExtract(self,con,extract):
+        cur = con.cursor()
+        cur.execute('select id from digesto.normative where extract like %s',('%' + extract + '%',))
+        data = cur.fetchall()
+        normatives = []
+        for d in data:
+            n = self.findNormativeById(con,d[0])
+            normatives.append(n)
+        return normatives
+
+    '''
+        Retorna las normativas con posean el texto
+    '''
+    def findNormative(self,con,text,filters):
+        # busco por nro de expediente
+        array = text.split('/')
+        normatives = self._findNormativeByNormativeNumber(con,array[0])
+        # si no encontro nada busco por el extracto
+        if len(normatives) == 0:
+            normatives = self._findNormativeByExtract(con,text)
+        # si no encontro nada busco por el contenido del archivo
+
+        for n in normatives:
+            n['issuer'] = self.offices.findOffice(con,n['issuer_id'])
+            yearStr = n['year'].strftime('%y')
+            n['normative_number_full'] = n['normative_number'] + '/' + yearStr[-2:]
+        return normatives

@@ -33,4 +33,17 @@ function Digesto($rootScope,$wamp,Session) {
       callbackError('Error')
     };
   };
+
+  this.findNormative = function(text,filters,callbackOk,callbackError) {
+    $wamp.call('digesto.digesto.findNormative',[text,filters])
+    .then(function(normatives) {
+      if (normatives != null) {
+        callbackOk(normatives);
+      } else {
+        callbackError('Error');
+      }
+    }),function(error) {
+      callbackError('Error');
+    };
+  };
 }
