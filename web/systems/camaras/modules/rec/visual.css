@@ -6,6 +6,7 @@
   padding: 0px;
 }
 
+
 .inputSearchContent {
   padding: 10px;
   margin-bottom: 20px;
@@ -24,7 +25,7 @@
   border:none
 }
 
-.recContainer {
+.rec {
   height:100%;
   width:100%;
   position:absolute;
@@ -91,9 +92,14 @@
 
 }
 
+
+/***********************************************************
+*********** CONTENEDOR RESULTADOS DE BUSQUEDA **************
+***********************************************************/
+
 .contentRecordings {
   position: absolute;
-  z-index: 999;
+  z-index: 998;
   background-color:white;
   -webkit-box-shadow: 1px 1px 5px #5c5f69;
   -moz-box-shadow: 5px 5px 5px #5c5f69;
@@ -127,3 +133,86 @@
   opacity:0.0;
 
 }
+
+.menuRecording {
+  padding: 5px;
+  margin: 0 5px 0 5px;
+  background-color: #eeeeee;
+  color:#5c5f69;
+  border-bottom: 1px solid #5c5f69;
+}
+
+.resultsRecording {
+  overflow-y: auto;
+}
+
+.itemsRecording {
+  padding: 2px 5px 2px 5px;
+  margin: 0 5px 0 5px;
+}
+
+.itemsRecording:nth-child(odd) {
+  background: white;
+}
+
+.itemsRecording:nth-child(even) {
+  background: #f7f7f7;
+}
+
+
+.tam0 {
+  width: 50px;
+}
+
+.tam1 {
+  width: 150px;
+}
+
+.tam2 {
+  width: 200px;
+}
+
+.fa-film, .fa-download{
+  margin-bottom: 0;
+}
+
+.btnVer{
+  border: none;
+  border-radius: 2px;
+  padding: 3px 10px 3px 10px;
+  background-color: #0066A6;
+  color: white;
+  margin-right: 10px;
+}
+.btnVer:hover {
+  background-color: #419CD6;
+}
+
+.btnDescargar {
+  border:none;
+  border-radius: 2px;
+  padding: 3px 10px 3px 10px;
+  background-color: #128c78;
+  color: white;
+}
+
+.btnDescargar:hover {
+  background-color: #3CB8A4;
+}
+
+/***********************************************************
+*************** CONTENEDOR DE REPRODUCIÓN ******************
+***********************************************************/
+
+/*.contentPlay {
+  color: #5c5f69;
+  width: 100%;
+  position: absolute;
+  float: right;
+  height: 100%;
+  background-color: rgba(0,0,0,0.8);
+  z-index: 999;
+  top:0px;
+  transform: translate3d(0,0,0);
+  transition: all 0.4s ease-in-out;
+}*/
