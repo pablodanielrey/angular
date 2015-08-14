@@ -31,6 +31,11 @@ function Login($rootScope, $wamp, Session) {
     );
   }
 
+  this.getUserId = function() {
+    var s = Session.getCurrentSession();
+    return s.user_id;
+  }
+
 
 	/*
 		Loguea al usuario en el servidor y genera tambien la sesion dentro de la cache local

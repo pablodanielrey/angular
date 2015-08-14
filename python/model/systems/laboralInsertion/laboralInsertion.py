@@ -1,8 +1,26 @@
+# -*- coding: utf-8 -*-
 import psycopg2
 import logging
 from model.objectView import ObjectView
 
+
 class LaboralInsertion:
+
+    """
+        método usado por los administradores para obtener la info de inserción laboral.
+    """
+    def getLaboralInsertionDataByUser(self, con, userId):
+        d = {}
+        d['insertionData'] = self.findLaboralInsertion(con, userId)
+
+        langs = self.listLanguages(con, userId)
+        d['languages'] = langs
+
+        degrees = self.listDegrees(con, userId)
+        d['degrees'] = degrees
+
+        return d
+
 
     """
         método usado por los administradores para obtener la info de inserción laboral.
@@ -87,7 +105,7 @@ class LaboralInsertion:
             cur.execute('update laboral_insertion.users_cv set cv = %s, name = %s where id = %s',params)
 
 
-    def findAllCvs(self,con):
+    def findAllCvs(self, con):
         cur = con.cursor()
         cur.execute('select cv.cv,cv.name,u.name,u.lastname from laboral_insertion.users_cv as cv, profile.users as u where u.id = cv.id')
         if cur.rowcount <= 0:
@@ -108,7 +126,7 @@ class LaboralInsertion:
         return cvs
 
 
-    def findAll(self,con):
+    def findAll(self, con):
         cur = con.cursor()
         cur.execute('select id,reside,travel,creation from laboral_insertion.users')
         data = cur.fetchall()
@@ -118,7 +136,7 @@ class LaboralInsertion:
             laboralInsertions.append(laboralInsertion)
         return laboralInsertions
 
-    def convertUserToDict(self,li):
+    def convertUserToDict(self, li):
         laboralInsertion = {
             'id':li[0],
             'reside':li[1],

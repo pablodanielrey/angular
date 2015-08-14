@@ -1,30 +1,7 @@
 var app = angular.module('mainApp');
 
-app.controller('ProfileLaboralInsertionCtrl', function($scope,$timeout, Session, Users, Student, LaboralInsertion) {
+app.controller('ProfileLaboralInsertionCtrl', function($scope, Users, Student, LaboralInsertion) {
 
-
-	$scope.loadData = function() {
-
-		Users.findUser($scope.model.selectedUser,
-			function(user) {
-				$scope.model.userData = user;
-				$scope.formatUser();
-			},
-			function(error) {
-				//alert(error);
-			}
-		);
-
-		Student.findStudentData($scope.model.selectedUser,
-			function(student) {
-				$scope.model.studentData = student;
-			},
-			function(error) {
-				//alert(error);
-			}
-		);
-	};
-  
 	/**
 	 * Dar formato a los datos de user para que sean visualizados correctamente a los usuarios
 	 */
@@ -33,19 +10,19 @@ app.controller('ProfileLaboralInsertionCtrl', function($scope,$timeout, Session,
 		if($scope.model.userData.birthdate != null){
 			$scope.model.userData.birthdate = new Date($scope.model.userData.birthdate);
 		}
-		
+
 		$scope.model.userData.cellPhone = {
 			country:"54",
 			city:"221",
 			number:"",
 		};
-		
+
 		$scope.model.userData.homePhone = {
 			country:"54",
 			city:"221",
 			number:"",
 		};
-		
+
 		//telefonos
 		if(($scope.model.userData.telephones != undefined) || ($scope.model.userData.telephones != null)){
 			for(var telephone in $scope.model.userData.telephones){
@@ -67,13 +44,13 @@ app.controller('ProfileLaboralInsertionCtrl', function($scope,$timeout, Session,
 			}
 		}
 	};
-	
+
 	/**
 	 * chequeo y transformacion de datos, por el momento se hace en el editData.
 	 *
 	$scope.$on('EditInsertionCheckDataEvent',function(){
 		$scope.model.status.profile = true;
-		
+
 		$scope.model.userData.telephones = [];
 		if($scope.model.userData.cellPhone){
 			var telephone = {
@@ -82,7 +59,7 @@ app.controller('ProfileLaboralInsertionCtrl', function($scope,$timeout, Session,
 			}
 			$scope.model.userData.telephones.push(telephone);
 		}
-		
+
 		if($scope.model.userData.homePhone){
 			var telephone = {
 				type:"home",
@@ -90,22 +67,11 @@ app.controller('ProfileLaboralInsertionCtrl', function($scope,$timeout, Session,
 			}
 			$scope.model.userData.telephones.push(telephone);
 		}
-		
+
 		$scope.$emit("EditInsertionDataCheckedEvent");
-		
+
 	});*/
 
-	$scope.test = function(){
-		//alert("test");
-	};
 
-	$scope.$on('UpdateUserDataEvent',function(event,data) {
-		$scope.loadData();
-	});
-
-
-	$timeout(function() {
-		$scope.loadData();
-	},0);
 
 });

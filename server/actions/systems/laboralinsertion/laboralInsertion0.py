@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
-import inject, json, base64, logging
+import inject
+import json
+import base64
+import logging
 import psycopg2
 import uuid
 from model.laboralInsertion import LaboralInsertion
@@ -12,12 +15,54 @@ from collections import OrderedDict
 import io
 from pyexcel_ods3 import ODSWriter
 
-
-from model.exceptions import *
+# from model.exceptions import *
 
 """
     Modulo de acceso a los datos de insercion laboral
 """
+
+import asyncio
+from asyncio import coroutine
+from autobahn.asyncio.wamp import ApplicationSession
+
+
+class LaboralInsertionWamp(ApplicationSession):
+
+    def __init__(self, config=None):
+        logging.debug('instanciando')
+        ApplicationSession.__init__(self, config)
+
+        self.serverConfig = inject.instance(Config)
+        self.laboralInsertion = inject.instance(LaboralInsertion)
+
+    @coroutine
+    def onJoin(self, details):
+        logging.debug('registering methods')
+        ''' yield from self.register(self.method_name, 'registered.method.name') '''
+
+    def _getDatabase(self):
+        host = self.serverConfig.configs['database_host']
+        dbname = self.serverConfig.configs['database_database']
+        user = self.serverConfig.configs['database_user']
+        passw = self.serverConfig.configs['database_password']
+        return psycopg2.connect(host=host, dbname=dbname, user=user, password=passw)
+
+    def download(self):
+        con = self._getDatabase()
+        try:
+
+            con.commit()
+            return True
+
+        finally:
+            con.close()
+
+    @coroutine
+    def download_async(self, param1):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.download)
+        return r
+
 
 
 
