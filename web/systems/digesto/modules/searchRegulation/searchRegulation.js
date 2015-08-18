@@ -65,12 +65,15 @@ function SearchRegulationCtrl($rootScope,$scope,Digesto,Notifications,$location)
   }
 
   function view(normative) {
-    $location.path('/load/' + normative.id + '/operation/view');
+    var hashId = window.btoa(normative.id);
+    var hashOperation = window.btoa('view');
+    $location.path('/load/' + hashId + '/operation/' + hashOperation);
   }
 
   function edit(normative) {
-    var operation = 'edit';
-    $location.path('/load/' + normative.id + '/operation/edit');
+    var hashId = window.btoa(normative.id);
+    var hashOperation = window.btoa('edit');
+    $location.path('/load/' + hashId + '/operation/' + hashOperation);
   }
 
 }

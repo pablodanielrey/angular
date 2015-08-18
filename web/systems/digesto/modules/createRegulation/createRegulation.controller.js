@@ -60,6 +60,7 @@ function CreateRegulationCtrl($rootScope, $scope, Notifications, Digesto, Office
     $scope.addFile = addFile;
     $scope.removeFile = removeFile;
     $scope.cancel = cancel;
+    $scope.finish = finish;
 
     // ----------------------------------------------------------
     // ---------------- PARTE VISUAL ----------------------------
@@ -141,12 +142,16 @@ function CreateRegulationCtrl($rootScope, $scope, Notifications, Digesto, Office
       initializeRegulation();
       initializeOffices();
 
+      $scope.model.operation = 'create';
       if ($routeParams['id']) {
-        id = $routeParams['id'];
+        hashId = $routeParams['id'];
+        id = window.atob(hashId);
         findNormativeById(id);
 
         if ($routeParams['operation']) {
-          console.log($routeParams['operation']);
+          hashOperation = $routeParams['operation'];
+          operation = window.atob(hashOperation);
+          $scope.model.operation = operation;
         }
       }
     }
@@ -292,7 +297,10 @@ function CreateRegulationCtrl($rootScope, $scope, Notifications, Digesto, Office
 
       $scope.model.normative.type = type;
       $scope.model.normative.file_number = null;
-      $scope.model.normative.normative_number_full = null;
+
+      if (!$scope.model.normative.normative_number_full) {        
+        $scope.model.normative.normative_number_full = null;
+      }
 
       if ($scope.model.normative.created) {
         $scope.model.normative.created = new Date($scope.model.normative.created);
@@ -311,6 +319,12 @@ function CreateRegulationCtrl($rootScope, $scope, Notifications, Digesto, Office
 
 
     $scope.save = function() {
+      console.log($scope.model.operation);
+      if ($scope.model.operation != 'create') {
+
+        $scope.view.regulationIndex = $scope.view.regulationIndex + 3;
+        return;
+      }
 
       var normative = $scope.model.normative;
       if (normative.visibility.type == 'GROUPPRIVATE') {
@@ -367,6 +381,18 @@ function CreateRegulationCtrl($rootScope, $scope, Notifications, Digesto, Office
     }
 
     function cancel() {
-      $location.path('/load');
+      if ($scope.model.operation == 'create') {
+        $location.path('/load');
+      } else {
+        $location.path('/search');
+      }
+    }
+
+    function finish() {
+      if ($scope.model.operation == 'create') {
+        $location.path('/load');
+      } else {
+        $location.path('/search');
+      }
     }
 };
