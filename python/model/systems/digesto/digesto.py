@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 import uuid, datetime,psycopg2,inject
-from model.systems.file.file import File
+from model.systems.files.files import Files
 from model.systems.offices.offices import Offices
 from model.systems.assistance.date import Date
 
 class Digesto:
 
     date = inject.attr(Date)
-    file = inject.attr(File)
+    file = inject.attr(Files)
     offices = inject.attr(Offices)
     '''
         Tipos de normativa:
