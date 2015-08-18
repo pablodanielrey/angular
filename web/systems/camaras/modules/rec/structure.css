@@ -68,3 +68,60 @@
   -moz-align-items:baseline; /* mozilla */
 
 }
+
+.play {
+  display:flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+}
+
+.rec .backList {
+  display:flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  flex-wrap: nowrap;
+  align-items: baseline;
+  -webkit-align-items:baseline; /* Safari */
+  -moz-align-items:baseline; /* mozilla */
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+}
+
+.rec .footerPlay {
+  display:flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  flex-wrap: nowrap;
+  align-items: baseline;
+  -webkit-align-items:baseline; /* Safari */
+  -moz-align-items:baseline; /* mozilla */
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+}
+
+.rec .videoDetalles {
+  display:flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  flex-wrap: nowrap;
+  align-items: baseline;
+  -webkit-align-items:baseline; /* Safari */
+  -moz-align-items:baseline; /* mozilla */
+  justify-content: space-around;
+  -webkit-justify-content: space-around;
+  -moz-justify-content: space-around;
+}
