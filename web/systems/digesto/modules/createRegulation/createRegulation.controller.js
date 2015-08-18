@@ -53,6 +53,7 @@ function CreateRegulationCtrl($rootScope, $scope, Notifications, Digesto, Office
     $scope.createRegulation = createRegulation;
 
     $scope.removeRelated = removeRelated;
+    $scope.loadRelateds = loadRelateds;
     $scope.addFile = addFile;
     $scope.removeFile = removeFile;
 
@@ -115,7 +116,8 @@ function CreateRegulationCtrl($rootScope, $scope, Notifications, Digesto, Office
       $scope.selectRegulation(7);
     });
 
-    $scope.$on('viewSearchResultRelatedsLoad',function(event) {
+    $scope.$on('viewSearchResultRelatedsLoad',function(event,normatives) {
+      $scope.loadRelateds(normatives);
       $scope.selectRegulation(9);
     })
 
@@ -272,6 +274,20 @@ function CreateRegulationCtrl($rootScope, $scope, Notifications, Digesto, Office
     function removeRelated(r) {
       var index = $scope.model.normative.relateds.indexOf(r);
       $scope.model.normative.relateds.splice(index,1);
+    }
+
+    function loadRelateds(normatives) {
+      for (var i = 0; i < normatives.length; i++) {
+        var include = false;
+        for (var j = 0; j < $scope.model.normative.relateds.length; j++) {
+          if (normatives[i].id == $scope.model.normative.relateds[j].related_id) {
+            include = true;
+          }
+        }
+        if (!include) {
+          $scope.model.normatives.push(normatives[i]);
+        }
+      }
     }
 
     function addFile(fileName,fileContent) {

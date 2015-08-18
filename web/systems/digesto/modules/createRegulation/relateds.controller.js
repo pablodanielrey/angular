@@ -30,19 +30,7 @@ function RelatedsCtrl($rootScope,$scope,Digesto,Notifications) {
     $scope.model.normatives = [];
     Digesto.findNormative(text,null,
         function(normatives) {
-          $scope.$emit('viewSearchResultRelatedsLoad');
-          for (var i = 0; i < normatives.length; i++) {
-            var include = false;
-            for (var j = 0; j < $scope.model.normative.relatedsObj.length; j++) {
-              if (normatives[i].id == $scope.model.normative.relatedsObj[j].id) {
-                include = true;
-              }
-            }
-            if (!include) {
-              $scope.model.normatives.push(normatives[i]);
-            }
-          }
-
+          $scope.$emit('viewSearchResultRelatedsLoad',normatives);
         }, function(error) {
           Notifications.message(error);
         }
