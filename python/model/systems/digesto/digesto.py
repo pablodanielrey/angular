@@ -321,7 +321,14 @@ class Digesto:
             status = self.getStatus(con,id)
             visibility = self.getVisibility(con,id)
             relateds = self.findRelateds(con,id)
-            return self._convertNormativeToDict(cur.fetchone(),status, visibility, relateds)
+
+            normative = self._convertNormativeToDict(cur.fetchone(),status, visibility, relateds)
+
+            normative['issuer'] = self.offices.findOffice(con,normative['issuer_id'])
+            yearStr = normative['year'].strftime('%y')
+            normative['normative_number_full'] = normative['normative_number'] + '/' + yearStr[-2:]
+
+            return normative
 
 
     def deleteNormative(self,con,id):
@@ -409,8 +416,4 @@ class Digesto:
             normatives = self._findNormativeByExtract(con,text)
         # si no encontro nada busco por el contenido del archivo
 
-        for n in normatives:
-            n['issuer'] = self.offices.findOffice(con,n['issuer_id'])
-            yearStr = n['year'].strftime('%y')
-            n['normative_number_full'] = n['normative_number'] + '/' + yearStr[-2:]
         return normatives
