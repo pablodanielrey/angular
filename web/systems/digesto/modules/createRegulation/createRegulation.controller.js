@@ -2,9 +2,9 @@ angular
     .module('mainApp')
     .controller('CreateRegulationCtrl',CreateRegulationCtrl);
 
-CreateRegulationCtrl.$inject = ['$rootScope', '$scope', 'Notifications', 'Digesto', 'Office'];
+CreateRegulationCtrl.$inject = ['$rootScope', '$scope', 'Notifications', 'Digesto', 'Office','$routeParams','$location'];
 
-function CreateRegulationCtrl($rootScope, $scope, Notifications, Digesto, Office) {
+function CreateRegulationCtrl($rootScope, $scope, Notifications, Digesto, Office,$routeParams,$location) {
 
     $scope.model = {
       offices: [],
@@ -51,11 +51,15 @@ function CreateRegulationCtrl($rootScope, $scope, Notifications, Digesto, Office
     $scope.createOrdinance = createOrdinance;
     $scope.createResolution = createResolution;
     $scope.createRegulation = createRegulation;
+    $scope.loadDataOrdinance = loadDataOrdinance;
+    $scope.loadDataResolution = loadDataResolution;
+    $scope.loadDataRegulation = loadDataRegulation;
 
     $scope.removeRelated = removeRelated;
     $scope.loadRelateds = loadRelateds;
     $scope.addFile = addFile;
     $scope.removeFile = removeFile;
+    $scope.cancel = cancel;
 
     // ----------------------------------------------------------
     // ---------------- PARTE VISUAL ----------------------------
@@ -136,6 +140,32 @@ function CreateRegulationCtrl($rootScope, $scope, Notifications, Digesto, Office
       initializeResolution();
       initializeRegulation();
       initializeOffices();
+
+      if ($routeParams['id']) {
+        id = $routeParams['id'];
+        findNormativeById(id);
+
+        if ($routeParams['operation']) {
+          console.log($routeParams['operation']);
+        }
+      }
+    }
+
+    function findNormativeById(id) {
+      Digesto.findNormativeById(id,
+          function(normative) {
+            $scope.model.normative = normative;
+            switch ($scope.model.normative.type) {
+              case 'ORDINANCE':$scope.loadDataOrdinance(normative,normative.status.status,normative.visibility.type);break;
+              case 'RESOLUTION':$scope.loadDataResolution(normative,normative.status.status,normative.visibility.type);break;
+              case 'REGULATION':$scope.loadDataRegulation(normative,normative.status.status,normative.visibility.type);break;
+              default:$scope.selectRegulation(0);break;
+            }
+          },
+          function(error) {
+            Notifications.message(error);
+          }
+      );
     }
 
     function initializeOffices() {
@@ -204,41 +234,77 @@ function CreateRegulationCtrl($rootScope, $scope, Notifications, Digesto, Office
     }
 
     function createOrdinance() {
-      var status = findStatus('APPROVED');
-      var visibility = findVisibility('PUBLIC');
+      $scope.model.normative = {};
+      $scope.loadDataOrdinance(null,'APPROVED','PUBLIC');
+    }
+
+    function loadDataOrdinance(normative,status,visibility) {
+      var status = findStatus(status);
+      var visibility = findVisibility(visibility);
       loadDataNormative($scope.model.issuersOrdinance,'ORDINANCE',status,visibility);
       $scope.selectRegulation(1);
     }
 
     function createResolution() {
-      var status = findStatus('PENDING');
-      var visibility = findVisibility('PRIVATE');
+      $scope.model.normative = {};
+      $scope.loadDataResolution(null,'PENDING','PRIVATE');
+    }
+
+    function loadDataResolution(normative,status,visibility) {
+      var status = findStatus(status);
+      var visibility = findVisibility(visibility);
       loadDataNormative($scope.model.issuersResolution,'RESOLUTION',status,visibility);
       $scope.selectRegulation(2);
     }
 
     function createRegulation() {
-      var status = findStatus('APPROVED');
-      var visibility = findVisibility('PUBLIC');
+      $scope.model.normative = {};
+      $scope.loadDataRegulation(null,'APPROVED','PUBLIC');
+    }
+
+    function loadDataRegulation(normative,status,visibility) {
+      var status = findStatus(status);
+      var visibility = findVisibility(visibility);
       loadDataNormative($scope.model.issuersRegulation,'REGULATION',status,visibility);
       $scope.selectRegulation(3);
     }
 
+    function loadIssuer(issuer_id,issuers) {
+        if (issuer_id != null) {
+          for (var i = 0; i < issuers.length; i++) {
+            if (issuer_id == issuers[i].id) {
+              $scope.model.normative.issuer = issuers[i];
+              $scope.model.normative.issuer_id = issuers[i].id;
+              return;
+            }
+          }
+        }
+
+        $scope.model.normative.issuer = (issuers.length > 0)?issuers[0]:null;
+        $scope.model.normative.issuer_id = (issuers.length > 0)?issuers[0].id:null;
+
+    }
+
     function loadDataNormative(issuers,type,status,visibility) {
       $scope.model.issuers = issuers;
-      $scope.model.normative = {};
-      $scope.model.normative.issuer = (issuers.length > 0)?issuers[0]:null;
-      $scope.model.normative.issuer_id = (issuers.length > 0)?issuers[0].id:null;
+
+      loadIssuer($scope.model.normative.issuer_id,issuers);
+
       $scope.model.normative.type = type;
       $scope.model.normative.file_number = null;
       $scope.model.normative.normative_number_full = null;
-      $scope.model.normative.created = new Date();
+
+      if ($scope.model.normative.created) {
+        $scope.model.normative.created = new Date($scope.model.normative.created);
+      } else {
+        $scope.model.normative.created = new Date();
+      }
+
       $scope.model.normative.extract = '';
       $scope.model.normative.status = status;
       $scope.model.normative.visibility = visibility;
       $scope.model.normative.offices = [];
       $scope.model.normative.relateds = [];
-      $scope.model.normative.relatedsObj = [];
       $scope.model.normative.file = null;
     }
 
@@ -298,5 +364,9 @@ function CreateRegulationCtrl($rootScope, $scope, Notifications, Digesto, Office
 
     function removeFile() {
       $scope.model.normative.file = null;
+    }
+
+    function cancel() {
+      $location.path('/load');
     }
 };

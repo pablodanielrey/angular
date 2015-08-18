@@ -6,8 +6,8 @@
             <div class=search>
                 <div class="inputSearchContent">
                   <form class="form-wrapper cf">
-                      <input type="text" placeholder="Buscar norma..." required>
-                      <button type="submit"><i class="fa fa-search"></i> BUSCAR </button>
+                      <input type="text" placeholder="Buscar norma..." required ng-model="model.searchText">
+                      <button type="submit" ng-click="find()"><i class="fa fa-search"></i> BUSCAR </button>
                   </form>
                 </div>
             </div>
@@ -123,64 +123,19 @@
 
           <div class="results">
 
-                <div>
+                <div ng-repeat="normative in model.normatives">
                     <div class="row3">
                       	<div class="col2 col-span-2"><input type="checkbox"></div>
-                      	<div class="col3 col-span-1"><i class="fa fa-file-text"></i>&nbsp; Resolución</div>
-                      	<div class="col col-span-1">025/15</div>
-                      	<div class="col col-span-1">900-1236/15</div>
-                      	<div class="col col-span-1">Decanato</div>
-                      	<div class="col col-span-1">Aprobada</div>
-                      	<div class="col col-span-1">Público</div>
-                      	<div class="col col-span-1"><button class="btnVer">VER</button> <button class="btnEditar">EDITAR</button></div>
+                      	<div class="col3 col-span-1"><i class="fa fa-file-text"></i>&nbsp; {{normative.type}}</div>
+                      	<div class="col col-span-1">{{normative.file_number}}</div>
+                      	<div class="col col-span-1">{{normative.normative_number_full}}</div>
+                      	<div class="col col-span-1">{{normative.issuer.name}}</div>
+                      	<div class="col col-span-1">{{normative.status.name}}</div>
+                      	<div class="col col-span-1">{{normative.visibility.name}}</div>
+                      	<div class="col col-span-1"><button class="btnVer" ng-click="view(normative)">VER</button> <button class="btnEditar" ng-click="edit(normative)">EDITAR</button></div>
                     </div>
                     <div class="row4">
-                      	<div class="col col-span-2">Curso de Capacitación en Informática para el personal no docente de la Facultad</div>
-                    </div>
-                </div>
-                <div>
-                    <div class="row">
-                      	<div class="col2 col-span-2"><input type="checkbox"></div>
-                      	<div class="col4 col-span-1"><i class="fa fa-file-text"></i>&nbsp; Ordenanza</div>
-                      	<div class="col col-span-1">025/15</div>
-                      	<div class="col col-span-1">900-1236/15</div>
-                      	<div class="col col-span-1">Decanato</div>
-                      	<div class="col col-span-1">Aprobada</div>
-                      	<div class="col col-span-1">Público</div>
-                      	<div class="col col-span-1"><button class="btnVer">VER</button> <button class="btnEditar">EDITAR</button></div>
-                    </div>
-                    <div class="row2">
-                      	<div class="col col-span-2">Curso de Capacitación en Informática para el personal no docente de la Facultad</div>
-                    </div>
-                </div>
-                <div>
-                    <div class="row3">
-                      	<div class="col2 col-span-2"><input type="checkbox"></div>
-                      	<div class="col5 col-span-1"><i class="fa fa-file-text"></i>&nbsp; Disposición</div>
-                      	<div class="col col-span-1">025/15</div>
-                      	<div class="col col-span-1">900-1236/15</div>
-                      	<div class="col col-span-1">Decanato</div>
-                      	<div class="col col-span-1">Aprobada</div>
-                      	<div class="col col-span-1">Público</div>
-                      	<div class="col col-span-1"><button class="btnVer">VER</button> <button class="btnEditar">EDITAR</button></div>
-                    </div>
-                    <div class="row4">
-                      	<div class="col col-span-2">Curso de Capacitación en Informática para el personal no docente de la Facultad</div>
-                    </div>
-                </div>
-                <div>
-                    <div class="row">
-                      	<div class="col2 col-span-2"><input type="checkbox"></div>
-                      	<div class="col4 col-span-1"><i class="fa fa-file-text"></i>&nbsp; Odenanza</div>
-                      	<div class="col col-span-1">025/15</div>
-                      	<div class="col col-span-1">900-1236/15</div>
-                      	<div class="col col-span-1">Decanato</div>
-                      	<div class="col col-span-1">Aprobada</div>
-                      	<div class="col col-span-1">Público</div>
-                      	<div class="col col-span-1"><button class="btnVer">VER</button> <button class="btnEditar">EDITAR</button></div>
-                    </div>
-                    <div class="row2">
-                      	<div class="col col-span-2">Curso de Capacitación en Informática para el personal no docente de la Facultad</div>
+                      	<div class="col col-span-2">{{normative.extract}}</div>
                     </div>
                 </div>
 
