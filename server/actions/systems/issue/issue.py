@@ -13,7 +13,7 @@ from model.events import Events
 
 from model.systems.assistance.date import Date
 from model.systems.issue.issue import Issue
-
+from model.systems.issue.issueModel import IssueModel
 
 
 
@@ -50,7 +50,7 @@ class NewRequest:
     events = inject.attr(Events)
     
     
-    issue = inject.attr(Issue)
+    issueModel = inject.attr(IssueModel)
 
     def handleAction(self, server, message):
 
@@ -83,7 +83,7 @@ class NewRequest:
         try:
         
             #abcm datos
-            events = self.issue.insert(con, request, officeId, requestorId, created, priority, visibility, relatedRequestId, state)
+            events = self.issueModel.insert(con, request, officeId, requestorId, created, priority, visibility, relatedRequestId, state)
             con.commit()
             
             #disparar eventos
@@ -198,7 +198,7 @@ class DeleteIssue:
     config = inject.attr(Config)
     events = inject.attr(Events)
     
-    issue = inject.attr(Issue)
+    issueModel = inject.attr(IssueModel)
     
     
     """ manejar accion """
@@ -225,7 +225,7 @@ class DeleteIssue:
         try: 
 
             #abcm datos
-            events = self.issue.deleteIssue(con,id) 
+            events = self.issueModel.deleteIssue(con,id) 
             con.commit()
 
             """ enviar mensaje de respuesta """
