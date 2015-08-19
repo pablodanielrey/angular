@@ -306,6 +306,31 @@ function CreateRegulationCtrl($rootScope, $scope, Notifications, Digesto, Office
 
     }
 
+    function loadRelatedsNormative(relateds) {
+      for (var i = 0; i < relateds.length; i++) {
+          r = relateds[i];
+          id = r['related_id'];
+          Digesto.findNormativeById(id,
+            function(normative) {
+              findTypeNormative(normative);
+            },
+            function(error) {
+              Notifications(error);
+            }
+        );
+      }
+    }
+
+    function findTypeNormative(normative) {
+      var relateds = $scope.model.normative.relateds
+      for (var i = 0; i < relateds.length; i++) {
+        if (normative.id == relateds[i].related_id) {
+          relateds[i].normative_number_full = normative.normative_number_full;
+          return;
+        }
+      }
+    }
+
     function loadDataNormative(issuers,type,status,visibility) {
       $scope.model.issuers = issuers;
 
@@ -342,6 +367,8 @@ function CreateRegulationCtrl($rootScope, $scope, Notifications, Digesto, Office
 
       if (!$scope.model.normative.relateds) {
         $scope.model.normative.relateds = [];
+      } else {
+        loadRelatedsNormative($scope.model.normative.relateds);
       }
 
       $scope.model.normative.file = null;
@@ -350,7 +377,7 @@ function CreateRegulationCtrl($rootScope, $scope, Notifications, Digesto, Office
 
 
     $scope.save = function() {
-      console.log($scope.model.operation);
+      console.log($scope.model.normative);
       if ($scope.model.operation != 'create') {
 
         $scope.view.regulationIndex = $scope.view.regulationIndex + 3;
