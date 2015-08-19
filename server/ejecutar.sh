@@ -13,7 +13,7 @@ sleep 60s
 cd $DIR
 echo "iniciando sistema"
 screen -S a6 -d -m python3 mainOffice.py
-screen -S a5 -d -m python3 mainDigesto.py
+screen -S a7 -d -m python3 mainDigesto.py
 screen -S a5 -d -m python3 mainFiles.py
 screen -S a4 -d -m python3 mainLaboralInsertion.py
 screen -S a3 -d -m python3 mainFirmware.py
