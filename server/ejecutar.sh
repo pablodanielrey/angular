@@ -12,6 +12,7 @@ screen -S crossbar -d -m ../pypy-2.6-linux_x86_64-portable/bin/crossbar start
 sleep 60s
 cd $DIR
 echo "iniciando sistema"
+screen -S a8 -d -m python3 mainIssue.py
 screen -S a6 -d -m python3 mainOffice.py
 screen -S a5 -d -m python3 mainDigesto.py
 screen -S a5 -d -m python3 mainFiles.py

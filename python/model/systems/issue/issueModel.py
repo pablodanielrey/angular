@@ -16,23 +16,23 @@ class IssueModel:
 
 
     issue = inject.attr(Issue)
-    
-    
+
+
     '''
      ' Metodo recursivo de eliminacion de peticiones y sus hijos
      '''
     def __deleteIssue(self, con, id):
         cur = con.cursor()
-        
-        ids = self.issue.getChildsId(con, id)        
-    
+
+        ids = self.issue.getChildsId(con, id)
+
         for idChild in ids:
             self.__deleteIssue(con, idChild)
 
-        self.issue.deleteStatesFromIssue(con, id)     
-        
-        self.issue.deleteIssue(con, id)       
-        
+        self.issue.deleteStatesFromIssue(con, id)
+
+        self.issue.deleteIssue(con, id)
+
 
     '''
      ' Eliminar peticion y sus hijos
@@ -41,29 +41,34 @@ class IssueModel:
         self.__deleteIssue(con, id)
         events = []
         e = {
-            'type':'IssueDeletedEvent', 
-            'data':id, 
+            'type':'IssueDeletedEvent',
+            'data':id,
         }
         events.append(e)
         return events
 
 
+    def insert(self,con,issue):
+        '''
+            es igual que el de abajo pero con los chequeos
+        '''
+        return 'ok'
 
     '''
      ' Insertar datos, se insertan los datos del request y el estado
      '''
     def insert(self,con,request,officeId,requestorId,created,priority,visibility,relatedRequestId, state):
         createdutc = created.astimezone(pytz.utc)
-            
-        id = str(uuid.uuid4()) 
+
+        id = str(uuid.uuid4())
         self.issue.insertIssue(con, id, request, officeId, requestorId, createdutc, priority, visibility, relatedRequestId)
         self.issue.insertState(con, id, requestorId, createdutc, state)
-       
+
         events = []
-        e = { 
-            'type':'IssueInsertedEvent', 
-            'data':{ 
-               'id':id, 
+        e = {
+            'type':'IssueInsertedEvent',
+            'data':{
+               'id':id,
                'request':request,
                'officeId':officeId,
                'requestorId':requestorId,
@@ -73,14 +78,7 @@ class IssueModel:
                'relatedRequestId':relatedRequestId,
                'state':state,
                'nodes':[],
-             } 
+             }
         }
         events.append(e)
-        return events 
-
-
-    def getIssuesByUser(self, 
-       
-                
-                
-          
+        return events
