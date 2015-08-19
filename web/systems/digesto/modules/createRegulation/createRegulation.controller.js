@@ -238,6 +238,19 @@ function CreateRegulationCtrl($rootScope, $scope, Notifications, Digesto, Office
       return null;
     }
 
+    function loadOfficesNormative(visibility) {
+      if (visibility.additional_data && visibility.additional_data.length > 0) {
+        Office.findOffices(visibility.additional_data,
+          function(offices) {
+            $scope.model.normative.offices = (offices == null)?[]:offices;
+          },
+          function(error) {
+            Notifications.message(error);
+          }
+        );
+      }
+    }
+
     function createOrdinance() {
       $scope.model.normative = {};
       $scope.loadDataOrdinance(null,'APPROVED','PUBLIC');
@@ -246,6 +259,7 @@ function CreateRegulationCtrl($rootScope, $scope, Notifications, Digesto, Office
     function loadDataOrdinance(normative,status,visibility) {
       var status = findStatus(status);
       var visibility = findVisibility(visibility);
+      loadOfficesNormative(normative['visibility']);
       loadDataNormative($scope.model.issuersOrdinance,'ORDINANCE',status,visibility);
       $scope.selectRegulation(1);
     }
@@ -258,6 +272,7 @@ function CreateRegulationCtrl($rootScope, $scope, Notifications, Digesto, Office
     function loadDataResolution(normative,status,visibility) {
       var status = findStatus(status);
       var visibility = findVisibility(visibility);
+      loadOfficesNormative(normative['visibility']);
       loadDataNormative($scope.model.issuersResolution,'RESOLUTION',status,visibility);
       $scope.selectRegulation(2);
     }
@@ -270,6 +285,7 @@ function CreateRegulationCtrl($rootScope, $scope, Notifications, Digesto, Office
     function loadDataRegulation(normative,status,visibility) {
       var status = findStatus(status);
       var visibility = findVisibility(visibility);
+      loadOfficesNormative(normative['visibility']);
       loadDataNormative($scope.model.issuersRegulation,'REGULATION',status,visibility);
       $scope.selectRegulation(3);
     }
@@ -296,9 +312,14 @@ function CreateRegulationCtrl($rootScope, $scope, Notifications, Digesto, Office
       loadIssuer($scope.model.normative.issuer_id,issuers);
 
       $scope.model.normative.type = type;
-      $scope.model.normative.file_number = null;
 
-      if (!$scope.model.normative.normative_number_full) {        
+      if (!$scope.model.normative.file_number) {
+        $scope.model.normative.file_number = null;
+      } else {
+        $scope.model.normative.file_number = parseInt($scope.model.normative.file_number);
+      }
+
+      if (!$scope.model.normative.normative_number_full) {
         $scope.model.normative.normative_number_full = null;
       }
 
@@ -308,11 +329,21 @@ function CreateRegulationCtrl($rootScope, $scope, Notifications, Digesto, Office
         $scope.model.normative.created = new Date();
       }
 
-      $scope.model.normative.extract = '';
+      if (!$scope.model.normative.extract) {
+        $scope.model.normative.extract = '';
+      }
+
       $scope.model.normative.status = status;
       $scope.model.normative.visibility = visibility;
-      $scope.model.normative.offices = [];
-      $scope.model.normative.relateds = [];
+
+      if (!$scope.model.normative.offices) {
+        $scope.model.normative.offices = [];
+      }
+
+      if (!$scope.model.normative.relateds) {
+        $scope.model.normative.relateds = [];
+      }
+
       $scope.model.normative.file = null;
     }
 
