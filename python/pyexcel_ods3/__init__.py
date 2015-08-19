@@ -7,7 +7,7 @@
     :copyright: (c) 2015 by Onni Software Ltd
     :license: New BSD License
 """
-import sys, logging
+import sys
 import datetime
 import ezodf
 from collections import OrderedDict
@@ -170,17 +170,8 @@ class ODSSheetWriter(SheetWriter):
         """
         write a row into the file
         """
-
-        logging.debug('\n---------- exportando fila ---------')
-        logging.debug(array)
-        logging.debug('\n-----------------------------------\n')
-
         count = 0
         for cell in array:
-
-            logging.debug('celda :')
-            logging.debug(cell)
-
             value_type = ODS_WRITE_FORMAT_COVERSION[type(cell)]
             if value_type == "time":
                 cell = cell.strftime("PT%HH%MM%SS")

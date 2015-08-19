@@ -2,12 +2,11 @@ angular
     .module('mainApp')
     .controller('MainFirmwareController',MainFirmwareController);
 
-MainFirmwareController.$inject = ['$rootScope','$scope','$timeout','$location','Notifications', 'Firmware'];
+MainFirmwareController.$inject = ['$rootScope','$scope','$timeout','$location', 'Notifications', 'Firmware'];
 
-function MainFirmwareController($rootScope,$scope, $timeout, $location, Notifications, Firmware) {
+function MainFirmwareController($rootScope, $scope, $timeout, $location, Notifications, Firmware) {
 
   var vm = this;
-
 
   vm.view = {
     inputCode : false,
@@ -250,7 +249,7 @@ function MainFirmwareController($rootScope,$scope, $timeout, $location, Notifica
    }
 
    function enterPassword() {
-    Firmware.identify(vm.model.code,vm.model.password,
+    Firmware.login(vm.model.code,vm.model.password,
       function(response) {
 
       },
@@ -314,24 +313,49 @@ function MainFirmwareController($rootScope,$scope, $timeout, $location, Notifica
      vm.initialize();
    });
 
-
-   $scope.$on('identifiedEvent', function(event, data) {
-     if (vm.model.adminMode) {
-       if (data.profile == 'admin') {
-         $location.path("/enroll");
-       } else {
-         Notifications.message('Error, usted no tiene permisos de administrador');
-         vm.initialize();
-       }
-     } else {
-       $scope.$parent.logData  = {
-          date:data.date,
-          user:data.user
-       }
-
-       $location.path('/log');
+   /*
+   $scope.$on('ErrorEvent', function(event, data) {
+     console.log(data);
+     if (data.error != undefined) {
+       // se envía un mensaje desde el servidor indicando un mensaje a mostrar.
+       Notifications.message(data.error);
+       return;
      }
    });
+   */
+
+
+   /*
+    Se produce un evento de identificación
+   */
+   $scope.identifiedEvent = function(res) {
+
+     var data = res[0];
+
+     console.log(data);
+
+     if (data.log == undefined || data.user == undefined) {
+       Notifications.message('No se pudo identicar a la persona');
+       return;
+     }
+
+     // registro los datos del usuario logueado
+     $scope.$parent.logData = {
+        date:new Date(data.log.log),
+        user:data.user,
+        sid:data.sid
+     }
+
+     if (vm.model.adminMode && data.profile != undefined && data.profile == 'admin') {
+       $location.path("/enroll");
+     } else {
+       $location.path('/log');
+     }
+
+   };
+
+   // registro los manejadores de eventos
+   Firmware.onIdentified($scope.identifiedEvent);
 
    $scope.$on('$viewContentLoaded', function(event) {
      vm.initialize();

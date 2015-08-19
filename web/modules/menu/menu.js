@@ -67,9 +67,9 @@ app.controller('MenuCtrl', function($rootScope, $scope, $window, $location, $tim
 	$scope.generateItems = function() {
 		$scope.items = [];
 
-		Profiles.checkAccess(Session.getSessionId(),'ADMIN', function(ok) {
+		Profiles.checkAccess(Session.getSessionId(),['ADMIN'], function(ok) {
 
-			if (ok == 'granted') {
+			if (ok) {
 				$scope.items.push({ label:'Mis datos', img:'fa-pencil-square-o', function: $scope.myProfile });
 				$scope.items.push({ label:'Cambiar clave', img:'fa-lock', function: $scope.changePassword });
 				$scope.items.push({ label:'Editar usuarios', img:'fa-users', function: $scope.editUsers });
@@ -87,8 +87,8 @@ app.controller('MenuCtrl', function($rootScope, $scope, $window, $location, $tim
 			// nada por ahora
 		});
 
-		Profiles.checkAccess(Session.getSessionId(),'ADMIN-TUTOR,USER-TUTOR', function(ok) {
-			if (ok == 'granted') {
+		Profiles.checkAccess(Session.getSessionId(),['ADMIN-TUTOR','USER-TUTOR'], function(ok) {
+			if (ok) {
 				$scope.items.push({ label:'Tutorias', img:'fa-pencil-square-o', function: $scope.tutors });
 			}
 		},
@@ -96,8 +96,8 @@ app.controller('MenuCtrl', function($rootScope, $scope, $window, $location, $tim
 			//alert(error);
 		});
 
-		Profiles.checkAccess(Session.getSessionId(),'ADMIN-ASSISTANCE,USER-ASSISTANCE', function(ok) {
-			if (ok == 'granted') {
+		Profiles.checkAccess(Session.getSessionId(),['ADMIN-ASSISTANCE','USER-ASSISTANCE'], function(ok) {
+			if (ok) {
 				$scope.items.push({ label:'Asistencia', img:'fa-clock-o', function: $scope.assistance });
 			}
 		},
@@ -105,8 +105,8 @@ app.controller('MenuCtrl', function($rootScope, $scope, $window, $location, $tim
 			//alert(error);
 		});
 
-		Profiles.checkAccess(Session.getSessionId(),'ADMIN-OFFICES,USER-OFFICES', function(ok) {
-			if (ok == 'granted') {
+		Profiles.checkAccess(Session.getSessionId(),['ADMIN-OFFICES','USER-OFFICES'], function(ok) {
+			if (ok) {
 				$scope.items.push({ label:'Oficinas', img:'fa-clock-o', function: $scope.office });
 			}
 		},

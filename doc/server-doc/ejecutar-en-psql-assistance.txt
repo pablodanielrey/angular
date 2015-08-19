@@ -1,0 +1,9 @@
+\i 1-profile.sql
+\i 1-system.sql
+\i 2-systems.sql
+\i 2-credentials.sql
+\i 2-offices.sql
+\i 3-account_request.sql
+\i 6-assistance.sql
+
+e insertar el basic-data de lo que corresponda.

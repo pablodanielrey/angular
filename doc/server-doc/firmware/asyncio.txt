@@ -1,0 +1,40 @@
+
+como llamar desde rutinas asyncio a código que es sincrónico
+
+http://stackoverflow.com/questions/30172821/python-asyncio-task-got-bad-yield
+
+--
+
+en este caso :
+
+searching() --- > método sincrónico.
+
+
+class search(object):
+  ...
+  self.s = some_search_engine()
+  ...
+  def searching(self, *args, **kwargs):
+    ret = {}
+    ...
+    return ret
+
+   @asyncio.coroutine
+   def searching_async(self, *args, **kwargs):
+      loop = kwargs.get('loop', asyncio.get_event_loop())
+      try:
+          del kwargs['loop']  # assuming searching doesn't take loop as an arg
+      except KeyError:
+          pass
+      r = yield from loop.run_in_executor(None, self.searching, *args, **kwargs)  # Passing None tells asyncio to use the default ThreadPoolExecutor
+      return r
+
+
+----
+
+código de testeo de ejemplo
+
+s = search()
+loop = asyncio.get_event_loop()
+loop.run_until_complete(s.searching_async(arg1, arg2, ...))
+loop.close()

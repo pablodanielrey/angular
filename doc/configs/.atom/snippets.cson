@@ -1,0 +1,247 @@
+
+'.text.html':
+  'Angular System Index':
+    'prefix': 'asi'
+    'body': """
+      <!DOCTYPE html>
+      <html ng-app="mainApp">
+      <head>
+        <meta charset="utf-8"/>
+        <meta name='viewport' content='width=device-width'/>
+
+        <script src="/libs/bower_components/angularjs/angular.js"></script>
+        <script src="/libs/bower_components/angular-route/angular-route.js"></script>
+        <script src="/libs/bower_components/autobahn/autobahn.js"></script>
+        <script src="/libs/bower_components/angular-wamp/release/angular-wamp.js"></script>
+
+        <!-- esto es el estilo de font awesome para tener los iconos -->
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+
+        <script type="text/javascript" src="/config.json"></script>
+      </head>
+      <body>
+      <body>
+      </html>
+    """
+
+'.source.js':
+  'Angular Controller':
+    'prefix': 'ac'
+    'body': """
+      angular
+        .module('mainApp')
+        .controller('$1Ctrl',$2Ctrl);
+
+      $3Ctrl.$inject = ['$rootScope','$scope','$location','Notifications'];
+
+      function $4Ctrl($rootScope, $scope, $location, Notifications) {
+
+          var vm = this;
+
+          $scope.model = {
+          }
+
+
+          $scope.initialize = function() {
+          }
+
+          $scope.$on('$viewContentLoaded', function(event) {
+            $scope.initialize();
+          });
+      }
+
+    """
+  'Angular Service':
+    'prefix': 'as'
+    'body': """
+      angular
+        .module('mainApp')
+        .service('$1',$2);
+
+      $3.inject = ['$rootScope','$wamp'];
+
+      function $4($rootScope, $wamp) {
+
+      }
+    """
+  'Wamp Call':
+    'prefix': 'wc'
+    'body': """
+      $wamp.call('$1', [$2])
+      .then(function(res) {
+        // codigo aca
+      },function(err) {
+        // codigo aca
+      });
+    """
+
+
+'.source.python':
+
+  'python header':
+    'prefix': 'ph'
+    'body': """
+      # -*- coding: utf-8 -*-
+      import inject
+      import logging
+    """
+
+  'wamp register method':
+    'prefix': 'wamprm'
+    'body': 'yield from self.register(self.$1, "$2")'
+
+  'wamp server method':
+    'prefix': 'wampsm'
+    'body': """
+      def $1(self, param1):
+          con = self._getDatabase()
+          try:
+              ''' .... codigo aca ... '''
+              con.commit()
+              return True
+
+          finally:
+              con.close()
+
+      @coroutine
+      def $2_async(self, param1):
+          loop = asyncio.get_event_loop()
+          r = yield from loop.run_in_executor(None, self.$1, param1)
+          return r
+    """
+
+  'wamp server python':
+    'prefix': 'wsp'
+    'body': """
+      # -*- coding: utf-8 -*-
+      import inject
+      import logging
+      import psycopg2
+
+      import asyncio
+      from asyncio import coroutine
+      from autobahn.asyncio.wamp import ApplicationSession
+
+      from model.config import Config
+
+      class $1(ApplicationSession):
+
+          def __init__(self, config=None):
+              logging.debug('instanciando')
+              ApplicationSession.__init__(self, config)
+
+              self.serverConfig = inject.instance(Config)
+
+          @coroutine
+          def onJoin(self, details):
+              logging.debug('registering methods')
+              ''' yield from self.register(self.method_name, 'registered.method.name') '''
+
+          def _getDatabase(self):
+              host = self.serverConfig.configs['database_host']
+              dbname = self.serverConfig.configs['database_database']
+              user = self.serverConfig.configs['database_user']
+              passw = self.serverConfig.configs['database_password']
+              return psycopg2.connect(host=host, dbname=dbname, user=user, password=passw)
+
+          def methodName(self, param1):
+              con = self._getDatabase()
+              try:
+                  ''' .... codigo aca ... '''
+                  con.commit()
+                  return True
+
+              finally:
+                  con.close()
+
+          @coroutine
+          def methodName_async(self, param1):
+              loop = asyncio.get_event_loop()
+              r = yield from loop.run_in_executor(None, self.methodName, param1)
+              return r
+    """
+
+  'main wamp server':
+    'prefix': 'mws'
+    'body': """
+      # -*- coding: utf-8 -*-
+      '''
+          Se conecta al router wamp y hace correr el Wamp
+      '''
+      if __name__ == '__main__':
+
+          import sys
+          import logging
+          import inject
+          sys.path.insert(0, '../python')
+
+          logging.basicConfig(level=logging.DEBUG)
+
+          from autobahn.asyncio.wamp import ApplicationRunner
+          from model.config import Config
+          from actions.$1 import $2
+
+          def config_injector(binder):
+              binder.bind(Config, Config('server-config.cfg'))
+
+          inject.configure(config_injector)
+          config = inject.instance(Config)
+
+          url = config.configs['server_url']
+          realm = config.configs['server_realm']
+          debug = config.configs['server_debug']
+
+          runner = ApplicationRunner(url=url, realm=realm, debug=debug, debug_wamp=debug, debug_app=debug)
+          runner.run($3)
+      """
+
+  'main wamp client':
+    'prefix': 'mwc'
+    'body': """
+        # -*- coding: utf-8 -*-
+        import sys
+        sys.path.append('../../python')
+
+        import logging
+        import inject
+
+        import model
+        from model.config import Config
+
+        ''' configuro el injector con las variables apropiadas '''
+        def config_injector(binder):
+            binder.bind(Config,Config('server-config.cfg'))
+
+        inject.configure(config_injector)
+
+        logging.getLogger().setLevel(logging.DEBUG)
+
+        from autobahn.asyncio.wamp import ApplicationSession
+        from asyncio import coroutine
+
+        class WampMain(ApplicationSession):
+
+            def __init__(self,config=None):
+                logging.debug('instanciando wampClient')
+                ApplicationSession.__init__(self, config)
+
+
+            @coroutine
+            def onJoin(self, details):
+                logging.debug('session joined')
+
+                ''' aca se ejecutan las llamadas wamp '''
+                try:
+                    yield from self.call('system.files.find')
+                except Exception as e:
+                    logging.exception(e)
+
+
+        if __name__ == '__main__':
+            from autobahn.asyncio.wamp import ApplicationRunner
+
+            config = inject.instance(Config)
+            runner = ApplicationRunner(url=config.configs['server_url'], realm=config.configs['server_realm'], debug=True, debug_wamp=True, debug_app=True)
+            runner.run(WampMain)
+      """

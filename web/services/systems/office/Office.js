@@ -1,342 +1,296 @@
 angular
-    .module('mainApp')
-    .service('Office', Office);
+  .module('mainApp')
+  .service('Office',Office);
 
-Office.$inject = ['$rootScope', 'Messages', 'Session', 'Utils', 'Cache', 'Config'];
+Office.inject = ['$rootScope','$wamp','Session'];
 
-function Office($rootScope, Messages, Session, Utils, Cache, Config) {
+function Office($rootScope, $wamp, Session) {
 
   var services = this;
 
-  services.getUserInOfficesByRole = getUserInOfficesByRole;
-  services.getUserOfficeRoles = getUserOfficeRoles;
+  //retorna todas las oficinas
   services.getOffices = getOffices;
-  services.getOfficesByUserRole = getOfficesByUserRole;
+
+  // obtiene las oficinas que puede ver el usuario
+  services.getOfficesByUser = getOfficesByUser;
+
+  // obtiene todos los usuarios de las oficinas pasadas como parametro
   services.getOfficesUsers = getOfficesUsers;
+
+  // retorna los usuarios que pertenecen a las oficinas y suboficinas en las cuales la persona userId tiene un rol determinado
+  services.getUserInOfficesByRole = getUserInOfficesByRole;
+
+  // obtiene todas las oficinas en las cuales el usuario tiene asignado un rol
+  services.getOfficesByUserRole = getOfficesByUserRole;
+
+  // elimina el rol para usuario oficina
   services.deleteOfficeRole = deleteOfficeRole;
+
+
+
+
+  // -----------------------------------------------------------
+  // --------------- FALTAN IMPLEMENTAR EN EL SERVER -----------
+  // -----------------------------------------------------------
+
+  // setea el rol role al usuario userId para la oficina officeId
   services.addOfficeRole = addOfficeRole;
+
+  // actualiza los roles para todos los usersId en officesId
   services.persistOfficeRole = persistOfficeRole;
+
+  // crea una nueva oficina si no existe o sino actualiza los datos
   services.persistOffice = persistOffice;
+
+  // elimina un usuario de una oficina
   services.removeUserFromOffice = removeUserFromOffice;
+
+  // agrega un usuario (userId) a una oficina (officeId)
   services.addUserToOffices = addUserToOffices;
+
+  // Retorna los roles que puede asignar el usuario (userId) para las oficinas (officesId) y para los usuarios (usersId)
+  // Ademas retorna los roles que ya poseen los usarios
   services.getRolesAdmin = getRolesAdmin;
 
-  function getUserInOfficesByRole(userId, role, tree, callbackOk, callbackError) {
-    if (role == null) {
-      return;
-    }
 
-    if (tree == null) {
-      tree = true;
-    }
 
-    var msg = {
-      id: Utils.getId(),
-      action: 'getUserInOfficesByRole',
-      session: Session.getSessionId(),
-      request: {
-        tree: tree,
-        role: role
+  /*
+    obtiene todas las oficinas
+    res = [{
+            name:'',
+            parent:'' -- id de la oficina padre,
+            id:'',
+            email:'',
+            telephone:''
+          }]
+  */
+  function getOffices(callbackOk,callbackError) {
+    $wamp.call('offices.offices.getOffices', [])
+    .then(function(res) {
+      if (res != null) {
+        callbackOk(res);
+      } else {
+        callbackError('Error');
       }
-    }
-
-    if (userId != null) {
-      msg.request.userId = userId;
-    }
-
-    Messages.send(msg,
-      function(data) {
-        if (typeof data.error === 'undefined') {
-          callbackOk(data.response.users);
-        } else {
-          callbackError(data.error);
-        }
-      });
-
-  }
-
-  function getUserOfficeRoles() {}
-
-  function getRolesAdmin(userId, officesId, usersId, callbackOk, callbackError) {
-    if (officesId == null || usersId == null) {
-      return;
-    }
-
-    var msg = {
-      id: Utils.getId(),
-      action:'getRolesAdmin',
-      session: Session.getSessionId(),
-      request: {
-        officesId: officesId,
-        usersId: usersId
-      }
-    };
-
-    if (userId != null) {
-      msg.request.userId = userId;
-    }
-
-    Messages.send(msg,
-      function(data) {
-        if (typeof data.error === 'undefined') {
-          callbackOk(data.response);
-        } else {
-          callbackError(data.error);
-        }
+    },function(err) {
+      callbackError(err);
     });
   }
 
-  function getOffices(userId, callbackOk, callbackError) {
-    var msg = {
-      id: Utils.getId(),
-      action: 'getOffices',
-      session: Session.getSessionId(),
-      request:{}
-    }
-
-    if (userId != null) {
-      msg.request.user_id = userId;
-    }
-
-    Messages.send(msg,
-      function(data) {
-        if (typeof data.error === 'undefined') {
-          callbackOk(data.response.offices);
-        } else {
-          callbackError(data.error);
-        }
-    });
-
-  }
-
-  function getOfficesByUserRole(userId,role,tree, callbackOk, callbackError) {
-    var msg = {
-      id: Utils.getId(),
-      action: 'getOfficesByUserRole',
-      session: Session.getSessionId(),
-      request:{
-        user_id: userId,
-        tree:tree
+  /*
+    obtiene las oficinas que puede ver el usuario
+    res = [{
+            name:'',
+            parent:'' -- id de la oficina padre,
+            id:'',
+            email:'',
+            telephone:''
+          }]
+  */
+  function getOfficesByUser(userId,tree,callbackOk,callbackError) {
+    $wamp.call('offices.offices.getOfficesByUser', [userId,tree])
+    .then(function(res) {
+      if (res != null) {
+        callbackOk(res);
+      } else {
+        callbackError('Error');
       }
-    }
-
-    if (role != null) {
-      msg.request.role = role;
-    }
-
-    Messages.send(msg,
-      function(data) {
-        if (typeof data.error === 'undefined') {
-          callbackOk(data.response.offices);
-        } else {
-          callbackError(data.error);
-        }
+    },function(err) {
+      callbackError(err);
     });
   }
+
 
   /*
   Obtiene todos los usuarios de las oficinas pasadas como parametro
   */
   function getOfficesUsers(offices, callbackOk, callbackError) {
-    var msg = {
-      id: Utils.getId(),
-      action: 'getOfficesUsers',
-      session: Session.getSessionId(),
-      request: {
-        offices: offices
-      }
-    }
-
-    Messages.send(msg,
-      function(data) {
-        if (typeof data.error === 'undefined') {
-          callbackOk(data.response.users);
+    $wamp.call('offices.offices.getOfficesUsers', [offices])
+      .then(function(res) {
+        if (res != null) {
+          callbackOk(res);
         } else {
-          callbackError(data.error);
+          callbackError('Error');
         }
+      },function(err) {
+        callbackError(err);
       });
   }
 
-  function persistOfficeRole(officesId, usersId, roles, oldRoles, callbackOk, callbackError) {
-    if (officesId == null || usersId == null || roles == null || oldRoles == null) {
+
+  /*
+    retorna los usuarios que pertenecen a las oficinas y suboficinas en las cuales la persona userId tiene un rol determinado
+  */
+  function getUserInOfficesByRole(userId, role, tree, callbackOk, callbackError) {
+    if (role == null) {
       return;
     }
 
-    var msg = {
-      id: Utils.getId(),
-      action: 'persistOfficeRole',
-      session: Session.getSessionId(),
-      request: {
-        usersId: usersId,
-        officesId: officesId,
-        roles: roles,
-        oldRoles: oldRoles
-      }
+    $wamp.call('offices.offices.getUserInOfficesByRole', [userId,role,tree])
+      .then(function(res) {
+        if (res != null) {
+          callbackOk(res);
+        } else {
+          callbackError('Error');
+        }
+      },function(err) {
+        callbackError(err);
+      });
     }
 
-    Messages.send(msg,
-      function(data) {
-        if (typeof data.error === 'undefined') {
-          callbackOk(data.ok);
+  /*
+  obtiene todas las oficinas en las cuales el usuario tiene asignado un rol
+  si tree=True obtiene todas las hijas también
+  */
+  function getOfficesByUserRole(userId, role, tree, callbackOk, callbackError) {
+    $wamp.call('offices.offices.getOfficesByUserRole', [userId,role,tree])
+      .then(function(res) {
+        if (res != null) {
+          callbackOk(res);
         } else {
-          callbackError(data.error);
+          callbackError('Error');
         }
-      }
-    );
-
+      },function(err) {
+        callbackError(err);
+      });
   }
 
-
+  /*
+  elimina el rol para usuario oficina
+  */
   function deleteOfficeRole(officesId, usersId, role, callbackOk, callbackError) {
     if (officesId == null || usersId == null || role == null) {
       return;
     }
-
-    var msg = {
-      id: Utils.getId(),
-      action: 'deleteOfficeRole',
-      session: Session.getSessionId(),
-      request: {
-        usersId: usersId,
-        officesId: officesId,
-        role: role
-      }
-    }
-
-    Messages.send(msg,
-      function(data) {
-        if (typeof data.error === 'undefined') {
-          callbackOk(data.ok);
+    $wamp.call('offices.offices.deleteOfficeRole', [officesId, usersId, role])
+      .then(function(res) {
+        if (res != null) {
+          callbackOk(res);
         } else {
-          callbackError(data.error);
+          callbackError('Error');
         }
-      }
-    );
-
+      },function(err) {
+        callbackError(err);
+      });
   }
 
+  /*
+    setea el rol role al usuario userId para la oficina officeId
+  */
   function addOfficeRole(officesId, usersId, role, callbackOk, callbackError) {
     if (officesId == null || usersId == null || role == null) {
       return;
     }
-
-    var msg = {
-      id: Utils.getId(),
-      action: 'addOfficeRole',
-      session: Session.getSessionId(),
-      request: {
-        usersId: usersId,
-        officesId: officesId,
-        role: role
-      }
-    }
-
-    Messages.send(msg,
-      function(data) {
-        if (typeof data.error === 'undefined') {
-          callbackOk(data.ok);
+    $wamp.call('offices.offices.addOfficeRole', [officesId, usersId, role])
+      .then(function(res) {
+        if (res != null) {
+          callbackOk(res);
         } else {
-          callbackError(data.error);
+          callbackError('Error');
         }
-      }
-    );
-
-  }
-
-  function persistOffice(office, callbackOk, callbackError) {
-    if (office == null) {
-      return;
-    }
-
-    if (office.name == null || office.name.trim() == '') {
-      return;
-    }
-
-    var msg = {
-      id: Utils.getId(),
-      action: 'persistOffice',
-      session: Session.getSessionId(),
-      request: {
-        office: {}
-      }
-    }
-
-    msg.request.office.name = office.name;
-
-    if (office.telephone != null && office.telephone.trim() != '') {
-      msg.request.office.telephone = office.telephone;
-    }
-
-    if (office.email != null && office.email.trim() != '') {
-      msg.request.office.email = office.email;
-    }
-
-    if (office.parent != null && office.parent.trim() != '') {
-      msg.request.office.parent = office.parent;
-    }
-
-    if (office.id != null) {
-      msg.request.office.id = office.id;
-    }
-
-    Messages.send(msg,
-      function(data) {
-        if (typeof data.error === 'undefined') {
-          callbackOk(data.ok);
-        } else {
-          callbackError(data.error);
-        }
+      },function(err) {
+        callbackError(err);
       });
   }
 
+  /*
+    actualiza los roles para todos los usersId en officesId
+  */
+  function persistOfficeRole(officesId, usersId, roles, oldRoles) {
+    if (officesId == null || usersId == null || roles == null || oldRoles == null) {
+      return;
+    }
+    $wamp.call('offices.offices.persistOfficeRole', [officesId, usersId, roles, oldRoles])
+      .then(function(res) {
+        if (res != null) {
+          callbackOk(res);
+        } else {
+          callbackError('Error');
+        }
+      },function(err) {
+        callbackError(err);
+      });
+  }
+
+
+  /*
+    crea una nueva oficina si no existe o sino actualiza los datos
+  */
+  function persistOffice(office, callbackOk, callbackError) {
+    if (office == null || office.name == null || office.name.trim() == '') {
+      return;
+    }
+
+    sessionId = Session.getSessionId();
+    $wamp.call('offices.offices.persistOffice', [sessionId,office])
+      .then(function(res) {
+        if (res != null) {
+          callbackOk(res);
+        } else {
+          callbackError('Error');
+        }
+      },function(err) {
+        callbackError(err);
+      });
+  }
+
+  /*
+    elimina un usuario de una oficina
+  */
   function removeUserFromOffice(userId, officeId, callbackOk,callbackError) {
     if (userId == null || officeId == null) {
         return;
     }
-
-    var msg = {
-      id: Utils.getId(),
-      action: 'removeUserFromOffice',
-      session: Session.getSessionId(),
-      request: {
-        userId: userId,
-        officeId: officeId
-      }
-    }
-
-    Messages.send(msg,
-      function(data) {
-        if (typeof data.error === 'undefined') {
-          callbackOk(data.ok);
+    $wamp.call('offices.offices.removeUserFromOffice', [userId, officeId])
+      .then(function(res) {
+        if (res != null) {
+          callbackOk(res);
         } else {
-          callbackError(data.error);
+          callbackError('Error');
         }
-    });
-
+      },function(err) {
+        callbackError(err);
+      });
   }
 
+  /*
+    agrega un usuario (userId) a una oficina (officeId)
+  */
   function addUserToOffices(userId, officeId, callbackOk,callbackError) {
     if (userId == null || officeId == null) {
         return;
     }
-
-    var msg = {
-      id: Utils.getId(),
-      action: 'addUserToOffices',
-      session: Session.getSessionId(),
-      request: {
-        userId: userId,
-        officeId: officeId
-      }
-    }
-
-    Messages.send(msg,
-      function(data) {
-        if (typeof data.error === 'undefined') {
-          callbackOk(data.ok);
+    $wamp.call('offices.offices.addUserToOffices', [userId, officeId])
+      .then(function(res) {
+        if (res != null) {
+          callbackOk(res);
         } else {
-          callbackError(data.error);
+          callbackError('Error');
         }
-    });
+      },function(err) {
+        callbackError(err);
+      });
   }
+
+  /*
+    Retorna los roles que puede asignar el usuario (userId) para las oficinas (officesId) y para los usuarios (usersId)
+    Ademas retorna los roles que ya poseen los usarios
+  */
+  function getRolesAdmin(userId, officesId, usersId, callbackOk, callbackError) {
+    if (officesId == null || usersId == null) {
+      return;
+    }
+    sessionId = Session.getSessionId();
+    $wamp.call('offices.offices.getRolesAdmin', [sessionId, userId, officesId, usersId])
+      .then(function(res) {
+        if (res != null) {
+          callbackOk(res);
+        } else {
+          callbackError('Error');
+        }
+      },function(err) {
+        callbackError(err);
+      });
+  }
+
 }

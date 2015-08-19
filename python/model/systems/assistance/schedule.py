@@ -251,3 +251,36 @@ class Schedule:
     def deleteSchedule(self,con,id):
         cur = con.cursor()
         cur.execute('delete from assistance.schedule where id = %s',(id,))
+
+    '''
+        combina los whs con los schedules
+        retorna [{schdule:{},whs:[]}]
+    '''
+    def combiner(self,schedules,whs):
+        controls = []
+
+        if schedules is None or len(schedules) == 0:
+            return controls
+
+        # ordeno los schedules y los whs por horario ascendente
+        schedules = sorted(schedules, key=lambda schedule: schedule['start'])
+        whs = sorted(whs, key=lambda wh: wh['start'])
+
+        for sched in schedules:
+            elem = {'schedule':sched,'whs':[]}
+            if len(schedules) == 1:
+                elem['whs'].extend(whs)
+                whsAppends = whs
+            else:
+                whsAppends = []
+                for wh in whs:
+                    if 'start' in wh and wh['start'] <= sched['end']:
+                        elem['whs'].append(wh)
+                        whsAppends.append(wh)
+
+                for w in whsAppends:
+                    whs.remove(w)
+
+            controls.append(elem)
+
+        return controls

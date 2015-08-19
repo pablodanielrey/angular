@@ -7,7 +7,7 @@ from model.systems.assistance.justifications.exceptions import *
 
 
 """
-    Donación de sangre
+    Justificado Por Autoridad
     no tiene límite
 """
 class AUTJustification(Justification):
@@ -16,6 +16,10 @@ class AUTJustification(Justification):
 
     def isJustification(self,id):
         return self.id == id
+
+    def _isJustifiedDay(self,date):
+        return True
+
 
     """
         retorna la cantidad de justificaciones que se tienen disponibles dentro de un período de tiempo.

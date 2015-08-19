@@ -1,6 +1,11 @@
 *{
   padding: 0px;
   margin: 0px;
+
+}
+
+body {
+  overflow-x: hidden;
 }
 
 
@@ -10,10 +15,14 @@
   display: flex;
   flex-direction: row;
   wrap: nowrap;
+
+
+
 }
 
 .principal.ng-scope {
   height: 100%;
+
 }
 
 
@@ -24,4 +33,9 @@
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
+
+}
+.systems {
+  background-color: blue;
+  width: 10%;
 }

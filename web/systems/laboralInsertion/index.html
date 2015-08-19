@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html ng-app="mainApp">
+<head>
+  <meta charset="utf-8"/>
+  <meta name='viewport' content='width=device-width'/>
+
+  <script>
+    AUTOBAHN_DEBUG = true;
+  </script>
+
+  <script src="/libs/bower_components/angularjs/angular.js"></script>
+  <script src="/libs/bower_components/angular-route/angular-route.js"></script>
+  <script src="/libs/bower_components/autobahn/autobahn.js"></script>
+  <script src="/libs/bower_components/angular-wamp/release/angular-wamp.js"></script>
+
+  <!-- esto es el estilo de font awesome para tener los iconos -->
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+
+  <script type="text/javascript" src="/config.json"></script>
+
+  <script type="text/javascript" src="/systems/laboralInsertion/index.module.js"></script>
+  <script type="text/javascript" src="/systems/laboralInsertion/index.controller.js"></script>
+  <script type="text/javascript" src="/systems/laboralInsertion/routes.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/laboralInsertion/index.css"/>
+
+  <!-- directivas -->
+  <script type="text/javascript" src="/directives/onReadFileBinaryString.js"></script>
+
+	<!-- servicios -->
+	<script type="text/javascript" src="/services/Credentials.js"></script>
+	<script type="text/javascript" src="/services/Utils.js"></script>
+	<script type="text/javascript" src="/services/Cache.js"></script>
+	<script type="text/javascript" src="/services/Session.js"></script>
+	<script type="text/javascript" src="/services/Notifications.js"></script>
+  <script type="text/javascript" src="/services/Login.js"></script>
+	<script type="text/javascript" src="/services/Profiles.js"></script>
+  <script type="text/javascript" src="/services/systems/files/Files.js"></script>
+  <script type="text/javascript" src="/services/systems/laboralInsertion/LaboralInsertion.js"></script>
+
+	<!-- modules -->
+  <script type="text/javascript" src="/systems/laboralInsertion/menu/menu.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/laboralInsertion/menu/menu.css"/>
+
+  <script type="text/javascript" src="/systems/laboralInsertion/modules/download/download.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/laboralInsertion/modules/download/download.css"/>
+
+  <script type="text/javascript" src="/systems/laboralInsertion/modules/upload/FileSaver.js"></script>
+  <script type="text/javascript" src="/systems/laboralInsertion/modules/upload/insertionData.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/laboralInsertion/modules/upload/insertionData.css"/>
+  <script type="text/javascript" src="/systems/laboralInsertion/modules/upload/languages.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/laboralInsertion/modules/upload/languages.css"/>
+  <!-- <script type="text/javascript" src="/systems/laboralInsertion/modules/upload/profileData.js"></script> -->
+  <script type="text/javascript" src="/systems/laboralInsertion/modules/upload/termsAndConditions.js"></script>
+  <script type="text/javascript" src="/systems/laboralInsertion/modules/upload/editData.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/laboralInsertion/modules/upload/editData.css"/>
+  <script type="text/javascript" src="/systems/laboralInsertion/modules/upload/degreeData.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/laboralInsertion/modules/upload/degreeData.css"/>
+  <link rel="stylesheet" type="text/css" href="/systems/laboralInsertion/modules/download/download.css"/>
+
+  <script type="text/javascript" src="/modules/messages/messages.js"></script>
+  <link rel="stylesheet" type="text/css" href="/modules/messages/messages.css"/>
+
+</head>
+<body>
+
+
+<div ng-controller="IndexCtrl" class="principal">
+
+<div class="screen" ng-class="{true:'closeMenu', false:'openMenu'}[hideMenu()]">
+      <!--
+	    <div class="header-container" ng-controller="HeaderCtrl" ng-include="'/systems/fce/modules/header/header.html'"></div>
+      -->
+
+      <div id='main'>
+        <nav ng-class="{true:'visible',false:'hidden'}[isLogged()]">
+          <div class='menu-container' ng-controller="MenuCtrl" ng-include="'/systems/laboralInsertion/menu/menu.html'">
+          </div>
+        </nav>
+
+        <article>
+          <div ng-view></div>
+        </article>
+      </div>
+    </div>
+
+    <div class='messages-container' ng-controller="MessagesCtrl" ng-include="'/modules/messages/messages.html'" ng-class="{false: 'hidden', true: 'visible'}[ isVisible() ]">
+    </div>
+
+</div>
+
+</body>
+</html>

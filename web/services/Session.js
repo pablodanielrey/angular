@@ -10,13 +10,13 @@ app.service('Session', function(Cache) {
 		Cache.setItem(session,data);
 	}
 
-	this.destroy = function(){
+	this.destroy = function() {
 		var sid = Cache.getItem(this.sessionIdentifier);
 		Cache.removeItem(sid);
 		Cache.removeItem(this.sessionIdentifier);
 	};
 
-	this.getSessionId = function(){
+	this.getSessionId = function() {
 		return Cache.getItem(this.sessionIdentifier);
 	}
 
@@ -32,7 +32,7 @@ app.service('Session', function(Cache) {
 		var data = Cache.getItem(sid);
 		return data;
 	}
-  
+
   /**
    * Obtener id de usuario de sesion
    */
@@ -49,17 +49,5 @@ app.service('Session', function(Cache) {
 		Cache.setItem(id,data);
 	}
 
-	this.isLogged = function() {
-		var sid = this.getSessionId();
-		if (sid == null) {
-			return false;
-		}
-
-		var data = Cache.getItem(sid);
-		if (data == null) {
-			return false;
-		}
-		return (data.user_id != undefined);
-	}
 
 });

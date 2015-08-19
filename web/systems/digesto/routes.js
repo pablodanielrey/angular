@@ -1,25 +1,28 @@
 angular
     .module('mainApp')
-    .config(config);
+    .config(configApp);
 
 config.$inject = ['$routeProvider'];
 
-function config($routeProvider) {
+function configApp($routeProvider) {
 
   $routeProvider
 
-    .when('/load', {
-      templateUrl: '/systems/digesto/modules/create/index.html',
-      controller: 'CreateDigestoController'
+    .when('/load/:id/operation/:operation', {
+      templateUrl: '/systems/digesto/modules/createRegulation/createRegulation.html',
+      controller: 'CreateRegulationCtrl',
     })
-
+    .when('/load/', {
+      templateUrl: '/systems/digesto/modules/createRegulation/createRegulation.html',
+      controller: 'CreateRegulationCtrl',
+    })
     .when('/search', {
-      templateUrl: '/systems/digesto/modules/search/index.html',
-      controller: 'SearchDigestoController',
+      templateUrl: '/systems/digesto/modules/searchRegulation/searchRegulation.html',
+      controller: 'SearchRegulationCtrl',
     })
 
     .otherwise({
-        redirectTo: '/'
+        redirectTo: '/load'
     });
 
 }

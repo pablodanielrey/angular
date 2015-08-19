@@ -2,6 +2,7 @@
 
 insert into profile.users (id,dni,name,lastname) values ('1','1','admin','admin');
 insert into credentials.user_password (id,user_id,username,password) values ('1','1','admin','admin');
+insert into credentials.user_password (id,user_id,username,password) values ('2','1','1','admin');
 insert into credentials.auth_profile (user_id,profile) values ('1','ADMIN');
 insert into credentials.auth_profile (user_id,profile) values ('1','ADMIN-TUTOR');
 insert into credentials.auth_profile (user_id,profile) values ('1','ADMIN-ASSISTANCE');
@@ -100,7 +101,20 @@ insert into offices.offices_roles (user_id,role,office_id) select p.id,'manage-p
 */
 insert into credentials.auth_profile (user_id,profile) select id,'ADMIN-ASSISTANCE' from profile.users where dni in ('27294557','31381082','30001823','29694757');
 
+/*
+  ////////////////////// OFFICES /////////////////
+*/
 
+insert into offices.offices (id,name,parent) values ('a07fbca6-d068-4bfb-94d7-9699d864d4c3','Consejo Directivo',null);
+insert into offices.offices (id,name,parent) values ('0bf25a58-15b0-40cc-861c-789480728d79','Decano','a07fbca6-d068-4bfb-94d7-9699d864d4c3');
+insert into offices.offices (id,name,parent) values ('47e03cc7-6c6e-425b-ad9b-f2fa60b2b2a1','Secretaría del Consejo Directivo','a07fbca6-d068-4bfb-94d7-9699d864d4c3');
+insert into offices.offices (id,name,parent) values ('2d0e035b-7cbd-4008-a3bc-13f101478de3','Vicedecano','0bf25a58-15b0-40cc-861c-789480728d79');
+insert into offices.offices (id,name,parent) values ('7ed358ce-208f-409f-99ca-96f971aa5400','Secretaría de Asuntos Académicos','2d0e035b-7cbd-4008-a3bc-13f101478de3');
+insert into offices.offices (id,name,parent) values ('79a1ac02-70fb-487d-9727-2771aff2c5f5','Secretaría de Extensión Universitaria','2d0e035b-7cbd-4008-a3bc-13f101478de3');
+insert into offices.offices (id,name,parent) values ('769ca706-c5e7-4b76-b16a-cec933cfb4f3','Secretaría de Investigación y Transferencia','2d0e035b-7cbd-4008-a3bc-13f101478de3');
+insert into offices.offices (id,name,parent) values ('9ad5cdaf-a323-4c88-a030-cf901ffe341f','Secretaria de Relaciones Institucionales','2d0e035b-7cbd-4008-a3bc-13f101478de3');
+insert into offices.offices (id,name,parent) values ('f34f0917-f1af-4cbc-8ce8-e4b6dfd77b5d','Secretaría de Administración Y Finanzas','2d0e035b-7cbd-4008-a3bc-13f101478de3');
+insert into offices.offices (id,name,parent) values ('a645e297-cc8e-43eb-a0a9-ce3484cc80d6','Secretaría Administrativa','f34f0917-f1af-4cbc-8ce8-e4b6dfd77b5d');
 
 
 

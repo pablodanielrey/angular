@@ -1,13 +1,18 @@
-var app = angular.module('mainApp');
+angular
+  .module('mainApp')
+  .service('Firmware',Firmware);
 
-app.service('Firmware', ['Utils','Messages','Session','$rootScope',
+Firmware.inject = ['$rootScope','$wamp'];
 
-  function(Utils,Messages,Session,$rootScope) {
+function Firmware($rootScope, $wamp) {
 
-    this.enroll = function(dni, callbackOk, callbackError) {
+
+    /*
+    this.enroll = function(sid, dni, callbackOk, callbackError) {
       var msg = {
         id: Utils.getId(),
         action: 'enroll',
+        sid: sid,
         request: {
           dni: dni
         }
@@ -23,15 +28,67 @@ app.service('Firmware', ['Utils','Messages','Session','$rootScope',
       });
     }
 
-    this.identify = function(code, password, callbackOk, callbackError) {
-      callbackOk('admin');
-      var data = {};
-      data.user = {name:'Emanuel',lastname:'Pais',dni:code};
-      data.profile = 'admin';
-      data.date = new Date();
-      $rootScope.$broadcast('identifiedEvent',data);
+    this.login = function(code, password, callbackOk, callbackError) {
+      var msg = {
+        id: Utils.getId(),
+        action: 'login',
+        request: {
+          dni: code,
+          password: password
+        }
+      }
+
+      Messages.send(msg,
+        function(data) {
+          if (typeof data.error === 'undefined') {
+              callbackOk(data);
+          } else {
+            callbackError(data.error)
+          }
+      });
+    }
+    */
+
+    this.enroll = function(dni, callbackOk, callbackError) {
+      $wamp.call('assistance.firmware.enroll', [dni])
+      .then(function(userId) {
+          if (userId != null) {
+            callbackOk(userId);
+          } else {
+            callbackError('Error!!');
+          }
+
+        }
+      ),function(err) {
+        callbackError(err);
+      };
     }
 
 
-  }
-]);
+    this.login = function(dni, password, callbackOk, callbackError) {
+      $wamp.call('assistance.firmware.login', [dni,password])
+        .then(function(res) {
+          console.log(res);
+          callbackOk(res);
+        }
+        ),function(err) {
+          console.log(err);
+          callbackError(err);
+        };
+    }
+
+
+    this.onEnrollEvents = function(needFingerEventHandler,msgEventHandler,templateEnrolledEventHandler, errorEventHandler,fatalErrorEventHandler) {
+      $wamp.subscribe('assistance.firmware.enroll_need_finger',needFingerEventHandler);
+      $wamp.subscribe('assistance.firmware.enroll_show_message',msgEventHandler);
+      $wamp.subscribe('assistance.firmware.enroll_template_enrolled',templateEnrolledEventHandler);
+      $wamp.subscribe('assistance.firmware.enroll_error',errorEventHandler);
+      $wamp.subscribe('assistance.firmware.enroll_fatal_error',fatalErrorEventHandler);
+    }
+
+
+    this.onIdentified = function(eventManager) {
+      $wamp.subscribe('assistance.firmware.identify',eventManager);
+    }
+
+};

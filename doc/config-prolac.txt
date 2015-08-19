@@ -1,0 +1,271 @@
+
+servidor de prolac.
+
+#loguearse
+ssh -p 24 root@prolac.gtinfo.com.ar
+
+#todo el sistema esta instalado dentro de /home/glassfish
+#usando el usuario glassfish
+
+cd /home/glassfish
+
+#se baja el proyecto y se lo deja en el branch correcto
+git clone https://www.github.com/pablodanielrey/angular.github
+cd angular
+git checkout prod-prolac-wamp
+
+#se arma la configuracion 
+cp server-config.cfg /home/glassfish/
+nano /home/glassfish/server-config.cfg
+
+
+#se instala crossbar.io para ser de router wamp para el sistema dentro del servidor.
+
+sudo apt-get install build-essential libssl-dev libffi-dev libreadline-dev libbz2-dev libsqlite3-dev libncurses5-dev
+
+# me muevo adentro del environment del crossbar.io
+
+cd /angular/environment
+
+# descargo una distribución portable de pypy
+wget https://bitbucket.org/squeaky/portable-pypy/downloads/pypy-2.6-linux_x86_64-portable.tar.bz2
+tar xvjf pypy-2.6-linux_x86_64-portable.tar.bz2
+
+# instalo el pip dentro de esa pypy
+wget https://bootstrap.pypa.io/get-pip.py
+./pypy-2.6-linux_x86_64-portable/bin/pypy get-pip.py
+
+# instalo usando pip el crossbar.io
+./pypy-2.6-linux_x86_64-portable/bin/pip install crossbar[tls,msgpack,manhole,system]
+
+# puedo cheqeuar la version de crossbar instalada
+./pypy-2.6-linux_x86_64-portable/bin/crossbar version
+
+# para crear un crossbar sin app ni nada se puede hacer (dentro de github ya se tiene un nodo configurado dentro de node1) :
+./pypy-2.6-linux_x86_64-portable/bin/crossbar init
+
+
+# ahora hay que dejar el crossbar ejecutandose para recibir conexiones de los clientes.
+cd node1
+
+#cheqeuo la config del crossbar. mas que nada la realm y el puerto y si se quiere los datos de autentificacion
+nano .crossbar/config.json
+
+# ejecuto el crossbar (se puede dejar dentro de un screen)
+../pypy-2.6-linux_x86_64-portable/bin/crossbar start
+
+
+
+
+
+
+###########################
+#########
+########   EJECUTAR EL SISTEMA
+#########
+
+ssh -p 24 root@prolac.gtinfo.com.ar
+
+cd /home/glassfish
+
+#ejecuto el crossbar dentro de un screen. puerto 8000
+screen -S agti-crossbar
+su glassfish
+cd angular/environment/node1
+../pypy-2.6-linux_x86_64-portable/bin/crossbar start
+
+#ejecuto el servidor dentro de un screen. puerto 8001
+screen -S agti-server
+su glassfish
+cd angular/server
+python3 Main.py
+
+#ejecuto el wampFirmware dentro de un screen
+screen -S agti-server2
+su glassfish
+cd angular/server
+python3 mainFirmware.py
+
+
+
+###ANTES!!! debo acomodar por única vez el serializer de wamp que tiene autobahn para que serialice ok las fechas.
+# el problema de la fecha se soluciona simplemente configurando un class encoder en json.
+# se debe editar el archivo serializer.py de autobahn.
+# ej:
+
+nano /usr/local/lib/python3.4/dist-packages/autobahn/wamp/serializer.py
+
+y dejar para que la parte de importación del json sea algo parecido a esto :
+
+
+
+..... codigo de importación de ujson .....
+
+except ImportError:
+# fallback to stdlib implementation
+##
+  import json
+  import datetime
+
+  class DateTimeEncoder(json.JSONEncoder):
+    def default(self, obj):
+      if isinstance(obj, datetime.datetime):
+        return obj.isoformat()
+
+      if isinstance(obj, datetime.date):
+        return obj.isoformat()
+
+      return json.JSONEncoder.default(self, obj)
+
+  _json = json
+
+  _loads = json.loads
+
+  def _dumps(obj):
+    return json.dumps(obj, separators=(',', ':'), ensure_ascii=False, cls=DateTimeEncoder)
+
+..... mas codigo de importacion de mpack ...
+
+
+
+
+
+
+
+
+#####################
+##### INSTALACION EN CUBIE BOARD
+#####
+
+#no existe una versión portable del python para el cubie como en la version de arriba pyppy.
+# por lo que crossbar.io y todo el sistema debe estar en las 2 versiones de python.
+# crossbario usa twsited para la comunicación por ahora.
+# twsited esta solo para python2
+
+sudo apt-get install python2.7 python-pip
+sudo pip install twisted
+sudo pip install autobahn[twisted]
+sudo pip install crossbar[tls,msgpack,manhole,system]
+
+
+# ahora paso a configurar el software del angular
+# dentro de angular/web/ edito la configuracion de la parte de conexión web hacia el servidor del firmware (localhost)
+# angular/web/config-firmware.json
+
+config_firmware = {
+  url: "ws://localhost:8000/ws",
+  realm: "assistance",
+  host: "127.0.0.1",
+  port: "8001",
+  ssl_host: "127.0.0.1",
+  ssl_port: "8002"
+}
+
+
+# tambien configuro el servidor del firmware que va en el cubie.
+# $HOME/firmware-config.cfg
+
+[database]
+host = 127.0.0.1
+database = dcsys
+user = dcsys
+password = dcsys
+
+[device]
+id = 82f31a0c-ccfd-4c72-9045-b647c86764d8
+name = Name
+enabled = True
+timezone = America/Buenos_Aires
+
+
+[reader]
+enable = True
+port = /dev/ttyS1
+algorithm = Camabio-SM20
+
+[firmware]
+url = ws://localhost:8000/ws
+realm = assistance
+debug = True
+port = 8000
+ip = 0.0.0.0
+
+[server]
+url = ws://10.0.23.1:8000/ws
+realm = assistance
+debug = True
+port = 8000
+ip = 10.0.23.1
+password = 3861d92b-80cb-490a-83c2-550a6da2f509
+
+[session]
+ID = id
+USER_ID = user_id
+
+
+###TAMBIEN ANTES!!! debo acomodar por única vez el serializer de wamp que tiene autobahn para que serialice ok las fechas.
+# el problema de la fecha se soluciona simplemente configurando un class encoder en json.
+# se debe editar el archivo serializer.py de autobahn.
+# ej:
+
+nano /usr/local/lib/python3.4/dist-packages/autobahn/wamp/serializer.py
+
+y dejar para que la parte de importación del json sea algo parecido a esto :
+
+
+
+..... codigo de importación de ujson .....
+
+except ImportError:
+# fallback to stdlib implementation
+##
+  import json
+  import datetime
+
+  class DateTimeEncoder(json.JSONEncoder):
+    def default(self, obj):
+      if isinstance(obj, datetime.datetime):
+        return obj.isoformat()
+
+      if isinstance(obj, datetime.date):
+        return obj.isoformat()
+
+      return json.JSONEncoder.default(self, obj)
+
+  _json = json
+
+  _loads = json.loads
+
+  def _dumps(obj):
+    return json.dumps(obj, separators=(',', ':'), ensure_ascii=False, cls=DateTimeEncoder)
+
+..... mas codigo de importacion de mpack ...
+
+
+
+-----
+
+# ahora para ejecutar el script en el cubie hay que levantar 4 servicios.
+# 1 - crossbar ------ router wamp que atiende las comunicaciones internas al firmware y la web
+# 2 - mainFirmware -- acceso wamp al firmware
+# 3 - mainSync ------ sincronizador de logs y usuarios desde el reloj hacia el servidor principal mediante wamp
+# 4 - main ---------- loop principal del firmware que ejecuta la identificación
+
+screen -S agti-server
+cd /home/cubie/angular/environment/node1
+crossbar start
+
+screen -S agti-server2
+cd /home/cubie/angular/firmware/camabio
+python3 mainFirmware.py
+
+screen -S agti-server3
+cd /home/cubie/angular/firmware/camabio
+python3 main.py
+
+screen -S agti-server4
+cd /home/cubie/angular/firmware/camabio
+python3 mainSync.py
+
+
+# posteriormente se ejecutaran todos mediante un solo script

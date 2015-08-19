@@ -78,6 +78,65 @@ app.service('Assistance', ['Utils','Messages','Session',
 					});
 		};
 
+		this.getFailsByFilter = function (users, offices, start, end, filter, callbackOk, callbackError) {
+			var msg = {
+				id: Utils.getId(),
+				action: 'getFailsByFilter',
+				session: Session.getSessionId(),
+				request: {
+					start: start,
+					end: end
+				}
+			}
+
+			if (users != null && users.length > 0) {
+				var usersIds = [];
+				for (var i = 0; i < users.length; i++) {
+					usersIds.push(users[i].id);
+				}
+				msg.request.users = usersIds;
+			}
+
+			if (offices != null && offices.length > 0) {
+				var officesIds = [];
+				for (var i = 0; i < offices.length; i++) {
+					officesIds.push(offices[i].id);
+				}
+				msg.request.offices = officesIds;
+			}
+
+			// chequeo los filtros
+			if (filter != null) {
+				msg.request.filter = {};
+
+				if (filter.failTypeSelected != null) {
+					msg.request.filter.failType = filter.failTypeSelected.name;
+				}
+
+				if (filter.periodicitySelected != null) {
+					msg.request.filter.periodicity = filter.periodicitySelected;
+					if (filter.hoursOperator != null) {
+						msg.request.filter.hoursOperator = filter.hoursOperator.value;
+						msg.request.filter.hours = filter.hours;
+						msg.request.filter.minutes = filter.minutes;
+					}
+				}
+
+				if (filter.count != null) {
+					msg.request.filter.count = filter.count;
+				}
+			}
+
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data);
+					} else {
+						callbackError(data.error);
+					}
+			});
+		}
+
 		this.getAssistanceStatusByDate = function(userId, date, callbackOk, callbackError) {
 			var msg = {
 				id: Utils.getId(),
