@@ -1,30 +1,25 @@
 /****************** Estilos comunes ******************************/
 /****************************************************************/
-
-*{
-  margin: 0px;
-  padding: 0px;
-}
-
 .createRegulationContainer {
   height:100%;
   width:100%;
   position:absolute;
   overflow:hidden;
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  margin: 0px;
+  padding: 0px;
 }
 
-.contentScreens {
+.live {
+
+}
+
+.live .contentScreens {
   height:100%;
   width:100%;
-
 }
 
-.container {
-
-}
-
-.content {
+.live .content {
   background-color:white;
   -webkit-box-shadow: 1px 1px 5px #5c5f69;
   -moz-box-shadow: 5px 5px 5px #5c5f69;
@@ -34,12 +29,10 @@
   padding: 10px;
   color: #5c5f69;
   margin-left: 15px;
-
   margin-top: 15px;
-
 }
 
-.buttonFilters{
+.live .buttonFilters{
   background-color: white;
   padding: 10px;
   position: absolute;
@@ -56,7 +49,7 @@
   -moz-border-bottom-left-radius:4px;
   cursor: pointer;
 }
-.buttonFilters:hover{
+.live .buttonFilters:hover{
   background-color: #e43e46;
   padding: 10px;
   position: absolute;
@@ -75,8 +68,7 @@
   cursor: pointer;
 }
 
-
-.contentFilters {
+.live .contentFilters {
   color: #5c5f69;
   width: 100%;
   position: absolute;
@@ -84,20 +76,14 @@
   height: 100%;
   background-color: rgba(0,0,0,0.8);
   z-index: 998;
-
-  transform: translate3d(0,0,0);
-  transition: all 0.4s ease-in-out;
-
 }
-.contentFilters.hidden {
+
+.live .contentFilters.hidden {
   position: absolute;
-  transform: translate3d(0,-100%,0);
-  transition: all 0.4s ease-in-out;
   opacity:0.0;
-
 }
 
-.subContentFilters {
+.live .subContentFilters {
   position: absolute;
   background-color:white;
   -webkit-box-shadow: 1px 1px 5px #5c5f69;
@@ -108,26 +94,19 @@
   padding: 10px;
   color: #5c5f69;
   margin:5% 15% auto;
-
-
-
 }
 
-
-
-
-
-.subContent {
+.live .subContent {
   padding: 10px;
-background-color: #eeeeee;
-border: 1px solid #ECECEC;
+  background-color: #eeeeee;
+  border: 1px solid #ECECEC;
 }
 
-h1 {
+.live h1 {
   font-size: 1em;
   margin-bottom: 1em;
 }
 
-button{
+.live button{
   cursor: pointer;
 }

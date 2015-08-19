@@ -1,23 +1,35 @@
 /****************** Estilos comunes ******************************/
 /****************************************************************/
 
-*{
+.rec {
+  height:100%;
+  width:100%;
+  position:absolute;
+  overflow:hidden;
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   margin: 0px;
   padding: 0px;
 }
 
+.rec .imgFilters {
+  background: url(../../img/filtros.png) no-repeat;
+  height: 100%;
+  width:50%;
+  margin: 0 auto;
+}
 
-.inputSearchContent {
+.rec .contentRec {
+  padding: 20px;
+}
+
+.rec .inputSearchContent {
   padding: 10px;
   margin-bottom: 20px;
   background-color: #5c5f69;
   width: 50%;
-
-
 }
 
-.inputSearch {
-
+.rec .inputSearch {
   margin-left: 20px;
   width: 250%;
   padding: 3px;
@@ -25,19 +37,7 @@
   border:none
 }
 
-.rec {
-  height:100%;
-  width:100%;
-  position:absolute;
-  overflow:hidden;
-  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-}
-
-.contentRec {
-  padding: 20px;
-}
-
-.menuRec {
+.rec .menuRec {
   background-color:white;
   -webkit-box-shadow: 1px 1px 5px #5c5f69;
   -moz-box-shadow: 5px 5px 5px #5c5f69;
@@ -49,19 +49,17 @@
   margin-bottom: 20px;
 }
 
-.contentItem {
+.rec .contentItem {
   border-radius:2px;
   -webkit-border-radius:2px;
   -moz-border-radius:2px;
   border:1px solid #ECECEC;
-
   padding:5px;
-
   color:#5c5f69;
   background-color:#eeeeee;
 }
 
-.contentItem input {
+.rec .contentItem input {
   border: none;
   padding: 2px;
   margin: 2px;
@@ -69,35 +67,25 @@
   font-weight: bold;
 }
 
-.menuRec button {
+.rec .menuRec button {
   border: none;
   padding:10px;
   background-color: #0066A6;
   color: white;
 }
 
-.menuRec button:hover {
+.rec .menuRec button:hover {
   border: none;
   padding:10px;
   background-color: #275276;
   color: white;
 }
 
-.imgFilters {
-  background: url(../../img/filtros.png) no-repeat;
-  height: 100%;
-  width:50%;
-  margin: 0 auto;
-
-
-}
-
-
 /***********************************************************
 *********** CONTENEDOR RESULTADOS DE BUSQUEDA **************
 ***********************************************************/
 
-.contentRecordings {
+.rec .contentRecordings {
   position: absolute;
   z-index: 998;
   background-color:white;
@@ -110,18 +98,11 @@
   margin-left: 20px;
   width: 81%;
   height: 50%;
-  transform: translate3d(0,-195%,0);
-  transition: all 0.4s ease-in-out;
-  -webkit-transition: all 500ms cubic-bezier(0.390, 0.575, 0.265, 1); /* older webkit */
--webkit-transition: all 500ms cubic-bezier(0.390, 0.575, 0.265, 1.185);
-   -moz-transition: all 500ms cubic-bezier(0.390, 0.575, 0.265, 1.185);
-     -o-transition: all 500ms cubic-bezier(0.390, 0.575, 0.265, 1.185);
-        transition: all 500ms cubic-bezier(0.390, 0.575, 0.265, 1.185); /* custom */
+
 }
-.contentRecordings.hidden {
+
+.rec .contentRecordings.hidden {
   position: absolute;
-  transform: translate3d(0,0,0);
-  transition: all 0.4s ease-in-out;
   background-color:white;
   -webkit-box-shadow: 1px 1px 5px #5c5f69;
   -moz-box-shadow: 5px 5px 5px #5c5f69;
@@ -131,10 +112,9 @@
   padding: 10px;
   margin-left: 20px;
   opacity:0.0;
-
 }
 
-.menuRecording {
+.rec .menuRecording {
   padding: 5px;
   margin: 0 5px 0 5px;
   background-color: #eeeeee;
@@ -142,41 +122,41 @@
   border-bottom: 1px solid #5c5f69;
 }
 
-.resultsRecording {
+.rec .resultsRecording {
   overflow-y: auto;
 }
 
-.itemsRecording {
+.rec .itemsRecording {
   padding: 2px 5px 2px 5px;
   margin: 0 5px 0 5px;
 }
 
-.itemsRecording:nth-child(odd) {
+.rec .itemsRecording:nth-child(odd) {
   background: white;
 }
 
-.itemsRecording:nth-child(even) {
+.rec .itemsRecording:nth-child(even) {
   background: #f7f7f7;
 }
 
 
-.tam0 {
+.rec .tam0 {
   width: 50px;
 }
 
-.tam1 {
+.rec .tam1 {
   width: 150px;
 }
 
-.tam2 {
+.rec .tam2 {
   width: 200px;
 }
 
-.fa-film, .fa-download {
+.rec .fa-film, .fa-download {
   margin-bottom: 0;
 }
 
-.btnVer{
+.rec .btnVer{
   border: none;
   border-radius: 2px;
   padding: 3px 10px 3px 10px;
@@ -184,11 +164,12 @@
   color: white;
   margin-right: 10px;
 }
-.btnVer:hover {
+
+.rec .btnVer:hover {
   background-color: #419CD6;
 }
 
-.btnDescargar {
+.rec .btnDescargar {
   border:none;
   border-radius: 2px;
   padding: 3px 10px 3px 10px;
@@ -196,7 +177,7 @@
   color: white;
 }
 
-.btnDescargar:hover {
+.rec .btnDescargar:hover {
   background-color: #3CB8A4;
 }
 
@@ -214,7 +195,6 @@
   z-index: 999;
   top:0px;
   padding: 20px;
-
 }
 
 .rec .play {
@@ -227,7 +207,6 @@
   padding: 20px;
   width: 80%;
   margin-bottom: 20px;
-
 }
 
 .rec .video {
@@ -237,7 +216,6 @@
 .rec .contentVideoList {
   background-color: #eeeeee;
   width: 20%;
-
 }
 
 .rec .backList {
@@ -269,7 +247,6 @@
   height: 470px;
   overflow-y: auto;
   padding: 5px;
-
 }
 
 .rec .videoItems {
@@ -280,7 +257,6 @@
   background-color: #0066A6 !Important;
   cursor: pointer;
   color: white;
-
 }
 
 .rec .videoItems:nth-child(odd) {
@@ -293,7 +269,6 @@
 
 .rec .footerPlay {
   padding: 5px 15px 5px 5px;
-
 }
 
 .rec .btnFooter {

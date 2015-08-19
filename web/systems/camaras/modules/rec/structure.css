@@ -1,4 +1,4 @@
-.menuRec {
+.rec .menuRec {
   display:flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
@@ -6,8 +6,6 @@
   -webkit-flex-direction:row; /* Safari */
   -moz-flex-direction:row; /* mozilla */
   flex-wrap: wrap;
-
-
   align-items: baseline;
   -webkit-align-items:baseline; /* Safari */
   -moz-align-items:baseline; /* mozilla */
@@ -21,7 +19,7 @@
 *********** CONTENEDOR RESULTADOS DE BUSQUEDA **************
 ***********************************************************/
 
-.contentRecordings {
+.rec .contentRecordings {
   display:flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
@@ -30,7 +28,7 @@
   -moz-flex-direction:column; /* mozilla */
 }
 
-.menuRecording {
+.rec .menuRecording {
   display:flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
@@ -43,7 +41,7 @@
   -moz-align-items:baseline; /* mozilla */
 }
 
-.itemsRecording {
+.rec .itemsRecording {
   display:flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
@@ -56,7 +54,7 @@
   -moz-align-items:baseline; /* mozilla */
 }
 
-.btnsItems {
+.rec .btnsItems {
   display:flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
@@ -66,10 +64,9 @@
   align-items: baseline;
   -webkit-align-items:baseline; /* Safari */
   -moz-align-items:baseline; /* mozilla */
-
 }
 
-.play {
+.rec .play {
   display:flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */

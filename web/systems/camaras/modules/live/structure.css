@@ -1,22 +1,4 @@
-
-
-.contentFilters {
-  display: flex;
-  display: -webkit-flex; /* Safari */
-  display: -moz-flex; /* mozilla */
-  flex-direction:row;
-  -webkit-flex-direction:row; /* Safari */
-  -moz-flex-direction:row; /* mozilla */
-  align-items: baseline;
-  -webkit-align-items:baseline; /* Safari */
-  -moz-align-items:baseline; /* mozilla */
-  justify-content: space-between;
-  -webkit-justify-content: space-between;
-  -moz-justify-content: space-between;
-
-}
-
-.subContentFilters {
+.live .contentFilters {
   display: flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
@@ -31,7 +13,22 @@
   -moz-justify-content: space-between;
 }
 
-.contentCameras {
+.live .subContentFilters {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: baseline;
+  -webkit-align-items:baseline; /* Safari */
+  -moz-align-items:baseline; /* mozilla */
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+}
+
+.live .contentCameras {
   display: flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */

@@ -1,4 +1,4 @@
-.closeReproductive {
+.rec .closeReproductive {
   transform: translate3d(10px,10px,0);
   /*transition: all 0.4s ease-in-out;*/
   -webkit-transition: all 800ms cubic-bezier(0.270, 0, 0.250, 1); /* older webkit */
@@ -8,7 +8,7 @@
   transition: all 800ms cubic-bezier(0.270, -0.075, 0.250, 1.355); /* custom */
 }
 
-.openReproductive {
+.rec .openReproductive {
   transform: translate3d(10px,350px,0);
   -webkit-transition: all 500ms cubic-bezier(0.440, 0.890, 0.950, 0.970);
      -moz-transition: all 500ms cubic-bezier(0.440, 0.890, 0.950, 0.970);
@@ -16,4 +16,38 @@
           transition: all 500ms cubic-bezier(0.440, 0.890, 0.950, 0.970); /* custom */
 
 
+}
+
+.rec .contentRecordings {
+  transform: translate3d(0,-195%,0);
+  transition: all 0.4s ease-in-out;
+  -webkit-transition: all 500ms cubic-bezier(0.390, 0.575, 0.265, 1); /* older webkit */
+  -webkit-transition: all 500ms cubic-bezier(0.390, 0.575, 0.265, 1.185);
+  -moz-transition: all 500ms cubic-bezier(0.390, 0.575, 0.265, 1.185);
+  -o-transition: all 500ms cubic-bezier(0.390, 0.575, 0.265, 1.185);
+  transition: all 500ms cubic-bezier(0.390, 0.575, 0.265, 1.185); /* custom */
+}
+
+.rec .contentRecordings.hidden {
+  transform: translate3d(0,0,0);
+  transition: all 0.4s ease-in-out;
+}
+
+
+.rec.reproductor .contentPlay {
+  transform: translate3d(0px,0px,0);
+  /*transition: all 0.4s ease-in-out;*/
+  -webkit-transition: all 800ms cubic-bezier(0.270, 0, 0.250, 1); /* older webkit */
+  -webkit-transition: all 800ms cubic-bezier(0.270, -0.075, 0.250, 1.355);
+  -moz-transition: all 800ms cubic-bezier(0.270, -0.075, 0.250, 1.355);
+  -o-transition: all 800ms cubic-bezier(0.270, -0.075, 0.250, 1.355);
+  transition: all 800ms cubic-bezier(0.270, -0.075, 0.250, 1.355); /* custom */
+}
+
+.rec .contentPlay {
+  transform: translate3d(10px,100%,0);
+  -webkit-transition: all 500ms cubic-bezier(0.440, 0.890, 0.950, 0.970);
+  -moz-transition: all 500ms cubic-bezier(0.440, 0.890, 0.950, 0.970);
+  -o-transition: all 500ms cubic-bezier(0.440, 0.890, 0.950, 0.970);
+  transition: all 500ms cubic-bezier(0.440, 0.890, 0.950, 0.970); /* custom */
 }
