@@ -25,6 +25,7 @@ class OfficesWamp(ApplicationSession):
     def onJoin(self, details):
         logging.debug('registering methods')
         yield from self.register(self.getOffices_async, 'offices.offices.getOffices')
+        yield from self.register(self.findOffices_async, 'offices.offices.findOffices')
         yield from self.register(self.getOfficesByUser_async, 'offices.offices.getOfficesByUser')
         yield from self.register(self.getOfficeUsers_async, 'offices.offices.getOfficesUsers')
         yield from self.register(self.getUserInOfficesByRole_async, 'offices.offices.getUserInOfficesByRole')
@@ -336,4 +337,18 @@ class OfficesWamp(ApplicationSession):
     def getRolesAdmin_async(self, sessionId, userId, officesId, usersId):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.getRolesAdmin, sessionId, userId, officesId, usersId)
+        return r
+
+
+    def findOffices(self, ids):
+        con = self._getDatabase()
+        try:
+            return self.offices.findOffices(con,ids)
+        finally:
+            con.close()
+
+    @coroutine
+    def findOffices_async(self, ids):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.findOffices, ids)
         return r

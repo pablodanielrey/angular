@@ -27,6 +27,8 @@ function Office($rootScope, $wamp, Session) {
   services.deleteOfficeRole = deleteOfficeRole;
 
 
+  // busca las oficinas que se pasan como parametro
+  services.findOffices = findOffices;
 
 
   // -----------------------------------------------------------
@@ -76,6 +78,30 @@ function Office($rootScope, $wamp, Session) {
       callbackError(err);
     });
   }
+
+
+    /*
+      obtiene todas las oficinas
+      res = [{
+              name:'',
+              parent:'' -- id de la oficina padre,
+              id:'',
+              email:'',
+              telephone:''
+            }]
+    */
+    function findOffices(ids,callbackOk,callbackError) {
+      $wamp.call('offices.offices.findOffices', [ids])
+      .then(function(res) {        
+        if (res != null) {
+          callbackOk(res);
+        } else {
+          callbackError('Error');
+        }
+      },function(err) {
+        callbackError(err);
+      });
+    }
 
   /*
     obtiene las oficinas que puede ver el usuario
