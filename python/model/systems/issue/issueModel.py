@@ -48,12 +48,6 @@ class IssueModel:
         return events
 
 
-    def insert(self,con,issue):
-        '''
-            es igual que el de abajo pero con los chequeos
-        '''
-        return 'ok'
-
     '''
      ' Insertar datos, se insertan los datos del request y el estado
      '''

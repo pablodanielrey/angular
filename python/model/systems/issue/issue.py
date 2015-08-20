@@ -1,256 +1,200 @@
 # -*- coding: utf-8 -*-
-import uuid
-import pytz
+import uuid, datetime,psycopg2,inject
+from model.systems.offices.offices import Offices
 from model.systems.assistance.date import Date
 
 class Issue:
 
+    date = inject.attr(Date)
+    offices = inject.attr(Offices)
+
+    # -----------------------------------------------------------------------------------
+    # -------------------------- ESTADO DEL PEDIDO --------------------------------------
+    # -----------------------------------------------------------------------------------
+    def _convertStateToDict(self,state):
+        return {'created':state[0],'state':state[1],'creator':state[2]}
 
     '''
-     ' Obtener los hijos de un issue en base a su id
-     '''
-    def getChildsId(self, con, id):
-        cur = con.cursor()
-        cur.execute('''
-          SELECT r.id
-          FROM issues.request AS r
-          WHERE r.related_request_id = %s
-          ORDER BY r.created ASC;
-        ''',(id,))
-        
-        ids = []
-        for row in cur: 
-            ids.append(issue[0])
-           
-        return ids
-        
-        
+        Obtiene el ultimo estado del pedido
     '''
-     ' Eliminar los estados de un issue en base a su id
-     '''
-    def deleteStatesFromIssue(self, con, id):
-        cur = con.cursor()
-        cur.execute('''
-          DELETE FROM issues.state
-          WHERE request_id = %s
-        ''',(id,))       
-        
+    def getState(self,con,issue_id):
+        cur = con.cursor
+        cur.execute('select created,state,user_id from issues.request where request_id = %s order by created desc limit 1',(issue_id,))
+        if cur.rowcount <= 0:
+            return None
+        return self._convertStateToDict(cur.fetchone())
+
     '''
-     ' Eliminar un determinado issue, para poder ser eliminado no debe estar asociado a ningun estado
-     ''' 
-    def deleteIssue(self, con, id):
-        cur = con.cursor()
-        cur.execute('''
-          DELETE FROM issues.request
-          WHERE id = %s
-        ''',(id,)) 
-    
-    
+        Crea un nuevo estado, por defecto lo pone como ...
     '''
-     ' Insertar issue
-     '''
-    def insertIssue(self, con, id, request, officeId, requestorId, created, priority, visibility, relatedRequestId):
-        cur = con.cursor() 
+    def updateState(self,con,issue_id,creator_id,created,state='PENDING'):
+        if issue_id is None or creator_id is None:
+            return
+
+        cur = con.cursor()
+
+        if created is None:
+            created = self.date.now()
+
+        createdUtc = self.date.awareUtc(created)
+        params = (state,cratedUtc,creator_id,issue_id)
+
         cur.execute('set timezone to %s',('UTC',))
-        cur.execute("""
-            INSERT INTO issues.request (id, request, office_id, requestor_id, created, priority, visibility, related_request_id)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s);
-        """,(id, request, officeId, requestorId, created, priority, visibility, relatedRequestId))
-        
+        cur.execute('insert into (state,created,user_id,request_id) values(%s,%s,%s,%s)',params)
+
+    # -----------------------------------------------------------------------------------
+    # --------------------------------- PEDIDO ------------------------------------------
+    # -----------------------------------------------------------------------------------
+
+    def _convertToDict(self,issue,state):
+        return {'id':issue[0],'created':issue[1],
+                'request':issue[2],'creator':issue[3],
+                'office_id':issue[4],'parent_id':issue[5],
+                'assigned_id':issue[6],'priority':issue[7],
+                'visibility':issue[8],'state':state}
+
+
+    def _getParamsPersistIssue(self, issue, id, userId):
+        return   (issue['created'],
+                  issue['request'] if 'request' in issue and issue['request'] is not None else '',
+                  userId,
+                  issue['office_id'],
+                  issue['parent_id'] if 'parent_id' in issue else None,
+                  issue['assigned_id'] if 'assigned_id' in issue else None,
+                  issue['priority'] if 'priority' in issue and issue['priority'] is not None else 0,
+                  issue['visibility'] if 'visibility' in issue and issue['visibility'] is not None else 'AUTHENTICATED',
+                  id
+                 )
+
     '''
-     ' Insertar estado de un determinado issue
-     '''
-    def insertState(self, con, requestId, requestorId, created, state):        
-        cur = con.cursor() 
+        Crea un nuevo issue
+    '''
+    def create(self,con,issue,userId):
+        if issue is None or userId is None:
+            return None
+
+        '''
+            chequeo precondiciones
+        '''
+        if 'office_id' not in issue or issue['office_id'] is None:
+            return None
+
+        id = str(uuid.uuid4())
+
+        if 'created' in issue and issue['created'] is not None:
+            issue['created'] = self.date.parse(issue['created'])
+        else:
+            issue['created'] = self.date.now()
+
+        params = self._getParamsPersistIssue(issue,id,userId)
+
+        cur = con.cursor()
         cur.execute('set timezone to %s',('UTC',))
-        cur.execute("""
-            INSERT INTO issues.state (state, created, user_id, request_id)
-            VALUES (%s, %s, %s, %s);
-        """,(state, created, requestorId, requestId))
-        
-        
-  
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-    
-   
-        
+        cur.execute('insert into issues.request (created,request,requestor_id,office_id,related_request_id,assigned_id,priority,visibility,id) values(%s,%s,%s,%s,%s,%s,%s,%s,%s)',params)
+
+        self.updateState(con,id,userId,issue['created'])
+
+        return id
+
     '''
-     ' Obtener peticiones relacionadas en funcion de los ids
-     '''
-    def __getIssuesRelated(self, con, ids, relatedRequestIds):
+        Actualiza el issuer
+    '''
+    def updateData(self,con,issue,userId):
+        if issue is None or userId is None or 'id' not in issue or issue['id'] is None:
+            return None
+
+        params = self._getParamsPersistIssue(issue,issue['id'],userId)
+
         cur = con.cursor()
-        cur.execute('''
-          SELECT r.id, r.created, r.request, r.requestor_id, r.office_id, r.related_request_id, r.assigned_id, r.priority, r.visibility, s.state
-          FROM issues.request AS r
-          INNER JOIN issues.state AS s ON (r.id = s.request_id)
-          INNER JOIN (
-            SELECT request_id, max(created) AS created 
-            FROM issues.state
-            GROUP BY request_id
-          ) AS s2 ON (s.request_id = s2.request_id AND s.created = s2.created)
-          WHERE ((r.related_request_id = ANY(%s)) OR (r.related_request_id = ANY(%s))) AND NOT (r.id = ANY(%s))
-          ORDER BY r.created ASC;
-        ''', (ids, relatedRequestIds, ids))
+        cur.execute('set timezone to %s',('UTC',))
+        cur.execute('update issues.request')
 
-        
-        issues = []  
-        ids = []
-        relatedRequestIds = []
-        for issue in cur: 
-            ids.append(issue[0])
-            if issue[5] != None:
-              relatedRequestIds.append(issue[5])
-            issues.append( 
-                { 
-                    'id':issue[0], 
-                    'created':issue[1], 
-                    'request':issue[2], 
-                    'requestor_id':issue[3], 
-                    'office_id':issue[4],
-                    'related_request_id':issue[5],
-                    'assigned_id':issue[6],
-                    'priority':issue[7],
-                    'visibility':issue[8],
-                    'state':issue[9],
-                } 
-            )
-        
-        return {
-          "ids":ids,
-          "relatedRequestIds":relatedRequestIds,
-          "issues":issues
-        }
-            
+        # actualizo el estado
+        if 'state' in issue and issue['state'] is not None:
+            state = issue['state']
+            self.updateState(con,issue['id'],userId,state['created'],state['state'])
+
+        return issue['id']
 
     '''
-     ' Obtener peticiones asociadas a un determinado usuario
-     '''
-    def getIssuesByUser(self, con, userId):
-        ids = []
-        relatedRequestIds = []
-        
-        cur = con.cursor() 
-        cur.execute('''
-          SELECT r.id, r.created, r.request, r.requestor_id, r.office_id, r.related_request_id, r.assigned_id, r.priority, r.visibility, s.state
-          FROM issues.request AS r
-          INNER JOIN issues.state AS s ON (r.id = s.request_id)
-          INNER JOIN (
-            SELECT request_id, max(created) AS created 
-            FROM issues.state
-            GROUP BY request_id
-          ) AS s2 ON (s.request_id = s2.request_id AND s.created = s2.created)
-          WHERE r.requestor_id = %s OR r.assigned_id = %s
-          ORDER BY r.created ASC;
-        ''', (userId, userId)) 
-        if cur.rowcount <= 0: 
-            return [] 
-        
-
-        issues = []         
-        ids = []
-        relatedRequestIds = []
-        for issue in cur: 
-            ids.append(issue[0])
-            if issue[5] != None:
-              relatedRequestIds.append(issue[5])
-            issues.append( 
-                { 
-                    'id':issue[0], 
-                    'created':issue[1], 
-                    'request':issue[2], 
-                    'requestor_id':issue[3], 
-                    'office_id':issue[4],
-                    'related_request_id':issue[5],
-                    'assigned_id':issue[6],
-                    'priority':issue[7],
-                    'visibility':issue[8],
-                    'state':issue[9],
-                } 
-            )
-
-        while True:
-       
-          
-          data = self.__getIssuesRelated(con, ids, relatedRequestIds)
-          print(data)
-          
-          if(len(data["ids"]) == 0):
-            break;
-            
-          ids = list(set(ids + data["ids"]))
-          relatedRequestIds = data["relatedRequestIds"]
-          issues = issues + data["issues"]
-         
-        return issues;
-        
-        
-    
-    
- 
-    
-    
-    
-          
-         
-    
-        
-    
+        Elimina el issue y sus hijos
     '''
-     ' Actualizar los datos de un pedido, solo los datos y no las relaciones
-     '''
-    def updateData(self,con,id,request,priority,visibility,state,userId):
+    def delete(self,con,id):
+        if id is None:
+            return None
+
+        childrens = self_getChildrens(con,id)
+        ids = list(map(lambda x : x['id'],childrens))
+        ids.append(id)
         cur = con.cursor()
+        # elimino los estados
+        cur.execute('delete from issues.state where request_id in %s',(tuple(ids),))
+        # elimino los issues
+        cur.execute('delete from issues.request where id in %s',(tuple(ids),))
 
-        cur.execute("""
-            UPDATE issues.request SET request = %s, priority = %s, visibility = %s
-            WHERE issues.request.id = %s;
-        """,(request, priority, visibility, id))
-             
-       
-        cur.execute('''
-          SELECT state
-          FROM issues.state AS r
-          WHERE r.request_id = %s
-          ORDER BY created DESC
-          LIMIT 1
-        ''',(id,))
-        
-        oldState = None
-        
+        return True
+
+
+    '''
+        Obtiene los hijos
+    '''
+    def _getChildrens(self,con,id):
+        if id is None:
+            return []
+
+        pids = []
+        pids.append(id)
+        childrens = []
+
+        while len(pids) > 0:
+            toFollow = []
+            toFollow.extend(pids)
+            pids = []
+
+            for issueId in toFollow:
+                cur = con.cursor()
+                cur.execute('select id,created,request,requestor_id,office_id,related_request_id,assigned_id,priority,visibility from issues.request where related_request_id = %s',(issueId,))
+                if cur.rowcount <= 0:
+                    continue
+
+                for cIss in cur:
+                    cId = cIss[0]
+                    if cId not in pids:
+                        state = self.getState(con,cId)
+                        childrens.append(self._convertToDict,cIss,state)
+                        pids.append(cId)
+
+        return childrens
+
+
+
+
+    '''
+        Retorna todas las issues solicitadas por el usuario o aquellas cuyo responsable es el usuario
+    '''
+    def getIssues(self,con,userId):
+        if userId is None:
+            return None
+
+        cur = con.cursor()
+        cur.execute('select id,created,request,requestor_id,office_id,related_request_id,assigned_id,priority,visibility from issues.request where requestor_id  = %s or assigned_id = %s',(userId,userId))
+        issues = []
+        ids = []
+        # elimino los repetidos y los convierto a diccionario
         for issue in cur:
-            oldState = issue[0]
-        
-        if(oldState != state):
-            cur.execute('set timezone to %s',('UTC',))
-            
-            cur.execute("""
-            INSERT INTO issues.state (created, state, user_id, request_id)
-            VALUES (now(), %s, %s, %s);
-        """,(state, userId, id))
-        
-        
-        events = []
-        e = { 
-            'type':'IssueUpdatedData', 
-            'data':{ 
-               'id':id, 
-               'request':request,
-               'priority':priority,
-               'visibility':visibility,
-               'state':state,
-             } 
-        }
-        events.append(e)
-        return events 
-        
+            if issue[0] in ids:
+                continue
 
+            ids.append(issue[0])
+            state = self.getState(con,issue[0])
+            obj = self._convertToDict(con,issue,state)
+            childrens = self._getChildrens(con,issue[0])
+            obj['childrens'] = childrens
+            issues.append(obj)
 
+        ret = []
+        for issue in issues:
+            for aux in issues:
+                '''
+                falta implementar
+                '''
