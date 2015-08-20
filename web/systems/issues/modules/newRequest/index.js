@@ -153,7 +153,7 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
    * Obtener lista de tareas
    */
   $scope.getIssues = function(){
-    Issue.getIssuesByUser($scope.global.sessionUserId,
+    Issue.getIssuesByUser(null,
       function(data) {
         $scope.data = IssueClient.generateTree(data);
       },
