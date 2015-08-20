@@ -278,11 +278,19 @@
   border:none;
   border-radius: 2px;
 }
-
-.rec .videoDetalles {
-  width: 80%;
+.rec .btnFooter2 {
+  background-color: #275276;
+  color: white;
+  padding: 5px;
+  border:none;
+  border-radius: 2px;
 }
 
-.rec .fa-fast-backward, .fa-fast-forward {
+
+.rec .videoDetalles {
+  width: 70%;
+}
+
+.rec .fa-step-backward, .fa-step-forward, .fa-backward, .fa-pause, .fa-forward, .fa-fast-backward, .fa-fast-forward, .fa-fast-forward {
   margin-bottom: 0;
 }

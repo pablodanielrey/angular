@@ -1,4 +1,4 @@
-<div class="rec  ">
+<div class="rec reproductor ">
     <!-- **************** CONTENEDOR DEL MENU DE BUSQUEDA  *************** -->
     <div class="contentRec">
           <div class="menuRec">
@@ -170,16 +170,21 @@
         <div class="play">
             <div class="video">
                 <div>
-                    <video controls="" autoplay width="99%"><source src="http://163.10.56.194/gluster/camaras/archivo/2015-08-18_09-00-01_camara1.m4v.mp4" type="video/mp4"></video>
+                    <video id='video' controls="" autoplay width="99%"><source src="http://163.10.56.194/gluster/camaras/archivo/2015-08-18_09-00-01_camara1.m4v.mp4" type="video/mp4"></video>
                 </div>
                 <div class="footerPlay">
                     <div>
-                        <button class="btnFooter"><i class="fa fa-fast-backward"></i></button>
-                        <button class="btnFooter"><i class="fa fa-fast-forward"></i></button>
+                        <button class="btnFooter2" ><i class="fa fa-step-backward"></i></button>
+                        <button class="btnFooter2" title="Próximo Video"><i class="fa fa-step-forward"></i></button>
+                        <button class="btnFooter" ng-click='slower()'><i class="fa fa-backward"></i></button>
+                        <button class="btnFooter" ng-click='pause()'><i class="fa fa-pause"></i></button>
+                        <button class="btnFooter" ng-click='faster()'><i class="fa fa-forward"></i></button>
+                        <button class="btnFooter" ng-click='seekBackwards()'><i class="fa fa-fast-backward"></i></button>
+                        <button class="btnFooter" ng-click='seekForward()'><i class="fa fa-fast-forward"></i></button>
                     </div>
                     <div class="videoDetalles">
                         <div>
-                          <span><i class="fa fa-video-camera"></i> 5 - Planta Baja</span>
+                          <span><i class="fa fa-video-camera"></i> 5 - PB</span>
                         </div>
                         <div>
                           <span><i class="fa fa-calendar-o"></i> 25/08/2015</span>

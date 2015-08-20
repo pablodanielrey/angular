@@ -8,6 +8,7 @@
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   margin: 0px;
   padding: 0px;
+
 }
 
 .live {
@@ -17,6 +18,12 @@
 .live .contentScreens {
   height:100%;
   width:100%;
+}
+
+.live .contentCameras {
+  width: 85%;
+  height: 100%;
+
 }
 
 .live .content {
@@ -31,6 +38,8 @@
   margin-left: 15px;
   margin-top: 15px;
 }
+
+
 
 .live .buttonFilters{
   background-color: white;
