@@ -5,28 +5,28 @@
  * @param {type} param2
  */
 app.service('IssueClient', ["Users", "Utils", function(Users, Utils) {
-	
-  
+
+
   this.defineStyle = function(state){
      switch(state){
-      case "COMMENT": return "commentOrder"; 
+      case "COMMENT": return "commentOrder";
       default: return "normal";
-        
+
     }
   };
-  
+
   /**
    * Inicializar nodo. Cuando se crea un nuevo nodo en el arbol se inicializa y guarda en la base con los siguientes parametros
    */
-  this.initializeNode = function(userId, status){
+  this.initializeNode = function(status){
     var style = this.defineStyle(status);
 
     return {
       id: null,
       request: null,
       created: new Date(),
-      requestorId: userId,
-      officeId: "8407abb2-33c2-46e7-bef6-d00bab573306",
+      requestorId: null,
+      office_id: "8407abb2-33c2-46e7-bef6-d00bab573306",
       relatedRequestId:null,
       priority:null,
       visibility:null,
@@ -35,8 +35,24 @@ app.service('IssueClient', ["Users", "Utils", function(Users, Utils) {
       style: style
     };
   };
-  
-  
+
+
+  this.loadDataNode = function(node) {
+    Users.findUser(node.requestor_id,
+      function(user) {
+        node.requestor = user.name + " " + user.lastname;
+      },
+      function(error) {
+      }
+    );
+
+    node.collapsedDescription = false;
+    node.style = this.defineStyle(node.state);
+    for (var i = 0; i < node.childrens.length; i++) {
+      this.loadDataNode(node.childrens[i]);
+    }
+  }
+
   /**
    * Generar arbol de pedidos
    * @param {Object} request Datos del pedido
@@ -46,18 +62,18 @@ app.service('IssueClient', ["Users", "Utils", function(Users, Utils) {
   this.generateTree = function(data) {
     var issues = [];
     for(var i in data){
-      
-      Users.findUser(data[i].requestor_id, 
+
+      Users.findUser(data[i].requestor_id,
         function(response){ data[i].requestor = response.name + " " + response.lastname; },
         function(error){ console.log(error); }
       );
-     
+
       data[i].collapsedDescription = false;
       data[i].style = this.defineStyle(data[i].state);
-      
+
       if(!("nodes" in data[i])) data[i]["nodes"] = [];
       var assigned = false;
-      
+
       if(data[i].related_request_id != null){
         for(var j in data){
           if(data[j].id == data[i].related_request_id){
@@ -67,17 +83,17 @@ app.service('IssueClient', ["Users", "Utils", function(Users, Utils) {
           }
         }
       }
-      
+
       if(!assigned){
         issues.push(data[i]);
       }
-    }    
-    
+    }
+
     return issues;
   };
-  
-  
-  
+
+
+
   /**
    * Agregar nodo
    * @param {type} data
@@ -86,14 +102,14 @@ app.service('IssueClient', ["Users", "Utils", function(Users, Utils) {
    */
   this.addChild = function(data, node){
     var newNode = this.initializeNode(node.requestorId, node.state);
-      
+
     Utils.joinObjects(node, newNode);
-    
+
     if(!node.relatedRequestId){
       data.push(node);
       return true;
     }
-    
+
     //var nodeAux = this.initializeNode(node)
     for(var i in data){
       if(data[i].id == node.relatedRequestId) {
@@ -106,11 +122,11 @@ app.service('IssueClient', ["Users", "Utils", function(Users, Utils) {
         if(add) return true;
       }
     }
-    
+
     return false;
-  
+
   };
-  
+
   /**
    * Eliminar nodo
    * @param {type} data
@@ -130,7 +146,7 @@ app.service('IssueClient', ["Users", "Utils", function(Users, Utils) {
         if(add) return true;
       }
     }
-    
+
     return false;
   };
 

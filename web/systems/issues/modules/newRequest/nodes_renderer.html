@@ -23,7 +23,7 @@
 
             <div ng-class="{true:'descriptionExpanded',false:'descriptionClosed'}[node.descriptionExpanded]">
               {{node.created | date:"MM/dd/yyyy hh:mm" }}
-              {{node.requestor}}              
+              {{node.requestor}}
             </div>
 
 
@@ -54,7 +54,7 @@
   </div>
 
 
-  <ol ui-tree-nodes ng-model="node.nodes" ng-class="{'angular-ui-tree-hidden': collapsed}">
-    <li  ng-repeat="node in node.nodes" ui-tree-node ng-include="'modules/newRequest/nodes_renderer.html'">
+  <ol ui-tree-nodes ng-model="node.childrens" ng-class="{'angular-ui-tree-hidden': collapsed}">
+    <li  ng-repeat="node in node.childrens" ui-tree-node ng-include="'modules/newRequest/nodes_renderer.html'">
     </li>
   </ol>

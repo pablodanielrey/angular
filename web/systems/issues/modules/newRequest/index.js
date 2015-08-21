@@ -70,7 +70,7 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
 
     var nodeData = nodeScope.$modelValue;
     Issue.updateIssueData(nodeData, $scope.global.sessionUserId,
-      function(data) { },
+      function(data) {},
       function(error) { Notifications.message(error); }
     );
   };
@@ -80,11 +80,12 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
   $scope.addNode = function(nodeScope){
     var nodeData = nodeScope.$modelValue;
 
-    var newNode = IssueClient.initializeNode($scope.global.sessionUserId, "PENDING");
-    newNode.relatedRequestId = nodeData.id;
+    var newNode = IssueClient.initializeNode("PENDING");
+    newNode.parent_id = nodeData.id;
+    newNode.request = $scope.request;
 
-    Issue.newRequest(newNode,
-      function(data) { },
+    Issue.newIssue(newNode,newNode['state'],
+      function(data) {$scope.getIssues(); $scope.request = null;},
       function(error) { Notifications.message(error); }
     );
   };
@@ -92,13 +93,18 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
   $scope.addComment = function(nodeScope){
     var nodeData = nodeScope.$modelValue;
 
-    var newNode = IssueClient.initializeNode($scope.global.sessionUserId, "COMMENT");
-    newNode.relatedRequestId = nodeData.id;
-    console.log(newNode);
+    var newNode = IssueClient.initializeNode("COMMENT");
+    newNode.parent_id = nodeData.id;
+    newNode.request = $scope.request;
 
-    Issue.newRequest(newNode,
-      function(data) { },
-      function(error) { Notifications.message(error); }
+    Issue.newIssue(newNode,newNode['state'],
+      function(data) {
+        $scope.getIssues();
+        $scope.request = null;
+      },
+      function(error) {
+        Notifications.message(error);
+      }
     );
   };
 
@@ -106,11 +112,11 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
 
 
   $scope.createNode = function(){
-    var newNode = IssueClient.initializeNode($scope.global.sessionUserId, "PENDING");
+    var newNode = IssueClient.initializeNode("PENDING");
     newNode.request = $scope.request;
 
-    Issue.newRequest(newNode,
-      function(data) {$scope.request = null; },
+    Issue.newIssue(newNode,newNode['state'],
+      function(data) {$scope.getIssues();$scope.request = null; },
       function(error) { Notifications.message(error); }
     );
   };
@@ -119,7 +125,7 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
   $scope.deleteNode = function(model){
     var nodeData = model.$modelValue;
     Issue.deleteIssue(nodeData.id,
-      function(data){ },
+      function(data){ $scope.getIssues();},
       function(error) { Notifications.message(error); }
     );
   };
@@ -153,9 +159,13 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
    * Obtener lista de tareas
    */
   $scope.getIssues = function(){
-    Issue.getIssuesByUser(null,
+    Issue.getIssues(null,
       function(data) {
-        $scope.data = IssueClient.generateTree(data);
+        // $scope.data = IssueClient.generateTree(data);
+        $scope.data = data;
+        for (var i = 0; i< data.length; i++) {
+          IssueClient.loadDataNode(data[i]);
+        }
       },
       function(error) {
         Notifications.message(error);
