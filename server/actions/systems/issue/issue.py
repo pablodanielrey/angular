@@ -42,10 +42,12 @@ class WampIssue(ApplicationSession):
         con = self._getDatabase()
         try:
             userId = self.profiles.getLocalUserId(sessionId)
-            self.issue.create(con,issue,userId)
+            id = self.issue.create(con,issue,userId)
             con.commit()
-            return True
-
+            return id
+        except Exception as e:
+            logging.exception(e)
+            return None
         finally:
             con.close()
 
@@ -63,7 +65,9 @@ class WampIssue(ApplicationSession):
             if userId is None:
                 userId = self.profiles.getLocalUserId(sessionId)
             return self.issue.getIssues(con,userId)
-
+        except Exception as e:
+            logging.exception(e)
+            return None
         finally:
             con.close()
 
@@ -77,10 +81,12 @@ class WampIssue(ApplicationSession):
     def deleteIssue(self, id):
         con = self._getDatabase()
         try:
-            ''' .... codigo aca ... '''
+            self.issue.delete(con,id)
             con.commit()
             return True
-
+        except Exception as e:
+            logging.exception(e)
+            return None
         finally:
             con.close()
 
@@ -97,10 +103,12 @@ class WampIssue(ApplicationSession):
         try:
             if userId is None:
                 userId = self.profiles.getLocalUserId(sessionId)
-            self.issue.updateData(con,issuer,userId)
+            id = self.issue.updateData(con,issuer,userId)
             con.commit()
-            return True
-
+            return id
+        except Exception as e:
+            logging.exception(e)
+            return None
         finally:
             con.close()
 

@@ -146,23 +146,18 @@ class Issue:
         pids.append(id)
         childrens = []
 
-        while len(pids) > 0:
-            toFollow = []
-            toFollow.extend(pids)
-            pids = []
+        cur = con.cursor()
+        cur.execute('select id,created,request,requestor_id,office_id,related_request_id,assigned_id,priority,visibility from issues.request where related_request_id = %s',(issueId,))
+        if cur.rowcount <= 0:
+            return []
 
-            for issueId in toFollow:
-                cur = con.cursor()
-                cur.execute('select id,created,request,requestor_id,office_id,related_request_id,assigned_id,priority,visibility from issues.request where related_request_id = %s',(issueId,))
-                if cur.rowcount <= 0:
-                    continue
 
-                for cIss in cur:
-                    cId = cIss[0]
-                    if cId not in pids:
-                        state = self.getState(con,cId)
-                        childrens.append(self._convertToDict,cIss,state)
-                        pids.append(cId)
+        for cIss in cur:
+            cId = cIss[0]
+            state = self.getState(con,cId)
+            obj = self._convertToDict(con,cIss,state)
+            obj['childrens'] = self._getChildrens(con,cId)
+            childrens.append(obj)
 
         return childrens
 
@@ -194,7 +189,23 @@ class Issue:
 
         ret = []
         for issue in issues:
+            include = False
             for aux in issues:
-                '''
-                falta implementar
-                '''
+                if aux['id'] != issue['id'] and self._include(issue,aux):
+                    include = True
+                    continue
+            if not include:
+                ret.append(issue)
+
+        return ret
+
+
+    def _include(self,issue,issue2):
+        if issue['id'] == issue2['id']:
+            return True
+
+        for iss in issue2['childrens']:
+            if self._include(issue,iss):
+                return True
+
+        return False

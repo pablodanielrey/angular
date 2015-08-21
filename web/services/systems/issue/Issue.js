@@ -19,7 +19,8 @@ function Issue($rootScope,$wamp,Session) {
 
   // Crea una nueva tarea
   function newIssue(issue, callbackOk, callbackError) {
-    $wamp.call('issue.issue.newIssue', [issue])
+    sessionId = Session.getSessionId();
+    $wamp.call('issue.issue.newIssue', [sessionId,issue])
     .then(function(res) {
       if (res != null) {
         callbackOk(res);
@@ -34,7 +35,8 @@ function Issue($rootScope,$wamp,Session) {
   // Retorna todas las issues solicitadas por el usuario o aquellas cuyo responsable es el usuario
   // si el userId es null tomo por defecto el id del usuario logueado
   function getIssues(userId, callbackOk, callbackError) {
-    $wamp.call('issue.issue.getIssues', [userId])
+    sessionId = Session.getSessionId();
+    $wamp.call('issue.issue.getIssues', [sessionId,userId])
     .then(function(res) {
       if (res != null) {
         callbackOk(res);
@@ -63,7 +65,8 @@ function Issue($rootScope,$wamp,Session) {
   // Actualiza los datos del issue
   // userId Id del usuario que solicita la actualizacion de datos (quiza sea alguien diferente a quien solicito el issue)
   function updateIssueData(issuer, userId, callbackOk, callbackError) {
-    $wamp.call('issue.issue.updateIssueData', [issuer,userId])
+    sessionId = Session.getSessionId();
+    $wamp.call('issue.issue.updateIssueData', [sessionId,issuer,userId])
     .then(function(res) {
       if (res != null) {
         callbackOk(res);
