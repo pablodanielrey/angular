@@ -103,16 +103,24 @@ class Issue:
         if issue is None or userId is None or 'id' not in issue or issue['id'] is None:
             return None
 
-        params = self._getParamsPersistIssue(issue,issue['id'],userId)
+        params = (issue['request'] if 'request' in issue and issue['request'] is not None else '',
+                  issue['office_id'],
+                  userId,
+                  issue['parent_id'] if 'parent_id' in issue else None,
+                  issue['assigned_id'] if 'assigned_id' in issue else None,
+                  issue['priority'] if 'priority' in issue and issue['priority'] is not None else 0,
+                  issue['visibility'] if 'visibility' in issue and issue['visibility'] is not None else 'AUTHENTICATED',
+                  issue['id']
+                 )
 
         cur = con.cursor()
         cur.execute('set timezone to %s',('UTC',))
-        cur.execute('update issues.request')
+        cur.execute('update issues.request set request = %s, office_id = %s, requestor_id = %s, related_request_id = %s, assigned_id = %s, priority = %s, visibility = %s where id = %s',(params))
 
         # actualizo el estado
         if 'state' in issue and issue['state'] is not None:
             state = issue['state']
-            self.updateState(con,issue['id'],userId,state['created'],state['state'])
+            self.updateState(con,issue['id'],userId,None,state)
 
         return issue['id']
 

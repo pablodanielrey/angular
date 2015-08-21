@@ -69,8 +69,8 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
   $scope.updateIssueData = function(nodeScope){
 
     var nodeData = nodeScope.$modelValue;
-    Issue.updateIssueData(nodeData, $scope.global.sessionUserId,
-      function(data) {},
+    Issue.updateIssueData(nodeData, null,
+      function(data) {$scope.getIssues();},
       function(error) { Notifications.message(error); }
     );
   };
