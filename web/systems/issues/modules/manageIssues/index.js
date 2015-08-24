@@ -8,29 +8,24 @@ app.controller('ManageIssuesCtrl', ["$scope", "$timeout", "$window", "Module", "
 
   /***** MANIPULACION DE ESTILOS ******/
   $scope.style = null;
-  $scope.styles = []
-  $scope.nodeStyles = [
-    "comment expanded",
-    "normal expanded",
-    "comment",
-    "normal",
-  ];
-  
+  $scope.styles = [];
+
   $scope.setStyle = function($index) {
     $scope.style = $scope.styles[$index];
   };
 
-  $scope.setNodeStyle = function($index) {
-    $scope.style = $scope.nodeStyles[$index];
-  };
 
+  /***** ATRIBUTOS ******/
   $scope.request = null; //descripcion de un nuevo nodo que sera agregado a la raiz
   $scope.data = []; //raiz del arbol de nodos
   
+  
+  
 
-    
 
- 
+
+
+
   /**
    * Incrementar espacio de la descripcion del nodo al hacer click (textarea) para facilitar el ingreso de datos
    * @param {scope del nodo} nodeScope
@@ -39,9 +34,9 @@ app.controller('ManageIssuesCtrl', ["$scope", "$timeout", "$window", "Module", "
       var nodeData = nodeScope.$modelValue;
       nodeData.expanded = !nodeData.expanded ;
   };
-  
-  
-  
+
+
+
   /**
    * Interruptor para visualizar subnodos
    * @param {type} nodeScope
@@ -49,9 +44,9 @@ app.controller('ManageIssuesCtrl', ["$scope", "$timeout", "$window", "Module", "
   $scope.toggleNode = function (nodeScope) {
     nodeScope.toggle();
   };
-  
-  
-  
+
+
+
   /**
    * Interruptor para visualizar descripcion del nodo
    * @param {type} nodeScope
@@ -60,9 +55,9 @@ app.controller('ManageIssuesCtrl', ["$scope", "$timeout", "$window", "Module", "
     var nodeData = nodeScope.$modelValue;
     nodeData.collapsedDescription = !nodeData.collapsedDescription
   };
-  
-  
-  
+
+
+
 
   $scope.expandDescription = function(nodeScope){
     var nodeData = nodeScope.$modelValue;
@@ -76,82 +71,88 @@ app.controller('ManageIssuesCtrl', ["$scope", "$timeout", "$window", "Module", "
    * @returns {undefined}
    */
   $scope.updateIssueData = function(nodeScope){
-    
+
     var nodeData = nodeScope.$modelValue;
-    Issue.updateIssueData(nodeData, $scope.global.sessionUserId,
-      function(data) { },
+    Issue.updateIssueData(nodeData, null,
+      function(data) {$scope.getIssues();},
       function(error) { Notifications.message(error); }
     );
   };
-  
 
-  
+
+
   $scope.addNode = function(nodeScope){
     var nodeData = nodeScope.$modelValue;
 
-    var newNode = IssueClient.initializeNode($scope.global.sessionUserId, "PENDING");
-    newNode.relatedRequestId = nodeData.id;
+    var newNode = IssueClient.initializeNode("PENDING");
+    newNode.parent_id = nodeData.id;
+    newNode.request = $scope.request;
 
-    Issue.newRequest(newNode,
-      function(data) { },
+    Issue.newIssue(newNode,newNode['state'],
+      function(data) {$scope.getIssues(); $scope.request = null;},
       function(error) { Notifications.message(error); }
     );
   };
-  
+
   $scope.addComment = function(nodeScope){
     var nodeData = nodeScope.$modelValue;
 
-    var newNode = IssueClient.initializeNode($scope.global.sessionUserId, "COMMENT");
-    newNode.relatedRequestId = nodeData.id;
-    console.log(newNode);
-
-    Issue.newRequest(newNode,
-      function(data) { },
-      function(error) { Notifications.message(error); }
-    );
-  };
-  
-  
-  
-  
-  $scope.createNode = function(){
-    var newNode = IssueClient.initializeNode($scope.global.sessionUserId, "PENDING");
+    var newNode = IssueClient.initializeNode("COMMENT");
+    newNode.parent_id = nodeData.id;
     newNode.request = $scope.request;
- 
-    Issue.newRequest(newNode,
-      function(data) {$scope.request = null; },
+
+    Issue.newIssue(newNode,newNode['state'],
+      function(data) {
+        $scope.getIssues();
+        $scope.request = null;
+      },
+      function(error) {
+        Notifications.message(error);
+      }
+    );
+  };
+
+
+
+
+  $scope.createNode = function(){
+    var newNode = IssueClient.initializeNode("PENDING");
+    newNode.request = $scope.request;
+
+    Issue.newIssue(newNode,newNode['state'],
+      function(data) {$scope.getIssues();$scope.request = null; },
       function(error) { Notifications.message(error); }
     );
   };
-  
-  
+
+
   $scope.deleteNode = function(model){
     var nodeData = model.$modelValue;
     Issue.deleteIssue(nodeData.id,
-      function(data){ },
+      function(data){ $scope.getIssues();},
       function(error) { Notifications.message(error); }
     );
   };
 
- 
+
 
 
   /**
    * IssueDeletedEvent
    */
-  $scope.$on('IssueInsertedEvent', function(event, node) { 
+  $scope.$on('IssueInsertedEvent', function(event, node) {
     IssueClient.addChild($scope.data, node);
-    $scope.request = null; 
-    
+    $scope.request = null;
+
 
   });
-  
 
-  
+
+
   /**
    * IssueDeletedEvent
    */
-  $scope.$on('IssueDeletedEvent', function(event, id) {    
+  $scope.$on('IssueDeletedEvent', function(event, id) {
     IssueClient.deleteNode($scope.data, id);
   });
 
@@ -162,12 +163,16 @@ app.controller('ManageIssuesCtrl', ["$scope", "$timeout", "$window", "Module", "
    * Obtener lista de tareas
    */
   $scope.getIssues = function(){
-    Issue.getIssues($scope.global.sessionUserId,
+    Issue.getIssues(null,
       function(data) {
-        $scope.data = IssueClient.generateTree(data);
+        // $scope.data = IssueClient.generateTree(data);
+        $scope.data = data;
+        for (var i = 0; i< data.length; i++) {
+          IssueClient.loadDataNode(data[i]);
+        }
       },
-      function(error) { 
-        Notifications.message(error); 
+      function(error) {
+        Notifications.message(error);
       }
     );
   };
@@ -184,7 +189,8 @@ app.controller('ManageIssuesCtrl', ["$scope", "$timeout", "$window", "Module", "
    * INICIALIZACION *
    ******************/
   $timeout(function() {
-    Module.authorize('ADMIN-ASSISTANCE,USER-ASSISTANCE',
+    $scope.getIssues();
+    /*Module.authorize('ADMIN-ASSISTANCE,USER-ASSISTANCE',
       function(response){
         if (response !== 'granted') {
           Notifications.message("Acceso no autorizado");
@@ -197,9 +203,9 @@ app.controller('ManageIssuesCtrl', ["$scope", "$timeout", "$window", "Module", "
         Notifications.message(error);
         $window.location.href = "/#/logout";
       }
-    );
-  
-  
+    );*/
+
+
   }, 0);
 
 }]);
