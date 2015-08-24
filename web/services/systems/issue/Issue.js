@@ -18,9 +18,9 @@ function Issue($rootScope,$wamp,Session) {
   services.updateIssueData = updateIssueData;
 
   // Crea una nueva tarea
-  function newIssue(issue, state, callbackOk, callbackError) {
+  function newIssue(issue, state, visibilities, callbackOk, callbackError) {
     sessionId = Session.getSessionId();
-    $wamp.call('issue.issue.newIssue', [sessionId,issue,state])
+    $wamp.call('issue.issue.newIssue', [sessionId,issue,state,visibilities])
     .then(function(res) {
       if (res != null) {
         callbackOk(res);

@@ -9,6 +9,78 @@ class Issue:
     offices = inject.attr(Offices)
 
     # -----------------------------------------------------------------------------------
+    # ---------------- VISIBILIDAD DE LOS PEDIDOS QUE PUEDO VER -------------------------
+    # -----------------------------------------------------------------------------------
+    '''
+    issues.visibility_group_owner {
+        id VARCHAR NOT NULL PRIMARY KEY,
+        request_id VARCHAR NOT NULL REFERENCES issues.request(id),
+        office_id VARCHAR NOT NULL REFERENCES offices.offices (id),
+        created TIMESTAMPTZ NOT NULL default now(),
+        tree boolean default true
+    }
+    '''
+    def _convertVisibilityOfficeToDict(self,visibility,type='OFFICE'):
+        return {'id':visibility[0],'issue_id':visibility[1],'office_id':visibility[2],'created':visibility[3],'tree':visibility[4],'type':type}
+
+
+    def getVisibilitiesOfficesView(self,con,issue_id):
+        cur = con.cursor()
+        cur.execute('select id,request_id,office_id,created,tree from issues.visibility_group_owner where request_id = %s',(issue_id,))
+        if cur.rowcount <= 0:
+            return []
+        visibilities = []
+        for v in cur:
+            visibilities.append(self._convertVisibilityOfficeToDict(v))
+        return visibilities
+
+    '''
+        obtiene los issues_id que puede ver la oficina office_id
+    '''
+    def findIssuesByOffice_View(self,con,office_id):
+        ids = []
+        cur = con.cursor()
+        cur.execute('select DISTINCT issue_id from issues.visibility_group_owner where office_id = %s',(office_id,))
+        for i in cur:
+            ids.append(i[0])
+        return ids
+
+
+    def removeVisibilityOffice_View(self,con,id):
+        if id is None:
+            return
+        cur = con.cursor()
+        cur.execute('delete from issues.visibility_group_owner where id = %s',(id,))
+
+    def removeAllVisibilityOffice_View(self,con,issue_id):
+        if id is None:
+            return
+        cur = con.cursor()
+        cur.execute('delete from issues.visibility_group_owner where request_id = %s',(issue_id,))
+
+
+    def createVisibilityOffice_View(self,con,issue_id,office_id,tree=True,created=None):
+        if visibility is None or issue_id is None or office_id is None:
+            return None
+
+        cur = con.cursor()
+
+        id = str(uuid.uuid4())
+        if created is None:
+            created = self.date.now()
+        if tree is None:
+            tree = True
+
+        createdUtc = self.date.awareToUtc(created)
+        params = (id,issue_id,office_id,created,tree)
+
+        cur.execute('set timezone to %s',('UTC',))
+        cur.execute('insert into issues (id,request_id,office_id,created,tree) values(%s,%s,%s,%s,%s)',params)
+
+        return id
+
+
+    # -----------------------------------------------------------------------------------
     # -------------------------- ESTADO DEL PEDIDO --------------------------------------
     # -----------------------------------------------------------------------------------
     def _convertStateToDict(self,state):
@@ -46,38 +118,33 @@ class Issue:
     # --------------------------------- PEDIDO ------------------------------------------
     # -----------------------------------------------------------------------------------
 
-    def _convertToDict(self,issue,state):
+    def _convertToDict(self,issue,state,visibilities):
         return {'id':issue[0],'created':issue[1],
                 'request':issue[2],'creator':issue[3],
-                'office_id':issue[4],'parent_id':issue[5],
-                'assigned_id':issue[6],'priority':issue[7],
-                'visibility':issue[8],'state':state['state']}
+                'parent_id':issue[4],'assigned_id':issue[5],
+                'priority':issue[6],'office_id':issue[7],
+                'visibilities':visibilities,'state':state['state']}
 
 
     def _getParamsPersistIssue(self, issue, id, userId):
         return   (issue['created'],
                   issue['request'] if 'request' in issue and issue['request'] is not None else '',
                   userId,
-                  issue['office_id'],
                   issue['parent_id'] if 'parent_id' in issue else None,
                   issue['assigned_id'] if 'assigned_id' in issue else None,
                   issue['priority'] if 'priority' in issue and issue['priority'] is not None else 0,
-                  issue['visibility'] if 'visibility' in issue and issue['visibility'] is not None else 'AUTHENTICATED',
+                  issue['office_id'],
                   id
                  )
 
     '''
         Crea un nuevo issue
+        visibilities = [{'type':OFFICE|USER},'office_id':id office o 'user_id' si es USER,'tree':True]
     '''
-    def create(self,con,issue,userId,state='PENDING'):
-        if issue is None or userId is None:
+    def create(self,con,issue,userId,visibilities,state='PENDING'):
+        if issue is None or userId is None or visibilities is None or 'office_id' not in issue:
             return None
 
-        '''
-            chequeo precondiciones
-        '''
-        if 'office_id' not in issue or issue['office_id'] is None:
-            return None
 
         id = str(uuid.uuid4())
 
@@ -90,10 +157,13 @@ class Issue:
 
         cur = con.cursor()
         cur.execute('set timezone to %s',('UTC',))
-        cur.execute('insert into issues.request (created,request,requestor_id,office_id,related_request_id,assigned_id,priority,visibility,id) values(%s,%s,%s,%s,%s,%s,%s,%s,%s)',params)
+        cur.execute('insert into issues.request (created,request,requestor_id,related_request_id,assigned_id,priority,office_id,id) values(%s,%s,%s,%s,%s,%s,%s,%s)',params)
 
         self.updateState(con,id,userId,issue['created'],state)
 
+        for v in visibilities:
+            if v['type'] == 'OFFICE':
+                self.createVisibilityOffice_View(con,id,v['office_id'],v['tree'])
         return id
 
     '''
@@ -104,25 +174,32 @@ class Issue:
             return None
 
         params = (issue['request'] if 'request' in issue and issue['request'] is not None else '',
-                  issue['office_id'],
                   userId,
                   issue['parent_id'] if 'parent_id' in issue else None,
                   issue['assigned_id'] if 'assigned_id' in issue else None,
                   issue['priority'] if 'priority' in issue and issue['priority'] is not None else 0,
-                  issue['visibility'] if 'visibility' in issue and issue['visibility'] is not None else 'AUTHENTICATED',
+                  issue['office_id'],
                   issue['id']
                  )
 
         cur = con.cursor()
         cur.execute('set timezone to %s',('UTC',))
-        cur.execute('update issues.request set request = %s, office_id = %s, requestor_id = %s, related_request_id = %s, assigned_id = %s, priority = %s, visibility = %s where id = %s',(params))
+        cur.execute('update issues.request set request = %s, requestor_id = %s, related_request_id = %s, assigned_id = %s, priority = %s, office_id = %s where id = %s',(params))
 
         # actualizo el estado
         if 'state' in issue and issue['state'] is not None:
             state = issue['state']
             self.updateState(con,issue['id'],userId,None,state)
 
+        # elimino la visibilidad que ya posee
+        self.removeAllVisibilityOffice_View(con,issue['id'])
+        # actualizo la visibilidad
+        for v in issue['visibilities']:
+            if v['type'] == 'OFFICE':
+                self.createVisibilityOffice_View(con,issue['id'],v['office_id'],v['tree'])
+
         return issue['id']
+
 
     '''
         Elimina el issue y sus hijos
@@ -139,6 +216,8 @@ class Issue:
         cur = con.cursor()
         # elimino los estados
         cur.execute('delete from issues.state where request_id = %s',(id,))
+        # elimino la visibilidad
+        self.removeAllVisibilityOffice_View(con,id)
         # elimino los issues
         cur.execute('delete from issues.request where id = %s',(id,))
 
@@ -157,7 +236,7 @@ class Issue:
         childrens = []
 
         cur = con.cursor()
-        cur.execute('select id,created,request,requestor_id,office_id,related_request_id,assigned_id,priority,visibility from issues.request where related_request_id = %s',(id,))
+        cur.execute('select id,created,request,requestor_id,related_request_id,assigned_id,priority,office_id from issues.request where related_request_id = %s',(id,))
         if cur.rowcount <= 0:
             return []
 
@@ -165,7 +244,8 @@ class Issue:
         for cIss in cur:
             cId = cIss[0]
             state = self.getState(con,cId)
-            obj = self._convertToDict(cIss,state)
+            visibilities = self.getVisibilitiesOfficesView(con,cId)
+            obj = self._convertToDict(cIss,state,visibilities)
             obj['childrens'] = self._getChildrens(con,cId)
             childrens.append(obj)
 
@@ -182,7 +262,7 @@ class Issue:
             return None
 
         cur = con.cursor()
-        cur.execute('select id,created,request,requestor_id,office_id,related_request_id,assigned_id,priority,visibility from issues.request where requestor_id  = %s or assigned_id = %s',(userId,userId))
+        cur.execute('select id,created,request,requestor_id,related_request_id,assigned_id,priority,office_id from issues.request where requestor_id  = %s or assigned_id = %s',(userId,userId))
         issues = []
         ids = []
         # elimino los repetidos y los convierto a diccionario
@@ -192,7 +272,8 @@ class Issue:
 
             ids.append(issue[0])
             state = self.getState(con,issue[0])
-            obj = self._convertToDict(issue,state)
+            visibilities = self.getVisibilitiesOfficesView(con,issue[0])
+            obj = self._convertToDict(issue,state,visibilities)
             childrens = self._getChildrens(con,issue[0])
             obj['childrens'] = childrens
             issues.append(obj)

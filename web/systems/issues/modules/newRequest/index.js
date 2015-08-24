@@ -13,7 +13,7 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
   $scope.setStyle = function($index) {
     $scope.style = $scope.styles[$index];
   };
-  
+
   $scope.setNodeStyleByState = function(state) {
      switch(state){
       case "COMMENT": return "commentOrder";
@@ -42,13 +42,12 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
       office_id: "8407abb2-33c2-46e7-bef6-d00bab573306",
       relatedRequestId:null,
       priority:null,
-      visibility:null,
       collapsedDescription: false,
       state: status,
       style: $scope.setNodeStyleByState(status)
     };
   };
-  
+
 
 
   /**
@@ -112,8 +111,9 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
     var newNode = $scope.initializeNode("PENDING");
     newNode.parent_id = nodeData.id;
     newNode.request = $scope.request;
+    newNode.visibilities = []
 
-    Issue.newIssue(newNode,newNode['state'],
+    Issue.newIssue(newNode,newNode['state'], newNode['visibilities'],
       function(data) {$scope.getIssues(); $scope.request = null;},
       function(error) { Notifications.message(error); }
     );
@@ -125,8 +125,9 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
     var newNode = $scope.initializeNode("COMMENT");
     newNode.parent_id = nodeData.id;
     newNode.request = $scope.request;
+    newNode.visibilities = []
 
-    Issue.newIssue(newNode,newNode['state'],
+    Issue.newIssue(newNode,newNode['state'],newNode['visibilities'],
       function(data) {
         $scope.getIssues();
         $scope.request = null;
@@ -143,8 +144,9 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
   $scope.createNode = function(){
     var newNode = $scope.initializeNode("PENDING");
     newNode.request = $scope.request;
+    newNode.visibilities = []
 
-    Issue.newIssue(newNode,newNode['state'],
+    Issue.newIssue(newNode,newNode['state'],newNode['visibilities'],
       function(data) {$scope.getIssues();$scope.request = null; },
       function(error) { Notifications.message(error); }
     );
@@ -178,9 +180,9 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
       }
     );
   };
-  
-  
-  
+
+
+
   $scope.loadDataNode = function(node) {
     Users.findUser(node.requestor_id,
       function(user) {

@@ -38,11 +38,11 @@ class WampIssue(ApplicationSession):
         passw = self.serverConfig.configs['database_password']
         return psycopg2.connect(host=host, dbname=dbname, user=user, password=passw)
 
-    def newIssue(self, sessionId, issue, state):
+    def newIssue(self, sessionId, issue, state, visibilities):
         con = self._getDatabase()
         try:
             userId = self.profiles.getLocalUserId(sessionId)
-            id = self.issue.create(con,issue,userId) if state is None else self.issue.create(con,issue,userId,state)
+            id = self.issue.create(con,issue,userId,visibilities) if state is None else self.issue.create(con,issue,userId,visibilities,state)
             con.commit()
             return id
         except Exception as e:
@@ -52,9 +52,9 @@ class WampIssue(ApplicationSession):
             con.close()
 
     @coroutine
-    def newIssue_async(self, sessionId, issue, state):
+    def newIssue_async(self, sessionId, issue, state, visibilities):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.newIssue, sessionId, issue, state)
+        r = yield from loop.run_in_executor(None, self.newIssue, sessionId, issue, state, visibilities)
         return r
 
     # Retorna todas las issues solicitadas por el usuario o aquellas cuyo responsable es el usuario
