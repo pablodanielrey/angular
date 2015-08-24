@@ -36,5 +36,5 @@
   -webkit-flex-direction:row; /* Safari */
   -moz-flex-direction:row; /* mozilla */
   flex-wrap:wrap;
-  align-content: stretch;
+
 }
