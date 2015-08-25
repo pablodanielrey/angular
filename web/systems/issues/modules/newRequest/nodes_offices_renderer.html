@@ -1,0 +1,7 @@
+<div ui-tree-handle>
+  <input type="checkbox">{{office.name}} tree:<input type="checkbox">
+</div>
+<ol ui-tree-nodes ng-model="office.childrens">
+  <li ng-repeat="office in office.childrens" ui-tree-node ng-include="'modules/newRequest/nodes_offices_renderer.html'">
+  </li>
+</ol>
