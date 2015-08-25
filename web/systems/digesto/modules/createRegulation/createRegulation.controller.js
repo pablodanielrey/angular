@@ -159,6 +159,7 @@ function CreateRegulationCtrl($rootScope, $scope, Notifications, Digesto, Office
     function findNormativeById(id) {
       Digesto.findNormativeById(id,
           function(normative) {
+            console.log(normative);
             $scope.model.normative = normative;
             switch ($scope.model.normative.type) {
               case 'ORDINANCE':$scope.loadDataOrdinance(normative,normative.status.status,normative.visibility.type);break;
@@ -253,39 +254,45 @@ function CreateRegulationCtrl($rootScope, $scope, Notifications, Digesto, Office
 
     function createOrdinance() {
       $scope.model.normative = {};
-      $scope.loadDataOrdinance(null,'APPROVED','PUBLIC');
+      $scope.loadDataOrdinance($scope.model.normative,'APPROVED','PUBLIC');
     }
 
     function loadDataOrdinance(normative,status,visibility) {
       var status = findStatus(status);
       var visibility = findVisibility(visibility);
-      loadOfficesNormative(normative['visibility']);
+      if (normative['visbility']) {
+        loadOfficesNormative(normative['visbility']);
+      }
       loadDataNormative($scope.model.issuersOrdinance,'ORDINANCE',status,visibility);
       $scope.selectRegulation(1);
     }
 
     function createResolution() {
       $scope.model.normative = {};
-      $scope.loadDataResolution(null,'PENDING','PRIVATE');
+      $scope.loadDataResolution($scope.model.normative,'PENDING','PRIVATE');
     }
 
     function loadDataResolution(normative,status,visibility) {
       var status = findStatus(status);
       var visibility = findVisibility(visibility);
-      loadOfficesNormative(normative['visibility']);
+      if (normative['visbility']) {
+        loadOfficesNormative(normative['visbility']);
+      }
       loadDataNormative($scope.model.issuersResolution,'RESOLUTION',status,visibility);
       $scope.selectRegulation(2);
     }
 
     function createRegulation() {
       $scope.model.normative = {};
-      $scope.loadDataRegulation(null,'APPROVED','PUBLIC');
+      $scope.loadDataRegulation($scope.model.normative,'APPROVED','PUBLIC');
     }
 
     function loadDataRegulation(normative,status,visibility) {
       var status = findStatus(status);
       var visibility = findVisibility(visibility);
-      loadOfficesNormative(normative['visibility']);
+      if (normative['visbility']) {
+        loadOfficesNormative(normative['visbility']);
+      }
       loadDataNormative($scope.model.issuersRegulation,'REGULATION',status,visibility);
       $scope.selectRegulation(3);
     }
