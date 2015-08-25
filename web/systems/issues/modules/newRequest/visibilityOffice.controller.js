@@ -16,7 +16,7 @@ function VisibilityOfficesCtrl($rootScope,$scope,Notifications,Office) {
   // -------------------------------------------------------------
   // ------------------------- EVENTOS ---------------------------
   // -------------------------------------------------------------
-  $scope.$on('$viewContentLoaded', function(event) {
+  $rootScope.$on('$viewContentLoaded', function(event) {
     $scope.initialize();
   });
 
@@ -25,7 +25,25 @@ function VisibilityOfficesCtrl($rootScope,$scope,Notifications,Office) {
   // ----------------- INICIALIZACION -------------------------
   // ----------------------------------------------------------
   function initialize() {
+    loadOffices();
+  }
 
+  function loadOffices() {
+    Office.getOfficesByUser(null,true,
+      function(offices) {
+        if (offices.length == 0) {
+          $scope.model.offices = [];
+          return;
+        }
+        $scope.model.offices = offices;
+        var o = $scope.model.offices[0];
+        o['childrens'] = [{name:'Programacion',childrens:[{name:'Diseño',childrens:[]}]}];
+        $scope.model.offices.push({name:'Detise',childrens:[]});
+      },
+      function(error) {
+        Notifications.message(error);
+      }
+    );
   }
 
 }

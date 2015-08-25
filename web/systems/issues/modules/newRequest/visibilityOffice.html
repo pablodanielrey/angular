@@ -1,3 +1,5 @@
-<div>
-Visibilidad por Oficinas
+<div data-drag-enabled="false" ui-tree class="contenOffices">
+  <ol ui-tree-nodes ng-model="model.offices" id="tree-root">
+    <li ng-repeat="office in model.offices" ui-tree-node ng-include="'modules/newRequest/nodes_offices_renderer.html'"></li>
+  </ol>
 </div>
