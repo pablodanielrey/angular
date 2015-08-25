@@ -204,30 +204,26 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
 
 
 
-
+  /*
+    ABRIR LA PANTALLA DE VISIBILIDAD DE GRUPO
+  */
+  $scope.openVisibility = openVisibility;
+  function openVisibility(issue) {
+      console.log('open visibility');
+  }
 
 
   /******************
    * INICIALIZACION *
    ******************/
-  $timeout(function() {
+
+  $scope.$on('$viewContentLoaded', function(event) {
+   $scope.initialize();
+  });
+
+  $scope.initialize = initialize;
+  function initialize() {
     $scope.getIssues();
-    /*Module.authorize('ADMIN-ASSISTANCE,USER-ASSISTANCE',
-      function(response){
-        if (response !== 'granted') {
-          Notifications.message("Acceso no autorizado");
-          $window.location.href = "/#/logout";
-        }
-        $scope.global.sessionUserId = Module.getSessionUserId();
-        $scope.getIssues();
-      },
-      function(error){
-        Notifications.message(error);
-        $window.location.href = "/#/logout";
-      }
-    );*/
-
-
-  }, 0);
+  }
 
 }]);
