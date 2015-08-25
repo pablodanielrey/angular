@@ -44,17 +44,19 @@ class OfficesWamp(ApplicationSession):
         passw = self.serverConfig.configs['database_password']
         return psycopg2.connect(host=host, dbname=dbname, user=user, password=passw)
 
-    def getOfficesByUser(self, userId, tree):
+    def getOfficesByUser(self, sessionId, userId, tree):
         con = self._getDatabase()
         try:
+            if userId is None:
+                userId = self.profiles.getLocalUserId(sessionId)            
             return self.offices.getOfficesByUser(con,userId,tree)
         finally:
             con.close()
 
     @coroutine
-    def getOfficesByUser_async(self, userId, tree):
+    def getOfficesByUser_async(self, sessionId,userId, tree):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getOfficesByUser, userId, tree)
+        r = yield from loop.run_in_executor(None, self.getOfficesByUser, sessionId, userId, tree)
         return r
 
     def getOffices(self):

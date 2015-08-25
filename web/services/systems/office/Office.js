@@ -88,7 +88,8 @@ function Office($rootScope, $wamp, Session) {
           }]
   */
   function getOfficesByUser(userId,tree,callbackOk,callbackError) {
-    $wamp.call('offices.offices.getOfficesByUser', [userId,tree])
+    sessionId = Session.getSessionId();
+    $wamp.call('offices.offices.getOfficesByUser', [sessionId,userId,tree])
     .then(function(res) {
       if (res != null) {
         callbackOk(res);
