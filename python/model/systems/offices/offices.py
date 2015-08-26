@@ -215,6 +215,8 @@ class Offices:
             for off2 in offices:
                 if off['parent'] ==  off2['id']:
                     removeOffices.append(off)
+                    if 'childrens' not in off2:
+                        off2['childrens'] = []
                     off2['childrens'].append(off)
                     break
                 if 'childrens' not in off2:
@@ -222,6 +224,8 @@ class Offices:
                 for child in off2['childrens']:
                     if off['parent'] == child['id']:
                         removeOffices.append(off)
+                        if 'childrens' not in child:
+                            child['childrens'] = []
                         child['childrens'].append(off)
                         break
                 else:
