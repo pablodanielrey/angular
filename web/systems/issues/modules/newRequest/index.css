@@ -184,10 +184,10 @@
 }
 
 .contentScreens .nodeOffice {
-  cursor:pointer;
+  cursor:default;
   height: initial;
 }
 
 .contentScreens .nodeOffice .nameNodeOffice {
-  cursor:pointer;
+  cursor:default;
 }
