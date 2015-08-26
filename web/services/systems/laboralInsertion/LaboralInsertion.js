@@ -1,36 +1,10 @@
 
-var app = angular.module('mainApp');
+angular
+  .module('mainApp')
+  .service('LaboralInsertion',LaboralInsertion);
 
-app.service('LaboralInsertion', function($wamp, Notifications) {
+LaboralInsertion.inject = ['$rootScope','$wamp','Session']
 
-	this.downloadDatabase = function(cok,cerr) {
-		$wamp.call('system.laboralInsertion.download')
-			.then(function(res) {
-				cok(res);
-			},function(err) {
-			  cerr(err);
-			}
-		);
-	}
+function LaboralInsertion($rootScope,$wamp,Session) {
 
-	this.find = function(userId, cok, cerr) {
-		$wamp.call('system.laboralInsertion.find',[userId])
-			.then(function(data) {
-				cok(data);
-			},function(err) {
-			  cerr(err);
-			}
-		);
-	}
-
-	this.update = function(data, cok, cerr) {
-		$wamp.call('system.laboralInsertion.update',[data])
-			.then(function(res) {
-				cok(res);
-			},function(err) {
-			  cerr(err);
-			}
-		);
-	}
-
-});
+}

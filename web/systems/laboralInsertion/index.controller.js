@@ -1,7 +1,5 @@
 
-angular
-  .module('mainApp')
-  .controller('IndexCtrl',IndexCtrl);
+app.controller('IndexCtrl',IndexCtrl);
 
 IndexCtrl.$inject = ['$rootScope','$scope','$wamp','$window', 'Notifications', 'Login'];
 

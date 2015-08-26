@@ -9,6 +9,7 @@ app.controller('EditInsertionDataCtrl',function($rootScope, $scope, Login, Labor
 		userData: {},
 		studentData : {}
 	};
+
 	$scope.transformations = [];
 
 
@@ -110,7 +111,7 @@ app.controller('EditInsertionDataCtrl',function($rootScope, $scope, Login, Labor
 
 	$scope.loadData = function() {
 		var userId = Login.getUserId();
-		LaboralInsertion.find(userId,
+		/*LaboralInsertion.find(userId,
 			function(data) {
 				console.log(data);
 				$scope.$emit('UpdateLaboralInsertionDataEvent');
@@ -118,7 +119,7 @@ app.controller('EditInsertionDataCtrl',function($rootScope, $scope, Login, Labor
 			function(err) {
 				Notifications.message(err);
 			}
-		)
+		)*/
 	}
 
 
