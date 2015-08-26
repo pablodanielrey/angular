@@ -201,10 +201,14 @@ class Offices:
         for off in cur:
             oId = off[0]
             o = self._convertToDict(off)
-            o['childrens'] = offices.extend(self._getChildOffices(con,oId))
+            o['childrens'] = offices.extend(self._getChildOffices(con,[oId]))
             if o['childrens'] is None:
                 o['childrens'] = []
+
+            parent = self.findOffice(con,o['parent'])
+            parent['childrens'] = []
             offices.append(o)
+            offices.append(parent)
 
         removeOffices = []
         for off in offices:
@@ -221,7 +225,8 @@ class Offices:
                         child['childrens'].append(off)
                         break
                 else:
-                    break
+                    continue
+                break
 
         offices = [x for x in offices if x not in removeOffices]
         return offices
