@@ -29,7 +29,7 @@ function VisibilityOfficesCtrl($rootScope,$scope,Notifications,Office) {
   }
 
   function loadOffices() {
-    Office.getOfficesByUser(null,true,
+    Office.getOfficesTreeByUser(null,
       function(offices) {
         if (offices.length == 0) {
           $scope.model.offices = [];

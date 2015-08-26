@@ -144,13 +144,6 @@
   font-size: 1.2em;
 }
 
-.hola {
-  background-color: #eee;
-  padding: 5px;
-  margin-top: 10px;
-  border:1px solid #E3DFDF;
-}
-
 .descriptionExpanded {
   height: 100%;
 }
@@ -190,6 +183,11 @@
   display:none;
 }
 
+.contentScreens .nodeOffice {
+  cursor:pointer;
+  height: initial;
+}
 
-
-
+.contentScreens .nodeOffice .nameNodeOffice {
+  cursor:pointer;
+}
