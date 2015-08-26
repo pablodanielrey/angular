@@ -35,15 +35,49 @@ function VisibilityOfficesCtrl($rootScope,$scope,Notifications,Office) {
           $scope.model.offices = [];
           return;
         }
+        for (var i = 0; i < offices.length; i++) {
+          o = offices[i];
+          o['tree'] = false;
+        }
         $scope.model.offices = offices;
-        var o = $scope.model.offices[0];
-        o['childrens'] = [{name:'Programacion',childrens:[{name:'Diseño',childrens:[]}]}];
-        $scope.model.offices.push({name:'Detise',childrens:[]});
       },
       function(error) {
         Notifications.message(error);
       }
     );
   }
+
+  // ----------------------------------------------------------
+  // --------------------- ACCIONES ---------------------------
+  // ----------------------------------------------------------
+  $scope.selectTree = selectTree;
+  $scope.selectOffice = selectOffice;
+
+  function selectTree(office) {
+    if (!office.selected) {
+      office.selected = !office.selected;
+    }
+    changeChildrens(office,office.tree);
+  }
+
+  function selectOffice(office) {
+    if (office.tree) {
+      office.tree = office.selected;
+      if (!office.tree) {
+        changeChildrens(office,false);
+      }
+    }
+  }
+
+  function changeChildrens(office,value) {
+    if (office.childrens) {
+      for (var i = 0; i < office.childrens.length; i++) {
+          office.childrens[i].selected = value;
+          office.childrens[i].disabled = value;
+          changeChildrens(office.childrens[i],value);
+      }
+    }
+  }
+
 
 }

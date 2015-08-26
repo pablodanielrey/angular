@@ -28,8 +28,6 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
   $scope.data = []; //raiz del arbol de nodos
 
 
-
-
   /**
    * Inicializar nodo con valores por defecto. Cuando se crea un nuevo nodo en el arbol se inicializa y guarda en la base con los siguientes parametros
    */
