@@ -40,7 +40,7 @@ class Issue:
     def findIssuesByOffice_View(self,con,office_id):
         ids = []
         cur = con.cursor()
-        cur.execute('select DISTINCT issue_id from issues.visibility_group_owner where office_id = %s',(office_id,))
+        cur.execute('select DISTINCT request_id from issues.visibility_group_owner where office_id = %s',(office_id,))
         for i in cur:
             ids.append(i[0])
         return ids
@@ -142,6 +142,7 @@ class Issue:
         visibilities = [{'type':OFFICE|USER},'office_id':id office o 'user_id' si es USER,'tree':True]
     '''
     def create(self,con,issue,userId,visibilities,state='PENDING'):
+
         if issue is None or userId is None or visibilities is None or 'office_id' not in issue:
             return None
 
@@ -253,6 +254,13 @@ class Issue:
 
 
 
+    def _includeIssue(self,issue_id,issues):
+        for iss in issues:
+            if iss['id'] == issue_id:
+                return True
+            if self._includeIssue(issue_id,iss['childrens']):
+                return True
+        return False
 
     '''
         Retorna todas las issues solicitadas por el usuario o aquellas cuyo responsable es el usuario
@@ -262,6 +270,40 @@ class Issue:
             return None
 
         cur = con.cursor()
+
+        # ---- issues por visibilidad de oficina -----
+        offices = self.offices.getOfficesByUser(con,userId,True)
+        issues = []
+        for o in offices:
+            # agrego solo los issues que no estan agregados
+            aux = self.findIssuesByOffice_View(con,o['id'])
+            for i in aux:
+                if not self._includeIssue(i,issues):
+                    issues.append(self.findIssue(con,i))
+            # issues.extend(busco por los padres directos indirectos(padre del padre) de o pero chequeo que tenga el tree seleccionado, a estos issues no se le puede modificar la visibilidad)
+
+        return issues
+
+
+    def findIssue(self,con,id):
+        cur = con.cursor()
+        cur.execute('select id,created,request,requestor_id,related_request_id,assigned_id,priority,office_id from issues.request where id = %s',(id,))
+        issue = cur.fetchone()
+        if issue:
+            state = self.getState(con,issue[0])
+            visibilities = self.getVisibilitiesOfficesView(con,issue[0])
+            obj = self._convertToDict(issue,state,visibilities)
+            childrens = self._getChildrens(con,issue[0])
+            obj['childrens'] = childrens
+            return obj
+        else:
+            return None
+
+        # ------------------------------------------------------------------
+        # ------------------------------------------------------------------
+        # ------------------------------------------------------------------
+
+        '''
         cur.execute('select id,created,request,requestor_id,related_request_id,assigned_id,priority,office_id from issues.request where requestor_id  = %s or assigned_id = %s',(userId,userId))
         issues = []
         ids = []
@@ -289,7 +331,7 @@ class Issue:
                 ret.append(issue)
 
         return ret
-
+        '''
 
     def _include(self,issue,issue2):
         if issue['id'] == issue2['id']:

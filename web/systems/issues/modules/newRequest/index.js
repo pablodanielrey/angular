@@ -109,7 +109,7 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
     var newNode = $scope.initializeNode("PENDING");
     newNode.parent_id = nodeData.id;
     newNode.request = $scope.request;
-    newNode.visibilities = []
+    newNode.visibilities = nodeData['vibilities'];
 
     Issue.newIssue(newNode,newNode['state'], newNode['visibilities'],
       function(data) {$scope.getIssues(); $scope.request = null;},
@@ -123,7 +123,7 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
     var newNode = $scope.initializeNode("COMMENT");
     newNode.parent_id = nodeData.id;
     newNode.request = $scope.request;
-    newNode.visibilities = []
+    newNode.visibilities = nodeData['visibilities'];
 
     Issue.newIssue(newNode,newNode['state'],newNode['visibilities'],
       function(data) {
@@ -142,7 +142,8 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
   $scope.createNode = function(){
     var newNode = $scope.initializeNode("PENDING");
     newNode.request = $scope.request;
-    newNode.visibilities = []
+    off = $scope.model.offices[0];
+    newNode.visibilities = [{'office_id':off.id,'tree':false,'type':'OFFICE'}]
 
     Issue.newIssue(newNode,newNode['state'],newNode['visibilities'],
       function(data) {$scope.getIssues();$scope.request = null; },
@@ -225,7 +226,7 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
     issue.visibilities = selecteds;
     Issue.updateIssueData(issue, null,
       function(response) {
-
+        $scope.getIssues();
       },
       function(error) {
         Notifications.message(error);
