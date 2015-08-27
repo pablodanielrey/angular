@@ -205,10 +205,10 @@ class Offices:
             if o['childrens'] is None:
                 o['childrens'] = []
 
-            parent = self.findOffice(con,o['parent'])
-            parent['childrens'] = []
+            # parent = self.findOffice(con,o['parent'])
+            # parent['childrens'] = []
             offices.append(o)
-            offices.append(parent)
+            # offices.append(parent)
 
         removeOffices = []
         for off in offices:
