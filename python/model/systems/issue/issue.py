@@ -60,7 +60,7 @@ class Issue:
 
 
     def createVisibilityOffice_View(self,con,issue_id,office_id,tree=True,created=None):
-        if visibility is None or issue_id is None or office_id is None:
+        if issue_id is None or office_id is None:
             return None
 
         cur = con.cursor()
@@ -75,7 +75,7 @@ class Issue:
         params = (id,issue_id,office_id,created,tree)
 
         cur.execute('set timezone to %s',('UTC',))
-        cur.execute('insert into issues (id,request_id,office_id,created,tree) values(%s,%s,%s,%s,%s)',params)
+        cur.execute('insert into issues.visibility_group_owner (id,request_id,office_id,created,tree) values(%s,%s,%s,%s,%s)',params)
 
         return id
 

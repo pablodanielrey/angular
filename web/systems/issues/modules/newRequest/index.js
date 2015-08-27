@@ -8,7 +8,7 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
 
   /***** MANIPULACION DE ESTILOS ******/
   $scope.style = null;
-  $scope.styles = [];
+  $scope.styles = ['none','displayVisibility'];
 
   $scope.setStyle = function($index) {
     $scope.style = $scope.styles[$index];
@@ -207,7 +207,8 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
   */
   $scope.openVisibility = openVisibility;
   function openVisibility(issue) {
-      console.log('open visibility');
+    $scope.$broadcast('displayVisbilityEvent',issue);
+    $scope.setStyle(1);
   }
 
 
@@ -217,6 +218,23 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
 
   $scope.$on('$viewContentLoaded', function(event) {
    $scope.initialize();
+  });
+
+  $scope.$on('saveVisibilityEvent', function(event,issue,selecteds) {
+    $scope.setStyle(0);
+    issue.visibilities = selecteds;
+    Issue.updateIssueData(issue, null,
+      function(response) {
+
+      },
+      function(error) {
+        Notifications.message(error);
+      }
+    );
+  });
+
+  $scope.$on('cancelVisibilityEvent', function(event) {
+    $scope.setStyle(0);
   });
 
   $scope.initialize = initialize;

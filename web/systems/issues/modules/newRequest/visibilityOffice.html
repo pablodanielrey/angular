@@ -1,5 +1,11 @@
-<div data-drag-enabled="false" ui-tree class="contentOffices">
-  <ol ui-tree-nodes ng-model="model.offices" id="tree-root">
-    <li class="nodeOffice" ng-repeat="office in model.offices" ui-tree-node ng-include="'modules/newRequest/nodes_offices_renderer.html'"></li>
-  </ol>
+<div class="contentOffices">
+  <div data-drag-enabled="false" ui-tree class="contentTreeOffices">
+    <ol ui-tree-nodes ng-model="model.offices" id="tree-root">
+      <li class="nodeOffice" ng-repeat="office in model.offices" ui-tree-node ng-include="'modules/newRequest/nodes_offices_renderer.html'"></li>
+    </ol>
+  </div>
+  <div class="actions">
+    <input type="submit" value="Cancelar" ng-click="cancelVisibility()"/>
+    <input type="submit" value="Guardar" ng-click="saveVisibility()"/>
+  <div>
 </div>

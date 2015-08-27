@@ -11,7 +11,13 @@
 
 }
 
+.contentScreens .visibilityOffices {
+  display:none;
+}
 
+.contentScreens.displayVisibility .visibilityOffices {
+  display:block;
+}
 
 
 .ContentOrders {
@@ -183,7 +189,7 @@
   display:none;
 }
 
-.contentScreens .nodeOffice {
+.contentScreens .contentOffices {
   cursor:default;
   height: initial;
 }

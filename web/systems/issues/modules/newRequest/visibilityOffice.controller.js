@@ -6,6 +6,10 @@ VisibilityOfficesCtrl.$inject =  ['$rootScope', '$scope', 'Notifications', 'Offi
 
 function VisibilityOfficesCtrl($rootScope,$scope,Notifications,Office) {
 
+  $scope.model.issueSelected = {}
+
+
+  // visibility = {'office_id':'','tree':false}
 
   // ----------------------------------------------------------
   // -------------- DEFINICION DE METODOS ---------------------
@@ -17,15 +21,50 @@ function VisibilityOfficesCtrl($rootScope,$scope,Notifications,Office) {
   // ------------------------- EVENTOS ---------------------------
   // -------------------------------------------------------------
   $rootScope.$on('$viewContentLoaded', function(event) {
-    $scope.initialize();
+    loadOffices();
+    $scope.initialize(null);
   });
+
+  $scope.$on('displayVisbilityEvent',function(event,issue) {
+    $scope.initialize(issue);
+    initializeOffices($scope.model.offices);
+    for (var i = 0; i < issue.visibilities.length; i++) {
+      var v = issue.visibilities[i];
+      changeVisibilities($scope.model.offices,v);
+    }
+  });
+
+  function changeVisibilities(offices,v) {
+    for (var i = 0; i < offices.length; i++) {
+      var o = offices[i];
+      if (o.id == v.office_id) {
+        o.selected = true;
+        if (v.tree) {
+          o.tree = true;
+          changeChildrens(o,true);
+        }
+        return;
+      }
+      changeVisibilities(o.childrens,v);
+    }
+  }
 
 
   // ----------------------------------------------------------
   // ----------------- INICIALIZACION -------------------------
   // ----------------------------------------------------------
-  function initialize() {
-    loadOffices();
+  function initialize(issue) {
+    $scope.model.issueSelected = issue;
+  }
+
+  function initializeOffices(offices) {
+    for (var i = 0; i < offices.length; i++) {
+      o = offices[i];
+      o['tree'] = false;
+      o['selected'] = false;
+      o['disabled'] = false;
+      initializeOffices(o.childrens);
+    }
   }
 
   function loadOffices() {
@@ -35,10 +74,7 @@ function VisibilityOfficesCtrl($rootScope,$scope,Notifications,Office) {
           $scope.model.offices = [];
           return;
         }
-        for (var i = 0; i < offices.length; i++) {
-          o = offices[i];
-          o['tree'] = false;
-        }
+        initializeOffices(offices);
         $scope.model.offices = offices;
       },
       function(error) {
@@ -52,6 +88,8 @@ function VisibilityOfficesCtrl($rootScope,$scope,Notifications,Office) {
   // ----------------------------------------------------------
   $scope.selectTree = selectTree;
   $scope.selectOffice = selectOffice;
+  $scope.saveVisibility = saveVisibility;
+  $scope.cancelVisibility = cancelVisibility;
 
   function selectTree(office) {
     if (!office.selected) {
@@ -79,5 +117,28 @@ function VisibilityOfficesCtrl($rootScope,$scope,Notifications,Office) {
     }
   }
 
+  function getSelecteds(offices) {
+    selecteds = [];
+    for (var i = 0; i < offices.length; i++) {
+      var off = offices[i];
+      if (off.tree) {
+        selecteds.push({'office_id':off.id,'tree':off.tree,'type':'OFFICE'});
+        continue;
+      }
+      if (off.selected) {
+        selecteds.push({'office_id':off.id,'tree':off.tree,'type':'OFFICE'});
+      }
+      selecteds = selecteds.concat(getSelecteds(off.childrens));
+    }
+    return selecteds;
+  }
 
+  function saveVisibility() {
+    selecteds = getSelecteds($scope.model.offices);
+    $scope.$emit('saveVisibilityEvent',$scope.model.issueSelected,selecteds);
+  }
+
+  function cancelVisibility() {
+    $scope.$emit('cancelVisibilityEvent');
+  }
 }
