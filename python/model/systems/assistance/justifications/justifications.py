@@ -104,6 +104,10 @@ class Justifications:
     def _getJustificationsInStatus(self,con,status=None):
         cur = con.cursor()
 
+
+        
+        
+        
         ''' obtengo el ultimo estado de los pedidos de justificacion '''
         if status is None:
             cur.execute('select jrs.request_id,jrs.status,jrs.user_id from assistance.justifications_requests_status as jrs, (select request_id,max(created) as created from assistance.justifications_requests_status group by request_id) as r where r.created = jrs.created and r.request_id = jrs.request_id')
