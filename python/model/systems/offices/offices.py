@@ -44,6 +44,23 @@ class Offices:
 
         return roffices
 
+    '''
+        obtiene las oficinas hijas de las oficinas pasadas como parámetro en forma de tree
+    '''
+    def _getChildOfficesTree(self,con,office):
+        cur = con.cursor()
+        cur.execute('select id,parent,name,telephone,email from offices.offices where parent = %s',(office['id'],))
+        if cur.rowcount <= 0:
+            return []
+
+        childrens = []
+        for cOff in cur:
+            off = self._convertToDict(cOff)
+            off['childrens'] = self._getChildOfficesTree(con,off)
+            for child in off['childrens']:
+                child['childrens'] = self._getChildOfficesTree(con,child)
+            childrens.append(off)
+        return childrens
 
 
     '''
@@ -201,7 +218,7 @@ class Offices:
         for off in cur:
             oId = off[0]
             o = self._convertToDict(off)
-            o['childrens'] = offices.extend(self._getChildOffices(con,[oId]))
+            o['childrens'] = self._getChildOfficesTree(con,o)
             if o['childrens'] is None:
                 o['childrens'] = []
 

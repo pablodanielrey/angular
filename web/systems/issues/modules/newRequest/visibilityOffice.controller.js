@@ -28,9 +28,19 @@ function VisibilityOfficesCtrl($rootScope,$scope,Notifications,Office) {
   $scope.$on('displayVisbilityEvent',function(event,issue) {
     $scope.initialize(issue);
     initializeOffices($scope.model.offices);
+    if (issue['readOnly']) {
+      for (var i = 0; i < $scope.model.offices.length; i++) {
+        var off = $scope.model.offices[i];
+        off.selected = true;
+        off.disabled = true;
+      }
+      return;
+    }
     for (var i = 0; i < issue.visibilities.length; i++) {
       var v = issue.visibilities[i];
-      changeVisibilities($scope.model.offices,v);
+      if (!changeVisibilities($scope.model.offices,v)) {
+        $scope.model.otherOffices.push(v);
+      }
     }
   });
 
@@ -43,10 +53,11 @@ function VisibilityOfficesCtrl($rootScope,$scope,Notifications,Office) {
           o.tree = true;
           changeChildrens(o,true);
         }
-        return;
+        return true;
       }
-      changeVisibilities(o.childrens,v);
+      return changeVisibilities(o.childrens,v);
     }
+    return false;
   }
 
 
@@ -55,9 +66,14 @@ function VisibilityOfficesCtrl($rootScope,$scope,Notifications,Office) {
   // ----------------------------------------------------------
   function initialize(issue) {
     $scope.model.issueSelected = issue;
+    if (issue != null) {
+      var v = (issue['readOnly']) ? issue['readOnly']:false;
+      $scope.model.issueSelected.readOnly = v;
+    }
   }
 
   function initializeOffices(offices) {
+    $scope.model.otherOffices = [];
     for (var i = 0; i < offices.length; i++) {
       o = offices[i];
       o['tree'] = false;
@@ -90,6 +106,11 @@ function VisibilityOfficesCtrl($rootScope,$scope,Notifications,Office) {
   $scope.selectOffice = selectOffice;
   $scope.saveVisibility = saveVisibility;
   $scope.cancelVisibility = cancelVisibility;
+  $scope.isReadOnly = isReadOnly;
+
+  function isReadOnly() {
+    return $scope.model.issueSelected != null && $scope.model.issueSelected.readOnly
+  }
 
   function selectTree(office) {
     if (!office.selected) {
@@ -135,6 +156,7 @@ function VisibilityOfficesCtrl($rootScope,$scope,Notifications,Office) {
 
   function saveVisibility() {
     selecteds = getSelecteds($scope.model.offices);
+    selecteds = selecteds.concat($scope.model.otherOffices);
     $scope.$emit('saveVisibilityEvent',$scope.model.issueSelected,selecteds);
   }
 

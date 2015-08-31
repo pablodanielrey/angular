@@ -275,15 +275,55 @@ class Issue:
         offices = self.offices.getOfficesByUser(con,userId,True)
         issues = []
         for o in offices:
-            # agrego solo los issues que no estan agregados
             aux = self.findIssuesByOffice_View(con,o['id'])
             for i in aux:
-                if not self._includeIssue(i,issues):
-                    issues.append(self.findIssue(con,i))
-            # issues.extend(busco por los padres directos indirectos(padre del padre) de o pero chequeo que tenga el tree seleccionado, a estos issues no se le puede modificar la visibilidad)
+                issues.append(self.findIssue(con,i))
+            issues.extend(self._getIssuesByParentsOffice(con,o['parent']))
+        issuesRet = []
+        while len(issues) > 0:
+            issue = issues[0]
+            issues.remove(issue)
+            if not self._includeIssue(issue['id'],issues) and not self._includeIssue(issue['id'],issuesRet):
+                issuesRet.append(issue)
+        # self.filterIssuesByVisibilityOffices(issues,offices)
+        return issuesRet
 
+    # obtiene los issues de la oficina y de todos los padres que tengan el tree como true
+    def _getIssuesByParentsOffice(self,con,officeId):
+        issues = []
+        if officeId is None:
+            return issues
+
+        office = self.offices.findOffice(con,officeId)
+        cur = con.cursor()
+        cur.execute('select DISTINCT request_id from issues.visibility_group_owner where office_id = %s and tree = true',(officeId,))
+        for i in cur:
+            issue = self.findIssue(con,i[0])
+            issue['readOnly'] = True
+            issues.append(issue)
+
+        issues.extend(self._getIssuesByParentsOffice(con,office['parent']))
         return issues
 
+    def filterIssuesByVisibilityOffices(self,issues,offices):
+        removeIssues = []
+        for issue in issues:
+            for v in issue['visibilities']:
+                if self._includeOffices(v['office_id'],offices):
+                    break
+            else:
+                removeIssues.append(issue)
+                continue
+            self.filterIssuesByVisibilityOffices(issue['childrens'],offices)
+
+        for i in removeIssues:
+            issues.remove(i)
+
+    def _includeOffices(self,id,offices):
+        for o in offices:
+            if o['id'] == id:
+                return True
+        return False
 
     def findIssue(self,con,id):
         cur = con.cursor()

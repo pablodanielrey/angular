@@ -5,7 +5,8 @@
     </ol>
   </div>
   <div class="actions">
-    <input type="submit" value="Cancelar" ng-click="cancelVisibility()"/>
-    <input type="submit" value="Guardar" ng-click="saveVisibility()"/>
+    <input type="button" value="Volver" ng-click="cancelVisibility()" ng-if="isReadOnly()"/>
+    <input type="button" value="Cancelar" ng-click="cancelVisibility()" ng-if="!isReadOnly()"/>
+    <input type="submit" value="Guardar" ng-click="saveVisibility()" ng-if="!isReadOnly()"/>
   <div>
 </div>
