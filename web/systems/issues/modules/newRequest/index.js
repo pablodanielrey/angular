@@ -109,7 +109,7 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
     var newNode = $scope.initializeNode("PENDING");
     newNode.parent_id = nodeData.id;
     newNode.request = $scope.request;
-    newNode.visibilities = nodeData['vibilities'];
+    newNode.visibilities = nodeData['visibilities'];
 
     Issue.newIssue(newNode,newNode['state'], newNode['visibilities'],
       function(data) {$scope.getIssues(); $scope.request = null;},

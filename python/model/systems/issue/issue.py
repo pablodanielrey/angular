@@ -142,7 +142,6 @@ class Issue:
         visibilities = [{'type':OFFICE|USER},'office_id':id office o 'user_id' si es USER,'tree':True]
     '''
     def create(self,con,issue,userId,visibilities,state='PENDING'):
-
         if issue is None or userId is None or visibilities is None or 'office_id' not in issue:
             return None
 
