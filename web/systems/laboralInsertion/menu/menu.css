@@ -4,16 +4,16 @@
   width: 200px;
 }
 
-.menu-container .ng-scope {
+.ng-scope {
   height: 100%;
 }
 
-.menu-container .fa:hover {
+.fa:hover {
   cursor: pointer;
 
 }
 
-.menu-container .menuDigesto {
+.menuDigesto {
   display: flex;
   flex-direction: column;
 
@@ -41,7 +41,8 @@
 }
 
 .menuDigesto ul {
-
+  padding-left: 0px;
+  margin: 0px;
   list-style-type:none;
   background: #34495e; /* Old browsers */
   background: -moz-linear-gradient(left, #275276 78%, #235984 78%); /* FF3.6+ */
@@ -102,8 +103,7 @@
 
 
 }
-
-.menu-container a:link, a:visited, a:active{
+a:link, a:visited, a:active{
   text-decoration: none;
   color:white;
 }

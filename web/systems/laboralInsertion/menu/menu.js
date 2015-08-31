@@ -14,11 +14,11 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Notifications'
     }
 
     $scope.download = function() {
-      $location.path('/download');
+      $location.path('/descargar');
     }
 
     $scope.upload = function() {
-      $location.path('/upload');
+      $location.path('/inscripcion');
     }
 
   	$scope.exit = function() {
@@ -31,8 +31,9 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Notifications'
 
     $scope.initialize = function() {
       $scope.model.items = [];
+      $scope.model.items.push({ n:1, label:'Inscripción', img:'fa fa-lock', function: $scope.upload });
       $scope.model.items.push({ n:1, label:'Descargar', img:'fa fa-lock', function: $scope.download });
-      $scope.model.items.push({ n:1, label:'Inscribirse', img:'fa fa-lock', function: $scope.upload });
+
     }
 
     $rootScope.$on('$viewContentLoaded', function(event) {

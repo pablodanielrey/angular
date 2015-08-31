@@ -9,13 +9,13 @@ app.config(['$routeProvider', function($routeProvider) {
      templateUrl: '/systems/laboralInsertion/modules/main.html'
   })
 
-  .when('/download', {
+  .when('/descargar', {
      templateUrl: '/systems/laboralInsertion/modules/download/download.html',
      controller: 'DownloadCtrl'
   })
 
-  .when('/upload', {
-     templateUrl: '/systems/laboralInsertion/modules/upload/editData.html',
+  .when('/inscripcion', {
+     templateUrl: '/systems/laboralInsertion/modules/inscription/inscription.html',
      controller: 'EditInsertionDataCtrl'
   })
 

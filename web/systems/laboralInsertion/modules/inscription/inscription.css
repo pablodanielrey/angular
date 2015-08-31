@@ -1,0 +1,162 @@
+.inscriptionContainer {
+  height:100%;
+  width:100%;
+  position:absolute;
+  overflow:hidden;
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  margin:0px;
+  background-color: #eee;
+
+
+}
+.inscription {
+  background-color:white;
+  -webkit-box-shadow: 1px 1px 5px #5c5f69;
+  -moz-box-shadow: 5px 5px 5px #5c5f69;
+  border-radius:2px;
+  -webkit-border-radius:2px;
+  -moz-border-radius:2px;
+  padding: 20px;
+  width: 79%;
+  margin: 20px;
+
+}
+
+/****************************************************************/
+/********************* DATOS BASICOS ****************************
+******* Contenedor de los datos basicos de la persona************/
+
+.inscription .dataBasic {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+}
+
+.inscription .item {
+  margin-bottom: 10px;
+  margin-right: 50px;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+}
+
+.inscription .item .photo {
+    width: 290px;
+    height: 140px;
+    float: left;
+    border: 0;
+    background: #eee;
+    border-radius: 3px 3px 3px 3px;
+    box-shadow: 0 0 2px rgba(0,0,0,.5) inset;
+}
+
+.inscription .item input {
+    width: 200px;
+    height: 20px;
+    padding: 10px 20px;
+    float: left;
+    font:  18px 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    border: 0;
+    background: #eee;
+    border-radius: 0 3px 3px 0px;
+    box-shadow: 0 0 2px rgba(0,0,0,.5) inset;
+}
+
+.inscription .item input:focus {
+    outline: 0;
+    background: #fff;
+    box-shadow: 0 0 2px rgba(0,0,0,.5) inset;
+}
+
+.inscription .item input::-webkit-input-placeholder {
+   color: #999;
+   font-weight: normal;
+   font-style: italic;
+}
+
+.inscription .item input:-moz-placeholder {
+    color: #999;
+    font-weight: normal;
+    font-style: italic;
+}
+
+.inscription .item input:-ms-input-placeholder {
+    color: #999;
+    font-weight: normal;
+    font-style: italic;
+}
+
+.inscription .selectGrey {
+  color: red;
+}
+
+.inscription .item select {
+    width: 240px;
+    height: 40px;
+    padding: 10px 20px;
+    float: left;
+    font:  18px 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    border: 0;
+    background: #eee;
+    border-radius: 0 3px 3px 0px;
+    box-shadow: 0 0 2px rgba(0,0,0,.5) inset;
+  
+}
+
+.inscription .item button {
+    overflow: visible;
+    position: relative;
+    float: right;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    height: 40px;
+    width: 50px;
+    font: bold 15px/40px 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    color: #fff;
+    text-transform: uppercase;
+    background: #0066A6;
+    border-radius: 3px 0 0 3px;
+    text-shadow: 0 -1px 0 rgba(0, 0 ,0, .3);
+}
+
+.inscription .item button:hover{
+    background: #0066A6;
+}
+
+.inscription .item button:active,
+.inscription .item button:focus{
+    background: #0066A6;
+    outline: 0;
+}
+
+.inscription .item button:before { /* FLECHITA */
+    content: '';
+    position: absolute;
+    border-width: 8px 0 8px 8px;
+    border-style: solid;
+    border-color: transparent #0066A6 transparent;
+    top: 12px;
+    right: -6px;
+}
+
+.inscription .item button:hover:before{
+    border-right-color: #0066A6;
+}
+
+.inscription .item button:focus:before,
+.searchRegulation .item button:active:before{
+        border-right-color: #0066A6;
+}
+
+/* quitar espacio extra del botón para Mozilla Firefox */
+.inscription .item button::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+}
