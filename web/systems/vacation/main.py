@@ -37,11 +37,26 @@ for userId in usersId:
 '''
 
 begin = datetime.datetime(2015, 8, 31)
-now = datetime.datetime(2020, 8, 31)
+future = datetime.datetime(2020, 8, 31)
     
     
-justificationRequests = justification.getJustificationRequestsByDate(con, ['APPROVED'], usersId, begin, now)
+justificationRequests = justification.getJustificationRequestsByDate(con, ['APPROVED'], usersId, begin, future)
 
+
+for userId in usersId:
+    stock = justification.getJustificationStock(con, userId, '76bc064a-e8bf-4aa3-9f51-a3c4483a729a', begin)
+    if stock > 0:
+        userData = users.findUser(con,userId)
+        print(userData["name"] + ' ' + userData["lastname"] + ' ' +  str(stock))
+
+        
+    
+    
+    
+    
+
+
+"""
 laoByUsers = {}
 for justificationRequest in justificationRequests:
     if justificationRequest["justification_id"] == '76bc064a-e8bf-4aa3-9f51-a3c4483a729a':
@@ -59,7 +74,7 @@ for userId in laoByUsers:
 
 
 #print(justificationRequests)
-
+"""
 
 
     
