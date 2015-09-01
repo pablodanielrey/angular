@@ -1,44 +1,60 @@
 var app = angular.module('mainApp');
 
-app.service('Assistance', ['Utils','Session','Office',
+app.service('Assistance', ['Utils','Messages','Session',
 
-	function(Utils, Session, Office) {
+	function(Utils,Messages,Session) {
 
-		this.getOfficesUsers = function(offices, cok, cerr) {
-			var sid = Session.getSessionId();
-			Office.getOfficesUsers(offices, cok, cerr);
-		}
+		/*
+		Obtiene todos los usuarios de las oficinas pasadas como parametro
+		*/
 
-		this.getUsersInOfficesByRole = function(role, cok, cerr) {
-			Office.getUserInOfficesByRole(role,cok,cerr);
-		}
-
-		this.getOfficesByUserRole = function(userId, role, tree, cok, cerr) {
-			Office.getOfficesByUserRole(userId, role, tree, cok, cerr);
-		}
-
-		this.getOfficesByUser = function(userId, callbackOk, callbackError) {
+		this.getOfficesUsers = function(offices, callbackOk, callbackError) {
 			var msg = {
 				id: Utils.getId(),
-				action: 'getOffices',
+				action: 'getOfficesUsers',
 				session: Session.getSessionId(),
-				request:{
-					user_id: userId
+				request: {
+					offices: offices
 				}
 			}
 
-		};
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response.users);
+					} else {
+						callbackError(data.error);
+					}
+				});
+		}
 
-		this.getUserOfficeRoles = function(callbackOk, callbackError) {
+		/*
+			Obtiene los usuarios que se encuentran dentro de las oficinas a las cuales el usuario loggeado tiene
+			un rol determinado.
+		*/
+		this.getUsersInOfficesByRole = function(role, callbackOk, callbackError) {
 			var msg = {
 				id: Utils.getId(),
-				action: 'getUserOfficeRoles',
+				action: 'getUserInOfficesByRole',
 				session: Session.getSessionId(),
-				request:{
+				request: {
+					tree: true
 				}
 			}
 
-		};
+			if (role != null) {
+				msg.request.role = role;
+			}
+
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response.users);
+					} else {
+						callbackError(data.error);
+					}
+				});
+			};
 
 
 		this.getFailsByDate = function(start, end, callbackOk, callbackError) {
@@ -52,6 +68,14 @@ app.service('Assistance', ['Utils','Session','Office',
 					}
 				}
 
+				Messages.send(msg,
+					function(data) {
+						if (typeof data.error === 'undefined') {
+							callbackOk(data);
+						} else {
+							callbackError(data.error);
+						}
+					});
 		};
 
 		this.getFailsByFilter = function (users, offices, start, end, filter, callbackOk, callbackError) {
@@ -103,6 +127,14 @@ app.service('Assistance', ['Utils','Session','Office',
 				}
 			}
 
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data);
+					} else {
+						callbackError(data.error);
+					}
+			});
 		}
 
 		this.getAssistanceStatusByDate = function(userId, date, callbackOk, callbackError) {
@@ -116,6 +148,14 @@ app.service('Assistance', ['Utils','Session','Office',
 				}
 			}
 
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response);
+					} else {
+						callbackError(data.error);
+					}
+				});
 		};
 
 		this.getAssistanceStatusByUsers = function(usersIds, dates, status, callbackOk, callbackError) {
@@ -130,7 +170,19 @@ app.service('Assistance', ['Utils','Session','Office',
 				}
 			}
 
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						var response = {};
+						response.assistances = data.response;
+						response.base64 = data.base64;
+						callbackOk(response);
+					} else {
+						callbackError(data.error);
+					}
+				});
 		};
+
 
 		this.getAssistanceStatus = function(userId, callbackOk, callbackError) {
 			var msg = {
@@ -143,6 +195,14 @@ app.service('Assistance', ['Utils','Session','Office',
 				}
 			}
 
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response);
+					} else {
+						callbackError(data.error);
+					}
+				});
 		};
 
 		this.getAssistanceData = function(userId, callbackOk, callbackError) {
@@ -155,6 +215,14 @@ app.service('Assistance', ['Utils','Session','Office',
 				}
 			}
 
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response);
+					} else {
+						callbackError(data.error);
+					}
+				});
 		};
 
 
@@ -172,6 +240,14 @@ app.service('Assistance', ['Utils','Session','Office',
 				msg.request.date = date;
 			}
 
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response);
+					} else {
+						callbackError(data.error);
+					}
+				});
 		};
 
 
@@ -196,6 +272,14 @@ app.service('Assistance', ['Utils','Session','Office',
 				request:request
 			}
 
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response);
+					} else {
+						callbackError(data.error);
+					}
+				});
 		};
 
 
@@ -209,9 +293,81 @@ app.service('Assistance', ['Utils','Session','Office',
 				}
 			};
 
+      Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.ok);
+					} else {
+						callbackError(data.error);
+					}
+		  });
     };
 
 
+		this.getOfficesByUserRole = function(userId,role,tree, callbackOk, callbackError) {
+			var msg = {
+				id: Utils.getId(),
+				action: 'getOfficesByUserRole',
+				session: Session.getSessionId(),
+
+				request:{
+					user_id: userId,
+					tree:tree
+				}
+			}
+
+			if (role != null) {
+				msg.request.role = role;
+			}
+
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response.offices);
+					} else {
+						callbackError(data.error);
+					}
+				});
+		};
+
+		this.getOfficesByUser = function(userId, callbackOk, callbackError) {
+			var msg = {
+				id: Utils.getId(),
+				action: 'getOffices',
+				session: Session.getSessionId(),
+				request:{
+					user_id: userId
+				}
+			}
+
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response);
+					} else {
+						callbackError(data.error);
+					}
+				});
+		};
+
+		this.getUserOfficeRoles = function(callbackOk, callbackError) {
+			var msg = {
+				id: Utils.getId(),
+				action: 'getUserOfficeRoles',
+				session: Session.getSessionId(),
+				request:{
+				}
+			}
+
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response.roles);
+					} else {
+						callbackError(data.error);
+					}
+				});
+		};
 
 
 		this.getJustifications = function(callbackOk, callbackError) {
@@ -221,6 +377,14 @@ app.service('Assistance', ['Utils','Session','Office',
 				session: Session.getSessionId(),
 			};
 
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response.justifications);
+					} else {
+						callbackError(data.error);
+					}
+				});
 		};
 
 		this.getJustificationsByUser = function(userId, callbackOk, callbackError) {
@@ -232,6 +396,15 @@ app.service('Assistance', ['Utils','Session','Office',
 					userId: userId
 				}
 			}
+
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response.justifications);
+					} else {
+						callbackError(data.error);
+					}
+				});
 		};
 
 
@@ -253,6 +426,15 @@ app.service('Assistance', ['Utils','Session','Office',
 			if (period != null) {
 				msg.request.period = period;
 			}
+
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response);
+					} else {
+						callbackError(data.error);
+					}
+				});
 		};
 
     /**
@@ -272,6 +454,15 @@ app.service('Assistance', ['Utils','Session','Office',
 					stock: stock
 				}
 			};
+
+      Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response);
+					} else {
+						callbackError(data.error);
+					}
+				});
 		};
 
 		this.getJustificationRequestsByDate = function(status, usersIds, start, end, callbackOk, callbackError){
@@ -298,6 +489,15 @@ app.service('Assistance', ['Utils','Session','Office',
 			if (end != null) {
 				msg.request.end = end;
 			}
+
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response.requests);
+					} else {
+						callbackError(data.error);
+					}
+			});
 		}
 
 		this.getJustificationRequestsToManage = function(status, group, callbackOk, callbackError){
@@ -316,6 +516,15 @@ app.service('Assistance', ['Utils','Session','Office',
 			if (group != null) {
 				msg.request.group = group;
 			}
+
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response.requests);
+					} else {
+						callbackError(data.error);
+					}
+			});
 		}
 
 
@@ -331,6 +540,15 @@ app.service('Assistance', ['Utils','Session','Office',
 			if (status != null) {
 				msg.request.status = status;
 			}
+
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response.requests);
+					} else {
+						callbackError(data.error);
+					}
+				});
 		}
 
 
@@ -344,6 +562,16 @@ app.service('Assistance', ['Utils','Session','Office',
 					status: status
 				}
 			}
+
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.ok);
+					} else {
+						callbackError(data.error);
+					}
+				}
+			);
 		};
 
 		this.requestJustification = function(userId, justification, status, callbackOk, callbackError) {
@@ -365,6 +593,15 @@ app.service('Assistance', ['Utils','Session','Office',
 			if (!(typeof status === 'undefined')) {
 				msg.request.status = status;
 			}
+
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response);
+					} else {
+						callbackError(data.error);
+					}
+				});
 		}
 
 		this.requestJustificationRange = function(userId, justification, status, callbackOk, callbackError) {
@@ -383,6 +620,15 @@ app.service('Assistance', ['Utils','Session','Office',
 			if (!(typeof status === 'undefined')) {
 				msg.request.status = status;
 			}
+
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response);
+					} else {
+						callbackError(data.error);
+					}
+				});
 		}
 
 
@@ -402,6 +648,15 @@ app.service('Assistance', ['Utils','Session','Office',
 			if (status != null) {
 				msg.request.status = status;
 			}
+
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response.requests);
+					} else {
+						callbackError(data.error);
+					}
+				});
 		};
 
 
@@ -424,7 +679,16 @@ app.service('Assistance', ['Utils','Session','Office',
 			if (group != null) {
 				msg.request.group = group;
 			}
-		};
+
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response.requests);
+					} else {
+						callbackError(data.error);
+					}
+				});
+			};
 
 
 		/**
@@ -444,6 +708,14 @@ app.service('Assistance', ['Utils','Session','Office',
 					reason: request.reason
 				}
 			};
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.ok);
+					} else {
+						callbackError(data.error);
+					}
+				});
 		};
 
 		/**
@@ -461,6 +733,14 @@ app.service('Assistance', ['Utils','Session','Office',
 					status: state
 				}
 			};
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.ok);
+					} else {
+						callbackError(data.error);
+					}
+				});
 		}
 
 
@@ -475,6 +755,14 @@ app.service('Assistance', ['Utils','Session','Office',
 				request: {
 				}
 			};
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response.justifications);
+					} else {
+						callbackError(data.error);
+					}
+				});
 		};
 
 
@@ -500,6 +788,15 @@ app.service('Assistance', ['Utils','Session','Office',
 			if (!(typeof justification.end === 'undefined')) {
 				msg.request.end = justification.end;
 			}
+
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response);
+					} else {
+						callbackError(data.error);
+					}
+				});
 		};
 
 
@@ -521,6 +818,16 @@ app.service('Assistance', ['Utils','Session','Office',
 					end: justification.end
 				}
 			};
+
+
+			Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response);
+					} else {
+						callbackError(data.error);
+					}
+				});
 		};
 
 
@@ -536,6 +843,16 @@ app.service('Assistance', ['Utils','Session','Office',
 				action: 'getGeneralJustificationRequests',
 				session: Session.getSessionId()
 			};
+
+      Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response.requests);
+					} else {
+						callbackError(data.error);
+					}
+				});
+
     };
 
     this.deleteGeneralJustificationRequest = function(requestId, callbackOk, callbackError){
@@ -547,6 +864,15 @@ app.service('Assistance', ['Utils','Session','Office',
 					request_id: requestId
 				}
 			};
+
+      Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.ok);
+					} else {
+						callbackError(data.error);
+					}
+		  });
     };
 
 
@@ -560,6 +886,15 @@ app.service('Assistance', ['Utils','Session','Office',
 					userId: userId
 				}
 			};
+
+      Messages.send(msg,
+				function(data) {
+					if (typeof data.error === 'undefined') {
+						callbackOk(data.response);
+					} else {
+						callbackError(data.error);
+					}
+		  });
   };
 
   /**
@@ -578,7 +913,16 @@ app.service('Assistance', ['Utils','Session','Office',
         position: position
       }
     };
-  }
+
+    Messages.send(msg,
+      function(data) {
+        if (typeof data.error === 'undefined') {
+          callbackOk(data.response);
+        } else {
+          callbackError(data.error);
+        }
+      });
+  };
 
 
 }]);

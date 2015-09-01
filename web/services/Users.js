@@ -1,7 +1,7 @@
 
 var app = angular.module('mainApp');
 
-app.service('Users', function($rootScope, Messages, Session, Utils, Cache, Config) {
+app.service('Users', function($rootScope, Session, Utils, Cache) {
 
   var instance = this;
   this.userPrefix = 'user_';
@@ -18,13 +18,7 @@ app.service('Users', function($rootScope, Messages, Session, Utils, Cache, Confi
       action: 'removeMail',
       mail_id: id
     }
-    Messages.send(msg, function(response) {
-      if (response.error != undefined) {
-        callbackError(response.error);
-      } else {
-        callbackOk(response.ok);
-      }
-    });
+
   }
 
   /*
@@ -38,13 +32,6 @@ app.service('Users', function($rootScope, Messages, Session, Utils, Cache, Confi
       sub_action: 'confirm',
       hash: hash
     }
-    Messages.send(msg, function(response) {
-      if (response.error != undefined) {
-        callbackError(response.error);
-      } else {
-        callbackOk(response.ok);
-      }
-    });
   }
 
   /*
@@ -58,13 +45,6 @@ app.service('Users', function($rootScope, Messages, Session, Utils, Cache, Confi
       sub_action: 'generate',
       mail_id: mail_id
     }
-    Messages.send(msg, function(response) {
-      if (response.error != undefined) {
-        callbackError(response.error);
-      } else {
-        callbackOk(response.ok);
-      }
-    });
   }
 
   /*
@@ -82,13 +62,6 @@ app.service('Users', function($rootScope, Messages, Session, Utils, Cache, Confi
       action: 'persistMail',
       mail: email
     }
-    Messages.send(msg, function(response) {
-      if (response.error != undefined) {
-        callbackError(error);
-      } else {
-        callbackOk(response.ok);
-      }
-    });
   }
 
   /*
@@ -101,13 +74,6 @@ app.service('Users', function($rootScope, Messages, Session, Utils, Cache, Confi
       action: 'listMails',
       user_id: user_id
     }
-    Messages.send(msg, function(response) {
-      if (response.error != undefined) {
-        callbackError(error);
-      } else {
-        callbackOk(response.mails);
-      }
-    });
   }
 
 
@@ -134,6 +100,7 @@ app.service('Users', function($rootScope, Messages, Session, Utils, Cache, Confi
       action: 'findUser',
       user: { id: id }
     }
+    /*
     Messages.send(msg, function(response) {
       if (response.error != undefined) {
         callbackError(response.error);
@@ -144,6 +111,7 @@ app.service('Users', function($rootScope, Messages, Session, Utils, Cache, Confi
         callbackOk(user);
       }
     });
+    */
   }
 
 
@@ -160,6 +128,7 @@ app.service('Users', function($rootScope, Messages, Session, Utils, Cache, Confi
       action: 'updateUser',
       user: user
     };
+    /*
     Messages.send(msg,function(response) {
       if (response.error != undefined) {
         callbackError(response.error);
@@ -167,6 +136,7 @@ app.service('Users', function($rootScope, Messages, Session, Utils, Cache, Confi
         callbackOk(response.ok);
       }
     });
+    */
   }
 
 
@@ -179,6 +149,7 @@ app.service('Users', function($rootScope, Messages, Session, Utils, Cache, Confi
       limit:100,
       search: search,
     };
+    /*
     Messages.send(msg, function(response) {
       if (response.error != undefined) {
         callbackError(response.error);
@@ -225,6 +196,7 @@ app.service('Users', function($rootScope, Messages, Session, Utils, Cache, Confi
         });
       }
     });
+    */
   };
 
 

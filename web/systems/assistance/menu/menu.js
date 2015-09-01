@@ -1,8 +1,8 @@
 var app = angular.module('mainApp');
 
-app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Notifications',
+app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Profiles', 'Session', 'Notifications', 'Assistance',
 
-  function ($rootScope, $scope, $location, $window, $http, Profiles, Session, Notifications) {
+  function ($rootScope, $scope, $location, Profiles, Session, Notifications, Assistance) {
 
     $scope.model = {
       class:'',
@@ -74,21 +74,19 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Notifications'
     };
 
 
-    $scope.items = [];
-
     $scope.initialize = function() {
 
       Profiles.checkAccess(Session.getSessionId(),["ADMIN-ASSISTANCE","USER-ASSISTANCE"],
         function(ok) {
           if (ok) {
-              $scope.items = [];
-              //$scope.items.push({ n:1, label:'Inicio', img:'fa-tachometer', function: $scope.summary});
-              $scope.items.push({ n:1, label:'Solicitudes', img:'fa-ticket', function: $scope.requestAssistance});
-              $scope.items.push({ n:2, label:'Control de Horario', img:'fa-clock-o', function: $scope.showAssistance});
-              $scope.items.push({ n:3, label:'Incumplimientos', img:'fa-ticket', function: $scope.assistanceFails});
-              //$scope.items.push({ label:'Filtro de Fallas (testing todavía no terminado)', img:'fa-ticket', function: $scope.assistanceFailsFilters});
+              $scope.model.items = [];
+              //$scope.model.items.push({ n:1, label:'Inicio', img:'fa-tachometer', function: $scope.summary});
+              $scope.model.items.push({ n:20, label:'Solicitudes', img:'fa-ticket', function: $scope.requestAssistance});
+              $scope.model.items.push({ n:10, label:'Control de Horario', img:'fa-clock-o', function: $scope.showAssistance});
+              $scope.model.items.push({ n:1, label:'Incumplimientos', img:'fa-ticket', function: $scope.assistanceFails});
+              //$scope.model.items.push({ label:'Filtro de Fallas (testing todavía no terminado)', img:'fa-ticket', function: $scope.assistanceFailsFilters});
               // hasta que no este terminado en producción no va
-              $scope.items.push({ n:4, label:'Mi Horario', img:'fa-clock-o', function: $scope.mySchedule});
+              $scope.model.items.push({ n:4, label:'Mi Horario', img:'fa-clock-o', function: $scope.mySchedule});
 
               Assistance.getUserOfficeRoles(
                   function(roles) {
@@ -96,6 +94,7 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Notifications'
                     var hasOvertime = false;
                     var hasJustification = false;
                     var hasPositions = false;
+
                     for (var i = 0; i < roles.length; i++) {
                       hasApprove = hasApprove || (roles[i].role == 'autoriza');
                       hasOvertime = hasOvertime || (roles[i].role == 'horas-extras');
@@ -104,24 +103,24 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Notifications'
                     }
 
                     if (hasApprove) {
-                      $scope.items.push({ label:'Adm. Solicitudes ', img:'fa-ticket', function: $scope.adminRequestAssistance});
-                      $scope.items.push({ label:'Horas Extras ', img:'fa-plus', function: $scope.requestAuthority});
-                      $scope.items.push({ label:'Solicitudes a Empleados', img:'fa-plus', function: $scope.userAssistanceManagementMediator});
+                      $scope.model.items.push({ n:22, label:'Adm. Solicitudes ', img:'fa-ticket', function: $scope.adminRequestAssistance});
+                      $scope.model.items.push({ n:30, label:'Horas Extras ', img:'fa-plus', function: $scope.requestAuthority});
+                      $scope.model.items.push({ n:21, label:'Solicitudes a Empleados', img:'fa-plus', function: $scope.userAssistanceManagementMediator});
                     }
 
                     if (hasOvertime) {
-                      //$scope.items.push({ label:'Licencias Médicas', img:'fa-stethoscope', function: $scope.medicalLicenses});
-                      $scope.items.push({ label:'Admin Horas Extras ', img:'fa-plus', function: $scope.adminRequestOverTime});
+                      //$scope.model.items.push({ label:'Licencias Médicas', img:'fa-stethoscope', function: $scope.medicalLicenses});
+                      $scope.model.items.push({ n:31, label:'Admin Horas Extras ', img:'fa-plus', function: $scope.adminRequestOverTime});
                     }
 
                     if (hasJustification) {
-                      $scope.items.push({ label:'Solicitudes Especiales ', img:'fa-plus', function: $scope.userAssistanceManagement});
-                      $scope.items.push({ label:'Solicitudes Generales ', img:'fa-plus', function: $scope.requestGeneralJustifications});
-                      $scope.items.push({ label:'Stock de Solicitudes ', img:'fa-plus', function: $scope.manageJustificationsStock});
+                      $scope.model.items.push({ n:23, label:'Solicitudes Especiales ', img:'fa-plus', function: $scope.userAssistanceManagement});
+                      $scope.model.items.push({ n:24, label:'Solicitudes Generales ', img:'fa-plus', function: $scope.requestGeneralJustifications});
+                      $scope.model.items.push({ n:25, label:'Stock de Solicitudes ', img:'fa-plus', function: $scope.manageJustificationsStock});
                     }
 
                     if (hasPositions) {
-                      $scope.items.push({ label:'Administrar Cargos', img:'fa-plus', function: $scope.managePositions});
+                      $scope.model.items.push({ n:40, label:'Administrar Cargos', img:'fa-plus', function: $scope.managePositions});
                     }
 
                   },
