@@ -10,15 +10,7 @@
 
 }
 .inscription {
-  background-color:white;
-  -webkit-box-shadow: 1px 1px 5px #5c5f69;
-  -moz-box-shadow: 5px 5px 5px #5c5f69;
-  border-radius:2px;
-  -webkit-border-radius:2px;
-  -moz-border-radius:2px;
-  padding: 20px;
-  width: 79%;
-  margin: 20px;
+
 
 }
 
@@ -33,6 +25,15 @@
   flex-direction:row;
   -webkit-flex-direction:row; /* Safari */
   -moz-flex-direction:row; /* mozilla */
+  background-color:white;
+  -webkit-box-shadow: 1px 1px 5px #5c5f69;
+  -moz-box-shadow: 5px 5px 5px #5c5f69;
+  border-radius:2px;
+  -webkit-border-radius:2px;
+  -moz-border-radius:2px;
+  padding: 20px;
+  width: 79%;
+  margin: 20px;
 }
 
 .inscription .item {
@@ -106,7 +107,7 @@
     background: #eee;
     border-radius: 0 3px 3px 0px;
     box-shadow: 0 0 2px rgba(0,0,0,.5) inset;
-  
+
 }
 
 .inscription .item button {
@@ -159,4 +160,172 @@
 .inscription .item button::-moz-focus-inner {
     border: 0;
     padding: 0;
+}
+
+/****************************************************************/
+/********************* bannerInscription ************************
+*****************************************************************/
+
+.inscription .bannerInscription {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  background-color:white;
+  -webkit-box-shadow: 1px 1px 5px #5c5f69;
+  -moz-box-shadow: 5px 5px 5px #5c5f69;
+  border-radius:2px;
+  -webkit-border-radius:2px;
+  -moz-border-radius:2px;
+  padding: 20px;
+  width: 79%;
+  margin: 20px;
+}
+
+/****************************************************************/
+/********************* RegistrationForm ************************
+*****************************************************************/
+
+.inscription.registrationForm {
+
+}
+
+.inscription.registro .registrationForm {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  top:0px;
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.9);
+  justify-content:center;
+  align-items: center;
+}
+
+.inscription .contentForm {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  background-color:white;
+  -webkit-box-shadow: 1px 1px 5px #5c5f69;
+  -moz-box-shadow: 5px 5px 5px #5c5f69;
+  border-radius:2px;
+  -webkit-border-radius:2px;
+  -moz-border-radius:2px;
+  padding: 20px;
+  width: 300px;
+  height: 300px;
+  margin:  auto;
+}
+
+.inscription .headerForm {
+  width: 100%;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  justify-content: space-between;
+}
+
+.inscription .content {
+  margin: 5px;
+  background-color: #eee;
+  height: 100%;
+  width: 100%;
+}
+
+/****** MOSTRAR U OCULTAR PANTALLAS DEL FORMULARIO ******/
+
+.inscription .content.pantalla1 .p2,
+.inscription .content.pantalla1 .p3,
+.inscription .content.pantalla1 .p4,
+.inscription .content.pantalla1 .p5,
+.inscription .content.pantalla1 .p6,
+.inscription .content.pantalla1 .p7 {
+  display: none;
+}
+
+.inscription .content.pantalla2 .p1,
+.inscription .content.pantalla2 .p3,
+.inscription .content.pantalla2 .p4,
+.inscription .content.pantalla2 .p5,
+.inscription .content.pantalla2 .p6,
+.inscription .content.pantalla2 .p7 {
+  display: none;
+}
+
+.inscription .content.pantalla3 .p1,
+.inscription .content.pantalla3 .p2,
+.inscription .content.pantalla3 .p4,
+.inscription .content.pantalla3 .p5,
+.inscription .content.pantalla3 .p6,
+.inscription .content.pantalla3 .p7 {
+  display: none;
+}
+
+.inscription .content.pantalla4 .p1,
+.inscription .content.pantalla4 .p2,
+.inscription .content.pantalla4 .p3,
+.inscription .content.pantalla4 .p5,
+.inscription .content.pantalla4 .p6,
+.inscription .content.pantalla4 .p7 {
+  display: none;
+}
+
+.inscription .content.pantalla5 .p1,
+.inscription .content.pantalla5 .p2,
+.inscription .content.pantalla5 .p3,
+.inscription .content.pantalla5 .p4,
+.inscription .content.pantalla5 .p6,
+.inscription .content.pantalla5 .p7 {
+  display: none;
+}
+
+.inscription .content.pantalla6 .p1,
+.inscription .content.pantalla6 .p2,
+.inscription .content.pantalla6 .p3,
+.inscription .content.pantalla6 .p4,
+.inscription .content.pantalla6 .p5,
+.inscription .content.pantalla6 .p7 {
+  display: none;
+}
+
+.inscription .content.pantalla7 .p1,
+.inscription .content.pantalla7 .p2,
+.inscription .content.pantalla7 .p3,
+.inscription .content.pantalla7 .p4,
+.inscription .content.pantalla7 .p5,
+.inscription .content.pantalla7 .p6 {
+  display: none;
+}
+
+
+/***** estrellas de los idiomas *****/
+
+.inscription .rating {
+  unicode-bidi: bidi-override;
+  direction: rtl;
+  font-size: 15px;
+}
+.inscription .rating span.star {
+  font-family: FontAwesome;
+  font-weight: normal;
+  font-style: normal;
+  display: inline-block;
+}
+.inscription .rating span.star:hover {
+  cursor: pointer;
+}
+.inscription .rating span.star:before {
+  content: "\f006";
+  padding-right: 5px;
+  color: #777777;
+}
+.inscription .rating span.star:hover:before,
+.inscription .rating span.star:hover ~ span.star:before {
+  content: "\f005";
+  color: #e3cf7a;
 }
