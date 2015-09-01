@@ -214,7 +214,7 @@
   -webkit-border-radius:2px;
   -moz-border-radius:2px;
   padding: 20px;
-  width: 300px;
+  width: 450px;
   height: 300px;
   margin:  auto;
 }
@@ -228,13 +228,20 @@
   -webkit-flex-direction:row; /* Safari */
   -moz-flex-direction:row; /* mozilla */
   justify-content: space-between;
+  align-items: center;
+}
+
+.fa-times-circle {
+  color:#e43e46;
 }
 
 .inscription .content {
-  margin: 5px;
+  margin-top: 10px;
   background-color: #eee;
   height: 100%;
-  width: 100%;
+  width: 95%;
+  border-radius: 5px;
+  padding: 10px;
 }
 
 /****** MOSTRAR U OCULTAR PANTALLAS DEL FORMULARIO ******/
@@ -328,4 +335,21 @@
 .inscription .rating span.star:hover ~ span.star:before {
   content: "\f005";
   color: #e3cf7a;
+}
+
+/***** ESTILOS DE LOS IMPUT DEL FORMULARIO DE REGESTRO *****/
+
+.inscription .subTittlesForm {
+  color:#0066A6;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.inscription .item .carrera {
+    width: 320px;
+    height: 40px;
+    float: left;
+    border: 0;
+    background: white;
+    border-radius: 3px 3px 3px 3px;
+    box-shadow: 0 0 2px rgba(0,0,0,.5) inset;
 }
