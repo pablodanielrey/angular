@@ -30,8 +30,6 @@ function Office($rootScope, $wamp, Session) {
   services.deleteOfficeRole = deleteOfficeRole;
 
 
-
-
   // -----------------------------------------------------------
   // --------------- FALTAN IMPLEMENTAR EN EL SERVER -----------
   // -----------------------------------------------------------
