@@ -14,6 +14,9 @@ function Office($rootScope, $wamp, Session) {
   // obtiene las oficinas que puede ver el usuario
   services.getOfficesByUser = getOfficesByUser;
 
+  // obtiene las oficinas que puede ver el usuario en forma de arbol
+  services.getOfficesTreeByUser = getOfficesTreeByUser;
+
   // obtiene todos los usuarios de las oficinas pasadas como parametro
   services.getOfficesUsers = getOfficesUsers;
 
@@ -114,7 +117,8 @@ function Office($rootScope, $wamp, Session) {
           }]
   */
   function getOfficesByUser(userId,tree,callbackOk,callbackError) {
-    $wamp.call('offices.offices.getOfficesByUser', [userId,tree])
+    sessionId = Session.getSessionId();
+    $wamp.call('offices.offices.getOfficesByUser', [sessionId,userId,tree])
     .then(function(res) {
       if (res != null) {
         callbackOk(res);
@@ -126,6 +130,30 @@ function Office($rootScope, $wamp, Session) {
     });
   }
 
+  /*
+    obtiene las oficinas que puede ver el usuario
+    res = [{
+            name:'',
+            parent:'' -- id de la oficina padre,
+            id:'',
+            email:'',
+            telephone:'',
+            childrens:[]
+          }]
+  */
+  function getOfficesTreeByUser(userId,callbackOk,callbackError) {
+    sessionId = Session.getSessionId();
+    $wamp.call('offices.offices.getOfficesTreeByUser', [sessionId,userId])
+    .then(function(res) {
+      if (res != null) {
+        callbackOk(res);
+      } else {
+        callbackError('Error');
+      }
+    },function(err) {
+      callbackError(err);
+    });
+  }
 
   /*
   Obtiene todos los usuarios de las oficinas pasadas como parametro

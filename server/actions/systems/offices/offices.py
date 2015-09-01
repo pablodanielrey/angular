@@ -28,6 +28,7 @@ class OfficesWamp(ApplicationSession):
         yield from self.register(self.getOffices_async, 'offices.offices.getOffices')
         yield from self.register(self.findOffices_async, 'offices.offices.findOffices')
         yield from self.register(self.getOfficesByUser_async, 'offices.offices.getOfficesByUser')
+        yield from self.register(self.getOfficesTreeByUser_async, 'offices.offices.getOfficesTreeByUser')
         yield from self.register(self.getOfficeUsers_async, 'offices.offices.getOfficesUsers')
         yield from self.register(self.getUserInOfficesByRole_async, 'offices.offices.getUserInOfficesByRole')
         yield from self.register(self.getOfficesByUserRole_async, 'offices.offices.getOfficesByUserRole')
@@ -71,9 +72,24 @@ class OfficesWamp(ApplicationSession):
             con.close()
 
     @coroutine
-    def getOfficesByUser_async(self, userId, tree):
+    def getOfficesByUser_async(self, sessionId, userId, tree):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getOfficesByUser, userId, tree)
+        r = yield from loop.run_in_executor(None, self.getOfficesByUser, sessionId, userId, tree)
+        return r
+
+    def getOfficesTreeByUser(self, sessionId, userId):
+        con = self._getDatabase()
+        try:
+            if userId is None:
+                userId = self.profiles.getLocalUserId(sessionId)
+            return self.offices.getOfficesTreeByUser(con,userId)
+        finally:
+            con.close()
+
+    @coroutine
+    def getOfficesTreeByUser_async(self, sessionId, userId):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.getOfficesTreeByUser, sessionId, userId)
         return r
 
     def getOffices(self):

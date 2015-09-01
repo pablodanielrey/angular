@@ -4,47 +4,25 @@
  * @param {type} param1
  * @param {type} param2
  */
-app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "Notifications", "Issue", "Users", function ($scope, $timeout, $window, Module, Notifications, Issue, Users) {
+app.controller('ManageIssuesCtrl', ["$scope", "$timeout", "$window", "Module", "Notifications", "Issue", "IssueClient", "Users", function ($scope, $timeout, $window, Module, Notifications, Issue, IssueClient, Users) {
 
   /***** MANIPULACION DE ESTILOS ******/
   $scope.style = null;
-  $scope.styles = ['none','displayVisibility'];
+  $scope.styles = [];
 
   $scope.setStyle = function($index) {
     $scope.style = $scope.styles[$index];
-  };
-
-  $scope.setNodeStyleByState = function(state) {
-     switch(state){
-      case "COMMENT": return "commentOrder";
-      default: return "normal";
-
-    }
   };
 
 
   /***** ATRIBUTOS ******/
   $scope.request = null; //descripcion de un nuevo nodo que sera agregado a la raiz
   $scope.data = []; //raiz del arbol de nodos
+  
+  
+  
 
 
-  /**
-   * Inicializar nodo con valores por defecto. Cuando se crea un nuevo nodo en el arbol se inicializa y guarda en la base con los siguientes parametros
-   */
-  $scope.initializeNode = function(status){
-    return {
-      id: null,
-      request: null,
-      created: new Date(),
-      requestorId: null,
-      office_id: "8407abb2-33c2-46e7-bef6-d00bab573306",
-      relatedRequestId:null,
-      priority:null,
-      collapsedDescription: false,
-      state: status,
-      style: $scope.setNodeStyleByState(status)
-    };
-  };
 
 
 
@@ -106,12 +84,11 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
   $scope.addNode = function(nodeScope){
     var nodeData = nodeScope.$modelValue;
 
-    var newNode = $scope.initializeNode("PENDING");
+    var newNode = IssueClient.initializeNode("PENDING");
     newNode.parent_id = nodeData.id;
     newNode.request = $scope.request;
-    newNode.visibilities = nodeData['visibilities'];
 
-    Issue.newIssue(newNode,newNode['state'], newNode['visibilities'],
+    Issue.newIssue(newNode,newNode['state'],
       function(data) {$scope.getIssues(); $scope.request = null;},
       function(error) { Notifications.message(error); }
     );
@@ -120,12 +97,11 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
   $scope.addComment = function(nodeScope){
     var nodeData = nodeScope.$modelValue;
 
-    var newNode = $scope.initializeNode("COMMENT");
+    var newNode = IssueClient.initializeNode("COMMENT");
     newNode.parent_id = nodeData.id;
     newNode.request = $scope.request;
-    newNode.visibilities = nodeData['visibilities'];
 
-    Issue.newIssue(newNode,newNode['state'],newNode['visibilities'],
+    Issue.newIssue(newNode,newNode['state'],
       function(data) {
         $scope.getIssues();
         $scope.request = null;
@@ -140,12 +116,10 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
 
 
   $scope.createNode = function(){
-    var newNode = $scope.initializeNode("PENDING");
+    var newNode = IssueClient.initializeNode("PENDING");
     newNode.request = $scope.request;
-    off = $scope.model.offices[0];
-    newNode.visibilities = [{'office_id':off.id,'tree':false,'type':'OFFICE'}]
 
-    Issue.newIssue(newNode,newNode['state'],newNode['visibilities'],
+    Issue.newIssue(newNode,newNode['state'],
       function(data) {$scope.getIssues();$scope.request = null; },
       function(error) { Notifications.message(error); }
     );
@@ -164,14 +138,37 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
 
 
   /**
+   * IssueDeletedEvent
+   */
+  $scope.$on('IssueInsertedEvent', function(event, node) {
+    IssueClient.addChild($scope.data, node);
+    $scope.request = null;
+
+
+  });
+
+
+
+  /**
+   * IssueDeletedEvent
+   */
+  $scope.$on('IssueDeletedEvent', function(event, id) {
+    IssueClient.deleteNode($scope.data, id);
+  });
+
+
+
+
+  /**
    * Obtener lista de tareas
    */
   $scope.getIssues = function(){
     Issue.getIssues(null,
       function(data) {
+        // $scope.data = IssueClient.generateTree(data);
         $scope.data = data;
         for (var i = 0; i< data.length; i++) {
-          $scope.loadDataNode(data[i]);
+          IssueClient.loadDataNode(data[i]);
         }
       },
       function(error) {
@@ -182,65 +179,33 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
 
 
 
-  $scope.loadDataNode = function(node) {
-    Users.findUser(node.requestor_id,
-      function(user) {
-        node.requestor = user.name + " " + user.lastname;
-      },
-      function(error) {
-      }
-    );
-
-    node.collapsedDescription = false;
-    node.style = $scope.setNodeStyleByState(node.state);
-    for (var i = 0; i < node.childrens.length; i++) {
-      $scope.loadDataNode(node.childrens[i]);
-    }
-  }
 
 
 
 
-
-
-  /*
-    ABRIR LA PANTALLA DE VISIBILIDAD DE GRUPO
-  */
-  $scope.openVisibility = openVisibility;
-  function openVisibility(issue) {
-    $scope.$broadcast('displayVisbilityEvent',issue);
-    $scope.setStyle(1);
-  }
 
 
   /******************
    * INICIALIZACION *
    ******************/
-
-  $scope.$on('$viewContentLoaded', function(event) {
-   $scope.initialize();
-  });
-
-  $scope.$on('saveVisibilityEvent', function(event,issue,selecteds) {
-    $scope.setStyle(0);
-    issue.visibilities = selecteds;
-    Issue.updateIssueData(issue, null,
-      function(response) {
+  $timeout(function() {
+    $scope.getIssues();
+    /*Module.authorize('ADMIN-ASSISTANCE,USER-ASSISTANCE',
+      function(response){
+        if (response !== 'granted') {
+          Notifications.message("Acceso no autorizado");
+          $window.location.href = "/#/logout";
+        }
+        $scope.global.sessionUserId = Module.getSessionUserId();
         $scope.getIssues();
       },
-      function(error) {
+      function(error){
         Notifications.message(error);
+        $window.location.href = "/#/logout";
       }
-    );
-  });
+    );*/
 
-  $scope.$on('cancelVisibilityEvent', function(event) {
-    $scope.setStyle(0);
-  });
 
-  $scope.initialize = initialize;
-  function initialize() {
-    $scope.getIssues();
-  }
+  }, 0);
 
 }]);
