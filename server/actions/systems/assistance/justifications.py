@@ -47,6 +47,12 @@ class JustificationsWamp(ApplicationSession):
         yield from self.register(self.getJustificationsRequests_async, 'assistance.justifications.getJustificationsRequests')
         yield from self.register(self.updateJustificationRequestStatus_async, 'assistance.justifications.updateJustificationRequestStatus')
         yield from self.register(self.requestJustification_async, 'assistance.justifications.requestJustification')
+        yield from self.register(self.requestJustificationRange_async, 'assistance.justifications.requestJustificationRange')
+        yield from self.register(self.getSpecialJustifications_async, 'assistance.justifications.getSpecialJustifications')
+        yield from self.register(self.requestGeneralJustification_async, 'assistance.justifications.requestGeneralJustification')
+        yield from self.register(self.requestGeneralJustificationRange_async, 'assistance.justifications.requestGeneralJustificationRange')
+        yield from self.register(self.getGeneralJustificationRequests_async, 'assistance.justifications.getGeneralJustificationRequests')
+        yield from self.register(self.deleteGeneralJustificationRequest_async, 'assistance.justifications.deleteGeneralJustificationRequest')
 
     def _getDatabase(self):
         host = self.serverConfig.configs['database_host']
@@ -197,4 +203,100 @@ class JustificationsWamp(ApplicationSession):
     def requestJustification_async(self, sid, userId, justification, status):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.requestJustification, userId, justification, status)
+        return r
+
+    def requestJustificationRange(self, userId, justificationId, start, end, status):
+        con = self._getDatabase()
+        try:
+            ''' .... codigo aca ... '''
+            con.commit()
+            return True
+
+        finally:
+            con.close()
+
+    @coroutine
+    def requestJustificationRange_async(self, sid, userId, justificationId, start, end, status):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.requestJustification, userId, justificationId, start, end, status)
+        return r
+
+    def getSpecialJustifications(self, sid):
+        con = self._getDatabase()
+        try:
+            ''' .... codigo aca ... '''
+            con.commit()
+            return True
+
+        finally:
+            con.close()
+
+    @coroutine
+    def getSpecialJustifications_async(self, sid):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.getSpecialJustifications, sid)
+        return r
+
+    def reguestGeneralJustification(self, sid, justification):
+        con = self._getDatabase()
+        try:
+            ''' .... codigo aca ... '''
+            con.commit()
+            return True
+
+        finally:
+            con.close()
+
+    @coroutine
+    def requestGeneralJustification_async(self, sid, justification):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.requestGeneralJustification, sid, justification)
+        return r
+
+    def reguestGeneralJustificationRange(self, sid, justification):
+        con = self._getDatabase()
+        try:
+            ''' .... codigo aca ... '''
+            con.commit()
+            return True
+
+        finally:
+            con.close()
+
+    @coroutine
+    def requestGeneralJustificationRange_async(self, sid, justification):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.requestGeneralJustificationRange, sid, justification)
+        return r
+
+    def getGeneralJustificationRequests(self, sid):
+        con = self._getDatabase()
+        try:
+            ''' .... codigo aca ... '''
+            con.commit()
+            return True
+
+        finally:
+            con.close()
+
+    @coroutine
+    def getGeneralJustificationRequests_async(self, sid):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.getGeneralJustificationRequests, sid)
+        return r
+
+    def deleteGeneralJustificationRequest(self, sid, requestId):
+        con = self._getDatabase()
+        try:
+            ''' .... codigo aca ... '''
+            con.commit()
+            return True
+
+        finally:
+            con.close()
+
+    @coroutine
+    def deleteGeneralJustificationRequest_async(self, sid, requestId):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.deleteGeneralJustificationRequest, sid, requestId)
         return r

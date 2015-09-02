@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
-import json, base64, datetime, traceback, logging
+import json
+import base64
+import datetime
+import logging
 import inject
 import psycopg2
-
 from model.exceptions import *
 
 from model.config import Config
@@ -14,313 +16,94 @@ from model.systems.assistance.date import Date
 from model.systems.assistance.justifications.justifications import Justifications
 from model.systems.assistance.overtime import Overtime
 
-
-"""
-query : Obtener todas las solicitudes de justificationces
-{
-  id:,
-  action:"getOvertimeRequestsToManage",
-  session:,
-  request:{
-      status: 'estado de la justificacion PENDING|APPROVED|REJECTED|CANCELED' -- si no existe se obtienen todas,
-      group: "ROOT|TREE" -- si no existe obtiene las del grupo directo que puede manejar.
-  }
-}
+import asyncio
+from asyncio import coroutine
+from autobahn.asyncio.wamp import ApplicationSession
 
 
-"""
-class GetOvertimeRequestsToManage:
+class OvertimeWamp(ApplicationSession):
 
-    profiles = inject.attr(Profiles)
-    config = inject.attr(Config)
-    overtime = inject.attr(Overtime)
+    def __init__(self, config=None):
+        logging.debug('instanciando')
+        ApplicationSession.__init__(self, config)
 
-    def handleAction(self, server, message):
+        self.serverConfig = inject.instance(Config)
 
-        if (message['action'] != 'getOvertimeRequestsToManage'):
-            return False
+    @coroutine
+    def onJoin(self, details):
+        logging.debug('registering methods')
+        yield from self.register(self.getRequests_async, 'assistance.overtime.getRequests')
+        yield from self.register(self.getRequestsToManage_async, 'assistance.overtime.getRequestsToManage')
+        yield from self.register(self.requestOvertime_async, 'assistance.overtime.requestOvertime')
+        yield from self.register(self.persistStatus_async, 'assistance.overtime.persistStatus')
 
-        if 'request' not in message:
-            response = {'id':message['id'], 'error':'Insuficientes parámetros'}
-            server.sendMessage(response)
-            return True
+    def _getDatabase(self):
+        host = self.serverConfig.configs['database_host']
+        dbname = self.serverConfig.configs['database_database']
+        user = self.serverConfig.configs['database_user']
+        passw = self.serverConfig.configs['database_password']
+        return psycopg2.connect(host=host, dbname=dbname, user=user, password=passw)
 
-        status = None
-        if 'status' in message['request']:
-            status = message['request']['status']
-
-        group = None
-        if 'group' in message['request']:
-            group = message['request']['group']
-
-
-        sid = message['session']
-        self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
-
-        userId = self.profiles.getLocalUserId(sid)
-
-        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+    def getRequests(self, status):
+        con = self._getDatabase()
         try:
-            requests = self.overtime.getOvertimeRequestsToManage(con,userId,[status],group)
-
-            response = {
-                'id':message['id'],
-                'ok':'',
-                'response':{
-                    'requests':requests
-                }
-            }
-            server.sendMessage(response)
-            return True
-
-        except Exception as e:
-            raise e
-
-        finally:
-            con.close()
-
-
-
-"""
-
-query : Obtener todas las solicitudes de justificationces
-{
-  id:,
-  action:"getOvertimeRequests",
-  session:,
-  request:{
-      status: 'estado de la justificacion PENDING|APPROVED|REJECTED|CANCELED' -- si no existe se obtienen todas,
-  }
-}
-
-response :
-{
-  id: "id de la petición",
-  ok: "caso exito",
-  error: "error del servidor",
-  response:{
-    requests : [ "lista de solicitudes"
-  		{
-	      id: "id de la solicitud de hora extra",
-          user_id:"id del usuario para el cual se solicito hora extra",
-    	  begin: 2014-12-01 00:00:00 "fecha y hora de inicio de la hora extra"
-    	  end: 2014-12-02 00:00:00 "fecha y hora de finalizacion de la hora extra"
-    	  reason: "motivo de la solicitud"
-    	  status: "PENDING|APPROVED|REJECTED|CANCELED (estado de la solicitud)"
-  		}
-	]
-}
-
-"""
-class GetOvertimeRequests:
-
-    profiles = inject.attr(Profiles)
-    config = inject.attr(Config)
-    overtime = inject.attr(Overtime)
-
-    def handleAction(self, server, message):
-
-        if (message['action'] != 'getOvertimeRequests'):
-            return False
-
-        if 'request' not in message:
-            response = {'id':message['id'], 'error':'Insuficientes parámetros'}
-            server.sendMessage(response)
-            return True
-
-        status = []
-        if 'status' in message['request']:
-            status.append(message['request']['status'])
-
-
-        sid = message['session']
-        self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
-
-        userId = self.profiles.getLocalUserId(sid)
-
-        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
-        try:
-            requests = self.overtime.getOvertimeRequests(con,status,requestors=[userId])
-
-            response = {
-                'id':message['id'],
-                'ok':'',
-                'response':{
-                    'requests':requests
-                }
-            }
-            server.sendMessage(response)
-            return True
-
-        except Exception as e:
-            raise e
-
-        finally:
-            con.close()
-
-
-
-
-"""
-query : solicitud de justificaciones de un determinado usuario
-{
-  id:,
-  action:"updateOvertimeRequestStatus",
-  session:,
-  request:{
-      request_id: "id del pedido",
-      status: "PENDING|APPROVED|REJECTED|CANCELED"
-  }
-
-}
-
-response :
-{
-  id: "id de la petición",
-  ok: "caso exito",
-  error: "error del servidor"
-}
-"""
-
-class UpdateOvertimeRequestStatus:
-
-    profiles = inject.attr(Profiles)
-    config = inject.attr(Config)
-    overtime = inject.attr(Overtime)
-    date = inject.attr(Date)
-    events = inject.attr(Events)
-
-    def handleAction(self, server, message):
-
-        if (message['action'] != 'updateOvertimeRequestStatus'):
-            return False
-
-        if ('session' not in message) or ('request' not in message) or ('request_id' not in message['request']) or ('status' not in message['request']):
-            response = {'id':message['id'], 'error':'Insuficientes parámetros'}
-            server.sendMessage(response)
-            return True
-
-        requestId = message['request']['request_id']
-        status = message['request']['status']
-
-        sid = message['session']
-        self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
-        userId = self.profiles.getLocalUserId(sid)
-
-        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
-        try:
-            events = self.overtime.updateOvertimeRequestStatus(con,userId,requestId,status)
+            ''' .... codigo aca ... '''
             con.commit()
-
-            response = {
-                'id':message['id'],
-                'ok':'El cambio se ha realizado correctamente'
-            }
-            server.sendMessage(response)
-
-            for e in events:
-                self.events.broadcast(server,e)
-
-            return True
-
-        except Exception as e:
-            logging.exception(e)
-            con.rollback()
-
-            response = {
-                'id':message['id'],
-                'error':'Error realizando pedido'
-            }
-            server.sendMessage(response)
             return True
 
         finally:
             con.close()
 
+    @coroutine
+    def getRequests_async(self, status):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.getRequests, status)
+        return r
 
-
-
-"""
-query : solicitud de justificaciones de un determinado usuario
-{
-  id:,
-  action:"requestOvertime",
-  session:,
-  request:{
-      user_id: "id del usuario al cual se le solicita el tiempo extra",
-  	  begin: "timestamp de inicio del tiempo extra"
-  	  end: "timestamp de fin del tiempo extra"
-  	  reason: "motivo de solicitud del tiempo extra"
-  }
-}
-
-response :
-{
-  id: "id de la petición",
-  ok: "caso exito",
-  error: "error del servidor"
-}
-"""
-
-class RequestOvertime:
-
-    profiles = inject.attr(Profiles)
-    config = inject.attr(Config)
-    overtime = inject.attr(Overtime)
-    date = inject.attr(Date)
-    events = inject.attr(Events)
-
-    def handleAction(self, server, message):
-
-        if (message['action'] != 'requestOvertime'):
-            return False
-
-        if ('request' not in message) or ('user_id' not in message['request']) or ('end' not in message['request']) or ('begin' not in message['request']) or ('reason' not in message['request']):
-            response = {'id':message['id'], 'error':'Insuficientes parámetros'}
-            server.sendMessage(response)
-            return True
-
-
-        userId = message['request']['user_id']
-        begin = message['request']['begin']
-        begin = self.date.parse(begin)
-        end = message['request']['end']
-        end = self.date.parse(end)
-        reason = message['request']['reason']
-
-        sid = message['session']
-        self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE'])
-
-        requestorId = self.profiles.getLocalUserId(sid)
-
-        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+    def getRequestsToManage(self, status, group):
+        con = self._getDatabase()
         try:
-            events = self.overtime.requestOvertime(con,requestorId,userId,begin,end,reason)
-
+            ''' .... codigo aca ... '''
             con.commit()
-
-            response = {
-                'id':message['id'],
-                'ok':'El pedido se ha realizado correctamente'
-            }
-            server.sendMessage(response)
-
-            for e in events:
-                self.events.broadcast(server,e)
-
-            return True
-
-
-        except Exception as e:
-            logging.exception(e)
-            con.rollback()
-
-            response = {
-                'id':message['id'],
-                'error':'Error realizando pedido'
-            }
-            server.sendMessage(response)
             return True
 
         finally:
             con.close()
+
+    @coroutine
+    def getRequestsToManage_async(self, status, group):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.getRequestsToManage, status, group)
+        return r
+
+    def requestOvertime(self, userId, request):
+        con = self._getDatabase()
+        try:
+            ''' .... codigo aca ... '''
+            con.commit()
+            return True
+
+        finally:
+            con.close()
+
+    @coroutine
+    def requestOvertime_async(self, userId, request):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.requestOvertime, userId, request)
+        return r
+
+    def persistStatus(self, requestId, status):
+        con = self._getDatabase()
+        try:
+            ''' .... codigo aca ... '''
+            con.commit()
+            return True
+
+        finally:
+            con.close()
+
+    @coroutine
+    def persistStatus_async(self, requestId, status):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.persistStatus, requestId, status)
+        return r
