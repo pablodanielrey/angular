@@ -67,7 +67,7 @@ class UsersWamp(ApplicationSession):
             con.close()
 
     @coroutine
-    def persist_async(self, user):
+    def persistUser_async(self, user):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.persist, user)
         return r
