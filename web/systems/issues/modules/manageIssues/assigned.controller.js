@@ -24,10 +24,7 @@ function AssignedCtrl($rootScope,$scope,Notifications,Office) {
   // -------------------------------------------------------------
   // ------------------------- EVENTOS ---------------------------
   // -------------------------------------------------------------
-  $rootScope.$on('$viewContentLoaded', function(event) {
-    loadOffices();
-    $scope.initialize(null);
-  });
+
 
   $scope.$on('displayAssignedEvent',function(event,issue) {
     $scope.initialize(issue);
@@ -70,21 +67,6 @@ function AssignedCtrl($rootScope,$scope,Notifications,Office) {
     }
   }
 
-  function loadOffices() {
-    Office.getOfficesTreeByUser(null,
-      function(offices) {
-        if (offices.length == 0) {
-          $scope.model.offices = [];
-          return;
-        }
-        initializeOffices(offices);
-        $scope.model.offices = offices;
-      },
-      function(error) {
-        Notifications.message(error);
-      }
-    );
-  }
 
   // ----------------------------------------------------------
   // --------------------- ACCIONES ---------------------------

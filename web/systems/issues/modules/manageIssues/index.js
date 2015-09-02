@@ -4,7 +4,11 @@
  * @param {type} param1
  * @param {type} param
  */
-app.controller('ManageIssuesCtrl', ["$scope", "$timeout", "$window", "Module", "Notifications", "Issue", "Users", function ($scope, $timeout, $window, Module, Notifications, Issue, Users) {
+app.controller('ManageIssuesCtrl', ["$scope", "$timeout", "$window", "Module", "Notifications", "Issue", "Users", "Office", function ($scope, $timeout, $window, Module, Notifications, Issue, Users, Office) {
+
+  $scope.model = {
+    offices: []
+  }
 
   /***** MANIPULACION DE ESTILOS ******/
   $scope.style = null;
@@ -218,6 +222,7 @@ app.controller('ManageIssuesCtrl', ["$scope", "$timeout", "$window", "Module", "
    ******************/
 
   $scope.$on('$viewContentLoaded', function(event) {
+    console.log('initialize --> index.js');
    $scope.initialize();
   });
 
@@ -241,6 +246,25 @@ app.controller('ManageIssuesCtrl', ["$scope", "$timeout", "$window", "Module", "
   $scope.initialize = initialize;
   function initialize() {
     $scope.getIssues();
+    $scope.loadOffices();
+  }
+
+  $scope.loadOffices = loadOffices;
+
+  function loadOffices() {
+    $scope.model.offices = [];
+    Office.getOfficesTree(
+      function(offices) {
+        if (offices.length == 0) {
+          $scope.model.offices = [];
+          return;
+        }
+        $scope.model.offices = offices;
+      },
+      function(error) {
+        Notifications.message(error);
+      }
+    );
   }
 
 }]);
