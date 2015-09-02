@@ -11,16 +11,12 @@ from model.exceptions import *
 
 from model.config import Config
 from model.profiles import Profiles
-from model.utils import DateTimeEncoder
-from model.events import Events
 
 from model.systems.assistance.assistance import Assistance
 from model.systems.assistance.fails import Fails
-from model.systems.assistance.logs import Logs
 from model.systems.assistance.schedule import Schedule
 from model.systems.assistance.check.checks import ScheduleChecks
 from model.systems.offices.offices import Offices
-from model.systems.assistance.positions import Positions
 from model.systems.assistance.date import Date
 
 import asyncio

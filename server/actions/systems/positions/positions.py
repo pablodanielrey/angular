@@ -9,7 +9,7 @@ from autobahn.asyncio.wamp import ApplicationSession
 
 from model.config import Config
 from model.profiles import Profiles
-from model.systems.assystance.positions import Positions
+from model.systems.positions.positions import Positions
 
 
 class PositionsWamp(ApplicationSession):
