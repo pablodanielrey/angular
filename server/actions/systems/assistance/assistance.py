@@ -32,7 +32,6 @@ class AssistanceWamp(ApplicationSession):
 
         self.serverConfig = inject.instance(Config)
         self.profiles = inject.attr(Profiles)
-        self.config = inject.attr(Config)
         self.assistance = inject.attr(Assistance)
         self.fails = inject.attr(Fails)
         self.dateutils = inject.attr(Date)

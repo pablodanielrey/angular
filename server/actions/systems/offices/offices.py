@@ -29,7 +29,7 @@ class OfficesWamp(ApplicationSession):
         yield from self.register(self.findOffices_async, 'offices.offices.findOffices')
         yield from self.register(self.getOfficesByUser_async, 'offices.offices.getOfficesByUser')
         yield from self.register(self.getOfficesTreeByUser_async, 'offices.offices.getOfficesTreeByUser')
-        yield from self.register(self.getOfficeUsers_async, 'offices.offices.getOfficesUsers')
+        yield from self.register(self.getOfficesUsers_async, 'offices.offices.getOfficesUsers')
         yield from self.register(self.getUserInOfficesByRole_async, 'offices.offices.getUserInOfficesByRole')
         yield from self.register(self.getOfficesByUserRole_async, 'offices.offices.getOfficesByUserRole')
         yield from self.register(self.deleteOfficeRole_async, 'offices.offices.deleteOfficeRole')
