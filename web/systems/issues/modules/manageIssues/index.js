@@ -8,7 +8,7 @@ app.controller('ManageIssuesCtrl', ["$scope", "$timeout", "$window", "Module", "
 
   /***** MANIPULACION DE ESTILOS ******/
   $scope.style = null;
-  $scope.styles = ['none','displayVisibility'];
+  $scope.styles = ['none','displayVisibility','displayAssigned'];
 
   $scope.setStyle = function($index) {
     $scope.style = $scope.styles[$index];
@@ -204,12 +204,12 @@ app.controller('ManageIssuesCtrl', ["$scope", "$timeout", "$window", "Module", "
 
 
   /*
-    ABRIR LA PANTALLA DE VISIBILIDAD DE GRUPO
+    ABRIR LA PANTALLA DE ASIGNACION DE GRUPO
   */
-  $scope.openVisibility = openVisibility;
-  function openVisibility(issue) {
-    $scope.$broadcast('displayVisbilityEvent',issue);
-    $scope.setStyle(1);
+  $scope.openAssigned = openAssigned;
+  function openAssigned(issue) {
+    $scope.$broadcast('displayAssignedEvent',issue);
+    $scope.setStyle(2);
   }
 
 
@@ -221,9 +221,9 @@ app.controller('ManageIssuesCtrl', ["$scope", "$timeout", "$window", "Module", "
    $scope.initialize();
   });
 
-  $scope.$on('saveVisibilityEvent', function(event,issue,selecteds) {
+  $scope.$on('saveAssignedEvent', function(event,issue,selecteds) {
     $scope.setStyle(0);
-    issue.visibilities = selecteds;
+    issue.office_id = (selecteds.length > 0)?selecteds[0]['id']:null;
     Issue.updateIssueData(issue, null,
       function(response) {
         $scope.getIssues();
@@ -234,7 +234,7 @@ app.controller('ManageIssuesCtrl', ["$scope", "$timeout", "$window", "Module", "
     );
   });
 
-  $scope.$on('cancelVisibilityEvent', function(event) {
+  $scope.$on('cancelAssignedEvent', function(event) {
     $scope.setStyle(0);
   });
 

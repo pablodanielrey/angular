@@ -11,7 +11,13 @@
 
 }
 
+.contentScreens .assignedOffices {
+  display:none;
+}
 
+.contentScreens.displayAssigned .assignedOffices {
+  display:block;
+}
 
 
 .ContentOrders {
