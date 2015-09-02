@@ -148,6 +148,24 @@ class Offices:
         return offices
 
 
+    ''' obtiene todas las oficinas en forma de arbol '''
+    def getOfficesTree(self,con):
+        offices = self.getOffices(con)
+        tree = []
+        # inicializo el childrens de todas las oficinas
+        for off in offices:
+            off['childrens'] = []
+        for off in offices:
+            parent = None
+            for off2 in offices:
+                if off['parent'] == off2['id']:
+                    parent = off2
+            if parent is None:
+                tree.append(off)
+            else:
+                parent['childrens'].append(off)
+        return tree
+
     '''
         retorna los ids de los usuarios que pertenecen a las oficinas pasasdas como parámetro
         offices = lista de ids de oficinas
