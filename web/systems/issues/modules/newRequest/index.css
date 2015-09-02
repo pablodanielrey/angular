@@ -58,6 +58,13 @@
 
 }
 
+.hola {
+  background-color: #eee;
+  padding: 5px;
+  margin-top: 10px;
+  border:1px solid #E3DFDF;
+}
+
 .order .buttonOrder {
   border: none;
   padding: 17px;

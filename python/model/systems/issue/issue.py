@@ -262,7 +262,7 @@ class Issue:
         return False
 
     '''
-        Retorna todas las issues solicitadas por el usuario o aquellas cuyo responsable es el usuario
+        Retorna todas las issues solicitadas por el usuario
     '''
     def getIssues(self,con,userId):
         if userId is None:
@@ -338,40 +338,6 @@ class Issue:
         else:
             return None
 
-        # ------------------------------------------------------------------
-        # ------------------------------------------------------------------
-        # ------------------------------------------------------------------
-
-        '''
-        cur.execute('select id,created,request,requestor_id,related_request_id,assigned_id,priority,office_id from issues.request where requestor_id  = %s or assigned_id = %s',(userId,userId))
-        issues = []
-        ids = []
-        # elimino los repetidos y los convierto a diccionario
-        for issue in cur:
-            if issue[0] in ids:
-                continue
-
-            ids.append(issue[0])
-            state = self.getState(con,issue[0])
-            visibilities = self.getVisibilitiesOfficesView(con,issue[0])
-            obj = self._convertToDict(issue,state,visibilities)
-            childrens = self._getChildrens(con,issue[0])
-            obj['childrens'] = childrens
-            issues.append(obj)
-
-        ret = []
-        for issue in issues:
-            include = False
-            for aux in issues:
-                if aux['id'] != issue['id'] and self._include(issue,aux):
-                    include = True
-                    continue
-            if not include:
-                ret.append(issue)
-
-        return ret
-        '''
-
     def _include(self,issue,issue2):
         if issue['id'] == issue2['id']:
             return True
@@ -381,3 +347,49 @@ class Issue:
                 return True
 
         return False
+
+
+    '''
+        Retorna todas las issues asignadas al usuario
+    '''
+    def getIssuesAdmin(self,con,userId):
+        if userId is None:
+            return None
+
+        cur = con.cursor()
+
+        # ---- issues asignadas a la oficina del usuario -----
+        offices = self.offices.getOfficesByUser(con,userId,True)
+        issues = []
+        for o in offices:
+            iss = self.findIssuesByOffice(con,o['id'])
+            issues.extend(iss)
+        issuesRet = []
+        while len(issues) > 0:
+            issue = issues[0]
+            issues.remove(issue)
+            if not self._includeIssue(issue['id'],issues) and not self._includeIssue(issue['id'],issuesRet):
+                issuesRet.append(issue)
+        # self.filterIssuesByVisibilityOffices(issues,offices)
+        return issuesRet
+
+
+    def findIssuesByOffice(self,con,officeId):
+        if officeId is None:
+            return []
+
+        cur = con.cursor()
+        cur.execute('select id,created,request,requestor_id,related_request_id,assigned_id,priority,office_id from issues.request where office_id = %s',(officeId,))
+        if cur.rowcount <= 0:
+            return []
+
+        issues = []
+        for issue in cur:
+            state = self.getState(con,issue[0])
+            visibilities = self.getVisibilitiesOfficesView(con,issue[0])
+            obj = self._convertToDict(issue,state,visibilities)
+            childrens = self._getChildrens(con,issue[0])
+            obj['childrens'] = childrens
+            issues.append(obj)
+
+        return issues

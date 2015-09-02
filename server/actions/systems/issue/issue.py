@@ -28,6 +28,7 @@ class WampIssue(ApplicationSession):
         logging.debug('registering methods')
         yield from self.register(self.newIssue_async,'issue.issue.newIssue')
         yield from self.register(self.getIssues_async, "issue.issue.getIssues")
+        yield from self.register(self.getIssuesAdmin_async, "issue.issue.getIssuesAdmin")
         yield from self.register(self.deleteIssue_async, "issue.issue.deleteIssue")
         yield from self.register(self.updateIssueData_async, "issue.issue.updateIssueData")
 
@@ -57,7 +58,7 @@ class WampIssue(ApplicationSession):
         r = yield from loop.run_in_executor(None, self.newIssue, sessionId, issue, state, visibilities)
         return r
 
-    # Retorna todas las issues solicitadas por el usuario o aquellas cuyo responsable es el usuario
+    # Retorna todas las issues solicitadas por el usuario
     # si el userId es null tomo por defecto el id del usuario logueado
     def getIssues(self, sessionId, userId):
         con = self._getDatabase()
@@ -75,6 +76,26 @@ class WampIssue(ApplicationSession):
     def getIssues_async(self, sessionId, userId):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.getIssues, sessionId, userId)
+        return r
+
+    # Retorna todas las issues asignadas al usuario
+    # si el userId es null tomo por defecto el id del usuario logueado
+    def getIssuesAdmin(self, sessionId, userId):
+        con = self._getDatabase()
+        try:
+            if userId is None:
+                userId = self.profiles.getLocalUserId(sessionId)
+            return self.issue.getIssuesAdmin(con,userId)
+        except Exception as e:
+            logging.exception(e)
+            return None
+        finally:
+            con.close()
+
+    @coroutine
+    def getIssuesAdmin_async(self, sessionId, userId):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.getIssuesAdmin, sessionId, userId)
         return r
 
 

@@ -10,8 +10,10 @@ function Issue($rootScope,$wamp,Session) {
 
   // Crea una nueva tarea
   services.newIssue = newIssue;
-  // Retornar todas las issues solicitadas por el usuario o aquellas cuyo responsable es el usuario
+  // Retornar todas las issues solicitadas por el usuario
   services.getIssues = getIssues;
+  // Retornar todas las issues asignadas al usuario
+  services.getIssuesAdmin = getIssuesAdmin;
   // elimina el pedido y sus hijos
   services.deleteIssue = deleteIssue;
   //  actualizacion de los datos del issue.
@@ -32,11 +34,28 @@ function Issue($rootScope,$wamp,Session) {
     });
   }
 
-  // Retorna todas las issues solicitadas por el usuario o aquellas cuyo responsable es el usuario
+  // Retorna todas las issues que puede ver el usuario
   // si el userId es null tomo por defecto el id del usuario logueado
   function getIssues(userId, callbackOk, callbackError) {
     sessionId = Session.getSessionId();
     $wamp.call('issue.issue.getIssues', [sessionId,userId])
+    .then(function(res) {
+      if (res != null) {
+        callbackOk(res);
+      } else {
+        callbackError('Error');
+      }
+    },function(err) {
+      callbackError('Error');
+    });
+  }
+
+
+  // Retorna todas las issues asignadas al usuario
+  // si el userId es null tomo por defecto el id del usuario logueado
+  function getIssuesAdmin(userId, callbackOk, callbackError) {
+    sessionId = Session.getSessionId();
+    $wamp.call('issue.issue.getIssuesAdmin', [sessionId,userId])
     .then(function(res) {
       if (res != null) {
         callbackOk(res);
