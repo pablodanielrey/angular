@@ -51,7 +51,7 @@ with open('/tmp/horario.csv','w') as f:
         shours = '{}:{}'.format(chours,(hours.seconds//60)%60)
 
         if e < s + elapsed:
-            f.write('{};{};{};{};{}\n'.format(s,s,e,e,shours))
+            f.write('{};{};{};{};{}\n'.format(s.date(),s.strftime('%H:%M'),e.date(),e.strftime('%H:%M'),shours))
         else:
-            f.write('{};{};{};{};{}\n'.format(s,s,e,e,shours))
+            f.write('{};{};{};{};{}\n'.format(s.date(),s.strftime('%H:%M'),e.date(),e.strftime('%H:%M'),shours))
             i = i - 1
