@@ -46,6 +46,7 @@ class JustificationsWamp(ApplicationSession):
         yield from self.register(self.getJustificationsRequestsToManage_async, 'assistance.justifications.getJustificationsRequestsToManage')
         yield from self.register(self.getJustificationsRequests_async, 'assistance.justifications.getJustificationsRequests')
         yield from self.register(self.updateJustificationRequestStatus_async, 'assistance.justifications.updateJustificationRequestStatus')
+        yield from self.register(self.requestJustification_async, 'assistance.justifications.requestJustification')
 
     def _getDatabase(self):
         host = self.serverConfig.configs['database_host']
@@ -180,4 +181,20 @@ class JustificationsWamp(ApplicationSession):
     def updateJustificationRequestStatus_async(self, sid, requestId, status):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.updateJustificationRequestStatus, requestId, status)
+        return r
+
+    def requestJustification(self, userId, justification, status):
+        con = self._getDatabase()
+        try:
+            ''' .... codigo aca ... '''
+            con.commit()
+            return True
+
+        finally:
+            con.close()
+
+    @coroutine
+    def requestJustification_async(self, sid, userId, justification, status):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.requestJustification, userId, justification, status)
         return r

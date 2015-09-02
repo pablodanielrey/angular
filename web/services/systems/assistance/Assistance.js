@@ -332,24 +332,17 @@ app.service('Assistance', ['Utils','Session','Office',
 		};
 
 		this.requestJustification = function(userId, justification, status, callbackOk, callbackError) {
-			var msg = {
-				id: Utils.getId(),
-				action: 'requestJustification',
-				session: Session.getSessionId(),
-				request: {
-					user_id: userId,
-					justification_id: justification.id,
-					begin: justification.begin
+			var sid = Session.getSessionId();
+			$wamp.call('assistance.justifications.requestJustification', [sid, userId, justification, status])
+			.then(function(res) {
+				if (res != null) {
+					callbackOk(res);
+				} else {
+					callbackError('Error');
 				}
-			}
-
-			if (!(typeof justification.end === 'undefined')) {
-				msg.request.end = justification.end;
-			}
-
-			if (!(typeof status === 'undefined')) {
-				msg.request.status = status;
-			}
+			},function(err) {
+				callbackError(err);
+			});
 		}
 
 		this.requestJustificationRange = function(userId, justification, status, callbackOk, callbackError) {
