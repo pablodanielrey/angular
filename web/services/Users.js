@@ -4,7 +4,7 @@ angular
 
 Users.inject = ['$rootScope', '$wamp', 'Messages','Session','Utils','Cache','Config'];
 
-Users = function($rootScope, $wamp, Messages, Session, Utils, Cache, Config) {
+function Users($rootScope, $wamp, Messages, Session, Utils, Cache, Config) {
 
   var instance = this;
   this.userPrefix = 'user_';
