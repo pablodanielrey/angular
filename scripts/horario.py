@@ -45,8 +45,13 @@ with open('/tmp/horario.csv','w') as f:
             ''' la salida es menor que la entrada, la ignoro '''
             continue
 
+        hours = e - s
+        chours = hours.seconds//3600
+        chours = chours + hours.days * 24
+        shours = '{}:{}'.format(chours,(hours.seconds//60)%60)
+
         if e < s + elapsed:
-            f.write('{};{};{};{};{}\n'.format(s,s.timetuple(),e,e.timetuple(),e-s))
+            f.write('{};{};{};{};{}\n'.format(s,s,e,e,shours))
         else:
-            f.write('{};{};{};{};{}\n'.format(s,s.timetuple(),e,e.timetuple(),e-s))
+            f.write('{};{};{};{};{}\n'.format(s,s,e,e,shours))
             i = i - 1
