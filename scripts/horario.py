@@ -27,6 +27,9 @@ con.close()
 
 
 with open('/tmp/horario.csv','w') as f:
+
+    f.write('dia entrada;hora entrada;dia salida;hora salida;cantidad de horas\n')
+
     logging.info('procesando resultados')
     i = 0
     while i < len(logs):
