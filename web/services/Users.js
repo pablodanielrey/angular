@@ -186,4 +186,4 @@ Users = function($rootScope, $wamp, Messages, Session, Utils, Cache, Config) {
       });
   };
 
-});
+};
