@@ -10,8 +10,20 @@
 
 }
 .inscription {
+  
 
+}
 
+.inscription .header {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  margin: 20px;
+  width: 79%;
+  background-color: white;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
 }
 
 /****************************************************************/
@@ -48,6 +60,14 @@
 }
 
 .inscription .item .photo {
+    display: flex;
+    display: -webkit-flex; /* Safari */
+    display: -moz-flex; /* mozilla */
+    flex-direction:column;
+    -webkit-flex-direction:column; /* Safari */
+    -moz-flex-direction:column; /* mozilla */
+    align-items: center;
+    justify-content:center;
     width: 290px;
     height: 140px;
     float: left;
@@ -55,6 +75,9 @@
     background: #eee;
     border-radius: 3px 3px 3px 3px;
     box-shadow: 0 0 2px rgba(0,0,0,.5) inset;
+    color:rgba(0,0,0,.2);
+    cursor:pointer;
+
 }
 
 .inscription .item input {
@@ -166,7 +189,7 @@
 /********************* bannerInscription ************************
 *****************************************************************/
 
-.inscription .bannerInscription {
+.inscription .contentInscription {
   display: flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
@@ -184,12 +207,71 @@
   margin: 20px;
 }
 
+.inscription .contentInscription {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+}
+
+.inscription .contentLeft {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  width: 50%;
+  justify-content: flex-start;
+
+}
+
+.inscription .contentRight {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  width: 50%;
+  justify-content: flex-end;
+}
+
+.inscription .btnInscription {
+  background-color: #128c78;
+  color: white;
+  padding: 20px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  border-bottom: 3px solid #5c5f69;
+}
+
+.inscription .btnInscription:hover {
+  background-color: #1EB49C;
+
+}
+
+.inscription .btnSave {
+  background-color: #0066A6;
+  color: white;
+  padding: 20px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  border-bottom: 3px solid #5c5f69;
+}
+
+.inscription .btnSave:hover {
+  background-color: #228BCD;
+
+}
+
+
+
+
 /****************************************************************/
 /********************* RegistrationForm ************************
 *****************************************************************/
 
-.inscription.registrationForm {
-
+.inscription .registrationForm {
+  display: none;
 }
 
 .inscription.registro .registrationForm {
@@ -242,6 +324,10 @@
   width: 95%;
   border-radius: 5px;
   padding: 10px;
+}
+
+.p1, .p2, .p3, .p4, .p5, .p6, .p7 {
+  margin-left: 30px;
 }
 
 /****** MOSTRAR U OCULTAR PANTALLAS DEL FORMULARIO ******/
@@ -316,6 +402,8 @@
   unicode-bidi: bidi-override;
   direction: rtl;
   font-size: 15px;
+  margin: 10px;
+
 }
 .inscription .rating span.star {
   font-family: FontAwesome;
@@ -327,14 +415,14 @@
   cursor: pointer;
 }
 .inscription .rating span.star:before {
-  content: "\f006";
+  content: "\f006 ";
   padding-right: 5px;
-  color: #777777;
+  color: grey;
 }
 .inscription .rating span.star:hover:before,
 .inscription .rating span.star:hover ~ span.star:before {
   content: "\f005";
-  color: #e3cf7a;
+  color: #ec9122;
 }
 
 /***** ESTILOS DE LOS IMPUT DEL FORMULARIO DE REGESTRO *****/
@@ -352,4 +440,67 @@
     background: white;
     border-radius: 3px 3px 3px 3px;
     box-shadow: 0 0 2px rgba(0,0,0,.5) inset;
+}
+
+.inscription .item .CantMatAprov {
+    width: 40px;
+    height: 20px;
+    float: left;
+    border: 0;
+    background: white;
+    border-radius: 3px 3px 3px 3px;
+    box-shadow: 0 0 2px rgba(0,0,0,.5) inset;
+}
+
+.inscription .item .languaje {
+    width: 200px;
+    height: 40px;
+    float: left;
+    border: 0;
+    background: white;
+    border-radius: 3px 3px 3px 3px;
+    box-shadow: 0 0 2px rgba(0,0,0,.5) inset;
+}
+
+/******** pantalla idioma **********/
+
+.inscription .btnAddLanguaje {
+  background-color: #ec9122;
+  color: white;
+  padding: 5px;
+  border: none;
+  border-radius: 5px;
+}
+
+.inscription .languajes {
+  overflow-y: auto;
+  height: 100px;
+}
+
+
+/******** footer del fomulario ********/
+
+.inscription .footerForm {
+  width: 95%;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+
+.inscription .btnFooter {
+  background-color: #0066A6;
+  color: white;
+  padding: 5px;
+  border: none;
+  border-radius: 5px;
+}
+
+.inscription .pagination {
+  color: grey;
 }
