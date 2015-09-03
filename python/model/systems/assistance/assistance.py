@@ -17,6 +17,9 @@ from model.systems.assistance.date import Date
 from model.systems.assistance.schedule import Schedule
 from model.systems.assistance.check.checks import ScheduleChecks
 from model.systems.assistance.justifications.justifications import Justifications
+from model.systems.positions.positions import Positions
+import model.systems.assistance.date
+
 
 class Assistance:
 
@@ -27,6 +30,29 @@ class Assistance:
     users = inject.attr(Users)
     justifications = inject.attr(Justifications)
     checks = inject.attr(ScheduleChecks)
+    positions = inject.attr(Positions)
+    date = inject.attr(model.systems.assistance.date.Date)
+
+    def getAssistanceData(self, con, userId, date=None):
+        ps = self.positions.find(con, userId)
+        p = ''
+        if len(ps) > 0:
+            p = ps[0]['name']
+
+        if date is None:
+            date = datetime.datetime.now()
+        if self.date.isNaive(date):
+            ldate = self.date.localizeLocal(date)
+            date = self.date.awareToUtc(ldate)
+
+        sch = self.schedule.getSchedule(con, userId, date)
+
+        rt = {
+            'userId': userId,
+            'schedule': sch,
+            'position': p
+        }
+        return rt
 
 
     """

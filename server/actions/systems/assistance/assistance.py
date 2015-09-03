@@ -31,14 +31,15 @@ class AssistanceWamp(ApplicationSession):
         ApplicationSession.__init__(self, config)
 
         self.serverConfig = inject.instance(Config)
-        self.profiles = inject.attr(Profiles)
-        self.assistance = inject.attr(Assistance)
-        self.fails = inject.attr(Fails)
-        self.dateutils = inject.attr(Date)
-        self.checks = inject.attr(ScheduleChecks)
+        self.profiles = inject.instance(Profiles)
+        self.assistance = inject.instance(Assistance)
+        self.fails = inject.instance(Fails)
+        self.dateutils = inject.instance(Date)
+        self.checks = inject.instance(ScheduleChecks)
 
-        self.offices = inject.attr(Offices)
-        self.schedule = inject.attr(Schedule)
+        self.assistance = inject.instance(Assistance)
+        self.offices = inject.instance(Offices)
+        self.schedule = inject.instance(Schedule)
 
     @coroutine
     def onJoin(self, details):
@@ -47,7 +48,7 @@ class AssistanceWamp(ApplicationSession):
         yield from self.register(self.getFailsByFilter_async, 'assistance.getFailsByFilter')
         yield from self.register(self.getAssistanceStatusByDate_async, 'assistance.getAssistanceStatusByDate')
         yield from self.register(self.getAssistanceStatusByUsers_async, 'assistance.getAssistanceStatusByUsers')
-        yield from self.register(self.getAssistanceData_async, 'assistance.getAssistanceData')
+        yield from self.register(self.getAssistanceData, 'assistance.getAssistanceData')
         yield from self.register(self.getSchedules_async, 'assistance.getSchedules')
         yield from self.register(self.persistSchedule_async, 'assistance.persistSchedule')
         yield from self.register(self.deleteSchedule_async, 'assistance.deleteSchedule')
@@ -123,26 +124,25 @@ class AssistanceWamp(ApplicationSession):
         r = yield from loop.run_in_executor(None, self.getAssistanceStatusByUsers, userIds, dates, status)
         return r
 
-    def getAssistanceData(self, userId):
+    def getAssistanceData(self, sid, userId, date=None):
         con = self._getDatabase()
         try:
-            ''' .... codigo aca ... '''
+            r = self.assistance.getAssistanceData(con, userId, date)
             con.commit()
-            return True
+            return r
 
         finally:
             con.close()
 
     @coroutine
-    def getAssistanceData_async(self, sid, userId):
+    def getAssistanceData_async(self, sid, userId, date=None):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getAssistanceData, userId)
+        r = yield from loop.run_in_executor(None, self.getAssistanceData, sid, userId, date)
         return r
 
     def getSchedules(self, userId, date):
         con = self._getDatabase()
         try:
-            ''' .... codigo aca ... '''
             con.commit()
             return True
 
