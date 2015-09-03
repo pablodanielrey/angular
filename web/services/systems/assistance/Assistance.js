@@ -4,6 +4,37 @@ app.service('Assistance', ['Utils','Session','$wamp',
 
 	function(Utils, Session, $wamp) {
 
+		this.getAssistanceData = function(userId, date, callbackOk, callbackError) {
+			var sid = Session.getSessionId();
+			$wamp.call('assistance.getAssistanceData', [sid, usersId])
+				.then(function(res) {
+					if (res != null) {
+						callbackOk(res);
+					} else {
+						callbackError('Error');
+					}
+				},function(err) {
+					callbackError(err);
+				});
+		};
+
+		this.getAssistanceStatusByDate = function(userId, date, callbackOk, callbackError) {
+			var sid = Session.getSessionId();
+			$wamp.call('assistance.getAssistanceStatusByDate', [sid, usersId, date])
+				.then(function(res) {
+					if (res != null) {
+						callbackOk(res);
+					} else {
+						callbackError('Error');
+					}
+				},function(err) {
+					callbackError(err);
+				});
+		};
+
+
+
+
 		this.getFailsByDate = function(start, end, callbackOk, callbackError) {
 			var sid = Session.getSessionId();
 			$wamp.call('assistance.getFailsByDate', [sid, start, end])
@@ -70,19 +101,7 @@ app.service('Assistance', ['Utils','Session','$wamp',
 
 		}
 
-		this.getAssistanceStatusByDate = function(userId, date, callbackOk, callbackError) {
-			var sid = Session.getSessionId();
-			$wamp.call('assistance.getAssistanceStatusByDate', [sid, usersId, date])
-				.then(function(res) {
-					if (res != null) {
-						callbackOk(res);
-					} else {
-						callbackError('Error');
-					}
-				},function(err) {
-					callbackError(err);
-				});
-		};
+
 
 		this.getAssistanceStatusByUsers = function(usersIds, dates, status, callbackOk, callbackError) {
 			var sid = Session.getSessionId();
@@ -98,19 +117,7 @@ app.service('Assistance', ['Utils','Session','$wamp',
 				});
 		};
 
-		this.getAssistanceData = function(userId, callbackOk, callbackError) {
-			var sid = Session.getSessionId();
-			$wamp.call('assistance.getAssistanceData', [sid, usersId])
-				.then(function(res) {
-					if (res != null) {
-						callbackOk(res);
-					} else {
-						callbackError('Error');
-					}
-				},function(err) {
-					callbackError(err);
-				});
-		};
+
 
 
 		this.getSchedules = function(userId, date, callbackOk, callbackError) {

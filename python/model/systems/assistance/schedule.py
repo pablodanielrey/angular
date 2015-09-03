@@ -19,9 +19,9 @@ class Schedule:
         Retorna la lista de logs determinada que deber�a tener un usuario para una fecha espec�fica,
         se tiene en cuenta el horario de la persona en la fecha y la fecha siguiente para obtener los logs correctos.
     """
-    def getLogsForSchedule(self,con,userId,date):
+    def getLogsForSchedule(self, con, userId, date):
 
-        schedules = self.getSchedule(con,userId,date)
+        schedules = self.getSchedule(con, userId, date)
         if schedules is None:
             return []
 
@@ -36,7 +36,7 @@ class Schedule:
         days = 1
         while (count < 10) and (schedules2 is None or len(schedules2) <= 0):
             date2 = date + datetime.timedelta(days=days)
-            schedules2 = self.getSchedule(con,userId,date2)
+            schedules2 = self.getSchedule(con, userId, date2)
             days = days + 1
             count = count + 1
 
@@ -44,7 +44,6 @@ class Schedule:
             start2 = end + datetime.timedelta(hours=24)
         else:
             start2 = schedules2[0]['start']
-
 
         """
         schedules2 = []
@@ -62,14 +61,13 @@ class Schedule:
             end2 = schedules2[0]['end']
         """
 
-
         deltaEnd = end + datetime.timedelta(seconds=((start2 - end).total_seconds() / 2))
         """
         deltaStart = start - datetime.timedelta(seconds=((start - end2).total_seconds() / 2))
         """
         deltaStart = start - datetime.timedelta(hours=3)
 
-        logs = self.logs.findLogs(con,userId,deltaStart,deltaEnd)
+        logs = self.logs.findLogs(con, userId, deltaStart, deltaEnd)
 
         return logs
 

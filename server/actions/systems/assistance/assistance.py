@@ -31,14 +31,15 @@ class AssistanceWamp(ApplicationSession):
         ApplicationSession.__init__(self, config)
 
         self.serverConfig = inject.instance(Config)
-        self.profiles = inject.attr(Profiles)
-        self.assistance = inject.attr(Assistance)
-        self.fails = inject.attr(Fails)
-        self.dateutils = inject.attr(Date)
-        self.checks = inject.attr(ScheduleChecks)
+        self.profiles = inject.instance(Profiles)
+        self.assistance = inject.instance(Assistance)
+        self.fails = inject.instance(Fails)
+        self.dateutils = inject.instance(Date)
+        self.checks = inject.instance(ScheduleChecks)
 
-        self.offices = inject.attr(Offices)
-        self.schedule = inject.attr(Schedule)
+        self.assistance = inject.instance(Assistance)
+        self.offices = inject.instance(Offices)
+        self.schedule = inject.instance(Schedule)
 
     @coroutine
     def onJoin(self, details):
@@ -58,6 +59,36 @@ class AssistanceWamp(ApplicationSession):
         user = self.serverConfig.configs['database_user']
         passw = self.serverConfig.configs['database_password']
         return psycopg2.connect(host=host, dbname=dbname, user=user, password=passw)
+
+    def getAssistanceData(self, sid, userId, date=None):
+        con = self._getDatabase()
+        try:
+            r = self.assistance.getAssistanceData(con, userId, date)
+            return r
+
+        finally:
+            con.close()
+
+    @coroutine
+    def getAssistanceData_async(self, sid, userId, date=None):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.getAssistanceData, sid, userId, date)
+        return r
+
+    def getAssistanceStatusByDate(self, userId, date=None):
+        con = self._getDatabase()
+        try:
+            r = self.assistance.getAssistanceStatus(con, userId, date)
+            return r
+
+        finally:
+            con.close()
+
+    @coroutine
+    def getAssistanceStatusByDate_async(self, sid, userId, date=None):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.getAssistanceStatusByDate, userId, date)
+        return r
 
     def getFailsByDate(self, start, end):
         con = self._getDatabase()
@@ -91,21 +122,6 @@ class AssistanceWamp(ApplicationSession):
         r = yield from loop.run_in_executor(None, self.getFailsByFilter, userIds, officesIds, start, end, filter)
         return r
 
-    def getAssistanceStatusByDate(self, userId, date):
-        con = self._getDatabase()
-        try:
-            ''' .... codigo aca ... '''
-            con.commit()
-            return True
-
-        finally:
-            con.close()
-
-    @coroutine
-    def getAssistanceStatusByDate_async(self, sid, userId, date):
-        loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getAssistanceStatusByDate, userId, date)
-        return r
 
     def getAssistanceStatusByUsers(self, userIds, dates, status):
         con = self._getDatabase()
@@ -123,26 +139,11 @@ class AssistanceWamp(ApplicationSession):
         r = yield from loop.run_in_executor(None, self.getAssistanceStatusByUsers, userIds, dates, status)
         return r
 
-    def getAssistanceData(self, userId):
-        con = self._getDatabase()
-        try:
-            ''' .... codigo aca ... '''
-            con.commit()
-            return True
 
-        finally:
-            con.close()
-
-    @coroutine
-    def getAssistanceData_async(self, sid, userId):
-        loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getAssistanceData, userId)
-        return r
 
     def getSchedules(self, userId, date):
         con = self._getDatabase()
         try:
-            ''' .... codigo aca ... '''
             con.commit()
             return True
 
