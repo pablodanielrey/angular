@@ -22,7 +22,7 @@ class UsersWamp(ApplicationSession):
     def __init__(self, config=None):
         logging.debug('instanciando')
         ApplicationSession.__init__(self, config)
-
+        self.users = inject.instance(Users)
         self.serverConfig = inject.instance(Config)
 
     @coroutine
@@ -43,9 +43,9 @@ class UsersWamp(ApplicationSession):
     def findById(self, id):
         con = self._getDatabase()
         try:
-            # codigo
+            data = self.users.findUser(con, id)
             con.commit()
-            return None
+            return data
 
         finally:
             con.close()
