@@ -54,53 +54,42 @@ class Assistance:
         }
         return rt
 
-
     """
         Obtiene el estado de asistencia del usuario
         IMPORANTE!!!
         la fecha se toma como aware y en zona local del cliente!!!
         se pasa a utc dentro de este método ya que se necesita saber el inicio del día y fin del día en zona local.
     """
-    def getAssistanceStatus(self,con,userId,date=None):
-        if date is None:
-            date = self.date.now()
+    def getAssistanceStatus(self, con, userId, date=None):
 
-        if self.date.isNaive(date) or self.date.isUTC(date):
+        if date is None:
+            date = datetime.datetime.now()
+        if self.date.isNaive(date):
             date = self.date.localizeLocal(date)
 
-        """ el cero y el fin del día son de la zona local """
-        From = date.replace(hour=0,minute=0,second=0,microsecond=0)
-        To = date.replace(hour=23,minute=59,second=59,microsecond=0)
-
-
-        From = self.date.awareToUtc(From)
-        To = self.date.awareToUtc(To)
-
-        logging.debug('from: {}, to: {}'.format(From,To))
-
         # Chequeo que tenga horario
-        scheds = self.schedule.getSchedule(con,userId,From)
+        scheds = self.schedule.getSchedule(con, userId, date)
         if (scheds is None) or (len(scheds) <= 0):
             """ no tiene horario declarado asi que no se chequea nada """
             return None
 
-        logs = self.logs.findLogs(con,userId,From,To)
+        logs = self.schedule.getLogsForSchedule(con, userId, date)
         logging.debug('logs {}'.format(logs))
 
         worked, attlogs = self.logs.getWorkedHours(logs)
-        logging.debug('worked : {}, attlogs: {}'.format(worked,attlogs))
+        logging.debug('worked : {}, attlogs: {}'.format(worked, attlogs))
 
-        sdate,edate,totalSeconds = self.logs.explainWorkedHours(worked)
+        sdate, edate, totalSeconds = self.logs.explainWorkedHours(worked)
         inside = 'Afuera' if len(attlogs) % 2 == 0 else 'Trabajando'
 
         assistanceStatus = {
-            'date':date,
+            'date': date,
             'userId': userId,
             'status': inside,
             'start': sdate,
             'end': edate,
             'logs': attlogs,
-            'justifications':[],
+            'justifications': [],
             'workedMinutes': totalSeconds / 60
         }
         return assistanceStatus

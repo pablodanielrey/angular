@@ -4,7 +4,6 @@ app.service('Assistance', ['Utils','Session','$wamp',
 
 	function(Utils, Session, $wamp) {
 
-
 		this.getAssistanceData = function(userId, date, callbackOk, callbackError) {
 			var sid = Session.getSessionId();
 			$wamp.call('assistance.getAssistanceData', [sid, usersId])
@@ -19,7 +18,19 @@ app.service('Assistance', ['Utils','Session','$wamp',
 				});
 		};
 
-
+		this.getAssistanceStatusByDate = function(userId, date, callbackOk, callbackError) {
+			var sid = Session.getSessionId();
+			$wamp.call('assistance.getAssistanceStatusByDate', [sid, usersId, date])
+				.then(function(res) {
+					if (res != null) {
+						callbackOk(res);
+					} else {
+						callbackError('Error');
+					}
+				},function(err) {
+					callbackError(err);
+				});
+		};
 
 
 
@@ -90,19 +101,7 @@ app.service('Assistance', ['Utils','Session','$wamp',
 
 		}
 
-		this.getAssistanceStatusByDate = function(userId, date, callbackOk, callbackError) {
-			var sid = Session.getSessionId();
-			$wamp.call('assistance.getAssistanceStatusByDate', [sid, usersId, date])
-				.then(function(res) {
-					if (res != null) {
-						callbackOk(res);
-					} else {
-						callbackError('Error');
-					}
-				},function(err) {
-					callbackError(err);
-				});
-		};
+
 
 		this.getAssistanceStatusByUsers = function(usersIds, dates, status, callbackOk, callbackError) {
 			var sid = Session.getSessionId();
