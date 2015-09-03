@@ -7,12 +7,14 @@
 app.controller('ManageIssuesCtrl', ["$scope", "$timeout", "$window", "Module", "Notifications", "Issue", "Users", "Office", function ($scope, $timeout, $window, Module, Notifications, Issue, Users, Office) {
 
   $scope.model = {
-    offices: []
+    offices: [],
+    newNode: null
   }
+
 
   /***** MANIPULACION DE ESTILOS ******/
   $scope.style = null;
-  $scope.styles = ['none','displayVisibility','displayAssigned'];
+  $scope.styles = ['none','displayVisibility','displayAssigned','displayCreateChild'];
 
   $scope.setStyle = function($index) {
     $scope.style = $scope.styles[$index];
@@ -96,9 +98,8 @@ app.controller('ManageIssuesCtrl', ["$scope", "$timeout", "$window", "Module", "
    * @param {type} nodeScope
    * @returns {undefined}
    */
-  $scope.updateIssueData = function(nodeScope){
+  $scope.updateIssueData = function(nodeData){
 
-    var nodeData = nodeScope.$modelValue;
     Issue.updateIssueData(nodeData, null,
       function(data) {$scope.getIssues();},
       function(error) { Notifications.message(error); }
@@ -107,38 +108,42 @@ app.controller('ManageIssuesCtrl', ["$scope", "$timeout", "$window", "Module", "
 
 
 
-  $scope.addNode = function(nodeScope){
-    var nodeData = nodeScope.$modelValue;
+  $scope.addNode = function(nodeData){
+    $scope.requestNewNode = "";
+    $scope.setStyle(3);
 
-    var newNode = $scope.initializeNode("PENDING");
-    newNode.parent_id = nodeData.id;
-    newNode.request = $scope.request;
-    newNode.visibilities = nodeData['visibilities'];
-
-    Issue.newIssue(newNode,newNode['state'], newNode['visibilities'],
-      function(data) {$scope.getIssues(); $scope.request = null;},
-      function(error) { Notifications.message(error); }
-    );
+    $scope.model.newNode = $scope.initializeNode("PENDING");
+    $scope.model.newNode.parent_id = nodeData.id;
+    $scope.model.newNode.visibilities = nodeData['visibilities'];
   };
 
-  $scope.addComment = function(nodeScope){
-    var nodeData = nodeScope.$modelValue;
+  $scope.addComment = function(nodeData){
+    $scope.requestNewNode = "";
+    $scope.setStyle(3);
 
-    var newNode = $scope.initializeNode("COMMENT");
-    newNode.parent_id = nodeData.id;
-    newNode.request = $scope.request;
-    newNode.visibilities = nodeData['visibilities'];
+    $scope.model.newNode = $scope.initializeNode("COMMENT");
+    $scope.model.newNode.parent_id = nodeData.id;
+    $scope.model.newNode.visibilities = nodeData['visibilities'];
+  };
 
-    Issue.newIssue(newNode,newNode['state'],newNode['visibilities'],
+  $scope.saveChild = function() {
+    $scope.model.newNode.request = $scope.requestNewNode;
+    Issue.newIssue($scope.model.newNode,$scope.model.newNode['state'],$scope.model.newNode['visibilities'],
       function(data) {
+        $scope.setStyle(0);
         $scope.getIssues();
         $scope.request = null;
       },
       function(error) {
+        $scope.setStyle(0);
         Notifications.message(error);
       }
     );
-  };
+  }
+
+  $scope.cancelChild = function() {
+    $scope.setStyle(0);
+  }
 
 
 
@@ -222,9 +227,9 @@ app.controller('ManageIssuesCtrl', ["$scope", "$timeout", "$window", "Module", "
    ******************/
 
   $scope.$on('$viewContentLoaded', function(event) {
-    console.log('initialize --> index.js');
    $scope.initialize();
   });
+
 
   $scope.$on('saveAssignedEvent', function(event,issue,selecteds) {
     $scope.setStyle(0);
@@ -245,6 +250,7 @@ app.controller('ManageIssuesCtrl', ["$scope", "$timeout", "$window", "Module", "
 
   $scope.initialize = initialize;
   function initialize() {
+    $scope.model.newNode = null;
     $scope.getIssues();
     $scope.loadOffices();
   }

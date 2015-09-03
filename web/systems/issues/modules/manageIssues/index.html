@@ -30,4 +30,16 @@
   <div class="assignedOffices" ng-controller="AssignedCtrl" ng-include="'/systems/issues/modules/manageIssues/assigned.html'">
   </div>
 
+
+  <!-- *******************************************************************
+  ****** PANTALLA PARA EL INGRESO DEL TEXTO PARA UN NUEVO ISSUE **********
+  ******************************************************************** -->
+  <div class="newIssueForm">
+    <textarea ng-model="requestNewNode"></textarea>
+    <div class="actions">
+      <button ng-click="cancelChild()">Cancelar</button>
+      <button ng-click="saveChild()">Guardar</button>
+    </div>
+  </div>
+
 </div>

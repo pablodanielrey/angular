@@ -19,6 +19,14 @@
   display:block;
 }
 
+.contentScreens .newIssueForm {
+  display:none;
+}
+
+.contentScreens.displayCreateChild .newIssueForm {
+  display:block;
+}
+
 
 .ContentOrders {
 
