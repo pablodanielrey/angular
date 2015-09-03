@@ -112,18 +112,18 @@
           </div>
           <div class="row1">
             	<div class="col2 col-span-2"><input type="checkbox"></div>
-            	<div class="col1 col-span-1">TIPO</div>
-            	<div class="col1 col-span-1">NÚMERO</div>
-            	<div class="col1 col-span-1">EXPEDIENTE</div>
-            	<div class="col1 col-span-1">EMISOR</div>
-            	<div class="col1 col-span-1">ESTADO</div>
-            	<div class="col1 col-span-1">VISIVILIDAD</div>
+            	<div class="col1 col-span-1" ng-click="view.reverseType=!view.reverseType;order(['type','file_number','normative_number_full','issuer.name','status.name','visibility.name'],view.reverseType)" >TIPO</div>
+            	<div class="col1 col-span-1" ng-click="view.reverseNumber=!view.reverseNumber;order(['file_number','normative_number_full','type','issuer.name','status.name','visibility.name'],view.reverseNumber)">NÚMERO</div>
+            	<div class="col1 col-span-1" ng-click="view.reverseExp=!view.reverseExp;order(['normative_number_full','file_number','type','issuer.name','status.name','visibility.name'],view.reverseExp)">EXPEDIENTE</div>
+            	<div class="col1 col-span-1" ng-click="view.reverseIssuer=!view.reverseIssuer;order(['issuer.name','file_number','normative_number_full','type','status.name','visibility.name'],view.reverseIssuer)">EMISOR</div>
+            	<div class="col1 col-span-1" ng-click="view.reverseState=!view.reverseState;order(['status.name','file_number','normative_number_full','type','issuer.name','visibility.name'],view.reverseState)">ESTADO</div>
+            	<div class="col1 col-span-1" ng-click="view.reverseVisibility=!view.reverseVisibility;order(['visibility.name','file_number','normative_number_full','type','issuer.name','status.name'],view.reverseNumber)">VISIVILIDAD</div>
             	<div class="col1 col-span-1">ACCION</div>
           </div>
 
           <div class="results">
 
-                <div ng-repeat="normative in model.normatives">
+                <div ng-repeat="normative in model.normatives" class="normative">
                     <div class="row3">
                       	<div class="col2 col-span-2"><input type="checkbox"></div>
                       	<div class="col3 col-span-1"><i class="fa fa-file-text"></i>&nbsp; {{normative.type}}</div>

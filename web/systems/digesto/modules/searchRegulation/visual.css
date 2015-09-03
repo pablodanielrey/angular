@@ -226,6 +226,10 @@
   background-color: #eeeeee;
 }
 
+.searchRegulation .normative {
+  height:auto;
+}
+
 .searchRegulation .row4 {
   display: flex;
   flex-direction: row;
