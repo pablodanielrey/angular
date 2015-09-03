@@ -44,7 +44,6 @@ class UsersWamp(ApplicationSession):
         con = self._getDatabase()
         try:
             data = self.users.findUser(con, id)
-            con.commit()
             return data
 
         finally:
@@ -59,9 +58,9 @@ class UsersWamp(ApplicationSession):
     def persistUser(self, user):
         con = self._getDatabase()
         try:
-            # codigo
+            userId = self.users.createUser(con, user)
             con.commit()
-            return True
+            return userId
 
         finally:
             con.close()
@@ -69,7 +68,7 @@ class UsersWamp(ApplicationSession):
     @coroutine
     def persistUser_async(self, user):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.persist, user)
+        r = yield from loop.run_in_executor(None, self.persistUser, user)
         return r
 
     def findUsersIds(self):
