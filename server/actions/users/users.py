@@ -34,6 +34,7 @@ class UsersWamp(ApplicationSession):
         yield from self.register(self.findUsersIds_async, 'users.findUsersIds')
         yield from self.register(self.findUsersByIds_async, 'users.findUsersByIds')
         yield from self.register(self.findMails_async, 'users.mails.findMails')
+        yield from self.register(self.persistMail_async, 'users.mails.persistMail')
 
     def _getDatabase(self):
         host = self.serverConfig.configs['database_host']
@@ -153,6 +154,7 @@ class UsersWamp(ApplicationSession):
 
     '''
      ' Buscar mails a partir de un userId
+     ' @param userId Uuid de usuario
      '''
     def findMails(self, userId):
         con = self._getDatabase()
@@ -167,4 +169,28 @@ class UsersWamp(ApplicationSession):
     def findMails_async(self, userId):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.findMails, userId)
+        return r
+
+
+    '''
+     ' Persistir email de usuario
+     ' @param email Objeto con los datos del email de usuario
+     '      userId: Id de usuario
+     '      email: Email propiamente dicho
+     '      confirmed: Flag para indicar si el email esta confirmado (Defecto False)
+     '''
+    def persistMail(self, email):
+        con = self._getDatabase()
+        try:
+            emailId = self.users.createMail(con, email)
+            con.commit()
+            return emailId
+
+        finally:
+            con.close()
+
+    @coroutine
+    def persistMail_async(self, email):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.persistMail, email)
         return r
