@@ -51,11 +51,12 @@ class WampMain(ApplicationSession):
             ret = yield from self.call('assistance.getSchedules', sid, userId, date)
 
             if len(ret) > 0:
-                start = parse(ret[0]['start'])
-                start = start.astimezone(tz)
-                end = parse(ret[0]['end'])
-                end = end.astimezone(tz)
-                logging.debug('{} : {} --> {}'.format(ret[0]['id'], start, end))
+                for r in ret:
+                    start = parse(r['start'])
+                    start = start.astimezone(tz)
+                    end = parse(r['end'])
+                    end = end.astimezone(tz)
+                    logging.debug('{} : {} --> {}'.format(r['id'], start, end))
             c = c + 1
             date = date + datetime.timedelta(days=1)
 
