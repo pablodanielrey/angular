@@ -10,7 +10,7 @@
 
 }
 .inscription {
-  
+
 
 }
 
@@ -19,11 +19,11 @@
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
   margin: 20px;
-  width: 79%;
+  width: 82%;
   background-color: white;
   align-items: center;
   justify-content: space-between;
-  padding: 20px;
+  padding: 0px;
 }
 
 /****************************************************************/
@@ -40,12 +40,12 @@
   background-color:white;
   -webkit-box-shadow: 1px 1px 5px #5c5f69;
   -moz-box-shadow: 5px 5px 5px #5c5f69;
-  border-radius:2px;
-  -webkit-border-radius:2px;
-  -moz-border-radius:2px;
+  border-radius:2px 2px 0px 2px;
+  -webkit-border-radius:2px 2px 0px 2px;
+  -moz-border-radius:2px 2px 0px 2px;
   padding: 20px;
   width: 79%;
-  margin: 20px;
+  margin: 20px 20px 0px 20px;
 }
 
 .inscription .item {
@@ -204,7 +204,7 @@
   -moz-border-radius:2px;
   padding: 20px;
   width: 79%;
-  margin: 20px;
+  margin: 0px 0px 0px 20px;
 }
 
 .inscription .contentInscription {
@@ -234,9 +234,15 @@
 }
 
 .inscription .btnInscription {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
   background-color: #128c78;
   color: white;
-  padding: 20px;
+  padding: 10px;
   border: none;
   border-radius: 3px;
   cursor: pointer;
@@ -251,7 +257,7 @@
 .inscription .btnSave {
   background-color: #0066A6;
   color: white;
-  padding: 20px;
+  padding: 10px;
   border: none;
   border-radius: 3px;
   cursor: pointer;
@@ -261,9 +267,82 @@
 .inscription .btnSave:hover {
   background-color: #228BCD;
 
+
+}
+
+.inscription .contentInscription .item {
+  background-color: #128c78;
+  color: white;
+  cursor: pointer;
+  border-radius: 3px;
+  margin-right: 30px;
+
+}
+
+.inscription .contentInscription .item button {
+    overflow: visible;
+    position: relative;
+    float: right;
+    border: 0;
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 20px;
+    cursor: pointer;
+    height: 68px;
+    width: 50px;
+    font: bold 15px/40px 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    color: white;
+    text-transform: uppercase;
+    background: #016857;
+    border-radius: 3px 0 0 3px;
+    text-shadow: 0 -1px 0 rgba(0, 0 ,0, .3);
+    margin-right: 5px;
+
+}
+
+.inscription .contentInscription .item button:hover{
+    background: #016857;
+}
+
+.inscription .contentInscription .item button:active,
+.inscription .contentInscription .item button:focus{
+    background: #016857;
+    outline: 0;
+}
+
+.inscription .contentInscription .item button:before { /* FLECHITA */
+    content: '';
+    position: absolute;
+    border-width: 8px 0 8px 8px;
+    border-style: solid;
+    border-color: transparent #016857 transparent;
+    top: 26px;
+    right: -6px;
+}
+
+.inscription .contentInscription .item button:hover:before{
+    border-right-color: #016857;
+}
+
+.inscription .contentInscription .item button:focus:before,
+.searchRegulation .contentInscription .item button:active:before{
+        border-right-color: #016857;
+}
+
+/* quitar espacio extra del botón para Mozilla Firefox */
+.inscription .contentInscription .item button::-moz-focus-inner {
+    border: 0;
+    padding: 0;
 }
 
 
+.inscription .textBtn {
+  padding: 10px;
+}
+
+.inscription .contentInscription .textInscribirme {
+  font-size:20px;
+}
 
 
 /****************************************************************/
