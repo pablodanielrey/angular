@@ -51,6 +51,7 @@ class AssistanceWamp(ApplicationSession):
         yield from self.register(self.getAssistanceStatusByDate_async, 'assistance.getAssistanceStatusByDate')
         yield from self.register(self.getAssistanceStatusByUsers_async, 'assistance.getAssistanceStatusByUsers')
         yield from self.register(self.getAssistanceData_async, 'assistance.getAssistanceData')
+        yield from self.register(self.getUsersWithSchedules_async, 'assistance.getUsersWithSchedules')
         yield from self.register(self.getSchedules_async, 'assistance.getSchedules')
         yield from self.register(self.persistSchedule_async, 'assistance.persistSchedule')
         yield from self.register(self.deleteSchedule_async, 'assistance.deleteSchedule')
@@ -122,6 +123,21 @@ class AssistanceWamp(ApplicationSession):
         r = yield from loop.run_in_executor(None, self.getAssistanceStatusByUsers, sid, userIds, dates)
         return r
 
+    def getUsersWithSchedules(self, sid):
+        con = self._getDatabase()
+        try:
+            r = self.schedule.getUsersInSchedules(con)
+            return r
+
+        finally:
+            con.close()
+
+    @coroutine
+    def getUsersWithSchedules_async(self, sid):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.getUsersWithSchedules, sid)
+        return r
+
     def getSchedules(self, sid, userId, date):
         con = self._getDatabase()
         try:
@@ -138,6 +154,21 @@ class AssistanceWamp(ApplicationSession):
         r = yield from loop.run_in_executor(None, self.getSchedules, sid, userId, date)
         return r
 
+    def persistSchedule(self, sid, schedule):
+        con = self._getDatabase()
+        try:
+            ''' .... codigo aca ... '''
+            con.commit()
+            return True
+
+        finally:
+            con.close()
+
+    @coroutine
+    def persistSchedule_async(self, sid, schedule):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.persistSchedule, sid, schedule)
+        return r
 
 
 
@@ -183,21 +214,7 @@ class AssistanceWamp(ApplicationSession):
 
 
 
-    def persistSchedule(self, schedule):
-        con = self._getDatabase()
-        try:
-            ''' .... codigo aca ... '''
-            con.commit()
-            return True
 
-        finally:
-            con.close()
-
-    @coroutine
-    def persistSchedule_async(self, sid, schedule):
-        loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.persistSchedule, schedule)
-        return r
 
     def deleteSchedule(self, id):
         con = self._getDatabase()

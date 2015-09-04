@@ -159,7 +159,7 @@ class Schedule:
 
         for schedule in scheduless:
 
-            """ controlo que las fechas est�n en utc """
+            """ controlo que las fechas están en utc """
             if not (self.date.isUTC(schedule[0]) and self.date.isUTC(schedule[1])):
                 raise FailedConstraints('date in database not in UTC')
 
@@ -203,11 +203,10 @@ class Schedule:
 
         return schedules
 
-
     """
-        reotnra los ids de los usuarios que tiene algun contr�l de horario
+        reotnra los ids de los usuarios que tiene algun contról de horario
     """
-    def getUsersInSchedules(self,con):
+    def getUsersInSchedules(self, con):
         cur = con.cursor()
         cur.execute('select distinct user_id from assistance.schedule')
         if cur.rowcount <= 0:
