@@ -35,6 +35,7 @@ class UsersWamp(ApplicationSession):
         yield from self.register(self.findUsersByIds_async, 'users.findUsersByIds')
         yield from self.register(self.findMails_async, 'users.mails.findMails')
         yield from self.register(self.persistMail_async, 'users.mails.persistMail')
+        yield from self.register(self.deleteMail_async, 'users.mails.deleteMail')
 
     def _getDatabase(self):
         host = self.serverConfig.configs['database_host']
@@ -193,4 +194,30 @@ class UsersWamp(ApplicationSession):
     def persistMail_async(self, email):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.persistMail, email)
+        return r
+
+
+
+    '''
+     ' Eliminacion de email
+     ' @override id uuid del email
+     '''
+    def deleteMail(self, id):
+        con = self._getDatabase()
+        try:
+            email = self.users.findMail(con, id)
+            if email is None:
+                return True
+
+            self.users.deleteMail(con, email['id'])
+            con.commit()
+            return True
+
+        finally:
+            con.close()
+
+    @coroutine
+    def deleteMail_async(self, id):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.deleteMail, id)
         return r
