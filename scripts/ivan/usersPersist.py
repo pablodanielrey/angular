@@ -29,12 +29,12 @@ class WampMain(ApplicationSession):
     @coroutine
     def onJoin(self, details):
         user = {
-            'dni':'31000123',
+            'dni':'31000567',
             'name':'Pepe',
             'lastname':'Pompin',
             'city':'La Plata',
             'country':'Argentina',
-            'adress':'33 Nº 3333',
+            'address':'33 Nº 3333',
             'genre':'Masculino',
             'birthdate':datetime.datetime(1980, 7, 20),
             'residence_city':'La Plata',
@@ -42,7 +42,24 @@ class WampMain(ApplicationSession):
         }
         userId = yield from self.call('users.persistUser', user)
 
-        logging.info("********** ID DEL USUARIO AGREGADO **********")
+        user = {
+            'id': userId,
+            'dni':'31000568',
+            'name':'Pepe',
+            'lastname':'Pompin',
+            'city':'La Plata',
+            'country':'Argentina',
+            'address':'33 Nº 3333',
+            'genre':'Masculino',
+            'birthdate':datetime.datetime(1980, 7, 20),
+            'residence_city':'La Plata',
+            'version':0
+        }
+
+        userId = yield from self.call('users.persistUser', user)
+
+
+        logging.info("********** ID DEL USUARIO PERSISTIDO **********")
         logging.info(userId)
 
 if __name__ == '__main__':

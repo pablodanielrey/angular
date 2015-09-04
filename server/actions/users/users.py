@@ -30,6 +30,7 @@ class UsersWamp(ApplicationSession):
         logging.debug('registering methods')
         yield from self.register(self.findById_async, 'users.findById')
         yield from self.register(self.persistUser_async, 'users.persistUser')
+        yield from self.register(self.listUsers_async, 'users.listUsers')
         yield from self.register(self.findUsersIds_async, 'users.findUsersIds')
         yield from self.register(self.findUsersByIds_async, 'users.findUsersByIds')
 
@@ -55,10 +56,31 @@ class UsersWamp(ApplicationSession):
         r = yield from loop.run_in_executor(None, self.findById, id)
         return r
 
+
+    '''
+     ' Persistir usuario
+     ' Si el id esta definido se actualiza caso contrario se inserta
+     ' @param user Diccionario con los datos de usuario
+     '    dni
+     '    name
+     '    lastname
+     '    city
+     '    country
+     '    adress
+     '    genre
+     '    birthdate
+     '    residence_city
+     '    version
+     '''
     def persistUser(self, user):
         con = self._getDatabase()
         try:
-            userId = self.users.createUser(con, user)
+            if 'id' not in user or not user['id']:
+                userId = self.users.createUser(con, user)
+            else:
+                self.users.updateUser(con, user)
+                userId = user['id']
+
             con.commit()
             return userId
 
@@ -70,6 +92,26 @@ class UsersWamp(ApplicationSession):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.persistUser, user)
         return r
+
+
+    '''
+     ' Listar usuarios
+     '''
+    def listUsers(self):
+        con = self._getDatabase()
+        try:
+            users = self.users.listUsers(con)
+            return users
+
+        finally:
+            con.close()
+
+    @coroutine
+    def listUsers_async(self):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.listUsers)
+        return r
+
 
     def findUsersIds(self):
         con = self._getDatabase()
@@ -86,6 +128,9 @@ class UsersWamp(ApplicationSession):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.findUsersIds)
         return r
+
+
+
 
     def findUsersByIds(self, ids):
         con = self._getDatabase()
