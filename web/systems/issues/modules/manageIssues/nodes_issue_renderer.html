@@ -19,10 +19,10 @@
         </div>
 
         <div>
-            <textarea class="orderText"  ng-model="node.request" ng-blur="updateIssueData(node)" ng-class="{'tree': node.expanded}"  ng-click="expandInput(node)"></textarea>
+            <textarea readonly class="orderText"  ng-model="node.request" ng-class="{'tree': node.expanded}"  ng-click="expandInput(node)"></textarea>
 
             <div ng-class="{true:'descriptionExpanded',false:'descriptionClosed'}[node.descriptionExpanded]">
-              {{node.created | date:"MM/dd/yyyy hh:mm" }}
+              {{node.created | date:"dd/MM/yyyy hh:mm" }}
               {{node.requestor}}
             </div>
         </div>

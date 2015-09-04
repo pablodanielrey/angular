@@ -30,4 +30,15 @@
   <div class="visibilityOffices" ng-controller="VisibilityOfficesCtrl" ng-include="'/systems/issues/modules/newRequest/visibilityOffice.html'">
   </div>
 
+  <!-- *******************************************************************
+  ****** PANTALLA PARA EL INGRESO DEL TEXTO PARA UN NUEVO ISSUE **********
+  ******************************************************************** -->
+  <div class="newIssueForm">
+    <textarea ng-model="requestNewNode"></textarea>
+    <div class="actions">
+      <button ng-click="cancelChild()">Cancelar</button>
+      <button ng-click="saveChild()">Guardar</button>
+    </div>
+  </div>  
+
 </div>
