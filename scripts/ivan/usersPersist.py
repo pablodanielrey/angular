@@ -1,10 +1,11 @@
 import logging
 import sys
 import inject
+import datetime
 sys.path.insert(0,'../../python')
 
 from model.config import Config
-logging.getLogger().setLevel(logging.INFO)
+logging.getLogger().setLevel(logging.DEBUG)
 
 from autobahn.asyncio.wamp import ApplicationSession
 from asyncio import coroutine
@@ -39,7 +40,6 @@ class WampMain(ApplicationSession):
             'residence_city':'La Plata',
             'version':0
         }
-
         userId = yield from self.call('users.persistUser', user)
 
         logging.info("********** ID DEL USUARIO AGREGADO **********")
