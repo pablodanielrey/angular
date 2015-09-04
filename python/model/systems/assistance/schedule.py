@@ -83,7 +83,7 @@ class Schedule:
         cur.execute('set time zone %s', ('utc',))
 
         """ obtengo todos los schedules que son en la fecha date del parámetro """
-        cur.execute("select sstart, send, date from assistance.schedule where \
+        cur.execute("select sstart, send, date, id from assistance.schedule where \
                     ((date = %s) or \
                     (isDayOfWeek = true and date <= %s and extract(dow from date) = extract(dow from %s)) or \
                     (isDayOfMonth = true and date <= %s and extract(day from date) = extract(day from %s)) or \
@@ -125,7 +125,8 @@ class Schedule:
                 schedules.append(
                     {
                         'start': st,
-                        'end': se
+                        'end': se,
+                        'id': schedule[3]
                     }
                 )
 
@@ -158,7 +159,7 @@ class Schedule:
 
         for schedule in scheduless:
 
-            """ controlo que las fechas est�n en utc """
+            """ controlo que las fechas están en utc """
             if not (self.date.isUTC(schedule[0]) and self.date.isUTC(schedule[1])):
                 raise FailedConstraints('date in database not in UTC')
 
@@ -202,11 +203,10 @@ class Schedule:
 
         return schedules
 
-
     """
-        reotnra los ids de los usuarios que tiene algun contr�l de horario
+        reotnra los ids de los usuarios que tiene algun contról de horario
     """
-    def getUsersInSchedules(self,con):
+    def getUsersInSchedules(self, con):
         cur = con.cursor()
         cur.execute('select distinct user_id from assistance.schedule')
         if cur.rowcount <= 0:
@@ -220,25 +220,27 @@ class Schedule:
 
 
     """
-        genera un nuevo schedule las fechas pasadas como par�metro (se supone aware)
+        genera un nuevo schedule las fechas pasadas como parámetro (se supone aware)
     """
-    def newSchedule(self,con,userId,date,start,end,isDayOfWeek,isDayOfMonth,isDayOfYear):
+    def persistSchedule(self, con, userId, date, start, end, isDayOfWeek, isDayOfMonth, isDayOfYear):
         uaware = date.astimezone(pytz.utc)
         ustart = start.astimezone(pytz.utc)
         uend = end.astimezone(pytz.utc)
 
         cur = con.cursor()
-        cur.execute('set time zone %s',('utc',))
+        cur.execute('set time zone %s', ('utc',))
 
-        req = (str(uuid.uuid4()), userId, uaware, ustart, uend, isDayOfWeek, isDayOfMonth, isDayOfYear)
-        cur.execute('insert into assistance.schedule (id,user_id,date,sstart,send,isDayOfWeek,isDayOfMonth,isDayOfYear) values (%s,%s,%s,%s,%s,%s,%s,%s)',req)
+        id = str(uuid.uuid4())
+        req = (id, userId, uaware, ustart, uend, isDayOfWeek, isDayOfMonth, isDayOfYear)
+        cur.execute('insert into assistance.schedule (id,user_id,date,sstart,send,isDayOfWeek,isDayOfMonth,isDayOfYear) values (%s,%s,%s,%s,%s,%s,%s,%s)', req)
+        return id
 
     '''
         elimina un schedule
     '''
-    def deleteSchedule(self,con,id):
+    def deleteSchedule(self, con, id):
         cur = con.cursor()
-        cur.execute('delete from assistance.schedule where id = %s',(id,))
+        cur.execute('delete from assistance.schedule where id = %s', (id,))
 
     '''
         combina los whs con los schedules

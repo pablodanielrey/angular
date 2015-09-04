@@ -51,6 +51,7 @@ class AssistanceWamp(ApplicationSession):
         yield from self.register(self.getAssistanceStatusByDate_async, 'assistance.getAssistanceStatusByDate')
         yield from self.register(self.getAssistanceStatusByUsers_async, 'assistance.getAssistanceStatusByUsers')
         yield from self.register(self.getAssistanceData_async, 'assistance.getAssistanceData')
+        yield from self.register(self.getUsersWithSchedules_async, 'assistance.getUsersWithSchedules')
         yield from self.register(self.getSchedules_async, 'assistance.getSchedules')
         yield from self.register(self.persistSchedule_async, 'assistance.persistSchedule')
         yield from self.register(self.deleteSchedule_async, 'assistance.deleteSchedule')
@@ -122,9 +123,75 @@ class AssistanceWamp(ApplicationSession):
         r = yield from loop.run_in_executor(None, self.getAssistanceStatusByUsers, sid, userIds, dates)
         return r
 
+    def getUsersWithSchedules(self, sid):
+        con = self._getDatabase()
+        try:
+            r = self.schedule.getUsersInSchedules(con)
+            return r
 
+        finally:
+            con.close()
 
+    @coroutine
+    def getUsersWithSchedules_async(self, sid):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.getUsersWithSchedules, sid)
+        return r
 
+    def getSchedules(self, sid, userId, date):
+        con = self._getDatabase()
+        try:
+            date = self._parseDate(date)
+            r = self.schedule.getSchedule(con, userId, date)
+            return r
+
+        finally:
+            con.close()
+
+    @coroutine
+    def getSchedules_async(self, sid, userId, date):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.getSchedules, sid, userId, date)
+        return r
+
+    def persistSchedule(self, sid, userId, date, start, end, dayOfWeek=False, dayOfMonth=False, dayOfYear=False):
+        con = self._getDatabase()
+        try:
+            date = self._parseDate(date)
+            start = self._parseDate(start)
+            end = self._parseDate(end)
+            r = self.schedule.persistSchedule(con, userId, date, start, end, dayOfWeek, dayOfMonth, dayOfYear)
+            con.commit()
+            return r
+
+        finally:
+            con.close()
+
+    @coroutine
+    def persistSchedule_async(self, sid, userId, date, start, end, dayOfWeek=False, dayOfMonth=False, dayOfYear=False):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.persistSchedule, sid, userId, date, start, end, dayOfWeek, dayOfMonth, dayOfYear)
+        return r
+
+    def deleteSchedule(self, sid, id):
+        con = self._getDatabase()
+        try:
+            self.schedule.deleteSchedule(con, id)
+            con.commit()
+            return True
+
+        except Exception as e:
+            logging.exception(e)
+            return False
+
+        finally:
+            con.close()
+
+    @coroutine
+    def deleteSchedule_async(self, sid, id):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.deleteSchedule, sid, id)
+        return r
 
 
 
@@ -166,36 +233,9 @@ class AssistanceWamp(ApplicationSession):
 
 
 
-    def getSchedules(self, userId, date):
-        con = self._getDatabase()
-        try:
-            con.commit()
-            return True
 
-        finally:
-            con.close()
 
-    @coroutine
-    def getSchedules_async(self, sid, userId, date):
-        loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getSchedules, userId, date)
-        return r
 
-    def persistSchedule(self, schedule):
-        con = self._getDatabase()
-        try:
-            ''' .... codigo aca ... '''
-            con.commit()
-            return True
-
-        finally:
-            con.close()
-
-    @coroutine
-    def persistSchedule_async(self, sid, schedule):
-        loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.persistSchedule, schedule)
-        return r
 
     def deleteSchedule(self, id):
         con = self._getDatabase()
