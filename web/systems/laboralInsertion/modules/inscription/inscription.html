@@ -1,5 +1,9 @@
 <div class="inscriptionContainer">
-    <div class="inscription ">
+
+    <button ng-click='changeInscription()'>cambiarInscripcion</button>
+    <button ng-click='changeRegistration()'>cambiarRegistration</button>
+
+    <div class="inscription {{model.inscription[model.ci]}}">
 
         <!-- ************************************
         ********* DATOS BASICOS ************
@@ -198,7 +202,7 @@
                 </div>
 
                 <!-- *** PANTALLAS INTERNAS DEL FORMULARIO VAN DE 1 A 7 *** -->
-                <div class="content pantalla6">
+                <div class="content {{model.registration[model.cr]}}">
 
                     <div class="p1">
                         <div class="subTittlesForm">
