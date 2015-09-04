@@ -83,7 +83,7 @@ class Schedule:
         cur.execute('set time zone %s', ('utc',))
 
         """ obtengo todos los schedules que son en la fecha date del parámetro """
-        cur.execute("select sstart, send, date from assistance.schedule where \
+        cur.execute("select sstart, send, date, id from assistance.schedule where \
                     ((date = %s) or \
                     (isDayOfWeek = true and date <= %s and extract(dow from date) = extract(dow from %s)) or \
                     (isDayOfMonth = true and date <= %s and extract(day from date) = extract(day from %s)) or \
@@ -125,7 +125,8 @@ class Schedule:
                 schedules.append(
                     {
                         'start': st,
-                        'end': se
+                        'end': se,
+                        'id': schedule[3]
                     }
                 )
 

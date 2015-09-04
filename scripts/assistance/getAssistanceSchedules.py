@@ -55,7 +55,7 @@ class WampMain(ApplicationSession):
                 start = start.astimezone(tz)
                 end = parse(ret[0]['end'])
                 end = end.astimezone(tz)
-                logging.debug('{} --> {}'.format(start, end))
+                logging.debug('{} : {} --> {}'.format(ret[0]['id'], start, end))
             c = c + 1
             date = date + datetime.timedelta(days=1)
 
