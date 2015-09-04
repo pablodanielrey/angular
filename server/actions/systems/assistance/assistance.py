@@ -173,7 +173,25 @@ class AssistanceWamp(ApplicationSession):
         r = yield from loop.run_in_executor(None, self.persistSchedule, sid, userId, date, start, end, dayOfWeek, dayOfMonth, dayOfYear)
         return r
 
+    def deleteSchedule(self, sid, id):
+        con = self._getDatabase()
+        try:
+            self.schedule.deleteSchedule(con, id)
+            con.commit()
+            return True
 
+        except Exception as e:
+            logging.exception(e)
+            return False
+
+        finally:
+            con.close()
+
+    @coroutine
+    def deleteSchedule_async(self, sid, id):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.deleteSchedule, sid, id)
+        return r
 
 
 

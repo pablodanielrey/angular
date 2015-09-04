@@ -230,15 +230,17 @@ class Schedule:
         cur = con.cursor()
         cur.execute('set time zone %s', ('utc',))
 
-        req = (str(uuid.uuid4()), userId, uaware, ustart, uend, isDayOfWeek, isDayOfMonth, isDayOfYear)
+        id = str(uuid.uuid4())
+        req = (id, userId, uaware, ustart, uend, isDayOfWeek, isDayOfMonth, isDayOfYear)
         cur.execute('insert into assistance.schedule (id,user_id,date,sstart,send,isDayOfWeek,isDayOfMonth,isDayOfYear) values (%s,%s,%s,%s,%s,%s,%s,%s)', req)
+        return id
 
     '''
         elimina un schedule
     '''
-    def deleteSchedule(self,con,id):
+    def deleteSchedule(self, con, id):
         cur = con.cursor()
-        cur.execute('delete from assistance.schedule where id = %s',(id,))
+        cur.execute('delete from assistance.schedule where id = %s', (id,))
 
     '''
         combina los whs con los schedules
