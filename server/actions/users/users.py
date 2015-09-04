@@ -33,6 +33,7 @@ class UsersWamp(ApplicationSession):
         yield from self.register(self.listUsers_async, 'users.listUsers')
         yield from self.register(self.findUsersIds_async, 'users.findUsersIds')
         yield from self.register(self.findUsersByIds_async, 'users.findUsersByIds')
+        yield from self.register(self.findMails_async, 'users.mails.findMails')
 
     def _getDatabase(self):
         host = self.serverConfig.configs['database_host']
@@ -146,4 +147,24 @@ class UsersWamp(ApplicationSession):
     def findUsersByIds_async(self, ids):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.findUsersByIds, ids)
+        return r
+
+
+
+    '''
+     ' Buscar mails a partir de un userId
+     '''
+    def findMails(self, userId):
+        con = self._getDatabase()
+        try:
+            mails = self.users.listMails(con, userId)
+            return mails
+
+        finally:
+            con.close()
+
+    @coroutine
+    def findMails_async(self, userId):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.findMails, userId)
         return r
