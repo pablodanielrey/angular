@@ -154,20 +154,23 @@ class AssistanceWamp(ApplicationSession):
         r = yield from loop.run_in_executor(None, self.getSchedules, sid, userId, date)
         return r
 
-    def persistSchedule(self, sid, schedule):
+    def persistSchedule(self, sid, userId, date, start, end, dayOfWeek=False, dayOfMonth=False, dayOfYear=False):
         con = self._getDatabase()
         try:
-            ''' .... codigo aca ... '''
+            date = self._parseDate(date)
+            start = self._parseDate(start)
+            end = self._parseDate(end)
+            r = self.schedule.persistSchedule(con, userId, date, start, end, dayOfWeek, dayOfMonth, dayOfYear)
             con.commit()
-            return True
+            return r
 
         finally:
             con.close()
 
     @coroutine
-    def persistSchedule_async(self, sid, schedule):
+    def persistSchedule_async(self, sid, userId, date, start, end, dayOfWeek=False, dayOfMonth=False, dayOfYear=False):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.persistSchedule, sid, schedule)
+        r = yield from loop.run_in_executor(None, self.persistSchedule, sid, userId, date, start, end, dayOfWeek, dayOfMonth, dayOfYear)
         return r
 
 

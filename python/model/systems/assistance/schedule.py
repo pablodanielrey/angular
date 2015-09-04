@@ -220,18 +220,18 @@ class Schedule:
 
 
     """
-        genera un nuevo schedule las fechas pasadas como par�metro (se supone aware)
+        genera un nuevo schedule las fechas pasadas como parámetro (se supone aware)
     """
-    def newSchedule(self,con,userId,date,start,end,isDayOfWeek,isDayOfMonth,isDayOfYear):
+    def persistSchedule(self, con, userId, date, start, end, isDayOfWeek, isDayOfMonth, isDayOfYear):
         uaware = date.astimezone(pytz.utc)
         ustart = start.astimezone(pytz.utc)
         uend = end.astimezone(pytz.utc)
 
         cur = con.cursor()
-        cur.execute('set time zone %s',('utc',))
+        cur.execute('set time zone %s', ('utc',))
 
         req = (str(uuid.uuid4()), userId, uaware, ustart, uend, isDayOfWeek, isDayOfMonth, isDayOfYear)
-        cur.execute('insert into assistance.schedule (id,user_id,date,sstart,send,isDayOfWeek,isDayOfMonth,isDayOfYear) values (%s,%s,%s,%s,%s,%s,%s,%s)',req)
+        cur.execute('insert into assistance.schedule (id,user_id,date,sstart,send,isDayOfWeek,isDayOfMonth,isDayOfYear) values (%s,%s,%s,%s,%s,%s,%s,%s)', req)
 
     '''
         elimina un schedule
