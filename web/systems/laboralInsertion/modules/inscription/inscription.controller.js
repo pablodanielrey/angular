@@ -25,6 +25,10 @@ function InscriptionCtrl($rootScope, $scope, $wamp, Session) {
     return $scope.model.inscriptions[$scope.model.ci];
   }
 
+  $scope.getRegistrationClazz = function() {
+    return $scope.model.registrations[$scope.model.cr];
+  }
+
 
   $scope.status = {
 
