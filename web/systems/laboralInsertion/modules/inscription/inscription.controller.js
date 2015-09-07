@@ -10,7 +10,7 @@ function InscriptionCtrl($rootScope, $scope, $wamp, Session) {
     ci: 0,
     cr: 0,
     inscriptions: ['','registro'],
-    registrations: ['','pantalla1','pantalla2','pantalla3']
+    registrations: ['pantalla1','pantalla2','pantalla3','pantalla4','pantalla5','pantalla6','pantalla7']
   };
 
   $scope.changeInscription = function() {

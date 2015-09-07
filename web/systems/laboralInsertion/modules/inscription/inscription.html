@@ -1,7 +1,6 @@
 <div class="inscriptionContainer">
 
-    <button ng-click='changeInscription()'>cambiarInscripcion</button>
-    <button ng-click='changeRegistration()'>cambiarRegistration</button>
+
 
     <div class="inscription" ng-class='getInscriptionClazz()'>
 
@@ -9,9 +8,9 @@
         ********* DATOS BASICOS ************
         ************************************* -->
         <div class="contentDataBasic">
-            <div class="header">
-               <img src="http://163.10.56.60/systems/laboralInsertion/img/imgHeader.png">
-            </div>
+            <!-- <div class="header">
+               <img src="http://163.10.56.60/systems/laboralInsertion/img/logoInsercion.jpg">
+            </div> -->
             <div class="dataBasic">
                 <div class"col">
                     <div class="item">
@@ -166,7 +165,7 @@
                     </div>
                 </button> -->
 
-                <div class="item">
+                <div class="item col1" ng-click='changeInscription()'>
                   <div>
                     <button><i class="fa fa-briefcase fa-2x"></i></button>
                   </div>
@@ -176,13 +175,44 @@
                   </div>
                 </div>
 
-                <div>
-                  Mis <br> Inscripciones
+                <div class="myInscriptions">
+                  <div>Mis <i class="fa fa-caret-right"></i></div>
+                  <div> Inscripciones</div>
                 </div>
+
+                <div class="item col2">
+                  <div>
+                    <button><i class="fa fa-briefcase fa-2x"></i></button>
+                  </div>
+                  <div class="textBtn">
+                    <span> Inscripto en</span><br>
+                    <span class="textInscribirme"> <b>FULL-TIME</b> </span>
+                  </div>
+                </div>
+
+                <!-- BOTONES ELIMINAR Y DESCARGAR DE LA INSCRIPCION -->
+                <div>
+                  <div class="btnTrash">
+                    <i class="fa fa-trash" tittle="Eliminar Inscripción"></i>
+                  </div>
+                  <div class="btnDownload" title="Descargar Inscripcion">
+                    <i class="fa fa-download"></i>
+                  </div>
+                </div>
+
 
             </div>
             <div class="contentRight">
-                <button class="btnSave"><i class="fa fa-floppy-o fa-2x"></i> GUARDAR  </button>
+                <div class="item col3">
+                  <div>
+                    <button><i class="fa fa-floppy-o fa-2x"></i></button>
+                  </div>
+                  <div class="textBtn">
+                    <span> <b>GUARDAR</b> </span><br>
+                    <span> <b>DATOS</b> </span><br>
+                  </div>
+                </div>
+
             </div>
         </div>
 
@@ -196,7 +226,7 @@
                     <div>
                         <h4>Formulario | OFERTA LABORAL</h4>
                     </div>
-                    <div>
+                    <div ng-click='changeInscription()'>
                       <i class="fa fa-times-circle fa-2x" title="Cancelar"></i>
                     </div>
                 </div>
@@ -231,7 +261,7 @@
                     <div class="p2">
 
                         <span class="subTittlesForm">
-                          <b>Materias aprovadas con Final</b>
+                          <b>Materias aprobadas con Final</b>
                         </span>
                         <div class="item">
                             <button><i class="fa fa-book"></i></button>
@@ -384,7 +414,7 @@
                     </div>
                     <div>
                       <button class="btnFooter"><i class="fa fa-arrow-circle-o-left"></i> Anterior </button>
-                      <button class="btnFooter">Siguiente <i class="fa fa-arrow-circle-o-right"></i></button>
+                      <button class="btnFooter" ng-click='changeRegistration()'>Siguiente <i class="fa fa-arrow-circle-o-right"></i></button>
                     </div>
                 </div>
             </div>
@@ -392,4 +422,8 @@
 
 
     </div>
+
+    <!-- <button class="btnChange" ng-click='changeInscription()'>Bolsa de Trabajo</button>
+    <button class="btnChange" ng-click='changeRegistration()'>Pag Siguiente</button> -->
+
 </div>

@@ -220,7 +220,7 @@
   display: flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
-  width: 50%;
+  width: 80%;
   justify-content: flex-start;
 
 }
@@ -229,7 +229,7 @@
   display: flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
-  width: 50%;
+  width: 20%;
   justify-content: flex-end;
 }
 
@@ -271,13 +271,63 @@
 }
 
 .inscription .contentInscription .item {
-  background-color: #128c78;
   color: white;
-  cursor: pointer;
   border-radius: 3px;
-  margin-right: 30px;
 
 }
+
+.inscription .contentInscription .item:hover {
+  background-color: grey;
+}
+
+/*colores de los botones*/
+.inscription .contentInscription .col1 {
+  background-color: #275276;
+  cursor: pointer;
+  margin-right: 32px;
+}
+.inscription .contentInscription .col1:hover {
+  background-color: #3885C5;
+
+}
+
+.inscription .contentInscription .col2 {
+  background-color: #128c78;
+  margin-right: 5px;
+}
+
+.inscription .contentInscription .col2:hover {
+  background-color: #128c78;
+}
+
+.inscription .contentInscription .col3 {
+  background-color: #275276;
+}
+
+.inscription .contentInscription .col3:hover {
+  background-color: #3885C5;
+  cursor: pointer;
+}
+
+.inscription .contentInscription .btnTrash {
+  background-color: #e43e46;
+  color: white;
+  border-radius: 2px;
+  padding: 2px;
+  margin-bottom: 2px;
+
+}
+
+.inscription .contentInscription .btnDownload {
+  background-color: #275276;
+  color: white;
+  border-radius: 2px;
+  padding: 2px;
+}
+
+
+
+
 
 .inscription .contentInscription .item button {
     overflow: visible;
@@ -293,7 +343,7 @@
     font: bold 15px/40px 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     color: white;
     text-transform: uppercase;
-    background: #016857;
+    background: #0066A6;
     border-radius: 3px 0 0 3px;
     text-shadow: 0 -1px 0 rgba(0, 0 ,0, .3);
     margin-right: 5px;
@@ -301,12 +351,12 @@
 }
 
 .inscription .contentInscription .item button:hover{
-    background: #016857;
+    background: #0066A6;
 }
 
 .inscription .contentInscription .item button:active,
 .inscription .contentInscription .item button:focus{
-    background: #016857;
+    background: #0066A6;
     outline: 0;
 }
 
@@ -315,18 +365,18 @@
     position: absolute;
     border-width: 8px 0 8px 8px;
     border-style: solid;
-    border-color: transparent #016857 transparent;
+    border-color: transparent #0066A6 transparent;
     top: 26px;
     right: -6px;
 }
 
 .inscription .contentInscription .item button:hover:before{
-    border-right-color: #016857;
+    border-right-color: #0066A6;
 }
 
 .inscription .contentInscription .item button:focus:before,
 .searchRegulation .contentInscription .item button:active:before{
-        border-right-color: #016857;
+        border-right-color: #0066A6;
 }
 
 /* quitar espacio extra del botón para Mozilla Firefox */
@@ -344,6 +394,14 @@
   font-size:20px;
 }
 
+.inscription .myInscriptions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-size: 0.9em;
+  color: grey;
+  margin-right: 20px;
+}
 
 /****************************************************************/
 /********************* RegistrationForm ************************
@@ -582,4 +640,9 @@
 
 .inscription .pagination {
   color: grey;
+}
+
+.btnChange {
+  position: relative;
+  z-index: 999;
 }
