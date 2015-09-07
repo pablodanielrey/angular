@@ -1,10 +1,10 @@
 angular
   .module('mainApp')
-  .service('Inscription',Inscription);
+  .controller('InscriptionCtrl', InscriptionCtrl);
 
-Inscription.inject = ['$rootScope','$wamp','Session']
+InscriptionCtrl.inject = ['$rootScope', '$scope', '$wamp','Session']
 
-function Inscription($rootScope, $wamp, Session) {
+function InscriptionCtrl($rootScope, $scope, $wamp, Session) {
 
   $scope.model = {
     ci: 0,
@@ -14,14 +14,16 @@ function Inscription($rootScope, $wamp, Session) {
   };
 
   $scope.changeInscription = function() {
-    $scope.model.ci = ($scope.model.ci + 1) % $scope.model.inscriptions.lenght();
+    $scope.model.ci = ($scope.model.ci + 1) % $scope.model.inscriptions.length;
   }
 
   $scope.changeRegistration = function() {
-    $scope.model.cr = ($scope.model.cr + 1) % $scope.model.registrations.lenght();
+    $scope.model.cr = ($scope.model.cr + 1) % $scope.model.registrations.length;
   }
 
-
+  $scope.getInscriptionClazz = function() {
+    return $scope.model.inscriptions[$scope.model.ci];
+  }
 
 
   $scope.status = {
