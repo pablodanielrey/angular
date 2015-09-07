@@ -14,7 +14,7 @@ function config($routeProvider) {
     })
     .when('/rec', {
       templateUrl: '/systems/camaras/modules/rec/rec.html',
-      controller: 'rec'
+      controller: 'RecordController'
     })
 
     .otherwise({

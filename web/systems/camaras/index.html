@@ -4,19 +4,22 @@
   <meta charset="utf-8"/>
   <meta name='viewport' content='width=device-width'/>
 
-  <script type="text/javascript" src="/angular/angular-1.3.8/angular.js"></script>
-  <script type="text/javascript" src="/angular/angular-1.3.8/angular-route.js"></script>
-  <script type="text/javascript" src="/angular/angular-1.3.8/angular-cookies.js"></script>
-  <script src="/angular/i18n/angular-locale_es-ar.js"></script>
+  <script src="/libs/bower_components/angularjs/angular.js"></script>
+  <script src="/libs/bower_components/angular-route/angular-route.js"></script>
+  <script src="/libs/bower_components/autobahn/autobahn.js"></script>
+  <script src="/libs/bower_components/angular-wamp/release/angular-wamp.js"></script>
 
   <!-- esto es el estilo de font awesome para tener los iconos -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 
+  <script type="text/javascript" src="/config.json"></script>
+
 
 
   <!--archivos principales-->
   <link rel="stylesheet" href="/systems/camaras/camaras.css">
+  <script type="text/javascript" src="/systems/camaras/index.module.js"></script>
   <script type="text/javascript" src="/systems/camaras/camaras.js"></script>
   <script type="text/javascript" src="/systems/camaras/routes.js"></script>
 
@@ -34,6 +37,7 @@
 	<script type="text/javascript" src="/services/Groups.js"></script>
 	<script type="text/javascript" src="/services/Users.js"></script>
 	<script type="text/javascript" src="/services/Profiles.js"></script>
+  <script type="text/javascript" src="/services/Login.js"></script>
 
 
 	<!-- ***** MODULOS ***** -->
@@ -60,14 +64,14 @@
   <link rel="stylesheet" type="text/css" href="/systems/camaras/modules/rec/navigation.css" />
 
 
-<body ng-controller="DigestoCtrl">
+<body ng-controller="CamarasCtrl">
 
 <div class="principal" ng-controller="MenuCamerasCtrl">
 
     <div class="screen" ng-class="{true:'closeMenu',false:'openMenu'}[model.cerrado]" >
 
       <!-- <nav ng-class="{true:'visible',false:'hidden'}[isLogged()]"> -->
-        <div class="menu-container" ng-include="'/systems/camaras/menu/menu.html'">
+        <div class="menu-container" ng-controller="MenuCamerasCtrl" ng-include="'/systems/camaras/menu/menu.html'">
         </div>
 
         <div ng-view>

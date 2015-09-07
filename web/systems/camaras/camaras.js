@@ -1,57 +1,32 @@
+angular
+    .module('mainApp')
+    .controller('CamarasCtrl',CamarasCtrl)
 
-// defino el módulo principal.
-var app = angular.module('mainApp',['ngRoute']);
+    CamarasCtrl.$inject = ['$rootScope','$scope','$location','$window','$wamp','Login'];
 
-/**
- * controlador principal. Funciones principales:
- * 		Verificar la conexión y autentificación de usuarios.
- * 		Recibir eventos del socket y transferirlo a los controladores secundarios
- */
-app.controller('DigestoCtrl', ["$rootScope", "$location", "$timeout", "$window", "Notifications", "Session", "WebSocket", function ($rootScope, $location, $timeout, $window, Notifications, Session, WebSocket) {
+function CamarasCtrl($rootScope,$scope,$location,$window,$wamp,Login) {
 
-  // mensajes que vienen del socket. solo me interesan los eventos, las respuestas son procesadas por otro lado.
-    $rootScope.$on('onSocketMessage', function(event, data) {
-      var response = JSON.parse(data);
+  $scope.initialize = initialize;
 
-      // tiene que tener tipo si o si.
-      if (response.type == undefined) {
-        return;
-      }
+  $scope.$on('$viewContentLoaded', function(event) {
+    $scope.initialize();
+  });
 
-      if (response.type == 'Exception') {
-
-        $rootScope.processGeneralExceptions(response);
-        return;
-      }
-
-      console.log(response.type);
-      $rootScope.$broadcast(response.type,response.data);
-    });
-
-    $rootScope.processGeneralExceptions = function(e) {
-
-      if (e.name == 'SessionNotFound') {
-        Session.destroy();
-        $window.location.reload();
-        return;
-      } else if(e.name == "NotImplemented"){
-		    Notifications.message("Mensaje no implementado en el servidor");
-      }
-
-
+  function initialize() {
+    if (!Login.isLogged()) {
+      $window.location.href = "/systems/login/index.html";
     }
 
-    // errores de applicacion
-    $rootScope.$on('onAppError', function(event, data) {
-    });
+    Login.validateSession(
+      function(v) {
+        if (!v) {
+          $window.location.href = "/systems/login/index.html";
+        }
+      },
+      function(err) {
+        Notifications.message(err);
+    })
+  }
 
-    // cambia la url de la pagina en base al evento.
-    $rootScope.$on('routeEvent', function(event, data) {
-      $location.path(data);
-    });
 
-    $timeout(function() {
-      WebSocket.registerHandlers();
-    }, 0);
-
-}]);
+}

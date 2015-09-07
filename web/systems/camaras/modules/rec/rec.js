@@ -1,6 +1,10 @@
-var app = angular.module('mainApp');
+angular
+    .module('mainApp')
+    .controller('RecordController',RecordController);
 
-app.controller('rec', function($scope,$timeout) {
+RecordController.$inject = ['$scope','$timeout'];
+
+function RecordController($scope,$timeout) {
 
     $scope.model = {
       class:'',
@@ -59,5 +63,4 @@ app.controller('rec', function($scope,$timeout) {
       video.pause();
     }
 
-  }
-);
+}
