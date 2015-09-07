@@ -13,6 +13,8 @@ from model.config import Config
 from model.users.users import Users
 from model.events import Events
 from model.profiles import Profiles
+from model.mail.mail import Mail
+
 
 from model.exceptions import *
 
@@ -24,6 +26,9 @@ class UsersWamp(ApplicationSession):
         ApplicationSession.__init__(self, config)
         self.users = inject.instance(Users)
         self.serverConfig = inject.instance(Config)
+        self.mail = inject.attr(Mail)
+
+
 
     @coroutine
     def onJoin(self, details):
@@ -36,6 +41,8 @@ class UsersWamp(ApplicationSession):
         yield from self.register(self.findMails_async, 'users.mails.findMails')
         yield from self.register(self.persistMail_async, 'users.mails.persistMail')
         yield from self.register(self.deleteMail_async, 'users.mails.deleteMail')
+        yield from self.register(self.sendEmailConfirmation_async, 'users.mails.sendEmailConfirmation')
+
 
     def _getDatabase(self):
         host = self.serverConfig.configs['database_host']
@@ -220,4 +227,49 @@ class UsersWamp(ApplicationSession):
     def deleteMail_async(self, id):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.deleteMail, id)
+        return r
+
+
+
+    '''
+     ' Enviar confirmacion por emai
+     ' @param email Datos del email
+     '      id: Uuid del email
+     '      user_id: Uuid del usuario
+     '      email: Email propieamente dicho
+     '      confirmed: Flag para indicar si el email esta confirmado o no
+     '''
+    def sendEmailConfirmation(self, email):
+        con = self._getDatabase()
+        try:
+            hash = hashlib.sha1((email['id'] + email['user_id']).encode('utf-8')).hexdigest()
+            email['hash'] = hash
+
+            self.users.updateMail(con,email)
+
+            From = self.serverConfig.configs['mail_confirm_mail_from']
+            subject = self.serverConfig.configs['mail_confirm_mail_subject']
+            To = email['email']
+            template = self.serverConfig.configs['mail_confirm_mail_template']
+
+            url = self.serverConfig.configs['mail_confirm_mail_url']
+            url = re.sub('###HASH###', hash, url)
+
+            replace = [
+                ('###URL###',url)
+            ]
+
+
+            self.mail.sendMail(From,[To],subject,replace,html=template)
+            con.commit()
+
+            return True
+
+        finally:
+            con.close()
+
+    @coroutine
+    def sendEmailConfirmation_async(self, email):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.sendEmailConfirmation, email)
         return r
