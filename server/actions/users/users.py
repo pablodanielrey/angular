@@ -26,7 +26,7 @@ class UsersWamp(ApplicationSession):
         ApplicationSession.__init__(self, config)
         self.users = inject.instance(Users)
         self.serverConfig = inject.instance(Config)
-        self.mail = inject.attr(Mail)
+        self.mail = inject.instance(Mail)
 
 
 
@@ -42,7 +42,7 @@ class UsersWamp(ApplicationSession):
         yield from self.register(self.persistMail_async, 'users.mails.persistMail')
         yield from self.register(self.deleteMail_async, 'users.mails.deleteMail')
         yield from self.register(self.sendEmailConfirmation_async, 'users.mails.sendEmailConfirmation')
-
+        yield from self.register(self.confirmEmail_async, 'users.mails.confirmEmail')
 
     def _getDatabase(self):
         host = self.serverConfig.configs['database_host']
@@ -259,8 +259,8 @@ class UsersWamp(ApplicationSession):
                 ('###URL###',url)
             ]
 
-
             self.mail.sendMail(From,[To],subject,replace,html=template)
+
             con.commit()
 
             return True
@@ -272,4 +272,30 @@ class UsersWamp(ApplicationSession):
     def sendEmailConfirmation_async(self, email):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.sendEmailConfirmation, email)
+        return r
+
+
+    '''
+     ' Confirmar email. Una vez confirmado se envia un email al usuario
+     ' @param hash Hash del email a confirmar
+     '''
+    def confirmEmail(self, hash):
+        con = self._getDatabase()
+        try:
+            email = self.users.findMailByHash(con, hash)
+            email['confirmed'] = True
+            email['hash'] = None
+
+            self.users.updateMail(con,email)
+
+            con.commit()
+            return True
+
+        finally:
+            con.close()
+
+    @coroutine
+    def confirmEmail_async(self, hash):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.confirmEmail, hash)
         return r
