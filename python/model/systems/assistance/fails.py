@@ -11,7 +11,7 @@ class Fails:
     date = inject.attr(Date)
     users = inject.attr(Users)
 
-    def filterUser(self,userId,fails):
+    def filterUser(self, userId, fails):
         ffails = []
         for f in fails:
             ui = f['userId']
@@ -19,18 +19,16 @@ class Fails:
                 ffails.append(f)
         return ffails
 
-
-    def filterFailsToday(self,fails):
+    def filterFailsToday(self, fails):
         ffails = []
         for f in fails:
             date = f['date']
-            if date.replace(hour=0,minute=0,second=0,microsecond=0) == datetime.datetime.now().replace(hour=0,minute=0,second=0,microsecond=0):
+            if date.replace(hour=0, minute=0, second=0, microsecond=0) == datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0):
                 ffails.append(f)
         return ffails
 
-
-    def toCsv(self,file,users,fails):
-        out = open(file,'w')
+    def toCsv(self, file, users, fails):
+        out = open(file, 'w')
         try:
             for fail in fails:
 
@@ -41,8 +39,7 @@ class Fails:
                         user = u
                         break
 
-
-                localDate = self.date.localizeAwareToLocal(self.date.localizeAwareToLocal(fail['date'])).replace(hour=0,minute=0,second=0,microsecond=0)
+                localDate = self.date.localizeAwareToLocal(self.date.localizeAwareToLocal(fail['date'])).replace(hour=0, minute=0, second=0, microsecond=0)
                 f = '{0},{1},{2},{3},{4},{5},{6},{7},{8}'.format(
                     localDate.date(),
                     user['dni'],
@@ -52,7 +49,7 @@ class Fails:
                     self.date.localizeAwareToLocal(fail['start']).time() if 'start' in fail else (self.date.localizeAwareToLocal(fail['end']).time() if 'end' in fail else 'no tiene'),
                     self.date.localizeAwareToLocal(fail['startSchedule']).time() if 'startSchedule' in fail else (self.date.localizeAwareToLocal(fail['endSchedule']).time() if 'endSchedule' in fail else 'no tiene'),
                     fail['seconds'] if 'seconds' in fail else '',
-                    fail['seconds']-(datetime.timedelta(minutes=15).total_seconds()) if 'seconds' in fail else '')
+                    fail['seconds'] - (datetime.timedelta(minutes=15).total_seconds()) if 'seconds' in fail else '')
                 out.write(f)
                 out.write('\n')
 

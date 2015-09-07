@@ -193,11 +193,6 @@ class AssistanceWamp(ApplicationSession):
         r = yield from loop.run_in_executor(None, self.deleteSchedule, sid, id)
         return r
 
-
-
-
-
-
     def getFailsByDate(self, start, end):
         con = self._getDatabase()
         try:
@@ -213,6 +208,11 @@ class AssistanceWamp(ApplicationSession):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.getFailsByDate, start, end)
         return r
+
+
+
+
+
 
     def getFailsByFilter(self, userIds, officesIds, start, end, filter):
         con = self._getDatabase()

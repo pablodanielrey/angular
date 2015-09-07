@@ -211,11 +211,8 @@ class Assistance:
 
 
     def arrangeCheckSchedule(self, con, data):
-        odata = self._arrangeForOdsChecks(con,data)
+        odata = self._arrangeForOdsChecks(con, data)
         return self._exportToOds(odata)
-
-
-
 
     """
         chequea el schedule de los usuarios pasados como parametro.
@@ -238,11 +235,11 @@ class Assistance:
             schedulesFails = []
             users = []
             for u in userIds:
-                logging.debug('chequeando usuario %s',(u,))
-                users.append(self.users.findUser(con,u))
-                schedulesFails.extend(self.checks.checkConstraints(con,u,start,end))
+                logging.debug('chequeando usuario %s', (u,))
+                users.append(self.users.findUser(con, u))
+                schedulesFails.extend(self.checks.checkConstraints(con, u, start, end))
 
-            return (users,schedulesFails)
+            return (users, schedulesFails)
 
         finally:
             con.close()
