@@ -229,26 +229,3 @@ class AssistanceWamp(ApplicationSession):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.getFailsByFilter, userIds, officesIds, start, end, filter)
         return r
-
-
-
-
-
-
-
-
-    def deleteSchedule(self, id):
-        con = self._getDatabase()
-        try:
-            ''' .... codigo aca ... '''
-            con.commit()
-            return True
-
-        finally:
-            con.close()
-
-    @coroutine
-    def deleteSchedule_async(self, sid, id):
-        loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.deleteSchedule, id)
-        return r
