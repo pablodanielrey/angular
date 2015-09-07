@@ -1,5 +1,4 @@
-
-var app = angular
+angular
     .module('mainApp',['ngRoute','vxWamp'])
     .config(function($wampProvider) {
       if (config.url == undefined || config.url == 'autodetect') {

@@ -3,7 +3,7 @@
     <button ng-click='changeInscription()'>cambiarInscripcion</button>
     <button ng-click='changeRegistration()'>cambiarRegistration</button>
 
-    <div class="inscription {{model.inscription[model.ci]}}">
+    <div class="inscription" ng-class='getInscriptionClazz()'>
 
         <!-- ************************************
         ********* DATOS BASICOS ************

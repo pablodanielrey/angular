@@ -16,7 +16,7 @@ app.config(['$routeProvider', function($routeProvider) {
 
   .when('/inscripcion', {
      templateUrl: '/systems/laboralInsertion/modules/inscription/inscription.html',
-     controller: 'EditInsertionDataCtrl'
+     controller: 'InscriptionCtrl'
   })
 
   .otherwise({
