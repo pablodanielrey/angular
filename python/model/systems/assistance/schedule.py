@@ -246,7 +246,8 @@ class Schedule:
         combina los whs con los schedules
         retorna [{schdule:{},whs:[]}]
     '''
-    def combiner(self,schedules,whs):
+    """
+    def combiner(self, schedules, whs):
         controls = []
 
         if schedules is None or len(schedules) == 0:
@@ -274,3 +275,4 @@ class Schedule:
             controls.append(elem)
 
         return controls
+    """
