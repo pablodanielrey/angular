@@ -1,14 +1,18 @@
 angular
     .module('mainApp')
-    .config(config);
+    .config(configApp);
 
 config.$inject = ['$routeProvider'];
 
-function config($routeProvider) {
+function configApp($routeProvider) {
 
   $routeProvider
 
-    .when('/load', {
+    .when('/load/:id/operation/:operation', {
+      templateUrl: '/systems/digesto/modules/createRegulation/createRegulation.html',
+      controller: 'CreateRegulationCtrl',
+    })
+    .when('/load/', {
       templateUrl: '/systems/digesto/modules/createRegulation/createRegulation.html',
       controller: 'CreateRegulationCtrl',
     })

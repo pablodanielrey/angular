@@ -60,7 +60,7 @@ from actions.systems.mail.mail import PersistInstitutionalMail, DeleteInstitutio
 
 from actions.systems.offices.offices import GetOffices, GetUserOfficeRoles, GetUserInOfficesByRole, GetOfficesByUserRole, GetOfficesUsers, DeleteOfficeRole, AddOfficeRole, PersistOfficeRole, PersistOffice, RemoveUserFromOffice, AddUserToOffices, GetRolesAdmin
 
-from actions.systems.issue.issue import NewRequest, GetIssuesByUser
+from actions.systems.issue.issue import NewRequest, GetIssuesByUser, DeleteIssue, UpdateIssueData
 
 
 ''' aca se definen las acciones a ser manejadas por el server de websocket '''
@@ -74,18 +74,13 @@ actions = [
     CreateStudent(), FindStudent(), PersistStudent(), FindAllStudents(),
     PersistTutorData(), ListTutorData(),
     GetOffices(), GetUserOfficeRoles(), GetUserInOfficesByRole(), GetOfficesByUserRole(), GetOfficesUsers(), DeleteOfficeRole(), AddOfficeRole(), PersistOfficeRole(), PersistOffice(), RemoveUserFromOffice(), AddUserToOffices(), GetRolesAdmin(),
-<<<<<<< HEAD
-
     # FirmwareDeviceAnnounce(), FirmwareSyncUser(), FirmwareSyncLogs(),
 
     GetAssistanceLogs(), GetAssistanceData(), GetSchedules(), NewSchedule(), DeleteSchedule(), GetPosition(), UpdatePosition(), GetFailsByFilter(), GetFailsByDate(), GetAssistanceStatus(), GetAssistanceStatusByUsers(), GetOffices(), GetJustifications(), GetJustificationsByUser(), GetJustificationStock(), UpdateJustificationStock(), GetJustificationRequests(), GetJustificationRequestsToManage(), GetJustificationRequestsByDate(), RequestJustification(),  RequestJustificationRange(), UpdateJustificationRequestStatus(),GetSpecialJustifications(), RequestGeneralJustification(), GetGeneralJustificationRequests(), DeleteGeneralJustificationRequest(), RequestGeneralJustificationRange(),
-=======
-    GetAssistanceLogs(), GetAssistanceData(), GetSchedules(), NewSchedule(), DeleteSchedule(), GetPosition(), UpdatePosition(), GetFailsByFilter(), GetFailsByDate(), GetAssistanceStatus(), GetAssistanceStatusByUsers(), GetOffices(), GetJustifications(), GetJustificationsByUser(), GetJustificationStock(), UpdateJustificationStock(), GetJustificationRequests(), GetJustificationRequestsToManage(), GetJustificationRequestsByDate(), RequestJustification(), RequestJustificationRange(), UpdateJustificationRequestStatus(), GetSpecialJustifications(), RequestGeneralJustification(), GetGeneralJustificationRequests(), DeleteGeneralJustificationRequest(), RequestGeneralJustificationRange(),
->>>>>>> origin/master
     GetOvertimeRequests(), GetOvertimeRequestsToManage(), RequestOvertime(), UpdateOvertimeRequestStatus(),
     CreateAccountRequest(), ResendAccountRequest(), ConfirmAccountRequest(), ListAccountRequests(), ApproveAccountRequest(), RemoveAccountRequest(), RejectAccountRequest(),
 
-    NewRequest(), GetIssuesByUser()
+    NewRequest(), GetIssuesByUser(), DeleteIssue(), UpdateIssueData(),
 ]
 
 """

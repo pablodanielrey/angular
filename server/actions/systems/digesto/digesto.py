@@ -35,6 +35,8 @@ class WampDigesto(ApplicationSession):
         logging.debug('registering methods')
         yield from self.register(self.createNormative_async,'digesto.digesto.createNormative')
         yield from self.register(self.loadIssuers_async,'digesto.digesto.loadIssuers')
+        yield from self.register(self.findNormative_async,'digesto.digesto.findNormative')
+        yield from self.register(self.findNormativeById_async,'digesto.digesto.findNormativeById')
 
     def _getDatabase(self):
         host = self.serverConfig.configs['database_host']
@@ -81,3 +83,37 @@ class WampDigesto(ApplicationSession):
         except Exception as e:
             logging.exception(e)
             return None
+
+
+    def findNormative(self, text, filters):
+        con = self._getDatabase()
+        try:
+            return self.digesto.findNormative(con,text,filters)
+        except Exception as e:
+            logging.exception(e)
+            return None
+        finally:
+            con.close()
+
+    @coroutine
+    def findNormative_async(self, text, filters):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.findNormative, text, filters)
+        return r
+
+
+    def findNormativeById(self, id):
+        con = self._getDatabase()
+        try:
+            return self.digesto.findNormativeById(con,id)
+        except Exception as e:
+            logging.exception(e)
+            return None
+        finally:
+            con.close()
+
+    @coroutine
+    def findNormativeById_async(self, id):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.findNormativeById, id)
+        return r

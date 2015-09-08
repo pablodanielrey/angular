@@ -1,0 +1,2 @@
+python3 persistSchedule.py 1 0cd70f16-aebb-4274-bc67-a57da88ab6c7 "2015-09-16 00:00:00-03:00" "2015-09-16 14:05:00-03:00" "2015-09-16 20:02:01-03:00" True False False
+

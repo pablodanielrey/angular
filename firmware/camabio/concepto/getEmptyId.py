@@ -1,4 +1,9 @@
-import serial, time, codecs
+import sys
+sys.path.append('../')
+
+import serial
+import time
+import codecs
 import camabio
 import sys
 import cserial

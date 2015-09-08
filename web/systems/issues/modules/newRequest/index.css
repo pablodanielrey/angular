@@ -8,11 +8,16 @@
   width:100%;
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   position:absolute;
-  overflow:hidden;
 
 }
 
+.contentScreens .visibilityOffices {
+  display:none;
+}
 
+.contentScreens.displayVisibility .visibilityOffices {
+  display:block;
+}
 
 
 .ContentOrders {
@@ -51,6 +56,13 @@
   -moz-flex-direction:row; /* mozilla */
   wrap: nowrap;
 
+}
+
+.hola {
+  background-color: #eee;
+  padding: 5px;
+  margin-top: 10px;
+  border:1px solid #E3DFDF;
 }
 
 .order .buttonOrder {
@@ -145,16 +157,6 @@
   font-size: 1.2em;
 }
 
-.hola {
-  background-color: #eee;
-  padding: 5px;
-  margin-top: 10px;
-  border:1px solid #E3DFDF;
-
-
-
-}
-
 .descriptionExpanded {
   height: 100%;
 }
@@ -192,4 +194,13 @@
 }
 .orderItems.commentOrder .btnDataOrder  {
   display:none;
+}
+
+.contentScreens .contentOffices {
+  cursor:default;
+  height: initial;
+}
+
+.contentScreens .nodeOffice .nameNodeOffice {
+  cursor:default;
 }

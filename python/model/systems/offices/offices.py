@@ -44,6 +44,23 @@ class Offices:
 
         return roffices
 
+    '''
+        obtiene las oficinas hijas de las oficinas pasadas como parámetro en forma de tree
+    '''
+    def _getChildOfficesTree(self,con,office):
+        cur = con.cursor()
+        cur.execute('select id,parent,name,telephone,email from offices.offices where parent = %s',(office['id'],))
+        if cur.rowcount <= 0:
+            return []
+
+        childrens = []
+        for cOff in cur:
+            off = self._convertToDict(cOff)
+            off['childrens'] = self._getChildOfficesTree(con,off)
+            for child in off['childrens']:
+                child['childrens'] = self._getChildOfficesTree(con,child)
+            childrens.append(off)
+        return childrens
 
 
     '''
@@ -120,6 +137,16 @@ class Offices:
             return None
 
 
+    '''
+    Busca una oficina
+    '''
+
+    def findOffices(self,con,ids):
+        offices = []
+        for id in ids:
+            offices.append(self.findOffice(con,id))
+        return offices
+
     ''' obtiene todas las oficinas '''
     def getOffices(self,con):
         cur = con.cursor()
@@ -187,6 +214,52 @@ class Offices:
         if parents:
             offices.extend(self._getParentOffices(con,ids))
 
+        return offices
+
+
+    ''' obtiene todas las oficinas a las que pertenece un usuario en forma de arbol '''
+    def getOfficesTreeByUser(self,con,userId):
+        cur = con.cursor()
+        cur.execute('select id,parent,name,telephone,email from offices.offices o, offices.offices_users ou where ou.user_id = %s and o.id = ou.office_id',(userId,))
+        if cur.rowcount <= 0:
+            return []
+
+        offices = []
+        for off in cur:
+            oId = off[0]
+            o = self._convertToDict(off)
+            o['childrens'] = self._getChildOfficesTree(con,o)
+            if o['childrens'] is None:
+                o['childrens'] = []
+
+            # parent = self.findOffice(con,o['parent'])
+            # parent['childrens'] = []
+            offices.append(o)
+            # offices.append(parent)
+
+        removeOffices = []
+        for off in offices:
+            for off2 in offices:
+                if off['parent'] ==  off2['id']:
+                    removeOffices.append(off)
+                    if 'childrens' not in off2:
+                        off2['childrens'] = []
+                    off2['childrens'].append(off)
+                    break
+                if 'childrens' not in off2:
+                    continue
+                for child in off2['childrens']:
+                    if off['parent'] == child['id']:
+                        removeOffices.append(off)
+                        if 'childrens' not in child:
+                            child['childrens'] = []
+                        child['childrens'].append(off)
+                        break
+                else:
+                    continue
+                break
+
+        offices = [x for x in offices if x not in removeOffices]
         return offices
 
 

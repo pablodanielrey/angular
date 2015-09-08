@@ -1,10 +1,10 @@
 angular
     .module('mainApp',['ngRoute','vxWamp'])
     .config(function($wampProvider) {
-
       if (config.url == undefined || config.url == 'autodetect') {
+
         var conn = {
-          url: "ws://" + location.host + ":80/ws",
+          url: "ws://" + location.host + ":8000/ws",
           realm: config.realm
         };
         console.log(conn);

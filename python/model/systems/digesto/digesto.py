@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 import uuid, datetime,psycopg2,inject
-from model.systems.file.file import File
+from model.systems.files.files import Files
 from model.systems.offices.offices import Offices
 from model.systems.assistance.date import Date
 
 class Digesto:
 
     date = inject.attr(Date)
-    file = inject.attr(File)
+    file = inject.attr(Files)
     offices = inject.attr(Offices)
     '''
         Tipos de normativa:
@@ -124,7 +124,9 @@ class Digesto:
         ADDITIONAL_DATA: son los ids separados por coma de las oficinas
     '''
     def _convertVisibilityToDict(self,v):
-        return {'id':v[0],'normative_id':v[1],'type':v[2],'additional_data':v[3]}
+        adStr = v[3]
+        additional_data  = adStr.split(',')
+        return {'id':v[0],'normative_id':v[1],'type':v[2],'additional_data':additional_data}
 
 
     def getVisibility(self,con,normative_id):
@@ -141,19 +143,26 @@ class Digesto:
 
         if type is None:
             type = 'PRIVATE'
-        if additional_data is None:
-            additional_data = ''
+
+        additional_dataStr = ''
+        if additional_data is not None:
+            i = 0
+            for a in additional_data:
+                if i != 0:
+                    additional_dataStr = additional_dataStr + ','
+                additional_dataStr = additional_dataStr + a
+                i = i +1
 
         cur = con.cursor()
 
         visibility = self.getVisibility(con,normative_id)
         if visibility is None:
             id = str(uuid.uuid4())
-            params = (normative_id,type,additional_data,id)
+            params = (normative_id,type,additional_dataStr,id)
             cur.execute('insert into digesto.visibility (normative_id,type,additional_data,id) values(%s,%s,%s,%s)',params)
 
         else:
-            params = (type,additional_data,visibility['id'])
+            params = (type,additional_dataStr,visibility['id'])
             cur.execute('update digesto.visibility set type = %s, additional_data = %s where id = %s',params)
 
     # -----------------------------------------------------------------------------------
@@ -235,15 +244,15 @@ class Digesto:
             self.persistVisibility(con,id)
         else:
             type = visibility['type'] if 'type' in visibility else None
-            additonal_data = visibility['additonal_data'] if 'additonal_data' in visibility else None
-            self.persistVisibility(con,id,type,additonal_data)
+            additional_data = visibility['additional_data'] if 'additional_data' in visibility else None
+            self.persistVisibility(con,id,type,additional_data)
 
         if relateds is not None:
             self.addRelateds(con,relateds,userId,id)
 
         return id
 
-    def updateNormative(con,normative,file=None,visibility=None):
+    def updateNormative(self,con,normative,file=None,visibility=None):
         if normative is None:
             return
 
@@ -303,19 +312,7 @@ class Digesto:
 
 
 
-    def findNormativeById(con,id):
-        cur = con.cursor()
-        cur.execute('select id,issuer_id,file_id,type,file_number,date,created,creator_id,extract from digesto.normative where id = %s',(id,))
-        if (cur.rowcount <= 0):
-            return None
-        else:
-            status = self.getStatus(con,id)
-            visibility = self.getVisibility(con,id)
-            relateds = self.findRelateds(con,id)
-            return self._convertNormativeToDict(cur.fetchone(),status, visibility, relateds)
-
-
-    def deleteNormative(con,id):
+    def deleteNormative(self,con,id):
         if id is None:
             return
 
@@ -356,3 +353,67 @@ class Digesto:
             if office is not None:
                 offices.append(office)
         return offices
+
+
+    # -----------------------------------------------------------------------------------
+    # ---------------------------- BUSQUEDA DE NORMATIVAS -------------------------------
+    # -----------------------------------------------------------------------------------
+
+    '''
+        Busca las normativas por numero de expediente
+    '''
+    def _findNormativeByNormativeNumber(self,con,number):
+        cur = con.cursor()
+        cur.execute('select id from digesto.normative where normative_number like %s',('%' + number + '%',))
+        data = cur.fetchall()
+        normatives = []
+        for d in data:
+            n = self.findNormativeById(con,d[0])
+            normatives.append(n)
+        return normatives
+
+    '''
+        Busca las normativas por el extracto
+    '''
+    def _findNormativeByExtract(self,con,extract):
+        cur = con.cursor()
+        cur.execute('select id from digesto.normative where extract like %s',('%' + extract + '%',))
+        data = cur.fetchall()
+        normatives = []
+        for d in data:
+            n = self.findNormativeById(con,d[0])
+            normatives.append(n)
+        return normatives
+
+    '''
+        Retorna las normativas con posean el texto
+    '''
+    def findNormative(self,con,text,filters):
+        # busco por nro de expediente
+        array = text.split('/')
+        normatives = self._findNormativeByNormativeNumber(con,array[0])
+        # si no encontro nada busco por el extracto
+        if len(normatives) == 0:
+            normatives = self._findNormativeByExtract(con,text)
+        # si no encontro nada busco por el contenido del archivo
+
+        return normatives
+
+
+    def findNormativeById(self,con,id):
+        cur = con.cursor()
+        cur.execute('select id,issuer_id,file_id,type,file_number,normative_number,date,created,creator_id,extract from digesto.normative where id = %s',(id,))
+        if (cur.rowcount <= 0):
+            return None
+        else:
+            status = self.getStatus(con,id)
+            visibility = self.getVisibility(con,id)
+            relateds = self.findRelateds(con,id)
+
+            normative = self._convertNormativeToDict(cur.fetchone(),status, visibility, relateds)
+
+            normative['issuer'] = self.offices.findOffice(con,normative['issuer_id'])
+            yearStr = normative['year'].strftime('%y')
+            normative['normative_number_full'] = normative['normative_number'] + '/' + yearStr[-2:]
+
+            return normative
