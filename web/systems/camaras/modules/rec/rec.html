@@ -92,14 +92,15 @@
         <div class="play">
             <div class="video">
                 <div>
-                    <video id='video' controls="" autoplay width="99%"><source src="http://163.10.56.194/gluster/camaras/archivo/2015-08-18_09-00-01_camara1.m4v.mp4" type="video/mp4"></video>
+                    <video id='video' controls="" autoplay width="99%"></video>
                 </div>
                 <div class="footerPlay">
                     <div>
                         <button class="btnFooter2" ><i class="fa fa-step-backward"></i></button>
                         <button class="btnFooter2" title="Próximo Video"><i class="fa fa-step-forward"></i></button>
                         <button class="btnFooter" ng-click='slower()'><i class="fa fa-backward"></i></button>
-                        <button class="btnFooter" ng-click='pause()'><i class="fa fa-pause"></i></button>
+                        <button class="btnFooter" ng-click='pause()' ng-if="!view.paused"><i class="fa fa-pause"></i></button>
+                        <button class="btnFooter" ng-click='play()' ng-if="view.paused"><i class="fa fa-play"></i></button>
                         <button class="btnFooter" ng-click='faster()'><i class="fa fa-forward"></i></button>
                         <button class="btnFooter" ng-click='seekBackwards()'><i class="fa fa-fast-backward"></i></button>
                         <button class="btnFooter" ng-click='seekForward()'><i class="fa fa-fast-forward"></i></button>

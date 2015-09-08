@@ -291,6 +291,6 @@
   width: 70%;
 }
 
-.rec .fa-step-backward, .fa-step-forward, .fa-backward, .fa-pause, .fa-forward, .fa-fast-backward, .fa-fast-forward, .fa-fast-forward {
+.rec .fa-step-backward, .fa-step-forward, .fa-backward, .fa-pause, .fa-play, .fa-forward, .fa-fast-backward, .fa-fast-forward, .fa-fast-forward {
   margin-bottom: 0;
 }

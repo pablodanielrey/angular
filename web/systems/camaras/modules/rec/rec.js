@@ -2,9 +2,9 @@ angular
     .module('mainApp')
     .controller('RecordController',RecordController);
 
-RecordController.$inject = ['$scope','$timeout'];
+RecordController.$inject = ['$scope','$timeout','$sce'];
 
-function RecordController($scope,$timeout) {
+function RecordController($scope,$timeout,$sce) {
 
     $scope.model = {
       recordings:[],
@@ -14,6 +14,7 @@ function RecordController($scope,$timeout) {
 
     $scope.view = {
         style: '',
+        paused: false,
         displayListRecordings: false,
         styles:['','reproductor']
     };
@@ -61,7 +62,7 @@ function RecordController($scope,$timeout) {
     $scope.search = search;
 
     function search() {
-      $scope.model.recordings = [{'displayName':'1 - Planta Baja','selected':false,'start':new Date(),'duration':'01:25:13','size':'45 Mb','fileName':'2015-07-31_23-00-02'}]
+      $scope.model.recordings = [{'displayName':'1 - Planta Baja','selected':false,'start':new Date(),'duration':'01:25:13','size':'45 Mb','fileName':'2015-07-31_23-00-02','src':'http://163.10.56.194/gluster/camaras/archivo/2015-08-18_09-00-01_camara1.m4v.mp4'}]
       $scope.view.displayListRecordings = true;
     }
 
@@ -95,6 +96,7 @@ function RecordController($scope,$timeout) {
     $scope.displayReproductor = displayReproductor;
     $scope.closeReproductor = closeReproductor;
     $scope.pause = pause;
+    $scope.play = play;
     $scope.faster = faster;
     $scope.slower = slower;
     $scope.seekForward = seekForward;
@@ -103,6 +105,24 @@ function RecordController($scope,$timeout) {
     function displayReproductor(items) {
       $scope.setStyle(1);
       $scope.model.listRecordings = items;
+      $scope.view.paused = false;
+      var video = document.getElementById("video");
+      video.addEventListener("pause", pauseEvent, true);
+      video.addEventListener("play", playEvent, true);
+
+      if (items.length > 0) {
+        video.src = items[0].src;
+      } else {
+        video.src = "";
+      }
+    }
+
+    function pauseEvent() {
+      $scope.view.paused = true;
+    }
+
+    function playEvent() {
+      $scope.view.paused = false;
     }
 
     function closeReproductor() {
@@ -110,24 +130,39 @@ function RecordController($scope,$timeout) {
       $scope.model.listRecordings = [];
     }
 
+    $scope.$watch('view.paused', function(newValue, oldValue) {
+      if (newValue) {
+        $scope.model.rate = 1;
+        var video = document.getElementById("video");
+        video.playbackRate = $scope.model.rate;
+      }
+    });
+
+
     function pause() {
-      $scope.model.rate = 1;
       var video = document.getElementById("video");
-      video.playbackRate = $scope.model.rate;
-      //video.play();
+      video.pause();
+    }
+
+    function play() {
+      var video = document.getElementById("video");
+      video.play();
     }
 
     function faster() {
       $scope.model.rate = $scope.model.rate + 0.5;
       var video = document.getElementById("video");
       video.playbackRate = $scope.model.rate;
+      $scope.view.paused = false;
 
       if ($scope.model.rate > 0) {
         video.play();
       }
     }
 
+
     function slower() {
+      $scope.view.paused = false;
       var video = document.getElementById("video");
       $scope.model.rate = $scope.model.rate - 0.5;
 
