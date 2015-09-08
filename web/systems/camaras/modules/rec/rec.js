@@ -7,25 +7,117 @@ RecordController.$inject = ['$scope','$timeout'];
 function RecordController($scope,$timeout) {
 
     $scope.model = {
-      class:'',
-      contentRecordings:false,
+      recordings:[],
+      listRecordings:[],
       rate: 1
     };
 
+    $scope.view = {
+        style: '',
+        displayListRecordings: false,
+        styles:['','reproductor']
+    };
+
+
+/* ---------------------------------------------------------------
+ * ------------------- MANEJO DE LA VISTA ------------------------
+ * ---------------------------------------------------------------
+ */
+
+    $scope.initialize = initialize;
+    $scope.setStyle = setStyle;
+
+    function initialize() {
+      $scope.view.displayListRecordings = false;
+      $scope.model.recordings = [];
+      $scope.model.listRecordings = [];
+    }
+
+    function setStyle(index) {
+      $scope.view.style = $scope.view.styles[index];
+    }
+
+
+
+
+/* ---------------------------------------------------------------
+ * ---------------------- EVENTOS --------------------------------
+ * ---------------------------------------------------------------
+ */
+
+    $scope.$on('$viewContentLoaded', function(event) {
+     $scope.initialize();
+    });
 
     $scope.$on('$viewRecordings', function(event) {
-      $scope.model.contentRecordings = false;
+      $scope.view.displayListRecordings = false;
     });
-    // console.log('hola');
 
-    $scope.pause = function() {
+
+/* ---------------------------------------------------------------
+ * ---------------------- BUSQUEDA -------------------------------
+ * ---------------------------------------------------------------
+ */
+    $scope.search = search;
+
+    function search() {
+      $scope.model.recordings = [{'displayName':'1 - Planta Baja','selected':false,'start':new Date(),'duration':'01:25:13','size':'45 Mb','fileName':'2015-07-31_23-00-02'}]
+      $scope.view.displayListRecordings = true;
+    }
+
+
+
+/* ---------------------------------------------------------------
+ * ------------- Acciones sobre el listado de videos -------------
+ * ---------------------------------------------------------------
+ */
+    $scope.selectRecording = selectRecording;
+    $scope.viewRecording = viewRecording;
+    $scope.downloadRecording = downloadRecording;
+
+    function selectRecording(recording) {
+      recording.selected = !recording.selected;
+    }
+
+    function viewRecording(recording) {
+      $scope.displayReproductor([recording]);
+    }
+
+    function downloadRecording(recording) {
+
+    }
+
+
+/* ---------------------------------------------------------------
+ * --------------------- REPRODUCTOR -----------------------------
+ * ---------------------------------------------------------------
+ */
+    $scope.displayReproductor = displayReproductor;
+    $scope.closeReproductor = closeReproductor;
+    $scope.pause = pause;
+    $scope.faster = faster;
+    $scope.slower = slower;
+    $scope.seekForward = seekForward;
+    $scope.seekBackwards = seekBackwards;
+
+    function displayReproductor(items) {
+      $scope.setStyle(1);
+      $scope.model.listRecordings = items;
+    }
+
+    function closeReproductor() {
+      $scope.setStyle(0);
+      $scope.model.listRecordings = [];
+    }
+
+    function pause() {
       $scope.model.rate = 1;
       var video = document.getElementById("video");
       video.playbackRate = $scope.model.rate;
       //video.play();
     }
 
-    $scope.faster = function() {
+    function faster() {
       $scope.model.rate = $scope.model.rate + 0.5;
       var video = document.getElementById("video");
       video.playbackRate = $scope.model.rate;
@@ -35,7 +127,7 @@ function RecordController($scope,$timeout) {
       }
     }
 
-    $scope.slower = function() {
+    function slower() {
       var video = document.getElementById("video");
       $scope.model.rate = $scope.model.rate - 0.5;
 
@@ -47,7 +139,7 @@ function RecordController($scope,$timeout) {
       video.playbackRate = $scope.model.rate;
     }
 
-    $scope.seekForward = function() {
+    function seekForward() {
       $scope.model.rate = 1;
       var video = document.getElementById("video");
       video.currentTime = video.currentTime + 1;
@@ -55,7 +147,7 @@ function RecordController($scope,$timeout) {
       video.pause();
     }
 
-    $scope.seekBackwards = function() {
+    function seekBackwards() {
       $scope.model.rate = 1;
       var video = document.getElementById("video");
       video.currentTime = video.currentTime - 1;

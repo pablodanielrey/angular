@@ -1,4 +1,4 @@
-<div class="rec   ">
+<div class="rec {{view.style}}">
     <!-- **************** CONTENEDOR DEL MENU DE BUSQUEDA  *************** -->
     <div class="contentRec">
           <div class="menuRec">
@@ -22,7 +22,7 @@
                   <input type="time">
               </div>
               <div>
-                  <button  ng-click='model.contentRecordings = true'><i class="fa fa-search"></i> BUSCAR</button>
+                  <button  ng-click='search()'><i class="fa fa-search"></i> BUSCAR</button>
               </div>
           </div>
     </div>
@@ -30,7 +30,7 @@
     <div class="imgFilters">
     </div>
     <!-- ******** CONTENEDOR DE LOS RESULTADOS DE BUSQUEDA *************** -->
-    <div class="contentRecordings" ng-class="{false:'hidden'}[model.contentRecordings]">
+    <div class="contentRecordings" ng-class="{false:'hidden'}[view.displayListRecordings]">
        <div class="menuRecording">
           <div class="tam0">
               <input type="checkbox" title="Seleccionar Todas">
@@ -56,109 +56,31 @@
       </div>
       <!-- ***************** RESULTADOS DE BUSQUEDA ******************** -->
       <div class="resultsRecording">
-         <div class="itemsRecording">
+         <div class="itemsRecording" ng-repeat="item in model.recordings">
                <div class="tam0">
-                   <input type="checkbox" title="Seleccionar Camara">
+                   <input type="checkbox" title="Seleccionar Camara" ng-model="item.selected" ng-change="selectRecording(item)">
                </div>
                <div class="tam2">
-                   <span><i class="fa fa-video-camera"></i> 2 - Planta Baja </span>
+                   <span><i class="fa fa-video-camera"></i> {{item.displayName}}</span>
                </div>
                <div class="tam1">
-                   <span><i class="fa fa-calendar-o"></i> 25/08/2015</span>
+                   <span><i class="fa fa-calendar-o"></i> {{item.start | date: "dd/MM/yyyy"}}</span>
                </div>
                <div class="tam1">
-                   <span><i class="fa fa-clock-o"></i> 20:36 pm</span>
+                   <span><i class="fa fa-clock-o"></i> {{item.start | date: "hh:ss"}}</span>
                </div>
                <div class="tam1">
-                   <span><i class="fa fa-clock-o"></i> 00:05:38</span>
+                   <span><i class="fa fa-clock-o"></i> {{item.duration}}</span>
                </div>
                <div class="tam1">
-                   <span><i class="fa fa-file-video-o"></i> 4,3 Mb</span>
+                   <span><i class="fa fa-file-video-o"></i> {{item.size}}</span>
                </div>
                <div class="tam2">
                  <div class="btnsItems">
-                   <div><button class="btnVer"><i class="fa fa-film"></i> Ver</button></div>
-                   <div><button class="btnDescargar"><i class="fa fa-download"></i> Descargar</button></div>
+                   <div><button class="btnVer" ng-click="viewRecording(item)"><i class="fa fa-film"></i> Ver</button></div>
+                   <div><button class="btnDescargar" ng-click="downloadRecording(item)"><i class="fa fa-download"></i> Descargar</button></div>
                  </div>
                </div>
-          </div>
-         <div class="itemsRecording">
-              <div class="tam0">
-                  <input type="checkbox" title="Seleccionar Camara">
-              </div>
-              <div class="tam2">
-                  <span><i class="fa fa-video-camera"></i> 6 - 5to Piso </span>
-              </div>
-              <div class="tam1">
-                  <span><i class="fa fa-calendar-o"></i> 24/08/2015</span>
-              </div>
-              <div class="tam1">
-                  <span><i class="fa fa-clock-o"></i> 06:36 am</span>
-              </div>
-              <div class="tam1">
-                  <span><i class="fa fa-clock-o"></i> 00:01:15</span>
-              </div>
-              <div class="tam1">
-                  <span><i class="fa fa-file-video-o"></i> 1,2 Mb</span>
-              </div>
-              <div class="tam2">
-                <div class="btnsItems">
-                  <div><button class="btnVer"><i class="fa fa-film"></i> Ver</button></div>
-                  <div><button class="btnDescargar"><i class="fa fa-download"></i> Descargar</button></div>
-                </div>
-              </div>
-         </div>
-         <div class="itemsRecording">
-             <div class="tam0">
-                 <input type="checkbox" title="Seleccionar Camara">
-             </div>
-             <div class="tam2">
-                 <span><i class="fa fa-video-camera"></i> 1 - 3er Piso </span>
-             </div>
-             <div class="tam1">
-                 <span><i class="fa fa-calendar-o"></i> 25/08/2015</span>
-             </div>
-             <div class="tam1">
-                 <span><i class="fa fa-clock-o"></i> 00:36 am</span>
-             </div>
-             <div class="tam1">
-                 <span><i class="fa fa-clock-o"></i> 00:00:21</span>
-             </div>
-             <div class="tam1">
-                 <span><i class="fa fa-file-video-o"></i> 0,7 Mb</span>
-             </div>
-             <div class="tam2">
-               <div class="btnsItems">
-                 <div><button class="btnVer"><i class="fa fa-film"></i> Ver</button></div>
-                 <div><button class="btnDescargar"><i class="fa fa-download"></i> Descargar</button></div>
-               </div>
-             </div>
-         </div>
-         <div class="itemsRecording">
-             <div class="tam0">
-                 <input type="checkbox" title="Seleccionar Camara">
-             </div>
-             <div class="tam2">
-                 <span><i class="fa fa-video-camera"></i> 5 - Planta Baja </span>
-             </div>
-             <div class="tam1">
-                 <span><i class="fa fa-calendar-o"></i> 25/08/2015</span>
-             </div>
-             <div class="tam1">
-                 <span><i class="fa fa-clock-o"></i> 18:32 pm</span>
-             </div>
-             <div class="tam1">
-                 <span><i class="fa fa-clock-o"></i> 01:35:21</span>
-             </div>
-             <div class="tam1">
-                 <span><i class="fa fa-file-video-o"></i> 50,8 Mb</span>
-             </div>
-             <div class="tam2">
-               <div class="btnsItems">
-                 <div><button class="btnVer"><i class="fa fa-film"></i> Ver</button></div>
-                 <div><button class="btnDescargar"><i class="fa fa-download"></i> Descargar</button></div>
-               </div>
-             </div>
          </div>
       </div>
 
@@ -210,72 +132,13 @@
                       <i class="fa fa-list"></i> Videos
                     </div>
                     <div>
-                        <button class="back"><i class="fa fa-reply"></i> VOLVER</button>
+                        <button class="back" ng-click="closeReproductor()"><i class="fa fa-reply"></i> VOLVER</button>
                     </div>
                 </div>
                 <div class="videoList">
-                    <div class="videoItems">
-                        <span><i class="fa fa-film"></i> 2015-07-31_23-00-02</span>
+                    <div class="videoItems" ng-repeat="item in model.listRecordings">
+                        <span><i class="fa fa-film"></i> {{item.fileName}}</span>
                     </div>
-                    <div class="videoItems">
-                        <span><i class="fa fa-film"></i> 2015-07-31_23-00-02</span>
-                    </div>
-                    <div class="videoItems">
-                        <span><i class="fa fa-film"></i> 2015-07-31_23-00-02</span>
-                    </div>
-                    <div class="videoItems">
-                        <span><i class="fa fa-film"></i> 2015-07-31_23-00-02</span>
-                    </div>
-                    <div class="videoItems">
-                        <span><i class="fa fa-film"></i> 2015-07-31_23-00-02</span>
-                    </div>
-                    <div class="videoItems">
-                        <span><i class="fa fa-film"></i> 2015-07-31_23-00-02</span>
-                    </div>
-                    <div class="videoItems">
-                        <span><i class="fa fa-film"></i> 2015-07-31_23-00-02</span>
-                    </div>
-                    <div class="videoItems">
-                        <span><i class="fa fa-film"></i> 2015-07-31_23-00-02</span>
-                    </div>
-                    <div class="videoItems">
-                        <span><i class="fa fa-film"></i> 2015-07-31_23-00-02</span>
-                    </div>
-                    <div class="videoItems">
-                        <span><i class="fa fa-film"></i> 2015-07-31_23-00-02</span>
-                    </div>
-                    <div class="videoItems">
-                        <span><i class="fa fa-film"></i> 2015-07-31_23-00-02</span>
-                    </div>
-                    <div class="videoItems">
-                        <span><i class="fa fa-film"></i> 2015-07-31_23-00-02</span>
-                    </div>
-                    <div class="videoItems">
-                        <span><i class="fa fa-film"></i> 2015-07-31_23-00-02</span>
-                    </div>
-                    <div class="videoItems">
-                        <span><i class="fa fa-film"></i> 2015-07-31_23-00-02</span>
-                    </div>
-                    <div class="videoItems">
-                        <span><i class="fa fa-film"></i> 2015-07-31_23-00-02</span>
-                    </div>
-                    <div class="videoItems">
-                        <span><i class="fa fa-film"></i> 2015-07-31_23-00-02</span>
-                    </div>
-                    <div class="videoItems">
-                        <span><i class="fa fa-film"></i> 2015-07-31_23-00-02</span>
-                    </div>
-                    <div class="videoItems">
-                        <span><i class="fa fa-film"></i> 2015-07-31_23-00-02</span>
-                    </div>
-                    <div class="videoItems">
-                        <span><i class="fa fa-film"></i> 2015-07-31_23-00-02</span>
-                    </div>
-                    <div class="videoItems">
-                        <span><i class="fa fa-film"></i> 2015-07-31_23-00-02</span>
-                    </div>
-
-
                 </div>
 
             </div>
