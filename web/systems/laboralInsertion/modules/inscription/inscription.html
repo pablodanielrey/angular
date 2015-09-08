@@ -147,6 +147,18 @@
                       </div>
                     </div>
 
+                    <div class="item2" ng-click='changeInscription()'>
+                      <div>
+                        <button><i class="fa fa-briefcase fa-2x"></i></button>
+                      </div>
+                      <div class="textBtnBolsaDeTrabajo">
+                        <div>
+                            <span> Bolsa de Trabajo</span><br>
+                            <span class="textInscribirme"> <b>INSCRIBIRME</b> </span>
+                        </div>
+                      </div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -155,32 +167,55 @@
         ************************************* -->
         <div class="contentInscription">
             <div class="contentLeft">
-                <!-- <button class="btnInscription">
-                    <div>
-                      <div><i class="fa fa-briefcase fa-2x"></i></div>
-                    </div>
-                    <div>
-                      <span> Bolsa de Trabajo</span><br>
-                      <span> <b>INSCRIBIRME</b> </span>
-                    </div>
-                </button> -->
-
-                <div class="item col1" ng-click='changeInscription()'>
-                  <div>
-                    <button><i class="fa fa-briefcase fa-2x"></i></button>
-                  </div>
-                  <div class="textBtn">
-                    <span> Bolsa de Trabajo</span><br>
-                    <span class="textInscribirme"> <b>INSCRIBIRME</b> </span>
-                  </div>
-                </div>
 
                 <div class="myInscriptions">
-                  <div>Mis <i class="fa fa-caret-right"></i></div>
-                  <div> Inscripciones</div>
+
+                  <div>
+                    Mis Inscripciones
+                  </div>
+
+                  <div class="inscriptionList">
+
+                    <div>
+                      <div>
+                        <button class="btnMyInscripcion"><i class="fa fa-briefcase"></i></button>
+                      </div>
+                    </div>
+
+
+                  </div>
+
+                  <!-- <div>
+                      Mis Inscripciones <i class="fa fa-caret-right"></i>
+                  </div>
+
+                  <div class="item">
+
+                    <div>
+                        <div>
+                          <button><i class="fa fa-briefcase"></i></button>
+                        </div>
+
+                        <div>
+                          hola hola hola
+                        </div>
+                    </div>
+                    <div>
+                      <div class="btnTrash">
+                        <i class="fa fa-trash" tittle="Eliminar Inscripción"></i>
+                      </div>
+                      <div class="btnDownload" title="Descargar Inscripcion">
+                        <i class="fa fa-download"></i>
+                      </div>
+                    </div>
+
+                  </div>  -->
+
+
+
                 </div>
 
-                <div class="item col2">
+                <!-- <div class="item col2">
                   <div>
                     <button><i class="fa fa-briefcase fa-2x"></i></button>
                   </div>
@@ -188,22 +223,14 @@
                     <span> Inscripto en</span><br>
                     <span class="textInscribirme"> <b>FULL-TIME</b> </span>
                   </div>
-                </div>
+                </div> -->
 
                 <!-- BOTONES ELIMINAR Y DESCARGAR DE LA INSCRIPCION -->
-                <div>
-                  <div class="btnTrash">
-                    <i class="fa fa-trash" tittle="Eliminar Inscripción"></i>
-                  </div>
-                  <div class="btnDownload" title="Descargar Inscripcion">
-                    <i class="fa fa-download"></i>
-                  </div>
-                </div>
 
 
             </div>
             <div class="contentRight">
-                <div class="item col3">
+                <!-- <div class="item col3">
                   <div>
                     <button><i class="fa fa-floppy-o fa-2x"></i></button>
                   </div>
@@ -211,7 +238,7 @@
                     <span> <b>GUARDAR</b> </span><br>
                     <span> <b>DATOS</b> </span><br>
                   </div>
-                </div>
+                </div> -->
 
             </div>
         </div>
@@ -399,7 +426,16 @@
                         <div>
                           Cargar CV
                         </div>
-                        <input type="file"></input>
+
+                        <div class="contentUploadPDF">
+                            <div>
+                                <div class="uploadPDF">
+                                   <p class="textBtnPDF"><i class="fa fa-arrow-circle-up"></i> Subir PDF</p>
+                                   <input type="file" class="btnInputFile" id="" on-read-file-binary-string="addFile(fileName,fileContent)">
+                                </div>
+                            </div>
+                       </div>
+
                     </div>
 
                     <div class="p7">
@@ -410,10 +446,10 @@
                 </div>
                 <div class="footerForm">
                     <div class="pagination">
-                      1/6
+                      {{model.currentPage}}/{{model.totalPages}}
                     </div>
                     <div>
-                      <button class="btnFooter"><i class="fa fa-arrow-circle-o-left"></i> Anterior </button>
+                      <button class="btnFooter" ng-click='changePreviousRegistration()'><i class="fa fa-arrow-circle-o-left"></i> Anterior </button>
                       <button class="btnFooter" ng-click='changeRegistration()'>Siguiente <i class="fa fa-arrow-circle-o-right"></i></button>
                     </div>
                 </div>

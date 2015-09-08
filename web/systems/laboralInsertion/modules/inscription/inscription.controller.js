@@ -10,8 +10,11 @@ function InscriptionCtrl($rootScope, $scope, $wamp, Session) {
     ci: 0,
     cr: 0,
     inscriptions: ['','registro'],
-    registrations: ['pantalla1','pantalla2','pantalla3','pantalla4','pantalla5','pantalla6','pantalla7']
+    registrations: ['pantalla1','pantalla2','pantalla3','pantalla4','pantalla5','pantalla6','pantalla7'],
+    currentPage: 1
   };
+
+  $scope.model.totalPages = $scope.model.registrations.length;
 
   $scope.changeInscription = function() {
     $scope.model.ci = ($scope.model.ci + 1) % $scope.model.inscriptions.length;
@@ -19,6 +22,10 @@ function InscriptionCtrl($rootScope, $scope, $wamp, Session) {
 
   $scope.changeRegistration = function() {
     $scope.model.cr = ($scope.model.cr + 1) % $scope.model.registrations.length;
+  }
+
+  $scope.changePreviousRegistration = function() {
+    $scope.model.cr = $scope.model.cr - 1;
   }
 
   $scope.getInscriptionClazz = function() {

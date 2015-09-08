@@ -185,6 +185,98 @@
     padding: 0;
 }
 
+/*INSCRIBIRSE A LA BOLSA DE TRABAJO*/
+
+.inscription .item2 {
+  background-color: #275276;
+  color: white;
+  border-radius: 5px;
+  width: 290px;
+  height: 90px;
+}
+
+.inscription .item2:hover {
+  background-color:#3885c5;
+  cursor: pointer;
+}
+
+.inscription .item2 select {
+    width: 240px;
+    height: 40px;
+    padding: 10px 20px;
+    float: left;
+    font:  18px 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    border: 0;
+    background: #eee;
+    border-radius: 0 3px 3px 0px;
+    box-shadow: 0 0 2px rgba(0,0,0,.5) inset;
+
+}
+
+.inscription .item2 button {
+    overflow: visible;
+    position: relative;
+    float: left;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    height: 90px;
+    width: 50px;
+    font: bold 15px/40px 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    color: #fff;
+    text-transform: uppercase;
+    background: #0066A6;
+    border-radius: 3px 0 0 3px;
+    text-shadow: 0 -1px 0 rgba(0, 0 ,0, .3);
+}
+
+.inscription .item2 button:hover{
+    background: #0066A6;
+}
+
+.inscription .item2 button:active,
+.inscription .item2 button:focus{
+    background: #0066A6;
+    outline: 0;
+}
+
+.inscription .item2 button:before { /* FLECHITA */
+    content: '';
+    position: absolute;
+    border-width: 8px 0 8px 8px;
+    border-style: solid;
+    border-color: transparent #0066A6 transparent;
+    top: 33px;
+    right: -6px;
+}
+
+.inscription .item2 button:hover:before{
+    border-right-color: #0066A6;
+}
+
+.inscription .item2 button:focus:before,
+.searchRegulation .item2 button:active:before{
+        border-right-color: #0066A6;
+}
+
+/* quitar espacio extra del botón para Mozilla Firefox */
+.inscription .item2 button::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+}
+
+.inscription .textInscribirme {
+  font-size:20px;
+}
+
+.inscription .textBtnBolsaDeTrabajo {
+  padding: 20px 20px 20px 70px;
+}
+
+
+
+
+
 /****************************************************************/
 /********************* bannerInscription ************************
 *****************************************************************/
@@ -220,7 +312,7 @@
   display: flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
-  width: 80%;
+  width: 70%;
   justify-content: flex-start;
 
 }
@@ -229,9 +321,12 @@
   display: flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
-  width: 20%;
+  width: 25%;
   justify-content: flex-end;
 }
+
+
+
 
 .inscription .btnInscription {
   display: flex;
@@ -271,14 +366,17 @@
 }
 
 .inscription .contentInscription .item {
-  color: white;
+  display: flex;
+  justify-content: space-between;
+  color: #0066A6;
   border-radius: 3px;
+  background-color: #eee;
+  height: 50px;
+  width: 290px;
+  box-shadow: 0 0 2px rgba(0,0,0,.5) inset;
 
 }
 
-.inscription .contentInscription .item:hover {
-  background-color: grey;
-}
 
 /*colores de los botones*/
 .inscription .contentInscription .col1 {
@@ -330,15 +428,13 @@
 
 
 .inscription .contentInscription .item button {
-    overflow: visible;
-    position: relative;
-    float: right;
+
+
+
     border: 0;
-    padding-top: 10px;
-    padding-left: 10px;
-    padding-right: 20px;
-    cursor: pointer;
-    height: 68px;
+
+
+    height: 50px;
     width: 50px;
     font: bold 15px/40px 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     color: white;
@@ -346,7 +442,7 @@
     background: #0066A6;
     border-radius: 3px 0 0 3px;
     text-shadow: 0 -1px 0 rgba(0, 0 ,0, .3);
-    margin-right: 5px;
+
 
 }
 
@@ -366,7 +462,7 @@
     border-width: 8px 0 8px 8px;
     border-style: solid;
     border-color: transparent #0066A6 transparent;
-    top: 26px;
+    top: 15px;
     right: -6px;
 }
 
@@ -397,11 +493,51 @@
 .inscription .myInscriptions {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
   font-size: 0.9em;
   color: grey;
   margin-right: 20px;
 }
+
+
+/*ESTILO DEL INPUT FILE (CARGA DE CV)*/
+
+
+.inscription .contentUploadPDF {
+  cursor: pointer;
+}
+
+.inscription .textBtnPDF{
+	text-align: center;
+	color:black;
+  cursor: pointer;
+}
+
+.inscription .uploadPDF {
+	position:relative;
+  border: 1px solid #bec3c6;
+  padding:3px 10px 3px 10px;
+	/*width:180px;*/
+	background-color: #bec3c6;
+  border-radius: 3px 0 0 3px;
+	-webkit-border-radius:3px 0 0 3px;
+  -webkit-box-shadow: 1px 1px 1px #5c5f69;
+  -moz-box-shadow: 1px 1px 1px #5c5f69;
+  cursor: pointer;
+}
+
+.inscription .btnInputFile {
+	position:absolute;
+	top:0px;
+	left:0px;
+	right:0px;
+	bottom:0px;
+	width:100%;
+	height:100%;
+	opacity: 0;
+  cursor: pointer;
+}
+
+
 
 /****************************************************************/
 /********************* RegistrationForm ************************
