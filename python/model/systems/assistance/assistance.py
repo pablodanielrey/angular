@@ -151,7 +151,6 @@ class Assistance:
         ////////////////////////////////////////// chequeo del tema de incumplimientos ////////////////////
     """
 
-
     def _arrangeForOdsChecks(self, con, data):
 
         values = [['Fecha','Dni','Nombre','Apellido','Hora Declarada','Hora de Marcación','Diferencia','Descripción','Horas Trabajadas','Justificación']]
@@ -173,7 +172,6 @@ class Assistance:
             else:
                 v.append('')
 
-
             if 'start' in l:
                 v.append(l['start'].astimezone(tz=None).time())
             elif 'end' in l:
@@ -181,25 +179,20 @@ class Assistance:
             else:
                 v.append('')
 
-
             if 'seconds' in l:
                 v.append('{:02d}:{:02d}'.format(int(l['seconds'] / 60 / 60), int(l['seconds'] / 60 % 60)))
             else:
                 v.append('')
 
-
             v.append(l['description'])
-
 
             if 'whSeconds' in l:
                 v.append('{:02d}:{:02d}'.format(int(l['whSeconds'] / 60 / 60), int(l['whSeconds'] / 60 % 60)))
             else:
                 v.append('')
 
-
-
             if 'justifications' in l:
-                self._resolveJustificationsNames(con,l['justifications'])
+                self._resolveJustificationsNames(con, l['justifications'])
                 for j in l['justifications']:
                     v.append(j['name'])
             else:
@@ -208,7 +201,6 @@ class Assistance:
             values.append(v)
 
         return values
-
 
     def arrangeCheckSchedule(self, con, data):
         odata = self._arrangeForOdsChecks(con, data)
