@@ -6,12 +6,9 @@
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   margin:0px;
   background-color: #eee;
-
-
 }
+
 .inscription {
-
-
 }
 
 .inscription .header {
@@ -274,20 +271,83 @@
 }
 
 
-
-
-
 /****************************************************************/
-/********************* bannerInscription ************************
+/***************** INSCRIPCIONES REALIZADAS *********************
 *****************************************************************/
 
-.inscription .contentInscription {
+.inscription .inscriptionList {
   display: flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
   flex-direction:row;
   -webkit-flex-direction:row; /* Safari */
   -moz-flex-direction:row; /* mozilla */
+  flex-wrap: wrap;
+}
+
+.inscription .itemInscription {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  box-shadow: 0 0  2px rgba(0,0,0,.5) inset;
+  border-radius: 3px;
+  margin-top: 10px;
+  margin-right: 20px;
+}
+
+.inscription .iconMaletin {
+  background-color: #275276;
+  color:white;
+  padding: 11px 18px 11px 18px;
+  border-radius: 3px 0px 0 3px;
+
+}
+
+.inscription .iconFlecha {
+  color: #275276;
+  background-color: #0066A6;
+  padding: 7px 0px 7px 0px;
+  font-size: 20px;
+}
+
+.inscription .icoTrash {
+  background-color: #275276;
+  padding: 1px 4px 1px 4px;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.inscription .icoDownload {
+  background-color: #275276;
+  padding: 1px 4px 1px 4px;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.inscription .textItemInscription {
+  width: 270px;
+  background-color: #0066A6;
+  border-radius: 0px 3px 3px 0px;
+  font-size: 18px;
+  color:white;
+  height: 41px;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  align-items: center;
+  padding-left: 10px;
+  justify-content: space-around;
+}
+
+.inscription .iconsInscription {
+  width: 55px;
+}
+
+.inscription .contentInscription {
   background-color:white;
   -webkit-box-shadow: 1px 1px 5px #5c5f69;
   -moz-box-shadow: 5px 5px 5px #5c5f69;
@@ -299,194 +359,7 @@
   margin: 0px 0px 0px 20px;
 }
 
-.inscription .contentInscription {
-  display: flex;
-  display: -webkit-flex; /* Safari */
-  display: -moz-flex; /* mozilla */
-  flex-direction:row;
-  -webkit-flex-direction:row; /* Safari */
-  -moz-flex-direction:row; /* mozilla */
-}
-
-.inscription .contentLeft {
-  display: flex;
-  display: -webkit-flex; /* Safari */
-  display: -moz-flex; /* mozilla */
-  width: 70%;
-  justify-content: flex-start;
-
-}
-
-.inscription .contentRight {
-  display: flex;
-  display: -webkit-flex; /* Safari */
-  display: -moz-flex; /* mozilla */
-  width: 25%;
-  justify-content: flex-end;
-}
-
-
-
-
-.inscription .btnInscription {
-  display: flex;
-  display: -webkit-flex; /* Safari */
-  display: -moz-flex; /* mozilla */
-  flex-direction:row;
-  -webkit-flex-direction:row; /* Safari */
-  -moz-flex-direction:row; /* mozilla */
-  background-color: #128c78;
-  color: white;
-  padding: 10px;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-  border-bottom: 3px solid #5c5f69;
-}
-
-.inscription .btnInscription:hover {
-  background-color: #1EB49C;
-
-}
-
-.inscription .btnSave {
-  background-color: #0066A6;
-  color: white;
-  padding: 10px;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-  border-bottom: 3px solid #5c5f69;
-}
-
-.inscription .btnSave:hover {
-  background-color: #228BCD;
-
-
-}
-
-.inscription .contentInscription .item {
-  display: flex;
-  justify-content: space-between;
-  color: #0066A6;
-  border-radius: 3px;
-  background-color: #eee;
-  height: 50px;
-  width: 290px;
-  box-shadow: 0 0 2px rgba(0,0,0,.5) inset;
-
-}
-
-
-/*colores de los botones*/
-.inscription .contentInscription .col1 {
-  background-color: #275276;
-  cursor: pointer;
-  margin-right: 32px;
-}
-.inscription .contentInscription .col1:hover {
-  background-color: #3885C5;
-
-}
-
-.inscription .contentInscription .col2 {
-  background-color: #128c78;
-  margin-right: 5px;
-}
-
-.inscription .contentInscription .col2:hover {
-  background-color: #128c78;
-}
-
-.inscription .contentInscription .col3 {
-  background-color: #275276;
-}
-
-.inscription .contentInscription .col3:hover {
-  background-color: #3885C5;
-  cursor: pointer;
-}
-
-.inscription .contentInscription .btnTrash {
-  background-color: #e43e46;
-  color: white;
-  border-radius: 2px;
-  padding: 2px;
-  margin-bottom: 2px;
-
-}
-
-.inscription .contentInscription .btnDownload {
-  background-color: #275276;
-  color: white;
-  border-radius: 2px;
-  padding: 2px;
-}
-
-
-
-
-
-.inscription .contentInscription .item button {
-
-
-
-    border: 0;
-
-
-    height: 50px;
-    width: 50px;
-    font: bold 15px/40px 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    color: white;
-    text-transform: uppercase;
-    background: #0066A6;
-    border-radius: 3px 0 0 3px;
-    text-shadow: 0 -1px 0 rgba(0, 0 ,0, .3);
-
-
-}
-
-.inscription .contentInscription .item button:hover{
-    background: #0066A6;
-}
-
-.inscription .contentInscription .item button:active,
-.inscription .contentInscription .item button:focus{
-    background: #0066A6;
-    outline: 0;
-}
-
-.inscription .contentInscription .item button:before { /* FLECHITA */
-    content: '';
-    position: absolute;
-    border-width: 8px 0 8px 8px;
-    border-style: solid;
-    border-color: transparent #0066A6 transparent;
-    top: 15px;
-    right: -6px;
-}
-
-.inscription .contentInscription .item button:hover:before{
-    border-right-color: #0066A6;
-}
-
-.inscription .contentInscription .item button:focus:before,
-.searchRegulation .contentInscription .item button:active:before{
-        border-right-color: #0066A6;
-}
-
-/* quitar espacio extra del botón para Mozilla Firefox */
-.inscription .contentInscription .item button::-moz-focus-inner {
-    border: 0;
-    padding: 0;
-}
-
-
-.inscription .textBtn {
-  padding: 10px;
-}
-
-.inscription .contentInscription .textInscribirme {
+.inscription .textInscribirme {
   font-size:20px;
 }
 
@@ -496,52 +369,13 @@
   font-size: 0.9em;
   color: grey;
   margin-right: 20px;
+  width: 100%;
 }
-
-
-/*ESTILO DEL INPUT FILE (CARGA DE CV)*/
-
-
-.inscription .contentUploadPDF {
-  cursor: pointer;
-}
-
-.inscription .textBtnPDF{
-	text-align: center;
-	color:black;
-  cursor: pointer;
-}
-
-.inscription .uploadPDF {
-	position:relative;
-  border: 1px solid #bec3c6;
-  padding:3px 10px 3px 10px;
-	/*width:180px;*/
-	background-color: #bec3c6;
-  border-radius: 3px 0 0 3px;
-	-webkit-border-radius:3px 0 0 3px;
-  -webkit-box-shadow: 1px 1px 1px #5c5f69;
-  -moz-box-shadow: 1px 1px 1px #5c5f69;
-  cursor: pointer;
-}
-
-.inscription .btnInputFile {
-	position:absolute;
-	top:0px;
-	left:0px;
-	right:0px;
-	bottom:0px;
-	width:100%;
-	height:100%;
-	opacity: 0;
-  cursor: pointer;
-}
-
 
 
 /****************************************************************/
-/********************* RegistrationForm ************************
-*****************************************************************/
+/********************* RegistrationForm *************************
+********************* FORMULARIO DE REGISTRO ********************/
 
 .inscription .registrationForm {
   display: none;
@@ -586,6 +420,7 @@
   align-items: center;
 }
 
+/**** BOTON SALIR DEL FORMULARIO ****/
 .fa-times-circle {
   color:#e43e46;
 }
@@ -599,9 +434,192 @@
   padding: 10px;
 }
 
+
+/***** ESTILOS DE LOS IMPUT DEL FORMULARIO DE REGESTRO *****/
+
+.inscription .subTittlesForm {
+  color:#0066A6;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.inscription .item .carrera {
+    width: 320px;
+    height: 40px;
+    float: left;
+    border: 0;
+    background: white;
+    border-radius: 3px 3px 3px 3px;
+    box-shadow: 0 0 2px rgba(0,0,0,.5) inset;
+}
+
+.inscription .item .CantMatAprov {
+    width: 40px;
+    height: 20px;
+    float: left;
+    border: 0;
+    background: white;
+    border-radius: 3px 3px 3px 3px;
+    box-shadow: 0 0 2px rgba(0,0,0,.5) inset;
+}
+
+
+/******** pantalla idioma **********/
+
+.inscription .btnAddLanguaje {
+  background-color: #ec9122;
+  color: white;
+  padding: 5px;
+  border: none;
+  border-radius: 5px;
+}
+
+.inscription .languajes {
+  overflow-y: auto;
+  height: 100px;
+}
+
+.inscription .item .languaje {
+    width: 200px;
+    height: 40px;
+    float: left;
+    border: 0;
+    background: white;
+    border-radius: 3px 3px 3px 3px;
+    box-shadow: 0 0 2px rgba(0,0,0,.5) inset;
+}
+
+
+/***** estrellas de los idiomas *****/
+
+.inscription .rating {
+  unicode-bidi: bidi-override;
+  direction: rtl;
+  font-size: 15px;
+  margin: 10px;
+
+}
+.inscription .rating span.star {
+  font-family: FontAwesome;
+  font-weight: normal;
+  font-style: normal;
+  display: inline-block;
+}
+.inscription .rating span.star:hover {
+  cursor: pointer;
+}
+.inscription .rating span.star:before {
+  content: "\f006 ";
+  padding-right: 5px;
+  color: grey;
+}
+.inscription .rating span.star:hover:before,
+.inscription .rating span.star:hover ~ span.star:before {
+  content: "\f005";
+  color: #ec9122;
+}
+
+/*ESTILO DEL INPUT FILE (CARGA DE CV)*/
+
+.inscription .p6 .item {
+  z-index: 999;
+}
+
+.inscription .contentUploadPDF {
+  cursor: pointer;
+
+  width: 200px;
+}
+
+.inscription .textBtnPDF{
+	text-align: center;
+	color:black;
+  cursor: pointer;
+}
+
+.inscription .uploadPDF {
+	position:relative;
+  border: 1px solid #bec3c6;
+  padding:8px 10px 8px 10px;
+	/*width:180px;*/
+	background-color: white;
+  border-radius: 0px 5px 5px 0px;
+	-webkit-border-radius:5px;
+  -webkit-box-shadow: 0 0  2px rgba(0,0,0,.5) inset
+  -moz-box-shadow: 0 0  2px rgba(0,0,0,.5) inset
+  cursor: pointer;
+
+}
+
+.inscription .btnInputFile {
+	position:absolute;
+	top:0px;
+	left:0px;
+	right:0px;
+	bottom:0px;
+	width:100%;
+	height:100%;
+	opacity: 0;
+  cursor: pointer;
+}
+
+
+/******* pantalla de finalización  ********/
+
+.inscription .p7 {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:column;
+  -webkit-flex-direction:column; /* Safari */
+  -moz-flex-direction:column; /* mozilla */
+  align-items: center;
+  -webkit-align-items: center; /* Safari */
+  -moz-align-items: center; /* mozilla */
+}
+
+
+
+/******** footer del fomulario ********/
+
+.inscription .footerForm {
+  width: 95%;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+
+.inscription .btnFooter {
+  background-color: #0066A6;
+  color: white;
+  padding: 5px;
+  border: none;
+  border-radius: 5px;
+}
+
+.inscription .pagination {
+  color: grey;
+}
+
+.btnChange {
+  position: relative;
+  z-index: 999;
+}
+
+
+
+
+
 .p1, .p2, .p3, .p4, .p5, .p6, .p7 {
   margin-left: 30px;
 }
+
+
 
 /****** MOSTRAR U OCULTAR PANTALLAS DEL FORMULARIO ******/
 
@@ -666,119 +684,4 @@
 .inscription .content.pantalla7 .p5,
 .inscription .content.pantalla7 .p6 {
   display: none;
-}
-
-
-/***** estrellas de los idiomas *****/
-
-.inscription .rating {
-  unicode-bidi: bidi-override;
-  direction: rtl;
-  font-size: 15px;
-  margin: 10px;
-
-}
-.inscription .rating span.star {
-  font-family: FontAwesome;
-  font-weight: normal;
-  font-style: normal;
-  display: inline-block;
-}
-.inscription .rating span.star:hover {
-  cursor: pointer;
-}
-.inscription .rating span.star:before {
-  content: "\f006 ";
-  padding-right: 5px;
-  color: grey;
-}
-.inscription .rating span.star:hover:before,
-.inscription .rating span.star:hover ~ span.star:before {
-  content: "\f005";
-  color: #ec9122;
-}
-
-/***** ESTILOS DE LOS IMPUT DEL FORMULARIO DE REGESTRO *****/
-
-.inscription .subTittlesForm {
-  color:#0066A6;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-.inscription .item .carrera {
-    width: 320px;
-    height: 40px;
-    float: left;
-    border: 0;
-    background: white;
-    border-radius: 3px 3px 3px 3px;
-    box-shadow: 0 0 2px rgba(0,0,0,.5) inset;
-}
-
-.inscription .item .CantMatAprov {
-    width: 40px;
-    height: 20px;
-    float: left;
-    border: 0;
-    background: white;
-    border-radius: 3px 3px 3px 3px;
-    box-shadow: 0 0 2px rgba(0,0,0,.5) inset;
-}
-
-.inscription .item .languaje {
-    width: 200px;
-    height: 40px;
-    float: left;
-    border: 0;
-    background: white;
-    border-radius: 3px 3px 3px 3px;
-    box-shadow: 0 0 2px rgba(0,0,0,.5) inset;
-}
-
-/******** pantalla idioma **********/
-
-.inscription .btnAddLanguaje {
-  background-color: #ec9122;
-  color: white;
-  padding: 5px;
-  border: none;
-  border-radius: 5px;
-}
-
-.inscription .languajes {
-  overflow-y: auto;
-  height: 100px;
-}
-
-
-/******** footer del fomulario ********/
-
-.inscription .footerForm {
-  width: 95%;
-  display: flex;
-  display: -webkit-flex; /* Safari */
-  display: -moz-flex; /* mozilla */
-  flex-direction:row;
-  -webkit-flex-direction:row; /* Safari */
-  -moz-flex-direction:row; /* mozilla */
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-}
-
-.inscription .btnFooter {
-  background-color: #0066A6;
-  color: white;
-  padding: 5px;
-  border: none;
-  border-radius: 5px;
-}
-
-.inscription .pagination {
-  color: grey;
-}
-
-.btnChange {
-  position: relative;
-  z-index: 999;
 }

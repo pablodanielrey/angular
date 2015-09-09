@@ -1,7 +1,5 @@
 <div class="inscriptionContainer">
 
-
-
     <div class="inscription" ng-class='getInscriptionClazz()'>
 
         <!-- ************************************
@@ -162,83 +160,54 @@
                 </div>
             </div>
         </div>
-        <!-- ************************************
-        ************ BANNER INSCRIPCION ************
-        ************************************* -->
+        <!-- *********************************************
+        ************ INSCRIPCIONES REALIZADAS ************
+        ********************************************** -->
         <div class="contentInscription">
-            <div class="contentLeft">
-
-                <div class="myInscriptions">
-
-                  <div>
-                    Mis Inscripciones
-                  </div>
-
-                  <div class="inscriptionList">
-
-                    <div>
-                      <div>
-                        <button class="btnMyInscripcion"><i class="fa fa-briefcase"></i></button>
-                      </div>
-                    </div>
-
-
-                  </div>
-
-                  <!-- <div>
-                      Mis Inscripciones <i class="fa fa-caret-right"></i>
-                  </div>
-
-                  <div class="item">
-
-                    <div>
-                        <div>
-                          <button><i class="fa fa-briefcase"></i></button>
-                        </div>
-
-                        <div>
-                          hola hola hola
-                        </div>
-                    </div>
-                    <div>
-                      <div class="btnTrash">
-                        <i class="fa fa-trash" tittle="Eliminar Inscripción"></i>
-                      </div>
-                      <div class="btnDownload" title="Descargar Inscripcion">
-                        <i class="fa fa-download"></i>
-                      </div>
-                    </div>
-
-                  </div>  -->
-
-
-
+            <div class="myInscriptions">
+                <div>
+                    <i class="fa fa-chevron-circle-down"></i> Mis Inscripciones
                 </div>
 
-                <!-- <div class="item col2">
-                  <div>
-                    <button><i class="fa fa-briefcase fa-2x"></i></button>
-                  </div>
-                  <div class="textBtn">
-                    <span> Inscripto en</span><br>
-                    <span class="textInscribirme"> <b>FULL-TIME</b> </span>
-                  </div>
-                </div> -->
+                <div class="inscriptionList">
 
-                <!-- BOTONES ELIMINAR Y DESCARGAR DE LA INSCRIPCION -->
+                    <div class="itemInscription">
+                        <div class="iconMaletin">
+                          <i class="fa fa-briefcase"></i>
+                        </div>
+                        <div class="iconFlecha">
+                          <i class="fa fa-caret-right"></i>
+                        </div>
+                        <div class="textItemInscription">
+                            <div>
+                              <span>Inscripto en <b>Pasantía</b></span>
+                            </div>
+                            <div class="iconsInscription">
+                              <span class="icoTrash" title="Eliminar Inscripción"><i class="fa fa-trash-o"></i></span>
+                              <span class="icoDownload" title="Descargar Inscripción"><i class="fa fa-file-pdf-o"></i></span>
+                            </div>
+                        </div>
+                    </div>
 
+                    <div class="itemInscription">
+                        <div class="iconMaletin">
+                          <i class="fa fa-briefcase"></i>
+                        </div>
+                        <div class="iconFlecha">
+                          <i class="fa fa-caret-right"></i>
+                        </div>
+                        <div class="textItemInscription">
+                            <div>
+                              <span>Inscripto en <b>Full-Time</b></span>
+                            </div>
+                            <div class="iconsInscription">
+                              <span class="icoTrash" title="Eliminar Inscripción"><i class="fa fa-trash-o"></i></span>
+                              <span class="icoDownload" title="Descargar Inscripción"><i class="fa fa-file-pdf-o"></i></span>
+                            </div>
+                        </div>
+                    </div>
 
-            </div>
-            <div class="contentRight">
-                <!-- <div class="item col3">
-                  <div>
-                    <button><i class="fa fa-floppy-o fa-2x"></i></button>
-                  </div>
-                  <div class="textBtn">
-                    <span> <b>GUARDAR</b> </span><br>
-                    <span> <b>DATOS</b> </span><br>
-                  </div>
-                </div> -->
+                </div>
 
             </div>
         </div>
@@ -423,23 +392,31 @@
                     </div>
 
                     <div class="p6">
-                        <div>
-                          Cargar CV
-                        </div>
 
-                        <div class="contentUploadPDF">
-                            <div>
-                                <div class="uploadPDF">
-                                   <p class="textBtnPDF"><i class="fa fa-arrow-circle-up"></i> Subir PDF</p>
-                                   <input type="file" class="btnInputFile" id="" on-read-file-binary-string="addFile(fileName,fileContent)">
+                        <div class="subTittlesForm">
+                          <b>Cargar CV</b>
+                        </div>
+                        <div class="item">
+                            <button><i class="fa fa-book"></i></button>
+                            <div class="contentUploadPDF">
+                                <div>
+                                    <div class="uploadPDF">
+                                       <p class="textBtnPDF"><i class="fa fa-arrow-circle-up"></i> Subir CV</p>
+                                       <input type="file" class="btnInputFile" id="" on-read-file-binary-string="addFile(fileName,fileContent)">
+                                    </div>
                                 </div>
-                            </div>
-                       </div>
+                           </div>
+                        </div>
 
                     </div>
 
                     <div class="p7">
-                        Solicitud Cargada con Exito!
+                        <div class="subTittlesForm">
+                          <i class="fa fa-check-square-o fa-4x"></i>
+                        </div>
+                        <div class="subTittlesForm">
+                          <b>Solicitud finalizada con éxito!</b>
+                        </div>
                     </div>
 
 
@@ -459,7 +436,5 @@
 
     </div>
 
-    <!-- <button class="btnChange" ng-click='changeInscription()'>Bolsa de Trabajo</button>
-    <button class="btnChange" ng-click='changeRegistration()'>Pag Siguiente</button> -->
 
 </div>
