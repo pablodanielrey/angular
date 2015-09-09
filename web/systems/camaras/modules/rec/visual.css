@@ -251,6 +251,13 @@
 
 .rec .videoItems {
   padding: 5px;
+  height: auto;
+}
+
+.rec .videoItems.selected {
+  background-color: #0066A6 !Important;
+  cursor: pointer;
+  color: white;  
 }
 
 .rec .videoItems:hover {

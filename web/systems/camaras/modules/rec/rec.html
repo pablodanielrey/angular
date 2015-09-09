@@ -33,7 +33,7 @@
     <div class="contentRecordings" ng-class="{false:'hidden'}[view.displayListRecordings]">
        <div class="menuRecording">
           <div class="tam0">
-              <input type="checkbox" title="Seleccionar Todas">
+              <input type="checkbox" title="Seleccionar Todas" ng-change="selectAll()" ng-model="view.selectAll">
           </div>
           <div class="tam2">
               <span><i class="fa fa-video-camera"></i> Camara </span>
@@ -67,7 +67,7 @@
                    <span><i class="fa fa-calendar-o"></i> {{item.start | date: "dd/MM/yyyy"}}</span>
                </div>
                <div class="tam1">
-                   <span><i class="fa fa-clock-o"></i> {{item.start | date: "hh:ss"}}</span>
+                   <span><i class="fa fa-clock-o"></i> {{item.start | date: "hh:mm"}}</span>
                </div>
                <div class="tam1">
                    <span><i class="fa fa-clock-o"></i> {{item.duration}}</span>
@@ -81,6 +81,9 @@
                    <div><button class="btnDescargar" ng-click="downloadRecording(item)"><i class="fa fa-download"></i> Descargar</button></div>
                  </div>
                </div>
+         </div>
+         <div>
+           <button ng-click="viewSelecteds()">Ver seleccionados</button>
          </div>
       </div>
 
@@ -96,8 +99,8 @@
                 </div>
                 <div class="footerPlay">
                     <div>
-                        <button class="btnFooter2" ><i class="fa fa-step-backward"></i></button>
-                        <button class="btnFooter2" title="Próximo Video"><i class="fa fa-step-forward"></i></button>
+                        <button class="btnFooter2" ng-click="previous()"><i class="fa fa-step-backward"></i></button>
+                        <button class="btnFooter2" title="Próximo Video" ng-click="next()"><i class="fa fa-step-forward"></i></button>
                         <button class="btnFooter" ng-click='slower()'><i class="fa fa-backward"></i></button>
                         <button class="btnFooter" ng-click='pause()' ng-if="!view.paused"><i class="fa fa-pause"></i></button>
                         <button class="btnFooter" ng-click='play()' ng-if="view.paused"><i class="fa fa-play"></i></button>
@@ -107,22 +110,22 @@
                     </div>
                     <div class="videoDetalles">
                         <div>
-                          <span><i class="fa fa-video-camera"></i> 5 - PB</span>
+                          <span><i class="fa fa-video-camera"></i>{{model.video.displayName}}</span>
                         </div>
                         <div>
-                          <span><i class="fa fa-calendar-o"></i> 25/08/2015</span>
+                          <span><i class="fa fa-calendar-o"></i> {{model.video.start | date: "dd/MM/yyyy"}}</span>
                         </div>
                         <div>
-                          <span><i class="fa fa-clock-o"></i> 18:32 pm</span>
+                          <span><i class="fa fa-clock-o"></i>{{model.video.start | date: "hh:mm"}}</span>
                         </div>
                         <div>
-                          <span><i class="fa fa-clock-o"></i> 01:35:21</span>
+                          <span><i class="fa fa-clock-o"></i>{{model.video.duration}}</span>
                         </div>
                         <div>
-                          <span><i class="fa fa-file-video-o"></i> 50,8 Mb</span>
+                          <span><i class="fa fa-file-video-o"></i>{{model.video.size}}</span>
                         </div>
                         <div>
-                          <button class="btnFooter"><i class="fa fa-download"></i> Descargar</button>
+                          <button class="btnFooter" ng-click="downloadRecording(model.video)"><i class="fa fa-download"></i> Descargar</button>
                         </div>
                     </div>
                 </div>
@@ -137,7 +140,7 @@
                     </div>
                 </div>
                 <div class="videoList">
-                    <div class="videoItems" ng-repeat="item in model.listRecordings">
+                    <div class="videoItems" ng-repeat="item in model.listRecordings" ng-class="{true:'selected'}[item == model.video]" ng-click="selectVideo(item)">
                         <span><i class="fa fa-film"></i> {{item.fileName}}</span>
                     </div>
                 </div>

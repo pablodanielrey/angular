@@ -9,11 +9,14 @@ function RecordController($scope,$timeout,$sce) {
     $scope.model = {
       recordings:[],
       listRecordings:[],
+      selecteds: [],
+      video: null,
       rate: 1
     };
 
     $scope.view = {
         style: '',
+        selecAll: false,
         paused: false,
         displayListRecordings: false,
         styles:['','reproductor']
@@ -30,8 +33,11 @@ function RecordController($scope,$timeout,$sce) {
 
     function initialize() {
       $scope.view.displayListRecordings = false;
+      $scope.view.selectAll = false;
       $scope.model.recordings = [];
       $scope.model.listRecordings = [];
+      $scope.model.selecteds = [];
+      $scope.model.video = null;
     }
 
     function setStyle(index) {
@@ -62,7 +68,9 @@ function RecordController($scope,$timeout,$sce) {
     $scope.search = search;
 
     function search() {
-      $scope.model.recordings = [{'displayName':'1 - Planta Baja','selected':false,'start':new Date(),'duration':'01:25:13','size':'45 Mb','fileName':'2015-07-31_23-00-02','src':'http://163.10.56.194/gluster/camaras/archivo/2015-08-18_09-00-01_camara1.m4v.mp4'}]
+      var r1 = {'displayName':'1 - Planta Baja','selected':false,'start':new Date(),'duration':'01:25:13','size':'45 Mb','fileName':'2015-07-31_23-00-02','src':'http://163.10.56.194/gluster/camaras/archivo/2015-08-18_09-00-01_camara1.m4v.mp4'}
+      var r2 = {'displayName':'2 - 1er piso','selected':false,'start':new Date(),'duration':'01:00:13','size':'35 Mb','fileName':'2015-07-30_23-00-02','src':'http://163.10.56.194/gluster/camaras/archivo/2015-08-18_09-00-01_camara1.m4v.mp4'}
+      $scope.model.recordings = [r1,r2]
       $scope.view.displayListRecordings = true;
     }
 
@@ -75,9 +83,35 @@ function RecordController($scope,$timeout,$sce) {
     $scope.selectRecording = selectRecording;
     $scope.viewRecording = viewRecording;
     $scope.downloadRecording = downloadRecording;
+    $scope.viewSelecteds = viewSelecteds;
+    $scope.selectAll = selectAll;
 
     function selectRecording(recording) {
-      recording.selected = !recording.selected;
+      $scope.view.selectAll = false;
+      var index = $scope.model.selecteds.indexOf(recording);
+      if (recording.selected) {
+        if (index == -1) {
+          $scope.model.selecteds.push(recording);
+          if ($scope.model.selecteds.length == $scope.model.recordings.length) {
+            $scope.view.selectAll = true;
+          }
+        }
+      } else {
+        if (index != -1) {
+          $scope.model.selecteds.splice(index, 1);
+        }
+      }
+    }
+
+    function selectAll() {
+      if ($scope.view.selectAll) {
+        $scope.model.selecteds = $scope.model.recordings.slice();
+      } else {
+        $scope.model.selecteds = [];
+      }
+      for (var i = 0; i < $scope.model.recordings.length; i++) {
+        $scope.model.recordings[i]['selected'] = $scope.view.selectAll;
+      }
     }
 
     function viewRecording(recording) {
@@ -88,6 +122,10 @@ function RecordController($scope,$timeout,$sce) {
 
     }
 
+    function viewSelecteds() {
+      $scope.displayReproductor($scope.model.selecteds);
+    }
+
 
 /* ---------------------------------------------------------------
  * --------------------- REPRODUCTOR -----------------------------
@@ -95,12 +133,15 @@ function RecordController($scope,$timeout,$sce) {
  */
     $scope.displayReproductor = displayReproductor;
     $scope.closeReproductor = closeReproductor;
+    $scope.selectVideo = selectVideo;
     $scope.pause = pause;
     $scope.play = play;
     $scope.faster = faster;
     $scope.slower = slower;
     $scope.seekForward = seekForward;
     $scope.seekBackwards = seekBackwards;
+    $scope.next = next;
+    $scope.previous = previous;
 
     function displayReproductor(items) {
       $scope.setStyle(1);
@@ -111,10 +152,17 @@ function RecordController($scope,$timeout,$sce) {
       video.addEventListener("play", playEvent, true);
 
       if (items.length > 0) {
-        video.src = items[0].src;
+        $scope.selectVideo(items[0]);
       } else {
+        $scope.model.video = null;
         video.src = "";
       }
+    }
+
+    function selectVideo(recording) {
+      $scope.model.video = recording;
+      var video = document.getElementById("video");
+      video.src = $scope.model.video.src;
     }
 
     function pauseEvent() {
@@ -188,6 +236,22 @@ function RecordController($scope,$timeout,$sce) {
       video.currentTime = video.currentTime - 1;
       video.playbackRate = $scope.model.rate;
       video.pause();
+    }
+
+    function next() {
+      var index = $scope.model.listRecordings.indexOf($scope.model.video);
+      if (index == -1 || index == ($scope.model.listRecordings.length - 1)) {
+        return;
+      }
+      $scope.selectVideo($scope.model.listRecordings[index+1]);
+    }
+
+    function previous() {
+      var index = $scope.model.listRecordings.indexOf($scope.model.video);
+      if (index <= 0) {
+        return;
+      }
+      $scope.selectVideo($scope.model.listRecordings[index-1]);
     }
 
 }
