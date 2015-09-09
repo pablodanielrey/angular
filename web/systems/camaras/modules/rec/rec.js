@@ -2,15 +2,21 @@ angular
     .module('mainApp')
     .controller('RecordController',RecordController);
 
-RecordController.$inject = ['$scope','$timeout','$sce'];
+RecordController.$inject = ['$scope','$timeout','$sce','Camaras'];
 
-function RecordController($scope,$timeout,$sce) {
+function RecordController($scope,$timeout,$sce,Camaras) {
 
     $scope.model = {
       recordings:[],
       listRecordings:[],
       selecteds: [],
       video: null,
+      camaras: [],
+      filter: {
+        start: null,
+        end: null,
+        camaras: []
+      },
       rate: 1
     };
 
@@ -29,6 +35,7 @@ function RecordController($scope,$timeout,$sce) {
  */
 
     $scope.initialize = initialize;
+    $scope.initializeCamaras = initializeCamaras;
     $scope.setStyle = setStyle;
 
     function initialize() {
@@ -38,6 +45,22 @@ function RecordController($scope,$timeout,$sce) {
       $scope.model.listRecordings = [];
       $scope.model.selecteds = [];
       $scope.model.video = null;
+      $scope.model.filter = {};
+      $scope.model.filter.start = new Date();
+      $scope.model.filter.end = new Date();
+      $scope.initializeCamaras();
+    }
+
+    function initializeCamaras() {
+      $scope.model.filter.camaras = [];
+      Camaras.findAllCamaras(
+        function(camaras) {
+          $scope.model.camaras = camaras;
+        },
+        function(error){
+          Notifications.message(error);
+        }
+      );
     }
 
     function setStyle(index) {
@@ -45,7 +68,15 @@ function RecordController($scope,$timeout,$sce) {
     }
 
 
+    $scope.$watch('model.filter.start', function(newValue, oldValue) {
+      $scope.model.filter.start.setSeconds(0);
+      $scope.model.filter.start.setMilliseconds(0);
+    });
 
+    $scope.$watch('model.filter.end', function(newValue, oldValue) {
+      $scope.model.filter.end.setSeconds(0);
+      $scope.model.filter.end.setMilliseconds(0);
+    });
 
 /* ---------------------------------------------------------------
  * ---------------------- EVENTOS --------------------------------
@@ -68,10 +99,19 @@ function RecordController($scope,$timeout,$sce) {
     $scope.search = search;
 
     function search() {
-      var r1 = {'displayName':'1 - Planta Baja','selected':false,'start':new Date(),'duration':'01:25:13','size':'45 Mb','fileName':'2015-07-31_23-00-02','src':'http://163.10.56.194/gluster/camaras/archivo/2015-08-18_09-00-01_camara1.m4v.mp4'}
-      var r2 = {'displayName':'2 - 1er piso','selected':false,'start':new Date(),'duration':'01:00:13','size':'35 Mb','fileName':'2015-07-30_23-00-02','src':'http://163.10.56.194/gluster/camaras/archivo/2015-08-18_09-00-01_camara1.m4v.mp4'}
-      $scope.model.recordings = [r1,r2]
-      $scope.view.displayListRecordings = true;
+      Camaras.findRecordings($scope.model.filter.start,$scope.model.filter.end,$scope.model.filter.camaras,
+        function(recordings) {
+          $scope.model.recordings = recordings;
+          for (var i = 0; i < recordings.length; i++) {
+            $scope.model.recordings[i].selected = false;
+          }
+          $scope.view.displayListRecordings = true;
+        },
+        function(error) {
+          $scope.model.recordings = [];
+          Notifications.message(error);
+        }
+      );
     }
 
 

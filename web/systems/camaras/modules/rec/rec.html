@@ -7,19 +7,19 @@
               </div>
               <div class="contentItem">
                   <span><i class="fa fa-calendar-o"></i> Inicio</span>
-                  <input type="date">
+                  <input type="date" ng-model="model.filter.start">
               </div>
               <div class="contentItem">
                   <span><i class="fa fa-calendar-o"></i> Fin</span>
-                  <input type="date">
+                  <input type="date" ng-model="model.filter.end">
               </div>
               <div class="contentItem">
                   <span><i class="fa fa-clock-o"></i> Inicio</span>
-                  <input type="time">
+                  <input type="time" ng-model="model.filter.start">
               </div>
               <div class="contentItem">
                   <span><i class="fa fa-clock-o"></i> Fin</span>
-                  <input type="time">
+                  <input type="time" ng-model="model.filter.end">
               </div>
               <div>
                   <button  ng-click='search()'><i class="fa fa-search"></i> BUSCAR</button>
