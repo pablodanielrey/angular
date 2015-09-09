@@ -148,8 +148,14 @@ function RecordController($scope,$timeout,$sce) {
       $scope.model.listRecordings = items;
       $scope.view.paused = false;
       var video = document.getElementById("video");
-      video.addEventListener("pause", pauseEvent, true);
-      video.addEventListener("play", playEvent, true);
+
+      video.addEventListener("pause", function() {
+        $scope.$apply(function() {$scope.view.paused = true;});
+      });
+
+      video.addEventListener("play", function() {
+        $scope.$apply(function() {$scope.view.paused = false;});
+      });
 
       if (items.length > 0) {
         $scope.selectVideo(items[0]);
@@ -165,36 +171,27 @@ function RecordController($scope,$timeout,$sce) {
       video.src = $scope.model.video.src;
     }
 
-    function pauseEvent() {
-      $scope.view.paused = true;
-    }
-
-    function playEvent() {
-      $scope.view.paused = false;
-    }
+    $scope.$watch('view.paused', function(newValue, oldValue) {
+      $scope.model.rate = 1;
+      var video = document.getElementById("video");
+      video.playbackRate = $scope.model.rate;
+    });
 
     function closeReproductor() {
       $scope.setStyle(0);
       $scope.model.listRecordings = [];
     }
 
-    $scope.$watch('view.paused', function(newValue, oldValue) {
-      if (newValue) {
-        $scope.model.rate = 1;
-        var video = document.getElementById("video");
-        video.playbackRate = $scope.model.rate;
-      }
-    });
-
-
     function pause() {
       var video = document.getElementById("video");
       video.pause();
+      $scope.view.paused = true;
     }
 
     function play() {
       var video = document.getElementById("video");
       video.play();
+      $scope.view.paused = false;
     }
 
     function faster() {
