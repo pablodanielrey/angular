@@ -122,9 +122,9 @@ class UsersWamp(ApplicationSession):
     def findUsersIds(self):
         con = self._getDatabase()
         try:
-            # codigo
+            usersIds = self.users.listUsersIds(con)
             con.commit()
-            return []
+            return usersIds
 
         finally:
             con.close()

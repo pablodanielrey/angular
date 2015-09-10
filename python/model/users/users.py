@@ -165,6 +165,20 @@ class Users:
             rdata.append(self.convertUserToDict(d))
         return rdata
 
+    '''
+     ' Listar ids de usuarios
+     ' @param con Conexion con la base de datos
+     ' @return Lista de ids de usuarios
+     '''
+    def listUsersIds(self, con):
+        cur = con.cursor()
+        cur.execute('select id from profile.users')
+        data = cur.fetchall()
+        rdata = []
+        for d in data:
+            rdata.append(d[0])
+        return rdata
+
 
     ''' retorna true en el caso de que el usuario pasado como parámetro tenga una version mayor al de la base '''
     def needSync(self,con,user):
