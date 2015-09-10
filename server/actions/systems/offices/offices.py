@@ -28,6 +28,7 @@ class OfficesWamp(ApplicationSession):
         yield from self.register(self.getOffices_async, 'offices.offices.getOffices')
         yield from self.register(self.findOffices_async, 'offices.offices.findOffices')
         yield from self.register(self.getOfficesByUser_async, 'offices.offices.getOfficesByUser')
+        yield from self.register(self.getOfficesTree_async, 'offices.offices.getOfficesTree')
         yield from self.register(self.getOfficesTreeByUser_async, 'offices.offices.getOfficesTreeByUser')
         yield from self.register(self.getOfficesUsers_async, 'offices.offices.getOfficesUsers')
         yield from self.register(self.getUserInOfficesByRole_async, 'offices.offices.getUserInOfficesByRole')
@@ -77,6 +78,21 @@ class OfficesWamp(ApplicationSession):
         r = yield from loop.run_in_executor(None, self.getOfficesByUser, sessionId, userId, tree)
         return r
 
+
+    def getOfficesTree(self):
+        con = self._getDatabase()
+        try:
+            return self.offices.getOfficesTree(con)
+        finally:
+            con.close()
+
+    @coroutine
+    def getOfficesTree_async(self):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.getOfficesTree)
+        return r
+
+
     def getOfficesTreeByUser(self, sessionId, userId):
         con = self._getDatabase()
         try:
@@ -96,7 +112,6 @@ class OfficesWamp(ApplicationSession):
         con = self._getDatabase()
         try:
             return self.offices.getOffices(con)
-
         finally:
             con.close()
 

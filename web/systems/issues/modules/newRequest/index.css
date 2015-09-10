@@ -11,6 +11,14 @@
 
 }
 
+.contentScreens .newIssueForm {
+  display:none;
+}
+
+.contentScreens.displayCreateChild .newIssueForm {
+  display:block;
+}
+
 .contentScreens .visibilityOffices {
   display:none;
 }
