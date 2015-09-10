@@ -25,7 +25,6 @@ class Login:
             self.config.configs['session_user_id']: rdata['user_id']
         }
         sid = self.session._create(con, sess)
-        con.commit()
 
         response = {'session_id': sid, 'user_id': rdata['user_id']}
         return response
