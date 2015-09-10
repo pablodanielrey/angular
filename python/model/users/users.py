@@ -75,7 +75,7 @@ class Users:
 
     def createUser(self,con,data):
         uid = str(uuid.uuid4())
-        if 'id' in data:
+        if 'id' in data and data['id'] is not None:
             uid = data['id']
 
         rreq = (uid,
@@ -93,6 +93,11 @@ class Users:
         cur.execute('insert into profile.users (id,dni,name,lastname,city,country,address,genre,birthdate,residence_city,version) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)', rreq)
         return uid
 
+    '''
+     ' Persistir usuario: En funcion del id del usuario crea o actualiza el usuario
+     ' @param user Datos del usuario
+     ' @return Id del usuario persistido
+     '''
     def updateUser(self,con,user):
         cur = con.cursor()
 
@@ -111,6 +116,7 @@ class Users:
                 if cur.rowcount <= 0:
                     raise Exception()
 
+
         #actualizar telefonos del usuario
         cur.execute('delete from profile.telephones where user_id = %s', (userId,))
 
@@ -119,6 +125,8 @@ class Users:
                  telephone_id = str(uuid.uuid4())
                  rreq = (telephone_id, user['id'], v["number"], v["type"])
                  cur.execute('INSERT INTO profile.telephones (id, user_id, number, type) VALUES (%s, %s, %s, %s);', rreq)
+
+        return userId
 
 
     def findUserByDni(self,con,dni):
