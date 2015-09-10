@@ -28,13 +28,7 @@ class WampMain(ApplicationSession):
 
     @coroutine
     def onJoin(self, details):
-        email = {
-            'id':'70574fb8-f31e-4e01-a3d5-c128bec4ba20',
-            'email':'ivancas84@gmail.com',
-            'user_id':'d44e92c1-d277-4a45-81dc-a72a76f6ef8d',
-            'confirmed':False
-        }
-        yield from self.call('users.mails.sendEmailConfirmation', email)
+        yield from self.call('users.mails.sendEmailConfirmation', '70574fb8-f31e-4e01-a3d5-c128bec4ba20')
 
         logging.info("********** CONFIRMACION POR EMAIL ENVIADA **********")
 

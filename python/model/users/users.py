@@ -1,10 +1,74 @@
 # -*- coding: utf-8 -*-
 import uuid
 import psycopg2
+import inject
+import hashlib
+import re
 
+from model.config import Config
 from model.objectView import ObjectView
+from model.mail.mail import Mail
 
 class Users:
+    def __init__(self, config=None):
+        self.serverConfig = inject.instance(Config)
+        self.mail = inject.instance(Mail)
+
+    '''
+     ' Enviar email de confirmacion: Define un hash y envia un email de confirmacion al usuario con el hash
+     ' @param con Conexion con la base de datos
+     ' @param emailId Identificacion del email
+     '''
+    def sendEmailConfirmation(self, con, emailId):
+        email = self.findMail(con, emailId)
+        if(email is None):
+            raise Exception("Email inexistente")
+
+        hash = hashlib.sha1((email['id'] + email['user_id']).encode('utf-8')).hexdigest()
+        email['hash'] = hash
+
+        self.updateMail(con,email)
+
+        From = self.serverConfig.configs['mail_confirm_mail_from']
+        subject = self.serverConfig.configs['mail_confirm_mail_subject']
+        To = email['email']
+        template = self.serverConfig.configs['mail_confirm_mail_template']
+
+        url = self.serverConfig.configs['mail_confirm_mail_url']
+        url = re.sub('###HASH###', hash, url)
+
+        replace = [
+            ('###URL###',url)
+        ]
+
+        self.mail.sendMail(From,[To],subject,replace,html=template)
+
+        return True
+
+
+    def confirmEmail(self,con,hash):
+        email = self.findMailByHash(con, hash)
+        if(email is None):
+            raise Exception("Email inexistente")
+
+        email['confirmed'] = True
+        email['hash'] = None
+
+        self.updateMail(con,email)
+
+        From = self.serverConfig.configs['mail_confirm_mail_from']
+        subject = self.serverConfig.configs['mail_confirm_mail_subject']
+        To = email['email']
+        template = self.serverConfig.configs['mail_confirm_mail_template']
+
+        url = self.serverConfig.configs['mail_mail_confirmed_template']
+        url = re.sub('###HASH###', hash, url)
+
+        replace = [
+            ('###URL###',url)
+        ]
+
+        self.mail.sendMail(From,[To],subject,replace,html=template)
 
 
     def createMail(self,con,data):
