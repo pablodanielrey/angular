@@ -1,11 +1,10 @@
 import logging
 import sys
 import inject
-import datetime
 sys.path.insert(0,'../../python')
 
 from model.config import Config
-logging.getLogger().setLevel(logging.DEBUG)
+logging.getLogger().setLevel(logging.INFO)
 
 from autobahn.asyncio.wamp import ApplicationSession
 from asyncio import coroutine
@@ -28,8 +27,14 @@ class WampMain(ApplicationSession):
 
     @coroutine
     def onJoin(self, details):
-        yield from self.call('users.mails.deleteMail', '29256a12-cc5f-4201-ae66-4836cbdaca23')
-        logging.info("********** ELIMINACION DE EMAIL REALIZADA **********")
+        userIds = yield from self.call('users.findUsersIds')
+
+        logging.info("********** ID DE USUARIOS **********")
+        logging.info(len(userIds))
+        logging.info("Primer id:" + userIds[0])
+
+
+
 
 if __name__ == '__main__':
 

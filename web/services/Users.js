@@ -2,9 +2,9 @@ angular
   .module('mainApp')
   .service('Users',Users);
 
-Users.inject = ['$rootScope', '$wamp', 'Messages','Session','Utils','Cache','Config'];
+Users.inject = ['$rootScope', '$wamp', 'Session','Utils','Cache','Config'];
 
-function Users($rootScope, $wamp, Messages, Session, Utils, Cache, Config) {
+function Users($rootScope, $wamp, Session, Utils, Cache, Config) {
 
   var instance = this;
   this.userPrefix = 'user_';

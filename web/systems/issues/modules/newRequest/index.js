@@ -8,7 +8,7 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
 
   /***** MANIPULACION DE ESTILOS ******/
   $scope.style = null;
-  $scope.styles = ['none','displayVisibility'];
+  $scope.styles = ['none','displayVisibility','displayCreateChild'];
 
   $scope.setStyle = function($index) {
     $scope.style = $scope.styles[$index];
@@ -26,7 +26,9 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
   /***** ATRIBUTOS ******/
   $scope.request = null; //descripcion de un nuevo nodo que sera agregado a la raiz
   $scope.data = []; //raiz del arbol de nodos
-
+  $scope.model = {
+    newNode: null
+  }
 
   /**
    * Inicializar nodo con valores por defecto. Cuando se crea un nuevo nodo en el arbol se inicializa y guarda en la base con los siguientes parametros
@@ -92,9 +94,7 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
    * @param {type} nodeScope
    * @returns {undefined}
    */
-  $scope.updateIssueData = function(nodeScope){
-
-    var nodeData = nodeScope.$modelValue;
+  $scope.updateIssueData = function(nodeData){
     Issue.updateIssueData(nodeData, null,
       function(data) {$scope.getIssues();},
       function(error) { Notifications.message(error); }
@@ -103,41 +103,45 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
 
 
 
-  $scope.addNode = function(nodeScope){
-    var nodeData = nodeScope.$modelValue;
+  $scope.addNode = function(nodeData){
+    $scope.requestNewNode = "";
+    $scope.setStyle(2);
 
-    var newNode = $scope.initializeNode("PENDING");
-    newNode.parent_id = nodeData.id;
-    newNode.request = $scope.request;
-    newNode.visibilities = nodeData['visibilities'];
-
-    Issue.newIssue(newNode,newNode['state'], newNode['visibilities'],
-      function(data) {$scope.getIssues(); $scope.request = null;},
-      function(error) { Notifications.message(error); }
-    );
+    $scope.model.newNode = $scope.initializeNode("PENDING");
+    $scope.model.newNode.parent_id = nodeData.id;
+    $scope.model.newNode.request = $scope.request;
+    $scope.model.newNode.visibilities = nodeData['visibilities'];
   };
 
-  $scope.addComment = function(nodeScope){
-    var nodeData = nodeScope.$modelValue;
+  $scope.addComment = function(nodeData){
+    $scope.requestNewNode = "";
+    $scope.setStyle(2);
 
-    var newNode = $scope.initializeNode("COMMENT");
-    newNode.parent_id = nodeData.id;
-    newNode.request = $scope.request;
-    newNode.visibilities = nodeData['visibilities'];
+    $scope.model.newNode = $scope.initializeNode("COMMENT");
+    $scope.model.newNode.parent_id = nodeData.id;
+    $scope.model.newNode.request = $scope.request;
+    $scope.model.newNode.visibilities = nodeData['visibilities'];
+  };
 
-    Issue.newIssue(newNode,newNode['state'],newNode['visibilities'],
+
+  $scope.saveChild = function() {
+    $scope.model.newNode.request = $scope.requestNewNode;
+    Issue.newIssue($scope.model.newNode,$scope.model.newNode['state'],$scope.model.newNode['visibilities'],
       function(data) {
+        $scope.setStyle(0);
         $scope.getIssues();
         $scope.request = null;
       },
       function(error) {
+        $scope.setStyle(0);
         Notifications.message(error);
       }
     );
-  };
+  }
 
-
-
+  $scope.cancelChild = function() {
+    $scope.setStyle(0);
+  }
 
   $scope.createNode = function(){
     var newNode = $scope.initializeNode("PENDING");
@@ -240,6 +244,7 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
 
   $scope.initialize = initialize;
   function initialize() {
+    $scope.model.newNode = null;
     $scope.getIssues();
   }
 

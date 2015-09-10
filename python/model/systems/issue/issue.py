@@ -173,8 +173,7 @@ class Issue:
         if issue is None or userId is None or 'id' not in issue or issue['id'] is None:
             return None
 
-        params = (issue['request'] if 'request' in issue and issue['request'] is not None else '',
-                  userId,
+        params = (userId,
                   issue['parent_id'] if 'parent_id' in issue else None,
                   issue['assigned_id'] if 'assigned_id' in issue else None,
                   issue['priority'] if 'priority' in issue and issue['priority'] is not None else 0,
@@ -184,7 +183,7 @@ class Issue:
 
         cur = con.cursor()
         cur.execute('set timezone to %s',('UTC',))
-        cur.execute('update issues.request set request = %s, requestor_id = %s, related_request_id = %s, assigned_id = %s, priority = %s, office_id = %s where id = %s',(params))
+        cur.execute('update issues.request set requestor_id = %s, related_request_id = %s, assigned_id = %s, priority = %s, office_id = %s where id = %s',(params))
 
         # actualizo el estado
         if 'state' in issue and issue['state'] is not None:

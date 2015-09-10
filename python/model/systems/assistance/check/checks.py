@@ -17,7 +17,6 @@ from model.systems.assistance.check.hoursCheck import HoursCheck
 from model.systems.assistance.check.presenceCheck import PresenceCheck
 
 
-
 class ScheduleChecks:
 
     date = inject.attr(Date)
@@ -42,9 +41,9 @@ class ScheduleChecks:
         ]
 
     """
-    def _getCheckData(self,con,userId):
+    def _getCheckData(self, con, userId, date):
         cur = con.cursor()
-        cur.execute('select id,user_id,date,type,created from assistance.checks where user_id = %s order by date asc',(userId,))
+        cur.execute('select id,user_id,date,type,created from assistance.checks where user_id = %s order by date asc', (userId,))
         if cur.rowcount <= 0:
             return
 
@@ -56,9 +55,8 @@ class ScheduleChecks:
 
             for t in self.typesCheck:
                 if t.isTypeCheck(c[3]):
-                    current = t.create(c[0],c[1],c[2],cur)
+                    current = t.create(c[0], c[1], c[2], cur)
                     break
-
 
             if last is not None:
                 last['end'] = current['start']
@@ -70,11 +68,10 @@ class ScheduleChecks:
 
         return checks
 
-
     """
         obtiene los usuarios que tienen configurado algún chequeo
     """
-    def getUsersWithConstraints(self,con):
+    def getUsersWithConstraints(self, con):
         cur = con.cursor()
         cur.execute('select distinct user_id from assistance.checks')
         if cur.rowcount <= 0:
@@ -85,33 +82,29 @@ class ScheduleChecks:
             users.append(c[0])
         return users
 
-
-
-    def _findJustificationsForDate(self,justifications,date):
+    def _findJustificationsForDate(self, justifications, date):
         justs = []
         for j in justifications:
-            logging.debug('chequeando fecha : {} == {}'.format(j['begin'].date(),date.date()))
+            logging.debug('chequeando fecha : {} == {}'.format(j['begin'].date(), date.date()))
             if j['begin'].date() == date.date():
                 justs.append(j)
         return justs
 
-    def _findGeneralJustificationsForDate(self,justifications,date):
+    def _findGeneralJustificationsForDate(self, justifications, date):
         justs = []
         for j in justifications:
-            logging.debug('chequeando fecha : {} == {}'.format(j['begin'].date(),date.date()))
+            logging.debug('chequeando fecha : {} == {}'.format(j['begin'].date(), date.date()))
             if j['begin'].date() == date.date():
                 justs.append(j)
         return justs
-
-
 
     """
         chequea la restricción del usuario entre determinadas fechas
         las fechas son aware.
     """
-    def checkConstraints(self,con,userId,start,end):
-        checks = self._getCheckData(con,userId)
-        logging.debug('checks %s',(checks,))
+    def checkConstraints(self, con, userId, start, end):
+        checks = self._getCheckData(con, userId, start)
+        logging.debug('checks %s', (checks,))
 
         if (checks is None) or (len(checks) <= 0):
             return []
@@ -246,7 +239,6 @@ class ScheduleChecks:
         return fails
     '''
 
-
     """
         chequea el schedule de la fecha pasada como parámetro (se supone aware)
         los logs de agrupan por schedule.
@@ -254,15 +246,15 @@ class ScheduleChecks:
 
         controls = [{schdule:{},whs:[]}]
     """
-    def checkSchedule(self,con,userId,date):
+    def checkSchedule(self, con, userId, date):
 
         date = self.date.awareToUtc(date)
 
 
-        schedules = self.schedule.getSchedule(con,userId,date)
-        logs = self.schedule.getLogsForSchedule(con,userId,date)
-        whs,attlogs = self.logs.getWorkedHours(logs)
-        controls = self.schedule.combiner(schedules,whs)
+        schedules = self.schedule.getSchedule(con, userId, date)
+        logs = self.schedule.getLogsForSchedule(con, userId, date)
+        whs, attlogs = self.logs.getWorkedHours(logs)
+        controls = self.schedule.combiner(schedules, whs)
         # controls = list(utils.combiner(schedules,whs))
 
         fails = self.scheduleCheck.checkWorkedHours(con,userId,controls)

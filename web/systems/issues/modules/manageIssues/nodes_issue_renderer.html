@@ -19,7 +19,7 @@
         </div>
 
         <div>
-            <textarea class="orderText"  readonly ng-model="node.request" ng-class="{'tree': node.expanded}"  ng-click="expandInput(this)"></textarea>
+            <textarea readonly class="orderText"  ng-model="node.request" ng-class="{'tree': node.expanded}"  ng-click="expandInput(node)"></textarea>
 
             <div ng-class="{true:'descriptionExpanded',false:'descriptionClosed'}[node.descriptionExpanded]">
               {{node.created | date:"dd/MM/yyyy hh:mm" }}
@@ -27,8 +27,8 @@
             </div>
         </div>
     </div>
-    <div class="visbility">
-      <span class="text_visibility" ng-click="openVisibility(node)">Seleccionar visibilidad</span>
+    <div class="assigned-container">
+      <span class="text_assigned" ng-click="openAssigned(node)">Asignado a:</span>
     </div>
     <div class="orderIcons">
         <div class="btnState">
@@ -56,6 +56,6 @@
 
 
   <ol ui-tree-nodes ng-model="node.childrens" ng-class="{'angular-ui-tree-hidden': collapsed}">
-    <li  ng-repeat="node in node.childrens" ui-tree-node ng-include="'modules/nodes_renderer.html'">
+    <li  ng-repeat="node in node.childrens" ui-tree-node ng-include="'modules/manageIssues/nodes_issue_renderer.html'">
     </li>
   </ol>

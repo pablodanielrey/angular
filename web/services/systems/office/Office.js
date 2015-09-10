@@ -11,6 +11,9 @@ function Office($rootScope, $wamp, Session) {
   //retorna todas las oficinas
   services.getOffices = getOffices;
 
+  //retorna todas las oficinas en forma de arbol
+  services.getOfficesTree = getOfficesTree;
+
   // obtiene las oficinas que puede ver el usuario
   services.getOfficesByUser = getOfficesByUser;
 
@@ -29,8 +32,6 @@ function Office($rootScope, $wamp, Session) {
   // elimina el rol para usuario oficina
   services.deleteOfficeRole = deleteOfficeRole;
 
-  // busca las oficinas que se pasan como parametro
-  services.findOffices = findOffices;
 
   // -----------------------------------------------------------
   // --------------- FALTAN IMPLEMENTAR EN EL SERVER -----------
@@ -81,29 +82,29 @@ function Office($rootScope, $wamp, Session) {
   }
 
 
-    /*
-      obtiene todas las oficinas
-      res = [{
-              name:'',
-              parent:'' -- id de la oficina padre,
-              id:'',
-              email:'',
-              telephone:''
-            }]
-    */
-    function findOffices(ids,callbackOk,callbackError) {
-      $wamp.call('offices.offices.findOffices', [ids])
-      .then(function(res) {
-        if (res != null) {
-          callbackOk(res);
-        } else {
-          callbackError('Error');
-        }
-      },function(err) {
-        callbackError(err);
-      });
-    }
-
+  /*
+    obtiene todas las oficinas
+    res = [{
+            name:'',
+            parent:'' -- id de la oficina padre,
+            id:'',
+            email:'',
+            telephone:'',
+            childrens: []
+          }]
+  */
+  function getOfficesTree(callbackOk,callbackError) {
+    $wamp.call('offices.offices.getOfficesTree', [])
+    .then(function(res) {
+      if (res != null) {
+        callbackOk(res);
+      } else {
+        callbackError('Error');
+      }
+    },function(err) {
+      callbackError(err);
+    });
+  }
   /*
     obtiene las oficinas que puede ver el usuario
     res = [{
