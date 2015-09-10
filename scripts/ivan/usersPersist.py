@@ -29,12 +29,12 @@ class WampMain(ApplicationSession):
     @coroutine
     def onJoin(self, details):
         user = {
-            'dni':'31000567',
+            'dni':'31111120',
             'name':'Pepe',
             'lastname':'Pompin',
             'city':'La Plata',
             'country':'Argentina',
-            'address':'33 Nº 3333',
+            'address':'33 Nº 3335',
             'genre':'Masculino',
             'birthdate':datetime.datetime(1980, 7, 20),
             'residence_city':'La Plata',
@@ -44,7 +44,7 @@ class WampMain(ApplicationSession):
 
         user = {
             'id': userId,
-            'dni':'31000568',
+            'dni':'31111121',
             'name':'Pepe',
             'lastname':'Pompin',
             'city':'La Plata',
