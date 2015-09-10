@@ -85,11 +85,7 @@ class UsersWamp(ApplicationSession):
     def persistUser(self, user):
         con = self._getDatabase()
         try:
-            if 'id' not in user or not user['id']:
-                userId = self.users.createUser(con, user)
-            else:
-                self.users.updateUser(con, user)
-                userId = user['id']
+            userId = self.users.updateUser(con, user)
 
             con.commit()
             return userId
@@ -126,9 +122,8 @@ class UsersWamp(ApplicationSession):
     def findUsersIds(self):
         con = self._getDatabase()
         try:
-            # codigo
-            con.commit()
-            return []
+            usersIds = self.users.listUsersIds(con)
+            return usersIds
 
         finally:
             con.close()
@@ -212,10 +207,6 @@ class UsersWamp(ApplicationSession):
     def deleteMail(self, id):
         con = self._getDatabase()
         try:
-            email = self.users.findMail(con, id)
-            if email is None:
-                return True
-
             self.users.deleteMail(con, email['id'])
             con.commit()
             return True
@@ -287,6 +278,20 @@ class UsersWamp(ApplicationSession):
             email['hash'] = None
 
             self.users.updateMail(con,email)
+
+            From = self.serverConfig.configs['mail_confirm_mail_from']
+            subject = self.serverConfig.configs['mail_confirm_mail_subject']
+            To = email['email']
+            template = self.serverConfig.configs['mail_confirm_mail_template']
+
+            url = self.serverConfig.configs['mail_mail_confirmed_template']
+            url = re.sub('###HASH###', hash, url)
+
+            replace = [
+                ('###URL###',url)
+            ]
+
+            self.mail.sendMail(From,[To],subject,replace,html=template)
 
             con.commit()
             return True

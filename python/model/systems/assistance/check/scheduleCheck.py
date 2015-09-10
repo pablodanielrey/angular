@@ -1,4 +1,5 @@
-import logging,inject
+import logging
+import inject
 import datetime
 from model.systems.assistance.date import Date
 from model.systems.assistance.schedule import Schedule
