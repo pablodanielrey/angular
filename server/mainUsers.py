@@ -9,7 +9,7 @@ if __name__ == '__main__':
     import inject
     sys.path.insert(0, '../python')
 
-    logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(level=logging.INFO)
 
     from autobahn.asyncio.wamp import ApplicationRunner
     from model.config import Config

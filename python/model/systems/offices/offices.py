@@ -137,6 +137,16 @@ class Offices:
             return None
 
 
+    '''
+    Busca una oficina
+    '''
+
+    def findOffices(self,con,ids):
+        offices = []
+        for id in ids:
+            offices.append(self.findOffice(con,id))
+        return offices
+
     ''' obtiene todas las oficinas '''
     def getOffices(self,con):
         cur = con.cursor()

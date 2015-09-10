@@ -312,25 +312,6 @@ class Digesto:
 
 
 
-    def findNormativeById(self,con,id):
-        cur = con.cursor()
-        cur.execute('select id,issuer_id,file_id,type,file_number,normative_number,date,created,creator_id,extract from digesto.normative where id = %s',(id,))
-        if (cur.rowcount <= 0):
-            return None
-        else:
-            status = self.getStatus(con,id)
-            visibility = self.getVisibility(con,id)
-            relateds = self.findRelateds(con,id)
-
-            normative = self._convertNormativeToDict(cur.fetchone(),status, visibility, relateds)
-
-            normative['issuer'] = self.offices.findOffice(con,normative['issuer_id'])
-            yearStr = normative['year'].strftime('%y')
-            normative['normative_number_full'] = normative['normative_number'] + '/' + yearStr[-2:]
-
-            return normative
-
-
     def deleteNormative(self,con,id):
         if id is None:
             return
@@ -417,3 +398,22 @@ class Digesto:
         # si no encontro nada busco por el contenido del archivo
 
         return normatives
+
+
+    def findNormativeById(self,con,id):
+        cur = con.cursor()
+        cur.execute('select id,issuer_id,file_id,type,file_number,normative_number,date,created,creator_id,extract from digesto.normative where id = %s',(id,))
+        if (cur.rowcount <= 0):
+            return None
+        else:
+            status = self.getStatus(con,id)
+            visibility = self.getVisibility(con,id)
+            relateds = self.findRelateds(con,id)
+
+            normative = self._convertNormativeToDict(cur.fetchone(),status, visibility, relateds)
+
+            normative['issuer'] = self.offices.findOffice(con,normative['issuer_id'])
+            yearStr = normative['year'].strftime('%y')
+            normative['normative_number_full'] = normative['normative_number'] + '/' + yearStr[-2:]
+
+            return normative

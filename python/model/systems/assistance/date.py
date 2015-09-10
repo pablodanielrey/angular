@@ -61,7 +61,7 @@ class Date:
         parsea una fecha y hora y la retorna el la zona local del servidor.
         si viene sin timezone entonces supone que esta en la zona del server.
     """
-    def parse(self,datestr):
+    def parse(self, datestr):
         dt = dateutil.parser.parse(datestr)
         if self.isNaive(dt):
             dt = self.localizeLocal(dt)

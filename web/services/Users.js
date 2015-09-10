@@ -13,8 +13,6 @@ function Users($rootScope, $wamp, Messages, Session, Utils, Cache, Config) {
     Cache.removeItem(instance.userPrefix + id);
   });
 
-
-
     this.deleteMail = function(id, callbackOk, callbackError) {
       $wamp.call('users.mails.deleteMail', [id])
         .then(function(res) {
@@ -135,12 +133,10 @@ function Users($rootScope, $wamp, Messages, Session, Utils, Cache, Config) {
       }, function(err) {
         callbackError(err);
       });
-
   }
 
 
   this.listUsers = function(search, callbackOk, callbackError) {
-
     $wamp.call('users.findUsersIds')
       .then(function(ids) {
         if (ids != null) {

@@ -32,6 +32,8 @@ function Office($rootScope, $wamp, Session) {
   // elimina el rol para usuario oficina
   services.deleteOfficeRole = deleteOfficeRole;
 
+  // busca las oficinas que se pasan como parametro
+  services.findOffices = findOffices;
 
   // -----------------------------------------------------------
   // --------------- FALTAN IMPLEMENTAR EN EL SERVER -----------

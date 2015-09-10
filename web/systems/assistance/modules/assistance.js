@@ -1,6 +1,8 @@
 var app = angular.module('mainApp');
 
-app.controller('AssistanceCtrl', ["$scope", "$timeout", "$window", "Profiles", "Session", "Users", "Assistance", "Notifications", "Utils", function($scope, $timeout, $window, Profiles, Session, Users, Assistance, Notifications, Utils) {
+app.controller('AssistanceCtrl', ["$scope", "$timeout", "$window", "Profiles", "Session", "Users", "Assistance", "Notifications", "Utils",
+
+function($scope, $timeout, $window, Profiles, Session, Users, Assistance, Notifications, Utils) {
 
 	$scope.model = {
 		session : null,

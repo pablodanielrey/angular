@@ -11,6 +11,7 @@ from model.config import Config
 from model.profiles import Profiles
 from model.systems.offices.offices import Offices
 
+
 class OfficesWamp(ApplicationSession):
 
     def __init__(self, config=None):
@@ -25,10 +26,11 @@ class OfficesWamp(ApplicationSession):
     def onJoin(self, details):
         logging.debug('registering methods')
         yield from self.register(self.getOffices_async, 'offices.offices.getOffices')
+        yield from self.register(self.findOffices_async, 'offices.offices.findOffices')
         yield from self.register(self.getOfficesByUser_async, 'offices.offices.getOfficesByUser')
         yield from self.register(self.getOfficesTree_async, 'offices.offices.getOfficesTree')
         yield from self.register(self.getOfficesTreeByUser_async, 'offices.offices.getOfficesTreeByUser')
-        yield from self.register(self.getOfficeUsers_async, 'offices.offices.getOfficesUsers')
+        yield from self.register(self.getOfficesUsers_async, 'offices.offices.getOfficesUsers')
         yield from self.register(self.getUserInOfficesByRole_async, 'offices.offices.getUserInOfficesByRole')
         yield from self.register(self.getOfficesByUserRole_async, 'offices.offices.getOfficesByUserRole')
         yield from self.register(self.deleteOfficeRole_async, 'offices.offices.deleteOfficeRole')
@@ -38,6 +40,7 @@ class OfficesWamp(ApplicationSession):
         yield from self.register(self.removeUserFromOffice_async, 'offices.offices.removeUserFromOffice')
         yield from self.register(self.addUserToOffices_async, 'offices.offices.addUserToOffices')
         yield from self.register(self.getRolesAdmin_async, 'offices.offices.getRolesAdmin')
+        yield from self.register(self.getUserOfficeRoles_async, 'offices.offices.getUserOfficeRoles')
 
     def _getDatabase(self):
         host = self.serverConfig.configs['database_host']
@@ -46,17 +49,31 @@ class OfficesWamp(ApplicationSession):
         passw = self.serverConfig.configs['database_password']
         return psycopg2.connect(host=host, dbname=dbname, user=user, password=passw)
 
-    def getOfficesByUser(self, sessionId, userId, tree):
+    '''
+        Obtiene los roles que tiene dentro de las oficinas el usuario
+    '''
+    def getUserOfficeRoles(self, userId):
         con = self._getDatabase()
         try:
-            if userId is None:
-                userId = self.profiles.getLocalUserId(sessionId)
-            return self.offices.getOfficesByUser(con,userId,tree)
+            return self.offices.getOfficesRoles(con, userId)
         finally:
             con.close()
 
     @coroutine
-    def getOfficesByUser_async(self, sessionId,userId, tree):
+    def getUserOfficeRoles_async(self, userId):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.getUserOfficeRoles, userId)
+        return r
+
+    def getOfficesByUser(self, userId, tree):
+        con = self._getDatabase()
+        try:
+            return self.offices.getOfficesByUser(con, userId, tree)
+        finally:
+            con.close()
+
+    @coroutine
+    def getOfficesByUser_async(self, sessionId, userId, tree):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.getOfficesByUser, sessionId, userId, tree)
         return r
@@ -226,15 +243,15 @@ class OfficesWamp(ApplicationSession):
         for officeId in officesId:
             for role in oldRoles:
                 roleName = role['name']
-                self.offices.deleteRole(con,userId,officeId,roleName)
+                self.offices.deleteRole(con, userId, officeId, roleName)
 
-    def _addRoles(self,con,userId,officesId,roles):
+    def _addRoles(self, con, userId, officesId, roles):
         for officeId in officesId:
             for role in roles:
                 if 'send_mail' in role:
-                    self.offices.addRole(con,userId,officeId,role['name'],sendMail)
+                    self.offices.addRole(con, userId, officeId, role['name'], sendMail)
                 else:
-                    self.offices.addRole(con,userId,officeId,role['name'])
+                    self.offices.addRole(con, userId, officeId, role['name'])
 
 
     def persistOfficeRole(self, officesId, usersId, roles, oldRoles):
@@ -369,4 +386,18 @@ class OfficesWamp(ApplicationSession):
     def getRolesAdmin_async(self, sessionId, userId, officesId, usersId):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.getRolesAdmin, sessionId, userId, officesId, usersId)
+        return r
+
+
+    def findOffices(self, ids):
+        con = self._getDatabase()
+        try:
+            return self.offices.findOffices(con,ids)
+        finally:
+            con.close()
+
+    @coroutine
+    def findOffices_async(self, ids):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.findOffices, ids)
         return r
