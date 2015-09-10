@@ -4,6 +4,7 @@
   <meta charset="utf-8"/>
   <meta name='viewport' content='width=device-width'/>
 
+
   <script src="/libs/bower_components/angularjs/angular.js"></script>
   <script src="/libs/bower_components/angular-route/angular-route.js"></script>
   <script src="/libs/bower_components/autobahn/autobahn.js"></script>
@@ -19,10 +20,9 @@
 
   <script type="text/javascript" src="/systems/issues/initializeApp.js"></script>
 
-  <!--archivos principales-->
-  <link rel="stylesheet" href="/systems/issues/index.css">
-  <script type="text/javascript" src="/systems/issues/index.js"></script>
-  <script type="text/javascript" src="/systems/issues/routes.js"></script>
+  <!-- ***** MENSAJES ***** -->
+  <script type="text/javascript" src="/modules/messages/messages.js"></script>
+  <link rel="stylesheet" type="text/css" href="/modules/messages/messages.css"/>
 
 	<!-- ***** SERVICIOS GENERALES ***** -->
 	<script type="text/javascript" src="/config.json"></script>
@@ -32,7 +32,6 @@
 	<script type="text/javascript" src="/services/Cache.js"></script>
 	<script type="text/javascript" src="/services/Session.js"></script>
 	<script type="text/javascript" src="/services/WebSocket.js"></script>
-	<script type="text/javascript" src="/services/Messages.js"></script>
 	<script type="text/javascript" src="/services/Notifications.js"></script>
 	<script type="text/javascript" src="/services/Systems.js"></script>
 	<script type="text/javascript" src="/services/Groups.js"></script>
@@ -44,11 +43,14 @@
 
   <!-- ***** SERVICIOS DE LA APLICACION ***** -->
 
+  <!--archivos principales-->
+  <link rel="stylesheet" href="/systems/issues/index.css">
+  <script type="text/javascript" src="/systems/issues/index.js"></script>
+  <script type="text/javascript" src="/systems/issues/routes.js"></script>
+
   <script type="text/javascript" src="/services/systems/issue/Issue.js"></script>
 
-	<!-- ***** MENSAJES ***** -->
-  <script type="text/javascript" src="/modules/messages/messages.js"></script>
-  <link rel="stylesheet" type="text/css" href="/modules/messages/messages.css"/>
+
 
   <!-- ***** MENU ***** -->
   <script type="text/javascript" src="/systems/issues/menu/menu.js"></script>
