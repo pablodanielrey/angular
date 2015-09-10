@@ -123,7 +123,6 @@ class UsersWamp(ApplicationSession):
         con = self._getDatabase()
         try:
             usersIds = self.users.listUsersIds(con)
-            con.commit()
             return usersIds
 
         finally:
@@ -208,10 +207,6 @@ class UsersWamp(ApplicationSession):
     def deleteMail(self, id):
         con = self._getDatabase()
         try:
-            email = self.users.findMail(con, id)
-            if email is None:
-                return True
-
             self.users.deleteMail(con, email['id'])
             con.commit()
             return True

@@ -28,8 +28,8 @@ class WampMain(ApplicationSession):
 
     @coroutine
     def onJoin(self, details):
-        yield from self.call('users.mails.deleteMail', '5484d1ed-c6fb-4cb8-afa5-e2f9b77f60f2')
-        logging.info("********** ELIMINACION COMPLETA **********")
+        yield from self.call('users.mails.deleteMail', '29256a12-cc5f-4201-ae66-4836cbdaca23')
+        logging.info("********** ELIMINACION DE EMAIL REALIZADA **********")
 
 if __name__ == '__main__':
 

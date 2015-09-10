@@ -30,7 +30,7 @@ class WampMain(ApplicationSession):
         userIds = yield from self.call('users.findUsersIds')
 
         logging.info("********** ID DE USUARIOS **********")
-        logging.info(len(userId))
+        logging.info(len(userIds))
         logging.info("Primer id:" + userIds[0])
 
 
