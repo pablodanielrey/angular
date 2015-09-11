@@ -218,6 +218,21 @@ class Users:
             rdataTelephones.append(self.convertTelephoneToDict(dataTelephone))
         rdataUser["telephones"] = rdataTelephones
         return rdataUser
+        
+    '''
+     ' Buscar usuarios a traves de una lista de ids
+     '''
+    def findUsersByIds(self,con,ids):
+        cur = con.cursor()
+        cur.execute('select id,dni,name,lastname,city,country,address,genre,birthdate,residence_city,version from profile.users where id IN %s', (tuple(ids),))
+        data = cur.fetchall()
+               
+        rdata = []
+        for d in data:
+            rdata.append(self.convertUserToDict(d))
+        return rdata
+        
+     
 
 
     def listUsers(self, con):

@@ -140,9 +140,8 @@ class UsersWamp(ApplicationSession):
     def findUsersByIds(self, ids):
         con = self._getDatabase()
         try:
-            # codigo
-            con.commit()
-            return []
+            usersIds = self.users.findUsersByIds(con, ids)
+            return usersIds
 
         finally:
             con.close()
