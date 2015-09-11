@@ -50,7 +50,7 @@ class WampCamaras(ApplicationSession):
     def findRecordings(self, start,end,camaras):
         con = self._getDatabase()
         try:
-            return self.camaras.efindRecordings(con,start,end,camaras)
+            return self.camaras.findRecordings(con,start,end,camaras)
 
         finally:
             con.close()
