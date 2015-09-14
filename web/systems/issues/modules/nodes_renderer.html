@@ -9,7 +9,7 @@
           </div>
         </div>
 
-      <div class="btnExpComment">
+        <div class="btnExpComment">
           <div ng-if="collapsed">
               <button class="btn cO fa fa-plus-square"  ng-click="toggleNode(this)" ></button>
           </div>
@@ -19,7 +19,7 @@
         </div>
 
         <div>
-            <textarea class="orderText"  readonly ng-model="node.request" ng-class="{'tree': node.expanded}"  ng-click="expandInput(this)"></textarea>
+            <textarea class="orderText"  readonly ng-model="node.request"  ng-click="expandInput(this)"></textarea>
 
             <div ng-class="{true:'descriptionExpanded',false:'descriptionClosed'}[node.descriptionExpanded]">
               {{node.created | date:"dd/MM/yyyy hh:mm" }}
@@ -27,6 +27,7 @@
             </div>
         </div>
     </div>
+
     <div class="visbility">
       <span class="text_visibility" ng-click="openVisibility(node)">Seleccionar visibilidad</span>
     </div>
@@ -39,7 +40,7 @@
         </div>
 
         <div class="btnDataOrder">
-            <button class="btn cB fa fa-caret-square-o-down" title="Datos del Pedido" ng-click="toggleNodeData(this)"></button>
+            <button class="btn cB fa fa-caret-square-o-down" title="Datos del Pedido" ng-click="toggleNodeData(node)"></button>
         </div>
 
         <div>
@@ -52,7 +53,7 @@
             <button class="btn cR fa fa-trash" title="Eliminar Pedido" ng-click="deleteNode(this)"></button>
         </div>
     </div>
-  </div>
+</div>
 
 
   <ol ui-tree-nodes ng-model="node.childrens" ng-class="{'angular-ui-tree-hidden': collapsed}">

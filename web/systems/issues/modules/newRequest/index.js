@@ -75,9 +75,8 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
    * Interruptor para visualizar descripcion del nodo
    * @param {type} nodeScope
    */
-  $scope.toggleNodeData = function (nodeScope) {
-    var nodeData = nodeScope.$modelValue;
-    nodeData.collapsedDescription = !nodeData.collapsedDescription
+  $scope.toggleNodeData = function (node) {
+    node.descriptionExpanded = !node.descriptionExpanded;
   };
 
 
@@ -187,7 +186,8 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
 
 
   $scope.loadDataNode = function(node) {
-    Users.findUser(node.requestor_id,
+    console.log(node);
+    Users.findUser(node.creator,
       function(user) {
         node.requestor = user.name + " " + user.lastname;
       },
@@ -196,6 +196,7 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
     );
 
     node.collapsedDescription = false;
+    node.descriptionExpanded = false;
     node.style = $scope.setNodeStyleByState(node.state);
     for (var i = 0; i < node.childrens.length; i++) {
       $scope.loadDataNode(node.childrens[i]);
