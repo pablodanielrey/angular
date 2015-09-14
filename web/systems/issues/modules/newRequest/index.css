@@ -131,6 +131,12 @@
   border-radius: 2px;
 }
 
+.issues .btnState {
+  font-size: 13px;
+  color:black;
+  font-weight: bold;
+}
+
 /* COLORES DE LOS BOTONES */
 
 .issues .cB { /* AZUL */
@@ -146,9 +152,16 @@
 }
 
 .issues .cR { /* ROJO */
-  background-color: #e43e46
+  background-color: #e43e46;
 }
 
+.issues .cV { /* VIOLETA */
+  background-color: #804080;
+}
+
+.issues .cGR { /*GRIS */
+  background-color: #BEBEBE;
+}
 
 /*******************************************************
 ************ PANTALLA SELLECION DE OFICINAS ************
@@ -199,7 +212,12 @@
 }
 
 .issues .contentScreens.displayCreateChild .newCommentForm { /*MIUESTRA PANTALLA NUEVO COMENTARIO */
-  display:block;
+  position: absolute;
+  display: block;
+  background-color: rgba(0,0,0,0.9);
+  height: 100%;
+  width: 100%;
+  top:0;
 }
 
 /*************** PANTALLA SELECCION DE OFICINAS ***************/
