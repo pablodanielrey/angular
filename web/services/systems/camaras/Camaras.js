@@ -11,7 +11,7 @@ function Camaras($rootScope,$wamp,Session) {
 
   function findAllCamaras(callbackOk,callbackError) {
     sessionId = Session.getSessionId();
-    $wamp.call('camaras.camaras.findAllCamaras', [])
+    $wamp.call('camaras.camaras.findAllCameras', [])
     .then(function(res) {
       if (res != null) {
         callbackOk(res);

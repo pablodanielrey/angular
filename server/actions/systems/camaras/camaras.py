@@ -22,7 +22,7 @@ class WampCamaras(ApplicationSession):
     @coroutine
     def onJoin(self, details):
         logging.debug('registering methods')
-        yield from self.register(self.findAllCamaras_async, 'camaras.camaras.findAllCamaras')
+        yield from self.register(self.findAllCameras_async, 'camaras.camaras.findAllCameras')
         yield from self.register(self.findRecordings_async, 'camaras.camaras.findRecordings')
 
     def _getDatabase(self):
@@ -33,18 +33,18 @@ class WampCamaras(ApplicationSession):
         return psycopg2.connect(host=host, dbname=dbname, user=user, password=passw)
 
 
-    def findAllCamaras(self):
+    def findAllCameras(self):
         con = self._getDatabase()
         try:
-            return self.camaras.findAllCamaras(con)
+            return self.camaras.findAllCameras(con)
 
         finally:
             con.close()
 
     @coroutine
-    def findAllCamaras_async(self):
+    def findAllCameras_async(self):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.findAllCamaras)
+        r = yield from loop.run_in_executor(None, self.findAllCameras)
         return r
 
     def findRecordings(self, start,end,camaras):
