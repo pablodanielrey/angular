@@ -44,10 +44,13 @@
         ************* PANTALLA PARA UN COMENTARIO *****************
         ******************************************************* -->
         <div class="newCommentForm">
-          <textarea ng-model="requestNewNode"></textarea>
-          <div class="actions">
-            <button ng-click="cancelChild()">Cancelar</button>
-            <button ng-click="saveChild()">Guardar</button>
+          <div class="contentComment">
+              <h3><i class="fa fa-comments"></i> CREAR COMENTARIO </h3>
+              <textarea class="textComment" ng-model="requestNewNode"></textarea>
+              <div class="actions">
+                <button class="btnSaveComment" title="Enviar Comentario" ng-click="saveChild()">Guardar</button>
+                <button class="btnCancelComment" title="Cancelar" ng-click="cancelChild()"><i class="fa fa-times"></i></button>
+              </div>
           </div>
         </div>
 

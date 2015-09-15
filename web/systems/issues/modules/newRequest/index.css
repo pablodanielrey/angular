@@ -171,6 +171,80 @@
   cursor:default;
 }
 
+/*******************************************************
+************** PANTALLA NUEVO COMENTARIO ***************
+*******************************************************/
+
+.issues .contentScreens .newCommentForm {
+  position: absolute;
+  display: block;
+  background-color: rgba(0,0,0,0.9);
+  height: 100%;
+  width: 100%;
+  top:0;
+
+
+
+}
+
+.issues .contentComment {
+  background-color:#eeeeee;
+  -webkit-box-shadow: 1px 1px 5px #5c5f69;
+  -moz-box-shadow: 5px 5px 5px #5c5f69;
+  border-radius:2px;
+  -webkit-border-radius:2px;
+  -moz-border-radius:2px;
+  padding: 20px;
+
+
+  position: absolute;
+  top: 50%; /* Buscamos el centro horizontal (relativo) del navegador */
+  left: 50%; /* Buscamos el centro vertical (relativo) del navegador */
+  width: 450px; /* Definimos el ancho del objeto a centrar */
+  height: 190px; /* Definimos el alto del objeto a centrar */
+  margin-top: -200px; /* Restamos la mitad de la altura del objeto con un margin-top */
+  margin-left: -350px; /* Restamos la mitad de la anchura del objeto con un margin-left */
+
+}
+
+.issues .textComment {
+  width: 99%;
+  height: 100px;
+  resize: none;
+  font-size: 18px;
+  padding: 2px;
+  border: 1px solid #e8dede;
+  margin-top: 10px;
+  margin-bottom: 5px;
+
+}
+
+.issues .actions {
+
+
+}
+
+.issues .btnSaveComment {
+  border: none;
+  padding: 8px;
+  margin: 2px;
+  background-color: #0066A6;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.issues .btnCancelComment {
+  border: none;
+  padding: 8px;
+  margin: 2px;
+  background-color: #e43e46;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 2px;
+}
 
 
 /*******************************************************
@@ -208,16 +282,14 @@
 /*************** PANTALLA NUEVO COMENTARIO ***************/
 
 .issues .contentScreens .newCommentForm { /* OCULTA PANTALLA DE NUEVO COMENTARIO */
-  display:none;
+  transform: translate3d(0,-100%,0);
+  transition: all 0.4s ease-in-out;
+
 }
 
 .issues .contentScreens.displayCreateChild .newCommentForm { /*MIUESTRA PANTALLA NUEVO COMENTARIO */
-  position: absolute;
-  display: block;
-  background-color: rgba(0,0,0,0.9);
-  height: 100%;
-  width: 100%;
-  top:0;
+  transform: translate3d(0,0,0);
+
 }
 
 /*************** PANTALLA SELECCION DE OFICINAS ***************/
