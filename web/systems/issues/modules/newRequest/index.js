@@ -184,6 +184,13 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
   };
 
 
+  $scope.getNodeRequest = function(node) {
+    if (node.request.length > 40) {
+      return node.request.substring(0,60) + '....';
+    } else {
+      return node.request;
+    }
+  }
 
   $scope.loadDataNode = function(node) {
     console.log(node);

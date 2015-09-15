@@ -19,11 +19,13 @@
         </div>
 
         <div>
-            <textarea class="orderText"  readonly ng-model="node.request"  ng-click="expandInput(this)"></textarea>
+            <div class="orderText" ng-click="toggleNodeData(node)">{{getNodeRequest(node)}}</div>
+            <!-- <textarea class="orderText"  readonly ng-model="node.request"  ng-click="expandInput(this)"></textarea> -->
 
             <div ng-class="{true:'descriptionExpanded',false:'descriptionClosed'}[node.descriptionExpanded]">
               {{node.created | date:"dd/MM/yyyy hh:mm" }}
               {{node.requestor}}
+              <textarea class="orderText"  readonly ng-model="node.request"></textarea>
             </div>
         </div>
     </div>
@@ -41,7 +43,7 @@
             <button class="btn cB fa fa-caret-square-o-down" title="Datos del Pedido" ng-click="toggleNodeData(node)"></button>
         </div>
 
-        <div class="visbility">
+        <div class="btnVisibility">
           <button class="btn cV fa fa-eye" title="Seleccionar Visibilidad" ng-click="openVisibility(node)"></button>
         </div>
 

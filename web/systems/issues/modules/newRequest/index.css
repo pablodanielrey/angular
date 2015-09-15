@@ -78,6 +78,12 @@
 *******************************************************/
 
 .issues .contentOrders { /*CONTENEDOR DE MIS PEDIDOS*/
+
+}
+
+.issues .contentMyIssues {
+  overflow-y: auto;
+  max-height: 390px;
 }
 
 .issues .issuesItems { /*CONTENEDOR DE CADA PEDIDO INDIVIDUAL*/
@@ -101,16 +107,21 @@
   width: 60%;
 }
 
-.orderText { /* TEXTO DE LOS PEDIDOS REALIZADO */
+.issues .dataIsues {
+  padding-right: 10px;
+}
+
+.issues .orderText { /* TEXTO DE LOS PEDIDOS REALIZADO */
   padding: 5px;
   background-color: white;
   border-color: #E3DFDF;
-  width: 500px;
-  height: 22px;
+  width: 600px;
+  height: 20px;
   resize: none;
   margin-top: 3px;
   margin-left: 5px;
   font-size: 1.2em;
+  padding: 7px;
 }
 
 
@@ -135,6 +146,14 @@
   font-size: 13px;
   color:black;
   font-weight: bold;
+}
+
+.issues .titleNewIssue {
+  height: initial;
+}
+
+.issues .titleNewComment {
+  height: initial;
 }
 
 /* COLORES DE LOS BOTONES */
@@ -195,8 +214,6 @@
   -webkit-border-radius:2px;
   -moz-border-radius:2px;
   padding: 20px;
-
-
   position: absolute;
   top: 50%; /* Buscamos el centro horizontal (relativo) del navegador */
   left: 50%; /* Buscamos el centro vertical (relativo) del navegador */
@@ -278,6 +295,10 @@
 .issues .orderItems.commentOrder .btnDataOrder  { /*OCULTA BOTON DATOS DEL PEDIDO */
   display:none;
 }
+.issues .orderItems.commentOrder .btnVisibility  { /*OCULTA BOTON VISIVILIDAD */
+  display:none;
+}
+
 
 /*************** PANTALLA NUEVO COMENTARIO ***************/
 
