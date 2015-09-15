@@ -9,7 +9,10 @@ logging.getLogger().setLevel(logging.DEBUG)
 from autobahn.asyncio.wamp import ApplicationSession
 from asyncio import coroutine
 
-
+'''
+python3 getOvertimeRequestsByUser state #retorna los requerimientos de todos los usuarios
+python3 getOvertimeRequestsByUser state userId1 userId2 userId3 ... #retorna los requerimientos de los usuarios con el id pasado como parametro
+'''
 
 def config_injector(binder):
     binder.bind(Config,Config('server-config.cfg'))
@@ -27,15 +30,26 @@ class WampMain(ApplicationSession):
 
     @coroutine
     def onJoin(self, details):
+        logging.info("********** REQUERIMIENTOS DE HORAS EXTRAS DE LOS USUARIOS **********")
+
+        if len(sys.argv) < 2:
+            sys.exit("Error de parámetros")
+
+        state = sys.argv[1]
+
+        if state != 'APPROVED' and state != 'PENDING' and state != 'REJECTED':
+            sys.exit("Error de parámetros")
+
+        logging.info("********** ESTADO: " + state + " **********")
+
+        states = [state]
 
         users = []
-        if len(sys.argv) > 1:
-            for i in range(1 , len(sys.argv)):
+        if len(sys.argv) > 2:
+            for i in range(2 , len(sys.argv)):
                 users.append(sys.argv[i])
 
-        requests = yield from self.call('overtime.getOvertimeRequestsByUsers', users)
-
-        logging.info("********** REQUERIMIENTOS DE HORAS EXTRAS DE LOS USUARIOS **********")
+        requests = yield from self.call('overtime.getOvertimeRequests', users, states)
 
         for request in requests:
             print(request)

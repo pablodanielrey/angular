@@ -34,10 +34,7 @@ class OvertimeWamp(ApplicationSession):
     @coroutine
     def onJoin(self, details):
         logging.debug('registering methods')
-        yield from self.register(self.getOvertimeRequestsByUsers_async, 'overtime.getOvertimeRequestsByUsers')
-        yield from self.register(self.getOvertimeRequestsByUsers_async, 'overtime.getOvertimeRequestsToManage')
-        yield from self.register(self.getOvertimeRequestsByUsers_async, 'overtime.updateOvertimeRequestStatus')
-        yield from self.register(self.getOvertimeRequestsByUsers_async, 'overtime.requestOvertime')
+        yield from self.register(self.getOvertimeRequests_async, 'overtime.getOvertimeRequests')
 
 
     def _getDatabase(self):
@@ -50,18 +47,21 @@ class OvertimeWamp(ApplicationSession):
 
     '''
      ' Obtener requerimiento de overtime a partir de una una lista de usuarios
+     ' @param usersIds Lista de usuarios, si es una lista vacia retorna todos los usuarios
+     ' @param states Lista de estados, si es una lista vacia retorna todos los estados
+     '      [APPROVED, PENDING, REJECTED]'
      '''
-    def getOvertimeRequestsByUsers(self, users):
+    def getOvertimeRequests(self, usersIds, states):
         con = self._getDatabase()
         try:
-            requests = self.overtime.getOvertimeRequests(con,[],None,users)
+            requests = self.overtime.getOvertimeRequests(con,states,None,usersIds)
             return requests
 
         finally:
             con.close()
 
     @coroutine
-    def getOvertimeRequestsByUsers_async(self, users):
+    def getOvertimeRequests_async(self, usersIds, states):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getOvertimeRequestsByUsers, users)
+        r = yield from loop.run_in_executor(None, self.getOvertimeRequests, usersIds, states)
         return r
