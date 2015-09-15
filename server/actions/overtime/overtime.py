@@ -36,6 +36,7 @@ class OvertimeWamp(ApplicationSession):
         logging.debug('registering methods')
         yield from self.register(self.getOvertimeRequests_async, 'overtime.getOvertimeRequests')
         yield from self.register(self.getOvertimeRequestsToManage_async, 'overtime.getOvertimeRequestsToManage')
+        yield from self.register(self.requestOvertime_async, 'overtime.requestOvertime')
 
 
 
@@ -90,4 +91,30 @@ class OvertimeWamp(ApplicationSession):
     def getOvertimeRequestsToManage_async(self,userId, states=[], group='ROOT'):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.getOvertimeRequestsToManage, userId, states, group)
+        return r
+        
+        
+        
+    '''
+     ' Solicitar requerimiento de horas extra
+     ' @param requestorId Id de usuario que solicita el requerimiento
+     ' @param userId Id del usuario para quien se solicita el requerimiento
+     ' @param begin Fecha y hora de inicio de solicitud
+     ' @param end Fecha y hora de fin de la solicitud
+     ' @param reason Razon de la solicitud
+     '''
+    def requestOvertime(self, requestorId, userId, begin, end, reason):
+        con = self._getDatabase()
+        try:            
+            overtimeId = self.overtime.requestOvertime(con, requestorId, userId, begin, end, reason)
+            con.commit()
+            return overtimeId
+
+        finally:
+            con.close()
+
+    @coroutine
+    def requestOvertime_async(self, requestorId, userId, begin, end, reason):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.requestOvertime, requestorId, userId, begin, end, reason)
         return r
