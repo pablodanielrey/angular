@@ -1,16 +1,17 @@
 import logging
 import sys
 import inject
-import datetime
-sys.path.insert(0,'../../python')
+sys.path.insert(0,'../../../python')
 
 from model.config import Config
-logging.getLogger().setLevel(logging.DEBUG)
+logging.getLogger().setLevel(logging.INFO)
 
 from autobahn.asyncio.wamp import ApplicationSession
 from asyncio import coroutine
 
-
+'''
+python3 listUsers.py
+'''
 
 def config_injector(binder):
     binder.bind(Config,Config('server-config.cfg'))
@@ -28,9 +29,13 @@ class WampMain(ApplicationSession):
 
     @coroutine
     def onJoin(self, details):
-        yield from self.call('users.mails.sendEmailConfirmation', '70574fb8-f31e-4e01-a3d5-c128bec4ba20')
+        logging.info("********** USUARIOS **********")
+        users = yield from self.call('users.listUsers')
+        for user in users:
+            logging.info(user)
 
-        logging.info("********** CONFIRMACION POR EMAIL ENVIADA **********")
+
+
 
 if __name__ == '__main__':
 

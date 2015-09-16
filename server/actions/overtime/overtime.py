@@ -37,6 +37,7 @@ class OvertimeWamp(ApplicationSession):
         yield from self.register(self.getOvertimeRequests_async, 'overtime.getOvertimeRequests')
         yield from self.register(self.getOvertimeRequestsToManage_async, 'overtime.getOvertimeRequestsToManage')
         yield from self.register(self.requestOvertime_async, 'overtime.requestOvertime')
+        yield from self.register(self.updateStatus_async, 'overtime.updateStatus')
 
 
 
@@ -80,7 +81,7 @@ class OvertimeWamp(ApplicationSession):
      '''
     def getOvertimeRequestsToManage(self, userId, states, group):
         con = self._getDatabase()
-        try:            
+        try:
             requests = self.overtime.getOvertimeRequestsToManage(con, userId, states, group)
             return requests
 
@@ -92,9 +93,9 @@ class OvertimeWamp(ApplicationSession):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.getOvertimeRequestsToManage, userId, states, group)
         return r
-        
-        
-        
+
+
+
     '''
      ' Solicitar requerimiento de horas extra
      ' @param requestorId Id de usuario que solicita el requerimiento
@@ -105,7 +106,7 @@ class OvertimeWamp(ApplicationSession):
      '''
     def requestOvertime(self, requestorId, userId, begin, end, reason):
         con = self._getDatabase()
-        try:            
+        try:
             overtimeId = self.overtime.requestOvertime(con, requestorId, userId, begin, end, reason)
             con.commit()
             return overtimeId
@@ -117,4 +118,28 @@ class OvertimeWamp(ApplicationSession):
     def requestOvertime_async(self, requestorId, userId, begin, end, reason):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.requestOvertime, requestorId, userId, begin, end, reason)
+        return r
+
+
+
+    '''
+     ' Actualizar estado de overtime
+     ' @param userId Id del usuario quien solicita el cambio de estado
+     ' @param requestId Id del requerimiento de hora extra
+     ' @param status Nuevo estado
+     '''
+    def updateStatus(self, userId, requestId, status):
+        con = self._getDatabase()
+        try:
+            events = self.overtime.updateOvertimeRequestStatus(con, userId, requestId, status)
+            con.commit()
+            return events
+
+        finally:
+            con.close()
+
+    @coroutine
+    def updateStatus_async(self, userId, requestId, status):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.updateStatus, userId, requestId, status)
         return r

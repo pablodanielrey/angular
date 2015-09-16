@@ -2,7 +2,7 @@ import logging
 import sys
 import inject
 import datetime
-sys.path.insert(0,'../../python')
+sys.path.insert(0,'../../../python')
 
 from model.config import Config
 logging.getLogger().setLevel(logging.DEBUG)
@@ -10,6 +10,10 @@ logging.getLogger().setLevel(logging.DEBUG)
 from autobahn.asyncio.wamp import ApplicationSession
 from asyncio import coroutine
 
+'''
+python3 updateStatus.py userId requestId status
+python3 updateStatus.py 1 1b4a8f46-9d9f-48a8-8ddb-078d361f8e05 APPROVED
+'''
 
 
 def config_injector(binder):
@@ -28,15 +32,18 @@ class WampMain(ApplicationSession):
 
     @coroutine
     def onJoin(self, details):
-        email = {
-            'user_id':'d44e92c1-d277-4a45-81dc-a72a76f6ef8d',
-            'email':'ivancito@gmail.com',
-            'confirmed':True,
-        }
-        emailId = yield from self.call('users.mails.persistMail', email)
+        logging.info("********** MODIFICAR ESTADO DE REQUERIMIENTO DE HORA EXTRA **********")
 
-        logging.info("********** ID DEL EMAIL PERSISTIDO **********")
-        logging.info(emailId)
+        if len(sys.argv) < 4:
+            sys.exit("Error de parámetros")
+
+
+        userId = sys.argv[1]
+        requestId = sys.argv[2]
+        status = sys.argv[3]
+
+        overtimeId = yield from self.call('overtime.updateStatus', userId, requestId, status)
+
 
 if __name__ == '__main__':
 
