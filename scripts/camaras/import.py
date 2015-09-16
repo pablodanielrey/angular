@@ -52,7 +52,7 @@ class Import:
                     rec['size'] = array[0]
                     rec['file_name'] = array[1]
                     rec['fps'] = 15
-                    rec['source'] = source + '/' + rec['file_name']
+                    rec['source'] = 'http://camaras.econo.unlp.edu.ar/' + rec['file_name']
                     rec['duration'] = '01:00:00'
 
                     arrayName = rec['file_name'].split('_')

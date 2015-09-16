@@ -53,30 +53,31 @@ class Camaras:
             rend timestamptz NOT NULL,
             size VARCHAR NOT NULL,
             file_name VARCHAR,
-            camera_id VARCHAR REFERENCES camera.camera (id)
+            camera_id VARCHAR REFERENCES camera.camera (id),
+            duration VARCHAR
           );
     '''
 
     def _convertRecordingToDict(self,rec,camera):
-        displayName = camera['number'] + ' - ' + camera['floor']
+        displayName = str(camera['number']) + ' - ' + camera['floor']
         start = rec[3]
         end = rec[4]
-        duration = end - start
-        return {'id':rec[0],'displayName':displayName,'start':start,'end':end,'size':rec[5],'duration':duration,'fileName':rec[6],'src':rec[2],'fps':rec[1],'camera':camera}
+        return {'id':rec[0],'displayName':displayName,'start':start,'end':end,'size':rec[5],'duration':rec[8],'fileName':rec[6],'src':rec[2],'fps':rec[1],'camera':camera}
 
 
     def findRecordings(self,con,start,end,cameras):
         cur = con.cursor()
         if cameras is None or len(cameras) == 0:
-            cur.execute('SELECT id,fps,source,start,rend,size,file_name,camera_id FROM camera.recording WHERE start >= %s and rend <= %s',(start,end))
+            cur.execute('SELECT id,fps,source,start,rend,size,file_name,camera_id,duration FROM camera.recording WHERE start >= %s and rend <= %s',(start,end))
         else:
-            cur.execute('SELECT id,fps,source,start,rend,size,file_name,camera_id FROM camera.recording WHERE start >= %s and rend <= %s and camera_id in %s',(start,end,cameras))
+            cur.execute('SELECT id,fps,source,start,rend,size,file_name,camera_id,duration FROM camera.recording WHERE start >= %s and rend <= %s and camera_id in %s',(start,end,cameras))
         if cur.rowcount <= 0:
             return []
         recordings = []
         for r in cur:
             camera = self.findCamera(con,r[7])
             recordings.append(self._convertRecordingToDict(r,camera))
+
         return recordings
 
 
@@ -108,7 +109,8 @@ class Camaras:
                   end,
                   rec['size'] if 'size' in rec else '0',
                   rec['file_name'] if 'file_name' in rec else None,
-                  rec['camera_id'] if 'camera_id' in rec else None
+                  rec['camera_id'] if 'camera_id' in rec else None,
+                  rec['duration'] if 'duration' in rec else '00:00:00',
                  )
 
         cur = con.cursor()
@@ -117,7 +119,7 @@ class Camaras:
         if 'id' not in rec or rec['id'] is None:
             id = str(uuid.uuid4())
             params = params + (id,)
-            cur.execute('insert into camera.recording (fps,source,start,rend,size,file_name,camera_id,id) values (%s,%s,%s,%s,%s,%s,%s,%s)',params)
+            cur.execute('insert into camera.recording (fps,source,start,rend,size,file_name,camera_id,duration,id) values (%s,%s,%s,%s,%s,%s,%s,%s,%s)',params)
         else:
             params = params + (rec['id'],)
-            cur.execute('update camera.recording set fps = %s, source = %s, start = %s, rend = %s, size = %s, file_name = %s, camera_id = %s  where id = %s',params)
+            cur.execute('update camera.recording set fps = %s, source = %s, start = %s, rend = %s, size = %s, file_name = %s, camera_id = %s, duration = %s  where id = %s',params)

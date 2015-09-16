@@ -17,5 +17,6 @@ CREATE SCHEMA camera;
     rend timestamptz NOT NULL,
     size VARCHAR NOT NULL,
     file_name VARCHAR,
-    camera_id VARCHAR REFERENCES camera.camera (id)
+    camera_id VARCHAR REFERENCES camera.camera (id),
+    duration VARCHAR
   );
