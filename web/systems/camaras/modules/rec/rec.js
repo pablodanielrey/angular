@@ -2,9 +2,9 @@ angular
     .module('mainApp')
     .controller('RecordController',RecordController);
 
-RecordController.$inject = ['$scope','$timeout','$sce','Camaras'];
+RecordController.$inject = ['$scope','$timeout','$filter','$sce','Camaras'];
 
-function RecordController($scope,$timeout,$sce,Camaras) {
+function RecordController($scope,$timeout,$filter,$sce,Camaras) {
 
     $scope.model = {
       recordings:[],
@@ -29,6 +29,7 @@ function RecordController($scope,$timeout,$sce,Camaras) {
     };
 
 
+
 /* ---------------------------------------------------------------
  * ------------------- MANEJO DE LA VISTA ------------------------
  * ---------------------------------------------------------------
@@ -37,6 +38,7 @@ function RecordController($scope,$timeout,$sce,Camaras) {
     $scope.initialize = initialize;
     $scope.initializeCamaras = initializeCamaras;
     $scope.setStyle = setStyle;
+    $scope.order = order;
 
     function initialize() {
       $scope.view.displayListRecordings = false;
@@ -66,6 +68,10 @@ function RecordController($scope,$timeout,$sce,Camaras) {
     function setStyle(index) {
       $scope.view.style = $scope.view.styles[index];
     }
+
+    function order(predicate, reverse) {
+      $scope.model.recordings = $filter('orderBy')($scope.model.recordings, predicate, reverse);
+    };
 
 
     $scope.$watch('model.filter.start', function(newValue, oldValue) {

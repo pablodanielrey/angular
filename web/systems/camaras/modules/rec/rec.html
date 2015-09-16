@@ -36,19 +36,19 @@
               <input type="checkbox" title="Seleccionar Todas" ng-change="selectAll()" ng-model="view.selectAll">
           </div>
           <div class="tam2">
-              <span><i class="fa fa-video-camera"></i> Camara </span>
+              <span ng-click="view.reverseCamera=!view.reverseCamera;order(['camera.floor','camera.number','start'],view.reverseCamera)"><i class="fa fa-video-camera"></i> Camara </span>
           </div>
           <div class="tam1">
-              <span><i class="fa fa-calendar-o"></i> Fecha</span>
+              <span ng-click="view.reverseDate=!view.reverseDate;order(['start','camera.floor','camera.number'],view.reverseDate)"><i class="fa fa-calendar-o"></i> Fecha</span>
           </div>
           <div class="tam1">
-              <span><i class="fa fa-clock-o"></i> Hora</span>
+              <span ng-click="view.reverseHour=!view.reverseHour;order([],view.reverseHour)"><i class="fa fa-clock-o"></i> Hora</span>
           </div>
           <div class="tam1">
-              <span><i class="fa fa-clock-o"></i> Duración</span>
+              <span ng-click="view.reverseDuration=!view.reverseDuration;order(['duration','start','camera.floor','camera.number'],view.reverseDuration)"><i class="fa fa-clock-o"></i> Duración</span>
           </div>
           <div class="tam1">
-              <span><i class="fa fa-file-video-o"></i> Tamaño</span>
+              <span ng-click="view.reverseSize=!view.reverseSize;order(['size','camera.floor','camera.number','start'],view.reverseSize)"><i class="fa fa-file-video-o"></i> Tamaño</span>
           </div>
           <div class="tam2">
             <span><i class="fa fa-bars"></i> Acción</span>
@@ -67,7 +67,7 @@
                    <span><i class="fa fa-calendar-o"></i> {{item.start | date: "dd/MM/yyyy"}}</span>
                </div>
                <div class="tam1">
-                   <span><i class="fa fa-clock-o"></i> {{item.start | date: "hh:mm"}}</span>
+                   <span><i class="fa fa-clock-o"></i> {{item.start | date: "HH:mm"}}</span>
                </div>
                <div class="tam1">
                    <span><i class="fa fa-clock-o"></i> {{item.duration}}</span>
