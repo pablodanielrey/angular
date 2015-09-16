@@ -27,6 +27,10 @@ class ScheduleChecks:
     scheduleCheck = ScheduleCheck()
     typesCheck = [scheduleCheck, HoursCheck(), PresenceCheck()]
 
+    ''' retorna los chequeos que están programados dentro del código actual '''
+    def getAvailableChecks(self):
+        return self.typesCheck
+
     """
         retorna una lista cronológica de los chequeos a realizar para el usuario.
         en el caso del chequeo de horas retora la cantidad de horas a chequear.
