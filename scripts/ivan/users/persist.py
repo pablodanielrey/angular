@@ -2,7 +2,7 @@ import logging
 import sys
 import inject
 import datetime
-sys.path.insert(0,'../../python')
+sys.path.insert(0,'../../../python')
 
 from model.config import Config
 logging.getLogger().setLevel(logging.DEBUG)
@@ -10,7 +10,10 @@ logging.getLogger().setLevel(logging.DEBUG)
 from autobahn.asyncio.wamp import ApplicationSession
 from asyncio import coroutine
 
-
+'''
+python3 persist.py dni name lastname city country address genre birthdate residence_city
+python3 persist.py 31111120 "Pepe Pipo" "Pompin Pampon" "La Plata" "Argentina" "31 Nro 94" "Masculino" "10/09/1984" "La Plata"
+'''
 
 def config_injector(binder):
     binder.bind(Config,Config('server-config.cfg'))
@@ -28,11 +31,18 @@ class WampMain(ApplicationSession):
 
     @coroutine
     def onJoin(self, details):
+        logging.info("********** PERSISTIR USUARIO **********")
+        birthdate = datetime.strptime("2000-10-10 00:00", "%Y-%m-%d %H:%M")
+        logging.info(birthdate.strftime("%Y-%m-%d"))
+        '''
         if len(sys.argv) < 10:
             sys.exit("Error de parámetros")
 
-        birthdate = datetime.strptime(sys.argv[8], "%d-%m-%Y")
+        print("cssssssssssssssss")
+        print(sys.argv[8])
 
+
+        print("bbbbbbbbbbbbb")
         user = {
             'dni':sys.argv[1],
             'name':sys.argv[2],
@@ -45,27 +55,11 @@ class WampMain(ApplicationSession):
             'residence_city':sys.argv[9],
             'version':0
         }
+
+        print("AAAAAAAAAAAA")
         userId = yield from self.call('users.persistUser', user)
-
-        user = {
-            'id': userId,
-            'dni':'31111121',
-            'name':'Pepe',
-            'lastname':'Pompin',
-            'city':'La Plata',
-            'country':'Argentina',
-            'address':'33 Nº 3333',
-            'genre':'Masculino',
-            'birthdate':datetime.datetime(1980, 7, 20),
-            'residence_city':'La Plata',
-            'version':0
-        }
-
-        userId = yield from self.call('users.persistUser', user)
-
-
-        logging.info("********** ID DEL USUARIO PERSISTIDO **********")
         logging.info(userId)
+        '''
 
 if __name__ == '__main__':
 

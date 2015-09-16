@@ -33,7 +33,7 @@ class WampMain(ApplicationSession):
         if len(sys.argv) < 8:
             sys.exit("Error de parámetros")
 
-        
+
         requestorId = sys.argv[1]
         userId = sys.argv[2]
         beginDate = sys.argv[3]
@@ -45,7 +45,7 @@ class WampMain(ApplicationSession):
         begin = datetime.strptime(beginDate + " " + beginTime, "%Y-%m-%d %H:%M")
         end = datetime.strptime(endDate + " " + endTime, "%Y-%m-%d %H:%M")
 
-     
+
         logging.info("********** SOLICITADO POR: " + requestorId + " **********")
         logging.info("********** USUARIO: " + userId + " **********")
         logging.info("********** INICIO: " + begin.strftime('%Y-%m-%d %H:%M') + " **********")

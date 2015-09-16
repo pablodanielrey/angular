@@ -2,7 +2,7 @@ import logging
 import sys
 import inject
 import datetime
-sys.path.insert(0,'../../python')
+sys.path.insert(0,'../../../python')
 
 from model.config import Config
 logging.getLogger().setLevel(logging.DEBUG)
@@ -10,6 +10,10 @@ logging.getLogger().setLevel(logging.DEBUG)
 from autobahn.asyncio.wamp import ApplicationSession
 from asyncio import coroutine
 
+'''
+python3 deleteById.py id
+python3 deleteById.py 29256a12-cc5f-4201-ae66-4836cbdaca23
+'''
 
 
 def config_injector(binder):
@@ -28,8 +32,14 @@ class WampMain(ApplicationSession):
 
     @coroutine
     def onJoin(self, details):
-        yield from self.call('users.mails.deleteMail', '29256a12-cc5f-4201-ae66-4836cbdaca23')
-        logging.info("********** ELIMINACION DE EMAIL REALIZADA **********")
+        logging.info("********** ELIMINAR EMAIL **********")
+
+        if len(sys.argv) < 2:
+            sys.exit("Error de parámetros")
+
+        id = sys.argv[1]
+
+        yield from self.call('users.mails.deleteMail', id)
 
 if __name__ == '__main__':
 

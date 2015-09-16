@@ -1,15 +1,18 @@
 import logging
 import sys
 import inject
-import datetime
-sys.path.insert(0,'../../python')
+sys.path.insert(0,'../../../python')
 
 from model.config import Config
-logging.getLogger().setLevel(logging.DEBUG)
+logging.getLogger().setLevel(logging.INFO)
 
 from autobahn.asyncio.wamp import ApplicationSession
 from asyncio import coroutine
 
+'''
+python3 findUsersByIds d44e92c1-d277-4a45-81dc-a72a76f6ef8d
+python3 findUsersByIds id1 id2 id3 ...
+'''
 
 
 def config_injector(binder):
@@ -28,9 +31,19 @@ class WampMain(ApplicationSession):
 
     @coroutine
     def onJoin(self, details):
-        yield from self.call('users.mails.sendEmailConfirmation', '70574fb8-f31e-4e01-a3d5-c128bec4ba20')
+        logging.info("********** USUARIOS **********")
 
-        logging.info("********** CONFIRMACION POR EMAIL ENVIADA **********")
+        if len(sys.argv) < 2:
+            sys.exit("Error de parámetros")
+
+        ids = []
+        for i in range(1 , len(sys.argv)):
+            ids.append(sys.argv[i])
+
+        users = yield from self.call('users.findUsersByIds', ids)
+        for user in users:
+            logging.info(user)
+
 
 if __name__ == '__main__':
 

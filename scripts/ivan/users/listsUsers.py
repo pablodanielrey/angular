@@ -1,7 +1,7 @@
 import logging
 import sys
 import inject
-sys.path.insert(0,'../../python')
+sys.path.insert(0,'../../../python')
 
 from model.config import Config
 logging.getLogger().setLevel(logging.INFO)
@@ -9,7 +9,9 @@ logging.getLogger().setLevel(logging.INFO)
 from autobahn.asyncio.wamp import ApplicationSession
 from asyncio import coroutine
 
-
+'''
+python3 listUsers.py
+'''
 
 def config_injector(binder):
     binder.bind(Config,Config('server-config.cfg'))
@@ -27,11 +29,12 @@ class WampMain(ApplicationSession):
 
     @coroutine
     def onJoin(self, details):
-        ids = ['d44e92c1-d277-4a45-81dc-a72a76f6ef8d']
-        users = yield from self.call('users.findUsersByIds', ids)
-
         logging.info("********** USUARIOS **********")
-        logging.info(len(users))
+        users = yield from self.call('users.listUsers')
+        for user in users:
+            logging.info(user)
+
+
 
 
 if __name__ == '__main__':
