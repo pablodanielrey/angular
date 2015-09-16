@@ -12,7 +12,7 @@ from asyncio import coroutine
 
 '''
 python3 persist.py dni name lastname city country address genre birthdate residence_city
-python3 persist.py 31111120 "Pepe Pipo" "Pompin Pampon" "La Plata" "Argentina" "31 Nro 94" "Masculino" "10/09/1984" "La Plata"
+python3 persist.py 31111120 "Pepe Pipo" "Pompin Pampon" "La Plata" "Argentina" "31 Nro 94" "Masculino" "25/09/1984" "La Plata"
 '''
 
 def config_injector(binder):
@@ -32,17 +32,11 @@ class WampMain(ApplicationSession):
     @coroutine
     def onJoin(self, details):
         logging.info("********** PERSISTIR USUARIO **********")
-        birthdate = datetime.strptime("2000-10-10 00:00", "%Y-%m-%d %H:%M")
-        logging.info(birthdate.strftime("%Y-%m-%d"))
-        '''
+
         if len(sys.argv) < 10:
             sys.exit("Error de parámetros")
 
-        print("cssssssssssssssss")
-        print(sys.argv[8])
-
-
-        print("bbbbbbbbbbbbb")
+        birthdate = datetime.datetime.strptime(sys.argv[8], "%d/%m/%Y").date()
         user = {
             'dni':sys.argv[1],
             'name':sys.argv[2],
@@ -56,10 +50,8 @@ class WampMain(ApplicationSession):
             'version':0
         }
 
-        print("AAAAAAAAAAAA")
         userId = yield from self.call('users.persistUser', user)
         logging.info(userId)
-        '''
 
 if __name__ == '__main__':
 

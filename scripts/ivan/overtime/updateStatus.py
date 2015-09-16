@@ -11,8 +11,8 @@ from autobahn.asyncio.wamp import ApplicationSession
 from asyncio import coroutine
 
 '''
-python3 requestOvertime.py requestorId userId begin end reason
-python3 requestOvertime.py 1 1 "01/09/2015 10:00" "01/09/2015 12:00" "Solicitud de prueba"
+python3 updateStatus.py userId requestId status
+python3 updateStatus.py 1 1b4a8f46-9d9f-48a8-8ddb-078d361f8e05 APPROVED
 '''
 
 
@@ -32,29 +32,18 @@ class WampMain(ApplicationSession):
 
     @coroutine
     def onJoin(self, details):
-        logging.info("********** CARGAR REQUERIMIENTO DE HORA EXTRA **********")
+        logging.info("********** MODIFICAR ESTADO DE REQUERIMIENTO DE HORA EXTRA **********")
 
-        if len(sys.argv) < 6:
+        if len(sys.argv) < 4:
             sys.exit("Error de parámetros")
 
 
-        requestorId = sys.argv[1]
-        userId = sys.argv[2]
-        beginParam = sys.argv[3]
-        endParam = sys.argv[4]
-        reason =  sys.argv[5]
+        userId = sys.argv[1]
+        requestId = sys.argv[2]
+        status = sys.argv[3]
 
-        begin = datetime.datetime.strptime(beginParam, "%d/%m/%Y %H:%M").date()
-        end = datetime.datetime.strptime(endParam, "%d/%m/%Y %H:%M").date()
+        overtimeId = yield from self.call('overtime.updateStatus', userId, requestId, status)
 
-        logging.info("********** SOLICITADO POR: " + requestorId + " **********")
-        logging.info("********** USUARIO: " + userId + " **********")
-        logging.info("********** INICIO: " + begin.strftime('%Y-%m-%d %H:%M') + " **********")
-        logging.info("********** FIN: " + end.strftime('%Y-%m-%d %H:%M') + " **********")
-
-        overtimeId = yield from self.call('overtime.requestOvertime', requestorId, userId, begin, end, reason)
-
-        logging.info(overtimeId)
 
 if __name__ == '__main__':
 
