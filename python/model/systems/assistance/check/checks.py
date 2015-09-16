@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
-import psycopg2, inject, uuid
-import datetime, pytz, calendar
+import psycopg2
+import inject
+import uuid
+import datetime
+import pytz
+import calendar
 import logging
 
 from model.exceptions import *
@@ -113,9 +117,8 @@ class ScheduleChecks:
         if (checks is None) or (len(checks) <= 0):
             return []
 
-
         gjustifications = self.justifications.getGeneralJustificationRequests(con)
-        justifications = self.justifications.getJustificationRequestsByDate(con,status=['APPROVED'],users=[userId],start=start,end=end + datetime.timedelta(days=1))
+        justifications = self.justifications.getJustificationRequestsByDate(con, status=['APPROVED'], users=[userId], start=start, end=end + datetime.timedelta(days=1))
         logging.debug('justificaciones encontradas : {} '.format(justifications))
 
         fails = []

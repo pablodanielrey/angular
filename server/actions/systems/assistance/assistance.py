@@ -216,9 +216,9 @@ class AssistanceWamp(ApplicationSession):
     def getChecksByUser(self, sid, userId, date):
         con = self._getDatabase()
         try:
-            ''' .... codigo aca ... '''
-            con.commit()
-            return True
+            cs = self.checks._getCheckData(con, userId, date)
+            logging.debug(cs)
+            return cs
 
         finally:
             con.close()

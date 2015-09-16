@@ -6,6 +6,9 @@ import inject
 import logging
 import datetime
 
+import dateutil
+from dateutil.parser import parse
+
 
 import asyncio
 from asyncio import coroutine
@@ -39,26 +42,24 @@ class WampMain(ApplicationSession):
     def onJoin(self, details):
         logging.debug('ejecutando llamadas')
 
-        date = datetime.datetime.now()
-
-        from dateutil.parser import parse
-        import dateutil
+        date = datetime.datetime.strptime(sys.argv[3], "%d-%m-%Y")
+        logging.debug('consutlando {}'.format(date))
+        # date = parse(sys.argv[3], dayfirst=True, yearfirst=False)
         tz = dateutil.tz.tzlocal()
 
-        days = 20
-        c = 0
-        while c < days:
-            ret = yield from self.call('assistance.getChecksByUser', sid, userId, date)
+        ret = yield from self.call('assistance.getChecksByUser', sid, userId, date)
 
-            if len(ret) > 0:
-                for r in ret:
+        if (ret is not None) and (len(ret) > 0):
+            for r in ret:
+                start = None
+                if r['start'] is not None:
                     start = parse(r['start'])
                     start = start.astimezone(tz)
+                end = None
+                if r['end'] is not None:
                     end = parse(r['end'])
                     end = end.astimezone(tz)
-                    logging.debug('{} : {} --> {}'.format(r['id'], start, end))
-            c = c + 1
-            date = date + datetime.timedelta(days=1)
+                logging.debug('{} : {} : {} --> {}'.format(r['userId'], r['type'], start, end))
 
         sys.exit()
 
