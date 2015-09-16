@@ -78,3 +78,46 @@ class Camaras:
             camera = self.findCamera(con,r[7])
             recordings.append(self._convertRecordingToDict(r,camera))
         return recordings
+
+
+    def persistCamera(self,con,rec):
+        if rec is None:
+            return
+
+        # precondiciones
+        if 'start' not in rec or rec['start'] is None or 'rend' not in rec or rec['rend'] is None:
+            return
+
+        start = rec['start']
+        if self.date.isNaive(start):
+            ldate = self.date.localizeLocal(start)
+            start = self.date.awareToUtc(ldate)
+        else:
+            start = self.date.awareToUtc(rec['start'])
+
+        end = rec['rend']
+        if self.date.isNaive(end):
+            ldate = self.date.localizeLocal(end)
+            end = self.date.awareToUtc(ldate)
+        else:
+            end = self.date.awareToUtc(rec['rend'])
+
+        params = (rec['fps'] if 'fps' in rec else None,
+                  rec['source'] if 'source' in rec else None,
+                  start,
+                  end,
+                  rec['size'] if 'size' in rec else '0',
+                  rec['file_name'] if 'file_name' in rec else None,
+                  rec['camera_id'] if 'camera_id' in rec else None
+                 )
+
+        cur = con.cursor()
+        cur.execute('set timezone to %s',('UTC',))
+
+        if 'id' not in rec or rec['id'] is None:
+            id = str(uuid.uuid4())
+            params = params + (id,)
+            cur.execute('insert into camera.recording (fps,source,start,rend,size,file_name,camera_id,id) values (%s,%s,%s,%s,%s,%s,%s,%s)',params)
+        else:
+            params = params + (rec['id'],)
+            cur.execute('update camera.recording set fps = %s, source = %s, start = %s, rend = %s, size = %s, file_name = %s, camera_id = %s  where id = %s',params)
