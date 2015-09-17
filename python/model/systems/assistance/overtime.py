@@ -54,28 +54,51 @@ class Overtime:
 
 
 
+    
+        
+
     """
         obtiene todas los pedidos de horas extras con cierto estado
         status es el estado a obtener. en el caso de que no sea pasado entonces se obtienen todas, en su ultimo estado
         users es una lista de ids de usuarios para los que se piden los requests, si = None o es vacío entonces retorna todas.
         requestors es una lista de ids de usuarios que piden los requests, si = None o es vacío entonces no se toma en cuenta.
     """
-    def getOvertimeRequests(self,con,status=[],requestors=None,users=None):
+    def getOvertimeRequests(self, con, status=[], requestors=None, users=None, begin=None, end=None):
 
+        
         statusR = self._getOvertimesInStatus(con,status)
-        logging.debug('in status = {} req {}'.format(status,statusR))
+        #logging.debug('in status = {} req {}'.format(status,statusR))
         if len(statusR) <= 0:
             return []
 
-        rids = tuple(statusR.keys())
+        ids = tuple(statusR.keys())
+        params = (ids, )
 
-        cur = con.cursor()
-        if (users is None or len(users) <= 0) and (requestors is None or len(requestors) <= 0):
-            cur.execute('select id,user_id,requestor_id,jbegin,jend,reason from assistance.overtime_requests where id in %s',(rids,))
-        elif (users is None or len(users) <= 0):
-            cur.execute('select id,user_id,requestor_id,jbegin,jend,reason from assistance.overtime_requests where id in %s and requestor_id in %s',(rids,tuple(requestors)))
-        elif (requestors is None or len(requestors) <= 0):
-            cur.execute('select id,user_id,requestor_id,jbegin,jend,reason from assistance.overtime_requests where id in %s and user_id in %s',(rids,tuple(users)))
+        sql = "select id,user_id,requestor_id,jbegin,jend,reason from assistance.overtime_requests where id in %s"
+
+
+        if users is not None and len(users) > 0:
+            users = tuple(users)
+            params = params + (users, )
+            sql += " AND user_id IN %s"
+
+        if requestors is not None and len(requestors) > 0:
+            requestors = tuple(requestors)
+            params = params + (requestors, )
+            sql += " AND requestor_id in %s"
+
+        if begin is not None:
+            params = params + (begin, )
+            sql += " AND jbegin >= %s"
+        
+        if begin is not None:
+            params = params + (begin, )
+            sql += " AND jend <= %s"
+
+        sql += ";"
+        
+        cur = con.cursor()        
+        cur.execute(sql, params)
 
 
         if cur.rowcount <= 0:
@@ -98,6 +121,7 @@ class Overtime:
 
         return requests
 
+        return []
 
 
     """
@@ -179,3 +203,4 @@ class Overtime:
         events.extend(self.updateOvertimeRequestStatus(con,requestorId,oid,'PENDING'))
 
         return events
+

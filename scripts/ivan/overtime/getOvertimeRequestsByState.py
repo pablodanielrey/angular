@@ -10,6 +10,12 @@ from autobahn.asyncio.wamp import ApplicationSession
 from asyncio import coroutine
 
 
+'''
+python3 getOvertimeRequestsByState userId #retorna los requerimientos de todos los usuarios
+python3 getOvertimeRequestsByState userId state1 state2 state3 ... #retorna los requerimientos de los usuarios con el id pasado como parametro
+python3 getOvertimeRequestsByState e43e5ded-e271-4422-8e85-9f1bc0a61235 #retorna los requerimientos de los usuarios con el id pasado como parametro
+
+'''
 
 def config_injector(binder):
     binder.bind(Config,Config('server-config.cfg'))
