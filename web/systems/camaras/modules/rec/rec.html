@@ -122,10 +122,10 @@
                           <span><i class="fa fa-clock-o"></i>{{model.video.duration}}</span>
                         </div>
                         <div>
-                          <span><i class="fa fa-file-video-o"></i>{{model.video.size}}</span>
+                          <span><i class="fa fa-file-video-o"></i>{{model.video.sizeStr}}</span>
                         </div>
                         <div>
-                          <button class="btnFooter" ng-click="downloadRecording(model.video)"><i class="fa fa-download"></i> Descargar</button>
+                          <a class="btnFooter" href="{{model.video.src}}" download><i class="fa fa-download"></i> Descargar</a>
                         </div>
                     </div>
                 </div>
