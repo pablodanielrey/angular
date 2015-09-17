@@ -25,7 +25,12 @@ function RecordController($scope,$timeout,$filter,$sce,Camaras) {
         selecAll: false,
         paused: false,
         displayListRecordings: false,
-        styles:['','reproductor']
+        styles:['','reproductor'],
+        reverseCamera:false,
+        reverseDate:false,
+        reverseHour:false,
+        reverseDuration:false,
+        reverseSize:false
     };
 
 
@@ -39,6 +44,8 @@ function RecordController($scope,$timeout,$filter,$sce,Camaras) {
     $scope.initializeCamaras = initializeCamaras;
     $scope.setStyle = setStyle;
     $scope.order = order;
+    $scope.orderByHour = orderByHour;
+    $scope.orderBySize = orderBySize;
 
     function initialize() {
       $scope.view.displayListRecordings = false;
@@ -51,6 +58,12 @@ function RecordController($scope,$timeout,$filter,$sce,Camaras) {
       $scope.model.filter.start = new Date();
       $scope.model.filter.end = new Date();
       $scope.initializeCamaras();
+
+      $scope.view.reverseCamera = false;
+      $scope.view.reverseDate = false;
+      $scope.view.reverseHour = false;
+      $scope.view.reverseDuration = false;
+      $scope.view.reverseSize = false;
     }
 
     function initializeCamaras() {
@@ -71,7 +84,30 @@ function RecordController($scope,$timeout,$filter,$sce,Camaras) {
 
     function order(predicate, reverse) {
       $scope.model.recordings = $filter('orderBy')($scope.model.recordings, predicate, reverse);
-    };
+    }
+
+    function orderByHour(reverse) {
+      var recordings = $scope.model.recordings;
+      for (var i = 0; i < recordings.length; i++) {
+        for (var j = i; j < recordings.length; j++) {
+          var rec = recordings[i];
+          var recDate = new Date(rec['start']);
+          var minRec = (recDate.getHours() * 60) + recDate.getMinutes();
+
+          var auxDate = new Date(recordings[j]['start']);
+          var minAux = (auxDate.getHours() * 60) + auxDate.getMinutes();
+
+          if (reverse && minAux > minRec) {
+            recordings[i] = recordings[j];
+            recordings[j] = rec;
+          }
+          if (!reverse && minAux < minRec) {
+            recordings[i] = recordings[j];
+            recordings[j] = rec;
+          }
+        }
+      }
+    }
 
 
     $scope.$watch('model.filter.start', function(newValue, oldValue) {
@@ -112,6 +148,7 @@ function RecordController($scope,$timeout,$filter,$sce,Camaras) {
             $scope.model.recordings[i].selected = false;
           }
           $scope.view.displayListRecordings = true;
+          $scope.order(['start','camera.floor','camera.number'],$scope.view.reverseCamera);
         },
         function(error) {
           $scope.model.recordings = [];
