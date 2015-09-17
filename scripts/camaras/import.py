@@ -24,6 +24,34 @@ class Import:
         passw = 'dcsys'
         return psycopg2.connect(host=host, dbname=dbname, user=user, password=passw)
 
+    def _getNumber(self,array):
+        numbers = []
+        for a in array:
+            if a.isnumeric():
+                numbers.append(a)
+        if len(numbers) == 2:
+            return float(numbers[0] + '.' + numbers[1])
+        else:
+            return float(numbers[0])
+
+    def convertSize(self,sizeStr):
+
+        numbersArray = re.split('[a-z,]+', sizeStr, flags=re.IGNORECASE)
+        number = self._getNumber(numbersArray)
+        unit = re.search('[gGmMkK]',sizeStr)
+        if unit != None:
+            unit = unit.group(0)
+        if unit is None:
+            return number
+        elif unit.lower() == 'k':
+            return number * 1024
+        elif unit.lower() == 'm':
+            return number * 1024 * 1024
+        elif unit.lower() == 'g':
+            return number * 1024 * 1024 * 1024
+        else:
+            return number
+
 
     def execute(self):
 
@@ -49,7 +77,9 @@ class Import:
                 if r.strip()[-4:] == '.mp4':
                     array = r.split()
                     rec = {}
-                    rec['size'] = array[0]
+                    
+                    rec['size'] = self.convertSize(array[0])
+
                     rec['file_name'] = array[1]
                     rec['fps'] = 15
                     rec['source'] = 'http://camaras.econo.unlp.edu.ar/' + rec['file_name']

@@ -15,7 +15,7 @@ CREATE SCHEMA camera;
     source VARCHAR,
     start timestamptz NOT NULL,
     rend timestamptz NOT NULL,
-    size VARCHAR NOT NULL,
+    size real NOT NULL,
     file_name VARCHAR,
     camera_id VARCHAR REFERENCES camera.camera (id),
     duration VARCHAR

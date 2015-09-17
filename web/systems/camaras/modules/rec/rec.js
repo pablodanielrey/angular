@@ -45,7 +45,6 @@ function RecordController($scope,$timeout,$filter,$sce,Camaras) {
     $scope.setStyle = setStyle;
     $scope.order = order;
     $scope.orderByHour = orderByHour;
-    $scope.orderBySize = orderBySize;
 
     function initialize() {
       $scope.view.displayListRecordings = false;

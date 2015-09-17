@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import uuid, datetime,psycopg2,inject
+import uuid, datetime,psycopg2,inject, math
 from model.systems.assistance.date import Date
 
 class Camaras:
@@ -51,18 +51,33 @@ class Camaras:
             source VARCHAR,
             start timestamptz NOT NULL,
             rend timestamptz NOT NULL,
-            size VARCHAR NOT NULL,
+            size real NOT NULL,
             file_name VARCHAR,
             camera_id VARCHAR REFERENCES camera.camera (id),
             duration VARCHAR
           );
     '''
 
+    def _convertSizeUnit(self,size):
+        if size < 1024:
+            return str(size)
+        elif size < (math.pow(1024, 2)):
+            return "%3.1f%s" % (size/1024, ' KB')
+        elif size < (math.pow(1024, 3)):
+            return "%3.1f%s" % (size/(math.pow(1024, 2)), ' MB')
+        elif size < (math.pow(1024, 4)):
+            return "%3.1f%s" % (size/(math.pow(1024, 3)), ' GB')
+        elif size < (math.pow(1024, 5)):
+            return "%3.1f%s" % (size/(math.pow(1024, 4)), ' TB')
+        return str(size)
+
+
     def _convertRecordingToDict(self,rec,camera):
         displayName = str(camera['number']) + ' - ' + camera['floor']
         start = rec[3]
         end = rec[4]
-        return {'id':rec[0],'displayName':displayName,'start':start,'end':end,'size':rec[5],'duration':rec[8],'fileName':rec[6],'src':rec[2],'fps':rec[1],'camera':camera}
+        sizeStr = self._convertSizeUnit(rec[5])
+        return {'id':rec[0],'displayName':displayName,'start':start,'end':end,'size':rec[5],'duration':rec[8],'fileName':rec[6],'src':rec[2],'fps':rec[1],'camera':camera,'sizeStr':sizeStr}
 
 
     def findRecordings(self,con,start,end,cameras):
@@ -107,7 +122,7 @@ class Camaras:
                   rec['source'] if 'source' in rec else None,
                   start,
                   end,
-                  rec['size'] if 'size' in rec else '0',
+                  rec['size'] if 'size' in rec else 0,
                   rec['file_name'] if 'file_name' in rec else None,
                   rec['camera_id'] if 'camera_id' in rec else None,
                   rec['duration'] if 'duration' in rec else '00:00:00',
