@@ -3,7 +3,7 @@
     <div class="contentRec">
           <div class="menuRec">
               <div class="contentItem">
-                <span><i class="fa fa-video-camera"></i> Camara <i class="fa fa-sort-desc"></i></span>
+                <span ng-click="viewFilterCamera()"><i class="fa fa-video-camera"></i> Camara <i class="fa fa-sort-desc"></i></span>
               </div>
               <div class="contentItem">
                   <span><i class="fa fa-calendar-o"></i> Inicio</span>
@@ -88,6 +88,13 @@
       </div>
 
     </div>
+
+    <div class="contentCamaras">
+      <div ng-repeat="camara in model.camaras">
+          <input type="checkbox" ng-model="camara.selected" ng-change="selectCamara(camara)"/>
+          <span>{{camara.number}} {{camara.floor}}</span>
+      </div>
+    <div>
 
 
     <!-- *************** CONTENEDOR DE REPRODUCIÓN *********************** -->

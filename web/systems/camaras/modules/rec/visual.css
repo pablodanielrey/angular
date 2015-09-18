@@ -257,7 +257,7 @@
 .rec .videoItems.selected {
   background-color: #0066A6 !Important;
   cursor: pointer;
-  color: white;  
+  color: white;
 }
 
 .rec .videoItems:hover {
@@ -300,4 +300,27 @@
 
 .rec .fa-step-backward, .fa-step-forward, .fa-backward, .fa-pause, .fa-play, .fa-forward, .fa-fast-backward, .fa-fast-forward, .fa-fast-forward {
   margin-bottom: 0;
+}
+
+
+
+
+
+
+
+
+
+
+/*
+------------------------------------------------------------------
+---------------- ESTO LO TIENE QUE ACOMADAR WALLY ----------------
+------------------------------------------------------------------
+*/
+
+.rec.displayFilterCamera .imgFilters {
+  display:none;
+}
+
+.rec.displayFilterCamera .contentCamaras {
+  display:block;
 }

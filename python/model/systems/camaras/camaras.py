@@ -85,7 +85,7 @@ class Camaras:
         if cameras is None or len(cameras) == 0:
             cur.execute('SELECT id,fps,source,start,rend,size,file_name,camera_id,duration FROM camera.recording WHERE start >= %s and rend <= %s',(start,end))
         else:
-            cur.execute('SELECT id,fps,source,start,rend,size,file_name,camera_id,duration FROM camera.recording WHERE start >= %s and rend <= %s and camera_id in %s',(start,end,cameras))
+            cur.execute('SELECT id,fps,source,start,rend,size,file_name,camera_id,duration FROM camera.recording WHERE start >= %s and rend <= %s and camera_id in %s',(start,end,(tuple(cameras,))))
         if cur.rowcount <= 0:
             return []
         recordings = []

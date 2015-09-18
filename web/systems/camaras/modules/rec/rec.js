@@ -25,7 +25,7 @@ function RecordController($scope,$timeout,$filter,$sce,Camaras) {
         selecAll: false,
         paused: false,
         displayListRecordings: false,
-        styles:['','reproductor'],
+        styles:['','reproductor','displayFilterCamera'],
         reverseCamera:false,
         reverseDate:false,
         reverseHour:false,
@@ -43,6 +43,8 @@ function RecordController($scope,$timeout,$filter,$sce,Camaras) {
     $scope.initialize = initialize;
     $scope.initializeCamaras = initializeCamaras;
     $scope.setStyle = setStyle;
+    $scope.viewFilterCamera = viewFilterCamera;
+    $scope.selectCamara = selectCamara;
     $scope.order = order;
     $scope.orderByHour = orderByHour;
 
@@ -70,6 +72,9 @@ function RecordController($scope,$timeout,$filter,$sce,Camaras) {
       Camaras.findAllCamaras(
         function(camaras) {
           $scope.model.camaras = camaras;
+          for (var i = 0; i < camaras.length; i++) {
+            camaras[i].selected = false;
+          }
         },
         function(error){
           Notifications.message(error);
@@ -77,8 +82,27 @@ function RecordController($scope,$timeout,$filter,$sce,Camaras) {
       );
     }
 
+    function selectCamara(camara) {
+      if (camara.selected) {
+        $scope.model.filter.camaras.push(camara.id);
+      } else {
+        var index = $scope.model.filter.camaras.indexOf(camara.id);
+        if (index > -1) {
+          $scope.model.filter.camaras(index,1);
+        }
+      }
+    }
+
     function setStyle(index) {
       $scope.view.style = $scope.view.styles[index];
+    }
+
+    function viewFilterCamera() {
+      if ($scope.view.style == $scope.view.styles[2]) {
+        $scope.setStyle(0);
+      } else {
+        $scope.setStyle(2);
+      }
     }
 
     function order(predicate, reverse) {
