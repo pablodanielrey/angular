@@ -188,6 +188,9 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
 
 
   $scope.getNodeRequest = function(node) {
+    if (node.state == "COMMENT") {
+      return node.request;
+    }
     var st = node.request;
     if (st.length > 40) {
       st = st.substring(0,60) + '....';
