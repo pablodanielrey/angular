@@ -6,9 +6,6 @@ import inject
 import logging
 import datetime
 
-import dateutil
-from dateutil.parser import parse
-
 
 import asyncio
 from asyncio import coroutine
@@ -27,8 +24,6 @@ inject.configure(config_injector)
 config = inject.instance(Config)
 
 sid = sys.argv[1]
-userId = sys.argv[2]
-
 
 class WampMain(ApplicationSession):
 
@@ -41,26 +36,8 @@ class WampMain(ApplicationSession):
     @coroutine
     def onJoin(self, details):
         logging.debug('ejecutando llamadas')
-
-        date = datetime.datetime.strptime(sys.argv[3], "%d-%m-%Y")
-        logging.debug('consutlando {}'.format(date))
-        # date = parse(sys.argv[3], dayfirst=True, yearfirst=False)
-        tz = dateutil.tz.tzlocal()
-
-        ret = yield from self.call('assistance.getChecksByUser', sid, userId, date)
-
-        if (ret is not None) and (len(ret) > 0):
-            for r in ret:
-                start = None
-                if r['start'] is not None:
-                    start = parse(r['start'])
-                    start = start.astimezone(tz)
-                end = None
-                if r['end'] is not None:
-                    end = parse(r['end'])
-                    end = end.astimezone(tz)
-                logging.debug('{} : {} : {} --> {}'.format(r['userId'], r['type'], start, end))
-
+        ret = yield from self.call('assistance.getAvailableChecks', sid)
+        logging.debug(ret)
         sys.exit()
 
 
