@@ -76,6 +76,9 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
    * @param {type} nodeScope
    */
   $scope.toggleNodeData = function (node) {
+    if (node.state == "COMMENT") {
+      return;
+    }
     node.descriptionExpanded = !node.descriptionExpanded;
   };
 
