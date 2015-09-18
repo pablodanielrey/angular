@@ -86,9 +86,9 @@ function RecordController($scope,$timeout,$filter,$sce,Camaras) {
       if (camara.selected) {
         $scope.model.filter.camaras.push(camara.id);
       } else {
-        var index = $scope.model.filter.camaras.indexOf(camara.id);
+        var index = $scope.model.filter.camaras.indexOf(camara['id']);
         if (index > -1) {
-          $scope.model.filter.camaras(index,1);
+          $scope.model.filter.camaras.splice(index,1);
         }
       }
     }
