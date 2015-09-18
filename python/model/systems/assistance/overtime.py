@@ -91,12 +91,13 @@ class Overtime:
             params = params + (begin, )
             sql += " AND jbegin >= %s"
         
-        if begin is not None:
-            params = params + (begin, )
+        if end is not None:
+            params = params + (end, )
             sql += " AND jend <= %s"
 
         sql += ";"
         
+
         cur = con.cursor()        
         cur.execute(sql, params)
 

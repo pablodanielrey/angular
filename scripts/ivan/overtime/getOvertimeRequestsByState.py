@@ -11,10 +11,10 @@ from asyncio import coroutine
 
 
 '''
-python3 getOvertimeRequestsByState userId #retorna los requerimientos de todos los usuarios
-python3 getOvertimeRequestsByState userId state1 state2 state3 ... #retorna los requerimientos de los usuarios con el id pasado como parametro
-python3 getOvertimeRequestsByState e43e5ded-e271-4422-8e85-9f1bc0a61235 #retorna los requerimientos de los usuarios con el id pasado como parametro
-
+python3 getOvertimeRequestsByState.py userId #retorna los requerimientos de todos los usuarios
+python3 getOvertimeRequestsByState.py userId state1 state2 state3 ... #retorna los requerimientos de los usuarios con el id pasado como parametro
+python3 getOvertimeRequestsByState.py e43e5ded-e271-4422-8e85-9f1bc0a61235 #retorna los requerimientos de los usuarios con el id pasado como parametro
+python3 getOvertimeRequestsByState.py e43e5ded-e271-4422-8e85-9f1bc0a61235 APPROVED #retorna los requerimientos de los usuarios con el id pasado como parametro
 '''
 
 def config_injector(binder):
@@ -54,7 +54,7 @@ class WampMain(ApplicationSession):
         requests = yield from self.call('overtime.getOvertimeRequests', users, states)
 
         for request in requests:
-            print(request)
+            logging.info(request)
 
 if __name__ == '__main__':
 
