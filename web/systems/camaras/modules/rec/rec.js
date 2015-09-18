@@ -67,13 +67,25 @@ function RecordController($scope,$timeout,$filter,$sce,Camaras) {
       $scope.view.reverseSize = false;
     }
 
+    function addCamara(camara) {
+      for (var i = 0; $scope.model.camaras.length; i++) {
+        if ($scope.model.camaras[i]['floor'] == camara['floor']) {
+          $scope.model.camaras[i]['camaras'].push(camara);
+          return;
+        }
+      }
+      var item = {'floor':camara['floor'],'camaras':[camara]};
+      $scope.model.camaras.push(item);
+    }
+
     function initializeCamaras() {
       $scope.model.filter.camaras = [];
       Camaras.findAllCamaras(
         function(camaras) {
-          $scope.model.camaras = camaras;
+          $scope.model.camaras = [];
           for (var i = 0; i < camaras.length; i++) {
             camaras[i].selected = false;
+            addCamara(camaras[i]);
           }
         },
         function(error){

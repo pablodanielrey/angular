@@ -90,9 +90,12 @@
     </div>
 
     <div class="contentCamaras">
-      <div ng-repeat="camara in model.camaras">
-          <input type="checkbox" ng-model="camara.selected" ng-change="selectCamara(camara)"/>
-          <span>{{camara.number}} {{camara.floor}}</span>
+      <div ng-repeat="floor in model.camaras">
+          <span>{{floor.floor}}</span>
+          <div ng-repeat="camara in floor.camaras">
+            <input type="checkbox" ng-model="camara.selected" ng-change="selectCamara(camara)"/>
+            <span>{{camara.number}}</span>
+          </div>
       </div>
     <div>
 
