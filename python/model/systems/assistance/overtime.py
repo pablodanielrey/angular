@@ -54,18 +54,53 @@ class Overtime:
 
 
 
-    
+
+    def getWorkedOvertime(self, con, userId, date):
+
+        date = self.date.awareToUtc(date)
+
+
+        schedules = self.schedule.getSchedule(con, userId, date)
+        schedules2 = None
+        date2 = date
+        while (schedules2 is None or len(schedules2)):
+            date2 = date2 + datetime.timedelta(days = 1)
+            schedules2 = self.schedule.getSchedule(con, userId, date2)
+
+
+        scheduyes = schedules para el dia fecha
+        schedules = shcedules para el dia fecha2
+
+        fechaInicial = min(schedules.inicial, hextra.inicial)
+        fechaFinal = schedules.2.inicial
+        logs = obtenerLogsentreFechas(fechaInicial, fechaFinal)
+
+        whs, attlogs = self.logs.getWorkedHours(logs)
         
 
-    """
-        obtiene todas los pedidos de horas extras con cierto estado
-        status es el estado a obtener. en el caso de que no sea pasado entonces se obtienen todas, en su ultimo estado
-        users es una lista de ids de usuarios para los que se piden los requests, si = None o es vacío entonces retorna todas.
-        requestors es una lista de ids de usuarios que piden los requests, si = None o es vacío entonces no se toma en cuenta.
-    """
+
+
+
+        logs = self.schedule.getLogsForSchedule(con, userId, date)
+
+        controls = self.schedule.combiner(schedules, whs)
+        # controls = list(utils.combiner(schedules,whs))
+
+        fails = self.scheduleCheck.checkWorkedHours(con,userId,controls)
+        return fails
+
+
+
+
     def getOvertimeRequests(self, con, status=[], requestors=None, users=None, begin=None, end=None):
 
-        
+        """
+            obtiene todas los pedidos de horas extras con cierto estado
+            status es el estado a obtener. en el caso de que no sea pasado entonces se obtienen todas, en su ultimo estado
+            users es una lista de ids de usuarios para los que se piden los requests, si = None o es vacío entonces retorna todas.
+            requestors es una lista de ids de usuarios que piden los requests, si = None o es vacío entonces no se toma en cuenta.
+        """
+
         statusR = self._getOvertimesInStatus(con,status)
         #logging.debug('in status = {} req {}'.format(status,statusR))
         if len(statusR) <= 0:
@@ -90,15 +125,15 @@ class Overtime:
         if begin is not None:
             params = params + (begin, )
             sql += " AND jbegin >= %s"
-        
+
         if end is not None:
             params = params + (end, )
             sql += " AND jend <= %s"
 
         sql += ";"
-        
 
-        cur = con.cursor()        
+
+        cur = con.cursor()
         cur.execute(sql, params)
 
 
@@ -204,4 +239,3 @@ class Overtime:
         events.extend(self.updateOvertimeRequestStatus(con,requestorId,oid,'PENDING'))
 
         return events
-

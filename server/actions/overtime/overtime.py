@@ -39,6 +39,7 @@ class OvertimeWamp(ApplicationSession):
         yield from self.register(self.requestOvertime_async, 'overtime.requestOvertime')
         yield from self.register(self.updateStatus_async, 'overtime.updateStatus')
         yield from self.register(self.getMinutesApproved_async, 'overtime.getMinutesApproved')
+        yield from self.register(self.getMinutesWorked_async, 'overtime.getMinutesWorked')
 
 
 
@@ -144,29 +145,51 @@ class OvertimeWamp(ApplicationSession):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.updateStatus, userId, requestId, status)
         return r
-        
 
-    '''
-     ' Obtener cantidad de minutos de los requerimientos de horas extras aprobadas por usuario
-     ' @param userId Id del usuario del cual se desea saber las horas extras aprobadas
-     ' @param begin Fecha de inicio de la solicitud
-     ' @param begin Fecha de fin de la solicitud
-     '''
+
+
+
     def getMinutesApproved(self, userId, begin, end):
+        '''
+        Obtener cantidad de minutos de los requerimientos de horas extras aprobadas por usuario
+        @param userId Id del usuario del cual se desea saber las horas extras aprobadas
+        @param begin Fecha de inicio de la solicitud
+        @param begin Fecha de fin de la solicitud
+        '''
         con = self._getDatabase()
         try:
             requests = self.overtime.getOvertimeRequests(con, ['APPROVED'], None, [userId], begin, end)
             minutes = 0
-            for request in requests:              
+            for request in requests:
               minutes += (request['end'] - request['begin']).seconds / 60
-            return minutes              
+            return minutes
 
         finally:
             con.close()
-        
-        
+
+
     @coroutine
     def getMinutesApproved_async(self, userId, begin, end = None):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.getMinutesApproved, userId, begin, end)
-        return r        
+        return r
+
+    def getMinutesWorked(self, userId, begin, end):
+        '''
+        Obtener cantidad de minutos de los requerimientos de horas extras aprobadas por usuario
+        @param userId Id del usuario del cual se desea saber las horas extras aprobadas
+        @param begin Fecha de inicio de la solicitud
+        @param begin Fecha de fin de la solicitud
+        '''
+        con = self._getDatabase()
+        try:
+            ''' codigo va aca '''
+        finally:
+            con.close()
+
+
+    @coroutine
+    def getMinutesWorked_async(self, userId, begin, end = None):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.getMinutesWorked, userId, begin, end)
+        return r
