@@ -11,21 +11,35 @@
 
         <div class="btnExpComment">
           <div ng-if="collapsed">
-              <button class="btn cO fa fa-plus-square"  ng-click="toggleNode(this)" ></button>
+              <button class="btn cO fa fa-plus-square" title="Expandir Comentarios" ng-click="toggleNode(this)" ></button>
           </div>
           <div ng-if="!collapsed">
-              <button class="btn cO fa fa-minus-square" title="Expandir Pedido" ng-click="toggleNode(this)" ></button>
+              <button class="btn cO fa fa-minus-square" title="Minimizar Comentarios" ng-click="toggleNode(this)" ></button>
           </div>
         </div>
 
         <div>
-            <div class="orderText" ng-click="toggleNodeData(node)">{{getNodeRequest(node)}}</div>
+            <div class="orderText" ng-click="toggleNodeData(node)"><span class="requestor">{{node.requestor}}</span>{{getNodeRequest(node)}}</div>
+
             <!-- <textarea class="orderText"  readonly ng-model="node.request"  ng-click="expandInput(this)"></textarea> -->
 
             <div ng-class="{true:'descriptionExpanded',false:'descriptionClosed'}[node.descriptionExpanded]">
-              {{node.created | date:"dd/MM/yyyy hh:mm" }}
-              {{node.requestor}}
-              <textarea class="orderText"  readonly ng-model="node.request"></textarea>
+              <div class="contentDataOrder">
+                  <div>
+                      <textarea class="orderText"  readonly ng-model="node.request"></textarea>
+                  </div>
+                  <div class="oderInfo">
+                      <div><i class="fa fa-tag"></i> <b>Pedido Nº: </b> {{node.id | limitTo:5}}</div>
+                      <div>
+                          <span><i class="fa fa-calendar-o"></i> <b>Fecha: </b> {{node.created | date:"dd/MM/yyyy" }}</span>
+                          <span><i class="fa fa-clock-o"></i> <b>Hora: </b> {{node.created | date:"hh:mm" }}</span>
+                      </div>
+                      <div><i class="fa fa-user"></i> <b>Usuario: </b>  {{node.requestor}}</div>
+                      <div><i class="fa fa-building"></i> <b>Oficina: </b>  Ditesi</div>
+                      <div><i class="fa fa-eye"></i> <b>Visibilidad: </b>  Ditesi</div>
+
+                  </div>
+              </div>
             </div>
         </div>
     </div>
@@ -61,6 +75,6 @@
 
 
   <ol ui-tree-nodes ng-model="node.childrens" ng-class="{'angular-ui-tree-hidden': collapsed}">
-    <li  ng-repeat="node in node.childrens" ui-tree-node ng-include="'modules/nodes_renderer.html'">
+    <li ng-repeat="node in node.childrens" ui-tree-node ng-include="'modules/nodes_renderer.html'">
     </li>
   </ol>

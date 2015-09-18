@@ -100,6 +100,10 @@
   width: 100%;
 }
 
+.issues .orderText .requestor {
+  display:none;
+}
+
 .issuesItems .orderItem { /*CONTENDERO DEL TEXTO DEL PEDIDO */
   display: flex;
   flex-direction: row;
@@ -113,7 +117,7 @@
 
 .issues .orderText { /* TEXTO DE LOS PEDIDOS REALIZADO */
   padding: 5px;
-  background-color: white;
+  background-color: #EEE;;
   border-color: #E3DFDF;
   width: 600px;
   height: 20px;
@@ -181,6 +185,37 @@
 .issues .cGR { /*GRIS */
   background-color: #BEBEBE;
 }
+
+/*******************************************************
+****************** DATOS DEL PEDIDO ********************
+*******************************************************/
+
+
+.issues .descriptionExpanded { /*EXPANDE PEDIDO*/
+  /*background-color: #BEBEBE;*/
+  width: 167%;
+  margin-top: 10px;
+}
+
+.issues .contentDataOrder {
+  display:flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+
+}
+
+.issues .contentDataOrder .orderText {
+  height: 100px;
+  background-color: white;
+}
+
+.issues .oderInfo {
+  margin-left: 90px;
+}
+
 
 /*******************************************************
 ************ PANTALLA SELLECION DE OFICINAS ************
@@ -297,6 +332,12 @@
 }
 .issues .orderItems.commentOrder .btnVisibility  { /*OCULTA BOTON VISIVILIDAD */
   display:none;
+}
+
+.issues .orderItems.commentOrder .orderText .requestor {
+  display:inline;
+  font-weight: bold;
+  font-size: small;
 }
 
 

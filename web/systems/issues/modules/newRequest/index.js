@@ -185,15 +185,14 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
 
 
   $scope.getNodeRequest = function(node) {
-    if (node.request.length > 40) {
-      return node.request.substring(0,60) + '....';
-    } else {
-      return node.request;
+    var st = node.request;
+    if (st.length > 40) {
+      st = st.substring(0,60) + '....';
     }
+    return st;
   }
 
   $scope.loadDataNode = function(node) {
-    console.log(node);
     Users.findUser(node.creator,
       function(user) {
         node.requestor = user.name + " " + user.lastname;
