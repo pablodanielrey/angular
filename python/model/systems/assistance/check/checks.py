@@ -79,9 +79,9 @@ class ScheduleChecks:
     """
         obtiene los usuarios que tienen configurado algún chequeo
     """
-    def getUsersWithConstraints(self, con):
+    def getUsersWithChecks(self, con, date):
         cur = con.cursor()
-        cur.execute('select distinct user_id from assistance.checks')
+        cur.execute('select distinct user_id from assistance.checks where date >= %s',(date,))
         if cur.rowcount <= 0:
             return []
 
@@ -89,6 +89,7 @@ class ScheduleChecks:
         for c in cur:
             users.append(c[0])
         return users
+
 
     def _findJustificationsForDate(self, justifications, date):
         justs = []

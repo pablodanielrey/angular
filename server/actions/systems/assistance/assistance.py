@@ -57,6 +57,7 @@ class AssistanceWamp(ApplicationSession):
         yield from self.register(self.deleteSchedule_async, 'assistance.deleteSchedule')
         yield from self.register(self.getAvailableChecks_async, 'assistance.getAvailableChecks')
         yield from self.register(self.getChecksByUser_async, 'assistance.getChecksByUser')
+        yield from self.register(self.getUsersWithChecks_async, 'assistance.getUsersWithChecks')
 
     def _getDatabase(self):
         host = self.serverConfig.configs['database_host']
@@ -227,6 +228,22 @@ class AssistanceWamp(ApplicationSession):
     def getChecksByUser_async(self, sid, userId, date):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.getChecksByUser, sid, userId, date)
+        return r
+
+
+    def getUsersWithChecks(self, sid, date):
+        con = self._getDatabase()
+        try:
+            cs = self.checks.getUsersWithChecks(con, date)
+            return cs
+
+        finally:
+            con.close()
+
+    @coroutine
+    def getUsersWithChecks_async(self, sid, date):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.getUsersWithChecks, sid, date)
         return r
 
 
