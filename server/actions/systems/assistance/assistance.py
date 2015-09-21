@@ -58,6 +58,7 @@ class AssistanceWamp(ApplicationSession):
         yield from self.register(self.getAvailableChecks_async, 'assistance.getAvailableChecks')
         yield from self.register(self.getChecksByUser_async, 'assistance.getChecksByUser')
         yield from self.register(self.getUsersWithChecks_async, 'assistance.getUsersWithChecks')
+        yield from self.register(self.getFailsByDate_async, 'assistance.getFailsByDate')
 
     def _getDatabase(self):
         host = self.serverConfig.configs['database_host']
@@ -247,20 +248,24 @@ class AssistanceWamp(ApplicationSession):
         return r
 
 
-    def getFailsByDate(self, start, end):
+    def getFailsByDate(self, sid, userId, start, end):
         con = self._getDatabase()
         try:
-            ''' .... codigo aca ... '''
+            r = self.assistance.getFailsByDate(userId, start, end)
             con.commit()
-            return True
+            return r
 
         finally:
             con.close()
 
     @coroutine
-    def getFailsByDate_async(self, sid, start, end):
+    def getFailsByDate_async(self, sid, userId, start, end):
+
+        start = dateutil.parser.parse(start)
+        end = dateutil.parser.parse(end)
+
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getFailsByDate, start, end)
+        r = yield from loop.run_in_executor(None, self.getFailsByDate, sid, userId, start, end)
         return r
 
 

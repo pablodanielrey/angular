@@ -260,7 +260,7 @@ class ScheduleChecks:
 
 
         schedules = self.schedule.getSchedule(con, userId, date)
-        logs = self.schedule.getLogsForSchedule(con, userId, date)
+        logs = self.schedule.getLogsForSchedule(con, userId, schedules)
         whs, attlogs = self.logs.getWorkedHours(logs)
         controls = self.schedule.combiner(schedules, whs)
         # controls = list(utils.combiner(schedules,whs))

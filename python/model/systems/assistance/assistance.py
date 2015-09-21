@@ -207,11 +207,9 @@ class Assistance:
         return self._exportToOds(odata)
 
     """
-        chequea el schedule de los usuarios pasados como parametro.
-        las fechas start y end son aware
+        obtiene las fallas que tenga el usuario en el rango de fechas
     """
-    def checkSchedule(self, userIds, start, end):
-
+    def getFailsByDate(self, userId, start, end):
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
             if self.date.isNaive(start):
@@ -224,14 +222,11 @@ class Assistance:
             elif self.date.isUTC(end):
                 end = self.date.localizeAwareToLocal(end)
 
-            schedulesFails = []
-            users = []
-            for u in userIds:
-                logging.debug('chequeando usuario %s', (u,))
-                users.append(self.users.findUser(con, u))
-                schedulesFails.extend(self.checks.checkConstraints(con, u, start, end))
+            logging.debug('%s : %s -> %s'.format(userId,start,end))
+            user = self.users.findUser(con, userId)
+            fails = self.checks.checkConstraints(con, userId, start, end)
 
-            return (users, schedulesFails)
+            return (user, fails)
 
         finally:
             con.close()
