@@ -2,6 +2,8 @@
 import calendar, datetime, logging, uuid
 import inject
 
+from model.systems.assistance.date import Date
+
 from model.systems.assistance.justifications.exceptions import *
 
 from model.systems.offices.offices import Offices
@@ -11,11 +13,14 @@ from model.systems.assistance.justifications.BSJustification import BSJustificat
 from model.systems.assistance.justifications.CJustification import CJustification
 from model.systems.assistance.justifications.LAOJustification import LAOJustification
 
-
+from model.systems.assistance.schedule import Schedule
 
 class Overtime:
 
     offices = inject.attr(Offices)
+    date = inject.attr(Date)
+    schedule = inject.attr(Schedule)
+    
 
     """
         obtiene el ultimo estado del pedido de horas extras indicado por reqId
@@ -56,40 +61,24 @@ class Overtime:
 
 
     def getWorkedOvertime(self, con, userId, date):
-
-        date = self.date.awareToUtc(date)
-
+    
+    
 
         schedules = self.schedule.getSchedule(con, userId, date)
         schedules2 = None
+          
         date2 = date
-        while (schedules2 is None or len(schedules2)):
+        while schedules2 is None or len(schedules2) == 0:
             date2 = date2 + datetime.timedelta(days = 1)
             schedules2 = self.schedule.getSchedule(con, userId, date2)
 
-
-        scheduyes = schedules para el dia fecha
-        schedules = shcedules para el dia fecha2
-
-        fechaInicial = min(schedules.inicial, hextra.inicial)
-        fechaFinal = schedules.2.inicial
-        logs = obtenerLogsentreFechas(fechaInicial, fechaFinal)
-
-        whs, attlogs = self.logs.getWorkedHours(logs)
         
 
-
-
-
-        logs = self.schedule.getLogsForSchedule(con, userId, date)
-
-        controls = self.schedule.combiner(schedules, whs)
-        # controls = list(utils.combiner(schedules,whs))
-
-        fails = self.scheduleCheck.checkWorkedHours(con,userId,controls)
-        return fails
-
-
+        dateEndOvertime = schedules2[0]["start"]
+        overtimeRequests = self.getOvertimeRequests(con, ['APPROVED'], None, [userId], date, dateEndOvertime)
+        
+     
+       
 
 
     def getOvertimeRequests(self, con, status=[], requestors=None, users=None, begin=None, end=None):

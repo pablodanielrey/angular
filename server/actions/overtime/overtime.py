@@ -7,6 +7,7 @@ import logging
 import psycopg2
 import hashlib
 import asyncio
+import datetime
 from asyncio import coroutine
 from autobahn.asyncio.wamp import ApplicationSession
 from model.config import Config
@@ -17,6 +18,7 @@ from model.profiles import Profiles
 from model.exceptions import *
 
 from model.systems.assistance.overtime import Overtime
+from model.systems.assistance.date import Date
 
 
 
@@ -28,6 +30,7 @@ class OvertimeWamp(ApplicationSession):
         ApplicationSession.__init__(self, config)
         self.serverConfig = inject.instance(Config)
         self.overtime = inject.instance(Overtime)
+        self.date = inject.instance(Date)
 
 
 
@@ -39,7 +42,7 @@ class OvertimeWamp(ApplicationSession):
         yield from self.register(self.requestOvertime_async, 'overtime.requestOvertime')
         yield from self.register(self.updateStatus_async, 'overtime.updateStatus')
         yield from self.register(self.getMinutesApproved_async, 'overtime.getMinutesApproved')
-        yield from self.register(self.getMinutesWorked_async, 'overtime.getMinutesWorked')
+        yield from self.register(self.getWorkedOvertime_async, 'overtime.getWorkedOvertime')
 
 
 
@@ -174,22 +177,31 @@ class OvertimeWamp(ApplicationSession):
         r = yield from loop.run_in_executor(None, self.getMinutesApproved, userId, begin, end)
         return r
 
-    def getMinutesWorked(self, userId, begin, end):
+
+
+
+    def getWorkedOvertime(self, userId, date):
         '''
-        Obtener cantidad de minutos de los requerimientos de horas extras aprobadas por usuario
+        Obtener tiempo trabajado correspondiente a las horas extra solicitadas
         @param userId Id del usuario del cual se desea saber las horas extras aprobadas
         @param begin Fecha de inicio de la solicitud
         @param begin Fecha de fin de la solicitud
         '''
+        
+        date = datetime.datetime.strptime(date, "%Y-%m-%dT%H:%M:%S")
+        date = self.date.localizeLocal(date)
+        
+        
         con = self._getDatabase()
         try:
-            ''' codigo va aca '''
+            self.overtime.getWorkedOvertime(con, userId, date)
+            
         finally:
             con.close()
 
 
     @coroutine
-    def getMinutesWorked_async(self, userId, begin, end = None):
+    def getWorkedOvertime_async(self, userId, date):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getMinutesWorked, userId, begin, end)
+        r = yield from loop.run_in_executor(None, self.getWorkedOvertime, userId, date)
         return r
