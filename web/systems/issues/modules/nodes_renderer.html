@@ -19,7 +19,24 @@
         </div>
 
         <div>
-            <div class="orderText" ng-click="toggleNodeData(node)"><span class="requestor">{{node.requestor}}</span>{{getNodeRequest(node)}}</div>
+            <div class="orderText" ng-click="toggleNodeData(node)">
+              <div class="itemsComment">
+                  <div class="items">
+                      <span class="requestor">{{node.requestor}}Walter Blanco</span>
+                  </div>
+                  <div class="items">
+                      <span class="date">21/09/15 | 08:25</span>
+                  </div>
+              </div>
+              <div class="text">{{getNodeRequest(node)}}</div>
+              <div class="btnComment2">
+                  <button class="btn cO fa fa-comment" title="Realizar Comentario" ng-click="addComment(node)"></button>
+              </div>
+              <div Class="btnDelete2">
+                  <button class="btn cR fa fa-trash" title="Eliminar Comentario" ng-click="deleteNode(this)"></button>
+              </div>
+            </div>
+
 
             <!-- <textarea class="orderText"  readonly ng-model="node.request"  ng-click="expandInput(this)"></textarea> -->
 
@@ -61,13 +78,13 @@
           <button class="btn cV fa fa-eye" title="Seleccionar Visibilidad" ng-click="openVisibility(node)"></button>
         </div>
 
-        <div>
+        <div class="btnComment">
             <button class="btn cO fa fa-comment" title="Realizar Comentario" ng-click="addComment(node)"></button>
         </div>
         <div class="btnSubTarea">
             <button class="btn cG fa fa-tag" title="Crear sub-Tarea" ng-click="addNode(node)"></button>
         </div>
-        <div>
+        <div class="btnDelete">
             <button class="btn cR fa fa-trash" title="Eliminar Pedido" ng-click="deleteNode(this)"></button>
         </div>
     </div>

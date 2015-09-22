@@ -129,6 +129,8 @@
 }
 
 
+
+
 .issues .orderIcons { /*CONTENEDOR DE LOS ICONOS DEL PEDIDO*/
   display: flex;
   flex-direction: row;
@@ -144,6 +146,10 @@
   border: none;
   color: white;
   border-radius: 2px;
+}
+
+.issues .orderItems.commentOrder .btn {
+  padding: 4px !important;
 }
 
 .issues .btnState {
@@ -210,20 +216,33 @@
 .issues .contentDataOrder .orderText {
   height: 100px;
   background-color: white;
+
 }
 
 .issues .orderItems.commentOrder .orderText {
   height: 100%;
-  width: 500px;
+  width: 600px;
   word-wrap: break-word;
   background-color: #EBDBC7;
   padding: 5px;
   border-radius: 2px;
   font-size: 14px;
+  display:flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+
 }
 
 .issues .oderInfo {
   margin-left: 90px;
+}
+
+.issues .btnDelete2 {
+  margin-right: 10px;
+  margin-left: 5px;
 }
 
 
@@ -233,6 +252,41 @@
 
 .issues .contentScreens .nodeOffice .nameNodeOffice {
   cursor:default;
+}
+
+.issues .contentScreens .visibilityOffices {
+  position: absolute;
+  display: block;
+  background-color: rgba(0,0,0,0.9);
+  height: 100%;
+  width: 100%;
+  top:0;
+}
+
+.issues .contentOffices {
+  background-color:#eeeeee;
+  -webkit-box-shadow: 1px 1px 5px #5c5f69;
+  -moz-box-shadow: 5px 5px 5px #5c5f69;
+  border-radius:2px;
+  -webkit-border-radius:2px;
+  -moz-border-radius:2px;
+  padding: 20px;
+  position: absolute;
+  top: 50%; /* Buscamos el centro horizontal (relativo) del navegador */
+  left: 50%; /* Buscamos el centro vertical (relativo) del navegador */
+  width: 450px; /* Definimos el ancho del objeto a centrar */
+  height: 190px; /* Definimos el alto del objeto a centrar */
+  margin-top: -200px; /* Restamos la mitad de la altura del objeto con un margin-top */
+  margin-left: -350px; /* Restamos la mitad de la anchura del objeto con un margin-left */
+
+}
+
+.issues .selectOffice {
+  border: 1px solid #e8dede;
+  padding: 20px;
+  background-color: white;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 /*******************************************************
@@ -317,6 +371,7 @@
 
 .issues .descriptionExpanded { /*EXPANDE PEDIDO*/
   height: 100%;
+
 }
 
 .issues .descriptionClosed { /*CIERRA PEDIDO*/
@@ -328,6 +383,19 @@
 .issues .orderItems.normal .btnExpComment { /*OCULTA BOTON EXPANDIR COMENTATIOS */
   display: none;
 }
+
+.issues .orderItems.normal .itemsComment { /*OCULTA BOTON EXPANDIR COMENTATIOS */
+  display: none;
+}
+
+.issues .orderItems.normal .btnComment2 { /*OCULTA BOTON COMENTATIOS */
+  display: none;
+}
+
+.issues .orderItems.normal .btnDelete2 { /*OCULTA BOTON Eliminar */
+  display: none;
+}
+
 .issues .orderItems.commentOrder .btnExpOrder  { /*OCULTA BOTON EXPANDIR PEDIDO */
   display:none;
 }
@@ -343,12 +411,42 @@
 .issues .orderItems.commentOrder .btnVisibility  { /*OCULTA BOTON VISIVILIDAD */
   display:none;
 }
+.issues .orderItems.commentOrder .btnComment  { /*OCULTA BOTON DATOS DEL PEDIDO */
+  display:none;
+}
+.issues .orderItems.commentOrder .btnDelete  { /*OCULTA BOTON VISIVILIDAD */
+  display:none;
+}
 
 .issues .orderItems.commentOrder .orderText .requestor {
   display:inline;
   font-weight: bold;
   font-size: small;
-  color:grey;
+  color:#5c5f69;
+
+}
+
+.issues .orderItems.commentOrder .orderText .date {
+  display:inline;
+  font-weight: bold;
+  font-size: 10px;;
+  color:#7f7f7f;
+}
+
+.issues .orderItems.commentOrder .orderText .items {
+  height: 12px;
+}
+
+.issues .orderItem .text {
+  width: 100%;
+}
+
+
+.issues .orderItems.commentOrder .itemsComment {
+  width: 120px;
+  margin-bottom: 5px;
+  border-right: 1px solid #bebebe;
+  margin-right: 5px;
 }
 
 
@@ -368,11 +466,12 @@
 /*************** PANTALLA SELECCION DE OFICINAS ***************/
 
 .issues .contentScreens .visibilityOffices { /* OCULTA EL DIV DE OFICINAS*/
-  display:none;
+  transform: translate3d(0,-100%,0);
+  transition: all 0.4s ease-in-out;
 }
 
 .issues .contentScreens.displayVisibility .visibilityOffices { /*MUESTRA LA PANTALLA DE OFICINAS*/
-  display:block;
+  transform: translate3d(0,0,0);
 }
 
 .issues .contentScreens .contentOffices { /*CONTENMEDOR PRINCIPAL DE OFICINAS */
