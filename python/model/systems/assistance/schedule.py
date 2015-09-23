@@ -81,7 +81,9 @@ class Schedule:
         date = self.date.awareToUtc(date)   # trabajo con las fechas en utc
         cur = con.cursor()
         cur.execute('set time zone %s', ('utc',))
-
+        
+        
+        
         """ obtengo todos los schedules que son en la fecha date del parámetro """
         cur.execute("select sstart, send, date, id from assistance.schedule where \
                     ((date = %s) or \
@@ -108,24 +110,16 @@ class Schedule:
 
             if schedule[2].date() == dateS:
 
-                sstart = schedule[0]
-                zeroTime = sstart.replace(hour=0, minute=0, second=0, microsecond=0)
-                initDelta = sstart - zeroTime
-                endDelta = initDelta + (schedule[1] - sstart)
-
-                actualZero = date.replace(hour=0, minute=0, second=0, microsecond=0)
-                st = actualZero + initDelta
-                se = actualZero + endDelta
-
                 """ me aseguro de que las fechas tengan si o si un timezone """
-                assert st.tzinfo is not None
-                assert se.tzinfo is not None
+                assert schedule[0].tzinfo is not None
+                assert schedule[1].tzinfo is not None
 
                 """ retorno los schedules con la fecha actual en utc - las fechas en la base deber�an estar en utc """
                 schedules.append(
                     {
-                        'start': st,
-                        'end': se,
+                        'date': schedule[2],
+                        'start': schedule[0],
+                        'end': schedule[1],
                         'id': schedule[3]
                     }
                 )

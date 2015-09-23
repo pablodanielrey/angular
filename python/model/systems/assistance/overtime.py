@@ -3,6 +3,7 @@ import calendar, datetime, logging, uuid
 import inject
 
 from model.systems.assistance.date import Date
+from model.systems.assistance.logs import Logs
 
 from model.systems.assistance.justifications.exceptions import *
 
@@ -20,6 +21,7 @@ class Overtime:
     offices = inject.attr(Offices)
     date = inject.attr(Date)
     schedule = inject.attr(Schedule)
+    logs = inject.attr(Logs)
     
 
     """
@@ -59,23 +61,59 @@ class Overtime:
 
 
 
-
+    '''
+    Definir horas extras trabajadas para una determinada fecha
+    @param con Conexion con la base de datos
+    @param userId Identificacion de usuario
+    @param date Fecha para la cual se quiere calcular el tiempo extra trabajado
+    '''
     def getWorkedOvertime(self, con, userId, date):
-    
-    
 
-        schedules = self.schedule.getSchedule(con, userId, date)
-        schedules2 = None
-          
-        date2 = date
-        while schedules2 is None or len(schedules2) == 0:
-            date2 = date2 + datetime.timedelta(days = 1)
-            schedules2 = self.schedule.getSchedule(con, userId, date2)
+        #inicializar parametros de fechas
+        dateStart = date.replace(hour=0, minute=0, second=0)
+        dateEnd = date.replace(hour=23, minute=59, second=59)
+        
+        
+        #calcular overtimes del dia
+        overtimeRequests = self.getOvertimeRequests(con, ['APPROVED'], None, [userId], dateStart, dateEnd)
 
         
+        #definir fecha inicial del ultimo schedule del dia anterior
+        schedulesPre = None
+        dateAux = dateStart
+        while schedulesPre is None or len(schedulesPre) == 0:
+            dateAux = dateAux - datetime.timedelta(days = 1)
+            schedulesPre = self.schedule.getSchedule(con, userId, dateAux)
+        datePre = schedulesPre[-1]["start"]
+        
+        
+        #definir fecha final del ultimo schedule del dia siguiente
+        schedulesPos = None
+        dateAux = dateStart
+        while schedulesPos is None or len(schedulesPos) == 0:
+            dateAux = dateAux + datetime.timedelta(days = 1)
+            schedulesPos = self.schedule.getSchedule(con, userId, dateAux)
+        datePos = schedulesPos[-1]["end"]
+        
+        
+        #obtener worked hours en base a las fechas definidas de los schedules anterior y posterior
+        logs = self.logs.findLogs(con, userId, datePre, datePos)
+        (workedHours, attlogs) = self.logs.getWorkedHours(logs)
+        
+        for o in overtimeRequests:
+            for wh in workedHours:
+                if wh["end"] is None or wh["start"] is None or o["end"] is None or o["begin"] is None:
+                    return 0
+                if wh["end"] <= o["end"] and wh["end"] >= o["begin"]:
+                   print("calcular y sumar minutos")
+                elif wh["start"] <= o["begin"] and wh["end"] >= o["end"]:
+                   print("calcular y sumar minutos")
+                elif wh["start"] >= o["begin"] and wh["start"] <= o["end"]: 
+                   print("calcular y sumar minutos")  
+                else:
+                   print("no sera calculado")            
 
-        dateEndOvertime = schedules2[0]["start"]
-        overtimeRequests = self.getOvertimeRequests(con, ['APPROVED'], None, [userId], date, dateEndOvertime)
+ 
         
      
        
