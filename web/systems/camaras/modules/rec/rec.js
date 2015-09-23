@@ -47,6 +47,7 @@ function RecordController($scope,$timeout,$filter,$sce,Camaras) {
     $scope.selectCamara = selectCamara;
     $scope.order = order;
     $scope.orderByHour = orderByHour;
+    $scope.closeFilterCamera = closeFilterCamera;
 
     function initialize() {
       $scope.view.displayListRecordings = false;
@@ -115,6 +116,10 @@ function RecordController($scope,$timeout,$filter,$sce,Camaras) {
       } else {
         $scope.setStyle(2);
       }
+    }
+
+    function closeFilterCamera() {
+      $scope.setStyle(0);
     }
 
     function order(predicate, reverse) {

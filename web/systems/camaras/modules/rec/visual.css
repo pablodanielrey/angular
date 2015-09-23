@@ -20,6 +20,8 @@
 
 .rec .contentRec {
   padding: 20px;
+
+
 }
 
 .rec .inputSearchContent {
@@ -81,13 +83,14 @@
   color: white;
 }
 
+
 /***********************************************************
 *********** CONTENEDOR RESULTADOS DE BUSQUEDA **************
 ***********************************************************/
 
 .rec .contentRecordings {
   position: absolute;
-  z-index: 998;
+  z-index: 997;
   background-color:white;
   -webkit-box-shadow: 1px 1px 5px #5c5f69;
   -moz-box-shadow: 5px 5px 5px #5c5f69;
@@ -192,7 +195,7 @@
   float: right;
   height: 100%;
   background-color: rgba(0,0,0,0.8);
-  z-index: 999;
+  z-index: 998;
   top:0px;
   padding: 20px;
 }
@@ -317,10 +320,19 @@
 ------------------------------------------------------------------
 */
 
+
 .rec.displayFilterCamera .imgFilters {
   display:none;
 }
 
+.rec.displayFilterCamera .contentRecordings {
+  display: none;
+}
+
 .rec.displayFilterCamera .contentCamaras {
-  display:block;
+
+
+
+
+
 }

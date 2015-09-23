@@ -3,7 +3,7 @@
     <div class="contentRec">
           <div class="menuRec">
               <div class="contentItem">
-                <span ng-click="viewFilterCamera()"><i class="fa fa-video-camera"></i> Camara <i class="fa fa-sort-desc"></i></span>
+                <span ng-click='viewFilterCamera()'><i class="fa fa-video-camera"></i> Camaras <i class="fa fa-sort-desc"></i></span>
               </div>
               <div class="contentItem">
                   <span><i class="fa fa-calendar-o"></i> Inicio</span>
@@ -26,6 +26,9 @@
               </div>
           </div>
     </div>
+
+
+
     <!-- ******************** iMAGEN DEL FONDO *************************** -->
     <div class="imgFilters">
     </div>
@@ -90,6 +93,7 @@
     </div>
 
     <div class="contentCamaras">
+      <button ng-click="closeFilterCamera()">Volver</button>
       <div ng-repeat="floor in model.camaras">
           <span>{{floor.floor}}</span>
           <div ng-repeat="camara in floor.camaras">
@@ -97,7 +101,7 @@
             <span>{{camara.number}}</span>
           </div>
       </div>
-    <div>
+    </div>
 
 
     <!-- *************** CONTENEDOR DE REPRODUCIÓN *********************** -->
