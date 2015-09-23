@@ -53,6 +53,17 @@ app.controller('ManageIssuesCtrl', ["$scope", "$timeout", "$window", "Module", "
   };
 
 
+  $scope.getNodeRequest = function(node) {
+    if (node.state == "COMMENT") {
+      return node.request;
+    }
+    var st = node.request;
+    if (st.length > 40) {
+      st = st.substring(0,60) + '....';
+    }
+    return st;
+  }
+
 
   /**
    * Incrementar espacio de la descripcion del nodo al hacer click (textarea) para facilitar el ingreso de datos
@@ -81,7 +92,7 @@ app.controller('ManageIssuesCtrl', ["$scope", "$timeout", "$window", "Module", "
    */
   $scope.toggleNodeData = function (nodeScope) {
     var nodeData = nodeScope.$modelValue;
-    nodeData.collapsedDescription = !nodeData.collapsedDescription
+    nodeData.collapsedDescription = !nodeData.collapsedDescription;
   };
 
 
@@ -90,6 +101,7 @@ app.controller('ManageIssuesCtrl', ["$scope", "$timeout", "$window", "Module", "
   $scope.expandDescription = function(nodeScope){
     var nodeData = nodeScope.$modelValue;
     nodeData.descriptionExpanded = !nodeData.descriptionExpanded ;
+    nodeData.collapsedDescription = !nodeData.collapsedDescription;
   };
 
 
@@ -115,6 +127,7 @@ app.controller('ManageIssuesCtrl', ["$scope", "$timeout", "$window", "Module", "
     $scope.model.newNode = $scope.initializeNode("PENDING");
     $scope.model.newNode.parent_id = nodeData.id;
     $scope.model.newNode.visibilities = nodeData['visibilities'];
+    $scope.model.newNode.collapsedDescription = true;
   };
 
   $scope.addComment = function(nodeData){
@@ -124,6 +137,7 @@ app.controller('ManageIssuesCtrl', ["$scope", "$timeout", "$window", "Module", "
     $scope.model.newNode = $scope.initializeNode("COMMENT");
     $scope.model.newNode.parent_id = nodeData.id;
     $scope.model.newNode.visibilities = nodeData['visibilities'];
+    $scope.model.newNode.collapsedDescription = true;
   };
 
   $scope.saveChild = function() {
