@@ -77,7 +77,7 @@ class Camaras:
         start = rec[3]
         end = rec[4]
         sizeStr = self._convertSizeUnit(rec[5])
-        return {'id':rec[0],'displayName':displayName,'start':start,'end':end,'size':rec[5],'duration':rec[8],'fileName':rec[6],'src':rec[2],'fps':rec[1],'camera':camera,'sizeStr':sizeStr}
+        return {'id':rec[0],'displayName':displayName,'start':start,'end':end,'size':rec[5],'duration':rec[8],'fileName':rec[6],'src':rec[2],'fps':str(rec[1]),'camera':camera,'sizeStr':sizeStr}
 
 
     def findRecordings(self,con,start,end,cameras):
