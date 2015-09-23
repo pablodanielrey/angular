@@ -1,13 +1,20 @@
+
 .issues {
   margin: 0px;
   padding: 0px;
   height:100%;
   width:100%;
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  position:absolute;
+  overflow-y: hidden;
+  background-color: #eee;
+
 }
 
 .issues .contentScreens {
-  position:absolute;
+  height:100%;
+  width:100%
+
 }
 
 /*******************************************************
@@ -104,7 +111,7 @@
   display:none;
 }
 
-.issuesItems .orderItem { /*CONTENDERO DEL TEXTO DEL PEDIDO */
+.issues .issuesItems .orderItem { /*CONTENDERO DEL TEXTO DEL PEDIDO */
   display: flex;
   flex-direction: row;
   wrap:nowrap;

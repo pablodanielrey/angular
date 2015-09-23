@@ -6,6 +6,7 @@
 
 body {
   overflow-x: hidden;
+
 }
 
 
@@ -18,9 +19,9 @@ body {
 }
 
 
-/*.principal.ng-scope {
+.principal.ng-scope {
   height: 100%;
-}*/
+}
 
 
 .screen {
