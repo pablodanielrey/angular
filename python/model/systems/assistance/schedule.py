@@ -18,15 +18,18 @@ from model.systems.assistance.logs import Logs
 class ScheduleData:
     ''' representa datos del schedule '''
 
-    def __init__(self, s, dateStart, dateEnd):
-        self.dateStart = dateStart
-        self.dateEnd = dateEnd
+    def __init__(self, s, dateStart = None, dateEnd = None):
+        self.id = s['id']
         self.date = s['date']
         self.start = s['start']
         self.end = s['end']
         self.isDayOfWeek = s['isDayOfWeek']
         self.isDayOfMonth = s['isDayOfMonth']
         self.isDayOfYear = s['isDayOfYear']
+        
+        self.dateStart = dateStart
+        self.dateEnd = dateEnd
+
 
     def _checkDate(date):
 
@@ -71,9 +74,11 @@ class Schedule:
     logs = inject.attr(Logs)
     date = inject.attr(Date)
 
+
     """
-        Retorna la lista de logs determinada que deber�a tener un usuario para una fecha espec�fica,
+        Retorna la lista de logs determinada que deberia tener un usuario para un schedule,
         se tiene en cuenta el horario de la persona en la fecha y la fecha siguiente para obtener los logs correctos.
+        @param schedules Lista de schedules Suponemos que la lista es de la misma fecha a consultar
     """
     def getLogsForSchedule(self, con, userId, schedules):
 
@@ -83,43 +88,15 @@ class Schedule:
         if len(schedules) <= 0:
             return []
 
-        start = schedules[0]['start']
-        end = schedules[-1]['end']
 
-        count = 0
-        schedules2 = []
-        days = 1
-        while (count < 10) and (schedules2 is None or len(schedules2) <= 0):
-            date2 = start + datetime.timedelta(days=days)
-            schedules2 = self.getSchedule(con, userId, date2)
-            days = days + 1
-            count = count + 1
+        #definir timestamps de inicio y finalizacion
+        dateStart = schedules[0].date
+        start = schedules[0].getStart(dateStart)
+        
+        dateEnd = schedules[-1].date
+        end = schedules[-1].getEnd(dateEnd)
 
-        if schedules2 is None or len(schedules2) <= 0:
-            start2 = end + datetime.timedelta(hours=24)
-        else:
-            start2 = schedules2[0]['start']
-
-        """
-        schedules2 = []
-        days = 1
-        count = 0
-        while (count < 10) or (schedules2 is None or len(schedules2) <= 0):
-            date2 = date - datetime.timedelta(days=days)
-            schedules2 = self.getSchedule(con,userId,date2)
-            days = days + 1
-            count = count + 1
-
-        if schedules2 is None or len(schedules2) <= 0:
-            end2 = start - datetime.timedelta(hours=24)
-        else:
-            end2 = schedules2[0]['end']
-        """
-
-        deltaEnd = end + datetime.timedelta(seconds=((start2 - end).total_seconds() / 2))
-        """
-        deltaStart = start - datetime.timedelta(seconds=((start - end2).total_seconds() / 2))
-        """
+        deltaEnd = end + datetime.timedelta(hours=3)
         deltaStart = start - datetime.timedelta(hours=3)
 
         logs = self.logs.findLogs(con, userId, deltaStart, deltaEnd)
@@ -131,51 +108,38 @@ class Schedule:
         la fecha esta en UTC
     """
     def getSchedule(self, con, userId, date):
-        print("**************************************** getSchedule")
-        print(date)
-
-
-        if self.date.isNaive(date):
-            raise Exception('date is naive')
-
-        date = self.date.awareToUtc(date)   # trabajo con las fechas en utc
         cur = con.cursor()
         cur.execute('set time zone %s', ('utc',))
 
-        print(date)
-        print("****************************************")
-
         """ obtengo todos los schedules que son en la fecha date del parámetro """
-        cur.execute("select sstart, send, date, id from assistance.schedule where \
-                    ((date = %s) or \
-                    (isDayOfWeek = true and date <= %s and extract(dow from date) = extract(dow from %s)) or \
-                    (isDayOfMonth = true and date <= %s and extract(day from date) = extract(day from %s)) or \
-                    (isDayOfYear = true and date <= %s and extract(doy from date) = extract(doy from %s))) and \
+        cur.execute("select id, sstart, send, sdate, isDayOfWeek, isDayOfMonth, isDayOfYear from assistance.schedule where \
+                    ((sdate = %s) or \
+                    (isDayOfWeek = true and sdate <= %s and extract(dow from date) = extract(dow from %s)) or \
+                    (isDayOfMonth = true and sdate <= %s and extract(day from date) = extract(day from %s)) or \
+                    (isDayOfYear = true and sdate <= %s and extract(doy from date) = extract(doy from %s))) and \
                     user_id = %s \
-                    order by date desc", (date, date, date, date, date, date, date, userId))
+                    order by sdate desc", (date, date, date, date, date, date, date, userId))
+       
         scheduless = cur.fetchall()
         if scheduless is None or len(scheduless) <= 0:
             return []
 
         schedules = []
-
-        if not self.date.isUTC(scheduless[0][2]):
-            raise FailedConstraints('date in database not in UTC')
-
-        dateS = scheduless[0][2].date()
         for schedule in scheduless:
-
-            """ controlo que las fechas están en utc """
-            if not (self.date.isUTC(schedule[0]) and self.date.isUTC(schedule[1])):
-                raise FailedConstraints('date in database not in UTC')
-
-            if schedule[2].date() == dateS:
-
-                """ me aseguro de que las fechas tengan si o si un timezone """
-                assert schedule[0].tzinfo is not None
-                assert schedule[1].tzinfo is not None
-
-                """ retorno los schedules con la fecha actual en utc - las fechas en la base deber�an estar en utc """
+  
+            sch = {
+                'id': schedule[0]
+                'date': schedule[1],
+                'start': schedule[2],
+                'end': schedule[3],
+                'isDayOfWeek': schedule[4],
+                'isDayOfMonth': schedule[5],
+                'isDayOfYear': schedule[6],                                      
+            }
+            
+            new ScheduleData(sch) 
+            
+                  """ retorno los schedules con la fecha actual en utc - las fechas en la base deberian estar en utc """
                 schedules.append(
                     {
                         'date': schedule[2],
