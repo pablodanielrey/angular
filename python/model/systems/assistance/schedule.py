@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
-import psycopg2, inject, uuid
-import datetime, pytz, calendar
+import psycopg2
+import inject
+import uuid
+import datetime
+import pytz
+import calendar
 import logging
 import pdb
 
@@ -9,6 +13,57 @@ from model.exceptions import *
 from model import utils
 from model.systems.assistance.date import Date
 from model.systems.assistance.logs import Logs
+
+
+class ScheduleData:
+    ''' representa datos del schedule '''
+
+    def __init__(self, s, dateStart, dateEnd):
+        self.dateStart = dateStart
+        self.dateEnd = dateEnd
+        self.date = s['date']
+        self.start = s['start']
+        self.end = s['end']
+        self.isDayOfWeek = s['isDayOfWeek']
+        self.isDayOfMonth = s['isDayOfMonth']
+        self.isDayOfYear = s['isDayOfYear']
+
+    def _checkDate(date):
+
+        if self.isDayOfWeek:
+            d = datetime.date.weekday(self.date)
+            d1 = datetime.date.weekday(date)
+            return (d1 == d)
+
+        ''' ... lo mismo con dia del mes y dia del año ... '''
+
+        if (dateStart > date) or (dateEnd > date):
+            return False
+        return True
+
+    def getStart(date):
+        ''' retorna el datetime del inicio del schedule '''
+
+        if not self._checkDate(date):
+            return None
+
+        zero = datetime.time(hour=0, minute=0, second=0)
+        dzero = datetime.combine(date, zero)
+        start = dzero + datetime.timedelta(seconds=self.start)
+
+        return start
+
+    def getEnd(date):
+        ''' retorna el datetime del fin del schedule '''
+
+        if not self._checkDate(date):
+            return None
+
+        zero = datetime.time(hour=0, minute=0, second=0)
+        dzero = datetime.combine(date, zero)
+        end = dzero + datetime.timedelta(seconds=self.end)
+
+        return end
 
 
 class Schedule:
@@ -78,18 +133,18 @@ class Schedule:
     def getSchedule(self, con, userId, date):
         print("**************************************** getSchedule")
         print(date)
-        
-        
+
+
         if self.date.isNaive(date):
             raise Exception('date is naive')
 
         date = self.date.awareToUtc(date)   # trabajo con las fechas en utc
         cur = con.cursor()
         cur.execute('set time zone %s', ('utc',))
-        
+
         print(date)
         print("****************************************")
-        
+
         """ obtengo todos los schedules que son en la fecha date del parámetro """
         cur.execute("select sstart, send, date, id from assistance.schedule where \
                     ((date = %s) or \
