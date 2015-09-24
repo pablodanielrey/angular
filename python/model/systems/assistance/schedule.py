@@ -2,6 +2,7 @@
 import psycopg2, inject, uuid
 import datetime, pytz, calendar
 import logging
+import pdb
 
 from model.exceptions import *
 
@@ -75,6 +76,10 @@ class Schedule:
         la fecha esta en UTC
     """
     def getSchedule(self, con, userId, date):
+        print("**************************************** getSchedule")
+        print(date)
+        
+        
         if self.date.isNaive(date):
             raise Exception('date is naive')
 
@@ -82,7 +87,8 @@ class Schedule:
         cur = con.cursor()
         cur.execute('set time zone %s', ('utc',))
         
-        
+        print(date)
+        print("****************************************")
         
         """ obtengo todos los schedules que son en la fecha date del parámetro """
         cur.execute("select sstart, send, date, id from assistance.schedule where \
