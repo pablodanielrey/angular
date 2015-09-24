@@ -22,7 +22,7 @@ class Overtime:
     date = inject.attr(Date)
     schedule = inject.attr(Schedule)
     logs = inject.attr(Logs)
-    
+
 
     """
         obtiene el ultimo estado del pedido de horas extras indicado por reqId
@@ -69,10 +69,11 @@ class Overtime:
     '''
     def getWorkedOvertime(self, con, userId, date):
 
-        #inicializar parametros de fechas
-        dateStart = date.replace(hour=0, minute=0, second=0)
+        t = datetime.time(hour=0, minute=0, second=0)
+        dateStart = datetime.datetime.combine(date, t)
+
         dateEnd = date.replace(hour=23, minute=59, second=59)
-        
+
         print("**************************************** date")
         print(date)
         print(dateStart)
@@ -85,9 +86,9 @@ class Overtime:
         print("**************************************** overtime")
         for overtime in overtimeRequests:
              print(overtime)
-             
+
         print("****************************************")
-        
+
         #definir fecha inicial del ultimo schedule del dia anterior
         schedulesPre = None
         dateAux = dateStart
@@ -99,14 +100,14 @@ class Overtime:
         print("****************************************")
 
         datePre = schedulesPre[-1]["start"]
-        
-        
+
+
         print("**************************************** schedulesPre")
         for sch in schedulesPre:
             print(sch)
-        print("****************************************")            
-            
-        
+        print("****************************************")
+
+
         #definir fecha final del ultimo schedule del dia siguiente
         schedulesPos = None
         dateAux = dateStart
@@ -114,27 +115,27 @@ class Overtime:
             dateAux = dateAux + datetime.timedelta(days = 1)
             schedulesPos = self.schedule.getSchedule(con, userId, dateAux)
         datePos = schedulesPos[-1]["end"]
-        
-        
+
+
         print("**************************************** schedulesPos")
         for sch in schedulesPos:
             print(sch)
-        print("****************************************")            
-            
+        print("****************************************")
 
-        print("**************************************** datePre datePos")        
+
+        print("**************************************** datePre datePos")
         print(datePre)
         print(datePos)
         print("****************************************")
-                
+
         #obtener worked hours en base a las fechas definidas de los schedules anterior y posterior
         logs = self.logs.findLogs(con, userId, datePre, datePos)
         (workedHours, attlogs) = self.logs.getWorkedHours(logs)
-        
+
         print("**************************************** workedHours")
         for wh in workedHours:
              print(wh)
-        
+
         print("****************************************")
 
         for o in overtimeRequests:
@@ -145,15 +146,15 @@ class Overtime:
                    print("calcular y sumar minutos")
                 elif wh["start"] <= o["begin"] and wh["end"] >= o["end"]:
                    print("calcular y sumar minutos")
-                elif wh["start"] >= o["begin"] and wh["start"] <= o["end"]: 
-                   print("calcular y sumar minutos")  
+                elif wh["start"] >= o["begin"] and wh["start"] <= o["end"]:
+                   print("calcular y sumar minutos")
                 else:
-                   print("no sera calculado")            
+                   print("no sera calculado")
 
- 
-        
-     
-       
+
+
+
+
 
 
     def getOvertimeRequests(self, con, status=[], requestors=None, users=None, begin=None, end=None):
