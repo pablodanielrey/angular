@@ -43,8 +43,12 @@ class ScheduleData:
         if (dateStart > date) or (dateEnd > date):
             return False
         return True
-
-    def getStart(date):
+    
+    def _getStart(self):
+        return self.start
+    
+    
+    def getStart(self,date):
         ''' retorna el datetime del inicio del schedule '''
 
         if not self._checkDate(date):
@@ -103,6 +107,7 @@ class Schedule:
 
         return logs
 
+
     """
         obtiene tods los schedules para un usuario en determinada fecha, solo deja los actuales, tiene en cuenta el historial ordenado por date
         la fecha esta en UTC
@@ -114,9 +119,9 @@ class Schedule:
         """ obtengo todos los schedules que son en la fecha date del parámetro """
         cur.execute("select id, sstart, send, sdate, isDayOfWeek, isDayOfMonth, isDayOfYear from assistance.schedule where \
                     ((sdate = %s) or \
-                    (isDayOfWeek = true and sdate <= %s and extract(dow from date) = extract(dow from %s)) or \
-                    (isDayOfMonth = true and sdate <= %s and extract(day from date) = extract(day from %s)) or \
-                    (isDayOfYear = true and sdate <= %s and extract(doy from date) = extract(doy from %s))) and \
+                    (isDayOfWeek = true and sdate <= %s and extract(dow from sdate) = extract(dow from %s)) or \
+                    (isDayOfMonth = true and sdate <= %s and extract(day from sdate) = extract(day from %s)) or \
+                    (isDayOfYear = true and sdate <= %s and extract(doy from sdate) = extract(doy from %s))) and \
                     user_id = %s \
                     order by sdate desc", (date, date, date, date, date, date, date, userId))
        
@@ -128,34 +133,26 @@ class Schedule:
         for schedule in scheduless:
   
             sch = {
-                'id': schedule[0]
+                'id': schedule[0],
                 'date': schedule[1],
                 'start': schedule[2],
                 'end': schedule[3],
                 'isDayOfWeek': schedule[4],
                 'isDayOfMonth': schedule[5],
-                'isDayOfYear': schedule[6],                                      
+                'isDayOfYear': schedule[6]                                   
             }
             
-            new ScheduleData(sch) 
+            schData = ScheduleData(sch) 
             
-                  """ retorno los schedules con la fecha actual en utc - las fechas en la base deberian estar en utc """
-                schedules.append(
-                    {
-                        'date': schedule[2],
-                        'start': schedule[0],
-                        'end': schedule[1],
-                        'id': schedule[3]
-                    }
-                )
-
-            else:
-                break
+            #retorno los schedules con la fecha actual en utc - las fechas en la base deberian estar en utc
+            schedules.append(schData)
+                
 
         # ordeno los schedules por el start
-        schedules = sorted(schedules, key=lambda schedule: schedule['start'])
+        #schedules = sorted(schedules, key=lambda schedule: schedule.getStart(date))
 
         return schedules
+
 
     """
         obtiene todos los schedules para un usuario

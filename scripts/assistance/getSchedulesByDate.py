@@ -1,4 +1,11 @@
 # -*- coding: utf-8 -*-
+'''
+Obtener schedules a partir de una fecha
+@author Ivan
+@example python3 getSchedulesByDate.py userId date
+@example python3 getSchedulesByDate.py e43e5ded-e271-4422-8e85-9f1bc0a61235 "14/04/2015"
+'''
+
 import sys
 sys.path.insert(0, '../../python')
 
@@ -12,6 +19,8 @@ from asyncio import coroutine
 from autobahn.asyncio.wamp import ApplicationSession
 
 from model.config import Config
+
+
 
 ''' configuro el injector y el logger '''
 logging.getLogger().setLevel(logging.DEBUG)
@@ -37,30 +46,18 @@ class WampMain(ApplicationSession):
 
     @coroutine
     def onJoin(self, details):
-        logging.debug('ejecutando llamadas')
+        logging.debug('********** getSchedulesByDate **********')
 
-        date = datetime.datetime.now()
+        userId = sys.argv[1]
+        dateParam = sys.argv[2]
+        
+        date = datetime.datetime.strptime(dateParam, "%d/%m/%Y").date()
+        
+        schedules = yield from self.call('assistance.getSchedulesByDate', userId, date)
 
-        from dateutil.parser import parse
-        import dateutil
-        tz = dateutil.tz.tzlocal()
-
-        days = 20
-        c = 0
-        while c < days:
-            ret = yield from self.call('assistance.getSchedules', sid, userId, date)
-
-            if len(ret) > 0:
-                for r in ret:
-                    start = parse(r['start'])
-                    start = start.astimezone(tz)
-                    end = parse(r['end'])
-                    end = end.astimezone(tz)
-                    print(r)
-                    #logging.debug('{} : {} --> {}'.format(r['id'], start, end))
-            c = c + 1
-            date = date + datetime.timedelta(days=1)
-
+        for schedule in schedules:
+            print(schedule)
+            
         sys.exit()
 
 

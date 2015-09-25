@@ -58,7 +58,8 @@ class AssistanceWamp(ApplicationSession):
         yield from self.register(self.getAvailableChecks_async, 'assistance.getAvailableChecks')
         yield from self.register(self.getChecksByUser_async, 'assistance.getChecksByUser')
         yield from self.register(self.getUsersWithChecks_async, 'assistance.getUsersWithChecks')
-        yield from self.register(self.getFailsByDate_async, 'assistance.getFailsByDate')
+        yield from self.register(self.getSchedulesByDate_async, 'assistance.getSchedulesByDate')
+
 
     def _getDatabase(self):
         host = self.serverConfig.configs['database_host']
@@ -271,8 +272,6 @@ class AssistanceWamp(ApplicationSession):
 
 
 
-
-
     def getFailsByFilter(self, userIds, officesIds, start, end, filter):
         con = self._getDatabase()
         try:
@@ -288,3 +287,30 @@ class AssistanceWamp(ApplicationSession):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.getFailsByFilter, userIds, officesIds, start, end, filter)
         return r
+        
+        
+    
+    def getSchedulesByDate(self, userId, date):
+        """
+         " Obtener schedules de una fecha determinada
+         " @param userId Id de usuario al cual se le va a pedir los schedules
+         " @param date Fecha para la cual se quieren consultar los schedules
+         """
+        date = datetime.datetime.strptime(date, "%Y-%m-%d").date()
+        
+        con = self._getDatabase()
+        try:
+            schedules = self.schedule.getSchedule(con, userId, date)
+            return schedules
+
+        finally:
+            con.close()
+
+
+
+
+    @coroutine
+    def getSchedulesByDate_async(self, userId, date):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.getSchedulesByDate, userId, date)
+        return r    
