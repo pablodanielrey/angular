@@ -95,6 +95,9 @@ class Camaras:
 
         return recordings
 
+    def deleteAllRecordings(self,con):
+        cur = con.cursor()
+        cur.execute('delete from camera.recording')
 
     def persistCamera(self,con,rec):
         if rec is None:

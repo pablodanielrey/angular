@@ -72,12 +72,14 @@ class Import:
 
         try:
             con = self._getDatabase()
+            self.camaras.deleteAllRecordings(con)
+            con.commit()
             for r in result:
                 r = r.decode('utf-8')
                 if r.strip()[-4:] == '.mp4':
                     array = r.split()
                     rec = {}
-                    
+
                     rec['size'] = self.convertSize(array[0])
 
                     rec['file_name'] = array[1]
