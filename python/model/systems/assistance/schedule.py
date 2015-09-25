@@ -44,8 +44,21 @@ class ScheduleData:
             return False
         return True
     
-    def _getStart(self):
-        return self.start
+    def __cmp__(self, other):
+    
+        r = other.date.__cmp__(self.date)
+        if r is not 0:
+          return r
+          
+        if self.start < other.start:
+          return -1
+        
+        if self.start == other.start:
+          return 0
+          
+        if self.start > other.start:
+          return 1
+        
     
     
     def getStart(self,date):
@@ -82,7 +95,7 @@ class Schedule:
     """
         Retorna la lista de logs determinada que deberia tener un usuario para un schedule,
         se tiene en cuenta el horario de la persona en la fecha y la fecha siguiente para obtener los logs correctos.
-        @param schedules Lista de schedules Suponemos que la lista es de la misma fecha a consultar
+        @param schedules Lista de schedules Los schedules de la lista deben tener la misma fecha a consultar
     """
     def getLogsForSchedule(self, con, userId, schedules):
 
@@ -91,7 +104,6 @@ class Schedule:
 
         if len(schedules) <= 0:
             return []
-
 
         #definir timestamps de inicio y finalizacion
         dateStart = schedules[0].date
@@ -128,7 +140,7 @@ class Schedule:
         scheduless = cur.fetchall()
         if scheduless is None or len(scheduless) <= 0:
             return []
-
+            
         schedules = []
         for schedule in scheduless:
   
@@ -149,8 +161,9 @@ class Schedule:
                 
 
         # ordeno los schedules por el start
-        #schedules = sorted(schedules, key=lambda schedule: schedule.getStart(date))
+        schedules = sorted(schedules)
 
+   
         return schedules
 
 
@@ -164,33 +177,27 @@ class Schedule:
         cur.execute("select sstart, send, date, isDayOfWeek, isDayOfMonth, isDayOfYear, id from assistance.schedule where \
                 user_id = %s \
                 order by date desc", (userId,))
+                
         scheduless = cur.fetchall()
         if scheduless is None or len(scheduless) <= 0:
             return []
 
         schedules = []
 
-        if not self.date.isUTC(scheduless[0][2]):
-            raise FailedConstraints('date in database not in UTC')
-
         for schedule in scheduless:
-
-            """ controlo que las fechas están en utc """
-            if not (self.date.isUTC(schedule[0]) and self.date.isUTC(schedule[1])):
-                raise FailedConstraints('date in database not in UTC')
-
-            """ retorno los schedules con la fecha actual en utc - las fechas en la base deber�an estar en utc """
-            schedules.append(
-                {
-                    'id': schedule[6],
-                    'start': schedule[0],
-                    'end': schedule[1],
-                    'date': schedule[2],
-                    'isDayOfWeek': schedule[3],
-                    'isDayOfMonth': schedule[4],
-                    'isDayOfYear': schedule[5]
-                }
-            )
+            sch = {
+                'id': schedule[0],
+                'date': schedule[1],
+                'start': schedule[2],
+                'end': schedule[3],
+                'isDayOfWeek': schedule[4],
+                'isDayOfMonth': schedule[5],
+                'isDayOfYear': schedule[6]                                   
+            }
+            
+            schData = ScheduleData(sch) 
+            
+            schedules.append(schData)
 
         return schedules
 
@@ -201,10 +208,6 @@ class Schedule:
 
         if date is None:
             date = self.date.now()
-            date = date.replace(hour=0,minute=0,second=0,microsecond=0)
-
-        # paso la fecha a utc
-        date = self.date.awareToUtc(date)
 
         # obtengo el primer dia de la semana del date (L-0 .. D-6)
         weekday = datetime.date.weekday(date)
@@ -218,6 +221,8 @@ class Schedule:
             date += datetime.timedelta(days=1)
 
         return schedules
+
+
 
     """
         reotnra los ids de los usuarios que tiene algun contról de horario
@@ -248,7 +253,7 @@ class Schedule:
 
         id = str(uuid.uuid4())
         req = (id, userId, uaware, ustart, uend, isDayOfWeek, isDayOfMonth, isDayOfYear)
-        cur.execute('insert into assistance.schedule (id,user_id,date,sstart,send,isDayOfWeek,isDayOfMonth,isDayOfYear) values (%s,%s,%s,%s,%s,%s,%s,%s)', req)
+        cur.execute('insert into assistance.schedule (id,user_id,sdate,sstart,send,isDayOfWeek,isDayOfMonth,isDayOfYear) values (%s,%s,%s,%s,%s,%s,%s,%s)', req)
         return id
 
     '''

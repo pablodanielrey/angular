@@ -301,6 +301,7 @@ class AssistanceWamp(ApplicationSession):
         con = self._getDatabase()
         try:
             schedules = self.schedule.getSchedule(con, userId, date)
+            
             return schedules
 
         finally:
