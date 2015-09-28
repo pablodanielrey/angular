@@ -13,12 +13,15 @@ from model.config import Config
 from model.profiles import Profiles
 
 from model.systems.assistance.assistance import Assistance
+from model.systems.assistance.schedule import ScheduleData
 import model.systems.assistance.date
 from model.systems.assistance.fails import Fails
 from model.systems.assistance.schedule import Schedule
 from model.systems.assistance.check.checks import ScheduleChecks
 from model.systems.offices.offices import Offices
 from model.systems.assistance.date import Date
+
+
 
 import asyncio
 from asyncio import coroutine
@@ -59,6 +62,7 @@ class AssistanceWamp(ApplicationSession):
         yield from self.register(self.getChecksByUser_async, 'assistance.getChecksByUser')
         yield from self.register(self.getUsersWithChecks_async, 'assistance.getUsersWithChecks')
         yield from self.register(self.getSchedulesByDate_async, 'assistance.getSchedulesByDate')
+        yield from self.register(self.getLogsForSchedulesByDate_async, 'assistance.getLogsForSchedulesByDate')
 
 
     def _getDatabase(self):
@@ -300,18 +304,63 @@ class AssistanceWamp(ApplicationSession):
         
         con = self._getDatabase()
         try:
-            schedules = self.schedule.getSchedule(con, userId, date)
-            
+            schedulesData = self.schedule.getSchedule(con, userId, date)
+
+            schedules = []
+            for schData in schedulesData:
+              sch = {
+                "id":schData.id,
+                "date":schData.date,
+                "start":schData.start,
+                "end":schData.end,
+                "date":schData.date,
+                "isDayOfWeek":schData.isDayOfWeek,
+                "isDayOfMonth":schData.isDayOfMonth,
+                "isDayOfYear":schData.isDayOfYear,
+                "previousDate":schData.previousDate,
+                "nextDate":schData.nextDate,
+                "userId":schData.userId
+              }
+              schedules.append(sch)
+          
             return schedules
 
         finally:
             con.close()
 
-
-
-
     @coroutine
     def getSchedulesByDate_async(self, userId, date):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.getSchedulesByDate, userId, date)
-        return r    
+        return r
+        
+        
+        
+    def getLogsForSchedulesByDate(self, userId, schedules):
+        """
+         " Obtener schedules de una fecha determinada
+         " @param userId Id de usuario al cual se le va a pedir los schedules
+         " @param date Fecha para la cual se quieren consultar los schedules
+         """
+        
+        con = self._getDatabase()
+        try:
+            print("************************************************************************************************************************")
+
+            schedulesData = []
+            for schedule in schedules:
+                schData = ScheduleData(schedule)
+                schedulesData.append(schData)
+
+
+            logs = self.schedule.getLogsForSchedule(con, userId, schedulesData)
+            return logs
+
+        finally:
+            con.close()
+
+    @coroutine
+    def getLogsForSchedulesByDate_async(self, userId, schedules):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.getLogsForSchedulesByDate, userId, schedules)
+        return r   

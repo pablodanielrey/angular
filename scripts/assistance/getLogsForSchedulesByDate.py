@@ -2,8 +2,8 @@
 '''
 Obtener schedules a partir de una fecha
 @author Ivan
-@example python3 getSchedulesByDate.py userId date
-@example python3 getSchedulesByDate.py e43e5ded-e271-4422-8e85-9f1bc0a61235 "14/04/2015"
+@example python3 getLogsForSchedulesByDate.py userId date
+@example python3 getLogsForSchedulesByDate.py e43e5ded-e271-4422-8e85-9f1bc0a61235 "14/04/2015"
 '''
 
 import sys
@@ -47,20 +47,18 @@ class WampMain(ApplicationSession):
 
     @coroutine
     def onJoin(self, details):
-        logging.debug('********** getSchedulesByDate **********')
+        logging.debug('********** getLogsForSchedulesByDate **********')
 
         userId = sys.argv[1]
         dateParam = sys.argv[2]
         
         date = datetime.datetime.strptime(dateParam, "%d/%m/%Y").date()
         
-        schedulesAux = yield from self.call('assistance.getSchedulesByDate', userId, date)
+        schedules = yield from self.call('assistance.getSchedulesByDate', userId, date)
+        logs = yield from self.call('assistance.getLogsForSchedulesByDate', userId, schedules)
 
-        schedules = []
-
-        for schedule in schedulesAux:
-            schData = ScheduleData(schedule)
-            schedules.append(schData);
+        for log in logs:
+            print(log)
             
         sys.exit()
 

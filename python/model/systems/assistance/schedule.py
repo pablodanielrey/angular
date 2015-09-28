@@ -15,10 +15,17 @@ from model.systems.assistance.date import Date
 from model.systems.assistance.logs import Logs
 
 
+
 class ScheduleData:
     ''' representa datos del schedule '''
-
-    def __init__(self, s, dateStart = None, dateEnd = None):
+    
+    def __init__(self, s, previousDate = None, nextDate = None):
+        '''
+        @param s Datos del schedule
+        @param previousDate Fecha del schedule anterior
+        @param nextDate Fecha del schedule posterior
+        '''
+        
         self.id = s['id']
         self.date = s['date']
         self.start = s['start']
@@ -26,9 +33,10 @@ class ScheduleData:
         self.isDayOfWeek = s['isDayOfWeek']
         self.isDayOfMonth = s['isDayOfMonth']
         self.isDayOfYear = s['isDayOfYear']
+        self.userId = s["userId"]
         
-        self.dateStart = dateStart
-        self.dateEnd = dateEnd
+        self.previousDate = previousDate
+        self.nextDate = nextDate
 
 
     def _checkDate(date):
@@ -40,7 +48,7 @@ class ScheduleData:
 
         ''' ... lo mismo con dia del mes y dia del año ... '''
 
-        if (dateStart > date) or (dateEnd > date):
+        if (previousDate > date) or (nextDate > date):
             return False
         return True
     
@@ -129,21 +137,20 @@ class Schedule:
         cur.execute('set time zone %s', ('utc',))
 
         """ obtengo todos los schedules que son en la fecha date del parámetro """
-        cur.execute("select id, sstart, send, sdate, isDayOfWeek, isDayOfMonth, isDayOfYear from assistance.schedule where \
+        cur.execute("select id, sdate, sstart, send, isDayOfWeek, isDayOfMonth, isDayOfYear from assistance.schedule where \
                     ((sdate = %s) or \
                     (isDayOfWeek = true and sdate <= %s and extract(dow from sdate) = extract(dow from %s)) or \
                     (isDayOfMonth = true and sdate <= %s and extract(day from sdate) = extract(day from %s)) or \
                     (isDayOfYear = true and sdate <= %s and extract(doy from sdate) = extract(doy from %s))) and \
                     user_id = %s \
                     order by sdate desc", (date, date, date, date, date, date, date, userId))
-       
+                                
         scheduless = cur.fetchall()
         if scheduless is None or len(scheduless) <= 0:
             return []
-            
+     
         schedules = []
         for schedule in scheduless:
-  
             sch = {
                 'id': schedule[0],
                 'date': schedule[1],
@@ -151,7 +158,8 @@ class Schedule:
                 'end': schedule[3],
                 'isDayOfWeek': schedule[4],
                 'isDayOfMonth': schedule[5],
-                'isDayOfYear': schedule[6]                                   
+                'isDayOfYear': schedule[6],
+                'userId': userId                         
             }
             
             schData = ScheduleData(sch) 
