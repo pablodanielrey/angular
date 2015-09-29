@@ -2,7 +2,8 @@
 import psycopg2
 import inject
 import uuid
-import datetime
+from datetime import datetime, date, time, timedelta
+
 import pytz
 import calendar
 import logging
@@ -39,8 +40,9 @@ class ScheduleData:
         self.nextDate = nextDate
 
 
-    def _checkDate(date):
-
+    def _checkDate(self, date):
+        return True #por el momento no hacemos el chequeo, retornamos True
+        
         if self.isDayOfWeek:
             d = datetime.date.weekday(self.date)
             d1 = datetime.date.weekday(date)
@@ -69,27 +71,27 @@ class ScheduleData:
         
     
     
-    def getStart(self,date):
+    def getStart(self, date):
         ''' retorna el datetime del inicio del schedule '''
 
         if not self._checkDate(date):
             return None
 
-        zero = datetime.time(hour=0, minute=0, second=0)
+        zero = time(hour=0, minute=0, second=0)
         dzero = datetime.combine(date, zero)
-        start = dzero + datetime.timedelta(seconds=self.start)
-
+        start = dzero + timedelta(seconds=self.start)
+        
         return start
 
-    def getEnd(date):
+    def getEnd(self, date):
         ''' retorna el datetime del fin del schedule '''
 
         if not self._checkDate(date):
             return None
 
-        zero = datetime.time(hour=0, minute=0, second=0)
+        zero = time(hour=0, minute=0, second=0)
         dzero = datetime.combine(date, zero)
-        end = dzero + datetime.timedelta(seconds=self.end)
+        end = dzero + timedelta(seconds=self.end)
 
         return end
 
@@ -105,23 +107,28 @@ class Schedule:
         se tiene en cuenta el horario de la persona en la fecha y la fecha siguiente para obtener los logs correctos.
         @param schedules Lista de schedules Los schedules de la lista deben tener la misma fecha a consultar
     """
-    def getLogsForSchedule(self, con, userId, schedules):
+    def getLogsForSchedule(self, con, schedules):
 
         if schedules is None:
             return []
 
         if len(schedules) <= 0:
             return []
+    
 
+        #definir userId
+        userId = schedules[0].userId
+        
         #definir timestamps de inicio y finalizacion
         dateStart = schedules[0].date
         start = schedules[0].getStart(dateStart)
+  
         
         dateEnd = schedules[-1].date
         end = schedules[-1].getEnd(dateEnd)
 
-        deltaEnd = end + datetime.timedelta(hours=3)
-        deltaStart = start - datetime.timedelta(hours=3)
+        deltaEnd = end + timedelta(hours=3)
+        deltaStart = start - timedelta(hours=3)
 
         logs = self.logs.findLogs(con, userId, deltaStart, deltaEnd)
 
@@ -153,7 +160,7 @@ class Schedule:
         for schedule in scheduless:
             sch = {
                 'id': schedule[0],
-                'date': schedule[1],
+                'date': date,
                 'start': schedule[2],
                 'end': schedule[3],
                 'isDayOfWeek': schedule[4],

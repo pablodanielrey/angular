@@ -53,13 +53,14 @@ class WampMain(ApplicationSession):
         dateParam = sys.argv[2]
         
         date = datetime.datetime.strptime(dateParam, "%d/%m/%Y").date()
-        
+
         schedules = yield from self.call('assistance.getSchedulesByDate', userId, date)
-        logs = yield from self.call('assistance.getLogsForSchedulesByDate', userId, schedules)
+        
+        logs = yield from self.call('assistance.getLogsForSchedulesByDate', schedules)
 
         for log in logs:
-            print(log)
-            
+            logging.debug(log)
+
         sys.exit()
 
 
