@@ -100,22 +100,14 @@
   padding: 10px;
   margin-left: 20px;
   width: 81%;
-  height: 50%;
+  height: 65%;
 
 }
 
-.rec .contentRecordings.hidden {
-  position: absolute;
-  background-color:white;
-  -webkit-box-shadow: 1px 1px 5px #5c5f69;
-  -moz-box-shadow: 5px 5px 5px #5c5f69;
-  border-radius:2px;
-  -webkit-border-radius:2px;
-  -moz-border-radius:2px;
-  padding: 10px;
-  margin-left: 20px;
-  opacity:0.0;
-}
+/*.rec .contentRecordings.hidden {
+
+
+}*/
 
 .rec .menuRecording {
   padding: 5px;
@@ -182,6 +174,14 @@
 
 .rec .btnDescargar:hover {
   background-color: #3CB8A4;
+}
+
+.rec .viewSelected {
+  
+  width: 97%;
+  background-color: #eee;
+  padding: 11px;
+  margin-left: 5px;
 }
 
 /***********************************************************
@@ -329,10 +329,53 @@
   display: none;
 }
 
-.rec.displayFilterCamera .contentCamaras {
+.rec .contentCamaras {
+
+  color: #5c5f69;
+  width: 100%;
+  position: absolute;
+  float: right;
+  height: 100%;
+  background-color: rgba(0,0,0,0.8);
+  z-index: 998;
+  top:0px;
+  padding: 20px;
+
+}
+
+.rec .camaras {
+  background-color:white;
+  -webkit-box-shadow: 1px 1px 5px #5c5f69;
+  -moz-box-shadow: 5px 5px 5px #5c5f69;
+  border-radius:2px;
+  -webkit-border-radius:2px;
+  -moz-border-radius:2px;
+  padding:10px;
+  width: 50%;
+  margin:5% 15% auto;
+
+}
+
+.rec .subContentCamaras {
+  background-color: #eee;
+  padding: 20px;
+}
+
+.rec .btnBack {
+  background-color:#0066A6;
+  border-radius: 3px;
+  padding: 5px;
+  color: white;
+  border:none;
+  margin-top: 20px;
+  cursor: pointer;
+}
+
+.rec .titleFloor {
+  margin-bottom: 50px;
+}
 
 
-
-
-
+.rec .selectCam {
+  cursor: pointer;
 }

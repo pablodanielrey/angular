@@ -2,7 +2,7 @@
     <!-- **************** CONTENEDOR DEL MENU DE BUSQUEDA  *************** -->
     <div class="contentRec">
           <div class="menuRec">
-              <div class="contentItem">
+              <div class="contentItem selectCam">
                 <span ng-click='viewFilterCamera()'><i class="fa fa-video-camera"></i> Camaras <i class="fa fa-sort-desc"></i></span>
               </div>
               <div class="contentItem">
@@ -85,21 +85,31 @@
                  </div>
                </div>
          </div>
-         <div>
-           <button ng-click="viewSelecteds()">Ver seleccionados</button>
-         </div>
+
       </div>
 
     </div>
 
+    <div class="viewSelected">
+      <button ng-click="viewSelecteds()">Ver seleccionados</button>
+    </div>
+
+
+
+
     <div class="contentCamaras">
-      <button ng-click="closeFilterCamera()">Volver</button>
-      <div ng-repeat="floor in model.camaras">
-          <span>{{floor.floor}}</span>
-          <div ng-repeat="camara in floor.camaras">
-            <input type="checkbox" ng-model="camara.selected" ng-change="selectCamara(camara)"/>
-            <span>{{camara.number}}</span>
+      <div class="camaras">
+          <div class="subContentCamaras">
+              <div ng-repeat="floor in model.camaras">
+                  <span class="titleFloor"><h3>{{floor.floor}}</h3></span>
+                  <div ng-repeat="camara in floor.camaras">
+                    <input type="checkbox" ng-model="camara.selected" ng-change="selectCamara(camara)"/>
+                    <span><i class="fa fa-video-camera"></i> {{camara.number}}</span>
+                  </div>
+              </div>
+              <button class="btnBack" ng-click="closeFilterCamera()"><i class="fa fa-reply"></i> VOLVER</button>
           </div>
+
       </div>
     </div>
 
