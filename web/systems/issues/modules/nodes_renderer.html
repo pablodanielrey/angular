@@ -22,10 +22,10 @@
             <div class="orderText" ng-click="toggleNodeData(node)">
               <div class="itemsComment">
                   <div class="items">
-                      <span class="requestor">{{node.requestor}}Walter Blanco</span>
+                      <span class="requestor">{{node.requestor}}</span>
                   </div>
                   <div class="items">
-                      <span class="date">21/09/15 | 08:25</span>
+                      <span class="date">{{node.created | date:"dd/MM/yyyy" }} | {{node.created | date:"hh:mm" }}</span>
                   </div>
               </div>
               <div class="text">{{getNodeRequest(node)}}</div>
@@ -52,8 +52,8 @@
                           <span><i class="fa fa-clock-o"></i> <b>Hora: </b> {{node.created | date:"hh:mm" }}</span>
                       </div>
                       <div><i class="fa fa-user"></i> <b>Usuario: </b>  {{node.requestor}}</div>
-                      <div><i class="fa fa-building"></i> <b>Oficina: </b>  Ditesi</div>
-                      <div><i class="fa fa-eye"></i> <b>Visibilidad: </b>  Ditesi</div>
+                      <div><i class="fa fa-building"></i> <b>Oficina: </b>  {{node.office.name}}</div>
+                      <div><i class="fa fa-eye"></i> <b>Visibilidad: </b>  {{node.visibilitiesOffices}}</div>
 
                   </div>
               </div>

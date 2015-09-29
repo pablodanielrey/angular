@@ -4,7 +4,7 @@
  * @param {type} param1
  * @param {type} param2
  */
-app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "Notifications", "Issue", "Users", function ($scope, $timeout, $window, Module, Notifications, Issue, Users) {
+app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "Notifications", "Issue", "Users", "Office", function ($scope, $timeout, $window, Module, Notifications, Issue, Users, Office) {
 
   /***** MANIPULACION DE ESTILOS ******/
   $scope.style = null;
@@ -179,6 +179,7 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
         for (var i = 0; i< data.length; i++) {
           $scope.loadDataNode(data[i]);
         }
+        console.log($scope.data);
       },
       function(error) {
         Notifications.message(error);
@@ -202,6 +203,40 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
     Users.findUser(node.creator,
       function(user) {
         node.requestor = user.name + " " + user.lastname;
+      },
+      function(error) {
+      }
+    );
+
+    Office.findOffices([node.office_id],
+      function(offices) {
+        if (offices == null || offices.length == 0) {
+            node.office = null;
+        } else {
+          node.office = offices[0];
+        }
+      },
+      function(error) {
+      }
+    );
+
+    var idsV = [];
+    for (var i = 0; i < node.visibilities.length; i++) {
+      idsV.push(node.visibilities[i]['office_id']);
+    }
+
+    Office.findOffices(idsV,
+      function(offices) {
+        node.visibilitiesOffices = '';
+        if (offices == null || offices.length == 0) {
+            return;
+        }
+        for (var i = 0; i < offices.length; i++) {
+            if (i > 0) {
+              node.visibilitiesOffices = node.visibilitiesOffices + ', ';
+            }
+            node.visibilitiesOffices = node.visibilitiesOffices + offices[i]['name'];
+        }
       },
       function(error) {
       }
