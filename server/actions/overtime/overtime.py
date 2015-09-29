@@ -187,15 +187,13 @@ class OvertimeWamp(ApplicationSession):
         @param begin Fecha de inicio de la solicitud
         @param begin Fecha de fin de la solicitud
         '''
-        
-        date = datetime.datetime.strptime(date, "%Y-%m-%dT%H:%M:%S")
-        date = self.date.localizeLocal(date)
-        
+
+        date = datetime.datetime.strptime(date, "%Y-%m-%d").date()
         
         con = self._getDatabase()
         try:
             self.overtime.getWorkedOvertime(con, userId, date)
-            
+
         finally:
             con.close()
 

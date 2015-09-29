@@ -42,8 +42,8 @@ class WampMain(ApplicationSession):
         userId = sys.argv[1]
         dateParam = sys.argv[2]
         
-        date = datetime.datetime.strptime(dateParam, "%d/%m/%Y")
-
+        date = datetime.datetime.strptime(dateParam, "%d/%m/%Y").date()
+        
         yield from self.call('overtime.getWorkedOvertime', userId, date)
         
         #logging.info(minutes)

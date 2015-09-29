@@ -15,6 +15,7 @@ from model.systems.assistance.justifications.CJustification import CJustificatio
 from model.systems.assistance.justifications.LAOJustification import LAOJustification
 
 from model.systems.assistance.schedule import Schedule
+from model.systems.assistance.schedule import ScheduleData
 
 class Overtime:
 
@@ -67,46 +68,27 @@ class Overtime:
     @param userId Identificacion de usuario
     @param date Fecha para la cual se quiere calcular el tiempo extra trabajado
     '''
-    def getWorkedOvertime(self, con, userId, date):
+    def getWorkedOvertime(self, con, userId, date):     
+    
+        startTime = datetime.time(hour=0, minute=0, second=0)
+        dateStart = datetime.datetime.combine(date, startTime)
 
-        t = datetime.time(hour=0, minute=0, second=0)
-        dateStart = datetime.datetime.combine(date, t)
-
-        dateEnd = date.replace(hour=23, minute=59, second=59)
-
-        print("**************************************** date")
-        print(date)
-        print(dateStart)
-        print(dateEnd)
-        print("****************************************")
+        endTime = datetime.time(hour=23, minute=59, second=59)
+        dateEnd = datetime.datetime.combine(date, endTime)
 
         #calcular overtimes del dia
         overtimeRequests = self.getOvertimeRequests(con, ['APPROVED'], None, [userId], dateStart, dateEnd)
 
-        print("**************************************** overtime")
-        for overtime in overtimeRequests:
-             print(overtime)
-
-        print("****************************************")
 
         #definir fecha inicial del ultimo schedule del dia anterior
         schedulesPre = None
         dateAux = dateStart
-        print("**************************************** dateAux")
+
         while schedulesPre is None or len(schedulesPre) == 0:
             dateAux = dateAux - datetime.timedelta(days = 1)
-            print(dateAux)
             schedulesPre = self.schedule.getSchedule(con, userId, dateAux)
-        print("****************************************")
 
-        datePre = schedulesPre[-1]["start"]
-
-
-        print("**************************************** schedulesPre")
-        for sch in schedulesPre:
-            print(sch)
-        print("****************************************")
-
+        datePre = schedulesPre[-1].getStart(dateAux)
 
         #definir fecha final del ultimo schedule del dia siguiente
         schedulesPos = None
@@ -114,30 +96,27 @@ class Overtime:
         while schedulesPos is None or len(schedulesPos) == 0:
             dateAux = dateAux + datetime.timedelta(days = 1)
             schedulesPos = self.schedule.getSchedule(con, userId, dateAux)
-        datePos = schedulesPos[-1]["end"]
+        datePos = schedulesPos[-1].getEnd(dateAux)
 
 
-        print("**************************************** schedulesPos")
-        for sch in schedulesPos:
-            print(sch)
-        print("****************************************")
-
-
-        print("**************************************** datePre datePos")
-        print(datePre)
-        print(datePos)
-        print("****************************************")
 
         #obtener worked hours en base a las fechas definidas de los schedules anterior y posterior
         logs = self.logs.findLogs(con, userId, datePre, datePos)
         (workedHours, attlogs) = self.logs.getWorkedHours(logs)
 
+
+        print(datePre)
+        print(datePos)
+        for log in logs:
+             print(log)
+
+        
         print("**************************************** workedHours")
         for wh in workedHours:
              print(wh)
 
         print("****************************************")
-
+        """
         for o in overtimeRequests:
             for wh in workedHours:
                 if wh["end"] is None or wh["start"] is None or o["end"] is None or o["begin"] is None:
@@ -151,7 +130,7 @@ class Overtime:
                 else:
                    print("no sera calculado")
 
-
+        """
 
 
 
