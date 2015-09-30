@@ -22,12 +22,7 @@
 ***********************************************************/
 
 .rec .contentRecordings {
-  display:flex;
-  display: -webkit-flex; /* Safari */
-  display: -moz-flex; /* mozilla */
-  flex-direction:column;
-  -webkit-flex-direction:column; /* Safari */
-  -moz-flex-direction:column; /* mozilla */
+
 }
 
 .rec .menuRecording {
@@ -50,7 +45,7 @@
   flex-direction:row;
   -webkit-flex-direction:row; /* Safari */
   -moz-flex-direction:row; /* mozilla */
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: baseline;
   -webkit-align-items:baseline; /* Safari */
   -moz-align-items:baseline; /* mozilla */

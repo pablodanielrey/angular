@@ -119,11 +119,17 @@
 
 .rec .resultsRecording {
   overflow-y: auto;
+  height: 350px;
+
+
 }
 
 .rec .itemsRecording {
   padding: 2px 5px 2px 5px;
   margin: 0 5px 0 5px;
+  height: 20px;
+
+
 }
 
 .rec .itemsRecording:nth-child(odd) {
@@ -177,7 +183,7 @@
 }
 
 .rec .viewSelected {
-  
+
   width: 97%;
   background-color: #eee;
   padding: 11px;
