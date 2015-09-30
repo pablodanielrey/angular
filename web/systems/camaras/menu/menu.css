@@ -1,5 +1,5 @@
 
-.menu-container {
+.menuCamerasContainer {
   height: 100%;
   width: 200px;
 }
@@ -8,12 +8,12 @@
   height: 100%;
 }
 
-.fa:hover {
+.menuCameras .fa:hover {
   cursor: pointer;
 
 }
 
-.menu {
+.menuCameras {
   display: flex;
   flex-direction: column;
 
@@ -28,7 +28,7 @@
 }
 
 
-.menu .contentActionMenu {
+.menuCameras .contentActionMenu {
   height: 28px;
 
   background-color: #0066A6;
@@ -40,7 +40,7 @@
   color:white
 }
 
-.menu ul {
+.menuCameras ul {
 
   list-style-type:none;
   background: #34495e; /* Old browsers */
@@ -54,7 +54,7 @@
 
 }
 
-.menu ul li {
+.menuCameras ul li {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -62,6 +62,7 @@
   padding-right: 15px;
   border-bottom: 1px solid #34495e;
   cursor: pointer;
+  height: initial;
 
 
 
@@ -70,7 +71,7 @@
 
 
 }
-.menu ul li:hover {
+.menuCameras ul li:hover {
 
   background-color: #0772b0;
   -webkit-transition: all 500ms cubic-bezier(0.250, 0.250, 0.750, 0.750);
@@ -84,7 +85,7 @@
 
 
 
-.closeMenu {
+.menuCameras .closeMenu {
   transform: translate3d(-155px,0,0);
   /*transition: all 0.4s ease-in-out;*/
   -webkit-transition: all 800ms cubic-bezier(0.270, 0, 0.250, 1); /* older webkit */
@@ -94,7 +95,7 @@
   transition: all 800ms cubic-bezier(0.270, -0.075, 0.250, 1.355); /* custom */
 }
 
-.openMenu {
+.menuCameras .openMenu {
   -webkit-transition: all 500ms cubic-bezier(0.440, 0.890, 0.950, 0.970);
      -moz-transition: all 500ms cubic-bezier(0.440, 0.890, 0.950, 0.970);
        -o-transition: all 500ms cubic-bezier(0.440, 0.890, 0.950, 0.970);
@@ -102,7 +103,7 @@
 
 
 }
-a:link, a:visited, a:active{
+.menuCameras a:link, a:visited, a:active{
   text-decoration: none;
   color:white;
 }

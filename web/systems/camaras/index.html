@@ -70,27 +70,18 @@
 <div class="principal" ng-controller="MenuCamerasCtrl">
 
     <div class="screen" ng-class="{true:'closeMenu',false:'openMenu'}[model.cerrado]" >
-
-      <!-- <nav ng-class="{true:'visible',false:'hidden'}[isLogged()]"> -->
-        <div class="menu-container" ng-controller="MenuCamerasCtrl" ng-include="'/systems/camaras/menu/menu.html'">
+        <!-- <nav ng-class="{true:'visible',false:'hidden'}[isLogged()]"> -->
+        <div class="menuCamerasContainer" ng-controller="MenuCamerasCtrl" ng-include="'/systems/camaras/menu/menu.html'">
         </div>
 
         <div ng-view>
         </div>
-
-
-
-
-
     </div>
-
-
-
 
     <div class='messages-container' ng-controller="MessagesCtrl" ng-include="'/modules/messages/messages.html'" ng-class="{false: 'hidden', true: 'visible'}[ isVisible() ]">
     </div>
-</div>
 
+</div>
 
 </body>
 </html>
