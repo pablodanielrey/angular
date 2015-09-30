@@ -18,6 +18,11 @@
   margin: 0 auto;
 }
 
+.rec a:link, a:visited, a:active{
+  text-decoration: none;
+  color:white;
+}
+
 .rec .contentRec {
   padding: 20px;
 
@@ -41,6 +46,7 @@
 
 .rec .menuRec {
   background-color:white;
+  box-shadow: 1px 1px 5px #5c5f69;
   -webkit-box-shadow: 1px 1px 5px #5c5f69;
   -moz-box-shadow: 5px 5px 5px #5c5f69;
   border-radius:2px;
@@ -55,10 +61,22 @@
   border-radius:2px;
   -webkit-border-radius:2px;
   -moz-border-radius:2px;
-  border:1px solid #ECECEC;
+  border:1px solid rgba(120, 120, 120, 0.2);
   padding:5px;
   color:#5c5f69;
   background-color:#eeeeee;
+  width: 190px;
+}
+
+.rec .contentItem0 {
+  border-radius:2px;
+  -webkit-border-radius:2px;
+  -moz-border-radius:2px;
+  border:1px solid rgba(120, 120, 120, 0.2);
+  padding:6px;
+  color:#5c5f69;
+  background-color:#eeeeee;
+  width: 110px;
 }
 
 .rec .contentItem input {
@@ -67,20 +85,26 @@
   margin: 2px;
   color: #5c5f69;
   font-weight: bold;
+  width: 115px;
+
 }
+
+
 
 .rec .menuRec button {
   border: none;
-  padding:10px;
+  padding:9px;
   background-color: #0066A6;
   color: white;
+  border-radius: 2px;
 }
 
 .rec .menuRec button:hover {
   border: none;
-  padding:10px;
+  padding:9px;
   background-color: #275276;
   color: white;
+
 }
 
 
@@ -92,6 +116,7 @@
   position: absolute;
   z-index: 997;
   background-color:white;
+  box-shadow: 1px 1px 5px #5c5f69;
   -webkit-box-shadow: 1px 1px 5px #5c5f69;
   -moz-box-shadow: 5px 5px 5px #5c5f69;
   border-radius:2px;
@@ -127,7 +152,7 @@
 .rec .itemsRecording {
   padding: 2px 5px 2px 5px;
   margin: 0 5px 0 5px;
-  height: 20px;
+  height: 22px;
 
 
 }
@@ -190,6 +215,10 @@
   margin-left: 5px;
 }
 
+.rec .viewSelected.hidden {
+  visibility:hidden;
+}
+
 /***********************************************************
 *************** CONTENEDOR DE REPRODUCIÓN ******************
 ***********************************************************/
@@ -208,6 +237,7 @@
 
 .rec .play {
   background-color:white;
+  box-shadow: 1px 1px 5px #5c5f69;
   -webkit-box-shadow: 1px 1px 5px #5c5f69;
   -moz-box-shadow: 5px 5px 5px #5c5f69;
   border-radius:2px;
@@ -240,6 +270,7 @@
   border:none;
   border-radius: 2px;
   padding: 5px;
+  box-shadow: 1px 1px 2px black;
   -webkit-box-shadow: 1px 1px 2px black;
   -moz-box-shadow: 1px 1px 2px black;
 }
@@ -351,6 +382,7 @@
 
 .rec .camaras {
   background-color:white;
+  box-shadow: 1px 1px 5px #5c5f69;
   -webkit-box-shadow: 1px 1px 5px #5c5f69;
   -moz-box-shadow: 5px 5px 5px #5c5f69;
   border-radius:2px;

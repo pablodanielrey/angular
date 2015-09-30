@@ -32,6 +32,7 @@
 
 .live .content {
   background-color:white;
+  box-shadow: 1px 1px 5px #5c5f69;
   -webkit-box-shadow: 1px 1px 5px #5c5f69;
   -moz-box-shadow: 5px 5px 5px #5c5f69;
   border-radius:2px;
@@ -54,6 +55,7 @@
   z-index: 999;
   float: right;
   margin: 0 0 0 78.5%;
+  box-shadow: 1px 1px 5px #5c5f69;
   -webkit-box-shadow: 1px 1px 5px #5c5f69;
   -moz-box-shadow: 5px 5px 5px #5c5f69;
   border-bottom-right-radius: :4px;
@@ -72,6 +74,7 @@
   z-index: 999;
   float: right;
   margin: 0 0 0 78.5%;
+  box-shadow: 1px 1px 5px #5c5f69;
   -webkit-box-shadow: 1px 1px 5px #5c5f69;
   -moz-box-shadow: 5px 5px 5px #5c5f69;
   border-bottom-right-radius: :4px;
@@ -90,6 +93,7 @@
   z-index: 999;
   float: right;
   margin: 0 0 0 82%;
+  box-shadow: 1px 1px 5px #5c5f69;
   -webkit-box-shadow: 1px 1px 5px #5c5f69;
   -moz-box-shadow: 5px 5px 5px #5c5f69;
   border-bottom-right-radius: :4px;
@@ -109,6 +113,7 @@
   z-index: 999;
   float: right;
   margin: 0 0 0 82%;
+  box-shadow: 1px 1px 5px #5c5f69;
   -webkit-box-shadow: 1px 1px 5px #5c5f69;
   -moz-box-shadow: 5px 5px 5px #5c5f69;
   border-bottom-right-radius: :4px;
@@ -140,6 +145,7 @@
 .live .subContentFilters {
   position: absolute;
   background-color:white;
+  box-shadow: 1px 1px 5px #5c5f69;
   -webkit-box-shadow: 1px 1px 5px #5c5f69;
   -moz-box-shadow: 5px 5px 5px #5c5f69;
   border-radius:2px;

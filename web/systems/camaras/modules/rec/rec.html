@@ -2,7 +2,7 @@
     <!-- **************** CONTENEDOR DEL MENU DE BUSQUEDA  *************** -->
     <div class="contentRec">
           <div class="menuRec">
-              <div class="contentItem selectCam">
+              <div class="contentItem0 selectCam">
                 <span ng-click='viewFilterCamera()'><i class="fa fa-video-camera"></i> Camaras <i class="fa fa-sort-desc"></i></span>
               </div>
               <div class="contentItem">
@@ -89,7 +89,7 @@
 
           </div>
       </div>
-      <div class="viewSelected">
+      <div class="viewSelected" ng-class="{false:'hidden'}[model.selecteds.length > 0]">
         <button class="btnVer" ng-click="viewSelecteds()"><i class="fa fa-film"></i> Ver seleccionados</button>
       </div>
     </div>
