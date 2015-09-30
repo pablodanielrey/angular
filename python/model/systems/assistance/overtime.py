@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import calendar, datetime, logging, uuid
+import calendar, datetime, logging, uuid, pytz
 import inject
 
 from model.systems.assistance.date import Date
@@ -70,74 +70,71 @@ class Overtime:
     '''
     def getWorkedOvertime(self, con, userId, date):     
     
-        startTime = datetime.time(hour=0, minute=0, second=0)
-        dateStart = datetime.datetime.combine(date, startTime)
-
-        endTime = datetime.time(hour=23, minute=59, second=59)
-        dateEnd = datetime.datetime.combine(date, endTime)
-
         #calcular overtimes del dia
-        overtimeRequests = self.getOvertimeRequests(con, ['APPROVED'], None, [userId], dateStart, dateEnd)
-
-
-        #definir fecha inicial del ultimo schedule del dia anterior
-        schedulesPre = None
-        dateAux = dateStart
-
-        while schedulesPre is None or len(schedulesPre) == 0:
-            dateAux = dateAux - datetime.timedelta(days = 1)
-            schedulesPre = self.schedule.getSchedule(con, userId, dateAux)
-
-        datePre = schedulesPre[-1].getStart(dateAux)
-
-        #definir fecha final del ultimo schedule del dia siguiente
-        schedulesPos = None
-        dateAux = dateStart
-        while schedulesPos is None or len(schedulesPos) == 0:
-            dateAux = dateAux + datetime.timedelta(days = 1)
-            schedulesPos = self.schedule.getSchedule(con, userId, dateAux)
-        datePos = schedulesPos[-1].getEnd(dateAux)
-
-
-
-        #obtener worked hours en base a las fechas definidas de los schedules anterior y posterior
-        logs = self.logs.findLogs(con, userId, datePre, datePos)
-        (workedHours, attlogs) = self.logs.getWorkedHours(logs)
-
-
-        print(datePre)
-        print(datePos)
-        for log in logs:
-             print(log)
-
+        overtimeRequests = self.getOvertimeRequests(con, ['APPROVED'], None, [userId], date)
         
-        print("**************************************** workedHours")
-        for wh in workedHours:
-             print(wh)
+        if len(overtimeRequests) == 0:
+            return 0
+             
+        #definir fecha inicial del ultimo schedule del dia anterior
+        schedules = None
+        dateAux = date
+        
+        while schedules is None or len(schedules) == 0:
+            dateAux = dateAux - datetime.timedelta(days=1)
+            schedules = self.schedule.getSchedule(con, userId, dateAux)
+            
+     
+        #modificar datetimeAux para transformarlo en utc
+        datetimeAux = schedules[0].getStart(dateAux)
+        datetimeAux = datetimeAux + datetime.timedelta(hours=3)
+        datetimeAux = datetimeAux.replace(tzinfo=pytz.UTC)
 
-        print("****************************************")
-        """
+        #asignar un tiempo prodencial para obtener los logs
+        datetimePre = datetimeAux - datetime.timedelta(hours=3)
+        
+        
+        
+        #definir fecha inicial del ultimo schedule del dia posterior
+        schedules = None
+        dateAux = date
+        
+        while schedules is None or len(schedules) == 0:
+            dateAux = dateAux + datetime.timedelta(days=1)
+            schedules = self.schedule.getSchedule(con, userId, dateAux)
+            
+     
+        #modificar datetimeAux para transformarlo en utc
+        datetimeAux = schedules[0].getEnd(dateAux)
+        datetimeAux = datetimeAux + datetime.timedelta(hours=3)
+        datetimeAux = datetimeAux.replace(tzinfo=pytz.UTC)
+
+        #asignar un tiempo prodencial para obtener los logs
+        datetimePos = datetimeAux + datetime.timedelta(hours=3)
+            
+        
+        #obtener worked hours en base a las fechas definidas de los schedules anterior y posterior
+        logs = self.logs.findLogs(con, userId, datetimePre, datetimePos)
+        (workedHours, attlogs) = self.logs.getWorkedHours(logs)
+        
+     
+        sum = 0
         for o in overtimeRequests:
             for wh in workedHours:
-                if wh["end"] is None or wh["start"] is None or o["end"] is None or o["begin"] is None:
-                    return 0
-                if wh["end"] <= o["end"] and wh["end"] >= o["begin"]:
-                   print("calcular y sumar minutos")
-                elif wh["start"] <= o["begin"] and wh["end"] >= o["end"]:
-                   print("calcular y sumar minutos")
-                elif wh["start"] >= o["begin"] and wh["start"] <= o["end"]:
-                   print("calcular y sumar minutos")
+                if (wh["start"] <= o["begin"] and wh["end"] >= o["begin"]) or (wh["end"] <= o["end"] and wh["start"] >= o["begin"]):
+                    start = o["begin"] if (o["begin"] - wh["start"]).total_seconds() >= 0 else wh["start"]
+                    end = o["end"] if (o["end"] - wh["end"]).total_seconds() <= 0 else wh["end"]
+
                 else:
-                   print("no sera calculado")
+                    continue  
+                                        
+                sum += (end - start).total_seconds()
 
-        """
-
-
+        return sum
 
 
 
     def getOvertimeRequests(self, con, status=[], requestors=None, users=None, begin=None, end=None):
-
         """
             obtiene todas los pedidos de horas extras con cierto estado
             status es el estado a obtener. en el caso de que no sea pasado entonces se obtienen todas, en su ultimo estado
@@ -166,14 +163,21 @@ class Overtime:
             params = params + (requestors, )
             sql += " AND requestor_id in %s"
 
-        if begin is not None:
+        if begin is not None and end is None:
             params = params + (begin, )
-            sql += " AND jbegin >= %s"
+            sql += " AND jbegin::date = %s"
 
-        if end is not None:
+        if begin is not None and end is not None:
+            print("estoy2")
+            params = params + (begin, end )
+            sql += " AND jbegin >= %s AND jend <= %s"
+
+        if end is not None and begin is None:
+            print("estoy3")
             params = params + (end, )
-            sql += " AND jend <= %s"
+            sql += " AND jend::date = %s"
 
+  
         sql += ";"
 
 

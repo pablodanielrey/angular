@@ -13,7 +13,7 @@ from asyncio import coroutine
 
 '''
 python3 getWorkedOvertime.py userId date #horas trabajadas correspondientes a overtime
-python3 getWorkedOvertime.py e43e5ded-e271-4422-8e85-9f1bc0a61235 "10/10/2015 00:00"
+python3 getWorkedOvertime.py e43e5ded-e271-4422-8e85-9f1bc0a61235 "10/10/2015"
 
 '''
 
@@ -44,9 +44,9 @@ class WampMain(ApplicationSession):
         
         date = datetime.datetime.strptime(dateParam, "%d/%m/%Y").date()
         
-        yield from self.call('overtime.getWorkedOvertime', userId, date)
+        seconds = yield from self.call('overtime.getWorkedOvertime', userId, date)
         
-        #logging.info(minutes)
+        logging.info(seconds)
 
       
 if __name__ == '__main__':

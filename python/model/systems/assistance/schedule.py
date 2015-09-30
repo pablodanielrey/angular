@@ -102,6 +102,8 @@ class Schedule:
     date = inject.attr(Date)
 
 
+    
+    
     """
         Retorna la lista de logs determinada que deberia tener un usuario para un schedule,
         se tiene en cuenta el horario de la persona en la fecha y la fecha siguiente para obtener los logs correctos.

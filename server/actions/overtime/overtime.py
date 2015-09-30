@@ -192,7 +192,7 @@ class OvertimeWamp(ApplicationSession):
         
         con = self._getDatabase()
         try:
-            self.overtime.getWorkedOvertime(con, userId, date)
+            return self.overtime.getWorkedOvertime(con, userId, date)
 
         finally:
             con.close()
