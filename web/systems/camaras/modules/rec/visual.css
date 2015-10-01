@@ -11,6 +11,16 @@
   padding: 0px;
 }
 
+.rec .disabled {
+  display:none;
+}
+
+.rec .searchDate {
+  margin-left: 10px;
+  color:#0066A6;
+}
+
+
 .rec .imgFilters {
   background: url(../../img/filtros.png) no-repeat;
   height: 100%;

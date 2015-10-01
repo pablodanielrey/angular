@@ -22,7 +22,8 @@
                   <input type="time" ng-model="model.filter.end">
               </div>
               <div>
-                  <button  ng-click='search()'><i class="fa fa-search"></i> BUSCAR</button>
+                  <button  ng-click='search()' ng-class="{false:'enabled',true:'disabled'}[model.searching]" ng-disabled="model.searching" ><i class="fa fa-search"></i> BUSCAR</button>
+                  <span class="searchDate" ng-if='model.searching'><i class="loading fa fa-spinner fa-spin"></i>  Buscando ...</span>
               </div>
           </div>
     </div>

@@ -17,6 +17,7 @@ function RecordController($scope,$timeout,$filter,$sce,Camaras) {
         end: null,
         camaras: []
       },
+      searching:false,
       rate: 1
     };
 
@@ -60,6 +61,7 @@ function RecordController($scope,$timeout,$filter,$sce,Camaras) {
       $scope.model.filter.start = new Date();
       $scope.model.filter.end = new Date();
       $scope.initializeCamaras();
+      $scope.model.searching = false;
 
       $scope.view.reverseCamera = false;
       $scope.view.reverseDate = false;
@@ -181,6 +183,7 @@ function RecordController($scope,$timeout,$filter,$sce,Camaras) {
     $scope.search = search;
 
     function search() {
+      $scope.model.searching = true;
       Camaras.findRecordings($scope.model.filter.start,$scope.model.filter.end,$scope.model.filter.camaras,
         function(recordings) {
           $scope.model.recordings = recordings;
@@ -189,8 +192,10 @@ function RecordController($scope,$timeout,$filter,$sce,Camaras) {
           }
           $scope.view.displayListRecordings = true;
           $scope.order(['start','camera.floor','camera.number'],$scope.view.reverseCamera);
+          $scope.model.searching = false;
         },
         function(error) {
+          $scope.model.searching = false;
           $scope.model.recordings = [];
           Notifications.message(error);
         }
