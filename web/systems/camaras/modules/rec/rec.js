@@ -58,7 +58,13 @@ function RecordController($scope,$timeout,$filter,$sce,Camaras) {
       $scope.model.selecteds = [];
       $scope.model.video = null;
       $scope.model.filter = {};
+
       $scope.model.filter.start = new Date();
+      $scope.model.filter.start.setHours(0);
+      $scope.model.filter.start.setMinutes(0);
+      $scope.model.filter.start.setSeconds(0);
+      $scope.model.filter.start.setMilliseconds(0);
+
       $scope.model.filter.end = new Date();
       $scope.initializeCamaras();
       $scope.model.searching = false;
@@ -153,11 +159,20 @@ function RecordController($scope,$timeout,$filter,$sce,Camaras) {
 
 
     $scope.$watch('model.filter.start', function(newValue, oldValue) {
+      if ($scope.model.filter.end == null) {
+        $scope.model.filter.end = new Date();
+      }
+      if (newValue == null || newValue >= $scope.model.filter.end) {
+          $scope.model.filter.start = new Date($scope.model.filter.end.getTime() - (1000) * 60 * 60);
+      }
       $scope.model.filter.start.setSeconds(0);
       $scope.model.filter.start.setMilliseconds(0);
     });
 
     $scope.$watch('model.filter.end', function(newValue, oldValue) {
+      if (newValue == null || newValue < $scope.model.filter.start) {
+        $scope.model.filter.end = new Date($scope.model.filter.start.getTime() + (1000) * 60 * 60);
+      }
       $scope.model.filter.end.setSeconds(0);
       $scope.model.filter.end.setMilliseconds(0);
     });
