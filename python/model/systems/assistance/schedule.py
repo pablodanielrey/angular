@@ -20,9 +20,10 @@ from model.systems.assistance.logs import Logs
 class ScheduleData:
     ''' representa datos del schedule '''
     
-    def __init__(self, s, previousDate = None, nextDate = None):
+    def __init__(self, s, tzinfo, previousDate = None, nextDate = None):
         '''
         @param s Datos del schedule
+        @param tzinfo Zona horaria
         @param previousDate Fecha del schedule anterior
         @param nextDate Fecha del schedule posterior
         '''
@@ -38,7 +39,7 @@ class ScheduleData:
         
         self.previousDate = previousDate
         self.nextDate = nextDate
-
+        self.tzinfo = tzinfo
 
     def _checkDate(self, date):
         return True #por el momento no hacemos el chequeo, retornamos True
@@ -80,7 +81,8 @@ class ScheduleData:
         zero = time(hour=0, minute=0, second=0)
         dzero = datetime.combine(date, zero)
         start = dzero + timedelta(seconds=self.start)
-        
+        start.replace(tzinfo=self.tzinfo)
+        start = start.replace(tzinfo=self.tzinfo)
         return start
 
     def getEnd(self, date):
@@ -92,7 +94,7 @@ class ScheduleData:
         zero = time(hour=0, minute=0, second=0)
         dzero = datetime.combine(date, zero)
         end = dzero + timedelta(seconds=self.end)
-
+        end = end.replace(tzinfo=self.tzinfo)
         return end
 
 
@@ -152,7 +154,7 @@ class Schedule:
                     (isDayOfMonth = true and sdate <= %s and extract(day from sdate) = extract(day from %s)) or \
                     (isDayOfYear = true and sdate <= %s and extract(doy from sdate) = extract(doy from %s))) and \
                     user_id = %s \
-                    order by sdate desc", (date, date, date, date, date, date, date, userId))
+                    order by sdate desc, sstart desc", (date, date, date, date, date, date, date, userId))
                                 
         scheduless = cur.fetchall()
         if scheduless is None or len(scheduless) <= 0:
@@ -170,17 +172,12 @@ class Schedule:
                 'isDayOfYear': schedule[6],
                 'userId': userId                         
             }
-            
-            schData = ScheduleData(sch) 
+
+            schData = ScheduleData(sch, self.date.getLocalTimezone())
             
             #retorno los schedules con la fecha actual en utc - las fechas en la base deberian estar en utc
             schedules.append(schData)
-                
 
-        # ordeno los schedules por el start
-        schedules = sorted(schedules)
-
-   
         return schedules
 
 

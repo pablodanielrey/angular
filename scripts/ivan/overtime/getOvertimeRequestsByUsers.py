@@ -10,8 +10,10 @@ from autobahn.asyncio.wamp import ApplicationSession
 from asyncio import coroutine
 
 '''
-python3 getOvertimeRequestsByUser state #retorna los requerimientos de todos los usuarios
-python3 getOvertimeRequestsByUser state userId1 userId2 userId3 ... #retorna los requerimientos de los usuarios con el id pasado como parametro
+python3 getOvertimeRequestsByUser.py state #retorna los requerimientos de todos los usuarios
+python3 getOvertimeRequestsByUser.py state userId1 userId2 userId3 ... #retorna los requerimientos de los usuarios con el id pasado como parametro
+python3 getOvertimeRequestsByUser.py APPROVED
+python3 getOvertimeRequestsByUser.py APPROVED "4b89c515-2eba-4316-97b9-a6204d344d3a  3e7b36fb-1530-4ef5-9088-4e5990f26a90"
 '''
 
 def config_injector(binder):
@@ -53,6 +55,8 @@ class WampMain(ApplicationSession):
 
         for request in requests:
             print(request)
+            
+        sys.exit()
 
 if __name__ == '__main__':
 

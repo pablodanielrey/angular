@@ -62,40 +62,34 @@ class Overtime:
 
 
 
-    '''
-    Definir horas extras trabajadas para una determinada fecha
-    @param con Conexion con la base de datos
-    @param userId Identificacion de usuario
-    @param date Fecha para la cual se quiere calcular el tiempo extra trabajado
-    '''
+
     def getWorkedOvertime(self, con, userId, date):     
-    
+        '''
+        Definir horas extras trabajadas para una determinada fecha
+        @param con Conexion con la base de datos
+        @param userId Identificacion de usuario
+        @param date Fecha para la cual se quiere calcular el tiempo extra trabajado
+        '''
+        
         #calcular overtimes del dia
         overtimeRequests = self.getOvertimeRequests(con, ['APPROVED'], None, [userId], date)
-        
+      
         if len(overtimeRequests) == 0:
             return 0
-             
-        #definir fecha inicial del ultimo schedule del dia anterior
+
+        #definir fecha inicial para el calculo de logs
         schedules = None
         dateAux = date
-        
+      
         while schedules is None or len(schedules) == 0:
             dateAux = dateAux - datetime.timedelta(days=1)
             schedules = self.schedule.getSchedule(con, userId, dateAux)
-            
-     
-        #modificar datetimeAux para transformarlo en utc
-        datetimeAux = schedules[0].getStart(dateAux)
-        datetimeAux = datetimeAux + datetime.timedelta(hours=3)
-        datetimeAux = datetimeAux.replace(tzinfo=pytz.UTC)
 
-        #asignar un tiempo prodencial para obtener los logs
-        datetimePre = datetimeAux - datetime.timedelta(hours=3)
+        datetimeAux = schedules[-1].getEnd(dateAux)
+        datetimePre = datetimeAux + datetime.timedelta(hours=3) #FALTARIA CALCULAR EL MAXIMO ENTRE EL OVERTIME DEFINIDO ENTRE dateAux y date -1 (dia) (SI EXISTE) y datetimeAux
+
         
-        
-        
-        #definir fecha inicial del ultimo schedule del dia posterior
+        #definir fecha final para el calculo de logs
         schedules = None
         dateAux = date
         
@@ -103,24 +97,20 @@ class Overtime:
             dateAux = dateAux + datetime.timedelta(days=1)
             schedules = self.schedule.getSchedule(con, userId, dateAux)
             
-     
-        #modificar datetimeAux para transformarlo en utc
-        datetimeAux = schedules[0].getEnd(dateAux)
-        datetimeAux = datetimeAux + datetime.timedelta(hours=3)
-        datetimeAux = datetimeAux.replace(tzinfo=pytz.UTC)
+        datetimeAux = schedules[0].getStart(dateAux)
+        datetimePos = datetimeAux - datetime.timedelta(hours=3) #FALTARIA CALCULAR EL MINIMO ENTRE EL OVERTIME DEFINIDO ENTRE date + 1 dia Y dateAux (SI EXISTE) y datetimeAux
 
-        #asignar un tiempo prodencial para obtener los logs
-        datetimePos = datetimeAux + datetime.timedelta(hours=3)
-            
         
         #obtener worked hours en base a las fechas definidas de los schedules anterior y posterior
         logs = self.logs.findLogs(con, userId, datetimePre, datetimePos)
         (workedHours, attlogs) = self.logs.getWorkedHours(logs)
-        
      
         sum = 0
         for o in overtimeRequests:
             for wh in workedHours:
+                if(wh["start"] is None or wh["end"] is None):
+                    continue
+
                 if (wh["start"] <= o["begin"] and wh["end"] >= o["begin"]) or (wh["end"] <= o["end"] and wh["start"] >= o["begin"]):
                     start = o["begin"] if (o["begin"] - wh["start"]).total_seconds() >= 0 else wh["start"]
                     end = o["end"] if (o["end"] - wh["end"]).total_seconds() <= 0 else wh["end"]
