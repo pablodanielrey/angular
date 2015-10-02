@@ -76,7 +76,7 @@ class Import:
             con.commit()
             for r in result:
                 r = r.decode('utf-8')
-                if r.strip()[-4:] == '.mp4':
+                if (r.strip()[-4:] == '.mkv') or (r.strip()[-4:] == '.mp4'):
                     array = r.split()
                     rec = {}
 
