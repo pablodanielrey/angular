@@ -72,7 +72,7 @@ class WampMain(ApplicationSession):
                     seconds += yield from self.call('overtime.getWorkedOvertime', user["id"], date)
 
             if seconds > 0:
-                append = user["id"] + ", " + user["name"] + ", " + user["lastname"] + ", " + user["dni"] + ", " + str(seconds)
+                append = user["id"] + ", " + user["name"] + ", " + user["lastname"] + ", " + user["dni"] + ", " + str(round(seconds/3600))
                 toPrint.append(append)
         
 
