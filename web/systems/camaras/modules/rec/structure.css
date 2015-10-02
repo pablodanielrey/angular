@@ -42,6 +42,37 @@
   -moz-align-items:baseline; /* mozilla */
 }
 
+.rec .contentItem {
+
+  display:flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+
+  align-items: baseline;
+  -webkit-align-items:baseline; /* Safari */
+  -moz-align-items:baseline; /* mozilla */
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+
+}
+
+.rec .contentItem0 {
+
+  display:flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  
+  justify-content: center;
+
+}
+
 .rec .itemsRecording {
   display:flex;
   display: -webkit-flex; /* Safari */
@@ -56,6 +87,18 @@
 }
 
 .rec .btnsItems {
+  display:flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: baseline;
+  -webkit-align-items:baseline; /* Safari */
+  -moz-align-items:baseline; /* mozilla */
+}
+
+.rec .btnsItemsCel {
   display:flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */

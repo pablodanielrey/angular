@@ -89,6 +89,10 @@
   width: 110px;
 }
 
+.rec .contentItem0 {
+
+}
+
 .rec .contentItem input {
   border: none;
   padding: 2px;
@@ -101,19 +105,21 @@
 
 
 
-.rec .menuRec button {
+.rec .menuRec .btnSearch {
   border: none;
   padding:9px;
   background-color: #0066A6;
   color: white;
   border-radius: 2px;
+  width: 100%;
 }
 
-.rec .menuRec button:hover {
+.rec .menuRec .btnSearch:hover {
   border: none;
   padding:9px;
   background-color: #275276;
   color: white;
+
 
 }
 
@@ -177,15 +183,15 @@
 
 
 .rec .tam0 {
-  width: 50px;
+  width: 3%;
 }
 
 .rec .tam1 {
-  width: 150px;
+  width: 12%;
 }
 
 .rec .tam2 {
-  width: 200px;
+  width: 20%;
 }
 
 .rec .fa-film, .fa-download {
@@ -426,4 +432,91 @@
 
 .rec .selectCam {
   cursor: pointer;
+}
+
+
+/*
+------------------------------------------------------------------
+---------------- @media queries  ----------------
+------------------------------------------------------------------
+*/
+
+@media only screen and (max-width: 768px) {
+    .visual{
+      display: none;
+    }
+
+    .rec .tam0 {
+      width: 10%;
+    }
+
+    .rec .tam1 {
+      width: 35%;
+      font-size: 13px;
+    }
+
+    .rec .tam2 {
+      width: 25%;
+      font-size: 13px;
+    }
+
+    .btnsItems {
+      display: none !important ;
+    }
+
+    .rec .menuRec {
+      display:flex;
+      display: -webkit-flex; /* Safari */
+      display: -moz-flex; /* mozilla */
+      flex-direction:column !important;
+      -webkit-flex-direction:column !important; /* Safari */
+      -moz-flex-direction:column !important; /* mozilla */
+
+      align-items: baseline;
+      -webkit-align-items:baseline; /* Safari */
+      -moz-align-items:baseline; /* mozilla */
+    }
+
+    .rec .menuRec button {
+      width: 100% !important;
+    }
+
+    .rec .menuRec button:hover {
+
+
+    }
+
+    .rec .menuRec .contentItem0 {
+        width: 95% !important;
+        margin: 5px;
+      }
+
+    .rec .menuRec .contentItem {
+      width: 95% !important;
+      margin: 5px;
+    }
+
+    .rec .menuRec .contentItem2 {
+      width: 98% !important;
+      margin: 5px;
+    }
+
+    .rec .contentItem input {
+        width: 70%;
+    }
+
+    .rec .imgFilters {
+      background: url("../../img/filtros.png")  no-repeat !important;
+      background-size: 90% !important;
+      width:90%;
+
+    }
+
+}
+
+@media only screen and (min-width: 768px) {
+    .btnsItemsCel{
+      display: none !important ;
+    }
+
 }
