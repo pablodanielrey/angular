@@ -23,6 +23,7 @@ function RecordController($scope,$timeout,$filter,$sce,Camaras) {
 
     $scope.view = {
         style: '',
+        style: '',
         selecAll: false,
         paused: false,
         displayListRecordings: false,
@@ -49,6 +50,7 @@ function RecordController($scope,$timeout,$filter,$sce,Camaras) {
     $scope.order = order;
     $scope.orderByHour = orderByHour;
     $scope.closeFilterCamera = closeFilterCamera;
+    $scope.displayFilter = displayFilter;
 
     function initialize() {
       $scope.view.displayListRecordings = false;
@@ -74,6 +76,10 @@ function RecordController($scope,$timeout,$filter,$sce,Camaras) {
       $scope.view.reverseHour = false;
       $scope.view.reverseDuration = false;
       $scope.view.reverseSize = false;
+    }
+
+    function displayFilter() {
+      $scope.view.style2 = '';
     }
 
     function addCamara(camara) {
@@ -199,6 +205,7 @@ function RecordController($scope,$timeout,$filter,$sce,Camaras) {
 
     function search() {
       $scope.model.searching = true;
+      $scope.view.style2 = 'hideFilterSearch';
       Camaras.findRecordings($scope.model.filter.start,$scope.model.filter.end,$scope.model.filter.camaras,
         function(recordings) {
           $scope.model.recordings = recordings;

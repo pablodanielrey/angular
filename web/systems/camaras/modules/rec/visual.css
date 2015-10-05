@@ -528,8 +528,14 @@
 
     }
 
+
+    .rec .contentRecordings {
+      display: none;
+    }
+
     .rec.hideFilterSearch .contentRecordings {
       top: 20px !important;
+      display: block;
     }
 
 
