@@ -140,8 +140,8 @@
   -moz-border-radius:2px;
   padding: 10px;
   margin-left: 20px;
-  width: 81%;
-  height: 65%;
+  width: 80%;
+  height: 60%;
 
 }
 
@@ -160,7 +160,7 @@
 
 .rec .resultsRecording {
   overflow-y: auto;
-  height: 350px;
+  height: 315px;
 
 
 }
@@ -271,6 +271,22 @@
 .rec .contentVideoList {
   background-color: #eeeeee;
   width: 20%;
+}
+
+.rec .backListCel {
+  background-color: #275276;
+  padding: 5px;
+  width: 98%;
+  color: white;
+  margin-bottom: 5px;
+}
+
+.rec .backListResults {
+  background-color: #275276;
+  padding: 5px;
+  width: 98%;
+  color: white;
+  margin-bottom: 5px;
 }
 
 .rec .backList {
@@ -512,6 +528,11 @@
 
     }
 
+    .rec.hideFilterSearch .contentRecordings {
+      top: 20px !important;
+    }
+
+
     .rec.hideFilterSearch .contentRec {
       display: none;
     }
@@ -520,10 +541,49 @@
       display: none;
     }
 
+    .rec .contentPlay .videoDetalles {
+      display: none;
+    }
+
+    .rec .contentVideoList {
+      background-color: #eeeeee;
+      width: 98% !important;
+      height: 200px !important;
+    }
+
+    .rec .videoList {
+      height: 80% !important;
+      overflow-y: auto;
+      padding: 5px;
+    }
+
+    .rec .video {
+      width: 99% !important;
+    }
+
+    .rec .backList {
+      display: none !important ;
+    }
+
+    .rec .resultsRecording {
+      overflow-y: auto;
+      height: 270px !important;
+
+
+    }
+
+
 }
 
 @media only screen and (min-width: 768px) {
     .btnsItemsCel{
+      display: none !important ;
+    }
+    .rec .backListCel {
+      display: none !important ;
+    }
+
+    .rec .backListResults {
       display: none !important ;
     }
 

@@ -1,5 +1,5 @@
-<!-- <div class="rec {{view.style}} hideFilterSearch"> -->
-<div class="rec {{view.style}}">
+<div class="rec {{view.style}} ">
+<!-- <div class="rec {{view.style}}"> -->
     <!-- **************** CONTENEDOR DEL MENU DE BUSQUEDA  *************** -->
     <div class="contentRec">
           <div class="menuRec">
@@ -37,6 +37,14 @@
     <!-- ******** CONTENEDOR DE LOS RESULTADOS DE BUSQUEDA *************** -->
     <div class="contentRecordings" ng-class="{false:'hidden'}[view.displayListRecordings]">
        <div>
+           <div class="backListResults">
+               <div>
+                 <i class="fa fa-list"></i> Resultados encontrados
+               </div>
+               <div>
+                   <button class="back" ng-click="closeReproductor()"><i class="fa fa-reply"></i> VOLVER</button>
+               </div>
+           </div>
            <div class="menuRecording">
               <div class="tam0">
                   <input type="checkbox" title="Seleccionar Todas" ng-change="selectAll()" ng-model="view.selectAll">
@@ -128,6 +136,14 @@
         <div class="play">
             <div class="video">
                 <div>
+                  <div class="backListCel">
+                      <div>
+                        <i class="fa fa-list"></i> Videos
+                      </div>
+                      <div>
+                          <button class="back" ng-click="closeReproductor()"><i class="fa fa-reply"></i> VOLVER</button>
+                      </div>
+                  </div>
                     <video id='video' controls="" autoplay width="99%"></video>
                 </div>
                 <div class="footerPlay">
