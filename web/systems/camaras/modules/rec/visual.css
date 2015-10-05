@@ -536,6 +536,18 @@
     .rec.hideFilterSearch .contentRecordings {
       top: 20px !important;
       display: block;
+      height: 85%;
+    }
+
+    .rec .resultsRecording {
+      overflow-y: auto;
+      height: 285px !important;
+    }
+
+    .rec .viewSelected {
+      margin-top: 10px;
+      width: 80% !important;
+
     }
 
 
@@ -571,12 +583,6 @@
       display: none !important ;
     }
 
-    .rec .resultsRecording {
-      overflow-y: auto;
-      height: 270px !important;
-
-
-    }
 
 
 }
