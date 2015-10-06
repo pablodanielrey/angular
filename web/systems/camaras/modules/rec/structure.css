@@ -9,9 +9,9 @@
   align-items: baseline;
   -webkit-align-items:baseline; /* Safari */
   -moz-align-items:baseline; /* mozilla */
-  justify-content: space-between;
-  -webkit-justify-content: space-between;
-  -moz-justify-content: space-between;
+  justify-content: flex-start;
+  /*-webkit-justify-content: space-between;
+  -moz-justify-content: space-between;*/
 }
 
 .rec .contentRecordings {

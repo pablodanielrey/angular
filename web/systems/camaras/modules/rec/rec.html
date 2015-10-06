@@ -3,9 +3,6 @@
     <!-- **************** CONTENEDOR DEL MENU DE BUSQUEDA  *************** -->
     <div class="contentRec">
           <div class="menuRec">
-              <div class="contentItem0 selectCam">
-                <span ng-click='viewFilterCamera()'><i class="fa fa-video-camera"></i> Camaras <i class="fa fa-sort-desc"></i></span>
-              </div>
               <div class="contentItem">
                   <span><i class="fa fa-calendar-o"></i> Inicio</span>
                   <input type="date" ng-model="model.filter.start">
@@ -21,6 +18,9 @@
               <div class="contentItem">
                   <span><i class="fa fa-clock-o"></i> Fin</span>
                   <input type="time" ng-model="model.filter.end">
+              </div>
+              <div class="contentItem0 selectCam">
+                <span ng-click='viewFilterCamera()'><i class="fa fa-video-camera"></i> Camaras <i class="fa fa-sort-desc"></i></span>
               </div>
               <div class="contentItem2">
                   <button class="btnSearch"  ng-click='search()' ng-class="{false:'enabled',true:'disabled'}[model.searching]" ng-disabled="model.searching" ><i class="fa fa-search"></i> BUSCAR</button>
