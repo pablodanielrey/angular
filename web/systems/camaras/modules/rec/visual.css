@@ -1,6 +1,7 @@
 /****************** Estilos comunes ******************************/
 /****************************************************************/
 
+
 .rec {
   height:100%;
   width:100%;
@@ -595,5 +596,18 @@
 
   .btnsItemsCel { /* Ocultar boton las aacciones sobre los videos */
     display: none !important ;
+  }
+}
+
+@media (orientation: landscape) {
+	.landscape{
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    background: black;
+    color:white;
+    top:0x;
+    z-index: 999 !important;
+    display: block;
   }
 }

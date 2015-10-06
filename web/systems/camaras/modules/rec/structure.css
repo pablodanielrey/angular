@@ -183,6 +183,14 @@
   -moz-justify-content: space-around;
 }
 
+.rec .landscape {
+  display:flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  align-items: center;
+  justify-content: center;
+}
+
 @media only screen and (max-width: 768px) {
   .rec .play {
     display:flex;
