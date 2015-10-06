@@ -145,10 +145,10 @@
 
 }
 
-/*.rec .contentRecordings.hidden {
+.rec .contentRecordings.hidden {
 
 
-}*/
+}
 
 .rec .menuRecording {
   padding: 5px;
@@ -374,32 +374,11 @@
   margin-bottom: 0;
 }
 
-
-
-
-
-
-
-
-
-
-/*
-------------------------------------------------------------------
----------------- ESTO LO TIENE QUE ACOMADAR WALLY ----------------
-------------------------------------------------------------------
-*/
-
-
-.rec.displayFilterCamera .imgFilters {
-  display:none;
-}
-
-.rec.displayFilterCamera .contentRecordings {
-  display: none;
-}
+/*****************************************************************
+************** CONTENEDOR PARA SELECCIONAR CAMARAS ***************
+*****************************************************************/
 
 .rec .contentCamaras {
-
   color: #5c5f69;
   width: 100%;
   position: absolute;
@@ -409,7 +388,6 @@
   z-index: 998;
   top:0px;
   padding: 20px;
-
 }
 
 .rec .camaras {
@@ -423,7 +401,6 @@
   padding:10px;
   width: 50%;
   margin:5% 15% auto;
-
 }
 
 .rec .subContentCamaras {
@@ -445,157 +422,145 @@
   margin-bottom: 50px;
 }
 
-
 .rec .selectCam {
   cursor: pointer;
 }
 
+.rec.displayFilterCamera .imgFilters {
+  display:none;
+}
 
-/*
-------------------------------------------------------------------
----------------- @media queries  ----------------
-------------------------------------------------------------------
-*/
+.rec.displayFilterCamera .contentRecordings {
+  display: none;
+}
 
-@media only screen and (max-width: 768px) {
-    .visual{
+
+/****************************************************************
+********************* @media queries  ***************************
+****************************************************************/
+
+@media only screen and (max-width: 768px) { /* Pantalla menor a 768px */
+
+    .visual { /* Esta clase se encarga de ocultar los items del de contenedor de busqueda */
       display: none;
     }
 
-    .rec .tam0 {
+    .rec .tam0 { /* ancho de los items del contenedor de busqueda */
       width: 10%;
     }
 
-    .rec .tam1 {
+    .rec .tam1 { /* ancho de los items del contenedor de busqueda */
       width: 35%;
       font-size: 13px;
     }
 
-    .rec .tam2 {
+    .rec .tam2 { /* ancho de los items del contenedor de busqueda */
       width: 25%;
       font-size: 13px;
     }
 
-    .btnsItems {
+    .rec .btnsItems { /* oculta los botones con nombre de acciones del contenedor de busqueda */
       display: none !important ;
     }
 
-    .rec .menuRec {
-      display:flex;
-      display: -webkit-flex; /* Safari */
-      display: -moz-flex; /* mozilla */
-      flex-direction:column !important;
-      -webkit-flex-direction:column !important; /* Safari */
-      -moz-flex-direction:column !important; /* mozilla */
-
-      align-items: baseline;
-      -webkit-align-items:baseline; /* Safari */
-      -moz-align-items:baseline; /* mozilla */
-    }
-
-    .rec .menuRec button {
+    .rec .menuRec button { /* Boton BUSCAR */
       width: 100% !important;
     }
 
-    .rec .menuRec button:hover {
-
-
-    }
-
-    .rec .menuRec .contentItem0 {
-        width: 95% !important;
-        margin: 5px;
-      }
-
-    .rec .menuRec .contentItem {
+    .rec .menuRec .contentItem0 { /* DIV contendor de los items de los filtros de busqueda */
       width: 95% !important;
       margin: 5px;
     }
 
-    .rec .menuRec .contentItem2 {
+    .rec .menuRec .contentItem { /* DIV contendor de los items de los filtros de busqueda */
+      width: 95% !important;
+      margin: 5px;
+    }
+
+    .rec .menuRec .contentItem2 { /* DIV contendor de los items de los filtros de busqueda */
       width: 98% !important;
       margin: 5px;
     }
 
-    .rec .contentItem input {
+    .rec .contentItem input { /* imputs de los fitros de busqueda */
         width: 70%;
     }
 
-    .rec .imgFilters {
+    .rec .imgFilters { /* Imagen */
       background: url("../../img/filtros.png")  no-repeat !important;
       background-size: 90% !important;
       width:90%;
-
     }
 
-
-    .rec .contentRecordings {
+    .rec .contentRecordings { /* Oculta conteneder de resultados de busqueda */
       display: none;
     }
 
-    .rec.hideFilterSearch .contentRecordings {
+    .rec.hideFilterSearch .contentRecordings { /* estado del contenedor resultados de busqueda cuando esta ocultos los filtros  */
       top: 20px !important;
       display: block;
-      height: 85%;
+      height: 500px;
     }
 
-    .rec .resultsRecording {
+    .rec.hideFilterSearch .contentRec { /* cuando los filtros estan ocultos no mostrar el contendedor de grabaciones */
+      display: none;
+    }
+
+    .rec.hideFilterSearch .imgFilters { /* cuando los filtros estan ocultos ocultar tambien la imagen de fondo */
+      display: none;
+    }
+
+
+    .rec .resultsRecording { /* altura de los resultados de busqueda */
       overflow-y: auto;
       height: 285px !important;
     }
 
-    .rec .viewSelected {
+    .rec .viewSelected { /* div contenedor del boton Ver Seleccionado */
       margin-top: 10px;
       width: 80% !important;
-
     }
 
 
-    .rec.hideFilterSearch .contentRec {
+    /*********** CONTENEDOR DE REPODUCCION **********/
+
+    .rec .contentPlay .videoDetalles { /* ocultar div que contiene los detalles de los videos */
       display: none;
     }
 
-    .rec.hideFilterSearch .imgFilters {
-      display: none;
-    }
-
-    .rec .contentPlay .videoDetalles {
-      display: none;
-    }
-
-    .rec .contentVideoList {
+    .rec .contentVideoList { /* Contenedor de la lista de videos */
       background-color: #eeeeee;
       width: 98% !important;
       height: 200px !important;
     }
 
-    .rec .videoList {
+    .rec .videoList { /* Lista de Videos */
       height: 80% !important;
       overflow-y: auto;
       padding: 5px;
     }
 
-    .rec .video {
+    .rec .video { /* Video */
       width: 99% !important;
     }
 
-    .rec .backList {
+    .rec .backList { /* Ocultar div del boton volver */
       display: none !important ;
     }
-
-
 
 }
 
-@media only screen and (min-width: 768px) {
-    .btnsItemsCel{
-      display: none !important ;
-    }
-    .rec .backListCel {
+@media only screen and (min-width: 768px) { /* Pantalla mayor a 768px */
+
+    .btnsItemsCel { /* Ocultar boton las aacciones sobre los videos */
       display: none !important ;
     }
 
-    .rec .backListResults {
+    .rec .backListCel { /* Ocultar div del boton volver de los resultados de busqueda*/
+      display: none !important ;
+    }
+
+    .rec .backListResults { /* Ocultar div del boton volver */
       display: none !important ;
     }
 
