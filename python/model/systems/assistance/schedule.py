@@ -104,36 +104,27 @@ class Schedule:
     date = inject.attr(Date)
 
 
-    
-    
     """
         Retorna la lista de logs determinada que deberia tener un usuario para un schedule,
         se tiene en cuenta el horario de la persona en la fecha y la fecha siguiente para obtener los logs correctos.
-        @param schedules Lista de schedules Los schedules de la lista deben tener la misma fecha a consultar
+        @param schedules Lista de schedules Los schedules de la lista deben tener la misma fecha a consultar y pertenecer al mismo usuario
+        @param date Fecha para la cual se quieren obtener los schedules
     """
-    def getLogsForSchedule(self, con, schedules):
+    def getLogsForSchedule(self, con, schedules, date):
 
-        if schedules is None:
+        if schedules is None or len(schedules) <= 0:
             return []
-
-        if len(schedules) <= 0:
-            return []
-    
 
         #definir userId
         userId = schedules[0].userId
         
         #definir timestamps de inicio y finalizacion
-        dateStart = schedules[0].date
-        start = schedules[0].getStart(dateStart)
-  
-        
-        dateEnd = schedules[-1].date
-        end = schedules[-1].getEnd(dateEnd)
-
-        deltaEnd = end + timedelta(hours=3)
+        start = schedules[0].getStart(date)
+        end = schedules[-1].getEnd(date)
+                
         deltaStart = start - timedelta(hours=3)
-
+        deltaEnd = end + timedelta(hours=3)
+        
         logs = self.logs.findLogs(con, userId, deltaStart, deltaEnd)
 
         return logs
@@ -159,12 +150,12 @@ class Schedule:
         scheduless = cur.fetchall()
         if scheduless is None or len(scheduless) <= 0:
             return []
-     
+            
         schedules = []
         for schedule in scheduless:
             sch = {
                 'id': schedule[0],
-                'date': date,
+                'date': schedule[1],
                 'start': schedule[2],
                 'end': schedule[3],
                 'isDayOfWeek': schedule[4],
@@ -209,7 +200,7 @@ class Schedule:
                 'isDayOfYear': schedule[6]                                   
             }
             
-            schData = ScheduleData(sch) 
+            schData = ScheduleData(sch, self.date.getLocalTimezone()) 
             
             schedules.append(schData)
 
@@ -278,8 +269,10 @@ class Schedule:
         cur.execute('delete from assistance.schedule where id = %s', (id,))
 
     '''
-        combina los whs con los schedules
-        retorna [{schdule:{},whs:[]}]
+        Combinar whs con los schedules
+        @param schedules Lista de objetos ScheduleData ordenados por date y start
+        @param whs Lista de worked hours
+        @return [{schdule:{},whs:[]}]
     '''
     def combiner(self, schedules, whs):
         controls = []
@@ -287,8 +280,7 @@ class Schedule:
         if schedules is None or len(schedules) == 0:
             return controls
 
-        # ordeno los schedules y los whs por horario ascendente
-        schedules = sorted(schedules, key=lambda schedule: schedule['start'])
+        # ordeno los whs por horario ascendente
         whs = sorted(whs, key=lambda wh: wh['start'])
 
         for sched in schedules:

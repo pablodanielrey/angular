@@ -158,12 +158,10 @@ class Overtime:
             sql += " AND jbegin::date = %s"
 
         if begin is not None and end is not None:
-            print("estoy2")
             params = params + (begin, end )
             sql += " AND jbegin >= %s AND jend <= %s"
 
         if end is not None and begin is None:
-            print("estoy3")
             params = params + (end, )
             sql += " AND jend::date = %s"
 
