@@ -111,7 +111,6 @@ class Schedule:
         @param date Fecha para la cual se quieren obtener los schedules
     """
     def getLogsForSchedule(self, con, schedules, date):
-
         if schedules is None or len(schedules) <= 0:
             return []
 

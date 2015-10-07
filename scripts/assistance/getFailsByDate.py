@@ -1,4 +1,10 @@
 # -*- coding: utf-8 -*-
+"""
+Obtener fallas en un intervalo de fechas
+@example python3 getFailsByDate.py uid user_id date1 date2
+@example python3 getFailsByDate.py 1 c3f23c7c-4abf-402e-b6f3-ee3fd70f4484 01-01-2015 01-05-2015
+"""
+
 import sys
 sys.path.insert(0, '../../python')
 
@@ -44,6 +50,8 @@ class WampMain(ApplicationSession):
     @coroutine
     def onJoin(self, details):
         logging.debug('ejecutando llamadas')
+
+
 
         ret = yield from self.call('assistance.getFailsByDate', sid, userId, start, end)
         for r in ret:

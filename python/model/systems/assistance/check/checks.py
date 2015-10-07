@@ -258,7 +258,6 @@ class ScheduleChecks:
 
         date = self.date.awareToUtc(date)
 
-
         schedules = self.schedule.getSchedule(con, userId, date)
         logs = self.schedule.getLogsForSchedule(con, schedules, date)
         whs, attlogs = self.logs.getWorkedHours(logs)

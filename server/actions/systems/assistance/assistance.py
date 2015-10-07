@@ -308,6 +308,7 @@ class AssistanceWamp(ApplicationSession):
 
             schedules = []
             for schData in schedulesData:
+          
               sch = {
                 "id":schData.id,
                 "date":schData.date,
@@ -319,7 +320,8 @@ class AssistanceWamp(ApplicationSession):
                 "isDayOfYear":schData.isDayOfYear,
                 "previousDate":schData.previousDate,
                 "nextDate":schData.nextDate,
-                "userId":schData.userId
+                "userId":schData.userId,
+
               }
               schedules.append(sch)
           
@@ -336,40 +338,41 @@ class AssistanceWamp(ApplicationSession):
         
         
         
-    def getLogsForSchedulesByDate(self, schedules):
+    def getLogsForSchedulesByDate(self, schedules, date):
         """
          " Obtener schedules de una fecha determinada
          " @param schedules Lista de diccionario con los datos de los schedules del usuario al cual se le solicitaran los logs
          """
-        
+
+        date = datetime.datetime.strptime(date, "%Y-%m-%d").date()
         con = self._getDatabase()
         try:
             schedulesData = []
             for schedule in schedules:
-                date = datetime.datetime.strptime(schedule["date"], "%Y-%m-%d").date()
+                dateSch = datetime.datetime.strptime(schedule["date"], "%Y-%m-%d").date()
                 
                 sch = {
                   'id': schedule["id"],
-                  'date': date,
+                  'date': dateSch,
                   'start': schedule["start"],
                   'end': schedule["end"],
                   'isDayOfWeek': schedule["isDayOfWeek"],
                   'isDayOfMonth': schedule["isDayOfMonth"],
                   'isDayOfYear': schedule["isDayOfYear"],
-                  'userId': schedule["userId"]                         
+                  'userId': schedule["userId"]
                 }
-                schData = ScheduleData(sch)
+                schData = ScheduleData(sch, self.date.getLocalTimezone())
                 
                 schedulesData.append(schData)
 
-            logs = self.schedule.getLogsForSchedule(con, schedulesData)
+            logs = self.schedule.getLogsForSchedule(con, schedulesData, date)
             return logs
 
         finally:
             con.close()
 
     @coroutine
-    def getLogsForSchedulesByDate_async(self, schedules):
+    def getLogsForSchedulesByDate_async(self, schedules, date):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getLogsForSchedulesByDate, schedules)
+        r = yield from loop.run_in_executor(None, self.getLogsForSchedulesByDate, schedules, date)
         return r   
