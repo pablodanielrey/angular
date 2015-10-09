@@ -35,46 +35,95 @@ class ScheduleChecks:
     def getAvailableChecks(self):
         return self.typesCheck
 
-    """
-        retorna una lista cronológica de los chequeos a realizar para el usuario.
-        en el caso del chequeo de horas retora la cantidad de horas a chequear.
 
+
+
+    """
+        Retorna todos los chequeos definidos para un usuario a partir de la fecha pasada como parametro.      
+        
+        @param con Conexion con la base de datos
+        @param userId Id de usuario
+        
+        @return 
         checks [
             {
                 'id': id
                 'start':fecha
-                'end':fecha
+                'type': 'NULL|PRESENCE|HOURS|SCHEDULE'
+            }
+        ]
+
+    """
+    def _getChecksByUser(self, con, userId):
+        cur = con.cursor()
+        cur.execute('SELECT id,user_id,sdate,type,created from assistance.checks where user_id = %s ORDER BY sdate ASC', (userId,))
+
+        if cur.rowcount <= 0:
+            return
+
+        data = cur.fetchall()
+        allChecks = []
+               
+        ##### verificar que los resultados devueltos de la consulta sean de un tipo de chequeo conocido y en caso afirmativo ir almacenando en la lista de checks los chequeos a realizar en orden cronologico ####
+        last = None
+        current = None
+        for c in data:
+            for t in self.typesCheck:
+                if t.isTypeCheck(c[3]): #si el chequeo a realizar es de tipo conocido
+                    current = t.create(c[0], c[1], c[2], cur) #crear una instancia de chequeo a realizar correspondiente al tipo
+                    break
+
+            if last is not None: 
+                last['end'] = current['start']
+                allChecks.append(last)
+            
+            last = current
+
+        if last is not None:
+            allChecks.append(last)
+        
+        return allChecks
+            
+    
+    """
+        retorna una lista de objetos ordenada cronologicamente de los chequeos a realizar para el usuario que son validos a partir de la fecha pasada como parametro.      
+        
+        @param con Conexion con la base de datos
+        @param userId Id de usuario
+        @param date Fecha de consulta de chequeos del tipo date
+        
+        @return 
+        checks [
+            {
+                'id': id
+                'start':fecha
                 'type': 'NULL|PRESENCE|HOURS|SCHEDULE'
             }
         ]
 
     """
     def _getCheckData(self, con, userId, date):
-        cur = con.cursor()
-        cur.execute('select id,user_id,date,type,created from assistance.checks where user_id = %s order by date asc', (userId,))
-        if cur.rowcount <= 0:
-            return
-
-        data = cur.fetchall()
-        checks = []
-        last = None
-        current = None
-        for c in data:
-
-            for t in self.typesCheck:
-                if t.isTypeCheck(c[3]):
-                    current = t.create(c[0], c[1], c[2], cur)
-                    break
-
-            if last is not None:
-                last['end'] = current['start']
-                checks.append(last)
-            last = current
-
-        if last is not None:
-            checks.append(last)
+        allChecks = self._getChecksByUser(con, userId)
+       
+        if len(allChecks) == 0:
+            return allChecks
+        
+        i = 0 #Indice correspondiente al check de la lista de todos los checks cuya fecha es mayor o igual a la fecha pasada como parametro
+        j = 0
+        for check in allChecks:
+            if check["start"] > date:
+                i = j
+                break
+        
+        if i > 1:
+            checks = allchecks
+            for index in range(i-1, len(allChecks)):
+                checks.append(allChecks[index])
+        else:    
+            checks = allChecks                
 
         return checks
+
 
     """
         obtiene los usuarios que tienen configurado algún chequeo
@@ -107,24 +156,35 @@ class ScheduleChecks:
                 justs.append(j)
         return justs
 
+
     """
         chequea la restricción del usuario entre determinadas fechas
-        las fechas son aware.
+        @param con Conexion con la base de datos
+        @param userId Identificacion de usuario
+        @param start Fecha inicial (date)
+        @param end Fecha final (date)
     """
     def checkConstraints(self, con, userId, start, end):
-        checks = self._getCheckData(con, userId, start)
-        logging.debug('checks %s', (checks,))
+        print("******************************************* checkConstraints")
 
-        if (checks is None) or (len(checks) <= 0):
+        checks = self._getCheckData(con, userId, start)  #obtener chequeos a realizar validos a partir de la fecha
+        
+        if (checks is None) or (len(checks) <= 0): #si no existen chequeos a realizar se retorna una lista vacia
             return []
 
+        #obtener justificaciones
         gjustifications = self.justifications.getGeneralJustificationRequests(con)
-        justifications = self.justifications.getJustificationRequestsByDate(con, status=['APPROVED'], users=[userId], start=start, end=end + datetime.timedelta(days=1))
+        justifications = self.justifications.getJustificationRequestsByDate(con, status=['APPROVED'], users=[userId], start=start, end=end)
+        
+        
+        '''
         logging.debug('justificaciones encontradas : {} '.format(justifications))
 
         fails = []
 
         actual = start
+        
+        #recorrer las fechas para verificar si el chequeo es valido
         while actual <= end:
 
             """ elijo el check indicado para la fecha actual """
@@ -141,8 +201,7 @@ class ScheduleChecks:
                 actual = nextDay
                 continue
 
-            actualUtc = self.date.awareToUtc(actual)
-            scheds = self.schedule.getSchedule(con,userId,actualUtc)
+            scheds = self.schedule.getSchedule(con,userId,actual)
             if (scheds is None) or (len(scheds) <= 0):
                 """ no tiene horario declarado asi que no se chequea nada """
                 actual = nextDay
@@ -165,13 +224,13 @@ class ScheduleChecks:
             if len(auxFails) > 0:
                 fails.extend(auxFails)
             actual = nextDay
-
+        '''
         return fails
 
 
 
     """ chequea los schedules contra las workedhours calculadas """
-    '''
+
     def _checkScheduleWorkedHours(self,userId,controls):
         tolerancia = datetime.timedelta(minutes=16)
         fails = []
@@ -245,7 +304,7 @@ class ScheduleChecks:
                 )
 
         return fails
-    '''
+
 
     """
         chequea el schedule de la fecha pasada como parámetro (se supone aware)
@@ -255,15 +314,22 @@ class ScheduleChecks:
         controls = [{schdule:{},whs:[]}]
     """
     def checkSchedule(self, con, userId, date):
-
         date = self.date.awareToUtc(date)
-
-        schedules = self.schedule.getSchedule(con, userId, date)
-        logs = self.schedule.getLogsForSchedule(con, schedules, date)
-        whs, attlogs = self.logs.getWorkedHours(logs)
         
+        schedules = self.schedule.getSchedule(con, userId, date)
+
+        logs = self.schedule.getLogsForSchedule(con, schedules, date)
+        for wh in whs:
+            print(wh)
+        whs, attlogs = self.logs.getWorkedHours(logs)
+
+        
+            
         controls = self.schedule.combiner(schedules, whs)
-    
-        fails = self.scheduleCheck.checkWorkedHours(con,userId,controls)
-        return fails
+
+        
+        
+        
+        #fails = self.scheduleCheck.checkWorkedHours(con,userId,controls)
+        #return fails
         
