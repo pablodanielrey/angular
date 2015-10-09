@@ -9,7 +9,9 @@ FROM (
   SELECT id, date::date  AS date
   FROM assistance.checks
 ) AS s
-WHERE c.id = s.id
+WHERE c.id = s.id;
 
+
+ALTER TABLE assistance.checks DROP date;
 
 
