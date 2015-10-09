@@ -207,25 +207,16 @@ class Assistance:
         return self._exportToOds(odata)
 
     """
-        obtiene las fallas que tenga el usuario en el rango de fechas
+        Obtiene las fallas que tenga el usuario en el rango de fecha
+        @param userId Identificacion de usuario
+        @param start Fecha (date) de inicio del periodo
+        @param end Fecha (date de finalizacion del periodo
     """
     def getFailsByDate(self, userId, start, end):
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
-            if self.date.isNaive(start):
-                start = self.date.localizeLocal(start)
-            elif self.date.isUTC(start):
-                start = self.date.localizeAwareToLocal(start)
-
-            if self.date.isNaive(end):
-                end = self.date.localizeLocal(end)
-            elif self.date.isUTC(end):
-                end = self.date.localizeAwareToLocal(end)
-
-            logging.debug('%s : %s -> %s'.format(userId,start,end))
+            fails = self.checks.checkConstraints(con, userId, start, end) #obtener fallas del usuario en determinado periodo
             user = self.users.findUser(con, userId)
-            fails = self.checks.checkConstraints(con, userId, start, end)
-
             return (user, fails)
 
         finally:
