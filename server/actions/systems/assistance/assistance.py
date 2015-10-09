@@ -254,6 +254,9 @@ class AssistanceWamp(ApplicationSession):
 
 
     def getFailsByDate(self, sid, userId, start, end):
+        start = dateutil.parser.parse(start).date()
+        end = dateutil.parser.parse(end).date()
+        
         con = self._getDatabase()
         try:
             r = self.assistance.getFailsByDate(userId, start, end)
@@ -265,9 +268,6 @@ class AssistanceWamp(ApplicationSession):
 
     @coroutine
     def getFailsByDate_async(self, sid, userId, start, end):
-
-        start = dateutil.parser.parse(start)
-        end = dateutil.parser.parse(end)
 
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.getFailsByDate, sid, userId, start, end)
