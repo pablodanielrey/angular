@@ -172,22 +172,19 @@ class ScheduleChecks:
         if (checks is None) or (len(checks) <= 0): #si no existen chequeos a realizar se retorna una lista vacia
             return []
 
-        #obtener justificaciones
+        #obtener todas las justificaciones asoiadas al usuario justificaciones, luego seran filtradas cuando se realice el chequeo
         gjustifications = self.justifications.getGeneralJustificationRequests(con)
         justifications = self.justifications.getJustificationRequestsByDate(con, status=['APPROVED'], users=[userId], start=start, end=end)
         
-        
-        '''
-        logging.debug('justificaciones encontradas : {} '.format(justifications))
 
         fails = []
-
         actual = start
         
-        #recorrer las fechas para verificar si el chequeo es valido
+        #recorrer las fechas y realizar chequeo de fallas
         while actual <= end:
 
-            """ elijo el check indicado para la fecha actual """
+
+            #definir el chequeo en base a la fecha
             check = None
             for c in checks:
                 check = c
@@ -201,15 +198,21 @@ class ScheduleChecks:
                 actual = nextDay
                 continue
 
+
+            #filtrar justificaciones previamente consultadas
+            justs = self._findJustificationsForDate(justifications,actual)
+            gjusts = self._findGeneralJustificationsForDate(gjustifications,actual)
+
+
             scheds = self.schedule.getSchedule(con,userId,actual)
             if (scheds is None) or (len(scheds) <= 0):
                 """ no tiene horario declarado asi que no se chequea nada """
                 actual = nextDay
                 continue
 
-            justs = self._findJustificationsForDate(justifications,actual)
+            
 
-            gjusts = self._findGeneralJustificationsForDate(gjustifications,actual)
+            
             if len(gjusts) > 0:
                 for j in gjusts:
                     j['user_id'] = userId
