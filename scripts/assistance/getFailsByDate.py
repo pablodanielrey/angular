@@ -2,7 +2,7 @@
 """
 Obtener fallas en un intervalo de fechas
 @example python3 getFailsByDate.py uid user_id date1 date2
-@example python3 getFailsByDate.py 1 c3f23c7c-4abf-402e-b6f3-ee3fd70f4484 01-01-2015 01-05-2015
+@example python3 getFailsByDate.py 1 c3f23c7c-4abf-402e-b6f3-ee3fd70f4484 01/01/2015 01/05/2015
 """
 
 import sys
@@ -34,9 +34,8 @@ config = inject.instance(Config)
 
 sid = sys.argv[1]
 userId = sys.argv[2]
-start = datetime.datetime.strptime(sys.argv[3], "%d-%m-%Y")
-end = datetime.datetime.strptime(sys.argv[4], "%d-%m-%Y")
-logging.debug('consutlando {} : {} --> {}'.format(userId, start, end))
+start = datetime.datetime.strptime(sys.argv[3], "%d/%m/%Y")
+end = datetime.datetime.strptime(sys.argv[4], "%d/%m/%Y")
 
 
 class WampMain(ApplicationSession):
@@ -50,8 +49,6 @@ class WampMain(ApplicationSession):
     @coroutine
     def onJoin(self, details):
         logging.debug('ejecutando llamadas')
-
-
 
         ret = yield from self.call('assistance.getFailsByDate', sid, userId, start, end)
         for r in ret:
