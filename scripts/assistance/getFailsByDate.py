@@ -34,22 +34,23 @@ config = inject.instance(Config)
 
 sid = sys.argv[1]
 userId = sys.argv[2]
-start = datetime.datetime.strptime(sys.argv[3], "%d/%m/%Y")
-end = datetime.datetime.strptime(sys.argv[4], "%d/%m/%Y")
+start = datetime.datetime.strptime(sys.argv[3], "%d/%m/%Y").date()
+end = datetime.datetime.strptime(sys.argv[4], "%d/%m/%Y").date()
+
 
 
 class WampMain(ApplicationSession):
 
     def __init__(self, config=None):
-        logging.debug('instanciando')
+
         ApplicationSession.__init__(self, config)
 
         self.serverConfig = inject.instance(Config)
 
     @coroutine
     def onJoin(self, details):
-        logging.debug('ejecutando llamadas')
-
+        logging.debug('********** getFailsByDate **********')
+       
         ret = yield from self.call('assistance.getFailsByDate', sid, userId, start, end)
         for r in ret:
             logging.debug(r)
