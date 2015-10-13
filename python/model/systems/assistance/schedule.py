@@ -110,7 +110,7 @@ class Schedule:
         @param schedules Lista de schedules Los schedules de la lista deben tener la misma fecha a consultar y pertenecer al mismo usuario
         @param date Fecha para la cual se quieren obtener los schedules
     """
-    def getLogsForSchedule(self, con, schedules):
+    def getLogsForSchedule(self, con, schedules, date):
         if schedules is None or len(schedules) <= 0:
             return []
 

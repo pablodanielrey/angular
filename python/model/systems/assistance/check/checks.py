@@ -86,7 +86,7 @@ class ScheduleChecks:
 
 
     """
-        retorna una lista de objetos ordenada cronologicamente de los chequeos a realizar para el usuario que son validos a partir de la fecha pasada como parametro.
+        retorna una diccionario de datos de chequeos ordenada cronologicamente de los chequeos a realizar para el usuario que son validos a partir de la fecha pasada como parametro.
 
         @param con Conexion con la base de datos
         @param userId Id de usuario
@@ -140,19 +140,28 @@ class ScheduleChecks:
         return users
 
 
+    '''
+      recorrer lista de justificaciones para filtrar aquellas que coinciden con una determinada fecha
+      @param justificaciones Lista de justificaciones a filtrar
+      @param date Fecha de filtro
+    '''
     def _findJustificationsForDate(self, justifications, date):
         justs = []
         for j in justifications:
-            logging.debug('chequeando fecha : {} == {}'.format(j['begin'].date(), date.date()))
-            if j['begin'].date() == date.date():
+            if j['begin'].date() == date:
                 justs.append(j)
         return justs
 
+
+    '''
+      recorrer lista de justificaciones generales para filtrar aquellas que coinciden con una determinada fecha
+      @param justificaciones Lista de justificaciones generales a filtrar
+      @param date Fecha de filtro
+    '''
     def _findGeneralJustificationsForDate(self, justifications, date):
         justs = []
         for j in justifications:
-            logging.debug('chequeando fecha : {} == {}'.format(j['begin'].date(), date.date()))
-            if j['begin'].date() == date.date():
+            if j['begin'].date() == date:
                 justs.append(j)
         return justs
 
@@ -199,17 +208,21 @@ class ScheduleChecks:
                 continue
 
 
-            #filtrar justificaciones previamente consultadas
-            justs = self._findJustificationsForDate(justifications,actual)
+            #si el tipo es schedule, verificar que tenga un schedule para la fecha de chequeo     
+            if check["type"] == "SCHEDULE":
+                scheds = self.schedule.getSchedule(con,userId,actual)
+                if (scheds is None) or (len(scheds) <= 0):
+                    """ no tiene horario declarado asi que no se chequea nada """
+                    actual = nextDay
+                    continue
+
+
+            #filtrar justificaciones previamente consultadas en base a la fecha de chequeo
+            justs = self._findJustificationsForDate(justifications,actual)          
             gjusts = self._findGeneralJustificationsForDate(gjustifications,actual)
 
 
-            scheds = self.schedule.getSchedule(con,userId,actual)
-            if (scheds is None) or (len(scheds) <= 0):
-                """ no tiene horario declarado asi que no se chequea nada """
-                actual = nextDay
-                continue
-
+            #agregar usuario a las justificaciones generales para facilitar su manipulacion
             if len(gjusts) > 0:
                 for j in gjusts:
                     j['user_id'] = userId
@@ -221,10 +234,13 @@ class ScheduleChecks:
                     auxFails = tcheck.getFails(self,userId,actual,con)
                     break
 
+            print("******************* auxFails")
+            print(auxFails)
+
             if len(auxFails) > 0:
                 fails.extend(auxFails)
             actual = nextDay
-        '''
+           
         return fails
 
 
@@ -307,28 +323,20 @@ class ScheduleChecks:
 
 
     """
-        chequea el schedule de la fecha pasada como parámetro (se supone aware)
-        los logs de agrupan por schedule.
-        teneiendo en cuenta la diferencia entre 2 schedules consecutivos dividido en 2.
+        Verificar el schedule de la fecha pasada como parametro: 
+        Se verifica si tiene logs correspondientes y si estan dentro de un limite determinado
+        @param con Conexion con la base de datos
+        @param userId Identificacion de usuario
+        @param date Fecha para la cual se verifica el schedule
 
-        controls = [{schdule:{},whs:[]}]
     """
     def checkSchedule(self, con, userId, date):
-        date = self.date.awareToUtc(date)
-
         schedules = self.schedule.getSchedule(con, userId, date)
-
         logs = self.schedule.getLogsForSchedule(con, schedules, date)
-        for wh in whs:
-            print(wh)
+
         whs, attlogs = self.logs.getWorkedHours(logs)
-
-
-
         controls = self.schedule.combiner(schedules, whs)
+        fails = self.scheduleCheck.checkWorkedHours(con,userId,controls, date)
+        print(fails)
+        return fails
 
-
-
-
-        #fails = self.scheduleCheck.checkWorkedHours(con,userId,controls)
-        #return fails

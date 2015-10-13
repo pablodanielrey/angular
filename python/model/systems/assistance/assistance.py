@@ -206,8 +206,11 @@ class Assistance:
         odata = self._arrangeForOdsChecks(con, data)
         return self._exportToOds(odata)
 
+
+
+
     """
-        Obtiene las fallas que tenga el usuario en el rango de fecha
+        Obtiene las fallas que tenga el usuario en el rango de fechas correspondientes al Schedule
         @param userId Identificacion de usuario
         @param start Fecha (date) de inicio del periodo
         @param end Fecha (date de finalizacion del periodo
