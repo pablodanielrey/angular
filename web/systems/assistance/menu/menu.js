@@ -77,7 +77,7 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Profiles', 'Se
     $scope.initialize = function() {
 
       Profiles.checkAccess(Session.getSessionId(),["ADMIN-ASSISTANCE","USER-ASSISTANCE"],
-        function(ok) {
+        function(ok) {/*
           if (ok) {
               $scope.model.items = [];
               //$scope.model.items.push({ n:1, label:'Inicio', img:'fa-tachometer', function: $scope.summary});
@@ -88,7 +88,7 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Profiles', 'Se
               // hasta que no este terminado en producción no va
               $scope.model.items.push({ n:4, label:'Mi Horario', img:'fa-clock-o', function: $scope.mySchedule});
 
-              Assistance.getUserOfficeRoles(
+              Office.getUserOfficeRoles(
                   function(roles) {
                     var hasApprove = false;
                     var hasOvertime = false;
@@ -129,6 +129,7 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Profiles', 'Se
                   }
               );
           }
+          */
         },
         function (error) {
             Notifications.message(error);

@@ -65,10 +65,10 @@ class OfficesWamp(ApplicationSession):
         r = yield from loop.run_in_executor(None, self.getUserOfficeRoles, userId)
         return r
 
-    def getOfficesByUser(self, userId, tree):
+    def getOfficesByUser(self, sessionId, userId, tree):
         con = self._getDatabase()
         try:
-            return self.offices.getOfficesByUser(con, userId, tree)
+            return self.offices.getOfficesByUser(con, userId, tree, False)
         finally:
             con.close()
 
