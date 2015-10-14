@@ -50,6 +50,7 @@ class Assistance:
             ldate = self.date.localizeLocal(date)
             date = self.date.awareToUtc(ldate)
 
+
         sch = self.schedule.getSchedule(con, userId, date)
 
         rt = {
@@ -64,12 +65,12 @@ class Assistance:
             jid = j['justification_id']
             j['name'] = self.justifications.getJustificationById(con, jid)['name']
 
-    def _getJustificationsForSchedule(self, con, userId, scheds):
+    def _getJustificationsForSchedule(self, con, userId, scheds,date):
         if scheds is None or len(scheds) <= 0:
             return []
 
-        start = scheds[0]['start']
-        end = scheds[-1]['end']
+        start = scheds[0].getStart(date)
+        end = scheds[-1].getEnd(date)
         justifications = self.justifications.getJustificationRequestsByDate(con, None, [userId], start, end)
         self._resolveJustificationsNames(con, justifications)
         return justifications
@@ -81,7 +82,6 @@ class Assistance:
         se pasa a utc dentro de este método ya que se necesita saber el inicio del día y fin del día en zona local.
     """
     def getAssistanceStatus(self, con, userId, date=None):
-
         if date is None:
             date = datetime.datetime.now()
         if self.date.isNaive(date):
@@ -93,7 +93,7 @@ class Assistance:
             """ no tiene horario declarado asi que no se chequea nada """
             return None
 
-        logs = self.schedule.getLogsForSchedule(con, userId, scheds)
+        logs = self.schedule.getLogsForSchedule(con, scheds, date)
         logging.debug('logs {}'.format(logs))
 
         worked, attlogs = self.logs.getWorkedHours(logs)
@@ -102,7 +102,7 @@ class Assistance:
         sdate, edate, totalSeconds = self.logs.explainWorkedHours(worked)
         inside = 'Afuera' if len(attlogs) % 2 == 0 else 'Trabajando'
 
-        justifications = self._getJustificationsForSchedule(con, userId, scheds)
+        justifications = self._getJustificationsForSchedule(con, userId, scheds,date)
 
         assistanceStatus = {
             'date': date,
@@ -112,14 +112,15 @@ class Assistance:
             'end': edate,
             'logs': attlogs,
             'justifications': justifications,
-            'schedules': scheds,
+            # comente esto para que me funcione, todavia no se quien utiliza el scheds
+            # 'schedules': scheds,
             'workedMinutes': totalSeconds / 60
         }
         return assistanceStatus
 
     def _getNullAssistanceStatus(self, con, userId, date):
         scheds = self.schedule.getSchedule(con, userId, date)
-        justifications = self._getJustificationsForSchedule(con, userId, scheds)
+        justifications = self._getJustificationsForSchedule(con, userId, scheds,date)
         assistanceStatus = {
             'date': date,
             'userId': userId,

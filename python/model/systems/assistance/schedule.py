@@ -19,7 +19,7 @@ from model.systems.assistance.logs import Logs
 
 class ScheduleData:
     ''' representa datos del schedule '''
-    
+
     def __init__(self, s, tzinfo, previousDate = None, nextDate = None):
         '''
         @param s Datos del schedule
@@ -27,7 +27,7 @@ class ScheduleData:
         @param previousDate Fecha del schedule anterior
         @param nextDate Fecha del schedule posterior
         '''
-        
+
         self.id = s['id']
         self.date = s['date']
         self.start = s['start']
@@ -36,14 +36,17 @@ class ScheduleData:
         self.isDayOfMonth = s['isDayOfMonth']
         self.isDayOfYear = s['isDayOfYear']
         self.userId = s["userId"]
-        
+
         self.previousDate = previousDate
         self.nextDate = nextDate
         self.tzinfo = tzinfo
 
+    def toMap(self,date):
+        return {'start':self.getStart(date),'end':self.getEnd(date)}
+
     def _checkDate(self, date):
         return True #por el momento no hacemos el chequeo, retornamos True
-        
+
         if self.isDayOfWeek:
             d = datetime.date.weekday(self.date)
             d1 = datetime.date.weekday(date)
@@ -54,24 +57,24 @@ class ScheduleData:
         if (previousDate > date) or (nextDate > date):
             return False
         return True
-    
+
     def __cmp__(self, other):
-    
+
         r = other.date.__cmp__(self.date)
         if r is not 0:
           return r
-          
+
         if self.start < other.start:
           return -1
-        
+
         if self.start == other.start:
           return 0
-          
+
         if self.start > other.start:
           return 1
-        
-    
-    
+
+
+
     def getStart(self, date):
         ''' retorna el datetime del inicio del schedule '''
 
@@ -116,14 +119,14 @@ class Schedule:
 
         #definir userId
         userId = schedules[0].userId
-        
+
         #definir timestamps de inicio y finalizacion
         start = schedules[0].getStart(date)
         end = schedules[-1].getEnd(date)
-                
+
         deltaStart = start - timedelta(hours=3)
         deltaEnd = end + timedelta(hours=3)
-        
+
         logs = self.logs.findLogs(con, userId, deltaStart, deltaEnd)
 
         return logs
@@ -145,11 +148,11 @@ class Schedule:
                     (isDayOfYear = true and sdate <= %s and extract(doy from sdate) = extract(doy from %s))) and \
                     user_id = %s \
                     order by sdate desc, sstart desc", (date, date, date, date, date, date, date, userId))
-                                
+
         scheduless = cur.fetchall()
         if scheduless is None or len(scheduless) <= 0:
             return []
-            
+
         schedules = []
         for schedule in scheduless:
             sch = {
@@ -160,11 +163,11 @@ class Schedule:
                 'isDayOfWeek': schedule[4],
                 'isDayOfMonth': schedule[5],
                 'isDayOfYear': schedule[6],
-                'userId': userId                         
+                'userId': userId
             }
 
             schData = ScheduleData(sch, self.date.getLocalTimezone())
-            
+
             #retorno los schedules con la fecha actual en utc - las fechas en la base deberian estar en utc
             schedules.append(schData)
 
@@ -181,7 +184,7 @@ class Schedule:
         cur.execute("select sstart, send, date, isDayOfWeek, isDayOfMonth, isDayOfYear, id from assistance.schedule where \
                 user_id = %s \
                 order by date desc", (userId,))
-                
+
         scheduless = cur.fetchall()
         if scheduless is None or len(scheduless) <= 0:
             return []
@@ -196,11 +199,11 @@ class Schedule:
                 'end': schedule[3],
                 'isDayOfWeek': schedule[4],
                 'isDayOfMonth': schedule[5],
-                'isDayOfYear': schedule[6]                                   
+                'isDayOfYear': schedule[6]
             }
-            
-            schData = ScheduleData(sch, self.date.getLocalTimezone()) 
-            
+
+            schData = ScheduleData(sch, self.date.getLocalTimezone())
+
             schedules.append(schData)
 
         return schedules

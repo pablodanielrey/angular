@@ -84,7 +84,15 @@ class AssistanceWamp(ApplicationSession):
     def getAssistanceData(self, sid, userId, date=None):
         con = self._getDatabase()
         try:
+            if date is not None:
+                date = self._parseDate(date)
+                            
             r = self.assistance.getAssistanceData(con, userId, date)
+            scheds = r['schedule']
+            schedsMap = []
+            for s in scheds:
+                schedsMap.append(s.toMap(date))
+            r['schedule'] = schedsMap
             return r
 
         finally:
@@ -256,7 +264,7 @@ class AssistanceWamp(ApplicationSession):
     def getFailsByDate(self, sid, userId, start, end):
         start = dateutil.parser.parse(start).date()
         end = dateutil.parser.parse(end).date()
-        
+
         con = self._getDatabase()
         try:
             r = self.assistance.getFailsByDate(userId, start, end)
@@ -291,9 +299,9 @@ class AssistanceWamp(ApplicationSession):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.getFailsByFilter, userIds, officesIds, start, end, filter)
         return r
-        
-        
-    
+
+
+
     def getSchedulesByDate(self, userId, date):
         """
          " Obtener schedules de una fecha determinada
@@ -301,14 +309,14 @@ class AssistanceWamp(ApplicationSession):
          " @param date Fecha para la cual se quieren consultar los schedules
          """
         date = datetime.datetime.strptime(date, "%Y-%m-%d").date()
-        
+
         con = self._getDatabase()
         try:
             schedulesData = self.schedule.getSchedule(con, userId, date)
 
             schedules = []
             for schData in schedulesData:
-          
+
               sch = {
                 "id":schData.id,
                 "date":schData.date,
@@ -324,7 +332,7 @@ class AssistanceWamp(ApplicationSession):
 
               }
               schedules.append(sch)
-          
+
             return schedules
 
         finally:
@@ -335,9 +343,9 @@ class AssistanceWamp(ApplicationSession):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.getSchedulesByDate, userId, date)
         return r
-        
-        
-        
+
+
+
     def getLogsForSchedulesByDate(self, schedules, date):
         """
          " Obtener schedules de una fecha determinada
@@ -350,7 +358,7 @@ class AssistanceWamp(ApplicationSession):
             schedulesData = []
             for schedule in schedules:
                 dateSch = datetime.datetime.strptime(schedule["date"], "%Y-%m-%d").date()
-                
+
                 sch = {
                   'id': schedule["id"],
                   'date': dateSch,
@@ -362,7 +370,7 @@ class AssistanceWamp(ApplicationSession):
                   'userId': schedule["userId"]
                 }
                 schData = ScheduleData(sch, self.date.getLocalTimezone())
-                
+
                 schedulesData.append(schData)
 
             logs = self.schedule.getLogsForSchedule(con, schedulesData, date)
@@ -375,4 +383,4 @@ class AssistanceWamp(ApplicationSession):
     def getLogsForSchedulesByDate_async(self, schedules, date):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.getLogsForSchedulesByDate, schedules, date)
-        return r   
+        return r

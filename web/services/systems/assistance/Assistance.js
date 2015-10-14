@@ -6,7 +6,7 @@ app.service('Assistance', ['Utils','Session','$wamp',
 
 		this.getAssistanceData = function(userId, date, callbackOk, callbackError) {
 			var sid = Session.getSessionId();
-			$wamp.call('assistance.getAssistanceData', [sid, usersId])
+			$wamp.call('assistance.getAssistanceData', [sid, userId, date])
 				.then(function(res) {
 					if (res != null) {
 						callbackOk(res);
@@ -20,7 +20,7 @@ app.service('Assistance', ['Utils','Session','$wamp',
 
 		this.getAssistanceStatusByDate = function(userId, date, callbackOk, callbackError) {
 			var sid = Session.getSessionId();
-			$wamp.call('assistance.getAssistanceStatusByDate', [sid, usersId, date])
+			$wamp.call('assistance.getAssistanceStatusByDate', [sid, userId, date])
 				.then(function(res) {
 					if (res != null) {
 						callbackOk(res);
