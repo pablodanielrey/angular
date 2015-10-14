@@ -37,9 +37,9 @@ function($scope, $timeout, $window, Profiles, Session, Users, Assistance, Notifi
 	/**
 	 * Dar formato a los datos de oficina recibidos del servidor
 	 */
-	$scope.formatOfficesFromServer = function(officesFromServer){
-		for (var office in officesFromServer.offices){
-			$scope.model.offices.push(officesFromServer.offices[office].name);
+	$scope.formatOfficesFromServer = function(officesFromServer) {
+		for (var i = 0; i < officesFromServer.length; i++) {
+			$scope.model.offices.push(officesFromServer[i].name);
 		}
 	};
 
@@ -69,10 +69,6 @@ function($scope, $timeout, $window, Profiles, Session, Users, Assistance, Notifi
 		$scope.model.assistanceStatus.workedTime = Utils.getTimeFromMinutes(workedMinutes);
 
 
-		for (var i in assistanceStatusFromServer.logs) {
-			console.log(assistanceStatusFromServer.logs[i]);
-		};
-
 	};
 
 	/**
@@ -81,11 +77,11 @@ function($scope, $timeout, $window, Profiles, Session, Users, Assistance, Notifi
 	$scope.formatAssistanceDataFromServer = function(assistanceDataFromServer) {
 		$scope.model.assistanceData.position = assistanceDataFromServer.position;
 
-		for (var time in assistanceDataFromServer.schedule) {
-			var start = new Date(assistanceDataFromServer.schedule[time].start);
+		for (var i = 0; i < assistanceDataFromServer.schedule.length; i++) {
+			var start = new Date(assistanceDataFromServer.schedule[i].start);
 			var startHour = Utils.formatTime(start);
 
-			var end = new Date(assistanceDataFromServer.schedule[time].end);
+			var end = new Date(assistanceDataFromServer.schedule[i].end);
 			var endHour = Utils.formatTime(end);
 
 			$scope.model.assistanceData.schedule.push(startHour + " / " + endHour);
@@ -136,14 +132,14 @@ function($scope, $timeout, $window, Profiles, Session, Users, Assistance, Notifi
     };
 
     $scope.loadOffices = function() {
-    /*	Office.getOfficesByUser($scope.model.session.user_id,true,
+    	Office.getOfficesByUser($scope.model.session.user_id,true,
 				function(offices){
 					$scope.formatOfficesFromServer(offices);
 				},
 				function(error){
 					Notifications.message(error);
 				}
-			);*/
+			);
     }
 
     $scope.loadJustifications = function() {
