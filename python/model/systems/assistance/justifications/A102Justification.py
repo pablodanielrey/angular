@@ -20,7 +20,7 @@ class A102Justification(Justification):
     def isJustification(self,id):
         return self.id == id
 
-    def _isJustifiedTimeEnd(self,sched,whs,justification,tolerancia):
+    def _isJustifiedTimeEnd(self,sched,whs,justification,tolerancia, date = None):
         (sdate,edate,totalSeconds) = self.logs.explainWorkedHours(whs)
         if (totalSeconds/60) >= 120:
             return True

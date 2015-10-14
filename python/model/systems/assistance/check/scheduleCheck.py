@@ -148,11 +148,11 @@ class ScheduleCheck(Check):
                 'justifications':[]
             }
         actualDate es aware.
-    '''
+    
     def getFails(self, utils, userId, actualDate, con):
         fails = utils.checkSchedule(con,userId,actualDate)
         return fails
-
+    '''
 
 
     '''
@@ -200,42 +200,72 @@ class ScheduleCheck(Check):
 
     '''
         Verifica si  hay alguna justificacion que justifique la falla en la entrada
+        @param justifications Lista de justificaciones
+        @param sched Schedule correspondiente al dia de chequeo
+        @param whs Horas trabajadas correspondientes al dia de chequeo
+        @param fail Falla correspondiente al dia de chequeo
+        @param isLastSchedule Flag para indicar que es el ultimo schedule que se esta chequeando de la lista de schedules
+        @param date Dia de chequeo
     '''
-    def _isJustifiedTimeStart(self,justifications,sched,whs,fail,isFirstSchedule):
-
+    def _isJustifiedTimeStart(self,justifications,sched,whs,fail,isFirstSchedule, date):
         if not isFirstSchedule or fail['whAnt'] is not None:
-            start = sched['start'] if fail['whAnt'] is None else fail['whAnt']['end']
+            start = sched.getStart(date) if fail['whAnt'] is None else fail['whAnt']['end']
             end = fail['wh']['start']
             return self._isJustifiedTime(justifications,start,end)
         for j in justifications:
             for just in self.justificationsTime:
                 if just.isJustification(j['justification_id']):
-                    return just._isJustifiedTimeStart(sched,whs,j,self.tolerancia)
+                    print(just)
+                    print("AAAAAAAA")
+                    print(sched)
+                    print(whs)
+                    print(self.tolerancia)
+                    print(date)
+                    print(j)
+                    return just._isJustifiedTimeStart(sched,whs,j,self.tolerancia, date)
+                    print("BBBBBBB")
 
         return False
 
+
+
+
     '''
         Verifica si  hay alguna justificacion que justifique la falla en la salida
+        @param justifications Lista de justificaciones
+        @param sched Schedule correspondiente al dia de chequeo
+        @param whs Horas trabajadas correspondientes al dia de chequeo
+        @param fail Falla correspondiente al dia de chequeo
+        @param isLastSchedule Flag para indicar que es el ultimo schedule que se esta chequeando de la lista de schedules
+        @param date Dia de chequeo
     '''
-    def _isJustifiedTimeEnd(self,justifications,sched,whs,fail,isLastSchedule):
+    def _isJustifiedTimeEnd(self, justifications, sched, whs, fail, isLastSchedule, date):
         if isLastSchedule and fail['whNext'] is None:
             for j in justifications:
                 for just in self.justificationsTime:
                     if just.isJustification(j['justification_id']):
-                        return just._isJustifiedTimeEnd(sched,whs,j,self.tolerancia)
+                        return just._isJustifiedTimeEnd(sched,whs,j,self.tolerancia, date)
         else:
-            start = wh['end']
-            end = sched['end'] if fail['whNext'] is None else fail['whNext']['start']
+            start = fail["wh"]["end"]
+            end = sched.getEnd(date) if fail['whNext'] is None else fail['whNext']['start']
+
             return self._isJustifiedTime(justifications,start,end)
 
         return False
 
 
+    '''
+       Verificar si esta justificado el intervalo de tiempo
+       @param justifications Justificaciones del usuario
+       @param start Timestamp de inicio
+       @param end Timestamp final
+    '''
     def _isJustifiedTime(self,justifications,start,end):
         for j in justifications:
             for just in self.justificationsTime:
+                print(just)
                 if just.isJustification(j['justification_id']):
-                    return just._isJustifiedTime(start,end,j)
+                    return just._isJustifiedTime(j,start,end)
         return False
 
 
@@ -340,13 +370,16 @@ class ScheduleCheck(Check):
 
             dateSchd = sched.getStart(date)
 
-            failsBySched = self._getFails(whs,sched, date)
+
+            failsBySched = self._getFails(whs, sched, date)
 
             isFirstSchedule = sched == firstSched
             isLastSchedule = sched == lastSched
 
             for f in failsBySched:
-            
+                print("************************** failsBySched")
+                
+                print(f["name"])
                 #  ------------ SIN MARCACION -----------
                 if f['name'] == 'Sin marcación':
                     if self._isJustifiedTime(justs,sched.getStart(date),sched.getEnd(date)):
@@ -356,11 +389,14 @@ class ScheduleCheck(Check):
 
                 #  ---------- LLEGADA TARDIA -------------
                 if f['name'] == 'Llegada tardía':
-                    if self._isJustifiedTimeStart(justs,sched,whs,f,isFirstSchedule):
+                    #verificar si esta justificada la llegada tardia
+                    if self._isJustifiedTimeStart(justs,sched,whs,f,isFirstSchedule, date):
                         continue
+                        
+                    #si no esta justificada la salida temprana, definir una falla y agregarla a la lista de fallas
                     else:
                         fail = self._createFail(userId,dateSchd,f['name'],justs)
-                        fail['startSchedule'] = sched['start']
+                        fail['startSchedule'] = sched.getStart(date)
                         fail['start'] = f['wh']['start']
                         fail['seconds'] =(f['wh']['start'] - sched.getStart(date)).total_seconds()
                         fail['whSeconds'] = f['wh']['seconds']
@@ -373,8 +409,12 @@ class ScheduleCheck(Check):
 
                 # ------------ Salida temprana ---------------
                 if f['name'] == 'Salida temprana':
-                    if self._isJustifiedTimeEnd(justs,sched,whs,f,isLastSchedule):
+                    print(f)
+                    #verificar si esta justificada la salida temprana
+                    if self._isJustifiedTimeEnd(justs, sched, whs, f, isLastSchedule, date):
                         continue
+
+                    #si no esta justificada la salida temprana, definir una falla y agregarla a la lista de fallas
                     else:
                         fail = self._createFail(userId,dateSchd,f['name'],justs)
                         fail['endSchedule'] = sched.getEnd(date)
@@ -385,15 +425,27 @@ class ScheduleCheck(Check):
 
 
 
-
-    def _getFails(self,whs,sched, date):
+    """
+       obtener fallas
+       @param whs Horas trabajadas correspondientes al dia de chequeo
+       @param sched Horario correspondiente al dia de chequeo
+       @param date Dia de chequeo
+       @return lista de fallas:
+          fail = {
+            name: Nombre de la falla (LLegada tardía, Sin Salida, Salida Temprada)
+            wh: Worked hour correspondiente a la falla
+            whAnt: Worked hour anterior a la falla
+            whNext: Worked hour posterior a la falla
+          }
+    """
+    def _getFails(self, whs, sched, date):
         if len(whs) == 0:
             # sin marcacion
             return [{'name':'Sin marcación','wh':None}]
 
         if len(whs) == 1:
             wh = whs[0]
-            if wh['start'] - self.tolerancia <= sched.getStart(date) and ('end' in wh and wh['end'] is not None) and ('end' in sched and sched.getEnd(date) is not None) and wh['end'] + self.tolerancia >= sched['end']:
+            if wh['start'] - self.tolerancia <= sched.getStart(date) and ('end' in wh and wh['end'] is not None) and (sched.getEnd(date) is not None) and wh['end'] + self.tolerancia >= sched.getEnd(date):
                 return []
 
         fails = []

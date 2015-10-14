@@ -23,23 +23,34 @@ class BSJustification(Justification):
     def isJustification(self,id):
         return self.id == id
 
-    def _isJustifiedTimeStart(self,sched,whs,justification,tolerancia):
+
+    """
+        
+        @param date Fecha de chequeo
+    """
+    def _isJustifiedTimeStart(self,sched,whs,justification,tolerancia, date):
         start = whs[0]['start']
-        if sched['start'] >= justification['begin'] and start <= justification['end']:
+        if sched.getStart(date) >= justification['begin'] and start <= justification['end']:
             return True
         return False
 
-    def _isJustifiedTimeEnd(self,sched,whs, justification, tolerancia):
+    """
+        
+        @param date Fecha de chequeo
+    """
+    def _isJustifiedTimeEnd(self,sched,whs, justification, tolerancia, date):
         whEnd = whs[-1]['end']
-        if whEnd >= justification['begin'] and sched['end'] <= justification['end']:
+        if whEnd >= justification['begin'] and sched.getEnd(date) <= justification['end']:
             return True
         return False
+
 
     def _isJustifiedTime(self,justification,start,end):
         if 'begin' not in justification or 'end' not in justification or start is None or end is None:
             return False
         if start >= justification['begin'] and end <= justification['end']:
             return True
+            
         return False
 
     """

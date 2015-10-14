@@ -174,25 +174,21 @@ class ScheduleChecks:
         @param end Fecha final (date)
     """
     def checkConstraints(self, con, userId, start, end):
-        print("******************************************* checkConstraints")
-
-        checks = self._getCheckData(con, userId, start)  #obtener chequeos a realizar validos a partir de la fecha
+        checks = self._getCheckData(con, userId, start) #obtener chequeos a realizar validos a partir de la fecha
 
         if (checks is None) or (len(checks) <= 0): #si no existen chequeos a realizar se retorna una lista vacia
             return []
 
-        #obtener todas las justificaciones asoiadas al usuario justificaciones, luego seran filtradas cuando se realice el chequeo
+        #obtener todas las justificaciones asoiadas al usuario, luego seran filtradas cuando se realice el chequeo
         gjustifications = self.justifications.getGeneralJustificationRequests(con)
         justifications = self.justifications.getJustificationRequestsByDate(con, status=['APPROVED'], users=[userId], start=start, end=end)
-
 
         fails = []
         actual = start
 
-        #recorrer las fechas y realizar chequeo de fallas
+        #recorrer fecha por fecha realizar chequeo de fallas
         while actual <= end:
-
-
+        
             #definir el chequeo en base a la fecha
             check = None
             for c in checks:
@@ -201,10 +197,11 @@ class ScheduleChecks:
                     check = c
                     break
 
-            nextDay = actual + datetime.timedelta(days=1)
 
+
+            #si no hay chequeo para la fecha que se esta recorriendo incrementamos un dia
             if check is None:
-                actual = nextDay
+                actual = actual + datetime.timedelta(days=1)
                 continue
 
 
@@ -213,7 +210,7 @@ class ScheduleChecks:
                 scheds = self.schedule.getSchedule(con,userId,actual)
                 if (scheds is None) or (len(scheds) <= 0):
                     """ no tiene horario declarado asi que no se chequea nada """
-                    actual = nextDay
+                    actual = actual + datetime.timedelta(days=1)
                     continue
 
 
@@ -228,18 +225,19 @@ class ScheduleChecks:
                     j['user_id'] = userId
                     justs.append(j)
 
+
+            #definir fallas correspondientes a la fecha de chequeo
             auxFails = []
             for tcheck in self.typesCheck:
                 if tcheck.isTypeCheck(check["type"]):
-                    auxFails = tcheck.getFails(self,userId,actual,con)
-                    break
+                    fails = self.checkSchedule(con,userId,actual)
 
-            print("******************* auxFails")
-            print(auxFails)
+                    break
 
             if len(auxFails) > 0:
                 fails.extend(auxFails)
-            actual = nextDay
+
+            actual = actual + datetime.timedelta(days=1)
            
         return fails
 
@@ -323,8 +321,7 @@ class ScheduleChecks:
 
 
     """
-        Verificar el schedule de la fecha pasada como parametro: 
-        Se verifica si tiene logs correspondientes y si estan dentro de un limite determinado
+        Verificar si tiene fallas de schedule en una fecha determinada
         @param con Conexion con la base de datos
         @param userId Identificacion de usuario
         @param date Fecha para la cual se verifica el schedule

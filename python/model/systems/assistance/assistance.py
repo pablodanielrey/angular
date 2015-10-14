@@ -219,7 +219,7 @@ class Assistance:
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
             fails = self.checks.checkConstraints(con, userId, start, end) #obtener fallas del usuario en determinado periodo
-            user = self.users.findUser(con, userId)
+            user = self.users.findUser(con, userId) #definir usuario
             return (user, fails)
 
         finally:
