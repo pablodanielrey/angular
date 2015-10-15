@@ -52,6 +52,7 @@ class WampMain(ApplicationSession):
         logging.debug('********** getFailsByDate **********')
        
         ret = yield from self.call('assistance.getFailsByDate', sid, userId, start, end)
+        print(len(ret))
         for r in ret:
             logging.debug(r)
 

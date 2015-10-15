@@ -21,7 +21,7 @@ app.config(['$routeProvider', function($routeProvider) {
   })
 
   .when('/assistanceFails', {
-      templateUrl: '/systems/assistance/modules/fails.html',
+      templateUrl: '/systems/assistance/modules/fails/fails.html',
       controller: 'AssistanceFailsCtrl'
   })
 
