@@ -105,6 +105,9 @@ class ScheduleChecks:
     def _getCheckData(self, con, userId, date):
         allChecks = self._getChecksByUser(con, userId)
 
+        if allChecks is None:
+            return []
+            
         if len(allChecks) == 0:
             return allChecks
 

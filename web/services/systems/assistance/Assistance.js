@@ -37,7 +37,10 @@ app.service('Assistance', ['Utils','Session','$wamp',
 
 		this.getFailsByDate = function(start, end, callbackOk, callbackError) {
 			var sid = Session.getSessionId();
-			$wamp.call('assistance.getFailsByDate', [sid, start, end])
+			var uid = Session.getCurrentSessionUserId();
+      console.log(sid)
+      console.log(uid)
+			$wamp.call('assistance.getFailsByDate', [sid, uid, start, end])
 				.then(function(res) {
 					if (res != null) {
 						callbackOk(res);

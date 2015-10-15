@@ -293,7 +293,9 @@ class Schedule:
             else:
                 whsAppends = []
                 for wh in whs:
-                    if 'start' in wh and wh['start'] <= sched['end']:
+                    date = wh['start'].date()
+
+                    if 'start' in wh and wh['start'] <= sched.getEnd(date):
                         elem['whs'].append(wh)
                         whsAppends.append(wh)
 

@@ -215,15 +215,8 @@ class ScheduleCheck(Check):
         for j in justifications:
             for just in self.justificationsTime:
                 if just.isJustification(j['justification_id']):
-                    print(just)
-                    print("AAAAAAAA")
-                    print(sched)
-                    print(whs)
-                    print(self.tolerancia)
-                    print(date)
-                    print(j)
                     return just._isJustifiedTimeStart(sched,whs,j,self.tolerancia, date)
-                    print("BBBBBBB")
+
 
         return False
 
