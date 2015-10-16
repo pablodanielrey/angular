@@ -77,7 +77,7 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Profiles', 'Se
     $scope.initialize = function() {
 
       Profiles.checkAccess(Session.getSessionId(),["ADMIN-ASSISTANCE","USER-ASSISTANCE"],
-        function(ok) {/*
+        function(ok) {
           if (ok) {
               $scope.model.items = [];
               //$scope.model.items.push({ n:1, label:'Inicio', img:'fa-tachometer', function: $scope.summary});
@@ -87,7 +87,7 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Profiles', 'Se
               //$scope.model.items.push({ label:'Filtro de Fallas (testing todavía no terminado)', img:'fa-ticket', function: $scope.assistanceFailsFilters});
               // hasta que no este terminado en producción no va
               $scope.model.items.push({ n:4, label:'Mi Horario', img:'fa-clock-o', function: $scope.mySchedule});
-
+              /* Lo comente para probar otras pantallas
               Office.getUserOfficeRoles(
                   function(roles) {
                     var hasApprove = false;
@@ -128,8 +128,9 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Profiles', 'Se
                     Notifications.message(error);
                   }
               );
+              */
           }
-          */
+
         },
         function (error) {
             Notifications.message(error);
