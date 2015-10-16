@@ -370,9 +370,7 @@ class ScheduleCheck(Check):
             isLastSchedule = sched == lastSched
 
             for f in failsBySched:
-                print("************************** failsBySched")
                 
-                print(f["name"])
                 #  ------------ SIN MARCACION -----------
                 if f['name'] == 'Sin marcación':
                     if self._isJustifiedTime(justs,sched.getStart(date),sched.getEnd(date)):
@@ -415,6 +413,9 @@ class ScheduleCheck(Check):
                         fail['seconds'] =(sched.getEnd(date) - f['wh']['end']).total_seconds()
                         fail['whSeconds'] = f['wh']['seconds']
                         fails.append(fail)
+                        
+
+            return fails
 
 
 
