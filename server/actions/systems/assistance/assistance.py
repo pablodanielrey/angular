@@ -65,7 +65,7 @@ class AssistanceWamp(ApplicationSession):
         yield from self.register(self.getSchedulesByDate_async, 'assistance.getSchedulesByDate')
         yield from self.register(self.getLogsForSchedulesByDate_async, 'assistance.getLogsForSchedulesByDate')
         yield from self.register(self.getJustifications_async, 'assistance.justifications.getJustifications')
-        
+
 
 
     def _getDatabase(self):
@@ -89,7 +89,7 @@ class AssistanceWamp(ApplicationSession):
         try:
             if date is not None:
                 date = self._parseDate(date)
-                            
+
             r = self.assistance.getAssistanceData(con, userId, date)
             scheds = r['schedule']
             schedsMap = []
@@ -131,7 +131,6 @@ class AssistanceWamp(ApplicationSession):
             if dates is not None:
                 dates = self._parseDates(dates)
             st = self.assistance.getAssistanceStatusByUsers(con, userIds, dates)
-            con.commit()
             return st
 
         finally:
@@ -387,11 +386,11 @@ class AssistanceWamp(ApplicationSession):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.getLogsForSchedulesByDate, schedules, date)
         return r
-        
-        
-    
-    
-    def getJustifications(self, sid):   
+
+
+
+
+    def getJustifications(self, sid):
         """
          " Obtener justificaciones a partir del session id
          " @param sid Identificador de session
@@ -404,11 +403,10 @@ class AssistanceWamp(ApplicationSession):
 
         finally:
             con.close()
-    
-        
+
+
     @coroutine
     def getJustifications_async(self, sid):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.getJustifications, sid)
-        return r   
-    
+        return r

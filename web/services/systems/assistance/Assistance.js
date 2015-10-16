@@ -1,141 +1,169 @@
-var app = angular.module('mainApp');
+angular
+	.module('mainApp')
+	.service('Assistance',Assistance);
 
-app.service('Assistance', ['Utils','Session','$wamp',
+Assistance.inject = ['Utils','Session','$wamp'];
 
-	function(Utils, Session, $wamp) {
+function Assistance (Utils, Session, $wamp) {
 
-		this.getAssistanceData = function(userId, date, callbackOk, callbackError) {
-			var sid = Session.getSessionId();
-			$wamp.call('assistance.getAssistanceData', [sid, userId, date])
-				.then(function(res) {
-					if (res != null) {
-						callbackOk(res);
-					} else {
-						callbackError('Error');
-					}
-				},function(err) {
-					callbackError(err);
-				});
-		};
+	var services = this;
 
-		this.getAssistanceStatusByDate = function(userId, date, callbackOk, callbackError) {
-			var sid = Session.getSessionId();
-			$wamp.call('assistance.getAssistanceStatusByDate', [sid, userId, date])
-				.then(function(res) {
-					if (res != null) {
-						callbackOk(res);
-					} else {
-						callbackError('Error');
-					}
-				},function(err) {
-					callbackError(err);
-				});
-		};
+	services.getAssistanceData = getAssistanceData;
+	services.getAssistanceStatusByDate = getAssistanceStatusByDate;
+	services.getAssistanceStatusByUsers = getAssistanceStatusByUsers;
+
+	services.getFailsByDate = getFailsByDate;
+	services.getFailsByFilter = getFailsByFilter;
+
+	services.getSchedules = getSchedules;
+	services.persistSchedule = persistSchedule;
+	services.deleteSchedule = deleteSchedule;
+	services.getJustifications = getJustifications;
+	services.getJustificationsByUser = getJustificationsByUser;
+	services.getJustificationStock = getJustificationStock;
+	services.updateJustificationStock = updateJustificationStock;
+	services.getJustificationRequestsByDate = getJustificationRequestsByDate;
+	services.getJustificationRequestsToManage = getJustificationRequestsToManage;
+	services.getJustificationRequests = getJustificationRequests;
+	services.updateJustificationRequestStatus = updateJustificationRequestStatus;
+	services.requestJustification = requestJustification;
+	services.requestJustificationRange = requestJustificationRange;
+	services.getOvertimeRequests = getOvertimeRequests;
+	services.getOvertimeRequestsToManage = getOvertimeRequestsToManage;
+	services.requestOvertime = requestOvertime;
+	services.updateRequestOvertimeStatus = updateRequestOvertimeStatus;
+	services.getSpecialJustifications = getSpecialJustifications;
+	services.requestGeneralJustification = requestGeneralJustification;
+	services.requestGeneralJustificationRange = requestGeneralJustificationRange;
+	services.getGeneralJustificationRequests = getGeneralJustificationRequests;
 
 
-
-
-		this.getFailsByDate = function(start, end, callbackOk, callbackError) {
-			var sid = Session.getSessionId();
-			var uid = Session.getCurrentSessionUserId();
-      console.log(sid)
-      console.log(uid)
-			$wamp.call('assistance.getFailsByDate', [sid, uid, start, end])
-				.then(function(res) {
-					if (res != null) {
-						callbackOk(res);
-					} else {
-						callbackError('Error');
-					}
-				},function(err) {
-					callbackError(err);
-				});
-		};
-
-		this.getFailsByFilter = function (users, offices, start, end, filter, callbackOk, callbackError) {
-
-			var usersIds = [];
-			var officesIds = [];
-			var ffilter = {};
-
-			if (users != null && users.length > 0) {
-				for (var i = 0; i < users.length; i++) {
-					usersIds.push(users[i].id);
+	function getAssistanceData(userId, date, callbackOk, callbackError) {
+		var sid = Session.getSessionId();
+		$wamp.call('assistance.getAssistanceData', [sid, userId, date])
+			.then(function(res) {
+				if (res != null) {
+					callbackOk(res);
+				} else {
+					callbackError('Error');
 				}
+			},function(err) {
+				callbackError(err);
+			});
+	};
+
+	function getAssistanceStatusByDate(userId, date, callbackOk, callbackError) {
+		var sid = Session.getSessionId();
+		$wamp.call('assistance.getAssistanceStatusByDate', [sid, userId, date])
+			.then(function(res) {
+				if (res != null) {
+					callbackOk(res);
+				} else {
+					callbackError('Error');
+				}
+			},function(err) {
+				callbackError(err);
+			});
+	};
+
+	function getFailsByDate(start, end, callbackOk, callbackError) {
+		var sid = Session.getSessionId();
+		var uid = Session.getCurrentSessionUserId();
+    console.log(sid)
+    console.log(uid)
+		$wamp.call('assistance.getFailsByDate', [sid, uid, start, end])
+			.then(function(res) {
+				if (res != null) {
+					callbackOk(res);
+				} else {
+					callbackError('Error');
+				}
+			},function(err) {
+				callbackError(err);
+			});
+	};
+
+	function getFailsByFilter(users, offices, start, end, filter, callbackOk, callbackError) {
+
+		var usersIds = [];
+		var officesIds = [];
+		var ffilter = {};
+
+		if (users != null && users.length > 0) {
+			for (var i = 0; i < users.length; i++) {
+				usersIds.push(users[i].id);
 			}
-
-			if (offices != null && offices.length > 0) {
-				for (var i = 0; i < offices.length; i++) {
-					officesIds.push(offices[i].id);
-				}
-			}
-
-			// chequeo los filtros
-			if (filter != null) {
-				if (filter.failTypeSelected != null) {
-					ffilter.failType = filter.failTypeSelected.name;
-				}
-
-				if (filter.periodicitySelected != null) {
-					ffilter.periodicity = filter.periodicitySelected;
-					if (filter.hoursOperator != null) {
-						ffilter.hoursOperator = filter.hoursOperator.value;
-						ffilter.hours = filter.hours;
-						ffilter.minutes = filter.minutes;
-					}
-				}
-
-				if (filter.count != null) {
-					ffilter.count = filter.count;
-				}
-			}
-
-			var sid = Session.getSessionId();
-			$wamp.call('assistance.getFailsByFilter', [sid, usersIds, officesIds, start, end, ffilter])
-				.then(function(res) {
-					if (res != null) {
-						callbackOk(res);
-					} else {
-						callbackError('Error');
-					}
-				},function(err) {
-					callbackError(err);
-				});
-
 		}
 
+		if (offices != null && offices.length > 0) {
+			for (var i = 0; i < offices.length; i++) {
+				officesIds.push(offices[i].id);
+			}
+		}
+
+		// chequeo los filtros
+		if (filter != null) {
+			if (filter.failTypeSelected != null) {
+				ffilter.failType = filter.failTypeSelected.name;
+			}
+
+			if (filter.periodicitySelected != null) {
+				ffilter.periodicity = filter.periodicitySelected;
+				if (filter.hoursOperator != null) {
+					ffilter.hoursOperator = filter.hoursOperator.value;
+					ffilter.hours = filter.hours;
+					ffilter.minutes = filter.minutes;
+				}
+			}
+
+			if (filter.count != null) {
+				ffilter.count = filter.count;
+			}
+		}
+
+		var sid = Session.getSessionId();
+		$wamp.call('assistance.getFailsByFilter', [sid, usersIds, officesIds, start, end, ffilter])
+			.then(function(res) {
+				if (res != null) {
+					callbackOk(res);
+				} else {
+					callbackError('Error');
+				}
+			},function(err) {
+				callbackError(err);
+			});
+
+	}
 
 
-		this.getAssistanceStatusByUsers = function(usersIds, dates, status, callbackOk, callbackError) {
-			var sid = Session.getSessionId();
-			$wamp.call('assistance.getAssistanceStatusByUsers', [sid, usersIds, dates, status])
-				.then(function(res) {
-					if (res != null) {
-						callbackOk(res);
-					} else {
-						callbackError('Error');
-					}
-				},function(err) {
-					callbackError(err);
-				});
-		};
+	function getAssistanceStatusByUsers(usersIds, dates, callbackOk, callbackError) {
+		var sid = Session.getSessionId();
+		$wamp.call('assistance.getAssistanceStatusByUsers', [sid, usersIds, dates])
+			.then(function(res) {
+				if (res != null) {
+					callbackOk(res);
+				} else {
+					callbackError('Error');
+				}
+			},function(err) {
+				callbackError(err);
+			});
+	};
 
 
-
-
-		this.getSchedules = function(userId, date, callbackOk, callbackError) {
-			var sid = Session.getSessionId();
-			$wamp.call('assistance.getSchedules', [sid, usersId, date])
-				.then(function(res) {
-					if (res != null) {
-						callbackOk(res);
-					} else {
-						callbackError('Error');
-					}
-				},function(err) {
-					callbackError(err);
-				});
-		};
+	function getSchedules(userId, date, callbackOk, callbackError) {
+		var sid = Session.getSessionId();
+		$wamp.call('assistance.getSchedules', [sid, usersId, date])
+			.then(function(res) {
+				if (res != null) {
+					callbackOk(res);
+				} else {
+					callbackError('Error');
+				}
+			},function(err) {
+				callbackError(err);
+			});
+	};
 
 
 		/*
@@ -151,80 +179,79 @@ app.service('Assistance', ['Utils','Session','$wamp',
 		}
 		*/
 
-		this.persistSchedule = function(schedule, callbackOk, callbackError) {
-			var sid = Session.getSessionId();
-			$wamp.call('assistance.persistSchedule', [sid, schedule])
-				.then(function(res) {
-					if (res != null) {
-						callbackOk(res);
-					} else {
-						callbackError('Error');
-					}
-				},function(err) {
-					callbackError(err);
-				});
-		};
+	function persistSchedule(schedule, callbackOk, callbackError) {
+		var sid = Session.getSessionId();
+		$wamp.call('assistance.persistSchedule', [sid, schedule])
+			.then(function(res) {
+				if (res != null) {
+					callbackOk(res);
+				} else {
+					callbackError('Error');
+				}
+			},function(err) {
+				callbackError(err);
+			});
+	};
 
 
-    this.deleteSchedule = function(id, callbackOk, callbackError) {
-			var sid = Session.getSessionId();
-			$wamp.call('assistance.deleteSchedule', [sid, id])
-				.then(function(res) {
-					if (res != null) {
-						callbackOk(res);
-					} else {
-						callbackError('Error');
-					}
-				},function(err) {
-					callbackError(err);
-				});
-    };
+  function deleteSchedule(id, callbackOk, callbackError) {
+		var sid = Session.getSessionId();
+		$wamp.call('assistance.deleteSchedule', [sid, id])
+			.then(function(res) {
+				if (res != null) {
+					callbackOk(res);
+				} else {
+					callbackError('Error');
+				}
+			},function(err) {
+				callbackError(err);
+			});
+  };
 
 
+	function getJustifications(callbackOk, callbackError) {
+		var sid = Session.getSessionId();
+		$wamp.call('assistance.justifications.getJustifications', [sid])
+			.then(function(res) {
+				if (res != null) {
+					callbackOk(res);
+				} else {
+					callbackError('Error');
+				}
+			},function(err) {
+				callbackError(err);
+			});
+	};
 
 
-		this.getJustifications = function(callbackOk, callbackError) {
-			var sid = Session.getSessionId();
-			$wamp.call('assistance.justifications.getJustifications', [sid])
-				.then(function(res) {
-					if (res != null) {
-						callbackOk(res);
-					} else {
-						callbackError('Error');
-					}
-				},function(err) {
-					callbackError(err);
-				});
-		};
-
-		this.getJustificationsByUser = function(userId, callbackOk, callbackError) {
-			var sid = Session.getSessionId();
-			$wamp.call('assistance.justifications.getJustificationsByUser', [sid, userId])
-				.then(function(res) {
-					if (res != null) {
-						callbackOk(res);
-					} else {
-						callbackError('Error');
-					}
-				},function(err) {
-					callbackError(err);
-				});
-		};
+	function getJustificationsByUser(userId, callbackOk, callbackError) {
+		var sid = Session.getSessionId();
+		$wamp.call('assistance.justifications.getJustificationsByUser', [sid, userId])
+			.then(function(res) {
+				if (res != null) {
+					callbackOk(res);
+				} else {
+					callbackError('Error');
+				}
+			},function(err) {
+				callbackError(err);
+			});
+	};
 
 
-		this.getJustificationStock = function(userId, justificationId, date, period, callbackOk, callbackError) {
-			var sid = Session.getSessionId();
-			$wamp.call('assistance.justifications.getJustificationsStock', [sid, userId, justificationId, date, period])
-				.then(function(res) {
-					if (res != null) {
-						callbackOk(res);
-					} else {
-						callbackError('Error');
-					}
-				},function(err) {
-					callbackError(err);
-				});
-		};
+	function getJustificationStock(userId, justificationId, date, period, callbackOk, callbackError) {
+		var sid = Session.getSessionId();
+		$wamp.call('assistance.justifications.getJustificationsStock', [sid, userId, justificationId, date, period])
+			.then(function(res) {
+				if (res != null) {
+					callbackOk(res);
+				} else {
+					callbackError('Error');
+				}
+			},function(err) {
+				callbackError(err);
+			});
+	};
 
     /**
      * Actualizar stock de la justificacion de un usuario
@@ -232,81 +259,10 @@ app.service('Assistance', ['Utils','Session','$wamp',
      * @param {justificationId} justificationId
      * @param {stock} stock
      */
-    this.updateJustificationStock = function(userId, justificationId, stock, callbackOk, callbackError) {
-			var sid = Session.getSessionId();
-			$wamp.call('assistance.justifications.updateJustificationStock', [sid, userId, justificationId, stock])
-				.then(function(res) {
-					if (res != null) {
-						callbackOk(res);
-					} else {
-						callbackError('Error');
-					}
-				},function(err) {
-					callbackError(err);
-				});
-		};
 
-		this.getJustificationRequestsByDate = function(status, usersIds, start, end, callbackOk, callbackError){
-			var sid = Session.getSessionId();
-			$wamp.call('assistance.justifications.getJustificationsRequestsByDate', [sid, userIds, start, end, status])
-				.then(function(res) {
-					if (res != null) {
-						callbackOk(res);
-					} else {
-						callbackError('Error');
-					}
-				},function(err) {
-					callbackError(err);
-				});
-		}
-
-		this.getJustificationRequestsToManage = function(status, group, callbackOk, callbackError){
-			var sid = Session.getSessionId();
-			$wamp.call('assistance.justifications.getJustificationsRequestsToManage', [sid, status, group])
-				.then(function(res) {
-					if (res != null) {
-						callbackOk(res);
-					} else {
-						callbackError('Error');
-					}
-				},function(err) {
-					callbackError(err);
-				});
-		}
-
-
-		this.getJustificationRequests = function(status, callbackOk, callbackError){
-			var sid = Session.getSessionId();
-			$wamp.call('assistance.justifications.getJustificationsRequests', [sid, status])
-				.then(function(res) {
-					if (res != null) {
-						callbackOk(res);
-					} else {
-						callbackError('Error');
-					}
-				},function(err) {
-					callbackError(err);
-				});
-		}
-
-
-		this.updateJustificationRequestStatus = function(requestId, status, callbackOk, callbackError) {
-			var sid = Session.getSessionId();
-			$wamp.call('assistance.justifications.updateJustificationRequestStatus', [sid, requestId, status])
-				.then(function(res) {
-					if (res != null) {
-						callbackOk(res);
-					} else {
-						callbackError('Error');
-					}
-				},function(err) {
-					callbackError(err);
-				});
-		};
-
-		this.requestJustification = function(userId, justification, status, callbackOk, callbackError) {
-			var sid = Session.getSessionId();
-			$wamp.call('assistance.justifications.requestJustification', [sid, userId, justification, status])
+	function updateJustificationStock(userId, justificationId, stock, callbackOk, callbackError) {
+		var sid = Session.getSessionId();
+		$wamp.call('assistance.justifications.updateJustificationStock', [sid, userId, justificationId, stock])
 			.then(function(res) {
 				if (res != null) {
 					callbackOk(res);
@@ -316,11 +272,12 @@ app.service('Assistance', ['Utils','Session','$wamp',
 			},function(err) {
 				callbackError(err);
 			});
-		}
+	};
 
-		this.requestJustificationRange = function(userId, justificationId, start, end, status, callbackOk, callbackError) {
-			var sid = Session.getSessionId();
-			$wamp.call('assistance.justifications.requestJustificationRange', [sid, userId, justificationId, start, end, status])
+
+	function getJustificationRequestsByDate(status, usersIds, start, end, callbackOk, callbackError){
+		var sid = Session.getSessionId();
+		$wamp.call('assistance.justifications.getJustificationsRequestsByDate', [sid, userIds, start, end, status])
 			.then(function(res) {
 				if (res != null) {
 					callbackOk(res);
@@ -330,16 +287,12 @@ app.service('Assistance', ['Utils','Session','$wamp',
 			},function(err) {
 				callbackError(err);
 			});
-		}
+	}
 
 
-
-		/**
-		 * Obtener solicitudes de horas extra realizadas por el usuario que esta logueado
-		 */
-		this.getOvertimeRequests = function(status, callbackOk, callbackError){
-			var sid = Session.getSessionId();
-			$wamp.call('assistance.overtime.getRequests', [sid, status])
+	function getJustificationRequestsToManage(status, group, callbackOk, callbackError){
+		var sid = Session.getSessionId();
+		$wamp.call('assistance.justifications.getJustificationsRequestsToManage', [sid, status, group])
 			.then(function(res) {
 				if (res != null) {
 					callbackOk(res);
@@ -349,15 +302,12 @@ app.service('Assistance', ['Utils','Session','$wamp',
 			},function(err) {
 				callbackError(err);
 			});
-		};
+	}
 
 
-		/**
-		* Obtener solicitudes de horas extra realizadas por el usuario que esta logueado
-		*/
-		this.getOvertimeRequestsToManage = function(status, group, callbackOk, callbackError){
-			var sid = Session.getSessionId();
-			$wamp.call('assistance.overtime.getRequestsToManage', [sid, status, group])
+	function getJustificationRequests(status, callbackOk, callbackError) {
+		var sid = Session.getSessionId();
+		$wamp.call('assistance.justifications.getJustificationsRequests', [sid, status])
 			.then(function(res) {
 				if (res != null) {
 					callbackOk(res);
@@ -367,17 +317,11 @@ app.service('Assistance', ['Utils','Session','$wamp',
 			},function(err) {
 				callbackError(err);
 			});
-		};
+	}
 
-
-		/**
-		 * Cargar nueva solicitud de horas extra
-		 * @param userId id del usuario al cual se solicita la hora extra
-		 * @param request Solicitud de hora extra
-		 */
-		this.requestOvertime = function(userId, request, callbackOk, callbackError){
-			var sid = Session.getSessionId();
-			$wamp.call('assistance.overtime.requestOvertime', [sid, userId, request])
+	function updateJustificationRequestStatus(requestId, status, callbackOk, callbackError) {
+		var sid = Session.getSessionId();
+		$wamp.call('assistance.justifications.updateJustificationRequestStatus', [sid, requestId, status])
 			.then(function(res) {
 				if (res != null) {
 					callbackOk(res);
@@ -387,128 +331,200 @@ app.service('Assistance', ['Utils','Session','$wamp',
 			},function(err) {
 				callbackError(err);
 			});
-		};
-
-		/**
-		 * Actualizar estado de solicitud de hora extra
-		 * @param requestId Id de la solicitud
-		 * @param state Nuevo estado de la solicitud
-		 */
-		this.updateRequestOvertimeStatus = function(requestId, status, callbackOk, callbackError) {
-			var sid = Session.getSessionId();
-			$wamp.call('assistance.overtime.persistStatus', [sid, requestId, status])
-			.then(function(res) {
-				if (res != null) {
-					callbackOk(res);
-				} else {
-					callbackError('Error');
-				}
-			},function(err) {
-				callbackError(err);
-			});
-		}
+	};
 
 
-		/**
-		*	Obtiene las justificaciones especiales que puede solicitar
-		*/
-		this.getSpecialJustifications = function(callbackOk, callbackError) {
-			var sid = Session.getSessionId();
-			$wamp.call('assistance.justifications.getSpecialJustifications', [sid])
-			.then(function(res) {
-				if (res != null) {
-					callbackOk(res);
-				} else {
-					callbackError('Error');
-				}
-			},function(err) {
-				callbackError(err);
-			});
-		};
+	function requestJustification(userId, justification, status, callbackOk, callbackError) {
+		var sid = Session.getSessionId();
+		$wamp.call('assistance.justifications.requestJustification', [sid, userId, justification, status])
+		.then(function(res) {
+			if (res != null) {
+				callbackOk(res);
+			} else {
+				callbackError('Error');
+			}
+		},function(err) {
+			callbackError(err);
+		});
+	}
+
+	function requestJustificationRange(userId, justificationId, start, end, status, callbackOk, callbackError) {
+		var sid = Session.getSessionId();
+		$wamp.call('assistance.justifications.requestJustificationRange', [sid, userId, justificationId, start, end, status])
+		.then(function(res) {
+			if (res != null) {
+				callbackOk(res);
+			} else {
+				callbackError('Error');
+			}
+		},function(err) {
+			callbackError(err);
+		});
+	}
+
+	/**
+	 * Obtener solicitudes de horas extra realizadas por el usuario que esta logueado
+	 */
+	function getOvertimeRequests(status, callbackOk, callbackError){
+		var sid = Session.getSessionId();
+		$wamp.call('assistance.overtime.getRequests', [sid, status])
+		.then(function(res) {
+			if (res != null) {
+				callbackOk(res);
+			} else {
+				callbackError('Error');
+			}
+		},function(err) {
+			callbackError(err);
+		});
+	};
+
+	/**
+	* Obtener solicitudes de horas extra realizadas por el usuario que esta logueado
+	*/
+	function getOvertimeRequestsToManage(status, group, callbackOk, callbackError){
+		var sid = Session.getSessionId();
+		$wamp.call('assistance.overtime.getRequestsToManage', [sid, status, group])
+		.then(function(res) {
+			if (res != null) {
+				callbackOk(res);
+			} else {
+				callbackError('Error');
+			}
+		},function(err) {
+			callbackError(err);
+		});
+	};
+
+	/**
+	 * Cargar nueva solicitud de horas extra
+	 * @param userId id del usuario al cual se solicita la hora extra
+	 * @param request Solicitud de hora extra
+	 */
+	function requestOvertime(userId, request, callbackOk, callbackError){
+		var sid = Session.getSessionId();
+		$wamp.call('assistance.overtime.requestOvertime', [sid, userId, request])
+		.then(function(res) {
+			if (res != null) {
+				callbackOk(res);
+			} else {
+				callbackError('Error');
+			}
+		},function(err) {
+			callbackError(err);
+		});
+	};
+
+	/**
+	 * Actualizar estado de solicitud de hora extra
+	 * @param requestId Id de la solicitud
+	 * @param state Nuevo estado de la solicitud
+	 */
+	function updateRequestOvertimeStatus(requestId, status, callbackOk, callbackError) {
+		var sid = Session.getSessionId();
+		$wamp.call('assistance.overtime.persistStatus', [sid, requestId, status])
+		.then(function(res) {
+			if (res != null) {
+				callbackOk(res);
+			} else {
+				callbackError('Error');
+			}
+		},function(err) {
+			callbackError(err);
+		});
+	}
+
+	/**
+	*	Obtiene las justificaciones especiales que puede solicitar
+	*/
+	function getSpecialJustifications(callbackOk, callbackError) {
+		var sid = Session.getSessionId();
+		$wamp.call('assistance.justifications.getSpecialJustifications', [sid])
+		.then(function(res) {
+			if (res != null) {
+				callbackOk(res);
+			} else {
+				callbackError('Error');
+			}
+		},function(err) {
+			callbackError(err);
+		});
+	};
+
+  /**
+   * solicitar justificacion general
+   * @param {type} justification Datos de la justificacion
+   * @param {type} callbackOk
+   * @param {type} callbackError
+   * @returns {undefined}
+   */
+  function requestGeneralJustification(justification, callbackOk, callbackError) {
+		var sid = Session.getSessionId();
+		$wamp.call('assistance.justifications.requestGeneralJustification', [sid, justification])
+		.then(function(res) {
+			if (res != null) {
+				callbackOk(res);
+			} else {
+				callbackError('Error');
+			}
+		},function(err) {
+			callbackError(err);
+		});
+	};
+
+	/**
+   * solicitar justificacion general en un rango
+   * @param {type} justification Datos de la justificacion
+   * @param {type} callbackOk
+   * @param {type} callbackError
+   * @returns {undefined}
+   */
+  function requestGeneralJustificationRange(justification, callbackOk, callbackError) {
+		var sid = Session.getSessionId();
+		$wamp.call('assistance.justifications.requestGeneralJustificationRange', [sid, justification])
+		.then(function(res) {
+			if (res != null) {
+				callbackOk(res);
+			} else {
+				callbackError('Error');
+			}
+		},function(err) {
+			callbackError(err);
+		});
+	};
+
+	/**
+   * solicitar justificaciones generales
+   * @param {type} callbackOk
+   * @param {type} callbackError
+   * @returns {undefined}
+   */
+  function getGeneralJustificationRequests(callbackOk, callbackError) {
+		var sid = Session.getSessionId();
+		$wamp.call('assistance.justifications.getGeneralJustificationRequests', [sid])
+		.then(function(res) {
+			if (res != null) {
+				callbackOk(res);
+			} else {
+				callbackError('Error');
+			}
+		},function(err) {
+			callbackError(err);
+		});
+  };
 
 
-
-    /**
-     * solicitar justificacion general
-     * @param {type} justification Datos de la justificacion
-     * @param {type} callbackOk
-     * @param {type} callbackError
-     * @returns {undefined}
-     */
-    this.requestGeneralJustification = function(justification, callbackOk, callbackError) {
-			var sid = Session.getSessionId();
-			$wamp.call('assistance.justifications.requestGeneralJustification', [sid, justification])
-			.then(function(res) {
-				if (res != null) {
-					callbackOk(res);
-				} else {
-					callbackError('Error');
-				}
-			},function(err) {
-				callbackError(err);
-			});
-		};
-
-
-		/**
-     * solicitar justificacion general en un rango
-     * @param {type} justification Datos de la justificacion
-     * @param {type} callbackOk
-     * @param {type} callbackError
-     * @returns {undefined}
-     */
-    this.requestGeneralJustificationRange = function(justification, callbackOk, callbackError) {
-			var sid = Session.getSessionId();
-			$wamp.call('assistance.justifications.requestGeneralJustificationRange', [sid, justification])
-			.then(function(res) {
-				if (res != null) {
-					callbackOk(res);
-				} else {
-					callbackError('Error');
-				}
-			},function(err) {
-				callbackError(err);
-			});
-		};
-
-
-    /**
-     * solicitar justificaciones generales
-     * @param {type} callbackOk
-     * @param {type} callbackError
-     * @returns {undefined}
-     */
-    this.getGeneralJustificationRequests = function(callbackOk, callbackError){
-			var sid = Session.getSessionId();
-			$wamp.call('assistance.justifications.getGeneralJustificationRequests', [sid])
-			.then(function(res) {
-				if (res != null) {
-					callbackOk(res);
-				} else {
-					callbackError('Error');
-				}
-			},function(err) {
-				callbackError(err);
-			});
-    };
-
-    this.deleteGeneralJustificationRequest = function(requestId, callbackOk, callbackError){
-			var sid = Session.getSessionId();
-			$wamp.call('assistance.justifications.deleteGeneralJustificationRequest', [sid, requestId])
-			.then(function(res) {
-				if (res != null) {
-					callbackOk(res);
-				} else {
-					callbackError('Error');
-				}
-			},function(err) {
-				callbackError(err);
-			});
-    };
-
-
-
-
-
-
-}]);
+  function deleteGeneralJustificationRequest(requestId, callbackOk, callbackError) {
+		var sid = Session.getSessionId();
+		$wamp.call('assistance.justifications.deleteGeneralJustificationRequest', [sid, requestId])
+		.then(function(res) {
+			if (res != null) {
+				callbackOk(res);
+			} else {
+				callbackError('Error');
+			}
+		},function(err) {
+			callbackError(err);
+		});
+  };
+};
