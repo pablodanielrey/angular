@@ -6,7 +6,7 @@ angular
 IndexCtrl.$inject = ['$rootScope','$scope','$wamp','$window', 'Notifications', 'Login'];
 
 function IndexCtrl($rootScope, $scope, $wamp, $window, Notifications, Login) {
-
+    
     var vm = this;
 
     $scope.model = {
@@ -14,13 +14,13 @@ function IndexCtrl($rootScope, $scope, $wamp, $window, Notifications, Login) {
 
     $scope.initialize = function() {
       if (!Login.isLogged()) {
-        $window.location.href = "/systems/login/index.html";
+        //$window.location.href = "/systems/login/index.html";
       }
 
       Login.validateSession(
         function(v) {
           if (!v) {
-            $window.location.href = "/systems/login/index.html";
+            //$window.location.href = "/systems/login/index.html";
           }
         },
         function(err) {

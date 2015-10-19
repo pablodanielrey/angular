@@ -86,11 +86,12 @@ app.controller('AssistanceFailsCtrl', ["$scope", "$timeout", "Assistance", "Noti
     $scope.correctDates();
     
     Assistance.getFailsByDate($scope.model.begin, $scope.model.end,
+    
+
+      
       function(response) {
       
-
         $scope.model.base64 = response.base64;
-
         
         for (var i = 0; i < response[1].length; i++) {
           r = {

@@ -67,10 +67,10 @@ function Assistance (Utils, Session, $wamp) {
 	};
 
 	function getFailsByDate(start, end, callbackOk, callbackError) {
+
 		var sid = Session.getSessionId();
 		var uid = Session.getCurrentSessionUserId();
-    console.log(sid)
-    console.log(uid)
+
 		$wamp.call('assistance.getFailsByDate', [sid, uid, start, end])
 			.then(function(res) {
 				if (res != null) {
