@@ -86,7 +86,7 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', '$window', '$ht
   	}
 
   	$scope.exit = function() {
-  		$location.path('/logout');
+  	  $window.location.href = "/systems/login/#/logout";
   	}
 
   	$scope.tutors = function() {
