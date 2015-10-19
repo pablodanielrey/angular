@@ -76,6 +76,8 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', '$window', '$ht
   	}
 
   	$scope.assistance = function() {
+  	  $window.location.href = "/systems/assistance/";
+  	
   	}
 
   	$scope.office = function() {
