@@ -124,22 +124,24 @@ class AssistanceWamp(ApplicationSession):
         r = yield from loop.run_in_executor(None, self.getAssistanceStatusByDate, userId, date)
         return r
 
-    def getAssistanceStatusByUsers(self, sid, userIds, dates):
+    def getAssistanceStatusByUsers(self, sid, userIds, dates,status):
         logging.debug(dates)
         con = self._getDatabase()
         try:
             if dates is not None:
                 dates = self._parseDates(dates)
-            st = self.assistance.getAssistanceStatusByUsers(con, userIds, dates)
-            return st
+            st = self.assistance.getAssistanceStatusByUsers(con, userIds, dates,status)
+            b64 = '' #self.assistance.arrangeAssistanceStatusByUsers(con,resp)
+            ret = {'base64':b64,'assistances':st}
+            return ret
 
         finally:
             con.close()
 
     @coroutine
-    def getAssistanceStatusByUsers_async(self, sid, userIds, dates):
+    def getAssistanceStatusByUsers_async(self, sid, userIds, dates,status):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getAssistanceStatusByUsers, sid, userIds, dates)
+        r = yield from loop.run_in_executor(None, self.getAssistanceStatusByUsers, sid, userIds, dates, status)
         return r
 
     def getUsersWithSchedules(self, sid):

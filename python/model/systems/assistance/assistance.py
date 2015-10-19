@@ -88,12 +88,12 @@ class Assistance:
             date = self.date.localizeLocal(date)
 
         # Chequeo que tenga horario
-        scheds = self.schedule.getSchedule(con, userId, date)
+        scheds = self.schedule.getSchedule(con, userId, date.date())
         if (scheds is None) or (len(scheds) <= 0):
             """ no tiene horario declarado asi que no se chequea nada """
             return None
 
-        logs = self.schedule.getLogsForSchedule(con, scheds, date)
+        logs = self.schedule.getLogsForSchedule(con, scheds, date.date())
         logging.debug('logs {}'.format(logs))
 
         worked, attlogs = self.logs.getWorkedHours(logs)
@@ -147,6 +147,63 @@ class Assistance:
                     sts.append(st)
             statuses[userId] = sts
         return statuses
+
+    '''
+        Obtiene los estados de asistencia de los usuarios entre las fechas pasadas
+    '''
+    def getAssistanceStatusByUsers(self,con,usersIds,dates,status):
+        resp = []
+        if (dates == None or len(dates) <= 0):
+            return resp
+
+        dstart = dates[0]
+
+        # dend = self.date.parse(dates[len(dates) -1]) + datetime.timedelta(days=1)
+        dend = dates[-1] + datetime.timedelta(days=1)
+
+        # obtengo las justificaciones
+        justifications = self.justifications.getJustificationRequestsByDate(con,status,usersIds,dstart,dend)
+
+
+        gjustifications = self.justifications.getGeneralJustificationRequests(con)
+        for j in gjustifications:
+            if j['begin'] >= dstart and j['begin'] <= dend:
+                for uid in usersIds:
+                    jnew = dict(j)
+                    jnew['user_id'] = uid
+                    justifications.append(jnew)
+
+
+        self._resolveJustificationsNames(con,justifications)
+
+
+        for userId in usersIds:
+            for date in dates:
+                s = self.getAssistanceStatus(con,userId,date)
+                if (s != None):
+                    # verifico si coincide alguna justificacion con el userId y el date
+                    just = list(filter(lambda j: j['user_id'] == userId and self._equalsTime(j["begin"],date), justifications))
+                    s["justifications"] = just;
+                    for j in just:
+                        justifications.remove(j)
+                    resp.append(s)
+
+        # falta agrupar las justificaciones que quedaron
+        # creo un assistance status por cada justificacion que quedaron sin matchear
+        for j in justifications:
+            a = {
+                'date':j['begin'],
+                'userId': j['user_id'],
+                'status': "",
+                'start': None,
+                'end': None,
+                'logs': [],
+                'justifications':[j],
+                'workedMinutes': 0
+            }
+            resp.append(a)
+
+        return resp
 
     """
         ////////////////////////////////////////// chequeo del tema de incumplimientos ////////////////////

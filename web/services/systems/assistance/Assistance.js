@@ -136,9 +136,9 @@ function Assistance (Utils, Session, $wamp) {
 	}
 
 
-	function getAssistanceStatusByUsers(usersIds, dates, callbackOk, callbackError) {
+	function getAssistanceStatusByUsers(usersIds, dates, status, callbackOk, callbackError) {
 		var sid = Session.getSessionId();
-		$wamp.call('assistance.getAssistanceStatusByUsers', [sid, usersIds, dates])
+		$wamp.call('assistance.getAssistanceStatusByUsers', [sid, usersIds, dates, status])
 			.then(function(res) {
 				if (res != null) {
 					callbackOk(res);

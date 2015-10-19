@@ -290,7 +290,7 @@ $scope.order = function(predicate, reverse) {
       $scope.checkDates();
       $scope.disabled = true; //deshabilitar nuevas busquedas hasta no completar la actual
 
-      // var status = "APPROVED"; //bsuca solo las justificaciones aprobadas
+      var status = "APPROVED"; //bsuca solo las justificaciones aprobadas
 
       $scope.model.assistances = [];
       $scope.searchDates = $scope.initializeSearchDates();
@@ -299,8 +299,8 @@ $scope.order = function(predicate, reverse) {
         var searchUsers = $scope.initializeSearchUsers($scope.searchDates); //si no existen usuarios seleccionados, se definen todos los usuarios
 
         $scope.usersIds = $scope.getUsersIds(searchUsers);
-        // Assistance.getAssistanceStatusByUsers($scope.usersIds, $scope.searchDates, status,
-        Assistance.getAssistanceStatusByUsers($scope.usersIds, $scope.searchDates, 
+        Assistance.getAssistanceStatusByUsers($scope.usersIds, $scope.searchDates, status,
+        // Assistance.getAssistanceStatusByUsers($scope.usersIds, $scope.searchDates,
             function ok(response) {
               var assistances = response.assistances;
               $scope.model.base64 = response.base64;
