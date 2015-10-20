@@ -131,7 +131,7 @@ class AssistanceWamp(ApplicationSession):
             if dates is not None:
                 dates = self._parseDates(dates)
             st = self.assistance.getAssistanceStatusByUsers(con, userIds, dates,status)
-            b64 = '' #self.assistance.arrangeAssistanceStatusByUsers(con,resp)
+            b64 = self.assistance.arrangeAssistanceStatusByUsers(con,st)
             ret = {'base64':b64,'assistances':st}
             return ret
 

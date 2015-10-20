@@ -38,6 +38,80 @@ class Assistance:
     positions = inject.attr(Positions)
     date = inject.attr(model.systems.assistance.date.Date)
 
+
+    """
+    //////////////////////////////////////////////////
+    //////////////
+    ////////////// codigo para exportar a ods los resultados
+    //////////////
+    //////////////////////////////////////////////////
+    """
+
+    def _exportToOds(self,data):
+        ods = OrderedDict()
+        ods.update({"Datos": data})
+        filename = '/tmp/{}.tmp'.format(str(uuid.uuid4()))
+        writer = ODSWriter(filename)
+        writer.write(ods)
+        writer.close()
+
+        b64 = ''
+        with open(filename,'rb') as f:
+            b64 = base64.b64encode(f.read()).decode('utf-8')
+
+        return b64
+
+    def _equalsTime(self,d1,d2):
+        d1Aux = self.date.awareToUtc(d1)
+        d1Aux = d1Aux.replace(hour=0, minute=0, second=0, microsecond=0)
+        d2Aux = d2.replace(hour=0, minute=0, second=0, microsecond=0)
+        return d1Aux == d2Aux
+
+
+    def _arrangeForOdsAssistanceStatus(self, con, data):
+
+        values = [['Fecha','Dni','Nombre','Apellido','Hora de Entrada','Hora de Salida','Cantidad de Horas','Justificación']]
+        for l in data:
+            v = []
+
+            userId = l['userId']
+            user = self.users.findUser(con,userId)
+
+            v.append(l['date'].astimezone(tz=None).date())
+            v.append(user['dni'])
+            v.append(user['name'])
+            v.append(user['lastname'])
+
+            if l['start'] != None and l['start'] != '':
+                v.append(l['start'].astimezone(tz=None).time())
+            else:
+                v.append('')
+
+            if l['end'] != None and l['end'] != '':
+                v.append(l['end'].astimezone(tz=None).time())
+            else:
+                v.append('')
+
+            v.append('{:02d}:{:02d}'.format(int(l['workedMinutes'] / 60), int(l['workedMinutes'] % 60)))
+
+            if l['justifications'] != None and len(l['justifications']) > 0:
+                jname = l['justifications'][0]['name']
+                v.append(jname)
+            else:
+                v.append('')
+
+            values.append(v)
+
+        return values
+
+
+    def arrangeAssistanceStatusByUsers(self, con, data):
+        odata = self._arrangeForOdsAssistanceStatus(con,data)
+        return self._exportToOds(odata)
+
+
+
+
     def getAssistanceData(self, con, userId, date=None):
         ps = self.positions.find(con, userId)
         p = ''
@@ -147,6 +221,7 @@ class Assistance:
                     sts.append(st)
             statuses[userId] = sts
         return statuses
+
 
     '''
         Obtiene los estados de asistencia de los usuarios entre las fechas pasadas

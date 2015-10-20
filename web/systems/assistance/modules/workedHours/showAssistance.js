@@ -300,7 +300,6 @@ $scope.order = function(predicate, reverse) {
 
         $scope.usersIds = $scope.getUsersIds(searchUsers);
         Assistance.getAssistanceStatusByUsers($scope.usersIds, $scope.searchDates, status,
-        // Assistance.getAssistanceStatusByUsers($scope.usersIds, $scope.searchDates,
             function ok(response) {
               var assistances = response.assistances;
               $scope.model.base64 = response.base64;
@@ -438,11 +437,11 @@ $scope.order = function(predicate, reverse) {
 // ---------- EXPORTAR DATOS --------
 
   $scope.download = function() {
-    if ($scope.model.base64 == null || $scope.model.base64 == '') {
+  /*  if ($scope.model.base64 == null || $scope.model.base64 == '') {
       return;
     }
     var blob = Utils.base64ToBlob($scope.model.base64);
-    window.saveAs(blob,'controlDeHorario.ods');
+    window.saveAs(blob,'controlDeHorario.ods');*/
   }
 
 
