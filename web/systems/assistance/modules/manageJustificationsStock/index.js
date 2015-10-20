@@ -1,12 +1,10 @@
 
-app.controller('ManageJustificationsStockCtrl', ["$scope", "$timeout", "$window", "Assistance", "Office",  "Notifications", "Users",  "Utils", function($scope, $timeout, $window, Assistance, Office, Notifications, Users, Utils) {
+app.controller('ManageJustificationsStockCtrl', ["$scope", "$timeout", "$window", "Assistance", "Office",  "Notifications", "Users",  "Utils", "Session", function($scope, $timeout, $window, Assistance, Office, Notifications, Users, Utils, Session) {
 
    /**
    * Variables del modelo en general
    */
   $scope.model = {
-    sessionUserId: null, //id de sesion de usuario
-
     //seleccion de usuario
     displayUsersList: false,  //flag para controlar si se debe mostrar la lista de usuarios
     selectedUser: null,  //usuario seleccionado
@@ -45,8 +43,11 @@ app.controller('ManageJustificationsStockCtrl', ["$scope", "$timeout", "$window"
    * Cargar usuarios de la lista
    */
   $scope.loadUsers = function(){
-    Office.getUserInOfficesByRole('autoriza',
+    var sessionUserId = Session.getCurrentSessionUserId();
+
+    Office.getUserInOfficesByRole(sessionUserId, 'autoriza', true,
       function(users) {
+
         $scope.model.users = [];
 
         // eliminamos el usuario jefe asi no se autoautoriza pedidos.
@@ -68,6 +69,7 @@ app.controller('ManageJustificationsStockCtrl', ["$scope", "$timeout", "$window"
         $scope.model.usersSelectionDisable = false;
       },
       function(error){
+
         Notifications.message(error);
       }
     );
