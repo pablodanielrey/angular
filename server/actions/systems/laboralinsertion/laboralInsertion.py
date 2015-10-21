@@ -11,8 +11,6 @@ from model.users.users import Users
 
 from zipfile import ZipFile
 from collections import OrderedDict
-from pyexcel_ods3 import ODSWriter
-
 # from model.exceptions import *
 
 """
@@ -29,6 +27,7 @@ class Utils:
     def __init__(self):
         self.users = inject.instance(Users)
 
+    """
     def _exportToOds(self, data):
         ods = OrderedDict()
         ods.update({"Datos": data})
@@ -129,7 +128,7 @@ class Utils:
                 values.append(v)
 
         return values
-
+    """
     def _prepareCvs(self, cvs):
         b64s = []
         for c in cvs:
@@ -158,6 +157,7 @@ class LaboralInsertionWamp(ApplicationSession):
         logging.debug('registering methods')
         yield from self.register(self.download_async, 'system.laboralInsertion.download')
         yield from self.register(self.find_async, 'system.laboralInsertion.find')
+        yield from self.register(self.findAllByUser_async, 'system.laboralInsertion.findAllByUser')
         yield from self.register(self.update_async, 'system.laboralInsertion.update')
 
     def _getDatabase(self):
@@ -181,6 +181,15 @@ class LaboralInsertionWamp(ApplicationSession):
         con = self._getDatabase()
         try:
             data = self.laboralInsertion.getLaboralInsertionDataByUser(con, userId)
+            return data
+
+        finally:
+            con.close()
+
+    def findAllByUser(self, userId):
+        con = self._getDatabase()
+        try:
+            data = self.laboralInsertion.findAllByUser(con, userId)
             return data
 
         finally:
@@ -233,6 +242,12 @@ class LaboralInsertionWamp(ApplicationSession):
     def find_async(self, userId):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.find, userId)
+        return r
+
+    @coroutine
+    def findAllByUser_async(self, userId):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.findAllByUser, userId)
         return r
 
     @coroutine

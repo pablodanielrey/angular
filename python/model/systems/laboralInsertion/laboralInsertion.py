@@ -6,6 +6,44 @@ from model.objectView import ObjectView
 
 class LaboralInsertion:
 
+    """ ----- codigo nuevo implementado en el nuevo laboralinsertion --- """
+
+    def findAllByUser(self, con, userId):
+        """ obtiene los datos de las inscripciones de los alumnos """
+        cur = con.cursor()
+        cur.execute('select id, user_id, degree, courses, average1, average2, work_type, reside, travel from laboral_insertion.inscriptions where user_id = %s', (userId,))
+        inscriptions = []
+        for c in cur:
+            inscription = {
+                'id': c[0],
+                'degree': c[2],
+                'courses': c[3],
+                'average1': c[4],
+                'average2': c[5],
+                'workType': c[6],
+                'reside': c[7],
+                'travel': c[8]
+            }
+            inscriptions.append(inscription)
+
+        cur.execute('select id, user_id, name, level from laboral_insertion.languages where user_id = %s', (userId,))
+        languages = []
+        for c in cur:
+            language = {
+                'id': c[0],
+                'name': c[2],
+                'level': c[3]
+            }
+            languages.append(language)
+
+        data = {
+            'id': userId,
+            'inscriptions': inscriptions,
+            'languages': languages
+        }
+        return data
+
+
     """
         método usado por los administradores para obtener la info de inserción laboral.
     """
@@ -21,55 +59,52 @@ class LaboralInsertion:
 
         return d
 
-
-    """
-        método usado por los administradores para obtener la info de inserción laboral.
-    """
-    def getLaboralInsertionData(self,con):
+    def getLaboralInsertionData(self, con):
+        """
+            método usado por los administradores para obtener la info de inserción laboral.
+        """
         data = self.findAll(con)
         for d in data:
             userId = d['id']
-            langs = self.listLanguages(con,userId)
+            langs = self.listLanguages(con, userId)
             d['languages'] = langs
 
-            degrees = self.listDegrees(con,userId)
+            degrees = self.listDegrees(con, userId)
             d['degrees'] = degrees
 
         return data
 
-
-    def acceptTermsAndConditions(self,con,id):
-
+    def acceptTermsAndConditions(self, con, id):
         cur = con.cursor()
-        cur.execute('select accepted_conditions from laboral_insertion.users where id = %s',(id,))
+        cur.execute('select accepted_conditions from laboral_insertion.users where id = %s', (id,))
         result = cur.fetchone()
         params = (True, id)
-        if result != None:
-            cur.execute('update laboral_insertion.users set accepted_conditions = %s where id = %s',params)
+        if result is not None:
+            cur.execute('update laboral_insertion.users set accepted_conditions = %s where id = %s', params)
         else:
-            cur.execute('INSERT INTO laboral_insertion.users (accepted_conditions, id) VALUES (%s, %s)',params)
+            cur.execute('INSERT INTO laboral_insertion.users (accepted_conditions, id) VALUES (%s, %s)', params)
 
-    def checkTermsAndConditions(self,con,id):
+    def checkTermsAndConditions(self, con, id):
         cur = con.cursor()
-        cur.execute('select accepted_conditions from laboral_insertion.users where id = %s',(id,))
+        cur.execute('select accepted_conditions from laboral_insertion.users where id = %s', (id,))
         language = cur.fetchone()
-        if language != None:
+        if language is not None:
             return language[0]
         else:
             return False
 
-    def findLaboralInsertion(self,con,id):
+    def findLaboralInsertion(self, con, id):
         cur = con.cursor()
-        cur.execute('select id,reside,travel,creation from laboral_insertion.users where id = %s',(id,))
+        cur.execute('select id,reside,travel,creation from laboral_insertion.users where id = %s', (id,))
         li = cur.fetchone()
         if li:
             return self.convertUserToDict(li)
         else:
             return None
 
-    def findLaboralInsertionCV(self,con,id):
+    def findLaboralInsertionCV(self, con, id):
         cur = con.cursor()
-        cur.execute('select id,name,cv from laboral_insertion.users_cv where id = %s',(id,))
+        cur.execute('select id,name,cv from laboral_insertion.users_cv where id = %s', (id,))
         li = cur.fetchone()
         if li:
             laboralInsertion = {

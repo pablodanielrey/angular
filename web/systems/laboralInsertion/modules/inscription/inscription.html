@@ -60,7 +60,7 @@
                         <button><i class="fa fa-calendar-o"></i></button>
                       </div>
                       <div>
-                        <input type="text" placeholder="Nacimiento ( 1/1/1990 )"></input>
+                        <input type="text" placeholder="Nacimiento ( 01/01/1990 )"></input>
                       </div>
                     </div>
 
@@ -171,25 +171,27 @@
 
                 <div class="inscriptionList">
 
+                    <div ng-repeat="i in model.inscriptionsData">
+                      <div class="itemInscription">
+                          <div class="iconMaletin">
+                            <i class="fa fa-briefcase"></i>
+                          </div>
+                          <div class="iconFlecha">
+                            <i class="fa fa-caret-right"></i>
+                          </div>
+                          <div class="textItemInscription">
+                              <div>
+                                <span>Inscripto en <b>{{getType(i)}}</b></span>
+                              </div>
+                              <div class="iconsInscription">
+                                <span class="icoTrash" title="Eliminar Inscripción" ng-click='removeInscription(i)'><i class="fa fa-trash-o"></i></span>
+                                <span class="icoDownload" title="Descargar Inscripción" ng-click='downloadInscription(i)'><i class="fa fa-file-pdf-o"></i></span>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
 
-                    <div class="itemInscription">
-                        <div class="iconMaletin">
-                          <i class="fa fa-briefcase"></i>
-                        </div>
-                        <div class="iconFlecha">
-                          <i class="fa fa-caret-right"></i>
-                        </div>
-                        <div class="textItemInscription">
-                            <div>
-                              <span>Inscripto en <b>Pasantía</b></span>
-                            </div>
-                            <div class="iconsInscription">
-                              <span class="icoTrash" title="Eliminar Inscripción"><i class="fa fa-trash-o"></i></span>
-                              <span class="icoDownload" title="Descargar Inscripción"><i class="fa fa-file-pdf-o"></i></span>
-                            </div>
-                        </div>
-                    </div>
-
+                  <!--
                     <div class="itemInscription">
                         <div class="iconMaletin">
                           <i class="fa fa-briefcase"></i>
@@ -209,7 +211,7 @@
                     </div>
 
                 </div>
-
+              -->
             </div>
         </div>
 

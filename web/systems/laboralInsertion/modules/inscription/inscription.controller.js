@@ -2,17 +2,21 @@ angular
   .module('mainApp')
   .controller('InscriptionCtrl', InscriptionCtrl);
 
-InscriptionCtrl.inject = ['$rootScope', '$scope', '$wamp','Session']
+InscriptionCtrl.inject = ['$rootScope', '$scope', '$wamp', 'LaboralInsertion', 'Login']
 
-function InscriptionCtrl($rootScope, $scope, $wamp, Session) {
+function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login) {
 
   $scope.model = {
     ci: 0,
     cr: 0,
     inscriptions: ['','registro'],
     registrations: ['pantalla1','pantalla2','pantalla3','pantalla4','pantalla5','pantalla6','pantalla7'],
-    currentPage: 1
+    currentPage: 1,
+    inscriptionsData: []
   };
+
+
+  // --- elementos graficos -----
 
   $scope.model.totalPages = $scope.model.registrations.length;
 
@@ -37,14 +41,33 @@ function InscriptionCtrl($rootScope, $scope, $wamp, Session) {
   }
 
 
+  // --- modelo ---
+
+  $scope.getInscriptions = function() {
+    var userId = Login.getUserId();
+    LaboralInsertion.findAllByUser(userId, function(data) {
+      $scope.model.inscriptionsData = data.inscriptions;
+    }, function(err) {
+      console.log(err);
+    })
+  }
+
+  $scope.downloadInscription = function(i) {
+    console.log(i);
+  }
+
+  $scope.removeInscription = function(i) {
+    console.log(i);
+  }
+
+
   $scope.status = {
 
   };
 
 
   $scope.initialize = function(){
-
-
+    $scope.getInscriptions();
   };
 
   $scope.submit = function(){

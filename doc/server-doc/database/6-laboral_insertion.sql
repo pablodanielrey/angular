@@ -5,16 +5,26 @@ create schema laboral_insertion;
 
   create table laboral_insertion.users (
     id varchar not null primary key references profile.users (id),
-    reside boolean default false,
-    travel boolean default false,
     accepted_conditions boolean default false,
     creation timestamptz default now()
   );
 
-  create table laboral_insertion.users_cv (
-    id varchar not null primary key references profile.users (id),
-    cv bytea,
-    name varchar not null,
+  create table laboral_insertion.inscriptions (
+    id varchar not null primary key,
+    user_id varchar not null references laboral_insertion.users (id),
+    reside boolean default false,
+    travel boolean default false,
+    degree varchar not null,
+    courses integer not null,
+    average1 real not null,
+    average2 real not null,
+    work_type varchar not null,
+    creation timestamptz default now()
+  );
+
+  create table laboral_insertion.cvs (
+    id varchar not null primary key references laboral_insertion.users (id),
+    file_id varchar not null references file.file (id),
     creation timestamptz default now()
   );
 
@@ -23,14 +33,4 @@ create schema laboral_insertion;
     user_id varchar not null references laboral_insertion.users (id),
     name varchar not null,
     level varchar not null
-  );
-
-  create table laboral_insertion.degree (
-    id varchar not null primary key,
-    user_id varchar references laboral_insertion.users (id),
-    name varchar not null,
-    courses integer,
-    average1 real,
-    average2 real,
-    work_type varchar
   );
