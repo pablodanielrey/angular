@@ -7,7 +7,6 @@ from datetime import datetime, date, time, timedelta
 import pytz
 import calendar
 import logging
-import pdb
 
 from model.exceptions import *
 
@@ -42,7 +41,14 @@ class ScheduleData:
         self.tzinfo = tzinfo
 
     def toMap(self,date):
-        return {'start':self.getStart(date),'end':self.getEnd(date)}
+        return {
+                'start': self.getStart(date),
+                'end': self.getEnd(date),
+                'date': self.date,
+                'isDayOfWeek': self.isDayOfWeek,
+                'isDayOfMonth': self.isDayOfMonth,
+                'isDayOfYear': self.isDayOfYear
+               }
 
     def _checkDate(self, date):
         return True #por el momento no hacemos el chequeo, retornamos True
@@ -141,9 +147,6 @@ class Schedule:
         cur.execute('set time zone %s', ('utc',))
 
 
-        import pdb
-        pdb.set_trace()
-
         """ obtengo todos los schedules que son en la fecha date del parámetro """
         cur.execute("select id, sdate, sstart, send, isDayOfWeek, isDayOfMonth, isDayOfYear from assistance.schedule where \
                     ((sdate = %s) or \
@@ -158,22 +161,24 @@ class Schedule:
             return []
 
         schedules = []
+        dateS = scheduless[0][1]
         for schedule in scheduless:
-            sch = {
-                'id': schedule[0],
-                'date': schedule[1],
-                'start': schedule[2],
-                'end': schedule[3],
-                'isDayOfWeek': schedule[4],
-                'isDayOfMonth': schedule[5],
-                'isDayOfYear': schedule[6],
-                'userId': userId
-            }
+            if dateS == schedule[1]:
+                sch = {
+                    'id': schedule[0],
+                    'date': schedule[1],
+                    'start': schedule[2],
+                    'end': schedule[3],
+                    'isDayOfWeek': schedule[4],
+                    'isDayOfMonth': schedule[5],
+                    'isDayOfYear': schedule[6],
+                    'userId': userId
+                }
 
-            schData = ScheduleData(sch, self.date.getLocalTimezone())
+                schData = ScheduleData(sch, self.date.getLocalTimezone())
 
-            #retorno los schedules con la fecha actual en utc - las fechas en la base deberian estar en utc
-            schedules.append(schData)
+                #retorno los schedules con la fecha actual en utc - las fechas en la base deberian estar en utc
+                schedules.append(schData)
 
         return schedules
 
@@ -182,12 +187,13 @@ class Schedule:
         obtiene todos los schedules para un usuario
     """
     def getSchedulesHistory(self, con, userId):
+
         cur = con.cursor()
         cur.execute('set time zone %s', ('utc',))
 
-        cur.execute("select sstart, send, date, isDayOfWeek, isDayOfMonth, isDayOfYear, id from assistance.schedule where \
+        cur.execute("select id, sdate, sstart, send, isDayOfWeek, isDayOfMonth, isDayOfYear from assistance.schedule where \
                 user_id = %s \
-                order by date desc", (userId,))
+                order by sdate desc", (userId,))
 
         scheduless = cur.fetchall()
         if scheduless is None or len(scheduless) <= 0:
@@ -203,7 +209,8 @@ class Schedule:
                 'end': schedule[3],
                 'isDayOfWeek': schedule[4],
                 'isDayOfMonth': schedule[5],
-                'isDayOfYear': schedule[6]
+                'isDayOfYear': schedule[6],
+                'userId': userId
             }
 
             schData = ScheduleData(sch, self.date.getLocalTimezone())
@@ -221,15 +228,15 @@ class Schedule:
             date = self.date.now()
 
         # obtengo el primer dia de la semana del date (L-0 .. D-6)
-        weekday = datetime.date.weekday(date)
-        date -= datetime.timedelta(days=weekday)
+        weekday = datetime.weekday(date)
+        date -= timedelta(days=weekday)
 
         schedules = []
 
         for x in range(0, 7):
-            sch = self.getSchedule(con,userId,date)
-            schedules.append(sch)
-            date += datetime.timedelta(days=1)
+            sch = self.getSchedule(con,userId,date.date())
+            schedules.extend(sch)
+            date += timedelta(days=1)
 
         return schedules
 

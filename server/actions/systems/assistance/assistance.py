@@ -5,9 +5,9 @@ import logging
 import inject
 import psycopg2
 import pytz
-import datetime
 import dateutil.parser
 from model.exceptions import *
+from datetime import datetime, date, time, timedelta
 
 from model.config import Config
 from model.profiles import Profiles
@@ -57,6 +57,7 @@ class AssistanceWamp(ApplicationSession):
         yield from self.register(self.getAssistanceData_async, 'assistance.getAssistanceData')
         yield from self.register(self.getUsersWithSchedules_async, 'assistance.getUsersWithSchedules')
         yield from self.register(self.getSchedules_async, 'assistance.getSchedules')
+        yield from self.register(self.getSchedulesHistory_async, 'assistance.getSchedulesHistory')
         yield from self.register(self.persistSchedule_async, 'assistance.persistSchedule')
         yield from self.register(self.deleteSchedule_async, 'assistance.deleteSchedule')
         yield from self.register(self.getAvailableChecks_async, 'assistance.getAvailableChecks')
@@ -162,16 +163,20 @@ class AssistanceWamp(ApplicationSession):
     def getSchedules(self, sid, userId, date):
         con = self._getDatabase()
         try:
-            d = None
-            if date is not None:
-                date = self._parseDate(date)
-                d = date.date()
-            import pdb
-            pdb.set_trace()
-            scheds = self.schedule.getSchedule(con, userId, d)
+            if date is None:
+                return None;
+
+            date = self._parseDate(date)
+            scheds = self.schedule.getSchedulesOfWeek(con, userId, date)
+
             schedsMap = []
+
+            weekday = datetime.weekday(date)
+            date -= timedelta(days=weekday)
             for s in scheds:
-                schedsMap.append(s.toMap(date))
+                weekday = datetime.weekday(s.date)
+                d = date + timedelta(days=weekday)
+                schedsMap.append(s.toMap(d))
             return schedsMap
 
         finally:
@@ -181,6 +186,24 @@ class AssistanceWamp(ApplicationSession):
     def getSchedules_async(self, sid, userId, date):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.getSchedules, sid, userId, date)
+        return r
+
+    def getSchedulesHistory(self, sid, userId):
+        con = self._getDatabase()
+        try:
+            scheds = self.schedule.getSchedulesHistory(con, userId)
+            schedsMap = []
+            for s in scheds:
+                date = s.date
+                schedsMap.append(s.toMap(date))
+            return schedsMap
+
+        finally:
+            con.close()
+    @coroutine
+    def getSchedulesHistory_async(self, sid, userId):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.getSchedulesHistory, sid, userId)
         return r
 
     def persistSchedule(self, sid, userId, date, start, end, dayOfWeek=False, dayOfMonth=False, dayOfYear=False):

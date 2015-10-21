@@ -16,6 +16,7 @@ function Assistance (Utils, Session, $wamp) {
 	services.getFailsByFilter = getFailsByFilter;
 
 	services.getSchedules = getSchedules;
+	services.getSchedulesHistory = getSchedulesHistory;
 	services.persistSchedule = persistSchedule;
 	services.deleteSchedule = deleteSchedule;
 	services.getJustifications = getJustifications;
@@ -154,6 +155,21 @@ function Assistance (Utils, Session, $wamp) {
 	function getSchedules(userId, date, callbackOk, callbackError) {
 		var sid = Session.getSessionId();
 		$wamp.call('assistance.getSchedules', [sid, userId, date])
+			.then(function(res) {
+				if (res != null) {
+					callbackOk(res);
+				} else {
+					callbackError('Error');
+				}
+			},function(err) {
+				callbackError(err);
+			});
+	};
+
+
+	function getSchedulesHistory(userId, callbackOk, callbackError) {
+		var sid = Session.getSessionId();
+		$wamp.call('assistance.getSchedulesHistory', [sid, userId])
 			.then(function(res) {
 				if (res != null) {
 					callbackOk(res);

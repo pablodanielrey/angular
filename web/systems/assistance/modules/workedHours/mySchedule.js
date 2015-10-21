@@ -83,19 +83,16 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
    */
   $scope.loadSchedule = function(){
     Assistance.getSchedules($scope.model.user.id, $scope.model.dateOfWeek,
-      function ok(response) {
-        var schedules = response.schedule;
+      function ok(schedules) {
         var schedule = [];
         for (var $i = 0; $i < schedules.length; $i++) {
           var sDay = schedules[$i];
-          for(var $j = 0; $j < sDay.length; $j++) {
-            var d = new Date(sDay[$j].start);
-            var s = {};
-            s.day = $scope.getDayOfWeek(d);
-            s.start = sDay[$j].start;
-            s.end = sDay[$j].end;
-            schedule.push(s);
-          }
+          var d = new Date(sDay.start);
+          var s = {};
+          s.day = $scope.getDayOfWeek(d);
+          s.start = sDay.start;
+          s.end = sDay.end;
+          schedule.push(s);
         }
         $scope.setModelSchedule(schedule);
       },
@@ -146,9 +143,8 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
 
   $scope.loadHistory = function(){
     $scope.model.history = [];
-    Assistance.getSchedules($scope.model.user.id, null,
-      function ok(response) {
-        var schedules = response.schedule;
+    Assistance.getSchedulesHistory($scope.model.user.id,
+      function ok(schedules) {
         var schedule = [];
         for (var $i = 0; $i < schedules.length; $i++) {
 
