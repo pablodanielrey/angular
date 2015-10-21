@@ -54,6 +54,7 @@ class JustificationsWamp(ApplicationSession):
         yield from self.register(self.getGeneralJustificationRequests_async, 'assistance.justifications.getGeneralJustificationRequests')
         yield from self.register(self.deleteGeneralJustificationRequest_async, 'assistance.justifications.deleteGeneralJustificationRequest')
 
+
     def _getDatabase(self):
         host = self.serverConfig.configs['database_host']
         dbname = self.serverConfig.configs['database_database']
@@ -77,12 +78,18 @@ class JustificationsWamp(ApplicationSession):
         r = yield from loop.run_in_executor(None, self.getJustifications)
         return r
 
+
+
     def getJustificationsByUser(self, userId):
+        '''
+        Obtener justificaciones del usuario
+        @param userId Id del usuario
+        '''
+        
         con = self._getDatabase()
         try:
-            ''' .... codigo aca ... '''
-            con.commit()
-            return True
+            justifications = justifications.getJustificationsByUser(con, userId)
+            return justifications
 
         finally:
             con.close()
@@ -92,6 +99,9 @@ class JustificationsWamp(ApplicationSession):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.getJustificationsByUser, userId)
         return r
+
+
+
 
     def getJustificationsStock(self, userId, justificationId, date, period):
         con = self._getDatabase()
