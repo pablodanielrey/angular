@@ -14,6 +14,7 @@ function IndexCtrl($rootScope, $scope, $wamp, $window, Notifications, Login) {
     }
 
     $scope.initialize = initialize;
+    
     function initialize() {
       /*  if (!Login.isLogged()) {
           $window.location.href = "/systems/login/index.html";
