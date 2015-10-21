@@ -153,7 +153,7 @@ function Assistance (Utils, Session, $wamp) {
 
 	function getSchedules(userId, date, callbackOk, callbackError) {
 		var sid = Session.getSessionId();
-		$wamp.call('assistance.getSchedules', [sid, usersId, date])
+		$wamp.call('assistance.getSchedules', [sid, userId, date])
 			.then(function(res) {
 				if (res != null) {
 					callbackOk(res);

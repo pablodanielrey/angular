@@ -125,7 +125,7 @@ class Assistance:
             date = self.date.awareToUtc(ldate)
 
 
-        sch = self.schedule.getSchedule(con, userId, date)
+        sch = self.schedule.getSchedule(con, userId, date.date())
 
         rt = {
             'userId': userId,
@@ -193,7 +193,7 @@ class Assistance:
         return assistanceStatus
 
     def _getNullAssistanceStatus(self, con, userId, date):
-        scheds = self.schedule.getSchedule(con, userId, date)
+        scheds = self.schedule.getSchedule(con, userId, date.date())
         justifications = self._getJustificationsForSchedule(con, userId, scheds,date)
         assistanceStatus = {
             'date': date,

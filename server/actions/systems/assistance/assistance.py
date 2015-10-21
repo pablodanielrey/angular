@@ -162,9 +162,17 @@ class AssistanceWamp(ApplicationSession):
     def getSchedules(self, sid, userId, date):
         con = self._getDatabase()
         try:
-            date = self._parseDate(date)
-            r = self.schedule.getSchedule(con, userId, date)
-            return r
+            d = None
+            if date is not None:
+                date = self._parseDate(date)
+                d = date.date()
+            import pdb
+            pdb.set_trace()
+            scheds = self.schedule.getSchedule(con, userId, d)
+            schedsMap = []
+            for s in scheds:
+                schedsMap.append(s.toMap(date))
+            return schedsMap
 
         finally:
             con.close()
@@ -316,7 +324,7 @@ class AssistanceWamp(ApplicationSession):
 
         con = self._getDatabase()
         try:
-            schedulesData = self.schedule.getSchedule(con, userId, date)
+            schedulesData = self.schedule.getSchedule(con, userId, date.date())
 
             schedules = []
             for schData in schedulesData:

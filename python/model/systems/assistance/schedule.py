@@ -140,6 +140,10 @@ class Schedule:
         cur = con.cursor()
         cur.execute('set time zone %s', ('utc',))
 
+
+        import pdb
+        pdb.set_trace()
+
         """ obtengo todos los schedules que son en la fecha date del parámetro """
         cur.execute("select id, sdate, sstart, send, isDayOfWeek, isDayOfMonth, isDayOfYear from assistance.schedule where \
                     ((sdate = %s) or \

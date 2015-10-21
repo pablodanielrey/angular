@@ -60,7 +60,7 @@ app.config(['$routeProvider', function($routeProvider) {
       controller: 'ShowAssistanceCtrl'
   })
   .when('/mySchedule', {
-      templateUrl: '/systems/assistance/modules/mySchedule.html',
+      templateUrl: '/systems/assistance/modules/workedHours/mySchedule.html',
       controller: 'MyScheduleCtrl'
   })
 
