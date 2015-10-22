@@ -190,29 +190,7 @@
                           </div>
                       </div>
                   </div>
-
-                  <!--
-                    <div class="itemInscription">
-                        <div class="iconMaletin">
-                          <i class="fa fa-briefcase"></i>
-                        </div>
-                        <div class="iconFlecha">
-                          <i class="fa fa-caret-right"></i>
-                        </div>
-                        <div class="textItemInscription">
-                            <div>
-                              <span>Inscripto en <b>Full-Time</b></span>
-                            </div>
-                            <div class="iconsInscription">
-                              <span class="icoTrash" title="Eliminar Inscripción"><i class="fa fa-trash-o"></i></span>
-                              <span class="icoDownload" title="Descargar Inscripción"><i class="fa fa-file-pdf-o"></i></span>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-              -->
-            </div>
+              </div>
         </div>
 
 
@@ -243,13 +221,16 @@
                             <button><i class="fa fa-graduation-cap"></i></button>
                           </div>
                           <div>
-                            <select class="carrera">
+                            <select class="carrera" ng-model='model.offer.degree'>
                               <option class="selectGrey" disabled selected style='display:none;'>Seleccionar...</option>
+                              <option ng-repeat='o in degrees'>{{o}}</option>
+                              <!--
                               <option>Contador Público</option>
                               <option>Licenciatura en Administración</option>
                               <option>Licenciatura en Turismo</option>
                               <option>Licenciatura en Economía</option>
                               <option>Tecnicatura en Cooperativas</option>
+                            -->
                             </select>
 
                           </div>
@@ -264,7 +245,7 @@
                         </span>
                         <div class="item">
                             <button><i class="fa fa-book"></i></button>
-                            <input class="CantMatAprov" type="text"></input>
+                            <input class="CantMatAprov" type="number" ng-model='model.offer.approved'></input>
                         </div>
 
                         <span class="subTittlesForm">
@@ -272,7 +253,7 @@
                         </span>
                         <div class="item">
                             <button><i class="fa fa-book"></i></button>
-                            <input class="CantMatAprov" type="text"></input>
+                            <input class="CantMatAprov" type="number" ng-model='model.offer.average1'></input>
                         </div>
 
                         <span class="subTittlesForm">
@@ -280,7 +261,7 @@
                         </span>
                         <div class="item">
                             <button><i class="fa fa-book"></i></button>
-                            <input class="CantMatAprov" type="text"></input>
+                            <input class="CantMatAprov" type="number" ng-model='model.offer.average2'></input>
                         </div>
 
                     </div>
@@ -295,11 +276,14 @@
                             <button><i class="fa fa-briefcase"></i></button>
                           </div>
                           <div>
-                            <select class="carrera">
+                            <select class="carrera" ng-model='model.offer.workType'>
                               <option class="selectGrey" disabled selected style='display:none;'>Seleccionar...</option>
+                              <option ng-repeat='o in workTypes'>{{o}}</option>
+                              <!--
                               <option>Pasantía</option>
                               <option>Full-Time</option>
                               <option>Programa estudiantes avanzados y jovenes profesionales</option>
+                              -->
                             </select>
                           </div>
                         </div>
@@ -316,10 +300,13 @@
                             <button><i class="fa fa-plane"></i></button>
                           </div>
                           <div>
-                            <select class="carrera">
+                            <select class="carrera" ng-model='model.offer.travel'>
                               <option class="selectGrey" disabled selected style='display:none;'>Seleccionar...</option>
+                              <option ng-repeat='o in travel'>{{o}}</option>
+                              <!--
                               <option>Si</option>
                               <option>No</option>
+                              -->
                             </select>
                           </div>
                         </div>
@@ -349,48 +336,35 @@
                         </div>
 
                         <div class="languajes">
-                            <div class="item">
+                            <div class="item" ng-repeat='i in model.languages'>
                               <div>
                                 <button><i class="fa fa-language"></i></button>
                               </div>
                               <div>
-                                <select class="languaje">
+                                <select class="languaje" ng-model='i.name'>
                                   <option class="selectGrey" disabled selected style='display:none;'>Seleccionar...</option>
+                                  <option ng-repeat='o in languages'>{{o}}</option>
+                                  <!--
                                   <option>Inglés</option>
                                   <option>Portugués</option>
                                   <option>Otro</option>
+                                  -->
                                 </select>
-                                <span class="rating">
-                                    <span class="star" title="Avanzado"></span>
-                                    <span class="star" title="Intermedio"></span>
-                                    <span class="star" title="Básico"></span>
-                                </span>
-                              </div>
-                            </div>
-                            <div class="item">
-                              <div>
-                                <button><i class="fa fa-language"></i></button>
-                              </div>
-                              <div>
-                                <select class="languaje">
-                                  <option class="selectGrey" disabled selected style='display:none;'>Seleccionar...</option>
-                                  <option>Inglés</option>
-                                  <option>Portugués</option>
-                                  <option>Otro</option>
-                                </select>
-                                <span class="rating">
-                                    <span class="star" title="Avanzado"></span>
-                                    <span class="star" title="Intermedio"></span>
-                                    <span class="star" title="Básico"></span>
-                                </span>
-                              </div>
-                            </div>
 
+                                <!-- esto no puede ser asi. tiene que si o si ser algun tipo de input, select, etc. -->
+                                <span class="rating">
+                                    <span class="star" title="Avanzado"></span>
+                                    <span class="star" title="Intermedio"></span>
+                                    <span class="star" title="Básico"></span>
+                                </span>
+                                <!-- ---------------- -->
+                              </div>
+                            </div>
                         </div>
 
 
                         <div>
-                          <button class="btnAddLanguaje"><i class="fa fa-language"></i> Agregar otro idioma</button>
+                          <button class="btnAddLanguaje" ng-click='addLanguage()'><i class="fa fa-language"></i> Agregar otro idioma</button>
                         </div>
 
                     </div>

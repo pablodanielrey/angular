@@ -6,13 +6,27 @@ InscriptionCtrl.inject = ['$rootScope', '$scope', '$wamp', 'LaboralInsertion', '
 
 function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login) {
 
+  $scope.degrees = ['Contador Público', 'Licenciatura en Administración', 'Licenciatura en Turismo', 'Licenciatura en Economía', 'Tecnicatura en Cooperativas'];
+  $scope.workTypes = ['Pasantía','Full-Time','Programa estudiantes avanzados y jovenes profesionales'];
+  $scope.travel = ['No', 'Sí'];
+  $scope.languages = ['Inglés','Portugués','Otro'];
+
   $scope.model = {
     ci: 0,
     cr: 0,
     inscriptions: ['','registro'],
     registrations: ['pantalla1','pantalla2','pantalla3','pantalla4','pantalla5','pantalla6','pantalla7'],
     currentPage: 1,
-    inscriptionsData: []
+    inscriptionsData: [],
+    offer: {
+      degree: $scope.degrees[0],
+      average1: 0.0,
+      average2: 0.0,
+      approved: 0,
+      workType: $scope.workTypes[0],
+      travel: $scope.travel[0]
+    },
+    languages: []
   };
 
 
@@ -60,6 +74,13 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login) {
     console.log(i);
   }
 
+
+  $scope.addLanguage = function() {
+    $scope.model.languages.push({
+        name: $scope.languages[0],
+        level: 'Básico'
+      });
+  }
 
   $scope.status = {
 
