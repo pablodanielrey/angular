@@ -18,6 +18,8 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login) {
     registrations: ['pantalla1','pantalla2','pantalla3','pantalla4','pantalla5','pantalla6','pantalla7'],
     currentPage: 1,
     inscriptionsData: [],
+
+    // inscripcion a ser subida al server.
     offer: {
       degree: $scope.degrees[0],
       average1: 0.0,
@@ -26,6 +28,8 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login) {
       workType: $scope.workTypes[0],
       travel: $scope.travel[0]
     },
+
+    // lenguajes a ser subidos al servidor
     languages: []
   };
 
