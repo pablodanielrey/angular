@@ -343,11 +343,12 @@ class AssistanceWamp(ApplicationSession):
          " @param userId Id de usuario al cual se le va a pedir los schedules
          " @param date Fecha para la cual se quieren consultar los schedules
          """
-        date = datetime.datetime.strptime(date, "%Y-%m-%d").date()
+
+        date = datetime.strptime(date, "%Y-%m-%d").date()
 
         con = self._getDatabase()
         try:
-            schedulesData = self.schedule.getSchedule(con, userId, date.date())
+            schedulesData = self.schedule.getSchedule(con, userId, date)
 
             schedules = []
             for schData in schedulesData:
@@ -387,12 +388,12 @@ class AssistanceWamp(ApplicationSession):
          " @param schedules Lista de diccionario con los datos de los schedules del usuario al cual se le solicitaran los logs
          """
 
-        date = datetime.datetime.strptime(date, "%Y-%m-%d").date()
+        date = datetime.strptime(date, "%Y-%m-%d").date()
         con = self._getDatabase()
         try:
             schedulesData = []
             for schedule in schedules:
-                dateSch = datetime.datetime.strptime(schedule["date"], "%Y-%m-%d").date()
+                dateSch = datetime.strptime(schedule["date"], "%Y-%m-%d").date()
 
                 sch = {
                   'id': schedule["id"],

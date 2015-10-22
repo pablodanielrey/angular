@@ -256,7 +256,6 @@ class ScheduleCheck(Check):
     def _isJustifiedTime(self,justifications,start,end):
         for j in justifications:
             for just in self.justificationsTime:
-                print(just)
                 if just.isJustification(j['justification_id']):
                     return just._isJustifiedTime(j,start,end)
         return False
@@ -284,7 +283,6 @@ class ScheduleCheck(Check):
 
         #ordenar justificaciones por fecha de inicio
         justifications = sorted(justifications, key=lambda j: j['begin'])
-        print(justifications)
 
         #elimino las justificaciones generales
         js = []
@@ -355,11 +353,12 @@ class ScheduleCheck(Check):
         #combinar controles con justificaciones
         self._combinerJustifications(controls, justifications, date)
     
-
+    
         for elem in controls:
             sched = elem['schedule']
             whs = sorted(elem['whs'], key=lambda wh: wh['start'])
             justs = elem['justifications']
+            
 
             dateSchd = sched.getStart(date)
 
@@ -400,7 +399,6 @@ class ScheduleCheck(Check):
 
                 # ------------ Salida temprana ---------------
                 if f['name'] == 'Salida temprana':
-                    print(f)
                     #verificar si esta justificada la salida temprana
                     if self._isJustifiedTimeEnd(justs, sched, whs, f, isLastSchedule, date):
                         continue
