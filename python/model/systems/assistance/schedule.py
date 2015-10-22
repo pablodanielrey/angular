@@ -42,6 +42,7 @@ class ScheduleData:
 
     def toMap(self,date):
         return {
+                'id': self.id,
                 'start': self.getStart(date),
                 'end': self.getEnd(date),
                 'date': self.date,
@@ -263,14 +264,21 @@ class Schedule:
     """
     def persistSchedule(self, con, userId, date, start, end, isDayOfWeek, isDayOfMonth, isDayOfYear):
         uaware = date.astimezone(pytz.utc)
-        ustart = start.astimezone(pytz.utc)
-        uend = end.astimezone(pytz.utc)
+
+        tzstart = start.astimezone(self.date.getLocalTimezone())
+        tzend = end.astimezone(self.date.getLocalTimezone())
+
+        # obtengo en segundos el start
+        sstart = tzstart.hour * 60 * 60 + tzstart.minute * 60 + tzstart.second
+        if tzend < tzstart:
+            tzend += timedelta(days=1)
+        send = (tzend - tzstart).seconds + sstart
 
         cur = con.cursor()
         cur.execute('set time zone %s', ('utc',))
 
         id = str(uuid.uuid4())
-        req = (id, userId, uaware, ustart, uend, isDayOfWeek, isDayOfMonth, isDayOfYear)
+        req = (id, userId, uaware, sstart, send, isDayOfWeek, isDayOfMonth, isDayOfYear)
         cur.execute('insert into assistance.schedule (id,user_id,sdate,sstart,send,isDayOfWeek,isDayOfMonth,isDayOfYear) values (%s,%s,%s,%s,%s,%s,%s,%s)', req)
         return id
 

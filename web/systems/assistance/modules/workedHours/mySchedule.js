@@ -126,7 +126,7 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
         if(day === schedule[i].day){
           if(schedule[i].start){
             var date = new Date(schedule[i].start);
-            var time = {hour:Utils.formatTime(date), type:"start"};
+            var time = {hour:Utils.formatTime(date), type:"start", date: date};
             $scope.model.schedule[day].push(time);
           }
           if(schedule[i].end){
@@ -379,7 +379,7 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
     request.isDayOfWeek = true;
 
 
-    Assistance.newSchedule(request,
+    Assistance.persistSchedule(request,
       function callbackOk(schedule){
         $scope.initializeFormNewSchedule();
         $scope.loadHistory();
@@ -420,7 +420,7 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
     request.start = $scope.model.specialStart;
     request.end = $scope.model.specialEnd;
 
-    Assistance.newSchedule(request,
+    Assistance.persistSchedule(request,
       function callbackOk(schedule){
         $scope.initializeFormNewSpecialSchedule();
         $scope.loadHistory();

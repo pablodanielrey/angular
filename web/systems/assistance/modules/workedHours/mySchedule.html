@@ -30,31 +30,31 @@
       <div class="weekly">
         <div>
           <div class="days">Lun</div>
-          <div ng-repeat="time in model.schedule.monday | orderBy:'hour'"><i ng-class="{true:'fa fa-caret-right', false:'fa fa-caret-left'}[time.type == 'start']"></i> {{time.hour}}</div>
+          <div ng-repeat="time in model.schedule.monday | orderBy:'date'"><i ng-class="{true:'fa fa-caret-right', false:'fa fa-caret-left'}[time.type == 'start']"></i> {{time.hour}}</div>
         </div>
         <div>
           <div class="days">Mar</div>
-          <div ng-repeat="time in model.schedule.tuesday | orderBy:'hour'"><i ng-class="{true:'fa fa-caret-right', false:'fa fa-caret-left'}[time.type == 'start']"></i> {{time.hour}}</div>
+          <div ng-repeat="time in model.schedule.tuesday | orderBy:'date'"><i ng-class="{true:'fa fa-caret-right', false:'fa fa-caret-left'}[time.type == 'start']"></i> {{time.hour}}</div>
         </div>
         <div>
           <div class="days">Mie</div>
-          <div ng-repeat="time in model.schedule.wednesday | orderBy:'hour'"><i ng-class="{true:'fa fa-caret-right', false:'fa fa-caret-left'}[time.type == 'start']"></i> {{time.hour}}</div>
+          <div ng-repeat="time in model.schedule.wednesday | orderBy:'date'"><i ng-class="{true:'fa fa-caret-right', false:'fa fa-caret-left'}[time.type == 'start']"></i> {{time.hour}}</div>
         </div>
         <div>
           <div class="days">Jue</div>
-          <div ng-repeat="time in model.schedule.thursday | orderBy:'hour'"><i ng-class="{true:'fa fa-caret-right', false:'fa fa-caret-left'}[time.type == 'start']"></i> {{time.hour}}</div>
+          <div ng-repeat="time in model.schedule.thursday | orderBy:'date'"><i ng-class="{true:'fa fa-caret-right', false:'fa fa-caret-left'}[time.type == 'start']"></i> {{time.hour}}</div>
         </div>
         <div>
           <div class="days">Vie</div>
-          <div ng-repeat="time in model.schedule.friday | orderBy:'hour'"><i ng-class="{true:'fa fa-caret-right', false:'fa fa-caret-left'}[time.type == 'start']"></i> {{time.hour}}</div>
+          <div ng-repeat="time in model.schedule.friday | orderBy:'date'"><i ng-class="{true:'fa fa-caret-right', false:'fa fa-caret-left'}[time.type == 'start']"></i> {{time.hour}}</div>
         </div>
         <div>
           <div class="days">Sab</div>
-          <div ng-repeat="time in model.schedule.saturday | orderBy:'hour'"><i ng-class="{true:'fa fa-caret-right', false:'fa fa-caret-left'}[time.type == 'start']"></i> {{time.hour}}</div>
+          <div ng-repeat="time in model.schedule.saturday | orderBy:'date'"><i ng-class="{true:'fa fa-caret-right', false:'fa fa-caret-left'}[time.type == 'start']"></i> {{time.hour}}</div>
         </div>
         <div>
           <div class="days">Dom</div>
-          <div ng-repeat="time in model.schedule.sunday | orderBy:'hour'"><i ng-class="{true:'fa fa-caret-right', false:'fa fa-caret-left'}[time.type == 'start']"></i> {{time.hour}}</div>
+          <div ng-repeat="time in model.schedule.sunday | orderBy:'date'"><i ng-class="{true:'fa fa-caret-right', false:'fa fa-caret-left'}[time.type == 'start']"></i> {{time.hour}}</div>
         </div>
       </div>
 
