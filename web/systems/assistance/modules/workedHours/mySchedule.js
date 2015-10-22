@@ -131,7 +131,7 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
           }
           if(schedule[i].end){
             var date = new Date(schedule[i].end);
-            var time = {hour:Utils.formatTime(date), type:"end"};
+            var time = {hour:Utils.formatTime(date), type:"end", date: date};
             $scope.model.schedule[day].push(time);
           }
         }
