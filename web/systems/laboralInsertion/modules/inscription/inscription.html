@@ -336,9 +336,10 @@
                         </div>
 
                         <div class="languajes">
-                            <div class="item" ng-repeat='i in model.languages'>
+                            <div class="item itemLanguajes" ng-repeat='i in model.languages'>
                               <div>
                                 <button><i class="fa fa-language"></i></button>
+
                               </div>
                               <div>
                                 <select class="languaje" ng-model='i.name'>
@@ -351,12 +352,21 @@
                                   -->
                                 </select>
 
+                                <select class="lenguajeLevel">
+                                  <option>Básico</option>
+                                  <option>Intermedio</option>
+                                  <option>Excelente</option>
+
+                                </select>
+
+
+
                                 <!-- esto no puede ser asi. tiene que si o si ser algun tipo de input, select, etc. -->
-                                <span class="rating">
+                                <!-- <span class="rating">
                                     <span class="star" title="Avanzado"></span>
                                     <span class="star" title="Intermedio"></span>
                                     <span class="star" title="Básico"></span>
-                                </span>
+                                </span> -->
                                 <!-- ---------------- -->
                               </div>
                             </div>

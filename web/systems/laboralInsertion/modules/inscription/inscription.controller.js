@@ -64,10 +64,38 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login) {
   $scope.getInscriptions = function() {
     var userId = Login.getUserId();
     LaboralInsertion.findAllByUser(userId, function(data) {
-      $scope.model.inscriptionsData = data.inscriptions;
+      //$scope.model.inscriptionsData = data.inscriptions;
+      $scope.model.inscriptionsData = [{
+        'id':'sdfdsfdsfs',
+        'languages':[{
+            'id':'dsfsdfsd',
+            'name':'Inglés',
+            'level':'Básico'
+          },
+          {
+            'id':'dsfsdfsd',
+            'name':'Inglés',
+            'level':'Básico'
+          }],
+        'inscriptions':[
+          {
+            'degree':'',
+            'average1':10,
+            'average2':20,
+            'courses':10,
+            'workType':'Pasantía',
+            'reside':'Sí',
+            'travel':'No'
+          }]
+      }];
     }, function(err) {
       console.log(err);
     })
+  }
+
+  $scope.getType = function(i) {
+    console.log(i);
+    return i.inscriptions[0].workType;
   }
 
   $scope.downloadInscription = function(i) {
