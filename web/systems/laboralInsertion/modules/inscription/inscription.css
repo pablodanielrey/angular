@@ -329,7 +329,7 @@
 }
 
 .inscription .textItemInscription {
-  width: 270px;
+  width: 600px;
   background-color: #0066A6;
   border-radius: 0px 3px 3px 0px;
   font-size: 18px;
@@ -426,6 +426,7 @@
 /**** BOTON SALIR DEL FORMULARIO ****/
 .fa-times-circle {
   color:#e43e46;
+  cursor: pointer;
 }
 
 .inscription .content {
@@ -468,6 +469,12 @@
 
 /******** pantalla idioma **********/
 
+.inscription .contentItemsLanguajes {
+  display: flex;
+  flex-direction: row;
+  align-items:  center;
+}
+
 .inscription .itemLanguajes {
   height: initial;
 }
@@ -478,15 +485,17 @@
   padding: 5px;
   border: none;
   border-radius: 5px;
+  margin-left: 10px;
+  cursor: pointer;
 }
 
 .inscription .languajes {
   overflow-y: auto;
-  height: 100px;
+  height: 150px;
 }
 
 .inscription .item .languaje {
-    width: 150px;
+    width: 170px;
     height: 40px;
     float: left;
     border: 0;
@@ -497,7 +506,7 @@
 
 
 .inscription .lenguajeLevel {
-  width: 140px !important;
+  width: 150px !important;
   margin-left: 5px;
   font-size: 14px !important;
   background-color: white !important;
@@ -505,10 +514,13 @@
 }
 
 .inscription .deleteLenguaje {
-  background-color: red;
-
-  height: 40px;
-  width: 20px;
+  background-color: #e43e46;
+  color:white;
+  cursor: pointer;
+  width: 15px;
+  padding: 5px;
+  margin-left: 10px;
+  border-radius: 2px;
 
 }
 
@@ -617,12 +629,31 @@
   padding: 10px;
 }
 
-.inscription .btnFooter {
+.inscription .btnBack {
   background-color: #0066A6;
   color: white;
   padding: 5px;
   border: none;
   border-radius: 5px;
+  cursor: pointer;
+}
+
+.inscription .btnNext {
+  background-color: #0066A6;
+  color: white;
+  padding: 5px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.inscription .btnSave {
+  background-color: #0066A6;
+  color: white;
+  padding: 5px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 .inscription .pagination {
@@ -710,5 +741,26 @@
 .inscription .content.pantalla7 .p4,
 .inscription .content.pantalla7 .p5,
 .inscription .content.pantalla7 .p6 {
+  display: none;
+}
+
+.inscription .footerForm.pantalla1 .btnSave,
+.inscription .footerForm.pantalla2 .btnSave,
+.inscription .footerForm.pantalla3 .btnSave,
+.inscription .footerForm.pantalla4 .btnSave,
+.inscription .footerForm.pantalla5 .btnSave,
+.inscription .footerForm.pantalla6 .btnSave {
+  display: none;
+}
+
+.inscription .footerForm.pantalla1 .btnBack {
+  display: none;
+}
+
+.inscription .footerForm.pantalla7 .btnBack {
+  display: none;
+}
+
+.inscription .footerForm.pantalla7 .btnNext{
   display: none;
 }

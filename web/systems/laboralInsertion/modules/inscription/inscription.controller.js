@@ -9,14 +9,13 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login) {
   $scope.degrees = ['Contador Público', 'Licenciatura en Administración', 'Licenciatura en Turismo', 'Licenciatura en Economía', 'Tecnicatura en Cooperativas'];
   $scope.workTypes = ['Pasantía','Full-Time','Programa estudiantes avanzados y jovenes profesionales'];
   $scope.travel = ['No', 'Sí'];
-  $scope.languages = ['Inglés','Portugués','Otro'];
+  $scope.languages = ['Inglés','Portugués','Alemán','Ruso','Italiano','Francés','Chino','Japonés'];
 
   $scope.model = {
     ci: 0,
     cr: 0,
     inscriptions: ['','registro'],
     registrations: ['pantalla1','pantalla2','pantalla3','pantalla4','pantalla5','pantalla6','pantalla7'],
-    currentPage: 1,
     inscriptionsData: [],
 
     // inscripcion a ser subida al server.
@@ -38,8 +37,13 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login) {
 
   $scope.model.totalPages = $scope.model.registrations.length;
 
-  $scope.changeInscription = function() {
-    $scope.model.ci = ($scope.model.ci + 1) % $scope.model.inscriptions.length;
+  $scope.startInscription = function() {
+    $scope.model.ci = 1;
+    $scope.model.cr = 0;
+  }
+
+  $scope.endInscription = function() {
+    $scope.model.ci = 0;
   }
 
   $scope.changeRegistration = function() {
@@ -61,6 +65,15 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login) {
 
   // --- modelo ---
 
+  $scope.uploadInscription = function() {
+    $scope.endInscription();
+    $scope.model.inscriptionsData.push({
+      'id': 'asdasds',
+      'languages': $scope.model.languages,
+      'inscriptions': [$scope.model.offer]
+    });
+  }
+
   $scope.getInscriptions = function() {
     var userId = Login.getUserId();
     LaboralInsertion.findAllByUser(userId, function(data) {
@@ -79,7 +92,7 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login) {
           }],
         'inscriptions':[
           {
-            'degree':'',
+            'degree':'Licenciatura en Administracion',
             'average1':10,
             'average2':20,
             'courses':10,
@@ -87,14 +100,110 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login) {
             'reside':'Sí',
             'travel':'No'
           }]
-      }];
+      },
+      {
+        'id':'sdfdsfdsfs',
+        'languages':[{
+            'id':'dsfsdfsd',
+            'name':'Inglés',
+            'level':'Básico'
+          },
+          {
+            'id':'dsfsdfsd',
+            'name':'Inglés',
+            'level':'Básico'
+          }],
+        'inscriptions':[
+          {
+            'degree':'Contador Público',
+            'average1':10,
+            'average2':20,
+            'courses':10,
+            'workType':'Pasantía',
+            'reside':'Sí',
+            'travel':'No'
+          }]
+      },
+      {
+        'id':'sdfdsfdsfs',
+        'languages':[{
+            'id':'dsfsdfsd',
+            'name':'Inglés',
+            'level':'Básico'
+          },
+          {
+            'id':'dsfsdfsd',
+            'name':'Inglés',
+            'level':'Básico'
+          }],
+        'inscriptions':[
+          {
+            'degree':'Contador Público',
+            'average1':10,
+            'average2':20,
+            'courses':10,
+            'workType':'Pasantía',
+            'reside':'Sí',
+            'travel':'No'
+          }]
+      },
+      {
+        'id':'sdfdsfdsfs',
+        'languages':[{
+            'id':'dsfsdfsd',
+            'name':'Inglés',
+            'level':'Básico'
+          },
+          {
+            'id':'dsfsdfsd',
+            'name':'Inglés',
+            'level':'Básico'
+          }],
+        'inscriptions':[
+          {
+            'degree':'Contador Público',
+            'average1':10,
+            'average2':20,
+            'courses':10,
+            'workType':'Pasantía',
+            'reside':'Sí',
+            'travel':'No'
+          }]
+      },
+      {
+        'id':'sdfdsfdsfs',
+        'languages':[{
+            'id':'dsfsdfsd',
+            'name':'Inglés',
+            'level':'Básico'
+          },
+          {
+            'id':'dsfsdfsd',
+            'name':'Inglés',
+            'level':'Básico'
+          }],
+        'inscriptions':[
+          {
+            'degree':'Contador Público',
+            'average1':10,
+            'average2':20,
+            'courses':10,
+            'workType':'Pasantía',
+            'reside':'Sí',
+            'travel':'No'
+          }]
+      }
+      ];
     }, function(err) {
       console.log(err);
     })
   }
 
+  $scope.getDegree = function(i) {
+    return i.inscriptions[0].degree;
+  }
+
   $scope.getType = function(i) {
-    console.log(i);
     return i.inscriptions[0].workType;
   }
 
@@ -104,6 +213,8 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login) {
 
   $scope.removeInscription = function(i) {
     console.log(i);
+    var index = $scope.model.inscriptionsData.indexOf(i);
+    $scope.model.inscriptionsData.splice(index,1);
   }
 
 

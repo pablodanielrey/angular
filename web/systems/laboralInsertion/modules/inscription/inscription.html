@@ -60,7 +60,7 @@
                         <button><i class="fa fa-calendar-o"></i></button>
                       </div>
                       <div>
-                        <input type="text" placeholder="Nacimiento ( 01/01/1990 )"></input>
+                        <input type="date" placeholder="Nacimiento ( 01/01/1990 )"></input>
                       </div>
                     </div>
 
@@ -141,11 +141,11 @@
                         <button><i class="fa fa-envelope"></i></button>
                       </div>
                       <div>
-                        <input type="text" placeholder="nombre@dominio.com"></input>
+                        <input type="mail" placeholder="nombre@dominio.com"></input>
                       </div>
                     </div>
 
-                    <div class="item2" ng-click='changeInscription()'>
+                    <div class="item2" ng-click='startInscription()'>
                       <div>
                         <button><i class="fa fa-briefcase fa-2x"></i></button>
                       </div>
@@ -181,7 +181,7 @@
                           </div>
                           <div class="textItemInscription">
                               <div>
-                                <span>Inscripto en <b>{{getType(i)}}</b></span>
+                                <span>Inscripto en <b>{{getType(i)}}</b> de <b>{{getDegree(i)}}</b></span>
                               </div>
                               <div class="iconsInscription">
                                 <span class="icoTrash" title="Eliminar Inscripción" ng-click='removeInscription(i)'><i class="fa fa-trash-o"></i></span>
@@ -203,7 +203,7 @@
                     <div>
                         <h4>Formulario | OFERTA LABORAL</h4>
                     </div>
-                    <div ng-click='changeInscription()'>
+                    <div ng-click='endInscription()'>
                       <i class="fa fa-times-circle fa-2x" title="Cancelar"></i>
                     </div>
                 </div>
@@ -333,6 +333,8 @@
                     <div class="p5">
                         <div class="subTittlesForm">
                           <b>Idioma</b>
+                          <button class="btnAddLanguaje" ng-click='addLanguage()'><i class="fa fa-language"></i> AGREGAR IDIOMA</button>
+
                         </div>
 
                         <div class="languajes">
@@ -341,7 +343,7 @@
                                 <button><i class="fa fa-language"></i></button>
 
                               </div>
-                              <div>
+                              <div class="contentItemsLanguajes">
                                 <select class="languaje" ng-model='i.name'>
                                   <option class="selectGrey" disabled selected style='display:none;'>Seleccionar...</option>
                                   <option ng-repeat='o in languages'>{{o}}</option>
@@ -359,6 +361,7 @@
 
                                 </select>
 
+                                 <span> <i class="fa fa-trash deleteLenguaje"></i> </span>
 
 
                                 <!-- esto no puede ser asi. tiene que si o si ser algun tipo de input, select, etc. -->
@@ -371,12 +374,6 @@
                               </div>
                             </div>
                         </div>
-
-
-                        <div>
-                          <button class="btnAddLanguaje" ng-click='addLanguage()'><i class="fa fa-language"></i> Agregar otro idioma</button>
-                        </div>
-
                     </div>
 
                     <div class="p6">
@@ -409,13 +406,14 @@
 
 
                 </div>
-                <div class="footerForm">
+                <div class="footerForm" ng-class='getRegistrationClazz()'>
                     <div class="pagination">
-                      {{model.currentPage}}/{{model.totalPages}}
+
                     </div>
                     <div>
-                      <button class="btnFooter" ng-click='changePreviousRegistration()'><i class="fa fa-arrow-circle-o-left"></i> Anterior </button>
-                      <button class="btnFooter" ng-click='changeRegistration()'>Siguiente <i class="fa fa-arrow-circle-o-right"></i></button>
+                      <button class="btnBack" ng-click='changePreviousRegistration()'><i class="fa fa-arrow-circle-o-left"></i> Anterior </button>
+                      <button class="btnNext" ng-click='changeRegistration()'>Siguiente <i class="fa fa-arrow-circle-o-right"></i></button>
+                      <button class="btnSave" ng-click='uploadInscription()'><i class="fa fa-floppy-o"></i> GUARDAR </button>
                     </div>
                 </div>
             </div>
