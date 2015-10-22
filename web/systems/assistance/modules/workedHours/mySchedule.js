@@ -91,6 +91,11 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
           var s = {};
           s.day = $scope.getDayOfWeek(d);
           s.start = sDay.start;
+          schedule.push(s);
+
+          var d = new Date(sDay.end);
+          var s = {};
+          s.day = $scope.getDayOfWeek(d);
           s.end = sDay.end;
           schedule.push(s);
         }
