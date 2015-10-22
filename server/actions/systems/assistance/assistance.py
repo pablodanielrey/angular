@@ -59,6 +59,7 @@ class AssistanceWamp(ApplicationSession):
         yield from self.register(self.getSchedules_async, 'assistance.getSchedules')
         yield from self.register(self.getSchedulesHistory_async, 'assistance.getSchedulesHistory')
         yield from self.register(self.persistSchedule_async, 'assistance.persistSchedule')
+        yield from self.register(self.persistScheduleWeek_async, 'assistance.persistScheduleWeek')
         yield from self.register(self.deleteSchedule_async, 'assistance.deleteSchedule')
         yield from self.register(self.getAvailableChecks_async, 'assistance.getAvailableChecks')
         yield from self.register(self.getChecksByUser_async, 'assistance.getChecksByUser')
@@ -210,8 +211,6 @@ class AssistanceWamp(ApplicationSession):
         con = self._getDatabase()
         try:
             date = self._parseDate(date)
-            start = self._parseDate(start)
-            end = self._parseDate(end)
             r = self.schedule.persistSchedule(con, userId, date, start, end, dayOfWeek, dayOfMonth, dayOfYear)
             con.commit()
             return r
@@ -223,6 +222,24 @@ class AssistanceWamp(ApplicationSession):
     def persistSchedule_async(self, sid, userId, date, start, end, dayOfWeek=False, dayOfMonth=False, dayOfYear=False):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.persistSchedule, sid, userId, date, start, end, dayOfWeek, dayOfMonth, dayOfYear)
+        return r
+
+
+    def persistScheduleWeek(self, sid, userId, date, start, end, daysOfWeek):
+        con = self._getDatabase()
+        try:
+            date = self._parseDate(date)
+            r = self.schedule.persistScheduleWeek(con, userId, date, start, end, daysOfWeek)
+            con.commit()
+            return r
+
+        finally:
+            con.close()
+
+    @coroutine
+    def persistScheduleWeek_async(self, sid, userId, date, start, end, daysOfWeek):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.persistScheduleWeek, sid, userId, date, start, end, daysOfWeek)
         return r
 
     def deleteSchedule(self, sid, id):

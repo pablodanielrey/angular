@@ -373,13 +373,17 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
     var request = {};
     request.user_id = $scope.model.user.id;
     request.date = $scope.model.date;
-    request.start = $scope.model.start;
-    request.end = $scope.model.end;
+
+    var s = $scope.model.start;
+    request.start = s.getHours() * 60 * 60 + s.getMinutes() * 60 + s.getSeconds();
+
+    var e = $scope.model.end;
+    request.end = e.getHours() * 60 * 60 + e.getMinutes() * 60 + e.getSeconds();
+
     request.daysOfWeek = $scope.getDaysOfWeek();
-    request.isDayOfWeek = true;
 
 
-    Assistance.persistSchedule(request,
+    Assistance.persistScheduleWeek(request,
       function callbackOk(schedule){
         $scope.initializeFormNewSchedule();
         $scope.loadHistory();
@@ -417,8 +421,12 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
     var request = {};
     request.user_id = $scope.model.user.id;
     request.date = $scope.model.specialDate;
-    request.start = $scope.model.specialStart;
-    request.end = $scope.model.specialEnd;
+
+    var s = $scope.model.specialStart;
+    request.start = s.getHours() * 60 * 60 + s.getMinutes() * 60 + s.getSeconds();
+
+    var e = $scope.model.specialEnd;
+    request.end = e.getHours() * 60 * 60 + e.getMinutes() * 60 + e.getSeconds();
 
     Assistance.persistSchedule(request,
       function callbackOk(schedule){

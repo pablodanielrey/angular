@@ -18,6 +18,7 @@ function Assistance (Utils, Session, $wamp) {
 	services.getSchedules = getSchedules;
 	services.getSchedulesHistory = getSchedulesHistory;
 	services.persistSchedule = persistSchedule;
+	services.persistScheduleWeek = persistScheduleWeek;
 	services.deleteSchedule = deleteSchedule;
 	services.getJustifications = getJustifications;
 	services.getJustificationsByUser = getJustificationsByUser;
@@ -199,6 +200,31 @@ function Assistance (Utils, Session, $wamp) {
 		var sid = Session.getSessionId();
 
 		$wamp.call('assistance.persistSchedule', [sid, schedule.user_id, schedule.date, schedule.start, schedule.end])
+			.then(function(res) {
+				if (res != null) {
+					callbackOk(res);
+				} else {
+					callbackError('Error');
+				}
+			},function(err) {
+				callbackError(err);
+			});
+	};
+
+	/*
+	schedule:{
+		user_id:"id del Usuario",
+		date:"fecha de que se empieza a utilizar el schedule, si no se envia se toma la fecha actual",
+		start:"hora de inicio del turno",
+		end:"hora de fin de turno",
+		daysOfWeek:[]
+	}
+	*/
+
+	function persistScheduleWeek(schedule, callbackOk, callbackError) {
+		var sid = Session.getSessionId();
+
+		$wamp.call('assistance.persistScheduleWeek', [sid, schedule.user_id, schedule.date, schedule.start, schedule.end, schedule.daysOfWeek])
 			.then(function(res) {
 				if (res != null) {
 					callbackOk(res);

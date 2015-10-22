@@ -262,17 +262,8 @@ class Schedule:
     """
         genera un nuevo schedule las fechas pasadas como parámetro (se supone aware)
     """
-    def persistSchedule(self, con, userId, date, start, end, isDayOfWeek, isDayOfMonth, isDayOfYear):
+    def persistSchedule(self, con, userId, date, sstart, send, isDayOfWeek=False, isDayOfMonth=False, isDayOfYear=False):
         uaware = date.astimezone(pytz.utc)
-
-        tzstart = start.astimezone(self.date.getLocalTimezone())
-        tzend = end.astimezone(self.date.getLocalTimezone())
-
-        # obtengo en segundos el start
-        sstart = tzstart.hour * 60 * 60 + tzstart.minute * 60 + tzstart.second
-        if tzend < tzstart:
-            tzend += timedelta(days=1)
-        send = (tzend - tzstart).seconds + sstart
 
         cur = con.cursor()
         cur.execute('set time zone %s', ('utc',))
@@ -282,6 +273,41 @@ class Schedule:
         cur.execute('insert into assistance.schedule (id,user_id,sdate,sstart,send,isDayOfWeek,isDayOfMonth,isDayOfYear) values (%s,%s,%s,%s,%s,%s,%s,%s)', req)
         return id
 
+    def _getDateWeek(self,day,date):
+        # date.weekday=Monday is 0 and Sunday is 6.
+        weekday = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
+        # Monday is 0 and Sunday is 6.
+        dateWeek = date.weekday()
+
+        dayWeek = None;
+        for x in range(0, 6):
+            if (day == weekday[x]):
+                dayWeek = x;
+                break;
+
+        # calculo la cantidad de dias a incrementar
+        inc = (dayWeek - dateWeek) if (dateWeek <= dayWeek) else ((7 - dateWeek) + dayWeek);
+
+        date += timedelta(days=inc)
+        return date
+
+
+    '''
+        Creacion de nuevo horario semanal
+        Crea un schedule por cada dia de la semana pasado como parametro
+    '''
+    def persistScheduleWeek(self, con, userId, date, start, end, daysOfWeek):
+        if daysOfWeek is None or len(daysOfWeek) <= 0:
+            return
+
+        isDayOfWeek = True
+
+        ids = []
+        for day in daysOfWeek:
+            d = self._getDateWeek(day,date)
+            id = self.persistSchedule(con, userId, d, start, end, isDayOfWeek)
+            ids.append(id)
+        return ids
     '''
         elimina un schedule
     '''
