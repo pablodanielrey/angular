@@ -304,6 +304,7 @@
   color:white;
   padding: 11px 18px 11px 18px;
   border-radius: 3px 0px 0 3px;
+  height: 49px;
 
 }
 
@@ -312,29 +313,54 @@
   background-color: #0066A6;
   padding: 7px 0px 7px 0px;
   font-size: 20px;
+  height: 56px;
+}
+
+.inscription .fa-caret-right {
+  margin-top: 15px;
+
+}
+
+.inscription .fa-briefcase {
+  margin-top: 15px;
+
+}
+
+.inscription .fa-trash-o {
+  margin-left: 5px;
+
+}
+
+.inscription .fa-file-pdf-o {
+  margin-left: 5px;
 }
 
 .inscription .icoTrash {
   background-color: #275276;
-  padding: 1px 4px 1px 4px;
+  padding: 1px 8px 1px 4px;
   border-radius: 2px;
   cursor: pointer;
+  height: 100%;
+  width: 20px;
+
 }
 
 .inscription .icoDownload {
   background-color: #275276;
-  padding: 1px 4px 1px 4px;
+  padding: 1px 8px 3px 4px;
   border-radius: 2px;
   cursor: pointer;
+  height: 100%;
+  width: 20px;
 }
 
 .inscription .textItemInscription {
-  width: 600px;
+  width: 260px;
   background-color: #0066A6;
   border-radius: 0px 3px 3px 0px;
   font-size: 18px;
   color:white;
-  height: 41px;
+  height: 70px;
   display: flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
@@ -343,8 +369,17 @@
   justify-content: space-around;
 }
 
+.inscription .textItemInscriptionCarrera {
+  font-size: 12px;
+}
+
 .inscription .iconsInscription {
-  width: 55px;
+
+display: flex;
+flex-direction: column;
+align-items: flex-end;
+justify-content: center;
+
 }
 
 .inscription .contentInscription {
