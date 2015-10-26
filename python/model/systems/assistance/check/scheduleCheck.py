@@ -283,8 +283,7 @@ class ScheduleCheck(Check):
 
         #ordenar justificaciones por fecha de inicio
         justifications = sorted(justifications, key=lambda j: j['begin'])
-        print("***************_combinerJustifications*")
-        print(justifications)
+        
         """
         #elimino las justificaciones generales
         js = []
