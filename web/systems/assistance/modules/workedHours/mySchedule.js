@@ -28,6 +28,12 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
   $scope.model.specialStart = null; //hora de inicio especial
   $scope.model.specialEnd = null;            //cantidad de horas especiales
 
+  //variables del fieldset de horario Franja de Días
+  $scope.model.daysStartDate = null;
+  $scope.model.daysStartTime = null;
+  $scope.model.daysEndDate = null;
+  $scope.model.daysEndTime = null;
+
   //variables de seleccion de usuario
   $scope.model.searchUser = null;        //nombre del usuario a buscar
   $scope.model.searchUserPromise = null; //promesa de busqueda del usuario
@@ -67,6 +73,13 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
     $scope.model.specialEnd = null;
   };
 
+  $scope.initializeFormNewScheduleDays = function() {
+    $scope.model.daysStartDate = new Date();
+    $scope.model.daysStartTime = null;
+    $scope.model.daysEndDate = new Date();
+    $scope.model.daysEndTime = null;
+  }
+
   $scope.getDayOfWeek = function(date) {
     var weekday = ["sunday","monday","tuesday","wednesday","thursday","friday","saturday"]
     return weekday[date.getDay()];
@@ -87,17 +100,25 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
         var schedule = [];
         for (var $i = 0; $i < schedules.length; $i++) {
           var sDay = schedules[$i];
-          var d = new Date(sDay.start);
+          var ds = new Date(sDay.start);
           var s = {};
-          s.day = $scope.getDayOfWeek(d);
+          s.day = $scope.getDayOfWeek(ds);
           s.start = sDay.start;
           schedule.push(s);
 
-          var d = new Date(sDay.end);
-          var s = {};
-          s.day = $scope.getDayOfWeek(d);
-          s.end = sDay.end;
-          schedule.push(s);
+          var de = new Date(sDay.end);
+          var date = new Date(sDay.date); // dia del cual entra en vigencia
+          var dif = ds.getDay() - de.getDay();
+          var difMillis = (24*60*60*1000) * dif;
+          var auxD = new Date(ds.getTime() - difMillis);
+          
+          // verifico que el end se encuentre dentro de la semana actual
+          if (de.getDay() >= ds.getDay() || de.getDay() == 0 || auxD >= date) {
+            var s = {};
+            s.day = $scope.getDayOfWeek(de);
+            s.end = sDay.end;
+            schedule.push(s);
+          }
         }
         $scope.setModelSchedule(schedule);
       },
@@ -250,6 +271,7 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
     $scope.loadUsers();
     $scope.initializeFormNewSchedule();
     $scope.initializeFormNewSpecialSchedule();
+    $scope.initializeFormNewScheduleDays();
 
   },0);
 
@@ -389,6 +411,62 @@ app.controller('MyScheduleCtrl', ["$scope", "$window", "$timeout", "Assistance",
 
 
     Assistance.persistScheduleWeek(request,
+      function callbackOk(schedule){
+        $scope.initializeFormNewSchedule();
+        $scope.loadHistory();
+        $scope.loadSchedule();
+        Notifications.message("Horario almacenado con exito");
+      },
+      function callbackError(error){
+        Notifications.message(error);
+        throw new Error(error);
+      }
+    );
+
+
+  };
+
+
+  $scope.saveNewScheduleDays = function(){
+    if(!$scope.isDaySelected() || $scope.model.readOnly){
+      return;
+    }
+
+    if ($scope.model.daysStartDate > $scope.model.daysEndDate) {
+      return;
+    }
+
+    if ($scope.model.daysStartDate == $scope.model.daysEndDate && $scope.model.daysStartTime >= $scope.model.daysEndTime) {
+      return;
+    }
+
+    $scope.model.daysStartDate.setHours(0);
+    $scope.model.daysStartDate.setMinutes(0);
+    $scope.model.daysStartDate.setSeconds(0);
+
+    $scope.model.daysEndDate.setHours(0);
+    $scope.model.daysEndDate.setMinutes(0);
+    $scope.model.daysEndDate.setSeconds(0);
+
+    var request = {};
+    request.user_id = $scope.model.user.id;
+    request.date = $scope.model.daysStartDate;
+    request.isDayOfWeek = true;
+
+    var s = $scope.model.daysStartTime;
+    request.start = s.getHours() * 60 * 60 + s.getMinutes() * 60 + s.getSeconds();
+
+    var e = $scope.model.daysEndTime;
+    request.end = e.getHours() * 60 * 60 + e.getMinutes() * 60 + e.getSeconds();
+
+    // Obtengo la cantidad de dias de diferencias que hay entre el start y el end
+    var dif = $scope.model.daysEndDate - $scope.model.daysStartDate;
+    var difDays = Math.floor(dif / (1000 * 60 * 60 * 24));
+
+    request.end = request.end + (difDays * 24 * 60 * 60);
+
+
+    Assistance.persistSchedule(request,
       function callbackOk(schedule){
         $scope.initializeFormNewSchedule();
         $scope.loadHistory();

@@ -167,6 +167,9 @@ class AssistanceWamp(ApplicationSession):
             if date is None:
                 return None;
 
+            import pdb
+            pdb.set_trace()
+
             date = self._parseDate(date)
             scheds = self.schedule.getSchedulesOfWeek(con, userId, date)
 

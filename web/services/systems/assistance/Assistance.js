@@ -199,7 +199,12 @@ function Assistance (Utils, Session, $wamp) {
 	function persistSchedule(schedule, callbackOk, callbackError) {
 		var sid = Session.getSessionId();
 
-		$wamp.call('assistance.persistSchedule', [sid, schedule.user_id, schedule.date, schedule.start, schedule.end])
+		var params = [sid, schedule.user_id, schedule.date, schedule.start, schedule.end]
+		if (schedule.isDayOfWeek) {
+				params.push(schedule.isDayOfWeek);
+		}
+
+		$wamp.call('assistance.persistSchedule', params)
 			.then(function(res) {
 				if (res != null) {
 					callbackOk(res);
