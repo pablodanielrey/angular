@@ -18,6 +18,41 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login) {
     registrations: ['pantalla1','pantalla2','pantalla3','pantalla4','pantalla5','pantalla6','pantalla7'],
     inscriptionsData: [],
 
+    // datos de usuario
+    user: {
+      name:'',
+      lastname:'',
+      dni:'',
+      telephone:'',
+      movil:'',
+      email:'',
+      country:'',
+      residence_city:'',
+      birth_city:'',
+      address:'',
+      genre:'Género',
+      birthdate: null,
+      student_number:''
+    },
+
+    // chequeos de los campos del usuario
+    userChecks: {
+      ok: true,
+      name:null,
+      lastname:null,
+      dni:null,
+      telephone:null,
+      movil:null,
+      email:null,
+      country:null,
+      residence_city:null,
+      birth_city:null,
+      address:null,
+      genre:null,
+      birthdate: null,
+      student_number:null
+    },
+
     // inscripcion a ser subida al server.
     offer: {
       degree: $scope.degrees[0],
@@ -31,6 +66,24 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login) {
     // lenguajes a ser subidos al servidor
     languages: []
   };
+
+  // seteo los watchs.
+  $scope.$watch(function() { return $scope.model.user.name; }, function(o,n) { $scope.checkUserData(); });
+  $scope.$watch(function() { return $scope.model.user.lastname; }, function(o,n) { $scope.checkUserData(); });
+  $scope.$watch(function() { return $scope.model.user.dni; }, function(o,n) { $scope.checkUserData(); });
+  $scope.$watch(function() { return $scope.model.user.telephone; }, function(o,n) { $scope.checkUserData(); });
+  $scope.$watch(function() { return $scope.model.user.movil; }, function(o,n) { $scope.checkUserData(); });
+  $scope.$watch(function() { return $scope.model.user.email; }, function(o,n) { $scope.checkUserData(); });
+  $scope.$watch(function() { return $scope.model.user.country; }, function(o,n) { $scope.checkUserData(); });
+  $scope.$watch(function() { return $scope.model.user.residence_city; }, function(o,n) { $scope.checkUserData(); });
+  $scope.$watch(function() { return $scope.model.user.birth_city; }, function(o,n) { $scope.checkUserData(); });
+  $scope.$watch(function() { return $scope.model.user.address; }, function(o,n) { $scope.checkUserData(); });
+  $scope.$watch(function() { return $scope.model.user.genre; }, function(o,n) { $scope.checkUserData(); });
+  $scope.$watch(function() { return $scope.model.birthdate; }, function(o,n) { $scope.checkUserData(); });
+  $scope.$watch(function() { return $scope.model.student_number; }, function(o,n) { $scope.checkUserData(); });
+
+
+
 
 
   // --- elementos graficos -----
@@ -64,6 +117,30 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login) {
 
 
   // --- modelo ---
+
+  $scope.checkUserData = function() {
+    var u = $scope.model.user;
+    var r = $scope.model.userChecks;
+
+    r.ok = true;
+
+    if (u.name == undefined || u.name.match(/^[a-zA-Z ]*$/)) {
+      $scope.model.userChecks.name = null;
+    } else {
+      $scope.model.userChecks.name = 'Error';
+      r.ok = false;
+    }
+
+    if (u.lastname == undefined || u.lastname.match(/^[a-zA-Z ]*$/)) {
+      $scope.model.userChecks.lastname = null;
+    } else {
+      $scope.model.userChecks.lastname = 'Error';
+      r.ok = false;
+    }
+
+    // aca faltan mas chequeos.
+
+  }
 
   $scope.uploadInscription = function() {
     $scope.endInscription();

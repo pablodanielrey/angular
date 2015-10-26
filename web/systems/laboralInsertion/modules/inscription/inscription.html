@@ -5,11 +5,11 @@
         <!-- ************************************
         ********* DATOS BASICOS ************
         ************************************* -->
-        <div class="contentDataBasic">
+        <form class="contentDataBasic" novalidate>
             <!-- <div class="header">
                <img src="http://163.10.56.60/systems/laboralInsertion/img/logoInsercion.jpg">
             </div> -->
-            <div class="dataBasic">
+            <div class="dataBasic" name="dataBasic">
                 <div class"col">
                     <div class="item">
                       <div class="photo" placeholder="Foto"><i class="fa fa-camera-retro fa-4x"></i>Subir Foto</div>
@@ -21,7 +21,8 @@
                           <button><i class="fa fa-user"></i></button>
                         </div>
                         <div>
-                          <input type="text" placeholder="Nombres"></input>
+                          <input type="text" placeholder="Nombres" name='nombre' ng-model='model.user.name'></input>
+                          <span ng-if='model.userChecks.name != null'>{{model.userChecks.name}}</span>
                         </div>
                     </div>
 
@@ -30,7 +31,7 @@
                         <button><i class="fa fa-user"></i></button>
                       </div>
                       <div>
-                        <input type="text" placeholder="Apellidos"></input>
+                        <input type="text" placeholder="Apellidos" ng-model='model.user.lastname'></input>
                       </div>
                     </div>
 
@@ -39,7 +40,7 @@
                         <button><i class="fa fa-credit-card"></i></button>
                       </div>
                       <div>
-                        <input type="text" placeholder="DNI"></input>
+                        <input type="text" placeholder="DNI" ng-model='model.user.dni'></input>
                       </div>
                     </div>
 
@@ -51,7 +52,7 @@
                         <button><i class="fa fa-graduation-cap"></i></button>
                       </div>
                       <div>
-                        <input type="text" placeholder="Legajo"></input>
+                        <input type="text" placeholder="Legajo" ng-model='model.user.student_number'></input>
                       </div>
                     </div>
 
@@ -60,7 +61,7 @@
                         <button><i class="fa fa-calendar-o"></i></button>
                       </div>
                       <div>
-                        <input type="date" placeholder="Nacimiento ( 01/01/1990 )"></input>
+                        <input type="date" placeholder="Nacimiento ( 01/01/1990 )" ng-model='model.user.birthdate'></input>
                       </div>
                     </div>
 
@@ -69,11 +70,11 @@
                         <button><i class="fa fa-venus-mars"></i></button>
                       </div>
                       <div>
-                        <select>
+                        <select ng-model='model.user.genre'>
                           <option class="selectGrey" disabled selected style='display:none;'>Género</option>
                           <option>Masculino</option>
                           <option>Femenino</option>
-                          <option>Otro</option>
+                          <!-- <option>Otro</option> -->
                         </select>
                       </input>
                       </div>
@@ -84,7 +85,7 @@
                         <button><i class="fa fa-map-marker"></i></button>
                       </div>
                       <div>
-                        <input type="text" placeholder="Ciudad de residencia actual"></input>
+                        <input type="text" placeholder="Ciudad de residencia actual" ng-model='model.user.residence_city'></input>
                       </div>
                     </div>
 
@@ -93,7 +94,7 @@
                         <button><i class="fa fa-home"></i></button>
                       </div>
                       <div>
-                        <input type="text" placeholder="Domicilio"></input>
+                        <input type="text" placeholder="Domicilio" ng-model='model.user.address'></input>
                       </div>
                     </div>
 
@@ -102,7 +103,7 @@
                         <button><i class="fa fa-map-marker"></i></button>
                       </div>
                       <div>
-                        <input type="text" placeholder="Ciudad de procedencia"></input>
+                        <input type="text" placeholder="Ciudad de procedencia" ng-model='model.user.birth_city'></input>
                       </div>
                     </div>
 
@@ -114,7 +115,7 @@
                         <button><i class="fa fa-globe"></i></button>
                       </div>
                       <div>
-                        <input type="text" placeholder="País"></input>
+                        <input type="text" placeholder="País" ng-model='model.user.country'></input>
                       </div>
                     </div>
 
@@ -123,7 +124,7 @@
                         <button><i class="fa fa-mobile"></i></button>
                       </div>
                       <div>
-                        <input type="text" placeholder="Cel. (+5492215011111)"></input>
+                        <input type="text" placeholder="Cel. (+5492215011111)" ng-model='model.user.movil'></input>
                       </div>
                     </div>
 
@@ -132,7 +133,7 @@
                         <button><i class="fa fa-phone"></i></button>
                       </div>
                       <div>
-                        <input type="text" placeholder="Fijo (+5492214231111)"></input>
+                        <input type="text" placeholder="Fijo (+5492214231111)" ng-model='model.user.telephone'></input>
                       </div>
                     </div>
 
@@ -141,11 +142,11 @@
                         <button><i class="fa fa-envelope"></i></button>
                       </div>
                       <div>
-                        <input type="mail" placeholder="nombre@dominio.com"></input>
+                        <input type="email" placeholder="nombre@dominio.com" ng-model='model.user.email'></input>
                       </div>
                     </div>
 
-                    <div class="item2" ng-click='startInscription()'>
+                    <div ng-if='model.userChecks.ok' class="item2" ng-click='startInscription()'>
                       <div>
                         <button><i class="fa fa-briefcase fa-2x"></i></button>
                       </div>
@@ -158,7 +159,7 @@
                     </div>
 
                 </div>
-            </div>
+            </form>
         </div>
         <!-- *********************************************
         ************ INSCRIPCIONES REALIZADAS ************
