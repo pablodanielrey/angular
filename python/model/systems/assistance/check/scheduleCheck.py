@@ -283,7 +283,9 @@ class ScheduleCheck(Check):
 
         #ordenar justificaciones por fecha de inicio
         justifications = sorted(justifications, key=lambda j: j['begin'])
-
+        print("***************_combinerJustifications*")
+        print(justifications)
+        """
         #elimino las justificaciones generales
         js = []
         for j in justifications:
@@ -291,13 +293,13 @@ class ScheduleCheck(Check):
                 if just.isJustification(j['justification_id']):
                     js.append(j)
                     break
-
+        """
 
         #combinar justificaciones con controles
         for elem in controls:
             sched = elem['schedule']
             justs = []
-            for j in js:
+            for j in justifications:
                 if ('end' not in j or j['end'] is None) and j['begin'] < sched.getEnd(date):
                     justs.append(j)
                 elif 'end' in j and j['end'] is not None and j['end'] > sched.getStart(date) and j['begin'] < sched.getEnd(date):
@@ -341,8 +343,7 @@ class ScheduleCheck(Check):
         endDate = lastSched.getEnd(date)
 
         justifications = self._getJustifications(con,userId,beginDate,endDate)       
-               
-
+ 
         #verificar si falto
         if len(allWhs) <= 0:
             if not self._isJustifiedDay(con,date,userId,justifications):
