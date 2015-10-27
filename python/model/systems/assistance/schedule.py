@@ -155,7 +155,7 @@ class Schedule:
                     (isDayOfMonth = true and sdate <= %s and extract(day from sdate) = extract(day from %s)) or \
                     (isDayOfYear = true and sdate <= %s and extract(doy from sdate) = extract(doy from %s))) and \
                     user_id = %s \
-                    order by sdate desc, sstart desc", (date, date, date, date, date, date, date, userId))
+                    order by sdate desc, sstart asc", (date, date, date, date, date, date, date, userId))
 
         scheduless = cur.fetchall()
         if scheduless is None or len(scheduless) <= 0:
@@ -228,8 +228,7 @@ class Schedule:
         if date is None:
             date = self.date.now()
 
-        import pdb
-        pdb.set_trace()
+  
         # obtengo el primer dia de la semana del date (L-0 .. D-6)
         weekday = datetime.weekday(date)
         date -= timedelta(days=weekday)
@@ -266,9 +265,6 @@ class Schedule:
     """
     def persistSchedule(self, con, userId, date, sstart, send, isDayOfWeek=False, isDayOfMonth=False, isDayOfYear=False):
         uaware = date.astimezone(pytz.utc)
-
-        import pdb
-        pdb.set_trace()
 
         cur = con.cursor()
         cur.execute('set time zone %s', ('utc',))

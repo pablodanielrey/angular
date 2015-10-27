@@ -6,7 +6,6 @@ from model.systems.assistance.schedule import Schedule
 from model.systems.assistance.logs import Logs
 from model.systems.assistance.justifications.exceptions import *
 
-import pdb
 
 """
     Boletas de salida - restricciones en horas.
