@@ -35,23 +35,8 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login) {
       student_number:''
     },
 
-    // chequeos de los campos del usuario
-    userChecks: {
-      ok: true,
-      name:null,
-      lastname:null,
-      dni:null,
-      telephone:null,
-      movil:null,
-      email:null,
-      country:null,
-      residence_city:null,
-      birth_city:null,
-      address:null,
-      genre:null,
-      birthdate: null,
-      student_number:null
-    },
+
+    showInscription: false,
 
     // inscripcion a ser subida al server.
     offer: {
@@ -68,20 +53,21 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login) {
   };
 
   // seteo los watchs.
-  $scope.$watch(function() { return $scope.model.user.name; }, function(o,n) { $scope.checkUserData(); });
-  $scope.$watch(function() { return $scope.model.user.lastname; }, function(o,n) { $scope.checkUserData(); });
-  $scope.$watch(function() { return $scope.model.user.dni; }, function(o,n) { $scope.checkUserData(); });
-  $scope.$watch(function() { return $scope.model.user.telephone; }, function(o,n) { $scope.checkUserData(); });
-  $scope.$watch(function() { return $scope.model.user.movil; }, function(o,n) { $scope.checkUserData(); });
-  $scope.$watch(function() { return $scope.model.user.email; }, function(o,n) { $scope.checkUserData(); });
-  $scope.$watch(function() { return $scope.model.user.country; }, function(o,n) { $scope.checkUserData(); });
-  $scope.$watch(function() { return $scope.model.user.residence_city; }, function(o,n) { $scope.checkUserData(); });
-  $scope.$watch(function() { return $scope.model.user.birth_city; }, function(o,n) { $scope.checkUserData(); });
-  $scope.$watch(function() { return $scope.model.user.address; }, function(o,n) { $scope.checkUserData(); });
-  $scope.$watch(function() { return $scope.model.user.genre; }, function(o,n) { $scope.checkUserData(); });
-  $scope.$watch(function() { return $scope.model.birthdate; }, function(o,n) { $scope.checkUserData(); });
-  $scope.$watch(function() { return $scope.model.student_number; }, function(o,n) { $scope.checkUserData(); });
-
+  /*
+  $scope.$watch(function() { return $scope.model.user.name; }, function(o,n) { $scope.checkUserData(o); });
+  $scope.$watch(function() { return $scope.model.user.lastname; }, function(o,n) { $scope.checkUserData(o); });
+  $scope.$watch(function() { return $scope.model.user.dni; }, function(o,n) { $scope.checkUserData(o); });
+  $scope.$watch(function() { return $scope.model.user.telephone; }, function(o,n) { $scope.checkUserData(o); });
+  $scope.$watch(function() { return $scope.model.user.movil; }, function(o,n) { $scope.checkUserData(o); });
+  $scope.$watch(function() { return $scope.model.user.email; }, function(o,n) { $scope.checkUserData(o); });
+  $scope.$watch(function() { return $scope.model.user.country; }, function(o,n) { $scope.checkUserData(o); });
+  $scope.$watch(function() { return $scope.model.user.residence_city; }, function(o,n) { $scope.checkUserData(o); });
+  $scope.$watch(function() { return $scope.model.user.birth_city; }, function(o,n) { $scope.checkUserData(o); });
+  $scope.$watch(function() { return $scope.model.user.address; }, function(o,n) { $scope.checkUserData(o); });
+  $scope.$watch(function() { return $scope.model.user.genre; }, function(o,n) { $scope.checkUserData(o); });
+  $scope.$watch(function() { return $scope.model.birthdate; }, function(o,n) { $scope.checkUserData(o); });
+  $scope.$watch(function() { return $scope.model.student_number; }, function(o,n) { $scope.checkUserData(o); });
+*/
 
 
 
@@ -118,25 +104,38 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login) {
 
   // --- modelo ---
 
-  $scope.checkUserData = function() {
-    var u = $scope.model.user;
-    var r = $scope.model.userChecks;
+  $scope.updateUserData = function() {
+    $scope.model.showInscription = $scope.checkUserData();
+    console.log('actualizarrr');
+  }
 
-    r.ok = true;
+  $scope.checkUserData = function() {
+    var ok = true;
+
+    ok = ok && $scope.dataBasic.name.$valid;
+    ok = ok && $scope.dataBasic.lastname.$valid;
+    ok = ok && $scope.dataBasic.dni.$valid;
+    ok = ok && $scope.dataBasic.student_number.$valid;
+    ok = ok && $scope.dataBasic.birthdate.$valid;
+    ok = ok && $scope.dataBasic.genre.$valid;
+
+    return ok;
+
+    /*
+    var u = $scope.model.user;
 
     if (u.name == undefined || u.name.match(/^[a-zA-Z ]*$/)) {
       $scope.model.userChecks.name = null;
     } else {
       $scope.model.userChecks.name = 'Error';
-      r.ok = false;
     }
 
     if (u.lastname == undefined || u.lastname.match(/^[a-zA-Z ]*$/)) {
       $scope.model.userChecks.lastname = null;
     } else {
       $scope.model.userChecks.lastname = 'Error';
-      r.ok = false;
     }
+    */
 
     // aca faltan mas chequeos.
 

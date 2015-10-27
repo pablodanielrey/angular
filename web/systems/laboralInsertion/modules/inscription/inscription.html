@@ -5,11 +5,11 @@
         <!-- ************************************
         ********* DATOS BASICOS ************
         ************************************* -->
-        <form class="contentDataBasic" novalidate>
+        <form class="contentDataBasic" name='dataBasic' novalidate>
             <!-- <div class="header">
                <img src="http://163.10.56.60/systems/laboralInsertion/img/logoInsercion.jpg">
             </div> -->
-            <div class="dataBasic" name="dataBasic">
+            <div class="dataBasic">
                 <div class"col">
                     <div class="item">
                       <div class="photo" placeholder="Foto"><i class="fa fa-camera-retro fa-4x"></i>Subir Foto</div>
@@ -21,8 +21,8 @@
                           <button><i class="fa fa-user"></i></button>
                         </div>
                         <div>
-                          <input type="text" placeholder="Nombres" name='nombre' ng-model='model.user.name'></input>
-                          <span ng-if='model.userChecks.name != null'>{{model.userChecks.name}}</span>
+                          <input type="text" placeholder="Nombres" name='name' ng-model='model.user.name' ng-pattern='/^[a-zA-Z ]*$/' ng-blur='updateUserData()'></input>
+                          <span ng-if='dataBasic.name.$invalid'>error</span>
                         </div>
                     </div>
 
@@ -31,7 +31,7 @@
                         <button><i class="fa fa-user"></i></button>
                       </div>
                       <div>
-                        <input type="text" placeholder="Apellidos" ng-model='model.user.lastname'></input>
+                        <input type="text" placeholder="Apellidos" name='lastname' ng-model='model.user.lastname' ng-blur='updateUserData()'></input>
                       </div>
                     </div>
 
@@ -40,7 +40,7 @@
                         <button><i class="fa fa-credit-card"></i></button>
                       </div>
                       <div>
-                        <input type="text" placeholder="DNI" ng-model='model.user.dni'></input>
+                        <input type="text" placeholder="DNI" name='dni' ng-model='model.user.dni'  ng-blur='updateUserData()'></input>
                       </div>
                     </div>
 
@@ -52,7 +52,7 @@
                         <button><i class="fa fa-graduation-cap"></i></button>
                       </div>
                       <div>
-                        <input type="text" placeholder="Legajo" ng-model='model.user.student_number'></input>
+                        <input type="text" placeholder="Legajo" name='student_number' ng-model='model.user.student_number' ng-blur='updateUserData()'></input>
                       </div>
                     </div>
 
@@ -61,7 +61,7 @@
                         <button><i class="fa fa-calendar-o"></i></button>
                       </div>
                       <div>
-                        <input type="date" placeholder="Nacimiento ( 01/01/1990 )" ng-model='model.user.birthdate'></input>
+                        <input type="date" placeholder="Nacimiento ( 01/01/1990 )" name='birthdate' ng-model='model.user.birthdate' ng-blur='updateUserData()'></input>
                       </div>
                     </div>
 
@@ -70,7 +70,7 @@
                         <button><i class="fa fa-venus-mars"></i></button>
                       </div>
                       <div>
-                        <select ng-model='model.user.genre'>
+                        <select ng-model='model.user.genre' name='genre' ng-blur='updateUserData()'>
                           <option class="selectGrey" disabled selected style='display:none;'>Género</option>
                           <option>Masculino</option>
                           <option>Femenino</option>
@@ -85,7 +85,7 @@
                         <button><i class="fa fa-map-marker"></i></button>
                       </div>
                       <div>
-                        <input type="text" placeholder="Ciudad de residencia actual" ng-model='model.user.residence_city'></input>
+                        <input type="text" placeholder="Ciudad de residencia actual" ng-model='model.user.residence_city' ng-blur='updateUserData()'></input>
                       </div>
                     </div>
 
@@ -94,7 +94,7 @@
                         <button><i class="fa fa-home"></i></button>
                       </div>
                       <div>
-                        <input type="text" placeholder="Domicilio" ng-model='model.user.address'></input>
+                        <input type="text" placeholder="Domicilio" ng-model='model.user.address' ng-blur='updateUserData()'></input>
                       </div>
                     </div>
 
@@ -103,7 +103,7 @@
                         <button><i class="fa fa-map-marker"></i></button>
                       </div>
                       <div>
-                        <input type="text" placeholder="Ciudad de procedencia" ng-model='model.user.birth_city'></input>
+                        <input type="text" placeholder="Ciudad de procedencia" ng-model='model.user.birth_city' ng-blur='updateUserData()'></input>
                       </div>
                     </div>
 
@@ -115,7 +115,7 @@
                         <button><i class="fa fa-globe"></i></button>
                       </div>
                       <div>
-                        <input type="text" placeholder="País" ng-model='model.user.country'></input>
+                        <input type="text" placeholder="País" ng-model='model.user.country' ng-blur='updateUserData()'></input>
                       </div>
                     </div>
 
@@ -124,7 +124,7 @@
                         <button><i class="fa fa-mobile"></i></button>
                       </div>
                       <div>
-                        <input type="text" placeholder="Cel. (+5492215011111)" ng-model='model.user.movil'></input>
+                        <input type="text" placeholder="Cel. (+5492215011111)" ng-model='model.user.movil' ng-blur='updateUserData()'></input>
                       </div>
                     </div>
 
@@ -133,7 +133,7 @@
                         <button><i class="fa fa-phone"></i></button>
                       </div>
                       <div>
-                        <input type="text" placeholder="Fijo (+5492214231111)" ng-model='model.user.telephone'></input>
+                        <input type="text" placeholder="Fijo (+5492214231111)" ng-model='model.user.telephone' ng-blur='updateUserData()'></input>
                       </div>
                     </div>
 
@@ -142,11 +142,11 @@
                         <button><i class="fa fa-envelope"></i></button>
                       </div>
                       <div>
-                        <input type="email" placeholder="nombre@dominio.com" ng-model='model.user.email'></input>
+                        <input type="email" placeholder="nombre@dominio.com" ng-model='model.user.email' ng-blur='updateUserData()'></input>
                       </div>
                     </div>
 
-                    <div ng-if='model.userChecks.ok' class="item2" ng-click='startInscription()'>
+                    <div ng-if='model.showInscription' class="item2" ng-click='startInscription()'>
                       <div>
                         <button><i class="fa fa-briefcase fa-2x"></i></button>
                       </div>
