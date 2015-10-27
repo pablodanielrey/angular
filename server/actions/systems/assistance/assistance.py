@@ -66,7 +66,7 @@ class AssistanceWamp(ApplicationSession):
         yield from self.register(self.getUsersWithChecks_async, 'assistance.getUsersWithChecks')
         yield from self.register(self.getSchedulesByDate_async, 'assistance.getSchedulesByDate')
         yield from self.register(self.getLogsForSchedulesByDate_async, 'assistance.getLogsForSchedulesByDate')
-        yield from self.register(self.getJustifications_async, 'assistance.justifications.getJustifications')
+        #yield from self.register(self.getJustifications_async, 'assistance.justifications.getJustifications')
 
 
 
@@ -166,9 +166,6 @@ class AssistanceWamp(ApplicationSession):
         try:
             if date is None:
                 return None;
-
-            import pdb
-            pdb.set_trace()
 
             date = self._parseDate(date)
             scheds = self.schedule.getSchedulesOfWeek(con, userId, date)

@@ -3,6 +3,7 @@ import inject
 import re
 import psycopg2
 import time
+import logging
 
 from model.exceptions import *
 
@@ -34,7 +35,8 @@ class JustificationsWamp(ApplicationSession):
         self.mail = inject.attr(Mail)
         self.users = inject.attr(Users)
         self.offices = inject.attr(Offices)
-
+        self.justifications = inject.attr(Justifications)
+  
     @coroutine
     def onJoin(self, details):
         logging.debug('registering methods')
@@ -88,7 +90,7 @@ class JustificationsWamp(ApplicationSession):
         
         con = self._getDatabase()
         try:
-            justifications = justifications.getJustificationsByUser(con, userId)
+            justifications = self.justifications.getJustificationsByUser(con, userId)
             return justifications
 
         finally:
