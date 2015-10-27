@@ -11,6 +11,24 @@
 .inscription {
 }
 
+.item .ng-invalid {
+
+  -webkit-box-shadow: 0 0 3px 2px #d43f3a !important;
+   -moz-box-shadow: 0 0 3px 2px #d43f3a !important;
+        box-shadow: 0 0 3px 2px #d43f3a !important;
+}
+
+
+/*.item .ng-valid {
+  background-image: url("\f00d");
+  content: "\f00d";
+}*/
+
+.item .invalidError {
+  color:#d43f3a;
+  font-size: 13px;
+}
+
 .inscription .header {
   display: flex;
   display: -webkit-flex; /* Safari */
