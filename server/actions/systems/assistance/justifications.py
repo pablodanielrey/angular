@@ -2,6 +2,7 @@
 import logging
 import inject
 import psycopg2
+import datetime
 
 from model.exceptions import *
 from model.config import Config
@@ -10,6 +11,8 @@ from model.systems.assistance.justifications.justifications import Justification
 import asyncio
 from asyncio import coroutine
 from autobahn.asyncio.wamp import ApplicationSession
+
+
 
 
 class JustificationsWamp(ApplicationSession):
@@ -23,12 +26,19 @@ class JustificationsWamp(ApplicationSession):
         self.justifications = inject.instance(Justifications)
 
 
+
+
     @coroutine
     def onJoin(self, details):
         logging.debug('registering methods')
         yield from self.register(self.getJustifications_async, 'assistance.justifications.getJustifications')
         yield from self.register(self.getJustificationsByUser_async, 'assistance.justifications.getJustificationsByUser')
-        yield from self.register(self.getJustificationsStock_async, 'assistance.justifications.getJustificationsStock')
+        yield from self.register(self.getJustificationsStockByUser_async, 'assistance.justifications.getJustificationsStockByUser')
+        #yield from self.register(self.getJustificationsRequestsByDate_async, 'assistance.justifications.getJustificationsRequestsByDate')
+
+
+
+
 
 
     def _getDatabase(self):
@@ -62,11 +72,11 @@ class JustificationsWamp(ApplicationSession):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.getJustifications, sid)
         return r
-        
+
+
+
           
-          
-          
-        
+
     def getJustificationsByUser(self, userId):        
         """
          " Obtener justificaciones del usuario
@@ -90,24 +100,29 @@ class JustificationsWamp(ApplicationSession):
 
 
 
-     def getJustificationsStock(self, sid, userId, justificationId, date, period):
+
+
+
+    def getJustificationsStockByUser(self, sid, userId, justificationId, date, period):   
         """
          " Obtener stock de justificacion para una determinada fecha
          " @param userId Identificador de usuario
          """
+        dateAux = datetime.datetime.strptime(date, "%Y-%m-%dT%H:%M:%S")
         con = self._getDatabase()
         try:
-            ''' .... codigo aca ... '''
-            con.commit()
-            return True
+            justificationsStock = self.justifications.getJustificationStock(con, userId, justificationId, dateAux, period)
+            return justificationsStock
 
         finally:
             con.close()
 
     @coroutine
-    def getJustificationsStock_async(self, sid, userId, justificationId, date, period):
+    def getJustificationsStockByUser_async(self, sid, userId, justificationId, date, period):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getJustificationsStock, sid, userId, justificationId, date, period)
+        r = yield from loop.run_in_executor(None, self.getJustificationsStockByUser, sid, userId, justificationId, date, period)
         return r
+
+
 
 
