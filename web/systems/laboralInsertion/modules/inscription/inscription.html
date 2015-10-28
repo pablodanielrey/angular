@@ -203,8 +203,11 @@
                       <div>
                         <select  ng-model='model.user.mail' name='mail' ng-blur='updateUserData()' required>
                           <option class="selectGrey" disabled selected style='display:none;'>Mail</option>
+                          <option ng-repeat='m in model.mails' value='{{m.id}}'>{{m.email}}</option>
+                          <!--
                           <option>pablo@econo.unlp.edu.ar</option>
                           <option>pablodanielrey@gmail.com</option>
+                          -->
 
                         </select>
 

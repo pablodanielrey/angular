@@ -2,9 +2,9 @@ angular
   .module('mainApp')
   .controller('InscriptionCtrl', InscriptionCtrl);
 
-InscriptionCtrl.inject = ['$rootScope', '$scope', '$wamp', 'LaboralInsertion', 'Login']
+InscriptionCtrl.inject = ['$rootScope', '$scope', '$wamp', 'LaboralInsertion', 'Login', 'Users']
 
-function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login) {
+function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Users) {
 
   $scope.degrees = ['Contador Público', 'Licenciatura en Administración', 'Licenciatura en Turismo', 'Licenciatura en Economía', 'Tecnicatura en Cooperativas'];
   $scope.workTypes = ['Pasantía','Full-Time','Programa estudiantes avanzados y jovenes profesionales'];
@@ -20,13 +20,15 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login) {
 
     tieneEmail: true,
 
+    mails: [],
+
     // datos de usuario
     user: {
-      name:'Pablo Daniel',
-      lastname:'Rey',
-      dni:'27294557',
-      telephone:'+5492214237467',
-      movil:'+5492215032684',
+      name:'',
+      lastname:'',
+      dni:'',
+      telephone:'',
+      movil:'',
       email:'',
       country:'Argentina',
       residence_city:'Casco Urbano (LP)',
@@ -106,9 +108,32 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login) {
 
   // --- modelo ---
 
+  $scope.formatUserToView = function(user) {
+    user.birthdate = new Date(user.birthdate);
+  }
+
+  $scope.findUserData = function() {
+    var uid = Login.getUserId();
+    Users.findUser(uid, function(user) {
+      console.log(user);
+      $scope.formatUserToView(user);
+      $scope.model.user = user;
+    }, function(err) {
+      console.log(err);
+    })
+
+    Users.findMails(uid, function(mails) {
+      console.log(mails);
+      $scope.model.mails = mails;
+    }, function(error) {
+      console.log(err);
+    });
+
+  }
+
   $scope.updateUserData = function() {
     $scope.model.showInscription = $scope.checkUserData();
-    console.log('actualizarrr');
+    console.log($scope.model.user);
   }
 
   $scope.checkUserData = function() {
@@ -307,6 +332,7 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login) {
 
 
   $scope.initialize = function(){
+    $scope.findUserData();
     $scope.getInscriptions();
   };
 
