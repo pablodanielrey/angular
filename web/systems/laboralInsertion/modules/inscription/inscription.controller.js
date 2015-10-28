@@ -18,6 +18,7 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login) {
     registrations: ['pantalla1','pantalla2','pantalla3','pantalla4','pantalla5','pantalla6','pantalla7'],
     inscriptionsData: [],
 
+<<<<<<< HEAD
     tieneEmail: true,
 
     // datos de usuario
@@ -25,6 +26,13 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login) {
       name:'Pablo Daniel',
       lastname:'Rey',
       dni:'27294557',
+=======
+    // datos de usuario
+    user: {
+      name:'',
+      lastname:'',
+      dni:'',
+>>>>>>> 1dbf334de17851751d9a0be350303fe7855bc3d2
       telephone:'',
       movil:'',
       email:'',
