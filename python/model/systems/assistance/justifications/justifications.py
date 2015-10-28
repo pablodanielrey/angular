@@ -261,7 +261,6 @@ class Justifications:
         users es una lista de ids de usuarios que piden los requests, si = None o es vacío entonces retorna todas.
     '''
     def getJustificationRequestsByDate(self,con,status=None,users=None,start=None,end=None):
-
         logging.debug('buscando justifications : {}, {}, {}, {}'.format(status,users,start,end))
 
         cur = con.cursor()

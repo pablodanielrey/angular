@@ -1,5 +1,10 @@
-import camabio, cserial
-import sys, time, logging
+import sys
+sys.path.append('../')
+
+import camabio
+import cserial
+import time
+import logging
 
 """
 Command Packet

@@ -109,7 +109,9 @@ class LoginWamp(ApplicationSession):
     def login(self, username, password):
         con = self._getDatabase()
         try:
-            return self.loginModel.login(con, username, password)
+            sid = self.loginModel.login(con, username, password)
+            con.commit()
+            return sid
 
         except Exception as e:
             logging.exception(e)

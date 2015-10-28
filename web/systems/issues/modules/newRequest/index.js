@@ -1,125 +1,168 @@
 
+/**
+ * Controlador asociado a la interfaz para agregar y visualizar issues
+ * @param {type} param1
+ * @param {type} param2
+ */
+app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "Notifications", "Issue", "Users", function ($scope, $timeout, $window, Module, Notifications, Issue, Users) {
 
-app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "Notifications", "Issue", "IssueClient", function ($scope, $timeout, $window, Module, Notifications, Issue, IssueClient) {
+  /***** MANIPULACION DE ESTILOS ******/
+  $scope.style = null;
+  $scope.styles = ['none','displayVisibility','displayCreateChild'];
 
+  $scope.setStyle = function($index) {
+    $scope.style = $scope.styles[$index];
+  };
+
+  $scope.setNodeStyleByState = function(state) {
+     switch(state){
+      case "COMMENT": return "commentOrder";
+      default: return "normal";
+
+    }
+  };
+
+
+  /***** ATRIBUTOS ******/
   $scope.request = null; //descripcion de un nuevo nodo que sera agregado a la raiz
-  $scope.data = []; //todos los nodos
-  
+  $scope.data = []; //raiz del arbol de nodos
+  $scope.model = {
+    newNode: null
+  }
+
   /**
-   * Inicializar nodo
+   * Inicializar nodo con valores por defecto. Cuando se crea un nuevo nodo en el arbol se inicializa y guarda en la base con los siguientes parametros
    */
-  $scope.initializeNode = function(){
+  $scope.initializeNode = function(status){
     return {
       id: null,
       request: null,
       created: new Date(),
-      requestorId: $scope.global.sessionUserId,
-      officeId: "8407abb2-33c2-46e7-bef6-d00bab573306",
+      requestorId: null,
+      office_id: "8407abb2-33c2-46e7-bef6-d00bab573306",
       relatedRequestId:null,
       priority:null,
-      visibility:null
+      collapsedDescription: false,
+      state: status,
+      style: $scope.setNodeStyleByState(status)
     };
   };
- 
 
-  $scope.expandInput = function(model){
-      var nodeData = model.$modelValue;
+
+
+  /**
+   * Incrementar espacio de la descripcion del nodo al hacer click (textarea) para facilitar el ingreso de datos
+   * @param {scope del nodo} nodeScope
+   */
+  $scope.expandTextarea = function(nodeScope){
+      var nodeData = nodeScope.$modelValue;
       nodeData.expanded = !nodeData.expanded ;
   };
 
-  $scope.expandDescription = function(model){
-      var nodeData = model.$modelValue;
-      nodeData.descriptionExpanded = !nodeData.descriptionExpanded ;
+
+
+  /**
+   * Interruptor para visualizar subnodos
+   * @param {type} nodeScope
+   */
+  $scope.toggleNode = function (nodeScope) {
+    nodeScope.toggle();
   };
 
-  $scope.toggleItem = function (model) {
-    model.toggle();
+
+
+  /**
+   * Interruptor para visualizar descripcion del nodo
+   * @param {type} nodeScope
+   */
+  $scope.toggleNodeData = function (nodeScope) {
+    var nodeData = nodeScope.$modelValue;
+    nodeData.collapsedDescription = !nodeData.collapsedDescription
   };
 
-  /*
-  $scope.newSubItem = function(model) {
-    model.expand();
-    var nodeData = model.$modelValue;
-    nodeData.nodes.push({
-      "id": (nodeData["id"]+1),
-      "title": "new" + (nodeData["id"]+1),
-      "nodes": [],
-      "expanded":false,
-      "descriptionExpanded":false
-    });
-  };*/
-  
-  
-  $scope.addNode = function(model){
-    var nodeData = model.$modelValue;
 
-    var newNode = $scope.initializeNode();
-    newNode.relatedRequestId = nodeData.id;
 
-    Issue.newRequest(newNode,
-      function(data) { },
+
+  $scope.expandDescription = function(nodeScope){
+    var nodeData = nodeScope.$modelValue;
+    nodeData.descriptionExpanded = !nodeData.descriptionExpanded ;
+  };
+
+
+  /**
+   * Actualizar los datos de un nodo (solo se actualizan los datos y no la posicion en el arbol)
+   * @param {type} nodeScope
+   * @returns {undefined}
+   */
+  $scope.updateIssueData = function(nodeData){
+    Issue.updateIssueData(nodeData, null,
+      function(data) {$scope.getIssues();},
       function(error) { Notifications.message(error); }
     );
   };
-  
-  
+
+
+
+  $scope.addNode = function(nodeData){
+    $scope.requestNewNode = "";
+    $scope.setStyle(2);
+
+    $scope.model.newNode = $scope.initializeNode("PENDING");
+    $scope.model.newNode.parent_id = nodeData.id;
+    $scope.model.newNode.request = $scope.request;
+    $scope.model.newNode.visibilities = nodeData['visibilities'];
+  };
+
+  $scope.addComment = function(nodeData){
+    $scope.requestNewNode = "";
+    $scope.setStyle(2);
+
+    $scope.model.newNode = $scope.initializeNode("COMMENT");
+    $scope.model.newNode.parent_id = nodeData.id;
+    $scope.model.newNode.request = $scope.request;
+    $scope.model.newNode.visibilities = nodeData['visibilities'];
+  };
+
+
+  $scope.saveChild = function() {
+    $scope.model.newNode.request = $scope.requestNewNode;
+    Issue.newIssue($scope.model.newNode,$scope.model.newNode['state'],$scope.model.newNode['visibilities'],
+      function(data) {
+        $scope.setStyle(0);
+        $scope.getIssues();
+        $scope.request = null;
+      },
+      function(error) {
+        $scope.setStyle(0);
+        Notifications.message(error);
+      }
+    );
+  }
+
+  $scope.cancelChild = function() {
+    $scope.setStyle(0);
+  }
+
   $scope.createNode = function(){
-    var newNode = $scope.initializeNode();
+    var newNode = $scope.initializeNode("PENDING");
     newNode.request = $scope.request;
- 
-    Issue.newRequest(newNode,
-      function(data) {$scope.request = null; },
-      function(error) { Notifications.message(error); }
-    );
-  };
-  
-  
-  $scope.deleteNode = function(node){
-    
-    Issue.deleteIssue(node.id,
-      function(data){ },
+    off = $scope.model.offices[0];
+    newNode.visibilities = [{'office_id':off.id,'tree':false,'type':'OFFICE'}]
+
+    Issue.newIssue(newNode,newNode['state'],newNode['visibilities'],
+      function(data) {$scope.getIssues();$scope.request = null; },
       function(error) { Notifications.message(error); }
     );
   };
 
-  /*
-  $scope.comment = function(model) {
-    model.expand();
+
+  $scope.deleteNode = function(model){
     var nodeData = model.$modelValue;
-    nodeData.nodes.push({
-      "id": (nodeData["id"]+1),
-      "title": "comentario",
-      "nodes": [],
-      "expanded":false,
-      "descriptionExpanded":false
-    });
-  };*/
-
-  /*$scope.requestState = {
-    created: new Date(),
-    state: "PENDING",
-    request_id:null,
-    user_id:$scope.global.sessionUserId,
-  };*/
-
-
-
-
-
-
-  $scope.$on('IssueInsertedEvent', function(event, node) { 
-    if(node.relatedRequestId){
-      IssueClient.addChild($scope.data, node);
-    } else {
-      $scope.data.push(node);
-    }
-  });
-  
-  
-  $scope.$on('IssueDeletedEvent', function(event, node) { 
-    IssueClient.deleteNode($scope.data, node);
-    
-  });
+    Issue.deleteIssue(nodeData.id,
+      function(data){ $scope.getIssues();},
+      function(error) { Notifications.message(error); }
+    );
+  };
 
 
 
@@ -128,38 +171,81 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
    * Obtener lista de tareas
    */
   $scope.getIssues = function(){
-    Issue.getIssuesByUser($scope.global.sessionUserId,
+    Issue.getIssues(null,
       function(data) {
-        $scope.data = IssueClient.generateTree(data);
+        $scope.data = data;
+        for (var i = 0; i< data.length; i++) {
+          $scope.loadDataNode(data[i]);
+        }
       },
-      function(error) { 
-        Notifications.message(error); 
+      function(error) {
+        Notifications.message(error);
       }
     );
   };
 
 
 
+  $scope.loadDataNode = function(node) {
+    Users.findUser(node.requestor_id,
+      function(user) {
+        node.requestor = user.name + " " + user.lastname;
+      },
+      function(error) {
+      }
+    );
+
+    node.collapsedDescription = false;
+    node.style = $scope.setNodeStyleByState(node.state);
+    for (var i = 0; i < node.childrens.length; i++) {
+      $scope.loadDataNode(node.childrens[i]);
+    }
+  }
+
+
+
+
+
+
+  /*
+    ABRIR LA PANTALLA DE VISIBILIDAD DE GRUPO
+  */
+  $scope.openVisibility = openVisibility;
+  function openVisibility(issue) {
+    $scope.$broadcast('displayVisbilityEvent',issue);
+    $scope.setStyle(1);
+  }
+
+
   /******************
    * INICIALIZACION *
    ******************/
-  $timeout(function() {
-    Module.authorize('ADMIN-ASSISTANCE,USER-ASSISTANCE',
-      function(response){
-        if (response !== 'granted') {
-          Notifications.message("Acceso no autorizado");
-          $window.location.href = "/#/logout";
-        }
-        $scope.global.sessionUserId = Module.getSessionUserId();
+
+  $scope.$on('$viewContentLoaded', function(event) {
+   $scope.initialize();
+  });
+
+  $scope.$on('saveVisibilityEvent', function(event,issue,selecteds) {
+    $scope.setStyle(0);
+    issue.visibilities = selecteds;
+    Issue.updateIssueData(issue, null,
+      function(response) {
         $scope.getIssues();
       },
-      function(error){
+      function(error) {
         Notifications.message(error);
-        $window.location.href = "/#/logout";
       }
     );
-  
-  
-  }, 0);
+  });
+
+  $scope.$on('cancelVisibilityEvent', function(event) {
+    $scope.setStyle(0);
+  });
+
+  $scope.initialize = initialize;
+  function initialize() {
+    $scope.model.newNode = null;
+    $scope.getIssues();
+  }
 
 }]);

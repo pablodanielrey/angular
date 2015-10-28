@@ -15,6 +15,29 @@ app.service('Utils', function() {
   };
 
 
+  /**
+   * Union de objetos o arrays: Se recorren los elementos de los objetos, aquellos elementos del segundo objeto cuyo indice no se encuentre en el primero seran agregados al primero
+   * @param {type} objectMain Objeto principal
+   * @param {type} objectAux Objeto auxiliar
+   */
+  this.joinObjects = function(objectMain,objectAux){
+    for(var x in objectAux){
+      var exists = false;
+      for(var y in objectMain){
+        if(x == y) {
+          exists = true;
+          break;
+        }
+      }
+      
+      if(exists){
+        exists = false;    
+      } else{
+        objectMain[x] = objectAux[x];
+      }
+    }
+  };
+
   this.filter = function(f,a) {
     var r = [];
     for (var i = 0; i < a.length; i++) {

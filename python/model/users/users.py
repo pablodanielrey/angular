@@ -1,10 +1,74 @@
 # -*- coding: utf-8 -*-
 import uuid
 import psycopg2
+import inject
+import hashlib
+import re
 
+from model.config import Config
 from model.objectView import ObjectView
+from model.mail.mail import Mail
 
 class Users:
+    def __init__(self, config=None):
+        self.serverConfig = inject.instance(Config)
+        self.mail = inject.instance(Mail)
+
+    '''
+     ' Enviar email de confirmacion: Define un hash y envia un email de confirmacion al usuario con el hash
+     ' @param con Conexion con la base de datos
+     ' @param emailId Identificacion del email
+     '''
+    def sendEmailConfirmation(self, con, emailId):
+        email = self.findMail(con, emailId)
+        if(email is None):
+            raise Exception("Email inexistente")
+
+        hash = hashlib.sha1((email['id'] + email['user_id']).encode('utf-8')).hexdigest()
+        email['hash'] = hash
+
+        self.updateMail(con,email)
+
+        From = self.serverConfig.configs['mail_confirm_mail_from']
+        subject = self.serverConfig.configs['mail_confirm_mail_subject']
+        To = email['email']
+        template = self.serverConfig.configs['mail_confirm_mail_template']
+
+        url = self.serverConfig.configs['mail_confirm_mail_url']
+        url = re.sub('###HASH###', hash, url)
+
+        replace = [
+            ('###URL###',url)
+        ]
+
+        self.mail.sendMail(From,[To],subject,replace,html=template)
+
+        return True
+
+
+    def confirmEmail(self,con,hash):
+        email = self.findMailByHash(con, hash)
+        if(email is None):
+            raise Exception("Email inexistente")
+
+        email['confirmed'] = True
+        email['hash'] = None
+
+        self.updateMail(con,email)
+
+        From = self.serverConfig.configs['mail_confirm_mail_from']
+        subject = self.serverConfig.configs['mail_confirm_mail_subject']
+        To = email['email']
+        template = self.serverConfig.configs['mail_confirm_mail_template']
+
+        url = self.serverConfig.configs['mail_mail_confirmed_template']
+        url = re.sub('###HASH###', hash, url)
+
+        replace = [
+            ('###URL###',url)
+        ]
+
+        self.mail.sendMail(From,[To],subject,replace,html=template)
 
 
     def createMail(self,con,data):
@@ -75,7 +139,7 @@ class Users:
 
     def createUser(self,con,data):
         uid = str(uuid.uuid4())
-        if 'id' in data:
+        if 'id' in data and data['id'] is not None:
             uid = data['id']
 
         rreq = (uid,
@@ -93,6 +157,11 @@ class Users:
         cur.execute('insert into profile.users (id,dni,name,lastname,city,country,address,genre,birthdate,residence_city,version) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)', rreq)
         return uid
 
+    '''
+     ' Persistir usuario: En funcion del id del usuario crea o actualiza el usuario
+     ' @param user Datos del usuario
+     ' @return Id del usuario persistido
+     '''
     def updateUser(self,con,user):
         cur = con.cursor()
 
@@ -111,6 +180,7 @@ class Users:
                 if cur.rowcount <= 0:
                     raise Exception()
 
+
         #actualizar telefonos del usuario
         cur.execute('delete from profile.telephones where user_id = %s', (userId,))
 
@@ -119,6 +189,8 @@ class Users:
                  telephone_id = str(uuid.uuid4())
                  rreq = (telephone_id, user['id'], v["number"], v["type"])
                  cur.execute('INSERT INTO profile.telephones (id, user_id, number, type) VALUES (%s, %s, %s, %s);', rreq)
+
+        return userId
 
 
     def findUserByDni(self,con,dni):
@@ -146,6 +218,21 @@ class Users:
             rdataTelephones.append(self.convertTelephoneToDict(dataTelephone))
         rdataUser["telephones"] = rdataTelephones
         return rdataUser
+        
+    '''
+     ' Buscar usuarios a traves de una lista de ids
+     '''
+    def findUsersByIds(self,con,ids):
+        cur = con.cursor()
+        cur.execute('select id,dni,name,lastname,city,country,address,genre,birthdate,residence_city,version from profile.users where id IN %s', (tuple(ids),))
+        data = cur.fetchall()
+               
+        rdata = []
+        for d in data:
+            rdata.append(self.convertUserToDict(d))
+        return rdata
+        
+     
 
 
     def listUsers(self, con):
@@ -155,6 +242,20 @@ class Users:
         rdata = []
         for d in data:
             rdata.append(self.convertUserToDict(d))
+        return rdata
+
+    '''
+     ' Listar ids de usuarios
+     ' @param con Conexion con la base de datos
+     ' @return Lista de ids de usuarios
+     '''
+    def listUsersIds(self, con):
+        cur = con.cursor()
+        cur.execute('select id from profile.users')
+        data = cur.fetchall()
+        rdata = []
+        for d in data:
+            rdata.append(d[0])
         return rdata
 
 

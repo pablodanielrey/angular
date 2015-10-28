@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
-import calendar, datetime, logging, uuid
+import calendar, datetime, logging, uuid, pytz
 import inject
+
+from model.systems.assistance.date import Date
+from model.systems.assistance.logs import Logs
 
 from model.systems.assistance.justifications.exceptions import *
 
@@ -11,11 +14,16 @@ from model.systems.assistance.justifications.BSJustification import BSJustificat
 from model.systems.assistance.justifications.CJustification import CJustification
 from model.systems.assistance.justifications.LAOJustification import LAOJustification
 
-
+from model.systems.assistance.schedule import Schedule
+from model.systems.assistance.schedule import ScheduleData
 
 class Overtime:
 
     offices = inject.attr(Offices)
+    date = inject.attr(Date)
+    schedule = inject.attr(Schedule)
+    logs = inject.attr(Logs)
+
 
     """
         obtiene el ultimo estado del pedido de horas extras indicado por reqId
@@ -54,28 +62,115 @@ class Overtime:
 
 
 
-    """
-        obtiene todas los pedidos de horas extras con cierto estado
-        status es el estado a obtener. en el caso de que no sea pasado entonces se obtienen todas, en su ultimo estado
-        users es una lista de ids de usuarios para los que se piden los requests, si = None o es vacío entonces retorna todas.
-        requestors es una lista de ids de usuarios que piden los requests, si = None o es vacío entonces no se toma en cuenta.
-    """
-    def getOvertimeRequests(self,con,status=[],requestors=None,users=None):
+
+    def getWorkedOvertime(self, con, userId, date):     
+        '''
+        Definir horas extras trabajadas para una determinada fecha
+        @param con Conexion con la base de datos
+        @param userId Identificacion de usuario
+        @param date Fecha para la cual se quiere calcular el tiempo extra trabajado
+        '''
+        
+        #calcular overtimes del dia
+        overtimeRequests = self.getOvertimeRequests(con, ['APPROVED'], None, [userId], date)
+      
+        if len(overtimeRequests) == 0:
+            return 0
+
+        #definir fecha inicial para el calculo de logs
+        schedules = None
+        dateAux = date
+      
+        while schedules is None or len(schedules) == 0:
+            dateAux = dateAux - datetime.timedelta(days=1)
+            schedules = self.schedule.getSchedule(con, userId, dateAux)
+
+        datetimeAux = schedules[-1].getEnd(dateAux)
+        datetimePre = datetimeAux + datetime.timedelta(hours=3) #FALTARIA CALCULAR EL MAXIMO ENTRE EL OVERTIME DEFINIDO ENTRE dateAux y date -1 (dia) (SI EXISTE) y datetimeAux
+
+        
+        #definir fecha final para el calculo de logs
+        schedules = None
+        dateAux = date
+        
+        while schedules is None or len(schedules) == 0:
+            dateAux = dateAux + datetime.timedelta(days=1)
+            schedules = self.schedule.getSchedule(con, userId, dateAux)
+            
+        datetimeAux = schedules[0].getStart(dateAux)
+        datetimePos = datetimeAux - datetime.timedelta(hours=3) #FALTARIA CALCULAR EL MINIMO ENTRE EL OVERTIME DEFINIDO ENTRE date + 1 dia Y dateAux (SI EXISTE) y datetimeAux
+
+        
+        #obtener worked hours en base a las fechas definidas de los schedules anterior y posterior
+        logs = self.logs.findLogs(con, userId, datetimePre, datetimePos)
+        (workedHours, attlogs) = self.logs.getWorkedHours(logs)
+     
+        sum = 0
+        for o in overtimeRequests:
+            for wh in workedHours:
+                if(wh["start"] is None or wh["end"] is None):
+                    continue
+
+                if (wh["start"] <= o["begin"] and wh["end"] >= o["begin"]) or (wh["end"] <= o["end"] and wh["start"] >= o["begin"]):
+                    start = o["begin"] if (o["begin"] - wh["start"]).total_seconds() >= 0 else wh["start"]
+                    end = o["end"] if (o["end"] - wh["end"]).total_seconds() <= 0 else wh["end"]
+
+                else:
+                    continue  
+                                        
+                sum += (end - start).total_seconds()
+
+        return sum
+
+
+
+    def getOvertimeRequests(self, con, status=[], requestors=None, users=None, begin=None, end=None):
+        """
+            obtiene todas los pedidos de horas extras con cierto estado
+            status es el estado a obtener. en el caso de que no sea pasado entonces se obtienen todas, en su ultimo estado
+            users es una lista de ids de usuarios para los que se piden los requests, si = None o es vacío entonces retorna todas.
+            requestors es una lista de ids de usuarios que piden los requests, si = None o es vacío entonces no se toma en cuenta.
+        """
 
         statusR = self._getOvertimesInStatus(con,status)
-        logging.debug('in status = {} req {}'.format(status,statusR))
+        #logging.debug('in status = {} req {}'.format(status,statusR))
         if len(statusR) <= 0:
             return []
 
-        rids = tuple(statusR.keys())
+        ids = tuple(statusR.keys())
+        params = (ids, )
+
+        sql = "select id,user_id,requestor_id,jbegin,jend,reason from assistance.overtime_requests where id in %s"
+
+
+        if users is not None and len(users) > 0:
+            users = tuple(users)
+            params = params + (users, )
+            sql += " AND user_id IN %s"
+
+        if requestors is not None and len(requestors) > 0:
+            requestors = tuple(requestors)
+            params = params + (requestors, )
+            sql += " AND requestor_id in %s"
+
+        if begin is not None and end is None:
+            params = params + (begin, )
+            sql += " AND jbegin::date = %s"
+
+        if begin is not None and end is not None:
+            params = params + (begin, end )
+            sql += " AND jbegin >= %s AND jend <= %s"
+
+        if end is not None and begin is None:
+            params = params + (end, )
+            sql += " AND jend::date = %s"
+
+  
+        sql += ";"
+
 
         cur = con.cursor()
-        if (users is None or len(users) <= 0) and (requestors is None or len(requestors) <= 0):
-            cur.execute('select id,user_id,requestor_id,jbegin,jend,reason from assistance.overtime_requests where id in %s',(rids,))
-        elif (users is None or len(users) <= 0):
-            cur.execute('select id,user_id,requestor_id,jbegin,jend,reason from assistance.overtime_requests where id in %s and requestor_id in %s',(rids,tuple(requestors)))
-        elif (requestors is None or len(requestors) <= 0):
-            cur.execute('select id,user_id,requestor_id,jbegin,jend,reason from assistance.overtime_requests where id in %s and user_id in %s',(rids,tuple(users)))
+        cur.execute(sql, params)
 
 
         if cur.rowcount <= 0:
@@ -98,6 +193,7 @@ class Overtime:
 
         return requests
 
+        return []
 
 
     """

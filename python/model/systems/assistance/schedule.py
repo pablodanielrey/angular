@@ -1,13 +1,105 @@
 # -*- coding: utf-8 -*-
-import psycopg2, inject, uuid
-import datetime, pytz, calendar
+import psycopg2
+import inject
+import uuid
+from datetime import datetime, date, time, timedelta
+
+import pytz
+import calendar
 import logging
+import pdb
 
 from model.exceptions import *
 
 from model import utils
 from model.systems.assistance.date import Date
 from model.systems.assistance.logs import Logs
+
+
+
+class ScheduleData:
+    ''' representa datos del schedule '''
+
+    def __init__(self, s, tzinfo, previousDate = None, nextDate = None):
+        '''
+        @param s Datos del schedule
+        @param tzinfo Zona horaria
+        @param previousDate Fecha del schedule anterior
+        @param nextDate Fecha del schedule posterior
+        '''
+
+        self.id = s['id']
+        self.date = s['date']
+        self.start = s['start']
+        self.end = s['end']
+        self.isDayOfWeek = s['isDayOfWeek']
+        self.isDayOfMonth = s['isDayOfMonth']
+        self.isDayOfYear = s['isDayOfYear']
+        self.userId = s["userId"]
+
+        self.previousDate = previousDate
+        self.nextDate = nextDate
+        self.tzinfo = tzinfo
+
+    def toMap(self,date):
+        return {'start':self.getStart(date),'end':self.getEnd(date)}
+
+    def _checkDate(self, date):
+        return True #por el momento no hacemos el chequeo, retornamos True
+
+        if self.isDayOfWeek:
+            d = datetime.date.weekday(self.date)
+            d1 = datetime.date.weekday(date)
+            return (d1 == d)
+
+        ''' ... lo mismo con dia del mes y dia del año ... '''
+
+        if (previousDate > date) or (nextDate > date):
+            return False
+        return True
+
+    def __cmp__(self, other):
+
+        r = other.date.__cmp__(self.date)
+        if r is not 0:
+          return r
+
+        if self.start < other.start:
+          return -1
+
+        if self.start == other.start:
+          return 0
+
+        if self.start > other.start:
+          return 1
+
+
+
+    def getStart(self, date):
+        ''' retorna el datetime del inicio del schedule '''
+
+        if not self._checkDate(date):
+            return None
+
+        zero = time(hour=0, minute=0, second=0)
+        dzero = datetime.combine(date, zero)
+        start = dzero + timedelta(seconds=self.start)
+        start.replace(tzinfo=self.tzinfo)
+        start = start.replace(tzinfo=self.tzinfo)
+        return start
+
+    def getEnd(self, date):
+        ''' retorna el datetime del fin del schedule '''
+
+        if not self._checkDate(date):
+            return None
+
+        zero = time(hour=0, minute=0, second=0)
+        dzero = datetime.combine(date, zero)
+        end = dzero + timedelta(seconds=self.end)
+        end = end.replace(tzinfo=self.tzinfo)
+        return end
+
 
 class Schedule:
 
@@ -16,178 +108,105 @@ class Schedule:
 
 
     """
-        Retorna la lista de logs determinada que deber�a tener un usuario para una fecha espec�fica,
+        Retorna la lista de logs determinada que deberia tener un usuario para un schedule,
         se tiene en cuenta el horario de la persona en la fecha y la fecha siguiente para obtener los logs correctos.
+        @param schedules Lista de schedules Los schedules de la lista deben tener la misma fecha a consultar y pertenecer al mismo usuario
+        @param date Fecha para la cual se quieren obtener los schedules
     """
-    def getLogsForSchedule(self,con,userId,date):
-
-        schedules = self.getSchedule(con,userId,date)
-        if schedules is None:
+    def getLogsForSchedule(self, con, schedules, date):
+        if schedules is None or len(schedules) <= 0:
             return []
 
-        if len(schedules) <= 0:
-            return []
+        #definir userId
+        userId = schedules[0].userId
 
-        start = schedules[0]['start']
-        end = schedules[-1]['end']
+        #definir timestamps de inicio y finalizacion
+        start = schedules[0].getStart(date)
+        end = schedules[-1].getEnd(date)
 
-        count = 0
-        schedules2 = []
-        days = 1
-        while (count < 10) and (schedules2 is None or len(schedules2) <= 0):
-            date2 = date + datetime.timedelta(days=days)
-            schedules2 = self.getSchedule(con,userId,date2)
-            days = days + 1
-            count = count + 1
+        deltaStart = start - timedelta(hours=3)
+        deltaEnd = end + timedelta(hours=3)
 
-        if schedules2 is None or len(schedules2) <= 0:
-            start2 = end + datetime.timedelta(hours=24)
-        else:
-            start2 = schedules2[0]['start']
-
-
-        """
-        schedules2 = []
-        days = 1
-        count = 0
-        while (count < 10) or (schedules2 is None or len(schedules2) <= 0):
-            date2 = date - datetime.timedelta(days=days)
-            schedules2 = self.getSchedule(con,userId,date2)
-            days = days + 1
-            count = count + 1
-
-        if schedules2 is None or len(schedules2) <= 0:
-            end2 = start - datetime.timedelta(hours=24)
-        else:
-            end2 = schedules2[0]['end']
-        """
-
-
-        deltaEnd = end + datetime.timedelta(seconds=((start2 - end).total_seconds() / 2))
-        """
-        deltaStart = start - datetime.timedelta(seconds=((start - end2).total_seconds() / 2))
-        """
-        deltaStart = start - datetime.timedelta(hours=3)
-
-        logs = self.logs.findLogs(con,userId,deltaStart,deltaEnd)
+        logs = self.logs.findLogs(con, userId, deltaStart, deltaEnd)
 
         return logs
-
-
-
 
 
     """
         obtiene tods los schedules para un usuario en determinada fecha, solo deja los actuales, tiene en cuenta el historial ordenado por date
         la fecha esta en UTC
     """
-    def getSchedule(self,con,userId,date):
-        if self.date.isNaive(date):
-          raise Exception('date is naive')
-
-        date = self.date.awareToUtc(date) #trabajo con las fechas en utc
-
+    def getSchedule(self, con, userId, date):
         cur = con.cursor()
-        cur.execute('set time zone %s',('utc',))
+        cur.execute('set time zone %s', ('utc',))
 
-        """ obtengo todos los schedules que son en la fecha date del par�metro """
-        cur.execute("select sstart, send, date from assistance.schedule where \
-                    ((date = %s) or \
-                    (isDayOfWeek = true and date <= %s and extract(dow from date) = extract(dow from %s)) or \
-                    (isDayOfMonth = true and date <= %s and extract(day from date) = extract(day from %s)) or \
-                    (isDayOfYear = true and date <= %s and extract(doy from date) = extract(doy from %s))) and \
+        """ obtengo todos los schedules que son en la fecha date del parámetro """
+        cur.execute("select id, sdate, sstart, send, isDayOfWeek, isDayOfMonth, isDayOfYear from assistance.schedule where \
+                    ((sdate = %s) or \
+                    (isDayOfWeek = true and sdate <= %s and extract(dow from sdate) = extract(dow from %s)) or \
+                    (isDayOfMonth = true and sdate <= %s and extract(day from sdate) = extract(day from %s)) or \
+                    (isDayOfYear = true and sdate <= %s and extract(doy from sdate) = extract(doy from %s))) and \
                     user_id = %s \
-                    order by date desc",(date,date,date,date,date,date,date,userId))
+                    order by sdate desc, sstart desc", (date, date, date, date, date, date, date, userId))
+
         scheduless = cur.fetchall()
         if scheduless is None or len(scheduless) <= 0:
             return []
 
         schedules = []
-
-        if not self.date.isUTC(scheduless[0][2]):
-            raise FailedConstraints('date in database not in UTC')
-
-        dateS = scheduless[0][2].date()
         for schedule in scheduless:
+            sch = {
+                'id': schedule[0],
+                'date': schedule[1],
+                'start': schedule[2],
+                'end': schedule[3],
+                'isDayOfWeek': schedule[4],
+                'isDayOfMonth': schedule[5],
+                'isDayOfYear': schedule[6],
+                'userId': userId
+            }
 
-            """ controlo que las fechas est�n en utc """
-            if not (self.date.isUTC(schedule[0]) and self.date.isUTC(schedule[1])):
-                raise FailedConstraints('date in database not in UTC')
+            schData = ScheduleData(sch, self.date.getLocalTimezone())
 
-            if schedule[2].date() == dateS:
-
-                sstart = schedule[0]
-                zeroTime = sstart.replace(hour=0,minute=0,second=0,microsecond=0)
-                initDelta = sstart - zeroTime
-                endDelta = initDelta + (schedule[1] - sstart)
-
-                actualZero = date.replace(hour=0,minute=0,second=0,microsecond=0)
-                st = actualZero + initDelta
-                se = actualZero + endDelta
-
-
-                """ me aseguro de que las fechas tengan si o si un timezone """
-                assert st.tzinfo is not None
-                assert se.tzinfo is not None
-
-
-                """ retorno los schedules con la fecha actual en utc - las fechas en la base deber�an estar en utc """
-                schedules.append(
-                    {
-                        'start':st,
-                        'end':se
-                    }
-                )
-
-            else:
-                break
-
-        # ordeno los schedules por el start
-        schedules = sorted(schedules, key=lambda schedule: schedule['start'])
+            #retorno los schedules con la fecha actual en utc - las fechas en la base deberian estar en utc
+            schedules.append(schData)
 
         return schedules
+
 
     """
         obtiene todos los schedules para un usuario
     """
-    def getSchedulesHistory(self,con,userId):
+    def getSchedulesHistory(self, con, userId):
         cur = con.cursor()
-        cur.execute('set time zone %s',('utc',))
+        cur.execute('set time zone %s', ('utc',))
 
         cur.execute("select sstart, send, date, isDayOfWeek, isDayOfMonth, isDayOfYear, id from assistance.schedule where \
                 user_id = %s \
-                order by date desc",(userId,))
+                order by date desc", (userId,))
+
         scheduless = cur.fetchall()
         if scheduless is None or len(scheduless) <= 0:
             return []
 
         schedules = []
 
-        if not self.date.isUTC(scheduless[0][2]):
-            raise FailedConstraints('date in database not in UTC')
-
         for schedule in scheduless:
+            sch = {
+                'id': schedule[0],
+                'date': schedule[1],
+                'start': schedule[2],
+                'end': schedule[3],
+                'isDayOfWeek': schedule[4],
+                'isDayOfMonth': schedule[5],
+                'isDayOfYear': schedule[6]
+            }
 
-            """ controlo que las fechas est�n en utc """
-            if not (self.date.isUTC(schedule[0]) and self.date.isUTC(schedule[1])):
-                raise FailedConstraints('date in database not in UTC')
+            schData = ScheduleData(sch, self.date.getLocalTimezone())
 
-            """ retorno los schedules con la fecha actual en utc - las fechas en la base deber�an estar en utc """
-            schedules.append(
-                {
-                    'id':schedule[6],
-                    'start':schedule[0],
-                    'end':schedule[1],
-                    'date':schedule[2],
-                    'isDayOfWeek':schedule[3],
-                    'isDayOfMonth':schedule[4],
-                    'isDayOfYear':schedule[5]
-                }
-            )
-
+            schedules.append(schData)
 
         return schedules
-
 
     """
         obtiene los schedules de la semana pasada en el date para un usuario
@@ -196,10 +215,6 @@ class Schedule:
 
         if date is None:
             date = self.date.now()
-            date = date.replace(hour=0,minute=0,second=0,microsecond=0)
-
-        # paso la fecha a utc
-        date = self.date.awareToUtc(date)
 
         # obtengo el primer dia de la semana del date (L-0 .. D-6)
         weekday = datetime.date.weekday(date)
@@ -215,10 +230,11 @@ class Schedule:
         return schedules
 
 
+
     """
-        reotnra los ids de los usuarios que tiene algun contr�l de horario
+        reotnra los ids de los usuarios que tiene algun contról de horario
     """
-    def getUsersInSchedules(self,con):
+    def getUsersInSchedules(self, con):
         cur = con.cursor()
         cur.execute('select distinct user_id from assistance.schedule')
         if cur.rowcount <= 0:
@@ -232,38 +248,41 @@ class Schedule:
 
 
     """
-        genera un nuevo schedule las fechas pasadas como par�metro (se supone aware)
+        genera un nuevo schedule las fechas pasadas como parámetro (se supone aware)
     """
-    def newSchedule(self,con,userId,date,start,end,isDayOfWeek,isDayOfMonth,isDayOfYear):
+    def persistSchedule(self, con, userId, date, start, end, isDayOfWeek, isDayOfMonth, isDayOfYear):
         uaware = date.astimezone(pytz.utc)
         ustart = start.astimezone(pytz.utc)
         uend = end.astimezone(pytz.utc)
 
         cur = con.cursor()
-        cur.execute('set time zone %s',('utc',))
+        cur.execute('set time zone %s', ('utc',))
 
-        req = (str(uuid.uuid4()), userId, uaware, ustart, uend, isDayOfWeek, isDayOfMonth, isDayOfYear)
-        cur.execute('insert into assistance.schedule (id,user_id,date,sstart,send,isDayOfWeek,isDayOfMonth,isDayOfYear) values (%s,%s,%s,%s,%s,%s,%s,%s)',req)
+        id = str(uuid.uuid4())
+        req = (id, userId, uaware, ustart, uend, isDayOfWeek, isDayOfMonth, isDayOfYear)
+        cur.execute('insert into assistance.schedule (id,user_id,sdate,sstart,send,isDayOfWeek,isDayOfMonth,isDayOfYear) values (%s,%s,%s,%s,%s,%s,%s,%s)', req)
+        return id
 
     '''
         elimina un schedule
     '''
-    def deleteSchedule(self,con,id):
+    def deleteSchedule(self, con, id):
         cur = con.cursor()
-        cur.execute('delete from assistance.schedule where id = %s',(id,))
+        cur.execute('delete from assistance.schedule where id = %s', (id,))
 
     '''
-        combina los whs con los schedules
-        retorna [{schdule:{},whs:[]}]
+        Combinar whs con los schedules
+        @param schedules Lista de objetos ScheduleData ordenados por date y start
+        @param whs Lista de worked hours
+        @return [{schdule:{},whs:[]}]
     '''
-    def combiner(self,schedules,whs):
+    def combiner(self, schedules, whs):
         controls = []
 
         if schedules is None or len(schedules) == 0:
             return controls
 
-        # ordeno los schedules y los whs por horario ascendente
-        schedules = sorted(schedules, key=lambda schedule: schedule['start'])
+        # ordeno los whs por horario ascendente
         whs = sorted(whs, key=lambda wh: wh['start'])
 
         for sched in schedules:
