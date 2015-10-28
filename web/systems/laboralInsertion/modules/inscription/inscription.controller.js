@@ -25,16 +25,16 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login) {
       name:'Pablo Daniel',
       lastname:'Rey',
       dni:'27294557',
-      telephone:'',
-      movil:'',
+      telephone:'+5492214237467',
+      movil:'+5492215032684',
       email:'',
-      country:'',
-      residence_city:'',
-      birth_city:'',
-      address:'',
-      genre:'Género',
+      country:'Argentina',
+      residence_city:'Casco Urbano (LP)',
+      birth_city:'Villa Elisa',
+      address:'Calle 4 Nº 1364 3A',
+      genre:'Masculino',
       birthdate: null,
-      student_number:''
+      student_number:'569842/9'
     },
 
 

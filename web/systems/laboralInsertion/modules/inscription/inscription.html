@@ -80,7 +80,7 @@
                           <option>Femenino</option>
                           <option>Otro</option>
                         </select>
-                      </input>
+
 
                       </div>
 
@@ -136,7 +136,7 @@
                           <option>Otro</option>
 
                         </select>
-                      </input>
+
 
                       </div>
                       <!-- <div>
@@ -150,7 +150,7 @@
                         <button><i class="fa fa-home"></i></button>
                       </div>
                       <div>
-                        <input type="text" placeholder="Domicilio" name='address' ng-model='model.user.address' ng-blur='updateUserData()' ng-pattern='/^[a-zA-ZñÑ ]*$/' required></input>
+                        <input type="text" placeholder="Domicilio" name='address' ng-model='model.user.address' ng-blur='updateUserData()' ng-pattern='/^[a-zA-Z0-9ñÑº ]*$/' required></input>
                         <div class="invalidError" ng-if='dataBasic.address.$invalid'><i class="fa fa-times"></i> Complete domicilio</div>
                       </div>
                     </div>
@@ -160,7 +160,8 @@
                         <button><i class="fa fa-map-marker"></i></button>
                       </div>
                       <div>
-                        <input type="text" placeholder="Ciudad de Nacimiento" ng-model='model.user.birth_city' ng-blur='updateUserData()' required></input>
+                        <input type="text" placeholder="Ciudad de Nacimiento" name='birth_city' ng-model='model.user.birth_city' ng-blur='updateUserData()' ng-pattern='/^[a-zA-Z0-9ñÑ ]*$/' required></input>
+                        <div class="invalidError" ng-if='dataBasic.birth_city.$invalid'><i class="fa fa-times"></i> Ingrese ciudad de nacimiento</div>
                       </div>
                     </div>
 
@@ -172,7 +173,8 @@
                         <button><i class="fa fa-globe"></i></button>
                       </div>
                       <div>
-                        <input type="text" placeholder="País" name='country' ng-model='model.user.country' ng-blur='updateUserData()' required></input>
+                        <input type="text" placeholder="País" name='country' ng-model='model.user.country' ng-blur='updateUserData()' ng-pattern='/^[a-zA-ZñÑ ]*$/' required></input>
+                        <div class="invalidError" ng-if='dataBasic.country.$invalid'><i class="fa fa-times"></i> Ingrese su nacionalidad</div>
                       </div>
                     </div>
 
@@ -194,15 +196,26 @@
                       </div>
                     </div>
 
-                    <div class="item" ng-if='dataBasic.name.$valid'>
+                    <div class="item " ng-if='dataBasic.name.$valid'>
                       <div>
                         <button><i class="fa fa-envelope"></i></button>
                       </div>
-
                       <div>
-                        <input type="email" placeholder="nombre@dominio.com" ng-model='model.user.email' ng-blur='updateUserData()' required></input>
+                        <select  ng-model='model.user.mail' name='mail' ng-blur='updateUserData()' required>
+                          <option class="selectGrey" disabled selected style='display:none;'>Mail</option>
+                          <option>pablo@econo.unlp.edu.ar</option>
+                          <option>pablodanielrey@gmail.com</option>
+
+                        </select>
+
+
                       </div>
+
+                      <!-- <div>
+                        <input type="email" placeholder="nombre@dominio.com" ng-model='model.user.email' ng-blur='updateUserData()' required></input>
+                      </div> -->
                     </div>
+
                     <div class='item' ng-if='!dataBasic.name.$valid'>
                       <div>Para agregar sus cuentas haga click <a href='http://fce.econo.unlp.edu.ar'>aca</a></div>
                     </div>
