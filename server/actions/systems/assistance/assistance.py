@@ -13,7 +13,6 @@ from model.config import Config
 from model.profiles import Profiles
 
 from model.systems.assistance.assistance import Assistance
-from model.systems.assistance.justifications.justifications import Justifications
 from model.systems.assistance.schedule import ScheduleData
 import model.systems.assistance.date
 from model.systems.assistance.fails import Fails
@@ -38,7 +37,6 @@ class AssistanceWamp(ApplicationSession):
         self.serverConfig = inject.instance(Config)
         self.profiles = inject.instance(Profiles)
         self.assistance = inject.instance(Assistance)
-        self.justifications = inject.instance(Justifications)
         self.fails = inject.instance(Fails)
         self.dateutils = inject.instance(Date)
         self.checks = inject.instance(ScheduleChecks)
@@ -66,7 +64,7 @@ class AssistanceWamp(ApplicationSession):
         yield from self.register(self.getUsersWithChecks_async, 'assistance.getUsersWithChecks')
         yield from self.register(self.getSchedulesByDate_async, 'assistance.getSchedulesByDate')
         yield from self.register(self.getLogsForSchedulesByDate_async, 'assistance.getLogsForSchedulesByDate')
-        #yield from self.register(self.getJustifications_async, 'assistance.justifications.getJustifications')
+
 
 
 
@@ -441,23 +439,4 @@ class AssistanceWamp(ApplicationSession):
 
 
 
-    def getJustifications(self, sid):
-        """
-         " Obtener justificaciones a partir del session id
-         " @param sid Identificador de session
-         """
-
-        con = self._getDatabase()
-        try:
-            justifications = self.justifications.getJustifications(con)
-            return justifications
-
-        finally:
-            con.close()
-
-
-    @coroutine
-    def getJustifications_async(self, sid):
-        loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getJustifications, sid)
-        return r
+    

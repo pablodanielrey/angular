@@ -1,22 +1,25 @@
 # -*- coding: utf-8 -*-
+'''
+Obtener justificaciones de un usuario
+@author Ivan
+@example python3 getJustifications.py sid
+@example python3 getJustifications.py 1
+'''
+
 import sys
-sys.path.insert(0, '../../python')
+sys.path.insert(0, '../../../python')
 
 import inject
 import logging
-import datetime
-
-import dateutil
-from dateutil.parser import parse
-
-
 import asyncio
+
 from asyncio import coroutine
 from autobahn.asyncio.wamp import ApplicationSession
-
 from model.config import Config
 
-''' configuro el injector y el logger '''
+
+
+###### configuracion #####
 logging.getLogger().setLevel(logging.DEBUG)
 
 
@@ -26,28 +29,31 @@ def config_injector(binder):
 inject.configure(config_injector)
 config = inject.instance(Config)
 
-userId = sys.argv[1]
+
+
+###### parametros #####
+sid = sys.argv[1]
+
+
+
 
 class WampMain(ApplicationSession):
 
     def __init__(self, config=None):
         logging.debug('instanciando')
         ApplicationSession.__init__(self, config)
-
+        
         self.serverConfig = inject.instance(Config)
 
     @coroutine
     def onJoin(self, details):
-        logging.debug('********* getJustificationsByUser ********')
+        logging.debug('********** getJustifications **********')
 
-
+        justifications = yield from self.call('assistance.justifications.getJustifications', sid)
         
-        justifications = yield from self.call('assistance.justifications.getJustificationsByUser', userId)
         for just in justifications:
             print(just)
-        
-        
-        
+            
         sys.exit()
 
 
