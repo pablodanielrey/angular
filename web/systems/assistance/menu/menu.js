@@ -95,7 +95,8 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Profiles', 'Se
                */
 
                $scope.model.items.push({ n:30, label:'Horas Extras ', img:'fa-plus', function: $scope.requestAuthority});
-
+               $scope.model.items.push({ n:31, label:'Admin Horas Extras ', img:'fa-plus', function: $scope.adminRequestOverTime});
+               
               /* Lo comente para probar otras pantallas
               Office.getUserOfficeRoles(
                   function(roles) {

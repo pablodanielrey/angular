@@ -79,15 +79,15 @@ class OvertimeWamp(ApplicationSession):
 
     '''
      ' Obtener requerimientos de horas extra para administrar
-     ' @param usersId Id de usuario
      ' @param states Lista con el estado estado de las solicitudes a consultar
      '      [APPROVED, PENDING, REJECTED]'
      ' @param group Grupo (Oficinas)
      '      ROOT|TREE --> ROOT = oficinas directas, TREE = oficinas directas y todas las hijas
      '''
-    def getOvertimeRequestsToManage(self, userId, states, group):
+    def getOvertimeRequestsToManage(self, sid, states, group):
         con = self._getDatabase()
         try:
+            userId = self.profiles.getLocalUserId(sid)
             requests = self.overtime.getOvertimeRequestsToManage(con, userId, states, group)
             return requests
 
@@ -95,9 +95,9 @@ class OvertimeWamp(ApplicationSession):
             con.close()
 
     @coroutine
-    def getOvertimeRequestsToManage_async(self,userId, states=[], group='ROOT'):
+    def getOvertimeRequestsToManage_async(self,sid, states=[], group='ROOT'):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getOvertimeRequestsToManage, userId, states, group)
+        r = yield from loop.run_in_executor(None, self.getOvertimeRequestsToManage, sid, states, group)
         return r
 
 
@@ -136,9 +136,10 @@ class OvertimeWamp(ApplicationSession):
      ' @param requestId Id del requerimiento de hora extra
      ' @param status Nuevo estado
      '''
-    def updateStatus(self, userId, requestId, status):
+    def updateStatus(self, sid, requestId, status):
         con = self._getDatabase()
         try:
+            userId = self.profiles.getLocalUserId(sid)
             events = self.overtime.updateOvertimeRequestStatus(con, userId, requestId, status)
             con.commit()
             return events
@@ -147,9 +148,9 @@ class OvertimeWamp(ApplicationSession):
             con.close()
 
     @coroutine
-    def updateStatus_async(self, userId, requestId, status):
+    def updateStatus_async(self, sid, requestId, status):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.updateStatus, userId, requestId, status)
+        r = yield from loop.run_in_executor(None, self.updateStatus, sid, requestId, status)
         return r
 
 

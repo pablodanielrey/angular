@@ -432,7 +432,7 @@ function Assistance (Utils, Session, $wamp) {
 	*/
 	function getOvertimeRequestsToManage(status, group, callbackOk, callbackError){
 		var sid = Session.getSessionId();
-		$wamp.call('assistance.overtime.getRequestsToManage', [sid, status, group])
+		$wamp.call('overtime.getOvertimeRequestsToManage', [sid, status, group])
 		.then(function(res) {
 			if (res != null) {
 				callbackOk(res);
@@ -471,7 +471,7 @@ function Assistance (Utils, Session, $wamp) {
 	 */
 	function updateRequestOvertimeStatus(requestId, status, callbackOk, callbackError) {
 		var sid = Session.getSessionId();
-		$wamp.call('assistance.overtime.persistStatus', [sid, requestId, status])
+		$wamp.call('overtime.updateStatus', [sid, requestId, status])
 		.then(function(res) {
 			if (res != null) {
 				callbackOk(res);
