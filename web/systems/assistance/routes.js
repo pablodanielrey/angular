@@ -90,7 +90,7 @@ app.config(['$routeProvider', function($routeProvider) {
   })
 
   .when('/managePositions', {
-    templateUrl: '/systems/fce/modules/managePositions/index.html',
+    templateUrl: '/systems/assistance/modules/managePositions/index.html',
     controller: 'ManagePositionsCtrl'
   })
 
