@@ -1,8 +1,8 @@
 var app = angular.module('mainApp');
 
-app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Notifications',
+app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Notifications', 'Login',
 
-  function ($rootScope, $scope, $location, $window, $http, Profiles, Session, Notifications) {
+  function ($rootScope, $scope, $location, Notifications, Login) {
 
     $scope.model = {
       class:'',
@@ -22,7 +22,13 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Notifications'
     }
 
   	$scope.exit = function() {
-  		$location.path('/logout');
+      var sid = '';
+      Login.logout(sid, function(ok) {
+        $location.path('/');
+      }, function(err) {
+        console.log(err)
+        Notifications.message(err);
+      });
   	}
 
     var compare = function(a,b) {
@@ -33,6 +39,7 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Notifications'
       $scope.model.items = [];
       $scope.model.items.push({ n:1, label:'Inscripción', img:'fa fa-lock', function: $scope.upload });
       $scope.model.items.push({ n:1, label:'Descargar', img:'fa fa-lock', function: $scope.download });
+      $scope.model.items.push({ n:1, label:'Salir', img:'fa fa-lock', function: $scope.exit });
 
     }
 

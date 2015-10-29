@@ -1,9 +1,9 @@
 
 app.controller('IndexCtrl',IndexCtrl);
 
-IndexCtrl.$inject = ['$rootScope','$scope','$wamp','$window', 'Notifications', 'Login'];
+IndexCtrl.$inject = ['$rootScope','$scope', '$window', 'Notifications', 'Login'];
 
-function IndexCtrl($rootScope, $scope, $wamp, $window, Notifications, Login) {
+function IndexCtrl($rootScope, $scope, $window, Notifications, Login) {
 
     $scope.model = {
       hideMenu: false
@@ -14,12 +14,11 @@ function IndexCtrl($rootScope, $scope, $wamp, $window, Notifications, Login) {
     }
 
     $scope.initialize = initialize;
-    
-    function initialize() {
-      /*  if (!Login.isLogged()) {
-          $window.location.href = "/systems/login/index.html";
-        }*/
 
+    function initialize() {
+      if (!Login.isLogged()) {
+        $window.location.href = '/systems/login/index.html';
+      }
         /*Login.validateSession(
           function(v) {
             if (!v) {
