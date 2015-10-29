@@ -34,7 +34,7 @@ class JustificationsWamp(ApplicationSession):
         yield from self.register(self.getJustifications_async, 'assistance.justifications.getJustifications')
         yield from self.register(self.getJustificationsByUser_async, 'assistance.justifications.getJustificationsByUser')
         yield from self.register(self.getJustificationsStockByUser_async, 'assistance.justifications.getJustificationsStockByUser')
-        #yield from self.register(self.getJustificationsRequestsByDate_async, 'assistance.justifications.getJustificationsRequestsByDate')
+        yield from self.register(self.getJustificationRequestsByDate_async, 'assistance.justifications.getJustificationRequestsByDate')
 
 
 
@@ -121,6 +121,35 @@ class JustificationsWamp(ApplicationSession):
     def getJustificationsStockByUser_async(self, sid, userId, justificationId, date, period):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.getJustificationsStockByUser, sid, userId, justificationId, date, period)
+        return r
+        
+        
+        
+        
+    def getJustificationRequestsByDate(self, userIds=None, start=None, end=None, statusList=None):
+        """
+         " Obtener requerimientos de justificaciones para un determinado rango de fechas, para una determinada lista de usuario, para una determinada lista de estados
+         " @param userIds Lista con ids de usuario
+         " @param start Timestamp de inicio
+         " @param end Timestamp de fin
+         " @param statusList Lista de estados
+         """
+         
+        startAux = None if(start is None) else datetime.datetime.strptime(start, "%Y-%m-%dT%H:%M:%S")
+        endAux = None if(start is None) else datetime.datetime.strptime(end, "%Y-%m-%dT%H:%M:%S")
+        
+        con = self._getDatabase()
+        try:
+            justificationsRequest = self.justifications.getJustificationRequestsByDate(con, statusList, userIds, startAux, endAux)
+            return justificationsRequest
+
+        finally:
+            con.close()
+
+    @coroutine
+    def getJustificationRequestsByDate_async(self, sid, userIds, start, end, statusList):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.getJustificationRequestsByDate, userIds, start, end, statusList)
         return r
 
 
