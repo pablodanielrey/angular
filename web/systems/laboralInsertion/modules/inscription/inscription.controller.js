@@ -21,6 +21,7 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
     tieneEmail: true,
 
     mails: [],
+    email: '',
 
     // datos de usuario
     user: {
@@ -29,7 +30,6 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
       dni:'',
       telephone:'',
       movil:'',
-      email:'',
       country:'Argentina',
       residence_city:'Casco Urbano (LP)',
       birth_city:'Villa Elisa',
@@ -125,6 +125,9 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
     Users.findMails(uid, function(mails) {
       console.log(mails);
       $scope.model.mails = mails;
+      if (mails.length > 0) {
+        $scope.model.email = mails[0].id;
+      }
     }, function(error) {
       console.log(err);
     });
