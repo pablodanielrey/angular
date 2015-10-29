@@ -87,6 +87,15 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Profiles', 'Se
               //$scope.model.items.push({ label:'Filtro de Fallas (testing todavía no terminado)', img:'fa-ticket', function: $scope.assistanceFailsFilters});
               // hasta que no este terminado en producción no va
               $scope.model.items.push({ n:4, label:'Mi Horario', img:'fa-clock-o', function: $scope.mySchedule});
+
+
+              /* -----------------------------------------------------------------------------------------------------------
+               * --------- ESTAN PANTALLAS ESTAN ACA PARA PROBARLAS, LUEGO HAY QUE HACER LOS CHEQUEOS CORRESPONDIENTES -----
+               * -----------------------------------------------------------------------------------------------------------
+               */
+
+               $scope.model.items.push({ n:30, label:'Horas Extras ', img:'fa-plus', function: $scope.requestAuthority});
+
               /* Lo comente para probar otras pantallas
               Office.getUserOfficeRoles(
                   function(roles) {

@@ -415,7 +415,7 @@ function Assistance (Utils, Session, $wamp) {
 	 */
 	function getOvertimeRequests(status, callbackOk, callbackError){
 		var sid = Session.getSessionId();
-		$wamp.call('assistance.overtime.getRequests', [sid, status])
+		$wamp.call('overtime.getOvertimeRequests', [sid, status])
 		.then(function(res) {
 			if (res != null) {
 				callbackOk(res);
@@ -449,9 +449,10 @@ function Assistance (Utils, Session, $wamp) {
 	 * @param userId id del usuario al cual se solicita la hora extra
 	 * @param request Solicitud de hora extra
 	 */
-	function requestOvertime(userId, request, callbackOk, callbackError){
+	function requestOvertime(requestorId, userId, begin, end, reason, callbackOk, callbackError){
+
 		var sid = Session.getSessionId();
-		$wamp.call('assistance.overtime.requestOvertime', [sid, userId, request])
+		$wamp.call('overtime.requestOvertime', [sid, requestorId, userId, begin, end, reason])
 		.then(function(res) {
 			if (res != null) {
 				callbackOk(res);

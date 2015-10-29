@@ -46,7 +46,7 @@ app.config(['$routeProvider', function($routeProvider) {
       controller: 'MedicalLicensesCtrl'
   })
   .when('/requestAuthority', {
-      templateUrl: '/systems/assistance/modules/requestAuthority.html',
+      templateUrl: '/systems/assistance/modules/overtime/requestAuthority.html',
       controller: 'RequestAuthorityCtrl'
   })
 
