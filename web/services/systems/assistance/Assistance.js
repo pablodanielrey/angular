@@ -274,7 +274,7 @@ function Assistance (Utils, Session, $wamp) {
 
 	function getJustificationsByUser(userId, callbackOk, callbackError) {
 		var sid = Session.getSessionId();
-		$wamp.call('assistance.justifications.getJustificationsByUser', [sid, userId])
+		$wamp.call('assistance.justifications.getJustificationsByUser', [userId])
 			.then(function(res) {
 				if (res != null) {
 					callbackOk(res);
@@ -289,7 +289,7 @@ function Assistance (Utils, Session, $wamp) {
 
 	function getJustificationStock(userId, justificationId, date, period, callbackOk, callbackError) {
 		var sid = Session.getSessionId();
-		$wamp.call('assistance.justifications.getJustificationsStock', [sid, userId, justificationId, date, period])
+		$wamp.call('assistance.justifications.getJustificationsStockByUser', [sid, userId, justificationId, date, period])
 			.then(function(res) {
 				if (res != null) {
 					callbackOk(res);
