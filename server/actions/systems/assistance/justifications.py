@@ -35,6 +35,7 @@ class JustificationsWamp(ApplicationSession):
         yield from self.register(self.getJustificationsByUser_async, 'assistance.justifications.getJustificationsByUser')
         yield from self.register(self.getJustificationsStockByUser_async, 'assistance.justifications.getJustificationsStockByUser')
         yield from self.register(self.getJustificationRequestsByDate_async, 'assistance.justifications.getJustificationRequestsByDate')
+        yield from self.register(self.getJustificationRequestsToManage_async, 'assistance.justifications.getJustificationRequestsToManage')
 
 
 
@@ -154,4 +155,29 @@ class JustificationsWamp(ApplicationSession):
 
 
 
+
+    def getJustificationRequestsToManage(self, userId, statusList, group):
+        """
+         " Obtener requerimientos de justificaciones para ser administradas
+         " @param userId Id de usuario administrador de justificaciones
+         " @param statusList Lista de estados
+         " @param group grupo a partir del cual se obtendran las justificaciones
+         """
+        con = self._getDatabase()
+        try:
+            print(userId)
+            print(statusList)
+            print(group)
+            justificationsRequest = self.justifications.getJustificationRequestsToManage(con,userId,statusList,group) 
+
+            return justificationsRequest
+
+        finally:
+            con.close()
+
+    @coroutine
+    def getJustificationRequestsToManage_async(self, userId, statusList, group):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.getJustificationRequestsToManage, userId, statusList, group)
+        return r
 

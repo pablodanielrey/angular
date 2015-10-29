@@ -312,11 +312,15 @@ class Justifications:
 
 
 
-    '''
-        obtiene todos los pedidos de justificaciones que tiene permisos de manejar, en cierto estado.
-        group = ROOT|TREE --> ROOT = oficinas directas, TREE = oficinas directas y todas las hijas
+     '''
+        Obtiene todos los pedidos de justificaciones que tiene permisos de administrar
+        @param con Conexion con la base de datos
+        @param userId Identificacion de usuario
+        @param status Lista con los estados que se desean consultar
+        @param group ROOT|TREE --> ROOT = oficinas directas, TREE = oficinas directas y todas las hijas
     '''
     def getJustificationRequestsToManage(self,con,userId,status,group='ROOT'):
+
 
         tree = False
         if group == 'TREE':
