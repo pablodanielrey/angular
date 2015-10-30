@@ -18,12 +18,13 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
     registrations: ['pantalla1','pantalla2','pantalla3','pantalla4','pantalla5','pantalla6','pantalla7'],
     inscriptionsData: [],
 
-    tieneEmail: true,
-
-    mails: [],
-    email: '',
-
     // datos de usuario
+
+    mails: {
+      emails: [],
+      email: ''
+    },
+
     user: {
       name:'',
       lastname:'',

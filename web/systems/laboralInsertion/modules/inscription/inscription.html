@@ -196,33 +196,28 @@
                       </div>
                     </div>
 
-                    <div class="item " ng-if='dataBasic.name.$valid'>
+                    <!-- email --------------------------------------- -->
+                    <div class="item " ng-if='model.mails.emails.length > 0'>
                       <div>
                         <button><i class="fa fa-envelope"></i></button>
                       </div>
                       <div>
-                        <select  ng-model='model.email' name='mail' ng-blur='updateUserData()' required>
+                        <select  ng-model='model.mails.email' name='mail' ng-blur='updateUserData()' required>
                           <!-- <option class="selectGrey" disabled selected style='display:none;'>Mail</option> -->
-                          <option ng-repeat='m in model.mails' value='{{m.id}}'>{{m.email}}</option>
+                          <option ng-repeat='m in model.mails.emails' value='{{m.id}}'>{{m.email}}</option>
                           <!--
                           <option>pablo@econo.unlp.edu.ar</option>
                           <option>pablodanielrey@gmail.com</option>
                           -->
 
                         </select>
-
-
                       </div>
-
-                      <!-- <div>
-                        <input type="email" placeholder="nombre@dominio.com" ng-model='model.user.email' ng-blur='updateUserData()' required></input>
-                      </div> -->
                     </div>
 
-                    <div class='item' ng-if='!dataBasic.name.$valid'>
-                      <div>Para agregar sus cuentas haga click <a href='http://fce.econo.unlp.edu.ar'>aca</a></div>
+                    <div class='item' ng-if='model.mails.emails.length <= 0'>
+                      <div>Agregue una cuenta de correo haciendo click <a target="_blank" href='http://fce.econo.unlp.edu.ar'>ACA</a></div>
                     </div>
-
+                    <!-- ------------------------------------------------ -->
 
                     <div class="item2" ng-click='startInscription()'>
                       <div>
