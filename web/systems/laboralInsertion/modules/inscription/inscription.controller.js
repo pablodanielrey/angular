@@ -35,11 +35,11 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
       dni:'',
       telephone:'',
       movil:'',
-      country:'Argentina',
-      residence_city:'Casco Urbano (LP)',
-      birth_city:'Villa Elisa',
-      address:'Calle 4 Nº 1364 3A',
-      genre:'Masculino',
+      country:'',
+      residence_city:'',
+      city:'',
+      address:'',
+      genre:'',
       birthdate: null
     },
 
@@ -135,9 +135,9 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
 
     Users.findMails(uid, function(mails) {
       console.log(mails);
-      $scope.model.mails = mails;
+      $scope.model.mails.emails = mails;
       if (mails.length > 0) {
-        $scope.model.email = mails[0].id;
+        $scope.model.mails.email = mails[0].id;
       }
     }, function(error) {
       console.log(err);
@@ -146,7 +146,14 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
   }
 
   $scope.updateUserData = function() {
-    $scope.model.showInscription = $scope.checkUserData();
+    var ok = $scope.checkUserData();
+    if (ok) {
+      Users.updateUser($scope.model.user, function(res) {
+        console.log(res);
+      }, function(err) {
+        console.log(err);
+      })
+    }
     console.log($scope.model.user);
   }
 
