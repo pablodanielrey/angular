@@ -198,12 +198,16 @@ function Office($rootScope, $wamp, Session) {
   function getOfficesByUserRole(userId, role, tree, callbackOk, callbackError) {
     $wamp.call('offices.offices.getOfficesByUserRole', [userId,role,tree])
       .then(function(res) {
+
         if (res != null) {
+
           callbackOk(res);
         } else {
+        
           callbackError('Error');
         }
       },function(err) {
+
         callbackError(err);
       });
   }

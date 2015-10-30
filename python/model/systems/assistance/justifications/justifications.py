@@ -166,7 +166,6 @@ class Justifications:
 
 
 
-
     ''' retorna todos los tipos de justificaciones que existan en la base '''
     def getJustificationById(self,con,id):
         cur = con.cursor()
@@ -258,11 +257,9 @@ class Justifications:
         start es la fecha de inicio de la busqueda. en el caso de que no sea pasado entonces no se pone como restriccion el inicio
         end es la fecha de limite de la busqueda. en el caso de que no sea pasado entonces no se pone como restriccion el end
         status es el estado a obtener. en el caso de que no sea pasado entonces se obtienen todas, en su ultimo estado
-        users es una lista de ids de usuarios que piden los requests, si = None o es vacío entonces retorna todas.
+        userIds es una lista de ids de usuarios que piden los requests, si = None o es vacío entonces retorna todas.
     '''
-    def getJustificationRequestsByDate(self,con,status=None,users=None,start=None,end=None):
-        logging.debug('buscando justifications : {}, {}, {}, {}'.format(status,users,start,end))
-
+    def getJustificationRequestsByDate(self,con,status=None,userIds=None,start=None,end=None):
         cur = con.cursor()
 
         statusR = self._getJustificationsInStatus(con,status)
@@ -271,24 +268,24 @@ class Justifications:
 
         rids = tuple(statusR.keys())
 
-
+        print(rids)
 
         if start is not None and end is not None:
-            if users is None or len(users) <= 0:
+            if userIds is None or len(userIds) <= 0:
                 cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where jbegin >= %s and jbegin <= %s and id in %s',(start,end,rids))
             else:
-                cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where jbegin >= %s and jbegin <= %s and id in %s and user_id in %s',(start,end,rids,tuple(users)))
+                cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where jbegin >= %s and jbegin <= %s and id in %s and user_id in %s',(start,end,rids,tuple(userIds)))
         else:
             if start is None:
-                if users is None or len(users) <= 0:
+                if userIds is None or len(userIds) <= 0:
                     cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where jbegin <= %s and id in %s',(end,rids))
                 else:
-                    cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where jbegin <= %s and id in %s and user_id in %s',(start,end,rids,tuple(users)))
+                    cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where jbegin <= %s and id in %s and user_id in %s',(start,end,rids,tuple(userIds)))
             else:
-                if users is None or len(users) <= 0:
+                if userIds is None or len(userIds) <= 0:
                     cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where jbegin >= %s and id in %s',(end,rids))
                 else:
-                    cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where jbegin >= %s and id in %s and user_id in %s',(start,end,rids,tuple(users)))
+                    cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where jbegin >= %s and id in %s and user_id in %s',(start,end,rids,tuple(userIds)))
 
         if cur.rowcount <= 0:
             return []
@@ -315,24 +312,27 @@ class Justifications:
 
 
 
-    '''
-        obtiene todos los pedidos de justificaciones que tiene permisos de manejar, en cierto estado.
-        group = ROOT|TREE --> ROOT = oficinas directas, TREE = oficinas directas y todas las hijas
+     '''
+        Obtiene todos los pedidos de justificaciones que tiene permisos de administrar
+        @param con Conexion con la base de datos
+        @param userId Identificacion de usuario
+        @param status Lista con los estados que se desean consultar
+        @param group ROOT|TREE --> ROOT = oficinas directas, TREE = oficinas directas y todas las hijas
     '''
     def getJustificationRequestsToManage(self,con,userId,status,group='ROOT'):
+
 
         tree = False
         if group == 'TREE':
             tree = True
         offices = self.offices.getOfficesByUserRole(con,userId,tree,'autoriza')
-        logging.debug('officesByUserRole : {}'.format(offices))
+        #logging.debug('officesByUserRole : {}'.format(offices))
 
         if offices is None or len(offices) <= 0:
             return []
 
         officesIds = list(map(lambda o: o['id'], offices))
         users = self.offices.getOfficesUsers(con,officesIds)
-        logging.debug('getOfficesUsers : {}'.format(users))
 
         while userId in users:
             users.remove(userId)

@@ -38,6 +38,80 @@ class Assistance:
     positions = inject.attr(Positions)
     date = inject.attr(model.systems.assistance.date.Date)
 
+
+    """
+    //////////////////////////////////////////////////
+    //////////////
+    ////////////// codigo para exportar a ods los resultados
+    //////////////
+    //////////////////////////////////////////////////
+    """
+
+    def _exportToOds(self,data):
+        ods = OrderedDict()
+        ods.update({"Datos": data})
+        filename = '/tmp/{}.tmp'.format(str(uuid.uuid4()))
+        writer = ODSWriter(filename)
+        writer.write(ods)
+        writer.close()
+
+        b64 = ''
+        with open(filename,'rb') as f:
+            b64 = base64.b64encode(f.read()).decode('utf-8')
+
+        return b64
+
+    def _equalsTime(self,d1,d2):
+        d1Aux = self.date.awareToUtc(d1)
+        d1Aux = d1Aux.replace(hour=0, minute=0, second=0, microsecond=0)
+        d2Aux = d2.replace(hour=0, minute=0, second=0, microsecond=0)
+        return d1Aux == d2Aux
+
+
+    def _arrangeForOdsAssistanceStatus(self, con, data):
+
+        values = [['Fecha','Dni','Nombre','Apellido','Hora de Entrada','Hora de Salida','Cantidad de Horas','Justificación']]
+        for l in data:
+            v = []
+
+            userId = l['userId']
+            user = self.users.findUser(con,userId)
+
+            v.append(l['date'].astimezone(tz=None).date())
+            v.append(user['dni'])
+            v.append(user['name'])
+            v.append(user['lastname'])
+
+            if l['start'] != None and l['start'] != '':
+                v.append(l['start'].astimezone(tz=None).time())
+            else:
+                v.append('')
+
+            if l['end'] != None and l['end'] != '':
+                v.append(l['end'].astimezone(tz=None).time())
+            else:
+                v.append('')
+
+            v.append('{:02d}:{:02d}'.format(int(l['workedMinutes'] / 60), int(l['workedMinutes'] % 60)))
+
+            if l['justifications'] != None and len(l['justifications']) > 0:
+                jname = l['justifications'][0]['name']
+                v.append(jname)
+            else:
+                v.append('')
+
+            values.append(v)
+
+        return values
+
+
+    def arrangeAssistanceStatusByUsers(self, con, data):
+        odata = self._arrangeForOdsAssistanceStatus(con,data)
+        return self._exportToOds(odata)
+
+
+
+
     def getAssistanceData(self, con, userId, date=None):
         ps = self.positions.find(con, userId)
         p = ''
@@ -51,7 +125,7 @@ class Assistance:
             date = self.date.awareToUtc(ldate)
 
 
-        sch = self.schedule.getSchedule(con, userId, date)
+        sch = self.schedule.getSchedule(con, userId, date.date())
 
         rt = {
             'userId': userId,
@@ -88,12 +162,12 @@ class Assistance:
             date = self.date.localizeLocal(date)
 
         # Chequeo que tenga horario
-        scheds = self.schedule.getSchedule(con, userId, date)
+        scheds = self.schedule.getSchedule(con, userId, date.date())
         if (scheds is None) or (len(scheds) <= 0):
             """ no tiene horario declarado asi que no se chequea nada """
             return None
 
-        logs = self.schedule.getLogsForSchedule(con, scheds, date)
+        logs = self.schedule.getLogsForSchedule(con, scheds, date.date())
         logging.debug('logs {}'.format(logs))
 
         worked, attlogs = self.logs.getWorkedHours(logs)
@@ -119,7 +193,7 @@ class Assistance:
         return assistanceStatus
 
     def _getNullAssistanceStatus(self, con, userId, date):
-        scheds = self.schedule.getSchedule(con, userId, date)
+        scheds = self.schedule.getSchedule(con, userId, date.date())
         justifications = self._getJustificationsForSchedule(con, userId, scheds,date)
         assistanceStatus = {
             'date': date,
@@ -147,6 +221,64 @@ class Assistance:
                     sts.append(st)
             statuses[userId] = sts
         return statuses
+
+
+    '''
+        Obtiene los estados de asistencia de los usuarios entre las fechas pasadas
+    '''
+    def getAssistanceStatusByUsers(self,con,usersIds,dates,status):
+        resp = []
+        if (dates == None or len(dates) <= 0):
+            return resp
+
+        dstart = dates[0]
+
+        # dend = self.date.parse(dates[len(dates) -1]) + datetime.timedelta(days=1)
+        dend = dates[-1] + datetime.timedelta(days=1)
+
+        # obtengo las justificaciones
+        justifications = self.justifications.getJustificationRequestsByDate(con,status,usersIds,dstart,dend)
+
+
+        gjustifications = self.justifications.getGeneralJustificationRequests(con)
+        for j in gjustifications:
+            if j['begin'] >= dstart and j['begin'] <= dend:
+                for uid in usersIds:
+                    jnew = dict(j)
+                    jnew['user_id'] = uid
+                    justifications.append(jnew)
+
+
+        self._resolveJustificationsNames(con,justifications)
+
+
+        for userId in usersIds:
+            for date in dates:
+                s = self.getAssistanceStatus(con,userId,date)
+                if (s != None):
+                    # verifico si coincide alguna justificacion con el userId y el date
+                    just = list(filter(lambda j: j['user_id'] == userId and self._equalsTime(j["begin"],date), justifications))
+                    s["justifications"] = just;
+                    for j in just:
+                        justifications.remove(j)
+                    resp.append(s)
+
+        # falta agrupar las justificaciones que quedaron
+        # creo un assistance status por cada justificacion que quedaron sin matchear
+        for j in justifications:
+            a = {
+                'date':j['begin'],
+                'userId': j['user_id'],
+                'status': "",
+                'start': None,
+                'end': None,
+                'logs': [],
+                'justifications':[j],
+                'workedMinutes': 0
+            }
+            resp.append(a)
+
+        return resp
 
     """
         ////////////////////////////////////////// chequeo del tema de incumplimientos ////////////////////

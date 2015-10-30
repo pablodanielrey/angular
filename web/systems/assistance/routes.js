@@ -46,21 +46,21 @@ app.config(['$routeProvider', function($routeProvider) {
       controller: 'MedicalLicensesCtrl'
   })
   .when('/requestAuthority', {
-      templateUrl: '/systems/assistance/modules/requestAuthority.html',
+      templateUrl: '/systems/assistance/modules/overtime/requestAuthority.html',
       controller: 'RequestAuthorityCtrl'
   })
 
   .when('/adminRequestOverTime', {
-      templateUrl: '/systems/assistance/modules/adminRequestOverTime.html',
+      templateUrl: '/systems/assistance/modules/overtime/adminRequestOverTime.html',
       controller: 'AdminRequestOverTimeCtrl'
   })
 
   .when('/showAssistance', {
-      templateUrl: '/systems/assistance/modules/showAssistance.html',
+      templateUrl: '/systems/assistance/modules/workedHours/showAssistance.html',
       controller: 'ShowAssistanceCtrl'
   })
   .when('/mySchedule', {
-      templateUrl: '/systems/assistance/modules/mySchedule.html',
+      templateUrl: '/systems/assistance/modules/workedHours/mySchedule.html',
       controller: 'MyScheduleCtrl'
   })
 
@@ -90,7 +90,7 @@ app.config(['$routeProvider', function($routeProvider) {
   })
 
   .when('/managePositions', {
-    templateUrl: '/systems/fce/modules/managePositions/index.html',
+    templateUrl: '/systems/assistance/modules/managePositions/index.html',
     controller: 'ManagePositionsCtrl'
   })
 

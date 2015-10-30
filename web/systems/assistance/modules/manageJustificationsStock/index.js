@@ -1,12 +1,10 @@
 
-app.controller('ManageJustificationsStockCtrl', ["$scope", "$timeout", "$window", "Assistance", "Module", "Notifications", "Users",  "Utils", function($scope, $timeout, $window, Assistance, Module, Notifications, Users, Utils) {
+app.controller('ManageJustificationsStockCtrl', ["$scope", "$timeout", "$window", "Assistance", "Office",  "Notifications", "Users",  "Utils", "Session", function($scope, $timeout, $window, Assistance, Office, Notifications, Users, Utils, Session) {
 
    /**
    * Variables del modelo en general
    */
   $scope.model = {
-    sessionUserId: null, //id de sesion de usuario
-
     //seleccion de usuario
     displayUsersList: false,  //flag para controlar si se debe mostrar la lista de usuarios
     selectedUser: null,  //usuario seleccionado
@@ -33,20 +31,7 @@ app.controller('ManageJustificationsStockCtrl', ["$scope", "$timeout", "$window"
    * INICIALIZACION *
    ******************/
   $timeout(function() {
-    Module.authorize('ADMIN-ASSISTANCE,USER-ASSISTANCE',
-      function(response){
-        if (response !== 'granted') {
-          Notifications.message("Acceso no autorizado");
-          $window.location.href = "/#/logout";
-        }
-        $scope.model.sessionUserId = Module.getSessionUserId();
-        $scope.loadUsers();
-      },
-      function(error){
-        Notifications.message(error);
-        $window.location.href = "/#/logout";
-      }
-    );
+    $scope.loadUsers();
   }, 0);
 
 
@@ -58,8 +43,11 @@ app.controller('ManageJustificationsStockCtrl', ["$scope", "$timeout", "$window"
    * Cargar usuarios de la lista
    */
   $scope.loadUsers = function(){
-    Assistance.getUsersInOfficesByRole('autoriza',
+    var sessionUserId = Session.getCurrentSessionUserId();
+
+    Office.getUserInOfficesByRole(sessionUserId, 'autoriza', true,
       function(users) {
+
         $scope.model.users = [];
 
         // eliminamos el usuario jefe asi no se autoautoriza pedidos.
@@ -81,6 +69,7 @@ app.controller('ManageJustificationsStockCtrl', ["$scope", "$timeout", "$window"
         $scope.model.usersSelectionDisable = false;
       },
       function(error){
+
         Notifications.message(error);
       }
     );

@@ -1,0 +1,299 @@
+.mySchedule {
+  display:flex;
+  flex-direction:column;
+  font-family: helvetica;
+  font-size:14px;
+
+}
+/*TITULO*/
+.mySchedule .title {
+  display:flex;
+  align-items: center;
+  background-image:linear-gradient(to right,#275276, #0066A6);
+  font-size:16px;
+  width:98%;
+  height:30px;
+  padding:5px;
+  color:white;
+  margin-bottom:10px;
+  margin:5px;
+}
+.mySchedule .title2 {
+  display:flex;
+  align-items: center;
+  background-image:linear-gradient(to right,#275276, #0066A6);
+  font-size:16px;
+  width:98%;
+  height:20px;
+  padding:5px;
+  color:white;
+  margin-bottom:10px;
+  margin:5px;
+}
+/*CONTENEDOR DE MIS HORARIOS*/
+.mySchedule .contentFirst {
+  display:flex;
+  flex-direction:row;
+  wrap:nowrap;
+  background-color:#DEDEDE;
+
+  z-index: 999;
+  position: relative;
+  padding:10px;
+}
+/*USUARIOS*/
+
+
+.mySchedule .SearchUser {
+  display:flex;
+  flex-direction: column;
+}
+.mySchedule .searchTitle {
+  background-color: #0066A6;
+  color: white;
+  padding:5px;
+  margin-bottom: 0px;
+  font-size: 13px;
+  width:170px;
+  border-top: 3px solid #275276;
+  margin-right:20px;
+
+}
+.mySchedule .inputSearch{
+  width:166px;
+  padding:5px;
+  font-size: 14px;
+
+}
+.mySchedule .listUsers {
+  list-style-type:none;
+  margin:0px;
+  padding-left:5px;
+  width:190px;
+  max-height:300px;
+  background-color:#0066A6;
+  color:white;
+  z-index:999;
+  overflow: scroll;
+  overflow-x: hidden;
+  z-index: 999;
+  position: absolute;
+}
+.mySchedule .liUsers {
+  height:25px;
+  padding-top:10px;
+  border-bottom:2px solid #275276;
+  cursor:pointer;
+  z-index:999;
+
+}
+
+.mySchedule .selectUser {
+  display:flex;
+  flex-direction:column;
+}
+.mySchedule .userSelect {
+  width:160px;
+  background-color:#0066A6;
+  color:white;
+  padding:10px;
+  margin-top:2px;
+  font-size:14px;
+  border-top: 3px solid #275276;
+}
+
+.mySchedule .weeklySelect {
+  display:flex;
+  flex-direction:column;
+  margin-left:20px;
+}
+
+
+/*MODULO DE HORARIO SEMANAL*/
+.mySchedule .myScheduleWeekly {
+  display:flex;
+  flex-direction:column;
+  border:2px solid #275276;
+
+}
+.mySchedule .titleMyScheduleWeekly {
+  background-color:#0066A6;
+  color:white;
+  padding:5px;
+
+}
+.mySchedule .titleMyScheduleWeekly2 {
+  background-color:#0066A6;
+  color:white;
+  padding:5px;
+  font-size:10px;
+  width:170px;
+}
+.mySchedule .weekly {
+  display:flex;
+  flex-direction:row;
+  wrap:nowrap;
+  background-color:white;
+}
+.mySchedule .days {
+  background-color:#275276;
+  color:white;
+  padding:8px;
+}
+.mySchedule .hours {
+
+
+  padding:5px;
+}
+.mySchedule .fa-caret-right {
+  color:#0066A6;
+}
+.mySchedule .fa-caret-left {
+  color:#d9534f;
+}
+
+
+
+/*MODULO SOLICITAR NUEVO HORARIO SEMANAL*/
+.mySchedule .newScheduleWeekly {
+  border:2px solid #275276;
+
+}
+.mySchedule .selectDays {
+  display:flex;
+  flex-direction:row;
+  wrap:nowrap;
+  font-size:13px;
+}
+.mySchedule .timeScheduleWeekly {
+
+  display:flex;
+  flex-direction:row;
+  wrap:nowrap;
+}
+.mySchedule .timeMyScheduleWeekly {
+
+  display:flex;
+  flex-direction:row;
+  wrap:nowrap;
+  margin-top:20px;
+}
+.mySchedule .margin {
+  margin-left:5px;
+  margin-bottom:5px;
+}
+/*MODULO SOLICITAR HORARIO PARA UN DIA ESPECIAL*/
+.mySchedule .myScheduleSpecial {
+  width:240px;
+  border:2px solid #275276;
+  margin-left: 15px;
+
+
+
+}
+.mySchedule .margin2 {
+  margin-left:0px;
+  margin-bottom:5px;
+}
+
+/*CONTENEDOR DE SOLICITUDES REALIZADAS + HISTORIAL*/
+
+.mySchedule .textBlue {
+  color:#275276;
+  padding:5px;
+}
+
+.mySchedule .contentSecond {
+  display:flex;
+  flex-direction:row;
+  wrap:nowrap;
+  padding:5px;
+  margin:5px;
+}
+.mySchedule .save {
+  background-color:#0066A6;
+  padding:10px;
+  margin:5px;
+  color:white;
+  border:none;
+  width:95%;
+  cursor:pointer;
+}
+.mySchedule .save2 {
+  background-color:#0066A6;
+  padding:10px;
+  margin:5px;
+  color:white;
+  border:none;
+  width:95%;
+  cursor:pointer;
+  margin-top:14px;
+}
+
+.mySchedule .disabled{background-color:gray;}
+
+/*HISTORIAL*/
+
+.mySchedule .historySchedule {
+  width:280px;
+  border:2px solid #275276;
+  margin-left: 15px;
+}
+.mySchedule .contentHistory {
+
+  overflow: scroll;
+  height:165px;;
+  overflow-x: hidden;
+}
+.mySchedule .ContentRepeat {
+  padding:5px;
+  display:flex;
+  flex-direction:column;
+}
+.mySchedule .userHistory {
+  display:flex;
+  flex-direction:row;
+  wrap:nowrap;
+}
+
+.mySchedule .dateHistory {
+  display:flex;
+  flex-direction:row;
+  wrap:nowrap;
+}
+.mySchedule .dateHistory2 {
+  display:flex;
+  flex-direction:row;
+  wrap:nowrap;
+}
+.mySchedule .timeHistory {
+  display:flex;
+  flex-direction:row;
+  wrap:nowrap;
+}
+.mySchedule .t {
+  color:#0066A6;
+  margin-right:5px;
+
+}
+.mySchedule .t2 {
+  color:#0066A6;
+  margin-right:8px;
+  font-weight:bold;
+
+}
+.mySchedule .t3 {
+  margin-left:10px;
+}
+.mySchedule .t4 {
+  margin-left:20px;
+}
+
+.mySchedule .t5 {
+  margin-left:5px;
+}
+.mySchedule .ContentRepeat:nth-child(even) { background: white }
+.mySchedule .ContentRepeat:nth-child(odd) { background: #F2F2F2}
+.mySchedule .hidden {visibility:hidden;}
+.mySchedule .title2.hidden {display:none;}
+.mySchedule .contentSecond.hidden {display:none;}

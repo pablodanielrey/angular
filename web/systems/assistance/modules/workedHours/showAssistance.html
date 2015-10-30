@@ -1,0 +1,127 @@
+<div class="showAssistance">
+
+  <!-- seleccion de usuario -->
+  <div class="title">
+    <label><i class="fa fa-clock-o"></i> Control de Horario</label>
+  </div>
+  <div class="content">
+    <div class="contentLeft">
+      <div class="navTitleUser">Usuario</div>
+
+      <input class="navTitleUser2" type="text" ng-model="model.searchUser" >
+
+      <div class="searchList">
+        <div class="navSearchList">Seleccione</div>
+        <div clasS='listUsersContent'>
+
+          <div class="listUsers" ng-repeat="user in model.usersFilters | filter:model.searchUser | orderBy:['name','lastname']" ng-click="selectUser(user)" ng-class="{true:'selected'}[isSelectedUser(user)]">{{user.name}} {{user.lastname}}</div>
+        </div>
+        <div class="cleanse" ng-class="{false:'enabled',true:'disabled'}[model.usersIdSelected.length == 0]">
+          <span ng-click="clearUsersSelected()" ><i class="fa fa-eraser"></i> Borrar Selección</span>
+        </div>
+      </div>
+    </div>
+    <div class="contentRight">
+      <div class="nav">
+        <div>
+          <div class="navTitle"><i class="fa fa-building-o"></i> Oficina</div>
+          <select class="navTitle1" ng-change="filterUsers()" ng-model="model.groupSelected"  ng-options="op.name group by op.parentName  for op in model.groups | orderBy:['parentName','order','name']">
+            <option value="">Todos</option>
+          </select>
+       </div>
+        <div>
+          <div class="navTitle">Fecha Inicio</div>
+          <input class="navTitle2" type="date" ng-model="model.start" ng-blur="checkDates()" >
+        </div>
+        <div>
+          <div class="navTitle">Fecha Fin</div>
+          <input class="navTitle2" type="date" ng-model="model.end" ng-blur="checkDates()">
+        </div>
+
+
+        <div>
+          <button class="searchButtom" ng-click="searchAssistance()" ng-class="{false:'enabled',true:'disabled'}[isDisabled()]" ng-disabled="isDisabled()"><i class="fa fa-search"></i> Buscar</button>
+          <span class="searchDate" ng-if='isDisabled()'><i class="loading fa fa-spinner fa-spin"></i>  Buscando Datos</span>
+        </div>
+
+
+      </div>
+
+      <div class="nav2">
+        <div ng-click="reverseDay=!reverseDay;order(['dayOfWeek.number','dateSort'],reverseDay)" class="tam0T pointer"><i class="fa fa-calendar-o"></i> Día</div>
+
+        <div ng-click="reverseDate=!reverseDate;order(['dateSort'],reverseDate)"  class="tam1 pointer"><i class="fa fa-calendar-o"></i> Fecha</div>
+        <div ng-click="reverseUser=!reverseUser;order(['user','dateSort'],reverseUser)" class="tam2T pointer"><i class="fa fa-user"></i> Usuario</div>
+        <div class="marking"><i class="fa fa-maxcdn"></i></div>
+        <div ng-click="reverseStart=!reverseStart;order(['start','dateSort'],reverseStart)" Class="tam1T pointer"> Entrada</div>
+        <div class="marking"><i class="fa fa-maxcdn"></i></div>
+        <div ng-click="reverseEnd=!reverseEnd;order(['end','dateSort'],reverseEnd)" class="tam3T pointer"> Salida</div>
+        <div ng-click="reverseWT=!reverseWT;order(['workedTime','dateSort'],reverseWT)" class="tam1T pointer"> Total</div>
+        <div class="tam3 pointer" ng-click="reverseObs=!reverseObs;order(['justification.shortName','dateSort'],reverseObs)"><i class="fa fa-exclamation"></i> Observaciones</div>
+      </div>
+      <div class='dataUsersContent'>
+        <div class="results" ng-repeat="assistance in model.assistances">
+
+          <div class="tam0">{{assistance.dayOfWeek.shortName}}</div>
+
+          <div class="tam1">{{assistance.date}}</div>
+          <div class="tam2 textBlue">{{assistance.user}}</div>
+
+          <div class="marking2" title="Marcación por Huella">
+            <!-- <i class="fa fa-forumbee"></i> -->
+          </div>
+
+          <div class="tam4">{{assistance.start}}</div>
+
+          <div class="marking2" title="Marcación por Teclado">
+            <!-- <i class="fa fa-hand-o-up"></i> -->
+          </div>
+
+          <div class="tam4">{{assistance.end}}</div>
+          <div class="tam4">{{assistance.workedTime}}</div>
+          <div class="tam3">
+            <div class="obs"  ng-class="{true:'visible',false:'hidden'}[!assistance.displayLogs]">
+              <span ng-click="showLogs(true,assistance)" class="link"> <i class="fa fa-plus-circle"></i></span>
+            </div>
+
+            <!-- MARCACIONES -->
+            <div class="logs obs" ng-class="{true:'visible',false:'hidden'}[assistance.displayLogs]">
+              <span ng-click="showLogs(false,assistance)" class="link"><i class="fa fa-minus-circle"></i></span>
+              <ul class="ULlogs">
+                <div ng-repeat="log in assistance.logs">
+                  <li><i class="fa fa-calendar-o"></i> {{log.date}}</li>
+                  <li><i class="fa fa-clock-o"></i> {{log.time}}</li>
+                </div>
+              </ul>
+            </div>
+
+
+            <!-- JUSTIFICATIONES -->
+
+            <div ng-class="{true:'visible',false:'hidden'}[(assistance.justification != undefined) && (assistance.justification.id != undefined) && (assistance.justification.id != 'fa64fdbd-31b0-42ab-af83-818b3cbecf46')]">
+              <span class="obs" title="{{assistance.justification.name}}"> <i class="fa {{assistance.justification.icon}}"></i>{{assistance.justification.shortName}}</span>
+            </div>
+
+            <div ng-class="{true:'visible',false:'hidden'}[assistance.justification.id == 'fa64fdbd-31b0-42ab-af83-818b3cbecf46']">
+              <span class="obs" ng-click="showJustifications(assistance)" title="{{assistance.justification.name}}"> <i class="fa {{assistance.justification.icon}}"></i> {{assistance.justification.shortName}}</span>
+              <ul class="ULlogs" ng-class="{true:'visible',false:'hidden'}[assistance.displayJustification]">
+                <li><i class="fa fa-calendar-o"></i> Desde {{assistance.justification.startTime}}</li>
+                <li><i class="fa fa-calendar-o"></i> Hasta {{assistance.justification.endTime}}</li>
+              </ul>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="saveContent">
+        <button class='save' ng-click='download()' ng-if='model.assistances.length > 0'><i class="fa fa-download"></i>&nbsp;  Descargar Datos</button>
+      </div>
+
+
+    </div>
+  </div>
+
+
+
+</div>

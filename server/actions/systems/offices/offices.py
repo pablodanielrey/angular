@@ -140,7 +140,7 @@ class OfficesWamp(ApplicationSession):
         con = self._getDatabase()
         try:
             tree = False if tree is None else tree
-            self.offices.getUserInOfficesByRole(con,userId,tree,role)
+            return self.offices.getUserInOfficesByRole(con,userId,tree,role)
         finally:
             con.close()
 
@@ -155,11 +155,11 @@ class OfficesWamp(ApplicationSession):
         con = self._getDatabase()
         try:
             if tree is None:
-                self.offices.getOfficesByUserRole(con,userId)
+                return self.offices.getOfficesByUserRole(con,userId)
             elif role is None:
-                self.offices.getOfficesByUserRole(con,userId,tree)
+                return self.offices.getOfficesByUserRole(con,userId,tree)
             else:
-                self.offices.getOfficesByUserRole(con,userId,tree,role)
+                return self.offices.getOfficesByUserRole(con,userId,tree,role)
 
         finally:
             con.close()

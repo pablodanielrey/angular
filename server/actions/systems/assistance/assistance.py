@@ -5,15 +5,14 @@ import logging
 import inject
 import psycopg2
 import pytz
-import datetime
 import dateutil.parser
 from model.exceptions import *
+from datetime import datetime, date, time, timedelta
 
 from model.config import Config
 from model.profiles import Profiles
 
 from model.systems.assistance.assistance import Assistance
-from model.systems.assistance.justifications.justifications import Justifications
 from model.systems.assistance.schedule import ScheduleData
 import model.systems.assistance.date
 from model.systems.assistance.fails import Fails
@@ -38,7 +37,6 @@ class AssistanceWamp(ApplicationSession):
         self.serverConfig = inject.instance(Config)
         self.profiles = inject.instance(Profiles)
         self.assistance = inject.instance(Assistance)
-        self.justifications = inject.instance(Justifications)
         self.fails = inject.instance(Fails)
         self.dateutils = inject.instance(Date)
         self.checks = inject.instance(ScheduleChecks)
@@ -57,15 +55,17 @@ class AssistanceWamp(ApplicationSession):
         yield from self.register(self.getAssistanceData_async, 'assistance.getAssistanceData')
         yield from self.register(self.getUsersWithSchedules_async, 'assistance.getUsersWithSchedules')
         yield from self.register(self.getSchedules_async, 'assistance.getSchedules')
+        yield from self.register(self.getSchedulesHistory_async, 'assistance.getSchedulesHistory')
         yield from self.register(self.persistSchedule_async, 'assistance.persistSchedule')
+        yield from self.register(self.persistScheduleWeek_async, 'assistance.persistScheduleWeek')
         yield from self.register(self.deleteSchedule_async, 'assistance.deleteSchedule')
         yield from self.register(self.getAvailableChecks_async, 'assistance.getAvailableChecks')
         yield from self.register(self.getChecksByUser_async, 'assistance.getChecksByUser')
         yield from self.register(self.getUsersWithChecks_async, 'assistance.getUsersWithChecks')
         yield from self.register(self.getSchedulesByDate_async, 'assistance.getSchedulesByDate')
         yield from self.register(self.getLogsForSchedulesByDate_async, 'assistance.getLogsForSchedulesByDate')
-        yield from self.register(self.getJustifications_async, 'assistance.justifications.getJustifications')
-        
+
+
 
 
     def _getDatabase(self):
@@ -89,7 +89,7 @@ class AssistanceWamp(ApplicationSession):
         try:
             if date is not None:
                 date = self._parseDate(date)
-                            
+
             r = self.assistance.getAssistanceData(con, userId, date)
             scheds = r['schedule']
             schedsMap = []
@@ -124,23 +124,24 @@ class AssistanceWamp(ApplicationSession):
         r = yield from loop.run_in_executor(None, self.getAssistanceStatusByDate, userId, date)
         return r
 
-    def getAssistanceStatusByUsers(self, sid, userIds, dates):
+    def getAssistanceStatusByUsers(self, sid, userIds, dates,status):
         logging.debug(dates)
         con = self._getDatabase()
         try:
             if dates is not None:
                 dates = self._parseDates(dates)
-            st = self.assistance.getAssistanceStatusByUsers(con, userIds, dates)
-            con.commit()
-            return st
+            st = self.assistance.getAssistanceStatusByUsers(con, userIds, dates,status)
+            b64 = self.assistance.arrangeAssistanceStatusByUsers(con,st)
+            ret = {'base64':b64,'assistances':st}
+            return ret
 
         finally:
             con.close()
 
     @coroutine
-    def getAssistanceStatusByUsers_async(self, sid, userIds, dates):
+    def getAssistanceStatusByUsers_async(self, sid, userIds, dates,status):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getAssistanceStatusByUsers, sid, userIds, dates)
+        r = yield from loop.run_in_executor(None, self.getAssistanceStatusByUsers, sid, userIds, dates, status)
         return r
 
     def getUsersWithSchedules(self, sid):
@@ -161,9 +162,21 @@ class AssistanceWamp(ApplicationSession):
     def getSchedules(self, sid, userId, date):
         con = self._getDatabase()
         try:
+            if date is None:
+                return None;
+
             date = self._parseDate(date)
-            r = self.schedule.getSchedule(con, userId, date)
-            return r
+            scheds = self.schedule.getSchedulesOfWeek(con, userId, date)
+
+            schedsMap = []
+
+            weekday = datetime.weekday(date)
+            date -= timedelta(days=weekday)
+            for s in scheds:
+                weekday = datetime.weekday(s.date)
+                d = date + timedelta(days=weekday)
+                schedsMap.append(s.toMap(d))
+            return schedsMap
 
         finally:
             con.close()
@@ -174,12 +187,28 @@ class AssistanceWamp(ApplicationSession):
         r = yield from loop.run_in_executor(None, self.getSchedules, sid, userId, date)
         return r
 
+    def getSchedulesHistory(self, sid, userId):
+        con = self._getDatabase()
+        try:
+            scheds = self.schedule.getSchedulesHistory(con, userId)
+            schedsMap = []
+            for s in scheds:
+                date = s.date
+                schedsMap.append(s.toMap(date))
+            return schedsMap
+
+        finally:
+            con.close()
+    @coroutine
+    def getSchedulesHistory_async(self, sid, userId):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.getSchedulesHistory, sid, userId)
+        return r
+
     def persistSchedule(self, sid, userId, date, start, end, dayOfWeek=False, dayOfMonth=False, dayOfYear=False):
         con = self._getDatabase()
         try:
             date = self._parseDate(date)
-            start = self._parseDate(start)
-            end = self._parseDate(end)
             r = self.schedule.persistSchedule(con, userId, date, start, end, dayOfWeek, dayOfMonth, dayOfYear)
             con.commit()
             return r
@@ -191,6 +220,24 @@ class AssistanceWamp(ApplicationSession):
     def persistSchedule_async(self, sid, userId, date, start, end, dayOfWeek=False, dayOfMonth=False, dayOfYear=False):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.persistSchedule, sid, userId, date, start, end, dayOfWeek, dayOfMonth, dayOfYear)
+        return r
+
+
+    def persistScheduleWeek(self, sid, userId, date, start, end, daysOfWeek):
+        con = self._getDatabase()
+        try:
+            date = self._parseDate(date)
+            r = self.schedule.persistScheduleWeek(con, userId, date, start, end, daysOfWeek)
+            con.commit()
+            return r
+
+        finally:
+            con.close()
+
+    @coroutine
+    def persistScheduleWeek_async(self, sid, userId, date, start, end, daysOfWeek):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.persistScheduleWeek, sid, userId, date, start, end, daysOfWeek)
         return r
 
     def deleteSchedule(self, sid, id):
@@ -311,7 +358,8 @@ class AssistanceWamp(ApplicationSession):
          " @param userId Id de usuario al cual se le va a pedir los schedules
          " @param date Fecha para la cual se quieren consultar los schedules
          """
-        date = datetime.datetime.strptime(date, "%Y-%m-%d").date()
+
+        date = datetime.strptime(date, "%Y-%m-%d").date()
 
         con = self._getDatabase()
         try:
@@ -355,12 +403,12 @@ class AssistanceWamp(ApplicationSession):
          " @param schedules Lista de diccionario con los datos de los schedules del usuario al cual se le solicitaran los logs
          """
 
-        date = datetime.datetime.strptime(date, "%Y-%m-%d").date()
+        date = datetime.strptime(date, "%Y-%m-%d").date()
         con = self._getDatabase()
         try:
             schedulesData = []
             for schedule in schedules:
-                dateSch = datetime.datetime.strptime(schedule["date"], "%Y-%m-%d").date()
+                dateSch = datetime.strptime(schedule["date"], "%Y-%m-%d").date()
 
                 sch = {
                   'id': schedule["id"],
@@ -387,28 +435,8 @@ class AssistanceWamp(ApplicationSession):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.getLogsForSchedulesByDate, schedules, date)
         return r
-        
-        
-    
-    
-    def getJustifications(self, sid):   
-        """
-         " Obtener justificaciones a partir del session id
-         " @param sid Identificador de session
-         """
 
-        con = self._getDatabase()
-        try:
-            justifications = self.justifications.getJustifications(con)
-            return justifications
 
-        finally:
-            con.close()
-    
-        
-    @coroutine
-    def getJustifications_async(self, sid):
-        loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getJustifications, sid)
-        return r   
+
+
     

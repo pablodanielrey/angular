@@ -56,9 +56,13 @@ class WampMain(ApplicationSession):
 
         schedules = yield from self.call('assistance.getSchedulesByDate', userId, date)
         
-
+        
+        
         logs = yield from self.call('assistance.getLogsForSchedulesByDate', schedules, date)
         
+        for sch in schedules:
+            print(sch)
+            
         for log in logs:
             print(log)
 

@@ -105,6 +105,9 @@ class ScheduleChecks:
     def _getCheckData(self, con, userId, date):
         allChecks = self._getChecksByUser(con, userId)
 
+        if allChecks is None:
+            return []
+            
         if len(allChecks) == 0:
             return allChecks
 
@@ -174,6 +177,7 @@ class ScheduleChecks:
         @param end Fecha final (date)
     """
     def checkConstraints(self, con, userId, start, end):
+
         checks = self._getCheckData(con, userId, start) #obtener chequeos a realizar validos a partir de la fecha
 
         if (checks is None) or (len(checks) <= 0): #si no existen chequeos a realizar se retorna una lista vacia
@@ -181,8 +185,8 @@ class ScheduleChecks:
 
         #obtener todas las justificaciones asoiadas al usuario, luego seran filtradas cuando se realice el chequeo
         gjustifications = self.justifications.getGeneralJustificationRequests(con)
-        justifications = self.justifications.getJustificationRequestsByDate(con, status=['APPROVED'], users=[userId], start=start, end=end)
-
+        justifications = self.justifications.getJustificationRequestsByDate(con, status=['APPROVED'], users=[userId], start=start, end=end)     
+        
         fails = []
         actual = start
 
@@ -218,27 +222,26 @@ class ScheduleChecks:
             justs = self._findJustificationsForDate(justifications,actual)          
             gjusts = self._findGeneralJustificationsForDate(gjustifications,actual)
 
-
+                     
             #agregar usuario a las justificaciones generales para facilitar su manipulacion
             if len(gjusts) > 0:
                 for j in gjusts:
                     j['user_id'] = userId
                     justs.append(j)
-
-
+                    
+            
             #definir fallas correspondientes a la fecha de chequeo
             auxFails = []
             for tcheck in self.typesCheck:
                 if tcheck.isTypeCheck(check["type"]):
-                    fails = self.checkSchedule(con,userId,actual)
-
+                    auxFails = self.checkSchedule(con,userId,actual)
                     break
 
-            if len(auxFails) > 0:
+            if auxFails is not None and len(auxFails) > 0:
                 fails.extend(auxFails)
 
             actual = actual + datetime.timedelta(days=1)
-           
+
         return fails
 
 
@@ -333,7 +336,8 @@ class ScheduleChecks:
 
         whs, attlogs = self.logs.getWorkedHours(logs)
         controls = self.schedule.combiner(schedules, whs)
+        
         fails = self.scheduleCheck.checkWorkedHours(con,userId,controls, date)
-        print(fails)
+        
         return fails
 

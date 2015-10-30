@@ -77,7 +77,7 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Profiles', 'Se
     $scope.initialize = function() {
 
       Profiles.checkAccess(Session.getSessionId(),["ADMIN-ASSISTANCE","USER-ASSISTANCE"],
-        function(ok) {/*
+        function(ok) {
           if (ok) {
               $scope.model.items = [];
               //$scope.model.items.push({ n:1, label:'Inicio', img:'fa-tachometer', function: $scope.summary});
@@ -88,6 +88,18 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Profiles', 'Se
               // hasta que no este terminado en producción no va
               $scope.model.items.push({ n:4, label:'Mi Horario', img:'fa-clock-o', function: $scope.mySchedule});
 
+
+              /* -----------------------------------------------------------------------------------------------------------
+               * --------- ESTAN PANTALLAS ESTAN ACA PARA PROBARLAS, LUEGO HAY QUE HACER LOS CHEQUEOS CORRESPONDIENTES -----
+               * -----------------------------------------------------------------------------------------------------------
+               */
+
+               $scope.model.items.push({ n:30, label:'Horas Extras ', img:'fa-plus', function: $scope.requestAuthority});
+               $scope.model.items.push({ n:31, label:'Admin Horas Extras ', img:'fa-plus', function: $scope.adminRequestOverTime});
+
+               $scope.model.items.push({ n:40, label:'Administrar Cargos', img:'fa-plus', function: $scope.managePositions});
+               
+              /* Lo comente para probar otras pantallas
               Office.getUserOfficeRoles(
                   function(roles) {
                     var hasApprove = false;
@@ -128,8 +140,9 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Profiles', 'Se
                     Notifications.message(error);
                   }
               );
+              */
           }
-          */
+
         },
         function (error) {
             Notifications.message(error);

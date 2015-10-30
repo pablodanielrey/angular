@@ -7,7 +7,6 @@ from datetime import datetime, date, time, timedelta
 import pytz
 import calendar
 import logging
-import pdb
 
 from model.exceptions import *
 
@@ -42,7 +41,15 @@ class ScheduleData:
         self.tzinfo = tzinfo
 
     def toMap(self,date):
-        return {'start':self.getStart(date),'end':self.getEnd(date)}
+        return {
+                'id': self.id,
+                'start': self.getStart(date),
+                'end': self.getEnd(date),
+                'date': self.date,
+                'isDayOfWeek': self.isDayOfWeek,
+                'isDayOfMonth': self.isDayOfMonth,
+                'isDayOfYear': self.isDayOfYear
+               }
 
     def _checkDate(self, date):
         return True #por el momento no hacemos el chequeo, retornamos True
@@ -140,6 +147,7 @@ class Schedule:
         cur = con.cursor()
         cur.execute('set time zone %s', ('utc',))
 
+
         """ obtengo todos los schedules que son en la fecha date del parámetro """
         cur.execute("select id, sdate, sstart, send, isDayOfWeek, isDayOfMonth, isDayOfYear from assistance.schedule where \
                     ((sdate = %s) or \
@@ -147,13 +155,53 @@ class Schedule:
                     (isDayOfMonth = true and sdate <= %s and extract(day from sdate) = extract(day from %s)) or \
                     (isDayOfYear = true and sdate <= %s and extract(doy from sdate) = extract(doy from %s))) and \
                     user_id = %s \
-                    order by sdate desc, sstart desc", (date, date, date, date, date, date, date, userId))
+                    order by sdate desc, sstart asc", (date, date, date, date, date, date, date, userId))
 
         scheduless = cur.fetchall()
         if scheduless is None or len(scheduless) <= 0:
             return []
 
         schedules = []
+        dateS = scheduless[0][1]
+        for schedule in scheduless:
+            if dateS == schedule[1]:
+                sch = {
+                    'id': schedule[0],
+                    'date': schedule[1],
+                    'start': schedule[2],
+                    'end': schedule[3],
+                    'isDayOfWeek': schedule[4],
+                    'isDayOfMonth': schedule[5],
+                    'isDayOfYear': schedule[6],
+                    'userId': userId
+                }
+
+                schData = ScheduleData(sch, self.date.getLocalTimezone())
+
+                #retorno los schedules con la fecha actual en utc - las fechas en la base deberian estar en utc
+                schedules.append(schData)
+
+        return schedules
+
+
+    """
+        obtiene todos los schedules para un usuario
+    """
+    def getSchedulesHistory(self, con, userId):
+
+        cur = con.cursor()
+        cur.execute('set time zone %s', ('utc',))
+
+        cur.execute("select id, sdate, sstart, send, isDayOfWeek, isDayOfMonth, isDayOfYear from assistance.schedule where \
+                user_id = %s \
+                order by sdate desc", (userId,))
+
+        scheduless = cur.fetchall()
+        if scheduless is None or len(scheduless) <= 0:
+            return []
+
+        schedules = []
+
         for schedule in scheduless:
             sch = {
                 'id': schedule[0],
@@ -164,42 +212,6 @@ class Schedule:
                 'isDayOfMonth': schedule[5],
                 'isDayOfYear': schedule[6],
                 'userId': userId
-            }
-
-            schData = ScheduleData(sch, self.date.getLocalTimezone())
-
-            #retorno los schedules con la fecha actual en utc - las fechas en la base deberian estar en utc
-            schedules.append(schData)
-
-        return schedules
-
-
-    """
-        obtiene todos los schedules para un usuario
-    """
-    def getSchedulesHistory(self, con, userId):
-        cur = con.cursor()
-        cur.execute('set time zone %s', ('utc',))
-
-        cur.execute("select sstart, send, date, isDayOfWeek, isDayOfMonth, isDayOfYear, id from assistance.schedule where \
-                user_id = %s \
-                order by date desc", (userId,))
-
-        scheduless = cur.fetchall()
-        if scheduless is None or len(scheduless) <= 0:
-            return []
-
-        schedules = []
-
-        for schedule in scheduless:
-            sch = {
-                'id': schedule[0],
-                'date': schedule[1],
-                'start': schedule[2],
-                'end': schedule[3],
-                'isDayOfWeek': schedule[4],
-                'isDayOfMonth': schedule[5],
-                'isDayOfYear': schedule[6]
             }
 
             schData = ScheduleData(sch, self.date.getLocalTimezone())
@@ -216,16 +228,17 @@ class Schedule:
         if date is None:
             date = self.date.now()
 
+  
         # obtengo el primer dia de la semana del date (L-0 .. D-6)
-        weekday = datetime.date.weekday(date)
-        date -= datetime.timedelta(days=weekday)
+        weekday = datetime.weekday(date)
+        date -= timedelta(days=weekday)
 
         schedules = []
 
         for x in range(0, 7):
-            sch = self.getSchedule(con,userId,date)
-            schedules.append(sch)
-            date += datetime.timedelta(days=1)
+            sch = self.getSchedule(con,userId,date.date())
+            schedules.extend(sch)
+            date += timedelta(days=1)
 
         return schedules
 
@@ -250,19 +263,52 @@ class Schedule:
     """
         genera un nuevo schedule las fechas pasadas como parámetro (se supone aware)
     """
-    def persistSchedule(self, con, userId, date, start, end, isDayOfWeek, isDayOfMonth, isDayOfYear):
+    def persistSchedule(self, con, userId, date, sstart, send, isDayOfWeek=False, isDayOfMonth=False, isDayOfYear=False):
         uaware = date.astimezone(pytz.utc)
-        ustart = start.astimezone(pytz.utc)
-        uend = end.astimezone(pytz.utc)
 
         cur = con.cursor()
         cur.execute('set time zone %s', ('utc',))
 
         id = str(uuid.uuid4())
-        req = (id, userId, uaware, ustart, uend, isDayOfWeek, isDayOfMonth, isDayOfYear)
+        req = (id, userId, uaware, sstart, send, isDayOfWeek, isDayOfMonth, isDayOfYear)
         cur.execute('insert into assistance.schedule (id,user_id,sdate,sstart,send,isDayOfWeek,isDayOfMonth,isDayOfYear) values (%s,%s,%s,%s,%s,%s,%s,%s)', req)
         return id
 
+    def _getDateWeek(self,day,date):
+        # date.weekday=Monday is 0 and Sunday is 6.
+        weekday = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
+        # Monday is 0 and Sunday is 6.
+        dateWeek = date.weekday()
+
+        dayWeek = None;
+        for x in range(0, 6):
+            if (day == weekday[x]):
+                dayWeek = x;
+                break;
+
+        # calculo la cantidad de dias a incrementar
+        inc = (dayWeek - dateWeek) if (dateWeek <= dayWeek) else ((7 - dateWeek) + dayWeek);
+
+        date += timedelta(days=inc)
+        return date
+
+
+    '''
+        Creacion de nuevo horario semanal
+        Crea un schedule por cada dia de la semana pasado como parametro
+    '''
+    def persistScheduleWeek(self, con, userId, date, start, end, daysOfWeek):
+        if daysOfWeek is None or len(daysOfWeek) <= 0:
+            return
+
+        isDayOfWeek = True
+
+        ids = []
+        for day in daysOfWeek:
+            d = self._getDateWeek(day,date)
+            id = self.persistSchedule(con, userId, d, start, end, isDayOfWeek)
+            ids.append(id)
+        return ids
     '''
         elimina un schedule
     '''
@@ -293,7 +339,9 @@ class Schedule:
             else:
                 whsAppends = []
                 for wh in whs:
-                    if 'start' in wh and wh['start'] <= sched['end']:
+                    date = wh['start'].date()
+
+                    if 'start' in wh and wh['start'] <= sched.getEnd(date):
                         elem['whs'].append(wh)
                         whsAppends.append(wh)
 

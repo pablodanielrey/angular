@@ -31,7 +31,7 @@ class OvertimeWamp(ApplicationSession):
         self.serverConfig = inject.instance(Config)
         self.overtime = inject.instance(Overtime)
         self.date = inject.instance(Date)
-
+        self.profiles = inject.instance(Profiles)
 
 
     @coroutine
@@ -60,33 +60,34 @@ class OvertimeWamp(ApplicationSession):
      ' @param states Lista de estados, si es una lista vacia retorna todos los estados
      '      [APPROVED, PENDING, REJECTED]'
      '''
-    def getOvertimeRequests(self, usersIds, states):
+    def getOvertimeRequests(self, sid, states, usersIds=[]):
         con = self._getDatabase()
         try:
-            requests = self.overtime.getOvertimeRequests(con,states,None,usersIds)
+            userId = self.profiles.getLocalUserId(sid)
+            requests = self.overtime.getOvertimeRequests(con,states,[userId],usersIds)
             return requests
 
         finally:
             con.close()
 
     @coroutine
-    def getOvertimeRequests_async(self, usersIds, states):
+    def getOvertimeRequests_async(self, sid, states, usersIds=[]):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getOvertimeRequests, usersIds, states)
+        r = yield from loop.run_in_executor(None, self.getOvertimeRequests, sid, states, usersIds)
         return r
 
 
     '''
      ' Obtener requerimientos de horas extra para administrar
-     ' @param usersId Id de usuario
      ' @param states Lista con el estado estado de las solicitudes a consultar
      '      [APPROVED, PENDING, REJECTED]'
      ' @param group Grupo (Oficinas)
      '      ROOT|TREE --> ROOT = oficinas directas, TREE = oficinas directas y todas las hijas
      '''
-    def getOvertimeRequestsToManage(self, userId, states, group):
+    def getOvertimeRequestsToManage(self, sid, states, group):
         con = self._getDatabase()
         try:
+            userId = self.profiles.getLocalUserId(sid)
             requests = self.overtime.getOvertimeRequestsToManage(con, userId, states, group)
             return requests
 
@@ -94,9 +95,9 @@ class OvertimeWamp(ApplicationSession):
             con.close()
 
     @coroutine
-    def getOvertimeRequestsToManage_async(self,userId, states=[], group='ROOT'):
+    def getOvertimeRequestsToManage_async(self,sid, states=[], group='ROOT'):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getOvertimeRequestsToManage, userId, states, group)
+        r = yield from loop.run_in_executor(None, self.getOvertimeRequestsToManage, sid, states, group)
         return r
 
 
@@ -109,9 +110,11 @@ class OvertimeWamp(ApplicationSession):
      ' @param end Fecha y hora de fin de la solicitud
      ' @param reason Razon de la solicitud
      '''
-    def requestOvertime(self, requestorId, userId, begin, end, reason):
+    def requestOvertime(self, sid, requestorId, userId, begin, end, reason):
         con = self._getDatabase()
         try:
+            if requestorId is None:
+                requestorId = self.profiles.getLocalUserId(sid)
             overtimeId = self.overtime.requestOvertime(con, requestorId, userId, begin, end, reason)
             con.commit()
             return overtimeId
@@ -120,9 +123,9 @@ class OvertimeWamp(ApplicationSession):
             con.close()
 
     @coroutine
-    def requestOvertime_async(self, requestorId, userId, begin, end, reason):
+    def requestOvertime_async(self, sid, requestorId, userId, begin, end, reason):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.requestOvertime, requestorId, userId, begin, end, reason)
+        r = yield from loop.run_in_executor(None, self.requestOvertime, sid, requestorId, userId, begin, end, reason)
         return r
 
 
@@ -133,9 +136,10 @@ class OvertimeWamp(ApplicationSession):
      ' @param requestId Id del requerimiento de hora extra
      ' @param status Nuevo estado
      '''
-    def updateStatus(self, userId, requestId, status):
+    def updateStatus(self, sid, requestId, status):
         con = self._getDatabase()
         try:
+            userId = self.profiles.getLocalUserId(sid)
             events = self.overtime.updateOvertimeRequestStatus(con, userId, requestId, status)
             con.commit()
             return events
@@ -144,9 +148,9 @@ class OvertimeWamp(ApplicationSession):
             con.close()
 
     @coroutine
-    def updateStatus_async(self, userId, requestId, status):
+    def updateStatus_async(self, sid, requestId, status):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.updateStatus, userId, requestId, status)
+        r = yield from loop.run_in_executor(None, self.updateStatus, sid, requestId, status)
         return r
 
 
@@ -189,7 +193,7 @@ class OvertimeWamp(ApplicationSession):
         '''
 
         date = datetime.datetime.strptime(date, "%Y-%m-%d").date()
-        
+
         con = self._getDatabase()
         try:
             return self.overtime.getWorkedOvertime(con, userId, date)

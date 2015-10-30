@@ -121,14 +121,14 @@ function($scope, $timeout, $window, Profiles, Session, Users, Assistance, Notifi
 	};
 
     $scope.loadUser = function() {
-		Users.findUser($scope.model.session.user_id,
-			function(user) {
-				$scope.model.user = user;
-			},
-			function(error) {
-				Notifications.message(error);
-			}
-		);
+			Users.findUser($scope.model.session.user_id,
+				function(user) {
+					$scope.model.user = user;
+				},
+				function(error) {
+					Notifications.message(error);
+				}
+			);
     };
 
     $scope.loadOffices = function() {

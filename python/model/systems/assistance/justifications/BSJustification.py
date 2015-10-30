@@ -6,7 +6,6 @@ from model.systems.assistance.schedule import Schedule
 from model.systems.assistance.logs import Logs
 from model.systems.assistance.justifications.exceptions import *
 
-import pdb
 
 """
     Boletas de salida - restricciones en horas.
@@ -28,7 +27,7 @@ class BSJustification(Justification):
         
         @param date Fecha de chequeo
     """
-    def _isJustifiedTimeStart(self,sched,whs,justification,tolerancia, date):
+    def _isJustifiedTimeStart(self,sched,whs,justification,tolerancia, date = None):
         start = whs[0]['start']
         if sched.getStart(date) >= justification['begin'] and start <= justification['end']:
             return True
@@ -38,7 +37,7 @@ class BSJustification(Justification):
         
         @param date Fecha de chequeo
     """
-    def _isJustifiedTimeEnd(self,sched,whs, justification, tolerancia, date):
+    def _isJustifiedTimeEnd(self,sched,whs, justification, tolerancia, date = None):
         whEnd = whs[-1]['end']
         if whEnd >= justification['begin'] and sched.getEnd(date) <= justification['end']:
             return True

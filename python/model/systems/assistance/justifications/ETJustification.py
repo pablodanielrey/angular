@@ -17,12 +17,12 @@ class ETJustification(Justification):
     def isJustification(self,id):
         return self.id == id
 
-    def _isJustifiedTimeStart(self,sched,whs,justification,tolerancia):
+    def _isJustifiedTimeStart(self,sched,whs,justification,tolerancia, date = None):
         if len(whs) > 0:
             return True
         return False
 
-    def _isJustifiedTime(self,justification,start,end):
+    def _isJustifiedTime(self,justification,start,end, date = None):
         return False
 
     """

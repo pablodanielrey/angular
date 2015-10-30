@@ -17,6 +17,7 @@ import datetime
 import asyncio
 from asyncio import coroutine
 from autobahn.asyncio.wamp import ApplicationSession
+from model.systems.assistance.date import Date
 
 from model.config import Config
 from model.systems.assistance.schedule import ScheduleData
@@ -39,10 +40,12 @@ userId = sys.argv[2]
 
 class WampMain(ApplicationSession):
 
+    date = inject.attr(Date)
+
     def __init__(self, config=None):
         logging.debug('instanciando')
         ApplicationSession.__init__(self, config)
-
+        
         self.serverConfig = inject.instance(Config)
 
     @coroutine
@@ -52,14 +55,16 @@ class WampMain(ApplicationSession):
         userId = sys.argv[1]
         dateParam = sys.argv[2]
         
+
         date = datetime.datetime.strptime(dateParam, "%d/%m/%Y").date()
         
+
         schedulesAux = yield from self.call('assistance.getSchedulesByDate', userId, date)
 
         schedules = []
-
+        
         for schedule in schedulesAux:
-            schData = ScheduleData(schedule)
+            schData = ScheduleData(schedule, self.date.getLocalTimezone())
             schedules.append(schData);
             
         sys.exit()

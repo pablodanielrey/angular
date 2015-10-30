@@ -161,7 +161,7 @@ class ScheduleCheck(Check):
     def _findGeneralJustificationsForDate(self,justifications,date):
         justs = []
         for j in justifications:
-            logging.debug('chequeando fecha : {} == {}'.format(j['begin'].date(),date.date()))
+
             if j['begin'].date() == date.date():
                 justs.append(j)
         return justs
@@ -215,15 +215,8 @@ class ScheduleCheck(Check):
         for j in justifications:
             for just in self.justificationsTime:
                 if just.isJustification(j['justification_id']):
-                    print(just)
-                    print("AAAAAAAA")
-                    print(sched)
-                    print(whs)
-                    print(self.tolerancia)
-                    print(date)
-                    print(j)
                     return just._isJustifiedTimeStart(sched,whs,j,self.tolerancia, date)
-                    print("BBBBBBB")
+
 
         return False
 
@@ -263,7 +256,6 @@ class ScheduleCheck(Check):
     def _isJustifiedTime(self,justifications,start,end):
         for j in justifications:
             for just in self.justificationsTime:
-                print(just)
                 if just.isJustification(j['justification_id']):
                     return just._isJustifiedTime(j,start,end)
         return False
@@ -291,8 +283,8 @@ class ScheduleCheck(Check):
 
         #ordenar justificaciones por fecha de inicio
         justifications = sorted(justifications, key=lambda j: j['begin'])
-        print(justifications)
-
+        
+        """
         #elimino las justificaciones generales
         js = []
         for j in justifications:
@@ -300,13 +292,13 @@ class ScheduleCheck(Check):
                 if just.isJustification(j['justification_id']):
                     js.append(j)
                     break
-
+        """
 
         #combinar justificaciones con controles
         for elem in controls:
             sched = elem['schedule']
             justs = []
-            for j in js:
+            for j in justifications:
                 if ('end' not in j or j['end'] is None) and j['begin'] < sched.getEnd(date):
                     justs.append(j)
                 elif 'end' in j and j['end'] is not None and j['end'] > sched.getStart(date) and j['begin'] < sched.getEnd(date):
@@ -326,7 +318,6 @@ class ScheduleCheck(Check):
     '''
     def checkWorkedHours(self,con,userId,controls, date):
         fails = []
-
 
         #definir primer y ultimo schedule
         firstSched = controls[0]['schedule']
@@ -351,8 +342,7 @@ class ScheduleCheck(Check):
         endDate = lastSched.getEnd(date)
 
         justifications = self._getJustifications(con,userId,beginDate,endDate)       
-               
-
+ 
         #verificar si falto
         if len(allWhs) <= 0:
             if not self._isJustifiedDay(con,date,userId,justifications):
@@ -361,25 +351,20 @@ class ScheduleCheck(Check):
 
         #combinar controles con justificaciones
         self._combinerJustifications(controls, justifications, date)
-    
 
         for elem in controls:
             sched = elem['schedule']
-            whs = sorted(elem['whs'], key=lambda wh: wh['start'])
+            whs = elem['whs']
             justs = elem['justifications']
-
+            
             dateSchd = sched.getStart(date)
-
-
             failsBySched = self._getFails(whs, sched, date)
-
+       
             isFirstSchedule = sched == firstSched
             isLastSchedule = sched == lastSched
 
             for f in failsBySched:
-                print("************************** failsBySched")
                 
-                print(f["name"])
                 #  ------------ SIN MARCACION -----------
                 if f['name'] == 'Sin marcación':
                     if self._isJustifiedTime(justs,sched.getStart(date),sched.getEnd(date)):
@@ -409,7 +394,6 @@ class ScheduleCheck(Check):
 
                 # ------------ Salida temprana ---------------
                 if f['name'] == 'Salida temprana':
-                    print(f)
                     #verificar si esta justificada la salida temprana
                     if self._isJustifiedTimeEnd(justs, sched, whs, f, isLastSchedule, date):
                         continue
@@ -422,6 +406,7 @@ class ScheduleCheck(Check):
                         fail['seconds'] =(sched.getEnd(date) - f['wh']['end']).total_seconds()
                         fail['whSeconds'] = f['wh']['seconds']
                         fails.append(fail)
+        return fails
 
 
 
@@ -439,6 +424,7 @@ class ScheduleCheck(Check):
           }
     """
     def _getFails(self, whs, sched, date):
+
         if len(whs) == 0:
             # sin marcacion
             return [{'name':'Sin marcación','wh':None}]
@@ -452,18 +438,23 @@ class ScheduleCheck(Check):
         whAnt = None
         iNext = 1
 
-
+       
+        
         for wh in whs:
             whNext = whs[iNext] if iNext < len(whs) else None
+            
             # Llegada tardía
             if wh['start'] - self.tolerancia > sched.getStart(date):
                 fails.append({'name':'Llegada tardía','wh':wh,'whAnt':whAnt,'whNext':whNext})
+                
             # 'Sin salida'
             if 'end' not in wh or wh['end'] is None:
                 fails.append({'name':'Sin salida','wh':wh,'whAnt':whAnt,'whNext':whNext})
+                
             # 'Salida temprana'
             elif wh['end'] + self.tolerancia < sched.getEnd(date):
                 fails.append({'name':'Salida temprana','wh':wh,'whAnt':whAnt,'whNext':whNext})
+                
             whAnt = wh
             iNext = iNext + 1
 
