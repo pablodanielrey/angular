@@ -162,10 +162,7 @@ class Users:
      ' @param user Datos del usuario
      ' @return Id del usuario persistido
      '''
-    def updateUser(self,con,user):
-        import logging
-        logging.info(user)
-
+    def updateUser(self, con, user):
         cur = con.cursor()
 
         ''' si no exite lo creo '''
@@ -174,12 +171,20 @@ class Users:
             userId = self.createUser(con,user)
         else:
             userId = user['id']
-            cur.execute('select id from profile.users where id = %s',(user['id'],))
+            cur.execute('select id from profile.users where id = %s', (user['id'],))
             if cur.rowcount <= 0:
                 userId = self.createUser(con, user)
             else:
-                user['version'] = user['version'] if 'version' in user else 1
-                rreq = (user['dni'],user['name'],user['lastname'],user['city'],user['country'],user['address'],user['genre'],user['birthdate'],user['residence_city'], user['version'], user['id'])
+                rreq = (user['dni'],
+                        user['name'] if 'name' in user else '',
+                        user['lastname'] if 'lastname' in user else '',
+                        user['city'] if 'city' in user else '',
+                        user['country'] if 'country' in user else '',
+                        user['address'] if 'address' in user else '',
+                        user['genre'] if 'genre' in user else '',
+                        user['birthdate'] if 'birthdate' in user else '',
+                        user['residence_city'] if 'residence_city' in user else '',
+                        user['version'] if 'version' in user else 1, user['id'])
                 cur.execute('update profile.users set dni = %s, name = %s, lastname = %s, city = %s, country = %s, address = %s, genre = %s, birthdate = %s, residence_city = %s, version = %s where id = %s', rreq)
                 if cur.rowcount <= 0:
                     raise Exception()

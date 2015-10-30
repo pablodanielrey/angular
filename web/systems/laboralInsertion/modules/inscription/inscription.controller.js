@@ -29,12 +29,15 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
       email: ''
     },
 
+    telephones: {
+      telephone:'',
+      movil:''
+    },
+
     user: {
       name:'',
       lastname:'',
       dni:'',
-      telephone:'',
-      movil:'',
       country:'',
       residence_city:'',
       city:'',
@@ -114,6 +117,14 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
 
   $scope.formatUserToView = function(user) {
     user.birthdate = new Date(user.birthdate);
+    for (var i = 0; i < user.telephones.length; i++) {
+      var t = user.telephones[i];
+      if (t.type == 'movil') {
+        $scope.model.telephones.movil = t.number;
+      } else {
+        $scope.model.telephones.telephone = t.number;
+      }
+    }
   }
 
   $scope.findUserData = function() {
@@ -148,6 +159,19 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
   $scope.updateUserData = function() {
     var ok = $scope.checkUserData();
     if (ok) {
+
+      // corrijo la info de los telefonos para el formato de la llamada.
+      $scope.model.user['telephones'] = [];
+      $scope.model.user.telephones.push({
+        number:$scope.model.telephones.telephone,
+        type:'residence'
+      });
+      $scope.model.user.telephones.push({
+        number:$scope.model.telephones.movil,
+        type:'movil'
+      });
+
+
       Users.updateUser($scope.model.user, function(res) {
         console.log(res);
       }, function(err) {
@@ -172,23 +196,6 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
     ok = ok && $scope.dataBasic.genre.$valid;
 
     return ok;
-
-    /*
-    var u = $scope.model.user;
-    if (u.name == undefined || u.name.match(/^[a-zA-Z ]*$/)) {
-      $scope.model.userChecks.name = null;
-    } else {
-      $scope.model.userChecks.name = 'Error';
-    }
-    if (u.lastname == undefined || u.lastname.match(/^[a-zA-Z ]*$/)) {
-      $scope.model.userChecks.lastname = null;
-    } else {
-      $scope.model.userChecks.lastname = 'Error';
-    }
-    */
-
-    // aca faltan mas chequeos.
-
   }
 
   $scope.uploadInscription = function() {
