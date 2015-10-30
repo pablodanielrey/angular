@@ -41,7 +41,7 @@
                         <button><i class="fa fa-credit-card"></i></button>
                       </div>
                       <div>
-                        <input type="text" placeholder="DNI" name='dni' ng-model='model.user.dni' ng-pattern='/^\d{8,8}$/' ng-blur='updateUserData()' required></input>
+                        <input type="text" placeholder="DNI" name='dni' ng-model='model.user.dni' ng-pattern='/^\d{8,8}$/' ng-blur='updateUserData()' readonly required></input>
                         <div class="invalidError" ng-if='dataBasic.dni.$invalid'><i class="fa fa-times"></i> En el DNI 8 números sin puntos</div>
                       </div>
                     </div>
@@ -54,7 +54,7 @@
                         <button><i class="fa fa-graduation-cap"></i></button>
                       </div>
                       <div>
-                        <input type="text" placeholder="Legajo" name='student_number' ng-model='model.student.studentNumber' ng-pattern='/^\d+\/\d{1}$/' ng-blur='updateUserData()' required></input>
+                        <input type="text" placeholder="Legajo" name='student_number' ng-model='model.student.studentNumber' ng-pattern='/^\d+\/\d{1}$/' ng-blur='updateStudentData()' readonly required></input>
                         <div class="invalidError" ng-if='dataBasic.student_number.$invalid'><i class="fa fa-times"></i> Formato inconrrecto (ej: 11111/1)</div>
                       </div>
                     </div>

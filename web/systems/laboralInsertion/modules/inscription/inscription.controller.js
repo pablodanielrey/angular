@@ -150,6 +150,10 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
     console.log($scope.model.user);
   }
 
+  $scope.updateStudentData = function() {
+    console.log('los datos del legajo son de solo lectura');
+  }
+
   $scope.checkUserData = function() {
     var ok = true;
 
