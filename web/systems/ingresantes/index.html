@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <title>Ingresantes 2015</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="ingresantes.css" />
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Indie+Flower' rel='stylesheet' type='text/css'>
+
+    <script language="JavaScript">
+    function ver_password() {
+        var passwd_valor = document.elformulario.input_pass.value;
+
+        document.getElementById('passwd_sitio').innerHTML
+            = (document.elformulario.input_ver.checked)
+            ? '<input type="text"     name="input_pass" value="">'
+            : '<input type="password" name="input_pass" value="">'
+            ;
+
+        document.elformulario.input_pass.value = passwd_valor;
+    }
+    </script>
+
+
+
+</head>
+
+<body>
+    <div class="pantallas">
+
+        <div class="pantallaInicio">
+              <div><h1>Alta de Usuario<h1></div>
+              INGRESE SU DNI
+              <div>
+                <input type="number" placeholder="DNI" name='dni'  ng-pattern='/^\d{8,8}$/' required></input>
+                <button type="button">Continuar</button>
+              </div>
+        </div>
+
+        <div class="pantallaCarga">
+              <div>
+                  <span class="textHola">Hola!</span> ,<b>Armando Esteban Quito </b> </div>
+              <div>
+                  Para dar de alta tu usuario y tener acceso a los sistemas de la Facultad de Ciencias Económicas <br>
+                  es necesario que registres una direccion de mail y que crees una contraseña.
+              </div>
+
+              <form name="elformulario">
+                  <div>MAIL</div>
+                  <div>
+                      <input type="mail" name='mail' required></input>
+                  </div>
+                  <div>CONTRASEÑA</div>
+                  <div id="passwd_sitio"><input type="password" name="input_pass" value=""></div>&nbsp;&nbsp;
+                  <input type="checkbox" name="input_ver" value="ver" onclick="ver_password();">
+
+              </form>
+              <button type="button">Continuar</button>
+        </div>
+
+        <div class="pantallaActivacion">
+            <div>
+                Le hemos enviado un correo con el CÓDIGO DE ACTIVACIÓN a <b>armandoesteban@quito.com.ar</b> <br>
+                Recuerda revisar la bandeja de correo NO DESEADO (Spam), en caso de no encontrar en correo en su bandeja de entrada <br>
+                Introduce el código de acticación para completar el trámite <br>
+            </div>
+            <input type="text"> </input>
+            <button type="button">Enviar</button>
+        </div>
+
+        <div class="pantallaFin">
+            <div>
+                PROCESO FINALIZADO CORRECTAMENTE!
+            </div>
+            <div>
+                Ahora podras acceder a los sistemas de la facultad de ciencías económicas
+            <div>
+            <div>
+                USUARIO: 30001823
+            <div>
+            <div>
+                CONTRASEÑA: ********
+            <div>
+            <button type="button">SALIR</button>
+
+
+        </div>
+
+    </div>
+
+    <!-- <div class="footer">
+        <img src="/systems/ingresantes/img/logofce.png" >
+    </div> -->
+</body>
+
+</html>

@@ -1,0 +1,50 @@
+body {
+  /*background-image: url('./img/fondo.jpg');*/
+  width: 100%;
+  height: 100%;
+  margin:0px;
+  padding: 0px;
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+}
+
+.pantallas {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  /*overflow: hidden;*/
+}
+
+.pantallaInicio {
+  width: 100%;
+  height: 100%;
+  background-color: white;
+
+
+}
+
+.pantallaCarga {
+  width: 100%;
+  height: 100%;
+  background-color: #F7F7F7;
+
+}
+
+.textHola {
+  font-family: 'Indie Flower', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 2em;
+}
+
+.pantallaActivacion {
+  width: 100%;
+  height: 100%;
+  background-color: white;
+
+}
+
+.pantallaFin {
+  width: 100%;
+  height: 100%;
+  background-color: #F7F7F7;
+
+}

@@ -183,7 +183,7 @@ function($scope, $timeout, $window, Profiles, Session, Users, Assistance, Notifi
 	 * Consultar datos de stock de justificacion
 	 */
     $scope.loadJustificationStock = function(justificationId) {
-	    /*Assistance.getJustificationStock($scope.model.session.user_id, justificationId, null, null,
+	    Assistance.getJustificationStock($scope.model.session.user_id, justificationId, null, null,
 				function(data){
 
 						var id = data.justificationId;
@@ -210,7 +210,7 @@ function($scope, $timeout, $window, Profiles, Session, Users, Assistance, Notifi
 				function(error){
 						Notifications.message(error);
 				}
-		);*/
+		);
     }
 
 
@@ -231,7 +231,7 @@ function($scope, $timeout, $window, Profiles, Session, Users, Assistance, Notifi
 						$scope.loadAssistanceStatus();
 						$scope.loadAssistanceData();
 						$scope.loadOffices();
-						//$scope.loadJustifications();
+						$scope.loadJustifications();
 					} else {
 						console.log("not granted");
 						$window.location.href = "/#/logout";
