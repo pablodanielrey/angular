@@ -34,6 +34,7 @@ class UsersWamp(ApplicationSession):
     def onJoin(self, details):
         logging.debug('registering methods')
         yield from self.register(self.findById_async, 'users.findById')
+        yield from self.register(self.findByDni_async, 'users.findByDni')
         yield from self.register(self.persistUser_async, 'users.persistUser')
         yield from self.register(self.listUsers_async, 'users.listUsers')
         yield from self.register(self.findUsersIds_async, 'users.findUsersIds')
@@ -64,6 +65,21 @@ class UsersWamp(ApplicationSession):
     def findById_async(self, id):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.findById, id)
+        return r
+
+    def findByDni(self, dni):
+        con = self._getDatabase()
+        try:
+            data = self.users.findUserByDni(con, dni)
+            return data
+
+        finally:
+            con.close()
+
+    @coroutine
+    def findByDni_async(self, dni):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.findByDni, dni)
         return r
 
 

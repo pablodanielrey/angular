@@ -2,9 +2,9 @@ angular
   .module('mainApp')
   .controller('InscriptionCtrl', InscriptionCtrl);
 
-InscriptionCtrl.inject = ['$rootScope', '$scope', '$wamp', 'LaboralInsertion', 'Login', 'Users']
+InscriptionCtrl.inject = ['$rootScope', '$scope', '$wamp', 'LaboralInsertion', 'Login', 'Users', 'Student']
 
-function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Users) {
+function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Users, Student) {
 
   $scope.degrees = ['Contador Público', 'Licenciatura en Administración', 'Licenciatura en Turismo', 'Licenciatura en Economía', 'Tecnicatura en Cooperativas'];
   $scope.workTypes = ['Pasantía','Full-Time','Programa estudiantes avanzados y jovenes profesionales'];
@@ -19,6 +19,10 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
     inscriptionsData: [],
 
     // datos de usuario
+
+    student: {
+      studentNumber: ''
+    },
 
     mails: {
       emails: [],
@@ -36,8 +40,7 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
       birth_city:'Villa Elisa',
       address:'Calle 4 Nº 1364 3A',
       genre:'Masculino',
-      birthdate: null,
-      student_number:'569842/9'
+      birthdate: null
     },
 
 
@@ -115,6 +118,13 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
 
   $scope.findUserData = function() {
     var uid = Login.getUserId();
+
+    Student.findById(uid).then(function(student) {
+      if (student != null) {
+        $scope.model.student = student;
+      }
+    });
+
     Users.findUser(uid, function(user) {
       console.log(user);
       $scope.formatUserToView(user);

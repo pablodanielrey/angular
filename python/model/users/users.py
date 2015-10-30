@@ -193,7 +193,7 @@ class Users:
         return userId
 
 
-    def findUserByDni(self,con,dni):
+    def findUserByDni(self, con, dni):
         cur = con.cursor()
         cur.execute('select id,dni,name,lastname,city,country,address,genre,birthdate,residence_city,version from profile.users where dni = %s', (dni,))
         data = cur.fetchone()
@@ -218,7 +218,7 @@ class Users:
             rdataTelephones.append(self.convertTelephoneToDict(dataTelephone))
         rdataUser["telephones"] = rdataTelephones
         return rdataUser
-        
+
     '''
      ' Buscar usuarios a traves de una lista de ids
      '''
@@ -226,13 +226,13 @@ class Users:
         cur = con.cursor()
         cur.execute('select id,dni,name,lastname,city,country,address,genre,birthdate,residence_city,version from profile.users where id IN %s', (tuple(ids),))
         data = cur.fetchall()
-               
+
         rdata = []
         for d in data:
             rdata.append(self.convertUserToDict(d))
         return rdata
-        
-     
+
+
 
 
     def listUsers(self, con):
