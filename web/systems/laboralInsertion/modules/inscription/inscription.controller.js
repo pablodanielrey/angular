@@ -185,6 +185,10 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
     console.log('los datos del legajo son de solo lectura');
   }
 
+  $scope.updateLaboralData = function() {
+    console.log('aca se actualiza la info del usuario que solo pertenece a insercion laboral');
+  }
+
   $scope.checkUserData = function() {
     var ok = true;
 
