@@ -28,17 +28,21 @@ function Assistance (Utils, Session, $wamp) {
 	services.getJustificationsByUser = getJustificationsByUser;
 	services.getJustificationStock = getJustificationStock;
 	services.updateJustificationStock = updateJustificationStock;
-	services.getJustificationRequestsByDate = getJustificationRequestsByDate;
+
+	services.getGeneralJustificationRequests = getGeneralJustificationRequests;
+	services.deleteGeneralJustificationRequest = deleteGeneralJustificationRequest;
+	services.requestGeneralJustification = requestGeneralJustification;
+
+	services.requestGeneralJustificationRange = requestGeneralJustificationRange;
+
+
+	// services.getJustificationRequestsByDate = getJustificationRequestsByDate;
 	services.getJustificationRequestsToManage = getJustificationRequestsToManage;
 	services.getJustificationRequests = getJustificationRequests;
 	services.updateJustificationRequestStatus = updateJustificationRequestStatus;
 	services.requestJustification = requestJustification;
 	services.requestJustificationRange = requestJustificationRange;
 	services.getSpecialJustifications = getSpecialJustifications;
-	services.requestGeneralJustification = requestGeneralJustification;
-	services.requestGeneralJustificationRange = requestGeneralJustificationRange;
-	services.getGeneralJustificationRequests = getGeneralJustificationRequests;
-	services.deleteGeneralJustificationRequest = deleteGeneralJustificationRequest;
 
 	//  ------------------------ OVERTIME -----------------------------
 	services.getOvertimeRequests = getOvertimeRequests;
@@ -497,7 +501,7 @@ function Assistance (Utils, Session, $wamp) {
    */
   function requestGeneralJustificationRange(justification, callbackOk, callbackError) {
 		var sid = Session.getSessionId();
-		$wamp.call('assistance.justifications.requestGeneralJustificationRange', [sid, justification])
+		$wamp.call('assistance.justifications.requestGeneralJustificationRange', [sid, justification.id, justification.begin, justification.end])
 		.then(function(res) {
 			if (res != null) {
 				callbackOk(res);

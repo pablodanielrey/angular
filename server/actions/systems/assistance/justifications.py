@@ -7,6 +7,7 @@ import datetime
 from model.exceptions import *
 from model.config import Config
 from model.systems.assistance.justifications.justifications import Justifications
+import model.systems.assistance.date
 
 import asyncio
 from asyncio import coroutine
@@ -22,6 +23,7 @@ class JustificationsWamp(ApplicationSession):
         ApplicationSession.__init__(self, config)
 
         self.serverConfig = inject.instance(Config)
+        self.date = inject.instance(model.systems.assistance.date.Date)
 
         self.justifications = inject.instance(Justifications)
 
@@ -289,13 +291,17 @@ class JustificationsWamp(ApplicationSession):
 
 
 
-    def reguestGeneralJustificationRange(self, sid, justification):
+    def requestGeneralJustificationRange(self, sid, justificationId, begin, end):
         """
            Solicitar justificacion general en un rango
         """
         con = self._getDatabase()
         try:
-
+            if begin is None or end is None:
+                return None
+            begin = self.date.parse(begin)
+            end = self.date.parse(end)
+            self.justifications.requestGeneralJustificationRange(con, justificationId, begin, end)
             con.commit()
             return True
 
@@ -303,9 +309,9 @@ class JustificationsWamp(ApplicationSession):
             con.close()
 
     @coroutine
-    def requestGeneralJustificationRange_async(self, sid, justification):
+    def requestGeneralJustificationRange_async(self, sid, justificationId, begin, end):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.requestGeneralJustificationRange, sid, justification)
+        r = yield from loop.run_in_executor(None, self.requestGeneralJustificationRange, sid, justificationId, begin, end)
         return r
 
 
