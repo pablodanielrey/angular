@@ -1,5 +1,5 @@
 body {
-  /*background-image: url('./img/fondo.jpg');*/
+  background-image: url('./img/fondo.jpg');
   width: 100%;
   height: 100%;
   margin:0px;
@@ -12,21 +12,53 @@ body {
   width: 100%;
   height: 100%;
   position: absolute;
-  /*overflow: hidden;*/
+
+  overflow: hidden;
+
 }
 
 .pantallaInicio {
   width: 100%;
   height: 100%;
-  background-color: white;
+  background-image: url('./img/fondo.jpg');
+  /*background-color: white;*/
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:column;
+  -webkit-flex-direction:column; /* Safari */
+  -moz-flex-direction:column; /* mozilla */
+  align-items: center;
+  -webkit-align-items: center; /* Safari */
+  -moz-align-items: center; /* mozilla */
+}
 
+.inputDates {
+  font-size: 2em;
+  padding: 10px;
+  width: 250px;
+}
 
+.btns {
+  font-size: 1em;
+  padding: 10px;
+  width: 274px;
+  margin-top: 20px;
 }
 
 .pantallaCarga {
   width: 100%;
   height: 100%;
   background-color: #F7F7F7;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:column;
+  -webkit-flex-direction:column; /* Safari */
+  -moz-flex-direction:column; /* mozilla */
+  align-items: center;
+  -webkit-align-items: center; /* Safari */
+  -moz-align-items: center; /* mozilla */
 
 }
 
@@ -39,6 +71,15 @@ body {
   width: 100%;
   height: 100%;
   background-color: white;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:column;
+  -webkit-flex-direction:column; /* Safari */
+  -moz-flex-direction:column; /* mozilla */
+  align-items: center;
+  -webkit-align-items: center; /* Safari */
+  -moz-align-items: center; /* mozilla */
 
 }
 
@@ -46,5 +87,14 @@ body {
   width: 100%;
   height: 100%;
   background-color: #F7F7F7;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:column;
+  -webkit-flex-direction:column; /* Safari */
+  -moz-flex-direction:column; /* mozilla */
+  align-items: center;
+  -webkit-align-items: center; /* Safari */
+  -moz-align-items: center; /* mozilla */
 
 }

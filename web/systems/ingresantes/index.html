@@ -31,16 +31,20 @@
 
         <div class="pantallaInicio">
               <div><h1>Alta de Usuario<h1></div>
-              INGRESE SU DNI
               <div>
-                <input type="number" placeholder="DNI" name='dni'  ng-pattern='/^\d{8,8}$/' required></input>
-                <button type="button">Continuar</button>
+                <h2>Ingrese su DNI</h2>
+              </div>
+              <div>
+                <input class="inputDates" type="number" placeholder="" name='dni' maxlength="8"  ng-pattern='/^\d{8,8}$/' required></input>
+              </div>
+              <div>
+                <button class="btns" type="button">Continuar</button>
               </div>
         </div>
 
         <div class="pantallaCarga">
               <div>
-                  <span class="textHola">Hola!</span> ,<b>Armando Esteban Quito </b> </div>
+                  <h1><span class="textHola">Hola!</span> ,<b>Armando Esteban Quito </b> </div></h1>
               <div>
                   Para dar de alta tu usuario y tener acceso a los sistemas de la Facultad de Ciencias Económicas <br>
                   es necesario que registres una direccion de mail y que crees una contraseña.
@@ -61,9 +65,16 @@
 
         <div class="pantallaActivacion">
             <div>
-                Le hemos enviado un correo con el CÓDIGO DE ACTIVACIÓN a <b>armandoesteban@quito.com.ar</b> <br>
-                Recuerda revisar la bandeja de correo NO DESEADO (Spam), en caso de no encontrar en correo en su bandeja de entrada <br>
-                Introduce el código de acticación para completar el trámite <br>
+                <h1>Código de Activación</h1>
+            </div>
+            <div>
+                <h2>Le hemos enviado un correo con el código de acticación a <b>armandoesteban@quito.com.ar</b></h2>
+            </div>
+            <div>
+                Recuerda revisar la bandeja de correo NO DESEADO (Spam)
+            </div>
+            <div>
+              <h1>Introduce el código de acticación para completar el trámite </h1>
             </div>
             <input type="text"> </input>
             <button type="button">Enviar</button>
