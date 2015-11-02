@@ -268,8 +268,6 @@ class Justifications:
 
         rids = tuple(statusR.keys())
 
-        print(rids)
-
         if start is not None and end is not None:
             if userIds is None or len(userIds) <= 0:
                 cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where jbegin >= %s and jbegin <= %s and id in %s',(start,end,rids))
@@ -312,7 +310,7 @@ class Justifications:
 
 
 
-     '''
+    '''
         Obtiene todos los pedidos de justificaciones que tiene permisos de administrar
         @param con Conexion con la base de datos
         @param userId Identificacion de usuario
@@ -349,6 +347,10 @@ class Justifications:
 
     '''
         actualizar el stock actual para la justificación indicada
+        @param con Conexion con la base de datos
+        @param userId id de usuario al cual se actualizara el stock
+        @param justId id de la justificacion que se actualizara
+        @param stock nuevo stock, dependiendo de la justificacion el tipo debe variar
     '''
     def updateJustificationStock(self,con,userId,justId,stock):
         cur = con.cursor()
