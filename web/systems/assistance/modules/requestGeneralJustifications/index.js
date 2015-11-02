@@ -1,5 +1,5 @@
 
-app.controller('RequestGeneralJustificationsCtrl', ["$scope", "$timeout", "$window", "Assistance", "Module", "Notifications", "Users",  "Utils", function($scope, $timeout, $window, Assistance, Module, Notifications, Users, Utils) {
+app.controller('RequestGeneralJustificationsCtrl', ["$scope", "$timeout", "$window", "Assistance", "Notifications", "Users",  "Utils", "Session", function($scope, $timeout, $window, Assistance, Notifications, Users, Utils, Session) {
 
   /**
    * Variables del modelo en general
@@ -82,20 +82,8 @@ app.controller('RequestGeneralJustificationsCtrl', ["$scope", "$timeout", "$wind
    * INICIALIZACION *
    ******************/
   $timeout(function() {
-    Module.authorize('ADMIN-ASSISTANCE,USER-ASSISTANCE',
-      function(response){
-        if (response !== 'granted') {
-          Notifications.message("Acceso no autorizado");
-          $window.location.href = "/#/logout";
-        }
-        $scope.model.sessionUserId = Module.getSessionUserId();
-        $scope.loadRequestedJustifications();
-      },
-      function(error){
-        Notifications.message(error);
-        $window.location.href = "/#/logout";
-      }
-    );
+    $scope.model.sessionUserId = Session.getCurrentSessionUserId();
+    $scope.loadRequestedJustifications();
   }, 0);
 
 

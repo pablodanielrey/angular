@@ -37,6 +37,7 @@ class JustificationsWamp(ApplicationSession):
         yield from self.register(self.getJustificationRequestsByDate_async, 'assistance.justifications.getJustificationRequestsByDate')
         yield from self.register(self.getJustificationRequestsToManage_async, 'assistance.justifications.getJustificationRequestsToManage')
         yield from self.register(self.updateJustificationStock_async, 'assistance.justifications.updateJustificationStock')
+        yield from self.register(self.getGeneralJustificationRequests_async, 'assistance.justifications.getGeneralJustificationRequests')
 
 
 
@@ -186,10 +187,7 @@ class JustificationsWamp(ApplicationSession):
         
         
     def updateJustificationStock(self, userId, justificationId, stock):
-        print("****************** updateJustificationStock")
-        print(userId)
-        print(justificationId)
-        print(stock)
+
         """
          " actualizar stock para un determinado usuario
          " @param userId usuario al cual se le actualizara la justifiacion
@@ -209,6 +207,27 @@ class JustificationsWamp(ApplicationSession):
     def updateJustificationStock_async(self, sid, userId, justificationId, stock):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.updateJustificationStock, userId, justificationId, stock)
+        return r
+
+
+
+    def getGeneralJustificationRequests(self, sid):
+        """
+           obtener justificaciones generales
+        """
+        con = self._getDatabase()
+        try:
+            event = self.justifications.getGeneralJustificationRequests(con)
+            con.commit()
+            return True
+
+        finally:
+            con.close()
+
+    @coroutine
+    def getGeneralJustificationRequests_async(self, sid):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.getGeneralJustificationRequests, sid)
         return r
 
 
