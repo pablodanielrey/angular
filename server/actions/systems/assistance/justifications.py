@@ -85,7 +85,7 @@ class JustificationsWamp(ApplicationSession):
 
 
 
-    def getJustificationsByUser(self, userId):
+    def getJustificationsByUser(self, sid, userId):
         """
          " Obtener justificaciones del usuario
          " @param userId Identificador de usuario
@@ -100,9 +100,9 @@ class JustificationsWamp(ApplicationSession):
             con.close()
 
     @coroutine
-    def getJustificationsByUser_async(self, userId):
+    def getJustificationsByUser_async(self, sid, userId):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getJustificationsByUser, userId)
+        r = yield from loop.run_in_executor(None, self.getJustificationsByUser, sid, userId)
         return r
 
 
@@ -123,7 +123,7 @@ class JustificationsWamp(ApplicationSession):
         con = self._getDatabase()
         try:
             justificationsStock = self.justifications.getJustificationStock(con, userId, justificationId, dateAux, period)
-  
+
             return justificationsStock
 
         finally:
@@ -187,10 +187,10 @@ class JustificationsWamp(ApplicationSession):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.getJustificationRequestsToManage, userId, statusList, group)
         return r
-        
-        
-        
-        
+
+
+
+
     def updateJustificationStock(self, userId, justificationId, stock):
 
         """
@@ -245,12 +245,12 @@ class JustificationsWamp(ApplicationSession):
 
             con.commit()
             return justification;
-            
+
 
         finally:
             con.close()
-            
-            
+
+
 
 
     @coroutine
@@ -307,8 +307,8 @@ class JustificationsWamp(ApplicationSession):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.requestGeneralJustificationRange, sid, justification)
         return r
-        
-        
+
+
 
 
     def getJustificationRequests(self, sid, status, userIds):
@@ -331,4 +331,3 @@ class JustificationsWamp(ApplicationSession):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.getJustificationRequests, sid, status, userIds)
         return r
-   
