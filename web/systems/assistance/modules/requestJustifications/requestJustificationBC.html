@@ -1,0 +1,27 @@
+    <div  ng-class="{true:'subcontentDisplay', false:'subcontent'}[isSelectedJustification()]" >
+
+      <!-- TITULO DE LA SECCION -->
+      <div class="titulo" ng-click="selectJustification()">
+        <p class="titulo"><i class="fa fa-ticket"></i>{{rjModel.name}}</p>
+      </div>
+
+      <!-- CONTENIDO DE LA SECCION -->
+      <div class="info">
+
+        <div class="margin">
+            <p class="parrafos">Seleccione el día</p>
+            <input type="date" class="date" ng-model="rjModel.date" ng-change="defineData()" >
+            <p class="parrafos">Seleccione Hora</p>
+            <div class="spanSE"><input class="timeMargin" type="time" ng-model="rjModel.begin" ng-change="defineData()"></div>
+        </div>
+
+        <div ng-class="{true:'visible', false:'hidden'}[isDataDefined()]">
+            <p class="parrafos">Solicitar {{rjModel.name}} para el día</p>
+            <p class="parrafos3"><i class="fa fa-calendar-o"></i> {{rjModel.dateFormated}}</p>
+            <p class="parrafos4"><i class="fa fa-clock-o"></i> Hora de inicio: {{rjModel.beginFormated}}</p>
+            <input class="button2 blue2" type="button" value="Confirmar" ng-click="save()" ng-disabled='rjModel.processingRequest'>
+        </div>
+
+      </div>
+        
+    </div>

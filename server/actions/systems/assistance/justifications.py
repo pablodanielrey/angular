@@ -8,6 +8,7 @@ from model.exceptions import *
 from model.config import Config
 from model.systems.assistance.justifications.justifications import Justifications
 import model.systems.assistance.date
+from model.profiles import Profiles
 
 import asyncio
 from asyncio import coroutine
@@ -24,6 +25,7 @@ class JustificationsWamp(ApplicationSession):
 
         self.serverConfig = inject.instance(Config)
         self.date = inject.instance(model.systems.assistance.date.Date)
+        self.profiles = inject.instance(Profiles)
 
         self.justifications = inject.instance(Justifications)
 
@@ -44,10 +46,9 @@ class JustificationsWamp(ApplicationSession):
         yield from self.register(self.requestGeneralJustification_async, 'assistance.justifications.requestGeneralJustification')
         yield from self.register(self.requestGeneralJustificationRange_async, 'assistance.justifications.requestGeneralJustificationRange')
         yield from self.register(self.getJustificationRequests_async, 'assistance.justifications.getJustificationRequests')
+        yield from self.register(self.requestJustification_async, 'assistance.justifications.requestJustification')
 
-
-
-
+        yield from self.register(self.updateJustificationRequestStatus_async, 'assistance.justifications.updateJustificationRequestStatus')
 
 
 
@@ -318,15 +319,13 @@ class JustificationsWamp(ApplicationSession):
 
 
     def getJustificationRequests(self, sid, status, userIds):
-        print("**************** getJustificationRequests")
-        print(status)
-        print(userIds)
         """
            obtener requerimientos de justificaciones
         """
         con = self._getDatabase()
         try:
-            justificationRequests = self.justifications.getJustificationRequests(con, None, userIds)
+
+            justificationRequests = self.justifications.getJustificationRequests(con, status, userIds)
             return justificationRequests
 
         finally:
@@ -336,4 +335,43 @@ class JustificationsWamp(ApplicationSession):
     def getJustificationRequests_async(self, sid, status, userIds):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.getJustificationRequests, sid, status, userIds)
+        return r
+
+
+    def requestJustification(self, sid, status, userId,requestor_id,justificationId,begin,end):
+        con = self._getDatabase()
+        try:
+            self.justifications.requestJustification(con,userId,requestor_id,justificationId,begin,end)
+            con.commit()
+            return True
+
+        finally:
+            con.close()
+
+    @coroutine
+    def requestJustification_async(self, sid, status, userId,requestor_id,justificationId,begin,end=None):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.requestJustification, sid, status, userId,requestor_id,justificationId,begin,end)
+        return r
+
+
+
+    def updateJustificationRequestStatus(self, sid, requestId, status):
+        con = self._getDatabase()
+        try:
+            userId = self.profiles.getLocalUserId(sid)
+            events = self.justifications.updateJustificationRequestStatus(con,userId,requestId,status)
+            con.commit()
+
+            self.publish('assistance.justification.JustificationRequestsUpdatedEvent', 'prueba de evento')
+
+            return True
+
+        finally:
+            con.close()
+
+    @coroutine
+    def updateJustificationRequestStatus_async(self, sid, requestId, status):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.updateJustificationRequestStatus, sid, requestId, status)
         return r

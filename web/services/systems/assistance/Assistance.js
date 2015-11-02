@@ -32,17 +32,17 @@ function Assistance (Utils, Session, $wamp) {
 	services.getGeneralJustificationRequests = getGeneralJustificationRequests;
 	services.deleteGeneralJustificationRequest = deleteGeneralJustificationRequest;
 	services.requestGeneralJustification = requestGeneralJustification;
-
 	services.requestGeneralJustificationRange = requestGeneralJustificationRange;
-
-
-	// services.getJustificationRequestsByDate = getJustificationRequestsByDate;
-	services.getJustificationRequestsToManage = getJustificationRequestsToManage;
 	services.getJustificationRequests = getJustificationRequests;
-	services.updateJustificationRequestStatus = updateJustificationRequestStatus;
 	services.requestJustification = requestJustification;
+	
+	
+	services.updateJustificationRequestStatus = updateJustificationRequestStatus;
+	
 	services.requestJustificationRange = requestJustificationRange;
-	services.getSpecialJustifications = getSpecialJustifications;
+	// services.getJustificationRequestsByDate = getJustificationRequestsByDate;
+	// services.getJustificationRequestsToManage = getJustificationRequestsToManage;
+	// services.getSpecialJustifications = getSpecialJustifications;
 
 	//  ------------------------ OVERTIME -----------------------------
 	services.getOvertimeRequests = getOvertimeRequests;
@@ -392,9 +392,9 @@ function Assistance (Utils, Session, $wamp) {
 	}
 
 
-	function getJustificationRequests(status, callbackOk, callbackError) {
+	function getJustificationRequests(status, usersIds, callbackOk, callbackError) {
 		var sid = Session.getSessionId();
-		$wamp.call('assistance.justifications.getJustificationsRequests', [sid, status])
+		$wamp.call('assistance.justifications.getJustificationRequests', [sid, status, usersIds])
 			.then(function(res) {
 				if (res != null) {
 					callbackOk(res);
@@ -422,8 +422,13 @@ function Assistance (Utils, Session, $wamp) {
 
 
 	function requestJustification(userId, justification, status, callbackOk, callbackError) {
+		var s = Session.getCurrentSession();
 		var sid = Session.getSessionId();
-		$wamp.call('assistance.justifications.requestJustification', [sid, userId, justification, status])
+		var requestor_id = s.user_id;
+		var justificationId = justification.id;
+		var begin = justification.begin;
+		var end = (justification.end) ? justification.end : null;
+		$wamp.call('assistance.justifications.requestJustification', [sid, status, userId,requestor_id,justificationId,begin,end])
 		.then(function(res) {
 			if (res != null) {
 				callbackOk(res);
