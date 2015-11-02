@@ -289,8 +289,11 @@ function Assistance (Utils, Session, $wamp) {
 
 	function getJustificationStock(userId, justificationId, date, period, callbackOk, callbackError) {
 		var sid = Session.getSessionId();
+		if(!date) date = new Date();
+		
 		$wamp.call('assistance.justifications.getJustificationsStockByUser', [sid, userId, justificationId, date, period])
 			.then(function(res) {
+
 				if (res != null) {
 					callbackOk(res);
 				} else {

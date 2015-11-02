@@ -186,6 +186,10 @@ class JustificationsWamp(ApplicationSession):
         
         
     def updateJustificationStock(self, userId, justificationId, stock):
+        print("****************** updateJustificationStock")
+        print(userId)
+        print(justificationId)
+        print(stock)
         """
          " actualizar stock para un determinado usuario
          " @param userId usuario al cual se le actualizara la justifiacion
@@ -194,10 +198,9 @@ class JustificationsWamp(ApplicationSession):
         """
         con = self._getDatabase()
         try:
-
-            self.justifications.updateJustificationStock(con, userId, justificationId, stock)
+            event = self.justifications.updateJustificationStock(con, userId, justificationId, stock)
             con.commit()
-            
+            return event;
 
         finally:
             con.close()
