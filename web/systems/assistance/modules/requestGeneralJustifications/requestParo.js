@@ -82,7 +82,6 @@ app.controller('RequestParoCtrl', ["$scope", "Assistance", "Notifications", "Uti
 
   
   $scope.save = function() {
-   
    $scope.rjModel.processingRequest = true;
    
     var request = {
@@ -90,12 +89,12 @@ app.controller('RequestParoCtrl', ["$scope", "Assistance", "Notifications", "Uti
 			begin:$scope.rjModel.date,
 		};
     
-   
     Assistance.requestGeneralJustification(request,
 			function(ok) {
 				$scope.clear(); //limpiar contenido
         $scope.model.justificationSelectedId = null; //limpiar seleccion de justificacion
         Notifications.message("Solicitud de " + $scope.rjModel.name + " registrada correctamente");
+	  		$scope.loadRequestedJustifications();
 			},
 			function(error){
         $scope.clear();    //limpiar contenido

@@ -92,21 +92,20 @@ app.controller('RequestVeranoCtrl', ["$scope", "Assistance", "Notifications", "U
 
 
   $scope.save = function() {
+    $scope.rjModel.processingRequest = true;
 
-   $scope.rjModel.processingRequest = true;
-
-   var request = {
-     id:$scope.rjModel.id,
-     begin:$scope.rjModel.begin,
-     end:$scope.rjModel.end,
-   };
-
+    var request = {
+      id:$scope.rjModel.id,
+      begin:$scope.rjModel.begin,
+      end:$scope.rjModel.end,
+    };
 
     Assistance.requestGeneralJustificationRange(request,
 			function(ok) {
 				$scope.clear(); //limpiar contenido
         $scope.model.justificationSelectedId = null; //limpiar seleccion de justificacion
         Notifications.message("Solicitud de " + $scope.rjModel.name + " registrada correctamente");
+ 	  		$scope.loadRequestedJustifications();
 			},
 			function(error){
         $scope.clear();    //limpiar contenido

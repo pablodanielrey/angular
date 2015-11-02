@@ -15,7 +15,6 @@ app.controller('RequestGeneralJustificationsCtrl', ["$scope", "$timeout", "$wind
     rjSort: ["dateSort", "justificationName"],       //ordenamiento de la lista de justificaciones
     rjReversed: false,   //flag para indicar el ordenamiento reverso de la lista de justificaciones
     loadRequestedJustifications: false  //flag para indicar que se esta procesando
-
   };
 
 
@@ -23,7 +22,7 @@ app.controller('RequestGeneralJustificationsCtrl', ["$scope", "$timeout", "$wind
   /**************************************
    * METODOS DE REQUESTED JUSTIFICACION *
    **************************************/
-  $scope.loadRequestedJustifications = function() {
+  $scope.loadRequestedJustifications = function(){
     $scope.model.loadRequestedJustifications = true;
 
     Assistance.getGeneralJustificationRequests(
@@ -43,10 +42,9 @@ app.controller('RequestGeneralJustificationsCtrl', ["$scope", "$timeout", "$wind
   };
 
 
-
   $scope.cancelRequest = function(request) {
     Assistance.deleteGeneralJustificationRequest(request.id,
-      function(ok) {
+      function(requestedJustifications) {
         $scope.loadRequestedJustifications();
       },
       function(error) {
@@ -54,6 +52,7 @@ app.controller('RequestGeneralJustificationsCtrl', ["$scope", "$timeout", "$wind
       }
     );
   };
+  
 
   $scope.sortRequestedJustifications = function(sort){
     if($scope.model.rjSort[0] === sort){
@@ -73,10 +72,9 @@ app.controller('RequestGeneralJustificationsCtrl', ["$scope", "$timeout", "$wind
       }
       $scope.model.rjReversed = false;
     }
-
   };
-
-
+  
+  
 
   /******************
    * INICIALIZACION *
@@ -89,12 +87,11 @@ app.controller('RequestGeneralJustificationsCtrl', ["$scope", "$timeout", "$wind
 
   $scope.$on('JustificationsRequestsUpdatedEvent', function(event, data){
     $scope.loadRequestedJustifications();
-
 	});
+
 
   $scope.$on('JustificationsRequestsDeletedEvent', function(event, data){
     $scope.loadRequestedJustifications();
-
 	});
 
 

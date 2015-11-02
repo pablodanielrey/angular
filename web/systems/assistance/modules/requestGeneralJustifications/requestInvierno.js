@@ -92,7 +92,6 @@ app.controller('RequestInviernoCtrl', ["$scope", "Assistance", "Notifications", 
 
 
   $scope.save = function() {
-
    $scope.rjModel.processingRequest = true;
 
    var request = {
@@ -101,12 +100,12 @@ app.controller('RequestInviernoCtrl', ["$scope", "Assistance", "Notifications", 
      end:$scope.rjModel.end,
    };
 
-
     Assistance.requestGeneralJustificationRange(request,
 			function(ok) {
 				$scope.clear(); //limpiar contenido
         $scope.model.justificationSelectedId = null; //limpiar seleccion de justificacion
         Notifications.message("Solicitud de " + $scope.rjModel.name + " registrada correctamente");
+ 	  		$scope.loadRequestedJustifications();
 			},
 			function(error){
         $scope.clear();    //limpiar contenido
