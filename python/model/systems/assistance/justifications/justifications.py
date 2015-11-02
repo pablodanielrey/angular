@@ -467,6 +467,8 @@ class Justifications:
       return events
 
 
+
+
     def deleteGeneralJustificationRequest(self, con, requestId):
       cur = con.cursor()
       sql = "DELETE FROM assistance.general_justifications WHERE id = '" + requestId + "'"

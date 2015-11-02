@@ -31,10 +31,13 @@ app.config(['$routeProvider', function($routeProvider) {
       controllerAs: 'vm'
   })
 
+
+
   .when('/requestAssistance', {
       templateUrl: '/systems/assistance/modules/requestJustifications/index.html',
       controller: 'RequestJustificationsCtrl'
   })
+
 
   .when('/adminRequestAssistance', {
       templateUrl: '/systems/assistance/modules/adminRequestAssistance.html',

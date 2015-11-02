@@ -38,6 +38,7 @@ function Assistance (Utils, Session, $wamp) {
 	services.requestGeneralJustification = requestGeneralJustification;
 	services.requestGeneralJustificationRange = requestGeneralJustificationRange;
 	services.getGeneralJustificationRequests = getGeneralJustificationRequests;
+	services.deleteGeneralJustificationRequest = deleteGeneralJustificationRequest;
 
 
 	function getAssistanceData(userId, date, callbackOk, callbackError) {
@@ -274,8 +275,11 @@ function Assistance (Utils, Session, $wamp) {
 
 	function getJustificationsByUser(userId, callbackOk, callbackError) {
 		var sid = Session.getSessionId();
-		$wamp.call('assistance.justifications.getJustificationsByUser', [userId])
+		var status = null;
+		var userIds = [userId]
+		$wamp.call('assistance.justifications.getJustificationRequests', [sid, status, userIds])
 			.then(function(res) {
+
 				if (res != null) {
 					callbackOk(res);
 				} else {
@@ -512,7 +516,10 @@ function Assistance (Utils, Session, $wamp) {
    */
   function requestGeneralJustification(justification, callbackOk, callbackError) {
 		var sid = Session.getSessionId();
-		$wamp.call('assistance.justifications.requestGeneralJustification', [sid, justification])
+		var justificationId = justification.id;
+		var begin = justification.begin;
+		
+		$wamp.call('assistance.justifications.requestGeneralJustification', [sid, justificationId, begin])
 		.then(function(res) {
 			if (res != null) {
 				callbackOk(res);
@@ -565,11 +572,12 @@ function Assistance (Utils, Session, $wamp) {
 		});
   };
 
-
   function deleteGeneralJustificationRequest(requestId, callbackOk, callbackError) {
+    console.log(requestId);
 		var sid = Session.getSessionId();
 		$wamp.call('assistance.justifications.deleteGeneralJustificationRequest', [sid, requestId])
 		.then(function(res) {
+		  console.log(res)
 			if (res != null) {
 				callbackOk(res);
 			} else {

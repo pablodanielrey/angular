@@ -4,7 +4,6 @@ sys.path.insert(0, '../../python')
 
 import inject
 import logging
-import datetime
 
 
 import asyncio

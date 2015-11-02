@@ -1,12 +1,10 @@
 
-app.controller('RequestGeneralJustificationsCtrl', ["$scope", "$timeout", "$window", "Assistance", "Notifications", "Users",  "Utils", "Session", function($scope, $timeout, $window, Assistance, Notifications, Users, Utils, Session) {
+app.controller('RequestGeneralJustificationsCtrl', ["$scope", "$timeout", "$window", "Assistance", "Notifications", "Users",  "Utils", function($scope, $timeout, $window, Assistance, Notifications, Users, Utils) {
 
   /**
    * Variables del modelo en general
    */
   $scope.model = {
-    sessionUserId: null, //id de sesion de usuario
-
     justificationsId: [],            //id de las justificaciones que el usuario tiene autorizadas
     justificationSelectedId: null,   //flag para indicar el id de la justificacion seleccionada si se debe mostrar la lista de usuarios
 
@@ -80,7 +78,6 @@ app.controller('RequestGeneralJustificationsCtrl', ["$scope", "$timeout", "$wind
    * INICIALIZACION *
    ******************/
   $timeout(function() {
-    $scope.model.sessionUserId = Session.getCurrentSessionUserId();
     $scope.loadRequestedJustifications();
   }, 0);
 

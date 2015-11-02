@@ -38,6 +38,11 @@ class JustificationsWamp(ApplicationSession):
         yield from self.register(self.getJustificationRequestsToManage_async, 'assistance.justifications.getJustificationRequestsToManage')
         yield from self.register(self.updateJustificationStock_async, 'assistance.justifications.updateJustificationStock')
         yield from self.register(self.getGeneralJustificationRequests_async, 'assistance.justifications.getGeneralJustificationRequests')
+        yield from self.register(self.deleteGeneralJustificationRequest_async, 'assistance.justifications.deleteGeneralJustificationRequest')
+        yield from self.register(self.requestGeneralJustification_async, 'assistance.justifications.requestGeneralJustification')
+        yield from self.register(self.requestGeneralJustificationRange_async, 'assistance.justifications.requestGeneralJustificationRange')
+        yield from self.register(self.getJustificationRequests_async, 'assistance.justifications.getJustificationRequests')
+
 
 
 
@@ -213,13 +218,11 @@ class JustificationsWamp(ApplicationSession):
 
     def getGeneralJustificationRequests(self, sid):
         """
-           obtener justificaciones generales
+           Obtener justificaciones generales
         """
         con = self._getDatabase()
         try:
-            event = self.justifications.getGeneralJustificationRequests(con)
-            con.commit()
-            return True
+            return self.justifications.getGeneralJustificationRequests(con)
 
         finally:
             con.close()
@@ -232,3 +235,100 @@ class JustificationsWamp(ApplicationSession):
 
 
 
+    def deleteGeneralJustificationRequest(self, requestId):
+        """
+           Eliminar solicitud de justificacion general
+        """
+        con = self._getDatabase()
+        try:
+            justification = self.justifications.deleteGeneralJustificationRequest(con, requestId)
+
+            con.commit()
+            return justification;
+            
+
+        finally:
+            con.close()
+            
+            
+
+
+    @coroutine
+    def deleteGeneralJustificationRequest_async(self, sid, requestId):
+        """
+           Eliminar justificacion general
+        """
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.deleteGeneralJustificationRequest, requestId)
+        return r
+
+
+
+
+
+
+    def requestGeneralJustification(self, sid, justificationId, begin):
+        """
+           Solicitar justificacion general en una determinada fecha
+        """
+        con = self._getDatabase()
+        try:
+            self.justifications.requestGeneralJustification(con, justificationId, begin)
+            con.commit()
+            return True
+
+        finally:
+            con.close()
+
+    @coroutine
+    def requestGeneralJustification_async(self, sid, justificationId, begin):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.requestGeneralJustification, sid, justificationId, begin)
+        return r
+
+
+
+
+    def reguestGeneralJustificationRange(self, sid, justification):
+        """
+           Solicitar justificacion general en un rango
+        """
+        con = self._getDatabase()
+        try:
+
+            con.commit()
+            return True
+
+        finally:
+            con.close()
+
+    @coroutine
+    def requestGeneralJustificationRange_async(self, sid, justification):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.requestGeneralJustificationRange, sid, justification)
+        return r
+        
+        
+
+
+    def getJustificationRequests(self, sid, status, userIds):
+        print("**************** getJustificationRequests")
+        print(status)
+        print(userIds)
+        """
+           obtener requerimientos de justificaciones
+        """
+        con = self._getDatabase()
+        try:
+            justificationRequests = self.justifications.getJustificationRequests(con, None, userIds)
+            return justificationRequests
+
+        finally:
+            con.close()
+
+    @coroutine
+    def getJustificationRequests_async(self, sid, status, userIds):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.getJustificationRequests, sid, status, userIds)
+        return r
+   
