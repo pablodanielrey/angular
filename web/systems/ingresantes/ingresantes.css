@@ -1,10 +1,37 @@
 body {
-  background-image: url('./img/fondo.jpg');
   width: 100%;
   height: 100%;
   margin:0px;
   padding: 0px;
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background-color: #F7F7F7;
+}
+h1 {
+  margin: 0px;
+}
+
+.header {
+  position: fixed;
+  z-index: 999;
+  width: 100%;
+  height: 50px;
+  background-color: #e5e4e4;
+  -moz-box-shadow: .5px 0 8px 0 #9c9c9c;
+  -webkit-box-shadow: .5px 0 8px 0 #9c9c9c;
+  -o-box-shadow: .5px 0 8px 0 #9c9c9c;
+  box-shadow: .5px 0 8px 0 #9c9c9c;
+
+}
+
+.footer {
+  background-color: #e5e4e4;
+  height: 37px;
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  font-size: 10px;
+  color: grey;
 
 }
 
@@ -13,15 +40,17 @@ body {
   height: 100%;
   position: absolute;
 
-  overflow: hidden;
+
+
+
+  /*overflow: hidden;*/
+
 
 }
 
 .pantallaInicio {
   width: 100%;
   height: 100%;
-  background-image: url('./img/fondo.jpg');
-  /*background-color: white;*/
   display: flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
@@ -31,12 +60,51 @@ body {
   align-items: center;
   -webkit-align-items: center; /* Safari */
   -moz-align-items: center; /* mozilla */
+  justify-content: center;
 }
 
-.inputDates {
+.textTitles2 {
+  font-size: 1.5em;
+  margin-top: 20px;
+}
+
+.textTitles3 {
+  color: #92AD17;
+}
+
+.inputDNI {
   font-size: 2em;
   padding: 10px;
   width: 250px;
+  color: #92AD17;
+  border: solid 1px #E5E4E4;
+
+}
+
+.inputPassword {
+  font-size: 2em;
+  padding: 10px;
+  width: 250px;
+  color: #92AD17;
+  border: solid 1px #E5E4E4;
+  margin-right: 20px;
+}
+
+.inputMail {
+  font-size: 2em;
+  padding: 10px;
+  width: 540px;
+  color: #92AD17;
+  border: solid 1px #E5E4E4;
+}
+
+.inputCode {
+  font-size: 2em;
+  padding: 10px;
+  width: 250px;
+  color: #92AD17;
+  border: solid 1px #E5E4E4;
+  margin-top: 5px;
 }
 
 .btns {
@@ -44,12 +112,22 @@ body {
   padding: 10px;
   width: 274px;
   margin-top: 20px;
+  background-color: #92AD17;
+  color: white;
+  cursor: pointer;
+  border: none;
+}
+
+.textSpan {
+
+  color: #92AD17;
+  padding: 5px;
+  margin-bottom: 30px;
 }
 
 .pantallaCarga {
   width: 100%;
   height: 100%;
-  background-color: #F7F7F7;
   display: flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
@@ -62,15 +140,25 @@ body {
 
 }
 
+.passwords {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+
+}
+
 .textHola {
   font-family: 'Indie Flower', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-size: 2em;
+  color:#92AD17;
 }
 
 .pantallaActivacion {
   width: 100%;
   height: 100%;
-  background-color: white;
   display: flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
@@ -86,7 +174,6 @@ body {
 .pantallaFin {
   width: 100%;
   height: 100%;
-  background-color: #F7F7F7;
   display: flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
@@ -97,4 +184,34 @@ body {
   -webkit-align-items: center; /* Safari */
   -moz-align-items: center; /* mozilla */
 
+}
+
+.ingresantes.carga .pantallas {
+    transform: translate(0px, -80%);
+    -webkit-transform: translate(0px, -80%);
+    -moz-transform: translate(0px, -80%);
+    -o-transform: translate(0px, -80%);
+    -ms-transform: translate(0px, -80%);
+    transition: all 0.4s ease-in-out;
+    -webkit-transition: all 0.4s ease-in-out;
+}
+
+.ingresantes.activacion .pantallas {
+    transform: translate(0px, -180%);
+    -webkit-transform: translate(0px, -180%);
+    -moz-transform: translate(0px, -180%);
+    -o-transform: translate(0px, -180%);
+    -ms-transform: translate(0px, -180%);
+    transition: all 0.4s ease-in-out;
+    -webkit-transition: all 0.4s ease-in-out;
+}
+
+.ingresantes.fin .pantallas {
+    transform: translate(0px, -280%);
+    -webkit-transform: translate(0px, -280%);
+    -moz-transform: translate(0px, -280%);
+    -o-transform: translate(0px, -280%);
+    -ms-transform: translate(0px, -280%);
+    transition: all 0.4s ease-in-out;
+    -webkit-transition: all 0.4s ease-in-out;
 }
