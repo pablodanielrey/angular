@@ -100,7 +100,7 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Profiles', 'Se
                $scope.model.items.push({ n:40, label:'Administrar Cargos', img:'fa-plus', function: $scope.managePositions});
                $scope.model.items.push({ n:25, label:'Stock de Solicitudes ', img:'fa-plus', function: $scope.manageJustificationsStock});
                $scope.model.items.push({ n:24, label:'Solicitudes Generales ', img:'fa-plus', function: $scope.requestGeneralJustifications});
-
+               $scope.model.items.push({ n:22, label:'Adm. Solicitudes ', img:'fa-ticket', function: $scope.adminRequestAssistance});
               /* Lo comente para probar otras pantallas
               Office.getUserOfficeRoles(
                   function(roles) {

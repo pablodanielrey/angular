@@ -36,7 +36,6 @@ function Assistance (Utils, Session, $wamp) {
 	services.getJustificationRequests = getJustificationRequests;
 	services.requestJustification = requestJustification;
 	services.updateJustificationRequestStatus = updateJustificationRequestStatus;
-
 	services.requestJustificationRange = requestJustificationRange;
 
 	services.getJustificationRequestsToManage = getJustificationRequestsToManage;

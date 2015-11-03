@@ -40,7 +40,7 @@ app.config(['$routeProvider', function($routeProvider) {
 
 
   .when('/adminRequestAssistance', {
-      templateUrl: '/systems/assistance/modules/adminRequestAssistance.html',
+      templateUrl: '/systems/assistance/modules/adminRequest/adminRequestAssistance.html',
       controller: 'AdminRequestAssistanceCtrl'
   })
 
