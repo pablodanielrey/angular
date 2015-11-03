@@ -183,13 +183,13 @@ app.controller('RequestJustificationPECtrl', ["$scope", "Assistance", "Notificat
 
    $scope.rjModel.processingRequest = true;
 
-    var request = {
-			id:$scope.rjModel.id,
-			begin:$scope.rjModel.begin,
-      end:$scope.rjModel.end,
-		};
+    var userId = $scope.model.selectedUser.id;
+    var justification_id = $scope.rjModel.id;
+    var begin = $scope.rjModel.begin;
+    var end = $scope.rjModel.end;
+    var status = 'PENDING';
 
-    Assistance.requestJustificationRange($scope.model.selectedUser.id, request, 'PENDING',
+    Assistance.requestJustificationRange(userId, justification_id, begin, end, status,
 			function(ok) {
 				$scope.clear(); //limpiar contenido
         $scope.model.justificationSelectedId = null; //limpiar seleccion de justificacion

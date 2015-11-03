@@ -47,9 +47,8 @@ class JustificationsWamp(ApplicationSession):
         yield from self.register(self.requestGeneralJustificationRange_async, 'assistance.justifications.requestGeneralJustificationRange')
         yield from self.register(self.getJustificationRequests_async, 'assistance.justifications.getJustificationRequests')
         yield from self.register(self.requestJustification_async, 'assistance.justifications.requestJustification')
-
         yield from self.register(self.updateJustificationRequestStatus_async, 'assistance.justifications.updateJustificationRequestStatus')
-
+        yield from self.register(self.requestJustificationRange_async, 'assistance.justifications.requestJustificationRange')
 
 
     def _getDatabase(self):
@@ -341,8 +340,15 @@ class JustificationsWamp(ApplicationSession):
     def requestJustification(self, sid, status, userId,requestor_id,justificationId,begin,end):
         con = self._getDatabase()
         try:
-            self.justifications.requestJustification(con,userId,requestor_id,justificationId,begin,end)
+            if begin is not None:
+                begin = self.date.parse(begin)
+            if end is not None:
+                end = self.date.parse(end)
+            events = self.justifications.requestJustification(con,userId,requestor_id,justificationId,begin,end)
             con.commit()
+            for e in events:
+                if 'type' in e and 'data' in e:
+                    self.publish('assistance.justification.' + e['type'], e['data'])
             return True
 
         finally:
@@ -355,6 +361,28 @@ class JustificationsWamp(ApplicationSession):
         return r
 
 
+    def requestJustificationRange(self, userId,requestor_id,justificationId,begin,end):
+        con = self._getDatabase()
+        try:
+            if begin is None or end is None:
+                return None
+            begin = self.date.parse(begin)
+            end = self.date.parse(end)
+            events = self.justifications.requestJustificationRange(con,userId,requestor_id,justificationId,begin,end)
+            con.commit()
+            for e in events:
+                if 'type' in e and 'data' in e:
+                    self.publish('assistance.justification.' + e['type'], e['data'])
+            return True
+        finally:
+            con.close()
+
+    @coroutine
+    def requestJustificationRange_async(self, sid, userId,requestor_id,justificationId,begin,end):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.requestJustificationRange, userId,requestor_id,justificationId,begin,end)
+        return r
+
 
     def updateJustificationRequestStatus(self, sid, requestId, status):
         con = self._getDatabase()
@@ -362,8 +390,9 @@ class JustificationsWamp(ApplicationSession):
             userId = self.profiles.getLocalUserId(sid)
             events = self.justifications.updateJustificationRequestStatus(con,userId,requestId,status)
             con.commit()
-
-            self.publish('assistance.justification.JustificationRequestsUpdatedEvent', 'prueba de evento')
+            for e in events:
+                if 'type' in e and 'data' in e:
+                    self.publish('assistance.justification.' + e['type'], e['data'])
 
             return True
 

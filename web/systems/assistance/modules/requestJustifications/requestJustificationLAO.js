@@ -172,27 +172,24 @@ app.controller('RequestJustificationLAOCtrl', ["$scope", "Assistance", "Notifica
 
 
   $scope.save = function() {
-
-   $scope.rjModel.processingRequest = true;
-
-    var request = {
-			id:$scope.rjModel.id,
-			begin:$scope.rjModel.begin,
-      end:$scope.rjModel.end,
-		};
-
-    Assistance.requestJustificationRange($scope.model.selectedUser.id, request, 'PENDING',
-			function(ok) {
-				$scope.clear(); //limpiar contenido
+     $scope.rjModel.processingRequest = true;
+     var userId = $scope.model.selectedUser.id;
+     var justification_id = $scope.rjModel.id;
+     var begin = $scope.rjModel.begin;
+     var end = $scope.rjModel.end;
+     var status = 'PENDING';
+    Assistance.requestJustificationRange(userId, justification_id, begin, end, status,
+    	function(ok) {
+    		$scope.clear(); //limpiar contenido
         $scope.model.justificationSelectedId = null; //limpiar seleccion de justificacion
         Notifications.message("Solicitud de " + $scope.rjModel.name + " registrada correctamente");
-			},
-			function(error){
+    	},
+    	function(error){
         $scope.clear();    //limpiar contenido
         $scope.model.justificationSelectedId = null; //limpiar seleccion de justificacion
-				Notifications.message(error);
-			}
-		);
+    		Notifications.message(error);
+    	}
+    );
   };
 
 

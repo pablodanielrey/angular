@@ -24,7 +24,7 @@ class BSJustification(Justification):
 
 
     """
-        
+
         @param date Fecha de chequeo
     """
     def _isJustifiedTimeStart(self,sched,whs,justification,tolerancia, date = None):
@@ -34,7 +34,7 @@ class BSJustification(Justification):
         return False
 
     """
-        
+
         @param date Fecha de chequeo
     """
     def _isJustifiedTimeEnd(self,sched,whs, justification, tolerancia, date = None):
@@ -49,7 +49,7 @@ class BSJustification(Justification):
             return False
         if start >= justification['begin'] and end <= justification['end']:
             return True
-            
+
         return False
 
     """
@@ -155,7 +155,7 @@ class BSJustification(Justification):
             break;
 
           #si existe un elemento del schedule asociado a la solicitud de boleta se deben verificar los logs realizados por el usuario para efectuar el calculo
-          if usrSch["start"] <= rj[0] and usrSch["end"] >= rj[1]:
+          if usrSch.getStart(rj[0].date()) <= rj[0] and usrSch.getEnd(rj[0]) >= rj[1]:
             stock = self._getStockFromLogs(con, userId, stock, rj, index, userSchedule);
 
           #si no existe un schLog asociado a la solicitud de boleta se resta del stock las fechas de la solicitud
@@ -198,15 +198,14 @@ class BSJustification(Justification):
 
       #definir cantidad de "user worked hours" que deberia tener el usuario
       uwhLen = len(userSchedule)
-      if rj[0] != userSchedule[schIndex]["start"] and rj[1] != userSchedule[schIndex]["end"]:
+      if rj[0] != userSchedule[schIndex].getStart(rj[0]) and rj[1] != userSchedule[schIndex].getEnd(rj[0]):
         uwhLen += 1
 
-
       #obtener fecha mas inicial del userSchedule (se supone que el userSchedule esta ordenado!)
-      start = userSchedule[0]["start"]
+      start = userSchedule[0].getStart(rj[0])
 
       schedule = Schedule()
-      userLogs = schedule.getLogsForSchedule(con, userId, start)
+      userLogs = schedule.getLogsForSchedule(con, userSchedule, start.date())
 
       logs = Logs()
       uwhInfo = logs.getWorkedHours(userLogs)
@@ -216,17 +215,17 @@ class BSJustification(Justification):
         return  self._getStockFromDates(stock, rj[0], rj[1])
 
       #definir fechas para calculo del tiempo trabajado en la worked hour correspondiente
-      if rj[0] != userSchedule[schIndex]["start"] and rj[1] != userSchedule[schIndex]["end"]:
-        calcStart = uwh[schIndex]["end"]
-        calcEnd =  uwh[schIndex+1]["start"]
+      if rj[0] != userSchedule[schIndex].getStart(rj[0]) and rj[1] != userSchedule[schIndex].getEnd(rj[0]):
+        calcStart = uwh[schIndex].getEnd(rj[0])
+        calcEnd =  uwh[schIndex+1].getStart(rj[0])
 
       else:
-        if(rj[0] == userSchedule[schIndex]["start"]):
-          calcStart = userSchedule[schIndex]["start"]
-          calcEnd = uwh[schIndex]["start"]
+        if(rj[0] == userSchedule[schIndex].getStart(rj[0])):
+          calcStart = userSchedule[schIndex].getStart(rj[0])
+          calcEnd = uwh[schIndex].getStart(rj[0])
         else:
-          calcStart = uwh[schIndex]["end"]
-          calcEnd =  userSchedule[schIndex]["end"]
+          calcStart = uwh[schIndex].getEnd(rj[0])
+          calcEnd =  userSchedule[schIndex].getEnd(rj[0])
 
       #chequear si calcStart y calcEnd son distintos de None
       if calcStart is None or calcEnd is None:

@@ -35,13 +35,13 @@ function Assistance (Utils, Session, $wamp) {
 	services.requestGeneralJustificationRange = requestGeneralJustificationRange;
 	services.getJustificationRequests = getJustificationRequests;
 	services.requestJustification = requestJustification;
-	
-	
 	services.updateJustificationRequestStatus = updateJustificationRequestStatus;
-	
+
 	services.requestJustificationRange = requestJustificationRange;
+
+	services.getJustificationRequestsToManage = getJustificationRequestsToManage;
+
 	// services.getJustificationRequestsByDate = getJustificationRequestsByDate;
-	// services.getJustificationRequestsToManage = getJustificationRequestsToManage;
 	// services.getSpecialJustifications = getSpecialJustifications;
 
 	//  ------------------------ OVERTIME -----------------------------
@@ -49,6 +49,7 @@ function Assistance (Utils, Session, $wamp) {
 	services.getOvertimeRequestsToManage = getOvertimeRequestsToManage;
 	services.requestOvertime = requestOvertime;
 	services.updateRequestOvertimeStatus = updateRequestOvertimeStatus;
+
 
 
 
@@ -377,14 +378,24 @@ function Assistance (Utils, Session, $wamp) {
 	}
 
 
+
+  /**
+   * Obtener lista de solicitudes que un usuario puede administrar de un determinado grupo de usuarios
+   * @param status Lista de estados
+   * @param group
+   * @param callbackOk Funcion a ejecutar si se retornan datos correctos
+   * @param callbackError Funcion a ejecutar si se retornan datos erroneos
+   */
 	function getJustificationRequestsToManage(status, group, callbackOk, callbackError){
 		var sid = Session.getSessionId();
-		$wamp.call('assistance.justifications.getJustificationsRequestsToManage', [sid, status, group])
+		var sessionUserId = Session.getCurrentSessionUserId();
+		$wamp.call('assistance.justifications.getJustificationRequestsToManage', [sid, sessionUserId, status, group])
 			.then(function(res) {
+			  console.log(res)
 				if (res != null) {
 					callbackOk(res);
 				} else {
-					callbackError('Error');
+					callbackError('Error: Datos vacios');
 				}
 			},function(err) {
 				callbackError(err);
@@ -440,9 +451,11 @@ function Assistance (Utils, Session, $wamp) {
 		});
 	}
 
-	function requestJustificationRange(userId, justificationId, start, end, status, callbackOk, callbackError) {
+	function requestJustificationRange(userId, justificationId, begin, end, status, callbackOk, callbackError) {
+		var s = Session.getCurrentSession();
 		var sid = Session.getSessionId();
-		$wamp.call('assistance.justifications.requestJustificationRange', [sid, userId, justificationId, start, end, status])
+		var requestor_id = s.user_id;
+		$wamp.call('assistance.justifications.requestJustificationRange', [sid, userId,requestor_id,justificationId,begin,end])
 		.then(function(res) {
 			if (res != null) {
 				callbackOk(res);

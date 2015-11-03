@@ -43,7 +43,7 @@ class JustificationsWamp(ApplicationSession):
 
         yield from self.register(self.getJustificationsRequestsToManage_async, 'assistance.justifications.getJustificationsRequestsToManage')
 
-        yield from self.register(self.requestJustificationRange_async, 'assistance.justifications.requestJustificationRange')
+
         yield from self.register(self.getSpecialJustifications_async, 'assistance.justifications.getSpecialJustifications')
 
 
@@ -74,26 +74,6 @@ class JustificationsWamp(ApplicationSession):
         return r
 
 
-
-
-
-
-
-    def requestJustificationRange(self, userId, justificationId, start, end, status):
-        con = self._getDatabase()
-        try:
-            ''' .... codigo aca ... '''
-            con.commit()
-            return True
-
-        finally:
-            con.close()
-
-    @coroutine
-    def requestJustificationRange_async(self, sid, userId, justificationId, start, end, status):
-        loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.requestJustification, userId, justificationId, start, end, status)
-        return r
 
     def getSpecialJustifications(self, sid):
         con = self._getDatabase()
