@@ -21,7 +21,7 @@
                           <button><i class="fa fa-user"></i></button>
                         </div>
                         <div>
-                          <input type="text" placeholder="Nombres" name='name' ng-model='model.user.name' ng-pattern='/^[a-zA-ZñÑ ]*$/' ng-blur='updateUserData()' required></input>
+                          <input type="text" placeholder="Nombres" name='name' ng-model='model.user.name' ng-pattern='/^[a-zA-ZñÑáÁéÉíÍóÓúÚ ]*$/' ng-blur='updateUserData()' required></input>
                           <div class="invalidError" ng-if='dataBasic.name.$invalid'><i class="fa fa-times"></i> En el nombre se permiten solo letras </div>
                         </div>
                     </div>
@@ -31,7 +31,7 @@
                         <button><i class="fa fa-user"></i></button>
                       </div>
                       <div>
-                        <input type="text" placeholder="Apellidos" name='lastname' ng-model='model.user.lastname' ng-pattern='/^[a-zA-ZñÑ ]*$/' ng-blur='updateUserData()' required></input>
+                        <input type="text" placeholder="Apellidos" name='lastname' ng-model='model.user.lastname' ng-pattern='/^[a-zA-ZñÑáÁéÉíÍóÓúÚ ]*$/' ng-blur='updateUserData()' required></input>
                         <div class="invalidError" ng-if='dataBasic.lastname.$invalid'><i class="fa fa-times"></i> En el apellido se permiten solo letras </div>
                       </div>
                     </div>
