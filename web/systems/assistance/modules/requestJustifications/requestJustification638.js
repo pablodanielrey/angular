@@ -52,11 +52,13 @@ app.controller('RequestJustification638Ctrl', ["$scope", "Assistance", "Notifica
   };
 
 
-  $scope.$on('JustificationsRequestsUpdatedEvent', function(event, data){
-    $scope.model.justificationSelectedId = null;
-    $scope.clear();
-    $scope.loadStock();
-
+  $scope.$on('JustificationsRequestsUpdatedEvent', function(event, args) {
+    data = args[0];
+    if ($scope.rjModel.id == data.justification_id) {
+      $scope.model.justificationSelectedId = null;
+      $scope.clear();
+      $scope.loadStock();
+    }
 	});
 
 	$scope.$on('JustificationStatusChangedEvent', function(event, data) {

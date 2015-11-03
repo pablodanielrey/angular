@@ -199,18 +199,18 @@ app.controller('RequestJustificationsCtrl', ["$scope", "$wamp", "$timeout", "$wi
       id: $scope.model.sessionUserId
     }
 
-    $wamp.subscribe('assistance.justification.JustificationRequestsUpdatedEvent', JustificationStatusChangedEvent);
+    $wamp.subscribe('assistance.justification.JustificationsRequestsUpdatedEvent', JustificationsRequestsUpdatedEvent);
+    $wamp.subscribe('assistance.justification.JustificationStatusChangedEvent', JustificationStatusChangedEvent);
 
     $scope.loadAuthorizedJustifications();
     $scope.loadRequestedJustifications();
     $scope.model.clearIndex();
   }, 0);
 
-  $scope.$on('JustificationsRequestsUpdatedEvent', function(event, data){
+  function JustificationsRequestsUpdatedEvent(data) {
+    $scope.$broadcast('JustificationsRequestsUpdatedEvent',data);
     $scope.loadRequestedJustifications();
-
-	});
-
+  }
 
   function JustificationStatusChangedEvent(data) {
     $scope.$broadcast('JustificationStatusChangedEvent',data);
