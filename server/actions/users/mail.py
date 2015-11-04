@@ -20,9 +20,8 @@ class UserMailsWamp(ApplicationSession):
 
         self.serverConfig = inject.instance(Config)
         self.users = inject.instance(Users)
-        self.events = inject.attr(Events)
-        self.profiles = inject.attr(Profiles)
-        self.mails = inject.attr(Mail)
+        self.profiles = inject.instance(Profiles)
+        self.mails = inject.instance(Mail)
 
     @coroutine
     def onJoin(self, details):
