@@ -340,8 +340,6 @@ class JustificationsWamp(ApplicationSession):
     def requestJustification(self, sid, status, userId,requestor_id,justificationId,begin,end):
         con = self._getDatabase()
         try:
-            import pdb
-            pdb.set_trace()
             if begin is not None:
                 begin = self.date.parse(begin)
             if end is not None:

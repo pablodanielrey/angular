@@ -101,6 +101,10 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Profiles', 'Se
                $scope.model.items.push({ n:25, label:'Stock de Solicitudes ', img:'fa-plus', function: $scope.manageJustificationsStock});
                $scope.model.items.push({ n:24, label:'Solicitudes Generales ', img:'fa-plus', function: $scope.requestGeneralJustifications});
                $scope.model.items.push({ n:22, label:'Adm. Solicitudes ', img:'fa-ticket', function: $scope.adminRequestAssistance});
+
+
+               $scope.model.items.push({ n:21, label:'Solicitudes a Empleados', img:'fa-plus', function: $scope.userAssistanceManagementMediator});
+               $scope.model.items.push({ n:23, label:'Solicitudes Especiales ', img:'fa-plus', function: $scope.userAssistanceManagement});
               /* Lo comente para probar otras pantallas
               Office.getUserOfficeRoles(
                   function(roles) {
