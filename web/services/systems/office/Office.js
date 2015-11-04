@@ -171,8 +171,13 @@ function Office($rootScope, $wamp, Session) {
   }
 
 
-  /*
-    retorna los usuarios que pertenecen a las oficinas y suboficinas en las cuales la persona userId tiene un rol determinado
+  /**
+   * Retornar usuarios que pertenecen a las oficinas y suboficinas en las cuales la persona userId tiene un rol determinado
+   * @param userId Identificacion de usuario
+   * @param role Rol de usuario: Ej. 'realizar-solicitud': Puede realizar solicitudes a otros usuarios de sus oficinas
+   * @param tree 
+   * @param callbackOk Funcion a ejecutar para respuestas correctas
+   * @param callbackError Funcion a ejecutar para respuestas erroneas
   */
   function getUserInOfficesByRole(userId, role, tree, callbackOk, callbackError) {
     if (role == null) {

@@ -75,18 +75,3 @@ class JustificationsWamp(ApplicationSession):
 
 
 
-    def getSpecialJustifications(self, sid):
-        con = self._getDatabase()
-        try:
-            ''' .... codigo aca ... '''
-            con.commit()
-            return True
-
-        finally:
-            con.close()
-
-    @coroutine
-    def getSpecialJustifications_async(self, sid):
-        loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getSpecialJustifications, sid)
-        return r
