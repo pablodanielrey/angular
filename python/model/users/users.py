@@ -91,11 +91,11 @@ class Users:
         else:
             return None
 
-    def findMail(self,con,id):
+    def findMail(self, con, id):
         cur = con.cursor()
         cur.execute('select id,user_id,email,confirmed,hash from profile.mails where id = %s', (id,))
         data = cur.fetchone()
-        if data != None:
+        if data is not None:
             return self.convertMailToDict(data)
         else:
             return None
@@ -109,12 +109,11 @@ class Users:
             rdata.append(self.convertMailToDict(d))
         return rdata
 
-    def deleteMail(self,con,id):
+    def deleteMail(self, con, id):
         cur = con.cursor()
         cur.execute('delete from profile.mails where id = %s', (id,))
 
-
-    def updateMail(self,con,data):
+    def updateMail(self, con, data):
         if 'hash' not in data:
             data['hash'] = ''
         mail = ObjectView(data)
@@ -124,7 +123,7 @@ class Users:
 
 
     ''' transformo a diccionario las respuestas de psycopg2'''
-    def convertMailToDict(self,d):
+    def convertMailToDict(self, d):
         rdata = {
                 'id':d[0],
                 'user_id':d[1],
