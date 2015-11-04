@@ -202,7 +202,7 @@
                         <button><i class="fa fa-envelope"></i></button>
                       </div>
                       <div>
-                        <select  ng-model='model.mails.email' name='mail' ng-blur='updateLaboralData()' required>
+                        <select  ng-model='model.laboralData.email' name='mail' ng-blur='updateLaboralData()' required>
                           <!-- <option class="selectGrey" disabled selected style='display:none;'>Mail</option> -->
                           <option ng-repeat='m in model.mails.emails' value='{{m.id}}'>{{m.email}}</option>
                           <!--
@@ -412,7 +412,7 @@
                         </div>
 
                         <div class="languajes">
-                            <div class="item itemLanguajes" ng-repeat='i in model.languages'>
+                            <div class="item itemLanguajes" ng-repeat='i in model.laboralData.languages'>
                               <div>
                                 <button><i class="fa fa-language"></i></button>
 
@@ -428,14 +428,13 @@
                                   -->
                                 </select>
 
-                                <select class="lenguajeLevel">
+                                <select class="lenguajeLevel" ng-model='i.level'>
                                   <option>Básico</option>
                                   <option>Intermedio</option>
                                   <option>Excelente</option>
-
                                 </select>
 
-                                 <span> <i class="fa fa-trash deleteLenguaje"></i> </span>
+                                 <span> <i class="fa fa-trash deleteLenguaje" ng-click="deleteLanguage(i)"></i> </span>
 
 
                                 <!-- esto no puede ser asi. tiene que si o si ser algun tipo de input, select, etc. -->

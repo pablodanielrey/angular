@@ -156,9 +156,10 @@ class LaboralInsertionWamp(ApplicationSession):
     def onJoin(self, details):
         logging.debug('registering methods')
         yield from self.register(self.download_async, 'system.laboralInsertion.download')
-        yield from self.register(self.find_async, 'system.laboralInsertion.find')
-        yield from self.register(self.findAllByUser_async, 'system.laboralInsertion.findAllByUser')
-        yield from self.register(self.update_async, 'system.laboralInsertion.update')
+        yield from self.register(self.findByUser_async, 'system.laboralInsertion.findByUser')
+        yield from self.register(self.persist_async, 'system.laboralInsertion.persist')
+        yield from self.register(self.findAllInscriptionsByUser_async, 'system.laboralInsertion.findAllInscriptionsByUser')
+        yield from self.register(self.persistInscriptionByUser_async, 'system.laboralInsertion.persistInscriptionByUser')
 
     def _getDatabase(self):
         host = self.serverConfig.configs['database_host']
@@ -167,29 +168,38 @@ class LaboralInsertionWamp(ApplicationSession):
         passw = self.serverConfig.configs['database_password']
         return psycopg2.connect(host=host, dbname=dbname, user=user, password=passw)
 
-    def update(self, data):
+    def persist(self, data):
         con = self._getDatabase()
         try:
-            logging.debug('actualizando : {}'.format(data))
+            self.laboralInsertion.persist(con, data)
             con.commit()
             return True
 
         finally:
             con.close()
 
-    def find(self, userId):
+    def findByUser(self, userId):
         con = self._getDatabase()
         try:
-            data = self.laboralInsertion.getLaboralInsertionDataByUser(con, userId)
+            data = self.laboralInsertion.findByUser(con, userId)
             return data
 
         finally:
             con.close()
 
-    def findAllByUser(self, userId):
+    def findAllInscriptionsByUser(self, userId):
         con = self._getDatabase()
         try:
-            data = self.laboralInsertion.findAllByUser(con, userId)
+            data = self.laboralInsertion.findAllInscriptionsByUser(con, userId)
+            return data
+
+        finally:
+            con.close()
+
+    def persistInscriptionByUser(self, userId, data):
+        con = self._getDatabase()
+        try:
+            data = self.laboralInsertion.persistInscriptionByUser(con, userId, data)
             return data
 
         finally:
@@ -239,19 +249,25 @@ class LaboralInsertionWamp(ApplicationSession):
         return r
 
     @coroutine
-    def find_async(self, userId):
+    def findByUser_async(self, userId):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.find, userId)
+        r = yield from loop.run_in_executor(None, self.findByUser, userId)
         return r
 
     @coroutine
-    def findAllByUser_async(self, userId):
+    def findAllInscriptionsByUser_async(self, userId):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.findAllByUser, userId)
+        r = yield from loop.run_in_executor(None, self.findAllInscriptionsByUser, userId)
         return r
 
     @coroutine
-    def update_async(self, data):
+    def persistInscriptionByUser_async(self, userId, data):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.update, data)
+        r = yield from loop.run_in_executor(None, self.persistInscriptionByUser, userId, data)
+        return r
+
+    @coroutine
+    def persist_async(self, data):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.persist, data)
         return r
