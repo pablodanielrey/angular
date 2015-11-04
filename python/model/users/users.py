@@ -102,7 +102,7 @@ class Users:
 
     def listMails(self, con, user_id):
         cur = con.cursor()
-        cur.execute('select id, user_id, email, confirmed, hash from profile.mails where user_id = %s',(user_id,))
+        cur.execute('select id, user_id, email, confirmed, hash from profile.mails where user_id = %s', (user_id,))
         data = cur.fetchall()
         rdata = []
         for d in data:

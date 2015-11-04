@@ -19,7 +19,7 @@ class UserMailsWamp(ApplicationSession):
         ApplicationSession.__init__(self, config)
 
         self.serverConfig = inject.instance(Config)
-        self.users = inject.attr(Users)
+        self.users = inject.instance(Users)
         self.events = inject.attr(Events)
         self.profiles = inject.attr(Profiles)
         self.mails = inject.attr(Mail)
@@ -111,9 +111,8 @@ class UserMailsWamp(ApplicationSession):
     def findMails(self, userId):
         con = self._getDatabase()
         try:
-            # codigo aca
-            con.commit()
-            return True
+            r = self.users.listMails(con, userId)
+            return r
 
         finally:
             con.close()
