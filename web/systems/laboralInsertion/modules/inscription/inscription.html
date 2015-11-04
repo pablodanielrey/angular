@@ -485,7 +485,7 @@
                     </div>
                     <div>
                       <button class="btnBack" ng-click='changePreviousRegistration()'><i class="fa fa-arrow-circle-o-left"></i> Anterior </button>
-                      <button class="btnNext" ng-click='changeRegistration()'>Siguiente <i class="fa fa-arrow-circle-o-right"></i></button>
+                      <button class="btnNext" ng-if='model.showNext' ng-click='changeRegistration()'>Siguiente <i class="fa fa-arrow-circle-o-right"></i></button>
                       <button class="btnSave" ng-click='uploadInscription()'><i class="fa fa-floppy-o"></i> GUARDAR </button>
                     </div>
                 </div>
