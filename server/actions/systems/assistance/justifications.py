@@ -340,12 +340,15 @@ class JustificationsWamp(ApplicationSession):
     def requestJustification(self, sid, status, userId,requestor_id,justificationId,begin,end):
         con = self._getDatabase()
         try:
+            import pdb
+            pdb.set_trace()
             if begin is not None:
                 begin = self.date.parse(begin)
             if end is not None:
                 end = self.date.parse(end)
-            events = self.justifications.requestJustification(con,userId,requestor_id,justificationId,begin,end)
+            events = self.justifications.requestJustification(con,userId,requestor_id,justificationId,begin,end,status)
             con.commit()
+
             for e in events:
                 if 'type' in e and 'data' in e:
                     self.publish('assistance.justification.' + e['type'], e['data'])
@@ -361,14 +364,14 @@ class JustificationsWamp(ApplicationSession):
         return r
 
 
-    def requestJustificationRange(self, userId,requestor_id,justificationId,begin,end):
+    def requestJustificationRange(self, userId,requestor_id,justificationId,begin,end, status):
         con = self._getDatabase()
         try:
             if begin is None or end is None:
                 return None
             begin = self.date.parse(begin)
             end = self.date.parse(end)
-            events = self.justifications.requestJustificationRange(con,userId,requestor_id,justificationId,begin,end)
+            events = self.justifications.requestJustificationRange(con,userId,requestor_id,justificationId,begin,end,status)
             con.commit()
             for e in events:
                 if 'type' in e and 'data' in e:
@@ -378,9 +381,9 @@ class JustificationsWamp(ApplicationSession):
             con.close()
 
     @coroutine
-    def requestJustificationRange_async(self, sid, userId,requestor_id,justificationId,begin,end):
+    def requestJustificationRange_async(self, sid, userId,requestor_id,justificationId,begin,end, status='PENDING'):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.requestJustificationRange, userId,requestor_id,justificationId,begin,end)
+        r = yield from loop.run_in_executor(None, self.requestJustificationRange, userId,requestor_id,justificationId,begin,end, status)
         return r
 
 
