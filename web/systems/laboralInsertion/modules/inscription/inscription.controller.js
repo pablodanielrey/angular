@@ -2,9 +2,9 @@ angular
   .module('mainApp')
   .controller('InscriptionCtrl', InscriptionCtrl);
 
-InscriptionCtrl.inject = ['$rootScope', '$scope', '$wamp', 'LaboralInsertion', 'Login', 'Users', 'Student']
+InscriptionCtrl.inject = ['$rootScope', '$scope', '$wamp', 'LaboralInsertion', 'Login', 'Users', 'Student', 'Notifications']
 
-function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Users, Student) {
+function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Users, Student, Notifications) {
 
   $scope.degrees = ['Contador Público', 'Licenciatura en Administración', 'Licenciatura en Turismo', 'Licenciatura en Economía', 'Tecnicatura en Cooperativas'];
   $scope.workTypes = ['Pasantía','Full-Time','Programa estudiantes avanzados y jovenes profesionales'];
@@ -88,6 +88,13 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
   $scope.model.totalPages = $scope.model.registrations.length;
 
   $scope.startInscription = function() {
+
+    var ok = $scope.checkUserData();
+    if (!ok) {
+      Notifications.message('Por favor complete todos los campos requeridos');
+      return;
+    }
+
     $scope.model.ci = 1;
     $scope.model.cr = 0;
   }
@@ -158,27 +165,28 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
 
   $scope.updateUserData = function() {
     var ok = $scope.checkUserData();
-    if (ok) {
 
-      // corrijo la info de los telefonos para el formato de la llamada.
-      $scope.model.user['telephones'] = [];
-      $scope.model.user.telephones.push({
-        number:$scope.model.telephones.telephone,
-        type:'residence'
-      });
-      $scope.model.user.telephones.push({
-        number:$scope.model.telephones.movil,
-        type:'movil'
-      });
-
-
-      Users.updateUser($scope.model.user, function(res) {
-        console.log(res);
-      }, function(err) {
-        console.log(err);
-      })
+    if (!ok) {
+      return;
     }
-    console.log($scope.model.user);
+
+    // corrijo la info de los telefonos para el formato de la llamada.
+    $scope.model.user['telephones'] = [];
+    $scope.model.user.telephones.push({
+      number:$scope.model.telephones.telephone,
+      type:'residence'
+    });
+    $scope.model.user.telephones.push({
+      number:$scope.model.telephones.movil,
+      type:'movil'
+    });
+
+
+    Users.updateUser($scope.model.user, function(res) {
+      console.log(res);
+    }, function(err) {
+      console.log(err);
+    })
   }
 
   $scope.updateStudentData = function() {
@@ -192,12 +200,26 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
   $scope.checkUserData = function() {
     var ok = true;
 
-    ok = ok && $scope.dataBasic.name.$valid;
-    ok = ok && $scope.dataBasic.lastname.$valid;
-    ok = ok && $scope.dataBasic.dni.$valid;
-    ok = ok && $scope.dataBasic.student_number.$valid;
-    ok = ok && $scope.dataBasic.birthdate.$valid;
-    ok = ok && $scope.dataBasic.genre.$valid;
+    var form = $scope.dataBasic;
+
+    ok = ok && form.name.$valid;
+    ok = ok && form.lastname.$valid;
+    ok = ok && form.dni.$valid;
+    ok = ok && form.student_number.$valid;
+    ok = ok && form.birthdate.$valid;
+    ok = ok && form.genre.$valid;
+    ok = ok && form.residence_city.$valid;
+    ok = ok && form.address.$valid;
+    ok = ok && form.birth_city.$valid;
+    ok = ok && form.country.$valid;
+
+    // chequeo que los telefonos sean validos y que por lo menos haya uno.
+    ok = ok && form.movil.$valid;
+    ok = ok && form.telephone.$valid;
+    ok = ok && ($scope.model.telephones.telephone != '' || $scope.model.telephones.movil != '');
+
+    // chequeo que tenga un email seleccionado de contacto
+    ok = ok && ($scope.model.mails.email != '');
 
     return ok;
   }
