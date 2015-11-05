@@ -257,9 +257,9 @@ class Justifications:
         start es la fecha de inicio de la busqueda. en el caso de que no sea pasado entonces no se pone como restriccion el inicio
         end es la fecha de limite de la busqueda. en el caso de que no sea pasado entonces no se pone como restriccion el end
         status es el estado a obtener. en el caso de que no sea pasado entonces se obtienen todas, en su ultimo estado
-        userIds es una lista de ids de usuarios que piden los requests, si = None o es vacío entonces retorna todas.
+        users es una lista de ids de usuarios que piden los requests, si = None o es vacío entonces retorna todas.
     '''
-    def getJustificationRequestsByDate(self,con,status=None,userIds=None,start=None,end=None):
+    def getJustificationRequestsByDate(self,con,status=None,users=None,start=None,end=None):
         cur = con.cursor()
 
         statusR = self._getJustificationsInStatus(con,status)
@@ -269,21 +269,21 @@ class Justifications:
         rids = tuple(statusR.keys())
 
         if start is not None and end is not None:
-            if userIds is None or len(userIds) <= 0:
+            if users is None or len(users) <= 0:
                 cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where jbegin >= %s and jbegin <= %s and id in %s',(start,end,rids))
             else:
-                cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where jbegin >= %s and jbegin <= %s and id in %s and user_id in %s',(start,end,rids,tuple(userIds)))
+                cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where jbegin >= %s and jbegin <= %s and id in %s and user_id in %s',(start,end,rids,tuple(users)))
         else:
             if start is None:
-                if userIds is None or len(userIds) <= 0:
+                if users is None or len(users) <= 0:
                     cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where jbegin <= %s and id in %s',(end,rids))
                 else:
-                    cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where jbegin <= %s and id in %s and user_id in %s',(start,end,rids,tuple(userIds)))
+                    cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where jbegin <= %s and id in %s and user_id in %s',(start,end,rids,tuple(users)))
             else:
-                if userIds is None or len(userIds) <= 0:
+                if users is None or len(users) <= 0:
                     cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where jbegin >= %s and id in %s',(end,rids))
                 else:
-                    cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where jbegin >= %s and id in %s and user_id in %s',(start,end,rids,tuple(userIds)))
+                    cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where jbegin >= %s and id in %s and user_id in %s',(start,end,rids,tuple(users)))
 
         if cur.rowcount <= 0:
             return []

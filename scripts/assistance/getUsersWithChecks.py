@@ -16,6 +16,14 @@ from autobahn.asyncio.wamp import ApplicationSession
 
 from model.config import Config
 
+
+"""
+  Obtener usuarios que tienen configurado algun chequeo a partir de la fecha pasada como parametro (chequeo mayor o igual a la fecha pasada como parametro)
+  python3 getUsersWithChecks.py sid date
+  python3 getUsersWithChecks.py 1 01-01-2015
+"""
+
+
 ''' configuro el injector y el logger '''
 logging.getLogger().setLevel(logging.DEBUG)
 
