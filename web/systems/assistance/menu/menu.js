@@ -1,8 +1,8 @@
 var app = angular.module('mainApp');
 
-app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Profiles', 'Session', 'Notifications', 'Assistance',
+app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Profiles', 'Session', 'Notifications', 'Assistance','Office',
 
-  function ($rootScope, $scope, $location, Profiles, Session, Notifications, Assistance) {
+  function ($rootScope, $scope, $location, Profiles, Session, Notifications, Assistance, Office) {
 
     $scope.model = {
       class:'',
@@ -89,24 +89,7 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Profiles', 'Se
               $scope.model.items.push({ n:4, label:'Mi Horario', img:'fa-clock-o', function: $scope.mySchedule});
 
 
-              /* -----------------------------------------------------------------------------------------------------------
-               * --------- ESTAN PANTALLAS ESTAN ACA PARA PROBARLAS, LUEGO HAY QUE HACER LOS CHEQUEOS CORRESPONDIENTES -----
-               * -----------------------------------------------------------------------------------------------------------
-               */
-
-               $scope.model.items.push({ n:30, label:'Horas Extras ', img:'fa-plus', function: $scope.requestAuthority});
-               $scope.model.items.push({ n:31, label:'Admin Horas Extras ', img:'fa-plus', function: $scope.adminRequestOverTime});
-
-               $scope.model.items.push({ n:40, label:'Administrar Cargos', img:'fa-plus', function: $scope.managePositions});
-               $scope.model.items.push({ n:25, label:'Stock de Solicitudes ', img:'fa-plus', function: $scope.manageJustificationsStock});
-               $scope.model.items.push({ n:24, label:'Solicitudes Generales ', img:'fa-plus', function: $scope.requestGeneralJustifications});
-               $scope.model.items.push({ n:22, label:'Adm. Solicitudes ', img:'fa-ticket', function: $scope.adminRequestAssistance});
-
-
-               $scope.model.items.push({ n:21, label:'Solicitudes a Empleados', img:'fa-plus', function: $scope.userAssistanceManagementMediator});
-               $scope.model.items.push({ n:23, label:'Solicitudes Especiales ', img:'fa-plus', function: $scope.userAssistanceManagement});
-              /* Lo comente para probar otras pantallas
-              Office.getUserOfficeRoles(
+              Office.getUserOfficeRoles(null,
                   function(roles) {
                     var hasApprove = false;
                     var hasOvertime = false;
@@ -146,7 +129,6 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Profiles', 'Se
                     Notifications.message(error);
                   }
               );
-              */
           }
 
         },

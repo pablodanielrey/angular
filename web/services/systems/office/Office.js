@@ -33,6 +33,9 @@ function Office($rootScope, $wamp, Session) {
   services.deleteOfficeRole = deleteOfficeRole;
 
 
+  services.getUserOfficeRoles = getUserOfficeRoles;
+
+
   // -----------------------------------------------------------
   // --------------- FALTAN IMPLEMENTAR EN EL SERVER -----------
   // -----------------------------------------------------------
@@ -175,7 +178,7 @@ function Office($rootScope, $wamp, Session) {
    * Retornar usuarios que pertenecen a las oficinas y suboficinas en las cuales la persona userId tiene un rol determinado
    * @param userId Identificacion de usuario
    * @param role Rol de usuario: Ej. 'realizar-solicitud': Puede realizar solicitudes a otros usuarios de sus oficinas
-   * @param tree 
+   * @param tree
    * @param callbackOk Funcion a ejecutar para respuestas correctas
    * @param callbackError Funcion a ejecutar para respuestas erroneas
   */
@@ -208,7 +211,7 @@ function Office($rootScope, $wamp, Session) {
 
           callbackOk(res);
         } else {
-        
+
           callbackError('Error');
         }
       },function(err) {
@@ -344,6 +347,21 @@ function Office($rootScope, $wamp, Session) {
     }
     sessionId = Session.getSessionId();
     $wamp.call('offices.offices.getRolesAdmin', [sessionId, userId, officesId, usersId])
+      .then(function(res) {
+        if (res != null) {
+          callbackOk(res);
+        } else {
+          callbackError('Error');
+        }
+      },function(err) {
+        callbackError(err);
+      });
+  }
+
+
+  function getUserOfficeRoles(userId,callbackOk,callbackError) {
+    sessionId = Session.getSessionId();
+    $wamp.call('offices.offices.getUserOfficeRoles', [sessionId, userId])
       .then(function(res) {
         if (res != null) {
           callbackOk(res);
