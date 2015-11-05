@@ -4,8 +4,11 @@
       <li class="nodeOffice" ng-repeat="office in model.offices" ui-tree-node ng-include="'modules/manageIssues/nodes_assigned_renderer.html'"></li>
     </ol>
   </div>
+
+  
   <div class="actions">
-    <input type="button" value="Cancelar" ng-click="cancelAssigned()" />
-    <input type="submit" value="Guardar" ng-click="saveAssigned()" />
-  <div>
+
+    <button class="btnSaveComment" title="Guardar"  ng-click="saveAssigned()" > Guardar</button>
+    <button class="btnCancelComment" title="Cancelar" ng-click="cancelAssigned()" ><i class="fa fa-times"></i></button>
+  </div>  
 </div>
