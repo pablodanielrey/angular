@@ -15,6 +15,7 @@ from model.config import Config
 
 
 """
+Obtener schedules de la semana en base a un determinado dia de la semana
 python3 getAssistanceSchedules.py sessionId userId date
 python3 getAssistanceSchedules.py 1 35f7a8a6-d844-4d6f-b60b-aab810610809 10-10-2015
 
