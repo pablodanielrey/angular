@@ -202,7 +202,7 @@
                         <button><i class="fa fa-envelope"></i></button>
                       </div>
                       <div>
-                        <select  ng-model='model.laboralData.email' name='mail' ng-blur='updateLaboralData()' required>
+                        <select  ng-model='model.laboralData.email' name='mail' ng-change='updateLaboralData()' required>
                           <!-- <option class="selectGrey" disabled selected style='display:none;'>Mail</option> -->
                           <option ng-repeat='m in model.mails.emails' value='{{m.id}}'>{{m.email}}</option>
                           <!--

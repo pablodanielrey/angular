@@ -141,6 +141,12 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
             if (offer.approved < minimum) {
               ok = false;
             }
+
+            if (offer.approved <= 0) {
+              offer.approved = 0;
+              ok = false;
+            }
+
             break;
           }
         }
@@ -275,7 +281,7 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
       console.log(mails);
       $scope.model.mails.emails = mails;
       if (mails.length > 0) {
-        $scope.model.mails.email = mails[0].id;
+        $scope.model.laboralData.email = mails[0].id;
       }
     }, function(error) {
       console.log(err);
