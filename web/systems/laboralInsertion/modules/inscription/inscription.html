@@ -214,9 +214,7 @@
                       </div>
                     </div>
 
-                    <div class='item' ng-if='model.mails.emails.length <= 0'>
-                      <div>Agregue una cuenta de correo haciendo click <a target="_blank" href='http://fce.econo.unlp.edu.ar'>ACA</a></div>
-                    </div>
+                    <div>Agregue una cuenta de correo haciendo click <a target="_blank" href='http://fce.econo.unlp.edu.ar'>ACA</a></div>
                     <!-- ------------------------------------------------ -->
 
                     <div class="item2" ng-click='startInscription()'>
@@ -297,8 +295,8 @@
                           </div>
                           <div>
                             <select class="carrera" ng-model='model.offer.degree'>
-                              <option class="selectGrey" disabled selected style='display:none;'>Seleccionar...</option>
-                              <option ng-repeat='o in degrees'>{{o}}</option>
+                              <!-- <option class="selectGrey" disabled selected style='display:none;'>Seleccionar...</option> -->
+                              <option ng-repeat='o in degrees'>{{o.degree}}</option>
                               <!--
                               <option>Contador Público</option>
                               <option>Licenciatura en Administración</option>
@@ -309,6 +307,10 @@
                             </select>
 
                           </div>
+                        </div>
+
+                        <div>
+                          <input type='checkbox' ng-model='model.offer.graduate'>Graduado</input>
                         </div>
 
                     </div>
@@ -418,8 +420,8 @@
 
                               </div>
                               <div class="contentItemsLanguajes">
-                                <select class="languaje" ng-model='i.name'>
-                                  <option class="selectGrey" disabled selected style='display:none;'>Seleccionar...</option>
+                                <select class="languaje" ng-model='i.name' ng-change='checkInscriptionPreconditions()'>
+                                  <!-- <option class="selectGrey" disabled selected style='display:none;'>Seleccionar...</option> -->
                                   <option ng-repeat='o in languages'>{{o}}</option>
                                   <!--
                                   <option>Inglés</option>

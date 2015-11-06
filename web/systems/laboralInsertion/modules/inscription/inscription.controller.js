@@ -6,7 +6,13 @@ InscriptionCtrl.inject = ['$rootScope', '$scope', '$wamp', 'LaboralInsertion', '
 
 function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Users, Student, Notifications) {
 
-  $scope.degrees = ['Contador Público', 'Licenciatura en Administración', 'Licenciatura en Turismo', 'Licenciatura en Economía', 'Tecnicatura en Cooperativas'];
+  $scope.degrees = [
+    { degree:'Contador Público', assignatures:34 },
+    { degree:'Licenciatura en Administración', assignatures:37 },
+    { degree:'Licenciatura en Turismo', assignatures:28 },
+    { degree:'Licenciatura en Economía', assignatures:35 },
+    { degree:'Tecnicatura en Cooperativas', assignatures:19 }
+  ];
   $scope.workTypes = ['Pasantía','Full-Time','Programa estudiantes avanzados y jovenes profesionales'];
   $scope.travel = ['No', 'Sí'];
   $scope.languages = ['Inglés','Portugués','Alemán','Ruso','Italiano','Francés','Chino','Japonés'];
@@ -51,7 +57,8 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
 
     // inscripcion a ser subida al server.
     offer: {
-      degree: $scope.degrees[0],
+      degree: $scope.degrees[0].degree,
+      graduate: false,
       average1: 0.0,
       average2: 0.0,
       approved: 0,
@@ -73,58 +80,98 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
   $scope.$watch(function() { return $scope.model.offer.degree; }, function(o,n) { $scope.checkInscriptionPreconditions(); });
   $scope.$watch(function() { return $scope.model.offer.average1; }, function(o,n) { $scope.checkInscriptionPreconditions(); });
   $scope.$watch(function() { return $scope.model.offer.average2; }, function(o,n) { $scope.checkInscriptionPreconditions(); });
-  $scope.$watch(function() { return $scope.model.offer.aproved; }, function(o,n) { $scope.checkInscriptionPreconditions(); });
-  $scope.$watch(function() { return $scope.model.laboralData.languages; }, function(o,n) { $scope.checkInscriptionPreconditions(); });
+  $scope.$watch(function() { return $scope.model.offer.approved; }, function(o,n) { $scope.checkInscriptionPreconditions(); });
+  //$scope.$watch(function() { return $scope.model.laboralData.languages; }, function(o,n) { $scope.checkInscriptionPreconditions(); });
   $scope.$watch(function() { return $scope.model.laboralData.email; }, function(o,n) { $scope.checkInscriptionPreconditions(); });
   $scope.$watch(function() { return $scope.model.laboralData.cv; }, function(o,n) { $scope.checkInscriptionPreconditions(); });
 
   $scope.checkInscriptionPreconditions = function() {
 
-    console.log('chequeando');
       var ok = true;
       var offer = $scope.model.offer;
 
       if ($scope.model.cr >= 0) {
-        ok = ok && offer.degree != '';
+
+        ok = false;
+        for (var i = 0; i < $scope.degrees.length; i++) {
+          if (offer.degree == $scope.degrees[i].degree) {
+            ok = true;
+            if (offer.graduate) {
+              offer.approved = $scope.degrees[i].assignatures;
+            }
+            break;
+          }
+        }
+
       }
 
       if ($scope.model.cr >= 1) {
-        ok = ok && offer.average1 >= 0;
-        ok = ok && offer.average1 >= 0;
 
-        if (offer.degree == 'Contador Público') {
-          ok = ok && offer.aproved >= 20;
+        /*
+          condiciones:
+            los promedios estan entre 0 y 10
+            los promedios deben ser mayor a 5 para anotarse
+            la cantidad de materias aprobadas va de 0 a (dependiendo de la carrera la cantidad de materias)
+            la cantidad de materias aprobadas deben superar el 80% de la cantidad de materias de la carrera
+        */
+
+        ok = ok && offer.average1 >= 5;
+        if (offer.average1 > 10) {
+          offer.average1 = 10;
+        } else if (offer.average1 <= 0) {
+          offer.average1 = 0;
         }
 
-        if (offer.degree == 'Licenciatura en Administración') {
-          ok = ok && offer.aproved >= 25;
+        ok = ok && offer.average2 >= 5;
+        if (offer.average2 > 10) {
+          offer.average2 = 10;
+        } else if (offer.average2 <= 0) {
+          offer.average2 = 0;
         }
 
-        if (offer.degree == 'Licenciatura en Turismo') {
-          ok = ok && offer.aproved >= 17;
+        for (var i = 0; i < $scope.degrees.length; i++) {
+          if (offer.degree == $scope.degrees[i].degree) {
+            var assignatures = $scope.degrees[i].assignatures;
+            if (offer.approved > assignatures) {
+              offer.approved = assignatures;
+              break;
+            }
+            // controlo que tenga aprobado el 80%
+            var minimum = (assignatures * 80) / 100;
+            if (offer.approved < minimum) {
+              ok = false;
+            }
+            break;
+          }
         }
 
-        if (offer.degree == 'Licenciatura en Economía') {
-          ok = ok && offer.aproved >= 22;
-        }
+      }
 
-        if (offer.degree == 'Tecnicatura en Cooperativas') {
-          ok = ok && offer.aproved >= 10;
+      if ($scope.model.cr >= 2) {
+
+        // ejemplo de chequeo. verlo con paula
+        if (offer.graduate || offer.approved > 30) {
+          $scope.workTypes = ['Full-Time','Programa estudiantes avanzados y jovenes profesionales'];
+        } else {
+          $scope.workTypes = ['Pasantía','Full-Time','Programa estudiantes avanzados y jovenes profesionales'];
         }
+        offer.workType = $scope.workTypes[0];
+
       }
 
       if ($scope.model.cr >= 4) {
+
         var languages = $scope.model.laboralData.languages
         for (var l = 0; l < languages.length; l++) {
           for (var i = l + 1; i < languages.length; i++) {
             if (languages[l].name == languages[i].name) {
-              $scope.model.showNext = false;
-              return;
+              ok = false;
             }
           }
         }
       }
 
+      console.log(ok);
       $scope.model.showNext = ok;
     }
 
@@ -162,6 +209,8 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
 
     $scope.model.ci = 1;
     $scope.model.cr = 0;
+
+    $scope.checkInscriptionPreconditions();
   }
 
   $scope.endInscription = function() {
@@ -179,6 +228,7 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
 
   $scope.changePreviousRegistration = function() {
     $scope.model.cr = $scope.model.cr - 1;
+    $scope.checkInscriptionPreconditions();
   }
 
   $scope.getInscriptionClazz = function() {
@@ -358,8 +408,33 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
 
 
   $scope.addLanguage = function() {
+
+    /*
+      Se controla que los lenguajes existan solo una vez en la lista de lenguajes.
+      al agregar uno, se selecciona automáticamente el primero que no este ya agregado a la lista.
+    */
+
+    var lang = '';
+    for (var l = 0; l < $scope.languages.length; l++) {
+      lang = $scope.languages[l];
+      for (var i = 0; i < $scope.model.laboralData.languages.length; i++) {
+        var lang2 = $scope.model.laboralData.languages[i].name;
+        if (lang2 == lang) {
+          lang = '';
+          break;
+        }
+      }
+      if (lang != '') {
+        break;
+      }
+    }
+
+    if (lang == '') {
+      return;
+    }
+
     $scope.model.laboralData.languages.push({
-        name: $scope.languages[0],
+        name: lang,
         level: 'Básico'
       });
   }
@@ -368,6 +443,7 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
     var languages = $scope.model.laboralData.languages;
     var i = languages.indexOf(l);
     languages.splice(i,1);
+    $scope.checkInscriptionPreconditions();
   }
 
   $scope.status = {
