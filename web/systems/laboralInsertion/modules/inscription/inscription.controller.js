@@ -2,9 +2,9 @@ angular
   .module('mainApp')
   .controller('InscriptionCtrl', InscriptionCtrl);
 
-InscriptionCtrl.inject = ['$rootScope', '$scope', '$wamp', 'LaboralInsertion', 'Login', 'Users', 'Student', 'Notifications']
+InscriptionCtrl.inject = ['$rootScope', '$scope', '$wamp', 'LaboralInsertion', 'Login', 'Users', 'Student', 'Notifications', 'Files']
 
-function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Users, Student, Notifications) {
+function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Users, Student, Notifications, Files) {
 
   $scope.degrees = [
     { degree:'Contador Público', assignatures:34 },
@@ -82,6 +82,22 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
   };
 
 
+  $scope.addCV = function(fileName, fileContent) {
+    var cv = window.btoa(fileContent);
+    Files.upload(null, fileName, cv).then(
+        function(id) {
+          console.log(id);
+          $scope.model.laboralData.cv = id;
+        },
+        function(err) {
+          console.log(err);
+          Notifications.message(err);
+        }
+
+    )
+  }
+
+
   $scope.$watch(function() { return $scope.model.offer.degree; }, function(o,n) { $scope.checkInscriptionPreconditions(); });
   $scope.$watch(function() { return $scope.model.offer.average1; }, function(o,n) { $scope.checkInscriptionPreconditions(); });
   $scope.$watch(function() { return $scope.model.offer.average2; }, function(o,n) { $scope.checkInscriptionPreconditions(); });
@@ -115,19 +131,18 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
         /*
           condiciones:
             los promedios estan entre 0 y 10
-            los promedios deben ser mayor a 5 para anotarse
             la cantidad de materias aprobadas va de 0 a (dependiendo de la carrera la cantidad de materias)
             la cantidad de materias aprobadas deben superar el 80% de la cantidad de materias de la carrera
         */
 
-        ok = ok && offer.average1 >= 5;
+        ok = ok && offer.average1 >= 0;
         if (offer.average1 > 10) {
           offer.average1 = 10;
         } else if (offer.average1 <= 0) {
           offer.average1 = 0;
         }
 
-        ok = ok && offer.average2 >= 5;
+        ok = ok && offer.average2 >= 0;
         if (offer.average2 > 10) {
           offer.average2 = 10;
         } else if (offer.average2 <= 0) {
@@ -143,30 +158,20 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
             }
             // controlo que tenga aprobado el 80%
             var minimum = (assignatures * 80) / 100;
-            if (offer.approved < minimum) {
-              ok = false;
+            if (offer.approved > minimum) {
+              $scope.workTypes = ['Full-Time','Programa estudiantes avanzados y jovenes profesionales'];
+            } else {
+              $scope.workTypes = ['Pasantía','Full-Time'];
             }
+            offer.workType = $scope.workTypes[0];
 
             if (offer.approved <= 0) {
               offer.approved = 0;
-              ok = false;
             }
 
             break;
           }
         }
-
-      }
-
-      if ($scope.model.cr >= 2) {
-
-        // TODO: ejemplo de chequeo. verlo con paula
-        if (offer.graduate || offer.approved > 30) {
-          $scope.workTypes = ['Full-Time','Programa estudiantes avanzados y jovenes profesionales'];
-        } else {
-          $scope.workTypes = ['Pasantía','Full-Time','Programa estudiantes avanzados y jovenes profesionales'];
-        }
-        offer.workType = $scope.workTypes[0];
 
       }
 
@@ -180,6 +185,10 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
             }
           }
         }
+      }
+
+      if ($scope.model.cr >= 5) {
+        ok = ok && ($scope.model.laboralData.cv != null && $scope.model.laboralData.cv != '');
       }
 
       console.log(ok);

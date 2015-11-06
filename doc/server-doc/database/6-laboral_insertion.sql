@@ -7,7 +7,7 @@ create schema laboral_insertion;
     id varchar not null primary key references profile.users (id),
     accepted_conditions boolean default false,
     email varchar references profile.mails (id),
-    cv varchar references file.file (id),
+    cv varchar references files.files (id),
     creation timestamptz default now()
   );
 

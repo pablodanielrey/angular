@@ -8,5 +8,5 @@ create schema files;
     id varchar not null primary key,
     name varchar,
     hash varchar,
-    data bytea
+    content bytea
   );
