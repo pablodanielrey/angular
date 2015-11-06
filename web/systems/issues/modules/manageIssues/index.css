@@ -91,24 +91,52 @@
 ************ ASIGNACION DE OFICINAS ********************
 *******************************************************/
 
-.contentScreens .assignedOffices {
-  display:none;
+
+
+.issues .contentScreens .nodeOffice .nameNodeOffice {
+  cursor:default;
 }
 
-.contentScreens.displayAssigned .assignedOffices {
-  display:block;
+.issues .contentScreens .assignedOffices {
+  position: absolute;
+  display: block;
+  background-color: rgba(0,0,0,0.9);
+  height: 100%;
+  width: 100%;
+  top:0;
 }
 
-.contentScreens .newIssueForm {
-  display:none;
+.issues .contentOffices {
+  background-color:#eeeeee;
+  -webkit-box-shadow: 1px 1px 5px #5c5f69;
+  -moz-box-shadow: 5px 5px 5px #5c5f69;
+  border-radius:2px;
+  -webkit-border-radius:2px;
+  -moz-border-radius:2px;
+  padding: 20px;
+  position: absolute;
+  top: 50%; /* Buscamos el centro horizontal (relativo) del navegador */
+  left: 50%; /* Buscamos el centro vertical (relativo) del navegador */
+  width: 450px; /* Definimos el ancho del objeto a centrar */
+  height: 190px; /* Definimos el alto del objeto a centrar */
+  margin-top: -200px; /* Restamos la mitad de la altura del objeto con un margin-top */
+  margin-left: -350px; /* Restamos la mitad de la anchura del objeto con un margin-left */
+
 }
 
-.contentScreens.displayCreateChild .newIssueForm {
-  display:block;
+.issues .selectOffice {
+  border: 1px solid #e8dede;
+  padding: 20px;
+  background-color: white;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  height: 150px;
+  overflow-y: scroll;
 }
 
-
-
+.issues .contentTreeOffices {
+  height:initial;
+}
 
 /*******************************************************
 ************ CONTENEDOR DE MIS PEDIDOS *****************
@@ -472,7 +500,7 @@
   transition: all 0.4s ease-in-out;
 }
 
-.issues .contentScreens.displayVisibility .assignedOffices { /*MUESTRA LA PANTALLA DE OFICINAS*/
+.issues .contentScreens.displayAssigned .assignedOffices { /*MUESTRA LA PANTALLA DE OFICINAS*/
   transform: translate3d(0,0,0);
 }
 
