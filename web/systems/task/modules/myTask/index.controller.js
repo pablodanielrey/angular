@@ -42,22 +42,33 @@ function MyTaskCtrl($scope, $wamp, Notifications,  $location, Task) {
     }
 
     function removeTaskEvent(args) {
-      console.log(" ----------- removeTaskEvent ----------");
-      console.log(args);
-      $scope.getTasks();
+      var id = args[0];
+      for (var i = 0; i < $scope.model.tasks.length; i++) {
+        var t = $scope.model.tasks[i];
+        if (t.id == id) {
+          var index = $scope.model.tasks.indexOf(t);
+          if (index > -1) {
+            $scope.model.tasks.splice(index, 1);
+          }
+          return;
+        }
+      }
     }
 
     function changeTaskEvent(args) {
-      console.log(" ----------- changeTaskEvent ----------");
-      console.log(args);
-      $scope.getTasks();
+      var task = args[0];
+      for (var i = 0; i < $scope.model.tasks.length; i++) {
+        var t = $scope.model.tasks[i];
+        if (t.id == task.id) {
+          t.finish = task.finish;
+          return;
+        }
+      }
     }
 
     function newTaskEvent(args) {
-      console.log(" ----------- newTaskEvent ----------");
-      console.log(args);
-      // $scope.model.tasks.push(args[0]);
-      $scope.getTasks();
+      var task = args[0];
+      $scope.model.tasks.push(task);
     }
 
 
