@@ -20,7 +20,7 @@ class LaboralInsertion:
             inscription = {
                 'id': c[0],
                 'degree': c[2],
-                'courses': c[3],
+                'approved': c[3],
                 'average1': c[4],
                 'average2': c[5],
                 'workType': c[6],
@@ -46,7 +46,7 @@ class LaboralInsertion:
             iid,
             userId,
             d['degree'],
-            d['courses'],
+            d['approved'],
             d['average1'],
             d['average2'],
             d['workType'],

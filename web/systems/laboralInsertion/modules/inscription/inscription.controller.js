@@ -14,7 +14,10 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
     { degree:'Tecnicatura en Cooperativas', assignatures:19 }
   ];
   $scope.workTypes = ['Pasantía','Full-Time','Programa estudiantes avanzados y jovenes profesionales'];
-  $scope.travel = ['No', 'Sí'];
+  $scope.travel = [
+    { label:'No', value: false },
+    { label:'Sí', value: true }
+  ];
   $scope.languages = ['Inglés','Portugués','Alemán','Ruso','Italiano','Francés','Chino','Japonés'];
 
   $scope.model = {
@@ -63,7 +66,7 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
       average2: 0.0,
       approved: 0,
       workType: $scope.workTypes[0],
-      travel: $scope.travel[0],
+      travel: $scope.travel[0].value,
       workExperience: false
     },
 
@@ -361,10 +364,25 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
 
   $scope.uploadInscription = function() {
     $scope.endInscription();
-    $scope.model.inscriptionsData.push({
-      'id': 'asdasds',
-      'languages': $scope.model.languages,
-      'inscriptions': [$scope.model.offer]
+
+    var userId = Login.getUserId();
+
+    //// ESTO SE ELIMINA TODOOO //////
+    var ld = JSON.parse(JSON.stringify($scope.model.laboralData))
+    if (ld.cv == undefined || ld.cv == '') {
+      delete ld.cv;
+    }
+    ////////
+
+    console.log($scope.model.offer);
+
+    Promise.all([
+      LaboralInsertion.persist(ld),
+      LaboralInsertion.persistInscriptionByUser(userId, $scope.model.offer)]
+    ).then(function(v,v) {
+      $scope.getInscriptions();
+    }, function(err) {
+      console.log(err);
     });
   }
 
@@ -372,7 +390,7 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
     var userId = Login.getUserId();
     LaboralInsertion.findAllInscriptionsByUser(userId)
       .then(function(data) {
-        $scope.model.inscriptionsData = data.inscriptions;
+        $scope.model.inscriptionsData = data;
         /*
         $scope.model.inscriptionsData = [{
           'id':'sdfdsfdsfs',
@@ -403,11 +421,11 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
   }
 
   $scope.getDegree = function(i) {
-    return i.inscriptions[0].degree;
+    return i.degree;
   }
 
   $scope.getType = function(i) {
-    return i.inscriptions[0].workType;
+    return i.workType;
   }
 
   $scope.downloadInscription = function(i) {

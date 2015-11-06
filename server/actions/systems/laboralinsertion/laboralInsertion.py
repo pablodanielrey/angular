@@ -199,8 +199,9 @@ class LaboralInsertionWamp(ApplicationSession):
     def persistInscriptionByUser(self, userId, data):
         con = self._getDatabase()
         try:
-            data = self.laboralInsertion.persistInscriptionByUser(con, userId, data)
-            return data
+            self.laboralInsertion.persistInscriptionByUser(con, userId, data)
+            con.commit()
+            return True
 
         finally:
             con.close()
