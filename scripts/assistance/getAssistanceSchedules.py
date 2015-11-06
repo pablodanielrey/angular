@@ -13,6 +13,13 @@ from autobahn.asyncio.wamp import ApplicationSession
 
 from model.config import Config
 
+
+"""
+python3 getAssistanceSchedules.py sessionId userId date
+python3 getAssistanceSchedules.py 1 35f7a8a6-d844-4d6f-b60b-aab810610809 10-10-2015
+
+"""
+
 ''' configuro el injector y el logger '''
 logging.getLogger().setLevel(logging.DEBUG)
 
@@ -39,27 +46,22 @@ class WampMain(ApplicationSession):
     def onJoin(self, details):
         logging.debug('ejecutando llamadas')
 
-        date = datetime.datetime.now()
+        date = datetime.datetime.strptime(sys.argv[3], "%d-%m-%Y").date()
 
         from dateutil.parser import parse
         import dateutil
         tz = dateutil.tz.tzlocal()
 
-        days = 20
-        c = 0
-        while c < days:
-            ret = yield from self.call('assistance.getSchedules', sid, userId, date)
+        ret = yield from self.call('assistance.getSchedules', sid, userId, date)
 
-            if len(ret) > 0:
-                for r in ret:
-                    start = parse(r['start'])
-                    start = start.astimezone(tz)
-                    end = parse(r['end'])
-                    end = end.astimezone(tz)
-                    logging.debug('{} : {} --> {}'.format(r['id'], start, end))
-            c = c + 1
-            date = date + datetime.timedelta(days=1)
-
+        if len(ret) > 0:
+            for r in ret:
+                start = parse(r['start'])
+                start = start.astimezone(tz)
+                end = parse(r['end'])
+                end = end.astimezone(tz)
+                logging.debug('{} : {} --> {}'.format(r['id'], start, end))
+      
         sys.exit()
 
 
