@@ -1,0 +1,32 @@
+
+<div class="myTaskContainer">
+
+    <!-- ****************************************************
+    ***************** CREAR NUEVA TAREA *********************
+    ***************************************************** -->
+    <div class="task">
+	<h2>NUEVA TAREA </h2>
+	<form class="formNewTask">
+	    <div>
+	      <textarea class="newTask"  ng-model="model.task"></textarea>
+	    </div>
+	    <div>
+	      <button class="buttonTask" ng-click="createTask()"><h3>CREAR</h3></button>
+	    </div>
+	</form>
+    </div>
+
+    <!-- ****************************************************
+    ***************** MIS PEDIDOS (Listado) *****************
+    ***************************************************** -->
+    <div class="task">
+	<h3>Mis Tareas <i class="fa fa-tags"></i> </h3>
+	<div class="contentMyTasks">
+	  <div class="tasks" ng-repeat="task in model.tasks" ng-class="{true:'finish'}[task.finish]">
+	    <input type="checkbox" ng-model="task.finish" ng-change="updateStatus(task)"/> 
+	    <span> {{task.text}}</span>
+	  </div>
+	</div>
+    </div>
+
+</div>
