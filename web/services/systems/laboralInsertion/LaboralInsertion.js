@@ -21,6 +21,13 @@ function LaboralInsertion($rootScope,$wamp,Session) {
     return $wamp.call('system.laboralInsertion.persistInscriptionByUser', [userId, data]);
   }
 
+  /*
+    Elimina una escripcion dado el id.
+  */
+  this.deleteInscriptionById = function(iid) {
+    return $wamp.call('system.laboralInsertion.deleteInscriptionById', [iid]);
+  }
+
 
   /*
     Encuentra todos los datos de insercion laboral independientes de las inscripciones en la bolsa que tenga el usuario.

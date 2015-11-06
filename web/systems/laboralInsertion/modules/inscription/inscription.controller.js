@@ -433,9 +433,13 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
   }
 
   $scope.removeInscription = function(i) {
-    console.log(i);
-    var index = $scope.model.inscriptionsData.indexOf(i);
-    $scope.model.inscriptionsData.splice(index,1);
+    LaboralInsertion.deleteInscriptionById(i.id).then(
+      function() {
+        $scope.getInscriptions();
+      }, function(err) {
+        console.log(err);
+      }
+    );
   }
 
 

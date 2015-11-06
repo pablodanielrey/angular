@@ -36,7 +36,7 @@ class LaboralInsertion:
     def deleteInscriptionById(self, con, iid):
         """ elimina la inscripción con el id determinado """
         cur = con.cursor()
-        cur.execute('delete from laboral_insertion.inscriptions where id = %s', (iid))
+        cur.execute('delete from laboral_insertion.inscriptions where id = %s', (iid,))
 
     def persistInscriptionByUser(self, con, userId, d):
         """ genera una inscripcion nueva por usuario """

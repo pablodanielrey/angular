@@ -160,6 +160,7 @@ class LaboralInsertionWamp(ApplicationSession):
         yield from self.register(self.persist_async, 'system.laboralInsertion.persist')
         yield from self.register(self.findAllInscriptionsByUser_async, 'system.laboralInsertion.findAllInscriptionsByUser')
         yield from self.register(self.persistInscriptionByUser_async, 'system.laboralInsertion.persistInscriptionByUser')
+        yield from self.register(self.deleteInscriptionById_async, 'system.laboralInsertion.deleteInscriptionById')
 
     def _getDatabase(self):
         host = self.serverConfig.configs['database_host']
@@ -200,6 +201,16 @@ class LaboralInsertionWamp(ApplicationSession):
         con = self._getDatabase()
         try:
             self.laboralInsertion.persistInscriptionByUser(con, userId, data)
+            con.commit()
+            return True
+
+        finally:
+            con.close()
+
+    def deleteInscriptionById(self, iid):
+        con = self._getDatabase()
+        try:
+            self.laboralInsertion.deleteInscriptionById(con, iid)
             con.commit()
             return True
 
@@ -265,6 +276,12 @@ class LaboralInsertionWamp(ApplicationSession):
     def persistInscriptionByUser_async(self, userId, data):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.persistInscriptionByUser, userId, data)
+        return r
+
+    @coroutine
+    def deleteInscriptionById_async(self, iid):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.deleteInscriptionById, iid)
         return r
 
     @coroutine
