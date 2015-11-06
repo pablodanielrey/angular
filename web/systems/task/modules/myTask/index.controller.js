@@ -28,6 +28,7 @@ function MyTaskCtrl($scope, $wamp, Notifications,  $location, Task) {
     $scope.getTasks = getTasks;
     $scope.updateStatus = updateStatus;
     $scope.removeTask = removeTask;
+    $scope.removeTaskByStatus = removeTaskByStatus;
 
     // -------------------------------------------------------------
     // ----------------- CARGA DE DATOS INICIALES ------------------
@@ -90,9 +91,10 @@ function MyTaskCtrl($scope, $wamp, Notifications,  $location, Task) {
     function createTask() {
       Task.createTask($scope.model.task,
         function(data) {
-
+          $scope.model.task = '';
         },
         function(error) {
+          $scope.model.task = '';
           Notifications.message(error);
         }
       );
@@ -111,6 +113,18 @@ function MyTaskCtrl($scope, $wamp, Notifications,  $location, Task) {
 
     function removeTask(task) {
       Task.removeTask(task.id,
+        function(data) {
+
+        },
+        function(error) {
+          Notifications.message(error);
+        }
+      );
+    }
+
+
+    function removeTaskByStatus() {
+      Task.removeTaskByStatus(true,
         function(data) {
 
         },

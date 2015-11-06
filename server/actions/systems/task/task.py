@@ -133,7 +133,7 @@ class WampTask(ApplicationSession):
             con.commit()
             for id in ids:
                 self.publish('task.removeTaskEvent', id)
-            return id
+            return ids
         except Exception as e:
             logging.exception(e)
             return None

@@ -21,16 +21,20 @@
     ***************************************************** -->
     <div class="task">
 	<h3>Mis Tareas <i class="fa fa-tags"></i> </h3>
-	<div class="filter"> 
+	<div class="filter">
 	  <span class="subtitle">Mostrar:</span>
-	  <span ng-click="search.finish = $">Todas</span> | 
-	  <span ng-click="search.finish = false">Pendientes</span> | 
+	  <span ng-click="search.finish = $">Todas</span> |
+	  <span ng-click="search.finish = false">Pendientes</span> |
 	  <span ng-click="search.finish = true">Finalizadas</span>
 	</div>
+  <div classs="deleteFinishContainer">
+    <span ng-click="removeTaskByStatus()">Eliminar todas las tareas finalizadas</span>
+  </div>
 	<div class="contentMyTasks">
 	  <div class="tasks" ng-repeat="task in model.tasks | filter:search.finish" ng-class="{true:'finish'}[task.finish]">
-	    <input type="checkbox" ng-model="task.finish" ng-change="updateStatus(task)"/> 
+	    <input type="checkbox" ng-model="task.finish" ng-change="updateStatus(task)"/>
 	    <span> {{task.text}}</span>
+      <button class="fa fa-trash" title="Eliminar Tarea" ng-click="removeTask(task)"></button>
 	  </div>
 	</div>
     </div>
