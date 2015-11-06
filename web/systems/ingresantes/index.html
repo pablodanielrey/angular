@@ -29,7 +29,8 @@
 
 <body>
 
-    <div class="ingresantes activacion">
+    <div class="ingresantes  activacion ">
+      <!--CLASES (home, genero, mail,activacion, password,fin)  y (mostrarEspere, ocultarEspere) y de errores (DNInoExiste, DNIActivado, CorreoNoLlega, consultaEnviada )-->
 
         <div class="header">
           &nbsp; <img class="logo" src="./img/siFCE_LogoMenu.png">
@@ -39,24 +40,61 @@
 
             <div class="pantallaInicio">
 
-                  <div class="textTitles"><h1><i class="fa fa-bookmark-o"></i> Alta de Usuario<h1></div>
+                  <div class="textTitles"><h1><i class="fa fa-bookmark-o"></i> Alta de cuenta para AU24<h1></div>
                   <div class="textTitles2">
-                    Ingrese su DNI
+                    Ingresá tu Nº de documento
                   </div>
                   <div>
-                    <input class="inputDNI" type="number" placeholder="" name='dni' maxlength="8"  ng-pattern='/^\d{8,8}$/' required></input>
+                    <input class="inputDNI" type="text" 3placeholder="" name='dni' maxlength="8"  ng-pattern='/^\d{8,8}$/' required></input>
                   </div>
+
+                  <div class="textSpan">
+                    <i class="fa fa-exclamation-triangle"></i> DNI sin puntos - Pasaporte sólo letras y números (sin barras, puntos, guiones)
+                  </div>
+
+
                   <div>
-                    <button class="btns" type="button"> Continuar</button>
+                    <button class="btns" type="button"> Continuar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
                   </div>
+
+
+                  <div class="logos">
+                    <img src="./img/logos.png">
+                  </div>
+            </div>
+
+            <div class="pantallaGenero">
+
+                  <div class="textTitles"><h1><i class="fa fa-venus-mars"></i> Marcá según corresponda<h1></div>
+                  <!-- <div class="textTitles2">
+                    Seleccione
+                  </div> -->
+
+                  <div class="textTitles2">
+                    <input type="checkbox" class="check"> Varón <br>
+                    <input type="checkbox"> Mujer <br>
+                    <input type="checkbox"> Prefiero no especificar
+
+
+                    </div>
+
+                    <div>
+                      <button class="btns" type="button"> Continuar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
+                    </div>
+                  <!-- <div class="generos">
+                      <button class="btnsGenero"type="button"><i class="fa fa-mars fa-2x textBlanco"></i><br> Masculino</button>
+                      <button class="btnsGenero"type="button"><i class="fa fa-venus fa-2x textBlanco"></i><br> Femenino</button>
+                      <button class="btnsGenero"type="button"><i class="fa fa-venus-mars fa-2x textBlanco"></i><br> Otro</button>
+
+                  </div> -->
+
             </div>
 
             <div class="pantallaCarga">
                   <div>
                       <h1><span class="textHola">Hola!</span> , <b>Armando Esteban Quito </b> </div></h1>
                   <div>
-                      Para dar de alta tu usuario y tener acceso a los sistemas de la Facultad de Ciencias Económicas <br>
-                      es necesario que registres una direccion de mail.
+                      Para dar de alta tu cuenta y acceder a AU24 es necesario que nos informes tu dirección de correo electrónico
                   </div>
 
                   <form name="elformulario">
@@ -69,7 +107,7 @@
                       <input type="checkbox" name="input_ver" value="ver" onclick="ver_password();"> -->
 
                   </form>
-                  <button class="btns" type="button">Enviar</button>
+                  <button class="btns" type="button">Enviar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
             </div>
 
             <div class="pantallaActivacion">
@@ -77,45 +115,71 @@
                     <h1><i class="fa fa-key"></i> Código de Activación</h1>
                 </div>
                 <div class="textTitles2">
-                    Le hemos enviado un correo con el código de acticación a <b>armandoesteban@quito.com.ar</b>
+                    Te hemos enviado un mensaje con el código de acticación a <b>armandoesteban@quito.com.ar</b>
                 </div>
-                <div class="textSpan">
-                    IMPORTANTE, Recuerda revisar la bandeja de correo NO DESEADO (Spam)
-                </div>
-                <div class="textTitles2">
-                  <i class="fa fa-key"></i> Código de Acticación
-                </div>
-                <input class="inputCode" type="text"> </input>
-                <button class="btns" type="button">Enviar</button>
-                <!-- <div class="textSpan2">
-                    No me llego el correo, <b>REENVIAR</b>
+                <div class="textSpan4">
+                  <button class="modificarMail"><i class="fa fa-pencil textBlanco2"></i> Modificar dirección de correo </button>
                 </div>
                 <div class="textSpan2">
-                    Modificar Mail
-                </div> -->
+                  <i class="fa fa-exclamation-triangle"></i> Revisá la bandeja de correo no deseado
+                </div>
+                <div class="textSpan2">
+                  <i class="fa fa-exclamation-triangle"></i> Si te llegó a "correo no deseado" tilda y da clic en "es correo deseado"
+                </div>
+
+                <div class="textTitles2 tituloCodAct">
+                  <i class="fa fa-key"></i> Código de Activación
+                </div>
+                <input class="inputCode" type="text"> </input>
+                <button class="btns" type="button">Enviar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
+
+
+                <div class="textSpan3">
+                    <button class="btnsActivacion" type="button">No me llego el correo, <b>volver a enviar</b></button><br>
+                     <div><i class="fa fa-circle-o-notch fa-spin"></i> enviando correo...</div>
+                     <div><i class="fa fa-times"></i> Código de Activación Incorrecto</div>
+
+                </div>
+
             </div>
 
             <div class="pantallaPassword">
               <div>
                   <h1><i class="fa fa-lock"></i> Crear Contraseña</h1>
               </div>
-              <div class="textTitles2">
-                  POR ÚLTIMO! será necesario que crees una contraseña,<br>
-                  la cual utilizaras para el acceso a los sistemas.
+              <div class="textTitles4">
+                  ¡Último paso! es necesario que crees tu contraseña<br>
+              </div>
+              <div class="textTitles5">
+                  para ingresar a AU24.
+              </div>
+
+              <div class="textSpan2">
+                <i class="fa fa-exclamation-triangle"></i> Debe tener una longitud minima de 5 caracteres
+              </div>
+              <div class="textSpan2">
+                 con al menos un número y una letra
               </div>
 
               <div class="passwords">
                   <div>
                     <div class="textTitles2"><i class="fa fa-lock"></i> Contraseña </div>
                     <div> <input class="inputPassword" type="password" name"password" required></div>
+                    <div> <input class="inputPassword" type="text" name"password" required></div>
                   </div>
                   <div>
                     <div class="textTitles2"><i class="fa fa-lock"></i> Repetir Contraseña</div>
                     <div> <input class="inputPassword" type="password" name"password" required>   </div>
+                    <div> <input class="inputPassword" type="text" name"password" required>   </div>
                   </div>
+                  <div>
+                    <div class="textTitles2"> &nbsp;</div>
+                    <button class="btnVerPassword"><i class="fa fa-unlock-alt fa-2x "></i></button>
+                  </div>
+
               </div>
 
-              <button class="btns" type="button">Enviar</button>
+              <button class="btns" type="button">Enviar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
 
 
             </div>
@@ -125,7 +189,8 @@
                     <h1><i class="fa fa-check-square-o"></i> Proceso Finalizado Correctamente!</h1>
                 </div>
                 <div class="textTitles2">
-                    Ahora podrás acceder a los sistemas de la facultad de ciencías económicas
+                    Ahora podrás acceder a AU24 <br>
+                    <b>www.au24.econo.unlp.edu.ar<b>
                 </div><br>
                 <div class="textTitles2">
                   <i class="fa fa-user"></i> Usuario: <span class="textTitles3"><b>30001823</b></span>
@@ -133,15 +198,126 @@
                 <div class="textTitles2">
                   <i class="fa fa-lock"></i> Contraseña: <span class="textTitles3"><b>********</b></span>
                 </div><br>
-                <button class="btns" type="button">Salir</button>
+                <button class="btns" type="button">Salir &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
 
 
             </div>
 
+
+
         </div>
 
+        <div class="pantallaEspere">
+          <!-- <ul class="fa-ul">
+              <li><i class="fa-li fa fa-spinner fa-spin"></i>Por favor espere...</li>
+          </ul> -->
+          <i class="fa fa-spinner fa-pulse fa-2x"></i> &nbsp;Por favor espere...
+        </div>
+
+        <div class="pantallaNoExisteDNI">
+          <div><h1><i class="fa fa-exclamation"></i> Documento Inexistente</h1> <br> </div>
+          <div>
+            <i class="fa fa-clock-o fa-3x"></i> Tené en cuenta que la carga del documento al sistema puede demorar hasta 48 hs luego de la inscripción
+          </div>
+          <br>
+          <div>
+            Si ese lapso a sido superado y continua aún el problema,
+          </div>
+          <div>
+            por favor completá el formulario y en la brevedad nos comunicaremos con vos
+          </div>
+
+          <br>
+
+          <div class="formulario">
+            <div>Nombre y Apellido   &nbsp;<input class="inputForms"  type="text"></input></div>
+            <div>Nº de Documento  &nbsp;<input class="inputForms" type="text"></input></div>
+            <div>Correo Electrónico  &nbsp;<input class="inputForms" type="text"></input></div>
+            <div>Teléfono / Celular  &nbsp;<input class="inputForms" type="text"></input></div>
+
+          </div>
+
+          <button class="btns" type="button">Enviar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
+
+        </div>
+
+        <div class="pantallaDNIActivado">
+          <div>
+            <span class="textHola">Hola!</span> , <b>Armando Esteban Quito </b>
+          </div>
+          <div>
+            <h1><i class="fa fa-exclamation"></i> Esta Cuenta ya se encuentra activa</h1> <br>
+            </div>
+
+          <div>
+             Si ya estabas registrado y no recuerdas la contraseña o deseas modificar tu datos personales
+          </div>
+          <div>
+             accede al portal de administración de cuentas desde <a class="textTitles3" href="http://www.fce.econo.unlp.edu.ar" target="_blank">aquí</a>
+          </div>
+          <br>
+
+          <div>
+            Si aún continuas con problemas, por favor completá el formulario y en la brevedad nos comunicaremos con vos
+          </div>
+
+          <br>
+
+          <div class="formulario">
+            <div>Nombre y Apellido   &nbsp;<input class="inputForms"  type="text"></input></div>
+            <div>Nº de Documento  &nbsp;<input class="inputForms" type="text"></input></div>
+            <div>Correo Electrónico  &nbsp;<input class="inputForms" type="text"></input></div>
+            <div>Teléfono / Celular  &nbsp;<input class="inputForms" type="text"></input></div>
+
+          </div>
+
+          <button class="btns" type="button">Enviar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
+
+        </div>
+
+
+        <div class="pantallaNoLlegaMail">
+
+          <div>
+            <h1><i class="fa fa-exclamation"></i> No me llego el código de activación</h1> <br>
+          </div>
+
+          <div>
+             ¿has revisado el correo no deseado en la cuenta <span class="textTitles6"><b> pepe@peepe.com </b></span> ?
+           </div>
+           <div>
+             si lo has hecho, por favor completá el formulario y en la brevedad nos comunicaremos con vos
+           </div>
+          <br>
+
+          <div class="formulario">
+            <div>Nombre y Apellido   &nbsp;<input class="inputForms"  type="text"></input></div>
+            <div>Nº de Documento  &nbsp;<input class="inputForms" type="text"></input></div>
+            <div>Correo Electrónico  &nbsp;<input class="inputForms" type="text"></input></div>
+            <div>Teléfono / Celular  &nbsp;<input class="inputForms" type="text"></input></div>
+
+          </div>
+
+          <button class="btns" type="button">Enviar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
+
+        </div>
+
+        <div class="pantallaConsultaEnviada">
+
+          <div>
+            <h1><i class="fa fa-envelope-o"></i></i> Consulta Enviada</h1> <br>
+          </div>
+
+          <div>
+            en la brevedad nos comunicaremos con vos
+           </div>
+
+
+        </div>
+
+
         <div class="footer">
-          &nbsp;  © 2015 | DITESI | Dirección de tecnologías y Sistemas Informáticos | Secretaría de Administración y Finanzaz | Facultad de Ciencias Económicas | UNLP | Calle 6 Nº 777 - 1er Subsuelo | La Plata | Bs. As. | Tel: +54 (221) 423-6769/71/72 int. 123 | ditesi@econo.unlp.edu.ar
+          &nbsp;  © 2015 | DITESI | Dirección de tecnologías y Sistemas Informáticos | Secretaría de Administración y Finanzas | Facultad de Ciencias Económicas | UNLP | Calle 6 Nº 777 - 1er Subsuelo | La Plata | Bs. As. | Tel: +54 (221) 423-6769/71/72 int. 123 | ditesi@econo.unlp.edu.ar
         </div>
     </div>
 </body>

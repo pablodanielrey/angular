@@ -14,6 +14,14 @@ i {
   color: #92AD17;
 }
 
+input[type="checkbox"]{
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+
+
+}
+
 .header {
   position: fixed;
   z-index: 999;
@@ -83,12 +91,37 @@ i {
   color: #92AD17;
 }
 
+.textTitles4 {
+  font-size: 1.5em;
+  margin-top: 20px;
+
+}
+.textTitles5 {
+  font-size: 1.5em;
+  margin-bottom: 20px;
+
+}
+
+.textTitles6 {
+  color: #92AD17;
+  font-size:1.4em;
+}
+
 .inputDNI {
   font-size: 2em;
   padding: 10px;
   width: 250px;
   color: #92AD17;
   border: solid 1px #E5E4E4;
+
+}
+
+.logos {
+  margin-top: 100px;
+
+}
+
+.check {
 
 }
 
@@ -129,19 +162,117 @@ i {
   border: none;
 }
 
-.textSpan {
+.btns:hover {
+  background-color: #707f27;
+}
 
+.btnFlecha {
+  color:white;
+}
+
+
+
+.btnsActivacion {
+  width: 274px;
+  border:none;
+  cursor: pointer;
+  color:#5c5f69;
+}
+
+.btnsActivacion:hover {
+  background-color: #5c5f69;
+  color:white;
+}
+
+
+.btnsGenero {
+  width: 100px;
+  height: 100px;
+  background-color: #92AD17;
+  border:none;
+  color: white;
+  font-size: 1.1em;
+  cursor: pointer;
+  margin: 10px;
+}
+
+.btnsGenero:hover{
+  background-color: #707f27;
+}
+
+.btnVerPassword {
+  background-color: #F7F7F7;
+  border: none;
+  padding: 15px;
+  cursor: pointer;
+
+}
+
+.iconoBlanco {
+  color:white;
+}
+
+.textBlanco {
+  color: white;
+  margin-bottom: 15px;
+}
+
+.textBlanco2 {
+  color: white;
+
+}
+
+.textSpan {
   color: #92AD17;
   padding: 5px;
   margin-bottom: 30px;
 }
 
 .textSpan2 {
-
   color: #92AD17;
+}
 
+.textSpan3 {
+  color: #92AD17;
+  margin-top: 10px;
+}
+
+.textSpan4 {
+  background-color:#92AD17;
+  color:white;
+  margin-bottom: 10px;
 
 }
+
+.tituloCodAct {
+  margin-top: 40px;
+}
+
+.modificarMail {
+  border:none;
+  background-color:#92AD17;
+  color:white;
+  padding: 5px;
+  font-size: 1em;
+  cursor: pointer;
+
+}
+
+.pantallaGenero {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:column;
+  -webkit-flex-direction:column; /* Safari */
+  -moz-flex-direction:column; /* mozilla */
+  align-items: center;
+  -webkit-align-items: center; /* Safari */
+  -moz-align-items: center; /* mozilla */
+
+}
+
 
 .pantallaCarga {
   width: 100%;
@@ -219,18 +350,20 @@ i {
   -moz-align-items: center; /* mozilla */
 }
 
+
+
 .ingresantes.home .pantallas {
-    transform: translate(0px, -80%);
-    -webkit-transform: translate(0px, -5%);
-    -moz-transform: translate(0px, -80%);
-    -o-transform: translate(0px, -80%);
-    -ms-transform: translate(0px, -80%);
+    transform: translate(0px, -0%);
+    -webkit-transform: translate(0px, -0%);
+    -moz-transform: translate(0px, -0%);
+    -o-transform: translate(0px, -0%);
+    -ms-transform: translate(0px, -0%);
     transition: all 0.4s ease-in-out;
     -webkit-transition: all 0.4s ease-in-out;
 }
 
 
-.ingresantes.mail .pantallas {
+.ingresantes.genero .pantallas {
     transform: translate(0px, -80%);
     -webkit-transform: translate(0px, -80%);
     -moz-transform: translate(0px, -80%);
@@ -240,7 +373,7 @@ i {
     -webkit-transition: all 0.4s ease-in-out;
 }
 
-.ingresantes.activacion .pantallas {
+.ingresantes.mail .pantallas {
     transform: translate(0px, -180%);
     -webkit-transform: translate(0px, -180%);
     -moz-transform: translate(0px, -180%);
@@ -250,7 +383,7 @@ i {
     -webkit-transition: all 0.4s ease-in-out;
 }
 
-.ingresantes.password .pantallas {
+.ingresantes.activacion .pantallas {
     transform: translate(0px, -280%);
     -webkit-transform: translate(0px, -280%);
     -moz-transform: translate(0px, -280%);
@@ -260,7 +393,7 @@ i {
     -webkit-transition: all 0.4s ease-in-out;
 }
 
-.ingresantes.fin .pantallas {
+.ingresantes.password .pantallas {
     transform: translate(0px, -380%);
     -webkit-transform: translate(0px, -380%);
     -moz-transform: translate(0px, -380%);
@@ -268,4 +401,174 @@ i {
     -ms-transform: translate(0px, -380%);
     transition: all 0.4s ease-in-out;
     -webkit-transition: all 0.4s ease-in-out;
+}
+
+.ingresantes.fin .pantallas {
+    transform: translate(0px, -480%);
+    -webkit-transform: translate(0px, -480%);
+    -moz-transform: translate(0px, -480%);
+    -o-transform: translate(0px, -480%);
+    -ms-transform: translate(0px, -480%);
+    transition: all 0.4s ease-in-out;
+    -webkit-transition: all 0.4s ease-in-out;
+}
+
+.ingresantes.home.mostrarEspere .pantallaEspere,
+.ingresantes.genero.mostrarEspere .pantallaEspere,
+.ingresantes.mail.mostrarEspere .pantallaEspere,
+.ingresantes.activacion.mostrarEspere .pantallaEspere,
+.ingresantes.password.mostrarEspere .pantallaEspere,
+.ingresantes.fin.mostrarEspere .pantallaEspere {
+  position: fixed;
+  z-index: 998;
+  width: 100%;
+  height: 80%;
+  top:70px;
+  margin: auto;
+  background-color: #F7F7F7;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  -webkit-align-items: center; /* Safari */
+  -moz-align-items: center; /* mozilla */
+}
+
+.ingresantes.home.ocultarEspere .pantallaEspere,
+.ingresantes.genero.ocultarEspere .pantallaEspere,
+.ingresantes.mail.ocultarEspere .pantallaEspere,
+.ingresantes.activacion.ocultarEspere .pantallaEspere,
+.ingresantes.password.ocultarEspere .pantallaEspere,
+.ingresantes.fin.ocultarEspere .pantallaEspere {
+  display: none;
+}
+
+.ingresantes .pantallaNoExisteDNI {
+  display: none;
+}
+.ingresantes.home.DNInoExiste .pantallaNoExisteDNI {
+  position: fixed;
+  z-index: 998;
+  width: 100%;
+  height: 80%;
+  top:70px;
+  margin: auto;
+  background-color: #F7F7F7;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:column;
+  -webkit-flex-direction:column; /* Safari */
+  -moz-flex-direction:column; /* mozilla */
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  -webkit-align-items: center; /* Safari */
+  -moz-align-items: center; /* mozilla */
+}
+
+.ingresantes .pantallaDNIActivado {
+  display: none;
+}
+.ingresantes.home.DNIActivado .pantallaDNIActivado {
+  position: fixed;
+  z-index: 998;
+  width: 100%;
+  height: 80%;
+  top:70px;
+  margin: auto;
+  background-color: #F7F7F7;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:column;
+  -webkit-flex-direction:column; /* Safari */
+  -moz-flex-direction:column; /* mozilla */
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  -webkit-align-items: center; /* Safari */
+  -moz-align-items: center; /* mozilla */
+}
+
+
+.formulario {
+  padding: 20px;
+  background-color: #E5E4E4;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:column;
+  -webkit-flex-direction:column; /* Safari */
+  -moz-flex-direction:column; /* mozilla */
+  justify-content: flex-end;
+  align-content: flex-end;
+  align-items: flex-end;
+}
+
+.inputForms {
+  font-size: 1.2em;
+  padding: 5px;
+  width: 250px;
+  color: #92AD17;
+  border: solid 1px #E5E4E4;
+  margin: 2px;
+
+}
+
+.ingresantes .pantallaNoLlegaMail {
+  display: none;
+}
+.ingresantes.activacion.CorreoNoLlega .pantallaNoLlegaMail {
+  position: fixed;
+  z-index: 998;
+  width: 100%;
+  height: 80%;
+  top:70px;
+  margin: auto;
+  background-color: #F7F7F7;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:column;
+  -webkit-flex-direction:column; /* Safari */
+  -moz-flex-direction:column; /* mozilla */
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  -webkit-align-items: center; /* Safari */
+  -moz-align-items: center; /* mozilla */
+}
+
+
+.ingresantes.home.consultaEnviada .pantallaConsultaEnviada,
+.ingresantes.genero.consultaEnviada .pantallaConsultaEnviada,
+.ingresantes.mail.consultaEnviada .pantallaConsultaEnviada,
+.ingresantes.activacion.consultaEnviada .pantallaConsultaEnviada,
+.ingresantes.password.consultaEnviada .pantallaConsultaEnviada,
+.ingresantes.fin.consultaEnviada .pantallaConsultaEnviada {
+    position: fixed;
+    z-index: 998;
+    width: 100%;
+    height: 80%;
+    top:70px;
+    margin: auto;
+    background-color: #F7F7F7;
+    display: flex;
+    display: -webkit-flex; /* Safari */
+    display: -moz-flex; /* mozilla */
+    flex-direction:column;
+    -webkit-flex-direction:column; /* Safari */
+    -moz-flex-direction:column; /* mozilla */
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    -webkit-align-items: center; /* Safari */
+    -moz-align-items: center; /* mozilla */
+}
+
+.ingresantes .pantallaConsultaEnviada {
+  display: none;
 }
