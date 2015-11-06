@@ -12,7 +12,8 @@
             <div class="dataBasic">
                 <div class"col">
                     <div class="item">
-                      <div class="photo" placeholder="Foto"><i class="fa fa-camera-retro fa-4x"></i>Subir Foto</div>
+                      <input type="file" class="btnInputFile" id="inputPhoto" on-read-file-binary-string="addPhoto(fileName,fileContent)">
+                      <div class="photo" placeholder="Foto" ng-click='addPhoto()'><i class="fa fa-camera-retro fa-4x"></i>Subir Foto</div>
 
                     </div>
 

@@ -52,7 +52,8 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
       city:'',
       address:'',
       genre:'',
-      birthdate: null
+      birthdate: null,
+      photo: ''
     },
 
 
@@ -80,6 +81,23 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
     }
 
   };
+
+
+  $scope.addPhoto = function(fileName, fileContent) {
+    var cv = window.btoa(fileContent);
+    Files.upload(null, fileName, cv).then(
+        function(id) {
+          console.log(id);
+          $scope.model.user.photo = id;
+          $scope.updateUserData();
+        },
+        function(err) {
+          console.log(err);
+          Notifications.message(err);
+        }
+
+    )
+  }
 
 
   $scope.addCV = function(fileName, fileContent) {
