@@ -14,7 +14,7 @@ class LaboralInsertion:
     def findAllInscriptionsByUser(self, con, userId):
         """ obtiene los datos de las inscripciones de los alumnos """
         cur = con.cursor()
-        cur.execute('select id, user_id, degree, courses, average1, average2, work_type, reside, travel from laboral_insertion.inscriptions where user_id = %s', (userId,))
+        cur.execute('select id, user_id, degree, courses, average1, average2, work_type, reside, travel, work_experience, creation from laboral_insertion.inscriptions where user_id = %s', (userId,))
         inscriptions = []
         for c in cur:
             inscription = {
@@ -25,7 +25,9 @@ class LaboralInsertion:
                 'average2': c[5],
                 'workType': c[6],
                 'reside': c[7],
-                'travel': c[8]
+                'travel': c[8],
+                'workExperience': c[9],
+                'creation': c[10]
             }
             inscriptions.append(inscription)
 
@@ -40,16 +42,17 @@ class LaboralInsertion:
         """ genera una inscripcion nueva por usuario """
         iid = str(uuid.uuid4())
         cur = con.cursor()
-        cur.execute('insert into laboral_insertion.inscriptions (id, user_id, degree, courses, average1, average2, work_type, reside, travel) values (%s,%s,%s,%s,%s,%s,%s,%s,%s)', (
+        cur.execute('insert into laboral_insertion.inscriptions (id, user_id, degree, courses, average1, average2, work_type, reside, travel, work_experience) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)', (
             iid,
             userId,
             d['degree'],
             d['courses'],
             d['average1'],
             d['average2'],
-            d['work_type'],
+            d['workType'],
             False,
-            d['travel']
+            d['travel'],
+            d['workExperience']
         ))
 
     def findByUser(self, con, userId):
@@ -68,7 +71,10 @@ class LaboralInsertion:
             }
             languages.append(language)
 
-        cur.execute('select id, accepted_conditions, email, cv from laboral_insertion.users where userid = %s', (userId,))
+        cur.execute('select id, accepted_conditions, email, cv from laboral_insertion.users where id = %s', (userId,))
+        if cur.rowcount <= 0:
+            return None
+
         r = cur.fetchone()
         ldata = {
             'id': userId,
@@ -84,18 +90,57 @@ class LaboralInsertion:
 
         userId = d['id']
 
-        if not self.files.check(con, d['cv']):
+        if 'cv' in d and d['cv'] is not None and d['cv'] is not '' and not self.files.check(con, d['cv']):
             raise Exception('no existe el cv en la base de datos')
 
-        data = (d['accepted_conditions'], d['email'], d['cv'], d['id'])
         cur = con.cursor()
-        cur.execute('select id from laboral_insertion.users where userid = %s', (userId,))
+        cur.execute('select id from laboral_insertion.users where id = %s', (userId,))
         if (cur.rowcount <= 0):
-            cur.execute('insert into laboral_insertion.users (id, accepted_conditions, email, cv) values (%s,%s,%s,%s)', data)
-        else:
-            cur.execute('update laboral_insertion.users set accepted_conditions = %s, email = %s, cv = %s where id = %s', data)
+            ldata = []
+            sql = 'insert into laboral_insertion.users ('
+            values = '('
+            if 'accepted_conditions' in d:
+                sql = sql + 'accepted_conditions'
+                ldata.append(d['accepted_conditions'])
+                values = values + "%s"
 
-        cur.execute('delete from laboral_insertion.languages where user_id = %s', d['id'])
+            if 'email' in d:
+                sql = sql + ',email'
+                ldata.append(d['email'])
+                values = values + ",%s"
+
+            if 'cv' in d:
+                sql = sql + ',cv'
+                ldata.append(d['cv'])
+                values = values + ",%s"
+
+            values = values + ",%s)"
+            ldata.append(d['id'])
+            sql = sql + ',id) values ' + values
+            data = tuple(ldata)
+
+            cur.execute(sql, data)
+        else:
+
+            ldata = []
+            sql = 'update laboral_insertion.users set accepted_conditions = %s '
+            ldata.append(d['accepted_conditions'])
+
+            if 'email' in d:
+                sql = sql + ',email = %s'
+                ldata.append(d['email'])
+
+            if 'cv' in d:
+                sql = sql + ',cv = %s'
+                ldata.append(d['cv'])
+
+            sql = sql + ' where id = %s'
+            ldata.append(d['id'])
+
+            data = tuple(ldata)
+            cur.execute(sql, data)
+
+        cur.execute('delete from laboral_insertion.languages where user_id = %s', (d['id'],))
         languages = d['languages']
         for l in languages:
             lid = str(uuid.uuid4())

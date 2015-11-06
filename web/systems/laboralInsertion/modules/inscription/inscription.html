@@ -151,7 +151,7 @@
                       </div>
                       <div>
                         <input type="text" placeholder="Domicilio" name='address' ng-model='model.user.address' ng-blur='updateUserData()' ng-pattern='/^[a-zA-Z0-9ñÑºúÚ\/ ]*$/' required></input>
-                        <div class="invalidError" ng-if='dataBasic.address.$invalid'><i class="fa fa-times"></i> Complete domicilio</div>
+                        <div class="invalidError" ng-if='dataBasic.address.$invalid'><i class="fa fa-times"></i> ingrese solo letras y números</div>
                       </div>
                     </div>
 
@@ -161,7 +161,7 @@
                       </div>
                       <div>
                         <input type="text" placeholder="Ciudad de Nacimiento" name='birth_city' ng-model='model.user.city' ng-blur='updateUserData()' ng-pattern='/^[a-zA-Z0-9ñÑúÚóÓíÍáÁéÉ ]*$/' required></input>
-                        <div class="invalidError" ng-if='dataBasic.birth_city.$invalid'><i class="fa fa-times"></i> Ingrese ciudad de nacimiento</div>
+                        <div class="invalidError" ng-if='dataBasic.birth_city.$invalid'><i class="fa fa-times"></i> ingrese solo letras y números</div>
                       </div>
                     </div>
 

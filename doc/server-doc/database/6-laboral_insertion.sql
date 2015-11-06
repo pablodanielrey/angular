@@ -6,8 +6,8 @@ create schema laboral_insertion;
   create table laboral_insertion.users (
     id varchar not null primary key references profile.users (id),
     accepted_conditions boolean default false,
-    email varchar not null references profile.mails (id),
-    cv varchar not null references file.file (id),
+    email varchar references profile.mails (id),
+    cv varchar references file.file (id),
     creation timestamptz default now()
   );
 
@@ -21,6 +21,7 @@ create schema laboral_insertion;
     average1 real not null,
     average2 real not null,
     work_type varchar not null,
+    work_experience boolean default false,
     creation timestamptz default now()
   );
 

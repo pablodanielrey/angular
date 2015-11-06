@@ -63,16 +63,18 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
       average2: 0.0,
       approved: 0,
       workType: $scope.workTypes[0],
-      travel: $scope.travel[0]
+      travel: $scope.travel[0],
+      workExperience: false
     },
 
+    // información general de inserción laboral
     laboralData: {
+      id: '',
       accepted_conditions: false,
       cv: '',
       email: '',
       languages: []
     }
-
 
   };
 
@@ -155,7 +157,7 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
 
       if ($scope.model.cr >= 2) {
 
-        // ejemplo de chequeo. verlo con paula
+        // TODO: ejemplo de chequeo. verlo con paula
         if (offer.graduate || offer.approved > 30) {
           $scope.workTypes = ['Full-Time','Programa estudiantes avanzados y jovenes profesionales'];
         } else {
@@ -180,26 +182,6 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
       console.log(ok);
       $scope.model.showNext = ok;
     }
-
-  // seteo los watchs.
-  /*
-  $scope.$watch(function() { return $scope.model.user.name; }, function(o,n) { $scope.checkUserData(o); });
-  $scope.$watch(function() { return $scope.model.user.lastname; }, function(o,n) { $scope.checkUserData(o); });
-  $scope.$watch(function() { return $scope.model.user.dni; }, function(o,n) { $scope.checkUserData(o); });
-  $scope.$watch(function() { return $scope.model.user.telephone; }, function(o,n) { $scope.checkUserData(o); });
-  $scope.$watch(function() { return $scope.model.user.movil; }, function(o,n) { $scope.checkUserData(o); });
-  $scope.$watch(function() { return $scope.model.user.email; }, function(o,n) { $scope.checkUserData(o); });
-  $scope.$watch(function() { return $scope.model.user.country; }, function(o,n) { $scope.checkUserData(o); });
-  $scope.$watch(function() { return $scope.model.user.residence_city; }, function(o,n) { $scope.checkUserData(o); });
-  $scope.$watch(function() { return $scope.model.user.birth_city; }, function(o,n) { $scope.checkUserData(o); });
-  $scope.$watch(function() { return $scope.model.user.address; }, function(o,n) { $scope.checkUserData(o); });
-  $scope.$watch(function() { return $scope.model.user.genre; }, function(o,n) { $scope.checkUserData(o); });
-  $scope.$watch(function() { return $scope.model.birthdate; }, function(o,n) { $scope.checkUserData(o); });
-  $scope.$watch(function() { return $scope.model.student_number; }, function(o,n) { $scope.checkUserData(o); });
-*/
-
-
-
 
   // --- elementos graficos -----
 
@@ -262,6 +244,7 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
 
   $scope.findUserData = function() {
     var uid = Login.getUserId();
+    $scope.model.laboralData.id = uid;
 
     Student.findById(uid).then(function(student) {
       if (student != null) {
@@ -283,9 +266,23 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
       if (mails.length > 0) {
         $scope.model.laboralData.email = mails[0].id;
       }
-    }, function(error) {
+    }, function(err) {
       console.log(err);
     });
+
+
+    LaboralInsertion.findByUser(uid).then(
+      function(laboralData) {
+        if (laboralData == null) {
+          return;
+        }
+        console.log(laboralData);
+        $scope.model.laboralData = laboralData;
+      },
+      function(err) {
+        console.log(err);
+      }
+    );
 
   }
 
@@ -320,10 +317,21 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
   }
 
   $scope.updateLaboralData = function() {
-    console.log('aca se actualiza la info del usuario que solo pertenece a insercion laboral');
+    var ld = JSON.parse(JSON.stringify($scope.model.laboralData))
+    if (ld.cv == undefined || ld.cv == '') {
+      delete ld.cv;
+    }
+    LaboralInsertion.persist(ld).then(null,function(err) {console.log(err)});
   }
 
   $scope.checkUserData = function() {
+
+    /*
+      Se cheqeuan que los datos del formulario sean validos con respecto a las expresiones regulares seteaas en el formulario.
+      condiciones:
+
+    */
+
     var ok = true;
 
     var form = $scope.dataBasic;
