@@ -33,7 +33,7 @@ class IngresoWamp(ApplicationSession):
         yield from self.register(self.sendEmailConfirmation_async, 'ingreso.mails.sendEmailConfirmation')
         yield from self.register(self.confirmEmail_async, 'ingreso.mails.confirmEmail')
         yield from self.register(self.changePassword_async, 'ingreso.user.changePassword')
-        yield from self.register(self.sendError_async, 'ingreso.mails.sendError')
+        yield from self.register(self.sendErrorMail_async, 'ingreso.mails.sendErrorMail')
         yield from self.register(self.sendFinalMail_async, 'ingreso.mails.sendFinalMail')
 
     def _getDatabase(self):
@@ -76,22 +76,6 @@ class IngresoWamp(ApplicationSession):
         r = yield from loop.run_in_executor(None, self.changePassword, dni, password)
         return r
 
-    def sendError(self, error, names, dni, email, tel):
-        con = self._getDatabase()
-        try:
-
-
-            return True
-
-        finally:
-            con.close()
-
-    @coroutine
-    def sendError_async(self, error, names, dni, email, tel):
-        loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.sendError, error, names, dni, email, tel)
-        return r
-
     def sendEmailConfirmation(self, name, lastname, eid):
         con = self._getDatabase()
         try:
@@ -132,4 +116,14 @@ class IngresoWamp(ApplicationSession):
     def sendFinalMail_async(self, user, password, email):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.sendFinalMail, user, password, email)
+        return r
+
+    def sendErrorMail(self, error, names, dni, email, tel):
+        self.ingreso.sendErrorEmail(error, names, dni, email, tel)
+        return True
+
+    @coroutine
+    def sendErrorMail_async(self, error, names, dni, email, tel):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.sendErrorMail, error, names, dni, email, tel)
         return r

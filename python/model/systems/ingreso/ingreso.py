@@ -14,6 +14,18 @@ class Ingreso:
     mail = inject.attr(Mail)
     serverConfig = inject.attr(Config)
 
+    def sendErrorEmail(self, error, names, dni, email, tel):
+        From = self.serverConfig.configs['ingreso_error_mail_from']
+        subject = "{} - {} - {} - {} - {}".format(error, dni, names, email, tel)
+        To = self.serverConfig.configs['ingreso_error_mail_to']
+
+        mail = self.mail.createMail(From, To, subject)
+        text = self.mail.getTextPart("error: {}\ndni: {}\nNombres: {}\nEmail: {}\nTel: {}".format(error, dni, names, email, tel))
+        mail.attach(text)
+        self.mail._sendMail(From, [To], mail)
+
+        return True
+
     def sendFinalEmail(self, user, password, email):
         From = self.serverConfig.configs['ingreso_final_mail_from']
         subject = self.serverConfig.configs['ingreso_final_mail_subject']

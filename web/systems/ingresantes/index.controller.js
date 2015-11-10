@@ -233,15 +233,39 @@ function IngresantesCtrl($rootScope, $scope, $window, Notifications, Users, Stud
     // errores e informes
 
     $scope.wrongDni = function() {
-      $scope.model.se = 4;
+      var error = $scope.model.error;
+      $wamp.call('ingreso.mails.sendErrorMail',['DNI inexistente', error.names, error.dni, error.email, error.tel]).then(
+        function(ok) {
+          $scope.model.se = 4;
+        },
+        function(err) {
+          console.log(err);
+        }
+      );
     }
 
     $scope.alreadyActive = function() {
-      $scope.model.se = 4;
+      var error = $scope.model.error;
+      $wamp.call('ingreso.mails.sendErrorMail',['Ya tiene cuenta', error.names, error.dni, error.email, error.tel]).then(
+        function(ok) {
+          $scope.model.se = 4;
+        },
+        function(err) {
+          console.log(err);
+        }
+      );
     }
 
     $scope.noCode = function() {
-      $scope.model.se = 4;
+      var error = $scope.model.error;
+      $wamp.call('ingreso.mails.sendErrorMail',['No llega el código', error.names, error.dni, error.email, error.tel]).then(
+        function(ok) {
+          $scope.model.se = 4;
+        },
+        function(err) {
+          console.log(err);
+        }
+      );
     }
 
 
