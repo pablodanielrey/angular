@@ -67,7 +67,8 @@
         <div class="pantallas">
 
             <div class="pantallaInicio">
-                  <div class="textTitles"><h1><i class="fa fa-bookmark-o"></i> Alta de cuenta para AU24<h1></div>
+                  <div><img src="./img/au24Logo.png"></div>
+                  <div class="textTitles"><h1> Alta de cuenta para AU24<h1></div>
                   <div class="textTitles2">
                     Ingresá tu Nº de documento
                   </div>
@@ -75,17 +76,18 @@
                     <input class="inputDNI" type="text" 3placeholder="" name='dni' ng-model='model.dni' ng-pattern='/^\d{8,8}$/' ng-change='checkDniSyntax()' required></input>
                   </div>
 
-                  <div class="textSpan">
-                    <i class="fa fa-exclamation-triangle"></i> DNI sin puntos - Pasaporte sólo letras y números (sin barras, puntos, guiones)
-                  </div>
+                  <!-- <div class="textSpan">
+                    <i class="fa fa-exclamation-triangle"></i> <b>ATENCIÓN |</b> DNI sin puntos - Pasaporte sólo letras y números (sin barras, puntos, guiones)
+                  </div> -->
 
-                  <div ng-if='model.dniOk'>
+                  <!-- <div ng-if='model.dniOk'> -->
+                  <div>
                     <button class="btns" type="button" ng-click='checkDni()'> Continuar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
                   </div>
 
 
                   <div class="logos">
-                    <img src="./img/logos.png">
+                    <img src="./img/fceLogo.png">
                   </div>
             </div>
 
@@ -133,7 +135,13 @@
                       <input type="checkbox" name="input_ver" value="ver" onclick="ver_password();"> -->
 
                   </form>
-                  <button class="btns" type="button" ng-if='emailform.mail.$valid' ng-click='sendEmailValidation()'>Enviar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
+                  <!-- <button class="btns" type="button" ng-if='emailform.mail.$valid' ng-click='sendEmailValidation()'>Enviar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button> -->
+                  <button class="btns" type="button"  ng-click='sendEmailValidation()'>Enviar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
+                  <div class="textSpan3">
+                    <i class="fa fa-times"></i> Formato de correo electrónico inválido
+                  </div>
+
+
             </div>
 
             <div class="pantallaActivacion">
@@ -147,7 +155,7 @@
                   <button class="modificarMail" ng-click='changeScreenBackwards()'><i class="fa fa-pencil textBlanco2"></i> Modificar dirección de correo </button>
                 </div>
                 <div class="textSpan2">
-                  <i class="fa fa-exclamation-triangle"></i> Revisá la bandeja de correo no deseado
+                  <i class="fa fa-exclamation-triangle"></i> <b>Revisá la bandeja de correo no deseado </b>
                 </div>
                 <div class="textSpan2">
                   <i class="fa fa-exclamation-triangle"></i> Si te llegó a "correo no deseado" tilda y da clic en "es correo deseado"
@@ -180,10 +188,10 @@
               </div>
 
               <div class="textSpan2">
-                <i class="fa fa-exclamation-triangle"></i> Debe comenzar con letras y tener al menos
+                <i class="fa fa-exclamation-triangle"></i> <b>Debe tener una longitud mínima de cinco caracteres </b>
               </div>
               <div class="textSpan2">
-                 una letra y un dígito
+                 <b>y contener al menos un número</b>
               </div>
 
               <div class="passwords">
@@ -204,8 +212,11 @@
 
               </div>
 
-              <button class="btns" type="button" ng-if='model.passwordOk' ng-click='changePassword()'>Enviar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
-
+              <!-- <button class="btns" type="button" ng-if='model.passwordOk' ng-click='changePassword()'>Enviar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button> -->
+              <button class="btns" type="button" ng-click='changePassword()'>Enviar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
+              <div class="textSpan3">
+                <i class="fa fa-times"></i> Las contraseñas no coinciden o no cumple con los requisitos
+              </div>
 
             </div>
 
@@ -242,7 +253,8 @@
         </div>
 
         <div class="pantallaNoExisteDNI">
-          <div><h1><i class="fa fa-exclamation"></i> Documento Inexistente</h1> <br> </div>
+          <div><h1> El Nº de Documento <span class="textSpan2">300001823</span> no existe</h1> <br> </div>
+          <button class="btns3" type="button" ng-click='wrongDni()'><i class="fa fa-angle-left"></i> Volver  </button>
           <div>
             <i class="fa fa-clock-o fa-3x"></i> Tené en cuenta que la carga del documento al sistema puede demorar hasta 48 hs luego de la inscripción
           </div>
@@ -260,11 +272,12 @@
             <div>Nombre y Apellido   &nbsp;<input class="inputForms"  type="text" ng-model='model.error.names'></input></div>
             <div>Nº de Documento  &nbsp;<input class="inputForms" type="text" ng-model='model.error.dni'></input></div>
             <div>Correo Electrónico  &nbsp;<input class="inputForms" type="text" ng-model='model.error.email'></input></div>
-            <div>Teléfono / Celular  &nbsp;<input class="inputForms" type="text" ng-model='model.error.tel'></input></div>
+            <div>Comentario  &nbsp;<input class="inputForms" type="text" ng-model='model.error.tel'  maxlength="150"></input></div>
 
           </div>
 
           <button class="btns" type="button" ng-click='wrongDni()'>Enviar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
+
 
         </div>
 
@@ -273,8 +286,8 @@
             <span class="textHola">Hola!</span> , <b>{{model.user.name}} {{model.user.lastname}}</b>
           </div>
           <div>
-            <h1><i class="fa fa-exclamation"></i> Esta Cuenta ya se encuentra activa</h1> <br>
-            </div>
+            <h1> La cuenta <span class="textSpan2">300001823</span> ya se encuentra activa</h1> <br>
+          </div>
 
           <div>
              Si ya estabas registrado y no recuerdas la contraseña o deseas modificar tu datos personales
@@ -294,12 +307,12 @@
             <div>Nombre y Apellido   &nbsp;<input class="inputForms"  type="text" ng-model='model.error.names'></input></div>
             <div>Nº de Documento  &nbsp;<input class="inputForms" type="text" ng-model='model.error.dni'></input></div>
             <div>Correo Electrónico  &nbsp;<input class="inputForms" type="text" ng-model='model.error.email'></input></div>
-            <div>Teléfono / Celular  &nbsp;<input class="inputForms" type="text" ng-model='model.error.tel'></input></div>
+            <div>Comentario  &nbsp;<input class="inputForms" type="text" ng-model='model.error.tel'  maxlength="150"></input></div>
 
           </div>
 
           <button class="btns" type="button" ng-click='alreadyActive()'>Enviar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
-
+          <button class="btns2" type="button" ng-click='wrongDni()'><i class="fa fa-angle-left"></i> Volver  </button>
         </div>
 
 
@@ -321,12 +334,12 @@
             <div>Nombre y Apellido   &nbsp;<input class="inputForms"  type="text" ng-model='model.error.names'></input></div>
             <div>Nº de Documento  &nbsp;<input class="inputForms" type="text" ng-model='model.error.dni'></input></div>
             <div>Correo Electrónico  &nbsp;<input class="inputForms" type="text" ng-model='model.error.email'></input></div>
-            <div>Teléfono / Celular  &nbsp;<input class="inputForms" type="text" ng-model='model.error.tel'></input></div>
+            <div>Comentario  &nbsp;<input class="inputForms" type="text" ng-model='model.error.tel'  maxlength="150"></input></div>
 
           </div>
 
           <button class="btns" type="button" ng-click='noCode()'>Enviar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
-
+          <button class="btns2" type="button" ng-click='wrongDni()'><i class="fa fa-angle-left"></i> Volver  </button>
         </div>
 
         <div class="pantallaConsultaEnviada">
@@ -344,7 +357,7 @@
 
 
         <div class="footer">
-          &nbsp;  © 2015 | DITESI | Dirección de tecnologías y Sistemas Informáticos | Secretaría de Administración y Finanzas | DETISE | Dirección de tecnologías y Sistemas de Información | Secretaría Académica | Facultad de Ciencias Económicas | UNLP | Calle 6 Nº 777 - 1er Subsuelo | La Plata | Bs. As. | Tel: +54 (221) 423-6769/71/72 int. 123 | ditesi@econo.unlp.edu.ar
+          &nbsp;  © 2015 | DiTESI | Dirección de tecnologías y Sistemas Informáticos | Secretaría de Administración y Finanzas | DeTISE | Departamento de tecnología Informática y Servicios Educativos | Secretaría Académica | Facultad de Ciencias Económicas | UNLP | Calle 6 Nº 777 - 1er Subsuelo | La Plata | Bs. As. | Tel: +54 (221) 423-6769/71/72 int. 123 | ditesi@econo.unlp.edu.ar
         </div>
     </div>
 </body>

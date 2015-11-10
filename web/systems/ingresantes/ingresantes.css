@@ -166,6 +166,36 @@ input[type="checkbox"]{
   background-color: #707f27;
 }
 
+.btns2 {
+  font-size: 1em;
+  padding: 2px;
+  width: 274px;
+  margin-top: 10px;
+  background-color: #E5E4E4;
+  color: black;
+  cursor: pointer;
+  border: none;
+}
+
+.btns2:hover {
+  background-color: #d3cbcb;
+}
+
+.btns3 {
+  font-size: 1em;
+  padding: 2px;
+  width: 274px;
+
+  background-color: #E5E4E4;
+  color: black;
+  cursor: pointer;
+  border: none;
+}
+
+.btns3 :hover {
+  background-color: #d3cbcb;
+}
+
 .btnFlecha {
   color:white;
 }
@@ -225,7 +255,7 @@ input[type="checkbox"]{
 .textSpan {
   color: #92AD17;
   padding: 5px;
-  margin-bottom: 30px;
+
 }
 
 .textSpan2 {
