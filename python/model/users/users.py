@@ -9,6 +9,7 @@ from model.config import Config
 from model.objectView import ObjectView
 from model.mail.mail import Mail
 
+
 class Users:
     def __init__(self, config=None):
         self.serverConfig = inject.instance(Config)
@@ -27,7 +28,7 @@ class Users:
         hash = hashlib.sha1((email['id'] + email['user_id']).encode('utf-8')).hexdigest()
         email['hash'] = hash
 
-        self.updateMail(con,email)
+        self.updateMail(con, email)
 
         From = self.serverConfig.configs['mail_confirm_mail_from']
         subject = self.serverConfig.configs['mail_confirm_mail_subject']
@@ -38,15 +39,13 @@ class Users:
         url = re.sub('###HASH###', hash, url)
 
         replace = [
-            ('###URL###',url)
+            ('###URL###', url)
         ]
 
-        self.mail.sendMail(From,[To],subject,replace,html=template)
-
+        self.mail.sendMail(From, [To], subject, replace, html=template)
         return True
 
-
-    def confirmEmail(self,con,hash):
+    def confirmEmail(self, con, hash):
         email = self.findMailByHash(con, hash)
         if(email is None):
             raise Exception("Email inexistente")
@@ -54,7 +53,7 @@ class Users:
         email['confirmed'] = True
         email['hash'] = None
 
-        self.updateMail(con,email)
+        self.updateMail(con, email)
 
         From = self.serverConfig.configs['mail_confirm_mail_from']
         subject = self.serverConfig.configs['mail_confirm_mail_subject']
@@ -65,10 +64,9 @@ class Users:
         url = re.sub('###HASH###', hash, url)
 
         replace = [
-            ('###URL###',url)
+            ('###URL###', url)
         ]
-
-        self.mail.sendMail(From,[To],subject,replace,html=template)
+        self.mail.sendMail(From, [To], subject, replace, html=template)
 
 
     def createMail(self, con, data):

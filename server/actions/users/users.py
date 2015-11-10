@@ -28,8 +28,6 @@ class UsersWamp(ApplicationSession):
         self.serverConfig = inject.instance(Config)
         self.mail = inject.instance(Mail)
 
-
-
     @coroutine
     def onJoin(self, details):
         logging.debug('registering methods')
@@ -102,7 +100,6 @@ class UsersWamp(ApplicationSession):
         con = self._getDatabase()
         try:
             userId = self.users.updateUser(con, user)
-
             con.commit()
             return userId
 
