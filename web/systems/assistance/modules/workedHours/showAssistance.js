@@ -290,7 +290,7 @@ $scope.order = function(predicate, reverse) {
       $scope.checkDates();
       $scope.disabled = true; //deshabilitar nuevas busquedas hasta no completar la actual
 
-      var status = "APPROVED"; //bsuca solo las justificaciones aprobadas
+      var status = ["APPROVED"]; //bsuca solo las justificaciones aprobadas
 
       $scope.model.assistances = [];
       $scope.searchDates = $scope.initializeSearchDates();
@@ -361,10 +361,10 @@ $scope.order = function(predicate, reverse) {
       }
     }
 
-    newAssistance.dateSort = date;
+    newAssistance.dateSort = new Date(assistance.date);
     if(assistance.start != null){
       var start = new Date(assistance.start);
-      newAssistance.dateSort = start;
+      // newAssistance.dateSort = start;
       newAssistance.start = Utils.formatTime(start);
     };
 

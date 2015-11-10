@@ -208,6 +208,9 @@ class Assistance:
         }
         return assistanceStatus
 
+
+    '''
+    Codigo anterior, lo reemplace por el otro del mismo nombre
     def getAssistanceStatusByUsers(self, con, usersIds, dates):
         statuses = {}
         for userId in usersIds:
@@ -221,11 +224,12 @@ class Assistance:
                     sts.append(st)
             statuses[userId] = sts
         return statuses
-
+    '''
 
     '''
         Obtiene los estados de asistencia de los usuarios entre las fechas pasadas
     '''
+
     def getAssistanceStatusByUsers(self,con,usersIds,dates,status):
         resp = []
         if (dates == None or len(dates) <= 0):
@@ -279,6 +283,7 @@ class Assistance:
             resp.append(a)
 
         return resp
+
 
     """
         ////////////////////////////////////////// chequeo del tema de incumplimientos ////////////////////
