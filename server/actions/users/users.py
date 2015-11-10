@@ -189,11 +189,10 @@ class UsersWamp(ApplicationSession):
         r = yield from loop.run_in_executor(None, self.findMails, userId)
         return r
 
-
     '''
      ' Persistir email de usuario
      ' @param email Objeto con los datos del email de usuario
-     '      userId: Id de usuario
+     '      user_id: Id de usuario
      '      email: Email propiamente dicho
      '      confirmed: Flag para indicar si el email esta confirmado (Defecto False)
      '''

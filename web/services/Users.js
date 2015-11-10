@@ -194,6 +194,14 @@ function Users($rootScope, $wamp, Session, Utils, Cache) {
     metodos nuevos usados por pablo. para reemplazar los viejos.
   */
 
+  this.findAllMails = function(userId) {
+    return $wamp.call('users.mails.findMails', [userId]);
+  }
+
+  this.persistMail = function(email) {
+    return $wamp.call('users.mails.persistMail', [email]);
+  }
+
   this.findByDni = function(dni) {
     return $wamp.call('users.findByDni', [dni]);
   }

@@ -99,15 +99,15 @@
                   </div> -->
 
                   <div class="textTitles2">
-                    <input type="checkbox" class="check"> Varón <br>
-                    <input type="checkbox"> Mujer <br>
-                    <input type="checkbox"> Prefiero no especificar
+                    <input type="checkbox" ng-model='model.gender.male' ng-click='setMale()' class="check"> Varón <br>
+                    <input type="checkbox" ng-model='model.gender.female' ng-click='setFemale()'> Mujer <br>
+                    <input type="checkbox" ng-model='model.gender.nd' ng-click='setNd()'> Prefiero no especificar
 
 
                     </div>
 
                     <div>
-                      <button class="btns" type="button" ng-click='changeScreen()'> Continuar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
+                      <button class="btns" type="button" ng-click='setGender()'> Continuar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
                     </div>
                   <!-- <div class="generos">
                       <button class="btnsGenero"type="button"><i class="fa fa-mars fa-2x textBlanco"></i><br> Masculino</button>
@@ -120,22 +120,22 @@
 
             <div class="pantallaCarga">
                   <div>
-                      <h1><span class="textHola">Hola!</span> , <b>Armando Esteban Quito </b> </div></h1>
+                      <h1><span class="textHola">Hola!</span> , <b>{{model.user.name}} {{model.user.lastname}}</b> </div></h1>
                   <div>
                       Para dar de alta tu cuenta y acceder a AU24 es necesario que nos informes tu dirección de correo electrónico
                   </div>
 
-                  <form name="elformulario">
+                  <form name="emailform">
                       <div class="textTitles2"> <i class="fa fa-envelope-o"></i> Correo electrónico personal</div>
                       <div>
-                          <input class="inputMail" type="mail" name='mail' required></input>
+                          <input class="inputMail" type="email" name='mail' ng-model='model.email.email' required></input>
                       </div>
 
                       <!-- <div id="passwd_sitio"><input type="password" name="input_pass" value=""></div>&nbsp;&nbsp;
                       <input type="checkbox" name="input_ver" value="ver" onclick="ver_password();"> -->
 
                   </form>
-                  <button class="btns" type="button" ng-click='changeScreen()'>Enviar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
+                  <button class="btns" type="button" ng-if='emailform.mail.$valid' ng-click='sendEmailValidation()'>Enviar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
             </div>
 
             <div class="pantallaActivacion">
@@ -143,10 +143,10 @@
                     <h1><i class="fa fa-key"></i> Código de Activación</h1>
                 </div>
                 <div class="textTitles2">
-                    Te hemos enviado un mensaje con el código de acticación a <b>armandoesteban@quito.com.ar</b>
+                    Te hemos enviado un mensaje con el código de activación a <b>{{model.email.email}}</b>
                 </div>
                 <div class="textSpan4">
-                  <button class="modificarMail"><i class="fa fa-pencil textBlanco2"></i> Modificar dirección de correo </button>
+                  <button class="modificarMail" ng-click='changeScreenBackwards()'><i class="fa fa-pencil textBlanco2"></i> Modificar dirección de correo </button>
                 </div>
                 <div class="textSpan2">
                   <i class="fa fa-exclamation-triangle"></i> Revisá la bandeja de correo no deseado
@@ -158,15 +158,14 @@
                 <div class="textTitles2 tituloCodAct">
                   <i class="fa fa-key"></i> Código de Activación
                 </div>
-                <input class="inputCode" type="text"> </input>
-                <button class="btns" type="button">Enviar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
+                <input class="inputCode" type="text" ng-model='model.email.code'> </input>
+                <button class="btns" type="button" ng-click='checkEmailCode()'>Enviar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
 
 
                 <div class="textSpan3">
-                    <button class="btnsActivacion" type="button">No me llego el correo, <b>volver a enviar</b></button><br>
-                     <div><i class="fa fa-circle-o-notch fa-spin"></i> enviando correo...</div>
-                     <div><i class="fa fa-times"></i> Código de Activación Incorrecto</div>
-
+                    <button class="btnsActivacion" type="button" ng-click='resendEmailValidation()'>No me llego el correo, <b>volver a enviar</b></button><br>
+                    <div ng-if='model.email.sending'><i class="fa fa-circle-o-notch fa-spin"></i> enviando correo...</div>
+                    <div ng-if='model.email.invalid'><i class="fa fa-times"></i> Código de Activación Incorrecto</div>
                 </div>
 
             </div>
@@ -183,31 +182,31 @@
               </div>
 
               <div class="textSpan2">
-                <i class="fa fa-exclamation-triangle"></i> Debe tener una longitud minima de 5 caracteres
+                <i class="fa fa-exclamation-triangle"></i> Debe comenzar con letras y tener al menos
               </div>
               <div class="textSpan2">
-                 con al menos un número y una letra
+                 una letra y un dígito
               </div>
 
               <div class="passwords">
                   <div>
                     <div class="textTitles2"><i class="fa fa-lock"></i> Contraseña </div>
-                    <div> <input class="inputPassword" type="password" name"password" required></div>
-                    <div> <input class="inputPassword" type="text" name"password" required></div>
+                    <div ng-if='!model.passwordVisible'> <input class="inputPassword" type="password" name"password" ng-model='model.password' ng-change='checkPassword()' required></div>
+                    <div ng-if='model.passwordVisible'> <input class="inputPassword" type="text" name"password" ng-model='model.password' ng-change='checkPassword()' required></div>
                   </div>
                   <div>
                     <div class="textTitles2"><i class="fa fa-lock"></i> Repetir Contraseña</div>
-                    <div> <input class="inputPassword" type="password" name"password" required>   </div>
-                    <div> <input class="inputPassword" type="text" name"password" required>   </div>
+                    <div ng-if='!model.passwordVisible'> <input class="inputPassword" type="password" name"password" ng-model='model.password2' ng-change='checkPassword()' required>   </div>
+                    <div ng-if='model.passwordVisible'> <input class="inputPassword" type="text" name"password" ng-model='model.password2' ng-change='checkPassword()' required>   </div>
                   </div>
                   <div>
                     <div class="textTitles2"> &nbsp;</div>
-                    <button class="btnVerPassword"><i class="fa fa-unlock-alt fa-2x "></i></button>
+                    <button class="btnVerPassword" ng-click='model.passwordVisible = !model.passwordVisible'><i class="fa fa-unlock-alt fa-2x "></i></button>
                   </div>
 
               </div>
 
-              <button class="btns" type="button">Enviar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
+              <button class="btns" type="button" ng-if='model.passwordOk' ng-click='changePassword()'>Enviar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
 
 
             </div>
@@ -218,16 +217,18 @@
                 </div>
                 <div class="textTitles2">
                     Ahora podrás acceder a AU24 <br>
-                    <b>www.au24.econo.unlp.edu.ar<b>
+                    <a href='http://www.au24.econo.unlp.edu.ar'><b>www.au24.econo.unlp.edu.ar<b></a>
                 </div><br>
                 <div class="textTitles2">
                   <i class="fa fa-user"></i> Usuario: <span class="textTitles3"><b>30001823</b></span>
                 </div>
+                <!--
                 <div class="textTitles2">
                   <i class="fa fa-lock"></i> Contraseña: <span class="textTitles3"><b>********</b></span>
-                </div><br>
+                </div>
+                <br>
                 <button class="btns" type="button">Salir &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
-
+                -->
 
             </div>
 
@@ -258,20 +259,20 @@
           <br>
 
           <div class="formulario">
-            <div>Nombre y Apellido   &nbsp;<input class="inputForms"  type="text"></input></div>
-            <div>Nº de Documento  &nbsp;<input class="inputForms" type="text"></input></div>
-            <div>Correo Electrónico  &nbsp;<input class="inputForms" type="text"></input></div>
-            <div>Teléfono / Celular  &nbsp;<input class="inputForms" type="text"></input></div>
+            <div>Nombre y Apellido   &nbsp;<input class="inputForms"  type="text" ng-model='model.error.names'></input></div>
+            <div>Nº de Documento  &nbsp;<input class="inputForms" type="text" ng-model='model.error.dni'></input></div>
+            <div>Correo Electrónico  &nbsp;<input class="inputForms" type="text" ng-model='model.error.email'></input></div>
+            <div>Teléfono / Celular  &nbsp;<input class="inputForms" type="text" ng-model='model.error.tel'></input></div>
 
           </div>
 
-          <button class="btns" type="button">Enviar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
+          <button class="btns" type="button" ng-click='wrongDni()'>Enviar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
 
         </div>
 
         <div class="pantallaDNIActivado">
           <div>
-            <span class="textHola">Hola!</span> , <b>Armando Esteban Quito </b>
+            <span class="textHola">Hola!</span> , <b>{{model.user.name}} {{model.user.lastname}}</b>
           </div>
           <div>
             <h1><i class="fa fa-exclamation"></i> Esta Cuenta ya se encuentra activa</h1> <br>
@@ -292,14 +293,14 @@
           <br>
 
           <div class="formulario">
-            <div>Nombre y Apellido   &nbsp;<input class="inputForms"  type="text"></input></div>
-            <div>Nº de Documento  &nbsp;<input class="inputForms" type="text"></input></div>
-            <div>Correo Electrónico  &nbsp;<input class="inputForms" type="text"></input></div>
-            <div>Teléfono / Celular  &nbsp;<input class="inputForms" type="text"></input></div>
+            <div>Nombre y Apellido   &nbsp;<input class="inputForms"  type="text" ng-model='model.error.names'></input></div>
+            <div>Nº de Documento  &nbsp;<input class="inputForms" type="text" ng-model='model.error.dni'></input></div>
+            <div>Correo Electrónico  &nbsp;<input class="inputForms" type="text" ng-model='model.error.email'></input></div>
+            <div>Teléfono / Celular  &nbsp;<input class="inputForms" type="text" ng-model='model.error.tel'></input></div>
 
           </div>
 
-          <button class="btns" type="button">Enviar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
+          <button class="btns" type="button" ng-click='alreadyActive()'>Enviar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
 
         </div>
 
@@ -311,7 +312,7 @@
           </div>
 
           <div>
-             ¿has revisado el correo no deseado en la cuenta <span class="textTitles6"><b> pepe@peepe.com </b></span> ?
+             ¿has revisado el correo no deseado en la cuenta <span class="textTitles6"><b> {{model.email.email}} </b></span> ?
            </div>
            <div>
              si lo has hecho, por favor completá el formulario y en la brevedad nos comunicaremos con vos
@@ -319,14 +320,14 @@
           <br>
 
           <div class="formulario">
-            <div>Nombre y Apellido   &nbsp;<input class="inputForms"  type="text"></input></div>
-            <div>Nº de Documento  &nbsp;<input class="inputForms" type="text"></input></div>
-            <div>Correo Electrónico  &nbsp;<input class="inputForms" type="text"></input></div>
-            <div>Teléfono / Celular  &nbsp;<input class="inputForms" type="text"></input></div>
+            <div>Nombre y Apellido   &nbsp;<input class="inputForms"  type="text" ng-model='model.error.names'></input></div>
+            <div>Nº de Documento  &nbsp;<input class="inputForms" type="text" ng-model='model.error.dni'></input></div>
+            <div>Correo Electrónico  &nbsp;<input class="inputForms" type="text" ng-model='model.error.email'></input></div>
+            <div>Teléfono / Celular  &nbsp;<input class="inputForms" type="text" ng-model='model.error.tel'></input></div>
 
           </div>
 
-          <button class="btns" type="button">Enviar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
+          <button class="btns" type="button" ng-click='noCode()'>Enviar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
 
         </div>
 
@@ -345,7 +346,7 @@
 
 
         <div class="footer">
-          &nbsp;  © 2015 | DITESI | Dirección de tecnologías y Sistemas Informáticos | Secretaría de Administración y Finanzas | Facultad de Ciencias Económicas | UNLP | Calle 6 Nº 777 - 1er Subsuelo | La Plata | Bs. As. | Tel: +54 (221) 423-6769/71/72 int. 123 | ditesi@econo.unlp.edu.ar
+          &nbsp;  © 2015 | DITESI | Dirección de tecnologías y Sistemas Informáticos | Secretaría de Administración y Finanzas | DETISE | Dirección de tecnologías y Sistemas de Información | Secretaría Académica | Facultad de Ciencias Económicas | UNLP | Calle 6 Nº 777 - 1er Subsuelo | La Plata | Bs. As. | Tel: +54 (221) 423-6769/71/72 int. 123 | ditesi@econo.unlp.edu.ar
         </div>
     </div>
 </body>
