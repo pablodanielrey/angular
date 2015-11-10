@@ -152,6 +152,7 @@ class Users:
                 data['version'] if 'version' in data else 0)
         cur = con.cursor()
         cur.execute('insert into profile.users (id,dni,name,lastname,city,country,address,genre,birthdate,residence_city,version) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)', rreq)
+        cur.execute('insert into au24.users (id,type) values (%s,%s)', (uid, 'ingresante'))
         return uid
 
     '''
