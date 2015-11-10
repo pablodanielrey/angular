@@ -34,6 +34,7 @@ class IngresoWamp(ApplicationSession):
         yield from self.register(self.confirmEmail_async, 'ingreso.mails.confirmEmail')
         yield from self.register(self.changePassword_async, 'ingreso.user.changePassword')
         yield from self.register(self.sendError_async, 'ingreso.mails.sendError')
+        yield from self.register(self.sendFinalMail_async, 'ingreso.mails.sendFinalMail')
 
     def _getDatabase(self):
         host = self.serverConfig.configs['database_host']
@@ -121,4 +122,14 @@ class IngresoWamp(ApplicationSession):
     def confirmEmail_async(self, eid, hash):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.confirmEmail, eid, hash)
+        return r
+
+    def sendFinalMail(self, user, password, email):
+        self.ingreso.sendFinalEmail(user, password, email)
+        return True
+
+    @coroutine
+    def sendFinalMail_async(self, user, password, email):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.sendFinalMail, user, password, email)
         return r

@@ -6,7 +6,7 @@ IngresantesCtrl.$inject = ['$rootScope','$scope', '$window', 'Notifications', 'U
 function IngresantesCtrl($rootScope, $scope, $window, Notifications, Users, Student, $wamp) {
 
     $scope.screens = ['home','genero','mail', 'activacion', 'password', 'fin'];
-    $scope.errors = ['', 'DNInoExiste', 'DNIActivado', 'CorreoNoLlega', 'consultaEnviada'];
+    $scope.errors = ['', 'DNInoExiste', 'DNIActivado', 'CorreoNoLlega', 'consultaEnviada', 'mostrarEspere'];
 
     $scope.model = {
       si: 0,
@@ -187,13 +187,28 @@ function IngresantesCtrl($rootScope, $scope, $window, Notifications, Users, Stud
     $scope.changePassword = function() {
       $wamp.call('ingreso.user.changePassword', [$scope.model.dni, $scope.model.password]).then(
         function(ok) {
+          var pass = '';
           if (!ok) {
             // TODO: falta poner que ya tiene una clave seteada.
             console.log(ok);
-            $scope.changeScreen();
+            pass = 'ya tenía una existente';
           } else {
-            $scope.changeScreen();
+            pass = $scope.model.password;
           }
+
+          $scope.changeScreen();
+          $scope.model.se = 5;
+
+          $wamp.call('ingreso.mails.sendFinalMail',[$scope.model.user, $scope.model.password, $scope.model.email.email]).then(
+            function(ok) {
+              $scope.model.se = 0;
+            },
+            function(err) {
+              console.log(err);
+              $scope.model.se = 0;
+            }
+          );
+
         },
         function(err) {
           console.log(err);
