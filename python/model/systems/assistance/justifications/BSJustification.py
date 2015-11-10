@@ -216,15 +216,14 @@ class BSJustification(Justification):
 
       #definir fechas para calculo del tiempo trabajado en la worked hour correspondiente
       if rj[0] != userSchedule[schIndex].getStart(rj[0]) and rj[1] != userSchedule[schIndex].getEnd(rj[0]):
-        calcStart = uwh[schIndex].getEnd(rj[0])
-        calcEnd =  uwh[schIndex+1].getStart(rj[0])
-
+        calcStart = uwh[schIndex]["end"]
+        calcEnd =  uwh[schIndex+1]["start"]
       else:
         if(rj[0] == userSchedule[schIndex].getStart(rj[0])):
           calcStart = userSchedule[schIndex].getStart(rj[0])
-          calcEnd = uwh[schIndex].getStart(rj[0])
+          calcEnd = uwh[schIndex]["start"]
         else:
-          calcStart = uwh[schIndex].getEnd(rj[0])
+          calcStart = uwh[schIndex]["end"]
           calcEnd =  userSchedule[schIndex].getEnd(rj[0])
 
       #chequear si calcStart y calcEnd son distintos de None

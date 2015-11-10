@@ -266,6 +266,10 @@ class Schedule:
     def persistSchedule(self, con, userId, date, sstart, send, isDayOfWeek=False, isDayOfMonth=False, isDayOfYear=False):
         uaware = date.astimezone(pytz.utc)
 
+        # verifico que el start sea menor al end, sino supongo que el end es del dia siguiente
+        if send < sstart:
+            send += 24 * 60 * 60
+
         cur = con.cursor()
         cur.execute('set time zone %s', ('utc',))
 
