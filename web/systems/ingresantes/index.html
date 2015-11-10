@@ -4,6 +4,7 @@
 <head>
     <title>Ingresantes 2015</title>
     <meta charset="utf-8" />
+    <meta name='viewport' content='width=device-width'/>
     <link rel="stylesheet" href="ingresantes.css" />
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
@@ -24,12 +25,39 @@
     </script> -->
 
 
+    <!-- LIBRERIAS -->
+    <script src="/libs/bower_components/angularjs/angular.js"></script>
+    <script src="/libs/bower_components/angular-route/angular-route.js"></script>
+    <script src="/libs/bower_components/autobahn/autobahn.js"></script>
+    <script src="/libs/bower_components/angular-wamp/release/angular-wamp.js"></script>
+
+    <!-- ARCHIVOS DE CONFIGURACION E INICIALIZACION -->
+    <script type="text/javascript" src="/config-ingresantes.json"></script>
+    <script type="text/javascript" src="/systems/ingresantes/index.module.js"></script>
+
+    <!-- SERVICIOS DE CONFIGURACION -->
+    <script type="text/javascript" src="/services/Session.js"></script>
+    <script type="text/javascript" src="/services/Cache.js"></script>
+    <script type="text/javascript" src="/services/Utils.js"></script>
+    <script type="text/javascript" src="/services/Notifications.js"></script>
+    <!-- <script type="text/javascript" src="/services/Login.js"></script> -->
+    <script type="text/javascript" src="/services/Users.js"></script>
+    <script type="text/javascript" src="/services/systems/student/Student.js"></script>
+    <!-- <script type="text/javascript" src="/services/systems/files/Files.js"></script> -->
+    <!-- <script type="text/javascript" src="/directives/onReadFileBinaryString.js"></script> -->
+
+    <!-- CONTROLADOR PRINCIPAL -->
+    <script type="text/javascript" src="/systems/ingresantes/index.controller.js"></script>
+
+    <!-- RUTEO Y MODULOS PRINCIPALES -->
+    <script type="text/javascript" src="/systems/ingresantes/routes.js"></script>
+
 
 </head>
 
-<body>
+<body ng-app="mainApp" ng-controller="IngresantesCtrl">
 
-    <div class="ingresantes  activacion ">
+    <div class="ingresantes" ng-class='getClazz()'>
       <!--CLASES (home, genero, mail,activacion, password,fin)  y (mostrarEspere, ocultarEspere) y de errores (DNInoExiste, DNIActivado, CorreoNoLlega, consultaEnviada )-->
 
         <div class="header">
@@ -45,7 +73,7 @@
                     Ingresá tu Nº de documento
                   </div>
                   <div>
-                    <input class="inputDNI" type="text" 3placeholder="" name='dni' maxlength="8"  ng-pattern='/^\d{8,8}$/' required></input>
+                    <input class="inputDNI" type="text" 3placeholder="" name='dni' ng-model='model.dni' maxlength="8"  ng-pattern='/^\d{8,8}$/' required></input>
                   </div>
 
                   <div class="textSpan">
@@ -54,7 +82,7 @@
 
 
                   <div>
-                    <button class="btns" type="button"> Continuar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
+                    <button class="btns" type="button" ng-click='checkDni()'> Continuar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
                   </div>
 
 
@@ -79,7 +107,7 @@
                     </div>
 
                     <div>
-                      <button class="btns" type="button"> Continuar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
+                      <button class="btns" type="button" ng-click='changeScreen()'> Continuar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
                     </div>
                   <!-- <div class="generos">
                       <button class="btnsGenero"type="button"><i class="fa fa-mars fa-2x textBlanco"></i><br> Masculino</button>
@@ -107,7 +135,7 @@
                       <input type="checkbox" name="input_ver" value="ver" onclick="ver_password();"> -->
 
                   </form>
-                  <button class="btns" type="button">Enviar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
+                  <button class="btns" type="button" ng-click='changeScreen()'>Enviar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
             </div>
 
             <div class="pantallaActivacion">

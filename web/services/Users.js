@@ -92,14 +92,17 @@ function Users($rootScope, $wamp, Session, Utils, Cache) {
   }
 
 
+
+
+
   this.findUser = function(id, callbackOk, callbackError) {
 
     // chequeo la cache primero
-    var user = Cache.getItem(instance.userPrefix + id);
-    if (user != null) {
-      callbackOk(user);
-      return;
-    }
+    //var user = Cache.getItem(instance.userPrefix + id);
+    //if (user != null) {
+    //  callbackOk(user);
+    //  return;
+    //}
 
     $wamp.call('users.findById', [id])
       .then(function(user) {
@@ -185,5 +188,19 @@ function Users($rootScope, $wamp, Session, Utils, Cache) {
         callbackError(err);
       });
   };
+
+
+  /*
+    metodos nuevos usados por pablo. para reemplazar los viejos.
+  */
+
+  this.findByDni = function(dni) {
+    return $wamp.call('users.findByDni', [dni]);
+  }
+
+  this.findById = function(id) {
+    return $wamp.call('users.findById', [id]);
+  }
+
 
 };
