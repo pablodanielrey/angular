@@ -27,6 +27,7 @@ function IngresantesCtrl($rootScope, $scope, $window, Notifications, Users, Stud
         times: 0
       },
 
+      dniOk: false,
       dni: '',
 
       password: '',
@@ -72,6 +73,13 @@ function IngresantesCtrl($rootScope, $scope, $window, Notifications, Users, Stud
       */
       $scope.model.screen = $scope.screens[$scope.model.si] + ' ' + $scope.errors[$scope.model.se];
       return $scope.model.screen;
+    }
+
+
+    $scope.checkDniSyntax = function() {
+      $scope.model.dniOk = false;
+      var re = /^\d{8,8}$/i;
+      $scope.model.dniOk = re.test($scope.model.dni;
     }
 
     // pasos de la aplicación

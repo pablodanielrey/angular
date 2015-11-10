@@ -67,21 +67,19 @@
         <div class="pantallas">
 
             <div class="pantallaInicio">
-
                   <div class="textTitles"><h1><i class="fa fa-bookmark-o"></i> Alta de cuenta para AU24<h1></div>
                   <div class="textTitles2">
                     Ingresá tu Nº de documento
                   </div>
                   <div>
-                    <input class="inputDNI" type="text" 3placeholder="" name='dni' ng-model='model.dni' maxlength="8"  ng-pattern='/^\d{8,8}$/' required></input>
+                    <input class="inputDNI" type="text" 3placeholder="" name='dni' ng-model='model.dni' ng-pattern='/^\d{8,8}$/' ng-change='checkDniSyntax()' required></input>
                   </div>
 
                   <div class="textSpan">
                     <i class="fa fa-exclamation-triangle"></i> DNI sin puntos - Pasaporte sólo letras y números (sin barras, puntos, guiones)
                   </div>
 
-
-                  <div>
+                  <div ng-if='dniOk'>
                     <button class="btns" type="button" ng-click='checkDni()'> Continuar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
                   </div>
 
