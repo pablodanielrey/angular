@@ -73,7 +73,7 @@
                     Ingresá tu Nº de documento
                   </div>
                   <div>
-                    <input class="inputDNI" type="text" 3placeholder="" name='dni' ng-model='model.dni' ng-pattern='/^\d{8,8}$/' ng-change='checkDniSyntax()' required></input>
+                    <input class="inputDNI" type="text" 3placeholder="" name='dni' ng-model='model.dni' ng-change='checkDniSyntax()' required></input>
                   </div>
 
                   <!-- <div class="textSpan">
@@ -137,7 +137,7 @@
                   </form>
                   <!-- <button class="btns" type="button" ng-if='emailform.mail.$valid' ng-click='sendEmailValidation()'>Enviar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button> -->
                   <button class="btns" type="button"  ng-click='sendEmailValidation()'>Enviar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
-                  <div class="textSpan3">
+                  <div ng-if='model.email.invalid' class="textSpan3">
                     <i class="fa fa-times"></i> Formato de correo electrónico inválido
                   </div>
 
@@ -254,7 +254,7 @@
 
         <div class="pantallaNoExisteDNI">
           <div><h1> El Nº de Documento <span class="textSpan2">{{model.dni}}</span> no existe</h1> <br> </div>
-          <button class="btns3" type="button" ng-click='wrongDni()'><i class="fa fa-angle-left"></i> Volver  </button>
+          <button class="btns3" type="button" ng-click='backToDni()'><i class="fa fa-angle-left"></i> Volver  </button>
           <div>
             <i class="fa fa-clock-o fa-3x"></i> Tené en cuenta que la carga del documento al sistema puede demorar hasta 48 hs luego de la inscripción
           </div>
@@ -286,7 +286,7 @@
             <span class="textHola">Hola!</span> , <b>{{model.user.name}} {{model.user.lastname}}</b>
           </div>
           <div>
-            <h1> La cuenta <span class="textSpan2">300001823</span> ya se encuentra activa</h1> <br>
+            <h1> La cuenta <span class="textSpan2">{{model.dni}}</span> ya se encuentra activa</h1> <br>
           </div>
 
           <div>
@@ -312,7 +312,7 @@
           </div>
 
           <button class="btns" type="button" ng-click='alreadyActive()'>Enviar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
-          <button class="btns2" type="button" ng-click='wrongDni()'><i class="fa fa-angle-left"></i> Volver  </button>
+          <button class="btns2" type="button" ng-click='backToDni()'><i class="fa fa-angle-left"></i> Volver  </button>
         </div>
 
 
@@ -339,7 +339,7 @@
           </div>
 
           <button class="btns" type="button" ng-click='noCode()'>Enviar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
-          <button class="btns2" type="button" ng-click='wrongDni()'><i class="fa fa-angle-left"></i> Volver  </button>
+          <button class="btns2" type="button" ng-click='backToEmail()'><i class="fa fa-angle-left"></i> Volver  </button>
         </div>
 
         <div class="pantallaConsultaEnviada">

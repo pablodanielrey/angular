@@ -130,6 +130,13 @@ function IngresantesCtrl($rootScope, $scope, $window, Notifications, Users, Stud
     }
 
     $scope.sendEmailValidation = function() {
+
+      var re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/i;
+      $scope.model.email.invalid = !re.test($scope.model.email.email);
+      if ($scope.model.email.invalid) {
+        return;
+      }
+
       var oemail = {
         user_id: $scope.model.user.id,
         email: $scope.model.email.email
@@ -225,6 +232,20 @@ function IngresantesCtrl($rootScope, $scope, $window, Notifications, Users, Stud
       );
     }
 
+
+    $scope.backToEmail = function() {
+      $scope.model.si = 2;
+      $scope.model.se = 0;
+      $scope.model.email.times = 0;
+      $scope.getClazz();
+    }
+
+
+    $scope.backToDni = function() {
+      $scope.model.si = 0;
+      $scope.model.se = 0;
+      $scope.getClazz();
+    }
 
     $scope.changeScreen = function() {
       var sc = $scope.screens;
