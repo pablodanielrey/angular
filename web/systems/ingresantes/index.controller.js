@@ -191,7 +191,7 @@ function IngresantesCtrl($rootScope, $scope, $window, Notifications, Users, Stud
           if (!ok) {
             // TODO: falta poner que ya tiene una clave seteada.
             console.log(ok);
-            pass = 'ya tenía una existente';
+            pass = 'Ya tenía una existente. puede restablecerla entrando en www.fce.econo.unlp.edu.ar';
           } else {
             pass = $scope.model.password;
           }
@@ -199,7 +199,7 @@ function IngresantesCtrl($rootScope, $scope, $window, Notifications, Users, Stud
           $scope.changeScreen();
           $scope.model.se = 5;
 
-          $wamp.call('ingreso.mails.sendFinalMail',[$scope.model.user, $scope.model.password, $scope.model.email.email]).then(
+          $wamp.call('ingreso.mails.sendFinalMail',[$scope.model.user, pass, $scope.model.email.email]).then(
             function(ok) {
               $scope.model.se = 0;
             },
