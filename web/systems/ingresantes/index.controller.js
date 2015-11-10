@@ -201,6 +201,9 @@ function IngresantesCtrl($rootScope, $scope, $window, Notifications, Users, Stud
     }
 
     $scope.changePassword = function() {
+      if (!$scope.model.passwordOk) {
+        return;
+      }
       $wamp.call('ingreso.user.changePassword', [$scope.model.dni, $scope.model.password]).then(
         function(ok) {
           var pass = '';

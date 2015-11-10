@@ -188,7 +188,7 @@
               </div>
 
               <div class="textSpan2">
-                <i class="fa fa-exclamation-triangle"></i> <b>Debe tener una longitud mínima de cinco caracteres </b>
+                <i class="fa fa-exclamation-triangle"></i> <b>Debe comenzar con una letra </b>
               </div>
               <div class="textSpan2">
                  <b>y contener al menos un número</b>
@@ -214,8 +214,11 @@
 
               <!-- <button class="btns" type="button" ng-if='model.passwordOk' ng-click='changePassword()'>Enviar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button> -->
               <button class="btns" type="button" ng-click='changePassword()'>Enviar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
-              <div class="textSpan3">
+              <div ng-if='!model.passwordOk' class="textSpan3">
                 <i class="fa fa-times"></i> Las contraseñas no coinciden o no cumple con los requisitos
+              </div>
+              <div ng-if='model.password != model.password2' class="textSpan3">
+                <i class="fa fa-times"></i> Las contraseñas no son iguales
               </div>
 
             </div>
