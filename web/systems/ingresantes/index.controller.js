@@ -77,9 +77,10 @@ function IngresantesCtrl($rootScope, $scope, $window, Notifications, Users, Stud
 
 
     $scope.checkDniSyntax = function() {
+      console.log('checkDniSyntax');
       $scope.model.dniOk = false;
       var re = /^\d{8,8}$/i;
-      $scope.model.dniOk = re.test($scope.model.dni;
+      $scope.model.dniOk = re.test($scope.model.dni);
     }
 
     // pasos de la aplicación
