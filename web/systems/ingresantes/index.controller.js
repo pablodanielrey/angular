@@ -233,6 +233,7 @@ function IngresantesCtrl($rootScope, $scope, $window, Notifications, Users, Stud
     // errores e informes
 
     $scope.wrongDni = function() {
+      $scope.model.se = 5;
       var error = $scope.model.error;
       $wamp.call('ingreso.mails.sendErrorMail',['DNI inexistente', error.names, error.dni, error.email, error.tel]).then(
         function(ok) {
@@ -245,6 +246,7 @@ function IngresantesCtrl($rootScope, $scope, $window, Notifications, Users, Stud
     }
 
     $scope.alreadyActive = function() {
+      $scope.model.se = 5;
       var error = $scope.model.error;
       $wamp.call('ingreso.mails.sendErrorMail',['Ya tiene cuenta', error.names, error.dni, error.email, error.tel]).then(
         function(ok) {
@@ -257,6 +259,7 @@ function IngresantesCtrl($rootScope, $scope, $window, Notifications, Users, Stud
     }
 
     $scope.noCode = function() {
+      $scope.model.se = 5;
       var error = $scope.model.error;
       $wamp.call('ingreso.mails.sendErrorMail',['No llega el código', error.names, error.dni, error.email, error.tel]).then(
         function(ok) {
