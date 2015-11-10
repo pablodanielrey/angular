@@ -48,8 +48,11 @@ class WampMain(ApplicationSession):
                 'name': name,
                 'lastname': lastname
             }
-            data = yield from self.call('users.persistUser', user)
-            logging.info('usuario creado : {}'.format(data))
+            try:
+                data = yield from self.call('users.persistUser', user)
+                logging.info('usuario creado : {}'.format(data))
+            except Exception as e:
+                logging.warn(e)
 
         sys.exit(0)
 
