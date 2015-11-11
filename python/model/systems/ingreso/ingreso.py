@@ -39,7 +39,7 @@ class Ingreso:
             ('###USERNAME###', user['dni']),
             ('###EMAIL###', email)
         ]
-        self.mail.sendMail(From, [To, "detise@econo.unlp.edu.ar", "soporte@econo.unlp.edu.ar"], subject, replace, html=template)
+        self.mail.sendMail(From, [To, "soporte@econo.unlp.edu.ar"], subject, replace, html=template)
         return True
 
     def sendEmailConfirmation(self, con, name, lastname, eid):
