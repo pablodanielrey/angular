@@ -62,9 +62,20 @@ function IngresantesCtrl($rootScope, $scope, $window, Notifications, Users, Stud
     }
 
     $scope.setGender = function() {
-      //if ($scope.model.gender.male || $scope.model.gender.female || $scope.model.gender.nd) {
-        $scope.changeScreen();
-      //}
+      if (!($scope.model.gender.male || $scope.model.gender.female || $scope.model.gender.nd)) {
+        return
+      }
+      $scope.model.se = 5;
+      console.log($scope.model.user);
+      Users.updateUser($scope.model.user, function(res) {
+        $scope.model.se = 0;
+        console.log(res);
+      }, function(err) {
+        $scope.model.se = 0;
+        console.log(err);
+      });
+
+      $scope.changeScreen();
     }
 
     $scope.getClazz = function() {
@@ -266,8 +277,14 @@ function IngresantesCtrl($rootScope, $scope, $window, Notifications, Users, Stud
     // errores e informes
 
     $scope.wrongDni = function() {
-      $scope.model.se = 5;
+
       var error = $scope.model.error;
+      if (error.names == '' || error.dni == '' || error.email == '') {
+        return;
+      }
+
+      $scope.model.se = 5;
+
       $wamp.call('ingreso.mails.sendErrorMail',['DNI inexistente', error.names, error.dni, error.email, error.tel]).then(
         function(ok) {
           $scope.model.se = 4;
@@ -279,8 +296,12 @@ function IngresantesCtrl($rootScope, $scope, $window, Notifications, Users, Stud
     }
 
     $scope.alreadyActive = function() {
-      $scope.model.se = 5;
       var error = $scope.model.error;
+      if (error.names == '' || error.dni == '' || error.email == '') {
+        return;
+      }
+
+      $scope.model.se = 5;
       $wamp.call('ingreso.mails.sendErrorMail',['Ya tiene cuenta', error.names, error.dni, error.email, error.tel]).then(
         function(ok) {
           $scope.model.se = 4;
@@ -292,8 +313,12 @@ function IngresantesCtrl($rootScope, $scope, $window, Notifications, Users, Stud
     }
 
     $scope.noCode = function() {
-      $scope.model.se = 5;
       var error = $scope.model.error;
+      if (error.names == '' || error.dni == '' || error.email == '') {
+        return;
+      }
+
+      $scope.model.se = 5;
       $wamp.call('ingreso.mails.sendErrorMail',['No llega el código', error.names, error.dni, error.email, error.tel]).then(
         function(ok) {
           $scope.model.se = 4;
