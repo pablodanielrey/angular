@@ -1,36 +1,46 @@
 
-var app = angular.module('mainApp');
+angular
+  .module('mainApp')
+  .service('LaboralInsertion',LaboralInsertion);
 
-app.service('LaboralInsertion', function($wamp, Notifications) {
+LaboralInsertion.inject = ['$rootScope','$wamp','Session']
 
-	this.downloadDatabase = function(cok,cerr) {
-		$wamp.call('system.laboralInsertion.download')
-			.then(function(res) {
-				cok(res);
-			},function(err) {
-			  cerr(err);
-			}
-		);
-	}
+function LaboralInsertion($rootScope,$wamp,Session) {
 
-	this.find = function(userId, cok, cerr) {
-		$wamp.call('system.laboralInsertion.find',[userId])
-			.then(function(data) {
-				cok(data);
-			},function(err) {
-			  cerr(err);
-			}
-		);
-	}
+  /**
+    obtiene todas las inscripciones de un usuario determinado
+  */
+  this.findAllInscriptionsByUser = function(userId) {
+    return $wamp.call('system.laboralInsertion.findAllInscriptionsByUser', [userId]);
+  }
 
-	this.update = function(data, cok, cerr) {
-		$wamp.call('system.laboralInsertion.update',[data])
-			.then(function(res) {
-				cok(res);
-			},function(err) {
-			  cerr(err);
-			}
-		);
-	}
+  /*
+    crea una nueva inscripción a la bosla para el usuario determinado
+  */
+  this.persistInscriptionByUser = function(userId, data) {
+    return $wamp.call('system.laboralInsertion.persistInscriptionByUser', [userId, data]);
+  }
 
-});
+  /*
+    Elimina una escripcion dado el id.
+  */
+  this.deleteInscriptionById = function(iid) {
+    return $wamp.call('system.laboralInsertion.deleteInscriptionById', [iid]);
+  }
+
+
+  /*
+    Encuentra todos los datos de insercion laboral independientes de las inscripciones en la bolsa que tenga el usuario.
+  */
+  this.findByUser = function(userId) {
+    return $wamp.call('system.laboralInsertion.findByUser',[userId]);
+  }
+
+  /*
+    persiste los datos de insercion laboral genericos. esto no incluye las inscripcinoes a la bolsa.
+  */
+  this.persist = function(data) {
+    return $wamp.call('system.laboralInsertion.persist',[data]);
+  }
+
+}

@@ -9,6 +9,7 @@ app.controller('EditInsertionDataCtrl',function($rootScope, $scope, Login, Labor
 		userData: {},
 		studentData : {}
 	};
+
 	$scope.transformations = [];
 
 

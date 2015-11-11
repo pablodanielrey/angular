@@ -28,12 +28,11 @@ class UsersWamp(ApplicationSession):
         self.serverConfig = inject.instance(Config)
         self.mail = inject.instance(Mail)
 
-
-
     @coroutine
     def onJoin(self, details):
         logging.debug('registering methods')
         yield from self.register(self.findById_async, 'users.findById')
+        yield from self.register(self.findByDni_async, 'users.findByDni')
         yield from self.register(self.persistUser_async, 'users.persistUser')
         yield from self.register(self.listUsers_async, 'users.listUsers')
         yield from self.register(self.findUsersIds_async, 'users.findUsersIds')
@@ -66,6 +65,21 @@ class UsersWamp(ApplicationSession):
         r = yield from loop.run_in_executor(None, self.findById, id)
         return r
 
+    def findByDni(self, dni):
+        con = self._getDatabase()
+        try:
+            data = self.users.findUserByDni(con, dni)
+            return data
+
+        finally:
+            con.close()
+
+    @coroutine
+    def findByDni_async(self, dni):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.findByDni, dni)
+        return r
+
 
     '''
      ' Persistir usuario
@@ -86,7 +100,6 @@ class UsersWamp(ApplicationSession):
         con = self._getDatabase()
         try:
             userId = self.users.updateUser(con, user)
-
             con.commit()
             return userId
 
@@ -173,11 +186,10 @@ class UsersWamp(ApplicationSession):
         r = yield from loop.run_in_executor(None, self.findMails, userId)
         return r
 
-
     '''
      ' Persistir email de usuario
      ' @param email Objeto con los datos del email de usuario
-     '      userId: Id de usuario
+     '      user_id: Id de usuario
      '      email: Email propiamente dicho
      '      confirmed: Flag para indicar si el email esta confirmado (Defecto False)
      '''

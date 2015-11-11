@@ -12,6 +12,7 @@
 #sleep 60s
 #cd $DIR
 echo "iniciando sistema"
+screen -S a13 -d -m python3 mainStudents.py
 screen -S a14 -d -m python3 mainOvertime.py
 screen -S a13 -d -m python3 mainJustifications.py
 screen -S a12 -d -m python3 mainAssistance.py
