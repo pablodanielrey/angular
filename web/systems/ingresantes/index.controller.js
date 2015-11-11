@@ -90,7 +90,7 @@ function IngresantesCtrl($rootScope, $scope, $window, Notifications, Users, Stud
     $scope.checkDniSyntax = function() {
       console.log('checkDniSyntax');
       $scope.model.dniOk = false;
-      var re = /^\d{8,8}$/i;
+      var re = /^[a-zA-Z]*\d+$/i;
       $scope.model.dniOk = re.test($scope.model.dni);
     }
 
