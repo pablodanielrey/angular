@@ -193,6 +193,12 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
 
       }
 
+      if ($scope.model.cr >= 3) {
+          if (offer.travel == undefined || offer.travel == '') {
+            ok = false;
+          }
+      }
+
       if ($scope.model.cr >= 4) {
 
         var languages = $scope.model.laboralData.languages
@@ -204,6 +210,7 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
           }
         }
       }
+
 
       if ($scope.model.cr >= 5) {
         ok = ok && ($scope.model.laboralData.cv != null && $scope.model.laboralData.cv != '');
