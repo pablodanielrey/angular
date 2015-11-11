@@ -58,6 +58,7 @@
 <body ng-app="mainApp" ng-controller="IngresantesCtrl">
 
     <div class="ingresantes" ng-class='getClazz()'>
+      <!-- <div class="ingresantes home DNInoExiste"> -->
       <!--CLASES (home, genero, mail,activacion, password,fin)  y (mostrarEspere, ocultarEspere) y de errores (DNInoExiste, DNIActivado, CorreoNoLlega, consultaEnviada )-->
 
         <div class="header">
@@ -231,6 +232,8 @@
                     Ahora podrás acceder a AU24 <br>
                     <a href='http://www.au24.econo.unlp.edu.ar'><b>www.au24.econo.unlp.edu.ar<b></a>
                 </div><br>
+
+                <div> <h3><i class="fa fa-envelope-o "></i> Te hemos enviado un correo con tus datos de acceso a AU24</h3></div>
                 <!--
                 <div class="textTitles2">
                   <i class="fa fa-user"></i> Usuario: <span class="textTitles3"><b{{model.dni}}</b></span>
@@ -272,9 +275,9 @@
           <br>
 
           <div class="formulario">
-            <div>Nombre y Apellido   &nbsp;<input class="inputForms"  type="text" ng-model='model.error.names'></input></div>
-            <div>Nº de Documento  &nbsp;<input class="inputForms" type="text" ng-model='model.error.dni'></input></div>
-            <div>Correo Electrónico  &nbsp;<input class="inputForms" type="text" ng-model='model.error.email'></input></div>
+            <div>Nombre y Apellido   &nbsp;<input class="inputForms"  type="text" ng-model='model.error.names' required></input></div>
+            <div>Nº de Documento  &nbsp;<input class="inputForms" type="text" ng-model='model.error.dni' required></input></div>
+            <div>Correo Electrónico  &nbsp;<input class="inputForms" type="text" ng-model='model.error.email' required></input></div>
             <div>Comentario  &nbsp;<input class="inputForms" type="text" ng-model='model.error.tel'  maxlength="150"></input></div>
 
           </div>
@@ -307,9 +310,9 @@
           <br>
 
           <div class="formulario">
-            <div>Nombre y Apellido   &nbsp;<input class="inputForms"  type="text" ng-model='model.error.names'></input></div>
-            <div>Nº de Documento  &nbsp;<input class="inputForms" type="text" ng-model='model.error.dni'></input></div>
-            <div>Correo Electrónico  &nbsp;<input class="inputForms" type="text" ng-model='model.error.email'></input></div>
+            <div>Nombre y Apellido   &nbsp;<input class="inputForms"  type="text" ng-model='model.error.names' required></input></div>
+            <div>Nº de Documento  &nbsp;<input class="inputForms" type="text" ng-model='model.error.dni' required></input></div>
+            <div>Correo Electrónico  &nbsp;<input class="inputForms" type="text" ng-model='model.error.email' required></input></div>
             <div>Comentario  &nbsp;<input class="inputForms" type="text" ng-model='model.error.tel'  maxlength="150"></input></div>
 
           </div>
@@ -334,9 +337,9 @@
           <br>
 
           <div class="formulario">
-            <div>Nombre y Apellido   &nbsp;<input class="inputForms"  type="text" ng-model='model.error.names'></input></div>
-            <div>Nº de Documento  &nbsp;<input class="inputForms" type="text" ng-model='model.error.dni'></input></div>
-            <div>Correo Electrónico  &nbsp;<input class="inputForms" type="text" ng-model='model.error.email'></input></div>
+            <div>Nombre y Apellido   &nbsp;<input class="inputForms"  type="text" ng-model='model.error.names' required></input></div>
+            <div>Nº de Documento  &nbsp;<input class="inputForms" type="text" ng-model='model.error.dni' required></input></div>
+            <div>Correo Electrónico  &nbsp;<input class="inputForms" type="text" ng-model='model.error.email' required></input></div>
             <div>Comentario  &nbsp;<input class="inputForms" type="text" ng-model='model.error.tel'  maxlength="150"></input></div>
 
           </div>
