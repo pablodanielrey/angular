@@ -11,10 +11,11 @@
             </div> -->
             <div class="dataBasic">
                 <div class"col">
+
                     <div class="item">
                       <input type="file" class="btnInputFile" id="inputPhoto" on-read-file-binary-string="addPhoto(fileName,fileContent)">
-                      <div class="photo" placeholder="Foto" ng-click='addPhoto()'><i class="fa fa-camera-retro fa-4x"></i>Subir Foto</div>
-
+                      <!-- <div class="photo" placeholder="Foto" ng-click='addPhoto()'><i class="fa fa-camera-retro fa-4x"></i>Subir Foto</div> -->
+                      <img class="photo" src="/systems/laboralInsertion/img/pablo.jpg" alt="Pablo" >
                     </div>
 
                     <div class="item">
@@ -166,9 +167,6 @@
                       </div>
                     </div>
 
-                </div>
-                <div class"col">
-
                     <div class="item">
                       <div>
                         <button><i class="fa fa-globe"></i></button>
@@ -178,6 +176,11 @@
                         <div class="invalidError" ng-if='dataBasic.country.$invalid'><i class="fa fa-times"></i> Ingrese su nacionalidad</div>
                       </div>
                     </div>
+
+                </div>
+                <div class"col">
+
+
 
                     <div class="item">
                       <div>
