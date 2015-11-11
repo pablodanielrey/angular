@@ -8,6 +8,15 @@ insert into credentials.auth_profile (user_id,profile) values ('1','ADMIN-TUTOR'
 insert into credentials.auth_profile (user_id,profile) values ('1','ADMIN-ASSISTANCE');
 
 
+/*
+  camaras
+*/
+
+insert into camera.camera (id,floor,number) values ('7d67a570-8151-430a-8423-a2f1b56d08c3','pb',1);
+insert into camera.camera (id,floor,number) values ('3cdadbc0-35ad-4ac4-a1d2-8e8b6b3b1a73','pb',2);
+insert into camera.camera (id,floor,number) values ('5e7da5d1-88a7-430a-8eb8-915e4d3d8f5d','pb',3);
+
+
 
 
 
