@@ -176,8 +176,10 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
             }
             // controlo que tenga aprobado el 80%
             var minimum = (assignatures * 80) / 100;
-            if (offer.approved > minimum) {
+            if (offer.approved == asignatures) {
               $scope.workTypes = ['Full-Time','Programa estudiantes avanzados y jovenes profesionales'];
+            } else if (offer.approved > minimum) {
+              $scope.workTypes = ['Pasantía','Full-Time','Programa estudiantes avanzados y jovenes profesionales'];
             } else {
               $scope.workTypes = ['Pasantía','Full-Time'];
             }
