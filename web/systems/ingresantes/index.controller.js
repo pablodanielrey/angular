@@ -288,6 +288,12 @@ function IngresantesCtrl($rootScope, $scope, $window, Notifications, Users, Stud
         return;
       }
 
+      var re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/i;
+      if (!re.test(error.email)) {
+        return;
+      }
+
+
       $scope.model.se = 5;
 
       $wamp.call('ingreso.mails.sendErrorMail',['DNI inexistente', error.names, error.dni, error.email, error.tel]).then(
@@ -306,6 +312,11 @@ function IngresantesCtrl($rootScope, $scope, $window, Notifications, Users, Stud
         return;
       }
 
+      var re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/i;
+      if (!re.test(error.email)) {
+        return;
+      }
+
       $scope.model.se = 5;
       $wamp.call('ingreso.mails.sendErrorMail',['Ya tiene cuenta', error.names, error.dni, error.email, error.tel]).then(
         function(ok) {
@@ -320,6 +331,11 @@ function IngresantesCtrl($rootScope, $scope, $window, Notifications, Users, Stud
     $scope.noCode = function() {
       var error = $scope.model.error;
       if (error.names == '' || error.dni == '' || error.email == '') {
+        return;
+      }
+
+      var re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/i;
+      if (!re.test(error.email)) {
         return;
       }
 
