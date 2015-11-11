@@ -96,6 +96,11 @@ function IngresantesCtrl($rootScope, $scope, $window, Notifications, Users, Stud
 
     // pasos de la aplicación
     $scope.checkDni = function() {
+
+      if (!$scope.model.dniOk) {
+        return;
+      }
+
       var dni = $scope.model.dni;
       Users.findByDni(dni).then(
         function(user) {
