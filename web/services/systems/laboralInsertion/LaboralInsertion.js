@@ -7,6 +7,12 @@ LaboralInsertion.inject = ['$rootScope','$wamp','Session']
 
 function LaboralInsertion($rootScope,$wamp,Session) {
 
+  /*
+  */
+  this.findAllInscriptions = function() {
+    return $wamp.call('system.laboralInsertion.findAllInscriptions');
+  }
+
   /**
     obtiene todas las inscripciones de un usuario determinado
   */

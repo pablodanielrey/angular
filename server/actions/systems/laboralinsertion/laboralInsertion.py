@@ -158,6 +158,7 @@ class LaboralInsertionWamp(ApplicationSession):
         yield from self.register(self.download_async, 'system.laboralInsertion.download')
         yield from self.register(self.findByUser_async, 'system.laboralInsertion.findByUser')
         yield from self.register(self.persist_async, 'system.laboralInsertion.persist')
+        yield from self.register(self.findAllInscriptions_async, 'system.laboralInsertion.findAllInscriptions')
         yield from self.register(self.findAllInscriptionsByUser_async, 'system.laboralInsertion.findAllInscriptionsByUser')
         yield from self.register(self.persistInscriptionByUser_async, 'system.laboralInsertion.persistInscriptionByUser')
         yield from self.register(self.deleteInscriptionById_async, 'system.laboralInsertion.deleteInscriptionById')
@@ -192,6 +193,15 @@ class LaboralInsertionWamp(ApplicationSession):
         con = self._getDatabase()
         try:
             data = self.laboralInsertion.findAllInscriptionsByUser(con, userId)
+            return data
+
+        finally:
+            con.close()
+
+    def findAllInscriptions(self):
+        con = self._getDatabase()
+        try:
+            data = self.laboralInsertion.findAllInscriptions(con)
             return data
 
         finally:

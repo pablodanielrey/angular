@@ -11,6 +11,29 @@ class LaboralInsertion:
     """
     files = inject.attr(Files)
 
+    def findAllInscriptions(self, con):
+        """ obtiene los datos de las inscripciones de los alumnos """
+        cur = con.cursor()
+        cur.execute('select id, user_id, degree, courses, average1, average2, work_type, reside, travel, work_experience, creation from laboral_insertion.inscriptions')
+        inscriptions = []
+        for c in cur:
+            inscription = {
+                'id': c[0],
+                'user_id': c[1],
+                'degree': c[2],
+                'approved': c[3],
+                'average1': c[4],
+                'average2': c[5],
+                'workType': c[6],
+                'reside': c[7],
+                'travel': c[8],
+                'workExperience': c[9],
+                'creation': c[10]
+            }
+            inscriptions.append(inscription)
+
+        return inscriptions
+
     def findAllInscriptionsByUser(self, con, userId):
         """ obtiene los datos de las inscripciones de los alumnos """
         cur = con.cursor()
