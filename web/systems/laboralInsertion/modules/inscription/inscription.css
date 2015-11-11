@@ -9,6 +9,7 @@
 }
 
 .inscription {
+
 }
 
 .item .ng-invalid {
@@ -83,7 +84,7 @@
     -moz-flex-direction:column; /* mozilla */
     align-items: center;
     justify-content:center;
-    width: 290px;
+    width: 300px;
     height: 192px;
     float: left;
     border: 0;
@@ -96,11 +97,11 @@
 }
 
 .inscription .item input {
-    width: 200px;
+    width: 210px;
     height: 20px;
     padding: 10px 20px;
     float: left;
-    font:  18px 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font:  15px 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     border: 0;
     background: #eee;
     border-radius: 0 3px 3px 0px;
@@ -136,11 +137,11 @@
 }
 
 .inscription .item select {
-    width: 240px;
+    width: 250px;
     height: 40px;
     padding: 10px 20px;
     float: left;
-    font:  18px 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font:  15px 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     border: 0;
     background: #eee;
     border-radius: 0 3px 3px 0px;
@@ -206,7 +207,7 @@
   background-color: #275276;
   color: white;
   border-radius: 5px;
-  width: 290px;
+  width: 300px;
   height: 90px;
 }
 
@@ -216,11 +217,11 @@
 }
 
 .inscription .item2 select {
-    width: 240px;
+    width: 250px;
     height: 40px;
     padding: 10px 20px;
     float: left;
-    font:  18px 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font:  15px 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     border: 0;
     background: #eee;
     border-radius: 0 3px 3px 0px;
@@ -303,6 +304,8 @@
   -webkit-flex-direction:row; /* Safari */
   -moz-flex-direction:row; /* mozilla */
   flex-wrap: wrap;
+  overflow-y: scroll;
+  height: 90px;
 }
 
 .inscription .itemInscription {
@@ -378,7 +381,7 @@
   width: 260px;
   background-color: #0066A6;
   border-radius: 0px 3px 3px 0px;
-  font-size: 18px;
+  font-size: 14px;
   color:white;
   height: 70px;
   display: flex;
@@ -412,6 +415,7 @@ justify-content: center;
   padding: 20px;
   width: 79%;
   margin: 0px 0px 0px 20px;
+  height: 100%;
 }
 
 .inscription .textInscribirme {
@@ -428,7 +432,14 @@ justify-content: center;
 }
 
 .inscription .cuentasCorreo {
-
+  background-color: #EEEEEE;
+  color:#0066A6;
+  width: 300px;
+  height: 40px;
+  border: none;
+  border: 1px solid #C6C6C6;
+  border-radius: 3px;
+  margin-bottom: 10px;
 }
 
 
