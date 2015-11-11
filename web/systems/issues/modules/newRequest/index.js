@@ -4,7 +4,7 @@
  * @param {type} param1
  * @param {type} param2
  */
-app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "Notifications", "Issue", "Users", function ($scope, $timeout, $window, Module, Notifications, Issue, Users) {
+app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "Notifications", "Issue", "Users", "Office", function ($scope, $timeout, $window, Module, Notifications, Issue, Users, Office) {
 
   /***** MANIPULACION DE ESTILOS ******/
   $scope.style = null;
@@ -75,9 +75,11 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
    * Interruptor para visualizar descripcion del nodo
    * @param {type} nodeScope
    */
-  $scope.toggleNodeData = function (nodeScope) {
-    var nodeData = nodeScope.$modelValue;
-    nodeData.collapsedDescription = !nodeData.collapsedDescription
+  $scope.toggleNodeData = function (node) {
+    if (node.state == "COMMENT") {
+      return;
+    }
+    node.descriptionExpanded = !node.descriptionExpanded;
   };
 
 
@@ -177,6 +179,7 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
         for (var i = 0; i< data.length; i++) {
           $scope.loadDataNode(data[i]);
         }
+        console.log($scope.data);
       },
       function(error) {
         Notifications.message(error);
@@ -185,9 +188,19 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
   };
 
 
+  $scope.getNodeRequest = function(node) {
+    if (node.state == "COMMENT") {
+      return node.request;
+    }
+    var st = node.request;
+    if (st.length > 40) {
+      st = st.substring(0,60) + '....';
+    }
+    return st;
+  }
 
   $scope.loadDataNode = function(node) {
-    Users.findUser(node.requestor_id,
+    Users.findUser(node.creator,
       function(user) {
         node.requestor = user.name + " " + user.lastname;
       },
@@ -195,7 +208,42 @@ app.controller('NewRequestCtrl', ["$scope", "$timeout", "$window", "Module", "No
       }
     );
 
+    Office.findOffices([node.office_id],
+      function(offices) {
+        if (offices == null || offices.length == 0) {
+            node.office = null;
+        } else {
+          node.office = offices[0];
+        }
+      },
+      function(error) {
+      }
+    );
+
+    var idsV = [];
+    for (var i = 0; i < node.visibilities.length; i++) {
+      idsV.push(node.visibilities[i]['office_id']);
+    }
+
+    Office.findOffices(idsV,
+      function(offices) {
+        node.visibilitiesOffices = '';
+        if (offices == null || offices.length == 0) {
+            return;
+        }
+        for (var i = 0; i < offices.length; i++) {
+            if (i > 0) {
+              node.visibilitiesOffices = node.visibilitiesOffices + ', ';
+            }
+            node.visibilitiesOffices = node.visibilitiesOffices + offices[i]['name'];
+        }
+      },
+      function(error) {
+      }
+    );
+
     node.collapsedDescription = false;
+    node.descriptionExpanded = false;
     node.style = $scope.setNodeStyleByState(node.state);
     for (var i = 0; i < node.childrens.length; i++) {
       $scope.loadDataNode(node.childrens[i]);

@@ -1,11 +1,17 @@
 <div class="contentOffices">
-  <div data-drag-enabled="false" ui-tree class="contentTreeOffices">
-    <ol ui-tree-nodes ng-model="model.offices" id="tree-root">
-      <li class="nodeOffice" ng-repeat="office in model.offices" ui-tree-node ng-include="'modules/manageIssues/nodes_assigned_renderer.html'"></li>
-    </ol>
+  <h3 class="titleNewComment"><i class="fa fa-eye"></i> Asignar pedido a: </h3>
+  <div class="selectOffice">
+    <div data-drag-enabled="false" ui-tree class="contentTreeOffices">
+      <ol ui-tree-nodes ng-model="model.offices" id="tree-root">
+	<li class="nodeOffice" ng-repeat="office in model.offices" ui-tree-node ng-include="'modules/manageIssues/nodes_assigned_renderer.html'"></li>
+      </ol>
+    </div>
   </div>
+
+  
   <div class="actions">
-    <input type="button" value="Cancelar" ng-click="cancelAssigned()" />
-    <input type="submit" value="Guardar" ng-click="saveAssigned()" />
-  <div>
+
+    <button class="btnSaveComment" title="Guardar"  ng-click="saveAssigned()" > Guardar</button>
+    <button class="btnCancelComment" title="Cancelar" ng-click="cancelAssigned()" ><i class="fa fa-times"></i></button>
+  </div>  
 </div>

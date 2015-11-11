@@ -10,15 +10,14 @@
   <script src="/libs/bower_components/autobahn/autobahn.js"></script>
   <script src="/libs/bower_components/angular-wamp/release/angular-wamp.js"></script>
 
-  <script type="text/javascript" src="/angular/angular-ui-tree/angular-ui-tree.min.js"></script>
-  <link rel="stylesheet" href="/angular/angular-ui-tree/angular-ui-tree.min.css">
+
   <!-- esto es el estilo de font awesome para tener los iconos -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 
   <script type="text/javascript" src="/config.json"></script>
 
-  <script type="text/javascript" src="/systems/issues/initializeApp.js"></script>
+  <script type="text/javascript" src="/systems/task/index.module.js"></script>
 
   <!-- ***** MENSAJES ***** -->
   <script type="text/javascript" src="/modules/messages/messages.js"></script>
@@ -43,37 +42,32 @@
   <!-- ***** SERVICIOS DE LA APLICACION ***** -->
 
   <!--archivos principales-->
-  <link rel="stylesheet" href="/systems/issues/index.css">
-  <script type="text/javascript" src="/systems/issues/index.js"></script>
-  <script type="text/javascript" src="/systems/issues/routes.js"></script>
+  <link rel="stylesheet" href="/systems/task/index.css">
+  <script type="text/javascript" src="/systems/task/index.controller.js"></script>
+  <script type="text/javascript" src="/systems/task/routes.js"></script>
 
-  <script type="text/javascript" src="/services/systems/issue/Issue.js"></script>
+  <script type="text/javascript" src="/services/systems/task/Task.js"></script>
 
 
 
   <!-- ***** MENU ***** -->
-  <script type="text/javascript" src="/systems/issues/menu/menu.js"></script>
-  <link rel="stylesheet" type="text/css" href="/systems/issues/menu/menu.css"/>
+  <script type="text/javascript" src="/systems/task/menu/menu.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/task/menu/menu.css"/>
 
   <!-- ***** MODULOS ***** -->
-  <link rel="stylesheet" href="/systems/issues/modules/newRequest/index.css">
-  <script type="text/javascript" src="/systems/issues/modules/newRequest/index.js"></script>
-  <script type="text/javascript" src="/systems/issues/modules/newRequest/visibilityOffice.controller.js"></script>
-
-  <link rel="stylesheet" href="/systems/issues/modules/manageIssues/index.css">
-  <script type="text/javascript" src="/systems/issues/modules/manageIssues/index.js"></script>
-  <script type="text/javascript" src="/systems/issues/modules/manageIssues/assigned.controller.js"></script>
-
+  <!-- **** PANTALLA MIS TAREAS **** -->
+  <script type="text/javascript" src="/systems/task/modules/myTask/index.controller.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/task/modules/myTask/index.css" />
+  
 </head>
 
-<body ng-controller="IndexCtrl">
+<body ng-controller="TaskCtrl">
 
   <div class="principal" ng-controller="MenuCtrl">
 
       <div class="screen" ng-class="{true:'closeMenu',false:'openMenu'}[model.cerrado]" >
 
-        <!-- <nav ng-class="{true:'visible',false:'hidden'}[isLogged()]"> -->
-        <div class="menu-container" ng-include="'/systems/issues/menu/menu.html'">
+        <div class="menu-container" ng-include="'/systems/task/menu/menu.html'">
           </div>
 
           <div ng-view>

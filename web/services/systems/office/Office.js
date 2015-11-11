@@ -11,6 +11,9 @@ function Office($rootScope, $wamp, Session) {
   //retorna todas las oficinas
   services.getOffices = getOffices;
 
+  //retorna el objeto oficina
+  services.findOffices = findOffices;
+
   //retorna todas las oficinas en forma de arbol
   services.getOfficesTree = getOfficesTree;
 
@@ -73,6 +76,29 @@ function Office($rootScope, $wamp, Session) {
   */
   function getOffices(callbackOk,callbackError) {
     $wamp.call('offices.offices.getOffices', [])
+    .then(function(res) {
+      if (res != null) {
+        callbackOk(res);
+      } else {
+        callbackError('Error');
+      }
+    },function(err) {
+      callbackError(err);
+    });
+  }
+
+  /*
+    usca la oficina y la retorna
+    res = {
+            name:'',
+            parent:'' -- id de la oficina padre,
+            id:'',
+            email:'',
+            telephone:''
+          }
+  */
+  function findOffices(ids,callbackOk,callbackError) {
+    $wamp.call('offices.offices.findOffices', [ids])
     .then(function(res) {
       if (res != null) {
         callbackOk(res);

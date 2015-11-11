@@ -1,12 +1,14 @@
 <div class="contentOffices">
-  <div data-drag-enabled="false" ui-tree class="contentTreeOffices">
+  <h3 class="titleNewComment"><i class="fa fa-eye"></i> Seleccionar Visibilidad </h3>
+  <div class="selectOffice" data-drag-enabled="false" ui-tree class="contentTreeOffices">
     <ol ui-tree-nodes ng-model="model.offices" id="tree-root">
       <li class="nodeOffice" ng-repeat="office in model.offices" ui-tree-node ng-include="'modules/newRequest/nodes_offices_renderer.html'"></li>
     </ol>
   </div>
   <div class="actions">
+
     <input type="button" value="Volver" ng-click="cancelVisibility()" ng-if="isReadOnly()"/>
-    <input type="button" value="Cancelar" ng-click="cancelVisibility()" ng-if="!isReadOnly()"/>
-    <input type="submit" value="Guardar" ng-click="saveVisibility()" ng-if="!isReadOnly()"/>
-  <div>
+    <button class="btnSaveComment" title="Guardar Visibilidad"  ng-click="saveVisibility()" ng-if="!isReadOnly()"> Guardar</button>
+    <button class="btnCancelComment" title="Cancelar" ng-click="cancelVisibility()" ng-if="!isReadOnly()"><i class="fa fa-times"></i></button>
+  </div>
 </div>

@@ -2,14 +2,14 @@
 /**
  * Controlador asociado a la interfaz para agregar y visualizar issues
  * @param {type} param1
- * @param {type} param
+ * @param {type} param2
  */
 app.controller('ManageIssuesCtrl', ["$scope", "$timeout", "$window", "Module", "Notifications", "Issue", "Users", "Office", function ($scope, $timeout, $window, Module, Notifications, Issue, Users, Office) {
 
-  $scope.model = {
-    offices: [],
-    newNode: null
-  }
+  // $scope.model = {
+  //   offices: [],
+  //   newNode: null
+  // }
 
 
   /***** MANIPULACION DE ESTILOS ******/
@@ -32,6 +32,9 @@ app.controller('ManageIssuesCtrl', ["$scope", "$timeout", "$window", "Module", "
   /***** ATRIBUTOS ******/
   $scope.request = null; //descripcion de un nuevo nodo que sera agregado a la raiz
   $scope.data = []; //raiz del arbol de nodos
+  $scope.model = {
+    newNode: null
+  }
 
 
   /**
@@ -79,11 +82,9 @@ app.controller('ManageIssuesCtrl', ["$scope", "$timeout", "$window", "Module", "
    * Interruptor para visualizar descripcion del nodo
    * @param {type} nodeScope
    */
-  $scope.toggleNodeData = function (node) {
-    if (node.state == "COMMENT") {
-      return;
-    }
-    node.descriptionExpanded = !node.descriptionExpanded;
+  $scope.toggleNodeData = function (nodeScope) {
+    var nodeData = nodeScope.$modelValue;
+    nodeData.collapsedDescription = !nodeData.collapsedDescription
   };
 
 
@@ -191,20 +192,10 @@ app.controller('ManageIssuesCtrl', ["$scope", "$timeout", "$window", "Module", "
     );
   };
 
-  $scope.getNodeRequest = function(node) {
-    if (node.state == "COMMENT") {
-      return node.request;
-    }
-    var st = node.request;
-    if (st.length > 40) {
-      st = st.substring(0,60) + '....';
-    }
-    return st;
-  }
-  
+
 
   $scope.loadDataNode = function(node) {
-    Users.findUser(node.creator,
+    Users.findUser(node.requestor_id,
       function(user) {
         node.requestor = user.name + " " + user.lastname;
       },
@@ -212,20 +203,7 @@ app.controller('ManageIssuesCtrl', ["$scope", "$timeout", "$window", "Module", "
       }
     );
 
-    Office.findOffices([node.office_id],
-      function(offices) {
-        if (offices == null || offices.length == 0) {
-            node.office = null;
-        } else {
-          node.office = offices[0];
-        }
-      },
-      function(error) {
-      }
-    );
-    
     node.collapsedDescription = false;
-    node.descriptionExpanded = false;
     node.style = $scope.setNodeStyleByState(node.state);
     for (var i = 0; i < node.childrens.length; i++) {
       $scope.loadDataNode(node.childrens[i]);
