@@ -2,9 +2,9 @@ angular
   .module('mainApp')
   .controller('DownloadCtrl',DownloadCtrl);
 
-DownloadCtrl.$inject = ['$rootScope','$scope','$location', '$window', 'Notifications','LaboralInsertion', 'Utils'];
+DownloadCtrl.$inject = ['$rootScope','$scope','$location', '$window', 'Notifications','LaboralInsertion', 'Login', 'Utils'];
 
-function DownloadCtrl($rootScope, $scope, $location, $window, Notifications, LaboralInsertion, Utils) {
+function DownloadCtrl($rootScope, $scope, $location, $window, Notifications, LaboralInsertion, Login, Utils) {
 
     var vm = this;
 
