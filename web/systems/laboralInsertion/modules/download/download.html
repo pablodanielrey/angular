@@ -1,11 +1,9 @@
 
 <div>
-  <div ng-if="model.fileToDownload == ''">
-    <div>{{model.message}}</div>
-    <progress></progress>
-  </div>
-  <div ng-if="model.fileToDownload != ''">
-    <div>Base de Datos</div>
-    <a href='{{model.fileToDownload}}'>{{model.fileToDownload}}</a>
+  <div ng-repeat='i in inscriptions'>
+    <div>{{i.name}}</div>
+    <div>{{i.lastname}}</div>
+    <div>{{i.dni}}</div>
+    <div ng-click='download(i.cv)'>{{i.cv}}</div>
   </div>
 </div>
