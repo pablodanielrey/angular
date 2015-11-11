@@ -77,11 +77,10 @@
                     <input class="inputDNI" type="text" 3placeholder="" name='dni' ng-model='model.dni' ng-change='checkDniSyntax()' required></input>
                   </div>
 
-                  <!-- <div class="textSpan">
+                  <div ng-if='!model.dniOk' class="textSpan">
                     <i class="fa fa-exclamation-triangle"></i> <b>ATENCIÓN |</b> DNI sin puntos - Pasaporte sólo letras y números (sin barras, puntos, guiones)
-                  </div> -->
+                  </div>
 
-                  <!-- <div ng-if='model.dniOk'> -->
                   <div>
                     <button class="btns" type="button" ng-click='checkDni()'> Continuar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
                   </div>
