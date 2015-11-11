@@ -385,7 +385,7 @@
                             <button><i class="fa fa-plane"></i></button>
                           </div>
                           <div>
-                            <select class="carrera" ng-model='model.offer.travel'>
+                            <select class="carrera" ng-change='checkInscriptionPreconditions()' ng-model='model.offer.travel'>
                               <!-- <option class="selectGrey" disabled selected style='display:none;'>Seleccionar...</option> -->
                               <option ng-repeat='o in travel' value="{{o.value}}">{{o.label}}</option>
                               <!--
