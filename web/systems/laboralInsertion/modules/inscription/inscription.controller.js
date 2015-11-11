@@ -425,30 +425,6 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
     LaboralInsertion.findAllInscriptionsByUser(userId)
       .then(function(data) {
         $scope.model.inscriptionsData = data;
-        /*
-        $scope.model.inscriptionsData = [{
-          'id':'sdfdsfdsfs',
-          'languages':[{
-              'id':'dsfsdfsd',
-              'name':'Inglés',
-              'level':'Básico'
-            },
-            {
-              'id':'dsfsdfsd',
-              'name':'Inglés',
-              'level':'Básico'
-            }],
-          'inscriptions':[
-            {
-              'degree':'Licenciatura en Administracion',
-              'average1':10,
-              'average2':20,
-              'courses':10,
-              'workType':'Pasantía',
-              'reside':'Sí',
-              'travel':'No'
-            }]
-        }];*/
       }, function(err) {
         console.log(err);
       });
