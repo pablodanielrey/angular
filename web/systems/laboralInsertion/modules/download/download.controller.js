@@ -18,7 +18,7 @@ function DownloadCtrl($rootScope, $scope, $location, $window, Notifications, Lab
       var userId = Login.getUserId();
       LaboralInsertion.findAllInscriptionsByUser(userId)
       .then(function(data) {
-        $scope.model.inscriptionsData = data;
+        $scope.model.inscriptions = data;
       }, function(err) {
         console.log(err);
       });
