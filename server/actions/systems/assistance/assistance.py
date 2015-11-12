@@ -49,7 +49,6 @@ class AssistanceWamp(ApplicationSession):
     def onJoin(self, details):
         logging.debug('registering methods')
         yield from self.register(self.getFailsByDate_async, 'assistance.getFailsByDate')
-        yield from self.register(self.getFailsByFilter_async, 'assistance.getFailsByFilter')
         yield from self.register(self.getAssistanceStatusByDate_async, 'assistance.getAssistanceStatusByDate')
         yield from self.register(self.getAssistanceStatusByUsers_async, 'assistance.getAssistanceStatusByUsers')
         yield from self.register(self.getAssistanceData_async, 'assistance.getAssistanceData')
@@ -286,7 +285,7 @@ class AssistanceWamp(ApplicationSession):
            @param date String con la fecha, en formato "Y-m-d", por ejemplo "2000-12-31"
         """
         date = self.date.parse(date).date()
- 
+
         con = self._getDatabase()
         try:
             cs = self.checks._getCheckData(con, userId, date)
@@ -325,8 +324,7 @@ class AssistanceWamp(ApplicationSession):
 
         con = self._getDatabase()
         try:
-            r = self.assistance.getFailsByDate(userId, start, end)
-            con.commit()
+            r = self.assistance.getFailsByDate(con, userId, start, end)
             return r
 
         finally:
@@ -337,25 +335,6 @@ class AssistanceWamp(ApplicationSession):
 
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.getFailsByDate, sid, userId, start, end)
-        return r
-
-
-
-
-    def getFailsByFilter(self, userIds, officesIds, start, end, filter):
-        con = self._getDatabase()
-        try:
-            ''' .... codigo aca ... '''
-            con.commit()
-            return True
-
-        finally:
-            con.close()
-
-    @coroutine
-    def getFailsByFilter_async(self, sid, userIds, officesIds, start, end, filter):
-        loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getFailsByFilter, userIds, officesIds, start, end, filter)
         return r
 
 
@@ -443,8 +422,3 @@ class AssistanceWamp(ApplicationSession):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.getLogsForSchedulesByDate, schedules, date)
         return r
-
-
-
-
-    
