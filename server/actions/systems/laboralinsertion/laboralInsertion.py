@@ -11,6 +11,7 @@ from model.users.users import Users
 
 from zipfile import ZipFile
 from collections import OrderedDict
+
 # from model.exceptions import *
 
 """
@@ -129,6 +130,7 @@ class Utils:
 
         return values
     """
+
     def _prepareCvs(self, cvs):
         b64s = []
         for c in cvs:
@@ -151,6 +153,7 @@ class LaboralInsertionWamp(ApplicationSession):
         self.serverConfig = inject.instance(Config)
         self.laboralInsertion = inject.instance(LaboralInsertion)
         self.utils = inject.instance(Utils)
+        self.users = inject.instance(Users)
 
     @coroutine
     def onJoin(self, details):
@@ -230,6 +233,16 @@ class LaboralInsertionWamp(ApplicationSession):
     def download(self):
         con = self._getDatabase()
         try:
+            self.laboralInsertion.download(con)
+            return True
+
+        finally:
+            con.close()
+
+    """
+    def download(self):
+        con = self._getDatabase()
+        try:
             path = '{}/tmp'.format(os.getcwd())
             zipName = '{}.zip'.format(str(uuid.uuid4()))
             with ZipFile('{}/{}'.format(path, zipName), 'w') as myzip:
@@ -249,12 +262,12 @@ class LaboralInsertionWamp(ApplicationSession):
                         f.write(c['cv'])
 
                     myzip.write(filename, os.path.basename(filename))
-            """
+
             b64 = None
             with open(zipName, 'rb') as f:
                 b64 = base64.b64encode(f.read()).decode('utf-8')
             return b64
-            """
+
             return zipName
 
         except Exception as e:
@@ -263,6 +276,7 @@ class LaboralInsertionWamp(ApplicationSession):
 
         finally:
             con.close()
+    """
 
     @coroutine
     def download_async(self):

@@ -24,8 +24,10 @@ class Files:
         cur = con.cursor()
         if id is None:
             id = str(uuid.uuid4())
+            #cur.execute('insert into files.files (id, name, content) values (%s,%s,%s)', (id, name, psycopg2.Binary(data)))
             cur.execute('insert into files.files (id, name, content) values (%s,%s,%s)', (id, name, data))
         else:
+            #cur.execute('update files.files set (name = %s, content = %s) where id = %s', (name, psycopg2.Binary(data), id))
             cur.execute('update files.files set (name = %s, content = %s) where id = %s', (name, data, id))
         return id
 

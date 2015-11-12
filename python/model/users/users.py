@@ -210,6 +210,9 @@ class Users:
         else:
             return None
 
+    def findById(self, con, id):
+        return self.findUser(con, id)
+
     def findUser(self,con,id):
         cur = con.cursor()
         cur.execute('select id,dni,name,lastname,city,country,address,genre,birthdate,residence_city,version from profile.users where id = %s', (id,))
