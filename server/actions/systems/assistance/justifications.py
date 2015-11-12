@@ -150,7 +150,7 @@ class JustificationsWamp(ApplicationSession):
          """
 
         startAux = None if(start is None) else datetime.datetime.strptime(start, "%Y-%m-%dT%H:%M:%S")
-        endAux = None if(start is None) else datetime.datetime.strptime(end, "%Y-%m-%dT%H:%M:%S")
+        endAux = None if(end is None) else datetime.datetime.strptime(end, "%Y-%m-%dT%H:%M:%S")
 
         con = self._getDatabase()
         try:
