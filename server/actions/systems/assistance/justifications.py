@@ -243,10 +243,10 @@ class JustificationsWamp(ApplicationSession):
         """
         con = self._getDatabase()
         try:
-            justification = self.justifications.deleteGeneralJustificationRequest(con, requestId)
+            event = self.justifications.deleteGeneralJustificationRequest(con, requestId)
 
             con.commit()
-            return justification;
+            return event;
 
 
         finally:
