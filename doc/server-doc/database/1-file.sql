@@ -8,5 +8,6 @@ create schema files;
     id varchar not null primary key,
     name varchar,
     hash varchar,
-    content bytea
+    content bytea,
+    created timestamp default now()
   );
