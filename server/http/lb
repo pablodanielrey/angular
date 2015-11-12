@@ -1,0 +1,51 @@
+#!/usr/bin/python3
+# -*- coding: UTF-8 -*-#
+import cgitb
+import cgi; cgitb.enable()  # opcional para debug
+import logging
+import inject
+import re
+import psycopg2
+import sys
+sys.path.insert(0, '../../python')
+
+print("Content-Type: application/pdf")
+print()
+
+args = cgi.FieldStorage()
+if "i" not in args:
+    sys.exit(1)
+
+fid = args.getvalue("i")
+if not re.search('/[a-zA-Z\-]+/', fid):
+    sys.exit(1)
+
+from model.systems.files.files import Files
+from model.config import Config
+
+
+def _getDatabase(config):
+    host = config.configs['database_host']
+    dbname = config.configs['database_database']
+    user = config.configs['database_user']
+    passw = config.configs['database_password']
+    return psycopg2.connect(host=host, dbname=dbname, user=user, password=passw)
+
+
+config = inject.instance(Config)
+files = inject.instance(Files)
+
+con = _getDatabase(config)
+try:
+    f = files.findById(con, fid)
+    if f is None:
+        sys.exit(1)
+
+    data = bytes(f['content'])
+    print("Content-Lenght: {}".format(len(data)))
+    print(data)
+    #sys.stdout.flush()
+    #sys.stdout.buffer.write(data)
+
+finally:
+    con.close()
