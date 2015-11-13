@@ -12,10 +12,10 @@ class Config:
     def __init__(self,cfg):
         home = expanduser("~")
         cfg = home + '/' + cfg
-        logging.info("Reading config from : " + cfg)
+        #logging.info("Reading config from : " + cfg)
 
         config = configparser.ConfigParser()
-        config.read(cfg)
+        config.read(cfg, encoding='UTF-8')
         for section in config.sections():
             options = config.options(section)
             for option in options:
@@ -28,5 +28,3 @@ class Config:
                     self.configs[section + '_' + option] = value
                 except:
                     self.configs[section + '_' + option] = None
-
-        print(self.configs)
