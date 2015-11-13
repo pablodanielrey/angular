@@ -12,10 +12,13 @@
             <div class="dataBasic">
                 <div class"col">
 
-                    <div class="item">
-                      <input type="file" class="btnInputFile" id="inputPhoto" on-read-file-binary-string="addPhoto(fileName,fileContent)">
-                      <!-- <div class="photo" placeholder="Foto" ng-click='addPhoto()'><i class="fa fa-camera-retro fa-4x"></i>Subir Foto</div> -->
-                      <img class="photo" src="/systems/laboralInsertion/img/pablo.jpg" alt="Pablo" >
+                    <!-- <div class="fileUpload">
+                        <div class="photo" placeholder="Foto" ng-click='addPhoto()'><i class="fa fa-camera-retro fa-4x"></i>Subir Foto</div>
+                        <input type="file" class="upload" />
+                    </div> -->
+
+                     <div class="item">
+                        <img class="photo" src="/systems/laboralInsertion/img/pablo.jpg" alt="Pablo" >
                     </div>
 
                     <div class="item">
@@ -218,9 +221,9 @@
                       </div>
                     </div>
 
-                    <div class="">
-                      <button class="cuentasCorreo"><i class="fa fa-envelope"></i>&nbsp; Agregar / Modificar cuentas de correo</button>
-                    </div>
+                    <a href="http://www.fce.econo.unlp.edu.ar/"  target="_blank">
+                      <input  type="button" class="cuentasCorreo"  value="Agregar / Modificar cuentas de correo"> <i class="fa fa-envelope"></i> </input>
+                    </a>
 
                     <!-- <div>Agregue una cuenta de correo haciendo click <a target="_blank" href='http://fce.econo.unlp.edu.ar'>ACA</a></div> -->
                     <!-- ------------------------------------------------ -->
@@ -317,9 +320,13 @@
                           </div>
                         </div>
 
-                        <div>
-                          <input type='checkbox' ng-model='model.offer.graduate'>Graduado</input>
+                        <div class="subTittlesForm2">
+                          <input type='checkbox' ng-model='model.offer.graduate'> <b> Estoy graduado</b></input>
                         </div>
+
+                        <!-- <div>
+                          <input type='checkbox' ng-model='model.offer.graduate'>Graduado</input>
+                        </div> -->
 
                     </div>
 
@@ -369,6 +376,25 @@
                               <option>Full-Time</option>
                               <option>Programa estudiantes avanzados y jovenes profesionales</option>
                               -->
+                            </select>
+                          </div>
+                        </div>
+
+                        <div class="subTittlesForm">
+                          <b>Cuenta con Experiencia Laboral</b>
+                        </div>
+
+                        <div class="item">
+                          <div>
+                            <button><i class="fa fa-briefcase"></i></button>
+                          </div>
+                          <div>
+                            <select class="carrera">
+                              <option class="selectGrey" disabled selected style='display:none;'>Seleccionar...</option>
+
+                              <option>Sí</option>
+                              <option>No</option>
+
                             </select>
                           </div>
                         </div>
@@ -474,6 +500,10 @@
                                     </div>
                                 </div>
                            </div>
+                        </div>
+
+                        <div class="subTittlesForm">
+                        <span>hola.pdf<span>
                         </div>
 
                     </div>
