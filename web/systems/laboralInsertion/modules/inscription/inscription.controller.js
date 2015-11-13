@@ -85,7 +85,7 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
 
   $scope.addPhoto = function(fileName, fileContent) {
     var cv = window.btoa(fileContent);
-    Files.upload(null, fileName, cv).then(
+    Files.upload(null, fileName, 'image/jpeg', Files.BASE64, cv).then(
         function(id) {
           console.log(id);
           $scope.model.user.photo = id;
@@ -102,7 +102,7 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
 
   $scope.addCV = function(fileName, fileContent) {
     var cv = window.btoa(fileContent);
-    Files.upload(null, fileName, cv).then(
+    Files.upload(null, fileName, 'application/pdf', Files.BASE64, cv).then(
         function(id) {
           console.log(id);
           $scope.model.laboralData.cv = id;

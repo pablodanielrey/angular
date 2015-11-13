@@ -52,7 +52,6 @@ try:
     data = base64.b64decode(edata)
     print("Content-Type: {}\n".format(mimetype))
     print("Content-Length: {}".format(len(data)))
-    #print(data)
     sys.stdout.flush()
     sys.stdout.buffer.write(data)
 

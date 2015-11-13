@@ -52,10 +52,10 @@ class FilesWamp(ApplicationSession):
         finally:
             con.close()
 
-    def upload(self, id, name, data):
+    def upload(self, id, name, mimetype, codec, data):
         con = self._getDatabase()
         try:
-            id = self.files.persist(con, id, name, data)
+            id = self.files.persist(con, id, name, mimetype, codec, data)
             con.commit()
             return id
 
@@ -63,9 +63,9 @@ class FilesWamp(ApplicationSession):
             con.close()
 
     @coroutine
-    def upload_async(self, id, name, data):
+    def upload_async(self, id, name, mimetype, codec, data):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.upload, id, name, data)
+        r = yield from loop.run_in_executor(None, self.upload, id, name, mimetype, codec, data)
         return r
 
     @coroutine

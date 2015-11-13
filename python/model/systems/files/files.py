@@ -20,15 +20,15 @@ class Files:
     '''
         Crea o actualiza un documento dentro de la base
     '''
-    def persist(self, con, id, name, mimetype, data):
+    def persist(self, con, id, name, mimetype, codec, data):
         cur = con.cursor()
         if id is None:
             id = str(uuid.uuid4())
             #cur.execute('insert into files.files (id, name, content) values (%s,%s,%s)', (id, name, psycopg2.Binary(data)))
-            cur.execute('insert into files.files (id, name, mimetype, content) values (%s,%s,%s,%s)', (id, name, mimetype, data))
+            cur.execute('insert into files.files (id, name, mimetype, codec, content) values (%s,%s,%s,%s,%s)', (id, name, mimetype, codec, data))
         else:
             #cur.execute('update files.files set (name = %s, content = %s) where id = %s', (name, psycopg2.Binary(data), id))
-            cur.execute('update files.files set (name = %s, content = %s, mimetype = %s) where id = %s', (name, data, mimetype, id))
+            cur.execute('update files.files set (name = %s, content = %s, mimetype = %s, codec = %s) where id = %s', (name, data, mimetype, codec, id))
         return id
 
     def findAllIds(self, con):
@@ -50,7 +50,7 @@ class Files:
 
     def findById(self, con, id):
         cur = con.cursor()
-        cur.execute('select id, name, content, mimetype from files.files where id = %s', (id,))
+        cur.execute('select id, name, content, mimetype, codec from files.files where id = %s', (id,))
         if cur.rowcount <= 0:
             return None
 
@@ -62,7 +62,8 @@ class Files:
             'id': d[0],
             'name': d[1],
             'content': d[2],
-            'mimetype': d[3]
+            'mimetype': d[3],
+            'codec': d[4]
         }
 
     def search(self, con, text):
