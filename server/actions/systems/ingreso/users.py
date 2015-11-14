@@ -31,10 +31,9 @@ class IngresoWamp(ApplicationSession):
     @coroutine
     def onJoin(self, details):
         yield from self.register(self.sendEmailConfirmation_async, 'ingreso.mails.sendEmailConfirmation')
-        yield from self.register(self.confirmEmail_async, 'ingreso.mails.confirmEmail')
-        yield from self.register(self.changePassword_async, 'ingreso.user.changePassword')
+        yield from self.register(self.checkEmailCode_async, 'ingreso.mails.checkEmailCode')
         yield from self.register(self.sendErrorMail_async, 'ingreso.mails.sendErrorMail')
-        yield from self.register(self.sendFinalMail_async, 'ingreso.mails.sendFinalMail')
+        yield from self.register(self.uploadIngresoData_async, 'ingreso.user.uploadIngresoData')
 
     def _getDatabase(self):
         host = self.serverConfig.configs['database_host']
@@ -43,37 +42,47 @@ class IngresoWamp(ApplicationSession):
         passw = self.serverConfig.configs['database_password']
         return psycopg2.connect(host=host, dbname=dbname, user=user, password=passw)
 
-    def changePassword(self, dni, password):
-        """
-            Crea la clave del usuario.
-            Solo en el caso de que ya no exista previamente un usuario y clave.
-        """
+    def uploadIngresoData(self, dni, password, user, email, eid, code):
         con = self._getDatabase()
         try:
+            # genero una clave.
+            apassword = 'Ya tiene registrado una clave'
             creds = self.credentials.findCredentials(con, dni)
-            if creds is not None:
-                return False
+            if creds is None:
+                uuser = self.users.findUserByDni(con, dni)
+                if uuser is None:
+                    con.rollback()
+                    return False
 
-            uuser = self.users.findUserByDni(con, dni)
-            if uuser is None:
-                return False
+                cuser = {
+                    'user_id': uuser['id'],
+                    'username': dni,
+                    'password': password
+                }
+                self.credentials.createUserPassword(con, cuser)
+                apassword = password
 
-            user = {
-                'user_id': uuser['id'],
-                'username': dni,
-                'password': password
-            }
-            self.credentials.createUserPassword(con, user)
-            con.commit()
+
+            # confirmo el email
+            r = self.ingreso.confirmEmail(con, eid, code)
+            if not r:
+                con.rollback()
+                return False
+            else:
+                con.commit()
+
+            # envío el email de finalización
+            self.ingreso.sendFinalEmail(user, apassword, email)
+
             return True
 
         finally:
             con.close()
 
     @coroutine
-    def changePassword_async(self, dni, password):
+    def uploadIngresoData_async(self, dni, password, user, email, eid, code):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.changePassword, dni, password)
+        r = yield from loop.run_in_executor(None, self.uploadIngresoData, dni, password, user, email, eid, code)
         return r
 
     def sendEmailConfirmation(self, name, lastname, eid):
@@ -92,30 +101,19 @@ class IngresoWamp(ApplicationSession):
         r = yield from loop.run_in_executor(None, self.sendEmailConfirmation, name, lastname, eid)
         return r
 
-    def confirmEmail(self, eid, hash):
+    def checkEmailCode(self, eid, hash):
         con = self._getDatabase()
         try:
-            r = self.ingreso.confirmEmail(con, eid, hash)
-            con.commit()
+            r = self.ingreso.checkEmailCode(con, eid, hash)
             return r
 
         finally:
             con.close()
 
     @coroutine
-    def confirmEmail_async(self, eid, hash):
+    def checkEmailCode_async(self, eid, hash):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.confirmEmail, eid, hash)
-        return r
-
-    def sendFinalMail(self, user, password, email):
-        self.ingreso.sendFinalEmail(user, password, email)
-        return True
-
-    @coroutine
-    def sendFinalMail_async(self, user, password, email):
-        loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.sendFinalMail, user, password, email)
+        r = yield from loop.run_in_executor(None, self.checkEmailCode, eid, hash)
         return r
 
     def sendErrorMail(self, error, names, dni, email, tel):

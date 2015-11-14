@@ -65,6 +65,14 @@ class Ingreso:
         self.mail.sendMail(From, [To], subject, replace, html=template)
         return True
 
+    def checkEmailCode(self, con, eid, code):
+
+        email = self.users.findMail(con, eid)
+        if(email is None):
+            raise Exception()
+
+        return (email['hash'] == code)
+
     def confirmEmail(self, con, eid, code):
 
         email = self.users.findMail(con, eid)
