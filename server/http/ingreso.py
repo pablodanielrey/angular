@@ -63,7 +63,7 @@ try:
         print()
 
         cur = con.cursor()
-        cur.execute('select name, lastname, dni, u.created, email from profile.users u left join profile.mails m on (u.id = m.user_id and m.confirmed) where u.id in (select id from students.users)')
+        cur.execute('select name, lastname, dni, u.created, email from profile.users u left join profile.mails m on (u.id = m.user_id and m.confirmed)')
         for c in cur:
             errors = ''
             for a in c:
