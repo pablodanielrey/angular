@@ -12,13 +12,12 @@
             <div class="dataBasic">
                 <div class"col">
 
-                    <!-- <div class="fileUpload">
-                        <div class="photo" placeholder="Foto" ng-click='addPhoto()'><i class="fa fa-camera-retro fa-4x"></i>Subir Foto</div>
-                        <input type="file" class="upload" />
-                    </div> -->
-
-                     <div class="item">
-                        <img class="photo" src="/systems/laboralInsertion/img/pablo.jpg" alt="Pablo" >
+                    <div ng-if="getUserPhoto() == null" class="fileUpload">
+                        <div class="photo" placeholder="Foto"><i class="fa fa-camera-retro fa-4x"></i>Subir Foto</div>
+                        <input type="file" on-read-file-binary-string="addPhoto(fileName,fileContent)" class="upload" />
+                    </div>
+                     <div ng-if='getUserPhoto() != null' class="item">
+                        <img class="photo" ng-src='{{getUserPhoto()}}' alt="Pablo"/>
                     </div>
 
                     <div class="item">

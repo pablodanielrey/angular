@@ -82,10 +82,18 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
 
   };
 
+  $scope.getUserPhoto = function() {
+    if ($scope.model.user.photo == null || $scope.model.user.photo == '') {
+      return null;
+    } else {
+      return "/c/lb?i=" + $scope.model.user.photo;
+    }
+  }
+
 
   $scope.addPhoto = function(fileName, fileContent) {
-    var cv = window.btoa(fileContent);
-    Files.upload(null, fileName, 'image/jpeg', Files.BASE64, cv).then(
+    var photo = window.btoa(fileContent);
+    Files.upload(null, fileName, 'image/jpeg', Files.BASE64, photo).then(
         function(id) {
           console.log(id);
           $scope.model.user.photo = id;

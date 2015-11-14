@@ -48,10 +48,17 @@ try:
 
     mimetype = f['mimetype'] if ['mimetype'] != '' else 'application/binary'
     edata = bytes(f['content'])
+
+    logging.debug(edata)
+
     import base64
     data = base64.b64decode(edata)
+
+    logging.debug(data)
+
     print("Content-Type: {}\n".format(mimetype))
-    print("Content-Length: {}".format(len(data)))
+    #rint("Content-Length: {}".format(len(data)))
+    #print()
     sys.stdout.flush()
     sys.stdout.buffer.write(data)
 

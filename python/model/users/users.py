@@ -149,9 +149,10 @@ class Users:
                 data['genre'] if 'genre' in data else '',
                 data['birthdate'] if 'birthdate' in data else None,
                 data['residence_city'] if 'residence_city' in data else '',
+                data['photo'] if 'photo' in data else '',
                 data['version'] if 'version' in data else 0)
         cur = con.cursor()
-        cur.execute('insert into profile.users (id,dni,name,lastname,city,country,address,genre,birthdate,residence_city,version) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)', rreq)
+        cur.execute('insert into profile.users (id,dni,name,lastname,city,country,address,genre,birthdate,residence_city,photo,version) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)', rreq)
         cur.execute('insert into au24.users (id,type) values (%s,%s)', (uid, 'ingresante'))
         return uid
 
@@ -182,8 +183,9 @@ class Users:
                         user['genre'] if 'genre' in user else '',
                         user['birthdate'] if 'birthdate' in user else '',
                         user['residence_city'] if 'residence_city' in user else '',
+                        user['photo'] if 'photo' in user else '',
                         user['version'] if 'version' in user else 1, user['id'])
-                cur.execute('update profile.users set dni = %s, name = %s, lastname = %s, city = %s, country = %s, address = %s, genre = %s, birthdate = %s, residence_city = %s, version = %s where id = %s', rreq)
+                cur.execute('update profile.users set dni = %s, name = %s, lastname = %s, city = %s, country = %s, address = %s, genre = %s, birthdate = %s, residence_city = %s, photo = %s, version = %s where id = %s', rreq)
                 if cur.rowcount <= 0:
                     raise Exception()
 
