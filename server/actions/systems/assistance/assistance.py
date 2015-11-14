@@ -279,6 +279,14 @@ class AssistanceWamp(ApplicationSession):
         return r
 
     def getChecksByUser(self, sid, userId, date):
+        """
+           obtener checks de un usuario a partir de cierta fecha
+           @param sid Identificacion de Session
+           @param userId Identificacion de usuario
+           @param date String con la fecha, en formato "Y-m-d", por ejemplo "2000-12-31"
+        """
+        date = self.date.parse(date).date()
+ 
         con = self._getDatabase()
         try:
             cs = self.checks._getCheckData(con, userId, date)

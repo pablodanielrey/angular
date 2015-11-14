@@ -36,7 +36,7 @@ class BCJustification(Justification):
     """
         inicializa un pedido en estado pendiente de una justificación en las fechas indicadas
     """
-    def requestJustification(self,utils,con,userId,requestor_id,begin,end=None):
+    def requestJustification(self,utils,con,userId,requestor_id,begin,end=None,status='PENDING'):
 
         jid = str(uuid.uuid4())
         cur = con.cursor()
@@ -61,18 +61,23 @@ class BCJustification(Justification):
             'end':end
         }
 
-        events.extend(self.updateJustificationRequestStatus(utils,con,userId,req,'PENDING'))
+        created = datetime.datetime.now()
+        aux = created - datetime.timedelta(seconds=60)
+        e = self.updateJustificationRequestStatus(utils,con,userId,req,'PENDING',aux)
+        if status != None and status != 'PENDING':
+            e = self.updateJustificationRequestStatus(utils,con,userId,req,status,created)
+        events.extend(e)
         return events
 
 
 
     """ actualiza el estado del pedido de la justificacion al estado status """
-    def updateJustificationRequestStatus(self,utils,con,userId,req,status):
+    def updateJustificationRequestStatus(self,utils,con,userId,req,status,created=datetime.datetime.now()):
 
         requestId = req['id']
 
         cur = con.cursor()
-        cur.execute('insert into assistance.justifications_requests_status (request_id,user_id,status) values (%s,%s,%s)',(requestId,userId,status))
+        cur.execute('insert into assistance.justifications_requests_status (request_id,user_id,status,created) values (%s,%s,%s,%s)',(requestId,userId,status,created))
 
         events = []
         e = {

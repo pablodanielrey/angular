@@ -49,7 +49,7 @@ class Justification:
         raise Exception('abstract')
 
     """ inicializa un pedido en estado pendiente de una justificación en las fechas indicadas """
-    def requestJustification(self,utils,con,userId,begin,end):
+    def requestJustification(self,utils,con,userId,begin,end,status):
         raise Exception('abstract')
 
 

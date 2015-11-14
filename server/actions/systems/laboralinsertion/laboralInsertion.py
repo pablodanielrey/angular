@@ -11,6 +11,7 @@ from model.users.users import Users
 
 from zipfile import ZipFile
 from collections import OrderedDict
+
 # from model.exceptions import *
 
 """
@@ -129,6 +130,7 @@ class Utils:
 
         return values
     """
+
     def _prepareCvs(self, cvs):
         b64s = []
         for c in cvs:
@@ -151,6 +153,7 @@ class LaboralInsertionWamp(ApplicationSession):
         self.serverConfig = inject.instance(Config)
         self.laboralInsertion = inject.instance(LaboralInsertion)
         self.utils = inject.instance(Utils)
+        self.users = inject.instance(Users)
 
     @coroutine
     def onJoin(self, details):
@@ -158,6 +161,7 @@ class LaboralInsertionWamp(ApplicationSession):
         yield from self.register(self.download_async, 'system.laboralInsertion.download')
         yield from self.register(self.findByUser_async, 'system.laboralInsertion.findByUser')
         yield from self.register(self.persist_async, 'system.laboralInsertion.persist')
+        yield from self.register(self.findAllInscriptions_async, 'system.laboralInsertion.findAllInscriptions')
         yield from self.register(self.findAllInscriptionsByUser_async, 'system.laboralInsertion.findAllInscriptionsByUser')
         yield from self.register(self.persistInscriptionByUser_async, 'system.laboralInsertion.persistInscriptionByUser')
         yield from self.register(self.deleteInscriptionById_async, 'system.laboralInsertion.deleteInscriptionById')
@@ -197,6 +201,15 @@ class LaboralInsertionWamp(ApplicationSession):
         finally:
             con.close()
 
+    def findAllInscriptions(self):
+        con = self._getDatabase()
+        try:
+            data = self.laboralInsertion.findAllInscriptions(con)
+            return data
+
+        finally:
+            con.close()
+
     def persistInscriptionByUser(self, userId, data):
         con = self._getDatabase()
         try:
@@ -220,6 +233,16 @@ class LaboralInsertionWamp(ApplicationSession):
     def download(self):
         con = self._getDatabase()
         try:
+            self.laboralInsertion.download(con)
+            return True
+
+        finally:
+            con.close()
+
+    """
+    def download(self):
+        con = self._getDatabase()
+        try:
             path = '{}/tmp'.format(os.getcwd())
             zipName = '{}.zip'.format(str(uuid.uuid4()))
             with ZipFile('{}/{}'.format(path, zipName), 'w') as myzip:
@@ -239,12 +262,12 @@ class LaboralInsertionWamp(ApplicationSession):
                         f.write(c['cv'])
 
                     myzip.write(filename, os.path.basename(filename))
-            """
+
             b64 = None
             with open(zipName, 'rb') as f:
                 b64 = base64.b64encode(f.read()).decode('utf-8')
             return b64
-            """
+
             return zipName
 
         except Exception as e:
@@ -253,6 +276,7 @@ class LaboralInsertionWamp(ApplicationSession):
 
         finally:
             con.close()
+    """
 
     @coroutine
     def download_async(self):
@@ -264,6 +288,12 @@ class LaboralInsertionWamp(ApplicationSession):
     def findByUser_async(self, userId):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.findByUser, userId)
+        return r
+
+    @coroutine
+    def findAllInscriptions_async(self):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.findAllInscriptions)
         return r
 
     @coroutine

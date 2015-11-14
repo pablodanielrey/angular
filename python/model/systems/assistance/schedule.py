@@ -228,7 +228,7 @@ class Schedule:
         if date is None:
             date = self.date.now()
 
-  
+
         # obtengo el primer dia de la semana del date (L-0 .. D-6)
         weekday = datetime.weekday(date)
         date -= timedelta(days=weekday)
@@ -266,6 +266,10 @@ class Schedule:
     def persistSchedule(self, con, userId, date, sstart, send, isDayOfWeek=False, isDayOfMonth=False, isDayOfYear=False):
         uaware = date.astimezone(pytz.utc)
 
+        # verifico que el start sea menor al end, sino supongo que el end es del dia siguiente
+        if send < sstart:
+            send += 24 * 60 * 60
+
         cur = con.cursor()
         cur.execute('set time zone %s', ('utc',))
 
@@ -279,12 +283,12 @@ class Schedule:
         weekday = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
         # Monday is 0 and Sunday is 6.
         dateWeek = date.weekday()
-
         dayWeek = None;
-        for x in range(0, 6):
+        for x in range(0, 7):
             if (day == weekday[x]):
                 dayWeek = x;
                 break;
+
 
         # calculo la cantidad de dias a incrementar
         inc = (dayWeek - dateWeek) if (dateWeek <= dayWeek) else ((7 - dateWeek) + dayWeek);

@@ -1,61 +1,43 @@
-*{
+
+.issues {
   margin: 0px;
   padding: 0px;
-}
-
-.contentScreens {
   height:100%;
   width:100%;
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   position:absolute;
+  overflow-y: hidden;
+  background-color: #eee;
 
 }
 
-.contentScreens .newIssueForm {
-  display:none;
-}
-
-.contentScreens.displayCreateChild .newIssueForm {
-  display:block;
-}
-
-.contentScreens .visibilityOffices {
-  display:none;
-}
-
-.contentScreens.displayVisibility .visibilityOffices {
-  display:block;
-}
-
-
-.ContentOrders {
+.issues .contentScreens {
+  height:100%;
+  width:100%
 
 }
 
-.tree {
-	height:50px;
+/*******************************************************
+**** ESTILO PARA LOS CONTENEDORES DE LAS PANTALLAS *****
+*******************************************************/
 
-}
-.principal.ng-scope {
-  height: 100%;
-}
-
-
-.order {
+.issues .order {
   background-color:white;
   -webkit-box-shadow: 1px 1px 5px #5c5f69;
- -moz-box-shadow: 5px 5px 5px #5c5f69;
- border-radius:2px;
- -webkit-border-radius:2px;
- -moz-border-radius:2px;
- padding: 20px;
- width: 79%;
- margin: 20px;
- font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-
-
+  -moz-box-shadow: 5px 5px 5px #5c5f69;
+  border-radius:2px;
+  -webkit-border-radius:2px;
+  -moz-border-radius:2px;
+  padding: 20px;
+  width: 79%;
+  margin: 20px;
 }
-.formOrder {
+
+/*******************************************************
+************ SOLICITAR NUEVO PEDIDO ********************
+*******************************************************/
+
+.issues .formOrder { /*FORMULARIO PARA NUEVO PEDIDO*/
   display:flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
@@ -63,40 +45,9 @@
   -webkit-flex-direction:row; /* Safari */
   -moz-flex-direction:row; /* mozilla */
   wrap: nowrap;
-
 }
 
-.hola {
-  background-color: #eee;
-  padding: 5px;
-  margin-top: 10px;
-  border:1px solid #E3DFDF;
-}
-
-.order .buttonOrder {
-  border: none;
-  padding: 17px;
-  margin: 2px;
-  background-color: #0066A6;
-  color: white;
-  margin-top: 10px;
-  margin-left: 20px;
-  cursor: pointer;
-}
-
-.order .buttonOrder:hover {
-  border: none;
-  padding: 17px;
-  margin: 2px;
-  background-color: #275276;
-  color: white;
-  margin-top: 10px;
-  margin-left: 20px;
-  cursor: pointer;
-}
-
-.order .newOrder {
-
+.issues .newOrder { /*TEXTAREA NUEVO PEDIDO*/
   margin-top: 10px;
   width: 800px;
   height: 40px;
@@ -107,20 +58,87 @@
   resize: none;
 }
 
-.orderItems {
+.issues .order .buttonOrder { /*BOTON SOLICITAR PEDIDO*/
+  border: none;
+  padding: 17px;
+  margin: 2px;
+  background-color: #0066A6;
+  color: white;
+  margin-top: 10px;
+  margin-left: 20px;
+  cursor: pointer;
+}
+
+.issues .order .buttonOrder:hover {  /*BOTON SOLICITAR PEDIDO*/
+  border: none;
+  padding: 17px;
+  margin: 2px;
+  background-color: #275276;
+  color: white;
+  margin-top: 10px;
+  margin-left: 20px;
+  cursor: pointer;
+}
+
+/*******************************************************
+************ CONTENEDOR DE MIS PEDIDOS *****************
+*******************************************************/
+
+.issues .contentOrders { /*CONTENEDOR DE MIS PEDIDOS*/
+
+}
+
+.issues .contentMyIssues {
+  overflow-y: auto;
+  max-height: 390px;
+}
+
+.issues .issuesItems { /*CONTENEDOR DE CADA PEDIDO INDIVIDUAL*/
+  background-color: #eee;
+  padding: 5px;
+  margin-top: 10px;
+  border:1px solid #E3DFDF;
+}
+
+.issues .orderItems { /* SUB-CONTENEDOR DE PEDIDO INDIVIDUAL */
   display: flex;
   flex-direction: row;
   wrap:nowrap;
   width: 100%;
 }
-.orderItem {
+
+.issues .orderText .requestor {
+  display:none;
+}
+
+.issues .issuesItems .orderItem { /*CONTENDERO DEL TEXTO DEL PEDIDO */
   display: flex;
   flex-direction: row;
   wrap:nowrap;
   width: 60%;
 }
 
-.orderIcons {
+.issues .dataIsues {
+  padding-right: 10px;
+}
+
+.issues .orderText { /* TEXTO DE LOS PEDIDOS REALIZADO */
+  padding: 5px;
+  background-color: #EEE;;
+  border-color: #E3DFDF;
+  width: 600px;
+  height: 20px;
+  resize: none;
+  margin-top: 3px;
+  margin-left: 5px;
+  font-size: 1.2em;
+  padding: 7px;
+}
+
+
+
+
+.issues .orderIcons { /*CONTENEDOR DE LOS ICONOS DEL PEDIDO*/
   display: flex;
   flex-direction: row;
   wrap:nowrap;
@@ -128,7 +146,7 @@
   width: 40%;
 }
 
-.btn {
+.issues .btn { /* ESTILO BOTON DE LOS PEDIDOS INDIVIDUALES */
   padding: 8px;
   margin: 3px;
   margin-left: 5px;
@@ -137,78 +155,334 @@
   border-radius: 2px;
 }
 
-.cB {
-  background-color: #0066A6;
+.issues .orderItems.commentOrder .btn {
+  padding: 4px !important;
 }
 
-.cO {
-  background-color: #ec9122;
+.issues .btnState {
+  font-size: 13px;
+  color:black;
+  font-weight: bold;
 }
 
-.cG {
-  background-color: #128c78;
-}
-
-.cR {
-  background-color: #e43e46
-}
-
-.orderText {
-  padding: 5px;
-  background-color: white;
-  border-color: #E3DFDF;
-  width: 500px;
-  height: 22px;
-  resize: none;
-  margin-top: 3px;
-  margin-left: 5px;
-  font-size: 1.2em;
-}
-
-.descriptionExpanded {
-  height: 100%;
-}
-
-.descriptionExpanded * {
-  height: 100%;
-}
-
-.descriptionClosed {
-  height: 0px;
-}
-
-.descriptionClosed * {
-  display: none;
-}
-
-.tree {
-	height:100px;
-
-}
-
-.orderItems.normal .btnExpComment {
-  display: none;
-}
-
-.orderItems.commentOrder .btnExpOrder  {
-  display:none;
-}
-
-.orderItems.commentOrder .btnState  {
-  display:none;
-}
-.orderItems.commentOrder .btnSubTarea  {
-  display:none;
-}
-.orderItems.commentOrder .btnDataOrder  {
-  display:none;
-}
-
-.contentScreens .contentOffices {
-  cursor:default;
+.issues .titleNewIssue {
   height: initial;
 }
 
-.contentScreens .nodeOffice .nameNodeOffice {
+.issues .titleNewComment {
+  height: initial;
+}
+
+/* COLORES DE LOS BOTONES */
+
+.issues .cB { /* AZUL */
+  background-color: #0066A6;
+}
+
+.issues .cO { /* AMARILLO */
+  background-color: #ec9122;
+}
+
+.issues .cG { /* VERDE */
+  background-color: #128c78;
+}
+
+.issues .cR { /* ROJO */
+  background-color: #e43e46;
+}
+
+.issues .cV { /* VIOLETA */
+  background-color: #804080;
+}
+
+.issues .cGR { /*GRIS */
+  background-color: #BEBEBE;
+}
+
+/*******************************************************
+****************** DATOS DEL PEDIDO ********************
+*******************************************************/
+
+
+.issues .descriptionExpanded { /*EXPANDE PEDIDO*/
+  /*background-color: #BEBEBE;*/
+  width: 167%;
+  margin-top: 10px;
+}
+
+.issues .contentDataOrder {
+  display:flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+
+}
+
+.issues .contentDataOrder .orderText {
+  height: 100px;
+  background-color: white;
+
+}
+
+.issues .orderItems.commentOrder .orderText {
+  height: 100%;
+  width: 600px;
+  word-wrap: break-word;
+  background-color: #EBDBC7;
+  padding: 5px;
+  border-radius: 2px;
+  font-size: 14px;
+  display:flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+
+}
+
+.issues .oderInfo {
+  margin-left: 90px;
+  font-size: 10px;
+}
+
+.issues .btnDelete2 {
+  margin-right: 10px;
+  margin-left: 5px;
+}
+
+
+/*******************************************************
+************ PANTALLA SELLECION DE OFICINAS ************
+*******************************************************/
+
+.issues .contentScreens .nodeOffice .nameNodeOffice {
   cursor:default;
+}
+
+.issues .contentScreens .visibilityOffices {
+  position: absolute;
+  display: block;
+  background-color: rgba(0,0,0,0.9);
+  height: 100%;
+  width: 100%;
+  top:0;
+}
+
+.issues .contentOffices {
+  background-color:#eeeeee;
+  -webkit-box-shadow: 1px 1px 5px #5c5f69;
+  -moz-box-shadow: 5px 5px 5px #5c5f69;
+  border-radius:2px;
+  -webkit-border-radius:2px;
+  -moz-border-radius:2px;
+  padding: 20px;
+  position: absolute;
+  top: 50%; /* Buscamos el centro horizontal (relativo) del navegador */
+  left: 50%; /* Buscamos el centro vertical (relativo) del navegador */
+  width: 450px; /* Definimos el ancho del objeto a centrar */
+  height: 190px; /* Definimos el alto del objeto a centrar */
+  margin-top: -200px; /* Restamos la mitad de la altura del objeto con un margin-top */
+  margin-left: -350px; /* Restamos la mitad de la anchura del objeto con un margin-left */
+
+}
+
+.issues .selectOffice {
+  border: 1px solid #e8dede;
+  padding: 20px;
+  background-color: white;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+/*******************************************************
+************** PANTALLA NUEVO COMENTARIO ***************
+*******************************************************/
+
+.issues .contentScreens .newCommentForm {
+  position: absolute;
+  display: block;
+  background-color: rgba(0,0,0,0.9);
+  height: 100%;
+  width: 100%;
+  top:0;
+
+
+
+}
+
+.issues .contentComment {
+  background-color:#eeeeee;
+  -webkit-box-shadow: 1px 1px 5px #5c5f69;
+  -moz-box-shadow: 5px 5px 5px #5c5f69;
+  border-radius:2px;
+  -webkit-border-radius:2px;
+  -moz-border-radius:2px;
+  padding: 20px;
+  position: absolute;
+  top: 50%; /* Buscamos el centro horizontal (relativo) del navegador */
+  left: 50%; /* Buscamos el centro vertical (relativo) del navegador */
+  width: 450px; /* Definimos el ancho del objeto a centrar */
+  height: 190px; /* Definimos el alto del objeto a centrar */
+  margin-top: -200px; /* Restamos la mitad de la altura del objeto con un margin-top */
+  margin-left: -350px; /* Restamos la mitad de la anchura del objeto con un margin-left */
+
+}
+
+.issues .textComment {
+  width: 99%;
+  height: 100px;
+  resize: none;
+  font-size: 18px;
+  padding: 2px;
+  border: 1px solid #e8dede;
+  margin-top: 10px;
+  margin-bottom: 5px;
+
+}
+
+.issues .actions {
+
+
+}
+
+.issues .btnSaveComment {
+  border: none;
+  padding: 8px;
+  margin: 2px;
+  background-color: #0066A6;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.issues .btnCancelComment {
+  border: none;
+  padding: 8px;
+  margin: 2px;
+  background-color: #e43e46;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+
+/*******************************************************
+************ VISIBILIDAD DE LAS PANTALLAS **************
+*******************************************************/
+
+/**** ESPANDIR Y CERRRAR LOS PEDIDOS Y LOS DATOS DEL PEDIDO ****/
+
+.issues .descriptionExpanded { /*EXPANDE PEDIDO*/
+  height: 100%;
+
+}
+
+.issues .descriptionClosed { /*CIERRA PEDIDO*/
+  display: none;
+}
+
+/********** OCULTAR BOTONES CUANDO ES UN COMENTARIO ***********/
+
+.issues .orderItems.normal .btnExpComment { /*OCULTA BOTON EXPANDIR COMENTATIOS */
+  display: none;
+}
+
+.issues .orderItems.normal .itemsComment { /*OCULTA BOTON EXPANDIR COMENTATIOS */
+  display: none;
+}
+
+.issues .orderItems.normal .btnComment2 { /*OCULTA BOTON COMENTATIOS */
+  display: none;
+}
+
+.issues .orderItems.normal .btnDelete2 { /*OCULTA BOTON Eliminar */
+  display: none;
+}
+
+.issues .orderItems.commentOrder .btnExpOrder  { /*OCULTA BOTON EXPANDIR PEDIDO */
+  display:none;
+}
+.issues .orderItems.commentOrder .btnState  { /*OCULTA ESTADO DEL PEDIDO */
+  display:none;
+}
+.issues .orderItems.commentOrder .btnSubTarea  { /*OCULTA BOTON CREAR SUB PEDIDO */
+  display:none;
+}
+.issues .orderItems.commentOrder .btnDataOrder  { /*OCULTA BOTON DATOS DEL PEDIDO */
+  display:none;
+}
+.issues .orderItems.commentOrder .btnVisibility  { /*OCULTA BOTON VISIVILIDAD */
+  display:none;
+}
+.issues .orderItems.commentOrder .btnComment  { /*OCULTA BOTON DATOS DEL PEDIDO */
+  display:none;
+}
+.issues .orderItems.commentOrder .btnDelete  { /*OCULTA BOTON VISIVILIDAD */
+  display:none;
+}
+
+.issues .orderItems.commentOrder .orderText .requestor {
+  display:inline;
+  font-weight: bold;
+  font-size: small;
+  color:#5c5f69;
+
+}
+
+.issues .orderItems.commentOrder .orderText .date {
+  display:inline;
+  font-weight: bold;
+  font-size: 10px;;
+  color:#7f7f7f;
+}
+
+.issues .orderItems.commentOrder .orderText .items {
+  height: 12px;
+}
+
+.issues .orderItem .text {
+  width: 100%;
+}
+
+
+.issues .orderItems.commentOrder .itemsComment {
+  width: 150px;
+  margin-bottom: 5px;
+  border-right: 1px solid #bebebe;
+  margin-right: 5px;
+}
+
+
+/*************** PANTALLA NUEVO COMENTARIO ***************/
+
+.issues .contentScreens .newCommentForm { /* OCULTA PANTALLA DE NUEVO COMENTARIO */
+  transform: translate3d(0,-100%,0);
+  transition: all 0.4s ease-in-out;
+
+}
+
+.issues .contentScreens.displayCreateChild .newCommentForm { /*MIUESTRA PANTALLA NUEVO COMENTARIO */
+  transform: translate3d(0,0,0);
+
+}
+
+/*************** PANTALLA SELECCION DE OFICINAS ***************/
+
+.issues .contentScreens .visibilityOffices { /* OCULTA EL DIV DE OFICINAS*/
+  transform: translate3d(0,-100%,0);
+  transition: all 0.4s ease-in-out;
+}
+
+.issues .contentScreens.displayVisibility .visibilityOffices { /*MUESTRA LA PANTALLA DE OFICINAS*/
+  transform: translate3d(0,0,0);
+}
+
+.issues .contentScreens .contentOffices { /*CONTENMEDOR PRINCIPAL DE OFICINAS */
+  cursor:default;
+  height: initial; /*CORRIGE EL ERROR CON EL SCOPE */
 }

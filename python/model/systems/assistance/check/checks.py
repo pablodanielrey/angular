@@ -129,11 +129,13 @@ class ScheduleChecks:
 
 
     """
-        obtiene los usuarios que tienen configurado algún chequeo
+        obtiene los usuarios que tienen configurado algún chequeo a partir de la fecha pasada como parametro
+        @param con Conexion con la base de datos
+        @param date Fecha a partir de la cual se definiran los chequeos
     """
     def getUsersWithChecks(self, con, date):
         cur = con.cursor()
-        cur.execute('select distinct user_id from assistance.checks where date >= %s',(date,))
+        cur.execute('select distinct user_id from assistance.checks where sdate >= %s',(date,))
         if cur.rowcount <= 0:
             return []
 

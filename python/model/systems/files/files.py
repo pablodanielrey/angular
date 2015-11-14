@@ -20,13 +20,16 @@ class Files:
     '''
         Crea o actualiza un documento dentro de la base
     '''
-    def persist(self, con, id, name, data):
+    def persist(self, con, id, name, mimetype, codec, data):
+        size = len(data) if data is not None else 0
         cur = con.cursor()
         if id is None:
             id = str(uuid.uuid4())
-            cur.execute('insert into files.files (id, name, content) values (%s,%s,%s)', (id, name, data))
+            #cur.execute('insert into files.files (id, name, content) values (%s,%s,%s)', (id, name, psycopg2.Binary(data)))
+            cur.execute('insert into files.files (id, name, mimetype, codec, size, content) values (%s,%s,%s,%s,%s,%s)', (id, name, mimetype, codec, size, data))
         else:
-            cur.execute('update files.files set (name = %s, content = %s) where id = %s', (name, data, id))
+            #cur.execute('update files.files set (name = %s, content = %s) where id = %s', (name, psycopg2.Binary(data), id))
+            cur.execute('update files.files set (name = %s, content = %s, mimetype = %s, codec = %s, size = %s) where id = %s', (name, data, mimetype, codec, size, id))
         return id
 
     def findAllIds(self, con):
@@ -48,19 +51,36 @@ class Files:
 
     def findById(self, con, id):
         cur = con.cursor()
-        cur.execute('select id, name, content from files.files where id = %s', (id,))
+        cur.execute('select id, name, mimetype, codec, size, created, content from files.files where id = %s', (id,))
         if cur.rowcount <= 0:
             return None
 
-        for c in cur:
-            return self._toDict(c)
+        for d in cur:
+            return {
+                'id': d[0],
+                'name': d[1],
+                'mimetype': d[2],
+                'codec': d[3],
+                'size': d[4],
+                'created': d[5],
+                'content': d[6]
+            }
 
-    def _toDict(self, d):
-        return {
-            'id': d[0],
-            'name': d[1],
-            'content': d[2]
-        }
+    def findMetaDataById(self, con, id):
+        cur = con.cursor()
+        cur.execute('select id, name, mimetype, codec, size, created from files.files where id = %s', (id,))
+        if cur.rowcount <= 0:
+            return None
+
+        for d in cur:
+            return {
+                'id': d[0],
+                'name': d[1],
+                'mimetype': d[2],
+                'codec': d[3],
+                'size': d[4],
+                'created': d[5]
+            }
 
     def search(self, con, text):
         '''

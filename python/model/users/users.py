@@ -149,9 +149,10 @@ class Users:
                 data['genre'] if 'genre' in data else '',
                 data['birthdate'] if 'birthdate' in data else None,
                 data['residence_city'] if 'residence_city' in data else '',
+                data['photo'] if 'photo' in data else '',
                 data['version'] if 'version' in data else 0)
         cur = con.cursor()
-        cur.execute('insert into profile.users (id,dni,name,lastname,city,country,address,genre,birthdate,residence_city,version) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)', rreq)
+        cur.execute('insert into profile.users (id,dni,name,lastname,city,country,address,genre,birthdate,residence_city,photo,version) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)', rreq)
         cur.execute('insert into au24.users (id,type) values (%s,%s)', (uid, 'ingresante'))
         return uid
 
@@ -182,8 +183,9 @@ class Users:
                         user['genre'] if 'genre' in user else '',
                         user['birthdate'] if 'birthdate' in user else '',
                         user['residence_city'] if 'residence_city' in user else '',
+                        user['photo'] if 'photo' in user else '',
                         user['version'] if 'version' in user else 1, user['id'])
-                cur.execute('update profile.users set dni = %s, name = %s, lastname = %s, city = %s, country = %s, address = %s, genre = %s, birthdate = %s, residence_city = %s, version = %s where id = %s', rreq)
+                cur.execute('update profile.users set dni = %s, name = %s, lastname = %s, city = %s, country = %s, address = %s, genre = %s, birthdate = %s, residence_city = %s, photo = %s, version = %s where id = %s', rreq)
                 if cur.rowcount <= 0:
                     raise Exception()
 
@@ -202,7 +204,7 @@ class Users:
 
     def findUserByDni(self, con, dni):
         cur = con.cursor()
-        cur.execute('select id,dni,name,lastname,city,country,address,genre,birthdate,residence_city,version from profile.users where dni = %s', (dni,))
+        cur.execute('select id,dni,name,lastname,city,country,address,genre,birthdate,residence_city,photo,version from profile.users where dni = %s', (dni,))
         data = cur.fetchone()
 
         if data != None:
@@ -210,9 +212,12 @@ class Users:
         else:
             return None
 
+    def findById(self, con, id):
+        return self.findUser(con, id)
+
     def findUser(self,con,id):
         cur = con.cursor()
-        cur.execute('select id,dni,name,lastname,city,country,address,genre,birthdate,residence_city,version from profile.users where id = %s', (id,))
+        cur.execute('select id,dni,name,lastname,city,country,address,genre,birthdate,residence_city,photo,version from profile.users where id = %s', (id,))
         if cur.rowcount <= 0:
             return None
 
@@ -231,7 +236,7 @@ class Users:
      '''
     def findUsersByIds(self,con,ids):
         cur = con.cursor()
-        cur.execute('select id,dni,name,lastname,city,country,address,genre,birthdate,residence_city,version from profile.users where id IN %s', (tuple(ids),))
+        cur.execute('select id,dni,name,lastname,city,country,address,genre,birthdate,residence_city,photo,version from profile.users where id IN %s', (tuple(ids),))
         data = cur.fetchall()
 
         rdata = []
@@ -244,7 +249,7 @@ class Users:
 
     def listUsers(self, con):
         cur = con.cursor()
-        cur.execute('select id,dni,name,lastname,city,country,address,genre,birthdate,residence_city,version from profile.users')
+        cur.execute('select id,dni,name,lastname,city,country,address,genre,birthdate,residence_city,photo,version from profile.users')
         data = cur.fetchall()
         rdata = []
         for d in data:
@@ -293,7 +298,8 @@ class Users:
                 'genre':d[7],
                 'birthdate':d[8],
                 'residence_city':d[9],
-                'version':d[10]
+                'photo':d[10],
+                'version':d[11]
             }
         return rdata
 

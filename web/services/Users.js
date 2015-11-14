@@ -123,8 +123,8 @@ function Users($rootScope, $wamp, Session, Utils, Cache) {
 
   this.updateUser = function(user, callbackOk, callbackError) {
     // elimino ese usuario de la cache
-    Cache.removeItem(instance.userPrefix + user.id);
-    instance.normalizeUser(user);
+    //Cache.removeItem(instance.userPrefix + user.id);
+    //instance.normalizeUser(user);
 
     $wamp.call('users.persistUser', [user])
       .then(function(res) {

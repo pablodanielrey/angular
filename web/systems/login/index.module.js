@@ -4,7 +4,7 @@ angular
 
       if (config.url == undefined || config.url == 'autodetect') {
         var conn = {
-          url: "ws://" + location.host + ":8000/ws",
+          url: "ws://" + location.host + ":443/ws",
           realm: config.realm
         };
         console.log(conn);

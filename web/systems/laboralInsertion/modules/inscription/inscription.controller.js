@@ -56,7 +56,8 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
       photo: ''
     },
 
-
+    loadingPhoto: false,
+    loadingCv: false,
     showInscription: false,
 
     // inscripcion a ser subida al server.
@@ -82,16 +83,37 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
 
   };
 
+  $scope.getUserPhoto = function() {
+    if ($scope.model.user.photo == null || $scope.model.user.photo == '') {
+      return null;
+    } else {
+      return "/c/lb?i=" + $scope.model.user.photo;
+    }
+  }
+
 
   $scope.addPhoto = function(fileName, fileContent) {
-    var cv = window.btoa(fileContent);
-    Files.upload(null, fileName, cv).then(
+
+    console.log(fileName);
+
+    re = /^.*\.jpg$/i
+    if (!re.test(fileName)) {
+      console.log('formato no soportado');
+      return;
+    }
+
+    $scope.model.loadingPhoto = true;
+
+    var photo = window.btoa(fileContent);
+    Files.upload(null, fileName, 'image/jpeg', Files.BASE64, photo).then(
         function(id) {
+          $scope.model.loadingPhoto = false;
           console.log(id);
           $scope.model.user.photo = id;
           $scope.updateUserData();
         },
         function(err) {
+          $scope.model.loadingPhoto = false;
           console.log(err);
           Notifications.message(err);
         }
@@ -101,15 +123,30 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
 
 
   $scope.addCV = function(fileName, fileContent) {
+
+    console.log(fileName);
+
+    re = /^.*\.pdf$/i
+    if (!re.test(fileName)) {
+      console.log('formato no soportado');
+      return;
+    }
+
+    $scope.model.loadingCv = true;
+
     var cv = window.btoa(fileContent);
-    Files.upload(null, fileName, cv).then(
+    Files.upload(null, fileName, 'application/pdf', Files.BASE64, cv).then(
         function(id) {
+          $scope.model.cv_name = fileName;
+          $scope.model.loadingCv = false;
           console.log(id);
           $scope.model.laboralData.cv = id;
         },
         function(err) {
+          $scope.model.loadingCv = false;
           console.log(err);
           Notifications.message(err);
+          $scope.model.laboralData.cv = null;
         }
 
     )
@@ -176,8 +213,10 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
             }
             // controlo que tenga aprobado el 80%
             var minimum = (assignatures * 80) / 100;
-            if (offer.approved > minimum) {
+            if (offer.approved == assignatures) {
               $scope.workTypes = ['Full-Time','Programa estudiantes avanzados y jovenes profesionales'];
+            } else if (offer.approved > minimum) {
+              $scope.workTypes = ['Pasantía','Full-Time','Programa estudiantes avanzados y jovenes profesionales'];
             } else {
               $scope.workTypes = ['Pasantía','Full-Time'];
             }
@@ -193,6 +232,12 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
 
       }
 
+      if ($scope.model.cr >= 3) {
+          if (offer.travel == undefined || offer.travel == '') {
+            ok = false;
+          }
+      }
+
       if ($scope.model.cr >= 4) {
 
         var languages = $scope.model.laboralData.languages
@@ -204,6 +249,7 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
           }
         }
       }
+
 
       if ($scope.model.cr >= 5) {
         ok = ok && ($scope.model.laboralData.cv != null && $scope.model.laboralData.cv != '');
@@ -308,6 +354,19 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
         }
         console.log(laboralData);
         $scope.model.laboralData = laboralData;
+
+        // encuentro los metadatos del cv si es que esta cargado
+        if (laboralData.cv != undefined && laboralData.cv != null) {
+          Files.findMetaDataById(laboralData.cv).then(
+            function(data) {
+              $scope.model.cv_name = data.name;
+            },
+            function(err) {
+              console.log(err);
+            }
+          );
+        }
+
       },
       function(err) {
         console.log(err);
@@ -418,30 +477,6 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
     LaboralInsertion.findAllInscriptionsByUser(userId)
       .then(function(data) {
         $scope.model.inscriptionsData = data;
-        /*
-        $scope.model.inscriptionsData = [{
-          'id':'sdfdsfdsfs',
-          'languages':[{
-              'id':'dsfsdfsd',
-              'name':'Inglés',
-              'level':'Básico'
-            },
-            {
-              'id':'dsfsdfsd',
-              'name':'Inglés',
-              'level':'Básico'
-            }],
-          'inscriptions':[
-            {
-              'degree':'Licenciatura en Administracion',
-              'average1':10,
-              'average2':20,
-              'courses':10,
-              'workType':'Pasantía',
-              'reside':'Sí',
-              'travel':'No'
-            }]
-        }];*/
       }, function(err) {
         console.log(err);
       });

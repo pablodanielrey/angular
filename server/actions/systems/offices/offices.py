@@ -52,17 +52,19 @@ class OfficesWamp(ApplicationSession):
     '''
         Obtiene los roles que tiene dentro de las oficinas el usuario
     '''
-    def getUserOfficeRoles(self, userId):
+    def getUserOfficeRoles(self, sid, userId):
         con = self._getDatabase()
         try:
+            if userId is None:
+                userId = self.profiles.getLocalUserId(sid)            
             return self.offices.getOfficesRoles(con, userId)
         finally:
             con.close()
 
     @coroutine
-    def getUserOfficeRoles_async(self, userId):
+    def getUserOfficeRoles_async(self,sid, userId):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getUserOfficeRoles, userId)
+        r = yield from loop.run_in_executor(None, self.getUserOfficeRoles, sid, userId)
         return r
 
     def getOfficesByUser(self, sessionId, userId, tree):

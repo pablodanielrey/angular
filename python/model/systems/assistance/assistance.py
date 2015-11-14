@@ -111,7 +111,12 @@ class Assistance:
 
 
 
-
+    """
+       Obtener datos de asistencia, los datos de asistencia consisten en el cargo (position) y schedule (horario)
+       @param con Conexion con la base de datos
+       @param userId Identificacion de usuario
+       @param date Fecha de consulta de los datos de asistencia. Por defecto now()
+    """
     def getAssistanceData(self, con, userId, date=None):
         ps = self.positions.find(con, userId)
         p = ''
@@ -139,7 +144,18 @@ class Assistance:
             jid = j['justification_id']
             j['name'] = self.justifications.getJustificationById(con, jid)['name']
 
-    def _getJustificationsForSchedule(self, con, userId, scheds,date):
+
+
+    
+    def _getJustificationsForSchedule(self, con, userId, scheds, date):
+        """
+            Obtener justificaciones de un usuario a partir de una fecha
+            @param con Conexion con la base de datos
+            @param userId Identificacion de usuario
+            @param scheds Lista de schedules
+            @param date Fecha para la cual se obtendran las justificaciones
+        """
+        
         if scheds is None or len(scheds) <= 0:
             return []
 
@@ -149,11 +165,12 @@ class Assistance:
         self._resolveJustificationsNames(con, justifications)
         return justifications
 
+
     """
-        Obtiene el estado de asistencia del usuario
-        IMPORANTE!!!
-        la fecha se toma como aware y en zona local del cliente!!!
-        se pasa a utc dentro de este método ya que se necesita saber el inicio del día y fin del día en zona local.
+        Obtiene el estado de asistencia del usuario para cierta fecha: El estado de asistencia incluye las justificaciones, los logs, los minutos trabajados, el esatdo (si se encuentra trabajando o no)
+        @param con Conexion con la base de datos
+        @param userId Identificacion de usuario
+        @param date Fecha de consulta del estado de asistencia. Por defecto now(). IMPORTANTE: La fecha se toma como aware y en zona local del cliente! Se pasa a utc dentro de este metodo ya que se necesita saber el inicio del día y fin del día en zona local.
     """
     def getAssistanceStatus(self, con, userId, date=None):
         if date is None:
@@ -192,6 +209,8 @@ class Assistance:
         }
         return assistanceStatus
 
+
+
     def _getNullAssistanceStatus(self, con, userId, date):
         scheds = self.schedule.getSchedule(con, userId, date.date())
         justifications = self._getJustificationsForSchedule(con, userId, scheds,date)
@@ -208,6 +227,9 @@ class Assistance:
         }
         return assistanceStatus
 
+
+    '''
+    Codigo anterior, lo reemplace por el otro del mismo nombre
     def getAssistanceStatusByUsers(self, con, usersIds, dates):
         statuses = {}
         for userId in usersIds:
@@ -221,11 +243,12 @@ class Assistance:
                     sts.append(st)
             statuses[userId] = sts
         return statuses
-
+    '''
 
     '''
         Obtiene los estados de asistencia de los usuarios entre las fechas pasadas
     '''
+
     def getAssistanceStatusByUsers(self,con,usersIds,dates,status):
         resp = []
         if (dates == None or len(dates) <= 0):
@@ -279,6 +302,7 @@ class Assistance:
             resp.append(a)
 
         return resp
+
 
     """
         ////////////////////////////////////////// chequeo del tema de incumplimientos ////////////////////

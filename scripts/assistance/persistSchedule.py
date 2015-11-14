@@ -13,6 +13,14 @@ from autobahn.asyncio.wamp import ApplicationSession
 
 from model.config import Config
 
+
+"""
+python3 persistSchedule.py sessionId userId date begin end isDayOfWeek isDayOfMonth isDayOfYear
+python3 persistSchedule.py 1 35f7a8a6-d844-4d6f-b60b-aab810610809 2015-09-16 28800 54000 True False False
+  35f7a8a6-d844-4d6f-b60b-aab810610809: Alejandro Oporto
+"""
+
+
 ''' configuro el injector y el logger '''
 logging.getLogger().setLevel(logging.DEBUG)
 
@@ -22,8 +30,6 @@ def config_injector(binder):
 
 inject.configure(config_injector)
 config = inject.instance(Config)
-
-
 
 class WampMain(ApplicationSession):
 
@@ -35,17 +41,17 @@ class WampMain(ApplicationSession):
 
     @coroutine
     def onJoin(self, details):
-        logging.debug('ejecutando llamadas')
+        logging.debug('********** persistSchedule **********')
 
-        from dateutil.parser import parse
-        import dateutil
-        tz = dateutil.tz.tzlocal()
 
         sid = sys.argv[1]
         userId = sys.argv[2]
-        date = parse(sys.argv[3])
-        start = parse(sys.argv[4])
-        end = parse(sys.argv[5])
+        print(sid)
+        print(userId)
+
+        date = sys.argv[3]
+        start = sys.argv[4]
+        end = sys.argv[5]
         dayOfWeek = sys.argv[6]
         dayOfMonth = sys.argv[7]
         dayOfYear = sys.argv[8]

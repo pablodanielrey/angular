@@ -1,15 +1,125 @@
 # -*- coding: utf-8 -*-
 import uuid
 import inject
+import logging
+import base64
 
 from model.systems.files.files import Files
+from model.users.users import Users
+from model.systems.students.students import Students
 
+import csv
 
 class LaboralInsertion:
+
     """
         encapsula todo el acceso a datos de insercion laboral
     """
     files = inject.attr(Files)
+    users = inject.attr(Users)
+    students = inject.attr(Students)
+
+    def download(self, con):
+        with open('/tmp/inscripciones.csv', 'w') as r:
+            w = csv.writer(r)
+            inscriptions = self.findAllInscriptions(con)
+            index = 0
+
+            w.writerow(['Fecha de Inscripción',
+                'Apellido',
+                'Nombre',
+                'Sexo',
+                'Fecha Nacimiento',
+                'Edad',
+                'Dni',
+                'e-Mail',
+                'País',
+                'Ciudad de Origen',
+                'Ciudad de residencia',
+                'Legajo',
+                'Viajar',
+                'Ingles', 'Portugués', 'Otro',
+                'Carrera', 'Cantidad de materias', 'Promedio con aplazos', 'Promedio', 'Pasantía', 'Tiempo Completo', 'Jóvenes Profesionales'])
+
+            for i in inscriptions:
+
+                userId = i['user_id']
+                user = self.users.findById(con, userId)
+                ld = self.findByUser(con, userId)
+                student = self.students.findById(con, userId)
+
+                logging.debug(student)
+
+                email = self.users.findMail(con, ld['email'])
+                cvId = ld['cv']
+
+                english = 'Inglés' in (l['name'] for l in ld['languages'])
+                portugues = 'Portugués' in (l['name'] for l in ld['languages'])
+
+                w.writerow([
+                 i['creation'],
+                 user['lastname'],
+                 user['name'],
+                 user['genre'],
+                 user['birthdate'],
+                 '',
+                 user['dni'],
+                 email['email'],
+                 user['country'],
+                 user['city'],
+                 user['residence_city'],
+                 student['studentNumber'],
+                 i['travel'],
+
+                 'Sí' if english else 'No',
+                 'Sí' if portugues else 'No',
+                 'No',
+
+                 i['degree'],
+                 i['approved'],
+                 i['average1'],
+                 i['average2'],
+                 'Sí' if 'Pasantía' in i['workType'] else 'No',
+                 'Sí' if 'Full-Time' in i['workType'] else 'No',
+                 'Sí' if 'Programa estudiantes avanzados y jovenes profesionales' in i['workType'] else 'No',
+
+                 i['workExperience'],
+
+                 'http://insercionlaboral.econo.unlp.edu.ar/cv/{}'.format(userId)
+
+                 ])
+
+                cv = self.files.findById(con, ld['cv'])
+                logging.debug('escribiendo cv : {}'.format(cv))
+                with open('./tmp/{}.pdf'.format(userId), 'wb') as c:
+                    c.write(base64.b64decode(bytes(cv['content'])))
+
+                index = index + 1
+
+
+
+    def findAllInscriptions(self, con):
+        """ obtiene los datos de las inscripciones de los alumnos """
+        cur = con.cursor()
+        cur.execute('select id, user_id, degree, courses, average1, average2, work_type, reside, travel, work_experience, creation from laboral_insertion.inscriptions')
+        inscriptions = []
+        for c in cur:
+            inscription = {
+                'id': c[0],
+                'user_id': c[1],
+                'degree': c[2],
+                'approved': c[3],
+                'average1': c[4],
+                'average2': c[5],
+                'workType': c[6],
+                'reside': c[7],
+                'travel': c[8],
+                'workExperience': c[9],
+                'creation': c[10]
+            }
+            inscriptions.append(inscription)
+
+        return inscriptions
 
     def findAllInscriptionsByUser(self, con, userId):
         """ obtiene los datos de las inscripciones de los alumnos """

@@ -257,9 +257,9 @@ class Justifications:
         start es la fecha de inicio de la busqueda. en el caso de que no sea pasado entonces no se pone como restriccion el inicio
         end es la fecha de limite de la busqueda. en el caso de que no sea pasado entonces no se pone como restriccion el end
         status es el estado a obtener. en el caso de que no sea pasado entonces se obtienen todas, en su ultimo estado
-        userIds es una lista de ids de usuarios que piden los requests, si = None o es vacío entonces retorna todas.
+        users es una lista de ids de usuarios que piden los requests, si = None o es vacío entonces retorna todas.
     '''
-    def getJustificationRequestsByDate(self,con,status=None,userIds=None,start=None,end=None):
+    def getJustificationRequestsByDate(self,con,status=None,users=None,start=None,end=None):
         cur = con.cursor()
 
         statusR = self._getJustificationsInStatus(con,status)
@@ -268,24 +268,22 @@ class Justifications:
 
         rids = tuple(statusR.keys())
 
-        print(rids)
-
         if start is not None and end is not None:
-            if userIds is None or len(userIds) <= 0:
+            if users is None or len(users) <= 0:
                 cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where jbegin >= %s and jbegin <= %s and id in %s',(start,end,rids))
             else:
-                cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where jbegin >= %s and jbegin <= %s and id in %s and user_id in %s',(start,end,rids,tuple(userIds)))
+                cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where jbegin >= %s and jbegin <= %s and id in %s and user_id in %s',(start,end,rids,tuple(users)))
         else:
             if start is None:
-                if userIds is None or len(userIds) <= 0:
+                if users is None or len(users) <= 0:
                     cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where jbegin <= %s and id in %s',(end,rids))
                 else:
-                    cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where jbegin <= %s and id in %s and user_id in %s',(start,end,rids,tuple(userIds)))
+                    cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where jbegin <= %s and id in %s and user_id in %s',(start,end,rids,tuple(users)))
             else:
-                if userIds is None or len(userIds) <= 0:
+                if users is None or len(users) <= 0:
                     cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where jbegin >= %s and id in %s',(end,rids))
                 else:
-                    cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where jbegin >= %s and id in %s and user_id in %s',(start,end,rids,tuple(userIds)))
+                    cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where jbegin >= %s and id in %s and user_id in %s',(start,end,rids,tuple(users)))
 
         if cur.rowcount <= 0:
             return []
@@ -312,7 +310,7 @@ class Justifications:
 
 
 
-     '''
+    '''
         Obtiene todos los pedidos de justificaciones que tiene permisos de administrar
         @param con Conexion con la base de datos
         @param userId Identificacion de usuario
@@ -349,6 +347,10 @@ class Justifications:
 
     '''
         actualizar el stock actual para la justificación indicada
+        @param con Conexion con la base de datos
+        @param userId id de usuario al cual se actualizara el stock
+        @param justId id de la justificacion que se actualizara
+        @param stock nuevo stock, dependiendo de la justificacion el tipo debe variar
     '''
     def updateJustificationStock(self,con,userId,justId,stock):
         cur = con.cursor()
@@ -424,12 +426,12 @@ class Justifications:
     '''
         realiza el pedido de justificación para ser aprobado
     '''
-    def requestJustification(self,con,userId,requestor_id,justificationId,begin,end=None):
+    def requestJustification(self,con,userId,requestor_id,justificationId,begin,end=None,status='PENDING'):
 
 
         for j in self.justifications:
             if j.isJustification(justificationId):
-                return j.requestJustification(self,con,userId,requestor_id,begin,end)
+                return j.requestJustification(self,con,userId,requestor_id,begin,end,status)
 
         raise JustificationError('No se puede encontrar ese tipo de justificación')
 
@@ -465,6 +467,8 @@ class Justifications:
       return events
 
 
+
+
     def deleteGeneralJustificationRequest(self, con, requestId):
       cur = con.cursor()
       sql = "DELETE FROM assistance.general_justifications WHERE id = '" + requestId + "'"
@@ -489,7 +493,7 @@ class Justifications:
         realiza el pedido de justificación para ser aprobado entre un rango de fechas
         estado inicial del pedido = PENDING, con la fecha actual del servidor.
     '''
-    def requestJustificationRange(self,con,userId,requestor_id,justificationId,begin,end):
+    def requestJustificationRange(self,con,userId,requestor_id,justificationId,begin,end,status='PENDING'):
 
         events = []
         for j in self.justifications:
@@ -498,7 +502,7 @@ class Justifications:
                 diff = (end-begin).days
                 # incremento en 1 para que tome el ultimo dia
                 for x in range(0, diff + 1):
-                    events.extend(j.requestJustification(self,con,userId,requestor_id,date,None))
+                    events.extend(j.requestJustification(self,con,userId,requestor_id,date,None,status))
                     date = date + datetime.timedelta(days=1)
 
                 return events

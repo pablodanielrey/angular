@@ -51,7 +51,7 @@ class PositionsWamp(ApplicationSession):
     def updatePosition(self, sid, userId, position):
         con = self._getDatabase()
         try:
-            ''' .... codigo aca ... '''
+            self.positions.update(con,userId,position)
             con.commit()
             return True
 

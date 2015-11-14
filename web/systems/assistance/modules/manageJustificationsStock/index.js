@@ -229,7 +229,8 @@ app.controller('ManageJustificationsStockCtrl', ["$scope", "$timeout", "$window"
 
     Assistance.getJustificationStock($scope.model.selectedUser.id, $scope.model.selectedJustification.id, null, null,
 				function(data){
-            $scope.model.stock = data.stock;
+				    console.log(data)
+            $scope.model.stock = data;
             $scope.model.submitButtonDisable = false;
             $scope.model.stockDisable = false;
 				},
