@@ -34,6 +34,7 @@ class IngresoWamp(ApplicationSession):
         yield from self.register(self.checkEmailCode_async, 'ingreso.mails.checkEmailCode')
         yield from self.register(self.sendErrorMail_async, 'ingreso.mails.sendErrorMail')
         yield from self.register(self.uploadIngresoData_async, 'ingreso.user.uploadIngresoData')
+        yield from self.register(self.findByDni_async, 'ingreso.user.findByDni')
 
     def _getDatabase(self):
         host = self.serverConfig.configs['database_host']
@@ -85,6 +86,30 @@ class IngresoWamp(ApplicationSession):
         r = yield from loop.run_in_executor(None, self.uploadIngresoData, dni, password, user, email, eid, code)
         return r
 
+    def findByDni(self, dni):
+        con = self._getDatabase()
+        try:
+            u = self.users.findUserByDni(con, dni)
+
+            found = False
+            if u is not None:
+                found = True
+
+            cursor = con.cursor()
+            cursor.execute('insert into ingreso.login (dni, found) values (%s,%s)', (dni, found))
+            con.commit()
+
+            return u
+
+        finally:
+            con.close()
+
+    @coroutine
+    def findByDni_async(self, dni):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.findByDni, dni)
+        return r
+
     def sendEmailConfirmation(self, name, lastname, eid):
         con = self._getDatabase()
         try:
@@ -116,8 +141,17 @@ class IngresoWamp(ApplicationSession):
         r = yield from loop.run_in_executor(None, self.checkEmailCode, eid, hash)
         return r
 
-    def sendErrorMail(self, error, names, dni, email, tel):
-        self.ingreso.sendErrorEmail(error, names, dni, email, tel)
+    def sendErrorMail(self, error, names, dni, email, comment):
+        con = self._getDatabase()
+        try:
+            cursor = con.cursor()
+            cursor.execute('insert into ingreso.errors (error, names, dni, email, comment) values (%s,%s,%s,%s,%s)', (error, names, dni, email, comment))
+            con.commit()
+
+        finally:
+            con.close()
+
+        self.ingreso.sendErrorEmail(error, names, dni, email, comment)
         return True
 
     @coroutine

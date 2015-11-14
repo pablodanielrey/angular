@@ -88,7 +88,8 @@ function IngresantesCtrl($rootScope, $scope, $window, Notifications, Users, Stud
 
 
     $scope.checkDniSyntax = function() {
-      console.log('checkDniSyntax');
+      $scope.model.error.dni = $scope.model.dni;
+
       $scope.model.dniOk = false;
       var re = /^[a-zA-Z]*\d+$/i;
       $scope.model.dniOk = re.test($scope.model.dni);
@@ -102,7 +103,7 @@ function IngresantesCtrl($rootScope, $scope, $window, Notifications, Users, Stud
       }
 
       var dni = $scope.model.dni;
-      Users.findByDni(dni).then(
+      $wamp.call('ingreso.user.findByDni', [dni]).then(
         function(user) {
           if (user == null) {
             $scope.model.se = 1;
