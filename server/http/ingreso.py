@@ -53,7 +53,7 @@ try:
         for c in cur:
             errors = ''
             for a in c:
-                errors = errors + a + ';'
+                errors = errors + str(a).replace("\"", '').replace(';', ',') + ';'
             print(errors)
 
     elif fid == 'p':
