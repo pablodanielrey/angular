@@ -10,6 +10,10 @@ app.service('Files', function($wamp, Notifications) {
 		return $wamp.call('system.files.find',[id]);
 	}
 
+	this.findMetaDataById = function(id) {
+		return $wamp.call('system.files.findMetaDataById',[id]);
+	}
+
 	this.upload = function(id, name, mimetype, codec, data) {
 		return $wamp.call('system.files.upload',[id, name, mimetype, codec, data]);
 	}

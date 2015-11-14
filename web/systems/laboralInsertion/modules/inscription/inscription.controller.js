@@ -137,6 +137,7 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
     var cv = window.btoa(fileContent);
     Files.upload(null, fileName, 'application/pdf', Files.BASE64, cv).then(
         function(id) {
+          $scope.model.cv_name = fileName;
           $scope.model.loadingCv = false;
           console.log(id);
           $scope.model.laboralData.cv = id;
@@ -353,6 +354,19 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
         }
         console.log(laboralData);
         $scope.model.laboralData = laboralData;
+
+        // encuentro los metadatos del cv si es que esta cargado
+        if (laboralData.cv != undefined && laboralData.cv != null) {
+          Files.findMetaDataById(laboralData.cv).then(
+            function(data) {
+              $scope.model.cv_name = data.name;
+            },
+            function(err) {
+              console.log(err);
+            }
+          );
+        }
+
       },
       function(err) {
         console.log(err);

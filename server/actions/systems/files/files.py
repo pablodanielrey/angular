@@ -24,6 +24,7 @@ class FilesWamp(ApplicationSession):
     def onJoin(self, details):
         logging.debug('registering methods')
         yield from self.register(self.find_async, 'system.files.find')
+        yield from self.register(self.findMetaDataById_async, 'system.files.findMetaDataById')
         yield from self.register(self.upload_async, 'system.files.upload')
         yield from self.register(self.findAllIds, 'system.files.findAllIds')
 
@@ -52,6 +53,15 @@ class FilesWamp(ApplicationSession):
         finally:
             con.close()
 
+    def findMetaDataById(self, id):
+        con = self._getDatabase()
+        try:
+            r = self.files.findMetaDataById(con, id)
+            return r
+
+        finally:
+            con.close()
+
     def upload(self, id, name, mimetype, codec, data):
         con = self._getDatabase()
         try:
@@ -72,4 +82,10 @@ class FilesWamp(ApplicationSession):
     def find_async(self, id):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.find, id)
+        return r
+
+    @coroutine
+    def findMetaDataById_async(self, id):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.findMetaDataById, id)
         return r

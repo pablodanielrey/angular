@@ -57,6 +57,21 @@ class Files:
         for c in cur:
             return self._toDict(c)
 
+    def findMetaDataById(self, con, id):
+        cur = con.cursor()
+        cur.execute('select id, name, mimetype, codec, created from files.files where id = %s', (id,))
+        if cur.rowcount <= 0:
+            return None
+
+        for d in cur:
+            return {
+                'id': d[0],
+                'name': d[1],
+                'mimetype': d[2],
+                'codec': d[3],
+                'created': d[4]
+            }
+
     def _toDict(self, d):
         return {
             'id': d[0],
