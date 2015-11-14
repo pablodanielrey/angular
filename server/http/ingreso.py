@@ -49,7 +49,7 @@ try:
         print()
 
         cur = con.cursor()
-        cur.execute('select error, names, dni, email, comment from ingreso.errors')
+        cur.execute('select error, names, dni, email, comment, created from ingreso.errors')
         for c in cur:
             errors = ''
             for a in c:
