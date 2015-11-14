@@ -63,11 +63,11 @@ try:
         print()
 
         cur = con.cursor()
-        cur.execute('select name, lastname, dni, email from profile.users u left join profile.mails m on (u.id = m.user_id and m.confirmed) where u.id in (select id from students.users)')
+        cur.execute('select name, lastname, dni, email, u.created from profile.users u left join profile.mails m on (u.id = m.user_id and m.confirmed) where u.id in (select id from students.users)')
         for c in cur:
             errors = ''
             for a in c:
-                errors = errors + (a.replace("\"", '').replace(';', ',') if a is not None else ' ') + ';'
+                errors = errors + (str(a).replace("\"", '').replace(';', ',') if a is not None else ' ') + ';'
             print(errors)
 
     else:
