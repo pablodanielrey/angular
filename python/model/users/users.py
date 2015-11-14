@@ -204,7 +204,7 @@ class Users:
 
     def findUserByDni(self, con, dni):
         cur = con.cursor()
-        cur.execute('select id,dni,name,lastname,city,country,address,genre,birthdate,residence_city,version from profile.users where dni = %s', (dni,))
+        cur.execute('select id,dni,name,lastname,city,country,address,genre,birthdate,residence_city,photo,version from profile.users where dni = %s', (dni,))
         data = cur.fetchone()
 
         if data != None:
@@ -217,7 +217,7 @@ class Users:
 
     def findUser(self,con,id):
         cur = con.cursor()
-        cur.execute('select id,dni,name,lastname,city,country,address,genre,birthdate,residence_city,version from profile.users where id = %s', (id,))
+        cur.execute('select id,dni,name,lastname,city,country,address,genre,birthdate,residence_city,photo,version from profile.users where id = %s', (id,))
         if cur.rowcount <= 0:
             return None
 
@@ -236,7 +236,7 @@ class Users:
      '''
     def findUsersByIds(self,con,ids):
         cur = con.cursor()
-        cur.execute('select id,dni,name,lastname,city,country,address,genre,birthdate,residence_city,version from profile.users where id IN %s', (tuple(ids),))
+        cur.execute('select id,dni,name,lastname,city,country,address,genre,birthdate,residence_city,photo,version from profile.users where id IN %s', (tuple(ids),))
         data = cur.fetchall()
 
         rdata = []
@@ -249,7 +249,7 @@ class Users:
 
     def listUsers(self, con):
         cur = con.cursor()
-        cur.execute('select id,dni,name,lastname,city,country,address,genre,birthdate,residence_city,version from profile.users')
+        cur.execute('select id,dni,name,lastname,city,country,address,genre,birthdate,residence_city,photo,version from profile.users')
         data = cur.fetchall()
         rdata = []
         for d in data:
@@ -298,7 +298,8 @@ class Users:
                 'genre':d[7],
                 'birthdate':d[8],
                 'residence_city':d[9],
-                'version':d[10]
+                'photo':d[10],
+                'version':d[11]
             }
         return rdata
 
