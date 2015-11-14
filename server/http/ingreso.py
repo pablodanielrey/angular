@@ -44,37 +44,31 @@ try:
 
     if fid == 'e':
 
-        errors = ''
-        cur = con.cursor()
-        cur.execute('select error, names, dni, email, comment from ingreso.errors')
-        for c in cur:
-            for a in c:
-                errors = errors + a.replace("\"", '').replace(';', ',') + ';'
-            errors = errors + '\n'
-
         print("Content-Type: {}; charset=utf-8".format('text/csv'))
         print("Content-Disposition: attachment; filename=\"ingeso-errores.csv\"")
         print()
-        print(errors)
-        #sys.stdout.flush()
-        #sys.stdout.buffer.write(errors)
+
+        cur = con.cursor()
+        cur.execute('select error, names, dni, email, comment from ingreso.errors')
+        for c in cur:
+            errors = ''
+            for a in c:
+                errors = errors + a.replace("\"", '').replace(';', ',') + ';'
+            print(errors)
 
     elif fid == 'p':
-
-        errors = ''
-        cur = con.cursor()
-        cur.execute('select name, lastname, dni, email from profile.users u left join profile.mails m on u.id = m.user_id where u.id in (select id from students.users)')
-        for c in cur:
-            for a in c:
-                errors = errors + (a.replace("\"", '').replace(';', ',') if a is not None else ' ') + ';'
-            errors = errors + '\n'
 
         print("Content-Type: {}; charset=utf-8".format('text/csv'))
         print("Content-Disposition: attachment; filename=\"ingeso.csv\"")
         print()
-        print(errors)
-        #sys.stdout.flush()
-        #sys.stdout.buffer.write(errors)
+
+        cur = con.cursor()
+        cur.execute('select name, lastname, dni, email from profile.users u left join profile.mails m on u.id = m.user_id where u.id in (select id from students.users)')
+        for c in cur:
+            errors = ''
+            for a in c:
+                errors = errors + (a.replace("\"", '').replace(';', ',') if a is not None else ' ') + ';'
+            print(errors)
 
     else:
         print("Status: 403 Forbidden\r\n\r\n")
