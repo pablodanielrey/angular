@@ -56,7 +56,8 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
       photo: ''
     },
 
-
+    loadingPhoto: false,
+    loadingCv: false,
     showInscription: false,
 
     // inscripcion a ser subida al server.
@@ -92,14 +93,27 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
 
 
   $scope.addPhoto = function(fileName, fileContent) {
+
+    console.log(fileName);
+
+    re = /^.*\.jpg$/i
+    if (!re.test(fileName)) {
+      console.log('formato no soportado');
+      return;
+    }
+
+    $scope.model.loadingPhoto = true;
+
     var photo = window.btoa(fileContent);
     Files.upload(null, fileName, 'image/jpeg', Files.BASE64, photo).then(
         function(id) {
+          $scope.model.loadingPhoto = false;
           console.log(id);
           $scope.model.user.photo = id;
           $scope.updateUserData();
         },
         function(err) {
+          $scope.model.loadingPhoto = false;
           console.log(err);
           Notifications.message(err);
         }
@@ -109,13 +123,26 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
 
 
   $scope.addCV = function(fileName, fileContent) {
+
+    console.log(fileName);
+
+    re = /^.*\.pdf$/i
+    if (!re.test(fileName)) {
+      console.log('formato no soportado');
+      return;
+    }
+
+    $scope.model.loadingCv = true;
+
     var cv = window.btoa(fileContent);
     Files.upload(null, fileName, 'application/pdf', Files.BASE64, cv).then(
         function(id) {
+          $scope.model.loadingCv = false;
           console.log(id);
           $scope.model.laboralData.cv = id;
         },
         function(err) {
+          $scope.model.loadingCv = false;
           console.log(err);
           Notifications.message(err);
           $scope.model.laboralData.cv = null;

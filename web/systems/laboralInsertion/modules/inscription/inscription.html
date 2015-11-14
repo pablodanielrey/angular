@@ -12,13 +12,22 @@
             <div class="dataBasic">
                 <div class"col">
 
-                    <div ng-if="getUserPhoto() == null" class="fileUpload">
+
+
+                    <!-- <div ng-if="getUserPhoto() == null" class="fileUpload"> -->
+                    <div ng-if='!model.loadingPhoto' class="fileUpload">
                         <div class="photo" placeholder="Foto"><i class="fa fa-camera-retro fa-4x"></i>Subir Foto</div>
                         <input type="file" on-read-file-binary-string="addPhoto(fileName,fileContent)" class="upload" />
+                    </div>
+                    <div ng-if='model.loadingPhoto'>
+                      Cargando Foto
                     </div>
                      <div ng-if='getUserPhoto() != null' class="item">
                         <img class="photo" ng-src='{{getUserPhoto()}}' alt="Pablo"/>
                     </div>
+
+
+
 
                     <div class="item">
                         <div>
@@ -495,14 +504,18 @@
                                 <div>
                                     <div class="uploadPDF">
                                        <p class="textBtnPDF"><i class="fa fa-arrow-circle-up"></i> Subir CV</p>
-                                       <input type="file" class="btnInputFile" id="inputcv" on-read-file-binary-string="addCV(fileName,fileContent)">
+                                       <input type="file" class="btnInputFile" id="inputcv" on-read-file-binary-string="addCV(fileName,fileContent)" accept='application/pdf,.pdf'>
                                     </div>
                                 </div>
                            </div>
                         </div>
 
-                        <div class="subTittlesForm">
-                        <span>hola.pdf<span>
+                        <div ng-if='model.loadingCv' class="subTittlesForm">
+                          <span>Cargando CV<span>
+                        </div>
+
+                        <div ng-if="model.laboralData.cv != null || model.laboralData.cv != ''" class="subTittlesForm">
+                          <span>{{model.laboralData.cv}}<span>
                         </div>
 
                     </div>
