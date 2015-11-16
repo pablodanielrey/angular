@@ -5,11 +5,14 @@ import cgi; cgitb.enable()  # opcional para debug
 import logging
 import inject
 import re
+import codecs
 import psycopg2
 import sys
 sys.path.insert(0, '../../python')
 
 logging.basicConfig(level=logging.DEBUG)
+
+#sys.stdout = codecs.getwriter("utf-8")(sys.stdout.detach())
 
 args = cgi.FieldStorage()
 if "i" not in args:
@@ -43,16 +46,16 @@ try:
     f = files.findById(con, fid)
     if f is None:
         print("Status: 403 Forbidden\r\n\r\n")
-        print("error de id nulo")
+        print("no permitido")
         sys.exit(1)
 
     mimetype = f['mimetype'] if ['mimetype'] != '' else 'application/binary'
-    edata = bytes(f['content'])
+    #edata = bytes(f['content'])
 
     #logging.debug(edata)
 
     import base64
-    data = base64.b64decode(edata)
+    #data = base64.b64decode(edata)
 
     #logging.debug(data)
 
@@ -60,7 +63,9 @@ try:
     #rint("Content-Length: {}".format(len(data)))
     #print()
     sys.stdout.flush()
-    sys.stdout.buffer.write(data)
+    #sys.stdout.buffer.write(data)
+    sys.stdout.buffer.write(base64.b64decode(f['content']))
+
 
 finally:
     con.close()

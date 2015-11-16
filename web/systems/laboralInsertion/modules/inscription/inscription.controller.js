@@ -91,7 +91,7 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
     if ($scope.model.user.photo == null || $scope.model.user.photo == '') {
       return null;
     } else {
-      return "/c/lb?i=" + $scope.model.user.photo;
+      return "/c/files.py?i=" + $scope.model.user.photo;
     }
   }
 
