@@ -57,7 +57,9 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
     },
 
     loadingPhoto: false,
+    formatPhoto: false,             // error de formato de la foto
     loadingCv: false,
+    formatCV: false,                // error de formato del cv
     showInscription: false,
 
     // inscripcion a ser subida al server.
@@ -94,11 +96,13 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
 
   $scope.addPhoto = function(fileName, fileContent) {
 
+    $scope.model.formatPhoto = false;
     console.log(fileName);
 
     re = /^.*\.jpg$/i
     if (!re.test(fileName)) {
       console.log('formato no soportado');
+      $scope.model.formatPhoto = true;
       return;
     }
 
@@ -124,11 +128,13 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
 
   $scope.addCV = function(fileName, fileContent) {
 
+    $scope.model.formatCV = false;
     console.log(fileName);
 
     re = /^.*\.pdf$/i
     if (!re.test(fileName)) {
       console.log('formato no soportado');
+      $scope.model.formatCV = true;
       return;
     }
 

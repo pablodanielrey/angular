@@ -22,6 +22,9 @@
                     <div ng-if='model.loadingPhoto'>
                       Cargando Foto
                     </div>
+                    <div ng-if='model.formatPhoto'>
+                      Solo se acepta .jpg
+                    </div>
                      <div ng-if='getUserPhoto() != null' class="item">
                         <img class="photo" ng-src='{{getUserPhoto()}}' alt="Pablo"/>
                     </div>
@@ -512,6 +515,10 @@
 
                         <div ng-if='model.loadingCv' class="subTittlesForm">
                           <span>Cargando CV<span>
+                        </div>
+
+                        <div ng-if='model.formatCV' class="subTittlesForm">
+                          <span>Solo se acepta pdf<span>
                         </div>
 
                         <div ng-if="model.cv_name != undefined && model.cv_name != ''" class="subTittlesForm">
