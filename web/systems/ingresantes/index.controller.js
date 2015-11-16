@@ -90,12 +90,17 @@ function IngresantesCtrl($rootScope, $scope, $window, Notifications, Users, Stud
     $scope.checkDniSyntax = function() {
       console.log('checkDniSyntax');
       $scope.model.dniOk = false;
-      var re = /^\d{8,8}$/i;
+      var re = /^[a-zA-Z]*\d+$/i;
       $scope.model.dniOk = re.test($scope.model.dni);
     }
 
     // pasos de la aplicación
     $scope.checkDni = function() {
+
+      if (!$scope.model.dniOk) {
+        return;
+      }
+
       var dni = $scope.model.dni;
       Users.findByDni(dni).then(
         function(user) {
@@ -283,6 +288,12 @@ function IngresantesCtrl($rootScope, $scope, $window, Notifications, Users, Stud
         return;
       }
 
+      var re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/i;
+      if (!re.test(error.email)) {
+        return;
+      }
+
+
       $scope.model.se = 5;
 
       $wamp.call('ingreso.mails.sendErrorMail',['DNI inexistente', error.names, error.dni, error.email, error.tel]).then(
@@ -301,6 +312,11 @@ function IngresantesCtrl($rootScope, $scope, $window, Notifications, Users, Stud
         return;
       }
 
+      var re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/i;
+      if (!re.test(error.email)) {
+        return;
+      }
+
       $scope.model.se = 5;
       $wamp.call('ingreso.mails.sendErrorMail',['Ya tiene cuenta', error.names, error.dni, error.email, error.tel]).then(
         function(ok) {
@@ -315,6 +331,11 @@ function IngresantesCtrl($rootScope, $scope, $window, Notifications, Users, Stud
     $scope.noCode = function() {
       var error = $scope.model.error;
       if (error.names == '' || error.dni == '' || error.email == '') {
+        return;
+      }
+
+      var re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/i;
+      if (!re.test(error.email)) {
         return;
       }
 
