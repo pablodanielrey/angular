@@ -88,7 +88,8 @@ function IngresantesCtrl($rootScope, $scope, $window, Notifications, Users, Stud
 
 
     $scope.checkDniSyntax = function() {
-      console.log('checkDniSyntax');
+      $scope.model.error.dni = $scope.model.dni;
+
       $scope.model.dniOk = false;
       var re = /^[a-zA-Z]*\d+$/i;
       $scope.model.dniOk = re.test($scope.model.dni);
@@ -102,7 +103,7 @@ function IngresantesCtrl($rootScope, $scope, $window, Notifications, Users, Stud
       }
 
       var dni = $scope.model.dni;
-      Users.findByDni(dni).then(
+      $wamp.call('ingreso.user.findByDni', [dni]).then(
         function(user) {
           if (user == null) {
             $scope.model.se = 1;
@@ -193,7 +194,7 @@ function IngresantesCtrl($rootScope, $scope, $window, Notifications, Users, Stud
 
     $scope.checkEmailCode = function() {
       $scope.model.email.invalid = false;
-      $wamp.call('ingreso.mails.confirmEmail', [$scope.model.email.id, $scope.model.email.code]).then(
+      $wamp.call('ingreso.mails.checkEmailCode', [$scope.model.email.id, $scope.model.email.code]).then(
         function(ok) {
           if (!ok) {
             $scope.model.email.invalid = true;
@@ -220,6 +221,10 @@ function IngresantesCtrl($rootScope, $scope, $window, Notifications, Users, Stud
       if (!$scope.model.passwordOk) {
         return;
       }
+
+      $scope.model.se = 5;
+      $scope.uploadIngresoData($scope.model.dni, $scope.model.password, $scope.model.user, $scope.model.email.email, $scope.model.email.id, $scope.model.email.code);
+      /*
       $wamp.call('ingreso.user.changePassword', [$scope.model.dni, $scope.model.password]).then(
         function(ok) {
           var pass = '';
@@ -234,7 +239,7 @@ function IngresantesCtrl($rootScope, $scope, $window, Notifications, Users, Stud
           $scope.changeScreen();
           $scope.model.se = 5;
 
-          $wamp.call('ingreso.mails.sendFinalMail',[$scope.model.user, pass, $scope.model.email.email]).then(
+          $wamp.call('ingreso.mails.sendFinalMail',[$scope.model.user, pass, $scope.model.email.email, $scope.model.email.id, $scope.model.email.code]).then(
             function(ok) {
               $scope.model.se = 0;
             },
@@ -249,6 +254,26 @@ function IngresantesCtrl($rootScope, $scope, $window, Notifications, Users, Stud
           console.log(err);
         }
       );
+      */
+    }
+
+    $scope.uploadIngresoData = function() {
+      $wamp.call('ingreso.user.uploadIngresoData', [$scope.model.dni, $scope.model.password, $scope.model.user, $scope.model.email.email, $scope.model.email.id, $scope.model.email.code]).then(
+        function(ok) {
+          if (!ok) {
+            // hubo algún error final. como no tengo pantalla para reiniciar todo le sigo mostrando el espere
+            // para que parezca que esta colgado.
+            $scope.model.se = 5;
+          } else {
+            $scope.changeScreen();
+            $scope.model.se = 0;
+          }
+        },
+        function(err) {
+          console.log(err);
+          $scope.model.se = 0;
+        }
+      )
     }
 
 
