@@ -6,6 +6,8 @@ InscriptionCtrl.inject = ['$rootScope', '$scope', '$wamp', 'LaboralInsertion', '
 
 function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Users, Student, Notifications, Files) {
 
+  $scope.boolToStr = function(arg) {return arg ? 'Sí' : 'No'};
+
   $scope.degrees = [
     { degree:'Contador Público', assignatures:34 },
     { degree:'Licenciatura en Administración', assignatures:37 },

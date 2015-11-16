@@ -400,12 +400,7 @@
                             <button><i class="fa fa-briefcase"></i></button>
                           </div>
                           <div>
-                            <select class="carrera">
-                              <option class="selectGrey" disabled selected style='display:none;'>Seleccionar...</option>
-
-                              <option>Sí</option>
-                              <option>No</option>
-
+                            <select class="carrera" ng-model='model.offer.workExperience' ng-options='boolToStr(item) for item in [true, false]'>
                             </select>
                           </div>
                         </div>
@@ -422,13 +417,7 @@
                             <button><i class="fa fa-plane"></i></button>
                           </div>
                           <div>
-                            <select class="carrera" ng-change='checkInscriptionPreconditions()' ng-model='model.offer.travel'>
-                              <!-- <option class="selectGrey" disabled selected style='display:none;'>Seleccionar...</option> -->
-                              <option ng-repeat='o in travel' value="{{o.value}}">{{o.label}}</option>
-                              <!--
-                              <option>Si</option>
-                              <option>No</option>
-                              -->
+                            <select class="carrera" ng-change='checkInscriptionPreconditions()' ng-model='model.offer.travel' ng-options='boolToStr(item) for item in [true, false]'>
                             </select>
                           </div>
                         </div>
