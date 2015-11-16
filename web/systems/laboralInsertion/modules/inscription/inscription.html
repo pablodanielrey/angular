@@ -14,11 +14,13 @@
 
 
 
-                    <!-- <div ng-if="getUserPhoto() == null" class="fileUpload"> -->
-                    <div ng-if='!model.loadingPhoto' class="fileUpload">
+                    <div ng-if="getUserPhoto() == null" class="fileUpload">
+                    <!-- <div ng-if='!model.loadingPhoto' class="fileUpload"> -->
                         <div class="photo" placeholder="Foto"><i class="fa fa-camera-retro fa-4x"></i>Subir Foto</div>
                         <input type="file" on-read-file-binary-string="addPhoto(fileName,fileContent)" class="upload" />
                     </div>
+
+
                     <div ng-if='model.loadingPhoto'>
                       Cargando Foto
                     </div>
@@ -26,6 +28,13 @@
                       Solo se acepta .jpg
                     </div>
                      <div ng-if='getUserPhoto() != null' class="item">
+
+                       <div ng-if='!model.loadingPhoto' class="fileUpload2" title="Cambiar Foto">
+
+                           <input type="file" on-read-file-binary-string="addPhoto(fileName,fileContent)" class="upload" />
+                       </div>
+                        <i class="fa fa-camera-retro iconoFotoMiniatura fa-2x" title="Cambiar Foto"></i>
+
                         <img class="photo" ng-src='{{getUserPhoto()}}' alt="Pablo"/>
                     </div>
 
