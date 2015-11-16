@@ -50,11 +50,15 @@ lb = inject.instance(LaboralInsertion)
 
 con = _getDatabase(config)
 try:
-    lb.download(con, 'http://163.10.17.15', '../tmp/')
+    url = 'http://163.10.17.15'
+    lb.download(con, url, '../tmp/')
 
     print("Content-Type: text/html")
     print()
-    print("<html><body>info actualizada</body></hmtl>")
+    print("<html><body>" +
+        "<div>info actualizada</div>" +
+        "<div><a href=\"{}/cv/\" target=\"_blank\">acceder</a></div>".format(url) +
+        "</body></hmtl>")
 
 
 

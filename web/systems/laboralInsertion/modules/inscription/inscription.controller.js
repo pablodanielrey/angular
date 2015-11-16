@@ -384,11 +384,12 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
   }
 
   $scope.updateUserData = function() {
-    var ok = $scope.checkUserData();
+    //var ok = $scope.checkUserData();
 
-    if (!ok) {
-      return;
-    }
+    //if (!ok) {
+    //  console.log('faltan datos requeridos')
+    //  return;
+    //}
 
     // corrijo la info de los telefonos para el formato de la llamada.
     $scope.model.user['telephones'] = [];

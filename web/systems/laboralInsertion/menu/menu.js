@@ -38,7 +38,7 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Notifications'
     $scope.initialize = function() {
       $scope.model.items = [];
       $scope.model.items.push({ n:1, label:'Inscripción', img:'fa fa-lock', function: $scope.upload });
-      $scope.model.items.push({ n:1, label:'Descargar', img:'fa fa-lock', function: $scope.download });
+      //$scope.model.items.push({ n:1, label:'Descargar', img:'fa fa-lock', function: $scope.download });
       $scope.model.items.push({ n:1, label:'Salir', img:'fa fa-lock', function: $scope.exit });
 
     }
