@@ -19,8 +19,8 @@ class LaboralInsertion:
     users = inject.attr(Users)
     students = inject.attr(Students)
 
-    def download(self, con):
-        with open('/tmp/inscripciones.csv', 'w') as r:
+    def download(self, con, url, root):
+        with open('{}inscripciones.csv'.format(root), 'w', encoding='utf-8') as r:
             w = csv.writer(r)
             inscriptions = self.findAllInscriptions(con)
             index = 0
@@ -39,7 +39,7 @@ class LaboralInsertion:
                 'Legajo',
                 'Viajar',
                 'Ingles', 'Portugués', 'Otro',
-                'Carrera', 'Cantidad de materias', 'Promedio con aplazos', 'Promedio', 'Pasantía', 'Tiempo Completo', 'Jóvenes Profesionales'])
+                'Carrera', 'Cantidad de materias', 'Promedio con aplazos', 'Promedio', 'Pasantía', 'Tiempo Completo', 'Jóvenes Profesionales','Experiencia Laboral'])
 
             for i in inscriptions:
 
@@ -55,6 +55,8 @@ class LaboralInsertion:
 
                 english = 'Inglés' in (l['name'] for l in ld['languages'])
                 portugues = 'Portugués' in (l['name'] for l in ld['languages'])
+
+                cv_name = '{}-{}-{}.pdf'.format(user['lastname'], user['name'], user['dni'])
 
                 w.writerow([
                  i['creation'],
@@ -85,13 +87,13 @@ class LaboralInsertion:
 
                  i['workExperience'],
 
-                 'http://insercionlaboral.econo.unlp.edu.ar/cv/{}'.format(userId)
+                 '{}/cv/{}'.format(url, cv_name)
 
                  ])
 
                 cv = self.files.findById(con, ld['cv'])
                 logging.debug('escribiendo cv : {}'.format(cv))
-                with open('./tmp/{}.pdf'.format(userId), 'wb') as c:
+                with open('{}{}'.format(root, cv_name), 'wb') as c:
                     c.write(base64.b64decode(bytes(cv['content'])))
 
                 index = index + 1
