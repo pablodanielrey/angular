@@ -289,7 +289,7 @@
                               </div>
                               <div class="iconsInscription">
                                 <span class="icoTrash" title="Eliminar Inscripción" ng-click='removeInscription(i)'><i class="fa fa-trash-o"></i></span>
-                                <span class="icoDownload" title="Descargar Inscripción" ng-click='downloadInscription(i)'><i class="fa fa-file-pdf-o"></i></span>
+                                <!-- <span class="icoDownload" title="Descargar Inscripción" ng-click='downloadInscription(i)'><i class="fa fa-file-pdf-o"></i></span> -->
                               </div>
                           </div>
                       </div>
@@ -388,8 +388,8 @@
                             <button><i class="fa fa-briefcase"></i></button>
                           </div>
                           <div>
-                            <select class="carrera" ng-model='model.offer.workType'>
-                              <option class="selectGrey" disabled selected style='display:none;'>Seleccionar...</option>
+                            <select class="carrera" ng-model='model.offer.workType' ng-change='checkInscriptionPreconditions()'>
+                              <!-- <option class="selectGrey" disabled selected style='display:none;'>Seleccionar...</option> -->
                               <option ng-repeat='o in workTypes'>{{o}}</option>
                               <!--
                               <option>Pasantía</option>
@@ -409,7 +409,7 @@
                             <button><i class="fa fa-briefcase"></i></button>
                           </div>
                           <div>
-                            <select class="carrera" ng-model='model.offer.workExperience' ng-options='boolToStr(item) for item in [true, false]'>
+                            <select class="carrera" ng-model='model.offer.workExperience' ng-change='checkInscriptionPreconditions()' ng-options='boolToStr(item) for item in [null, true, false]'>
                             </select>
                           </div>
                         </div>
@@ -426,7 +426,7 @@
                             <button><i class="fa fa-plane"></i></button>
                           </div>
                           <div>
-                            <select class="carrera" ng-change='checkInscriptionPreconditions()' ng-model='model.offer.travel' ng-options='boolToStr(item) for item in [true, false]'>
+                            <select class="carrera" ng-change='checkInscriptionPreconditions()' ng-model='model.offer.travel' ng-options='boolToStr(item) for item in [null, true, false]'>
                             </select>
                           </div>
                         </div>
@@ -497,14 +497,15 @@
                     <div class="p6">
 
                         <div class="subTittlesForm">
-                          <b>Cargar CV</b>
+                          <b>CV (solo se acepta formato .pdf)</b>
                         </div>
                         <div class="item">
                             <button><i class="fa fa-book"></i></button>
                             <div class="contentUploadPDF">
                                 <div>
                                     <div class="uploadPDF">
-                                       <p class="textBtnPDF"><i class="fa fa-arrow-circle-up"></i> Subir CV</p>
+                                       <p ng-if="model.cv_name != undefined && model.cv_name != ''" class="textBtnPDF"><i class="fa fa-arrow-circle-up"></i> Actualizar CV</p>
+                                       <p ng-if="model.cv_name == undefined || model.cv_name == ''" class="textBtnPDF"><i class="fa fa-arrow-circle-up"></i> Subir CV</p>
                                        <input type="file" class="btnInputFile" id="inputcv" on-read-file-binary-string="addCV(fileName,fileContent)" accept='application/pdf,.pdf'>
                                     </div>
                                 </div>
@@ -516,11 +517,11 @@
                         </div>
 
                         <div ng-if='model.formatCV' class="subTittlesForm">
-                          <span>Solo se acepta pdf<span>
+                          <span>SOLO PDF<span>
                         </div>
 
                         <div ng-if="model.cv_name != undefined && model.cv_name != ''" class="subTittlesForm">
-                          <a href="/c/files.py?i={{model.laboralData.cv}}" target="_blank"><span>{{model.cv_name}}</span></a>
+                          {{model.cv_name}} <a href="/c/files.py?i={{model.laboralData.cv}}" target="_blank"><div class="subTittlesForm"><b>Descargar</b></div></a>
                         </div>
 
                     </div>

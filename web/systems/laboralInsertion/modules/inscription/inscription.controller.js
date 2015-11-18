@@ -6,9 +6,15 @@ InscriptionCtrl.inject = ['$rootScope', '$scope', '$wamp', 'LaboralInsertion', '
 
 function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Users, Student, Notifications, Files) {
 
-  $scope.boolToStr = function(arg) {return arg ? 'Sí' : 'No'};
+  $scope.boolToStr = function(arg) {
+    if (arg == null) {
+      return 'Seleccionar';
+    }
+    return arg ? 'Sí' : 'No'
+  };
 
   $scope.degrees = [
+    { degree:'Seleccionar' },
     { degree:'Contador Público', assignatures:34 },
     { degree:'Licenciatura en Administración', assignatures:37 },
     { degree:'Licenciatura en Turismo', assignatures:28 },
@@ -66,14 +72,14 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
 
     // inscripcion a ser subida al server.
     offer: {
-      degree: $scope.degrees[0].degree,
+      degree: null,
       graduate: false,
       average1: 0.0,
       average2: 0.0,
       approved: 0,
-      workType: $scope.workTypes[0],
-      travel: $scope.travel[0].value,
-      workExperience: false
+      workType: null,
+      travel: null,
+      workExperience: null
     },
 
     // información general de inserción laboral
@@ -171,96 +177,118 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
 
   $scope.checkInscriptionPreconditions = function() {
 
+      console.log($scope.model.cr);
+
       var ok = true;
       var offer = $scope.model.offer;
 
-      if ($scope.model.cr >= 0) {
+      if ($scope.model.cr == 0) {
 
-        ok = false;
-        for (var i = 0; i < $scope.degrees.length; i++) {
-          if (offer.degree == $scope.degrees[i].degree) {
-            ok = true;
-            if (offer.graduate) {
-              offer.approved = $scope.degrees[i].assignatures;
+        if (offer.degree == null || offer.degree == 'Seleccionar') {
+          ok = false;
+        } else {
+          ok = false;
+          for (var i = 0; i < $scope.degrees.length; i++) {
+            if (offer.degree == $scope.degrees[i].degree) {
+              ok = true;
+              if (offer.graduate) {
+                offer.approved = $scope.degrees[i].assignatures;
+              }
+              break;
             }
-            break;
           }
         }
 
+        offer.approved = 0;
+        offer.average1 = 0;
+        offer.average2 = 0;
       }
 
-      if ($scope.model.cr >= 1) {
+      if ($scope.model.cr == 1) {
 
         /*
           condiciones:
             los promedios estan entre 0 y 10
             la cantidad de materias aprobadas va de 0 a (dependiendo de la carrera la cantidad de materias)
-            la cantidad de materias aprobadas deben superar el 80% de la cantidad de materias de la carrera
         */
 
-        ok = ok && offer.average1 >= 0;
         if (offer.average1 > 10) {
           offer.average1 = 10;
         } else if (offer.average1 <= 0) {
           offer.average1 = 0;
         }
+        ok = ok && offer.average1 > 0;
 
-        ok = ok && offer.average2 >= 0;
         if (offer.average2 > 10) {
           offer.average2 = 10;
         } else if (offer.average2 <= 0) {
           offer.average2 = 0;
         }
+        ok = ok && offer.average2 > 0;
 
+        if (offer.average2 > offer.average1) {
+          offer.average2 = offer.average1;
+        }
+
+        var assignatures = 0;
         for (var i = 0; i < $scope.degrees.length; i++) {
           if (offer.degree == $scope.degrees[i].degree) {
-            var assignatures = $scope.degrees[i].assignatures;
-            if (offer.approved > assignatures) {
-              offer.approved = assignatures;
-              break;
-            }
-            // controlo que tenga aprobado el 80%
-            var minimum = (assignatures * 80) / 100;
-            if (offer.approved == assignatures) {
-              $scope.workTypes = ['Full-Time','Programa estudiantes avanzados y jovenes profesionales'];
-            } else if (offer.approved > minimum) {
-              $scope.workTypes = ['Pasantía','Full-Time','Programa estudiantes avanzados y jovenes profesionales'];
-            } else {
-              $scope.workTypes = ['Pasantía','Full-Time'];
-            }
-            offer.workType = $scope.workTypes[0];
-
-            if (offer.approved <= 0) {
-              offer.approved = 0;
-            }
-
+            assignatures = $scope.degrees[i].assignatures;
             break;
           }
         }
 
+        if (offer.approved > assignatures) {
+          offer.approved = assignatures;
+        }
+
+        if (offer.approved <= 0) {
+          offer.approved = 0;
+        }
+
+        // controlo que tenga aprobado el 80%
+        var minimum = (assignatures * 80) / 100;
+        if (offer.approved == assignatures) {
+          $scope.workTypes = ['Seleccionar', 'Full-Time','Programa estudiantes avanzados y jovenes profesionales'];
+        } else if (offer.approved > minimum) {
+          $scope.workTypes = ['Seleccionar', 'Pasantía','Full-Time','Programa estudiantes avanzados y jovenes profesionales'];
+        } else {
+          $scope.workTypes = ['Seleccionar', 'Pasantía','Full-Time'];
+        }
+        //offer.workType = $scope.workTypes[0];
+        offer.workType = 'Seleccionar';
+        offer.workExperience = null;
+
       }
 
-      if ($scope.model.cr >= 3) {
-          if (offer.travel == undefined || offer.travel == '') {
-            ok = false;
-          }
+      if ($scope.model.cr == 2) {
+        offer.travel = null;
+
+        ok = (offer.workType != 'Seleccionar');
+        ok = ok && (offer.workExperience != null);
       }
 
-      if ($scope.model.cr >= 4) {
+      if ($scope.model.cr == 3) {
+          ok = (offer.travel != null);
+      }
 
+      if ($scope.model.cr == 4) {
+
+        // me fijo solo que no haya repetidos
         var languages = $scope.model.laboralData.languages
         for (var l = 0; l < languages.length; l++) {
           for (var i = l + 1; i < languages.length; i++) {
             if (languages[l].name == languages[i].name) {
               ok = false;
+              break;
             }
           }
         }
+
       }
 
-
-      if ($scope.model.cr >= 5) {
-        ok = ok && ($scope.model.laboralData.cv != null && $scope.model.laboralData.cv != '');
+      if ($scope.model.cr == 5) {
+        ok = ($scope.model.laboralData.cv != null && $scope.model.laboralData.cv != '');
       }
 
       console.log(ok);
@@ -281,6 +309,8 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
 
     $scope.model.ci = 1;
     $scope.model.cr = 0;
+
+    $scope.model.offer.degree = 'Seleccionar';
 
     $scope.checkInscriptionPreconditions();
   }

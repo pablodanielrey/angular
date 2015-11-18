@@ -20,7 +20,7 @@ app.config(['$routeProvider', function($routeProvider) {
   })
 
   .otherwise({
-    redirectTo: '/main'
+    redirectTo: '/inscripcion'
   });
 
 }]);
