@@ -28,7 +28,7 @@ function Users($rootScope, $wamp, Session, Utils, Cache) {
 
 
   this.confirmMail = function(hash, callbackOk, callbackError) {
-    $wamp.call('users.mails.confirmMail', [hash])
+    $wamp.call('users.mails.confirmEmail', [hash])
       .then(function(res) {
         if (res != null) {
           callbackOk(res);
@@ -46,7 +46,7 @@ function Users($rootScope, $wamp, Session, Utils, Cache) {
     Envía un mail de confirmación al email dado por mail_id
   */
   this.sendConfirmMail = function(id, callbackOk, callbackError) {
-    $wamp.call('users.mails.sendConfirmMail', [id])
+    $wamp.call('users.mails.sendEmailConfirmation', [id])
       .then(function(res) {
         if (res != null) {
           callbackOk(res);
