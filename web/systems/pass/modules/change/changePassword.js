@@ -40,14 +40,8 @@ app.controller('ChangePasswordCtrl', function($rootScope, $scope, $routeParams, 
   }
 
   $scope.$on('UserSelectedEvent', function(e,id) {
-    Users.findUser(id,
-    function(user) {
-
-    },
-    function(error) {
-
-    })
-  })
+    
+  });
 
   $scope.clear();
 
