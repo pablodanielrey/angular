@@ -653,6 +653,10 @@ justify-content: center;
 }
 
 
+.inscription .textIncluyendoSeminario {
+  font-size: 14px;
+}
+
 /******** pantalla idioma **********/
 
 .inscription .contentItemsLanguajes {
@@ -781,6 +785,11 @@ justify-content: center;
 	height:100%;
 	opacity: 0;
   cursor: pointer;
+}
+
+.inscription .textFormatoCV {
+  font-size: 14px;
+  color:#E43E46;
 }
 
 

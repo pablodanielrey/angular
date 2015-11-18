@@ -356,7 +356,7 @@
                     <div class="p2">
 
                         <span class="subTittlesForm">
-                          <b>Materias aprobadas con final (incluyendo seminario)</b>
+                          <b>Materias aprobadas con final </b> <span class="textIncluyendoSeminario">(incluyendo seminario)</span>
                         </span>
                         <div class="item">
                             <button><i class="fa fa-book"></i></button>
@@ -500,7 +500,7 @@
                     <div class="p6">
 
                         <div class="subTittlesForm">
-                          <b>CV (solo se acepta formato .pdf)</b>
+                          <b>Curriculum Vitae </b> <span class="textFormatoCV"> &nbsp; (en formato <i class="fa fa-file-pdf-o"></i> PDF </span>)
                         </div>
                         <div class="item">
                             <button><i class="fa fa-book"></i></button>
@@ -516,15 +516,15 @@
                         </div>
 
                         <div ng-if='model.loadingCv' class="subTittlesForm">
-                          <span>Cargando CV<span>
+                          <span><i class="fa fa-spinner fa-spin"></i> Cargando CV<span>
                         </div>
 
                         <div ng-if='model.formatCV' class="subTittlesForm">
-                          <span>SOLO PDF<span>
+                          <span class="textFormatoCV"><i class="fa fa-cog fa-spin"></i> Formato de CV Incompatible<span>
                         </div>
 
                         <div ng-if="model.cv_name != undefined && model.cv_name != ''" class="subTittlesForm">
-                          {{model.cv_name}} <a href="/c/files.py?i={{model.laboralData.cv}}" target="_blank"><div class="subTittlesForm"><b>Descargar</b></div></a>
+                          <i class="fa fa-file-pdf-o"></i> {{model.cv_name}} &nbsp;  <a href="/c/files.py?i={{model.laboralData.cv}}" target="_blank"><span class="subTittlesForm"> <i class="fa fa-download"> Ver</i></span></a>
                         </div>
 
                     </div>
