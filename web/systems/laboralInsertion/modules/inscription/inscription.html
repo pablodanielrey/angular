@@ -21,19 +21,22 @@
                     </div>
 
 
-                    <div ng-if='model.loadingPhoto'>
-                      Cargando Foto
+                    <div  ng-if='model.loadingPhoto'>
+                      <div class="photo2" placeholder="Foto"><i class="fa fa-circle-o-notch fa-spin fa-3x"></i>Cargando imágen...</div>
                     </div>
+
                     <div ng-if='model.formatPhoto'>
-                      Solo se acepta .jpg
+                      <div class="photo2" placeholder="Foto"><i class="fa fa-ban fa-4x"></i>Formato de imágen no compatible <div>(solo JPG)</div></div>
                     </div>
-                     <div ng-if='getUserPhoto() != null' class="item">
+
+
+                   <div ng-if='getUserPhoto() != null' class="item">
 
                        <div ng-if='!model.loadingPhoto' class="fileUpload2" title="Cambiar Foto">
 
                            <input type="file" on-read-file-binary-string="addPhoto(fileName,fileContent)" class="upload" />
                        </div>
-                        <i class="fa fa-camera-retro iconoFotoMiniatura fa-2x" title="Cambiar Foto"></i>
+                        <div class="iconoFotoMiniatura"><i class="fa fa-camera-retro  fa-2x" title="Cambiar Foto"></i></div>
 
                         <img class="photo" ng-src='{{getUserPhoto()}}' alt="Pablo"/>
                     </div>
@@ -476,7 +479,7 @@
                                 <select class="lenguajeLevel" ng-model='i.level'>
                                   <option>Básico</option>
                                   <option>Intermedio</option>
-                                  <option>Excelente</option>
+                                  <option>Avanzado</option>
                                 </select>
 
                                  <span> <i class="fa fa-trash deleteLenguaje" ng-click="deleteLanguage(i)"></i> </span>

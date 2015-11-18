@@ -84,7 +84,13 @@
   color:white;
   margin: 5px;
   cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.3);
+  padding: 3px;
+  border-radius: 3px;
+
 }
+
+
 
 .inscription .fileUpload {
     position: relative;
@@ -140,6 +146,7 @@
 
 
 .inscription  .photo {
+
     display: flex;
     display: -webkit-flex; /* Safari */
     display: -moz-flex; /* mozilla */
@@ -152,15 +159,34 @@
     height: 192px;
     float: left;
     border: 1;
-    color: #eee;
+    background-color: #eee;
+
     border-radius: 3px 3px 3px 3px;
-    /*box-shadow: 0 0 2px rgba(0,0,0,.5) inset;*/
+    box-shadow: 0 0 2px rgba(0,0,0,.5) inset;
     color:rgba(0,0,0,.2);
     cursor:pointer;
 }
 
 .inscription  .photo2 {
-4
+  position: absolute;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:column;
+  -webkit-flex-direction:column; /* Safari */
+  -moz-flex-direction:column; /* mozilla */
+  align-items: center;
+  justify-content:center;
+  width: 300px;
+  height: 192px;
+  float: left;
+  border: 1;
+  background-color: #eee;
+
+  border-radius: 3px 3px 3px 3px;
+  box-shadow: 0 0 2px rgba(0,0,0,.5) inset;
+  color:rgba(0,0,0,.2);
+  cursor:pointer;
 }
 
 
@@ -538,7 +564,7 @@ justify-content: center;
   height: 100%;
   top:0px;
   left: 0px;
-
+  z-index: 999;
   position: absolute;
   background-color: rgba(0, 0, 0, 0.9);
   justify-content:center;
