@@ -363,7 +363,10 @@ class OfficesWamp(ApplicationSession):
         r = yield from loop.run_in_executor(None, self.addUserToOffices, userId, officeId)
         return r
 
-
+    '''
+    Retorna los roles que puede asignar el usuario (userId) para las oficinas (officesId) y para los usuarios (usersId)
+    Ademas retorna los roles que ya poseen los usuarios
+    '''
     def getRolesAdmin(self, sessionId, userId, officesId, usersId):
         con = self._getDatabase()
         try:
@@ -372,8 +375,10 @@ class OfficesWamp(ApplicationSession):
 
             roles = self.offices.getRolesAdmin(con, userId, officesId, usersId)
             assignedRoles = self.offices.getAssignedRoles(con, officesId, usersId, roles)
+            
+            ret =  {'roles':roles,'assignedRoles':assignedRoles}
 
-            return True
+            return ret
 
         except psycopg2.DatabaseError as e:
             con.rollback()
