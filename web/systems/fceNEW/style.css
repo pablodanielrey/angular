@@ -43,6 +43,24 @@
   font-size: 14px;
 }
 
+.sistema .notification {
+  background-color: #EC9122 !important;
+  position: absolute;
+  font-size: 12px !important;
+  border-radius: 10px;
+  z-index: 999;
+
+}
+
+.sistema .notification2 {
+  background-color: #E43E46 !important;
+  position: absolute;
+  font-size: 12px !important;
+  border-radius: 10px;
+  z-index: 999;
+
+}
+
 .sistema .main {
   display: flex;
   display: -webkit-flex; /* Safari */
@@ -54,11 +72,95 @@
   background-color: #EEEEEE;
 }
 
-.sistema .menu {
-  background-color: #5C5F69;
-  height: 100%;
-  width: 200px;
+
+.sistema .itemMenu {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  wrap:nowrap;
+  width: 100%;
+  height: 50px;
+  border-bottom: 1px solid #565963;
+  cursor: pointer;
+
 }
+
+.sistema .itemMenu:hover {
+  background-color: #3a3c44;
+}
+
+.sistema .itemMenu:hover .arrowItemsMenu {
+  color: #0066A6;
+}
+
+.sistema .itemMenu:hover .itemIcons {
+  color: #0066A6;
+}
+
+.sistema .itemTextMenu {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  color: white;
+  margin-left: 15px;
+  font-size: 14px;
+}
+
+
+
+.sistema .itemTextMenu2 {
+  color: white;
+  margin-left: 15px;
+  font-size: 14px;
+
+}
+
+.sistema .itemIcons {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  background-color: #3A3C44;
+  height: 100%;
+  width: 50px;
+  color: white;
+}
+
+.sistema .iconsMenu {
+
+}
+
+.sistema .arrowItemsMenu {
+  color: #3A3C44;
+  margin-right: 5px;
+}
+
 
 .sistema .content {
   background-color: #DBE2E5;
@@ -76,6 +178,186 @@
   background-color: #3A3C44;
   color: #DBE2E5;
   font-size: 10px;
-
   padding-left: 5px;
+  z-index: 999;
+}
+
+
+.sistema .closeMenu .itemTextMenu {
+  display: none;
+}
+.sistema .closeMenu .itemTextMenu2 {
+  display: none;
+}
+
+.sistema .closeMenu .menu {
+  width: 50px !important;
+  -webkit-transition: width 2s; /* Safari */
+    transition: width 2s;
+
+}
+
+.sistema .openMenu .menu {
+  width: 250px ;
+  -webkit-transition: width 2s; /* Safari */
+    transition: width 2s;
+}
+
+
+.sistema .menu {
+  background-color: #5C5F69;
+  height: 100%;
+  width: 250px;
+  -webkit-transition: width 0.2s; /* For Safari 3.1 to 6.0 */
+  transition: width 0.2s;
+
+
+
+}
+
+.sistema .menu.close{
+  width: 50px;
+  -webkit-transition: width 0.2s; /* For Safari 3.1 to 6.0 */
+  transition: width 0.2s;
+
+
+
+}
+
+
+
+.sistema .menu.close .itemTextMenu{
+  display: none;
+}
+
+.sistema .menu.close .itemTextMenu2{
+  display: none;
+}
+
+/*********** CHAT ******************/
+
+.sistema .chat {
+  position: absolute;
+  width: 300px;
+  height: 0px;
+  background-color: none;
+  z-index: 999;
+  top: 35px;
+  right: 20px;
+  transition: all 0.2s ease-in-out;
+  opacity: 0;
+
+}
+
+.sistema.verChat .chat {
+  height: 200px;
+  transition: all 0.2s ease-in-out;
+  opacity: 1;
+
+
+}
+
+.sistema .arrowChat {
+  color: #EC9122;
+  height: 12px;
+  margin-left: 120px;
+}
+
+.sistema .headerChat {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  background-color: #EC9122;
+  height: 75px;
+  border-radius: 5px 5px 0px 0px;
+  color: white;
+  font-size: 25px;
+}
+
+.sistema .contentChat {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  background-color: #EEEEEE;
+  height: 100%;
+  font-size: 20px;
+  color: grey;
+}
+
+/*********** NOTIFICACIONES ******************/
+
+.sistema .notificaciones {
+  position: absolute;
+  width: 300px;
+  height: 0px;
+  background-color: none;
+  z-index: 999;
+  top: 35px;
+  right: 20px;
+  transition: all 0.2s ease-in-out;
+  opacity: 0;
+
+}
+
+.sistema.verNoti .notificaciones {
+  height: 200px;
+  transition: all 0.2s ease-in-out;
+  opacity: 1;
+
+
+}
+
+.sistema .arrowNoti {
+  color: #E43E46;
+  height: 12px;
+  margin-left: 175px;
+}
+
+.sistema .headerNoti {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  background-color: #E43E46;
+  height: 75px;
+  border-radius: 5px 5px 0px 0px;
+  color: white;
+  font-size: 25px;
+}
+
+.sistema .contentNoti {
+
+  background-color: #EEEEEE;
+  height: 100%;
+  font-size: 14px;
+  color: grey;
+}
+
+.sistema .noti1 {
+  background-color: #dbd4d4;
+  color: #28292D;
+  padding: 10px;
+}
+
+.sistema .noti2 {
+  background-color: #e5dada;
+  color: #28292D;
+  padding: 10px;
 }

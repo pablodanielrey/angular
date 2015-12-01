@@ -8,7 +8,7 @@
   <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 </head>
 
-<body class="sistema">
+<body class="sistema verNoti">
 
     <div class="header">
         <div class="logo">
@@ -19,12 +19,18 @@
         <div class="access">
             <button title="Mi Perfil">
               <i class="fa fa-picture-o"></i> <span class="textUser"> Walter Blanco</span>
+              <button class="notification">3</button>
             </button>
             <button title="Chat">
                 <i class="fa fa-comments-o"></i>
+                <button class="notification">1</button>
             </button>
             <button title="Notificaciones">
                 <i class="fa fa-bell-o"></i>
+                <button class="notification2"><i class="fa fa-exclamation-triangle"></i></button>
+            </button>
+            <button title="Salir">
+              <i class="fa fa-server"></i>
             </button>
             <button title="Salir">
               <i class="fa fa-power-off"></i>
@@ -34,13 +40,77 @@
     </div>
 
     <div class="main">
-        <div class="menu">
-          menu
+        <div class="menu " id="itemMenuId">
+            <div class="itemMenu"  onclick="if (document.getElementById('itemMenuId').className == 'menu close') {document.getElementById('itemMenuId').className = 'menu'} else {document.getElementById('itemMenuId').className = 'menu close'} ">
+                <div class="itemTextMenu2">
+                  <b>MENU</b>
+                </div>
+                <div class="itemIcons" title="Menu">
+                  <i class="fa fa-bars  iconsMenu"></i>
+                </div>
+            </div>
+            <div class="itemMenu" >
+                <div class="itemTextMenu">
+                  <i class="fa fa-caret-right arrowItemsMenu"></i> Usuarios
+                </div>
+                <div class="itemIcons" title="Edición de Usuarios">
+                  <i class="fa fa-user iconsMenu" ></i>
+                </div>
+            </div>
+            <div class="itemMenu" >
+                <div class="itemTextMenu">
+                  <i class="fa fa-caret-right arrowItemsMenu"></i> Grupos
+                </div>
+                <div class="itemIcons" title="Edición de grupos">
+                  <i class="fa fa-users iconsMenu" ></i>
+                </div>
+            </div>
+            <div class="itemMenu" >
+                <div class="itemTextMenu">
+                  <i class="fa fa-caret-right arrowItemsMenu"></i> Pedido de <br> Cuentas
+                </div>
+                <div class="itemIcons" title="Pedido de cuentas">
+                  <i class="fa fa-user-plus iconsMenu" ></i>
+                </div>
+            </div>
         </div>
 
         <div class="content">
-          contenido
+          <span>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+          aaaaaaaaaaaaaaaaaaaaaaaaaa aaaa a a a a a a a a a a a a a a  a a  a a
+          </span>
+
         </div>
+    </div>
+
+    <div class="chat">
+      <div class="arrowChat">
+        <i class="fa fa-sort-asc fa-2x"></i>
+      </div>
+      <div class="headerChat">
+        <i class="fa fa-comments-o fa-2x"></i> &nbsp; Chat FCE
+      </div>
+      <div class="contentChat">
+          PROXIMAMENTE!!!
+      </div>
+    </div>
+
+    <div class="notificaciones">
+      <div class="arrowNoti">
+        <i class="fa fa-sort-asc fa-2x"></i>
+      </div>
+      <div class="headerNoti">
+        <i class="fa fa-bell-o fa-2x"></i> &nbsp; Notificaciones
+      </div>
+      <div class="contentNoti">
+          <div class="noti1">
+            <i class="fa fa-envelope-o"></i> Mail de Contato aún sin confirmar   <b>CONFIRMAR AHORA</b>
+          </div>
+          <div class="noti2">
+            <i class="fa fa-key"></i> Su contraseña esta a punto de expirar   <b>CREAR NUEVA CONTRASEÑA</b>
+          </div>
+
+      </div>
     </div>
 
     <div class="footer">
