@@ -1,0 +1,70 @@
+Sea A) antiguo esquema laboral_insertion
+y B) nuevo esquema de laboral_insertion
+
+terminal 1: sudo su, su postgres para hacer los backups más facil de A
+
+1) BACKUP DE A: laboral_insertions.users_cv
+IMPORTAR en B.
+
+  CREATE TABLE laboral_insertions.users_cv (
+    id character varying NOT NULL PRIMARY KEY,
+    cv bytea,
+    creation timestamp with time zone DEFAULT now(),
+    name character varying NOT NULL
+  );
+  
+  \i 1.sql
+  
+INSERT INTO files.files (id, content, name, created) SELECT id, data, name, creation FROM laboral_insertion.users_cv;
+
+Eliminar laboral_insertion.users_cv
+
+2) Backup de A: laboral_insertions.users
+Como no son muchos  los datos editar el backup, cambiar el nombre de users  por users_temp y agregarle creacion de esquema
+En B \i 6.sql
+
+Se insertan los valores de users_temp en users (se omiten los ya insertados que son 3 valroes)
+INSERT INTO laboral_insertion.users (id, creation, accepted_conditions, cv) SELECT ut.id, ut.creation, ut.accepted_conditions, ut.id FROM users_temp ut 
+INNER JOIN file.file f ON (ut.id = f.id)
+INNER JOIN profile.users pu ON (ut.id = pu.id)
+WHERE ut.id NOT IN('9c5cf510-cc0d-4cc2-83e5-e61e3e39be58', 'f4db8211-55e0-4adf-8443-72fed94cc1b0', '89d88b81-fbc0-48fa-badb-d32854d3d93a');
+
+3)
+Backup de A de languages
+En B: \i 9.sql
+UPDATE laboral_insertion.languages SET level = INITCAP(level);
+
+4) BACKUP DE A datos y esquema por separado porque va a ver kilombo con las fk
+pg_dump --data-only --table=laboral_insertion.degree --dbname=dcsys -b --file=degree_data.sql
+pg_dump --data-only --table=laboral_insertion.degree --dbname=dcsys -b --file=degree_schema.sql
+
+editar degree_schema para sacar los constraints de fk.
+
+CREATE TABLE laboral_insertion.degree (
+    id character varying NOT NULL,
+    user_id character varying,
+    name character varying NOT NULL,
+    courses integer,
+    average1 real,
+    average2 real,
+    work_type character varying
+);
+
+EN B: 
+  script anterior para crear tabla
+  \i degree_data.sql
+  
+ 
+INSERT INTO laboral_insertion.inscriptions (id, user_id, degree, courses, average1, average2, work_type)
+SELECT d.id, d.user_id, d.name, d.courses, d.average1, d.average2, replace(replace(replace(replace(d.work_type, ';', E'\n'), 'Internship', 'Pasantía'), 'FullTime', 'Full-Time' ), 'YoungProfessionals', 'Programa estudiantes avanzados y jovenes profesionales') 
+FROM laboral_insertion.degree d
+INNER JOIN laboral_insertion.users u ON (d.user_id = u.id)
+WHERE d.average1 IS NOT NULL AND d.courses IS NOT NULL AND d.average2 IS NOT NULL;
+
+DROP TABLE laboral_insertion.degree;
+DROP TABLE users_temp;
+DROP TABLE laboral_insertion.users_cv;
+
+
+reemplazar ultimo salto de línea:
+UPDATE laboral_insertion.inscriptions SET work_type = regexp_replace(work_type, '\n+$', '');
