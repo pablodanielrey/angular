@@ -162,10 +162,6 @@
 }
 
 
-.sistema .content {
-  background-color: #DBE2E5;
-  width: 100%;
-}
 
 .sistema .footer {
   display: flex;
@@ -247,6 +243,7 @@
   transition: all 0.2s ease-in-out;
   opacity: 0;
 
+
 }
 
 .sistema.verChat .chat {
@@ -274,10 +271,10 @@
   -webkit-justify-content: center;
   -moz-justify-content: center;
   background-color: #EC9122;
-  height: 75px;
+  height: 60px;
   border-radius: 5px 5px 0px 0px;
   color: white;
-  font-size: 25px;
+  font-size: 20px;
 }
 
 .sistema .contentChat {
@@ -294,6 +291,11 @@
   height: 100%;
   font-size: 20px;
   color: grey;
+  box-shadow: 1px 1px 5px #5c5f69;
+  -webkit-box-shadow: 1px 1px 5px #5c5f69;
+  -moz-box-shadow: 5px 5px 5px #5c5f69;
+
+
 }
 
 /*********** NOTIFICACIONES ******************/
@@ -308,6 +310,7 @@
   right: 20px;
   transition: all 0.2s ease-in-out;
   opacity: 0;
+
 
 }
 
@@ -336,28 +339,192 @@
   -webkit-justify-content: center;
   -moz-justify-content: center;
   background-color: #E43E46;
-  height: 75px;
+  height: 60px;
   border-radius: 5px 5px 0px 0px;
   color: white;
-  font-size: 25px;
+  font-size: 20px;
 }
 
 .sistema .contentNoti {
 
-  background-color: #EEEEEE;
+  background-color: #E5E5E5;
   height: 100%;
   font-size: 14px;
   color: grey;
+  box-shadow: 1px 1px 5px #5c5f69;
+  -webkit-box-shadow: 1px 1px 5px #5c5f69;
+  -moz-box-shadow: 5px 5px 5px #5c5f69;
+  padding: 15px;
+  overflow-y: scroll;
 }
 
-.sistema .noti1 {
-  background-color: #dbd4d4;
+.sistema .noti {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  background-color: #FFFFFF;
   color: #28292D;
-  padding: 10px;
+  box-shadow: 1px 1px 2px #5c5f69;
+  -webkit-box-shadow: 1px 1px 2px #5c5f69;
+  -moz-box-shadow: 5px 5px 2px #5c5f69;
+  margin-bottom: 15px;
+  border-bottom: 3px solid  #E43E46;
+  cursor:pointer;
 }
+
+.sistema .iconoNoti {
+  width: 50px;
+  height: 50px;
+  background-color: #E43E46;
+  padding: 10px;
+  color: #E5E5E5;
+
+}
+
+.sistema .textNoti {
+  padding: 5px;
+  font-size: 12px;
+  width: 300px;
+}
+
 
 .sistema .noti2 {
-  background-color: #e5dada;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  background-color: #FFFFFF;
   color: #28292D;
+  box-shadow: 1px 1px 2px #5c5f69;
+  -webkit-box-shadow: 1px 1px 2px #5c5f69;
+  -moz-box-shadow: 5px 5px 2px #5c5f69;
+  margin-bottom: 15px;
+  border-bottom: 3px solid  #128C78;
+  cursor:pointer;
+}
+
+.sistema .iconoNoti2 {
+  width: 50px;
+  height: 50px;
+  background-color: #128C78;
   padding: 10px;
+  color: #E5E5E5;
+
+}
+
+.sistema .textNoti2 {
+  padding: 5px;
+  font-size: 12px;
+  width: 300px;
+}
+
+/*********** SERVER ******************/
+
+.sistema .server {
+  position: absolute;
+  width: 300px;
+  height: 0px;
+  background-color: none;
+  z-index: 999;
+  top: 35px;
+  right: 20px;
+  transition: all 0.2s ease-in-out;
+  opacity: 0;
+
+
+}
+
+.sistema.verServer .server {
+  height: 150px;
+  transition: all 0.2s ease-in-out;
+  opacity: 1;
+
+
+}
+
+.sistema .arrowServer {
+  color: #804080;
+  height: 12px;
+  margin-left: 230px;
+}
+
+.sistema .headerServer {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  background-color: #804080;
+  height: 60px;
+  border-radius: 5px 5px 0px 0px;
+  color: white;
+  font-size: 20px;
+}
+
+.sistema .contentServer {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:column;
+  -webkit-flex-direction:column; /* Safari */
+  -moz-flex-direction:column; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  background-color: #EEEEEE;
+  height: 100%;
+  font-size: 20px;
+  color: #3A3C44;
+  box-shadow: 1px 1px 5px #5c5f69;
+  -webkit-box-shadow: 1px 1px 5px #5c5f69;
+  -moz-box-shadow: 5px 5px 5px #5c5f69;
+
+
+}
+
+
+
+/********** CONTENEDOR PRINCIPAL ****************/
+
+.sistema .content {
+  padding: 10px;
+  background-color: #DBE2E5;
+  width: 100%;
+  height: 100%;
+
+}
+
+.sistema .contentSistemas {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  flex-wrap: wrap;
+
+
+}
+
+.sistema .System1 {
+  width: 180px;
+  height: 150px;
+  background-color: grey;
+  box-shadow: 1px 1px 5px #5c5f69;
+  -webkit-box-shadow: 1px 1px 5px #5c5f69;
+  -moz-box-shadow: 5px 5px 5px #5c5f69;
+  margin: 10px;
+  background-image: url("http://www.publicidadexterior.com.ar/home/images/stories/2013/camaras_seguridad.jpg");
 }
