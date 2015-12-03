@@ -59,7 +59,7 @@ class LaboralInsertion:
 
                 import os
                 filename, extension = os.path.splitext(cv['name'])
-                cv_name = '{}-{}-{}{}'.format(user['lastname'], user['name'], user['dni'], extension)
+                cv_name = '{}{}'.format(user['dni'], extension)
 
                 w.writerow([
                  i['creation'],
