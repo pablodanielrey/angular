@@ -52,6 +52,7 @@ class LaboralInsertion:
 
                 email = self.users.findMail(con, ld['email'])
                 cvId = ld['cv']
+                cv = self.files.findById(con, ld['cv'])
 
                 english = 'Inglés' in (l['name'] for l in ld['languages'])
                 portugues = 'Portugués' in (l['name'] for l in ld['languages'])
@@ -93,7 +94,6 @@ class LaboralInsertion:
 
                  ])
 
-                cv = self.files.findById(con, ld['cv'])
                 logging.debug('escribiendo cv : {}'.format(cv))
                 #with open('{}{}'.format(root, cv_name), 'wb') as c:
 
