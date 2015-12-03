@@ -56,7 +56,9 @@ class LaboralInsertion:
                 english = 'Inglés' in (l['name'] for l in ld['languages'])
                 portugues = 'Portugués' in (l['name'] for l in ld['languages'])
 
-                cv_name = '{}-{}-{}.pdf'.format(user['lastname'], user['name'], user['dni'])
+                import os
+                filename, extension = os.path.splitext(cv['name'])
+                cv_name = '{}-{}-{}{}'.format(user['lastname'], user['name'], user['dni'], extension)
 
                 w.writerow([
                  i['creation'],
@@ -94,9 +96,8 @@ class LaboralInsertion:
                 cv = self.files.findById(con, ld['cv'])
                 logging.debug('escribiendo cv : {}'.format(cv))
                 #with open('{}{}'.format(root, cv_name), 'wb') as c:
-                import os
-                filename, extension = os.path.splitext(cv['name'])
-                with open('{}{}{}'.format(root, user['dni'], extension), 'wb') as c:
+
+                with open('{}{}'.format(root, cv_name), 'wb') as c:
                     try:
                         if cv['codec'] == 'binary':
                             c.write(bytes(cv['content']))
