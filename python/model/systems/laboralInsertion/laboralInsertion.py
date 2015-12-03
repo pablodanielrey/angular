@@ -93,8 +93,17 @@ class LaboralInsertion:
 
                 cv = self.files.findById(con, ld['cv'])
                 logging.debug('escribiendo cv : {}'.format(cv))
-                with open('{}{}'.format(root, cv_name), 'wb') as c:
-                    c.write(base64.b64decode(bytes(cv['content'])))
+                #with open('{}{}'.format(root, cv_name), 'wb') as c:
+                import os
+                filename, extension = os.path.splitext(cv['name'])
+                with open('{}{}{}'.format(root, user['dni'], extension), 'wb') as c:
+                    try:
+                        if cv['codec'] == 'binary':
+                            c.write(bytes(cv['content']))
+                        elif cv['codec'] == 'base64':
+                            c.write(base64.b64decode(bytes(cv['content'])))
+                    except Exception as e:
+                        logging.warn('error en cv {}'.format(cv))
 
                 index = index + 1
 
