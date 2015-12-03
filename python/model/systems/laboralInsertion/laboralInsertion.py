@@ -66,7 +66,7 @@ class LaboralInsertion:
                  user['birthdate'],
                  '',
                  user['dni'],
-                 email['email'],
+                 email['email'] if email else '',
                  user['country'],
                  user['city'],
                  user['residence_city'],
