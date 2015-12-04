@@ -425,7 +425,7 @@
 
 /*********** SERVER ******************/
 
-.sistema .server {
+.sistema .serverDesconectado {
   position: absolute;
   width: 300px;
   height: 0px;
@@ -439,8 +439,8 @@
 
 }
 
-.sistema.verServer .server {
-  height: 150px;
+.sistema.verServer .serverDesconectado {
+  height: 120px;
   transition: all 0.2s ease-in-out;
   opacity: 1;
 
@@ -448,7 +448,7 @@
 }
 
 .sistema .arrowServer {
-  color: #804080;
+  color: #E43E57;
   height: 12px;
   margin-left: 230px;
 }
@@ -463,7 +463,7 @@
   justify-content: center;
   -webkit-justify-content: center;
   -moz-justify-content: center;
-  background-color: #804080;
+  background-color: #E43E57;
   height: 60px;
   border-radius: 5px 5px 0px 0px;
   color: white;
@@ -493,6 +493,81 @@
 
 
 }
+
+.sistema .textReconectando {
+  font-size: 12px;
+}
+
+
+.sistema .serverConectado {
+  position: absolute;
+  width: 300px;
+  height: 0px;
+  background-color: none;
+  z-index: 999;
+  top: 35px;
+  right: 20px;
+  transition: all 0.2s ease-in-out;
+  opacity: 0;
+
+
+}
+
+.sistema.verServer .serverConectado {
+  height: 120px;
+  transition: all 0.2s ease-in-out;
+  opacity: 1;
+
+
+}
+
+.sistema .arrowServer {
+  color: #128c78;
+  height: 12px;
+  margin-left: 230px;
+}
+
+.sistema .headerServer {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  background-color: #128c78;
+  height: 60px;
+  border-radius: 5px 5px 0px 0px;
+  color: white;
+  font-size: 20px;
+}
+
+.sistema .contentServer {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:column;
+  -webkit-flex-direction:column; /* Safari */
+  -moz-flex-direction:column; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  background-color: #EEEEEE;
+  height: 100%;
+  font-size: 20px;
+  color: #3A3C44;
+  box-shadow: 1px 1px 5px #5c5f69;
+  -webkit-box-shadow: 1px 1px 5px #5c5f69;
+  -moz-box-shadow: 5px 5px 5px #5c5f69;
+
+
+}
+
 
 
 
@@ -527,4 +602,55 @@
   -moz-box-shadow: 5px 5px 5px #5c5f69;
   margin: 10px;
   background-image: url("http://www.publicidadexterior.com.ar/home/images/stories/2013/camaras_seguridad.jpg");
+}
+
+
+/******************* VISTA CELULAR ******************************/
+
+@media (min-width: 720px) and (orientation:landscape){
+  .sistema .icoLogo {
+      display: none;
+  }
+}
+
+
+@media (max-width: 719px) {
+  .sistema .menu {
+      display: none;
+  }
+}
+
+
+
+@media (max-width: 1024px) and (orientation:portrait){
+  .sistema .menu {
+      display: none;
+  }
+
+  .sistema .header {
+      height: 120px !important;
+  }
+
+  .sistema .access {
+
+    zoom: 200%;
+  }
+
+  .sistema .logo {
+    zoom:200%;
+  }
+
+
+}
+
+@media (max-width: 720px){
+  .sistema .footer {
+      display: none;
+  }
+}
+
+@media (max-height: 500px){
+  .sistema .footer {
+      display: none;
+  }
 }
