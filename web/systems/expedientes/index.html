@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html ng-app="mainApp">
+<head>
+  <meta charset="utf-8"/>
+  <meta name='viewport' content='width=device-width'/>
+
+  <!-- LIBRERIAS -->
+  <script src="/libs/bower_components/angularjs/angular.js"></script>
+  <script src="/libs/bower_components/angular-route/angular-route.js"></script>
+  <script src="/libs/bower_components/autobahn/autobahn.js"></script>
+  <script src="/libs/bower_components/angular-wamp/release/angular-wamp.js"></script>
+  <script src="/config-expedientes.json"></script>
+  
+  <!-- ARCHIVOS DE CONFIGURACION E INICIALIZACION -->
+  <script src="index.module.js"></script>
+  <script src="index.controller.js"></script>
+  <script src="route.js"></script>
+
+  <script src="modules/grid/destino/Destino.js"></script>
+  <!-- script type="text/javascript" src="/services/systems/expedientes/Destino.js"></script -->
+
+  <script src="modules/grid/expediente/Expediente.js"></script>
+  <!-- script type="text/javascript" src="/services/systems/expedientes/Expediente.js"></script -->
+
+  <script src="modules/grid/lugar/Lugar.js"></script>
+  <!-- script type="text/javascript" src="/services/systems/expedientes/Lugar.js"></script -->
+
+  <script src="modules/grid/nota/Nota.js"></script>
+  <!-- script type="text/javascript" src="/services/systems/expedientes/Nota.js"></script -->
+
+  <script src="modules/grid/participacion/Participacion.js"></script>
+  <!-- script type="text/javascript" src="/services/systems/expedientes/Participacion.js"></script -->
+
+  <script src="modules/grid/persona/Persona.js"></script>
+  <!-- script type="text/javascript" src="/services/systems/expedientes/Persona.js"></script -->
+
+  <script src="modules/grid/tema/Tema.js"></script>
+  <!-- script type="text/javascript" src="/services/systems/expedientes/Tema.js"></script -->
+
+</head>
+<body>
+  <div ng-view></div>
+
+</body>
+</html>
