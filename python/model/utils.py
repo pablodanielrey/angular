@@ -70,3 +70,21 @@ class Periodic(object):
         self._stopped = True
         self._timer.cancel()
         self._lock.release()
+        
+        
+        
+class Tools(object):
+
+   
+    @staticmethod
+    def concat(value, connectNoEmpty, connectEmpty = None, connectCond = None):
+      if not value:
+        return ''
+	
+      if not connectEmpty:
+        connect = connectNoEmpty
+      else:
+        connect = connectEmpty if not connectCond else connectNoEmpty
+		
+      return connect + " " + value
+        
