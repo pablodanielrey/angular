@@ -3,7 +3,7 @@ DELETE FROM assistance.schedule WHERE EXTRACT(EPOCH FROM (send - date)) <= 0 OR 
 
 CREATE TABLE scheduleTemp (
     id varchar primary key,
-    user_id varchar not null references profile.users (id),
+    user_id varchar not null,
     sdate date not null,
     sstart bigint not null,
     send bigint not null,
