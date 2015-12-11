@@ -4,8 +4,8 @@ app.service("Expediente", ["$wamp", function($wamp) {
     return $wamp.call('expedientes.expediente.findById', [id])
   }
 
-  this.gridData = function(search, pageSize, pageNumber) {
-    return $wamp.call('expedientes.expediente.gridData', [search, pageSize, pageNumber])
+  this.gridData = function(filterParams) {
+    return $wamp.call('expedientes.expediente.gridData', [filterParams])
   }
 
   this.numRows = function(search) {

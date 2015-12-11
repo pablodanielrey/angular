@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import uuid, psycopg2, inject
+import uuid, psycopg2, inject, psycopg2.extras
 from model.utils import Tools
 
 class Participacion:	
@@ -80,7 +80,10 @@ LEFT OUTER JOIN expedientes.persona AS per ON (part.persona = per.id)
             
         return cur.fetchone()
         
-    def gridData(self, con, search = None, pageNumber = 1, pageSize = 40):
+    def gridData(self, con, filterParams):
+        search = None
+        pageNumber = 1
+        pageSize = 40
         sql = "SELECT "
         sql = sql + self._fields()
         sql = sql + self._fieldsComplete()
@@ -92,12 +95,14 @@ LEFT OUTER JOIN expedientes.persona AS per ON (part.persona = per.id)
         if pageSize: 
           sql = sql + " LIMIT " + str(pageSize) + " OFFSET " + str((pageNumber - 1) * pageSize) + "; ";
         
-        cur = con.cursor()
+        cur = con.cursor(cursor_factory=psycopg2.extras.DictCursor)
         cur.execute(sql)
         
+        rows = cur.fetchall()
         data = []
-        for c in cur:
-            data.append(c)
+        for row in rows:
+            data.append(dict(row))
+            
         return data
 
     def numRows(self, con, search = None):

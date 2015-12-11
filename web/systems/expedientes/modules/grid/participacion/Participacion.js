@@ -8,4 +8,9 @@ app.controller("GridParticipacionCtrl", ["$scope", "$timeout", "Participacion", 
     TableGrid.initialize($scope, Participacion);
   },0);
 
+  /***** escuchar evento de incializacion de "gridNumRows" *****/
+  $scope.$on("gridNumRowsInitialized", function(event){
+    TableGrid.initializePagination($scope);
+    TableGrid.getGridData($scope, Participacion);
+  });
 }]);

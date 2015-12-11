@@ -32,26 +32,26 @@ class ExpedientesWamp(ApplicationSession):
     @coroutine
     def onJoin(self, details):
 
-        yield from self.register(self.getDestinoById_async, 'expedientes.getDestinoById')
-        yield from self.register(self.getDestinoGridData_async, 'expedientes.getDestinoGridData')
+        yield from self.register(self.rowByIdDestino_async, 'expedientes.destino.rowById')
+        yield from self.register(self.gridDataDestino_async, 'expedientes.destino.gridData')
         yield from self.register(self.numRowsDestino_async, 'expedientes.destino.numRows')  
-        yield from self.register(self.getExpedienteById_async, 'expedientes.getExpedienteById')
-        yield from self.register(self.getExpedienteGridData_async, 'expedientes.getExpedienteGridData')
+        yield from self.register(self.rowByIdExpediente_async, 'expedientes.expediente.rowById')
+        yield from self.register(self.gridDataExpediente_async, 'expedientes.expediente.gridData')
         yield from self.register(self.numRowsExpediente_async, 'expedientes.expediente.numRows')  
-        yield from self.register(self.getLugarById_async, 'expedientes.getLugarById')
-        yield from self.register(self.getLugarGridData_async, 'expedientes.getLugarGridData')
+        yield from self.register(self.rowByIdLugar_async, 'expedientes.lugar.rowById')
+        yield from self.register(self.gridDataLugar_async, 'expedientes.lugar.gridData')
         yield from self.register(self.numRowsLugar_async, 'expedientes.lugar.numRows')  
-        yield from self.register(self.getNotaById_async, 'expedientes.getNotaById')
-        yield from self.register(self.getNotaGridData_async, 'expedientes.getNotaGridData')
+        yield from self.register(self.rowByIdNota_async, 'expedientes.nota.rowById')
+        yield from self.register(self.gridDataNota_async, 'expedientes.nota.gridData')
         yield from self.register(self.numRowsNota_async, 'expedientes.nota.numRows')  
-        yield from self.register(self.getParticipacionById_async, 'expedientes.getParticipacionById')
-        yield from self.register(self.getParticipacionGridData_async, 'expedientes.getParticipacionGridData')
+        yield from self.register(self.rowByIdParticipacion_async, 'expedientes.participacion.rowById')
+        yield from self.register(self.gridDataParticipacion_async, 'expedientes.participacion.gridData')
         yield from self.register(self.numRowsParticipacion_async, 'expedientes.participacion.numRows')  
-        yield from self.register(self.getPersonaById_async, 'expedientes.getPersonaById')
-        yield from self.register(self.getPersonaGridData_async, 'expedientes.getPersonaGridData')
+        yield from self.register(self.rowByIdPersona_async, 'expedientes.persona.rowById')
+        yield from self.register(self.gridDataPersona_async, 'expedientes.persona.gridData')
         yield from self.register(self.numRowsPersona_async, 'expedientes.persona.numRows')  
-        yield from self.register(self.getTemaById_async, 'expedientes.getTemaById')
-        yield from self.register(self.getTemaGridData_async, 'expedientes.getTemaGridData')
+        yield from self.register(self.rowByIdTema_async, 'expedientes.tema.rowById')
+        yield from self.register(self.gridDataTema_async, 'expedientes.tema.gridData')
         yield from self.register(self.numRowsTema_async, 'expedientes.tema.numRows')  
 
     def _getDatabase(self):
@@ -62,12 +62,12 @@ class ExpedientesWamp(ApplicationSession):
         return psycopg2.connect(host=host, dbname=dbname, user=user, password=passw)
 
     @coroutine
-    def getDestinoById_async(self, id):
+    def rowByIdDestino_async(self, id):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getDestinoById, id)
+        r = yield from loop.run_in_executor(None, self.rowByIdDestino, id)
         return r
 
-    def getDestinoById(self, id):
+    def rowByIdDestino(self, id):
         con = self._getDatabase()
         try:
             r = self.destino.rowById(con, id)
@@ -77,15 +77,15 @@ class ExpedientesWamp(ApplicationSession):
             con.close()
 
     @coroutine
-    def getDestinoGridData_async(self, search):
+    def gridDataDestino_async(self, filterParams):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getDestinoGridData, search)
+        r = yield from loop.run_in_executor(None, self.gridDataDestino, filterParams)
         return r
 
-    def getDestinoGridData(self, search):
+    def gridDataDestino(self, filterParams):
         con = self._getDatabase()
         try:
-            r = self.destino.gridData(con, search)
+            r = self.destino.gridData(con, filterParams)
             return r
 
         finally:
@@ -107,12 +107,12 @@ class ExpedientesWamp(ApplicationSession):
             con.close()
 
     @coroutine
-    def getExpedienteById_async(self, id):
+    def rowByIdExpediente_async(self, id):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getExpedienteById, id)
+        r = yield from loop.run_in_executor(None, self.rowByIdExpediente, id)
         return r
 
-    def getExpedienteById(self, id):
+    def rowByIdExpediente(self, id):
         con = self._getDatabase()
         try:
             r = self.expediente.rowById(con, id)
@@ -122,15 +122,15 @@ class ExpedientesWamp(ApplicationSession):
             con.close()
 
     @coroutine
-    def getExpedienteGridData_async(self, search):
+    def gridDataExpediente_async(self, filterParams):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getExpedienteGridData, search)
+        r = yield from loop.run_in_executor(None, self.gridDataExpediente, filterParams)
         return r
 
-    def getExpedienteGridData(self, search):
+    def gridDataExpediente(self, filterParams):
         con = self._getDatabase()
         try:
-            r = self.expediente.gridData(con, search)
+            r = self.expediente.gridData(con, filterParams)
             return r
 
         finally:
@@ -152,12 +152,12 @@ class ExpedientesWamp(ApplicationSession):
             con.close()
 
     @coroutine
-    def getLugarById_async(self, id):
+    def rowByIdLugar_async(self, id):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getLugarById, id)
+        r = yield from loop.run_in_executor(None, self.rowByIdLugar, id)
         return r
 
-    def getLugarById(self, id):
+    def rowByIdLugar(self, id):
         con = self._getDatabase()
         try:
             r = self.lugar.rowById(con, id)
@@ -167,15 +167,15 @@ class ExpedientesWamp(ApplicationSession):
             con.close()
 
     @coroutine
-    def getLugarGridData_async(self, search):
+    def gridDataLugar_async(self, filterParams):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getLugarGridData, search)
+        r = yield from loop.run_in_executor(None, self.gridDataLugar, filterParams)
         return r
 
-    def getLugarGridData(self, search):
+    def gridDataLugar(self, filterParams):
         con = self._getDatabase()
         try:
-            r = self.lugar.gridData(con, search)
+            r = self.lugar.gridData(con, filterParams)
             return r
 
         finally:
@@ -197,12 +197,12 @@ class ExpedientesWamp(ApplicationSession):
             con.close()
 
     @coroutine
-    def getNotaById_async(self, id):
+    def rowByIdNota_async(self, id):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getNotaById, id)
+        r = yield from loop.run_in_executor(None, self.rowByIdNota, id)
         return r
 
-    def getNotaById(self, id):
+    def rowByIdNota(self, id):
         con = self._getDatabase()
         try:
             r = self.nota.rowById(con, id)
@@ -212,15 +212,15 @@ class ExpedientesWamp(ApplicationSession):
             con.close()
 
     @coroutine
-    def getNotaGridData_async(self, search):
+    def gridDataNota_async(self, filterParams):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getNotaGridData, search)
+        r = yield from loop.run_in_executor(None, self.gridDataNota, filterParams)
         return r
 
-    def getNotaGridData(self, search):
+    def gridDataNota(self, filterParams):
         con = self._getDatabase()
         try:
-            r = self.nota.gridData(con, search)
+            r = self.nota.gridData(con, filterParams)
             return r
 
         finally:
@@ -242,12 +242,12 @@ class ExpedientesWamp(ApplicationSession):
             con.close()
 
     @coroutine
-    def getParticipacionById_async(self, id):
+    def rowByIdParticipacion_async(self, id):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getParticipacionById, id)
+        r = yield from loop.run_in_executor(None, self.rowByIdParticipacion, id)
         return r
 
-    def getParticipacionById(self, id):
+    def rowByIdParticipacion(self, id):
         con = self._getDatabase()
         try:
             r = self.participacion.rowById(con, id)
@@ -257,15 +257,15 @@ class ExpedientesWamp(ApplicationSession):
             con.close()
 
     @coroutine
-    def getParticipacionGridData_async(self, search):
+    def gridDataParticipacion_async(self, filterParams):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getParticipacionGridData, search)
+        r = yield from loop.run_in_executor(None, self.gridDataParticipacion, filterParams)
         return r
 
-    def getParticipacionGridData(self, search):
+    def gridDataParticipacion(self, filterParams):
         con = self._getDatabase()
         try:
-            r = self.participacion.gridData(con, search)
+            r = self.participacion.gridData(con, filterParams)
             return r
 
         finally:
@@ -287,12 +287,12 @@ class ExpedientesWamp(ApplicationSession):
             con.close()
 
     @coroutine
-    def getPersonaById_async(self, id):
+    def rowByIdPersona_async(self, id):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getPersonaById, id)
+        r = yield from loop.run_in_executor(None, self.rowByIdPersona, id)
         return r
 
-    def getPersonaById(self, id):
+    def rowByIdPersona(self, id):
         con = self._getDatabase()
         try:
             r = self.persona.rowById(con, id)
@@ -302,15 +302,15 @@ class ExpedientesWamp(ApplicationSession):
             con.close()
 
     @coroutine
-    def getPersonaGridData_async(self, search):
+    def gridDataPersona_async(self, filterParams):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getPersonaGridData, search)
+        r = yield from loop.run_in_executor(None, self.gridDataPersona, filterParams)
         return r
 
-    def getPersonaGridData(self, search):
+    def gridDataPersona(self, filterParams):
         con = self._getDatabase()
         try:
-            r = self.persona.gridData(con, search)
+            r = self.persona.gridData(con, filterParams)
             return r
 
         finally:
@@ -332,12 +332,12 @@ class ExpedientesWamp(ApplicationSession):
             con.close()
 
     @coroutine
-    def getTemaById_async(self, id):
+    def rowByIdTema_async(self, id):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getTemaById, id)
+        r = yield from loop.run_in_executor(None, self.rowByIdTema, id)
         return r
 
-    def getTemaById(self, id):
+    def rowByIdTema(self, id):
         con = self._getDatabase()
         try:
             r = self.tema.rowById(con, id)
@@ -347,15 +347,15 @@ class ExpedientesWamp(ApplicationSession):
             con.close()
 
     @coroutine
-    def getTemaGridData_async(self, search):
+    def gridDataTema_async(self, filterParams):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getTemaGridData, search)
+        r = yield from loop.run_in_executor(None, self.gridDataTema, filterParams)
         return r
 
-    def getTemaGridData(self, search):
+    def gridDataTema(self, filterParams):
         con = self._getDatabase()
         try:
-            r = self.tema.gridData(con, search)
+            r = self.tema.gridData(con, filterParams)
             return r
 
         finally:

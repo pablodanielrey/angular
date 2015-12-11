@@ -8,4 +8,9 @@ app.controller("GridTemaCtrl", ["$scope", "$timeout", "Tema", "TableGrid", funct
     TableGrid.initialize($scope, Tema);
   },0);
 
+  /***** escuchar evento de incializacion de "gridNumRows" *****/
+  $scope.$on("gridNumRowsInitialized", function(event){
+    TableGrid.initializePagination($scope);
+    TableGrid.getGridData($scope, Tema);
+  });
 }]);

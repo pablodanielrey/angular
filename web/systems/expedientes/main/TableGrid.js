@@ -83,42 +83,41 @@ app.service('TableGrid', ["$location", "$rootScope", "$http", function($location
   /***** METODOS ASOCIADOS A LA PAGINACION *****  
   /**
    * Inicializar paginacion: En funcion de numRows se inicializan los parametros de paginacion
-   * @param {type} scope
+   * @param {type} $scope
    * @returns {undefined}
    */
-  this.initializePagination = function(scope){
-    scope.pagination.pageSize = parseInt(scope.pagination.pageSize);
-    scope.pagination.page = 0;
-    scope.pagination.pages = 0;
-    scope.pagination.disabled = true;
-    if (scope.grid.numRows > 0){
-      scope.pagination.page = 1;
-      scope.pagination.pages = (scope.grid.numRows !== 0) ? Math.ceil(scope.grid.numRows / scope.pagination.pageSize) : 0;
+  this.initializePagination = function($scope){
+    $scope.pagination.pageSize = parseInt($scope.pagination.pageSize);
+    $scope.pagination.page = 0;
+    $scope.pagination.pages = 0;
+    $scope.pagination.disabled = true;
+    if ($scope.grid.numRows > 0){
+      $scope.pagination.page = 1;
+      $scope.pagination.pages = ($scope.grid.numRows !== 0) ? Math.ceil($scope.grid.numRows / $scope.pagination.pageSize) : 0;
     }  
   };
   
   /**
    * Consultar datos de una pagina
-   * @param {type} scope
+   * @param {type} $scope
    * @param {type} page
    * @returns {undefined}
    */  
-  this.goPage = function(scope, page){
-    scope.pagination.disabled = true;
+  this.goPage = function($scope, page){
+    $scope.pagination.disabled = true;
     var p = parseInt(page);    
-    scope.pagination.page = (isNaN(p)) ? 1 :
+    $scope.pagination.page = (isNaN(p)) ? 1 :
       (p < 1) ? 1 :
-        (p > scope.pagination.pages) ? scope.pagination.pages : p;
+        (p > $scope.pagination.pages) ? $scope.pagination.pages : p;
     
-    this.getGridData(scope);
+    this.getGridData($scope);
   };
   
   
   /***** METODOS DE FORMATO DE VARIABLES PARA ENVIAR AL SERVIDOR *****/
   /**
    * Definir parametros de busqueda para enviar al servidor
-   * @param {type} scope
-   * @param {type} access
+get
    * @returns {undefined}
    */
   this.defineSearchParams = function(search){  
@@ -222,16 +221,17 @@ app.service('TableGrid', ["$location", "$rootScope", "$http", function($location
    * @param {$scope} $scope
    * @param {String} access Identificacion de acceso
    */
-  this.getGridData = function($scope){
+  this.getGridData = function($scope, ServerAccess){
     
     $scope.grid.data = []; 
     if($scope.grid.numRows < 1) return;
 
     var params = this.defineParams($scope);
     
-    $http.post($location.protocol() + "://" + $location.host() + "/" + $location.path() + "?go=getGridData&t=" + $scope.grid.id, params)
+    ServerAccess.gridData(params)
       .then(
         function(response){
+          console.log(response)
           $scope.grid.data = response.data;   //cargar datos de la grilla
           $scope.pagination.disabled = false; //habilitar paginacion
         },

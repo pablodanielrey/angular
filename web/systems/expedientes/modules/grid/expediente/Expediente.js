@@ -8,4 +8,9 @@ app.controller("GridExpedienteCtrl", ["$scope", "$timeout", "Expediente", "Table
     TableGrid.initialize($scope, Expediente);
   },0);
 
+  /***** escuchar evento de incializacion de "gridNumRows" *****/
+  $scope.$on("gridNumRowsInitialized", function(event){
+    TableGrid.initializePagination($scope);
+    TableGrid.getGridData($scope, Expediente);
+  });
 }]);
