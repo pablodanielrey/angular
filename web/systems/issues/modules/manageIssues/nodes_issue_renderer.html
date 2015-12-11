@@ -16,20 +16,68 @@
           <div ng-if="!collapsed">
               <button class="btn cO fa fa-minus-square" title="Expandir Pedido" ng-click="toggleNode(this)" ></button>
           </div>
-        </div>
+      </div>
 
+<<<<<<< HEAD
         <div>
             <textarea readonly class="orderText"  ng-model="node.request" ng-class="{'tree': node.expanded}"  ng-click="expandInput(node)"></textarea>
 
             <div ng-class="{true:'descriptionExpanded',false:'descriptionClosed'}[node.descriptionExpanded]">
               {{node.created | date:"dd/MM/yyyy hh:mm" }}
               {{node.requestor}}
+=======
+      <div>
+            <div class="orderText" ng-click="toggleNodeData(node)">
+              <div class="itemsComment">
+                  <div class="items">
+                      <span class="requestor">{{node.requestor}}</span>
+                  </div>
+                  <div class="items">
+                      <span class="date">{{node.created | date:"dd/MM/yyyy" }} | {{node.created | date:"hh:mm" }}</span>
+                  </div>
+              </div>
+              <div class="text">{{getNodeRequest(node)}}</div>
+              <div class="btnComment2">
+                  <button class="btn cO fa fa-comment" title="Realizar Comentario" ng-click="addComment(node)"></button>
+              </div>
+              <div Class="btnDelete2">
+                  <button class="btn cR fa fa-trash" title="Eliminar Comentario" ng-click="deleteNode(this)"></button>
+              </div>
             </div>
-        </div>
+            
+
+            <div ng-class="{true:'descriptionExpanded',false:'descriptionClosed'}[node.descriptionExpanded]">
+              <div class="contentDataOrder">
+                  <div>
+                      <textarea class="orderText"  readonly ng-model="node.request"></textarea>
+                  </div>
+                  <div class="oderInfo">
+                      <div><i class="fa fa-tag"></i> <b>Pedido Nº: </b> {{node.id | limitTo:5}}</div>
+                      <div>
+                          <span><i class="fa fa-calendar-o"></i> <b>Fecha: </b> {{node.created | date:"dd/MM/yyyy" }}</span>
+                          <span><i class="fa fa-clock-o"></i> <b>Hora: </b> {{node.created | date:"hh:mm" }}</span>
+                      </div>
+                      <div><i class="fa fa-user"></i> <b>Usuario: </b>  {{node.requestor}}</div>
+                      <div><i class="fa fa-building"></i> <b>Oficina: </b>  {{node.office.name}}</div>
+                      
+                      <!--<div><i class="fa fa-eye"></i> <b>Visibilidad: </b>  {{node.visibilitiesOffices}}</div> -->
+
+                  </div>
+              </div>
+>>>>>>> e4f2118cd194737c04f1db778b72f462e5ac88fb
+            </div>
+      </div>
     </div>
+<<<<<<< HEAD
     <div class="assigned-container">
       <span class="text_assigned" ng-click="openAssigned(node)">Asignado a:</span>
     </div>
+=======
+    
+    
+    
+    
+>>>>>>> e4f2118cd194737c04f1db778b72f462e5ac88fb
     <div class="orderIcons">
         <div class="btnState">
             <select ng-model='node.state' ng-change="updateIssueData(node)">
@@ -38,11 +86,23 @@
             </select>
         </div>
 
+
         <div class="btnDataOrder">
+<<<<<<< HEAD
             <button class="btn cB fa fa-caret-square-o-down" title="Datos del Pedido" ng-click="toggleNodeData(this)"></button>
         </div>
 
         <div>
+=======
+            <button class="btn cB fa fa-caret-square-o-down" title="Datos del Pedido" ng-click="toggleNodeData(node)"></button>
+        </div>
+        
+        <div class="btnVisibility">
+          <button class="btn cV fa fa-eye" title="Asignado a:" ng-click="openAssigned(node)"></button>
+        </div>
+        
+        <div class="btnComment">
+>>>>>>> e4f2118cd194737c04f1db778b72f462e5ac88fb
             <button class="btn cO fa fa-comment" title="Realizar Comentario" ng-click="addComment(node)"></button>
         </div>
         <div class="btnSubTarea">
@@ -58,4 +118,8 @@
   <ol ui-tree-nodes ng-model="node.childrens" ng-class="{'angular-ui-tree-hidden': collapsed}">
     <li  ng-repeat="node in node.childrens" ui-tree-node ng-include="'modules/manageIssues/nodes_issue_renderer.html'">
     </li>
+<<<<<<< HEAD
   </ol>
+=======
+  </ol>
+>>>>>>> e4f2118cd194737c04f1db778b72f462e5ac88fb

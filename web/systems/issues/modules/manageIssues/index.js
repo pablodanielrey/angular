@@ -53,17 +53,6 @@ app.controller('ManageIssuesCtrl', ["$scope", "$timeout", "$window", "Module", "
   };
 
 
-  $scope.getNodeRequest = function(node) {
-    if (node.state == "COMMENT") {
-      return node.request;
-    }
-    var st = node.request;
-    if (st.length > 40) {
-      st = st.substring(0,60) + '....';
-    }
-    return st;
-  }
-
 
   /**
    * Incrementar espacio de la descripcion del nodo al hacer click (textarea) para facilitar el ingreso de datos
@@ -90,9 +79,11 @@ app.controller('ManageIssuesCtrl', ["$scope", "$timeout", "$window", "Module", "
    * Interruptor para visualizar descripcion del nodo
    * @param {type} nodeScope
    */
-  $scope.toggleNodeData = function (nodeScope) {
-    var nodeData = nodeScope.$modelValue;
-    nodeData.collapsedDescription = !nodeData.collapsedDescription;
+  $scope.toggleNodeData = function (node) {
+    if (node.state == "COMMENT") {
+      return;
+    }
+    node.descriptionExpanded = !node.descriptionExpanded;
   };
 
 
@@ -101,7 +92,6 @@ app.controller('ManageIssuesCtrl', ["$scope", "$timeout", "$window", "Module", "
   $scope.expandDescription = function(nodeScope){
     var nodeData = nodeScope.$modelValue;
     nodeData.descriptionExpanded = !nodeData.descriptionExpanded ;
-    nodeData.collapsedDescription = !nodeData.collapsedDescription;
   };
 
 
@@ -127,7 +117,6 @@ app.controller('ManageIssuesCtrl', ["$scope", "$timeout", "$window", "Module", "
     $scope.model.newNode = $scope.initializeNode("PENDING");
     $scope.model.newNode.parent_id = nodeData.id;
     $scope.model.newNode.visibilities = nodeData['visibilities'];
-    $scope.model.newNode.collapsedDescription = true;
   };
 
   $scope.addComment = function(nodeData){
@@ -137,7 +126,6 @@ app.controller('ManageIssuesCtrl', ["$scope", "$timeout", "$window", "Module", "
     $scope.model.newNode = $scope.initializeNode("COMMENT");
     $scope.model.newNode.parent_id = nodeData.id;
     $scope.model.newNode.visibilities = nodeData['visibilities'];
-    $scope.model.newNode.collapsedDescription = true;
   };
 
   $scope.saveChild = function() {
@@ -203,10 +191,20 @@ app.controller('ManageIssuesCtrl', ["$scope", "$timeout", "$window", "Module", "
     );
   };
 
-
+  $scope.getNodeRequest = function(node) {
+    if (node.state == "COMMENT") {
+      return node.request;
+    }
+    var st = node.request;
+    if (st.length > 40) {
+      st = st.substring(0,60) + '....';
+    }
+    return st;
+  }
+  
 
   $scope.loadDataNode = function(node) {
-    Users.findUser(node.requestor_id,
+    Users.findUser(node.creator,
       function(user) {
         node.requestor = user.name + " " + user.lastname;
       },
@@ -214,7 +212,20 @@ app.controller('ManageIssuesCtrl', ["$scope", "$timeout", "$window", "Module", "
       }
     );
 
+    Office.findOffices([node.office_id],
+      function(offices) {
+        if (offices == null || offices.length == 0) {
+            node.office = null;
+        } else {
+          node.office = offices[0];
+        }
+      },
+      function(error) {
+      }
+    );
+    
     node.collapsedDescription = false;
+    node.descriptionExpanded = false;
     node.style = $scope.setNodeStyleByState(node.state);
     for (var i = 0; i < node.childrens.length; i++) {
       $scope.loadDataNode(node.childrens[i]);

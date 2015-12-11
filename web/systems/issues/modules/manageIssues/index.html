@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <div class="manageIssues">
 <div class="contentScreens {{style}}">
   <!-- <div class="order">
@@ -8,6 +9,52 @@
           <textarea class="newOrder"  ng-model="request"></textarea>
         </div>
 
+=======
+<div class="issues">
+
+    <!-- ****************************************************
+    ****** CONTENEDOR PRINCIPAL (Maneja los estilos) ********
+    ***************************************************** -->
+
+    <div class="contentScreens {{style}}">
+
+      
+        <!-- ****************************************************
+        ***************** MIS PEDIDOS (Listado) *****************
+        ***************************************************** -->
+        <div class="order">
+            <h3>MIS PEDIDOS <i class="fa fa-tags"></i> </h3>
+            <div class="contentMyIssues">
+              <div data-drag-enabled="false" class="contentOrders" ui-tree>
+                  <ol class="dataIsues" ui-tree-nodes ng-model="data" id="tree-root">
+                      <li  class="issuesItems {{node.style}}" ng-repeat="node in data" ui-tree-node ng-include="'modules/manageIssues/nodes_issue_renderer.html'"></li>
+                  </ol>
+              </div>
+            </div>
+        </div>      
+
+      <!-- *******************************************************************
+      ***************** PANTALLA ASICNACION DE OFICINAs *********************
+      ******************************************************************** -->
+      <div class="assignedOffices" ng-controller="AssignedCtrl" ng-include="'/systems/issues/modules/manageIssues/assigned.html'">
+      </div>
+
+
+        <!-- ******************************************************
+        ************* PANTALLA PARA UN COMENTARIO *****************
+        ******************************************************* -->
+        <div class="newCommentForm">
+          <div class="contentComment">
+              <h3 ng-if="model.newNode.state == 'COMMENT'" class="titleNewComment"><i class="fa fa-comments"></i> CREAR COMENTARIO </h3>
+              <h3 ng-if="model.newNode.state != 'COMMENT'" class="titleNewIssue"><i class="fa fa-tag"></i> CREAR SUBTAREA </h3>
+              <textarea class="textComment" ng-model="requestNewNode"></textarea>
+              <div class="actions">
+                <button class="btnSaveComment" title="Enviar Comentario" ng-click="saveChild()">Guardar</button>
+                <button class="btnCancelComment" title="Cancelar" ng-click="cancelChild()"><i class="fa fa-times"></i></button>
+              </div>
+          </div>
+        </div>
+>>>>>>> e4f2118cd194737c04f1db778b72f462e5ac88fb
 
         <div>
           <button class="buttonOrder" ng-click="createNode()"><h3>SOLICITAR</h3></button>
@@ -41,7 +88,12 @@
       <button ng-click="cancelChild()">Cancelar</button>
       <button ng-click="saveChild()">Guardar</button>
     </div>
+<<<<<<< HEAD
   </div>
 
 </div>
 </div>
+=======
+  
+</div> 
+>>>>>>> e4f2118cd194737c04f1db778b72f462e5ac88fb

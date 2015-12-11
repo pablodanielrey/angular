@@ -1,5 +1,5 @@
 
-.manageIssues {
+.issues {
   margin: 0px;
   padding: 0px;
   height:100%;
@@ -11,18 +11,19 @@
 
 }
 
-.manageIssues .contentScreens {
+.issues .contentScreens {
   height:100%;
   width:100%
 
 }
 
 
+
 /*******************************************************
 **** ESTILO PARA LOS CONTENEDORES DE LAS PANTALLAS *****
 *******************************************************/
 
-.manageIssues .order {
+.issues .order {
   background-color:white;
   -webkit-box-shadow: 1px 1px 5px #5c5f69;
   -moz-box-shadow: 5px 5px 5px #5c5f69;
@@ -34,11 +35,13 @@
   margin: 20px;
 }
 
+
+
 /*******************************************************
 ************ SOLICITAR NUEVO PEDIDO ********************
 *******************************************************/
 
-.manageIssues .formOrder { /*FORMULARIO PARA NUEVO PEDIDO*/
+.issues .formOrder { /*FORMULARIO PARA NUEVO PEDIDO*/
   display:flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
@@ -48,7 +51,7 @@
   wrap: nowrap;
 }
 
-.manageIssues .newOrder { /*TEXTAREA NUEVO PEDIDO*/
+.issues .newOrder { /*TEXTAREA NUEVO PEDIDO*/
   margin-top: 10px;
   width: 800px;
   height: 40px;
@@ -59,7 +62,7 @@
   resize: none;
 }
 
-.manageIssues .order .buttonOrder { /*BOTON SOLICITAR PEDIDO*/
+.issues .order .buttonOrder { /*BOTON SOLICITAR PEDIDO*/
   border: none;
   padding: 17px;
   margin: 2px;
@@ -70,7 +73,7 @@
   cursor: pointer;
 }
 
-.manageIssues .order .buttonOrder:hover {  /*BOTON SOLICITAR PEDIDO*/
+.issues .order .buttonOrder:hover {  /*BOTON SOLICITAR PEDIDO*/
   border: none;
   padding: 17px;
   margin: 2px;
@@ -81,49 +84,103 @@
   cursor: pointer;
 }
 
+
+
+
+/*******************************************************
+************ ASIGNACION DE OFICINAS ********************
+*******************************************************/
+
+
+
+.issues .contentScreens .nodeOffice .nameNodeOffice {
+  cursor:default;
+}
+
+.issues .contentScreens .assignedOffices {
+  position: absolute;
+  display: block;
+  background-color: rgba(0,0,0,0.9);
+  height: 100%;
+  width: 100%;
+  top:0;
+}
+
+.issues .contentOffices {
+  background-color:#eeeeee;
+  -webkit-box-shadow: 1px 1px 5px #5c5f69;
+  -moz-box-shadow: 5px 5px 5px #5c5f69;
+  border-radius:2px;
+  -webkit-border-radius:2px;
+  -moz-border-radius:2px;
+  padding: 20px;
+  position: absolute;
+  top: 50%; /* Buscamos el centro horizontal (relativo) del navegador */
+  left: 50%; /* Buscamos el centro vertical (relativo) del navegador */
+  width: 450px; /* Definimos el ancho del objeto a centrar */
+  height: 190px; /* Definimos el alto del objeto a centrar */
+  margin-top: -200px; /* Restamos la mitad de la altura del objeto con un margin-top */
+  margin-left: -350px; /* Restamos la mitad de la anchura del objeto con un margin-left */
+
+}
+
+.issues .selectOffice {
+  border: 1px solid #e8dede;
+  padding: 20px;
+  background-color: white;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  height: 150px;
+  overflow-y: scroll;
+}
+
+.issues .contentTreeOffices {
+  height:initial;
+}
+
 /*******************************************************
 ************ CONTENEDOR DE MIS PEDIDOS *****************
 *******************************************************/
 
-.manageIssues .contentOrders { /*CONTENEDOR DE MIS PEDIDOS*/
+.issues .contentOrders { /*CONTENEDOR DE MIS PEDIDOS*/
 
 }
 
-.manageIssues .contentMyIssues {
+.issues .contentMyIssues {
   overflow-y: auto;
   max-height: 390px;
 }
 
-.manageIssues .issuesItems { /*CONTENEDOR DE CADA PEDIDO INDIVIDUAL*/
+.issues .issuesItems { /*CONTENEDOR DE CADA PEDIDO INDIVIDUAL*/
   background-color: #eee;
   padding: 5px;
   margin-top: 10px;
   border:1px solid #E3DFDF;
 }
 
-.manageIssues .orderItems { /* SUB-CONTENEDOR DE PEDIDO INDIVIDUAL */
+.issues .orderItems { /* SUB-CONTENEDOR DE PEDIDO INDIVIDUAL */
   display: flex;
   flex-direction: row;
   wrap:nowrap;
   width: 100%;
 }
 
-.manageIssues .orderText .requestor {
+.issues .orderText .requestor {
   display:none;
 }
 
-.manageIssues .issuesItems .orderItem { /*CONTENDERO DEL TEXTO DEL PEDIDO */
+.issues .issuesItems .orderItem { /*CONTENDERO DEL TEXTO DEL PEDIDO */
   display: flex;
   flex-direction: row;
   wrap:nowrap;
   width: 60%;
 }
 
-.manageIssues .dataIsues {
+.issues .dataIsues {
   padding-right: 10px;
 }
 
-.manageIssues .orderText { /* TEXTO DE LOS PEDIDOS REALIZADO */
+.issues .orderText { /* TEXTO DE LOS PEDIDOS REALIZADO */
   padding: 5px;
   background-color: #EEE;;
   border-color: #E3DFDF;
@@ -139,7 +196,7 @@
 
 
 
-.manageIssues .orderIcons { /*CONTENEDOR DE LOS ICONOS DEL PEDIDO*/
+.issues .orderIcons { /*CONTENEDOR DE LOS ICONOS DEL PEDIDO*/
   display: flex;
   flex-direction: row;
   wrap:nowrap;
@@ -147,7 +204,7 @@
   width: 40%;
 }
 
-.manageIssues .btn { /* ESTILO BOTON DE LOS PEDIDOS INDIVIDUALES */
+.issues .btn { /* ESTILO BOTON DE LOS PEDIDOS INDIVIDUALES */
   padding: 8px;
   margin: 3px;
   margin-left: 5px;
@@ -156,62 +213,69 @@
   border-radius: 2px;
 }
 
-.manageIssues .orderItems.commentOrder .btn {
+.issues .orderItems.commentOrder .btn {
   padding: 4px !important;
 }
 
-.manageIssues .btnState {
+.issues .btnState {
   font-size: 13px;
   color:black;
   font-weight: bold;
 }
 
-.manageIssues .titleNewIssue {
+.issues .titleNewIssue {
   height: initial;
 }
 
-.manageIssues .titleNewComment {
+.issues .titleNewComment {
   height: initial;
 }
 
 /* COLORES DE LOS BOTONES */
 
-.manageIssues .cB { /* AZUL */
+.issues .cB { /* AZUL */
   background-color: #0066A6;
 }
 
-.manageIssues .cO { /* AMARILLO */
+.issues .cO { /* AMARILLO */
   background-color: #ec9122;
 }
 
-.manageIssues .cG { /* VERDE */
+.issues .cG { /* VERDE */
   background-color: #128c78;
 }
 
-.manageIssues .cR { /* ROJO */
+.issues .cR { /* ROJO */
   background-color: #e43e46;
 }
 
-.manageIssues .cV { /* VIOLETA */
+.issues .cV { /* VIOLETA */
   background-color: #804080;
 }
 
-.manageIssues .cGR { /*GRIS */
+.issues .cGR { /*GRIS */
   background-color: #BEBEBE;
 }
+
+
+
+
+
+
+
 
 /*******************************************************
 ****************** DATOS DEL PEDIDO ********************
 *******************************************************/
 
 
-.manageIssues .descriptionExpanded { /*EXPANDE PEDIDO*/
+.issues .descriptionExpanded { /*EXPANDE PEDIDO*/
   /*background-color: #BEBEBE;*/
   width: 167%;
   margin-top: 10px;
 }
 
-.manageIssues .contentDataOrder {
+.issues .contentDataOrder {
   display:flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
@@ -221,13 +285,13 @@
 
 }
 
-.manageIssues .contentDataOrder .orderText {
+.issues .contentDataOrder .orderText {
   height: 100px;
   background-color: white;
 
 }
 
-.manageIssues .orderItems.commentOrder .orderText {
+.issues .orderItems.commentOrder .orderText {
   height: 100%;
   width: 600px;
   word-wrap: break-word;
@@ -244,64 +308,22 @@
 
 }
 
-.manageIssues .oderInfo {
+.issues .oderInfo {
   margin-left: 90px;
+  font-size: 10px;
 }
 
-.manageIssues .btnDelete2 {
+.issues .btnDelete2 {
   margin-right: 10px;
   margin-left: 5px;
 }
 
 
 /*******************************************************
-************ PANTALLA SELLECION DE OFICINAS ************
-*******************************************************/
-
-.manageIssues .contentScreens .nodeOffice .nameNodeOffice {
-  cursor:default;
-}
-
-.manageIssues .contentScreens .visibilityOffices {
-  position: absolute;
-  display: block;
-  background-color: rgba(0,0,0,0.9);
-  height: 100%;
-  width: 100%;
-  top:0;
-}
-
-.manageIssues .contentOffices {
-  background-color:#eeeeee;
-  -webkit-box-shadow: 1px 1px 5px #5c5f69;
-  -moz-box-shadow: 5px 5px 5px #5c5f69;
-  border-radius:2px;
-  -webkit-border-radius:2px;
-  -moz-border-radius:2px;
-  padding: 20px;
-  position: absolute;
-  top: 50%; /* Buscamos el centro horizontal (relativo) del navegador */
-  left: 50%; /* Buscamos el centro vertical (relativo) del navegador */
-  width: 450px; /* Definimos el ancho del objeto a centrar */
-  height: 190px; /* Definimos el alto del objeto a centrar */
-  margin-top: -200px; /* Restamos la mitad de la altura del objeto con un margin-top */
-  margin-left: -350px; /* Restamos la mitad de la anchura del objeto con un margin-left */
-
-}
-
-.manageIssues .selectOffice {
-  border: 1px solid #e8dede;
-  padding: 20px;
-  background-color: white;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-/*******************************************************
 ************** PANTALLA NUEVO COMENTARIO ***************
 *******************************************************/
 
-.manageIssues .contentScreens .newCommentForm {
+.issues .contentScreens .newCommentForm {
   position: absolute;
   display: block;
   background-color: rgba(0,0,0,0.9);
@@ -313,7 +335,7 @@
 
 }
 
-.manageIssues .contentComment {
+.issues .contentComment {
   background-color:#eeeeee;
   -webkit-box-shadow: 1px 1px 5px #5c5f69;
   -moz-box-shadow: 5px 5px 5px #5c5f69;
@@ -331,7 +353,7 @@
 
 }
 
-.manageIssues .textComment {
+.issues .textComment {
   width: 99%;
   height: 100px;
   resize: none;
@@ -343,12 +365,12 @@
 
 }
 
-.manageIssues .actions {
+.issues .actions {
 
 
 }
 
-.manageIssues .btnSaveComment {
+.issues .btnSaveComment {
   border: none;
   padding: 8px;
   margin: 2px;
@@ -359,7 +381,7 @@
   border-radius: 2px;
 }
 
-.manageIssues .btnCancelComment {
+.issues .btnCancelComment {
   border: none;
   padding: 8px;
   margin: 2px;
@@ -377,56 +399,61 @@
 
 /**** ESPANDIR Y CERRRAR LOS PEDIDOS Y LOS DATOS DEL PEDIDO ****/
 
-.manageIssues .descriptionExpanded { /*EXPANDE PEDIDO*/
+.issues .descriptionExpanded { /*EXPANDE PEDIDO*/
   height: 100%;
 
 }
 
-.manageIssues .descriptionClosed { /*CIERRA PEDIDO*/
+.issues .descriptionClosed { /*CIERRA PEDIDO*/
   display: none;
 }
 
 /********** OCULTAR BOTONES CUANDO ES UN COMENTARIO ***********/
 
-.manageIssues .orderItems.normal .btnExpComment { /*OCULTA BOTON EXPANDIR COMENTATIOS */
+.issues .orderItems.normal .btnExpComment { /*OCULTA BOTON EXPANDIR COMENTATIOS */
   display: none;
 }
 
-.manageIssues .orderItems.normal .itemsComment { /*OCULTA BOTON EXPANDIR COMENTATIOS */
+.issues .orderItems.normal .itemsComment { /*OCULTA BOTON EXPANDIR COMENTATIOS */
   display: none;
 }
 
-.manageIssues .orderItems.normal .btnComment2 { /*OCULTA BOTON COMENTATIOS */
+.issues .orderItems.normal .btnComment2 { /*OCULTA BOTON COMENTATIOS */
   display: none;
 }
 
-.manageIssues .orderItems.normal .btnDelete2 { /*OCULTA BOTON Eliminar */
+.issues .orderItems.normal .btnDelete2 { /*OCULTA BOTON Eliminar */
   display: none;
 }
 
-.manageIssues .orderItems.commentOrder .btnExpOrder  { /*OCULTA BOTON EXPANDIR PEDIDO */
+.issues .orderItems.commentOrder .btnExpOrder  { /*OCULTA BOTON EXPANDIR PEDIDO */
   display:none;
 }
-.manageIssues .orderItems.commentOrder .btnState  { /*OCULTA ESTADO DEL PEDIDO */
+.issues .orderItems.commentOrder .btnState  { /*OCULTA ESTADO DEL PEDIDO */
   display:none;
 }
-.manageIssues .orderItems.commentOrder .btnSubTarea  { /*OCULTA BOTON CREAR SUB PEDIDO */
+.issues .orderItems.commentOrder .btnSubTarea  { /*OCULTA BOTON CREAR SUB PEDIDO */
   display:none;
 }
-.manageIssues .orderItems.commentOrder .btnDataOrder  { /*OCULTA BOTON DATOS DEL PEDIDO */
+.issues .orderItems.commentOrder .btnDataOrder  { /*OCULTA BOTON DATOS DEL PEDIDO */
   display:none;
 }
+<<<<<<< HEAD
 .manageIssues .orderItems.commentOrder .btnVisibility  { /*OCULTA BOTON VISIVILIDAD */
   /*display:none;*/
+=======
+.issues .orderItems.commentOrder .btnVisibility  { /*OCULTA BOTON VISIVILIDAD */
+  display:none;
+>>>>>>> e4f2118cd194737c04f1db778b72f462e5ac88fb
 }
-.manageIssues .orderItems.commentOrder .btnComment  { /*OCULTA BOTON DATOS DEL PEDIDO */
+.issues .orderItems.commentOrder .btnComment  { /*OCULTA BOTON DATOS DEL PEDIDO */
   display:none;
 }
-.manageIssues .orderItems.commentOrder .btnDelete  { /*OCULTA BOTON VISIVILIDAD */
+.issues .orderItems.commentOrder .btnDelete  { /*OCULTA BOTON VISIVILIDAD */
   display:none;
 }
 
-.manageIssues .orderItems.commentOrder .orderText .requestor {
+.issues .orderItems.commentOrder .orderText .requestor {
   display:inline;
   font-weight: bold;
   font-size: small;
@@ -434,24 +461,24 @@
 
 }
 
-.manageIssues .orderItems.commentOrder .orderText .date {
+.issues .orderItems.commentOrder .orderText .date {
   display:inline;
   font-weight: bold;
   font-size: 10px;;
   color:#7f7f7f;
 }
 
-.manageIssues .orderItems.commentOrder .orderText .items {
+.issues .orderItems.commentOrder .orderText .items {
   height: 12px;
 }
 
-.manageIssues .orderItem .text {
+.issues .orderItem .text {
   width: 100%;
 }
 
 
-.manageIssues .orderItems.commentOrder .itemsComment {
-  width: 120px;
+.issues .orderItems.commentOrder .itemsComment {
+  width: 150px;
   margin-bottom: 5px;
   border-right: 1px solid #bebebe;
   margin-right: 5px;
@@ -460,29 +487,31 @@
 
 /*************** PANTALLA NUEVO COMENTARIO ***************/
 
-.manageIssues .contentScreens .newCommentForm { /* OCULTA PANTALLA DE NUEVO COMENTARIO */
+.issues .contentScreens .newCommentForm { /* OCULTA PANTALLA DE NUEVO COMENTARIO */
   transform: translate3d(0,-100%,0);
   transition: all 0.4s ease-in-out;
 
 }
 
-.manageIssues .contentScreens.displayCreateChild .newCommentForm { /*MIUESTRA PANTALLA NUEVO COMENTARIO */
+.issues .contentScreens.displayCreateChild .newCommentForm { /*MIUESTRA PANTALLA NUEVO COMENTARIO */
   transform: translate3d(0,0,0);
 
 }
 
 /*************** PANTALLA SELECCION DE OFICINAS ***************/
 
-.manageIssues .contentScreens .visibilityOffices { /* OCULTA EL DIV DE OFICINAS*/
+.issues .contentScreens .assignedOffices { /* OCULTA EL DIV DE OFICINAS*/
   transform: translate3d(0,-100%,0);
   transition: all 0.4s ease-in-out;
 }
 
-.manageIssues .contentScreens.displayVisibility .visibilityOffices { /*MUESTRA LA PANTALLA DE OFICINAS*/
+.issues .contentScreens.displayAssigned .assignedOffices { /*MUESTRA LA PANTALLA DE OFICINAS*/
   transform: translate3d(0,0,0);
 }
 
-.manageIssues .contentScreens .contentOffices { /*CONTENMEDOR PRINCIPAL DE OFICINAS */
+.issues .contentScreens .contentOffices { /*CONTENMEDOR PRINCIPAL DE OFICINAS */
   cursor:default;
   height: initial; /*CORRIGE EL ERROR CON EL SCOPE */
 }
+
+
