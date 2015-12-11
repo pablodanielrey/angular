@@ -201,7 +201,6 @@ app.service('TableGrid', ["$location", "$rootScope", "$http", function($location
    */
   this.getGridNumRows = function(scope, ServerAccess){    
     var searchParams = this.defineSearchParams(scope.search);    
-    console.log(searchParams);
     return ServerAccess.numRows(searchParams)
         .then(
           function(response){
