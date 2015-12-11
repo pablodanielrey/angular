@@ -417,7 +417,7 @@
   display:none;
 }
 .manageIssues .orderItems.commentOrder .btnVisibility  { /*OCULTA BOTON VISIVILIDAD */
-  display:none;
+  /*display:none;*/
 }
 .manageIssues .orderItems.commentOrder .btnComment  { /*OCULTA BOTON DATOS DEL PEDIDO */
   display:none;
