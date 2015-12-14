@@ -1,0 +1,59 @@
+		
+<div ng-controller="GridParticipacionCtrl">
+  <div class="table-responsive" style="height:350px">
+  <table class="table table-striped table-bordered table-hover">
+    <thead>
+      <tr>
+</div>
+        <th><input type="checkbox"></th>
+        <th>expediente: numero&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('exp_numero')"></span></th>
+        <th>expediente: fecha origen&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('exp_fecha_origen')"></span></th>
+        <th>expediente: fecha entrada&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('exp_fecha_entrada')"></span></th>
+        <th>expediente: archivo numero&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('exp_archivo_numero')"></span></th>
+        <th>expediente: archivo anio&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('exp_archivo_anio')"></span></th>
+        <th>expediente: antecedente&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('exp_antecedente')"></span></th>
+        <th>expediente: extracto&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('exp_extracto')"></span></th>
+        <th>expediente: resolucion iniciador&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('exp_resolucion_iniciador')"></span></th>
+        <th>expediente: iniciador: nombres&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('exp_ini_nombres')"></span></th>
+        <th>expediente: iniciador: apellidos&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('exp_ini_apellidos')"></span></th>
+        <th>expediente: lugar iniciador: descripcion&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('exp_li_descripcion')"></span></th>
+        <th>expediente: tema: descripcion&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('exp_tem_descripcion')"></span></th>
+        <th>expediente: ultimo destino: fecha entrada&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('exp_ud_fecha_entrada')"></span></th>
+        <th>expediente: ultimo destino: fecha salida&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('exp_ud_fecha_salida')"></span></th>
+        <th>expediente: ultimo destino: lugar: descripcion&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('exp_ud_lug_descripcion')"></span></th>
+        <th>persona: nombres&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('per_nombres')"></span></th>
+        <th>persona: apellidos&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('per_apellidos')"></span></th>
+        <th>Opciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="fields in grid.data">
+        <td><input type="checkbox" ng-checked="isSelected(fields.id)" ng-click="toggleSelection(fields.id)"></td>
+        <td><a href="index.php?go=htmlGrid&t=expediente&ic=1&0if=id&0in=expediente&0it=EXPEDIENTE&0iv={{fields.exp_id}}">{{fields.exp_numero}}</a></td>
+        <td><a href="index.php?go=htmlGrid&t=expediente&ic=1&0if=id&0in=expediente&0it=EXPEDIENTE&0iv={{fields.exp_id}}">{{fields.exp_fecha_origen}}</a></td>
+        <td><a href="index.php?go=htmlGrid&t=expediente&ic=1&0if=id&0in=expediente&0it=EXPEDIENTE&0iv={{fields.exp_id}}">{{fields.exp_fecha_entrada}}</a></td>
+        <td><a href="index.php?go=htmlGrid&t=expediente&ic=1&0if=id&0in=expediente&0it=EXPEDIENTE&0iv={{fields.exp_id}}">{{fields.exp_archivo_numero}}</a></td>
+        <td><a href="index.php?go=htmlGrid&t=expediente&ic=1&0if=id&0in=expediente&0it=EXPEDIENTE&0iv={{fields.exp_id}}">{{fields.exp_archivo_anio}}</a></td>
+        <td><a href="index.php?go=htmlGrid&t=expediente&ic=1&0if=id&0in=expediente&0it=EXPEDIENTE&0iv={{fields.exp_id}}">{{fields.exp_antecedente}}</a></td>
+        <td><a href="index.php?go=htmlGrid&t=expediente&ic=1&0if=id&0in=expediente&0it=EXPEDIENTE&0iv={{fields.exp_id}}">{{fields.exp_extracto}}</a></td>
+        <td><a href="index.php?go=htmlGrid&t=expediente&ic=1&0if=id&0in=expediente&0it=EXPEDIENTE&0iv={{fields.exp_id}}">{{fields.exp_resolucion_iniciador}}</a></td>
+        <td><a href="index.php?go=htmlGrid&t=persona&ic=1&0if=id&0in=persona&0it=PERSONA&0iv={{fields.exp_ini_id}}">{{fields.exp_ini_nombres}}</a></td>
+        <td><a href="index.php?go=htmlGrid&t=persona&ic=1&0if=id&0in=persona&0it=PERSONA&0iv={{fields.exp_ini_id}}">{{fields.exp_ini_apellidos}}</a></td>
+        <td><a href="index.php?go=htmlGrid&t=lugar&ic=1&0if=id&0in=lugar&0it=LUGAR&0iv={{fields.exp_li_id}}">{{fields.exp_li_descripcion}}</a></td>
+        <td><a href="index.php?go=htmlGrid&t=tema&ic=1&0if=id&0in=tema&0it=TEMA&0iv={{fields.exp_tem_id}}">{{fields.exp_tem_descripcion}}</a></td>
+        <td><a href="index.php?go=htmlGrid&t=destino&ic=1&0if=id&0in=destino&0it=DESTINO&0iv={{fields.exp_ud_id}}">{{fields.exp_ud_fecha_entrada}}</a></td>
+        <td><a href="index.php?go=htmlGrid&t=destino&ic=1&0if=id&0in=destino&0it=DESTINO&0iv={{fields.exp_ud_id}}">{{fields.exp_ud_fecha_salida}}</a></td>
+        <td><a href="index.php?go=htmlGrid&t=lugar&ic=1&0if=id&0in=lugar&0it=LUGAR&0iv={{fields.exp_ud_lug_id}}">{{fields.exp_ud_lug_descripcion}}</a></td>
+        <td><a href="index.php?go=htmlGrid&t=persona&ic=1&0if=id&0in=persona&0it=PERSONA&0iv={{fields.per_id}}">{{fields.per_nombres}}</a></td>
+        <td><a href="index.php?go=htmlGrid&t=persona&ic=1&0if=id&0in=persona&0it=PERSONA&0iv={{fields.per_id}}">{{fields.per_apellidos}}</a></td>
+        <td>
+          <a href="<?=PATH_HTTP?>index.php?go=htmlFormAdmin&t=participacion&id={{fields.id}}"><span class="glyphicon glyphicon-pencil"></span></a>&nbsp;&nbsp;
+		  <a href="?go=delete&t=participacion&pk={{fields.id}}" target="_blank"><span class="glyphicon glyphicon-remove"></span></a>&nbsp;&nbsp;
+        </td>
+
+      </tr>
+    </tbody>	  
+  </table>
+  </div>
+<!-- div class="well"><b>Elementos seleccionados:</b> <button type="button" class="btn btn-sm btn-danger">Eliminar</button></div -->
+</div>

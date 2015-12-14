@@ -231,7 +231,6 @@ get
     ServerAccess.gridData(params)
       .then(
         function(response){
-          console.log(response)
           $scope.grid.data = response.data;   //cargar datos de la grilla
           $scope.pagination.disabled = false; //habilitar paginacion
         },

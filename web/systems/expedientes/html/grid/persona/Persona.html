@@ -1,0 +1,35 @@
+		
+<div ng-controller="GridPersonaCtrl">
+  <div class="table-responsive" style="height:350px">
+  <table class="table table-striped table-bordered table-hover">
+    <thead>
+      <tr>
+</div>
+        <th><input type="checkbox"></th>
+        <th>nombres&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('nombres')"></span></th>
+        <th>apellidos&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('apellidos')"></span></th>
+        <th>Opciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="fields in grid.data">
+        <td><input type="checkbox" ng-checked="isSelected(fields.id)" ng-click="toggleSelection(fields.id)"></td>
+        <td>{{fields.nombres}}</td>
+        <td>{{fields.apellidos}}</td>
+        <td>
+          <a href="<?=PATH_HTTP?>index.php?go=htmlFormAdmin&t=persona&id={{fields.id}}"><span class="glyphicon glyphicon-pencil"></span></a>&nbsp;&nbsp;
+		  <a href="?go=delete&t=persona&pk={{fields.id}}" target="_blank"><span class="glyphicon glyphicon-remove"></span></a>&nbsp;&nbsp;
+          <a href="<?=PATH_HTTP?>index.php?go=htmlFormAdmin&t=expediente&iniciador={{fields.id}}"><span class="glyphicon glyphicon-plus"></span>EXPE</a>&nbsp;&nbsp;
+		  <a href="<?=PATH_HTTP?>index.php?go=htmlGrid&t=expediente&ic=1&0if=iniciador&0in=iniciador&0it=persona&0iv={{fields.id}}"><span class="glyphicon glyphicon-eye-open"></span>EXPE</a>&nbsp;&nbsp;
+          <a href="<?=PATH_HTTP?>index.php?go=htmlFormAdmin&t=nota&persona={{fields.id}}"><span class="glyphicon glyphicon-plus"></span>NOTA</a>&nbsp;&nbsp;
+		  <a href="<?=PATH_HTTP?>index.php?go=htmlGrid&t=nota&ic=1&0if=persona&0in=persona&0it=persona&0iv={{fields.id}}"><span class="glyphicon glyphicon-eye-open"></span>NOTA</a>&nbsp;&nbsp;
+          <a href="<?=PATH_HTTP?>index.php?go=htmlFormAdmin&t=participacion&persona={{fields.id}}"><span class="glyphicon glyphicon-plus"></span>PART</a>&nbsp;&nbsp;
+		  <a href="<?=PATH_HTTP?>index.php?go=htmlGrid&t=participacion&ic=1&0if=persona&0in=persona&0it=persona&0iv={{fields.id}}"><span class="glyphicon glyphicon-eye-open"></span>PART</a>&nbsp;&nbsp;
+        </td>
+
+      </tr>
+    </tbody>	  
+  </table>
+  </div>
+<!-- div class="well"><b>Elementos seleccionados:</b> <button type="button" class="btn btn-sm btn-danger">Eliminar</button></div -->
+</div>

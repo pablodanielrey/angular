@@ -1,0 +1,81 @@
+		
+<div ng-controller="GridDestinoCtrl">
+  <div class="table-responsive" style="height:350px">
+  <table class="table table-striped table-bordered table-hover">
+    <thead>
+      <tr>
+</div>
+        <th><input type="checkbox"></th>
+        <th>fecha entrada&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('fecha_entrada')"></span></th>
+        <th>fecha salida&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('fecha_salida')"></span></th>
+        <th>expediente: numero&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('exp_numero')"></span></th>
+        <th>expediente: fecha origen&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('exp_fecha_origen')"></span></th>
+        <th>expediente: fecha entrada&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('exp_fecha_entrada')"></span></th>
+        <th>expediente: archivo numero&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('exp_archivo_numero')"></span></th>
+        <th>expediente: archivo anio&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('exp_archivo_anio')"></span></th>
+        <th>expediente: antecedente&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('exp_antecedente')"></span></th>
+        <th>expediente: extracto&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('exp_extracto')"></span></th>
+        <th>expediente: resolucion iniciador&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('exp_resolucion_iniciador')"></span></th>
+        <th>expediente: iniciador: nombres&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('exp_ini_nombres')"></span></th>
+        <th>expediente: iniciador: apellidos&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('exp_ini_apellidos')"></span></th>
+        <th>expediente: lugar iniciador: descripcion&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('exp_li_descripcion')"></span></th>
+        <th>expediente: tema: descripcion&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('exp_tem_descripcion')"></span></th>
+        <th>lugar: descripcion&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('lug_descripcion')"></span></th>
+        <th>expeYud: numero&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('expeYud_numero')"></span></th>
+        <th>expeYud: fecha origen&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('expeYud_fecha_origen')"></span></th>
+        <th>expeYud: fecha entrada&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('expeYud_fecha_entrada')"></span></th>
+        <th>expeYud: archivo numero&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('expeYud_archivo_numero')"></span></th>
+        <th>expeYud: archivo anio&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('expeYud_archivo_anio')"></span></th>
+        <th>expeYud: antecedente&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('expeYud_antecedente')"></span></th>
+        <th>expeYud: extracto&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('expeYud_extracto')"></span></th>
+        <th>expeYud: resolucion iniciador&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('expeYud_resolucion_iniciador')"></span></th>
+        <th>expeYud: iniciador: nombres&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('expeYud_ini_nombres')"></span></th>
+        <th>expeYud: iniciador: apellidos&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('expeYud_ini_apellidos')"></span></th>
+        <th>expeYud: lugar iniciador: descripcion&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('expeYud_li_descripcion')"></span></th>
+        <th>expeYud: tema: descripcion&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('expeYud_tem_descripcion')"></span></th>
+        <th>Opciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="fields in grid.data">
+        <td><input type="checkbox" ng-checked="isSelected(fields.id)" ng-click="toggleSelection(fields.id)"></td>
+        <td>{{fields.fecha_entrada}}</td>
+        <td>{{fields.fecha_salida}}</td>
+        <td><a href="index.php?go=htmlGrid&t=expediente&ic=1&0if=id&0in=expediente&0it=EXPEDIENTE&0iv={{fields.exp_id}}">{{fields.exp_numero}}</a></td>
+        <td><a href="index.php?go=htmlGrid&t=expediente&ic=1&0if=id&0in=expediente&0it=EXPEDIENTE&0iv={{fields.exp_id}}">{{fields.exp_fecha_origen}}</a></td>
+        <td><a href="index.php?go=htmlGrid&t=expediente&ic=1&0if=id&0in=expediente&0it=EXPEDIENTE&0iv={{fields.exp_id}}">{{fields.exp_fecha_entrada}}</a></td>
+        <td><a href="index.php?go=htmlGrid&t=expediente&ic=1&0if=id&0in=expediente&0it=EXPEDIENTE&0iv={{fields.exp_id}}">{{fields.exp_archivo_numero}}</a></td>
+        <td><a href="index.php?go=htmlGrid&t=expediente&ic=1&0if=id&0in=expediente&0it=EXPEDIENTE&0iv={{fields.exp_id}}">{{fields.exp_archivo_anio}}</a></td>
+        <td><a href="index.php?go=htmlGrid&t=expediente&ic=1&0if=id&0in=expediente&0it=EXPEDIENTE&0iv={{fields.exp_id}}">{{fields.exp_antecedente}}</a></td>
+        <td><a href="index.php?go=htmlGrid&t=expediente&ic=1&0if=id&0in=expediente&0it=EXPEDIENTE&0iv={{fields.exp_id}}">{{fields.exp_extracto}}</a></td>
+        <td><a href="index.php?go=htmlGrid&t=expediente&ic=1&0if=id&0in=expediente&0it=EXPEDIENTE&0iv={{fields.exp_id}}">{{fields.exp_resolucion_iniciador}}</a></td>
+        <td><a href="index.php?go=htmlGrid&t=persona&ic=1&0if=id&0in=persona&0it=PERSONA&0iv={{fields.exp_ini_id}}">{{fields.exp_ini_nombres}}</a></td>
+        <td><a href="index.php?go=htmlGrid&t=persona&ic=1&0if=id&0in=persona&0it=PERSONA&0iv={{fields.exp_ini_id}}">{{fields.exp_ini_apellidos}}</a></td>
+        <td><a href="index.php?go=htmlGrid&t=lugar&ic=1&0if=id&0in=lugar&0it=LUGAR&0iv={{fields.exp_li_id}}">{{fields.exp_li_descripcion}}</a></td>
+        <td><a href="index.php?go=htmlGrid&t=tema&ic=1&0if=id&0in=tema&0it=TEMA&0iv={{fields.exp_tem_id}}">{{fields.exp_tem_descripcion}}</a></td>
+        <td><a href="index.php?go=htmlGrid&t=lugar&ic=1&0if=id&0in=lugar&0it=LUGAR&0iv={{fields.lug_id}}">{{fields.lug_descripcion}}</a></td>
+        <td><a href="index.php?go=htmlGrid&t=expediente&ic=1&0if=id&0in=expediente&0it=EXPEDIENTE&0iv={{fields.expeYud_id}}">{{fields.expeYud_numero}}</a></td>
+        <td><a href="index.php?go=htmlGrid&t=expediente&ic=1&0if=id&0in=expediente&0it=EXPEDIENTE&0iv={{fields.expeYud_id}}">{{fields.expeYud_fecha_origen}}</a></td>
+        <td><a href="index.php?go=htmlGrid&t=expediente&ic=1&0if=id&0in=expediente&0it=EXPEDIENTE&0iv={{fields.expeYud_id}}">{{fields.expeYud_fecha_entrada}}</a></td>
+        <td><a href="index.php?go=htmlGrid&t=expediente&ic=1&0if=id&0in=expediente&0it=EXPEDIENTE&0iv={{fields.expeYud_id}}">{{fields.expeYud_archivo_numero}}</a></td>
+        <td><a href="index.php?go=htmlGrid&t=expediente&ic=1&0if=id&0in=expediente&0it=EXPEDIENTE&0iv={{fields.expeYud_id}}">{{fields.expeYud_archivo_anio}}</a></td>
+        <td><a href="index.php?go=htmlGrid&t=expediente&ic=1&0if=id&0in=expediente&0it=EXPEDIENTE&0iv={{fields.expeYud_id}}">{{fields.expeYud_antecedente}}</a></td>
+        <td><a href="index.php?go=htmlGrid&t=expediente&ic=1&0if=id&0in=expediente&0it=EXPEDIENTE&0iv={{fields.expeYud_id}}">{{fields.expeYud_extracto}}</a></td>
+        <td><a href="index.php?go=htmlGrid&t=expediente&ic=1&0if=id&0in=expediente&0it=EXPEDIENTE&0iv={{fields.expeYud_id}}">{{fields.expeYud_resolucion_iniciador}}</a></td>
+        <td><a href="index.php?go=htmlGrid&t=persona&ic=1&0if=id&0in=persona&0it=PERSONA&0iv={{fields.expeYud_ini_id}}">{{fields.expeYud_ini_nombres}}</a></td>
+        <td><a href="index.php?go=htmlGrid&t=persona&ic=1&0if=id&0in=persona&0it=PERSONA&0iv={{fields.expeYud_ini_id}}">{{fields.expeYud_ini_apellidos}}</a></td>
+        <td><a href="index.php?go=htmlGrid&t=lugar&ic=1&0if=id&0in=lugar&0it=LUGAR&0iv={{fields.expeYud_li_id}}">{{fields.expeYud_li_descripcion}}</a></td>
+        <td><a href="index.php?go=htmlGrid&t=tema&ic=1&0if=id&0in=tema&0it=TEMA&0iv={{fields.expeYud_tem_id}}">{{fields.expeYud_tem_descripcion}}</a></td>
+        <td>
+          <a href="<?=PATH_HTTP?>index.php?go=htmlFormAdmin&t=destino&id={{fields.id}}"><span class="glyphicon glyphicon-pencil"></span></a>&nbsp;&nbsp;
+		  <a href="?go=delete&t=destino&pk={{fields.id}}" target="_blank"><span class="glyphicon glyphicon-remove"></span></a>&nbsp;&nbsp;
+          <a href="<?=PATH_HTTP?>index.php?go=htmlFormAdmin&t=expediente&ultimo_destino={{fields.id}}"><span class="glyphicon glyphicon-plus"></span>EXPE</a>&nbsp;&nbsp;
+		  <a href="<?=PATH_HTTP?>index.php?go=htmlGrid&t=expediente&ic=1&0if=ultimo_destino&0in=ultimo_destino&0it=destino&0iv={{fields.id}}"><span class="glyphicon glyphicon-eye-open"></span>EXPE</a>&nbsp;&nbsp;
+        </td>
+
+      </tr>
+    </tbody>	  
+  </table>
+  </div>
+<!-- div class="well"><b>Elementos seleccionados:</b> <button type="button" class="btn btn-sm btn-danger">Eliminar</button></div -->
+</div>

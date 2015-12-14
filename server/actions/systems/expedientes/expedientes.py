@@ -85,7 +85,8 @@ class ExpedientesWamp(ApplicationSession):
     def gridDataDestino(self, filterParams):
         con = self._getDatabase()
         try:
-            r = self.destino.gridData(con, filterParams)
+            r = {'data': None, 'status': 200}
+            r['data'] = self.destino.gridData(con, filterParams)
             return r
 
         finally:
@@ -130,7 +131,8 @@ class ExpedientesWamp(ApplicationSession):
     def gridDataExpediente(self, filterParams):
         con = self._getDatabase()
         try:
-            r = self.expediente.gridData(con, filterParams)
+            r = {'data': None, 'status': 200}
+            r['data'] = self.expediente.gridData(con, filterParams)
             return r
 
         finally:
@@ -175,7 +177,8 @@ class ExpedientesWamp(ApplicationSession):
     def gridDataLugar(self, filterParams):
         con = self._getDatabase()
         try:
-            r = self.lugar.gridData(con, filterParams)
+            r = {'data': None, 'status': 200}
+            r['data'] = self.lugar.gridData(con, filterParams)
             return r
 
         finally:
@@ -220,7 +223,8 @@ class ExpedientesWamp(ApplicationSession):
     def gridDataNota(self, filterParams):
         con = self._getDatabase()
         try:
-            r = self.nota.gridData(con, filterParams)
+            r = {'data': None, 'status': 200}
+            r['data'] = self.nota.gridData(con, filterParams)
             return r
 
         finally:
@@ -265,7 +269,8 @@ class ExpedientesWamp(ApplicationSession):
     def gridDataParticipacion(self, filterParams):
         con = self._getDatabase()
         try:
-            r = self.participacion.gridData(con, filterParams)
+            r = {'data': None, 'status': 200}
+            r['data'] = self.participacion.gridData(con, filterParams)
             return r
 
         finally:
@@ -310,7 +315,8 @@ class ExpedientesWamp(ApplicationSession):
     def gridDataPersona(self, filterParams):
         con = self._getDatabase()
         try:
-            r = self.persona.gridData(con, filterParams)
+            r = {'data': None, 'status': 200}
+            r['data'] = self.persona.gridData(con, filterParams)
             return r
 
         finally:
@@ -355,7 +361,8 @@ class ExpedientesWamp(ApplicationSession):
     def gridDataTema(self, filterParams):
         con = self._getDatabase()
         try:
-            r = self.tema.gridData(con, filterParams)
+            r = {'data': None, 'status': 200}
+            r['data'] = self.tema.gridData(con, filterParams)
             return r
 
         finally:
