@@ -208,23 +208,21 @@
 
 
 </head>
+
 <body>
 
 
-<div ng-controller="IndexCtrl" class="principal">
+<div class="principal" ng-controller="IndexCtrl">
 
-<div class="screen">
-      <div id='main'>
-        <nav ng-class="{true:'visible',false:'hidden'}[isLogged()]">
+<div class="screen" ng-class="{true:'visible',false:'hidden'}[isLogged()]">
+
           <div class='menu-container' ng-controller="MenuCtrl" ng-include="'/systems/assistance/menu/menu.html'">
           </div>
-        </nav>
 
-        <article>
-            <div ng-view></div>
-        </article>
-      </div>
-    </div>
+          <div ng-view>
+          </div>
+
+</div>
 
 <!--
     <div class='connection-container' ng-class="{false:'visible',true:'hidden'}[isConnected()]" ng-controller="ConnectionCtrl" ng-include="'/modules/connection/conn.html'">
