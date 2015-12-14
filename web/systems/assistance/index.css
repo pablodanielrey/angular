@@ -6,6 +6,7 @@
 
 body {
   overflow-x: hidden;
+  overflow-y: auto;
   height: 100%;
 }
 
@@ -38,6 +39,12 @@ body {
   justify-content: flex-start;
 
 }
+
+.content {
+  width: 100%;
+}
+
+
 .systems {
   background-color: blue;
   width: 10%;
