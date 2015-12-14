@@ -80,7 +80,7 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Profiles', 'Se
         function(ok) {
           if (ok) {
               $scope.model.items = [];
-              //$scope.model.items.push({ n:1, label:'Inicio', img:'fa-tachometer', function: $scope.summary});
+              $scope.model.items.push({ n:1, label:'Inicio', img:'fa fa-home', function: $scope.summary});
               $scope.model.items.push({ n:20, label:'Solicitudes', img:'fa fa-ticket', function: $scope.requestAssistance});
               $scope.model.items.push({ n:10, label:'Control de Horario', img:'fa fa-clock-o', function: $scope.showAssistance});
               $scope.model.items.push({ n:1, label:'Incumplimientos', img:'fa fa-exclamation-triangle', function: $scope.assistanceFails});

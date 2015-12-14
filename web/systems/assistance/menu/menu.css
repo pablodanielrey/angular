@@ -25,14 +25,14 @@
   background-color: #275276;
   color: white;
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-size: 1em;
+  font-size: 13px;
 
 
 }
 
 
 .menuAssistance .contentActionMenu {
-  height: 28px;
+  height: 25px;
 
   background-color: #0066A6;
   display: flex;
@@ -40,7 +40,8 @@
   justify-content: center;
   align-items: flex-end;
   padding: 10px;
-  color:white
+  color:white;
+
 }
 
 .menuAssistance ul {
