@@ -10,7 +10,42 @@ app.controller("GridNotaCtrl", ["$scope", "$timeout", "Nota", "TableGrid", funct
 
   /***** escuchar evento de incializacion de "gridNumRows" *****/
   $scope.$on("gridNumRowsInitialized", function(event){
-    TableGrid.initializePagination($scope);
-    TableGrid.getGridData($scope, Nota);
+    TableGrid.changePagination($scope, Nota);
   });
+  
+  /**
+   * Ir a pagina anterior
+   */
+  $scope.previousPage = function(){
+    TableGrid.goPage($scope, $scope.pagination.page-1, Nota);
+  };
+  
+  /**
+   * Ir a pagina siguiente
+   */
+  $scope.nextPage = function(){
+    TableGrid.goPage($scope, $scope.pagination.page+1, Nota);
+  };
+  
+  /**
+   * Ir a pagina determinada
+   */
+  $scope.goPage = function(){
+    TableGrid.goPage($scope, $scope.pagination.page, Nota);
+  };
+  
+  /**
+   * Cambiar tamanio de pagina
+   */
+  $scope.changePageSize = function(){
+    TableGrid.changePagination($scope, Nota);
+  };
+  
+  /** 
+   * Buscar datos
+   * @returns {undefined}
+   */
+  $scope.searchData = function(){
+    TableGrid.searchData($scope, Nota);
+  };
 }]);

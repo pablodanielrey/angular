@@ -70,7 +70,8 @@ class ExpedientesWamp(ApplicationSession):
     def rowByIdDestino(self, id):
         con = self._getDatabase()
         try:
-            r = self.destino.rowById(con, id)
+            r = {'data': None, 'status': 200}
+            r['data'] = self.destino.rowById(con, id)
             return r
 
         finally:
@@ -78,6 +79,7 @@ class ExpedientesWamp(ApplicationSession):
 
     @coroutine
     def gridDataDestino_async(self, filterParams):
+        print(filterParams)
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.gridDataDestino, filterParams)
         return r
@@ -101,7 +103,8 @@ class ExpedientesWamp(ApplicationSession):
     def numRowsDestino(self, search):
         con = self._getDatabase()
         try:
-            r = self.destino.numRows(con, search)
+            r = {'data': None, 'status': 200}
+            r['data'] = self.destino.numRows(con, search)
             return r
 
         finally:
@@ -116,7 +119,8 @@ class ExpedientesWamp(ApplicationSession):
     def rowByIdExpediente(self, id):
         con = self._getDatabase()
         try:
-            r = self.expediente.rowById(con, id)
+            r = {'data': None, 'status': 200}
+            r['data'] = self.expediente.rowById(con, id)
             return r
 
         finally:
@@ -147,7 +151,8 @@ class ExpedientesWamp(ApplicationSession):
     def numRowsExpediente(self, search):
         con = self._getDatabase()
         try:
-            r = self.expediente.numRows(con, search)
+            r = {'data': None, 'status': 200}
+            r['data'] = self.expediente.numRows(con, search)
             return r
 
         finally:
@@ -162,7 +167,8 @@ class ExpedientesWamp(ApplicationSession):
     def rowByIdLugar(self, id):
         con = self._getDatabase()
         try:
-            r = self.lugar.rowById(con, id)
+            r = {'data': None, 'status': 200}
+            r['data'] = self.lugar.rowById(con, id)
             return r
 
         finally:
@@ -190,10 +196,11 @@ class ExpedientesWamp(ApplicationSession):
         r = yield from loop.run_in_executor(None, self.numRowsLugar, search)
         return r
 
-    def numRowsLugar(self, search):
+    def numRowsLugar(self, filterParams):
         con = self._getDatabase()
         try:
-            r = self.lugar.numRows(con, search)
+            r = {'data': None, 'status': 200}
+            r['data'] = self.lugar.numRows(con, filterParams)
             return r
 
         finally:
@@ -208,7 +215,8 @@ class ExpedientesWamp(ApplicationSession):
     def rowByIdNota(self, id):
         con = self._getDatabase()
         try:
-            r = self.nota.rowById(con, id)
+            r = {'data': None, 'status': 200}
+            r['data'] = self.nota.rowById(con, id)
             return r
 
         finally:
@@ -239,7 +247,8 @@ class ExpedientesWamp(ApplicationSession):
     def numRowsNota(self, search):
         con = self._getDatabase()
         try:
-            r = self.nota.numRows(con, search)
+            r = {'data': None, 'status': 200}
+            r['data'] = self.nota.numRows(con, search)
             return r
 
         finally:
@@ -254,7 +263,8 @@ class ExpedientesWamp(ApplicationSession):
     def rowByIdParticipacion(self, id):
         con = self._getDatabase()
         try:
-            r = self.participacion.rowById(con, id)
+            r = {'data': None, 'status': 200}
+            r['data'] = self.participacion.rowById(con, id)
             return r
 
         finally:
@@ -285,7 +295,8 @@ class ExpedientesWamp(ApplicationSession):
     def numRowsParticipacion(self, search):
         con = self._getDatabase()
         try:
-            r = self.participacion.numRows(con, search)
+            r = {'data': None, 'status': 200}
+            r['data'] = self.participacion.numRows(con, search)
             return r
 
         finally:
@@ -300,7 +311,8 @@ class ExpedientesWamp(ApplicationSession):
     def rowByIdPersona(self, id):
         con = self._getDatabase()
         try:
-            r = self.persona.rowById(con, id)
+            r = {'data': None, 'status': 200}
+            r['data'] = self.persona.rowById(con, id)
             return r
 
         finally:
@@ -331,7 +343,8 @@ class ExpedientesWamp(ApplicationSession):
     def numRowsPersona(self, search):
         con = self._getDatabase()
         try:
-            r = self.persona.numRows(con, search)
+            r = {'data': None, 'status': 200}
+            r['data'] = self.persona.numRows(con, search)
             return r
 
         finally:
@@ -346,7 +359,8 @@ class ExpedientesWamp(ApplicationSession):
     def rowByIdTema(self, id):
         con = self._getDatabase()
         try:
-            r = self.tema.rowById(con, id)
+            r = {'data': None, 'status': 200}
+            r['data'] = self.tema.rowById(con, id)
             return r
 
         finally:
@@ -377,7 +391,8 @@ class ExpedientesWamp(ApplicationSession):
     def numRowsTema(self, search):
         con = self._getDatabase()
         try:
-            r = self.tema.numRows(con, search)
+            r = {'data': None, 'status': 200}
+            r['data'] = self.tema.numRows(con, search)
             return r
 
         finally:

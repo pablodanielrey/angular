@@ -10,7 +10,42 @@ app.controller("GridTemaCtrl", ["$scope", "$timeout", "Tema", "TableGrid", funct
 
   /***** escuchar evento de incializacion de "gridNumRows" *****/
   $scope.$on("gridNumRowsInitialized", function(event){
-    TableGrid.initializePagination($scope);
-    TableGrid.getGridData($scope, Tema);
+    TableGrid.changePagination($scope, Tema);
   });
+  
+  /**
+   * Ir a pagina anterior
+   */
+  $scope.previousPage = function(){
+    TableGrid.goPage($scope, $scope.pagination.page-1, Tema);
+  };
+  
+  /**
+   * Ir a pagina siguiente
+   */
+  $scope.nextPage = function(){
+    TableGrid.goPage($scope, $scope.pagination.page+1, Tema);
+  };
+  
+  /**
+   * Ir a pagina determinada
+   */
+  $scope.goPage = function(){
+    TableGrid.goPage($scope, $scope.pagination.page, Tema);
+  };
+  
+  /**
+   * Cambiar tamanio de pagina
+   */
+  $scope.changePageSize = function(){
+    TableGrid.changePagination($scope, Tema);
+  };
+  
+  /** 
+   * Buscar datos
+   * @returns {undefined}
+   */
+  $scope.searchData = function(){
+    TableGrid.searchData($scope, Tema);
+  };
 }]);

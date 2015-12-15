@@ -10,7 +10,42 @@ app.controller("GridPersonaCtrl", ["$scope", "$timeout", "Persona", "TableGrid",
 
   /***** escuchar evento de incializacion de "gridNumRows" *****/
   $scope.$on("gridNumRowsInitialized", function(event){
-    TableGrid.initializePagination($scope);
-    TableGrid.getGridData($scope, Persona);
+    TableGrid.changePagination($scope, Persona);
   });
+  
+  /**
+   * Ir a pagina anterior
+   */
+  $scope.previousPage = function(){
+    TableGrid.goPage($scope, $scope.pagination.page-1, Persona);
+  };
+  
+  /**
+   * Ir a pagina siguiente
+   */
+  $scope.nextPage = function(){
+    TableGrid.goPage($scope, $scope.pagination.page+1, Persona);
+  };
+  
+  /**
+   * Ir a pagina determinada
+   */
+  $scope.goPage = function(){
+    TableGrid.goPage($scope, $scope.pagination.page, Persona);
+  };
+  
+  /**
+   * Cambiar tamanio de pagina
+   */
+  $scope.changePageSize = function(){
+    TableGrid.changePagination($scope, Persona);
+  };
+  
+  /** 
+   * Buscar datos
+   * @returns {undefined}
+   */
+  $scope.searchData = function(){
+    TableGrid.searchData($scope, Persona);
+  };
 }]);

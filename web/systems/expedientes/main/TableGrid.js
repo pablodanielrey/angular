@@ -87,14 +87,38 @@ app.service('TableGrid', ["$location", "$rootScope", "$http", function($location
    * @returns {undefined}
    */
   this.initializePagination = function($scope){
-    $scope.pagination.pageSize = parseInt($scope.pagination.pageSize);
+    var pageSize = parseInt($scope.pagination.pageSize);
+    $scope.pagination.pageSize = $scope.pagination.pageSize.toString();
     $scope.pagination.page = 0;
     $scope.pagination.pages = 0;
     $scope.pagination.disabled = true;
     if ($scope.grid.numRows > 0){
       $scope.pagination.page = 1;
-      $scope.pagination.pages = ($scope.grid.numRows !== 0) ? Math.ceil($scope.grid.numRows / $scope.pagination.pageSize) : 0;
-    }  
+      $scope.pagination.pages = ($scope.grid.numRows !== 0) ? Math.ceil($scope.grid.numRows / pageSize) : 0;
+    }   
+  };
+  
+  
+  /**
+   * Definir pagina
+   */
+  this.setPage = function($scope, page){
+    $scope.pagination.disabled = true;
+    var p = parseInt(page);    
+    $scope.pagination.page = (isNaN(p)) ? 1 :
+      (p < 1) ? 1 :
+        (p > $scope.pagination.pages) ? $scope.pagination.pages : p;
+  };
+   
+   
+  /**
+   * Modificar tamanio de pagina
+   * @param {$scope} $scope
+   * @param {service} ServerAccess Servicio de acceso a los datos del servidor
+   */   
+  this.changePagination = function($scope, ServerAccess){
+    this.initializePagination($scope);
+    this.getGridData($scope, ServerAccess);
   };
   
   /**
@@ -103,14 +127,9 @@ app.service('TableGrid', ["$location", "$rootScope", "$http", function($location
    * @param {type} page
    * @returns {undefined}
    */  
-  this.goPage = function($scope, page){
-    $scope.pagination.disabled = true;
-    var p = parseInt(page);    
-    $scope.pagination.page = (isNaN(p)) ? 1 :
-      (p < 1) ? 1 :
-        (p > $scope.pagination.pages) ? $scope.pagination.pages : p;
-    
-    this.getGridData($scope);
+  this.goPage = function($scope, page, ServerAccess){
+    this.setPage($scope, page);    
+    this.getGridData($scope, ServerAccess);
   };
   
   
@@ -155,8 +174,8 @@ get
    */
   this.definePaginationParams = function(pagination){    
     var paginationParams = {};
-    paginationParams["p"] = pagination.page;
-    paginationParams["q"] = pagination.pageSize;
+    paginationParams["p"] = parseInt(pagination.page);
+    paginationParams["q"] = parseInt(pagination.pageSize);
     return paginationParams;
   };
   
@@ -212,6 +231,15 @@ get
           }
         );
   };
+  
+  
+  /**
+   * Buscar datos
+   */
+  this.searchData = function($scope, ServerAccess){
+    $scope.pagination.disabled = true;
+    this.getGridNumRows($scope, ServerAccess);
+  }
 
 
   /**
@@ -227,7 +255,7 @@ get
     if($scope.grid.numRows < 1) return;
 
     var params = this.defineParams($scope);
-    
+
     ServerAccess.gridData(params)
       .then(
         function(response){

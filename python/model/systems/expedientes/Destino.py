@@ -98,8 +98,8 @@ LEFT OUTER JOIN expedientes.tema AS expeYud_tem ON (expeYud.tema = expeYud_tem.i
         
     def gridData(self, con, filterParams):
         search = None
-        pageNumber = 1
-        pageSize = 40
+        pageNumber = filterParams["p"] if filterParams["p"] else 1
+        pageSize = filterParams["q"] if filterParams["q"] else 40
         sql = "SELECT "
         sql = sql + self._fields()
         sql = sql + self._fieldsComplete()

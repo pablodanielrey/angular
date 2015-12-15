@@ -1,0 +1,27 @@
+
+<div class="well">
+  <form role="form">
+    <div class="form-inline">
+      <div class="form-group">
+        <input id="search" type="text" class="form-control" ng-model="search.simple">
+        <button  type="button" ng-click="searchData()" class="form-control btn btn-primary" ng-disabled="search.disabled">Buscar</button>
+     </div>
+    </div>
+  	<br/>
+    <div class="form-vertical">
+      <div class="form-group" ng-repeat="search in search.index">
+        <b>{{search.fieldLabel}}:</b>
+        <span>{{search.valueLabel}}</span>
+        <button type="button" ng-click="deleteSearchIndex($index)" class="btn btn-danger btn-xs">Eliminar</button>
+      </div>
+    </div>
+    <!--<div class="form-vertical">
+      <div class="form-group" ng-repeat="search in search.advanced">
+        <select ng-model="search.field" ng-options="opt as opt.name for opt in advancedSearchFields" ng-change="selectAdvancedSearchField($index)"><option value="">--Elemento--</option></select>
+        <select ng-model="search.option" ng.options="opt as opt.option for opt in advancedSearchFields.options"  ng-change="selectAdvancedSearchOption($index)"><option value="">--Opcion--</option></select>
+        <input ng-show="search.showValue" type="text" ng-model="search.value"  />
+        </div>
+      <button type="button" ng-click="addAdvancedSearchField()" class="btn btn-primary btn-sm">Agregar Elemento</button>
+    </div>-->
+  </form> 
+</div>
