@@ -12,6 +12,7 @@ from collections import OrderedDict
 import io
 from pyexcel_ods3 import ODSWriter
 
+from model.systems.offices.offices import Offices
 from model.utils import DateTimeEncoder
 from model.config import Config
 from model.users.users import Users
@@ -29,6 +30,7 @@ import model.systems.assistance.date
 class Assistance:
 
     config = inject.attr(Config)
+    offices = inject.attr(Offices)
     date = inject.attr(Date)
     logs = inject.attr(Logs)
     schedule = inject.attr(Schedule)
