@@ -30,6 +30,32 @@ tema.id AS id, tema.descripcion AS descripcion,
       condition = condition + "(lower(" + alias + ".descripcion) LIKE lower('%" + search + "%')) "
       return "(" + condition + ")"
 
+    """
+     " definir condicion de busqueda avanzada
+     " @param search Diccionario con los fields a buscar
+     " @param connect Conexion
+     " @param alias Alias de la tabla
+     " @param fieldAlias Alias para identificar a los fields
+    """
+    def _conditionAdvancedSearch(self, connect, search = None, alias = "tema", fieldAlias = ""):
+      if not search or "ic" not in search or int(float(search["ic"])) == 0:
+        return ''
+
+      condition = ''
+      
+      for i in range(0, int(float(search["ic"]))):
+        i = str(i)
+        #definir condiciones de id
+        if search[i+"if"] == fieldAlias + "id": 
+          condition = condition + "(" + alias + ".id = " + search[i+"iv"] + ") "
+
+        #definir condiciones de descripcion
+        if search[i+"if"] == fieldAlias + "descripcion": 
+          if condition: 
+            condition = condition + " " + connect + " "
+          condition = condition + "(lower(" + alias + ".descripcion) = lower('" + search[i+"iv"] + "')) "
+      return "(" + condition + ")"
+
     #fields de la tabla con cadena relaciones
     def _leftJoinsComplete(self):
       return """
@@ -49,10 +75,11 @@ tema.id AS id, tema.descripcion AS descripcion,
             
         return cur.fetchone()
         
-    def gridData(self, con, filterParams):
-        search = None
-        pageNumber = filterParams["p"] if filterParams["p"] else 1
-        pageSize = filterParams["q"] if filterParams["q"] else 40
+    def gridData(self, con, filterParams = None):
+        search = filterParams["s"] if filterParams and "s" in filterParams else None
+        pageNumber = filterParams["p"] if filterParams and "p" in filterParams else 1
+        pageSize = filterParams["q"] if filterParams and "q" in filterParams else 40
+
         sql = "SELECT "
         sql = sql + self._fields()
         sql = sql + self._fieldsComplete()
@@ -61,6 +88,9 @@ tema.id AS id, tema.descripcion AS descripcion,
         sql = sql + self._leftJoinsComplete()
         cond = self._conditionSearch(search)
         sql = sql + Tools.concat(cond, 'WHERE')
+        cond2 = self._conditionAdvancedSearch('AND', filterParams)
+        sql = sql + Tools.concat(cond2, 'AND', 'WHERE', cond)
+        
         if pageSize: 
           sql = sql + " LIMIT " + str(pageSize) + " OFFSET " + str((pageNumber - 1) * pageSize) + "; ";
         
@@ -74,14 +104,19 @@ tema.id AS id, tema.descripcion AS descripcion,
             
         return data
 
-    def numRows(self, con, search = None):
+    def numRows(self, con, filterParams = None):
+        search = filterParams["s"] if filterParams and "s" in filterParams else None
+
         sql = "SELECT count(DISTINCT tema.id) AS num_rows"
         sql = sql + "	FROM expedientes.tema AS tema"
         sql = sql + self._leftJoinsComplete()
         cond = self._conditionSearch(search)
         sql = sql + Tools.concat(cond, 'WHERE')
-
+        cond2 = self._conditionAdvancedSearch('AND', filterParams)
+        sql = sql + Tools.concat(cond2, 'AND', 'WHERE', cond)
+        
         cur = con.cursor()
+        
         cur.execute(sql)
         if cur.rowcount <= 0:
             return None

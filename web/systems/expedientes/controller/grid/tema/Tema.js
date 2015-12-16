@@ -2,43 +2,43 @@
 /**
  * Controlador de la grilla de Tema
  */
-app.controller("GridTemaCtrl", ["$scope", "$timeout", "Tema", "TableGrid", function ($scope, $timeout, Tema, TableGrid) {
+app.controller("GridTemaCtrl", ["$scope", "$timeout", "TableGrid", function ($scope, $timeout, TableGrid) {
  //***** codigo de inicializacion del controlador *****
   $timeout(function() {
-    TableGrid.initialize($scope, Tema);
+    TableGrid.initialize($scope, "tema");
   },0);
 
   /***** escuchar evento de incializacion de "gridNumRows" *****/
   $scope.$on("gridNumRowsInitialized", function(event){
-    TableGrid.changePagination($scope, Tema);
+    TableGrid.changePagination($scope, "tema");
   });
   
   /**
    * Ir a pagina anterior
    */
   $scope.previousPage = function(){
-    TableGrid.goPage($scope, $scope.pagination.page-1, Tema);
+    TableGrid.goPage($scope, $scope.pagination.page-1, "tema");
   };
   
   /**
    * Ir a pagina siguiente
    */
   $scope.nextPage = function(){
-    TableGrid.goPage($scope, $scope.pagination.page+1, Tema);
+    TableGrid.goPage($scope, $scope.pagination.page+1, "tema");
   };
   
   /**
    * Ir a pagina determinada
    */
   $scope.goPage = function(){
-    TableGrid.goPage($scope, $scope.pagination.page, Tema);
+    TableGrid.goPage($scope, $scope.pagination.page, "tema");
   };
   
   /**
    * Cambiar tamanio de pagina
    */
   $scope.changePageSize = function(){
-    TableGrid.changePagination($scope, Tema);
+    TableGrid.changePagination($scope, "tema");
   };
   
   /** 
@@ -46,6 +46,6 @@ app.controller("GridTemaCtrl", ["$scope", "$timeout", "Tema", "TableGrid", funct
    * @returns {undefined}
    */
   $scope.searchData = function(){
-    TableGrid.searchData($scope, Tema);
+    TableGrid.searchData($scope, "tema");
   };
 }]);

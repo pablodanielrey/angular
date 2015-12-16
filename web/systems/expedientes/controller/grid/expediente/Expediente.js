@@ -2,43 +2,43 @@
 /**
  * Controlador de la grilla de Expediente
  */
-app.controller("GridExpedienteCtrl", ["$scope", "$timeout", "Expediente", "TableGrid", function ($scope, $timeout, Expediente, TableGrid) {
+app.controller("GridExpedienteCtrl", ["$scope", "$timeout", "TableGrid", function ($scope, $timeout, TableGrid) {
  //***** codigo de inicializacion del controlador *****
   $timeout(function() {
-    TableGrid.initialize($scope, Expediente);
+    TableGrid.initialize($scope, "expediente");
   },0);
 
   /***** escuchar evento de incializacion de "gridNumRows" *****/
   $scope.$on("gridNumRowsInitialized", function(event){
-    TableGrid.changePagination($scope, Expediente);
+    TableGrid.changePagination($scope, "expediente");
   });
   
   /**
    * Ir a pagina anterior
    */
   $scope.previousPage = function(){
-    TableGrid.goPage($scope, $scope.pagination.page-1, Expediente);
+    TableGrid.goPage($scope, $scope.pagination.page-1, "expediente");
   };
   
   /**
    * Ir a pagina siguiente
    */
   $scope.nextPage = function(){
-    TableGrid.goPage($scope, $scope.pagination.page+1, Expediente);
+    TableGrid.goPage($scope, $scope.pagination.page+1, "expediente");
   };
   
   /**
    * Ir a pagina determinada
    */
   $scope.goPage = function(){
-    TableGrid.goPage($scope, $scope.pagination.page, Expediente);
+    TableGrid.goPage($scope, $scope.pagination.page, "expediente");
   };
   
   /**
    * Cambiar tamanio de pagina
    */
   $scope.changePageSize = function(){
-    TableGrid.changePagination($scope, Expediente);
+    TableGrid.changePagination($scope, "expediente");
   };
   
   /** 
@@ -46,6 +46,6 @@ app.controller("GridExpedienteCtrl", ["$scope", "$timeout", "Expediente", "Table
    * @returns {undefined}
    */
   $scope.searchData = function(){
-    TableGrid.searchData($scope, Expediente);
+    TableGrid.searchData($scope, "expediente");
   };
 }]);

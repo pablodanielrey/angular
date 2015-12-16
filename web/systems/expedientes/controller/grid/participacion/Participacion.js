@@ -2,43 +2,43 @@
 /**
  * Controlador de la grilla de Participacion
  */
-app.controller("GridParticipacionCtrl", ["$scope", "$timeout", "Participacion", "TableGrid", function ($scope, $timeout, Participacion, TableGrid) {
+app.controller("GridParticipacionCtrl", ["$scope", "$timeout", "TableGrid", function ($scope, $timeout, TableGrid) {
  //***** codigo de inicializacion del controlador *****
   $timeout(function() {
-    TableGrid.initialize($scope, Participacion);
+    TableGrid.initialize($scope, "participacion");
   },0);
 
   /***** escuchar evento de incializacion de "gridNumRows" *****/
   $scope.$on("gridNumRowsInitialized", function(event){
-    TableGrid.changePagination($scope, Participacion);
+    TableGrid.changePagination($scope, "participacion");
   });
   
   /**
    * Ir a pagina anterior
    */
   $scope.previousPage = function(){
-    TableGrid.goPage($scope, $scope.pagination.page-1, Participacion);
+    TableGrid.goPage($scope, $scope.pagination.page-1, "participacion");
   };
   
   /**
    * Ir a pagina siguiente
    */
   $scope.nextPage = function(){
-    TableGrid.goPage($scope, $scope.pagination.page+1, Participacion);
+    TableGrid.goPage($scope, $scope.pagination.page+1, "participacion");
   };
   
   /**
    * Ir a pagina determinada
    */
   $scope.goPage = function(){
-    TableGrid.goPage($scope, $scope.pagination.page, Participacion);
+    TableGrid.goPage($scope, $scope.pagination.page, "participacion");
   };
   
   /**
    * Cambiar tamanio de pagina
    */
   $scope.changePageSize = function(){
-    TableGrid.changePagination($scope, Participacion);
+    TableGrid.changePagination($scope, "participacion");
   };
   
   /** 
@@ -46,6 +46,6 @@ app.controller("GridParticipacionCtrl", ["$scope", "$timeout", "Participacion", 
    * @returns {undefined}
    */
   $scope.searchData = function(){
-    TableGrid.searchData($scope, Participacion);
+    TableGrid.searchData($scope, "participacion");
   };
 }]);

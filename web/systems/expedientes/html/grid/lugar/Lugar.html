@@ -20,9 +20,9 @@
           <a href="<?=PATH_HTTP?>index.php?go=htmlFormAdmin&t=lugar&id={{fields.id}}"><span class="glyphicon glyphicon-pencil"></span></a>&nbsp;&nbsp;
 		  <a href="?go=delete&t=lugar&pk={{fields.id}}" target="_blank"><span class="glyphicon glyphicon-remove"></span></a>&nbsp;&nbsp;
           <a href="<?=PATH_HTTP?>index.php?go=htmlFormAdmin&t=destino&lugar={{fields.id}}"><span class="glyphicon glyphicon-plus"></span>DEST</a>&nbsp;&nbsp;
-		  <a href="<?=PATH_HTTP?>index.php?go=htmlGrid&t=destino&ic=1&0if=lugar&0in=lugar&0it=lugar&0iv={{fields.id}}"><span class="glyphicon glyphicon-eye-open"></span>DEST</a>&nbsp;&nbsp;
+		  <a href="#/gridDestino?ic=1&0if=lugar&0in=lugar&0it=lugar&0iv={{fields.id}}"><span class="glyphicon glyphicon-eye-open"></span>DEST</a>&nbsp;&nbsp;
           <a href="<?=PATH_HTTP?>index.php?go=htmlFormAdmin&t=expediente&lugar_iniciador={{fields.id}}"><span class="glyphicon glyphicon-plus"></span>EXPE</a>&nbsp;&nbsp;
-		  <a href="<?=PATH_HTTP?>index.php?go=htmlGrid&t=expediente&ic=1&0if=lugar_iniciador&0in=lugar_iniciador&0it=lugar&0iv={{fields.id}}"><span class="glyphicon glyphicon-eye-open"></span>EXPE</a>&nbsp;&nbsp;
+		  <a href="#/gridExpediente?ic=1&0if=lugar_iniciador&0in=lugar_iniciador&0it=lugar&0iv={{fields.id}}"><span class="glyphicon glyphicon-eye-open"></span>EXPE</a>&nbsp;&nbsp;
         </td>
 
       </tr>

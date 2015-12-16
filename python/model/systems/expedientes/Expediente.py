@@ -86,6 +86,89 @@ ud_lug.id AS ud_lug_id, ud_lug.descripcion AS ud_lug_descripcion,
 
       return "(" + condition + ")"
 
+    """
+     " definir condicion de busqueda avanzada
+     " @param search Diccionario con los fields a buscar
+     " @param connect Conexion
+     " @param alias Alias de la tabla
+     " @param fieldAlias Alias para identificar a los fields
+    """
+    def _conditionAdvancedSearch(self, connect, search = None, alias = "expe", fieldAlias = ""):
+      if not search or "ic" not in search or int(float(search["ic"])) == 0:
+        return ''
+
+      condition = ''
+      
+      for i in range(0, int(float(search["ic"]))):
+        i = str(i)
+        #definir condiciones de id
+        if search[i+"if"] == fieldAlias + "id": 
+          condition = condition + "(" + alias + ".id = " + search[i+"iv"] + ") "
+
+        #definir condiciones de numero
+        if search[i+"if"] == fieldAlias + "numero": 
+          if condition: 
+            condition = condition + " " + connect + " "
+          condition = condition + "(lower(" + alias + ".numero) = lower('" + search[i+"iv"] + "')) "
+        #definir condiciones de archivo_numero
+        if search[i+"if"] == fieldAlias + "archivo_numero": 
+          if condition: 
+            condition = condition + " " + connect + " "
+          condition = condition + "(" + alias + ".archivo_numero = " + search[i+"iv"] + ") "
+
+        #definir condiciones de archivo_anio
+        if search[i+"if"] == fieldAlias + "archivo_anio": 
+          if condition: 
+            condition = condition + " " + connect + " "
+          condition = condition + "(" + alias + ".archivo_anio = " + search[i+"iv"] + ") "
+
+        #definir condiciones de antecedente
+        if search[i+"if"] == fieldAlias + "antecedente": 
+          if condition: 
+            condition = condition + " " + connect + " "
+          condition = condition + "(lower(" + alias + ".antecedente) = lower('" + search[i+"iv"] + "')) "
+        #definir condiciones de extracto
+        if search[i+"if"] == fieldAlias + "extracto": 
+          if condition: 
+            condition = condition + " " + connect + " "
+          condition = condition + "(lower(" + alias + ".extracto) = lower('" + search[i+"iv"] + "')) "
+        #definir condiciones de resolucion_iniciador
+        if search[i+"if"] == fieldAlias + "resolucion_iniciador": 
+          if condition: 
+            condition = condition + " " + connect + " "
+          condition = condition + "(lower(" + alias + ".resolucion_iniciador) = lower('" + search[i+"iv"] + "')) "
+        #definir condiciones de iniciador
+        if search[i+"if"] == fieldAlias + "iniciador": 
+          if condition: 
+            condition = condition + " " + connect + " "
+          condition = condition + "(" + alias + ".iniciador = " + search[i+"iv"] + ") "
+
+        #definir condiciones de agregado
+        if search[i+"if"] == fieldAlias + "agregado": 
+          if condition: 
+            condition = condition + " " + connect + " "
+          condition = condition + "(" + alias + ".agregado = " + search[i+"iv"] + ") "
+
+        #definir condiciones de lugar_iniciador
+        if search[i+"if"] == fieldAlias + "lugar_iniciador": 
+          if condition: 
+            condition = condition + " " + connect + " "
+          condition = condition + "(" + alias + ".lugar_iniciador = " + search[i+"iv"] + ") "
+
+        #definir condiciones de tema
+        if search[i+"if"] == fieldAlias + "tema": 
+          if condition: 
+            condition = condition + " " + connect + " "
+          condition = condition + "(" + alias + ".tema = " + search[i+"iv"] + ") "
+
+        #definir condiciones de ultimo_destino
+        if search[i+"if"] == fieldAlias + "ultimo_destino": 
+          if condition: 
+            condition = condition + " " + connect + " "
+          condition = condition + "(" + alias + ".ultimo_destino = " + search[i+"iv"] + ") "
+
+      return "(" + condition + ")"
+
     #fields de la tabla con cadena relaciones
     def _leftJoinsComplete(self):
       return """
@@ -116,10 +199,11 @@ LEFT OUTER JOIN expedientes.lugar AS ud_lug ON (ud.lugar = ud_lug.id)
             
         return cur.fetchone()
         
-    def gridData(self, con, filterParams):
-        search = None
-        pageNumber = filterParams["p"] if filterParams["p"] else 1
-        pageSize = filterParams["q"] if filterParams["q"] else 40
+    def gridData(self, con, filterParams = None):
+        search = filterParams["s"] if filterParams and "s" in filterParams else None
+        pageNumber = filterParams["p"] if filterParams and "p" in filterParams else 1
+        pageSize = filterParams["q"] if filterParams and "q" in filterParams else 40
+
         sql = "SELECT "
         sql = sql + self._fields()
         sql = sql + self._fieldsComplete()
@@ -128,6 +212,9 @@ LEFT OUTER JOIN expedientes.lugar AS ud_lug ON (ud.lugar = ud_lug.id)
         sql = sql + self._leftJoinsComplete()
         cond = self._conditionSearch(search)
         sql = sql + Tools.concat(cond, 'WHERE')
+        cond2 = self._conditionAdvancedSearch('AND', filterParams)
+        sql = sql + Tools.concat(cond2, 'AND', 'WHERE', cond)
+        
         if pageSize: 
           sql = sql + " LIMIT " + str(pageSize) + " OFFSET " + str((pageNumber - 1) * pageSize) + "; ";
         
@@ -141,14 +228,19 @@ LEFT OUTER JOIN expedientes.lugar AS ud_lug ON (ud.lugar = ud_lug.id)
             
         return data
 
-    def numRows(self, con, search = None):
+    def numRows(self, con, filterParams = None):
+        search = filterParams["s"] if filterParams and "s" in filterParams else None
+
         sql = "SELECT count(DISTINCT expe.id) AS num_rows"
         sql = sql + "	FROM expedientes.expediente AS expe"
         sql = sql + self._leftJoinsComplete()
         cond = self._conditionSearch(search)
         sql = sql + Tools.concat(cond, 'WHERE')
-
+        cond2 = self._conditionAdvancedSearch('AND', filterParams)
+        sql = sql + Tools.concat(cond2, 'AND', 'WHERE', cond)
+        
         cur = con.cursor()
+        
         cur.execute(sql)
         if cur.rowcount <= 0:
             return None

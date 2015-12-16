@@ -22,11 +22,11 @@
           <a href="<?=PATH_HTTP?>index.php?go=htmlFormAdmin&t=persona&id={{fields.id}}"><span class="glyphicon glyphicon-pencil"></span></a>&nbsp;&nbsp;
 		  <a href="?go=delete&t=persona&pk={{fields.id}}" target="_blank"><span class="glyphicon glyphicon-remove"></span></a>&nbsp;&nbsp;
           <a href="<?=PATH_HTTP?>index.php?go=htmlFormAdmin&t=expediente&iniciador={{fields.id}}"><span class="glyphicon glyphicon-plus"></span>EXPE</a>&nbsp;&nbsp;
-		  <a href="<?=PATH_HTTP?>index.php?go=htmlGrid&t=expediente&ic=1&0if=iniciador&0in=iniciador&0it=persona&0iv={{fields.id}}"><span class="glyphicon glyphicon-eye-open"></span>EXPE</a>&nbsp;&nbsp;
+		  <a href="#/gridExpediente?ic=1&0if=iniciador&0in=iniciador&0it=persona&0iv={{fields.id}}"><span class="glyphicon glyphicon-eye-open"></span>EXPE</a>&nbsp;&nbsp;
           <a href="<?=PATH_HTTP?>index.php?go=htmlFormAdmin&t=nota&persona={{fields.id}}"><span class="glyphicon glyphicon-plus"></span>NOTA</a>&nbsp;&nbsp;
-		  <a href="<?=PATH_HTTP?>index.php?go=htmlGrid&t=nota&ic=1&0if=persona&0in=persona&0it=persona&0iv={{fields.id}}"><span class="glyphicon glyphicon-eye-open"></span>NOTA</a>&nbsp;&nbsp;
+		  <a href="#/gridNota?ic=1&0if=persona&0in=persona&0it=persona&0iv={{fields.id}}"><span class="glyphicon glyphicon-eye-open"></span>NOTA</a>&nbsp;&nbsp;
           <a href="<?=PATH_HTTP?>index.php?go=htmlFormAdmin&t=participacion&persona={{fields.id}}"><span class="glyphicon glyphicon-plus"></span>PART</a>&nbsp;&nbsp;
-		  <a href="<?=PATH_HTTP?>index.php?go=htmlGrid&t=participacion&ic=1&0if=persona&0in=persona&0it=persona&0iv={{fields.id}}"><span class="glyphicon glyphicon-eye-open"></span>PART</a>&nbsp;&nbsp;
+		  <a href="#/gridParticipacion?ic=1&0if=persona&0in=persona&0it=persona&0iv={{fields.id}}"><span class="glyphicon glyphicon-eye-open"></span>PART</a>&nbsp;&nbsp;
         </td>
 
       </tr>

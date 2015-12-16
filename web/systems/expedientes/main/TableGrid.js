@@ -2,10 +2,10 @@
 /**
  * Servicio de controlador de grilla con busqueda simple, avanzada, indice y paginacion
  */
-app.service('TableGrid', ["$location", "$rootScope", "$http", function($location, $rootScope, $http){
+app.service('TableGrid', ["$location", "$rootScope", "$http", "ServerAccess", function($location, $rootScope, $http, ServerAccess){
 	
 	
-	this.initialize = function($scope, ServerAccess){
+	this.initialize = function($scope, label){
 	  
     /***** datos de la grilla *****/
     $scope.grid = {numRows: 0, data: 0};
@@ -23,7 +23,7 @@ app.service('TableGrid', ["$location", "$rootScope", "$http", function($location
     $scope.selection = [];
 
     this.initializeSearch($scope.search);
-    this.getGridNumRows($scope, ServerAccess);
+    this.getGridNumRows($scope, label);
 	}
   
   /***** METODOS ASOCIADOS AL FORMULARIO DE BUSQUEDA ******
@@ -72,7 +72,7 @@ app.service('TableGrid', ["$location", "$rootScope", "$http", function($location
    * @returns {Array} busqueda indice
    */
   this.initializeSearchIndexValueLabel = function(searchIndex){
-    $http.get($location.protocol() + "://" + $location.host() + "/" + $location.path() + "?go=pkMainFieldsByPk&t=" + searchIndex.table + "&pk=" + searchIndex.value)
+    ServerAccess.findById(searchIndex.value, searchIndex.table)
       .then(
         function(response){ searchIndex.valueLabel = response.data["label"]; },
         function(error){ $rootScope.$broadcast("errorEvent", error); }
@@ -114,11 +114,11 @@ app.service('TableGrid', ["$location", "$rootScope", "$http", function($location
   /**
    * Modificar tamanio de pagina
    * @param {$scope} $scope
-   * @param {service} ServerAccess Servicio de acceso a los datos del servidor
+   * @param {string} label Etiqueta de acceso
    */   
-  this.changePagination = function($scope, ServerAccess){
+  this.changePagination = function($scope, label){
     this.initializePagination($scope);
-    this.getGridData($scope, ServerAccess);
+    this.getGridData($scope, label);
   };
   
   /**
@@ -127,9 +127,9 @@ app.service('TableGrid', ["$location", "$rootScope", "$http", function($location
    * @param {type} page
    * @returns {undefined}
    */  
-  this.goPage = function($scope, page, ServerAccess){
+  this.goPage = function($scope, page, label){
     this.setPage($scope, page);    
-    this.getGridData($scope, ServerAccess);
+    this.getGridData($scope, label);
   };
   
   
@@ -217,9 +217,10 @@ get
    * @param {type} access
    * @returns {undefined}
    */
-  this.getGridNumRows = function(scope, ServerAccess){    
+  this.getGridNumRows = function(scope, label){    
     var searchParams = this.defineSearchParams(scope.search);    
-    return ServerAccess.numRows(searchParams)
+    console.log(searchParams);
+    return ServerAccess.numRows(searchParams, label)
         .then(
           function(response){
             scope.grid.numRows = parseInt(response.data);
@@ -236,9 +237,9 @@ get
   /**
    * Buscar datos
    */
-  this.searchData = function($scope, ServerAccess){
+  this.searchData = function($scope, label){
     $scope.pagination.disabled = true;
-    this.getGridNumRows($scope, ServerAccess);
+    this.getGridNumRows($scope, label);
   }
 
 
@@ -249,14 +250,14 @@ get
    * @param {$scope} $scope
    * @param {String} access Identificacion de acceso
    */
-  this.getGridData = function($scope, ServerAccess){
+  this.getGridData = function($scope, label){
     
     $scope.grid.data = []; 
     if($scope.grid.numRows < 1) return;
 
     var params = this.defineParams($scope);
 
-    ServerAccess.gridData(params)
+    ServerAccess.gridData(params, label)
       .then(
         function(response){
           $scope.grid.data = response.data;   //cargar datos de la grilla

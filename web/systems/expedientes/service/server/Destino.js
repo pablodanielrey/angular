@@ -12,5 +12,13 @@ app.service("Destino", ["$wamp", function($wamp) {
     return $wamp.call('expedientes.destino.numRows', [search])
   }
 
+  
+  
+  this.findById = function(id, table){  
+    return $wamp.call(table + ".numRows", [id]);
+  }
 
 }]);
+
+
+
