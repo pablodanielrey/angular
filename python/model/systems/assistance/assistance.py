@@ -375,7 +375,7 @@ class Assistance:
         @param end Fecha (date de finalizacion del periodo
     """
     def getFailsByDate(self, con, userId, start, end):
-        offices = self.offices.getOfficesByUserRole(con,userId,tree,'autoriza')
+        offices = self.offices.getOfficesByUserRole(con,userId,True,'autoriza')
         #logging.debug('officesByUserRole : {}'.format(offices))
 
         if offices is None or len(offices) <= 0:
