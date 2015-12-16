@@ -57,6 +57,16 @@
   font-size: 14px;
 
 }
+
+.managePositions .inputSearch2{
+  width:180px;
+  padding:5px;
+  font-size: 14px;
+  background-color: white;
+
+}
+
+
 .managePositions .list {
   list-style-type:none;
   margin:0px;
@@ -80,3 +90,11 @@
 
 }
 
+.managePositions .btnSave {
+  background-color: #0066A6;
+  padding: 10px;
+  border-radius: 3px;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
