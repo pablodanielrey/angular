@@ -146,7 +146,7 @@ class Assistance:
 
 
 
-    
+
     def _getJustificationsForSchedule(self, con, userId, scheds, date):
         """
             Obtener justificaciones de un usuario a partir de una fecha
@@ -155,7 +155,7 @@ class Assistance:
             @param scheds Lista de schedules
             @param date Fecha para la cual se obtendran las justificaciones
         """
-        
+
         if scheds is None or len(scheds) <= 0:
             return []
 
@@ -372,7 +372,19 @@ class Assistance:
         @param start Fecha (date) de inicio del periodo
         @param end Fecha (date de finalizacion del periodo
     """
-    def getFailsByDate(self, con, userId, start, end):  
-        fails = self.checks.checkConstraints(con, userId, start, end) #obtener fallas del usuario en determinado periodo
-        user = self.users.findUser(con, userId) #definir usuario
-        return (user, fails)
+    def getFailsByDate(self, con, userId, start, end):
+        offices = self.offices.getOfficesByUserRole(con,userId,tree,'autoriza')
+        #logging.debug('officesByUserRole : {}'.format(offices))
+
+        if offices is None or len(offices) <= 0:
+            return []
+
+        officesIds = list(map(lambda o: o['id'], offices))
+        users = self.offices.getOfficesUsers(con,officesIds)
+        fails = []
+        for userId in users:
+            fails = self.checks.checkConstraints(con, userId, start, end) #obtener fallas del usuario en determinado periodo
+            user = self.users.findUser(con, userId) #definir usuario
+            f = (user, fails)
+            fails.append(f)
+        return fails
