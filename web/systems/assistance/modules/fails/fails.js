@@ -84,62 +84,67 @@ app.controller('AssistanceFailsCtrl', ["$scope", "$timeout", "Assistance", "Noti
     $scope.model.searching = true;
     $scope.model.assistanceFails = [];
     $scope.correctDates();
-    
+
     Assistance.getFailsByDate($scope.model.begin, $scope.model.end,
-    
 
-      
+
+
       function(response) {
-      
-        $scope.model.base64 = response.base64;
-        
-        for (var i = 0; i < response[1].length; i++) {
-          r = {
-            user: response[0],
-            fail: response[1][i]
+
+        //$scope.model.base64 = response.base64;
+        $scope.model.base64 = '';
+        //for (var i = 0; i < response[1].length; i++) {
+        for (var i = 0; i < response.length; i++) {
+          var resp = response[i];
+
+          for (var j=0; j < resp[1].length; j++) {
+            r = {
+              user: resp[0],
+              fail: resp[1][j]
+            }
+
+            r.justification = {name:''};
+            if ((r.fail.justifications != undefined) && (r.fail.justifications != null) && (r.fail.justifications.length > 0)) {
+              var just = Utils.getJustification(r.fail.justifications[0].justification_id);
+              just.begin = r.fail.justifications[0].begin;
+              r.justification = just;
+            }
+
+            var date = new Date(r.fail.date);
+            r.fail.dateFormat = Utils.formatDate(date);
+            r.fail.dateExtend = Utils.formatDateExtend(date);
+            r.fail.dayOfWeek = {};
+            r.fail.dayOfWeek.name = Utils.getDayString(date);
+            r.fail.dayOfWeek.number = date.getDay();
+
+
+
+            if (r.fail.startSchedule || r.fail.endSchedule) {
+              r.fail.dateSchedule = (r.fail.startSchedule) ? r.fail.startSchedule : r.fail.endSchedule;
+              r.fail.dateSchedule = Utils.formatTime(new Date(r.fail.dateSchedule));
+            }
+
+            if (r.fail.start || r.fail.end) {
+              r.fail.wh = (r.fail.start) ?  new Date(r.fail.start) : new Date(r.fail.end);
+              r.fail.wh =  Utils.formatTime(r.fail.wh);
+            }
+
+            if (r.fail.seconds) {
+              var hoursDiff = Math.floor((r.fail.seconds / 60) / 60);
+              var minutesDiff = Math.floor((r.fail.seconds / 60) % 60);
+              r.fail.diff = ('0' + hoursDiff).substr(-2) + ":" + ('0' + minutesDiff).substr(-2);
+            }
+
+            if (r.fail.whSeconds) {
+              var hours = Math.floor((r.fail.whSeconds / 60) / 60);
+              var minutes = Math.floor((r.fail.whSeconds / 60) % 60);
+              r.fail.whs = ('0' + hours).substr(-2) + ":" + ('0' + minutes).substr(-2);
+            } else {
+              r.fail.whs = '00:00';
+            }
+
+            $scope.model.assistanceFails.push(r);
           }
-
-          r.justification = {name:''};
-          if ((r.fail.justifications != undefined) && (r.fail.justifications != null) && (r.fail.justifications.length > 0)) {
-            var just = Utils.getJustification(r.fail.justifications[0].justification_id);
-            just.begin = r.fail.justifications[0].begin;
-            r.justification = just;
-          }
-
-          var date = new Date(r.fail.date);
-          r.fail.dateFormat = Utils.formatDate(date);
-          r.fail.dateExtend = Utils.formatDateExtend(date);
-          r.fail.dayOfWeek = {};
-          r.fail.dayOfWeek.name = Utils.getDayString(date);
-          r.fail.dayOfWeek.number = date.getDay();
-
-
-
-          if (r.fail.startSchedule || r.fail.endSchedule) {
-            r.fail.dateSchedule = (r.fail.startSchedule) ? r.fail.startSchedule : r.fail.endSchedule;
-            r.fail.dateSchedule = Utils.formatTime(new Date(r.fail.dateSchedule));
-          }
-
-          if (r.fail.start || r.fail.end) {
-            r.fail.wh = (r.fail.start) ?  new Date(r.fail.start) : new Date(r.fail.end);
-            r.fail.wh =  Utils.formatTime(r.fail.wh);
-          }
-
-          if (r.fail.seconds) {
-            var hoursDiff = Math.floor((r.fail.seconds / 60) / 60);
-            var minutesDiff = Math.floor((r.fail.seconds / 60) % 60);
-            r.fail.diff = ('0' + hoursDiff).substr(-2) + ":" + ('0' + minutesDiff).substr(-2);
-          }
-
-          if (r.fail.whSeconds) {
-            var hours = Math.floor((r.fail.whSeconds / 60) / 60);
-            var minutes = Math.floor((r.fail.whSeconds / 60) % 60);
-            r.fail.whs = ('0' + hours).substr(-2) + ":" + ('0' + minutes).substr(-2);
-          } else {
-            r.fail.whs = '00:00';
-          }
-
-          $scope.model.assistanceFails.push(r);
         }
         $scope.order(['fail.dateExtend','user.lastname','user.name'],false);//ordenamiento por defecto
         $scope.model.searching = false;
