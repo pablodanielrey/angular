@@ -44,29 +44,32 @@ app.controller('RequestJustificationsCtrl', ["$scope", "$wamp", "$timeout", "$wi
     );
   };
 
+  function formatUser(req) {
+    Users.findUser(req.userId,
+      function(user){
+        req.userName = user.name + " " + user.lastname;
+        Users.findUser(req.requestorId,
+          function(user){
+            req.requestorName = user.name + " " + user.lastname;
+            $scope.model.requestedJustificationsFiltered.push(req);
+          },
+          function(error) {
+            Notifications.message(error);
+          }
+        );
+      },
+      function(error) {
+        Notifications.message(error);
+      }
+    );
+  }
    $scope.filterUserRequestedJustifications = function(){
 
     $scope.model.requestedJustificationsFiltered = [];
     for (var i = 0; i < $scope.model.requestedJustifications.length; i++) {
       if(($scope.model.selectedUser.id === $scope.model.requestedJustifications[i].user_id) && ($scope.isAuthorizedJustification($scope.model.requestedJustifications[i].justification_id))){
         var req = Utils.formatRequestJustification($scope.model.requestedJustifications[i]);
-        Users.findUser(req.userId,
-          function(user){
-            req.userName = user.name + " " + user.lastname;
-            Users.findUser(req.requestorId,
-              function(user){
-                req.requestorName = user.name + " " + user.lastname;
-                $scope.model.requestedJustificationsFiltered.push(req);
-              },
-              function(error) {
-                Notifications.message(error);
-              }
-            );
-          },
-          function(error) {
-            Notifications.message(error);
-          }
-        );
+        formatUser(req);
       }
     }
   };
