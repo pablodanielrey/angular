@@ -323,8 +323,10 @@ class AssistanceWamp(ApplicationSession):
         #end = dateutil.parser.parse(end).date()
         import pdb
         pdb.set_trace()
-        start = self.date.parse(start).date()
-        end = self.date.parse(end).date()
+        start = self.date.parse(start)
+        start = self.date.awareToUtc(start).date()
+        end = self.date.parse(end)
+        end = self.date.awareToUtc(end).date()
 
         con = self._getDatabase()
         try:
