@@ -80,3 +80,11 @@
 
 }
 
+.manageJustificationsStock .btnSave {
+  background-color: #0066A6;
+  padding: 10px;
+  border-radius: 3px;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
