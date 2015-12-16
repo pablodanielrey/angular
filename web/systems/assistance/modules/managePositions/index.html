@@ -1,6 +1,6 @@
 
 <div class="managePositions">
-<h2>Administración de Stock</h2>
+<h2>Administración de Cargos</h2>
 
 <form>
   <div class="input">
@@ -23,17 +23,17 @@
         <span><i class="fa fa-calendar"></i> Seleccione Cargo</span>
       </div>
       <div>
-        <select ng-disabled="model.positionsSelectionDisable" ng-model="model.selectedPosition" ng-options="position for position in model.positions"> 
-          <option value="">-- Cargo --</option>
+        <select class="inputSearch2" ng-disabled="model.positionsSelectionDisable" ng-model="model.selectedPosition" ng-options="position for position in model.positions">
+          <option  value="">-- Cargo --</option>
         </select>
       </div>
     </div>
   </div>
 
-  
+
 
   <div class="input" >
-    <button ng-click="updateUserPosition()"  ng-disabled="model.submitButtonDisable">Aceptar</button>
+    <button class="btnSave" ng-click="updateUserPosition()"  ng-disabled="model.submitButtonDisable"><i class="fa fa-floppy-o"></i> Guardar</button>
   </div>
 </form>
 </div>
