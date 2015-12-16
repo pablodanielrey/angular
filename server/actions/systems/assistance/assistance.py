@@ -324,9 +324,9 @@ class AssistanceWamp(ApplicationSession):
         import pdb
         pdb.set_trace()
         start = self.date.parse(start)
-        start = self.date.awareToUtc(start).date()
+        start = self.date.localizeLocal(start).date()
         end = self.date.parse(end)
-        end = self.date.awareToUtc(end).date()
+        end = self.date.localizeLocal(end).date()
 
         con = self._getDatabase()
         try:
