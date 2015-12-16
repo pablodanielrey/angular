@@ -319,8 +319,10 @@ class AssistanceWamp(ApplicationSession):
 
 
     def getFailsByDate(self, sid, userId, start, end):
-        start = dateutil.parser.parse(start).date()
-        end = dateutil.parser.parse(end).date()
+        #start = dateutil.parser.parse(start).date()
+        #end = dateutil.parser.parse(end).date()
+        start = datetime.strptime(start, "%Y-%m-%d").date()
+        end = datetime.strptime(end, "%Y-%m-%d").date()
 
         con = self._getDatabase()
         try:
