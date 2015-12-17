@@ -48,4 +48,11 @@ app.controller("GridParticipacionCtrl", ["$scope", "$timeout", "TableGrid", func
   $scope.searchData = function(){
     TableGrid.searchData($scope, "participacion");
   };
+  
+  /**
+   * Eliminar elemento de busqueda indice
+   */
+  $scope.deleteSearchIndex = function(index){
+    $scope.search.index.splice(index, 1);
+  };
 }]);

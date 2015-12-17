@@ -1,8 +1,21 @@
 
 
-app.controller('IndexCtrl',["$scope", "$timeout", "$modal", IndexCtrl]);
+app.controller('IndexCtrl',["$scope", "$timeout", "$modal", "$window", "Login", IndexCtrl]);
 
-function IndexCtrl($scope, $timeout, $modal) {
+function IndexCtrl($scope, $timeout, $modal, $window, Login) {
+
+  $scope.$on('$viewContentLoaded', function(event) {
+     $scope.initialize();
+  });
+
+  $scope.initialize =  function() {
+
+    if (!Login.isLogged()) {
+      $window.location.href = "/systems/login/index.html";
+    }
+  }
+  
+  
   $scope.alerts = [];
 
 
@@ -36,6 +49,7 @@ function IndexCtrl($scope, $timeout, $modal) {
     
     
     $timeout(function() { 
+    
       modalInstance.close(newAlert);
     },5000);
   

@@ -16,10 +16,7 @@
       <tr ng-repeat="fields in grid.data">
         <td><input type="checkbox" ng-checked="isSelected(fields.id)" ng-click="toggleSelection(fields.id)"></td>
         <td>{{fields.descripcion}}</td>
-        <td>
-          <a href="<?=PATH_HTTP?>index.php?go=htmlFormAdmin&t=tema&id={{fields.id}}"><span class="glyphicon glyphicon-pencil"></span></a>&nbsp;&nbsp;
-		  <a href="?go=delete&t=tema&pk={{fields.id}}" target="_blank"><span class="glyphicon glyphicon-remove"></span></a>&nbsp;&nbsp;
-          <a href="<?=PATH_HTTP?>index.php?go=htmlFormAdmin&t=expediente&tema={{fields.id}}"><span class="glyphicon glyphicon-plus"></span>EXPE</a>&nbsp;&nbsp;
+        <td>          
 		  <a href="#/gridExpediente?ic=1&0if=tema&0in=tema&0it=tema&0iv={{fields.id}}"><span class="glyphicon glyphicon-eye-open"></span>EXPE</a>&nbsp;&nbsp;
         </td>
 

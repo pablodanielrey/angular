@@ -27,6 +27,14 @@ ud.id AS ud_id, ud.fecha_entrada AS ud_fecha_entrada, ud.fecha_salida AS ud_fech
 ud_lug.id AS ud_lug_id, ud_lug.descripcion AS ud_lug_descripcion, 
       """
 
+
+    """
+     " concatenar campos principales en un campo alias label
+    """
+    def _fieldsLabel(self):
+      return """ CONCAT_wS(', ', expe.numero) AS label, 
+"""
+
     #definir condicion de busqueda
     def _conditionSearch(self, search = None, alias = "expe"):
       if not search:
@@ -110,6 +118,7 @@ ud_lug.id AS ud_lug_id, ud_lug.descripcion AS ud_lug_descripcion,
           if condition: 
             condition = condition + " " + connect + " "
           condition = condition + "(lower(" + alias + ".numero) = lower('" + search[i+"iv"] + "')) "
+
         #definir condiciones de archivo_numero
         if search[i+"if"] == fieldAlias + "archivo_numero": 
           if condition: 
@@ -127,16 +136,19 @@ ud_lug.id AS ud_lug_id, ud_lug.descripcion AS ud_lug_descripcion,
           if condition: 
             condition = condition + " " + connect + " "
           condition = condition + "(lower(" + alias + ".antecedente) = lower('" + search[i+"iv"] + "')) "
+
         #definir condiciones de extracto
         if search[i+"if"] == fieldAlias + "extracto": 
           if condition: 
             condition = condition + " " + connect + " "
           condition = condition + "(lower(" + alias + ".extracto) = lower('" + search[i+"iv"] + "')) "
+
         #definir condiciones de resolucion_iniciador
         if search[i+"if"] == fieldAlias + "resolucion_iniciador": 
           if condition: 
             condition = condition + " " + connect + " "
           condition = condition + "(lower(" + alias + ".resolucion_iniciador) = lower('" + search[i+"iv"] + "')) "
+
         #definir condiciones de iniciador
         if search[i+"if"] == fieldAlias + "iniciador": 
           if condition: 
@@ -188,16 +200,17 @@ LEFT OUTER JOIN expedientes.lugar AS ud_lug ON (ud.lugar = ud_lug.id)
     def rowById(self, con, id):
         sql = "SELECT DISTINCT "
         sql = sql + self._fields()
+        sql = sql + self._fieldsLabel()
         sql = sql[:sql.rfind(",")] #eliminar ultima coma
         sql = sql + "	FROM expedientes.expediente AS expe"
         sql = sql + " WHERE id = %s;"
         
-        cur = con.cursor()
+        cur = con.cursor(cursor_factory=psycopg2.extras.DictCursor)
         cur.execute(sql, (id, ))
         if cur.rowcount <= 0:
             return None
             
-        return cur.fetchone()
+        return dict(cur.fetchone())
         
     def gridData(self, con, filterParams = None):
         search = filterParams["s"] if filterParams and "s" in filterParams else None

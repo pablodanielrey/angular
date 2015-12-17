@@ -16,6 +16,14 @@ pers.id AS id, pers.nombres AS nombres, pers.apellidos AS apellidos,
       return """
       """
 
+
+    """
+     " concatenar campos principales en un campo alias label
+    """
+    def _fieldsLabel(self):
+      return """ CONCAT_wS(', ', pers.nombres, pers.apellidos) AS label, 
+"""
+
     #definir condicion de busqueda
     def _conditionSearch(self, search = None, alias = "pers"):
       if not search:
@@ -57,11 +65,13 @@ pers.id AS id, pers.nombres AS nombres, pers.apellidos AS apellidos,
           if condition: 
             condition = condition + " " + connect + " "
           condition = condition + "(lower(" + alias + ".nombres) = lower('" + search[i+"iv"] + "')) "
+
         #definir condiciones de apellidos
         if search[i+"if"] == fieldAlias + "apellidos": 
           if condition: 
             condition = condition + " " + connect + " "
           condition = condition + "(lower(" + alias + ".apellidos) = lower('" + search[i+"iv"] + "')) "
+
       return "(" + condition + ")"
 
     #fields de la tabla con cadena relaciones
@@ -72,16 +82,17 @@ pers.id AS id, pers.nombres AS nombres, pers.apellidos AS apellidos,
     def rowById(self, con, id):
         sql = "SELECT DISTINCT "
         sql = sql + self._fields()
+        sql = sql + self._fieldsLabel()
         sql = sql[:sql.rfind(",")] #eliminar ultima coma
         sql = sql + "	FROM expedientes.persona AS pers"
         sql = sql + " WHERE id = %s;"
         
-        cur = con.cursor()
+        cur = con.cursor(cursor_factory=psycopg2.extras.DictCursor)
         cur.execute(sql, (id, ))
         if cur.rowcount <= 0:
             return None
             
-        return cur.fetchone()
+        return dict(cur.fetchone())
         
     def gridData(self, con, filterParams = None):
         search = filterParams["s"] if filterParams and "s" in filterParams else None

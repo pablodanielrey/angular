@@ -4,7 +4,7 @@ app.config(['$routeProvider', function($routeProvider) {
   $routeProvider
 
   .when('/gridDestino', {
-     templateUrl: '/systems/expedientes/html/grid/destino/Destino.html'
+     templateUrl: '/systems/expedientes/html/grid/destino/DestinoSmall.html'
   })
 
   .when('/gridExpediente', {
@@ -30,5 +30,18 @@ app.config(['$routeProvider', function($routeProvider) {
   .when('/gridTema', {
      templateUrl: '/systems/expedientes/html/grid/tema/Tema.html'
   })
+  
+  .when('/options', {
+     templateUrl: '/systems/expedientes/html/menu/options.html'
+  })
+  
+  .when('/logout', {
+     templateUrl: '/systems/login/modules/logout.html',
+     controller: 'LogoutCtrl'
+  })
+  
+  .otherwise({
+    redirectTo: '/options'
+  });
 
 }]);

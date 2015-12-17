@@ -48,4 +48,11 @@ app.controller("GridLugarCtrl", ["$scope", "$timeout", "TableGrid", function ($s
   $scope.searchData = function(){
     TableGrid.searchData($scope, "lugar");
   };
+  
+  /**
+   * Eliminar elemento de busqueda indice
+   */
+  $scope.deleteSearchIndex = function(index){
+    $scope.search.index.splice(index, 1);
+  };
 }]);

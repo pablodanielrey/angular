@@ -102,16 +102,17 @@ LEFT OUTER JOIN expedientes.persona AS per ON (part.persona = per.id)
     def rowById(self, con, id):
         sql = "SELECT DISTINCT "
         sql = sql + self._fields()
+        sql = sql + self._fieldsLabel()
         sql = sql[:sql.rfind(",")] #eliminar ultima coma
         sql = sql + "	FROM expedientes.participacion AS part"
         sql = sql + " WHERE id = %s;"
         
-        cur = con.cursor()
+        cur = con.cursor(cursor_factory=psycopg2.extras.DictCursor)
         cur.execute(sql, (id, ))
         if cur.rowcount <= 0:
             return None
             
-        return cur.fetchone()
+        return dict(cur.fetchone())
         
     def gridData(self, con, filterParams = None):
         search = filterParams["s"] if filterParams and "s" in filterParams else None

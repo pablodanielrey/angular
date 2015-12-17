@@ -16,6 +16,14 @@ luga.id AS id, luga.descripcion AS descripcion,
       return """
       """
 
+
+    """
+     " concatenar campos principales en un campo alias label
+    """
+    def _fieldsLabel(self):
+      return """ CONCAT_wS(', ', luga.descripcion) AS label, 
+"""
+
     #definir condicion de busqueda
     def _conditionSearch(self, search = None, alias = "luga"):
       if not search:
@@ -54,6 +62,7 @@ luga.id AS id, luga.descripcion AS descripcion,
           if condition: 
             condition = condition + " " + connect + " "
           condition = condition + "(lower(" + alias + ".descripcion) = lower('" + search[i+"iv"] + "')) "
+
       return "(" + condition + ")"
 
     #fields de la tabla con cadena relaciones
@@ -64,16 +73,17 @@ luga.id AS id, luga.descripcion AS descripcion,
     def rowById(self, con, id):
         sql = "SELECT DISTINCT "
         sql = sql + self._fields()
+        sql = sql + self._fieldsLabel()
         sql = sql[:sql.rfind(",")] #eliminar ultima coma
         sql = sql + "	FROM expedientes.lugar AS luga"
         sql = sql + " WHERE id = %s;"
         
-        cur = con.cursor()
+        cur = con.cursor(cursor_factory=psycopg2.extras.DictCursor)
         cur.execute(sql, (id, ))
         if cur.rowcount <= 0:
             return None
             
-        return cur.fetchone()
+        return dict(cur.fetchone())
         
     def gridData(self, con, filterParams = None):
         search = filterParams["s"] if filterParams and "s" in filterParams else None

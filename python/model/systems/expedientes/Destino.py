@@ -33,6 +33,14 @@ expeYud_li.id AS expeYud_li_id, expeYud_li.descripcion AS expeYud_li_descripcion
 expeYud_tem.id AS expeYud_tem_id, expeYud_tem.descripcion AS expeYud_tem_descripcion, 
       """
 
+
+    """
+     " concatenar campos principales en un campo alias label
+    """
+    def _fieldsLabel(self):
+      return """ CONCAT_wS(', ', dest.fecha_entrada) AS label, 
+"""
+
     #definir condicion de busqueda
     def _conditionSearch(self, search = None, alias = "dest"):
       if not search:
@@ -118,16 +126,17 @@ LEFT OUTER JOIN expedientes.tema AS expeYud_tem ON (expeYud.tema = expeYud_tem.i
     def rowById(self, con, id):
         sql = "SELECT DISTINCT "
         sql = sql + self._fields()
+        sql = sql + self._fieldsLabel()
         sql = sql[:sql.rfind(",")] #eliminar ultima coma
         sql = sql + "	FROM expedientes.destino AS dest"
         sql = sql + " WHERE id = %s;"
         
-        cur = con.cursor()
+        cur = con.cursor(cursor_factory=psycopg2.extras.DictCursor)
         cur.execute(sql, (id, ))
         if cur.rowcount <= 0:
             return None
             
-        return cur.fetchone()
+        return dict(cur.fetchone())
         
     def gridData(self, con, filterParams = None):
         search = filterParams["s"] if filterParams and "s" in filterParams else None

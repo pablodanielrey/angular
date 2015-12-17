@@ -26,6 +26,11 @@
   <script src="index.controller.js"></script>
   <script src="route.js"></script>
   
+	<script src="/services/Cache.js"></script>
+	<script src="/services/Session.js"></script>
+  <script src="/services/Login.js"></script>
+  <script src="/systems/login/modules/logout.js"></script>
+  
   <script src="main/TableGrid.js"></script>
   <script src="main/service/ServerAccess.js"></script>
 
@@ -40,6 +45,8 @@
 
 </head>
 <body  class="container-fluid"   ng-app="mainApp" ng-controller="IndexCtrl">
+  <nav ng-include="'html/menu/admin_menu.html'" class="navbar navbar-default"></nav>
+  
   <div ng-view></div>
   
   <script type="text/ng-template" id="modalAlert.html"> 

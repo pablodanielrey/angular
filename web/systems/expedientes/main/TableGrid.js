@@ -8,7 +8,7 @@ app.service('TableGrid', ["$location", "$rootScope", "$http", "ServerAccess", fu
 	this.initialize = function($scope, label){
 	  
     /***** datos de la grilla *****/
-    $scope.grid = {numRows: 0, data: 0};
+    $scope.grid = {label: label, numRows: 0, data: 0};
     
     /***** datos de busqueda *****/
     $scope.search = {simple: null, advanced: [], index: []};
@@ -24,7 +24,8 @@ app.service('TableGrid', ["$location", "$rootScope", "$http", "ServerAccess", fu
 
     this.initializeSearch($scope.search);
     this.getGridNumRows($scope, label);
-	}
+	};
+	
   
   /***** METODOS ASOCIADOS AL FORMULARIO DE BUSQUEDA ******
   /**

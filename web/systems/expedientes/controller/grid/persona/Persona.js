@@ -48,4 +48,11 @@ app.controller("GridPersonaCtrl", ["$scope", "$timeout", "TableGrid", function (
   $scope.searchData = function(){
     TableGrid.searchData($scope, "persona");
   };
+  
+  /**
+   * Eliminar elemento de busqueda indice
+   */
+  $scope.deleteSearchIndex = function(index){
+    $scope.search.index.splice(index, 1);
+  };
 }]);

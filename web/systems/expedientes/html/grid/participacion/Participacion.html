@@ -31,26 +31,24 @@
     <tbody>
       <tr ng-repeat="fields in grid.data">
         <td><input type="checkbox" ng-checked="isSelected(fields.id)" ng-click="toggleSelection(fields.id)"></td>
-        <td><a href="#/gridExpediente?ic=1&0if=id&0in=expediente&0it=EXPEDIENTE&0iv={{fields.exp_id}}">{{fields.exp_numero}}</a></td>
-        <td><a href="#/gridExpediente?ic=1&0if=id&0in=expediente&0it=EXPEDIENTE&0iv={{fields.exp_id}}">{{fields.exp_fecha_origen}}</a></td>
-        <td><a href="#/gridExpediente?ic=1&0if=id&0in=expediente&0it=EXPEDIENTE&0iv={{fields.exp_id}}">{{fields.exp_fecha_entrada}}</a></td>
-        <td><a href="#/gridExpediente?ic=1&0if=id&0in=expediente&0it=EXPEDIENTE&0iv={{fields.exp_id}}">{{fields.exp_archivo_numero}}</a></td>
-        <td><a href="#/gridExpediente?ic=1&0if=id&0in=expediente&0it=EXPEDIENTE&0iv={{fields.exp_id}}">{{fields.exp_archivo_anio}}</a></td>
-        <td><a href="#/gridExpediente?ic=1&0if=id&0in=expediente&0it=EXPEDIENTE&0iv={{fields.exp_id}}">{{fields.exp_antecedente}}</a></td>
-        <td><a href="#/gridExpediente?ic=1&0if=id&0in=expediente&0it=EXPEDIENTE&0iv={{fields.exp_id}}">{{fields.exp_extracto}}</a></td>
-        <td><a href="#/gridExpediente?ic=1&0if=id&0in=expediente&0it=EXPEDIENTE&0iv={{fields.exp_id}}">{{fields.exp_resolucion_iniciador}}</a></td>
-        <td><a href="#/gridPersona?ic=1&0if=id&0in=persona&0it=PERSONA&0iv={{fields.exp_ini_id}}">{{fields.exp_ini_nombres}}</a></td>
-        <td><a href="#/gridPersona?ic=1&0if=id&0in=persona&0it=PERSONA&0iv={{fields.exp_ini_id}}">{{fields.exp_ini_apellidos}}</a></td>
-        <td><a href="#/gridLugar?ic=1&0if=id&0in=lugar&0it=LUGAR&0iv={{fields.exp_li_id}}">{{fields.exp_li_descripcion}}</a></td>
-        <td><a href="#/gridTema?ic=1&0if=id&0in=tema&0it=TEMA&0iv={{fields.exp_tem_id}}">{{fields.exp_tem_descripcion}}</a></td>
-        <td><a href="#/gridDestino?ic=1&0if=id&0in=destino&0it=DESTINO&0iv={{fields.exp_ud_id}}">{{fields.exp_ud_fecha_entrada}}</a></td>
-        <td><a href="#/gridDestino?ic=1&0if=id&0in=destino&0it=DESTINO&0iv={{fields.exp_ud_id}}">{{fields.exp_ud_fecha_salida}}</a></td>
-        <td><a href="#/gridLugar?ic=1&0if=id&0in=lugar&0it=LUGAR&0iv={{fields.exp_ud_lug_id}}">{{fields.exp_ud_lug_descripcion}}</a></td>
-        <td><a href="#/gridPersona?ic=1&0if=id&0in=persona&0it=PERSONA&0iv={{fields.per_id}}">{{fields.per_nombres}}</a></td>
-        <td><a href="#/gridPersona?ic=1&0if=id&0in=persona&0it=PERSONA&0iv={{fields.per_id}}">{{fields.per_apellidos}}</a></td>
-        <td>
-          <a href="<?=PATH_HTTP?>index.php?go=htmlFormAdmin&t=participacion&id={{fields.id}}"><span class="glyphicon glyphicon-pencil"></span></a>&nbsp;&nbsp;
-		  <a href="?go=delete&t=participacion&pk={{fields.id}}" target="_blank"><span class="glyphicon glyphicon-remove"></span></a>&nbsp;&nbsp;
+        <td><a href="#/gridExpediente?ic=1&0if=id&0in=expediente&0it=expediente&0iv={{fields.exp_id}}">{{fields.exp_numero}}</a></td>
+        <td><a href="#/gridExpediente?ic=1&0if=id&0in=expediente&0it=expediente&0iv={{fields.exp_id}}">{{fields.exp_fecha_origen}}</a></td>
+        <td><a href="#/gridExpediente?ic=1&0if=id&0in=expediente&0it=expediente&0iv={{fields.exp_id}}">{{fields.exp_fecha_entrada}}</a></td>
+        <td><a href="#/gridExpediente?ic=1&0if=id&0in=expediente&0it=expediente&0iv={{fields.exp_id}}">{{fields.exp_archivo_numero}}</a></td>
+        <td><a href="#/gridExpediente?ic=1&0if=id&0in=expediente&0it=expediente&0iv={{fields.exp_id}}">{{fields.exp_archivo_anio}}</a></td>
+        <td><a href="#/gridExpediente?ic=1&0if=id&0in=expediente&0it=expediente&0iv={{fields.exp_id}}">{{fields.exp_antecedente}}</a></td>
+        <td><a href="#/gridExpediente?ic=1&0if=id&0in=expediente&0it=expediente&0iv={{fields.exp_id}}">{{fields.exp_extracto}}</a></td>
+        <td><a href="#/gridExpediente?ic=1&0if=id&0in=expediente&0it=expediente&0iv={{fields.exp_id}}">{{fields.exp_resolucion_iniciador}}</a></td>
+        <td><a href="#/gridPersona?ic=1&0if=id&0in=persona&0it=persona&0iv={{fields.exp_ini_id}}">{{fields.exp_ini_nombres}}</a></td>
+        <td><a href="#/gridPersona?ic=1&0if=id&0in=persona&0it=persona&0iv={{fields.exp_ini_id}}">{{fields.exp_ini_apellidos}}</a></td>
+        <td><a href="#/gridLugar?ic=1&0if=id&0in=lugar&0it=lugar&0iv={{fields.exp_li_id}}">{{fields.exp_li_descripcion}}</a></td>
+        <td><a href="#/gridTema?ic=1&0if=id&0in=tema&0it=tema&0iv={{fields.exp_tem_id}}">{{fields.exp_tem_descripcion}}</a></td>
+        <td><a href="#/gridDestino?ic=1&0if=id&0in=destino&0it=destino&0iv={{fields.exp_ud_id}}">{{fields.exp_ud_fecha_entrada}}</a></td>
+        <td><a href="#/gridDestino?ic=1&0if=id&0in=destino&0it=destino&0iv={{fields.exp_ud_id}}">{{fields.exp_ud_fecha_salida}}</a></td>
+        <td><a href="#/gridLugar?ic=1&0if=id&0in=lugar&0it=lugar&0iv={{fields.exp_ud_lug_id}}">{{fields.exp_ud_lug_descripcion}}</a></td>
+        <td><a href="#/gridPersona?ic=1&0if=id&0in=persona&0it=persona&0iv={{fields.per_id}}">{{fields.per_nombres}}</a></td>
+        <td><a href="#/gridPersona?ic=1&0if=id&0in=persona&0it=persona&0iv={{fields.per_id}}">{{fields.per_apellidos}}</a></td>
+        <td>          
         </td>
 
       </tr>

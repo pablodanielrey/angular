@@ -17,6 +17,14 @@ nota.id AS id, nota.codigo AS codigo, nota.fecha AS fecha, nota.descripcion AS d
 per.id AS per_id, per.nombres AS per_nombres, per.apellidos AS per_apellidos, 
       """
 
+
+    """
+     " concatenar campos principales en un campo alias label
+    """
+    def _fieldsLabel(self):
+      return """ CONCAT_wS(', ', nota.codigo) AS label, 
+"""
+
     #definir condicion de busqueda
     def _conditionSearch(self, search = None, alias = "nota"):
       if not search:
@@ -69,16 +77,19 @@ per.id AS per_id, per.nombres AS per_nombres, per.apellidos AS per_apellidos,
           if condition: 
             condition = condition + " " + connect + " "
           condition = condition + "(lower(" + alias + ".codigo) = lower('" + search[i+"iv"] + "')) "
+
         #definir condiciones de descripcion
         if search[i+"if"] == fieldAlias + "descripcion": 
           if condition: 
             condition = condition + " " + connect + " "
           condition = condition + "(lower(" + alias + ".descripcion) = lower('" + search[i+"iv"] + "')) "
+
         #definir condiciones de observaciones
         if search[i+"if"] == fieldAlias + "observaciones": 
           if condition: 
             condition = condition + " " + connect + " "
           condition = condition + "(lower(" + alias + ".observaciones) = lower('" + search[i+"iv"] + "')) "
+
         #definir condiciones de persona
         if search[i+"if"] == fieldAlias + "persona": 
           if condition: 
@@ -96,16 +107,17 @@ LEFT OUTER JOIN expedientes.persona AS per ON (nota.persona = per.id)
     def rowById(self, con, id):
         sql = "SELECT DISTINCT "
         sql = sql + self._fields()
+        sql = sql + self._fieldsLabel()
         sql = sql[:sql.rfind(",")] #eliminar ultima coma
         sql = sql + "	FROM expedientes.nota AS nota"
         sql = sql + " WHERE id = %s;"
         
-        cur = con.cursor()
+        cur = con.cursor(cursor_factory=psycopg2.extras.DictCursor)
         cur.execute(sql, (id, ))
         if cur.rowcount <= 0:
             return None
             
-        return cur.fetchone()
+        return dict(cur.fetchone())
         
     def gridData(self, con, filterParams = None):
         search = filterParams["s"] if filterParams and "s" in filterParams else None
