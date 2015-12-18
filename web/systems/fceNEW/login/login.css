@@ -1,0 +1,226 @@
+.login {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:column;
+  -webkit-flex-direction:column; /* Safari */
+  -moz-flex-direction:column; /* mozilla */
+  margin: 0px;
+  padding: 0px;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  min-height: 400px;
+}
+
+.login .video {
+  position: absolute;
+  width: 100%;
+
+
+}
+
+
+/***************************** HEADER ********************************/
+
+.login .header {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  height: 60px;
+  background-color: #28292D;
+  color:white;
+  z-index: 999;
+}
+
+.login .logo {
+  margin-left: 10px;
+}
+
+.login .header button {
+  background: none;
+  border:none;
+  color: white;
+  font-size: 20px;
+  margin: 10px;
+  cursor: pointer;
+}
+
+.login .notification2 {
+  background-color: #E43E46 !important;
+  position: absolute;
+  font-size: 12px !important;
+  border-radius: 10px;
+  z-index: 999;
+
+}
+
+/********************* CONTENEDOR *******************************/
+
+.login .main {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  height: 100%;
+  background-color: #EEEEEE;
+  background-image: url('/views/img/fondo1.jpg');
+
+
+}
+
+.login .contentLogin {
+  border: 10px solid;
+  border-color: rgba(255, 255, 255, 0.3);
+  border-radius: 0.3em;
+  z-index: 999;
+  width: 280px;
+}
+
+.login .user {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:column;
+  -webkit-flex-direction:column; /* Safari */
+  -moz-flex-direction:column; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: space-around;
+  -webkit-justify-content: space-around;
+  -moz-justify-content: space-around;
+  background-color: white;
+  height: 300px;
+  border: 1px solid #EEEEEE;
+}
+
+.login .avatar {
+  width: 100px;
+  height: 100px;
+  background-color: #EEEEEE;
+  border-radius: 100px;
+  border: 1px solid #d3cdcd;
+}
+
+.login .textUser {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:column;
+  -webkit-flex-direction:column; /* Safari */
+  -moz-flex-direction:column; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  color:#28292D;
+  width: 100%;
+
+}
+
+
+.login .contentPassword {
+  width: 80%;
+}
+
+.login .inputPassword, .inputUser {
+  padding: 5px;
+  width: 210px;
+  font-size: 16px;
+
+  border: 1px solid #d3cdcd;
+  background-color: #EEEEEE;
+}
+
+.login .textPasswordError {
+  color: #E43E46;
+  font-size: 12px;
+}
+
+.login .btnPassword, .btnNext {
+  padding: 8px;
+  width: 224px;
+  font-size: 14px;
+  background-color: #0066A6;
+  color: white;
+  border: 1px solid #EEEEEE;
+  cursor: pointer;
+  margin-top: 5px;
+}
+
+.login .btnPassword:hover, .btnNext:hover {
+  background-color: #075382;
+}
+
+.login .textNoPuedoAcceder {
+  font-size: 12px;
+  color: #0066A6;
+  cursor: pointer;
+}
+
+
+/********************* FOOTER **********************************/
+
+.login .footer {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  height: 20px;
+  background-color: #28292D;
+  color: #DBE2E5;
+  font-size: 10px;
+  padding-left: 5px;
+  z-index: 999;
+}
+
+
+/*********************** VISTAS *****************************/
+
+.login.screenUser .contentAvatarUser,
+.login.screenUser .contentTextUserName,
+.login.screenUser .contentInputPassword,
+.login.screenUser .contentBtnPassword {
+    display: none;
+}
+
+.login.screenPassword .contentAvatar,
+.login.screenPassword .contentTextUser,
+.login.screenPassword .contentInputUser,
+.login.screenPassword .contentBtnNext {
+    display: none;
+}
+
+
+
+
+/******************** MEDIA QUERIS ***************************/
+
+@media (max-width: 720px){
+  .login .footer {
+      display: none;
+  }
+}
+
+@media (max-height: 500px){
+  .login .footer {
+      display: none;
+  }
+}
