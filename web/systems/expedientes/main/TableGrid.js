@@ -25,7 +25,8 @@ app.service('TableGrid', ["$location", "$rootScope", "$http", "ServerAccess", fu
     this.initializeSearch($scope.search);
     this.getGridNumRows($scope, label);
 	};
-  
+	
+	
   /***** METODOS ASOCIADOS AL FORMULARIO DE BUSQUEDA ******
   /**
    * Limpiar variables de busqueda, la busqueda se inicializa en funcion de los parametros de la url
@@ -109,16 +110,16 @@ app.service('TableGrid', ["$location", "$rootScope", "$http", "ServerAccess", fu
       (p < 1) ? 1 :
         (p > $scope.pagination.pages) ? $scope.pagination.pages : p;
   };
-   
-   
+  
+  
   /**
    * Modificar tamanio de pagina
    * @param {$scope} $scope
    * @param {string} label Etiqueta de acceso
    */   
-  this.changePagination = function($scope, label){
+  this.changePagination = function($scope){
     this.initializePagination($scope);
-    this.getGridData($scope, label);
+    this.getGridData($scope);
   };
   
   /**
@@ -127,13 +128,14 @@ app.service('TableGrid', ["$location", "$rootScope", "$http", "ServerAccess", fu
    * @param {type} page
    * @returns {undefined}
    */  
-  this.goPage = function($scope, page, label){
+  this.goPage = function($scope, page){
     this.setPage($scope, page);    
-    this.getGridData($scope, label);
+    this.getGridData($scope);
   };
   
   
-  /***** METODOS DE FORMATO DE VARIABLES PARA ENVIAR AL SERVIDOR *****/
+  
+  //***** METODOS DE FORMATO DE VARIABLES PARA ENVIAR AL SERVIDOR *****/
   /**
    * Definir parametros de busqueda para enviar al servidor
 get
@@ -217,18 +219,17 @@ get
    * @param {type} access
    * @returns {undefined}
    */
-  this.getGridNumRows = function(scope, label){    
-    var searchParams = this.defineSearchParams(scope.search);    
-    console.log(searchParams);
-    return ServerAccess.numRows(searchParams, label)
+  this.getGridNumRows = function($scope){    
+    var searchParams = this.defineSearchParams($scope.search);    
+    ServerAccess.numRows(searchParams, $scope.grid.label)
         .then(
           function(response){
-            scope.grid.numRows = parseInt(response.data);
+            $scope.grid.numRows = parseInt(response.data);
             $rootScope.$broadcast("gridNumRowsInitialized");
           },
           function(error){
             var alert = {title:"Error", message:error.data};
-            scope.addAlert(alert);
+            $scope.addAlert(alert);
           }
         );
   };
@@ -237,9 +238,9 @@ get
   /**
    * Buscar datos
    */
-  this.searchData = function($scope, label){
+  this.searchData = function($scope){
     $scope.pagination.disabled = true;
-    this.getGridNumRows($scope, label);
+    this.getGridNumRows($scope);
   }
 
 
@@ -250,14 +251,14 @@ get
    * @param {$scope} $scope
    * @param {String} access Identificacion de acceso
    */
-  this.getGridData = function($scope, label){
+  this.getGridData = function($scope){
     
     $scope.grid.data = []; 
     if($scope.grid.numRows < 1) return;
 
     var params = this.defineParams($scope);
-
-    ServerAccess.gridData(params, label)
+    
+    ServerAccess.gridData(params, $scope.grid.label)
       .then(
         function(response){
           $scope.grid.data = response.data;   //cargar datos de la grilla
