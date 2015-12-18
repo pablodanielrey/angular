@@ -25,7 +25,6 @@ app.service('TableGrid', ["$location", "$rootScope", "$http", "ServerAccess", fu
     this.initializeSearch($scope.search);
     this.getGridNumRows($scope, label);
 	};
-	
   
   /***** METODOS ASOCIADOS AL FORMULARIO DE BUSQUEDA ******
   /**
