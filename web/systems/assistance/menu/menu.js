@@ -73,6 +73,9 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Profiles', 'Se
       $location.path('/managePositions');
     };
 
+    $scope.exit = function() {
+  	    $location.path('/logout');
+  	}
 
     $scope.initialize = function() {
 
@@ -87,6 +90,7 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Profiles', 'Se
               //$scope.model.items.push({ label:'Filtro de Fallas (testing todavía no terminado)', img:'fa-ticket', function: $scope.assistanceFailsFilters});
               // hasta que no este terminado en producción no va
               $scope.model.items.push({ n:4, label:'Mi Horario', img:'fa fa-clock-o', function: $scope.mySchedule});
+              $scope.model.items.push({ n:100, label:'Salir', img:'fa fa-sign-out', function: $scope.exit });
 
 
               Office.getUserOfficeRoles(null,
@@ -129,6 +133,8 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Profiles', 'Se
                     Notifications.message(error);
                   }
               );
+          } else {
+            $scope.model.items.push({ n:100, label:'Salir', img:'fa fa-sign-out', function: $scope.exit });
           }
 
         },
