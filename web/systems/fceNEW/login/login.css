@@ -17,8 +17,6 @@
 .login .video {
   position: absolute;
   width: 100%;
-
-
 }
 
 
@@ -80,8 +78,6 @@
   height: 100%;
   background-color: #EEEEEE;
   background-image: url('/views/img/fondo1.jpg');
-
-
 }
 
 .login .contentLogin {
@@ -110,6 +106,31 @@
   border: 1px solid #EEEEEE;
 }
 
+.login .contentAvatars {
+  position: relative;
+
+}
+
+.login .contentAvatar {
+  position: relative;  top: 0px;
+}
+
+.login .contentAvatarUser {
+  position: absolute;  top: 0px;
+}
+
+.login.screenUser .contentAvatarUser {
+  opacity:  0 !important;
+}
+
+.login.screenPassword .contentAvatarUser {
+  opacity:  1 !important;
+  -webkit-transition-duration:0.3s;
+  -moz-transition-duration: 0.3s;
+  -o-transition-duration: 0.3s;
+  transition-duration: .0.3s;
+}
+
 .login .avatar {
   width: 100px;
   height: 100px;
@@ -130,9 +151,7 @@
   -moz-align-items:center; /* mozilla */
   color:#28292D;
   width: 100%;
-
 }
-
 
 .login .contentPassword {
   width: 80%;
@@ -194,22 +213,17 @@
 
 /*********************** VISTAS *****************************/
 
-.login.screenUser .contentAvatarUser,
 .login.screenUser .contentTextUserName,
 .login.screenUser .contentInputPassword,
 .login.screenUser .contentBtnPassword {
     display: none;
 }
 
-.login.screenPassword .contentAvatar,
 .login.screenPassword .contentTextUser,
 .login.screenPassword .contentInputUser,
 .login.screenPassword .contentBtnNext {
     display: none;
 }
-
-
-
 
 /******************** MEDIA QUERIS ***************************/
 
@@ -217,6 +231,7 @@
   .login .footer {
       display: none;
   }
+  
 }
 
 @media (max-height: 500px){
