@@ -385,8 +385,9 @@ class Assistance:
         users = self.offices.getOfficesUsers(con,officesIds)
         fails = []
         for userId in users:
-            fails = self.checks.checkConstraints(con, userId, start, end) #obtener fallas del usuario en determinado periodo
+            logging.debug('userId : {}'.format(userId))
+            fs = self.checks.checkConstraints(con, userId, start, end) #obtener fallas del usuario en determinado periodo
             user = self.users.findUser(con, userId) #definir usuario
-            f = (user, fails)
+            f = (user, fs)
             fails.append(f)
         return fails
