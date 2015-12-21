@@ -8,7 +8,7 @@
   <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 </head>
 
-<body class="login screenUser">    <!-- Variables 1: screenUser, screenPassword -->
+<body class="login screenUser  verServerDesconectado">    <!-- Variables 1: screenUser, screenPassword -Variables 2:  verServerDesconectado, verServerConectado-->
 
   <!-- <video  class="video" preload="auto"   autoplay=""   src="http://barrelny.com/recap/2012/wp-content/themes/barrel-portfolio/im/office_small.mp4"></video> -->
 
@@ -17,12 +17,9 @@
           <img src="./img/diresi.png" width="104px" height="25px">
         </div>
         <div class="access">
-            <button title="Notificaciones">
-                <i class="fa fa-bell-o"></i>
-                <button class="notification2"><i class="fa fa-exclamation-triangle"></i></button>
-            </button>
-            <button title="Servidor">
+            <button title="servidor">
               <i class="fa fa-server"></i>
+              <button class="notification2"><i class="fa fa-exclamation-triangle"></i></button>
             </button>
         </div>
     </div>
@@ -75,6 +72,21 @@
             </div>
         </div>
     </div>
+
+    <div class="serverDesconectado">
+      <div class="arrowServer">
+        <i class="fa fa-sort-asc fa-2x"></i>
+      </div>
+      <div class="headerServer">
+        <i class="fa fa-server"></i> &nbsp; Estado del servidor
+      </div>
+      <div class="contentServer">
+        <div><i class="fa fa-cog fa-spin fa-2x"></i></div>
+        <div>Servidor desconectado</div>
+        <div class="textReconectando">Reconectando, por favor espere...</div>
+      </div>
+    </div>
+
 
     <div class="footer">
       <span>

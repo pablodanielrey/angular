@@ -51,12 +51,23 @@
   cursor: pointer;
 }
 
+.login .notification {
+  background-color: #EC9122 !important;
+  position: absolute;
+  font-size: 12px !important;
+  border-radius: 10px;
+  z-index: 999;
+  right: 70px;
+
+}
+
 .login .notification2 {
   background-color: #E43E46 !important;
   position: absolute;
   font-size: 12px !important;
   border-radius: 10px;
   z-index: 999;
+  right: 15px;
 
 }
 
@@ -231,11 +242,91 @@
   .login .footer {
       display: none;
   }
-  
+
 }
 
 @media (max-height: 500px){
   .login .footer {
       display: none;
   }
+}
+
+/*****************************************************************
+*****************  NOTIFICACIONES ********************************
+*****************************************************************/
+
+
+
+/*********** SERVER ******************/
+
+.login.verServerConectado .access {
+  display: none;
+}
+
+.login .serverDesconectado {
+  position: absolute;
+  width: 300px;
+  height: 0px;
+  background-color: none;
+  z-index: 999;
+  top: 35px;
+  right: 10px;
+  transition: all 0.2s ease-in-out;
+  opacity: 0;
+}
+
+.login.verServerDesconectado .serverDesconectado {
+  height: 120px;
+  transition: all 0.2s ease-in-out;
+  opacity: 1;
+}
+
+.login .textReconectando {
+  font-size: 12px;
+}
+
+
+.login .arrowServer {
+  color: #E43E46;
+  height: 12px;
+  margin-left: 270px;
+}
+
+.login .headerServer {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  background-color: #E43E46;
+  height: 60px;
+  border-radius: 5px 5px 0px 0px;
+  color: white;
+  font-size: 20px;
+}
+
+.login .contentServer {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:column;
+  -webkit-flex-direction:column; /* Safari */
+  -moz-flex-direction:column; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  background-color: #EEEEEE;
+  height: 100%;
+  font-size: 20px;
+  color: #3A3C44;
+  box-shadow: 1px 1px 5px #5c5f69;
+  -webkit-box-shadow: 1px 1px 5px #5c5f69;
+  -moz-box-shadow: 5px 5px 5px #5c5f69;
 }
