@@ -221,7 +221,7 @@ function($scope, $timeout, $window, Profiles, Session, Users, Assistance, Notifi
 		$scope.model.session = Session.getCurrentSession();
 		if ((!$scope.model.session) || (!$scope.model.session.user_id)) {
 			Notifications.message("Error: Session no definida");
-			$window.location.href = "/#/logout";
+			$window.location.href = "/";
     } else {
 			Profiles.checkAccess(Session.getSessionId(),['ADMIN-ASSISTANCE','USER-ASSISTANCE'],
 				function(ok) {
