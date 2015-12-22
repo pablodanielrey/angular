@@ -3,7 +3,7 @@ angular
   .module('mainApp')
   .controller('LoginCtrl',LoginCtrl);
 
-LoginCtrl.$inject = ['$rootScope','$scope','$location','$window','Notifications','Login'];
+LoginCtrl.$inject = ['$rootScope','$scope', '$location','$window','Notifications','Login'];
 
 function LoginCtrl($rootScope, $scope, $location, $window, Notifications, Login) {
 
@@ -11,16 +11,31 @@ function LoginCtrl($rootScope, $scope, $location, $window, Notifications, Login)
 
     $scope.model = {
 			username: '',
-			password: ''
+			password: '',
+      openConnection: false
+    }
+
+    $scope.view = {
+      classConnection: 'verServerDesconectado'
     }
 
     $scope.initialize = function() {
+
     }
 
     $scope.$on('$viewContentLoaded', function(event) {
       $scope.initialize();
     });
 
+    $scope.$on('wampOpenEvent', function(event) {
+      $scope.model.openConnection = true;
+      $scope.view.classConnection = 'verServerConectado';
+    });
+
+    $scope.$on('wampCloseEvent', function(event) {
+      $scope.model.openConnection = false;
+      $scope.view.classConnection = 'verServerDesconectado';
+    });
 
 		$scope.hasToLogin = function() {
 			return (!Login.isLogged());
