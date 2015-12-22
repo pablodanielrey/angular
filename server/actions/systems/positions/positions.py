@@ -19,8 +19,8 @@ class PositionsWamp(ApplicationSession):
         ApplicationSession.__init__(self, config)
 
         self.serverConfig = inject.instance(Config)
-        self.profiles = inject.attr(Profiles)
-        self.positions = inject.attr(Positions)
+        self.profiles = inject.instance(Profiles)
+        self.positions = inject.instance(Positions)
 
     @coroutine
     def onJoin(self, details):
@@ -38,10 +38,7 @@ class PositionsWamp(ApplicationSession):
     def getPosition(self, sid, userId):
         con = self._getDatabase()
         try:
-            ''' .... codigo aca ... '''
-            con.commit()
-            return True
-
+            return self.positions.find(con, userId)
         finally:
             con.close()
 
@@ -54,7 +51,7 @@ class PositionsWamp(ApplicationSession):
     def updatePosition(self, sid, userId, position):
         con = self._getDatabase()
         try:
-            ''' .... codigo aca ... '''
+            self.positions.update(con,userId,position)
             con.commit()
             return True
 

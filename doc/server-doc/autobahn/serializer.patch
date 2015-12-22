@@ -1,0 +1,28 @@
+--- serializer.py	2015-10-15 12:27:00.000000000 -0300
++++ serializer-new.py	2015-10-15 12:34:17.570170063 -0300
+@@ -156,13 +156,24 @@
+     # fallback to stdlib implementation
+     ##
+     import json
++    import datetime
++
++    class DateTimeEncoder(json.JSONEncoder):
++        def default(self, obj):
++            if isinstance(obj, datetime.datetime):
++                return obj.isoformat()
++
++            if isinstance(obj, datetime.date):
++                return obj.isoformat()
++
++            return json.JSONEncoder.default(self, obj)
+ 
+     _json = json
+ 
+     _loads = json.loads
+ 
+     def _dumps(obj):
+-        return json.dumps(obj, separators=(',', ':'), ensure_ascii=False)
++        return json.dumps(obj, separators=(',', ':'), ensure_ascii=False, cls=DateTimeEncoder)
+ 
+ finally:
+     class JsonObjectSerializer(object):

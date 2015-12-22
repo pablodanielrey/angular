@@ -337,12 +337,13 @@ class Offices:
     '''
     def getUserInOfficesByRole(self,con,userId,tree=False,role='autoriza'):
         offices = self.getOfficesByUserRole(con,userId,tree,role)
-        logging.debug(offices)
+
         if offices is None or len(offices) <= 0:
             return []
 
         officesIds = list(map(lambda x : x['id'],offices))
         users = self.getOfficesUsers(con,officesIds)
+        print(users)
         return users
 
 

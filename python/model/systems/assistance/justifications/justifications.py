@@ -166,7 +166,6 @@ class Justifications:
 
 
 
-
     ''' retorna todos los tipos de justificaciones que existan en la base '''
     def getJustificationById(self,con,id):
         cur = con.cursor()
@@ -261,9 +260,6 @@ class Justifications:
         users es una lista de ids de usuarios que piden los requests, si = None o es vacío entonces retorna todas.
     '''
     def getJustificationRequestsByDate(self,con,status=None,users=None,start=None,end=None):
-
-        logging.debug('buscando justifications : {}, {}, {}, {}'.format(status,users,start,end))
-
         cur = con.cursor()
 
         statusR = self._getJustificationsInStatus(con,status)
@@ -271,8 +267,6 @@ class Justifications:
             return []
 
         rids = tuple(statusR.keys())
-
-
 
         if start is not None and end is not None:
             if users is None or len(users) <= 0:
@@ -317,23 +311,26 @@ class Justifications:
 
 
     '''
-        obtiene todos los pedidos de justificaciones que tiene permisos de manejar, en cierto estado.
-        group = ROOT|TREE --> ROOT = oficinas directas, TREE = oficinas directas y todas las hijas
+        Obtiene todos los pedidos de justificaciones que tiene permisos de administrar
+        @param con Conexion con la base de datos
+        @param userId Identificacion de usuario
+        @param status Lista con los estados que se desean consultar
+        @param group ROOT|TREE --> ROOT = oficinas directas, TREE = oficinas directas y todas las hijas
     '''
     def getJustificationRequestsToManage(self,con,userId,status,group='ROOT'):
+
 
         tree = False
         if group == 'TREE':
             tree = True
         offices = self.offices.getOfficesByUserRole(con,userId,tree,'autoriza')
-        logging.debug('officesByUserRole : {}'.format(offices))
+        #logging.debug('officesByUserRole : {}'.format(offices))
 
         if offices is None or len(offices) <= 0:
             return []
 
         officesIds = list(map(lambda o: o['id'], offices))
         users = self.offices.getOfficesUsers(con,officesIds)
-        logging.debug('getOfficesUsers : {}'.format(users))
 
         while userId in users:
             users.remove(userId)
@@ -350,6 +347,10 @@ class Justifications:
 
     '''
         actualizar el stock actual para la justificación indicada
+        @param con Conexion con la base de datos
+        @param userId id de usuario al cual se actualizara el stock
+        @param justId id de la justificacion que se actualizara
+        @param stock nuevo stock, dependiendo de la justificacion el tipo debe variar
     '''
     def updateJustificationStock(self,con,userId,justId,stock):
         cur = con.cursor()
@@ -425,12 +426,12 @@ class Justifications:
     '''
         realiza el pedido de justificación para ser aprobado
     '''
-    def requestJustification(self,con,userId,requestor_id,justificationId,begin,end=None):
+    def requestJustification(self,con,userId,requestor_id,justificationId,begin,end=None,status='PENDING'):
 
 
         for j in self.justifications:
             if j.isJustification(justificationId):
-                return j.requestJustification(self,con,userId,requestor_id,begin,end)
+                return j.requestJustification(self,con,userId,requestor_id,begin,end,status)
 
         raise JustificationError('No se puede encontrar ese tipo de justificación')
 
@@ -466,6 +467,8 @@ class Justifications:
       return events
 
 
+
+
     def deleteGeneralJustificationRequest(self, con, requestId):
       cur = con.cursor()
       sql = "DELETE FROM assistance.general_justifications WHERE id = '" + requestId + "'"
@@ -490,7 +493,7 @@ class Justifications:
         realiza el pedido de justificación para ser aprobado entre un rango de fechas
         estado inicial del pedido = PENDING, con la fecha actual del servidor.
     '''
-    def requestJustificationRange(self,con,userId,requestor_id,justificationId,begin,end):
+    def requestJustificationRange(self,con,userId,requestor_id,justificationId,begin,end,status='PENDING'):
 
         events = []
         for j in self.justifications:
@@ -499,7 +502,7 @@ class Justifications:
                 diff = (end-begin).days
                 # incremento en 1 para que tome el ultimo dia
                 for x in range(0, diff + 1):
-                    events.extend(j.requestJustification(self,con,userId,requestor_id,date,None))
+                    events.extend(j.requestJustification(self,con,userId,requestor_id,date,None,status))
                     date = date + datetime.timedelta(days=1)
 
                 return events

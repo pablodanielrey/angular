@@ -1,19 +1,81 @@
 # -*- coding: utf-8 -*-
 import uuid
 import psycopg2
+import inject
+import hashlib
+import re
 
+from model.config import Config
 from model.objectView import ObjectView
+from model.mail.mail import Mail
+
 
 class Users:
+    def __init__(self, config=None):
+        self.serverConfig = inject.instance(Config)
+        self.mail = inject.instance(Mail)
+
+    '''
+     ' Enviar email de confirmacion: Define un hash y envia un email de confirmacion al usuario con el hash
+     ' @param con Conexion con la base de datos
+     ' @param emailId Identificacion del email
+     '''
+    def sendEmailConfirmation(self, con, emailId):
+        email = self.findMail(con, emailId)
+        if(email is None):
+            raise Exception("Email inexistente")
+
+        hash = hashlib.sha1((email['id'] + email['user_id']).encode('utf-8')).hexdigest()
+        email['hash'] = hash
+
+        self.updateMail(con, email)
+
+        From = self.serverConfig.configs['mail_confirm_mail_from']
+        subject = self.serverConfig.configs['mail_confirm_mail_subject']
+        To = email['email']
+        template = self.serverConfig.configs['mail_confirm_mail_template']
+
+        url = self.serverConfig.configs['mail_confirm_mail_url']
+        url = re.sub('###HASH###', hash, url)
+
+        replace = [
+            ('###URL###', url)
+        ]
+
+        self.mail.sendMail(From, [To], subject, replace, html=template)
+        return True
+
+    def confirmEmail(self, con, hash):
+        email = self.findMailByHash(con, hash)
+        if(email is None):
+            raise Exception("Email inexistente")
+
+        email['confirmed'] = True
+        email['hash'] = None
+
+        self.updateMail(con, email)
+
+        From = self.serverConfig.configs['mail_confirm_mail_from']
+        subject = self.serverConfig.configs['mail_confirm_mail_subject']
+        To = email['email']
+        template = self.serverConfig.configs['mail_confirm_mail_template']
+
+        url = self.serverConfig.configs['mail_mail_confirmed_template']
+        url = re.sub('###HASH###', hash, url)
+
+        replace = [
+            ('###URL###', url)
+        ]
+        self.mail.sendMail(From, [To], subject, replace, html=template)
 
 
-    def createMail(self,con,data):
+    def createMail(self, con, data):
         if 'confirmed' not in data:
             data['confirmed'] = False
 
         mail = ObjectView(data)
         mid = str(uuid.uuid4())
-        rreq = (mid,mail.user_id,mail.email,mail.confirmed,'')
+        rreq = (mid, mail.user_id, mail.email, mail.confirmed, '')
         cur = con.cursor()
         cur.execute('insert into profile.mails (id,user_id,email,confirmed,hash) values (%s,%s,%s,%s,%s)', rreq)
         return mid
@@ -27,30 +89,29 @@ class Users:
         else:
             return None
 
-    def findMail(self,con,id):
+    def findMail(self, con, id):
         cur = con.cursor()
         cur.execute('select id,user_id,email,confirmed,hash from profile.mails where id = %s', (id,))
         data = cur.fetchone()
-        if data != None:
+        if data is not None:
             return self.convertMailToDict(data)
         else:
             return None
 
     def listMails(self, con, user_id):
         cur = con.cursor()
-        cur.execute('select id, user_id, email, confirmed, hash from profile.mails where user_id = %s',(user_id,))
+        cur.execute('select id, user_id, email, confirmed, hash from profile.mails where user_id = %s', (user_id,))
         data = cur.fetchall()
         rdata = []
         for d in data:
             rdata.append(self.convertMailToDict(d))
         return rdata
 
-    def deleteMail(self,con,id):
+    def deleteMail(self, con, id):
         cur = con.cursor()
         cur.execute('delete from profile.mails where id = %s', (id,))
 
-
-    def updateMail(self,con,data):
+    def updateMail(self, con, data):
         if 'hash' not in data:
             data['hash'] = ''
         mail = ObjectView(data)
@@ -60,7 +121,7 @@ class Users:
 
 
     ''' transformo a diccionario las respuestas de psycopg2'''
-    def convertMailToDict(self,d):
+    def convertMailToDict(self, d):
         rdata = {
                 'id':d[0],
                 'user_id':d[1],
@@ -91,6 +152,7 @@ class Users:
                 data['version'] if 'version' in data else 0)
         cur = con.cursor()
         cur.execute('insert into profile.users (id,dni,name,lastname,city,country,address,genre,birthdate,residence_city,version) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)', rreq)
+        cur.execute('insert into au24.users (id,type) values (%s,%s)', (uid, 'ingresante'))
         return uid
 
     '''
@@ -98,7 +160,7 @@ class Users:
      ' @param user Datos del usuario
      ' @return Id del usuario persistido
      '''
-    def updateUser(self,con,user):
+    def updateUser(self, con, user):
         cur = con.cursor()
 
         ''' si no exite lo creo '''
@@ -107,11 +169,20 @@ class Users:
             userId = self.createUser(con,user)
         else:
             userId = user['id']
-            cur.execute('select id from profile.users where id = %s',(user['id'],))
+            cur.execute('select id from profile.users where id = %s', (user['id'],))
             if cur.rowcount <= 0:
-                userId = self.createUser(con,user)
+                userId = self.createUser(con, user)
             else:
-                rreq = (user['dni'],user['name'],user['lastname'],user['city'],user['country'],user['address'],user['genre'],user['birthdate'],user['residence_city'], user['version'], user['id'])
+                rreq = (user['dni'],
+                        user['name'] if 'name' in user else '',
+                        user['lastname'] if 'lastname' in user else '',
+                        user['city'] if 'city' in user else '',
+                        user['country'] if 'country' in user else '',
+                        user['address'] if 'address' in user else '',
+                        user['genre'] if 'genre' in user else '',
+                        user['birthdate'] if 'birthdate' in user else '',
+                        user['residence_city'] if 'residence_city' in user else '',
+                        user['version'] if 'version' in user else 1, user['id'])
                 cur.execute('update profile.users set dni = %s, name = %s, lastname = %s, city = %s, country = %s, address = %s, genre = %s, birthdate = %s, residence_city = %s, version = %s where id = %s', rreq)
                 if cur.rowcount <= 0:
                     raise Exception()
@@ -129,7 +200,7 @@ class Users:
         return userId
 
 
-    def findUserByDni(self,con,dni):
+    def findUserByDni(self, con, dni):
         cur = con.cursor()
         cur.execute('select id,dni,name,lastname,city,country,address,genre,birthdate,residence_city,version from profile.users where dni = %s', (dni,))
         data = cur.fetchone()
@@ -154,6 +225,21 @@ class Users:
             rdataTelephones.append(self.convertTelephoneToDict(dataTelephone))
         rdataUser["telephones"] = rdataTelephones
         return rdataUser
+
+    '''
+     ' Buscar usuarios a traves de una lista de ids
+     '''
+    def findUsersByIds(self,con,ids):
+        cur = con.cursor()
+        cur.execute('select id,dni,name,lastname,city,country,address,genre,birthdate,residence_city,version from profile.users where id IN %s', (tuple(ids),))
+        data = cur.fetchall()
+
+        rdata = []
+        for d in data:
+            rdata.append(self.convertUserToDict(d))
+        return rdata
+
+
 
 
     def listUsers(self, con):

@@ -28,12 +28,11 @@ class UsersWamp(ApplicationSession):
         self.serverConfig = inject.instance(Config)
         self.mail = inject.instance(Mail)
 
-
-
     @coroutine
     def onJoin(self, details):
         logging.debug('registering methods')
         yield from self.register(self.findById_async, 'users.findById')
+        yield from self.register(self.findByDni_async, 'users.findByDni')
         yield from self.register(self.persistUser_async, 'users.persistUser')
         yield from self.register(self.listUsers_async, 'users.listUsers')
         yield from self.register(self.findUsersIds_async, 'users.findUsersIds')
@@ -66,6 +65,21 @@ class UsersWamp(ApplicationSession):
         r = yield from loop.run_in_executor(None, self.findById, id)
         return r
 
+    def findByDni(self, dni):
+        con = self._getDatabase()
+        try:
+            data = self.users.findUserByDni(con, dni)
+            return data
+
+        finally:
+            con.close()
+
+    @coroutine
+    def findByDni_async(self, dni):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.findByDni, dni)
+        return r
+
 
     '''
      ' Persistir usuario
@@ -86,7 +100,6 @@ class UsersWamp(ApplicationSession):
         con = self._getDatabase()
         try:
             userId = self.users.updateUser(con, user)
-
             con.commit()
             return userId
 
@@ -140,9 +153,8 @@ class UsersWamp(ApplicationSession):
     def findUsersByIds(self, ids):
         con = self._getDatabase()
         try:
-            # codigo
-            con.commit()
-            return []
+            usersIds = self.users.findUsersByIds(con, ids)
+            return usersIds
 
         finally:
             con.close()
@@ -174,11 +186,10 @@ class UsersWamp(ApplicationSession):
         r = yield from loop.run_in_executor(None, self.findMails, userId)
         return r
 
-
     '''
      ' Persistir email de usuario
      ' @param email Objeto con los datos del email de usuario
-     '      userId: Id de usuario
+     '      user_id: Id de usuario
      '      email: Email propiamente dicho
      '      confirmed: Flag para indicar si el email esta confirmado (Defecto False)
      '''
@@ -207,7 +218,7 @@ class UsersWamp(ApplicationSession):
     def deleteMail(self, id):
         con = self._getDatabase()
         try:
-            self.users.deleteMail(con, email['id'])
+            self.users.deleteMail(con, id)
             con.commit()
             return True
 
@@ -224,34 +235,12 @@ class UsersWamp(ApplicationSession):
 
     '''
      ' Enviar confirmacion por emai
-     ' @param email Datos del email
-     '      id: Uuid del email
-     '      user_id: Uuid del usuario
-     '      email: Email propieamente dicho
-     '      confirmed: Flag para indicar si el email esta confirmado o no
+     ' @param emailId Uuid del email
      '''
-    def sendEmailConfirmation(self, email):
+    def sendEmailConfirmation(self, emailId):
         con = self._getDatabase()
         try:
-            hash = hashlib.sha1((email['id'] + email['user_id']).encode('utf-8')).hexdigest()
-            email['hash'] = hash
-
-            self.users.updateMail(con,email)
-
-            From = self.serverConfig.configs['mail_confirm_mail_from']
-            subject = self.serverConfig.configs['mail_confirm_mail_subject']
-            To = email['email']
-            template = self.serverConfig.configs['mail_confirm_mail_template']
-
-            url = self.serverConfig.configs['mail_confirm_mail_url']
-            url = re.sub('###HASH###', hash, url)
-
-            replace = [
-                ('###URL###',url)
-            ]
-
-            self.mail.sendMail(From,[To],subject,replace,html=template)
-
+            self.users.sendEmailConfirmation(con, emailId)
             con.commit()
 
             return True
@@ -260,9 +249,9 @@ class UsersWamp(ApplicationSession):
             con.close()
 
     @coroutine
-    def sendEmailConfirmation_async(self, email):
+    def sendEmailConfirmation_async(self, emailId):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.sendEmailConfirmation, email)
+        r = yield from loop.run_in_executor(None, self.sendEmailConfirmation, emailId)
         return r
 
 
@@ -273,27 +262,9 @@ class UsersWamp(ApplicationSession):
     def confirmEmail(self, hash):
         con = self._getDatabase()
         try:
-            email = self.users.findMailByHash(con, hash)
-            email['confirmed'] = True
-            email['hash'] = None
-
-            self.users.updateMail(con,email)
-
-            From = self.serverConfig.configs['mail_confirm_mail_from']
-            subject = self.serverConfig.configs['mail_confirm_mail_subject']
-            To = email['email']
-            template = self.serverConfig.configs['mail_confirm_mail_template']
-
-            url = self.serverConfig.configs['mail_mail_confirmed_template']
-            url = re.sub('###HASH###', hash, url)
-
-            replace = [
-                ('###URL###',url)
-            ]
-
-            self.mail.sendMail(From,[To],subject,replace,html=template)
-
+            self.users.confirmEmail(con, hash)
             con.commit()
+
             return True
 
         finally:

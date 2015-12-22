@@ -1,11 +1,9 @@
 
-angular
-  .module('mainApp')
-  .controller('IndexCtrl',IndexCtrl);
+app.controller('IndexCtrl',IndexCtrl);
 
-IndexCtrl.$inject = ['$rootScope','$scope','$wamp','$window', 'Notifications', 'Login'];
+IndexCtrl.$inject = ['$rootScope','$scope', '$window', 'Notifications', 'Login'];
 
-function IndexCtrl($rootScope, $scope, $wamp, $window, Notifications, Login) {
+function IndexCtrl($rootScope, $scope, $window, Notifications, Login) {
 
     $scope.model = {
       hideMenu: false
@@ -15,22 +13,22 @@ function IndexCtrl($rootScope, $scope, $wamp, $window, Notifications, Login) {
       return $scope.model.hideMenu;
     }
 
+    $scope.initialize = initialize;
 
-    $scope.initialize = function() {
+    function initialize() {
       if (!Login.isLogged()) {
-        $window.location.href = "/systems/login/index.html";
+        $window.location.href = '/systems/login/index.html';
       }
-
-      Login.validateSession(
-        function(v) {
-          if (!v) {
-            $window.location.href = "/systems/login/index.html";
-          }
-        },
-        function(err) {
-          Notifications.message(err);
-      })
-    }
+        /*Login.validateSession(
+          function(v) {
+            if (!v) {
+              $window.location.href = "/systems/login/index.html";
+            }
+          },
+          function(err) {
+            Notifications.message(err);
+        })*/
+      }
 
     $scope.$on('$viewContentLoaded', function(event) {
       $scope.initialize();

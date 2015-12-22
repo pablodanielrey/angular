@@ -43,7 +43,11 @@ class Mail:
       try:
           if s == None:
               raise MailServerNotFound()
-          s.login(self.config.configs['mail_user'],self.config.configs['mail_password'])
+
+          if 'mail_user' in self.config.configs:
+              username = self.config.configs['mail_user']
+              password = self.config.configs['mail_password']
+              s.login(username, password)
 
           s.send_message(body,from_addr=ffrom,to_addrs=tos)
           #From = self.__extractFrom(ffrom)

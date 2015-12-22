@@ -25,11 +25,11 @@ class Justification:
         raise Exception('abstract')
 
     ''' retorna True si la justificacion justifica la falla en la entrada, por defecto, todos retornan False '''
-    def _isJustifiedTimeStart(self,sched,whs,justification,tolerancia):
+    def _isJustifiedTimeStart(self,sched,whs,justification,tolerancia, date = None):
         return False
 
     ''' retorna True si la justificacion justifica la falla en la salida, por defecto, todos retornan False '''
-    def _isJustifiedTimeEnd(self,sched,whs, justification, tolerancia):
+    def _isJustifiedTimeEnd(self,sched,whs, justification, tolerancia, date = None):
         return False
 
     ''' retorna True si justifica la falla por un periodo de tiempo, por defecto, todos retornan False '''
@@ -49,7 +49,7 @@ class Justification:
         raise Exception('abstract')
 
     """ inicializa un pedido en estado pendiente de una justificación en las fechas indicadas """
-    def requestJustification(self,utils,con,userId,begin,end):
+    def requestJustification(self,utils,con,userId,begin,end,status):
         raise Exception('abstract')
 
 

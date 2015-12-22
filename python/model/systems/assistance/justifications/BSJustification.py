@@ -6,7 +6,6 @@ from model.systems.assistance.schedule import Schedule
 from model.systems.assistance.logs import Logs
 from model.systems.assistance.justifications.exceptions import *
 
-import pdb
 
 """
     Boletas de salida - restricciones en horas.
@@ -23,23 +22,34 @@ class BSJustification(Justification):
     def isJustification(self,id):
         return self.id == id
 
-    def _isJustifiedTimeStart(self,sched,whs,justification,tolerancia):
+
+    """
+
+        @param date Fecha de chequeo
+    """
+    def _isJustifiedTimeStart(self,sched,whs,justification,tolerancia, date = None):
         start = whs[0]['start']
-        if sched['start'] >= justification['begin'] and start <= justification['end']:
+        if sched.getStart(date) >= justification['begin'] and start <= justification['end']:
             return True
         return False
 
-    def _isJustifiedTimeEnd(self,sched,whs, justification, tolerancia):
+    """
+
+        @param date Fecha de chequeo
+    """
+    def _isJustifiedTimeEnd(self,sched,whs, justification, tolerancia, date = None):
         whEnd = whs[-1]['end']
-        if whEnd >= justification['begin'] and sched['end'] <= justification['end']:
+        if whEnd >= justification['begin'] and sched.getEnd(date) <= justification['end']:
             return True
         return False
+
 
     def _isJustifiedTime(self,justification,start,end):
         if 'begin' not in justification or 'end' not in justification or start is None or end is None:
             return False
         if start >= justification['begin'] and end <= justification['end']:
             return True
+
         return False
 
     """
@@ -145,7 +155,7 @@ class BSJustification(Justification):
             break;
 
           #si existe un elemento del schedule asociado a la solicitud de boleta se deben verificar los logs realizados por el usuario para efectuar el calculo
-          if usrSch["start"] <= rj[0] and usrSch["end"] >= rj[1]:
+          if usrSch.getStart(rj[0].date()) <= rj[0] and usrSch.getEnd(rj[0]) >= rj[1]:
             stock = self._getStockFromLogs(con, userId, stock, rj, index, userSchedule);
 
           #si no existe un schLog asociado a la solicitud de boleta se resta del stock las fechas de la solicitud
@@ -188,15 +198,14 @@ class BSJustification(Justification):
 
       #definir cantidad de "user worked hours" que deberia tener el usuario
       uwhLen = len(userSchedule)
-      if rj[0] != userSchedule[schIndex]["start"] and rj[1] != userSchedule[schIndex]["end"]:
+      if rj[0] != userSchedule[schIndex].getStart(rj[0]) and rj[1] != userSchedule[schIndex].getEnd(rj[0]):
         uwhLen += 1
 
-
       #obtener fecha mas inicial del userSchedule (se supone que el userSchedule esta ordenado!)
-      start = userSchedule[0]["start"]
+      start = userSchedule[0].getStart(rj[0])
 
       schedule = Schedule()
-      userLogs = schedule.getLogsForSchedule(con, userId, start)
+      userLogs = schedule.getLogsForSchedule(con, userSchedule, start.date())
 
       logs = Logs()
       uwhInfo = logs.getWorkedHours(userLogs)
@@ -206,17 +215,16 @@ class BSJustification(Justification):
         return  self._getStockFromDates(stock, rj[0], rj[1])
 
       #definir fechas para calculo del tiempo trabajado en la worked hour correspondiente
-      if rj[0] != userSchedule[schIndex]["start"] and rj[1] != userSchedule[schIndex]["end"]:
+      if rj[0] != userSchedule[schIndex].getStart(rj[0]) and rj[1] != userSchedule[schIndex].getEnd(rj[0]):
         calcStart = uwh[schIndex]["end"]
         calcEnd =  uwh[schIndex+1]["start"]
-
       else:
-        if(rj[0] == userSchedule[schIndex]["start"]):
-          calcStart = userSchedule[schIndex]["start"]
+        if(rj[0] == userSchedule[schIndex].getStart(rj[0])):
+          calcStart = userSchedule[schIndex].getStart(rj[0])
           calcEnd = uwh[schIndex]["start"]
         else:
           calcStart = uwh[schIndex]["end"]
-          calcEnd =  userSchedule[schIndex]["end"]
+          calcEnd =  userSchedule[schIndex].getEnd(rj[0])
 
       #chequear si calcStart y calcEnd son distintos de None
       if calcStart is None or calcEnd is None:
@@ -249,7 +257,7 @@ class BSJustification(Justification):
     """
         inicializa un pedido en estado pendiente de una justificación en las fechas indicadas
     """
-    def requestJustification(self,utils,con,userId,requestor_id,begin,end):
+    def requestJustification(self,utils,con,userId,requestor_id,begin,end,status):
 
         available = self.available(utils,con,userId,begin)
 
@@ -280,18 +288,23 @@ class BSJustification(Justification):
             'end':end
         }
 
-        events.extend(self.updateJustificationRequestStatus(utils,con,userId,req,'PENDING'))
+        created = datetime.datetime.now()
+        aux = created - datetime.timedelta(seconds=60)
+        e = self.updateJustificationRequestStatus(utils,con,userId,req,'PENDING',aux)
+        if status != None and status != 'PENDING':
+            e = self.updateJustificationRequestStatus(utils,con,userId,req,status,created)
+        events.extend(e)
         return events
 
 
 
     """ actualiza el estado del pedido de la justificacion al estado status """
-    def updateJustificationRequestStatus(self,utils,con,userId,req,status):
+    def updateJustificationRequestStatus(self,utils,con,userId,req,status,created=datetime.datetime.now()):
 
         requestId = req['id']
 
         cur = con.cursor()
-        cur.execute('insert into assistance.justifications_requests_status (request_id,user_id,status) values (%s,%s,%s)',(requestId,userId,status))
+        cur.execute('insert into assistance.justifications_requests_status (request_id,user_id,status,created) values (%s,%s,%s,%s)',(requestId,userId,status,created))
 
         events = []
         e = {

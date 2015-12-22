@@ -1,8 +1,8 @@
 var app = angular.module('mainApp');
 
-app.controller('AssistanceCtrl', ["$scope", "$timeout", "$window", "Profiles", "Session", "Users", "Assistance", "Notifications", "Utils",
+app.controller('AssistanceCtrl', ["$scope", "$timeout", "$window", "Profiles", "Session", "Users", "Assistance", "Notifications", "Utils","Office",
 
-function($scope, $timeout, $window, Profiles, Session, Users, Assistance, Notifications, Utils) {
+function($scope, $timeout, $window, Profiles, Session, Users, Assistance, Notifications, Utils, Office) {
 
 	$scope.model = {
 		session : null,
@@ -37,9 +37,9 @@ function($scope, $timeout, $window, Profiles, Session, Users, Assistance, Notifi
 	/**
 	 * Dar formato a los datos de oficina recibidos del servidor
 	 */
-	$scope.formatOfficesFromServer = function(officesFromServer){
-		for (var office in officesFromServer.offices){
-			$scope.model.offices.push(officesFromServer.offices[office].name);
+	$scope.formatOfficesFromServer = function(officesFromServer) {
+		for (var i = 0; i < officesFromServer.length; i++) {
+			$scope.model.offices.push(officesFromServer[i].name);
 		}
 	};
 
@@ -69,23 +69,19 @@ function($scope, $timeout, $window, Profiles, Session, Users, Assistance, Notifi
 		$scope.model.assistanceStatus.workedTime = Utils.getTimeFromMinutes(workedMinutes);
 
 
-		for (var i in assistanceStatusFromServer.logs) {
-			console.log(assistanceStatusFromServer.logs[i]);
-		};
-
 	};
 
 	/**
 	 * Dar formato a los datos de asistencia recibidos del servidor
 	 */
-	$scope.formatAssistanceDataFromServer = function(assistanceDataFromServer){
+	$scope.formatAssistanceDataFromServer = function(assistanceDataFromServer) {
 		$scope.model.assistanceData.position = assistanceDataFromServer.position;
 
-		for (var time in assistanceDataFromServer.schedule) {
-			var start = new Date(assistanceDataFromServer.schedule[time].start);
+		for (var i = 0; i < assistanceDataFromServer.schedule.length; i++) {
+			var start = new Date(assistanceDataFromServer.schedule[i].start);
 			var startHour = Utils.formatTime(start);
 
-			var end = new Date(assistanceDataFromServer.schedule[time].end);
+			var end = new Date(assistanceDataFromServer.schedule[i].end);
 			var endHour = Utils.formatTime(end);
 
 			$scope.model.assistanceData.schedule.push(startHour + " / " + endHour);
@@ -98,7 +94,7 @@ function($scope, $timeout, $window, Profiles, Session, Users, Assistance, Notifi
 	 * consultar datos de asistencia
 	 */
 	$scope.loadAssistanceStatus = function(){
-		Assistance.getAssistanceStatus($scope.model.session.user_id,
+		Assistance.getAssistanceStatusByDate($scope.model.session.user_id, new Date(),
 			function(assistanceStatus){
 				if ((assistanceStatus != undefined) && (assistanceStatus != null)) {
 					$scope.formatAssistanceStatusFromServer(assistanceStatus);
@@ -114,7 +110,7 @@ function($scope, $timeout, $window, Profiles, Session, Users, Assistance, Notifi
 	 * consultar datos de asistencia
 	 */
 	$scope.loadAssistanceData = function(){
-		Assistance.getAssistanceData($scope.model.session.user_id,
+		Assistance.getAssistanceData($scope.model.session.user_id, new Date(),
 			function(assistanceData){
 				$scope.formatAssistanceDataFromServer(assistanceData);
 			},
@@ -125,25 +121,25 @@ function($scope, $timeout, $window, Profiles, Session, Users, Assistance, Notifi
 	};
 
     $scope.loadUser = function() {
-		Users.findUser($scope.model.session.user_id,
-			function(user) {
-				$scope.model.user = user;
-			},
-			function(error) {
-				Notifications.message(error);
-			}
-		);
+			Users.findUser($scope.model.session.user_id,
+				function(user) {
+					$scope.model.user = user;
+				},
+				function(error) {
+					Notifications.message(error);
+				}
+			);
     };
 
     $scope.loadOffices = function() {
-    	Assistance.getOfficesByUser($scope.model.session.user_id,
-			function(offices){
-				$scope.formatOfficesFromServer(offices);
-			},
-			function(error){
-				Notifications.message(error);
-			}
-		);
+    	Office.getOfficesByUser($scope.model.session.user_id,true,
+				function(offices){
+					$scope.formatOfficesFromServer(offices);
+				},
+				function(error){
+					Notifications.message(error);
+				}
+			);
     }
 
     $scope.loadJustifications = function() {
@@ -225,7 +221,7 @@ function($scope, $timeout, $window, Profiles, Session, Users, Assistance, Notifi
 		$scope.model.session = Session.getCurrentSession();
 		if ((!$scope.model.session) || (!$scope.model.session.user_id)) {
 			Notifications.message("Error: Session no definida");
-			$window.location.href = "/#/logout";
+			$window.location.href = "/systems/login/";
     } else {
 			Profiles.checkAccess(Session.getSessionId(),['ADMIN-ASSISTANCE','USER-ASSISTANCE'],
 				function(ok) {
@@ -235,7 +231,7 @@ function($scope, $timeout, $window, Profiles, Session, Users, Assistance, Notifi
 						$scope.loadAssistanceStatus();
 						$scope.loadAssistanceData();
 						$scope.loadOffices();
-						//$scope.loadJustifications();
+						$scope.loadJustifications();
 					} else {
 						console.log("not granted");
 						$window.location.href = "/#/logout";

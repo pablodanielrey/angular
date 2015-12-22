@@ -65,7 +65,8 @@ function Login($rootScope, $wamp, Session) {
 		});
 	}
 
-	this.logout = function(sid, cok, cerr) {
+	this.logout = function(cok, cerr) {
+    var sid = Session.getSessionId();
 		$wamp.call('system.logout', [sid])
 		.then(function(ok) {
 			if (ok == null) {

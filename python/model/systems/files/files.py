@@ -40,6 +40,12 @@ class Files:
             ids.append(c[0])
         return ids
 
+    def check(self, con, id):
+        """ chequea si existe un archivo con ese id """
+        cur = con.cursor()
+        cur.execute('select id from files.files where id = %s', (id,))
+        return cur.rowcount > 0
+
     def findById(self, con, id):
         cur = con.cursor()
         cur.execute('select id, name, content from files.files where id = %s', (id,))

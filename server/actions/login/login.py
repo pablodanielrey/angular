@@ -31,6 +31,7 @@ class LoginWamp(ApplicationSession):
         yield from self.register(self.logout_async, 'system.logout')
         yield from self.register(self.validateSession_async, 'system.session.validate')
         yield from self.register(self.generateResetPasswordHash_async, 'system.password.generateResetPasswordHash')
+        yield from self.register(self.changePassword_async, 'system.password.changePassword')
         yield from self.register(self.changePasswordWithHash_async, 'system.password.changePasswordWithHash')
         yield from self.register(self.checkProfileAccess_async, 'system.profiles.checkProfileAccess')
 
@@ -89,10 +90,27 @@ class LoginWamp(ApplicationSession):
     '''
         cambia la clave del usuario determinado por el hash pasado como parámetro
     '''
-    def changePasswordWithHash(self, username, password, hash):
+    def changePassword(self, sid, username, password):
         con = self._getDatabase()
         try:
-            r = self.loginModel.changePasswordWithHash(con, username, password, hash)
+            r = self.loginModel.changePassword(con, sid, username, password)
+            con.commit()
+            return r
+
+        except Exception as e:
+            logging.exception(e)
+            return False
+
+        finally:
+            con.close()
+
+    '''
+        cambia la clave del usuario determinado por el hash pasado como parámetro
+    '''
+    def changePasswordWithHash(self, username, password, hhash):
+        con = self._getDatabase()
+        try:
+            r = self.loginModel.changePasswordWithHash(con, username, password, hhash)
             con.commit()
             return r
 
@@ -147,6 +165,12 @@ class LoginWamp(ApplicationSession):
     def changePasswordWithHash_async(self, username, password, hash):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.changePasswordWithHash, username, password, hash)
+        return r
+
+    @coroutine
+    def changePassword_async(self, sid, username, password):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.changePassword, sid, username, password)
         return r
 
     @coroutine

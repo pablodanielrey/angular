@@ -5,11 +5,18 @@ import dateutil, dateutil.tz, dateutil.parser
 import logging
 
 class Date:
-
+      
     def isAware(self, date):
+        """
+           Tiene zona definida?
+        """
         return (date.tzinfo != None) and (date.tzinfo.utcoffset(date) != None)
 
+
     def isNaive(self, date):
+        """
+           No tiene zona definida?
+        """
         return not self.isAware(date)
 
     """ transforma un datetime naive a uno aware con la zona pasada """

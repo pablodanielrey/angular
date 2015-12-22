@@ -1,18 +1,19 @@
 
 var app = angular.module('mainApp');
 
-app.controller('LogoutCtrl', function($scope, $window, Session, Credentials) {
+app.controller('LogoutCtrl', function($scope, $window, Session, Login) {
 
   $scope.logout = function() {
 
-    Credentials.logout(
+    Login.logout(
       function(ok) {
         Session.destroy();
         $scope.$emit('logoutOk','');
-         $window.location.href = "/systems/login/indexLogin.html";
+        console.log("logout");
+         $window.location.href = "/systems/login/index.html";
       },
       function(error) {
-          //alert(error);
+          alert(error);
       });
   };
 
