@@ -230,6 +230,21 @@
   display: none;
 }
 
+
+/************ MENU 2 ********************/
+
+/*.sistema .menu2 {
+  width: 90%;
+  height: 100%;
+  background-color: red;
+  position: absolute;
+  z-index: 999;
+  top:0px;
+
+}*/
+
+
+
 /*********** CHAT ******************/
 
 .sistema .chat {
