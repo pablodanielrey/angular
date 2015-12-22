@@ -1,0 +1,42 @@
+<div class="menu " id="itemMenuId">
+    <div class="itemMenu"  onclick="if (document.getElementById('itemMenuId').className == 'menu close') {document.getElementById('itemMenuId').className = 'menu'} else {document.getElementById('itemMenuId').className = 'menu close'} ">
+        <div class="itemTextMenu2">
+          <b>MENU</b>
+        </div>
+        <div class="itemIcons" title="Menu">
+          <i class="fa fa-bars  iconsMenu"></i>
+        </div>
+    </div>
+    <div class="itemMenu"  ng-click="view.mainContent= 'mostrarPerfil'">
+        <div class="itemTextMenu">
+          <i class="fa fa-caret-right arrowItemsMenu"></i>Perfil
+        </div>
+        <div class="itemIcons" title="Edición de Usuarios">
+          <i class="fa fa-user iconsMenu" ></i>
+        </div>
+    </div>
+    <div class="itemMenu" ng-click="view.mainContent= 'mostrarContraseña'">
+        <div class="itemTextMenu">
+          <i class="fa fa-caret-right arrowItemsMenu"></i> Contraseña
+        </div>
+        <div class="itemIcons" title="Edición de grupos">
+          <i class="fa fa-key iconsMenu" ></i>
+        </div>
+    </div>
+    <div class="itemMenu"  ng-click="view.mainContent= 'mostrarCorreos'">
+        <div class="itemTextMenu">
+          <i class="fa fa-caret-right arrowItemsMenu"></i> Correos
+        </div>
+        <div class="itemIcons" title="Pedido de cuentas">
+          <i class="fa fa-envelope iconsMenu" ></i>
+        </div>
+    </div>
+    <div class="itemMenu" ng-click="view.mainContent = 'mostrarSistemas'">
+        <div class="itemTextMenu">
+          <i class="fa fa-caret-right arrowItemsMenu"></i> Sistemas
+        </div>
+        <div class="itemIcons" title="Pedido de cuentas">
+          <i class="fa fa-th-large iconsMenu" ></i>
+        </div>
+    </div>
+</div>

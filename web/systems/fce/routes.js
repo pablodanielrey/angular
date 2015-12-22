@@ -5,8 +5,14 @@ app.config(['$routeProvider', function($routeProvider) {
 
   $routeProvider
 
-  .when('/main', {
-     templateUrl: '/systems/fce/modules/home/home.html'
+  .when('/profile', {
+     templateUrl: '/systems/fce/modules/perfil/index.html',
+     controller: 'ProfileCtrl'
+  })
+
+  .when('/password', {
+     templateUrl: '/systems/fce/modules/password/index.html',
+     controller: 'PasswordCtrl'
   })
 
   .when('/logout', {

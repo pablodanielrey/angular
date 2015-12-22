@@ -1,0 +1,677 @@
+.sistema {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:column;
+  -webkit-flex-direction:column; /* Safari */
+  -moz-flex-direction:column; /* mozilla */
+  margin: 0px;
+  padding: 0px;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+
+.sistema .header {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  height: 60px;
+  background-color: #28292D;
+  color:white;
+}
+
+
+
+.sistema .header button {
+  background: none;
+  border:none;
+  color: white;
+  font-size: 20px;
+  margin: 10px;
+  cursor: pointer;
+}
+
+.sistema .textUser {
+  font-size: 14px;
+}
+
+.sistema .notification {
+  background-color: #EC9122 !important;
+  position: absolute;
+  font-size: 12px !important;
+  border-radius: 10px;
+  z-index: 999;
+
+}
+
+.sistema .notification2 {
+  background-color: #E43E46 !important;
+  position: absolute;
+  font-size: 12px !important;
+  border-radius: 10px;
+  z-index: 999;
+
+}
+
+.sistema .main {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  height: 100%;
+  background-color: #EEEEEE;
+}
+
+
+.sistema .itemMenu {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  wrap:nowrap;
+  width: 100%;
+  height: 50px;
+  border-bottom: 1px solid #565963;
+  cursor: pointer;
+
+}
+
+.sistema .itemMenu:hover {
+  background-color: #3a3c44;
+}
+
+.sistema .itemMenu:hover .arrowItemsMenu {
+  color: #0066A6;
+}
+
+.sistema .itemMenu:hover .itemIcons {
+  color: #0066A6;
+}
+
+.sistema .itemTextMenu {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  color: white;
+  margin-left: 15px;
+  font-size: 14px;
+}
+
+
+
+.sistema .itemTextMenu2 {
+  color: white;
+  margin-left: 15px;
+  font-size: 14px;
+
+}
+
+.sistema .itemIcons {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  background-color: #3A3C44;
+  height: 100%;
+  width: 50px;
+  color: white;
+}
+
+.sistema .iconsMenu {
+
+}
+
+.sistema .arrowItemsMenu {
+  color: #3A3C44;
+  margin-right: 5px;
+}
+
+
+
+.sistema .footer {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  height: 20px;
+  background-color: #28292D;;
+  color: #DBE2E5;
+  font-size: 10px;
+  padding-left: 5px;
+  z-index: 999;
+}
+
+
+.sistema .closeMenu .itemTextMenu {
+  display: none;
+}
+.sistema .closeMenu .itemTextMenu2 {
+  display: none;
+}
+
+.sistema .closeMenu .menu {
+  width: 50px !important;
+  -webkit-transition: width 2s; /* Safari */
+    transition: width 2s;
+
+}
+
+.sistema .openMenu .menu {
+  width: 250px ;
+  -webkit-transition: width 2s; /* Safari */
+    transition: width 2s;
+}
+
+
+.sistema .menu {
+  background-color: #5C5F69;
+  height: 100%;
+  width: 250px;
+  -webkit-transition: width 0.2s; /* For Safari 3.1 to 6.0 */
+  transition: width 0.2s;
+
+
+
+}
+
+.sistema .menu.close{
+  width: 50px;
+  -webkit-transition: width 0.2s; /* For Safari 3.1 to 6.0 */
+  transition: width 0.2s;
+
+
+
+}
+
+
+
+.sistema .menu.close .itemTextMenu{
+  display: none;
+}
+
+.sistema .menu.close .itemTextMenu2{
+  display: none;
+}
+
+
+/************ MENU 2 ********************/
+
+/*.sistema .menu2 {
+  width: 90%;
+  height: 100%;
+  background-color: red;
+  position: absolute;
+  z-index: 999;
+  top:0px;
+
+}*/
+
+
+
+/*********** CHAT ******************/
+
+.sistema .chat {
+  position: absolute;
+  width: 300px;
+  height: 0px;
+  background-color: none;
+  z-index: 999;
+  top: 35px;
+  right: 20px;
+  transition: all 0.2s ease-in-out;
+  opacity: 0;
+
+
+}
+
+.sistema.verChat .chat {
+  height: 200px;
+  transition: all 0.2s ease-in-out;
+  opacity: 1;
+
+
+}
+
+.sistema .arrowChat {
+  color: #EC9122;
+  height: 12px;
+  margin-left: 120px;
+}
+
+.sistema .headerChat {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  background-color: #EC9122;
+  height: 60px;
+  border-radius: 5px 5px 0px 0px;
+  color: white;
+  font-size: 20px;
+}
+
+.sistema .contentChat {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  background-color: #EEEEEE;
+  height: 100%;
+  font-size: 20px;
+  color: grey;
+  box-shadow: 1px 1px 5px #5c5f69;
+  -webkit-box-shadow: 1px 1px 5px #5c5f69;
+  -moz-box-shadow: 5px 5px 5px #5c5f69;
+
+
+}
+
+/*********** NOTIFICACIONES ******************/
+
+.sistema .notificaciones {
+  position: absolute;
+  width: 300px;
+  height: 0px;
+  background-color: none;
+  z-index: 999;
+  top: 35px;
+  right: 20px;
+  transition: all 0.2s ease-in-out;
+  opacity: 0;
+
+
+}
+
+.sistema.verNoti .notificaciones {
+  height: 200px;
+  transition: all 0.2s ease-in-out;
+  opacity: 1;
+
+
+}
+
+.sistema .arrowNoti {
+  color: #E43E46;
+  height: 12px;
+  margin-left: 175px;
+}
+
+.sistema .headerNoti {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  background-color: #E43E46;
+  height: 60px;
+  border-radius: 5px 5px 0px 0px;
+  color: white;
+  font-size: 20px;
+}
+
+.sistema .contentNoti {
+
+  background-color: #E5E5E5;
+  height: 100%;
+  font-size: 14px;
+  color: grey;
+  box-shadow: 1px 1px 5px #5c5f69;
+  -webkit-box-shadow: 1px 1px 5px #5c5f69;
+  -moz-box-shadow: 5px 5px 5px #5c5f69;
+  padding: 15px;
+  overflow-y: scroll;
+}
+
+.sistema .noti {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  background-color: #FFFFFF;
+  color: #28292D;
+  box-shadow: 1px 1px 2px #5c5f69;
+  -webkit-box-shadow: 1px 1px 2px #5c5f69;
+  -moz-box-shadow: 5px 5px 2px #5c5f69;
+  margin-bottom: 15px;
+  border-bottom: 3px solid  #E43E46;
+  cursor:pointer;
+}
+
+.sistema .iconoNoti {
+  width: 50px;
+  height: 50px;
+  background-color: #E43E46;
+  padding: 10px;
+  color: #E5E5E5;
+
+}
+
+.sistema .textNoti {
+  padding: 5px;
+  font-size: 12px;
+  width: 300px;
+}
+
+
+.sistema .noti2 {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  background-color: #FFFFFF;
+  color: #28292D;
+  box-shadow: 1px 1px 2px #5c5f69;
+  -webkit-box-shadow: 1px 1px 2px #5c5f69;
+  -moz-box-shadow: 5px 5px 2px #5c5f69;
+  margin-bottom: 15px;
+  border-bottom: 3px solid  #128C78;
+  cursor:pointer;
+}
+
+.sistema .iconoNoti2 {
+  width: 50px;
+  height: 50px;
+  background-color: #128C78;
+  padding: 10px;
+  color: #E5E5E5;
+
+}
+
+.sistema .textNoti2 {
+  padding: 5px;
+  font-size: 12px;
+  width: 300px;
+}
+
+/*********** SERVER ******************/
+
+.sistema .serverDesconectado {
+  position: absolute;
+  width: 300px;
+  height: 0px;
+  background-color: none;
+  z-index: 999;
+  top: 35px;
+  right: 20px;
+  transition: all 0.2s ease-in-out;
+  opacity: 0;
+
+
+}
+
+.sistema.verServer .serverDesconectado {
+  height: 120px;
+  transition: all 0.2s ease-in-out;
+  opacity: 1;
+
+
+}
+
+.sistema .arrowServer {
+  color: #E43E57;
+  height: 12px;
+  margin-left: 230px;
+}
+
+.sistema .headerServer {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  background-color: #E43E57;
+  height: 60px;
+  border-radius: 5px 5px 0px 0px;
+  color: white;
+  font-size: 20px;
+}
+
+.sistema .contentServer {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:column;
+  -webkit-flex-direction:column; /* Safari */
+  -moz-flex-direction:column; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  background-color: #EEEEEE;
+  height: 100%;
+  font-size: 20px;
+  color: #3A3C44;
+  box-shadow: 1px 1px 5px #5c5f69;
+  -webkit-box-shadow: 1px 1px 5px #5c5f69;
+  -moz-box-shadow: 5px 5px 5px #5c5f69;
+
+
+}
+
+.sistema .textReconectando {
+  font-size: 12px;
+}
+
+
+.sistema .serverConectado {
+  position: absolute;
+  width: 300px;
+  height: 0px;
+  background-color: none;
+  z-index: 999;
+  top: 35px;
+  right: 20px;
+  transition: all 0.2s ease-in-out;
+  opacity: 0;
+
+
+}
+
+.sistema.verServer .serverConectado {
+  height: 120px;
+  transition: all 0.2s ease-in-out;
+  opacity: 1;
+
+
+}
+
+.sistema .arrowServer {
+  color: #128c78;
+  height: 12px;
+  margin-left: 230px;
+}
+
+.sistema .headerServer {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  background-color: #128c78;
+  height: 60px;
+  border-radius: 5px 5px 0px 0px;
+  color: white;
+  font-size: 20px;
+}
+
+.sistema .contentServer {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:column;
+  -webkit-flex-direction:column; /* Safari */
+  -moz-flex-direction:column; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  background-color: #EEEEEE;
+  height: 100%;
+  font-size: 20px;
+  color: #3A3C44;
+  box-shadow: 1px 1px 5px #5c5f69;
+  -webkit-box-shadow: 1px 1px 5px #5c5f69;
+  -moz-box-shadow: 5px 5px 5px #5c5f69;
+
+
+}
+
+
+
+
+/********** CONTENEDOR PRINCIPAL ****************/
+
+.sistema .content {
+  padding: 10px;
+  background-color: #DBE2E5;
+  width: 100%;
+  height: 100%;
+
+}
+
+
+
+.sistema .contentSistemas {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  flex-wrap: wrap;
+}
+
+.sistema .System1 {
+  width: 180px;
+  height: 150px;
+  background-color: grey;
+  box-shadow: 1px 1px 5px #5c5f69;
+  -webkit-box-shadow: 1px 1px 5px #5c5f69;
+  -moz-box-shadow: 5px 5px 5px #5c5f69;
+  margin: 10px;
+  background-image: url("http://www.publicidadexterior.com.ar/home/images/stories/2013/camaras_seguridad.jpg");
+}
+
+
+/******************* VISTA CELULAR ******************************/
+
+@media (min-width: 720px) and (orientation:landscape){
+  .sistema .icoLogo {
+      display: none;
+  }
+}
+
+
+@media (max-width: 719px) {
+  .sistema .menu {
+      display: none;
+  }
+}
+
+
+
+@media (max-width: 1024px) and (orientation:portrait){
+  .sistema .menu {
+      display: none;
+  }
+
+  .sistema .header {
+      height: 120px !important;
+  }
+
+  .sistema .access {
+
+    zoom: 200%;
+  }
+
+  .sistema .logo {
+    zoom:200%;
+  }
+
+  .sistema .notificaciones {
+    zoom:200%;
+  }
+
+
+
+}
+
+@media (max-width: 720px){
+  .sistema .footer {
+      display: none;
+  }
+}
+
+@media (max-height: 500px){
+  .sistema .footer {
+      display: none;
+  }
+}

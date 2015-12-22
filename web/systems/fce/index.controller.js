@@ -33,7 +33,7 @@ function IndexCtrl($rootScope, $scope, $wamp, $window, Notifications, Login) {
     }
 
     $scope.$on('$viewContentLoaded', function(event) {
-      $scope.initialize();
+      // $scope.initialize();
     });
 
 };
