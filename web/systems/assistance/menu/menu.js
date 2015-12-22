@@ -79,7 +79,12 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Profiles', 'Se
 
     $scope.initialize = function() {
 
-      Profiles.checkAccess(Session.getSessionId(),["ADMIN-ASSISTANCE","USER-ASSISTANCE"],
+      var sid = Session.getSessionId();
+      if (sid == null) {
+        return;
+      }
+
+      Profiles.checkAccess(sid, ["ADMIN-ASSISTANCE","USER-ASSISTANCE"],
         function(ok) {
           if (ok) {
               $scope.model.items = [];
