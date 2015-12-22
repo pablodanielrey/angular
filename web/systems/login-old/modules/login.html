@@ -1,0 +1,49 @@
+<div class='login'>
+
+	<div class='manteinance'>
+		<div class='message'>
+			<p>Se están realizando tareas de mantenimiento en el sistema</p>
+			<p>El funcionamiento normal se restablecera a la brevedad</p>
+			<p>Sepa disculpar las molestias</p>
+		</div>
+	</div>
+
+
+	<div class="logo">
+		<img src="/logo.jpg" />
+	</div>
+
+	<form ng-submit='login()'>
+
+		<div>
+			<div class="margin_div_login">
+				<label class="text"> Usuario (DNI)</label>
+				<input class="name" type="text" ng-model="model.username" autofill='autofill'/>
+			</div>
+
+			<div class="margin_div_login">
+				<label class="text"> Contraseña</label>
+				<input class="password" type="password" ng-model="model.password" autofill='autofill'/>
+			</div>
+		</div>
+
+		<div>
+			<input type="submit" class="loginAction" value="Enviar"/>
+		</div>
+
+		<div class="option">
+			<span><a class="links" href="/systems/pass/resetPassword.html"> Olvidé mi contraseña </a></span>
+			<!-- <span>|</span> -->
+			<!-- <span><a class="links" href="/systems/account/indexCreateAccountRequest.html"> Crear cuenta </a></span> -->
+		<div>
+
+	</form>
+
+<!--
+		<div class="disclaimer">
+			<p>Este sistema es seguro</p>
+			<p>Para que funcione adecuadamente debe importar como autoridad <a class="links" href="/rootCA.crt">este</a> certificado</p>
+		</div>
+-->
+
+</div>
