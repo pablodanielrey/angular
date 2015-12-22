@@ -26,7 +26,7 @@ app.controller('ResetPasswordCtrl', function($rootScope, $scope, Credentials, No
   }
 
   $scope.back = function() {
-    $window.location.href = "/systems/login/indexLogin.html";
+    $window.location.href = "/systems/login/";
   }
 
 });
