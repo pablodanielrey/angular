@@ -2,7 +2,7 @@
 var app = angular.module('mainApp');
 
 
-app.controller('ResetPasswordCtrl', function($rootScope, $scope, Credentials, Notifications,$window) {
+app.controller('ResetPasswordCtrl', function($rootScope, $scope, Credentials, Notifications, $window) {
 
   $scope.user = { username:'' };
 

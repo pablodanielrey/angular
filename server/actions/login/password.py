@@ -45,11 +45,11 @@ class ChangePassword:
     def changePassword(self, con, sid, username, password):
         s = self.session.getSession(sid)
         user_id = s[self.config.configs['session_user_id']]
-        creds = self.userPassword.findCredentials(con,username)
+        creds = self.userPassword.findCredentials(con, username)
 
         if (creds['user_id'] != user_id):
             ''' se esta tratando de modificar credenciales que pertenecen a otro usuario, no el de la session indicada '''
-            if not self.profiles.checkAccess(sid,'ADMIN'):
+            if not self.profiles.checkAccess(sid, 'ADMIN'):
                 raise InsuficientAccess()
 
         newCreds = {

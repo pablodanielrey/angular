@@ -2,7 +2,7 @@
 var app = angular.module('mainApp');
 
 
-app.controller('ChangePasswordCtrl', function($rootScope, $scope, $routeParams, $location, $timeout, $window, Messages, Utils, Session, Credentials, Notifications) {
+app.controller('ChangePasswordCtrl', function($rootScope, $scope, $routeParams, $location, $timeout, $window, Session, Credentials, Notifications) {
 
   $scope.user = {};
   $scope.cp = {};
@@ -16,7 +16,18 @@ app.controller('ChangePasswordCtrl', function($rootScope, $scope, $routeParams, 
   $scope.changePassword = function() {
 
     if (($scope.cp.hash != undefined) && ($scope.cp.hash != null)) {
-      Credentials.changePasswordWithHash($scope.user,$scope.cp.hash,
+
+      if ($scope.user.newPassword != $scope.user.newPasswordRepeat) {
+        Notifications.message(['Las claves son distintas']);
+        return;
+      }
+
+      var creds = {
+        username: $scope.user.username,
+        password: $scope.user.newPassword
+      };
+
+      Credentials.changePasswordWithHash(creds, $scope.cp.hash,
         function(ok) {
           Notifications.messageWithCallback('Clave cambiada exitósamente');
           $timeout(function() {
@@ -29,7 +40,14 @@ app.controller('ChangePasswordCtrl', function($rootScope, $scope, $routeParams, 
           Notifications.message(['Ocurrió un error cambiando su clave','Por favor llame al 4236769 interno 123']);
         });
     } else {
-      Credentials.changePassword($scope.user,
+
+      var sid = Session.getSessionId();
+      if (sid == null) {
+        Notifications.message(['Debe ingresar al sistema con la clave actual para poder cambiar a una nueva clave']);
+        return;
+      }
+
+      Credentials.changePassword(sid, $scope.user,
         function(ok) {
           Notifications.message('Clave cambiada exitósamente');
         },
@@ -40,7 +58,7 @@ app.controller('ChangePasswordCtrl', function($rootScope, $scope, $routeParams, 
   }
 
   $scope.$on('UserSelectedEvent', function(e,id) {
-    
+
   });
 
   $scope.clear();
@@ -54,9 +72,12 @@ app.controller('ChangePasswordCtrl', function($rootScope, $scope, $routeParams, 
   } else {
 
     var s = Session.getCurrentSession();
-    $scope.user.username = s.login.username;
-    $scope.cp.hash = null;
-
+    if (s == undefined || s == null) {
+      $scope.clear();
+    } else {
+      $scope.user.username = s.login.username;
+      $scope.cp.hash = null;
+    }
   }
 
 });
