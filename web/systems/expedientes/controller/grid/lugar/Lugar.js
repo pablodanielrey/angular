@@ -10,35 +10,35 @@ app.controller("GridLugarCtrl", ["$scope", "$timeout", "TableGrid", function ($s
 
   /***** escuchar evento de incializacion de "gridNumRows" *****/
   $scope.$on("gridNumRowsInitialized", function(event){
-    TableGrid.changePagination($scope, "lugar");
+    TableGrid.changePagination($scope);
   });
   
   /**
    * Ir a pagina anterior
    */
   $scope.previousPage = function(){
-    TableGrid.goPage($scope, $scope.pagination.page-1, "lugar");
+    TableGrid.goPage($scope, $scope.pagination.page-1);
   };
   
   /**
    * Ir a pagina siguiente
    */
   $scope.nextPage = function(){
-    TableGrid.goPage($scope, $scope.pagination.page+1, "lugar");
+    TableGrid.goPage($scope, $scope.pagination.page+1);
   };
   
   /**
    * Ir a pagina determinada
    */
   $scope.goPage = function(){
-    TableGrid.goPage($scope, $scope.pagination.page, "lugar");
+    TableGrid.goPage($scope, $scope.pagination.page);
   };
   
   /**
    * Cambiar tamanio de pagina
    */
   $scope.changePageSize = function(){
-    TableGrid.changePagination($scope, "lugar");
+    TableGrid.changePagination($scope);
   };
   
   /** 
@@ -46,7 +46,7 @@ app.controller("GridLugarCtrl", ["$scope", "$timeout", "TableGrid", function ($s
    * @returns {undefined}
    */
   $scope.searchData = function(){
-    TableGrid.searchData($scope, "lugar");
+    TableGrid.searchData($scope);
   };
   
   /**
@@ -54,5 +54,17 @@ app.controller("GridLugarCtrl", ["$scope", "$timeout", "TableGrid", function ($s
    */
   $scope.deleteSearchIndex = function(index){
     $scope.search.index.splice(index, 1);
+  };
+
+  $scope.toggleSelection = function(id){
+    TableGrid.toggleSelection($scope, id);
+  };
+  
+  $scope.isSelected = function(id){
+    return $scope.selection.indexOf(id) > -1;
+  };
+
+  $scope.toggleOrderBy = function(field){
+    TableGrid.toggleOrderBy($scope, field);
   };
 }]);

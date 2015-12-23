@@ -78,6 +78,7 @@ class Tools(object):
    
     @staticmethod
     def concat(value, connectNoEmpty, connectEmpty = None, connectCond = None):
+
       if not value:
         return ''
 	
