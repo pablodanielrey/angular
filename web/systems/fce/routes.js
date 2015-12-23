@@ -15,6 +15,16 @@ app.config(['$routeProvider', function($routeProvider) {
      controller: 'PasswordCtrl'
   })
 
+  .when('/mails', {
+     templateUrl: '/systems/fce/modules/mails/index.html',
+     controller: 'MailsCtrl'
+  })
+
+  .when('/systems', {
+     templateUrl: '/systems/fce/modules/systems/index.html',
+     controller: 'SystemsCtrl'
+  })
+
   .when('/logout', {
      templateUrl: '/systems/login/modules/logout.html',
      controller: 'LogoutCtrl'
