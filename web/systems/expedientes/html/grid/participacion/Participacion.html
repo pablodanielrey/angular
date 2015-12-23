@@ -1,12 +1,11 @@
 		
-<div ng-controller="GridParticipacionCtrl">
+<div ng-controller="GridCtrl" ng-init="init('participacion', 'Ver Participacion')">
   <div ng-include="'main/html/search.html'"></div>
-  <div ng-include="'main/html/pagination.html'"></div>  
+  <div ng-include="'main/html/pagination.html'"></div>
   <div class="table-responsive" style="height:350px">
   <table class="table table-striped table-bordered table-hover">
     <thead>
       <tr>
-</div>
         <th><input type="checkbox"></th>
         <th>expediente: numero&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('exp_numero')"></span></th>
         <th>expediente: fecha origen&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('exp_fecha_origen')"></span></th>
@@ -48,7 +47,9 @@
         <td><a href="#/gridLugar?ic=1&0if=id&0in=lugar&0it=lugar&0iv={{fields.exp_ud_lug_id}}">{{fields.exp_ud_lug_descripcion}}</a></td>
         <td><a href="#/gridPersona?ic=1&0if=id&0in=persona&0it=persona&0iv={{fields.per_id}}">{{fields.per_nombres}}</a></td>
         <td><a href="#/gridPersona?ic=1&0if=id&0in=persona&0it=persona&0iv={{fields.per_id}}">{{fields.per_apellidos}}</a></td>
-        <td>          
+        <td>
+          <a href="<?=PATH_HTTP?>index.php?go=htmlFormAdmin&t=participacion&id={{fields.id}}"><span class="glyphicon glyphicon-pencil"></span></a>&nbsp;&nbsp;
+		  <a href="?go=delete&t=participacion&pk={{fields.id}}" target="_blank"><span class="glyphicon glyphicon-remove"></span></a>&nbsp;&nbsp;
         </td>
 
       </tr>

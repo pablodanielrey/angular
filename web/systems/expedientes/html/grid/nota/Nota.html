@@ -1,12 +1,11 @@
 		
-<div ng-controller="GridNotaCtrl">
+<div ng-controller="GridCtrl" ng-init="init('nota', 'Ver Nota')">
   <div ng-include="'main/html/search.html'"></div>
-  <div ng-include="'main/html/pagination.html'"></div>  
+  <div ng-include="'main/html/pagination.html'"></div>
   <div class="table-responsive" style="height:350px">
   <table class="table table-striped table-bordered table-hover">
     <thead>
       <tr>
-</div>
         <th><input type="checkbox"></th>
         <th>codigo&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('codigo')"></span></th>
         <th>fecha&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('fecha')"></span></th>
@@ -26,7 +25,9 @@
         <td>{{fields.observaciones}}</td>
         <td><a href="#/gridPersona?ic=1&0if=id&0in=persona&0it=persona&0iv={{fields.per_id}}">{{fields.per_nombres}}</a></td>
         <td><a href="#/gridPersona?ic=1&0if=id&0in=persona&0it=persona&0iv={{fields.per_id}}">{{fields.per_apellidos}}</a></td>
-        <td>          
+        <td>
+          <a href="<?=PATH_HTTP?>index.php?go=htmlFormAdmin&t=nota&id={{fields.id}}"><span class="glyphicon glyphicon-pencil"></span></a>&nbsp;&nbsp;
+		  <a href="?go=delete&t=nota&pk={{fields.id}}" target="_blank"><span class="glyphicon glyphicon-remove"></span></a>&nbsp;&nbsp;
         </td>
 
       </tr>

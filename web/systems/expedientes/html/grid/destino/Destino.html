@@ -1,12 +1,11 @@
 		
-<div ng-controller="GridDestinoCtrl">
+<div ng-controller="GridCtrl" ng-init="init('destino', 'Ver Destino')">
   <div ng-include="'main/html/search.html'"></div>
-  <div ng-include="'main/html/pagination.html'"></div>  
+  <div ng-include="'main/html/pagination.html'"></div>
   <div class="table-responsive" style="height:350px">
   <table class="table table-striped table-bordered table-hover">
     <thead>
       <tr>
-</div>
         <th><input type="checkbox"></th>
         <th>fecha entrada&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('fecha_entrada')"></span></th>
         <th>fecha salida&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('fecha_salida')"></span></th>
@@ -23,18 +22,18 @@
         <th>expediente: lugar iniciador: descripcion&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('exp_li_descripcion')"></span></th>
         <th>expediente: tema: descripcion&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('exp_tem_descripcion')"></span></th>
         <th>lugar: descripcion&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('lug_descripcion')"></span></th>
-        <th>expeYud: numero&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('expeYud_numero')"></span></th>
-        <th>expeYud: fecha origen&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('expeYud_fecha_origen')"></span></th>
-        <th>expeYud: fecha entrada&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('expeYud_fecha_entrada')"></span></th>
-        <th>expeYud: archivo numero&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('expeYud_archivo_numero')"></span></th>
-        <th>expeYud: archivo anio&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('expeYud_archivo_anio')"></span></th>
-        <th>expeYud: antecedente&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('expeYud_antecedente')"></span></th>
-        <th>expeYud: extracto&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('expeYud_extracto')"></span></th>
-        <th>expeYud: resolucion iniciador&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('expeYud_resolucion_iniciador')"></span></th>
-        <th>expeYud: iniciador: nombres&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('expeYud_ini_nombres')"></span></th>
-        <th>expeYud: iniciador: apellidos&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('expeYud_ini_apellidos')"></span></th>
-        <th>expeYud: lugar iniciador: descripcion&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('expeYud_li_descripcion')"></span></th>
-        <th>expeYud: tema: descripcion&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('expeYud_tem_descripcion')"></span></th>
+        <th>expeud: numero&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('expeud_numero')"></span></th>
+        <th>expeud: fecha origen&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('expeud_fecha_origen')"></span></th>
+        <th>expeud: fecha entrada&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('expeud_fecha_entrada')"></span></th>
+        <th>expeud: archivo numero&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('expeud_archivo_numero')"></span></th>
+        <th>expeud: archivo anio&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('expeud_archivo_anio')"></span></th>
+        <th>expeud: antecedente&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('expeud_antecedente')"></span></th>
+        <th>expeud: extracto&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('expeud_extracto')"></span></th>
+        <th>expeud: resolucion iniciador&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('expeud_resolucion_iniciador')"></span></th>
+        <th>expeud: iniciador: nombres&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('expeud_ini_nombres')"></span></th>
+        <th>expeud: iniciador: apellidos&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('expeud_ini_apellidos')"></span></th>
+        <th>expeud: lugar iniciador: descripcion&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('expeud_li_descripcion')"></span></th>
+        <th>expeud: tema: descripcion&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('expeud_tem_descripcion')"></span></th>
         <th>Opciones</th>
       </tr>
     </thead>
@@ -56,19 +55,22 @@
         <td><a href="#/gridLugar?ic=1&0if=id&0in=lugar&0it=lugar&0iv={{fields.exp_li_id}}">{{fields.exp_li_descripcion}}</a></td>
         <td><a href="#/gridTema?ic=1&0if=id&0in=tema&0it=tema&0iv={{fields.exp_tem_id}}">{{fields.exp_tem_descripcion}}</a></td>
         <td><a href="#/gridLugar?ic=1&0if=id&0in=lugar&0it=lugar&0iv={{fields.lug_id}}">{{fields.lug_descripcion}}</a></td>
-        <td><a href="#/gridExpediente?ic=1&0if=id&0in=expediente&0it=expediente&0iv={{fields.expeYud_id}}">{{fields.expeYud_numero}}</a></td>
-        <td><a href="#/gridExpediente?ic=1&0if=id&0in=expediente&0it=expediente&0iv={{fields.expeYud_id}}">{{fields.expeYud_fecha_origen}}</a></td>
-        <td><a href="#/gridExpediente?ic=1&0if=id&0in=expediente&0it=expediente&0iv={{fields.expeYud_id}}">{{fields.expeYud_fecha_entrada}}</a></td>
-        <td><a href="#/gridExpediente?ic=1&0if=id&0in=expediente&0it=expediente&0iv={{fields.expeYud_id}}">{{fields.expeYud_archivo_numero}}</a></td>
-        <td><a href="#/gridExpediente?ic=1&0if=id&0in=expediente&0it=expediente&0iv={{fields.expeYud_id}}">{{fields.expeYud_archivo_anio}}</a></td>
-        <td><a href="#/gridExpediente?ic=1&0if=id&0in=expediente&0it=expediente&0iv={{fields.expeYud_id}}">{{fields.expeYud_antecedente}}</a></td>
-        <td><a href="#/gridExpediente?ic=1&0if=id&0in=expediente&0it=expediente&0iv={{fields.expeYud_id}}">{{fields.expeYud_extracto}}</a></td>
-        <td><a href="#/gridExpediente?ic=1&0if=id&0in=expediente&0it=expediente&0iv={{fields.expeYud_id}}">{{fields.expeYud_resolucion_iniciador}}</a></td>
-        <td><a href="#/gridPersona?ic=1&0if=id&0in=persona&0it=persona&0iv={{fields.expeYud_ini_id}}">{{fields.expeYud_ini_nombres}}</a></td>
-        <td><a href="#/gridPersona?ic=1&0if=id&0in=persona&0it=persona&0iv={{fields.expeYud_ini_id}}">{{fields.expeYud_ini_apellidos}}</a></td>
-        <td><a href="#/gridLugar?ic=1&0if=id&0in=lugar&0it=lugar&0iv={{fields.expeYud_li_id}}">{{fields.expeYud_li_descripcion}}</a></td>
-        <td><a href="#/gridTema?ic=1&0if=id&0in=tema&0it=tema&0iv={{fields.expeYud_tem_id}}">{{fields.expeYud_tem_descripcion}}</a></td>
-        <td>          
+        <td><a href="#/gridExpediente?ic=1&0if=id&0in=expediente&0it=expediente&0iv={{fields.expeud_id}}">{{fields.expeud_numero}}</a></td>
+        <td><a href="#/gridExpediente?ic=1&0if=id&0in=expediente&0it=expediente&0iv={{fields.expeud_id}}">{{fields.expeud_fecha_origen}}</a></td>
+        <td><a href="#/gridExpediente?ic=1&0if=id&0in=expediente&0it=expediente&0iv={{fields.expeud_id}}">{{fields.expeud_fecha_entrada}}</a></td>
+        <td><a href="#/gridExpediente?ic=1&0if=id&0in=expediente&0it=expediente&0iv={{fields.expeud_id}}">{{fields.expeud_archivo_numero}}</a></td>
+        <td><a href="#/gridExpediente?ic=1&0if=id&0in=expediente&0it=expediente&0iv={{fields.expeud_id}}">{{fields.expeud_archivo_anio}}</a></td>
+        <td><a href="#/gridExpediente?ic=1&0if=id&0in=expediente&0it=expediente&0iv={{fields.expeud_id}}">{{fields.expeud_antecedente}}</a></td>
+        <td><a href="#/gridExpediente?ic=1&0if=id&0in=expediente&0it=expediente&0iv={{fields.expeud_id}}">{{fields.expeud_extracto}}</a></td>
+        <td><a href="#/gridExpediente?ic=1&0if=id&0in=expediente&0it=expediente&0iv={{fields.expeud_id}}">{{fields.expeud_resolucion_iniciador}}</a></td>
+        <td><a href="#/gridPersona?ic=1&0if=id&0in=persona&0it=persona&0iv={{fields.expeud_ini_id}}">{{fields.expeud_ini_nombres}}</a></td>
+        <td><a href="#/gridPersona?ic=1&0if=id&0in=persona&0it=persona&0iv={{fields.expeud_ini_id}}">{{fields.expeud_ini_apellidos}}</a></td>
+        <td><a href="#/gridLugar?ic=1&0if=id&0in=lugar&0it=lugar&0iv={{fields.expeud_li_id}}">{{fields.expeud_li_descripcion}}</a></td>
+        <td><a href="#/gridTema?ic=1&0if=id&0in=tema&0it=tema&0iv={{fields.expeud_tem_id}}">{{fields.expeud_tem_descripcion}}</a></td>
+        <td>
+          <a href="<?=PATH_HTTP?>index.php?go=htmlFormAdmin&t=destino&id={{fields.id}}"><span class="glyphicon glyphicon-pencil"></span></a>&nbsp;&nbsp;
+		  <a href="?go=delete&t=destino&pk={{fields.id}}" target="_blank"><span class="glyphicon glyphicon-remove"></span></a>&nbsp;&nbsp;
+          <a href="<?=PATH_HTTP?>index.php?go=htmlFormAdmin&t=expediente&ultimo_destino={{fields.id}}"><span class="glyphicon glyphicon-plus"></span>EXPE</a>&nbsp;&nbsp;
 		  <a href="#/gridExpediente?ic=1&0if=ultimo_destino&0in=ultimo_destino&0it=destino&0iv={{fields.id}}"><span class="glyphicon glyphicon-eye-open"></span>EXPE</a>&nbsp;&nbsp;
         </td>
 

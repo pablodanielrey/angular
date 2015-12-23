@@ -31,21 +31,16 @@
   <script src="/services/Login.js"></script>
   <script src="/systems/login/modules/logout.js"></script>
   
-  <script src="main/TableGrid.js"></script>
-  <script src="main/service/ServerAccess.js"></script>
+  <script src="main/angular/service/ServerAccess.js"></script>
 
-  <script src="controller/grid/destino/Destino.js"></script>
-  <script src="controller/grid/expediente/Expediente.js"></script>
-  <script src="controller/grid/lugar/Lugar.js"></script>
-  <script src="controller/grid/nota/Nota.js"></script>
-  <script src="controller/grid/participacion/Participacion.js"></script>
-  <script src="controller/grid/persona/Persona.js"></script>
-  <script src="controller/grid/tema/Tema.js"></script>
-
+  <script src="main/angular/service/Grid.js"></script>
+	
+  <script src="main/angular/controller/Grid.js"></script>
 
 </head>
 <body  class="container-fluid"   ng-app="mainApp" ng-controller="IndexCtrl">
   <nav ng-include="'html/menu/admin_menu.html'" class="navbar navbar-default"></nav>
+  <h3 ng-show="mainTitle" class="well">{{mainTitle}}</h3>
   
   <div ng-view></div>
   

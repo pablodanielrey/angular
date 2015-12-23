@@ -1,29 +1,20 @@
 
+/**
+ * Controlador principal, encargado de:
+ *   Administracion de alerts
+ *   Metodos de date picker
+ */
+app.controller("IndexCtrl", ["$scope", "$timeout", "$modal", function ($scope, $timeout, $modal) {
 
-app.controller('IndexCtrl',["$scope", "$timeout", "$modal", "$window", "Login", IndexCtrl]);
-
-function IndexCtrl($scope, $timeout, $modal, $window, Login) {
-
- $scope.setMainTitle = function(mainTitle){
+  $scope.alerts = [];
+  
+  
+  $scope.setMainTitle = function(mainTitle){
     $scope.mainTitle = mainTitle;
   }
   
+   
   
-  $scope.$on('$viewContentLoaded', function(event) {
-     $scope.initialize();
-  });
-
-  $scope.initialize =  function() {
-
-    if (!Login.isLogged()) {
-      $window.location.href = "/systems/login/index.html";
-    }
-  }
-  
-  
-  $scope.alerts = [];
-
-
   $scope.addAlert = function(newAlert) {
     
     for(var i = 0; i < $scope.alerts.length; i++){
@@ -54,9 +45,13 @@ function IndexCtrl($scope, $timeout, $modal, $window, Login) {
     
     
     $timeout(function() { 
-    
       modalInstance.close(newAlert);
     },5000);
   
   };
-}
+
+  
+      
+}]);
+
+

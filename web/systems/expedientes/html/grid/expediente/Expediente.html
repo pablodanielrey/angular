@@ -1,12 +1,11 @@
 		
-<div ng-controller="GridExpedienteCtrl">
+<div ng-controller="GridCtrl" ng-init="init('expediente', 'Ver Expediente')">
   <div ng-include="'main/html/search.html'"></div>
-  <div ng-include="'main/html/pagination.html'"></div>  
+  <div ng-include="'main/html/pagination.html'"></div>
   <div class="table-responsive" style="height:350px">
   <table class="table table-striped table-bordered table-hover">
     <thead>
       <tr>
-</div>
         <th><input type="checkbox"></th>
         <th>numero&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('numero')"></span></th>
         <th>fecha origen&nbsp;&nbsp;<span class="glyphicon glyphicon-sort pointer" ng-click="toggleOrderBy('fecha_origen')"></span></th>
@@ -44,9 +43,14 @@
         <td><a href="#/gridDestino?ic=1&0if=id&0in=destino&0it=destino&0iv={{fields.ud_id}}">{{fields.ud_fecha_entrada}}</a></td>
         <td><a href="#/gridDestino?ic=1&0if=id&0in=destino&0it=destino&0iv={{fields.ud_id}}">{{fields.ud_fecha_salida}}</a></td>
         <td><a href="#/gridLugar?ic=1&0if=id&0in=lugar&0it=lugar&0iv={{fields.ud_lug_id}}">{{fields.ud_lug_descripcion}}</a></td>
-        <td>          
+        <td>
+          <a href="<?=PATH_HTTP?>index.php?go=htmlFormAdmin&t=expediente&id={{fields.id}}"><span class="glyphicon glyphicon-pencil"></span></a>&nbsp;&nbsp;
+		  <a href="?go=delete&t=expediente&pk={{fields.id}}" target="_blank"><span class="glyphicon glyphicon-remove"></span></a>&nbsp;&nbsp;
+          <a href="<?=PATH_HTTP?>index.php?go=htmlFormAdmin&t=destino&expediente={{fields.id}}"><span class="glyphicon glyphicon-plus"></span>DEST</a>&nbsp;&nbsp;
 		  <a href="#/gridDestino?ic=1&0if=expediente&0in=expediente&0it=expediente&0iv={{fields.id}}"><span class="glyphicon glyphicon-eye-open"></span>DEST</a>&nbsp;&nbsp;
+          <a href="<?=PATH_HTTP?>index.php?go=htmlFormAdmin&t=expediente&agregado={{fields.id}}"><span class="glyphicon glyphicon-plus"></span>EXPE</a>&nbsp;&nbsp;
 		  <a href="#/gridExpediente?ic=1&0if=agregado&0in=agregado&0it=expediente&0iv={{fields.id}}"><span class="glyphicon glyphicon-eye-open"></span>EXPE</a>&nbsp;&nbsp;
+          <a href="<?=PATH_HTTP?>index.php?go=htmlFormAdmin&t=participacion&expediente={{fields.id}}"><span class="glyphicon glyphicon-plus"></span>PART</a>&nbsp;&nbsp;
 		  <a href="#/gridParticipacion?ic=1&0if=expediente&0in=expediente&0it=expediente&0iv={{fields.id}}"><span class="glyphicon glyphicon-eye-open"></span>PART</a>&nbsp;&nbsp;
         </td>
 

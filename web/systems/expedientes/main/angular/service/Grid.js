@@ -2,11 +2,15 @@
 /**
  * Servicio de controlador de grilla con busqueda simple, avanzada, indice y paginacion
  */
-app.service('TableGrid', ["$location", "$rootScope", "$http", "ServerAccess", function($location, $rootScope, $http, ServerAccess){
+app.service('Grid', ["$location", "$rootScope", "ServerAccess", function($location, $rootScope, ServerAccess){
 	
 	
-	this.initialize = function($scope, label){
+  
+  
+	this.initialize = function($scope, label, title){
 	  
+    $scope.setMainTitle(title);
+    
     /***** datos de la grilla *****/
     $scope.grid = {label: label, numRows: 0, data: 0};
     
@@ -24,6 +28,7 @@ app.service('TableGrid', ["$location", "$rootScope", "$http", "ServerAccess", fu
 
     this.initializeSearch($scope.search);
     this.getGridNumRows($scope, label);
+    console.log($scope)
 	};
 	
 	
