@@ -1,12 +1,33 @@
 
 angular
   .module('mainApp')
-  .controller('LoginCtrl',LoginCtrl);
+  .controller('LoginCtrl',LoginCtrl)
+  .directive('mooFocusExpression', function($timeout) {
+    return {
+        link: function(scope, element, attrs) {
+          scope.$watch(attrs.mooFocusExpression, function (value) {
+
+              if (attrs.mooFocusExpression) {
+                  if (scope.$eval(attrs.mooFocusExpression)) {
+                      $timeout(function () {
+                          element[0].focus();
+                      }, 100); //need some delay to work with ng-disabled
+                  }
+              }
+          });
+        }
+    };
+  });
+
 
 LoginCtrl.$inject = ['$rootScope','$scope', '$location','$window','Notifications','Login'];
 
 function LoginCtrl($rootScope, $scope, $location, $window, Notifications, Login) {
 
+  /* ---------------------------------------------------
+   * --------------------- VARIABLES -------------------
+   * ---------------------------------------------------
+   */
     var vm = this;
 
     $scope.model = {
@@ -15,37 +36,115 @@ function LoginCtrl($rootScope, $scope, $location, $window, Notifications, Login)
       openConnection: false
     }
 
+    const classNameViewUser = 'screenUser';
+    const classNameViewPassword = 'screenPassword';
+
+    const classNameDisconnected = 'verServerDesconectado';
+    const classNameConnected = 'verServerConectado';
+
     $scope.view = {
-      classConnection: 'verServerDesconectado'
+      focus: 'inputUser',
+      classConnection: classNameDisconnected, // classNameDisconnected classNameConnected
+      classScreen: classNameViewUser // classNameViewUser classNameViewPassword
     }
 
-    $scope.initialize = function() {
 
+    /* ---------------------------------------------------
+     * ---------------- INICIALIZACION -------------------
+     * ---------------------------------------------------
+     */
+
+    $scope.initialize = initialize;
+
+    function initialize() {
+      $scope.view.classConnection = classNameConnected;
+      $scope.view.classScreen = classNameViewUser;
+      $scope.view.focus = 'inputUser';
     }
+
+
+    /* ---------------------------------------------------
+     * ----------------------- EVENTOS -------------------
+     * ---------------------------------------------------
+     */
 
     $scope.$on('$viewContentLoaded', function(event) {
       $scope.initialize();
     });
 
     $scope.$on('wampOpenEvent', function(event) {
-      $scope.model.openConnection = true;
-      $scope.view.classConnection = 'verServerConectado';
+      $scope.connectServer();
     });
 
     $scope.$on('wampCloseEvent', function(event) {
-      $scope.model.openConnection = false;
-      $scope.view.classConnection = 'verServerDesconectado';
+      $scope.disconnectServer();
     });
 
-		$scope.hasToLogin = function() {
-			return (!Login.isLogged());
-		}
+    /* ---------------------------------------------------
+     * ---------------------- ACCIONES -------------------
+     * ---------------------------------------------------
+     */
+     $scope.connectServer = connectServer;
+     $scope.disconnectServer = disconnectServer;
+     $scope.sendUsername = sendUsername;
+     $scope.sendPassword = sendPassword;
 
+     function connectServer() {
+       $scope.model.openConnection = true;
+       $scope.changeClassConnection(classNameConnected);
+     }
+
+     function disconnectServer() {
+       $scope.model.openConnection = false;
+       $scope.changeClassConnection(classNameDisconnected);
+     }
+
+     function sendUsername() {
+       if ($scope.model.username == '31381082') {
+         $scope.viewPassword();
+         $scope.view.focus = 'inputPassword';
+       }
+     }
+
+     function sendPassword() {
+       console.log("Clave:" + $scope.model.password);
+       $scope.viewUser();
+       $scope.view.focus = 'inputUser';
+     }
+
+     /* ---------------------------------------------------
+      * ----------------- MANEJO VISUAL -------------------
+      * ---------------------------------------------------
+      */
+
+      $scope.changeClassConnection = changeClassConnection;
+
+      $scope.viewUser = viewUser;
+      $scope.viewPassword = viewPassword;
+
+      function changeClassConnection(className) {
+        $scope.view.classConnection = className;
+      }
+
+      function viewPassword() {
+        $scope.view.classScreen = classNameViewPassword;
+      }
+
+      function viewUser() {
+        $scope.view.classScreen = classNameViewUser;
+      }
+
+     /* ---------------------------------------------------
+      * ------------------ CODIGO VIEJO -------------------
+      * ---------------------------------------------------
+      */
+
+    /*
 		$scope.login = function() {
-			/*
-				bug de angular.
-				http://stackoverflow.com/questions/14965968/angularjs-browser-autofill-workaround-by-using-a-directive
-			*/
+
+				// bug de angular.
+				// http://stackoverflow.com/questions/14965968/angularjs-browser-autofill-workaround-by-using-a-directive
+
 			$scope.$broadcast("autofill:update");
 
       Login.login($scope.model.username, $scope.model.password,
@@ -57,6 +156,6 @@ function LoginCtrl($rootScope, $scope, $location, $window, Notifications, Login)
             Notifications.message(err);
         });
 
-		};
+		};*/
 
 };
