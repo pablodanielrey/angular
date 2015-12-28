@@ -39,7 +39,6 @@ class WampMain(ApplicationSession):
         email = sys.argv[2]
 
         user = yield from self.call('users.findByDni', dni)
-        print(user["id"])
         
         userEmail = {
           'user_id': user["id"],
@@ -51,9 +50,8 @@ class WampMain(ApplicationSession):
 
         yield from self.call('users.mails.sendEmailConfirmation', emailId)
 
-        print("***** Email alternativo agregado: " + user["name"] + " " + user["lastname"] + " " + email + " (" + emailId + ")")
+        sys.exit("***** Email alternativo agregado: " + user["name"] + " " + user["lastname"] + " " + email + " (" + emailId + ")")
         
-        sys.exit()
 
 
 if __name__ == '__main__':
