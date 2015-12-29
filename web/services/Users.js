@@ -202,8 +202,20 @@ function Users($rootScope, $wamp, Session, Utils, Cache) {
     return $wamp.call('users.mails.persistMail', [email]);
   }
 
-  this.findByDni = function(dni) {
-    return $wamp.call('users.findByDni', [dni]);
+  // esto lo modifique solo para obtener el usuario por dni, no se como se deberia manejar con la cache
+  this.findByDni = function(dni,callbackOk,callbackError) {
+    $wamp.call('users.findByDni', [dni])
+    .then(function(user) {
+      if (user != null) {
+        callbackOk(user);
+
+      } else {
+        callbackError('Error');
+
+      }
+    }, function(err) {
+      callbackError(err);
+    });
   }
 
   this.findById = function(id) {

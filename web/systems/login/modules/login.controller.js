@@ -20,9 +20,9 @@ angular
   });
 
 
-LoginCtrl.$inject = ['$rootScope','$scope', '$location','$window','Notifications','Login'];
+LoginCtrl.$inject = ['$scope','$window','Notifications','Login','Users'];
 
-function LoginCtrl($rootScope, $scope, $location, $window, Notifications, Login) {
+function LoginCtrl($scope, $window, Notifications, Login, Users) {
 
   /* ---------------------------------------------------
    * --------------------- VARIABLES -------------------
@@ -100,10 +100,17 @@ function LoginCtrl($rootScope, $scope, $location, $window, Notifications, Login)
      }
 
      function sendUsername() {
-       if ($scope.model.username == '31381082') {
-         $scope.viewPassword();
-         $scope.view.focus = 'inputPassword';
-       }
+       Users.findByDni($scope.model.username,
+         function(user) {
+
+           $scope.viewPassword();
+           $scope.view.focus = 'inputPassword';
+         },
+         function(error) {
+           console.error("Usuario no encontrado");
+         }
+       );
+
      }
 
      function sendPassword() {
