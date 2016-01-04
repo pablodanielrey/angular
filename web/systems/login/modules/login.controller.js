@@ -114,9 +114,15 @@ function LoginCtrl($scope, $window, Notifications, Login, Users) {
      }
 
      function sendPassword() {
-       console.log("Clave:" + $scope.model.password);
-       $scope.viewUser();
-       $scope.view.focus = 'inputUser';
+       Login.login($scope.model.username,$scope.model.password,
+         function(data) {
+           $window.location.href = "/index.html";
+         },
+         function(error) {
+           $scope.viewUser();
+           $scope.view.focus = 'inputUser';
+         }
+       );
      }
 
      /* ---------------------------------------------------
