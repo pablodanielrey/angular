@@ -1,0 +1,112 @@
+.search {
+  height:100%;
+  width:100%;
+  position:absolute;
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  margin:0px;
+  background-color: #eee;
+}
+
+/************************************************
+********* INICIO PANTALLA RESULTADOS ************
+************************************************/
+
+.search .searchContainer{
+  background-color:white;
+  -webkit-box-shadow: 1px 1px 5px #5c5f69;
+  -moz-box-shadow: 5px 5px 5px #5c5f69;
+  border-radius:2px 2px 0px 2px;
+  -webkit-border-radius:2px 2px 0px 2px;
+  -moz-border-radius:2px 2px 0px 2px;
+  width: 79%;
+  height: 79%;
+  margin: 20px 20px 0px 20px;
+  overflow-x: scroll;
+}
+
+.search .fileTitles {
+  background-color: #5C5F69;
+  color:white;
+  cursor: pointer;
+}
+
+.search .Select, .dates {
+  width: 25px;
+  margin-left: 1px;
+  padding: 2px;
+}
+
+.search .name, .city, .city2 {
+  width: 200px;
+  margin-left: 1px;
+  padding: 2px;
+}
+
+.search .age,  .travel,  .cousers, .average, .average2   {
+  width: 50px ;
+  margin-left: 1px;
+  padding: 2px;
+}
+
+.search .portugues, .english, .other, .sex, .dni {
+  width: 80px ;
+  margin-left: 1px;
+  padding: 2px;
+}
+
+.search .program {
+  width: 150px ;
+  margin-left: 1px;
+  padding: 2px;
+}
+
+.search .selectProgram {
+  width: 150px ;
+  margin-left: 1px;
+  background-color: #5C5F69;
+  padding: 2px;
+  font-size: 14px;
+  border: none;
+  color: white;
+}
+
+.search .fileResults {
+  color:#28292D;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.search .fileResults:hover {
+  background-color: #77797f;
+  color:white;
+}
+
+.search .searchResults {
+}
+
+.search .searchResults table:nth-child(even) { background: #EEE }
+.search .searchResults table:nth-child(odd) { background: #DBE2E5}
+
+.search .btnSend {
+  margin: 20px;
+  padding: 10px;
+  width: 200px;
+  font-size: 14px;
+  background-color: #DBE2E5;
+  cursor: pointer;
+  border: none;
+  -webkit-box-shadow: 1px 1px 5px #5c5f69;
+  -moz-box-shadow: 5px 5px 5px #5c5f69;
+  border-radius:2px 2px 0px 2px;
+  -webkit-border-radius:2px 2px 0px 2px;
+  -moz-border-radius:2px 2px 0px 2px;
+}
+
+.search .btnSend:hover {
+  background-color: #275276;
+  color:white;
+}
+
+/************************************************
+*********** FIN PANTALLA RESULTADOS *************
+************************************************/

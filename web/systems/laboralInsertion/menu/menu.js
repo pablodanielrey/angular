@@ -21,6 +21,10 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Notifications'
       $location.path('/inscripcion');
     }
 
+    $scope.search = function() {
+      $location.path('/busqueda');
+    }
+
   	$scope.exit = function() {
       var sid = '';
       Login.logout(sid, function(ok) {
@@ -37,9 +41,10 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Notifications'
 
     $scope.initialize = function() {
       $scope.model.items = [];
-      $scope.model.items.push({ n:1, label:'Inscripción', img:'fa fa-lock', function: $scope.upload });
+      $scope.model.items.push({ n:1, label:'Inscripción', img:'fa fa-ticket', function: $scope.upload });
+      $scope.model.items.push({ n:1, label:'Busqueda', img:'fa fa-search', function: $scope.search });
       //$scope.model.items.push({ n:1, label:'Descargar', img:'fa fa-lock', function: $scope.download });
-      $scope.model.items.push({ n:1, label:'Salir', img:'fa fa-lock', function: $scope.exit });
+      $scope.model.items.push({ n:1, label:'Salir', img:'fa fa-sign-out', function: $scope.exit });
 
     }
 
