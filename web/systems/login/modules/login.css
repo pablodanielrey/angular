@@ -231,13 +231,22 @@
 .login.screenUser .contentBtnPassword {
     display: none;
 }
+.login.screenUser .textPasswordError {
+  display: none;
+}
 
 .login.screenPassword .contentTextUser,
 .login.screenPassword .contentInputUser,
 .login.screenPassword .contentBtnNext {
     display: none;
 }
+.login.screenPassword .textPasswordError {
+  display: none;
+}
 
+.login.screenPasswordError .textPasswordError {
+  
+}
 /******************** MEDIA QUERIS ***************************/
 
 @media (max-width: 720px){

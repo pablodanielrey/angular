@@ -37,14 +37,16 @@ function LoginCtrl($scope, $window, Notifications, Login, Users) {
     }
 
     const classNameViewUser = 'screenUser';
+    const classNameViewUserError = 'screenUserError';
     const classNameViewPassword = 'screenPassword';
+    const classNameViewPasswordError = 'screenPasswordError';
 
     const classNameDisconnected = 'verServerDesconectado';
     const classNameConnected = 'verServerConectado';
 
     $scope.view = {
       focus: 'inputUser',
-      classConnection: classNameDisconnected, // classNameDisconnected classNameConnected
+      classConnection: classNameConnected, // classNameDisconnected classNameConnected
       classScreen: classNameViewUser // classNameViewUser classNameViewPassword
     }
 
@@ -107,7 +109,7 @@ function LoginCtrl($scope, $window, Notifications, Login, Users) {
            $scope.view.focus = 'inputPassword';
          },
          function(error) {
-           console.error("Usuario no encontrado");
+           $scope.viewUserError();
          }
        );
 
@@ -119,8 +121,7 @@ function LoginCtrl($scope, $window, Notifications, Login, Users) {
            $window.location.href = "/index.html";
          },
          function(error) {
-           $scope.viewUser();
-           $scope.view.focus = 'inputUser';
+           $scope.viewPasswordError();
          }
        );
      }
@@ -133,7 +134,9 @@ function LoginCtrl($scope, $window, Notifications, Login, Users) {
       $scope.changeClassConnection = changeClassConnection;
 
       $scope.viewUser = viewUser;
+      $scope.viewUserError = viewUserError;
       $scope.viewPassword = viewPassword;
+      $scope.viewPasswordError = viewPasswordError;
 
       function changeClassConnection(className) {
         $scope.view.classConnection = className;
@@ -141,8 +144,16 @@ function LoginCtrl($scope, $window, Notifications, Login, Users) {
 
       function viewPassword() {
         $scope.view.classScreen = classNameViewPassword;
+      }      
+
+      function viewPasswordError() {
+        $scope.view.classScreen = classNameViewPasswordError;
       }
 
+      function viewUserError() {
+        $scope.view.classScreen = classNameViewUserError;
+      }
+      
       function viewUser() {
         $scope.view.classScreen = classNameViewUser;
       }
