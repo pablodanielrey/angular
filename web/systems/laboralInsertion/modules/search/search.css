@@ -11,6 +11,19 @@
 ********* INICIO PANTALLA RESULTADOS ************
 ************************************************/
 
+.search .header {
+  width: 82%;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+}
+
 .search .searchContainer{
   background-color:white;
   -webkit-box-shadow: 1px 1px 5px #5c5f69;
@@ -20,7 +33,7 @@
   -moz-border-radius:2px 2px 0px 2px;
   width: 79%;
   height: 79%;
-  margin: 20px 20px 0px 20px;
+  margin: 0px 20px 0px 20px;
   overflow-x: scroll;
 }
 
@@ -36,7 +49,7 @@
   padding: 2px;
 }
 
-.search .name, .city, .city2 {
+.search .name, .city, .city2, .mail, .career {
   width: 200px;
   margin-left: 1px;
   padding: 2px;
@@ -48,7 +61,7 @@
   padding: 2px;
 }
 
-.search .portugues, .english, .other, .sex, .dni {
+.search .portugues, .english, .other, .sex, .dni, .registration {
   width: 80px ;
   margin-left: 1px;
   padding: 2px;
@@ -92,6 +105,22 @@
   padding: 10px;
   width: 200px;
   font-size: 14px;
+  background-color: #275276;
+  cursor: pointer;
+  border: none;
+  color: white;
+  -webkit-box-shadow: 1px 1px 5px #5c5f69;
+  -moz-box-shadow: 5px 5px 5px #5c5f69;
+  border-radius:2px 2px 0px 2px;
+  -webkit-border-radius:2px 2px 0px 2px;
+  -moz-border-radius:2px 2px 0px 2px;
+}
+
+.search .btnFilters {
+  margin: 20px;
+  padding: 10px;
+  width: 100px;
+  font-size: 14px;
   background-color: #DBE2E5;
   cursor: pointer;
   border: none;
@@ -102,10 +131,30 @@
   -moz-border-radius:2px 2px 0px 2px;
 }
 
-.search .btnSend:hover {
+.search .btnFilters:hover {
   background-color: #275276;
   color:white;
 }
+
+.search .btnSend:hover {
+  background-color: #0066A6;
+  color:white;
+}
+
+.search .btnUserSelect {
+  margin: 20px;
+  padding: 10px;
+  width: 200px;
+  font-size: 14px;
+  background-color: #DBE2E5;
+  border: none;
+  -webkit-box-shadow: 1px 1px 5px #5c5f69;
+  -moz-box-shadow: 5px 5px 5px #5c5f69;
+  border-radius:2px 2px 0px 2px;
+  -webkit-border-radius:2px 2px 0px 2px;
+  -moz-border-radius:2px 2px 0px 2px;
+}
+
 
 /************************************************
 *********** FIN PANTALLA RESULTADOS *************
@@ -121,9 +170,13 @@
   width: 100%;
   height: 100%;
   top:-100%;
+
 }
 
-.search.screenBussines .business {
+.search.screenBussines.screenSelectBusiness .business,
+.search.screenBussines.screenSendBusiness .business,
+.search.screenBussines.screenSending .business,
+.search.screenBussines.screenSent .business {
   position: absolute ;
   background-color: rgba(0, 0, 0, 0.9);;
   width: 100%;
@@ -131,7 +184,7 @@
   top:0 !important;
 }
 
-.search .contentBusines {
+.search .contentBusines, .sendBusines, .sending, .sent {
   display: flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
@@ -148,17 +201,78 @@
   transition: all 0.4s ease-in-out;
 }
 
-.search.screenBussines .contentBusines {
+.search.screenBussines .contentBusines, .sendBusines, .sending, .sent {
   transform: translate3d(0,0,0);
   transition: all 0.4s ease-in-out;
 }
 
-.search .businessList {
+.search .businessList, .contentSendBusines, .contentSending, .contentSent {
   width: 400px;
   height: 300px;
   background: #EEE;
   border-radius: 3px;
+  overflow-y: scroll;
+  padding: 10px;
 }
+
+.search .infoBussines {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  margin: 10px;
+  background-color: white;
+  padding: 5px;
+  -webkit-box-shadow: 1px 1px 5px #5c5f69;
+  -moz-box-shadow: 5px 5px 5px #5c5f69;
+  border-radius:2px 2px 0px 2px;
+  -webkit-border-radius:2px 2px 0px 2px;
+  -moz-border-radius:2px 2px 0px 2px;
+  cursor: pointer;
+}
+
+.search .textBussines {
+  margin-left: 20px;
+
+}
+
+/*Cuando esta la pantalla de seleccion de empresas:
+la pantalla sendBusines, sending y sent no se muentran*/
+.search.screenBussines.screenSelectBusiness .sendBusines,
+.search.screenBussines.screenSelectBusiness .sending,
+.search.screenBussines.screenSelectBusiness .sent {
+  display: none;
+}
+
+
+/*Cuando esta la pantalla lista para enviar a la empresa elejida,
+la pantalla contentBusines, sendBusines y sent no se muentran*/
+.search.screenBussines.screenSendBusiness .contentBusines,
+.search.screenBussines.screenSendBusiness .sending.
+.search.screenBussines.screenSendBusiness .sent {
+  display: none;
+}
+
+
+/*Cuando esta la pantalla enviando,
+la pantalla contentBusines, sendBusines y sent no se muentran*/
+.search.screenBussines.screenSending .contentBusines,
+.search.screenBussines.screenSending .sendBusines,
+.search.screenBussines.screenSending .sent {
+  display: none;
+}
+
+/*Cuando esta la pantalla enviado,
+la pantalla contentBusines, sendBusines y sending no se muentran*/
+.search.screenBussines.screenSent .contentBusines,
+.search.screenBussines.screenSent .sendBusines,
+.search.screenBussines.screenSent .sending {
+  display: none;
+}
+
+
 
 
 
