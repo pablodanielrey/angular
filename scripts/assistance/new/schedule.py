@@ -1,6 +1,7 @@
 import psycopg2
 import logging
 import datetime
+import json
 
 logging.getLogger().setLevel(logging.INFO)
 
@@ -11,12 +12,14 @@ def getConnection():
 
 
 class ScheduleModel:
+    ''' modelo del sistema que encapsula el manejo de schedules '''
 
     def findSchedulesFor(userId, start, end):
         ''' obtiene los schedules del usuario entre determinadas fechas '''
 
 
 class WorkedHours:
+    ''' franja de horarios '''
 
     def __init__(self, start, end):
         self.start = start
@@ -24,14 +27,17 @@ class WorkedHours:
 
 
 class ScheduleData:
-    ''' se mantiene en ram y es autogenerado '''
+    ''' schedule que representa un período laboral y sus horarios dentro de ese período '''
+    __serializable__ = True
 
     def __init__(self):
+        self.ids = []
         self.dates = []
         self.workedHours = []
 
 
 class Schedule:
+    ''' schedule como esta representado en la base de datos. '''
 
     def __init__(self):
         self.id = ''
@@ -57,9 +63,11 @@ class Schedule:
             date = date + datetime.timedelta(days=1)
 
         for s in schedules:
+            assert s.id is not None
             assert s.date is not None
             assert s.start is not None
             assert s.end is not None
+            sd.ids.append(s.id)
             start = date + datetime.timedelta(seconds=s.start)
             end = date + datetime.timedelta(seconds=s.end)
             w = WorkedHours(start, end)
@@ -137,6 +145,8 @@ class Schedule:
 
 if __name__ == '__main__':
 
+    from serializer import Serializer
+
     con = getConnection()
     s = Schedule()
 
@@ -149,6 +159,11 @@ if __name__ == '__main__':
         scheds = s._findAllBetween(con, uid, datetime.datetime(2012, 12, 1), datetime.datetime(2016, 12, 1))
         logging.info(scheds)
         logging.info(len(scheds))
+
+        ss = Serializer.dumps(scheds)
+        ss2 = Serializer.loads(ss)
+
+        """
         for s2 in scheds:
             logging.info('dates: {}'.format(s2.dates))
             for wh in s2.workedHours:
@@ -157,3 +172,4 @@ if __name__ == '__main__':
             if len(s2.workedHours) > 1:
                 logging.info('parando')
                 break
+        """
