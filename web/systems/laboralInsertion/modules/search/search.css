@@ -43,7 +43,7 @@
   cursor: pointer;
 }
 
-.search .Select, .dates {
+.search .Select, .dates, .user {
   width: 25px;
   margin-left: 1px;
   padding: 2px;
@@ -279,3 +279,13 @@ la pantalla contentBusines, sendBusines y sending no se muentran*/
 /************************************************
 ************ FIN PANTALLA EMPRESAS **************
 ************************************************/
+
+
+.search .filters {
+  display: none;
+  height:100%;
+  width:100%;
+  position:absolute;
+  background-color: #eee;
+  top:0;
+}
