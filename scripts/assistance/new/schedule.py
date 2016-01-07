@@ -47,6 +47,7 @@ class Schedule:
         self.isDayOfYear = False
 
     def _fromSchedule(self, date, schedules):
+        ''' retorna un scheduleData a partir de una lista de schedules que representan el mismo período laboral con horario cortado '''
         sd = ScheduleData()
 
         ''' calculamos las fechas para las cuales vale este schedule '''
@@ -67,6 +68,7 @@ class Schedule:
         return sd
 
     def _fromMap(map):
+        ''' retorna un Schedule a partir del mapa retornado de la consulta a la base '''
         s = Schedule()
         s.date = datetime.datetime.combine(map[0], datetime.time())
         s.start = map[1]
@@ -78,7 +80,7 @@ class Schedule:
         return s
 
     def _findAllBetween(self, con, userId, start, end):
-
+        ''' retorna todos los ScheduleData que representan los períodos laborales entre start (inclusive) y end (inclusive) '''
         cur = con.cursor()
         try:
 
@@ -95,6 +97,7 @@ class Schedule:
             logging.info(specific)
 
             if len(specific) > 0:
+                ''' se calculan los horarios específicos '''
                 while len(specific) > 0:
                     sdate = specific[0].date
                     specificDates.append(sdate)
@@ -104,10 +107,11 @@ class Schedule:
                     scheduleDatas.append(scheduleData)
 
             if len(wheekly) > 0:
+                ''' se calculan los horarios semanales '''
                 actual = start
                 while actual <= end:
-                    ''' calculo los scheduleData para '''
                     if actual in specificDates:
+                        ''' si ya es una fecha calculada especificamente se toma esa como primaria y no se tiene en cuenta el horario semanal '''
                         actual = actual + datetime.timedelta(days=1)
                         continue
 
