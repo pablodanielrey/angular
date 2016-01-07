@@ -2,8 +2,8 @@ import psycopg2
 import logging
 import datetime
 
-
 logging.getLogger().setLevel(logging.INFO)
+
 
 def getConnection():
     con = psycopg2.connect(host='163.10.17.80', database='dcsys', user='dcsys', password='dcsys')
@@ -14,6 +14,7 @@ class ScheduleModel:
 
     def findSchedulesFor(userId, start, end):
         ''' obtiene los schedules del usuario entre determinadas fechas '''
+
 
 class WorkedHours:
 
@@ -28,7 +29,6 @@ class ScheduleData:
     def __init__(self):
         self.dates = []
         self.workedHours = []
-
 
 
 class Schedule:
@@ -61,7 +61,7 @@ class Schedule:
             assert s.end is not None
             start = date + datetime.timedelta(seconds=s.start)
             end = date + datetime.timedelta(seconds=s.end)
-            w = WorkedHours(start,end)
+            w = WorkedHours(start, end)
             sd.workedHours.append(w)
 
         return sd
@@ -77,7 +77,6 @@ class Schedule:
         s.id = map[6]
         return s
 
-
     def _findAllBetween(self, con, userId, start, end):
 
         cur = con.cursor()
@@ -88,10 +87,10 @@ class Schedule:
 
             cur.execute("select sdate, sstart, send, isDayOfWeek, isDayOfMonth, isDayOfYear, id from assistance.schedule where sdate <= %s and user_id = %s order by sdate desc", (end, userId))
             schedulesCur = cur.fetchall()
-            schedules = [ Schedule._fromMap(s) for s in schedulesCur ]
+            schedules = [Schedule._fromMap(s) for s in schedulesCur]
 
-            specific = [ s for s in schedules if not s.isDayOfMonth and not s.isDayOfWeek and not s.isDayOfYear and s.date >= start ]
-            wheekly = [ s for s in schedules if s.isDayOfWeek ]
+            specific = [s for s in schedules if not s.isDayOfMonth and not s.isDayOfWeek and not s.isDayOfYear and s.date >= start]
+            wheekly = [s for s in schedules if s.isDayOfWeek]
 
             logging.info(specific)
 
@@ -99,8 +98,8 @@ class Schedule:
                 while len(specific) > 0:
                     sdate = specific[0].date
                     specificDates.append(sdate)
-                    sameDay = [ s for s in specific if s.date == sdate ]
-                    specific = [ s for s in specific if s not in sameDay ]
+                    sameDay = [s for s in specific if s.date == sdate]
+                    specific = [s for s in specific if s not in sameDay]
                     scheduleData = self._fromSchedule(sdate, sameDay)
                     scheduleDatas.append(scheduleData)
 
@@ -113,13 +112,13 @@ class Schedule:
                         continue
 
                     wd = actual.weekday()
-                    daySchedules = [ s for s in wheekly if s.date.weekday() == wd and s.date <= actual ]
+                    daySchedules = [s for s in wheekly if s.date.weekday() == wd and s.date <= actual]
                     if len(daySchedules) <= 0:
                         actual = actual + datetime.timedelta(days=1)
                         continue
 
                     assert len(daySchedules) > 0
-                    lastDaySchedules = [ s for s in daySchedules if s.date == daySchedules[0].date ]
+                    lastDaySchedules = [s for s in daySchedules if s.date == daySchedules[0].date]
                     scheduleData = self._fromSchedule(actual, lastDaySchedules)
                     scheduleDatas.append(scheduleData)
                     actual = scheduleData.dates[-1] + datetime.timedelta(days=1)
@@ -136,10 +135,21 @@ if __name__ == '__main__':
 
     con = getConnection()
     s = Schedule()
-    scheds = s._findAllBetween(con, '35f7a8a6-d844-4d6f-b60b-aab810610809', datetime.datetime(2012,12,1), datetime.datetime(2016,12,1))
-    logging.info(scheds)
-    logging.info(len(scheds))
-    for s in scheds:
-        logging.info('dates: {}'.format(s.dates))
-        for wh in s.workedHours:
-            logging.info('wh {} -> {}'.format(wh.start, wh.end))
+
+    cur = con.cursor()
+    cur.execute('select distinct user_id from assistance.schedule')
+    users = cur.fetchall()
+    for u in users:
+        uid = u[0]
+        logging.info('\n----------{}-----------\n'.format(uid))
+        scheds = s._findAllBetween(con, uid, datetime.datetime(2012, 12, 1), datetime.datetime(2016, 12, 1))
+        logging.info(scheds)
+        logging.info(len(scheds))
+        for s2 in scheds:
+            logging.info('dates: {}'.format(s2.dates))
+            for wh in s2.workedHours:
+                logging.info('wh {} -> {}'.format(wh.start, wh.end))
+            logging.info('\n')
+            if len(s2.workedHours) > 1:
+                logging.info('parando')
+                break
