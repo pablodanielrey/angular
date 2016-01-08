@@ -1,8 +1,14 @@
+# -*- coding: utf-8 -*-
+'''
+    Implementa todo el codigo relacionado al modelo y las entidades de los schedules
+'''
 import psycopg2
 from psycopg2 import pool
 import logging
 import datetime
 import json
+import redis
+import uuid
 
 logging.getLogger().setLevel(logging.INFO)
 
@@ -21,13 +27,26 @@ class ScheduleModel:
     @staticmethod
     def findAllBetween(userId, start, end):
         ''' obtiene los schedules del usuario entre determinadas fechas '''
-        con = getConnection()
+        r = redis.StrictRedis(host='163.10.17.21', port=6379)
         try:
-            scheds = Schedule.findAllBetween(con, userId, start, end)
-            logging.info(scheds)
-        finally:
-            closeConnection(con)
+            logging.info(r.keys())
 
+            """
+            con = getConnection()
+            try:
+                scheds = Schedule.findAllBetween(con, userId, start, end)
+                logging.info(scheds)
+                for s in scheds:
+                    pid = s._getPrivateId()
+                    r.set(pid, Serializer.dumps(s))
+                    for sid in s._getIds():
+                        r.set('{}'.format(sid), pid)
+
+            finally:
+                closeConnection(con)
+            """
+        finally:
+            r.close()
 
 class WorkedHours:
     ''' franja de horarios '''
@@ -41,9 +60,16 @@ class ScheduleData:
     ''' schedule que representa un período laboral y sus horarios dentro de ese período '''
 
     def __init__(self):
+        self.privateId = str(uuid.uuid4())
         self.ids = []
         self.dates = []
         self.workedHours = []
+
+    def _getPrivateId(self):
+        return self.privateId
+
+    def _getIds(self):
+        return [d.timestamp() for d in self.dates]
 
 
 class Schedule:
@@ -157,6 +183,9 @@ class Schedule:
 
 
 if __name__ == '__main__':
+
+    print(Schedule.__doc__)
+
 
     from serializer import Serializer
 
