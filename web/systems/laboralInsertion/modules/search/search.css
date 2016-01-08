@@ -116,6 +116,22 @@
   -moz-border-radius:2px 2px 0px 2px;
 }
 
+.search .btnSend2 {
+  margin: 10px;
+  padding: 10px;
+  width: 200px;
+  font-size: 14px;
+  background-color: #275276;
+  cursor: pointer;
+  border: none;
+  color: white;
+  -webkit-box-shadow: 1px 1px 5px #5c5f69;
+  -moz-box-shadow: 5px 5px 5px #5c5f69;
+  border-radius:2px 2px 0px 2px;
+  -webkit-border-radius:2px 2px 0px 2px;
+  -moz-border-radius:2px 2px 0px 2px;
+}
+
 .search .btnFilters {
   margin: 20px;
   padding: 10px;
@@ -137,6 +153,11 @@
 }
 
 .search .btnSend:hover {
+  background-color: #0066A6;
+  color:white;
+}
+
+.search .btnSend2:hover {
   background-color: #0066A6;
   color:white;
 }
@@ -191,14 +212,16 @@
   align-items: center;
   -webkit-align-items:center; /* Safari */
   -moz-align-items:center; /* mozilla */
-  justify-content: center;
+  /*justify-content: center;
   -webkit-justify-content: center;
-  -moz-justify-content: center;
+  -moz-justify-content: center;*/
   position: absolute;
   height: 100%;
   width: 100%;
   transform: translate3d(0,-100%,0);
   transition: all 0.4s ease-in-out;
+  margin-left: 250px;
+
 }
 
 .search.screenBussines .contentBusines, .sendBusines, .sending, .sent {
@@ -211,8 +234,53 @@
   height: 300px;
   background: #EEE;
   border-radius: 3px;
-  overflow-y: scroll;
+  /*overflow-y: scroll;*/
   padding: 10px;
+}
+
+.contentSending {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  color:#707173;
+}
+
+.search .contentBusinesList {
+  overflow-y: scroll;
+  height: 260px;
+}
+
+.search .textTitlesBusines {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  background-color: #dbe2e5;
+  padding: 10px;
+}
+
+.search .btnBack {
+  padding: 5px;
+  background-color: #28292D;
+  border: none;
+  border-radius: 3px;
+  color: white;
+  cursor: pointer;
+}
+
+.search .btnBack:hover {
+  background-color: #E43E46;
 }
 
 .search .infoBussines {
@@ -233,9 +301,47 @@
   cursor: pointer;
 }
 
+.search .infoBussines:hover {
+  -webkit-box-shadow: 1px 1px 10px #28292D;
+  -moz-box-shadow: 5px 5px 5px #28292D;
+
+}
+
+.search .infoBussines2 {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  margin: 10px;
+  background-color: white;
+  padding: 5px;
+  -webkit-box-shadow: 1px 1px 5px #5c5f69;
+  -moz-box-shadow: 5px 5px 5px #5c5f69;
+  border-radius:2px 2px 0px 2px;
+  -webkit-border-radius:2px 2px 0px 2px;
+  -moz-border-radius:2px 2px 0px 2px;
+
+}
+
 .search .textBussines {
   margin-left: 20px;
 
+}
+
+.search .contentMail {
+  margin-top: 20px;
+  padding: 10px;
+}
+
+.search .listMail {
+  background-color: white;
+  overflow-y: scroll;
+  height: 150px;
+  margin-top: 10px;
+  padding: 5px;
+  font-size: 12px;
 }
 
 /*Cuando esta la pantalla de seleccion de empresas:
@@ -250,7 +356,7 @@ la pantalla sendBusines, sending y sent no se muentran*/
 /*Cuando esta la pantalla lista para enviar a la empresa elejida,
 la pantalla contentBusines, sendBusines y sent no se muentran*/
 .search.screenBussines.screenSendBusiness .contentBusines,
-.search.screenBussines.screenSendBusiness .sending.
+.search.screenBussines.screenSendBusiness .sending,
 .search.screenBussines.screenSendBusiness .sent {
   display: none;
 }
@@ -281,11 +387,55 @@ la pantalla contentBusines, sendBusines y sending no se muentran*/
 ************************************************/
 
 
-.search .filters {
-  display: none;
-  height:100%;
-  width:100%;
-  position:absolute;
-  background-color: #eee;
-  top:0;
+/************************************************
+********** INICIO PANTALLA FILTROS *************
+************************************************/
+
+
+.search.screenFilters .filters {
+  position: absolute ;
+  background-color: rgba(0, 0, 0, 0.9);;
+  width: 100%;
+  height: 100%;
+  top:0 !important;
+  transform: translate3d(0,0,0);
 }
+
+.search .filters {
+  position: absolute ;
+  background-color: rgba(0, 0, 0, 0.9);;
+  width: 100%;
+  height: 100%;
+  top:0 !important;
+  transform: translate3d(0,-100%,0);
+}
+
+
+.search .contentFilters {
+  position: absolute ;
+  background-color: #eee;
+  padding: 20px;
+  margin: 20px;
+  width: 79%;
+  transform: translate3d(0,-150%,0);
+  transition: all 0.4s ease-in-out;
+}
+
+.search.screenFilters .contentFilters {
+  position: absolute ;
+  background-color: #eee;
+  padding: 20px;
+  margin: 20px;
+  width: 79%;
+  top:0 !important;
+  transform: translate3d(0,0,0);
+  transition: all 0.4s ease-in-out;
+}
+
+
+
+
+
+/************************************************
+************ FIN PANTALLA FILTROS **************
+************************************************/
