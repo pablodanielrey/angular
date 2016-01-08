@@ -1,6 +1,18 @@
 import json
 import re
 import datetime
+import jsonpickle
+
+
+class Serializable:
+    ''' clase base que implementa metodos para serializar y deserializar a json las subclases '''
+    def _toJson(self):
+        j = "{'className':'{}', 'content':\{{}\}}".format(self.__name__, Serializer.dumps(self.__dict__))
+        return j
+
+    @classmethod
+    def _fromJson(cls, str):
+        pass
 
 
 class DateTimeEncoder(json.JSONEncoder):
@@ -36,8 +48,10 @@ class Serializer:
 
     @staticmethod
     def dumps(obj):
-        return json.dumps(obj, cls=DateTimeEncoder)
+        ''' return json.dumps(obj, cls=DateTimeEncoder) '''
+        return jsonpickle.encode(obj)
 
     @staticmethod
     def loads(str):
-        json.loads(str, cls=DateTimeDecoder)
+        ''' json.loads(str, cls=DateTimeDecoder) '''
+        return jsonpickle.decode(str)

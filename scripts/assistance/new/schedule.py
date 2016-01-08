@@ -28,7 +28,6 @@ class WorkedHours:
 
 class ScheduleData:
     ''' schedule que representa un período laboral y sus horarios dentro de ese período '''
-    __serializable__ = True
 
     def __init__(self):
         self.ids = []
@@ -161,7 +160,9 @@ if __name__ == '__main__':
         logging.info(len(scheds))
 
         ss = Serializer.dumps(scheds)
+        logging.info(ss)
         ss2 = Serializer.loads(ss)
+        logging.info(ss2)
 
         """
         for s2 in scheds:
