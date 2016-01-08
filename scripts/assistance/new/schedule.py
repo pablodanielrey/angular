@@ -1,21 +1,32 @@
 import psycopg2
+from psycopg2 import pool
 import logging
 import datetime
 import json
 
 logging.getLogger().setLevel(logging.INFO)
 
+pool = psycopg2.pool.ThreadedConnectionPool(10, 20, host='163.10.17.80', database='dcsys', user='dcsys', password='dcsys')
 
 def getConnection():
-    con = psycopg2.connect(host='163.10.17.80', database='dcsys', user='dcsys', password='dcsys')
-    return con
+    return pool.getconn()
+
+def closeConnection(con):
+    pool.putconn(con)
 
 
 class ScheduleModel:
     ''' modelo del sistema que encapsula el manejo de schedules '''
 
-    def findSchedulesFor(userId, start, end):
+    @staticmethod
+    def findAllBetween(userId, start, end):
         ''' obtiene los schedules del usuario entre determinadas fechas '''
+        con = getConnection()
+        try:
+            scheds = Schedule.findAllBetween(con, userId, start, end)
+            logging.info(scheds)
+        finally:
+            closeConnection(con)
 
 
 class WorkedHours:
@@ -51,7 +62,21 @@ class Schedule:
         self.isDayOfWeek = True
         self.isDayOfYear = False
 
-    def _fromSchedule(self, date, schedules):
+    @staticmethod
+    def _fromMap(map):
+        ''' retorna un Schedule a partir del mapa retornado de la consulta a la base '''
+        s = Schedule()
+        s.date = datetime.datetime.combine(map[0], datetime.time())
+        s.start = map[1]
+        s.end = map[2]
+        s.isDayOfWeek = map[3]
+        s.isDayOfMonth = map[4]
+        s.isDayOfYear = map[5]
+        s.id = map[6]
+        return s
+
+    @classmethod
+    def _fromSchedule(cls, date, schedules):
         ''' retorna un scheduleData a partir de una lista de schedules que representan el mismo período laboral con horario cortado '''
         sd = ScheduleData()
 
@@ -74,19 +99,8 @@ class Schedule:
 
         return sd
 
-    def _fromMap(map):
-        ''' retorna un Schedule a partir del mapa retornado de la consulta a la base '''
-        s = Schedule()
-        s.date = datetime.datetime.combine(map[0], datetime.time())
-        s.start = map[1]
-        s.end = map[2]
-        s.isDayOfWeek = map[3]
-        s.isDayOfMonth = map[4]
-        s.isDayOfYear = map[5]
-        s.id = map[6]
-        return s
-
-    def _findAllBetween(self, con, userId, start, end):
+    @classmethod
+    def findAllBetween(cls, con, userId, start, end):
         ''' retorna todos los ScheduleData que representan los períodos laborales entre start (inclusive) y end (inclusive) '''
         cur = con.cursor()
         try:
@@ -96,7 +110,7 @@ class Schedule:
 
             cur.execute("select sdate, sstart, send, isDayOfWeek, isDayOfMonth, isDayOfYear, id from assistance.schedule where sdate <= %s and user_id = %s order by sdate desc", (end, userId))
             schedulesCur = cur.fetchall()
-            schedules = [Schedule._fromMap(s) for s in schedulesCur]
+            schedules = [cls._fromMap(s) for s in schedulesCur]
 
             specific = [s for s in schedules if not s.isDayOfMonth and not s.isDayOfWeek and not s.isDayOfYear and s.date >= start]
             wheekly = [s for s in schedules if s.isDayOfWeek]
@@ -110,7 +124,7 @@ class Schedule:
                     specificDates.append(sdate)
                     sameDay = [s for s in specific if s.date == sdate]
                     specific = [s for s in specific if s not in sameDay]
-                    scheduleData = self._fromSchedule(sdate, sameDay)
+                    scheduleData = cls._fromSchedule(sdate, sameDay)
                     scheduleDatas.append(scheduleData)
 
             if len(wheekly) > 0:
@@ -130,7 +144,7 @@ class Schedule:
 
                     assert len(daySchedules) > 0
                     lastDaySchedules = [s for s in daySchedules if s.date == daySchedules[0].date]
-                    scheduleData = self._fromSchedule(actual, lastDaySchedules)
+                    scheduleData = cls._fromSchedule(actual, lastDaySchedules)
                     scheduleDatas.append(scheduleData)
                     actual = scheduleData.dates[-1] + datetime.timedelta(days=1)
 
@@ -147,15 +161,17 @@ if __name__ == '__main__':
     from serializer import Serializer
 
     con = getConnection()
-    s = Schedule()
 
     cur = con.cursor()
     cur.execute('select distinct user_id from assistance.schedule')
     users = cur.fetchall()
+    closeConnection(con)
+
     for u in users:
         uid = u[0]
         logging.info('\n----------{}-----------\n'.format(uid))
-        scheds = s._findAllBetween(con, uid, datetime.datetime(2012, 12, 1), datetime.datetime(2016, 12, 1))
+        scheds = ScheduleModel.findAllBetween(uid, datetime.datetime(2012, 12, 1), datetime.datetime(2016, 12, 1))
+        """
         logging.info(scheds)
         logging.info(len(scheds))
         for s2 in scheds:
@@ -166,3 +182,4 @@ if __name__ == '__main__':
             for wh in s2.workedHours:
                 logging.info('wh {} -> {}'.format(wh.start, wh.end))
             logging.info('\n')
+        """
