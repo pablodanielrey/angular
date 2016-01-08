@@ -158,19 +158,11 @@ if __name__ == '__main__':
         scheds = s._findAllBetween(con, uid, datetime.datetime(2012, 12, 1), datetime.datetime(2016, 12, 1))
         logging.info(scheds)
         logging.info(len(scheds))
-
-        ss = Serializer.dumps(scheds)
-        logging.info(ss)
-        ss2 = Serializer.loads(ss)
-        logging.info(ss2)
-
-        """
         for s2 in scheds:
+            ss2 = Serializer.dumps(s2)
+            logging.info(ss2)
+            s2 = Serializer.loads(ss2)
             logging.info('dates: {}'.format(s2.dates))
             for wh in s2.workedHours:
                 logging.info('wh {} -> {}'.format(wh.start, wh.end))
             logging.info('\n')
-            if len(s2.workedHours) > 1:
-                logging.info('parando')
-                break
-        """
