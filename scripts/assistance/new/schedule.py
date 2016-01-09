@@ -14,10 +14,14 @@ logging.getLogger().setLevel(logging.INFO)
 
 pool = psycopg2.pool.ThreadedConnectionPool(10, 20, host='163.10.17.80', database='dcsys', user='dcsys', password='dcsys')
 
+
 def getConnection():
+    global pool
     return pool.getconn()
 
+
 def closeConnection(con):
+    global pool
     pool.putconn(con)
 
 
@@ -28,25 +32,32 @@ class ScheduleModel:
     def findAllBetween(userId, start, end):
         ''' obtiene los schedules del usuario entre determinadas fechas '''
         r = redis.StrictRedis(host='163.10.17.21', port=6379)
+
+        cache = []
+        dates = []
+
+        actual = start
+        while actual <= end:
+            scheduleData = ScheduleData._loadFromCache(r, userId, actual)
+            if scheduleData:
+                cache.append(scheduleData)
+                dates.append(actual)
+            actual = actual + datetime.timedelta(days=1)
+
+        con = getConnection()
         try:
-            logging.info(r.keys())
+            scheds = Schedule.findAllBetween(con, userId, start, end, dates)
+            for s in scheds:
+                s._storeInCache(r)
 
-            """
-            con = getConnection()
-            try:
-                scheds = Schedule.findAllBetween(con, userId, start, end)
-                logging.info(scheds)
-                for s in scheds:
-                    pid = s._getPrivateId()
-                    r.set(pid, Serializer.dumps(s))
-                    for sid in s._getIds():
-                        r.set('{}'.format(sid), pid)
+            scheds.extend(cache)
+            scheds = sorted(scheds, key=lambda x: x.dates)
 
-            finally:
-                closeConnection(con)
-            """
+            return scheds
+
         finally:
-            r.close()
+            closeConnection(con)
+
 
 class WorkedHours:
     ''' franja de horarios '''
@@ -60,16 +71,36 @@ class ScheduleData:
     ''' schedule que representa un período laboral y sus horarios dentro de ese período '''
 
     def __init__(self):
-        self.privateId = str(uuid.uuid4())
+        self.userId = ''
         self.ids = []
         self.dates = []
         self.workedHours = []
 
-    def _getPrivateId(self):
-        return self.privateId
+    def _storeInCache(self, cache):
+        ''' almaceno en la cache el scheduleData y tambien genero los indices de las fechas hacia ese schedule '''
+        schedIndex = 'ScheduleData_{}_{}'.format(self.userId, ''.join([str(d) for d in self.dates]))
+        logging.info('almacenando en cache {}'.format(schedIndex))
+        sched = Serializer.dumps(self)
+        cache.set(schedIndex, str(sched))
+        for date in self.dates:
+            sid = 'ScheduleData_{}_{}'.format(self.userId, date)
+            logging.info('almacenando en cache {}'.format(sid))
+            cache.set(sid, str(schedIndex))
 
-    def _getIds(self):
-        return [d.timestamp() for d in self.dates]
+    @staticmethod
+    def _loadFromCache(cache, userId, date):
+        ''' carga el ScheduleData desde cache y lo retorna o retorna None en caso de no existir '''
+        sid = 'ScheduleData_{}_{}'.format(userId, date)
+        logging.info('cargando desde cache {}'.format(sid))
+        schedIndex = cache.get(sid)
+        if schedIndex:
+            logging.info('cargando desde cache index {}'.format(schedIndex))
+            sched = cache.get(str(schedIndex))
+            if sched:
+                logging.info('ss {}'.format(sched))
+                schedule = Serializer.loads(str(sched))
+                return schedule
+        return None
 
 
 class Schedule:
@@ -77,6 +108,7 @@ class Schedule:
 
     def __init__(self):
         self.id = ''
+        self.userId = ''
         self.date = datetime.datetime.now()
         self.start = 60 * 60 * 6
         self.end = self.start + (60 * 60 * 7)
@@ -99,12 +131,14 @@ class Schedule:
         s.isDayOfMonth = map[4]
         s.isDayOfYear = map[5]
         s.id = map[6]
+        s.userId = map[7]
         return s
 
     @classmethod
     def _fromSchedule(cls, date, schedules):
         ''' retorna un scheduleData a partir de una lista de schedules que representan el mismo período laboral con horario cortado '''
         sd = ScheduleData()
+        sd.userId = schedules[0].userId
 
         ''' calculamos las fechas para las cuales vale este schedule '''
         end = date + datetime.timedelta(seconds=schedules[-1].end)
@@ -126,7 +160,7 @@ class Schedule:
         return sd
 
     @classmethod
-    def findAllBetween(cls, con, userId, start, end):
+    def findAllBetween(cls, con, userId, start, end, exceptDates=None):
         ''' retorna todos los ScheduleData que representan los períodos laborales entre start (inclusive) y end (inclusive) '''
         cur = con.cursor()
         try:
@@ -134,7 +168,7 @@ class Schedule:
             scheduleDatas = []
             specificDates = []
 
-            cur.execute("select sdate, sstart, send, isDayOfWeek, isDayOfMonth, isDayOfYear, id from assistance.schedule where sdate <= %s and user_id = %s order by sdate desc", (end, userId))
+            cur.execute("select sdate, sstart, send, isDayOfWeek, isDayOfMonth, isDayOfYear, id, user_id from assistance.schedule where sdate <= %s and user_id = %s order by sdate desc", (end, userId))
             schedulesCur = cur.fetchall()
             schedules = [cls._fromMap(s) for s in schedulesCur]
 
@@ -150,8 +184,9 @@ class Schedule:
                     specificDates.append(sdate)
                     sameDay = [s for s in specific if s.date == sdate]
                     specific = [s for s in specific if s not in sameDay]
-                    scheduleData = cls._fromSchedule(sdate, sameDay)
-                    scheduleDatas.append(scheduleData)
+                    if sdate not in exceptDates:
+                        scheduleData = cls._fromSchedule(sdate, sameDay)
+                        scheduleDatas.append(scheduleData)
 
             if len(wheekly) > 0:
                 ''' se calculan los horarios semanales '''
@@ -159,6 +194,11 @@ class Schedule:
                 while actual <= end:
                     if actual in specificDates:
                         ''' si ya es una fecha calculada especificamente se toma esa como primaria y no se tiene en cuenta el horario semanal '''
+                        actual = actual + datetime.timedelta(days=1)
+                        continue
+
+                    if actual in exceptDates:
+                        ''' una fecha que no se debe calcular ya que fue pasada como parámetro '''
                         actual = actual + datetime.timedelta(days=1)
                         continue
 
@@ -183,10 +223,6 @@ class Schedule:
 
 
 if __name__ == '__main__':
-
-    print(Schedule.__doc__)
-
-
     from serializer import Serializer
 
     con = getConnection()
@@ -199,7 +235,8 @@ if __name__ == '__main__':
     for u in users:
         uid = u[0]
         logging.info('\n----------{}-----------\n'.format(uid))
-        scheds = ScheduleModel.findAllBetween(uid, datetime.datetime(2012, 12, 1), datetime.datetime(2016, 12, 1))
+        scheds = ScheduleModel.findAllBetween(uid, datetime.datetime(2016, 11, 1), datetime.datetime(2016, 12, 1))
+        break
         """
         logging.info(scheds)
         logging.info(len(scheds))
