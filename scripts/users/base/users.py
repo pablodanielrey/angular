@@ -45,12 +45,17 @@ class UserPasswordDAO:
 
     @staticmethod
     def findByUserId(con, userId):
+        '''
+            Obtiene los datos de las credenciales de un usuario
+            Retorna:
+                Una lista con instancias de UserPassword
+                En caso de no existir una lista vacía
+        '''
         cur = con.cursor()
         try:
             cur.execute('select id, user_id, username, password from credentials.user_password where user_id = %s', (userId,))
             if cur.rowcount <= 0:
-                return None
-
+                return []
             data = [UserPassword._fromResult(c) for c in cur]
             return data
 
@@ -103,9 +108,6 @@ class User:
         self.created = datetime.datetime.now()
         self.version = 0
         self.photo = None
-
-    def _persist(self, con):
-        UserDAO.persist(con, self)
 
 
 class UserDAO:
