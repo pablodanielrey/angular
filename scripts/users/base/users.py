@@ -42,7 +42,7 @@ class User:
         self.photo = None
 
     def _persist(self, con):
-        UserDAO.persist(self, con)
+        UserDAO.persist(con, self)
 
 
 class UserDAO:
@@ -82,7 +82,27 @@ class UserDAO:
             cur.close()
 
     @staticmethod
-    def persist(user, con):
+    def findByDni(con, dni):
+        '''
+            Obtiene los datos básicos del usuario
+            Retorna:
+                (id, version)
+                None en caso de no existir
+        '''
+        cur = con.cursor()
+        try:
+            cur.execute('select id, version from profile.users where dni = %s', (dni,))
+            if cur.rowcount <= 0:
+                return None
+            else:
+                (id, version) = cur.fetchone()
+                return (id, version)
+
+        finally:
+            cur.close()
+
+    @staticmethod
+    def persist(con, user):
         '''
             Agrega o actualiza un usuario dentro de la base de datos
         '''
@@ -165,7 +185,7 @@ class StudentDAO:
     def findById(con, sId):
         cur = con.cursor()
         try:
-            cur.select('select id, student_number, condition from students.users where id = %s', (sId,))
+            cur.execute('select id, student_number, condition from students.users where id = %s', (sId,))
             if cur.rowcount <= 0:
                 return None
             else:
@@ -177,7 +197,7 @@ class StudentDAO:
             cur.close()
 
     @staticmethod
-    def persist(student, con):
+    def persist(con, student):
         '''
             Inserta o actualiza un alumno dentro de la base de datos
             Precondiciones:
@@ -190,7 +210,7 @@ class StudentDAO:
 
         cur = con.cursor()
         try:
-            cur.execute('select id from studetns.users where id = %s', (student.id,))
+            cur.execute('select id from students.users where id = %s', (student.id,))
             if cur.rowcount <= 0:
                 ''' inserto el alumno dentro de la base de datos '''
                 cur.execute('insert into students.users (id, student_number, condition) values (%(id)s, %(studentNumber)s, %(condition)s)', params)
@@ -211,7 +231,7 @@ class Student:
         self.condition = None
 
     def persist(self, con):
-        StudentDAO.persist(self, con)
+        StudentDAO.persist(con, self)
 
     def _fromDict(self, d):
         self.id = d[0]
@@ -220,10 +240,34 @@ class Student:
 
 
 if __name__ == '__main__':
+
+    import sys
+
     con = getConnection()
 
-    st = StudentDAO.findAll(con)
-    logging.info(st)
-    logging.info(len(st))
+    dni = sys.argv[1]
+    uid = None
 
+    u = UserDAO.findByDni(con, dni)
+    if u is None:
+        u = User()
+        u.dni = dni
+        u.name = sys.argv[2]
+        u.lastname = sys.argv[3]
+        uid = UserDAO.persist(con, u)
+    else:
+        (id, version) = u
+        uid = id
+
+    s = Student()
+    s.id = uid
+    s.studentNumber = sys.argv[4]
+    s.condition = 'Regular'
+
+    StudentDAO.persist(con, s)
+
+    st = StudentDAO.findById(con, s.id)
+    logging.info(st.__dict__)
+
+    con.rollback()
     closeConnection(con)
