@@ -23,6 +23,69 @@ def closeConnection(con):
     pool.putconn(con)
 
 
+class UserPassword:
+
+    def __init__(self):
+        self.id = None
+        self.userId = None
+        self.username = None
+        self.password = None
+
+    @staticmethod
+    def _fromResult(r):
+        up = UserPassword()
+        up.id = r[0]
+        up.userId = r[1]
+        up.username = r[2]
+        up.password = r[3]
+        return up
+
+
+class UserPasswordDAO:
+
+    @staticmethod
+    def findByUserId(con, userId):
+        cur = con.cursor()
+        try:
+            cur.execute('select id, user_id, username, password from credentials.user_password where user_id = %s', (userId,))
+            if cur.rowcount <= 0:
+                return None
+
+            data = [UserPassword._fromResult(c) for c in cur]
+            return data
+
+        finally:
+            cur.close()
+
+    @staticmethod
+    def persist(con, up):
+        '''
+            Inserta o actualiza el usuario y clave de una persona
+            Precondiciones:
+                El usuario debe existir
+            Retorna:
+                Id de las credenciales
+        '''
+        assert up.userId is not None
+        assert up.username is not None
+        assert up.password is not None
+
+        cur = con.cursor()
+        try:
+            if up.id is None:
+                up.id = str(uuid.uuid4())
+                params = up.__dict__
+                cur.execute('insert into credentials.user_password (id, user_id, username, password) values (%(id)s, %(userId)s, %(username)s, %(password)s)', params)
+            else:
+                params = up.__dict__
+                cur.execute('update credentials.user_password set user_id = %(userId)s, username = %(username)s, password = %(password)s where id = %(id)s', params)
+
+            return up.id
+
+        finally:
+            cur.close()
+
+
 class User:
     ''' usuario básico del sistema '''
 
@@ -265,9 +328,20 @@ if __name__ == '__main__':
     s.condition = 'Regular'
 
     StudentDAO.persist(con, s)
-
     st = StudentDAO.findById(con, s.id)
     logging.info(st.__dict__)
 
-    con.rollback()
+    passw = UserPasswordDAO.findByUserId(con, uid)
+    if passw is None:
+        up = UserPassword()
+        up.userId = uid
+        up.username = dni
+        up.password = s.studentNumber
+        UserPasswordDAO.persist(con, up)
+
+    passw = UserPasswordDAO.findByUserId(con, uid)
+    for p in passw:
+        logging.info(p.__dict__)
+
+    con.commit()
     closeConnection(con)
