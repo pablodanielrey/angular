@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import uuid
 
 
 class Office:
@@ -10,15 +11,52 @@ class Office:
         self.name = None
         self.telephone = None
         self.email = None
-        self.users = []
+        self.users = None
 
 
 class OfficeDAO:
     ''' dao de las oficinas '''
 
     @staticmethod
+    def _fromResult(r):
+        o = Office()
+        o.id = r['id']
+        o.parent = r['parent']
+        o.name = r['name']
+        o.telephone = r['telephone']
+        o.email = r['email']
+        return o
+
+    @staticmethod
+    def findById(con, oid):
+        ''' obtiene la oficina que se identifica con un id '''
+        assert oid is not None
+        cur = con.cursor()
+        try:
+            cur.execute('select * from offices.offices where id = %s', (oid,))
+            if cur.rowcount <= 0:
+                return None
+
+            office = OfficeDAO._fromResult(cur.fetchone())
+            cur.execute('select user_id from offices.offices_users where office_id = %s', (office.id,))
+            office.users = [c['user_id'] for c in cur]
+
+            return office
+
+        finally:
+            cur.close()
+
+    @staticmethod
     def findAll(con):
         ''' obtiene todos los ids '''
+        cur = con.cursor()
+        try:
+            cur.execute('select id from offices.offices')
+            ids = [o['id'] for o in cur]
+            return ids
+
+        finally:
+            cur.close()
 
     @staticmethod
     def persist(con, office):
@@ -33,8 +71,11 @@ class OfficeDAO:
                 params = office.__dict__
                 cur.execute('update offices.offices (name, telephone, email, parent) values (%(name)s, %(telephone)s, %(email)s, %(parent)s)', params)
 
-            ''' actualizo los usuarios de la oficina a partir de offices.users '''
+            if office.users is None:
+                ''' en el caso de que sea = None no todo la lista de usuarios '''
+                return office.id
 
+            ''' actualizo los usuarios de la oficina a partir de offices.users '''
             cur.execute('select user_id from offices.offices_users where office_id = %s', (office.id,))
             idsInBase = [r['user_id'] for r in cur]
 
@@ -52,6 +93,7 @@ class OfficeDAO:
 
         finally:
             cur.close()
+
 
 class Group:
     ''' Grupo de usuarios '''
