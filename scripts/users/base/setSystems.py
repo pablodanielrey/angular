@@ -27,7 +27,7 @@ if __name__ == '__main__':
         assert user.id is not None
 
         domains = systems.DomainDAO.findAll(con)
-        logging.info([True for d2 in domains if d2.id == uid][0])
+        logging.info([True for d2 in domains if d2.id == uid])
 
         d = systems.Domain()
         d.id = user.id
@@ -36,9 +36,9 @@ if __name__ == '__main__':
         systems.DomainDAO.persist(con, d)
 
         domains = systems.DomainDAO.findAll(con)
-        logging.info([True for d2 in domains if d2.id == d.id][0])
+        logging.info([True for d2 in domains if d2.id == d.id])
 
-        con.rollback()
+        con.commit()
 
     finally:
         connection.closeConnection(con)
