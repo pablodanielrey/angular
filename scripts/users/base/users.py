@@ -4,6 +4,7 @@
 '''
 import psycopg2
 from psycopg2 import pool
+from psycopg2.extras import DictCursor
 import logging
 import datetime
 import uuid
@@ -15,7 +16,7 @@ pool = psycopg2.pool.ThreadedConnectionPool(10, 20, host='163.10.17.80', databas
 
 def getConnection():
     global pool
-    return pool.getconn()
+    return pool.getconn(cursor_factory=DictCursor)
 
 
 def closeConnection(con):
@@ -31,6 +32,9 @@ class UserPassword:
         self.username = None
         self.password = None
 
+
+class UserPasswordDAO:
+
     @staticmethod
     def _fromResult(r):
         up = UserPassword()
@@ -39,9 +43,6 @@ class UserPassword:
         up.username = r[2]
         up.password = r[3]
         return up
-
-
-class UserPasswordDAO:
 
     @staticmethod
     def findByUserId(con, userId):
@@ -56,7 +57,7 @@ class UserPasswordDAO:
             cur.execute('select id, user_id, username, password from credentials.user_password where user_id = %s', (userId,))
             if cur.rowcount <= 0:
                 return []
-            data = [UserPassword._fromResult(c) for c in cur]
+            data = [UserPasswordDAO._fromResult(c) for c in cur]
             return data
 
         finally:
@@ -91,6 +92,68 @@ class UserPasswordDAO:
             cur.close()
 
 
+class Mail:
+    ''' cuenta de email de un usuario '''
+
+    def __init__(self):
+        self.id = None
+        self.userId = None
+        self.email = None
+        self.confirmed = False
+        self.hash = None
+        self.created = None
+
+    def confirm(con, self):
+        ''' cambia el estado a confirmado '''
+        if self.confirmed:
+            return
+        self.confirmed = True
+        MailDAO.persist(con, self)
+
+
+class MailDAO:
+    ''' dao de las cuentas de email de los usuarios '''
+
+    @staticmethod
+    def _fromResult(r):
+        m = Mail()
+        m.id = r['id']
+        m.userId = r['user_id']
+        m.email = r['email']
+        m.confirmed = r['confirmed']
+        m.hash = r['hash']
+        m.created = r['created']
+        return m
+
+    @staticmethod
+    def findAll(con, userId):
+        ''' Obtiene los emails de un usuario '''
+        cur = con.cursor()
+        try:
+            cur.execute('select id, user_id, email, confirmed, hash, created from profile.mails where user_id = %s', (userId,))
+            m = [MailDAO._fromResult(ma) for ma in cur]
+            return m
+
+        finally:
+            cur.close()
+
+    @staticmethod
+    def persist(con, mail):
+        ''' crea o actualiza un email de usuario '''
+        cur = con.cursor()
+        try:
+            if mail.id is None:
+                mail.id = str(uuid.uuid4())
+                params = mail.__dict__
+                cur.execute('insert into profile.mails (id, user_id, email, confirmed, hash) values (%(id)s, %(userId)s, %(email)s, %(confirmed)s, %(hash)s)', params)
+            else:
+                params = mail.__dict__
+                cur.execute('update profile.mails set user_id = %(userId)s, email = %(email)s, confirmed = %(confirmed)s, hash = %(hash)s where id = %(id)s', params)
+
+        finally:
+            cur.close()
+
+
 class User:
     ''' usuario básico del sistema '''
 
@@ -114,6 +177,24 @@ class UserDAO:
     ''' DAO para los usuarios '''
 
     @staticmethod
+    def _fromResult(r):
+        u = User()
+        u.id = r['id']
+        u.dni = r['dni']
+        u.name = r['name']
+        u.lastname = r['lastname']
+        u.genre = r['genre']
+        u.birthdate = r['birthdate']
+        u.city = r['city']
+        u.country = r['country']
+        u.address = r['address']
+        u.residence_city = r['residence_city']
+        u.created = r['created']
+        u.version = r['version']
+        u.photo = r['photo']
+        return u
+
+    @staticmethod
     def findAll(con):
         '''
             Obtiene todos los usuarios
@@ -125,6 +206,26 @@ class UserDAO:
             cur.execute('select id, version from profile.users')
             users = [(u[0], u[1]) for u in cur]
             return users
+        finally:
+            cur.close()
+
+    @staticmethod
+    def findById(con, uid):
+        '''
+            Obtiene el usuario especificado por el id
+            Retorna:
+                User a partir de los datos de la base
+                None en caso de que no exista
+        '''
+        assert uid is not None
+        cur = con.cursor()
+        try:
+            cur.execute('select * from profile.users where id = %s', (uid,))
+            if cur.rowcount <= 0:
+                return None
+            user = UserDAO._fromResult(cur.fetchone())
+            return user
+
         finally:
             cur.close()
 
