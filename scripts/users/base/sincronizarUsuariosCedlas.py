@@ -9,8 +9,17 @@ import groups
 import systems
 import logging
 import datetime
+import jsonpickle
 
 if __name__ == '__main__':
+
+    ''' por defecto la fecha de sincronizacion es desde hace un año '''
+    lastSinc = datetime.datetime.now() - datetime.timedelta(days=365)
+    try:
+        with open('/tmp/sinc.dat', 'r') as f:
+            lastSinc = jsonpickle.decode(f.read())
+    except Exception as e:
+        logging.warn(e)
 
     logging.getLogger().setLevel(logging.INFO)
     con = connection.getConnection()
@@ -51,3 +60,7 @@ if __name__ == '__main__':
 
     finally:
         connection.closeConnection(con)
+
+    ''' almaceno la fecha de la ultima sincronizacion '''
+    with open('/tmp/sinc.dat', 'w') as f:
+        f.write(jsonpickle.encode(lastSinc))
