@@ -38,10 +38,11 @@ class UserPasswordDAO:
     @staticmethod
     def _fromResult(r):
         up = UserPassword()
-        up.id = r[0]
-        up.userId = r[1]
-        up.username = r[2]
-        up.password = r[3]
+        up.id = r['id']
+        up.userId = r['user_id']
+        up.username = r['username']
+        up.password = r['password']
+        up.updated = r['updated']
         return up
 
     @staticmethod
@@ -54,7 +55,7 @@ class UserPasswordDAO:
         '''
         cur = con.cursor()
         try:
-            cur.execute('select id, user_id, username, password from credentials.user_password where user_id = %s', (userId,))
+            cur.execute('select id, user_id, username, password, updated from credentials.user_password where user_id = %s', (userId,))
             if cur.rowcount <= 0:
                 return []
             data = [UserPasswordDAO._fromResult(c) for c in cur]
@@ -81,10 +82,10 @@ class UserPasswordDAO:
             if up.id is None:
                 up.id = str(uuid.uuid4())
                 params = up.__dict__
-                cur.execute('insert into credentials.user_password (id, user_id, username, password) values (%(id)s, %(userId)s, %(username)s, %(password)s)', params)
+                cur.execute('insert into credentials.user_password (id, user_id, username, password, updated) values (%(id)s, %(userId)s, %(username)s, %(password)s, now())', params)
             else:
                 params = up.__dict__
-                cur.execute('update credentials.user_password set user_id = %(userId)s, username = %(username)s, password = %(password)s where id = %(id)s', params)
+                cur.execute('update credentials.user_password set user_id = %(userId)s, username = %(username)s, password = %(password)s, updated = now() where id = %(id)s', params)
 
             return up.id
 
