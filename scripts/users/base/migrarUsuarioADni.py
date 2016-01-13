@@ -110,7 +110,7 @@ if __name__ == '__main__':
         for u in users.UserPasswordDAO.findByUserId(con, uid):
             logging.info(u.__dict__)
 
-        con.rollback()
+        con.commit()
 
     finally:
         connection.closeConnection(con)
