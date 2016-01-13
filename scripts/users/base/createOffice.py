@@ -32,7 +32,7 @@ if __name__ == '__main__':
         office = groups.OfficeDAO.findById(con, oid)
         logging.info(office.__dict__)
 
-        con.rollback()
+        con.commit()
 
     finally:
         connection.closeConnection(con)

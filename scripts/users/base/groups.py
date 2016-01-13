@@ -69,7 +69,7 @@ class OfficeDAO:
                 cur.execute('insert into offices.offices (id, name, telephone, email, parent) values (%(id)s, %(name)s, %(telephone)s, %(email)s, %(parent)s)', params)
             else:
                 params = office.__dict__
-                cur.execute('update offices.offices (name, telephone, email, parent) values (%(name)s, %(telephone)s, %(email)s, %(parent)s)', params)
+                cur.execute('update offices.offices set name = %(name)s, telephone = %(telephone)s, email = %(email)s, parent = %(parent)s where id = %(id)s', params)
 
             if office.users is None:
                 ''' en el caso de que sea = None no todo la lista de usuarios '''

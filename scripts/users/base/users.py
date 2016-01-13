@@ -306,21 +306,13 @@ class UserDAO:
                 v = cur.fetchone()
                 if v[0] <= user.version:
                     user.version = user.version + 1
-                    cur.execute('update profile.users set ' +
-                                'dni = %s, name = %s, lastname = %s, ' +
-                                'genre = %s, ' +
-                                'birthdate = %s, ' +
-                                'city = %s, country = %s, address = %s, residence_city = %s, ' +
-                                'version = %s, ' +
-                                'photo = %s',
-                                (user.id,
-                                 user.dni, user.name, user.lastname,
-                                 user.genre,
-                                 user.birthdate,
-                                 user.city, user.country, user.address, user.residence_city,
-                                 user.version,
-                                 user.photo
-                                 ))
+                    params = user.__dict__
+                    cur.execute('update profile.users set dni = %(dni)s, name = %(name)s, lastname = %(lastname)s, genre = %(genre)s, ' +
+                                'birthdate = %(birthdate)s, ' +
+                                'city = %(city)s, country = %(country)s, address = %(address)s, residence_city = %(residence_city)s, ' +
+                                'version = %(version)s, ' +
+                                'photo = %(photo)s ' +
+                                'where id = %(id)s', params)
                     return user.id
                 else:
                     raise Exception('versión inferior')
