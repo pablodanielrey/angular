@@ -84,7 +84,7 @@ class UserPassword:
         try:
             rreq = (user['user_id'], user['username'], user['password'], user['id'])
             cur = con.cursor()
-            cur.execute('update credentials.user_password set user_id = %s, username = %s, password = %s where id = %s', rreq)
+            cur.execute('update credentials.user_password set user_id = %s, username = %s, password = %s, updated = now() where id = %s', rreq)
 
         except psycopg2.DatabaseError as e:
             raise e
