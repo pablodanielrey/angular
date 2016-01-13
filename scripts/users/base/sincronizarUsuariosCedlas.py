@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 '''
-    Obtiene los usuarios de la base de datos principal y los sincroniza con el linux actual.
+    Obtiene los usuarios de la base de datos principal que pertenecen a la oficina Cedlas y los sincroniza con el linux actual.
     Tambien actualiza la clave en el samba
 '''
 import connection
@@ -62,5 +62,6 @@ if __name__ == '__main__':
         connection.closeConnection(con)
 
     ''' almaceno la fecha de la ultima sincronizacion '''
+    lastSinc = datetime.datetime.now()
     with open('/tmp/sinc.dat', 'w') as f:
         f.write(jsonpickle.encode(lastSinc))
