@@ -32,6 +32,11 @@ if __name__ == '__main__':
             up = ups[0]
 
             logging.info('sincronizando : {}'.format(up.username))
+
+            cmd = 'useradd {}'.format(up.username)
+            cp = subprocess.run(cmd)
+            logging.info(cp.returncode)
+
             cmd = "echo \"{}:{}\" | chpasswd".format(up.username, up.password)
             cp = subprocess.run(cmd, shell=True)
             logging.info(cp.returncode)
