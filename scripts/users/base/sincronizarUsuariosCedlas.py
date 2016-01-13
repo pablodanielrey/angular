@@ -40,7 +40,7 @@ if __name__ == '__main__':
                 continue
 
             up = ups[0]
-            if up.updated <= datetime.datetime.now():
+            if up.updated <= lastSinc:
                 ''' solo lo actualizo si la fecha es mayor a la actual '''
                 continue
 
