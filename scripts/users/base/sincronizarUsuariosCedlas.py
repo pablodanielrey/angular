@@ -41,7 +41,7 @@ if __name__ == '__main__':
             cp = subprocess.run(cmd, shell=True)
             logging.info(cp.returncode)
 
-            cmd = "echo -e \"{1}\n{1}\" | smbpasswd -a -s {0}".format(up.username, up.password)
+            cmd = "echo -e \"{1}\n{1}\n\" | smbpasswd -a -s {0}".format(up.username, up.password)
             cp = subprocess.run(cmd, shell=True)
             logging.info(cp.returncode)
 
