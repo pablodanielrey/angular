@@ -33,6 +33,7 @@ if __name__ == '__main__':
                 break
 
         import subprocess
+        from subprocess import PIPE
 
         for uid in usersToSinc:
             ups = users.UserPasswordDAO.findByUserId(con, uid)
@@ -42,6 +43,7 @@ if __name__ == '__main__':
             up = ups[0]
             if up.updated <= lastSinc:
                 ''' solo lo actualizo si la fecha es mayor a la actual '''
+                logging.warn('usuario {} clave ya actualizada {}'.format(up.username, up.updated))
                 continue
 
             logging.info('sincronizando : {}'.format(up.username))
@@ -54,9 +56,14 @@ if __name__ == '__main__':
             cp = subprocess.run(cmd, shell=True)
             logging.info(cp.returncode)
 
-            cmd = "echo -e \"{1}\n{1}\n\" | smbpasswd -a -s {0}".format(up.username, up.password)
-            cp = subprocess.run(cmd, shell=True)
+            #cmd = "echo -e \"{1}\n{1}\n\" | smbpasswd -a -s {0}".format(up.username, up.password)
+            cmd = "/usr/bin/smbpasswd -a -s {}".format(up.username)
+            #logging.info('actualizando clave samba : {}'.format(cmd))
+            #cp = subprocess.run(cmd, shell=True)
+            cp = subprocess.Popen(['/usr/bin/smbpasswd','-a', '-s', '{}'.format(up.username)], stdout=PIPE, stdin=PIPE, stderr=PIPE, universal_newlines=True)
+            o = cp.communicate(input='{0}\n{0}\n'.format(up.password))
             logging.info(cp.returncode)
+            logging.info(o)
 
     finally:
         connection.closeConnection(con)
