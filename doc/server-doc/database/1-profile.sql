@@ -17,6 +17,7 @@ create table profile.users (
     residence_city varchar,
     country varchar,
     address varchar,
+    photo varchar references files.files (id),
     version bigint default 0,
     created timestamptz default now()
 );

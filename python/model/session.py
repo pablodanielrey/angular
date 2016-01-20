@@ -75,7 +75,7 @@ class Session:
     def findSession(self,id):
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
-            return self._findSession(con,id)
+            return self._findSession(con, id)
 
         finally:
             con.close()
@@ -144,23 +144,24 @@ class Session:
         finally:
             con.close()
 
-
+    def _destroy(self, con, id):
+        cur = con.cursor()
+        cur.execute('delete from system.sessions where id = %s', (id,))
 
     def destroy(self, id):
         con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
         try:
             self.removeExpired(con)
-            cur = con.cursor()
-            cur.execute('delete from system.sessions where id = %s',(id,))
+            self._destroy(con, id)
             con.commit()
 
         finally:
             con.close()
 
-
-
-    def _getSession(self,con,id):
-        s = self._findSession(con,id)
+    def _getSession(self, con, id):
+        s = self._findSession(con, id)
+        if s is None:
+            return None
         return s['data']
 
 

@@ -1,235 +1,46 @@
 
-var app = angular.module('mainApp');
+angular
+  .module('mainApp')
+  .service('LaboralInsertion',LaboralInsertion);
 
-app.service('LaboralInsertion', function(Messages, Utils, Session) {
+LaboralInsertion.inject = ['$rootScope','$wamp','Session']
 
+function LaboralInsertion($rootScope,$wamp,Session) {
 
-	this.getLaboralInsertionData = function(ok,error) {
-		var msg = {
-			id: Utils.getId(),
-			session: Session.getSessionId(),
-			action:'getLaboralInsertionData',
-		}
-		Messages.send(msg,
-			function(data) {
-				if (typeof data.error === 'undefined') {
-					ok(data);
-				} else {
-					error(data.error);
-				}
-			});
-	}
-
-	/**
-	 * Aceptar los terminos y condiciones de insercion laboral
-	 * @param userId Id de usuario al que se modificaran los terminos y condiciones
-	 * @param ok Callback en el caso de que el servidor reciba una respuesta correcta
-	 * @param err Callback en el caso de que el servidor reciba una respuesta erronea
-	 */
-	this.acceptTermsAndConditions = function(userId, ok, err) {
-		var msg = {
-		  id: Utils.getId(),
-		  session: Session.getSessionId(),
-		  action:'acceptTermsAndConditions',
-		  user_id: userId,
-		}
-
-		Messages.send(msg,
-			function(response) {
-				ok(response);
-			},
-			function(error) {
-				err(error);
-			}
-		);
-	}
-
-
-	/**
-	 * Estan aceptados los terminos y condiciones de insercion laboral?
-	 * @param userId Id de usuario al que se modificaran los terminos y condiciones
-	 * @param ok Callback en el caso de que el servidor reciba una respuesta correcta
-	 * @param err Callback en el caso de que el servidor reciba una respuesta erronea
-	 * @response boolean accepted = true | false
-	 */
-	this.isTermsAndConditionsAccepted = function(userId, ok, err) {
-		var msg = {
-			id: Utils.getId(),
-			session: Session.getSessionId(),
-			action:'checkTermsAndConditions',
-			user_id: userId,
-		}
-
-		Messages.send(msg,
-			function(response) {
-				ok(response);
-			},
-			function(error) {
-				err(error);
-			}
-		);
-	}
-
-
-  this.findLaboralInsertionData = function(user_id,ok,err) {
-    var msg = {
-      id: Utils.getId(),
-      session: Session.getSessionId(),
-      action:'findLaboralInsertionData',
-      laboralInsertion: {
-        id: user_id
-      }
-    }
-    Messages.send(msg,
-      function(data) {
-        ok(data.laboralInsertion);
-      },
-      function(error) {
-        err(error);
-      }
-    );
+  /**
+    obtiene todas las inscripciones de un usuario determinado
+  */
+  this.findAllInscriptionsByUser = function(userId) {
+    return $wamp.call('system.laboralInsertion.findAllInscriptionsByUser', [userId]);
   }
 
-  this.updateLaboralInsertionData = function(data, callbackOk, callbackError) {
-    var msg = {
-      id: Utils.getId(),
-      session: Session.getSessionId(),
-      action: 'persistLaboralInsertionData',
-      laboralInsertion: data
-    };
+  /*
+    crea una nueva inscripción a la bosla para el usuario determinado
+  */
+  this.persistInscriptionByUser = function(userId, data) {
+    return $wamp.call('system.laboralInsertion.persistInscriptionByUser', [userId, data]);
+  }
 
-    Messages.send(msg,function(response){
-      if (response.error != undefined) {
-        callbackError(response.error);
-      } else {
-        callbackOk(response.ok);
-      }
-    });
+  /*
+    Elimina una escripcion dado el id.
+  */
+  this.deleteInscriptionById = function(iid) {
+    return $wamp.call('system.laboralInsertion.deleteInscriptionById', [iid]);
   }
 
 
-	this.findLaboralInsertionCV = function(user_id,ok,err) {
-		var msg = {
-			id: Utils.getId(),
-			session: Session.getSessionId(),
-			action:'findLaboralInsertionCV',
-			laboralInsertion: {
-				id: user_id
-			}
-		}
-		Messages.send(msg,
-			function(data) {
-				ok(data.laboralInsertion);
-			},
-			function(error) {
-				err(error);
-			}
-		);
-	}
+  /*
+    Encuentra todos los datos de insercion laboral independientes de las inscripciones en la bolsa que tenga el usuario.
+  */
+  this.findByUser = function(userId) {
+    return $wamp.call('system.laboralInsertion.findByUser',[userId]);
+  }
 
-	this.updateLaboralInsertionCV = function(data, callbackOk, callbackError) {
-		var msg = {
-			id: Utils.getId(),
-			session: Session.getSessionId(),
-			action: 'persistLaboralInsertionCV',
-			laboralInsertion: data
-		};
+  /*
+    persiste los datos de insercion laboral genericos. esto no incluye las inscripcinoes a la bolsa.
+  */
+  this.persist = function(data) {
+    return $wamp.call('system.laboralInsertion.persist',[data]);
+  }
 
-		Messages.send(msg,function(response){
-			if (response.error != undefined) {
-				callbackError(response.error);
-			} else {
-				callbackOk(response.ok);
-			}
-		});
-	}
-
-
-	this.findDegreeData = function(user_id,ok,err) {
-		var msg = {
-			id:Utils.getId(),
-	    action:"listDegrees",
-	    session:Session.getSessionId(),
-	    user_id:user_id
-		}
-		Messages.send(msg,
-			function(data) {
-				ok(data.degrees)
-			},
-			function(error) {
-				err(error)
-			}
-		);
-	}
-
-	/**
-	 * Actualizar lenguages
-	 * @param user_id Id del usuario al cual se actualizaran las carreras
-	 * @param degrees Datos de las carreras
-	 * @param ok Callback en el caso de que la actualizacion se realice de forma correcta
- 	 * @param error Callback en el caso de que la actualizacion se realice de forma erronea
-	 */
-	this.updateDegreeData = function(user_id,degrees,ok,err) {
-
-		var msg = {
-			id:Utils.getId(),
-			action:"persistDegreeData",
-			session:Session.getSessionId(),
-			degrees: degrees,
-			user_id:user_id,
-		}
-		Messages.send(msg,
-			function(data) {
-				ok(data)
-			},
-			function(error) {
-				err(error)
-			}
-		);
-	}
-
-
-	this.findLanguageData = function(user_id,ok,err) {
-		var msg = {
-			id:Utils.getId(),
-	    action:'listLanguageData',
-	    session:Session.getSessionId(),
-	    user_id:user_id
-		}
-		Messages.send(msg,
-			function(data) {
-				ok(data.languages);
-			},
-			function(error) {
-				err(error);
-			}
-		);
-	}
-
-	/**
-	 * Actualizar lenguages
-	 * @param user_id Id del usuario al cual se actualizaran los lenguajes
-	 * @param languages Datos de los lenguajes
-	 * @param ok Callback en el caso de que la actualizacion se realice de forma correcta
- 	 * @param error Callback en el caso de que la actualizacion se realice de forma erronea
-	 */
-	this.updateLanguageData = function(user_id, languages,ok,err) {
-		var msg = {
-			id:Utils.getId(),
-			action:'persistLanguage',
-			session:Session.getSessionId(),
-			user_id:user_id,
-			languages:languages,
-		}
-
-		Messages.send(msg,
-			function(data) {
-				ok(data)
-			},
-			function(error) {
-				err(error)
-			}
-		);
-	}
-
-});
+}

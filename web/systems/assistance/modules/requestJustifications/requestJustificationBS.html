@@ -1,0 +1,56 @@
+    <div  ng-class="{true:'subcontentDisplay', false:'subcontent'}[isSelectedJustification()]" >
+
+        <!-- TITULO DE LA SECCION -->
+        <div class="titulo" ng-click="selectJustification()">
+          <p class="titulo"><i class="fa fa-ticket"></i>{{rjModel.name}}</p>
+        </div>
+
+        <!-- CONTENIDO DE LA SECCION -->
+        <div class="info">
+          <div>
+            <div>
+              <input class="button blue" type="button" value="Solicitar" ng-click="selectRequest()">
+            </div>
+            <div>
+              <input class="button green" type="button" value="Disponibles" ng-click="selectAvailable()">
+            </div>
+          </div>
+
+
+        <div class="margin" ng-class="{true:'visible', false:'hidden'}[isSelectedRequest()]">
+           <p class="parrafos">Seleccione el día</p>
+            <input type="date" class="date" ng-model="rjModel.date" ng-change="isDataDefined()" >
+            <p class="parrafos">Seleccione Horas</p>
+
+            <div class="titlesHours">
+              <div class="spanSE"><span>Desde</span></div>
+              <div class="spanSE"><input class="timeMargin" type="time" ng-model="rjModel.begin" ng-change="isDataDefined()"></div>
+            </div>
+            <div class="hours">
+              <div class="spanSE2"><span> Hasta</span></div>
+              <div class="spanSE"><input type="time" ng-model="rjModel.end" ng-change="isDataDefined()"></div>
+            </div>
+        </div>
+
+
+      <div ng-class="{true:'visible', false:'hidden'}[isSelectedRequest() && isDataDefined()]">
+           <p class="parrafos">Solicitar Boleta de salida para el día</p>
+          <p class="parrafos3"><i class="fa fa-calendar-o"></i> {{rjModel.dateFormated}} / <i class="fa fa-clock-o"></i> {{rjModel.timeFormated}} Horas </p>
+          <p class="parrafos4"><i class="fa fa-clock-o"></i> De {{rjModel.beginFormated}} a {{rjModel.endFormated}} Horas </p>
+          <input class="button2 blue2" type="button" value="Confirmar" ng-click="save()" ng-disabled='rjModel.processingRequest'>
+      </div>
+
+      <div  ng-class="{true:'visible', false:'hidden'}[isSelectedAvailable()]">
+        <div>
+          <p class="parrafosGreen margin"> Disponibililad total</p>
+          <p class="parrafosGreen2 margin">{{rjModel.stock}}</p>
+        </div>
+
+        <div>
+          <p class="parrafosGreen margin"> Disponibililad anual</p>
+          <p class="parrafosGreen2 margin">{{rjModel.stockYear}}</p>
+        </div>
+      </div>
+   </div>
+
+    </div>

@@ -25,8 +25,8 @@ app.controller('TutorsCtrl', function($rootScope,$scope,$timeout,Student,Session
     return $scope.displayExport;
   }
   $scope.checkAccess = function() {
-    Profiles.checkAccess(Session.getSessionId(),'ADMIN-TUTOR', function(ok) {
-      if (ok == 'granted') {
+    Profiles.checkAccess(Session.getSessionId(),['ADMIN-TUTOR'], function(ok) {
+      if (ok) {
         $scope.displayExport = true;
       } else {
         $scope.displayExport = false;

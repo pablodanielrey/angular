@@ -58,20 +58,20 @@ class Logs:
         cur.execute("set timezone to 'UTC'")
 
         if dfrom == None and dto == None:
-            cur.execute('select id,device_id,user_id,verifymode,log from assistance.attlog where user_id = %s', (userId,))
+            cur.execute('select id,device_id,user_id,verifymode,log from assistance.attlog where user_id = %s ORDER BY log', (userId,))
 
         elif dfrom == None:
             if self.date.isNaive(dfrom):
                 raise TypeError('dfrom is naive')
-            cur.execute('select id,device_id,user_id,verifymode,log from assistance.attlog where user_id = %s and log <= %s',(userId,dto))
+            cur.execute('select id,device_id,user_id,verifymode,log from assistance.attlog where user_id = %s and log <= %s ORDER BY log',(userId,dto))
 
         elif dto == None:
             if self.date.isNaive(dto):
                 raise TypeError('dto is naive')
-            cur.execute('select id,device_id,user_id,verifymode,log from assistance.attlog where user_id = %s and log >= %s',(userId,dfrom))
+            cur.execute('select id,device_id,user_id,verifymode,log from assistance.attlog where user_id = %s and log >= %s ORDER BY log',(userId,dfrom))
 
         elif dfrom is not None and dto is not None:
-            cur.execute('select id,device_id,user_id,verifymode,log from assistance.attlog where user_id = %s and log >= %s and log <= %s',(userId,dfrom,dto))
+            cur.execute('select id,device_id,user_id,verifymode,log from assistance.attlog where user_id = %s and log >= %s and log <= %s ORDER BY log',(userId,dfrom,dto))
 
         if cur.rowcount <= 0:
             return []

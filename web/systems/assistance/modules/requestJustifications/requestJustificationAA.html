@@ -1,0 +1,45 @@
+    <div  ng-class="{true:'subcontentDisplay', false:'subcontent'}[isSelectedJustification()]" >
+
+        <!-- TITULO DE LA SECCION -->
+        <div class="titulo" ng-click="selectJustification()">
+          <p class="titulo"><i class="fa fa-ticket"></i>{{rjModel.name}}</p>
+        </div>
+
+        <!-- CONTENIDO DE LA SECCION -->
+        <div class="info">
+          <div>
+            <div>
+              <input class="button blue" type="button" value="Solicitar" ng-click="selectRequest()">
+            </div>
+            <div>
+              <input class="button green" type="button" value="Disponibles" ng-click="selectAvailable()">
+            </div>
+          </div>
+          
+      <div ng-class="{true:'visible', false:'hidden'}[isSelectedRequest()]">
+        <div class="margin" >
+          <p class="parrafos">Seleccione el día</p>
+          <input class="date" type="date" ng-model="rjModel.date" ng-change="selectDate()" >
+        </div>
+      </div>
+
+      <div ng-class="{true:'visible', false:'hidden'}[isSelectedRequest() && isDateDefined()]">
+        <p class="parrafos">Solicitar {{rjModel.name}} para el día</p>
+        <p class="parrafos2"><i class="fa fa-calendar-o"></i> {{rjModel.dateFormated}}</p>
+        <input class="button2 blue2" type="button" value="Confirmar" ng-click="save()" ng-disabled="rjModel.processingRequest">
+      </div>
+
+      <div  ng-class="{true:'visible', false:'hidden'}[isSelectedAvailable()]">
+        <div>
+          <p class="parrafosGreen margin"> Disponibililad total</p>
+          <p class="parrafosGreen2 margin">{{rjModel.stock}}</p>
+        </div>
+       
+        <div>
+          <p class="parrafosGreen margin"> Disponibililad anual</p>
+          <p class="parrafosGreen2 margin">{{rjModel.stockYear}}</p>
+        </div>
+      </div>
+   </div>
+        
+    </div>

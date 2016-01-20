@@ -1,0 +1,8 @@
+<div ui-tree-handle class="nameNodeOffice">
+  <input type="radio" ng-value="office" name="office" ng-model="model.officeSelected" ng-change="selectOffice(office)" ng-disabled="office.disabled"/>
+  {{office.name}}
+</div>
+<ol ui-tree-nodes ng-model="office.childrens">
+  <li ng-repeat="office in office.childrens" ui-tree-node ng-include="'modules/manageIssues/nodes_assigned_renderer.html'">
+  </li>
+</ol>

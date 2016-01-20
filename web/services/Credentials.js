@@ -1,8 +1,8 @@
 var app = angular.module('mainApp');
 
-app.service('Credentials', ['$rootScope','Utils','Messages','Session','Config',
+app.service('Credentials', ['$rootScope','$wamp',
 
-  function($rootScope, Utils, Messages, Session, Config) {
+  function($rootScope, $wamp) {
 
     /*
     info local del explorador para detectar errores
@@ -23,129 +23,43 @@ app.service('Credentials', ['$rootScope','Utils','Messages','Session','Config',
     }
 
 
-    this.resetPassword = function(username, ok, error) {
-      var info = JSON.stringify(this.getLocalInfo());
-
-      var msg = {
-        id: Utils.getId(),
-        action: 'resetPassword',
-        username: username,
-        info: info
-      };
-
-      Messages.send(msg, function(response) {
-        if (response.error != undefined) {
-          error(response.error);
-        } else {
-          ok(response.ok);
-        }
-      });
+    this.resetPassword = function(username, cok, cerr) {
+      $wamp.call('system.password.generateResetPasswordHash', [username])
+  		.then(function(hash) {
+	       if (hash == null) {
+  				cerr('');
+  			} else {
+  				cok(hash);
+  			}
+  		},function(err) {
+  			cerr(err);
+  		});
     }
 
-
-    this.isLogged = function() {
-      var sid = Session.getSessionId();
-      if (sid == null) {
-        return false;
-      }
-      var s = Session.getSession(sid);
-      if (s == null) {
-        return false;
-      }
-      return ((s.user_id != undefined) && (s.user_id != null));
+    this.changePasswordWithHash = function(creds, hash, cok, cerr) {
+      $wamp.call('system.password.changePasswordWithHash', [creds.username, creds.password, hash])
+  		.then(function(ok) {
+	       if (ok) {
+           cok();
+         } else {
+  				cerr('');
+  			}
+  		},function(err) {
+  			cerr(err);
+  		});
     }
 
-
-
-    this.login = function(creds, ok, error) {
-      var info = JSON.stringify(this.getLocalInfo());
-
-      var msg = {
-        "id" : Utils.getId(),
-        "user" : creds.username,
-        "password" : creds.password,
-        "action" : "login",
-        "info": info
-      };
-
-      Messages.send(msg, function(response) {
-        if (response.ok != undefined) {
-          ok({user_id:response.user_id, session:response.session});
-        } else {
-          error(response.error);
-        }
-      });
-    }
-
-    this.logout = function(ok,error) {
-      var info = JSON.stringify(this.getLocalInfo());
-
-      var msg = {
-        id: Utils.getId(),
-        action: 'logout',
-        session: Session.getSessionId(),
-        info: info
-      };
-
-      Messages.send(msg, function(response) {
-
-        if (response.error != undefined) {
-          error(response.error);
-        } else {
-          ok(response.ok);
-        }
-
-      });
-    }
-
-
-    this.changePasswordWithHash = function(creds, hash, ok, error) {
-      var info = JSON.stringify(this.getLocalInfo());
-
-      var msg = {
-        id: Utils.getId(),
-        action: 'changePassword',
-        username: creds.username,
-        password: creds.newPassword,
-        hash: hash,
-        info: info
-      };
-
-      Messages.send(msg, function(response) {
-        if (response.error != undefined) {
-          error(response.error);
-        } else {
-          ok(response.ok);
-        }
-      });
-    }
-
-    this.changePassword = function(creds, ok, error) {
-
-      var sid = Session.getSessionId();
-      if ((sid == null) || (sid == '')) {
-        error('usuario no autentificado');
-        return;
-      }
-
-      var info = JSON.stringify(this.getLocalInfo());
-
-      var msg = {
-        id: Utils.getId(),
-        action: 'changePassword',
-        username: creds.username,
-        password: creds.newPassword,
-        session: sid,
-        info: info
-      };
-
-      Messages.send(msg, function(response) {
-        if (response.error != undefined) {
-          error(response.error);
-        } else {
-          ok(response.ok);
-        }
-      });
+    this.changePassword = function(sid, creds, cok, cerr) {
+      $wamp.call('system.password.changePassword', [sid, creds.username, creds.newPassword])
+  		.then(function(ok) {
+	       if (ok) {
+           cok();
+         } else {
+  				cerr('');
+  			}
+  		},function(err) {
+  			cerr(err);
+  		});
     }
 
 }])

@@ -1,0 +1,14 @@
+
+<div class='menuAssistance'>
+    <div class="contentActionMenu">
+      <div class="openMenu" ng-click="toggleMenu()"> <i class="fa fa-bars fa-2x"></i> </div>
+    </div>
+
+    <ul>
+      <li ng-repeat='item in model.items' ng-click='item.function()'>
+        <!-- <div><a href={{item.url}}>{{item.label}}</a></div> -->
+        <div>{{item.label}}</div>
+        <div class="{{item.img}}"></div>
+      </li>
+    </ul>
+</div>

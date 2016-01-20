@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <title>Ingresantes 2015</title>
+    <meta charset="utf-8" />
+    <meta name='viewport' content='width=device-width'/>
+    <link rel="stylesheet" href="ingresantes.css" />
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Indie+Flower' rel='stylesheet' type='text/css'>
+
+    <!-- <script language="JavaScript">
+    function ver_password() {
+        var passwd_valor = document.elformulario.input_pass.value;
+
+        document.getElementById('passwd_sitio').innerHTML
+            = (document.elformulario.input_ver.checked)
+            ? '<input type="text"     name="input_pass" value="">'
+            : '<input type="password" name="input_pass" value="">'
+            ;
+
+        document.elformulario.input_pass.value = passwd_valor;
+    }
+    </script> -->
+
+
+    <!-- LIBRERIAS -->
+    <script src="/libs/bower_components/angularjs/angular.js"></script>
+    <script src="/libs/bower_components/angular-route/angular-route.js"></script>
+    <script src="/libs/bower_components/autobahn/autobahn.js"></script>
+    <script src="/libs/bower_components/angular-wamp/release/angular-wamp.js"></script>
+
+    <!-- ARCHIVOS DE CONFIGURACION E INICIALIZACION -->
+    <script type="text/javascript" src="/config-ingresantes.json"></script>
+    <script type="text/javascript" src="/systems/ingresantes/index.module.js"></script>
+
+    <!-- SERVICIOS DE CONFIGURACION -->
+    <script type="text/javascript" src="/services/Session.js"></script>
+    <script type="text/javascript" src="/services/Cache.js"></script>
+    <script type="text/javascript" src="/services/Utils.js"></script>
+    <script type="text/javascript" src="/services/Notifications.js"></script>
+    <!-- <script type="text/javascript" src="/services/Login.js"></script> -->
+    <script type="text/javascript" src="/services/Users.js"></script>
+    <script type="text/javascript" src="/services/systems/student/Student.js"></script>
+    <!-- <script type="text/javascript" src="/services/systems/files/Files.js"></script> -->
+    <!-- <script type="text/javascript" src="/directives/onReadFileBinaryString.js"></script> -->
+
+    <!-- CONTROLADOR PRINCIPAL -->
+    <script type="text/javascript" src="/systems/ingresantes/index.controller.js"></script>
+
+    <!-- RUTEO Y MODULOS PRINCIPALES -->
+    <script type="text/javascript" src="/systems/ingresantes/routes.js"></script>
+
+
+</head>
+
+<body ng-app="mainApp" ng-controller="IngresantesCtrl">
+
+    <div class="ingresantes" ng-class='getClazz()'>
+      <!--CLASES (home, genero, mail,activacion, password,fin)  y (mostrarEspere, ocultarEspere) y de errores (DNInoExiste, DNIActivado, CorreoNoLlega, consultaEnviada )-->
+
+        <div class="header">
+          &nbsp; <img class="logo" src="./img/siFCE_LogoMenu.png">
+        </div>
+
+        <div class="pantallas">
+
+            <div class="pantallaInicio">
+                  <div><img src="./img/au24Logo.png"></div>
+                  <div class="textTitles"><h1> Alta de cuenta para AU24<h1></div>
+                  <div class="textTitles2">
+                    Ingresá tu Nº de documento
+                  </div>
+                  <div>
+                    <input class="inputDNI" type="text" 3placeholder="" name='dni' ng-model='model.dni' ng-change='checkDniSyntax()' required></input>
+                  </div>
+
+                  <!-- <div class="textSpan">
+                    <i class="fa fa-exclamation-triangle"></i> <b>ATENCIÓN |</b> DNI sin puntos - Pasaporte sólo letras y números (sin barras, puntos, guiones)
+                  </div> -->
+
+                  <!-- <div ng-if='model.dniOk'> -->
+                  <div>
+                    <button class="btns" type="button" ng-click='checkDni()'> Continuar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
+                  </div>
+
+
+                  <div class="logos">
+                    <img src="./img/fceLogo.png">
+                  </div>
+            </div>
+
+            <div class="pantallaGenero">
+
+                  <div class="textTitles"><h1><i class="fa fa-venus-mars"></i> Marcá según corresponda<h1></div>
+                  <!-- <div class="textTitles2">
+                    Seleccione
+                  </div> -->
+
+                  <div class="textTitles2">
+                    <input type="checkbox" ng-model='model.gender.male' ng-click='setMale()' class="check"> Varón <br>
+                    <input type="checkbox" ng-model='model.gender.female' ng-click='setFemale()'> Mujer <br>
+                    <input type="checkbox" ng-model='model.gender.nd' ng-click='setNd()'> Prefiero no especificar
+
+
+                    </div>
+
+                    <div>
+                      <button class="btns" type="button" ng-click='setGender()'> Continuar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
+                    </div>
+                  <!-- <div class="generos">
+                      <button class="btnsGenero"type="button"><i class="fa fa-mars fa-2x textBlanco"></i><br> Masculino</button>
+                      <button class="btnsGenero"type="button"><i class="fa fa-venus fa-2x textBlanco"></i><br> Femenino</button>
+                      <button class="btnsGenero"type="button"><i class="fa fa-venus-mars fa-2x textBlanco"></i><br> Otro</button>
+
+                  </div> -->
+
+            </div>
+
+            <div class="pantallaCarga">
+                  <div>
+                      <h1><span class="textHola">Hola!</span> , <b>{{model.user.name}} {{model.user.lastname}}</b> </div></h1>
+                  <div>
+                      Para dar de alta tu cuenta y acceder a AU24 es necesario que nos informes tu dirección de correo electrónico
+                  </div>
+
+                  <form name="emailform">
+                      <div class="textTitles2"> <i class="fa fa-envelope-o"></i> Correo electrónico personal</div>
+                      <div>
+                          <input class="inputMail" type="email" name='mail' ng-model='model.email.email' required></input>
+                      </div>
+
+                      <!-- <div id="passwd_sitio"><input type="password" name="input_pass" value=""></div>&nbsp;&nbsp;
+                      <input type="checkbox" name="input_ver" value="ver" onclick="ver_password();"> -->
+
+                  </form>
+                  <!-- <button class="btns" type="button" ng-if='emailform.mail.$valid' ng-click='sendEmailValidation()'>Enviar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button> -->
+                  <button class="btns" type="button"  ng-click='sendEmailValidation()'>Enviar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
+                  <div ng-if='model.email.invalid' class="textSpan3">
+                    <i class="fa fa-times"></i> Formato de correo electrónico inválido
+                  </div>
+
+
+            </div>
+
+            <div class="pantallaActivacion">
+                <div>
+                    <h1><i class="fa fa-key"></i> Código de Activación</h1>
+                </div>
+                <div class="textTitles2">
+                    Te hemos enviado un mensaje con el código de activación a <b>{{model.email.email}}</b>
+                </div>
+                <div class="textSpan4">
+                  <button class="modificarMail" ng-click='changeScreenBackwards()'><i class="fa fa-pencil textBlanco2"></i> Modificar dirección de correo </button>
+                </div>
+                <div class="textSpan2">
+                  <i class="fa fa-exclamation-triangle"></i> <b>Revisá la bandeja de correo no deseado </b>
+                </div>
+                <div class="textSpan2">
+                  <i class="fa fa-exclamation-triangle"></i> Si te llegó a "correo no deseado" tilda y da clic en "es correo deseado"
+                </div>
+
+                <div class="textTitles2 tituloCodAct">
+                  <i class="fa fa-key"></i> Código de Activación
+                </div>
+                <input class="inputCode" type="text" ng-model='model.email.code'> </input>
+                <button class="btns" type="button" ng-click='checkEmailCode()'>Enviar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
+
+
+                <div class="textSpan3">
+                    <button class="btnsActivacion" type="button" ng-click='resendEmailValidation()'>No me llego el correo, <b>volver a enviar</b></button><br>
+                    <div ng-if='model.email.sending'><i class="fa fa-circle-o-notch fa-spin"></i> enviando correo...</div>
+                    <div ng-if='model.email.invalid'><i class="fa fa-times"></i> Código de Activación Incorrecto</div>
+                </div>
+
+            </div>
+
+            <div class="pantallaPassword">
+              <div>
+                  <h1><i class="fa fa-lock"></i> Crear Contraseña</h1>
+              </div>
+              <div class="textTitles4">
+                  ¡Último paso! es necesario que crees tu contraseña<br>
+              </div>
+              <div class="textTitles5">
+                  para ingresar a AU24.
+              </div>
+
+              <div class="textSpan2">
+                <i class="fa fa-exclamation-triangle"></i> <b>Debe comenzar con una letra </b>
+              </div>
+              <div class="textSpan2">
+                 <b>y contener al menos un número</b>
+              </div>
+
+              <div class="passwords">
+                  <div>
+                    <div class="textTitles2"><i class="fa fa-lock"></i> Contraseña </div>
+                    <div ng-if='!model.passwordVisible'> <input class="inputPassword" type="password" name"password" ng-model='model.password' ng-change='checkPassword()' required></div>
+                    <div ng-if='model.passwordVisible'> <input class="inputPassword" type="text" name"password" ng-model='model.password' ng-change='checkPassword()' required></div>
+                  </div>
+                  <div>
+                    <div class="textTitles2"><i class="fa fa-lock"></i> Repetir Contraseña</div>
+                    <div ng-if='!model.passwordVisible'> <input class="inputPassword" type="password" name"password" ng-model='model.password2' ng-change='checkPassword()' required>   </div>
+                    <div ng-if='model.passwordVisible'> <input class="inputPassword" type="text" name"password" ng-model='model.password2' ng-change='checkPassword()' required>   </div>
+                  </div>
+                  <div>
+                    <div class="textTitles2"> &nbsp;</div>
+                    <button class="btnVerPassword" ng-click='model.passwordVisible = !model.passwordVisible'><i class="fa fa-unlock-alt fa-2x "></i></button>
+                  </div>
+
+              </div>
+
+              <!-- <button class="btns" type="button" ng-if='model.passwordOk' ng-click='changePassword()'>Enviar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button> -->
+              <button class="btns" type="button" ng-click='changePassword()'>Enviar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
+              <div ng-if='!model.passwordOk' class="textSpan3">
+                <i class="fa fa-times"></i> Las contraseñas no coinciden o no cumple con los requisitos
+              </div>
+              <div ng-if='model.password != model.password2' class="textSpan3">
+                <i class="fa fa-times"></i> Las contraseñas no son iguales
+              </div>
+
+            </div>
+
+            <div class="pantallaFin">
+                <div>
+                    <h1><i class="fa fa-check-square-o"></i> Proceso Finalizado Correctamente!</h1>
+                </div>
+                <div class="textTitles2">
+                    Ahora podrás acceder a AU24 <br>
+                    <a href='http://www.au24.econo.unlp.edu.ar'><b>www.au24.econo.unlp.edu.ar<b></a>
+                </div><br>
+                <!--
+                <div class="textTitles2">
+                  <i class="fa fa-user"></i> Usuario: <span class="textTitles3"><b{{model.dni}}</b></span>
+                </div>
+                <div class="textTitles2">
+                  <i class="fa fa-lock"></i> Contraseña: <span class="textTitles3"><b>********</b></span>
+                </div>
+                <br>
+                <button class="btns" type="button">Salir &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
+                -->
+
+            </div>
+
+
+
+        </div>
+
+        <div class="pantallaEspere">
+          <!-- <ul class="fa-ul">
+              <li><i class="fa-li fa fa-spinner fa-spin"></i>Por favor espere...</li>
+          </ul> -->
+          <i class="fa fa-spinner fa-pulse fa-2x"></i> &nbsp;Por favor espere...
+        </div>
+
+        <div class="pantallaNoExisteDNI">
+          <div><h1> El Nº de Documento <span class="textSpan2">{{model.dni}}</span> no existe</h1> <br> </div>
+          <button class="btns3" type="button" ng-click='backToDni()'><i class="fa fa-angle-left"></i> Volver  </button>
+          <div>
+            <i class="fa fa-clock-o fa-3x"></i> Tené en cuenta que la carga del documento al sistema puede demorar hasta 48 hs luego de la inscripción
+          </div>
+          <br>
+          <div>
+            Si ese lapso a sido superado y continua aún el problema,
+          </div>
+          <div>
+            por favor completá el formulario, nos comunicaremos con vos a la brevedad
+          </div>
+
+          <br>
+
+          <div class="formulario">
+            <div>Nombre y Apellido   &nbsp;<input class="inputForms"  type="text" ng-model='model.error.names'></input></div>
+            <div>Nº de Documento  &nbsp;<input class="inputForms" type="text" ng-model='model.error.dni'></input></div>
+            <div>Correo Electrónico  &nbsp;<input class="inputForms" type="text" ng-model='model.error.email'></input></div>
+            <div>Comentario  &nbsp;<input class="inputForms" type="text" ng-model='model.error.tel'  maxlength="150"></input></div>
+
+          </div>
+
+          <button class="btns" type="button" ng-click='wrongDni()'>Enviar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
+
+
+        </div>
+
+        <div class="pantallaDNIActivado">
+          <div>
+            <span class="textHola">Hola!</span> , <b>{{model.user.name}} {{model.user.lastname}}</b>
+          </div>
+          <div>
+            <h1> La cuenta <span class="textSpan2">{{model.dni}}</span> ya se encuentra activa</h1> <br>
+          </div>
+
+          <div>
+             Si ya estabas registrado y no recuerdas la contraseña o deseas modificar tu datos personales
+          </div>
+          <div>
+             accede al portal de administración de cuentas desde <a class="textTitles3" href="http://www.fce.econo.unlp.edu.ar" target="_blank">aquí</a>
+          </div>
+          <br>
+
+          <div>
+            Si aún continuas con problemas, por favor completá el formulario, nos comunicaremos con vos a la brevedad
+          </div>
+
+          <br>
+
+          <div class="formulario">
+            <div>Nombre y Apellido   &nbsp;<input class="inputForms"  type="text" ng-model='model.error.names'></input></div>
+            <div>Nº de Documento  &nbsp;<input class="inputForms" type="text" ng-model='model.error.dni'></input></div>
+            <div>Correo Electrónico  &nbsp;<input class="inputForms" type="text" ng-model='model.error.email'></input></div>
+            <div>Comentario  &nbsp;<input class="inputForms" type="text" ng-model='model.error.tel'  maxlength="150"></input></div>
+
+          </div>
+
+          <button class="btns" type="button" ng-click='alreadyActive()'>Enviar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
+          <button class="btns2" type="button" ng-click='backToDni()'><i class="fa fa-angle-left"></i> Volver  </button>
+        </div>
+
+
+        <div class="pantallaNoLlegaMail">
+
+          <div>
+            <h1><i class="fa fa-exclamation"></i> No me llego el código de activación</h1> <br>
+          </div>
+
+          <div>
+             ¿has revisado el correo no deseado en la cuenta <span class="textTitles6"><b> {{model.email.email}} </b></span> ?
+           </div>
+           <div>
+             si lo has hecho, por favor completá el formulario, nos comunicaremos con vos a la brevedad
+           </div>
+          <br>
+
+          <div class="formulario">
+            <div>Nombre y Apellido   &nbsp;<input class="inputForms"  type="text" ng-model='model.error.names'></input></div>
+            <div>Nº de Documento  &nbsp;<input class="inputForms" type="text" ng-model='model.error.dni'></input></div>
+            <div>Correo Electrónico  &nbsp;<input class="inputForms" type="text" ng-model='model.error.email'></input></div>
+            <div>Comentario  &nbsp;<input class="inputForms" type="text" ng-model='model.error.tel'  maxlength="150"></input></div>
+
+          </div>
+
+          <button class="btns" type="button" ng-click='noCode()'>Enviar &nbsp; <i class="fa fa-angle-right btnFlecha"></i></button>
+          <button class="btns2" type="button" ng-click='backToEmail()'><i class="fa fa-angle-left"></i> Volver  </button>
+        </div>
+
+        <div class="pantallaConsultaEnviada">
+
+          <div>
+            <h1><i class="fa fa-envelope-o"></i></i> Consulta Enviada</h1> <br>
+          </div>
+
+          <div>
+            nos comunicaremos con vos, a la brevedad
+           </div>
+
+
+        </div>
+
+
+        <div class="footer">
+          &nbsp;  © 2015 | DiTESI | Dirección de tecnologías y Sistemas Informáticos | Secretaría de Administración y Finanzas | DeTISE | Departamento de tecnología Informática y Servicios Educativos | Secretaría Académica | Facultad de Ciencias Económicas | UNLP | Calle 6 Nº 777 - 1er Subsuelo | La Plata | Bs. As. | Tel: +54 (221) 423-6769/71/72 int. 123 | ditesi@econo.unlp.edu.ar
+        </div>
+    </div>
+</body>
+
+</html>

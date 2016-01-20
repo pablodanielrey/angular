@@ -1,170 +1,198 @@
 # -*- coding: utf-8 -*-
-import psycopg2, logging
+import psycopg2
 import inject
-import hashlib
-import re
+import logging
 
-from model.logging import Log
-from model.profiles import Profiles
-from model.mail.mail import Mail
 from model.config import Config
-from model.events import Events
-from model.users.users import Users
-from model.credentials.credentials import UserPassword
-from model.session import Session, SessionNotFound
+from model.login import Login
+from model.profiles import Profiles
+from model.session import Session
 
-from model.exceptions import *
-
-
-"""
-peticion :
-
-{
-  "id":"id de la peticion"
-  "action":"login",
-  "user":"usuario",
-  "password":"clave",
-  "info":"informacion adicional enviada por el clietne javascript"
-}
-
-respuesta :
-
-{
-  "id":"id de la peticion"
-  "session":"id de sesion a usar para la ejecución de futuras funciones",
-  "user_id":'id del usuario logueado'
-  "ok":""
-  "error":"mensaje de error"
-}
-
-"""
-class Login:
-
-  userPassword = inject.attr(UserPassword)
-  session = inject.attr(Session)
-  config = inject.attr(Config)
-  events = inject.attr(Events)
-  log = inject.attr(Log)
-
-  def sendEvents(self,server,user_id):
-      event = {
-        'type':'StatusChangedEvent',
-        'data':''
-      }
-      self.events.broadcast(server,event)
+import asyncio
+from asyncio import coroutine
+from autobahn.asyncio.wamp import ApplicationSession
 
 
-  def handleAction(self, server, message):
+class LoginWamp(ApplicationSession):
 
-    if message['action'] != 'login':
-      return False
+    def __init__(self, config=None):
+        logging.debug('instanciando')
+        ApplicationSession.__init__(self, config)
 
-    user = message['user']
-    passw = message['password']
-    credentials = {
-        'username':message['user'],
-        'password':message['password']
-    }
+        self.serverConfig = inject.instance(Config)
+        self.loginModel = inject.instance(Login)
+        self.profiles = inject.instance(Profiles)
+        self.session = inject.instance(Session)
 
-    info = ' - ' + message['info'] if 'info' in message else ''
+    @coroutine
+    def onJoin(self, details):
+        logging.debug('registering methods')
+        yield from self.register(self.login_async, 'system.login')
+        yield from self.register(self.logout_async, 'system.logout')
+        yield from self.register(self.validateSession_async, 'system.session.validate')
+        yield from self.register(self.generateResetPasswordHash_async, 'system.password.generateResetPasswordHash')
+        yield from self.register(self.changePassword_async, 'system.password.changePassword')
+        yield from self.register(self.changePasswordWithHash_async, 'system.password.changePasswordWithHash')
+        yield from self.register(self.checkProfileAccess_async, 'system.profiles.checkProfileAccess')
 
-    con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
-    try:
-      rdata = self.userPassword.findUserPassword(con,credentials)
-      if rdata == None:
-        response = {'id':message['id'], 'error':'autentificación denegada'}
-        server.sendMessage(response)
+    def _getDatabase(self):
+        host = self.serverConfig.configs['database_host']
+        dbname = self.serverConfig.configs['database_database']
+        user = self.serverConfig.configs['database_user']
+        passw = self.serverConfig.configs['database_password']
+        return psycopg2.connect(host=host, dbname=dbname, user=user, password=passw)
 
-        self.log.log('login - ERROR - ' + message['user'] + ' - ' + message['password'] + ' - ' + server.peer + info)
+    '''
+        Chequea que el usuario logeado en la sesion sid tenga alguno de los perfiles enviados en la lista de perfiles
+    '''
+    def checkProfileAccess(self, sid, roles):
+        con = self._getDatabase()
+        try:
+            r = self.profiles._checkAccessWithCon(con, sid, roles)
+            return r
 
-        return True
+        finally:
+            con.close()
 
-      sess = {
-        self.config.configs['session_user_id']:rdata['user_id'],
-        'peer':server.peer
-      }
-      sid = self.session.create(sess)
+    '''
+        valida que la session sid exista
+    '''
+    def validateSession(self, sid):
+        con = self._getDatabase()
+        try:
+            self.session._findSession(con, sid)
+            return True
 
-      self.log.log('login - ' + message['user'] + ' - ' + server.peer + info,sid)
+        except Exception as e:
+            logging.exception(e)
+            return False
 
-      response = {'id':message['id'], 'ok':'', 'session':sid, 'user_id':rdata['user_id']}
-      server.sendMessage(response)
+        finally:
+            con.close()
 
-      self.sendEvents(server,rdata['user_id'])
+    '''
+        Genera el hash para reseteo de la clave
+    '''
+    def generateResetPasswordHash(self, username):
+        con = self._getDatabase()
+        try:
+            hash = self.loginModel.generateResetPasswordHash(con, username)
+            con.commit()
+            return hash
 
-      ''' para debug '''
-      print(str(self.session))
+        except Exception as e:
+            logging.exception(e)
+            return None
 
-      return True
+        finally:
+            con.close()
 
-    finally:
-        con.close()
+    '''
+        cambia la clave del usuario determinado por el hash pasado como parámetro
+    '''
+    def changePassword(self, sid, username, password):
+        con = self._getDatabase()
+        try:
+            r = self.loginModel.changePassword(con, sid, username, password)
+            con.commit()
+            return r
 
+        except Exception as e:
+            logging.exception(e)
+            return False
 
+        finally:
+            con.close()
 
-"""
-peticion :
+    '''
+        cambia la clave del usuario determinado por el hash pasado como parámetro
+    '''
+    def changePasswordWithHash(self, username, password, hhash):
+        con = self._getDatabase()
+        try:
+            r = self.loginModel.changePasswordWithHash(con, username, password, hhash)
+            con.commit()
+            return r
 
-{
-  "id":"id de la peticion"
-  "action":"logout",
-  "session":"sesion del usuario",
-  'info': 'info adicional para debug'
-}
+        except Exception as e:
+            logging.exception(e)
+            return False
 
-respuesta :
+        finally:
+            con.close()
 
-{
-  "id":"id de la peticion"
- O "ok":""
- O "error":"mensaje de error"
-}
+    '''
+        Loguea al usuario dentro del sistema y genera una sesion
+    '''
+    def login(self, username, password):
+        con = self._getDatabase()
+        try:
+            sid = self.loginModel.login(con, username, password)
+            con.commit()
+            return sid
 
-"""
-class Logout:
+        except Exception as e:
+            logging.exception(e)
+            return None
 
-  session = inject.attr(Session)
-  events = inject.attr(Events)
-  config = inject.attr(Config)
-  log = inject.attr(Log)
+        finally:
+            con.close()
 
-  def sendEvents(self,server,user_id):
-      event = {
-        'type':'StatusChangedEvent',
-        'data':''
-      }
-      self.events.broadcast(server,event)
+    '''
+        Elimina la sesion de usuario identificada por sid
+    '''
+    def logout(self, sid):
+        con = self._getDatabase()
+        try:
+            self.loginModel.logout(con, sid)
+            con.commit()
+            return True
 
+        except Exception as e:
+            logging.exception(e)
+            return False
 
-  def handleAction(self, server, message):
+        finally:
+            con.close()
 
-    if message['action'] != 'logout':
-      return False
+    @coroutine
+    def generateResetPasswordHash_async(self, username):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.generateResetPasswordHash, username)
+        return r
 
-    if 'session' not in message:
-        raise MalformedMessage()
+    @coroutine
+    def changePasswordWithHash_async(self, username, password, hash):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.changePasswordWithHash, username, password, hash)
+        return r
 
-    uid = None
-    sid = message['session']
+    @coroutine
+    def changePassword_async(self, sid, username, password):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.changePassword, sid, username, password)
+        return r
 
-    info = ' - ' + message['info'] if 'info' in message else ''
+    @coroutine
+    def login_async(self, username, password):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.login, username, password)
+        return r
 
-    self.log.log('logout - ' + server.peer + info,sid)
+    @coroutine
+    def logout_async(self, sid):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.logout, sid)
+        return r
 
-    try:
-        sess = self.session.findSession(sid)
-        uid = sess['data'][self.config.configs['session_user_id']]
-        self.session.destroy(sid)
+    @coroutine
+    def checkProfileAccess_async(self, sid, roles):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.checkProfileAccess, sid, roles)
+        return r
 
-        self.log.log('session destroyed - ' + server.peer + info)
-
-    except SessionNotFound as e:
-        pass
-
-    ok = {'id':message['id'], 'ok':''}
-    server.sendMessage(ok)
-
-    if uid:
-        self.sendEvents(server,uid)
-
-    return True
+    @coroutine
+    def validateSession_async(self, sid):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.validateSession, sid)
+        return r

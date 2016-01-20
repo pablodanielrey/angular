@@ -5,11 +5,18 @@ import dateutil, dateutil.tz, dateutil.parser
 import logging
 
 class Date:
-
+      
     def isAware(self, date):
+        """
+           Tiene zona definida?
+        """
         return (date.tzinfo != None) and (date.tzinfo.utcoffset(date) != None)
 
+
     def isNaive(self, date):
+        """
+           No tiene zona definida?
+        """
         return not self.isAware(date)
 
     """ transforma un datetime naive a uno aware con la zona pasada """
@@ -61,7 +68,7 @@ class Date:
         parsea una fecha y hora y la retorna el la zona local del servidor.
         si viene sin timezone entonces supone que esta en la zona del server.
     """
-    def parse(self,datestr):
+    def parse(self, datestr):
         dt = dateutil.parser.parse(datestr)
         if self.isNaive(dt):
             dt = self.localizeLocal(dt)

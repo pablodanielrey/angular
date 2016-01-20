@@ -10,7 +10,7 @@
 
 
 	<div class="logo">
-		<img src="/systems/login/modules/logo.jpg" />
+		<img src="/logo.jpg" />
 	</div>
 
 	<form ng-submit='login()'>
@@ -18,12 +18,12 @@
 		<div>
 			<div class="margin_div_login">
 				<label class="text"> Usuario (DNI)</label>
-				<input class="name" type="text" ng-model="user.username" autofill='autofill'/>
+				<input class="name" type="text" ng-model="model.username" autofill='autofill'/>
 			</div>
 
 			<div class="margin_div_login">
 				<label class="text"> Contraseña</label>
-				<input class="password" type="password" ng-model="user.password" autofill='autofill'/>
+				<input class="password" type="password" ng-model="model.password" autofill='autofill'/>
 			</div>
 		</div>
 
@@ -33,8 +33,8 @@
 
 		<div class="option">
 			<span><a class="links" href="/systems/pass/resetPassword.html"> Olvidé mi contraseña </a></span>
-			<span>|</span>
-			<span><a class="links" href="/systems/account/indexCreateAccountRequest.html"> Crear cuenta </a></span>
+			<!-- <span>|</span> -->
+			<!-- <span><a class="links" href="/systems/account/indexCreateAccountRequest.html"> Crear cuenta </a></span> -->
 		<div>
 
 	</form>

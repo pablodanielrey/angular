@@ -17,12 +17,12 @@ class ETJustification(Justification):
     def isJustification(self,id):
         return self.id == id
 
-    def _isJustifiedTimeStart(self,sched,whs,justification,tolerancia):
+    def _isJustifiedTimeStart(self,sched,whs,justification,tolerancia, date = None):
         if len(whs) > 0:
             return True
         return False
 
-    def _isJustifiedTime(self,justification,start,end):
+    def _isJustifiedTime(self,justification,start,end, date = None):
         return False
 
     """
@@ -36,7 +36,7 @@ class ETJustification(Justification):
         inicializa un pedido en estado pendiente de una justificación en las fechas indicadas
         solo se tiene en cuenta begin
     """
-    def requestJustification(self,utils,con,userId,requestor_id,begin,end):
+    def requestJustification(self,utils,con,userId,requestor_id,begin,end,status):
 
         jid = str(uuid.uuid4())
         cur = con.cursor()
@@ -61,19 +61,27 @@ class ETJustification(Justification):
             'end':end
         }
 
-        events.extend(self.updateJustificationRequestStatus(utils,con,userId,req,'PENDING'))
+        created = datetime.datetime.now()
+        aux = created - datetime.timedelta(seconds=60)
+        e = self.updateJustificationRequestStatus(utils,con,userId,req,'PENDING',aux)
+        if status != None and status != 'PENDING':
+            e = self.updateJustificationRequestStatus(utils,con,userId,req,status)
+        events.extend(e)
         return events
 
 
 
     """ actualiza el estado del pedido de la justificacion al estado status """
-    def updateJustificationRequestStatus(self,utils,con,userId,req,status):
-
+    def updateJustificationRequestStatus(self,utils,con,userId,req,status,created=None):
+        if created is None:
+            created = datetime.datetime.now(datetime.timezone.utc)
+            created = created - datetime.timedelta(seconds=1)
+            
         requestId = req['id']
         previousStatus = utils._getJustificationRequestStatus(con,requestId)
 
         cur = con.cursor()
-        cur.execute('insert into assistance.justifications_requests_status (request_id,user_id,status) values (%s,%s,%s)',(requestId,userId,status))
+        cur.execute('insert into assistance.justifications_requests_status (request_id,user_id,status,created) values (%s,%s,%s,%s)',(requestId,userId,status,created))
 
         events = []
         e = {

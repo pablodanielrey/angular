@@ -1,974 +1,410 @@
 # -*- coding: utf-8 -*-
-import json, base64, datetime, traceback, logging
 import inject
+import logging
 import psycopg2
 
-from model.exceptions import *
+import asyncio
+from asyncio import coroutine
+from autobahn.asyncio.wamp import ApplicationSession
 
 from model.config import Config
-from model.profiles import AccessDenied, Profiles
-
-from model.utils import DateTimeEncoder
-
+from model.profiles import Profiles
 from model.systems.offices.offices import Offices
 
 
+class OfficesWamp(ApplicationSession):
 
-"""
-retorna los usuarios que pertenecen a las oficinas y suboficinas en las cuales la persona userId tiene un rol determinado
+    def __init__(self, config=None):
+        logging.debug('instanciando')
+        ApplicationSession.__init__(self, config)
 
-query:
-{
-  id:
-  action:'getUserInOfficesByRole'
-  session:
-  request: {
-    userId: id del usuario que tiene los roles en las oficinas -- opcional,. si no va se toma el usuario actual de la session
-    role: rol a buscar
-    tree: False|True -- retorna el arbol o solo las oficinas directas que tienen el rol.
-  }
-}
+        self.serverConfig = inject.instance(Config)
+        self.profiles = inject.instance(Profiles)
+        self.offices = inject.instance(Offices)
 
-response:
-{
-  id:
-  ok:
-  error:
-  response: {
-    users: [
-        userId: 'id del usuario'
-    ]
-  }
-}
+    @coroutine
+    def onJoin(self, details):
+        logging.debug('registering methods')
+        yield from self.register(self.getOffices_async, 'offices.offices.getOffices')
+        yield from self.register(self.findOffices_async, 'offices.offices.findOffices')
+        yield from self.register(self.getOfficesByUser_async, 'offices.offices.getOfficesByUser')
+        yield from self.register(self.getOfficesTree_async, 'offices.offices.getOfficesTree')
+        yield from self.register(self.getOfficesTreeByUser_async, 'offices.offices.getOfficesTreeByUser')
+        yield from self.register(self.getOfficesUsers_async, 'offices.offices.getOfficesUsers')
+        yield from self.register(self.getUserInOfficesByRole_async, 'offices.offices.getUserInOfficesByRole')
+        yield from self.register(self.getOfficesByUserRole_async, 'offices.offices.getOfficesByUserRole')
+        yield from self.register(self.deleteOfficeRole_async, 'offices.offices.deleteOfficeRole')
+        yield from self.register(self.addOfficeRole_async, 'offices.offices.addOfficeRole')
+        yield from self.register(self.persistOfficeRole_async, 'offices.offices.persistOfficeRole')
+        yield from self.register(self.persistOffice_async, 'offices.offices.persistOffice')
+        yield from self.register(self.removeUserFromOffice_async, 'offices.offices.removeUserFromOffice')
+        yield from self.register(self.addUserToOffices_async, 'offices.offices.addUserToOffices')
+        yield from self.register(self.getRolesAdmin_async, 'offices.offices.getRolesAdmin')
+        yield from self.register(self.getUserOfficeRoles_async, 'offices.offices.getUserOfficeRoles')
 
-"""
-class GetUserInOfficesByRole:
+    def _getDatabase(self):
+        host = self.serverConfig.configs['database_host']
+        dbname = self.serverConfig.configs['database_database']
+        user = self.serverConfig.configs['database_user']
+        passw = self.serverConfig.configs['database_password']
+        return psycopg2.connect(host=host, dbname=dbname, user=user, password=passw)
 
-    profiles = inject.attr(Profiles)
-    config = inject.attr(Config)
-    offices = inject.attr(Offices)
-
-    def handleAction(self, server, message):
-
-        if (message['action'] != 'getUserInOfficesByRole'):
-            return False
-
-        if 'role' not in message['request']:
-            raise MalformedMessage()
-
-        sid = message['session']
-        self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE','ADMIN-OFFICES','USER-OFFICES'])
-
-        userId = self.profiles.getLocalUserId(sid)
-        if 'userId' in message['request']:
-            userId = message['request']['userId']
-
-        tree = False
-        if 'tree' in message['request']:
-            tree = message['request']['tree']
-
-        role = message['request']['role']
-
-        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+    '''
+        Obtiene los roles que tiene dentro de las oficinas el usuario
+    '''
+    def getUserOfficeRoles(self, sid, userId):
+        con = self._getDatabase()
         try:
-            logging.debug('getUserInOfficesByRole')
-            users = self.offices.getUserInOfficesByRole(con,userId,tree,role)
-
-            response = {
-                'id':message['id'],
-                'ok':'',
-                'response':{
-                    'users':users
-                }
-            }
-            server.sendMessage(response)
-            return True
-
-        except Exception as e:
-            logging.exception(e)
-            raise e
-
+            if userId is None:
+                userId = self.profiles.getLocalUserId(sid)            
+            return self.offices.getOfficesRoles(con, userId)
         finally:
             con.close()
 
+    @coroutine
+    def getUserOfficeRoles_async(self,sid, userId):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.getUserOfficeRoles, sid, userId)
+        return r
 
-
-'''
-Retorna los roles que puede asignar el usuario (userId) para las oficinas (officesId) y para los usuarios (usersId)
-Ademas retorna los roles que ya poseen lso usarios
-query:
-{
-  id:
-  action:'getRolesAdmin'
-  session:
-  request: {
-    userId: 'id del usuario -- opcional, en el caso de no existir se toma el usuario de sesión'
-    officesId: [] 'ids de la oficina'
-    usersId: [] 'listado de usarios'
-  }
-}
-
-response:
-{
-  id:
-  ok:
-  error:
-  response: {
-    roles: [],
-    assignedRoles: [{
-        name:'',
-        send_mail: '' --- 't' | 'f'   si tiene mas de un valor retorno false
-    }]
-  }
-}
-
-'''
-class GetRolesAdmin:
-
-    profiles = inject.attr(Profiles)
-    config = inject.attr(Config)
-    offices = inject.attr(Offices)
-
-    def handleAction(self, server, message):
-
-        if (message['action'] != 'getRolesAdmin'):
-            return False
-
-        if ('session' not in message) or ('request' not in message) or ('officesId' not in message['request']) or ('usersId' not in message['request']):
-            response = {'id':message['id'], 'error': 'Insuficientes parámetros'}
-            server.sendMessage(response)
-            return True
-
-        sid = message['session']
-        self.profiles.checkAccess(sid,['ADMIN-OFFICES','USER-OFFICES'])
-
-        req = message['request']
-        officesId = req['officesId']
-        usersId = req['usersId']
-
-        if 'userId' in req:
-            userId = req['userId']
-        else:
-            userId = self.profiles.getLocalUserId(sid)
-
-        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+    def getOfficesByUser(self, sessionId, userId, tree):
+        con = self._getDatabase()
         try:
-            roles = self.offices.getRolesAdmin(con, userId, officesId, usersId)
-            assignedRoles = self.offices.getAssignedRoles(con, officesId, usersId, roles)
-            response = {
-                'id':message['id'],
-                'ok':'',
-                'response': {
-                    'roles':roles,
-                    'assignedRoles':assignedRoles
-                }
-            }
-            server.sendMessage(response)
-            return True
-        except Exception as e:
-            logging.exception(e)
-            raise e
+            return self.offices.getOfficesByUser(con, userId, tree, False)
         finally:
             con.close()
 
+    @coroutine
+    def getOfficesByUser_async(self, sessionId, userId, tree):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.getOfficesByUser, sessionId, userId, tree)
+        return r
 
 
-"""
-query:
-{
-  id:
-  action:'getUserOfficeRoles'
-  session:
-  request: {
-    officeId: 'id de la oficina' -- opcional, en el caso de no existir obtiene todos los roles que tenga en las oficinas
-  }
-}
-
-response:
-{
-  id:
-  ok:
-  error:
-  response: {
-    roles: [
-      {
-        officeId: 'id de la oficina',
-        role: 'rol en la oficina'
-      }
-    ]
-  }
-}
-
-"""
-class GetUserOfficeRoles:
-
-    profiles = inject.attr(Profiles)
-    config = inject.attr(Config)
-    offices = inject.attr(Offices)
-
-    def handleAction(self, server, message):
-
-        if (message['action'] != 'getUserOfficeRoles'):
-            return False
-
-        sid = message['session']
-        self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE','ADMIN-OFFICES','USER-OFFICES'])
-        userId = self.profiles.getLocalUserId(sid)
-
-        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+    def getOfficesTree(self):
+        con = self._getDatabase()
         try:
-            roles = self.offices.getOfficesRoles(con,userId)
-
-            response = {
-                'id':message['id'],
-                'ok':'',
-                'response':{
-                    'roles':roles
-                }
-            }
-            server.sendMessage(response)
-            return True
-
-        except Exception as e:
-            logging.exception(e)
-            raise e
-
+            return self.offices.getOfficesTree(con)
         finally:
             con.close()
 
+    @coroutine
+    def getOfficesTree_async(self):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.getOfficesTree)
+        return r
 
 
-
-
-"""
-
-query :
-{
-  id:,
-  action:"getOffices",
-  session:,
-  request:{
-      user_id: "id del usuario" -- opcional. si no existe el parámetro entonces retorna todas las oficinas.
-      tree: "True|False" -- obtiene todo el arbol de las oficinas abajo de las que la persona pertenece.
-  }
-
-}
-
-response :
-{
-  id: "id de la petición",
-  ok: "caso exito",
-  error: "error del servidor",
-  response:{
-    offices: [
-      {
-        id: 'id de la oficina',
-        name: 'nombre de la oficina',
-        parent: 'id de la oficina padre' -- o no existente en el caso de ser oficina de primer nivel.
-      }
-    ]
-  }
-
-}
-
-
-"""
-
-class GetOffices:
-
-    profiles = inject.attr(Profiles)
-    config = inject.attr(Config)
-    offices = inject.attr(Offices)
-
-    def handleAction(self, server, message):
-
-        if (message['action'] != 'getOffices'):
-            return False
-
-        userId = None
-        if 'request' in message and 'user_id' in message['request']:
-            userId = message['request']['user_id']
-
-
-        tree = False
-        if 'request' in message and 'tree' in message['request']:
-            tree = message['request']['tree']
-
-
-        sid = message['session']
-        self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE','ADMIN-OFFICES','USER-OFFICES'])
-
-        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+    def getOfficesTreeByUser(self, sessionId, userId):
+        con = self._getDatabase()
         try:
-            offices = []
-            if userId is not None:
-                offices = self.offices.getOfficesByUser(con,userId,tree)
+            if userId is None:
+                userId = self.profiles.getLocalUserId(sessionId)
+            return self.offices.getOfficesTreeByUser(con,userId)
+        finally:
+            con.close()
+
+    @coroutine
+    def getOfficesTreeByUser_async(self, sessionId, userId):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.getOfficesTreeByUser, sessionId, userId)
+        return r
+
+    def getOffices(self):
+        con = self._getDatabase()
+        try:
+            return self.offices.getOffices(con)
+        finally:
+            con.close()
+
+    @coroutine
+    def getOffices_async(self):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.getOffices)
+        return r
+
+
+    def getOfficesUsers(self, offices):
+        con = self._getDatabase()
+        try:
+            return self.offices.getOfficesUsers(con,offices)
+        finally:
+            con.close()
+
+    @coroutine
+    def getOfficesUsers_async(self, offices):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.getOfficesUsers, offices)
+        return r
+
+
+    def getUserInOfficesByRole(self, userId, role, tree):
+        con = self._getDatabase()
+        try:
+            tree = False if tree is None else tree
+            return self.offices.getUserInOfficesByRole(con,userId,tree,role)
+        finally:
+            con.close()
+
+    @coroutine
+    def getUserInOfficesByRole_async(self, userId, role, tree):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.getUserInOfficesByRole, userId, role, tree)
+        return r
+
+
+    def getOfficesByUserRole(self, userId, role, tree):
+        con = self._getDatabase()
+        try:
+            if tree is None:
+                return self.offices.getOfficesByUserRole(con,userId)
+            elif role is None:
+                return self.offices.getOfficesByUserRole(con,userId,tree)
             else:
-                offices = self.offices.getOffices(con)
-
-            response = {
-                'id':message['id'],
-                'ok':'',
-                'response':{
-                    'offices':offices
-                }
-            }
-            server.sendMessage(response)
-            return True
-
-        except psycopg2.DatabaseError as e:
-            raise e
+                return self.offices.getOfficesByUserRole(con,userId,tree,role)
 
         finally:
             con.close()
 
-
-"""
-
-query :
-{
-  id:,
-  action:"getOfficesByUserRole",
-  session:,
-  request:{
-      user_id: "id del usuario" -- opcional. si no existe el parámetro entonces retorna todas las oficinas.
-      role: "por defecto es administra"
-      tree: "True|False" -- obtiene todo el arbol de las oficinas abajo de las que la persona pertenece.
-  }
-
-}
-
-response :
-{
-  id: "id de la petición",
-  ok: "caso exito",
-  error: "error del servidor",
-  response:{
-    offices: [
-      {
-        id: 'id de la oficina',
-        name: 'nombre de la oficina',
-        parent: 'id de la oficina padre' -- o no existente en el caso de ser oficina de primer nivel.
-      }
-    ]
-  }
-
-}
+    @coroutine
+    def getOfficesByUserRole_async(self, userId, role, tree):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.getOfficesByUserRole, userId, role, tree)
+        return r
 
 
-"""
-
-class GetOfficesByUserRole:
-
-    profiles = inject.attr(Profiles)
-    config = inject.attr(Config)
-    offices = inject.attr(Offices)
-
-    def handleAction(self, server, message):
-
-        if (message['action'] != 'getOfficesByUserRole'):
-            return False
-
-        userId = None
-        if 'request' in message and 'user_id' in message['request']:
-            userId = message['request']['user_id']
-
-        else:
-            response = {'id':message['id'], 'error':'Parámetros insuficientes'}
-            server.sendMessage(response)
-            return True
-
-        tree = False
-        if 'tree' in message['request']:
-            tree = message['request']['tree']
-
-        role = 'administra'
-        if 'role' in message['request']:
-            role = message['request']['role']
+    def _checkRoleByOffices(officesId,role):
+        localUserId = self.profiles.getLocalUserId(sid)
+        offices = self.offices.getOfficesByUserRole(con,localUserId,True,role)
+        for officeId in officesId:
+            listOff = list(map(lambda x: x == officeId, offices))
+            if len(listOff) == 0:
+                return False
+        return True
 
 
-        sid = message['session']
-        self.profiles.checkAccess(sid,['ADMIN-ASSISTANCE','USER-ASSISTANCE','ADMIN-OFFICES','USER-OFFICES'])
-
-        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+    def deleteOfficeRole(self, officesId, usersId, role):
+        con = self._getDatabase()
         try:
-            offices = self.offices.getOfficesByUserRole(con,userId,tree,role)
-
-            response = {
-                'id':message['id'],
-                'ok':'',
-                'response':{
-                    'offices':offices
-                }
-            }
-            server.sendMessage(response)
-            return True
+            if self._checkRoleByOffices(officesId,'admin-office'):
+                # elimino el rol
+                for officeId in officesId:
+                    for userId in usersId:
+                        self.offices.deleteRole(con,userId,officeId,role)
+                con.commit()
+                return 'ok'
+            else:
+                return None
 
         except psycopg2.DatabaseError as e:
-            raise e
-
-        finally:
-            con.close()
-
-
-
-"""
-retorna los usuarios que pertenecen a las oficinas y suboficinas en las cuales la persona userId tiene un rol determinado
-
-query:
-{
-  id:
-  action:'getOfficesUsers'
-  session:
-  request: {
-    offices:[] lista de ids de oficinas
-  }
-}
-
-response:
-{
-  id:
-  ok:
-  error:
-  response: {
-    users: [
-        userId: 'id del usuario'
-    ]
-  }
-}
-
-"""
-
-class GetOfficesUsers:
-
-    config = inject.attr(Config)
-    offices = inject.attr(Offices)
-
-    def handleAction(self, server, message):
-
-        if (message['action'] != 'getOfficesUsers'):
-            return False
-
-        if 'offices' not in message['request']:
-            raise MalformedMessage()
-
-
-        offices = message['request']['offices']
-        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
-        try:
-            users = self.offices.getOfficesUsers(con,offices)
-
-            response = {
-                'id':message['id'],
-                'ok':'',
-                'response': {
-                    'users':users
-                }
-            }
-            server.sendMessage(response)
-            return True
+            con.rollback()
+            return None
         except Exception as e:
-            logging.exception(e)
-            raise e
-
-        finally:
-            con.close()
-
-
-'''
-elimina el rol para usuario oficina
-
-query:{
-    id:,
-    action:'deleteOfficeRole',
-    session:,
-    request:{
-        usersId: [],
-        officesId: [],
-        role: "nombre del rol que se desea eliminar"
-    }
-}
-
-response: {
-    id: "id de la petición",
-    ok: "caso exito",
-    error: "error del servidor"
-}
-
-'''
-
-class DeleteOfficeRole:
-
-    profiles = inject.attr(Profiles)
-    config = inject.attr(Config)
-    offices = inject.attr(Offices)
-
-    def handleAction(self, server, message):
-
-        if (message['action'] != 'deleteOfficeRole'):
-            return False
-
-        if ('session' not in message) or ('request' not in message) or ('usersId' not in message['request']) or ('role' not in message['request']) or ('officesId' not in message['request']):
-            response = {'id':message['id'], 'error':'Insuficientes parámetros'}
-            server.sendMessage(response)
-            return True
-
-        sid = message['session']
-        self.profiles.checkAccess(sid,['ADMIN-OFFICES','USER-OFFICES'])
-
-        req = message['request']
-        officesId = req['officesId']
-        usersId = req['usersId']
-        role = req['role']
-
-        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
-        try:
-            # verifico si el usuario de session tiene el rol admin-office para la oficina de la cual se desean eliminar el rol
-            localUserId = self.profiles.getLocalUserId(sid)
-            offices = self.offices.getOfficesByUserRole(con,localUserId,True,'admin-office')
-            for officeId in officesId:
-                listOff = list(map(lambda x: x == officeId, offices))
-                if len(listOff) == 0:
-                    response = {'id':message['id'], 'error':'No tiene permiso para realizar esta operación'}
-                    server.sendMessage(response)
-                    return True
-
-            # elimino el rol
-            for officeId in officesId:
-                for userId in usersId:
-                    self.offices.deleteRole(con,userId,officeId,role)
-
-            con.commit()
-            response = {'id':message['id'], 'ok':'El rol se ha eliminado correctamente'}
-            server.sendMessage(response)
-            return True
-
-        except psycopg2.DatabaseError as e:
             con.rollback()
-            raise e
-
+            return None
         finally:
             con.close()
 
-
-'''
-setea el rol role al usuario userId para la oficina officeId
-
-query:{
-    id:,
-    action:'addOfficeRole',
-    session:,
-    request:{
-        usersId: [],
-        officesId: [],
-        role: {
-            name: '',
-            send_mail: ''
-        }
-    }
-}
-
-response: {
-    id: "id de la petición",
-    ok: "caso exito",
-    error: "error del servidor"
-}
-'''
-class AddOfficeRole:
-    profiles = inject.attr(Profiles)
-    config = inject.attr(Config)
-    offices = inject.attr(Offices)
-
-    def handleAction(self, server, message):
-
-        if (message['action'] != 'addOfficeRole'):
-            return False
-
-        if ('session' not in message) or ('request' not in message) or ('usersId' not in message['request']) or ('role' not in message['request']) or ('officesId' not in message['request']):
-            response = {'id':message['id'], 'error':'Insuficientes parámetros'}
-            server.sendMessage(response)
-            return True
+    @coroutine
+    def deleteOfficeRole_async(self, officesId, usersId, role):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.deleteOfficeRole, officesId, usersId, role)
+        return r
 
 
-        sid = message['session']
-        self.profiles.checkAccess(sid,['ADMIN-OFFICES','USER-OFFICES'])
-
-        req = message['request']
-
-        role = req['role']
+    def addOfficeRole(self, officesId, usersId, role):
         if ('name' not in role) or role["name"].strip() == "":
-            response = {'id':message['id'], 'error':'El rol no tiene nombre'}
-            server.sendMessage(response)
-            return True
-
-        roleName = req['role']['name']
-
-        officesId = req['officesId']
-
-        usersId = req['usersId']
-
-        sendMail = (True,role['send_mail'])['send_mail' in role]
-
-        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+            return None
+        con = self._getDatabase()
         try:
-            # verifico si el usuario de session tiene el rol admin-office para la oficina de la cual se desea agregar el rol
-            localUserId = self.profiles.getLocalUserId(sid)
-            offices = self.offices.getOfficesByUserRole(con,localUserId,True,'admin-office')
-            for officeId in officesId:
-                listOff = list(map(lambda x: x == officeId, offices))
-                if len(listOff) == 0:
-                    response = {'id':message['id'], 'error':'No tiene permiso para realizar esta operación'}
-                    server.sendMessage(response)
-                    return True
-
-            # agrego el rol
-            for userId in usersId:
-                for officeId in officesId:
-                    self.offices.addRole(con,userId,officeId,roleName,sendMail)
-
-            con.commit()
-            response = {'id':message['id'], 'ok':'El rol se ha creado correctamente'}
-            server.sendMessage(response)
-            return True
+            if self._checkRoleByOffices(officesId,'admin-office'):
+                for userId in usersId:
+                    for officeId in officesId:
+                        self.offices.addRole(con,userId,officeId,roleName,sendMail)
+                con.commit()
+                return 'ok'
+            return None
 
         except psycopg2.DatabaseError as e:
             con.rollback()
-            raise e
+            return None
+        except Exception as e:
+            con.rollback()
+            return None
+        finally:
+            con.close()
+
+    @coroutine
+    def addOfficeRole_async(self, officesId, usersId, role):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.addOfficeRole, officesId, usersId, role)
+        return r
+
+
+    def _deleteRoles(self, con, userId, officesId, roles):
+        for officeId in officesId:
+            for role in oldRoles:
+                roleName = role['name']
+                self.offices.deleteRole(con, userId, officeId, roleName)
+
+    def _addRoles(self, con, userId, officesId, roles):
+        for officeId in officesId:
+            for role in roles:
+                if 'send_mail' in role:
+                    self.offices.addRole(con, userId, officeId, role['name'], sendMail)
+                else:
+                    self.offices.addRole(con, userId, officeId, role['name'])
+
+
+    def persistOfficeRole(self, officesId, usersId, roles, oldRoles):
+        con = self._getDatabase()
+        try:
+            if self._checkRoleByOffices(officesId,'admin-office'):
+                for userId in usersId:
+                    self._deleteRoles(con,userId,officesId,oldRoles)
+                    self._addRoles(con,userId,officesId,roles)
+
+                con.commit()
+                return 'ok'
+
+            return None
+
+        except psycopg2.DatabaseError as e:
+            con.rollback()
+            return None
+        except Exception as e:
+            con.rollback()
+            return None
 
         finally:
             con.close()
 
+    @coroutine
+    def persistOfficeRole_async(self, officesId, usersId, roles, oldRoles):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.persistOfficeRole, officesId, usersId, roles, oldRoles)
+        return r
 
 
-'''
-actualiza los roles para todos los usersId en officesId
-
-query:{
-    id:,
-    action:'persistOfficeRole',
-    session:,
-    request:{
-        usersId: [],
-        officesId: [],
-        roles: [{
-            name: '',
-            send_mail: ''
-        }],
-        oldRoles: [{
-            name: '',
-            send_mail: ''
-        }]
-    }
-}
-
-response: {
-    id: "id de la petición",
-    ok: "caso exito",
-    error: "error del servidor"
-}
-'''
-class PersistOfficeRole:
-    profiles = inject.attr(Profiles)
-    config = inject.attr(Config)
-    offices = inject.attr(Offices)
-
-    def handleAction(self, server, message):
-
-        if (message['action'] != 'persistOfficeRole'):
-            return False
-
-        if ('session' not in message) or ('request' not in message) or ('usersId' not in message['request']) or ('roles' not in message['request']) or ('oldRoles' not in message['request'])  or ('officesId' not in message['request']):
-            response = {'id':message['id'], 'error':'Insuficientes parámetros'}
-            server.sendMessage(response)
-            return True
-
-
-        sid = message['session']
-        self.profiles.checkAccess(sid,['ADMIN-OFFICES','USER-OFFICES'])
-
-        req = message['request']
-
-        roles = req['roles']
-
-        oldRoles = req['oldRoles']
-
-        officesId = req['officesId']
-
-        usersId = req['usersId']
-
-        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
-        try:
-            # verifico si el usuario de session tiene el rol admin-office para la oficina de la cual se desea agregar el rol
-            localUserId = self.profiles.getLocalUserId(sid)
-            offices = self.offices.getOfficesByUserRole(con,localUserId,True,'admin-office')
-            for officeId in officesId:
-                listOff = list(map(lambda x: x == officeId, offices))
-                if len(listOff) == 0:
-                    response = {'id':message['id'], 'error':'No tiene permiso para realizar esta operación'}
-                    server.sendMessage(response)
-                    return True
-
-
-            # elimino los roles que tenia antes
-            for userId in usersId:
-                for officeId in officesId:
-                    for role in oldRoles:
-                        roleName = role['name']
-                        self.offices.deleteRole(con,userId,officeId,roleName)
-
-            # agrego los nuevos roles
-            for userId in usersId:
-                for officeId in officesId:
-                    for role in roles:
-                        sendMail = (True,role['send_mail'])['send_mail' in role]
-                        self.offices.addRole(con,userId,officeId,role['name'],sendMail)
-
-            con.commit()
-            response = {'id':message['id'], 'ok':'Los roles se han modificado correctamente'}
-            server.sendMessage(response)
-            return True
-
-        except psycopg2.DatabaseError as e:
-            con.rollback()
-            raise e
-
-        finally:
-            con.close()
-
-
-'''
-crea una nueva oficina si no existe o sino actualiza los datos
-
-query:{
-    id:,
-    action:'persistOffice',
-    session:,
-    request:{
-        office: {
-            id: "",
-            name: "",
-            parent: "",
-            telephone: "",
-            email: ""
-        }
-    }
-}
-
-response: {
-    id: "id de la petición",
-    ok: "caso exito",
-    error: "error del servidor"
-}
-'''
-class PersistOffice:
-    profiles = inject.attr(Profiles)
-    config = inject.attr(Config)
-    offices = inject.attr(Offices)
-
-    def handleAction(self, server, message):
-
-        if (message['action'] != 'persistOffice'):
-            return False
-
-        if ('session' not in message) or ('request' not in message) or ('office' not in message['request']):
-            response = {'id':message['id'], 'error':'Insuficientes parámetros'}
-            server.sendMessage(response)
-            return True
-
-        sid = message['session']
-        self.profiles.checkAccess(sid,['SUPER-ADMIN-OFFICES','ADMIN-OFFICES','USER-OFFICES'])
-
-        req = message['request']
-        office = req['office']
-
-        if office is None:
-            response = {'id':message['id'], 'error':'Oficina es null'}
-            server.sendMessage(response)
-            return True
-
-        if 'name' not in office or office['name'].strip() == '':
-            response = {'id':message['id'], 'error':'La oficina no posee nombre'}
-            server.sendMessage(response)
-            return True
-
-        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+    def persistOffice(self, sessionId, office):
+        con = self._getDatabase()
         try:
             if 'parent' not in office or office['parent'] == '':
-                parent = None
-                if 'parent' in office:
-                    parent = office['parent']
-                # verifico si se modifico el padre
-                actualOffice = None
-                if 'id' in office:
-                    actualOffice = self.offices.findOffice(con,office['id'])
-                if actualOffice == None or actualOffice['parent'] != parent:
-                    # en dicho caso verifico que tenga el perfil de super admin
-                    self.profiles.checkAccess(sid,['SUPER-ADMIN-OFFICES'])
+                if self._checkModifiedParent():
+                    # si se modifico el padre me fijo que tenga el perfil de super admin
+                    self.profiles.checkAccess(sessionId,['SUPER-ADMIN-OFFICES'])
 
             self.offices.persist(con,office)
             con.commit()
-            response = {'id':message['id'], 'ok':'La oficina se ha actualizado correctamente'}
-            server.sendMessage(response)
             return True
 
         except psycopg2.DatabaseError as e:
             con.rollback()
-            raise e
-
-        except AccessDenied as e:
-            logging.exception(e)
-            con.rollback()
-
-            response = {
-                'id':message['id'],
-                'error':'No tiene permisos necesarios para realizar esta operacion'
-            }
-            server.sendMessage(response)
-            return True
-
+            return None
         except Exception as e:
-            logging.exception(e)
             con.rollback()
-
-            response = {
-                'id':message['id'],
-                'error':str(e)
-            }
-            server.sendMessage(response)
-            return True
-
+            return None
         finally:
             con.close()
 
+    @coroutine
+    def persistOffice_async(self, sessionId, office):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.persistOffice, sessionId, office)
+        return r
 
-'''
-elimina un usuario de una oficina
 
-query:{
-    id:,
-    action:'removeUserFromOffice',
-    session:,
-    request:{
-        userId: "id del usuario",
-        officeId: "id de la oficina"
-    }
-}
-
-response: {
-    id: "id de la petición",
-    ok: "caso exito",
-    error: "error del servidor"
-}
-
-'''
-class RemoveUserFromOffice:
-
-    profiles = inject.attr(Profiles)
-    config = inject.attr(Config)
-    offices = inject.attr(Offices)
-
-    def handleAction(self, server, message):
-
-        if (message['action'] != 'removeUserFromOffice'):
-            return False
-
-        if ('session' not in message) or ('request' not in message) or ('userId' not in message['request']) or ('officeId' not in message['request']):
-            response = {'id':message['id'], 'error':'Insuficientes parámetros'}
-            server.sendMessage(response)
-            return True
-
-        sid = message['session']
-        self.profiles.checkAccess(sid,['ADMIN-OFFICES','USER-OFFICES'])
-
-        req = message['request']
-        officeId = req['officeId']
-        userId = req['userId']
-        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+    def removeUserFromOffice(self, userId, officeId):
+        con = self._getDatabase()
         try:
-            # verifico si el usuario de session tiene el rol admin-office para la oficina de la cual se desea eliminar el usuario
-            localUserId = self.profiles.getLocalUserId(sid)
-            offices = self.offices.getOfficesByUserRole(con,localUserId,True,'admin-office')
-            listOff = list(map(lambda x: x == officeId, offices))
-            if len(listOff) == 0:
-                response = {'id':message['id'], 'error':'No tiene permiso para realizar esta operación'}
-                server.sendMessage(response)
+            if self._checkRoleByOffices([officeId],'admin-office'):
+                self.offices.removeUser(con,officeId,userId)
+                con.commit()
                 return True
 
-            # elimino el usuario de la oficina
-            self.offices.removeUser(con,officeId,userId)
-            con.commit()
-            response = {'id':message['id'], 'ok':'El usuario se ha eliminado correctamente'}
-            server.sendMessage(response)
-            return True
-
+            return None
         except psycopg2.DatabaseError as e:
-            raise e
-
+            con.rollback()
+            return None
+        except Exception as e:
+            con.rollback()
+            return None
         finally:
             con.close()
 
-'''
-    agrega un usuario (userId) a una oficina (officeId)
+    @coroutine
+    def removeUserFromOffice_async(self, userId, officeId):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.removeUserFromOffice, userId, officeId)
+        return r
 
-query:{
-    id:,
-    action:'addUserToOffices',
-    session:,
-    request:{
-        userId: "id del usuario",
-        officeId: "id de la oficina"
-    }
-}
 
-response: {
-    id: "id de la petición",
-    ok: "caso exito",
-    error: "error del servidor"
-}
-'''
-class AddUserToOffices:
-
-    profiles = inject.attr(Profiles)
-    config = inject.attr(Config)
-    offices = inject.attr(Offices)
-
-    def handleAction(self, server, message):
-
-        if (message['action'] != 'addUserToOffices'):
-            return False
-
-        if ('session' not in message) or ('request' not in message) or ('userId' not in message['request']) or ('officeId' not in message['request']):
-            response = {'id':message['id'], 'error':'Insuficientes parámetros'}
-            server.sendMessage(response)
-            return True
-
-        sid = message['session']
-        self.profiles.checkAccess(sid,['ADMIN-OFFICES','USER-OFFICES'])
-
-        req = message['request']
-        officeId = req['officeId']
-        userId = req['userId']
-        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+    def addUserToOffices(self, userId, officeId):
+        con = self._getDatabase()
         try:
-            # verifico si el usuario de session tiene el rol admin-office para la oficina de la cual se desea agregar el usuario
-            localUserId = self.profiles.getLocalUserId(sid)
-            offices = self.offices.getOfficesByUserRole(con,localUserId,True,'admin-office')
-            listOff = list(map(lambda x: x == officeId, offices))
-            if len(listOff) == 0:
-                response = {'id':message['id'], 'error':'No tiene permiso para realizar esta operación'}
-                server.sendMessage(response)
+            if self._checkRoleByOffices([officeId],'admin-office'):
+                self.offices.addUserToOffices(con,officeId,userId)
+                con.commit()
                 return True
 
-            # agrego el usuario de la oficina
-            self.offices.addUserToOffices(con,officeId,userId)
-            con.commit()
-            response = {'id':message['id'], 'ok':'El usuario se ha guardado correctamente'}
-            server.sendMessage(response)
-            return True
+            return None
+        except psycopg2.DatabaseError as e:
+            con.rollback()
+            return None
+        except Exception as e:
+            con.rollback()
+            return None
+        finally:
+            con.close()
+
+    @coroutine
+    def addUserToOffices_async(self, userId, officeId):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.addUserToOffices, userId, officeId)
+        return r
+
+    '''
+    Retorna los roles que puede asignar el usuario (userId) para las oficinas (officesId) y para los usuarios (usersId)
+    Ademas retorna los roles que ya poseen los usuarios
+    '''
+    def getRolesAdmin(self, sessionId, userId, officesId, usersId):
+        con = self._getDatabase()
+        try:
+            if userId is None:
+                userId = self.profiles.getLocalUserId(sessionId)
+
+            roles = self.offices.getRolesAdmin(con, userId, officesId, usersId)
+            assignedRoles = self.offices.getAssignedRoles(con, officesId, usersId, roles)
+            
+            ret =  {'roles':roles,'assignedRoles':assignedRoles}
+
+            return ret
 
         except psycopg2.DatabaseError as e:
             con.rollback()
-            raise e
-
+            return None
+        except Exception as e:
+            con.rollback()
+            return None
         finally:
             con.close()
+
+    @coroutine
+    def getRolesAdmin_async(self, sessionId, userId, officesId, usersId):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.getRolesAdmin, sessionId, userId, officesId, usersId)
+        return r
+
+
+    def findOffices(self, ids):
+        con = self._getDatabase()
+        try:
+            return self.offices.findOffices(con,ids)
+        finally:
+            con.close()
+
+    @coroutine
+    def findOffices_async(self, ids):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.findOffices, ids)
+        return r

@@ -118,7 +118,7 @@ class AAJustification(Justification):
         inicializa un pedido en estado pendiente de una justificación en las fechas indicadas
         solo se tiene en cuenta begin
     """
-    def requestJustification(self,utils,con,userId,requestor_id,begin,end):
+    def requestJustification(self,utils,con,userId,requestor_id,begin,end,status):
         if self.available(utils,con,userId,begin) <= 0:
             raise RestrictionError('No existe stock disponible')
 
@@ -145,18 +145,26 @@ class AAJustification(Justification):
             'end':end
         }
 
-        events.extend(self.updateJustificationRequestStatus(utils,con,userId,req,'PENDING'))
+        created = datetime.datetime.now()
+        aux = created - datetime.timedelta(seconds=60)
+        e = self.updateJustificationRequestStatus(utils,con,userId,req,'PENDING',aux)
+        if status != None and status != 'PENDING':
+            e = self.updateJustificationRequestStatus(utils,con,userId,req,status)
+        events.extend(e)
         return events
 
 
 
     """ actualiza el estado del pedido de la justificacion al estado status """
-    def updateJustificationRequestStatus(self,utils,con,userId,req,status):
+    def updateJustificationRequestStatus(self,utils,con,userId,req,status,created=None):
+        if created is None:
+            created = datetime.datetime.now(datetime.timezone.utc)
+            created = created - datetime.timedelta(seconds=1)
 
         requestId = req['id']
 
         cur = con.cursor()
-        cur.execute('insert into assistance.justifications_requests_status (request_id,user_id,status) values (%s,%s,%s)',(requestId,userId,status))
+        cur.execute('insert into assistance.justifications_requests_status (request_id,user_id,status,created) values (%s,%s,%s,%s)',(requestId,userId,status,created))
 
         events = []
         e = {

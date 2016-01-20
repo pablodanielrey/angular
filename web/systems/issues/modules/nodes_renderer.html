@@ -1,0 +1,97 @@
+<div  class="orderItems {{node.style}}" ui-tree-handle>
+    <div class="orderItem">
+        <div class="btnExpOrder">
+          <div ng-if="collapsed">
+              <button class="btn cB fa fa-plus-square"  ng-click="toggleNode(this)" ></button>
+          </div>
+          <div ng-if="!collapsed">
+              <button class="btn cB fa fa-minus-square" title="Expandir Pedido" ng-click="toggleNode(this)" ></button>
+          </div>
+        </div>
+
+        <div class="btnExpComment">
+          <div ng-if="collapsed">
+              <button class="btn cO fa fa-plus-square" title="Expandir Comentarios" ng-click="toggleNode(this)" ></button>
+          </div>
+          <div ng-if="!collapsed">
+              <button class="btn cO fa fa-minus-square" title="Minimizar Comentarios" ng-click="toggleNode(this)" ></button>
+          </div>
+        </div>
+
+        <div>
+            <div class="orderText" ng-click="toggleNodeData(node)">
+              <div class="itemsComment">
+                  <div class="items">
+                      <span class="requestor">{{node.requestor}}</span>
+                  </div>
+                  <div class="items">
+                      <span class="date">{{node.created | date:"dd/MM/yyyy" }} | {{node.created | date:"hh:mm" }}</span>
+                  </div>
+              </div>
+              <div class="text">{{getNodeRequest(node)}}</div>
+              <div class="btnComment2">
+                  <button class="btn cO fa fa-comment" title="Realizar Comentario" ng-click="addComment(node)"></button>
+              </div>
+              <div Class="btnDelete2">
+                  <button class="btn cR fa fa-trash" title="Eliminar Comentario" ng-click="deleteNode(this)"></button>
+              </div>
+            </div>
+
+
+            <!-- <textarea class="orderText"  readonly ng-model="node.request"  ng-click="expandInput(this)"></textarea> -->
+
+            <div ng-class="{true:'descriptionExpanded',false:'descriptionClosed'}[node.descriptionExpanded]">
+              <div class="contentDataOrder">
+                  <div>
+                      <textarea class="orderText"  readonly ng-model="node.request"></textarea>
+                  </div>
+                  <div class="oderInfo">
+                      <div><i class="fa fa-tag"></i> <b>Pedido Nº: </b> {{node.id | limitTo:5}}</div>
+                      <div>
+                          <span><i class="fa fa-calendar-o"></i> <b>Fecha: </b> {{node.created | date:"dd/MM/yyyy" }}</span>
+                          <span><i class="fa fa-clock-o"></i> <b>Hora: </b> {{node.created | date:"hh:mm" }}</span>
+                      </div>
+                      <div><i class="fa fa-user"></i> <b>Usuario: </b>  {{node.requestor}}</div>
+                      <div><i class="fa fa-building"></i> <b>Oficina: </b>  {{node.office.name}}</div>
+                      <div><i class="fa fa-eye"></i> <b>Visibilidad: </b>  {{node.visibilitiesOffices}}</div>
+
+                  </div>
+              </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="orderIcons">
+        <div class="btnState">
+            <select class="btn cGR btnState" ng-model='node.state' ng-change="updateIssueData(node)">
+              <option class="btn" value='PENDING'>PENDIENTE</option>
+              <option class="btn" value='CLOSED'>CERRADO</option>
+            </select>
+        </div>
+
+        <div class="btnDataOrder">
+            <button class="btn cB fa fa-caret-square-o-down" title="Datos del Pedido" ng-click="toggleNodeData(node)"></button>
+        </div>
+
+        <div class="btnVisibility">
+          <button class="btn cV fa fa-eye" title="Seleccionar Visibilidad" ng-click="openVisibility(node)"></button>
+        </div>
+
+        <div class="btnComment">
+            <button class="btn cO fa fa-comment" title="Realizar Comentario" ng-click="addComment(node)"></button>
+        </div>
+        <div class="btnSubTarea">
+            <button class="btn cG fa fa-tag" title="Crear sub-Tarea" ng-click="addNode(node)"></button>
+        </div>
+        <div class="btnDelete">
+            <button class="btn cR fa fa-trash" title="Eliminar Pedido" ng-click="deleteNode(this)"></button>
+        </div>
+    </div>
+</div>
+
+
+  <ol ui-tree-nodes ng-model="node.childrens" ng-class="{'angular-ui-tree-hidden': collapsed}">
+    <li ng-repeat="node in node.childrens" ui-tree-node ng-include="'modules/nodes_renderer.html'">
+    </li>
+  </ol>
