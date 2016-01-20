@@ -1,6 +1,6 @@
 config = {
-  host: "127.0.0.1",
-  port: "9090",
+  host: "asistencia.laboratoriosprolac.com",
+  port: "8000",
   ssl_host: "127.0.0.1",
   ssl_port: "8002"
 }

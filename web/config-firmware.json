@@ -1,8 +1,9 @@
 config_firmware = {
-  url: "ws://192.168.0.3:8000/ws",
-  host: "192.168.0.3",
-  port: "8000",
+  //url: "ws://10.0.23.58:8000/ws",
+  url: "autodetect",
   realm: "assistance",
+  host: "10.0.23.58",
+  port: "8001",
   ssl_host: "127.0.0.1",
   ssl_port: "8002"
 }
