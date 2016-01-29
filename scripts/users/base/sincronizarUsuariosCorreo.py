@@ -16,7 +16,7 @@ import datetime
 if __name__ == '__main__':
 
     dcon = dovecotConnection.getConnection()
-    con = dovecot.getConnection()
+    con = connection.getConnection()
     try:
         dcur = dcon.cursor()
         cur = con.cursor()
