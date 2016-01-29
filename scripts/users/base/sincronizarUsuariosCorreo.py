@@ -30,7 +30,7 @@ if __name__ == '__main__':
                 lastSinc = dcur.fetchone()['modified']
             logging.info('Fecha de la ultima actualización : {}'.format(lastSinc))
 
-            cur.execute('select * from dovecot.users du, credentials.user_password up where du.modified > %s', (lastSinc,))
+            cur.execute('select * from dovecot.users du, credentials.user_password up where du.id = up.user_id and du.modified > %s or up.updated > %s', (lastSinc, lastSinc))
             logging.info('Registros encontrados {}'.format(cur.rowcount))
             for du in cur:
                 dcur.execute('select username from dovecot.users where username = %(username)s', du)
