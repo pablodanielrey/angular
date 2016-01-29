@@ -42,7 +42,7 @@ if __name__ == '__main__':
                 dcur.execute('select username from dovecot.users where username = %(username)s', du)
                 if dcur.rowcount <= 0:
                     logging.info('Insertando {}'.format(du['username']))
-                    dcur.execute('insert into dovecot.users (username, password, domain, home, uid, gid, maildir, active, modified) values (%(username)s, %(password)s, %(domain)s, %(home)s, %(uid)s, %(gid)s, %(maildir)s, %(active)s, %(modified)s', du)
+                    dcur.execute('insert into dovecot.users (username, password, domain, home, uid, gid, maildir, active, modified) values (%(username)s, %(password)s, %(domain)s, %(home)s, %(uid)s, %(gid)s, %(maildir)s, %(active)s, %(modified)s)', du)
                 else:
                     logging.info('Actualizando {}'.format(du['username']))
                     dcur.execute('update dovecot.users set password = %(password)s, domain = %(domain)s, home = %(home)s, uid = %(uid)s, gid = %(gid)s, maildir = %(maildir)s, active = %(active)s, modified = %(modified)s where username = %(username)s', du)
