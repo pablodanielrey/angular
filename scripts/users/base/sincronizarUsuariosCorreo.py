@@ -27,7 +27,7 @@ if __name__ == '__main__':
             if dcur.rowcount <= 0:
                 lastSinc = datetime.datetime.now() - datetime.timedelta(days=365)
             else:
-                lastSinc = dcur['modified']
+                lastSinc = dcur.fetchone()['modified']
             logging.info('Fecha de la ultima actualización : {}'.format(lastSinc))
 
             cur.execute('select * from dovecot.users du, credentials.user_password up where du.modified > %s or up.updated > %s', (lastSinc,))
