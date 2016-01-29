@@ -30,9 +30,15 @@ if __name__ == '__main__':
                 lastSinc = dcur.fetchone()['modified']
             logging.info('Fecha de la ultima actualización : {}'.format(lastSinc))
 
-            cur.execute('select * from dovecot.users du, credentials.user_password up where du.user_id = up.user_id and du.modified > %s or up.updated > %s', (lastSinc, lastSinc))
+            cur.execute('select du.user_id from dovecot.users du, credentials.user_password up where du.user_id = up.user_id and du.modified > %s or up.updated > %s', (lastSinc, lastSinc))
             logging.info('Registros encontrados {}'.format(cur.rowcount))
-            for du in cur:
+
+            usersToSync = cur.fetchall()
+
+            for mu in usersToSync:
+                logging.info('Sincronizando {}'.format(mu['user_id']))
+                cur.execute('select * from dovecot.users du, credentials.user_password up where du.user_id = %s and up.user_id = %s', (mu['user_id'], mu['user_id']))
+                du = cur.fetchone()
                 dcur.execute('select username from dovecot.users where username = %(username)s', du)
                 if dcur.rowcount <= 0:
                     logging.info('Insertando {}'.format(du['username']))
