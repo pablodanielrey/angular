@@ -6,7 +6,7 @@ import psycopg2
 from psycopg2 import pool
 from psycopg2.extras import DictCursor
 
-pool = psycopg2.pool.ThreadedConnectionPool(10, 20, host='163.10.17.118', database='dovecot', user='dovecot', password='tocevod', cursor_factory=DictCursor)
+pool = psycopg2.pool.ThreadedConnectionPool(10, 20, host='127.0.0.1', database='dovecot', user='dovecot', password='tocevod', cursor_factory=DictCursor)
 
 
 def getConnection():
