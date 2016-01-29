@@ -12,6 +12,9 @@ import datetime
 
 if __name__ == '__main__':
 
+    ''' ahora lo comento. lo dejo aca por referencia, pero solo se debe ejecutar 1 sola vez para generar los datos principales '''
+    sys.exit(1)
+
     uid = 2000
     ids = []
 
