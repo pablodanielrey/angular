@@ -89,7 +89,7 @@
               </div>
             </td>
             <td>
-              <div class="career" title="Otro Idioma">
+              <div class="career" title="Carrera">
                 Carrera
               </div>
             </td>
@@ -123,9 +123,8 @@
 
       </div>
 
-      <div class="searchResults" ng-repeat='i in model.inscriptions'>
-        <div>i.id</div>
-        <table>
+      <div class="searchResults">
+        <table ng-repeat='i in model.inscriptions'>
           <tr class="fileResults">
             <td>
               <div class="Select">
@@ -134,7 +133,6 @@
             </td>
             <td>
               <div class="dates">
-                3
               </div>
             </td>
             <td>
@@ -144,592 +142,86 @@
             </td>
             <td>
               <div class="registration">
-                05/12/2015
+                {{getDate(i.creation)}}
               </div>
             </td>
             <td>
               <div class="name">
-                Blanco,1 Walter
+                {{getName(i.user_id)}}
               </div>
             </td>
             <td>
               <div class="sex">
-                Masculino
+                {{getGenre(i.user_id)}}
               </div>
             </td>
             <td>
               <div class="age">
-                32
+                {{getAge(i.user_id)}}
               </div>
             </td>
             <td>
               <div class="dni">
-                30001823
+                {{getDni(i.user_id)}}
               </div>
             </td>
             <td>
               <div class="city">
-                General Paz (Ranchos)
+                {{getResidence(i.user_id)}}
               </div>
             </td>
             <td>
               <div class="city2">
-                La Plata (Centro)
+                {{getCity(i.user_id)}}
               </div>
             </td>
             <td>
               <div class="travel">
-                Sí
+                {{getTravel(i)}}
               </div>
             </td>
             <td>
               <div class="english">
-                Intermedio
+                {{getEnglish(i.user_id)}}
               </div>
             </td>
             <td>
               <div class="other">
-                No
+                {{getLanguagesOther(i.user_id)}}
               </div>
             </td>
             <td>
-              <div class="career" title="Otro Idioma">
-                Lic. en Turismo
-              </div>
-            </td>
-            <td>
-              <div class="cousers" title="Cantidad de Materias">
-                22
-              </div>
-            </td>
-            <td>
-              <div class="average" title="Promedio c/aplazos">
-                6.50
-              </div>
-            </td>
-            <td>
-              <div class="average2" title="Promedio">
-                7.50
-              </div>
-            </td>
-            <td>
-              <div class="program">
-                Full-Time
-              </div>
-            </td>
-            <td>
-              <div class="mail">
-                walter.blanco@econo.unlp.edu.ar
-              </div>
-            </td>
-          </tr>
-        </table>
-
-        <table>
-          <tr class="fileResults">
-            <td>
-              <div class="Select">
-                <input type="checkbox">
-              </div>
-            </td>
-            <td>
-              <div class="dates">
-                3
-              </div>
-            </td>
-            <td>
-              <div class="user">
-                <i class="fa fa-user"></i>
-              </div>
-            </td>
-            <td>
-              <div class="registration">
-                05/12/2015
-              </div>
-            </td>
-            <td>
-              <div class="name">
-                Blanco,1 Walter
-              </div>
-            </td>
-            <td>
-              <div class="sex">
-                Masculino
-              </div>
-            </td>
-            <td>
-              <div class="age">
-                32
-              </div>
-            </td>
-            <td>
-              <div class="dni">
-                30001823
-              </div>
-            </td>
-            <td>
-              <div class="city">
-                General Paz (Ranchos)
-              </div>
-            </td>
-            <td>
-              <div class="city2">
-                La Plata (Centro)
-              </div>
-            </td>
-            <td>
-              <div class="travel">
-                Sí
-              </div>
-            </td>
-            <td>
-              <div class="english">
-                Intermedio
-              </div>
-            </td>
-            <td>
-              <div class="other">
-                No
-              </div>
-            </td>
-            <td>
-              <div class="career" title="Otro Idioma">
-                Lic. en Turismo
+              <div class="career" title="Carrera">
+                {{i.degree}}
               </div>
             </td>
             <td>
               <div class="cousers" title="Cantidad de Materias">
-                22
+                {{i.approved}}
               </div>
             </td>
             <td>
               <div class="average" title="Promedio c/aplazos">
-                6.50
+                {{i.average1}}
               </div>
             </td>
             <td>
               <div class="average2" title="Promedio">
-                7.50
+                {{i.average2}}
               </div>
             </td>
             <td>
               <div class="program">
-                Full-Time
+                {{i.workType}}
               </div>
             </td>
             <td>
               <div class="mail">
-                walter.blanco@econo.unlp.edu.ar
+                {{getMail(i.user_id)}}
               </div>
             </td>
           </tr>
         </table>
-
-
-        <table>
-          <tr class="fileResults">
-            <td>
-              <div class="Select">
-                <input type="checkbox">
-              </div>
-            </td>
-            <td>
-              <div class="dates">
-                3
-              </div>
-            </td>
-            <td>
-              <div class="user">
-                <i class="fa fa-user"></i>
-              </div>
-            </td>
-            <td>
-              <div class="registration">
-                05/12/2015
-              </div>
-            </td>
-            <td>
-              <div class="name">
-                Blanco,1 Walter
-              </div>
-            </td>
-            <td>
-              <div class="sex">
-                Masculino
-              </div>
-            </td>
-            <td>
-              <div class="age">
-                32
-              </div>
-            </td>
-            <td>
-              <div class="dni">
-                30001823
-              </div>
-            </td>
-            <td>
-              <div class="city">
-                General Paz (Ranchos)
-              </div>
-            </td>
-            <td>
-              <div class="city2">
-                La Plata (Centro)
-              </div>
-            </td>
-            <td>
-              <div class="travel">
-                Sí
-              </div>
-            </td>
-            <td>
-              <div class="english">
-                Intermedio
-              </div>
-            </td>
-            <td>
-              <div class="other">
-                No
-              </div>
-            </td>
-            <td>
-              <div class="career" title="Otro Idioma">
-                Lic. en Turismo
-              </div>
-            </td>
-            <td>
-              <div class="cousers" title="Cantidad de Materias">
-                22
-              </div>
-            </td>
-            <td>
-              <div class="average" title="Promedio c/aplazos">
-                6.50
-              </div>
-            </td>
-            <td>
-              <div class="average2" title="Promedio">
-                7.50
-              </div>
-            </td>
-            <td>
-              <div class="program">
-                Full-Time
-              </div>
-            </td>
-            <td>
-              <div class="mail">
-                walter.blanco@econo.unlp.edu.ar
-              </div>
-            </td>
-          </tr>
-        </table>
-
-
-        <table>
-          <tr class="fileResults">
-            <td>
-              <div class="Select">
-                <input type="checkbox">
-              </div>
-            </td>
-            <td>
-              <div class="dates">
-                3
-              </div>
-            </td>
-            <td>
-              <div class="user">
-                <i class="fa fa-user"></i>
-              </div>
-            </td>
-            <td>
-              <div class="registration">
-                05/12/2015
-              </div>
-            </td>
-            <td>
-              <div class="name">
-                Blanco,1 Walter
-              </div>
-            </td>
-            <td>
-              <div class="sex">
-                Masculino
-              </div>
-            </td>
-            <td>
-              <div class="age">
-                32
-              </div>
-            </td>
-            <td>
-              <div class="dni">
-                30001823
-              </div>
-            </td>
-            <td>
-              <div class="city">
-                General Paz (Ranchos)
-              </div>
-            </td>
-            <td>
-              <div class="city2">
-                La Plata (Centro)
-              </div>
-            </td>
-            <td>
-              <div class="travel">
-                Sí
-              </div>
-            </td>
-            <td>
-              <div class="english">
-                Intermedio
-              </div>
-            </td>
-            <td>
-              <div class="other">
-                No
-              </div>
-            </td>
-            <td>
-              <div class="career" title="Otro Idioma">
-                Lic. en Turismo
-              </div>
-            </td>
-            <td>
-              <div class="cousers" title="Cantidad de Materias">
-                22
-              </div>
-            </td>
-            <td>
-              <div class="average" title="Promedio c/aplazos">
-                6.50
-              </div>
-            </td>
-            <td>
-              <div class="average2" title="Promedio">
-                7.50
-              </div>
-            </td>
-            <td>
-              <div class="program">
-                Full-Time
-              </div>
-            </td>
-            <td>
-              <div class="mail">
-                walter.blanco@econo.unlp.edu.ar
-              </div>
-            </td>
-          </tr>
-        </table>
-
-
-        <table>
-          <tr class="fileResults">
-            <td>
-              <div class="Select">
-                <input type="checkbox">
-              </div>
-            </td>
-            <td>
-              <div class="dates">
-                3
-              </div>
-            </td>
-            <td>
-              <div class="user">
-                <i class="fa fa-user"></i>
-              </div>
-            </td>
-            <td>
-              <div class="registration">
-                05/12/2015
-              </div>
-            </td>
-            <td>
-              <div class="name">
-                Blanco,1 Walter
-              </div>
-            </td>
-            <td>
-              <div class="sex">
-                Masculino
-              </div>
-            </td>
-            <td>
-              <div class="age">
-                32
-              </div>
-            </td>
-            <td>
-              <div class="dni">
-                30001823
-              </div>
-            </td>
-            <td>
-              <div class="city">
-                General Paz (Ranchos)
-              </div>
-            </td>
-            <td>
-              <div class="city2">
-                La Plata (Centro)
-              </div>
-            </td>
-            <td>
-              <div class="travel">
-                Sí
-              </div>
-            </td>
-            <td>
-              <div class="english">
-                Intermedio
-              </div>
-            </td>
-            <td>
-              <div class="other">
-                No
-              </div>
-            </td>
-            <td>
-              <div class="career" title="Otro Idioma">
-                Lic. en Turismo
-              </div>
-            </td>
-            <td>
-              <div class="cousers" title="Cantidad de Materias">
-                22
-              </div>
-            </td>
-            <td>
-              <div class="average" title="Promedio c/aplazos">
-                6.50
-              </div>
-            </td>
-            <td>
-              <div class="average2" title="Promedio">
-                7.50
-              </div>
-            </td>
-            <td>
-              <div class="program">
-                Full-Time
-              </div>
-            </td>
-            <td>
-              <div class="mail">
-                walter.blanco@econo.unlp.edu.ar
-              </div>
-            </td>
-          </tr>
-        </table>
-
-
-        <table>
-          <tr class="fileResults">
-            <td>
-              <div class="Select">
-                <input type="checkbox">
-              </div>
-            </td>
-            <td>
-              <div class="dates">
-                3
-              </div>
-            </td>
-            <td>
-              <div class="user">
-                <i class="fa fa-user"></i>
-              </div>
-            </td>
-            <td>
-              <div class="registration">
-                05/12/2015
-              </div>
-            </td>
-            <td>
-              <div class="name">
-                Blanco,1 Walter
-              </div>
-            </td>
-            <td>
-              <div class="sex">
-                Masculino
-              </div>
-            </td>
-            <td>
-              <div class="age">
-                32
-              </div>
-            </td>
-            <td>
-              <div class="dni">
-                30001823
-              </div>
-            </td>
-            <td>
-              <div class="city">
-                General Paz (Ranchos)
-              </div>
-            </td>
-            <td>
-              <div class="city2">
-                La Plata (Centro)
-              </div>
-            </td>
-            <td>
-              <div class="travel">
-                Sí
-              </div>
-            </td>
-            <td>
-              <div class="english">
-                Intermedio
-              </div>
-            </td>
-            <td>
-              <div class="other">
-                No
-              </div>
-            </td>
-            <td>
-              <div class="career" title="Otro Idioma">
-                Lic. en Turismo
-              </div>
-            </td>
-            <td>
-              <div class="cousers" title="Cantidad de Materias">
-                22
-              </div>
-            </td>
-            <td>
-              <div class="average" title="Promedio c/aplazos">
-                6.50
-              </div>
-            </td>
-            <td>
-              <div class="average2" title="Promedio">
-                7.50
-              </div>
-            </td>
-            <td>
-              <div class="program">
-                Full-Time
-              </div>
-            </td>
-            <td>
-              <div class="mail">
-                walter.blanco@econo.unlp.edu.ar
-              </div>
-            </td>
-          </tr>
-        </table>
-
-
 
       </div>
 

@@ -187,6 +187,8 @@ class LaboralInsertionWamp(ApplicationSession):
         con = self._getDatabase()
         try:
             data = self.laboralInsertion.findByUser(con, userId)
+            eid = data['email']
+            data['email'] = self.users.findMail(con, eid)
             return data
 
         finally:
