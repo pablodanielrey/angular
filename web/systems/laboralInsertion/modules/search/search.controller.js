@@ -6,11 +6,13 @@ SearchCtrl.$inject = ['$rootScope','$scope','$location', '$window', 'Notificatio
 
 function SearchCtrl($rootScope, $scope, $location, $window, Notifications, LaboralInsertion, Login, Utils) {
 
-  $scope.inscriptions = [];
+  $scope.model = {
+    inscriptions = [];
+  };
 
   $scope.initialize = function() {
     LaboralInsertion.findAllInscriptions().then(function(ins) {
-      $scope.inscriptions = ins;
+      $scope.model.inscriptions = ins;
       console.log($scope.inscriptions);
     }, function(err) {
       console.log(err);
