@@ -165,6 +165,7 @@ class LaboralInsertionWamp(ApplicationSession):
         yield from self.register(self.findAllInscriptionsByUser_async, 'system.laboralInsertion.findAllInscriptionsByUser')
         yield from self.register(self.persistInscriptionByUser_async, 'system.laboralInsertion.persistInscriptionByUser')
         yield from self.register(self.deleteInscriptionById_async, 'system.laboralInsertion.deleteInscriptionById')
+        yield from self.register(self.sendMailToCompany_async, 'system.laboralInsertion.sendEmailToCompany');
 
     def _getDatabase(self):
         host = self.serverConfig.configs['database_host']
@@ -240,6 +241,17 @@ class LaboralInsertionWamp(ApplicationSession):
 
         finally:
             con.close()
+
+    def sendMailToCompany(self, inscriptions, company):
+        con = self._getDatabase()
+        try:
+            self.laboralInsertion.sendMailToCompany(con, inscriptions, company)
+            self.publish('system.laboralInsertion.COMPANYSENDED')
+            return True
+
+        finally:
+            con.close()
+
 
     """
     def download(self):
@@ -320,4 +332,10 @@ class LaboralInsertionWamp(ApplicationSession):
     def persist_async(self, data):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.persist, data)
+        return r
+
+    @coroutine
+    def sendMailToCompany_async(self, inscriptions, company):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.sendMailToCompany, inscriptions, company)
         return r

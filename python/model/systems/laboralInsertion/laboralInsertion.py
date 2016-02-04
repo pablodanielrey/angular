@@ -269,6 +269,12 @@ class LaboralInsertion:
             cur.execute('insert into laboral_insertion.languages (id, user_id, name, level) values (%s,%s,%s,%s)', (lid, userId, l['name'], l['level']))
 
 
+
+    def sendMailToCompany(self, con, inscriptions, company):
+        logging.info(inscriptions)
+        logging.info(company)
+
+
 """"
 
     def persistLaboralInsertionCV(self,con,data):

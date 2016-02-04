@@ -2,9 +2,9 @@ angular
   .module('mainApp')
   .controller('SearchCtrl', SearchCtrl);
 
-SearchCtrl.$inject = ['$rootScope','$scope','$location', '$window', 'Notifications','LaboralInsertion', 'Login', 'Utils', 'Users'];
+SearchCtrl.$inject = ['$rootScope','$scope','$location', '$window', 'Notifications','LaboralInsertion', 'Login', 'Utils', 'Users', '$wamp'];
 
-function SearchCtrl($rootScope, $scope, $location, $window, Notifications, LaboralInsertion, Login, Utils, Users) {
+function SearchCtrl($rootScope, $scope, $location, $window, Notifications, LaboralInsertion, Login, Utils, Users, $wamp) {
 
   $scope.model = {
     inscriptions: [],
@@ -31,16 +31,29 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     $scope.model.currentScreen = "screenBussines screenSelectBusiness";
   }
 
-  $scope.sendMailToCompany = function() {
-    $scope.model.currentScreen = "screenBussines screenSending";
-    //  $scope.model.company = c;
-  }
-
   $scope.confirmMailToCompany = function(c) {
     $scope.model.currentScreen = "screenBussines screenSendBusiness";
     $scope.model.company = c;
   }
 
+  $scope.sendMailToCompany = function() {
+    $scope.model.currentScreen = "screenBussines screenSending";
+    //  $scope.model.company = c;
+    LaboralInsertion.sendEmailToCompany($scope.model.inscriptions, $scope.model.company).then(
+      function() {
+        console.log('enviado');
+      },
+      function(err) {
+        $scope.confirmMailToCompany($scope.model.company);
+        console.log(err);
+      }
+    )
+  }
+
+  $scope.mailToCompanySent = function() {
+    $scope.model.currentScreen = "screenBussines screenSent";
+    console.log('mail enviado ok');
+  }
 
   /*
     Calcula la cantidad de seleccionados
@@ -258,6 +271,10 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
 
 
   $scope.initialize = function() {
+
+    // me registro al evento de envío de mails a las empresas.
+    $wamp.subscribe('system.laboralInsertion.COMPANYSENDED', $scope.mailToCompanySent);
+
     LaboralInsertion.findAllInscriptions().then(function(ins) {
       $scope.model.inscriptions = ins;
       $scope.getUsers(ins);
