@@ -1,4 +1,4 @@
-<div class="search  ">
+<div class="search " ng-class='getCurrentScreen()'>
   <!-- Variables 1: screenBussines, screenFilters
        Variables2: screenSelectBusiness, screenSendBusiness, screenSending, screenSent-->
 
@@ -9,11 +9,11 @@
     </div>
 
     <div class="btnUserSelect">
-      <i class="fa fa-users"></i> <b>15</b> Personas Seleccionadas
+      <i class="fa fa-users"></i> <b>{{model.selected}}</b> Personas Seleccionadas
     </div>
 
     <div>
-      <button class="btnSend" type="button" name="button"><i class="fa fa-angle-double-right"></i> <b> Enviar seleccionados a </b></button>
+      <button class="btnSend" type="button" name="button" ng-click='selectCompany()'><i class="fa fa-angle-double-right"></i> <b> Enviar seleccionados a </b></button>
     </div>
 
   </div>
@@ -123,12 +123,13 @@
 
       </div>
 
-      <div class="searchResults">
+      <!-- <div class="searchResults" ng-class="{true:'seleccionado'}[isSelected(i.user_id)]"> -->
+      <div class="searchResults" ng-class="{true:'seleccionado'}[isSelected(i.user_id)]">
         <table ng-repeat='i in model.inscriptions'>
           <tr class="fileResults">
             <td>
               <div class="Select">
-                <input type="checkbox">
+                <input type="checkbox" value='isSelected(i.user_id)' ng-click='selectUser(i.user_id)'>
               </div>
             </td>
             <td>
@@ -238,60 +239,21 @@
                   <i class="fa fa-building-o"></i> <b>Seleccione empresa</b>
                 </div>
                 <div>
-                  <button class="btnBack" type="button" name="Volver"> Volver</button>
+                  <button class="btnBack" type="button" name="Volver" ng-click="selectUsers()"> Volver</button>
                 </div>
               </div>
               <div class="contentBusinesList">
 
-                  <div class="infoBussines">
+                  <div class="infoBussines" ng-repeat='c in model.companies' ng-click='confirmMailToCompany(c)'>
                       <div>
-                          <img src="./img/logos/sr.jpg" width="100px" height="34px">
+                          <img src="{{c.url}}" width="100px" height="34px">
                       </div>
                       <div class="textBussines">
-                        <b>Seguros Rivadavia</b> <br>
+                        <b>{{c.name}}</b> <br>
                         La Plata
                       </div>
                   </div>
 
-                  <div class="infoBussines">
-                      <div>
-                          <img src="./img/logos/quilmes.jpg" width="100px" height="34px">
-                      </div>
-                      <div class="textBussines">
-                        <b>Cerveceria Quilmes</b> <br>
-                        Quilmes
-                      </div>
-                  </div>
-
-                  <div class="infoBussines">
-                      <div>
-                          <img src="./img/logos/osde.jpg" width="100px" height="34px">
-                      </div>
-                      <div class="textBussines">
-                        <b>Multual Osde</b> <br>
-                        Sucursal La Plata
-                      </div>
-                  </div>
-
-                  <div class="infoBussines">
-                      <div>
-                          <img src="./img/logos/coca.jpg" width="100px" height="34px">
-                      </div>
-                      <div class="textBussines">
-                        <b>Coca Cola</b> <br>
-                        Capital Federal
-                      </div>
-                  </div>
-
-                  <div class="infoBussines">
-                      <div>
-                          <img src="./img/logos/google.jpg" width="100px" height="34px">
-                      </div>
-                      <div class="textBussines">
-                        <b>Google</b> <br>
-                        Capital Federal
-                      </div>
-                  </div>
               </div>
          </div>
      </div>
@@ -301,21 +263,21 @@
             <div class="textTitlesBusines">
                <b>Enviar las personas seleccionadas a</b>
                <div>
-                 <button class="btnBack" type="button" name="Volver"> Volver</button>
+                 <button class="btnBack" type="button" name="Volver" ng-click='selectCompany()'> Volver</button>
                </div>
             </div>
 
-                <div class="infoBussines2">
+                <div class="infoBussines2" ng-if='model.company != null'>
                   <div>
-                      <img src="./img/logos/sr.jpg" width="100px" height="34px">
+                      <img src="{{model.company.url}}" width="100px" height="34px">
                   </div>
                   <div class="textBussines">
-                    <b>Seguros Rivadavia</b> <br>
+                    <b>{{model.company.name}}</b> <br>
                     La Plata
                   </div>
                 </div>
                 <div>
-                  <button class="btnSend2" type="button" name="button"><i class="fa fa-angle-double-right"></i> <b> Enviar  </b></button>
+                  <button class="btnSend2" type="button" name="button" ng-click='sendMailToCompany()'><i class="fa fa-angle-double-right"></i> <b> Enviar  </b></button>
                 </div>
 
           </div>

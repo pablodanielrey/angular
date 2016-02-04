@@ -9,8 +9,77 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
   $scope.model = {
     inscriptions: [],
     users: [],
-    data: []
+    data: [],
+    selected: 0,
+    currentScreen: '',
+    companies: [
+      {'name':'Cervecería Quilmes', 'url':'./img/logos/quilmes.jpg' },
+      {'name':'Seguros Rivadavia', 'url':'./img/logos/sr.jpg' }
+    ],
+    company: null
   };
+
+  $scope.getCurrentScreen = function() {
+    return $scope.model.currentScreen;
+  }
+
+  $scope.selectUsers = function() {
+    $scope.model.currentScreen = "";
+  }
+
+  $scope.selectCompany = function() {
+    $scope.model.currentScreen = "screenBussines screenSelectBusiness";
+  }
+
+  $scope.sendMailToCompany = function() {
+    $scope.model.currentScreen = "screenBussines screenSending";
+    //  $scope.model.company = c;
+  }
+
+  $scope.confirmMailToCompany = function(c) {
+    $scope.model.currentScreen = "screenBussines screenSendBusiness";
+    $scope.model.company = c;
+  }
+
+
+  /*
+    Calcula la cantidad de seleccionados
+  */
+  $scope.getSelectedNumber = function() {
+    $scope.model.selected = 0;
+    for (i = 0; i < $scope.model.users.length; i++) {
+      if ($scope.model.users[i].selected) {
+        $scope.model.selected = $scope.model.selected + 1;
+      }
+    }
+  }
+
+  /*
+    Selecciono un usuario para ser enviado por correo a una empresa
+  */
+  $scope.selectUser = function(id) {
+    for (i = 0; i < $scope.model.users.length; i++) {
+      if ($scope.model.users[i].id == id) {
+        $scope.model.users[i].selected = !$scope.model.users[i].selected;
+        $scope.getSelectedNumber();
+      }
+    }
+  }
+
+  /*
+    Chequea si un usuario esta seleccionado para ser enviado a una empresa.
+  */
+  $scope.isSelected = function(id) {
+    for (i = 0; i < $scope.model.users.length; i++) {
+      if ($scope.model.users[i].id == id) {
+        if ($scope.model.users[i].selected == undefined) {
+          return false;
+        }
+        return $scope.model.users[i].selected;
+      }
+    }
+    return false;
+  }
 
   /*
     funciones para obtener datos de la persona identificada por el id.
