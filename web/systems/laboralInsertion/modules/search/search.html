@@ -9,7 +9,7 @@
     </div>
 
     <div class="btnUserSelect">
-      <i class="fa fa-users"></i> <b>{{model.selected}}</b> Personas Seleccionadas
+      <i class="fa fa-users"></i> <b>{{model.selected}}</b> Inscripciones Seleccionadas
     </div>
 
     <div>
@@ -124,12 +124,12 @@
       </div>
 
       <!-- <div class="searchResults" ng-class="{true:'seleccionado'}[isSelected(i.user_id)]"> -->
-      <div class="searchResults" ng-class="{true:'seleccionado'}[isSelected(i.user_id)]">
+      <div class="searchResults" ng-class="{true:'seleccionado'}[isSelected(i.id)]">
         <table ng-repeat='i in model.inscriptions'>
           <tr class="fileResults">
             <td>
               <div class="Select">
-                <input type="checkbox" value='isSelected(i.user_id)' ng-click='selectUser(i.user_id)'>
+                <input type="checkbox" value='isSelected(i.id)' ng-click='selectInscription(i.id)'>
               </div>
             </td>
             <td>
@@ -239,7 +239,7 @@
                   <i class="fa fa-building-o"></i> <b>Seleccione empresa</b>
                 </div>
                 <div>
-                  <button class="btnBack" type="button" name="Volver" ng-click="selectUsers()"> Volver</button>
+                  <button class="btnBack" type="button" name="Volver" ng-click="selectInscriptions()"> Volver</button>
                 </div>
               </div>
               <div class="contentBusinesList">
@@ -301,37 +301,14 @@
                 <i class="fa fa-check-circle"></i> <b>Envio finalizado!</b>
               </div>
               <div>
-                <button class="btnBack" type="button" name="Salir"> Salir</button>
+                <button class="btnBack" type="button" name="Salir" ng-click='selectInscriptions()'> Salir</button>
               </div>
             </div>
 
             <div class="contentMail">
               <i class="fa fa-envelope-o"></i> Correos electrónicos de los postulantes
                 <div class="listMail">
-                  walter.blanco@econo.unlp.edu.ar;
-                  lllwalterlll@gmail.com;
-                  pablo@econo.unlp.edu.ar;
-                  walter.blanco@econo.unlp.edu.ar;
-                  lllwalterlll@gmail.com;
-                  pablo@econo.unlp.edu.ar;
-                  walter.blanco@econo.unlp.edu.ar;
-                  lllwalterlll@gmail.com;
-                  pablo@econo.unlp.edu.ar;
-                  walter.blanco@econo.unlp.edu.ar;
-                  lllwalterlll@gmail.com;
-                  pablo@econo.unlp.edu.ar;
-                  walter.blanco@econo.unlp.edu.ar;
-                  lllwalterlll@gmail.com;
-                  pablo@econo.unlp.edu.ar;
-                  walter.blanco@econo.unlp.edu.ar;
-                  lllwalterlll@gmail.com;
-                  pablo@econo.unlp.edu.ar;
-                  walter.blanco@econo.unlp.edu.ar;
-                  lllwalterlll@gmail.com;
-                  pablo@econo.unlp.edu.ar;
-                  walter.blanco@econo.unlp.edu.ar;
-                  lllwalterlll@gmail.com;
-                  pablo@econo.unlp.edu.ar;
+                  <div ng-repeat='e in model.emails'>{{e}}</div>
                 </div>
             </div>
 

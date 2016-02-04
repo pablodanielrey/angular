@@ -6,6 +6,7 @@ import base64
 
 from model.systems.files.files import Files
 from model.users.users import Users
+from model.mail.mail import Mail
 from model.systems.students.students import Students
 
 import csv
@@ -18,6 +19,7 @@ class LaboralInsertion:
     files = inject.attr(Files)
     users = inject.attr(Users)
     students = inject.attr(Students)
+    mail = inject.attr(Mail)
 
     def download(self, con, url, root):
         with open('{}inscripciones.csv'.format(root), 'w', encoding='utf-8') as r:
@@ -107,8 +109,6 @@ class LaboralInsertion:
                         logging.warn('error en cv {}'.format(cv))
 
                 index = index + 1
-
-
 
     def findAllInscriptions(self, con):
         """ obtiene los datos de las inscripciones de los alumnos """
@@ -269,10 +269,33 @@ class LaboralInsertion:
             cur.execute('insert into laboral_insertion.languages (id, user_id, name, level) values (%s,%s,%s,%s)', (lid, userId, l['name'], l['level']))
 
 
-
     def sendMailToCompany(self, con, inscriptions, company):
-        logging.info(inscriptions)
-        logging.info(company)
+        datar = []
+        email = company['email']
+
+        if email is None:
+            return []
+
+        m = self.mail.createMail('insercionlaboral@econo.unlp.edu.ar', email, 'Inscripción en la bolsa de trabajo FCE')
+
+        content = ''
+        for i in inscriptions:
+            data = self.findByUser(con, i['user_id'])
+            mail = self.users.findMail(con, data['email'])
+            if mail is None:
+                continue
+            datar.append(mail['email'])
+
+            user = self.users.findById(con, i['user_id'])
+
+            content = content + '<div>Nombre:{}</div><div>Apellido:{}</div><div>Email:{}</div><div>CV:{}</div>'.format(user['name'], user['lastname'], mail['email'], data['cv'])
+            logging.info(content)
+
+        maux = self.mail.getHtmlPart(content)
+        m.attach(maux)
+        self.mail._sendMail('insercionlaboral@econo.unlp.edu.ar', email, m)
+
+        return datar
 
 
 """"

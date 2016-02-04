@@ -8,26 +8,30 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
 
   $scope.model = {
     inscriptions: [],
+    selected: 0,
     users: [],
     data: [],
-    selected: 0,
     currentScreen: '',
     companies: [
-      {'name':'Cervecería Quilmes', 'url':'./img/logos/quilmes.jpg' },
-      {'name':'Seguros Rivadavia', 'url':'./img/logos/sr.jpg' }
+      {'name':'Cervecería Quilmes', 'url':'./img/logos/quilmes.jpg', 'email':'pablo@econo.unlp.edu.ar' },
+      {'name':'Seguros Rivadavia', 'url':'./img/logos/sr.jpg', 'email':'pablo@econo.unlp.edu.ar' }
     ],
-    company: null
+    company: null,
+    emails: []
   };
 
   $scope.getCurrentScreen = function() {
     return $scope.model.currentScreen;
   }
 
-  $scope.selectUsers = function() {
+  $scope.selectInscriptions = function() {
     $scope.model.currentScreen = "";
   }
 
   $scope.selectCompany = function() {
+    if ($scope.model.selected <= 0) {
+      return;
+    }
     $scope.model.currentScreen = "screenBussines screenSelectBusiness";
   }
 
@@ -39,7 +43,15 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
   $scope.sendMailToCompany = function() {
     $scope.model.currentScreen = "screenBussines screenSending";
     //  $scope.model.company = c;
-    LaboralInsertion.sendEmailToCompany($scope.model.inscriptions, $scope.model.company).then(
+
+    var selectedInscriptions = [];
+    for (i = 0; i < $scope.model.inscriptions.length; i++) {
+      if ($scope.model.inscriptions[i].selected) {
+        selectedInscriptions.push($scope.model.inscriptions[i]);
+      }
+    }
+
+    LaboralInsertion.sendEmailToCompany(selectedInscriptions, $scope.model.company).then(
       function() {
         console.log('enviado');
       },
@@ -50,8 +62,9 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     )
   }
 
-  $scope.mailToCompanySent = function() {
+  $scope.mailToCompanySent = function(emails) {
     $scope.model.currentScreen = "screenBussines screenSent";
+    $scope.model.emails = emails;
     console.log('mail enviado ok');
   }
 
@@ -60,35 +73,35 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
   */
   $scope.getSelectedNumber = function() {
     $scope.model.selected = 0;
-    for (i = 0; i < $scope.model.users.length; i++) {
-      if ($scope.model.users[i].selected) {
+    for (i = 0; i < $scope.model.inscriptions.length; i++) {
+      if ($scope.model.inscriptions[i].selected) {
         $scope.model.selected = $scope.model.selected + 1;
       }
     }
   }
 
   /*
-    Selecciono un usuario para ser enviado por correo a una empresa
+    Selecciono una inscripcion para ser enviado por correo a una empresa
   */
-  $scope.selectUser = function(id) {
+  $scope.selectInscription = function(id) {
     for (i = 0; i < $scope.model.users.length; i++) {
-      if ($scope.model.users[i].id == id) {
-        $scope.model.users[i].selected = !$scope.model.users[i].selected;
+      if ($scope.model.inscriptions[i].id == id) {
+        $scope.model.inscriptions[i].selected = !$scope.model.inscriptions[i].selected;
         $scope.getSelectedNumber();
       }
     }
   }
 
   /*
-    Chequea si un usuario esta seleccionado para ser enviado a una empresa.
+    Chequea si una inscripcion esta seleccionado para ser enviado a una empresa.
   */
   $scope.isSelected = function(id) {
-    for (i = 0; i < $scope.model.users.length; i++) {
-      if ($scope.model.users[i].id == id) {
-        if ($scope.model.users[i].selected == undefined) {
+    for (i = 0; i < $scope.model.inscriptions.length; i++) {
+      if ($scope.model.inscriptions[i].id == id) {
+        if ($scope.model.inscriptions[i].selected == undefined) {
           return false;
         }
-        return $scope.model.users[i].selected;
+        return $scope.model.inscriptions[i].selected;
       }
     }
     return false;

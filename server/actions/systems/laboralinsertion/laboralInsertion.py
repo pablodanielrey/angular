@@ -245,8 +245,8 @@ class LaboralInsertionWamp(ApplicationSession):
     def sendMailToCompany(self, inscriptions, company):
         con = self._getDatabase()
         try:
-            self.laboralInsertion.sendMailToCompany(con, inscriptions, company)
-            self.publish('system.laboralInsertion.COMPANYSENDED')
+            data = self.laboralInsertion.sendMailToCompany(con, inscriptions, company)
+            self.publish('system.laboralInsertion.COMPANYSENDED', data)
             return True
 
         finally:
