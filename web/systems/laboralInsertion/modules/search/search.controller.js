@@ -13,8 +13,8 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     data: [],
     currentScreen: '',
     companies: [
-      {'name':'Cervecería Quilmes', 'url':'./img/logos/quilmes.jpg', 'email':'pablo@econo.unlp.edu.ar' },
-      {'name':'Seguros Rivadavia', 'url':'./img/logos/sr.jpg', 'email':'pablo@econo.unlp.edu.ar' }
+      {'name':'Cervecería Quilmes', 'url':'./img/logos/quilmes.jpg', 'email':'paula.beyries@econo.unlp.edu.ar' },
+      {'name':'Seguros Rivadavia', 'url':'./img/logos/sr.jpg', 'email':'paula.beyries@econo.unlp.edu.ar' }
     ],
     company: null,
     emails: []

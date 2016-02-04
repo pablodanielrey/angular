@@ -8,6 +8,7 @@ from model.systems.files.files import Files
 from model.users.users import Users
 from model.mail.mail import Mail
 from model.systems.students.students import Students
+from email.mime.text import MIMEText
 
 import csv
 
@@ -284,11 +285,19 @@ class LaboralInsertion:
             mail = self.users.findMail(con, data['email'])
             if mail is None:
                 continue
-            datar.append(mail['email'])
+
+            cvf = self.files.findById(con, data['cv'])
+            if cvf['content'] is None:
+                continue
 
             user = self.users.findById(con, i['user_id'])
 
-            content = content + '<div>Nombre:{}</div><div>Apellido:{}</div><div>Email:{}</div><div>CV:{}</div>'.format(user['name'], user['lastname'], mail['email'], data['cv'])
+            f = self.mail.attachFile('{}-{}'.format(user['dni'], cvf['name']), base64.b64decode(cvf['content']))
+            m.attach(f)
+
+            datar.append(mail['email'])
+
+            content = content + '<div><div>Nombre:{}</div><div>Apellido:{}</div><div>Email:{}</div><div>CV:{}</div></div>'.format(user['name'], user['lastname'], mail['email'], data['cv'])
             logging.info(content)
 
         maux = self.mail.getHtmlPart(content)

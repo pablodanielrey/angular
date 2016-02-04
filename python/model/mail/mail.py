@@ -1,5 +1,7 @@
 import inject, smtplib, re
 
+import email
+from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.header import Header
@@ -33,10 +35,16 @@ class Mail:
         msg = MIMEText(body,'html','utf-8')
         return msg
 
-    def getTextPart(self,body):
+    def getTextPart(self, body):
         msg = MIMEText(body,'plain','utf-8')
         return msg
 
+    def attachFile(self, name, data):
+        b = MIMEBase('application', 'pdf')
+        b.set_payload(data)
+        #email.encoders.encode_base64(b)
+        b.add_header('Content-Disposition','attachment;filename={}'.format(name))
+        return b
 
     def _sendMail(self, ffrom, tos, body):
       s = smtplib.SMTP(self.config.configs['mail_host'])
