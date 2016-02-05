@@ -277,7 +277,34 @@ class LaboralInsertion:
         if emails is None:
             return []
 
-        content = ''
+        content = '''
+            <html>
+            <body>
+                <div>
+                    A través del presente correo enviamos el listado de candidatos solicitados y
+                    sus respectivos CVs.
+                    Cualquier inquietud, estamos a disposición.
+                    Atte.
+                </div>
+
+                <div>
+                    Cra. Ma. Paula Beyries
+
+                    Lic. Lucas Tomás Troiano
+                    Prosecretario de Inserción Laboral
+                </div>
+
+                <div>
+                    Prosecretaría de Inserción Laboral
+                    Facultad de Ciencias Económicas
+                    Oficina 511 - 5to piso
+                    Tel: (221) 423-6769/6772 int 117
+                    e-mail: insercionlaboral@econo.unlp.edu.ar
+                </div>
+            </body>
+            </html>
+        '''
+
         fss = []
         for i in inscriptions:
             data = self.findByUser(con, i['user_id'])
