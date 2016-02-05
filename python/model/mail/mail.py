@@ -42,7 +42,7 @@ class Mail:
     def attachFile(self, name, data):
         b = MIMEBase('application', 'pdf')
         b.set_payload(data)
-        #email.encoders.encode_base64(b)
+        email.encoders.encode_base64(b)
         b.add_header('Content-Disposition','attachment;filename={}'.format(name))
         return b
 
