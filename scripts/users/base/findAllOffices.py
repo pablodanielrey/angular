@@ -2,6 +2,7 @@
 import connection
 import groups
 import logging
+from pprint import pprint
 
 if __name__ == '__main__':
 
@@ -10,7 +11,7 @@ if __name__ == '__main__':
     try:
         for oid in groups.OfficeDAO.findAll(con):
             office = groups.OfficeDAO.findById(con, oid)
-            logging.info(office.__dict__)
+            pprint(office.__dict__)
 
     finally:
         connection.closeConnection(con)
