@@ -272,14 +272,13 @@ class LaboralInsertion:
 
     def sendMailToCompany(self, con, inscriptions, company):
         datar = []
-        email = company['email']
+        emails = company.emails
 
-        if email is None:
+        if emails is None:
             return []
 
-        m = self.mail.createMail('insercionlaboral@econo.unlp.edu.ar', email, 'Inscripción en la bolsa de trabajo FCE')
-
         content = ''
+        fss = []
         for i in inscriptions:
             data = self.findByUser(con, i['user_id'])
             mail = self.users.findMail(con, data['email'])
@@ -292,17 +291,20 @@ class LaboralInsertion:
 
             user = self.users.findById(con, i['user_id'])
 
-            f = self.mail.attachFile('{}-{}'.format(user['dni'], cvf['name']), base64.b64decode(cvf['content']))
-            m.attach(f)
+            fss.append(self.mail.attachFile('{}-{}'.format(user['dni'], cvf['name']), base64.b64decode(cvf['content'])))
 
             datar.append(mail['email'])
-
             content = content + '<div><div>Nombre:{}</div><div>Apellido:{}</div><div>Email:{}</div><div>CV:{}</div></div>'.format(user['name'], user['lastname'], mail['email'], data['cv'])
-            logging.info(content)
 
-        maux = self.mail.getHtmlPart(content)
-        m.attach(maux)
-        self.mail._sendMail('insercionlaboral@econo.unlp.edu.ar', email, m)
+
+        for email in emails:
+            logging.info('enviando a {}'.format(email))
+            m = self.mail.createMail('insercionlaboral@econo.unlp.edu.ar', email, 'Inscripción en la bolsa de trabajo FCE')
+            maux = self.mail.getHtmlPart(content)
+            m.attach(maux)
+            for f in fss:
+                m.attach(f)
+            self.mail._sendMail('insercionlaboral@econo.unlp.edu.ar', email, m)
 
         return datar
 

@@ -12,21 +12,9 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     users: [],
     data: [],
     currentScreen: '',
-    companies: [
-      {'name':'Cervecería Quilmes',
-       'url':'./img/logos/quilmes.jpg',
-       'emails':[
-         {'email':'pablo@econo.unlp.edu.ar'},
-         {'email':'prueba@econo.unlp.edu.ar'}
-       ]},
-      {'name':'Seguros Rivadavia',
-       'url':'./img/logos/sr.jpg',
-       'emails':[
-         {'email':'pablo@econo.unlp.edu.ar'},
-         {'email':'prueba@econo.unlp.edu.ar'}
-       ]}
-    ],
+    companies: [],
     company: null,
+    emailAddToCompany: '',
     emails: []
   };
 
@@ -52,6 +40,19 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
   $scope.confirmMailToCompany = function(c) {
     $scope.model.currentScreen = "screenBussines screenSendBusiness";
     $scope.model.company = c;
+  }
+
+  $scope.addEmailToCompany = function() {
+    $scope.model.company.emails.push($scope.model.emailAddToCompany);
+    $scope.model.emailAddToCompany = '';
+  }
+
+  $scope.removeEmailFromCompany = function(email) {
+    for (i = 0; i < $scope.model.company.emails.length; i++) {
+      if ($scope.model.company.emails[i] == email) {
+        $scope.model.company.emails.splice(i,1);
+      }
+    }
   }
 
   $scope.sendMailToCompany = function() {
