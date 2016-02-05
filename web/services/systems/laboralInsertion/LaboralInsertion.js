@@ -63,4 +63,15 @@ function LaboralInsertion($rootScope,$wamp,Session) {
     return $wamp.call('system.laboralInsertion.company.findAll')
   }
 
+  /*
+    encuentra todos los sent que tengan el id de incripcion
+  */
+  this.findSentByInscriptionId = function(id) {
+    return $wamp.call('system.laboralInsertion.sent.findByInscription', [id]).then(function(sents) {
+      return {'id':id, 'sents':sents};
+    })
+  }
+
+
+
 }

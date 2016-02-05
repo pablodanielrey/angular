@@ -11,6 +11,7 @@ import uuid
 import os
 from model.systems.laboralInsertion.laboralInsertion import LaboralInsertion
 from model.systems.laboralInsertion.company import Company
+from model.systems.laboralInsertion.mails import Sent
 from model.config import Config
 from model.users.users import Users
 
@@ -174,6 +175,7 @@ class LaboralInsertionWamp(ApplicationSession):
         yield from self.register(self.deleteInscriptionById_async, 'system.laboralInsertion.deleteInscriptionById')
         yield from self.register(self.sendMailToCompany_async, 'system.laboralInsertion.sendEmailToCompany');
         yield from self.register(self.findAllCompanies_async, 'system.laboralInsertion.company.findAll');
+        yield from self.register(self.findSentByInscriptionId_async, 'system.laboralInsertion.sent.findByInscription');
 
     def _getDatabase(self):
         if self.pool is None:
@@ -278,6 +280,15 @@ class LaboralInsertionWamp(ApplicationSession):
         finally:
             self._closeDatabase(con)
 
+    def findSentByInscriptionId(self, id):
+        con = self._getDatabase()
+        try:
+            ids = Sent.findByInscriptionId(con, id)
+            return ids
+
+        finally:
+            self._closeDatabase(con)
+
     """
     def download(self):
         con = self._getDatabase()
@@ -369,4 +380,10 @@ class LaboralInsertionWamp(ApplicationSession):
     def findAllCompanies_async(self):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.findAllCompanies)
+        return r
+
+    @coroutine
+    def findSentByInscriptionId_async(self, id):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.findSentByInscriptionId, id)
         return r

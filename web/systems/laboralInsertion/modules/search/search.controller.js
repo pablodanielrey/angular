@@ -7,6 +7,7 @@ SearchCtrl.$inject = ['$rootScope','$scope','$location', '$window', 'Notificatio
 function SearchCtrl($rootScope, $scope, $location, $window, Notifications, LaboralInsertion, Login, Utils, Users, $wamp) {
 
   $scope.model = {
+    sents: {},
     inscriptions: [],
     selected: 0,
     users: [],
@@ -268,6 +269,14 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
   }
 
   /*
+    Retorna la cantida de veces que esta registrado en los sents el id de la inscripcion
+    (calculado cuando se obtienen todas las inscripciones)
+  */
+  $scope.getSents = function(id) {
+    return $scope.model.sents[id]
+  }
+
+  /*
     Obtiene la info de los usuarios
   */
   $scope.getUsers = function(ins) {
@@ -316,6 +325,18 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
 
     LaboralInsertion.findAllInscriptions().then(function(ins) {
       $scope.model.inscriptions = ins;
+
+      // obtegno el numero de veces que esta el id de la inscripcion en los sents
+      for (var i = 0; i < ins.length; i++) {
+        LaboralInsertion.findSentByInscriptionId(ins[i]['id']).then(function(r) {
+          // registro el numero de veces que esta esa inscripcion en los sents
+          console.log(r);
+          $scope.model.sents[r['id']] = r['sents'].length
+        }, function(err) {
+          console.log(err);
+        });
+      }
+
       $scope.getUsers(ins);
       $scope.getUserData(ins);
       $scope.getCompaniesData();
