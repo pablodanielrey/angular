@@ -56,4 +56,11 @@ function LaboralInsertion($rootScope,$wamp,Session) {
     return $wamp.call('system.laboralInsertion.sendEmailToCompany', [inscriptions, company])
   }
 
+  /*
+    encuentra todas las companies definidas en la base de datos.
+  */
+  this.findAllCompanies = function() {
+    return $wamp.call('system.laboralInsertion.company.findAll')
+  }
+
 }

@@ -296,6 +296,17 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     }
   }
 
+  /*
+    Obtiene toda la info de las companias
+  */
+  $scope.getCompaniesData = function() {
+    LaboralInsertion.findAllCompanies().then(function(companies) {
+      $scope.model.companies = companies;
+      console.log(companies);
+    }, function(err) {
+      console.log(err);
+    });
+  }
 
   $scope.initialize = function() {
 
@@ -306,6 +317,7 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
       $scope.model.inscriptions = ins;
       $scope.getUsers(ins);
       $scope.getUserData(ins);
+      $scope.getCompaniesData();
       //console.log($scope.model.inscriptions);
     }, function(err) {
       console.log(err);
