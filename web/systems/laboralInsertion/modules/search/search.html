@@ -1,11 +1,11 @@
-<div class="search " ng-class='getCurrentScreen()'>
+<div class="search" ng-class='getCurrentScreen()'>
   <!-- Variables 1: screenBussines, screenFilters
        Variables2: screenSelectBusiness, screenSendBusiness, screenSending, screenSent-->
 
   <div class="header">
 
     <div>
-      <button class="btnFilters" type="button" name="filters"><i class="fa fa-sliders "></i> <b>Filtros</b> </button>
+      <button class="btnFilters" type="button" name="filters" ng-click='selectFilters()'><i class="fa fa-sliders "></i> <b>Filtros</b> </button>
     </div>
 
     <div class="btnUserSelect">
@@ -245,9 +245,11 @@
               <div class="contentBusinesList">
 
                   <div class="infoBussines" ng-repeat='c in model.companies' ng-click='confirmMailToCompany(c)'>
+                    <!--
                       <div>
                           <img src="{{c.url}}" width="100px" height="34px">
                       </div>
+                    -->
                       <div class="textBussines">
                         <b>{{c.name}}</b> <br>
                         La Plata
@@ -274,6 +276,15 @@
                   <div class="textBussines">
                     <b>{{model.company.name}}</b> <br>
                     La Plata
+                  </div>
+                  <div>
+                    <div ng-repeat='e in model.company.emails'>
+                      <div>{{e.email}}<button>x</button></div>
+                    </div>
+                    <div>
+                      <input type=email></input>
+                      <button>agregar</button>
+                    </div>
                   </div>
                 </div>
                 <div>
@@ -478,7 +489,9 @@
           <div>
             ACA TENES EL DIV PUTOOOOOOOOOOOOOOOO
           </div>
-
+          <div>
+              <button ng-click='selectInscriptions()'>Cerrar</button>
+          </div>
 
 
 

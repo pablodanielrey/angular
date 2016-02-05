@@ -13,8 +13,18 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     data: [],
     currentScreen: '',
     companies: [
-      {'name':'Cervecería Quilmes', 'url':'./img/logos/quilmes.jpg', 'email':'paula.beyries@econo.unlp.edu.ar' },
-      {'name':'Seguros Rivadavia', 'url':'./img/logos/sr.jpg', 'email':'paula.beyries@econo.unlp.edu.ar' }
+      {'name':'Cervecería Quilmes',
+       'url':'./img/logos/quilmes.jpg',
+       'emails':[
+         {'email':'pablo@econo.unlp.edu.ar'},
+         {'email':'prueba@econo.unlp.edu.ar'}
+       ]},
+      {'name':'Seguros Rivadavia',
+       'url':'./img/logos/sr.jpg',
+       'emails':[
+         {'email':'pablo@econo.unlp.edu.ar'},
+         {'email':'prueba@econo.unlp.edu.ar'}
+       ]}
     ],
     company: null,
     emails: []
@@ -22,6 +32,10 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
 
   $scope.getCurrentScreen = function() {
     return $scope.model.currentScreen;
+  }
+
+  $scope.selectFilters = function() {
+    $scope.model.currentScreen = "screenFilters";
   }
 
   $scope.selectInscriptions = function() {
