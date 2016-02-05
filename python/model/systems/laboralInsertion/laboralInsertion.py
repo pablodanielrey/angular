@@ -10,6 +10,8 @@ from model.mail.mail import Mail
 from model.systems.students.students import Students
 from email.mime.text import MIMEText
 
+from model.systems.laboralInsertion.mails import Sent
+
 import csv
 
 class LaboralInsertion:
@@ -340,6 +342,13 @@ class LaboralInsertion:
             for f in fss:
                 m.attach(f)
             self.mail._sendMail('insercionlaboral@econo.unlp.edu.ar', email, m)
+
+        ''' genero los datos del envío en la base '''
+        sent = Sent()
+        sent.emails = emails
+        sent.inscriptions = [i['id'] for i in inscriptions]
+        sent.persist(con)
+        con.commit()
 
         return datar
 
