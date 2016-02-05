@@ -13,6 +13,8 @@ if __name__ == '__main__':
     import sys
     dni = sys.argv[1]
     name = sys.argv[2]
+    name1 = sys.argv[3]
+    lastname = sys.argv[4]
 
     ldappass = None
     email = None
@@ -21,6 +23,7 @@ if __name__ == '__main__':
     ''' busco a ver si existe el usuario en el ldap y sus propiedades '''
     lcon = connectionLdap.getConnection()
     lcon.search("ou=people,dc=econo", "(uid=" + name + ")", attributes=["uid", 'userPassword', 'mail'])
+    logging.info(lcon)
     result = lcon.entries
     if len(result) > 0:
         n = result[0]
@@ -52,8 +55,8 @@ if __name__ == '__main__':
             ''' creo el usuario y le pongo la clave que tenga en el ldap '''
             user = users.User()
             user.dni = dni
-            user.name = ''
-            user.lastname = ''
+            user.name = name1
+            user.lastname = lastname
             uid = users.UserDAO.persist(con, user)
 
             up = users.UserPassword()
