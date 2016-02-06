@@ -57,8 +57,11 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
   }
 
   $scope.sendMailToCompany = function() {
-    $scope.model.currentScreen = "screenBussines screenSending";
-    //  $scope.model.company = c;
+
+    if ($scope.model.company.emails.length <= 0) {
+      console.log('company.emails = 0');
+      return;
+    }
 
     var selectedInscriptions = [];
     for (i = 0; i < $scope.model.inscriptions.length; i++) {
@@ -67,6 +70,12 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
       }
     }
 
+    if (selectedInscriptions.length <= 0) {
+      console.log('selectedInscriptions == 0');
+      return;
+    }
+
+    $scope.model.currentScreen = "screenBussines screenSending";
     LaboralInsertion.sendEmailToCompany(selectedInscriptions, $scope.model.company).then(
       function() {
         console.log('enviado');
@@ -88,39 +97,29 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     Calcula la cantidad de seleccionados
   */
   $scope.getSelectedNumber = function() {
-    $scope.model.selected = 0;
-    for (i = 0; i < $scope.model.inscriptions.length; i++) {
-      if ($scope.model.inscriptions[i].selected) {
-        $scope.model.selected = $scope.model.selected + 1;
-      }
-    }
+    return $scope.model.selected;
   }
 
   /*
     Selecciono una inscripcion para ser enviado por correo a una empresa
   */
-  $scope.selectInscription = function(id) {
-    for (i = 0; i < $scope.model.users.length; i++) {
-      if ($scope.model.inscriptions[i].id == id) {
-        $scope.model.inscriptions[i].selected = !$scope.model.inscriptions[i].selected;
-        $scope.getSelectedNumber();
-      }
+  $scope.selectInscription = function(i) {
+    i.selected = !i.selected;
+    if (i.selected) {
+      $scope.model.selected = $scope.model.selected + 1;
+    } else {
+      $scope.model.selected = $scope.model.selected - 1;
     }
   }
 
   /*
     Chequea si una inscripcion esta seleccionado para ser enviado a una empresa.
   */
-  $scope.isSelected = function(id) {
-    for (i = 0; i < $scope.model.inscriptions.length; i++) {
-      if ($scope.model.inscriptions[i].id == id) {
-        if ($scope.model.inscriptions[i].selected == undefined) {
-          return false;
-        }
-        return $scope.model.inscriptions[i].selected;
-      }
+  $scope.isSelected = function(i) {
+    if (i.selected == undefined) {
+      return false;
     }
-    return false;
+    return i.selected;
   }
 
   /*
