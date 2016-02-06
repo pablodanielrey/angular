@@ -126,48 +126,38 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     funciones para obtener datos de la persona identificada por el id.
   */
   $scope.getName = function(id) {
-    for (i = 0; i < $scope.model.users.length; i++) {
-      if ($scope.model.users[i].id == id) {
-        return $scope.model.users[i].lastname + " " + $scope.model.users[i].name;
-      }
+    if ($scope.model.users[id] == undefined) {
+      return "No Definido";
     }
-    return 'No Encontrado';
+    return $scope.model.users[id].lastname + " " + $scope.model.users[id].name;
   }
 
   $scope.getResidence = function(id) {
-    for (i = 0; i < $scope.model.users.length; i++) {
-      if ($scope.model.users[i].id == id) {
-        return $scope.model.users[i].residence_city;
-      }
+    if ($scope.model.users[id] == undefined) {
+      return "No Definido";
     }
-    return 'No Encontrado';
+    return $scope.model.users[id].residence_city;
   }
 
   $scope.getCity = function(id) {
-    for (i = 0; i < $scope.model.users.length; i++) {
-      if ($scope.model.users[i].id == id) {
-        return $scope.model.users[i].city;
-      }
+    if ($scope.model.users[id] == undefined) {
+      return "No Definido";
     }
-    return 'No Encontrado';
+    return $scope.model.users[id].city;
   }
 
   $scope.getDni = function(id) {
-    for (i = 0; i < $scope.model.users.length; i++) {
-      if ($scope.model.users[i].id == id) {
-        return $scope.model.users[i].dni;
-      }
+    if ($scope.model.users[id] == undefined) {
+      return "No Definido";
     }
-    return 'No Encontrado';
+    return $scope.model.users[id].dni;
   }
 
   $scope.getGenre = function(id) {
-    for (i = 0; i < $scope.model.users.length; i++) {
-      if ($scope.model.users[i].id == id) {
-        return $scope.model.users[i].genre;
-      }
+    if ($scope.model.users[id] == undefined) {
+      return "No Definido";
     }
-    return 'No Encontrado';
+    return $scope.model.users[id].genre;
   }
 
   $scope.getTravel = function(i) {
@@ -237,17 +227,15 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
   }
 
   $scope.getAge = function(id) {
-    for (i = 0; i < $scope.model.users.length; i++) {
-      if ($scope.model.users[i].id == id) {
-        date = new Date($scope.model.users[i].birthdate);
-        if (date != null) {
-          return $scope._calculateAge(date);
-        } else {
-          return 'nc';
-        }
-      }
+    if ($scope.model.users[id] == undefined) {
+      return "No Definido";
     }
-    return 'No Encontrado';
+    date = new Date($scope.model.users[id].birthdate);
+    if (date != null) {
+      return $scope._calculateAge(date);
+    } else {
+      return 'nc';
+    }
   }
 
   $scope.getDate = function(d) {
@@ -282,7 +270,7 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     for (i = 0; i < ins.length; i++) {
       //console.log('Buscando usuario ' + ins[i].user_id);
       Users.findById(ins[i].user_id).then(function(user) {
-        $scope.model.users.push(user);
+        $scope.model.users[user['id']] = user;
         //console.log(user);
       }, function(err) {
         console.log(err);
@@ -298,7 +286,7 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
       //console.log('Buscando usuario ' + ins[i].user_id);
       LaboralInsertion.findByUser(ins[i].user_id).then(function(data) {
         $scope.model.data.push(data);
-        //console.log(data);
+        console.log(data);
       }, function(err) {
         console.log(err);
       });
