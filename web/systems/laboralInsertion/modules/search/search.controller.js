@@ -104,6 +104,13 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     Selecciono una inscripcion para ser enviado por correo a una empresa
   */
   $scope.selectInscription = function(i) {
+
+    // chequeo que tenga email
+    if ($scope.getMail(i.user_id) == 'No Definido') {
+      console.log('No tiene email');
+      return;
+    }
+
     i.selected = !i.selected;
     if (i.selected) {
       $scope.model.selected = $scope.model.selected + 1;
@@ -116,9 +123,7 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     Chequea si una inscripcion esta seleccionado para ser enviado a una empresa.
   */
   $scope.isSelected = function(i) {
-    if (i.selected == undefined) {
-      return false;
-    }
+    console.log(i);
     return i.selected;
   }
 
@@ -169,53 +174,37 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
   }
 
   $scope.getMail = function(id) {
-    for (i = 0; i < $scope.model.data.length; i++) {
-      if ($scope.model.data[i].id == id) {
-        if ($scope.model.data[i].email != null) {
-          return $scope.model.data[i].email.email;
-        } else {
-          return "No Definido";
-        }
-      }
+    if ($scope.model.data[id].email != null) {
+      return $scope.model.data[id].email.email;
+    } else {
+      return "No Definido";
     }
-    return 'No Encontrado';
   }
 
   $scope.getEnglish = function(id) {
-    for (i = 0; i < $scope.model.data.length; i++) {
-      if ($scope.model.data[i].id == id) {
-        if ($scope.model.data[i].languages.length > 0) {
-          for (a = 0; a < $scope.model.data[i].languages.length; a++) {
-            if ($scope.model.data[i].languages[a].name == 'Inglés') {
-              return $scope.model.data[i].languages[a].level;
-            }
-          }
-          return "No";
-        } else {
-          return "No";
+    if ($scope.model.data[id].languages.length > 0) {
+      for (a = 0; a < $scope.model.data[id].languages.length; a++) {
+        if ($scope.model.data[id].languages[a].name == 'Inglés') {
+          return $scope.model.data[id].languages[a].level;
         }
       }
+      return "No";
+    } else {
+      return "No";
     }
-    return 'No Encontrado';
   }
 
   $scope.getLanguagesOther = function(id) {
-    for (i = 0; i < $scope.model.data.length; i++) {
-      if ($scope.model.data[i].id == id) {
-        if ($scope.model.data[i].languages.length > 0) {
-          for (a = 0; a < $scope.model.data[i].languages.length; a++) {
-            if ($scope.model.data[i].languages[a].name != 'Inglés') {
-              //return $scope.model.data[i].languages[a].name;
-              return "Sí";
-            }
-          }
-          return "No";
-        } else {
-          return "No";
+    if ($scope.model.data[id].languages.length > 0) {
+      for (a = 0; a < $scope.model.data[id].languages.length; a++) {
+        if ($scope.model.data[id].languages[a].name != 'Inglés') {
+          return "Sí";
         }
       }
+      return "No";
+    } else {
+      return "No";
     }
-    return 'No Encontrado';
   }
 
   // calcula la edad a partir de la fecha de nac.
@@ -285,8 +274,7 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     for (i = 0; i < ins.length; i++) {
       //console.log('Buscando usuario ' + ins[i].user_id);
       LaboralInsertion.findByUser(ins[i].user_id).then(function(data) {
-        $scope.model.data.push(data);
-        console.log(data);
+        $scope.model.data[data['id']] = data;
       }, function(err) {
         console.log(err);
       });
@@ -315,6 +303,7 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
 
       // obtegno el numero de veces que esta el id de la inscripcion en los sents
       for (var i = 0; i < ins.length; i++) {
+        ins.selected = false;
         LaboralInsertion.findSentByInscriptionId(ins[i]['id']).then(function(r) {
           // registro el numero de veces que esta esa inscripcion en los sents
           console.log(r);

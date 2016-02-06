@@ -128,8 +128,11 @@
         <table ng-repeat='i in model.inscriptions'>
           <tr class="fileResults">
             <td>
-              <div class="Select">
-                <input type="checkbox" value='isSelected(i)' ng-click='selectInscription(i)'>
+              <div class="Select" ng-if="getMail(i.user_id) != 'No Definido'">
+                <input type="checkbox" ng-checked='isSelected(i)' ng-click='selectInscription(i)'>
+              </div>
+              <div class="Select" ng-if="getMail(i.user_id) == 'No Definido'">
+                -
               </div>
             </td>
             <td>
