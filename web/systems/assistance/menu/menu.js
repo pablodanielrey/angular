@@ -73,20 +73,29 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Profiles', 'Se
       $location.path('/managePositions');
     };
 
+    $scope.exit = function() {
+  	    $location.path('/logout');
+  	}
 
     $scope.initialize = function() {
 
-      Profiles.checkAccess(Session.getSessionId(),["ADMIN-ASSISTANCE","USER-ASSISTANCE"],
+      var sid = Session.getSessionId();
+      if (sid == null) {
+        return;
+      }
+
+      Profiles.checkAccess(sid, ["ADMIN-ASSISTANCE","USER-ASSISTANCE"],
         function(ok) {
           if (ok) {
               $scope.model.items = [];
-              //$scope.model.items.push({ n:1, label:'Inicio', img:'fa-tachometer', function: $scope.summary});
-              $scope.model.items.push({ n:20, label:'Solicitudes', img:'fa-ticket', function: $scope.requestAssistance});
-              $scope.model.items.push({ n:10, label:'Control de Horario', img:'fa-clock-o', function: $scope.showAssistance});
-              $scope.model.items.push({ n:1, label:'Incumplimientos', img:'fa-ticket', function: $scope.assistanceFails});
+              $scope.model.items.push({ n:1, label:'Inicio', img:'fa fa-home', function: $scope.summary});
+              $scope.model.items.push({ n:20, label:'Solicitudes', img:'fa fa-ticket', function: $scope.requestAssistance});
+              $scope.model.items.push({ n:10, label:'Control de Horario', img:'fa fa-clock-o', function: $scope.showAssistance});
+              $scope.model.items.push({ n:1, label:'Incumplimientos', img:'fa fa-exclamation-triangle', function: $scope.assistanceFails});
               //$scope.model.items.push({ label:'Filtro de Fallas (testing todavía no terminado)', img:'fa-ticket', function: $scope.assistanceFailsFilters});
               // hasta que no este terminado en producción no va
-              $scope.model.items.push({ n:4, label:'Mi Horario', img:'fa-clock-o', function: $scope.mySchedule});
+              $scope.model.items.push({ n:4, label:'Mi Horario', img:'fa fa-clock-o', function: $scope.mySchedule});
+              $scope.model.items.push({ n:100, label:'Salir', img:'fa fa-sign-out', function: $scope.exit });
 
 
               Office.getUserOfficeRoles(null,
@@ -104,24 +113,24 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Profiles', 'Se
                     }
 
                     if (hasApprove) {
-                      $scope.model.items.push({ n:22, label:'Adm. Solicitudes ', img:'fa-ticket', function: $scope.adminRequestAssistance});
-                      $scope.model.items.push({ n:30, label:'Horas Extras ', img:'fa-plus', function: $scope.requestAuthority});
-                      $scope.model.items.push({ n:21, label:'Solicitudes a Empleados', img:'fa-plus', function: $scope.userAssistanceManagementMediator});
+                      $scope.model.items.push({ n:22, label:'Adm. Solicitudes ', img:'fa fa-tags', function: $scope.adminRequestAssistance});
+                      $scope.model.items.push({ n:30, label:'Horas Extras ', img:'fa fa-clock-o', function: $scope.requestAuthority});
+                      $scope.model.items.push({ n:21, label:'Solicitudes a Empleados', img:'fa fa-tags', function: $scope.userAssistanceManagementMediator});
                     }
 
                     if (hasOvertime) {
                       //$scope.model.items.push({ label:'Licencias Médicas', img:'fa-stethoscope', function: $scope.medicalLicenses});
-                      $scope.model.items.push({ n:31, label:'Admin Horas Extras ', img:'fa-plus', function: $scope.adminRequestOverTime});
+                      $scope.model.items.push({ n:31, label:'Admin Horas Extras ', img:'fa fa-clock-o', function: $scope.adminRequestOverTime});
                     }
 
                     if (hasJustification) {
-                      $scope.model.items.push({ n:23, label:'Solicitudes Especiales ', img:'fa-plus', function: $scope.userAssistanceManagement});
-                      $scope.model.items.push({ n:24, label:'Solicitudes Generales ', img:'fa-plus', function: $scope.requestGeneralJustifications});
-                      $scope.model.items.push({ n:25, label:'Stock de Solicitudes ', img:'fa-plus', function: $scope.manageJustificationsStock});
+                      $scope.model.items.push({ n:23, label:'Solicitudes Especiales ', img:'fa fa-tags', function: $scope.userAssistanceManagement});
+                      $scope.model.items.push({ n:24, label:'Solicitudes Generales ', img:'fa fa-tags', function: $scope.requestGeneralJustifications});
+                      $scope.model.items.push({ n:25, label:'Stock de Solicitudes ', img:'fa fa-stack-overflow', function: $scope.manageJustificationsStock});
                     }
 
                     if (hasPositions) {
-                      $scope.model.items.push({ n:40, label:'Administrar Cargos', img:'fa-plus', function: $scope.managePositions});
+                      $scope.model.items.push({ n:40, label:'Administrar Cargos', img:'fa fa-cogs', function: $scope.managePositions});
                     }
 
                   },
@@ -129,6 +138,8 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Profiles', 'Se
                     Notifications.message(error);
                   }
               );
+          } else {
+            $scope.model.items.push({ n:100, label:'Salir', img:'fa fa-sign-out', function: $scope.exit });
           }
 
         },

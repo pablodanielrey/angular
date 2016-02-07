@@ -12,6 +12,7 @@ from collections import OrderedDict
 import io
 from pyexcel_ods3 import ODSWriter
 
+from model.systems.offices.offices import Offices
 from model.utils import DateTimeEncoder
 from model.config import Config
 from model.users.users import Users
@@ -29,6 +30,7 @@ import model.systems.assistance.date
 class Assistance:
 
     config = inject.attr(Config)
+    offices = inject.attr(Offices)
     date = inject.attr(Date)
     logs = inject.attr(Logs)
     schedule = inject.attr(Schedule)
@@ -146,7 +148,7 @@ class Assistance:
 
 
 
-    
+
     def _getJustificationsForSchedule(self, con, userId, scheds, date):
         """
             Obtener justificaciones de un usuario a partir de una fecha
@@ -155,7 +157,7 @@ class Assistance:
             @param scheds Lista de schedules
             @param date Fecha para la cual se obtendran las justificaciones
         """
-        
+
         if scheds is None or len(scheds) <= 0:
             return []
 
@@ -372,12 +374,20 @@ class Assistance:
         @param start Fecha (date) de inicio del periodo
         @param end Fecha (date de finalizacion del periodo
     """
-    def getFailsByDate(self, userId, start, end):
-        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
-        try:
-            fails = self.checks.checkConstraints(con, userId, start, end) #obtener fallas del usuario en determinado periodo
-            user = self.users.findUser(con, userId) #definir usuario
-            return (user, fails)
+    def getFailsByDate(self, con, userId, start, end):
+        offices = self.offices.getOfficesByUserRole(con,userId,True,'autoriza')
+        #logging.debug('officesByUserRole : {}'.format(offices))
 
-        finally:
-            con.close()
+        if offices is None or len(offices) <= 0:
+            return []
+
+        officesIds = list(map(lambda o: o['id'], offices))
+        users = self.offices.getOfficesUsers(con,officesIds)
+        fails = []
+        for userId in users:
+            logging.debug('userId : {}'.format(userId))
+            fs = self.checks.checkConstraints(con, userId, start, end) #obtener fallas del usuario en determinado periodo
+            user = self.users.findUser(con, userId) #definir usuario
+            f = (user, fs)
+            fails.append(f)
+        return fails

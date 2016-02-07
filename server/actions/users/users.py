@@ -218,7 +218,7 @@ class UsersWamp(ApplicationSession):
     def deleteMail(self, id):
         con = self._getDatabase()
         try:
-            self.users.deleteMail(con, email['id'])
+            self.users.deleteMail(con, id)
             con.commit()
             return True
 

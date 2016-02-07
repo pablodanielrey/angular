@@ -3,6 +3,7 @@
   flex-direction:column;
   font-family: helvetica;
   font-size:14px;
+  background-color: #FFFFFF;
 
 }
 /*TITULO*/
@@ -35,7 +36,7 @@
   display:flex;
   flex-direction:row;
   wrap:nowrap;
-  background-color:#DEDEDE;
+  background-color:#FFFFFF;
 
   z-index: 999;
   position: relative;
@@ -114,6 +115,7 @@
   display:flex;
   flex-direction:column;
   border:2px solid #275276;
+  background-color: white;
 
 }
 .mySchedule .titleMyScheduleWeekly {
@@ -139,6 +141,7 @@
   background-color:#275276;
   color:white;
   padding:8px;
+  width: 40px;
 }
 .mySchedule .hours {
 
@@ -157,6 +160,8 @@
 /*MODULO SOLICITAR NUEVO HORARIO SEMANAL*/
 .mySchedule .newScheduleWeekly {
   border:2px solid #275276;
+  width: 250px;
+  background-color: white;
 
 }
 .mySchedule .selectDays {
@@ -181,6 +186,15 @@
 .mySchedule .margin {
   margin-left:5px;
   margin-bottom:5px;
+
+}
+
+
+.mySchedule .dateStyle {
+  width: 95%;
+  padding: 3px;
+  margin-top: 5px;
+  background-color: white;
 }
 /*MODULO SOLICITAR HORARIO PARA UN DIA ESPECIAL*/
 .mySchedule .myScheduleSpecial {
@@ -242,13 +256,26 @@
 .mySchedule .contentHistory {
 
   overflow: scroll;
-  height:165px;;
+  height:300px;;
   overflow-x: hidden;
+}
+
+.mySchedule .eliminarHorario {
+  background-color: #D9534F;
+  color:white;
+  padding: 3px;
+  border:none;
+  border-radius: 3px;
+  margin-top: 5px;
+  cursor:pointer;
+
 }
 .mySchedule .ContentRepeat {
   padding:5px;
   display:flex;
   flex-direction:column;
+  height: 90px;
+
 }
 .mySchedule .userHistory {
   display:flex;

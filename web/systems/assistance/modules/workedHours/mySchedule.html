@@ -84,7 +84,7 @@
       <div class="titleMyScheduleWeekly">
         <span><i class="fa fa-clock-o"></i> Nuevo Horario Semanal</span>
       </div>
-      <div class="textBlue"><i class="fa fa-calendar-o"></i> Desde el Día <input type="date" ng-model="model.date" required></div>
+      <div class="textBlue"><i class="fa fa-calendar-o"></i> A partir del día <input class="dateStyle" type="date" ng-model="model.date" required></div>
       <div class="selectDays textBlue">
         <div><input type="checkbox" ng-model="model.checkDay.monday">Lun</div>
         <div><input type="checkbox" ng-model="model.checkDay.tuesday">Mar</div>
@@ -130,8 +130,8 @@
       <button type="submit" class="save2" ng-disabled="model.user==null" ng-class="{true:'disabled'}[model.user==null]"> <i class="fa fa-floppy-o"></i> Guardar</Button>
     </form>
     <!-- MODULO SOLICITAR FRANJA HORARIO ENTRE DIAS -->
-    <form name="form3" class="myScheduleDays" ng-submit="form3.$valid && saveNewScheduleDays()">
-      <div class="titleMyScheduleDays">
+    <form name="form3" class="myScheduleSpecial" ng-submit="form3.$valid && saveNewScheduleDays()">
+      <div class="titleMyScheduleWeekly">
         <span><i class="fa fa-clock-o"></i> Nuevo Horario - Fraja de días</span>
       </div>
       <div class="timeMyScheduleDays">
@@ -176,7 +176,7 @@
                 <div>{{schedule.end}}</div>
               </div>
               <div class="delete">
-                <span ng-click="delete(schedule.id)">Eliminar</span>
+                <button class="eliminarHorario" ng-click="delete(schedule.id)"><i class="fa fa-trash-o"></i> Eliminar</button>
               </div>
           </div>
       </div>

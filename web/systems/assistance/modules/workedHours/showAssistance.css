@@ -86,6 +86,8 @@
 
 
 
+
+
 }
 .showAssistance .nav {
   display:flex;
@@ -146,6 +148,7 @@
   background-color:white;
   margin-top:5px;
 
+
 }
 .showAssistance .navSearchList {
   background-color:#0066A6;
@@ -175,7 +178,7 @@
 }
 
 .showAssistance .listUsersContent {
-  height:374px;
+  height:400px;
   background-color:#DEDEDE;
   padding-top:10px;
   overflow: scroll;
@@ -183,14 +186,17 @@
 }
 
 .showAssistance .dataUsersContent {
-  height:384px;
+
   overflow: scroll;
   overflow-x: hidden;
+  height: 410px;
+
 }
 
 .showAssistance .listUsers {
   padding:5px;
   cursor:pointer;
+  height: initial !important;
 }
 
 .showAssistance .selected {
@@ -286,6 +292,8 @@
   display:flex;
   flex-direcction:row;
   margin-top:5px;
+  height: initial;
+
 
 }
 .showAssistance .marking {

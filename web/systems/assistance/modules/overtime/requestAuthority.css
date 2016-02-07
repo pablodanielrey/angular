@@ -148,6 +148,10 @@
 
 }
 
+.requestAuthority .solicitudes {
+  margin-top: 5px;
+}
+
 .requestAuthority .solicitar {
 
   margin-top:5px;
