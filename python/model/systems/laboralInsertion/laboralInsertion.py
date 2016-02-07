@@ -308,31 +308,41 @@ class LaboralInsertion:
         '''
 
         fss = []
-        for i in inscriptions:
-            data = self.findByUser(con, i['user_id'])
-            mail = self.users.findMail(con, data['email'])
-            if mail is None:
-                continue
+        import csv
+        inscriptionsfile = '/tmp/{}.csv'.format(str(uuid.uuid4()))
+        with open(inscriptionsfile, 'w', newline='') as csvfile:
+            writer = csv.writer(csvfile, dialect='excel')
+            writer.writerow(['Dni', 'Nombre', 'Apellido', 'Email'])
 
-            if mail in datar:
-                continue
+            for i in inscriptions:
+                data = self.findByUser(con, i['user_id'])
+                mail = self.users.findMail(con, data['email'])
+                if mail is None:
+                    continue
 
-            cvf = self.files.findById(con, data['cv'])
-            if cvf['content'] is None:
-                continue
+                if mail in datar:
+                    continue
 
-            filedata = None
-            if cvf['codec'] == 'binary':
-                filedata = bytes(cvf['content'])
-            elif cvf['codec'] == 'base64':
-                filedata = base64.b64decode(bytes(cvf['content']))
+                cvf = self.files.findById(con, data['cv'])
+                if cvf['content'] is None:
+                    continue
 
-            user = self.users.findById(con, i['user_id'])
-            fss.append(self.mail.attachFile('{}_{}_{}_{}'.format(user['name'], user['lastname'], user['dni'], cvf['name']), filedata))
+                ''' decodifico los datos del archivo '''
+                filedata = None
+                if cvf['codec'] == 'binary':
+                    filedata = bytes(cvf['content'])
+                elif cvf['codec'] == 'base64':
+                    filedata = base64.b64decode(bytes(cvf['content']))
 
-            datar.append(mail['email'])
-            content = content + '<div><div>Nombre:{}</div><div>Apellido:{}</div><div>Email:{}</div><div>CV:{}</div></div>'.format(user['name'], user['lastname'], mail['email'], data['cv'])
+                user = self.users.findById(con, i['user_id'])
+                fss.append(self.mail.attachFile('{}_{}_{}_{}'.format(user['name'], user['lastname'], user['dni'], cvf['name']), filedata))
 
+                datar.append(mail['email'])
+                logging.info('escribiendo fila')
+                writer.writerow([user['dni'], user['name'], user['lastname'], mail['email']])
+
+        with open(inscriptionsfile, 'r', newline='') as csvfile:
+            fss.append(self.mail.attachFile('inscriptos.csv', csvfile.read(), 'application', 'csv'))
 
         for email in emails:
             logging.info('enviando a {}'.format(email))
