@@ -311,7 +311,7 @@ class LaboralInsertion:
         import csv
         import os
         inscriptionsfile = '/tmp/{}.csv'.format(str(uuid.uuid4()))
-        with open(inscriptionsfile, 'w', newline='') as csvfile:
+        with open(inscriptionsfile, 'w', newline='', encoding='utf-8') as csvfile:
             writer = csv.writer(csvfile, dialect='excel')
             writer.writerow(['Dni', 'Nombre', 'Apellido', 'Email'])
 
@@ -345,7 +345,7 @@ class LaboralInsertion:
                 logging.info('escribiendo fila')
                 writer.writerow([user['dni'], user['name'], user['lastname'], mail['email']])
 
-        with open(inscriptionsfile, 'r', newline='') as csvfile:
+        with open(inscriptionsfile, 'r', newline='', encoding='utf-8') as csvfile:
             fss.append(self.mail.attachFile('inscriptos.csv', csvfile.read(), 'application', 'csv'))
 
         for email in emails:

@@ -101,6 +101,15 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
   }
 
   /*
+    Selecciona todas las inscripciones que se puedan seleccionar de la lista de inscripciones
+  */
+  $scope.selectAllInscriptions = function() {
+    for (var i = 0; i < $scope.model.inscriptions.length; i++) {
+      $scope.selectInscription($scope.model.inscriptions[i]);
+    }
+  }
+
+  /*
     Selecciono una inscripcion para ser enviado por correo a una empresa
   */
   $scope.selectInscription = function(i) {
