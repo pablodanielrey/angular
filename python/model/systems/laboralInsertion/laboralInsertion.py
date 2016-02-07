@@ -309,6 +309,7 @@ class LaboralInsertion:
 
         fss = []
         import csv
+        import os
         inscriptionsfile = '/tmp/{}.csv'.format(str(uuid.uuid4()))
         with open(inscriptionsfile, 'w', newline='') as csvfile:
             writer = csv.writer(csvfile, dialect='excel')
@@ -320,7 +321,7 @@ class LaboralInsertion:
                 if mail is None:
                     continue
 
-                if mail in datar:
+                if mail['email'] in datar:
                     continue
 
                 cvf = self.files.findById(con, data['cv'])
@@ -335,7 +336,10 @@ class LaboralInsertion:
                     filedata = base64.b64decode(bytes(cvf['content']))
 
                 user = self.users.findById(con, i['user_id'])
-                fss.append(self.mail.attachFile('{}_{}_{}_{}'.format(user['name'], user['lastname'], user['dni'], cvf['name']), filedata))
+
+                filename, file_extension = os.path.splitext(cvf['name'])
+                #fss.append(self.mail.attachFile('{}_{}_{}_{}'.format(user['name'], user['lastname'], user['dni'], file_extension), filedata))
+                fss.append(self.mail.attachFile('{}{}'.format(user['dni'], file_extension), filedata))
 
                 datar.append(mail['email'])
                 logging.info('escribiendo fila')
