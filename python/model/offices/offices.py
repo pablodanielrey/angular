@@ -93,10 +93,3 @@ class OfficeDAO:
 
         finally:
             cur.close()
-
-
-class Group:
-    ''' Grupo de usuarios '''
-
-    def __init__(self):
-        pass
