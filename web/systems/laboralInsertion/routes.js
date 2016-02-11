@@ -19,8 +19,13 @@ app.config(['$routeProvider', function($routeProvider) {
      controller: 'InscriptionCtrl'
   })
 
+  .when('/busqueda', {
+     templateUrl: '/systems/laboralInsertion/modules/search/search.html',
+     controller: 'SearchCtrl'
+  })
+
   .otherwise({
-    redirectTo: '/main'
+    redirectTo: '/inscripcion'
   });
 
 }]);

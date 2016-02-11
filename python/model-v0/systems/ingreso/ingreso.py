@@ -39,7 +39,7 @@ class Ingreso:
             ('###USERNAME###', user['dni']),
             ('###EMAIL###', email)
         ]
-        self.mail.sendMail(From, [To, "detise@econo.unlp.edu.ar", "soporte@econo.unlp.edu.ar"], subject, replace, html=template)
+        self.mail.sendMail(From, [To, "red@econo.unlp.edu.ar"], subject, replace, html=template)
         return True
 
     def sendEmailConfirmation(self, con, name, lastname, eid):
@@ -64,6 +64,14 @@ class Ingreso:
         ]
         self.mail.sendMail(From, [To], subject, replace, html=template)
         return True
+
+    def checkEmailCode(self, con, eid, code):
+
+        email = self.users.findMail(con, eid)
+        if(email is None):
+            raise Exception()
+
+        return (email['hash'] == code)
 
     def confirmEmail(self, con, eid, code):
 

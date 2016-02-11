@@ -1,0 +1,508 @@
+<div class="search" ng-class='getCurrentScreen()'>
+  <!-- Variables 1: screenBussines, screenFilters
+       Variables2: screenSelectBusiness, screenSendBusiness, screenSending, screenSent-->
+
+  <div class="header">
+
+    <div>
+      <button class="btnFilters" type="button" name="filters" ng-click='selectFilters()'><i class="fa fa-sliders "></i> <b>Filtros</b> </button>
+    </div>
+
+    <div class="btnUserSelect">
+      <i class="fa fa-users"></i> <b>{{model.selected}}</b> Inscripciones Seleccionadas
+    </div>
+
+    <div>
+      <button class="btnSend" type="button" name="button" ng-click='selectCompany()'><i class="fa fa-angle-double-right"></i> <b> Enviar seleccionados a </b></button>
+    </div>
+
+  </div>
+
+  <div class="searchContainer">
+      <div class="titles">
+        <table>
+          <tr class="fileTitles">
+            <td>
+              <div class="Select">
+                <input type="checkbox" ng-click='selectAllInscriptions()'>
+              </div>
+            </td>
+            <td>
+              <div class="dates">
+                <i class="fa fa-bookmark"></i>
+              </div>
+            </td>
+            <td>
+              <div class="user">
+                <i class="fa fa-user"></i>
+              </div>
+            </td>
+            <td>
+              <div class="registration">
+                Inscripto
+              </div>
+            </td>
+            <td>
+              <div class="name">
+                Postulante
+              </div>
+            </td>
+            <td>
+              <div class="sex">
+                Sexo
+              </div>
+            </td>
+            <td>
+              <div class="age">
+                Edad
+              </div>
+            </td>
+            <td>
+              <div class="dni">
+                DNI
+              </div>
+            </td>
+            <td>
+              <div class="city">
+                C. de Origen
+              </div>
+            </td>
+            <td>
+              <div class="city2">
+                C. de Residencia
+              </div>
+            </td>
+            <td>
+              <div class="travel">
+                Viajar
+              </div>
+            </td>
+            <td>
+              <div class="english">
+                Inglés
+              </div>
+            </td>
+
+            <td>
+              <div class="other" title="Otro Idioma">
+                Otro I.
+              </div>
+            </td>
+            <td>
+              <div class="career" title="Carrera">
+                Carrera
+              </div>
+            </td>
+            <td>
+              <div class="cousers" title="Cantidad de Materias">
+                C. M.
+              </div>
+            </td>
+            <td>
+              <div class="average" title="Promedio c/aplazos">
+                % c/a
+              </div>
+            </td>
+            <td>
+              <div class="average2" title="Promedio">
+                %
+              </div>
+            </td>
+            <td>
+              <div class="program">
+                  Oferta
+              </div>
+            </td>
+            <td>
+              <div class="mail">
+                Correo
+              </div>
+            </td>
+          </tr>
+        </table>
+
+      </div>
+
+      <!-- <div class="searchResults" ng-class="{true:'seleccionado'}[isSelected(i.user_id)]"> -->
+      <div class="searchResults" ng-class="{true:'seleccionado'}[isSelected(i.id)]">
+        <table ng-repeat='i in model.inscriptions'>
+          <tr class="fileResults">
+            <td>
+              <div class="Select" ng-if="getMail(i.user_id) != 'No Definido'">
+                <input type="checkbox" ng-checked='isSelected(i)' ng-click='selectInscription(i)'>
+              </div>
+              <div class="Select" ng-if="getMail(i.user_id) == 'No Definido'">
+                -
+              </div>
+            </td>
+            <td>
+              <div class="dates">
+                {{getSents(i.id)}}
+              </div>
+            </td>
+            <td>
+              <div class="user">
+                <i class="fa fa-user"></i>
+              </div>
+            </td>
+            <td>
+              <div class="registration">
+                {{getDate(i.creation)}}
+              </div>
+            </td>
+            <td>
+              <div class="name">
+                {{getName(i.user_id)}}
+              </div>
+            </td>
+            <td>
+              <div class="sex">
+                {{getGenre(i.user_id)}}
+              </div>
+            </td>
+            <td>
+              <div class="age">
+                {{getAge(i.user_id)}}
+              </div>
+            </td>
+            <td>
+              <div class="dni">
+                {{getDni(i.user_id)}}
+              </div>
+            </td>
+            <td>
+              <div class="city">
+                {{getResidence(i.user_id)}}
+              </div>
+            </td>
+            <td>
+              <div class="city2">
+                {{getCity(i.user_id)}}
+              </div>
+            </td>
+            <td>
+              <div class="travel">
+                {{getTravel(i)}}
+              </div>
+            </td>
+            <td>
+              <div class="english">
+                {{getEnglish(i.user_id)}}
+              </div>
+            </td>
+            <td>
+              <div class="other">
+                {{getLanguagesOther(i.user_id)}}
+              </div>
+            </td>
+            <td>
+              <div class="career" title="Carrera">
+                {{i.degree}}
+              </div>
+            </td>
+            <td>
+              <div class="cousers" title="Cantidad de Materias">
+                {{i.approved}}
+              </div>
+            </td>
+            <td>
+              <div class="average" title="Promedio c/aplazos">
+                {{i.average1}}
+              </div>
+            </td>
+            <td>
+              <div class="average2" title="Promedio">
+                {{i.average2}}
+              </div>
+            </td>
+            <td>
+              <div class="program">
+                {{i.workType}}
+              </div>
+            </td>
+            <td>
+              <div class="mail">
+                {{getMail(i.user_id)}}
+              </div>
+            </td>
+          </tr>
+        </table>
+
+      </div>
+
+  </div>
+
+
+
+  <div class="business">
+
+     <div class="contentBusines">
+         <div class="businessList">
+              <div class="textTitlesBusines">
+                <div>
+                  <i class="fa fa-building-o"></i> <b>Seleccione empresa</b>
+                </div>
+                <div>
+                  <button class="btnBack" type="button" name="Volver" ng-click="selectInscriptions()"> Volver</button>
+                </div>
+              </div>
+              <div class="contentBusinesList">
+
+                  <div class="infoBussines" ng-repeat='c in model.companies' ng-click='confirmMailToCompany(c)'>
+                    <!--
+                      <div>
+                          <img src="{{c.url}}" width="100px" height="34px">
+                      </div>
+                    -->
+                      <div class="textBussines">
+                        <b>{{c.name}}</b> <br>
+                        La Plata
+                      </div>
+                  </div>
+
+              </div>
+         </div>
+     </div>
+
+     <div class="sendBusines">
+          <div class="contentSendBusines">
+            <div class="textTitlesBusines">
+               <b>Enviar las personas seleccionadas a</b>
+               <div>
+                 <button class="btnBack" type="button" name="Volver" ng-click='selectCompany()'> Volver</button>
+               </div>
+            </div>
+
+                <div class="infoBussines2" ng-if='model.company != null'>
+                  <div>
+                      <img src="{{model.company.url}}" width="100px" height="34px">
+                  </div>
+                  <div class="textBussines">
+                    <b>{{model.company.name}}</b> <br>
+                    La Plata
+                  </div>
+                  <div>
+                    <div ng-repeat='e in model.company.emails'>
+                      <div>{{e}}<button ng-click='removeEmailFromCompany(e)'>x</button></div>
+                    </div>
+                    <div>
+                      <input type=email ng-model='model.emailAddToCompany'></input>
+                      <button ng-click='addEmailToCompany()'>agregar</button>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <button class="btnSend2" type="button" name="button" ng-click='sendMailToCompany()'><i class="fa fa-angle-double-right"></i> <b> Enviar  </b></button>
+                </div>
+
+          </div>
+     </div>
+
+     <div class="sending">
+          <div class="contentSending">
+               <div>
+                 <i class="fa fa-spinner fa-2x fa-pulse"></i>
+               </div>
+               <div>
+                 &nbsp;  Enviando...
+               </div>
+          </div>
+     </div>
+
+     <div class="sent">
+          <div class="contentSent">
+            <div class="textTitlesBusines">
+              <div>
+                <i class="fa fa-check-circle"></i> <b>Envio finalizado!</b>
+              </div>
+              <div>
+                <button class="btnBack" type="button" name="Salir" ng-click='selectInscriptions()'> Salir</button>
+              </div>
+            </div>
+
+            <div class="contentMail">
+              <i class="fa fa-envelope-o"></i> Correos electrónicos de los postulantes
+                <div class="listMail">
+                  <div ng-repeat='e in model.emails'>{{e}}</div>
+                </div>
+            </div>
+
+          </div>
+     </div>
+
+  </div>
+
+  <div class="filters">
+
+      <div class="contentFilters">
+        filtros
+          <hr>
+          <div>
+            Fecha de Inscripción
+          </div>
+          <div>
+              <select>
+                  <option value="Todos">Todos</option>
+                  <option value="2016">2016</option>
+                  <option value="2015">2015</option>
+                  <option value="2014">2014</option>
+              </select>
+              <i class="fa fa-plus-circle"></i>
+          </div>
+          <hr>
+          <div>
+            <div>
+              Sexo
+            </div>
+            <select>
+                <option value="Todos">Todos</option>
+                <option value="Masculino">Masculino</option>
+                <option value="Femenino">Femenino</option>
+                <option value="Otros">Otros</option>
+            </select>
+            <i class="fa fa-plus-circle"></i>
+          </div>
+          <hr>
+          <div>
+            <div>
+              Ciudad de Residencia
+            </div>
+            <select n name='residence_city'>
+              <option class="selectGrey" disabled selected style='display:none;'>Ciudad de Residencia</option>
+              <option>Casco Urbano (LP)</option>
+              <option>City Bell (LP)</option>
+              <option>Villa Elisa (LP)</option>
+              <option>City Bell (LP)</option>
+              <option>Gonnet (LP)</option>
+              <option>Tolosa (LP)</option>
+              <option>Ringuelet (LP)</option>
+              <option>Barrio Jardin (LP)</option>
+              <option>Barrio Hipódromo (LP)</option>
+              <option>Los Hornos (LP)</option>
+              <option>Etcheverry (LP)</option>
+              <option>Lisandro Olmos (LP)</option>
+              <option>El Retiro (LP)</option>
+              <option>Abasto (LP)</option>
+              <option>Melchor Romero (LP)</option>
+              <option>Las Malvinas (LP)</option>
+              <option>La Cumbre (LP)</option>
+              <option>Las Quintas (LP)</option>
+              <option>Gambier (LP)</option>
+              <option>Parque Sicardi (LP)</option>
+              <option>Villa Montoro (LP)</option>
+              <option>Rufino de Elizalde (LP)</option>
+              <option>Villa Elvira (LP)</option>
+              <option>El Carmen (LP)</option>
+              <option>Arana (LP)</option>
+              <option>Villa Garibaldi (LP)</option>
+              <option>Casco Urbano (LP)</option>
+              <option>José Hernandez (LP)</option>
+              <option>Gorina (LP)</option>
+              <option>Arturo Segui (LP)</option>
+              <option>El Peligro</option>
+              <option>Capital Federal</option>
+              <option>Berisso</option>
+              <option>Ensenada</option>
+              <option>Chascomús</option>
+              <option>Quilmes</option>
+              <option>Magdalena</option>
+              <option>Berazategui</option>
+              <option>Avellaneda</option>
+              <option>Florencio Varela</option>
+              <option>Otro</option>
+
+            </select>
+            <i class="fa fa-plus-circle"></i>
+          </div>
+          <hr>
+          Viajar
+          <div>
+              <select>
+                  <option value="Todos">Todos</option>
+                  <option value="S">Sí</option>
+                  <option value="No">No</option>
+
+              </select>
+              <i class="fa fa-plus-circle"></i>
+          </div>
+          <hr>
+          <div>
+            Idioma
+
+
+          </div>
+          <div>
+
+            <select>
+                <option value="ingles">Ingles</option>
+                <option value="portugues">Portugues</option>
+
+            </select>
+            <select>
+                <option value="basico">Basico</option>
+                <option value="intermedio">Intermedio</option>
+                <option value="avanzado">Avanzado</option>
+            </select>
+
+            <i class="fa fa-plus-circle"></i>
+          </div>
+          <hr>
+          <div>
+            <div>
+            Cantidad de Materias
+            </div>
+            <input type="text"></input>
+            <i class="fa fa-plus-circle"></i>
+          </div>
+          <hr>
+
+          <div>
+            <div>
+            Promedio c/a
+            </div>
+            <input type="text"></input>
+            <i class="fa fa-plus-circle"></i>
+          </div>
+
+          <hr>
+
+          <div>
+            <div>
+            Promedio s/a
+            </div>
+            <input type="text"></input>
+            <i class="fa fa-plus-circle"></i>
+          </div>
+
+          <hr>
+
+          Oferta laboral
+          <div>
+              <select>
+                  <option value="Todos">Todos</option>
+                  <option value="pasantia">Pasantía</option>
+                  <option value="fulltime">Full-Time</option>
+                  <option value="jp">JP</option>
+
+
+              </select>
+              <i class="fa fa-plus-circle"></i>
+          </div>
+          <hr>
+
+          <div>
+            ACA TENES EL DIV PUTOOOOOOOOOOOOOOOO
+          </div>
+          <div>
+              <button ng-click='selectInscriptions()'>Cerrar</button>
+          </div>
+
+
+
+
+
+
+      </div>
+  </div>
+
+</div>

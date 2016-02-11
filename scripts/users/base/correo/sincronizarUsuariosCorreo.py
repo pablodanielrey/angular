@@ -37,7 +37,7 @@ if __name__ == '__main__':
 
             for mu in usersToSync:
                 logging.info('Sincronizando {}'.format(mu['user_id']))
-                cur.execute('select * from dovecot.users du, credentials.user_password up where du.user_id = %s and up.user_id = %s', (mu['user_id'], mu['user_id']))
+                cur.execute('select * from profile.users pu, dovecot.users du, credentials.user_password up where pu.id = %(user_id)s, du.user_id = %(user_id)s and up.user_id = %(user_id)s', mu)
                 du = cur.fetchone()
                 dcur.execute('select username from dovecot.users where username = %(username)s', du)
                 if dcur.rowcount <= 0:
