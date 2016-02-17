@@ -1,8 +1,6 @@
 .profile {
   height: 100%;
   width: 100%;
-
-
 }
 
 .profile .header {
@@ -12,9 +10,6 @@
   color: #5C5F69;
   padding-left: 50px;
   font-size: 1.5em;
-
-
-
 }
 
 .profile .contentProfile {
@@ -33,7 +28,7 @@
   -webkit-box-sizing: border-box;
 }
 
-.systems .listSystems {
+.profile .listSystems {
   display: flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
@@ -43,31 +38,4 @@
   flex-wrap: wrap;
   width: 100%;
   margin-top: 10px;
-}
-
-
-.systems .btnsSystems {
-  display: flex;
-  display: -webkit-flex; /* Safari */
-  display: -moz-flex; /* mozilla */
-  flex-direction:column;
-  -webkit-flex-direction:column; /* Safari */
-  -moz-flex-direction:column; /* mozilla */
-  align-items:center;
-  -webkit-align-items:column; /* Safari */
-  -moz-align-items:column; /* mozilla */
-  border-radius:2px;
-  -webkit-border-radius:2px;
-  -moz-border-radius:2px;
-  border-top:1px solid #ECECEC;
-  border-left:1px solid #ECECEC;
-  border-right:1px solid #ECECEC;
-  cursor:pointer;
-  font-size:14px;
-  padding:10px;
-  margin:10px;
-  color:#5c5f69;
-  background-color:#eeeeee;
-  width: 100px;
-
 }
