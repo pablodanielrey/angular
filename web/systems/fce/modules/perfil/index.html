@@ -1,4 +1,5 @@
-<div class="profile">
+<div class="profile perfilBloqueado">
+  <!--variables: perfilBloqueado, editarPerfil -->
 
     <div class="header">
         <div>
@@ -8,9 +9,89 @@
 
     <div class="contentProfile">
         <div>
-          Perfil
+          INFORMACIÓN BASICA
         </div>
         <div class="listSystems">
+
+          <div class="contentProfileBasic">
+
+            <div class="contentPhoto">
+
+                <div ng-if="getUserPhoto() == null" class="fileUpload">
+                    <!-- <div ng-if='!model.loadingPhoto' class="fileUpload"> -->
+                    <div class="photo" placeholder="Foto"><i class="fa fa-camera-retro fa-4x"></i>Subir Foto</div>
+                    <input type="file" on-read-file-binary-string="addPhoto(fileName,fileContent)" class="upload" />
+                </div>
+
+                <div  ng-if='model.loadingPhoto'>
+                    <div class="photo2" placeholder="Foto"><i class="fa fa-circle-o-notch fa-spin fa-3x"></i>Cargando imágen...</div>
+                </div>
+
+                <div ng-if='model.formatPhoto'>
+                    <div class="photo2" placeholder="Foto"><i class="fa fa-ban fa-4x"></i>Formato de imágen no compatible <div>(solo JPG)</div></div>
+                </div>
+
+
+                <div ng-if='getUserPhoto() != null' class="item">
+                    <div ng-if='!model.loadingPhoto' class="fileUpload2" title="Cambiar Foto">
+                    <input type="file" on-read-file-binary-string="addPhoto(fileName,fileContent)" class="upload" />
+                </div>
+
+                <div class="iconoFotoMiniatura"><i class="fa fa-camera-retro  fa-2x" title="Cambiar Foto"></i></div>
+                    <img class="photo" ng-src='{{getUserPhoto()}}' alt="Pablo"/>
+                </div>
+
+            </div>
+
+            <div class="contentData">
+              <div class="titlesProfileBasic">
+                  Nombre
+              </div>
+              <div class="dataProfileName">
+                  Walter Roberto
+              </div>
+              <div class="dataProfileName2">
+                  <input type="text" class="dataProfileNameEdit" placeholder="Walter Roberto"></input>
+              </div>
+              <div class="titlesProfileBasic">
+                  Apellido
+              </div>
+              <div class="dataProfileLastName">
+                  Blanco
+              </div>
+              <div class="dataProfileLastName2">
+                  <input type="text" class="dataProfileLastNameEdit" placeholder="Blanco"></input>
+              </div>
+              <div class="titlesProfileBasic">
+                  DNI
+              </div>
+              <div class="dataProfileBasic">
+                  30001823
+              </div>
+              <div class="titlesProfileBasic">
+                  Legajo
+              </div>
+              <div class="dataProfileBasic">
+                  65429/9
+              </div>
+
+            </div>
+
+          </div>
+
+          <div class="contentProfileAdvanced">
+            Perfil Avanzado
+          </div>
+
+        </div>
+
+        <hr>
+
+        <div class="contentBtnEdit">
+          <button class="btnEdit"> EDITAR</button>
+        </div>
+        <div class="contentBtnSave">
+          <button class="btnSave"> GUARDAR</button>
         </div>
     </div>
 
