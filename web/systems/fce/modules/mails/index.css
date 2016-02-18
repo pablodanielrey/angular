@@ -28,14 +28,168 @@
   -webkit-box-sizing: border-box;
 }
 
-.mails .listSystems {
+.mails .mailInstitutional {
   display: flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
   flex-direction:row;
   -webkit-flex-direction:row; /* Safari */
   -moz-flex-direction:row; /* mozilla */
-  flex-wrap: wrap;
-  width: 100%;
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  color: #3A3C44;
+  margin-top: 5px;
+  background-color: #EEEEEE;
+  padding: 5px;
+}
+
+.mails .mailPersonal {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  color: #3A3C44;
+  margin-top: 5px;
+  background-color: #EEEEEE;
+  padding: 5px;
+}
+
+.mails .btnMailValidated {
+  padding: 10px;
+  background-color: #128C78;
+  border-radius: 2px;
+  -moz-border-radius:2px;
+  -webkit-border-radius:2px;
+  border: none;
+  color: white;
+}
+
+.mails .btnMailNoValidated {
+  padding: 10px;
+  background-color: #EC9122;
+  border-radius: 2px;
+  -moz-border-radius:2px;
+  -webkit-border-radius:2px;
+  border: none;
+  color: white;
+}
+
+.mails .btnDeleteMail {
+  padding: 10px;
+  background-color: #E43E46;
+  border-radius: 2px;
+  -moz-border-radius:2px;
+  -webkit-border-radius:2px;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+.mails .btnWebMail {
+  padding: 10px;
+  background-color: #c9c3c3;
+  border-radius: 2px;
+  -moz-border-radius:2px;
+  -webkit-border-radius:2px;
+  border: none;
+  color: #5C5F69;
+  cursor: pointer;
+}
+
+.mails .btnForwardMail {
+  padding: 10px;
+  background-color: #92AD17;
+    border-radius: 2px;
+  -moz-border-radius:2px;
+  -webkit-border-radius:2px;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+.mails hr {
+  color: red;
+  border:none;
+  border: 1px solid #DBE2E5;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.mails .contentNewMail {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
   margin-top: 10px;
+  margin-top: 20px;
+}
+
+.mails .btnNewMail {
+  padding: 10px;
+  background-color: #92AD17;
+  border-radius: 2px 0px 0px 2px;
+  -moz-border-radius: 2px 0px 0px 2px;
+  -webkit-border-radius: 2px 0px 0px 2px;
+  border: none;
+  color: white;
+  cursor: pointer;
+
+}
+
+.mails .inputMail {
+  background-color: #EEEEEE;
+  padding: 7px;
+  border-radius: 0px 2px 2px 0px;
+  -moz-border-radius: 0px 2px 2px 0px;
+  -webkit-border-radius: 0px 2px 2px 0px;
+  border: solid 1px #92AD17;
+  font-size: 16.5px;
+  width: 1px;
+  opacity: 0;
+  transition: all 0.1s ease-in-out;
+  -webkit-transition: all 0.1s ease-in-out;
+}
+
+.mails .btnOkMail {
+  padding: 10px;
+  background-color: #92AD17;
+  border-radius: 0px 2px 2px 0px;
+  -moz-border-radius: 0px 2px 2px 0px;
+  -webkit-border-radius: 0px 2px 2px 0px;
+  border: none;
+  color: white;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.1s ease-in-out;
+  -webkit-transition: all 0.1s ease-in-out;
+}
+
+.mails.newMail .inputMail {
+  opacity: 1;
+  width: 300px;
+  transition: all 0.1s ease-in-out;
+  -webkit-transition: all 0.1s ease-in-out;
+}
+
+.mails.newMail .btnOkMail {
+  opacity: 1;
+  transition: all 0.1s ease-in-out;
+  -webkit-transition: all 0.1s ease-in-out;
 }
