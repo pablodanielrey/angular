@@ -393,9 +393,9 @@ class Student:
         StudentDAO.persist(con, self)
 
     def _fromDict(self, d):
-        self.id = d[0]
-        self.studentNumber = d[1]
-        self.condition = d[2]
+        self.id = d['id']
+        self.studentNumber = d['student_number']
+        self.condition = d['condition']
 
 
 if __name__ == '__main__':
@@ -405,6 +405,8 @@ if __name__ == '__main__':
     con = getConnection()
 
     dni = sys.argv[1]
+    assert dni is not None
+
     uid = None
 
     u = UserDAO.findByDni(con, dni)

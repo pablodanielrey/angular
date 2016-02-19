@@ -1,17 +1,18 @@
 # -*- coding: utf-8 -*-
 '''
-    Crea un usuario dentro de la base de datos.
-    le setea el email que debe terminar con econo.unlp.edu.ar
-    no crea clave hayq ue setearsela usando changeUserPassword.py
+    Crea un alumno en la base de datos.
 '''
+
 from connection import connection
 from users import users
 import systems
 import logging
 
-def createUser(dni, name, lastname):
+def createStudent(dni, name, lastname, studentN):
 
     logging.getLogger().setLevel(logging.INFO)
+
+
     con = connection.getConnection()
     try:
         u = users.UserDAO.findByDni(con, dni)
@@ -26,10 +27,15 @@ def createUser(dni, name, lastname):
         user.dni = dni
         uid = users.UserDAO.persist(con, user)
 
+        student = users.Student()
+        student.id = uid
+        student.studentNumber = studentN
+        sid = users.StudentDAO.persist(con, student)
+
         up = users.UserPassword()
         up.userId = uid
         up.username = dni
-        up.password = '{}-autogenerado'.format(dni)
+        up.password = studentN
         users.UserPasswordDAO.persist(con, up)
 
         con.commit()
@@ -45,9 +51,12 @@ if __name__ == '__main__':
     dni = sys.argv[1]
     name = sys.argv[2]
     lastname = sys.argv[3]
+    studentN = sys.argv[4]
 
     assert dni is not None
     assert name is not None
     assert lastname is not None
+    assert studentN is not None
 
-    createUser(dni, name, lastname)
+
+    createStudent(dni, name, lastname, studentN)

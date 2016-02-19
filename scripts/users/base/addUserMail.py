@@ -4,11 +4,11 @@
     Lo agrega como CONFIRMADO!!! ojo
     Forma de invocación:
 
-        python3 addUserMail.py dni email
+        PYTHONPATH="../../../python/model" python3 addUserMail.py dni cuenta-de-email
 
 '''
-import connection
-import users
+from connection import connection
+from users import users
 import systems
 import logging
 
