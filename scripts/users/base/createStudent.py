@@ -8,43 +8,38 @@ from users import users
 import systems
 import logging
 
-def createStudent(dni, name, lastname, studentN):
+def createStudent(con, dni, name, lastname, studentN):
 
     logging.getLogger().setLevel(logging.INFO)
 
+    u = users.UserDAO.findByDni(con, dni)
+    if u is not None:
+        logging.warn('Persona ya existente')
+        logging.warn(u)
+        return
 
-    con = connection.getConnection()
-    try:
-        u = users.UserDAO.findByDni(con, dni)
-        if u is not None:
-            logging.warn('Persona ya existente')
-            logging.warn(u)
-            return
+    user = users.User()
+    user.name = name
+    user.lastname = lastname
+    user.dni = dni
+    uid = users.UserDAO.persist(con, user)
 
-        user = users.User()
-        user.name = name
-        user.lastname = lastname
-        user.dni = dni
-        uid = users.UserDAO.persist(con, user)
+    student = users.Student()
+    student.id = uid
+    student.studentNumber = studentN
+    sid = users.StudentDAO.persist(con, student)
 
-        student = users.Student()
-        student.id = uid
-        student.studentNumber = studentN
-        sid = users.StudentDAO.persist(con, student)
-
-        up = users.UserPassword()
-        up.userId = uid
-        up.username = dni
-        up.password = studentN
-        users.UserPasswordDAO.persist(con, up)
-
-        con.commit()
-
-    finally:
-        connection.closeConnection(con)
+    up = users.UserPassword()
+    up.userId = uid
+    up.username = dni
+    up.password = studentN
+    users.UserPasswordDAO.persist(con, up)
 
 
 if __name__ == '__main__':
+
+    import inject
+    inject.configure()
 
     import sys
 
@@ -58,5 +53,11 @@ if __name__ == '__main__':
     assert lastname is not None
     assert studentN is not None
 
+    conn = inject.instance(connection.Connection)
+    con = conn.get()
+    try:
+        createStudent(con, dni, name, lastname, studentN)
+        con.commit()
 
-    createStudent(dni, name, lastname, studentN)
+    finally:
+        conn.put(con)

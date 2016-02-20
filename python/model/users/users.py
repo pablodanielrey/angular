@@ -2,26 +2,11 @@
 '''
     Implementa todo el codigo relacionado al modelo y las entidades de los usuarios
 '''
-import psycopg2
-from psycopg2 import pool
-from psycopg2.extras import DictCursor
+
 import logging
 import datetime
 import uuid
-
-logging.getLogger().setLevel(logging.INFO)
-
-pool = psycopg2.pool.ThreadedConnectionPool(10, 20, host='163.10.17.80', database='dcsys', user='dcsys', password='dcsys')
-
-
-def getConnection():
-    global pool
-    return pool.getconn(cursor_factory=DictCursor)
-
-
-def closeConnection(con):
-    global pool
-    pool.putconn(con)
+from connection.connection import Connection
 
 
 class UserPassword:
@@ -400,9 +385,11 @@ class Student:
 
 if __name__ == '__main__':
 
+    logging.getLogger().setLevel(logging.INFO)
     import sys
 
-    con = getConnection()
+    conn = inject.instance(Connection)
+    con = conn.getConnection()
 
     dni = sys.argv[1]
     assert dni is not None
@@ -442,4 +429,4 @@ if __name__ == '__main__':
         logging.info(p.__dict__)
 
     con.commit()
-    closeConnection(con)
+    conn.put(con)
