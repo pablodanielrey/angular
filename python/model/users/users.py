@@ -31,6 +31,26 @@ class UserPasswordDAO:
         return up
 
     @staticmethod
+    def findByUsername(con, username):
+        '''
+            Obtiene los datos de las credenciales de un usuario
+            Retorna:
+                Una lista con instancias de UserPassword
+                En caso de no existir una lista vacía
+        '''
+        cur = con.cursor()
+        try:
+            cur.execute('select id, user_id, username, password, updated from credentials.user_password where username = %s', (username,))
+            if cur.rowcount <= 0:
+                return []
+            data = [UserPasswordDAO._fromResult(c) for c in cur]
+            return data
+
+        finally:
+            cur.close()
+
+
+    @staticmethod
     def findByUserId(con, userId):
         '''
             Obtiene los datos de las credenciales de un usuario
