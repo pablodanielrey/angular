@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 '''
     Crea un alumno en la base de datos.
+
+    PYTHONPATH="../../../python/model" python3 createStudent.py dni name lastname legajo
 '''
 
 from connection import connection
