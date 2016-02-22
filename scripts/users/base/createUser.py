@@ -16,7 +16,7 @@ def generatePassword(con, uid):
     passw = users.UserPasswordDAO.findByUserId(con, uid)
     if len(passw) > 0:
         #logging.debug('{},ya tiene clave,'.format(uid))
-        return
+        return 0
 
     u = users.UserDAO.findById(con, uid)
     up = users.UserPassword()
@@ -25,6 +25,7 @@ def generatePassword(con, uid):
     up.password = '{}-autogenerado'.format(u.dni)
     users.UserPasswordDAO.persist(con, up)
     logging.debug('{} {} {}'.format(up.userId, up.username, up.password))
+    return 1
 
 
 def createUser(con, dni, name, lastname):

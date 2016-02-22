@@ -18,6 +18,7 @@ if __name__ == '__main__':
     logging.getLogger().setLevel(logging.DEBUG)
 
     count = 0
+    countg = 0
 
     inject.configure()
     conn = inject.instance(Connection)
@@ -28,9 +29,12 @@ if __name__ == '__main__':
         for uid, verion in users:
             logging.debug('count : {}'.format(count))
             count = count + 1
-            createUser.generatePassword(con, uid)
+            countg = countg + createUser.generatePassword(con, uid)
 
-        #con.commit()
+        con.commit()
 
     finally:
         conn.put(con)
+
+
+    logging.debug('cantidad total de generados : {}'.format(countg))
