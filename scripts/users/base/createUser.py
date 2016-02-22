@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 '''
     Crea un usuario dentro de la base de datos.
-    le setea el email que debe terminar con econo.unlp.edu.ar
-    no crea clave hayq ue setearsela usando changeUserPassword.py
+
+    PYTHONPATH="../../../python/model" python3 createUser.py dni name lastname
+
+    sin email ni nada adicional.
 '''
 from connection import connection
 from users import users
