@@ -1,13 +1,55 @@
 # -*- coding: utf-8 -*-
 '''
     Crea un usuario dentro de la base de datos.
-    le setea el email que debe terminar con econo.unlp.edu.ar
-    no crea clave hayq ue setearsela usando changeUserPassword.py
+
+    PYTHONPATH="../../../python/model" python3 createUser.py dni name lastname
+
+    sin email ni nada adicional.
 '''
-import connection
-import users
+from connection import connection
+from users import users
 import systems
 import logging
+
+
+def generatePassword(con, uid):
+    ''' genera una clave para el usuario si es que no tiene '''
+
+    passw = users.UserPasswordDAO.findByUserId(con, uid)
+    if len(passw) > 0:
+        #logging.debug('{},ya tiene clave,'.format(uid))
+        return 0
+
+    u = users.UserDAO.findById(con, uid)
+    up = users.UserPassword()
+    up.userId = uid
+    up.username = u.dni
+    up.password = '{}-autogenerado'.format(u.dni)
+    users.UserPasswordDAO.persist(con, up)
+    logging.debug('{} {} {}'.format(up.userId, up.username, up.password))
+    return 1
+
+
+def createUser(con, dni, name, lastname):
+
+    u = users.UserDAO.findByDni(con, dni)
+    if u is not None:
+        logging.warn('Persona ya existente')
+        logging.warn(u)
+        return
+
+    user = users.User()
+    user.name = name
+    user.lastname = lastname
+    user.dni = dni
+    uid = users.UserDAO.persist(con, user)
+
+    up = users.UserPassword()
+    up.userId = uid
+    up.username = dni
+    up.password = '{}-autogenerado'.format(dni)
+    users.UserPasswordDAO.persist(con, up)
+
 
 if __name__ == '__main__':
 
@@ -16,42 +58,19 @@ if __name__ == '__main__':
     dni = sys.argv[1]
     name = sys.argv[2]
     lastname = sys.argv[3]
-    email = sys.argv[4]
 
     assert dni is not None
     assert name is not None
     assert lastname is not None
-    assert email is not None and email[-17:] == 'econo.unlp.edu.ar'
 
-    logging.getLogger().setLevel(logging.INFO)
-    con = connection.getConnection()
+    import inject
+    inject.configure()
+
+    conn = inject.instance(connection.Connection)
+    con = conn.get()
     try:
-        u = users.UserDAO.findByDni(con, dni)
-        if u is not None:
-            logging.warn('Persona ya existente')
-            logging.warn(u)
-            sys.exit(1)
-
-        user = users.User()
-        user.name = name
-        user.lastname = lastname
-        user.dni = dni
-        uid = users.UserDAO.persist(con, user)
-
-        mail = users.Mail()
-        mail.userId = uid
-        mail.email = email
-        mail.confirmed = True
-        mid = users.MailDAO.persist(con, mail)
-
-        d = systems.Domain()
-        d.id = uid
-        systems.DomainDAO.persist(con, d)
-
-        domains = systems.DomainDAO.findAll(con)
-        logging.info([True for d2 in domains if d2.id == d.id])
-
+        createUser(con, dni, name, lastname)
         con.commit()
 
     finally:
-        connection.closeConnection(con)
+        conn.put(con)

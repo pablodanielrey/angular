@@ -2,26 +2,11 @@
 '''
     Implementa todo el codigo relacionado al modelo y las entidades de los usuarios
 '''
-import psycopg2
-from psycopg2 import pool
-from psycopg2.extras import DictCursor
+
 import logging
 import datetime
 import uuid
-
-logging.getLogger().setLevel(logging.INFO)
-
-pool = psycopg2.pool.ThreadedConnectionPool(10, 20, host='163.10.17.80', database='dcsys', user='dcsys', password='dcsys')
-
-
-def getConnection():
-    global pool
-    return pool.getconn(cursor_factory=DictCursor)
-
-
-def closeConnection(con):
-    global pool
-    pool.putconn(con)
+from connection.connection import Connection
 
 
 class UserPassword:
@@ -44,6 +29,26 @@ class UserPasswordDAO:
         up.password = r['password']
         up.updated = r['updated']
         return up
+
+    @staticmethod
+    def findByUsername(con, username):
+        '''
+            Obtiene los datos de las credenciales de un usuario
+            Retorna:
+                Una lista con instancias de UserPassword
+                En caso de no existir una lista vacía
+        '''
+        cur = con.cursor()
+        try:
+            cur.execute('select id, user_id, username, password, updated from credentials.user_password where username = %s', (username,))
+            if cur.rowcount <= 0:
+                return []
+            data = [UserPasswordDAO._fromResult(c) for c in cur]
+            return data
+
+        finally:
+            cur.close()
+
 
     @staticmethod
     def findByUserId(con, userId):
@@ -393,18 +398,22 @@ class Student:
         StudentDAO.persist(con, self)
 
     def _fromDict(self, d):
-        self.id = d[0]
-        self.studentNumber = d[1]
-        self.condition = d[2]
+        self.id = d['id']
+        self.studentNumber = d['student_number']
+        self.condition = d['condition']
 
 
 if __name__ == '__main__':
 
+    logging.getLogger().setLevel(logging.INFO)
     import sys
 
-    con = getConnection()
+    conn = inject.instance(Connection)
+    con = conn.getConnection()
 
     dni = sys.argv[1]
+    assert dni is not None
+
     uid = None
 
     u = UserDAO.findByDni(con, dni)
@@ -440,4 +449,4 @@ if __name__ == '__main__':
         logging.info(p.__dict__)
 
     con.commit()
-    closeConnection(con)
+    conn.put(con)
