@@ -18,6 +18,28 @@ class Inscription:
 class InscriptionDAO:
 
     @staticmethod
+    def _createSchema(con):
+        cur = con.cursor()
+        try:
+            cur.execute("""
+                create table laboral_insertion.inscriptions (
+                    id varchar primary key,
+                    user_id varchar not null references laboral_insertion.users (id)
+                    reside boolean default false,
+                    travel boolean default false,
+                    degree varchar not null,
+                    approved integer default 0,
+                    average1 real default 0.0,
+                    average2 real default 0.0,
+                    work_type varchar not null,
+                    created timestampz default now(),
+                    work_experience boolean default false
+                )
+            """)
+        finally:
+            cur.close()
+
+    @staticmethod
     def _fromResult(r):
         i = Inscription()
         i.id = r['id']
