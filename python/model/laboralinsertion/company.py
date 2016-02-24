@@ -22,8 +22,27 @@ class Company:
         self.emails = []
         self.cuit = ''
 
+
+class CompanyDAO:
+
     @staticmethod
-    def loadFrom(r):
+    def _createSchema(con):
+        cur = con.cursor()
+        try:
+            cur.execute("""
+                create table laboral_insertion.companies (
+                    id varchar primary key,
+                    name varchar not null,
+                    address varchar,
+                    telephones varchar[],
+                    emails varchar[]
+                )
+            """)
+        finally:
+            cur.close()
+            
+    @staticmethod
+    def _loadFrom(r):
         ''' carga los datos desde el resultado pasad por parametro '''
         c = Company()
         c.name = r['name']
@@ -41,7 +60,7 @@ class Company:
             if cur.rowcount <= 0:
                 return None
             r = cur.fetchone()
-            return Company.loadFrom(r)
+            return Company._loadFrom(r)
 
         finally:
             cur.close()
@@ -67,7 +86,7 @@ class Company:
         cur = con.cursor()
         try:
             cur.execute('select * from laboral_insertion.companies where id in %s', (tuple(ids),))
-            cs = [Company.loadFrom(c) for c in cur]
+            cs = [Company._loadFrom(c) for c in cur]
             return cs
 
         finally:
