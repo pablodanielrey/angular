@@ -1,4 +1,4 @@
-<div class="editAccounts editarUsuario"> <!-- VARIABLES: editarUsuario-->
+<div class="editAccounts {{view.style}} {{view.style2}}"> <!-- VARIABLES: editarUsuario-->
 
     <div class="header">
         <div>
@@ -32,7 +32,7 @@
                   </div>
               </div>
 
-              <div class="contentUserRecent">
+              <div class="contentUserRecent" ng-click="view.style='editarUsuario'">
                   <div class="contentPhotoRecent">
                     <img class="imgUserRecent" src="img/pablosarmieto.jpg">
                   </div>
@@ -340,76 +340,170 @@
 
     <div class="contentEditAccounts">
 
+
         <div class="contentProfile">
 
-          <div>
-            INFORMACIÓN BASICA
-          </div>
+
           <div class="listSystems">
 
-            <div class="contentProfileBasic">
+              <div class="contentProfileBasic">
 
-                <div class="contentPhotoProfile">
+                  <div class="contentPhotoProfile">
 
-                    <div ng-if="getUserPhoto() == null" class="fileUpload">
-                        <!-- <div ng-if='!model.loadingPhoto' class="fileUpload"> -->
-                        <div class="photo" placeholder="Foto"><i class="fa fa-camera-retro fa-4x"></i>Subir Foto</div>
-                        <input type="file" on-read-file-binary-string="addPhoto(fileName,fileContent)" class="upload" />
+                      <div ng-if="getUserPhoto() == null" class="fileUpload">
+                          <!-- <div ng-if='!model.loadingPhoto' class="fileUpload"> -->
+                          <div class="photo" placeholder="Foto"><i class="fa fa-camera-retro fa-4x"></i>Subir Foto</div>
+                          <input type="file" on-read-file-binary-string="addPhoto(fileName,fileContent)" class="upload" />
+                      </div>
+
+                      <div  ng-if='model.loadingPhoto'>
+                          <div class="photo2" placeholder="Foto"><i class="fa fa-circle-o-notch fa-spin fa-3x"></i>Cargando imágen...</div>
+                      </div>
+
+                      <div ng-if='model.formatPhoto'>
+                          <div class="photo2" placeholder="Foto"><i class="fa fa-ban fa-4x"></i>Formato de imágen no compatible <div>(solo JPG)</div></div>
+                      </div>
+
+
+                      <div ng-if='getUserPhoto() != null' class="item">
+                          <div ng-if='!model.loadingPhoto' class="fileUpload2" title="Cambiar Foto">
+                          <input type="file" on-read-file-binary-string="addPhoto(fileName,fileContent)" class="upload" />
+                      </div>
+
+                      <div class="iconoFotoMiniatura"><i class="fa fa-camera-retro  fa-2x" title="Cambiar Foto"></i></div>
+                          <img class="photo" ng-src='{{getUserPhoto()}}' alt="Pablo"/>
+                      </div>
+
+                  </div>
+
+                  <div class="subContentProfile">
+                      <div class="contentDataInput"> Nombre </div>
+                      <div><input type="text" class="inputDataUser" placeholder=""></input></div>
+
+                      <div class="contentDataInput"> Apelido </div>
+                      <div><input type="text" class="inputDataUser" placeholder=""></input></div>
+
+                  </div>
+
+                  <div class="subContentProfile">
+                      <div class="contentDataInput"> DNI </div>
+                      <div><input type="text" class="inputDataUser" placeholder=""></input></div>
+
+                      <div class="contentDataInput"> Legajo </div>
+                      <div><input type="text" class="inputDataUser" placeholder=""></input></div>
+                  </div>
+
+                  <div class="subContentProfile">
+                    <div class="contentDataInput"> Tipo de Usuario </div>
+                    <div class="listTypeUser">
+                        <div class="iconTypeUser" title="Alumno"> <b>A</b> </div>
+                        <div class="iconTypeUser" title="Docente"> <b>D</b> </div>
+                        <div class="iconTypeUser" title="NoDocente"> <b>ND</b> </div>
+                        <div>
+                          <button class="btnInputDataUser" ng-click="view.style2='verTipos'">Cambiar</button>
+                          <div class="typeUsers">
+                            <div>
+                              <div class="inputCheckbox"><input type="checkbox"> Alumno</div>
+                              <div class="inputCheckbox"><input type="checkbox"> Docente</div>
+                              <div class="inputCheckbox"><input type="checkbox"> Posgrado</div>
+                              <div class="inputCheckbox"><input type="checkbox"> NoDocente</div>
+                            </div>
+                            <div><button class="btnBackTypes" ng-click="view.style2=''"> Volver</button></div>
+                          </div>
+                        </div>
                     </div>
 
-                    <div  ng-if='model.loadingPhoto'>
-                        <div class="photo2" placeholder="Foto"><i class="fa fa-circle-o-notch fa-spin fa-3x"></i>Cargando imágen...</div>
-                    </div>
-
-                    <div ng-if='model.formatPhoto'>
-                        <div class="photo2" placeholder="Foto"><i class="fa fa-ban fa-4x"></i>Formato de imágen no compatible <div>(solo JPG)</div></div>
-                    </div>
 
 
-                    <div ng-if='getUserPhoto() != null' class="item">
-                        <div ng-if='!model.loadingPhoto' class="fileUpload2" title="Cambiar Foto">
-                        <input type="file" on-read-file-binary-string="addPhoto(fileName,fileContent)" class="upload" />
-                    </div>
+                    <div class="contentDataInput"> Acceso Sistemas </div>
+                    <div><button class="btnInputDataUser">Configurar</button></div>
+                  </div>
 
-                    <div class="iconoFotoMiniatura"><i class="fa fa-camera-retro  fa-2x" title="Cambiar Foto"></i></div>
-                        <img class="photo" ng-src='{{getUserPhoto()}}' alt="Pablo"/>
-                    </div>
+              </div>
 
-                </div>
-
-                <div class="subContentProfile">
-                    <div class="contentDataInput"> Nombre </div>
-                    <div><input type="text" class="inputDataUser" placeholder=""></input></div>
-
-                    <div class="contentDataInput"> Apelido </div>
-                    <div><input type="text" class="inputDataUser" placeholder=""></input></div>
-
-                </div>
-
-                <div class="subContentProfile">
-                    <div class="contentDataInput"> DNI </div>
-                    <div><input type="text" class="inputDataUser" placeholder=""></input></div>
-
-                    <div class="contentDataInput"> Legajo </div>
-                    <div><input type="text" class="inputDataUser" placeholder=""></input></div>
-                </div>
-
-            </div>
+          </div>
 
 
+          <div class="contentMails">
 
-            </div>
+              <div class="titleMails">
+                <i class="fa fa-envelope-o"></i> CORREOS ELECTRÓNICOS
+                <button class="btnNewMail">Agregar Correo</button>
+              </div>
 
-            <hr>
+              <div class="mailList">
+
+                  <div class="mailInstitutional">
+                      <div class="dataMail">
+                          <div class="contentIconMail"><i class="fa fa-envelope-o"></i></div>
+                          <div><input type="text" class="contentMailsUser" placeholder="Dirección de correo"></input></div>
+                      </div>
+                      <div class="actionMail">
+                      <button class="btnMailValidated" title="Correo confirmado"><i class="fa fa-check"></i></button>
+                      <button class="btnMailNoValidated" title="Correo sin confirmar"><i class="fa fa-exclamation-triangle"></i></button>
+                      <button class="btnForwardMail" title="Reenviar confimación"><i class="fa fa-repeat"></i></button>
+                      <button class="btnForwardMail" title="Enviado correo"><i class="fa fa-spinner fa-pulse"></i> Enviando correo </button>
+                      <button class="btnDeleteMail" title="Eliminar correo"><i class="fa fa-trash-o"></i></button>
+                      </div>
+                  </div>
+
+                  <div class="mailInstitutional">
+                      <div class="dataMail">
+                          <div class="contentIconMail"><i class="fa fa-envelope-o"></i></div>
+                          <div><input type="text" class="contentMailsUser" placeholder="Dirección de correo"></input></div>
+                      </div>
+                      <div class="actionMail">
+                      <button class="btnMailValidated" title="Correo confirmado"><i class="fa fa-check"></i></button>
+                      <button class="btnMailNoValidated" title="Correo sin confirmar"><i class="fa fa-exclamation-triangle"></i></button>
+                      <button class="btnForwardMail" title="Reenviar confimación"><i class="fa fa-repeat"></i></button>
+                      <button class="btnForwardMail" title="Enviado correo"><i class="fa fa-spinner fa-pulse"></i> Enviando correo </button>
+                      <button class="btnDeleteMail" title="Eliminar correo"><i class="fa fa-trash-o"></i></button>
+                      </div>
+                  </div>
+
+                  <div class="mailInstitutional">
+                      <div class="dataMail">
+                          <div class="contentIconMail"><i class="fa fa-envelope-o"></i></div>
+                          <div><input type="text" class="contentMailsUser" placeholder="Dirección de correo"></input></div>
+                      </div>
+                      <div class="actionMail">
+                      <button class="btnMailValidated" title="Correo confirmado"><i class="fa fa-check"></i></button>
+                      <button class="btnMailNoValidated" title="Correo sin confirmar"><i class="fa fa-exclamation-triangle"></i></button>
+                      <button class="btnForwardMail" title="Reenviar confimación"><i class="fa fa-repeat"></i></button>
+                      <button class="btnForwardMail" title="Enviado correo"><i class="fa fa-spinner fa-pulse"></i> Enviando correo </button>
+                      <button class="btnDeleteMail" title="Eliminar correo"><i class="fa fa-trash-o"></i></button>
+                      </div>
+                  </div>
+
+                  <div class="mailInstitutional">
+                      <div class="dataMail">
+                          <div class="contentIconMail"><i class="fa fa-envelope-o"></i></div>
+                          <div><input type="text" class="contentMailsUser" placeholder="Dirección de correo"></input></div>
+                      </div>
+                      <div class="actionMail">
+                      <button class="btnMailValidated" title="Correo confirmado"><i class="fa fa-check"></i></button>
+                      <button class="btnMailNoValidated" title="Correo sin confirmar"><i class="fa fa-exclamation-triangle"></i></button>
+                      <button class="btnForwardMail" title="Reenviar confimación"><i class="fa fa-repeat"></i></button>
+                      <button class="btnForwardMail" title="Enviado correo"><i class="fa fa-spinner fa-pulse"></i> Enviando correo </button>
+                      <button class="btnDeleteMail" title="Eliminar correo"><i class="fa fa-trash-o"></i></button>
+                      </div>
+                  </div>
+
+              </div>
 
 
-            <div class="contentBtnSave">
-              <button class="btnSave"> GUARDAR</button>
-            </div>
+          </div>
+
+
+          <div class="contentBtnSave">
+            <button class="btnBack" title="Volver" ng-click="view.style=''" ><i class="fa fa-chevron-left"></i> </button>
+            <button class="btnSave"> GUARDAR</button>
+          </div>
 
         </div>
 
 
     </div>
+
 
 </div>

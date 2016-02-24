@@ -1,20 +1,15 @@
 .systems {
   height: 100%;
   width: 100%;
-
 }
 
 .systems .header {
-
   height: 102px;
   width: 100%;
   background: #DBE2E5;
   color: #5C5F69;
   padding-left: 50px;
   font-size: 1.5em;
-
-
-
 }
 
 .systems .contentSystems {
@@ -33,201 +28,34 @@
   -webkit-box-sizing: border-box;
 }
 
-.systems .listSystems {
-  display: flex;
-  display: -webkit-flex; /* Safari */
-  display: -moz-flex; /* mozilla */
-  flex-direction:row;
-  -webkit-flex-direction:row; /* Safari */
-  -moz-flex-direction:row; /* mozilla */
-  flex-wrap: wrap;
-  width: 100%;
-  margin-top: 10px;
+.systems .contentDataInput {
+  font-size: 12px;
+  color: #5C5F69;
 }
 
-
-.systems .btnsSystems {
-  display: flex;
-  display: -webkit-flex; /* Safari */
-  display: -moz-flex; /* mozilla */
-  flex-direction:column;
-  -webkit-flex-direction:column; /* Safari */
-  -moz-flex-direction:column; /* mozilla */
-  align-items:center;
-  -webkit-align-items:column; /* Safari */
-  -moz-align-items:column; /* mozilla */
-  border-radius:2px;
-  -webkit-border-radius:2px;
-  -moz-border-radius:2px;
-  border-top:1px solid #ECECEC;
-  border-left:1px solid #ECECEC;
-  border-right:1px solid #ECECEC;
-  cursor:pointer;
-  font-size:14px;
-  padding:10px;
-  margin:10px;
-  color:#5c5f69;
-  background-color:#eeeeee;
-  width: 100px;
-
+.systems .inputDataUser {
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    font-size: 16px;
+    padding: 5px;
+    margin: 5px 5px 5px 0px;
+    border: 1px solid #DBE2E5;
 }
 
-.c1 {
-  border-bottom:3px solid #0066A6;
+.systems .btnSave {
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border:none;
+  background-color: #92AD17;
+  color: white;
+  padding: 10px;
+  margin-top: 20px;
+  width: 125px;
+  cursor: pointer;
 }
 
-.c1:hover {
-  color:white;
-  background-color:#0066A6;
-  border-bottom:3px solid #0066A6;
-}
-
-.c2 {
-  border-bottom:3px solid #275276;
-}
-
-.c2:hover {
-  color:white;
-  background-color:#275276;
-  border-bottom:3px solid #275276;
-}
-
-.c3 {
-  border-bottom:3px solid #4B68A1;
-}
-
-.c3:hover {
-  color:white;
-  background-color:#4B68A1;
-  border-bottom:3px solid #4B68A1;
-}
-
-.c4 {
-  border-bottom:3px solid #28292D;
-}
-
-.c4:hover {
-  color:white;
-  background-color:#28292D;
-  border-bottom:3px solid #28292D;
-}
-
-.c5 {
-  border-bottom:3px solid #EC9122;
-}
-
-.c5:hover {
-  color:white;
-  background-color:#EC9122;
-  border-bottom:3px solid #EC9122;
-}
-
-.c6 {
-  border-bottom:3px solid #E43E46;
-}
-
-.c6:hover {
-  color:white;
-  background-color:#E43E46;
-  border-bottom:3px solid #E43E46;
-}
-
-.c7 {
-  border-bottom:3px solid #804080;
-}
-
-.c7:hover {
-  color:white;
-  background-color:#804080;
-  border-bottom:3px solid #804080;
-}
-
-.c8 {
-  border-bottom:3px solid #128C78;
-}
-
-.c8:hover {
-  color:white;
-  background-color:#128C78;
-  border-bottom:3px solid #128C78;
-}
-
-.c9 {
-  border-bottom:3px solid #92ad17;
-}
-
-.c9:hover {
-  color:white;
-  background-color:#92ad17;
-  border-bottom:3px solid #92ad17;
-}
-
-.c10 {
-  border-bottom:3px solid #ffd521;
-}
-
-.c10:hover {
-  color:white;
-  background-color:#ffd521;
-  border-bottom:3px solid #ffd521;
-}
-
-.c11 {
-  border-bottom:3px solid #0493cf;
-}
-
-.c11:hover {
-  color:white;
-  background-color:#0493cf;
-  border-bottom:3px solid #0493cf;
-}
-
-.c12 {
-  border-bottom:3px solid #9951CC;
-}
-
-.c12:hover {
-  color:white;
-  background-color:#9951CC;
-  border-bottom:3px solid #9951CC;
-}
-
-.c13 {
-  border-bottom:3px solid #FF2668;
-}
-
-.c13:hover {
-  color:white;
-  background-color:#FF2668;
-  border-bottom:3px solid #FF2668;
-}
-
-.c14 {
-  border-bottom:3px solid #9C8C5A;
-}
-
-.c14:hover {
-  color:white;
-  background-color:#9C8C5A;
-  border-bottom:3px solid #9C8C5A;
-}
-
-.c15 {
-  border-bottom:3px solid #FFC521;
-}
-
-.c15:hover {
-  color:white;
-  background-color:#FFC521;
-  border-bottom:3px solid #FFC521;
-}
-
-.c16 {
-  border-bottom:3px solid #727f30;
-}
-
-.c16:hover {
-  color:white;
-  background-color:#727f30;
-  border-bottom:3px solid #727f30;
+.systems .btnSave:hover {
+  background-color: #809612;
 }

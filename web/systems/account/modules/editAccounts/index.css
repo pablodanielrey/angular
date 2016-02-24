@@ -13,40 +13,13 @@
 }
 
 
+
+
 /*****************************************************
 *********** INICIO PANTALLA DE BUSQUEDA **************
 *****************************************************/
 
-.editAccounts .contentSearchAccounts {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  opacity: 1;
-  background-color: #F1F1F1;
-  transform: translate3d(0px,0px,0);
-  -webkit-transform: translate3d(0px,0px,0);
-  /*transition: all 0.2s ease-in-out;
-  -webkit-transition: all 0.2s ease-in-out;*/
-  -webkit-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
-     -moz-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
-       -o-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
-          transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910); /* custom */
-}
 
-.editAccounts.editarUsuario .contentSearchAccounts {
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  background-color: #F1F1F1;
-  transform: translate3d(0,100%,0);
-  -webkit-transform: translate3d(0,100%,0);
-  /*transition: all 0.2s ease-in-out;
-  -webkit-transition: all 0.2s ease-in-out;*/
-  -webkit-transition-timing-function: cubic-bezier(0.480, 0.525, 0.340, 0.910);
-     -moz-transition-timing-function: cubic-bezier(0.480, 0.525, 0.340, 0.910);
-       -o-transition-timing-function: cubic-bezier(0.480, 0.525, 0.340, 0.910);
-          transition-timing-function: cubic-bezier(0.480, 0.525, 0.340, 0.910); /* custom */
-}
 
 .editAccounts .contentSearch {
   display: flex;
@@ -258,41 +231,9 @@
 ********* INICIO PANTALLA PERFIL DE USUARIO **********
 *****************************************************/
 
-.editAccounts .contentEditAccounts {
-  width: 100%;
-  height: 100%;
-  padding: 20px;
-  opacity: 0;
-  background-color: #F1F1F1;
-  transform: translate3d(0,100%,0);
-  -webkit-transform: translate3d(0,100%,0);
-  /*transition: all 0.2s ease-in-out;
-  -webkit-transition: all 0.2s ease-in-out;*/
-  -webkit-transition-timing-function: cubic-bezier(0.480, 0.525, 0.340, 0.910);
-     -moz-transition-timing-function: cubic-bezier(0.480, 0.525, 0.340, 0.910);
-       -o-transition-timing-function: cubic-bezier(0.480, 0.525, 0.340, 0.910);
-          transition-timing-function: cubic-bezier(0.480, 0.525, 0.340, 0.910); /* custom */
-}
-
-.editAccounts.editarUsuario .contentEditAccounts{
-  width: 100%;
-  height: 100%;
-  padding: 20px;
-  opacity: 1;
-  background-color: #F1F1F1;
-  transform: translate3d(0px,0px,0);
-  -webkit-transform: translate3d(0px,0px,0);
-  /*transition: all 0.2s ease-in-out;
-  -webkit-transition: all 0.2s ease-in-out;*/
-  -webkit-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
-     -moz-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
-       -o-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
-          transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910); /* custom */
-}
 
 .editAccounts .contentProfile {
   width: 95%;
-
   padding: 20px;
   background-color: #FFF;
   border-radius: 2px;
@@ -304,6 +245,7 @@
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
+
 }
 
 .editAccounts .contentPhotoProfile {
@@ -369,7 +311,140 @@
     border: 1px solid #DBE2E5;
 }
 
-.editAccounts .btnEdit,
+.editAccounts .btnInputDataUser {
+    width: 150px;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    font-size: 14px;
+    padding: 6px;
+    margin: 5px 5px 5px 0px;
+    border: 1px solid #DBE2E5;
+    background-color: #DBE2E5;
+    color: #5C5F69;
+}
+
+.editAccounts .btnInputDataUser:hover {
+    background-color: #eee;
+    cursor: pointer;
+}
+
+.editAccounts .listTypeUser {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+}
+
+.editAccounts .iconTypeUser {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  width: 25px;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  font-size: 14px;
+  padding: 4px;
+  margin: 5px 5px 5px 0px;
+  border: 1px solid #DBE2E5;
+  background-color: #eee;
+  color: #5C5F69;
+}
+
+.editAccounts .typeUsers {
+    display: flex;
+    display: -webkit-flex; /* Safari */
+    display: -moz-flex; /* mozilla */
+    flex-direction:column;
+    -webkit-flex-direction:column; /* Safari */
+    -moz-flex-direction:column; /* mozilla */
+    justify-content: space-between;
+    -webkit-justify-content: space-between;
+    -moz-justify-content: space-between;
+    position: absolute;
+    width: 148px;
+    height: 1px;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    font-size: 14px;
+    padding: 0px;
+    margin: 5px 5px 5px 0px;
+    border: 1px solid #DBE2E5;
+    background-color: white;
+    color: #5C5F69;
+    top:95px;
+    opacity: 0;
+    transition: all 0.2s ease-in-out;
+    -webkit-transition: all 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+.editAccounts.verTipos .typeUsers{
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:column;
+  -webkit-flex-direction:column; /* Safari */
+  -moz-flex-direction:column; /* mozilla */
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  position: absolute;
+  width: 148px;
+  height: 150px;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  font-size: 14px;
+  padding: 0px;
+  margin: 5px 5px 5px 0px;
+  border: 1px solid #DBE2E5;
+  background-color: white;
+  color: #5C5F69;
+  top:95px;
+  transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;
+  opacity: 1;
+  cursor: pointer;
+}
+
+.editAccounts .btnBackTypes {
+  width: 150px;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  font-size: 14px;
+  padding: 6px;
+  border: 1px solid #DBE2E5;
+  background-color: #DBE2E5;
+  color: #5C5F69;
+  cursor: pointer;
+}
+
+.editAccounts .btnBackTypes:hover {
+  background-color: #eee;
+
+}
+
+.editAccounts .inputCheckbox {
+
+  padding: 5px;
+}
+
+.editAccounts .inputCheckbox:hover {
+  background-color: #eee;
+}
+
 .editAccounts .btnSave {
   border-radius: 2px;
   -moz-border-radius: 2px;
@@ -378,9 +453,34 @@
   background-color: #92AD17;
   color: white;
   padding: 10px;
-
+  margin-top: 20px;
   width: 125px;
   cursor: pointer;
+}
+
+
+
+
+
+.editAccounts .btnSave:hover {
+  background-color: #809612;
+}
+
+.editAccounts .btnBack {
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border:none;
+  background-color: #bebebe;
+  color: white;
+  padding: 10px;
+  margin-top: 20px;
+  width: 40px;
+  cursor: pointer;
+}
+
+.editAccounts .btnBack:hover {
+  background-color: #5C5F69;
 }
 
 .editAccounts hr {
@@ -391,17 +491,6 @@
   margin-bottom: 20px;
 }
 
-.profile.editarPerfil .contentBtnEdit,
-.profile.editarPerfil .dataProfileName,
-.profile.editarPerfil .dataProfileLastName {
-  display: none;
-}
-
-.profile.perfilBloqueado .contentBtnSave,
-.profile.perfilBloqueado .dataProfileName2,
-.profile.perfilBloqueado .dataProfileLastName2 {
-  display: none;
-}
 
 /******* ESTILO IMAGEN DE PERFIL *******/
 
@@ -421,8 +510,8 @@
     overflow: hidden;
     background-color: #eeeeee;
     border-radius: 3px;
-    width: 250px;
-    height: 160px;
+    width: 172px;
+    height: 110px;
     margin-bottom: 10px;
     box-shadow: 0 0 2px rgba(0,0,0,.5) inset;
 }
@@ -438,7 +527,7 @@
     opacity: 0;
     filter: alpha(opacity=0);
     /*background-color: blue;*/
-    height: 160px;
+    height: 110px;
 }
 
 .editAccounts .fileUpload2 {
@@ -473,8 +562,8 @@
   -moz-flex-direction:column; /* mozilla */
   align-items: center;
   justify-content:center;
-  width: 250px;
-  height: 160px;
+  width: 172px;
+  height: 110px;
   float: left;
   border: 1;
   background-color: #eee;
@@ -494,8 +583,8 @@
   -moz-flex-direction:column; /* mozilla */
   align-items: center;
   justify-content:center;
-  width: 250px;
-  height: 160px;
+  width: 172px;
+  height: 110px;
   float: left;
   border: 1;
   background-color: #eee;
@@ -508,6 +597,335 @@
 /******* FIN ESTILO IMAGEN DE PERFIL *******/
 
 
+.editAccounts .contentMails {
+  border-top: 2px solid #DBE2E5;
+  margin-top: 5px;
+}
+
+.editAccounts .mailList {
+  max-height: 120px;
+  /*background-color: red;*/
+  overflow-y: auto;
+  height: initial;
+}
+
+.editAccounts .btnNewMail {
+    width: 140px;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    font-size: 14px;
+    padding: 5px;
+    margin-left: 30px;
+    margin-bottom: 10px;
+    border: 1px solid #DBE2E5;
+    background-color: #DBE2E5;
+    color: #5C5F69;
+
+}
+
+.editAccounts .btnNewMail:hover {
+    background-color: #eee;
+    cursor: pointer;
+}
+
+
+.editAccounts .contentIconMail {
+  margin-right: 5px;
+  border-radius: 2px 0px 0px 2px;
+  -moz-border-radius: 2px 0px 0px 2px;
+  -webkit-border-radius: 2px 0px 0px 2px;
+  font-size: 16px;
+  padding: 3px 5px 3px 5px;
+  margin: 5px 0px 5px 0px;
+  border: 1px solid #DBE2E5;
+  background-color: #eee;
+}
+
+.editAccounts .contentMailsUser {
+  width: 340px;
+  border-radius: 0px 2px 2px 0px;
+  -moz-border-radius: 0px 2px 2px 0px;
+  -webkit-border-radius: 0px 2px 2px 0px;
+  font-size: 16px;
+  padding: 5px;
+  margin: 5px 5px 5px 0px;
+  border: 1px solid #DBE2E5;
+  margin-right: 27px;
+}
+
+.editAccounts .titleMails {
+  font-size: 12px;
+  color: #28292D;
+  margin-top: 10px;
+}
+
+.editAccounts .mailInstitutional {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  color: #3A3C44;
+
+}
+
+.editAccounts .dataMail {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+}
+
+.editAccounts .mailPersonal {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  color: #3A3C44;
+  margin-top: 5px;
+  /*background-color: #EEEEEE;*/
+  padding: 5px;
+}
+
+.editAccounts .btnMailValidated {
+  padding: 7px;
+  background-color: #128C78;
+  border-radius: 2px;
+  -moz-border-radius:2px;
+  -webkit-border-radius:2px;
+  border: none;
+  color: white;
+
+}
+
+.editAccounts .btnMailNoValidated {
+  padding: 7px;
+  background-color: #EC9122;
+  border-radius: 2px;
+  -moz-border-radius:2px;
+  -webkit-border-radius:2px;
+  border: none;
+  color: white;
+
+}
+
+.editAccounts .btnDeleteMail {
+  padding: 7px;
+  background-color: #E43E46;
+  border-radius: 2px;
+  -moz-border-radius:2px;
+  -webkit-border-radius:2px;
+  border: none;
+  color: white;
+  cursor: pointer;
+
+}
+
+.editAccounts .btnWebMail {
+  padding: 8px;
+  background-color: #c9c3c3;
+  border-radius: 2px;
+  -moz-border-radius:2px;
+  -webkit-border-radius:2px;
+  border: none;
+  color: #5C5F69;
+  cursor: pointer;
+
+}
+
+.editAccounts .btnForwardMail {
+  padding: 7px;
+  background-color: #92AD17;
+    border-radius: 2px;
+  -moz-border-radius:2px;
+  -webkit-border-radius:2px;
+  border: none;
+  color: white;
+  cursor: pointer;
+
+}
+
+.editAccounts .hrMails {
+  color: red;
+  border:none;
+  border: 1px solid #DBE2E5;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.editAccounts .contentNewMailAndSave {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: flex-start;
+  -webkit-justify-content: flex-start;
+  -moz-justify-content: flex-start;
+  margin-top: 10px;
+
+  border-top: 2px solid #DBE2E5;
+}
+
+.editAccounts .contentNewMail {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content:  flex-start;
+  -webkit-justify-content:flex-start;
+  -moz-justify-content: flex-start;
+  margin-top: 10px;
+
+}
+
+
+
+.editAccounts .inputMail {
+  background-color: #EEEEEE;
+  padding: 7px;
+  border-radius: 0px 2px 2px 0px;
+  -moz-border-radius: 0px 2px 2px 0px;
+  -webkit-border-radius: 0px 2px 2px 0px;
+  border: solid 1px #5C5F69;
+  font-size: 18px;
+  width: 1px;
+  opacity: 0;
+  transition: all 0.1s ease-in-out;
+  -webkit-transition: all 0.1s ease-in-out;
+}
+
+.editAccounts .btnOkMail {
+  padding: 7px;
+  background-color: #5C5F69;
+  border-radius: 0px 2px 2px 0px;
+  -moz-border-radius: 0px 2px 2px 0px;
+  -webkit-border-radius: 0px 2px 2px 0px;
+  border: none;
+  color: white;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.1s ease-in-out;
+  -webkit-transition: all 0.1s ease-in-out;
+}
+
+.editAccounts.editarUsuario.newMail .inputMail {
+  opacity: 1;
+  width: 300px;
+  transition: all 0.1s ease-in-out;
+  -webkit-transition: all 0.1s ease-in-out;
+}
+
+.editAccounts.editarUsuario.newMail .btnOkMail {
+  opacity: 1;
+  transition: all 0.1s ease-in-out;
+  -webkit-transition: all 0.1s ease-in-out;
+}
+
+
+
+
 /*****************************************************
 ********** FIN PANTALLA PERFIL DE USUARIO ************
+*****************************************************/
+
+
+/*****************************************************
+************* INICIO CAMBIO DE PANTALLAS *************
+*****************************************************/
+
+.editAccounts .contentEditAccounts {
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  opacity: 0;
+  background-color: #F1F1F1;
+  transform: translate3d(0,100%,0);
+  -webkit-transform: translate3d(0,100%,0);
+  /*transition: all 0.4s ease-in-out;
+  -webkit-transition: all 0.4s ease-in-out;*/
+  -webkit-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+     -moz-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+       -o-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+          transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910); /* custom */
+
+}
+
+.editAccounts.editarUsuario .contentEditAccounts{
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  opacity: 1;
+  background-color: #F1F1F1;
+  transform: translate3d(0px,0px,0);
+  -webkit-transform: translate3d(0px,0px,0);
+  /*transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;*/
+  -webkit-transition-timing-function: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+     -moz-transition-timing-function: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+       -o-transition-timing-function: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+          transition-timing-function: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910); /* custom */
+}
+
+
+.editAccounts .contentSearchAccounts {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 1;
+  background-color: #F1F1F1;
+  transform: translate3d(0px,0px,0);
+  -webkit-transform: translate3d(0px,0px,0);
+  /*transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;*/
+  -webkit-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+     -moz-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+       -o-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+          transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910); /* custom */
+}
+
+.editAccounts.editarUsuario .contentSearchAccounts {
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  background-color: #F1F1F1;
+  transform: translate3d(0,100%,0);
+  -webkit-transform: translate3d(0,100%,0);
+  /*transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;*/
+  -webkit-transition-timing-function: cubic-bezier(0.480, 0.525, 0.340, 0.910);
+     -moz-transition-timing-function: cubic-bezier(0.480, 0.525, 0.340, 0.910);
+       -o-transition-timing-function: cubic-bezier(0.480, 0.525, 0.340, 0.910);
+          transition-timing-function: cubic-bezier(0.480, 0.525, 0.340, 0.910); /* custom */
+}
+
+/*****************************************************
+************** FIN CAMBIO DE PANTALLAS **************
 *****************************************************/
