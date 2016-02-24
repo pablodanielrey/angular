@@ -1,313 +1,452 @@
 # -*- coding: utf-8 -*-
+'''
+    Implementa todo el codigo relacionado al modelo y las entidades de los usuarios
+'''
+
+import logging
+import datetime
 import uuid
-import psycopg2
-import inject
-import hashlib
-import re
-
-from model.config import Config
-from model.objectView import ObjectView
-from model.mail.mail import Mail
+from connection.connection import Connection
 
 
-class Users:
-    def __init__(self, config=None):
-        self.serverConfig = inject.instance(Config)
-        self.mail = inject.instance(Mail)
+class UserPassword:
 
-    '''
-     ' Enviar email de confirmacion: Define un hash y envia un email de confirmacion al usuario con el hash
-     ' @param con Conexion con la base de datos
-     ' @param emailId Identificacion del email
-     '''
-    def sendEmailConfirmation(self, con, emailId):
-        email = self.findMail(con, emailId)
-        if(email is None):
-            raise Exception("Email inexistente")
-
-        hash = hashlib.sha1((email['id'] + email['user_id']).encode('utf-8')).hexdigest()
-        email['hash'] = hash
-
-        self.updateMail(con, email)
-
-        From = self.serverConfig.configs['mail_confirm_mail_from']
-        subject = self.serverConfig.configs['mail_confirm_mail_subject']
-        To = email['email']
-        template = self.serverConfig.configs['mail_confirm_mail_template']
-
-        url = self.serverConfig.configs['mail_confirm_mail_url']
-        url = re.sub('###HASH###', hash, url)
-
-        replace = [
-            ('###URL###', url)
-        ]
-
-        self.mail.sendMail(From, [To], subject, replace, html=template)
-        return True
-
-    def confirmEmail(self, con, hash):
-        email = self.findMailByHash(con, hash)
-        if(email is None):
-            raise Exception("Email inexistente")
-
-        email['confirmed'] = True
-        email['hash'] = None
-
-        self.updateMail(con, email)
-
-        From = self.serverConfig.configs['mail_confirm_mail_from']
-        subject = self.serverConfig.configs['mail_confirm_mail_subject']
-        To = email['email']
-        template = self.serverConfig.configs['mail_confirm_mail_template']
-
-        url = self.serverConfig.configs['mail_mail_confirmed_template']
-        url = re.sub('###HASH###', hash, url)
-
-        replace = [
-            ('###URL###', url)
-        ]
-        self.mail.sendMail(From, [To], subject, replace, html=template)
+    def __init__(self):
+        self.id = None
+        self.userId = None
+        self.username = None
+        self.password = None
 
 
-    def createMail(self, con, data):
-        if 'confirmed' not in data:
-            data['confirmed'] = False
+class UserPasswordDAO:
 
-        mail = ObjectView(data)
-        mid = str(uuid.uuid4())
-        rreq = (mid, mail.user_id, mail.email, mail.confirmed, '')
+    @staticmethod
+    def _fromResult(r):
+        up = UserPassword()
+        up.id = r['id']
+        up.userId = r['user_id']
+        up.username = r['username']
+        up.password = r['password']
+        up.updated = r['updated']
+        return up
+
+    @staticmethod
+    def findByUsername(con, username):
+        '''
+            Obtiene los datos de las credenciales de un usuario
+            Retorna:
+                Una lista con instancias de UserPassword
+                En caso de no existir una lista vacía
+        '''
         cur = con.cursor()
-        cur.execute('insert into profile.mails (id,user_id,email,confirmed,hash) values (%s,%s,%s,%s,%s)', rreq)
-        return mid
-
-    def findMailByHash(self,con,hash):
-        cur = con.cursor()
-        cur.execute('select id,user_id,email,confirmed,hash from profile.mails where hash = %s', (hash,))
-        data = cur.fetchone()
-        if data != None:
-            return self.convertMailToDict(data)
-        else:
-            return None
-
-    def findMail(self, con, id):
-        cur = con.cursor()
-        cur.execute('select id,user_id,email,confirmed,hash from profile.mails where id = %s', (id,))
-        data = cur.fetchone()
-        if data is not None:
-            return self.convertMailToDict(data)
-        else:
-            return None
-
-    def listMails(self, con, user_id):
-        cur = con.cursor()
-        cur.execute('select id, user_id, email, confirmed, hash from profile.mails where user_id = %s', (user_id,))
-        data = cur.fetchall()
-        rdata = []
-        for d in data:
-            rdata.append(self.convertMailToDict(d))
-        return rdata
-
-    def deleteMail(self, con, id):
-        cur = con.cursor()
-        cur.execute('delete from profile.mails where id = %s', (id,))
-
-    def updateMail(self, con, data):
-        if 'hash' not in data:
-            data['hash'] = ''
-        mail = ObjectView(data)
-        rreq = (mail.email, mail.confirmed, mail.hash, mail.id)
-        cur = con.cursor()
-        cur.execute('update profile.mails set email = %s, confirmed = %s, hash = %s where id = %s', rreq)
-
-
-    ''' transformo a diccionario las respuestas de psycopg2'''
-    def convertMailToDict(self, d):
-        rdata = {
-                'id':d[0],
-                'user_id':d[1],
-                'email':d[2],
-                'confirmed':d[3],
-                'hash':d[4]
-            }
-        return rdata
-
-
-    """-------------------------------"""
-
-    def createUser(self,con,data):
-        uid = str(uuid.uuid4())
-        if 'id' in data and data['id'] is not None:
-            uid = data['id']
-
-        rreq = (uid,
-                data['dni'],
-                data['name'],
-                data['lastname'],
-                data['city'] if 'city' in data else '',
-                data['country'] if 'country' in data else '',
-                data['address'] if 'address' in data else '',
-                data['genre'] if 'genre' in data else '',
-                data['birthdate'] if 'birthdate' in data else None,
-                data['residence_city'] if 'residence_city' in data else '',
-                data['photo'] if 'photo' in data else '',
-                data['version'] if 'version' in data else 0)
-        cur = con.cursor()
-        cur.execute('insert into profile.users (id,dni,name,lastname,city,country,address,genre,birthdate,residence_city,photo,version) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)', rreq)
-        cur.execute('insert into au24.users (id,type) values (%s,%s)', (uid, 'ingresante'))
-        return uid
-
-    '''
-     ' Persistir usuario: En funcion del id del usuario crea o actualiza el usuario
-     ' @param user Datos del usuario
-     ' @return Id del usuario persistido
-     '''
-    def updateUser(self, con, user):
-        cur = con.cursor()
-
-        ''' si no exite lo creo '''
-        userId = None
-        if 'id' not in user:
-            userId = self.createUser(con,user)
-        else:
-            userId = user['id']
-            cur.execute('select id from profile.users where id = %s', (user['id'],))
+        try:
+            cur.execute('select id, user_id, username, password, updated from credentials.user_password where username = %s', (username,))
             if cur.rowcount <= 0:
-                userId = self.createUser(con, user)
+                return []
+            data = [UserPasswordDAO._fromResult(c) for c in cur]
+            return data
+
+        finally:
+            cur.close()
+
+
+    @staticmethod
+    def findByUserId(con, userId):
+        '''
+            Obtiene los datos de las credenciales de un usuario
+            Retorna:
+                Una lista con instancias de UserPassword
+                En caso de no existir una lista vacía
+        '''
+        cur = con.cursor()
+        try:
+            cur.execute('select id, user_id, username, password, updated from credentials.user_password where user_id = %s', (userId,))
+            if cur.rowcount <= 0:
+                return []
+            data = [UserPasswordDAO._fromResult(c) for c in cur]
+            return data
+
+        finally:
+            cur.close()
+
+    @staticmethod
+    def persist(con, up):
+        '''
+            Inserta o actualiza el usuario y clave de una persona
+            Precondiciones:
+                El usuario debe existir
+            Retorna:
+                Id de las credenciales
+        '''
+        assert up.userId is not None
+        assert up.username is not None
+        assert up.password is not None
+
+        cur = con.cursor()
+        try:
+            if up.id is None:
+                up.id = str(uuid.uuid4())
+                params = up.__dict__
+                cur.execute('insert into credentials.user_password (id, user_id, username, password, updated) values (%(id)s, %(userId)s, %(username)s, %(password)s, now())', params)
             else:
-                rreq = (user['dni'],
-                        user['name'] if 'name' in user else '',
-                        user['lastname'] if 'lastname' in user else '',
-                        user['city'] if 'city' in user else '',
-                        user['country'] if 'country' in user else '',
-                        user['address'] if 'address' in user else '',
-                        user['genre'] if 'genre' in user else '',
-                        user['birthdate'] if 'birthdate' in user else '',
-                        user['residence_city'] if 'residence_city' in user else '',
-                        user['photo'] if 'photo' in user else '',
-                        user['version'] if 'version' in user else 1, user['id'])
-                cur.execute('update profile.users set dni = %s, name = %s, lastname = %s, city = %s, country = %s, address = %s, genre = %s, birthdate = %s, residence_city = %s, photo = %s, version = %s where id = %s', rreq)
-                if cur.rowcount <= 0:
-                    raise Exception()
+                params = up.__dict__
+                cur.execute('update credentials.user_password set user_id = %(userId)s, username = %(username)s, password = %(password)s, updated = now() where id = %(id)s', params)
+
+            return up.id
+
+        finally:
+            cur.close()
 
 
-        #actualizar telefonos del usuario
-        cur.execute('delete from profile.telephones where user_id = %s', (userId,))
+class Mail:
+    ''' cuenta de email de un usuario '''
 
-        if 'telephones' in user:
-            for i, v in enumerate(user['telephones']):
-                 telephone_id = str(uuid.uuid4())
-                 rreq = (telephone_id, user['id'], v["number"], v["type"])
-                 cur.execute('INSERT INTO profile.telephones (id, user_id, number, type) VALUES (%s, %s, %s, %s);', rreq)
+    def __init__(self):
+        self.id = None
+        self.userId = None
+        self.email = None
+        self.confirmed = False
+        self.hash = None
+        self.created = None
 
-        return userId
+    def confirm(con, self):
+        ''' cambia el estado a confirmado '''
+        if self.confirmed:
+            return
+        self.confirmed = True
+        MailDAO.persist(con, self)
 
 
-    def findUserByDni(self, con, dni):
+class MailDAO:
+    ''' dao de las cuentas de email de los usuarios '''
+
+    @staticmethod
+    def _fromResult(r):
+        m = Mail()
+        m.id = r['id']
+        m.userId = r['user_id']
+        m.email = r['email']
+        m.confirmed = r['confirmed']
+        m.hash = r['hash']
+        m.created = r['created']
+        return m
+
+    @staticmethod
+    def findAll(con, userId):
+        ''' Obtiene los emails de un usuario '''
         cur = con.cursor()
-        cur.execute('select id,dni,name,lastname,city,country,address,genre,birthdate,residence_city,photo,version from profile.users where dni = %s', (dni,))
-        data = cur.fetchone()
+        try:
+            cur.execute('select id, user_id, email, confirmed, hash, created from profile.mails where user_id = %s', (userId,))
+            m = [MailDAO._fromResult(ma) for ma in cur]
+            return m
 
-        if data != None:
-            return self.convertUserToDict(data)
-        else:
-            return None
+        finally:
+            cur.close()
 
-    def findById(self, con, id):
-        return self.findUser(con, id)
-
-    def findUser(self,con,id):
+    @staticmethod
+    def persist(con, mail):
+        ''' crea o actualiza un email de usuario '''
         cur = con.cursor()
-        cur.execute('select id,dni,name,lastname,city,country,address,genre,birthdate,residence_city,photo,version from profile.users where id = %s', (id,))
-        if cur.rowcount <= 0:
-            return None
+        try:
+            if mail.id is None:
+                mail.id = str(uuid.uuid4())
+                params = mail.__dict__
+                cur.execute('insert into profile.mails (id, user_id, email, confirmed, hash) values (%(id)s, %(userId)s, %(email)s, %(confirmed)s, %(hash)s)', params)
+            else:
+                params = mail.__dict__
+                cur.execute('update profile.mails set user_id = %(userId)s, email = %(email)s, confirmed = %(confirmed)s, hash = %(hash)s where id = %(id)s', params)
 
-        dataUser = cur.fetchone()
-        rdataUser = self.convertUserToDict(dataUser);
-        cur.execute('SELECT id, number, type FROM profile.telephones WHERE user_id = %s',(dataUser[0],))
-        dataTelephones = cur.fetchall()
-        rdataTelephones = []
-        for dataTelephone in dataTelephones:
-            rdataTelephones.append(self.convertTelephoneToDict(dataTelephone))
-        rdataUser["telephones"] = rdataTelephones
-        return rdataUser
+        finally:
+            cur.close()
 
-    '''
-     ' Buscar usuarios a traves de una lista de ids
-     '''
-    def findUsersByIds(self,con,ids):
+
+class User:
+    ''' usuario básico del sistema '''
+
+    def __init__(self):
+        self.id = None
+        self.dni = None
+        self.name = None
+        self.lastname = None
+        self.genre = None
+        self.birthdate = None
+        self.city = None
+        self.country = None
+        self.address = None
+        self.residence_city = None
+        self.created = datetime.datetime.now()
+        self.version = 0
+        self.photo = None
+
+
+class UserDAO:
+    ''' DAO para los usuarios '''
+
+    @staticmethod
+    def _fromResult(r):
+        u = User()
+        u.id = r['id']
+        u.dni = r['dni']
+        u.name = r['name']
+        u.lastname = r['lastname']
+        u.genre = r['genre']
+        u.birthdate = r['birthdate']
+        u.city = r['city']
+        u.country = r['country']
+        u.address = r['address']
+        u.residence_city = r['residence_city']
+        u.created = r['created']
+        u.version = r['version']
+        u.photo = r['photo']
+        return u
+
+    @staticmethod
+    def findAll(con):
+        '''
+            Obtiene todos los usuarios
+            Retorna:
+                una lista de tuplas (id, version)
+        '''
         cur = con.cursor()
-        cur.execute('select id,dni,name,lastname,city,country,address,genre,birthdate,residence_city,photo,version from profile.users where id IN %s', (tuple(ids),))
-        data = cur.fetchall()
+        try:
+            cur.execute('select id, version from profile.users')
+            users = [(u[0], u[1]) for u in cur]
+            return users
+        finally:
+            cur.close()
 
-        rdata = []
-        for d in data:
-            rdata.append(self.convertUserToDict(d))
-        return rdata
-
-
-
-
-    def listUsers(self, con):
+    @staticmethod
+    def findById(con, uid):
+        '''
+            Obtiene el usuario especificado por el id
+            Retorna:
+                User a partir de los datos de la base
+                None en caso de que no exista
+        '''
+        assert uid is not None
         cur = con.cursor()
-        cur.execute('select id,dni,name,lastname,city,country,address,genre,birthdate,residence_city,photo,version from profile.users')
-        data = cur.fetchall()
-        rdata = []
-        for d in data:
-            rdata.append(self.convertUserToDict(d))
-        return rdata
+        try:
+            cur.execute('select * from profile.users where id = %s', (uid,))
+            if cur.rowcount <= 0:
+                return None
+            user = UserDAO._fromResult(cur.fetchone())
+            return user
 
-    '''
-     ' Listar ids de usuarios
-     ' @param con Conexion con la base de datos
-     ' @return Lista de ids de usuarios
-     '''
-    def listUsersIds(self, con):
+        finally:
+            cur.close()
+
+    @staticmethod
+    def findVersion(con, userId):
+        '''
+            Obtiene la versión del usuario
+            Retorna:
+                la version del usuario
+                None en caso de que el usuario no exista
+        '''
         cur = con.cursor()
-        cur.execute('select id from profile.users')
-        data = cur.fetchall()
-        rdata = []
-        for d in data:
-            rdata.append(d[0])
-        return rdata
+        try:
+            cur.execute('select version from profile.users where id = %s', (userId,))
+            if cur.rowcount > 0:
+                return cur.fetchone()[0]
+            else:
+                return None
+        finally:
+            cur.close()
+
+    @staticmethod
+    def findByDni(con, dni):
+        '''
+            Obtiene los datos básicos del usuario
+            Retorna:
+                (id, version)
+                None en caso de no existir
+        '''
+        cur = con.cursor()
+        try:
+            cur.execute('select id, version from profile.users where dni = %s', (dni,))
+            if cur.rowcount <= 0:
+                return None
+            else:
+                (id, version) = cur.fetchone()
+                return (id, version)
+
+        finally:
+            cur.close()
+
+    @staticmethod
+    def persist(con, user):
+        '''
+            Agrega o actualiza un usuario dentro de la base de datos
+        '''
+        cur = con.cursor()
+        try:
+            if user.id is None:
+                user.id = str(uuid.uuid4())
+                user.version = 0
+                cur.execute('insert into profile.users (id, dni, name, lastname, genre, birthdate, city, country, address, residence_city, version, photo) values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)', (
+                    user.id,
+                    user.dni, user.name, user.lastname,
+                    user.genre,
+                    user.birthdate,
+                    user.city, user.country, user.address, user.residence_city,
+                    user.version,
+                    user.photo
+                ))
+                return user.id
+
+            cur.execute('select version from profile.users where id = %s', (user.id,))
+            if cur.rowcount <= 0:
+                ''' el usuario no existe asi que lo creo '''
+                cur.execute('insert into profile.users (id, dni, name, lastname, genre, birthdate, city, country, address, residence_city, version, photo) values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)', (
+                    user.id,
+                    user.dni, user.name, user.lastname,
+                    user.genre,
+                    user.birthdate,
+                    user.city, user.country, user.address, user.residence_city,
+                    user.version,
+                    user.photo
+                ))
+                return user.id
+            else:
+                ''' el usuario existe asi que chequeo el número de version y si esta ok lo actualizo '''
+                v = cur.fetchone()
+                if v[0] <= user.version:
+                    user.version = user.version + 1
+                    params = user.__dict__
+                    cur.execute('update profile.users set dni = %(dni)s, name = %(name)s, lastname = %(lastname)s, genre = %(genre)s, ' +
+                                'birthdate = %(birthdate)s, ' +
+                                'city = %(city)s, country = %(country)s, address = %(address)s, residence_city = %(residence_city)s, ' +
+                                'version = %(version)s, ' +
+                                'photo = %(photo)s ' +
+                                'where id = %(id)s', params)
+                    return user.id
+                else:
+                    raise Exception('versión inferior')
+
+        finally:
+            cur.close()
 
 
-    ''' retorna true en el caso de que el usuario pasado como parámetro tenga una version mayor al de la base '''
-    def needSync(self,con,user):
-        id = user['id']
+class StudentDAO:
+
+    @staticmethod
+    def findAll(con):
+        '''
+            Obtiene todos los ids de los estudiantes
+            Retorno:
+                una lista con los ids
+        '''
+        cur = con.cursor()
+        try:
+            cur.execute('select id from students.users')
+            st = [s[0] for s in cur]
+            return st
+
+        finally:
+            cur.close()
+
+    @staticmethod
+    def findById(con, sId):
+        cur = con.cursor()
+        try:
+            cur.execute('select id, student_number, condition from students.users where id = %s', (sId,))
+            if cur.rowcount <= 0:
+                return None
+            else:
+                st = Student()
+                st._fromDict(cur.fetchone())
+                return st
+
+        finally:
+            cur.close()
+
+    @staticmethod
+    def persist(con, student):
+        '''
+            Inserta o actualiza un alumno dentro de la base de datos
+            Precondiciones:
+                La persona debe existir dentro de la base con el mismo id pasado dentro de student.id
+            Retorno:
+                El id del estudiante
+        '''
+        assert student.id is not None
+        params = student.__dict__
 
         cur = con.cursor()
-        cur.execute('select version from profile.users where id = %s',(id,))
-        if cur.rowcount <= 0:
-            return True
+        try:
+            cur.execute('select id from students.users where id = %s', (student.id,))
+            if cur.rowcount <= 0:
+                ''' inserto el alumno dentro de la base de datos '''
+                cur.execute('insert into students.users (id, student_number, condition) values (%(id)s, %(studentNumber)s, %(condition)s)', params)
+                return student.id
+            else:
+                cur.execute('update students.users set student_number = %(studentNumber)s, condition = %(condition)s where id = %(id)s', params)
+                return student.id
 
-        version = cur.fetchone()[0]
-        return user['version'] > version
+        finally:
+            cur.close()
 
 
+class Student:
 
-    ''' transformo a diccionario las respuestas de psycopg2'''
-    def convertUserToDict(self,d):
-        rdata = {
-                'id':d[0],
-                'dni':d[1],
-                'name':d[2],
-                'lastname':d[3],
-                'city':d[4],
-                'country':d[5],
-                'address':d[6],
-                'genre':d[7],
-                'birthdate':d[8],
-                'residence_city':d[9],
-                'photo':d[10],
-                'version':d[11]
-            }
-        return rdata
+    def __init__(self):
+        self.id = None
+        self.studentNumber = None
+        self.condition = None
 
-    ''' transformo a telefonos las respuestas de psycopg2'''
-    def convertTelephoneToDict(self,d):
-        rdata = {
-                'id':d[0],
-                'number':d[1],
-                'type':d[2]
-            }
-        return rdata
+    def persist(self, con):
+        StudentDAO.persist(con, self)
+
+    def _fromDict(self, d):
+        self.id = d['id']
+        self.studentNumber = d['student_number']
+        self.condition = d['condition']
+
+
+if __name__ == '__main__':
+
+    logging.getLogger().setLevel(logging.INFO)
+    import sys
+
+    conn = inject.instance(Connection)
+    con = conn.getConnection()
+
+    dni = sys.argv[1]
+    assert dni is not None
+
+    uid = None
+
+    u = UserDAO.findByDni(con, dni)
+    if u is None:
+        u = User()
+        u.dni = dni
+        u.name = sys.argv[2]
+        u.lastname = sys.argv[3]
+        uid = UserDAO.persist(con, u)
+    else:
+        (id, version) = u
+        uid = id
+
+    s = Student()
+    s.id = uid
+    s.studentNumber = sys.argv[4]
+    s.condition = 'Regular'
+
+    StudentDAO.persist(con, s)
+    st = StudentDAO.findById(con, s.id)
+    logging.info(st.__dict__)
+
+    passw = UserPasswordDAO.findByUserId(con, uid)
+    if passw is None:
+        up = UserPassword()
+        up.userId = uid
+        up.username = dni
+        up.password = s.studentNumber
+        UserPasswordDAO.persist(con, up)
+
+    passw = UserPasswordDAO.findByUserId(con, uid)
+    for p in passw:
+        logging.info(p.__dict__)
+
+    con.commit()
+    conn.put(con)
