@@ -33,7 +33,8 @@ function LoginCtrl($scope, $window, Notifications, Login, Users) {
     $scope.model = {
 			username: '',
 			password: '',
-      openConnection: false
+      openConnection: false,
+	user:null
     }
 
     const classNameViewUser = 'screenUser';
@@ -104,7 +105,8 @@ function LoginCtrl($scope, $window, Notifications, Login, Users) {
      function sendUsername() {
        Users.findByDni($scope.model.username,
          function(user) {
-
+           console.log(user);
+           $scope.model.user = user;
            $scope.viewPassword();
            $scope.view.focus = 'inputPassword';
          },
