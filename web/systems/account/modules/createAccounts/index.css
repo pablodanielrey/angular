@@ -1,9 +1,9 @@
-.systems {
+.createAccounts {
   height: 100%;
   width: 100%;
 }
 
-.systems .header {
+.createAccounts .header {
   height: 102px;
   width: 100%;
   background: #DBE2E5;
@@ -12,7 +12,7 @@
   font-size: 1.5em;
 }
 
-.systems .contentSystems {
+.createAccounts .contentCreateAccounts {
   margin: 20px;
   width: 95%;
   padding: 20px;
@@ -28,12 +28,17 @@
   -webkit-box-sizing: border-box;
 }
 
-.systems .contentDataInput {
+.createAccounts .titleCreateAccounts {
+    color: #5C5F69;
+    margin-bottom: 20px;
+}
+
+.createAccounts .contentDataInput {
   font-size: 12px;
   color: #5C5F69;
 }
 
-.systems .inputDataUser {
+.createAccounts .inputDataUser {
     border-radius: 2px;
     -moz-border-radius: 2px;
     -webkit-border-radius: 2px;
@@ -43,7 +48,7 @@
     border: 1px solid #DBE2E5;
 }
 
-.systems .btnSave {
+.createAccounts .btnSave {
   border-radius: 2px;
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
@@ -56,6 +61,45 @@
   cursor: pointer;
 }
 
-.systems .btnSave:hover {
+.createAccounts .btnSave:hover {
   background-color: #809612;
+}
+
+.createAccounts .loading {
+  color: #5C5F69;
+  padding: 10px;
+  margin-top: 10px;
+}
+
+.createAccounts .messageErrorSystem {
+  color: #E43E46;
+  padding: 10px;
+  margin-top: 10px;
+}
+
+.createAccounts .messageOK {
+  color: #92AD17;
+  padding: 10px;
+  margin-top: 10px;
+}
+
+/******* MENSAJES **********/
+
+.createAccounts.ocultarMensajes .mensages {
+  display: none;
+}
+
+.createAccounts.avisoCargando .messageOK,
+.createAccounts.avisoCargando .messageErrorSystem {
+  display: none;
+}
+
+.createAccounts.avisoError .messageOK,
+.createAccounts.avisoError .loading {
+  display: none;
+}
+
+.createAccounts.avisoOk .messageErrorSystem,
+.createAccounts.avisoOk .loading {
+  display: none;
 }
