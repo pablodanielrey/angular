@@ -7,7 +7,7 @@ from psycopg2 import pool
 from psycopg2.extras import DictCursor
 import inject
 
-from registry import Registry
+from model.registry import Registry
 
 
 
@@ -16,11 +16,10 @@ class Connection:
     registry = inject.attr(Registry)
 
     def __init__(self):
-        self.name = '{}.{}'.format(self.__class__.__module__, self.__class__.__name__)
-        self.host = self.registry.get(self.name, 'host')
-        self.database = self.registry.get(self.name, 'database')
-        self.user = self.registry.get(self.name, 'user')
-        self.password = self.registry.get(self.name, 'password')
+        self.host = self.registry.get(self, 'host')
+        self.database = self.registry.get(self, 'database')
+        self.user = self.registry.get(self, 'user')
+        self.password = self.registry.get(self, 'password')
         self.pool = psycopg2.pool.ThreadedConnectionPool(10, 20, host=self.host, database=self.database, user=self.user, password=self.password, cursor_factory=DictCursor)
 
     def get(self):

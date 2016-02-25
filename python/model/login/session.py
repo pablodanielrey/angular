@@ -2,21 +2,11 @@
 import uuid
 import datetime
 import inject
-import psycopg2
 import json
 
-from model.config import Config
+from model.registry import Registry
 from model.utils import DateTimeEncoder
 
-"""
-datos de la entidad:
-
-{
-    id:'id de la sesion',
-    data:'datos variables de sesion'
-}
-
-"""
 
 class SessionNotFound(Exception):
 
@@ -34,8 +24,74 @@ class SessionExpired(Exception):
     def __str__(self):
         return 'Sesion expirada'
 
-
 class Session:
+    def __init__(self):
+        self.id = None
+        self.userId = None
+        self.username = None
+        self.created = None
+        self.expire = None
+        sefl.data = None
+
+class SessionDAO:
+
+    registry = inject.attr(Registry)
+
+    @staticmethod
+    def _createSchema(con):
+        cur = con.cursor()
+        try:
+            cur.execute('create schema if not exists systems')
+            cur.execute("""
+                create table systems.sessions (
+                    id varchar primary key,
+                    user_id varchar,
+                    username varchar,
+                    expire timsetampz default now(),
+                    created timestampz default now(),
+                    data varchar
+                )
+            """)
+        finally:
+            cur.close()
+
+    @staticmethod
+    def persist(con, sess):
+        cur = con.cursor()
+        try:
+            if sess.id is None:
+                sess.id = str(uuid.uuid4())
+                r = sess.__dict__
+                cur.execute('insert into systems.sessions (id, user_id, username, expire, created, data)'
+                            'values (%(id)s, %(userId)s, %(username)s, %(expire)s, %(created)s, %(data)s)', r)
+            else:
+                r = sess.__dict__
+                cur.execute('update systems.sessions set expire = %(expire)s, data = %(data)s where id = %(id)s', r)
+
+        finally:
+            cur.close()
+
+
+    @staticmethod
+    def touch(con, sid):
+        cur = con.cursor()
+        try:
+            cur.execute('select expire from systems.sessions where id = %s', (sid))
+            if cur.rowcount <= 0:
+                raise SessionNotFound()
+
+            now = datetime.datetime.now()
+            if cur.fetchone()['expire'] <= now:
+                raise SessionExpired()
+
+            exp = now + datetime.timedelta(minutes=int(registry.get(SessionDAO,'expire')))
+            cur.execute('update systems.sessions set expire = %s where id = %s', (exp, sid))
+
+        finally:
+            cur.close()
+
+
+
 
     expire = datetime.timedelta(hours=1)
     config = inject.attr(Config)
