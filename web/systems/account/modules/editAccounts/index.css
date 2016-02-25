@@ -12,14 +12,9 @@
   font-size: 1.5em;
 }
 
-
-
-
 /*****************************************************
 *********** INICIO PANTALLA DE BUSQUEDA **************
 *****************************************************/
-
-
 
 .editAccounts .contentSearch {
   display: flex;
@@ -29,7 +24,6 @@
   -webkit-flex-direction:row; /* Safari */
   -moz-flex-direction:row; /* mozilla */
   padding: 20px;
-  /*background-color: red;*/
   height: 70%;
 }
 
@@ -37,18 +31,11 @@
   border-right: 1px solid #DBE2E5;
 }
 
-.editAccounts .contentSearchResults {
-  margin-left: 40px;
-  height: 100%;
-
-}
-
 .editAccounts .titleRecent {
   color: #5C5F69;
 }
 
 .editAccounts .contentBtnSearch {
-  /*background-color: #E4E4E6;*/
   width: 250px;
   border-radius: 2px;
   -moz-border-radius: 2px;
@@ -59,29 +46,12 @@
 }
 
 .editAccounts .inputSearch {
-
   border-radius: 2px;
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
   font-size: 20px;
   padding: 11px;
   border: 1px solid #DBE2E5;
-}
-
-.editAccounts .searchResults {
-
-  height: 95%;
-  overflow-y: auto;
-  display: flex;
-  display: -webkit-flex; /* Safari */
-  display: -moz-flex; /* mozilla */
-  flex-direction:row;
-  -webkit-flex-direction:row; /* Safari */
-  -moz-flex-direction:row; /* mozilla */
-  flex-wrap: wrap;
-  align-content: flex-start;
-  -webkit-align-content: flex-start;
-  -moz-align-content: flex-start;
 }
 
 .editAccounts .contentRecentAndTrash {
@@ -111,6 +81,8 @@
   background-color: #E4E4E6;
 }
 
+/*CONTENEDORES DE LOS USUARIOS RECIENTES*/
+
 .editAccounts .contentUserRecent {
   display: flex;
   display: -webkit-flex; /* Safari */
@@ -131,6 +103,47 @@
 
 .editAccounts .contentUserRecent:hover {
   background-color: #E4E4E6;
+}
+
+
+.editAccounts .contentPhotoRecent {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  width: 65px;
+  height: 65px;
+  margin-left: 10px;
+}
+
+.editAccounts .imgUserRecent {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+}
+
+.editAccounts .contentDataRecent {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:column;
+  -webkit-flex-direction:column; /* Safari */
+  -moz-flex-direction:column; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  font-size: 14px;
+}
+
+/*CONTENEDOR DE LOS RESULTADOS ECONTRADOS*/
+
+.editAccounts .contentSearchResults {
+  margin-left: 40px;
+  height: 100%;
 }
 
 .editAccounts .contentUser {
@@ -155,19 +168,6 @@
   background-color: #E4E4E6;
 }
 
-
-.editAccounts .contentPhotoRecent {
-  display: flex;
-  display: -webkit-flex; /* Safari */
-  display: -moz-flex; /* mozilla */
-  align-items: center;
-  -webkit-align-items:center; /* Safari */
-  -moz-align-items:center; /* mozilla */
-  width: 65px;
-  height: 65px;
-  margin-left: 10px;
-}
-
 .editAccounts .contentPhoto {
   display: flex;
   display: -webkit-flex; /* Safari */
@@ -180,33 +180,12 @@
   margin-left: 10px;
 }
 
-.editAccounts .imgUserRecent {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  -moz-border-radius: 50%;
-  -webkit-border-radius: 50%;
-}
-
 .editAccounts .imgUser {
   width: 60px;
   height: 60px;
   border-radius: 50%;
   -moz-border-radius: 50%;
   -webkit-border-radius: 50%;
-}
-
-.editAccounts .contentDataRecent {
-  display: flex;
-  display: -webkit-flex; /* Safari */
-  display: -moz-flex; /* mozilla */
-  flex-direction:column;
-  -webkit-flex-direction:column; /* Safari */
-  -moz-flex-direction:column; /* mozilla */
-  justify-content: center;
-  -webkit-justify-content: center;
-  -moz-justify-content: center;
-  font-size: 14px;
 }
 
 .editAccounts .contentData {
@@ -221,16 +200,28 @@
   -moz-justify-content: center;
 }
 
+.editAccounts .searchResults {
+  height: 95%;
+  overflow-y: auto;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  flex-wrap: wrap;
+  align-content: flex-start;
+  -webkit-align-content: flex-start;
+  -moz-align-content: flex-start;
+}
+
 /*****************************************************
 ************ FIN PANTALLA DE BUSQUEDA ****************
 *****************************************************/
 
-
-
 /*****************************************************
 ********* INICIO PANTALLA PERFIL DE USUARIO **********
 *****************************************************/
-
 
 .editAccounts .contentProfile {
   width: 95%;
@@ -245,7 +236,6 @@
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
-
 }
 
 .editAccounts .contentPhotoProfile {
@@ -302,31 +292,31 @@
 }
 
 .editAccounts .inputDataUser {
-    border-radius: 2px;
-    -moz-border-radius: 2px;
-    -webkit-border-radius: 2px;
-    font-size: 16px;
-    padding: 5px;
-    margin: 5px 5px 5px 0px;
-    border: 1px solid #DBE2E5;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  font-size: 16px;
+  padding: 5px;
+  margin: 5px 5px 5px 0px;
+  border: 1px solid #DBE2E5;
 }
 
 .editAccounts .btnInputDataUser {
-    width: 150px;
-    border-radius: 2px;
-    -moz-border-radius: 2px;
-    -webkit-border-radius: 2px;
-    font-size: 14px;
-    padding: 6px;
-    margin: 5px 5px 5px 0px;
-    border: 1px solid #DBE2E5;
-    background-color: #DBE2E5;
-    color: #5C5F69;
+  width: 150px;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  font-size: 14px;
+  padding: 6px;
+  margin: 5px 5px 5px 0px;
+  border: 1px solid #DBE2E5;
+  background-color: #DBE2E5;
+  color: #5C5F69;
 }
 
 .editAccounts .btnInputDataUser:hover {
-    background-color: #eee;
-    cursor: pointer;
+  background-color: #eee;
+  cursor: pointer;
 }
 
 .editAccounts .listTypeUser {
@@ -361,32 +351,32 @@
 }
 
 .editAccounts .typeUsers {
-    display: flex;
-    display: -webkit-flex; /* Safari */
-    display: -moz-flex; /* mozilla */
-    flex-direction:column;
-    -webkit-flex-direction:column; /* Safari */
-    -moz-flex-direction:column; /* mozilla */
-    justify-content: space-between;
-    -webkit-justify-content: space-between;
-    -moz-justify-content: space-between;
-    position: absolute;
-    width: 148px;
-    height: 1px;
-    border-radius: 2px;
-    -moz-border-radius: 2px;
-    -webkit-border-radius: 2px;
-    font-size: 14px;
-    padding: 0px;
-    margin: 5px 5px 5px 0px;
-    border: 1px solid #DBE2E5;
-    background-color: white;
-    color: #5C5F69;
-    top:95px;
-    opacity: 0;
-    transition: all 0.2s ease-in-out;
-    -webkit-transition: all 0.2s ease-in-out;
-    cursor: pointer;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:column;
+  -webkit-flex-direction:column; /* Safari */
+  -moz-flex-direction:column; /* mozilla */
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  position: absolute;
+  width: 148px;
+  height: 1px;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  font-size: 14px;
+  padding: 0px;
+  margin: 5px 5px 5px 0px;
+  border: 1px solid #DBE2E5;
+  background-color: white;
+  color: #5C5F69;
+  top:95px;
+  opacity: 0;
+  transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;
+  cursor: pointer;
 }
 
 .editAccounts.verTipos .typeUsers{
@@ -433,11 +423,9 @@
 
 .editAccounts .btnBackTypes:hover {
   background-color: #eee;
-
 }
 
 .editAccounts .inputCheckbox {
-
   padding: 5px;
 }
 
@@ -457,10 +445,6 @@
   width: 125px;
   cursor: pointer;
 }
-
-
-
-
 
 .editAccounts .btnSave:hover {
   background-color: #809612;
@@ -506,28 +490,27 @@
 }
 
 .editAccounts .fileUpload {
-    position: relative;
-    overflow: hidden;
-    background-color: #eeeeee;
-    border-radius: 3px;
-    width: 172px;
-    height: 110px;
-    margin-bottom: 10px;
-    box-shadow: 0 0 2px rgba(0,0,0,.5) inset;
+  position: relative;
+  overflow: hidden;
+  background-color: #eeeeee;
+  border-radius: 3px;
+  width: 172px;
+  height: 110px;
+  margin-bottom: 10px;
+  box-shadow: 0 0 2px rgba(0,0,0,.5) inset;
 }
 
 .editAccounts .fileUpload input.upload {
-    position: absolute;
-    top: 0;
-    right: 0;
-    margin: 0;
-    padding: 0;
-    font-size: 20px;
-    cursor: pointer;
-    opacity: 0;
-    filter: alpha(opacity=0);
-    /*background-color: blue;*/
-    height: 110px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0;
+  padding: 0;
+  font-size: 20px;
+  cursor: pointer;
+  opacity: 0;
+  filter: alpha(opacity=0);
+  height: 110px;
 }
 
 .editAccounts .fileUpload2 {
@@ -549,7 +532,6 @@
   cursor: pointer;
   opacity: 0;
   filter: alpha(opacity=0);
-  /*background-color: blue;*/
   height: 50px;
 }
 
@@ -596,7 +578,6 @@
 
 /******* FIN ESTILO IMAGEN DE PERFIL *******/
 
-
 .editAccounts .contentMails {
   border-top: 2px solid #DBE2E5;
   margin-top: 5px;
@@ -604,31 +585,28 @@
 
 .editAccounts .mailList {
   max-height: 120px;
-  /*background-color: red;*/
   overflow-y: auto;
   height: initial;
 }
 
 .editAccounts .btnNewMail {
-    width: 140px;
-    border-radius: 2px;
-    -moz-border-radius: 2px;
-    -webkit-border-radius: 2px;
-    font-size: 14px;
-    padding: 5px;
-    margin-left: 30px;
-    margin-bottom: 10px;
-    border: 1px solid #DBE2E5;
-    background-color: #DBE2E5;
-    color: #5C5F69;
-
+  width: 140px;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  font-size: 14px;
+  padding: 5px;
+  margin-left: 30px;
+  margin-bottom: 10px;
+  border: 1px solid #DBE2E5;
+  background-color: #DBE2E5;
+  color: #5C5F69;
 }
 
 .editAccounts .btnNewMail:hover {
-    background-color: #eee;
-    cursor: pointer;
+  background-color: #eee;
+  cursor: pointer;
 }
-
 
 .editAccounts .contentIconMail {
   margin-right: 5px;
@@ -660,7 +638,7 @@
   margin-top: 10px;
 }
 
-.editAccounts .mailInstitutional {
+.editAccounts .mail {
   display: flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
@@ -671,7 +649,6 @@
   -webkit-align-items:center; /* Safari */
   -moz-align-items:center; /* mozilla */
   color: #3A3C44;
-
 }
 
 .editAccounts .dataMail {
@@ -686,25 +663,6 @@
   -moz-align-items:center; /* mozilla */
 }
 
-.editAccounts .mailPersonal {
-  display: flex;
-  display: -webkit-flex; /* Safari */
-  display: -moz-flex; /* mozilla */
-  flex-direction:row;
-  -webkit-flex-direction:row; /* Safari */
-  -moz-flex-direction:row; /* mozilla */
-  justify-content: space-between;
-  -webkit-justify-content: space-between;
-  -moz-justify-content: space-between;
-  align-items: center;
-  -webkit-align-items:center; /* Safari */
-  -moz-align-items:center; /* mozilla */
-  color: #3A3C44;
-  margin-top: 5px;
-  /*background-color: #EEEEEE;*/
-  padding: 5px;
-}
-
 .editAccounts .btnMailValidated {
   padding: 7px;
   background-color: #128C78;
@@ -713,7 +671,6 @@
   -webkit-border-radius:2px;
   border: none;
   color: white;
-
 }
 
 .editAccounts .btnMailNoValidated {
@@ -724,7 +681,6 @@
   -webkit-border-radius:2px;
   border: none;
   color: white;
-
 }
 
 .editAccounts .btnDeleteMail {
@@ -736,7 +692,6 @@
   border: none;
   color: white;
   cursor: pointer;
-
 }
 
 .editAccounts .btnWebMail {
@@ -748,7 +703,6 @@
   border: none;
   color: #5C5F69;
   cursor: pointer;
-
 }
 
 .editAccounts .btnForwardMail {
@@ -760,102 +714,11 @@
   border: none;
   color: white;
   cursor: pointer;
-
 }
-
-.editAccounts .hrMails {
-  color: red;
-  border:none;
-  border: 1px solid #DBE2E5;
-  margin-top: 5px;
-  margin-bottom: 5px;
-}
-
-.editAccounts .contentNewMailAndSave {
-  display: flex;
-  display: -webkit-flex; /* Safari */
-  display: -moz-flex; /* mozilla */
-  flex-direction:row;
-  -webkit-flex-direction:row; /* Safari */
-  -moz-flex-direction:row; /* mozilla */
-  align-items: center;
-  -webkit-align-items:center; /* Safari */
-  -moz-align-items:center; /* mozilla */
-  justify-content: flex-start;
-  -webkit-justify-content: flex-start;
-  -moz-justify-content: flex-start;
-  margin-top: 10px;
-
-  border-top: 2px solid #DBE2E5;
-}
-
-.editAccounts .contentNewMail {
-  display: flex;
-  display: -webkit-flex; /* Safari */
-  display: -moz-flex; /* mozilla */
-  flex-direction:row;
-  -webkit-flex-direction:row; /* Safari */
-  -moz-flex-direction:row; /* mozilla */
-  align-items: center;
-  -webkit-align-items:center; /* Safari */
-  -moz-align-items:center; /* mozilla */
-  justify-content:  flex-start;
-  -webkit-justify-content:flex-start;
-  -moz-justify-content: flex-start;
-  margin-top: 10px;
-
-}
-
-
-
-.editAccounts .inputMail {
-  background-color: #EEEEEE;
-  padding: 7px;
-  border-radius: 0px 2px 2px 0px;
-  -moz-border-radius: 0px 2px 2px 0px;
-  -webkit-border-radius: 0px 2px 2px 0px;
-  border: solid 1px #5C5F69;
-  font-size: 18px;
-  width: 1px;
-  opacity: 0;
-  transition: all 0.1s ease-in-out;
-  -webkit-transition: all 0.1s ease-in-out;
-}
-
-.editAccounts .btnOkMail {
-  padding: 7px;
-  background-color: #5C5F69;
-  border-radius: 0px 2px 2px 0px;
-  -moz-border-radius: 0px 2px 2px 0px;
-  -webkit-border-radius: 0px 2px 2px 0px;
-  border: none;
-  color: white;
-  cursor: pointer;
-  opacity: 0;
-  transition: all 0.1s ease-in-out;
-  -webkit-transition: all 0.1s ease-in-out;
-}
-
-.editAccounts.editarUsuario.newMail .inputMail {
-  opacity: 1;
-  width: 300px;
-  transition: all 0.1s ease-in-out;
-  -webkit-transition: all 0.1s ease-in-out;
-}
-
-.editAccounts.editarUsuario.newMail .btnOkMail {
-  opacity: 1;
-  transition: all 0.1s ease-in-out;
-  -webkit-transition: all 0.1s ease-in-out;
-}
-
-
-
 
 /*****************************************************
 ********** FIN PANTALLA PERFIL DE USUARIO ************
 *****************************************************/
-
 
 /*****************************************************
 ************* INICIO CAMBIO DE PANTALLAS *************
@@ -875,7 +738,6 @@
      -moz-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
        -o-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
           transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910); /* custom */
-
 }
 
 .editAccounts.editarUsuario .contentEditAccounts{
@@ -893,7 +755,6 @@
        -o-transition-timing-function: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
           transition-timing-function: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910); /* custom */
 }
-
 
 .editAccounts .contentSearchAccounts {
   position: absolute;

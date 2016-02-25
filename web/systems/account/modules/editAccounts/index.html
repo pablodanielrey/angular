@@ -4,23 +4,25 @@
         <div>
             <i class="fa fa-user"></i> Editar Cuentas
         </div>
-
     </div>
 
+<!-- *************** PANTALLA DE BUSCADA DE USUARIOS *********************** -->
     <div class="contentSearchAccounts">
 
         <div class="contentSearch">
 
+          <!-- ******* CONTENEDOR DE BUSQUEDA Y USUARIOS RECIENTES ********* -->
           <div class="contentSearchAndRecents">
 
             <div class="titleRecent">
               <i class="fa fa-search"></i> BUSCAR
             </div>
 
-            <div class="contentBtnSearch">
+            <div class="contentBtnSearch"> <!-- ***** INPUT DE BUSQUEDA **** -->
               <input class="inputSearch" type="text"></input>
             </div>
 
+              <!-- **** USUARIOS RECIENTES *** -->
               <div class="titleRecent">
                   <div class="contentRecentAndTrash">
                       <div>
@@ -32,6 +34,7 @@
                   </div>
               </div>
 
+              <!-- *** DIV CONTENEDORES DE LOS USUARIOS RECIENTES ****-->
               <div class="contentUserRecent" ng-click="view.style='editarUsuario'">
                   <div class="contentPhotoRecent">
                     <img class="imgUserRecent" src="img/pablosarmieto.jpg">
@@ -94,13 +97,14 @@
 
           </div>
 
+          <!-- ********* CONTENEDOR DE LOS RESULTADOS ECONTRADOS *********** -->
           <div class="contentSearchResults">
               <div class="titleRecent">
                 <i class="fa fa-search"></i> RESULTADOS ENCONTRADOS
               </div>
 
               <div class="searchResults">
-
+                  <!-- **** DIV CONTENEDORES DE LOS USUARIOS ENCONTRADOS ****-->
                   <div class="contentUser">
                     <div class="contentPhoto">
                       <img class="imgUser" src="img/emanuel.jpg">
@@ -325,10 +329,6 @@
 
                     </div>
                   </div>
-
-
-
-
 
               </div>
 
@@ -338,12 +338,12 @@
 
     </div>
 
+<!-- *************** PANTALLA DE EDICION DE USUARIOS *********************** -->
     <div class="contentEditAccounts">
-
 
         <div class="contentProfile">
 
-
+          <!-- *** CONTENEDOR DE PERFIL ****-->
           <div class="listSystems">
 
               <div class="contentProfileBasic">
@@ -423,7 +423,7 @@
 
           </div>
 
-
+          <!-- *** CONTENEDOR DE MAILS ****-->
           <div class="contentMails">
 
               <div class="titleMails">
@@ -433,49 +433,7 @@
 
               <div class="mailList">
 
-                  <div class="mailInstitutional">
-                      <div class="dataMail">
-                          <div class="contentIconMail"><i class="fa fa-envelope-o"></i></div>
-                          <div><input type="text" class="contentMailsUser" placeholder="Dirección de correo"></input></div>
-                      </div>
-                      <div class="actionMail">
-                      <button class="btnMailValidated" title="Correo confirmado"><i class="fa fa-check"></i></button>
-                      <button class="btnMailNoValidated" title="Correo sin confirmar"><i class="fa fa-exclamation-triangle"></i></button>
-                      <button class="btnForwardMail" title="Reenviar confimación"><i class="fa fa-repeat"></i></button>
-                      <button class="btnForwardMail" title="Enviado correo"><i class="fa fa-spinner fa-pulse"></i> Enviando correo </button>
-                      <button class="btnDeleteMail" title="Eliminar correo"><i class="fa fa-trash-o"></i></button>
-                      </div>
-                  </div>
-
-                  <div class="mailInstitutional">
-                      <div class="dataMail">
-                          <div class="contentIconMail"><i class="fa fa-envelope-o"></i></div>
-                          <div><input type="text" class="contentMailsUser" placeholder="Dirección de correo"></input></div>
-                      </div>
-                      <div class="actionMail">
-                      <button class="btnMailValidated" title="Correo confirmado"><i class="fa fa-check"></i></button>
-                      <button class="btnMailNoValidated" title="Correo sin confirmar"><i class="fa fa-exclamation-triangle"></i></button>
-                      <button class="btnForwardMail" title="Reenviar confimación"><i class="fa fa-repeat"></i></button>
-                      <button class="btnForwardMail" title="Enviado correo"><i class="fa fa-spinner fa-pulse"></i> Enviando correo </button>
-                      <button class="btnDeleteMail" title="Eliminar correo"><i class="fa fa-trash-o"></i></button>
-                      </div>
-                  </div>
-
-                  <div class="mailInstitutional">
-                      <div class="dataMail">
-                          <div class="contentIconMail"><i class="fa fa-envelope-o"></i></div>
-                          <div><input type="text" class="contentMailsUser" placeholder="Dirección de correo"></input></div>
-                      </div>
-                      <div class="actionMail">
-                      <button class="btnMailValidated" title="Correo confirmado"><i class="fa fa-check"></i></button>
-                      <button class="btnMailNoValidated" title="Correo sin confirmar"><i class="fa fa-exclamation-triangle"></i></button>
-                      <button class="btnForwardMail" title="Reenviar confimación"><i class="fa fa-repeat"></i></button>
-                      <button class="btnForwardMail" title="Enviado correo"><i class="fa fa-spinner fa-pulse"></i> Enviando correo </button>
-                      <button class="btnDeleteMail" title="Eliminar correo"><i class="fa fa-trash-o"></i></button>
-                      </div>
-                  </div>
-
-                  <div class="mailInstitutional">
+                  <div class="mail">
                       <div class="dataMail">
                           <div class="contentIconMail"><i class="fa fa-envelope-o"></i></div>
                           <div><input type="text" class="contentMailsUser" placeholder="Dirección de correo"></input></div>
@@ -490,7 +448,6 @@
                   </div>
 
               </div>
-
 
           </div>
 
@@ -504,6 +461,5 @@
 
 
     </div>
-
 
 </div>
