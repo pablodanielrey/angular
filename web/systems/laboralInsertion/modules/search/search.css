@@ -666,6 +666,7 @@ la pantalla contentBusines, sendBusines y sending no se muentran*/
 }
 
 .search .itemsFilters {
+  height: auto;
   display: flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */

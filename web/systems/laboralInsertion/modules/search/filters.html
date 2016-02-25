@@ -12,15 +12,12 @@
           <div class="itemsFilters">
             <div class="subItemsFilters">
                 <div class="textItemFilters"><i class="fa fa-calendar-o"></i> Fecha de Inscripción</div>
-                <select class="inputFilters">
-                    <option value="Todos">Todos</option>
-                    <option value="2016">2016</option>
-                    <option value="2015">2015</option>
-                    <option value="2014">2014</option>
+                <select class="inputFilters" ng-model="model.selectFilterDate" ng-options="option.name for option in view.filtersDate | orderBy: ['name']: true">
+                    <option value="">Todos</option>
                 </select>
             </div>
             <div>
-                <button class="btnItems"> Agregar <i class="fa fa-arrow-circle-right"></i></button>
+                <button class="btnItems" ng-click="addDateFilter()"> Agregar <i class="fa fa-arrow-circle-right"></i></button>
             </div>
           </div>
 
@@ -263,32 +260,12 @@
 
         <div class="listFiltersAssets">
 
-            <div class="itemsFilters">
+            <div class="itemsFilters" ng-repeat="filter in model.filters">
               <div class="subItemsFilters2">
-                  <div class="textItemFilters">Fecha de Inscripción</div>
-                  <div class="textItemFilters"><b>2016</b></div>
+                  <div class="textItemFilters">{{filter.descriptionType}}</div>
+                  <div class="textItemFilters"><b>{{filter.name}}</b></div>
               </div>
-              <div>
-                  <button class="btnItems2"> <i class="fa fa-trash"></i></button>
-              </div>
-            </div>
-
-            <div class="itemsFilters">
-              <div class="subItemsFilters2">
-                  <div class="textItemFilters">Carrera</div>
-                  <div class="textItemFilters"><b>Contador Público</b></div>
-              </div>
-              <div>
-                  <button class="btnItems2"> <i class="fa fa-trash"></i></button>
-              </div>
-            </div>
-
-            <div class="itemsFilters">
-              <div class="subItemsFilters2">
-                  <div class="textItemFilters">Oferta Laboral</div>
-                  <div class="textItemFilters"><b>Pasantía</b></div>
-              </div>
-              <div>
+              <div ng-click="removeFilter(filter)">
                   <button class="btnItems2"> <i class="fa fa-trash"></i></button>
               </div>
             </div>
