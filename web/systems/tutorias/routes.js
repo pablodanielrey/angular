@@ -10,7 +10,7 @@ app.config(['$routeProvider', function($routeProvider) {
      controller: 'CreateTutoringCtrl'
   })
 
-  .when('/myTurorings', {
+  .when('/myTutorings', {
      templateUrl: '/systems/tutorias/modules/myTutorings/index.html',
      controller: 'MyTutoringsCtrl'
   })

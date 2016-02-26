@@ -5,6 +5,7 @@ app.controller('MenuCtrl', ["$rootScope", '$scope','$location',
   function ($rootScope, $scope, $location) {
 
     $scope.selectCreateTutoring = function() {
+
       $location.path('/createTutoring');
     }
 
