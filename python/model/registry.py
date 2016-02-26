@@ -26,3 +26,6 @@ class Registry:
     def get(self, instance, name):
         setion = Registry._getSectionName(instance)
         return self.preferences[section][name]
+
+    def get(self, name):
+        return self.preferences['DEFAULT'][name]
