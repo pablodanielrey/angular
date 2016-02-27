@@ -165,7 +165,7 @@
 .search .btnUserSelect {
   margin: 20px;
   padding: 10px;
-  width: 200px;
+  width: 230px;
   font-size: 14px;
   background-color: #DBE2E5;
   border: none;
@@ -181,6 +181,108 @@
 *********** FIN PANTALLA RESULTADOS *************
 ************************************************/
 
+
+/************************************************
+***** INICIO PANTALLA SELECCIONADOS *************
+************************************************/
+
+.search .selected {
+  position: absolute ;
+  background-color: rgba(0, 0, 0, 0.9);;
+  width: 100%;
+  height: 100%;
+  top:0 !important;
+  transform: translate3d(0,-100%,0);
+}
+
+.search.screenSelected .selected {
+  position: absolute ;
+  background-color: rgba(0, 0, 0, 0.9);;
+  width: 100%;
+  height: 100%;
+  top:0 !important;
+  transform: translate3d(0,0,0);
+  transition: all 0.4s ease-in-out;
+}
+
+.search .contentSeleted {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:column;
+  -webkit-flex-direction:column; /* Safari */
+  -moz-flex-direction:column; /* mozilla */
+  position: absolute ;
+  background-color: #eee;
+  padding: 20px;
+  margin: 20px;
+  width: 79%;
+  height: 86%;
+  transform: translate3d(0,-150%,0);
+  transition: all 0.4s ease-in-out;
+
+}
+
+.search.screenSelected .contentSeleted {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+
+  position: absolute ;
+  background-color: #eee;
+  padding: 20px;
+  margin: 20px;
+  width: 79%;
+  top:0 !important;
+  transform: translate3d(0,0,0);
+  transition: all 0.4s ease-in-out;
+
+}
+
+.search .headerSeleted {
+  width: 940px;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+}
+
+.search .searchContainerSelected{
+  background-color:white;
+  -webkit-box-shadow: 1px 1px 5px #5c5f69;
+  -moz-box-shadow: 5px 5px 5px #5c5f69;
+  border-radius:2px 2px 0px 2px;
+  -webkit-border-radius:2px 2px 0px 2px;
+  -moz-border-radius:2px 2px 0px 2px;
+  width: 900px;
+  height: 450px;
+  margin: 0px 20px 0px 20px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+
+.search .btnDeleteInsciption {
+  width: 75px;
+  height: 30px;
+  border:none;
+  background-color:#5C5F69;
+}
+
+
+
+/************************************************
+***** FIN PANTALLA SELECCIONADOS *************
+************************************************/
+
+
+
+
 /************************************************
 ********** INICIO PANTALLA EMPRESAS *************
 ************************************************/
@@ -194,10 +296,10 @@
 
 }
 
-.search.screenBussines.screenSelectBusiness .business,
-.search.screenBussines.screenSendBusiness .business,
-.search.screenBussines.screenSending .business,
-.search.screenBussines.screenSent .business {
+.search.screenSelected.screenSelectBusiness .business,
+.search.screenSelected.screenSendBusiness .business,
+.search.screenSelected.screenSending .business,
+.search.screenSelected.screenSent .business {
   position: absolute ;
   background-color: rgba(0, 0, 0, 0.9);;
   width: 100%;
@@ -224,7 +326,7 @@
 
 }
 
-.search.screenBussines .contentBusines, .sendBusines, .sending, .sent {
+.search.screenSelected .contentBusines, .sendBusines, .sending, .sent {
   transform: translate3d(0,0,0);
   transition: all 0.4s ease-in-out;
 }
@@ -299,6 +401,7 @@
   -webkit-border-radius:2px 2px 0px 2px;
   -moz-border-radius:2px 2px 0px 2px;
   cursor: pointer;
+  height: 50px;
 }
 
 .search .infoBussines:hover {
@@ -311,10 +414,11 @@
   display: flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
-  flex-direction:row;
-  -webkit-flex-direction:row; /* Safari */
-  -moz-flex-direction:row; /* mozilla */
+  flex-direction:column;
+  -webkit-flex-direction:column; /* Safari */
+  -moz-flex-direction:column; /* mozilla */
   margin: 10px;
+  margin-bottom: 0px;
   background-color: white;
   padding: 5px;
   -webkit-box-shadow: 1px 1px 5px #5c5f69;
@@ -322,7 +426,74 @@
   border-radius:2px 2px 0px 2px;
   -webkit-border-radius:2px 2px 0px 2px;
   -moz-border-radius:2px 2px 0px 2px;
+  height: 190px;
 
+}
+
+.search .sendBusines {
+}
+
+.search .contentMailBusines{
+    max-height: 75px;
+    overflow-y: auto;
+    padding: 5px;
+}
+
+.search .addMail {
+  padding: 5px;
+}
+
+.search .mailBussines {
+  height: 25px;
+}
+
+.search .inputMail {
+  width: 200px;
+  font-size: 14px;
+  padding: 3px;
+  background-color: #EEE;
+  border: none;
+  border: 1px solid #dbe2e5;
+}
+
+.search .btnAddMail {
+  font-size: 14px;
+  padding: 3px;
+  background-color: #275276;
+  border: none;
+  border: 1px solid #dbe2e5;
+  color: white;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.search .btnAddMail:hover {
+  background-color: #0066A6;
+}
+
+.search .textsendList {
+  font-size: 12px;
+  color:grey;
+}
+
+.search .btnDeleteMail {
+  margin-left: 5px;
+  color: white;
+  cursor: pointer;
+  background-color: #E43E46;
+  padding: 3px;
+  border: none;
+  border-radius: 3px;
+}
+
+.search .contentInfoBussines {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  margin-bottom: 5px;
 }
 
 .search .textBussines {
@@ -346,35 +517,35 @@
 
 /*Cuando esta la pantalla de seleccion de empresas:
 la pantalla sendBusines, sending y sent no se muentran*/
-.search.screenBussines.screenSelectBusiness .sendBusines,
-.search.screenBussines.screenSelectBusiness .sending,
-.search.screenBussines.screenSelectBusiness .sent {
+.search.screenSelected.screenSelectBusiness .sendBusines,
+.search.screenSelected.screenSelectBusiness .sending,
+.search.screenSelected.screenSelectBusiness .sent {
   display: none;
 }
 
 
 /*Cuando esta la pantalla lista para enviar a la empresa elejida,
 la pantalla contentBusines, sendBusines y sent no se muentran*/
-.search.screenBussines.screenSendBusiness .contentBusines,
-.search.screenBussines.screenSendBusiness .sending,
-.search.screenBussines.screenSendBusiness .sent {
+.search.screenSelected.screenSendBusiness .contentBusines,
+.search.screenSelected.screenSendBusiness .sending,
+.search.screenSelected.screenSendBusiness .sent {
   display: none;
 }
 
 
 /*Cuando esta la pantalla enviando,
 la pantalla contentBusines, sendBusines y sent no se muentran*/
-.search.screenBussines.screenSending .contentBusines,
-.search.screenBussines.screenSending .sendBusines,
-.search.screenBussines.screenSending .sent {
+.search.screenSelected.screenSending .contentBusines,
+.search.screenSelected.screenSending .sendBusines,
+.search.screenSelected.screenSending .sent {
   display: none;
 }
 
 /*Cuando esta la pantalla enviado,
 la pantalla contentBusines, sendBusines y sending no se muentran*/
-.search.screenBussines.screenSent .contentBusines,
-.search.screenBussines.screenSent .sendBusines,
-.search.screenBussines.screenSent .sending {
+.search.screenSelected.screenSent .contentBusines,
+.search.screenSelected.screenSent .sendBusines,
+.search.screenSelected.screenSent .sending {
   display: none;
 }
 
@@ -412,6 +583,12 @@ la pantalla contentBusines, sendBusines y sending no se muentran*/
 
 
 .search .contentFilters {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:column;
+  -webkit-flex-direction:column; /* Safari */
+  -moz-flex-direction:column; /* mozilla */
   position: absolute ;
   background-color: #eee;
   padding: 20px;
@@ -422,6 +599,10 @@ la pantalla contentBusines, sendBusines y sending no se muentran*/
 }
 
 .search.screenFilters .contentFilters {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+
   position: absolute ;
   background-color: #eee;
   padding: 20px;
@@ -432,6 +613,185 @@ la pantalla contentBusines, sendBusines y sending no se muentran*/
   transition: all 0.4s ease-in-out;
 }
 
+
+.search .subContentFilters {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+
+}
+
+
+.search .contentFiltersLeft {
+  width: 50%;
+  height: 450px;
+  background-color: #fff;
+  padding: 20px;
+  margin: 5px;
+  -webkit-box-shadow: 1px 1px 5px #5c5f69;
+  -moz-box-shadow: 5px 5px 5px #5c5f69;
+  border-radius:2px 2px 0px 2px;
+  -webkit-border-radius:2px 2px 0px 2px;
+  -moz-border-radius:2px 2px 0px 2px;
+}
+
+.search .contentFiltersRight {
+  width: 30%;
+  height: 450px;
+  background-color: #fff;
+  padding: 20px;
+  margin: 5px;
+  -webkit-box-shadow: 1px 1px 5px #5c5f69;
+  -moz-box-shadow: 5px 5px 5px #5c5f69;
+  border-radius:2px 2px 0px 2px;
+  -webkit-border-radius:2px 2px 0px 2px;
+  -moz-border-radius:2px 2px 0px 2px;
+}
+
+.search .iconArrows {
+  margin: 20px;
+  color:#5C5F69;
+}
+
+
+.search .titleFilters {
+  background-color: #DBE2E5;
+  padding: 5px;
+}
+
+.search .itemsFilters {
+  height: auto;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  border: 1px solid #DBE2E5;
+  margin-top: 10px;
+  padding-left: 5px;
+  background-color: #eee;
+
+}
+
+.search .subItemsFilters {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+}
+
+.search .btnItems {
+  border:none;
+  background-color: #DBE2E5;
+  height: 25px;
+  width: 100px;
+  font-size: 16px;
+  cursor:pointer;
+
+}
+
+.search .btnItems:hover {
+  background-color:#0066A6;
+  color:white;
+}
+
+.search .textItemFilters {
+  width: 200px !important;
+
+}
+
+.search .inputFilters {
+  border: none;
+  height: 25px;
+
+  background-color: #eee;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 5px;
+  margin-left: 5px;
+}
+
+.search .inputCant {
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  height: 25px;
+  background-color: #FFF;
+  margin-left: 10px;
+  padding-left: 5px;
+  width: 50px;
+}
+
+.search .subContentFilters2 {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:column;
+  -webkit-flex-direction:column; /* Safari */
+  -moz-flex-direction:column; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+
+}
+
+.search .btnItems2 {
+  border:none;
+  background-color: #DBE2E5;
+  height: 50px;
+  width: 100px;
+  font-size: 16px;
+  cursor:pointer;
+
+}
+
+.search .btnItems2:hover {
+  background-color: #E43E46;
+  color:white;
+}
+
+.search .listFiltersAssets {
+  overflow-y: auto;
+  height: 400px;
+}
+
+
+
+.search .btnSend3 {
+  margin: 10px;
+  padding: 10px;
+  width: 200px;
+  font-size: 14px;
+  background-color: #275276;
+  cursor: pointer;
+  border: none;
+  color: white;
+  -webkit-box-shadow: 1px 1px 5px #5c5f69;
+  -moz-box-shadow: 5px 5px 5px #5c5f69;
+  border-radius:2px 2px 0px 2px;
+  -webkit-border-radius:2px 2px 0px 2px;
+  -moz-border-radius:2px 2px 0px 2px;
+}
+
+.search .btnSend3:hover {
+  background-color: #0066A6;
+  color:white;
+}
 
 
 

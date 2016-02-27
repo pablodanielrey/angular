@@ -16,5 +16,16 @@ class Registry:
         self.file = '{}{}{}'.format(self.home, self.separator, 'registry.cfg')
         self.preferences.read(self.file)
 
-    def get(self, section, name):
+    @staticmethod
+    def _getSectionName(instance):
+        if instance.__class__.__name__ == 'type':
+            return '{}.{}'.format(instance.__module__, self.__name__)
+        else:
+            return '{}.{}'.format(instance.__class__.__module__, self.__class__.__name__)
+
+    def get(self, instance, name):
+        setion = Registry._getSectionName(instance)
         return self.preferences[section][name]
+
+    def get(self, name):
+        return self.preferences['DEFAULT'][name]

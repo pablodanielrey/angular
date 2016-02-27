@@ -31,6 +31,18 @@ class UserPasswordDAO:
         return up
 
     @staticmethod
+    def findByUserPassword(con, username, password):
+        cur = con.cursor()
+        try:
+            cur.execute('select * from credentials.user_password where username = %s and password = %s', (username, password))
+            if cur.rowcount <= 0:
+                return None
+            return UserPasswordDAO._fromResult(cur.fetchone())
+
+        finally:
+            cur.close()
+
+    @staticmethod
     def findByUsername(con, username):
         '''
             Obtiene los datos de las credenciales de un usuario

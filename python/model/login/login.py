@@ -2,27 +2,24 @@
 import inject
 import re
 
-from model.config import Config
-from model.credentials.credentials import UserPassword
+from model.registry import Registry
+from model.users.users import UserPassword, UserPasswordDAO, User, UserDAO
+
 from model.session import Session
 from model.mail.mail import Mail
-from model.users.users import Users
+
 
 
 class Login:
 
-    config = inject.attr(Config)
+    config = inject.attr(Registry)
     session = inject.attr(Session)
-    userPassword = inject.attr(UserPassword)
+    userPassword = inject.attr(UserPasswordDAO)
     users = inject.attr(Users)
     mail = inject.attr(Mail)
 
     def login(self, con, username, password):
-        credentials = {
-            'username': username,
-            'password': password
-        }
-        rdata = self.userPassword.findUserPassword(con, credentials)
+        rdata = self.userPassword.findByUserPassword(con, username, password)
         if rdata is None:
             return None
 
