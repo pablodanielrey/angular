@@ -27,14 +27,14 @@ if __name__ == '__main__':
 
         if(office.name):
             print("GRUPO: " + office.name)
-            
+
         for userId in office.users:
           userInfo = users.UserPasswordDAO.findByUserId(con, userId)
-         
+
           for userData in userInfo:
               if userData.username and userData.password:
                   print("USUARIO: " + userData.username)
-                  cmd = "NET user " + userData.username + " " + userData.password + " /add /passwordreq:yes" 
+                  cmd = "NET user " + userData.username + " " + userData.password + " /add /passwordreq:yes"
                   if(sys.version_info.major == 3) and (sys.version_info.minor > 4):
                     cp = subprocess.run(cmd, shell=True)
                   else:
@@ -42,10 +42,3 @@ if __name__ == '__main__':
 
     finally:
         connection.closeConnection(con)
-             
-
-
-    
-    
-
-

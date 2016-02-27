@@ -2,6 +2,10 @@ import ldap3
 import logging
 
 
+class Connection:
+
+
+
 def getConnection():
     f = open('/tmp/pass.txt')
     try:

@@ -5,7 +5,7 @@
     cat /tmp/archivo.csv | PYTHONPATH="../../../python/model" python3 importStudents.py
 '''
 
-from connection import connection
+from model.connection import connection
 import sys
 
 if __name__ == '__main__':

@@ -11,6 +11,9 @@ if __name__ == '__main__':
     logging.getLogger().setLevel(logging.INFO)
 
     import sys
+    logging.info('script viejo, queda como referencia')
+    sys.exit(1)
+
     dni = sys.argv[1]
     name = sys.argv[2]
     name1 = sys.argv[3]

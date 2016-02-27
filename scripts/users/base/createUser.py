@@ -2,12 +2,12 @@
 '''
     Crea un usuario dentro de la base de datos.
 
-    PYTHONPATH="../../../python/model" python3 createUser.py dni name lastname
+    PYTHONPATH="../../../python" python3 createUser.py dni name lastname
 
     sin email ni nada adicional.
 '''
-from connection import connection
-from users import users
+from model.connection import connection
+from model.users import users
 import systems
 import logging
 
@@ -30,7 +30,7 @@ def generatePassword(con, uid):
     return 1
 
 
-def createUser(con, dni, name, lastname):
+def createUser(con, dni, name, lastname, password=None):
 
     u = users.UserDAO.findByDni(con, dni)
     if u is not None:
@@ -47,8 +47,32 @@ def createUser(con, dni, name, lastname):
     up = users.UserPassword()
     up.userId = uid
     up.username = dni
-    up.password = '{}-autogenerado'.format(dni)
+    if password is None:
+        up.password = '{}-autogenerado'.format(dni)
+    else:
+        up.password = password
     users.UserPasswordDAO.persist(con, up)
+
+    return uid
+
+def showUserInfo(con, dni):
+    import pprint
+    u = users.UserDAO.findByDni(con, dni)
+    if u is None:
+        logging.info('No existe ese usuario dentro de la base de datos')
+        return
+
+    (uid, version) = u
+    u = users.UserDAO.findById(con, uid)
+    logging.info(pprint.pformat(u.__dict__))
+
+    ups = users.UserPasswordDAO.findByUserId(con, u.id)
+    for up in ups:
+        logging.info(pprint.pformat(up.__dict__))
+
+    emails = users.MailDAO.findAll(con, u.id)
+    for e in emails:
+        logging.info(pprint.pformat(e.__dict__))
 
 
 if __name__ == '__main__':
