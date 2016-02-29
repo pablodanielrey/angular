@@ -9,23 +9,27 @@ import logging
 
 class Registry:
 
-    def __init__(self):
+    class SectionRegistry:
+        ''' registro que saca los datos siempre de la misma sección '''
+        def __init__(self, registry, section):
+            self.registry = registry
+            self.section = section
+
+        def get(self, name):
+            return self.registry._get(name, self.section)
+
+    def __init__(self, name='registry.cfg'):
         self.home = home = os.path.expanduser("~")
         self.separator = os.path.sep
         self.preferences = configparser.ConfigParser()
-        self.file = '{}{}{}'.format(self.home, self.separator, 'registry.cfg')
+        self.file = '{}{}{}'.format(self.home, self.separator, name)
         self.preferences.read(self.file)
 
-    @staticmethod
-    def _getSectionName(instance):
-        if instance.__class__.__name__ == 'type':
-            return '{}.{}'.format(instance.__module__, self.__name__)
-        else:
-            return '{}.{}'.format(instance.__class__.__module__, self.__class__.__name__)
-
-    def get(self, instance, name):
-        setion = Registry._getSectionName(instance)
+    def _get(self, name, section='DEFAULT'):
         return self.preferences[section][name]
 
+    def getRegistry(self, section):
+        return self.SectionRegistry(self, section)
+
     def get(self, name):
-        return self.preferences['DEFAULT'][name]
+        return self._get(name, 'DEFAULT')

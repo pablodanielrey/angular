@@ -2,11 +2,11 @@
 '''
     Crea un alumno en la base de datos.
 
-    PYTHONPATH="../../../python/model" python3 createStudent.py dni name lastname legajo
+    PYTHONPATH="../../../python" python3 createStudent.py dni name lastname legajo
 '''
 
-from connection import connection
-from users import users
+from model.connection import connection
+from model.users import users
 import systems
 import logging
 

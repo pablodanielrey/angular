@@ -7,9 +7,9 @@
 
 '''
 
+from model.connection.connection import Connection
 import sys
 import inject
-from connection.connection import Connection
 
 if __name__ == '__main__':
 

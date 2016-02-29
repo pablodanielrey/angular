@@ -2,11 +2,11 @@
 '''
     Setea los sistemas del usuario especificado mediante dni
 
-    PYTHONPATH="../../../python/model" python3 setSystems.py dni
+    PYTHONPATH="../../../python" python3 setSystems.py dni
 
 '''
-from connection import connection
-from users import users
+from model.connection import connection
+from model.users import users
 import systems
 import logging
 

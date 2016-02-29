@@ -3,15 +3,15 @@
     Genera claves para la gente que no tiene
     forma de invocacón de ejemplo:
 
-    PYTHONPATH="../../../python/model" python3 generatePasswords.py
+    PYTHONPATH="../../../python" python3 generatePasswords.py
 
 '''
 
-from users import users
+from model.users import users
+from model.connection.connection import Connection
 import sys
 import inject
 import logging
-from connection.connection import Connection
 
 if __name__ == '__main__':
 

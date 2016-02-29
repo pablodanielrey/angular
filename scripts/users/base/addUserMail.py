@@ -4,12 +4,12 @@
     Lo agrega como CONFIRMADO!!! ojo
     Forma de invocación:
 
-        PYTHONPATH="../../../python/model" python3 addUserMail.py dni cuenta-de-email
+        PYTHONPATH="../../../python" python3 addUserMail.py dni cuenta-de-email
 
 '''
-from connection import connection
+from model.connection import connection
+from model.users import users
 import createUser
-from users import users
 import systems
 import logging
 
@@ -20,6 +20,12 @@ def createMail(con, dni, email):
         return
 
     (uid, version) = u
+
+    emails = users.MailDAO.findAll(con, uid)
+    for e in emails:
+        if e.email == email:
+            logging.warn('Ya tiene el email {} configurado'.format(email))
+            return
 
     mail = users.Mail()
     mail.userId = uid

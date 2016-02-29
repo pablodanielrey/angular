@@ -6,7 +6,7 @@
 import logging
 import datetime
 import uuid
-from connection.connection import Connection
+from model.connection.connection import Connection
 
 
 class UserPassword:
@@ -167,6 +167,16 @@ class MailDAO:
             else:
                 params = mail.__dict__
                 cur.execute('update profile.mails set user_id = %(userId)s, email = %(email)s, confirmed = %(confirmed)s, hash = %(hash)s where id = %(id)s', params)
+
+        finally:
+            cur.close()
+
+    @staticmethod
+    def delete(con, mid):
+        ''' Elimina el email dado por el id '''
+        cur = con.cursor()
+        try:
+            cur.execute('delete from profile.mails where id = %s', (mid,))
 
         finally:
             cur.close()
