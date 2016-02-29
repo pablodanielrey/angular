@@ -140,7 +140,6 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     Chequea si una inscripcion esta seleccionado para ser enviado a una empresa.
   */
   $scope.isSelected = function(i) {
-    console.log(i);
     if(i) return i.selected;
   }
 
@@ -311,7 +310,8 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
   }
 
   $scope.initialize = function() {
-
+    // TODO: hay que sacar el return, lo puse para que no cargue nada
+    return;
     // me registro al evento de envío de mails a las empresas.
     $wamp.subscribe('system.laboralInsertion.COMPANYSENDED', $scope.mailToCompanySent);
 
