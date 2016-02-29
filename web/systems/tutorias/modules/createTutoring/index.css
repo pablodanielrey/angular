@@ -339,6 +339,14 @@ padding: 10px;
 
 }
 
+.createTutoring .selectSituacion {
+  background-color: white;
+  font-size: 15px;
+  padding: 5px;
+  border: 1px solid #DBE2E5;
+  border: none;
+}
+
 
 
 /******************* PANTALLA RESULTADOS DE BUSQUEDA *******************/
