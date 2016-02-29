@@ -16,8 +16,10 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     companies: [],
     company: null,
     emailAddToCompany: '',
-    emails: []
+    emails: [],
+    filters: []
   };
+
 
   $scope.getCurrentScreen = function() {
     return $scope.model.currentScreen;
@@ -27,8 +29,9 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     $scope.model.currentScreen = "screenFilters";
   }
 
-  $scope.selectInscriptions = function() {
+  $scope.selectInscriptions = function(filters) {
     $scope.model.currentScreen = "";
+    $scope.model.filters = filters;
   }
 
   $scope.viewSelected = function() {
@@ -337,6 +340,10 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     }, function(err) {
       console.log(err);
     });
+  }
+
+  $scope.search = function() {
+    console.log($scope.model.filters);
   }
 
   $rootScope.$on('$viewContentLoaded', function(event) {

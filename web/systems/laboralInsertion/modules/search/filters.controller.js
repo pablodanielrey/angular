@@ -7,7 +7,6 @@ FiltersCtrl.$inject = ['$rootScope','$scope'];
 function FiltersCtrl($rootScope, $scope) {
 
   $scope.model = {
-    filters: [],
     selectFilterDate: null,
     selectFilterDegree: null,
     selectFilterLaboral: null,
@@ -22,7 +21,8 @@ function FiltersCtrl($rootScope, $scope) {
     beginAverageWithFails: 0,
     endAverageWithFails: 10,
     beginAverageWithoutFails: 0,
-    endAverageWithoutFails: 10
+    endAverageWithoutFails: 10,
+    filters: []
   }
 
   $scope.view = {
@@ -172,6 +172,7 @@ function FiltersCtrl($rootScope, $scope) {
     }
     var l = $scope.model.selectFilterLanguage;
     l.nivel = $scope.model.selectFilterLanguageNivel.name;
+    l.value = l.value + "-" + $scope.model.selectFilterLanguageNivel.value;
     $scope.model.filters.push(l);
     var i = $scope.view.filtersLanguage.indexOf($scope.model.selectFilterLanguage);
     $scope.view.filtersLanguage.splice(i,1);
@@ -180,8 +181,7 @@ function FiltersCtrl($rootScope, $scope) {
   function addCountCathedra() {
     var b = $scope.model.beginCountCathedra;
     var e = $scope.model.endCountCathedra;
-    var v = b + " - " + e;
-    var filter = {type:"filterCountCathedra", descriptionType:'Cantidad de Materias', name: v , value: v};
+    var filter = {type:"filterCountCathedra", descriptionType:'Cantidad de Materias', name: b + " - " + e , value: b + "-" + e};
     $scope.model.filters.push(filter);
     $scope.view.enabledFilterCountCathedra = false;
   }
@@ -189,8 +189,7 @@ function FiltersCtrl($rootScope, $scope) {
   function addAverageWithFails() {
     var b = $scope.model.beginAverageWithFails;
     var e = $scope.model.endAverageWithFails;
-    var v = b + " - " + e;
-    var filter = {type:"filterAverageWithFails", descriptionType:'Promedio con aplazos', name: v , value: v};
+    var filter = {type:"filterAverageWithFails", descriptionType:'Promedio con aplazos', name: b + " - " + e , value: b + "-" + e};
     $scope.model.filters.push(filter);
     $scope.view.enabledFilterAverageWithFails = false;
   }
@@ -198,8 +197,7 @@ function FiltersCtrl($rootScope, $scope) {
   function addAverageWithoutFails() {
     var b = $scope.model.beginAverageWithoutFails;
     var e = $scope.model.endAverageWithoutFails;
-    var v = b + " - " + e;
-    var filter = {type:"filterAverageWithoutFails", descriptionType:'Promedio sin aplazos', name: v , value: v};
+    var filter = {type:"filterAverageWithoutFails", descriptionType:'Promedio sin aplazos', name: b + " - " + e , value: b + "-" + e};
     $scope.model.filters.push(filter);
     $scope.view.enabledFilterAverageWithoutFails = false;
   }
