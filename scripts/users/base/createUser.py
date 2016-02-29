@@ -6,6 +6,7 @@
 
     sin email ni nada adicional.
 '''
+from model.registry import Registry
 from model.connection import connection
 from model.users import users
 import systems
@@ -90,7 +91,8 @@ if __name__ == '__main__':
     import inject
     inject.configure()
 
-    conn = inject.instance(connection.Connection)
+    reg = inject.instance(Registry)
+    conn = connection.Connection(reg.getRegistry('dcsys'))
     con = conn.get()
     try:
         createUser(con, dni, name, lastname)
