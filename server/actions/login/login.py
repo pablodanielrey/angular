@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
-import psycopg2
 import inject
 import logging
 
-from model.config import Config
-from model.login import Login
+from model.login.login import Login
+from model.login.session import SessionDAO
 from model.profiles import Profiles
-from model.session import Session
 
 import asyncio
 from asyncio import coroutine
@@ -19,7 +17,8 @@ class LoginWamp(ApplicationSession):
         logging.debug('instanciando')
         ApplicationSession.__init__(self, config)
 
-        self.serverConfig = inject.instance(Config)
+        reg = inject.instance(Registry)
+        self.conn = connection.Connection(reg.getRegistry('dcsys'))
         self.loginModel = inject.instance(Login)
         self.profiles = inject.instance(Profiles)
         self.session = inject.instance(Session)
@@ -35,30 +34,23 @@ class LoginWamp(ApplicationSession):
         yield from self.register(self.changePasswordWithHash_async, 'system.password.changePasswordWithHash')
         yield from self.register(self.checkProfileAccess_async, 'system.profiles.checkProfileAccess')
 
-    def _getDatabase(self):
-        host = self.serverConfig.configs['database_host']
-        dbname = self.serverConfig.configs['database_database']
-        user = self.serverConfig.configs['database_user']
-        passw = self.serverConfig.configs['database_password']
-        return psycopg2.connect(host=host, dbname=dbname, user=user, password=passw)
-
     '''
         Chequea que el usuario logeado en la sesion sid tenga alguno de los perfiles enviados en la lista de perfiles
     '''
     def checkProfileAccess(self, sid, roles):
-        con = self._getDatabase()
+        con = self.conn.get()
         try:
             r = self.profiles._checkAccessWithCon(con, sid, roles)
             return r
 
         finally:
-            con.close()
+            self.conn.put(con)
 
     '''
         valida que la session sid exista
     '''
     def validateSession(self, sid):
-        con = self._getDatabase()
+        con = self.conn.get()
         try:
             self.session._findSession(con, sid)
             return True
@@ -68,13 +60,13 @@ class LoginWamp(ApplicationSession):
             return False
 
         finally:
-            con.close()
+            self.conn.put(con)
 
     '''
         Genera el hash para reseteo de la clave
     '''
     def generateResetPasswordHash(self, username):
-        con = self._getDatabase()
+        con = self.conn.get()
         try:
             hash = self.loginModel.generateResetPasswordHash(con, username)
             con.commit()
@@ -85,13 +77,13 @@ class LoginWamp(ApplicationSession):
             return None
 
         finally:
-            con.close()
+            self.conn.put(con)
 
     '''
         cambia la clave del usuario determinado por el hash pasado como parámetro
     '''
     def changePassword(self, sid, username, password):
-        con = self._getDatabase()
+        con = self.conn.get()
         try:
             r = self.loginModel.changePassword(con, sid, username, password)
             con.commit()
@@ -102,13 +94,13 @@ class LoginWamp(ApplicationSession):
             return False
 
         finally:
-            con.close()
+            self.conn.put(con)
 
     '''
         cambia la clave del usuario determinado por el hash pasado como parámetro
     '''
     def changePasswordWithHash(self, username, password, hhash):
-        con = self._getDatabase()
+        con = self.conn.get()
         try:
             r = self.loginModel.changePasswordWithHash(con, username, password, hhash)
             con.commit()
@@ -119,13 +111,13 @@ class LoginWamp(ApplicationSession):
             return False
 
         finally:
-            con.close()
+            self.conn.put(con)
 
     '''
         Loguea al usuario dentro del sistema y genera una sesion
     '''
     def login(self, username, password):
-        con = self._getDatabase()
+        con = self.conn.get()
         try:
             sid = self.loginModel.login(con, username, password)
             con.commit()
@@ -136,13 +128,13 @@ class LoginWamp(ApplicationSession):
             return None
 
         finally:
-            con.close()
+            self.conn.put(con)
 
     '''
         Elimina la sesion de usuario identificada por sid
     '''
     def logout(self, sid):
-        con = self._getDatabase()
+        con = self.conn.get()
         try:
             self.loginModel.logout(con, sid)
             con.commit()
@@ -153,7 +145,7 @@ class LoginWamp(ApplicationSession):
             return False
 
         finally:
-            con.close()
+            self.conn.put(con)
 
     @coroutine
     def generateResetPasswordHash_async(self, username):

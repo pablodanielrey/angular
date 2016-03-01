@@ -5,7 +5,7 @@ import re
 from model.registry import Registry
 from model.users.users import UserPassword, UserPasswordDAO, User, UserDAO
 
-from model.session import Session
+from model.login.session import SessionDAO
 from model.mail.mail import Mail
 
 
@@ -13,7 +13,7 @@ from model.mail.mail import Mail
 class Login:
 
     config = inject.attr(Registry)
-    session = inject.attr(Session)
+    session = inject.attr(SessionDAO)
     userPassword = inject.attr(UserPasswordDAO)
     users = inject.attr(Users)
     mail = inject.attr(Mail)
