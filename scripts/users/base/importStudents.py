@@ -6,14 +6,15 @@
 '''
 
 from model.connection import connection
+from model.registry import Registry
 import sys
 
 if __name__ == '__main__':
 
     import inject
     inject.configure()
-
-    conn = inject.instance(connection.Connection)
+    r = inject.instance(Registry)
+    conn = connection.Connection(r.getRegistry('dcsys'))
     con = conn.get()
     try:
         import createStudent
