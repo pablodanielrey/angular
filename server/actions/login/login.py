@@ -36,7 +36,7 @@ class LoginWamp(ApplicationSession):
         try:
             if len(self.session.findById(con, [sid])) > 0:
                 return True
-            else
+            else:
                 return False
 
         except Exception as e:
