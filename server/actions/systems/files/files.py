@@ -18,7 +18,7 @@ class FilesWamp(ApplicationSession):
         ApplicationSession.__init__(self, config)
 
         r = inject.instance(Registry)
-        self.conn = inject.instance(Connection(r.getRegistry('dcsys')))
+        self.conn = Connection(r.getRegistry('dcsys'))
         self.files = inject.instance(FileDAO)
 
     @coroutine
