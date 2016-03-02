@@ -1,8 +1,13 @@
-<div class="createTutoring {{view.style}} {{view.style2}}"> <!-- VARIABLES1: nuevaTutoria VARIABLES2:verResultados -->
+<div class="createTutoring {{view.style}} {{view.style2}} {{view.style3}} {{view.style4}}">
+  <!-- VARIABLES1: nuevaTutoria
+       VARIABLES2: verResultados
+       VARIABLES3: mensajes
+       VARIABLES4: msjCargando, msjGuardada, msjCancelada
+  -->
 
     <div class="header">
         <div>
-          <i class="fa fa-tumblr fa-2x"></i>utorías | fce
+          Tutorías
         </div>
     </div>
 
@@ -20,6 +25,92 @@
               <div>
                 <button class="btnCreate" type="button" ng-click="view.style='nuevaTutoria'">CREAR </button>
               </div>
+              <div class="titleMyTutoring">
+                 MIS TUTORÍAS
+              </div>
+
+              <div class="contentMyRecentTutoring">
+
+                  <div class="contentItemTutoringRecent" ng-click="view.style='nuevaTutoria'">
+                      <div class="contentIconTutoring">
+                        <div class="IconTutoring">
+                          <i class="fa fa-tumblr fa-2x"></i>
+                        </div>
+                      </div>
+                      <div class="contentDataTutoringRecent">
+                        <div>
+                          Miércoles
+                        </div>
+                        <div>
+                          <b>26/03/2016</b>
+                        </div>
+                      </div>
+                      <div class="iconIrTutoring">
+                        <i class="fa fa-sign-in fa-2x"></i>
+                      </div>
+                  </div>
+
+                  <div class="contentItemTutoringRecent" ng-click="view.style='nuevaTutoria'">
+                      <div class="contentIconTutoring">
+                        <div class="IconTutoring">
+                          <i class="fa fa-tumblr fa-2x"></i>
+                        </div>
+                      </div>
+                      <div class="contentDataTutoringRecent">
+                        <div>
+                          Jueves
+                        </div>
+                        <div>
+                          <b>19/03/2016</b>
+                        </div>
+                      </div>
+                      <div class="iconIrTutoring">
+                        <i class="fa fa-sign-in fa-2x"></i>
+                      </div>
+                  </div>
+
+                  <div class="contentItemTutoringRecent" ng-click="view.style='nuevaTutoria'">
+                      <div class="contentIconTutoring">
+                        <div class="IconTutoring">
+                          <i class="fa fa-tumblr fa-2x"></i>
+                        </div>
+                      </div>
+                      <div class="contentDataTutoringRecent">
+                        <div>
+                          Martes
+                        </div>
+                        <div>
+                          <b>16/03/2016</b>
+                        </div>
+                      </div>
+                      <div class="iconIrTutoring">
+                        <i class="fa fa-sign-in fa-2x"></i>
+                      </div>
+                  </div>
+
+                  <div class="contentItemTutoringRecent" ng-click="view.style='nuevaTutoria'">
+                      <div class="contentIconTutoring">
+                        <div class="IconTutoring">
+                          <i class="fa fa-tumblr fa-2x"></i>
+                        </div>
+                      </div>
+                      <div class="contentDataTutoringRecent">
+                        <div>
+                          Miércoles
+                        </div>
+                        <div>
+                          <b>11/03/2016</b>
+                        </div>
+                      </div>
+                      <div class="iconIrTutoring">
+                        <i class="fa fa-sign-in fa-2x"></i>
+                      </div>
+                  </div>
+
+
+              </div>
+
+
           </div>
 
           <div class="contentSearch">
@@ -121,8 +212,8 @@
                       <div><b>Lucas Langoni</b></div>
                   </div>
                   <div>
-                    <button class="btnCreate" ng-click="view.style=''">GUARDAR</button>
-                    <button class="btnCancel" ng-click="view.style=''"><i class="fa fa-times"></i></button>
+                    <button class="btnCreate" ng-click="view.style3='mensajes'; view.style4='msjGuardada'">GUARDAR</button>
+                    <button class="btnCancel" ng-click="view.style3='mensajes'; view.style4='msjCancelada' "><i class="fa fa-times"></i></button>
                   </div>
               </div>
 
@@ -451,12 +542,40 @@
 
           </div>
 
-          <div class="contentPreload">
+          <div class="contentcontentHome">
+
 
           </div>
 
       </div>
 
     </div>
+
+    <div class="messages">
+
+      <div class="contentMessage">
+
+          <div class="preload">
+            <i class="fa fa-spinner fa-pulse fa-3x"></i>
+          </div>
+
+          <div class="guarded">
+            <div>Tutoría</div>
+            <div>guardada con éxito! </div>
+          </div>
+
+          <div class="cancel">
+            <div>¿Desea salir sin guardar?</div>
+            <div class="btns">
+                <button class="btnSi" ng-click="view.style=''; view.style3=''">SI</button>
+                <button class="btnNo" ng-click="view.style3=''">VOLVER</button>
+            </div>
+          </div>
+
+      </div>
+
+    </div>
+
+
 
 </div>
