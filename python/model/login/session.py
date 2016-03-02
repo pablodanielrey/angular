@@ -14,7 +14,7 @@ import json
 
 from model.connection.connection import Connection
 from model.registry import Registry
-from model.utils import DateTimeEncoder
+#from model.utils import DateTimeEncoder
 
 
 class SessionNotFound(Exception):
@@ -71,7 +71,7 @@ class SessionDAO:
                     username varchar,
                     expire timsetampz default now(),
                     created timestampz default now(),
-                    deleted timestampz default now(),
+                    deleted timestampz,
                     data varchar
                 )
             """)
@@ -84,6 +84,10 @@ class SessionDAO:
         try:
             if sess.id is None:
                 sess.id = str(uuid.uuid4())
+                sess.created = datetime.datetime.now()
+                sess.expire = sess.created + datetime.timedelta(minutes=self.registry.get('expire'))
+                sess.deleted = None
+
                 r = sess.__dict__
                 cur.execute('insert into systems.sessions (id, user_id, username, expire, created, deleted, data)'
                             'values (%(id)s, %(userId)s, %(username)s, %(expire)s, %(created)s, %(deleted)s, %(data)s)', r)
