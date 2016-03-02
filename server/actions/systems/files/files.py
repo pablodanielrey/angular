@@ -7,6 +7,7 @@ from asyncio import coroutine
 from autobahn.asyncio.wamp import ApplicationSession
 
 from model.registry import Registry
+from model.connection.connection import Connection
 from model.files.files import FileDAO, File
 
 
