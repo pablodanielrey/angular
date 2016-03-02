@@ -89,7 +89,7 @@ class FilesWamp(ApplicationSession):
         return r
 
     @coroutine
-    def findMetaDataById_async(self, id):
+    def findById_async(self, id):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.findMetaDataById, id)
         return r
