@@ -26,6 +26,7 @@ class FilesWamp(ApplicationSession):
         logging.debug('registering methods')
         yield from self.register(self.find_async, 'system.files.find')
         yield from self.register(self.findById_async, 'system.files.findMetaDataById')
+        yield from self.register(self.findById_async, 'system.files.findById')
         yield from self.register(self.upload_async, 'system.files.upload')
         yield from self.register(self.findAllIds, 'system.files.findAllIds')
 
@@ -91,5 +92,5 @@ class FilesWamp(ApplicationSession):
     @coroutine
     def findById_async(self, id):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.findMetaDataById, id)
+        r = yield from loop.run_in_executor(None, self.findById, id)
         return r
