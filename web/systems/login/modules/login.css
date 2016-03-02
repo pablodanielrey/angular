@@ -264,11 +264,18 @@
       display: none;
   }
 
+  .login .video {
+    display: none;
+  }
+
 }
 
 @media (max-height: 500px){
   .login .footer {
       display: none;
+  }
+  .login .video {
+    display: none;
   }
 }
 
