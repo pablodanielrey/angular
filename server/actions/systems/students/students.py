@@ -4,7 +4,7 @@ import logging
 
 from model.users.users import Student, StudentDAO
 from model.registry import Registry
-from mocel.connection.connection import Connection
+from model.connection.connection import Connection
 
 import asyncio
 from asyncio import coroutine
