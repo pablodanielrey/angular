@@ -349,7 +349,21 @@ class UserDAO:
             cur.close()
 
 
+class Student:
+
+    def __init__(self):
+        self.id = None
+        self.studentNumber = None
+        self.condition = None
+
 class StudentDAO:
+
+    @staticmethod
+    def _fromResult(r):
+        s = Student()
+        s.id = r['id']
+        s.studentNumer = r['student_number']
+        s.condition = r['condition']
 
     @staticmethod
     def findAll(con):
@@ -361,23 +375,20 @@ class StudentDAO:
         cur = con.cursor()
         try:
             cur.execute('select id from students.users')
-            st = [s[0] for s in cur]
-            return st
+            return [ s['id'] for s in cur ]
 
         finally:
             cur.close()
 
     @staticmethod
-    def findById(con, sId):
+    def findById(con, sId = []):
+        if len(sId) <= 0:
+            return []
+
         cur = con.cursor()
         try:
-            cur.execute('select id, student_number, condition from students.users where id = %s', (sId,))
-            if cur.rowcount <= 0:
-                return None
-            else:
-                st = Student()
-                st._fromDict(cur.fetchone())
-                return st
+            cur.execute('select * from students.users where id in %s', (tuple(sId),))
+            return [ self._fromResult(s) for s in cur ]
 
         finally:
             cur.close()
@@ -408,21 +419,6 @@ class StudentDAO:
         finally:
             cur.close()
 
-
-class Student:
-
-    def __init__(self):
-        self.id = None
-        self.studentNumber = None
-        self.condition = None
-
-    def persist(self, con):
-        StudentDAO.persist(con, self)
-
-    def _fromDict(self, d):
-        self.id = d['id']
-        self.studentNumber = d['student_number']
-        self.condition = d['condition']
 
 
 if __name__ == '__main__':
