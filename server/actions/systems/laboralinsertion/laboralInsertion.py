@@ -9,9 +9,9 @@ from psycopg2.extras import DictCursor
 
 import uuid
 import os
-from model.systems.laboralInsertion.laboralInsertion import LaboralInsertion
-from model.systems.laboralInsertion.company import Company
-from model.systems.laboralInsertion.mails import Sent
+from model.laboralinsertion.laboralInsertion import LaboralInsertion
+from model.laboralinsertion.company import Company
+from model.laboralinsertion.mails import Sent
 from model.config import Config
 from model.users.users import Users
 

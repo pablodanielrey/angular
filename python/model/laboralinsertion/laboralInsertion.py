@@ -4,13 +4,13 @@ import inject
 import logging
 import base64
 
-from model.systems.files.files import Files
-from model.users.users import Users
+from model.files.files import FileDAO
+from model.users.users import UserDAO
 from model.mail.mail import Mail
 from model.systems.students.students import Students
 from email.mime.text import MIMEText
 
-from model.systems.laboralInsertion.mails import Sent
+from model.laboralInsertion.mails import Sent
 
 import csv
 
@@ -19,8 +19,8 @@ class LaboralInsertion:
     """
         encapsula todo el acceso a datos de insercion laboral
     """
-    files = inject.attr(Files)
-    users = inject.attr(Users)
+    files = inject.attr(FileDAO)
+    users = inject.attr(UserDAO)
     students = inject.attr(Students)
     mail = inject.attr(Mail)
 
