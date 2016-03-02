@@ -21,6 +21,11 @@ import logging
 def migrateUser(con, dni, uid):
     cur = con.cursor()
     try:
+        cur.execute('select username from mdl_user where username = %s', (uid,))
+        if cur.rowcount <= 0:
+            logging.info('No existe ese usuario {}'.format(uid))
+            return
+
         cur.execute('update mdl_user set username = %s where username = %s', ('{}.viejo'.format(dni), dni))
         if cur.rowcount > 0:
             logging.info('{} --> {}.viejo'.format(dni, dni))
