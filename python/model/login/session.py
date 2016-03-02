@@ -117,7 +117,7 @@ class SessionDAO:
             if cur.fetchone()['expire'] <= now:
                 raise SessionExpired()
 
-            exp = now + datetime.timedelta(minutes=int(registry.get('expire')))
+            exp = now + datetime.timedelta(minutes=int(self.registry.get('expire')))
             cur.execute('update systems.sessions set expire = %s where id = %s', (exp, sid))
 
         finally:
