@@ -8,6 +8,7 @@
 '''
 
 from model.connection.connection import Connection
+from model.registry import Registry
 import sys
 import inject
 
@@ -16,7 +17,8 @@ if __name__ == '__main__':
     print(sys.path)
 
     inject.configure()
-    conn = inject.instance(Connection)
+    r = inject.instance(Registry)
+    conn = Connection(r.getRegistry('dcsys'))
     con = conn.get()
     try:
         import createUser
