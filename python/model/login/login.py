@@ -6,7 +6,7 @@ import inject
 import re
 
 from model.registry import Registry
-from model.login.session import Session
+from model.login.session import Session, SessionDAO
 from model.users.users import UserPassword, UserPasswordDAO, User, UserDAO
 
 class Login:
@@ -14,6 +14,7 @@ class Login:
     reg = inject.attr(Registry)
     userPassword = inject.attr(UserPasswordDAO)
     users = inject.attr(User)
+    sessions = inject.attr(SessionDAO)
 
     def login(self, con, username, password):
         assert username is not None
