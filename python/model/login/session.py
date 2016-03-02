@@ -72,9 +72,9 @@ class SessionDAO:
                     id varchar primary key,
                     user_id varchar,
                     username varchar,
-                    expire timsetampz default now(),
-                    created timestampz default now(),
-                    deleted timestampz,
+                    expire timestamptz default now(),
+                    created timestamptz default now(),
+                    deleted timestamptz,
                     data varchar
                 )
             """)
