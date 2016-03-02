@@ -7,7 +7,7 @@ from autobahn.asyncio.wamp import ApplicationSession
 from model.users.users import UserDAO
 from model.registry import Registry
 from model.connection import connection
-# from model.mail.mail import Mail
+from model.mail.mail import Mail
 # from model.exceptions import *
 
 
@@ -19,7 +19,7 @@ class UsersWamp(ApplicationSession):
         reg = inject.instance(Registry)
         self.conn = connection.Connection(reg.getRegistry('dcsys'))
         self.users = inject.instance(UserDAO)
-        # self.mail = inject.instance(Mail)
+        self.mail = inject.instance(Mail)
         self.mail = None
 
     @coroutine
