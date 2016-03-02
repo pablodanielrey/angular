@@ -1,3 +1,15 @@
+# -*- coding: utf-8 -*-
+'''
+    implementa el modelo de los mails.
+    debe agregarse las secciones a la config
+
+    [mail]
+    host = hosts
+    user = usuario
+    password = clave
+    enabled = true|false
+
+'''
 import inject, smtplib, re
 
 import email
