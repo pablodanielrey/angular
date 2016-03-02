@@ -5,7 +5,7 @@ import logging
 from model.login.login import Login
 from model.login.session import SessionDAO
 from model.registry import Registry
-from model.connection import Connection
+import model.connection
 
 import asyncio
 from asyncio import coroutine
