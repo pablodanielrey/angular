@@ -55,11 +55,12 @@ def getRegistry():
 class Reg:
     def get(self,s):
         return 3600
-        
+
 
 class SessionDAO:
 
-    registry = getRegistry()
+    #registry = getRegistry()
+    registry = Reg()
 
     @staticmethod
     def _fromResult(r):
