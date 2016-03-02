@@ -49,7 +49,7 @@ class FilesWamp(ApplicationSession):
         finally:
             self.conn.put(con)
 
-    def findMetaDataById(self, id):
+    def findById(self, id):
         con = self.conn.get()
         try:
             r = self.files.findById(con, id)
