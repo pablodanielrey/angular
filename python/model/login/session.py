@@ -43,9 +43,14 @@ class Session:
         self.deleted = None
         self.data = None
 
+
+def getRegistry():
+    registry = inject.instance(Registry)
+    return registry.getRegistry('sessions')
+
 class SessionDAO:
 
-    registry = inject.instance(Registry).getRegistry('sessions')
+    registry = getRegistry()
 
     @staticmethod
     def _fromResult(r):
