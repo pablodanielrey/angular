@@ -72,6 +72,15 @@ class InscriptionDAO:
         finally:
             cur.close()
 
+    @staticmethod
+    def delete(con, id):
+        """ elimina la inscripción con el id determinado """
+        cur = con.cursor()
+        try:
+            cur.execute('delete from laboral_insertion.inscriptions where id = %s', (id,))            
+        finally:
+            cur.close()
+
 
     @staticmethod
     def findAll(con):
@@ -86,13 +95,27 @@ class InscriptionDAO:
             cur.close()
 
     @staticmethod
-    def findById(con):
+    def findByUser(con, userId):
+        """ obtiene los datos de las inscripciones de los alumnos """
+        cur = con.cursor()
+        try:
+            cur.execute('select id from laboral_insertion.inscriptions where user_id = %s', (userId,))
+            ins = [ x['id'] for x in cur ]
+            return ins
+
+        finally:
+            cur.close()
+
+    @staticmethod
+    def findById(con, id):
         ''' obtiene la inscripcion determinada por el id '''
         cur = con.cursor()
         try:
-            cur.execute('select * from laboral_insertion.inscriptions')
-            ins = [ InscriptionDAO._fromResult(x) for x in cur ]
-            return ins
+            cur.execute('select * from laboral_insertion.inscriptions where id = %s', (id,))
+            if cur.rowcount <= 0:
+                return None
+            r = cur.fetchone()
+            return InscriptionDAO._loadFrom(r)
 
         finally:
             cur.close()

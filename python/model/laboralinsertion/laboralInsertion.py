@@ -5,12 +5,15 @@ import logging
 import base64
 
 from model.files.files import FileDAO
-from model.users.users import UserDAO
+import model.users.users
+from model.users.users import StudentDAO
 from model.mail.mail import Mail
-from model.systems.students.students import Students
 from email.mime.text import MIMEText
 
-from model.laboralInsertion.mails import Sent
+from model.laboralinsertion.mails import SentDAO
+from model.laboralinsertion.inscription import InscriptionDAO
+from model.laboralinsertion.company import CompanyDAO
+import model.laboralinsertion.user
 
 import csv
 
@@ -19,10 +22,18 @@ class LaboralInsertion:
     """
         encapsula todo el acceso a datos de insercion laboral
     """
-    files = inject.attr(FileDAO)
-    users = inject.attr(UserDAO)
-    students = inject.attr(Students)
-    mail = inject.attr(Mail)
+    def __init__(self):
+        self.files = inject.attr(FileDAO)
+        self.users = inject.attr(model.users.users.UserDAO)
+        self.students = inject.attr(StudentDAO)
+        self.mail = inject.attr(Mail)
+
+        self.sentDAO = inject.attr(SentDAO)
+        self.inscriptionDAO = inject.attr(InscriptionDAO)
+        self.companyDAO = inject.attr(CompanyDAO)
+        self.userLI = inject.attr(model.laboralinsertion.user.UserDAO)
+
+
 
     def download(self, con, url, root):
         with open('{}inscripciones.csv'.format(root), 'w', encoding='utf-8') as r:
@@ -115,70 +126,32 @@ class LaboralInsertion:
 
     def findAllInscriptions(self, con):
         """ obtiene los datos de las inscripciones de los alumnos """
-        cur = con.cursor()
-        cur.execute('select id, user_id, degree, courses, average1, average2, work_type, reside, travel, work_experience, creation from laboral_insertion.inscriptions')
+        ids = self.inscriptionDAO.findAll(con)
         inscriptions = []
-        for c in cur:
-            inscription = {
-                'id': c[0],
-                'user_id': c[1],
-                'degree': c[2],
-                'approved': c[3],
-                'average1': c[4],
-                'average2': c[5],
-                'workType': c[6],
-                'reside': c[7],
-                'travel': c[8],
-                'workExperience': c[9],
-                'creation': c[10]
-            }
+        for id in ids:
+            inscription = self.inscriontDAO.findById(con, id)
             inscriptions.append(inscription)
 
         return inscriptions
 
     def findAllInscriptionsByUser(self, con, userId):
         """ obtiene los datos de las inscripciones de los alumnos """
-        cur = con.cursor()
-        cur.execute('select id, user_id, degree, courses, average1, average2, work_type, reside, travel, work_experience, creation from laboral_insertion.inscriptions where user_id = %s', (userId,))
+        ids = self.inscriptionDAO.findByUser(con, userId)
         inscriptions = []
-        for c in cur:
-            inscription = {
-                'id': c[0],
-                'degree': c[2],
-                'approved': c[3],
-                'average1': c[4],
-                'average2': c[5],
-                'workType': c[6],
-                'reside': c[7],
-                'travel': c[8],
-                'workExperience': c[9],
-                'creation': c[10]
-            }
+        for id in ids:
+            inscription = self.inscriontDAO.findById(con, id)
             inscriptions.append(inscription)
 
         return inscriptions
 
     def deleteInscriptionById(self, con, iid):
         """ elimina la inscripción con el id determinado """
-        cur = con.cursor()
-        cur.execute('delete from laboral_insertion.inscriptions where id = %s', (iid,))
+        self.inscriptionDAO.delete(con, iid)
 
     def persistInscriptionByUser(self, con, userId, d):
         """ genera una inscripcion nueva por usuario """
-        iid = str(uuid.uuid4())
-        cur = con.cursor()
-        cur.execute('insert into laboral_insertion.inscriptions (id, user_id, degree, courses, average1, average2, work_type, reside, travel, work_experience) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)', (
-            iid,
-            userId,
-            d['degree'],
-            d['approved'],
-            d['average1'],
-            d['average2'],
-            d['workType'],
-            False,
-            d['travel'],
-            d['workExperience']
-        ))
+        d.userId = userId;
+        self.inscriontDAO.persist(con, inscription)
 
     def findByUser(self, con, userId):
         """

@@ -47,7 +47,7 @@ class UserDAO:
                             '(%(id)s, %(acceptedConditions)s, %(email)s, %(cv)s)', ins)
             else:
                 cur.execute('update laboral_insertion.inscriptions (accepted_conditions = %(acceptedConditions)s, email = %(email)s, '
-                            'cv = %(cv)s, ins)
+                            'cv = %(cv)s', ins)
         finally:
             cur.close()
 
