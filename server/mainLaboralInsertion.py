@@ -23,5 +23,6 @@ if __name__ == '__main__':
     realm = registry.get('realm')
     debug = registry.get('debug')
 
+    logging.info('iniciando app en {} {} {}'.format(url, realm, debug))
     runner = ApplicationRunner(url=url, realm=realm, debug=debug, debug_wamp=debug, debug_app=debug)
     runner.run(LaboralInsertionWamp)
