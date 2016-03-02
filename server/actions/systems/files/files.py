@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 import inject
 import logging
-import psycopg2
 
 import asyncio
 from asyncio import coroutine
 from autobahn.asyncio.wamp import ApplicationSession
 
-from model.config import Config
-from model.systems.files.files import Files
+from model.registry import Registry
+from model.files.files import FileDAO, File
 
 
 class FilesWamp(ApplicationSession):
@@ -17,60 +16,64 @@ class FilesWamp(ApplicationSession):
         logging.debug('instanciando')
         ApplicationSession.__init__(self, config)
 
-        self.serverConfig = inject.instance(Config)
-        self.files = inject.instance(Files)
+        r = inject.instance(Registry)
+        self.conn = inject.instance(Connection(r.getRegistry('dcsys')))
+        self.files = inject.instance(FileDAO)
 
     @coroutine
     def onJoin(self, details):
         logging.debug('registering methods')
         yield from self.register(self.find_async, 'system.files.find')
-        yield from self.register(self.findMetaDataById_async, 'system.files.findMetaDataById')
+        yield from self.register(self.findById_async, 'system.files.findMetaDataById')
         yield from self.register(self.upload_async, 'system.files.upload')
         yield from self.register(self.findAllIds, 'system.files.findAllIds')
 
-    def _getDatabase(self):
-        host = self.serverConfig.configs['database_host']
-        dbname = self.serverConfig.configs['database_database']
-        user = self.serverConfig.configs['database_user']
-        passw = self.serverConfig.configs['database_password']
-        return psycopg2.connect(host=host, dbname=dbname, user=user, password=passw)
-
     def findAllIds(self):
-        con = self._getDatabase()
+        con = self.conn.get()
         try:
-            r = self.files.findAllIds(con)
+            r = self.files.findAll(con)
             return r
 
         finally:
-            con.close()
+            self.conn.put(con)
 
     def find(self, id):
-        con = self._getDatabase()
+        con = self.conn.get()
         try:
             r = self.files.findById(con, id)
-            return r
+            r.content = self.files.getContent(con, id)
+            rs = r.__dict__
+            return rs
 
         finally:
-            con.close()
+            self.conn.put(con)
 
     def findMetaDataById(self, id):
-        con = self._getDatabase()
+        con = self.conn.get()
         try:
-            r = self.files.findMetaDataById(con, id)
-            return r
+            r = self.files.findById(con, id)
+            rs = r.__dict__
+            return rs
 
         finally:
-            con.close()
+            self.conn.put(con)
 
     def upload(self, id, name, mimetype, codec, data):
-        con = self._getDatabase()
+        con = self.conn.get()
         try:
-            id = self.files.persist(con, id, name, mimetype, codec, data)
+            f = File()
+            f.name = name
+            f.mimetype = mimetype
+            f.codec = codec
+            f.size = len(data)
+            f._calculateHash()
+
+            id = self.files.persist(con, f)
             con.commit()
             return id
 
         finally:
-            con.close()
+            self.conn.put(con)
 
     @coroutine
     def upload_async(self, id, name, mimetype, codec, data):
