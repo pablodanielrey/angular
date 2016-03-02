@@ -88,7 +88,7 @@ class SessionDAO:
             if sess.id is None:
                 sess.id = str(uuid.uuid4())
                 sess.created = datetime.datetime.now()
-                sess.expire = sess.created + datetime.timedelta(minutes=SessionDAO.registry.get('expire'))
+                sess.expire = sess.created + datetime.timedelta(minutes=int(SessionDAO.registry.get('expire')))
                 sess.deleted = None
 
                 r = sess.__dict__
