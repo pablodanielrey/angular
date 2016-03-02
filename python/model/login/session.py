@@ -44,23 +44,11 @@ class Session:
         self.data = None
 
 
-"""
-no esta funcando
-def getRegistry():
-    registry = inject.instance(Registry)
-    return registry.getRegistry('sessions')
-"""
-
-""" lo hago para reemplazar el registro que no funca ahora """
-class Reg:
-    def get(self,s):
-        return 3600
-
-
 class SessionDAO:
 
+    registry = inject.instance(Registry).getRegistry('sessions')
     #registry = getRegistry()
-    registry = Reg()
+    #registry = Reg()
 
     @staticmethod
     def _fromResult(r):
