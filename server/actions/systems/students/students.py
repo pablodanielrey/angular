@@ -55,7 +55,7 @@ class StudentsWamp(ApplicationSession):
             students = self.students.findById(con, [userId])
             if len(students) <= 0:
                 return None
-            return student[0]
+            return student[0].__dict__
 
         finally:
             self.conn.put(con)
