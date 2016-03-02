@@ -18,7 +18,7 @@ if __name__ == '__main__':
     inject.configure()
 
     reg = inject.instance(Registry)
-    registry = reg.getRegistry('dcsys')
+    registry = reg.getRegistry('wamp')
     url = registry.get('url')
     realm = registry.get('realm')
     debug = registry.get('debug')
