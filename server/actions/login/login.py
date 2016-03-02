@@ -3,9 +3,10 @@ import inject
 import logging
 
 from model.login.login import Login
-from model.login.session import SessionDAO
+from model.login.session import SessionDAO, Session
 from model.registry import Registry
 from model.connection import connection
+
 
 import asyncio
 from asyncio import coroutine
