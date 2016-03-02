@@ -2,11 +2,15 @@
 '''
     Se conecta al router wamp y hace correr el Wamp
 '''
+import inject
+inject.configure()
+
+
+
 if __name__ == '__main__':
 
     import sys
     import logging
-    import inject
     sys.path.insert(0, '../python')
 
     logging.basicConfig(level=logging.DEBUG)
@@ -14,8 +18,6 @@ if __name__ == '__main__':
     from autobahn.asyncio.wamp import ApplicationRunner
     from model.registry import Registry
     from actions.login.login import LoginWamp
-
-    inject.configure()
 
     reg = inject.instance(Registry)
     registry = reg.getRegistry('wamp')
