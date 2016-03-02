@@ -12,12 +12,10 @@
   position: fixed;
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   min-height: 400px;
+  background-color: black;
 }
 
-.login .video {
-  position: absolute;
-  width: 100%;
-}
+
 
 
 
@@ -89,9 +87,21 @@
   -webkit-justify-content: center;
   -moz-justify-content: center;
   height: 100%;
-  background-color: #EEEEEE;
-  background-image: url('/views/img/fondo1.jpg');
+  width: 100%;
+  /*background-color: #EEEEEE;*/
+  /*background-image: url('/views/img/fondo1.jpg');*/
+  resize: none;
 }
+
+.login .video {
+  position: absolute;
+  width: 1920px;
+  height: 1080px;
+  z-index: -999;
+  resize: none;
+}
+
+
 
 .login .contentLogin {
   border: 10px solid;
@@ -245,7 +255,7 @@
 }
 
 .login.screenPasswordError .textPasswordError {
-  
+
 }
 /******************** MEDIA QUERIS ***************************/
 
