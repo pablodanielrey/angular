@@ -170,7 +170,7 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
   $scope.$watch(function() { return $scope.model.offer.degree; }, function(o,n) { $scope.checkInscriptionPreconditions(); });
   $scope.$watch(function() { return $scope.model.offer.average1; }, function(o,n) { $scope.checkInscriptionPreconditions(); });
   $scope.$watch(function() { return $scope.model.offer.average2; }, function(o,n) { $scope.checkInscriptionPreconditions(); });
-  $scope.$watch(function() { return $scope.model.offer.approved; }, function(o,n) { $scope.checkInscriptionPreconditions(); });
+  $scope.$watch(function() { return $scope.model.offer.approved; }, function(o,n) {$scope.checkInscriptionPreconditions(); });
   //$scope.$watch(function() { return $scope.model.laboralData.languages; }, function(o,n) { $scope.checkInscriptionPreconditions(); });
   $scope.$watch(function() { return $scope.model.laboralData.email; }, function(o,n) { $scope.checkInscriptionPreconditions(); });
   $scope.$watch(function() { return $scope.model.laboralData.cv; }, function(o,n) { $scope.checkInscriptionPreconditions(); });
@@ -193,13 +193,14 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
               ok = true;
               if (offer.graduate) {
                 offer.approved = $scope.degrees[i].assignatures;
+              } else {
+                offer.approved = 0;
               }
               break;
             }
           }
         }
 
-        offer.approved = 0;
         offer.average1 = 0;
         offer.average2 = 0;
       }
