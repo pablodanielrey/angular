@@ -166,11 +166,29 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
     )
   }
 
+  function changeApproved() {
+    var offer = $scope.model.offer;
+    offer.approved = 0;
+    if (offer.degree == null || offer.degree == 'Seleccionar') {
+      return;
+    }
+    if (offer.graduate) {
+      for (var i = 0; i < $scope.degrees.length; i++) {
+        if (offer.degree == $scope.degrees[i].degree) {
+          offer.approved = $scope.degrees[i].assignatures;
+          return;
+        }
+      }
+    }
+  }
 
-  $scope.$watch(function() { return $scope.model.offer.degree; }, function(o,n) { $scope.checkInscriptionPreconditions(); });
+  $scope.$watch(function() { return $scope.model.offer.degree; }, function(o,n) { $scope.checkInscriptionPreconditions(); changeApproved()});
   $scope.$watch(function() { return $scope.model.offer.average1; }, function(o,n) { $scope.checkInscriptionPreconditions(); });
   $scope.$watch(function() { return $scope.model.offer.average2; }, function(o,n) { $scope.checkInscriptionPreconditions(); });
-  $scope.$watch(function() { return $scope.model.offer.approved; }, function(o,n) {$scope.checkInscriptionPreconditions(); });
+  $scope.$watch(function() { return $scope.model.offer.approved; }, function(o,n) {$scope.checkInscriptionPreconditions();});
+  $scope.$watch(function() { return $scope.model.offer.graduate; }, function(o,n) {
+    changeApproved();
+  });
   //$scope.$watch(function() { return $scope.model.laboralData.languages; }, function(o,n) { $scope.checkInscriptionPreconditions(); });
   $scope.$watch(function() { return $scope.model.laboralData.email; }, function(o,n) { $scope.checkInscriptionPreconditions(); });
   $scope.$watch(function() { return $scope.model.laboralData.cv; }, function(o,n) { $scope.checkInscriptionPreconditions(); });
@@ -181,9 +199,7 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
 
       var ok = true;
       var offer = $scope.model.offer;
-
       if ($scope.model.cr == 0) {
-
         if (offer.degree == null || offer.degree == 'Seleccionar') {
           ok = false;
         } else {
@@ -191,11 +207,6 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
           for (var i = 0; i < $scope.degrees.length; i++) {
             if (offer.degree == $scope.degrees[i].degree) {
               ok = true;
-              if (offer.graduate) {
-                offer.approved = $scope.degrees[i].assignatures;
-              } else {
-                offer.approved = 0;
-              }
               break;
             }
           }
