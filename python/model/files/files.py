@@ -20,9 +20,9 @@ class File:
         self.hash = File._calculateHashStatic(self.content)
 
     @staticmethod
-    def _calculateHashStatic(self, content):
+    def _calculateHashStatic(content):
         m = hashlib.md5()
-        m.update(self.content)
+        m.update(content.encode('utf8'))
         return m.hexdigest()
 
 
@@ -71,7 +71,7 @@ class FileDAO:
             p = f.__dict__
             #cur.execute('insert into files.files (id, name, content) values (%s,%s,%s)', (id, name, psycopg2.Binary(data)))
             cur.execute('insert into files.files (id, name, hash, mimetype, codec, size, content) '
-                        'values (%(id)s, %(name)s, %(hash)s, %(mimetype)s, %(codec)s, %(size)s', p)
+                        'values (%(id)s, %(name)s, %(hash)s, %(mimetype)s, %(codec)s, %(size)s, %(content)s)', p)
         else:
             p = f.__dict__
             #cur.execute('update files.files set (name = %s, content = %s) where id = %s', (name, psycopg2.Binary(data), id))
@@ -123,7 +123,20 @@ class FileDAO:
         cur = con.cursor()
         try:
             cur.execute('select content from files.files where id = %s', (id,))
-            return r['content']
+            if cur.rowcount <= 0:
+                return None
+            return cur.fetchone()['content']
+
+        finally:
+            cur.close()
+
+    @staticmethod
+    def check(con, id):
+        ''' chequea que exista el file cargado en la base '''
+        cur = con.cursor()
+        try:
+            cur.execute('select id from files.files where id = %s', (id,))
+            return (cur.rowcount > 0)
 
         finally:
             cur.close()

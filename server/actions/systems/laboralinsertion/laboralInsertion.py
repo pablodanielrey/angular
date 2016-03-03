@@ -10,6 +10,7 @@ from psycopg2.extras import DictCursor
 import uuid
 import os
 from model.laboralinsertion.laboralInsertion import LaboralInsertion
+from model.laboralinsertion.inscription import Inscription
 from model.laboralinsertion.company import Company
 from model.laboralinsertion.mails import Sent
 from model.users.users import UserDAO
@@ -230,7 +231,10 @@ class LaboralInsertionWamp(ApplicationSession):
     def persistInscriptionByUser(self, userId, data):
         con = self.conn.get()
         try:
-            self.laboralInsertion.persistInscriptionByUser(con, userId, data)
+            i = Inscription()
+            i.__dict__ = data
+            i.userId = userId
+            self.laboralInsertion.persistInscription(con, i)
             con.commit()
             return True
 

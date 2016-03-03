@@ -214,6 +214,14 @@ class User:
         self.photo = None
         self.telephones = []
 
+    def _toJson():
+        pass
+
+    @staticmethod
+    def fromJson(j):
+        pass
+
+
 class Telephone:
     def __init__(self):
         self.id = None
@@ -357,6 +365,14 @@ class UserDAO:
                         'version = %(version)s, ' +
                         'photo = %(photo)s ' +
                         'where id = %(id)s', params)
+
+            cur.execute('delete from profile.telephones where user_id = %s', (user.id,))
+            for t in user.telephones:
+                t.id = str(uuid.uuid4())
+                t.userId = user.id
+                param = t.__dict__
+                cur.execute('insert into profile.telephones (id, user_id, number, type) values (%(id)s, %(userId)s, %(number)s, %(type)s)', param)
+
             return user.id
 
 

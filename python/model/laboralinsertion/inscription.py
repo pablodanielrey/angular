@@ -32,7 +32,7 @@ class InscriptionDAO:
                     average1 real default 0.0,
                     average2 real default 0.0,
                     work_type varchar not null,
-                    created timestampz default now(),
+                    created timestamptz default now(),
                     work_experience boolean default false
                 )
             """)

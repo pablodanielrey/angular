@@ -152,9 +152,8 @@ class LaboralInsertion:
         """ elimina la inscripción con el id determinado """
         InscriptionDAO.delete(con, iid)
 
-    def persistInscriptionByUser(self, con, userId, d):
+    def persistInscription(self, con, inscription):
         """ genera una inscripcion nueva por usuario """
-        d.userId = userId;
         InscriptionDAO.persist(con, inscription)
 
     def findByUser(self, con, userId):
@@ -177,7 +176,7 @@ class LaboralInsertion:
 
         userId = d['id']
 
-        if 'cv' in d and d['cv'] is not None and d['cv'] is not '' and not self.files.check(con, d['cv']):
+        if 'cv' in d and d['cv'] is not None and d['cv'] is not '' and not FileDAO.check(con, d['cv']):
             raise Exception('no existe el cv en la base de datos')
 
         cur = con.cursor()

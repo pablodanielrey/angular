@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 import inject
 import logging
+import uuid
 import asyncio
 from asyncio import coroutine
 from autobahn.asyncio.wamp import ApplicationSession
-from model.users.users import UserDAO, User, MailDAO
+from model.users.users import UserDAO, User, Telephone, MailDAO
 from model.registry import Registry
 from model.connection import connection
 from model.mail.mail import Mail
@@ -88,9 +89,17 @@ class UsersWamp(ApplicationSession):
     def persistUser(self, user):
         con = self.conn.get()
         try:
+            telephones = user['telephones']
+
             u = User()
             u.__dict__ = user
-            u.telephones = user['telephones']
+            u.telephones = []
+            for t in telephones:
+                logging.info(t)
+                t2 = Telephone()
+                t2.__dict__ = t
+                u.telephones.append(t2)
+                logging.info(u.telephones)
             userId = self.users.persist(con, u)
             con.commit()
             return userId

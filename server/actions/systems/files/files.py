@@ -68,6 +68,7 @@ class FilesWamp(ApplicationSession):
             f.mimetype = mimetype
             f.codec = codec
             f.size = len(data)
+            f.content = data
             f._calculateHash()
 
             id = self.files.persist(con, f)
