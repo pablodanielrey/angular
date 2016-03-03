@@ -13,7 +13,7 @@ from email.mime.text import MIMEText
 from model.laboralinsertion.mails import SentDAO
 from model.laboralinsertion.inscription import InscriptionDAO
 from model.laboralinsertion.company import CompanyDAO
-import model.laboralinsertion.user
+from model.laboralinsertion.user import UserDAO, User
 
 import csv
 
@@ -34,7 +34,7 @@ class LaboralInsertion:
         self.userLI = inject.attr(model.laboralinsertion.user.UserDAO)
 
 
-
+    """
     def download(self, con, url, root):
         with open('{}inscripciones.csv'.format(root), 'w', encoding='utf-8') as r:
             w = csv.writer(r)
@@ -123,6 +123,8 @@ class LaboralInsertion:
                         logging.warn('error en cv {}'.format(cv))
 
                 index = index + 1
+    """
+
 
     def findAllInscriptions(self, con):
         """ obtiene los datos de las inscripciones de los alumnos """

@@ -21,7 +21,7 @@ class UserDAO:
                     accepted_conditions boolean default true,
                     email varhcar not null references profile.mails (id),
                     cv varchar not null references files.files (id),
-                    created timestampz default now()
+                    created timestamptz default now()
                 )
             """)
         finally:

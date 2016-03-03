@@ -4,7 +4,7 @@ import logging
 import asyncio
 from asyncio import coroutine
 from autobahn.asyncio.wamp import ApplicationSession
-from model.users.users import UserDAO
+from model.users.users import UserDAO, User, MailDAO
 from model.registry import Registry
 from model.connection import connection
 from model.mail.mail import Mail
@@ -19,8 +19,8 @@ class UsersWamp(ApplicationSession):
         reg = inject.instance(Registry)
         self.conn = connection.Connection(reg.getRegistry('dcsys'))
         self.users = inject.instance(UserDAO)
+        self.mails = inject.instance(MailDAO)
         self.mail = inject.instance(Mail)
-        self.mail = None
 
     @coroutine
     def onJoin(self, details):
@@ -40,8 +40,12 @@ class UsersWamp(ApplicationSession):
     def findById(self, id):
         con = self.conn.get()
         try:
-            data = self.users.findUser(con, id)
-            return data
+            data = self.users.findById(con, id)
+            if data is None:
+                return None
+            ru = data.__dict__
+            ru['telephones'] = [ t.__dict__ for t in data.telephones ]
+            return ru
         finally:
             self.conn.put(con)
 
@@ -84,7 +88,9 @@ class UsersWamp(ApplicationSession):
     def persistUser(self, user):
         con = self.conn.get()
         try:
-            userId = self.users.updateUser(con, user)
+            u = User()
+            u.__dict__ = user
+            userId = self.users.persist(con, u)
             con.commit()
             return userId
 
@@ -152,8 +158,8 @@ class UsersWamp(ApplicationSession):
     def findMails(self, userId):
         con = self.conn.get()
         try:
-            mails = self.users.listMails(con, userId)
-            return mails
+            mails = self.mails.findByUserId(con, userId)
+            return [ m.__dict__ for m in mails ]
 
         finally:
             self.conn.put(con)

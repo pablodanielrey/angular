@@ -13,6 +13,7 @@ from model.laboralinsertion.laboralInsertion import LaboralInsertion
 from model.laboralinsertion.company import Company
 from model.laboralinsertion.mails import Sent
 from model.users.users import UserDAO
+from model.users.users import MailDAO
 from model.registry import Registry
 from model.connection import connection
 
@@ -162,6 +163,7 @@ class LaboralInsertionWamp(ApplicationSession):
         self.laboralInsertion = inject.instance(LaboralInsertion)
         self.utils = inject.instance(Utils)
         self.users = inject.instance(UserDAO)
+        self.mails = inject.instance(MailDAO)
 
     @coroutine
     def onJoin(self, details):
@@ -192,8 +194,8 @@ class LaboralInsertionWamp(ApplicationSession):
         con = self.conn.get()
         try:
             data = self.laboralInsertion.findByUser(con, userId)
-            eid = data['email']
-            data['email'] = self.users.findMail(con, eid)
+            eid = data.email
+            data['email'] = self.mails.findById(con, eid)
             return data
 
         finally:
