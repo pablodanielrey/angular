@@ -13,6 +13,7 @@ from email.mime.text import MIMEText
 from model.laboralinsertion.mails import SentDAO
 from model.laboralinsertion.inscription import InscriptionDAO
 from model.laboralinsertion.company import CompanyDAO
+from model.laboralinsertion.languages import LanguageDAO
 from model.laboralinsertion.user import UserDAO, User
 
 import csv
@@ -32,6 +33,7 @@ class LaboralInsertion:
         self.inscriptionDAO = inject.attr(InscriptionDAO)
         self.companyDAO = inject.attr(CompanyDAO)
         self.userLI = inject.attr(model.laboralinsertion.user.UserDAO)
+        self.languagesDAO = inject.attr(LanguageDAO)
 
 
     """
@@ -128,62 +130,47 @@ class LaboralInsertion:
 
     def findAllInscriptions(self, con):
         """ obtiene los datos de las inscripciones de los alumnos """
-        ids = self.inscriptionDAO.findAll(con)
+        ids = InscriptionDAO.findAll(con)
         inscriptions = []
         for id in ids:
-            inscription = self.inscriontDAO.findById(con, id)
+            inscription = InscriontDAO.findById(con, id)
             inscriptions.append(inscription)
 
         return inscriptions
 
     def findAllInscriptionsByUser(self, con, userId):
         """ obtiene los datos de las inscripciones de los alumnos """
-        ids = self.inscriptionDAO.findByUser(con, userId)
+        ids = InscriptionDAO.findByUser(con, userId)
         inscriptions = []
         for id in ids:
-            inscription = self.inscriontDAO.findById(con, id)
+            inscription = InscriptionDAO.findById(con, id)
             inscriptions.append(inscription)
 
         return inscriptions
 
     def deleteInscriptionById(self, con, iid):
         """ elimina la inscripción con el id determinado """
-        self.inscriptionDAO.delete(con, iid)
+        InscriptionDAO.delete(con, iid)
 
     def persistInscriptionByUser(self, con, userId, d):
         """ genera una inscripcion nueva por usuario """
         d.userId = userId;
-        self.inscriontDAO.persist(con, inscription)
+        InscriptionDAO.persist(con, inscription)
 
     def findByUser(self, con, userId):
         """
             obtiene todos los datos referidos a las propiedades de insercion laboral que no sean inscripciones a la bolsa
         """
 
-        cur = con.cursor()
-        cur.execute('select id, user_id, name, level from laboral_insertion.languages where user_id = %s', (userId,))
+        languagesIds = LanguageDAO.findByUser(con, userId)
         languages = []
-        for c in cur:
-            language = {
-                'id': c[0],
-                'name': c[2],
-                'level': c[3]
-            }
-            languages.append(language)
+        for id in languagesIds:
+            languages.append(LanguageDAO.findById(con, id))
 
-        cur.execute('select id, accepted_conditions, email, cv from laboral_insertion.users where id = %s', (userId,))
-        if cur.rowcount <= 0:
-            return None
-
-        r = cur.fetchone()
-        ldata = {
-            'id': userId,
-            'accepted_conditions': r[1],
-            'email': r[2],
-            'languages': languages,
-            'cv': r[3]
-        }
-        return ldata
+        users = model.laboralinsertion.user.UserDAO.findById(con, userId)
+        user = users[0]
+        user.languages = languages
+        return user
 
     def persist(self, con, d):
         """ actualiza la información de insercion laboral del usuario """

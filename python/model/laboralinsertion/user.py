@@ -35,6 +35,7 @@ class UserDAO:
         u.email = r['email']
         u.cv = r['cv']
         u.created = r['created']
+        return u
 
     @staticmethod
     def persist(con, u):
@@ -66,7 +67,7 @@ class UserDAO:
     def findById(con, id):
         cur = con.cursor()
         try:
-            cur.execute('select * from laboral_insertion.users')
+            cur.execute('select * from laboral_insertion.users where id = %s', (id,))
             ins = [ UserDAO._fromResult(x) for x in cur ]
             return ins
 

@@ -77,7 +77,7 @@ class InscriptionDAO:
         """ elimina la inscripción con el id determinado """
         cur = con.cursor()
         try:
-            cur.execute('delete from laboral_insertion.inscriptions where id = %s', (id,))            
+            cur.execute('delete from laboral_insertion.inscriptions where id = %s', (id,))
         finally:
             cur.close()
 
@@ -115,7 +115,7 @@ class InscriptionDAO:
             if cur.rowcount <= 0:
                 return None
             r = cur.fetchone()
-            return InscriptionDAO._loadFrom(r)
+            return InscriptionDAO._fromResult(r)
 
         finally:
             cur.close()

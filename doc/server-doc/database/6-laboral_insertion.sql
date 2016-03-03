@@ -3,6 +3,14 @@ tablas del módulo de inserción laboral
 */
 create schema laboral_insertion;
 
+  create table laboral_insertion.companies (
+      id varchar primary key,
+      name varchar not null,
+      address varchar,
+      telephones varchar[],
+      emails varchar[]
+  );
+
   create table laboral_insertion.users (
     id varchar not null primary key references profile.users (id),
     accepted_conditions boolean default false,
@@ -10,6 +18,13 @@ create schema laboral_insertion;
     cv varchar references files.files (id),
     creation timestamptz default now()
   );
+
+  create table laboral_insertion.languages (
+      id varchar not null primary key,
+      user_id varchar not null references laboral_insertion.users (id),
+      name varchar not null,
+      level varchar not null
+  );  
 
   create table laboral_insertion.inscriptions (
     id varchar not null primary key,

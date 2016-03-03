@@ -407,8 +407,9 @@ class StudentDAO:
     def _fromResult(r):
         s = Student()
         s.id = r['id']
-        s.studentNumer = r['student_number']
+        s.studentNumber = r['student_number']
         s.condition = r['condition']
+        return s
 
     @staticmethod
     def findAll(con):

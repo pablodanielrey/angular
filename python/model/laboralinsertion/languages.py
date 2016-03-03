@@ -71,7 +71,7 @@ class LanguageDAO:
             if cur.rowcount <= 0:
                 return None
             r = cur.fetchone()
-            return LanguageDAO._loadFrom(r)
+            return LanguageDAO._fromResult(r)
 
         finally:
             cur.close()

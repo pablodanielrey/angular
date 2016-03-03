@@ -195,8 +195,14 @@ class LaboralInsertionWamp(ApplicationSession):
         try:
             data = self.laboralInsertion.findByUser(con, userId)
             eid = data.email
-            data['email'] = self.mails.findById(con, eid)
-            return data
+            mails = MailDAO.findById(con, eid)
+            if mails is not None and len(mails) > 0:
+                data.email = mails[0]
+            else:
+                data.email = ''
+            user = data.__dict__
+            user['languages'] = [ l.__dict__ for l in data.languages ]
+            return
 
         finally:
             self.conn.put(con)
@@ -205,7 +211,8 @@ class LaboralInsertionWamp(ApplicationSession):
         con = self.conn.get()
         try:
             data = self.laboralInsertion.findAllInscriptionsByUser(con, userId)
-            return data
+            insc = [ i.__dict__ for i in data ]
+            return insc
 
         finally:
             self.conn.put(con)
