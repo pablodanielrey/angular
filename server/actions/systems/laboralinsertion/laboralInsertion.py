@@ -198,12 +198,16 @@ class LaboralInsertionWamp(ApplicationSession):
         con = self.conn.get()
         try:
             data = self.laboralInsertion.findByUser(con, userId)
+
+            """
             eid = data.email
             mails = MailDAO.findById(con, eid)
             if mails is not None and len(mails) > 0:
                 data.email = mails[0].__dict__
             else:
                 data.email = ''
+            """
+            
             user = data.__dict__
             user['languages'] = [ l.__dict__ for l in data.languages ]
             return user
