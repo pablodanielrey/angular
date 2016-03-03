@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import uuid
 
 class Language:
     def __init__(self):
@@ -35,12 +36,19 @@ class LanguageDAO:
 
     @staticmethod
     def persist(con, language):
+        LanguageDAO.deleteByUser(con, language.userId)
         cur = con.cursor()
         try:
-            language.id = str(uuid.uuid4)
-            ins = language.__dict__
-            cur.execute('insert into laboral_insertion.languages (id, user_id, name, level) values '
-                        '(%(id)s, %(user_id)s, %(name)s, %(level)s)', ins)
+            if language.id is None:
+                language.id = str(uuid.uuid4())
+                ins = language.__dict__
+                cur.execute('insert into laboral_insertion.languages (id, user_id, name, level) values '
+                            '(%(id)s, %(userId)s, %(name)s, %(level)s)', ins)
+            else:
+                ins = language.__dict__
+                cur.execute('update laboral_insertion.languages set user_id = %(userId)s, name = %(name)s,'
+                            'level = %(level)s where id = %(id)s', ins)
+
         finally:
             cur.close()
 

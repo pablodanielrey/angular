@@ -12,6 +12,7 @@ import os
 from model.laboralinsertion.laboralInsertion import LaboralInsertion
 from model.laboralinsertion.inscription import Inscription
 from model.laboralinsertion.company import Company
+from model.laboralinsertion.languages import Language
 import model.laboralinsertion
 from model.laboralinsertion.mails import Sent
 from model.users.users import UserDAO
@@ -187,7 +188,15 @@ class LaboralInsertionWamp(ApplicationSession):
         try:
             u = model.laboralinsertion.user.User()
             u.__dict__ = data
-            self.laboralInsertion.persist(con, u)
+            languages = []
+            for l in data['languages']:
+                l['id'] = l['id'] if 'id' in l else None
+                l['userId'] = u.id
+                l2 = Language()
+                l2.__dict__ = l
+                languages.append(l2)
+
+            self.laboralInsertion.persist(con, u, languages)
             con.commit()
             return True
 
@@ -207,7 +216,7 @@ class LaboralInsertionWamp(ApplicationSession):
             else:
                 data.email = ''
             """
-            
+
             user = data.__dict__
             user['languages'] = [ l.__dict__ for l in data.languages ]
             return user

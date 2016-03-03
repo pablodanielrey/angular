@@ -171,9 +171,11 @@ class LaboralInsertion:
         user.languages = languages
         return user
 
-    def persist(self, con, d):
+    def persist(self, con, user, languages):
         """ actualiza la información de insercion laboral del usuario """
-        UserDAO.persist(con, d)
+        UserDAO.persist(con, user)
+        for l in languages:
+            LanguageDAO.persist(con, l)
 
 
     def sendMailToCompany(self, con, inscriptions, company):
