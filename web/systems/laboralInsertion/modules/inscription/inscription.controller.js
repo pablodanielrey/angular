@@ -309,7 +309,6 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
 
     var ok = $scope.checkUserData();
     if (!ok) {
-      Notifications.message('Por favor complete todos los campos requeridos');
       return;
     }
 
