@@ -12,6 +12,7 @@ import os
 from model.laboralinsertion.laboralInsertion import LaboralInsertion
 from model.laboralinsertion.inscription import Inscription
 from model.laboralinsertion.company import Company
+import model.laboralinsertion
 from model.laboralinsertion.mails import Sent
 from model.users.users import UserDAO
 from model.users.users import MailDAO
@@ -184,7 +185,9 @@ class LaboralInsertionWamp(ApplicationSession):
     def persist(self, data):
         con = self.conn.get()
         try:
-            self.laboralInsertion.persist(con, data)
+            u = laboralinsertion.user.User()
+            u.__dict__ = data
+            self.laboralInsertion.persist(con, u)
             con.commit()
             return True
 
@@ -231,9 +234,12 @@ class LaboralInsertionWamp(ApplicationSession):
     def persistInscriptionByUser(self, userId, data):
         con = self.conn.get()
         try:
+            if 'id' not in data:
+                data['id'] = None
+            data['userId'] = userId
             i = Inscription()
             i.__dict__ = data
-            i.userId = userId
+
             self.laboralInsertion.persistInscription(con, i)
             con.commit()
             return True
