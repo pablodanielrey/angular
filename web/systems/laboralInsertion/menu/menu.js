@@ -1,8 +1,8 @@
 var app = angular.module('mainApp');
 
-app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Notifications', 'Login',
+app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Notifications', 'Login', 'Session',
 
-  function ($rootScope, $scope, $location, Notifications, Login) {
+  function ($rootScope, $scope, $location, Notifications, Login, Session) {
 
     $scope.model = {
       class:'',
@@ -26,8 +26,8 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Notifications'
     }
 
   	$scope.exit = function() {
-      var sid = '';
-      Login.logout(sid, function(ok) {
+      var sid = Session.getCurrentSession();
+      Login.logout(function(ok) {
         $location.path('/');
       }, function(err) {
         console.log(err)
