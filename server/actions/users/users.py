@@ -90,6 +90,7 @@ class UsersWamp(ApplicationSession):
         try:
             u = User()
             u.__dict__ = user
+            u.telephones = user['telephones']
             userId = self.users.persist(con, u)
             con.commit()
             return userId
