@@ -27,7 +27,8 @@ class Login:
         s.userId = up.userId
         s.username = up.username
         sid = self.sessions.persist(con, s)
-        return sid
+        s.id = sid
+        return s
 
     def logout(self, con, sid):
         assert sid is not None

@@ -11,7 +11,7 @@ app.service('Cache', function($window) {
   this.getItem = function(key) {
     var s = this.getStorage();
     var jdata = s.getItem(key);
-    if (jdata == null || jdata == undefined) {
+    if (jdata == null || jdata == undefined || jdata == "undefined") {
       return null;
     }
     var data = JSON.parse(jdata);
