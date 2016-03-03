@@ -120,7 +120,6 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
     Files.upload(null, fileName, 'image/jpeg', Files.BASE64, photo).then(
         function(id) {
           $scope.model.loadingPhoto = false;
-          console.log(id);
           $scope.model.user.photo = id;
           $scope.updateUserData();
         },
@@ -137,11 +136,10 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
   $scope.addCV = function(fileName, fileContent) {
 
     $scope.model.formatCV = false;
-    console.log(fileName);
 
     re = /^.*\.pdf$/i
     if (!re.test(fileName)) {
-      console.log('formato no soportado');
+      // console.log('formato no soportado');
       $scope.model.formatCV = true;
       return;
     }
@@ -153,7 +151,6 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
         function(id) {
           $scope.model.cv_name = fileName;
           $scope.model.loadingCv = false;
-          console.log(id);
           $scope.model.laboralData.cv = id;
         },
         function(err) {
@@ -194,8 +191,6 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
   $scope.$watch(function() { return $scope.model.laboralData.cv; }, function(o,n) { $scope.checkInscriptionPreconditions(); });
 
   $scope.checkInscriptionPreconditions = function() {
-
-      console.log($scope.model.cr);
 
       var ok = true;
       var offer = $scope.model.offer;
@@ -303,7 +298,6 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
         ok = ($scope.model.laboralData.cv != null && $scope.model.laboralData.cv != '');
       }
 
-      console.log(ok);
       $scope.model.showNext = ok;
     }
 
@@ -334,10 +328,6 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
   $scope.changeRegistration = function() {
     $scope.model.cr = ($scope.model.cr + 1) % $scope.model.registrations.length;
     $scope.checkInscriptionPreconditions();
-
-    console.log($scope.model.user);
-    console.log($scope.model.offer);
-    console.log($scope.model.laboralData);
   }
 
   $scope.changePreviousRegistration = function() {
@@ -379,7 +369,6 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
     });
 
     Users.findUser(uid, function(user) {
-      console.log(user);
       $scope.formatUserToView(user);
       $scope.model.user = user;
     }, function(err) {
@@ -387,7 +376,6 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
     })
 
     Users.findMails(uid, function(mails) {
-      console.log(mails);
       $scope.model.mails.emails = mails;
       if (mails.length > 0) {
         $scope.model.laboralData.email = mails[0].id;
@@ -402,7 +390,6 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
         if (laboralData == null) {
           return;
         }
-        console.log(laboralData);
         $scope.model.laboralData = laboralData;
 
         // encuentro los metadatos del cv si es que esta cargado
@@ -446,14 +433,14 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
 
 
     Users.updateUser($scope.model.user, function(res) {
-      console.log(res);
+
     }, function(err) {
       console.log(err);
     })
   }
 
   $scope.updateStudentData = function() {
-    console.log('los datos del legajo son de solo lectura');
+    // console.log('los datos del legajo son de solo lectura');
   }
 
   $scope.updateLaboralData = function() {
@@ -511,7 +498,6 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
     }
     ////////
 
-    console.log($scope.model.offer);
 
     Promise.all([
       LaboralInsertion.persist(ld),
@@ -542,7 +528,7 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
   }
 
   $scope.downloadInscription = function(i) {
-    console.log(i);
+    // console.log(i);
   }
 
   $scope.removeInscription = function(i) {
