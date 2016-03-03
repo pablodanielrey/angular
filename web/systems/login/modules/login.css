@@ -15,10 +15,9 @@
   background-color: black;
 }
 
-.login .principal {
+/*.login .principal {
   display: none;
-}
-
+}*/
 
 
 
@@ -183,12 +182,17 @@
 }
 
 .login .inputPassword, .inputUser {
-  padding: 5px;
   width: 210px;
-  font-size: 16px;
-
-  border: 1px solid #d3cdcd;
+  height: 23px;
+  border: 1px solid #DBE2E5;
   background-color: #EEEEEE;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  font-size: 20px;
+  padding: 5px;
+  text-align: center;
+
 }
 
 .login .textPasswordError {
@@ -197,25 +201,67 @@
 }
 
 .login .btnPassword, .btnNext {
-  padding: 8px;
-  width: 224px;
+  padding: 10px;
+  width: 223px;
   font-size: 14px;
   background-color: #0066A6;
   color: white;
   border: 1px solid #EEEEEE;
   cursor: pointer;
   margin-top: 5px;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
 }
 
 .login .btnPassword:hover, .btnNext:hover {
   background-color: #075382;
 }
 
-.login .textNoPuedoAcceder {
-  font-size: 12px;
-  color: #0066A6;
-  cursor: pointer;
+.login.screenUser.ocultarError .contentUserNonExistent {
+  display: none;
 }
+
+.login.screenPassword.ocultarError .contentErrorPassword {
+  display: none;
+}
+
+.login.screenUser .contentUserNonExistent, .contentErrorPassword {
+  position: absolute;
+  margin-top: 2px;
+  width: 223px;
+  background-color: white;
+}
+
+.login .arrow {
+  color: #E43E46;
+  background-color: white;
+  height: 10px;
+  margin-left: 20px;
+}
+
+.login .textUserNonExistent {
+  background-color: #E43E46;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  padding: 10px;
+  color:white;
+}
+
+.login .textUserNonExistent2 {
+  font-size: 13px;
+}
+
+
+::-webkit-input-placeholder { color: #ACADB1; font-size: 14px;}
+:-moz-placeholder { color: #ACADB1; opacity:  1; font-size: 14px;}
+::-moz-placeholder { color: #ACADB1; opacity:  1; font-size: 14px;}
+:-ms-input-placeholder { color: #ACADB1; font-size: 14px;}
+:placeholder-shown { color: #ACADB1;  font-size: 14px;}
+
+.login .inputPassword::-webkit-input-placeholder { color:#ACADB1; padding-top: 4px;}
+.login .inputPassword::-moz-input-placeholder { color:#ACADB1; padding-top: 4px;}
 
 
 /********************* FOOTER **********************************/
@@ -240,7 +286,8 @@
 
 .login.screenUser .contentTextUserName,
 .login.screenUser .contentInputPassword,
-.login.screenUser .contentBtnPassword {
+.login.screenUser .contentBtnPassword,
+.login.screenUser .contentErrorPassword {
     display: none;
 }
 .login.screenUser .textPasswordError {
@@ -249,7 +296,8 @@
 
 .login.screenPassword .contentTextUser,
 .login.screenPassword .contentInputUser,
-.login.screenPassword .contentBtnNext {
+.login.screenPassword .contentBtnNext,
+.login.screenPassword .contentUserNonExistent {
     display: none;
 }
 .login.screenPassword .textPasswordError {

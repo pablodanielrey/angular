@@ -1,4 +1,8 @@
-<div class="login {{view.classScreen}}  {{view.classConnection}}">    <!-- Variables 1: screenUser, screenPassword -Variables 2:  verServerDesconectado, verServerConectado-->
+<!-- <div class="login {{view.classScreen}}  {{view.classConnection}} usuarioNoExiste"> -->
+  <!-- VARIABLES 1: screenUser, screenPassword -VARIABLES 2:  verServerDesconectado, verServerConectado - VARIABLES 3: ocultarError-->
+<div class="login screenUser  ocultarError ">
+   <!-- Variables 1: screenUser, screenPassword -Variables 2:  verServerDesconectado, verServerConectado-->
+
 
   <div class="contentHeader" ng-include="'/systems/login/modules/header/header.html'"></div>
 
@@ -34,29 +38,53 @@
 
                 <div class="contentPassword">
                     <form name="formUser" ng-submit="sendUsername()">
+
                       <div class="contentInputUser">
                         <input ng-model="model.username" class="inputUser" type="text" placeholder="Número de documento" autofocus moo-focus-expression="view.focus == 'inputUser'"></imput>
                       </div>
+
+                      <div class="contentUserNonExistent">
+                          <div class="arrow">
+                            <i class="fa fa-sort-asc fa-2x"></i>
+                          </div>
+                          <div class="textUserNonExistent">
+                            <i class="fa fa-frown-o"></i> Oops! <span class="textUserNonExistent2"> El usuario no existe</span>
+                          </div>
+                      </div>
+
                       <div class="contentBtnNext">
                         <input class="btnNext" type="submit" name="button" value="Siguiente"/>
                       </div>
                     </form>
 
                     <form name="formPassword" ng-submit="sendPassword()">
+
                       <div class="contentInputPassword">
-                        <input ng-model="model.password" class="inputPassword" id="inputPassword" type="password" placeholder="Contraseña" moo-focus-expression="view.focus == 'inputPassword'"></imput>
+                        <input ng-model="model.password" class="inputPassword"  type="password" placeholder="Contraseña" autofocus moo-focus-expression="view.focus == 'inputPassword'"></imput>
                       </div>
+
+                      <div class="contentErrorPassword">
+                          <div class="arrow">
+                            <i class="fa fa-sort-asc fa-2x"></i>
+                          </div>
+                          <div class="textUserNonExistent">
+                            <i class="fa fa-frown-o"></i> Oops! <span class="textUserNonExistent2"> Contraseña incorrecta</span>
+                          </div>
+                      </div>
+
                       <div class="contentBtnPassword">
                         <input class="btnPassword" type="submit" name="button" value="Acceder"/>
                       </div>
+
                     </form>
-                    <div class=textPasswordError>
+
+                    <!-- <div class=textPasswordError>
                       ¡La contraseña no es correcta!
-                    </div>
+                    </div> -->
 
                 </div>
                 <div class="textNoPuedoAcceder">
-                    ¿No podés acceder?
+                    <!-- ¿No podés acceder? -->
                 </div>
             </div>
         </div>
