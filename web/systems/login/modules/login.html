@@ -1,16 +1,6 @@
 <div class="login {{view.classScreen}}  {{view.classConnection}}">    <!-- Variables 1: screenUser, screenPassword -Variables 2:  verServerDesconectado, verServerConectado-->
 
-    <div class="header">
-        <div class="logo">
-          <img src="./modules/img/diresi.png" width="104px" height="25px">
-        </div>
-        <div class="access">
-            <button title="servidor">
-              <i class="fa fa-server"></i>
-              <button class="notification2"><i class="fa fa-exclamation-triangle"></i></button>
-            </button>
-        </div>
-    </div>
+  <div class="contentHeader" ng-include="'/systems/login/modules/header/header.html'"></div>
 
     <video loop muted autoplay class="video" >
             <source class="video2" src="./img/video.mp4" type="video/mp4" width="100%" height="100%">
@@ -87,13 +77,8 @@
       </div>
     </div>
 
+    <div class="contentFooter" ng-include="'/systems/login/modules/footer/footer.html'"></div>
 
-    <div class="footer">
-      <span>
-        © 2016 | DiTESI | Dirección de tecnologías y Sistemas Informáticos
-        | Facultad de Ciencias Económicas | UNLP | Calle 6 Nº 777
-      </span>
-    </div>
 
 
 </div>
