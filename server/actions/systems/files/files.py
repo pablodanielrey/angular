@@ -53,7 +53,7 @@ class FilesWamp(ApplicationSession):
     def findById(self, id):
         con = self.conn.get()
         try:
-            r = self.files.findById(con, id)
+            r = FileDAO.findById(con, id)
             rs = r.__dict__
             return rs
 

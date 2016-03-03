@@ -60,7 +60,7 @@ class FileDAO:
         f.size = r['size'],
         f.created = r['created']
         f.modified = r['modified']
-        return r
+        return f
 
     @staticmethod
     def persist(con, f):
@@ -101,7 +101,7 @@ class FileDAO:
         try:
             cur.execute('select id, name, hash, mimetype, codec, size, created, modified from files.files where id = %s', (id,))
             ins = [ FileDAO._fromResult(x) for x in cur ]
-            return ins
+            return ins[0]
 
         finally:
             cur.close()

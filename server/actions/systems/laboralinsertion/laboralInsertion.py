@@ -197,7 +197,7 @@ class LaboralInsertionWamp(ApplicationSession):
             eid = data.email
             mails = MailDAO.findById(con, eid)
             if mails is not None and len(mails) > 0:
-                data.email = mails[0]
+                data.email = mails[0].__dict__
             else:
                 data.email = ''
             user = data.__dict__
