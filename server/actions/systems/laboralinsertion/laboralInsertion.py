@@ -202,7 +202,7 @@ class LaboralInsertionWamp(ApplicationSession):
                 data.email = ''
             user = data.__dict__
             user['languages'] = [ l.__dict__ for l in data.languages ]
-            return
+            return user
 
         finally:
             self.conn.put(con)
@@ -221,7 +221,8 @@ class LaboralInsertionWamp(ApplicationSession):
         con = self.conn.get()
         try:
             data = self.laboralInsertion.findAllInscriptions(con)
-            return data
+            insc = [ i.__dict__ for i in data ]
+            return insc
 
         finally:
             self.conn.put(con)
