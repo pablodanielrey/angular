@@ -185,7 +185,7 @@ class LaboralInsertionWamp(ApplicationSession):
     def persist(self, data):
         con = self.conn.get()
         try:
-            u = laboralinsertion.user.User()
+            u = model.laboralinsertion.user.User()
             u.__dict__ = data
             self.laboralInsertion.persist(con, u)
             con.commit()

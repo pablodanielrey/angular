@@ -173,64 +173,7 @@ class LaboralInsertion:
 
     def persist(self, con, d):
         """ actualiza la información de insercion laboral del usuario """
-
-        userId = d['id']
-
-        if 'cv' in d and d['cv'] is not None and d['cv'] is not '' and not FileDAO.check(con, d['cv']):
-            raise Exception('no existe el cv en la base de datos')
-
-        cur = con.cursor()
-        cur.execute('select id from laboral_insertion.users where id = %s', (userId,))
-        if (cur.rowcount <= 0):
-            ldata = []
-            sql = 'insert into laboral_insertion.users ('
-            values = '('
-            if 'accepted_conditions' in d:
-                sql = sql + 'accepted_conditions'
-                ldata.append(d['accepted_conditions'])
-                values = values + "%s"
-
-            if 'email' in d:
-                sql = sql + ',email'
-                ldata.append(d['email'])
-                values = values + ",%s"
-
-            if 'cv' in d:
-                sql = sql + ',cv'
-                ldata.append(d['cv'])
-                values = values + ",%s"
-
-            values = values + ",%s)"
-            ldata.append(d['id'])
-            sql = sql + ',id) values ' + values
-            data = tuple(ldata)
-
-            cur.execute(sql, data)
-        else:
-
-            ldata = []
-            sql = 'update laboral_insertion.users set accepted_conditions = %s '
-            ldata.append(d['accepted_conditions'])
-
-            if 'email' in d:
-                sql = sql + ',email = %s'
-                ldata.append(d['email'])
-
-            if 'cv' in d:
-                sql = sql + ',cv = %s'
-                ldata.append(d['cv'])
-
-            sql = sql + ' where id = %s'
-            ldata.append(d['id'])
-
-            data = tuple(ldata)
-            cur.execute(sql, data)
-
-        cur.execute('delete from laboral_insertion.languages where user_id = %s', (d['id'],))
-        languages = d['languages']
-        for l in languages:
-            lid = str(uuid.uuid4())
-            cur.execute('insert into laboral_insertion.languages (id, user_id, name, level) values (%s,%s,%s,%s)', (lid, userId, l['name'], l['level']))
+        UserDAO.persist(con, d)
 
 
     def sendMailToCompany(self, con, inscriptions, company):

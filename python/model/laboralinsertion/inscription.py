@@ -58,6 +58,10 @@ class InscriptionDAO:
 
     @staticmethod
     def persist(con, inscription):
+
+        import logging
+        logging.debug(inscription.__dic__)
+
         ''' crea o actualiza un registro de inscripcion en la base de datos '''
         cur = con.cursor()
         try:

@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import logging
+from model.files.files import FileDAO
 
 class User:
     def __init__(self):
@@ -39,6 +41,15 @@ class UserDAO:
 
     @staticmethod
     def persist(con, u):
+
+        logging.info(u)
+
+        if u.cv is None:
+            raise Exception('no existe el cv en la base de datos')
+
+        if not FileDAO.check(con, u.cv):
+            raise Exception('no existe el cv en la base de datos')
+
         cur = con.cursor()
         try:
             if u.id is None:
@@ -47,8 +58,9 @@ class UserDAO:
                 cur.execute('insert into laboral_insertion.users (id, accepted_conditions, email, cv) values '
                             '(%(id)s, %(acceptedConditions)s, %(email)s, %(cv)s)', ins)
             else:
-                cur.execute('update laboral_insertion.inscriptions (accepted_conditions = %(acceptedConditions)s, email = %(email)s, '
-                            'cv = %(cv)s', ins)
+                ins = u.__dict__
+                cur.execute('update laboral_insertion.users set accepted_conditions = %(acceptedConditions)s, email = %(email)s, '
+                            'cv = %(cv)s where id = %(id)s', ins)
         finally:
             cur.close()
 
