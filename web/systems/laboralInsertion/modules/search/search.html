@@ -128,15 +128,15 @@
 
       </div>
 
-      <!-- <div class="searchResults" ng-class="{true:'seleccionado'}[isSelected(i.user_id)]"> -->
+      <!-- <div class="searchResults" ng-class="{true:'seleccionado'}[isSelected(i.userId)]"> -->
       <div class="searchResults" ng-class="{true:'seleccionado'}[isSelected(i.id)]">
         <table ng-repeat='i in model.inscriptions'>
           <tr class="fileResults">
             <td>
-              <div class="Select" ng-if="getMail(i.user_id) != 'No Definido'">
+              <div class="Select" ng-if="getMail(i.userId) != 'No Definido'">
                 <input type="checkbox" ng-checked='isSelected(i)' ng-click='selectInscription(i)'>
               </div>
-              <div class="Select" ng-if="getMail(i.user_id) == 'No Definido'">
+              <div class="Select" ng-if="getMail(i.userId) == 'No Definido'">
                 -
               </div>
             </td>
@@ -152,37 +152,37 @@
             </td>
             <td>
               <div class="registration">
-                {{getDate(i.creation)}}
+                {{getDate(i.created)}}
               </div>
             </td>
             <td>
               <div class="name">
-                {{getName(i.user_id)}}
+                {{getName(i.userId)}}
               </div>
             </td>
             <td>
               <div class="sex">
-                {{getGenre(i.user_id)}}
+                {{getGenre(i.userId)}}
               </div>
             </td>
             <td>
               <div class="age">
-                {{getAge(i.user_id)}}
+                {{getAge(i.userId)}}
               </div>
             </td>
             <td>
               <div class="dni">
-                {{getDni(i.user_id)}}
+                {{getDni(i.userId)}}
               </div>
             </td>
             <td>
               <div class="city">
-                {{getResidence(i.user_id)}}
+                {{getResidence(i.userId)}}
               </div>
             </td>
             <td>
               <div class="city2">
-                {{getCity(i.user_id)}}
+                {{getCity(i.userId)}}
               </div>
             </td>
             <td>
@@ -192,12 +192,12 @@
             </td>
             <td>
               <div class="english">
-                {{getEnglish(i.user_id)}}
+                {{getEnglish(i.userId)}}
               </div>
             </td>
             <td>
               <div class="other">
-                {{getLanguagesOther(i.user_id)}}
+                {{getLanguagesOther(i.userId)}}
               </div>
             </td>
             <td>
@@ -227,7 +227,7 @@
             </td>
             <td>
               <div class="mail">
-                {{getMail(i.user_id)}}
+                {{getMail(i.userId)}}
               </div>
             </td>
           </tr>
@@ -302,7 +302,7 @@
 
               </div>
 
-              <!-- <div class="searchResults" ng-class="{true:'seleccionado'}[isSelected(i.user_id)]"> -->
+              <!-- <div class="searchResults" ng-class="{true:'seleccionado'}[isSelected(i.userId)]"> -->
               <div class="searchResults" ng-class="{true:'seleccionado'}[isSelected(i.id)]">
                 <table ng-repeat='i in model.inscriptions'>
                   <tr class="fileResults">
@@ -315,19 +315,19 @@
 
                     <td>
                       <div class="name">
-                        {{getName(i.user_id)}}
+                        {{getName(i.userId)}}
                       </div>
                     </td>
 
                     <td>
                       <div class="dni">
-                        {{getDni(i.user_id)}}
+                        {{getDni(i.userId)}}
                       </div>
                     </td>
 
                     <td>
                       <div class="age">
-                        {{getAge(i.user_id)}}
+                        {{getAge(i.userId)}}
                       </div>
                     </td>
 

@@ -11,10 +11,10 @@ import uuid
 import os
 from model.laboralinsertion.laboralInsertion import LaboralInsertion
 from model.laboralinsertion.inscription import Inscription
-from model.laboralinsertion.company import Company
+from model.laboralinsertion.company import Company, CompanyDAO
 from model.laboralinsertion.languages import Language
 import model.laboralinsertion
-from model.laboralinsertion.mails import Sent
+from model.laboralinsertion.mails import Sent, SentDAO
 from model.users.users import UserDAO
 from model.users.users import MailDAO
 from model.registry import Registry
@@ -207,7 +207,8 @@ class LaboralInsertionWamp(ApplicationSession):
         con = self.conn.get()
         try:
             data = self.laboralInsertion.findByUser(con, userId)
-
+            if data is None:
+                return None
             """
             eid = data.email
             mails = MailDAO.findById(con, eid)
@@ -294,8 +295,8 @@ class LaboralInsertionWamp(ApplicationSession):
     def findAllCompanies(self):
         con = self.conn.get()
         try:
-            ids = Company.findAll(con)
-            cs = Company.findById(con, ids)
+            ids = CompanyDAO.findAll(con)
+            cs = CompanyDAO.findById(con, ids)
             css = [c.__dict__ for c in cs]
             return css
 
@@ -305,7 +306,7 @@ class LaboralInsertionWamp(ApplicationSession):
     def findSentByInscriptionId(self, id):
         con = self.conn.get()
         try:
-            ids = Sent.findByInscriptionId(con, id)
+            ids = SentDAO.findByInscriptionId(con, id)
             return ids
 
         finally:

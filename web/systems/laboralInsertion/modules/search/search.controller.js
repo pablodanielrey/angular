@@ -126,7 +126,7 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
   $scope.selectInscription = function(i) {
 
     // chequeo que tenga email
-    if ($scope.getMail(i.user_id) == 'No Definido') {
+    if ($scope.getMail(i.userId) == 'No Definido') {
       console.log('No tiene email');
       return;
     }
@@ -193,7 +193,7 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
   }
 
   $scope.getMail = function(id) {
-    if ($scope.model.data[id].email != null) {
+    if ($scope.model.data[id] != null && $scope.model.data[id].email != null) {
       return $scope.model.data[id].email.email;
     } else {
       return "No Definido";
@@ -201,7 +201,7 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
   }
 
   $scope.getEnglish = function(id) {
-    if ($scope.model.data[id].languages.length > 0) {
+    if ($scope.model.data[id] != null && $scope.model.data[id].languages != null && $scope.model.data[id].languages.length > 0) {
       for (a = 0; a < $scope.model.data[id].languages.length; a++) {
         if ($scope.model.data[id].languages[a].name == 'Inglés') {
           return $scope.model.data[id].languages[a].level;
@@ -214,7 +214,7 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
   }
 
   $scope.getLanguagesOther = function(id) {
-    if ($scope.model.data[id].languages.length > 0) {
+    if ($scope.model.data[id] != null && $scope.model.data[id].languages != null && $scope.model.data[id].languages.length > 0) {
       for (a = 0; a < $scope.model.data[id].languages.length; a++) {
         if ($scope.model.data[id].languages[a].name != 'Inglés') {
           return "Sí";
@@ -276,8 +276,8 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
   */
   $scope.getUsers = function(ins) {
     for (i = 0; i < ins.length; i++) {
-      //console.log('Buscando usuario ' + ins[i].user_id);
-      Users.findById(ins[i].user_id).then(function(user) {
+      //console.log('Buscando usuario ' + ins[i].userId);
+      Users.findById(ins[i].userId).then(function(user) {
         $scope.model.users[user['id']] = user;
         //console.log(user);
       }, function(err) {
@@ -286,14 +286,30 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     }
   }
 
+  $scope.findMail = function(userId) {
+    Users.findMails(userId, function(mails) {
+      d = $scope.model.data[userId];
+      for ( var i = 0; i < mails.length; i++) {
+        if (d["email"] == mails[i]["id"]) {
+          d["email"] = mails[i];
+        }
+      }
+    }, function(err) {
+      console.log(err);
+    });
+  }
+
   /*
     Obtiene la info que tiene ese usuario de las pasantias
   */
   $scope.getUserData = function(ins) {
     for (i = 0; i < ins.length; i++) {
-      //console.log('Buscando usuario ' + ins[i].user_id);
-      LaboralInsertion.findByUser(ins[i].user_id).then(function(data) {
+      //console.log('Buscando usuario ' + ins[i].userId);
+      LaboralInsertion.findByUser(ins[i].userId).then(function(data) {
         $scope.model.data[data['id']] = data;
+        if (data["email"] != "") {
+          $scope.findMail(data["id"]);
+        }
       }, function(err) {
         console.log(err);
       });
@@ -313,11 +329,12 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
   }
 
   $scope.initialize = function() {
-    // TODO: hay que sacar el return, lo puse para que no cargue nada
-    return;
     // me registro al evento de envío de mails a las empresas.
     $wamp.subscribe('system.laboralInsertion.COMPANYSENDED', $scope.mailToCompanySent);
 
+  }
+
+  $scope.search = function() {
     LaboralInsertion.findAllInscriptions().then(function(ins) {
       $scope.model.inscriptions = ins;
 
@@ -326,7 +343,6 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
         ins.selected = false;
         LaboralInsertion.findSentByInscriptionId(ins[i]['id']).then(function(r) {
           // registro el numero de veces que esta esa inscripcion en los sents
-          console.log(r);
           $scope.model.sents[r['id']] = r['sents'].length
         }, function(err) {
           console.log(err);
@@ -340,10 +356,6 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     }, function(err) {
       console.log(err);
     });
-  }
-
-  $scope.search = function() {
-    console.log($scope.model.filters);
   }
 
   $rootScope.$on('$viewContentLoaded', function(event) {

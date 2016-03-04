@@ -133,7 +133,7 @@ class LaboralInsertion:
         ids = InscriptionDAO.findAll(con)
         inscriptions = []
         for id in ids:
-            inscription = InscriontDAO.findById(con, id)
+            inscription = InscriptionDAO.findById(con, id)
             inscriptions.append(inscription)
 
         return inscriptions
@@ -167,6 +167,8 @@ class LaboralInsertion:
             languages.append(LanguageDAO.findById(con, id))
 
         users = model.laboralinsertion.user.UserDAO.findById(con, userId)
+        if len(users) == 0:
+            return None
         user = users[0]
         user.languages = languages
         return user

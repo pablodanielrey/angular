@@ -91,7 +91,7 @@ class InscriptionDAO:
         ''' obtiene todos los ids de todas las inscripciones '''
         cur = con.cursor()
         try:
-            cur.execute('select id from laboral_insertion.inscriptions')
+            cur.execute("select id from laboral_insertion.inscriptions")
             ins = [ x['id'] for x in cur ]
             return ins
 
