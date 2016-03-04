@@ -24,6 +24,11 @@ app.config(['$routeProvider', function($routeProvider) {
      controller: 'SearchCtrl'
   })
 
+  .when('/logout', {
+     templateUrl: '/systems/login/modules/logout.html',
+     controller: 'LogoutCtrl'
+  })
+
   .otherwise({
     redirectTo: '/inscripcion'
   });

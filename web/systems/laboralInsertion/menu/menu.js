@@ -28,7 +28,7 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Notifications'
   	$scope.exit = function() {
       var sid = Session.getCurrentSession();
       Login.logout(function(ok) {
-        $location.path('/');
+        $location.path('/logout');
       }, function(err) {
         console.log(err)
         Notifications.message(err);
