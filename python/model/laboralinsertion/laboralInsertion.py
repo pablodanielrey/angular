@@ -10,7 +10,7 @@ from model.users.users import StudentDAO
 from model.mail.mail import Mail
 from email.mime.text import MIMEText
 
-from model.laboralinsertion.mails import SentDAO
+from model.laboralinsertion.mails import SentDAO, Sent
 from model.laboralinsertion.inscription import InscriptionDAO
 from model.laboralinsertion.company import CompanyDAO
 from model.laboralinsertion.languages import LanguageDAO
@@ -24,16 +24,7 @@ class LaboralInsertion:
         encapsula todo el acceso a datos de insercion laboral
     """
     def __init__(self):
-        self.files = inject.attr(FileDAO)
-        self.users = inject.attr(model.users.users.UserDAO)
-        self.students = inject.attr(StudentDAO)
-        self.mail = inject.attr(Mail)
-
-        self.sentDAO = inject.attr(SentDAO)
-        self.inscriptionDAO = inject.attr(InscriptionDAO)
-        self.companyDAO = inject.attr(CompanyDAO)
-        self.userLI = inject.attr(model.laboralinsertion.user.UserDAO)
-        self.languagesDAO = inject.attr(LanguageDAO)
+        self.mail = inject.instance(Mail)
 
 
     """
@@ -224,34 +215,42 @@ class LaboralInsertion:
             writer.writerow(['Dni', 'Nombre', 'Apellido', 'Email'])
 
             for i in inscriptions:
-                data = self.findByUser(con, i['user_id'])
-                mail = self.users.findMail(con, data['email'])
-                if mail is None:
+                data = self.findByUser(con, i['userId'])
+                mail = model.users.users.MailDAO.findById(con, data.email)
+                if mail is None or len(mail) <= 0:
                     continue
 
-                if mail['email'] in datar:
+                mail = mail[0]
+
+                if mail.email in datar:
                     continue
 
-                cvf = self.files.findById(con, data['cv'])
-                if cvf['content'] is None:
+
+                if (data.cv is None):
+                    continue
+                cvf = FileDAO.findById(con, data.cv)
+                cvf.content = FileDAO.getContent(con, cvf.id)
+                if cvf.content is None:
                     continue
 
                 ''' decodifico los datos del archivo '''
                 filedata = None
-                if cvf['codec'] == 'binary':
-                    filedata = bytes(cvf['content'])
-                elif cvf['codec'] == 'base64':
-                    filedata = base64.b64decode(bytes(cvf['content']))
+                if cvf.codec[0] == 'binary':
+                    filedata = bytes(cvf.content)
+                elif cvf.codec[0] == 'base64':
+                    filedata = base64.b64decode(bytes(cvf.content))
 
-                user = self.users.findById(con, i['user_id'])
+                user = model.users.users.UserDAO.findById(con, i['userId'])
+                if user is None:
+                    continue
 
-                filename, file_extension = os.path.splitext(cvf['name'])
+                filename, file_extension = os.path.splitext(cvf.name)
                 #fss.append(self.mail.attachFile('{}_{}_{}_{}'.format(user['name'], user['lastname'], user['dni'], file_extension), filedata))
-                fss.append(self.mail.attachFile('{}{}'.format(user['dni'], file_extension), filedata))
+                fss.append(self.mail.attachFile('{}{}'.format(user.dni, file_extension), filedata))
 
-                datar.append(mail['email'])
+                datar.append(mail.email)
                 logging.info('escribiendo fila')
-                writer.writerow([user['dni'], user['name'], user['lastname'], mail['email']])
+                writer.writerow([user.dni, user.name, user.lastname, mail.email])
 
         with open(inscriptionsfile, 'r', newline='', encoding='utf-8') as csvfile:
             fss.append(self.mail.attachFile('inscriptos.csv', csvfile.read(), 'application', 'csv'))

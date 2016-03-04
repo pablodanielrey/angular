@@ -11,7 +11,7 @@ class File:
         self.hash = None
         self.content = None
         self.mimetype = None
-        self.cocec = None
+        self.codec = None
         self.size = 0
         self.created = None
         self.modified = None
