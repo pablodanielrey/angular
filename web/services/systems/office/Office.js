@@ -11,6 +11,9 @@ function Office($rootScope, $wamp, Session) {
   //retorna todas las oficinas
   services.getOffices = getOffices;
 
+  //retorna el objeto oficina
+  services.findOffices = findOffices;
+
   //retorna todas las oficinas en forma de arbol
   services.getOfficesTree = getOfficesTree;
 
@@ -31,6 +34,9 @@ function Office($rootScope, $wamp, Session) {
 
   // elimina el rol para usuario oficina
   services.deleteOfficeRole = deleteOfficeRole;
+
+
+  services.getUserOfficeRoles = getUserOfficeRoles;
 
 
   // -----------------------------------------------------------
@@ -70,6 +76,29 @@ function Office($rootScope, $wamp, Session) {
   */
   function getOffices(callbackOk,callbackError) {
     $wamp.call('offices.offices.getOffices', [])
+    .then(function(res) {
+      if (res != null) {
+        callbackOk(res);
+      } else {
+        callbackError('Error');
+      }
+    },function(err) {
+      callbackError(err);
+    });
+  }
+
+  /*
+    usca la oficina y la retorna
+    res = {
+            name:'',
+            parent:'' -- id de la oficina padre,
+            id:'',
+            email:'',
+            telephone:''
+          }
+  */
+  function findOffices(ids,callbackOk,callbackError) {
+    $wamp.call('offices.offices.findOffices', [ids])
     .then(function(res) {
       if (res != null) {
         callbackOk(res);
@@ -171,8 +200,13 @@ function Office($rootScope, $wamp, Session) {
   }
 
 
-  /*
-    retorna los usuarios que pertenecen a las oficinas y suboficinas en las cuales la persona userId tiene un rol determinado
+  /**
+   * Retornar usuarios que pertenecen a las oficinas y suboficinas en las cuales la persona userId tiene un rol determinado
+   * @param userId Identificacion de usuario
+   * @param role Rol de usuario: Ej. 'realizar-solicitud': Puede realizar solicitudes a otros usuarios de sus oficinas
+   * @param tree
+   * @param callbackOk Funcion a ejecutar para respuestas correctas
+   * @param callbackError Funcion a ejecutar para respuestas erroneas
   */
   function getUserInOfficesByRole(userId, role, tree, callbackOk, callbackError) {
     if (role == null) {
@@ -198,12 +232,16 @@ function Office($rootScope, $wamp, Session) {
   function getOfficesByUserRole(userId, role, tree, callbackOk, callbackError) {
     $wamp.call('offices.offices.getOfficesByUserRole', [userId,role,tree])
       .then(function(res) {
+
         if (res != null) {
+
           callbackOk(res);
         } else {
+
           callbackError('Error');
         }
       },function(err) {
+
         callbackError(err);
       });
   }
@@ -335,6 +373,21 @@ function Office($rootScope, $wamp, Session) {
     }
     sessionId = Session.getSessionId();
     $wamp.call('offices.offices.getRolesAdmin', [sessionId, userId, officesId, usersId])
+      .then(function(res) {
+        if (res != null) {
+          callbackOk(res);
+        } else {
+          callbackError('Error');
+        }
+      },function(err) {
+        callbackError(err);
+      });
+  }
+
+
+  function getUserOfficeRoles(userId,callbackOk,callbackError) {
+    sessionId = Session.getSessionId();
+    $wamp.call('offices.offices.getUserOfficeRoles', [sessionId, userId])
       .then(function(res) {
         if (res != null) {
           callbackOk(res);

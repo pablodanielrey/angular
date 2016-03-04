@@ -2,9 +2,9 @@ angular
   .module('mainApp')
   .service('Users',Users);
 
-Users.inject = ['$rootScope', '$wamp', 'Session','Utils','Cache','Config'];
+Users.inject = ['$rootScope', '$wamp', 'Session','Utils','Cache'];
 
-function Users($rootScope, $wamp, Session, Utils, Cache, Config) {
+function Users($rootScope, $wamp, Session, Utils, Cache) {
 
   var instance = this;
   this.userPrefix = 'user_';
@@ -28,7 +28,7 @@ function Users($rootScope, $wamp, Session, Utils, Cache, Config) {
 
 
   this.confirmMail = function(hash, callbackOk, callbackError) {
-    $wamp.call('users.mails.confirmMail', [hash])
+    $wamp.call('users.mails.confirmEmail', [hash])
       .then(function(res) {
         if (res != null) {
           callbackOk(res);
@@ -46,7 +46,7 @@ function Users($rootScope, $wamp, Session, Utils, Cache, Config) {
     Envía un mail de confirmación al email dado por mail_id
   */
   this.sendConfirmMail = function(id, callbackOk, callbackError) {
-    $wamp.call('users.mails.sendConfirmMail', [id])
+    $wamp.call('users.mails.sendEmailConfirmation', [id])
       .then(function(res) {
         if (res != null) {
           callbackOk(res);
@@ -92,14 +92,17 @@ function Users($rootScope, $wamp, Session, Utils, Cache, Config) {
   }
 
 
+
+
+
   this.findUser = function(id, callbackOk, callbackError) {
 
     // chequeo la cache primero
-    var user = Cache.getItem(instance.userPrefix + id);
-    if (user != null) {
-      callbackOk(user);
-      return;
-    }
+    //var user = Cache.getItem(instance.userPrefix + id);
+    //if (user != null) {
+    //  callbackOk(user);
+    //  return;
+    //}
 
     $wamp.call('users.findById', [id])
       .then(function(user) {
@@ -120,8 +123,8 @@ function Users($rootScope, $wamp, Session, Utils, Cache, Config) {
 
   this.updateUser = function(user, callbackOk, callbackError) {
     // elimino ese usuario de la cache
-    Cache.removeItem(instance.userPrefix + user.id);
-    instance.normalizeUser(user);
+    //Cache.removeItem(instance.userPrefix + user.id);
+    //instance.normalizeUser(user);
 
     $wamp.call('users.persistUser', [user])
       .then(function(res) {
@@ -185,5 +188,27 @@ function Users($rootScope, $wamp, Session, Utils, Cache, Config) {
         callbackError(err);
       });
   };
+
+
+  /*
+    metodos nuevos usados por pablo. para reemplazar los viejos.
+  */
+
+  this.findAllMails = function(userId) {
+    return $wamp.call('users.mails.findMails', [userId]);
+  }
+
+  this.persistMail = function(email) {
+    return $wamp.call('users.mails.persistMail', [email]);
+  }
+
+  this.findByDni = function(dni) {
+    return $wamp.call('users.findByDni', [dni]);
+  }
+
+  this.findById = function(id) {
+    return $wamp.call('users.findById', [id]);
+  }
+
 
 };

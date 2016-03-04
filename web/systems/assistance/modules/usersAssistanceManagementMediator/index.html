@@ -1,0 +1,81 @@
+
+<div class="usersAssistanceManagementMediator">
+  <div class="title">
+    <label><i class="fa fa-ticket"></i> | Administración de solicitudes de un usuario</label>
+  </div>
+
+  <div class="selectUser">
+      <div class="searchUser">
+        <div class="searchTitle">
+          <span><i class="fa fa-user-plus"></i> Seleccione Usuario</span>
+        </div>
+        <div>
+          <input class="inputSearch" ng-model="model.searchUser" ng-click="displayListUser()" placeholder="Buscar...">
+          <ul class="listUsers" ng-class="{true:'visible', false:'hidden'}[isDisplayListUser()]">
+            <li class="liUsers" ng-repeat="user in model.users | filter:model.searchUser | orderBy : 'name'" ng-click="selectUser(user)">{{user.name}} {{user.lastname}}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  <div class="content">
+    <div ng-repeat="justificationId in model.justificationsId">
+       <div ng-if="justificationId === 'e0dfcef6-98bb-4624-ae6c-960657a9a741'" ng-controller="UsersAssistanceManagementMediatorRequestJustificationAACtrl" ng-include="'/systems/assistance/modules/usersAssistanceManagementMediator/requestJustificationAA.html'"></div>
+       <div ng-if="justificationId === '48773fd7-8502-4079-8ad5-963618abe725'" ng-controller="UsersAssistanceManagementMediatorRequestJustificationCCtrl" ng-include="'/systems/assistance/modules/usersAssistanceManagementMediator/requestJustificationC.html'"></div>
+       <div ng-if="justificationId === '4d7bf1d4-9e17-4b95-94ba-4ca81117a4fb'" ng-controller="UsersAssistanceManagementMediatorRequestJustification102Ctrl" ng-include="'/systems/assistance/modules/usersAssistanceManagementMediator/requestJustification102.html'"></div>
+       <div ng-if="justificationId === 'b70013e3-389a-46d4-8b98-8e4ab75335d0'" ng-controller="UsersAssistanceManagementMediatorRequestJustificationPECtrl" ng-include="'/systems/assistance/modules/usersAssistanceManagementMediator/requestJustificationPE.html'"></div>
+       <div ng-if="justificationId === '76bc064a-e8bf-4aa3-9f51-a3c4483a729a'" ng-controller="UsersAssistanceManagementMediatorRequestJustificationLAOCtrl" ng-include="'/systems/assistance/modules/usersAssistanceManagementMediator/requestJustificationLAO.html'"></div>
+       <div ng-if="justificationId === '50998530-10dd-4d68-8b4a-a4b7a87f3972'" ng-controller="UsersAssistanceManagementMediatorRequestJustification638Ctrl" ng-include="'/systems/assistance/modules/usersAssistanceManagementMediator/requestJustification638.html'"></div>
+       <div ng-if="justificationId === 'b309ea53-217d-4d63-add5-80c47eb76820'" ng-controller="UsersAssistanceManagementMediatorRequestJustificationCUCtrl" ng-include="'/systems/assistance/modules/usersAssistanceManagementMediator/requestJustificationCU.html'"></div>
+       <div ng-if="justificationId === 'fa64fdbd-31b0-42ab-af83-818b3cbecf46'" ng-controller="UsersAssistanceManagementMediatorRequestJustificationBSCtrl" ng-include="'/systems/assistance/modules/usersAssistanceManagementMediator/requestJustificationBS.html'"></div>
+       <div ng-if="justificationId === 'cb2b4583-2f44-4db0-808c-4e36ee059efe'" ng-controller="UsersAssistanceManagementMediatorRequestJustificationBCCtrl" ng-include="'/systems/assistance/modules/usersAssistanceManagementMediator/requestJustificationBC.html'"></div>
+
+
+    </div>
+  </div>
+
+  <div class="myRequests">
+    <span><i class="fa fa-ticket"></i> Solicitudes del Usuario</span>
+  </div>
+  <div class="titlesFiles">
+    <div class="column t1" ng-click="sortRequestedJustifications('userName')"><i  class="fa fa-ticket"></i> Usuario</div>
+    <div class="column t1" ng-click="sortRequestedJustifications('justificationName')"><i  class="fa fa-ticket"></i> Solicitud</div>
+    <div class="column t1" ng-click="sortRequestedJustifications('dateSort')"><i  class="fa fa-calendar"></i> Día</div>
+    <div class="column t1" ng-click="sortRequestedJustifications('requestorName')"><i  class="fa fa-ticket"></i> Solicitado por</div>
+    <div class="column t1" ng-click="sortRequestedJustifications('status')"><i class="fa fa-info-circle"></i> Estado</div>
+  </div>
+  <div class="scroll">
+    <div class="myRequestInfo" ng-repeat="req in model.requestedJustificationsFiltered | orderBy:model.rjSort:model.rjReversed" >
+      <div class="myRequest">
+        <span>{{req.userName}}</span>
+      </div>
+      <div class="myRequest">
+        <span>{{req.justificationName}}</span>
+      </div>
+      <div class="myRequestDate">
+        <span><i class="fa fa-calendar"></i> {{req.date}}</span>
+        <div ng-class="{true:'visible', false:'hidden'}[req.justificationId === 'cb2b4583-2f44-4db0-808c-4e36ee059efe']">
+          <span><i class="fa fa-clock-o"></i> Hora de inicio {{req.start}}</span>
+        </div>
+        <div ng-class="{true:'visible', false:'hidden'}[req.time != null]">
+          <span><i class="fa fa-clock-o"></i> {{req.time}} Horas</span>
+          <div>
+            <span>De {{req.start}} a {{req.end}}</span>
+          </div>
+        </div>
+      </div>
+      <div class="myRequest">
+        <span>{{req.requestorName}}</span>
+      </div>
+      <div class="myStateRequestApproved" ng-class="{true:'visible', false:'hidden'}[req.status == 'APPROVED']">
+        <span class="buttonApproved"><i class="fa fa-check-circle"></i> Aprobado</span>
+        <button  ng-click="cancelRequest(req)" ng-disabled="model.processingRequestedJustifications"> Cancelar</button>
+      </div>
+      <div class="myStateRequestApproved" ng-class="{true:'visible', false:'hidden'}[req.status == 'PENDING']">
+        <span class="buttonApproved"><i class="fa fa-spinner fa-spin"></i> Pendiente</span>
+        <button  ng-click="approveRequest(req)" ng-disabled="model.processingRequestedJustifications">Aprobar</Button>
+        <button  ng-click="refuseRequest(req)" ng-disabled="model.processingRequestedJustifications">Denegar</Button>
+      </div>
+    </div>
+  </div>
+</div>

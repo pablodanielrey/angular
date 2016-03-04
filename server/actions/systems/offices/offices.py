@@ -52,23 +52,25 @@ class OfficesWamp(ApplicationSession):
     '''
         Obtiene los roles que tiene dentro de las oficinas el usuario
     '''
-    def getUserOfficeRoles(self, userId):
+    def getUserOfficeRoles(self, sid, userId):
         con = self._getDatabase()
         try:
+            if userId is None:
+                userId = self.profiles.getLocalUserId(sid)            
             return self.offices.getOfficesRoles(con, userId)
         finally:
             con.close()
 
     @coroutine
-    def getUserOfficeRoles_async(self, userId):
+    def getUserOfficeRoles_async(self,sid, userId):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getUserOfficeRoles, userId)
+        r = yield from loop.run_in_executor(None, self.getUserOfficeRoles, sid, userId)
         return r
 
-    def getOfficesByUser(self, userId, tree):
+    def getOfficesByUser(self, sessionId, userId, tree):
         con = self._getDatabase()
         try:
-            return self.offices.getOfficesByUser(con, userId, tree)
+            return self.offices.getOfficesByUser(con, userId, tree, False)
         finally:
             con.close()
 
@@ -140,7 +142,7 @@ class OfficesWamp(ApplicationSession):
         con = self._getDatabase()
         try:
             tree = False if tree is None else tree
-            self.offices.getUserInOfficesByRole(con,userId,tree,role)
+            return self.offices.getUserInOfficesByRole(con,userId,tree,role)
         finally:
             con.close()
 
@@ -155,11 +157,11 @@ class OfficesWamp(ApplicationSession):
         con = self._getDatabase()
         try:
             if tree is None:
-                self.offices.getOfficesByUserRole(con,userId)
+                return self.offices.getOfficesByUserRole(con,userId)
             elif role is None:
-                self.offices.getOfficesByUserRole(con,userId,tree)
+                return self.offices.getOfficesByUserRole(con,userId,tree)
             else:
-                self.offices.getOfficesByUserRole(con,userId,tree,role)
+                return self.offices.getOfficesByUserRole(con,userId,tree,role)
 
         finally:
             con.close()
@@ -361,7 +363,10 @@ class OfficesWamp(ApplicationSession):
         r = yield from loop.run_in_executor(None, self.addUserToOffices, userId, officeId)
         return r
 
-
+    '''
+    Retorna los roles que puede asignar el usuario (userId) para las oficinas (officesId) y para los usuarios (usersId)
+    Ademas retorna los roles que ya poseen los usuarios
+    '''
     def getRolesAdmin(self, sessionId, userId, officesId, usersId):
         con = self._getDatabase()
         try:
@@ -370,8 +375,10 @@ class OfficesWamp(ApplicationSession):
 
             roles = self.offices.getRolesAdmin(con, userId, officesId, usersId)
             assignedRoles = self.offices.getAssignedRoles(con, officesId, usersId, roles)
+            
+            ret =  {'roles':roles,'assignedRoles':assignedRoles}
 
-            return True
+            return ret
 
         except psycopg2.DatabaseError as e:
             con.rollback()

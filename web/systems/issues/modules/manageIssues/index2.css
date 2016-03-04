@@ -1,0 +1,205 @@
+*{
+  margin: 0px;
+  padding: 0px;
+}
+
+.contentScreens {
+  height:100%;
+  width:100%;
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  position:absolute;
+
+}
+
+.contentScreens .assignedOffices {
+  display:none;
+}
+
+.contentScreens.displayAssigned .assignedOffices {
+  display:block;
+}
+
+.contentScreens .newIssueForm {
+  display:none;
+}
+
+.contentScreens.displayCreateChild .newIssueForm {
+  display:block;
+}
+
+
+.ContentOrders {
+
+}
+
+.tree {
+	height:50px;
+
+}
+.principal.ng-scope {
+  height: 100%;
+}
+
+
+.order {
+  background-color:white;
+  -webkit-box-shadow: 1px 1px 5px #5c5f69;
+ -moz-box-shadow: 5px 5px 5px #5c5f69;
+ border-radius:2px;
+ -webkit-border-radius:2px;
+ -moz-border-radius:2px;
+ padding: 20px;
+ width: 79%;
+ margin: 20px;
+ font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+
+}
+.formOrder {
+  display:flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  wrap: nowrap;
+
+}
+
+.order .buttonOrder {
+  border: none;
+  padding: 17px;
+  margin: 2px;
+  background-color: #0066A6;
+  color: white;
+  margin-top: 10px;
+  margin-left: 20px;
+  cursor: pointer;
+}
+
+.order .buttonOrder:hover {
+  border: none;
+  padding: 17px;
+  margin: 2px;
+  background-color: #275276;
+  color: white;
+  margin-top: 10px;
+  margin-left: 20px;
+  cursor: pointer;
+}
+
+.order .newOrder {
+
+  margin-top: 10px;
+  width: 800px;
+  height: 40px;
+  font-size: 1.4em;
+  padding: 5px;
+  background-color: #eee;
+  border-color: #E3DFDF;
+  resize: none;
+}
+
+.orderItems {
+  display: flex;
+  flex-direction: row;
+  wrap:nowrap;
+  width: 100%;
+}
+.orderItem {
+  display: flex;
+  flex-direction: row;
+  wrap:nowrap;
+  width: 60%;
+}
+
+.orderIcons {
+  display: flex;
+  flex-direction: row;
+  wrap:nowrap;
+  justify-content: flex-end;
+  width: 40%;
+}
+
+.btn {
+  padding: 8px;
+  margin: 3px;
+  margin-left: 5px;
+  border: none;
+  color: white;
+  border-radius: 2px;
+}
+
+.cB {
+  background-color: #0066A6;
+}
+
+.cO {
+  background-color: #ec9122;
+}
+
+.cG {
+  background-color: #128c78;
+}
+
+.cR {
+  background-color: #e43e46
+}
+
+.orderText {
+  padding: 5px;
+  background-color: white;
+  border-color: #E3DFDF;
+  width: 500px;
+  height: 22px;
+  resize: none;
+  margin-top: 3px;
+  margin-left: 5px;
+  font-size: 1.2em;
+}
+
+.hola {
+  background-color: #eee;
+  padding: 5px;
+  margin-top: 10px;
+  border:1px solid #E3DFDF;
+}
+
+.descriptionExpanded {
+  height: 100%;
+}
+
+.descriptionExpanded * {
+  height: 100%;
+}
+
+.descriptionClosed {
+  height: 0px;
+}
+
+.descriptionClosed * {
+  display: none;
+}
+
+.tree {
+	height:100px;
+
+}
+
+.orderItems.normal .btnExpComment {
+  display: none;
+}
+
+.orderItems.commentOrder .btnExpOrder  {
+  display:none;
+}
+
+.orderItems.commentOrder .btnState  {
+  display:none;
+}
+.orderItems.commentOrder .btnSubTarea  {
+  display:none;
+}
+.orderItems.commentOrder .btnDataOrder  {
+  display:none;
+}

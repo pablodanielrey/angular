@@ -1,0 +1,560 @@
+<div class="inscriptionContainer">
+
+    <div class="inscription" ng-class='getInscriptionClazz()'>
+
+        <!-- ************************************
+        ********* DATOS BASICOS ************
+        ************************************* -->
+        <form class="contentDataBasic" name='dataBasic' novalidate>
+            <!-- <div class="header">
+               <img src="http://163.10.56.60/systems/laboralInsertion/img/logoInsercion.jpg">
+            </div> -->
+            <div class="dataBasic">
+                <div class"col">
+
+
+
+                    <div ng-if="getUserPhoto() == null" class="fileUpload">
+                    <!-- <div ng-if='!model.loadingPhoto' class="fileUpload"> -->
+                        <div class="photo" placeholder="Foto"><i class="fa fa-camera-retro fa-4x"></i>Subir Foto</div>
+                        <input type="file" on-read-file-binary-string="addPhoto(fileName,fileContent)" class="upload" />
+                    </div>
+
+
+                    <div  ng-if='model.loadingPhoto'>
+                      <div class="photo2" placeholder="Foto"><i class="fa fa-circle-o-notch fa-spin fa-3x"></i>Cargando imágen...</div>
+                    </div>
+
+                    <div ng-if='model.formatPhoto'>
+                      <div class="photo2" placeholder="Foto"><i class="fa fa-ban fa-4x"></i>Formato de imágen no compatible <div>(solo JPG)</div></div>
+                    </div>
+
+
+                   <div ng-if='getUserPhoto() != null' class="item">
+
+                       <div ng-if='!model.loadingPhoto' class="fileUpload2" title="Cambiar Foto">
+
+                           <input type="file" on-read-file-binary-string="addPhoto(fileName,fileContent)" class="upload" />
+                       </div>
+                        <div class="iconoFotoMiniatura"><i class="fa fa-camera-retro  fa-2x" title="Cambiar Foto"></i></div>
+
+                        <img class="photo" ng-src='{{getUserPhoto()}}' alt="Pablo"/>
+                    </div>
+
+
+
+
+                    <div class="item">
+                        <div>
+                          <button><i class="fa fa-user"></i></button>
+                        </div>
+                        <div>
+                          <input type="text" placeholder="Nombres" name='name' ng-model='model.user.name' ng-pattern='/^[a-zA-ZñÑáÁéÉíÍóÓúÚ ]*$/' ng-blur='updateUserData()' required></input>
+                          <div class="invalidError" ng-if='dataBasic.name.$invalid'><i class="fa fa-times"></i> En el nombre se permiten solo letras </div>
+                        </div>
+                    </div>
+
+                    <div class="item">
+                      <div>
+                        <button><i class="fa fa-user"></i></button>
+                      </div>
+                      <div>
+                        <input type="text" placeholder="Apellidos" name='lastname' ng-model='model.user.lastname' ng-pattern='/^[a-zA-ZñÑáÁéÉíÍóÓúÚ ]*$/' ng-blur='updateUserData()' required></input>
+                        <div class="invalidError" ng-if='dataBasic.lastname.$invalid'><i class="fa fa-times"></i> En el apellido se permiten solo letras </div>
+                      </div>
+                    </div>
+
+                    <div class="item">
+                      <div>
+                        <button><i class="fa fa-credit-card"></i></button>
+                      </div>
+                      <div>
+                        <input type="text" placeholder="DNI" name='dni' ng-model='model.user.dni' ng-pattern='/^\d{8,8}$/' ng-blur='updateUserData()' readonly required></input>
+                        <div class="invalidError" ng-if='dataBasic.dni.$invalid'><i class="fa fa-times"></i> En el DNI 8 números sin puntos</div>
+                      </div>
+                    </div>
+
+                </div>
+                <div class"col">
+
+                    <div class="item">
+                      <div>
+                        <button><i class="fa fa-graduation-cap"></i></button>
+                      </div>
+                      <div>
+                        <input type="text" placeholder="Legajo" name='student_number' ng-model='model.student.studentNumber' ng-pattern='/^\d+\/\d{1}$/' ng-blur='updateStudentData()' readonly required></input>
+                        <div class="invalidError" ng-if='dataBasic.student_number.$invalid'><i class="fa fa-times"></i> Formato inconrrecto (ej: 11111/1)</div>
+                      </div>
+                    </div>
+
+                    <div class="item">
+                      <div>
+                        <button><i class="fa fa-calendar-o"></i></button>
+                      </div>
+                      <div>
+                        <input type="date" placeholder="Nacimiento ( 01/01/1990 )" name='birthdate' ng-model='model.user.birthdate' ng-blur='updateUserData()' required></input>
+                        <div class="invalidError" ng-if='dataBasic.birthdate.$invalid'><i class="fa fa-times"></i> Seleccione fecha de nacimiento</div>
+                      </div>
+                    </div>
+
+                    <div class="item">
+                      <div>
+                        <button><i class="fa fa-venus-mars"></i></button>
+                      </div>
+                      <div>
+                        <select ng-model='model.user.genre' name='genre' ng-blur='updateUserData()' required>
+                          <option class="selectGrey" disabled selected style='display:none;'>Género</option>
+                          <option>Masculino</option>
+                          <option>Femenino</option>
+                          <option>Otro</option>
+                        </select>
+
+
+                      </div>
+
+                    </div>
+
+                    <div class="item">
+                      <div>
+                        <button><i class="fa fa-map-marker"></i></button>
+                      </div>
+                      <div>
+                        <select ng-model='model.user.residence_city' name='residence_city' ng-blur='updateUserData()' required>
+                          <option class="selectGrey" disabled selected style='display:none;'>Ciudad de Residencia</option>
+                          <option>Casco Urbano (LP)</option>
+                          <option>City Bell (LP)</option>
+                          <option>Villa Elisa (LP)</option>
+                          <option>City Bell (LP)</option>
+                          <option>Gonnet (LP)</option>
+                          <option>Tolosa (LP)</option>
+                          <option>Ringuelet (LP)</option>
+                          <option>Barrio Jardin (LP)</option>
+                          <option>Barrio Hipódromo (LP)</option>
+                          <option>Los Hornos (LP)</option>
+                          <option>Etcheverry (LP)</option>
+                          <option>Lisandro Olmos (LP)</option>
+                          <option>El Retiro (LP)</option>
+                          <option>Abasto (LP)</option>
+                          <option>Melchor Romero (LP)</option>
+                          <option>Las Malvinas (LP)</option>
+                          <option>La Cumbre (LP)</option>
+                          <option>Las Quintas (LP)</option>
+                          <option>Gambier (LP)</option>
+                          <option>Parque Sicardi (LP)</option>
+                          <option>Villa Montoro (LP)</option>
+                          <option>Rufino de Elizalde (LP)</option>
+                          <option>Villa Elvira (LP)</option>
+                          <option>El Carmen (LP)</option>
+                          <option>Arana (LP)</option>
+                          <option>Villa Garibaldi (LP)</option>
+                          <option>Casco Urbano (LP)</option>
+                          <option>José Hernandez (LP)</option>
+                          <option>Gorina (LP)</option>
+                          <option>Arturo Segui (LP)</option>
+                          <option>El Peligro</option>
+                          <option>Capital Federal</option>
+                          <option>Berisso</option>
+                          <option>Ensenada</option>
+                          <option>Chascomús</option>
+                          <option>Quilmes</option>
+                          <option>Magdalena</option>
+                          <option>Berazategui</option>
+                          <option>Avellaneda</option>
+                          <option>Florencio Varela</option>
+                          <option>Otro</option>
+
+                        </select>
+
+
+                      </div>
+                      <!-- <div>
+                        <input type="text" placeholder="Ciudad de Residencia" name='residence_city' ng-model='model.user.residence_city' ng-pattern='/^[a-zA-ZñÑ ]*$/' ng-blur='updateUserData()' required></input>
+                        <div class="invalidError" ng-if='dataBasic.residence_city.$invalid'><i class="fa fa-times"></i> Se permiten solo letras y espacios</div>
+                      </div> -->
+                    </div>
+
+                    <div class="item">
+                      <div>
+                        <button><i class="fa fa-home"></i></button>
+                      </div>
+                      <div>
+                        <input type="text" placeholder="Domicilio" name='address' ng-model='model.user.address' ng-blur='updateUserData()' ng-pattern='/^[a-zA-Z0-9ñÑºúÚ\/ ]*$/' required></input>
+                        <div class="invalidError" ng-if='dataBasic.address.$invalid'><i class="fa fa-times"></i> ingrese solo letras y números</div>
+                      </div>
+                    </div>
+
+                    <div class="item">
+                      <div>
+                        <button><i class="fa fa-map-marker"></i></button>
+                      </div>
+                      <div>
+                        <input type="text" placeholder="Ciudad de Nacimiento" name='birth_city' ng-model='model.user.city' ng-blur='updateUserData()' ng-pattern='/^[a-zA-Z0-9ñÑúÚóÓíÍáÁéÉ ]*$/' required></input>
+                        <div class="invalidError" ng-if='dataBasic.birth_city.$invalid'><i class="fa fa-times"></i> ingrese solo letras y números</div>
+                      </div>
+                    </div>
+
+                    <div class="item">
+                      <div>
+                        <button><i class="fa fa-globe"></i></button>
+                      </div>
+                      <div>
+                        <input type="text" placeholder="País" name='country' ng-model='model.user.country' ng-blur='updateUserData()' ng-pattern='/^[a-zA-ZñÑ ]*$/' required></input>
+                        <div class="invalidError" ng-if='dataBasic.country.$invalid'><i class="fa fa-times"></i> Ingrese su nacionalidad</div>
+                      </div>
+                    </div>
+
+                </div>
+                <div class"col">
+
+
+
+                    <div class="item">
+                      <div>
+                        <button><i class="fa fa-mobile"></i></button>
+                      </div>
+                      <div>
+                        <input type="text" placeholder="Cel. (+5492215011111)" ng-model='model.telephones.movil' name='movil' ng-blur='updateUserData()' ></input>
+                      </div>
+                    </div>
+
+                    <div class="item">
+                      <div>
+                        <button><i class="fa fa-phone"></i></button>
+                      </div>
+                      <div>
+                        <input type="text" placeholder="Fijo (+5492214231111)" ng-model='model.telephones.telephone' name='telephone' ng-blur='updateUserData()' ></input>
+                      </div>
+                    </div>
+
+                    <!-- email --------------------------------------- -->
+                    <div class="item " ng-if='model.mails.emails.length > 0'>
+                      <div>
+                        <button><i class="fa fa-envelope"></i></button>
+                      </div>
+                      <div>
+                        <select  ng-model='model.laboralData.email' name='mail' ng-change='updateLaboralData()' required>
+                          <!-- <option class="selectGrey" disabled selected style='display:none;'>Mail</option> -->
+                          <option ng-repeat='m in model.mails.emails' value='{{m.id}}'>{{m.email}}</option>
+                          <!--
+                          <option>pablo@econo.unlp.edu.ar</option>
+                          <option>pablodanielrey@gmail.com</option>
+                          -->
+
+                        </select>
+                      </div>
+                    </div>
+
+                    <a href="http://www.fce.econo.unlp.edu.ar/"  target="_blank">
+                      <input  type="button" class="cuentasCorreo"  value="Agregar / Modificar cuentas de correo"> <i class="fa fa-envelope"></i> </input>
+                    </a>
+
+                    <!-- <div>Agregue una cuenta de correo haciendo click <a target="_blank" href='http://fce.econo.unlp.edu.ar'>ACA</a></div> -->
+                    <!-- ------------------------------------------------ -->
+
+                    <div class="item2" ng-click='startInscription()'>
+                      <div>
+                        <button><i class="fa fa-briefcase fa-2x"></i></button>
+                      </div>
+                      <div class="textBtnBolsaDeTrabajo">
+                        <div>
+                            <span> Bolsa de Trabajo</span><br>
+                            <span class="textInscribirme"> <b>INSCRIBIRME</b> </span>
+                        </div>
+                      </div>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+        <!-- *********************************************
+        ************ INSCRIPCIONES REALIZADAS ************
+        ********************************************** -->
+        <div class="contentInscription">
+            <div class="myInscriptions">
+                <div>
+                    <i class="fa fa-chevron-circle-down"></i> Mis Inscripciones
+                </div>
+
+                <div class="inscriptionList">
+
+                    <div ng-repeat="i in model.inscriptionsData">
+                      <div class="itemInscription">
+                          <div class="iconMaletin">
+                            <i class="fa fa-briefcase"></i>
+                          </div>
+                          <div class="iconFlecha">
+                            <i class="fa fa-caret-right"></i>
+                          </div>
+                          <div class="textItemInscription">
+                              <div>
+                                <span>Inscripto en <b>{{getType(i)}}</b></span></br>
+                                <span class="textItemInscriptionCarrera">como <b>{{getDegree(i)}}</b></span>
+                              </div>
+                              <div class="iconsInscription">
+                                <span class="icoTrash" title="Eliminar Inscripción" ng-click='removeInscription(i)'><i class="fa fa-trash-o"></i></span>
+                                <!-- <span class="icoDownload" title="Descargar Inscripción" ng-click='downloadInscription(i)'><i class="fa fa-file-pdf-o"></i></span> -->
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+        </div>
+
+
+        <!-- ************************************
+        ******* FPRMULARIO DE REGISTRO **********
+        ************************************* -->
+        <div class="registrationForm">
+            <div class="contentForm">
+                <div class="headerForm">
+                    <div>
+                        <h4>Formulario | OFERTA LABORAL</h4>
+                    </div>
+                    <div ng-click='endInscription()'>
+                      <i class="fa fa-times-circle fa-2x" title="Cancelar"></i>
+                    </div>
+                </div>
+
+                <!-- *** PANTALLAS INTERNAS DEL FORMULARIO VAN DE 1 A 7 *** -->
+                <div class="content" ng-class='getRegistrationClazz()'>
+
+                    <div class="p1">
+                        <div class="subTittlesForm">
+                          <b>Seleccione Carrera</b>
+                        </div>
+
+                        <div class="item">
+                          <div>
+                            <button><i class="fa fa-graduation-cap"></i></button>
+                          </div>
+                          <div>
+                            <select class="carrera" ng-model='model.offer.degree'>
+                              <!-- <option class="selectGrey" disabled selected style='display:none;'>Seleccionar...</option> -->
+                              <option ng-repeat='o in degrees'>{{o.degree}}</option>
+                              <!--
+                              <option>Contador Público</option>
+                              <option>Licenciatura en Administración</option>
+                              <option>Licenciatura en Turismo</option>
+                              <option>Licenciatura en Economía</option>
+                              <option>Tecnicatura en Cooperativas</option>
+                            -->
+                            </select>
+
+                          </div>
+                        </div>
+
+                        <div class="subTittlesForm2">
+                          <input type='checkbox' ng-model='model.offer.graduate'> <b> Estoy graduado</b></input>
+                        </div>
+
+                        <!-- <div>
+                          <input type='checkbox' ng-model='model.offer.graduate'>Graduado</input>
+                        </div> -->
+
+                    </div>
+
+                    <div class="p2">
+
+                        <span class="subTittlesForm">
+                          <b>Materias aprobadas con final </b> <span class="textIncluyendoSeminario">(incluyendo seminario)</span>
+                        </span>
+                        <div class="item">
+                            <button><i class="fa fa-book"></i></button>
+                            <input class="CantMatAprov" type="number" ng-model='model.offer.approved'></input>
+                        </div>
+
+                        <span class="subTittlesForm">
+                          <b>Promedio sin aplazos</b>
+                        </span>
+                        <div class="item">
+                            <button><i class="fa fa-book"></i></button>
+                            <input class="CantMatAprov" type="number" step='0.1' ng-model='model.offer.average1'></input>
+                        </div>
+
+                        <span class="subTittlesForm">
+                          <b>Promedio con aplazos</b>
+                        </span>
+                        <div class="item">
+                            <button><i class="fa fa-book"></i></button>
+                            <input class="CantMatAprov" type="number" step='0.1' ng-model='model.offer.average2'></input>
+                        </div>
+
+                    </div>
+
+                    <div class="p3">
+                        <div class="subTittlesForm">
+                          <b>Seleccione el tipo de Oferta Laboral</b>
+                        </div>
+
+                        <div class="item">
+                          <div>
+                            <button><i class="fa fa-briefcase"></i></button>
+                          </div>
+                          <div>
+                            <select class="carrera" ng-model='model.offer.workType' ng-change='checkInscriptionPreconditions()'>
+                              <!-- <option class="selectGrey" disabled selected style='display:none;'>Seleccionar...</option> -->
+                              <option ng-repeat='o in workTypes'>{{o}}</option>
+                              <!--
+                              <option>Pasantía</option>
+                              <option>Full-Time</option>
+                              <option>Programa estudiantes avanzados y jovenes profesionales</option>
+                              -->
+                            </select>
+                          </div>
+                        </div>
+
+                        <div class="subTittlesForm">
+                          <b>¿ cuenta con experiencia laboral relacionada a la carrera en la que se está inscribiendo ? </b>
+                        </div>
+
+                        <div class="item">
+                          <div>
+                            <button><i class="fa fa-briefcase"></i></button>
+                          </div>
+                          <div>
+                            <select class="carrera" ng-model='model.offer.workExperience' ng-change='checkInscriptionPreconditions()' ng-options='boolToStr(item) for item in [null, true, false]'>
+                            </select>
+                          </div>
+                        </div>
+
+                    </div>
+
+                    <div class="p4">
+                        <div class="subTittlesForm">
+                          <b>¿Está dispuesto a viajar?</b>
+                        </div>
+
+                        <div class="item">
+                          <div>
+                            <button><i class="fa fa-plane"></i></button>
+                          </div>
+                          <div>
+                            <select class="carrera" ng-change='checkInscriptionPreconditions()' ng-model='model.offer.travel' ng-options='boolToStr(item) for item in [null, true, false]'>
+                            </select>
+                          </div>
+                        </div>
+<!--
+                        <div class="subTittlesForm">
+                          <b>¿ está dispuesto a residir en el interior / exterior ?</b>
+                        </div>
+                        <div class="item">
+                          <div>
+                            <button><i class="fa fa-globe"></i></button>
+                          </div>
+                          <div>
+                            <select class="carrera">
+                              <option class="selectGrey" disabled selected style='display:none;'>Seleccionar...</option>
+                              <option>Si</option>
+                              <option>No</option>
+                            </select>
+                          </div>
+                        </div> -->
+
+                    </div>
+
+                    <div class="p5">
+                        <div class="subTittlesForm">
+                          <b>Idioma</b>
+                          <button class="btnAddLanguaje" ng-click='addLanguage()'><i class="fa fa-language"></i> AGREGAR IDIOMA</button>
+
+                        </div>
+
+                        <div class="languajes">
+                            <div class="item itemLanguajes" ng-repeat='i in model.laboralData.languages'>
+                              <div>
+                                <button><i class="fa fa-language"></i></button>
+
+                              </div>
+                              <div class="contentItemsLanguajes">
+                                <select class="languaje" ng-model='i.name' ng-change='checkInscriptionPreconditions()'>
+                                  <!-- <option class="selectGrey" disabled selected style='display:none;'>Seleccionar...</option> -->
+                                  <option ng-repeat='o in languages'>{{o}}</option>
+                                  <!--
+                                  <option>Inglés</option>
+                                  <option>Portugués</option>
+                                  <option>Otro</option>
+                                  -->
+                                </select>
+
+                                <select class="lenguajeLevel" ng-model='i.level'>
+                                  <option>Básico</option>
+                                  <option>Intermedio</option>
+                                  <option>Avanzado</option>
+                                </select>
+
+                                 <span> <i class="fa fa-trash deleteLenguaje" ng-click="deleteLanguage(i)"></i> </span>
+
+
+                                <!-- esto no puede ser asi. tiene que si o si ser algun tipo de input, select, etc. -->
+                                <!-- <span class="rating">
+                                    <span class="star" title="Avanzado"></span>
+                                    <span class="star" title="Intermedio"></span>
+                                    <span class="star" title="Básico"></span>
+                                </span> -->
+                                <!-- ---------------- -->
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p6">
+
+                        <div class="subTittlesForm">
+                          <b>Curriculum Vitae </b> <span class="textFormatoCV"> &nbsp; (en formato <i class="fa fa-file-pdf-o"></i> PDF </span>)
+                        </div>
+                        <div class="item">
+                            <button><i class="fa fa-book"></i></button>
+                            <div class="contentUploadPDF">
+                                <div>
+                                    <div class="uploadPDF">
+                                       <p ng-if="model.cv_name != undefined && model.cv_name != ''" class="textBtnPDF"><i class="fa fa-arrow-circle-up"></i> Actualizar CV</p>
+                                       <p ng-if="model.cv_name == undefined || model.cv_name == ''" class="textBtnPDF"><i class="fa fa-arrow-circle-up"></i> Subir CV</p>
+                                       <input type="file" class="btnInputFile" id="inputcv" on-read-file-binary-string="addCV(fileName,fileContent)" accept='application/pdf,.pdf'>
+                                    </div>
+                                </div>
+                           </div>
+                        </div>
+
+                        <div ng-if='model.loadingCv' class="subTittlesForm">
+                          <span><i class="fa fa-spinner fa-spin"></i> Cargando CV<span>
+                        </div>
+
+                        <div ng-if='model.formatCV' class="subTittlesForm">
+                          <span class="textFormatoCV"><i class="fa fa-cog fa-spin"></i> Formato de CV Incompatible<span>
+                        </div>
+
+                        <div ng-if="model.cv_name != undefined && model.cv_name != ''" class="subTittlesForm">
+                          <i class="fa fa-file-pdf-o"></i> {{model.cv_name}} &nbsp;  <a href="/c/files.py?i={{model.laboralData.cv}}" target="_blank"><span class="subTittlesForm"> <i class="fa fa-download"> Ver</i></span></a>
+                        </div>
+
+                    </div>
+
+                    <div class="p7">
+                        <div class="subTittlesForm">
+                          <i class="fa fa-check-square-o fa-4x"></i>
+                        </div>
+                        <div class="subTittlesForm">
+                          <b>Solicitud finalizada con éxito!</b>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="footerForm" ng-class='getRegistrationClazz()'>
+                    <div class="pagination">
+
+                    </div>
+                    <div>
+                      <button class="btnBack" ng-click='changePreviousRegistration()'><i class="fa fa-arrow-circle-o-left"></i> Anterior </button>
+                      <button class="btnNext" ng-if='model.showNext' ng-click='changeRegistration()'>Siguiente <i class="fa fa-arrow-circle-o-right"></i></button>
+                      <button class="btnSave" ng-click='uploadInscription()'><i class="fa fa-floppy-o"></i> GUARDAR </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+</div>

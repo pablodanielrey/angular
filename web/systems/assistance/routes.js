@@ -21,7 +21,7 @@ app.config(['$routeProvider', function($routeProvider) {
   })
 
   .when('/assistanceFails', {
-      templateUrl: '/systems/assistance/modules/fails.html',
+      templateUrl: '/systems/assistance/modules/fails/fails.html',
       controller: 'AssistanceFailsCtrl'
   })
 
@@ -31,13 +31,16 @@ app.config(['$routeProvider', function($routeProvider) {
       controllerAs: 'vm'
   })
 
+
+
   .when('/requestAssistance', {
       templateUrl: '/systems/assistance/modules/requestJustifications/index.html',
       controller: 'RequestJustificationsCtrl'
   })
 
+
   .when('/adminRequestAssistance', {
-      templateUrl: '/systems/assistance/modules/adminRequestAssistance.html',
+      templateUrl: '/systems/assistance/modules/adminRequest/adminRequestAssistance.html',
       controller: 'AdminRequestAssistanceCtrl'
   })
 
@@ -46,21 +49,21 @@ app.config(['$routeProvider', function($routeProvider) {
       controller: 'MedicalLicensesCtrl'
   })
   .when('/requestAuthority', {
-      templateUrl: '/systems/assistance/modules/requestAuthority.html',
+      templateUrl: '/systems/assistance/modules/overtime/requestAuthority.html',
       controller: 'RequestAuthorityCtrl'
   })
 
   .when('/adminRequestOverTime', {
-      templateUrl: '/systems/assistance/modules/adminRequestOverTime.html',
+      templateUrl: '/systems/assistance/modules/overtime/adminRequestOverTime.html',
       controller: 'AdminRequestOverTimeCtrl'
   })
 
   .when('/showAssistance', {
-      templateUrl: '/systems/assistance/modules/showAssistance.html',
+      templateUrl: '/systems/assistance/modules/workedHours/showAssistance.html',
       controller: 'ShowAssistanceCtrl'
   })
   .when('/mySchedule', {
-      templateUrl: '/systems/assistance/modules/mySchedule.html',
+      templateUrl: '/systems/assistance/modules/workedHours/mySchedule.html',
       controller: 'MyScheduleCtrl'
   })
 
@@ -90,7 +93,7 @@ app.config(['$routeProvider', function($routeProvider) {
   })
 
   .when('/managePositions', {
-    templateUrl: '/systems/fce/modules/managePositions/index.html',
+    templateUrl: '/systems/assistance/modules/managePositions/index.html',
     controller: 'ManagePositionsCtrl'
   })
 

@@ -6,6 +6,9 @@ import inject
 import logging
 import datetime
 
+import dateutil
+from dateutil.parser import parse
+
 
 import asyncio
 from asyncio import coroutine
@@ -13,6 +16,12 @@ from autobahn.asyncio.wamp import ApplicationSession
 
 from model.config import Config
 
+"""
+python3 getAssistanceChecksByUser.py sessionId userId date
+python3 getAssistanceChecksByUser.py 1 35f7a8a6-d844-4d6f-b60b-aab810610809 10-10-2015
+"""
+ 
+ 
 ''' configuro el injector y el logger '''
 logging.getLogger().setLevel(logging.DEBUG)
 
@@ -37,28 +46,15 @@ class WampMain(ApplicationSession):
 
     @coroutine
     def onJoin(self, details):
-        logging.debug('ejecutando llamadas')
+        logging.debug('***** getAssistanceChecksByUser *****')
 
-        date = datetime.datetime.now()
-
-        from dateutil.parser import parse
-        import dateutil
-        tz = dateutil.tz.tzlocal()
-
-        days = 20
-        c = 0
-        while c < days:
-            ret = yield from self.call('assistance.getChecksByUser', sid, userId, date)
-
-            if len(ret) > 0:
-                for r in ret:
-                    start = parse(r['start'])
-                    start = start.astimezone(tz)
-                    end = parse(r['end'])
-                    end = end.astimezone(tz)
-                    logging.debug('{} : {} --> {}'.format(r['id'], start, end))
-            c = c + 1
-            date = date + datetime.timedelta(days=1)
+        date = datetime.datetime.strptime(sys.argv[3], "%d-%m-%Y").date()
+       
+        ret = yield from self.call('assistance.getChecksByUser', sid, userId, date)
+        
+        if (ret is not None) and (len(ret) > 0):
+            for r in ret:
+              print(ret)
 
         sys.exit()
 

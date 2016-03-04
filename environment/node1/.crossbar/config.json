@@ -29,7 +29,7 @@
                "type": "web",
                "endpoint": {
                   "type": "tcp",
-                  "port": 8000
+                  "port": 443
                },
                "paths": {
                   "/": {

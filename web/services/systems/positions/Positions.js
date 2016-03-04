@@ -1,6 +1,6 @@
 var app = angular.module('mainApp');
 
-app.service('Positions', ['Utils','Session','$wmap',
+app.service('Positions', ['Utils','Session','$wamp',
 
 	function(Utils, Session, $wamp) {
 

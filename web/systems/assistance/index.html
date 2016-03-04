@@ -26,6 +26,7 @@
 
   <script type="text/javascript" src="/modules/messages/messages.js"></script>
   <link rel="stylesheet" type="text/css" href="/modules/messages/messages.css"/>
+  <script type="text/javascript" src="/systems/login/modules/logout.js"></script>
 
 	<!-- servicios -->
   <script type="text/javascript" src="/services/Notifications.js"></script>
@@ -53,6 +54,7 @@
 	<script type="text/javascript" src="/services/systems/email/Mail.js"></script> -->
   <script type="text/javascript" src="/services/systems/office/Office.js"></script>
 	<script type="text/javascript" src="/services/systems/assistance/Assistance.js"></script>
+	<script type="text/javascript" src="/services/systems/positions/Positions.js"></script>
 <!--  <script type="text/javascript" src="/services/systems/tutors/tutors.js"></script> -->
 
   <script type="text/javascript" src="/modules/messages/messages.js"></script>
@@ -64,106 +66,124 @@
   <script type="text/javascript" src="/systems/assistance/modules/assistance.js"></script>
   <link rel="stylesheet" type="text/css" href="/systems/assistance/modules/assistance.css"/>
 
-  <!--
-  <link rel="stylesheet" type="text/css" href="/modules/systems/assistance/fails.css"/>
-  <script type="text/javascript" src="/modules/systems/assistance/fails.js"></script>
-  <link rel="stylesheet" type="text/css" href="/modules/systems/assistance/failsFilters.css"/>
-  <script type="text/javascript" src="/modules/systems/assistance/failsFilters.js"></script>
-  <script type="text/javascript" src="/modules/systems/assistance/tree.directive.js"></script>
-  <script type="text/javascript" src="/modules/systems/assistance/adminRequestAssistance.js"></script>
-  <link rel="stylesheet" type="text/css" href="/modules/systems/assistance/adminRequestAssistance.css"/>
-  -->
 
-  <script type="text/javascript" src="/modules/systems/assistance/showAssistance.js"></script>
-
-  <script type="text/javascript" src="/modules/systems/assistance/showAssistance.js"></script> <!--visualizacion del estado de asistencia -->
-
-  <!-- <link rel="stylesheet" type="text/css" href="/modules/systems/assistance/showAssistance.css"/> -->
-
-  <!--archivos del modulo requestJustifications -->
-  <!--
-  <script type="text/javascript" src="/modules/systems/assistance/requestJustifications/index.js"></script>
-  <link rel="stylesheet" type="text/css" href="/modules/systems/assistance/requestJustifications/index.css"/>
-  <script type="text/javascript" src="/modules/systems/assistance/requestJustifications/requestJustificationAA.js"></script>
-  <script type="text/javascript" src="/modules/systems/assistance/requestJustifications/requestJustificationC.js"></script>
-  <script type="text/javascript" src="/modules/systems/assistance/requestJustifications/requestJustification102.js"></script>
-  <script type="text/javascript" src="/modules/systems/assistance/requestJustifications/requestJustificationPE.js"></script>
-  <script type="text/javascript" src="/modules/systems/assistance/requestJustifications/requestJustificationLAO.js"></script>
-  <script type="text/javascript" src="/modules/systems/assistance/requestJustifications/requestJustification638.js"></script>
-  <script type="text/javascript" src="/modules/systems/assistance/requestJustifications/requestJustificationCU.js"></script>
-  <script type="text/javascript" src="/modules/systems/assistance/requestJustifications/requestJustificationBS.js"></script>
-  <script type="text/javascript" src="/modules/systems/assistance/requestJustifications/requestJustificationBC.js"></script>
--->
-
-  <!--archivos del modulo usersAssistanceManagementMediator -->
-  <!--
-  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagementMediator/index.js"></script>
-  <link rel="stylesheet" type="text/css" href="/modules/systems/assistance/usersAssistanceManagementMediator/index.css"/>
-  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagementMediator/requestJustificationAA.js"></script>
-  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagementMediator/requestJustificationC.js"></script>
-  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagementMediator/requestJustification102.js"></script>
-  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagementMediator/requestJustificationPE.js"></script>
-  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagementMediator/requestJustificationLAO.js"></script>
-  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagementMediator/requestJustification638.js"></script>
-  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagementMediator/requestJustificationCU.js"></script>
-  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagementMediator/requestJustificationBS.js"></script>
-  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagementMediator/requestJustificationBC.js"></script>
--->
-
-  <!--archivos del modulo usersAssistanceManagement -->
-  <!--
-  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagement/index.js"></script>
-  <link rel="stylesheet" type="text/css" href="/modules/systems/assistance/usersAssistanceManagement/index.css"/>
-  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagement/requestJustificationART.js"></script>
-  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagement/requestJustificationB.js"></script>
-  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagement/requestJustificationCC.js"></script>
-  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagement/requestJustificationD.js"></script>
-  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagement/requestJustificationDS.js"></script>
-  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagement/requestJustificationIC.js"></script>
-  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagement/requestJustificationJM.js"></script>
-  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagement/requestJustificationMAF.js"></script>
-  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagement/requestJustificationMCD.js"></script>
-  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagement/requestJustificationMLT.js"></script>
-  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagement/requestJustificationET.js"></script>
-  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagement/requestJustificationAUT.js"></script>
-  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagement/requestJustificationCON.js"></script>
-  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagement/requestJustificationPRN.js"></script>
-  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagement/requestJustificationPON.js"></script>
-  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagement/requestJustificationNAC.js"></script>
-  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagement/requestJustificationINV.js"></script>
-  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagement/requestJustificationMAT.js"></script>
-  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagement/requestJustificationSGS.js"></script>
-  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagement/requestJustificationSUS.js"></script>
-  <script type="text/javascript" src="/modules/systems/assistance/usersAssistanceManagement/requestJustificationVJE.js"></script>
--->
-
-  <!--archivos del modulo requestGeneralJustifications -->
-  <!--
-  <script type="text/javascript" src="/modules/systems/assistance/requestGeneralJustifications/index.js"></script>
-  <link rel="stylesheet" type="text/css" href="/modules/systems/assistance/requestGeneralJustifications/index.css"/>
-  <script type="text/javascript" src="/modules/systems/assistance/requestGeneralJustifications/requestFeriado.js"></script>
-  <script type="text/javascript" src="/modules/systems/assistance/requestGeneralJustifications/requestParo.js"></script>
-  <script type="text/javascript" src="/modules/systems/assistance/requestGeneralJustifications/requestInvierno.js"></script>
-  <script type="text/javascript" src="/modules/systems/assistance/requestGeneralJustifications/requestVerano.js"></script>
--->
+  <link rel="stylesheet" type="text/css" href="/systems/assistance/modules/fails/fails.css"/>
+  <script type="text/javascript" src="/systems/assistance/modules/fails/fails.js"></script>
 
   <!--archivos del modulo manageJustificationsStock -->
+  <script type="text/javascript" src="/systems/assistance/modules/manageJustificationsStock/index.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/assistance/modules/manageJustificationsStock/index.css"/>
+
+  <!-- archivos de la pantalla de administacion de solicitudes -->
+  <script type="text/javascript" src="/systems/assistance/modules/adminRequest/adminRequestAssistance.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/assistance/modules/adminRequest/adminRequestAssistance.css"/>
+
+  <!--archivos del modulo requestGeneralJustifications -->
+  <script type="text/javascript" src="/systems/assistance/modules/requestGeneralJustifications/index.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/assistance/modules/requestGeneralJustifications/index.css"/>
+  <script type="text/javascript" src="/systems/assistance/modules/requestGeneralJustifications/requestFeriado.js"></script>
+  <script type="text/javascript" src="/systems/assistance/modules/requestGeneralJustifications/requestParo.js"></script>
+  <script type="text/javascript" src="/systems/assistance/modules/requestGeneralJustifications/requestInvierno.js"></script>
+  <script type="text/javascript" src="/systems/assistance/modules/requestGeneralJustifications/requestVerano.js"></script>
+
+  <!--archivos del modulo requestJustifications -->
+  <script type="text/javascript" src="/systems/assistance/modules/requestJustifications/index.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/assistance/modules/requestJustifications/index.css"/>
+  <script type="text/javascript" src="/systems/assistance/modules/requestJustifications/requestJustificationAA.js"></script>
+  <script type="text/javascript" src="/systems/assistance/modules/requestJustifications/requestJustificationC.js"></script>
+  <script type="text/javascript" src="/systems/assistance/modules/requestJustifications/requestJustification102.js"></script>
+  <script type="text/javascript" src="/systems/assistance/modules/requestJustifications/requestJustificationPE.js"></script>
+  <script type="text/javascript" src="/systems/assistance/modules/requestJustifications/requestJustificationLAO.js"></script>
+  <script type="text/javascript" src="/systems/assistance/modules/requestJustifications/requestJustification638.js"></script>
+  <script type="text/javascript" src="/systems/assistance/modules/requestJustifications/requestJustificationCU.js"></script>
+  <script type="text/javascript" src="/systems/assistance/modules/requestJustifications/requestJustificationBS.js"></script>
+  <script type="text/javascript" src="/systems/assistance/modules/requestJustifications/requestJustificationBC.js"></script>
+
+  <!--archivos del modulo usersAssistanceManagement -->
+  <script type="text/javascript" src="/systems/assistance/modules/usersAssistanceManagement/index.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/assistance/modules/usersAssistanceManagement/index.css"/>
+  <script type="text/javascript" src="/systems/assistance/modules/usersAssistanceManagement/requestJustificationART.js"></script>
+  <script type="text/javascript" src="/systems/assistance/modules/usersAssistanceManagement/requestJustificationB.js"></script>
+  <script type="text/javascript" src="/systems/assistance/modules/usersAssistanceManagement/requestJustificationCC.js"></script>
+  <script type="text/javascript" src="/systems/assistance/modules/usersAssistanceManagement/requestJustificationD.js"></script>
+  <script type="text/javascript" src="/systems/assistance/modules/usersAssistanceManagement/requestJustificationDS.js"></script>
+  <script type="text/javascript" src="/systems/assistance/modules/usersAssistanceManagement/requestJustificationIC.js"></script>
+  <script type="text/javascript" src="/systems/assistance/modules/usersAssistanceManagement/requestJustificationJM.js"></script>
+  <script type="text/javascript" src="/systems/assistance/modules/usersAssistanceManagement/requestJustificationMAF.js"></script>
+  <script type="text/javascript" src="/systems/assistance/modules/usersAssistanceManagement/requestJustificationMCD.js"></script>
+  <script type="text/javascript" src="/systems/assistance/modules/usersAssistanceManagement/requestJustificationMLT.js"></script>
+  <script type="text/javascript" src="/systems/assistance/modules/usersAssistanceManagement/requestJustificationET.js"></script>
+  <script type="text/javascript" src="/systems/assistance/modules/usersAssistanceManagement/requestJustificationAUT.js"></script>
+  <script type="text/javascript" src="/systems/assistance/modules/usersAssistanceManagement/requestJustificationCON.js"></script>
+  <script type="text/javascript" src="/systems/assistance/modules/usersAssistanceManagement/requestJustificationPRN.js"></script>
+  <script type="text/javascript" src="/systems/assistance/modules/usersAssistanceManagement/requestJustificationPON.js"></script>
+  <script type="text/javascript" src="/systems/assistance/modules/usersAssistanceManagement/requestJustificationNAC.js"></script>
+  <script type="text/javascript" src="/systems/assistance/modules/usersAssistanceManagement/requestJustificationINV.js"></script>
+  <script type="text/javascript" src="/systems/assistance/modules/usersAssistanceManagement/requestJustificationMAT.js"></script>
+  <script type="text/javascript" src="/systems/assistance/modules/usersAssistanceManagement/requestJustificationSGS.js"></script>
+  <script type="text/javascript" src="/systems/assistance/modules/usersAssistanceManagement/requestJustificationSUS.js"></script>
+  <script type="text/javascript" src="/systems/assistance/modules/usersAssistanceManagement/requestJustificationVJE.js"></script>
+
+
   <!--
-  <script type="text/javascript" src="/modules/systems/assistance/manageJustificationsStock/index.js"></script>
-  <link rel="stylesheet" type="text/css" href="/modules/systems/assistance/manageJustificationsStock/index.css"/>
--->
+  <link rel="stylesheet" type="text/css" href="/systems/assistance/modules/failsFilters.css"/>
+  <script type="text/javascript" src="/systems/assistance/modules/failsFilters.js"></script>
+  <script type="text/javascript" src="/systems/assistance/modules/tree.directive.js"></script>
+  <script type="text/javascript" src="/systems/assistance/modules/adminRequestAssistance.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/assistance/modules/adminRequestAssistance.css"/>
+  -->
+
+
+  <script type="text/javascript" src="/systems/assistance/modules/workedHours/showAssistance.js"></script> <!--visualizacion del estado de asistencia -->
+  <link rel="stylesheet" type="text/css" href="/systems/assistance/modules/workedHours/showAssistance.css"/>
+
+  <script type="text/javascript" src="/systems/assistance/modules/workedHours/mySchedule.js"></script> <!--visualizacion del estado de asistencia -->
+  <link rel="stylesheet" type="text/css" href="/systems/assistance/modules/workedHours/mySchedule.css"/>
+
+  <!-- Control de horario  -->
+  <script type="text/javascript" src="/systems/assistance/modules/overtime/requestAuthority.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/assistance/modules/overtime/requestAuthority.css"/>
+  <script type="text/javascript" src="/systems/assistance/modules/overtime/adminRequestOverTime.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/assistance/modules/overtime/adminRequestOverTime.css"/>
+
+
+  <!--archivos del modulo managePositions -->
+
+ <script type="text/javascript" src="/systems/assistance/modules/managePositions/index.js"></script>
+ <link rel="stylesheet" type="text/css" href="/systems/assistance/modules/managePositions/index.css"/>
+
+
+
+  <!--archivos del modulo usersAssistanceManagementMediator -->
+
+  <script type="text/javascript" src="/systems/assistance/modules/usersAssistanceManagementMediator/index.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/assistance/modules/usersAssistanceManagementMediator/index.css"/>
+  <script type="text/javascript" src="/systems/assistance/modules/usersAssistanceManagementMediator/requestJustificationAA.js"></script>
+  <script type="text/javascript" src="/systems/assistance/modules/usersAssistanceManagementMediator/requestJustificationC.js"></script>
+  <script type="text/javascript" src="/systems/assistance/modules/usersAssistanceManagementMediator/requestJustification102.js"></script>
+  <script type="text/javascript" src="/systems/assistance/modules/usersAssistanceManagementMediator/requestJustificationPE.js"></script>
+  <script type="text/javascript" src="/systems/assistance/modules/usersAssistanceManagementMediator/requestJustificationLAO.js"></script>
+  <script type="text/javascript" src="/systems/assistance/modules/usersAssistanceManagementMediator/requestJustification638.js"></script>
+  <script type="text/javascript" src="/systems/assistance/modules/usersAssistanceManagementMediator/requestJustificationCU.js"></script>
+  <script type="text/javascript" src="/systems/assistance/modules/usersAssistanceManagementMediator/requestJustificationBS.js"></script>
+  <script type="text/javascript" src="/systems/assistance/modules/usersAssistanceManagementMediator/requestJustificationBC.js"></script>
+
+
+
+
+
+
 
    <!--archivos del modulo managePositions -->
    <!--
   <script type="text/javascript" src="/systems/fce/modules/managePositions/index.js"></script>
   <link rel="stylesheet" type="text/css" href="/systems/fce/modules/managePositions/index.css"/>
 
-  <script type="text/javascript" src="/modules/systems/assistance/requestAuthority.js"></script>
-  <script type="text/javascript" src="/modules/systems/assistance/adminRequestOverTime.js"></script>
-  <script type="text/javascript" src="/modules/systems/assistance/mySchedule.js"></script>
-  <link rel="stylesheet" type="text/css" href="/modules/systems/assistance/requestAuthority.css"/>
-  <link rel="stylesheet" type="text/css" href="/modules/systems/assistance/adminRequestOverTime.css"/>
-  <link rel="stylesheet" type="text/css" href="/modules/systems/assistance/mySchedule.css"/>
+
+  <script type="text/javascript" src="/systems/assistance/modules/mySchedule.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/assistance/modules/requestAuthority.css"/>
+  <link rel="stylesheet" type="text/css" href="/systems/assistance/modules/adminRequestOverTime.css"/>
+  <link rel="stylesheet" type="text/css" href="/systems/assistance/modules/mySchedule.css"/>
 
 -->
 
@@ -189,23 +209,21 @@
 
 
 </head>
+
 <body>
 
 
-<div ng-controller="IndexCtrl" class="principal">
+<div class="principal" ng-controller="IndexCtrl">
 
-<div class="screen">
-      <div id='main'>
-        <nav ng-class="{true:'visible',false:'hidden'}[isLogged()]">
+<div class="screen" ng-class="{true:'visible',false:'hidden'}[isLogged()]">
+
           <div class='menu-container' ng-controller="MenuCtrl" ng-include="'/systems/assistance/menu/menu.html'">
           </div>
-        </nav>
 
-        <article>
-            <div ng-view></div>
-        </article>
-      </div>
-    </div>
+          <div class="content" ng-view>
+          </div>
+
+</div>
 
 <!--
     <div class='connection-container' ng-class="{false:'visible',true:'hidden'}[isConnected()]" ng-controller="ConnectionCtrl" ng-include="'/modules/connection/conn.html'">

@@ -50,14 +50,14 @@ function Login($rootScope, $wamp, Session) {
           Creo la sesion dentro de la cache cliente
         */
 				var data = {
-					session_id: s.session_id,
-					user_id: s.user_id,
+					session_id: s.id,
+					user_id: s.userId,
 					login: {
-						username: username,
+						username: s.username,
 						password: password
 					}
 				}
-				Session.create(s.session_id, data);
+				Session.create(s.id, data);
 				cok(s.session_id);
 			}
 		},function(err) {
@@ -65,7 +65,8 @@ function Login($rootScope, $wamp, Session) {
 		});
 	}
 
-	this.logout = function(sid, cok, cerr) {
+	this.logout = function(cok, cerr) {
+    var sid = Session.getSessionId();
 		$wamp.call('system.logout', [sid])
 		.then(function(ok) {
 			if (ok == null) {

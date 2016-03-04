@@ -3,14 +3,14 @@ import logging, inject, time, sys, signal
 import psycopg2, uuid
 import datetime
 
-sys.path.append('../python')
+sys.path.append('../../python')
 
 from model.config import Config
 from model.utils import Periodic
 from model.users.users import Users
 from model.systems.assistance.logs import Logs
 from model.systems.assistance.date import Date
-from model.systems.assistance.offices.offices import Offices
+from model.systems.offices.offices import Offices
 
 from zksoftware.zkSoftware import ZkSoftware
 

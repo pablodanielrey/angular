@@ -10,8 +10,13 @@ app.config(['$routeProvider', function($routeProvider) {
       controller: 'ChangePasswordCtrl'
     })
 
+    .when('/cp', {
+      templateUrl: '/systems/pass/modules/change/changePassword.html',
+      controller: 'ChangePasswordCtrl'
+    })
+
     .otherwise({
-        redirectTo: '/main'
+        redirectTo: '/cp'
     });
   }
 ])

@@ -1,280 +1,84 @@
+import inject
+import json
+import logging
 
-import inject, json
-import psycopg2
+from model.users.users import Student, StudentDAO
+from model.registry import Registry
+from model.connection.connection import Connection
 
-from model.systems.students.students import Students
+import asyncio
+from asyncio import coroutine
+from autobahn.asyncio.wamp import ApplicationSession
 
-from model.events import Events
-from model.profiles import Profiles
-from model.config import Config
 
 """
     Modulo de acceso a los datos de los estudiantes
 """
 
 
-"""
-peticion:
-{
-    "id":"id de la peticion",
-    "action":"persistStudent",
-    "session":"session de usuario",
-    "student": {
-        "id":"id del estudiante a actualizar",
-        "studentNumber":"legajo",
-        "condition":"regularidad del alumno"
-    }
-}
+class StudentsWamp(ApplicationSession):
 
-respuesta:
-{
-    "id":"id de la peticion",
-    "ok":"",
-    "error":""
-}
+    def __init__(self, config=None):
+        logging.debug('instanciando')
+        ApplicationSession.__init__(self, config)
 
-evento:
-{
-    'type':'StudentPersistedEvent',
-    'data':student['id']
-}
-"""
-class PersistStudent:
-  events = inject.attr(Events)
-  profiles = inject.attr(Profiles)
-  config = inject.attr(Config)
-  students = inject.attr(Students)
+        r = inject.instance(Registry)
+        self.conn = Connection(r.getRegistry('dcsys'))
+        self.students = inject.instance(StudentDAO)
 
-  def handleAction(self, server, message):
+    @coroutine
+    def onJoin(self, details):
+        logging.debug('registering methods')
+        yield from self.register(self.persist_async, 'system.students.persist')
+        yield from self.register(self.findById_async, 'system.students.findById')
+        #yield from self.register(self.findByNumber_async, 'system.students.findByNumber')
 
-    #El procesamiento continuara solo si el mensaje solicitado por el cliente es el que se indica
-    if (message['action'] != 'persistStudent'):
-      return False
+    def persist(self, student):
+        con = self.conn.get()
+        try:
+            sid = self.students.persist(con, student)
+            con.commit()
+            return sid
 
-    #Verificar datos del mensaje, si no es correcto responder con un error
-    if 'student' not in message:
-      response = {'id':message['id'], 'error':'no existe la info del estudiante'}
-      server.sendMessage(response)
-      return True
+        finally:
+            self.conn.put(con)
 
-    #Verificar rol del usuario conectado a la session
-    sid = message['session']
-    self.profiles.checkAccess(sid,['ADMIN'])
+    @coroutine
+    def persist_async(self, student):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.persist, student)
+        return r
 
-    #Abrir conexion con base de datos
-    con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
-    try:
-      #consultar datos para verificar si existe
-      student = message['student']
-      studentFromDb = self.students.findStudent(con,student['id'])
+    def findById(self, userId):
+        con = self.conn.get()
+        try:
+            students = self.students.findById(con, [userId])
+            if len(students) <= 0 or students[0] is None:
+                return None
+            return students[0].__dict__
 
-      #si no existe estudiante en la base de datos se creara, si existe se actualizara
-      if(studentFromDb == None):
-        self.students.createStudent(con,student)
-      else:
-        self.students.updateStudent(con,student)
+        finally:
+            self.conn.put(con)
 
-      con.commit()
+    @coroutine
+    def findById_async(self, userId):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.findById, userId)
+        return r
 
-      #enviar respuesta al cliente
-      response = {'id':message['id'], 'ok':''}
-      server.sendMessage(response)
+    """
+    def findByNumber(self, n):
+        con = self.conn.get()
+        try:
+            student = self.students.findByNumber(con, n)
+            return student
 
-      #enviar evento al cliente
-      event = {
-        'type':'StudentPersistedEvent',
-        'data':student['id']
-      }
-      self.events.broadcast(server,event)
+        finally:
+            self.conn.put(con)
 
-      return True
-    except psycopg2.DatabaseError as e:
-        con.rollback()
-        raise e
-
-    finally:
-        con.close()
-
-
-"""
-peticion:
-{
-    "id":"",
-    "action":"createStudent",
-    "session":"session de usuario",
-    "student": {
-        "id":"id del usuario a agregar la info de estudiante",
-        "studentNumber":"numero de alumnos",
-        "condition":"condicion del alumno"
-    }
-}
-
-respuesta:
-{
-    "id":"id de la peticion",
-    "ok":"",
-    "error":""
-}
-
-"""
-class CreateStudent:
-
-  students = inject.attr(Students)
-  events = inject.attr(Events)
-  profiles = inject.attr(Profiles)
-  config = inject.attr(Config)
-
-  def handleAction(self, server, message):
-
-    if (message['action'] != 'createStudent'):
-        return False
-
-    if 'student' not in message:
-        response = {'id':message['id'], 'error':'no existe la info del estudiante'}
-        server.sendMessage(response)
-        return True
-
-    """ chequeo que exista la sesion, etc """
-    sid = message['session']
-    self.profiles.checkAccess(sid,['ADMIN'])
-
-    con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
-    try:
-
-      student = message['student']
-      self.students.createStudent(con,student)
-      con.commit()
-
-      response = {'id':message['id'], 'ok':''}
-      server.sendMessage(response)
-
-      event = {
-        'type':'UserUpdatedEvent',
-        'data':student['id']
-      }
-      self.events.broadcast(server,event)
-
-      return True
-    except psycopg2.DatabaseError as e:
-        con.rollback()
-        raise e
-
-    finally:
-        con.close()
-
-
-
-"""
-peticion:
-{
-    "id":"",
-    "action":"findStudent",
-    "session":"session de usuario",
-    "student": {
-        "id":"id del usuario a obtener la info"
-    }
-}
-
-respuesta:
-{
-    "id":"id de la peticion",
-    "student":{
-        "id":"id de la persona",
-        "studentNumber":"legajo del alumno",
-        "condition":"condicion del alumno"
-    }
-    "ok":"",
-    "error":""
-}
-
-"""
-
-class FindStudent:
-
-  students = inject.attr(Students)
-  events = inject.attr(Events)
-  profiles = inject.attr(Profiles)
-  config = inject.attr(Config)
-
-  def handleAction(self, server, message):
-
-    if (message['action'] != 'findStudent'):
-        return False
-
-    if 'student' not in message:
-        response = {'id':message['id'], 'error':'no existe la info del estudiante'}
-        server.sendMessage(response)
-        return True
-
-    if 'id' not in message['student']:
-        response = {'id':message['id'], 'error':'no existe la info del estudiante'}
-        server.sendMessage(response)
-        return True
-
-    """ chequeo que exista la sesion, etc """
-    sid = message['session']
-    self.profiles.checkAccess(sid,['ADMIN','USER'])
-
-    con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
-    try:
-
-      st = message['student']
-      student = self.students.findStudent(con,st['id'])
-      response = {'id':message['id'], 'student':student, 'ok':''}
-      server.sendMessage(response)
-
-      return True
-
-    finally:
-        con.close()
-
-
-"""
-peticion:
-{
-    "id":"",
-    "action":"findAllStudents",
-    "session":"session de usuario",
-}
-
-respuesta:
-{
-    "id":"id de la peticion",
-    "students":[{
-        "id":"id de la persona",
-        "studentNumber":"legajo del alumno",
-        "condition":"condicion del alumno"
-    }]
-    "ok":"",
-    "error":""
-}
-
-"""
-
-class FindAllStudents:
-
-  students = inject.attr(Students)
-  events = inject.attr(Events)
-  profiles = inject.attr(Profiles)
-  config = inject.attr(Config)
-
-  def handleAction(self, server, message):
-
-    if (message['action'] != 'findAllStudents'):
-        return False
-
-    """ chequeo que exista la sesion, etc """
-    sid = message['session']
-    self.profiles.checkAccess(sid,['ADMIN','USER','ADMIN-TUTOR','USER-TUTOR'])
-
-    con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
-    try:
-
-      students = self.students.findAll(con)
-      response = {'id':message['id'], 'students':students, 'ok':''}
-      server.sendMessage(response)
-
-      return True
-
-    finally:
-        con.close()
+    @coroutine
+    def findByNumber_async(self, n):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.findByNumber, n)
+        return r
+    """

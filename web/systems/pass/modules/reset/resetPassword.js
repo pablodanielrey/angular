@@ -2,7 +2,7 @@
 var app = angular.module('mainApp');
 
 
-app.controller('ResetPasswordCtrl', function($rootScope, $scope, Credentials, Notifications,$window) {
+app.controller('ResetPasswordCtrl', function($rootScope, $scope, Credentials, Notifications, $window) {
 
   $scope.user = { username:'' };
 
@@ -26,7 +26,7 @@ app.controller('ResetPasswordCtrl', function($rootScope, $scope, Credentials, No
   }
 
   $scope.back = function() {
-    $window.location.href = "/systems/login/indexLogin.html";
+    $window.location.href = "/systems/login/";
   }
 
 });
