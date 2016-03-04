@@ -19,6 +19,14 @@
   display: none;
 }*/
 
+.login.logged .contentPreload {
+  display: none;
+}
+
+.login.noLogged .principal {
+  display: none;
+}
+
 
 
 /***************************** HEADER ********************************/
@@ -253,6 +261,12 @@
   font-size: 13px;
 }
 
+.login .textNoPuedoAcceder {
+  font-size: 12px;
+  cursor: pointer;
+  color: #28292D;
+}
+
 
 ::-webkit-input-placeholder { color: #ACADB1; font-size: 14px;}
 :-moz-placeholder { color: #ACADB1; opacity:  1; font-size: 14px;}
@@ -306,6 +320,10 @@
 
 .login.screenPasswordError .textPasswordError {
 
+}
+
+.login.screenUser .textNoPuedoAcceder {
+  opacity: 0;
 }
 /******************** MEDIA QUERIS ***************************/
 

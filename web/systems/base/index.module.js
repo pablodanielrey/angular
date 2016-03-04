@@ -1,8 +1,8 @@
 angular
     .module('mainApp',['ngRoute','vxWamp'])
     .config(function($wampProvider) {
-
       if (config.url == undefined || config.url == 'autodetect') {
+
         var conn = {
           url: "ws://" + location.host + ":443/ws",
           realm: config.realm
@@ -19,5 +19,5 @@ angular
       }
     })
     .run(function($wamp) {
-      //$wamp.open();
+      $wamp.open();
     });
