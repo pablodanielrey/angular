@@ -3,10 +3,12 @@
 <head>
   <meta charset="utf-8"/>
   <meta name='viewport' content='width=device-width'/>
+  <title>FCE | Soporte </title>
 
   <!-- ESTILOS PRINCIPALES -->
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
   <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+  <link rel="shortcut icon" href="/systems/fce/img/favicon2.ico"
 
   <!-- LIBRERIAS -->
   <script src="/libs/bower_components/angularjs/angular.js"></script>
@@ -41,16 +43,25 @@
 
   <!-- ARCHIVOS, SERVICIOS Y MODULOS DE LA APLICACION -->
   <link rel="stylesheet" href="/systems/support/index.css">
+  <link rel="stylesheet" href="/systems/support/modules/header/header.css">
+  <link rel="stylesheet" href="/systems/support/modules/footer/footer.css">
+
 
 </head>
 
-<body>
+<body class="support">
+
     <div class='main' ng-controller='IndexCtrl'>
-      <div class="header-container" ng-include="'/systems/fce/modules/header/header.html'">
-      </div>
-      <div ng-view></div>
-      <div class="footer-container" ng-include="'/systems/fce/modules/footer/footer.html'">
-      </div>
+
+        <div class="header-container" ng-include="'/systems/support/modules/header/header.html'">
+        </div>
+
+        <div class="contentModules" ng-view></div>
+
+        <div class="footer-container" ng-include="'/systems/support/modules/footer/footer.html'">
+        </div>
+
+
     </div>
 
 </body>

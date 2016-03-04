@@ -14,7 +14,6 @@ app.config(['$routeProvider', function($routeProvider) {
      controller: 'ResetPasswordCtrl'
   })
 
-
   .otherwise({
     redirectTo: '/resetPassword'
   });
