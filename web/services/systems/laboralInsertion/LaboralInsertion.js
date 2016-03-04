@@ -7,6 +7,12 @@ LaboralInsertion.inject = ['$rootScope','$wamp','Session']
 
 function LaboralInsertion($rootScope,$wamp,Session) {
 
+  /*
+  */
+  this.findAllInscriptions = function() {
+    return $wamp.call('system.laboralInsertion.findAllInscriptions');
+  }
+
   /**
     obtiene todas las inscripciones de un usuario determinado
   */
@@ -42,5 +48,30 @@ function LaboralInsertion($rootScope,$wamp,Session) {
   this.persist = function(data) {
     return $wamp.call('system.laboralInsertion.persist',[data]);
   }
+
+  /*
+    envía un mail a la empresa con los usuarios seleccionados.
+  */
+  this.sendEmailToCompany = function(inscriptions, company) {
+    return $wamp.call('system.laboralInsertion.sendEmailToCompany', [inscriptions, company])
+  }
+
+  /*
+    encuentra todas las companies definidas en la base de datos.
+  */
+  this.findAllCompanies = function() {
+    return $wamp.call('system.laboralInsertion.company.findAll')
+  }
+
+  /*
+    encuentra todos los sent que tengan el id de incripcion
+  */
+  this.findSentByInscriptionId = function(id) {
+    return $wamp.call('system.laboralInsertion.sent.findByInscription', [id]).then(function(sents) {
+      return {'id':id, 'sents':sents};
+    })
+  }
+
+
 
 }
