@@ -10,13 +10,15 @@
     </div>
 
     <div class="btnUserSelect">
-      <i class="fa fa-users"></i> <b>{{model.selected}}</b> Inscripciones Seleccionadas
+      <i class="fa fa-users"></i> <b>{{model.selecteds.length}}</b> Inscripciones Seleccionadas
     </div>
 
-    <div>
+    <div ng-if="!model.searching">
       <button class="btnSend" type="button" name="button" ng-click='search()'><i class="fa fa-plus"></i> <b> Buscar </b></button>
     </div>
-
+    <div ng-if="model.searching">
+      Buscando
+    </div>
     <div>
       <button class="btnSend" type="button" name="button" ng-click='viewSelected()'><i class="fa fa-plus"></i> <b> Agregar </b></button>
     </div>
@@ -247,7 +249,7 @@
             </div>
 
             <div class="btnUserSelect">
-              <i class="fa fa-users"></i> <b>{{model.selected}}</b> Inscripciones Seleccionadas
+              <i class="fa fa-users"></i> <b>{{model.selecteds.length}}</b> Inscripciones Seleccionadas
             </div>
 
             <div>
@@ -304,12 +306,12 @@
 
               <!-- <div class="searchResults" ng-class="{true:'seleccionado'}[isSelected(i.userId)]"> -->
               <div class="searchResults" ng-class="{true:'seleccionado'}[isSelected(i.id)]">
-                <table ng-repeat='i in model.inscriptions'>
+                <table ng-repeat='i in model.selecteds'>
                   <tr class="fileResults">
 
                     <td>
                       <div class="age">
-                        01
+                        {{$index + 1}}
                       </div>
                     </td>
 
@@ -345,7 +347,7 @@
 
                     <td>
                       <div class="program">
-                          <button class="btnDeleteInsciption">borrar</button>
+                          <button class="btnDeleteInsciption" ng-click="deleteSelected(i)">borrar</button>
                       </div>
                     </td>
 

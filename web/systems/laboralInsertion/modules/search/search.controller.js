@@ -9,7 +9,7 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
   $scope.model = {
     sents: {},
     inscriptions: [],
-    selected: 0,
+    selecteds: [],
     users: [],
     data: [],
     currentScreen: '',
@@ -17,7 +17,8 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     company: null,
     emailAddToCompany: '',
     emails: [],
-    filters: []
+    filters: [],
+    searching: false
   };
 
 
@@ -35,7 +36,7 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
   }
 
   $scope.viewSelected = function() {
-    if ($scope.model.selected <= 0) {
+    if ($scope.model.selecteds.length <= 0) {
       return;
     }
     $scope.model.currentScreen = "screenSelected";
@@ -43,7 +44,7 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
 
 
   $scope.selectCompany = function() {
-    if ($scope.model.selected <= 0) {
+    if ($scope.model.selecteds.length <= 0) {
       return;
     }
     $scope.model.currentScreen = "screenSelected screenSelectBusiness";
@@ -108,7 +109,7 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     Calcula la cantidad de seleccionados
   */
   $scope.getSelectedNumber = function() {
-    return $scope.model.selected;
+    return $scope.model.selecteds.length;
   }
 
   /*
@@ -133,10 +134,21 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
 
     i.selected = !i.selected;
     if (i.selected) {
-      $scope.model.selected = $scope.model.selected + 1;
+      addSelected(i);
     } else {
-      $scope.model.selected = $scope.model.selected - 1;
+      var index = $scope.model.selecteds.indexOf(i);
+      $scope.model.selecteds.splice(index,1);
     }
+  }
+
+  function addSelected(inscription) {
+    $scope.model.selecteds.push(inscription);
+  }
+
+  $scope.deleteSelected = function(inscription) {
+    inscription.selected = !inscription.selected;
+    var index = $scope.model.selecteds.indexOf(inscription);
+    $scope.model.selecteds.splice(index,1);
   }
 
   /*
@@ -331,16 +343,26 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
   $scope.initialize = function() {
     // me registro al evento de envío de mails a las empresas.
     $wamp.subscribe('system.laboralInsertion.COMPANYSENDED', $scope.mailToCompanySent);
-
+    $scope.model.selecteds = [];
   }
 
   $scope.search = function() {
+    $scope.model.searching = true;
     LaboralInsertion.findAllInscriptions().then(function(ins) {
       $scope.model.inscriptions = ins;
+      $scope.model.searching = false;
 
       // obtegno el numero de veces que esta el id de la inscripcion en los sents
       for (var i = 0; i < ins.length; i++) {
-        ins.selected = false;
+        ins[i].selected = false;
+        for (var j = 0; j < $scope.model.selecteds.length; j++) {
+          var s = $scope.model.selecteds[j];
+          if (s['id'] == ins[i]["id"]) {
+            ins[i].selected = true;
+            $scope.model.selecteds[j] = ins[i];
+            break;
+          }
+        }
         LaboralInsertion.findSentByInscriptionId(ins[i]['id']).then(function(r) {
           // registro el numero de veces que esta esa inscripcion en los sents
           $scope.model.sents[r['id']] = r['sents'].length
