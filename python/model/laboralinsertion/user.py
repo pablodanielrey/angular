@@ -53,7 +53,6 @@ class UserDAO:
             else:
                 ins = u.__dict__
                 ins['acceptedConditions'] = True
-                ins['cv'] = ins['cv'] if 'cv' in ins else None
                 cur.execute('update laboral_insertion.users set accepted_conditions = %(acceptedConditions)s, email = %(email)s, '
                             'cv = %(cv)s where id = %(id)s', ins)
         finally:
