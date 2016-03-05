@@ -44,10 +44,7 @@ class UserDAO:
 
         logging.info(u)
 
-        if u.cv is None:
-            raise Exception('no existe el cv en la base de datos')
-
-        if not FileDAO.check(con, u.cv):
+        if u.cv is not None and not FileDAO.check(con, u.cv):
             raise Exception('no existe el cv en la base de datos')
 
         cur = con.cursor()
