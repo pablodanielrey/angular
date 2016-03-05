@@ -41,12 +41,6 @@ class UserDAO:
 
     @staticmethod
     def persist(con, u):
-
-        logging.info(u)
-
-        if u.cv is not None and not FileDAO.check(con, u.cv):
-            raise Exception('no existe el cv en la base de datos')
-
         cur = con.cursor()
         try:
             if u.id is None:
