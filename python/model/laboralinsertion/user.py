@@ -41,10 +41,14 @@ class UserDAO:
 
     @staticmethod
     def persist(con, u):
+
+        if u.id is None:
+            raise Exception('Usuario no existente')
+
         cur = con.cursor()
         try:
-            if u.id is None:
-                u.id = str(uuid.uuid4())
+            cur.execute('select id from laboral_insertion.users where id = %s', (u.id,))
+            if cur.rowcount <= 0:
                 ins = u.__dict__
                 ins['acceptedConditions'] = True
                 ins['cv'] = ins['cv'] if 'cv' in ins else None
