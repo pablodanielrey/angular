@@ -55,10 +55,12 @@ class UserDAO:
             if u.id is None:
                 u.id = str(uuid.uuid4())
                 ins = u.__dict__
+                ins['acceptedConditions'] = True
                 cur.execute('insert into laboral_insertion.users (id, accepted_conditions, email, cv) values '
                             '(%(id)s, %(acceptedConditions)s, %(email)s, %(cv)s)', ins)
             else:
                 ins = u.__dict__
+                ins['acceptedConditions'] = True
                 cur.execute('update laboral_insertion.users set accepted_conditions = %(acceptedConditions)s, email = %(email)s, '
                             'cv = %(cv)s where id = %(id)s', ins)
         finally:
