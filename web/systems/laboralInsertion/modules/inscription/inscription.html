@@ -310,7 +310,7 @@
                     <div>
                         <h4>Formulario | OFERTA LABORAL</h4>
                     </div>
-                    <div ng-click='endInscription()'>
+                    <div ng-click='endInscription()' ng-if='!model.finish'>
                       <i class="fa fa-times-circle fa-2x" title="Cancelar"></i>
                     </div>
                 </div>
@@ -547,7 +547,8 @@
                     <div>
                       <button class="btnBack" ng-click='changePreviousRegistration()'><i class="fa fa-arrow-circle-o-left"></i> Anterior </button>
                       <button class="btnNext" ng-if='model.showNext' ng-click='changeRegistration()'>Siguiente <i class="fa fa-arrow-circle-o-right"></i></button>
-                      <button class="btnSave" ng-click='uploadInscription()'><i class="fa fa-floppy-o"></i> GUARDAR </button>
+                      <button class="btnSave" ng-if='model.showNext' ng-click='uploadInscription()'><i class="fa fa-floppy-o"></i> GUARDAR </button>
+                      <button class="btnFinish" ng-if='model.finish' ng-click='finishInscription()'><i class="fa fa-check-square-o"></i> ACEPTAR </button>
                     </div>
                 </div>
             </div>
@@ -555,6 +556,5 @@
 
 
     </div>
-
 
 </div>

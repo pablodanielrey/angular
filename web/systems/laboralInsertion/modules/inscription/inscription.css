@@ -851,6 +851,15 @@ justify-content: center;
   cursor: pointer;
 }
 
+.inscription .btnFinish {
+  background-color: #0066A6;
+  color: white;
+  padding: 5px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
 .inscription .pagination {
   color: grey;
 }
@@ -944,7 +953,7 @@ justify-content: center;
 .inscription .footerForm.pantalla3 .btnSave,
 .inscription .footerForm.pantalla4 .btnSave,
 .inscription .footerForm.pantalla5 .btnSave,
-.inscription .footerForm.pantalla6 .btnSave {
+.inscription .footerForm.pantalla7 .btnSave {
   display: none;
 }
 
@@ -956,6 +965,7 @@ justify-content: center;
   display: none;
 }
 
+.inscription .footerForm.pantalla6 .btnNext,
 .inscription .footerForm.pantalla7 .btnNext{
   display: none;
 }

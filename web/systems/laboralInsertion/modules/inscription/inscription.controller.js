@@ -29,6 +29,7 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
   $scope.languages = ['Inglés','Portugués','Alemán','Ruso','Italiano','Francés','Chino','Japonés'];
 
   $scope.model = {
+    finish: false,
     ci: 0,
     cr: 0,
     showNext: false,
@@ -190,6 +191,11 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
   $scope.$watch(function() { return $scope.model.laboralData.email; }, function(o,n) { $scope.checkInscriptionPreconditions(); });
   $scope.$watch(function() { return $scope.model.laboralData.cv; }, function(o,n) { $scope.checkInscriptionPreconditions(); });
 
+
+  $scope.$watch(function() { return $scope.save; }, function(o,n) {
+    console.log("Cambio el save:" + $scope.save);
+  });
+
   $scope.checkInscriptionPreconditions = function() {
 
       var ok = true;
@@ -306,7 +312,7 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
   $scope.model.totalPages = $scope.model.registrations.length;
 
   $scope.startInscription = function() {
-
+    $scope.model.finish = false;
     var ok = $scope.checkUserData();
     if (!ok) {
       return;
@@ -486,7 +492,6 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
 
 
   $scope.uploadInscription = function() {
-    $scope.endInscription();
 
     var userId = Login.getUserId();
 
@@ -497,15 +502,21 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
     }
     ////////
 
-
     Promise.all([
       LaboralInsertion.persist(ld),
       LaboralInsertion.persistInscriptionByUser(userId, $scope.model.offer)]
     ).then(function(v,v) {
-      $scope.getInscriptions();
+      $scope.changeRegistration();
+      $scope.model.finish = true;
+      $scope.$apply();
     }, function(err) {
       console.log(err);
     });
+  }
+
+  $scope.finishInscription = function() {
+    $scope.endInscription();
+    $scope.getInscriptions();
   }
 
   $scope.getInscriptions = function() {
