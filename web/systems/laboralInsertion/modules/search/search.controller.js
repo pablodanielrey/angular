@@ -21,6 +21,89 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     searching: false
   };
 
+  $scope.view = {
+    reverseSent: false,
+    reverseName: false,
+    reverseRegistration: false
+  };
+
+  // --------------------------------------------------------------
+  // ------------------- FUNCIONES DE ORDENACION ------------------
+  // --------------------------------------------------------------
+
+  function compareName(a, b) {
+    aName = $scope.getName(a.userId);
+    aName = aName.toLowerCase();
+    bName = $scope.getName(b.userId);
+    bName = bName.toLowerCase();
+    return aName < bName ? -1 : (aName > bName ? 1 : 0);
+  }
+
+  function compareSent(a, b) {
+      aSent = $scope.getSents(a.id);
+      bSent = $scope.getSents(b.id);
+      return aSent < bSent ? -1 : (aSent > bSent ? 1 : 0);
+  }
+
+  $scope.orderSents = function(reverse) {
+    if (reverse) {
+      $scope.model.inscriptions.sort(function(a, b) {
+        value = compareSent(a, b);
+        if (value == 0) {
+          value = compareName(a, b);
+        }
+        if (value == 0) {
+          value = a.created < b.created ? -1 : (a.created > b.created ? 1 : 0);
+        }
+        return value;
+      });
+    } else {
+      $scope.model.inscriptions.sort(function(a, b) {
+        value = compareSent(b, a);
+        if (value == 0) {
+          value = compareName(a, b);
+        }
+        if (value == 0) {
+          value = a.created < b.created ? -1 : (a.created > b.created ? 1 : 0);
+        }
+        return value;
+      });
+    };
+  }
+
+  $scope.orderRegistration = function(reverse) {
+    if (reverse) {
+      $scope.model.inscriptions.sort(function(a, b) {
+        value = a.created < b.created ? -1 : (a.created > b.created ? 1 : 0);
+        if (value == 0) {
+          value = compareName(a, b);
+        }
+        return value;
+      });
+    } else {
+      $scope.model.inscriptions.sort(function(a, b) {
+        value = b.created < a.created ? -1 : (b.created > a.created ? 1 : 0);
+        if (value == 0) {
+          value = compareName(a, b);
+        }
+        return value;
+      });
+    }
+  }
+
+  $scope.orderUser = function(reverse) {
+    if (reverse) {
+      $scope.model.inscriptions.sort(function(a, b) {
+        return compareName(a, b);
+      });
+    } else {
+      $scope.model.inscriptions.sort(function(a, b) {
+        return compareName(b, a);
+      });
+    }
+  };
+
+  // ------------- FIN DE LAS FUNCIONES DE ORDENACIÓN -----------------
 
   $scope.getCurrentScreen = function() {
     return $scope.model.currentScreen;

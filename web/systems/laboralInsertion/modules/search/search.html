@@ -17,7 +17,7 @@
       <button class="btnSend" type="button" name="button" ng-click='search()'><i class="fa fa-plus"></i> <b> Buscar </b></button>
     </div>
     <div ng-if="model.searching">
-      Buscando
+      <span class="search" ng-if='model.searching'><i class="loading fa fa-spinner fa-spin"></i>  Buscando Datos</span>
     </div>
     <div>
       <button class="btnSend" type="button" name="button" ng-click='viewSelected()'><i class="fa fa-plus"></i> <b> Agregar </b></button>
@@ -35,7 +35,7 @@
               </div>
             </td>
             <td>
-              <div class="dates">
+              <div class="dates" ng-click="view.reverseSent=!view.reverseSent;orderSents(view.reverseSent)">
                 <i class="fa fa-bookmark"></i>
               </div>
             </td>
@@ -45,12 +45,12 @@
               </div>
             </td>
             <td>
-              <div class="registration">
+              <div class="registration" ng-click="view.reverseRegistration=!view.reverseRegistration;orderRegistration(view.reverseRegistration)">
                 Inscripto
               </div>
             </td>
             <td>
-              <div class="name">
+              <div class="name" ng-click="view.reverseName=!view.reverseName;orderUser(view.reverseName)">
                 Postulante
               </div>
             </td>
