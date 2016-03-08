@@ -8,6 +8,9 @@
   <!-- ESTILOS PRINCIPALES -->
   <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
   <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Indie+Flower' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Bangers' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Mouse+Memoirs' rel='stylesheet' type='text/css'>
   <link rel="shortcut icon" href="/systems/fce/img/favicon2.ico"
 
   <!-- LIBRERIAS -->
@@ -45,6 +48,10 @@
   <link rel="stylesheet" href="/systems/support/index.css">
   <link rel="stylesheet" href="/systems/support/modules/header/header.css">
   <link rel="stylesheet" href="/systems/support/modules/footer/footer.css">
+  <!-- ResetPassword -->
+  <link rel="stylesheet" href="/systems/support/modules/resetPassword/resetPassword.css">
+  <link rel="stylesheet" href="/systems/support/modules/resetPassword/resetPassword.js">
+
 
 
 </head>
@@ -53,12 +60,12 @@
 
     <div class='main' ng-controller='IndexCtrl'>
 
-        <div class="header-container" ng-include="'/systems/support/modules/header/header.html'">
+        <div class="contentHeader" ng-include="'/systems/support/modules/header/header.html'">
         </div>
 
         <div class="contentModules" ng-view></div>
 
-        <div class="footer-container" ng-include="'/systems/support/modules/footer/footer.html'">
+        <div class="contentFooter" ng-include="'/systems/support/modules/footer/footer.html'">
         </div>
 
 

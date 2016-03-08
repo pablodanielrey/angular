@@ -1,5 +1,87 @@
-<div>
-    hola mundo
-</div>
+<div class="resetPassword {{view.style}} {{view.style2}}">
 
-<i class="fa fa-bluetooth"></i>
+      <div class="dni">
+        <div class="contentDni">
+          <div class="titleHandwritten"> <b>¿ Olvidaste tu contraseña ?</b></div>
+          <!-- <div class="title">USUARIO</div> -->
+          <div><input class="inputDni" type=text placeholder="Ingrese número de documento"></input></div>
+          <div class="contentUserNonExistent">
+              <div class="arrow">
+                <i class="fa fa-sort-asc fa-2x"></i>
+              </div>
+              <div class="textUserNonExistent">
+                <i class="fa fa-frown-o"></i> Oops! <span class="textUserNonExistent2"> El usuario no existe</span>
+              </div>
+          </div>
+          <div><button class="btnNext">Siguiente</button></div>
+        </div>
+      </div>
+
+      <div class="code">
+
+          <div class="contentText">
+                <div>Le hemos enviado un código de seguridad a su correo personal </div>
+                <div class="textMail">walter@creativehands.com.ar </div>
+                <div class="textImportant">IMPORTANTE: Verifique el correo no deseado (span) </div>
+          </div>
+          <div class="titleHandwritten"> <b>Código</b></div>
+          <div><input class="inputDni" type=text placeholder="Ingrese el código"></input></div>
+          <div class="contentError">
+            <div class="contentUserNonExistent">
+                <div class="arrow">
+                  <i class="fa fa-sort-asc fa-2x"></i>
+                </div>
+                <div class="textUserNonExistent">
+                  <i class="fa fa-frown-o"></i> Oops! <span class="textUserNonExistent2"> El código no es correcto</span>
+                </div>
+            </div>
+          </div>
+          <div><button class="btnNext">Siguiente</button></div>
+
+      </div>
+
+      <div class="pass">
+        <div class="contentCode">
+          <div class="titleHandwritten"> <b>Nueva contraseña</b></div>
+          <!-- <div class="title">USUARIO</div> -->
+          <div><input class="inputDni" type=password placeholder="Ingrese nueva contraseña"></input></div>
+          <div><input class="inputDni" type=password placeholder="Repita nueva contraseña"></input></div>
+          <div class="contentError">
+            <div class="contentUserNonExistent">
+                <div class="arrow">
+                  <i class="fa fa-sort-asc fa-2x"></i>
+                </div>
+                <div class="textUserNonExistent">
+                  <i class="fa fa-frown-o"></i> Oops! <span class="textUserNonExistent2"> Las contraseñas no coinciden</span>
+                </div>
+            </div>
+          </div>
+          <div><button class="btnNext">Siguiente</button></div>
+        </div>
+      </div>
+
+      <div class="fin">
+        <div class="contentCode">
+          <div class="titleHandwritten"> <b>Contraseña modificada con éxito</b></div>
+        </div>
+        <div class="contentText">
+              <div>Ahora podrá acceder a todos los sistemas informáticos de la Facultad de Ciencias Económicas de la UNLP. </div>
+              <div class="textMail">"Recuerde utilizar su número de documento como nombre de usuario" </div>
+
+        </div>
+      </div>
+
+
+
+
+    <div class="navegacion">
+      <button ng-click="view.style='screenDni';view.style2='ocultarError'">1</button>
+      <button ng-click="view.style2='error'">1b</button>
+      <button ng-click="view.style='screenCode';view.style2='ocultarError'">2</button>
+      <button ng-click="view.style2='error'">2b</button>
+      <button ng-click="view.style='screenNewPass';view.style2='ocultarError'">3</button>
+      <button ng-click="view.style2='error'">3b</button>
+      <button ng-click="view.style='screenFin';view.style2='ocultarError'">4</button>
+    </div>
+
+</div>

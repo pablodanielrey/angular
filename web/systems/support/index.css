@@ -1,31 +1,56 @@
 .support {
-  display: flex;
-  display: -webkit-flex; /* Safari */
-  display: -moz-flex; /* mozilla */
-  flex-direction:column;
-  -webkit-flex-direction:column; /* Safari */
-  -moz-flex-direction:column; /* mozilla */
   margin: 0px;
   padding: 0px;
   width: 100%;
   height: 100%;
-  position: absolute;
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 .support .main {
+  position: absolute;
   display: flex;
-  display: -webkit-flex; /* Safari */
-  display: -moz-flex; /* mozilla */
-  flex-direction:column;
-  -webkit-flex-direction:column; /* Safari */
-  -moz-flex-direction:column; /* mozilla */
-  width: 100%;
+  display: -webkit-flex;
+  display: -moz-flex;
+  flex-direction: column;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
   height: 100%;
+  width: 100%;
   background-color: #F1F1F1;
+  overflow-x: hidden;
+  overflow-y: hidden;
+
+}
+
+.support .contentHeader {
+  width: 100%;
 }
 
 .support .contentModules {
+  display: flex;
+  display: -webkit-flex;
+  display: -moz-flex;
   width: 100%;
   height: 100%;
+}
+
+.support .contentFooter {
+  width: 100%;
+}
+
+
+
+@media (max-width: 720px){
+   .contentFooter {
+      display: none;
+  }
+}
+
+@media (max-height: 500px){
+   .contentFooter {
+      display: none;
+  }
 }
