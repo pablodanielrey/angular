@@ -55,7 +55,7 @@
               </div>
             </td>
             <td>
-              <div class="sex">
+              <div class="sex" ng-click="view.reverseSex=!view.reverseSex;orderSex(view.reverseSex)">
                 Sexo
               </div>
             </td>
@@ -179,12 +179,12 @@
             </td>
             <td>
               <div class="city">
-                {{getResidence(i.userId)}}
+                {{getCity(i.userId)}}
               </div>
             </td>
             <td>
               <div class="city2">
-                {{getCity(i.userId)}}
+              {{getResidence(i.userId)}}
               </div>
             </td>
             <td>
