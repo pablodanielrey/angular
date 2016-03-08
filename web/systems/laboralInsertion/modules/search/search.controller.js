@@ -570,6 +570,12 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
       return;
     }
 
+    // chequeo que se haya verificado al usuario
+    if (!i.checked) {
+      console.log('No ha sido verificado');
+      return;
+    }
+
     i.selected = !i.selected;
     if (i.selected) {
       addSelected(i);
@@ -816,6 +822,12 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     }, function(err) {
       console.log(err);
     });
+  }
+
+  $scope.displayProfile = function(i) {
+    console.log(i);
+    i.checked = true;
+    LaboralInsertion.persistInscriptionByUser(i.userId,i).then(console.log(i),function(err) {console.log(err)});
   }
 
   $rootScope.$on('$viewContentLoaded', function(event) {

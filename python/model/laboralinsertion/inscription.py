@@ -11,6 +11,7 @@ class Inscription:
         self.reside = False
         self.travel = False
         self.workExperience = False
+        self.checked = False
         self.created = None
         self.average1 = 0
         self.average2 = 0
@@ -28,6 +29,7 @@ class InscriptionDAO:
                     user_id varchar not null references laboral_insertion.users (id)
                     reside boolean default false,
                     travel boolean default false,
+                    checked boolean default false,
                     degree varchar not null,
                     approved integer default 0,
                     average1 real default 0.0,
@@ -49,6 +51,7 @@ class InscriptionDAO:
         i.workType = r['work_type']
         i.reside = r['reside']
         i.travel = r['travel']
+        i.checked = r['checked']
         i.workExperience = r['work_experience']
         i.created = r['created']
         i.average1 = r['average1']
@@ -67,11 +70,12 @@ class InscriptionDAO:
             if inscription.id is None:
                 inscription.id = str(uuid.uuid4())
                 ins = inscription.__dict__
-                cur.execute('insert into laboral_insertion.inscriptions (id, user_id, degree, work_type, reside, travel, work_experience, average1, average2, approved) values '
-                            '(%(id)s, %(userId)s, %(degree)s, %(workType)s, %(reside)s, %(travel)s, %(workExperience)s, %(average1)s, %(average2)s, %(approved)s )', ins)
+                cur.execute('insert into laboral_insertion.inscriptions (id, user_id, degree, work_type, reside, travel, checked, work_experience, average1, average2, approved) values '
+                            '(%(id)s, %(userId)s, %(degree)s, %(workType)s, %(reside)s, %(travel)s, %(checked)s, %(workExperience)s, %(average1)s, %(average2)s, %(approved)s )', ins)
             else:
-                cur.execute('update laboral_insertion.inscriptions (user_id = %(userId)s, degree = %(degree)s, work_type = %(workType)s, '
-                            'reside = %(reside)s, travel = %(travel)s, average1 = %(average1)s, average2 = %(average2)s, approved = %(approved)s) where id = %(id)s', ins)
+                ins = inscription.__dict__
+                cur.execute('update laboral_insertion.inscriptions set user_id = %(userId)s, degree = %(degree)s, work_type = %(workType)s, '
+                            'reside = %(reside)s, travel = %(travel)s, checked = %(checked)s, average1 = %(average1)s, average2 = %(average2)s, approved = %(approved)s where id = %(id)s', ins)
 
         finally:
             cur.close()

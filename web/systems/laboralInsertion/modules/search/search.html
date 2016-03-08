@@ -135,10 +135,10 @@
         <table ng-repeat='i in model.inscriptions'>
           <tr class="fileResults">
             <td>
-              <div class="Select" ng-if="getMail(i.userId) != 'No Definido'">
+              <div class="Select" ng-if="getMail(i.userId) != 'No Definido' && i.checked">
                 <input type="checkbox" ng-checked='isSelected(i)' ng-click='selectInscription(i)'>
               </div>
-              <div class="Select" ng-if="getMail(i.userId) == 'No Definido'">
+              <div class="Select" ng-if="getMail(i.userId) == 'No Definido' || !i.checked">
                 -
               </div>
             </td>
@@ -148,7 +148,7 @@
               </div>
             </td>
             <td>
-              <div class="user">
+              <div class="user" ng-click="displayProfile(i)">
                 <i class="fa fa-user"></i>
               </div>
             </td>
