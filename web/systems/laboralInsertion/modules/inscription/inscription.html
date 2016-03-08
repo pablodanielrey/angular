@@ -232,9 +232,9 @@
                         <button><i class="fa fa-envelope"></i></button>
                       </div>
                       <div>
-                        <select  ng-model='model.laboralData.email' name='mail' ng-change='updateLaboralData()' required>
+                        <select  ng-model='model.selectedEmail' name='mail' ng-change='updateLaboralData()' required ng-options="option.email for option in model.mails.emails | orderBy: ['email']">
                           <!-- <option class="selectGrey" disabled selected style='display:none;'>Mail</option> -->
-                          <option ng-repeat='m in model.mails.emails' value='{{m.id}}'>{{m.email}}</option>
+                          <!-- <option ng-repeat='m in model.mails.emails' value='{{m.id}}'>{{m.email}}</option> -->
                           <!--
                           <option>pablo@econo.unlp.edu.ar</option>
                           <option>pablodanielrey@gmail.com</option>
