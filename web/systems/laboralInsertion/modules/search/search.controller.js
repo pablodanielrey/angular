@@ -854,10 +854,13 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
   }
 
   $scope.displayProfile = function(i) {
-    console.log(i);
-    i.checked = true;
-    LaboralInsertion.persistInscriptionByUser(i.userId,i).then(console.log(i),function(err) {console.log(err)});
+    $scope.model.currentScreen = "screenProfile";
+    $scope.$broadcast('openProfileEvent',i);
   }
+
+  $scope.$on('closeProfileEvent', function(event) {
+    $scope.model.currentScreen = "";
+  });
 
   $rootScope.$on('$viewContentLoaded', function(event) {
     $scope.initialize();

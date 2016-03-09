@@ -1,0 +1,53 @@
+<div class="contentProfile">
+  <div class="title">
+    {{getTitleProfile()}}
+  </div>
+
+  <div class="formProfile">
+    <div class="item">
+      <div class="titleItem">
+        Carrera:
+      </div>
+      <div>
+        {{data.degree}}
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="titleItem">
+        Cantidad de Materias:
+      </div>
+      <div class="inputItem">
+        <input type="text" ng-model="data.approved"/>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="titleItem">
+        Promedio:
+      </div>
+      <div class="inputItem">
+        <input type="text" ng-model="data.average1"/>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="titleItem">
+        Promedio con aplazo:
+      </div>
+      <div class="inputItem">
+        <input type="text" ng-model="data.average2"/>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="contentButtons">
+    <div class="itemButton">
+      <button class="btnSend3" ng-click='cancelProfile()'> <i class="fa fa-times"></i> CANCELAR</button>
+    </div>
+    <div class="itemButton">
+      <button class="btnSend3" ng-click='saveProfile()'> <i class="fa fa-floppy-o"></i> GUARDAR</button>
+    </div>
+  </div>
+</div>
