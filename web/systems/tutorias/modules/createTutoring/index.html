@@ -30,8 +30,7 @@
               </div>
 
               <div class="contentMyRecentTutoring">
-
-                  <div class="contentItemTutoringRecent" ng-click="view.style='nuevaTutoria'">
+                  <div class="contentItemTutoringRecent" ng-repeat="t in model.recentTutorings" ng-click="selectTutoring(t)">
                       <div class="contentIconTutoring">
                         <div class="IconTutoring">
                           <i class="fa fa-tumblr fa-2x"></i>
@@ -39,74 +38,16 @@
                       </div>
                       <div class="contentDataTutoringRecent">
                         <div>
-                          Miércoles
+                          {{t.day}}
                         </div>
                         <div>
-                          <b>26/03/2016</b>
+                          <b>{{t.date}}</b>
                         </div>
                       </div>
                       <div class="iconIrTutoring">
                         <i class="fa fa-sign-in fa-2x"></i>
                       </div>
                   </div>
-
-                  <div class="contentItemTutoringRecent" ng-click="view.style='nuevaTutoria'">
-                      <div class="contentIconTutoring">
-                        <div class="IconTutoring">
-                          <i class="fa fa-tumblr fa-2x"></i>
-                        </div>
-                      </div>
-                      <div class="contentDataTutoringRecent">
-                        <div>
-                          Jueves
-                        </div>
-                        <div>
-                          <b>19/03/2016</b>
-                        </div>
-                      </div>
-                      <div class="iconIrTutoring">
-                        <i class="fa fa-sign-in fa-2x"></i>
-                      </div>
-                  </div>
-
-                  <div class="contentItemTutoringRecent" ng-click="view.style='nuevaTutoria'">
-                      <div class="contentIconTutoring">
-                        <div class="IconTutoring">
-                          <i class="fa fa-tumblr fa-2x"></i>
-                        </div>
-                      </div>
-                      <div class="contentDataTutoringRecent">
-                        <div>
-                          Martes
-                        </div>
-                        <div>
-                          <b>16/03/2016</b>
-                        </div>
-                      </div>
-                      <div class="iconIrTutoring">
-                        <i class="fa fa-sign-in fa-2x"></i>
-                      </div>
-                  </div>
-
-                  <div class="contentItemTutoringRecent" ng-click="view.style='nuevaTutoria'">
-                      <div class="contentIconTutoring">
-                        <div class="IconTutoring">
-                          <i class="fa fa-tumblr fa-2x"></i>
-                        </div>
-                      </div>
-                      <div class="contentDataTutoringRecent">
-                        <div>
-                          Miércoles
-                        </div>
-                        <div>
-                          <b>11/03/2016</b>
-                        </div>
-                      </div>
-                      <div class="iconIrTutoring">
-                        <i class="fa fa-sign-in fa-2x"></i>
-                      </div>
-                  </div>
-
 
               </div>
 
@@ -131,68 +72,20 @@
             </div>
             <div class="contentRecent">
 
-              <div class="contentUserRecent">
+              <div class="contentUserRecent" ng-repeat="user in model.recentUsers">
                   <div class="contentPhotoRecent">
-                    <img class="imgUserRecent" src="img/pablosarmieto.jpg">
+                    <img class="imgUserRecent" src="{{user.img}}">
                   </div>
                   <div class="contentDataRecent">
                     <div>
-                      <b>Pablo Sarmiento</b>
+                      <b>{{user.name}} {{user.lastname}}</b>
                     </div>
                     <div>
-                      30235968
+                      {{user.dni}}
                     </div>
 
                   </div>
               </div>
-
-              <div class="contentUserRecent">
-                  <div class="contentPhotoRecent">
-                    <img class="imgUserRecent" src="img/lucas.jpg">
-                  </div>
-                  <div class="contentDataRecent">
-                    <div>
-                      <b>Lucas Langoni</b>
-                    </div>
-                    <div>
-                      35456923
-                    </div>
-                  </div>
-              </div>
-
-              <div class="contentUserRecent">
-                  <div class="contentPhotoRecent">
-                    <img class="imgUserRecent" src="img/walter.jpg">
-                  </div>
-                  <div class="contentDataRecent">
-                    <div>
-                      <b>Walter Blanco</b>
-                    </div>
-                    <div>
-                      30001823
-                    </div>
-
-                  </div>
-              </div>
-
-              <div class="contentUserRecent">
-                  <div class="contentPhotoRecent">
-                    <img class="imgUserRecent" src="img/pablo.jpg">
-                  </div>
-                  <div class="contentDataRecent">
-                    <div>
-                      <b>Pablo Daniel Rey</b>
-                    </div>
-                    <div>
-                      28356952
-                    </div>
-
-                  </div>
-              </div>
-
-
-
-
 
             </div>
 
