@@ -18,6 +18,7 @@ from model.laboralinsertion.user import UserDAO, User
 
 import csv
 
+
 class LaboralInsertion:
 
     """
