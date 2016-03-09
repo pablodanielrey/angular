@@ -32,6 +32,7 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     reverseCity: false,
     reverseResidence: false,
     reverseTravel: false,
+    reverseWorkExperience: false,
     reverseEnglish: false,
     reverseLanguagesOther: false,
     reverseDegree: false,
@@ -290,6 +291,26 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     } else {
       $scope.model.inscriptions.sort(function(a, b) {
         value = b.travel < a.travel ? -1 : (b.travel > a.travel ? 1 : 0);
+        if (value == 0) {
+          value = compareName(a, b);
+        }
+        return value;
+      });
+    }
+  };
+
+  $scope.orderWorkExperience = function(reverse) {
+    if (reverse) {
+      $scope.model.inscriptions.sort(function(a, b) {
+        value = a.workExperience < b.workExperience ? -1 : (a.workExperience > b.workExperience ? 1 : 0);
+        if (value == 0) {
+          value = compareName(a, b);
+        }
+        return value;
+      });
+    } else {
+      $scope.model.inscriptions.sort(function(a, b) {
+        value = b.workExperience < a.workExperience ? -1 : (b.workExperience > a.workExperience ? 1 : 0);
         if (value == 0) {
           value = compareName(a, b);
         }
@@ -642,6 +663,14 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
 
   $scope.getTravel = function(i) {
     if (i.travel) {
+      return "Sí";
+    } else {
+      return "No";
+    }
+  }
+
+  $scope.getWorkExperience = function(i) {
+    if (i.workExperience) {
       return "Sí";
     } else {
       return "No";

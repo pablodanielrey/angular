@@ -85,6 +85,11 @@
               </div>
             </td>
             <td>
+              <div class="workExperience" ng-click="view.reverseWorkExperience=!view.reverseWorkExperience;orderWorkExperience(view.reverseWorkExperience)">
+                Exp. Laboral
+              </div>
+            </td>
+            <td>
               <div class="english" ng-click="view.reverseEnglish=!view.reverseEnglish;orderEnglish(view.reverseEnglish)">
                 Inglés
               </div>
@@ -190,6 +195,11 @@
             <td>
               <div class="travel">
                 {{getTravel(i)}}
+              </div>
+            </td>
+            <td>
+              <div class="workExperience">
+                {{getWorkExperience(i)}}
               </div>
             </td>
             <td>

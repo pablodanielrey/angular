@@ -55,13 +55,13 @@
   padding: 2px;
 }
 
-.search .age,  .travel,  .cousers, .average, .average2   {
+.search .age,  .travel,  .cousers, .average, .average2 {
   width: 50px ;
   margin-left: 1px;
   padding: 2px;
 }
 
-.search .portugues, .english, .other, .sex, .dni, .registration {
+.search .portugues, .english, .other, .sex, .dni, .registration, .workExperience {
   width: 80px ;
   margin-left: 1px;
   padding: 2px;
