@@ -20,10 +20,28 @@ class Filter:
 
         ''' deserializa el objeto desde json '''
         for sub in cls.__subclasses__():
-            o = sub._fromJson(t,d)
+            if sub.__name__ != t:
+                continue
+
+            o = sub._fromJson(d)
             if o is not None:
                 return o
         return None
+
+
+class FDegree(Filter):
+
+    def __init__(self):
+        self.degree = 'Lic. En Economía'
+
+    def _toJson(self):
+        return "'{}'".format(self.degree)
+
+    @classmethod
+    def _fromJson(cls, data):
+        d = FDegree()
+        d.degree = data[1:][:-1]
+        return d
 
 
 class FInscriptionDate(Filter):
@@ -36,10 +54,7 @@ class FInscriptionDate(Filter):
         return "'{}'".format(self.date.isoformat())
 
     @classmethod
-    def _fromJson(cls, t, data):
-        if cls.__name__ != t:
-            return None
-
+    def _fromJson(cls, data):
         import dateutil.parser
         f = FInscriptionDate()
         date = data[1:][:-1]
@@ -47,13 +62,12 @@ class FInscriptionDate(Filter):
         return f
 
 
-
 if __name__ == '__main__':
-    f = FInscriptionDate()
-    import datetime
-    f.date = datetime.datetime.now()
-    s = f.toJson()
-    print(s)
-    ft = Filter.fromJson(s)
-    print(ft.__class__.__name__)
-    print(ft.toJson())
+
+    fs = [ FInscriptionDate(), FDegree() ]
+    for f in fs:
+        s = f.toJson()
+        print(s)
+        ft = Filter.fromJson(s)
+        print(ft.__class__.__name__)
+        print(ft.toJson())
