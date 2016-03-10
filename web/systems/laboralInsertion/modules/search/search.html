@@ -58,73 +58,78 @@
               </div>
             </td>
             <td>
-              <div class="sex">
+              <div class="sex" ng-click="view.reverseGenre=!view.reverseGenre;orderGenre(view.reverseGenre)">
                 Sexo
               </div>
             </td>
             <td>
-              <div class="age">
+              <div class="age" ng-click="view.reverseAge=!view.reverseAge;orderAge(view.reverseAge)">
                 Edad
               </div>
             </td>
             <td>
-              <div class="dni">
+              <div class="dni" ng-click="view.reverseDni=!view.reverseDni;orderDni(view.reverseDni)">
                 DNI
               </div>
             </td>
             <td>
-              <div class="city">
+              <div class="city" ng-click="view.reverseCity=!view.reverseCity;orderCity(view.reverseCity)">
                 C. de Origen
               </div>
             </td>
             <td>
-              <div class="city2">
+              <div class="city2" ng-click="view.reverseResidence=!view.reverseResidence;orderResidence(view.reverseResidence)">
                 C. de Residencia
               </div>
             </td>
             <td>
-              <div class="travel">
+              <div class="travel" ng-click="view.reverseTravel=!view.reverseTravel;orderTravel(view.reverseTravel)">
                 Viajar
               </div>
             </td>
             <td>
-              <div class="english">
+              <div class="workExperience" ng-click="view.reverseWorkExperience=!view.reverseWorkExperience;orderWorkExperience(view.reverseWorkExperience)">
+                Exp. Laboral
+              </div>
+            </td>
+            <td>
+              <div class="english" ng-click="view.reverseEnglish=!view.reverseEnglish;orderEnglish(view.reverseEnglish)">
                 Inglés
               </div>
             </td>
 
             <td>
-              <div class="other" title="Otro Idioma">
+              <div class="other" title="Otro Idioma" ng-click="view.reverseLanguagesOther=!view.reverseLanguagesOther;orderLanguagesOther(view.reverseLanguagesOther)">
                 Otro I.
               </div>
             </td>
             <td>
-              <div class="career" title="Carrera">
+              <div class="career" title="Carrera" ng-click="view.reverseDegree=!view.reverseDegree;orderDegree(view.reverseDegree)">
                 Carrera
               </div>
             </td>
             <td>
-              <div class="cousers" title="Cantidad de Materias">
+              <div class="cousers" title="Cantidad de Materias" ng-click="view.reverseApproved=!view.reverseApproved;orderApproved(view.reverseApproved)">
                 C. M.
               </div>
             </td>
             <td>
-              <div class="average" title="Promedio c/aplazos">
-                % c/a
-              </div>
-            </td>
-            <td>
-              <div class="average2" title="Promedio">
+              <div class="average" title="Promedio c/aplazos" ng-click="view.reverseAverage1=!view.reverseAverage1;orderAverage1(view.reverseAverage1)">
                 %
               </div>
             </td>
             <td>
-              <div class="program">
+              <div class="average2" title="Promedio" ng-click="view.reverseAverage2=!view.reverseAverage2;orderAverage2(view.reverseAverage2)">
+                % c/a
+              </div>
+            </td>
+            <td>
+              <div class="program" ng-click="view.reverseWorkType=!view.reverseWorkType;orderWorkType(view.reverseWorkType)">
                   Oferta
               </div>
             </td>
             <td>
-              <div class="mail">
+              <div class="mail" ng-click="view.reverseMail=!view.reverseMail;orderMail(view.reverseMail)">
                 Correo
               </div>
             </td>
@@ -138,10 +143,10 @@
         <table ng-repeat='i in model.inscriptions' ng-class="{true:'seleccionado'}[isSelected(i)]">
           <tr class="fileResults" >
             <td>
-              <div class="Select" ng-if="getMail(i.userId) != 'No Definido'">
+              <div class="Select" ng-if="getMail(i.userId) != 'No Definido' && i.checked">
                 <input type="checkbox" ng-checked='isSelected(i)' ng-click='selectInscription(i)'>
               </div>
-              <div class="Select" ng-if="getMail(i.userId) == 'No Definido'">
+              <div class="Select" ng-if="getMail(i.userId) == 'No Definido' || !i.checked">
                 -
               </div>
             </td>
@@ -151,7 +156,7 @@
               </div>
             </td>
             <td>
-              <div class="user">
+              <div class="user" ng-click="displayProfile(i)">
                 <i class="fa fa-user"></i>
               </div>
             </td>
@@ -182,17 +187,22 @@
             </td>
             <td>
               <div class="city">
-                {{getResidence(i.userId)}}
+                {{getCity(i.userId)}}
               </div>
             </td>
             <td>
               <div class="city2">
-                {{getCity(i.userId)}}
+              {{getResidence(i.userId)}}
               </div>
             </td>
             <td>
               <div class="travel">
                 {{getTravel(i)}}
+              </div>
+            </td>
+            <td>
+              <div class="workExperience">
+                {{getWorkExperience(i)}}
               </div>
             </td>
             <td>
@@ -482,4 +492,6 @@
   <div class="filters" ng-controller="FiltersCtrl" ng-include="'/systems/laboralInsertion/modules/search/filters.html'">
   </div>
 
+  <div class="profile" ng-controller="ProfilesCtrl" ng-include="'/systems/laboralInsertion/modules/search/profileUser.html'">
+  </div>
 </div>

@@ -37,7 +37,7 @@ class LoginWamp(ApplicationSession):
     def validateSession(self, sid):
         con = self.conn.get()
         try:
-            if len(self.session.findById(con, [sid])) > 0:
+            if len(SessionDAO.findById(con, [sid])) > 0:
                 return True
             else:
                 return False

@@ -150,8 +150,8 @@ class SessionDAO:
     def findById(con, ids=[]):
         cur = con.cursor()
         try:
-            cur.execute('select * from systems.sessions where id in %s and expire >= NOW()', (tuple(ids)))
-            return [ self._fromResult(x) for x in cur ]
+            cur.execute('select * from systems.sessions where id in %s and expire >= NOW()', (tuple(ids),))
+            return [ SessionDAO._fromResult(x) for x in cur ]
 
         finally:
             cur.close()

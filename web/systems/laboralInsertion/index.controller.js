@@ -22,16 +22,16 @@ function IndexCtrl($rootScope, $scope, $window, Notifications, Login) {
       }
 
 
-        /*Login.validateSession(
-          function(v) {
-            if (!v) {
-              $window.location.href = "/systems/login/index.html";
-            }
-          },
-          function(err) {
-            Notifications.message(err);
-        })*/
-      }
+      Login.validateSession(
+        function(v) {
+          if (!v) {
+            $window.location.href = "/systems/login/index.html";
+          }
+        },
+        function(err) {
+          Notifications.message(err);
+      })
+    }
 
     $scope.$on('$viewContentLoaded', function(event) {
       $scope.initialize();

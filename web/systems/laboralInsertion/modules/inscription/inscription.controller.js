@@ -191,9 +191,14 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
   $scope.$watch(function() { return $scope.model.laboralData.email; }, function(o,n) { $scope.checkInscriptionPreconditions(); });
   $scope.$watch(function() { return $scope.model.laboralData.cv; }, function(o,n) { $scope.checkInscriptionPreconditions(); });
 
-
-  $scope.$watch(function() { return $scope.save; }, function(o,n) {
-    console.log("Cambio el save:" + $scope.save);
+  $scope.$watch(function() { return $scope.model.mails.emails;}, function(o,n) {
+    for (var i = 0; i < $scope.model.mails.emails.length; i++) {
+      var m = $scope.model.mails.emails[i];
+      if ($scope.model.laboralData.email == m.id) {
+        $scope.model.selectedEmail = m;
+        break;
+      }
+    }
   });
 
   $scope.checkInscriptionPreconditions = function() {
@@ -382,9 +387,6 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
 
     Users.findMails(uid, function(mails) {
       $scope.model.mails.emails = mails;
-      if (mails.length > 0) {
-        $scope.model.laboralData.email = mails[0].id;
-      }
     }, function(err) {
       console.log(err);
     });
@@ -449,6 +451,7 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
   }
 
   $scope.updateLaboralData = function() {
+    $scope.model.laboralData.email = $scope.model.selectedEmail == null ? null : $scope.model.selectedEmail.id;
     var ld = JSON.parse(JSON.stringify($scope.model.laboralData))
     if (ld.cv == undefined || ld.cv == '') {
       delete ld.cv;
