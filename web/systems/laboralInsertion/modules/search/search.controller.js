@@ -238,7 +238,10 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     Chequea si una inscripcion esta seleccionado para ser enviado a una empresa.
   */
   $scope.isSelected = function(i) {
-    if(i) return i.selected;
+    if (i != null) {
+      return i.selected;
+    }
+    return false;
   }
 
   /*

@@ -48,8 +48,13 @@
   margin-left: 1px;
   padding: 2px;
 }
+.search .name {
+  width: 250px;
+  margin-left: 1px;
+  padding: 2px;
+}
 
-.search .name, .city, .city2, .mail, .career {
+.search .city, .city2, .mail, .career {
   width: 200px;
   margin-left: 1px;
   padding: 2px;
@@ -97,8 +102,11 @@
 .search .searchResults {
 }
 
+/*.search .searchResults table:nth-child(even) { background: #EEE }
+.search .searchResults table:nth-child(odd) { background: #DBE2E5}*/
+
 .search .searchResults table:nth-child(even) { background: #EEE }
-.search .searchResults table:nth-child(odd) { background: #DBE2E5}
+.search .searchResults table:nth-child(odd) { background: white}
 
 .search .btnSend {
   margin: 20px;
@@ -125,6 +133,23 @@
   cursor: pointer;
   border: none;
   color: white;
+  -webkit-box-shadow: 1px 1px 5px #5c5f69;
+  -moz-box-shadow: 5px 5px 5px #5c5f69;
+  border-radius:2px 2px 0px 2px;
+  -webkit-border-radius:2px 2px 0px 2px;
+  -moz-border-radius:2px 2px 0px 2px;
+}
+
+.search .searching {
+  margin: 20px;
+  padding: 10px;
+  width: 179px;
+  height: 18px;
+  font-size: 14px;
+  background-color: #0066A6;
+  border: none;
+  color: white;
+  text-align: center;
   -webkit-box-shadow: 1px 1px 5px #5c5f69;
   -moz-box-shadow: 5px 5px 5px #5c5f69;
   border-radius:2px 2px 0px 2px;
@@ -794,6 +819,13 @@ la pantalla contentBusines, sendBusines y sending no se muentran*/
 }
 
 
+.search .seleccionado {
+  background-color:#0066A6 !important;
+
+}
+.search .seleccionado td {
+  color:white !important;
+}
 
 
 /************************************************
