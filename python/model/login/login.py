@@ -16,6 +16,30 @@ class Login:
     userPassword = inject.attr(UserPasswordDAO)
     users = inject.attr(User)
     sessions = inject.attr(SessionDAO)
+    profiles = inject.attr(ProfileDAO)
+
+    def hasRoles(self, con, sId, roles = []):
+        ss = self.sessions.findById(con, [sId])
+        if len(ss) <= 0:
+            return False
+
+        jprofile = ss[0].data
+        if jprofile is None:
+            return False
+            
+        return Profile._fromJson(jprofile).hasRoles(roles)
+
+    def hasOneRole(self, con, sId, roles = []):
+        ss = self.sessions.findById(con, [sId])
+        if len(ss) <= 0:
+            return False
+
+        jprofile = ss[0].data
+        if jprofile is None:
+            return False
+
+        return Profile._fromJson(jprofile).hasOneRole(roles)
+
 
     def login(self, con, username, password):
         assert username is not None
@@ -27,14 +51,19 @@ class Login:
         s = Session()
         s.userId = up.userId
         s.username = up.username
+
+        profile = self.profiles.findByUserId(con, s.userId)
+        if profile is not None:
+            s.data = profile._toJson()
+
         sid = self.sessions.persist(con, s)
         s.id = sid
         return s
 
     def logout(self, con, sid):
         assert sid is not None
-        self.session.deleteById(con, sid)
+        self.sessions.deleteById(con, sid)
 
     def touch(self, con, sid):
         assert sid is not None
-        self.session.touch(con, sid)
+        self.sessions.touch(con, sid)

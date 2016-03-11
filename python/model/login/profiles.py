@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+import json
 
 class Profile:
 
@@ -7,6 +7,38 @@ class Profile:
         self.userId = None
         self.roles = []
 
+    def hasOneRole(role = []):
+        if len(role) <= 0:
+            return False
+
+        if len(role) == 1:
+            return role[0] in self.roles
+
+        for r in role:
+            if r in self.roles:
+                return True
+        return False
+
+    def hasRoles(role = []):
+        if len(role) <= 0:
+            return False
+
+        if len(role) == 1:
+            return role[0] in self.roles
+
+        for r in role:
+            if r not in self.roles:
+                return False
+        return True
+
+    def _toJson(self):
+        return json.dumps(self)
+
+    @staticmethod
+    def _fromJson(pstring):
+        p = Profile()
+        p.__dict__ = json.loads(pstring)
+        return p
 
 class ProfileDAO:
 

@@ -43,6 +43,14 @@ class Session:
         self.deleted = None
         self.data = None
 
+    def _toJson(self):
+        return json.dumps(self)
+
+    @staticmethod
+    def _fromJson(sess):
+        s = Session()
+        s.__dict__ = json.loads(sess)
+        return s
 
 class SessionDAO:
 
