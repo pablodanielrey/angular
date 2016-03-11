@@ -26,7 +26,7 @@ class Login:
         jprofile = ss[0].data
         if jprofile is None:
             return False
-            
+
         return Profile._fromJson(jprofile).hasRoles(roles)
 
     def hasOneRole(self, con, sId, roles = []):
@@ -40,6 +40,9 @@ class Login:
 
         return Profile._fromJson(jprofile).hasOneRole(roles)
 
+    def getUserId(self, con, sId):
+        ss = self.sessions.findById(con, [sId])
+        return ss[0].userId
 
     def login(self, con, username, password):
         assert username is not None
