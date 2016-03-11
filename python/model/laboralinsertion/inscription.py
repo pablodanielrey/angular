@@ -66,6 +66,8 @@ class InscriptionDAO:
 
         ''' crea o actualiza un registro de inscripcion en la base de datos '''
         cur = con.cursor()
+        if not(hasattr(inscription, 'checked')):
+            inscription.checked = False
         try:
             if inscription.id is None:
                 inscription.id = str(uuid.uuid4())
