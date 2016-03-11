@@ -17,12 +17,12 @@
     </div>
 
     <div>
-      <button class="btnSend" type="button" name="button" ng-click='viewSelected()'><i class="fa fa-plus"></i> <b> Agregar </b></button>
+      <button class="btnSend" type="button" name="button" ng-click='viewSelected()'>  <b>{{model.selecteds.length}}</b>&nbsp; <i class="fa fa-users"></i>&nbsp; Seleccionados</button>
     </div>
 
-    <div class="btnUserSelect">
+    <!-- <div class="btnUserSelect">
       <i class="fa fa-users"></i> <b>{{model.selecteds.length}}</b> Inscripciones Seleccionadas
-    </div>
+    </div> -->
 
 
 
@@ -89,8 +89,8 @@
                 </div>
               </th>
               <th>
-                <div class="workExperience" ng-click="view.reverseWorkExperience=!view.reverseWorkExperience;orderWorkExperience(view.reverseWorkExperience)">
-                  Exp. Laboral
+                <div class="workExperience" title="Experiencía Laboral" ng-click="view.reverseWorkExperience=!view.reverseWorkExperience;orderWorkExperience(view.reverseWorkExperience)">
+                  Exp. L.
                 </div>
               </th>
               <th>
@@ -337,7 +337,7 @@
 
                     <td>
                       <div class="name">
-                        {{getName(i.userId)}}
+                        <b>{{getName(i.userId)}}</b>
                       </div>
                     </td>
 
@@ -367,7 +367,7 @@
 
                     <td>
                       <div class="program">
-                          <button class="btnDeleteInsciption" ng-click="deleteSelected(i)">borrar</button>
+                          <button class="btnDeleteInsciption" ng-click="deleteSelected(i)"><i class="fa fa-trash-o"></i> Borrar</button>
                       </div>
                     </td>
 
@@ -496,4 +496,5 @@
 
   <div class="profile" ng-controller="ProfilesCtrl" ng-include="'/systems/laboralInsertion/modules/search/profileUser.html'">
   </div>
+
 </div>
