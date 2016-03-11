@@ -3,7 +3,7 @@ import calendar, datetime, logging, uuid
 import inject
 
 from model.assistance.justification.exceptions import *
-"""
+
 from model.assistance.justification.AAJustification import AAJustification
 from model.assistance.justification.BSJustification import BSJustification
 from model.assistance.justification.BCJustification import BCJustification
@@ -37,12 +37,12 @@ from model.assistance.justification.INVJustification import INVJustification
 from model.assistance.justification.NACJustification import NACJustification
 from model.assistance.justification.PONJustification import PONJustification
 from model.assistance.justification.PRNJustification import PRNJustification
-"""
+
 
 
 
 class Justifications:
-    """
+
     justifications = [
         CJustification(), LAOJustification(), AAJustification(), BSJustification(), R638Justification(), PEJustification(),
         CumpJustification(), A102Justification(), LMCDJustification(), LMLTJustification(), BloodDonationJustification(),
@@ -51,8 +51,7 @@ class Justifications:
         VJEJustification(), SUSJustification(), SGSJustification(), MATJustification(), INVJustification(), NACJustification(), PONJustification(),
         PRNJustification(),
     ]
-    """
-    justifications = []
+    
 
 
     ''' obtiene un requerimiento de justificacion dado el id '''

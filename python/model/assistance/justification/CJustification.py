@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import calendar, datetime, logging, uuid
 
-from model.systems.assistance.justifications.justification import Justification, Repetition
-from model.systems.assistance.justifications.exceptions import *
+from model.assistance.justification.justification import Justification, Repetition
+from model.assistance.justification.exceptions import *
 
 
 """

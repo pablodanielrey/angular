@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import calendar, datetime, logging, uuid
 
-from model.systems.assistance.justifications.justification import Justification, Repetition
-from model.systems.assistance.justifications.exceptions import *
+from model.assistance.justification.justification import Justification, Repetition
+from model.assistance.justification.exceptions import *
 
 
 """
@@ -158,7 +158,7 @@ class PEJustification(Justification):
         if created is None:
             created = datetime.datetime.now(datetime.timezone.utc)
             created = created - datetime.timedelta(seconds=1)
-            
+
         requestId = req['id']
 
         cur = con.cursor()
