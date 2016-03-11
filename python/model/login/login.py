@@ -41,6 +41,8 @@ class Login:
         return Profile._fromJson(jprofile).hasOneRole(roles)
 
     def getUserId(self, con, sId):
+        assert con is not None
+        assert sId is not None
         ss = self.sessions.findById(con, [sId])
         return ss[0].userId
 
