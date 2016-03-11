@@ -8,7 +8,7 @@ class Profile:
         self.roles = []
 
 
-class Profiles:
+class ProfileDAO:
 
     @staticmethod
     def _createSchema(con):
