@@ -232,9 +232,9 @@
                         <button><i class="fa fa-envelope"></i></button>
                       </div>
                       <div>
-                        <select  ng-model='model.laboralData.email' name='mail' ng-change='updateLaboralData()' required>
+                        <select  ng-model='model.selectedEmail' name='mail' ng-change='updateLaboralData()' required ng-options="option.email for option in model.mails.emails | orderBy: ['email']">
                           <!-- <option class="selectGrey" disabled selected style='display:none;'>Mail</option> -->
-                          <option ng-repeat='m in model.mails.emails' value='{{m.id}}'>{{m.email}}</option>
+                          <!-- <option ng-repeat='m in model.mails.emails' value='{{m.id}}'>{{m.email}}</option> -->
                           <!--
                           <option>pablo@econo.unlp.edu.ar</option>
                           <option>pablodanielrey@gmail.com</option>
@@ -310,7 +310,7 @@
                     <div>
                         <h4>Formulario | OFERTA LABORAL</h4>
                     </div>
-                    <div ng-click='endInscription()'>
+                    <div ng-click='endInscription()' ng-if='!model.finish'>
                       <i class="fa fa-times-circle fa-2x" title="Cancelar"></i>
                     </div>
                 </div>
@@ -368,7 +368,7 @@
                         </span>
                         <div class="item">
                             <button><i class="fa fa-book"></i></button>
-                            <input class="CantMatAprov" type="number" ng-model='model.offer.average1'></input>
+                            <input class="CantMatAprov" type="number" step='0.1' ng-model='model.offer.average1'></input>
                         </div>
 
                         <span class="subTittlesForm">
@@ -376,7 +376,7 @@
                         </span>
                         <div class="item">
                             <button><i class="fa fa-book"></i></button>
-                            <input class="CantMatAprov" type="number" ng-model='model.offer.average2'></input>
+                            <input class="CantMatAprov" type="number" step='0.1' ng-model='model.offer.average2'></input>
                         </div>
 
                     </div>
@@ -547,7 +547,8 @@
                     <div>
                       <button class="btnBack" ng-click='changePreviousRegistration()'><i class="fa fa-arrow-circle-o-left"></i> Anterior </button>
                       <button class="btnNext" ng-if='model.showNext' ng-click='changeRegistration()'>Siguiente <i class="fa fa-arrow-circle-o-right"></i></button>
-                      <button class="btnSave" ng-click='uploadInscription()'><i class="fa fa-floppy-o"></i> GUARDAR </button>
+                      <button class="btnSave" ng-if='model.showNext' ng-click='uploadInscription()'><i class="fa fa-floppy-o"></i> GUARDAR </button>
+                      <button class="btnFinish" ng-if='model.finish' ng-click='finishInscription()'><i class="fa fa-check-square-o"></i> ACEPTAR </button>
                     </div>
                 </div>
             </div>
@@ -555,6 +556,5 @@
 
 
     </div>
-
 
 </div>

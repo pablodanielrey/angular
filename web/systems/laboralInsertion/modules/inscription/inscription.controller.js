@@ -29,6 +29,7 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
   $scope.languages = ['Inglés','Portugués','Alemán','Ruso','Italiano','Francés','Chino','Japonés'];
 
   $scope.model = {
+    finish: false,
     ci: 0,
     cr: 0,
     showNext: false,
@@ -120,7 +121,6 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
     Files.upload(null, fileName, 'image/jpeg', Files.BASE64, photo).then(
         function(id) {
           $scope.model.loadingPhoto = false;
-          console.log(id);
           $scope.model.user.photo = id;
           $scope.updateUserData();
         },
@@ -137,11 +137,10 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
   $scope.addCV = function(fileName, fileContent) {
 
     $scope.model.formatCV = false;
-    console.log(fileName);
 
     re = /^.*\.pdf$/i
     if (!re.test(fileName)) {
-      console.log('formato no soportado');
+      // console.log('formato no soportado');
       $scope.model.formatCV = true;
       return;
     }
@@ -153,7 +152,6 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
         function(id) {
           $scope.model.cv_name = fileName;
           $scope.model.loadingCv = false;
-          console.log(id);
           $scope.model.laboralData.cv = id;
         },
         function(err) {
@@ -166,24 +164,48 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
     )
   }
 
+  function changeApproved() {
+    var offer = $scope.model.offer;
+    offer.approved = 0;
+    if (offer.degree == null || offer.degree == 'Seleccionar') {
+      return;
+    }
+    if (offer.graduate) {
+      for (var i = 0; i < $scope.degrees.length; i++) {
+        if (offer.degree == $scope.degrees[i].degree) {
+          offer.approved = $scope.degrees[i].assignatures;
+          return;
+        }
+      }
+    }
+  }
 
-  $scope.$watch(function() { return $scope.model.offer.degree; }, function(o,n) { $scope.checkInscriptionPreconditions(); });
+  $scope.$watch(function() { return $scope.model.offer.degree; }, function(o,n) { $scope.checkInscriptionPreconditions(); changeApproved()});
   $scope.$watch(function() { return $scope.model.offer.average1; }, function(o,n) { $scope.checkInscriptionPreconditions(); });
   $scope.$watch(function() { return $scope.model.offer.average2; }, function(o,n) { $scope.checkInscriptionPreconditions(); });
-  $scope.$watch(function() { return $scope.model.offer.approved; }, function(o,n) { $scope.checkInscriptionPreconditions(); });
+  $scope.$watch(function() { return $scope.model.offer.approved; }, function(o,n) {$scope.checkInscriptionPreconditions();});
+  $scope.$watch(function() { return $scope.model.offer.graduate; }, function(o,n) {
+    changeApproved();
+  });
   //$scope.$watch(function() { return $scope.model.laboralData.languages; }, function(o,n) { $scope.checkInscriptionPreconditions(); });
   $scope.$watch(function() { return $scope.model.laboralData.email; }, function(o,n) { $scope.checkInscriptionPreconditions(); });
   $scope.$watch(function() { return $scope.model.laboralData.cv; }, function(o,n) { $scope.checkInscriptionPreconditions(); });
 
-  $scope.checkInscriptionPreconditions = function() {
+  $scope.$watch(function() { return $scope.model.mails.emails;}, function(o,n) {
+    for (var i = 0; i < $scope.model.mails.emails.length; i++) {
+      var m = $scope.model.mails.emails[i];
+      if ($scope.model.laboralData.email == m.id) {
+        $scope.model.selectedEmail = m;
+        break;
+      }
+    }
+  });
 
-      console.log($scope.model.cr);
+  $scope.checkInscriptionPreconditions = function() {
 
       var ok = true;
       var offer = $scope.model.offer;
-
       if ($scope.model.cr == 0) {
-
         if (offer.degree == null || offer.degree == 'Seleccionar') {
           ok = false;
         } else {
@@ -191,15 +213,11 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
           for (var i = 0; i < $scope.degrees.length; i++) {
             if (offer.degree == $scope.degrees[i].degree) {
               ok = true;
-              if (offer.graduate) {
-                offer.approved = $scope.degrees[i].assignatures;
-              }
               break;
             }
           }
         }
 
-        offer.approved = 0;
         offer.average1 = 0;
         offer.average2 = 0;
       }
@@ -291,7 +309,6 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
         ok = ($scope.model.laboralData.cv != null && $scope.model.laboralData.cv != '');
       }
 
-      console.log(ok);
       $scope.model.showNext = ok;
     }
 
@@ -300,10 +317,9 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
   $scope.model.totalPages = $scope.model.registrations.length;
 
   $scope.startInscription = function() {
-
+    $scope.model.finish = false;
     var ok = $scope.checkUserData();
     if (!ok) {
-      Notifications.message('Por favor complete todos los campos requeridos');
       return;
     }
 
@@ -322,10 +338,6 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
   $scope.changeRegistration = function() {
     $scope.model.cr = ($scope.model.cr + 1) % $scope.model.registrations.length;
     $scope.checkInscriptionPreconditions();
-
-    console.log($scope.model.user);
-    console.log($scope.model.offer);
-    console.log($scope.model.laboralData);
   }
 
   $scope.changePreviousRegistration = function() {
@@ -367,7 +379,6 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
     });
 
     Users.findUser(uid, function(user) {
-      console.log(user);
       $scope.formatUserToView(user);
       $scope.model.user = user;
     }, function(err) {
@@ -375,11 +386,7 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
     })
 
     Users.findMails(uid, function(mails) {
-      console.log(mails);
       $scope.model.mails.emails = mails;
-      if (mails.length > 0) {
-        $scope.model.laboralData.email = mails[0].id;
-      }
     }, function(err) {
       console.log(err);
     });
@@ -390,7 +397,6 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
         if (laboralData == null) {
           return;
         }
-        console.log(laboralData);
         $scope.model.laboralData = laboralData;
 
         // encuentro los metadatos del cv si es que esta cargado
@@ -434,17 +440,18 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
 
 
     Users.updateUser($scope.model.user, function(res) {
-      console.log(res);
+
     }, function(err) {
       console.log(err);
     })
   }
 
   $scope.updateStudentData = function() {
-    console.log('los datos del legajo son de solo lectura');
+    // console.log('los datos del legajo son de solo lectura');
   }
 
   $scope.updateLaboralData = function() {
+    $scope.model.laboralData.email = $scope.model.selectedEmail == null ? null : $scope.model.selectedEmail.id;
     var ld = JSON.parse(JSON.stringify($scope.model.laboralData))
     if (ld.cv == undefined || ld.cv == '') {
       delete ld.cv;
@@ -488,7 +495,6 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
 
 
   $scope.uploadInscription = function() {
-    $scope.endInscription();
 
     var userId = Login.getUserId();
 
@@ -499,16 +505,21 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
     }
     ////////
 
-    console.log($scope.model.offer);
-
     Promise.all([
       LaboralInsertion.persist(ld),
       LaboralInsertion.persistInscriptionByUser(userId, $scope.model.offer)]
     ).then(function(v,v) {
-      $scope.getInscriptions();
+      $scope.changeRegistration();
+      $scope.model.finish = true;
+      $scope.$apply();
     }, function(err) {
       console.log(err);
     });
+  }
+
+  $scope.finishInscription = function() {
+    $scope.endInscription();
+    $scope.getInscriptions();
   }
 
   $scope.getInscriptions = function() {
@@ -530,7 +541,7 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
   }
 
   $scope.downloadInscription = function(i) {
-    console.log(i);
+    // console.log(i);
   }
 
   $scope.removeInscription = function(i) {

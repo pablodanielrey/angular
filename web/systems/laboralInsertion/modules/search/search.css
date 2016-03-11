@@ -55,13 +55,13 @@
   padding: 2px;
 }
 
-.search .age,  .travel,  .cousers, .average, .average2   {
+.search .age,  .travel,  .cousers, .average, .average2 {
   width: 50px ;
   margin-left: 1px;
   padding: 2px;
 }
 
-.search .portugues, .english, .other, .sex, .dni, .registration {
+.search .portugues, .english, .other, .sex, .dni, .registration, .workExperience {
   width: 80px ;
   margin-left: 1px;
   padding: 2px;
@@ -799,3 +799,84 @@ la pantalla contentBusines, sendBusines y sending no se muentran*/
 /************************************************
 ************ FIN PANTALLA FILTROS **************
 ************************************************/
+
+
+
+/************************************************
+********** INICIO PANTALLA PERFIL ***************
+************************************************/
+
+.search.screenProfile .profile {
+  position: absolute ;
+  background-color: rgba(0, 0, 0, 0.9);;
+  width: 100%;
+  height: 100%;
+  top:0 !important;
+  transform: translate3d(0,0,0);
+}
+
+.search .profile {
+  position: absolute ;
+  background-color: rgba(0, 0, 0, 0.9);;
+  width: 100%;
+  height: 100%;
+  top:0 !important;
+  transform: translate3d(0,-100%,0);
+}
+
+.search.screenProfile .contentProfile {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:column;
+  -webkit-flex-direction:column; /* Safari */
+  -moz-flex-direction:column; /* mozilla */
+  position: absolute ;
+  background-color: #eee;
+  padding: 20px;
+  margin: 20px;
+  width: 79%;
+  transform: translate3d(0,-150%,0);
+  transition: all 0.4s ease-in-out;
+}
+
+.search.screenProfile .contentProfile {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+
+  position: absolute ;
+  background-color: #eee;
+  padding: 20px;
+  margin: 20px;
+  width: 50%;
+  height: 50%;
+  top:0 !important;
+  transform: translate3d(0,0,0);
+  transition: all 0.4s ease-in-out;
+}
+
+ .search .contentProfile .contentButtons {
+   display: flex;
+   display: -webkit-flex; /* Safari */
+   display: -moz-flex; /* mozilla */
+   flex-direction:row;
+   -webkit-flex-direction:row; /* Safari */
+   -moz-flex-direction:row; /* mozilla */
+   flex: 1;
+ }
+
+ .search .contentProfile .itemButton {
+   align-self: flex-end;
+ }
+
+ .search .contentProfile .title {
+
+ }
+
+  .search .contentProfile .formProfile {
+
+  }
+
+  .search .contentProfile .formProfile .item {
+  }

@@ -26,30 +26,24 @@ fid = args.getvalue("i")
 #    print("no valor {}".format(fid))
 #    sys.exit(1)
 
-from model.systems.files.files import Files
-from model.config import Config
 
+from model.connection.connection import Connection
+from model.files.files import FileDAO
+from model.registry import Registry
 
-config = Config('server-config.cfg')
+inject.configure()
+r = inject.instance(Registry)
+conn = Connection(r.getRegistry('dcsys'))
 
-def _getDatabase(config):
-    host = config.configs['database_host']
-    dbname = config.configs['database_database']
-    user = config.configs['database_user']
-    passw = config.configs['database_password']
-    return psycopg2.connect(host=host, dbname=dbname, user=user, password=passw)
-
-files = Files()
-
-con = _getDatabase(config)
+con = conn.get()
 try:
-    f = files.findById(con, fid)
+    f = FileDAO.findById(con, fid)
     if f is None:
         print("Status: 403 Forbidden\r\n\r\n")
         print("no permitido")
         sys.exit(1)
 
-    mimetype = f['mimetype'] if ['mimetype'] != '' else 'application/binary'
+    mimetype = f.mimetype if f.mimetype != '' else 'application/binary'
     #edata = bytes(f['content'])
 
     #logging.debug(edata)
@@ -64,8 +58,9 @@ try:
     #print()
     sys.stdout.flush()
     #sys.stdout.buffer.write(data)
-    sys.stdout.buffer.write(base64.b64decode(f['content']))
+    content = FileDAO.getContent(con, f.id)
+    sys.stdout.buffer.write(base64.b64decode(content))
 
 
 finally:
-    con.close()
+    conn.put(con)

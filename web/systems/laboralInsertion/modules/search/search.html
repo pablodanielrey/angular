@@ -10,9 +10,15 @@
     </div>
 
     <div class="btnUserSelect">
-      <i class="fa fa-users"></i> <b>{{model.selected}}</b> Inscripciones Seleccionadas
+      <i class="fa fa-users"></i> <b>{{model.selecteds.length}}</b> Inscripciones Seleccionadas
     </div>
 
+    <div ng-if="!model.searching">
+      <button class="btnSend" type="button" name="button" ng-click='search()'><i class="fa fa-plus"></i> <b> Buscar </b></button>
+    </div>
+    <div ng-if="model.searching">
+      <span class="search" ng-if='model.searching'><i class="loading fa fa-spinner fa-spin"></i>  Buscando Datos</span>
+    </div>
     <div>
       <button class="btnSend" type="button" name="button" ng-click='viewSelected()'><i class="fa fa-plus"></i> <b> Agregar </b></button>
     </div>
@@ -29,7 +35,7 @@
               </div>
             </td>
             <td>
-              <div class="dates">
+              <div class="dates" ng-click="view.reverseSent=!view.reverseSent;orderSents(view.reverseSent)">
                 <i class="fa fa-bookmark"></i>
               </div>
             </td>
@@ -39,83 +45,88 @@
               </div>
             </td>
             <td>
-              <div class="registration">
+              <div class="registration" ng-click="view.reverseRegistration=!view.reverseRegistration;orderRegistration(view.reverseRegistration)">
                 Inscripto
               </div>
             </td>
             <td>
-              <div class="name">
+              <div class="name" ng-click="view.reverseName=!view.reverseName;orderUser(view.reverseName)">
                 Postulante
               </div>
             </td>
             <td>
-              <div class="sex">
+              <div class="sex" ng-click="view.reverseGenre=!view.reverseGenre;orderGenre(view.reverseGenre)">
                 Sexo
               </div>
             </td>
             <td>
-              <div class="age">
+              <div class="age" ng-click="view.reverseAge=!view.reverseAge;orderAge(view.reverseAge)">
                 Edad
               </div>
             </td>
             <td>
-              <div class="dni">
+              <div class="dni" ng-click="view.reverseDni=!view.reverseDni;orderDni(view.reverseDni)">
                 DNI
               </div>
             </td>
             <td>
-              <div class="city">
+              <div class="city" ng-click="view.reverseCity=!view.reverseCity;orderCity(view.reverseCity)">
                 C. de Origen
               </div>
             </td>
             <td>
-              <div class="city2">
+              <div class="city2" ng-click="view.reverseResidence=!view.reverseResidence;orderResidence(view.reverseResidence)">
                 C. de Residencia
               </div>
             </td>
             <td>
-              <div class="travel">
+              <div class="travel" ng-click="view.reverseTravel=!view.reverseTravel;orderTravel(view.reverseTravel)">
                 Viajar
               </div>
             </td>
             <td>
-              <div class="english">
+              <div class="workExperience" ng-click="view.reverseWorkExperience=!view.reverseWorkExperience;orderWorkExperience(view.reverseWorkExperience)">
+                Exp. Laboral
+              </div>
+            </td>
+            <td>
+              <div class="english" ng-click="view.reverseEnglish=!view.reverseEnglish;orderEnglish(view.reverseEnglish)">
                 Inglés
               </div>
             </td>
 
             <td>
-              <div class="other" title="Otro Idioma">
+              <div class="other" title="Otro Idioma" ng-click="view.reverseLanguagesOther=!view.reverseLanguagesOther;orderLanguagesOther(view.reverseLanguagesOther)">
                 Otro I.
               </div>
             </td>
             <td>
-              <div class="career" title="Carrera">
+              <div class="career" title="Carrera" ng-click="view.reverseDegree=!view.reverseDegree;orderDegree(view.reverseDegree)">
                 Carrera
               </div>
             </td>
             <td>
-              <div class="cousers" title="Cantidad de Materias">
+              <div class="cousers" title="Cantidad de Materias" ng-click="view.reverseApproved=!view.reverseApproved;orderApproved(view.reverseApproved)">
                 C. M.
               </div>
             </td>
             <td>
-              <div class="average" title="Promedio c/aplazos">
-                % c/a
-              </div>
-            </td>
-            <td>
-              <div class="average2" title="Promedio">
+              <div class="average" title="Promedio c/aplazos" ng-click="view.reverseAverage1=!view.reverseAverage1;orderAverage1(view.reverseAverage1)">
                 %
               </div>
             </td>
             <td>
-              <div class="program">
+              <div class="average2" title="Promedio" ng-click="view.reverseAverage2=!view.reverseAverage2;orderAverage2(view.reverseAverage2)">
+                % c/a
+              </div>
+            </td>
+            <td>
+              <div class="program" ng-click="view.reverseWorkType=!view.reverseWorkType;orderWorkType(view.reverseWorkType)">
                   Oferta
               </div>
             </td>
             <td>
-              <div class="mail">
+              <div class="mail" ng-click="view.reverseMail=!view.reverseMail;orderMail(view.reverseMail)">
                 Correo
               </div>
             </td>
@@ -124,15 +135,15 @@
 
       </div>
 
-      <!-- <div class="searchResults" ng-class="{true:'seleccionado'}[isSelected(i.user_id)]"> -->
+      <!-- <div class="searchResults" ng-class="{true:'seleccionado'}[isSelected(i.userId)]"> -->
       <div class="searchResults" ng-class="{true:'seleccionado'}[isSelected(i.id)]">
         <table ng-repeat='i in model.inscriptions'>
           <tr class="fileResults">
             <td>
-              <div class="Select" ng-if="getMail(i.user_id) != 'No Definido'">
+              <div class="Select" ng-if="getMail(i.userId) != 'No Definido' && i.checked">
                 <input type="checkbox" ng-checked='isSelected(i)' ng-click='selectInscription(i)'>
               </div>
-              <div class="Select" ng-if="getMail(i.user_id) == 'No Definido'">
+              <div class="Select" ng-if="getMail(i.userId) == 'No Definido' || !i.checked">
                 -
               </div>
             </td>
@@ -142,43 +153,43 @@
               </div>
             </td>
             <td>
-              <div class="user">
+              <div class="user" ng-click="displayProfile(i)">
                 <i class="fa fa-user"></i>
               </div>
             </td>
             <td>
               <div class="registration">
-                {{getDate(i.creation)}}
+                {{getDate(i.created)}}
               </div>
             </td>
             <td>
               <div class="name">
-                {{getName(i.user_id)}}
+                {{getName(i.userId)}}
               </div>
             </td>
             <td>
               <div class="sex">
-                {{getGenre(i.user_id)}}
+                {{getGenre(i.userId)}}
               </div>
             </td>
             <td>
               <div class="age">
-                {{getAge(i.user_id)}}
+                {{getAge(i.userId)}}
               </div>
             </td>
             <td>
               <div class="dni">
-                {{getDni(i.user_id)}}
+                {{getDni(i.userId)}}
               </div>
             </td>
             <td>
               <div class="city">
-                {{getResidence(i.user_id)}}
+                {{getCity(i.userId)}}
               </div>
             </td>
             <td>
               <div class="city2">
-                {{getCity(i.user_id)}}
+              {{getResidence(i.userId)}}
               </div>
             </td>
             <td>
@@ -187,13 +198,18 @@
               </div>
             </td>
             <td>
+              <div class="workExperience">
+                {{getWorkExperience(i)}}
+              </div>
+            </td>
+            <td>
               <div class="english">
-                {{getEnglish(i.user_id)}}
+                {{getEnglish(i.userId)}}
               </div>
             </td>
             <td>
               <div class="other">
-                {{getLanguagesOther(i.user_id)}}
+                {{getLanguagesOther(i.userId)}}
               </div>
             </td>
             <td>
@@ -223,7 +239,7 @@
             </td>
             <td>
               <div class="mail">
-                {{getMail(i.user_id)}}
+                {{getMail(i.userId)}}
               </div>
             </td>
           </tr>
@@ -243,7 +259,7 @@
             </div>
 
             <div class="btnUserSelect">
-              <i class="fa fa-users"></i> <b>{{model.selected}}</b> Inscripciones Seleccionadas
+              <i class="fa fa-users"></i> <b>{{model.selecteds.length}}</b> Inscripciones Seleccionadas
             </div>
 
             <div>
@@ -298,32 +314,32 @@
 
               </div>
 
-              <!-- <div class="searchResults" ng-class="{true:'seleccionado'}[isSelected(i.user_id)]"> -->
+              <!-- <div class="searchResults" ng-class="{true:'seleccionado'}[isSelected(i.userId)]"> -->
               <div class="searchResults" ng-class="{true:'seleccionado'}[isSelected(i.id)]">
-                <table ng-repeat='i in model.inscriptions'>
+                <table ng-repeat='i in model.selecteds'>
                   <tr class="fileResults">
 
                     <td>
                       <div class="age">
-                        01
+                        {{$index + 1}}
                       </div>
                     </td>
 
                     <td>
                       <div class="name">
-                        {{getName(i.user_id)}}
+                        {{getName(i.userId)}}
                       </div>
                     </td>
 
                     <td>
                       <div class="dni">
-                        {{getDni(i.user_id)}}
+                        {{getDni(i.userId)}}
                       </div>
                     </td>
 
                     <td>
                       <div class="age">
-                        {{getAge(i.user_id)}}
+                        {{getAge(i.userId)}}
                       </div>
                     </td>
 
@@ -341,7 +357,7 @@
 
                     <td>
                       <div class="program">
-                          <button class="btnDeleteInsciption">borrar</button>
+                          <button class="btnDeleteInsciption" ng-click="deleteSelected(i)">borrar</button>
                       </div>
                     </td>
 
@@ -468,4 +484,6 @@
   <div class="filters" ng-controller="FiltersCtrl" ng-include="'/systems/laboralInsertion/modules/search/filters.html'">
   </div>
 
+  <div class="profile" ng-controller="ProfilesCtrl" ng-include="'/systems/laboralInsertion/modules/search/profileUser.html'">
+  </div>
 </div>

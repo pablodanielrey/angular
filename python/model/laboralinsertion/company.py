@@ -40,7 +40,7 @@ class CompanyDAO:
             """)
         finally:
             cur.close()
-            
+
     @staticmethod
     def _loadFrom(r):
         ''' carga los datos desde el resultado pasad por parametro '''
@@ -60,7 +60,7 @@ class CompanyDAO:
             if cur.rowcount <= 0:
                 return None
             r = cur.fetchone()
-            return Company._loadFrom(r)
+            return CompanyDAO._loadFrom(r)
 
         finally:
             cur.close()
@@ -86,7 +86,7 @@ class CompanyDAO:
         cur = con.cursor()
         try:
             cur.execute('select * from laboral_insertion.companies where id in %s', (tuple(ids),))
-            cs = [Company._loadFrom(c) for c in cur]
+            cs = [CompanyDAO._loadFrom(c) for c in cur]
             return cs
 
         finally:

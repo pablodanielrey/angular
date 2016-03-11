@@ -9,11 +9,16 @@ from psycopg2.extras import DictCursor
 
 import uuid
 import os
-from model.systems.laboralInsertion.laboralInsertion import LaboralInsertion
-from model.systems.laboralInsertion.company import Company
-from model.systems.laboralInsertion.mails import Sent
-from model.config import Config
-from model.users.users import Users
+from model.laboralinsertion.laboralInsertion import LaboralInsertion
+from model.laboralinsertion.inscription import Inscription
+from model.laboralinsertion.company import Company, CompanyDAO
+from model.laboralinsertion.languages import Language
+import model.laboralinsertion
+from model.laboralinsertion.mails import Sent, SentDAO
+from model.users.users import UserDAO
+from model.users.users import MailDAO
+from model.registry import Registry
+from model.connection import connection
 
 from zipfile import ZipFile
 from collections import OrderedDict
@@ -32,7 +37,7 @@ from autobahn.asyncio.wamp import ApplicationSession
 class Utils:
 
     def __init__(self):
-        self.users = inject.instance(Users)
+        self.users = inject.instance(UserDAO)
 
     """
     def _exportToOds(self, data):
@@ -156,12 +161,12 @@ class LaboralInsertionWamp(ApplicationSession):
         logging.debug('instanciando')
         ApplicationSession.__init__(self, config)
 
-        self.serverConfig = inject.instance(Config)
+        reg = inject.instance(Registry)
+        self.conn = connection.Connection(reg.getRegistry('dcsys'))
         self.laboralInsertion = inject.instance(LaboralInsertion)
         self.utils = inject.instance(Utils)
-        self.users = inject.instance(Users)
-
-        self.pool = None
+        self.users = inject.instance(UserDAO)
+        self.mails = inject.instance(MailDAO)
 
     @coroutine
     def onJoin(self, details):
@@ -177,88 +182,106 @@ class LaboralInsertionWamp(ApplicationSession):
         yield from self.register(self.findAllCompanies_async, 'system.laboralInsertion.company.findAll');
         yield from self.register(self.findSentByInscriptionId_async, 'system.laboralInsertion.sent.findByInscription');
 
-    def _getDatabase(self):
-        if self.pool is None:
-            host = self.serverConfig.configs['database_host']
-            dbname = self.serverConfig.configs['database_database']
-            user = self.serverConfig.configs['database_user']
-            passw = self.serverConfig.configs['database_password']
-            self.pool = psycopg2.pool.ThreadedConnectionPool(10, 20, host=host, database=dbname, user=user, password=passw, cursor_factory=DictCursor)
-        return self.pool.getconn()
-
-    def _closeDatabase(self, con):
-        self.pool.putconn(con)
 
     def persist(self, data):
-        con = self._getDatabase()
+        con = self.conn.get()
         try:
-            self.laboralInsertion.persist(con, data)
+            u = model.laboralinsertion.user.User()
+            u.__dict__ = data
+            languages = []
+            for l in data['languages']:
+                l['id'] = l['id'] if 'id' in l else None
+                l['userId'] = u.id
+                l2 = Language()
+                l2.__dict__ = l
+                languages.append(l2)
+
+            self.laboralInsertion.persist(con, u, languages)
             con.commit()
             return True
 
         finally:
-            self._closeDatabase(con)
+            self.conn.put(con)
 
     def findByUser(self, userId):
-        con = self._getDatabase()
+        con = self.conn.get()
         try:
             data = self.laboralInsertion.findByUser(con, userId)
-            eid = data['email']
-            data['email'] = self.users.findMail(con, eid)
-            return data
+            if data is None:
+                return None
+            """
+            eid = data.email
+            mails = MailDAO.findById(con, eid)
+            if mails is not None and len(mails) > 0:
+                data.email = mails[0].__dict__
+            else:
+                data.email = ''
+            """
+
+            user = data.__dict__
+            user['languages'] = [ l.__dict__ for l in data.languages ]
+            return user
 
         finally:
-            self._closeDatabase(con)
+            self.conn.put(con)
 
     def findAllInscriptionsByUser(self, userId):
-        con = self._getDatabase()
+        con = self.conn.get()
         try:
             data = self.laboralInsertion.findAllInscriptionsByUser(con, userId)
-            return data
+            insc = [ i.__dict__ for i in data ]
+            return insc
 
         finally:
-            self._closeDatabase(con)
+            self.conn.put(con)
 
     def findAllInscriptions(self):
-        con = self._getDatabase()
+        con = self.conn.get()
         try:
             data = self.laboralInsertion.findAllInscriptions(con)
-            return data
+            insc = [ i.__dict__ for i in data ]
+            return insc
 
         finally:
-            self._closeDatabase(con)
+            self.conn.put(con)
 
     def persistInscriptionByUser(self, userId, data):
-        con = self._getDatabase()
+        con = self.conn.get()
         try:
-            self.laboralInsertion.persistInscriptionByUser(con, userId, data)
+            if 'id' not in data:
+                data['id'] = None
+            data['userId'] = userId
+            i = Inscription()
+            i.__dict__ = data
+
+            self.laboralInsertion.persistInscription(con, i)
             con.commit()
             return True
 
         finally:
-            self._closeDatabase(con)
+            self.conn.put(con)
 
     def deleteInscriptionById(self, iid):
-        con = self._getDatabase()
+        con = self.conn.get()
         try:
             self.laboralInsertion.deleteInscriptionById(con, iid)
             con.commit()
             return True
 
         finally:
-            self._closeDatabase(con)
+            self.conn.put(con)
 
     def download(self):
-        con = self._getDatabase()
+        con = self.conn.get()
         try:
             self.laboralInsertion.download(con)
             return True
 
         finally:
-            self._closeDatabase(con)
+            self.conn.put(con)
 
     def sendMailToCompany(self, inscriptions, company):
-        con = self._getDatabase()
+        con = self.conn.get()
         try:
             c = Company()
             c.__dict__ = company
@@ -267,27 +290,27 @@ class LaboralInsertionWamp(ApplicationSession):
             return True
 
         finally:
-            self._closeDatabase(con)
+            self.conn.put(con)
 
     def findAllCompanies(self):
-        con = self._getDatabase()
+        con = self.conn.get()
         try:
-            ids = Company.findAll(con)
-            cs = Company.findById(con, ids)
+            ids = CompanyDAO.findAll(con)
+            cs = CompanyDAO.findById(con, ids)
             css = [c.__dict__ for c in cs]
             return css
 
         finally:
-            self._closeDatabase(con)
+            self.conn.put(con)
 
     def findSentByInscriptionId(self, id):
-        con = self._getDatabase()
+        con = self.conn.get()
         try:
-            ids = Sent.findByInscriptionId(con, id)
+            ids = SentDAO.findByInscriptionId(con, id)
             return ids
 
         finally:
-            self._closeDatabase(con)
+            self.conn.put(con)
 
     """
     def download(self):

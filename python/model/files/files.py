@@ -11,7 +11,7 @@ class File:
         self.hash = None
         self.content = None
         self.mimetype = None
-        self.cocec = None
+        self.codec = None
         self.size = 0
         self.created = None
         self.modified = None
@@ -20,9 +20,9 @@ class File:
         self.hash = File._calculateHashStatic(self.content)
 
     @staticmethod
-    def _calculateHashStatic(self, content):
+    def _calculateHashStatic(content):
         m = hashlib.md5()
-        m.update(self.content)
+        m.update(content.encode('utf8'))
         return m.hexdigest()
 
 
@@ -60,7 +60,7 @@ class FileDAO:
         f.size = r['size'],
         f.created = r['created']
         f.modified = r['modified']
-        return r
+        return f
 
     @staticmethod
     def persist(con, f):
@@ -71,7 +71,7 @@ class FileDAO:
             p = f.__dict__
             #cur.execute('insert into files.files (id, name, content) values (%s,%s,%s)', (id, name, psycopg2.Binary(data)))
             cur.execute('insert into files.files (id, name, hash, mimetype, codec, size, content) '
-                        'values (%(id)s, %(name)s, %(hash)s, %(mimetype)s, %(codec)s, %(size)s', p)
+                        'values (%(id)s, %(name)s, %(hash)s, %(mimetype)s, %(codec)s, %(size)s, %(content)s)', p)
         else:
             p = f.__dict__
             #cur.execute('update files.files set (name = %s, content = %s) where id = %s', (name, psycopg2.Binary(data), id))
@@ -101,7 +101,7 @@ class FileDAO:
         try:
             cur.execute('select id, name, hash, mimetype, codec, size, created, modified from files.files where id = %s', (id,))
             ins = [ FileDAO._fromResult(x) for x in cur ]
-            return ins
+            return ins[0]
 
         finally:
             cur.close()
@@ -123,7 +123,20 @@ class FileDAO:
         cur = con.cursor()
         try:
             cur.execute('select content from files.files where id = %s', (id,))
-            return r['content']
+            if cur.rowcount <= 0:
+                return None
+            return cur.fetchone()['content']
+
+        finally:
+            cur.close()
+
+    @staticmethod
+    def check(con, id):
+        ''' chequea que exista el file cargado en la base '''
+        cur = con.cursor()
+        try:
+            cur.execute('select id from files.files where id = %s', (id,))
+            return (cur.rowcount > 0)
 
         finally:
             cur.close()

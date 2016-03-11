@@ -4,26 +4,31 @@ import inject
 import logging
 import base64
 
-from model.systems.files.files import Files
-from model.users.users import Users
+from model.files.files import FileDAO
+import model.users.users
+from model.users.users import StudentDAO
 from model.mail.mail import Mail
-from model.systems.students.students import Students
 from email.mime.text import MIMEText
 
-from model.systems.laboralInsertion.mails import Sent
+from model.laboralinsertion.mails import SentDAO, Sent
+from model.laboralinsertion.inscription import InscriptionDAO
+from model.laboralinsertion.company import CompanyDAO
+from model.laboralinsertion.languages import LanguageDAO
+from model.laboralinsertion.user import UserDAO, User
 
 import csv
+
 
 class LaboralInsertion:
 
     """
         encapsula todo el acceso a datos de insercion laboral
     """
-    files = inject.attr(Files)
-    users = inject.attr(Users)
-    students = inject.attr(Students)
-    mail = inject.attr(Mail)
+    def __init__(self):
+        self.mail = inject.instance(Mail)
 
+
+    """
     def download(self, con, url, root):
         with open('{}inscripciones.csv'.format(root), 'w', encoding='utf-8') as r:
             w = csv.writer(r)
@@ -112,164 +117,59 @@ class LaboralInsertion:
                         logging.warn('error en cv {}'.format(cv))
 
                 index = index + 1
+    """
+
 
     def findAllInscriptions(self, con):
         """ obtiene los datos de las inscripciones de los alumnos """
-        cur = con.cursor()
-        cur.execute('select id, user_id, degree, courses, average1, average2, work_type, reside, travel, work_experience, creation from laboral_insertion.inscriptions')
+        ids = InscriptionDAO.findAll(con)
         inscriptions = []
-        for c in cur:
-            inscription = {
-                'id': c[0],
-                'user_id': c[1],
-                'degree': c[2],
-                'approved': c[3],
-                'average1': c[4],
-                'average2': c[5],
-                'workType': c[6],
-                'reside': c[7],
-                'travel': c[8],
-                'workExperience': c[9],
-                'creation': c[10]
-            }
+        for id in ids:
+            inscription = InscriptionDAO.findById(con, id)
             inscriptions.append(inscription)
 
         return inscriptions
 
     def findAllInscriptionsByUser(self, con, userId):
         """ obtiene los datos de las inscripciones de los alumnos """
-        cur = con.cursor()
-        cur.execute('select id, user_id, degree, courses, average1, average2, work_type, reside, travel, work_experience, creation from laboral_insertion.inscriptions where user_id = %s', (userId,))
+        ids = InscriptionDAO.findByUser(con, userId)
         inscriptions = []
-        for c in cur:
-            inscription = {
-                'id': c[0],
-                'degree': c[2],
-                'approved': c[3],
-                'average1': c[4],
-                'average2': c[5],
-                'workType': c[6],
-                'reside': c[7],
-                'travel': c[8],
-                'workExperience': c[9],
-                'creation': c[10]
-            }
+        for id in ids:
+            inscription = InscriptionDAO.findById(con, id)
             inscriptions.append(inscription)
 
         return inscriptions
 
     def deleteInscriptionById(self, con, iid):
         """ elimina la inscripción con el id determinado """
-        cur = con.cursor()
-        cur.execute('delete from laboral_insertion.inscriptions where id = %s', (iid,))
+        InscriptionDAO.delete(con, iid)
 
-    def persistInscriptionByUser(self, con, userId, d):
+    def persistInscription(self, con, inscription):
         """ genera una inscripcion nueva por usuario """
-        iid = str(uuid.uuid4())
-        cur = con.cursor()
-        cur.execute('insert into laboral_insertion.inscriptions (id, user_id, degree, courses, average1, average2, work_type, reside, travel, work_experience) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)', (
-            iid,
-            userId,
-            d['degree'],
-            d['approved'],
-            d['average1'],
-            d['average2'],
-            d['workType'],
-            False,
-            d['travel'],
-            d['workExperience']
-        ))
+        InscriptionDAO.persist(con, inscription)
 
     def findByUser(self, con, userId):
         """
             obtiene todos los datos referidos a las propiedades de insercion laboral que no sean inscripciones a la bolsa
         """
 
-        cur = con.cursor()
-        cur.execute('select id, user_id, name, level from laboral_insertion.languages where user_id = %s', (userId,))
+        languagesIds = LanguageDAO.findByUser(con, userId)
         languages = []
-        for c in cur:
-            language = {
-                'id': c[0],
-                'name': c[2],
-                'level': c[3]
-            }
-            languages.append(language)
+        for id in languagesIds:
+            languages.append(LanguageDAO.findById(con, id))
 
-        cur.execute('select id, accepted_conditions, email, cv from laboral_insertion.users where id = %s', (userId,))
-        if cur.rowcount <= 0:
+        users = model.laboralinsertion.user.UserDAO.findById(con, userId)
+        if len(users) == 0:
             return None
+        user = users[0]
+        user.languages = languages
+        return user
 
-        r = cur.fetchone()
-        ldata = {
-            'id': userId,
-            'accepted_conditions': r[1],
-            'email': r[2],
-            'languages': languages,
-            'cv': r[3]
-        }
-        return ldata
-
-    def persist(self, con, d):
+    def persist(self, con, user, languages):
         """ actualiza la información de insercion laboral del usuario """
-
-        userId = d['id']
-
-        if 'cv' in d and d['cv'] is not None and d['cv'] is not '' and not self.files.check(con, d['cv']):
-            raise Exception('no existe el cv en la base de datos')
-
-        cur = con.cursor()
-        cur.execute('select id from laboral_insertion.users where id = %s', (userId,))
-        if (cur.rowcount <= 0):
-            ldata = []
-            sql = 'insert into laboral_insertion.users ('
-            values = '('
-            if 'accepted_conditions' in d:
-                sql = sql + 'accepted_conditions'
-                ldata.append(d['accepted_conditions'])
-                values = values + "%s"
-
-            if 'email' in d:
-                sql = sql + ',email'
-                ldata.append(d['email'])
-                values = values + ",%s"
-
-            if 'cv' in d:
-                sql = sql + ',cv'
-                ldata.append(d['cv'])
-                values = values + ",%s"
-
-            values = values + ",%s)"
-            ldata.append(d['id'])
-            sql = sql + ',id) values ' + values
-            data = tuple(ldata)
-
-            cur.execute(sql, data)
-        else:
-
-            ldata = []
-            sql = 'update laboral_insertion.users set accepted_conditions = %s '
-            ldata.append(d['accepted_conditions'])
-
-            if 'email' in d:
-                sql = sql + ',email = %s'
-                ldata.append(d['email'])
-
-            if 'cv' in d:
-                sql = sql + ',cv = %s'
-                ldata.append(d['cv'])
-
-            sql = sql + ' where id = %s'
-            ldata.append(d['id'])
-
-            data = tuple(ldata)
-            cur.execute(sql, data)
-
-        cur.execute('delete from laboral_insertion.languages where user_id = %s', (d['id'],))
-        languages = d['languages']
+        UserDAO.persist(con, user)
         for l in languages:
-            lid = str(uuid.uuid4())
-            cur.execute('insert into laboral_insertion.languages (id, user_id, name, level) values (%s,%s,%s,%s)', (lid, userId, l['name'], l['level']))
+            LanguageDAO.persist(con, l)
 
 
     def sendMailToCompany(self, con, inscriptions, company):
@@ -316,34 +216,42 @@ class LaboralInsertion:
             writer.writerow(['Dni', 'Nombre', 'Apellido', 'Email'])
 
             for i in inscriptions:
-                data = self.findByUser(con, i['user_id'])
-                mail = self.users.findMail(con, data['email'])
-                if mail is None:
+                data = self.findByUser(con, i['userId'])
+                mail = model.users.users.MailDAO.findById(con, data.email)
+                if mail is None or len(mail) <= 0:
                     continue
 
-                if mail['email'] in datar:
+                mail = mail[0]
+
+                if mail.email in datar:
                     continue
 
-                cvf = self.files.findById(con, data['cv'])
-                if cvf['content'] is None:
+
+                if (data.cv is None):
+                    continue
+                cvf = FileDAO.findById(con, data.cv)
+                cvf.content = FileDAO.getContent(con, cvf.id)
+                if cvf.content is None:
                     continue
 
                 ''' decodifico los datos del archivo '''
                 filedata = None
-                if cvf['codec'] == 'binary':
-                    filedata = bytes(cvf['content'])
-                elif cvf['codec'] == 'base64':
-                    filedata = base64.b64decode(bytes(cvf['content']))
+                if cvf.codec[0] == 'binary':
+                    filedata = bytes(cvf.content)
+                elif cvf.codec[0] == 'base64':
+                    filedata = base64.b64decode(bytes(cvf.content))
 
-                user = self.users.findById(con, i['user_id'])
+                user = model.users.users.UserDAO.findById(con, i['userId'])
+                if user is None:
+                    continue
 
-                filename, file_extension = os.path.splitext(cvf['name'])
+                filename, file_extension = os.path.splitext(cvf.name)
                 #fss.append(self.mail.attachFile('{}_{}_{}_{}'.format(user['name'], user['lastname'], user['dni'], file_extension), filedata))
-                fss.append(self.mail.attachFile('{}{}'.format(user['dni'], file_extension), filedata))
+                fss.append(self.mail.attachFile('{}{}'.format(user.dni, file_extension), filedata))
 
-                datar.append(mail['email'])
+                datar.append(mail.email)
                 logging.info('escribiendo fila')
-                writer.writerow([user['dni'], user['name'], user['lastname'], mail['email']])
+                writer.writerow([user.dni, user.name, user.lastname, mail.email])
 
         with open(inscriptionsfile, 'r', newline='', encoding='utf-8') as csvfile:
             fss.append(self.mail.attachFile('inscriptos.csv', csvfile.read(), 'application', 'csv'))

@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import logging
+from model.files.files import FileDAO
 
 class User:
     def __init__(self):
@@ -21,7 +23,7 @@ class UserDAO:
                     accepted_conditions boolean default true,
                     email varhcar not null references profile.mails (id),
                     cv varchar not null references files.files (id),
-                    created timestampz default now()
+                    created timestamptz default now()
                 )
             """)
         finally:
@@ -35,19 +37,28 @@ class UserDAO:
         u.email = r['email']
         u.cv = r['cv']
         u.created = r['created']
+        return u
 
     @staticmethod
     def persist(con, u):
+
+        if u.id is None:
+            raise Exception('Usuario no existente')
+
         cur = con.cursor()
         try:
-            if u.id is None:
-                u.id = str(uuid.uuid4())
+            cur.execute('select id from laboral_insertion.users where id = %s', (u.id,))
+            if cur.rowcount <= 0:
                 ins = u.__dict__
+                ins['acceptedConditions'] = True
+                ins['cv'] = ins['cv'] if 'cv' in ins else None
                 cur.execute('insert into laboral_insertion.users (id, accepted_conditions, email, cv) values '
                             '(%(id)s, %(acceptedConditions)s, %(email)s, %(cv)s)', ins)
             else:
-                cur.execute('update laboral_insertion.inscriptions (accepted_conditions = %(acceptedConditions)s, email = %(email)s, '
-                            'cv = %(cv)s, ins)
+                ins = u.__dict__
+                ins['acceptedConditions'] = True
+                cur.execute('update laboral_insertion.users set accepted_conditions = %(acceptedConditions)s, email = %(email)s, '
+                            'cv = %(cv)s where id = %(id)s', ins)
         finally:
             cur.close()
 
@@ -66,7 +77,7 @@ class UserDAO:
     def findById(con, id):
         cur = con.cursor()
         try:
-            cur.execute('select * from laboral_insertion.users')
+            cur.execute('select * from laboral_insertion.users where id = %s', (id,))
             ins = [ UserDAO._fromResult(x) for x in cur ]
             return ins
 

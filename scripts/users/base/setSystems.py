@@ -7,6 +7,7 @@
 '''
 from model.connection import connection
 from model.users import users
+from model.registry import Registry
 import systems
 import logging
 
@@ -45,7 +46,8 @@ if __name__ == '__main__':
     import inject
     inject.configure()
 
-    conn = inject.instance(connection.Connection)
+    r = inject.instance(Registry)
+    conn = connection.Connection(r.getRegistry('dcsys'))
     con = conn.get()
     try:
         setSystems(con, dni)

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html ng-app="mainApp">
+<head>
+  <meta charset="utf-8"/>
+  <meta name='viewport' content='width=device-width'/>
+
+  <!-- ESTILOS PRINCIPALES -->
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+
+  <!-- LIBRERIAS -->
+  <script src="/libs/bower_components/angularjs/angular.js"></script>
+  <script src="/libs/bower_components/angular-route/angular-route.js"></script>
+  <script src="/libs/bower_components/autobahn/autobahn.js"></script>
+  <script src="/libs/bower_components/angular-wamp/release/angular-wamp.js"></script>
+
+  <!-- ARCHIVOS DE CONFIGURACION E INICIALIZACION -->
+  <script type="text/javascript" src="/config-laboralInsertion.json"></script>
+  <script type="text/javascript" src="/systems/laboralInsertion/index.module.js"></script>
+
+  <!-- SERVICIOS DE CONFIGURACION -->
+  <script type="text/javascript" src="/services/Session.js"></script>
+  <script type="text/javascript" src="/services/Cache.js"></script>
+  <script type="text/javascript" src="/services/Notifications.js"></script>
+  <script type="text/javascript" src="/services/Login.js"></script>
+  <script type="text/javascript" src="/services/Users.js"></script>
+  <script type="text/javascript" src="/services/systems/student/Student.js"></script>
+  <script type="text/javascript" src="/services/systems/files/Files.js"></script>
+
+  <!-- CONTROLADOR PRINCIPAL -->
+  <script type="text/javascript" src="/systems/support/index.controller.js"></script>
+
+  <!-- RUTEO Y MODULOS PRINCIPALES -->
+  <script type="text/javascript" src="/systems/support/routes.js"></script>
+
+  <!-- ARCHIVOS, SERVICIOS Y MODULOS GENERALES UTILIZADOS EN LA APLICACION -->
+  <script type="text/javascript" src="/services/Utils.js"></script>
+
+  <script type="text/javascript" src="/systems/support/modules/resetPassword/resetPassword.js"></script>
+
+
+  <!-- ARCHIVOS, SERVICIOS Y MODULOS DE LA APLICACION -->
+  <link rel="stylesheet" href="/systems/support/index.css">
+
+</head>
+
+<body>
+    <div class='main' ng-controller='IndexCtrl'>
+      <div class="header-container" ng-include="'/systems/fce/modules/header/header.html'">
+      </div>
+      <div ng-view></div>
+      <div class="footer-container" ng-include="'/systems/fce/modules/footer/footer.html'">
+      </div>
+    </div>
+
+</body>
+</html>

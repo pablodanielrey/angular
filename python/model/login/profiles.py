@@ -7,7 +7,6 @@ from model.session import Session
 from model.exceptions import *
 
 
-
 class Profiles:
 
     session = inject.attr(Session)

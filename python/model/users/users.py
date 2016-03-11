@@ -144,16 +144,29 @@ class MailDAO:
         return m
 
     @staticmethod
-    def findAll(con, userId):
+    def findByUserId(con, userId):
         ''' Obtiene los emails de un usuario '''
         cur = con.cursor()
         try:
             cur.execute('select id, user_id, email, confirmed, hash, created from profile.mails where user_id = %s', (userId,))
-            m = [MailDAO._fromResult(ma) for ma in cur]
+            m = [ MailDAO._fromResult(ma) for ma in cur ]
             return m
 
         finally:
             cur.close()
+
+    @staticmethod
+    def findById(con, eid):
+        ''' Obtiene el email identificado por el id '''
+        cur = con.cursor()
+        try:
+            cur.execute('select * from profile.mails where id = %s', (eid,))
+            m = [ MailDAO._fromResult(ma) for ma in cur ]
+            return m
+
+        finally:
+            cur.close()
+
 
     @staticmethod
     def persist(con, mail):
@@ -199,7 +212,22 @@ class User:
         self.created = datetime.datetime.now()
         self.version = 0
         self.photo = None
+        self.telephones = []
 
+    def _toJson():
+        pass
+
+    @staticmethod
+    def fromJson(j):
+        pass
+
+
+class Telephone:
+    def __init__(self):
+        self.id = None
+        self.userId = None
+        self.number = None
+        self.type = None
 
 class UserDAO:
     ''' DAO para los usuarios '''
@@ -223,6 +251,15 @@ class UserDAO:
         return u
 
     @staticmethod
+    def _telephoneFromResult(r):
+        t = Telephone()
+        t.id = r['id']
+        t.userId = r['user_id']
+        t.number = r['number']
+        t.type = r['type']
+        return t
+
+    @staticmethod
     def findAll(con):
         '''
             Obtiene todos los usuarios
@@ -232,7 +269,7 @@ class UserDAO:
         cur = con.cursor()
         try:
             cur.execute('select id, version from profile.users')
-            users = [(u[0], u[1]) for u in cur]
+            users = [(u['id'], u['version']) for u in cur]
             return users
         finally:
             cur.close()
@@ -252,6 +289,10 @@ class UserDAO:
             if cur.rowcount <= 0:
                 return None
             user = UserDAO._fromResult(cur.fetchone())
+
+            cur.execute('select * from profile.telephones where user_id = %s', (uid,))
+            user.telephones = [ UserDAO._telephoneFromResult(r) for r in cur ]
+
             return user
 
         finally:
@@ -316,6 +357,26 @@ class UserDAO:
                 ))
                 return user.id
 
+            ''' como tira error siempre ahora lo dejo sin chequear version '''
+            params = user.__dict__
+            cur.execute('update profile.users set dni = %(dni)s, name = %(name)s, lastname = %(lastname)s, genre = %(genre)s, ' +
+                        'birthdate = %(birthdate)s, ' +
+                        'city = %(city)s, country = %(country)s, address = %(address)s, residence_city = %(residence_city)s, ' +
+                        'version = %(version)s, ' +
+                        'photo = %(photo)s ' +
+                        'where id = %(id)s', params)
+
+            cur.execute('delete from profile.telephones where user_id = %s', (user.id,))
+            for t in user.telephones:
+                t.id = str(uuid.uuid4())
+                t.userId = user.id
+                param = t.__dict__
+                cur.execute('insert into profile.telephones (id, user_id, number, type) values (%(id)s, %(userId)s, %(number)s, %(type)s)', param)
+
+            return user.id
+
+
+            """
             cur.execute('select version from profile.users where id = %s', (user.id,))
             if cur.rowcount <= 0:
                 ''' el usuario no existe asi que lo creo '''
@@ -344,12 +405,27 @@ class UserDAO:
                     return user.id
                 else:
                     raise Exception('versión inferior')
-
+            """
         finally:
             cur.close()
 
 
+class Student:
+
+    def __init__(self):
+        self.id = None
+        self.studentNumber = None
+        self.condition = None
+
 class StudentDAO:
+
+    @staticmethod
+    def _fromResult(r):
+        s = Student()
+        s.id = r['id']
+        s.studentNumber = r['student_number']
+        s.condition = r['condition']
+        return s
 
     @staticmethod
     def findAll(con):
@@ -361,23 +437,20 @@ class StudentDAO:
         cur = con.cursor()
         try:
             cur.execute('select id from students.users')
-            st = [s[0] for s in cur]
-            return st
+            return [ s['id'] for s in cur ]
 
         finally:
             cur.close()
 
     @staticmethod
-    def findById(con, sId):
+    def findById(con, sId = []):
+        if len(sId) <= 0:
+            return []
+
         cur = con.cursor()
         try:
-            cur.execute('select id, student_number, condition from students.users where id = %s', (sId,))
-            if cur.rowcount <= 0:
-                return None
-            else:
-                st = Student()
-                st._fromDict(cur.fetchone())
-                return st
+            cur.execute('select * from students.users where id in %s', (tuple(sId),))
+            return [ StudentDAO._fromResult(s) for s in cur ]
 
         finally:
             cur.close()
@@ -408,21 +481,6 @@ class StudentDAO:
         finally:
             cur.close()
 
-
-class Student:
-
-    def __init__(self):
-        self.id = None
-        self.studentNumber = None
-        self.condition = None
-
-    def persist(self, con):
-        StudentDAO.persist(con, self)
-
-    def _fromDict(self, d):
-        self.id = d['id']
-        self.studentNumber = d['student_number']
-        self.condition = d['condition']
 
 
 if __name__ == '__main__':

@@ -7,6 +7,7 @@
 
 from model.connection import connection
 from model.users import users
+from model.registry import Registry
 import systems
 import logging
 
@@ -55,7 +56,8 @@ if __name__ == '__main__':
     assert lastname is not None
     assert studentN is not None
 
-    conn = inject.instance(connection.Connection)
+    r = inject.instance(Registry)
+    conn = connection.Connection(r.getRegistry('dcsys'))
     con = conn.get()
     try:
         createStudent(con, dni, name, lastname, studentN)
