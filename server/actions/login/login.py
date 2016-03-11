@@ -22,7 +22,7 @@ class LoginWamp(ApplicationSession):
         reg = inject.instance(Registry)
         self.conn = connection.Connection(reg.getRegistry('dcsys'))
         self.loginModel = inject.instance(Login)
-        self.session = inject.instance(Session)
+        self.sessionDAO = inject.instance(SessionDAO)
 
     @coroutine
     def onJoin(self, details):
@@ -37,10 +37,9 @@ class LoginWamp(ApplicationSession):
     def validateSession(self, sid):
         con = self.conn.get()
         try:
-            if len(SessionDAO.findById(con, [sid])) > 0:
-                return True
-            else:
-                return False
+            self.sessionDAO.touch(con, sid)
+            con.commit()
+            return True
 
         except Exception as e:
             logging.exception(e)

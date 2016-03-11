@@ -7,6 +7,7 @@ import re
 
 from model.registry import Registry
 from model.login.session import Session, SessionDAO
+from model.login.profiles import Profile, ProfileDAO
 from model.users.users import UserPassword, UserPasswordDAO, User, UserDAO
 
 class Login:
