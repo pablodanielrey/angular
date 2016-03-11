@@ -43,6 +43,15 @@
   cursor: pointer;
 }
 
+.search input[type="checkbox"]{
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+  color: #0066A6 !important;
+  background-color: white;
+}
+
+
 .search .Select, .dates, .user {
   width: 25px;
   margin-left: 1px;
@@ -642,7 +651,7 @@ la pantalla contentBusines, sendBusines y sending no se muentran*/
   padding: 20px;
   margin: 20px;
   width: 79%;
-  height: 550px;
+  height: 575px;
   top:0 !important;
   transform: translate3d(0,0,0);
   transition: all 0.4s ease-in-out;
@@ -665,7 +674,7 @@ la pantalla contentBusines, sendBusines y sending no se muentran*/
 
 .search .contentFiltersLeft {
   width: 55%;
-  height: 450px;
+  height: 500px;
   background-color: #fff;
   padding: 20px;
   margin: 5px;
@@ -678,7 +687,7 @@ la pantalla contentBusines, sendBusines y sending no se muentran*/
 
 .search .contentFiltersRight {
   width: 30%;
-  height: 450px;
+  height: 500px;
   background-color: #fff;
   padding: 20px;
   margin: 5px;
@@ -698,6 +707,10 @@ la pantalla contentBusines, sendBusines y sending no se muentran*/
 .search .titleFilters {
   background-color: #DBE2E5;
   padding: 5px;
+}
+
+.search .textInscription {
+  width: 140px;
 }
 
 .search .itemsFilters {
@@ -728,6 +741,22 @@ la pantalla contentBusines, sendBusines y sending no se muentran*/
   flex-direction:row;
   -webkit-flex-direction:row; /* Safari */
   -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+}
+
+.search .subItemsFilters2 {
+width: 200px;
+display: flex;
+display: -webkit-flex; /* Safari */
+display: -moz-flex; /* mozilla */
+flex-direction:row;
+-webkit-flex-direction:row; /* Safari */
+-moz-flex-direction:row; /* mozilla */
+align-items: center;
+-webkit-align-items:center; /* Safari */
+-moz-align-items:center; /* mozilla */
 }
 
 .search .btnItems {
@@ -760,6 +789,18 @@ la pantalla contentBusines, sendBusines y sending no se muentran*/
   padding: 5px;
   margin-left: 5px;
 }
+
+.search .inputFilters2 {
+  border: none;
+  height: 25px;
+
+  background-color: #eee;
+  font-size: 14px;
+  /*font-weight: bold;*/
+  padding: 5px;
+  margin-left: 5px;
+}
+
 
 .search .inputCant {
   font-size: 16px;
@@ -808,7 +849,8 @@ la pantalla contentBusines, sendBusines y sending no se muentran*/
 
 
 .search .btnSend3 {
-  margin: 10px;
+  margin-top: 20px;
+  margin-left: 10px;
   padding: 10px;
   width: 200px;
   font-size: 14px;

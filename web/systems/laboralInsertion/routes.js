@@ -24,6 +24,16 @@ app.config(['$routeProvider', function($routeProvider) {
      controller: 'SearchCtrl'
   })
 
+  .when('/envios', {
+     templateUrl: '/systems/laboralInsertion/modules/send/send.html',
+    //  controller: 'SendCtrl'
+  })
+
+  .when('/empresas', {
+     templateUrl: '/systems/laboralInsertion/modules/company/company.html',
+    //  controller: 'CompanyCtrl'
+  })
+
   .when('/logout', {
      templateUrl: '/systems/login/modules/logout.html',
      controller: 'LogoutCtrl'

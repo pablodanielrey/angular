@@ -13,10 +13,20 @@
           <!-- Inscripción -->
           <div class="itemsFilters">
             <div class="subItemsFilters">
-                <div class="textItemFilters"><i class="fa fa-calendar-o"></i> Fecha de Inscripción</div>
-                <select class="inputFilters" ng-model="model.selectFilterDate" ng-options="option.name for option in view.filtersDate | orderBy: ['name']: true">
+                <div class="textInscription"><i class="fa fa-calendar-o"></i> Inscripción</div>
+                <div>
+                  <form>
+                    <input class="inputFilters2" type="date">
+                  </form>
+                </div>
+                <div>
+                  <form>
+                    <input class="inputFilters2" type="date">
+                  </form>
+                </div>
+                <!-- <select class="inputFilters" ng-model="model.selectFilterDate" ng-options="option.name for option in view.filtersDate | orderBy: ['name']: true">
                     <option value="">Seleccionar</option>
-                </select>
+                </select> -->
             </div>
             <div>
                 <button class="btnItems" ng-click="addDateFilter()"> Agregar <i class="fa fa-arrow-circle-right"></i></button>
@@ -60,6 +70,18 @@
             <div>
                 <button class="btnItems" ng-click="addGenreFilter()"> Agregar <i class="fa fa-arrow-circle-right"></i></button>
             </div>
+          </div>
+
+          <!-- Edad -->
+          <div class="itemsFilters">
+              <div class="subItemsFilters">
+                  <div class="textItemFilters"><i class="fa fa-calendar-o"></i> Edad</div>
+                  <input class="inputCant" type="text" placeholder="20" ></input> -
+                  <input class="inputCant" type="text" placeholder="30" ></input>
+              </div>
+              <div>
+                  <button class="btnItems" ng-click="addCountCathedra()" ng-disabled="!view.enabledFilterCountCathedra"> Agregar <i class="fa fa-arrow-circle-right"></i></button>
+              </div>
           </div>
 
 
