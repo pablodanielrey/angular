@@ -1,19 +1,19 @@
 # -*- coding: utf-8 -*-
 import logging
 import inject
-import psycopg2
 import datetime
 
-from model.exceptions import *
-from model.config import Config
-from model.systems.assistance.justifications.justifications import Justifications
-import model.systems.assistance.date
-from model.profiles import Profiles
+from model.login.login import Login
+from model.login.session import SessionDAO, Session
+
+import model.assistance.date
+from model.assistance.justifications import Justifications
+from model.registry import Registry
 
 import asyncio
 from asyncio import coroutine
 from autobahn.asyncio.wamp import ApplicationSession
-
+from model.connection import connection
 
 
 
@@ -22,43 +22,25 @@ class JustificationsWamp(ApplicationSession):
     def __init__(self, config=None):
         logging.debug('instanciando')
         ApplicationSession.__init__(self, config)
+        reg = inject.instance(Registry)
 
-        self.serverConfig = inject.instance(Config)
-        self.date = inject.instance(model.systems.assistance.date.Date)
-        self.profiles = inject.instance(Profiles)
+        self.conn = connection.Connection(reg.getRegistry('dcsys'))
 
+        self.login = inject.instance(Login)
+        self.date = inject.instance(model.assistance.date.Date)
         self.justifications = inject.instance(Justifications)
-
-
 
 
     @coroutine
     def onJoin(self, details):
         logging.debug('registering methods')
-        yield from self.register(self.getJustifications_async, 'assistance.justifications.getJustifications')
-        yield from self.register(self.getJustificationsByUser_async, 'assistance.justifications.getJustificationsByUser')
-        yield from self.register(self.getJustificationsStockByUser_async, 'assistance.justifications.getJustificationsStockByUser')
-        yield from self.register(self.getJustificationRequestsByDate_async, 'assistance.justifications.getJustificationRequestsByDate')
-        yield from self.register(self.getJustificationRequestsToManage_async, 'assistance.justifications.getJustificationRequestsToManage')
-        yield from self.register(self.updateJustificationStock_async, 'assistance.justifications.updateJustificationStock')
-        yield from self.register(self.getGeneralJustificationRequests_async, 'assistance.justifications.getGeneralJustificationRequests')
-        yield from self.register(self.deleteGeneralJustificationRequest_async, 'assistance.justifications.deleteGeneralJustificationRequest')
-        yield from self.register(self.requestGeneralJustification_async, 'assistance.justifications.requestGeneralJustification')
-        yield from self.register(self.requestGeneralJustificationRange_async, 'assistance.justifications.requestGeneralJustificationRange')
+
+        yield from self.register(self.updateJustificationRequestStatus_async, 'assistance.justifications.updateJustificationRequestStatus')
         yield from self.register(self.getJustificationRequests_async, 'assistance.justifications.getJustificationRequests')
         yield from self.register(self.requestJustification_async, 'assistance.justifications.requestJustification')
-        yield from self.register(self.updateJustificationRequestStatus_async, 'assistance.justifications.updateJustificationRequestStatus')
         yield from self.register(self.requestJustificationRange_async, 'assistance.justifications.requestJustificationRange')
-
-
-    def _getDatabase(self):
-        host = self.serverConfig.configs['database_host']
-        dbname = self.serverConfig.configs['database_database']
-        user = self.serverConfig.configs['database_user']
-        passw = self.serverConfig.configs['database_password']
-        return psycopg2.connect(host=host, dbname=dbname, user=user, password=passw)
-
-
+        yield from self.register(self.getJustificationsStockByUser_async, 'assistance.justifications.getJustificationsStockByUser')
+        yield from self.register(self.getJustifications_async, 'assistance.justifications.getJustifications')
 
 
 
@@ -68,13 +50,13 @@ class JustificationsWamp(ApplicationSession):
          " @param sid Identificador de session
          """
 
-        con = self._getDatabase()
+        con = self.conn.get()
         try:
             justifications = self.justifications.getJustifications(con)
             return justifications
 
         finally:
-            con.close()
+            self.conn.put(con)
 
 
     @coroutine
@@ -82,35 +64,6 @@ class JustificationsWamp(ApplicationSession):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.getJustifications, sid)
         return r
-
-
-
-
-
-    def getJustificationsByUser(self, sid, userId):
-        """
-         " Obtener justificaciones del usuario
-         " @param userId Identificador de usuario
-         """
-        con = self._getDatabase()
-        try:
-
-            justifications = self.justifications.getJustificationsByUser(con, userId)
-            return justifications
-
-        finally:
-            con.close()
-
-    @coroutine
-    def getJustificationsByUser_async(self, sid, userId):
-        loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getJustificationsByUser, sid, userId)
-        return r
-
-
-
-
-
 
 
     def getJustificationsStockByUser(self, sid, userId, justificationId, date, period):
@@ -122,14 +75,14 @@ class JustificationsWamp(ApplicationSession):
             dateAux = datetime.datetime.strptime(date[0:19], "%Y-%m-%dT%H:%M:%S")
         else:
             dateAux = datetime.datetime.now()
-        con = self._getDatabase()
+        con = self.conn.get()
         try:
             justificationsStock = self.justifications.getJustificationStock(con, userId, justificationId, dateAux, period)
 
             return justificationsStock
 
         finally:
-            con.close()
+            self.conn.put(con)
 
     @coroutine
     def getJustificationsStockByUser_async(self, sid, userId, justificationId, date, period):
@@ -152,183 +105,27 @@ class JustificationsWamp(ApplicationSession):
         startAux = None if(start is None) else datetime.datetime.strptime(start, "%Y-%m-%dT%H:%M:%S")
         endAux = None if(end is None) else datetime.datetime.strptime(end, "%Y-%m-%dT%H:%M:%S")
 
-        con = self._getDatabase()
+        con = self.conn.get()
         try:
             justificationsRequest = self.justifications.getJustificationRequestsByDate(con, statusList, userIds, startAux, endAux)
             return justificationsRequest
 
         finally:
-            con.close()
-
-    @coroutine
-    def getJustificationRequestsByDate_async(self, sid, userIds, start, end, statusList):
-        loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getJustificationRequestsByDate, userIds, start, end, statusList)
-        return r
-
-
-
-
-    def getJustificationRequestsToManage(self, userId, statusList, group):
-        """
-         " Obtener requerimientos de justificaciones para ser administradas
-         " @param userId Id de usuario administrador de justificaciones
-         " @param statusList Lista de estados
-         " @param group grupo a partir del cual se obtendran las justificaciones
-         """
-        con = self._getDatabase()
-        try:
-            justificationsRequest = self.justifications.getJustificationRequestsToManage(con,userId,statusList,group)
-            return justificationsRequest
-
-        finally:
-            con.close()
-
-    @coroutine
-    def getJustificationRequestsToManage_async(self, sid, userId, statusList, group):
-        loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getJustificationRequestsToManage, userId, statusList, group)
-        return r
-
-
-
-
-    def updateJustificationStock(self, userId, justificationId, stock):
-
-        """
-         " actualizar stock para un determinado usuario
-         " @param userId usuario al cual se le actualizara la justifiacion
-         " @param justificationId Id de la justificacion a actualizar
-         " @param stock Nuevo stock, dependiendo de la justificacion variara el tipo y el valor, generalmente es un entero correspondiente a los dias o segundos
-        """
-        con = self._getDatabase()
-        try:
-            event = self.justifications.updateJustificationStock(con, userId, justificationId, stock)
-            con.commit()
-            return event;
-
-        finally:
-            con.close()
-
-    @coroutine
-    def updateJustificationStock_async(self, sid, userId, justificationId, stock):
-        loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.updateJustificationStock, userId, justificationId, stock)
-        return r
-
-
-
-    def getGeneralJustificationRequests(self, sid):
-        """
-           Obtener justificaciones generales
-        """
-        con = self._getDatabase()
-        try:
-            return self.justifications.getGeneralJustificationRequests(con)
-
-        finally:
-            con.close()
-
-    @coroutine
-    def getGeneralJustificationRequests_async(self, sid):
-        loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getGeneralJustificationRequests, sid)
-        return r
-
-
-
-    def deleteGeneralJustificationRequest(self, requestId):
-        """
-           Eliminar solicitud de justificacion general
-        """
-        con = self._getDatabase()
-        try:
-            event = self.justifications.deleteGeneralJustificationRequest(con, requestId)
-
-            con.commit()
-            return event;
-
-
-        finally:
-            con.close()
-
-
-
-
-    @coroutine
-    def deleteGeneralJustificationRequest_async(self, sid, requestId):
-        """
-           Eliminar justificacion general
-        """
-        loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.deleteGeneralJustificationRequest, requestId)
-        return r
-
-
-
-
-
-
-    def requestGeneralJustification(self, sid, justificationId, begin):
-        """
-           Solicitar justificacion general en una determinada fecha
-        """
-        con = self._getDatabase()
-        try:
-            self.justifications.requestGeneralJustification(con, justificationId, begin)
-            con.commit()
-            return True
-
-        finally:
-            con.close()
-
-    @coroutine
-    def requestGeneralJustification_async(self, sid, justificationId, begin):
-        loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.requestGeneralJustification, sid, justificationId, begin)
-        return r
-
-
-
-
-    def requestGeneralJustificationRange(self, sid, justificationId, begin, end):
-        """
-           Solicitar justificacion general en un rango
-        """
-        con = self._getDatabase()
-        try:
-            if begin is None or end is None:
-                return None
-            begin = self.date.parse(begin)
-            end = self.date.parse(end)
-            self.justifications.requestGeneralJustificationRange(con, justificationId, begin, end)
-            con.commit()
-            return True
-
-        finally:
-            con.close()
-
-    @coroutine
-    def requestGeneralJustificationRange_async(self, sid, justificationId, begin, end):
-        loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.requestGeneralJustificationRange, sid, justificationId, begin, end)
-        return r
-
-
+            self.conn.put(con)
 
 
     def getJustificationRequests(self, sid, status, userIds):
         """
            obtener requerimientos de justificaciones
         """
-        con = self._getDatabase()
+        con = self.conn.get()
         try:
 
             justificationRequests = self.justifications.getJustificationRequests(con, status, userIds)
             return justificationRequests
 
         finally:
-            con.close()
+            self.conn.put(con)
 
     @coroutine
     def getJustificationRequests_async(self, sid, status, userIds):
@@ -338,7 +135,7 @@ class JustificationsWamp(ApplicationSession):
 
 
     def requestJustification(self, sid, status, userId,requestor_id,justificationId,begin,end):
-        con = self._getDatabase()
+        con = self.conn.get()
         try:
             if begin is not None:
                 begin = self.date.parse(begin)
@@ -353,7 +150,7 @@ class JustificationsWamp(ApplicationSession):
             return True
 
         finally:
-            con.close()
+            self.conn.put(con)
 
     @coroutine
     def requestJustification_async(self, sid, status, userId,requestor_id,justificationId,begin,end=None):
@@ -363,7 +160,7 @@ class JustificationsWamp(ApplicationSession):
 
 
     def requestJustificationRange(self, userId,requestor_id,justificationId,begin,end, status):
-        con = self._getDatabase()
+        con = self.conn.get()
         try:
             if begin is None or end is None:
                 return None
@@ -376,7 +173,7 @@ class JustificationsWamp(ApplicationSession):
                     self.publish('assistance.justification.' + e['type'], e['data'])
             return True
         finally:
-            con.close()
+            self.conn.put(con)
 
     @coroutine
     def requestJustificationRange_async(self, sid, userId,requestor_id,justificationId,begin,end, status='PENDING'):
@@ -386,9 +183,9 @@ class JustificationsWamp(ApplicationSession):
 
 
     def updateJustificationRequestStatus(self, sid, requestId, status):
-        con = self._getDatabase()
+        con = self.conn.get()
         try:
-            userId = self.profiles.getLocalUserId(sid)
+            userId = self.login.getUserId(sid)
             events = self.justifications.updateJustificationRequestStatus(con,userId,requestId,status)
             con.commit()
             for e in events:
@@ -398,7 +195,7 @@ class JustificationsWamp(ApplicationSession):
             return True
 
         finally:
-            con.close()
+            self.conn.put(con)
 
     @coroutine
     def updateJustificationRequestStatus_async(self, sid, requestId, status):
