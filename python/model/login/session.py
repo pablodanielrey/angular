@@ -8,7 +8,7 @@
 
 '''
 import uuid
-import datetime
+import datetime, pytz
 import inject
 import json
 
@@ -112,11 +112,11 @@ class SessionDAO:
     def touch(self, con, sid):
         cur = con.cursor()
         try:
-            cur.execute('select expire from systems.sessions where id = %s', (sid))
+            cur.execute('select expire from systems.sessions where id = %s', (sid,))
             if cur.rowcount <= 0:
                 raise SessionNotFound()
 
-            now = datetime.datetime.now()
+            now = datetime.datetime.now(pytz.utc)
             if cur.fetchone()['expire'] <= now:
                 raise SessionExpired()
 

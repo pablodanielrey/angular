@@ -37,7 +37,7 @@ class Login:
         jprofile = ss[0].data
         if jprofile is None:
             return False
-
+        
         return Profile._fromJson(jprofile).hasOneRole(roles)
 
     def getUserId(self, con, sId):
