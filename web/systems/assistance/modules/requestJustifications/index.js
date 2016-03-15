@@ -6,7 +6,16 @@ app.controller('RequestJustificationsCtrl', ["$scope", "$wamp", "$timeout", "$wi
    */
   $scope.model = {
 
-
+    filter: {
+              start: null,
+              end:null,
+              status: {
+                 approved: true,
+                 canceled: false,
+                 rejected: false,
+                 pending: true
+              }
+    },
     justificationsId: [],            //id de las justificaciones que el usuario tiene autorizadas
     justificationSelectedId: null,   //flag para indicar el id de la justificacion seleccionada si se debe mostrar la lista de usuarios
 
@@ -33,9 +42,14 @@ app.controller('RequestJustificationsCtrl', ["$scope", "$wamp", "$timeout", "$wi
   $scope.loadRequestedJustifications = function() {
     $scope.model.processingRequestedJustifications = true;
     userIds = [$scope.model.selectedUser.id];
-    start = null;
-    end = null;
-    Assistance.getJustificationRequestsByDate(['APPROVED','REJECTED'], userIds, start, end,
+    start = $scope.model.filter.start;
+    end = $scope.model.filter.end;
+    var status = [];
+    if ($scope.model.filter.status.approved) status.push('APPROVED');
+    if ($scope.model.filter.status.canceled) status.push('CANCELED');
+    if ($scope.model.filter.status.pending) status.push('PENDING');
+    if ($scope.model.filter.status.rejected) status.push('REJECTED');                                                         
+    Assistance.getJustificationRequestsByDate(status, userIds, start, end,
       function(requestedJustifications) {
         $scope.model.processingRequestedJustifications = false;
         $scope.model.requestedJustifications = requestedJustifications;
@@ -204,12 +218,21 @@ app.controller('RequestJustificationsCtrl', ["$scope", "$wamp", "$timeout", "$wi
     $scope.model.selectedUser = {
       id: $scope.model.sessionUserId
     }
+    
+    $scope.model.filter = {};
+    $scope.model.filter.start = null;
+    $scope.model.filter.end = null;
+    $scope.model.filter.status = {};
+    $scope.model.filter.status.approved = true;
+    $scope.model.filter.status.canceled = false;
+    $scope.model.filter.status.pending = true;
+    $scope.model.filter.status.rejected = false;
 
     $wamp.subscribe('assistance.justification.JustificationsRequestsUpdatedEvent', JustificationsRequestsUpdatedEvent);
     $wamp.subscribe('assistance.justification.JustificationStatusChangedEvent', JustificationStatusChangedEvent);
 
     $scope.loadAuthorizedJustifications();
-    $scope.loadRequestedJustifications();
+    // $scope.loadRequestedJustifications();
     $scope.model.clearIndex();
   }, 0);
 

@@ -124,9 +124,8 @@ class JustificationsWamp(ApplicationSession):
          " @param end Timestamp de fin
          " @param statusList Lista de estados
          """
-
-        startAux = None if(start is None) else datetime.datetime.strptime(start, "%Y-%m-%dT%H:%M:%S")
-        endAux = None if(end is None) else datetime.datetime.strptime(end, "%Y-%m-%dT%H:%M:%S")
+        startAux = None if(start is None) else datetime.datetime.strptime(start[0:10], "%Y-%m-%d")
+        endAux = None if(end is None) else datetime.datetime.strptime(end[0:10], "%Y-%m-%d")
 
         con = self.conn.get()
         try:
