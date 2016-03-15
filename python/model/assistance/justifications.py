@@ -51,7 +51,7 @@ class Justifications:
         VJEJustification(), SUSJustification(), SGSJustification(), MATJustification(), INVJustification(), NACJustification(), PONJustification(),
         PRNJustification(),
     ]
-    
+
 
 
     ''' obtiene un requerimiento de justificacion dado el id '''
@@ -264,16 +264,22 @@ class Justifications:
             else:
                 cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where jbegin >= %s and jbegin <= %s and id in %s and user_id in %s',(start,end,rids,tuple(users)))
         else:
-            if start is None:
+            if start is None and end is None:
                 if users is None or len(users) <= 0:
-                    cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where jbegin <= %s and id in %s',(end,rids))
+                    cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where id in %s',(rids,))
                 else:
-                    cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where jbegin <= %s and id in %s and user_id in %s',(start,end,rids,tuple(users)))
+                    cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where id in %s and user_id in %s',(rids,tuple(users)))
             else:
-                if users is None or len(users) <= 0:
-                    cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where jbegin >= %s and id in %s',(end,rids))
+                if start is None:
+                    if users is None or len(users) <= 0:
+                        cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where jbegin <= %s and id in %s',(end,rids))
+                    else:
+                        cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where jbegin <= %s and id in %s and user_id in %s',(end,rids,tuple(users)))
                 else:
-                    cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where jbegin >= %s and id in %s and user_id in %s',(start,end,rids,tuple(users)))
+                    if users is None or len(users) <= 0:
+                        cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where jbegin >= %s and id in %s',(start,rids))
+                    else:
+                        cur.execute('select id,user_id,justification_id,jbegin,jend from assistance.justifications_requests where jbegin >= %s and id in %s and user_id in %s',(start,rids,tuple(users)))
 
         if cur.rowcount <= 0:
             return []

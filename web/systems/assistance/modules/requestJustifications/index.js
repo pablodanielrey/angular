@@ -32,7 +32,10 @@ app.controller('RequestJustificationsCtrl', ["$scope", "$wamp", "$timeout", "$wi
    **************************************/
   $scope.loadRequestedJustifications = function() {
     $scope.model.processingRequestedJustifications = true;
-    Assistance.getJustificationRequests(null,[$scope.model.selectedUser.id],
+    userIds = [$scope.model.selectedUser.id];
+    start = null;
+    end = null;
+    Assistance.getJustificationRequestsByDate(['APPROVED','REJECTED'], userIds, start, end,
       function(requestedJustifications) {
         $scope.model.processingRequestedJustifications = false;
         $scope.model.requestedJustifications = requestedJustifications;
