@@ -1,6 +1,6 @@
 <div class="inscriptionContainer">
 
-    <div class="inscription" ng-class='getInscriptionClazz()'>
+    <div class="inscription {{view.styleIsMessage}} {{view.styleMessage}}" ng-class='getInscriptionClazz()'>
 
         <!-- ************************************
         ********* DATOS BASICOS ************
@@ -554,7 +554,31 @@
             </div>
         </div>
 
+    </div>
+
+
+
+    <div class="messages">
+
+      <div class="contentMessage">
+
+          <div class="error">
+            <div class="title">Error</div>
+
+            <div class="contentError">
+              <ul>
+                <li ng-repeat="e in view.error">{{e}}</li>
+              </ul>
+            </div>
+
+            <div class="buttons">
+              <button class="btnClose" ng-click="closeMessage()">Cerrar</button>
+            </div>
+          </div>
+
+      </div>
 
     </div>
+
 
 </div>

@@ -2,9 +2,9 @@ angular
   .module('mainApp')
   .controller('InscriptionCtrl', InscriptionCtrl);
 
-InscriptionCtrl.inject = ['$rootScope', '$scope', '$wamp', 'LaboralInsertion', 'Login', 'Users', 'Student', 'Notifications', 'Files']
+InscriptionCtrl.inject = ['$rootScope', '$scope', '$timeout', '$wamp', 'LaboralInsertion', 'Login', 'Users', 'Student', 'Notifications', 'Files']
 
-function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Users, Student, Notifications, Files) {
+function InscriptionCtrl($rootScope, $scope, $timeout, $wamp, LaboralInsertion, Login, Users, Student, Notifications, Files) {
 
   $scope.boolToStr = function(arg) {
     if (arg == null) {
@@ -94,6 +94,12 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
     }
 
   };
+
+  $scope.view = {
+    styleIsMessage: '',
+    styleMessage: '',
+    error: []
+  }
 
   $scope.getUserPhoto = function() {
     if ($scope.model.user.photo == null || $scope.model.user.photo == '') {
@@ -341,6 +347,8 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
     $scope.model.finish = false;
     var ok = $scope.checkUserData();
     if (!ok) {
+      $scope.view.styleIsMessage = 'mensajes';
+      $scope.view.styleMessage = 'msjError';
       return;
     }
 
@@ -350,6 +358,11 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
     $scope.model.offer.degree = 'Seleccionar';
 
     $scope.checkInscriptionPreconditions();
+  }
+
+  $scope.closeMessage = function() {
+    $scope.view.styleIsMessage = '';
+    $scope.view.styleMessage = '';
   }
 
   $scope.endInscription = function() {
@@ -494,27 +507,75 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
     */
 
     var ok = true;
+    $scope.view.error = [];
 
     var form = $scope.dataBasic;
 
+    if (!form.name.$valid) {
+      $scope.view.error.push("Debe ingresar su nombre");
+    }
     ok = ok && form.name.$valid;
+
+    if (!form.lastname.$valid) {
+      $scope.view.error.push("Debe ingresar su apellido");
+    }
     ok = ok && form.lastname.$valid;
+
+    if (!form.dni.$valid) {
+      $scope.view.error.push("Número de documento incorrecto");
+    }
     ok = ok && form.dni.$valid;
+
+    if (!form.student_number.$valid) {
+      $scope.view.error.push("Número de legajo incorrecto");
+    }
     ok = ok && form.student_number.$valid;
+
+    if (!form.birthdate.$valid) {
+      $scope.view.error.push("Debe seleccionar un fecha de nacimiento");
+    }
     ok = ok && form.birthdate.$valid;
+
+    if (!form.genre.$valid) {
+      $scope.view.error.push("Debe seleccionar el género");
+    }
     ok = ok && form.genre.$valid;
+
+    if (!form.residence_city.$valid) {
+      $scope.view.error.push("Debe ingresar la ciudad de residencia");
+    }
     ok = ok && form.residence_city.$valid;
+
+    if (!form.address.$valid) {
+      $scope.view.error.push("Debe ingresar la dirección");
+    }
     ok = ok && form.address.$valid;
+
+    if (!form.birth_city.$valid) {
+      $scope.view.error.push("Debe ingresar la ciudad de nacimiento");
+    }
     ok = ok && form.birth_city.$valid;
+
+    if (!form.country.$valid) {
+      $scope.view.error.push("El país ingresado es incorrecto");
+    }
     ok = ok && form.country.$valid;
 
     // chequeo que los telefonos sean validos y que por lo menos haya uno.
     ok = ok && form.movil.$valid;
     ok = ok && form.telephone.$valid;
-    ok = ok && ($scope.model.telephones.telephone != '' || $scope.model.telephones.movil != '');
+
+    var validTel = ($scope.model.telephones.telephone != '' || $scope.model.telephones.movil != '');
+    if (!validTel || !form.movil.$valid || !form.telephone.$valid) {
+      $scope.view.error.push("Debe ingresar al menos un teléfono");
+    }
+    ok = ok && validTel;
 
     // chequeo que tenga un email seleccionado de contacto
-    ok = ok && ($scope.model.mails.email != '');
+    if ($scope.model.selectedEmail == null) {
+      $scope.view.error.push("Debe seleccionar un e-mail");
+    }
+    ok = ok && ($scope.model.selectedEmail != null);
 
     return ok;
   }
