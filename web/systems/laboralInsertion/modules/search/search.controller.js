@@ -492,6 +492,14 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
   $scope.selectInscriptions = function(filters) {
     $scope.model.currentScreen = "";
     $scope.model.filters = filters;
+    LaboralInsertion.getFilters().then(
+      function(filters) {
+        console.log(filters);
+      },
+      function() {
+        console.log("error");
+      }
+    );
   }
 
   $scope.viewSelected = function() {

@@ -204,13 +204,22 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
   });
 
   $scope.$watch(function() { return $scope.model.mails.emails;}, function(o,n) {
-    for (var i = 0; i < $scope.model.mails.emails.length; i++) {
-      var m = $scope.model.mails.emails[i];
-      if ($scope.model.laboralData.email == m.id) {
-        $scope.model.selectedEmail = m;
-        break;
+    if ($scope.model.mails == null || $scope.model.mails.emails == null || $scope.model.mails.emails.length <= 0) {
+      return
+    }
+    if ($scope.model.laboralData.email == null || $scope.model.laboralData.email == "") {
+      $scope.model.selectedEmail = $scope.model.mails.emails[0];
+      $scope.updateLaboralData();
+    } else {
+      for (var i = 0; i < $scope.model.mails.emails.length; i++) {
+        var m = $scope.model.mails.emails[i];
+        if ($scope.model.laboralData.email == m.id) {
+          $scope.model.selectedEmail = m;
+          break;
+        }
       }
     }
+
   });
 
   $scope.checkInscriptionPreconditions = function() {
