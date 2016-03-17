@@ -56,12 +56,29 @@ class FInscriptionDate(Filter):
     def _filter(self, inscriptions):
         return [ i for i in inscriptions if i.created.date().year == self.date.date().year ]
 
+class FWorkExperience(Filter):
+
+    def __init__(self):
+        self.workExperience = True
+
+
+class FPriority(Filer):
+
+    def __init__(self):
+        self.ffrom = 0
+        self.to = 0
+
+
 class Filters:
 
     @staticmethod
     def getFilters():
         fs = [ FInscriptionDate(), FDegree() ]
         return jsonpickle.encode(fs)
+
+
+
+
 
 if __name__ == '__main__':
 

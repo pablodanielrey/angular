@@ -459,6 +459,12 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     }
   };
 
+
+  // TODO: dalta implementar.
+  $scope.getPriority(id) {
+
+  }
+
   $scope.orderMail = function(reverse) {
     if (reverse) {
       $scope.model.inscriptions.sort(function(a, b) {
