@@ -25,6 +25,18 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Notifications'
       $location.path('/busqueda');
     }
 
+    $scope.send = function() {
+      $location.path('/envios');
+    }
+
+    $scope.company = function() {
+      $location.path('/empresas');
+    }
+
+
+
+
+
   	$scope.exit = function() {
       var sid = Session.getCurrentSession();
       Login.logout(function(ok) {
@@ -50,6 +62,8 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Notifications'
           uid == '205de802-2a15-4652-8fde-f23c674a1246' // walter
         ) {
         $scope.model.items.push({ n:1, label:'Busqueda', img:'fa fa-search', function: $scope.search });
+        $scope.model.items.push({ n:1, label:'Envíos', img:'fa fa-list', function: $scope.send });
+        $scope.model.items.push({ n:1, label:'Empresas', img:'fa fa-building-o', function: $scope.company });
         //$scope.model.items.push({ n:1, label:'Descargar', img:'fa fa-lock', function: $scope.download });
       }
       $scope.model.items.push({ n:1, label:'Salir', img:'fa fa-sign-out', function: $scope.exit });

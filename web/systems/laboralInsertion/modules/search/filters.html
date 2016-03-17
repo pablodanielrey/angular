@@ -13,10 +13,20 @@
           <!-- Inscripción -->
           <div class="itemsFilters">
             <div class="subItemsFilters">
-                <div class="textItemFilters"><i class="fa fa-calendar-o"></i> Fecha de Inscripción</div>
-                <select class="inputFilters" ng-model="model.selectFilterDate" ng-options="option.name for option in view.filtersDate | orderBy: ['name']: true">
-                    <option value="">Seleccionar... </option>
-                </select>
+                <div class="textInscription"><i class="fa fa-calendar-o"></i> Inscripción</div>
+                <div>
+                  <form>
+                    <input class="inputFilters2" type="date">
+                  </form>
+                </div>
+                <div>
+                  <form>
+                    <input class="inputFilters2" type="date">
+                  </form>
+                </div>
+                <!-- <select class="inputFilters" ng-model="model.selectFilterDate" ng-options="option.name for option in view.filtersDate | orderBy: ['name']: true">
+                    <option value="">Seleccionar</option>
+                </select> -->
             </div>
             <div>
                 <button class="btnItems" ng-click="addDateFilter()"> Agregar <i class="fa fa-arrow-circle-right"></i></button>
@@ -28,7 +38,7 @@
             <div class="subItemsFilters">
                 <div class="textItemFilters"><i class="fa fa-graduation-cap"></i> Carrera</div>
                 <select class="inputFilters" ng-model="model.selectFilterDegree" ng-options="option.name for option in view.filtersDegrees | orderBy: ['name']: true">
-                        <option value="">Seleccionar... </option>
+                        <option value="">Seleccionar</option>
                 </select>
             </div>
             <div>
@@ -41,7 +51,7 @@
             <div class="subItemsFilters">
                 <div class="textItemFilters"><i class="fa fa-suitcase"></i> Oferta laboral</div>
                 <select class="inputFilters" ng-model="model.selectFilterLaboral" ng-options="option.name for option in view.filtersLaboral | orderBy: ['name']: true">
-                    <option value="">Seleccionar ...</option>
+                    <option value="">Seleccionar</option>
                 </select>
             </div>
             <div>
@@ -54,12 +64,24 @@
             <div class="subItemsFilters">
               <div class="textItemFilters"> <i class="fa fa-venus-mars"></i> Sexo </div>
               <select class="inputFilters" ng-model="model.selectFilterGenre" ng-options="option.name for option in view.filtersGenre | orderBy: ['name']: true">
-                  <option value="">Seleccionar ...</option>
+                  <option value="">Seleccionar,</option>
               </select>
             </div>
             <div>
                 <button class="btnItems" ng-click="addGenreFilter()"> Agregar <i class="fa fa-arrow-circle-right"></i></button>
             </div>
+          </div>
+
+          <!-- Edad -->
+          <div class="itemsFilters">
+              <div class="subItemsFilters">
+                  <div class="textItemFilters"><i class="fa fa-calendar-o"></i> Edad</div>
+                  <input class="inputCant" type="text" placeholder="20" ></input> -
+                  <input class="inputCant" type="text" placeholder="30" ></input>
+              </div>
+              <div>
+                  <button class="btnItems" ng-click="addCountCathedra()" ng-disabled="!view.enabledFilterCountCathedra"> Agregar <i class="fa fa-arrow-circle-right"></i></button>
+              </div>
           </div>
 
 
@@ -86,7 +108,7 @@
                   <i class="fa fa-building-o"></i> Ciudad de Origen
                 </div>
                 <select class="inputFilters" name='residence_city' ng-model="model.selectFilterOrigin" ng-options="option.name for option in view.filtersOrigin | orderBy: ['name']: false">
-                  <option class="selectGrey" disabled selected style='display:none;' value="">Seleccionar...</option>
+                  <option class="selectGrey" disabled selected style='display:none;' value="">Seleccionar</option>
                 </select>
             </div>
             <div>
@@ -99,7 +121,7 @@
             <div class="subItemsFilters">
                 <div class="textItemFilters"><i class="fa fa-plane"></i> Viajar</div>
                 <select class="inputFilters" ng-model="model.selectFilterTravel" ng-options="option.name for option in view.filtersTravel | orderBy: ['name']: false">
-                    <option value="">Seleccionar ...</option>
+                    <option value="">Seleccionar</option>
                 </select>
             </div>
             <div>
@@ -115,7 +137,7 @@
                     <option class="selectGrey" disabled selected style='display:none;' value="">Seleccionar</option>
                   </select>
                   <select class="inputFilters"  ng-model="model.selectFilterLanguageNivel" ng-options="option.name for option in view.filtersLanguageNivel | orderBy: ['order']">
-                    <option class="selectGrey" disabled selected style='display:none;' value="">Seleccionar</option>
+                    <option class="selectGrey" disabled selected style='display:none;' value="">Nivel</option>
                   </select>
               </div>
               <div>
