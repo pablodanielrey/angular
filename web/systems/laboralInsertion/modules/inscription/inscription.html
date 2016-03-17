@@ -213,7 +213,7 @@
                         <button><i class="fa fa-mobile"></i></button>
                       </div>
                       <div>
-                        <input type="text" placeholder="Cel. (+5492215011111)" ng-model='model.telephones.movil' name='movil' ng-blur='updateUserData()' ></input>
+                        <input type="text" placeholder="Cel. (+5492215011111)" ng-model='model.telephones.movil' name='movil' ng-blur='updateUserData()' ng-required="model.telephoneRequired"></input>
                       </div>
                     </div>
 
@@ -222,7 +222,7 @@
                         <button><i class="fa fa-phone"></i></button>
                       </div>
                       <div>
-                        <input type="text" placeholder="Fijo (+5492214231111)" ng-model='model.telephones.telephone' name='telephone' ng-blur='updateUserData()' ></input>
+                        <input type="text" placeholder="Fijo (+5492214231111)" ng-model='model.telephones.telephone' name='telephone' ng-blur='updateUserData()' ng-required="model.telephoneRequired"></input>
                       </div>
                     </div>
 
