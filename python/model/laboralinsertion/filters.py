@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import model.utils.DateTimeEncoder
+import jsonpickle
 
 class Filter:
 
@@ -91,6 +92,26 @@ class FInscriptionDate(Filter):
         import json
         return json.dumps(self, cls=DateTimeEncoder)
 
+class FWorkExperience(Filter):
+
+    def __init__(self):
+        self.workExperience = True
+
+
+class FPriority(Filer):
+
+    def __init__(self):
+        self.ffrom = 0
+        self.to = 0
+
+
+class Filters:
+
+    @staticmethod
+    def getFilters():
+        fs = [ FInscriptionDate(), FDegree() ]
+        return jsonpickle.encode(fs)
+
 
 
 if __name__ == '__main__':
@@ -102,7 +123,7 @@ if __name__ == '__main__':
     import sys
 
     print(jsonpickle.encode(fs))
-    sys.exit(1)
+    # sys.exit(1)
 
     from inscription import Inscription
     ins = Inscription()
@@ -133,4 +154,5 @@ if __name__ == '__main__':
 
     fi = Filter.apply(inss, fs)
     for i in fi:
-        print(i.__dict__)
+        json = jsonpickle.encode(i)
+        print(json)

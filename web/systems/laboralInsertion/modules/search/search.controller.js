@@ -459,6 +459,12 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     }
   };
 
+
+  // TODO: dalta implementar.
+  $scope.getPriority(id) {
+
+  }
+
   $scope.orderMail = function(reverse) {
     if (reverse) {
       $scope.model.inscriptions.sort(function(a, b) {
@@ -492,6 +498,14 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
   $scope.selectInscriptions = function(filters) {
     $scope.model.currentScreen = "";
     $scope.model.filters = filters;
+    LaboralInsertion.getFilters().then(
+      function(filters) {
+        console.log(filters);
+      },
+      function() {
+        console.log("error");
+      }
+    );
   }
 
   $scope.viewSelected = function() {
@@ -620,7 +634,10 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     Chequea si una inscripcion esta seleccionado para ser enviado a una empresa.
   */
   $scope.isSelected = function(i) {
-    if(i) return i.selected;
+    if (i != null) {
+      return i.selected;
+    }
+    return false;
   }
 
   /*
