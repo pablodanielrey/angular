@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-
-
+import jsonpickle
 class Filter:
 
     @staticmethod
@@ -57,6 +56,12 @@ class FInscriptionDate(Filter):
     def _filter(self, inscriptions):
         return [ i for i in inscriptions if i.created.date().year == self.date.date().year ]
 
+class Filters:
+
+    @staticmethod
+    def getFilters():
+        fs = [ FInscriptionDate(), FDegree() ]
+        return jsonpickle.encode(fs)
 
 if __name__ == '__main__':
 
@@ -67,7 +72,7 @@ if __name__ == '__main__':
     import sys
 
     print(jsonpickle.encode(fs))
-    sys.exit(1)
+    # sys.exit(1)
 
     from inscription import Inscription
     ins = Inscription()
@@ -98,4 +103,5 @@ if __name__ == '__main__':
 
     fi = Filter.apply(inss, fs)
     for i in fi:
-        print(i.__dict__)
+        json = jsonpickle.encode(i)
+        print(json)
