@@ -1,7 +1,29 @@
 # -*- coding: utf-8 -*-
-
+import model.utils.DateTimeEncoder
 
 class Filter:
+
+    fr = re.compile("^{'filter':'(?P<type>.*)', 'data':(?P<data>.*)}$")
+
+    def toJson(self):
+        return "{{'filter':'{}', 'data':{}}}".format(self.__class__.__name__, self._toJson())
+
+    @classmethod
+    def fromJson(cls, s):
+        m = cls.fr.match(s)
+        if not m:
+            return None
+
+        t = m.group('type')
+        d = m.group('data')
+
+        ''' deserializa el objeto desde json '''
+        for sub in cls.__subclasses__():
+            o = sub._fromJson(t,d)
+            if o is not None:
+                return o
+        return None
+
 
     @staticmethod
     def _groupFilters(filters=[]):
@@ -44,18 +66,31 @@ class FDegree(Filter):
     def _filter(self, inscriptions):
         return [ i for i in inscriptions if i.degree == self.degree ]
 
+    def _toJson(self):
+        return = self.degree
 
 class FInscriptionDate(Filter):
 
     def __init__(self, date = None):
         if date is None:
             import datetime
-            self.date = datetime.datetime.now()
+            self.ffrom = datetime.datetime.now()
+            self.to = datetime.datetime.now()
         else:
             self.date = date
 
     def _filter(self, inscriptions):
         return [ i for i in inscriptions if i.created.date().year == self.date.date().year ]
+
+    def _fromJson(self, st):
+        import json
+        s = json.loads(st)
+        self.ffrom = dateutils.parser(s['from'])
+
+    def _toJson(self):
+        import json
+        return json.dumps(self, cls=DateTimeEncoder)
+
 
 
 if __name__ == '__main__':
