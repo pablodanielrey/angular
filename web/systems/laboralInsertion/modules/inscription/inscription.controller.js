@@ -51,6 +51,7 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
       telephone:'',
       movil:''
     },
+    telephoneRequired:true,
 
     user: {
       name:'',
@@ -191,14 +192,34 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
   $scope.$watch(function() { return $scope.model.laboralData.email; }, function(o,n) { $scope.checkInscriptionPreconditions(); });
   $scope.$watch(function() { return $scope.model.laboralData.cv; }, function(o,n) { $scope.checkInscriptionPreconditions(); });
 
+  $scope.$watch(function() {return $scope.model.telephones.telephone;}, function(o,n) {
+    $scope.model.telephoneRequired = ($scope.model.telephones.movil == null ||$scope.model.telephones.movil == "") &&
+                                     ($scope.model.telephones.telephone == null || $scope.model.telephones.telephone == "");
+  });
+
+
+  $scope.$watch(function() {return $scope.model.telephones.movil;}, function(o,n) {
+    $scope.model.telephoneRequired = ($scope.model.telephones.movil == null ||$scope.model.telephones.movil == "") &&
+                                     ($scope.model.telephones.telephone == null || $scope.model.telephones.telephone == "");
+  });
+
   $scope.$watch(function() { return $scope.model.mails.emails;}, function(o,n) {
-    for (var i = 0; i < $scope.model.mails.emails.length; i++) {
-      var m = $scope.model.mails.emails[i];
-      if ($scope.model.laboralData.email == m.id) {
-        $scope.model.selectedEmail = m;
-        break;
+    if ($scope.model.mails == null || $scope.model.mails.emails == null || $scope.model.mails.emails.length <= 0) {
+      return
+    }
+    if ($scope.model.laboralData.email == null || $scope.model.laboralData.email == "") {
+      $scope.model.selectedEmail = $scope.model.mails.emails[0];
+      $scope.updateLaboralData();
+    } else {
+      for (var i = 0; i < $scope.model.mails.emails.length; i++) {
+        var m = $scope.model.mails.emails[i];
+        if ($scope.model.laboralData.email == m.id) {
+          $scope.model.selectedEmail = m;
+          break;
+        }
       }
     }
+
   });
 
   $scope.checkInscriptionPreconditions = function() {
@@ -429,15 +450,20 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
 
     // corrijo la info de los telefonos para el formato de la llamada.
     $scope.model.user['telephones'] = [];
-    $scope.model.user.telephones.push({
-      number:$scope.model.telephones.telephone,
-      type:'residence'
-    });
-    $scope.model.user.telephones.push({
-      number:$scope.model.telephones.movil,
-      type:'movil'
-    });
 
+    if ($scope.model.telephones.telephone != null && $scope.model.telephones.movil.trim() != "") {
+      $scope.model.user.telephones.push({
+        number: $scope.model.telephones.telephone,
+        type: 'residence'
+      });
+    }
+
+    if ($scope.model.telephones.movil != null && $scope.model.telephones.movil.trim() != "") {
+      $scope.model.user.telephones.push({
+        number: $scope.model.telephones.movil,
+        type: 'movil'
+      });
+    }
 
     Users.updateUser($scope.model.user, function(res) {
 

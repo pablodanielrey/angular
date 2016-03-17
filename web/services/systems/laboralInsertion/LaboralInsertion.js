@@ -13,6 +13,10 @@ function LaboralInsertion($rootScope,$wamp,Session) {
     return $wamp.call('system.laboralInsertion.findAllInscriptions');
   }
 
+  this.getFilters = function() {
+    return $wamp.call('system.laboralInsertion.getFilters');
+  }
+
   /**
     obtiene todas las inscripciones de un usuario determinado
   */
