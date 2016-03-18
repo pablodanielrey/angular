@@ -1,3 +1,4 @@
+<!-- VARIABLES 2: notificaciones | VARIABLES 3: cargando, cancelar, guardar -->
 <div class="company {{view.style}}">
 
   <div class="contentLeft">
@@ -115,6 +116,31 @@
 
             </div>
 
+        </div>
+
+    </div>
+
+  </div>
+
+  <div class="notification">
+
+    <div class="contentNotification">
+
+        <div class="cancel">
+            <div>¿Desea salir sin guardar?</div>
+            <div class="btns">
+                <button class="btnSi" ng-click="view.style=''; view.style3=''">SI</button>
+                <button class="btnNo" ng-click="view.style3=''">VOLVER</button>
+            </div>
+        </div>
+
+        <div class="preload">
+            <i class="fa fa-spinner fa-pulse fa-3x"></i>
+        </div>
+
+        <div class="guarded">
+            <div>Tutoría</div>
+            <div>guardada con éxito! </div>
         </div>
 
     </div>
