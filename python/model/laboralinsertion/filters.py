@@ -11,8 +11,8 @@ class Filter:
 
     ls = re.compile("{(.*?)}")
     #frt = re.compile("^{['|\"]filter['|\"]:['|\"](?P<type>.*)['|\"], ['|\"]data['|\"]:(?P<data>.*)}$")
-    frt = re.compile(".*['|\"]filter['|\"]:['|\"](?P<type>.*?)['|\"].*")
-    frd = re.compile(".*['|\"]data['|\"]:(?P<data>.*)[,|}].*")
+    frt = re.compile(".*['|\"]\s*filter\s*['|\"]\s*:\s*['|\"]\s*(?P<type>.*?)['|\"].*")
+    frd = re.compile(".*['|\"]\s*data\s*['|\"]\s*:\s*(?P<data>{.*?}).*")
 
     @staticmethod
     def toJsonList(ls):
@@ -23,7 +23,8 @@ class Filter:
         ls = []
         for i in l:
             logging.debug(str(i))
-            o = cls.fromJson(str(i))
+            i = str(i).replace("'", "\"")
+            o = cls.fromJson(i)
             if o is not None:
                 logging.debug('deseializado')
                 ls.append(o)
@@ -32,15 +33,17 @@ class Filter:
     @classmethod
     def fromJsonList(cls, s):
         logging.debug('fromJsonList {}'.format(s))
-        if '[' in s and ']' in s and '{' in s and '}' in s:
-            import json
-            sls = json.loads(s)
-            return cls._fromJsonList(sls)
-        else:
-            return []
+        import json
+        sls = json.loads(s)
+        logging.debug(sls)
+        return cls._fromJsonList(sls)
 
     @classmethod
     def fromJson(cls, s):
+
+        logging.debug('deserializando')
+        logging.debug(s)
+
         m = cls.frt.match(s)
         if not m:
             return None
@@ -134,6 +137,7 @@ class FInscriptionDate(Filter):
         import json
         #import dateutil.parser
         f = FInscriptionDate()
+        logging.debug(data)
         f.__dict__ = json.loads(data)
         #d.ffrom = dateutil.parser.parse(d.ffrom)
         #d.to = dateutil.parser.parse(d.to)
@@ -182,6 +186,7 @@ if __name__ == '__main__':
     s = Filter.toJsonList([d,d2,d])
     logging.debug('toJsonList {}'.format(s))
 
+    logging.debug("\n\n\n")
     ls = Filter.fromJsonList(s)
     if ls is None:
         logging.debug('None')
@@ -190,4 +195,4 @@ if __name__ == '__main__':
             logging.debug('0')
         else:
             for i in ls:
-                logging.debug(l)
+                logging.debug(i)
