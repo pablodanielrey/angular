@@ -2,12 +2,11 @@ angular
   .module('mainApp')
   .controller('FiltersCtrl', FiltersCtrl);
 
-FiltersCtrl.$inject = ['$rootScope','$scope'];
+FiltersCtrl.$inject = ['$rootScope','$scope','$filter'];
 
-function FiltersCtrl($rootScope, $scope) {
+function FiltersCtrl($rootScope, $scope, $filter) {
 
   $scope.model = {
-    selectFilterDate: null,
     selectFilterDegree: null,
     selectFilterLaboral: null,
     selectFilterGenre: null,
@@ -16,6 +15,8 @@ function FiltersCtrl($rootScope, $scope) {
     selectFilterTravel: null,
     selectFilterLanguage: null,
     selectFilterLanguageNivel: null,
+    beginDate:null,
+    endDate:new Date(),
     beginCountCathedra: 0,
     endCountCathedra: 10,
     beginAverageWithFails: 0,
@@ -33,13 +34,6 @@ function FiltersCtrl($rootScope, $scope) {
       {type:"filterDegree", descriptionType:'Carrera', name:'Contador Público',value:'contador'},
       {type:"filterDegree", descriptionType:'Carrera', name: 'Lic. en Economía', value:'economia'},
       {type:"filterDegree", descriptionType:'Carrera', name: 'Lic. en Administración', value:'administracion'}
-    ],
-    filtersDate: [
-      {type:"filterDate", descriptionType:'Fecha de Inscripción', name:"2015", value:"2015"},
-      {type:"filterDate", descriptionType:'Fecha de Inscripción', name:"2014", value:"2014"},
-      {type:"filterDate", descriptionType:'Fecha de Inscripción', name:"2013", value:"2013"},
-      {type:"filterDate", descriptionType:'Fecha de Inscripción', name:"2012", value:"2012"},
-      {type:"filterDate", descriptionType:'Fecha de Inscripción', name:"2011", value:"2011"}
     ],
     filtersLaboral: [
       {type:"filterLaboral", descriptionType:'Oferta Laboral', name:"Pasantía", value:"pasantia"},
@@ -104,12 +98,22 @@ function FiltersCtrl($rootScope, $scope) {
   $scope.removeFilter = removeFilter;
 
   function addDateFilter() {
-    if ($scope.model.selectFilterDate == null) {
+    if ($scope.model.beginDate == null || $scope.model.endDate == null) {
       return;
     }
-    $scope.model.filters.push($scope.model.selectFilterDate);
-    var i = $scope.view.filtersDate.indexOf($scope.model.selectFilterDate);
-    $scope.view.filtersDate.splice(i,1);
+    // {'filter': 'FInscriptionDate', 'data': {'ffrom': '2016-03-18T12:38:40.720044', 'to': '2016-03-18T12:38:40.720099'}}
+    var dateFilter = {};
+    dateFilter.filter = 'FInscriptionDate';
+    dateFilter.data = {};
+    dateFilter.data.ffrom = $scope.model.beginDate;
+    dateFilter.data.to = $scope.model.endDate;
+
+    var filter = {};
+    filter.data = dateFilter;
+    var beginStr = $filter('date')(dateFilter.data.ffrom,'dd/MM/yyyy');
+    var endStr = $filter('date')(dateFilter.data.to,'dd/MM/yyyy');
+    filter.view = {type:'Inscripción',value: beginStr + ' hasta ' + endStr};
+    $scope.model.filters.push(filter);
   }
 
   function addDegreeFilter() {
@@ -205,7 +209,6 @@ function FiltersCtrl($rootScope, $scope) {
 
   function removeFilter(filter) {
     switch (filter.type) {
-      case "filterDate": $scope.view.filtersDate.push(filter); break;
       case "filterDegree": $scope.view.filtersDegrees.push(filter); break;
       case "filterLaboral": $scope.view.filtersLaboral.push(filter); break;
       case "filterGenre": $scope.view.filtersGenre.push(filter); break;
