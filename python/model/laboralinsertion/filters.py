@@ -2,9 +2,7 @@
 import re
 import logging
 import json
-
 import sys
-sys.path.append('../../')
 
 from model.utils import DateTimeEncoder
 
@@ -204,29 +202,3 @@ class Filters:
     def getFilters():
         fs = [ FInscriptionDate(), FDegree() ]
         return jsonpickle.encode(fs)
-
-
-
-
-
-if __name__ == '__main__':
-
-    logging.getLogger().setLevel(logging.DEBUG)
-    import datetime
-
-    d = FInscriptionDate()
-    d.ffrom = datetime.datetime.now()
-    d.to = datetime.datetime.now()
-    s = d.toJson()
-    logging.debug(s)
-    o = Filter.fromJson(s)
-    logging.debug(o.__class__.__name__)
-    logging.debug(o.__dict__)
-
-    d = FOffer()
-    d.offer = 'Pasantía'
-    s = d.toJson()
-    logging.debug(s)
-    o = Filter.fromJson(s)
-    logging.debug(o.__class__.__name__)
-    logging.debug(o.__dict__)
