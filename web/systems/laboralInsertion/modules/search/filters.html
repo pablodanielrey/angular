@@ -34,7 +34,7 @@
           <div class="itemsFilters">
             <div class="subItemsFilters">
                 <div class="textItemFilters"><i class="fa fa-graduation-cap"></i> Carrera</div>
-                <select class="inputFilters" ng-model="model.selectFilterDegree" ng-options="option.name for option in view.filtersDegrees | orderBy: ['name']: true">
+                <select class="inputFilters" ng-model="model.selectFilterDegree" ng-options="option for option in view.filtersDegrees | orderBy: option: false">
                         <option value="">Seleccionar</option>
                 </select>
             </div>

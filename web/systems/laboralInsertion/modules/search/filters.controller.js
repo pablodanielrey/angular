@@ -30,11 +30,7 @@ function FiltersCtrl($rootScope, $scope, $filter) {
     enabledFilterCountCathedra: true,
     enabledFilterAverageWithFails: true,
     enabledFilterAverageWithoutFails: true,
-    filtersDegrees:[
-      {type:"filterDegree", descriptionType:'Carrera', name:'Contador Público',value:'contador'},
-      {type:"filterDegree", descriptionType:'Carrera', name: 'Lic. en Economía', value:'economia'},
-      {type:"filterDegree", descriptionType:'Carrera', name: 'Lic. en Administración', value:'administracion'}
-    ],
+    filtersDegrees:['Contador Público','Lic. en Economía','Lic. en Administración'],
     filtersLaboral: [
       {type:"filterLaboral", descriptionType:'Oferta Laboral', name:"Pasantía", value:"pasantia"},
       {type:"filterLaboral", descriptionType:'Oferta Laboral', name:"Full-Time", value:"fulltime"},
@@ -120,7 +116,16 @@ function FiltersCtrl($rootScope, $scope, $filter) {
     if ($scope.model.selectFilterDegree == null) {
       return;
     }
-    $scope.model.filters.push($scope.model.selectFilterDegree);
+    // {"data": {"degree": "Lic. En Economía"}, "filter": "FDegree"}
+    var dataFilter = {};
+    dataFilter.data = {degree:$scope.model.selectFilterDegree};
+    dataFilter.filter = "FDegree";
+
+    var filter = {};
+    filter.data = dataFilter;
+    filter.view = {type:'Carrera',value: $scope.model.selectFilterDegree};
+
+    $scope.model.filters.push(filter);
     var i = $scope.view.filtersDegrees.indexOf($scope.model.selectFilterDegree);
     $scope.view.filtersDegrees.splice(i,1);
   }
@@ -208,8 +213,8 @@ function FiltersCtrl($rootScope, $scope, $filter) {
 
 
   function removeFilter(filter) {
-    switch (filter.type) {
-      case "filterDegree": $scope.view.filtersDegrees.push(filter); break;
+    switch (filter.data.filter) {
+      case "FDegree": $scope.view.filtersDegrees.push(filter.view.value); break;
       case "filterLaboral": $scope.view.filtersLaboral.push(filter); break;
       case "filterGenre": $scope.view.filtersGenre.push(filter); break;
       case "filterResidence": $scope.view.filtersResidence.push(filter); break;
