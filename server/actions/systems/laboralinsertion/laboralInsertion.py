@@ -13,7 +13,8 @@ from model.laboralinsertion.laboralInsertion import LaboralInsertion
 from model.laboralinsertion.inscription import Inscription
 from model.laboralinsertion.company import Company, CompanyDAO
 from model.laboralinsertion.languages import Language
-from model.laboralinsertion.filters import Filters
+from model.laboralinsertion.filters import Filter
+
 import model.laboralinsertion
 from model.laboralinsertion.mails import Sent, SentDAO
 from model.users.users import UserDAO

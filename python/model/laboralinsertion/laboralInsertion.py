@@ -14,7 +14,7 @@ from model.laboralinsertion.mails import SentDAO, Sent
 from model.laboralinsertion.inscription import InscriptionDAO
 from model.laboralinsertion.company import CompanyDAO
 from model.laboralinsertion.languages import LanguageDAO
-from model.laboralinsertion.filters import Filters
+from model.laboralinsertion.filters import Filter
 from model.laboralinsertion.user import UserDAO, User
 
 import csv
