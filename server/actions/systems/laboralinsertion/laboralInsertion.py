@@ -241,6 +241,7 @@ class LaboralInsertionWamp(ApplicationSession):
     def findAllInscriptions(self, filters):
         con = self.conn.get()
         try:
+            logging.debug(filters)
             filterss = Filter.fromJson(filters)
             data = self.laboralInsertion.findAllInscriptions(con, filterss)
             insc = [ i.__dict__ for i in data ]
