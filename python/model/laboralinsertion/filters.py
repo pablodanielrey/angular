@@ -1,6 +1,72 @@
 # -*- coding: utf-8 -*-
-import jsonpickle
+import re
+import logging
+
+import sys
+sys.path.append('../../')
+
+from model.utils import DateTimeEncoder
+
 class Filter:
+
+    ls = re.compile("{(.*?)}")
+    #frt = re.compile("^{['|\"]filter['|\"]:['|\"](?P<type>.*)['|\"], ['|\"]data['|\"]:(?P<data>.*)}$")
+    frt = re.compile(".*['|\"]filter['|\"]:['|\"](?P<type>.*?)['|\"].*")
+    frd = re.compile(".*['|\"]data['|\"]:(?P<data>.*)[,|}].*")
+
+    @staticmethod
+    def toJsonList(ls):
+        return '[' + ','.join([ s.toJson() for s in ls ]) + ']'
+
+    @classmethod
+    def _fromJsonList(cls, l):
+        ls = []
+        for i in l:
+            logging.debug(str(i))
+            o = cls.fromJson(str(i))
+            if o is not None:
+                logging.debug('deseializado')
+                ls.append(o)
+        return ls
+
+    @classmethod
+    def fromJsonList(cls, s):
+        logging.debug('fromJsonList {}'.format(s))
+        if '[' in s and ']' in s and '{' in s and '}' in s:
+            import json
+            sls = json.loads(s)
+            return cls._fromJsonList(sls)
+        else:
+            return []
+
+    @classmethod
+    def fromJson(cls, s):
+        m = cls.frt.match(s)
+        if not m:
+            return None
+
+        m2 = cls.frd.match(s)
+        if not m2:
+            return None
+
+        t = m.group('type')
+        d = m2.group('data')
+
+        ''' deserializa el objeto desde json '''
+        for sub in cls.__subclasses__():
+            logging.debug('chequeando {} == {}'.format(t, sub.__name__))
+            if t == sub.__name__:
+                o = sub._fromJson(d)
+                if o is not None:
+                    return o
+        return None
+
+    def toJson(self):
+        return "{{\"filter\":\"{}\", \"data\":{}}}".format(self.__class__.__name__, self._toJson())
+
+    def _toJson(self):
+        import json
+        return json.dumps(self.__dict__)
 
     @staticmethod
     def _groupFilters(filters=[]):
@@ -30,7 +96,6 @@ class Filter:
 
         return result
 
-
     def filter(self, list):
         return self._filter(list)
 
@@ -43,26 +108,45 @@ class FDegree(Filter):
     def _filter(self, inscriptions):
         return [ i for i in inscriptions if i.degree == self.degree ]
 
+    @classmethod
+    def _fromJson(cls, s):
+        import json
+        d = FDegree()
+        d.__dict__ = json.loads(s)
+        return d
+
 
 class FInscriptionDate(Filter):
 
-    def __init__(self, date = None):
-        if date is None:
-            import datetime
-            self.date = datetime.datetime.now()
-        else:
-            self.date = date
+    def __init__(self):
+        self.ffrom = None
+        self.to = None
 
     def _filter(self, inscriptions):
-        return [ i for i in inscriptions if i.created.date().year == self.date.date().year ]
+        return [ i for i in inscriptions if i.created >= self.ffrom and i.created <= self.to ]
 
-class FWorkExperience(Filter):
+    def _toJson(self):
+        import json
+        return json.dumps(self.__dict__, cls=DateTimeEncoder)
+
+    @classmethod
+    def _fromJson(cls, data):
+        import json
+        #import dateutil.parser
+        f = FInscriptionDate()
+        f.__dict__ = json.loads(data)
+        #d.ffrom = dateutil.parser.parse(d.ffrom)
+        #d.to = dateutil.parser.parse(d.to)
+        return d
+
+
+class FWorkExperience:
 
     def __init__(self):
         self.workExperience = True
 
 
-class FPriority(Filer):
+class FPriority:
 
     def __init__(self):
         self.ffrom = 0
@@ -82,43 +166,28 @@ class Filters:
 
 if __name__ == '__main__':
 
+    logging.getLogger().setLevel(logging.DEBUG)
     import datetime
-    fs = [ FInscriptionDate(), FDegree(), FInscriptionDate(datetime.datetime.now() - datetime.timedelta(hours = -1 * 24 * 365)) ]
 
-    import jsonpickle
-    import sys
+    d = FInscriptionDate()
+    d.ffrom = datetime.datetime.now()
+    d.to = datetime.datetime.now()
 
-    print(jsonpickle.encode(fs))
-    # sys.exit(1)
+    s1 = d.toJson()
+    logging.debug('toJson = {}'.format(s1))
+    o = Filter.fromJson(s1)
+    logging.debug('fromJson = {}'.format(o.toJson()))
 
-    from inscription import Inscription
-    ins = Inscription()
-    ins.degree = 'Lic. En Economía'
-    ins.created = datetime.datetime.now()
-    inss = []
-    inss.append(ins)
+    d2 = FDegree()
+    s = Filter.toJsonList([d,d2,d])
+    logging.debug('toJsonList {}'.format(s))
 
-    ins = Inscription()
-    ins.degree = 'Lic. En Economía'
-    ins.created = datetime.datetime.now() - datetime.timedelta(hours = -2 * 24 * 365)
-    inss.append(ins)
-
-    ins = Inscription()
-    ins.degree = 'Lic. En Economí2a'
-    ins.created = datetime.datetime.now()
-    inss.append(ins)
-
-    ins = Inscription()
-    ins.degree = 'Lic. En Economía2'
-    ins.created = datetime.datetime.now() - datetime.timedelta(hours = -2 * 24 * 365)
-    inss.append(ins)
-
-    ins = Inscription()
-    ins.degree = 'Lic. En Economía'
-    ins.created = datetime.datetime.now() - datetime.timedelta(hours = -1 * 24 * 365)
-    inss.append(ins)
-
-    fi = Filter.apply(inss, fs)
-    for i in fi:
-        json = jsonpickle.encode(i)
-        print(json)
+    ls = Filter.fromJsonList(s)
+    if ls is None:
+        logging.debug('None')
+    else:
+        if len(ls) <= 0:
+            logging.debug('0')
+        else:
+            for i in ls:
+                logging.debug(l)
