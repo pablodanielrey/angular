@@ -152,9 +152,7 @@ margin-left: 10px;
 
 
 .company .dataCompany {
-  display: flex;
-  display: -webkit-flex;
-  display: -moz-flex;
+  display: none;
   flex-direction: row;
   -webkit-flex-direction: row;
   -moz-flex-direction: row;
@@ -189,9 +187,7 @@ margin-left: 10px;
 
 .company .actions {
   width: 80%;
-  display: flex;
-  display: -webkit-flex;
-  display: -moz-flex;
+  display: none;
   justify-content: flex-end;
   -webkit-justify-content: flex-end;
   -moz-justify-content: flex-end;
@@ -370,4 +366,16 @@ margin-left: 10px;
   background-color: #E43E46;
   cursor: pointer;
   color: white;
+}
+
+.company.displayForm .actions {
+  display: flex;
+  display: -webkit-flex;
+  display: -moz-flex;
+}
+
+.company.displayForm .dataCompany {
+  display: flex;
+  display: -webkit-flex;
+  display: -moz-flex;
 }
