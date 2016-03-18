@@ -89,14 +89,14 @@ class Filter:
         return groups
 
     @staticmethod
-    def apply(ls, filters=[]):
+    def apply(con, ls, filters=[]):
         ''' aplica los filtros indicados a una lista de inscripciones '''
         groups = Filter._groupFilters(filters)
         result = None
         for k in groups.keys():
             s = set()
             for f in groups[k]:
-                lss = f.filter(ls)
+                lss = f.filter(con, ls)
                 s = s.union(lss)
 
             if result is None:
@@ -106,8 +106,8 @@ class Filter:
 
         return result
 
-    def filter(self, list):
-        return self._filter(list)
+    def filter(self, con, ls):
+        return self._filter(con, ls)
 
 
 class FInscriptionDate(Filter):
@@ -116,7 +116,7 @@ class FInscriptionDate(Filter):
         self.ffrom = None
         self.to = None
 
-    def _filter(self, inscriptions):
+    def _filter(self, con, inscriptions):
         return [ i for i in inscriptions if i.created >= self.ffrom and i.created <= self.to ]
 
     def _toJson(self):
@@ -140,7 +140,7 @@ class FDegree(Filter):
     def __init__(self):
         self.degree = 'Lic. En Economía'
 
-    def _filter(self, inscriptions):
+    def _filter(self, con, inscriptions):
         return [ i for i in inscriptions if i.degree == self.degree ]
 
     @classmethod
@@ -155,7 +155,7 @@ class FOffer(Filter):
     def __init__(self):
         self.offer = ''
 
-    def _filter(self, inscriptions):
+    def _filter(self, con, inscriptions):
         return [ i for i in inscriptions if i.workType == self.offer ]
 
 
@@ -163,6 +163,32 @@ class FWorkExperience:
 
     def __init__(self):
         self.workExperience = True
+
+    def _filter(self, con, inscriptions):
+        return [ i for i in inscriptions if i.workExperience == self.workExperience ]
+
+
+class FGenre(Filter):
+
+    def __init__(self):
+        self.genre = 'Masculino'
+
+    def _filter(self, con, inscriptions):
+        return [ i for i in inscriptions if i.getUser(con).genre == self.genre ]
+
+
+class FAge(Filter):
+
+    def __init__(self):
+        self.age = 0
+
+    def _filter(self, con, inscriptions):
+        return [ i for i in inscriptions if FAge._age(i.getUser(con).birthdate) == self.age ]
+
+    @staticmethod
+    def _age(birthdate):
+        import datetime
+        return (datetime.datetime.now() - birthdate).year
 
 
 class FPriority:

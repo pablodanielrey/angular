@@ -236,10 +236,11 @@ class LaboralInsertionWamp(ApplicationSession):
         finally:
             self.conn.put(con)
 
-    def findAllInscriptions(self):
+    def findAllInscriptions(self, filters):
         con = self.conn.get()
         try:
-            data = self.laboralInsertion.findAllInscriptions(con)
+            filterss = Filter.fromJson(filters)
+            data = self.laboralInsertion.findAllInscriptions(con, filterss)
             insc = [ i.__dict__ for i in data ]
             return insc
 
@@ -374,9 +375,9 @@ class LaboralInsertionWamp(ApplicationSession):
         return r
 
     @coroutine
-    def findAllInscriptions_async(self):
+    def findAllInscriptions_async(self, filters):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.findAllInscriptions)
+        r = yield from loop.run_in_executor(None, self.findAllInscriptions, filters)
         return r
 
     @coroutine

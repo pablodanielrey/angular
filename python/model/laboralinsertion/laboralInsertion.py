@@ -121,13 +121,16 @@ class LaboralInsertion:
     """
 
 
-    def findAllInscriptions(self, con):
+    def findAllInscriptions(self, con, filters):
         """ obtiene los datos de las inscripciones de los alumnos """
         ids = InscriptionDAO.findAll(con)
         inscriptions = []
         for id in ids:
             inscription = InscriptionDAO.findById(con, id)
             inscriptions.append(inscription)
+
+        ''' aplico los filtros '''
+        inscriptions = Filter.apply(con, inscriptions, filters)
 
         return inscriptions
 
