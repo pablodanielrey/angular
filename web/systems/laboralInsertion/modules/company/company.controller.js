@@ -25,6 +25,7 @@ function CompanyCtrl($rootScope, $scope) {
   $scope.addEmail = addEmail;
   $scope.removeEmail = removeEmail;
 
+
   // --------------------------------------------
   // ------------- INICIALIZACION ---------------
   // --------------------------------------------
