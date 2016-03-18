@@ -461,7 +461,7 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
 
 
   // TODO: dalta implementar.
-  $scope.getPriority(id) {
+  $scope.getPriority = function(id) {
 
   }
 
