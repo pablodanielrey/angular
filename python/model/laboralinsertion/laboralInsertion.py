@@ -130,7 +130,8 @@ class LaboralInsertion:
             inscriptions.append(inscription)
 
         ''' aplico los filtros '''
-        inscriptions = Filter.apply(con, inscriptions, filters)
+        if len(filters) > 0:
+            inscriptions = Filter.apply(con, inscriptions, filters)
 
         return inscriptions
 

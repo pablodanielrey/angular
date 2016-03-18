@@ -30,7 +30,7 @@ function FiltersCtrl($rootScope, $scope, $filter) {
     enabledFilterCountCathedra: true,
     enabledFilterAverageWithFails: true,
     enabledFilterAverageWithoutFails: true,
-    filtersDegrees:['Contador Público','Lic. en Economía','Lic. en Administración'],
+    filtersDegrees:['Contador Público','Licenciatura en Economía','Licenciatura en Administración','Licenciatura en Turismo','Tecnicatura en Cooperativas'],
     filtersLaboral: [
       {type:"filterLaboral", descriptionType:'Oferta Laboral', name:"Pasantía", value:"pasantia"},
       {type:"filterLaboral", descriptionType:'Oferta Laboral', name:"Full-Time", value:"fulltime"},
