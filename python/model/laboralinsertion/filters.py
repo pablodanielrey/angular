@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import re
 import logging
+import json
 
 import sys
 sys.path.append('../../')
@@ -64,6 +65,12 @@ class Filter:
                     return o
         return None
 
+    @classmethod
+    def _fromJson(cls, s):
+        d = cls()
+        d.__dict__ = json.loads(s)
+        return d
+
     def toJson(self):
         return "{{\"filter\":\"{}\", \"data\":{}}}".format(self.__class__.__name__, self._toJson())
 
@@ -103,22 +110,6 @@ class Filter:
         return self._filter(list)
 
 
-class FDegree(Filter):
-
-    def __init__(self):
-        self.degree = 'Lic. En Economía'
-
-    def _filter(self, inscriptions):
-        return [ i for i in inscriptions if i.degree == self.degree ]
-
-    @classmethod
-    def _fromJson(cls, s):
-        import json
-        d = FDegree()
-        d.__dict__ = json.loads(s)
-        return d
-
-
 class FInscriptionDate(Filter):
 
     def __init__(self):
@@ -142,6 +133,30 @@ class FInscriptionDate(Filter):
         #d.ffrom = dateutil.parser.parse(d.ffrom)
         #d.to = dateutil.parser.parse(d.to)
         return d
+
+
+class FDegree(Filter):
+
+    def __init__(self):
+        self.degree = 'Lic. En Economía'
+
+    def _filter(self, inscriptions):
+        return [ i for i in inscriptions if i.degree == self.degree ]
+
+    @classmethod
+    def _fromJson(cls, s):
+        d = FDegree()
+        d.__dict__ = json.loads(s)
+        return d
+
+
+class FOffer(Filter):
+
+    def __init__(self):
+        self.offer = ''
+
+    def _filter(self, inscriptions):
+        return [ i for i in inscriptions if i.workType == self.offer ]
 
 
 class FWorkExperience:
@@ -176,23 +191,16 @@ if __name__ == '__main__':
     d = FInscriptionDate()
     d.ffrom = datetime.datetime.now()
     d.to = datetime.datetime.now()
+    s = d.toJson()
+    logging.debug(s)
+    o = Filter.fromJson(s)
+    logging.debug(o.__class__.__name__)
+    logging.debug(o.__dict__)
 
-    s1 = d.toJson()
-    logging.debug('toJson = {}'.format(s1))
-    o = Filter.fromJson(s1)
-    logging.debug('fromJson = {}'.format(o.toJson()))
-
-    d2 = FDegree()
-    s = Filter.toJsonList([d,d2,d])
-    logging.debug('toJsonList {}'.format(s))
-
-    logging.debug("\n\n\n")
-    ls = Filter.fromJsonList(s)
-    if ls is None:
-        logging.debug('None')
-    else:
-        if len(ls) <= 0:
-            logging.debug('0')
-        else:
-            for i in ls:
-                logging.debug(i)
+    d = FOffer()
+    d.offer = 'Pasantía'
+    s = d.toJson()
+    logging.debug(s)
+    o = Filter.fromJson(s)
+    logging.debug(o.__class__.__name__)
+    logging.debug(o.__dict__)
