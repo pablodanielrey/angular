@@ -4,77 +4,29 @@ import logging
 import json
 import sys
 
-from model.utils import DateTimeEncoder
 
 class Filter:
 
-    ls = re.compile("{(.*?)}")
-    #frt = re.compile("^{['|\"]filter['|\"]:['|\"](?P<type>.*)['|\"], ['|\"]data['|\"]:(?P<data>.*)}$")
-    frt = re.compile(".*['|\"]\s*filter\s*['|\"]\s*:\s*['|\"]\s*(?P<type>.*?)['|\"].*")
-    frd = re.compile(".*['|\"]\s*data\s*['|\"]\s*:\s*(?P<data>{.*?}).*")
-
-    @staticmethod
-    def toJsonList(ls):
-        return '[' + ','.join([ s.toJson() for s in ls ]) + ']'
+    @classmethod
+    def fromMapList(cls, ls):
+        result = []
+        for f in ls:
+            for sub in cls.__subclasses__():
+                if f['filter'] == sub.__name__:
+                    o = sub._fromMap(f['data'])
+                    if o is not None:
+                        result.append(o)
+        return result
 
     @classmethod
-    def _fromJsonList(cls, l):
-        ls = []
-        for i in l:
-            logging.debug(str(i))
-            i = str(i).replace("'", "\"")
-            o = cls.fromJson(i)
-            if o is not None:
-                logging.debug('deseializado')
-                ls.append(o)
-        return ls
-
-    @classmethod
-    def fromJsonList(cls, s):
-        logging.debug('fromJsonList {}'.format(s))
-        import json
-        sls = json.loads(s)
-        logging.debug(sls)
-        return cls._fromJsonList(sls)
-
-    @classmethod
-    def fromJson(cls, s):
-
-        logging.debug('deserializando')
-        logging.debug(s)
-
-        m = cls.frt.match(s)
-        if not m:
+    def _fromMap(cls, m):
+        try:
+            c = cls()
+            c.__dict__ = m
+            return c
+        except Exception as e:
+            logging.exception(e)
             return None
-
-        m2 = cls.frd.match(s)
-        if not m2:
-            return None
-
-        t = m.group('type')
-        d = m2.group('data')
-
-        ''' deserializa el objeto desde json '''
-        for sub in cls.__subclasses__():
-            logging.debug('chequeando {} == {}'.format(t, sub.__name__))
-            if t == sub.__name__:
-                o = sub._fromJson(d)
-                if o is not None:
-                    return o
-        return None
-
-    @classmethod
-    def _fromJson(cls, s):
-        d = cls()
-        d.__dict__ = json.loads(s)
-        return d
-
-    def toJson(self):
-        return "{{\"filter\":\"{}\", \"data\":{}}}".format(self.__class__.__name__, self._toJson())
-
-    def _toJson(self):
-        import json
-        return json.dumps(self.__dict__)
 
     @staticmethod
     def _groupFilters(filters=[]):
@@ -117,21 +69,6 @@ class FInscriptionDate(Filter):
     def _filter(self, con, inscriptions):
         return [ i for i in inscriptions if i.created >= self.ffrom and i.created <= self.to ]
 
-    def _toJson(self):
-        import json
-        return json.dumps(self.__dict__, cls=DateTimeEncoder)
-
-    @classmethod
-    def _fromJson(cls, data):
-        import json
-        #import dateutil.parser
-        f = FInscriptionDate()
-        logging.debug(data)
-        f.__dict__ = json.loads(data)
-        #d.ffrom = dateutil.parser.parse(d.ffrom)
-        #d.to = dateutil.parser.parse(d.to)
-        return d
-
 
 class FDegree(Filter):
 
@@ -140,12 +77,6 @@ class FDegree(Filter):
 
     def _filter(self, con, inscriptions):
         return [ i for i in inscriptions if i.degree == self.degree ]
-
-    @classmethod
-    def _fromJson(cls, s):
-        d = FDegree()
-        d.__dict__ = json.loads(s)
-        return d
 
 
 class FOffer(Filter):
@@ -194,11 +125,3 @@ class FPriority:
     def __init__(self):
         self.ffrom = 0
         self.to = 0
-
-
-class Filters:
-
-    @staticmethod
-    def getFilters():
-        fs = [ FInscriptionDate(), FDegree() ]
-        return jsonpickle.encode(fs)
