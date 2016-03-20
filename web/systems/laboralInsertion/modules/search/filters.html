@@ -16,17 +16,14 @@
                 <div class="textInscription"><i class="fa fa-calendar-o"></i> Inscripción</div>
                 <div>
                   <form>
-                    <input class="inputFilters2" type="date">
+                    <input class="inputFilters2" type="date" ng-model="model.beginDate">
                   </form>
                 </div>
                 <div>
                   <form>
-                    <input class="inputFilters2" type="date">
+                    <input class="inputFilters2" type="date" ng-model="model.endDate">
                   </form>
                 </div>
-                <!-- <select class="inputFilters" ng-model="model.selectFilterDate" ng-options="option.name for option in view.filtersDate | orderBy: ['name']: true">
-                    <option value="">Seleccionar</option>
-                </select> -->
             </div>
             <div>
                 <button class="btnItems" ng-click="addDateFilter()"> Agregar <i class="fa fa-arrow-circle-right"></i></button>
@@ -37,7 +34,7 @@
           <div class="itemsFilters">
             <div class="subItemsFilters">
                 <div class="textItemFilters"><i class="fa fa-graduation-cap"></i> Carrera</div>
-                <select class="inputFilters" ng-model="model.selectFilterDegree" ng-options="option.name for option in view.filtersDegrees | orderBy: ['name']: true">
+                <select class="inputFilters" ng-model="model.selectFilterDegree" ng-options="option for option in view.filtersDegrees | orderBy: option: false">
                         <option value="">Seleccionar</option>
                 </select>
             </div>
@@ -200,9 +197,9 @@
 
             <div class="itemsFilters" ng-repeat="filter in model.filters">
               <div class="subItemsFilters2">
-                  <div class="textItemFilters">{{filter.descriptionType}}</div>
+                  <div class="textItemFilters">{{filter.view.type}}</div>
                   <div class="textItemFilters">
-                    <b>{{filter.name}}</b>
+                    <b>{{filter.view.value}}</b>
                     <div ng-if="filter.nivel">
                       <b>{{filter.nivel}}</b>
                     </div>

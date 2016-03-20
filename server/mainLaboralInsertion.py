@@ -10,6 +10,7 @@ if __name__ == '__main__':
     sys.path.insert(0, '../python')
 
     logging.basicConfig(level=logging.DEBUG)
+    logging.getLogger().setLevel(logging.DEBUG)
 
     from autobahn.asyncio.wamp import ApplicationRunner
     from actions.systems.laboralinsertion.laboralInsertion import LaboralInsertionWamp
@@ -24,5 +25,5 @@ if __name__ == '__main__':
     debug = registry.get('debug')
 
     logging.info('iniciando app en {} {} {}'.format(url, realm, debug))
-    runner = ApplicationRunner(url=url, realm=realm, debug=debug, debug_wamp=debug, debug_app=debug)
+    runner = ApplicationRunner(url=url, realm=realm)
     runner.run(LaboralInsertionWamp)

@@ -17,7 +17,7 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     company: null,
     emailAddToCompany: '',
     emails: [],
-    filters: [],
+    filtersData:[],
     searching: false
   };
 
@@ -461,7 +461,7 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
 
 
   // TODO: dalta implementar.
-  $scope.getPriority(id) {
+  $scope.getPriority = function(id) {
 
   }
 
@@ -497,15 +497,10 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
 
   $scope.selectInscriptions = function(filters) {
     $scope.model.currentScreen = "";
-    $scope.model.filters = filters;
-    LaboralInsertion.getFilters().then(
-      function(filters) {
-        console.log(filters);
-      },
-      function() {
-        console.log("error");
-      }
-    );
+    $scope.model.filtersData = [];
+    for (var i = 0; i < filters.length; i++) {
+        $scope.model.filtersData.push(filters[i].data);
+    }
   }
 
   $scope.viewSelected = function() {
@@ -838,7 +833,7 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
 
   $scope.search = function() {
     $scope.model.searching = true;
-    LaboralInsertion.findAllInscriptions().then(function(ins) {
+    LaboralInsertion.findAllInscriptions($scope.model.filtersData).then(function(ins) {
       $scope.model.inscriptions = ins;
       $scope.model.searching = false;
 

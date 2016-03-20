@@ -31,7 +31,7 @@ app.config(['$routeProvider', function($routeProvider) {
 
   .when('/empresas', {
      templateUrl: '/systems/laboralInsertion/modules/company/company.html',
-    //  controller: 'CompanyCtrl'
+     controller: 'CompanyCtrl'
   })
 
   .when('/logout', {
