@@ -8,7 +8,7 @@
 
 '''
 import uuid
-import datetime, pytz
+import datetime
 import inject
 import json
 
@@ -116,7 +116,7 @@ class SessionDAO:
             if cur.rowcount <= 0:
                 raise SessionNotFound()
 
-            now = datetime.datetime.now(pytz.utc)
+            now = datetime.datetime.now()
             if cur.fetchone()['expire'] <= now:
                 raise SessionExpired()
 
