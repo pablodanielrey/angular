@@ -31,9 +31,24 @@ function Login($rootScope, $wamp, Session) {
     );
   }
 
-  this.getUserId = function() {
-    var s = Session.getCurrentSession();
-    return s.user_id;
+  this.getSessionData = function(cok, cerr) {
+    return new Promise(function(cok, cerr) {
+      var s = Session.getCurrentSession();
+      if (s != null) {
+        $wamp.call('system.session.validate', [])
+        .then(function() {
+          cok(s);
+        }, function() {
+          cerr();
+        });
+      }
+      $wamp.call('', [])
+      .then(function() {
+        cok();
+      }, function() {
+        cerr();
+      });
+    });
   }
 
 
@@ -41,29 +56,29 @@ function Login($rootScope, $wamp, Session) {
 		Loguea al usuario en el servidor y genera tambien la sesion dentro de la cache local
 	*/
 	this.login = function(username, password, cok, cerr) {
-		$wamp.call('system.login', [username,password])
-		.then(function(s) {
-			if (s == null) {
-				cerr('Datos Incorrectos');
-			} else {
-        /*
-          Creo la sesion dentro de la cache cliente
-        */
-				var data = {
-					session_id: s.id,
-					user_id: s.userId,
-					login: {
-						username: s.username,
-						password: password
-					}
-				}
-				Session.create(s.id, data);
-				cok(s.session_id);
-			}
-		},function(err) {
-			cerr(err);
-		});
-	}
+  		$wamp.call('system.login', [username,password])
+  		.then(function(s) {
+  			if (s == null) {
+  				cerr('Datos Incorrectos');
+  			} else {
+          /*
+            Creo la sesion dentro de la cache cliente
+          */
+  				var data = {
+  					session_id: s.id,
+  					user_id: s.userId,
+  					login: {
+  						username: s.username,
+  						password: password
+  					}
+  				}
+  				Session.create(s.id, data);
+  				cok(data);
+  			}
+  		},function(err) {
+  			cerr(err);
+  		});
+  }
 
 	this.logout = function(cok, cerr) {
     var sid = Session.getSessionId();
@@ -78,6 +93,16 @@ function Login($rootScope, $wamp, Session) {
 		},function(err) {
 			cerr(err);
 		});
-	}
+  };
+
+  this.hasOneRole = function(roles, cok, cerr) {
+    var sid = Session.getSessionId();
+		$wamp.call('system.profile.hasOneRole', [sid, roles])
+    .then(function(v) {
+      cok(v);
+    },function(err) {
+      cerr(err);
+    })
+  };
 
 };

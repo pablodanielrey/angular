@@ -21,6 +21,471 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     searching: false
   };
 
+  $scope.view = {
+    reverseSent: false,
+    reverseName: false,
+    reverseRegistration: false,
+    reverseSex: false,
+    reverseGenre: false,
+    reverseAge: false,
+    reverseDni: false,
+    reverseCity: false,
+    reverseResidence: false,
+    reverseTravel: false,
+    reverseWorkExperience: false,
+    reverseEnglish: false,
+    reverseLanguagesOther: false,
+    reverseDegree: false,
+    reverseApproved: false,
+    reverseAverage1: false,
+    reverseAverage2: false,
+    reverseWorkType: false,
+    reverMail: false
+  };
+
+  // --------------------------------------------------------------
+  // ------------------- FUNCIONES DE ORDENACION ------------------
+  // --------------------------------------------------------------
+
+  function compareName(a, b) {
+    aName = $scope.getName(a.userId);
+    aName = a == null ? '' : aName.toLowerCase();
+    bName = $scope.getName(b.userId);
+    bName = b == null ? '' : bName.toLowerCase();
+    return aName < bName ? -1 : (aName > bName ? 1 : 0);
+  }
+
+  function compareGenre(a, b) {
+      a = $scope.getGenre(a.userId);
+      a = a == null ? '' : a.toLowerCase();
+      b = $scope.getGenre(b.userId);
+      b = b == null ? '' : b.toLowerCase();
+      return a < b ? -1 : (a > b ? 1 : 0)
+  }
+
+  function compareMail(a, b) {
+      a = $scope.getMail(a.userId);
+      a = a == null ? '' : a.toLowerCase();
+      b = $scope.getMail(b.userId);
+      b = b == null ? '' : b.toLowerCase();
+      return a < b ? -1 : (a > b ? 1 : 0)
+  }
+
+  function compareAge(a, b) {
+      a = $scope.getAge(a.userId);
+      b = $scope.getAge(b.userId);
+      return a < b ? -1 : (a > b ? 1 : 0)
+  }
+
+  function compareDni(a, b) {
+      a = $scope.getDni(a.userId);
+      b = $scope.getDni(b.userId);
+      return a < b ? -1 : (a > b ? 1 : 0)
+  }
+
+  function compareCity(a, b) {
+      aCity = $scope.getCity(a.userId);
+      aCity = aCity == null ? '' : aCity.toLowerCase();
+      bCity = $scope.getCity(b.userId);
+      bCity = bCity == null ? '' : bCity.toLowerCase();
+      return aCity < bCity ? -1 : (aCity > bCity ? 1 : 0)
+  }
+
+  function compareResidence(a, b) {
+      a = $scope.getResidence(a.userId);
+      a = a == null ? '' : a.toLowerCase();
+      b = $scope.getResidence(b.userId);
+      b = b == null ? '' : b.toLowerCase();
+      return a < b ? -1 : (a > b ? 1 : 0)
+  }
+
+  function compareSent(a, b) {
+      aSent = $scope.getSents(a.id);
+      bSent = $scope.getSents(b.id);
+      return aSent < bSent ? -1 : (aSent > bSent ? 1 : 0);
+  }
+
+  function compareEnglish(a, b) {
+      a = $scope.getEnglish(a.userId);
+      a = a == null ? '' : a.toLowerCase();
+      b = $scope.getEnglish(b.userId);
+      b = b == null ? '' : b.toLowerCase();
+      return a < b ? -1 : (a > b ? 1 : 0)
+  }
+
+  function compareLanguagesOther(a, b) {
+      a = $scope.getLanguagesOther(a.userId);
+      a = a == null ? '' : a.toLowerCase();
+      b = $scope.getLanguagesOther(b.userId);
+      b = b == null ? '' : b.toLowerCase();
+      return a < b ? -1 : (a > b ? 1 : 0)
+  }
+
+  $scope.orderSents = function(reverse) {
+    if (reverse) {
+      $scope.model.inscriptions.sort(function(a, b) {
+        value = compareSent(a, b);
+        if (value == 0) {
+          value = compareName(a, b);
+        }
+        if (value == 0) {
+          value = a.created < b.created ? -1 : (a.created > b.created ? 1 : 0);
+        }
+        return value;
+      });
+    } else {
+      $scope.model.inscriptions.sort(function(a, b) {
+        value = compareSent(b, a);
+        if (value == 0) {
+          value = compareName(a, b);
+        }
+        if (value == 0) {
+          value = a.created < b.created ? -1 : (a.created > b.created ? 1 : 0);
+        }
+        return value;
+      });
+    };
+  }
+
+  $scope.orderRegistration = function(reverse) {
+    if (reverse) {
+      $scope.model.inscriptions.sort(function(a, b) {
+        value = a.created < b.created ? -1 : (a.created > b.created ? 1 : 0);
+        if (value == 0) {
+          value = compareName(a, b);
+        }
+        return value;
+      });
+    } else {
+      $scope.model.inscriptions.sort(function(a, b) {
+        value = b.created < a.created ? -1 : (b.created > a.created ? 1 : 0);
+        if (value == 0) {
+          value = compareName(a, b);
+        }
+        return value;
+      });
+    }
+  };
+
+  $scope.orderUser = function(reverse) {
+    if (reverse) {
+      $scope.model.inscriptions.sort(function(a, b) {
+        return compareName(a, b);
+      });
+    } else {
+      $scope.model.inscriptions.sort(function(a, b) {
+        return compareName(b, a);
+      });
+    }
+  };
+
+  $scope.orderGenre = function(reverse) {
+    if (reverse) {
+      $scope.model.inscriptions.sort(function(a, b) {
+        value = compareGenre(a, b);
+        if (value == 0) {
+          value = compareName(a, b);
+        }
+        return value;
+      });
+    } else {
+      $scope.model.inscriptions.sort(function(a, b) {
+        value = compareGenre(b,a);
+        if (value == 0) {
+          value = compareName(a, b);
+        }
+        return value;
+      });
+    }
+  };
+
+  $scope.orderAge = function(reverse) {
+    if (reverse) {
+      $scope.model.inscriptions.sort(function(a, b) {
+        value = compareAge(a, b);
+        if (value == 0) {
+          value = compareName(a, b);
+        }
+        return value;
+      });
+    } else {
+      $scope.model.inscriptions.sort(function(a, b) {
+        value = compareAge(b, a);
+        if (value == 0) {
+          value = compareName(a, b);
+        }
+        return value;
+      });
+    }
+  };
+
+  $scope.orderDni = function(reverse) {
+    if (reverse) {
+      $scope.model.inscriptions.sort(function(a, b) {
+        value = compareDni(a, b);
+        if (value == 0) {
+          value = compareName(a, b);
+        }
+        return value;
+      });
+    } else {
+      $scope.model.inscriptions.sort(function(a, b) {
+        value = compareDni(b, a);
+        if (value == 0) {
+          value = compareName(a, b);
+        }
+        return value;
+      });
+    }
+  };
+
+  $scope.orderCity = function(reverse) {
+    if (reverse) {
+      $scope.model.inscriptions.sort(function(a, b) {
+        value = compareCity(a, b);
+        if (value == 0) {
+          value = compareName(a, b);
+        }
+        return value;
+      });
+    } else {
+      $scope.model.inscriptions.sort(function(a, b) {
+        value = compareCity(b, a);
+        if (value == 0) {
+          value = compareName(a, b);
+        }
+        return value;
+      });
+    }
+  };
+
+  $scope.orderResidence = function(reverse) {
+    if (reverse) {
+      $scope.model.inscriptions.sort(function(a, b) {
+        value = compareResidence(a, b);
+        if (value == 0) {
+          value = compareName(a, b);
+        }
+        return value;
+      });
+    } else {
+      $scope.model.inscriptions.sort(function(a, b) {
+        value = compareResidence(b, a);
+        if (value == 0) {
+          value = compareName(a, b);
+        }
+        return value;
+      });
+    }
+  };
+
+  $scope.orderTravel = function(reverse) {
+    if (reverse) {
+      $scope.model.inscriptions.sort(function(a, b) {
+        value = a.travel < b.travel ? -1 : (a.travel > b.travel ? 1 : 0);
+        if (value == 0) {
+          value = compareName(a, b);
+        }
+        return value;
+      });
+    } else {
+      $scope.model.inscriptions.sort(function(a, b) {
+        value = b.travel < a.travel ? -1 : (b.travel > a.travel ? 1 : 0);
+        if (value == 0) {
+          value = compareName(a, b);
+        }
+        return value;
+      });
+    }
+  };
+
+  $scope.orderWorkExperience = function(reverse) {
+    if (reverse) {
+      $scope.model.inscriptions.sort(function(a, b) {
+        value = a.workExperience < b.workExperience ? -1 : (a.workExperience > b.workExperience ? 1 : 0);
+        if (value == 0) {
+          value = compareName(a, b);
+        }
+        return value;
+      });
+    } else {
+      $scope.model.inscriptions.sort(function(a, b) {
+        value = b.workExperience < a.workExperience ? -1 : (b.workExperience > a.workExperience ? 1 : 0);
+        if (value == 0) {
+          value = compareName(a, b);
+        }
+        return value;
+      });
+    }
+  };
+
+  $scope.orderEnglish = function(reverse) {
+    if (reverse) {
+      $scope.model.inscriptions.sort(function(a, b) {
+        value = compareEnglish(a, b);
+        if (value == 0) {
+          value = compareName(a, b);
+        }
+        return value;
+      });
+    } else {
+      $scope.model.inscriptions.sort(function(a, b) {
+        value = compareEnglish(b, a);
+        if (value == 0) {
+          value = compareName(a, b);
+        }
+        return value;
+      });
+    }
+  };
+
+  $scope.orderLanguagesOther = function(reverse) {
+    if (reverse) {
+      $scope.model.inscriptions.sort(function(a, b) {
+        value = compareLanguagesOther(a, b);
+        if (value == 0) {
+          value = compareName(a, b);
+        }
+        return value;
+      });
+    } else {
+      $scope.model.inscriptions.sort(function(a, b) {
+        value = compareLanguagesOther(b, a);
+        if (value == 0) {
+          value = compareName(a, b);
+        }
+        return value;
+      });
+    }
+  };
+
+  $scope.orderDegree = function(reverse) {
+    if (reverse) {
+      $scope.model.inscriptions.sort(function(a, b) {
+        value = a.degree < b.degree ? -1 : (a.degree > b.degree ? 1 : 0);
+        if (value == 0) {
+          value = compareName(a, b);
+        }
+        return value;
+      });
+    } else {
+      $scope.model.inscriptions.sort(function(a, b) {
+        value = b.degree < a.degree ? -1 : (b.degree > a.degree ? 1 : 0);
+        if (value == 0) {
+          value = compareName(a, b);
+        }
+        return value;
+      });
+    }
+  };
+
+  $scope.orderApproved = function(reverse) {
+    if (reverse) {
+      $scope.model.inscriptions.sort(function(a, b) {
+        value = a.approved < b.approved ? -1 : (a.approved > b.approved ? 1 : 0);
+        if (value == 0) {
+          value = compareName(a, b);
+        }
+        return value;
+      });
+    } else {
+      $scope.model.inscriptions.sort(function(a, b) {
+        value = b.approved < a.approved ? -1 : (b.approved > a.approved ? 1 : 0);
+        if (value == 0) {
+          value = compareName(a, b);
+        }
+        return value;
+      });
+    }
+  };
+
+  $scope.orderAverage1 = function(reverse) {
+    if (reverse) {
+      $scope.model.inscriptions.sort(function(a, b) {
+        value = a.average1 < b.average1 ? -1 : (a.average1 > b.average1 ? 1 : 0);
+        if (value == 0) {
+          value = compareName(a, b);
+        }
+        return value;
+      });
+    } else {
+      $scope.model.inscriptions.sort(function(a, b) {
+        value = b.average1 < a.average1 ? -1 : (b.average1 > a.average1 ? 1 : 0);
+        if (value == 0) {
+          value = compareName(a, b);
+        }
+        return value;
+      });
+    }
+  };
+
+  $scope.orderAverage2 = function(reverse) {
+    if (reverse) {
+      $scope.model.inscriptions.sort(function(a, b) {
+        value = a.average2 < b.average2 ? -1 : (a.average2 > b.average2 ? 1 : 0);
+        if (value == 0) {
+          value = compareName(a, b);
+        }
+        return value;
+      });
+    } else {
+      $scope.model.inscriptions.sort(function(a, b) {
+        value = b.average2 < a.average2 ? -1 : (b.average2 > a.average2 ? 1 : 0);
+        if (value == 0) {
+          value = compareName(a, b);
+        }
+        return value;
+      });
+    }
+  };
+
+  $scope.orderWorkType = function(reverse) {
+    if (reverse) {
+      $scope.model.inscriptions.sort(function(a, b) {
+        value = a.workType < b.workType ? -1 : (a.workType > b.workType ? 1 : 0);
+        if (value == 0) {
+          value = compareName(a, b);
+        }
+        return value;
+      });
+    } else {
+      $scope.model.inscriptions.sort(function(a, b) {
+        value = b.workType < a.workType ? -1 : (b.workType > a.workType ? 1 : 0);
+        if (value == 0) {
+          value = compareName(a, b);
+        }
+        return value;
+      });
+    }
+  };
+
+
+  // TODO: dalta implementar.
+  $scope.getPriority(id) {
+
+  }
+
+  $scope.orderMail = function(reverse) {
+    if (reverse) {
+      $scope.model.inscriptions.sort(function(a, b) {
+        value = compareMail(a, b);
+        if (value == 0) {
+          value = compareName(a, b);
+        }
+        return value;
+      });
+    } else {
+      $scope.model.inscriptions.sort(function(a, b) {
+        value = compareMail(b, a);
+        if (value == 0) {
+          value = compareName(a, b);
+        }
+        return value;
+      });
+    };
+  };
+
+  // ------------- FIN DE LAS FUNCIONES DE ORDENACIÓN -----------------
 
   $scope.getCurrentScreen = function() {
     return $scope.model.currentScreen;
@@ -33,6 +498,14 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
   $scope.selectInscriptions = function(filters) {
     $scope.model.currentScreen = "";
     $scope.model.filters = filters;
+    LaboralInsertion.getFilters().then(
+      function(filters) {
+        console.log(filters);
+      },
+      function() {
+        console.log("error");
+      }
+    );
   }
 
   $scope.viewSelected = function() {
@@ -132,6 +605,12 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
       return;
     }
 
+    // chequeo que se haya verificado al usuario
+    if (!i.checked) {
+      console.log('No ha sido verificado');
+      return;
+    }
+
     i.selected = !i.selected;
     if (i.selected) {
       addSelected(i);
@@ -155,7 +634,10 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     Chequea si una inscripcion esta seleccionado para ser enviado a una empresa.
   */
   $scope.isSelected = function(i) {
-    if(i) return i.selected;
+    if (i != null) {
+      return i.selected;
+    }
+    return false;
   }
 
   /*
@@ -198,6 +680,14 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
 
   $scope.getTravel = function(i) {
     if (i.travel) {
+      return "Sí";
+    } else {
+      return "No";
+    }
+  }
+
+  $scope.getWorkExperience = function(i) {
+    if (i.workExperience) {
       return "Sí";
     } else {
       return "No";
@@ -379,6 +869,15 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
       console.log(err);
     });
   }
+
+  $scope.displayProfile = function(i) {
+    $scope.model.currentScreen = "screenProfile";
+    $scope.$broadcast('openProfileEvent',i);
+  }
+
+  $scope.$on('closeProfileEvent', function(event) {
+    $scope.model.currentScreen = "";
+  });
 
   $rootScope.$on('$viewContentLoaded', function(event) {
     $scope.initialize();

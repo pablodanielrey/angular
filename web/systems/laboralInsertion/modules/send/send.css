@@ -1,0 +1,9 @@
+.send {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  color: #e6e6e6;
+  padding: 50px;
+  font-size: 40px;
+}

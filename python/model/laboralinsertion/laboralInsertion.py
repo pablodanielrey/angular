@@ -14,9 +14,11 @@ from model.laboralinsertion.mails import SentDAO, Sent
 from model.laboralinsertion.inscription import InscriptionDAO
 from model.laboralinsertion.company import CompanyDAO
 from model.laboralinsertion.languages import LanguageDAO
+from model.laboralinsertion.filters import Filters
 from model.laboralinsertion.user import UserDAO, User
 
 import csv
+
 
 class LaboralInsertion:
 
@@ -128,6 +130,9 @@ class LaboralInsertion:
             inscriptions.append(inscription)
 
         return inscriptions
+
+    def getFilters(self):
+        return Filters.getFilters()
 
     def findAllInscriptionsByUser(self, con, userId):
         """ obtiene los datos de las inscripciones de los alumnos """

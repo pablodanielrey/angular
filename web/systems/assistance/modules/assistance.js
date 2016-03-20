@@ -1,8 +1,8 @@
 var app = angular.module('mainApp');
 
-app.controller('AssistanceCtrl', ["$scope", "$timeout", "$window", "Profiles", "Session", "Users", "Assistance", "Notifications", "Utils","Office",
+app.controller('AssistanceCtrl', ["$scope", "$timeout", "$window", "Session", "Users", "Assistance", "Notifications", "Utils","Office", "Login",
 
-function($scope, $timeout, $window, Profiles, Session, Users, Assistance, Notifications, Utils, Office) {
+function($scope, $timeout, $window, Session, Users, Assistance, Notifications, Utils, Office, Login) {
 
 	$scope.model = {
 		session : null,
@@ -223,15 +223,15 @@ function($scope, $timeout, $window, Profiles, Session, Users, Assistance, Notifi
 			Notifications.message("Error: Session no definida");
 			$window.location.href = "/systems/login/";
     } else {
-			Profiles.checkAccess(Session.getSessionId(),['ADMIN-ASSISTANCE','USER-ASSISTANCE'],
+			Login.hasOneRole(['ADMIN-ASSISTANCE','USER-ASSISTANCE'],
 				function(ok) {
 					if (ok) {
-						console.log("granted");
+						console.log("granted");/*
 						$scope.loadUser();
 						$scope.loadAssistanceStatus();
 						$scope.loadAssistanceData();
 						$scope.loadOffices();
-						$scope.loadJustifications();
+						$scope.loadJustifications();*/
 					} else {
 						console.log("not granted");
 						$window.location.href = "/#/logout";

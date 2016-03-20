@@ -1,8 +1,8 @@
 var app = angular.module('mainApp');
 
-app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Profiles', 'Session', 'Notifications', 'Assistance','Office',
+app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Login', 'Session', 'Notifications', 'Assistance','Office',
 
-  function ($rootScope, $scope, $location, Profiles, Session, Notifications, Assistance, Office) {
+  function ($rootScope, $scope, $location, Login, Session, Notifications, Assistance, Office) {
 
     $scope.model = {
       class:'',
@@ -84,7 +84,7 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Profiles', 'Se
         return;
       }
 
-      Profiles.checkAccess(sid, ["ADMIN-ASSISTANCE","USER-ASSISTANCE"],
+      Login.hasOneRole(['ADMIN-ASSISTANCE','USER-ASSISTANCE'],
         function(ok) {
           if (ok) {
               $scope.model.items = [];
@@ -97,7 +97,8 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Profiles', 'Se
               $scope.model.items.push({ n:4, label:'Mi Horario', img:'fa fa-clock-o', function: $scope.mySchedule});
               $scope.model.items.push({ n:100, label:'Salir', img:'fa fa-sign-out', function: $scope.exit });
 
-
+              /*
+              *** Comentado porque todavia no esta dicha funcionalidad 14/3/2016
               Office.getUserOfficeRoles(null,
                   function(roles) {
                     var hasApprove = false;
@@ -137,7 +138,7 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Profiles', 'Se
                   function(err) {
                     Notifications.message(error);
                   }
-              );
+              );*/
           } else {
             $scope.model.items.push({ n:100, label:'Salir', img:'fa fa-sign-out', function: $scope.exit });
           }

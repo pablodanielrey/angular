@@ -42,23 +42,21 @@ class UserDAO:
     @staticmethod
     def persist(con, u):
 
-        logging.info(u)
-
-        if u.cv is None:
-            raise Exception('no existe el cv en la base de datos')
-
-        if not FileDAO.check(con, u.cv):
-            raise Exception('no existe el cv en la base de datos')
+        if u.id is None:
+            raise Exception('Usuario no existente')
 
         cur = con.cursor()
         try:
-            if u.id is None:
-                u.id = str(uuid.uuid4())
+            cur.execute('select id from laboral_insertion.users where id = %s', (u.id,))
+            if cur.rowcount <= 0:
                 ins = u.__dict__
+                ins['acceptedConditions'] = True
+                ins['cv'] = ins['cv'] if 'cv' in ins else None
                 cur.execute('insert into laboral_insertion.users (id, accepted_conditions, email, cv) values '
                             '(%(id)s, %(acceptedConditions)s, %(email)s, %(cv)s)', ins)
             else:
                 ins = u.__dict__
+                ins['acceptedConditions'] = True
                 cur.execute('update laboral_insertion.users set accepted_conditions = %(acceptedConditions)s, email = %(email)s, '
                             'cv = %(cv)s where id = %(id)s', ins)
         finally:

@@ -1,6 +1,6 @@
 <div class="inscriptionContainer">
 
-    <div class="inscription" ng-class='getInscriptionClazz()'>
+    <div class="inscription {{view.styleIsMessage}} {{view.styleMessage}}" ng-class='getInscriptionClazz()'>
 
         <!-- ************************************
         ********* DATOS BASICOS ************
@@ -213,7 +213,7 @@
                         <button><i class="fa fa-mobile"></i></button>
                       </div>
                       <div>
-                        <input type="text" placeholder="Cel. (+5492215011111)" ng-model='model.telephones.movil' name='movil' ng-blur='updateUserData()' ></input>
+                        <input type="text" placeholder="Cel. (+5492215011111)" ng-model='model.telephones.movil' name='movil' ng-blur='updateUserData()' ng-required="model.telephoneRequired"></input>
                       </div>
                     </div>
 
@@ -222,7 +222,7 @@
                         <button><i class="fa fa-phone"></i></button>
                       </div>
                       <div>
-                        <input type="text" placeholder="Fijo (+5492214231111)" ng-model='model.telephones.telephone' name='telephone' ng-blur='updateUserData()' ></input>
+                        <input type="text" placeholder="Fijo (+5492214231111)" ng-model='model.telephones.telephone' name='telephone' ng-blur='updateUserData()' ng-required="model.telephoneRequired"></input>
                       </div>
                     </div>
 
@@ -232,9 +232,9 @@
                         <button><i class="fa fa-envelope"></i></button>
                       </div>
                       <div>
-                        <select  ng-model='model.laboralData.email' name='mail' ng-change='updateLaboralData()' required>
+                        <select  ng-model='model.selectedEmail' name='mail' ng-change='updateLaboralData()' required ng-options="option.email for option in model.mails.emails | orderBy: ['email']">
                           <!-- <option class="selectGrey" disabled selected style='display:none;'>Mail</option> -->
-                          <option ng-repeat='m in model.mails.emails' value='{{m.id}}'>{{m.email}}</option>
+                          <!-- <option ng-repeat='m in model.mails.emails' value='{{m.id}}'>{{m.email}}</option> -->
                           <!--
                           <option>pablo@econo.unlp.edu.ar</option>
                           <option>pablodanielrey@gmail.com</option>
@@ -310,7 +310,7 @@
                     <div>
                         <h4>Formulario | OFERTA LABORAL</h4>
                     </div>
-                    <div ng-click='endInscription()'>
+                    <div ng-click='endInscription()' ng-if='!model.finish'>
                       <i class="fa fa-times-circle fa-2x" title="Cancelar"></i>
                     </div>
                 </div>
@@ -547,12 +547,36 @@
                     <div>
                       <button class="btnBack" ng-click='changePreviousRegistration()'><i class="fa fa-arrow-circle-o-left"></i> Anterior </button>
                       <button class="btnNext" ng-if='model.showNext' ng-click='changeRegistration()'>Siguiente <i class="fa fa-arrow-circle-o-right"></i></button>
-                      <button class="btnSave" ng-click='uploadInscription()'><i class="fa fa-floppy-o"></i> GUARDAR </button>
+                      <button class="btnSave" ng-if='model.showNext' ng-click='uploadInscription()'><i class="fa fa-floppy-o"></i> GUARDAR </button>
+                      <button class="btnFinish" ng-if='model.finish' ng-click='finishInscription()'><i class="fa fa-check-square-o"></i> ACEPTAR </button>
                     </div>
                 </div>
             </div>
         </div>
 
+    </div>
+
+
+
+    <div class="messages">
+
+      <div class="contentMessage">
+
+          <div class="error">
+            <div class="title">Error</div>
+
+            <div class="contentError">
+              <ul>
+                <li ng-repeat="e in view.error">{{e}}</li>
+              </ul>
+            </div>
+
+            <div class="buttons">
+              <button class="btnClose" ng-click="closeMessage()">Cerrar</button>
+            </div>
+          </div>
+
+      </div>
 
     </div>
 
