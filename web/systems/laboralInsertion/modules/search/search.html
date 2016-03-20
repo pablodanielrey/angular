@@ -1,0 +1,477 @@
+<div class="search" ng-class='getCurrentScreen()'>
+<!-- <div class="search  "> -->
+  <!-- Variables 1: screenBussines, screenFilters, screenSelected
+       Variables2: screenSelectBusiness, screenSendBusiness, screenSending, screenSent-->
+
+  <div class="header">
+
+    <div>
+      <button class="btnFilters" type="button" name="filters" ng-click='selectFilters()'><i class="fa fa-sliders "></i> <b>Filtros</b> </button>
+    </div>
+
+    <div class="btnUserSelect">
+      <i class="fa fa-users"></i> <b>{{model.selecteds.length}}</b> Inscripciones Seleccionadas
+    </div>
+
+    <div ng-if="!model.searching">
+      <button class="btnSend" type="button" name="button" ng-click='search()'><i class="fa fa-plus"></i> <b> Buscar </b></button>
+    </div>
+    <div ng-if="model.searching">
+      Buscando
+    </div>
+    <div>
+      <button class="btnSend" type="button" name="button" ng-click='viewSelected()'><i class="fa fa-plus"></i> <b> Agregar </b></button>
+    </div>
+
+  </div>
+
+  <div class="searchContainer">
+      <div class="titles">
+        <table>
+          <tr class="fileTitles">
+            <td>
+              <div class="Select">
+                <input type="checkbox" ng-click='selectAllInscriptions()'>
+              </div>
+            </td>
+            <td>
+              <div class="dates">
+                <i class="fa fa-bookmark"></i>
+              </div>
+            </td>
+            <td>
+              <div class="user">
+                <i class="fa fa-user"></i>
+              </div>
+            </td>
+            <td>
+              <div class="registration">
+                Inscripto
+              </div>
+            </td>
+            <td>
+              <div class="name">
+                Postulante
+              </div>
+            </td>
+            <td>
+              <div class="sex">
+                Sexo
+              </div>
+            </td>
+            <td>
+              <div class="age">
+                Edad
+              </div>
+            </td>
+            <td>
+              <div class="dni">
+                DNI
+              </div>
+            </td>
+            <td>
+              <div class="city">
+                C. de Origen
+              </div>
+            </td>
+            <td>
+              <div class="city2">
+                C. de Residencia
+              </div>
+            </td>
+            <td>
+              <div class="travel">
+                Viajar
+              </div>
+            </td>
+            <td>
+              <div class="english">
+                Inglés
+              </div>
+            </td>
+
+            <td>
+              <div class="other" title="Otro Idioma">
+                Otro I.
+              </div>
+            </td>
+            <td>
+              <div class="career" title="Carrera">
+                Carrera
+              </div>
+            </td>
+            <td>
+              <div class="cousers" title="Cantidad de Materias">
+                C. M.
+              </div>
+            </td>
+            <td>
+              <div class="average" title="Promedio c/aplazos">
+                % c/a
+              </div>
+            </td>
+            <td>
+              <div class="average2" title="Promedio">
+                %
+              </div>
+            </td>
+            <td>
+              <div class="program">
+                  Oferta
+              </div>
+            </td>
+            <td>
+              <div class="mail">
+                Correo
+              </div>
+            </td>
+          </tr>
+        </table>
+
+      </div>
+
+      <!-- <div class="searchResults" ng-class="{true:'seleccionado'}[isSelected(i.userId)]"> -->
+      <div class="searchResults" ng-class="{true:'seleccionado'}[isSelected(i.id)]">
+        <table ng-repeat='i in model.inscriptions'>
+          <tr class="fileResults">
+            <td>
+              <div class="Select" ng-if="getMail(i.userId) != 'No Definido'">
+                <input type="checkbox" ng-checked='isSelected(i)' ng-click='selectInscription(i)'>
+              </div>
+              <div class="Select" ng-if="getMail(i.userId) == 'No Definido'">
+                -
+              </div>
+            </td>
+            <td>
+              <div class="dates">
+                {{getSents(i.id)}}
+              </div>
+            </td>
+            <td>
+              <div class="user">
+                <i class="fa fa-user"></i>
+              </div>
+            </td>
+            <td>
+              <div class="registration">
+                {{getDate(i.created)}}
+              </div>
+            </td>
+            <td>
+              <div class="name">
+                {{getName(i.userId)}}
+              </div>
+            </td>
+            <td>
+              <div class="sex">
+                {{getGenre(i.userId)}}
+              </div>
+            </td>
+            <td>
+              <div class="age">
+                {{getAge(i.userId)}}
+              </div>
+            </td>
+            <td>
+              <div class="dni">
+                {{getDni(i.userId)}}
+              </div>
+            </td>
+            <td>
+              <div class="city">
+                {{getResidence(i.userId)}}
+              </div>
+            </td>
+            <td>
+              <div class="city2">
+                {{getCity(i.userId)}}
+              </div>
+            </td>
+            <td>
+              <div class="travel">
+                {{getTravel(i)}}
+              </div>
+            </td>
+            <td>
+              <div class="english">
+                {{getEnglish(i.userId)}}
+              </div>
+            </td>
+            <td>
+              <div class="other">
+                {{getLanguagesOther(i.userId)}}
+              </div>
+            </td>
+            <td>
+              <div class="career" title="Carrera">
+                {{i.degree}}
+              </div>
+            </td>
+            <td>
+              <div class="cousers" title="Cantidad de Materias">
+                {{i.approved}}
+              </div>
+            </td>
+            <td>
+              <div class="average" title="Promedio c/aplazos">
+                {{i.average1}}
+              </div>
+            </td>
+            <td>
+              <div class="average2" title="Promedio">
+                {{i.average2}}
+              </div>
+            </td>
+            <td>
+              <div class="program">
+                {{i.workType}}
+              </div>
+            </td>
+            <td>
+              <div class="mail">
+                {{getMail(i.userId)}}
+              </div>
+            </td>
+          </tr>
+        </table>
+
+      </div>
+
+  </div>
+
+  <div class="selected">
+      <div class="contentSeleted">
+
+          <div class="headerSeleted">
+
+            <div>
+              <button class="btnFilters" type="button" name="backSeachr" ng-click='selectInscriptions()'><i class="fa fa-arrow-left"></i> <b>Volver</b> </button>
+            </div>
+
+            <div class="btnUserSelect">
+              <i class="fa fa-users"></i> <b>{{model.selecteds.length}}</b> Inscripciones Seleccionadas
+            </div>
+
+            <div>
+              <button class="btnSend" type="button" name="button" ng-click='selectCompany()'><i class="fa fa-angle-double-right"></i> <b> Enviar seleccionados a </b></button>
+            </div>
+
+          </div>
+
+          <div class="searchContainerSelected">
+              <div class="titles">
+                <table>
+                  <tr class="fileTitles">
+
+                    <td>
+                      <div class="age">
+                        Nº
+                      </div>
+                    </td>
+
+                    <td>
+                      <div class="name">
+                        Postulante
+                      </div>
+                    </td>
+                    <td>
+                      <div class="dni">
+                        DNI
+                      </div>
+                    </td>
+                    <td>
+                      <div class="age">
+                        Edad
+                      </div>
+                    </td>
+                    <td>
+                      <div class="career" title="Carrera">
+                        Carrera
+                      </div>
+                    </td>
+                    <td>
+                      <div class="program">
+                          Oferta
+                      </div>
+                    </td>
+                    <td>
+                      <div class="program">
+                          Acción
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+
+              </div>
+
+              <!-- <div class="searchResults" ng-class="{true:'seleccionado'}[isSelected(i.userId)]"> -->
+              <div class="searchResults" ng-class="{true:'seleccionado'}[isSelected(i.id)]">
+                <table ng-repeat='i in model.selecteds'>
+                  <tr class="fileResults">
+
+                    <td>
+                      <div class="age">
+                        {{$index + 1}}
+                      </div>
+                    </td>
+
+                    <td>
+                      <div class="name">
+                        {{getName(i.userId)}}
+                      </div>
+                    </td>
+
+                    <td>
+                      <div class="dni">
+                        {{getDni(i.userId)}}
+                      </div>
+                    </td>
+
+                    <td>
+                      <div class="age">
+                        {{getAge(i.userId)}}
+                      </div>
+                    </td>
+
+                    <td>
+                      <div class="career" title="Carrera">
+                        {{i.degree}}
+                      </div>
+                    </td>
+
+                    <td>
+                      <div class="program">
+                        {{i.workType}}
+                      </div>
+                    </td>
+
+                    <td>
+                      <div class="program">
+                          <button class="btnDeleteInsciption" ng-click="deleteSelected(i)">borrar</button>
+                      </div>
+                    </td>
+
+                  </tr>
+                </table>
+
+              </div>
+
+          </div>
+
+
+      </div>
+  </div>
+
+  <div class="business">
+
+     <div class="contentBusines">
+         <div class="businessList">
+              <div class="textTitlesBusines">
+                <div>
+                  <i class="fa fa-building-o"></i> <b>Seleccione empresa</b>
+                </div>
+                <div>
+                  <button class="btnBack" type="button" name="Volver" ng-click="viewSelected()"> Volver</button>
+                </div>
+              </div>
+              <div class="contentBusinesList">
+
+                  <div class="infoBussines" ng-repeat='c in model.companies' ng-click='confirmMailToCompany(c)'>
+                    <!--
+                      <div>
+                          <img src="{{c.url}}" width="100px" height="34px">
+                      </div>
+                    -->
+                      <div class="textBussines">
+                        <b>{{c.name}}</b> <br>
+                        La Plata
+                      </div>
+                  </div>
+
+              </div>
+         </div>
+     </div>
+
+     <div class="sendBusines">
+          <div class="contentSendBusines">
+
+              <div class="textTitlesBusines">
+                 <b>Enviar las personas seleccionadas a</b>
+                 <div>
+                   <button class="btnBack" type="button" name="Volver" ng-click='selectCompany()'> Volver</button>
+                 </div>
+              </div>
+
+              <div class="infoBussines2" ng-if='model.company != null'>
+
+                  <div class="contentInfoBussines">
+                      <div>
+                          <img src="{{model.company.url}}" width="100px" height="34px">
+                      </div>
+                      <div class="textBussines">
+                        <b>{{model.company.name}}</b> <br>
+                        La Plata
+                      </div>
+                  </div>
+                  <div class="textsendList">
+                  Enviar listado de postulantes a:
+                  </div>
+                  <div class="contentMailBusines">
+                      <div class="mailBussines" ng-repeat='e in model.company.emails'>
+                        <div><i class="fa fa-envelope-o"></i> {{e}}<button class="btnDeleteMail" ng-click='removeEmailFromCompany(e)'> <i class="fa fa-trash-o"></i></button></div>
+                      </div>
+                  </div>
+                  <div class="addMail">
+                    <i class="fa fa-envelope-o"></i>
+                    <input class="inputMail" type=email ng-model='model.emailAddToCompany' placeholder="Nuevo Correo"></input>
+                    <button class="btnAddMail" ng-click='addEmailToCompany()'> <i class="fa fa-plus"></i> Agregar</button>
+                  </div>
+
+              </div>
+
+              <div>
+                  <button class="btnSend2" type="button" name="button" ng-click='sendMailToCompany()'><i class="fa fa-angle-double-right"></i> <b> Enviar  </b></button>
+              </div>
+
+          </div>
+
+     </div>
+
+     <div class="sending">
+          <div class="contentSending">
+               <div>
+                 <i class="fa fa-spinner fa-2x fa-pulse"></i>
+               </div>
+               <div>
+                 &nbsp;  Enviando...
+               </div>
+          </div>
+     </div>
+
+     <div class="sent">
+          <div class="contentSent">
+            <div class="textTitlesBusines">
+              <div>
+                <i class="fa fa-check-circle"></i> <b>Envio finalizado!</b>
+              </div>
+              <div>
+                <button class="btnBack" type="button" name="Salir" ng-click='selectInscriptions()'> Salir</button>
+              </div>
+            </div>
+
+            <div class="contentMail">
+              <i class="fa fa-envelope-o"></i> Correos electrónicos de los postulantes
+                <div class="listMail">
+                  <div ng-repeat='e in model.emails'>{{e}}</div>
+                </div>
+            </div>
+
+          </div>
+     </div>
+
+  </div>
+
+  <div class="filters" ng-controller="FiltersCtrl" ng-include="'/systems/laboralInsertion/modules/search/filters.html'">
+  </div>
+
+</div>

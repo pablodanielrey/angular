@@ -1,0 +1,71 @@
+.header {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  height: 60px;
+  background-color: #28292D;
+  color:white;
+}
+
+.header button {
+  background: none;
+  border:none;
+  color: white;
+  font-size: 20px;
+  margin: 10px;
+  cursor: pointer;
+}
+
+.logo {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction: row;
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+}
+
+.imgLogo {
+  margin-left: 10px;
+}
+
+.myProfile {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction: row;
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+}
+
+
+.imgUserRecent {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    border-radius: 50%;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+}
+
+
+.header button {
+  background: none;
+  border:none;
+  color: white;
+  font-size: 20px;
+  margin: 10px;
+  cursor: pointer;
+}

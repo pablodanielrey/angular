@@ -19,5 +19,5 @@ angular
       }
     })
     .run(function($wamp) {
-      $wamp.open();
+      //$wamp.open();
     });
