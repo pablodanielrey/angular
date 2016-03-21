@@ -2,9 +2,9 @@ angular
   .module('mainApp')
   .controller('CreateTutoringCtrl',CreateTutoringCtrl);
 
-CreateTutoringCtrl.inject = ['$rootScope', '$scope', 'Login', 'Users'];
+CreateTutoringCtrl.inject = ['$rootScope', '$scope', 'Login', 'Tutors', '$timeout'];
 
-function CreateTutoringCtrl($rootScope, $scope, Login, Users) {
+function CreateTutoringCtrl($rootScope, $scope, Login, Tutors, $timeout) {
 
   $scope.model = {
     tutoring: {
@@ -13,13 +13,13 @@ function CreateTutoringCtrl($rootScope, $scope, Login, Users) {
       date: new Date(),
       participants: []
     },
-    recentTutorings: [],
+    tutorings: [],
     recentUsers: []
   }
 
   $scope.view = {
     style: '',
-    stype2: ''
+    style2: ''
   }
 
 
@@ -102,7 +102,7 @@ function CreateTutoringCtrl($rootScope, $scope, Login, Users) {
     $scope.view.style2='verResultados';
     $scope.searchResults = [];
 
-    Users.search($scope.model.search)
+    Tutors.search($scope.model.search)
     .then(function(users) {
       $scope.model.searching = false;
       $scope.model.searchResults = users
@@ -115,16 +115,19 @@ function CreateTutoringCtrl($rootScope, $scope, Login, Users) {
   }
 
   $scope.initialize = function() {
-    //$scope.loadRecentTutorings();
+    $scope.loadTutorings();
     //$scope.loadRecentUsers();
   }
 
-  $scope.loadRecentTutorings = function() {
-    $scope.model.recentTutorings = [];
-    $scope.model.recentTutorings.push({'date':'26/03/2016','day':'Martes'});
-    $scope.model.recentTutorings.push({'date':'02/03/2016','day':'Miércoles'});
-    $scope.model.recentTutorings.push({'date':'24/02/2016','day':'Viernes'});
-    $scope.model.recentTutorings.push({'date':'20/02/2016','day':'Lunes'});
+  $scope.loadTutorings = function() {
+    $scope.model.tutorings = [];
+    Tutors.loadTutorings()
+    .then(function(tutorings) {
+      // $scope.model.tutorings.push({'date':'26/03/2016','day':'Martes'});
+        $scope.model.tutorings = tutorings;
+    }, function(err) {
+
+    });
   }
 
   $scope.loadRecentUsers = function() {
@@ -142,6 +145,35 @@ function CreateTutoringCtrl($rootScope, $scope, Login, Users) {
 
   $scope.selectTutoring = function(t) {
     $scope.view.style = 'nuevaTutoria';
+  }
+
+  $scope.save = function() {
+    Tutors.persist(tutoring)
+    .then(function(data) {
+      $scope.view.style3='mensajes';
+      $scope.view.style4='msjGuardada';
+      $timeout(function () {
+        $scope.view.style = '';
+        $scope.view.style3 = '';
+      }, 3000);
+    }, function(err) {
+      console.log('error');
+    });
+
+  }
+
+  $scope.cancel = function() {
+    $scope.view.style3='mensajes';
+    $scope.view.style4='msjCancelada';
+  }
+
+  $scope.back = function() {
+    $scope.view.style3 = '';
+  }
+
+  $scope.confirmCancel = function() {
+    $scope.view.style = '';
+    $scope.view.style3 = '';
   }
 
 }

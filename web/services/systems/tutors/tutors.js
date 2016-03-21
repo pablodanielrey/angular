@@ -1,44 +1,30 @@
+angular
+  .module('mainApp')
+  .service('Tutors',Tutors);
 
-var app = angular.module('mainApp');
+Tutors.ineject = ['$wamp','Session'];
 
+function Tutors($wamp, Session) {
 
-app.service('Tutors', function(Messages, Utils, Session) {
+  /*
+    PARTE NUEVA, LA REIMPLEMENTACIÓN.
+    DEJO LOS OTROS METODOS PARA TENER UNA REFERENCIA PERO HAY QUE PASARLOS A PROMESAS Y
+    VER SI EL TEMA DEL CACHE ESTA OK. CREO QUE NO POR AHORA.
 
-  this.persistTutorData = function(data,callbackOk,callbackError) {
-    var msg = {
-      id:Utils.getId(),
-      action:'persistTutorData',
-      session:Session.getSessionId(),
-      request: data
-    };
+    wamp ya retorna promesas.
+  */
 
-    Messages.send(msg,
-      function(data) {
-        if (typeof data.error === 'undefined') {
-          callbackOk(data.ok);
-        } else {
-          callbackError(data.error);
-        }
-      }
-    );
+  this.search = function(regex) {
+    return $wamp.call('users.search', [regex]);
   }
 
-  this.listTutorData = function(callbackOk, callbackError) {
-    var msg = {
-      id:Utils.getId(),
-      action:'listTutorData',
-      session:Session.getSessionId()
-    };
-
-    Messages.send(msg,
-      function(data) {
-        if (typeof data.error === 'undefined') {
-          callbackOk(data.response);
-        } else {
-          callbackError(data.error);
-        }
-      }
-    );
+  this.loadTutorings = function() {
+    var sid = Session.getSessionId();
+    return $wamp.call('tutors.loadTutorings',[sid]);
   }
 
-});
+  this.persist = function(tutoring) {
+    return $wamp.call('tutors.persist',[tutoring]);
+  }
+
+}

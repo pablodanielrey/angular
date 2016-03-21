@@ -30,7 +30,7 @@
               </div>
 
               <div class="contentMyRecentTutoring">
-                  <div class="contentItemTutoringRecent" ng-repeat="t in model.recentTutorings" ng-click="selectTutoring(t)">
+                  <div class="contentItemTutoringRecent" ng-repeat="t in model.tutorings" ng-click="selectTutoring(t)">
                       <div class="contentIconTutoring">
                         <div class="IconTutoring">
                           <i class="fa fa-tumblr fa-2x"></i>
@@ -108,8 +108,8 @@
                       <div><b>{{model.tutoring.tutor.name}}</b></div>
                   </div>
                   <div>
-                    <button class="btnCreate" ng-click="view.style3='mensajes'; view.style4='msjGuardada'">GUARDAR</button>
-                    <button class="btnCancel" ng-click="view.style3='mensajes'; view.style4='msjCancelada' "><i class="fa fa-times"></i></button>
+                    <button class="btnCreate" ng-click="save()">GUARDAR</button>
+                    <button class="btnCancel" ng-click="cancel()"><i class="fa fa-times"></i></button>
                   </div>
               </div>
 
@@ -202,8 +202,8 @@
           <div class="cancel">
             <div>¿Desea salir sin guardar?</div>
             <div class="btns">
-                <button class="btnSi" ng-click="view.style=''; view.style3=''">SI</button>
-                <button class="btnNo" ng-click="view.style3=''">VOLVER</button>
+                <button class="btnSi" ng-click="confirmCancel()">SI</button>
+                <button class="btnNo" ng-click="back()">VOLVER</button>
             </div>
           </div>
 

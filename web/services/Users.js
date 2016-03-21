@@ -7,22 +7,6 @@ Users.inject = ['$rootScope', '$wamp', 'Session','Utils','Cache'];
 function Users($rootScope, $wamp, Session, Utils, Cache) {
 
   /*
-    PARTE NUEVA, LA REIMPLEMENTACIÓN.
-    DEJO LOS OTROS METODOS PARA TENER UNA REFERENCIA PERO HAY QUE PASARLOS A PROMESAS Y
-    VER SI EL TEMA DEL CACHE ESTA OK. CREO QUE NO POR AHORA.
-
-    wamp ya retorna promesas.
-  */
-
-  this.search = function(regex) {
-    return $wamp.call('users.search', [regex]);
-  }
-
-
-
-
-
-  /*
   -----------------------   CODIGO VIEJO A REEMPLAZAR A MEDIDA QUE SE VAYA ARMANDO TODO LO DEL FCE NUEVO ------
   */
 
