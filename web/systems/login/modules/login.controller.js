@@ -178,7 +178,7 @@ function LoginCtrl($scope, $window, $interval, Notifications, Login, Users) {
         $scope.view.classError = classNameError;
         $scope.interval = $interval(function() {
             $scope.clearPasswordField();
-        }, 1000, [1]);
+        }, 5000, [1]);
       }
 
       function viewUserError() {
@@ -186,7 +186,7 @@ function LoginCtrl($scope, $window, $interval, Notifications, Login, Users) {
         $scope.view.classError = classNameError;
         $scope.interval = $interval(function() {
             $scope.clearUserNameField();
-        }, 1000, [1]);
+        }, 5000, [1]);
       }
 
       function viewUser() {
