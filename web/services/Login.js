@@ -7,31 +7,34 @@ Login.inject = ['$rootScope','$wamp', 'Session'];
 function Login($rootScope, $wamp, Session) {
 
 	this.isLogged = function() {
-		var sid = Session.getCurrentSession();
-		if (sid == null) {
-			return false;
-		}
-		return (sid.user_id != undefined);
+    return new Promise(function(cok, cerr) {
+      var sid = Session.getCurrentSession();
+  		if (sid == null) {
+  			cok(false);
+  		} else {
+  		  cok(sid.user_id != undefined);
+      }
+    });
 	}
 
-  /*
-    Chequea que la session actual sea valida
-  */
-  this.validateSession = function(cok,cerr) {
-    var sid = Session.getSessionId();
-    if (sid == null) {
-      return false;
-    }
-    $wamp.call('system.session.validate', [sid])
-      .then(function(v) {
-        cok(v);
-      },function(err) {
-        cerr(err);
+  this.validateSession = function() {
+    return new Promise(function(cok, cerr) {
+      var sid = Session.getSessionId();
+      if (sid == null) {
+        cok(false);
+      } else {
+        $wamp.call('system.session.validate', [sid])
+          .then(function(v) {
+            cok(v);
+          },function(err) {
+            cerr(err);
+          }
+        );
       }
-    );
+    });
   }
 
-  this.getSessionData = function(cok, cerr) {
+  this.getSessionData = function() {
     return new Promise(function(cok, cerr) {
       var s = Session.getCurrentSession();
       if (s != null) {
@@ -39,15 +42,9 @@ function Login($rootScope, $wamp, Session) {
         .then(function() {
           cok(s);
         }, function() {
-          cerr();
+          cerr(Error());
         });
       }
-      $wamp.call('', [])
-      .then(function() {
-        cok();
-      }, function() {
-        cerr();
-      });
     });
   }
 
@@ -55,15 +52,13 @@ function Login($rootScope, $wamp, Session) {
 	/*
 		Loguea al usuario en el servidor y genera tambien la sesion dentro de la cache local
 	*/
-	this.login = function(username, password, cok, cerr) {
-  		$wamp.call('system.login', [username,password])
+	this.login = function(username, password) {
+    return new Promise(function(cok, cerr) {
+      $wamp.call('system.login', [username, password])
   		.then(function(s) {
   			if (s == null) {
-  				cerr('Datos Incorrectos');
+  				cerr(Error('Datos Incorrectos'));
   			} else {
-          /*
-            Creo la sesion dentro de la cache cliente
-          */
   				var data = {
   					session_id: s.id,
   					user_id: s.userId,
@@ -78,31 +73,40 @@ function Login($rootScope, $wamp, Session) {
   		},function(err) {
   			cerr(err);
   		});
+    });
   }
 
-	this.logout = function(cok, cerr) {
-    var sid = Session.getSessionId();
-		$wamp.call('system.logout', [sid])
-		.then(function(ok) {
-			if (ok == null) {
-				cerr('');
-			} else {
-				Session.destroy();
-				cok();
-			}
-		},function(err) {
-			cerr(err);
-		});
+	this.logout = function() {
+    return new Promise(function(cok, cerr) {
+      var sid = Session.getSessionId();
+  		$wamp.call('system.logout', [sid])
+  		.then(function(ok) {
+  			if (ok == null) {
+  				cerr(Error('resultado = null'));
+  			} else {
+  				Session.destroy();
+  				cok();
+  			}
+  		},function(err) {
+  			cerr(err);
+  		});
+    });
   };
 
-  this.hasOneRole = function(roles, cok, cerr) {
-    var sid = Session.getSessionId();
-		$wamp.call('system.profile.hasOneRole', [sid, roles])
-    .then(function(v) {
-      cok(v);
-    },function(err) {
-      cerr(err);
-    })
+  this.testUser = function(username) {
+    return $wamp.call('system.testUser', [username])
+  }
+
+  this.hasOneRole = function(roles) {
+    return new Promise(function(cok, cerr) {
+      var sid = Session.getSessionId();
+  		$wamp.call('system.profile.hasOneRole', [sid, roles])
+      .then(function(v) {
+        cok(v);
+      },function(err) {
+        cerr(err);
+      });
+    });
   };
 
 };

@@ -1,7 +1,7 @@
 
 angular
   .module('mainApp')
-  .controller('LoginCtrl',LoginCtrl)
+  .controller('LoginCtrl', LoginCtrl)
   .directive('mooFocusExpression', function($timeout) {
     return {
         link: function(scope, element, attrs) {
@@ -34,21 +34,21 @@ function LoginCtrl($scope, $window, Notifications, Login, Users) {
 			username: '',
 			password: '',
       openConnection: false,
-	user:null
+	    user:null
     }
 
     const classNameViewUser = 'screenUser';
-    const classNameViewUserError = 'screenUserError';
     const classNameViewPassword = 'screenPassword';
-    const classNameViewPasswordError = 'screenPasswordError';
-
     const classNameDisconnected = 'verServerDesconectado';
     const classNameConnected = 'verServerConectado';
+    const classNoError = 'ocultarError';
+    const classError = ''
 
     $scope.view = {
       focus: 'inputUser',
       classConnection: classNameConnected, // classNameDisconnected classNameConnected
-      classScreen: classNameViewUser // classNameViewUser classNameViewPassword
+      classScreen: classNameViewUser, // classNameViewUser classNameViewPassword
+      classError: classNoError
     }
 
 
@@ -62,6 +62,7 @@ function LoginCtrl($scope, $window, Notifications, Login, Users) {
     function initialize() {
       $scope.view.classConnection = classNameConnected;
       $scope.view.classScreen = classNameViewUser;
+      $scope.view.classError = classNoError;
       $scope.view.focus = 'inputUser';
     }
 
@@ -146,7 +147,7 @@ function LoginCtrl($scope, $window, Notifications, Login, Users) {
 
       function viewPassword() {
         $scope.view.classScreen = classNameViewPassword;
-      }      
+      }
 
       function viewPasswordError() {
         $scope.view.classScreen = classNameViewPasswordError;
@@ -155,7 +156,7 @@ function LoginCtrl($scope, $window, Notifications, Login, Users) {
       function viewUserError() {
         $scope.view.classScreen = classNameViewUserError;
       }
-      
+
       function viewUser() {
         $scope.view.classScreen = classNameViewUser;
       }
