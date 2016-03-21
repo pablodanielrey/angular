@@ -40,7 +40,7 @@
                     <form name="formUser" ng-submit="sendUsername()">
 
                       <div class="contentInputUser">
-                        <input ng-model="model.username" class="inputUser" type="text" placeholder="Número de documento" autofocus moo-focus-expression="view.focus == 'inputUser'"></imput>
+                        <input ng-model="model.username" ng-click="clearUserNameField()" class="inputUser" type="text" placeholder="Número de documento" autofocus moo-focus-expression="view.focus == 'inputUser'"></imput>
                       </div>
 
                       <div class="contentUserNonExistent">

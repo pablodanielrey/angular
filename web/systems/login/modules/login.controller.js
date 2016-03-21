@@ -91,6 +91,7 @@ function LoginCtrl($scope, $window, Notifications, Login, Users) {
      $scope.disconnectServer = disconnectServer;
      $scope.sendUsername = sendUsername;
      $scope.sendPassword = sendPassword;
+     $scope.clearUserNameField = clearUserNameField;
 
      function connectServer() {
        $scope.model.openConnection = true;
@@ -100,6 +101,11 @@ function LoginCtrl($scope, $window, Notifications, Login, Users) {
      function disconnectServer() {
        $scope.model.openConnection = false;
        $scope.changeClassConnection(classNameDisconnected);
+     }
+
+     function clearUserNameField() {
+       $scope.model.username = '';
+       $scope.view.classError = classNameNoError;
      }
 
      function sendUsername() {
@@ -114,8 +120,8 @@ function LoginCtrl($scope, $window, Notifications, Login, Users) {
          console.log(err);
          $scope.viewUserError();
        })
-       Users.findByDni($scope.model.username,
-         function(user) {
+       Users.findByDni($scope.model.username)
+       .then(function(user) {
            console.log(user);
            $scope.model.user = user;
            $scope.viewPassword();

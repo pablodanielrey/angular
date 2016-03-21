@@ -6,9 +6,22 @@ Users.inject = ['$rootScope', '$wamp', 'Session','Utils','Cache'];
 
 function Users($rootScope, $wamp, Session, Utils, Cache) {
 
-  /*
-  -----------------------   CODIGO VIEJO A REEMPLAZAR A MEDIDA QUE SE VAYA ARMANDO TODO LO DEL FCE NUEVO ------
-  */
+  this.findByDni = function(dni) {
+    return new Promise(function(cok, cerr) {
+      $wamp.call('users.findByDni', [dni])
+      .then(function(id) {
+        $wamp.call('users.findById', [id])
+        .then(function(user) {
+          cok(user);
+        }, function(err) {
+          cerr(err);
+        });
+      }, function(err) {
+        cerr(err);
+      });
+    });
+  }
+
 
   var instance = this;
   this.userPrefix = 'user_';
@@ -207,20 +220,7 @@ function Users($rootScope, $wamp, Session, Utils, Cache) {
   }
 
   // esto lo modifique solo para obtener el usuario por dni, no se como se deberia manejar con la cache
-  this.findByDni = function(dni,callbackOk,callbackError) {
-    $wamp.call('users.findByDni', [dni])
-    .then(function(user) {
-      if (user != null) {
-        callbackOk(user);
 
-      } else {
-        callbackError('Error');
-
-      }
-    }, function(err) {
-      callbackError(err);
-    });
-  }
 
   this.findById = function(id) {
     return $wamp.call('users.findById', [id]);
