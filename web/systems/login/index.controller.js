@@ -2,17 +2,15 @@ angular
   .module('mainApp')
   .controller('IndexLoginCtrl',IndexLoginCtrl);
 
-IndexLoginCtrl.$inject = ['$rootScope','$scope','$timeout','$location','Notifications'];
+IndexLoginCtrl.$inject = ['$rootScope','$scope'];
 
-function IndexLoginCtrl($rootScope, $scope, $timeout, $location, Notifications) {
+function IndexLoginCtrl($rootScope, $scope) {
 
-    var vm = this;
-
-    $scope.model = {
-    }
+    $rootScope.loaded = false;
+    $scope.loaded = false;
 
     $rootScope.$on("$wamp.open", function (event, session) {
-      $scope.$broadcast('wampOpenEvent',event);
+      $scope.$broadcast('wampOpenEvent', event);
     });
 
     $rootScope.$on("$wamp.close", function (event, session) {
@@ -20,7 +18,7 @@ function IndexLoginCtrl($rootScope, $scope, $timeout, $location, Notifications) 
     });
 
     $scope.$on('$viewContentLoaded', function(event) {
-      $scope.initialize();
+      // nada
     });
 
 };
