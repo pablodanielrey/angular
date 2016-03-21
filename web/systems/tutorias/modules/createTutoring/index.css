@@ -364,6 +364,28 @@ padding: 10px;
   align-content: flex-start;
   -webkit-align-content: flex-start;
   -moz-align-content: flex-start;
+  /*background-color: red;*/
+}
+
+.createTutoring.verResultados.cargandoBusqueda .searchPreload {
+  height: 95%;
+  width: 100%;
+  padding-top: 20px;
+  background-color: #F1F1F1;
+  position: absolute;
+  transform: translate3d(0,0,0);
+  -webkit-transform: translate3d(0,0,0);
+  color: #6d6f75;
+}
+
+.createTutoring .searchPreload {
+  height: 95%;
+  width: 100%;
+  padding-top: 20px;
+  background-color: #F1F1F1;
+  position: absolute;
+  transform: translate3d(0,500%,0);
+  -webkit-transform: translate3d(0,500%,0);
 }
 
 .createTutoring .contentUser {
@@ -475,6 +497,9 @@ padding: 10px;
        -o-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
           transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
 }
+
+
+
 
 /********* FIN TRANSICIONES DEL CONTENEDOR DE LA DERECHA **********/
 

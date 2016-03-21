@@ -1,7 +1,7 @@
-<div class="createTutoring {{view.style}} {{view.style2}} {{view.style3}} {{view.style4}}">
+<div class="createTutoring {{view.style}} {{view.style2}} {{view.style3}}  {{view.style4}}">
   <!-- VARIABLES1: nuevaTutoria
        VARIABLES2: verResultados
-       VARIABLES3: mensajes
+       VARIABLES3: cargandoBusqueda, mensajes
        VARIABLES4: msjCargando, msjGuardada, msjCancelada
   -->
 
@@ -133,7 +133,7 @@
 
               <div class="contentUserRecent">
                   <div class="contentPhotoRecent">
-                    <img class="imgUserRecent" src="img/pablosarmieto.jpg">
+                    <img class="imgUserRecent" src="img/avatarMen.jpg">
                   </div>
                   <div class="contentDataRecent">
                     <div>
@@ -148,7 +148,7 @@
 
               <div class="contentUserRecent">
                   <div class="contentPhotoRecent">
-                    <img class="imgUserRecent" src="img/lucas.jpg">
+                    <img class="imgUserRecent" src="img/avatarMen.jpg">
                   </div>
                   <div class="contentDataRecent">
                     <div>
@@ -162,7 +162,7 @@
 
               <div class="contentUserRecent">
                   <div class="contentPhotoRecent">
-                    <img class="imgUserRecent" src="img/walter.jpg">
+                    <img class="imgUserRecent" src="img/avatarWoman.jpg">
                   </div>
                   <div class="contentDataRecent">
                     <div>
@@ -177,7 +177,7 @@
 
               <div class="contentUserRecent">
                   <div class="contentPhotoRecent">
-                    <img class="imgUserRecent" src="img/pablo.jpg">
+                    <img class="imgUserRecent" src="img/avatarMen.jpg">
                   </div>
                   <div class="contentDataRecent">
                     <div>
@@ -208,7 +208,7 @@
                   <div class="dataHeader">
                       <div>Tutoría &nbsp;<i class="fa fa-calendar-o"></i> <b>26/03/2016 </b></div>
                       <div>&nbsp; | Tutor</div>
-                      <div><img class="imgTutor" src="img/lucas.jpg"></div>
+                      <div><img class="imgTutor" src="img/avatarMen.jpg"></div>
                       <div><b>Lucas Langoni</b></div>
                   </div>
                   <div>
@@ -222,7 +222,7 @@
                   <div class="itemUserList">
                       <div class="itemUser">
                           <div class="contentPhotoRecent">
-                            <img class="imgUserRecent" src="img/pablosarmieto.jpg">
+                            <img class="imgUserRecent" src="img/avatarMen.jpg">
                           </div>
                           <div class="contentDataRecent">
                             <div>
@@ -249,7 +249,7 @@
                   <div class="itemUserList">
                       <div class="itemUser">
                           <div class="contentPhotoRecent">
-                            <img class="imgUserRecent" src="img/pablo.jpg">
+                            <img class="imgUserRecent" src="img/avatarWoman.jpg">
                           </div>
                           <div class="contentDataRecent">
                             <div>
@@ -276,7 +276,7 @@
                   <div class="itemUserList">
                       <div class="itemUser">
                           <div class="contentPhotoRecent">
-                            <img class="imgUserRecent" src="img/walter.jpg">
+                            <img class="imgUserRecent" src="img/avatarMen.jpg">
                           </div>
                           <div class="contentDataRecent">
                             <div>
@@ -311,11 +311,17 @@
                 <i class="fa fa-search"></i> RESULTADOS ENCONTRADOS
               </div>
 
+
+
               <div class="searchResults">
+
+                <div class="searchPreload">
+                  <div><i class="fa fa-spinner fa-pulse"></i> Espere por favor...</div>
+                </div>
                   <!-- **** DIV CONTENEDORES DE LOS USUARIOS ENCONTRADOS ****-->
                   <div class="contentUser" ng-click="view.style2=''">
                     <div class="contentPhoto">
-                      <img class="imgUser" src="img/emanuel.jpg">
+                      <img class="imgUser" src="img/avatarMen.jpg">
                     </div>
                     <div class="contentData">
                       <div>
@@ -330,7 +336,7 @@
 
                   <div class="contentUser">
                     <div class="contentPhoto">
-                      <img class="imgUser" src="img/alejandro.jpg">
+                      <img class="imgUser" src="img/avatarWoman.jpg">
                     </div>
                     <div class="contentData">
                       <div>
@@ -345,7 +351,7 @@
 
                   <div class="contentUser">
                     <div class="contentPhoto">
-                      <img class="imgUser" src="img/pablosarmieto.jpg">
+                      <img class="imgUser" src="img/avatarMen.jpg">
                     </div>
                     <div class="contentData">
                       <div>
@@ -360,7 +366,7 @@
 
                   <div class="contentUser">
                     <div class="contentPhoto">
-                      <img class="imgUser" src="img/lucas.jpg">
+                      <img class="imgUser" src="img/avatarMen.jpg">
                     </div>
                     <div class="contentData">
                       <div>
@@ -375,7 +381,7 @@
 
                   <div class="contentUser">
                     <div class="contentPhoto">
-                      <img class="imgUser" src="img/walter.jpg">
+                      <img class="imgUser" src="img/avatarWoman.jpg">
                     </div>
                     <div class="contentData">
                       <div>
@@ -390,7 +396,7 @@
 
                   <div class="contentUser">
                     <div class="contentPhoto">
-                      <img class="imgUser" src="img/pablo.jpg">
+                      <img class="imgUser" src="img/avatarWoman.jpg">
                     </div>
                     <div class="contentData">
                       <div>
@@ -405,7 +411,7 @@
 
                   <div class="contentUser">
                     <div class="contentPhoto">
-                      <img class="imgUser" src="img/maxi.jpg">
+                      <img class="imgUser" src="img/avatarMen.jpg">
                     </div>
                     <div class="contentData">
                       <div>
@@ -420,7 +426,7 @@
 
                   <div class="contentUser">
                     <div class="contentPhoto">
-                      <img class="imgUser" src="img/emanuel.jpg">
+                      <img class="imgUser" src="img/avatarWoman.jpg">
                     </div>
                     <div class="contentData">
                       <div>
@@ -435,7 +441,7 @@
 
                   <div class="contentUser">
                     <div class="contentPhoto">
-                      <img class="imgUser" src="img/alejandro.jpg">
+                      <img class="imgUser" src="img/avatarMen.jpg">
                     </div>
                     <div class="contentData">
                       <div>
@@ -450,7 +456,7 @@
 
                   <div class="contentUser">
                     <div class="contentPhoto">
-                      <img class="imgUser" src="img/pablosarmieto.jpg">
+                      <img class="imgUser" src="img/avatarMen.jpg">
                     </div>
                     <div class="contentData">
                       <div>
@@ -465,7 +471,7 @@
 
                   <div class="contentUser">
                     <div class="contentPhoto">
-                      <img class="imgUser" src="img/lucas.jpg">
+                      <img class="imgUser" src="img/avatarWoman.jpg">
                     </div>
                     <div class="contentData">
                       <div>
@@ -480,7 +486,7 @@
 
                   <div class="contentUser">
                     <div class="contentPhoto">
-                      <img class="imgUser" src="img/walter.jpg">
+                      <img class="imgUser" src="img/avatarWoman.jpg">
                     </div>
                     <div class="contentData">
                       <div>
@@ -495,7 +501,7 @@
 
                   <div class="contentUser">
                     <div class="contentPhoto">
-                      <img class="imgUser" src="img/pablo.jpg">
+                      <img class="imgUser" src="img/avatarMen.jpg">
                     </div>
                     <div class="contentData">
                       <div>
@@ -510,7 +516,7 @@
 
                   <div class="contentUser">
                     <div class="contentPhoto">
-                      <img class="imgUser" src="img/maxi.jpg">
+                      <img class="imgUser" src="img/avatarWoman.jpg">
                     </div>
                     <div class="contentData">
                       <div>
@@ -525,7 +531,7 @@
 
                   <div class="contentUser">
                     <div class="contentPhoto">
-                      <img class="imgUser" src="img/emanuel.jpg">
+                      <img class="imgUser" src="img/avatarMen.jpg">
                     </div>
                     <div class="contentData">
                       <div>
