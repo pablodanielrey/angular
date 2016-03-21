@@ -9,6 +9,7 @@
 '''
 import uuid
 import datetime
+from dateutil import tz
 import inject
 import json
 
@@ -116,7 +117,7 @@ class SessionDAO:
             if cur.rowcount <= 0:
                 raise SessionNotFound()
 
-            now = datetime.datetime.now()
+            now = datetime.datetime.now(tz.tzlocal())
             if cur.fetchone()['expire'] <= now:
                 raise SessionExpired()
 
