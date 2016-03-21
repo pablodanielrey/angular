@@ -37,29 +37,27 @@
 	<script type="text/javascript" src="/services/Notifications.js"></script>
 
 	<!-- ***** MODULOS ***** -->
-  <script type="text/javascript" src="/modules/messages/messages.js"></script>
-  <link rel="stylesheet" type="text/css" href="/modules/messages/messages.css"/>
 
   <script type="text/javascript" src="/systems/login/modules/login.controller.js"></script>
   <link rel="stylesheet" type="text/css" href="/systems/login/modules/login.css" />
 
   <link rel="stylesheet" type="text/css" href="/systems/login/modules/help/help.css" />
 
-  <script type="text/javascript" src="/systems/login/modules/preload/preload.js"></script>
+  <script type="text/javascript" src="/systems/login/modules/header/header.controller.js"></script>
+
+  <script type="text/javascript" src="/systems/login/modules/preload/preload.controller.js"></script>
   <link rel="stylesheet" type="text/css" href="/systems/login/modules/preload/preload.css" />
 
-  <script type="text/javascript" src="/systems/login/modules/resetPassword/resetPassword.js"></script>
-  <link rel="stylesheet" type="text/css" href="/systems/login/modules/resetPassword/resetPassword.css" />
 
-<body ng-controller="PreloadCtrl" class="login" ng-class='getLoggedClazz()'>
+<body ng-cloak ng-controller="IndexLoginCtrl" class="login">
 
-    <div class="contentPreload" ng-include="'/systems/login/modules/preload/preload.html'">
-    </div>
+  <!-- <div ng-hide='{{!loaded}}' class="contentPreload" ng-controller="PreloadCtrl" ng-include="'/systems/login/modules/preload/preload.html'">
+  </div> -->
 
-  <div ng-controller="IndexLoginCtrl" class="principal">
-    <div class='' ng-include="'/systems/login/modules/login.html'"></div>
+  <!-- <div ng-show='{{loaded}}' class="principal"> -->
+  <div class="principal">
     <div class='login-container' ng-controller="LoginCtrl" ng-include="'/systems/login/modules/login.html'"></div>
-    <div class='messages-container' ng-controller="MessagesCtrl" ng-include="'/modules/messages/messages.html'" ng-class="{false: 'hidden', true: 'visible'}[isVisible()]"></div>
+    <!-- <div class='messages-container' ng-controller="MessagesCtrl" ng-include="'/modules/messages/messages.html'" ng-class="{false: 'hidden', true: 'visible'}[isVisible()]"></div> -->
   </div>
 
 

@@ -20,18 +20,17 @@
                  NUEVA TUTORÍA
               </div>
               <div>
-                <input class="inputDate" type="date" value="2026-01-13"/>
+                <input class="inputDate" type="date" ng-model="model.tutoring.date"/>
               </div>
               <div>
-                <button class="btnCreate" type="button" ng-click="view.style='nuevaTutoria'">CREAR </button>
+                <button class="btnCreate" type="button" ng-click="createNewTutoring()">CREAR </button>
               </div>
               <div class="titleMyTutoring">
                  MIS TUTORÍAS
               </div>
 
               <div class="contentMyRecentTutoring">
-
-                  <div class="contentItemTutoringRecent" ng-click="view.style='nuevaTutoria'">
+                  <div class="contentItemTutoringRecent" ng-repeat="t in model.tutorings" ng-click="selectTutoring(t)">
                       <div class="contentIconTutoring">
                         <div class="IconTutoring">
                           <i class="fa fa-tumblr fa-2x"></i>
@@ -39,74 +38,16 @@
                       </div>
                       <div class="contentDataTutoringRecent">
                         <div>
-                          Miércoles
+                          {{t.day}}
                         </div>
                         <div>
-                          <b>26/03/2016</b>
+                          <b>{{t.date}}</b>
                         </div>
                       </div>
                       <div class="iconIrTutoring">
                         <i class="fa fa-sign-in fa-2x"></i>
                       </div>
                   </div>
-
-                  <div class="contentItemTutoringRecent" ng-click="view.style='nuevaTutoria'">
-                      <div class="contentIconTutoring">
-                        <div class="IconTutoring">
-                          <i class="fa fa-tumblr fa-2x"></i>
-                        </div>
-                      </div>
-                      <div class="contentDataTutoringRecent">
-                        <div>
-                          Jueves
-                        </div>
-                        <div>
-                          <b>19/03/2016</b>
-                        </div>
-                      </div>
-                      <div class="iconIrTutoring">
-                        <i class="fa fa-sign-in fa-2x"></i>
-                      </div>
-                  </div>
-
-                  <div class="contentItemTutoringRecent" ng-click="view.style='nuevaTutoria'">
-                      <div class="contentIconTutoring">
-                        <div class="IconTutoring">
-                          <i class="fa fa-tumblr fa-2x"></i>
-                        </div>
-                      </div>
-                      <div class="contentDataTutoringRecent">
-                        <div>
-                          Martes
-                        </div>
-                        <div>
-                          <b>16/03/2016</b>
-                        </div>
-                      </div>
-                      <div class="iconIrTutoring">
-                        <i class="fa fa-sign-in fa-2x"></i>
-                      </div>
-                  </div>
-
-                  <div class="contentItemTutoringRecent" ng-click="view.style='nuevaTutoria'">
-                      <div class="contentIconTutoring">
-                        <div class="IconTutoring">
-                          <i class="fa fa-tumblr fa-2x"></i>
-                        </div>
-                      </div>
-                      <div class="contentDataTutoringRecent">
-                        <div>
-                          Miércoles
-                        </div>
-                        <div>
-                          <b>11/03/2016</b>
-                        </div>
-                      </div>
-                      <div class="iconIrTutoring">
-                        <i class="fa fa-sign-in fa-2x"></i>
-                      </div>
-                  </div>
-
 
               </div>
 
@@ -118,7 +59,7 @@
               <i class="fa fa-search"></i> BUSCAR
             </div>
             <div>
-              <input class="inputSearch" type="text" ng-click="view.style2='verResultados'"/>
+              <input class="inputSearch" type="text" ng-readonly="{{model.searching}}" ng-model="model.search" ng-model-options="{ debounce: 1000 }" ng-change="searchParticipants()"/>
             </div>
             <div class="contentRecentAndTrash">
                 <div>
@@ -131,68 +72,23 @@
             </div>
             <div class="contentRecent">
 
-              <div class="contentUserRecent">
+              <div class="contentUserRecent" ng-repeat="user in model.recentUsers" ng-click='addParticipant(user)'>
                   <div class="contentPhotoRecent">
-                    <img class="imgUserRecent" src="img/avatarMen.jpg">
+                    <img class="imgUserRecent" src="{{user.img}}">
                   </div>
                   <div class="contentDataRecent">
                     <div>
-                      <b>Pablo Sarmiento</b>
+                      <b>{{user.user.name}} {{user.user.lastname}}</b>
                     </div>
                     <div>
-                      30235968
+                      {{user.user.dni}}
+                    </div>
+                    <div>
+                      {{user.student.studentNumber}}
                     </div>
 
                   </div>
               </div>
-
-              <div class="contentUserRecent">
-                  <div class="contentPhotoRecent">
-                    <img class="imgUserRecent" src="img/avatarMen.jpg">
-                  </div>
-                  <div class="contentDataRecent">
-                    <div>
-                      <b>Lucas Langoni</b>
-                    </div>
-                    <div>
-                      35456923
-                    </div>
-                  </div>
-              </div>
-
-              <div class="contentUserRecent">
-                  <div class="contentPhotoRecent">
-                    <img class="imgUserRecent" src="img/avatarWoman.jpg">
-                  </div>
-                  <div class="contentDataRecent">
-                    <div>
-                      <b>Walter Blanco</b>
-                    </div>
-                    <div>
-                      30001823
-                    </div>
-
-                  </div>
-              </div>
-
-              <div class="contentUserRecent">
-                  <div class="contentPhotoRecent">
-                    <img class="imgUserRecent" src="img/avatarMen.jpg">
-                  </div>
-                  <div class="contentDataRecent">
-                    <div>
-                      <b>Pablo Daniel Rey</b>
-                    </div>
-                    <div>
-                      28356952
-                    </div>
-
-                  </div>
-              </div>
-
-
-
-
 
             </div>
 
@@ -206,103 +102,45 @@
           <div class="contentList">
               <div class="headerList">
                   <div class="dataHeader">
-                      <div>Tutoría &nbsp;<i class="fa fa-calendar-o"></i> <b>26/03/2016 </b></div>
+                      <div>Tutoría &nbsp;<i class="fa fa-calendar-o"></i> <b><input class="inputDate" type="date" ng-model="model.tutoring.date"/> </b></div>
                       <div>&nbsp; | Tutor</div>
-                      <div><img class="imgTutor" src="img/avatarMen.jpg"></div>
-                      <div><b>Lucas Langoni</b></div>
+                      <div><img class="imgTutor" src="{{model.tutoring.tutor.img}}"></div>
+                      <div><b>{{model.tutoring.tutor.name}}</b></div>
                   </div>
                   <div>
-                    <button class="btnCreate" ng-click="view.style3='mensajes'; view.style4='msjGuardada'">GUARDAR</button>
-                    <button class="btnCancel" ng-click="view.style3='mensajes'; view.style4='msjCancelada' "><i class="fa fa-times"></i></button>
+                    <button class="btnCreate" ng-click="save()">GUARDAR</button>
+                    <button class="btnCancel" ng-click="cancel()"><i class="fa fa-times"></i></button>
                   </div>
               </div>
 
               <div class="listParticipants">
-
-                  <div class="itemUserList">
+                <div class="itemUserList" ng-repeat='user in model.tutoring.participants'>
                       <div class="itemUser">
                           <div class="contentPhotoRecent">
-                            <img class="imgUserRecent" src="img/avatarMen.jpg">
+                            <img class="imgUserRecent" src="{{user.img}}">
                           </div>
                           <div class="contentDataRecent">
                             <div>
-                              <b>Pablo Sarmiento</b>
+                              <b>{{user.user.name}} {{user.user.lastname}}</b>
                             </div>
                             <div>
-                              30235968
+                              {{user.user.dni}}
                             </div>
-
+                            <div>
+                              {{user.student.studentNumber}}
+                            </div>
                           </div>
                       </div>
                       <div>
-                          <select class="selectSituacion">
-                              <option>Situación académica</option>
-                              <option>Situación económica</option>
-                              <option>Situación personal</option>
+                          <select class="selectSituacion" ng-model="user.tutoring" ng-options="option for option in model.situations">
                           </select>
                       </div>
                       <div>
-                        <button class="btnCancel"><i class="fa fa-trash-o" title="Borar"></i></button>
+                        <button class="btnCancel"><i class="fa fa-trash-o" title="Borar" ng-click='deleteParticipant(user)'></i></button>
                       </div>
                   </div>
-
-                  <div class="itemUserList">
-                      <div class="itemUser">
-                          <div class="contentPhotoRecent">
-                            <img class="imgUserRecent" src="img/avatarWoman.jpg">
-                          </div>
-                          <div class="contentDataRecent">
-                            <div>
-                              <b>Pablo Daniel Rey</b>
-                            </div>
-                            <div>
-                              28368952
-                            </div>
-
-                          </div>
-                      </div>
-                      <div>
-                          <select class="selectSituacion">
-                              <option>Situación académica</option>
-                              <option>Situación económica</option>
-                              <option>Situación personal</option>
-                          </select>
-                      </div>
-                      <div>
-                        <button class="btnCancel"><i class="fa fa-trash-o" title="Borar"></i></button>
-                      </div>
-                  </div>
-
-                  <div class="itemUserList">
-                      <div class="itemUser">
-                          <div class="contentPhotoRecent">
-                            <img class="imgUserRecent" src="img/avatarMen.jpg">
-                          </div>
-                          <div class="contentDataRecent">
-                            <div>
-                              <b>Walter Blanco</b>
-                            </div>
-                            <div>
-                              30001823
-                            </div>
-
-                          </div>
-                      </div>
-                      <div>
-                          <select class="selectSituacion">
-                              <option>Situación académica</option>
-                              <option>Situación económica</option>
-                              <option>Situación personal</option>
-                          </select>
-                      </div>
-                      <div>
-                        <button class="btnCancel"><i class="fa fa-trash-o" title="Borar"></i></button>
-                      </div>
-                  </div>
-
-
-
               </div>
+
           </div>
 
           <!-- ********* RESULTADOS DE BUSQUEDA ************** -->
@@ -319,231 +157,23 @@
                   <div><i class="fa fa-spinner fa-pulse"></i> Espere por favor...</div>
                 </div>
                   <!-- **** DIV CONTENEDORES DE LOS USUARIOS ENCONTRADOS ****-->
-                  <div class="contentUser" ng-click="view.style2=''">
+                  <div class="contentUser" ng-repeat="user in model.searchResults" ng-click="addParticipant(user)">
                     <div class="contentPhoto">
-                      <img class="imgUser" src="img/avatarMen.jpg">
+                      <img class="imgUser" src="{{user.user.img}}">
                     </div>
                     <div class="contentData">
                       <div>
-                        <b>Emanuel Joaquin Pais</b>
+                        <b>{{user.user.name}} {{user.user.lastname}}</b>
                       </div>
                       <div>
-                        31269568
+                        {{user.user.dni}}
+                      </div>
+                      <div>
+                        {{user.student.studentNumber}}
                       </div>
 
                     </div>
                   </div>
-
-                  <div class="contentUser">
-                    <div class="contentPhoto">
-                      <img class="imgUser" src="img/avatarWoman.jpg">
-                    </div>
-                    <div class="contentData">
-                      <div>
-                        <b>Alejandro Agustin Oporto</b>
-                      </div>
-                      <div>
-                        29496698
-                      </div>
-
-                    </div>
-                  </div>
-
-                  <div class="contentUser">
-                    <div class="contentPhoto">
-                      <img class="imgUser" src="img/avatarMen.jpg">
-                    </div>
-                    <div class="contentData">
-                      <div>
-                        <b>Pablo Sarmiento</b>
-                      </div>
-                      <div>
-                        30256957
-                      </div>
-
-                    </div>
-                  </div>
-
-                  <div class="contentUser">
-                    <div class="contentPhoto">
-                      <img class="imgUser" src="img/avatarMen.jpg">
-                    </div>
-                    <div class="contentData">
-                      <div>
-                        <b>Lucas Langoni</b>
-                      </div>
-                      <div>
-                        35456923
-                      </div>
-
-                    </div>
-                  </div>
-
-                  <div class="contentUser">
-                    <div class="contentPhoto">
-                      <img class="imgUser" src="img/avatarWoman.jpg">
-                    </div>
-                    <div class="contentData">
-                      <div>
-                        <b>Walter Blanco</b>
-                      </div>
-                      <div>
-                        30001823
-                      </div>
-
-                    </div>
-                  </div>
-
-                  <div class="contentUser">
-                    <div class="contentPhoto">
-                      <img class="imgUser" src="img/avatarWoman.jpg">
-                    </div>
-                    <div class="contentData">
-                      <div>
-                        <b>Pablo Daniel Rey</b>
-                      </div>
-                      <div>
-                        28356952
-                      </div>
-
-                    </div>
-                  </div>
-
-                  <div class="contentUser">
-                    <div class="contentPhoto">
-                      <img class="imgUser" src="img/avatarMen.jpg">
-                    </div>
-                    <div class="contentData">
-                      <div>
-                        <b>Maximiliano Saucedo</b>
-                      </div>
-                      <div>
-                        29356874
-                      </div>
-
-                    </div>
-                  </div>
-
-                  <div class="contentUser">
-                    <div class="contentPhoto">
-                      <img class="imgUser" src="img/avatarWoman.jpg">
-                    </div>
-                    <div class="contentData">
-                      <div>
-                        <b>Emanuel Joaquin Pais</b>
-                      </div>
-                      <div>
-                        31269568
-                      </div>
-
-                    </div>
-                  </div>
-
-                  <div class="contentUser">
-                    <div class="contentPhoto">
-                      <img class="imgUser" src="img/avatarMen.jpg">
-                    </div>
-                    <div class="contentData">
-                      <div>
-                        <b>Alejandro Agustin Oporto</b>
-                      </div>
-                      <div>
-                        29496698
-                      </div>
-
-                    </div>
-                  </div>
-
-                  <div class="contentUser">
-                    <div class="contentPhoto">
-                      <img class="imgUser" src="img/avatarMen.jpg">
-                    </div>
-                    <div class="contentData">
-                      <div>
-                        <b>Pablo Sarmiento</b>
-                      </div>
-                      <div>
-                        30256957
-                      </div>
-
-                    </div>
-                  </div>
-
-                  <div class="contentUser">
-                    <div class="contentPhoto">
-                      <img class="imgUser" src="img/avatarWoman.jpg">
-                    </div>
-                    <div class="contentData">
-                      <div>
-                        <b>Lucas Langoni</b>
-                      </div>
-                      <div>
-                        35456923
-                      </div>
-
-                    </div>
-                  </div>
-
-                  <div class="contentUser">
-                    <div class="contentPhoto">
-                      <img class="imgUser" src="img/avatarWoman.jpg">
-                    </div>
-                    <div class="contentData">
-                      <div>
-                        <b>Walter Blanco</b>
-                      </div>
-                      <div>
-                        30001823
-                      </div>
-
-                    </div>
-                  </div>
-
-                  <div class="contentUser">
-                    <div class="contentPhoto">
-                      <img class="imgUser" src="img/avatarMen.jpg">
-                    </div>
-                    <div class="contentData">
-                      <div>
-                        <b>Pablo Daniel Rey</b>
-                      </div>
-                      <div>
-                        28356952
-                      </div>
-
-                    </div>
-                  </div>
-
-                  <div class="contentUser">
-                    <div class="contentPhoto">
-                      <img class="imgUser" src="img/avatarWoman.jpg">
-                    </div>
-                    <div class="contentData">
-                      <div>
-                        <b>Maximiliano Saucedo</b>
-                      </div>
-                      <div>
-                        29356874
-                      </div>
-
-                    </div>
-                  </div>
-
-                  <div class="contentUser">
-                    <div class="contentPhoto">
-                      <img class="imgUser" src="img/avatarMen.jpg">
-                    </div>
-                    <div class="contentData">
-                      <div>
-                        <b>Emanuel Joaquin Pais</b>
-                      </div>
-                      <div>
-                        31269568
-                      </div>
-
-                    </div>
-                  </div>
-
               </div>
 
           </div>
@@ -573,8 +203,8 @@
           <div class="cancel">
             <div>¿Desea salir sin guardar?</div>
             <div class="btns">
-                <button class="btnSi" ng-click="view.style=''; view.style3=''">SI</button>
-                <button class="btnNo" ng-click="view.style3=''">VOLVER</button>
+                <button class="btnSi" ng-click="confirmCancel()">SI</button>
+                <button class="btnNo" ng-click="back()">VOLVER</button>
             </div>
           </div>
 

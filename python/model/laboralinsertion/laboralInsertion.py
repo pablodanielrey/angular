@@ -14,9 +14,11 @@ from model.laboralinsertion.mails import SentDAO, Sent
 from model.laboralinsertion.inscription import InscriptionDAO
 from model.laboralinsertion.company import CompanyDAO
 from model.laboralinsertion.languages import LanguageDAO
+from model.laboralinsertion.filters import Filter
 from model.laboralinsertion.user import UserDAO, User
 
 import csv
+
 
 class LaboralInsertion:
 
@@ -119,7 +121,7 @@ class LaboralInsertion:
     """
 
 
-    def findAllInscriptions(self, con):
+    def findAllInscriptions(self, con, filters):
         """ obtiene los datos de las inscripciones de los alumnos """
         ids = InscriptionDAO.findAll(con)
         inscriptions = []
@@ -127,7 +129,14 @@ class LaboralInsertion:
             inscription = InscriptionDAO.findById(con, id)
             inscriptions.append(inscription)
 
+        ''' aplico los filtros '''
+        if len(filters) > 0:
+            inscriptions = Filter.apply(con, inscriptions, filters)
+
         return inscriptions
+
+    def getFilters(self):
+        return Filters.getFilters()
 
     def findAllInscriptionsByUser(self, con, userId):
         """ obtiene los datos de las inscripciones de los alumnos """

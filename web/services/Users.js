@@ -6,6 +6,10 @@ Users.inject = ['$rootScope', '$wamp', 'Session','Utils','Cache'];
 
 function Users($rootScope, $wamp, Session, Utils, Cache) {
 
+  /*
+  -----------------------   CODIGO VIEJO A REEMPLAZAR A MEDIDA QUE SE VAYA ARMANDO TODO LO DEL FCE NUEVO ------
+  */
+
   var instance = this;
   this.userPrefix = 'user_';
 

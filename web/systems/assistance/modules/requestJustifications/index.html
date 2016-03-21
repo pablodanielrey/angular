@@ -20,6 +20,39 @@
   <div class="myRequests">
     <span><i class="fa fa-ticket"></i> Mis Solicitudes</span>
   </div>
+
+  <div class="requestFilters">
+
+    <div class="date">
+			<div class="dateTitle">
+				<span><i class="fa fa-calendar"></i> Desde: </span>
+			</div>
+			<div>
+				<input class="inputDate" type="date" ng-model="model.filter.start" ng-blur="checkStart()">
+			</div>
+    </div>
+
+    <div class="date">
+			<div class="dateTitle">
+				<span><i class="fa fa-calendar"></i>Hasta: </span>
+			</div>
+			<div>
+				<input class="inputDate" type="date" ng-model="model.filter.end" ng-blur="checkEnd()">
+			</div>
+    </div>
+
+    <div>
+      <div> Mostrar: </div>
+      <div> <span>Aprobados: </span><input type="checkbox" ng-model="model.filter.status.approved"> </div>
+      <div> <span>Rechazados: </span><input type="checkbox" ng-model="model.filter.status.rejected"> </div>
+      <div> <span>Cancelados: </span><input type="checkbox" ng-model="model.filter.status.canceled"> </div>
+      <div> <span>Pendientes: </span><input type="checkbox" ng-model="model.filter.status.pending"> </div>
+    </div>
+
+    <div>
+      <button ng-click="loadRequestedJustifications()">Buscar</button>
+    </div>
+  </div>
   <div class="titlesFiles">
     <div class="column t1" ng-click="sortRequestedJustifications('userName')"><i  class="fa fa-ticket"></i> Usuario</div>
     <div class="column t1" ng-click="sortRequestedJustifications('justificationName')"><i  class="fa fa-ticket"></i> Solicitud</div>

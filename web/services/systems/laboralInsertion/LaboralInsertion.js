@@ -9,8 +9,12 @@ function LaboralInsertion($rootScope,$wamp,Session) {
 
   /*
   */
-  this.findAllInscriptions = function() {
-    return $wamp.call('system.laboralInsertion.findAllInscriptions');
+  this.findAllInscriptions = function(filters) {
+    return $wamp.call('system.laboralInsertion.findAllInscriptions',[filters]);
+  }
+
+  this.getFilters = function() {
+    return $wamp.call('system.laboralInsertion.getFilters');
   }
 
   /**

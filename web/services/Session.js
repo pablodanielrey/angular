@@ -37,7 +37,6 @@ app.service('Session', function(Cache) {
    * Obtener id de usuario de sesion
    */
   this.getCurrentSessionUserId = function(){
-    
     var session = this.getCurrentSession();
     return session.user_id;
   };

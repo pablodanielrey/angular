@@ -3,6 +3,7 @@
     Implementa todo el codigo relacionado al modelo y las entidades de los usuarios
 '''
 
+import re
 import logging
 import datetime
 import uuid
@@ -480,7 +481,6 @@ class StudentDAO:
 
         finally:
             cur.close()
-
 
 
 if __name__ == '__main__':

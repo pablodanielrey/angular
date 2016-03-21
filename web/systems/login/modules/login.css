@@ -19,6 +19,8 @@
   display: none;
 }*/
 
+/*
+tenia este codigo walter. pero lo comento porque lo hago con ng-show y ng-hide
 .login.logged .contentPreload {
   display: none;
 }
@@ -26,6 +28,7 @@
 .login.noLogged .principal {
   display: none;
 }
+*/
 
 
 

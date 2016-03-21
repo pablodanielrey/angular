@@ -9,6 +9,7 @@
 '''
 import uuid
 import datetime
+from dateutil import tz
 import inject
 import json
 
@@ -43,6 +44,14 @@ class Session:
         self.deleted = None
         self.data = None
 
+    def _toJson(self):
+        return json.dumps(self)
+
+    @staticmethod
+    def _fromJson(sess):
+        s = Session()
+        s.__dict__ = json.loads(sess)
+        return s
 
 class SessionDAO:
 
@@ -50,8 +59,7 @@ class SessionDAO:
     #registry = getRegistry()
     #registry = Reg()
 
-    @staticmethod
-    def _fromResult(r):
+    def _fromResult(self, r):
         s = Session()
         s.id = r['id']
         s.userId = r['user_id']
@@ -81,14 +89,13 @@ class SessionDAO:
         finally:
             cur.close()
 
-    @staticmethod
-    def persist(con, sess):
+    def persist(self, con, sess):
         cur = con.cursor()
         try:
             if sess.id is None:
                 sess.id = str(uuid.uuid4())
                 sess.created = datetime.datetime.now()
-                sess.expire = sess.created + datetime.timedelta(minutes=int(SessionDAO.registry.get('expire')))
+                sess.expire = sess.created + datetime.timedelta(minutes=int(self.registry.get('expire')))
                 sess.deleted = None
 
                 r = sess.__dict__
@@ -103,26 +110,24 @@ class SessionDAO:
         finally:
             cur.close()
 
-    @staticmethod
-    def touch(con, sid):
+    def touch(self, con, sid):
         cur = con.cursor()
         try:
-            cur.execute('select expire from systems.sessions where id = %s', (sid))
+            cur.execute('select expire from systems.sessions where id = %s', (sid,))
             if cur.rowcount <= 0:
                 raise SessionNotFound()
 
-            now = datetime.datetime.now()
+            now = datetime.datetime.now(tz.tzlocal())
             if cur.fetchone()['expire'] <= now:
                 raise SessionExpired()
 
-            exp = now + datetime.timedelta(minutes=int(SessionDAO.registry.get('expire')))
+            exp = now + datetime.timedelta(minutes=int(self.registry.get('expire')))
             cur.execute('update systems.sessions set expire = %s where id = %s', (exp, sid))
 
         finally:
             cur.close()
 
-    @staticmethod
-    def deleteById(con, ids = []):
+    def deleteById(self, con, ids = []):
         ''' elimina las sesiones identificadas por la lista de ids, retorna la cantidad de registros afectados '''
         if len(ids) <= 0:
             return 0
@@ -135,8 +140,8 @@ class SessionDAO:
         finally:
             cur.close()
 
-    @staticmethod
-    def expire(con):
+
+    def expire(self, con):
         ''' elimina las sesiones que ya han expirado '''
         cur = con.cursor()
         try:
@@ -146,11 +151,10 @@ class SessionDAO:
         finally:
             cur.close()
 
-    @staticmethod
-    def findById(con, ids=[]):
+    def findById(self, con, ids=[]):
         cur = con.cursor()
         try:
-            cur.execute('select * from systems.sessions where id in %s and expire >= NOW()', (tuple(ids)))
+            cur.execute('select * from systems.sessions where id in %s and expire >= NOW()', (tuple(ids),))
             return [ self._fromResult(x) for x in cur ]
 
         finally:

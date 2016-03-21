@@ -43,25 +43,39 @@
   cursor: pointer;
 }
 
+.search input[type="checkbox"]{
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+  color: #0066A6 !important;
+  background-color: white;
+}
+
+
 .search .Select, .dates, .user {
   width: 25px;
   margin-left: 1px;
   padding: 2px;
 }
+.search .name {
+  width: 250px;
+  margin-left: 1px;
+  padding: 2px;
+}
 
-.search .name, .city, .city2, .mail, .career {
+.search .city, .city2, .mail, .career {
   width: 200px;
   margin-left: 1px;
   padding: 2px;
 }
 
-.search .age,  .travel,  .cousers, .average, .average2   {
+.search .age,  .travel,  .cousers, .average, .average2 {
   width: 50px ;
   margin-left: 1px;
   padding: 2px;
 }
 
-.search .portugues, .english, .other, .sex, .dni, .registration {
+.search .portugues, .english, .other, .sex, .dni, .registration, .workExperience {
   width: 80px ;
   margin-left: 1px;
   padding: 2px;
@@ -86,19 +100,21 @@
 .search .fileResults {
   color:#28292D;
   font-size: 12px;
-  cursor: pointer;
 }
 
 .search .fileResults:hover {
-  background-color: #77797f;
+  background-color: #0066a6;
   color:white;
 }
 
 .search .searchResults {
 }
 
-.search .searchResults table:nth-child(even) { background: #EEE }
-.search .searchResults table:nth-child(odd) { background: #DBE2E5}
+/*.search .searchResults table:nth-child(even) { background: #EEE }
+.search .searchResults table:nth-child(odd) { background: #DBE2E5}*/
+
+.search .searchResults table:nth-child(even) { background: white }
+.search .searchResults table:nth-child(odd) { background: white}
 
 .search .btnSend {
   margin: 20px;
@@ -125,6 +141,23 @@
   cursor: pointer;
   border: none;
   color: white;
+  -webkit-box-shadow: 1px 1px 5px #5c5f69;
+  -moz-box-shadow: 5px 5px 5px #5c5f69;
+  border-radius:2px 2px 0px 2px;
+  -webkit-border-radius:2px 2px 0px 2px;
+  -moz-border-radius:2px 2px 0px 2px;
+}
+
+.search .searching {
+  margin: 20px;
+  padding: 10px;
+  width: 179px;
+  height: 18px;
+  font-size: 14px;
+  background-color: #0066A6;
+  border: none;
+  color: white;
+  text-align: center;
   -webkit-box-shadow: 1px 1px 5px #5c5f69;
   -moz-box-shadow: 5px 5px 5px #5c5f69;
   border-radius:2px 2px 0px 2px;
@@ -240,7 +273,7 @@
 }
 
 .search .headerSeleted {
-  width: 940px;
+  width: 1010px;
   display: flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
@@ -259,7 +292,7 @@
   border-radius:2px 2px 0px 2px;
   -webkit-border-radius:2px 2px 0px 2px;
   -moz-border-radius:2px 2px 0px 2px;
-  width: 900px;
+  width: 995px;
   height: 450px;
   margin: 0px 20px 0px 20px;
   overflow-y: auto;
@@ -268,11 +301,20 @@
 
 
 .search .btnDeleteInsciption {
-  width: 75px;
+  width: 100%;
   height: 30px;
   border:none;
-  background-color:#5C5F69;
+  background-color:#DBE2E5;
 }
+
+.search .btnDeleteInsciption:hover {
+  background-color:#E43E46;
+  color:white;
+  cursor: pointer;
+}
+
+
+
 
 
 
@@ -594,6 +636,7 @@ la pantalla contentBusines, sendBusines y sending no se muentran*/
   padding: 20px;
   margin: 20px;
   width: 79%;
+  height: 550px;
   transform: translate3d(0,-150%,0);
   transition: all 0.4s ease-in-out;
 }
@@ -608,6 +651,7 @@ la pantalla contentBusines, sendBusines y sending no se muentran*/
   padding: 20px;
   margin: 20px;
   width: 79%;
+  height: 575px;
   top:0 !important;
   transform: translate3d(0,0,0);
   transition: all 0.4s ease-in-out;
@@ -629,8 +673,8 @@ la pantalla contentBusines, sendBusines y sending no se muentran*/
 
 
 .search .contentFiltersLeft {
-  width: 50%;
-  height: 450px;
+  width: 55%;
+  height: 500px;
   background-color: #fff;
   padding: 20px;
   margin: 5px;
@@ -643,7 +687,7 @@ la pantalla contentBusines, sendBusines y sending no se muentran*/
 
 .search .contentFiltersRight {
   width: 30%;
-  height: 450px;
+  height: 500px;
   background-color: #fff;
   padding: 20px;
   margin: 5px;
@@ -663,6 +707,10 @@ la pantalla contentBusines, sendBusines y sending no se muentran*/
 .search .titleFilters {
   background-color: #DBE2E5;
   padding: 5px;
+}
+
+.search .textInscription {
+  width: 140px;
 }
 
 .search .itemsFilters {
@@ -693,6 +741,22 @@ la pantalla contentBusines, sendBusines y sending no se muentran*/
   flex-direction:row;
   -webkit-flex-direction:row; /* Safari */
   -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+}
+
+.search .subItemsFilters2 {
+width: 200px;
+display: flex;
+display: -webkit-flex; /* Safari */
+display: -moz-flex; /* mozilla */
+flex-direction:row;
+-webkit-flex-direction:row; /* Safari */
+-moz-flex-direction:row; /* mozilla */
+align-items: center;
+-webkit-align-items:center; /* Safari */
+-moz-align-items:center; /* mozilla */
 }
 
 .search .btnItems {
@@ -721,10 +785,22 @@ la pantalla contentBusines, sendBusines y sending no se muentran*/
 
   background-color: #eee;
   font-size: 16px;
-  font-weight: bold;
+  /*font-weight: bold;*/
   padding: 5px;
   margin-left: 5px;
 }
+
+.search .inputFilters2 {
+  border: none;
+  height: 25px;
+
+  background-color: #eee;
+  font-size: 14px;
+  /*font-weight: bold;*/
+  padding: 5px;
+  margin-left: 5px;
+}
+
 
 .search .inputCant {
   font-size: 16px;
@@ -773,7 +849,8 @@ la pantalla contentBusines, sendBusines y sending no se muentran*/
 
 
 .search .btnSend3 {
-  margin: 10px;
+  margin-top: 20px;
+  margin-left: 10px;
   padding: 10px;
   width: 200px;
   font-size: 14px;
@@ -794,8 +871,96 @@ la pantalla contentBusines, sendBusines y sending no se muentran*/
 }
 
 
+.search .seleccionado {
+  background-color:#0066A6 !important;
+
+}
+.search .seleccionado td {
+  color:white !important;
+}
 
 
 /************************************************
 ************ FIN PANTALLA FILTROS **************
 ************************************************/
+
+
+
+/************************************************
+********** INICIO PANTALLA PERFIL ***************
+************************************************/
+
+.search.screenProfile .profile {
+  position: absolute ;
+  background-color: rgba(0, 0, 0, 0.9);;
+  width: 100%;
+  height: 100%;
+  top:0 !important;
+  transform: translate3d(0,0,0);
+}
+
+.search .profile {
+  position: absolute ;
+  background-color: rgba(0, 0, 0, 0.9);;
+  width: 100%;
+  height: 100%;
+  top:0 !important;
+  transform: translate3d(0,-100%,0);
+}
+
+.search.screenProfile .contentProfile {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:column;
+  -webkit-flex-direction:column; /* Safari */
+  -moz-flex-direction:column; /* mozilla */
+  position: absolute ;
+  background-color: #eee;
+  padding: 20px;
+  margin: 20px;
+  width: 79%;
+  transform: translate3d(0,-150%,0);
+  transition: all 0.4s ease-in-out;
+}
+
+.search.screenProfile .contentProfile {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+
+  position: absolute ;
+  background-color: #eee;
+  padding: 20px;
+  margin: 20px;
+  width: 50%;
+  height: 50%;
+  top:0 !important;
+  transform: translate3d(0,0,0);
+  transition: all 0.4s ease-in-out;
+}
+
+ .search .contentProfile .contentButtons {
+   display: flex;
+   display: -webkit-flex; /* Safari */
+   display: -moz-flex; /* mozilla */
+   flex-direction:row;
+   -webkit-flex-direction:row; /* Safari */
+   -moz-flex-direction:row; /* mozilla */
+   flex: 1;
+ }
+
+ .search .contentProfile .itemButton {
+   align-self: flex-end;
+ }
+
+ .search .contentProfile .title {
+
+ }
+
+  .search .contentProfile .formProfile {
+
+  }
+
+  .search .contentProfile .formProfile .item {
+  }

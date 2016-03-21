@@ -1,7 +1,7 @@
 
 angular
   .module('mainApp')
-  .controller('LoginCtrl',LoginCtrl)
+  .controller('LoginCtrl', LoginCtrl)
   .directive('mooFocusExpression', function($timeout) {
     return {
         link: function(scope, element, attrs) {
@@ -34,21 +34,21 @@ function LoginCtrl($scope, $window, Notifications, Login, Users) {
 			username: '',
 			password: '',
       openConnection: false,
-	user:null
+	    user:null
     }
 
     const classNameViewUser = 'screenUser';
-    const classNameViewUserError = 'screenUserError';
     const classNameViewPassword = 'screenPassword';
-    const classNameViewPasswordError = 'screenPasswordError';
-
     const classNameDisconnected = 'verServerDesconectado';
     const classNameConnected = 'verServerConectado';
+    const classNameNoError = 'ocultarError';
+    const classNameError = ''
 
     $scope.view = {
       focus: 'inputUser',
       classConnection: classNameConnected, // classNameDisconnected classNameConnected
-      classScreen: classNameViewUser // classNameViewUser classNameViewPassword
+      classScreen: classNameViewUser, // classNameViewUser classNameViewPassword
+      classError: classNameNoError
     }
 
 
@@ -61,7 +61,7 @@ function LoginCtrl($scope, $window, Notifications, Login, Users) {
 
     function initialize() {
       $scope.view.classConnection = classNameConnected;
-      $scope.view.classScreen = classNameViewUser;
+      $scope.viewUser();
       $scope.view.focus = 'inputUser';
     }
 
@@ -103,6 +103,17 @@ function LoginCtrl($scope, $window, Notifications, Login, Users) {
      }
 
      function sendUsername() {
+       Login.testUser($scope.model.username)
+       .then(function(ok) {
+         if (!ok) {
+           $scope.viewUserError();
+         } else {
+           $scope.viewPassword();
+         }
+       }, function(err) {
+         console.log(err);
+         $scope.viewUserError();
+       })
        Users.findByDni($scope.model.username,
          function(user) {
            console.log(user);
@@ -118,8 +129,8 @@ function LoginCtrl($scope, $window, Notifications, Login, Users) {
      }
 
      function sendPassword() {
-       Login.login($scope.model.username,$scope.model.password,
-         function(data) {
+       Login.login($scope.model.username, $scope.model.password)
+       .then(function(data) {
            $window.location.href = "/index.html";
          },
          function(error) {
@@ -146,18 +157,22 @@ function LoginCtrl($scope, $window, Notifications, Login, Users) {
 
       function viewPassword() {
         $scope.view.classScreen = classNameViewPassword;
-      }      
+        $scope.view.classError = classNameNoError;
+      }
 
       function viewPasswordError() {
-        $scope.view.classScreen = classNameViewPasswordError;
+        $scope.view.classScreen = classNameViewPassword;
+        $scope.view.classError = classNameError;
       }
 
       function viewUserError() {
-        $scope.view.classScreen = classNameViewUserError;
+        $scope.view.classScreen = classNameViewUser;
+        $scope.view.classError = classNameError;
       }
-      
+
       function viewUser() {
         $scope.view.classScreen = classNameViewUser;
+        $scope.view.classError = classNameNoError;
       }
 
      /* ---------------------------------------------------

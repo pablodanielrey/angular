@@ -1,104 +1,104 @@
 # -*- coding: utf-8 -*-
-import inject, psycopg2, logging
+import json
 
-from model.config import Config
-from model.session import Session
+class Profile:
 
-from model.exceptions import *
+    def __init__(self):
+        self.userId = None
+        self.roles = []
 
+    def hasOneRole(self, role = []):
+        if len(role) <= 0:
+            return False
 
-class Profiles:
+        if len(role) == 1:
+            return role[0] in self.roles
 
-    session = inject.attr(Session)
-    config = inject.attr(Config)
+        for r in role:
+            if r in self.roles:
+                return True
+        return False
 
-    def _checkUserProfile(self,con,userId,roles):
+    def hasRoles(self, role = []):
+        if len(role) <= 0:
+            return False
 
-        logging.debug('chequeando permisos del userId = {}, roles = {}'.format(userId,roles))
+        if len(role) == 1:
+            return role[0] in self.roles
 
-        try:
-            cur = con.cursor()
-            cur.execute('select profile from credentials.auth_profile where user_id = %s',(userId,))
-            rdata = cur.fetchall()
-            if rdata == None:
-                logging.debug('el usuario con id %s no tiene ningun rol asignado' % userId)
+        for r in role:
+            if r not in self.roles:
                 return False
+        return True
 
-            for role in rdata:
-                if role[0] in roles:
-                  return True
+    def _toJson(self):
+        return json.dumps(self, default=lambda o: o.__dict__)
 
-            logging.debug('no se encuentan los roles asignados al usuario (%s) en la lista de roles pedidos %s' % (rdata,tuple(roles)))
-            return False
+    @staticmethod
+    def _fromJson(pstring):
+        p = Profile()
+        p.__dict__ = json.loads(pstring)
+        return p
 
-        except Exception as e:
-            logging.exception(e)
-            return False
+class ProfileDAO:
 
-
-    def _checkAccessWithCon(self,con,sid,roles):
-
-        if sid is None:
-            return False
-
-        s = self.session._getSession(con,sid)
-        if s is None:
-            return False
-
-        user_id = s[self.config.configs['session_user_id']]
-        if user_id == None:
-            logging.debug('no se encuenta user_id con el id de sesión %s' % sid)
-            return False
-
-        """ por ahora cualquier usuario logueado exitósamente es usuario """
-        if 'USER' in roles:
-            return True;
-
-        return self._checkUserProfile(con,user_id,roles)
-
-
-
-    """
-        chequeo si el usuario identificado con la sesion = sid, tiene alguno de los roles pasados dentro de la lista roles
-        en el caso de que tenga alguno retorno true.
-        en caso de no tener ninguno tiro false
-    """
-    def _checkAccess(self,sid,roles):
-
-        if sid is None:
-            return False
-
-        con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
+    @staticmethod
+    def _createSchema(con):
+        cur = con.cursor()
         try:
-            return self._checkAccessWithCon(con,sid,roles)
+            cur.execute('create schema if not exists credentials')
+            cur.execute("""
+                create table credentials.auth_profile (
+                    user_id varchar not null,
+                    profile varchar not null
+                    created timestamptz default now()
+                )
+            """)
+        finally:
+            cur.close()
 
-        except Exception as e:
-            logging.exception(e)
-            return False
+    @staticmethod
+    def findByUserId(con, userId):
+        profile = Profile()
+        profile.userId = userId
+
+        cur = con.cursor()
+        try:
+            roles = []
+            cur.execute('select profile from credentials.auth_profile where user_id = %s', (userId,))
+            for p in cur:
+                roles.append(p['profile'])
+            profile.roles = roles
 
         finally:
-            if con:
-                con.close()
+            cur.close()
 
+        return profile
 
+    @staticmethod
+    def persist(con, profiles = []):
+        if len(profiles) <= 0:
+            return
 
+        cur = con.cursor()
+        try:
+            for p in profiles:
+                param = p.__dict__
+                cur.execute('insert into credentials.auth_profile (user_id, profile) select (%(userId)s, %(profile)s) where not exists (select user_id from credentials.auth_profile where user_id = %(userId)s and profile = %(profile)s)', param)
 
+        finally:
+            cur.close()
 
-    """
-        chequeo si el usuario identificado con la sesion = sid, tiene alguno de los roles pasados dentro de la lista roles
-        en el caso de que tenga alguno retorno true.
-        en caso de no tener ninguno o error dispara AccessDenied
-    """
-    def checkAccess(self,sid,roles):
+    @staticmethod
+    def remove(con, profiles = []):
+        if len(profiles) <= 0:
+            return
 
-        if self._checkAccess(sid,roles):
-            return True
-        else:
-            raise AccessDenied()
+        cur = con.cursor()
+        try:
+            for p in profiles:
+                param = p.__dict__
+                cur.execute('delete from credentials.auth_profile where user_id = %(userId)s and profile = %(profile)s)', param)
 
-
-
-    def getLocalUserId(self,sid):
-        s = self.session.getSession(sid)
-        user_id = s[self.config.configs['session_user_id']]
-        return user_id
+        finally:
+            cur.close()

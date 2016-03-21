@@ -6,6 +6,7 @@ import asyncio
 from asyncio import coroutine
 from autobahn.asyncio.wamp import ApplicationSession
 from model.users.users import UserDAO, User, Telephone, MailDAO
+from model.tutorias.tutorias import TutoriasModel
 from model.registry import Registry
 from model.connection import connection
 from model.mail.mail import Mail
@@ -19,7 +20,7 @@ class UsersWamp(ApplicationSession):
         ApplicationSession.__init__(self, config)
         reg = inject.instance(Registry)
         self.conn = connection.Connection(reg.getRegistry('dcsys'))
-        self.users = inject.instance(UserDAO)
+        self.tutoriasModel = inject.instance(TutoriasModel)
         self.mails = inject.instance(MailDAO)
         self.mail = inject.instance(Mail)
 
@@ -38,10 +39,27 @@ class UsersWamp(ApplicationSession):
         yield from self.register(self.sendEmailConfirmation_async, 'users.mails.sendEmailConfirmation')
         yield from self.register(self.confirmEmail_async, 'users.mails.confirmEmail')
 
+        yield from self.register(self.search_async, 'users.search')
+
+    def search(self, regex):
+        con = self.conn.get()
+        try:
+            users = self.tutoriasModel.search(con, regex)
+            return users
+
+        finally:
+            self.conn.put(con)
+
+    @coroutine
+    def search_async(self, regex):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.search, regex)
+        return r
+
     def findById(self, id):
         con = self.conn.get()
         try:
-            data = self.users.findById(con, id)
+            data = UserDAO.findById(con, id)
             if data is None:
                 return None
             ru = data.__dict__
@@ -59,7 +77,7 @@ class UsersWamp(ApplicationSession):
     def findByDni(self, dni):
         con = self.conn.get()
         try:
-            data = self.users.findUserByDni(con, dni)
+            data = UserDAO.findByDni(con, dni)
             return data
 
         finally:
@@ -100,7 +118,7 @@ class UsersWamp(ApplicationSession):
                 t2.__dict__ = t
                 u.telephones.append(t2)
                 logging.info(u.telephones)
-            userId = self.users.persist(con, u)
+            userId = UserDAO.persist(con, u)
             con.commit()
             return userId
 
@@ -119,7 +137,7 @@ class UsersWamp(ApplicationSession):
     def listUsers(self):
         con = self.conn.get()
         try:
-            users = self.users.listUsers(con)
+            users = UserDAO.listUsers(con)
             return users
 
         finally:
@@ -134,7 +152,7 @@ class UsersWamp(ApplicationSession):
     def findUsersIds(self):
         con = self.conn.get()
         try:
-            usersIds = self.users.listUsersIds(con)
+            usersIds = UserDAO.listUsersIds(con)
             return usersIds
 
         finally:
@@ -149,7 +167,7 @@ class UsersWamp(ApplicationSession):
     def findUsersByIds(self, ids):
         con = self.conn.get()
         try:
-            usersIds = self.users.findUsersByIds(con, ids)
+            usersIds = UserDAO.findUsersByIds(con, ids)
             return usersIds
 
         finally:
@@ -190,7 +208,7 @@ class UsersWamp(ApplicationSession):
     def persistMail(self, email):
         con = self.conn.get()
         try:
-            emailId = self.users.createMail(con, email)
+            emailId = UserDAO.createMail(con, email)
             con.commit()
             return emailId
 
@@ -210,7 +228,7 @@ class UsersWamp(ApplicationSession):
     def deleteMail(self, id):
         con = self.conn.get()
         try:
-            self.users.deleteMail(con, id)
+            UserDAO.deleteMail(con, id)
             con.commit()
             return True
 
@@ -230,7 +248,7 @@ class UsersWamp(ApplicationSession):
     def sendEmailConfirmation(self, emailId):
         con = self.conn.get()
         try:
-            self.users.sendEmailConfirmation(con, emailId)
+            UserDAO.sendEmailConfirmation(con, emailId)
             con.commit()
             return True
 
@@ -250,7 +268,7 @@ class UsersWamp(ApplicationSession):
     def confirmEmail(self, hash):
         con = self.conn.get()
         try:
-            self.users.confirmEmail(con, hash)
+            UserDAO.confirmEmail(con, hash)
             con.commit()
             return True
 

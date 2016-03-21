@@ -15,6 +15,10 @@ if __name__ == '__main__':
 
     logging.basicConfig(level=logging.DEBUG)
 
+    #import txaio
+    #txaio.use_asyncio()
+    #txaio.start_logging(level='debug')
+
     from autobahn.asyncio.wamp import ApplicationRunner
     from model.registry import Registry
     from actions.login.login import LoginWamp
@@ -25,5 +29,5 @@ if __name__ == '__main__':
     realm = registry.get('realm')
     debug = registry.get('debug')
 
-    runner = ApplicationRunner(url=url, realm=realm, debug=debug, debug_wamp=debug, debug_app=debug)
+    runner = ApplicationRunner(url=url, realm=realm)
     runner.run(LoginWamp)
