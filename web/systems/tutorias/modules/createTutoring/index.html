@@ -134,10 +134,7 @@
                           </div>
                       </div>
                       <div>
-                          <select class="selectSituacion">
-                              <option>Situación académica</option>
-                              <option>Situación económica</option>
-                              <option>Situación personal</option>
+                          <select class="selectSituacion" ng-model="user.tutoring" ng-options="option for option in model.situations">
                           </select>
                       </div>
                       <div>

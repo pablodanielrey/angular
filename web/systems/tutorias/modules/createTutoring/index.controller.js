@@ -8,13 +8,16 @@ function CreateTutoringCtrl($rootScope, $scope, Login, Tutors, $timeout) {
 
   $scope.model = {
     tutoring: {
-      search: '',
       tutor: {},
       date: new Date(),
       participants: []
     },
+    searchResults: [],
+    searching: false,
+    search: '',
     tutorings: [],
-    recentUsers: []
+    recentUsers: [],
+    situations: ['Situación académica','Situación económica','Situación personal']
   }
 
   $scope.view = {
@@ -76,6 +79,7 @@ function CreateTutoringCtrl($rootScope, $scope, Login, Tutors, $timeout) {
 
     i = $scope.findByDni(user, $scope.model.tutoring.participants);
     if (i < 0) {
+      user.tutoring = $scope.model.situations[0];
       $scope.model.tutoring.participants.push(user);
     }
     $scope.view.style2='';
