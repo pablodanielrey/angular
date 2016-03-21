@@ -38,11 +38,12 @@
                       </div>
                       <div class="contentDataTutoringRecent">
                         <div>
-                          {{t.day}}
+                          <b>{{t.date | date:'dd/MM/yyyy'}}</b>
                         </div>
                         <div>
-                          <b>{{t.date}}</b>
+                          {{t.participants.length}} alumnos
                         </div>
+
                       </div>
                       <div class="iconIrTutoring">
                         <i class="fa fa-sign-in fa-2x"></i>
@@ -59,7 +60,7 @@
               <i class="fa fa-search"></i> BUSCAR
             </div>
             <div>
-              <input class="inputSearch" type="text" ng-readonly="{{model.searching}}" ng-model="model.search" ng-model-options="{ debounce: 1000 }" ng-change="searchParticipants()"/>
+              <input class="inputSearch" type="text" ng-click="view.style2 = 'verResultados'" ng-model="model.search" ng-model-options="{ debounce: 1000 }" ng-change="searchParticipants()"/>
             </div>
             <div class="contentRecentAndTrash">
                 <div>
@@ -74,7 +75,7 @@
 
               <div class="contentUserRecent" ng-repeat="user in model.recentUsers" ng-click='addParticipant(user)'>
                   <div class="contentPhotoRecent">
-                    <img class="imgUserRecent" src="{{user.img}}">
+                    <img class="imgUserRecent" src="{{user.user.img}}">
                   </div>
                   <div class="contentDataRecent">
                     <div>
@@ -102,22 +103,30 @@
           <div class="contentList">
               <div class="headerList">
                   <div class="dataHeader">
-                      <div>Tutoría &nbsp;<i class="fa fa-calendar-o"></i> <b><input class="inputDate" type="date" ng-model="model.tutoring.date"/> </b></div>
+                      <div>Tutoría &nbsp;<i class="fa fa-calendar-o"></i>
+                        <!-- <b><input class="inputDate" type="date" ng-model="model.tutoring.date"/> </b> -->
+                        <b>{{model.tutoring.date | date:'dd/MM/yyyy'}}</b>
+                      </div>
+                      <div>
+                        &nbsp; | <i class="fa fa-user"></i> &nbsp;{{model.tutoring.participants.length}} alumnos
+                      </div>
                       <div>&nbsp; | Tutor</div>
                       <div><img class="imgTutor" src="{{model.tutoring.tutor.img}}"></div>
                       <div><b>{{model.tutoring.tutor.name}}</b></div>
                   </div>
                   <div>
                     <button class="btnCreate" ng-click="save()">GUARDAR</button>
+                    <button class="btnDelete" ng-if="model.tutoring.id != null" ng-click="delete()">ELIMINAR</button>
                     <button class="btnCancel" ng-click="cancel()"><i class="fa fa-times"></i></button>
                   </div>
               </div>
 
               <div class="listParticipants">
+
                 <div class="itemUserList" ng-repeat='user in model.tutoring.participants'>
                       <div class="itemUser">
                           <div class="contentPhotoRecent">
-                            <img class="imgUserRecent" src="{{user.img}}">
+                            <img class="imgUserRecent" src="{{user.user.img}}">
                           </div>
                           <div class="contentDataRecent">
                             <div>
@@ -146,7 +155,7 @@
           <!-- ********* RESULTADOS DE BUSQUEDA ************** -->
           <div class="contentSearchResults">
               <div class="title">
-                <i class="fa fa-search"></i> RESULTADOS ENCONTRADOS
+                <i class="fa fa-search"></i> <b>{{model.searchResults.length}}</b> RESULTADOS ENCONTRADOS
               </div>
 
 

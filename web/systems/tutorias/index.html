@@ -45,13 +45,16 @@
 
   <script type="text/javascript" src="/systems/tutorias/modules/menu/index.controller.js"></script>
 
+  <script type="text/javascript" src="/systems/fce/modules/header/header.controller.js"></script>
   <link rel="stylesheet" type="text/css" href="/systems/fce/modules/header/header.css"/>
+
   <link rel="stylesheet" type="text/css" href="/systems/fce/modules/footer/footer.css"/>
 
 </head>
 <body class="sistema">
 
-    <div ng-include="'/systems/fce/modules/header/index.html'"></div>
+    <div ng-controller='HeaderCtrl' ng-include="'/systems/fce/modules/header/index.html'"></div>
+
     <div class="main">
       <div class="MenuContent" ng-controller="MenuCtrl" ng-include="'/systems/tutorias/modules/menu/index.html'"></div>
       <div class="viewContent" ng-view></div>

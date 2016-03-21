@@ -8,6 +8,7 @@ function CreateTutoringCtrl($rootScope, $scope, Login, Tutors, $timeout) {
 
   $scope.model = {
     tutoring: {
+      id: null,
       tutor: {},
       date: new Date(),
       participants: []
@@ -36,14 +37,14 @@ function CreateTutoringCtrl($rootScope, $scope, Login, Tutors, $timeout) {
       $scope.$apply([
         $scope.model.tutoring.tutor = {
           name: s.login.username,
-          img: ''
+          img: 'img/avatarMen.jpg'
         }
       ]);
     }, function(err) {
       $scope.$apply([
         $scope.model.tutoring.tutor = {
           name: 'Error',
-          img: ''
+          img: 'img/avatarMen.jpg'
         }
       ]);
     });
@@ -103,14 +104,19 @@ function CreateTutoringCtrl($rootScope, $scope, Login, Tutors, $timeout) {
     }
 
     $scope.model.searching = true;
-    $scope.view.style2='verResultados';
+    $scope.view.style2 = 'verResultados';
     $scope.searchResults = [];
+    $scope.view.style3 = 'cargandoBusqueda';
 
     Tutors.search($scope.model.search)
     .then(function(users) {
-      $scope.model.searching = false;
-      $scope.model.searchResults = users
+      $scope.$apply(function() {
+        $scope.view.style3 = '';
+        $scope.model.searching = false;
+        $scope.model.searchResults = users
+      });
     }, function(err) {
+      $scope.view.style3 = '';
       $scope.model.searching = false;
       console.log(err);
     })
@@ -119,7 +125,7 @@ function CreateTutoringCtrl($rootScope, $scope, Login, Tutors, $timeout) {
   }
 
   $scope.initialize = function() {
-    $scope.loadTutorings();
+    //$scope.loadTutorings();
     //$scope.loadRecentUsers();
   }
 
@@ -149,17 +155,24 @@ function CreateTutoringCtrl($rootScope, $scope, Login, Tutors, $timeout) {
 
   $scope.selectTutoring = function(t) {
     $scope.view.style = 'nuevaTutoria';
+    $scope.model.tutoring = t;
   }
 
   $scope.save = function() {
-    Tutors.persist(tutoring)
+    Tutors.persist($scope.model.tutoring)
     .then(function(data) {
-      $scope.view.style3='mensajes';
-      $scope.view.style4='msjGuardada';
+      $scope.$apply(function() {
+        $scope.view.style3='mensajes';
+        $scope.view.style4='msjGuardada';
+        $scope.model.tutorings.push(data);
+      });
+
       $timeout(function () {
         $scope.view.style = '';
         $scope.view.style3 = '';
       }, 3000);
+
+
     }, function(err) {
       console.log('error');
     });

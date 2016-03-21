@@ -15,7 +15,21 @@ function Tutors($wamp, Session) {
   */
 
   this.search = function(regex) {
-    return $wamp.call('users.search', [regex]);
+    return new Promise(function(cok, cerr) {
+      $wamp.call('users.search', [regex])
+      .then(function(users) {
+        for (var i = 0; i < users.length; i++) {
+          if (users[i]['user'].genre == 'Femenino') {
+            users[i]['user'].img='img/avatarWoman.jpg';
+          } else {
+            users[i]['user'].img='img/avatarMen.jpg';
+          }
+        }
+        cok(users);
+      }, function(err) {
+        cerr(err);
+      });
+    });
   }
 
   this.loadTutorings = function() {
@@ -24,7 +38,12 @@ function Tutors($wamp, Session) {
   }
 
   this.persist = function(tutoring) {
-    return $wamp.call('tutors.persist',[tutoring]);
+    return new Promise(function(cok, cerr) {
+      var t = JSON.parse(JSON.stringify(tutoring));
+      t.id = '';
+      cok(t);
+    });
+    //return $wamp.call('tutors.persist',[tutoring]);
   }
 
 }

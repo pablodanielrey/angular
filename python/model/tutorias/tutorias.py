@@ -20,7 +20,7 @@ class TutoriasModel:
         for uid in userIds:
             if uid not in self.cache.keys():
                 user = {
-                    'user': UserDAO.findById(con, uid),
+                    'user': UserDAO.findById(con, [uid])[0],
                     'student': StudentDAO.findById(con, [uid])[0]
                 }
                 self.cache[uid] = user
