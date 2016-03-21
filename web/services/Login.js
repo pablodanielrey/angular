@@ -38,9 +38,13 @@ function Login($rootScope, $wamp, Session) {
     return new Promise(function(cok, cerr) {
       var s = Session.getCurrentSession();
       if (s != null) {
-        $wamp.call('system.session.validate', [])
-        .then(function() {
-          cok(s);
+        $wamp.call('system.session.validate', [s.session_id])
+        .then(function(v) {
+          if (v) {
+            cok(s);
+          } else {
+            cerr(Error('No existe sesión'))
+          }
         }, function() {
           cerr(Error());
         });

@@ -20,10 +20,10 @@
                  NUEVA TUTORÍA
               </div>
               <div>
-                <input class="inputDate" type="date" value="2026-01-13"/>
+                <input class="inputDate" type="date" ng-model="model.tutoring.date"/>
               </div>
               <div>
-                <button class="btnCreate" type="button" ng-click="view.style='nuevaTutoria'">CREAR </button>
+                <button class="btnCreate" type="button" ng-click="createNewTutoring()">CREAR </button>
               </div>
               <div class="titleMyTutoring">
                  MIS TUTORÍAS
@@ -59,7 +59,7 @@
               <i class="fa fa-search"></i> BUSCAR
             </div>
             <div>
-              <input class="inputSearch" type="text" ng-click="view.style2='verResultados'"/>
+              <input class="inputSearch" type="text" ng-readonly="{{model.searching}}" ng-model="model.search" ng-model-options="{ debounce: 1000 }" ng-change="searchParticipants()"/>
             </div>
             <div class="contentRecentAndTrash">
                 <div>
@@ -72,16 +72,19 @@
             </div>
             <div class="contentRecent">
 
-              <div class="contentUserRecent" ng-repeat="user in model.recentUsers">
+              <div class="contentUserRecent" ng-repeat="user in model.recentUsers" ng-click='addParticipant(user)'>
                   <div class="contentPhotoRecent">
                     <img class="imgUserRecent" src="{{user.img}}">
                   </div>
                   <div class="contentDataRecent">
                     <div>
-                      <b>{{user.name}} {{user.lastname}}</b>
+                      <b>{{user.user.name}} {{user.user.lastname}}</b>
                     </div>
                     <div>
-                      {{user.dni}}
+                      {{user.user.dni}}
+                    </div>
+                    <div>
+                      {{user.student.studentNumber}}
                     </div>
 
                   </div>
@@ -99,10 +102,10 @@
           <div class="contentList">
               <div class="headerList">
                   <div class="dataHeader">
-                      <div>Tutoría &nbsp;<i class="fa fa-calendar-o"></i> <b>26/03/2016 </b></div>
+                      <div>Tutoría &nbsp;<i class="fa fa-calendar-o"></i> <b><input class="inputDate" type="date" ng-model="model.tutoring.date"/> </b></div>
                       <div>&nbsp; | Tutor</div>
-                      <div><img class="imgTutor" src="img/lucas.jpg"></div>
-                      <div><b>Lucas Langoni</b></div>
+                      <div><img class="imgTutor" src="{{model.tutoring.tutor.img}}"></div>
+                      <div><b>{{model.tutoring.tutor.name}}</b></div>
                   </div>
                   <div>
                     <button class="btnCreate" ng-click="view.style3='mensajes'; view.style4='msjGuardada'">GUARDAR</button>
@@ -111,19 +114,22 @@
               </div>
 
               <div class="listParticipants">
-
-                  <div class="itemUserList">
+                <div class="itemUserList" ng-repeat='user in model.tutoring.participants'>
                       <div class="itemUser">
                           <div class="contentPhotoRecent">
-                            <img class="imgUserRecent" src="img/pablosarmieto.jpg">
+                            <img class="imgUserRecent" src="{{user.img}}">
                           </div>
                           <div class="contentDataRecent">
                             <div>
-                              <b>Pablo Sarmiento</b>
+                              <b>{{user.user.name}} {{user.user.lastname}}</b>
                             </div>
                             <div>
-                              30235968
+                              {{user.user.dni}}
                             </div>
+                            <div>
+                              {{user.student.studentNumber}}
+                            </div>
+
 
                           </div>
                       </div>
@@ -135,67 +141,11 @@
                           </select>
                       </div>
                       <div>
-                        <button class="btnCancel"><i class="fa fa-trash-o" title="Borar"></i></button>
+                        <button class="btnCancel"><i class="fa fa-trash-o" title="Borar" ng-click='deleteParticipant(user)'></i></button>
                       </div>
                   </div>
-
-                  <div class="itemUserList">
-                      <div class="itemUser">
-                          <div class="contentPhotoRecent">
-                            <img class="imgUserRecent" src="img/pablo.jpg">
-                          </div>
-                          <div class="contentDataRecent">
-                            <div>
-                              <b>Pablo Daniel Rey</b>
-                            </div>
-                            <div>
-                              28368952
-                            </div>
-
-                          </div>
-                      </div>
-                      <div>
-                          <select class="selectSituacion">
-                              <option>Situación académica</option>
-                              <option>Situación económica</option>
-                              <option>Situación personal</option>
-                          </select>
-                      </div>
-                      <div>
-                        <button class="btnCancel"><i class="fa fa-trash-o" title="Borar"></i></button>
-                      </div>
-                  </div>
-
-                  <div class="itemUserList">
-                      <div class="itemUser">
-                          <div class="contentPhotoRecent">
-                            <img class="imgUserRecent" src="img/walter.jpg">
-                          </div>
-                          <div class="contentDataRecent">
-                            <div>
-                              <b>Walter Blanco</b>
-                            </div>
-                            <div>
-                              30001823
-                            </div>
-
-                          </div>
-                      </div>
-                      <div>
-                          <select class="selectSituacion">
-                              <option>Situación académica</option>
-                              <option>Situación económica</option>
-                              <option>Situación personal</option>
-                          </select>
-                      </div>
-                      <div>
-                        <button class="btnCancel"><i class="fa fa-trash-o" title="Borar"></i></button>
-                      </div>
-                  </div>
-
-
-
               </div>
+
           </div>
 
           <!-- ********* RESULTADOS DE BUSQUEDA ************** -->
@@ -206,231 +156,23 @@
 
               <div class="searchResults">
                   <!-- **** DIV CONTENEDORES DE LOS USUARIOS ENCONTRADOS ****-->
-                  <div class="contentUser" ng-click="view.style2=''">
+                  <div class="contentUser" ng-repeat="user in model.searchResults" ng-click="addParticipant(user)">
                     <div class="contentPhoto">
-                      <img class="imgUser" src="img/emanuel.jpg">
+                      <img class="imgUser" src="{{user.user.img}}">
                     </div>
                     <div class="contentData">
                       <div>
-                        <b>Emanuel Joaquin Pais</b>
+                        <b>{{user.user.name}} {{user.user.lastname}}</b>
                       </div>
                       <div>
-                        31269568
+                        {{user.user.dni}}
+                      </div>
+                      <div>
+                        {{user.student.studentNumber}}
                       </div>
 
                     </div>
                   </div>
-
-                  <div class="contentUser">
-                    <div class="contentPhoto">
-                      <img class="imgUser" src="img/alejandro.jpg">
-                    </div>
-                    <div class="contentData">
-                      <div>
-                        <b>Alejandro Agustin Oporto</b>
-                      </div>
-                      <div>
-                        29496698
-                      </div>
-
-                    </div>
-                  </div>
-
-                  <div class="contentUser">
-                    <div class="contentPhoto">
-                      <img class="imgUser" src="img/pablosarmieto.jpg">
-                    </div>
-                    <div class="contentData">
-                      <div>
-                        <b>Pablo Sarmiento</b>
-                      </div>
-                      <div>
-                        30256957
-                      </div>
-
-                    </div>
-                  </div>
-
-                  <div class="contentUser">
-                    <div class="contentPhoto">
-                      <img class="imgUser" src="img/lucas.jpg">
-                    </div>
-                    <div class="contentData">
-                      <div>
-                        <b>Lucas Langoni</b>
-                      </div>
-                      <div>
-                        35456923
-                      </div>
-
-                    </div>
-                  </div>
-
-                  <div class="contentUser">
-                    <div class="contentPhoto">
-                      <img class="imgUser" src="img/walter.jpg">
-                    </div>
-                    <div class="contentData">
-                      <div>
-                        <b>Walter Blanco</b>
-                      </div>
-                      <div>
-                        30001823
-                      </div>
-
-                    </div>
-                  </div>
-
-                  <div class="contentUser">
-                    <div class="contentPhoto">
-                      <img class="imgUser" src="img/pablo.jpg">
-                    </div>
-                    <div class="contentData">
-                      <div>
-                        <b>Pablo Daniel Rey</b>
-                      </div>
-                      <div>
-                        28356952
-                      </div>
-
-                    </div>
-                  </div>
-
-                  <div class="contentUser">
-                    <div class="contentPhoto">
-                      <img class="imgUser" src="img/maxi.jpg">
-                    </div>
-                    <div class="contentData">
-                      <div>
-                        <b>Maximiliano Saucedo</b>
-                      </div>
-                      <div>
-                        29356874
-                      </div>
-
-                    </div>
-                  </div>
-
-                  <div class="contentUser">
-                    <div class="contentPhoto">
-                      <img class="imgUser" src="img/emanuel.jpg">
-                    </div>
-                    <div class="contentData">
-                      <div>
-                        <b>Emanuel Joaquin Pais</b>
-                      </div>
-                      <div>
-                        31269568
-                      </div>
-
-                    </div>
-                  </div>
-
-                  <div class="contentUser">
-                    <div class="contentPhoto">
-                      <img class="imgUser" src="img/alejandro.jpg">
-                    </div>
-                    <div class="contentData">
-                      <div>
-                        <b>Alejandro Agustin Oporto</b>
-                      </div>
-                      <div>
-                        29496698
-                      </div>
-
-                    </div>
-                  </div>
-
-                  <div class="contentUser">
-                    <div class="contentPhoto">
-                      <img class="imgUser" src="img/pablosarmieto.jpg">
-                    </div>
-                    <div class="contentData">
-                      <div>
-                        <b>Pablo Sarmiento</b>
-                      </div>
-                      <div>
-                        30256957
-                      </div>
-
-                    </div>
-                  </div>
-
-                  <div class="contentUser">
-                    <div class="contentPhoto">
-                      <img class="imgUser" src="img/lucas.jpg">
-                    </div>
-                    <div class="contentData">
-                      <div>
-                        <b>Lucas Langoni</b>
-                      </div>
-                      <div>
-                        35456923
-                      </div>
-
-                    </div>
-                  </div>
-
-                  <div class="contentUser">
-                    <div class="contentPhoto">
-                      <img class="imgUser" src="img/walter.jpg">
-                    </div>
-                    <div class="contentData">
-                      <div>
-                        <b>Walter Blanco</b>
-                      </div>
-                      <div>
-                        30001823
-                      </div>
-
-                    </div>
-                  </div>
-
-                  <div class="contentUser">
-                    <div class="contentPhoto">
-                      <img class="imgUser" src="img/pablo.jpg">
-                    </div>
-                    <div class="contentData">
-                      <div>
-                        <b>Pablo Daniel Rey</b>
-                      </div>
-                      <div>
-                        28356952
-                      </div>
-
-                    </div>
-                  </div>
-
-                  <div class="contentUser">
-                    <div class="contentPhoto">
-                      <img class="imgUser" src="img/maxi.jpg">
-                    </div>
-                    <div class="contentData">
-                      <div>
-                        <b>Maximiliano Saucedo</b>
-                      </div>
-                      <div>
-                        29356874
-                      </div>
-
-                    </div>
-                  </div>
-
-                  <div class="contentUser">
-                    <div class="contentPhoto">
-                      <img class="imgUser" src="img/emanuel.jpg">
-                    </div>
-                    <div class="contentData">
-                      <div>
-                        <b>Emanuel Joaquin Pais</b>
-                      </div>
-                      <div>
-                        31269568
-                      </div>
-
-                    </div>
-                  </div>
-
               </div>
 
           </div>
