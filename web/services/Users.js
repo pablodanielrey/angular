@@ -9,10 +9,16 @@ function Users($rootScope, $wamp, Session, Utils, Cache) {
   this.findByDni = function(dni) {
     return new Promise(function(cok, cerr) {
       $wamp.call('users.findByDni', [dni])
-      .then(function(id) {
-        $wamp.call('users.findById', [id])
-        .then(function(user) {
-          cok(user);
+      .then(function(data) {
+        if (data == null) {
+          cerr(Error('No existe ese usuario'));
+          return;
+        };
+        var id = data[0];
+        var version = data[1];
+        $wamp.call('users.findById', [[id]])
+        .then(function(users) {
+          cok(users);
         }, function(err) {
           cerr(err);
         });

@@ -276,25 +276,22 @@ class UserDAO:
             cur.close()
 
     @staticmethod
-    def findById(con, uid):
-        '''
-            Obtiene el usuario especificado por el id
-            Retorna:
-                User a partir de los datos de la base
-                None en caso de que no exista
-        '''
-        assert uid is not None
+    def findById(con, uids):
+        assert uids is not None
         cur = con.cursor()
         try:
-            cur.execute('select * from profile.users where id = %s', (uid,))
+            cur.execute('select * from profile.users where id in %s', (tuple(uids),))
             if cur.rowcount <= 0:
-                return None
-            user = UserDAO._fromResult(cur.fetchone())
+                return []
 
-            cur.execute('select * from profile.telephones where user_id = %s', (uid,))
-            user.telephones = [ UserDAO._telephoneFromResult(r) for r in cur ]
+            users = []
+            for user in cur:
+                ouser = UserDAO._fromResult(user)
+                cur.execute('select * from profile.telephones where user_id = %s', (ouser.id,))
+                ouser.telephones = [ UserDAO._telephoneFromResult(r) for r in cur ]
+                users.append(ouser)
 
-            return user
+            return users
 
         finally:
             cur.close()

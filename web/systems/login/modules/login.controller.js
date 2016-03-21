@@ -20,9 +20,9 @@ angular
   });
 
 
-LoginCtrl.$inject = ['$scope','$window','Notifications','Login','Users'];
+LoginCtrl.$inject = ['$scope','$window', '$interval', 'Notifications','Login','Users'];
 
-function LoginCtrl($scope, $window, Notifications, Login, Users) {
+function LoginCtrl($scope, $window, $interval, Notifications, Login, Users) {
 
   /* ---------------------------------------------------
    * --------------------- VARIABLES -------------------
@@ -92,6 +92,7 @@ function LoginCtrl($scope, $window, Notifications, Login, Users) {
      $scope.sendUsername = sendUsername;
      $scope.sendPassword = sendPassword;
      $scope.clearUserNameField = clearUserNameField;
+     $scope.clearPasswordField = clearPasswordField;
 
      function connectServer() {
        $scope.model.openConnection = true;
@@ -108,30 +109,34 @@ function LoginCtrl($scope, $window, Notifications, Login, Users) {
        $scope.view.classError = classNameNoError;
      }
 
+     function clearPasswordField() {
+       $scope.model.password = '';
+       $scope.view.classError = classNameNoError;
+     }
+
      function sendUsername() {
        Login.testUser($scope.model.username)
        .then(function(ok) {
-         if (!ok) {
-           $scope.viewUserError();
+         if (ok) {
+
+           Users.findByDni($scope.model.username)
+           .then(function(user) {
+               console.log(user);
+               $scope.$apply(function() {
+                 $scope.model.user = user[0];
+                 $scope.view.focus = 'inputPassword';
+                 $scope.viewPassword();
+               });
+           }, function(err) {
+             $scope.viewUserError();
+           });
+
          } else {
-           $scope.viewPassword();
+           $scope.viewUserError();
          }
        }, function(err) {
-         console.log(err);
          $scope.viewUserError();
-       })
-       Users.findByDni($scope.model.username)
-       .then(function(user) {
-           console.log(user);
-           $scope.model.user = user;
-           $scope.viewPassword();
-           $scope.view.focus = 'inputPassword';
-         },
-         function(error) {
-           $scope.viewUserError();
-         }
-       );
-
+       });
      }
 
      function sendPassword() {
@@ -140,7 +145,9 @@ function LoginCtrl($scope, $window, Notifications, Login, Users) {
            $window.location.href = "/index.html";
          },
          function(error) {
-           $scope.viewPasswordError();
+           $scope.$apply(function() {
+             $scope.viewPasswordError();
+           });
          }
        );
      }
@@ -169,11 +176,17 @@ function LoginCtrl($scope, $window, Notifications, Login, Users) {
       function viewPasswordError() {
         $scope.view.classScreen = classNameViewPassword;
         $scope.view.classError = classNameError;
+        $scope.interval = $interval(function() {
+            $scope.clearPasswordField();
+        }, 1000, [1]);
       }
 
       function viewUserError() {
         $scope.view.classScreen = classNameViewUser;
         $scope.view.classError = classNameError;
+        $scope.interval = $interval(function() {
+            $scope.clearUserNameField();
+        }, 1000, [1]);
       }
 
       function viewUser() {

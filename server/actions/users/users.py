@@ -60,6 +60,8 @@ class UsersWamp(ApplicationSession):
         con = self.conn.get()
         try:
             data = UserDAO.findById(con, id)
+            return data
+
             if data is None:
                 return None
             ru = data.__dict__
