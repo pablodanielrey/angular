@@ -77,7 +77,7 @@ class UsersWamp(ApplicationSession):
     def findByDni(self, dni):
         con = self.conn.get()
         try:
-            data = UserDAO.findUserByDni(con, dni)
+            data = UserDAO.findByDni(con, dni)
             return data
 
         finally:

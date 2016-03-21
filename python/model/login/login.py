@@ -8,13 +8,14 @@ import re
 from model.registry import Registry
 from model.login.session import Session, SessionDAO
 from model.login.profiles import Profile, ProfileDAO
-from model.users.users import UserPassword, UserPasswordDAO, User, UserDAO, UserModel
+# from model.users.users import UserPassword, UserPasswordDAO, User, UserDAO, UserModel
+from model.users.users import UserPassword, UserPasswordDAO, User, UserDAO
 
 class Login:
 
     reg = inject.attr(Registry)
     userPassword = inject.attr(UserPasswordDAO)
-    users = inject.attr(UserModel)
+    # users = inject.attr(UserModel)
     sessions = inject.attr(SessionDAO)
     profiles = inject.attr(ProfileDAO)
 
