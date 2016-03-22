@@ -109,16 +109,27 @@ class FGenre(Filter):
 class FAge(Filter):
 
     def __init__(self):
-        self.age = 0
+        self.beginAge = 0
+        self.endAge = 0
 
     def _filter(self, con, inscriptions):
-        return [ i for i in inscriptions if FAge._age(i.getUser(con).birthdate) == self.age ]
+        return [ i for i in inscriptions if FAge._age(i.getUser(con).birthdate) >= self.beginAge and FAge._age(i.getUser(con).birthdate) <= self.endAge ]
 
     @staticmethod
     def _age(birthdate):
         import datetime
-        return (datetime.datetime.now() - birthdate).year
+        if (birthdate is None):
+            return 0
+        return (datetime.date.today() - birthdate).days / 365
 
+
+class FResidence(Filter):
+
+    def __init__(self):
+        self.city = 'La Plata'
+
+    def _filter(self, con, inscriptions):
+        return [ i for i in inscriptions if i.getUser(con).residence_city == self.city ]
 
 class FPriority:
 

@@ -20,6 +20,8 @@ function FiltersCtrl($rootScope, $scope, $filter) {
     endDate:new Date(),
     beginCountCathedra: 0,
     endCountCathedra: 10,
+    beginAge: 20,
+    endAge: 30,
     beginAverageWithFails: 0,
     endAverageWithFails: 10,
     beginAverageWithoutFails: 0,
@@ -35,13 +37,7 @@ function FiltersCtrl($rootScope, $scope, $filter) {
     filtersLaboral: ["Pasantía", "Full-Time", "Jovenes Profesionales"],
     filtersWorkExperience: ['No', 'Sí'],
     filtersGenre: ["Masculino", "Femenino", "Otros"],
-    filtersResidence: [
-      {type:"filterResidence", descriptionType:'Ciudad de Residencia', name:"La Plata", value:"laPlata"},
-      {type:"filterResidence", descriptionType:'Ciudad de Residencia', name:"M.B Gonnet", value:"gonnet"},
-      {type:"filterResidence", descriptionType:'Ciudad de Residencia', name:"Ranchos", value:"ranchos"},
-      {type:"filterResidence", descriptionType:'Ciudad de Residencia', name:"City Bell", value:"cityBell"},
-      {type:"filterResidence", descriptionType:'Ciudad de Residencia', name:"Otros", value:"others"}
-    ],
+    filtersResidence: ["La Plata","M.B Gonnet", "Ranchos", "City Bell", "Otros"],
     filtersOrigin: [
       {type:"filterOrigin", descriptionType:'Ciudad de Origen', name:"La Plata", value:"laPlata"},
       {type:"filterOrigin", descriptionType:'Ciudad de Origen', name:"M.B Gonnet", value:"gonnet"},
@@ -78,6 +74,7 @@ function FiltersCtrl($rootScope, $scope, $filter) {
   $scope.addLaboralFilter = addLaboralFilter;
   $scope.addWorkExperience = addWorkExperience;
   $scope.addGenreFilter = addGenreFilter;
+  $scope.addAgeFilter = addAgeFilter;
   $scope.addResidenceFilter = addResidenceFilter;
   $scope.addOriginFilter = addOriginFilter;
   $scope.addTravelFilter = addTravelFilter;
@@ -180,11 +177,37 @@ function FiltersCtrl($rootScope, $scope, $filter) {
     $scope.view.filtersGenre.splice(i,1);
   }
 
+  function addAgeFilter() {
+    if ($scope.model.beginAge > $scope.model.endAge && $scope.model.endAge > 0) {
+      return;
+    }
+    // {"data": {"beginAge": 20, endAge: 30}, "filter": "FAge"}
+    var dataFilter = {};
+    dataFilter.data = {beginAge: $scope.model.beginAge, endAge: $scope.model.endAge};
+    dataFilter.filter = "FAge";
+
+    var filter = {};
+    filter.data = dataFilter;
+    filter.view = {type: "Edad", value: $scope.model.beginAge + " - " + $scope.model.endAge};
+
+    $scope.model.filters.push(filter);
+  }
+
   function addResidenceFilter() {
     if ($scope.model.selectFilterResidence == null) {
       return;
     }
-    $scope.model.filters.push($scope.model.selectFilterResidence);
+
+    // {"data": {"city": "La Plata"}, "filter": "FResidence"}
+    var dataFilter = {};
+    dataFilter.data = {city: $scope.model.selectFilterResidence};
+    dataFilter.filter = "FResidence";
+
+    var filter = {};
+    filter.data = dataFilter;
+    filter.view = {type: "Ciudad de Residencia", value: $scope.model.selectFilterResidence};
+
+    $scope.model.filters.push(filter);
     var i = $scope.view.filtersResidence.indexOf($scope.model.selectFilterResidence);
     $scope.view.filtersResidence.splice(i,1);
   }
@@ -250,7 +273,7 @@ function FiltersCtrl($rootScope, $scope, $filter) {
       case "FOffer": $scope.view.filtersLaboral.push(filter.view.value); break;
       case "FWorkExperience": $scope.view.filtersWorkExperience.push(filter.view.value); break;
       case "FGenre": $scope.view.filtersGenre.push(filter.view.value); break;
-      case "filterResidence": $scope.view.filtersResidence.push(filter); break;
+      case "FResidence": $scope.view.filtersResidence.push(filter.view.value); break;
       case "filterOrigin": $scope.view.filtersOrigin.push(filter); break;
       case "filterTravel": $scope.view.filtersTravel.push(filter); break;
       case "filterLanguage": $scope.view.filtersLanguage.push(filter); break;

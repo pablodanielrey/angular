@@ -86,11 +86,11 @@
           <div class="itemsFilters">
               <div class="subItemsFilters">
                   <div class="textItemFilters"><i class="fa fa-calendar-o"></i> Edad</div>
-                  <input class="inputCant" type="text" placeholder="20" ></input> -
-                  <input class="inputCant" type="text" placeholder="30" ></input>
+                  <input class="inputCant" type="text" placeholder="20" ng-model="model.beginAge"></input> -
+                  <input class="inputCant" type="text" placeholder="30" ng-model="model.endAge"></input>
               </div>
               <div>
-                  <button class="btnItems" ng-click="addCountCathedra()" ng-disabled="!view.enabledFilterCountCathedra"> Agregar <i class="fa fa-arrow-circle-right"></i></button>
+                  <button class="btnItems" ng-click="addAgeFilter()"> Agregar <i class="fa fa-arrow-circle-right"></i></button>
               </div>
           </div>
 
@@ -101,7 +101,7 @@
                 <div class="textItemFilters">
                   <i class="fa fa-building-o"></i> Ciudad de Residencia
                 </div>
-                <select class="inputFilters" name='residence_city' ng-model="model.selectFilterResidence" ng-options="option.name for option in view.filtersResidence | orderBy: ['name']: false">
+                <select class="inputFilters" name='residence_city' ng-model="model.selectFilterResidence" ng-options="option for option in view.filtersResidence | orderBy: option">
                   <option class="selectGrey" disabled selected style='display:none;' value="">Seleccionar</option>
                 </select>
             </div>
