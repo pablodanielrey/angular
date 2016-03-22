@@ -61,17 +61,22 @@ class TutorsWamp(ApplicationSession):
         con = self.conn.get()
         try:
             users = self.tutoriasModel.search(con, regex)
+            susers = []
             for u in users:
-                u['user'] = self._serializeUser(u['user'])
-                u['student'] = u['student'].__dict__
-            return users
+                u2 = {
+                    'user': self._serializeUser(u['user']),
+                    'student': u['student'].__dict__
+                }
+                susers.append(u2)
+            return susers
 
         finally:
             self.conn.put(con)
 
     def _serializeUser(self, u):
-        u.telephones = [ t.__dict__ for t in u.telephones ]
-        return u.__dict__
+        u2 = u.__dict__
+        u2['telephones'] = [ t.__dict__ for t in u.telephones ]
+        return u2
 
     def _serializeSituation(self, s):
         s.user['user'] = self._serializeUser(s.user['user'])
