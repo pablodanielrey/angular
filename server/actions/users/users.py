@@ -44,13 +44,12 @@ class UsersWamp(ApplicationSession):
         con = self.conn.get()
         try:
             data = UserDAO.findById(con, id)
-            return data
+            datas = []
+            for d in data:
+                d.telephones = [ t.__dict__ for t in d.telephones ]
+                datas.append(d.__dict__)
+            return datas
 
-            if data is None:
-                return None
-            ru = data.__dict__
-            ru['telephones'] = [ t.__dict__ for t in data.telephones ]
-            return ru
         finally:
             self.conn.put(con)
 
