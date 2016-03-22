@@ -136,9 +136,11 @@ class Serializer(object):
 
 
 # JSON serialization is always supported
+"""
 try:
     # try import accelerated JSON implementation
     #
+
     import ujson
 
     _json = ujson
@@ -150,6 +152,8 @@ try:
         return ujson.dumps(obj, double_precision=15, ensure_ascii=False)
 
 except ImportError:
+"""
+try:
     # fallback to stdlib implementation
     #
     import json
