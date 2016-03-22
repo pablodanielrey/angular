@@ -61,6 +61,9 @@ class TutorsWamp(ApplicationSession):
         con = self.conn.get()
         try:
             users = self.tutoriasModel.search(con, regex)
+            for u in users:
+                u['user'] = self._serializeUser(u['user'])
+                u['student'] = u['student'].__dict__
             return users
 
         finally:
