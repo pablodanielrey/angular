@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import uuid
 import inject
-from model.users.users import UserDAO
+import model.users.users
 from model.laboralinsertion.user import UserDAO
 
 
@@ -21,11 +21,11 @@ class Inscription:
         self.average2 = 0
         self.approved = 0
 
-        def getUser(self, con):
-            return model.users.users.UserDAO.findById(con, self.userId)
+    def getUser(self, con):
+        return model.users.users.UserDAO.findById(con, self.userId)
 
-        def getUserData(self, con):
-            return model.laboralinsertion.user.UserDAO.findByIf(con, self.userId)
+    def getUserData(self, con):
+        return model.laboralinsertion.user.UserDAO.findByIf(con, self.userId)
 
 class InscriptionDAO:
 
