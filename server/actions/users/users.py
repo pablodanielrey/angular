@@ -39,22 +39,6 @@ class UsersWamp(ApplicationSession):
         yield from self.register(self.sendEmailConfirmation_async, 'users.mails.sendEmailConfirmation')
         yield from self.register(self.confirmEmail_async, 'users.mails.confirmEmail')
 
-        yield from self.register(self.search_async, 'users.search')
-
-    def search(self, regex):
-        con = self.conn.get()
-        try:
-            users = self.tutoriasModel.search(con, regex)
-            return users
-
-        finally:
-            self.conn.put(con)
-
-    @coroutine
-    def search_async(self, regex):
-        loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.search, regex)
-        return r
 
     def findById(self, id):
         con = self.conn.get()

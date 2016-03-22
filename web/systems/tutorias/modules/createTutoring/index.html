@@ -41,7 +41,7 @@
                           <b>{{t.date | date:'dd/MM/yyyy'}}</b>
                         </div>
                         <div>
-                          {{t.participants.length}} alumnos
+                          {{t.situations.length}} alumnos
                         </div>
 
                       </div>
@@ -60,7 +60,7 @@
               <i class="fa fa-search"></i> BUSCAR
             </div>
             <div>
-              <input class="inputSearch" type="text" ng-click="view.style2 = 'verResultados'" ng-model="model.search" ng-model-options="{ debounce: 1000 }" ng-change="searchParticipants()"/>
+              <input class="inputSearch" type="text" ng-click="view.style2 = 'verResultados'" ng-model="model.search" ng-model-options="{ debounce: 1000 }" ng-change="searchStudents()"/>
             </div>
             <div class="contentRecentAndTrash">
                 <div>
@@ -73,7 +73,7 @@
             </div>
             <div class="contentRecent">
 
-              <div class="contentUserRecent" ng-repeat="user in model.recentUsers" ng-click='addParticipant(user)'>
+              <div class="contentUserRecent" ng-repeat="user in model.recentUsers" ng-click='addStudent(user)'>
                   <div class="contentPhotoRecent">
                     <img class="imgUserRecent" src="{{user.user.img}}">
                   </div>
@@ -108,44 +108,44 @@
                         <b>{{model.tutoring.date | date:'dd/MM/yyyy'}}</b>
                       </div>
                       <div>
-                        &nbsp; | <i class="fa fa-user"></i> &nbsp;{{model.tutoring.participants.length}} alumnos
+                        &nbsp; | <i class="fa fa-user"></i> &nbsp;{{model.tutoring.situations.length}} alumnos
                       </div>
                       <div>&nbsp; | Tutor</div>
                       <div><img class="imgTutor" src="{{model.tutoring.tutor.img}}"></div>
-                      <div><b>{{model.tutoring.tutor.name}}</b></div>
+                      <div><b>{{model.tutoring.tutor.name}} {{model.tutoring.tutor.lastname}}</b></div>
                   </div>
                   <div>
                     <button class="btnCreate" ng-click="save()">GUARDAR</button>
-                    <button class="btnDelete" ng-if="model.tutoring.id != null" ng-click="delete()">ELIMINAR</button>
+                    <button class="btnDelete" ng-if="model.tutoring.id != null" ng-click="delete(model.tutoring.id)">ELIMINAR</button>
                     <button class="btnCancel" ng-click="cancel()"><i class="fa fa-times"></i></button>
                   </div>
               </div>
 
               <div class="listParticipants">
 
-                <div class="itemUserList" ng-repeat='user in model.tutoring.participants'>
+                <div class="itemUserList" ng-repeat='situation in model.tutoring.situations'>
                       <div class="itemUser">
                           <div class="contentPhotoRecent">
-                            <img class="imgUserRecent" src="{{user.user.img}}">
+                            <img class="imgUserRecent" src="{{situation.user.user.img}}">
                           </div>
                           <div class="contentDataRecent">
                             <div>
-                              <b>{{user.user.name}} {{user.user.lastname}}</b>
+                              <b>{{situation.user.user.name}} {{situation.user.user.lastname}}</b>
                             </div>
                             <div>
-                              {{user.user.dni}}
+                              {{situation.user.user.dni}}
                             </div>
                             <div>
-                              {{user.student.studentNumber}}
+                              {{situation.user.student.studentNumber}}
                             </div>
                           </div>
                       </div>
                       <div>
-                          <select class="selectSituacion" ng-model="user.tutoring" ng-options="option for option in model.situations">
+                          <select class="selectSituacion" ng-model="situation.situation" ng-options="option for option in model.situations">
                           </select>
                       </div>
                       <div>
-                        <button class="btnCancel"><i class="fa fa-trash-o" title="Borar" ng-click='deleteParticipant(user)'></i></button>
+                        <button class="btnCancel"><i class="fa fa-trash-o" title="Borar" ng-click='deleteStudent(situation.user)'></i></button>
                       </div>
                   </div>
               </div>
@@ -166,7 +166,7 @@
                   <div><i class="fa fa-spinner fa-pulse"></i> Espere por favor...</div>
                 </div>
                   <!-- **** DIV CONTENEDORES DE LOS USUARIOS ENCONTRADOS ****-->
-                  <div class="contentUser" ng-repeat="user in model.searchResults" ng-click="addParticipant(user)">
+                  <div class="contentUser" ng-repeat="user in model.searchResults" ng-click="addStudent(user)">
                     <div class="contentPhoto">
                       <img class="imgUser" src="{{user.user.img}}">
                     </div>

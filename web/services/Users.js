@@ -6,6 +6,10 @@ Users.inject = ['$rootScope', '$wamp', 'Session','Utils','Cache'];
 
 function Users($rootScope, $wamp, Session, Utils, Cache) {
 
+  this.findById = function(id) {
+    return $wamp.call('users.findById', [id]);
+  }
+
   this.findByDni = function(dni) {
     return new Promise(function(cok, cerr) {
       $wamp.call('users.findByDni', [dni])
@@ -16,7 +20,7 @@ function Users($rootScope, $wamp, Session, Utils, Cache) {
         };
         var id = data[0];
         var version = data[1];
-        $wamp.call('users.findById', [[id]])
+        this.findById([id])
         .then(function(users) {
           cok(users);
         }, function(err) {
@@ -228,9 +232,7 @@ function Users($rootScope, $wamp, Session, Utils, Cache) {
   // esto lo modifique solo para obtener el usuario por dni, no se como se deberia manejar con la cache
 
 
-  this.findById = function(id) {
-    return $wamp.call('users.findById', [id]);
-  }
+
 
 
 };

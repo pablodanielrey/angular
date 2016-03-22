@@ -2,16 +2,17 @@ angular
   .module('mainApp')
   .controller('CreateTutoringCtrl',CreateTutoringCtrl);
 
-CreateTutoringCtrl.inject = ['$rootScope', '$scope', 'Login', 'Tutors', '$timeout'];
+CreateTutoringCtrl.inject = ['$rootScope', '$scope', 'Login', 'Users', 'Tutors', '$timeout'];
 
-function CreateTutoringCtrl($rootScope, $scope, Login, Tutors, $timeout) {
+function CreateTutoringCtrl($rootScope, $scope, Login, Users, Tutors, $timeout) {
 
   $scope.model = {
     tutoring: {
       id: null,
+      tutorId: '',
       tutor: {},
       date: new Date(),
-      participants: []
+      situations: []        // arreglo de objetos del tipo {user: {user:{}, student:{}}, situation: ''}
     },
     searchResults: [],
     searching: false,
@@ -27,33 +28,54 @@ function CreateTutoringCtrl($rootScope, $scope, Login, Tutors, $timeout) {
   }
 
 
+  $scope.initializeNewTutoring = function(date) {
+    $scope.model.tutoring = {
+          id: null,
+          tutorId: '',
+          tutor: {},
+          date: date,
+          situations: []        // arreglo de objetos del tipo {user: {user:{}, student:{}}, situation: ''}
+        };
+    }
+
+  $scope.delete = function(tid) {
+    Tutors.delete(tid)
+      .then(function(ok) {
+
+        $scope.initialize();
+        $scope.view.style = '';
+        $scope.view.style2 = '';
+
+      }, function(err) {
+        cosole.log(err);
+      })
+  }
+
   $scope.createNewTutoring = function() {
-    $scope.model.tutoring.participants = [
-        // {name:'Pablo Rey', img: 'img/pablo.jpg', dni: '27294557'}
-    ];
+    $scope.initializeNewTutoring($scope.model.tutoring.date);
 
     Login.getSessionData()
-    .then(function(s) {
-      $scope.$apply([
-        $scope.model.tutoring.tutor = {
-          name: s.login.username,
-          img: 'img/avatarMen.jpg'
-        }
-      ]);
-    }, function(err) {
-      $scope.$apply([
-        $scope.model.tutoring.tutor = {
-          name: 'Error',
-          img: 'img/avatarMen.jpg'
-        }
-      ]);
-    });
+      .then(function(s) {
+          var userId = s.user_id;
+          Users.findById([userId])
+            .then(function(users) {
+                var user = users[0];
+                user.img = 'img/avatarMen.jpg';
+                $scope.model.tutoring.tutor = user;
+                $scope.model.tutoring.tutorId = userId;
+            }, function(err) {
+                console.log(err);
+            });
+      }, function(err) {
+        console.log(err);
+      });
 
     $scope.view.style = 'nuevaTutoria';
   }
 
-  $scope.deleteParticipant = function(user) {
-    $scope.model.tutoring.participants.splice($scope.model.tutoring.participants.indexOf(user),1);
+  $scope.deleteStudent = function(user) {
+    var i = $scope.findByDniInSituations(user, $scope.model.tutoring.situations);
+    $scope.model.tutoring.situations.splice(i,1);
   }
 
 
@@ -67,7 +89,17 @@ function CreateTutoringCtrl($rootScope, $scope, Login, Tutors, $timeout) {
     return -1;
   }
 
-  $scope.addParticipant = function(user) {
+  $scope.findByDniInSituations = function(user, situationList) {
+    var dni = user['user'].dni;
+    for (var i = 0; i < situationList.length; i++) {
+      if (situationList[i].user['user'].dni == dni) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  $scope.addStudent = function(user) {
     var i = $scope.findByDni(user, $scope.model.searchResults);
     if (i >= 0) {
       $scope.model.searchResults.splice(i,1);
@@ -78,15 +110,18 @@ function CreateTutoringCtrl($rootScope, $scope, Login, Tutors, $timeout) {
       $scope.model.recentUsers.push(user);
     }
 
-    i = $scope.findByDni(user, $scope.model.tutoring.participants);
+    i = $scope.findByDni(user, $scope.model.tutoring.situations);
     if (i < 0) {
-      user.tutoring = $scope.model.situations[0];
-      $scope.model.tutoring.participants.push(user);
+      var situation = {
+        user: user,
+        situation: $scope.model.situations[0]
+      };
+      $scope.model.tutoring.situations.push(situation);
     }
     $scope.view.style2='';
   }
 
-  $scope.searchParticipants = function() {
+  $scope.searchStudents = function() {
 
     if ($scope.model.searching) {
       console.log('buscando');
@@ -95,11 +130,6 @@ function CreateTutoringCtrl($rootScope, $scope, Login, Tutors, $timeout) {
 
     if ($scope.model.search == '') {
       $scope.view.style2='';
-      return;
-    }
-
-    if ($scope.model.search.length < 3) {
-      console.log('Muy pocos caracteres. como mínimo deben ser 3');
       return;
     }
 
@@ -125,7 +155,7 @@ function CreateTutoringCtrl($rootScope, $scope, Login, Tutors, $timeout) {
   }
 
   $scope.initialize = function() {
-    //$scope.loadTutorings();
+    $scope.loadTutorings();
     //$scope.loadRecentUsers();
   }
 
@@ -134,9 +164,11 @@ function CreateTutoringCtrl($rootScope, $scope, Login, Tutors, $timeout) {
     Tutors.loadTutorings()
     .then(function(tutorings) {
       // $scope.model.tutorings.push({'date':'26/03/2016','day':'Martes'});
+      $scope.$apply(function() {
         $scope.model.tutorings = tutorings;
+      });
     }, function(err) {
-
+      console.log(err);
     });
   }
 
@@ -159,19 +191,29 @@ function CreateTutoringCtrl($rootScope, $scope, Login, Tutors, $timeout) {
   }
 
   $scope.save = function() {
+
+    // acomodo el id del tutor y elimino los datos del tutor asi no transfiero tanto hacia el servidor.
+    $scope.model.tutoring.tutorId = $scope.model.tutoring.tutor.id;
+    $scope.model.tutoring.tutor = null;
+
+    // acomodo las situaciones para que tengan el userId correctamente.
+    // y elimino los datos del usuario para no enviar datos la santo botón al servidor.
+    for (var i = 0; i < $scope.model.tutoring.situations.length; i++) {
+      $scope.model.tutoring.situations[i].userId = $scope.model.tutoring.situations[i].user.user.id;
+      $scope.model.tutoring.situations[i].user = null;
+    }
+
     Tutors.persist($scope.model.tutoring)
-    .then(function(data) {
-      $scope.$apply(function() {
+    .then(function(id) {
+        $scope.initializeNewTutoring(new Date());
         $scope.view.style3='mensajes';
         $scope.view.style4='msjGuardada';
-        $scope.model.tutorings.push(data);
-      });
+        $scope.loadTutorings();
 
-      $timeout(function () {
-        $scope.view.style = '';
-        $scope.view.style3 = '';
-      }, 3000);
-
+        $timeout(function () {
+          $scope.view.style = '';
+          $scope.view.style3 = '';
+        }, 3000);
 
     }, function(err) {
       console.log('error');
