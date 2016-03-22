@@ -23,7 +23,6 @@ function IndexCtrl($rootScope, $scope, $wamp, $window, Notifications, Login) {
       }, function(err) {
         $window.location.href = "/systems/login/index.html";
       })
-
     }
 
     $scope.$on('$viewContentLoaded', function(event) {
