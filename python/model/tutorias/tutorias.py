@@ -158,19 +158,20 @@ class TutoriasModel:
                 self.cache[uid] = user
             users.append(self.cache[uid])
 
+        import copy
         m = re.compile(".*{}.*".format(regex), re.I)
         matched = []
         if '/' in regex:
             ''' busco por número de alumnos '''
-            matched = [ u for u in users if u['student'].studentNumber != None and m.search(u['student'].studentNumber) ]
+            matched = [ copy.deepcopy(u) for u in users if u['student'].studentNumber != None and m.search(u['student'].studentNumber) ]
             return matched
 
         digits = re.compile('^\d+$')
         if digits.match(regex):
             ''' busco por dni '''
-            matched = [ u for u in users if m.search(u['user'].dni) ]
+            matched = [ copy.deepcopy(u) for u in users if m.search(u['user'].dni) ]
             return matched
 
         ''' busco por nombre y apellido '''
-        matched = [ u for u in users if m.search(u['user'].name) or m.search(u['user'].lastname) ]
+        matched = [ copy.deepcopy(u) for u in users if m.search(u['user'].name) or m.search(u['user'].lastname) ]
         return matched
