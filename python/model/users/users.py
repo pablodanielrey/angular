@@ -278,8 +278,13 @@ class UserDAO:
     @staticmethod
     def findById(con, uids):
         assert uids is not None
+        assert isinstance(uids, list)
+
         cur = con.cursor()
         try:
+
+            import pdb; pdb.set_trace()
+
             cur.execute('select * from profile.users where id in %s', (tuple(uids),))
             if cur.rowcount <= 0:
                 return []

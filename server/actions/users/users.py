@@ -40,10 +40,12 @@ class UsersWamp(ApplicationSession):
         yield from self.register(self.confirmEmail_async, 'users.mails.confirmEmail')
 
 
-    def findById(self, id):
+    def findById(self, ids):
+        assert isinstance(ids, list)
+
         con = self.conn.get()
         try:
-            data = UserDAO.findById(con, id)
+            data = UserDAO.findById(con, ids)
             datas = []
             for d in data:
                 d.telephones = [ t.__dict__ for t in d.telephones ]
