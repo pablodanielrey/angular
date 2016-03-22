@@ -88,7 +88,7 @@ class FOffer(Filter):
         return [ i for i in inscriptions if i.workType == self.offer ]
 
 
-class FWorkExperience:
+class FWorkExperience(Filter):
 
     def __init__(self):
         self.workExperience = True
