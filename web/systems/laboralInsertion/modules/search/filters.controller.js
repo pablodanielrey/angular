@@ -9,6 +9,7 @@ function FiltersCtrl($rootScope, $scope, $filter) {
   $scope.model = {
     selectFilterDegree: null,
     selectFilterLaboral: null,
+    selectWorkExperience: null,
     selectFilterGenre: null,
     selectFilterResidence: null,
     selectFilterOrigin: null,
@@ -31,16 +32,9 @@ function FiltersCtrl($rootScope, $scope, $filter) {
     enabledFilterAverageWithFails: true,
     enabledFilterAverageWithoutFails: true,
     filtersDegrees:['Contador Público','Licenciatura en Economía','Licenciatura en Administración','Licenciatura en Turismo','Tecnicatura en Cooperativas'],
-    filtersLaboral: [
-      {type:"filterLaboral", descriptionType:'Oferta Laboral', name:"Pasantía", value:"pasantia"},
-      {type:"filterLaboral", descriptionType:'Oferta Laboral', name:"Full-Time", value:"fulltime"},
-      {type:"filterLaboral", descriptionType:'Oferta Laboral', name:"Jovenes Profesionales", value:"jp"},
-    ],
-    filtersGenre: [
-      {type:"filterGenre", descriptionType:'Sexo', name:"Masculino", value:"masculine"},
-      {type:"filterGenre", descriptionType:'Sexo', name:"Femenino", value:"female"},
-      {type:"filterGenre", descriptionType:'Sexo', name:"Otros", value:"other"}
-    ],
+    filtersLaboral: ["Pasantía", "Full-Time", "Jovenes Profesionales"],
+    filtersWorkExperience: ['No', 'Sí'],
+    filtersGenre: ["Masculino", "Femenino", "Otros"],
     filtersResidence: [
       {type:"filterResidence", descriptionType:'Ciudad de Residencia', name:"La Plata", value:"laPlata"},
       {type:"filterResidence", descriptionType:'Ciudad de Residencia', name:"M.B Gonnet", value:"gonnet"},
@@ -82,6 +76,7 @@ function FiltersCtrl($rootScope, $scope, $filter) {
   $scope.addDateFilter = addDateFilter;
   $scope.addDegreeFilter = addDegreeFilter;
   $scope.addLaboralFilter = addLaboralFilter;
+  $scope.addWorkExperience = addWorkExperience;
   $scope.addGenreFilter = addGenreFilter;
   $scope.addResidenceFilter = addResidenceFilter;
   $scope.addOriginFilter = addOriginFilter;
@@ -134,16 +129,53 @@ function FiltersCtrl($rootScope, $scope, $filter) {
     if ($scope.model.selectFilterLaboral == null) {
       return;
     }
-    $scope.model.filters.push($scope.model.selectFilterLaboral);
+    // {"data": {"offer": "Pasantía"}, "filter": "FOffer"}
+    var dataFilter = {};
+    dataFilter.data = {offer: $scope.model.selectFilterLaboral};
+    dataFilter.filter = "FOffer";
+
+    var filter = {};
+    filter.data = dataFilter;
+    filter.view = {type: 'Oferta Laboral', value: $scope.model.selectFilterLaboral};
+
+    $scope.model.filters.push(filter);
     var i = $scope.view.filtersLaboral.indexOf($scope.model.selectFilterLaboral);
     $scope.view.filtersLaboral.splice(i,1);
+  }
+
+  function addWorkExperience() {
+    if ($scope.model.selectWorkExperience == null) {
+      return;
+    }
+    var value = ($scope.model.selectWorkExperience == "No") ? false : true;
+    // {"data": {"workExperience": "No"}, "filter": "FWorkExperience"}
+    var dataFilter = {};
+    dataFilter.data = {workExperience: value};
+    dataFilter.filter = "FWorkExperience";
+
+    var filter = {};
+    filter.data = dataFilter;
+    filter.view = {type: 'Experiencia Laboral', value: $scope.model.selectWorkExperience};
+
+    $scope.model.filters.push(filter);
+    var i = $scope.view.filtersWorkExperience.indexOf($scope.model.selectWorkExperience);
+    $scope.view.filtersWorkExperience.splice(i,1);
   }
 
   function addGenreFilter() {
     if ($scope.model.selectFilterGenre == null) {
       return;
     }
-    $scope.model.filters.push($scope.model.selectFilterGenre);
+    // {"data": {"genre": "Masculino"}, "filter": "FGenre"}
+    var dataFilter = {};
+    dataFilter.data = {genre: $scope.model.selectFilterGenre};
+    dataFilter.filter = "FGenre";
+
+    var filter = {};
+    filter.data = dataFilter;
+    filter.view = {type: 'Género', value: $scope.model.selectFilterGenre};
+
+    $scope.model.filters.push(filter);
     var i = $scope.view.filtersGenre.indexOf($scope.model.selectFilterGenre);
     $scope.view.filtersGenre.splice(i,1);
   }
@@ -215,8 +247,9 @@ function FiltersCtrl($rootScope, $scope, $filter) {
   function removeFilter(filter) {
     switch (filter.data.filter) {
       case "FDegree": $scope.view.filtersDegrees.push(filter.view.value); break;
-      case "filterLaboral": $scope.view.filtersLaboral.push(filter); break;
-      case "filterGenre": $scope.view.filtersGenre.push(filter); break;
+      case "FOffer": $scope.view.filtersLaboral.push(filter.view.value); break;
+      case "FWorkExperience": $scope.view.filtersWorkExperience.push(filter.view.value); break;
+      case "FGenre": $scope.view.filtersGenre.push(filter.view.value); break;
       case "filterResidence": $scope.view.filtersResidence.push(filter); break;
       case "filterOrigin": $scope.view.filtersOrigin.push(filter); break;
       case "filterTravel": $scope.view.filtersTravel.push(filter); break;

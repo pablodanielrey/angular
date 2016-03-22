@@ -47,7 +47,7 @@
           <div class="itemsFilters">
             <div class="subItemsFilters">
                 <div class="textItemFilters"><i class="fa fa-suitcase"></i> Oferta laboral</div>
-                <select class="inputFilters" ng-model="model.selectFilterLaboral" ng-options="option.name for option in view.filtersLaboral | orderBy: ['name']: true">
+                <select class="inputFilters" ng-model="model.selectFilterLaboral" ng-options="option for option in view.filtersLaboral | orderBy: option: false">
                     <option value="">Seleccionar</option>
                 </select>
             </div>
@@ -56,12 +56,25 @@
             </div>
           </div>
 
+          <!-- Experiencia laboral -->
+          <div class="itemsFilters">
+            <div class="subItemsFilters">
+              <div class="textItemFilters"> <i class="fa fa-suitcase"></i> Experiencia Laboral </div>
+              <select class="inputFilters" ng-model="model.selectWorkExperience" ng-options="option for option in view.filtersWorkExperience | orderBy: option : false">
+                  <option value="">Seleccionar</option>
+              </select>
+            </div>
+            <div>
+                <button class="btnItems" ng-click="addWorkExperience()"> Agregar <i class="fa fa-arrow-circle-right"></i></button>
+            </div>
+          </div>
+
           <!-- Género -->
           <div class="itemsFilters">
             <div class="subItemsFilters">
               <div class="textItemFilters"> <i class="fa fa-venus-mars"></i> Sexo </div>
-              <select class="inputFilters" ng-model="model.selectFilterGenre" ng-options="option.name for option in view.filtersGenre | orderBy: ['name']: true">
-                  <option value="">Seleccionar,</option>
+              <select class="inputFilters" ng-model="model.selectFilterGenre" ng-options="option for option in view.filtersGenre | orderBy: option: false">
+                  <option value="">Seleccionar</option>
               </select>
             </div>
             <div>
