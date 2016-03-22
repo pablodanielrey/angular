@@ -282,9 +282,6 @@ class UserDAO:
 
         cur = con.cursor()
         try:
-
-            import pdb; pdb.set_trace()
-
             cur.execute('select * from profile.users where id in %s', (tuple(uids),))
             if cur.rowcount <= 0:
                 return []
