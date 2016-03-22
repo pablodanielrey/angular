@@ -183,7 +183,7 @@ function FiltersCtrl($rootScope, $scope, $filter) {
     }
     // {"data": {"beginAge": 20, endAge: 30}, "filter": "FAge"}
     var dataFilter = {};
-    dataFilter.data = {beginAge: $scope.model.beginAge, endAge: $scope.model.endAge};
+    dataFilter.data = {beginAge: parseInt($scope.model.beginAge), endAge: parseInt($scope.model.endAge)};
     dataFilter.filter = "FAge";
 
     var filter = {};
