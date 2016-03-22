@@ -43,11 +43,13 @@ function Login($rootScope, $wamp, Session) {
           if (v) {
             cok(s);
           } else {
-            cerr(Error('No existe sesión'))
+            cerr(Error('No existe sesión'));
           }
         }, function() {
           cerr(Error());
         });
+      } else {
+        cerr(Error('No existe sesión'));
       }
     });
   }
