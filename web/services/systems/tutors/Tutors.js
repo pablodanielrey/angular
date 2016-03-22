@@ -8,7 +8,7 @@ function Tutors($wamp, Login) {
 
   this.search = function(regex) {
     return new Promise(function(cok, cerr) {
-      $wamp.call('users.search', [regex])
+      $wamp.call('tutors.search', [regex])
       .then(function(users) {
         for (var i = 0; i < users.length; i++) {
           if (users[i]['user'].genre == 'Femenino') {
