@@ -20,7 +20,7 @@ function Users($rootScope, $wamp, Session, Utils, Cache) {
         };
         var id = data[0];
         var version = data[1];
-        this.findById([id])
+        $wamp.call('users.findById', [id])
         .then(function(users) {
           cok(users);
         }, function(err) {
