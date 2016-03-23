@@ -586,7 +586,8 @@ function InscriptionCtrl($rootScope, $scope, $timeout, $wamp, LaboralInsertion, 
 
   $scope.uploadInscription = function() {
 
-    var userId = Login.getUserId();
+    var userId = $scope.userId;
+  
 
     //// ESTO SE ELIMINA TODOOO //////
     var ld = JSON.parse(JSON.stringify($scope.model.laboralData))
