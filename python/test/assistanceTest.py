@@ -33,7 +33,7 @@ if __name__ == '__main__':
         logging.info('cargando los periodos')
 
         a = inject.instance(AssistanceModel)
-        wps = a.getWorkPeriods(con, [uid], datetime.datetime.now() - datetime.timedelta(365), datetime.datetime.now())
+        wps = a.getWorkPeriods(con, [uid], datetime.datetime.now() - datetime.timedelta(10000), datetime.datetime.now())
 
         logs = []
         for w in wps:
