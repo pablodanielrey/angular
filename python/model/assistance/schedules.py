@@ -70,3 +70,16 @@ class ScheduleDAO:
 
         finally:
             cur.close()
+
+    @staticmethod
+    def findByUserId(con, id, date):
+        cur = con.cursor()
+        try:
+            cur.execute('select * from assistance.schedules where user_id = %s and sdate <= %s and weekday = %s order by sdate desc limit 1', (id, date, date.weekday()))
+            if cur.rowcount <= 0:
+                return None
+
+            return ScheduleDAO._fromResult(cur.fetchone())
+
+        finally:
+            cur.close()
