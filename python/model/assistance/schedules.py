@@ -68,7 +68,8 @@ class ScheduleDAO:
         assert isinstance(ids, list)
         cur = con.cursor()
         try:
-            cur.execute('select * from assistance.schedules where user_id in %s and sdate >= %s and sdate <= %s order by user_id, sdate, weekday', (tuple(ids), startDate, endDate))
+            #cur.execute('select * from assistance.schedules where user_id in %s and sdate >= %s and sdate <= %s order by user_id, sdate, weekday', (tuple(ids), startDate, endDate))
+            cur.execute('select * from assistance.schedules where user_id in %s order by user_id, sdate, weekday', (tuple(ids),))
             return [ ScheduleDAO._fromResult(r) for r in cur ]
 
         finally:

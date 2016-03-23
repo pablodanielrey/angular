@@ -27,15 +27,23 @@ if __name__ == '__main__':
 
         logging.info('buscando los usuarios')
 
-        uids = [ u for u,v in UserDAO.findAll(con) ]
+        uid, v = UserDAO.findByDni(con, sys.argv[1])
+        #uids = [ u for u,v in UserDAO.findAll(con) ]
 
         logging.info('cargando los periodos')
 
         a = inject.instance(AssistanceModel)
-        wps = a.getWorkPeriods(con, uids, datetime.datetime.now() - datetime.timedelta(365), datetime.datetime.now())
+        wps = a.getWorkPeriods(con, [uid], datetime.datetime.now() - datetime.timedelta(365), datetime.datetime.now())
 
+        logs = []
         for w in wps:
-            logging.info(json.dumps(w, cls=Serializer))
+            wp = wps[w]
+            for w1 in wp:
+                sec = w1.getWorkedSeconds()
+                logging.info('{} --> e:{}, s:{} --> {}:{} '.format(w1.date, w1.getStartDate(), w1.getEndDate(), int(sec / 60 / 60), int(sec / 60 % 60)))
+
+        #logging.info(json.dumps(logs, cls=Serializer))
+            #logging.info(json.dumps(wps[w], cls=Serializer))
 
 
         """

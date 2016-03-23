@@ -19,9 +19,13 @@ class WorkPeriod(JSONSerializable):
         self.logs = []
 
     def getStartDate(self):
+        if self.schedule is None:
+            return None
         return self.schedule.getStartDate(self.date)
 
     def getEndDate(self):
+        if self.schedule is None:
+            return None
         return self.schedule.getEndDate(self.date)
 
     def getStartLog(self):
@@ -29,6 +33,18 @@ class WorkPeriod(JSONSerializable):
 
     def getEndLog(self):
         return self.logs[-1]
+
+    def getWorkedSeconds(self):
+        total = 0
+        last = None
+        for l in self.logs:
+            if last is None:
+                last = l.log
+            else:
+                total = total + (l.log - last).total_seconds()
+                last = None
+
+        return total
 
     def _loadSchedule(self, schedules):
         """ el último schedule válido para esa fecha es el que vale """
