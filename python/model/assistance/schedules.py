@@ -1,4 +1,5 @@
 
+import datetime
 from model.assistance.utils import JSONSerializable
 
 class Schedule(JSONSerializable):
@@ -22,10 +23,12 @@ class Schedule(JSONSerializable):
         return (self.date <= date) and (self.weekday == date.weekday())
 
     def getStartDate(self, date):
-        return date + datetime.timedelta(seconds=self.start)
+        dt = datetime.datetime.combine(date, datetime.time(0,0))
+        return dt + datetime.timedelta(seconds=self.start)
 
     def getEndDate(self, date):
-        return date + datetime.timedelta(seconds=self.end)
+        dt = datetime.datetime.combine(date, datetime.time(0,0))
+        return dt + datetime.timedelta(seconds=self.end)
 
 
 
@@ -72,7 +75,7 @@ class ScheduleDAO:
             cur.close()
 
     @staticmethod
-    def findByUserId(con, id, date):
+    def findByUserIdInDate(con, id, date):
         cur = con.cursor()
         try:
             cur.execute('select * from assistance.schedules where user_id = %s and sdate <= %s and weekday = %s order by sdate desc limit 1', (id, date, date.weekday()))

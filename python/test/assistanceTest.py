@@ -14,6 +14,8 @@ from model.connection.connection import Connection
 from model.assistance.assistance import AssistanceModel
 from model.assistance.utils import Serializer, serializer_loads
 
+from model.users.users import UserDAO
+
 if __name__ == '__main__':
 
     logging.getLogger().setLevel(logging.INFO)
@@ -23,12 +25,18 @@ if __name__ == '__main__':
     try:
         con = conn.get()
 
+        logging.info('buscando los usuarios')
+
+        uids = [ u for u,v in UserDAO.findAll(con) ]
+
+        logging.info('cargando los periodos')
+
         a = inject.instance(AssistanceModel)
-        wps = a.getWorkPeriods(con, ['77979435-b43f-4c8b-91a9-5a84ecb46261'], datetime.datetime.now() - datetime.timedelta(365), datetime.datetime.now())
+        wps = a.getWorkPeriods(con, uids, datetime.datetime.now() - datetime.timedelta(365), datetime.datetime.now())
 
         for w in wps:
-            if w.schedule is None:
-                logging.info('{} día {} no tenía que venir a trabajar'.format(w.date, w.date.weekday()))
+            logging.info(json.dumps(w, cls=Serializer))
+
 
         """
         ser = json.dumps(wps, cls=Serializer)

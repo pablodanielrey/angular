@@ -48,7 +48,7 @@ if __name__ == '__main__':
 
                 """ guardo el schedule que tenía para esa fecha, asi cambio el horario nuevamente en la fecha del dia siguiente """
                 specificDate = c['sdate']
-                sa = ScheduleDAO.findByUserId(con, c['user_id'], specificDate)
+                sa = ScheduleDAO.findByUserIdInDate(con, c['user_id'], specificDate)
 
                 params = {
                     'id': c['id'],
