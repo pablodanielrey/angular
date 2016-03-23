@@ -1,5 +1,13 @@
 # -*- coding: utf-8 -*-
+import datetime, pytz
+import json, logging
+import inject
+import itertools
 
+from model import utils
+from model.assistance.date import Date
+from model.assistance.devices import Devices
+from model.users.users import UserDAO
 
 class Log:
 
@@ -9,6 +17,88 @@ class Log:
         self.userId = None
         self.verifyMode = 0
         self.log = None
+
+
+class WorkPeriod:
+
+    def __init__(self):
+        self.userId = None
+        self.date = None
+        self.schedule = None
+        self.logs = []
+
+    def getStartDate(self):
+        return self.schedule.getStartDate(self.date)
+
+    def getEndDate(self):
+        return self.schedule.getEndDate(self.date)
+
+    def getStartLog(self):
+        return self.logs[0]
+
+    def getEndLog(self):
+        return self.logs[-1]
+
+
+class Schedule:
+
+    Monday = 0
+    Tuesday = 1
+    Wednesday = 2
+    Thursday = 3
+    Friday = 4
+    Saturday = 5
+    Sunday = 6
+
+    def __init__(self):
+        self.userId = None
+        self.date = None
+        self.weekday = -1
+        self.start = None
+        self.end = None
+
+    def isValid(self, date):
+        return (self.date <= date) and (self.weekday == date.weekday)
+
+    def getStartDate(self, date):
+        return date + datetime.timedelta(seconds=self.start)
+
+    def getEndDate(self, date):
+        return date + datetime.timedelta(seconds=self.end)
+
+
+
+class ScheduleDAO:
+
+    @staticmethod
+    def _fromResult(r):
+        s = Schedule()
+        s.userId = r['user_id']
+        s.start = r['start']
+        s.end = r['end']
+        s.date = r['date']
+        s.weekday = r['weekday']
+        return s
+
+    @staticmethod
+    def _classifyByUserId(data):
+        result = {}
+        for d in data:
+            if d.userId not in result:
+                result[d.userId] = []
+            result[d.userId].append(d)
+        return result
+
+    @staticmethod
+    def findByUserId(con, ids, startDate, endDate):
+        assert isinstance(ids, list)
+        cur = con.cursor()
+        try:
+            cur.execute('select * from assistance.schedule where user_id in %s and date >= %s and date <= %s order by userId, date, weekday', (tuple(ids), startDate, endDate))
+            return [ ScheduleDAO._fromResult(r) for r in cur ]
+
+        finally:
+            cur.close()
 
 
 class LogsDAO:
