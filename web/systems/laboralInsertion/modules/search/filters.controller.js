@@ -252,25 +252,52 @@ function FiltersCtrl($rootScope, $scope, $filter) {
   }
 
   function addCountCathedra() {
-    var b = $scope.model.beginCountCathedra;
-    var e = $scope.model.endCountCathedra;
-    var filter = {type:"filterCountCathedra", descriptionType:'Cantidad de Materias', name: b + " - " + e , value: b + "-" + e};
+    if ($scope.model.beginCountCathedra > $scope.model.endCountCathedra) {
+      return;
+    }
+    // {"data": {"begin": 0, end: 10}, "filter": "FCountCathedra"}
+    var dataFilter = {};
+    dataFilter.data = {begin: parseInt($scope.model.beginCountCathedra), end: parseInt($scope.model.endCountCathedra)};
+    dataFilter.filter = "FCountCathedra";
+
+    var filter = {};
+    filter.data = dataFilter;
+    filter.view = {type: "Cantidad de Materias", value: $scope.model.beginCountCathedra + " - " + $scope.model.endCountCathedra};
+
     $scope.model.filters.push(filter);
     $scope.view.enabledFilterCountCathedra = false;
   }
 
   function addAverageWithFails() {
-    var b = $scope.model.beginAverageWithFails;
-    var e = $scope.model.endAverageWithFails;
-    var filter = {type:"filterAverageWithFails", descriptionType:'Promedio con aplazos', name: b + " - " + e , value: b + "-" + e};
+    if ($scope.model.beginAverageWithFails > $scope.model.endAverageWithFails) {
+      return;
+    }
+    // {"data": {"begin": 0, end: 10}, "filter": "FAverageFails"}
+    var dataFilter = {};
+    dataFilter.data = {begin: parseFloat($scope.model.beginAverageWithFails), end: parseFloat($scope.model.endAverageWithFails)};
+    dataFilter.filter = "FAverageFails";
+
+    var filter = {};
+    filter.data = dataFilter;
+    filter.view = {type: "Promedio con aplazos", value: $scope.model.beginAverageWithFails + " - " + $scope.model.endAverageWithFails};
+
     $scope.model.filters.push(filter);
     $scope.view.enabledFilterAverageWithFails = false;
   }
 
   function addAverageWithoutFails() {
-    var b = $scope.model.beginAverageWithoutFails;
-    var e = $scope.model.endAverageWithoutFails;
-    var filter = {type:"filterAverageWithoutFails", descriptionType:'Promedio sin aplazos', name: b + " - " + e , value: b + "-" + e};
+    if ($scope.model.beginAverageWithoutFails > $scope.model.endAverageWithoutFails) {
+      return;
+    }
+    // {"data": {"begin": 0, end: 10}, "filter": "FAverage"}
+    var dataFilter = {};
+    dataFilter.data = {begin: parseFloat($scope.model.beginAverageWithoutFails), end: parseFloat($scope.model.endAverageWithoutFails)};
+    dataFilter.filter = "FAverage";
+
+    var filter = {};
+    filter.data = dataFilter;
+    filter.view = {type: "Promedio sin aplazos", value: $scope.model.beginAverageWithoutFails + " - " + $scope.model.endAverageWithoutFails};
+
     $scope.model.filters.push(filter);
     $scope.view.enabledFilterAverageWithoutFails = false;
   }
@@ -285,9 +312,9 @@ function FiltersCtrl($rootScope, $scope, $filter) {
       case "FResidence": $scope.view.filtersResidence.push(filter.view.value); break;
       case "FCity": $scope.view.filtersOrigin.push(filter.view.value); break;
       case "FTravel": $scope.view.filtersTravel.push(filter.view.value); break;
-      case "filterCountCathedra": $scope.view.enabledFilterCountCathedra = true;break;
-      case "filterAverageWithFails": $scope.view.enabledFilterAverageWithFails = true;break;
-      case "filterAverageWithoutFails": $scope.view.enabledFilterAverageWithoutFails = true;break;
+      case "FCountCathedra": $scope.view.enabledFilterCountCathedra = true;break;
+      case "FAverageFails": $scope.view.enabledFilterAverageWithFails = true;break;
+      case "FAverage": $scope.view.enabledFilterAverageWithoutFails = true;break;
     }
     var i = $scope.model.filters.indexOf(filter);
     $scope.model.filters.splice(i,1);

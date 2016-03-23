@@ -166,6 +166,33 @@ class FLanguage(Filter):
                 return True
         return False
 
+class FCountCathedra(Filter):
+
+    def __init__(self):
+        self.begin = 0
+        self.end = 0
+
+    def _filter(self, con, inscriptions):
+        return [ i for i in inscriptions if i.approved >= self.begin and  i.approved <= self.end]
+
+class FAverageFails(Filter):
+
+    def __init__(self):
+        self.begin = 0
+        self.end = 0
+
+    def _filter(self, con, inscriptions):
+        return [ i for i in inscriptions if i.average2 >= self.begin and  i.average2 <= self.end]
+
+class FAverage(Filter):
+
+    def __init__(self):
+        self.begin = 0
+        self.end = 0
+
+    def _filter(self, con, inscriptions):
+        return [ i for i in inscriptions if i.average1 >= self.begin and  i.average1 <= self.end]
+
 class FPriority:
 
     def __init__(self):
