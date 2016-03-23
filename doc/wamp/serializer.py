@@ -136,11 +136,10 @@ class Serializer(object):
 
 
 # JSON serialization is always supported
-"""
 try:
+    """
     # try import accelerated JSON implementation
     #
-
     import ujson
 
     _json = ujson
@@ -152,43 +151,22 @@ try:
         return ujson.dumps(obj, double_precision=15, ensure_ascii=False)
 
 except ImportError:
-"""
-try:
+    """
     # fallback to stdlib implementation
     #
     import json
 
     _json = json
 
+    from utils import serializer_loads, Serializer
     import dateutil.parser
     import re
-    def datetime_loads(d):
-        for k, v in d.items():
-            """
-                se matchea en el formato isoformat
-                2016-03-19T16:56:26.767543
-            """
-            if isinstance(v, str) and re.search("\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d.\d+", v):
-                try:
-                    d[k] = dateutil.parser.parse(v)
-                except:
-                    pass
-        return d
 
     #_loads = json.loads
-    _loads = lambda x: json.loads(x, object_hook=datetime_loads)
-
-    import datetime
-    class DateTimeEncoder(json.JSONEncoder):
-        def default(self, obj):
-            if isinstance(obj, datetime.datetime):
-                return obj.isoformat()
-            if isinstance(obj, datetime.date):
-                return obj.isoformat()
-            return json.JSONEncoder.default(self, obj)
+    _loads = lambda x: json.loads(x, object_hook=serializer_loads)
 
     def _dumps(obj):
-        return json.dumps(obj, separators=(',', ':'), ensure_ascii=False, cls=DateTimeEncoder)
+        return json.dumps(obj, separators=(',', ':'), ensure_ascii=False, cls=Serializer)
 
 finally:
     class JsonObjectSerializer(object):
