@@ -117,7 +117,7 @@
                 <div class="textItemFilters">
                   <i class="fa fa-building-o"></i> Ciudad de Origen
                 </div>
-                <select class="inputFilters" name='residence_city' ng-model="model.selectFilterOrigin" ng-options="option.name for option in view.filtersOrigin | orderBy: ['name']: false">
+                <select class="inputFilters" name='residence_city' ng-model="model.selectFilterOrigin" ng-options="option for option in view.filtersOrigin | orderBy: option">
                   <option class="selectGrey" disabled selected style='display:none;' value="">Seleccionar</option>
                 </select>
             </div>
@@ -130,7 +130,7 @@
           <div class="itemsFilters">
             <div class="subItemsFilters">
                 <div class="textItemFilters"><i class="fa fa-plane"></i> Viajar</div>
-                <select class="inputFilters" ng-model="model.selectFilterTravel" ng-options="option.name for option in view.filtersTravel | orderBy: ['name']: false">
+                <select class="inputFilters" ng-model="model.selectFilterTravel" ng-options="option for option in view.filtersTravel | orderBy: option">
                     <option value="">Seleccionar</option>
                 </select>
             </div>
@@ -143,10 +143,10 @@
           <div class="itemsFilters">
               <div class="subItemsFilters">
                   <div class="textItemFilters"><i class="fa fa-bullhorn"></i> Idioma</div>
-                  <select class="inputFilters"  ng-model="model.selectFilterLanguage" ng-options="option.name for option in view.filtersLanguage | orderBy: ['name']: false">
+                  <select class="inputFilters"  ng-model="model.selectFilterLanguage" ng-options="option for option in view.filtersLanguage ">
                     <option class="selectGrey" disabled selected style='display:none;' value="">Seleccionar</option>
                   </select>
-                  <select class="inputFilters"  ng-model="model.selectFilterLanguageNivel" ng-options="option.name for option in view.filtersLanguageNivel | orderBy: ['order']">
+                  <select class="inputFilters"  ng-model="model.selectFilterLanguageNivel" ng-options="option for option in view.filtersLanguageNivel | orderBy: option">
                     <option class="selectGrey" disabled selected style='display:none;' value="">Nivel</option>
                   </select>
               </div>
@@ -213,8 +213,8 @@
                   <div class="textItemFilters">{{filter.view.type}}</div>
                   <div class="textItemFilters">
                     <b>{{filter.view.value}}</b>
-                    <div ng-if="filter.nivel">
-                      <b>{{filter.nivel}}</b>
+                    <div ng-if="filter.view.level">
+                      <b>{{filter.view.level}}</b>
                     </div>
                   </div>
               </div>

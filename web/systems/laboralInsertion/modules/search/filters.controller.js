@@ -38,26 +38,10 @@ function FiltersCtrl($rootScope, $scope, $filter) {
     filtersWorkExperience: ['No', 'Sí'],
     filtersGenre: ["Masculino", "Femenino", "Otros"],
     filtersResidence: ["La Plata","M.B Gonnet", "Ranchos", "City Bell", "Otros"],
-    filtersOrigin: [
-      {type:"filterOrigin", descriptionType:'Ciudad de Origen', name:"La Plata", value:"laPlata"},
-      {type:"filterOrigin", descriptionType:'Ciudad de Origen', name:"M.B Gonnet", value:"gonnet"},
-      {type:"filterOrigin", descriptionType:'Ciudad de Origen', name:"Ranchos", value:"ranchos"},
-      {type:"filterOrigin", descriptionType:'Ciudad de Origen', name:"City Bell", value:"cityBell"},
-      {type:"filterOrigin", descriptionType:'Ciudad de Origen', name:"Otros", value:"others"}
-    ],
-    filtersTravel: [
-      {type:"filterTravel", descriptionType:'Viajar', name:"No", value:"no"},
-      {type:"filterTravel", descriptionType:'Viajar', name:"Sí", value:"yes"}
-    ],
-    filtersLanguage: [
-      {type:"filterLanguage", descriptionType:"Idioma", name:"Inglés", value:"english"},
-      {type:"filterLanguage", descriptionType:"Idioma", name:"Postugués", value:"portuguese"}
-    ],
-    filtersLanguageNivel: [
-      {type:"filterLanguageNivel", descriptionType:"Idioma", name:"Básico", value:"basic", order: 1},
-      {type:"filterLanguageNivel", descriptionType:"Idioma", name:"Intermedio", value:"intermediate", order: 2},
-      {type:"filterLanguageNivel", descriptionType:"Idioma", name:"Avanzado", value:"advanced", order: 3}
-    ]
+    filtersOrigin: ["La Plata","M.B Gonnet", "Ranchos", "City Bell", "Otros"],
+    filtersTravel: ["No", "Sí"],
+    filtersLanguage: ["Inglés", "Portugués", "Francés"],
+    filtersLanguageNivel: ["Básico", "Intermedio", "Avanzado"]
   }
 
 
@@ -216,7 +200,16 @@ function FiltersCtrl($rootScope, $scope, $filter) {
     if ($scope.model.selectFilterOrigin == null) {
       return;
     }
-    $scope.model.filters.push($scope.model.selectFilterOrigin);
+    // {"data": {"city": "La Plata"}, "filter": "FOrigin"}
+    var dataFilter = {};
+    dataFilter.data = {city: $scope.model.selectFilterOrigin};
+    dataFilter.filter = "FCity";
+
+    var filter = {};
+    filter.data = dataFilter;
+    filter.view = {type: "Ciudad de Origen", value: $scope.model.selectFilterOrigin};
+
+    $scope.model.filters.push(filter);
     var i = $scope.view.filtersOrigin.indexOf($scope.model.selectFilterOrigin);
     $scope.view.filtersOrigin.splice(i,1);
   }
@@ -225,21 +218,37 @@ function FiltersCtrl($rootScope, $scope, $filter) {
     if ($scope.model.selectFilterTravel == null) {
       return;
     }
-    $scope.model.filters.push($scope.model.selectFilterTravel);
+    var value = ($scope.model.selectFilterTravel == "No") ? false : true;
+    // {"data": {"travel": "No"}, "filter": "FTravel"}
+    var dataFilter = {};
+    dataFilter.data = {travel: value};
+    dataFilter.filter = "FTravel";
+
+    var filter = {};
+    filter.data = dataFilter;
+    filter.view = {type: 'Viajar', value: $scope.model.selectFilterTravel};
+
+    $scope.model.filters.push(filter);
     var i = $scope.view.filtersTravel.indexOf($scope.model.selectFilterTravel);
     $scope.view.filtersTravel.splice(i,1);
+
   }
 
   function addLanguageFilter() {
     if ($scope.model.selectFilterLanguage == null) {
       return;
     }
-    var l = $scope.model.selectFilterLanguage;
-    l.nivel = $scope.model.selectFilterLanguageNivel.name;
-    l.value = l.value + "-" + $scope.model.selectFilterLanguageNivel.value;
-    $scope.model.filters.push(l);
-    var i = $scope.view.filtersLanguage.indexOf($scope.model.selectFilterLanguage);
-    $scope.view.filtersLanguage.splice(i,1);
+
+    // {"data": {"language": "Inglés", "nivel":"Básico"}, "filter": "FLanguage"}
+    var dataFilter = {};
+    dataFilter.data = {language: $scope.model.selectFilterLanguage, level: $scope.model.selectFilterLanguageNivel};
+    dataFilter.filter = "FLanguage";
+
+    var filter = {};
+    filter.data = dataFilter;
+    filter.view = {type: 'Idioma', value: $scope.model.selectFilterLanguage, level: $scope.model.selectFilterLanguageNivel};
+
+    $scope.model.filters.push(filter);
   }
 
   function addCountCathedra() {
@@ -274,9 +283,8 @@ function FiltersCtrl($rootScope, $scope, $filter) {
       case "FWorkExperience": $scope.view.filtersWorkExperience.push(filter.view.value); break;
       case "FGenre": $scope.view.filtersGenre.push(filter.view.value); break;
       case "FResidence": $scope.view.filtersResidence.push(filter.view.value); break;
-      case "filterOrigin": $scope.view.filtersOrigin.push(filter); break;
-      case "filterTravel": $scope.view.filtersTravel.push(filter); break;
-      case "filterLanguage": $scope.view.filtersLanguage.push(filter); break;
+      case "FCity": $scope.view.filtersOrigin.push(filter.view.value); break;
+      case "FTravel": $scope.view.filtersTravel.push(filter.view.value); break;
       case "filterCountCathedra": $scope.view.enabledFilterCountCathedra = true;break;
       case "filterAverageWithFails": $scope.view.enabledFilterAverageWithFails = true;break;
       case "filterAverageWithoutFails": $scope.view.enabledFilterAverageWithoutFails = true;break;

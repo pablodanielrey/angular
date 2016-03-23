@@ -4,6 +4,7 @@ import logging
 import json
 import sys
 
+from model.laboralinsertion.languages import LanguageDAO
 
 class Filter:
 
@@ -130,6 +131,40 @@ class FResidence(Filter):
 
     def _filter(self, con, inscriptions):
         return [ i for i in inscriptions if i.getUser(con).residence_city == self.city ]
+
+
+class FCity(Filter):
+
+    def __init__(self):
+        self.city = 'La Plata'
+
+    def _filter(self, con, inscriptions):
+        return [ i for i in inscriptions if i.getUser(con).city == self.city ]
+
+class FTravel(Filter):
+
+    def __init__(self):
+        self.travel = True
+
+    def _filter(self, con, inscriptions):
+        return [ i for i in inscriptions if i.travel == self.travel ]
+
+class FLanguage(Filter):
+
+    def __init__(self):
+        self.language = "Inglés"
+        self.level = None
+
+    def _filter(self, con, inscriptions):
+        return [ i for i in inscriptions if FLanguage._includeLanguages(con, self.language, self.level, i.getLanguages(con)) ]
+
+    @staticmethod
+    def _includeLanguages(con, language, level, languages):
+        for lid in languages:
+            l = LanguageDAO.findById(con, lid)
+            if l.name == language and (level == None or l.level == level):
+                return True
+        return False
 
 class FPriority:
 

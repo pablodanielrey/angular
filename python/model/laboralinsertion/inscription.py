@@ -3,6 +3,7 @@ import uuid
 import inject
 import model.users.users
 from model.laboralinsertion.user import UserDAO
+from model.laboralinsertion.languages import LanguageDAO
 
 
 class Inscription:
@@ -26,6 +27,9 @@ class Inscription:
 
     def getUserData(self, con):
         return model.laboralinsertion.user.UserDAO.findByIf(con, self.userId)
+
+    def getLanguages(self, con):
+        return LanguageDAO.findByUser(con, self.userId)
 
 class InscriptionDAO:
 
