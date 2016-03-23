@@ -6,6 +6,33 @@ Users.inject = ['$rootScope', '$wamp', 'Session','Utils','Cache'];
 
 function Users($rootScope, $wamp, Session, Utils, Cache) {
 
+  this.findById = function(id) {
+    return $wamp.call('users.findById', [id]);
+  }
+
+  this.findByDni = function(dni) {
+    return new Promise(function(cok, cerr) {
+      $wamp.call('users.findByDni', [dni])
+      .then(function(data) {
+        if (data == null) {
+          cerr(Error('No existe ese usuario'));
+          return;
+        };
+        var id = data[0];
+        var version = data[1];
+        $wamp.call('users.findById', [[id]])
+        .then(function(users) {
+          cok(users);
+        }, function(err) {
+          cerr(err);
+        });
+      }, function(err) {
+        cerr(err);
+      });
+    });
+  }
+
+
   var instance = this;
   this.userPrefix = 'user_';
 
@@ -202,13 +229,10 @@ function Users($rootScope, $wamp, Session, Utils, Cache) {
     return $wamp.call('users.mails.persistMail', [email]);
   }
 
-  this.findByDni = function(dni) {
-    return $wamp.call('users.findByDni', [dni]);
-  }
+  // esto lo modifique solo para obtener el usuario por dni, no se como se deberia manejar con la cache
 
-  this.findById = function(id) {
-    return $wamp.call('users.findById', [id]);
-  }
+
+
 
 
 };

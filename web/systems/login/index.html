@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name='viewport' content='width=device-width'/>
+  <title>FCE | Iniciar sesión</title>
 
   <script>
     AUTOBAHN_DEBUG = true;
@@ -14,8 +15,9 @@
   <script src="/libs/bower_components/angular-wamp/release/angular-wamp.js"></script>
 
   <!-- esto es el estilo de font awesome para tener los iconos -->
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
   <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+  <link rel="shortcut icon" href="/systems/fce/img/favicon2.ico">
 
   <script type="text/javascript" src="/config-login.json"></script>
 
@@ -30,21 +32,34 @@
 	<script type="text/javascript" src="/services/Cache.js"></script>
 	<script type="text/javascript" src="/services/Session.js"></script>
   <script type="text/javascript" src="/services/Login.js"></script>
+  <script type="text/javascript" src="/services/Users.js"></script>
+  <script type="text/javascript" src="/services/Utils.js"></script>
 	<script type="text/javascript" src="/services/Notifications.js"></script>
 
 	<!-- ***** MODULOS ***** -->
-  <script type="text/javascript" src="/modules/messages/messages.js"></script>
-  <link rel="stylesheet" type="text/css" href="/modules/messages/messages.css"/>
 
   <script type="text/javascript" src="/systems/login/modules/login.controller.js"></script>
   <link rel="stylesheet" type="text/css" href="/systems/login/modules/login.css" />
 
-<body>
+  <link rel="stylesheet" type="text/css" href="/systems/login/modules/help/help.css" />
 
-  <div ng-controller="IndexLoginCtrl" class="principal">
+  <script type="text/javascript" src="/systems/login/modules/header/header.controller.js"></script>
+
+  <script type="text/javascript" src="/systems/login/modules/preload/preload.controller.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/login/modules/preload/preload.css" />
+
+
+<body ng-cloak ng-controller="IndexLoginCtrl" class="login">
+
+  <!-- <div ng-hide='{{!loaded}}' class="contentPreload" ng-controller="PreloadCtrl" ng-include="'/systems/login/modules/preload/preload.html'">
+  </div> -->
+
+  <!-- <div ng-show='{{loaded}}' class="principal"> -->
+  <div class="principal">
     <div class='login-container' ng-controller="LoginCtrl" ng-include="'/systems/login/modules/login.html'"></div>
-    <div class='messages-container' ng-controller="MessagesCtrl" ng-include="'/modules/messages/messages.html'" ng-class="{false: 'hidden', true: 'visible'}[isVisible()]"></div>
+    <!-- <div class='messages-container' ng-controller="MessagesCtrl" ng-include="'/modules/messages/messages.html'" ng-class="{false: 'hidden', true: 'visible'}[isVisible()]"></div> -->
   </div>
+
 
 </body>
 </html>

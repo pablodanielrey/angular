@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html ng-app="mainApp">
+<head>
+  <meta charset="utf-8"/>
+  <meta name='viewport' content='width=device-width'/>
+
+
+  <!-- ESTILOS PRINCIPALES -->
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+
+  <!-- LIBRERIAS -->
+  <script src="/libs/bower_components/angularjs/angular.js"></script>
+  <script src="/libs/bower_components/angular-route/angular-route.js"></script>
+  <script src="/libs/bower_components/autobahn/autobahn.js"></script>
+  <script src="/libs/bower_components/angular-wamp/release/angular-wamp.js"></script>
+
+  <script type="text/javascript" src="/config-assistance.json"></script>
+
+  <script type="text/javascript" src="/systems/assistance/index.module.js"></script>
+
+  <script type="text/javascript" src="/systems/login/modules/logout.js"></script>
+
+	<!-- servicios -->
+  <script type="text/javascript" src="/services/Notifications.js"></script>
+	<script type="text/javascript" src="/services/Credentials.js"></script>
+	<script type="text/javascript" src="/services/Utils.js"></script>
+	<script type="text/javascript" src="/services/Cache.js"></script>
+	<script type="text/javascript" src="/services/Session.js"></script>
+  <script type="text/javascript" src="/services/Module.js"></script>
+	<script type="text/javascript" src="/services/Systems.js"></script>
+	<script type="text/javascript" src="/services/Users.js"></script>
+	<script type="text/javascript" src="/services/Profiles.js"></script>
+  <script type="text/javascript" src="/services/Login.js"></script>
+
+
+  <script type="text/javascript" src="/systems/assistance/preload.controller.js"></script>
+  <script type="text/javascript" src="/systems/assistance/routes.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/assistance/index.css"/>
+
+
+
+</head>
+
+<body>
+
+
+<div class="preload" ng-controller="PreloadCtrl">
+
+  <div class="screen">
+    Cargando ...
+
+  </div>
+
+</div>
+
+</body>
+</html>

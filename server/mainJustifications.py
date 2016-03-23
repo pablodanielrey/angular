@@ -2,29 +2,30 @@
 '''
     Se conecta al router wamp y hace correr JustificationsWamp
 '''
+
 if __name__ == '__main__':
 
     import sys
     import logging
     import inject
+    inject.configure()
+    
     sys.path.insert(0, '../python')
 
     logging.basicConfig(level=logging.DEBUG)
 
     from autobahn.asyncio.wamp import ApplicationRunner
-    from model.config import Config
     from actions.systems.assistance.justifications import JustificationsWamp
-    
+    from model.registry import Registry
 
-    def config_injector(binder):
-        binder.bind(Config, Config('server-config.cfg'))
 
-    inject.configure(config_injector)
-    config = inject.instance(Config)
 
-    url = config.configs['server_url']
-    realm = config.configs['server_realm']
-    debug = config.configs['server_debug']
+    reg = inject.instance(Registry)
+    registry = reg.getRegistry('wamp')
+    url = registry.get('url')
+    realm = registry.get('realm')
+    debug = registry.get('debug')
+
 
     runner = ApplicationRunner(url=url, realm=realm, debug=debug, debug_wamp=debug, debug_app=debug)
     runner.run(JustificationsWamp)

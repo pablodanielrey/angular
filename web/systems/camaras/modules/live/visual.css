@@ -4,7 +4,7 @@
   height:100%;
   width:100%;
   position:absolute;
-  overflow:hidden;
+  overflow:auto;
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   margin: 0px;
   padding: 0px;
@@ -21,14 +21,51 @@
 }
 
 .live .contentCameras {
-  padding: 10px;
+  padding: 0px;
   width: 85%;
   height: 99%;
 
 
-
-
 }
+
+.live .colorPB {
+  background-color: #E43E46;
+  color:white;
+}
+
+.live .infoCam {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  align-items: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+}
+
+.live .DownVideo {
+  color:white;
+  text-decoration: none;
+}
+
+.live .DeleteCam {
+  background-color: transparent;
+  border: none;
+  color: white;
+}
+
+
+.live .titleCam {
+  margin-left: 10px;
+  font-size: 12px;
+}
+
+.live .actionCam {
+  margin-right: 10px;
+}
+
 
 .live .content {
   background-color:white;
@@ -44,6 +81,54 @@
 
 
 
+}
+
+.live .CamPisos {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  align-self: flex-end;
+  -webkit-align-self: flex-end;
+  -moz-align-self: flex-end;
+  align-items: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+}
+
+.live .SelectCam {
+  width: 499px;
+  height: 304px;
+  margin: 5px;
+  background-color: #dbd4d4;
+  border: 1px solid #c9bfbf;
+  color: #8e8484;
+  font-size: 20px;
+}
+
+.live .SelectCam:hover {
+  width: 499px;
+  height: 304px;
+  margin: 5px;
+  background-color: grey;
+  border: 1px solid #c9bfbf;
+  color: #FFFFFF;
+  font-size: 20px;
+}
+
+.live .SelectCam2 {
+  padding: 10px;
+  margin: 5px;
+  background-color: #dbd4d4;
+  border: 1px solid #c9bfbf;
+  color: #5b5757;
+}
+
+.live .SelectCam2:hover {
+  padding: 10px;
+  margin: 5px;
+  background-color: grey;
+  border: 1px solid #c9bfbf;
+  color: #FFFFFF;
 }
 
 
@@ -175,6 +260,13 @@
   margin-bottom: 0;
 }
 
+
+
+.live .pb {
+  border:3px solid #0066A6;
+  max-width: 50%;
+}
+
 /************************************************
 ************* TAMAÑOS DE CAMARAS ****************
 ************************************************/
@@ -192,4 +284,10 @@
 .live.size3 .size {
   width: 520px;
   height: 440px;
+}
+
+.live .tam {
+  width: 500px;
+  height: 300px;
+  margin: 5px;
 }
