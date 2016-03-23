@@ -23,10 +23,11 @@ class Inscription:
         self.approved = 0
 
     def getUser(self, con):
-        return model.users.users.UserDAO.findById(con, self.userId)
+        users = model.users.users.UserDAO.findById(con, [self.userId])
+        return None if (users == None or len(users) == 0) else users[0]
 
     def getUserData(self, con):
-        return model.laboralinsertion.user.UserDAO.findByIf(con, self.userId)
+        return model.laboralinsertion.user.UserDAO.findById(con, self.userId)
 
     def getLanguages(self, con):
         return LanguageDAO.findByUser(con, self.userId)

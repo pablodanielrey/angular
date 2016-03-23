@@ -403,7 +403,7 @@ function InscriptionCtrl($rootScope, $scope, $timeout, $wamp, LaboralInsertion, 
   }
 
   $scope.findUserData = function() {
-    var uid = Login.getUserId();
+    var uid = $scope.userId;
     $scope.model.laboralData.id = uid;
 
     Student.findById(uid).then(function(student) {
@@ -412,12 +412,15 @@ function InscriptionCtrl($rootScope, $scope, $timeout, $wamp, LaboralInsertion, 
       }
     });
 
-    Users.findUser(uid, function(user) {
-      $scope.formatUserToView(user);
-      $scope.model.user = user;
-    }, function(err) {
-      console.log(err);
-    })
+    Users.findById([uid])
+      .then(function(users) {
+        if (users != null && users.length > 0) {
+          $scope.formatUserToView(users[0]);
+          $scope.model.user = users[0];
+        }
+      }, function(err) {
+          console.log(err);
+    });
 
     Users.findMails(uid, function(mails) {
       $scope.model.mails.emails = mails;
@@ -464,7 +467,7 @@ function InscriptionCtrl($rootScope, $scope, $timeout, $wamp, LaboralInsertion, 
     // corrijo la info de los telefonos para el formato de la llamada.
     $scope.model.user['telephones'] = [];
 
-    if ($scope.model.telephones.telephone != null && $scope.model.telephones.movil.trim() != "") {
+    if ($scope.model.telephones.telephone != null && $scope.model.telephones.telephone.trim() != "") {
       $scope.model.user.telephones.push({
         number: $scope.model.telephones.telephone,
         type: 'residence'
@@ -610,7 +613,7 @@ function InscriptionCtrl($rootScope, $scope, $timeout, $wamp, LaboralInsertion, 
   }
 
   $scope.getInscriptions = function() {
-    var userId = Login.getUserId();
+    var userId = $scope.userId;
     LaboralInsertion.findAllInscriptionsByUser(userId)
       .then(function(data) {
         $scope.model.inscriptionsData = data;
@@ -699,7 +702,14 @@ function InscriptionCtrl($rootScope, $scope, $timeout, $wamp, LaboralInsertion, 
 
 
   $scope.$on('$viewContentLoaded', function(event) {
-    $scope.initialize();
+    $scope.userId = '';
+    Login.getSessionData()
+      .then(function(s) {
+          $scope.userId = s.user_id;
+          $scope.initialize();
+      }, function(err) {
+        console.log(err);
+      });
   });
 
 

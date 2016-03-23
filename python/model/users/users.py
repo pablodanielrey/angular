@@ -8,9 +8,10 @@ import logging
 import datetime
 import uuid
 from model.connection.connection import Connection
+from model.serializer.utils import Serializer, JSONSerializable
 
 
-class UserPassword:
+class UserPassword(JSONSerializable):
 
     def __init__(self):
         self.id = None
@@ -111,7 +112,7 @@ class UserPasswordDAO:
             cur.close()
 
 
-class Mail:
+class Mail(JSONSerializable):
     ''' cuenta de email de un usuario '''
 
     def __init__(self):
@@ -196,7 +197,7 @@ class MailDAO:
             cur.close()
 
 
-class User:
+class User(JSONSerializable):
     ''' usuario básico del sistema '''
 
     def __init__(self):
@@ -223,7 +224,7 @@ class User:
         pass
 
 
-class Telephone:
+class Telephone(JSONSerializable):
     def __init__(self):
         self.id = None
         self.userId = None
@@ -410,7 +411,7 @@ class UserDAO:
             cur.close()
 
 
-class Student:
+class Student(JSONSerializable):
 
     def __init__(self):
         self.id = None

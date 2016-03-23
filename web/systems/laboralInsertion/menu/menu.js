@@ -1,8 +1,8 @@
 var app = angular.module('mainApp');
 
-app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Notifications', 'Login', 'Session',
+app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Notifications', 'Login', 'Session', '$window',
 
-  function ($rootScope, $scope, $location, Notifications, Login, Session) {
+  function ($rootScope, $scope, $location, Notifications, Login, Session, $window) {
 
     $scope.model = {
       class:'',
@@ -38,12 +38,11 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Notifications'
 
 
   	$scope.exit = function() {
-      var sid = Session.getCurrentSession();
-      Login.logout(function(ok) {
-        $location.path('/logout');
+      Login.logout()
+      .then(function(ok) {
+        $window.location.href = "/systems/login/index.html";
       }, function(err) {
-        console.log(err)
-        Notifications.message(err);
+        console.log(err);
       });
   	}
 
@@ -51,11 +50,10 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Notifications'
       return a.n - b.n;
     }
 
-    $scope.initialize = function() {
+    $scope.initialize = function(uid) {
       $scope.model.items = [];
       $scope.model.items.push({ n:1, label:'Inscripción', img:'fa fa-ticket', function: $scope.upload });
 
-      var uid = Login.getUserId();
       if (uid == '9c5cf510-cc0d-4cc2-83e5-e61e3e39be58' ||  // paula
           uid == 'f4db8211-55e0-4adf-8443-72fed94cc1b0' ||  // lucas
           uid == '89d88b81-fbc0-48fa-badb-d32854d3d93a' ||  // pablo
@@ -71,7 +69,12 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Notifications'
     }
 
     $rootScope.$on('$viewContentLoaded', function(event) {
-      $scope.initialize();
+      Login.getSessionData()
+        .then(function(s) {
+            $scope.initialize(s.user_id);
+          }, function(err) {
+            $window.location.href = "/systems/login/index.html";
+          });
     });
 
 

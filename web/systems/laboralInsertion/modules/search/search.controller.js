@@ -774,8 +774,11 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
   $scope.getUsers = function(ins) {
     for (i = 0; i < ins.length; i++) {
       //console.log('Buscando usuario ' + ins[i].userId);
-      Users.findById(ins[i].userId).then(function(user) {
-        $scope.model.users[user['id']] = user;
+      Users.findById([ins[i].userId]).then(function(users) {
+        user = (users.length > 0) ? users[0] : null;
+        if (user != null) {
+          $scope.model.users[user['id']] = user;
+        }
         //console.log(user);
       }, function(err) {
         console.log(err);

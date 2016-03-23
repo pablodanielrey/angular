@@ -6,8 +6,8 @@ Users.inject = ['$rootScope', '$wamp', 'Session','Utils','Cache'];
 
 function Users($rootScope, $wamp, Session, Utils, Cache) {
 
-  this.findById = function(id) {
-    return $wamp.call('users.findById', [id]);
+  this.findById = function(ids) {
+    return $wamp.call('users.findById', [ids]);
   }
 
   this.findByDni = function(dni) {
