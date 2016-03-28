@@ -31,11 +31,13 @@ import struct
 
 from autobahn.wamp.interfaces import IObjectSerializer, ISerializer
 from autobahn.wamp.exception import ProtocolError
+from autobahn.wamp.utils import serializer_loads, MySerializer
 from autobahn.wamp import message
 
 # note: __all__ must be a list here, since we dynamically
 # extend it depending on availability of more serializers
 __all__ = ['Serializer',
+           'MySerializer',
            'JsonObjectSerializer',
            'JsonSerializer']
 
@@ -137,37 +139,19 @@ class Serializer(object):
 
 # JSON serialization is always supported
 try:
-    """
     # try import accelerated JSON implementation
     #
-    import ujson
-
-    _json = ujson
-
-    def _loads(val):
-        return ujson.loads(val, precise_float=True)
-
-    def _dumps(obj):
-        return ujson.dumps(obj, double_precision=15, ensure_ascii=False)
-
-except ImportError:
-    """
     # fallback to stdlib implementation
     #
     import json
 
     _json = json
 
-    from utils import serializer_loads, Serializer
-    import dateutil.parser
-    import re
-
     #_loads = json.loads
     _loads = lambda x: json.loads(x, object_hook=serializer_loads)
 
     def _dumps(obj):
-        return json.dumps(obj, separators=(',', ':'), ensure_ascii=False, cls=Serializer)
-
+        return json.dumps(obj, separators=(',', ':'), ensure_ascii=False, cls=MySerializer)
 finally:
     class JsonObjectSerializer(object):
 
@@ -254,7 +238,6 @@ ISerializer.register(JsonSerializer)
 # MsgPack serialization depends on the `msgpack` package being available
 #
 try:
-    raise ImportError()
     import msgpack
 except ImportError:
     pass
@@ -397,7 +380,6 @@ else:
 # https://bitbucket.org/bodhisnarkva/cbor
 #
 try:
-    raise ImportError()
     import cbor
 except ImportError:
     pass
