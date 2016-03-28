@@ -8,7 +8,7 @@ import logging
 import datetime
 import uuid
 from model.connection.connection import Connection
-from model.serializer.utils import Serializer, JSONSerializable
+from model.serializer.utils import MySerializer, JSONSerializable
 
 
 class UserPassword(JSONSerializable):
@@ -216,13 +216,14 @@ class User(JSONSerializable):
         self.photo = None
         self.telephones = []
 
+    '''
     def _toJson():
         pass
 
     @staticmethod
     def fromJson(j):
         pass
-
+    '''
 
 class Telephone(JSONSerializable):
     def __init__(self):
