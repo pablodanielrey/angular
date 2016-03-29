@@ -176,6 +176,7 @@ class LaboralInsertion:
     def persist(self, con, user, languages):
         """ actualiza la información de insercion laboral del usuario """
         UserDAO.persist(con, user)
+        LanguageDAO.deleteByUser(con, user.id)
         for l in languages:
             LanguageDAO.persist(con, l)
 
