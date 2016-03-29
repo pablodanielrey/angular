@@ -98,7 +98,7 @@ class UserPasswordDAO:
 
         cur = con.cursor()
         try:
-            if up.id is None:
+            if not hasattr(user, 'id'):
                 up.id = str(uuid.uuid4())
                 params = up.__dict__
                 cur.execute('insert into credentials.user_password (id, user_id, username, password, updated) values (%(id)s, %(userId)s, %(username)s, %(password)s, now())', params)
@@ -175,7 +175,7 @@ class MailDAO:
         ''' crea o actualiza un email de usuario '''
         cur = con.cursor()
         try:
-            if mail.id is None:
+            if not hasattr(user, 'id'):
                 mail.id = str(uuid.uuid4())
                 params = mail.__dict__
                 cur.execute('insert into profile.mails (id, user_id, email, confirmed, hash) values (%(id)s, %(userId)s, %(email)s, %(confirmed)s, %(hash)s)', params)
@@ -345,7 +345,7 @@ class UserDAO:
         '''
         cur = con.cursor()
         try:
-            if user.id is None:
+            if not hasattr(user, 'id'):
                 user.id = str(uuid.uuid4())
                 user.version = 0
                 cur.execute('insert into profile.users (id, dni, name, lastname, genre, birthdate, city, country, address, residence_city, version, photo) values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)', (

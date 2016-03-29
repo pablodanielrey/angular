@@ -6,6 +6,42 @@ Users.inject = ['$rootScope', '$wamp', 'Session','Utils','Cache'];
 
 function Users($rootScope, $wamp, Session, Utils, Cache) {
 
+
+  /*
+    NORMALIZACION DE USUARIO
+  */
+  this.normalizeUser = function(user) {
+    if (!('__json_module__' in user)) {
+      user.__json_module__ =  'model.users.users';
+    }
+
+    if (!('__json_class__' in user)) {
+      user.__json_class__ = 'User';
+    }
+
+    if (user.telephones && user.telephones.length > 0) {
+        user.telephones = this.normalizeTelephones(user.telephones);
+    }
+
+    return user;
+  }
+
+  this.normalizeTelephones = function(telephones) {
+    ret = []
+    for (var i = 0; i < telephones.length; i++) {
+      t = telephones[i];
+      if (!('__json_module__' in t)) {
+        t.__json_module__ =  'model.users.users';
+      }
+
+      if (!('__json_class__' in t)) {
+        t.__json_class__ = 'Telephone';
+      }
+      ret.push(t);
+    }
+    return ret;
+  }
+
   this.findById = function(ids) {
     return $wamp.call('users.findById', [ids]);
   }
@@ -112,15 +148,6 @@ function Users($rootScope, $wamp, Session, Utils, Cache) {
   }
 
 
-  this.normalizeUser = function(user) {
-    if (user.birthdate != undefined) {
-      //user.birthdate = new Date(user.birthdate)
-    }
-  }
-
-
-
-
 
   this.findUser = function(id, callbackOk, callbackError) {
 
@@ -134,7 +161,7 @@ function Users($rootScope, $wamp, Session, Utils, Cache) {
     $wamp.call('users.findById', [id])
       .then(function(user) {
         if (user != null) {
-          instance.normalizeUser(user);
+          user = this.normalizeUser(user);
           Cache.setItem(instance.userPrefix + user.id, user);
           callbackOk(user);
 
@@ -151,7 +178,8 @@ function Users($rootScope, $wamp, Session, Utils, Cache) {
   this.updateUser = function(user, callbackOk, callbackError) {
     // elimino ese usuario de la cache
     //Cache.removeItem(instance.userPrefix + user.id);
-    //instance.normalizeUser(user);
+
+    user = this.normalizeUser(user);
 
     $wamp.call('users.persistUser', [user])
       .then(function(res) {
