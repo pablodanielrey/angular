@@ -2,9 +2,9 @@ angular
   .module('mainApp')
   .controller('CompanyCtrl', CompanyCtrl);
 
-CompanyCtrl.$inject = ['$rootScope','$scope'];
+CompanyCtrl.$inject = ['$rootScope','$scope', 'LaboralInsertion'];
 
-function CompanyCtrl($rootScope, $scope) {
+function CompanyCtrl($rootScope, $scope, LaboralInsertion) {
 
   $scope.model = {
     companies: [],
@@ -17,13 +17,12 @@ function CompanyCtrl($rootScope, $scope) {
   }
 
   $scope.initialize = initialize;
+  $scope.loadCompanies = loadCompanies;
   $scope.selectCompany = selectCompany;
   $scope.save = save;
   $scope.cancel = cancel;
-  $scope.addTelephone = addTelephone;
-  $scope.removeTelephone = removeTelephone;
-  $scope.addEmail = addEmail;
-  $scope.removeEmail = removeEmail;
+  $scope.addContact = addContact;
+  $scope.removeContact = removeContact;
 
 
   // --------------------------------------------
@@ -31,15 +30,21 @@ function CompanyCtrl($rootScope, $scope) {
   // --------------------------------------------
 
   function initialize() {
-    $scope.model.companies = [{'name':'AFIP','city':'La Plata','img':'/systems/laboralInsertion/img/empresa.jpg'},
-                              {'name':'Cerveceria Quilmes','city':'La Plata','img':'/systems/laboralInsertion/img/empresa.jpg'},
-                              {'name':'OSDE','city':'La Plata','img':'/systems/laboralInsertion/img/empresa.jpg'},
-                              {'name':'Seguros Rivadavia','city':'La Plata','img':'/systems/laboralInsertion/img/empresa.jpg'},
-                              {'name':'Techint','city':'Capital Federal','img':'/systems/laboralInsertion/img/empresa.jpg'},
-                              {'name':'Coca Cola','city':'La Plata','img':'/systems/laboralInsertion/img/empresa.jpg'},
-                              {'name':'Google','city':'Capital Federal','img':'/systems/laboralInsertion/img/empresa.jpg'},
-                              {'name':'Arba','city':'La Plata','img':'/systems/laboralInsertion/img/empresa.jpg'}
-                             ];
+    $scope.loadCompanies();
+  }
+
+  function loadCompanies() {
+    LaboralInsertion.findAllCompanies().then(function(companies) {
+      $scope.model.companies = companies;
+      for (var i = 0; i < companies.length; i++) {
+        c = $scope.model.companies[i];
+        c['beginCM'] = new Date(c['beginCM']);
+        c['endCM'] = new Date(c['endCM']);
+        c['img'] = '/systems/laboralInsertion/img/empresa.jpg';
+      }
+    }, function(err) {
+      console.log(err);
+    });
   }
 
   // --------------------------------------------
@@ -59,13 +64,9 @@ function CompanyCtrl($rootScope, $scope) {
       c = {};
     }
     $scope.model.companySelected = c;
-    if (c.telephones === undefined || c.telephones.length <= 0) {
-      c.telephones = [];
-      addTelephone();
-    }
-    if (c.emails === undefined || c.emails.length <= 0) {
-      c.emails = [];
-      addEmail();
+    if (!c.contacts) {
+      c.contacts = [];
+      $scope.addContact();
     }
     $scope.view.style = 'displayForm';
   }
@@ -76,35 +77,26 @@ function CompanyCtrl($rootScope, $scope) {
   }
 
   function save() {
-    $scope.model.companySelected = null;
-    $scope.view.style = "";
+    LaboralInsertion.persistCompany($scope.model.companySelected).then(function(id) {
+      loadCompanies();
+      $scope.model.companySelected = null;
+      $scope.view.style = "";
+    }, function(err) {
+        console.log(err);
+    });
   }
 
-  function addTelephone() {
-    $scope.model.companySelected.telephones.push({'number':''});
+  function addContact() {
+    $scope.model.companySelected.contacts.push({'name':'','email':'','telephone':''});
   }
 
-  function removeTelephone(t) {
-    var index = $scope.model.companySelected.telephones.indexOf(t);
+  function removeContact(c) {
+    var index = $scope.model.companySelected.contacts.indexOf(c);
     if (index > -1) {
-        $scope.model.companySelected.telephones.splice(index, 1);
+        $scope.model.companySelected.contacts.splice(index, 1);
     }
-    if ($scope.model.companySelected.telephones.length <= 0) {
-      addTelephone();
-    }
-  }
-
-  function addEmail() {
-    $scope.model.companySelected.emails.push({'email':''});
-  }
-
-  function removeEmail(m) {
-    var index = $scope.model.companySelected.emails.indexOf(m);
-    if (index > -1) {
-        $scope.model.companySelected.emails.splice(index, 1);
-    }
-    if ($scope.model.companySelected.emails.length <= 0) {
-      addEmail();
+    if ($scope.model.companySelected.contacts.length <= 0) {
+      addContact();
     }
   }
 

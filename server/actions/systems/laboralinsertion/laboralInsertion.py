@@ -11,7 +11,7 @@ import uuid
 import os
 from model.laboralinsertion.laboralInsertion import LaboralInsertion
 from model.laboralinsertion.inscription import Inscription
-from model.laboralinsertion.company import Company, CompanyDAO
+from model.laboralinsertion.company import Company, CompanyDAO, Contact
 from model.laboralinsertion.languages import Language
 from model.laboralinsertion.filters import Filter
 
@@ -181,9 +181,10 @@ class LaboralInsertionWamp(ApplicationSession):
         yield from self.register(self.persistInscriptionByUser_async, 'system.laboralInsertion.persistInscriptionByUser')
         yield from self.register(self.deleteInscriptionById_async, 'system.laboralInsertion.deleteInscriptionById')
         yield from self.register(self.sendMailToCompany_async, 'system.laboralInsertion.sendEmailToCompany');
-        yield from self.register(self.findAllCompanies_async, 'system.laboralInsertion.company.findAll');
         yield from self.register(self.findSentByInscriptionId_async, 'system.laboralInsertion.sent.findByInscription');
         yield from self.register(self.getFilters_async, 'system.laboralInsertion.getFilters');
+        yield from self.register(self.findAllCompanies_async, 'system.laboralInsertion.company.findAll');
+        yield from self.register(self.persistCompany_async, 'system.laboralInsertion.company.persist');
 
 
     def persist(self, data):
@@ -309,9 +310,17 @@ class LaboralInsertionWamp(ApplicationSession):
         con = self.conn.get()
         try:
             ids = CompanyDAO.findAll(con)
-            cs = CompanyDAO.findById(con, ids)
-            css = [c.__dict__ for c in cs]
-            return css
+            return CompanyDAO.findById(con, ids)
+
+        finally:
+            self.conn.put(con)
+
+    def persistCompany(self, company):
+        con = self.conn.get()
+        try:
+            id = CompanyDAO.persist(con, company)
+            con.commit()
+            return id
 
         finally:
             self.conn.put(con)
@@ -422,6 +431,12 @@ class LaboralInsertionWamp(ApplicationSession):
     def findAllCompanies_async(self):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.findAllCompanies)
+        return r
+
+    @coroutine
+    def persistCompany_async(self, data):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.persistCompany, data)
         return r
 
     @coroutine
