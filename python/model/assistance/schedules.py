@@ -1,6 +1,6 @@
 
 import datetime
-from model.assistance.utils import JSONSerializable
+from model.serializer.utils import JSONSerializable
 
 class Schedule(JSONSerializable):
 

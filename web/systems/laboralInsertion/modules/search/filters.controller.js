@@ -9,6 +9,7 @@ function FiltersCtrl($rootScope, $scope, $filter) {
   $scope.model = {
     selectFilterDegree: null,
     selectFilterLaboral: null,
+    selectWorkExperience: null,
     selectFilterGenre: null,
     selectFilterResidence: null,
     selectFilterOrigin: null,
@@ -19,6 +20,8 @@ function FiltersCtrl($rootScope, $scope, $filter) {
     endDate:new Date(),
     beginCountCathedra: 0,
     endCountCathedra: 10,
+    beginAge: 20,
+    endAge: 30,
     beginAverageWithFails: 0,
     endAverageWithFails: 10,
     beginAverageWithoutFails: 0,
@@ -31,43 +34,14 @@ function FiltersCtrl($rootScope, $scope, $filter) {
     enabledFilterAverageWithFails: true,
     enabledFilterAverageWithoutFails: true,
     filtersDegrees:['Contador Público','Licenciatura en Economía','Licenciatura en Administración','Licenciatura en Turismo','Tecnicatura en Cooperativas'],
-    filtersLaboral: [
-      {type:"filterLaboral", descriptionType:'Oferta Laboral', name:"Pasantía", value:"pasantia"},
-      {type:"filterLaboral", descriptionType:'Oferta Laboral', name:"Full-Time", value:"fulltime"},
-      {type:"filterLaboral", descriptionType:'Oferta Laboral', name:"Jovenes Profesionales", value:"jp"},
-    ],
-    filtersGenre: [
-      {type:"filterGenre", descriptionType:'Sexo', name:"Masculino", value:"masculine"},
-      {type:"filterGenre", descriptionType:'Sexo', name:"Femenino", value:"female"},
-      {type:"filterGenre", descriptionType:'Sexo', name:"Otros", value:"other"}
-    ],
-    filtersResidence: [
-      {type:"filterResidence", descriptionType:'Ciudad de Residencia', name:"La Plata", value:"laPlata"},
-      {type:"filterResidence", descriptionType:'Ciudad de Residencia', name:"M.B Gonnet", value:"gonnet"},
-      {type:"filterResidence", descriptionType:'Ciudad de Residencia', name:"Ranchos", value:"ranchos"},
-      {type:"filterResidence", descriptionType:'Ciudad de Residencia', name:"City Bell", value:"cityBell"},
-      {type:"filterResidence", descriptionType:'Ciudad de Residencia', name:"Otros", value:"others"}
-    ],
-    filtersOrigin: [
-      {type:"filterOrigin", descriptionType:'Ciudad de Origen', name:"La Plata", value:"laPlata"},
-      {type:"filterOrigin", descriptionType:'Ciudad de Origen', name:"M.B Gonnet", value:"gonnet"},
-      {type:"filterOrigin", descriptionType:'Ciudad de Origen', name:"Ranchos", value:"ranchos"},
-      {type:"filterOrigin", descriptionType:'Ciudad de Origen', name:"City Bell", value:"cityBell"},
-      {type:"filterOrigin", descriptionType:'Ciudad de Origen', name:"Otros", value:"others"}
-    ],
-    filtersTravel: [
-      {type:"filterTravel", descriptionType:'Viajar', name:"No", value:"no"},
-      {type:"filterTravel", descriptionType:'Viajar', name:"Sí", value:"yes"}
-    ],
-    filtersLanguage: [
-      {type:"filterLanguage", descriptionType:"Idioma", name:"Inglés", value:"english"},
-      {type:"filterLanguage", descriptionType:"Idioma", name:"Postugués", value:"portuguese"}
-    ],
-    filtersLanguageNivel: [
-      {type:"filterLanguageNivel", descriptionType:"Idioma", name:"Básico", value:"basic", order: 1},
-      {type:"filterLanguageNivel", descriptionType:"Idioma", name:"Intermedio", value:"intermediate", order: 2},
-      {type:"filterLanguageNivel", descriptionType:"Idioma", name:"Avanzado", value:"advanced", order: 3}
-    ]
+    filtersLaboral: ["Pasantía", "Full-Time", "Jovenes Profesionales"],
+    filtersWorkExperience: ['No', 'Sí'],
+    filtersGenre: ["Masculino", "Femenino", "Otros"],
+    filtersResidence: ["La Plata","M.B Gonnet", "Ranchos", "City Bell", "Otros"],
+    filtersOrigin: ["La Plata","M.B Gonnet", "Ranchos", "City Bell", "Otros"],
+    filtersTravel: ["No", "Sí"],
+    filtersLanguage: ["Inglés", "Portugués", "Francés"],
+    filtersLanguageNivel: ["Básico", "Intermedio", "Avanzado"]
   }
 
 
@@ -82,7 +56,9 @@ function FiltersCtrl($rootScope, $scope, $filter) {
   $scope.addDateFilter = addDateFilter;
   $scope.addDegreeFilter = addDegreeFilter;
   $scope.addLaboralFilter = addLaboralFilter;
+  $scope.addWorkExperience = addWorkExperience;
   $scope.addGenreFilter = addGenreFilter;
+  $scope.addAgeFilter = addAgeFilter;
   $scope.addResidenceFilter = addResidenceFilter;
   $scope.addOriginFilter = addOriginFilter;
   $scope.addTravelFilter = addTravelFilter;
@@ -134,25 +110,88 @@ function FiltersCtrl($rootScope, $scope, $filter) {
     if ($scope.model.selectFilterLaboral == null) {
       return;
     }
-    $scope.model.filters.push($scope.model.selectFilterLaboral);
+    // {"data": {"offer": "Pasantía"}, "filter": "FOffer"}
+    var dataFilter = {};
+    dataFilter.data = {offer: $scope.model.selectFilterLaboral};
+    dataFilter.filter = "FOffer";
+
+    var filter = {};
+    filter.data = dataFilter;
+    filter.view = {type: 'Oferta Laboral', value: $scope.model.selectFilterLaboral};
+
+    $scope.model.filters.push(filter);
     var i = $scope.view.filtersLaboral.indexOf($scope.model.selectFilterLaboral);
     $scope.view.filtersLaboral.splice(i,1);
+  }
+
+  function addWorkExperience() {
+    if ($scope.model.selectWorkExperience == null) {
+      return;
+    }
+    var value = ($scope.model.selectWorkExperience == "No") ? false : true;
+    // {"data": {"workExperience": "No"}, "filter": "FWorkExperience"}
+    var dataFilter = {};
+    dataFilter.data = {workExperience: value};
+    dataFilter.filter = "FWorkExperience";
+
+    var filter = {};
+    filter.data = dataFilter;
+    filter.view = {type: 'Experiencia Laboral', value: $scope.model.selectWorkExperience};
+
+    $scope.model.filters.push(filter);
+    var i = $scope.view.filtersWorkExperience.indexOf($scope.model.selectWorkExperience);
+    $scope.view.filtersWorkExperience.splice(i,1);
   }
 
   function addGenreFilter() {
     if ($scope.model.selectFilterGenre == null) {
       return;
     }
-    $scope.model.filters.push($scope.model.selectFilterGenre);
+    // {"data": {"genre": "Masculino"}, "filter": "FGenre"}
+    var dataFilter = {};
+    dataFilter.data = {genre: $scope.model.selectFilterGenre};
+    dataFilter.filter = "FGenre";
+
+    var filter = {};
+    filter.data = dataFilter;
+    filter.view = {type: 'Género', value: $scope.model.selectFilterGenre};
+
+    $scope.model.filters.push(filter);
     var i = $scope.view.filtersGenre.indexOf($scope.model.selectFilterGenre);
     $scope.view.filtersGenre.splice(i,1);
+  }
+
+  function addAgeFilter() {
+    if ($scope.model.beginAge > $scope.model.endAge && $scope.model.endAge > 0) {
+      return;
+    }
+    // {"data": {"beginAge": 20, endAge: 30}, "filter": "FAge"}
+    var dataFilter = {};
+    dataFilter.data = {beginAge: parseInt($scope.model.beginAge), endAge: parseInt($scope.model.endAge)};
+    dataFilter.filter = "FAge";
+
+    var filter = {};
+    filter.data = dataFilter;
+    filter.view = {type: "Edad", value: $scope.model.beginAge + " - " + $scope.model.endAge};
+
+    $scope.model.filters.push(filter);
   }
 
   function addResidenceFilter() {
     if ($scope.model.selectFilterResidence == null) {
       return;
     }
-    $scope.model.filters.push($scope.model.selectFilterResidence);
+
+    // {"data": {"city": "La Plata"}, "filter": "FResidence"}
+    var dataFilter = {};
+    dataFilter.data = {city: $scope.model.selectFilterResidence};
+    dataFilter.filter = "FResidence";
+
+    var filter = {};
+    filter.data = dataFilter;
+    filter.view = {type: "Ciudad de Residencia", value: $scope.model.selectFilterResidence};
+
+    $scope.model.filters.push(filter);
     var i = $scope.view.filtersResidence.indexOf($scope.model.selectFilterResidence);
     $scope.view.filtersResidence.splice(i,1);
   }
@@ -161,7 +200,16 @@ function FiltersCtrl($rootScope, $scope, $filter) {
     if ($scope.model.selectFilterOrigin == null) {
       return;
     }
-    $scope.model.filters.push($scope.model.selectFilterOrigin);
+    // {"data": {"city": "La Plata"}, "filter": "FOrigin"}
+    var dataFilter = {};
+    dataFilter.data = {city: $scope.model.selectFilterOrigin};
+    dataFilter.filter = "FCity";
+
+    var filter = {};
+    filter.data = dataFilter;
+    filter.view = {type: "Ciudad de Origen", value: $scope.model.selectFilterOrigin};
+
+    $scope.model.filters.push(filter);
     var i = $scope.view.filtersOrigin.indexOf($scope.model.selectFilterOrigin);
     $scope.view.filtersOrigin.splice(i,1);
   }
@@ -170,43 +218,86 @@ function FiltersCtrl($rootScope, $scope, $filter) {
     if ($scope.model.selectFilterTravel == null) {
       return;
     }
-    $scope.model.filters.push($scope.model.selectFilterTravel);
+    var value = ($scope.model.selectFilterTravel == "No") ? false : true;
+    // {"data": {"travel": "No"}, "filter": "FTravel"}
+    var dataFilter = {};
+    dataFilter.data = {travel: value};
+    dataFilter.filter = "FTravel";
+
+    var filter = {};
+    filter.data = dataFilter;
+    filter.view = {type: 'Viajar', value: $scope.model.selectFilterTravel};
+
+    $scope.model.filters.push(filter);
     var i = $scope.view.filtersTravel.indexOf($scope.model.selectFilterTravel);
     $scope.view.filtersTravel.splice(i,1);
+
   }
 
   function addLanguageFilter() {
     if ($scope.model.selectFilterLanguage == null) {
       return;
     }
-    var l = $scope.model.selectFilterLanguage;
-    l.nivel = $scope.model.selectFilterLanguageNivel.name;
-    l.value = l.value + "-" + $scope.model.selectFilterLanguageNivel.value;
-    $scope.model.filters.push(l);
-    var i = $scope.view.filtersLanguage.indexOf($scope.model.selectFilterLanguage);
-    $scope.view.filtersLanguage.splice(i,1);
+
+    // {"data": {"language": "Inglés", "nivel":"Básico"}, "filter": "FLanguage"}
+    var dataFilter = {};
+    dataFilter.data = {language: $scope.model.selectFilterLanguage, level: $scope.model.selectFilterLanguageNivel};
+    dataFilter.filter = "FLanguage";
+
+    var filter = {};
+    filter.data = dataFilter;
+    filter.view = {type: 'Idioma', value: $scope.model.selectFilterLanguage, level: $scope.model.selectFilterLanguageNivel};
+
+    $scope.model.filters.push(filter);
   }
 
   function addCountCathedra() {
-    var b = $scope.model.beginCountCathedra;
-    var e = $scope.model.endCountCathedra;
-    var filter = {type:"filterCountCathedra", descriptionType:'Cantidad de Materias', name: b + " - " + e , value: b + "-" + e};
+    if ($scope.model.beginCountCathedra > $scope.model.endCountCathedra) {
+      return;
+    }
+    // {"data": {"begin": 0, end: 10}, "filter": "FCountCathedra"}
+    var dataFilter = {};
+    dataFilter.data = {begin: parseInt($scope.model.beginCountCathedra), end: parseInt($scope.model.endCountCathedra)};
+    dataFilter.filter = "FCountCathedra";
+
+    var filter = {};
+    filter.data = dataFilter;
+    filter.view = {type: "Cantidad de Materias", value: $scope.model.beginCountCathedra + " - " + $scope.model.endCountCathedra};
+
     $scope.model.filters.push(filter);
     $scope.view.enabledFilterCountCathedra = false;
   }
 
   function addAverageWithFails() {
-    var b = $scope.model.beginAverageWithFails;
-    var e = $scope.model.endAverageWithFails;
-    var filter = {type:"filterAverageWithFails", descriptionType:'Promedio con aplazos', name: b + " - " + e , value: b + "-" + e};
+    if ($scope.model.beginAverageWithFails > $scope.model.endAverageWithFails) {
+      return;
+    }
+    // {"data": {"begin": 0, end: 10}, "filter": "FAverageFails"}
+    var dataFilter = {};
+    dataFilter.data = {begin: parseFloat($scope.model.beginAverageWithFails), end: parseFloat($scope.model.endAverageWithFails)};
+    dataFilter.filter = "FAverageFails";
+
+    var filter = {};
+    filter.data = dataFilter;
+    filter.view = {type: "Promedio con aplazos", value: $scope.model.beginAverageWithFails + " - " + $scope.model.endAverageWithFails};
+
     $scope.model.filters.push(filter);
     $scope.view.enabledFilterAverageWithFails = false;
   }
 
   function addAverageWithoutFails() {
-    var b = $scope.model.beginAverageWithoutFails;
-    var e = $scope.model.endAverageWithoutFails;
-    var filter = {type:"filterAverageWithoutFails", descriptionType:'Promedio sin aplazos', name: b + " - " + e , value: b + "-" + e};
+    if ($scope.model.beginAverageWithoutFails > $scope.model.endAverageWithoutFails) {
+      return;
+    }
+    // {"data": {"begin": 0, end: 10}, "filter": "FAverage"}
+    var dataFilter = {};
+    dataFilter.data = {begin: parseFloat($scope.model.beginAverageWithoutFails), end: parseFloat($scope.model.endAverageWithoutFails)};
+    dataFilter.filter = "FAverage";
+
+    var filter = {};
+    filter.data = dataFilter;
+    filter.view = {type: "Promedio sin aplazos", value: $scope.model.beginAverageWithoutFails + " - " + $scope.model.endAverageWithoutFails};
+
     $scope.model.filters.push(filter);
     $scope.view.enabledFilterAverageWithoutFails = false;
   }
@@ -215,15 +306,15 @@ function FiltersCtrl($rootScope, $scope, $filter) {
   function removeFilter(filter) {
     switch (filter.data.filter) {
       case "FDegree": $scope.view.filtersDegrees.push(filter.view.value); break;
-      case "filterLaboral": $scope.view.filtersLaboral.push(filter); break;
-      case "filterGenre": $scope.view.filtersGenre.push(filter); break;
-      case "filterResidence": $scope.view.filtersResidence.push(filter); break;
-      case "filterOrigin": $scope.view.filtersOrigin.push(filter); break;
-      case "filterTravel": $scope.view.filtersTravel.push(filter); break;
-      case "filterLanguage": $scope.view.filtersLanguage.push(filter); break;
-      case "filterCountCathedra": $scope.view.enabledFilterCountCathedra = true;break;
-      case "filterAverageWithFails": $scope.view.enabledFilterAverageWithFails = true;break;
-      case "filterAverageWithoutFails": $scope.view.enabledFilterAverageWithoutFails = true;break;
+      case "FOffer": $scope.view.filtersLaboral.push(filter.view.value); break;
+      case "FWorkExperience": $scope.view.filtersWorkExperience.push(filter.view.value); break;
+      case "FGenre": $scope.view.filtersGenre.push(filter.view.value); break;
+      case "FResidence": $scope.view.filtersResidence.push(filter.view.value); break;
+      case "FCity": $scope.view.filtersOrigin.push(filter.view.value); break;
+      case "FTravel": $scope.view.filtersTravel.push(filter.view.value); break;
+      case "FCountCathedra": $scope.view.enabledFilterCountCathedra = true;break;
+      case "FAverageFails": $scope.view.enabledFilterAverageWithFails = true;break;
+      case "FAverage": $scope.view.enabledFilterAverageWithoutFails = true;break;
     }
     var i = $scope.model.filters.indexOf(filter);
     $scope.model.filters.splice(i,1);

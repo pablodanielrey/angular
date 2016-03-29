@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from model.assistance.utils import JSONSerializable
+from model.serializer.utils import JSONSerializable
 
 class Log(JSONSerializable):
 

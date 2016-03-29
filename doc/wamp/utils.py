@@ -40,7 +40,7 @@ class JSONSerializable:
         d['__json_class__'] = self.__class__.__name__
         return d
 
-class Serializer(json.JSONEncoder):
+class MySerializer(json.JSONEncoder):
 
     def default(self, obj):
 
