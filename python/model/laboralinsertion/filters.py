@@ -4,6 +4,7 @@ import logging
 import json
 import sys
 
+from model.laboralinsertion.languages import LanguageDAO
 
 class Filter:
 
@@ -88,7 +89,7 @@ class FOffer(Filter):
         return [ i for i in inscriptions if i.workType == self.offer ]
 
 
-class FWorkExperience:
+class FWorkExperience(Filter):
 
     def __init__(self):
         self.workExperience = True
@@ -109,16 +110,88 @@ class FGenre(Filter):
 class FAge(Filter):
 
     def __init__(self):
-        self.age = 0
+        self.beginAge = 0
+        self.endAge = 0
 
     def _filter(self, con, inscriptions):
-        return [ i for i in inscriptions if FAge._age(i.getUser(con).birthdate) == self.age ]
+        return [ i for i in inscriptions if FAge._age(i.getUser(con).birthdate) >= self.beginAge and FAge._age(i.getUser(con).birthdate) <= self.endAge ]
 
     @staticmethod
     def _age(birthdate):
         import datetime
-        return (datetime.datetime.now() - birthdate).year
+        if (birthdate is None):
+            return 0
+        return (datetime.date.today() - birthdate).days / 365
 
+
+class FResidence(Filter):
+
+    def __init__(self):
+        self.city = 'La Plata'
+
+    def _filter(self, con, inscriptions):
+        return [ i for i in inscriptions if i.getUser(con).residence_city == self.city ]
+
+
+class FCity(Filter):
+
+    def __init__(self):
+        self.city = 'La Plata'
+
+    def _filter(self, con, inscriptions):
+        return [ i for i in inscriptions if i.getUser(con).city == self.city ]
+
+class FTravel(Filter):
+
+    def __init__(self):
+        self.travel = True
+
+    def _filter(self, con, inscriptions):
+        return [ i for i in inscriptions if i.travel == self.travel ]
+
+class FLanguage(Filter):
+
+    def __init__(self):
+        self.language = "Inglés"
+        self.level = None
+
+    def _filter(self, con, inscriptions):
+        return [ i for i in inscriptions if FLanguage._includeLanguages(con, self.language, self.level, i.getLanguages(con)) ]
+
+    @staticmethod
+    def _includeLanguages(con, language, level, languages):
+        for lid in languages:
+            l = LanguageDAO.findById(con, lid)
+            if l.name == language and (level == None or l.level == level):
+                return True
+        return False
+
+class FCountCathedra(Filter):
+
+    def __init__(self):
+        self.begin = 0
+        self.end = 0
+
+    def _filter(self, con, inscriptions):
+        return [ i for i in inscriptions if i.approved >= self.begin and  i.approved <= self.end]
+
+class FAverageFails(Filter):
+
+    def __init__(self):
+        self.begin = 0
+        self.end = 0
+
+    def _filter(self, con, inscriptions):
+        return [ i for i in inscriptions if i.average2 >= self.begin and  i.average2 <= self.end]
+
+class FAverage(Filter):
+
+    def __init__(self):
+        self.begin = 0
+        self.end = 0
+
+    def _filter(self, con, inscriptions):
+        return [ i for i in inscriptions if i.average1 >= self.begin and  i.average1 <= self.end]
 
 class FPriority:
 

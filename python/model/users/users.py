@@ -8,9 +8,10 @@ import logging
 import datetime
 import uuid
 from model.connection.connection import Connection
+from model.serializer.utils import MySerializer, JSONSerializable
 
 
-class UserPassword:
+class UserPassword(JSONSerializable):
 
     def __init__(self):
         self.id = None
@@ -97,7 +98,7 @@ class UserPasswordDAO:
 
         cur = con.cursor()
         try:
-            if up.id is None:
+            if not hasattr(user, 'id'):
                 up.id = str(uuid.uuid4())
                 params = up.__dict__
                 cur.execute('insert into credentials.user_password (id, user_id, username, password, updated) values (%(id)s, %(userId)s, %(username)s, %(password)s, now())', params)
@@ -111,7 +112,7 @@ class UserPasswordDAO:
             cur.close()
 
 
-class Mail:
+class Mail(JSONSerializable):
     ''' cuenta de email de un usuario '''
 
     def __init__(self):
@@ -174,7 +175,7 @@ class MailDAO:
         ''' crea o actualiza un email de usuario '''
         cur = con.cursor()
         try:
-            if mail.id is None:
+            if not hasattr(user, 'id'):
                 mail.id = str(uuid.uuid4())
                 params = mail.__dict__
                 cur.execute('insert into profile.mails (id, user_id, email, confirmed, hash) values (%(id)s, %(userId)s, %(email)s, %(confirmed)s, %(hash)s)', params)
@@ -196,7 +197,7 @@ class MailDAO:
             cur.close()
 
 
-class User:
+class User(JSONSerializable):
     ''' usuario básico del sistema '''
 
     def __init__(self):
@@ -215,15 +216,16 @@ class User:
         self.photo = None
         self.telephones = []
 
+    '''
     def _toJson():
         pass
 
     @staticmethod
     def fromJson(j):
         pass
+    '''
 
-
-class Telephone:
+class Telephone(JSONSerializable):
     def __init__(self):
         self.id = None
         self.userId = None
@@ -343,7 +345,7 @@ class UserDAO:
         '''
         cur = con.cursor()
         try:
-            if user.id is None:
+            if not hasattr(user, 'id'):
                 user.id = str(uuid.uuid4())
                 user.version = 0
                 cur.execute('insert into profile.users (id, dni, name, lastname, genre, birthdate, city, country, address, residence_city, version, photo) values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)', (
@@ -410,7 +412,7 @@ class UserDAO:
             cur.close()
 
 
-class Student:
+class Student(JSONSerializable):
 
     def __init__(self):
         self.id = None

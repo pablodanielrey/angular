@@ -31,6 +31,7 @@ import struct
 
 from autobahn.wamp.interfaces import IObjectSerializer, ISerializer
 from autobahn.wamp.exception import ProtocolError
+from autobahn.wamp.utils import serializer_loads, MySerializer
 from autobahn.wamp import message
 
 # note: __all__ must be a list here, since we dynamically
@@ -136,60 +137,20 @@ class Serializer(object):
 
 
 # JSON serialization is always supported
-"""
 try:
     # try import accelerated JSON implementation
     #
-
-    import ujson
-
-    _json = ujson
-
-    def _loads(val):
-        return ujson.loads(val, precise_float=True)
-
-    def _dumps(obj):
-        return ujson.dumps(obj, double_precision=15, ensure_ascii=False)
-
-except ImportError:
-"""
-try:
     # fallback to stdlib implementation
     #
     import json
 
     _json = json
 
-    import dateutil.parser
-    import re
-    def datetime_loads(d):
-        for k, v in d.items():
-            """
-                se matchea en el formato isoformat
-                2016-03-19T16:56:26.767543
-            """
-            if isinstance(v, str) and re.search("\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d.\d+", v):
-                try:
-                    d[k] = dateutil.parser.parse(v)
-                except:
-                    pass
-        return d
-
     #_loads = json.loads
-    _loads = lambda x: json.loads(x, object_hook=datetime_loads)
-
-    import datetime
-    class DateTimeEncoder(json.JSONEncoder):
-        def default(self, obj):
-            if isinstance(obj, datetime.datetime):
-                return obj.isoformat()
-            if isinstance(obj, datetime.date):
-                return obj.isoformat()
-            return json.JSONEncoder.default(self, obj)
+    _loads = lambda x: json.loads(x, object_hook=serializer_loads)
 
     def _dumps(obj):
-        return json.dumps(obj, separators=(',', ':'), ensure_ascii=False, cls=DateTimeEncoder)
-
+        return json.dumps(obj, separators=(',', ':'), ensure_ascii=False, cls=MySerializer)
 finally:
     class JsonObjectSerializer(object):
 
@@ -270,256 +231,3 @@ class JsonSerializer(Serializer):
 
 
 ISerializer.register(JsonSerializer)
-
-
-#
-# MsgPack serialization depends on the `msgpack` package being available
-#
-try:
-    raise ImportError()
-    import msgpack
-except ImportError:
-    pass
-else:
-
-    class MsgPackObjectSerializer(object):
-
-        BINARY = True
-        """
-        Flag that indicates whether this serializer needs a binary clean transport.
-        """
-
-        ENABLE_V5 = True
-        """
-        Enable version 5 of the MsgPack specification (which differentiates
-        between strings and binary).
-        """
-
-        def __init__(self, batched=False):
-            """
-            Ctor.
-
-            :param batched: Flag that controls whether serializer operates in batched mode.
-            :type batched: bool
-            """
-            self._batched = batched
-
-        def serialize(self, obj):
-            """
-            Implements :func:`autobahn.wamp.interfaces.IObjectSerializer.serialize`
-            """
-            data = msgpack.packb(obj, use_bin_type=self.ENABLE_V5)
-            if self._batched:
-                return struct.pack("!L", len(data)) + data
-            else:
-                return data
-
-        def unserialize(self, payload):
-            """
-            Implements :func:`autobahn.wamp.interfaces.IObjectSerializer.unserialize`
-            """
-
-            def ensure_string_keys(d):
-                """
-                under python 2, with use_bin_type=True, most dict keys end up
-                getting encoded as bytes (any syntax except {u"key":
-                u"value"}) so instead of recursively looking through
-                everything that's getting serialized, we fix them up
-                on the way out using msgpack's `object_hook` as
-                there's no corresponding hook for serialization...
-                """
-                for (k, v) in six.iteritems(d):
-                    if not isinstance(k, six.text_type):
-                        newk = six.text_type(k, encoding='utf8')
-                        del d[k]
-                        d[newk] = v
-                return d
-
-            if self._batched:
-                msgs = []
-                N = len(payload)
-                i = 0
-                while i < N:
-                    # read message length prefix
-                    if i + 4 > N:
-                        raise Exception("batch format error [1]")
-                    l = struct.unpack("!L", payload[i:i + 4])[0]
-
-                    # read message data
-                    if i + 4 + l > N:
-                        raise Exception("batch format error [2]")
-                    data = payload[i + 4:i + 4 + l]
-
-                    # append parsed raw message
-                    msgs.append(
-                        msgpack.unpackb(
-                            data,
-                            encoding='utf-8',
-                            object_hook=ensure_string_keys,
-                        )
-                    )
-
-                    # advance until everything consumed
-                    i = i + 4 + l
-
-                if i != N:
-                    raise Exception("batch format error [3]")
-                return msgs
-
-            else:
-                unpacked = msgpack.unpackb(
-                    payload,
-                    encoding='utf-8',
-                    object_hook=ensure_string_keys,
-                )
-                return [unpacked]
-
-    IObjectSerializer.register(MsgPackObjectSerializer)
-
-    __all__.append('MsgPackObjectSerializer')
-
-    class MsgPackSerializer(Serializer):
-
-        SERIALIZER_ID = u"msgpack"
-        """
-        ID used as part of the WebSocket subprotocol name to identify the
-        serializer with WAMP-over-WebSocket.
-        """
-
-        RAWSOCKET_SERIALIZER_ID = 2
-        """
-        ID used in lower four bits of second octet in RawSocket opening
-        handshake identify the serializer with WAMP-over-RawSocket.
-        """
-
-        MIME_TYPE = u"application/x-msgpack"
-        """
-        MIME type announced in HTTP request/response headers when running
-        WAMP-over-Longpoll HTTP fallback.
-        """
-
-        def __init__(self, batched=False):
-            """
-            Ctor.
-
-            :param batched: Flag to control whether to put this serialized into batched mode.
-            :type batched: bool
-            """
-            Serializer.__init__(self, MsgPackObjectSerializer(batched=batched))
-            if batched:
-                self.SERIALIZER_ID = u"msgpack.batched"
-
-    ISerializer.register(MsgPackSerializer)
-
-    __all__.append('MsgPackSerializer')
-
-
-# CBOR serialization depends on the `cbor` package being available
-# https://pypi.python.org/pypi/cbor
-# https://bitbucket.org/bodhisnarkva/cbor
-#
-try:
-    raise ImportError()
-    import cbor
-except ImportError:
-    pass
-else:
-
-    class CBORObjectSerializer(object):
-
-        BINARY = True
-        """
-        Flag that indicates whether this serializer needs a binary clean transport.
-        """
-
-        def __init__(self, batched=False):
-            """
-            Ctor.
-
-            :param batched: Flag that controls whether serializer operates in batched mode.
-            :type batched: bool
-            """
-            self._batched = batched
-
-        def serialize(self, obj):
-            """
-            Implements :func:`autobahn.wamp.interfaces.IObjectSerializer.serialize`
-            """
-            data = cbor.dumps(obj)
-            if self._batched:
-                return struct.pack("!L", len(data)) + data
-            else:
-                return data
-
-        def unserialize(self, payload):
-            """
-            Implements :func:`autobahn.wamp.interfaces.IObjectSerializer.unserialize`
-            """
-
-            if self._batched:
-                msgs = []
-                N = len(payload)
-                i = 0
-                while i < N:
-                    # read message length prefix
-                    if i + 4 > N:
-                        raise Exception("batch format error [1]")
-                    l = struct.unpack("!L", payload[i:i + 4])[0]
-
-                    # read message data
-                    if i + 4 + l > N:
-                        raise Exception("batch format error [2]")
-                    data = payload[i + 4:i + 4 + l]
-
-                    # append parsed raw message
-                    msgs.append(cbor.loads(data))
-
-                    # advance until everything consumed
-                    i = i + 4 + l
-
-                if i != N:
-                    raise Exception("batch format error [3]")
-                return msgs
-
-            else:
-                unpacked = cbor.loads(payload)
-                return [unpacked]
-
-    IObjectSerializer.register(CBORObjectSerializer)
-
-    __all__.append('CBORObjectSerializer')
-
-    class CBORSerializer(Serializer):
-
-        SERIALIZER_ID = u"cbor"
-        """
-        ID used as part of the WebSocket subprotocol name to identify the
-        serializer with WAMP-over-WebSocket.
-        """
-
-        RAWSOCKET_SERIALIZER_ID = 3
-        """
-        ID used in lower four bits of second octet in RawSocket opening
-        handshake identify the serializer with WAMP-over-RawSocket.
-        """
-
-        MIME_TYPE = u"application/cbor"
-        """
-        MIME type announced in HTTP request/response headers when running
-        WAMP-over-Longpoll HTTP fallback.
-        """
-
-        def __init__(self, batched=False):
-            """
-            Ctor.
-
-            :param batched: Flag to control whether to put this serialized into batched mode.
-            :type batched: bool
-            """
-            Serializer.__init__(self, CBORObjectSerializer(batched=batched))
-            if batched:
-                self.SERIALIZER_ID = u"cbor.batched"
-
-    ISerializer.register(CBORSerializer)
-
-    __all__.append('CBORSerializer')

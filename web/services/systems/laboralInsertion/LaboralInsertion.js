@@ -67,6 +67,43 @@ function LaboralInsertion($rootScope,$wamp,Session) {
     return $wamp.call('system.laboralInsertion.company.findAll')
   }
 
+  this.normalizeContacts = function(contacts) {
+    ret = []
+    for (var i = 0; i < contacts.length; i++) {
+      c = contacts[i];
+      if (!('__json_module__' in c)) {
+        c.__json_module__ =  'model.laboralinsertion.company';
+      }
+
+      if (!('__json_class__' in c)) {
+        c.__json_class__ = 'Contact';
+      }
+      ret.push(c);
+    }
+    return ret;
+  }
+
+  this.normalizeCompany = function(company) {
+    if (!('__json_module__' in company)) {
+      company.__json_module__ =  'model.laboralinsertion.company';
+    }
+
+    if (!('__json_class__' in company)) {
+      company.__json_class__ = 'Company';
+    }
+
+    if (company.contacts && company.contacts.length > 0) {
+        company.contacts = this.normalizeContacts(company.contacts);
+    }
+
+    return company;
+  }
+
+  this.persistCompany = function(company) {
+    company = this.normalizeCompany(company);
+    return $wamp.call('system.laboralInsertion.company.persist',[company])
+  }
+
   /*
     encuentra todos los sent que tengan el id de incripcion
   */

@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 import uuid
 import inject
-from model.users.users import UserDAO
+import model.users.users
 from model.laboralinsertion.user import UserDAO
+from model.laboralinsertion.languages import LanguageDAO
 
 
 class Inscription:
@@ -21,11 +22,15 @@ class Inscription:
         self.average2 = 0
         self.approved = 0
 
-        def getUser(self, con):
-            return model.users.users.UserDAO.findById(con, self.userId)
+    def getUser(self, con):
+        users = model.users.users.UserDAO.findById(con, [self.userId])
+        return None if (users == None or len(users) == 0) else users[0]
 
-        def getUserData(self, con):
-            return model.laboralinsertion.user.UserDAO.findByIf(con, self.userId)
+    def getUserData(self, con):
+        return model.laboralinsertion.user.UserDAO.findById(con, self.userId)
+
+    def getLanguages(self, con):
+        return LanguageDAO.findByUser(con, self.userId)
 
 class InscriptionDAO:
 
@@ -46,7 +51,8 @@ class InscriptionDAO:
                     average2 real default 0.0,
                     work_type varchar not null,
                     created timestamptz default now(),
-                    work_experience boolean default false
+                    work_experience boolean default false,
+                    deleted boolean default false
                 )
             """)
         finally:
@@ -67,6 +73,7 @@ class InscriptionDAO:
         i.average1 = r['average1']
         i.average2 = r['average2']
         i.approved = r['approved']
+        i.deleted = r['deleted']
         return i
 
     @staticmethod
@@ -97,7 +104,7 @@ class InscriptionDAO:
         """ elimina la inscripción con el id determinado """
         cur = con.cursor()
         try:
-            cur.execute('delete from laboral_insertion.inscriptions where id = %s', (id,))
+            cur.execute('update laboral_insertion.inscriptions set deleted = true where id = %s', (id,))
         finally:
             cur.close()
 

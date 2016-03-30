@@ -42,15 +42,10 @@ class UsersWamp(ApplicationSession):
 
     def findById(self, ids):
         assert isinstance(ids, list)
-
         con = self.conn.get()
         try:
             data = UserDAO.findById(con, ids)
-            datas = []
-            for d in data:
-                d.telephones = [ t.__dict__ for t in d.telephones ]
-                datas.append(d.__dict__)
-            return datas
+            return data
 
         finally:
             self.conn.put(con)
@@ -94,6 +89,7 @@ class UsersWamp(ApplicationSession):
     def persistUser(self, user):
         con = self.conn.get()
         try:
+            ''''
             telephones = user['telephones']
 
             u = User()
@@ -105,7 +101,8 @@ class UsersWamp(ApplicationSession):
                 t2.__dict__ = t
                 u.telephones.append(t2)
                 logging.info(u.telephones)
-            userId = UserDAO.persist(con, u)
+            '''
+            userId = UserDAO.persist(con, user)
             con.commit()
             return userId
 
@@ -174,7 +171,8 @@ class UsersWamp(ApplicationSession):
         con = self.conn.get()
         try:
             mails = self.mails.findByUserId(con, userId)
-            return [ m.__dict__ for m in mails ]
+            # return [ m.__dict__ for m in mails ]
+            return mails
 
         finally:
             self.conn.put(con)
