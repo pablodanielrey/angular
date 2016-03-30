@@ -51,7 +51,7 @@
 
               <!-- prioridad falta -->
               <th>
-                <div class="priority">
+                <div class="priority" ng-click="view.reversePriority=!view.reversePriority;orderPriority(view.reversePriority)">
                   P
                 </div>
               </th>
@@ -175,7 +175,7 @@
             </td>
             <td>
               <div class="priority">
-                {{getPriority(i.id)}}
+                {{getPriority(i.userId)}}
               </div>
             </td>
             <td>

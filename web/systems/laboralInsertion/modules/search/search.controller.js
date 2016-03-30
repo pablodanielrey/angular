@@ -40,6 +40,7 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     reverseAverage1: false,
     reverseAverage2: false,
     reverseWorkType: false,
+    reversePriority: false,
     reverMail: false
   };
 
@@ -217,6 +218,30 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
         return value;
       });
     }
+  };
+
+  function comparePriority(a,b) {
+    return $scope.getPriority(a.userId) < $scope.getPriority(b.userId) ? -1 : ($scope.getPriority(a.userId) > $scope.getPriority(b.userId) ? 1 : 0)
+  }
+
+  $scope.orderPriority = function(reverse) {
+      if (reverse) {
+        $scope.model.inscriptions.sort(function(a, b) {
+          value = comparePriority(a,b);
+          if (value == 0) {
+            value = compareName(a, b);
+          }
+          return value;
+        });
+      } else {
+        $scope.model.inscriptions.sort(function(a, b) {
+          value = comparePriority(b,a);
+          if (value == 0) {
+            value = compareName(a, b);
+          }
+          return value;
+        });
+      }
   };
 
   $scope.orderDni = function(reverse) {
@@ -460,11 +485,6 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
   };
 
 
-  // TODO: dalta implementar.
-  $scope.getPriority = function(id) {
-
-  }
-
   $scope.orderMail = function(reverse) {
     if (reverse) {
       $scope.model.inscriptions.sort(function(a, b) {
@@ -696,6 +716,13 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     }
   }
 
+  $scope.getPriority = function(id) {
+    if ($scope.model.data[id] != null && $scope.model.data[id].priority != null) {
+        return $scope.model.data[id].priority;
+    }
+    return 0;
+  }
+
   $scope.getEnglish = function(id) {
     if ($scope.model.data[id] != null && $scope.model.data[id].languages != null && $scope.model.data[id].languages.length > 0) {
       for (a = 0; a < $scope.model.data[id].languages.length; a++) {
@@ -869,7 +896,7 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
 
   $scope.displayProfile = function(i) {
     $scope.model.currentScreen = "screenProfile";
-    $scope.$broadcast('openProfileEvent',i);
+    $scope.$broadcast('openProfileEvent',i,$scope.model.data[i.userId]);
   }
 
   $scope.$on('closeProfileEvent', function(event) {
