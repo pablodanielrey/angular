@@ -8,7 +8,8 @@ function CompanyCtrl($rootScope, $scope, LaboralInsertion) {
 
   $scope.model = {
     companies: [],
-    companySelected:null
+    companySelected:null,
+    bkpCompanySelected:null
   }
 
   $scope.view = {
@@ -64,6 +65,7 @@ function CompanyCtrl($rootScope, $scope, LaboralInsertion) {
       c = {};
     }
     $scope.model.companySelected = c;
+    $scope.model.bkpCompanySelected = angular.copy($scope.model.companySelected);
     if (!c.contacts) {
       c.contacts = [];
       $scope.addContact();
@@ -72,11 +74,20 @@ function CompanyCtrl($rootScope, $scope, LaboralInsertion) {
   }
 
   function cancel() {
+    angular.copy($scope.model.bkpCompanySelected, $scope.model.companySelected);
     $scope.model.companySelected = null;
     $scope.view.style = "";
   }
 
   function save() {
+    var i = $scope.model.companySelected.contacts.length;
+    while (i > 0) {
+      var c = $scope.model.companySelected.contacts[i-1];
+      if (c.name.trim() == '' && c.telephone.trim() == '' && c.email.trim() == '') {
+        $scope.removeContact(c);
+      }
+      i = i - 1;
+    }
     LaboralInsertion.persistCompany($scope.model.companySelected).then(function(id) {
       loadCompanies();
       $scope.model.companySelected = null;
