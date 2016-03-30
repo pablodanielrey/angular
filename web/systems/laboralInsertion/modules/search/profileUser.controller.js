@@ -11,6 +11,7 @@ function ProfilesCtrl($rootScope, $scope, LaboralInsertion) {
   $scope.cancelProfile = cancelProfile;
   $scope.saveProfile = saveProfile;
   $scope.saveUserData = saveUserData;
+  $scope.deleteInscription = deleteInscription;8
 
   $scope.data = {};
   $scope.selectInscription = null;
@@ -24,6 +25,7 @@ function ProfilesCtrl($rootScope, $scope, LaboralInsertion) {
   });
 
   $scope.$on('openProfileEvent', function(event, i, userData) {
+    $scope.data.id = i.id;
     $scope.data.approved = i.approved;
     $scope.data.userId = i.userId;
     $scope.data.degree = i.degree;
@@ -59,6 +61,18 @@ function ProfilesCtrl($rootScope, $scope, LaboralInsertion) {
     }, function(err) {
       console.log(err);
     });
+  }
+
+  function deleteInscription() {
+    LaboralInsertion.deleteInscriptionById($scope.data.id).then(
+      function(ok) {
+        $scope.$emit('closeProfileEvent');
+        $scope.$emit('searchInscriptionsEvent');
+      }, function(err) {
+        console.log(err);
+        //$scope.$emit('closeProfileEvent');
+      }
+    );
   }
 
 
