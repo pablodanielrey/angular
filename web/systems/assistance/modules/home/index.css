@@ -147,6 +147,19 @@
   -webkit-border-radius: 2px;
 }
 
+.home .contentTitle {
+  display: flex;
+  display: -webkit-flex;
+  display: -moz-flex;
+  flex-direction: row;
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+  align-items: -content: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+
+}
+
 .home .title {
     color: #5C5F69;
 }
@@ -157,8 +170,10 @@
 
 .home .dailySchedule {
 margin-left: 10px;
-margin-top: 20px;
-width:96%;
+margin-top: 10px;
+width:1020px;
+background-color: #DBE2E5;
+padding: 10px;
 
 /*background-color: red;*/
   /*background-color: #FFF;
@@ -178,12 +193,15 @@ box-sizing: border-box;
 .home .inputDate {
   border: none;
   font-size: 16px;
-  background-color: white;
-  margin-left: 10px;
-  width: 162px;
+  background-color: #EEEEEE;
+  margin-left: 20px;
+  width: 152px;
   padding: 3px;
-  margin-left: 15px;
+  margin-left: 20px;
   color:#5c5f69;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
 }
 
 .home .schedules {
@@ -199,26 +217,35 @@ box-sizing: border-box;
 }
 
 .home .hourEntry {
-  background-color: #DBE2E5;
+  background-color: #5C5F69;
   text-align: center;
-  color: #5C5F69;
+  color: white;
+  border-radius: 2px 2px 2px 2px;
+  -moz-border-radius: 2px 2px 2px 2px;
+  -webkit-border-radius: 2px 2px 2px 2px;
 }
 
 .home .hourOutput {
-  background-color: #DBE2E5;
+  background-color: #5C5F69;
   text-align: center;
-  color: #5C5F69;
+  color: white;
   margin-left: 10px;
+  border-radius: 2px 2px 2px 2px;
+  -moz-border-radius: 2px 2px 2px 2px;
+  -webkit-border-radius: 2px 2px 2px 2px;
 }
 
 .home .inputHourEntry {
-  padding: 10px;
+  padding: 7px;
   font-size: 40px;
   border:none;
   width: 142px;
   text-align: center;
   background-color: white;
   color: #5c5f69;
+  border-radius:0 0 2px 2px;
+  -moz-border-radius:0 0 2px 2px;
+  -webkit-border-radius:0 0 2px 2px;
 }
 
 
@@ -231,8 +258,8 @@ box-sizing: border-box;
 
   .home .contentHome {
     /*background-color: red;*/
-    /*background-color: #F1F1F1;*/
-    height: 88%;
+    background-color: #F1F1F1;
+    height: 80%;
   }
 
 
@@ -247,14 +274,32 @@ box-sizing: border-box;
   }
 
   .home .dailySchedule {
-  width:93%;
+  width:87.5%;
+  margin-top: 5px;
+  /*background-color: #DBE2E5; */
 }
 
+
+
   .home .inputDate {
-    width: 46.2%;
-    margin-left: 25px;
+    width: 45%;
+    margin-left: 21px;
   }
 
+  .home .schedules {
+    margin-top: 7px;
+
+  }
+
+  .home .inputHourEntry {
+    padding: 3.5px;
+
+
+  }
+
+  .home .hourOutput {
+    margin-left: 15px;
+  }
 
 
 }
