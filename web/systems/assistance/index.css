@@ -42,57 +42,8 @@
   position: relative;
   width: 100%;
 
-}
-
-.sistema .logo {
-  display: flex;
-  display: -webkit-flex; /* Safari */
-  display: -moz-flex; /* mozilla */
-  flex-direction: row;
-  -webkit-flex-direction: row;
-  -moz-flex-direction: row;
-  align-items: center;
-  -webkit-align-items:center; /* Safari */
-  -moz-align-items:center; /* mozilla */
-}
-
-.sistema .imgLogo {
-  margin-left: 10px;
-}
 
 
-.sistema .access {
-  display: flex;
-  display: -webkit-flex; /* Safari */
-  display: -moz-flex; /* mozilla */
-  flex-direction: row;
-  -webkit-flex-direction: row;
-  -moz-flex-direction: row;
-  align-items: center;
-  -webkit-align-items:center; /* Safari */
-  -moz-align-items:center; /* mozilla */
-}
-
-.sistema .myProfile {
-  display: flex;
-  display: -webkit-flex; /* Safari */
-  display: -moz-flex; /* mozilla */
-  flex-direction: row;
-  -webkit-flex-direction: row;
-  -moz-flex-direction: row;
-  align-items: center;
-  -webkit-align-items:center; /* Safari */
-  -moz-align-items:center; /* mozilla */
-}
-
-
-.sistema .imgUserRecent {
-    width: 30px;
-    height: 30px;
-    margin-right: 10px;
-    border-radius: 50%;
-    -moz-border-radius: 50%;
-    -webkit-border-radius: 50%;
 }
 
 

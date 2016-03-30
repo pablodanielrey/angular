@@ -1,0 +1,260 @@
+.home {
+  height: 100%;
+  width: 100%;
+}
+
+.home .header {
+  height: 102px;
+  width: 100%;
+  background: #DBE2E5;
+  color: #5C5F69;
+  padding-left: 50px;
+  font-size: 1.5em;
+}
+
+/******************************************************
+************ INICIO PANTALLA DE HOME ******************
+*******************************************************/
+
+.home .contentHome {
+  /*background-color: red;*/
+  /*background-color: #F1F1F1;*/
+  height: 76%;
+  width: 100%;
+  overflow-y: auto;
+}
+
+
+.home .infoUser {
+  width:96%;
+  /*background-color: red;*/
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  flex-wrap: wrap;
+  margin-top: 5px;
+}
+
+.home .contentUser {
+  display: flex;
+  display: -webkit-flex;
+  display: -moz-flex;
+  flex-direction: row;
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+  background-color: white;
+  width: 330px;
+  height: 75px;
+  margin: 5px 0 5px 10px;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+
+}
+
+.home .contentPhoto {
+  display: flex;
+  display: -webkit-flex;
+  display: -moz-flex;
+  align-items: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  width: 75px;
+  height: 75px;
+  margin-left: 10px;
+}
+
+.home .imgUser {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+}
+
+.home .contentData {
+  display: flex;
+  display: -webkit-flex;
+  display: -moz-flex;
+  flex-direction: column;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+}
+
+.home .contentSchedule {
+  display: flex;
+  display: -webkit-flex;
+  display: -moz-flex;
+  flex-direction: column;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  background-color: white;
+  width: 210px;
+  height: 75px;
+  margin: 5px 0 5px 10px;
+  padding-left: 10px;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+}
+
+.home .contentOffice {
+  display: flex;
+  display: -webkit-flex;
+  display: -moz-flex;
+  flex-direction: column;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  background-color: white;
+  width: 230px;
+  height: 75px;
+  margin: 5px 0 5px 10px;
+  padding-left: 10px;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+}
+
+.home .contentJob {
+  display: flex;
+  display: -webkit-flex;
+  display: -moz-flex;
+  flex-direction: column;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  background-color: white;
+  width: 210px;
+  height: 75px;
+  margin: 5px 0 5px 10px;
+  padding-left: 10px;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+}
+
+.home .title {
+    color: #5C5F69;
+}
+
+
+
+/*****************************************************************/
+
+.home .dailySchedule {
+margin-left: 10px;
+margin-top: 20px;
+width:96%;
+
+/*background-color: red;*/
+  /*background-color: #FFF;
+border-radius: 2px;
+-moz-border-radius: 2px;
+-webkit-border-radius: 2px;
+box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+-moz-box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+-webkit-box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+box-sizing: border-box;
+-moz-box-sizing: border-box;
+-webkit-box-sizing: border-box;*/
+}
+
+
+
+.home .inputDate {
+  border: none;
+  font-size: 16px;
+  background-color: white;
+  margin-left: 10px;
+  width: 162px;
+  padding: 3px;
+  margin-left: 15px;
+  color:#5c5f69;
+}
+
+.home .schedules {
+  margin-top: 10px;
+  width: 328px;
+  /*background-color: red;*/
+  display: flex;
+  display: -webkit-flex;
+  display: -moz-flex;
+  flex-direction: row;
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+}
+
+.home .hourEntry {
+  background-color: #DBE2E5;
+  text-align: center;
+  color: #5C5F69;
+}
+
+.home .hourOutput {
+  background-color: #DBE2E5;
+  text-align: center;
+  color: #5C5F69;
+  margin-left: 10px;
+}
+
+.home .inputHourEntry {
+  padding: 10px;
+  font-size: 40px;
+  border:none;
+  width: 142px;
+  text-align: center;
+  background-color: white;
+  color: #5c5f69;
+}
+
+
+/******************** MEDIA QUERIS ***************************/
+
+@media (max-width: 720px){
+  .home .header {
+      display: none;
+  }
+
+  .home .contentHome {
+    /*background-color: red;*/
+    /*background-color: #F1F1F1;*/
+    height: 88%;
+  }
+
+
+  .home .contentUser,
+  .home .contentOffice {
+    width: 100%;
+  }
+
+  .home .contentSchedule,
+  .home .contentJob {
+    width: 44%;
+  }
+
+  .home .dailySchedule {
+  width:93%;
+}
+
+  .home .inputDate {
+    width: 46.2%;
+    margin-left: 25px;
+  }
+
+
+
+}

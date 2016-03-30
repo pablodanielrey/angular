@@ -1,0 +1,52 @@
+.request {
+  height: 100%;
+  width: 100%;
+}
+
+.request .header {
+  height: 102px;
+  width: 100%;
+  background: #DBE2E5;
+  color: #5C5F69;
+  padding-left: 50px;
+  font-size: 1.5em;
+}
+
+/******************************************************
+****** INICIO PANTALLA DE CREAR TUTOTRIA **************
+*******************************************************/
+
+.request .contentRequest {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  background-color: #F1F1F1;
+  height: 70%;
+  padding: 20px;
+}
+
+/******************* CONTENEDOR DE LA IZQUIERDA ***********************/
+
+.request .contentLeft {
+  /*background-color: grey;*/
+  width: 380px;
+  height: 100%;
+  border-right: 1px solid #DBE2E5;
+}
+
+.request .contentSearch {
+  height: 100%;
+}
+
+
+/******************* CONTENEDOR DE LA DERECHA ***********************/
+
+.request .contentRight {
+  /*background-color: white;*/
+  margin-left: 20px;
+  width: 100%;
+  height: 100%;
+}
