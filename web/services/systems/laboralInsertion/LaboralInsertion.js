@@ -56,8 +56,8 @@ function LaboralInsertion($rootScope,$wamp,Session) {
   /*
     envía un mail a la empresa con los usuarios seleccionados.
   */
-  this.sendEmailToCompany = function(inscriptions, company) {
-    return $wamp.call('system.laboralInsertion.sendEmailToCompany', [inscriptions, company])
+  this.sendEmailToCompany = function(inscriptions, emails) {
+    return $wamp.call('system.laboralInsertion.sendEmailToCompany', [inscriptions, emails])
   }
 
   /*
