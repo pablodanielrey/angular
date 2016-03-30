@@ -51,7 +51,8 @@ class InscriptionDAO:
                     average2 real default 0.0,
                     work_type varchar not null,
                     created timestamptz default now(),
-                    work_experience boolean default false
+                    work_experience boolean default false,
+                    deleted boolean default false
                 )
             """)
         finally:
@@ -72,6 +73,7 @@ class InscriptionDAO:
         i.average1 = r['average1']
         i.average2 = r['average2']
         i.approved = r['approved']
+        i.deleted = r['deleted']
         return i
 
     @staticmethod
@@ -102,7 +104,7 @@ class InscriptionDAO:
         """ elimina la inscripción con el id determinado """
         cur = con.cursor()
         try:
-            cur.execute('delete from laboral_insertion.inscriptions where id = %s', (id,))
+            cur.execute('update laboral_insertion.inscriptions set deleted = true where id = %s', (id,))
         finally:
             cur.close()
 

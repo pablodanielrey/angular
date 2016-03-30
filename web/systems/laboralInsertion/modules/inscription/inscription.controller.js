@@ -587,7 +587,7 @@ function InscriptionCtrl($rootScope, $scope, $timeout, $wamp, LaboralInsertion, 
   $scope.uploadInscription = function() {
 
     var userId = $scope.userId;
-  
+
 
     //// ESTO SE ELIMINA TODOOO //////
     var ld = JSON.parse(JSON.stringify($scope.model.laboralData))
@@ -613,11 +613,22 @@ function InscriptionCtrl($rootScope, $scope, $timeout, $wamp, LaboralInsertion, 
     $scope.getInscriptions();
   }
 
+  function filterDeleted(inscriptions) {
+    var active = Array();
+    for (var i = 0; i < inscriptions.length; i++) {
+      if (!inscriptions[i].deleted) {
+        active.push(inscriptions[i]);
+      }
+    }
+    return active;
+  }
+
   $scope.getInscriptions = function() {
     var userId = $scope.userId;
     LaboralInsertion.findAllInscriptionsByUser(userId)
       .then(function(data) {
-        $scope.model.inscriptionsData = data;
+        var data2 = filterDeleted(data)
+        $scope.model.inscriptionsData = data2;
       }, function(err) {
         console.log(err);
       });

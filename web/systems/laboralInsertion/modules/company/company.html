@@ -23,7 +23,7 @@
                     <b>{{c.name}}</b>
                   </div>
                   <div>
-                    {{c.city}}
+                    {{c.detail}}
                   </div>
               </div>
           </div>
@@ -48,7 +48,7 @@
 
             <div>
                 <div class="title">Detalle</div>
-                <input class="inputText" type="text" ng-model="model.companySelected.description"></input>
+                <input class="inputText" type="text" ng-model="model.companySelected.detail"></input>
             </div>
 
             <div>
@@ -62,11 +62,11 @@
 
           <div>
               <div class="title">Docente guía</div>
-              <input class="inputText2" type="text"></input>
+              <input class="inputText2" type="text" ng-model="model.companySelected.teacher"></input>
           </div>
           <div>
               <div class="title">Responsable</div>
-              <input class="inputText2" type="text"></input>
+              <input class="inputText2" type="text" ng-model="model.companySelected.manager"></input>
           </div>
 
           <div>
@@ -74,11 +74,11 @@
               <div class="contentMarco">
                   <div class="contentTextMarco">
                       <div class="title textMarco">Alta</div>
-                      <div><input class="inputText3" type="date"></input></div>
+                      <div><input class="inputText3" type="date" ng-model="model.companySelected.beginCM"></input></div>
                   </div>
                   <div>
                       <div class="title textMarco">Vencimiento</div>
-                      <div><input class="inputText3" type="date"></input></div>
+                      <div><input class="inputText3" type="date" ng-model="model.companySelected.endCM"></input></div>
                   </div>
               </div>
           </div>
@@ -88,27 +88,27 @@
 
             <div class="contentDataContact">
 
-                <div class="dataContact">
+                <div class="dataContact" ng-repeat="c in model.companySelected.contacts">
 
                     <div>
                         <div class="title">Nombre </div>
-                                                <input class="inputText5" type="text"></input>
+                        <input class="inputText5" type="text" ng-model="c.name"></input>
 
                     </div>
 
                     <div>
                         <div class="title">Teléfono </div>
-                        <div class="contentInput" ng-repeat="t in model.companySelected.telephones">
-                          <input class="inputText6" type="text" ng-model="t.number"></input>
+                        <div class="contentInput">
+                          <input class="inputText6" type="text" ng-model="c.telephone"></input>
                         </div>
                     </div>
 
                     <div>
                         <div class="title">Correo electrónico </div>
-                        <div class="contentInput" ng-repeat="m in model.companySelected.emails">
-                            <input class="inputText7" type="text" ng-model="m.email"></input>
-                            <button class="btnDelete" title="Eliminar correo" ng-click="removeEmail(m)"><i class="fa fa-trash-o"></i></button>
-                            <button class="btnNewContact" title="Agregar Correo" ng-click="addEmail(m)"><i class="fa fa-plus"></i></button>
+                        <div class="contentInput">
+                            <input class="inputText7" type="text" ng-model="c.email"></input>
+                            <button class="btnDelete" title="Eliminar correo" ng-click="removeContact(c)"><i class="fa fa-trash-o"></i></button>
+                            <button class="btnNewContact" title="Agregar Correo" ng-click="addContact()"><i class="fa fa-plus"></i></button>
                         </div>
                     </div>
 

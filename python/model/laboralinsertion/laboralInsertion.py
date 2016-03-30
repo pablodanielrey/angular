@@ -183,7 +183,8 @@ class LaboralInsertion:
 
     def sendMailToCompany(self, con, inscriptions, company):
         datar = []
-        emails = company.emails
+        emails = [ c.email for c in company.contacts if c.email is not None and c.email != '']
+
 
         if emails is None:
             return []
@@ -250,9 +251,11 @@ class LaboralInsertion:
                 elif cvf.codec[0] == 'base64':
                     filedata = base64.b64decode(bytes(cvf.content))
 
-                user = model.users.users.UserDAO.findById(con, i['userId'])
-                if user is None:
+                user = model.users.users.UserDAO.findById(con, [i['userId']])
+                if user is None or len(user) <= 0:
                     continue
+
+                user = user[0]
 
                 filename, file_extension = os.path.splitext(cvf.name)
                 #fss.append(self.mail.attachFile('{}_{}_{}_{}'.format(user['name'], user['lastname'], user['dni'], file_extension), filedata))
@@ -278,7 +281,7 @@ class LaboralInsertion:
         sent = Sent()
         sent.emails = emails
         sent.inscriptions = [i['id'] for i in inscriptions]
-        sent.persist(con)
+        SentDAO.persist(con, sent)
         con.commit()
 
         return datar
