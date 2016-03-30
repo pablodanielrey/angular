@@ -245,7 +245,7 @@ class CompanyDAO:
                 cur.execute('update laboral_insertion.companies set name = %(name)s, detail = %(detail)s, cuit = %(cuit)s, teacher = %(teacher)s, '
                             'manager = %(manager)s, address = %(address)s, beginCM = %(beginCM)s, endCM = %(endCM)s where id = %(id)s', params)
 
-                ContactDAO.deleteByCompany(con, contact.id)
+                ContactDAO.deleteByCompany(con, company.id)
 
             for c in company.contacts:
                 c.companyId = company.id
