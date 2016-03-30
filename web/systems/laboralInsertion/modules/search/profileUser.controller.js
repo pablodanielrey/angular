@@ -10,6 +10,7 @@ function ProfilesCtrl($rootScope, $scope, LaboralInsertion) {
   $scope.getTitleProfile = getTitleProfile;
   $scope.cancelProfile = cancelProfile;
   $scope.saveProfile = saveProfile;
+  $scope.deleteInscription = deleteInscription;
 
   $scope.data = {};
   $scope.selectInscription = null;
@@ -23,6 +24,7 @@ function ProfilesCtrl($rootScope, $scope, LaboralInsertion) {
   });
 
   $scope.$on('openProfileEvent', function(event, i) {
+    $scope.data.id = i.id;
     $scope.data.approved = i.approved;
     $scope.data.userId = i.userId;
     $scope.data.degree = i.degree;
@@ -44,11 +46,23 @@ function ProfilesCtrl($rootScope, $scope, LaboralInsertion) {
     $scope.selectInscription.average1 = $scope.data.average1;
     $scope.selectInscription.average2 = $scope.data.average2;
     $scope.selectInscription.checked = true;
-    LaboralInsertion.persistInscriptionByUser($scope.selectInscription.userId,$scope.selectInscription).then(function(r) {
+    LaboralInsertion.persistInscriptionByUser($scope.selectInscription.userId, $scope.selectInscription).then(function(r) {
       $scope.$emit('closeProfileEvent');
     }, function(err) {
       console.log(err);
     });
+  }
+
+  function deleteInscription() {
+    LaboralInsertion.deleteInscriptionById($scope.data.id).then(
+      function(ok) {
+        $scope.$emit('closeProfileEvent');
+        $scope.$emit('searchInscriptionsEvent');
+      }, function(err) {
+        console.log(err);
+        //$scope.$emit('closeProfileEvent');
+      }
+    );
   }
 
 

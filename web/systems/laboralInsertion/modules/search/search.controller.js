@@ -833,39 +833,58 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     $scope.model.selecteds = [];
   }
 
+
+  function filterDeleted(inscriptions) {
+    var active = Array();
+    for (var i = 0; i < inscriptions.length; i++) {
+      if (!inscriptions[i].deleted) {
+        active.push(inscriptions[i]);
+      }
+    }
+    return active;
+  }
+
   $scope.search = function() {
     $scope.model.searching = true;
-    LaboralInsertion.findAllInscriptions($scope.model.filtersData).then(function(ins) {
-      $scope.model.inscriptions = ins;
-      $scope.model.searching = false;
+    LaboralInsertion.findAllInscriptions($scope.model.filtersData).then(
+      function(ins2) {
+        var ins = filterDeleted(ins2);
 
-      // obtegno el numero de veces que esta el id de la inscripcion en los sents
-      for (var i = 0; i < ins.length; i++) {
-        ins[i].selected = false;
-        for (var j = 0; j < $scope.model.selecteds.length; j++) {
-          var s = $scope.model.selecteds[j];
-          if (s['id'] == ins[i]["id"]) {
-            ins[i].selected = true;
-            $scope.model.selecteds[j] = ins[i];
-            break;
+        $scope.model.inscriptions = ins;
+        $scope.model.searching = false;
+
+        // obtegno el numero de veces que esta el id de la inscripcion en los sents
+        for (var i = 0; i < ins.length; i++) {
+          ins[i].selected = false;
+          for (var j = 0; j < $scope.model.selecteds.length; j++) {
+            var s = $scope.model.selecteds[j];
+            if (s['id'] == ins[i]["id"]) {
+              ins[i].selected = true;
+              $scope.model.selecteds[j] = ins[i];
+              break;
+            }
           }
+          LaboralInsertion.findSentByInscriptionId(ins[i]['id']).then(
+            function(r) {
+              // registro el numero de veces que esta esa inscripcion en los sents
+              $scope.model.sents[r['id']] = r['sents'].length
+          }, function(err) {
+              console.log(err);
+          });
         }
-        LaboralInsertion.findSentByInscriptionId(ins[i]['id']).then(function(r) {
-          // registro el numero de veces que esta esa inscripcion en los sents
-          $scope.model.sents[r['id']] = r['sents'].length
-        }, function(err) {
-          console.log(err);
-        });
-      }
 
-      $scope.getUsers(ins);
-      $scope.getUserData(ins);
-      $scope.getCompaniesData();
-      //console.log($scope.model.inscriptions);
+        $scope.getUsers(ins);
+        $scope.getUserData(ins);
+        $scope.getCompaniesData();
+        //console.log($scope.model.inscriptions);
     }, function(err) {
-      console.log(err);
+        console.log(err);
     });
   }
+
+  $scope.$on('searchInscriptionsEvent', function(e) {
+    $scope.search();
+  })
 
   $scope.displayProfile = function(i) {
     $scope.model.currentScreen = "screenProfile";
