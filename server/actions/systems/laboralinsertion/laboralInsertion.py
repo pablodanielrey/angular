@@ -297,9 +297,7 @@ class LaboralInsertionWamp(ApplicationSession):
     def sendMailToCompany(self, inscriptions, company):
         con = self.conn.get()
         try:
-            c = Company()
-            c.__dict__ = company
-            data = self.laboralInsertion.sendMailToCompany(con, inscriptions, c)
+            data = self.laboralInsertion.sendMailToCompany(con, inscriptions, company)
             self.publish('system.laboralInsertion.COMPANYSENDED', data)
             return True
 

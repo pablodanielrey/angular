@@ -453,8 +453,8 @@
                   Enviar listado de postulantes a:
                   </div>
                   <div class="contentMailBusines">
-                      <div class="mailBussines" ng-repeat='e in model.company.emails'>
-                        <div><i class="fa fa-envelope-o"></i> {{e}}<button class="btnDeleteMail" ng-click='removeEmailFromCompany(e)'> <i class="fa fa-trash-o"></i></button></div>
+                      <div class="mailBussines" ng-repeat='c in model.company.contacts'>
+                        <div><i class="fa fa-envelope-o"></i> {{c.email}}<button class="btnDeleteMail" ng-click='removeEmailFromCompany(c)'> <i class="fa fa-trash-o"></i></button></div>
                       </div>
                   </div>
                   <div class="addMail">

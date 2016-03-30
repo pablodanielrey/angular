@@ -528,17 +528,16 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     $scope.model.emailAddToCompany = '';
   }
 
-  $scope.removeEmailFromCompany = function(email) {
-    for (i = 0; i < $scope.model.company.emails.length; i++) {
-      if ($scope.model.company.emails[i] == email) {
-        $scope.model.company.emails.splice(i,1);
-      }
+  $scope.removeEmailFromCompany = function(c) {
+    var index = $scope.model.company.contacts.indexOf(c);
+    if (index > -1) {
+        $scope.model.company.contacts.splice(index, 1);
     }
   }
 
   $scope.sendMailToCompany = function() {
 
-    if ($scope.model.company.emails.length <= 0) {
+    if ($scope.model.company.contacts.length <= 0) {
       console.log('company.emails = 0');
       return;
     }
