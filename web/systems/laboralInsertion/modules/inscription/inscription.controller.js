@@ -498,6 +498,7 @@ function InscriptionCtrl($rootScope, $scope, $timeout, $wamp, LaboralInsertion, 
     if (ld.cv == undefined || ld.cv == '') {
       delete ld.cv;
     }
+    console.log(ld);
     LaboralInsertion.persist(ld).then(null,function(err) {console.log(err)});
   }
 

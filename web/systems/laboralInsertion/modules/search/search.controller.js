@@ -541,6 +541,12 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
   $scope.confirmMailToCompany = function(c) {
     $scope.model.currentScreen = "screenSelected screenSendBusiness";
     $scope.model.company = c;
+    $scope.model.company.emails = [];
+    for (var i = 0; i < c.contacts.length; i++) {
+        if (c.contacts[i].email != null && c.contacts[i].email.trim() != '') {
+          $scope.model.company.emails.push(c.contacts[i].email);
+        }
+    }
   }
 
   $scope.addEmailToCompany = function() {
@@ -548,16 +554,16 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     $scope.model.emailAddToCompany = '';
   }
 
-  $scope.removeEmailFromCompany = function(c) {
-    var index = $scope.model.company.contacts.indexOf(c);
+  $scope.removeEmailFromCompany = function(e) {
+    var index = $scope.model.company.emails.indexOf(e);
     if (index > -1) {
-        $scope.model.company.contacts.splice(index, 1);
+        $scope.model.company.emails.splice(index, 1);
     }
   }
 
   $scope.sendMailToCompany = function() {
 
-    if ($scope.model.company.contacts.length <= 0) {
+    if ($scope.model.company.emails.length <= 0) {
       console.log('company.emails = 0');
       return;
     }
@@ -575,7 +581,7 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     }
 
     $scope.model.currentScreen = "screenSelected screenSending";
-    LaboralInsertion.sendEmailToCompany(selectedInscriptions, $scope.model.company).then(
+    LaboralInsertion.sendEmailToCompany(selectedInscriptions, $scope.model.company.emails).then(
       function() {
         console.log('enviado');
       },
