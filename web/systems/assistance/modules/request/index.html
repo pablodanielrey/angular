@@ -33,7 +33,7 @@
 
           <div class="contentRequestSelected">
             <button class="btnBackCel" ng-click="view.style='seleccionSolicitud';view.style2=''">VOLVER</button>
-            <div ng-include="'/systems/assistance/modules/request/AA/index.html'"></div>
+            <div ng-if="view.style2 == 'solicitudSeleccionada'" ng-include="'/systems/assistance/modules/request/AA/index.html'"></div>
           </div>
 
 
