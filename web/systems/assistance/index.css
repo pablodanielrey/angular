@@ -1,22 +1,43 @@
-
-
-.sistema.celular .MenuContent {
-  display:none;
+.sistema .main {
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
 }
+
+/*.sistema.celular .MenuContent {
+  display:none;
+}*/
 
 .sistema.celular .MenuCel {
 }
 
-.sistema.celular .main {
-  flex-direction:column;
-  -webkit-flex-direction:column; /* Safari */
-  -moz-flex-direction:column; /* mozilla */
-}
 
 
-.sistema.full .MenuContent {
+/*.sistema.full .MenuContent {
 
 }
 .sistema.full .MenuCel {
   display:none;
+}*/
+
+
+@media (max-width: 719px){
+  .MenuContent {
+    display: none;
+  }
+
+  .sistema .main {
+    flex-direction:column;
+    -webkit-flex-direction:column; /* Safari */
+    -moz-flex-direction:column; /* mozilla */
+  }
+
+
+
+}
+
+@media (min-width: 720px){
+  .MenuCel {
+    display: none;
+  }
 }

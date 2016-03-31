@@ -251,7 +251,7 @@ box-sizing: border-box;
 
 /******************** MEDIA QUERIS ***************************/
 
-@media (max-width: 720px){
+@media (max-width: 719px){
   .home .header {
       display: none;
   }
