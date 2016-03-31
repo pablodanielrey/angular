@@ -12,7 +12,7 @@ app.config(['$routeProvider', function($routeProvider) {
 
   .when('/request', {
      templateUrl: '/systems/assistance/modules/request/index.html',
-     controller: 'requestCtrl'
+     controller: 'RequestCtrl'
   })
 
 

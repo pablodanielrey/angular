@@ -1,4 +1,5 @@
-<div class="request">
+<div class="request {{view.style}} {{view.style2}}">
+<!-- VARIABLES 1: seleccionSolicitud VARIABLES 2:solicitudSeleccionada -->
 
     <div class="header">
         <div>
@@ -10,18 +11,29 @@
 
         <div class="contentLeft">
 
-            <div class="contentSearch">
+            <div class="newRequest">
 
+              <button ng-click="view.style='seleccionSolicitud'">NUEVA SOLICITUD</button>
 
+            </div>
+
+            <div class="listRequest">
+              <button ng-click="view.style='';view.style2=''">VOLVER</button>
+              <div>lista de solicitudes</div>
+              <button ng-click="view.style2='solicitudSeleccionada'">AUSENTE CON AVISO</button>
             </div>
 
         </div>
 
         <div class="contentRight">
 
-          <div class="contentSearchResults">
+          <div class="contentMyRequest">
+            <div>MIS SOLICITUDES REALIZADAS</div>
+          </div>
 
-
+          <div class="contentRequestSelected">
+            <button class="btnBackCel" ng-click="view.style='seleccionSolicitud';view.style2=''">VOLVER</button>
+            <div ng-include="'/systems/assistance/modules/request/AA/index.html'"></div>
           </div>
 
 

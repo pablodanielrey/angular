@@ -1,10 +1,10 @@
 var app = angular.module('mainApp');
 
-app.controller('MyTutoringsCtrl', ["$rootScope", '$scope',
+app.controller('RequestCtrl', ["$rootScope", '$scope',
 
 
   function ($rootScope, $scope) {
-    console.log("MyTutoringsCtrl");
+    console.log("RequestCtrl");
   }
 
 ]);
