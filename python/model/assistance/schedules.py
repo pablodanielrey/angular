@@ -18,6 +18,7 @@ class Schedule(JSONSerializable):
         self.weekday = -1
         self.start = None
         self.end = None
+        self.daily = False
 
     def isValid(self, date):
         return (self.date <= date) and (self.weekday == date.weekday())
@@ -47,6 +48,7 @@ class ScheduleDAO:
                     sstart bigint,
                     send bigint,
                     weekday integer,
+                    daily boolean default false,
                     created timestamptz default now()
                 );
             """)
