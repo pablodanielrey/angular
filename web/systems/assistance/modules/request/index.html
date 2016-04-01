@@ -13,14 +13,23 @@
 
             <div class="newRequest">
 
-              <button ng-click="view.style='seleccionSolicitud'">NUEVA SOLICITUD</button>
+              <button class="btnNewRequest" ng-click="view.style='seleccionSolicitud'">NUEVA SOLICITUD</button>
 
             </div>
 
             <div class="listRequest">
-              <button ng-click="view.style='';view.style2=''">VOLVER</button>
-              <div>lista de solicitudes</div>
-              <button ng-click="view.style2='solicitudSeleccionada'">AUSENTE CON AVISO</button>
+              <button class="btnBack" ng-click="view.style='';view.style2=''"><i class="arrowBack fa fa-chevron-left"></i> VOLVER</button>
+              <div class="titleListRequest">Lista de solicitudes</div>
+                  <div class="contentListRequest">
+                      <button class="btnRequest" ng-click="view.style2='solicitudSeleccionada'"><i class="iconoRequest fa fa-ticket "></i> Ausente con aviso</button>
+                      <button class="btnRequest"><i class="iconoRequest fa fa-ticket "></i> Boleta de salida</button>
+                      <button class="btnRequest"><i class="iconoRequest fa fa-ticket "></i> Pre-Examen</button>
+                      <button class="btnRequest"><i class="iconoRequest fa fa-ticket "></i> Art. 102</button>
+                      <button class="btnRequest"><i class="iconoRequest fa fa-ticket "></i> Compensatorio</button>
+                      <button class="btnRequest"><i class="iconoRequest fa fa-ticket "></i> Cumpleaños</button>
+                      <button class="btnRequest"><i class="iconoRequest fa fa-ticket "></i> Vacaciones</button>
+                      <button class="btnRequest"><i class="iconoRequest fa fa-ticket "></i> Pre-Examen</button>
+                  </div>
             </div>
 
         </div>
@@ -28,11 +37,90 @@
         <div class="contentRight">
 
           <div class="contentMyRequest">
-            <div>MIS SOLICITUDES REALIZADAS</div>
+            <div class="title">MIS SOLICITUDES</div>
+            <div class="listMyRequest">
+                <div class="itemRequest">
+                  <div>
+                    Ausente con aviso
+                  </div>
+                  <div>
+                    15/04/2016
+                  </div>
+                  <div>
+                    Estado
+                  </div>
+                </div>
+                <div class="itemRequest">
+                  <div>
+                    Ausente con aviso
+                  </div>
+                  <div>
+                    15/04/2016
+                  </div>
+                  <div>
+                    Estado
+                  </div>
+                </div>
+                <div class="itemRequest">
+                  <div>
+                    Ausente con aviso
+                  </div>
+                  <div>
+                    15/04/2016
+                  </div>
+                  <div>
+                    Estado
+                  </div>
+                </div>
+                <div class="itemRequest">
+                  <div>
+                    Ausente con aviso
+                  </div>
+                  <div>
+                    15/04/2016
+                  </div>
+                  <div>
+                    Estado
+                  </div>
+                </div>
+                <div class="itemRequest">
+                  <div>
+                    Ausente con aviso
+                  </div>
+                  <div>
+                    15/04/2016
+                  </div>
+                  <div>
+                    Estado
+                  </div>
+                </div>
+                <div class="itemRequest">
+                  <div>
+                    Ausente con aviso
+                  </div>
+                  <div>
+                    15/04/2016
+                  </div>
+                  <div>
+                    Estado
+                  </div>
+                </div>
+                <div class="itemRequest">
+                  <div>
+                    Ausente con aviso
+                  </div>
+                  <div>
+                    15/04/2016
+                  </div>
+                  <div>
+                    Estado
+                  </div>
+                </div>
+            </div>
           </div>
 
           <div class="contentRequestSelected">
-            <button class="btnBackCel" ng-click="view.style='seleccionSolicitud';view.style2=''">VOLVER</button>
+            <button class="btnBackCel" ng-click="view.style='seleccionSolicitud';view.style2=''"><i class="arrowBack fa fa-chevron-left"></i> VOLVER</button>
             <div ng-if="view.style2 == 'solicitudSeleccionada'" ng-include="'/systems/assistance/modules/request/AA/index.html'"></div>
           </div>
 
