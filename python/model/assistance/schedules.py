@@ -63,6 +63,7 @@ class ScheduleDAO:
         s.end = r['send']
         s.date = r['sdate']
         s.weekday = r['weekday']
+        s.daily = r['daily']
         return s
 
     @staticmethod
@@ -81,7 +82,7 @@ class ScheduleDAO:
     def findByUserIdInDate(con, id, date):
         cur = con.cursor()
         try:
-            cur.execute('select * from assistance.schedules where user_id = %s and sdate <= %s and weekday = %s order by sdate desc limit 1', (id, date, date.weekday()))
+            cur.execute('select * from assistance.schedules where user_id = %s and ((sdate <= %s and weekday = %s and daily = false) or (extract(dow from sdate) = weekday and daily = true)) order by sdate desc limit 1', (id, date, date.weekday()))
             if cur.rowcount <= 0:
                 return None
 
