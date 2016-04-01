@@ -9,6 +9,8 @@
 '''
 from model.connection.connection import Connection
 from model.registry import Registry
+from model.serializer.utils import JSONSerializable
+
 from model.assistance.justification.status import Status
 import datetime, uuid
 
@@ -28,8 +30,10 @@ class ShortDurationJustification(JSONSerializable):
 
 
     def persist(self, con, days=None):
-        ShortDurationJustificationDAO.persist(con, self, days)
-
+        jid = ShortDurationJustificationDAO.persist(con, self, days)
+        s = Status(jid)
+        s.persist(con)
+        return jid
 
 class ShortDurationJustificationDAO:
     registry = inject.instance(Registry).getRegistry('shortDurationJustification')
