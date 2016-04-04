@@ -13,6 +13,7 @@ from model.registry import Registry
 from model.connection.connection import Connection
 from model.assistance.assistance import AssistanceModel
 from model.assistance.justifications.shortDurationJustification import ShortDurationJustification
+from model.assistance.justifications.status import Status
 
 from model.serializer.utils import MySerializer, serializer_loads
 
@@ -62,12 +63,16 @@ if __name__ == '__main__':
         '''
         j = ShortDurationJustification()
         j.userId = uid
-        j.owner = uid
+        j.ownerId = uid
         j.start = datetime.date.today()
         j.number = 65905
         j.persist(con, 30)
         con.commit()
-        '''
+        logging.info(j.__dict__)
 
+        j.changeStatus(con, Status.REJECTED, uid)
+        con.commit()
+        logging.info(j.__dict__)
+        '''
     finally:
         conn.put(con)
