@@ -20,6 +20,20 @@ class Status(JSONSerializable):
     def persist(self, con):
         return StatusDAO.persist(con,self)
 
+    def changeStatus(self, con, status, userId):
+        s = Status(self.justificationId, userId)
+        s.status = status
+        s.id = StatusDAO.persist(con,s)
+        return s
+
+    @classmethod
+    def findByIds(cls, con, ids):
+        return StatusDAO.findByIds(con, ids)
+
+    @classmethod
+    def getLastStatus(cls, con, jid):
+        pass
+
 class StatusDAO:
 
     @staticmethod
@@ -59,5 +73,15 @@ class StatusDAO:
             cur.execute('insert into assistance.justification_status (id, status, user_id, justification_id, created) '
                         'values (%(id)s, %(status)s, %(userId)s, %(justificationId)s, %(created)s)', r)
             return id
+        finally:
+            cur.close()
+
+    @staticmethod
+    def findByIds(con, ids):
+        assert isinstance(ids, list)
+        cur = con.cursor()
+        try:
+            cur.execute('select * from assistance.justification_status where id in %s', tuple(ids))
+            return [ StatusDAO._fromResult(r) for r in cur ]
         finally:
             cur.close()

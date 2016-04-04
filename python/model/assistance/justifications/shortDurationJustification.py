@@ -22,7 +22,7 @@ class ShortDurationJustification(JSONSerializable):
     def __init__(self):
         self.id = None
         self.userId = None
-        self.owner = None
+        self.ownerId = None
         self.start = None
         self.end = None
         self.number = 0
@@ -33,16 +33,27 @@ class ShortDurationJustification(JSONSerializable):
 
     def persist(self, con, days=None):
         jid = ShortDurationJustificationDAO.persist(con, self, days)
-        s = Status(jid,self.owner)
-        sid = s.persist(con)
-        s.status = Status.APPROVED
-        s.created = s.created + datetime.timedelta(seconds = 1)
+        s = Status(jid,self.ownerId)
+        s.created = s.created - datetime.timedelta(seconds=1)
         sid = s.persist(con)
 
         self.status = s
-        self.statusId = sid
+        self.statusId = s.id
         self.statusConst = s.status
+
+        self.changeStatus(con, Status.APPROVED, self.ownerId)
+
         return jid
+
+    def changeStatus(self, con, status, userId):
+        if self.status == None and self.statusId == None:
+            return
+        if self.status == None:
+            self.status = Status.findByIds(con, [self.statusId])
+
+        self.status = self.status.changeStatus(con, status, userId)
+        self.statusId = self.status.id
+        self.statusConst = self.status.status
 
 class ShortDurationJustificationDAO:
     registry = inject.instance(Registry).getRegistry('shortDurationJustification')
@@ -56,7 +67,7 @@ class ShortDurationJustificationDAO:
                 create table assistance.short_duration_j (
                     id varchar primary key,
                     user_id varchar not null references profile.users (id),
-                    owner varchar not null references profile.users (id),
+                    owner_id varchar not null references profile.users (id),
                     jstart date default now(),
                     jend date default now(),
                     number bigint,
@@ -71,7 +82,7 @@ class ShortDurationJustificationDAO:
         j = ShortDurationJustification()
         j.id = r['id']
         j.userId = r['user_id']
-        j.owner = r['owner']
+        j.ownerId = r['owner_id']
         j.start = r['jstart']
         j.end = r['jend']
         j.number = r['number']
@@ -110,11 +121,11 @@ class ShortDurationJustificationDAO:
                 j.id = ShortDurationJustification.prefix + "-" + str(uuid.uuid4())
 
                 r = j.__dict__
-                cur.execute('insert into assistance.short_duration_j (id, user_id, owner, jstart, jend, number) '
-                            'values (%(id)s, %(userId)s, %(owner)s, %(start)s, %(end)s, %(number)s)', r)
+                cur.execute('insert into assistance.short_duration_j (id, user_id, owner_id, jstart, jend, number) '
+                            'values (%(id)s, %(userId)s, %(ownerId)s, %(start)s, %(end)s, %(number)s)', r)
             else:
                 r = j.__dict__
-                cur.execute('update assistance.short_duration_j set user_id = %(userId)s, owner = %(owner)s, '
+                cur.execute('update assistance.short_duration_j set user_id = %(userId)s, owner_id = %(ownerId)s, '
                             'jstart = %(start)s, jend = %(end)s, number = %(number)s where id = %(id)s', r)
             return j.id
 
