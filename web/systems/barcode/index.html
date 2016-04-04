@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>Generador</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <meta name="description" content="" />
+  <meta name="keywords" content="" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link href="lib/bootstrap-3.3.6-dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">	
+
+  <script src="lib/angular/angular-1.4.8/angular.min.js"></script>
+  <script src="lib/angular/angular-1.4.8/angular-route.min.js"></script>
+  <script src="lib/angular/angular-1.4.8/angular-animate.min.js"></script> 
+  <script src="lib/angular/angular-1.4.8/i18n/angular-locale_es-ar.js"></script>
+  <script src="lib/angular/ui-bootstrap-tpls-1.1.1/ui-bootstrap-tpls-1.1.1.min.js"></script>
+  <!-- script src="lib/angular/angular-md5-0.1.8/angular-md5.min.js"></script -->
+  <script src="lib/angular/ng-file-upload-10.0.2/ng-file-upload.min.js"></script>
+  <script src="lib/jsBarcode-2.5.1/JsBarcode.all.min.js"></script>
+
+  <script src="angular/initializeApp.js"></script>
+  <script src="lib/jsBarcode-2.5.1/initializeApp.js"></script>
+    
+  <script src="angular/route.js"></script>
+
+  <script src="angular/Index.js"></script>
+
+
+
+
+
+  <script src="documento/Documento.js"></script>
+
+
+
+</head>
+<body class="container-fluid" ng-app="MainApp" ng-controller="IndexCtrl">
+
+  <nav class="navbar navbar-default navbar-fixed-top" role="navigation" ng-include="'menu/adminMenu.html'"></nav>
+  <h3 ng-show="mainTitle" class="well text-info">{{mainTitle}}</h3>
+  
+	<div ng-view></div>
+  
+
+
+</body>
+</html> 

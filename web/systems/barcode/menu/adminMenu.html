@@ -1,0 +1,17 @@
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" ng-init="navCollapsed = true" ng-click="navCollapsed = !navCollapsed">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+		    <a class="navbar-brand" href="#documento">Generador</a>
+      </div>
+      <div class="collapse navbar-collapse" ng-class="!navCollapsed && 'in'">
+        <ul class="nav navbar-nav">              
+          <li><a href="#/documento">Agregar</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="#" ng-click="logout()"><span class="glyphicon glyphicon-log-out"></span> Salir</a></li>
+        </ul>
+      </div>
