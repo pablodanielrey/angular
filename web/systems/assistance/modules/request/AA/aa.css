@@ -1,3 +1,160 @@
 .aa {
+  width: 100%;
+  height: 100%;
+  /*background-color: red;*/
   padding: 20px;
+}
+
+.aa .contentRequestAA {
+  width: 95%;
+  height: 250px;
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #FFF;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+  -moz-box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+  -webkit-box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  overflow-x: auto;
+}
+
+.availabilityRequest {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: flex-start;
+  -webkit-justify-content: flex-start;
+  -moz-justify-content: flex-start;
+  margin-bottom: 20px;
+}
+.aa .ico {
+  color: #5C5F69 ;
+}
+
+.aa .title {
+    color: #5C5F69;
+}
+
+.aa .contentCantAvailability {
+  margin-left: 10px;
+  color: #5C5F69;
+}
+
+.aa .cantAvailability {
+  background-color: #92AD17;
+  color: white;
+  padding: 0px 10px 0 10px;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+}
+
+.aa .inputDate {
+    border: none;
+    font-size: 20px;
+    background-color: #EEEEEE;
+    margin-top: 5px;
+    width: 93%;
+    padding:10px;
+
+    color: #5c5f69;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+}
+
+.request .btnApply {
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    border: none;
+    background-color: #92AD17;
+      font-size: 16px;
+    color: white;
+    padding: 10px;
+    width: 100%;
+    height: 45px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.aa .screenMessage {
+  width: 100%;
+  height: 100%;
+}
+
+.aa .processing {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction: column;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  color: #5C5F69;
+}
+
+
+/**********************************************************************
+*********************** VISTA DE PANTALLAS  ***************************
+***********************************************************************/
+
+.aa.solicitud .screenMessage {
+  display: none;
+}
+
+.aa.mensaje .screenRequest {
+  display: none;
+}
+
+.aa.mensaje.procesando .processed,
+.aa.mensaje.procesando .notAvailable,
+.aa.mensaje.procesando .errorSystem {
+  display: none;
+}
+
+.aa.mensaje.procesado .processing,
+.aa.mensaje.procesado .notAvailable,
+.aa.mensaje.procesado .errorSystem {
+  display: none;
+}
+
+.aa.mensaje.sinDisponibilidad .processing,
+.aa.mensaje.sinDisponibilidad .processed,
+.aa.mensaje.sinDisponibilidad .errorSystem {
+  display: none;
+}
+
+.aa.mensaje.errorDeSistema .processing,
+.aa.mensaje.errorDeSistema .processed,
+.aa.mensaje.errorDeSistema .notAvailable {
+  display: none;
+}
+
+/**********************************************************************
+************************* VISTA CELULAR *******************************
+***********************************************************************/
+
+@media (max-width: 719px) {
+  .aa .contentRequestAA {
+    width: 88%;
+
+    overflow-x: auto;
+  }
+
 }

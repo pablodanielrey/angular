@@ -1,8 +1,45 @@
-<div class="aa">
-  <div>Solicitar</div>
-  <b> AUNSENTE CON AVISO </b>
+<!-- VARIABLES 1:solicitud, mensaje | VARIABLES 2: procesando, procesado, sinDisponibilidad, errorDeSistema -->
+<div class="aa mensaje procesando">
+  <div class="title">Solicitar</div>
+  <i class="ico fa fa-ticket "></i> <b> AUSENTE CON AVISO </b>
 
-  <div>Para el día</div>
-  <div><input type="date"></input></div>
-  <div><button>SOLICITAR</button></div>
+      <div class="contentRequestAA">
+
+        <div class="screenRequest">
+            <div class="availabilityRequest">
+              <div class="title"> Disponibilidad </div>
+              <div class="contentCantAvailability"> <b>Mensual</b> <b class="cantAvailability">2</b>  <b>Anual</b> <b class="cantAvailability">6</b> </div>
+            </div>
+            <div class="title">SELECCIONE EL DÍA</div>
+            <div><input class="inputDate" type="date"></input></div>
+            <div><button class="btnApply"> SOLICITAR</button></div>
+        </div>
+
+        <div class="screenMessage">
+
+            <div class="processing">
+              <div>PROCESANDO SOLICITUD</div>
+              <div>espere por favor...</div>
+            </div>
+
+            <div class="processed">
+              <div>SOLICITUD PROCESADA CON ÉXITO</div>
+            </div>
+
+            <div class="notAvailable">
+              <div>ERROR</div>
+              <div>No tienes más días disponibles</div>
+            </div>
+
+            <div class="errorSystem">
+              <div>SE HA PRODUCIDO UN ERROR EN EL SISTEMA</div>
+              <div>por favor intente más tarde</div>
+            </div>
+
+        </div>
+
+      </div>
+
+
+
 </div>
