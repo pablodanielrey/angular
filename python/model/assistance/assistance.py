@@ -5,7 +5,7 @@ import datetime
 from dateutil.tz import tzlocal
 from model.assistance.logs import LogDAO, Log
 from model.assistance.schedules import ScheduleDAO, Schedule
-from model.serializer.utils import Serializer, JSONSerializable
+from model.serializer.utils import JSONSerializable
 
 
 class WorkPeriod(JSONSerializable):

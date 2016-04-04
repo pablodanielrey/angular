@@ -12,7 +12,7 @@ import logging
 from model.registry import Registry
 from model.connection.connection import Connection
 from model.assistance.assistance import AssistanceModel
-from model.serializer.utils import Serializer, serializer_loads
+from model.serializer.utils import MySerializer, serializer_loads
 
 from model.users.users import UserDAO
 

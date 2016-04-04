@@ -22,5 +22,9 @@ class Status(JSONSerializable):
 class StatusDAO:
 
     @staticmethod
+    def _createSchema(con):
+        pass
+
+    @staticmethod
     def persist(con, status);
         pass
