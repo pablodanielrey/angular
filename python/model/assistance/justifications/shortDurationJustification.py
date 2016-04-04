@@ -10,8 +10,10 @@
 from model.connection.connection import Connection
 from model.registry import Registry
 from model.serializer.utils import JSONSerializable
+import inject
 
-from model.assistance.justification.status import Status
+
+from model.assistance.justifications.status import Status
 import datetime, uuid
 
 class ShortDurationJustification(JSONSerializable):
@@ -31,8 +33,15 @@ class ShortDurationJustification(JSONSerializable):
 
     def persist(self, con, days=None):
         jid = ShortDurationJustificationDAO.persist(con, self, days)
-        s = Status(jid)
-        s.persist(con)
+        s = Status(jid,self.owner)
+        sid = s.persist(con)
+        s.status = Status.APPROVED
+        s.created = s.created + datetime.timedelta(seconds = 1)
+        sid = s.persist(con)
+
+        self.status = s
+        self.statusId = sid
+        self.statusConst = s.status
         return jid
 
 class ShortDurationJustificationDAO:
@@ -44,12 +53,12 @@ class ShortDurationJustificationDAO:
         try:
             cur.execute("""
                 create schema if not exists assistance;
-                create table assistance.shortDurationJ (
+                create table assistance.short_duration_j (
                     id varchar primary key,
                     user_id varchar not null references profile.users (id),
                     owner varchar not null references profile.users (id),
-                    start date default now(),
-                    end date default now(),
+                    jstart date default now(),
+                    jend date default now(),
                     number bigint,
                     created timestamptz default now()
                 );
@@ -59,12 +68,12 @@ class ShortDurationJustificationDAO:
 
     @staticmethod
     def _fromResult(r):
-        j = ShortDurationJustification
+        j = ShortDurationJustification()
         j.id = r['id']
         j.userId = r['user_id']
         j.owner = r['owner']
-        j.start = r['start']
-        j.end = r['end']
+        j.start = r['jstart']
+        j.end = r['jend']
         j.number = r['number']
         return j
 
@@ -73,7 +82,8 @@ class ShortDurationJustificationDAO:
         if j.start is None:
             return None
 
-        if (self.registry.get('continuousDays')):
+        continuous = ShortDurationJustificationDAO.registry.get('continuousDays')
+        if (continuous.lower() == 'true'):
             return j.start + datetime.timedelta(days=days)
         else:
             date = j.start
@@ -82,7 +92,10 @@ class ShortDurationJustificationDAO:
                     date = date + datetime.timedelta(days = (7 - date.weekday()))
                 else:
                     days = days - 1
-                    date = date + date.timedelta(days=1)
+                    date = date + datetime.timedelta(days=1)
+
+            if date.weekday() >= 5:
+                date = date + datetime.timedelta(days = (7 - date.weekday()))
             return date
 
 
@@ -93,16 +106,16 @@ class ShortDurationJustificationDAO:
             if j.end is None:
                 j.end = ShortDurationJustificationDAO._getEnd(j, days)
 
-            if id not in j or j.id is None:
+            if hasattr(j, 'id') or j.id is None:
                 j.id = ShortDurationJustification.prefix + "-" + str(uuid.uuid4())
 
                 r = j.__dict__
-                cur.execute('insert into assistance.shortDurationJ (id, user_id, owner, start, end, number) '
+                cur.execute('insert into assistance.short_duration_j (id, user_id, owner, jstart, jend, number) '
                             'values (%(id)s, %(userId)s, %(owner)s, %(start)s, %(end)s, %(number)s)', r)
             else:
                 r = j.__dict__
-                cur.execute('update assistance.shortDurationJ set user_id = %(userId)s, owner = %(owner)s, '
-                            'start = %(start)s, end = %(end)s, number = %(number)s where id = %(id)s', r)
+                cur.execute('update assistance.short_duration_j set user_id = %(userId)s, owner = %(owner)s, '
+                            'jstart = %(start)s, jend = %(end)s, number = %(number)s where id = %(id)s', r)
             return j.id
 
         finally:

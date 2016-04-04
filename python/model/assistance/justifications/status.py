@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from model.serializer.utils import JSONSerializable
 import datetime
+import uuid
 
 class Status(JSONSerializable):
     UNDEFINED = 0
@@ -9,22 +10,54 @@ class Status(JSONSerializable):
     REJECTED = 3
     CANCELED = 4
 
-    def __init__(self, jid):
-        self.created = datetime.datetime.now()
-        self.status = Status.PENDING
+    def __init__(self, jid, userId):
         self.id = None
+        self.status = Status.PENDING
         self.justificationId = jid
-        self.userId = None
+        self.userId = userId
+        self.created = datetime.datetime.now()
 
-    def persist(self, status):
-        pass
+    def persist(self, con):
+        return StatusDAO.persist(con,self)
 
 class StatusDAO:
 
     @staticmethod
     def _createSchema(con):
-        pass
+        cur = con.cursor()
+        try:
+            cur.execute("""
+                create schema if not exists assistance;
+                create table assistance.justification_status (
+                    id varchar primary key,
+                    status varchar,
+                    user_id varchar not null references profile.users (id),
+                    justification_id varchar,
+                    created timestamptz default now()
+                );
+            """)
+        finally:
+            cur.close()
 
     @staticmethod
-    def persist(con, status);
-        pass
+    def _fromResult(r):
+        s = Status()
+        s.id = r['id']
+        s.status = r['status']
+        s.justificationId = r['justification_id']
+        s.userId = r['user_id']
+        s.created = r['created']
+        return s
+
+    @staticmethod
+    def persist(con, status):
+        cur = con.cursor()
+        try:
+            id = str(uuid.uuid4())
+            status.id = id
+            r = status.__dict__
+            cur.execute('insert into assistance.justification_status (id, status, user_id, justification_id, created) '
+                        'values (%(id)s, %(status)s, %(userId)s, %(justificationId)s, %(created)s)', r)
+            return id
+        finally:
+            cur.close()
