@@ -29,9 +29,9 @@ if __name__ == '__main__':
 
         logging.info('buscando los usuarios')
 
-        uid, v = UserDAO.findByDni(con, sys.argv[1])
-        uids = [uid]
-        # uids = [ u for u,v in UserDAO.findAll(con) ]
+        # uid, v = UserDAO.findByDni(con, sys.argv[1])
+        # uids = [uid]
+        uids = [ u for u,v in UserDAO.findAll(con) ]
 
         logging.info('cargando los periodos')
 
@@ -59,14 +59,15 @@ if __name__ == '__main__':
         logging.info(wps2)
         """
 
+        '''
         j = ShortDurationJustification()
         j.userId = uid
         j.owner = uid
         j.start = datetime.date.today()
         j.number = 65905
         j.persist(con, 30)
-        logging.info(j)
         con.commit()
+        '''
 
     finally:
         conn.put(con)

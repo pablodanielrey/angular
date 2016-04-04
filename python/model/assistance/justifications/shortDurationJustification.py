@@ -106,7 +106,7 @@ class ShortDurationJustificationDAO:
             if j.end is None:
                 j.end = ShortDurationJustificationDAO._getEnd(j, days)
 
-            if hasattr(j, 'id') or j.id is None:
+            if ((not hasattr(j, 'id')) or (j.id is None)):
                 j.id = ShortDurationJustification.prefix + "-" + str(uuid.uuid4())
 
                 r = j.__dict__
