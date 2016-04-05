@@ -44,7 +44,7 @@ class StatusDAO:
                 create schema if not exists assistance;
                 create table assistance.justification_status (
                     id varchar primary key,
-                    status varchar,
+                    status int,
                     user_id varchar not null references profile.users (id),
                     justification_id varchar,
                     created timestamptz default now()

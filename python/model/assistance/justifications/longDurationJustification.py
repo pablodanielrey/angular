@@ -63,7 +63,9 @@ class LongDurationJustification(JSONSerializable, Justification):
 
         return self.status
 
-    def setWorkedPeriods(self, wps):
+    def setWorkedPeriods(self, con, wps):
+        if self.getLastStatus(con).status != Status.APPROVED:
+            return
         for wp in wps:
             if wp is None or wp.getStartDate() is None:
                 continue

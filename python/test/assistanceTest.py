@@ -70,6 +70,9 @@ def testFindJustification(con, uid):
         j.persist(con, 30)
         con.commit()
 
+        j.changeStatus(con, Status.REJECTED, uid)
+        con.commit()
+
         # obtengo las justificaciones
 
         js = Justification.getJustifications(con, uid, start, end)
@@ -99,7 +102,7 @@ if __name__ == '__main__':
         a = inject.instance(AssistanceModel)
         wps = a.getWorkPeriods(con, uids, datetime.datetime.now() - datetime.timedelta(days=63), datetime.datetime.now())
         for j in js:
-            j.setWorkedPeriods(wps[uid])
+            j.setWorkedPeriods(con, wps[uid])
             logging.info(j.__dict__)
 
         exit(1)
