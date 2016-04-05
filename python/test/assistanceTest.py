@@ -157,10 +157,10 @@ if __name__ == '__main__':
             wp = wps[w]
             for w1 in wp:
                 sec = w1.getWorkedSeconds()
-                sd = w1.getStartDate()
-                ed = w1.getEndDate()
-                hi = None if w1.getStartLog() is None else w1.getStartLog().log.time()
-                hs = None if w1.getEndLog() is None else w1.getEndLog().log.time()
+                sd = '' if w1.getStartDate() is None else w1.getStartDate()
+                ed = '' if w1.getEndDate() is None else w1.getEndDate()
+                hi = '' if w1.getStartLog() is None else w1.getStartLog().log.time()
+                hs = '' if w1.getEndLog() is None else w1.getEndLog().log.time()
                 th = int(sec / 60 / 60)
                 tm = int(sec / 60 % 60)
                 logging.info('{} --> e:{}, s:{} --> {}:{} -- he {} - hs {}'.format(w1.date, sd, ed, th, tm, hi, hs))
