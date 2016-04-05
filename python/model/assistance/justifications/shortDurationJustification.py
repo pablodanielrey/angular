@@ -29,7 +29,7 @@ class ShortDurationJustification(JSONSerializable, Justification):
         self.status = None
         self.statusId = None
         self.statusConst = Status.UNDEFINED
-
+        self.wps = []
 
     def persist(self, con, days=None):
 
@@ -63,6 +63,14 @@ class ShortDurationJustification(JSONSerializable, Justification):
             self.statusConst = self.status.status
 
         return self.status
+
+    def setWorkedPeriods(self, wps):
+        for wp in wps:
+            if wp is None or wp.getStartDate() is None:
+                continue
+            if self.start <= wp.getStartDate().date() <= self.end:
+                self.wps.append(wp)
+                wp.addJustification(self)
 
     @classmethod
     def findByUserId(cls,con, userIds, start, end):

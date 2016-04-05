@@ -26,12 +26,12 @@ def findUser(users, uid):
         if uid == u.id:
             return u
 
-def testFindJustification(con):
+def testFindJustification(con, uid):
         # fechas a testear
         start = datetime.datetime.now() - datetime.timedelta(days=10)
         end = datetime.datetime.now() + datetime.timedelta(days=10)
 
-        uid, v = UserDAO.findByDni(con, "31381082")
+
         # creo justificaciones con lasdifrerentes opciones posibles
 
         # (jstart < start) and (jend >= start and jend <= end)
@@ -89,16 +89,20 @@ if __name__ == '__main__':
     con = conn.get()
     try:
 
-        '''
-        js = testFindJustification(con)
+        uid, v = UserDAO.findByDni(con, "31381082")
+        uids = [uid]
+        js = testFindJustification(con, uid)
+
         ids = [ j.id for j in js ]
         justifications = ShortDurationJustification.findById(con, ids)
-        logging.info('Find by ids')
+
+        a = inject.instance(AssistanceModel)
+        wps = a.getWorkPeriods(con, uids, datetime.datetime.now() - datetime.timedelta(days=63), datetime.datetime.now())
         for j in js:
+            j.setWorkedPeriods(wps[uid])
             logging.info(j.__dict__)
 
         exit(1)
-        '''
 
         logging.info('buscando los usuarios')
 
@@ -139,6 +143,8 @@ if __name__ == '__main__':
 
         a = inject.instance(AssistanceModel)
         wps = a.getWorkPeriods(con, uids, datetime.datetime.now() - datetime.timedelta(days=63), datetime.datetime.now())
+
+
 
         import uuid
         f = str(uuid.uuid4())

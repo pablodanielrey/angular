@@ -17,6 +17,10 @@ class WorkPeriod(JSONSerializable):
         self.date = date
         self.schedule = None
         self.logs = []
+        self.justifications = []
+
+    def addJustification(self, j):
+        self.justifications.append(j)
 
     def getStartDate(self):
         if self.schedule is None:
