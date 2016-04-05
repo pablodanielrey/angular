@@ -13,6 +13,7 @@ from model.registry import Registry
 from model.connection.connection import Connection
 from model.assistance.assistance import AssistanceModel
 from model.assistance.justifications.shortDurationJustification import ShortDurationJustification
+from model.assistance.justifications.longDurationJustification import LongDurationJustification
 from model.assistance.justifications.status import Status
 from model.assistance.justifications.justifications import Justification
 
@@ -52,7 +53,7 @@ def testFindJustification(con):
         con.commit()
 
         # se encuentra entre el start y el end
-        j = ShortDurationJustification()
+        j = LongDurationJustification()
         j.userId = uid
         j.ownerId = uid
         j.start = start + datetime.timedelta(days=5)
@@ -61,7 +62,7 @@ def testFindJustification(con):
         con.commit()
 
         # jstart < start and jend > end
-        j = ShortDurationJustification()
+        j = LongDurationJustification()
         j.userId = uid
         j.ownerId = uid
         j.start = start - datetime.timedelta(days=5)
@@ -75,6 +76,7 @@ def testFindJustification(con):
         for j in js:
             j.getLastStatus(con)
             logging.info(j.__dict__)
+        return js
 
 
 if __name__ == '__main__':
@@ -84,10 +86,16 @@ if __name__ == '__main__':
     reg = inject.instance(Registry)
 
     conn = Connection(reg.getRegistry('dcsys'))
+    con = conn.get()
     try:
-        con = conn.get()
 
-        testFindJustification(con)
+        js = testFindJustification(con)
+        ids = [ j.id for j in js ]
+        justifications = ShortDurationJustification.findById(con, ids)
+        logging.info('Find by ids')
+        for j in js:
+            logging.info(j.__dict__)
+
         exit(1)
 
         logging.info('buscando los usuarios')
