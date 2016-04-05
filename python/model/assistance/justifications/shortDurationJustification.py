@@ -55,6 +55,18 @@ class ShortDurationJustification(JSONSerializable, Justification):
         self.statusId = self.status.id
         self.statusConst = self.status.status
 
+    def getLastStatus(self, con):
+        self.status = Status.getLastStatus(con, self.id)
+        self.statusId = self.status.id
+        self.statusConst = self.status.status
+
+        return self.status
+
+    @classmethod
+    def findByUserId(cls,con, userIds, start, end):
+        return ShortDurationJustificationDAO.findByUserId(con, userIds, start, end)
+
+
 class ShortDurationJustificationDAO:
     registry = inject.instance(Registry).getRegistry('shortDurationJustification')
 
@@ -86,6 +98,7 @@ class ShortDurationJustificationDAO:
         j.start = r['jstart']
         j.end = r['jend']
         j.number = r['number']
+
         return j
 
     @staticmethod
@@ -136,9 +149,24 @@ class ShortDurationJustificationDAO:
     def findById(con, ids):
         assert isinstance(ids, list)
 
-
     @staticmethod
-    def findBy(con, userIds, startDate, endDate):
+    def findByUserId(con, userIds, start, end):
         assert isinstance(userIds, list)
-        assert isinstance(startDate, datetime.datetime)
-        assert isinstance(endDate, datetime.datetime)
+        assert isinstance(start, datetime.datetime)
+        assert isinstance(end, datetime.datetime)
+
+        if len(userIds) <= 0:
+            return
+
+        cur = con.cursor()
+        try:
+            sDate = None if start is None else start.date()
+            eDate = datetime.date.today() if end is None else end.date()
+            cur.execute('select * from assistance.short_duration_j where user_id in %s and '
+                        '((jend >= %s and jend <= %s) or '
+                        '(jstart >= %s and jstart <= %s) or '
+                        '(jstart <= %s and jend >= %s))', (tuple(userIds), sDate, eDate, sDate, eDate, sDate, eDate))
+
+            return [ ShortDurationJustificationDAO._fromResult(r) for r in cur ]
+        finally:
+            cur.close()
