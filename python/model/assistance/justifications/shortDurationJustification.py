@@ -13,11 +13,11 @@ from model.serializer.utils import JSONSerializable
 import inject
 
 
+from model.assistance.justifications.justifications import Justification
 from model.assistance.justifications.status import Status
 import datetime, uuid
 
-class ShortDurationJustification(JSONSerializable):
-    prefix = '0001'
+class ShortDurationJustification(JSONSerializable, Justification):
 
     def __init__(self):
         self.id = None
@@ -118,7 +118,7 @@ class ShortDurationJustificationDAO:
                 j.end = ShortDurationJustificationDAO._getEnd(j, days)
 
             if ((not hasattr(j, 'id')) or (j.id is None)):
-                j.id = ShortDurationJustification.prefix + "-" + str(uuid.uuid4())
+                j.id = str(uuid.uuid4())
 
                 r = j.__dict__
                 cur.execute('insert into assistance.short_duration_j (id, user_id, owner_id, jstart, jend, number) '
@@ -136,8 +136,9 @@ class ShortDurationJustificationDAO:
     def findById(con, ids):
         assert isinstance(ids, list)
 
-        pass
 
     @staticmethod
-    def findBy(con, userId, startData, endDate):
-        pass
+    def findBy(con, userIds, startDate, endDate):
+        assert isinstance(userIds, list)
+        assert isinstance(startDate, datetime.datetime)
+        assert isinstance(endDate, datetime.datetime)
