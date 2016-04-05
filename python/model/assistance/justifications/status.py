@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from model.serializer.utils import JSONSerializable
-import datetime
+import datetime, logging
 import uuid
 
 class Status(JSONSerializable):
@@ -32,7 +32,7 @@ class Status(JSONSerializable):
 
     @classmethod
     def getLastStatus(cls, con, jid):
-        pass
+        return StatusDAO.getLastStatus(con, jid)
 
 class StatusDAO:
 
@@ -55,11 +55,9 @@ class StatusDAO:
 
     @staticmethod
     def _fromResult(r):
-        s = Status()
-        s.id = r['id']
+        s = Status(r['id'], r['user_id'])
         s.status = r['status']
         s.justificationId = r['justification_id']
-        s.userId = r['user_id']
         s.created = r['created']
         return s
 
@@ -83,5 +81,17 @@ class StatusDAO:
         try:
             cur.execute('select * from assistance.justification_status where id in %s', tuple(ids))
             return [ StatusDAO._fromResult(r) for r in cur ]
+        finally:
+            cur.close()
+
+    @staticmethod
+    def getLastStatus(con, jid):
+        cur = con.cursor()
+        try:
+            cur.execute('select * from assistance.justification_status where justification_id = %s order by created desc limit 1', (jid,))
+            if cur.rowcount <= 0:
+                return None
+
+            return StatusDAO._fromResult(cur.fetchone())
         finally:
             cur.close()

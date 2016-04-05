@@ -25,6 +25,58 @@ def findUser(users, uid):
         if uid == u.id:
             return u
 
+def testFindJustification(con):
+        # fechas a testear
+        start = datetime.datetime.now() - datetime.timedelta(days=10)
+        end = datetime.datetime.now() + datetime.timedelta(days=10)
+
+        uid, v = UserDAO.findByDni(con, "31381082")
+        # creo justificaciones con lasdifrerentes opciones posibles
+
+        # (jstart < start) and (jend >= start and jend <= end)
+        j = ShortDurationJustification()
+        j.userId = uid
+        j.ownerId = uid
+        j.start = start - datetime.timedelta(days=5)
+        j.number = 70000
+        j.persist(con, 10)
+        con.commit()
+
+        # (jend > end) and (jstart >= start and jstart <= end)
+        j = ShortDurationJustification()
+        j.userId = uid
+        j.ownerId = uid
+        j.start = start + datetime.timedelta(days=10)
+        j.number = 70000
+        j.persist(con, 15)
+        con.commit()
+
+        # se encuentra entre el start y el end
+        j = ShortDurationJustification()
+        j.userId = uid
+        j.ownerId = uid
+        j.start = start + datetime.timedelta(days=5)
+        j.number = 70000
+        j.persist(con, 5)
+        con.commit()
+
+        # jstart < start and jend > end
+        j = ShortDurationJustification()
+        j.userId = uid
+        j.ownerId = uid
+        j.start = start - datetime.timedelta(days=5)
+        j.number = 70000
+        j.persist(con, 30)
+        con.commit()
+
+        # obtengo las justificaciones
+
+        js = Justification.getJustifications(con, uid, start, end)
+        for j in js:
+            j.getLastStatus(con)
+            logging.info(j.__dict__)
+
+
 if __name__ == '__main__':
 
     logging.getLogger().setLevel(logging.INFO)
@@ -34,6 +86,9 @@ if __name__ == '__main__':
     conn = Connection(reg.getRegistry('dcsys'))
     try:
         con = conn.get()
+
+        testFindJustification(con)
+        exit(1)
 
         logging.info('buscando los usuarios')
 
@@ -142,7 +197,7 @@ if __name__ == '__main__':
         logging.info(wps2)
         """
 
-        '''
+
         j = ShortDurationJustification()
         j.userId = uid
         j.ownerId = uid
@@ -155,6 +210,8 @@ if __name__ == '__main__':
         j.changeStatus(con, Status.REJECTED, uid)
         con.commit()
         logging.info(j.__dict__)
-        '''
+
+
+
     finally:
         conn.put(con)
