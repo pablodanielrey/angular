@@ -18,18 +18,13 @@
 
   <script src="lib/jsBarcode-2.5.1/JsBarcode.all.min.js"></script>
 
-  <script src="angular/initializeApp.js"></script>
-  <script src="lib/jsBarcode-2.5.1/initializeApp.js"></script>
+  <script src="angular/index.module.js"></script>
+  <script src="lib/jsBarcode-2.5.1/index.module.js"></script>
     
   <script src="angular/route.js"></script>
 
-  <script src="angular/Index.js"></script>
-
-
-
-
-
-  <script src="documento/Documento.js"></script>
+  <script src="modules/index.controller.js"></script>
+  <script src="modules/documento/Documento.js"></script>
 
 
 
@@ -37,8 +32,6 @@
 <body class="container-fluid" ng-app="MainApp" ng-controller="IndexCtrl">
 
 
-<h3 ng-show="mainTitle" class="well text-info">{{mainTitle}}</h3>
-  
 	<div ng-view></div>
   
 
