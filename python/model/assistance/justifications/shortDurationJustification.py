@@ -32,6 +32,7 @@ class ShortDurationJustification(JSONSerializable, Justification):
 
 
     def persist(self, con, days=None):
+
         jid = ShortDurationJustificationDAO.persist(con, self, days)
         s = Status(jid,self.ownerId)
         s.created = s.created - datetime.timedelta(seconds=1)
@@ -122,11 +123,18 @@ class ShortDurationJustificationDAO:
                 date = date + datetime.timedelta(days = (7 - date.weekday()))
             return date
 
+    def _verifyConstraints(j, days):
+        '''
+        debe verificar que no supere el limite anual de justificaciones
+        '''
+        return
 
     @staticmethod
     def persist(con, j, days):
         cur = con.cursor()
         try:
+            ShortDurationJustificationDAO._verifyConstraints(j, days)
+
             if j.end is None:
                 j.end = ShortDurationJustificationDAO._getEnd(j, days)
 
