@@ -55,9 +55,10 @@ class LongDurationJustification(JSONSerializable, Justification):
         self.statusConst = self.status.status
 
     def getLastStatus(self, con):
-        self.status = Status.getLastStatus(con, self.id)
-        self.statusId = self.status.id
-        self.statusConst = self.status.status
+        if self.status is None:
+            self.status = Status.getLastStatus(con, self.id)
+            self.statusId = self.status.id
+            self.statusConst = self.status.status
 
         return self.status
 

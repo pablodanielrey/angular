@@ -89,6 +89,7 @@ if __name__ == '__main__':
     con = conn.get()
     try:
 
+        '''
         js = testFindJustification(con)
         ids = [ j.id for j in js ]
         justifications = ShortDurationJustification.findById(con, ids)
@@ -97,6 +98,7 @@ if __name__ == '__main__':
             logging.info(j.__dict__)
 
         exit(1)
+        '''
 
         logging.info('buscando los usuarios')
 
@@ -205,7 +207,7 @@ if __name__ == '__main__':
         logging.info(wps2)
         """
 
-
+        '''
         j = ShortDurationJustification()
         j.userId = uid
         j.ownerId = uid
@@ -218,7 +220,7 @@ if __name__ == '__main__':
         j.changeStatus(con, Status.REJECTED, uid)
         con.commit()
         logging.info(j.__dict__)
-
+        '''
 
 
     finally:
