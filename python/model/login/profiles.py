@@ -7,7 +7,7 @@ class Profile:
         self.userId = None
         self.roles = []
 
-    def hasOneRole(role = []):
+    def hasOneRole(self, role = []):
         if len(role) <= 0:
             return False
 
@@ -19,7 +19,7 @@ class Profile:
                 return True
         return False
 
-    def hasRoles(role = []):
+    def hasRoles(self, role = []):
         if len(role) <= 0:
             return False
 
@@ -32,7 +32,7 @@ class Profile:
         return True
 
     def _toJson(self):
-        return json.dumps(self)
+        return json.dumps(self, default=lambda o: o.__dict__)
 
     @staticmethod
     def _fromJson(pstring):
@@ -59,21 +59,21 @@ class ProfileDAO:
 
     @staticmethod
     def findByUserId(con, userId):
-        p = Profile()
-        p.userId = userId
+        profile = Profile()
+        profile.userId = userId
 
         cur = con.cursor()
         try:
             roles = []
-            cur.execute('select profile from credentails.auth_profile where user_id = %s', (userId,))
+            cur.execute('select profile from credentials.auth_profile where user_id = %s', (userId,))
             for p in cur:
-                profiles.append(p['profile'])
-            p.roles = roles
+                roles.append(p['profile'])
+            profile.roles = roles
 
         finally:
             cur.close()
 
-        return p
+        return profile
 
     @staticmethod
     def persist(con, profiles = []):

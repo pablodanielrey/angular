@@ -3,13 +3,15 @@
     Implementa todo el codigo relacionado al modelo y las entidades de los usuarios
 '''
 
+import re
 import logging
 import datetime
 import uuid
 from model.connection.connection import Connection
+from model.serializer.utils import MySerializer, JSONSerializable
 
 
-class UserPassword:
+class UserPassword(JSONSerializable):
 
     def __init__(self):
         self.id = None
@@ -96,7 +98,7 @@ class UserPasswordDAO:
 
         cur = con.cursor()
         try:
-            if up.id is None:
+            if not hasattr(user, 'id'):
                 up.id = str(uuid.uuid4())
                 params = up.__dict__
                 cur.execute('insert into credentials.user_password (id, user_id, username, password, updated) values (%(id)s, %(userId)s, %(username)s, %(password)s, now())', params)
@@ -110,7 +112,7 @@ class UserPasswordDAO:
             cur.close()
 
 
-class Mail:
+class Mail(JSONSerializable):
     ''' cuenta de email de un usuario '''
 
     def __init__(self):
@@ -173,7 +175,7 @@ class MailDAO:
         ''' crea o actualiza un email de usuario '''
         cur = con.cursor()
         try:
-            if mail.id is None:
+            if not hasattr(user, 'id'):
                 mail.id = str(uuid.uuid4())
                 params = mail.__dict__
                 cur.execute('insert into profile.mails (id, user_id, email, confirmed, hash) values (%(id)s, %(userId)s, %(email)s, %(confirmed)s, %(hash)s)', params)
@@ -195,7 +197,7 @@ class MailDAO:
             cur.close()
 
 
-class User:
+class User(JSONSerializable):
     ''' usuario básico del sistema '''
 
     def __init__(self):
@@ -214,15 +216,16 @@ class User:
         self.photo = None
         self.telephones = []
 
+    '''
     def _toJson():
         pass
 
     @staticmethod
     def fromJson(j):
         pass
+    '''
 
-
-class Telephone:
+class Telephone(JSONSerializable):
     def __init__(self):
         self.id = None
         self.userId = None
@@ -275,25 +278,24 @@ class UserDAO:
             cur.close()
 
     @staticmethod
-    def findById(con, uid):
-        '''
-            Obtiene el usuario especificado por el id
-            Retorna:
-                User a partir de los datos de la base
-                None en caso de que no exista
-        '''
-        assert uid is not None
+    def findById(con, uids):
+        assert uids is not None
+        assert isinstance(uids, list)
+
         cur = con.cursor()
         try:
-            cur.execute('select * from profile.users where id = %s', (uid,))
+            cur.execute('select * from profile.users where id in %s', (tuple(uids),))
             if cur.rowcount <= 0:
-                return None
-            user = UserDAO._fromResult(cur.fetchone())
+                return []
 
-            cur.execute('select * from profile.telephones where user_id = %s', (uid,))
-            user.telephones = [ UserDAO._telephoneFromResult(r) for r in cur ]
+            users = []
+            for user in cur:
+                ouser = UserDAO._fromResult(user)
+                cur.execute('select * from profile.telephones where user_id = %s', (ouser.id,))
+                ouser.telephones = [ UserDAO._telephoneFromResult(r) for r in cur ]
+                users.append(ouser)
 
-            return user
+            return users
 
         finally:
             cur.close()
@@ -343,7 +345,7 @@ class UserDAO:
         '''
         cur = con.cursor()
         try:
-            if user.id is None:
+            if not hasattr(user, 'id'):
                 user.id = str(uuid.uuid4())
                 user.version = 0
                 cur.execute('insert into profile.users (id, dni, name, lastname, genre, birthdate, city, country, address, residence_city, version, photo) values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)', (
@@ -410,7 +412,7 @@ class UserDAO:
             cur.close()
 
 
-class Student:
+class Student(JSONSerializable):
 
     def __init__(self):
         self.id = None
@@ -480,7 +482,6 @@ class StudentDAO:
 
         finally:
             cur.close()
-
 
 
 if __name__ == '__main__':

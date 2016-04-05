@@ -36,7 +36,6 @@ class LanguageDAO:
 
     @staticmethod
     def persist(con, language):
-        LanguageDAO.deleteByUser(con, language.userId)
         cur = con.cursor()
         try:
             if language.id is None:

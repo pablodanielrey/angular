@@ -1,0 +1,19 @@
+# referencias 
+# http://serverfault.com/questions/386261/save-the-stream-to-mp4-files
+# http://stackoverflow.com/questions/10459338/save-continuous-rtsp-stream-to-5-10-minute-long-mp4-files
+
+ffmpeg -i rtsp://admin:admin@10.1.1.1:554/ch1-s1 -c copy -map 0 -f segment -segment_time 600 -segment_format mp4 "out%03d.mp4"
+avconv -i rtsp://10.2.2.19/live/ch01_0 -c copy -map 0 -f segment -segment_time 300 -segment_format mp4 "capture-%03d.mp4"
+
+# documentacion de como generar el hls
+https://www.bentasker.co.uk/documentation/linux/207-transcoding-files-ready-for-http-live-streaming-on-linux
+
+#para hls
+avconv -i rtsp://163.10.17.6/video.h264 -c copy -map 0 -f segment -segment_list playlist.m3u8 -segment_list_flags +live -segment_time 60 -segment_format mp4 "capture-%03d.mp4"
+
+
+tambien existen proyectos para convertir rtp -> dash
+
+http://stackoverflow.com/questions/30617673/live-streaming-dash-content-using-mp4box
+https://github.com/sannies/rtp2dash
+

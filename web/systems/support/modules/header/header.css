@@ -1,0 +1,18 @@
+.header {
+  display: flex;
+  display: -webkit-flex;
+  display: -moz-flex;
+  align-items: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  height: 60px;
+  background-color: #28292D;
+  color: white;
+}
+
+.header .imgLogo {
+  margin-left: 10px;
+}

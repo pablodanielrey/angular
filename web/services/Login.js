@@ -23,6 +23,7 @@ function Login($rootScope, $wamp, Session) {
     });
 	}
 
+
   this.getSessionData = function() {
     return new Promise(function(cok, cerr) {
       var s = Session.getCurrentSession();
@@ -52,9 +53,6 @@ function Login($rootScope, $wamp, Session) {
   			if (s == null) {
   				cerr(Error('Datos Incorrectos'));
   			} else {
-          /*
-            Creo la sesion dentro de la cache cliente
-          */
   				var data = {
   					session_id: s.id,
   					user_id: s.userId,
@@ -69,7 +67,7 @@ function Login($rootScope, $wamp, Session) {
   		},function(err) {
   			cerr(err);
   		});
-  	});
+    });
   }
 
 	this.logout = function() {
@@ -78,7 +76,7 @@ function Login($rootScope, $wamp, Session) {
   		$wamp.call('system.logout', [sid])
   		.then(function(ok) {
   			if (ok == null) {
-  				cerr('');
+  				cerr(Error('resultado = null'));
   			} else {
   				Session.destroy();
   				cok();
@@ -86,7 +84,23 @@ function Login($rootScope, $wamp, Session) {
   		},function(err) {
   			cerr(err);
   		});
-  	});
+    });
+  };
+
+  this.testUser = function(username) {
+    return $wamp.call('system.testUser', [username])
+  }
+
+  this.hasOneRole = function(roles) {
+    return new Promise(function(cok, cerr) {
+      var sid = Session.getSessionId();
+  		$wamp.call('system.profile.hasOneRole', [sid, roles])
+      .then(function(v) {
+        cok(v);
+      },function(err) {
+        cerr(err);
+      });
+    });
   };
 
 };

@@ -14,6 +14,7 @@ from model.laboralinsertion.mails import SentDAO, Sent
 from model.laboralinsertion.inscription import InscriptionDAO
 from model.laboralinsertion.company import CompanyDAO
 from model.laboralinsertion.languages import LanguageDAO
+from model.laboralinsertion.filters import Filter
 from model.laboralinsertion.user import UserDAO, User
 
 import csv
@@ -120,7 +121,7 @@ class LaboralInsertion:
     """
 
 
-    def findAllInscriptions(self, con):
+    def findAllInscriptions(self, con, filters):
         """ obtiene los datos de las inscripciones de los alumnos """
         ids = InscriptionDAO.findAll(con)
         inscriptions = []
@@ -128,7 +129,14 @@ class LaboralInsertion:
             inscription = InscriptionDAO.findById(con, id)
             inscriptions.append(inscription)
 
+        ''' aplico los filtros '''
+        if len(filters) > 0:
+            inscriptions = Filter.apply(con, inscriptions, filters)
+
         return inscriptions
+
+    def getFilters(self):
+        return Filters.getFilters()
 
     def findAllInscriptionsByUser(self, con, userId):
         """ obtiene los datos de las inscripciones de los alumnos """
@@ -168,13 +176,14 @@ class LaboralInsertion:
     def persist(self, con, user, languages):
         """ actualiza la información de insercion laboral del usuario """
         UserDAO.persist(con, user)
+        LanguageDAO.deleteByUser(con, user.id)
         for l in languages:
             LanguageDAO.persist(con, l)
 
 
-    def sendMailToCompany(self, con, inscriptions, company):
+    def sendMailToCompany(self, con, inscriptions, emails):
         datar = []
-        emails = company.emails
+
 
         if emails is None:
             return []
@@ -241,9 +250,11 @@ class LaboralInsertion:
                 elif cvf.codec[0] == 'base64':
                     filedata = base64.b64decode(bytes(cvf.content))
 
-                user = model.users.users.UserDAO.findById(con, i['userId'])
-                if user is None:
+                user = model.users.users.UserDAO.findById(con, [i['userId']])
+                if user is None or len(user) <= 0:
                     continue
+
+                user = user[0]
 
                 filename, file_extension = os.path.splitext(cvf.name)
                 #fss.append(self.mail.attachFile('{}_{}_{}_{}'.format(user['name'], user['lastname'], user['dni'], file_extension), filedata))
@@ -269,7 +280,7 @@ class LaboralInsertion:
         sent = Sent()
         sent.emails = emails
         sent.inscriptions = [i['id'] for i in inscriptions]
-        sent.persist(con)
+        SentDAO.persist(con, sent)
         con.commit()
 
         return datar

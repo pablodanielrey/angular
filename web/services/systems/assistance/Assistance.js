@@ -40,7 +40,7 @@ function Assistance (Utils, Session, $wamp) {
 
 	services.getJustificationRequestsToManage = getJustificationRequestsToManage;
 
-	// services.getJustificationRequestsByDate = getJustificationRequestsByDate;
+	services.getJustificationRequestsByDate = getJustificationRequestsByDate;
 	//services.getSpecialJustifications = getSpecialJustifications;
 
 	//  ------------------------ OVERTIME -----------------------------

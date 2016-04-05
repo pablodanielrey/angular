@@ -17,7 +17,7 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     company: null,
     emailAddToCompany: '',
     emails: [],
-    filters: [],
+    filtersData:[],
     searching: false
   };
 
@@ -40,6 +40,7 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     reverseAverage1: false,
     reverseAverage2: false,
     reverseWorkType: false,
+    reversePriority: false,
     reverMail: false
   };
 
@@ -217,6 +218,30 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
         return value;
       });
     }
+  };
+
+  function comparePriority(a,b) {
+    return $scope.getPriority(a.userId) < $scope.getPriority(b.userId) ? -1 : ($scope.getPriority(a.userId) > $scope.getPriority(b.userId) ? 1 : 0)
+  }
+
+  $scope.orderPriority = function(reverse) {
+      if (reverse) {
+        $scope.model.inscriptions.sort(function(a, b) {
+          value = comparePriority(a,b);
+          if (value == 0) {
+            value = compareName(a, b);
+          }
+          return value;
+        });
+      } else {
+        $scope.model.inscriptions.sort(function(a, b) {
+          value = comparePriority(b,a);
+          if (value == 0) {
+            value = compareName(a, b);
+          }
+          return value;
+        });
+      }
   };
 
   $scope.orderDni = function(reverse) {
@@ -459,6 +484,7 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     }
   };
 
+
   $scope.orderMail = function(reverse) {
     if (reverse) {
       $scope.model.inscriptions.sort(function(a, b) {
@@ -491,7 +517,10 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
 
   $scope.selectInscriptions = function(filters) {
     $scope.model.currentScreen = "";
-    $scope.model.filters = filters;
+    $scope.model.filtersData = [];
+    for (var i = 0; i < filters.length; i++) {
+        $scope.model.filtersData.push(filters[i].data);
+    }
   }
 
   $scope.viewSelected = function() {
@@ -512,6 +541,12 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
   $scope.confirmMailToCompany = function(c) {
     $scope.model.currentScreen = "screenSelected screenSendBusiness";
     $scope.model.company = c;
+    $scope.model.company.emails = [];
+    for (var i = 0; i < c.contacts.length; i++) {
+        if (c.contacts[i].email != null && c.contacts[i].email.trim() != '') {
+          $scope.model.company.emails.push(c.contacts[i].email);
+        }
+    }
   }
 
   $scope.addEmailToCompany = function() {
@@ -519,11 +554,10 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     $scope.model.emailAddToCompany = '';
   }
 
-  $scope.removeEmailFromCompany = function(email) {
-    for (i = 0; i < $scope.model.company.emails.length; i++) {
-      if ($scope.model.company.emails[i] == email) {
-        $scope.model.company.emails.splice(i,1);
-      }
+  $scope.removeEmailFromCompany = function(e) {
+    var index = $scope.model.company.emails.indexOf(e);
+    if (index > -1) {
+        $scope.model.company.emails.splice(index, 1);
     }
   }
 
@@ -547,7 +581,7 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     }
 
     $scope.model.currentScreen = "screenSelected screenSending";
-    LaboralInsertion.sendEmailToCompany(selectedInscriptions, $scope.model.company).then(
+    LaboralInsertion.sendEmailToCompany(selectedInscriptions, $scope.model.company.emails).then(
       function() {
         console.log('enviado');
       },
@@ -620,7 +654,10 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     Chequea si una inscripcion esta seleccionado para ser enviado a una empresa.
   */
   $scope.isSelected = function(i) {
-    if(i) return i.selected;
+    if (i != null) {
+      return i.selected;
+    }
+    return false;
   }
 
   /*
@@ -683,6 +720,13 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     } else {
       return "No Definido";
     }
+  }
+
+  $scope.getPriority = function(id) {
+    if ($scope.model.data[id] != null && $scope.model.data[id].priority != null) {
+        return $scope.model.data[id].priority;
+    }
+    return 0;
   }
 
   $scope.getEnglish = function(id) {
@@ -762,8 +806,11 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
   $scope.getUsers = function(ins) {
     for (i = 0; i < ins.length; i++) {
       //console.log('Buscando usuario ' + ins[i].userId);
-      Users.findById(ins[i].userId).then(function(user) {
-        $scope.model.users[user['id']] = user;
+      Users.findById([ins[i].userId]).then(function(users) {
+        user = (users.length > 0) ? users[0] : null;
+        if (user != null) {
+          $scope.model.users[user['id']] = user;
+        }
         //console.log(user);
       }, function(err) {
         console.log(err);
@@ -819,43 +866,62 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     $scope.model.selecteds = [];
   }
 
+
+  function filterDeleted(inscriptions) {
+    var active = Array();
+    for (var i = 0; i < inscriptions.length; i++) {
+      if (!inscriptions[i].deleted) {
+        active.push(inscriptions[i]);
+      }
+    }
+    return active;
+  }
+
   $scope.search = function() {
     $scope.model.searching = true;
-    LaboralInsertion.findAllInscriptions().then(function(ins) {
-      $scope.model.inscriptions = ins;
-      $scope.model.searching = false;
+    LaboralInsertion.findAllInscriptions($scope.model.filtersData).then(
+      function(ins2) {
+        var ins = filterDeleted(ins2);
 
-      // obtegno el numero de veces que esta el id de la inscripcion en los sents
-      for (var i = 0; i < ins.length; i++) {
-        ins[i].selected = false;
-        for (var j = 0; j < $scope.model.selecteds.length; j++) {
-          var s = $scope.model.selecteds[j];
-          if (s['id'] == ins[i]["id"]) {
-            ins[i].selected = true;
-            $scope.model.selecteds[j] = ins[i];
-            break;
+        $scope.model.inscriptions = ins;
+        $scope.model.searching = false;
+
+        // obtegno el numero de veces que esta el id de la inscripcion en los sents
+        for (var i = 0; i < ins.length; i++) {
+          ins[i].selected = false;
+          for (var j = 0; j < $scope.model.selecteds.length; j++) {
+            var s = $scope.model.selecteds[j];
+            if (s['id'] == ins[i]["id"]) {
+              ins[i].selected = true;
+              $scope.model.selecteds[j] = ins[i];
+              break;
+            }
           }
+          LaboralInsertion.findSentByInscriptionId(ins[i]['id']).then(
+            function(r) {
+              // registro el numero de veces que esta esa inscripcion en los sents
+              $scope.model.sents[r['id']] = r['sents'].length
+          }, function(err) {
+              console.log(err);
+          });
         }
-        LaboralInsertion.findSentByInscriptionId(ins[i]['id']).then(function(r) {
-          // registro el numero de veces que esta esa inscripcion en los sents
-          $scope.model.sents[r['id']] = r['sents'].length
-        }, function(err) {
-          console.log(err);
-        });
-      }
 
-      $scope.getUsers(ins);
-      $scope.getUserData(ins);
-      $scope.getCompaniesData();
-      //console.log($scope.model.inscriptions);
+        $scope.getUsers(ins);
+        $scope.getUserData(ins);
+        $scope.getCompaniesData();
+        //console.log($scope.model.inscriptions);
     }, function(err) {
-      console.log(err);
+        console.log(err);
     });
   }
 
+  $scope.$on('searchInscriptionsEvent', function(e) {
+    $scope.search();
+  })
+
   $scope.displayProfile = function(i) {
     $scope.model.currentScreen = "screenProfile";
-    $scope.$broadcast('openProfileEvent',i);
+    $scope.$broadcast('openProfileEvent',i,$scope.model.data[i.userId]);
   }
 
   $scope.$on('closeProfileEvent', function(event) {

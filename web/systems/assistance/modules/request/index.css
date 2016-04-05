@@ -1,0 +1,224 @@
+.request {
+  height: 100%;
+  width: 100%;
+}
+
+.request .header {
+  height: 102px;
+  width: 100%;
+  background: #DBE2E5;
+  color: #5C5F69;
+  padding-left: 50px;
+  font-size: 1.5em;
+}
+
+/******************************************************
+****** INICIO PANTALLA DE CREAR TUTOTRIA **************
+*******************************************************/
+
+.request .contentRequest {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  background-color: yellow;
+  /*background-color: #F1F1F1;*/
+  width: 100%;
+  height: 75%;
+
+}
+
+/******************* CONTENEDOR DE LA IZQUIERDA ***********************/
+
+.request .contentLeft {
+  /*background-color: grey;*/
+  width: 300px;
+  height: 100%;
+  border-right: 1px solid #DBE2E5;
+}
+
+.request .newRequest {
+  background-color: green;
+  opacity: 1;
+  transform: translate3d(0,0,0);
+  -webkit-transform: translate3d(0,0,0);
+  -moz-transform: translate3d(0,0,0);
+  -webkit-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+     -moz-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+       -o-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+          transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+}
+
+.request.seleccionSolicitud .newRequest {
+  opacity: 0;
+  transform: translate3d(0,1000%,0);
+  -webkit-transform: translate3d(0,1000%,0);
+  -moz-transform: translate3d(0,1000%,0);
+  -webkit-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+     -moz-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+       -o-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+          transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+}
+
+.request .listRequest {
+
+  background: pink;
+  opacity: 0;
+  transform: translate3d(0,1000%,0);
+  -webkit-transform: translate3d(0,1000%,0);
+  -moz-transform: translate3d(0,1000%,0);
+  -webkit-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+     -moz-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+       -o-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+          transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+}
+
+.request.seleccionSolicitud .listRequest {
+  opacity: 1;
+  transform: translate3d(0,0,0);
+  -webkit-transform: translate3d(0,0,0);
+  -moz-transform: translate3d(0,0,0);
+  -webkit-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+     -moz-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+       -o-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+          transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+}
+
+
+/******************* CONTENEDOR DE LA DERECHA ***********************/
+
+.request .contentRight {
+  background-color: red;
+  width: 72%;
+  height: 100%;
+  opacity: 1;
+  transform: translate3d(0,0,0);
+  -webkit-transform: translate3d(0,0,0);
+  -moz-transform: translate3d(0,0,0);
+  -webkit-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+     -moz-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+       -o-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+          transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+}
+
+.request .contentMyRequest {
+  background-color: purple;
+  opacity: 1;
+  transform: translate3d(0,0,0);
+  -webkit-transform: translate3d(0,0,0);
+  -moz-transform: translate3d(0,0,0);
+  -webkit-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+     -moz-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+       -o-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+          transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+}
+
+.request.solicitudSeleccionada .contentMyRequest {
+  opacity: 0;
+  transform: translate3d(0,1000%,0);
+  -webkit-transform: translate3d(0,1000%,0);
+  -moz-transform: translate3d(0,1000%,0);
+  -webkit-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+     -moz-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+       -o-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+          transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+}
+
+
+.request .contentRequestSelected {
+  background-color: orange;
+  opacity: 0;
+  transform: translate3d(0,1000%,0);
+  -webkit-transform: translate3d(0,1000%,0);
+  -moz-transform: translate3d(0,1000%,0);
+  -webkit-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+     -moz-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+       -o-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+          transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+}
+
+.request.solicitudSeleccionada .contentRequestSelected {
+  opacity: 1;
+  transform: translate3d(0,0,0);
+  -webkit-transform: translate3d(0,0,0);
+  -moz-transform: translate3d(0,0,0);
+  -webkit-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+     -moz-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+       -o-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+          transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+}
+
+
+
+/**********************************************************************
+************************* VISTA CELULAR *******************************
+***********************************************************************/
+
+@media (max-width: 719px) {
+  .request .contentRequest {
+    display: flex;
+    display: -webkit-flex; /* Safari */
+    display: -moz-flex; /* mozilla */
+    flex-direction:column;
+    -webkit-flex-direction:column; /* Safari */
+    -moz-flex-direction:column; /* mozilla */
+    height: 78%;
+  }
+
+  .request .header {
+    display: none;
+  }
+
+  .request .contentLeft {
+    /*background-color: grey;*/
+    width: 100%;
+    height: 150px;
+  }
+  .request .contentRight {
+    background-color: red;
+    width: 100%;
+  }
+
+  .request.seleccionSolicitud .contentRight {
+    opacity: 0;
+    transform: translate3d(0,1000%,0);
+    -webkit-transform: translate3d(0,1000%,0);
+    -moz-transform: translate3d(0,1000%,0);
+    -webkit-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+       -moz-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+         -o-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+            transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+  }
+
+  .request.solicitudSeleccionada .listRequest {
+    opacity: 0;
+    transform: translate3d(0,1000%,0);
+    -webkit-transform: translate3d(0,1000%,0);
+    -moz-transform: translate3d(0,1000%,0);
+    -webkit-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+       -moz-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+         -o-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+            transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+  }
+
+  .request.solicitudSeleccionada .contentRight {
+    opacity: 1;
+    transform: translate3d(0,0,0);
+    -webkit-transform: translate3d(0,0,0);
+    -moz-transform: translate3d(0,0,0);
+    -webkit-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+       -moz-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+         -o-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+            transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+  }
+
+
+}
+
+@media (min-width: 720px) {
+  .request .btnBackCel {
+    display: none;
+  }
+}

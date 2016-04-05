@@ -1,179 +1,432 @@
-
-.login .manteinance {
-	display: none;
-	position: fixed;
-	z-index: 9999;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background: black;
-}
-
-.login .manteinance .message {
-	position: relative;
-	display: flex;
-	flex-direction: column;
-	top: 37%;
-	left: 37%;
-	width: 300px;
-	height: 300px;
-	background-color: white;
-}
-
-.login .manteinance p.message {
-	font-family:Arial, Helvetica, sans-serif;
-	font-size:20px;
-}
-
-
-
-.login-container .disclaimer {
-	font-size: 11px;
-}
-
-.login-container .disclaimer a {
-	color: red;
-}
-
-
-.login-container {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background: linear-gradient(45deg, black, #0066A6);
-}
-
-.login-container.hidden {
-	display: none;
-}
-
-
 .login {
-	background-clip: padding-box;
-	background-color: rgba(255, 255, 255, 1);
-	border:10px solid;
-	border-color: rgba(255, 255, 255, 0.3);
-	border-radius: 0.3em;
-	margin: 0.5em auto;
-	margin-top:100px;
-	max-width: 275px;
-	padding: 20px;
-	-webkit-background-clip: padding-box;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:column;
+  -webkit-flex-direction:column; /* Safari */
+  -moz-flex-direction:column; /* mozilla */
+  margin: 0px;
+  padding: 0px;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  min-height: 400px;
+  background-color: black;
 }
 
-.login label {
-	font-family:Arial, Helvetica, sans-serif;
-	font-size:14px;
+/*.login .principal {
+  display: none;
+}*/
 
+/*
+tenia este codigo walter. pero lo comento porque lo hago con ng-show y ng-hide
+.login.logged .contentPreload {
+  display: none;
 }
 
-.login .text {
-	font: 15px arial, sans-serif, bold;
+.login.noLogged .principal {
+  display: none;
+}
+*/
 
+
+
+/***************************** HEADER ********************************/
+
+.login .header {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  height: 60px;
+  background-color: #28292D;
+  color:white;
+  z-index: 999;
 }
 
-.login .margin_div_login{
-	margin-top:5px;
+.login .logo {
+  margin-left: 10px;
 }
 
-.login .name {
-	appearance: none;
-	-webkit-appearance: none;
-	-moz-appearance: none;
-	-o-appearance: none;
-	border-radius: 0.2em;
-	border:1px solid;
-	border-color: #E7DDE9;
-	width: 268px;
-	height:30px;
-	background-color:#F2F2F2;
-	color: #000;
-	margin-top:5px;
-	background-image: url("/views/img/imguser.png");
-	background-repeat: no-repeat;
-	background-position: right center;
-	font-size: 18px;
-	padding-left:5px
+.login .header button {
+  background: none;
+  border:none;
+  color: white;
+  font-size: 20px;
+  margin: 10px;
+  cursor: pointer;
 }
 
-.login .password {
-	appearance: none;
-	-webkit-appearance: none;
-	-moz-appearance: none;
-	-o-appearance: none;
-	border-radius: 0.2em;
-	border:1px solid;
-	border-color: #E7DDE9;
-	width: 268px;
-	height:30px;
-	background-color:#F2F2F2;
-	color: #000;
-	margin-top:5px;
-	background-image: url("/views/img/imglocked.png");
-	background-repeat: no-repeat;
-	background-position: right center;
-	font-size: 18px;
-	padding-left:5px
-
-}
-
-
-.login .loginAction {
-	appearance: none;
-	-webkit-appearance: none;
-	-moz-appearance: none;
-	-o-appearance: none;
-	border-radius: 0.2em;
-	height:30px;
-	background-color: #0066A6;
-	color: #FFF;
-	border:0px;
-	width: 275px;
-	height:30px;
-	margin-top:20px;
-	font-size: 15px;
-	font-family:Arial, Helvetica, sans-serif;
-	font-weight: bold;
-	cursor:pointer;
-}
-
-.login .loginAction:hover{
-	appearance: none;
-	-webkit-appearance: none;
-	-moz-appearance: none;
-	-o-appearance: none;
-	border-radius: 0.2em;
-	height:30px;
-	background-color: #0066A6;
-	color: #FFF;
-	border:0px;
-	width: 275px;
-	height:30px;
-	margin-top:20px;
-	box-shadow: 0px 0px 8px #0066A6;
-	font-size: 15px;
-	font-family:Arial, Helvetica, sans-serif;
-	font-weight: bold;
-}
-
-.login .option {
-	margin-top:20px;
-	font-size:12px, bold;
-	color: #0066A6;
-	text-align: center;
-	font-family:Arial, Helvetica, sans-serif;
+.login .notification {
+  background-color: #EC9122 !important;
+  position: absolute;
+  font-size: 12px !important;
+  border-radius: 10px;
+  z-index: 999;
+  right: 70px;
 
 }
 
-.login .links {
-	color: #0066A6;
-	text-decoration:none;
+.login .notification2 {
+  background-color: #E43E46 !important;
+  position: absolute;
+  font-size: 12px !important;
+  border-radius: 10px;
+  z-index: 999;
+  right: 15px;
+
 }
 
-.login .links:hover {
-	text-decoration:none;
-	text-decoration: underline;
+/********************* CONTENEDOR *******************************/
+
+.login .main {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  height: 100%;
+  width: 100%;
+  /*background-color: #EEEEEE;*/
+  /*background-image: url('/views/img/fondo1.jpg');*/
+  resize: none;
+}
+
+.login .video {
+  position: absolute;
+  width: 1920px;
+  height: 1080px;
+  z-index: -999;
+  resize: none;
+}
+
+
+
+.login .contentLogin {
+  border: 10px solid;
+  border-color: rgba(255, 255, 255, 0.3);
+  border-radius: 0.3em;
+  z-index: 999;
+  width: 280px;
+}
+
+.login .user {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:column;
+  -webkit-flex-direction:column; /* Safari */
+  -moz-flex-direction:column; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: space-around;
+  -webkit-justify-content: space-around;
+  -moz-justify-content: space-around;
+  background-color: white;
+  height: 300px;
+  border: 1px solid #EEEEEE;
+}
+
+.login .contentAvatars {
+  position: relative;
+
+}
+
+.login .contentAvatar {
+  position: relative;  top: 0px;
+}
+
+.login .contentAvatarUser {
+  position: absolute;  top: 0px;
+}
+
+.login.screenUser .contentAvatarUser {
+  opacity:  0 !important;
+}
+
+.login.screenPassword .contentAvatarUser {
+  opacity:  1 !important;
+  -webkit-transition-duration:0.3s;
+  -moz-transition-duration: 0.3s;
+  -o-transition-duration: 0.3s;
+  transition-duration: .0.3s;
+}
+
+.login .avatar {
+  width: 100px;
+  height: 100px;
+  background-color: #EEEEEE;
+  border-radius: 100px;
+  border: 1px solid #d3cdcd;
+}
+
+.login .textUser {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:column;
+  -webkit-flex-direction:column; /* Safari */
+  -moz-flex-direction:column; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  color:#28292D;
+  width: 100%;
+}
+
+.login .contentPassword {
+  width: 80%;
+}
+
+.login .inputPassword, .inputUser {
+  width: 210px;
+  height: 23px;
+  border: 1px solid #DBE2E5;
+  background-color: #EEEEEE;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  font-size: 20px;
+  padding: 5px;
+  text-align: center;
+
+}
+
+.login .textPasswordError {
+  color: #E43E46;
+  font-size: 12px;
+}
+
+.login .btnPassword, .btnNext {
+  padding: 10px;
+  width: 223px;
+  font-size: 14px;
+  background-color: #0066A6;
+  color: white;
+  border: 1px solid #EEEEEE;
+  cursor: pointer;
+  margin-top: 5px;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+}
+
+.login .btnPassword:hover, .btnNext:hover {
+  background-color: #075382;
+}
+
+.login.screenUser.ocultarError .contentUserNonExistent {
+  display: none;
+}
+
+.login.screenPassword.ocultarError .contentErrorPassword {
+  display: none;
+}
+
+.login.screenUser .contentUserNonExistent, .contentErrorPassword {
+  position: absolute;
+  margin-top: 2px;
+  width: 223px;
+  background-color: white;
+}
+
+.login .arrow {
+  color: #E43E46;
+  background-color: white;
+  height: 10px;
+  margin-left: 20px;
+}
+
+.login .textUserNonExistent {
+  background-color: #E43E46;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  padding: 10px;
+  color:white;
+}
+
+.login .textUserNonExistent2 {
+  font-size: 13px;
+}
+
+.login .textNoPuedoAcceder {
+  font-size: 12px;
+  cursor: pointer;
+  color: #28292D;
+  opacity: 0;
+}
+
+
+::-webkit-input-placeholder { color: #ACADB1; font-size: 14px;}
+:-moz-placeholder { color: #ACADB1; opacity:  1; font-size: 14px;}
+::-moz-placeholder { color: #ACADB1; opacity:  1; font-size: 14px;}
+:-ms-input-placeholder { color: #ACADB1; font-size: 14px;}
+:placeholder-shown { color: #ACADB1;  font-size: 14px;}
+
+.login .inputPassword::-webkit-input-placeholder { color:#ACADB1; padding-top: 4px;}
+.login .inputPassword::-moz-input-placeholder { color:#ACADB1; padding-top: 4px;}
+
+
+/********************* FOOTER **********************************/
+
+.login .footer {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  height: 20px;
+  background-color: #28292D;
+  color: #DBE2E5;
+  font-size: 10px;
+  padding-left: 5px;
+  z-index: 999;
+}
+
+
+/*********************** VISTAS *****************************/
+
+.login.screenUser .contentTextUserName,
+.login.screenUser .contentInputPassword,
+.login.screenUser .contentBtnPassword,
+.login.screenUser .contentErrorPassword {
+    display: none;
+}
+.login.screenUser .textPasswordError {
+  display: none;
+}
+
+.login.screenPassword .contentTextUser,
+.login.screenPassword .contentInputUser,
+.login.screenPassword .contentBtnNext,
+.login.screenPassword .contentUserNonExistent {
+    display: none;
+}
+.login.screenPassword .textPasswordError {
+  display: none;
+}
+
+.login.screenPasswordError .textPasswordError {
+
+}
+
+.login.screenUser .textNoPuedoAcceder {
+  opacity: 0;
+}
+/******************** MEDIA QUERIS ***************************/
+
+@media (max-width: 720px){
+  .login .footer {
+      display: none;
+  }
+
+  .login .video {
+    display: none;
+  }
+
+}
+
+@media (max-height: 500px){
+  .login .footer {
+      display: none;
+  }
+  .login .video {
+    display: none;
+  }
+}
+
+/*****************************************************************
+*****************  NOTIFICACIONES ********************************
+*****************************************************************/
+
+
+
+/*********** SERVER ******************/
+
+.login.verServerConectado .access {
+  display: none;
+}
+
+.login .serverDesconectado {
+  position: absolute;
+  width: 300px;
+  height: 0px;
+  background-color: none;
+  z-index: 999;
+  top: 35px;
+  right: 10px;
+  transition: all 0.2s ease-in-out;
+  opacity: 0;
+}
+
+.login.verServerDesconectado .serverDesconectado {
+  height: 120px;
+  transition: all 0.2s ease-in-out;
+  opacity: 1;
+}
+
+.login .textReconectando {
+  font-size: 12px;
+}
+
+
+.login .arrowServer {
+  color: #E43E46;
+  height: 12px;
+  margin-left: 270px;
+}
+
+.login .headerServer {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  background-color: #E43E46;
+  height: 60px;
+  border-radius: 5px 5px 0px 0px;
+  color: white;
+  font-size: 20px;
+}
+
+.login .contentServer {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:column;
+  -webkit-flex-direction:column; /* Safari */
+  -moz-flex-direction:column; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  background-color: #EEEEEE;
+  height: 100%;
+  font-size: 20px;
+  color: #3A3C44;
+  box-shadow: 1px 1px 5px #5c5f69;
+  -webkit-box-shadow: 1px 1px 5px #5c5f69;
+  -moz-box-shadow: 5px 5px 5px #5c5f69;
 }

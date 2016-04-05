@@ -40,6 +40,15 @@
       </div>
     </div>
 
+    <div class="item">
+      <div class="titleItem">
+        Prioridad:
+      </div>
+      <div class="inputItem">
+        <input type="number" ng-model="data.userData.priority" min="0"/>
+      </div>
+    </div>
+
   </div>
 
   <div class="contentButtons">
@@ -48,6 +57,9 @@
     </div>
     <div class="itemButton">
       <button class="btnSend3" ng-click='saveProfile()'> <i class="fa fa-floppy-o"></i> GUARDAR</button>
+    </div>
+    <div class="itemButton">
+      <button class="btnSend3" ng-click='deleteInscription()'> <i class="fa fa-floppy-o"></i> BORRAR</button>
     </div>
   </div>
 </div>

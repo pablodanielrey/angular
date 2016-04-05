@@ -29,7 +29,18 @@ class LoginWamp(ApplicationSession):
         logging.debug('registering methods')
         yield from self.register(self.login_async, 'system.login')
         yield from self.register(self.logout_async, 'system.logout')
+        yield from self.register(self.testUser_async, 'system.testUser')
         yield from self.register(self.validateSession_async, 'system.session.validate')
+        yield from self.register(self.hasOneRole_async, 'system.profile.hasOneRole')
+
+
+    def testUser(self, username):
+        con = self.conn.get()
+        try:
+            return self.loginModel.testUser(con, username)
+
+        finally:
+            self.conn.put(con)
 
     '''
         valida que la session sid exista
@@ -81,6 +92,33 @@ class LoginWamp(ApplicationSession):
 
         finally:
             self.conn.put(con)
+
+    '''
+        Verifica que tenga al menos un rol
+    '''
+    def hasOneRole(self, sid, roles= []):
+        con = self.conn.get()
+        try:
+            return self.loginModel.hasOneRole(con, sid, roles)
+
+        except Exception as e:
+            logging.exception(e)
+            return False
+
+        finally:
+            self.conn.put(con)
+
+    @coroutine
+    def testUser_async(self, username):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.testUser, username)
+        return r
+
+    @coroutine
+    def hasOneRole_async(self, sid, roles):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.hasOneRole, sid, roles)
+        return r
 
     @coroutine
     def login_async(self, username, password):

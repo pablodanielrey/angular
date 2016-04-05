@@ -8,13 +8,14 @@ import re
 from model.registry import Registry
 from model.login.session import Session, SessionDAO
 from model.login.profiles import Profile, ProfileDAO
+# from model.users.users import UserPassword, UserPasswordDAO, User, UserDAO, UserModel
 from model.users.users import UserPassword, UserPasswordDAO, User, UserDAO
 
 class Login:
 
     reg = inject.attr(Registry)
     userPassword = inject.attr(UserPasswordDAO)
-    users = inject.attr(User)
+    # users = inject.attr(UserModel)
     sessions = inject.attr(SessionDAO)
     profiles = inject.attr(ProfileDAO)
 
@@ -45,6 +46,11 @@ class Login:
         assert sId is not None
         ss = self.sessions.findById(con, [sId])
         return ss[0].userId
+
+    def testUser(self, con, username):
+        assert username is not None
+        up = self.userPassword.findByUsername(con, username)
+        return len(up) > 0
 
     def login(self, con, username, password):
         assert username is not None

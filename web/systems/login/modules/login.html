@@ -1,47 +1,111 @@
-<div class='login'>
-
-	<div class='manteinance'>
-		<div class='message'>
-			<p>Se están realizando tareas de mantenimiento en el sistema</p>
-			<p>El funcionamiento normal se restablecera a la brevedad</p>
-			<p>Sepa disculpar las molestias</p>
-		</div>
-	</div>
+<!-- <div class="login {{view.classScreen}}  {{view.classConnection}} usuarioNoExiste"> -->
+  <!-- VARIABLES 1: screenUser, screenPassword -VARIABLES 2:  verServerDesconectado, verServerConectado - VARIABLES 3: ocultarError-->
+<div class="login {{view.classScreen}}  {{view.classConnection}} {{view.classError}}">
+   <!-- Variables 1: screenUser, screenPassword -Variables 2:  verServerDesconectado, verServerConectado-->
 
 
-	<div class="logo">
-		<img src="/logo.jpg" />
-	</div>
+  <div class="contentHeader" ng-include="'/systems/login/modules/header/header.html'"></div>
 
-	<form ng-submit='login()'>
+    <video loop muted autoplay class="video" >
+            <source class="video2" src="/systems/login/img/video.mp4" type="video/mp4" width="100%" height="100%">
+    </video>
 
-		<div>
-			<div class="margin_div_login">
-				<label class="text"> Usuario (DNI)</label>
-				<input class="name" type="text" ng-model="model.username" autofill='autofill'/>
-			</div>
+    <div class="main">
 
-			<div class="margin_div_login">
-				<label class="text"> Contraseña</label>
-				<input class="password" type="password" ng-model="model.password" autofill='autofill'/>
-			</div>
-		</div>
+        <div class="contentLogin">
+            <div class="user">
+                <div>
+                    <div class="contentAvatars">
+                        <div class="contentAvatar">
+                          <img class="avatar" src="modules/img/imgUser.jpg" >
+                        </div>
+                        <div class="contentAvatarUser">
+                          <img class="avatar" src="modules/img/imgUser.jpg" >
+                        </div>
+                    </div>
+                    <div class="contentTextUser">
+                        <div class="textUser">
+                            Usuario
+                        </div>
+                    </div>
+                    <div class="contentTextUserName">
+                        <div class="textUser">
+                            {{model.user.name}} {{model.user.lastname}}
+                        </div>
+                    </div>
 
-		<div>
-			<input type="submit" class="loginAction" value="Enviar"/>
-		</div>
+                </div>
 
-		<div class="option">
-			<span><a class="links" href="http://fce.econo.unlp.edu.ar/systems/pass/resetPassword.html"> Olvidé mi contraseña </a></span>
-		<div>
+                <div class="contentPassword">
+                    <form name="formUser" ng-submit="sendUsername()">
 
-	</form>
+                      <div class="contentInputUser">
+                        <input ng-model="model.username" class="inputUser" type="text" placeholder="Número de documento" autofocus moo-focus-expression="view.focus == 'inputUser'"></imput>
+                      </div>
 
-<!--
-		<div class="disclaimer">
-			<p>Este sistema es seguro</p>
-			<p>Para que funcione adecuadamente debe importar como autoridad <a class="links" href="/rootCA.crt">este</a> certificado</p>
-		</div>
--->
+                      <div class="contentUserNonExistent">
+                          <div class="arrow">
+                            <i class="fa fa-sort-asc fa-2x"></i>
+                          </div>
+                          <div class="textUserNonExistent">
+                            <i class="fa fa-frown-o"></i> Oops! <span class="textUserNonExistent2"> El usuario no existe</span>
+                          </div>
+                      </div>
+
+                      <div class="contentBtnNext">
+                        <input class="btnNext" type="submit" name="button" value="Siguiente"/>
+                      </div>
+                    </form>
+
+                    <form name="formPassword" ng-submit="sendPassword()">
+
+                      <div class="contentInputPassword">
+                        <input ng-model="model.password" class="inputPassword"  type="password" placeholder="Contraseña" autofocus moo-focus-expression="view.focus == 'inputPassword'"></imput>
+                      </div>
+
+                      <div class="contentErrorPassword">
+                          <div class="arrow">
+                            <i class="fa fa-sort-asc fa-2x"></i>
+                          </div>
+                          <div class="textUserNonExistent">
+                            <i class="fa fa-frown-o"></i> Oops! <span class="textUserNonExistent2"> Contraseña incorrecta</span>
+                          </div>
+                      </div>
+
+                      <div class="contentBtnPassword">
+                        <input class="btnPassword" type="submit" name="button" value="Acceder"/>
+                      </div>
+
+                    </form>
+
+                    <!-- <div class=textPasswordError>
+                      ¡La contraseña no es correcta!
+                    </div> -->
+
+                </div>
+                <div class="textNoPuedoAcceder">
+                    olvidé mi contraseña
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="serverDesconectado">
+      <div class="arrowServer">
+        <i class="fa fa-sort-asc fa-2x"></i>
+      </div>
+      <div class="headerServer">
+        <i class="fa fa-server"></i> &nbsp; Estado del servidor
+      </div>
+      <div class="contentServer">
+        <div><i class="fa fa-cog fa-spin fa-2x"></i></div>
+        <div>Servidor desconectado</div>
+        <div class="textReconectando">Reconectando, por favor espere...</div>
+      </div>
+    </div>
+
+    <div class="contentFooter" ng-include="'/systems/login/modules/footer/footer.html'"></div>
+
 
 </div>

@@ -11,8 +11,10 @@ import uuid
 import os
 from model.laboralinsertion.laboralInsertion import LaboralInsertion
 from model.laboralinsertion.inscription import Inscription
-from model.laboralinsertion.company import Company, CompanyDAO
+from model.laboralinsertion.company import Company, CompanyDAO, Contact
 from model.laboralinsertion.languages import Language
+from model.laboralinsertion.filters import Filter
+
 import model.laboralinsertion
 from model.laboralinsertion.mails import Sent, SentDAO
 from model.users.users import UserDAO
@@ -179,8 +181,10 @@ class LaboralInsertionWamp(ApplicationSession):
         yield from self.register(self.persistInscriptionByUser_async, 'system.laboralInsertion.persistInscriptionByUser')
         yield from self.register(self.deleteInscriptionById_async, 'system.laboralInsertion.deleteInscriptionById')
         yield from self.register(self.sendMailToCompany_async, 'system.laboralInsertion.sendEmailToCompany');
-        yield from self.register(self.findAllCompanies_async, 'system.laboralInsertion.company.findAll');
         yield from self.register(self.findSentByInscriptionId_async, 'system.laboralInsertion.sent.findByInscription');
+        yield from self.register(self.getFilters_async, 'system.laboralInsertion.getFilters');
+        yield from self.register(self.findAllCompanies_async, 'system.laboralInsertion.company.findAll');
+        yield from self.register(self.persistCompany_async, 'system.laboralInsertion.company.persist');
 
 
     def persist(self, data):
@@ -235,12 +239,22 @@ class LaboralInsertionWamp(ApplicationSession):
         finally:
             self.conn.put(con)
 
-    def findAllInscriptions(self):
+    def findAllInscriptions(self, filters):
         con = self.conn.get()
         try:
-            data = self.laboralInsertion.findAllInscriptions(con)
+            filterss = Filter.fromMapList(filters)
+            data = self.laboralInsertion.findAllInscriptions(con, filterss)
             insc = [ i.__dict__ for i in data ]
             return insc
+
+        finally:
+            self.conn.put(con)
+
+    def getFilters(self):
+        con = self.conn.get()
+        try:
+            data = self.laboralInsertion.getFilters()
+            return data
 
         finally:
             self.conn.put(con)
@@ -280,12 +294,10 @@ class LaboralInsertionWamp(ApplicationSession):
         finally:
             self.conn.put(con)
 
-    def sendMailToCompany(self, inscriptions, company):
+    def sendMailToCompany(self, inscriptions, emails):
         con = self.conn.get()
         try:
-            c = Company()
-            c.__dict__ = company
-            data = self.laboralInsertion.sendMailToCompany(con, inscriptions, c)
+            data = self.laboralInsertion.sendMailToCompany(con, inscriptions, emails)
             self.publish('system.laboralInsertion.COMPANYSENDED', data)
             return True
 
@@ -296,9 +308,17 @@ class LaboralInsertionWamp(ApplicationSession):
         con = self.conn.get()
         try:
             ids = CompanyDAO.findAll(con)
-            cs = CompanyDAO.findById(con, ids)
-            css = [c.__dict__ for c in cs]
-            return css
+            return CompanyDAO.findById(con, ids)
+
+        finally:
+            self.conn.put(con)
+
+    def persistCompany(self, company):
+        con = self.conn.get()
+        try:
+            id = CompanyDAO.persist(con, company)
+            con.commit()
+            return id
 
         finally:
             self.conn.put(con)
@@ -364,9 +384,15 @@ class LaboralInsertionWamp(ApplicationSession):
         return r
 
     @coroutine
-    def findAllInscriptions_async(self):
+    def findAllInscriptions_async(self, filters):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.findAllInscriptions)
+        r = yield from loop.run_in_executor(None, self.findAllInscriptions, filters)
+        return r
+
+    @coroutine
+    def getFilters_async(self):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.getFilters)
         return r
 
     @coroutine
@@ -403,6 +429,12 @@ class LaboralInsertionWamp(ApplicationSession):
     def findAllCompanies_async(self):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.findAllCompanies)
+        return r
+
+    @coroutine
+    def persistCompany_async(self, data):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.persistCompany, data)
         return r
 
     @coroutine

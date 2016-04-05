@@ -9,7 +9,7 @@ if __name__ == '__main__':
     import inject
     sys.path.insert(0, '../python')
 
-    logging.basicConfig(level=logging.INFO)
+    logging.basicConfig(level=logging.DEBUG)
 
     from autobahn.asyncio.wamp import ApplicationRunner
     from actions.users.users import UsersWamp
@@ -23,5 +23,5 @@ if __name__ == '__main__':
     realm = registry.get('realm')
     debug = registry.get('debug')
 
-    runner = ApplicationRunner(url=url, realm=realm, debug=debug, debug_wamp=debug, debug_app=debug)
+    runner = ApplicationRunner(url=url, realm=realm)
     runner.run(UsersWamp)

@@ -1,7 +1,33 @@
 # -*- coding: utf-8 -*-
+import re
+import logging
+import json
+import sys
 
+from model.laboralinsertion.languages import LanguageDAO
 
 class Filter:
+
+    @classmethod
+    def fromMapList(cls, ls):
+        result = []
+        for f in ls:
+            for sub in cls.__subclasses__():
+                if f['filter'] == sub.__name__:
+                    o = sub._fromMap(f['data'])
+                    if o is not None:
+                        result.append(o)
+        return result
+
+    @classmethod
+    def _fromMap(cls, m):
+        try:
+            c = cls()
+            c.__dict__ = m
+            return c
+        except Exception as e:
+            logging.exception(e)
+            return None
 
     @staticmethod
     def _groupFilters(filters=[]):
@@ -14,14 +40,14 @@ class Filter:
         return groups
 
     @staticmethod
-    def apply(ls, filters=[]):
+    def apply(con, ls, filters=[]):
         ''' aplica los filtros indicados a una lista de inscripciones '''
         groups = Filter._groupFilters(filters)
         result = None
         for k in groups.keys():
             s = set()
             for f in groups[k]:
-                lss = f.filter(ls)
+                lss = f.filter(con, ls)
                 s = s.union(lss)
 
             if result is None:
@@ -31,9 +57,18 @@ class Filter:
 
         return result
 
+    def filter(self, con, ls):
+        return self._filter(con, ls)
 
-    def filter(self, list):
-        return self._filter(list)
+
+class FInscriptionDate(Filter):
+
+    def __init__(self):
+        self.ffrom = None
+        self.to = None
+
+    def _filter(self, con, inscriptions):
+        return [ i for i in inscriptions if i.created >= self.ffrom and i.created <= self.to ]
 
 
 class FDegree(Filter):
@@ -41,61 +76,125 @@ class FDegree(Filter):
     def __init__(self):
         self.degree = 'Lic. En Economía'
 
-    def _filter(self, inscriptions):
+    def _filter(self, con, inscriptions):
         return [ i for i in inscriptions if i.degree == self.degree ]
 
 
-class FInscriptionDate(Filter):
+class FOffer(Filter):
 
-    def __init__(self, date = None):
-        if date is None:
-            import datetime
-            self.date = datetime.datetime.now()
-        else:
-            self.date = date
+    def __init__(self):
+        self.offer = ''
 
-    def _filter(self, inscriptions):
-        return [ i for i in inscriptions if i.created.date().year == self.date.date().year ]
+    def _filter(self, con, inscriptions):
+        return [ i for i in inscriptions if i.workType == self.offer ]
 
 
-if __name__ == '__main__':
+class FWorkExperience(Filter):
 
-    import datetime
-    fs = [ FInscriptionDate(), FDegree(), FInscriptionDate(datetime.datetime.now() - datetime.timedelta(hours = -1 * 24 * 365)) ]
+    def __init__(self):
+        self.workExperience = True
 
-    import jsonpickle
-    import sys
+    def _filter(self, con, inscriptions):
+        return [ i for i in inscriptions if i.workExperience == self.workExperience ]
 
-    print(jsonpickle.encode(fs))
-    sys.exit(1)
 
-    from inscription import Inscription
-    ins = Inscription()
-    ins.degree = 'Lic. En Economía'
-    ins.created = datetime.datetime.now()
-    inss = []
-    inss.append(ins)
+class FGenre(Filter):
 
-    ins = Inscription()
-    ins.degree = 'Lic. En Economía'
-    ins.created = datetime.datetime.now() - datetime.timedelta(hours = -2 * 24 * 365)
-    inss.append(ins)
+    def __init__(self):
+        self.genre = 'Masculino'
 
-    ins = Inscription()
-    ins.degree = 'Lic. En Economí2a'
-    ins.created = datetime.datetime.now()
-    inss.append(ins)
+    def _filter(self, con, inscriptions):
+        return [ i for i in inscriptions if i.getUser(con).genre == self.genre ]
 
-    ins = Inscription()
-    ins.degree = 'Lic. En Economía2'
-    ins.created = datetime.datetime.now() - datetime.timedelta(hours = -2 * 24 * 365)
-    inss.append(ins)
 
-    ins = Inscription()
-    ins.degree = 'Lic. En Economía'
-    ins.created = datetime.datetime.now() - datetime.timedelta(hours = -1 * 24 * 365)
-    inss.append(ins)
+class FAge(Filter):
 
-    fi = Filter.apply(inss, fs)
-    for i in fi:
-        print(i.__dict__)
+    def __init__(self):
+        self.beginAge = 0
+        self.endAge = 0
+
+    def _filter(self, con, inscriptions):
+        return [ i for i in inscriptions if FAge._age(i.getUser(con).birthdate) >= self.beginAge and FAge._age(i.getUser(con).birthdate) <= self.endAge ]
+
+    @staticmethod
+    def _age(birthdate):
+        import datetime
+        if (birthdate is None):
+            return 0
+        return (datetime.date.today() - birthdate).days / 365
+
+
+class FResidence(Filter):
+
+    def __init__(self):
+        self.city = 'La Plata'
+
+    def _filter(self, con, inscriptions):
+        return [ i for i in inscriptions if i.getUser(con).residence_city == self.city ]
+
+
+class FCity(Filter):
+
+    def __init__(self):
+        self.city = 'La Plata'
+
+    def _filter(self, con, inscriptions):
+        return [ i for i in inscriptions if i.getUser(con).city == self.city ]
+
+class FTravel(Filter):
+
+    def __init__(self):
+        self.travel = True
+
+    def _filter(self, con, inscriptions):
+        return [ i for i in inscriptions if i.travel == self.travel ]
+
+class FLanguage(Filter):
+
+    def __init__(self):
+        self.language = "Inglés"
+        self.level = None
+
+    def _filter(self, con, inscriptions):
+        return [ i for i in inscriptions if FLanguage._includeLanguages(con, self.language, self.level, i.getLanguages(con)) ]
+
+    @staticmethod
+    def _includeLanguages(con, language, level, languages):
+        for lid in languages:
+            l = LanguageDAO.findById(con, lid)
+            if l.name == language and (level == None or l.level == level):
+                return True
+        return False
+
+class FCountCathedra(Filter):
+
+    def __init__(self):
+        self.begin = 0
+        self.end = 0
+
+    def _filter(self, con, inscriptions):
+        return [ i for i in inscriptions if i.approved >= self.begin and  i.approved <= self.end]
+
+class FAverageFails(Filter):
+
+    def __init__(self):
+        self.begin = 0
+        self.end = 0
+
+    def _filter(self, con, inscriptions):
+        return [ i for i in inscriptions if i.average2 >= self.begin and  i.average2 <= self.end]
+
+class FAverage(Filter):
+
+    def __init__(self):
+        self.begin = 0
+        self.end = 0
+
+    def _filter(self, con, inscriptions):
+        return [ i for i in inscriptions if i.average1 >= self.begin and  i.average1 <= self.end]
+
+class FPriority:
+
+    def __init__(self):
+        self.ffrom = 0
+        self.to = 0

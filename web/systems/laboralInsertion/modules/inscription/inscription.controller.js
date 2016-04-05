@@ -2,9 +2,9 @@ angular
   .module('mainApp')
   .controller('InscriptionCtrl', InscriptionCtrl);
 
-InscriptionCtrl.inject = ['$rootScope', '$scope', '$wamp', 'LaboralInsertion', 'Login', 'Users', 'Student', 'Notifications', 'Files']
+InscriptionCtrl.inject = ['$rootScope', '$scope', '$timeout', '$wamp', 'LaboralInsertion', 'Login', 'Users', 'Student', 'Notifications', 'Files']
 
-function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Users, Student, Notifications, Files) {
+function InscriptionCtrl($rootScope, $scope, $timeout, $wamp, LaboralInsertion, Login, Users, Student, Notifications, Files) {
 
   $scope.boolToStr = function(arg) {
     if (arg == null) {
@@ -51,6 +51,7 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
       telephone:'',
       movil:''
     },
+    telephoneRequired:true,
 
     user: {
       name:'',
@@ -93,6 +94,12 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
     }
 
   };
+
+  $scope.view = {
+    styleIsMessage: '',
+    styleMessage: '',
+    error: []
+  }
 
   $scope.getUserPhoto = function() {
     if ($scope.model.user.photo == null || $scope.model.user.photo == '') {
@@ -191,14 +198,34 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
   $scope.$watch(function() { return $scope.model.laboralData.email; }, function(o,n) { $scope.checkInscriptionPreconditions(); });
   $scope.$watch(function() { return $scope.model.laboralData.cv; }, function(o,n) { $scope.checkInscriptionPreconditions(); });
 
+  $scope.$watch(function() {return $scope.model.telephones.telephone;}, function(o,n) {
+    $scope.model.telephoneRequired = ($scope.model.telephones.movil == null ||$scope.model.telephones.movil == "") &&
+                                     ($scope.model.telephones.telephone == null || $scope.model.telephones.telephone == "");
+  });
+
+
+  $scope.$watch(function() {return $scope.model.telephones.movil;}, function(o,n) {
+    $scope.model.telephoneRequired = ($scope.model.telephones.movil == null ||$scope.model.telephones.movil == "") &&
+                                     ($scope.model.telephones.telephone == null || $scope.model.telephones.telephone == "");
+  });
+
   $scope.$watch(function() { return $scope.model.mails.emails;}, function(o,n) {
-    for (var i = 0; i < $scope.model.mails.emails.length; i++) {
-      var m = $scope.model.mails.emails[i];
-      if ($scope.model.laboralData.email == m.id) {
-        $scope.model.selectedEmail = m;
-        break;
+    if ($scope.model.mails == null || $scope.model.mails.emails == null || $scope.model.mails.emails.length <= 0) {
+      return
+    }
+    if ($scope.model.laboralData.email == null || $scope.model.laboralData.email == "") {
+      $scope.model.selectedEmail = $scope.model.mails.emails[0];
+      $scope.updateLaboralData();
+    } else {
+      for (var i = 0; i < $scope.model.mails.emails.length; i++) {
+        var m = $scope.model.mails.emails[i];
+        if ($scope.model.laboralData.email == m.id) {
+          $scope.model.selectedEmail = m;
+          break;
+        }
       }
     }
+
   });
 
   $scope.checkInscriptionPreconditions = function() {
@@ -320,6 +347,8 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
     $scope.model.finish = false;
     var ok = $scope.checkUserData();
     if (!ok) {
+      $scope.view.styleIsMessage = 'mensajes';
+      $scope.view.styleMessage = 'msjError';
       return;
     }
 
@@ -329,6 +358,11 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
     $scope.model.offer.degree = 'Seleccionar';
 
     $scope.checkInscriptionPreconditions();
+  }
+
+  $scope.closeMessage = function() {
+    $scope.view.styleIsMessage = '';
+    $scope.view.styleMessage = '';
   }
 
   $scope.endInscription = function() {
@@ -369,7 +403,7 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
   }
 
   $scope.findUserData = function() {
-    var uid = Login.getUserId();
+    var uid = $scope.userId;
     $scope.model.laboralData.id = uid;
 
     Student.findById(uid).then(function(student) {
@@ -378,12 +412,15 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
       }
     });
 
-    Users.findUser(uid, function(user) {
-      $scope.formatUserToView(user);
-      $scope.model.user = user;
-    }, function(err) {
-      console.log(err);
-    })
+    Users.findById([uid])
+      .then(function(users) {
+        if (users != null && users.length > 0) {
+          $scope.formatUserToView(users[0]);
+          $scope.model.user = users[0];
+        }
+      }, function(err) {
+          console.log(err);
+    });
 
     Users.findMails(uid, function(mails) {
       $scope.model.mails.emails = mails;
@@ -429,15 +466,20 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
 
     // corrijo la info de los telefonos para el formato de la llamada.
     $scope.model.user['telephones'] = [];
-    $scope.model.user.telephones.push({
-      number:$scope.model.telephones.telephone,
-      type:'residence'
-    });
-    $scope.model.user.telephones.push({
-      number:$scope.model.telephones.movil,
-      type:'movil'
-    });
 
+    if ($scope.model.telephones.telephone != null && $scope.model.telephones.telephone.trim() != "") {
+      $scope.model.user.telephones.push({
+        number: $scope.model.telephones.telephone,
+        type: 'residence'
+      });
+    }
+
+    if ($scope.model.telephones.movil != null && $scope.model.telephones.movil.trim() != "") {
+      $scope.model.user.telephones.push({
+        number: $scope.model.telephones.movil,
+        type: 'movil'
+      });
+    }
 
     Users.updateUser($scope.model.user, function(res) {
 
@@ -456,6 +498,7 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
     if (ld.cv == undefined || ld.cv == '') {
       delete ld.cv;
     }
+    console.log(ld);
     LaboralInsertion.persist(ld).then(null,function(err) {console.log(err)});
   }
 
@@ -468,27 +511,75 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
     */
 
     var ok = true;
+    $scope.view.error = [];
 
     var form = $scope.dataBasic;
 
+    if (!form.name.$valid) {
+      $scope.view.error.push("Debe ingresar su nombre");
+    }
     ok = ok && form.name.$valid;
+
+    if (!form.lastname.$valid) {
+      $scope.view.error.push("Debe ingresar su apellido");
+    }
     ok = ok && form.lastname.$valid;
+
+    if (!form.dni.$valid) {
+      $scope.view.error.push("Número de documento incorrecto");
+    }
     ok = ok && form.dni.$valid;
+
+    if (!form.student_number.$valid) {
+      $scope.view.error.push("Número de legajo incorrecto");
+    }
     ok = ok && form.student_number.$valid;
+
+    if (!form.birthdate.$valid) {
+      $scope.view.error.push("Debe seleccionar un fecha de nacimiento");
+    }
     ok = ok && form.birthdate.$valid;
+
+    if (!form.genre.$valid) {
+      $scope.view.error.push("Debe seleccionar el género");
+    }
     ok = ok && form.genre.$valid;
+
+    if (!form.residence_city.$valid) {
+      $scope.view.error.push("Debe ingresar la ciudad de residencia");
+    }
     ok = ok && form.residence_city.$valid;
+
+    if (!form.address.$valid) {
+      $scope.view.error.push("Debe ingresar la dirección");
+    }
     ok = ok && form.address.$valid;
+
+    if (!form.birth_city.$valid) {
+      $scope.view.error.push("Debe ingresar la ciudad de nacimiento");
+    }
     ok = ok && form.birth_city.$valid;
+
+    if (!form.country.$valid) {
+      $scope.view.error.push("El país ingresado es incorrecto");
+    }
     ok = ok && form.country.$valid;
 
     // chequeo que los telefonos sean validos y que por lo menos haya uno.
     ok = ok && form.movil.$valid;
     ok = ok && form.telephone.$valid;
-    ok = ok && ($scope.model.telephones.telephone != '' || $scope.model.telephones.movil != '');
+
+    var validTel = ($scope.model.telephones.telephone != '' || $scope.model.telephones.movil != '');
+    if (!validTel || !form.movil.$valid || !form.telephone.$valid) {
+      $scope.view.error.push("Debe ingresar al menos un teléfono");
+    }
+    ok = ok && validTel;
 
     // chequeo que tenga un email seleccionado de contacto
-    ok = ok && ($scope.model.mails.email != '');
+    if ($scope.model.selectedEmail == null) {
+      $scope.view.error.push("Debe seleccionar un e-mail");
+    }
+    ok = ok && ($scope.model.selectedEmail != null);
 
     return ok;
   }
@@ -496,7 +587,8 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
 
   $scope.uploadInscription = function() {
 
-    var userId = Login.getUserId();
+    var userId = $scope.userId;
+
 
     //// ESTO SE ELIMINA TODOOO //////
     var ld = JSON.parse(JSON.stringify($scope.model.laboralData))
@@ -522,11 +614,22 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
     $scope.getInscriptions();
   }
 
+  function filterDeleted(inscriptions) {
+    var active = Array();
+    for (var i = 0; i < inscriptions.length; i++) {
+      if (!inscriptions[i].deleted) {
+        active.push(inscriptions[i]);
+      }
+    }
+    return active;
+  }
+
   $scope.getInscriptions = function() {
-    var userId = Login.getUserId();
+    var userId = $scope.userId;
     LaboralInsertion.findAllInscriptionsByUser(userId)
       .then(function(data) {
-        $scope.model.inscriptionsData = data;
+        var data2 = filterDeleted(data)
+        $scope.model.inscriptionsData = data2;
       }, function(err) {
         console.log(err);
       });
@@ -612,7 +715,14 @@ function InscriptionCtrl($rootScope, $scope, $wamp, LaboralInsertion, Login, Use
 
 
   $scope.$on('$viewContentLoaded', function(event) {
-    $scope.initialize();
+    $scope.userId = '';
+    Login.getSessionData()
+      .then(function(s) {
+          $scope.userId = s.user_id;
+          $scope.initialize();
+      }, function(err) {
+        console.log(err);
+      });
   });
 
 

@@ -9,8 +9,12 @@ function LaboralInsertion($rootScope,$wamp,Session) {
 
   /*
   */
-  this.findAllInscriptions = function() {
-    return $wamp.call('system.laboralInsertion.findAllInscriptions');
+  this.findAllInscriptions = function(filters) {
+    return $wamp.call('system.laboralInsertion.findAllInscriptions',[filters]);
+  }
+
+  this.getFilters = function() {
+    return $wamp.call('system.laboralInsertion.getFilters');
   }
 
   /**
@@ -52,8 +56,8 @@ function LaboralInsertion($rootScope,$wamp,Session) {
   /*
     envía un mail a la empresa con los usuarios seleccionados.
   */
-  this.sendEmailToCompany = function(inscriptions, company) {
-    return $wamp.call('system.laboralInsertion.sendEmailToCompany', [inscriptions, company])
+  this.sendEmailToCompany = function(inscriptions, emails) {
+    return $wamp.call('system.laboralInsertion.sendEmailToCompany', [inscriptions, emails])
   }
 
   /*
@@ -61,6 +65,43 @@ function LaboralInsertion($rootScope,$wamp,Session) {
   */
   this.findAllCompanies = function() {
     return $wamp.call('system.laboralInsertion.company.findAll')
+  }
+
+  this.normalizeContacts = function(contacts) {
+    ret = []
+    for (var i = 0; i < contacts.length; i++) {
+      c = contacts[i];
+      if (!('__json_module__' in c)) {
+        c.__json_module__ =  'model.laboralinsertion.company';
+      }
+
+      if (!('__json_class__' in c)) {
+        c.__json_class__ = 'Contact';
+      }
+      ret.push(c);
+    }
+    return ret;
+  }
+
+  this.normalizeCompany = function(company) {
+    if (!('__json_module__' in company)) {
+      company.__json_module__ =  'model.laboralinsertion.company';
+    }
+
+    if (!('__json_class__' in company)) {
+      company.__json_class__ = 'Company';
+    }
+
+    if (company.contacts && company.contacts.length > 0) {
+        company.contacts = this.normalizeContacts(company.contacts);
+    }
+
+    return company;
+  }
+
+  this.persistCompany = function(company) {
+    company = this.normalizeCompany(company);
+    return $wamp.call('system.laboralInsertion.company.persist',[company])
   }
 
   /*
