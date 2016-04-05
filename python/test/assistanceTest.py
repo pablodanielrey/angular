@@ -20,6 +20,11 @@ from model.serializer.utils import MySerializer, serializer_loads
 
 from model.users.users import UserDAO
 
+def findUser(users, uid):
+    for u in users:
+        if uid == u.id:
+            return u
+
 if __name__ == '__main__':
 
     logging.getLogger().setLevel(logging.INFO)
@@ -55,6 +60,11 @@ if __name__ == '__main__':
         uid, v = UserDAO.findByDni(con, "29694757")      # oporto
         uids.append(uid)
 
+        users = UserDAO.findById(con, uids)
+        logging.info(uids)
+        logging.info(users)
+
+
         #uid, v = UserDAO.findByDni(con, "31381082")
         #uids.append(uid)
 
@@ -71,7 +81,7 @@ if __name__ == '__main__':
 
         import pyoo
         calc = pyoo.Desktop('localhost', 2002)
-        doc = calc.open_spreadsheet('/tmp/prueba.ods')
+        doc = calc.open_spreadsheet('template.ods')
         sheet = doc.sheets[0]
 
         index = 2
@@ -90,12 +100,13 @@ if __name__ == '__main__':
                 logging.info('{} --> e:{}, s:{} --> {}:{} -- he {} - hs {}'.format(w1.date, sd, ed, th, tm, hi, hs))
                 totalHoras = totalHoras + sec
 
-                sheet[index,0].value = w1.date
-                sheet[index,1].value = sd
-                sheet[index,2].value = ed
-                sheet[index,3].value = hi
-                sheet[index,4].value = hs
-                sheet[index,5].value = sec
+                sheet[index,0].value = findUser(users, w1.userId).dni if findUser(users, w1.userId) is not None else 'nada'
+                sheet[index,1].value = w1.date
+                sheet[index,2].value = sd
+                sheet[index,3].value = ed
+                sheet[index,4].value = hi
+                sheet[index,5].value = hs
+                sheet[index,6].value = sec
                 index = index + 1
 
         logging.info('total de horas trabajadas : {}:{}'.format(int(totalHoras / 60 / 60), int(totalHoras / 60 % 60)))
