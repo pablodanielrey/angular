@@ -1,66 +1,56 @@
 angular
   .module('mainApp')
-  .service('Login',Login);
+  .service('Login', Login);
 
 Login.inject = ['$rootScope','$wamp', 'Session'];
 
 function Login($rootScope, $wamp, Session) {
-
-	this.isLogged = function() {
-		var sid = Session.getCurrentSession();
-		if (sid == null) {
-			return false;
-		}
-		return (sid.user_id != undefined);
-	}
-
   /*
-    Chequea que la session actual sea valida
+    llama a cok con true en el caso de que el usuario este logueado
+    llama a cok con false en el caso de que el usuario no este logueado
   */
-  this.validateSession = function(cok,cerr) {
-    var sid = Session.getSessionId();
-    if (sid == null) {
-      return false;
-    }
-    $wamp.call('system.session.validate', [sid])
-      .then(function(v) {
-        cok(v);
-      },function(err) {
+	this.isLogged = function() {
+    return new Promise(function(cok, cerr) {
+      this.getSessionData().then(function(s) {
+        if (s.user_id != undefined && s.user_id != null) {
+          cok(true);
+        } else {
+          cok(false);
+        }
+      }, function(err) {
         cerr(err);
-      }
-    );
-  }
+      });
+    });
+	}
 
   this.getSessionData = function() {
     return new Promise(function(cok, cerr) {
       var s = Session.getCurrentSession();
       if (s != null) {
-        $wamp.call('system.session.validate', [])
+        var sid = s.id;
+        $wamp.call('system.session.validate', [sid])
         .then(function() {
           cok(s);
-        }, function() {
-          cerr();
+        }, function(err) {
+          Session.destroy();
+          cerr(err);
         });
+      } else {
+        Session.destroy();
+        cerr(Error('No existe la session'));
       }
-      $wamp.call('', [])
-      .then(function() {
-        cok();
-      }, function() {
-        cerr();
-      });
     });
   }
-
 
 	/*
 		Loguea al usuario en el servidor y genera tambien la sesion dentro de la cache local
 	*/
 	this.login = function(username, password) {
     return new Promise(function(cok, cerr) {
-  		$wamp.call('system.login', [username,password])
+  		$wamp.call('system.login', [username, password])
   		.then(function(s) {
   			if (s == null) {
-  				cerr('Datos Incorrectos');
+  				cerr(Error('Datos Incorrectos'));
   			} else {
           /*
             Creo la sesion dentro de la cache cliente
