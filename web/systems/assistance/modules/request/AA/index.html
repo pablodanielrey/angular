@@ -1,5 +1,5 @@
 <!-- VARIABLES 1:solicitud, mensaje | VARIABLES 2: procesando, procesado, sinDisponibilidad, errorDeSistema -->
-<div class="aa mensaje procesando">
+<div class="aa solicitud">
   <div class="title">Solicitar</div>
   <i class="ico fa fa-ticket "></i> <b> AUSENTE CON AVISO </b>
 
@@ -18,22 +18,25 @@
         <div class="screenMessage">
 
             <div class="processing">
+              <div class="iconMessage"><i class="fa fa-circle-o-notch fa-spin fa-4x"></i></div>
               <div>PROCESANDO SOLICITUD</div>
-              <div>espere por favor...</div>
+              <div>Por favor espere... </div>
             </div>
 
             <div class="processed">
+              <div class="iconMessageProcessed"><i class="fa fa-check fa-4x"></i></div>
               <div>SOLICITUD PROCESADA CON ÉXITO</div>
             </div>
 
             <div class="notAvailable">
-              <div>ERROR</div>
+              <div class="iconMessageNotAvailable"><i class="fa fa-exclamation fa-4x"></i> ERROR</div>
               <div>No tienes más días disponibles</div>
             </div>
 
             <div class="errorSystem">
-              <div>SE HA PRODUCIDO UN ERROR EN EL SISTEMA</div>
-              <div>por favor intente más tarde</div>
+              <div class="iconMessageErrorSystem"><i class="fa fa-exclamation-triangle fa-4x"></i></div>
+              <div class="iconMessageErrorSystem">ERROR EN EL SISTEMA</div>
+              <div>Por favor intente más tarde</div>
             </div>
 
         </div>

@@ -9,7 +9,7 @@
   width: 95%;
   height: 250px;
   margin-top: 10px;
-  padding: 10px;
+  padding: 20px;
   background-color: #FFF;
   border-radius: 2px;
   -moz-border-radius: 2px;
@@ -62,13 +62,13 @@
     font-size: 20px;
     background-color: #EEEEEE;
     margin-top: 5px;
-    width: 93%;
-    padding:10px;
-
+    width: 290px;
+    height: 45px;
     color: #5c5f69;
     border-radius: 2px;
     -moz-border-radius: 2px;
     -webkit-border-radius: 2px;
+    padding-left: 10px;
 }
 
 .request .btnApply {
@@ -80,7 +80,7 @@
       font-size: 16px;
     color: white;
     padding: 10px;
-    width: 100%;
+    width: 300px;
     height: 45px;
     cursor: pointer;
     margin-top: 10px;
@@ -91,7 +91,10 @@
   height: 100%;
 }
 
-.aa .processing {
+.aa .processing,
+.aa .processed,
+.aa .notAvailable,
+.aa .errorSystem {
   width: 100%;
   height: 100%;
   display: flex;
@@ -109,6 +112,21 @@
   color: #5C5F69;
 }
 
+
+.aa .iconMessage {
+  color: #f1f1f1;
+  margin-bottom: 10px;
+}
+
+.aa .iconMessageProcessed {
+  color: #92ad17;
+}
+
+.aa .iconMessageNotAvailable,
+.aa .iconMessageErrorSystem {
+  color: #E43E46;
+  font-size: 20px;
+}
 
 /**********************************************************************
 *********************** VISTA DE PANTALLAS  ***************************
@@ -153,8 +171,36 @@
 @media (max-width: 719px) {
   .aa .contentRequestAA {
     width: 88%;
-
+    padding: 10px;
     overflow-x: auto;
   }
+
+  .aa .inputDate {
+      border: none;
+      font-size: 20px;
+      background-color: #EEEEEE;
+      margin-top: 5px;
+      width: 96%;
+      color: #5c5f69;
+      border-radius: 2px;
+      -moz-border-radius: 2px;
+      -webkit-border-radius: 2px;
+  }
+
+  .request .btnApply {
+      border-radius: 2px;
+      -moz-border-radius: 2px;
+      -webkit-border-radius: 2px;
+      border: none;
+      background-color: #92AD17;
+        font-size: 16px;
+      color: white;
+      padding: 10px;
+      width: 100%;
+      height: 45px;
+      cursor: pointer;
+      margin-top: 10px;
+  }
+
 
 }
