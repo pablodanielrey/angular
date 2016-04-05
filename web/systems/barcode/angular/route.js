@@ -7,7 +7,7 @@ app.config(['$routeProvider', function($routeProvider) {
   .when('/documento', { templateUrl: 'modules/documento/Documento.html', controller:'DocumentoCtrl'})
   .when('/barcode', { templateUrl: 'modules/documento/Barcode.html'  })         
   
-  .otherwise({ redirectTo: '/barcode' });       
+  .otherwise({ redirectTo: '/documento' });       
   
  
 }]);
