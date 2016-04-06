@@ -73,7 +73,8 @@ class ShortDurationJustification(JSONSerializable, Justification):
     def _loadWorkedPeriods(self, wps):
         assert self.status is not None
 
-        if self.status != Status.APPROVED:
+        # import pdb;pdb.set_trace()
+        if self.status.status != Status.APPROVED:
             return
 
         for wp in wps:
@@ -114,13 +115,9 @@ class ShortDurationJustificationDAO:
 
     @staticmethod
     def _fromResult(r):
-        j = ShortDurationJustification()
+        j = ShortDurationJustification(r['user_id'], r['owner_id'], r['jstart'], 0, r['number'])
         j.id = r['id']
-        j.userId = r['user_id']
-        j.ownerId = r['owner_id']
-        j.start = r['jstart']
         j.end = r['jend']
-        j.number = r['number']
 
         return j
 

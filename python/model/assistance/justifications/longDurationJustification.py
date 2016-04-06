@@ -18,17 +18,17 @@ import datetime, uuid
 
 class LongDurationJustification(JSONSerializable, Justification):
 
-    def __init__(self):
+    def __init__(self, userId, ownerId, start, days = 0, number = None):
         self.id = None
-        self.userId = None
-        self.ownerId = None
-        self.start = None
-        self.end = None
-        self.number = 0
+        self.userId = userId
+        self.ownerId = ownerId
+        self.start = start
+        self.number = number
         self.status = None
         self.statusId = None
-        self.statusConst = Status.UNDEFINED
+        self.StatusConst = Status.UNDEFINED
         self.wps = []
+        self.end = LongDurationJustificationDAO._getEnd(self, days)
 
     def persist(self, con, days=None):
 
@@ -46,16 +46,17 @@ class LongDurationJustification(JSONSerializable, Justification):
         return jid
 
     def changeStatus(self, con, status, userId):
-        if self.status == None and self.statusId == None:
-            return
+        assert status is not None
+        assert (self.status is not None or self.statusId is not None)
+
         if self.status == None:
             self.status = Status.findByIds(con, [self.statusId])
+        else:
+            self.statusId = self.status.id
 
-        self.status = self.status.changeStatus(con, status, userId)
-        self.statusId = self.status.id
-        self.statusConst = self.status.status
+        self.status.changeStatus(con, self, status, userId)
 
-    def getLastStatus(self, con):
+    def _getLastStatus(self, con):
         if self.status is None:
             self.status = Status.getLastStatus(con, self.id)
             self.statusId = self.status.id
@@ -63,13 +64,14 @@ class LongDurationJustification(JSONSerializable, Justification):
 
         return self.status
 
-    def setWorkedPeriods(self, con, wps):
-        if self.getLastStatus(con).status != Status.APPROVED:
+    def _loadWorkedPeriods(self, wps):
+        assert self.status is not None
+
+        if self.status.status != Status.APPROVED:
             return
+
         for wp in wps:
-            if wp is None or wp.getStartDate() is None:
-                continue
-            if self.start <= wp.getStartDate().date() <= self.end:
+            if self.start <= wp.date <= self.end:
                 self.wps.append(wp)
                 wp.addJustification(self)
 
@@ -106,13 +108,9 @@ class LongDurationJustificationDAO:
 
     @staticmethod
     def _fromResult(r):
-        j = LongDurationJustification()
+        j = LongDurationJustification(r['user_id'], r['owner_id'], r['jstart'], 0, r['number'])
         j.id = r['id']
-        j.userId = r['user_id']
-        j.ownerId = r['owner_id']
-        j.start = r['jstart']
         j.end = r['jend']
-        j.number = r['number']
 
         return j
 
@@ -145,13 +143,10 @@ class LongDurationJustificationDAO:
 
     @staticmethod
     def persist(con, j, days):
+        assert j is not None
+
         cur = con.cursor()
         try:
-            LongDurationJustificationDAO._verifyConstraints(j, days)
-
-            if j.end is None:
-                j.end = LongDurationJustificationDAO._getEnd(j, days)
-
             if ((not hasattr(j, 'id')) or (j.id is None)):
                 j.id = str(uuid.uuid4())
 

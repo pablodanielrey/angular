@@ -28,46 +28,30 @@ def findUser(users, uid):
 
 def testFindJustification(con, uid):
         # fechas a testear
-        start = datetime.datetime.now() - datetime.timedelta(days=10)
-        end = datetime.datetime.now() + datetime.timedelta(days=10)
+        start = datetime.datetime.now() - datetime.timedelta(days=40)
+        end = datetime.datetime.now() - datetime.timedelta(days=20)
 
 
         # creo justificaciones con lasdifrerentes opciones posibles
 
         # (jstart < start) and (jend >= start and jend <= end)
-        j = ShortDurationJustification()
-        j.userId = uid
-        j.ownerId = uid
-        j.start = start - datetime.timedelta(days=5)
-        j.number = 70000
-        j.persist(con, 10)
+        j = ShortDurationJustification(uid, uid, start - datetime.timedelta(days=5), 10, 70000)
+        j.persist(con)
         con.commit()
 
         # (jend > end) and (jstart >= start and jstart <= end)
-        j = ShortDurationJustification()
-        j.userId = uid
-        j.ownerId = uid
-        j.start = start + datetime.timedelta(days=10)
-        j.number = 70000
-        j.persist(con, 15)
+        j = ShortDurationJustification(uid, uid, start + datetime.timedelta(days=10), 15, 70001)
+        j.persist(con)
         con.commit()
 
         # se encuentra entre el start y el end
-        j = LongDurationJustification()
-        j.userId = uid
-        j.ownerId = uid
-        j.start = start + datetime.timedelta(days=5)
-        j.number = 70000
-        j.persist(con, 5)
+        j = LongDurationJustification(uid, uid, start + datetime.timedelta(days=5), 5, 70002)
+        j.persist(con)
         con.commit()
 
         # jstart < start and jend > end
-        j = LongDurationJustification()
-        j.userId = uid
-        j.ownerId = uid
-        j.start = start - datetime.timedelta(days=5)
-        j.number = 70000
-        j.persist(con, 30)
+        j = LongDurationJustification(uid, uid, start - datetime.timedelta(days=5), 30, 70003)
+        j.persist(con)
         con.commit()
 
         j.changeStatus(con, Status.REJECTED, uid)
@@ -77,7 +61,7 @@ def testFindJustification(con, uid):
 
         js = Justification.getJustifications(con, uid, start, end)
         for j in js:
-            j.getLastStatus(con)
+            j._getLastStatus(con)
             logging.info(j.__dict__)
         return js
 
@@ -89,9 +73,9 @@ if __name__ == '__main__':
     reg = inject.instance(Registry)
 
     conn = Connection(reg.getRegistry('dcsys'))
-    con = conn.get()
     try:
-
+        con = conn.get()
+        
         uid, v = UserDAO.findByDni(con, "31381082")
         uids = [uid]
         js = testFindJustification(con, uid)
@@ -100,9 +84,12 @@ if __name__ == '__main__':
         justifications = ShortDurationJustification.findById(con, ids)
 
         a = inject.instance(AssistanceModel)
+
         wps = a.getWorkPeriods(con, uids, datetime.datetime.now() - datetime.timedelta(days=63), datetime.datetime.now())
+        wDate = [w.date  for w in wps[uid]]
+        logging.info(wDate)
         for j in js:
-            j.setWorkedPeriods(con, wps[uid])
+            j._loadWorkedPeriods(wps[uid])
             logging.info(j.__dict__)
 
         exit(1)
