@@ -134,15 +134,14 @@ class InscriptionDAO:
             cur.close()
 
     @staticmethod
-    def findById(con, id):
-        ''' obtiene la inscripcion determinada por el id '''
+    def findById(con, ids):
+        assert isinstance(ids, list)
         cur = con.cursor()
         try:
-            cur.execute('select * from laboral_insertion.inscriptions where id = %s', (id,))
+            cur.execute('select * from laboral_insertion.inscriptions where id in %s', (tuple(ids),))
             if cur.rowcount <= 0:
-                return None
-            r = cur.fetchone()
-            return InscriptionDAO._fromResult(r)
+                return []
+            return [ InscriptionDAO._fromResult(r) for r in cur ]
 
         finally:
             cur.close()
