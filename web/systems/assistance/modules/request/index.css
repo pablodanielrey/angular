@@ -317,7 +317,12 @@
   overflow-x: auto;
 }
 
-
+.request.solicitudesGrupo .requestOwn {
+  display: none;
+}
+.request.solicitudesPersonales .requestGroup {
+  display: none;
+}
 
 .request .itemRequest {
   display: flex;
@@ -394,6 +399,22 @@
     margin: 0 5px 0 5px;
 }
 
+.request .infoRequest {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  font-size: 13px;
+}
+
+.request .bar {
+  margin-left: 5px;
+  margin-right: 5px;
+  color:#5C5F69 !important;
+}
+
 .request .orderRequest {
   display: flex;
   display: -webkit-flex; /* Safari */
@@ -438,6 +459,10 @@
   /*background-color: red;*/
   width: 200px;
 }
+/*
+.request .dateRequest2 {
+  font-size: 12px;
+}*/
 
 
 .request .contentState {
@@ -530,6 +555,72 @@
   font-size: 13px;
 }
 
+.request .nameRequest {
+  font-weight: bold;
+  font-size: 14px;
+  color: #28292D;
+  margin-right:25px;
+  /*background: red;*/
+  width: 150px;
+}
+
+.request .actionBtns {
+  margin-left: 5px;
+}
+
+.request .btnApprove {
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  width: 100px;
+  height: 25px;
+  padding: 3px;
+  border: none;
+  background-color: #92AD17;
+  color:white;
+  margin-bottom: 5px;
+}
+
+.request .btnApprove:hover {
+  background-color: #809612;
+  cursor: pointer;
+}
+
+.request .btnCancel {
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  width: 100px;
+  height: 25px;
+  padding: 3px;
+  border: none;
+  background-color: #E43E46;
+  color:white;
+}
+
+.request .btnCancel:hover {
+  background-color: #c1262b;
+  cursor: pointer;
+}
+
+.request.solicitudesGrupo .state {
+  display: none;
+}
+
+.request.solicitudesGrupo .typeRequest {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  width: 350px;
+  /*background-color: red;*/
+}
+
 
 
 /**********************************************************************
@@ -610,7 +701,8 @@
   }
 
   .request .typeRequest {
-    width: 130px;
+    width: 140px !important;
+    /*background-color: red;*/
   }
 
   .request .contentMyRequest {
@@ -622,10 +714,20 @@
   }
 
   .request .itemRequest {
-    font-size: 12px;
+    font-size: 11px;
   }
 
+  .request .dateRequest {
+    font-size: 11px;
+  }
 
+  .request .dateRequest2 {
+    font-size: 11px;
+  }
+
+  .request .state {
+    display: none;
+  }
 
   .request .textIcoState {
     display: none;
@@ -636,6 +738,32 @@
   }
 
 
+
+
+  .request .nameRequest {
+    font-weight: bold;
+    font-size: 12px;
+    color: #28292D;
+    margin-right: 0px;
+    width: 130px;
+  }
+
+  .request .btnApprove {
+    width: 70px;
+    height: 20px;
+    font-size: 10px;
+    margin-bottom: 2px;
+  }
+
+  .request .btnCancel {
+    width: 70px;
+    height: 20px;
+    font-size: 10px;
+  }
+
+  .request .nameRequest {
+    margin-right: 0px;
+  }
 
 
 }
@@ -649,4 +777,41 @@
   .dateOrder {
       display: none;
   }
+  .request .state {
+    display: none;
+  }
+  .request .textIcoState {
+    display: none;
+  }
+  .request.solicitudesGrupo .typeRequest {
+    display: flex;
+    display: -webkit-flex; /* Safari */
+    display: -moz-flex; /* mozilla */
+    flex-direction:column;;
+    -webkit-flex-direction:column; /* Safari */
+    -moz-flex-direction:column; /* mozilla */
+    align-items: flex-start;
+    width: 200px;
+
+  }
+
+  .request .infoRequest {
+    display: flex;
+    display: -webkit-flex; /* Safari */
+    display: -moz-flex; /* mozilla */
+    flex-direction:column;;
+    -webkit-flex-direction:column; /* Safari */
+    -moz-flex-direction:column; /* mozilla */
+
+  }
+
+  .request .bar {
+    display: none;
+  }
+
+
+  .request .nameRequest {
+    margin-right: 0px;
+  }
+
 }

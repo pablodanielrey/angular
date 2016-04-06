@@ -1,4 +1,4 @@
-<div class="request {{view.style}} {{view.style2}}">
+<div class="request {{view.style}} {{view.style2}} solicitudesGrupo">
 <!-- VARIABLES 1: seleccionSolicitud VARIABLES 2:solicitudSeleccionada -->
 
     <div class="header">
@@ -41,8 +41,8 @@
             <div class="contentHeaderRequest">
                 <div>
                     <select  class="selectRequest">
-                        <option class="title">MIS SOLICITUDES</option>
-                        <option class="title">MI GRUPO</option>
+                        <option class="title" ng-click="view.style3='solicitudesPersonales'">MIS SOLICITUDES</option>
+                        <option class="title" ng-click="view.style3='solicitudesGrupales'">MI GRUPO</option>
                     </select>
                 </div>
 
@@ -62,308 +62,568 @@
             </div>
 
             <div class="listMyRequest">
+                <div class="requestOwn">
+                  <!-- SOLICITUD INDIVIDUAL -->
+                  <div class="itemRequest">
+                    <div class="typeRequest">
+                        <i class="ico fa fa-ticket "></i> Boleta de salida
+                    </div>
+                    <div class="infoRequest">
+                        <div class="dateRequest">
+                          19/04/2016
+                        </div>
+                        <div class="bar"> | </div>
+                        <div class="dateRequest2">
+                          14:00 - 16:00
+                        </div>
+                    </div>
+                    <div class="contentState">
+                        <div class="state">
+                          Estado
+                        </div>
+                        <div class="icoState">
+                          <div class="icoStatePendig">
+                            P
+                          </div>
+                          <div class="textIcoState">
+                            Pendiente
+                          </div>
+                        </div>
+                    </div>
+                  </div>
 
-                <!-- SOLICITUD INDIVIDUAL -->
-                <div class="itemRequest">
-                  <div class="typeRequest">
-                      <i class="ico fa fa-ticket "></i> Ausente con aviso
-                  </div>
-                  <div class="dateRequest">
-                    26/05/2016
-                  </div>
-                  <div class="contentState">
-                      <div class="state">
-                        Estado
-                      </div>
-                      <div class="icoState">
-                        <div class="icoStatePendig">
-                          P
+                  <!-- SOLICITUD INDIVIDUAL -->
+                  <div class="itemRequest">
+                    <div class="typeRequest">
+                        <i class="ico fa fa-ticket "></i> Ausente con aviso
+                    </div>
+                    <div class="infoRequest">
+                        <div class="dateRequest">
+                          08/01/2016
                         </div>
-                        <div class="textIcoState">
-                          Pendiente
+                        <div class="dateRequest2">
+
+
                         </div>
-                      </div>
+                    </div>
+                    <div class="contentState">
+                        <div class="state">
+                          Estado
+                        </div>
+                        <div class="icoState">
+                          <div class="icoStatePendig">
+                            P
+                          </div>
+                          <div class="textIcoState">
+                            Pendiente
+                          </div>
+                        </div>
+                    </div>
                   </div>
+
+                  <!-- SOLICITUD INDIVIDUAL -->
+                  <div class="itemRequest">
+                    <div class="typeRequest">
+                        <i class="ico fa fa-ticket "></i> Ausente con aviso
+                    </div>
+                    <div class="infoRequest">
+                        <div class="dateRequest">
+                          08/01/2016
+                        </div>
+                        <div class="dateRequest2">
+
+
+                        </div>
+                    </div>
+                    <div class="contentState">
+                        <div class="state">
+                          Estado
+                        </div>
+                        <div class="icoState">
+                          <div class="icoStateCancel">
+                            C
+                          </div>
+                          <div class="textIcoState">
+                            Cancelado
+                          </div>
+                        </div>
+                    </div>
+                  </div>
+
+                  <!-- SOLICITUD INDIVIDUAL -->
+                  <div class="itemRequest">
+                    <div class="typeRequest">
+                        <i class="ico fa fa-ticket "></i> Ausente con aviso
+                    </div>
+                    <div class="infoRequest">
+                        <div class="dateRequest">
+                          08/01/2016
+                        </div>
+                        <div class="dateRequest2">
+
+
+                        </div>
+                    </div>
+                    <div class="contentState">
+                        <div class="state">
+                          Estado
+                        </div>
+                        <div class="icoState">
+                          <div class="icoStateApproved">
+                            A
+                          </div>
+                          <div class="textIcoState">
+                            Aprobado
+                          </div>
+                        </div>
+                    </div>
+                  </div>
+
+                  <!-- SOLICITUD INDIVIDUAL -->
+                  <div class="itemRequest">
+                    <div class="typeRequest">
+                        <i class="ico fa fa-ticket "></i> Boleta de salida
+                    </div>
+                    <div class="infoRequest">
+                        <div class="dateRequest">
+                          19/04/2016
+                        </div>
+                        <div class="bar"> | </div>
+                        <div class="dateRequest2">
+                          14:00 - 16:00
+                        </div>
+                    </div>
+                    <div class="contentState">
+                        <div class="state">
+                          Estado
+                        </div>
+                        <div class="icoState">
+                          <div class="icoStateCancel">
+                            C
+                          </div>
+                          <div class="textIcoState">
+                            Cancelado
+                          </div>
+                        </div>
+                    </div>
+                  </div>
+                    <!-- SOLICITUD INDIVIDUAL -->
+                    <div class="itemRequest">
+                      <div class="typeRequest">
+                          <i class="ico fa fa-ticket "></i> Pre-exámen
+                      </div>
+                      <div class="infoRequest">
+                          <div class="dateRequest">
+                            19/04/2016
+                          </div>
+                          <div class="bar"> | </div>
+                          <div class="dateRequest2">
+                            21/04/2016
+                          </div>
+                      </div>
+                      <div class="contentState">
+                          <div class="state">
+                            Estado
+                          </div>
+                          <div class="icoState">
+                            <div class="icoStateApproved">
+                              A
+                            </div>
+                            <div class="textIcoState">
+                              Aprobado
+                            </div>
+                          </div>
+                      </div>
+                    </div>
+
+                    <!-- SOLICITUD INDIVIDUAL -->
+                    <div class="itemRequest">
+                      <div class="typeRequest">
+                          <i class="ico fa fa-ticket "></i> Ausente con aviso
+                      </div>
+                      <div class="infoRequest">
+                          <div class="dateRequest">
+                            08/01/2016
+                          </div>
+                          <div class="dateRequest2">
+
+
+                          </div>
+                      </div>
+                      <div class="contentState">
+                          <div class="state">
+                            Estado
+                          </div>
+                          <div class="icoState">
+                            <div class="icoStateApproved">
+                              A
+                            </div>
+                            <div class="textIcoState">
+                              Aprobado
+                            </div>
+                          </div>
+                      </div>
+                    </div>
+
+                  <!-- SOLICITUD INDIVIDUAL -->
+                  <div class="itemRequest">
+                    <div class="typeRequest">
+                        <i class="ico fa fa-ticket "></i> Ausente con aviso
+                    </div>
+                    <div class="infoRequest">
+                        <div class="dateRequest">
+                          08/01/2016
+                        </div>
+                        <div class="dateRequest2">
+
+
+                        </div>
+                    </div>
+                    <div class="contentState">
+                        <div class="state">
+                          Estado
+                        </div>
+                        <div class="icoState">
+                          <div class="icoStateCancel">
+                            C
+                          </div>
+                          <div class="textIcoState">
+                            Cancelado
+                          </div>
+                        </div>
+                    </div>
+                  </div>
+
+                  <!-- SOLICITUD INDIVIDUAL -->
+                  <div class="itemRequest">
+                    <div class="typeRequest">
+                        <i class="ico fa fa-ticket "></i> Ausente con aviso
+                    </div>
+                    <div class="infoRequest">
+                        <div class="dateRequest">
+                          08/01/2016
+                        </div>
+                        <div class="dateRequest2">
+
+
+                        </div>
+                    </div>
+                    <div class="contentState">
+                        <div class="state">
+                          Estado
+                        </div>
+                        <div class="icoState">
+                          <div class="icoStateApproved">
+                            A
+                          </div>
+                          <div class="textIcoState">
+                            Aprobado
+                          </div>
+                        </div>
+                    </div>
+                  </div>
+
+                  <!-- SOLICITUD INDIVIDUAL -->
+                  <div class="itemRequest">
+                    <div class="typeRequest">
+                        <i class="ico fa fa-ticket "></i> Boleta de salida
+                    </div>
+                    <div class="infoRequest">
+                        <div class="dateRequest">
+                          19/04/2016
+                        </div>
+                        <div class="bar"> | </div>
+                        <div class="dateRequest2">
+                          14:00 - 16:00
+                        </div>
+                    </div>
+                    <div class="contentState">
+                        <div class="state">
+                          Estado
+                        </div>
+                        <div class="icoState">
+                          <div class="icoStateCancel">
+                            C
+                          </div>
+                          <div class="textIcoState">
+                            Cancelado
+                          </div>
+                        </div>
+                    </div>
+                  </div>
+                    <!-- SOLICITUD INDIVIDUAL -->
+                    <div class="itemRequest">
+                      <div class="typeRequest">
+                          <i class="ico fa fa-ticket "></i> Pre-exámen
+                      </div>
+                      <div class="infoRequest">
+                          <div class="dateRequest">
+                            19/04/2016
+                          </div>
+                          <div class="bar"> | </div>
+                          <div class="dateRequest2">
+                            21/04/2016
+                          </div>
+                      </div>
+                      <div class="contentState">
+                          <div class="state">
+                            Estado
+                          </div>
+                          <div class="icoState">
+                            <div class="icoStateApproved">
+                              A
+                            </div>
+                            <div class="textIcoState">
+                              Aprobado
+                            </div>
+                          </div>
+                      </div>
+                    </div>
+
+                    <!-- SOLICITUD INDIVIDUAL -->
+                    <div class="itemRequest">
+                      <div class="typeRequest">
+                          <i class="ico fa fa-ticket "></i> Ausente con aviso
+                      </div>
+                      <div class="infoRequest">
+                          <div class="dateRequest">
+                            08/01/2016
+                          </div>
+                          <div class="dateRequest2">
+
+
+                          </div>
+                      </div>
+                      <div class="contentState">
+                          <div class="state">
+                            Estado
+                          </div>
+                          <div class="icoState">
+                            <div class="icoStateApproved">
+                              A
+                            </div>
+                            <div class="textIcoState">
+                              Aprobado
+                            </div>
+                          </div>
+                      </div>
+                    </div>
+
+                    <!-- SOLICITUD INDIVIDUAL -->
+                    <div class="itemRequest">
+                      <div class="typeRequest">
+                          <i class="ico fa fa-ticket "></i> Vacaciones
+                      </div>
+                      <div class="infoRequest">
+                          <div class="dateRequest">
+                            08/01/2016
+                          </div>
+                          <div class="dateRequest2">
+                            <span class="bar"> | </span>
+                            27/01/2016
+                          </div>
+                      </div>
+                      <div class="contentState">
+                          <div class="state">
+                            Estado
+                          </div>
+                          <div class="icoState">
+                            <div class="icoStateApproved">
+                              A
+                            </div>
+                            <div class="textIcoState">
+                              Aprobado
+                            </div>
+                          </div>
+                      </div>
+                    </div>
                 </div>
 
-                <!-- SOLICITUD INDIVIDUAL -->
-                <div class="itemRequest">
-                  <div class="typeRequest">
-                      <i class="ico fa fa-ticket "></i> Boleta de salida
-                  </div>
-                  <div class="dateRequest">
-                    21/05/2016
-                  </div>
-                  <div class="contentState">
-                      <div class="state">
-                        Estado
-                      </div>
-                      <div class="icoState">
-                        <div class="icoStatePendig">
-                          P
+                <div class="requestGroup">
+                  <!-- SOLICITUD INDIVIDUAL -->
+                  <div class="itemRequest">
+                    <div class="typeRequest">
+                        <div class="nameRequest">Walter Roberto Blanco</div>
+                        <div><i class="ico fa fa-ticket "></i> Boleta de salida</div>
+                    </div>
+                    <div class="infoRequest">
+                        <div class="dateRequest">
+                          19/04/2016
                         </div>
-                        <div class="textIcoState">
-                          pendiente
+                        <div class="bar"> | </div>
+                        <div class="dateRequest2">
+                          <div>14:00 - 16:00</div>
                         </div>
-                      </div>
+                    </div>
+                    <div class="contentState">
+                        <div class="state">
+                          Acción
+                        </div>
+                        <div class="actionBtns">
+                          <div>
+                            <button class="btnApprove">Aprobar</button>
+                          </div>
+                          <div>
+                            <button class="btnCancel">Denegar</button>
+                          </div>
+                        </div>
+                    </div>
                   </div>
-                </div>
 
-                <!-- SOLICITUD INDIVIDUAL -->
-                <div class="itemRequest">
-                  <div class="typeRequest">
-                      <i class="ico fa fa-ticket "></i> Pre-exámen
-                  </div>
-                  <div class="dateRequest">
-                    19/04/2016
-                  </div>
-                  <div class="contentState">
-                      <div class="state">
-                        Estado
-                      </div>
-                      <div class="icoState">
-                        <div class="icoStateApproved">
-                          A
+                  <!-- SOLICITUD INDIVIDUAL -->
+                  <div class="itemRequest">
+                    <div class="typeRequest">
+                        <div class="nameRequest">Alejandro Oporto</div>
+                        <div><i class="ico fa fa-ticket "></i> Ausente con aviso</div>
+                    </div>
+                    <div class="infoRequest">
+                        <div class="dateRequest">
+                          19/04/2016
                         </div>
-                        <div class="textIcoState">
-                          Aprobado
+                        <!-- <div class="bar"> | </div>
+                        <div class="dateRequest2">
+                          <div>14:00 - 16:00</div>
+                        </div> -->
+                    </div>
+                    <div class="contentState">
+                        <div class="state">
+                          Acción
                         </div>
-                      </div>
+                        <div class="actionBtns">
+                          <div>
+                            <button class="btnApprove">Aprobar</button>
+                          </div>
+                          <div>
+                            <button class="btnCancel">Denegar</button>
+                          </div>
+                        </div>
+                    </div>
                   </div>
-                </div>
 
-                <!-- SOLICITUD INDIVIDUAL -->
-                <div class="itemRequest">
-                  <div class="typeRequest">
-                      <i class="ico fa fa-ticket "></i> Boleta de salida
-                  </div>
-                  <div class="dateRequest">
-                    18/04/2016
-                  </div>
-                  <div class="contentState">
-                      <div class="state">
-                        Estado
-                      </div>
-                      <div class="icoState">
-                        <div class="icoStateApproved">
-                          A
+                  <!-- SOLICITUD INDIVIDUAL -->
+                  <div class="itemRequest">
+                    <div class="typeRequest">
+                        <div class="nameRequest">Santiago Ojeda</div>
+                        <div><i class="ico fa fa-ticket "></i> Pre-exámen</div>
+                    </div>
+                    <div class="infoRequest">
+                        <div class="dateRequest">
+                          19/04/2016
                         </div>
-                        <div class="textIcoState">
-                          Aprobado
+                        <div class="bar"> | </div>
+                        <div class="dateRequest2">
+                          <div>14:00 - 16:00</div>
                         </div>
-                      </div>
+                    </div>
+                    <div class="contentState">
+                        <div class="state">
+                          Acción
+                        </div>
+                        <div class="actionBtns">
+                          <div>
+                            <button class="btnApprove">Aprobar</button>
+                          </div>
+                          <div>
+                            <button class="btnCancel">Denegar</button>
+                          </div>
+                        </div>
+                    </div>
                   </div>
-                </div>
 
-                <!-- SOLICITUD INDIVIDUAL -->
-                <div class="itemRequest">
-                  <div class="typeRequest">
-                      <i class="ico fa fa-ticket "></i> Ausente con aviso
-                  </div>
-                  <div class="dateRequest">
-                    15/04/2016
-                  </div>
-                  <div class="contentState">
-                      <div class="state">
-                        Estado
-                      </div>
-                      <div class="icoState">
-                        <div class="icoStateCancel">
-                          D
+                  <!-- SOLICITUD INDIVIDUAL -->
+                  <div class="itemRequest">
+                    <div class="typeRequest">
+                        <div class="nameRequest">Emanuel Pais</div>
+                        <div><i class="ico fa fa-ticket "></i> Vacaciones</div>
+                    </div>
+                    <div class="infoRequest">
+                        <div class="dateRequest">
+                          19/04/2016
                         </div>
-                        <div class="textIcoState">
-                          Denegado
+                        <div class="bar"> | </div>
+                        <div class="dateRequest2">
+                          <div>25/04/2016</div>
                         </div>
-                      </div>
+                    </div>
+                    <div class="contentState">
+                        <div class="state">
+                          Acción
+                        </div>
+                        <div class="actionBtns">
+                          <div>
+                            <button class="btnApprove">Aprobar</button>
+                          </div>
+                          <div>
+                            <button class="btnCancel">Denegar</button>
+                          </div>
+                        </div>
+                    </div>
                   </div>
-                </div>
 
-                <!-- SOLICITUD INDIVIDUAL -->
-                <div class="itemRequest">
-                  <div class="typeRequest">
-                      <i class="ico fa fa-ticket "></i> Boleta de salida
-                  </div>
-                  <div class="dateRequest">
-                    10/04/2016
-                  </div>
-                  <div class="contentState">
-                      <div class="state">
-                        Estado
-                      </div>
-                      <div class="icoState">
-                        <div class="icoStateApproved">
-                          A
+                  <!-- SOLICITUD INDIVIDUAL -->
+                  <div class="itemRequest">
+                    <div class="typeRequest">
+                        <div class="nameRequest">Maximiliano Saucedo</div>
+                        <div><i class="ico fa fa-ticket "></i> Boleta de salida</div>
+                    </div>
+                    <div class="infoRequest">
+                        <div class="dateRequest">
+                          19/04/2016
                         </div>
-                        <div class="textIcoState">
-                          Aprobado
+                        <div class="bar"> | </div>
+                        <div class="dateRequest2">
+                          <div>14:00 - 16:00</div>
                         </div>
-                      </div>
+                    </div>
+                    <div class="contentState">
+                        <div class="state">
+                          Acción
+                        </div>
+                        <div class="actionBtns">
+                          <div>
+                            <button class="btnApprove">Aprobar</button>
+                          </div>
+                          <div>
+                            <button class="btnCancel">Denegar</button>
+                          </div>
+                        </div>
+                    </div>
                   </div>
-                </div>
 
-                <!-- SOLICITUD INDIVIDUAL -->
-                <div class="itemRequest">
-                  <div class="typeRequest">
-                      <i class="ico fa fa-ticket "></i> Ausente con aviso
-                  </div>
-                  <div class="dateRequest">
-                    08/04/2016
-                  </div>
-                  <div class="contentState">
-                      <div class="state">
-                        Estado
-                      </div>
-                      <div class="icoState">
-                        <div class="icoStateApproved">
-                          A
+                  <!-- SOLICITUD INDIVIDUAL -->
+                  <div class="itemRequest">
+                    <div class="typeRequest">
+                        <div class="nameRequest">Ivan Castañeda</div>
+                        <div><i class="ico fa fa-ticket "></i> Boleta de salida</div>
+                    </div>
+                    <div class="infoRequest">
+                        <div class="dateRequest">
+                          19/04/2016
                         </div>
-                        <div class="textIcoState">
-                          Aprobado
+                        <div class="bar"> | </div>
+                        <div class="dateRequest2">
+                          <div>14:00 - 16:00</div>
                         </div>
-                      </div>
+                    </div>
+                    <div class="contentState">
+                        <div class="state">
+                          Acción
+                        </div>
+                        <div class="actionBtns">
+                          <div>
+                            <button class="btnApprove">Aprobar</button>
+                          </div>
+                          <div>
+                            <button class="btnCancel">Denegar</button>
+                          </div>
+                        </div>
+                    </div>
                   </div>
-                </div>
 
-                <!-- SOLICITUD INDIVIDUAL -->
-                <div class="itemRequest">
-                  <div class="typeRequest">
-                      <i class="ico fa fa-ticket "></i> Ausente con aviso
-                  </div>
-                  <div class="dateRequest">
-                    25/03/2016
-                  </div>
-                  <div class="contentState">
-                      <div class="state">
-                        Estado
-                      </div>
-                      <div class="icoState">
-                        <div class="icoStateApproved">
-                          A
-                        </div>
-                        <div class="textIcoState">
-                          Aprobado
-                        </div>
-                      </div>
-                  </div>
-                </div>
-
-                <!-- SOLICITUD INDIVIDUAL -->
-                <div class="itemRequest">
-                  <div class="typeRequest">
-                      <i class="ico fa fa-ticket "></i> Ausente con aviso
-                  </div>
-                  <div class="dateRequest">
-                    22/03/2016
-                  </div>
-                  <div class="contentState">
-                      <div class="state">
-                        Estado
-                      </div>
-                      <div class="icoState">
-                        <div class="icoStateCancel">
-                          D
-                        </div>
-                        <div class="textIcoState">
-                          Denegado
-                        </div>
-                      </div>
-                  </div>
-                </div>
-
-                <!-- SOLICITUD INDIVIDUAL -->
-                <div class="itemRequest">
-                  <div class="typeRequest">
-                      <i class="ico fa fa-ticket "></i> Boleta de salida
-                  </div>
-                  <div class="dateRequest">
-                    15/03/2016
-                  </div>
-                  <div class="contentState">
-                      <div class="state">
-                        Estado
-                      </div>
-                      <div class="icoState">
-                        <div class="icoStateCancel">
-                          D
-                        </div>
-                        <div class="textIcoState">
-                          Denegado
-                        </div>
-                      </div>
-                  </div>
-                </div>
-
-                <!-- SOLICITUD INDIVIDUAL -->
-                <div class="itemRequest">
-                  <div class="typeRequest">
-                      <i class="ico fa fa-ticket "></i> Pre-exámen
-                  </div>
-                  <div class="dateRequest">
-                    12/03/2016
-                  </div>
-                  <div class="contentState">
-                      <div class="state">
-                        Estado
-                      </div>
-                      <div class="icoState">
-                        <div class="icoStateApproved">
-                          A
-                        </div>
-                        <div class="textIcoState">
-                          Aprobado
-                        </div>
-                      </div>
-                  </div>
-                </div>
-
-                <!-- SOLICITUD INDIVIDUAL -->
-                <div class="itemRequest">
-                  <div class="typeRequest">
-                      <i class="ico fa fa-ticket "></i> Ausente con aviso
-                  </div>
-                  <div class="dateRequest">
-                    08/03/2016
-                  </div>
-                  <div class="contentState">
-                      <div class="state">
-                        Estado
-                      </div>
-                      <div class="icoState">
-                        <div class="icoStateApproved">
-                          A
-                        </div>
-                        <div class="textIcoState">
-                          Aprobado
-                        </div>
-                      </div>
-                  </div>
-                </div>
-
-                <!-- SOLICITUD INDIVIDUAL -->
-                <div class="itemRequest">
-                  <div class="typeRequest">
-                      <i class="ico fa fa-ticket "></i> Boleta de salida
-                  </div>
-                  <div class="dateRequest">
-                    05/03/2016
-                  </div>
-                  <div class="contentState">
-                      <div class="state">
-                        Estado
-                      </div>
-                      <div class="icoState">
-                        <div class="icoStateApproved">
-                          A
-                        </div>
-                        <div class="textIcoState">
-                          Aprobado
-                        </div>
-                      </div>
-                  </div>
                 </div>
 
             </div>
-
+            <!-- fin -->
           </div>
 
           <div class="contentRequestSelected">
