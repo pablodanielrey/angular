@@ -20,12 +20,19 @@ class Status(JSONSerializable):
     def persist(self, con):
         return StatusDAO.persist(con,self)
 
-    def changeStatus(self, con, status, userId):
+    def changeStatus(self, con, justification, status, userId = None):
+
+        if userId is None:
+            userId = justification.userId
+
         s = Status(self.justificationId, userId)
         s.status = status
         s.id = StatusDAO.persist(con,s)
-        return s
 
+        justification.status = s
+        justification.statusId = s.id
+        justification.statusConst = s.status
+        
     @classmethod
     def findByIds(cls, con, ids):
         return StatusDAO.findByIds(con, ids)

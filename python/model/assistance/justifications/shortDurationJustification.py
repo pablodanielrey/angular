@@ -7,34 +7,37 @@
     continuousDays = True
 
 '''
+
+import inject
+import logging
+import json
+import datetime
+
 from model.connection.connection import Connection
 from model.registry import Registry
 from model.serializer.utils import JSONSerializable
-import inject, logging
-
 
 from model.assistance.justifications.justifications import Justification
 from model.assistance.justifications.status import Status
-import datetime, uuid
 
 class ShortDurationJustification(JSONSerializable, Justification):
 
-    def __init__(self):
+    def __init__(self, userId, ownerId, start, days = 0, number = None):
         self.id = None
-        self.userId = None
-        self.ownerId = None
-        self.start = None
-        self.end = None
-        self.number = 0
+        self.userId = userId
+        self.ownerId = ownerId
+        self.start = start
+        self.number = number
         self.status = None
         self.statusId = None
-        self.statusConst = Status.UNDEFINED
+        self.StatusConst = Status.UNDEFINED
         self.wps = []
+        self.end = ShortDurationJustificationDAO._getEnd(self, days)
 
-    def persist(self, con, days=None):
+    def persist(self, con):
+        jid = ShortDurationJustificationDAO.persist(con, self)
 
-        jid = ShortDurationJustificationDAO.persist(con, self, days)
-        s = Status(jid,self.ownerId)
+        s = Status(jid, self.ownerId)
         s.created = s.created - datetime.timedelta(seconds=1)
         sid = s.persist(con)
 
@@ -46,17 +49,19 @@ class ShortDurationJustification(JSONSerializable, Justification):
 
         return jid
 
-    def changeStatus(self, con, status, userId):
-        if self.status == None and self.statusId == None:
-            return
+    def changeStatus(self, con, status, userId = None):
+        assert status is not None
+        assert (self.status is not None or self.statusId is not None)
+
         if self.status == None:
             self.status = Status.findByIds(con, [self.statusId])
+        else:
+            self.statusId = self.status.id
 
-        self.status = self.status.changeStatus(con, status, userId)
-        self.statusId = self.status.id
-        self.statusConst = self.status.status
+        self.status.changeStatus(con, self, status, userId)
 
-    def getLastStatus(self, con):
+
+    def _getLastStatus(self, con):
         if self.status is None:
             self.status = Status.getLastStatus(con, self.id)
             self.statusId = self.status.id
@@ -64,14 +69,14 @@ class ShortDurationJustification(JSONSerializable, Justification):
 
         return self.status
 
-    def setWorkedPeriods(self, con, wps):
+    def _loadWorkedPeriods(self, wps):
+        assert self.status is not None
 
-        if self.getLastStatus(con).status != Status.APPROVED:
+        if self.status != Status.APPROVED:
             return
+
         for wp in wps:
-            if wp is None or wp.getStartDate() is None:
-                continue
-            if self.start <= wp.getStartDate().date() <= self.end:
+            if self.start <= wp.date <= self.end:
                 self.wps.append(wp)
                 wp.addJustification(self)
 
@@ -146,13 +151,12 @@ class ShortDurationJustificationDAO:
         return
 
     @staticmethod
-    def persist(con, j, days):
+    def persist(con, j):
+        assert j is not None
+        
         cur = con.cursor()
         try:
             ShortDurationJustificationDAO._verifyConstraints(j, days)
-
-            if j.end is None:
-                j.end = ShortDurationJustificationDAO._getEnd(j, days)
 
             if ((not hasattr(j, 'id')) or (j.id is None)):
                 j.id = str(uuid.uuid4())
