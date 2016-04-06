@@ -4,6 +4,7 @@ import imaplib
 import email
 import logging
 import re
+import datetime
 import dateutil
 from dateutil import parser
 
@@ -21,10 +22,17 @@ class JustCreator:
         pass
 
 
+# otros tipos de justificaciones que veo son :
+# Junta médica, Maternidad, Familiar enfermo,
+#
+#  tener cuidado que veo un mail con : No se justifica
+#
+
+
 class ShortDurationCreator(JustCreator):
 
     def checkType(ttype):
-        return 'Corta duración' == ttype
+        return 'Corta duración' == ttype or 'Familiar enfermo' == ttype
 
     def create(con, dni, start, days):
         ####
@@ -40,11 +48,16 @@ class ShortDurationCreator(JustCreator):
         uid, v = user
         assert uid is not None
 
+        just = ShortDurationJustificationDAO.findByUserId(con, [uid], start, start + datetime.timedelta(days = days))
+        if len(just) > 0:
+            ''' ya esta justificado con una de corta duración para ese día aunque sea asi que las ignoro '''
+            logging.warn('ya esta justificado {} para {}'.format(uid, start))
+            return False
+
         s = ShortDurationJustification(uid, uid, start, days)
         s.persist(con)
 
         return True
-
 
 
 class ImapJustifier:
@@ -134,22 +147,28 @@ class ImapJustifier:
                     continue
 
                 rv, data = m.uid('fetch', mail, '(RFC822)')
-                logging.debug('procesando {}'.format(mail))
+                #logging.debug('procesando {}'.format(mail))
                 (ui, body) = data[0]
-                text = body.decode('utf-8')
-                email_message = email.message_from_string(text)
 
-                for part in email_message.walk():
-                    email_body = None
-                    if part.get_content_type() == 'text/plain':
-                        """ esta parte de codigo no esta probado ya que siempre envían con html """
-                        email_body = part.get_payload(decode=True)
+                try:
+                    text = body.decode('utf-8')
+                    email_message = email.message_from_string(text)
 
-                    elif part.get_content_type() == 'text/html':
-                        email_body = part.get_payload(decode=True).decode('utf-8')
+                    for part in email_message.walk():
+                        email_body = None
+                        if part.get_content_type() == 'text/plain':
+                            """ esta parte de codigo no esta probado ya que siempre envían con html """
+                            email_body = part.get_payload(decode=True)
 
-                    if ImapJustifier._processTypeOfLicence(con, email_body):
-                        logging.info('{} reconocido'.format(mail))
+                        elif part.get_content_type() == 'text/html':
+                            email_body = part.get_payload(decode=True).decode('utf-8')
+
+                        if ImapJustifier._processTypeOfLicence(con, email_body):
+                            logging.info('{} reconocido'.format(mail))
+
+                except Exception as e:
+                    #logging.warn(e)
+                    pass
 
         finally:
             m.close()
