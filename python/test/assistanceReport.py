@@ -35,51 +35,54 @@ def workedPeriodsToPyoo(wps):
     import pyoo
     calc = pyoo.Desktop('localhost', 2002)
     doc = calc.open_spreadsheet('template.ods')
-    sheet = doc.sheets[0]
+    try:
+        sheet = doc.sheets[0]
 
-    sh = 0
-    chartStart = 0
-    index = 2
-    totalHoras = 0
-    logs = []
-    for w in wps:
-        chartStart = index
-        wp = wps[w]
-        for w1 in wp:
-            sec = w1.getWorkedSeconds()
-            sd = '' if w1.getStartDate() is None else w1.getStartDate()
-            ed = '' if w1.getEndDate() is None else w1.getEndDate()
-            hi = '' if w1.getStartLog() is None else w1.getStartLog().log.time()
-            hs = '' if w1.getEndLog() is None else w1.getEndLog().log.time()
-            th = int(sec / 60 / 60)
-            tm = int(sec / 60 % 60)
-            logging.info('{} --> e:{}, s:{} --> {}:{} -- he {} - hs {}'.format(w1.date, sd, ed, th, tm, hi, hs))
-            totalHoras = totalHoras + sec
+        sh = 0
+        chartStart = 0
+        index = 2
+        totalHoras = 0
+        logs = []
+        for w in wps:
+            chartStart = index
+            wp = wps[w]
+            for w1 in wp:
+                sec = w1.getWorkedSeconds()
+                sd = '' if w1.getStartDate() is None else w1.getStartDate()
+                ed = '' if w1.getEndDate() is None else w1.getEndDate()
+                hi = '' if w1.getStartLog() is None else w1.getStartLog().log.time()
+                hs = '' if w1.getEndLog() is None else w1.getEndLog().log.time()
+                th = int(sec / 60 / 60)
+                tm = int(sec / 60 % 60)
+                logging.info('{} --> e:{}, s:{} --> {}:{} -- he {} - hs {}'.format(w1.date, sd, ed, th, tm, hi, hs))
+                totalHoras = totalHoras + sec
 
-            us = findUser(users, w1.userId) if findUser(users, w1.userId) is not None else 'nada'
-            sheet[index,0].value = us.dni if us != 'nada' else ''
-            sheet[index,1].value = us.name if us != 'nada' else ''
-            sheet[index,2].value = us.lastname if us != 'nada' else ''
-            sheet[index,3].value = w1.date
-            sheet[index,4].value = sd
-            sheet[index,5].value = ed
-            sheet[index,6].value = hi
-            sheet[index,7].value = hs
-            #sheet[index,8].value = datetime.timedelta(seconds=sec)
-            sheet[index,8].value = sec
-            sheet[index,9].formula = '={}/60/60'.format(sheet[index,8].address)
+                us = findUser(users, w1.userId) if findUser(users, w1.userId) is not None else 'nada'
+                sheet[index,0].value = us.dni if us != 'nada' else ''
+                sheet[index,1].value = us.name if us != 'nada' else ''
+                sheet[index,2].value = us.lastname if us != 'nada' else ''
+                sheet[index,3].value = w1.date
+                sheet[index,4].value = sd
+                sheet[index,5].value = ed
+                sheet[index,6].value = hi
+                sheet[index,7].value = hs
+                #sheet[index,8].value = datetime.timedelta(seconds=sec)
+                sheet[index,8].value = sec
+                sheet[index,9].formula = '={}/60/60'.format(sheet[index,8].address)
+                index = index + 1
+
+            logging.info(chartStart)
+            logging.info(index)
+            c = sheet.charts.create('Horas Trabajadas {}'.format(len(sheet.charts)), sheet[chartStart:index, 12:12 + len(wp)], sheet[chartStart:index, 9:10])
+            #c.change_type(pyoo.LineDiagram)
             index = index + 1
 
-        logging.info(chartStart)
-        logging.info(index)
-        c = sheet.charts.create('Horas Trabajadas {}'.format(len(sheet.charts)), sheet[chartStart:index, 12:12 + len(wp)], sheet[chartStart:index, 9:10])
-        #c.change_type(pyoo.LineDiagram)
-        index = index + 1
+        logging.info('total de horas trabajadas : {}:{}'.format(int(totalHoras / 60 / 60), int(totalHoras / 60 % 60)))
 
-    logging.info('total de horas trabajadas : {}:{}'.format(int(totalHoras / 60 / 60), int(totalHoras / 60 % 60)))
-
-    doc.save(fn)
-    doc.close()
+        doc.save(fn)
+        
+    finally:
+        doc.close()
 
 
 def _getUsers(con):
