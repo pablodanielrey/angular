@@ -181,9 +181,8 @@ class LaboralInsertion:
             LanguageDAO.persist(con, l)
 
 
-    def sendMailToCompany(self, con, inscriptions, company):
+    def sendMailToCompany(self, con, inscriptions, emails):
         datar = []
-        emails = [ c.email for c in company.contacts if c.email is not None and c.email != '']
 
 
         if emails is None:

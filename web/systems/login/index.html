@@ -19,7 +19,7 @@
   <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
   <link rel="shortcut icon" href="/systems/fce/img/favicon2.ico">
 
-  <script type="text/javascript" src="/config-login.json"></script>
+  <script type="text/javascript" src="/config.json"></script>
 
   <!--archivos principales-->
   <script type="text/javascript" src="/systems/login/index.module.js"></script>
@@ -32,6 +32,7 @@
 	<script type="text/javascript" src="/services/Cache.js"></script>
 	<script type="text/javascript" src="/services/Session.js"></script>
   <script type="text/javascript" src="/services/Login.js"></script>
+
   <script type="text/javascript" src="/services/Users.js"></script>
   <script type="text/javascript" src="/services/Utils.js"></script>
 	<script type="text/javascript" src="/services/Notifications.js"></script>
@@ -57,7 +58,6 @@
   <!-- <div ng-show='{{loaded}}' class="principal"> -->
   <div class="principal">
     <div class='login-container' ng-controller="LoginCtrl" ng-include="'/systems/login/modules/login.html'"></div>
-    <!-- <div class='messages-container' ng-controller="MessagesCtrl" ng-include="'/modules/messages/messages.html'" ng-class="{false: 'hidden', true: 'visible'}[isVisible()]"></div> -->
   </div>
 
 

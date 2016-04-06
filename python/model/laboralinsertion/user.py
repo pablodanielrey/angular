@@ -57,11 +57,12 @@ class UserDAO:
                 ins['cv'] = ins['cv'] if 'cv' in ins else None
                 ins['priority'] = ins['priority'] if 'priority' in ins else 0
                 cur.execute('insert into laboral_insertion.users (id, accepted_conditions, email, cv, priority) values '
-                            '(%(id)s, %(acceptedConditions)s, %(email)s, %(cv)s, %(priority))', ins)
+                            '(%(id)s, %(acceptedConditions)s, %(email)s, %(cv)s, %(priority)s)', ins)
             else:
                 ins = u.__dict__
                 ins['acceptedConditions'] = True
                 ins['cv'] = ins['cv'] if 'cv' in ins else None
+                ins['priority'] = ins['priority'] if 'priority' in ins else 0
                 cur.execute('update laboral_insertion.users set accepted_conditions = %(acceptedConditions)s, email = %(email)s, '
                             'cv = %(cv)s, priority = %(priority)s where id = %(id)s', ins)
         finally:

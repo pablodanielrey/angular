@@ -5,7 +5,7 @@ import datetime
 from dateutil.tz import tzlocal
 from model.assistance.logs import LogDAO, Log
 from model.assistance.schedules import ScheduleDAO, Schedule
-from model.serializer.utils import Serializer, JSONSerializable
+from model.serializer.utils import JSONSerializable
 
 
 class WorkPeriod(JSONSerializable):
@@ -17,6 +17,10 @@ class WorkPeriod(JSONSerializable):
         self.date = date
         self.schedule = None
         self.logs = []
+        self.justifications = []
+
+    def addJustification(self, j):
+        self.justifications.append(j)
 
     def getStartDate(self):
         if self.schedule is None:
@@ -29,9 +33,13 @@ class WorkPeriod(JSONSerializable):
         return self.schedule.getEndDate(self.date)
 
     def getStartLog(self):
+        if len(self.logs) <= 0:
+            return None
         return self.logs[0]
 
     def getEndLog(self):
+        if len(self.logs) <= 0:
+            return None
         return self.logs[-1]
 
     def getWorkedSeconds(self):
@@ -50,6 +58,7 @@ class WorkPeriod(JSONSerializable):
         """ el último schedule válido para esa fecha es el que vale """
         for s in reversed(schedules):
             if s.userId == self.userId and s.isValid(self.date):
+                logging.info('eligiendo el schedule : {} para la fecha {}'.format(self.date, s.__dict__))
                 self.schedule = s
                 break
 
@@ -59,10 +68,18 @@ class WorkPeriod(JSONSerializable):
             return self.logs
 
         """ carga los logs que estén dentro de la tolerancia para esa fecha de acuerdo al horario """
-        sd = (self.schedule.getStartDate(self.date) - WorkPeriod.logsTolerance).replace(tzinfo=tzlocal())
-        se = (self.schedule.getEndDate(self.date) + WorkPeriod.logsTolerance).replace(tzinfo=tzlocal())
-        self.logs = [ l for l in logs if l.between(sd, se) ]
+        if not self.schedule.daily:
+            sd = (self.schedule.getStartDate(self.date) - WorkPeriod.logsTolerance).replace(tzinfo=tzlocal())
+            se = (self.schedule.getEndDate(self.date) + WorkPeriod.logsTolerance).replace(tzinfo=tzlocal())
+            self.logs = [ l for l in logs if l.between(sd, se) ]
+        else:
+            self.logs = [ l for l in logs if l.between(self._getStartOfDay(), self._getEndOfDay()) ]
 
+    def _getStartOfDay(self):
+        return datetime.datetime.combine(self.date, datetime.time(0)).replace(tzinfo=tzlocal())
+
+    def _getEndOfDay(self):
+        return self._getStartOfDay() + datetime.timedelta(days=1)
 
 class AssistanceModel:
 
@@ -105,6 +122,9 @@ class AssistanceModel:
         timer = datetime.datetime.now()
         logs = self._getLogs(con, userIds, start, end + datetime.timedelta(1))
         logging.info(datetime.datetime.now() - timer)
+        for lk in logs.keys():
+            for l in logs[lk]:
+                logging.info(l.__dict__)
 
         """ genero los dias a trabajar """
         logging.info('generando los dias de trabajo')

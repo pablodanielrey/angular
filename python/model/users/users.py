@@ -289,7 +289,8 @@ class UserDAO:
                 return []
 
             users = []
-            for user in cur:
+            for user in cur.fetchall():
+                logging.info(user)
                 ouser = UserDAO._fromResult(user)
                 cur.execute('select * from profile.telephones where user_id = %s', (ouser.id,))
                 ouser.telephones = [ UserDAO._telephoneFromResult(r) for r in cur ]

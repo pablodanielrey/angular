@@ -294,10 +294,10 @@ class LaboralInsertionWamp(ApplicationSession):
         finally:
             self.conn.put(con)
 
-    def sendMailToCompany(self, inscriptions, company):
+    def sendMailToCompany(self, inscriptions, emails):
         con = self.conn.get()
         try:
-            data = self.laboralInsertion.sendMailToCompany(con, inscriptions, company)
+            data = self.laboralInsertion.sendMailToCompany(con, inscriptions, emails)
             self.publish('system.laboralInsertion.COMPANYSENDED', data)
             return True
 
