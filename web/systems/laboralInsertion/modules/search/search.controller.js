@@ -822,7 +822,7 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     Users.findMails(userId, function(mails) {
       d = $scope.model.data[userId];
       for ( var i = 0; i < mails.length; i++) {
-        if (d["email"] == mails[i]["id"]) {
+        if (d["emailId"] == mails[i]["id"]) {
           d["email"] = mails[i];
         }
       }
@@ -839,7 +839,7 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
       //console.log('Buscando usuario ' + ins[i].userId);
       LaboralInsertion.findByUser(ins[i].userId).then(function(data) {
         $scope.model.data[data['id']] = data;
-        if (data["email"] != "") {
+        if (data["emailId"] != "") {
           $scope.findMail(data["id"]);
         }
       }, function(err) {

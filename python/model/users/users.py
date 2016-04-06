@@ -216,6 +216,11 @@ class User(JSONSerializable):
         self.photo = None
         self.telephones = []
 
+    def getAge(self):
+        today = datetime.datetime.now()
+        born = self.birthdate
+        return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+
     '''
     def _toJson():
         pass
