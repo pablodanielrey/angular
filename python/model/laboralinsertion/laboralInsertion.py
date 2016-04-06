@@ -1,4 +1,19 @@
 # -*- coding: utf-8 -*-
+"""
+    Implementa le modelo de insercion laboral.
+
+
+    configuración para el registry.cfg
+
+    [LaboralInsertion]
+    ooHost = localhost
+    ooPort = 2002
+    sheetTemplate = ../python/model/laboralinsertion/template/template_send.ods
+    mailTemplate = ../python/model/laboralinsertion/template/template_send.html
+
+"""
+
+
 import uuid
 import inject
 import logging
@@ -16,6 +31,7 @@ from model.laboralinsertion.company import CompanyDAO
 from model.laboralinsertion.languages import LanguageDAO
 from model.laboralinsertion.filters import Filter
 from model.laboralinsertion.user import UserDAO, User
+from model.laboralinsertion.mails import EmailToSend
 
 import csv
 
@@ -25,7 +41,7 @@ class LaboralInsertion:
     def findAllInscriptions(self, con, filters):
         """ obtiene los datos de las inscripciones de los alumnos """
         ids = InscriptionDAO.findAll(con)
-        inscriptions = inscriptionDAO.findById(con, ids)
+        inscriptions = InscriptionDAO.findById(con, ids)
 
         ''' aplico los filtros '''
         if len(filters) > 0:
@@ -39,12 +55,7 @@ class LaboralInsertion:
     def findAllInscriptionsByUser(self, con, userId):
         """ obtiene los datos de las inscripciones de los alumnos """
         ids = InscriptionDAO.findByUser(con, userId)
-        inscriptions = []
-        for id in ids:
-            inscription = InscriptionDAO.findById(con, id)
-            inscriptions.append(inscription)
-
-        return inscriptions
+        return InscriptionDAO.findById(con, ids)
 
     def deleteInscriptionById(self, con, iid):
         """ elimina la inscripción con el id determinado """
@@ -73,36 +84,27 @@ class LaboralInsertion:
 
     def persist(self, con, user, languages):
         """ actualiza la información de insercion laboral del usuario """
+        logging.info(user.__dict__)
         UserDAO.persist(con, user)
         LanguageDAO.deleteByUser(con, user.id)
         for l in languages:
             LanguageDAO.persist(con, l)
 
 
-    def sendMailToCompany(self, con, inscriptions, emails):
+    def sendMailToCompany(self, con, inscriptionIds, emails):
 
-        ets = mails.EmailToSend(inscriptions, emails)
-        ets.sendMail(con)
+        """ pongo una restriccion que deberíamos despues chequear pero por el tema del tamaño y ram usados al enviar """
+        if len(inscriptionIds) >= 10:
+            raise Exception('Demasiadas peronas en el envío')
+
+        ets = EmailToSend(inscriptionIds, emails)
+        sentEmails = ets.sendMail(con)
 
         ''' genero los datos del envío en la base '''
         sent = Sent()
         sent.emails = emails
-        sent.inscriptions = [i['id'] for i in inscriptions]
+        sent.inscriptions = inscriptionIds
         SentDAO.persist(con, sent)
         con.commit()
 
-        return datar
-
-
-""""
-
-    def persistLaboralInsertionCV(self,con,data):
-        if (self.findLaboralInsertionCV(con,data['id'])) == None:
-            params = (data['id'],psycopg2.Binary(data['cv']),data['name'])
-            cur = con.cursor()
-            cur.execute("insert into laboral_insertion.users_cv (id,cv,name) values (%s,%s,%s)",params)
-        else:
-            params = (psycopg2.Binary(data['cv']),data['name'],data['id'])
-            cur = con.cursor()
-            cur.execute('update laboral_insertion.users_cv set cv = %s, name = %s where id = %s',params)
-"""
+        return sentEmails
