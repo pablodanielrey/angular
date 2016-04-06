@@ -111,6 +111,7 @@ if __name__ == '__main__':
     con = conn.get()
     try:
         ImapJustifier.loadJustifications(con)
+        con.commit()
 
     finally:
         conn.put(con)

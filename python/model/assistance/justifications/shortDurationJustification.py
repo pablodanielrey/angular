@@ -12,6 +12,7 @@ import inject
 import logging
 import json
 import datetime
+import uuid
 
 from model.connection.connection import Connection
 from model.registry import Registry
@@ -144,20 +145,12 @@ class ShortDurationJustificationDAO:
                 date = date + datetime.timedelta(days = (7 - date.weekday()))
             return date
 
-    def _verifyConstraints(j, days):
-        '''
-        debe verificar que no supere el limite anual de justificaciones
-        '''
-        return
-
     @staticmethod
     def persist(con, j):
         assert j is not None
-        
+
         cur = con.cursor()
         try:
-            ShortDurationJustificationDAO._verifyConstraints(j, days)
-
             if ((not hasattr(j, 'id')) or (j.id is None)):
                 j.id = str(uuid.uuid4())
 

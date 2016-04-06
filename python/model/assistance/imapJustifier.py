@@ -8,6 +8,7 @@ import dateutil
 from dateutil import parser
 
 from model.registry import Registry
+from model.users.users import UserDAO
 from model.assistance.justifications.shortDurationJustification import ShortDurationJustificationDAO, ShortDurationJustification
 from model.assistance.justifications.longDurationJustification import LongDurationJustificationDAO, LongDurationJustification
 
@@ -27,16 +28,22 @@ class ShortDurationCreator(JustCreator):
 
     def create(con, dni, start, days):
         ####
-        #### aca hay que ver si se saca del registry el dni de una persona responsable del sistema de asistencia para ponerlo como owner.
-        #### por ahora uso el mismo userId.
+        #### aca hay que ver si se saca del registry el dni de una persona responsable del sistema de asistencia para ponerlo como userId.
+        #### por ahora uso el mismo que el ownerId.
         ####
 
-        uid, v = UserDAO.findByDni(con, dni)
+        user = UserDAO.findByDni(con, dni)
+        if user is None:
+            logging.warn('No existe usuario {}'.format(dni))
+            return False
+
+        uid, v = user
         assert uid is not None
 
-        s = ShortDurationJustification(userId, userId, start, days)
+        s = ShortDurationJustification(uid, uid, start, days)
         s.persist(con)
 
+        return True
 
 
 
