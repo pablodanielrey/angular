@@ -6,7 +6,7 @@
 }
 
 .aa .contentRequestAA {
-  width: 95%;
+  width: 338px;
   height: 250px;
   margin-top: 10px;
   padding: 20px;
@@ -44,8 +44,9 @@
 }
 
 .aa .contentCantAvailability {
-  margin-left: 10px;
+  margin-left: 40px;
   color: #5C5F69;
+  font-size: 12px;
 }
 
 .aa .cantAvailability {
