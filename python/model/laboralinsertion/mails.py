@@ -67,12 +67,12 @@ class EmailToSend:
                 sheet[index,0].value = self.users[i.userId]['user'].lastname
                 sheet[index,1].value = self.users[i.userId]['user'].name
                 sheet[index,2].value = self.users[i.userId]['user'].genre
-                sheet[index,3].value = self.users[i.userId]['user'].getAge()
-                sheet[index,4].value = self.users[i.userId]['user'].dni
-                sheet[index,5].value = self.users[i.userId]['email'].email
-                sheet[index,6].value = i.degree
-                sheet[index,7].value = i.approved
-                sheet[index,8].value = i.average1
+                #sheet[index,3].value = self.users[i.userId]['user'].getAge()
+                sheet[index,3].value = self.users[i.userId]['user'].dni
+                sheet[index,4].value = self.users[i.userId]['email'].email
+                sheet[index,5].value = i.degree
+                sheet[index,6].value = i.approved
+                sheet[index,7].value = i.average1
                 index = index + 1
 
             fn = '/tmp/{}.xlsx'.format(str(uuid.uuid4()))
