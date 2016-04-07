@@ -40,52 +40,53 @@ def workedPeriodsToPyoo(wps, users):
     doc = calc.open_spreadsheet('template.ods')
     try:
         sheetIndex = 0
-        for w in wps:
 
-            """ creo una copia del template para poder llenar los datos """
-            sheet = doc.sheets.copy('Template', 'Sheet {}'.format(sheetIndex), sheetIndex)
-            sheetIndex = sheetIndex + 1
+        for user in users:
 
-            index = 2
-            wp = wps[w]
-            for w1 in wp:
-                sec = w1.getWorkedSeconds()
-                sd = w1.getStartDate()
-                ed = w1.getEndDate()
-                hi = None if w1.getStartLog() is None else w1.getStartLog().log.astimezone(tzlocal()).replace(tzinfo=None)
-                hs = None if w1.getEndLog() is None else w1.getEndLog().log.astimezone(tzlocal()).replace(tzinfo=None)
+            if user:
 
-                us = findUser(users, w1.userId)
-                if us:
-                    sheet[index,0].value = us.dni
-                    sheet[index,1].value = us.name
-                    sheet[index,2].value = us.lastname
+                """ creo una copia del template para poder llenar los datos """
+                sheet = doc.sheets.copy('Template', '{} {} {}'.format(user.dni, user.name, user.lastname), sheetIndex)
+                sheetIndex = sheetIndex + 1
 
-                sheet[index,3].value = w1.date
-                if sd is not None: sheet[index,4].value = sd
-                if ed is not None: sheet[index,5].value = ed
-                if sd is not None and ed is not None: sheet[index,6].formula = '={}-{}'.format(sheet[index,5].address, sheet[index,4].address)
+                index = 2
+                wp = wps[user.id]
+                for w1 in wp:
+                    sec = w1.getWorkedSeconds()
+                    sd = w1.getStartDate()
+                    ed = w1.getEndDate()
+                    hi = None if w1.getStartLog() is None else w1.getStartLog().log.astimezone(tzlocal()).replace(tzinfo=None)
+                    hs = None if w1.getEndLog() is None else w1.getEndLog().log.astimezone(tzlocal()).replace(tzinfo=None)
 
-                if hi is not None: sheet[index,7].value = hi
-                if hs is not None: sheet[index,8].value = hs
+                    sheet[index,0].value = user.dni
+                    sheet[index,1].value = user.name
+                    sheet[index,2].value = user.lastname
 
-                if hi is not None and hs is not None:
-                    sheet[index,9].formula = '={}-{}'.format(sheet[index,8].address, sheet[index,7].address)
+                    sheet[index,3].value = w1.date
+                    if sd is not None: sheet[index,4].value = sd
+                    if ed is not None: sheet[index,5].value = ed
+                    if sd is not None and ed is not None: sheet[index,6].formula = '={}-{}'.format(sheet[index,5].address, sheet[index,4].address)
 
-                if hi is not None and hi > sd:
-                    sheet[index,10].formula = '={}-{}'.format(sheet[index,7].address, sheet[index,4].address)
-                #else:
-                    #sheet[index,9].value = 0
+                    if hi is not None: sheet[index,7].value = hi
+                    if hs is not None: sheet[index,8].value = hs
 
-                if hs is not None and ed > hs:
-                    sheet[index,11].formula = '={}-{}'.format(sheet[index,5].address, sheet[index,8].address)
-                #else:
-                    #sheet[index,10].value = 0
+                    if hi is not None and hs is not None:
+                        sheet[index,9].formula = '={}-{}'.format(sheet[index,8].address, sheet[index,7].address)
 
-                if len(w1.justifications) > 0:
-                    sheet[index,12].value = w1.justifications[0].getIdentifier()
+                    if hi is not None and hi > sd:
+                        sheet[index,10].formula = '={}-{}'.format(sheet[index,7].address, sheet[index,4].address)
+                    #else:
+                        #sheet[index,9].value = 0
 
-                index = index + 1
+                    if hs is not None and ed > hs:
+                        sheet[index,11].formula = '={}-{}'.format(sheet[index,5].address, sheet[index,8].address)
+                    #else:
+                        #sheet[index,10].value = 0
+
+                    if len(w1.justifications) > 0:
+                        sheet[index,12].value = w1.justifications[0].getIdentifier()
+
+                    index = index + 1
 
 
 
@@ -100,24 +101,20 @@ def workedPeriodsToPyoo(wps, users):
 def _getUsers(con):
     uids = []
 
-    """
-    uid, v = UserDAO.findByDni(con, "32393755")    # pablo Lozada
-    uids.append(uid)
+    #uid, v = UserDAO.findByDni(con, "32393755")    # pablo Lozada
+    #uids.append(uid)
 
-    uid, v = UserDAO.findByDni(con, "27528150")    # julio ciappa
-    uids.append(uid)
+    #uid, v = UserDAO.findByDni(con, "27528150")    # julio ciappa
+    #uids.append(uid)
 
-    uid, v = UserDAO.findByDni(con, "18609353")    # juan acosta
-    uids.append(uid)
+    #uid, v = UserDAO.findByDni(con, "18609353")    # juan acosta
+    #uids.append(uid)
 
-    uid, v = UserDAO.findByDni(con, "24040623")     # miguel rey
-    uids.append(uid)
+    #uid, v = UserDAO.findByDni(con, "24040623")     # miguel rey
+    #uids.append(uid)
 
-    uid, v = UserDAO.findByDni(con, "30001823")    # walter
-    uids.append(uid)
-
-    uid, v = UserDAO.findByDni(con, "27821597")     # maxi
-    uids.append(uid)
+    #uid, v = UserDAO.findByDni(con, "27821597")     # maxi
+    #uids.append(uid)
 
     uid, v = UserDAO.findByDni(con, "31073351")     # ivan
     uids.append(uid)
@@ -128,14 +125,16 @@ def _getUsers(con):
     uid, v = UserDAO.findByDni(con, "27294557")     # pablo
     uids.append(uid)
 
+    uid, v = UserDAO.findByDni(con, "30001823")    # walter
+    uids.append(uid)
+
     uid, v = UserDAO.findByDni(con, "31381082")     # ema
     uids.append(uid)
 
     uid, v = UserDAO.findByDni(con, "29694757")      # oporto
     uids.append(uid)
-    """
 
-    uids = ScheduleDAO.findUsersWithSchedule(con)
+    #uids = ScheduleDAO.findUsersWithSchedule(con)
     users = UserDAO.findById(con, uids)
     return users, uids
 
@@ -151,7 +150,7 @@ if __name__ == '__main__':
     try:
         users, userIds = _getUsers(con)
         a = inject.instance(AssistanceModel)
-        wps = a.getWorkPeriods(con, userIds, datetime.datetime.now() - datetime.timedelta(days=63), datetime.datetime.now())
+        wps = a.getWorkPeriods(con, userIds, datetime.datetime.now() - datetime.timedelta(days=97), datetime.datetime.now())
         workedPeriodsToPyoo(wps, users)
 
     finally:
