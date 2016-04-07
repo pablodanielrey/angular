@@ -56,6 +56,7 @@ class UserDAO:
                 ins['acceptedConditions'] = True
                 ins['cv'] = ins['cv'] if 'cv' in ins else None
                 ins['priority'] = ins['priority'] if 'priority' in ins else 0
+                logging.info('persist laboralinsertion.userdao {} {}'.format(u.id, u.emailId))
                 cur.execute('insert into laboral_insertion.users (id, accepted_conditions, email, cv, priority) values '
                             '(%(id)s, %(acceptedConditions)s, %(emailId)s, %(cv)s, %(priority)s)', ins)
             else:

@@ -136,6 +136,8 @@ class InscriptionDAO:
     @staticmethod
     def findById(con, ids):
         assert isinstance(ids, list)
+        if len(ids) <= 0:
+            return []
         cur = con.cursor()
         try:
             cur.execute('select * from laboral_insertion.inscriptions where id in %s', (tuple(ids),))
