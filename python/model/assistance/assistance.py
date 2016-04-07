@@ -146,12 +146,18 @@ class AssistanceModel:
         logging.info('cargando los datos de los periodos')
         timer = datetime.datetime.now()
         for uid, wps in wpss.items():
+            scheds = []
             if uid in schedules:
                 scheds = schedules[uid]
+
+            log = []
+            if uid in logs:
                 log = logs[uid]
-                for wp in wps:
-                    wp._loadSchedule(scheds)
-                    wp._loadLogs(log)
+
+            for wp in wps:
+                wp._loadSchedule(scheds)
+                wp._loadLogs(log)
+
         logging.info(datetime.datetime.now() - timer)
 
         return wpss

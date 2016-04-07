@@ -90,3 +90,14 @@ class ScheduleDAO:
 
         finally:
             cur.close()
+
+    @staticmethod
+    def findUsersWithSchedule(con):
+        """ lo creo para hacer unas pruebas pero puede servir para despues. es codig BETAAA """
+        cur = con.cursor()
+        try:
+            cur.execute('select distinct user_id from assistance.schedules')
+            return [ c[0] for c in cur ]
+            
+        finally:
+            cur.close()

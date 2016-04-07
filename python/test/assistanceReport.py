@@ -18,6 +18,7 @@ from model.assistance.justifications.shortDurationJustification import ShortDura
 from model.assistance.justifications.longDurationJustification import LongDurationJustification
 from model.assistance.justifications.status import Status
 from model.assistance.justifications.justifications import Justification
+from model.assistance.schedules import ScheduleDAO
 
 from model.serializer.utils import MySerializer, serializer_loads
 
@@ -72,12 +73,12 @@ def workedPeriodsToPyoo(wps, users):
                     sheet[index,9].formula = '={}-{}'.format(sheet[index,8].address, sheet[index,7].address)
 
                 if hi is not None and hi > sd:
-                    sheet[index,10].formula = '={}-{}'.format(sheet[index,7].address, sheet[index,5].address)
+                    sheet[index,10].formula = '={}-{}'.format(sheet[index,7].address, sheet[index,4].address)
                 #else:
                     #sheet[index,9].value = 0
 
                 if hs is not None and ed > hs:
-                    sheet[index,11].formula = '={}-{}'.format(sheet[index,6].address, sheet[index,8].address)
+                    sheet[index,11].formula = '={}-{}'.format(sheet[index,5].address, sheet[index,8].address)
                 #else:
                     #sheet[index,10].value = 0
 
@@ -98,6 +99,13 @@ def workedPeriodsToPyoo(wps, users):
 
 def _getUsers(con):
     uids = []
+
+    """
+    uid, v = UserDAO.findByDni(con, "32393755")    # pablo Lozada
+    uids.append(uid)
+
+    uid, v = UserDAO.findByDni(con, "27528150")    # julio ciappa
+    uids.append(uid)
 
     uid, v = UserDAO.findByDni(con, "18609353")    # juan acosta
     uids.append(uid)
@@ -125,7 +133,9 @@ def _getUsers(con):
 
     uid, v = UserDAO.findByDni(con, "29694757")      # oporto
     uids.append(uid)
+    """
 
+    uids = ScheduleDAO.findUsersWithSchedule(con)
     users = UserDAO.findById(con, uids)
     return users, uids
 
