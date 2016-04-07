@@ -44,14 +44,10 @@ class WorkPeriod(JSONSerializable):
 
     def getWorkedSeconds(self):
         total = 0
-        last = None
-        for l in self.logs:
-            if last is None:
-                last = l.log
-            else:
-                total = total + (l.log - last).total_seconds()
-                last = None
-
+        workingLogs = [ self.logs[k:k+2] for k in range(0, len(self.logs), 2) ]
+        for wl in workingLogs:
+            if len(wl) >= 2:
+                total = total + (wl[1].log - wl[0].log).total_seconds()
         return total
 
     def _loadSchedule(self, schedules):
@@ -138,7 +134,7 @@ class AssistanceModel:
             d = d + oneDay
         logging.info(datetime.datetime.now() - timer)
 
-        """ ahora genero todos los WorkPeriods para todos los usuarios """
+        """ genero todos los WorkPeriods para todos los usuarios """
         logging.info('generando los periodos de trabjo')
         timer = datetime.datetime.now()
         wpss = {}
@@ -146,7 +142,7 @@ class AssistanceModel:
             wpss[uid] = [ WorkPeriod(uid, AssistanceModel._cloneDate(d)) for d in days ]
         logging.info(datetime.datetime.now() - timer)
 
-        """ se proceden a cargar los datos de la base """
+        """ cargar los datos de la base """
         logging.info('cargando los datos de los periodos')
         timer = datetime.datetime.now()
         for uid, wps in wpss.items():

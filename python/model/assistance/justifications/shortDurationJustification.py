@@ -35,6 +35,9 @@ class ShortDurationJustification(JSONSerializable, Justification):
         self.wps = []
         self.end = ShortDurationJustificationDAO._getEnd(self, days)
 
+    def getIdentifier(self):
+        return 'Corta Duración'
+
     def persist(self, con):
         jid = ShortDurationJustificationDAO.persist(con, self)
 

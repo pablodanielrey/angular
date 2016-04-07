@@ -14,3 +14,6 @@ class Justification:
             ret.extend(j.findByUserId(con, [userIds], start, end))
 
         return ret
+
+    def getIdentifier(self):
+        return ''

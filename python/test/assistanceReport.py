@@ -1,6 +1,8 @@
 
 import json
 import datetime
+import pytz
+from dateutil.tz import tzlocal
 import sys
 sys.path.append('../../python')
 
@@ -26,8 +28,8 @@ def findUser(users, uid):
         if uid == u.id:
             return u
 
+def workedPeriodsToPyoo(wps, users):
 
-def workedPeriodsToPyoo(wps):
     import uuid
     f = str(uuid.uuid4())
     fn = '/tmp/{}.ods'.format(f)
@@ -36,57 +38,72 @@ def workedPeriodsToPyoo(wps):
     calc = pyoo.Desktop('localhost', 2002)
     doc = calc.open_spreadsheet('template.ods')
     try:
-        sheet = doc.sheets[0]
-
-        sh = 0
-        chartStart = 0
-        index = 2
-        totalHoras = 0
-        logs = []
+        sheetIndex = 0
         for w in wps:
-            chartStart = index
+
+            """ creo una copia del template para poder llenar los datos """
+            sheet = doc.sheets.copy('Template', 'Sheet {}'.format(sheetIndex), sheetIndex)
+            sheetIndex = sheetIndex + 1
+
+            index = 2
             wp = wps[w]
             for w1 in wp:
                 sec = w1.getWorkedSeconds()
-                sd = '' if w1.getStartDate() is None else w1.getStartDate()
-                ed = '' if w1.getEndDate() is None else w1.getEndDate()
-                hi = '' if w1.getStartLog() is None else w1.getStartLog().log.time()
-                hs = '' if w1.getEndLog() is None else w1.getEndLog().log.time()
-                th = int(sec / 60 / 60)
-                tm = int(sec / 60 % 60)
-                logging.info('{} --> e:{}, s:{} --> {}:{} -- he {} - hs {}'.format(w1.date, sd, ed, th, tm, hi, hs))
-                totalHoras = totalHoras + sec
+                sd = w1.getStartDate()
+                ed = w1.getEndDate()
+                hi = None if w1.getStartLog() is None else w1.getStartLog().log.astimezone(tzlocal()).replace(tzinfo=None)
+                hs = None if w1.getEndLog() is None else w1.getEndLog().log.astimezone(tzlocal()).replace(tzinfo=None)
 
-                us = findUser(users, w1.userId) if findUser(users, w1.userId) is not None else 'nada'
-                sheet[index,0].value = us.dni if us != 'nada' else ''
-                sheet[index,1].value = us.name if us != 'nada' else ''
-                sheet[index,2].value = us.lastname if us != 'nada' else ''
+                us = findUser(users, w1.userId)
+                if us:
+                    sheet[index,0].value = us.dni
+                    sheet[index,1].value = us.name
+                    sheet[index,2].value = us.lastname
+
                 sheet[index,3].value = w1.date
-                sheet[index,4].value = sd
-                sheet[index,5].value = ed
-                sheet[index,6].value = hi
-                sheet[index,7].value = hs
-                #sheet[index,8].value = datetime.timedelta(seconds=sec)
-                sheet[index,8].value = sec
-                sheet[index,9].formula = '={}/60/60'.format(sheet[index,8].address)
+                if sd is not None: sheet[index,4].value = sd
+                if ed is not None: sheet[index,5].value = ed
+                if sd is not None and ed is not None: sheet[index,6].formula = '={}-{}'.format(sheet[index,5].address, sheet[index,4].address)
+
+                if hi is not None: sheet[index,7].value = hi
+                if hs is not None: sheet[index,8].value = hs
+
+                if hi is not None and hs is not None:
+                    sheet[index,9].formula = '={}-{}'.format(sheet[index,8].address, sheet[index,7].address)
+
+                if hi is not None and hi > sd:
+                    sheet[index,10].formula = '={}-{}'.format(sheet[index,7].address, sheet[index,5].address)
+                #else:
+                    #sheet[index,9].value = 0
+
+                if hs is not None and ed > hs:
+                    sheet[index,11].formula = '={}-{}'.format(sheet[index,6].address, sheet[index,8].address)
+                #else:
+                    #sheet[index,10].value = 0
+
+                if len(w1.justifications) > 0:
+                    sheet[index,12].value = w1.justifications[0].getIdentifier()
+
                 index = index + 1
 
-            logging.info(chartStart)
-            logging.info(index)
-            c = sheet.charts.create('Horas Trabajadas {}'.format(len(sheet.charts)), sheet[chartStart:index, 12:12 + len(wp)], sheet[chartStart:index, 9:10])
-            #c.change_type(pyoo.LineDiagram)
-            index = index + 1
 
-        logging.info('total de horas trabajadas : {}:{}'.format(int(totalHoras / 60 / 60), int(totalHoras / 60 % 60)))
 
+            #c = sheet.charts.create('Horas Trabajadas {}'.format(len(sheet.charts)), sheet[chartStart:index, 12:12 + len(wp)], sheet[chartStart:index, 9:10])
+            #index = index + 1
         doc.save(fn)
-        
+
     finally:
         doc.close()
 
 
 def _getUsers(con):
     uids = []
+
+    uid, v = UserDAO.findByDni(con, "18609353")    # juan acosta
+    uids.append(uid)
+
+    uid, v = UserDAO.findByDni(con, "24040623")     # miguel rey
+    uids.append(uid)
 
     uid, v = UserDAO.findByDni(con, "30001823")    # walter
     uids.append(uid)
@@ -110,7 +127,7 @@ def _getUsers(con):
     uids.append(uid)
 
     users = UserDAO.findById(con, uids)
-    return users
+    return users, uids
 
 
 if __name__ == '__main__':
@@ -122,13 +139,10 @@ if __name__ == '__main__':
     conn = Connection(reg.getRegistry('dcsys'))
     con = conn.get()
     try:
-        users = _getUsers(con)
+        users, userIds = _getUsers(con)
         a = inject.instance(AssistanceModel)
-        wps = a.getWorkPeriods(con, uids, datetime.datetime.now() - datetime.timedelta(days=63), datetime.datetime.now())
-
-
-
-        workedPeriodsToPyoo(wps)
+        wps = a.getWorkPeriods(con, userIds, datetime.datetime.now() - datetime.timedelta(days=63), datetime.datetime.now())
+        workedPeriodsToPyoo(wps, users)
 
     finally:
         conn.put(con)
