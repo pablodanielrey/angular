@@ -317,12 +317,45 @@
   overflow-x: auto;
 }
 
-.request.solicitudesGrupo .requestOwn {
+.request.solicitudesGrupo .requestOwn,
+.request.solicitudesGrupo .loadingRequests {
   display: none;
 }
-.request.solicitudesPersonales .requestGroup {
+
+.request.solicitudesPersonales .requestGroup,
+.request.solicitudesPersonales .loadingRequests {
   display: none;
 }
+
+.request.cargandoSolicitudes .requestOwn,
+.request.cargandoSolicitudes .requestGroup {
+  display: none;
+}
+
+.request .loadingRequests {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction: column;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  color: #5C5F69;
+}
+
+.request .iconMessage {
+  color: #f1f1f1;
+  margin-bottom: 10px;
+}
+
+
 
 .request .itemRequest {
   display: flex;
@@ -397,6 +430,7 @@
     -webkit-border-radius: 2px;
     padding: 1px 0px 1px 5px;
     margin: 0 5px 0 5px;
+    border: 1px solid #DBE2E5;
 }
 
 .request .infoRequest {
@@ -443,11 +477,14 @@
   color:#5C5F69;
   border:none;
   padding: 3px;
-  width: 20px;
+  width: 23px;
+  height: 23px;
   margin-right: 5px;
   border-radius: 2px;
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
+  border: 1px solid #DBE2E5;
+
   cursor: pointer;
 }
 

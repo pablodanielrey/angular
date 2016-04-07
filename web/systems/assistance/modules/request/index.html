@@ -1,5 +1,9 @@
-<div class="request {{view.style}} {{view.style2}} solicitudesGrupo">
-<!-- VARIABLES 1: seleccionSolicitud VARIABLES 2:solicitudSeleccionada -->
+<div class="request {{view.style}} {{view.style2}} cargandoSolicitudes">
+<!--
+VARIABLES 1: seleccionSolicitud
+VARIABLES 2: solicitudSeleccionada
+VARIABLES 3: solicitudesPersonales, solicitudesGrupo, cargandoSolicitudes
+-->
 
     <div class="header">
         <div>
@@ -50,6 +54,7 @@
                   Inicio <input class="inputDateRequest" type="date"></input>
                   Fin <input class="inputDateRequest" type="date"></input>
                   <button class="btnOrder"><i class="fa fa-refresh"></i></button>
+                  <button class="btnOrder"><i class="fa fa-refresh fa-spin"></i></button>
                 </div>
 
                 <div class="orderRequest">
@@ -62,6 +67,7 @@
             </div>
 
             <div class="listMyRequest">
+
                 <div class="requestOwn">
                   <!-- SOLICITUD INDIVIDUAL -->
                   <div class="itemRequest">
@@ -620,6 +626,12 @@
                     </div>
                   </div>
 
+                </div>
+
+                <div class="loadingRequests">
+                  <div class="iconMessage"><i class="fa fa-circle-o-notch fa-spin fa-4x"></i></div>
+                  <div>CARGANDO SOLICITUDES</div>
+                  <div>Por favor espere... </div>
                 </div>
 
             </div>
