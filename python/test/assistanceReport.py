@@ -92,9 +92,9 @@ def workedPeriodsToPyoo(wps, users):
                     stats.updateStatistics(w1)
                     index = index + 1
 
+                indexLastData = index
 
                 """ calculo los totales """
-                indexLastData = index
                 index = index + 4
                 #sheet[index-1,6].value = 'Cantidad Total a Trabajar'
                 #sheet[index,6].value = stats.secondsToWork
@@ -116,6 +116,9 @@ def workedPeriodsToPyoo(wps, users):
                 sheet[index,51].value = int(stats.secondsEarly)
                 #sheet[index+1,11].value = '{} d {} h {} m {} s'.format(int(stats.secondsEarly / 60 / 60 / 24), int(stats.secondsEarly / 60 / 60), int(stats.secondsEarly / 60 % 60), int(stats.secondsEarly % 60))
                 sheet[index,11].value = '{} Salidas Tempranas'.format(int(stats.countEarly))
+
+                """ detallo las justificaciones """
+
 
 
                 """ armo los graficos comparativos """
