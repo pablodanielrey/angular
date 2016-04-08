@@ -12,10 +12,12 @@ from model.registry import Registry
 from model.users.users import UserDAO
 from model.assistance.justifications.shortDurationJustification import ShortDurationJustificationDAO, ShortDurationJustification
 from model.assistance.justifications.longDurationJustification import LongDurationJustificationDAO, LongDurationJustification
+from model.assistance.justifications.familyAttentionJustification import FamilyAttentionJustificationDAO, FamilyAttentionJustification
 
 from model.assistance.justifications.imapJustifier.justCreator import JustCreator
 from model.assistance.justifications.imapJustifier.shortDurationJustification import ShortDurationCreator
 from model.assistance.justifications.imapJustifier.longDurationJustification import LongDurationCreator
+from model.assistance.justifications.imapJustifier.familyAttentionJustification import FamilyAttentionCreator
 
 
 class ImapJustifier:
