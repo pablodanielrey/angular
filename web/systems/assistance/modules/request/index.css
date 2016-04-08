@@ -528,9 +528,22 @@
 }
 
 .request .icoStateApproved {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  height: 25px;
+  width: 25px;
   background-color: #92AD17;
   color:white;
-  padding: 0px 10px 0 10px;
   margin-left: 5px;
   margin-right: 5px;
   border-radius: 2px;
@@ -539,15 +552,27 @@
 }
 
 .request .icoStatePendig {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  height: 25px;
+  width: 25px;
   /*background-color: #0069A6;*/
   color:white;
-  padding: 0px 10px 0 10px;
   margin-left: 5px;
   margin-right: 5px;
   border-radius: 2px;
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
-
   -webkit-animation-name: pendiente; /* Chrome, Safari, Opera */
   -webkit-animation-duration: 1s; /* Chrome, Safari, Opera */
   -webkit-animation-iteration-count: infinite;
@@ -570,9 +595,23 @@
 
 
 .request .icoStateCancel {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  height: 25px;
+  width: 25px;
   background-color: #e43e46;
   color:white;
-  padding: 0px 10px 0 10px;
+
   margin-left: 5px;
   margin-right: 5px;
   border-radius: 2px;
@@ -638,6 +677,24 @@
 .request .btnCancel:hover {
   background-color: #c1262b;
   cursor: pointer;
+}
+
+.request .btnTrash {
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border: none;
+  cursor: pointer;
+  height: 25px;
+  width: 25px;
+  cursor: #5C5F69;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.request .btnTrash:hover {
+  background-color: #E43E46;
+  color: white;
 }
 
 .request.solicitudesGrupo .state {
