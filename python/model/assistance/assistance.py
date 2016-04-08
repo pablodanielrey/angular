@@ -7,6 +7,8 @@ from model.assistance.logs import LogDAO, Log
 from model.assistance.schedules import ScheduleDAO, Schedule
 from model.serializer.utils import JSONSerializable
 
+from model.assistance.justifications.justifications import Justification
+from model.assistance.statistics import WpStatistics
 
 class WorkPeriod(JSONSerializable):
 
@@ -110,6 +112,15 @@ class AssistanceModel:
         return justs
 
 
+    def calculateStatistics(self, wps):
+        userId = wps[0].userId
+        stats = WpStatistics(userId)
+        for wp in wps:
+            logging.info('calculando {}'.format(wp.date))
+            stats.updateStatistics(wp)
+        return stats
+
+
     def getWorkPeriods(self, con, userIds, start, end):
         """
             Calcula los datos de los WorkinPeriods de las personas entre las fechas.
@@ -184,7 +195,6 @@ class AssistanceModel:
             if uid in justifications:
                 for js in justifications[uid]:
                     js._loadWorkedPeriods(wps)
-
 
         logging.info(datetime.datetime.now() - timer)
 

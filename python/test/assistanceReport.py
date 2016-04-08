@@ -89,7 +89,7 @@ def workedPeriodsToPyoo(wps, users):
                     if len(w1.justifications) > 0:
                         sheet[index,12].value = w1.justifications[0].getIdentifier()
 
-                    stats.updateStatistic(sd, ed, hi, hs)
+                    stats.updateStatistics(sd, ed, hi, hs)
                     index = index + 1
 
 
@@ -179,7 +179,6 @@ def _getUsers(con):
     #uid, v = UserDAO.findByDni(con, "24040623")     # miguel rey
     #uids.append(uid)
 
-    """
     uid, v = UserDAO.findByDni(con, "27821597")     # maxi
     uids.append(uid)
 
@@ -200,8 +199,8 @@ def _getUsers(con):
 
     uid, v = UserDAO.findByDni(con, "29694757")      # oporto
     uids.append(uid)
-    """
-    uids = ScheduleDAO.findUsersWithSchedule(con)
+
+    #uids = ScheduleDAO.findUsersWithSchedule(con)
     users = UserDAO.findById(con, uids)
     return users, uids
 
@@ -218,6 +217,22 @@ if __name__ == '__main__':
         users, userIds = _getUsers(con)
         a = inject.instance(AssistanceModel)
         wps = a.getWorkPeriods(con, userIds, datetime.datetime.now() - datetime.timedelta(days=97), datetime.datetime.now())
+
+        logging.info('Calculando estadísticas')
+        timer = datetime.datetime.now()
+        for uid, wp in wps.items():
+
+            # las obtengo de la base
+            #stats = WpStatistics.findByUserId(con, uid, datetime.datetime.now() - datetime.timedelta(days=97), datetime.datetime.now())
+
+            # las calculo y las persisto en la base
+            #stats = a.calculateStatistics(wp)
+            #stats.persist(con)
+            #con.commit()
+            
+        logging.info(datetime.datetime.now() - timer)
+
+
         workedPeriodsToPyoo(wps, users)
 
     finally:

@@ -9,9 +9,10 @@ class Justification:
             retorna un mapa :
                 justifications[useId] = [justification1, justification2, .... ]
         """
+        assert isinstance(userIds, list)
         ret = []
         for j in cls.__subclasses__():
-            ret.extend(j.findByUserId(con, [userIds], start, end))
+            ret.extend(j.findByUserId(con, userIds, start, end))
 
         return ret
 
