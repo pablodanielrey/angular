@@ -31,7 +31,7 @@ class ShortDurationJustification(JSONSerializable, Justification):
         self.number = number
         self.status = None
         self.statusId = None
-        self.StatusConst = Status.UNDEFINED
+        self.statusConst = Status.UNDEFINED
         self.wps = []
         self.end = ShortDurationJustificationDAO._getEnd(self, days)
 
@@ -117,10 +117,14 @@ class ShortDurationJustificationDAO:
             cur.close()
 
     @staticmethod
-    def _fromResult(r):
+    def _fromResult(con, r):
         j = ShortDurationJustification(r['user_id'], r['owner_id'], r['jstart'], 0, r['number'])
         j.id = r['id']
         j.end = r['jend']
+
+        j.status = Status.getLastStatus(con, j.id)
+        j.statusId = j.status.id
+        j.statusConst = j.status.status
 
         return j
 
@@ -174,7 +178,7 @@ class ShortDurationJustificationDAO:
         try:
             logging.info('ids: %s', tuple(ids))
             cur.execute('select * from assistance.short_duration_j where id in %s',(tuple(ids),))
-            return [ ShortDurationJustificationDAO._fromResult(r) for r in cur ]
+            return [ ShortDurationJustificationDAO._fromResult(con, r) for r in cur ]
         finally:
             cur.close()
 
@@ -196,6 +200,6 @@ class ShortDurationJustificationDAO:
                         '(jstart >= %s and jstart <= %s) or '
                         '(jstart <= %s and jend >= %s))', (tuple(userIds), sDate, eDate, sDate, eDate, sDate, eDate))
 
-            return [ ShortDurationJustificationDAO._fromResult(r) for r in cur ]
+            return [ ShortDurationJustificationDAO._fromResult(con, r) for r in cur ]
         finally:
             cur.close()

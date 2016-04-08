@@ -89,7 +89,7 @@ def workedPeriodsToPyoo(wps, users):
                     if len(w1.justifications) > 0:
                         sheet[index,12].value = w1.justifications[0].getIdentifier()
 
-                    stats.updateStatistics(sd, ed, hi, hs)
+                    stats.updateStatistics(w1)
                     index = index + 1
 
 
@@ -97,13 +97,13 @@ def workedPeriodsToPyoo(wps, users):
                 indexLastData = index
                 index = index + 4
                 #sheet[index-1,6].value = 'Cantidad Total a Trabajar'
-                sheet[index,6].value = stats.secondsToWork
-                sheet[index+1,6].value = '{} d {} h {} m {} s'.format(int(stats.secondsToWork / 60 / 60 / 24), int(stats.secondsToWork / 60 / 60), int(stats.secondsToWork / 60 % 60), int(stats.secondsToWork % 60))
+                #sheet[index,6].value = stats.secondsToWork
+                #sheet[index+1,6].value = '{} d {} h {} m {} s'.format(int(stats.secondsToWork / 60 / 60 / 24), int(stats.secondsToWork / 60 / 60), int(stats.secondsToWork / 60 % 60), int(stats.secondsToWork % 60))
 
                 #index = index + 4
                 #sheet[index-1,6].value = 'Cantidad Total Trabajada'
-                sheet[index,9].value = stats.secondsWorked
-                sheet[index+1,9].value = '{} d {} h {} m {} s'.format(int(stats.secondsWorked / 60 / 60 / 24), int(stats.secondsWorked / 60 / 60), int(stats.secondsWorked / 60 % 60), int(stats.secondsWorked % 60))
+                #sheet[index,9].value = stats.secondsWorked
+                #sheet[index+1,9].value = '{} d {} h {} m {} s'.format(int(stats.secondsWorked / 60 / 60 / 24), int(stats.secondsWorked / 60 / 60), int(stats.secondsWorked / 60 % 60), int(stats.secondsWorked % 60))
 
                 #index = index + 4
                 #sheet[index-1,6].value = 'Cantidad Total de Lllegadas Tarde'
@@ -167,6 +167,18 @@ def workedPeriodsToPyoo(wps, users):
 def _getUsers(con):
     uids = []
 
+    uid, v = UserDAO.findByDni(con, "26575940")
+    uids.append(uid)
+
+    uid, v = UserDAO.findByDni(con, "18854479")
+    uids.append(uid)
+
+    uid, v = UserDAO.findByDni(con, "26106065")
+    uids.append(uid)
+
+    uid, v = UserDAO.findByDni(con, "24040623")
+    uids.append(uid)
+
     #uid, v = UserDAO.findByDni(con, "32393755")    # pablo Lozada
     #uids.append(uid)
 
@@ -218,6 +230,7 @@ if __name__ == '__main__':
         a = inject.instance(AssistanceModel)
         wps = a.getWorkPeriods(con, userIds, datetime.datetime.now() - datetime.timedelta(days=97), datetime.datetime.now())
 
+        """
         logging.info('Calculando estadísticas')
         timer = datetime.datetime.now()
         for uid, wp in wps.items():
@@ -229,9 +242,9 @@ if __name__ == '__main__':
             #stats = a.calculateStatistics(wp)
             #stats.persist(con)
             #con.commit()
-            
-        logging.info(datetime.datetime.now() - timer)
 
+        logging.info(datetime.datetime.now() - timer)
+        """
 
         workedPeriodsToPyoo(wps, users)
 
