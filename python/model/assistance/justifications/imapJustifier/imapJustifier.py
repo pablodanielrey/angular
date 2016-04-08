@@ -11,11 +11,13 @@ from dateutil import parser
 from model.registry import Registry
 from model.users.users import UserDAO
 from model.assistance.justifications.shortDurationJustification import ShortDurationJustificationDAO, ShortDurationJustification
+from model.assistance.justifications.medicalBoardJustification import MedicalBoardJustificationDAO, MedicalBoardJustification
 from model.assistance.justifications.longDurationJustification import LongDurationJustificationDAO, LongDurationJustification
 from model.assistance.justifications.familyAttentionJustification import FamilyAttentionJustificationDAO, FamilyAttentionJustification
 
 from model.assistance.justifications.imapJustifier.justCreator import JustCreator
 from model.assistance.justifications.imapJustifier.shortDurationJustification import ShortDurationCreator
+from model.assistance.justifications.imapJustifier.medicalBoardJustification import MedicalBoardCreator
 from model.assistance.justifications.imapJustifier.longDurationJustification import LongDurationCreator
 from model.assistance.justifications.imapJustifier.familyAttentionJustification import FamilyAttentionCreator
 
@@ -40,6 +42,7 @@ class ImapJustifier:
         start = None
         days = 0
         ttype = None
+        number = None
 
         m = re.search("Imputable al artículo.*<em>(?P<type>.*)</em>.*", text)
         if not m:
@@ -51,17 +54,27 @@ class ImapJustifier:
             return False
         dni = m.group('cuit')[2:][:-1]
 
+        m = re.search(".*Número.*<em.*>(?P<number>.*)</em>", text)
+        if not m:
+            return False
+        number = m.group('number')
+
         m = re.search(".*Inicio.*<em>(?P<start>.*)</em>", text)
         if not m:
             return False
-        start = parser.parse(m.group('start'))
+
+        start = parser.parse(m.group('start'),dayfirst=True)
+
 
         m = re.search(".*Días de licencia.*<em>(?P<days>\d*)</em>", text)
         if not m:
             return False
         days = int(m.group('days'))
 
-        logging.info('dni {} licencia {} inicio {} cantidad de días {}'.format(dni,ttype,start,days))
+
+
+        logging.info('dni {} licencia {} inicio {} cantidad de días {} número {}'.format(dni,ttype,start,days, number))
+
         for cls in JustCreator.__subclasses__():
             if cls.checkType(ttype):
                 cls.create(con, dni, start, days)

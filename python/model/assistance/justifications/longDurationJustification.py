@@ -104,9 +104,13 @@ class LongDurationJustificationDAO:
 
     @staticmethod
     def _getEnd(j, days):
-        if j.start is None:
+        if j.start is None and days > 0:
             return None
-
+        '''
+        le resto un dia al days porque el start es un dia a justificar
+        '''
+        days = days - 1
+        
         continuous = LongDurationJustificationDAO.registry.get('continuousDays')
         if (continuous.lower() == 'true'):
             return j.start + datetime.timedelta(days=days)
