@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 '''
-    implementa la justificación de corta duración
+    implementa la justificación de Atención del Grupo Familiar
     dentro del registry debe existir una sección :
 
-    [shortDurationJustification]
+    [familyAttentionJustification]
     continuousDays = True
 
 '''
@@ -20,19 +20,19 @@ from model.registry import Registry
 from model.assistance.justifications.justifications import Justification
 from model.assistance.justifications.status import Status
 
-class ShortDurationJustification(Justification):
+class FamilyAttentionJustification(Justification):
 
     def __init__(self, userId, ownerId, start, days = 0, number = None):
         super().__init__(start, None, userId, ownerId)
-        dEnd = ShortDurationJustificationDAO._getEnd(self, days)
+        dEnd = FamilyAttentionJustificationDAO._getEnd(self, days)
         self.end = dEnd
         self.number = number
 
     def getIdentifier(self):
-        return 'Corta Duración'
+        return 'Familiar enfermo'
 
     def persist(self, con):
-        jid = ShortDurationJustificationDAO.persist(con, self)
+        jid = FamilyAttentionJustificationDAO.persist(con, self)
 
         s = Status(jid, self.ownerId)
         s.created = s.created - datetime.timedelta(seconds=1)
@@ -67,15 +67,15 @@ class ShortDurationJustification(Justification):
 
     @classmethod
     def findByUserId(cls,con, userIds, start, end):
-        return ShortDurationJustificationDAO.findByUserId(con, userIds, start, end)
+        return FamilyAttentionJustificationDAO.findByUserId(con, userIds, start, end)
 
     @classmethod
     def findById(cls, con, ids):
-        return ShortDurationJustificationDAO.findById(con, ids)
+        return FamilyAttentionJustificationDAO.findById(con, ids)
 
 
-class ShortDurationJustificationDAO:
-    registry = inject.instance(Registry).getRegistry('shortDurationJustification')
+class FamilyAttentionJustificationDAO:
+    registry = inject.instance(Registry).getRegistry('familyAttentionJustification')
 
     @staticmethod
     def _createSchema(con):
@@ -83,7 +83,7 @@ class ShortDurationJustificationDAO:
         try:
             cur.execute("""
                 create schema if not exists assistance;
-                create table assistance.short_duration_j (
+                create table assistance.family_attention_j (
                     id varchar primary key,
                     user_id varchar not null references profile.users (id),
                     owner_id varchar not null references profile.users (id),
@@ -98,7 +98,7 @@ class ShortDurationJustificationDAO:
 
     @staticmethod
     def _fromResult(con, r):
-        j = ShortDurationJustification(r['user_id'], r['owner_id'], r['jstart'], 0, r['number'])
+        j = FamilyAttentionJustification(r['user_id'], r['owner_id'], r['jstart'], 0, r['number'])
         j.id = r['id']
         j.end = r['jend']
 
@@ -113,7 +113,7 @@ class ShortDurationJustificationDAO:
         if j.start is None:
             return None
 
-        continuous = ShortDurationJustificationDAO.registry.get('continuousDays')
+        continuous = FamilyAttentionJustificationDAO.registry.get('continuousDays')
         if (continuous.lower() == 'true'):
             return j.start + datetime.timedelta(days=days)
         else:
@@ -139,11 +139,11 @@ class ShortDurationJustificationDAO:
                 j.id = str(uuid.uuid4())
 
                 r = j.__dict__
-                cur.execute('insert into assistance.short_duration_j (id, user_id, owner_id, jstart, jend, number) '
+                cur.execute('insert into assistance.family_attention_j (id, user_id, owner_id, jstart, jend, number) '
                             'values (%(id)s, %(userId)s, %(ownerId)s, %(start)s, %(end)s, %(number)s)', r)
             else:
                 r = j.__dict__
-                cur.execute('update assistance.short_duration_j set user_id = %(userId)s, owner_id = %(ownerId)s, '
+                cur.execute('update assistance.family_attention_j set user_id = %(userId)s, owner_id = %(ownerId)s, '
                             'jstart = %(start)s, jend = %(end)s, number = %(number)s where id = %(id)s', r)
             return j.id
 
@@ -157,8 +157,8 @@ class ShortDurationJustificationDAO:
         cur = con.cursor()
         try:
             logging.info('ids: %s', tuple(ids))
-            cur.execute('select * from assistance.short_duration_j where id in %s',(tuple(ids),))
-            return [ ShortDurationJustificationDAO._fromResult(con, r) for r in cur ]
+            cur.execute('select * from assistance.family_attention_j where id in %s',(tuple(ids),))
+            return [ FamilyAttentionJustificationDAO._fromResult(con, r) for r in cur ]
         finally:
             cur.close()
 
@@ -175,11 +175,11 @@ class ShortDurationJustificationDAO:
         try:
             sDate = None if start is None else start.date()
             eDate = datetime.date.today() if end is None else end.date()
-            cur.execute('select * from assistance.short_duration_j where user_id in %s and '
+            cur.execute('select * from assistance.family_attention_j where user_id in %s and '
                         '((jend >= %s and jend <= %s) or '
                         '(jstart >= %s and jstart <= %s) or '
                         '(jstart <= %s and jend >= %s))', (tuple(userIds), sDate, eDate, sDate, eDate, sDate, eDate))
 
-            return [ ShortDurationJustificationDAO._fromResult(con, r) for r in cur ]
+            return [ FamilyAttentionJustificationDAO._fromResult(con, r) for r in cur ]
         finally:
             cur.close()

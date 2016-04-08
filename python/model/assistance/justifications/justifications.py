@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from model.assistance.justifications.status import Status
+from model.serializer.utils import JSONSerializable
 
 class Justification(JSONSerializable):
 

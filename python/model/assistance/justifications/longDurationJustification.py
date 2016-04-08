@@ -9,7 +9,6 @@
 '''
 from model.connection.connection import Connection
 from model.registry import Registry
-from model.serializer.utils import JSONSerializable
 import inject
 
 from model.assistance.justifications.justifications import Justification
@@ -19,16 +18,17 @@ import datetime, uuid
 class LongDurationJustification(Justification):
 
     def __init__(self, userId, ownerId, start, days = 0, number = None):
+        super().__init__(start, None, userId, ownerId)
         dEnd = LongDurationJustificationDAO._getEnd(self, days)
-        super().__init__(start, dEnd, userId, ownerId)
+        self.end = dEnd
         self.number = number
 
     def getIdentifier(self):
         return 'Larga Duración'
 
-    def persist(self, con, days=None):
+    def persist(self, con):
 
-        jid = LongDurationJustificationDAO.persist(con, self, days)
+        jid = LongDurationJustificationDAO.persist(con, self)
         s = Status(jid,self.ownerId)
         s.created = s.created - datetime.timedelta(seconds=1)
         sid = s.persist(con)
@@ -91,7 +91,7 @@ class LongDurationJustificationDAO:
             cur.close()
 
     @staticmethod
-    def _fromResult(r):
+    def _fromResult(con, r):
         j = LongDurationJustification(r['user_id'], r['owner_id'], r['jstart'], 0, r['number'])
         j.id = r['id']
         j.end = r['jend']
@@ -130,7 +130,7 @@ class LongDurationJustificationDAO:
         return
 
     @staticmethod
-    def persist(con, j, days):
+    def persist(con, j):
         assert j is not None
 
         cur = con.cursor()
@@ -157,7 +157,7 @@ class LongDurationJustificationDAO:
         cur = con.cursor()
         try:
             cur.execute('select * from assistance.long_duration_j where id in %s',tuple(ids))
-            return [ LongDurationJustificationDAO._fromResult(r) for r in cur ]
+            return [ LongDurationJustificationDAO._fromResult(con, r) for r in cur ]
         finally:
             cur.close()
 
@@ -179,6 +179,6 @@ class LongDurationJustificationDAO:
                         '(jstart >= %s and jstart <= %s) or '
                         '(jstart <= %s and jend >= %s))', (tuple(userIds), sDate, eDate, sDate, eDate, sDate, eDate))
 
-            return [ LongDurationJustificationDAO._fromResult(r) for r in cur ]
+            return [ LongDurationJustificationDAO._fromResult(con, r) for r in cur ]
         finally:
             cur.close()
