@@ -240,6 +240,10 @@ class Telephone(JSONSerializable):
 class UserDAO:
     ''' DAO para los usuarios '''
 
+    @classmethod
+    def _createSchema(cls, con):
+        pass
+
     @staticmethod
     def _fromResult(r):
         u = User()
