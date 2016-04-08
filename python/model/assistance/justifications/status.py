@@ -32,7 +32,7 @@ class Status(JSONSerializable):
         justification.status = s
         justification.statusId = s.id
         justification.statusConst = s.status
-        
+
     @classmethod
     def findByIds(cls, con, ids):
         return StatusDAO.findByIds(con, ids)

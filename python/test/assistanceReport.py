@@ -14,6 +14,7 @@ import logging
 from model.registry import Registry
 from model.connection.connection import Connection
 from model.assistance.assistance import AssistanceModel
+from model.assistance.statistics import WpStatistics
 from model.assistance.justifications.shortDurationJustification import ShortDurationJustification
 from model.assistance.justifications.longDurationJustification import LongDurationJustification
 from model.assistance.justifications.status import Status
@@ -28,33 +29,6 @@ def findUser(users, uid):
     for u in users:
         if uid == u.id:
             return u
-
-class WpStatistics:
-
-    def __init__(self, userId):
-        self.userId = userId
-        self.secondsToWork = 0              # total que deberia trabajar
-        self.secondsWorked = 0              # total trabajado
-        self.secondsLate = 0                # total de llegadas tarde
-        self.countLate = 0                  # cantidad de llegadas tarde
-        self.secondsEarly = 0               # total de salidas tempranas
-        self.countEarly = 0                 # cantidad de salidas tempranas
-
-    def updateStatistic(self, start, end, hourStart, hourEnd):
-
-        if end is not None and start is not None:
-            self.secondsToWork = self.secondsToWork + (end - start).total_seconds()
-
-        if hourStart is not None and hourEnd is not None:
-            self.secondsWorked = self.secondsWorked + (hourEnd - hourStart).total_seconds()
-
-        if hourStart is not None and start is not None and hourStart > start:
-            self.secondsLate = self.secondsLate + (hourStart - start).total_seconds()
-            self.countLate = self.countLate + 1
-
-        if hourEnd is not None and end is not None and end > hourEnd:
-            self.secondsEarly = self.secondsEarly + (end - hourEnd).total_seconds()
-            self.countEarly = self.countEarly + 1
 
 
 def workedPeriodsToPyoo(wps, users):
@@ -205,6 +179,7 @@ def _getUsers(con):
     #uid, v = UserDAO.findByDni(con, "24040623")     # miguel rey
     #uids.append(uid)
 
+    """
     uid, v = UserDAO.findByDni(con, "27821597")     # maxi
     uids.append(uid)
 
@@ -225,8 +200,8 @@ def _getUsers(con):
 
     uid, v = UserDAO.findByDni(con, "29694757")      # oporto
     uids.append(uid)
-
-    #uids = ScheduleDAO.findUsersWithSchedule(con)
+    """
+    uids = ScheduleDAO.findUsersWithSchedule(con)
     users = UserDAO.findById(con, uids)
     return users, uids
 

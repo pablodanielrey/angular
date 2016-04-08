@@ -15,5 +15,9 @@ class Justification:
 
         return ret
 
+    def _loadWorkedPeriods(self, wps):
+        """ por defecto no hace nada """
+        return
+
     def getIdentifier(self):
         return ''

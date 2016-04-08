@@ -77,6 +77,7 @@ class WorkPeriod(JSONSerializable):
     def _getEndOfDay(self):
         return self._getStartOfDay() + datetime.timedelta(days=1)
 
+
 class AssistanceModel:
 
     @staticmethod
@@ -103,8 +104,22 @@ class AssistanceModel:
         logs = AssistanceModel._classifyByUserId(ls)
         return logs
 
+    def _getJustifications(self, con, userIds, start, end):
+        js = Justification.getJustifications(con, userIds, start, end)
+        justs = AssistanceModel._classifyByUserId(js)
+        return justs
+
 
     def getWorkPeriods(self, con, userIds, start, end):
+        """
+            Calcula los datos de los WorkinPeriods de las personas entre las fechas.
+            variables importantes :
+                schedules -- schedules de las personas
+                logs -- logs de las personas
+                days -- dias generados entre las 2 fechas para calcular
+                wpss -- working periods
+                justifications -- justificaciones de las personas entre las fechas.
+        """
         assert isinstance(userIds, list)
         assert isinstance(start, datetime.datetime)
         assert isinstance(end, datetime.datetime)
@@ -116,11 +131,18 @@ class AssistanceModel:
 
         logging.info('buscando los logs')
         timer = datetime.datetime.now()
-        logs = self._getLogs(con, userIds, start, end + datetime.timedelta(1))
+        logs = self._getLogs(con, userIds, start, end + datetime.timedelta(days=1))
         logging.info(datetime.datetime.now() - timer)
+        """
         for lk in logs.keys():
             for l in logs[lk]:
                 logging.info(l.__dict__)
+        """
+
+        logging.info('buscando las justificaciones')
+        timer = datetime.datetime.now()
+        justifications = self._getJustifications(con, userIds, start, end + datetime.timedelta(days=1))
+        logging.info(datetime.datetime.now() - timer)
 
         """ genero los dias a trabajar """
         logging.info('generando los dias de trabajo')
@@ -157,6 +179,12 @@ class AssistanceModel:
             for wp in wps:
                 wp._loadSchedule(scheds)
                 wp._loadLogs(log)
+
+            """ cargo los datos de las justificaciones en los WorkedPeriod """
+            if uid in justifications:
+                for js in justifications[uid]:
+                    js._loadWorkedPeriods(wps)
+
 
         logging.info(datetime.datetime.now() - timer)
 
