@@ -16,19 +16,15 @@ from model.assistance.justifications.justifications import Justification
 from model.assistance.justifications.status import Status
 import datetime, uuid
 
-class LongDurationJustification(JSONSerializable, Justification):
+class LongDurationJustification(Justification):
 
     def __init__(self, userId, ownerId, start, days = 0, number = None):
-        self.id = None
-        self.userId = userId
-        self.ownerId = ownerId
-        self.start = start
+        dEnd = LongDurationJustificationDAO._getEnd(self, days)
+        super().__init__(start, dEnd, userId, ownerId)
         self.number = number
-        self.status = None
-        self.statusId = None
-        self.StatusConst = Status.UNDEFINED
-        self.wps = []
-        self.end = LongDurationJustificationDAO._getEnd(self, days)
+
+    def getIdentifier(self):
+        return 'Larga Duración'
 
     def persist(self, con, days=None):
 
@@ -45,24 +41,12 @@ class LongDurationJustification(JSONSerializable, Justification):
 
         return jid
 
-    def changeStatus(self, con, status, userId):
-        assert status is not None
-        assert (self.status is not None or self.statusId is not None)
+    def changeStatus(self, con, status, userId = None):
+        super().changeStatus(con,status,userId)
 
-        if self.status == None:
-            self.status = Status.findByIds(con, [self.statusId])
-        else:
-            self.statusId = self.status.id
-
-        self.status.changeStatus(con, self, status, userId)
 
     def _getLastStatus(self, con):
-        if self.status is None:
-            self.status = Status.getLastStatus(con, self.id)
-            self.statusId = self.status.id
-            self.statusConst = self.status.status
-
-        return self.status
+        super()._getLastStatus(con)
 
     def _loadWorkedPeriods(self, wps):
         assert self.status is not None
@@ -111,6 +95,10 @@ class LongDurationJustificationDAO:
         j = LongDurationJustification(r['user_id'], r['owner_id'], r['jstart'], 0, r['number'])
         j.id = r['id']
         j.end = r['jend']
+
+        j.status = Status.getLastStatus(con, j.id)
+        j.statusId = j.status.id
+        j.statusConst = j.status.status
 
         return j
 
