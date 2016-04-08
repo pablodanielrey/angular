@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+
 from model.serializer.utils import JSONSerializable
 
 class Log(JSONSerializable):
@@ -16,7 +17,22 @@ class Log(JSONSerializable):
         return (self.log >= start and self.log <= end)
 
 
-class LogDAO:
+from model.dao import DAO
+from model.users.users import UserDAO
+
+class LogDAO(DAO):
+
+    schemaDependencies = [ UserDAO ]
+
+    @classmethod
+    def _createSchema(cls, con):
+        for c in cls.schemaDependencies:
+            c._createSchema(con)
+        cur = con.cursor()
+        try:
+            cur.execute('....')
+        finally:
+            cur.close()
 
     @staticmethod
     def _fromResult(r):
