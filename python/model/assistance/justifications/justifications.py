@@ -43,8 +43,16 @@ class Justification(JSONSerializable):
         return self.status
 
     def _loadWorkedPeriods(self, wps):
-        """ por defecto no hace nada """
-        return
+        assert self.status is not None
+
+        if self.status.status != Status.APPROVED:
+            return
+
+        for wp in wps:
+            if self.start.date() == wp.date:
+                self.wps.append(wp)
+                wp.addJustification(self)
+
 
     @classmethod
     def findByUserId(cls, con, userIds, start, end):
@@ -80,7 +88,8 @@ class Justification(JSONSerializable):
             else:
                 toProcess.extend(sc)
         return finalSubC
-        
+
+
 class RangedJustification(Justification):
 
     def __init__(self, start, days, userId, ownerId):
