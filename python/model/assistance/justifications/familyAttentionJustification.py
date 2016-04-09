@@ -17,15 +17,15 @@ import uuid
 from model.connection.connection import Connection
 from model.registry import Registry
 
-from model.assistance.justifications.justifications import Justification
+from model.assistance.justifications.justifications import Justification, RangedJustification
 from model.assistance.justifications.status import Status
 
-class FamilyAttentionJustification(Justification):
+class FamilyAttentionJustification(RangedJustification):
+
+    registry = inject.instance(Registry).getRegistry('familyAttentionJustification')
 
     def __init__(self, userId, ownerId, start, days = 0, number = None):
-        super().__init__(start, None, userId, ownerId)
-        dEnd = FamilyAttentionJustificationDAO._getEnd(self, days)
-        self.end = dEnd
+        super().__init__(start, days, userId, ownerId)
         self.number = number
 
     def getIdentifier(self):
@@ -46,25 +46,6 @@ class FamilyAttentionJustification(Justification):
 
         return jid
 
-    def changeStatus(self, con, status, userId = None):
-        super().changeStatus(con,status,userId)
-
-
-    def _getLastStatus(self, con):
-        super()._getLastStatus(con)
-
-    def _loadWorkedPeriods(self, wps):
-        assert self.status is not None
-
-        # import pdb;pdb.set_trace()
-        if self.status.status != Status.APPROVED:
-            return
-
-        for wp in wps:
-            if self.start <= wp.date <= self.end:
-                self.wps.append(wp)
-                wp.addJustification(self)
-
     @classmethod
     def findByUserId(cls,con, userIds, start, end):
         return FamilyAttentionJustificationDAO.findByUserId(con, userIds, start, end)
@@ -75,7 +56,6 @@ class FamilyAttentionJustification(Justification):
 
 
 class FamilyAttentionJustificationDAO:
-    registry = inject.instance(Registry).getRegistry('familyAttentionJustification')
 
     @staticmethod
     def _createSchema(con):
@@ -107,31 +87,6 @@ class FamilyAttentionJustificationDAO:
         j.statusConst = j.status.status
 
         return j
-
-    @staticmethod
-    def _getEnd(j, days):
-        if j.start is None and days > 0:
-            return None
-        '''
-        le resto un dia al days porque el start es un dia a justificar
-        '''
-        days = days - 1
-        
-        continuous = FamilyAttentionJustificationDAO.registry.get('continuousDays')
-        if (continuous.lower() == 'true'):
-            return j.start + datetime.timedelta(days=days)
-        else:
-            date = j.start
-            while (days > 0):
-                if date.weekday() >= 5:
-                    date = date + datetime.timedelta(days = (7 - date.weekday()))
-                else:
-                    days = days - 1
-                    date = date + datetime.timedelta(days=1)
-
-            if date.weekday() >= 5:
-                date = date + datetime.timedelta(days = (7 - date.weekday()))
-            return date
 
     @staticmethod
     def persist(con, j):

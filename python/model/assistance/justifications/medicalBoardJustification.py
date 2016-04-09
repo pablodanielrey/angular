@@ -25,11 +25,7 @@ class MedicalBoardJustification(RangedJustification):
     registry = inject.instance(Registry).getRegistry('medicalBoardJustification')
 
     def __init__(self, userId, ownerId, start, days = 0, number = None):
-        super().__init__(start, userId, ownerId)
-        if (MedicalBoardJustification.registry.get('continuousDays').lower == 'true'):
-            self.end = self._getEnd(start, days, True)
-        else:
-            self.end = self._getEnd(start, days, False)
+        super().__init__(start, days, userId, ownerId)
         self.number = number
 
     def getIdentifier(self):
@@ -49,13 +45,6 @@ class MedicalBoardJustification(RangedJustification):
         self.changeStatus(con, Status.APPROVED, self.ownerId)
 
         return jid
-
-    #def changeStatus(self, con, status, userId = None):
-    #    super().changeStatus(con,status,userId)
-
-
-    #def _getLastStatus(self, con):
-    #    super()._getLastStatus(con)
 
     @classmethod
     def findByUserId(cls,con, userIds, start, end):

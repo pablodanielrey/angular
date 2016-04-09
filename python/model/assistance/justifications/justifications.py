@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import datetime
+
 from model.assistance.justifications.status import Status
 from model.serializer.utils import JSONSerializable
 
@@ -45,6 +47,10 @@ class Justification(JSONSerializable):
         return
 
     @classmethod
+    def findByUserId(cls, con, userIds, start, end):
+        raise Exception('abstract method')
+
+    @classmethod
     def getJustifications(cls, con, userIds, start, end):
         """
             obtiene todas las justificaciones para esos usuarios entre esas fechas.
@@ -54,17 +60,40 @@ class Justification(JSONSerializable):
         """
         assert isinstance(userIds, list)
         ret = []
-        for j in cls.__subclasses__():
+
+        for j in cls._getLeafSubclasses():
             ret.extend(j.findByUserId(con, userIds, start, end))
 
         return ret
 
-
+    @classmethod
+    def _getLeafSubclasses(cls):
+        finalSubC = []
+        toProcess = cls.__subclasses__()
+        if len(toProcess) <= 0:
+            return []
+        while len(toProcess) > 0:
+            c = toProcess.pop()
+            sc = c.__subclasses__()
+            if len(sc) <= 0:
+                finalSubC.append(c)
+            else:
+                toProcess.extend(sc)
+        return finalSubC
+        
 class RangedJustification(Justification):
 
-    def __init__(self, start, userId, ownerId):
+    def __init__(self, start, days, userId, ownerId):
         super().__init__(start, userId, ownerId)
-        self.end = None
+        continuous = self.isContinuous()
+        self.end = self._getEnd(start, days, continuous)
+
+    @classmethod
+    def isContinuous(cls):
+        if (cls.registry.get('continuousDays').lower == 'true'):
+            return True
+        else:
+            return False
 
     @classmethod
     def _getEnd(cls, start, days, continuous=False):
@@ -76,9 +105,9 @@ class RangedJustification(Justification):
         days = days - 1
 
         if continuous:
-            return j.start + datetime.timedelta(days=days)
+            return start + datetime.timedelta(days=days)
         else:
-            date = j.start
+            date = start
             while (days > 0):
                 if date.weekday() >= 5:
                     date = date + datetime.timedelta(days = (7 - date.weekday()))
