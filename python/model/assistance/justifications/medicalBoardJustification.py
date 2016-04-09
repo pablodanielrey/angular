@@ -17,15 +17,19 @@ import uuid
 from model.connection.connection import Connection
 from model.registry import Registry
 
-from model.assistance.justifications.justifications import Justification
+from model.assistance.justifications.justifications import Justification, RangedJustification
 from model.assistance.justifications.status import Status
 
-class MedicalBoardJustification(Justification):
+class MedicalBoardJustification(RangedJustification):
+
+    registry = inject.instance(Registry).getRegistry('medicalBoardJustification')
 
     def __init__(self, userId, ownerId, start, days = 0, number = None):
-        super().__init__(start, None, userId, ownerId)
-        dEnd = MedicalBoardJustificationDAO._getEnd(self, days)
-        self.end = dEnd
+        super().__init__(start, userId, ownerId)
+        if (MedicalBoardJustification.registry.get('continuousDays').lower == 'true'):
+            self.end = self._getEnd(start, days, True)
+        else:
+            self.end = self._getEnd(start, days, False)
         self.number = number
 
     def getIdentifier(self):
@@ -46,24 +50,12 @@ class MedicalBoardJustification(Justification):
 
         return jid
 
-    def changeStatus(self, con, status, userId = None):
-        super().changeStatus(con,status,userId)
+    #def changeStatus(self, con, status, userId = None):
+    #    super().changeStatus(con,status,userId)
 
 
-    def _getLastStatus(self, con):
-        super()._getLastStatus(con)
-
-    def _loadWorkedPeriods(self, wps):
-        assert self.status is not None
-
-        # import pdb;pdb.set_trace()
-        if self.status.status != Status.APPROVED:
-            return
-
-        for wp in wps:
-            if self.start <= wp.date <= self.end:
-                self.wps.append(wp)
-                wp.addJustification(self)
+    #def _getLastStatus(self, con):
+    #    super()._getLastStatus(con)
 
     @classmethod
     def findByUserId(cls,con, userIds, start, end):
@@ -75,7 +67,6 @@ class MedicalBoardJustification(Justification):
 
 
 class MedicalBoardJustificationDAO:
-    registry = inject.instance(Registry).getRegistry('medicalBoardJustification')
 
     @staticmethod
     def _createSchema(con):
@@ -107,32 +98,6 @@ class MedicalBoardJustificationDAO:
         j.statusConst = j.status.status
 
         return j
-
-    @staticmethod
-    def _getEnd(j, days):
-        if j.start is None and days > 0:
-            return None
-
-        continuous = MedicalBoardJustificationDAO.registry.get('continuousDays')
-        '''
-        le resto un dia al days porque el start es un dia a justificar
-        '''
-        days = days - 1
-        if (continuous.lower() == 'true'):
-            return j.start + datetime.timedelta(days=days)
-        else:
-            date = j.start
-
-            while (days > 0):
-                if date.weekday() >= 5:
-                    date = date + datetime.timedelta(days = (7 - date.weekday()))
-                else:
-                    days = days - 1
-                    date = date + datetime.timedelta(days=1)
-
-            if date.weekday() >= 5:
-                date = date + datetime.timedelta(days = (7 - date.weekday()))
-            return date
 
     @staticmethod
     def persist(con, j):

@@ -4,10 +4,9 @@ from model.serializer.utils import JSONSerializable
 
 class Justification(JSONSerializable):
 
-    def __init__(self, start, end, userId, ownerId):
+    def __init__(self, start, userId, ownerId):
         self.id = None
         self.start = start
-        self.end = end
         self.userId = userId
         self.ownerId = ownerId
         self.status = None
@@ -59,3 +58,46 @@ class Justification(JSONSerializable):
             ret.extend(j.findByUserId(con, userIds, start, end))
 
         return ret
+
+
+class RangedJustification(Justification):
+
+    def __init__(self, start, userId, ownerId):
+        super().__init__(start, userId, ownerId)
+        self.end = None
+
+    @classmethod
+    def _getEnd(cls, start, days, continuous=False):
+        if start is None and days > 0:
+            return None
+        '''
+        le resto un dia al days porque el start es un dia a justificar
+        '''
+        days = days - 1
+
+        if continuous:
+            return j.start + datetime.timedelta(days=days)
+        else:
+            date = j.start
+            while (days > 0):
+                if date.weekday() >= 5:
+                    date = date + datetime.timedelta(days = (7 - date.weekday()))
+                else:
+                    days = days - 1
+                    date = date + datetime.timedelta(days=1)
+
+            if date.weekday() >= 5:
+                date = date + datetime.timedelta(days = (7 - date.weekday()))
+            return date
+
+
+    def _loadWorkedPeriods(self, wps):
+        assert self.status is not None
+
+        if self.status.status != Status.APPROVED:
+            return
+
+        for wp in wps:
+            if self.start <= wp.date <= self.end:
+                self.wps.append(wp)
+                wp.addJustification(self)
