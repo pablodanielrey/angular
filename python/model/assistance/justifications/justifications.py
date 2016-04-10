@@ -7,12 +7,11 @@ from model.serializer.utils import JSONSerializable
 
 class Justification(JSONSerializable):
 
-    def __init__(self, start, userId, ownerId):
+    def __init__(self, userId, ownerId):
         self.id = None
-        self.start = start
         self.userId = userId
         self.ownerId = ownerId
-        self.status = Status(userId, start + datetime.timedelta(seconds=1))
+        self.status = Status(userId, datetime.datetime.now())
         self.wps = []
 
     def getIdentifier(self):
@@ -42,18 +41,11 @@ class Justification(JSONSerializable):
             self._setStatus(Status.getLastStatus(con, self.id))
         return self.getStatus()
 
-    def _loadWorkedPeriods(self, wps):
-        assert self.getStatus() is not None
-        if self.getStatus().status != Status.APPROVED:
-            return
 
-        for wp in wps:
-            if self.start.date() == wp.date:
-                self.wps.append(wp)
-                wp.addJustification(self)
 
     @classmethod
-    def _loadStatuses(cls, con, justs):
+    def _loadStatus(cls, con, justs):
+        """ carga el ultimo estado a cada una de las justificaciones """
         jids = [ j.id for j in justs ]
         statuses = Status.findByJustificationIds(con, jids)
         for j in justs:
@@ -63,10 +55,10 @@ class Justification(JSONSerializable):
             j.setStatus(lastStatus)
 
     @classmethod
-    def findByUserId(cls,con, userIds, start, end):
+    def findByUserId(cls, con, userIds, start, end):
         assert cls.dao is not None
         justs = cls.dao.findByUserId(con, userIds, start, end)
-        cls._loadStatuses(con, justs)
+        cls._loadStatus(con, justs)
         return justs
 
 
@@ -109,10 +101,32 @@ class Justification(JSONSerializable):
         return finalSubC
 
 
+class SingleDateJustification(Justification):
+
+    def __init__(self, date, userId, ownerId):
+        assert isinstance(date, datetime.datetime)
+        super().__init__(userId, ownerId)
+        self.date = date
+
+    def getDate(self):
+        return self.date
+
+    def _loadWorkedPeriods(self, wps):
+        assert self.getStatus() is not None
+        if self.getStatus().status != Status.APPROVED:
+            return
+
+        date = self.getDate().date()
+        for wp in wps:
+            if date == wp.date:
+                self.wps.append(wp)
+                wp.addJustification(self)
+
+
 class RangedJustification(Justification):
 
-    @classmethod
-    def _getEnd(cls, start, days, continuous=False):
+    @staticmethod
+    def _getEnd(start, days, continuous=False):
         if start is None and days > 0:
             return None
         '''
@@ -143,9 +157,10 @@ class RangedJustification(Justification):
             return False
 
     def __init__(self, start, days, userId, ownerId):
-        super().__init__(start, userId, ownerId)
+        super().__init__(userId, ownerId)
         continuous = self.isContinuous()
-        self.end = self._getEnd(start, days, continuous)
+        self.start = start
+        self.end = RangedJustification._getEnd(start, days, continuous)
 
     def _loadWorkedPeriods(self, wps):
         assert self.getStatus() is not None
