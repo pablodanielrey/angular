@@ -29,10 +29,14 @@ class Status(JSONSerializable):
         assert userId is not None
         date = justification.getStatus().date + datetime.timedelta(seconds=1)
         s = Status(userId, date)
-        s.justificationId = justification.justificationId
+        s.justificationId = justification.id
         s.status = statusConst
         s.id = StatusDAO.persist(con, s)
-        justification._setStatus(s)
+        justification.setStatus(s)
+
+    @classmethod
+    def findByJustificationIds(cls, con, ids):
+        return StatusDAO.findByJustificationIds(con, ids)
 
     @classmethod
     def findByIds(cls, con, ids):
@@ -64,10 +68,10 @@ class StatusDAO:
 
     @staticmethod
     def _fromResult(r):
-        s = Status(r['id'], r['user_id'])
+        s = Status(r['user_id'], r['date'])
+        s.id = r['id']
         s.status = r['status']
         s.justificationId = r['justification_id']
-        s.date = r['date']
         s.created = r['created']
         return s
 
@@ -85,11 +89,22 @@ class StatusDAO:
             cur.close()
 
     @staticmethod
+    def findByJustificationIds(con, ids):
+        assert isinstance(ids, list)
+        cur = con.cursor()
+        try:
+            cur.execute('select * from assistance.justification_status where justification_id in %s', (tuple(ids),))
+            return [ StatusDAO._fromResult(r) for r in cur ]
+        finally:
+            cur.close()
+
+
+    @staticmethod
     def findByIds(con, ids):
         assert isinstance(ids, list)
         cur = con.cursor()
         try:
-            cur.execute('select * from assistance.justification_status where id in %s', tuple(ids))
+            cur.execute('select * from assistance.justification_status where id in %s', (tuple(ids),))
             return [ StatusDAO._fromResult(r) for r in cur ]
         finally:
             cur.close()

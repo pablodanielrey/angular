@@ -3,6 +3,7 @@ import logging
 import datetime
 
 from model.users.users import UserDAO
+from model.assistance.justifications.status import Status
 from model.assistance.justifications.imapJustifier.justCreator import JustCreator
 from model.assistance.justifications.medicalBoardJustification import MedicalBoardJustification
 
@@ -27,8 +28,11 @@ class MedicalBoardCreator(JustCreator):
 
         just = MedicalBoardJustification.findByUserId(con, [uid], start, start + datetime.timedelta(days = days))
         if len(just) > 0:
-            ''' ya esta justificado con una de corta duración para ese día aunque sea asi que las ignoro '''
             logging.warn('ya esta justificado {} para {}'.format(uid, start))
+            for j in just:
+                if (j.getStatus().status != Status.APPROVED):
+                    j.changeStatus(con, Status.APPROVED, j.ownerId)
+                    return True
             return False
 
         s = MedicalBoardJustification(uid, uid, start, days)

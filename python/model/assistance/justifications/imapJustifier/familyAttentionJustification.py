@@ -3,6 +3,7 @@ import logging
 import datetime
 
 from model.users.users import UserDAO
+from model.assistance.justifications.status import Status
 from model.assistance.justifications.imapJustifier.justCreator import JustCreator
 from model.assistance.justifications.familyAttentionJustification import FamilyAttentionJustification
 
@@ -29,6 +30,10 @@ class FamilyAttentionCreator(JustCreator):
         if len(just) > 0:
             ''' ya esta justificado con una de corta duración para ese día aunque sea asi que las ignoro '''
             logging.warn('ya esta justificado {} para {}'.format(uid, start))
+            for j in just:
+                if (j.getStatus().status != Status.APPROVED):
+                    j.changeStatus(con, Status.APPROVED, j.ownerId)
+                    return True
             return False
 
         s = FamilyAttentionJustification(uid, uid, start, days)

@@ -53,14 +53,29 @@ class Justification(JSONSerializable):
                 wp.addJustification(self)
 
     @classmethod
+    def _loadStatuses(cls, con, justs):
+        jids = [ j.id for j in justs ]
+        statuses = Status.findByJustificationIds(con, jids)
+        for j in justs:
+            sts = [ s for s in statuses if s.justificationId == j.id ]
+            sts.sort(key=lambda x: x.date)
+            lastStatus = sts[-1]
+            j.setStatus(lastStatus)
+
+    @classmethod
     def findByUserId(cls,con, userIds, start, end):
         assert cls.dao is not None
-        return cls.dao.findByUserId(con, userIds, start, end)
+        justs = cls.dao.findByUserId(con, userIds, start, end)
+        cls._loadStatuses(con, justs)
+        return justs
+
 
     @classmethod
     def findById(cls, con, ids):
         assert cls.dao is not None
-        return cls.dao.findById(con, ids)
+        justs = cls.dao.findById(con, ids)
+        cls._loadStatuses(con, justs)
+        return justs
 
     @classmethod
     def getJustifications(cls, con, userIds, start, end):

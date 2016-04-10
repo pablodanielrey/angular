@@ -3,6 +3,7 @@ import logging
 import datetime
 
 from model.users.users import UserDAO
+from model.assistance.justifications.status import Status
 from model.assistance.justifications.imapJustifier.justCreator import JustCreator
 from model.assistance.justifications.shortDurationJustification import ShortDurationJustification
 
@@ -27,8 +28,12 @@ class ShortDurationCreator(JustCreator):
 
         just = ShortDurationJustification.findByUserId(con, [uid], start, start + datetime.timedelta(days = days))
         if len(just) > 0:
-            ''' ya esta justificado con una de corta duración para ese día aunque sea asi que las ignoro '''
             logging.warn('ya esta justificado {} para {}'.format(uid, start))
+            for j in just:
+                assert j.getStatus() is not None
+                if (j.getStatus().status != Status.APPROVED):
+                    j.changeStatus(con, Status.APPROVED, j.ownerId)
+                    return True
             return False
 
         s = ShortDurationJustification(uid, uid, start, days)

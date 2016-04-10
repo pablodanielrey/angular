@@ -140,6 +140,7 @@ class ImapJustifier:
                             logging.info('{} reconocido'.format(mail))
 
                 except TypeError as te:
+                    logging.exception(te)
                     pass
                 except UnicodeDecodeError as ue:
                     pass
