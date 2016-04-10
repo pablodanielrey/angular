@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import datetime
+import logging
 
 from model.assistance.justifications.status import Status
 from model.serializer.utils import JSONSerializable
@@ -11,41 +12,39 @@ class Justification(JSONSerializable):
         self.start = start
         self.userId = userId
         self.ownerId = ownerId
-        self.status = None
-        self.statusId = None
-        self.StatusConst = Status.UNDEFINED
+        self.status = Status(userId, start + datetime.timedelta(seconds=1))
         self.wps = []
 
     def getIdentifier(self):
-        return ''
+        raise Exception('abstract method')
 
     def persist(self, con):
-        """ por defecto no hace nada """
-        return
+        jid = self.dao.persist(con, self)
+        status = self.getStatus()
+        status._setJustificationId(jid)
+        status.persist(con)
+        return jid
 
-    def changeStatus(self, con, status, userId):
-        assert status is not None
-        assert (self.status is not None or self.statusId is not None)
+    def setStatus(self, s):
+        self.status = s
 
-        if self.status == None:
-            self.status = Status.findByIds(con, [self.statusId])
-        else:
-            self.statusId = self.status.id
-
-        self.status.changeStatus(con, self, status, userId)
-
-    def _getLastStatus(self, con):
-        if self.status is None:
-            self.status = Status.getLastStatus(con, self.id)
-            self.statusId = self.status.id
-            self.statusConst = self.status.status
-
+    def getStatus(self):
         return self.status
 
-    def _loadWorkedPeriods(self, wps):
-        assert self.status is not None
+    def changeStatus(self, con, statusConst, userId):
+        assert statusConst is not None
+        assert self.getStatus() is not None
+        assert self.getStatus().id is not None
+        self.getStatus().changeStatus(con, self, statusConst, userId)
 
-        if self.status.status != Status.APPROVED:
+    def _getLastStatus(self, con):
+        if self.getStatus() is None:
+            self._setStatus(Status.getLastStatus(con, self.id))
+        return self.getStatus()
+
+    def _loadWorkedPeriods(self, wps):
+        assert self.getStatus() is not None
+        if self.getStatus().status != Status.APPROVED:
             return
 
         for wp in wps:
@@ -53,16 +52,21 @@ class Justification(JSONSerializable):
                 self.wps.append(wp)
                 wp.addJustification(self)
 
+    @classmethod
+    def findByUserId(cls,con, userIds, start, end):
+        assert cls.dao is not None
+        return cls.dao.findByUserId(con, userIds, start, end)
 
     @classmethod
-    def findByUserId(cls, con, userIds, start, end):
-        raise Exception('abstract method')
+    def findById(cls, con, ids):
+        assert cls.dao is not None
+        return cls.dao.findById(con, ids)
 
     @classmethod
     def getJustifications(cls, con, userIds, start, end):
         """
-            obtiene todas las justificaciones para esos usuarios entre esas fechas.
-            las fechas son datetime y son incluídos.
+            llama a los findByUserId de todas las sublcases hoja de la jerarquía
+            las fechas son datetime y son inclusivas
             retorna un mapa :
                 justifications[useId] = [justification1, justification2, .... ]
         """
@@ -92,18 +96,6 @@ class Justification(JSONSerializable):
 
 class RangedJustification(Justification):
 
-    def __init__(self, start, days, userId, ownerId):
-        super().__init__(start, userId, ownerId)
-        continuous = self.isContinuous()
-        self.end = self._getEnd(start, days, continuous)
-
-    @classmethod
-    def isContinuous(cls):
-        if (cls.registry.get('continuousDays').lower == 'true'):
-            return True
-        else:
-            return False
-
     @classmethod
     def _getEnd(cls, start, days, continuous=False):
         if start is None and days > 0:
@@ -128,11 +120,21 @@ class RangedJustification(Justification):
                 date = date + datetime.timedelta(days = (7 - date.weekday()))
             return date
 
+    @classmethod
+    def isContinuous(cls):
+        if (cls.registry.get('continuousDays').lower == 'true'):
+            return True
+        else:
+            return False
+
+    def __init__(self, start, days, userId, ownerId):
+        super().__init__(start, userId, ownerId)
+        continuous = self.isContinuous()
+        self.end = self._getEnd(start, days, continuous)
 
     def _loadWorkedPeriods(self, wps):
-        assert self.status is not None
-
-        if self.status.status != Status.APPROVED:
+        assert self.getStatus() is not None
+        if self.getStatus().status != Status.APPROVED:
             return
 
         for wp in wps:

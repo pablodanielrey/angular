@@ -6,7 +6,7 @@ from model.assistance.justifications.justifications import Justification
 class InformedAbsence(Justification):
 
     def __init__(self, userId, ownerId, date):
-        super().__init__(start, userId, ownerId)
+        super().__init__(date, userId, ownerId)
 
     def getIdentifier(self):
         return "Ausente con aviso"

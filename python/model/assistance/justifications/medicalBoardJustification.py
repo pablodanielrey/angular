@@ -20,40 +20,6 @@ from model.registry import Registry
 from model.assistance.justifications.justifications import Justification, RangedJustification
 from model.assistance.justifications.status import Status
 
-class MedicalBoardJustification(RangedJustification):
-
-    registry = inject.instance(Registry).getRegistry('medicalBoardJustification')
-
-    def __init__(self, userId, ownerId, start, days = 0, number = None):
-        super().__init__(start, days, userId, ownerId)
-        self.number = number
-
-    def getIdentifier(self):
-        return 'Junta médica'
-
-    def persist(self, con):
-        jid = MedicalBoardJustificationDAO.persist(con, self)
-
-        s = Status(jid, self.ownerId)
-        s.created = s.created - datetime.timedelta(seconds=1)
-        sid = s.persist(con)
-
-        self.status = s
-        self.statusId = s.id
-        self.statusConst = s.status
-
-        self.changeStatus(con, Status.APPROVED, self.ownerId)
-
-        return jid
-
-    @classmethod
-    def findByUserId(cls,con, userIds, start, end):
-        return MedicalBoardJustificationDAO.findByUserId(con, userIds, start, end)
-
-    @classmethod
-    def findById(cls, con, ids):
-        return MedicalBoardJustificationDAO.findById(con, ids)
-
 
 class MedicalBoardJustificationDAO:
 
@@ -63,7 +29,7 @@ class MedicalBoardJustificationDAO:
         try:
             cur.execute("""
                 create schema if not exists assistance;
-                create table assistance.medical_board_j (
+                create table assistance.justification_medical_board (
                     id varchar primary key,
                     user_id varchar not null references profile.users (id),
                     owner_id varchar not null references profile.users (id),
@@ -81,11 +47,7 @@ class MedicalBoardJustificationDAO:
         j = MedicalBoardJustification(r['user_id'], r['owner_id'], r['jstart'], 0, r['number'])
         j.id = r['id']
         j.end = r['jend']
-
-        j.status = Status.getLastStatus(con, j.id)
-        j.statusId = j.status.id
-        j.statusConst = j.status.status
-
+        j.setStatus(Status.getLastStatus(con, j.id))
         return j
 
     @staticmethod
@@ -98,11 +60,11 @@ class MedicalBoardJustificationDAO:
                 j.id = str(uuid.uuid4())
 
                 r = j.__dict__
-                cur.execute('insert into assistance.medical_board_j (id, user_id, owner_id, jstart, jend, number) '
+                cur.execute('insert into assistance.justification_medical_board (id, user_id, owner_id, jstart, jend, number) '
                             'values (%(id)s, %(userId)s, %(ownerId)s, %(start)s, %(end)s, %(number)s)', r)
             else:
                 r = j.__dict__
-                cur.execute('update assistance.medical_board_j set user_id = %(userId)s, owner_id = %(ownerId)s, '
+                cur.execute('update assistance.justification_medical_board set user_id = %(userId)s, owner_id = %(ownerId)s, '
                             'jstart = %(start)s, jend = %(end)s, number = %(number)s where id = %(id)s', r)
             return j.id
 
@@ -116,7 +78,7 @@ class MedicalBoardJustificationDAO:
         cur = con.cursor()
         try:
             logging.info('ids: %s', tuple(ids))
-            cur.execute('select * from assistance.medical_board_j where id in %s',(tuple(ids),))
+            cur.execute('select * from assistance.justification_medical_board where id in %s',(tuple(ids),))
             return [ MedicalBoardJustificationDAO._fromResult(con, r) for r in cur ]
         finally:
             cur.close()
@@ -134,7 +96,7 @@ class MedicalBoardJustificationDAO:
         try:
             sDate = None if start is None else start.date()
             eDate = datetime.date.today() if end is None else end.date()
-            cur.execute('select * from assistance.medical_board_j where user_id in %s and '
+            cur.execute('select * from assistance.justification_medical_board where user_id in %s and '
                         '((jend >= %s and jend <= %s) or '
                         '(jstart >= %s and jstart <= %s) or '
                         '(jstart <= %s and jend >= %s))', (tuple(userIds), sDate, eDate, sDate, eDate, sDate, eDate))
@@ -142,3 +104,16 @@ class MedicalBoardJustificationDAO:
             return [ MedicalBoardJustificationDAO._fromResult(con, r) for r in cur ]
         finally:
             cur.close()
+
+
+class MedicalBoardJustification(RangedJustification):
+
+    dao = MedicalBoardJustificationDAO
+    registry = inject.instance(Registry).getRegistry('medicalBoardJustification')
+
+    def __init__(self, userId, ownerId, start, days = 0, number = None):
+        super().__init__(start, days, userId, ownerId)
+        self.number = number
+
+    def getIdentifier(self):
+        return 'Junta médica'

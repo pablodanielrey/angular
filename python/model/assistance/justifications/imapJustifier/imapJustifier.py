@@ -139,8 +139,12 @@ class ImapJustifier:
                         if ImapJustifier._processTypeOfLicence(con, email_body):
                             logging.info('{} reconocido'.format(mail))
 
+                except TypeError as te:
+                    pass
+                except UnicodeDecodeError as ue:
+                    pass
                 except Exception as e:
-                    #logging.warn(e)
+                    logging.exception(e)
                     pass
 
         finally:
