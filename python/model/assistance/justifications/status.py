@@ -27,11 +27,11 @@ class Status(JSONSerializable):
 
     def changeStatus(self, con, justification, statusConst, userId):
         assert userId is not None
-        date = justification.getStatus().date + datetime.timedelta(seconds=1)
+        date = self.date + datetime.timedelta(seconds=1)
         s = Status(userId, date)
         s.justificationId = justification.id
         s.status = statusConst
-        s.id = StatusDAO.persist(con, s)
+        s.persist(con)
         justification.setStatus(s)
 
     @classmethod
