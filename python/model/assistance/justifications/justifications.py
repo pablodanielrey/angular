@@ -46,6 +46,8 @@ class Justification(JSONSerializable):
     @classmethod
     def _loadStatus(cls, con, justs):
         """ carga el ultimo estado a cada una de las justificaciones """
+        if len(justs) <= 0:
+            return
         jids = [ j.id for j in justs ]
         statuses = Status.findByJustificationIds(con, jids)
         for j in justs:
