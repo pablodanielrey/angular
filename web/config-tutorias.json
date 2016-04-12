@@ -1,0 +1,4 @@
+config = {
+  url: "ws://127.0.0.1:443/ws",
+  realm: "assistance"
+}
