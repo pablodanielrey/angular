@@ -20,27 +20,42 @@ from model.registry import Registry
 from model.assistance.justifications.justifications import Justification, RangedJustification
 from model.assistance.justifications.status import Status
 
+from model.dao import DAO
+from model.users.users import UserDAO
 
-class ShortDurationJustificationDAO:
 
-    @staticmethod
-    def _createSchema(con):
+class ShortDurationJustificationDAO(DAO):
+
+    dependencies = [UserDAO]
+
+    @classmethod
+    def _createSchema(cls, con):
+        cls._createDependencies(con)
         cur = con.cursor()
         try:
-            cur.execute("""
-                create schema if not exists assistance;
-                create table assistance.justification_short_duration (
-                    id varchar primary key,
-                    user_id varchar not null references profile.users (id),
-                    owner_id varchar not null references profile.users (id),
-                    jstart date default now(),
-                    jend date default now(),
-                    number bigint,
-                    created timestamptz default now()
-                );
-            """.format(ShortDurationJustificationDAO.TABLE_NAME))
+            sql = """
+              CREATE SCHEMA IF NOT EXISTS assistance;
+
+              create table IF NOT EXISTS assistance.justification_short_duration (
+                  id varchar primary key,
+                  user_id varchar not null references profile.users (id),
+                  owner_id varchar not null references profile.users (id),
+                  jstart date default now(),
+                  jend date default now(),
+                  number bigint,
+                  created timestamptz default now()
+              );
+              """
+
+            try:
+                cur.execute(sql) 
+                con.commit()
+            except Exception as e:
+                con.rollback()
+                raise e
         finally:
             cur.close()
+  
 
     @staticmethod
     def _fromResult(con, r):

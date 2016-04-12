@@ -17,6 +17,10 @@ from model.users.users import UserPasswordDAO
 from model.files.files import FileDAO
 from model.users.users import MailDAO
 from model.users.users import StudentDAO
+from model.assistance.justifications.longDurationJustification import LongDurationJustificationDAO
+from model.assistance.justifications.familyAttentionJustification import FamilyAttentionJustificationDAO
+from model.assistance.justifications.medicalBoardJustification import MedicalBoardJustificationDAO
+from model.assistance.justifications.shortDurationJustification import ShortDurationJustificationDAO
 
 class TestConnection(unittest.TestCase):
       
@@ -34,8 +38,12 @@ class TestConnection(unittest.TestCase):
       #UserDAO._createSchema(con)
       #UserPasswordDAO._createSchema(con)
       #MailDAO._createSchema(con)
-      StudentDAO._createSchema(con)
-      
+      #StudentDAO._createSchema(con)
+      #LongDurationJustificationDAO._createSchema(con)
+      #FamilyAttentionJustificationDAO._createSchema(con)
+      #MedicalBoardJustificationDAO._createSchema(con)
+      ShortDurationJustificationDAO._createSchema(con)      
+            
       #UserDAO.findByDni(con, "31073351")
            
       #uid, v = UserDAO.findByDni(con, "31073351")
