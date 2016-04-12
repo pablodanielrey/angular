@@ -173,3 +173,10 @@ class RangedJustification(Justification):
             if self.start <= wp.date <= self.end:
                 self.wps.append(wp)
                 wp.addJustification(self)
+
+class RangedTimeJustification(Justification):
+
+    def __init__(self, start, end, userId, ownerId):
+        super().__init__(userId, ownerId)
+        self.start = start
+        self.end = end
