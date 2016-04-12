@@ -45,17 +45,11 @@ class ShortDurationJustificationDAO(DAO):
                   number bigint,
                   created timestamptz default now()
               );
-              """
-
-            try:
-                cur.execute(sql) 
-                con.commit()
-            except Exception as e:
-                con.rollback()
-                raise e
+              """              
+            cur.execute(sql)
         finally:
             cur.close()
-  
+
 
     @staticmethod
     def _fromResult(con, r):
