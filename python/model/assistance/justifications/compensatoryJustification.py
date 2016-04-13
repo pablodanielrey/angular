@@ -4,7 +4,7 @@ from model.dao import DAO
 from model.assistance.justifications.justifications import SingleDateJustification
 from model.assistance.justifications.status import Status
 import uuid, datetime
-class CompensatoryDAO(DAO):
+class CompensatoryJustificationDAO(DAO):
 
     @classmethod
     def _createSchema(cls, con):
@@ -19,13 +19,13 @@ class CompensatoryDAO(DAO):
                     date date not null default now(),
                     created timestamptz default now()
                 );
-            """.format(ShortDurationJustificationDAO.TABLE_NAME))
+            """.format(CompensatoryJustificationDAO.TABLE_NAME))
         finally:
             cur.close()
 
     @staticmethod
     def _fromResult(con, r):
-        c = Compensatory(r['user_id', r['owner_id'], r['date'])
+        c = CompensatoryJustification(r['user_id', r['owner_id'], r['date'])
         c.id = r['id']
         c.setStatus(Status.getLastStatus(con, c.id))
         return c
@@ -80,9 +80,9 @@ class CompensatoryDAO(DAO):
         finally:
             cur.close()
 
-class Compensatory(SingleDateJustification):
+class CompensatoryJustification(SingleDateJustification):
 
-    dao = CompensatoryDAO
+    dao = CompensatoryJustificationDAO
 
     def __init__(self, userId, ownerId, date):
         super().__init__(date, userId, ownerId)

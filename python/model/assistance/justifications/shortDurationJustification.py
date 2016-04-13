@@ -45,7 +45,7 @@ class ShortDurationJustificationDAO(DAO):
                   number bigint,
                   created timestamptz default now()
               );
-              """              
+              """
             cur.execute(sql)
         finally:
             cur.close()
@@ -106,9 +106,7 @@ class ShortDurationJustificationDAO(DAO):
             sDate = None if start is None else start.date()
             eDate = datetime.date.today() if end is None else end.date()
             cur.execute('select * from assistance.justification_short_duration where user_id in %s and '
-                        '((jend >= %s and jend <= %s) or '
-                        '(jstart >= %s and jstart <= %s) or '
-                        '(jstart <= %s and jend >= %s))', (tuple(userIds), sDate, eDate, sDate, eDate, sDate, eDate))
+                        '(jstart <= %s and jend >= %s)', (tuple(userIds), eDate, sDate))
 
             return [ ShortDurationJustificationDAO._fromResult(con, r) for r in cur ]
         finally:

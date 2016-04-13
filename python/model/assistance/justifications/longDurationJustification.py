@@ -43,7 +43,7 @@ class LongDurationJustificationDAO(DAO):
             """
 
             try:
-                cur.execute(sql) 
+                cur.execute(sql)
                 con.commit()
             except Exception as e:
                 con.rollback()
@@ -52,8 +52,8 @@ class LongDurationJustificationDAO(DAO):
             cur.close()
 
 
-  
-   
+
+
 
     @staticmethod
     def _fromResult(con, r):
@@ -109,9 +109,7 @@ class LongDurationJustificationDAO(DAO):
             sDate = None if start is None else start.date()
             eDate = datetime.date.today() if end is None else end.date()
             cur.execute('select * from assistance.justification_long_duration where user_id in %s and '
-                        '((jend >= %s and jend <= %s) or '
-                        '(jstart >= %s and jstart <= %s) or '
-                        '(jstart <= %s and jend >= %s))', (tuple(userIds), sDate, eDate, sDate, eDate, sDate, eDate))
+                        '(jstart <= %s and jend >= %s)', (tuple(userIds), eDate, sDate))
 
             return [ LongDurationJustificationDAO._fromResult(con, r) for r in cur ]
         finally:

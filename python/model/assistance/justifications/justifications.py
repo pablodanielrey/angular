@@ -180,3 +180,13 @@ class RangedTimeJustification(Justification):
         super().__init__(userId, ownerId)
         self.start = start
         self.end = end
+
+    def _loadWorkedPeriods(self, wps):
+        assert self.getStatus() is not None
+        if self.getStatus().status != Status.APPROVED:
+            return
+
+        for wp in wps:
+            if wp.getStartDate() <= self.end and  wp.getEndDate() >= self.start:
+                self.wps.append(wp)
+                wp.addJustification(self)

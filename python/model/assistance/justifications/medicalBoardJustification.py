@@ -47,7 +47,7 @@ class MedicalBoardJustificationDAO(DAO):
               """
 
             try:
-                cur.execute(sql) 
+                cur.execute(sql)
                 con.commit()
             except Exception as e:
                 con.rollback()
@@ -111,9 +111,7 @@ class MedicalBoardJustificationDAO(DAO):
             sDate = None if start is None else start.date()
             eDate = datetime.date.today() if end is None else end.date()
             cur.execute('select * from assistance.justification_medical_board where user_id in %s and '
-                        '((jend >= %s and jend <= %s) or '
-                        '(jstart >= %s and jstart <= %s) or '
-                        '(jstart <= %s and jend >= %s))', (tuple(userIds), sDate, eDate, sDate, eDate, sDate, eDate))
+                        '(jstart <= %s and jend >= %s)', (tuple(userIds), eDate, sDate))
 
             return [ MedicalBoardJustificationDAO._fromResult(con, r) for r in cur ]
         finally:
