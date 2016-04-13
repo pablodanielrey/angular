@@ -1,4 +1,5 @@
-<div class="tutors {{view.style}} {{view.style2}}">
+<div class="tutors {{view.style}} ">
+<!-- VARIABLES 1: verTutorias -->
 
     <div class="header">
         <div>
@@ -14,7 +15,7 @@
               <i class="fa fa-search"></i> BUSCAR TUTOR
             </div>
             <div>
-              <input class="inputSearch ng-pristine ng-valid ng-touched" type="text" ng-click="view.style2 = 'verResultados'" ng-model="model.search" ng-model-options="{ debounce: 1000 }" ng-change="searchStudents()">
+              <input class="inputSearch" type="text">
             </div>
 
             <div class="title">
@@ -23,9 +24,9 @@
 
             <div class="contentSearch">
 
-                <div class="contentUser" ng-click="view.style2=''">
+                <div class="contentUser" ng-click="view.style='verTutorias'">
                   <div class="contentPhoto">
-                    <img class="imgUser" src="img/emanuel.jpg">
+                    <img class="imgUser" src="img/avatarMen.jpg">
                   </div>
                   <div class="contentData">
                     <div>
@@ -39,7 +40,7 @@
 
                 <div class="contentUser">
                   <div class="contentPhoto">
-                    <img class="imgUser" src="img/lucas.jpg">
+                    <img class="imgUser" src="img/avatarMen.jpg">
                   </div>
                   <div class="contentData">
                     <div>
@@ -53,7 +54,7 @@
 
                 <div class="contentUser">
                   <div class="contentPhoto">
-                    <img class="imgUser" src="img/walter.jpg">
+                    <img class="imgUser" src="img/avatarMen.jpg">
                   </div>
                   <div class="contentData">
                     <div>
@@ -67,7 +68,7 @@
 
                 <div class="contentUser">
                   <div class="contentPhoto">
-                    <img class="imgUser" src="img/pablo.jpg">
+                    <img class="imgUser" src="img/avatarMen.jpg">
                   </div>
                   <div class="contentData">
                     <div>
@@ -81,7 +82,7 @@
 
                 <div class="contentUser">
                   <div class="contentPhoto">
-                    <img class="imgUser" src="img/alejandro.jpg">
+                    <img class="imgUser" src="img/avatarMen.jpg">
                   </div>
                   <div class="contentData">
                     <div>
@@ -96,7 +97,7 @@
 
                 <div class="contentUser">
                   <div class="contentPhoto">
-                    <img class="imgUser" src="img/maxi.jpg">
+                    <img class="imgUser" src="img/avatarMen.jpg">
                   </div>
                   <div class="contentData">
                     <div>
@@ -124,6 +125,18 @@
               <div class="headerList">
                   <div class="title">
                     LISTADO DE TUTORÍAS
+                  </div>
+                  <div class="contentHeaderRight">
+                    <div>
+                      <span class="textOrder">Ordenar</span>
+                    </div>
+                    <div>
+                      <button class="btnOrder"><i class="fa fa-sort-alpha-asc"></i></button>
+                    </div>
+                    <div>
+                      <button class="btnOrder"><i class="fa fa-calendar-o"></i></button>
+                    </div>
+                    <button class="btnCancel" ><i class="fa fa-trash" ></i></button>
                   </div>
               </div>
 
@@ -299,7 +312,7 @@
                 <div class="title">
                   <b>ALUMNOS</b> <span class="cantTotalStudents">156</span>
                 </div>
-                
+
 
 
 
