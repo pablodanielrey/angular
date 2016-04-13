@@ -50,8 +50,8 @@ class MarriageJustificationAbstractDAO(DAO):
             cur.close()
 
 
-    @staticmethod
-    def persist(con, j):
+    @classmethod
+    def persist(cls, con, j):
         assert j is not None
 
         cur = con.cursor()
@@ -71,7 +71,7 @@ class MarriageJustificationAbstractDAO(DAO):
         finally:
             cur.close()
 
-    @staticmethod
+    @classmethod
     def findById(cls, con, ids):
         assert isinstance(ids, list)
 
@@ -83,7 +83,7 @@ class MarriageJustificationAbstractDAO(DAO):
         finally:
             cur.close()
 
-    @staticmethod
+    @classmethod
     def findByUserId(cls, con, userIds, start, end):
         assert isinstance(userIds, list)
         assert isinstance(start, datetime.datetime)
@@ -105,39 +105,25 @@ class MarriageJustificationAbstractDAO(DAO):
 
 class MarriageJustificationDAO(MarriageJustificationAbstractDAO):
 
-    @staticmethod
-    def _fromResult(con, r):
+    @classmethod
+    def _fromResult(cls, con, r):
         j = MarriageJustification(r['user_id'], r['owner_id'], r['jstart'], 0)
         j.id = r['id']
         j.end = r['jend']
         j.setStatus(Status.getLastStatus(con, j.id))
         return j
 
-    @staticmethod
-    def findById(con, ids):
-        return MarriageJustificationAbstractDAO.findById(MarriageJustificationDAO, con, ids)
 
-    @staticmethod
-    def findByUserId(cls, con, userIds, start, end):
-        return MarriegeJustificationAbstractDAO.findByUserId(MarriageJustificationDAO, con, userIds, start, end)
+class ChildMarriageJustificationDAO(MarriageJustificationAbstractDAO):
 
-class MarriageOfChildJustificationDAO(MarriageJustificationAbstractDAO):
-
-    @staticmethod
+    @classmethod
     def _fromResult(con, r):
-        j = MarriageOfChildJustification(r['user_id'], r['owner_id'], r['jstart'], 0)
+        j = ChildMarriageJustification(r['user_id'], r['owner_id'], r['jstart'], 0)
         j.id = r['id']
         j.end = r['jend']
         j.setStatus(Status.getLastStatus(con, j.id))
         return j
 
-    @staticmethod
-    def findById(con, ids):
-        return MarriageJustificationAbstractDAO.findById(MarriageOfChildJustificationDAO, con, ids)
-
-    @staticmethod
-    def findByUserId(cls, con, userIds, start, end):
-        return MarriegeJustificationAbstractDAO.findByUserId(MarriageOfChildJustificationDAO, con, userIds, start, end)
 
 """
     ENTIDADES
@@ -155,10 +141,10 @@ class MarriageJustification(RangedJustification):
         return 'Matrimonio'
 
 
-class MarriageOfChildJustification(RangedJustification):
+class ChildMarriageJustification(RangedJustification):
 
-    dao = MarriageOfChildJustificationDAO
-    registry = inject.instance(Registry).getRegistry('marriageOfChildJustification')
+    dao = ChildMarriageJustificationDAO
+    registry = inject.instance(Registry).getRegistry('childMarriageJustification')
 
     def __init__(self, userId, ownerId, start, days = 0):
         super().__init__(start, days, userId, ownerId)
