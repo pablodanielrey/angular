@@ -81,11 +81,13 @@
                     <div>
                       <b>{{user.user.name}} {{user.user.lastname}}</b>
                     </div>
-                    <div>
-                      {{user.user.dni}}
-                    </div>
-                    <div>
-                      {{user.student.studentNumber}}
+                    <div class="dataUser">
+                        <div>
+                            <span>DNI</span> {{user.user.dni}}&nbsp;&nbsp;
+                        </div>
+                        <div>
+                            <span>LEG</span> {{user.student.studentNumber}}
+                        </div>
                     </div>
 
                   </div>
@@ -103,7 +105,7 @@
           <div class="contentList">
               <div class="headerList">
                   <div class="dataHeader">
-                      <div>Tutoría &nbsp;<i class="fa fa-calendar-o"></i>
+                      <div><i class="fa fa-calendar-o"></i>
                         <!-- <b><input class="inputDate" type="date" ng-model="model.tutoring.date"/> </b> -->
                         <b>{{model.tutoring.date | date:'dd/MM/yyyy'}}</b>
                       </div>
@@ -116,7 +118,7 @@
                   </div>
                   <div>
                     <button class="btnCreate" ng-click="save()">GUARDAR</button>
-                    <button class="btnDelete" ng-if="model.tutoring.id != null" ng-click="delete(model.tutoring.id)">ELIMINAR</button>
+                    <button class="btnDelete" ng-if="model.tutoring.id != null" ng-click="delete(model.tutoring.id)"><i class="fa fa-trash-o" title="Borar"></i></button>
                     <button class="btnCancel" ng-click="cancel()"><i class="fa fa-times"></i></button>
                   </div>
               </div>
@@ -132,11 +134,13 @@
                             <div>
                               <b>{{situation.user.user.name}} {{situation.user.user.lastname}}</b>
                             </div>
-                            <div>
-                              {{situation.user.user.dni}}
-                            </div>
-                            <div>
-                              {{situation.user.student.studentNumber}}
+                            <div class="dataUser">
+                                <div>
+                                  <span>DNI</span> {{situation.user.user.dni}}&nbsp;&nbsp;
+                                </div>
+                                <div>
+                                  <span>LEG</span> {{situation.user.student.studentNumber}}
+                                </div>
                             </div>
                           </div>
                       </div>
@@ -155,6 +159,7 @@
           <!-- ********* RESULTADOS DE BUSQUEDA ************** -->
           <div class="contentSearchResults">
               <div class="title">
+                <button class="btnBack" ng-click="view.style2 = ''"><i class="fa fa-chevron-left" title="Volver" ></i></button>
                 <i class="fa fa-search"></i> <b>{{model.searchResults.length}}</b> RESULTADOS ENCONTRADOS
               </div>
 
@@ -174,11 +179,13 @@
                       <div>
                         <b>{{user.user.name}} {{user.user.lastname}}</b>
                       </div>
-                      <div>
-                        {{user.user.dni}}
-                      </div>
-                      <div>
-                        {{user.student.studentNumber}}
+                      <div class="dataUser">
+                        <div>
+                          <span>DNI</span> {{user.user.dni}}&nbsp;&nbsp;
+                        </div>
+                        <div>
+                          <span>LEG</span> {{user.student.studentNumber}}
+                        </div>
                       </div>
 
                     </div>
@@ -220,6 +227,11 @@
       </div>
 
     </div>
+
+
+
+</div>
+/div>
 
 
 
