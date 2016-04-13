@@ -50,16 +50,16 @@ class SummerBreakJustificationDAO(DAO):
             cur.close()
 
 
-    @staticmethod
-    def _fromResult(con, r):
+    @classmethod
+    def _fromResult(cls, con, r):
         j = SummerBreakJustification(r['user_id'], r['owner_id'], r['jstart'], 0)
         j.id = r['id']
         j.end = r['jend']
         j.setStatus(Status.getLastStatus(con, j.id))
         return j
 
-    @staticmethod
-    def persist(con, j):
+    @classmethod
+    def persist(cls, con, j):
         assert j is not None
 
         cur = con.cursor()
@@ -79,20 +79,20 @@ class SummerBreakJustificationDAO(DAO):
         finally:
             cur.close()
 
-    @staticmethod
-    def findById(con, ids):
+    @classmethod
+    def findById(cls, con, ids):
         assert isinstance(ids, list)
 
         cur = con.cursor()
         try:
             logging.info('ids: %s', tuple(ids))
             cur.execute('select * from assistance.justification_summer_break where id in %s',(tuple(ids),))
-            return [ SummerBreakJustificationDAO._fromResult(con, r) for r in cur ]
+            return [ cls._fromResult(con, r) for r in cur ]
         finally:
             cur.close()
 
-    @staticmethod
-    def findByUserId(con, userIds, start, end):
+    @classmethod
+    def findByUserId(cls, con, userIds, start, end):
         assert isinstance(userIds, list)
         assert isinstance(start, datetime.datetime)
         assert isinstance(end, datetime.datetime)
@@ -107,7 +107,7 @@ class SummerBreakJustificationDAO(DAO):
             cur.execute('select * from assistance.justification_summer_break where user_id in %s and '
                         '(jstart <= %s and jend >= %s)', (tuple(userIds), eDate, sDate))
 
-            return [ SummerBreakJustificationDAO._fromResult(con, r) for r in cur ]
+            return [ cls._fromResult(con, r) for r in cur ]
         finally:
             cur.close()
 

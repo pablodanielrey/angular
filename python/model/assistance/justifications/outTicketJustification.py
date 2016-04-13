@@ -35,8 +35,8 @@ class OutTicketJustificationDAO(DAO):
             cur.close()
 
 
-    @staticmethod
-    def persist(con, j):
+    @classmethod
+    def persist(cls, con, j):
         assert j is not None
 
         cur = con.cursor()
@@ -56,33 +56,19 @@ class OutTicketJustificationDAO(DAO):
         finally:
             cur.close()
 
-
-class OutTicketWithReturnJustificationDAO(OutTicketJustificationDAO):
-
-    @staticmethod
-    def _fromResult(con, r):
-        j = OutTicketWithReturnJustification(r['user_id'], r['owner_id'], r['jstart'], r['jend'])
-        j.id = r['id']
-        j.setStatus(Status.getLastStatus(con, j.id))
-        return j
-
-    @staticmethod
-    def persist(con, j):
-        return OutTicketJustificationDAO.persist(con, j)
-
-    @staticmethod
-    def findById(con, ids):
+    @classmethod
+    def findById(cls, con, ids):
         assert isinstance(ids, list)
 
         cur = con.cursor()
         try:
             cur.execute('select * from assistance.justification_out_ticket where id in %s', (tuple(ids),))
-            return [ OutTicketWithReturnJustificationDAO._fromResult(con, r) for r in cur ]
+            return [ cls._fromResult(con, r) for r in cur ]
         finally:
             cur.close()
 
-    @staticmethod
-    def findByUserId(con, userIds, start, end):
+    @classmethod
+    def findByUserId(cls, con, userIds, start, end):
         assert isinstance(userIds, list)
         assert isinstance(start, datetime.datetime)
         assert isinstance(end, datetime.datetime)
@@ -93,36 +79,32 @@ class OutTicketWithReturnJustificationDAO(OutTicketJustificationDAO):
         cur = con.cursor()
         try:
             cur.execute('select * from assistance.justification_out_ticket where user_id in %s and (jstart <= %s and jend >= %s)', (tuple(userIds), end, start))
-            return [ OutTicketWithReturnJustificationDAO._fromResult(con, r) for r in cur ]
+            return [ cls._fromResult(con, r) for r in cur ]
         finally:
             cur.close()
 
+
+class OutTicketWithReturnJustificationDAO(OutTicketJustificationDAO):
+
+    @classmethod
+    def _fromResult(cls, con, r):
+        j = OutTicketWithReturnJustification(r['user_id'], r['owner_id'], r['jstart'], r['jend'])
+        j.id = r['id']
+        j.setStatus(Status.getLastStatus(con, j.id))
+        return j
+
+
 class OutTicketWithoutReturnJustificationDAO(OutTicketJustificationDAO):
 
-    @staticmethod
-    def _fromResult(con, r):
+    @classmethod
+    def _fromResult(cls, con, r):
         j = OutTicketWithoutReturnJustification(r['user_id'], r['owner_id'], r['jstart'])
         j.id = r['id']
         j.setStatus(Status.getLastStatus(con, j.id))
         return j
 
-    @staticmethod
-    def persist(con, j):
-        return OutTicketJustificationDAO.persist(con, j)
-
-    @staticmethod
-    def findById(con, ids):
-        assert isinstance(ids, list)
-
-        cur = con.cursor()
-        try:
-            cur.execute('select * from assistance.justification_out_ticket where id in %s', (tuple(ids),))
-            return [ OutTicketWithoutReturnJustificationDAO._fromResult(con, r) for r in cur ]
-        finally:
-            cur.close()
-
-    @staticmethod
-    def findByUserId(con, userIds, start, end):
+    @classmethod
+    def findByUserId(cls, con, userIds, start, end):
         assert isinstance(userIds, list)
         assert isinstance(start, datetime.datetime)
         assert isinstance(end, datetime.datetime)
@@ -135,7 +117,7 @@ class OutTicketWithoutReturnJustificationDAO(OutTicketJustificationDAO):
             cur.execute('select * from assistance.justification_out_ticket where user_id in %s and '
                         '(jstart <= %s and DATE(jstart) = %s)', (tuple(userIds), end, start.date()))
 
-            return [ OutTicketWithoutReturnJustificationDAO._fromResult(con, r) for r in cur ]
+            return [ cls._fromResult(con, r) for r in cur ]
         finally:
             cur.close()
 
