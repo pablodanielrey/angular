@@ -42,7 +42,6 @@ class SummerBreakJustificationDAO(DAO):
                   owner_id varchar not null references profile.users (id),
                   jstart date default now(),
                   jend date default now(),
-                  number bigint,
                   created timestamptz default now()
               );
               """
@@ -53,7 +52,7 @@ class SummerBreakJustificationDAO(DAO):
 
     @staticmethod
     def _fromResult(con, r):
-        j = SummerBreakJustification(r['user_id'], r['owner_id'], r['jstart'], 0, r['number'])
+        j = SummerBreakJustification(r['user_id'], r['owner_id'], r['jstart'], 0)
         j.id = r['id']
         j.end = r['jend']
         j.setStatus(Status.getLastStatus(con, j.id))
@@ -69,12 +68,12 @@ class SummerBreakJustificationDAO(DAO):
                 j.id = str(uuid.uuid4())
 
                 r = j.__dict__
-                cur.execute('insert into assistance.justification_summer_break (id, user_id, owner_id, jstart, jend, number) '
-                            'values (%(id)s, %(userId)s, %(ownerId)s, %(start)s, %(end)s, %(number)s)', r)
+                cur.execute('insert into assistance.justification_summer_break (id, user_id, owner_id, jstart, jend) '
+                            'values (%(id)s, %(userId)s, %(ownerId)s, %(start)s, %(end)s', r)
             else:
                 r = j.__dict__
                 cur.execute('update assistance.justification_summer_break set user_id = %(userId)s, owner_id = %(ownerId)s, '
-                            'jstart = %(start)s, jend = %(end)s, number = %(number)s where id = %(id)s', r)
+                            'jstart = %(start)s, jend = %(end)s where id = %(id)s', r)
             return j.id
 
         finally:
@@ -118,9 +117,8 @@ class SummerBreakJustification(RangedJustification):
     dao = SummerBreakJustificationDAO
     registry = inject.instance(Registry).getRegistry('summerBreakJustification')
 
-    def __init__(self, userId, ownerId, start, days = 0, number = None):
+    def __init__(self, userId, ownerId, start, days = 0):
         super().__init__(start, days, userId, ownerId)
-        self.number = number
 
     def getIdentifier(self):
         return 'Licencia Anual Ordinaria'
