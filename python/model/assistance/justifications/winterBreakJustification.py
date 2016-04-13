@@ -41,8 +41,7 @@ class WinterBreakJustificationDAO(DAO):
                   user_id varchar not null references profile.users (id),
                   owner_id varchar not null references profile.users (id),
                   jstart date default now(),
-                  jend date default now(),
-                  number bigint,
+                  jend date default now()
                   created timestamptz default now()
               );
               """
@@ -53,7 +52,7 @@ class WinterBreakJustificationDAO(DAO):
 
     @staticmethod
     def _fromResult(con, r):
-        j = WinterBreakJustification(r['user_id'], r['owner_id'], r['jstart'], 0, r['number'])
+        j = WinterBreakJustification(r['user_id'], r['owner_id'], r['jstart'], 0)
         j.id = r['id']
         j.end = r['jend']
         j.setStatus(Status.getLastStatus(con, j.id))
@@ -69,12 +68,12 @@ class WinterBreakJustificationDAO(DAO):
                 j.id = str(uuid.uuid4())
 
                 r = j.__dict__
-                cur.execute('insert into assistance.justification_winter_break (id, user_id, owner_id, jstart, jend, number) '
-                            'values (%(id)s, %(userId)s, %(ownerId)s, %(start)s, %(end)s, %(number)s)', r)
+                cur.execute('insert into assistance.justification_winter_break (id, user_id, owner_id, jstart, jend) '
+                            'values (%(id)s, %(userId)s, %(ownerId)s, %(start)s, %(end)s', r)
             else:
                 r = j.__dict__
                 cur.execute('update assistance.justification_winter_break set user_id = %(userId)s, owner_id = %(ownerId)s, '
-                            'jstart = %(start)s, jend = %(end)s, number = %(number)s where id = %(id)s', r)
+                            'jstart = %(start)s, jend = %(end)s where id = %(id)s', r)
             return j.id
 
         finally:
