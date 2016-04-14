@@ -83,7 +83,7 @@ class HolidayJustificationDAO(DAO):
         try:
             sDate = None if start is None else start.date()
             eDate = datetime.date.today() if end is None else end.date()
-            cur.execute('select * from assistance.holiday where user_id  in %s and date BETWEEN %s AND %s', (tupe(userIds), sDate, eDate))
+            cur.execute('select * from assistance.justification_holiday where user_id  in %s and date BETWEEN %s AND %s', (tupe(userIds), sDate, eDate))
             return [ cls._fromResult(con, r) for r in cur ]
         finally:
             cur.close()
