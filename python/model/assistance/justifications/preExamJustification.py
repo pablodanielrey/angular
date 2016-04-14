@@ -122,3 +122,21 @@ class PreExamJustification(RangedJustification):
 
     def getIdentifier(self):
         return 'Pre exámen'
+
+
+class SchoolPreExamJustification(PreExamJustification):
+
+    def __init__(self, userId, ownerId, start, days = 0):
+        super().__init__(start, days, userId, ownerId)
+
+    def getIdentifier(self):
+        return 'Pre exámen Ensañanza Media'
+
+
+class UniversityPreExamJustification(PreExamJustification):
+
+    def __init__(self, userId, ownerId, start, days = 0):
+        super().__init__(start, days, userId, ownerId)
+
+    def getIdentifier(self):
+        return 'Pre exámen Ensañanza Superior'
