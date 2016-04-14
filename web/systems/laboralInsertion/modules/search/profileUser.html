@@ -1,65 +1,100 @@
 <div class="contentProfile">
-  <div class="title">
-    {{getTitleProfile()}}
-  </div>
+    <div class="subContentProfile">
+          <div class="headerProfile">
+            <div class="userProfile">
+              <div class="contentPhoto">
+                  <img class="imgUser" src="img/avatarMen.jpg">
+              </div>
+              <div class="">
+                {{getTitleProfile()}}
+              </div>
+            </div>
+            <div>
+                <button class="btnDelete" ng-click='deleteInscription()'> <i class="fa fa-trash"></i> BORRAR</button>
+            </div>
+          </div>
 
-  <div class="formProfile">
-    <div class="item">
-      <div class="titleItem">
-        Carrera:
-      </div>
-      <div>
-        {{data.degree}}
-      </div>
-    </div>
+          <div class="formProfile">
 
-    <div class="item">
-      <div class="titleItem">
-        Cantidad de Materias:
-      </div>
-      <div class="inputItem">
-        <input type="text" ng-model="data.approved"/>
-      </div>
-    </div>
+            <div class="contentProfileDegree">
 
-    <div class="item">
-      <div class="titleItem">
-        Promedio:
-      </div>
-      <div class="inputItem">
-        <input type="text" ng-model="data.average1"/>
-      </div>
-    </div>
+                <div class="titleProfile">
+                    Carrera
+                </div>
+                <hr>
 
-    <div class="item">
-      <div class="titleItem">
-        Promedio con aplazo:
-      </div>
-      <div class="inputItem">
-        <input type="text" ng-model="data.average2"/>
-      </div>
-    </div>
+                <div class="item">
+                  <div>
+                    <div class="degree">{{data.degree}}</div>
+                  </div>
+                  <div class="titleItem">
+                    Cantidad de Materias
+                  </div>
+                  <div >
+                    <input class="inputItem" type="text" ng-model="data.approved"/>
+                  </div>
+                </div>
 
-    <div class="item">
-      <div class="titleItem">
-        Prioridad:
-      </div>
-      <div class="inputItem">
-        <input type="number" ng-model="data.userData.priority" min="0"/>
-      </div>
-    </div>
+                <div class="item">
+                  <div class="titleItem">
+                    Promedio
+                  </div>
+                  <div>
+                    <input class="inputItem" type="text" ng-model="data.average1"/>
+                  </div>
+                </div>
 
-  </div>
+                <div class="item">
+                  <div class="titleItem">
+                    Promedio con aplazo
+                  </div>
+                  <div>
+                    <input class="inputItem" type="text" ng-model="data.average2"/>
+                  </div>
+                </div>
 
-  <div class="contentButtons">
-    <div class="itemButton">
-      <button class="btnSend3" ng-click='cancelProfile()'> <i class="fa fa-times"></i> CANCELAR</button>
+            </div>
+
+            <div class="contentPriority">
+
+                <div class="item">
+                  <div class="titleProfile">
+                    Prioridad
+                  </div>
+                  <hr>
+                  <div >
+                    <input class="inputItem2" type="number" ng-model="data.userData.priority" min="0"/>
+                  </div>
+                </div>
+
+            </div>
+
+            <div class="contentProfileBusines">
+              <div class="titleProfile">
+                Contratado
+              </div>
+              <hr>
+              <div class="titleItem2">
+                Seleccione fecha
+              </div>
+              <div>
+                <input class="inputItem3" type="date"></input>
+              </div>
+              <div class="titleItem">
+                Seleccione empresa
+              </div>
+            </div>
+
+          </div>
+
+          <div class="contentButtons">
+            <div class="itemButton">
+              <button class="btnBackProfile" ng-click='cancelProfile()'> <i class="fa fa-chevron-left"></i> </button>
+            </div>
+            <div class="itemButton">
+              <button class="btnSend3" ng-click='saveProfile()'> <i class="fa fa-floppy-o"></i> GUARDAR</button>
+            </div>
+
+          </div>
     </div>
-    <div class="itemButton">
-      <button class="btnSend3" ng-click='saveProfile()'> <i class="fa fa-floppy-o"></i> GUARDAR</button>
-    </div>
-    <div class="itemButton">
-      <button class="btnSend3" ng-click='deleteInscription()'> <i class="fa fa-floppy-o"></i> BORRAR</button>
-    </div>
-  </div>
 </div>
