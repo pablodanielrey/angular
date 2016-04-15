@@ -9,192 +9,13 @@ import datetime
 import uuid
 from model.connection.connection import Connection
 from model.serializer.utils import MySerializer, JSONSerializable
+from model.dao import DAO
+from model.files.files import FileDAO
 
 
-class UserPassword(JSONSerializable):
-
-    def __init__(self):
-        self.id = None
-        self.userId = None
-        self.username = None
-        self.password = None
 
 
-class UserPasswordDAO:
 
-    @staticmethod
-    def _fromResult(r):
-        up = UserPassword()
-        up.id = r['id']
-        up.userId = r['user_id']
-        up.username = r['username']
-        up.password = r['password']
-        up.updated = r['updated']
-        return up
-
-    @staticmethod
-    def findByUserPassword(con, username, password):
-        cur = con.cursor()
-        try:
-            cur.execute('select * from credentials.user_password where username = %s and password = %s', (username, password))
-            if cur.rowcount <= 0:
-                return None
-            return UserPasswordDAO._fromResult(cur.fetchone())
-
-        finally:
-            cur.close()
-
-    @staticmethod
-    def findByUsername(con, username):
-        '''
-            Obtiene los datos de las credenciales de un usuario
-            Retorna:
-                Una lista con instancias de UserPassword
-                En caso de no existir una lista vacía
-        '''
-        cur = con.cursor()
-        try:
-            cur.execute('select id, user_id, username, password, updated from credentials.user_password where username = %s', (username,))
-            if cur.rowcount <= 0:
-                return []
-            data = [UserPasswordDAO._fromResult(c) for c in cur]
-            return data
-
-        finally:
-            cur.close()
-
-
-    @staticmethod
-    def findByUserId(con, userId):
-        '''
-            Obtiene los datos de las credenciales de un usuario
-            Retorna:
-                Una lista con instancias de UserPassword
-                En caso de no existir una lista vacía
-        '''
-        cur = con.cursor()
-        try:
-            cur.execute('select id, user_id, username, password, updated from credentials.user_password where user_id = %s', (userId,))
-            if cur.rowcount <= 0:
-                return []
-            data = [UserPasswordDAO._fromResult(c) for c in cur]
-            return data
-
-        finally:
-            cur.close()
-
-    @staticmethod
-    def persist(con, up):
-        '''
-            Inserta o actualiza el usuario y clave de una persona
-            Precondiciones:
-                El usuario debe existir
-            Retorna:
-                Id de las credenciales
-        '''
-        assert up.userId is not None
-        assert up.username is not None
-        assert up.password is not None
-
-        cur = con.cursor()
-        try:
-            if not hasattr(user, 'id'):
-                up.id = str(uuid.uuid4())
-                params = up.__dict__
-                cur.execute('insert into credentials.user_password (id, user_id, username, password, updated) values (%(id)s, %(userId)s, %(username)s, %(password)s, now())', params)
-            else:
-                params = up.__dict__
-                cur.execute('update credentials.user_password set user_id = %(userId)s, username = %(username)s, password = %(password)s, updated = now() where id = %(id)s', params)
-
-            return up.id
-
-        finally:
-            cur.close()
-
-
-class Mail(JSONSerializable):
-    ''' cuenta de email de un usuario '''
-
-    def __init__(self):
-        self.id = None
-        self.userId = None
-        self.email = None
-        self.confirmed = False
-        self.hash = None
-        self.created = None
-
-    def confirm(con, self):
-        ''' cambia el estado a confirmado '''
-        if self.confirmed:
-            return
-        self.confirmed = True
-        MailDAO.persist(con, self)
-
-
-class MailDAO:
-    ''' dao de las cuentas de email de los usuarios '''
-
-    @staticmethod
-    def _fromResult(r):
-        m = Mail()
-        m.id = r['id']
-        m.userId = r['user_id']
-        m.email = r['email']
-        m.confirmed = r['confirmed']
-        m.hash = r['hash']
-        m.created = r['created']
-        return m
-
-    @staticmethod
-    def findByUserId(con, userId):
-        ''' Obtiene los emails de un usuario '''
-        cur = con.cursor()
-        try:
-            cur.execute('select id, user_id, email, confirmed, hash, created from profile.mails where user_id = %s', (userId,))
-            m = [ MailDAO._fromResult(ma) for ma in cur ]
-            return m
-
-        finally:
-            cur.close()
-
-    @staticmethod
-    def findById(con, eid):
-        ''' Obtiene el email identificado por el id '''
-        cur = con.cursor()
-        try:
-            cur.execute('select * from profile.mails where id = %s', (eid,))
-            m = [ MailDAO._fromResult(ma) for ma in cur ]
-            return m
-
-        finally:
-            cur.close()
-
-
-    @staticmethod
-    def persist(con, mail):
-        ''' crea o actualiza un email de usuario '''
-        cur = con.cursor()
-        try:
-            if not hasattr(user, 'id'):
-                mail.id = str(uuid.uuid4())
-                params = mail.__dict__
-                cur.execute('insert into profile.mails (id, user_id, email, confirmed, hash) values (%(id)s, %(userId)s, %(email)s, %(confirmed)s, %(hash)s)', params)
-            else:
-                params = mail.__dict__
-                cur.execute('update profile.mails set user_id = %(userId)s, email = %(email)s, confirmed = %(confirmed)s, hash = %(hash)s where id = %(id)s', params)
-
-        finally:
-            cur.close()
-
-    @staticmethod
-    def delete(con, mid):
-        ''' Elimina el email dado por el id '''
-        cur = con.cursor()
-        try:
-            cur.execute('delete from profile.mails where id = %s', (mid,))
-
-        finally:
-            cur.close()
 
 
 class User(JSONSerializable):
@@ -237,9 +58,53 @@ class Telephone(JSONSerializable):
         self.number = None
         self.type = None
 
-class UserDAO:
-    ''' DAO para los usuarios '''
 
+
+class UserDAO(DAO):
+    ''' DAO para los usuarios '''
+    
+    dependencies = [FileDAO]
+    
+    @classmethod
+    def _createSchema(cls, con):
+        cls._createDependencies(con)
+        cur = con.cursor()
+        try:
+            sql = """
+              CREATE SCHEMA IF NOT EXISTS profile;
+                     
+              CREATE TABLE IF NOT EXISTS profile.users (
+                id VARCHAR NOT NULL PRIMARY KEY,
+                dni VARCHAR NOT NULL UNIQUE,
+                name VARCHAR,
+                lastname VARCHAR,
+                genre VARCHAR,
+                birthdate TIMESTAMPTZ,
+                city VARCHAR,
+                country VARCHAR,
+                address VARCHAR,
+                residence_city VARCHAR,
+                created TIMESTAMPTZ DEFAULT now(),
+                version BIGINT DEFAULT 0,
+                photo VARCHAR REFERENCES files.files (id)
+              );
+
+              CREATE TABLE IF NOT EXISTS profile.telephones (
+                id VARCHAR NOT NULL PRIMARY KEY,
+                user_id VARCHAR NOT NULL REFERENCES profile.users (id),
+                "number" VARCHAR NOT NULL,
+                type VARCHAR
+              );
+              """
+            try:
+                cur.execute(sql) 
+                con.commit()
+            except Exception as e:
+                con.rollback()
+                raise e
+        finally:
+            cur.close()   
+             
     @staticmethod
     def _fromResult(r):
         u = User()
@@ -418,6 +283,16 @@ class UserDAO:
             cur.close()
 
 
+
+
+
+
+
+
+
+
+
+############### Student ###############
 class Student(JSONSerializable):
 
     def __init__(self):
@@ -425,8 +300,34 @@ class Student(JSONSerializable):
         self.studentNumber = None
         self.condition = None
 
-class StudentDAO:
+class StudentDAO(DAO):
 
+    dependencies = [UserDAO]
+    
+    @classmethod
+    def _createSchema(cls, con):
+        cls._createDependencies(con)
+        cur = con.cursor()
+        try:
+            sql = """
+              CREATE SCHEMA IF NOT EXISTS students;
+                     
+              CREATE TABLE students.users (
+                id VARCHAR PRIMARY KEY NOT NULL REFERENCES profile.users (id),
+                student_number VARCHAR UNIQUE,
+                condition VARCHAR
+              );
+              """
+            try:
+                cur.execute(sql) 
+                con.commit()
+            except Exception as e:
+                con.rollback()
+                raise e
+        finally:
+            cur.close()   
+            
+            
     @staticmethod
     def _fromResult(r):
         s = Student()
@@ -537,3 +438,257 @@ if __name__ == '__main__':
 
     con.commit()
     conn.put(con)
+    
+    
+    
+    
+    
+    
+############### UserPassword ###############
+class UserPassword(JSONSerializable):
+
+    def __init__(self):
+        self.id = None
+        self.userId = None
+        self.username = None
+        self.password = None
+
+
+class UserPasswordDAO(DAO):
+
+    dependencies = [UserDAO]
+    
+    @classmethod
+    def _createSchema(cls, con):
+        cls._createDependencies(con)
+        cur = con.cursor()
+        try:
+            sql = """
+              CREATE SCHEMA IF NOT EXISTS credentials;
+
+              CREATE TABLE IF NOT EXISTS credentials.user_password(
+                id VARCHAR NOT NULL PRIMARY KEY,
+                user_id VARCHAR NOT NULL REFERENCES profile.users (id), 
+                username VARCHAR NOT NULL UNIQUE,
+                password VARCHAR NOT NULL,
+                updated TIMESTAMP DEFAULT now()
+              );
+            """
+
+            try:
+                cur.execute(sql) 
+                con.commit()
+            except Exception as e:
+                con.rollback()
+                raise e
+        finally:
+            cur.close()
+            
+            
+    @staticmethod
+    def _fromResult(r):
+        up = UserPassword()
+        up.id = r['id']
+        up.userId = r['user_id']
+        up.username = r['username']
+        up.password = r['password']
+        up.updated = r['updated']
+        return up
+
+    @staticmethod
+    def findByUserPassword(con, username, password):
+        cur = con.cursor()
+        try:
+            cur.execute('select * from credentials.user_password where username = %s and password = %s', (username, password))
+            if cur.rowcount <= 0:
+                return None
+            return UserPasswordDAO._fromResult(cur.fetchone())
+
+        finally:
+            cur.close()
+
+    @staticmethod
+    def findByUsername(con, username):
+        '''
+            Obtiene los datos de las credenciales de un usuario
+            Retorna:
+                Una lista con instancias de UserPassword
+                En caso de no existir una lista vacía
+        '''
+        cur = con.cursor()
+        try:
+            cur.execute('select id, user_id, username, password, updated from credentials.user_password where username = %s', (username,))
+            if cur.rowcount <= 0:
+                return []
+            data = [UserPasswordDAO._fromResult(c) for c in cur]
+            return data
+
+        finally:
+            cur.close()
+
+
+    @staticmethod
+    def findByUserId(con, userId):
+        '''
+            Obtiene los datos de las credenciales de un usuario
+            Retorna:
+                Una lista con instancias de UserPassword
+                En caso de no existir una lista vacía
+        '''
+        cur = con.cursor()
+        try:
+            cur.execute('select id, user_id, username, password, updated from credentials.user_password where user_id = %s', (userId,))
+            if cur.rowcount <= 0:
+                return []
+            data = [UserPasswordDAO._fromResult(c) for c in cur]
+            return data
+
+        finally:
+            cur.close()
+
+    @staticmethod
+    def persist(con, up):
+        '''
+            Inserta o actualiza el usuario y clave de una persona
+            Precondiciones:
+                El usuario debe existir
+            Retorna:
+                Id de las credenciales
+        '''
+        assert up.userId is not None
+        assert up.username is not None
+        assert up.password is not None
+
+        cur = con.cursor()
+        try:
+            if not hasattr(user, 'id'):
+                up.id = str(uuid.uuid4())
+                params = up.__dict__
+                cur.execute('insert into credentials.user_password (id, user_id, username, password, updated) values (%(id)s, %(userId)s, %(username)s, %(password)s, now())', params)
+            else:
+                params = up.__dict__
+                cur.execute('update credentials.user_password set user_id = %(userId)s, username = %(username)s, password = %(password)s, updated = now() where id = %(id)s', params)
+
+            return up.id
+
+        finally:
+            cur.close()
+            
+            
+            
+############### Mail ###############
+class Mail(JSONSerializable):
+    ''' cuenta de email de un usuario '''
+
+    def __init__(self):
+        self.id = None
+        self.userId = None
+        self.email = None
+        self.confirmed = False
+        self.hash = None
+        self.created = None
+
+    def confirm(con, self):
+        ''' cambia el estado a confirmado '''
+        if self.confirmed:
+            return
+        self.confirmed = True
+        MailDAO.persist(con, self)
+
+
+class MailDAO(DAO):
+
+    dependencies = [UserDAO]
+    
+    @classmethod
+    def _createSchema(cls, con):
+        cls._createDependencies(con)
+        cur = con.cursor()
+        try:
+            sql = """
+              CREATE SCHEMA IF NOT EXISTS profile;
+                     
+              CREATE TABLE IF NOT EXISTS profile.mails(
+                id VARCHAR NOT NULL PRIMARY KEY,
+                user_id VARCHAR NOT NULL REFERENCES profile.users (id),
+                email VARCHAR NOT NULL,
+                confirmed boolean NOT NULL DEFAULT false,
+                hash VARCHAR,
+                created TIMESTAMP DEFAULT now()
+              );
+            """         
+
+            try:
+                cur.execute(sql) 
+                con.commit()
+            except Exception as e:
+                con.rollback()
+                raise e
+        finally:
+            cur.close()   
+             
+
+
+
+
+    @staticmethod
+    def _fromResult(r):
+        m = Mail()
+        m.id = r['id']
+        m.userId = r['user_id']
+        m.email = r['email']
+        m.confirmed = r['confirmed']
+        m.hash = r['hash']
+        m.created = r['created']
+        return m
+
+    @staticmethod
+    def findByUserId(con, userId):
+        ''' Obtiene los emails de un usuario '''
+        cur = con.cursor()
+        try:
+            cur.execute('select id, user_id, email, confirmed, hash, created from profile.mails where user_id = %s', (userId,))
+            m = [ MailDAO._fromResult(ma) for ma in cur ]
+            return m
+
+        finally:
+            cur.close()
+
+    @staticmethod
+    def findById(con, eid):
+        ''' Obtiene el email identificado por el id '''
+        cur = con.cursor()
+        try:
+            cur.execute('select * from profile.mails where id = %s', (eid,))
+            m = [ MailDAO._fromResult(ma) for ma in cur ]
+            return m
+
+        finally:
+            cur.close()
+
+
+    @staticmethod
+    def persist(con, mail):
+        ''' crea o actualiza un email de usuario '''
+        cur = con.cursor()
+        try:
+            if not hasattr(user, 'id'):
+                mail.id = str(uuid.uuid4())
+                params = mail.__dict__
+                cur.execute('insert into profile.mails (id, user_id, email, confirmed, hash) values (%(id)s, %(userId)s, %(email)s, %(confirmed)s, %(hash)s)', params)
+            else:
+                params = mail.__dict__
+                cur.execute('update profile.mails set user_id = %(userId)s, email = %(email)s, confirmed = %(confirmed)s, hash = %(hash)s where id = %(id)s', params)
+
+        finally:
+            cur.close()
+
+    @staticmethod
+    def delete(con, mid):
+        ''' Elimina el email dado por el id '''
+        cur = con.cursor()
+        try:
+            cur.execute('delete from profile.mails where id = %s', (mid,))
+
+        finally:
+            cur.close()            

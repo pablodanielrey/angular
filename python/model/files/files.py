@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import uuid
 import hashlib
-
+from model.dao import DAO
 
 class File:
 
@@ -26,26 +26,35 @@ class File:
         return m.hexdigest()
 
 
-class FileDAO:
+class FileDAO(DAO):
 
-    @staticmethod
-    def _createSchema(con):
+    @classmethod
+    def _createSchema(cls, con):
+        cls._createDependencies(con)
         cur = con.cursor()
         try:
-            cur.execute('create schema if not exists files')
-            cur.execute("""
-                create table files.files (
-                    id varchar not null primary key,
-                    name varchar not null,
-                    hash varchar,
-                    content bytea,
-                    mimetype varchar default 'application/binary',
-                    codec varchar default 'base64',
-                    size default 0,
-                    created timestamptz default now(),
-                    modified timestampz default now()
-                )
-            """)
+            sql = """
+              CREATE SCHEMA IF NOT EXISTS files;
+
+              CREATE TABLE IF NOT EXISTS files.files (
+                  id VARCHAR NOT NULL PRIMARY KEY,
+                  name VARCHAR NOT NULL,
+                  hash VARCHAR,
+                  content BYTEA,
+                  mimetype VARCHAR DEFAULT 'application/binary',
+                  codec VARCHAR DEFAULT 'base64',
+                  size BIGINT DEFAULT 0,
+                  created TIMESTAMPTZ DEFAULT now(),
+                  modified TIMESTAMPTZ DEFAULT now()
+              );
+            """
+
+            try:
+                cur.execute(sql) 
+                con.commit()
+            except Exception as e:
+                con.rollback()
+                raise e
         finally:
             cur.close()
 

@@ -10,29 +10,34 @@ class Status(JSONSerializable):
     REJECTED = 3
     CANCELED = 4
 
-    def __init__(self, jid, userId):
+    def __init__(self, userId, date):
         self.id = None
+        self.justificationId = None
         self.status = Status.PENDING
-        self.justificationId = jid
         self.userId = userId
+        self.date = date
         self.created = datetime.datetime.now()
 
+    def _setJustificationId(self, jid):
+        self.justificationId = jid
+
     def persist(self, con):
-        return StatusDAO.persist(con,self)
+        assert self.justificationId is not None
+        return StatusDAO.persist(con, self)
 
-    def changeStatus(self, con, justification, status, userId = None):
+    def changeStatus(self, con, justification, statusConst, userId):
+        assert userId is not None
+        date = self.date + datetime.timedelta(seconds=1)
+        s = Status(userId, date)
+        s.justificationId = justification.id
+        s.status = statusConst
+        s.persist(con)
+        justification.setStatus(s)
 
-        if userId is None:
-            userId = justification.userId
+    @classmethod
+    def findByJustificationIds(cls, con, ids):
+        return StatusDAO.findByJustificationIds(con, ids)
 
-        s = Status(self.justificationId, userId)
-        s.status = status
-        s.id = StatusDAO.persist(con,s)
-
-        justification.status = s
-        justification.statusId = s.id
-        justification.statusConst = s.status
-        
     @classmethod
     def findByIds(cls, con, ids):
         return StatusDAO.findByIds(con, ids)
@@ -51,9 +56,10 @@ class StatusDAO:
                 create schema if not exists assistance;
                 create table assistance.justification_status (
                     id varchar primary key,
-                    status int,
+                    status int not null,
                     user_id varchar not null references profile.users (id),
-                    justification_id varchar,
+                    justification_id varchar not null,
+                    date timestampz default now(),
                     created timestamptz default now()
                 );
             """)
@@ -62,7 +68,8 @@ class StatusDAO:
 
     @staticmethod
     def _fromResult(r):
-        s = Status(r['id'], r['user_id'])
+        s = Status(r['user_id'], r['date'])
+        s.id = r['id']
         s.status = r['status']
         s.justificationId = r['justification_id']
         s.created = r['created']
@@ -75,18 +82,29 @@ class StatusDAO:
             id = str(uuid.uuid4())
             status.id = id
             r = status.__dict__
-            cur.execute('insert into assistance.justification_status (id, status, user_id, justification_id, created) '
-                        'values (%(id)s, %(status)s, %(userId)s, %(justificationId)s, %(created)s)', r)
+            cur.execute('insert into assistance.justification_status (id, status, user_id, justification_id, date) '
+                        'values (%(id)s, %(status)s, %(userId)s, %(justificationId)s, %(date)s)', r)
             return id
         finally:
             cur.close()
+
+    @staticmethod
+    def findByJustificationIds(con, ids):
+        assert isinstance(ids, list)
+        cur = con.cursor()
+        try:
+            cur.execute('select * from assistance.justification_status where justification_id in %s', (tuple(ids),))
+            return [ StatusDAO._fromResult(r) for r in cur ]
+        finally:
+            cur.close()
+
 
     @staticmethod
     def findByIds(con, ids):
         assert isinstance(ids, list)
         cur = con.cursor()
         try:
-            cur.execute('select * from assistance.justification_status where id in %s', tuple(ids))
+            cur.execute('select * from assistance.justification_status where id in %s', (tuple(ids),))
             return [ StatusDAO._fromResult(r) for r in cur ]
         finally:
             cur.close()
@@ -95,7 +113,7 @@ class StatusDAO:
     def getLastStatus(con, jid):
         cur = con.cursor()
         try:
-            cur.execute('select * from assistance.justification_status where justification_id = %s order by created desc limit 1', (jid,))
+            cur.execute('select * from assistance.justification_status where justification_id = %s order by date desc limit 1', (jid,))
             if cur.rowcount <= 0:
                 return None
 
