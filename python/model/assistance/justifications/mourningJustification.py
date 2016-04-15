@@ -98,7 +98,7 @@ class MourningJustificationDAO(DAO):
         try:
             sDate = None if start is None else start.date()
             eDate = datetime.date.today() if end is None else end.date()
-            t = j.__class__.__name__
+            t = cls.type
             cur.execute('select * from assistance.justification_justifyName where user_id in %s and '
                         '(jstart <= %s and jend >= %s) and type = %s', (tuple(userIds), eDate, sDate, t))
 
@@ -108,6 +108,8 @@ class MourningJustificationDAO(DAO):
 
 
 class MourningFirstGradeJustificationDAO(MourningJustificationDAO):
+
+    type = 'MourningFirstGradeJustification'
 
     @classmethod
     def _fromResult(cls, con, r):
@@ -119,6 +121,8 @@ class MourningFirstGradeJustificationDAO(MourningJustificationDAO):
 
 class MourningSecondGradeJustificationDAO(MourningJustificationDAO):
 
+    type = 'MourningSecondGradeJustification'
+
     @classmethod
     def _fromResult(cls, con, r):
         j = MourningSecondGradeJustification(r['user_id'], r['owner_id'], r['jstart'], 0)
@@ -128,6 +132,8 @@ class MourningSecondGradeJustificationDAO(MourningJustificationDAO):
         return j
 
 class MourningRelativeJustificationDAO(MourningJustificationDAO):
+
+    type = 'MourningRelativeJustification'
 
     @classmethod
     def _fromResult(cls, con, r):
