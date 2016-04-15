@@ -1,4 +1,4 @@
-<div class="contentProfile">
+<div class="contentProfile {{view.style}}">
     <div class="subContentProfile">
           <div class="headerProfile">
             <div class="userProfile">
@@ -83,6 +83,66 @@
               <div class="titleItem">
                 Seleccione empresa
               </div>
+
+
+              <div class="itemCompany" ng-click="view.style= 'verListadoDeEmpresas'">
+                  <div class="contentPhotoRecent">
+                    <img class="imgCompanyRecent" src="/systems/laboralInsertion/img/empresa.jpg">
+                  </div>
+                  <div class="contentDataRecent">
+                      <div>
+                        <b>Seleccione empresa</b>
+                      </div>
+                      <div class="">
+                        ver listado
+                      </div>
+                  </div>
+              </div>
+
+              <!-- LISTADO DE EMPRESAS -->
+              <div class="listCompany">
+                  <div class="itemCompany" ng-click="view.style= ''">
+                      <div class="contentPhotoRecent">
+                        <img class="imgCompanyRecent" src="/systems/laboralInsertion/img/empresa.jpg">
+                      </div>
+                      <div class="contentDataRecent">
+                          <div>
+                            <b>Seguros Rivadavia</b>
+                          </div>
+                          <div class="">
+                            Suc. La Plata
+                          </div>
+                      </div>
+                  </div>
+                  <div class="itemCompany" ng-click="view.style= ''">
+                      <div class="contentPhotoRecent">
+                        <img class="imgCompanyRecent" src="/systems/laboralInsertion/img/empresa.jpg">
+                      </div>
+                      <div class="contentDataRecent">
+                          <div>
+                            <b>Arba</b>
+                          </div>
+                          <div class="">
+                            La Plata
+                          </div>
+                      </div>
+                  </div>
+                  <div class="itemCompany" ng-click="view.style= ''">
+                      <div class="contentPhotoRecent">
+                        <img class="imgCompanyRecent" src="/systems/laboralInsertion/img/empresa.jpg">
+                      </div>
+                      <div class="contentDataRecent">
+                          <div>
+                            <b>Quilmes</b>
+                          </div>
+                          <div class="">
+                            Suc. La Plata
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+
             </div>
 
           </div>

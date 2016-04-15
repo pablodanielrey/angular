@@ -5,6 +5,7 @@
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   margin:0px;
   background-color: #eee;
+  overflow-y: hidden;
 }
 
 /************************************************
@@ -875,7 +876,7 @@ align-items: center;
   margin-left: 10px;
   padding: 10px;
   font-size: 14px;
-  background-color: #cccfd1;
+  background-color: #a9a9aa;
   cursor: pointer;
   border: none;
   color: white;
@@ -888,7 +889,7 @@ align-items: center;
 }
 
 .search .btnBackProfile:hover {
-  background-color: #E4E4E6;
+  background-color: #cccfd1;
   color:white;
 }
 
@@ -1118,7 +1119,7 @@ align-items: center;
   font-size: 20px;
   padding: 5px;
   border: 1px solid #DBE2E5;
-  width: 200px;
+  width: 220px;
   margin-bottom: 3px;
   margin-top: 3px;
 }
@@ -1138,4 +1139,82 @@ align-items: center;
 
 .search .contentProfileBusines {
   width: 300px;
+}
+
+
+.search .itemCompany {
+  display: flex;
+  display: -webkit-flex;
+  display: -moz-flex;
+  flex-direction: row;
+  -webkit-flex-direction: row;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  width: 220px;
+  height: 65px;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  padding: 5px;
+  background-color:#EBEBEC;
+  color: black;
+  cursor: pointer;
+}
+
+.search .itemCompany:hover {
+  background-color: #E3E3E7;
+}
+
+.search .contentPhotoRecent {
+  display: flex;
+  display: -webkit-flex;
+  display: -moz-flex;
+  align-items: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  width: 65px;
+  height: 65px;
+  margin-left: 10px;
+}
+
+.search .imgCompanyRecent {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+}
+
+.search .contentDataRecent {
+  display: flex;
+  display: -webkit-flex;
+  display: -moz-flex;
+  flex-direction: column;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  font-size: 13px;
+}
+
+.contentProfile.verListadoDeEmpresas .listCompany {
+  position: absolute;
+    overflow-y: scroll;
+    height: 200px;
+    margin-right: 5px;
+    width: 300px;
+    top:200px;
+    transform: translate3d(0,0,0);
+}
+
+.search .listCompany {
+
+  position: absolute;
+    overflow-y: scroll;
+    height: 200px;
+    margin-right: 5px;
+    width: 300px;
+    background-color: white;
+    transform: translate3d(0,1000%,0);
 }
