@@ -41,6 +41,9 @@ class OutTicketJustificationDAO(DAO):
 
         cur = con.cursor()
         try:
+            if not hasattr(j, 'end'):
+                j.end = None
+
             if ((not hasattr(j, 'id')) or (j.id is None)):
                 j.id = str(uuid.uuid4())
 
@@ -78,7 +81,7 @@ class OutTicketJustificationDAO(DAO):
 
         cur = con.cursor()
         try:
-            cur.execute('select * from assistance.justification_out_ticket where user_id in %s and (jstart <= %s and jend >= %s)', (tuple(userIds), end, start))
+            cur.execute('select * from assistance.justification_out_ticket where jend != null and user_id in %s and (jstart <= %s and jend >= %s)', (tuple(userIds), end, start))
             return [ cls._fromResult(con, r) for r in cur ]
         finally:
             cur.close()
@@ -115,7 +118,7 @@ class OutTicketWithoutReturnJustificationDAO(OutTicketJustificationDAO):
         cur = con.cursor()
         try:
             cur.execute('select * from assistance.justification_out_ticket where user_id in %s and '
-                        '(jstart <= %s and DATE(jstart) = %s)', (tuple(userIds), end, start.date()))
+                        '(jstart <= %s and DATE(jstart) = %s) and jend = null', (tuple(userIds), end, start.date()))
 
             return [ cls._fromResult(con, r) for r in cur ]
         finally:
@@ -147,6 +150,7 @@ class OutTicketWithoutReturnJustification(OutTicketJustification):
 
     def __init__(self, userId, ownerId, start):
         super().__init__(userId, ownerId, start)
+        self.end = None
 
     def getIdentifier(self):
         return 'Boleta de salida sin retorno'
