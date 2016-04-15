@@ -23,15 +23,15 @@ class InformedAbsenceDAO(DAO):
             cur.close()
 
     @classmethod
-    def _fromResult(con, r):
+    def _fromResult(cls, con, r):
         j = InformedAbsenceJustification(r['user_id'], r['owner_id'], r['jstart'], 0, r['number'])
         j.id = r['id']
         j.end = r['jdate']
         j.setStatus(Status.getLastStatus(con, j.id))
         return j
 
-    @staticmethod
-    def persist(con, j):
+    @classmethod
+    def persist(cls, con, j):
         assert j is not None
 
         cur = con.cursor()

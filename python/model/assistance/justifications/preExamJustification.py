@@ -42,6 +42,7 @@ class PreExamJustificationDAO(DAO):
                   owner_id varchar not null references profile.users (id),
                   jstart date default now(),
                   jend date default now(),
+                  type varchar not null,
                   created timestamptz default now()
               );
               """
@@ -51,14 +52,6 @@ class PreExamJustificationDAO(DAO):
 
 
     @classmethod
-    def _fromResult(cls, con, r):
-        j = PreExamJustification(r['user_id'], r['owner_id'], r['jstart'], 0)
-        j.id = r['id']
-        j.end = r['jend']
-        j.setStatus(Status.getLastStatus(con, j.id))
-        return j
-
-    @classmethod
     def persist(cls, con, j):
         assert j is not None
 
@@ -66,6 +59,7 @@ class PreExamJustificationDAO(DAO):
         try:
             if ((not hasattr(j, 'id')) or (j.id is None)):
                 j.id = str(uuid.uuid4())
+                j.type = j.__class__.__name__
 
                 r = j.__dict__
                 cur.execute('insert into assistance.justification_pre_exam (id, user_id, owner_id, jstart, jend) '
@@ -87,7 +81,7 @@ class PreExamJustificationDAO(DAO):
         try:
             logging.info('ids: %s', tuple(ids))
             cur.execute('select * from assistance.justification_pre_exam where id in %s',(tuple(ids),))
-            return [ PreExamJustificationDAO._fromResult(con, r) for r in cur ]
+            return [ cls._fromResult(con, r) for r in cur ]
         finally:
             cur.close()
 
@@ -104,27 +98,52 @@ class PreExamJustificationDAO(DAO):
         try:
             sDate = None if start is None else start.date()
             eDate = datetime.date.today() if end is None else end.date()
+            t = cls.type
             cur.execute('select * from assistance.justification_pre_exam where user_id in %s and '
-                        '(jstart <= %s and jend >= %s)', (tuple(userIds), eDate, sDate))
+                        '(jstart <= %s and jend >= %s) and t = %s', (tuple(userIds), eDate, sDate, t))
 
-            return [ PreExamJustificationDAO._fromResult(con, r) for r in cur ]
+            return [ cls._fromResult(con, r) for r in cur ]
         finally:
             cur.close()
 
 
+class SchoolPreExamJustificationDAO(PreExamJustificationDAO):
+    type = 'SchoolPreExamJustification'
+
+    @classmethod
+    def _fromResult(cls, con, r):
+        j = SchoolPreExamJustification(r['user_id'], r['owner_id'], r['jstart'], 0)
+        j.id = r['id']
+        j.end = r['jend']
+        j.setStatus(Status.getLastStatus(con, j.id))
+        return j
+
+
+class UniversityPreExamJustificationDAO(PreExamJustificationDAO):
+
+    type = 'UniversityPreExamJustification'
+
+    @classmethod
+    def _fromResult(cls, con, r):
+        j = UniversityPreExamJustification(r['user_id'], r['owner_id'], r['jstart'], 0)
+        j.id = r['id']
+        j.end = r['jend']
+        j.setStatus(Status.getLastStatus(con, j.id))
+        return j
+
+
 class PreExamJustification(RangedJustification):
 
-    dao = PreExamJustificationDAO
     registry = inject.instance(Registry).getRegistry('preExamJustification')
 
     def __init__(self, userId, ownerId, start, days = 0):
         super().__init__(start, days, userId, ownerId)
 
-    def getIdentifier(self):
-        return 'Pre exámen'
-
 
 class SchoolPreExamJustification(PreExamJustification):
+
+    dao = SchoolPreExamJustificationDAO
+
 
     def __init__(self, userId, ownerId, start, days = 0):
         super().__init__(start, days, userId, ownerId)
@@ -134,6 +153,8 @@ class SchoolPreExamJustification(PreExamJustification):
 
 
 class UniversityPreExamJustification(PreExamJustification):
+
+    dao = UniversityPreExamJustificationDAO
 
     def __init__(self, userId, ownerId, start, days = 0):
         super().__init__(start, days, userId, ownerId)
