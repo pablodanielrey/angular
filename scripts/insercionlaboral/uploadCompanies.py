@@ -59,6 +59,20 @@ def upload(files, con):
     finally:
         doc.close()
 
+
+def capitalize(con):
+    cur = con.cursor()
+    try:
+        cur.execute('select id, name from laboral_insertion.companies')
+        for c in cur.fetchall():
+            cid = c['id']
+            name = c['name'].title()
+            cur.execute('update laboral_insertion.companies set name = %s where id = %s', (name, cid))
+
+    finally:
+        cur.close()
+
+
 def _getUsers(con):
     uids = []
 
@@ -95,9 +109,10 @@ if __name__ == '__main__':
     conn = Connection(reg.getRegistry('dcsys'))
     con = conn.get()
     try:
-        files = sys.argv[1]
-        logging.info('importando {}'.format(files))
-        upload(files, con)
+        capitalize(con)
+        #files = sys.argv[1]
+        #logging.info('importando {}'.format(files))
+        #upload(files, con)
         con.commit()
 
     finally:
