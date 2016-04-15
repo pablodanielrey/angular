@@ -87,7 +87,7 @@ class TravelJustificationDAO(DAO):
         try:
             logging.info('ids: %s', tuple(ids))
             cur.execute('select * from assistance.justification_travel where id in %s',(tuple(ids),))
-            return [ TravelJustificationDAO._fromResult(con, r) for r in cur ]
+            return [ cls._fromResult(con, r) for r in cur ]
         finally:
             cur.close()
 
@@ -107,7 +107,7 @@ class TravelJustificationDAO(DAO):
             cur.execute('select * from assistance.justification_travel where user_id in %s and '
                         '(jstart <= %s and jend >= %s)', (tuple(userIds), eDate, sDate))
 
-            return [ TravelJustificationDAO._fromResult(con, r) for r in cur ]
+            return [ cls._fromResult(con, r) for r in cur ]
         finally:
             cur.close()
 

@@ -87,7 +87,7 @@ class MedicalCertificateJustificationDAO(DAO):
         try:
             logging.info('ids: %s', tuple(ids))
             cur.execute('select * from assistance.justification_medical_certificate where id in %s',(tuple(ids),))
-            return [ MedicalCertificateJustificationDAO._fromResult(con, r) for r in cur ]
+            return [ cls._fromResult(con, r) for r in cur ]
         finally:
             cur.close()
 
@@ -107,7 +107,7 @@ class MedicalCertificateJustificationDAO(DAO):
             cur.execute('select * from assistance.justification_medical_certificate where user_id in %s and '
                         '(jstart <= %s and jend >= %s)', (tuple(userIds), eDate, sDate))
 
-            return [ MedicalCertificateJustificationDAO._fromResult(con, r) for r in cur ]
+            return [ cls._fromResult(con, r) for r in cur ]
         finally:
             cur.close()
 
