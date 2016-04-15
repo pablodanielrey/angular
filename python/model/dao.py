@@ -1,13 +1,15 @@
 
 class DAO:
-    dependencies = []
-    
+
+    schemaDependencies = []
+
     @classmethod
     def _createSchema(cls, con):
         for c in cls.__subclasses__():
-            c._createSchema()
-            
+            for d in c._getDependencies():
+                if cls is not d:
+                    d._createSchema()
+
     @classmethod
-    def _createDependencies(cls, con):
-        for c in cls.dependencies:
-            c._createSchema(con)
+    def _getDependencies(cls):
+        return cls.schemaDependencies
