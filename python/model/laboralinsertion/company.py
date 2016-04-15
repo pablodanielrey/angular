@@ -41,7 +41,7 @@ class CompanyDAO(DAO):
                     manager varchar,
                     address varchar,
                     begincm timestamptz default now(),
-                    endcm timestamptz default now(),
+                    endcm timestamptz default now()
                 )
             """)
         finally:
