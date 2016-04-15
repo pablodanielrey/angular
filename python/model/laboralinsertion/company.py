@@ -2,6 +2,9 @@
 import uuid
 import inject
 import logging
+
+from model.dao import DAO
+
 from model.serializer.utils import MySerializer, JSONSerializable
 
 
@@ -14,10 +17,10 @@ class Contact(JSONSerializable):
         self.companyId = ''
         self.id = ''
 
-class ContactDAO:
+class ContactDAO(DAO):
 
-    @staticmethod
-    def _createSchema(con):
+    @classmethod
+    def _createSchema(cls, con):
         cur = con.cursor()
         try:
             cur.execute("""
