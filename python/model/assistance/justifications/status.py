@@ -22,6 +22,7 @@ class Status(JSONSerializable):
         self.justificationId = jid
 
     def persist(self, con):
+        logging.info('persitiendo el estado : {}'.format(self.__dict__))
         assert self.justificationId is not None
         return StatusDAO.persist(con, self)
 

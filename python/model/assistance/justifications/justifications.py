@@ -18,6 +18,8 @@ class Justification(JSONSerializable):
         raise Exception('abstract method')
 
     def persist(self, con):
+        logging.info('persitiendo la justificacion : {}'.format(self.__dict__))
+
         jid = self.dao.persist(con, self)
         status = self.getStatus()
         status._setJustificationId(jid)
@@ -68,7 +70,7 @@ class Justification(JSONSerializable):
     def findById(cls, con, ids):
         assert cls.dao is not None
         justs = cls.dao.findById(con, ids)
-        cls._loadStatuses(con, justs)
+        cls._loadStatus(con, justs)
         return justs
 
     @classmethod

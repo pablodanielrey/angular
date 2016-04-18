@@ -1,33 +1,43 @@
 
 from model.dao import DAO
 from model.assistance.justifications.justifications import Justification
+from model.assistance.justifications.status import Status
 from model.assistance.justifications.justifications import SingleDateJustification
+from model.users.users import UserDAO
+
+import datetime
 
 
 class InformedAbsenceJustificationDAO(DAO):
 
+    dependencies = [UserDAO]
+
     @classmethod
     def _createSchema(cls, con):
+        cls._createDependencies(con)
+
         cur = con.cursor()
         try:
-            cur.execute("""
-                create schema if not exists assistance;
-                create table assistance.justification_informed_absence (
+            sql = """
+              CREATE SCHEMA IF NOT EXISTS assistance;
+
+              create table IF NOT EXISTS assistance.justification_informed_absence (
                     id varchar primary key,
                     user_id varchar not null references profile.users (id),
                     owner_id varchar not null references profile.users (id),
                     jdate date default now(),
                     created timestamptz default now()
-                );
-            """)
+              );
+              """
+            cur.execute(sql)
         finally:
             cur.close()
 
     @classmethod
     def _fromResult(cls, con, r):
-        j = InformedAbsenceJustification(r['user_id'], r['owner_id'], r['jstart'], 0, r['number'])
+        date = datetime.datetime.combine(r['jdate'], datetime.time.min)
+        j = InformedAbsenceJustification(r['user_id'], r['owner_id'], date)
         j.id = r['id']
-        j.end = r['jdate']
         j.setStatus(Status.getLastStatus(con, j.id))
         return j
 
@@ -37,8 +47,10 @@ class InformedAbsenceJustificationDAO(DAO):
 
         cur = con.cursor()
         try:
-            if ((not hasattr(j, 'id')) or (j.id is None)):
-                j.id = str(uuid.uuid4())
+
+            if ((not hasattr(j, 'id')) or (j.id is None)) or (len(j.findById(con, [j.id])) <=  0):
+                if not hasattr(j, 'id') or j.id is None:
+                    j.id = str(uuid.uuid4())
 
                 r = j.__dict__
                 cur.execute('insert into assistance.justification_informed_absence(id, user_id, owner_id, jdate) '
@@ -49,6 +61,17 @@ class InformedAbsenceJustificationDAO(DAO):
                             'jdate = %(date)s where id = %(id)s', r)
             return j.id
 
+        finally:
+            cur.close()
+
+    @classmethod
+    def findById(cls, con, ids):
+        assert isinstance(ids, list)
+
+        cur = con.cursor()
+        try:
+            cur.execute('select * from assistance.justification_informed_absence where id in %s', (tuple(ids),))
+            return [ cls._fromResult(con, r) for r in cur ]
         finally:
             cur.close()
 
