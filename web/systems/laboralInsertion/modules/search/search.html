@@ -1,6 +1,6 @@
-<div class="search" ng-class='getCurrentScreen()'>
+<div class="search {{view.style3}}" ng-class='getCurrentScreen()' >
 <!-- <div class="search  "> -->
-  <!-- Variables 1: screenBussines, screenFilters, screenSelected
+  <!-- Variables 1: screenBussines, screenFilters, screenSelected, screenSentNumber
        Variables2: screenSelectBusiness, screenSendBusiness, screenSending, screenSent-->
 
   <div class="header">
@@ -171,11 +171,26 @@
                 <i class="fa fa-user"></i>
               </div>
             </td>
-            <td>
-              <div class="dates" title="Cantidad de veces enviado">
+
+
+            <td class="tdSent" ng-if='getSents(i.id) == 0'>
+              <div class="dates"  title="Cantidad de veces enviado">
                 {{getSents(i.id)}}
               </div>
+              <div class="numberSend">
+                envios {{i.id}}
+              </div>
             </td>
+
+            <td class="tdSent" ng-if='getSents(i.id) > 0' ng-mouseenter="view.style3='verEnvios'" ng-mouseleave="view.style3=''">
+              <div class="dates"  title="Cantidad de veces enviado">
+                {{getSents(i.id)}}
+              </div>
+              <div class="numberSend">
+                envios {{i.id}}
+              </div>
+            </td>
+
             <td>
               <div class="priority" title="Prioridad">
                 {{getPriority(i.userId)}}
