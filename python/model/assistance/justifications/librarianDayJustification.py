@@ -33,7 +33,7 @@ class LibrarianDayJustificationDAO(DAO):
 
     @classmethod
     def _fromResult(cls, con, r):
-        c = LibrarianDayJustification(r['user_id', r['owner_id'], r['date'])
+        c = LibrarianDayJustification(r['user_id'], r['owner_id'], r['date'])
         c.id = r['id']
         c.setStatus(Status.getLastStatus(con, c.id))
         return c

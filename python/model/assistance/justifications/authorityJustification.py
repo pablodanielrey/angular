@@ -33,7 +33,7 @@ class AuthorityJustificationDAO(DAO):
 
     @classmethod
     def _fromResult(cls, con, r):
-        c = AuthorityJustification(r['user_id', r['owner_id'], r['date'])
+        c = AuthorityJustification(r['user_id'], r['owner_id'], r['date'])
         c.id = r['id']
         c.setStatus(Status.getLastStatus(con, c.id))
         return c

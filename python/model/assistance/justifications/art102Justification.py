@@ -33,7 +33,7 @@ class Art102JustificationDAO(DAO):
 
     @classmethod
     def _fromResult(cls, con, r):
-        c = Art102Justification(r['user_id', r['owner_id'], r['date'])
+        c = Art102Justification(r['user_id'], r['owner_id'], r['date'])
         c.id = r['id']
         c.setStatus(Status.getLastStatus(con, c.id))
         return c

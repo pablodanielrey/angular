@@ -1,6 +1,7 @@
 
 from model.dao import DAO
 from model.assistance.justifications.justifications import Justification
+from model.assistance.justifications.justifications import SingleDateJustification
 
 
 class InformedAbsenceDAO(DAO):
