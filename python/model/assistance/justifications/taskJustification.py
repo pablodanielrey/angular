@@ -4,7 +4,7 @@ import datetime
 import uuid
 
 
-from model.assistance.justifications.justifications import Justification, RangedJustification
+from model.assistance.justifications.justifications import Justification, RangedJustification, RangedTimeJustification
 from model.assistance.justifications.status import Status
 
 from model.dao import DAO
@@ -21,6 +21,7 @@ class TaskJustificationDAO(DAO):
         try:
             sql = """
                 CREATE SCHEMA IF NOT EXISTS assistance;
+                
                 create table IF NOT EXISTS assistance.justification_task (
                     id varchar primary key,
                     user_id varchar not null references profile.users (id),

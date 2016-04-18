@@ -33,7 +33,7 @@ class StrikeJustificationDAO(DAO):
 
     @classmethod
     def _fromResult(cls, con, r):
-        c = StrikeJustification(r['user_id', r['owner_id'], r['date'])
+        c = StrikeJustification(r['user_id'], r['owner_id'], r['date'])
         c.id = r['id']
         c.setStatus(Status.getLastStatus(con, c.id))
         return c
