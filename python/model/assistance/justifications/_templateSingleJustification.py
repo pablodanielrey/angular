@@ -7,7 +7,7 @@ from model.assistance.justifications.justifications import SingleDateJustificati
 from model.assistance.justifications.status import Status
 import uuid, datetime
 
-class StrikeJustificationDAO(DAO):
+class JustifyNameJustificationDAO(DAO):
 
     dependencies = [UserDAO]
 
@@ -19,7 +19,7 @@ class StrikeJustificationDAO(DAO):
             sql = """
               CREATE SCHEMA IF NOT EXISTS assistance;
 
-              create table IF NOT EXISTS assistance.justification_strike (
+              create table IF NOT EXISTS assistance.justification_justifyName (
                     id varchar primary key,
                     user_id varchar not null references profile.users (id),
                     owner_id varchar not null references profile.users (id),
@@ -33,7 +33,7 @@ class StrikeJustificationDAO(DAO):
 
     @classmethod
     def _fromResult(cls, con, r):
-        c = StrikeJustification(r['user_id'], r['owner_id'], r['date'])
+        c = JustifyNameJustification(r['user_id'], r['owner_id'], r['date'])
         c.id = r['id']
         c.setStatus(Status.getLastStatus(con, c.id))
         return c
@@ -44,17 +44,18 @@ class StrikeJustificationDAO(DAO):
 
         cur = con.cursor()
         try:
-            if ((not hasattr(c, 'id')) or (c.id is None)):
-                c.id = str(uuid.uuid4())
+            if ((not hasattr(c, 'id')) or (c.id is None)) or (len(c.findById(con, [c.id])) <=  0):
+                if not hasattr(c, 'id') or c.id is None:
+                    c.id = str(uuid.uuid4())
 
                 r = c.__dict__
-                cur.execute('insert into assistance.justification_strike (id, user_id, owner_id, date) '
+                cur.execute('insert into assistance.justification_justifyName (id, user_id, owner_id, date) '
                             'values ( %(id)s, %(userId)s, %(ownerId)s, %(date)s)', r)
             else:
                 r = c.__dict__
-                cur.execute('update assistance.justification_strike set user_id = %(userId)s, owner_id = %(ownerId)s, '
+                cur.execute('update assistance.justification_justifyName set user_id = %(userId)s, owner_id = %(ownerId)s, '
                             'date = %(date)s where id = %(id)s', r)
-            return id
+            return c.id
 
         finally:
             cur.close()
@@ -65,7 +66,7 @@ class StrikeJustificationDAO(DAO):
 
         cur = con.cursor()
         try:
-            cur.execute('select * from assistance.justification_strike where id in %s', (tuple(ids),))
+            cur.execute('select * from assistance.justification_justifyName where id in %s', (tuple(ids),))
             return [ cls._fromResult(con, r) for r in cur ]
         finally:
             cur.close()
@@ -83,17 +84,17 @@ class StrikeJustificationDAO(DAO):
         try:
             sDate = None if start is None else start.date()
             eDate = datetime.date.today() if end is None else end.date()
-            cur.execute('select * from assistance.justification_strike where user_id  in %s and date BETWEEN %s AND %s', (tupe(userIds), sDate, eDate))
+            cur.execute('select * from assistance.justification_justifyName where user_id  in %s and date BETWEEN %s AND %s', (tupe(userIds), sDate, eDate))
             return [ cls._fromResult(con, r) for r in cur ]
         finally:
             cur.close()
 
-class StrikeJustification(SingleDateJustification):
+class JustifyNameJustification(SingleDateJustification):
 
-    dao = StrikeJustificationDAO
+    dao = JustifyNameJustificationDAO
 
     def __init__(self, userId, ownerId, date):
         super().__init__(date, userId, ownerId)
 
     def getIdentifier(self):
-        return "Paro"
+        return "justifyName"

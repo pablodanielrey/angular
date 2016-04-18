@@ -49,12 +49,7 @@ class FileDAO(DAO):
               );
             """
 
-            try:
-                cur.execute(sql) 
-                con.commit()
-            except Exception as e:
-                con.rollback()
-                raise e
+            cur.execute(sql) 
         finally:
             cur.close()
 

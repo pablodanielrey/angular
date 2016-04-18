@@ -96,12 +96,9 @@ class UserDAO(DAO):
                 type VARCHAR
               );
               """
-            try:
-                cur.execute(sql) 
-                con.commit()
-            except Exception as e:
-                con.rollback()
-                raise e
+              
+            cur.execute(sql) 
+ 
         finally:
             cur.close()   
              
@@ -318,12 +315,9 @@ class StudentDAO(DAO):
                 condition VARCHAR
               );
               """
-            try:
-                cur.execute(sql) 
-                con.commit()
-            except Exception as e:
-                con.rollback()
-                raise e
+
+            cur.execute(sql) 
+                
         finally:
             cur.close()   
             
@@ -475,12 +469,9 @@ class UserPasswordDAO(DAO):
               );
             """
 
-            try:
-                cur.execute(sql) 
-                con.commit()
-            except Exception as e:
-                con.rollback()
-                raise e
+
+            cur.execute(sql) 
+
         finally:
             cur.close()
             
@@ -616,14 +607,10 @@ class MailDAO(DAO):
                 hash VARCHAR,
                 created TIMESTAMP DEFAULT now()
               );
-            """         
+            """   
+            
+            cur.execute(sql)       
 
-            try:
-                cur.execute(sql) 
-                con.commit()
-            except Exception as e:
-                con.rollback()
-                raise e
         finally:
             cur.close()   
              

@@ -33,7 +33,7 @@ class BirthdayJustificationDAO(DAO):
 
     @classmethod
     def _fromResult(cls, con, r):
-        c = BirthdayJustification(r['user_id', r['owner_id'], r['date'])
+        c = BirthdayJustification(r['user_id'], r['owner_id'], r['date'])
         c.id = r['id']
         c.setStatus(Status.getLastStatus(con, c.id))
         return c

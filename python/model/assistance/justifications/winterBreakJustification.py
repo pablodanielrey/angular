@@ -41,7 +41,7 @@ class WinterBreakJustificationDAO(DAO):
                   user_id varchar not null references profile.users (id),
                   owner_id varchar not null references profile.users (id),
                   jstart date default now(),
-                  jend date default now()
+                  jend date default now(),
                   created timestamptz default now()
               );
               """
