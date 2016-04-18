@@ -46,6 +46,7 @@ from model.assistance.justifications.preExamJustification import PreExamJustific
 from model.assistance.justifications.prenatalJustification import PrenatalJustificationDAO
 from model.assistance.justifications.resolution638Justification import Resolution638JustificationDAO
 from model.assistance.justifications.scheduleJustification import ScheduleJustificationDAO
+from model.assistance.justifications.status import StatusDAO
 
 
 
@@ -70,7 +71,9 @@ class TestConnection(unittest.TestCase):
       #StudentDAO._createSchema(con)
 
 
-      #ShortDurationJustificationDAO._createSchema(con)      
+
+      StatusDAO._createSchema(con)      
+
       
       #Art102JustificationDAO._createSchema(con)      
       #ARTJustificationDAO._createSchema(con)
@@ -97,7 +100,10 @@ class TestConnection(unittest.TestCase):
       #PrenatalJustificationDAO._createSchema(con)
       #Resolution638JustificationDAO._createSchema(con)
       #Resolution638JustificationDAO._createSchema(con)
-      ScheduleJustificationDAO._createSchema(con)
+      #ScheduleJustificationDAO._createSchema(con)
+      #ShortDurationJustificationDAO._createSchema(con)      
+      
+  
       
       con.commit()
       #UserDAO.findByDni(con, "31073351")

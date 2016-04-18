@@ -2,6 +2,7 @@
 from model.serializer.utils import JSONSerializable
 import datetime, logging
 import uuid
+from model.users.users import UserDAO
 
 class Status(JSONSerializable):
     UNDEFINED = 0
@@ -48,18 +49,21 @@ class Status(JSONSerializable):
 
 class StatusDAO:
 
+    dependencies = [UserDAO]
+
     @staticmethod
     def _createSchema(con):
         cur = con.cursor()
         try:
             cur.execute("""
-                create schema if not exists assistance;
-                create table assistance.justification_status (
+                CREATE SCHEMA IF NOT EXISTS assistance;
+                
+                CREATE TABLE IF NOT EXISTS assistance.justification_status (
                     id varchar primary key,
                     status int not null,
                     user_id varchar not null references profile.users (id),
                     justification_id varchar not null,
-                    date timestampz default now(),
+                    date timestamptz default now(),
                     created timestamptz default now()
                 );
             """)
