@@ -4,7 +4,7 @@ import datetime
 import uuid
 
 
-from model.assistance.justifications.justifications import Justification, RangedJustification
+from model.assistance.justifications.justifications import Justification, RangedJustification, RangedTimeJustification
 from model.assistance.justifications.status import Status
 
 from model.dao import DAO

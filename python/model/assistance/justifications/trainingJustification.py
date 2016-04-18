@@ -33,7 +33,7 @@ class TrainingJustificationDAO(DAO):
 
     @classmethod
     def _fromResult(cls, con, r):
-        c = TrainingJustification(r['user_id', r['owner_id'], r['date'])
+        c = TrainingJustification(r['user_id'], r['owner_id'], r['date'])
         c.id = r['id']
         c.setStatus(Status.getLastStatus(con, c.id))
         return c

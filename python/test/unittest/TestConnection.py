@@ -19,8 +19,8 @@ from model.users.users import MailDAO
 from model.users.users import StudentDAO
 
 
-from model.assistance.justifications.medicalBoardJustification import MedicalBoardJustificationDAO
-from model.assistance.justifications.shortDurationJustification import ShortDurationJustificationDAO
+from model.assistance.justifications.status import StatusDAO
+
 
 from model.assistance.justifications.art102Justification import Art102JustificationDAO
 from model.assistance.justifications.artJustification import ARTJustificationDAO
@@ -31,18 +31,31 @@ from model.assistance.justifications.compensatoryJustification import Compensato
 from model.assistance.justifications.evaluationJustification import EvaluationJustificationDAO
 from model.assistance.justifications.familyAttentionJustification import FamilyAttentionJustificationDAO
 from model.assistance.justifications.holidayJustification import HolidayJustificationDAO
-from model.assistance.justifications.informedAbsenceJustification import InformedAbsenceDAO
+from model.assistance.justifications.informedAbsenceJustification import InformedAbsenceJustificationDAO
 from model.assistance.justifications.lateArrivalJustification import LateArrivalJustificationDAO
 from model.assistance.justifications.leaveWithoutSalaryJustification import LeaveWithoutSalaryJustificationDAO
 from model.assistance.justifications.librarianDayJustification import LibrarianDayJustificationDAO
 from model.assistance.justifications.longDurationJustification import LongDurationJustificationDAO
 from model.assistance.justifications.marriageJustification import MarriageJustificationAbstractDAO
 from model.assistance.justifications.maternityJustification import MaternityJustificationDAO
+from model.assistance.justifications.medicalBoardJustification import MedicalBoardJustificationDAO
 from model.assistance.justifications.medicalCertificateJustification import MedicalCertificateJustificationDAO
-from model.assistance.justifications.medicalCertificateJustification import MedicalCertificateJustificationDAO
-
-
-
+from model.assistance.justifications.mourningJustification import MourningJustificationDAO
+from model.assistance.justifications.outTicketJustification import OutTicketJustificationDAO
+from model.assistance.justifications.paternityJustification import PaternityJustificationDAO
+from model.assistance.justifications.preExamJustification import PreExamJustificationDAO
+from model.assistance.justifications.prenatalJustification import PrenatalJustificationDAO
+from model.assistance.justifications.resolution638Justification import Resolution638JustificationDAO
+from model.assistance.justifications.scheduleJustification import ScheduleJustificationDAO
+from model.assistance.justifications.shortDurationJustification import ShortDurationJustificationDAO
+from model.assistance.justifications.strikeJustification import StrikeJustificationDAO
+from model.assistance.justifications.summerBreakJustification import SummerBreakJustificationDAO
+from model.assistance.justifications.suspensionJustification import SuspensionJustificationDAO
+from model.assistance.justifications.taskJustification import TaskJustificationDAO
+from model.assistance.justifications.trainingJustification import TrainingJustificationDAO
+from model.assistance.justifications.travelJustification import TravelJustificationDAO
+from model.assistance.justifications.weatherJustification import WeatherJustificationDAO
+from model.assistance.justifications.winterBreakJustification import WinterBreakJustificationDAO
 
 
 
@@ -65,7 +78,9 @@ class TestConnection(unittest.TestCase):
       #StudentDAO._createSchema(con)
 
 
-      #ShortDurationJustificationDAO._createSchema(con)      
+
+      StatusDAO._createSchema(con)      
+
       
       #Art102JustificationDAO._createSchema(con)      
       #ARTJustificationDAO._createSchema(con)
@@ -76,7 +91,7 @@ class TestConnection(unittest.TestCase):
       #EvaluationJustificationDAO._createSchema(con)
       #FamilyAttentionJustificationDAO._createSchema(con)
       #HolidayJustificationDAO._createSchema(con)
-      #InformedAbsenceDAO._createSchema(con)
+      #InformedAbsenceJustificationDAO._createSchema(con)
       #LateArrivalJustificationDAO._createSchema(con)
       #LeaveWithoutSalaryJustificationDAO._createSchema(con)
       #LibrarianDayJustificationDAO._createSchema(con)
@@ -84,7 +99,25 @@ class TestConnection(unittest.TestCase):
       #MarriageJustificationAbstractDAO._createSchema(con)
       #MaternityJustificationDAO._createSchema(con)
       #MedicalBoardJustificationDAO._createSchema(con)
-      MedicalCertificateJustificationDAO._createSchema(con)
+      #MedicalCertificateJustificationDAO._createSchema(con)
+      #MourningJustificationDAO._createSchema(con)
+      #OutTicketJustificationDAO._createSchema(con)
+      #PaternityJustificationDAO._createSchema(con)
+      #PreExamJustificationDAO._createSchema(con)
+      #PrenatalJustificationDAO._createSchema(con)
+      #Resolution638JustificationDAO._createSchema(con)
+      #Resolution638JustificationDAO._createSchema(con)
+      #ScheduleJustificationDAO._createSchema(con)
+      #ShortDurationJustificationDAO._createSchema(con)      
+      #StrikeJustificationDAO._createSchema(con)      
+      #SummerBreakJustificationDAO._createSchema(con)
+      #SuspensionJustificationDAO._createSchema(con)
+      #TaskJustificationDAO._createSchema(con)
+      #TaskJustificationDAO._createSchema(con)
+      #TrainingJustificationDAO._createSchema(con)
+      #TravelJustificationDAO._createSchema(con)
+      #WeatherJustificationDAO._createSchema(con)
+      WinterBreakJustificationDAO._createSchema(con)
       
       con.commit()
       #UserDAO.findByDni(con, "31073351")
