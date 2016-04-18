@@ -31,7 +31,7 @@ from model.assistance.justifications.compensatoryJustification import Compensato
 from model.assistance.justifications.evaluationJustification import EvaluationJustificationDAO
 from model.assistance.justifications.familyAttentionJustification import FamilyAttentionJustificationDAO
 from model.assistance.justifications.holidayJustification import HolidayJustificationDAO
-from model.assistance.justifications.informedAbsenceJustification import InformedAbsenceDAO
+from model.assistance.justifications.informedAbsenceJustification import InformedAbsenceJustificationDAO
 from model.assistance.justifications.lateArrivalJustification import LateArrivalJustificationDAO
 from model.assistance.justifications.leaveWithoutSalaryJustification import LeaveWithoutSalaryJustificationDAO
 from model.assistance.justifications.librarianDayJustification import LibrarianDayJustificationDAO
@@ -42,6 +42,8 @@ from model.assistance.justifications.medicalCertificateJustification import Medi
 from model.assistance.justifications.mourningJustification import MourningJustificationDAO
 from model.assistance.justifications.outTicketJustification import OutTicketJustificationDAO
 from model.assistance.justifications.paternityJustification import PaternityJustificationDAO
+from model.assistance.justifications.preExamJustification import PreExamJustificationDAO
+
 
 
 
@@ -76,7 +78,7 @@ class TestConnection(unittest.TestCase):
       #EvaluationJustificationDAO._createSchema(con)
       #FamilyAttentionJustificationDAO._createSchema(con)
       #HolidayJustificationDAO._createSchema(con)
-      #InformedAbsenceDAO._createSchema(con)
+      #InformedAbsenceJustificationDAO._createSchema(con)
       #LateArrivalJustificationDAO._createSchema(con)
       #LeaveWithoutSalaryJustificationDAO._createSchema(con)
       #LibrarianDayJustificationDAO._createSchema(con)
@@ -87,7 +89,8 @@ class TestConnection(unittest.TestCase):
       #MedicalCertificateJustificationDAO._createSchema(con)
       #MourningJustificationDAO._createSchema(con)
       #OutTicketJustificationDAO._createSchema(con)
-      PaternityJustificationDAO._createSchema(con)
+      #PaternityJustificationDAO._createSchema(con)
+      PreExamJustificationDAO._createSchema(con)
       
       con.commit()
       #UserDAO.findByDni(con, "31073351")

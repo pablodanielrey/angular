@@ -85,7 +85,7 @@ class PreExamJustificationDAO(DAO):
         finally:
             cur.close()
 
-    @clssmethod
+    @classmethod
     def findByUserId(cls, con, userIds, start, end):
         assert isinstance(userIds, list)
         assert isinstance(start, datetime.datetime)
