@@ -4,7 +4,7 @@ from model.assistance.justifications.justifications import Justification
 from model.assistance.justifications.justifications import SingleDateJustification
 
 
-class InformedAbsenceDAO(DAO):
+class InformedAbsenceJustificationDAO(DAO):
 
     @classmethod
     def _createSchema(cls, con):
@@ -55,6 +55,8 @@ class InformedAbsenceDAO(DAO):
 
 
 class InformedAbsenceJustification(SingleDateJustification):
+
+    dao = InformedAbsenceJustificationDAO
 
     def __init__(self, userId, ownerId, date):
         super().__init__(date, userId, ownerId)
