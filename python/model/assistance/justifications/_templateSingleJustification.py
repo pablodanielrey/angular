@@ -44,8 +44,9 @@ class JustifyNameJustificationDAO(DAO):
 
         cur = con.cursor()
         try:
-            if ((not hasattr(c, 'id')) or (c.id is None)):
-                c.id = str(uuid.uuid4())
+            if ((not hasattr(c, 'id')) or (c.id is None)) or (len(c.findById(con, [c.id])) <=  0):
+                if not hasattr(c, 'id') or c.id is None:
+                    c.id = str(uuid.uuid4())
 
                 r = c.__dict__
                 cur.execute('insert into assistance.justification_justifyName (id, user_id, owner_id, date) '
@@ -54,7 +55,7 @@ class JustifyNameJustificationDAO(DAO):
                 r = c.__dict__
                 cur.execute('update assistance.justification_justifyName set user_id = %(userId)s, owner_id = %(ownerId)s, '
                             'date = %(date)s where id = %(id)s', r)
-            return id
+            return c.id
 
         finally:
             cur.close()

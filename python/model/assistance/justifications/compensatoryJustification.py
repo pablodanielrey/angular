@@ -33,7 +33,8 @@ class CompensatoryJustificationDAO(DAO):
 
     @classmethod
     def _fromResult(cls, con, r):
-        c = CompensatoryJustification(r['user_id'], r['owner_id'], r['date'])
+        date = datetime.datetime.combine(r['date'], datetime.time.min)
+        c = CompensatoryJustification(r['user_id'], r['owner_id'], date)
         c.id = r['id']
         c.setStatus(Status.getLastStatus(con, c.id))
         return c
@@ -44,8 +45,10 @@ class CompensatoryJustificationDAO(DAO):
 
         cur = con.cursor()
         try:
-            if ((not hasattr(c, 'id')) or (c.id is None)):
-                c.id = str(uuid.uuid4())
+            if ((not hasattr(c, 'id')) or (c.id is None)) or (len(c.findById(con, [c.id])) <=  0):
+
+                if ((not hasattr(c, 'id')) or (c.id is None)):
+                    c.id = str(uuid.uuid4())
 
                 r = c.__dict__
                 cur.execute('insert into assistance.justification_compensatory (id, user_id, owner_id, date) '
@@ -54,7 +57,7 @@ class CompensatoryJustificationDAO(DAO):
                 r = c.__dict__
                 cur.execute('update assistance.justification_compensatory set user_id = %(userId)s, owner_id = %(ownerId)s, '
                             'date = %(date)s where id = %(id)s', r)
-            return id
+            return c.id
 
         finally:
             cur.close()

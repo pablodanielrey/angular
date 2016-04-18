@@ -12,6 +12,7 @@ from model.connection.connection import Connection
 
 from model.assistance.justifications.status import Status
 from model.assistance.justifications.informedAbsenceJustification import InformedAbsenceJustification, InformedAbsenceJustificationDAO
+from model.assistance.justifications.compensatoryJustification import CompensatoryJustification, CompensatoryJustificationDAO
 
 """
 UNDEFINED = 0
@@ -25,6 +26,9 @@ def getStatus(s):
     return status.index(s)
 
 def setStatus(con, j):
+    """
+        Agrega el estado de las justificaciones
+    """
     cur = con.cursor()
     try:
         cur.execute('select * from assistance.justifications_requests_status where request_id = %s order by created asc',(j.id,))
@@ -38,14 +42,20 @@ def setStatus(con, j):
     finally:
         cur.close()
 
+
+
 def createAA(con):
+    """
+        migra las justificaciones Ausente con Aviso
+    """
     cur = con.cursor()
     try:
+        logging.info('Migrando los ausentes con aviso')
         # creo el la tabla
         InformedAbsenceJustificationDAO._createSchema(con)
         # id de la justificación Ausente con Aviso
         id = 'e0dfcef6-98bb-4624-ae6c-960657a9a741'
-        
+
         cur.execute('select id, user_id, requestor_id, jbegin from assistance.justifications_requests where justification_id = %s',(id,))
         for jr in cur:
             logging.info('obteniendo justificacion : {}:{}'.format(jr['id'], jr['requestor_id']))
@@ -54,6 +64,36 @@ def createAA(con):
             ownerId = jr['requestor_id']
             date = jr['jbegin']
             just = InformedAbsenceJustification(userId, ownerId, date)
+            just.id = jr['id']
+            j = just.findById(con, [just.id])
+            if (j is None or len(j) <= 0):
+                setStatus(con, just)
+
+    finally:
+        cur.close()
+
+
+
+def createCompensatory(con):
+    """
+        migra las justificaciones Compensatorio
+    """
+    cur = con.cursor()
+    try:
+        logging.info('Migrando los Compensatorios')
+        # creo el la tabla
+        CompensatoryJustificationDAO._createSchema(con)
+        # id de la justificación Compensatorio
+        id = '48773fd7-8502-4079-8ad5-963618abe725'
+
+        cur.execute('select id, user_id, requestor_id, jbegin from assistance.justifications_requests where justification_id = %s',(id,))
+        for jr in cur:
+            logging.info('obteniendo justificacion : {}:{}'.format(jr['id'], jr['requestor_id']))
+
+            userId = jr['user_id']
+            ownerId = jr['requestor_id']
+            date = jr['jbegin']
+            just = CompensatoryJustification(userId, ownerId, date)
             just.id = jr['id']
             j = just.findById(con, [just.id])
             if (j is None or len(j) <= 0):
@@ -72,6 +112,7 @@ if __name__ == '__main__':
         con = conn.get()
 
         createAA(con)
+        createCompensatory(con)
 
         con.commit()
     finally:
