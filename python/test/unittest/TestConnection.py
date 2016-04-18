@@ -43,6 +43,9 @@ from model.assistance.justifications.mourningJustification import MourningJustif
 from model.assistance.justifications.outTicketJustification import OutTicketJustificationDAO
 from model.assistance.justifications.paternityJustification import PaternityJustificationDAO
 from model.assistance.justifications.preExamJustification import PreExamJustificationDAO
+from model.assistance.justifications.prenatalJustification import PrenatalJustificationDAO
+from model.assistance.justifications.resolution638Justification import Resolution638JustificationDAO
+from model.assistance.justifications.scheduleJustification import ScheduleJustificationDAO
 
 
 
@@ -90,7 +93,11 @@ class TestConnection(unittest.TestCase):
       #MourningJustificationDAO._createSchema(con)
       #OutTicketJustificationDAO._createSchema(con)
       #PaternityJustificationDAO._createSchema(con)
-      PreExamJustificationDAO._createSchema(con)
+      #PreExamJustificationDAO._createSchema(con)
+      #PrenatalJustificationDAO._createSchema(con)
+      #Resolution638JustificationDAO._createSchema(con)
+      #Resolution638JustificationDAO._createSchema(con)
+      ScheduleJustificationDAO._createSchema(con)
       
       con.commit()
       #UserDAO.findByDni(con, "31073351")
