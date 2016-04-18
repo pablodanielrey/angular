@@ -55,6 +55,7 @@ from model.assistance.justifications.taskJustification import TaskJustificationD
 from model.assistance.justifications.trainingJustification import TrainingJustificationDAO
 from model.assistance.justifications.travelJustification import TravelJustificationDAO
 from model.assistance.justifications.weatherJustification import WeatherJustificationDAO
+from model.assistance.justifications.winterBreakJustification import WinterBreakJustificationDAO
 
 
 
@@ -115,7 +116,8 @@ class TestConnection(unittest.TestCase):
       #TaskJustificationDAO._createSchema(con)
       #TrainingJustificationDAO._createSchema(con)
       #TravelJustificationDAO._createSchema(con)
-      WeatherJustificationDAO._createSchema(con)
+      #WeatherJustificationDAO._createSchema(con)
+      WinterBreakJustificationDAO._createSchema(con)
       
       con.commit()
       #UserDAO.findByDni(con, "31073351")
