@@ -39,9 +39,9 @@ from model.assistance.justifications.longDurationJustification import LongDurati
 from model.assistance.justifications.marriageJustification import MarriageJustificationAbstractDAO
 from model.assistance.justifications.maternityJustification import MaternityJustificationDAO
 from model.assistance.justifications.medicalCertificateJustification import MedicalCertificateJustificationDAO
-from model.assistance.justifications.medicalCertificateJustification import MedicalCertificateJustificationDAO
-
-
+from model.assistance.justifications.mourningJustification import MourningJustificationDAO
+from model.assistance.justifications.outTicketJustification import OutTicketJustificationDAO
+from model.assistance.justifications.paternityJustification import PaternityJustificationDAO
 
 
 
@@ -84,7 +84,10 @@ class TestConnection(unittest.TestCase):
       #MarriageJustificationAbstractDAO._createSchema(con)
       #MaternityJustificationDAO._createSchema(con)
       #MedicalBoardJustificationDAO._createSchema(con)
-      MedicalCertificateJustificationDAO._createSchema(con)
+      #MedicalCertificateJustificationDAO._createSchema(con)
+      #MourningJustificationDAO._createSchema(con)
+      #OutTicketJustificationDAO._createSchema(con)
+      PaternityJustificationDAO._createSchema(con)
       
       con.commit()
       #UserDAO.findByDni(con, "31073351")
