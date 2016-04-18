@@ -53,6 +53,9 @@ from model.assistance.justifications.summerBreakJustification import SummerBreak
 from model.assistance.justifications.suspensionJustification import SuspensionJustificationDAO
 from model.assistance.justifications.taskJustification import TaskJustificationDAO
 from model.assistance.justifications.trainingJustification import TrainingJustificationDAO
+from model.assistance.justifications.travelJustification import TravelJustificationDAO
+from model.assistance.justifications.weatherJustification import WeatherJustificationDAO
+
 
 
 class TestConnection(unittest.TestCase):
@@ -110,8 +113,9 @@ class TestConnection(unittest.TestCase):
       #SuspensionJustificationDAO._createSchema(con)
       #TaskJustificationDAO._createSchema(con)
       #TaskJustificationDAO._createSchema(con)
-      TrainingJustificationDAO._createSchema(con)
-      
+      #TrainingJustificationDAO._createSchema(con)
+      #TravelJustificationDAO._createSchema(con)
+      WeatherJustificationDAO._createSchema(con)
       
       con.commit()
       #UserDAO.findByDni(con, "31073351")
