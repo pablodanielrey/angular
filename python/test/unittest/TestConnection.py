@@ -52,7 +52,7 @@ from model.assistance.justifications.strikeJustification import StrikeJustificat
 from model.assistance.justifications.summerBreakJustification import SummerBreakJustificationDAO
 from model.assistance.justifications.suspensionJustification import SuspensionJustificationDAO
 from model.assistance.justifications.taskJustification import TaskJustificationDAO
-
+from model.assistance.justifications.trainingJustification import TrainingJustificationDAO
 
 
 class TestConnection(unittest.TestCase):
@@ -108,7 +108,10 @@ class TestConnection(unittest.TestCase):
       #StrikeJustificationDAO._createSchema(con)      
       #SummerBreakJustificationDAO._createSchema(con)
       #SuspensionJustificationDAO._createSchema(con)
-      TaskJustificationDAO._createSchema(con)
+      #TaskJustificationDAO._createSchema(con)
+      #TaskJustificationDAO._createSchema(con)
+      TrainingJustificationDAO._createSchema(con)
+      
       
       con.commit()
       #UserDAO.findByDni(con, "31073351")
