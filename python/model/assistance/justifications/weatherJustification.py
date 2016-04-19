@@ -13,7 +13,7 @@ class WeatherJustificationDAO(DAO):
 
     @classmethod
     def _createSchema(cls, con):
-        cls._createDependencies(con)
+        super()._createSchema(con)
         cur = con.cursor()
         try:
             sql = """

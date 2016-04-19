@@ -13,7 +13,7 @@ class CompensatoryJustificationDAO(DAO):
 
     @classmethod
     def _createSchema(cls, con):
-        cls._createDependencies(con)
+        super()._createSchema(con)
         cur = con.cursor()
         try:
             sql = """
@@ -48,7 +48,7 @@ class CompensatoryJustificationDAO(DAO):
             if ((not hasattr(c, 'id')) or (c.id is None)):
                 c.id = str(uuid.uuid4())
 
-            if len(c.findById(con, [c.id])) <=  0)
+            if len(c.findById(con, [c.id]) <=  0):
                 r = c.__dict__
                 cur.execute('insert into assistance.justification_compensatory (id, user_id, owner_id, date) '
                             'values ( %(id)s, %(userId)s, %(ownerId)s, %(date)s)', r)

@@ -67,7 +67,7 @@ class UserDAO(DAO):
     
     @classmethod
     def _createSchema(cls, con):
-        cls._createDependencies(con)
+        super()._createSchema(con)
         cur = con.cursor()
         try:
             sql = """
@@ -303,7 +303,7 @@ class StudentDAO(DAO):
     
     @classmethod
     def _createSchema(cls, con):
-        cls._createDependencies(con)
+        super()._createSchema(con)
         cur = con.cursor()
         try:
             sql = """
@@ -454,7 +454,7 @@ class UserPasswordDAO(DAO):
     
     @classmethod
     def _createSchema(cls, con):
-        cls._createDependencies(con)
+        super()._createSchema(con)
         cur = con.cursor()
         try:
             sql = """
@@ -593,7 +593,7 @@ class MailDAO(DAO):
     
     @classmethod
     def _createSchema(cls, con):
-        cls._createDependencies(con)
+        super()._createSchema(con)
         cur = con.cursor()
         try:
             sql = """
