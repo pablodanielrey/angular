@@ -46,6 +46,20 @@ def setStatus(con, j):
     finally:
         cur.close()
 
+def _isContiguos(date1, date2):
+    """
+     date.weekday() ==> 0 > Lunes, 1 > Martes, 2 > Miércoles, 3 > Jueves, 4 > Viernes, 5 > Sábado, 6 > Domingo
+    """
+
+    diff = abs((date2 - date1).days)
+    if (diff <= 1):
+        return True
+
+    """ por si es fin de semana """
+    if (diff <= 3 and date1.weekday() == 4):
+        return True
+
+    return False
 
 
 def createAA(con):
@@ -173,40 +187,45 @@ def createPreExam(con):
         PreExamJustificationDAO._createSchema(con)
         # id de la justificación Pre Examen
         id = 'b70013e3-389a-46d4-8b98-8e4ab75335d0'
-        cur.execute('select id, user_id, requestor_id, jbegin, jend from assistance.justifications_requests where justification_id = %s',(id,))
+        cur.execute('select id, user_id, requestor_id, jbegin, jend from assistance.justifications_requests where justification_id = %s order by user_id, jbegin asc',(id,))
+
+        userId = None
+        ownerId = None
+        start = None
+        end = None
+        days = 0
+
         for jr in cur:
             logging.info('obteniendo justificacion : {}:{}'.format(jr['id'], jr['requestor_id']))
 
-            userId = jr['user_id']
-            ownerId = jr['requestor_id']
-            start = jr['jbegin']
+            if userId is None:
+                userId = jr['user_id']
+                ownerId = jr['requestor_id']
+                start = jr['jbegin'].date()
+                end = jr['jbegin'].date()
 
-            """
-                las justificaciones de pre-examen se tomaban por dia individualmente, ahora es un rango de fechas
-            """
-            days = 1
-            just = UniversityPreExamJustification(userId, ownerId, start.date(), days)
+            """ si cambio de usuario o los dias no son contiguos persisto los datos """
+            if userId != jr['user_id'] or not _isContiguos(end, jr['jbegin'].date()):                
+                days = (end - start).days + 1
+                just = UniversityPreExamJustification(userId, ownerId, start, days)
+                just.id = jr["id"]
+                setStatus(con, just)
 
-            just.id = jr['id']
+                """ inicializo los datos """
+                userId = jr['user_id']
+                ownerId = jr['requestor_id']
+                start = jr['jbegin'].date()
 
-            setStatus(con, just)
+            end = jr['jbegin'].date()
+
+        """ persisto el ultimo que me quedo """
+        days = (end - start).days + 1
+        just = UniversityPreExamJustification(userId, ownerId, start, days)
+        just.id = jr["id"]
+        setStatus(con, just)
+
     finally:
         cur.close()
-
-def _isContiguos(date1, date2):
-    """
-     date.weekday() ==> 0 > Lunes, 1 > Martes, 2 > Miércoles, 3 > Jueves, 4 > Viernes, 5 > Sábado, 6 > Domingo
-    """
-
-    diff = abs((date2 - date1).days)
-    if (diff <= 1):
-        return True
-
-    """ por si es fin de semana """
-    if (diff <= 3 and date1.weekday() == 4):
-        return True
-
-    return False
 
 
 def createLAO(con):
@@ -272,8 +291,8 @@ if __name__ == '__main__':
         # createCompensatory(con)
         # createBS(con)
         # createArt102(con)
-        # createPreExam(con)
-        createLAO(con)
+        createPreExam(con)
+        # createLAO(con)
 
         con.commit()
     finally:
