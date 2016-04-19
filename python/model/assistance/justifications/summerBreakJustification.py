@@ -70,7 +70,7 @@ class SummerBreakJustificationDAO(DAO):
             if len(j.findById(con, [j.id])) <=  0:
                 r = j.__dict__
                 cur.execute('insert into assistance.justification_summer_break (id, user_id, owner_id, jstart, jend) '
-                            'values (%(id)s, %(userId)s, %(ownerId)s, %(start)s, %(end)s', r)
+                            'values (%(id)s, %(userId)s, %(ownerId)s, %(start)s, %(end)s)', r)
             else:
                 r = j.__dict__
                 cur.execute('update assistance.justification_summer_break set user_id = %(userId)s, owner_id = %(ownerId)s, '
@@ -119,7 +119,16 @@ class SummerBreakJustification(RangedJustification):
     registry = inject.instance(Registry).getRegistry('summerBreakJustification')
 
     def __init__(self, userId, ownerId, start, days = 0):
+        assert isinstance(start, datetime.date)
         super().__init__(start, days, userId, ownerId)
 
     def getIdentifier(self):
         return 'Licencia Anual Ordinaria'
+
+    def setEnd(self, date):
+        assert isinstance(date, datetime.date)
+        self.end = date
+
+    def setStart(self, date):
+        assert isinstance(date, datetime.date)
+        self.start = date

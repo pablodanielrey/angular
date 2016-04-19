@@ -70,7 +70,7 @@ class JustifyNameJustificationDAO(DAO):
             if len(j.findById(con, [j.id])) <=  0:
                 r = j.__dict__
                 cur.execute('insert into assistance.justification_justifyName (id, user_id, owner_id, jstart, jend) '
-                            'values (%(id)s, %(userId)s, %(ownerId)s, %(start)s, %(end)s', r)
+                            'values (%(id)s, %(userId)s, %(ownerId)s, %(start)s, %(end)s)', r)
             else:
                 r = j.__dict__
                 cur.execute('update assistance.justification_justifyName set user_id = %(userId)s, owner_id = %(ownerId)s, '

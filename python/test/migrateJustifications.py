@@ -16,6 +16,7 @@ from model.assistance.justifications.compensatoryJustification import Compensato
 from model.assistance.justifications.outTicketJustification import OutTicketWithoutReturnJustification, OutTicketWithReturnJustification, OutTicketJustificationDAO
 from model.assistance.justifications.art102Justification import Art102Justification, Art102JustificationDAO
 from model.assistance.justifications.preExamJustification import UniversityPreExamJustification, SchoolPreExamJustification, PreExamJustificationDAO
+from model.assistance.justifications.summerBreakJustification import SummerBreakJustification, SummerBreakJustificationDAO
 
 """
 UNDEFINED = 0
@@ -68,9 +69,8 @@ def createAA(con):
             date = jr['jbegin']
             just = InformedAbsenceJustification(userId, ownerId, date)
             just.id = jr['id']
-            j = just.findById(con, [just.id])
-            if (j is None or len(j) <= 0):
-                setStatus(con, just)
+
+            setStatus(con, just)
 
     finally:
         cur.close()
@@ -98,9 +98,8 @@ def createCompensatory(con):
             date = jr['jbegin']
             just = CompensatoryJustification(userId, ownerId, date)
             just.id = jr['id']
-            j = just.findById(con, [just.id])
-            if (j is None or len(j) <= 0):
-                setStatus(con, just)
+
+            setStatus(con, just)
 
     finally:
         cur.close()
@@ -132,9 +131,8 @@ def createBS(con):
                 just = OutTicketWithReturnJustification(userId, ownerId, date, end)
 
             just.id = jr['id']
-            j = just.findById(con, [just.id])
-            if (j is None or len(j) <= 0):
-                setStatus(con, just)
+
+            setStatus(con, just)
     finally:
         cur.close()
 
@@ -158,9 +156,8 @@ def createArt102(con):
             date = jr['jbegin']
             just = Art102Justification(userId, ownerId, date)
             just.id = jr['id']
-            j = just.findById(con, [just.id])
-            if (j is None or len(j) <= 0):
-                setStatus(con, just)
+
+            setStatus(con, just)
 
     finally:
         cur.close()
@@ -192,9 +189,73 @@ def createPreExam(con):
 
             just.id = jr['id']
 
-            j = just.findById(con, [just.id])
-            if (j is None or len(j) <= 0):
+            setStatus(con, just)
+    finally:
+        cur.close()
+
+def _isContiguos(date1, date2):
+    """
+     date.weekday() ==> 0 > Lunes, 1 > Martes, 2 > Miércoles, 3 > Jueves, 4 > Viernes, 5 > Sábado, 6 > Domingo
+    """
+
+    diff = abs((date2 - date1).days)
+    if (diff <= 1):
+        return True
+
+    """ por si es fin de semana """
+    if (diff <= 3 and date1.weekday() == 4):
+        return True
+
+    return False
+
+
+def createLAO(con):
+    """
+        migra las justificaciones de Licencia Anual Ordinaria
+    """
+    cur = con.cursor()
+    try:
+        logging.info("Migrando las justificaciones de LAO")
+        # creo la tabla
+        SummerBreakJustificationDAO._createSchema(con)
+        # id de la justificación LAO
+        id = '76bc064a-e8bf-4aa3-9f51-a3c4483a729a'
+        cur.execute('select id, user_id, requestor_id, jbegin from assistance.justifications_requests where justification_id = %s order by user_id, jbegin asc',(id,))
+
+        userId = None
+        ownerId = None
+        start = None
+        end = None
+        days = 0
+        for jr in cur:
+            logging.info('obteniendo justificacion : {}:{}'.format(jr['id'], jr['requestor_id']))
+
+            if userId is None:
+                userId = jr['user_id']
+                ownerId = jr['requestor_id']
+                start = jr['jbegin'].date()
+                end = jr['jbegin'].date()
+
+            """ si cambio de usuario o los dias no son contiguos persisto los datos """
+            if userId != jr['user_id'] or not _isContiguos(end, jr['jbegin'].date()):
+                days = (end - start).days + 1
+                just = SummerBreakJustification(userId, ownerId, start, days)
+                just.id = jr["id"]
                 setStatus(con, just)
+
+                """ inicializo los datos """
+                userId = jr['user_id']
+                ownerId = jr['requestor_id']
+                start = jr['jbegin'].date()
+
+            end = jr['jbegin'].date()
+
+        """ persisto el ultimo que me quedo """
+        days = (end - start).days + 1
+        just = SummerBreakJustification(userId, ownerId, start, days)
+        just.id = jr["id"]
+        setStatus(con, just)
+
     finally:
         cur.close()
 
@@ -211,7 +272,8 @@ if __name__ == '__main__':
         # createCompensatory(con)
         # createBS(con)
         # createArt102(con)
-        createPreExam(con)
+        # createPreExam(con)
+        createLAO(con)
 
         con.commit()
     finally:

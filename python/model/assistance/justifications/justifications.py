@@ -155,13 +155,14 @@ class RangedJustification(Justification):
 
     @classmethod
     def isContinuous(cls):
-        if (cls.registry.get('continuousDays').lower == 'true'):
+        if (cls.registry.get('continuousDays').lower() == 'true'):
             return True
         else:
             return False
 
     def __init__(self, start, days, userId, ownerId):
         super().__init__(userId, ownerId)
+
         continuous = self.isContinuous()
         self.start = start
         self.end = RangedJustification._getEnd(start, days, continuous)
