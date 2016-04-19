@@ -66,6 +66,7 @@ from model.assistance.justifications.winterBreakJustification import WinterBreak
 from model.laboralinsertion.company import CompanyDAO
 from model.laboralinsertion.user import UserDAO as LiUserDao
 from model.laboralinsertion.inscription import InscriptionDAO
+from model.laboralinsertion.languages import LanguageDAO
 
 class TestConnection(unittest.TestCase):
 
@@ -169,6 +170,7 @@ class TestConnection(unittest.TestCase):
       CompanyDAO._createSchema(con)
       LiUserDao._createSchema(con)
       InscriptionDAO._createSchema(con)
+      LanguageDAO._createSchema(con)      
       
       con.commit()
 
