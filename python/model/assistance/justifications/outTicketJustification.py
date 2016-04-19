@@ -46,6 +46,8 @@ class OutTicketJustificationDAO(DAO):
 
             if ((not hasattr(j, 'id')) or (j.id is None)):
                 j.id = str(uuid.uuid4())
+                
+            if len(j.findById(con, [j.id])) <=  0:
 
                 r = j.__dict__
                 cur.execute('insert into assistance.justification_out_ticket (id, user_id, owner_id, jstart, jend) '

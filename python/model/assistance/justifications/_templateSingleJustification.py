@@ -33,7 +33,8 @@ class JustifyNameJustificationDAO(DAO):
 
     @classmethod
     def _fromResult(cls, con, r):
-        c = JustifyNameJustification(r['user_id'], r['owner_id'], r['date'])
+        date = datetime.datetime.combine(r['date'], datetime.time.min)
+        c = JustifyNameJustification(r['user_id'], r['owner_id'], date)
         c.id = r['id']
         c.setStatus(Status.getLastStatus(con, c.id))
         return c
@@ -44,10 +45,9 @@ class JustifyNameJustificationDAO(DAO):
 
         cur = con.cursor()
         try:
-            if ((not hasattr(c, 'id')) or (c.id is None)) or (len(c.findById(con, [c.id])) <=  0):
-                if not hasattr(c, 'id') or c.id is None:
-                    c.id = str(uuid.uuid4())
-
+            if not hasattr(c, 'id') or c.id is None:
+                c.id = str(uuid.uuid4())
+            if len(c.findById(con, [c.id])) <=  0:
                 r = c.__dict__
                 cur.execute('insert into assistance.justification_justifyName (id, user_id, owner_id, date) '
                             'values ( %(id)s, %(userId)s, %(ownerId)s, %(date)s)', r)

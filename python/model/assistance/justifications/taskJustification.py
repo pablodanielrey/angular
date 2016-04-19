@@ -21,7 +21,7 @@ class TaskJustificationDAO(DAO):
         try:
             sql = """
                 CREATE SCHEMA IF NOT EXISTS assistance;
-                
+
                 create table IF NOT EXISTS assistance.justification_task (
                     id varchar primary key,
                     user_id varchar not null references profile.users (id),
@@ -48,6 +48,7 @@ class TaskJustificationDAO(DAO):
             if ((not hasattr(j, 'id')) or (j.id is None)):
                 j.id = str(uuid.uuid4())
 
+            if len(j.findById(con, [j.id])) <=  0:                
                 r = j.__dict__
                 cur.execute('insert into assistance.justification_task (id, user_id, owner_id, jstart, jend) '
                             'values (%(id)s, %(userId)s, %(ownerId)s, %(start)s, %(end)s)', r)

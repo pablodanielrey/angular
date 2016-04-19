@@ -47,11 +47,10 @@ class InformedAbsenceJustificationDAO(DAO):
 
         cur = con.cursor()
         try:
+            if not hasattr(j, 'id') or j.id is None:
+                j.id = str(uuid.uuid4())
 
-            if ((not hasattr(j, 'id')) or (j.id is None)) or (len(j.findById(con, [j.id])) <=  0):
-                if not hasattr(j, 'id') or j.id is None:
-                    j.id = str(uuid.uuid4())
-
+            if len(j.findById(con, [j.id])) <=  0:
                 r = j.__dict__
                 cur.execute('insert into assistance.justification_informed_absence(id, user_id, owner_id, jdate) '
                             'values (%(id)s, %(userId)s, %(ownerId)s, %(date)s)', r)
@@ -75,7 +74,23 @@ class InformedAbsenceJustificationDAO(DAO):
         finally:
             cur.close()
 
+    @classmethod
+    def findByUserId(cls, con, userIds, start, end):
+        assert isinstance(userIds, list)
+        assert isinstance(start, datetime.datetime)
+        assert isinstance(end, datetime.datetime)
 
+        if len(userIds) <= 0:
+            return
+
+        cur = con.cursor()
+        try:
+            sDate = None if start is None else start.date()
+            eDate = datetime.date.today() if end is None else end.date()
+            cur.execute('select * from assistance.justification_informed_absence where user_id  in %s and date BETWEEN %s AND %s', (tupe(userIds), sDate, eDate))
+            return [ cls._fromResult(con, r) for r in cur ]
+        finally:
+            cur.close()
 
 class InformedAbsenceJustification(SingleDateJustification):
 
