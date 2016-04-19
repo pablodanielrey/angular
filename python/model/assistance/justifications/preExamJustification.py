@@ -64,8 +64,8 @@ class PreExamJustificationDAO(DAO):
                 j.type = j.__class__.__name__
 
                 r = j.__dict__
-                cur.execute('insert into assistance.justification_pre_exam (id, user_id, owner_id, jstart, jend) '
-                            'values (%(id)s, %(userId)s, %(ownerId)s, %(start)s, %(end)s', r)
+                cur.execute('insert into assistance.justification_pre_exam (id, user_id, owner_id, jstart, jend, type) '
+                            'values (%(id)s, %(userId)s, %(ownerId)s, %(start)s, %(end)s, %(type)s)', r)
             else:
                 r = j.__dict__
                 cur.execute('update assistance.justification_pre_exam set user_id = %(userId)s, owner_id = %(ownerId)s, '
@@ -139,8 +139,16 @@ class PreExamJustification(RangedJustification):
     registry = inject.instance(Registry).getRegistry('preExamJustification')
 
     def __init__(self, userId, ownerId, start, days = 0):
+        assert isinstance(start, datetime.date)
         super().__init__(start, days, userId, ownerId)
 
+    def setEnd(self, date):
+        assert isinstance(date, datetime.date)
+        self.end = date
+
+    def setStart(self, date):
+        assert isinstance(date, datetime.date)
+        self.start = date
 
 class SchoolPreExamJustification(PreExamJustification):
 
@@ -148,7 +156,7 @@ class SchoolPreExamJustification(PreExamJustification):
 
 
     def __init__(self, userId, ownerId, start, days = 0):
-        super().__init__(start, days, userId, ownerId)
+        super().__init__(userId, ownerId, start, days)
 
     def getIdentifier(self):
         return 'Pre exámen Ensañanza Media'
@@ -159,7 +167,7 @@ class UniversityPreExamJustification(PreExamJustification):
     dao = UniversityPreExamJustificationDAO
 
     def __init__(self, userId, ownerId, start, days = 0):
-        super().__init__(start, days, userId, ownerId)
+        super().__init__(userId, ownerId, start, days)
 
     def getIdentifier(self):
         return 'Pre exámen Ensañanza Superior'
