@@ -1227,11 +1227,12 @@ align-items: center;
   position:absolute;
   width: 100%;
   height: 100%;
-  background-color: red;
+  background-color: #EEEEEE;
   top:0px;
   opacity: 1;
-  transform: translate3d(900px,0,0);
-  -webkit-transform: translate3d(900px,0,0);
+  border-left: 5px solid #dbe2e5;
+  transform: translate3d(55%,0,0);
+  -webkit-transform: translate3d(55%,0,0);
   -webkit-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
      -moz-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
        -o-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
@@ -1243,9 +1244,9 @@ align-items: center;
   position:absolute;
   width: 100%;
   height: 100%;
-  background-color: red;
+  background-color: #EEEEEE;
   top:0px;
-    opacity: 0;
+  opacity:0;
   transform: translate3d(100%,0,0);
   -webkit-transform: translate3d(100%,0,0);
   -webkit-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
@@ -1253,4 +1254,20 @@ align-items: center;
        -o-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
           transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
 
+}
+
+.search .contentNumberSend {
+  margin: 20px;
+}
+
+.search .sendContent {
+  width: 335px;
+  background-color: white;
+  padding: 10px;
+  margin-top: 10px;
+  font-size: 12px;
+}
+
+.search .sendContentText {
+  margin-top: 3px;
 }

@@ -177,17 +177,11 @@
               <div class="dates"  title="Cantidad de veces enviado">
                 {{getSents(i.id)}}
               </div>
-              <div class="numberSend">
-                envios {{i.id}}
-              </div>
             </td>
 
             <td class="tdSent" ng-if='getSents(i.id) > 0' ng-mouseenter="view.style3='verEnvios'" ng-mouseleave="view.style3=''">
               <div class="dates"  title="Cantidad de veces enviado">
                 {{getSents(i.id)}}
-              </div>
-              <div class="numberSend">
-                envios {{i.id}}
               </div>
             </td>
 
@@ -529,6 +523,10 @@
   </div>
 
   <div class="profile" ng-controller="ProfilesCtrl" ng-include="'/systems/laboralInsertion/modules/search/profileUser.html'">
+  </div>
+
+  <div class="numberSend" ng-include="'/systems/laboralInsertion/modules/search/numberSend.html'">
+
   </div>
 
 </div>
