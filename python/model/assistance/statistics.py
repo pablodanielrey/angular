@@ -23,7 +23,7 @@
 
 
 """
-
+from model.users.users import UserDAO
 from dateutil.tz import tzlocal
 
 class DailyWpStatistics:

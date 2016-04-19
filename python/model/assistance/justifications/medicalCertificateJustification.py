@@ -20,11 +20,11 @@ from model.registry import Registry
 from model.assistance.justifications.justifications import Justification, RangedJustification
 from model.assistance.justifications.status import Status
 
-from model.dao import DAO
+from model.assistance.assistanceDao import AssistanceDAO
 from model.users.users import UserDAO
 
 
-class MedicalCertificateJustificationDAO(DAO):
+class MedicalCertificateJustificationDAO(AssistanceDAO):
 
     dependencies = [UserDAO]
 

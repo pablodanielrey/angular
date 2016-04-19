@@ -14,6 +14,8 @@ sys.path.append('../../../python')
 from model.registry import Registry
 from model.connection.connection import Connection
 
+from model.assistance.assistanceDao import AssistanceDAO
+
 
 from model.files.files import FileDAO
 
@@ -103,7 +105,7 @@ class TestConnection(unittest.TestCase):
                   DROP SCHEMA IF EXISTS students CASCADE;
                   DROP SCHEMA IF EXISTS profile CASCADE;
                   DROP SCHEMA IF EXISTS files CASCADE;
-                  DROP SCHEMA IF EXISTS tuttoring CASCADE;
+                  DROP SCHEMA IF EXISTS tutoring CASCADE;
                   """
               cur.execute(sql)
               con.commit()
@@ -131,6 +133,8 @@ class TestConnection(unittest.TestCase):
       
       con = conn.get()
       
+      AssistanceDAO._createSchema(con)
+      """
       FileDAO._createSchema(con)
       UserDAO._createSchema(con)
       UserPasswordDAO._createSchema(con)
@@ -194,7 +198,7 @@ class TestConnection(unittest.TestCase):
       
       ##### Tutorias #####
       TutoringDAO._createSchema(con)
-      
+      """
       
       con.commit()
 

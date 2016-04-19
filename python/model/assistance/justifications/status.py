@@ -2,7 +2,7 @@
 from model.serializer.utils import JSONSerializable
 import datetime, logging
 import uuid
-from model.dao import DAO
+from model.assistance.assistanceDao import AssistanceDAO
 from model.users.users import UserDAO
 
 class Status(JSONSerializable):
@@ -49,7 +49,7 @@ class Status(JSONSerializable):
     def getLastStatus(cls, con, jid):
         return StatusDAO.getLastStatus(con, jid)
 
-class StatusDAO(DAO):
+class StatusDAO(AssistanceDAO):
 
     dependencies = [UserDAO]
 

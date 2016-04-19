@@ -1,5 +1,5 @@
 
-from model.dao import DAO
+from model.assistance.assistanceDao import AssistanceDAO
 from model.assistance.justifications.justifications import Justification
 from model.assistance.justifications.status import Status
 from model.assistance.justifications.justifications import SingleDateJustification
@@ -8,7 +8,7 @@ from model.users.users import UserDAO
 import datetime
 
 
-class InformedAbsenceJustificationDAO(DAO):
+class InformedAbsenceJustificationDAO(AssistanceDAO):
 
     dependencies = [UserDAO]
 
