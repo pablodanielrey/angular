@@ -13,20 +13,19 @@ sys.path.append('../../../python')
 
 from model.registry import Registry
 from model.connection.connection import Connection
+
+
 from model.files.files import FileDAO
 
-
 from model.users.users import UserDAO
-
 from model.users.users import UserPasswordDAO
-
 from model.users.users import MailDAO
 from model.users.users import StudentDAO
 
 
+from model.assistance.logs import LogDAO
+
 from model.assistance.justifications.status import StatusDAO
-
-
 from model.assistance.justifications.art102Justification import Art102JustificationDAO
 from model.assistance.justifications.artJustification import ARTJustificationDAO
 from model.assistance.justifications.authorityJustification import AuthorityJustificationDAO
@@ -119,6 +118,8 @@ class TestConnection(unittest.TestCase):
       UserPasswordDAO._createSchema(con)
       MailDAO._createSchema(con)
       StudentDAO._createSchema(con)
+
+      LogDAO._createSchema(con)
 
       StatusDAO._createSchema(con)      
 

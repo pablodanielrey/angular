@@ -22,15 +22,25 @@ from model.users.users import UserDAO
 
 class LogDAO(DAO):
 
-    schemaDependencies = [ UserDAO ]
+    dependencies = [ UserDAO ]
 
     @classmethod
     def _createSchema(cls, con):
-        for c in cls.schemaDependencies:
-            c._createSchema(con)
+        super()._createSchema(con)
         cur = con.cursor()
         try:
-            cur.execute('....')
+            cur.execute("""
+              CREATE SCHEMA IF NOT EXISTS assistance;
+              
+              CREATE TABLE IF NOT EXISTS assistance.attlog (
+                id VARCHAR NOT NULL PRIMARY KEY,
+                device_id VARCHAR NOT NULL,
+                user_id VARCHAR NOT NULL  REFERENCES profile.users (id),
+                verifymode BIGINT NOT NULL,
+                log TIMESTAMPTZ NOT NULL,
+                created TIMESTAMPTZ DEFAULT now()
+              );
+            """)
         finally:
             cur.close()
 
