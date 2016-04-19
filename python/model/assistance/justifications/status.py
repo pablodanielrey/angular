@@ -2,6 +2,7 @@
 from model.serializer.utils import JSONSerializable
 import datetime, logging
 import uuid
+from model.dao import DAO
 from model.users.users import UserDAO
 
 class Status(JSONSerializable):
@@ -48,12 +49,13 @@ class Status(JSONSerializable):
     def getLastStatus(cls, con, jid):
         return StatusDAO.getLastStatus(con, jid)
 
-class StatusDAO:
+class StatusDAO(DAO):
 
     dependencies = [UserDAO]
 
-    @staticmethod
-    def _createSchema(con):
+    @classmethod
+    def _createSchema(cls, con):
+        super()._createSchema(con)
         cur = con.cursor()
         try:
             cur.execute("""

@@ -1,6 +1,8 @@
 
 import datetime
 from model.serializer.utils import JSONSerializable
+from model.dao import DAO
+from model.users.users import UserDAO
 
 class Schedule(JSONSerializable):
 
@@ -33,15 +35,17 @@ class Schedule(JSONSerializable):
 
 
 
-class ScheduleDAO:
-
-    @staticmethod
-    def _createSchema(con):
+class ScheduleDAO(DAO):
+    dependencies = [ UserDAO ]
+    
+    @classmethod
+    def _createSchema(cls, con):
+        super()._createSchema(con)
         cur = con.cursor()
         try:
             cur.execute("""
                 create schema if not exists assistance;
-                create table assistance.schedules (
+                create table IF NOT EXISTS assistance.schedules (
                     id varchar primary key,
                     user_id varchar not null references profile.users (id),
                     sdate date default now(),

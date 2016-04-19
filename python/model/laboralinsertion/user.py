@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import logging
+from model.dao import DAO
 from model.files.files import FileDAO
+from model.users.users import MailDAO
 
 class User:
     def __init__(self):
@@ -12,21 +14,26 @@ class User:
         self.priority = 0
 
 
-class UserDAO:
-
-    @staticmethod
-    def _createSchema(con):
+class UserDAO(DAO):
+    dependencies = [FileDAO, MailDAO]
+    
+    @classmethod
+    def _createSchema(cls, con):
+        super()._createSchema(con)
+        
         cur = con.cursor()
         try:
             cur.execute("""
-                create table laboral_insertion.users (
+                CREATE SCHEMA IF NOT EXISTS laboral_insertion;
+                
+                create table IF NOT EXISTS laboral_insertion.users (
                     id varchar primary key,
                     accepted_conditions boolean default true,
-                    email varhcar not null references profile.mails (id),
+                    email varchar not null references profile.mails (id),
                     cv varchar not null references files.files (id),
                     priority integer default 0,
                     created timestamptz default now()
-                )
+                );
             """)
         finally:
             cur.close()
@@ -56,6 +63,7 @@ class UserDAO:
                 ins['acceptedConditions'] = True
                 ins['cv'] = ins['cv'] if 'cv' in ins else None
                 ins['priority'] = ins['priority'] if 'priority' in ins else 0
+                logging.info('persist laboralinsertion.userdao {} {}'.format(u.id, u.emailId))
                 cur.execute('insert into laboral_insertion.users (id, accepted_conditions, email, cv, priority) values '
                             '(%(id)s, %(acceptedConditions)s, %(emailId)s, %(cv)s, %(priority)s)', ins)
             else:

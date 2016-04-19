@@ -493,7 +493,7 @@ function InscriptionCtrl($rootScope, $scope, $timeout, $wamp, LaboralInsertion, 
   }
 
   $scope.updateLaboralData = function() {
-    $scope.model.laboralData.email = $scope.model.selectedEmail == null ? null : $scope.model.selectedEmail.id;
+    $scope.model.laboralData.emailId = $scope.model.selectedEmail == null ? null : $scope.model.selectedEmail.id;
     var ld = JSON.parse(JSON.stringify($scope.model.laboralData))
     if (ld.cv == undefined || ld.cv == '') {
       delete ld.cv;
