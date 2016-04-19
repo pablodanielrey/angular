@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import re
 import uuid
+from model.dao import DAO
 from model.users.users import UserDAO, User, StudentDAO, Student
 
 class TutoringSituation:
@@ -45,7 +46,7 @@ class TutoringDAO(DAO):
             cur.execute("""
                 create schema if not exists tutoring;
                 
-                create table tutoring.tutorings (
+                create table if not exists tutoring.tutorings (
                     id varchar primary key,
                     tutor_id varchar not null references profile.users (id),
                     date timestamptz default now(),

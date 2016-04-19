@@ -6,7 +6,6 @@ class DAO:
 
     @classmethod
     def _createSchema(cls, con):
-        print(cls)
         for dep in cls._getDependencies():
             logging.debug('creando schema : {}'.format(dep.__name__))
             dep._createSchema(con)

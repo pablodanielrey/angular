@@ -15,6 +15,7 @@ import json
 
 from model.connection.connection import Connection
 from model.registry import Registry
+from model.dao import DAO
 #from model.utils import DateTimeEncoder
 
 
@@ -53,7 +54,7 @@ class Session:
         s.__dict__ = json.loads(sess)
         return s
 
-class SessionDAO:
+class SessionDAO(DAO):
 
     registry = inject.instance(Registry).getRegistry('sessions')
     #registry = getRegistry()
@@ -70,13 +71,15 @@ class SessionDAO:
         s.data = r['data']
         return s
 
-    @staticmethod
-    def _createSchema(con):
+    @classmethod
+    def _createSchema(cls, con):
+        super()._createSchema(con)
         cur = con.cursor()
         try:
-            cur.execute('create schema if not exists systems')
             cur.execute("""
-                create table systems.sessions (
+                create schema if not exists systems;
+                
+                create table IF NOT EXISTS systems.sessions (
                     id varchar primary key,
                     user_id varchar,
                     username varchar,
@@ -84,7 +87,7 @@ class SessionDAO:
                     created timestamptz default now(),
                     deleted timestamptz,
                     data varchar
-                )
+                );
             """)
         finally:
             cur.close()

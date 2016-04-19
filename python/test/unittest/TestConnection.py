@@ -68,6 +68,14 @@ from model.laboralinsertion.user import UserDAO as LiUserDao
 from model.laboralinsertion.inscription import InscriptionDAO
 from model.laboralinsertion.languages import LanguageDAO
 
+from model.login.profiles import ProfileDAO
+from model.login.session import SessionDAO
+
+from model.offices.offices import OfficeDAO
+
+from model.tutorias.tutorias import TutoringDAO
+
+
 class TestConnection(unittest.TestCase):
 
   def test_drop_database(self):
@@ -86,12 +94,16 @@ class TestConnection(unittest.TestCase):
           
           try:
               sql = """
+                  DROP SCHEMA IF EXISTS offices CASCADE;
+                  DROP SCHEMA IF EXISTS system CASCADE;
+                  DROP SCHEMA IF EXISTS systems CASCADE;
+                  DROP SCHEMA IF EXISTS laboral_insertion CASCADE;
                   DROP SCHEMA IF EXISTS assistance CASCADE;
                   DROP SCHEMA IF EXISTS credentials CASCADE;
                   DROP SCHEMA IF EXISTS students CASCADE;
                   DROP SCHEMA IF EXISTS profile CASCADE;
                   DROP SCHEMA IF EXISTS files CASCADE;
-
+                  DROP SCHEMA IF EXISTS tuttoring CASCADE;
                   """
               cur.execute(sql)
               con.commit()
@@ -171,6 +183,18 @@ class TestConnection(unittest.TestCase):
       LiUserDao._createSchema(con)
       InscriptionDAO._createSchema(con)
       LanguageDAO._createSchema(con)      
+      
+      
+      ##### Login #####
+      ProfileDAO._createSchema(con)
+      SessionDAO._createSchema(con)
+      
+      ##### Office #####
+      OfficeDAO._createSchema(con)
+      
+      ##### Tutorias #####
+      TutoringDAO._createSchema(con)
+      
       
       con.commit()
 

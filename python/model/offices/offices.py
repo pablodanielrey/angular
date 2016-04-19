@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import uuid
-
+from model.dao import DAO
+from model.users.users import UserDAO
 
 class Office:
     ''' oficina '''
@@ -14,9 +15,36 @@ class Office:
         self.users = None
 
 
-class OfficeDAO:
+class OfficeDAO(DAO):
     ''' dao de las oficinas '''
-
+    dependencies = [UserDAO]
+    
+    @classmethod
+    def _createSchema(cls, con):
+        super()._createSchema(con)
+        cur = con.cursor()
+        try:
+            cur.execute("""
+                CREATE SCHEMA IF NOT EXISTS offices;
+                
+                CREATE TABLE IF NOT EXISTS offices.offices (
+                  id VARCHAR NOT NULL PRIMARY KEY,
+                  name VARCHAR NOT NULL,
+                  telephone VARCHAR,
+                  email VARCHAR,
+                  parent VARCHAR REFERENCES offices.offices (id),
+                  UNIQUE (name, parent)
+                );
+                
+                CREATE TABLE IF NOT EXISTS offices.offices_users (
+                  user_id VARCHAR NOT NULL REFERENCES profile.users (id),
+                  office_id VARCHAR REFERENCES offices.offices (id),
+                  UNIQUE (user_id, office_id)
+                );
+            """)
+        finally:
+            cur.close()
+            
     @staticmethod
     def _fromResult(r):
         o = Office()
