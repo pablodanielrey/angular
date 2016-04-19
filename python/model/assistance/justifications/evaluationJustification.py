@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from model.dao import DAO
+from model.assistance.assistanceDao import AssistanceDAO
 from model.users.users import UserDAO
 
 from model.assistance.justifications.justifications import SingleDateJustification
 from model.assistance.justifications.status import Status
 import uuid, datetime
 
-class EvaluationJustificationDAO(DAO):
+class EvaluationJustificationDAO(AssistanceDAO):
 
     dependencies = [UserDAO]
 

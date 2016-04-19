@@ -1,8 +1,8 @@
 
 import datetime
 from model.serializer.utils import JSONSerializable
-from model.dao import DAO
 from model.users.users import UserDAO
+from model.assistance.assistanceDao import AssistanceDAO
 
 class Schedule(JSONSerializable):
 
@@ -35,7 +35,7 @@ class Schedule(JSONSerializable):
 
 
 
-class ScheduleDAO(DAO):
+class ScheduleDAO(AssistanceDAO):
     dependencies = [ UserDAO ]
     
     @classmethod

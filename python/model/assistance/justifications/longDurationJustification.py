@@ -15,11 +15,11 @@ from model.assistance.justifications.justifications import Justification, Ranged
 from model.assistance.justifications.status import Status
 import datetime, uuid
 
-from model.dao import DAO
+from model.assistance.assistanceDao import AssistanceDAO
 from model.users.users import UserDAO
 
 
-class LongDurationJustificationDAO(DAO):
+class LongDurationJustificationDAO(AssistanceDAO):
 
     dependencies = [UserDAO]
 

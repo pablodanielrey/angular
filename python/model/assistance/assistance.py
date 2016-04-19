@@ -10,6 +10,7 @@ from model.serializer.utils import JSONSerializable
 from model.assistance.justifications.justifications import Justification
 from model.assistance.statistics import WpStatistics
 
+
 class WorkPeriod(JSONSerializable):
 
     logsTolerance = datetime.timedelta(hours=2)
@@ -199,3 +200,7 @@ class AssistanceModel:
         logging.info(datetime.datetime.now() - timer)
 
         return wpss
+     
+     
+ 
+
