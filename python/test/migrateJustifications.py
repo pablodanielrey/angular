@@ -17,6 +17,7 @@ from model.assistance.justifications.outTicketJustification import OutTicketWith
 from model.assistance.justifications.art102Justification import Art102Justification, Art102JustificationDAO
 from model.assistance.justifications.preExamJustification import UniversityPreExamJustification, SchoolPreExamJustification, PreExamJustificationDAO
 from model.assistance.justifications.summerBreakJustification import SummerBreakJustification, SummerBreakJustificationDAO
+from model.assistance.justifications.taskJustification import TaskWithoutReturnJustification, TaskWithReturnJustification, TaskJustificationDAO
 
 """
 UNDEFINED = 0
@@ -205,7 +206,7 @@ def createPreExam(con):
                 end = jr['jbegin'].date()
 
             """ si cambio de usuario o los dias no son contiguos persisto los datos """
-            if userId != jr['user_id'] or not _isContiguos(end, jr['jbegin'].date()):                
+            if userId != jr['user_id'] or not _isContiguos(end, jr['jbegin'].date()):
                 days = (end - start).days + 1
                 just = UniversityPreExamJustification(userId, ownerId, start, days)
                 just.id = jr["id"]
@@ -278,6 +279,41 @@ def createLAO(con):
     finally:
         cur.close()
 
+def createTask(con):
+    """
+        migra las justificaciones Boleta en Comisión
+    """
+    cur = con.cursor()
+    try:
+        logging.info("Migrando las Boleta en Comisión")
+        # creo la tabla
+        TaskJustificationDAO._createSchema(con)
+        # id de la justificación Boleta en Comisión
+        id = 'cb2b4583-2f44-4db0-808c-4e36ee059efe'
+
+        cur.execute('select id, user_id, requestor_id, jbegin, jend from assistance.justifications_requests where justification_id = %s',(id,))
+        for jr in cur:
+            logging.info('obteniendo justificacion : {}:{}'.format(jr['id'], jr['requestor_id']))
+
+            userId = jr['user_id']
+            ownerId = jr['requestor_id']
+            date = jr['jbegin']
+            end = jr['jend']
+
+            if end is None:
+                just = TaskWithoutReturnJustification(userId, ownerId, date)
+            else:
+                just = TaskWithReturnJustification(userId, ownerId, date, end)
+
+            just.id = jr['id']
+
+            setStatus(con, just)
+    finally:
+        cur.close()
+
+def createResol638(con):
+    pass
+
 if __name__ == '__main__':
 
     logging.getLogger().setLevel(logging.INFO)
@@ -291,8 +327,10 @@ if __name__ == '__main__':
         # createCompensatory(con)
         # createBS(con)
         # createArt102(con)
-        createPreExam(con)
+        # createPreExam(con)
         # createLAO(con)
+        createResol638(con)
+        createTask(con)
 
         con.commit()
     finally:
