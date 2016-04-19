@@ -15,6 +15,7 @@ from model.assistance.justifications.informedAbsenceJustification import Informe
 from model.assistance.justifications.compensatoryJustification import CompensatoryJustification, CompensatoryJustificationDAO
 from model.assistance.justifications.outTicketJustification import OutTicketWithoutReturnJustification, OutTicketWithReturnJustification, OutTicketJustificationDAO
 from model.assistance.justifications.art102Justification import Art102Justification, Art102JustificationDAO
+from model.assistance.justifications.preExamJustification import UniversityPreExamJustification, SchoolPreExamJustification, PreExamJustificationDAO
 
 """
 UNDEFINED = 0
@@ -164,6 +165,38 @@ def createArt102(con):
     finally:
         cur.close()
 
+def createPreExam(con):
+    """
+        migra las justificaciones Pre-Exámen
+    """
+    cur = con.cursor()
+    try:
+        logging.info("Migrando las justificaciones de Pre-Exámen")
+        # creo la tabla
+        PreExamJustificationDAO._createSchema(con)
+        # id de la justificación Pre Examen
+        id = 'b70013e3-389a-46d4-8b98-8e4ab75335d0'
+        cur.execute('select id, user_id, requestor_id, jbegin, jend from assistance.justifications_requests where justification_id = %s',(id,))
+        for jr in cur:
+            logging.info('obteniendo justificacion : {}:{}'.format(jr['id'], jr['requestor_id']))
+
+            userId = jr['user_id']
+            ownerId = jr['requestor_id']
+            start = jr['jbegin']
+
+            """
+                las justificaciones de pre-examen se tomaban por dia individualmente, ahora es un rango de fechas
+            """
+            days = 1
+            just = UniversityPreExamJustification(userId, ownerId, start.date(), days)
+
+            just.id = jr['id']
+
+            j = just.findById(con, [just.id])
+            if (j is None or len(j) <= 0):
+                setStatus(con, just)
+    finally:
+        cur.close()
 
 if __name__ == '__main__':
 
@@ -177,7 +210,8 @@ if __name__ == '__main__':
         # createAA(con)
         # createCompensatory(con)
         # createBS(con)
-        createArt102(con)
+        # createArt102(con)
+        createPreExam(con)
 
         con.commit()
     finally:
