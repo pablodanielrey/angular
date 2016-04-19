@@ -63,6 +63,9 @@ from model.assistance.justifications.travelJustification import TravelJustificat
 from model.assistance.justifications.weatherJustification import WeatherJustificationDAO
 from model.assistance.justifications.winterBreakJustification import WinterBreakJustificationDAO
 
+from model.laboralinsertion.company import CompanyDAO
+from model.laboralinsertion.user import UserDAO as LiUserDao
+from model.laboralinsertion.inscription import InscriptionDAO
 
 class TestConnection(unittest.TestCase):
 
@@ -160,6 +163,12 @@ class TestConnection(unittest.TestCase):
       TravelJustificationDAO._createSchema(con)
       WeatherJustificationDAO._createSchema(con)
       WinterBreakJustificationDAO._createSchema(con)
+      
+      
+      ##### LaboralInsertion #####
+      CompanyDAO._createSchema(con)
+      LiUserDao._createSchema(con)
+      InscriptionDAO._createSchema(con)
       
       con.commit()
 

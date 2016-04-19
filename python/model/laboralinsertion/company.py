@@ -32,7 +32,9 @@ class CompanyDAO(DAO):
         cur = con.cursor()
         try:
             cur.execute("""
-                create table laboral_insertion.companies (
+                CREATE SCHEMA IF NOT EXISTS laboral_insertion;
+                
+                create table IF NOT EXISTS laboral_insertion.companies (
                     id varchar primary key,
                     name varchar not null,
                     detail varchar,
@@ -42,7 +44,7 @@ class CompanyDAO(DAO):
                     address varchar,
                     begincm timestamptz default now(),
                     endcm timestamptz default now()
-                )
+                );
             """)
         finally:
             cur.close()
