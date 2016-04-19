@@ -63,6 +63,7 @@ class LongDurationJustificationDAO(DAO):
             if ((not hasattr(j, 'id')) or (j.id is None)):
                 j.id = str(uuid.uuid4())
 
+            if len(j.findById(con, [j.id])) <=  0:
                 r = j.__dict__
                 cur.execute('insert into assistance.justification_long_duration(id, user_id, owner_id, jstart, jend, number) '
                             'values (%(id)s, %(userId)s, %(ownerId)s, %(start)s, %(end)s, %(number)s)', r)

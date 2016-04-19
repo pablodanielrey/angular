@@ -59,6 +59,8 @@ class MarriageJustificationAbstractDAO(DAO):
         try:
             if ((not hasattr(j, 'id')) or (j.id is None)):
                 j.id = str(uuid.uuid4())
+
+            if len(j.findById(con, [j.id])) <=  0:
                 j.type = j.__class__.__name__
                 r = j.__dict__
                 cur.execute('insert into assistance.justification_marriage (id, user_id, owner_id, jstart, jend, type) '

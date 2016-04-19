@@ -33,7 +33,8 @@ class BirthdayJustificationDAO(DAO):
 
     @classmethod
     def _fromResult(cls, con, r):
-        c = BirthdayJustification(r['user_id'], r['owner_id'], r['date'])
+        date = datetime.datetime.combine(r['date'], datetime.time.min)
+        c = BirthdayJustification(r['user_id'], r['owner_id'], date)
         c.id = r['id']
         c.setStatus(Status.getLastStatus(con, c.id))
         return c
@@ -47,6 +48,7 @@ class BirthdayJustificationDAO(DAO):
             if ((not hasattr(c, 'id')) or (c.id is None)):
                 c.id = str(uuid.uuid4())
 
+            if len(c.findById(con, [c.id])) <=  0:
                 r = c.__dict__
                 cur.execute('insert into assistance.justification_birthday (id, user_id, owner_id, date) '
                             'values ( %(id)s, %(userId)s, %(ownerId)s, %(date)s)', r)
@@ -54,7 +56,7 @@ class BirthdayJustificationDAO(DAO):
                 r = c.__dict__
                 cur.execute('update assistance.justification_birthday set user_id = %(userId)s, owner_id = %(ownerId)s, '
                             'date = %(date)s where id = %(id)s', r)
-            return id
+            return c.id
 
         finally:
             cur.close()
