@@ -309,7 +309,7 @@ class StudentDAO(DAO):
             sql = """
               CREATE SCHEMA IF NOT EXISTS students;
                      
-              CREATE TABLE students.users (
+              CREATE TABLE IF NOT EXISTS students.users (
                 id VARCHAR PRIMARY KEY NOT NULL REFERENCES profile.users (id),
                 student_number VARCHAR UNIQUE,
                 condition VARCHAR

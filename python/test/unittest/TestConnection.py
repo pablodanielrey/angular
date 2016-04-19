@@ -24,6 +24,8 @@ from model.users.users import StudentDAO
 
 
 from model.assistance.logs import LogDAO
+from model.assistance.schedules import ScheduleDAO
+#from model.assistance.statics import StaticsDAO
 
 from model.assistance.justifications.status import StatusDAO
 from model.assistance.justifications.art102Justification import Art102JustificationDAO
@@ -120,6 +122,7 @@ class TestConnection(unittest.TestCase):
       StudentDAO._createSchema(con)
 
       LogDAO._createSchema(con)
+      ScheduleDAO._createSchema(con)
 
       StatusDAO._createSchema(con)      
 

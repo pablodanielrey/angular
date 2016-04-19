@@ -131,15 +131,19 @@ class WpStatistics:
     def findByUserId(con, userId, start, end):
         return WpStatisticsDAO.findByUserId(con, userId, start, end)
 
+
+
 class WpStatisticsDAO:
 
-    @staticmethod
-    def _createSchema(con):
+    dependencies = [UserDAO]
+    
+    @classmethod
+    def _createSchema(cls, con):
         cur = con.cursor()
         try:
             cur.execute("""
                 create schema if not exists assistance;
-                create table assistance.wp_daily_statistics (
+                create table IF NOT EXISTS assistance.wp_daily_statistics (
                     user_id varchar not null references profile.users (id),
                     sdate date not null,
                     sstart timestamp,
