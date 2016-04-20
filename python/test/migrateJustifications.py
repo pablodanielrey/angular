@@ -32,6 +32,7 @@ from model.assistance.justifications.authorityJustification import AuthorityJust
 from model.assistance.justifications.resolution638Justification import Resolution638Justification, Resolution638JustificationDAO
 from model.assistance.justifications.shortDurationJustification import ShortDurationJustification, ShortDurationJustificationDAO
 from model.assistance.justifications.longDurationJustification import LongDurationJustification, LongDurationJustificationDAO
+from model.assistance.justifications.familyAttentionJustification import FamilyAttentionJustification, FamilyAttentionJustificationDAO
 
 """
 UNDEFINED = 0
@@ -678,6 +679,11 @@ class RangedJustificationMigrate():
     """
 
     @classmethod
+    def migrateAll(cls, con):
+        for c in cls.__subclasses__():
+            c.migrate(con)
+
+    @classmethod
     def createJustification(cls, userId, ownerId, start, days):
         logging.info("Se debe definir en la subclase")
         pass
@@ -728,6 +734,7 @@ class ShortDurationMigrate(RangedJustificationMigrate):
 
     @classmethod
     def createJustification(cls, userId, ownerId, start, days):
+        logging.info('migrando Licencia Corta Duración')
         return ShortDurationJustification(userId, ownerId, start, days)
 
 
@@ -737,7 +744,18 @@ class LongDurationMigrate(RangedJustificationMigrate):
 
     @classmethod
     def createJustification(cls, userId, ownerId, start, days):
+        logging.info('migrando Licencia Larga Duración')
         return LongDurationJustification(userId, ownerId, start, days)
+
+
+class FamilyAttentionMigrate(RangedJustificationMigrate):
+
+    id = "b80c8c0e-5311-4ad1-94a7-8d294888d770"
+
+    @classmethod
+    def createJustification(cls, userId, ownerId, start, days):
+        logging.info('migrando  Licencia Médica Atención Familiar')
+        return FamilyAttentionJustification(userId, ownerId, start, days)
 
 
 if __name__ == '__main__':
@@ -768,8 +786,9 @@ if __name__ == '__main__':
         # createLateArrival(con)
         # createAuthority(con)
         # createResol638(con)
-        ShortDurationMigrate.migrate(con)
-        LongDurationMigrate.migrate(con)
+
+        RangedJustificationMigrate.migrateAll(con)
+
         con.commit()
     finally:
         conn.put(con)
