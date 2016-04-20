@@ -41,6 +41,8 @@ from model.assistance.justifications.paternityJustification import PaternityJust
 from model.assistance.justifications.maternityJustification import MaternityJustification, MaternityJustificationDAO
 from model.assistance.justifications.marriageJustification import MarriageJustification, MarriageJustificationDAO
 from model.assistance.justifications.leaveWithoutSalaryJustification import LeaveWithoutSalaryJustification, LeaveWithoutSalaryJustificationDAO
+from model.assistance.justifications.suspensionJustification import SuspensionJustification, SuspensionJustificationDAO
+from model.assistance.justifications.travelJustification import TravelJustification, TravelJustificationDAO
 
 """
 UNDEFINED = 0
@@ -863,6 +865,28 @@ class LeaveWithoutSalaryMigrate(RangedJustificationMigrate):
         return LeaveWithoutSalaryJustification(userId, ownerId, start, days)
 
 
+class SuspensionMigrate(RangedJustificationMigrate):
+
+    id = "bfaebb07-8d08-4551-b264-85eb4cab6ef1"
+    dao = SuspensionJustificationDAO
+
+    @classmethod
+    def createJustification(cls, userId, ownerId, start, days):
+        logging.info('migrando  Suspención')
+        return SuspensionJustification(userId, ownerId, start, days)
+
+
+class TravelMigrate(RangedJustificationMigrate):
+
+    id = "7747e3ff-bbe2-4f2e-88f7-9cc624a242a9"
+    dao = TravelJustificationDAO
+
+    @classmethod
+    def createJustification(cls, userId, ownerId, start, days):
+        logging.info('migrando  Viaje')
+        return TravelJustification(userId, ownerId, start, days)
+
+
 if __name__ == '__main__':
 
     logging.getLogger().setLevel(logging.INFO)
@@ -891,7 +915,8 @@ if __name__ == '__main__':
         # createLateArrival(con)
         # createAuthority(con)
         # createResol638(con)
-        LeaveWithoutSalaryMigrate.migrate(con)
+        SuspensionMigrate.migrate(con)
+        TravelMigrate.migrate(con)
         # RangedJustificationMigrate.migrateAll(con)
 
         con.commit()
