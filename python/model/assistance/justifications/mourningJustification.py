@@ -60,15 +60,15 @@ class MourningJustificationDAO(AssistanceDAO):
             if ((not hasattr(j, 'id')) or (j.id is None)):
                 j.id = str(uuid.uuid4())
 
-            if len(j.findById(con, [j.id])) <=  0:                
+            if len(j.findById(con, [j.id])) <=  0:
                 j.type = j.__class__.__name__
                 r = j.__dict__
 
-                cur.execute('insert into assistance.justification_justifyName (id, user_id, owner_id, jstart, jend, type) '
-                            'values (%(id)s, %(userId)s, %(ownerId)s, %(start)s, %(end)s, %(type)s', r)
+                cur.execute('insert into assistance.justification_mourning (id, user_id, owner_id, jstart, jend, type) '
+                            'values (%(id)s, %(userId)s, %(ownerId)s, %(start)s, %(end)s, %(type)s)', r)
             else:
                 r = j.__dict__
-                cur.execute('update assistance.justification_justifyName set user_id = %(userId)s, owner_id = %(ownerId)s, '
+                cur.execute('update assistance.justification_mourning set user_id = %(userId)s, owner_id = %(ownerId)s, '
                             'jstart = %(start)s, jend = %(end)s, type = %(type)s where id = %(id)s', r)
             return j.id
 
@@ -82,7 +82,7 @@ class MourningJustificationDAO(AssistanceDAO):
         cur = con.cursor()
         try:
             logging.info('ids: %s', tuple(ids))
-            cur.execute('select * from assistance.justification_justifyName where id in %s',(tuple(ids),))
+            cur.execute('select * from assistance.justification_mourning where id in %s',(tuple(ids),))
             return [ cls._fromResult(con, r) for r in cur ]
         finally:
             cur.close()
@@ -101,7 +101,7 @@ class MourningJustificationDAO(AssistanceDAO):
             sDate = None if start is None else start.date()
             eDate = datetime.date.today() if end is None else end.date()
             t = cls.type
-            cur.execute('select * from assistance.justification_justifyName where user_id in %s and '
+            cur.execute('select * from assistance.justification_mourning where user_id in %s and '
                         '(jstart <= %s and jend >= %s) and type = %s', (tuple(userIds), eDate, sDate, t))
 
             return [ cls._fromResult(con, r) for r in cur ]
@@ -151,7 +151,16 @@ class MourningJustification(RangedJustification):
     registry = inject.instance(Registry).getRegistry('mourningJustification')
 
     def __init__(self, userId, ownerId, start, days = 0):
+        assert isinstance(start, datetime.date)
         super().__init__(start, days, userId, ownerId)
+
+    def setEnd(self, date):
+        assert isinstance(date, datetime.date)
+        self.end = date
+
+    def setStart(self, date):
+        assert isinstance(date, datetime.date)
+        self.start = date
 
 
 class MourningFirstGradeJustification(MourningJustification):
@@ -159,7 +168,7 @@ class MourningFirstGradeJustification(MourningJustification):
     dao = MourningFirstGradeJustificationDAO
 
     def __init__(self, userId, ownerId, start, days = 0):
-        super().__init__(start, days, userId, ownerId)
+        super().__init__(userId, ownerId, start, days)
 
     def getIdentifier(self):
         return 'Fallecimiento pariente primer grado'
@@ -170,7 +179,7 @@ class MourningSecondGradeJustification(MourningJustification):
     dao = MourningSecondGradeJustificationDAO
 
     def __init__(self, userId, ownerId, start, days = 0):
-        super().__init__(start, days, userId, ownerId)
+        super().__init__(userId, ownerId, start, days)
 
     def getIdentifier(self):
         return 'Fallecimiento pariente segundo grado'
@@ -181,7 +190,7 @@ class MourningRelativeJustification(MourningJustification):
     dao = MourningRelativeJustificationDAO
 
     def __init__(self, userId, ownerId, start, days = 0):
-        super().__init__(start, days, userId, ownerId)
+        super().__init__(userId, ownerId, start, days)
 
     def getIdentifier(self):
         return 'Fallecimiento pariente político'

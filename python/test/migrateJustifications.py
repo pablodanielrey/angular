@@ -33,6 +33,7 @@ from model.assistance.justifications.resolution638Justification import Resolutio
 from model.assistance.justifications.shortDurationJustification import ShortDurationJustification, ShortDurationJustificationDAO
 from model.assistance.justifications.longDurationJustification import LongDurationJustification, LongDurationJustificationDAO
 from model.assistance.justifications.familyAttentionJustification import FamilyAttentionJustification, FamilyAttentionJustificationDAO
+from model.assistance.justifications.mourningJustification import MourningFirstGradeJustification, MourningSecondGradeJustification, MourningRelativeJustification, MourningJustificationDAO
 
 """
 UNDEFINED = 0
@@ -675,7 +676,7 @@ def createResol638(con):
 
 class RangedJustificationMigrate():
     """
-        atributos de clase: id
+        atributos de clase: id, dao
     """
 
     @classmethod
@@ -692,6 +693,9 @@ class RangedJustificationMigrate():
     def migrate(cls, con):
         cur = con.cursor()
         try:
+            # creo la tabla
+            cls.dao._createSchema(con)
+
             cur.execute('select id, user_id, requestor_id, jbegin from assistance.justifications_requests where justification_id = %s order by user_id, jbegin asc',(cls.id,))
             userId = None
             days = 0
@@ -708,7 +712,9 @@ class RangedJustificationMigrate():
                     days = (end - start).days + 1
                     just = cls.createJustification(userId, ownerId, start, days)
                     just.id = jr["id"]
-                    setStatus(con, just)
+
+                    if (len(just.findById(con,[just.id])) <= 0):
+                        setStatus(con, just)
 
                     """ inicializo los datos """
                     userId = jr['user_id']
@@ -721,7 +727,8 @@ class RangedJustificationMigrate():
             days = (end - start).days + 1
             just = cls.createJustification(userId, ownerId, start, days)
             just.id = jr["id"]
-            setStatus(con, just)
+            if (len(just.findById(con,[just.id])) <= 0):
+                setStatus(con, just)
 
         finally:
             cur.close()
@@ -731,6 +738,7 @@ class RangedJustificationMigrate():
 class ShortDurationMigrate(RangedJustificationMigrate):
 
     id = 'f9baed8a-a803-4d7f-943e-35c436d5db46'
+    dao = ShortDurationJustificationDAO
 
     @classmethod
     def createJustification(cls, userId, ownerId, start, days):
@@ -741,6 +749,7 @@ class ShortDurationMigrate(RangedJustificationMigrate):
 class LongDurationMigrate(RangedJustificationMigrate):
 
     id = "a93d3af3-4079-4e93-a891-91d5d3145155"
+    dao = LongDurationJustificationDAO
 
     @classmethod
     def createJustification(cls, userId, ownerId, start, days):
@@ -751,11 +760,23 @@ class LongDurationMigrate(RangedJustificationMigrate):
 class FamilyAttentionMigrate(RangedJustificationMigrate):
 
     id = "b80c8c0e-5311-4ad1-94a7-8d294888d770"
+    dao = FamilyAttentionJustificationDAO
 
     @classmethod
     def createJustification(cls, userId, ownerId, start, days):
         logging.info('migrando  Licencia Médica Atención Familiar')
         return FamilyAttentionJustification(userId, ownerId, start, days)
+
+
+class MourningMigrate(RangedJustificationMigrate):
+
+    id = "0cd276aa-6d6b-4752-abe5-9258dbfd6f09"
+    dao = MourningJustificationDAO
+
+    @classmethod
+    def createJustification(cls, userId, ownerId, start, days):
+        logging.info('migrando  Duelo')
+        return MourningFirstGradeJustification(userId, ownerId, start, days)
 
 
 if __name__ == '__main__':
