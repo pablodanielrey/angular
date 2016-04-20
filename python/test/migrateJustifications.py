@@ -110,7 +110,8 @@ def createAA(con):
             just = InformedAbsenceJustification(userId, ownerId, date)
             just.id = jr['id']
 
-            setStatus(con, just)
+            if (len(just.findById(con,[just.id])) <= 0):
+                setStatus(con, just)
 
     finally:
         cur.close()
@@ -139,7 +140,8 @@ def createCompensatory(con):
             just = CompensatoryJustification(userId, ownerId, date)
             just.id = jr['id']
 
-            setStatus(con, just)
+            if (len(just.findById(con,[just.id])) <= 0):
+                setStatus(con, just)
 
     finally:
         cur.close()
@@ -172,7 +174,8 @@ def createBS(con):
 
             just.id = jr['id']
 
-            setStatus(con, just)
+            if (len(just.findById(con,[just.id])) <= 0):
+                setStatus(con, just)
     finally:
         cur.close()
 
@@ -197,7 +200,8 @@ def createArt102(con):
             just = Art102Justification(userId, ownerId, date)
             just.id = jr['id']
 
-            setStatus(con, just)
+            if (len(just.findById(con,[just.id])) <= 0):
+                setStatus(con, just)
 
     finally:
         cur.close()
@@ -235,7 +239,9 @@ def createPreExam(con):
                 days = (end - start).days + 1
                 just = UniversityPreExamJustification(userId, ownerId, start, days)
                 just.id = jr["id"]
-                setStatus(con, just)
+
+                if (len(just.findById(con,[just.id])) <= 0):
+                    setStatus(con, just)
 
                 """ inicializo los datos """
                 userId = jr['user_id']
@@ -248,7 +254,8 @@ def createPreExam(con):
         days = (end - start).days + 1
         just = UniversityPreExamJustification(userId, ownerId, start, days)
         just.id = jr["id"]
-        setStatus(con, just)
+        if (len(just.findById(con,[just.id])) <= 0):
+            setStatus(con, just)
 
     finally:
         cur.close()
@@ -286,7 +293,8 @@ def createLAO(con):
                 days = (end - start).days + 1
                 just = SummerBreakJustification(userId, ownerId, start, days)
                 just.id = jr["id"]
-                setStatus(con, just)
+                if (len(just.findById(con,[just.id])) <= 0):
+                    setStatus(con, just)
 
                 """ inicializo los datos """
                 userId = jr['user_id']
@@ -299,7 +307,8 @@ def createLAO(con):
         days = (end - start).days + 1
         just = SummerBreakJustification(userId, ownerId, start, days)
         just.id = jr["id"]
-        setStatus(con, just)
+        if (len(just.findById(con,[just.id])) <= 0):
+            setStatus(con, just)
 
     finally:
         cur.close()
@@ -332,7 +341,8 @@ def createTask(con):
 
             just.id = jr['id']
 
-            setStatus(con, just)
+            if (len(just.findById(con,[just.id])) <= 0):
+                setStatus(con, just)
     finally:
         cur.close()
 
@@ -358,7 +368,8 @@ def createHoliday(con):
             just = HolidayJustification(userId, ownerId, date)
             just.id = jr['id']
 
-            setStatus(con, just)
+            if (len(just.findById(con,[just.id])) <= 0):
+                setStatus(con, just)
 
     finally:
         cur.close()
@@ -385,7 +396,8 @@ def createStrike(con):
             just = StrikeJustification(userId, ownerId, date)
             just.id = jr['id']
 
-            setStatus(con, just)
+            if (len(just.findById(con,[just.id])) <= 0):
+                setStatus(con, just)
 
     finally:
         cur.close()
@@ -412,7 +424,8 @@ def createBirthday(con):
             just = BirthdayJustification(userId, ownerId, date)
             just.id = jr['id']
 
-            setStatus(con, just)
+            if (len(just.findById(con,[just.id])) <= 0):
+                setStatus(con, just)
 
     finally:
         cur.close()
@@ -439,7 +452,8 @@ def createBloodDonation(con):
             just = BloodDonationJustification(userId, ownerId, date)
             just.id = jr['id']
 
-            setStatus(con, just)
+            if (len(just.findById(con,[just.id])) <= 0):
+                setStatus(con, just)
 
     finally:
         cur.close()
@@ -466,7 +480,8 @@ def createEvaluation(con):
             just = EvaluationJustification(userId, ownerId, date)
             just.id = jr['id']
 
-            setStatus(con, just)
+            if (len(just.findById(con,[just.id])) <= 0):
+                setStatus(con, just)
 
     finally:
         cur.close()
@@ -493,7 +508,8 @@ def createSchedule(con):
             just = ScheduleJustification(userId, ownerId, date)
             just.id = jr['id']
 
-            setStatus(con, just)
+            if (len(just.findById(con,[just.id])) <= 0):
+                setStatus(con, just)
 
     finally:
         cur.close()
@@ -520,7 +536,8 @@ def createWeather(con):
             just = WeatherJustification(userId, ownerId, date)
             just.id = jr['id']
 
-            setStatus(con, just)
+            if (len(just.findById(con,[just.id])) <= 0):
+                setStatus(con, just)
 
     finally:
         cur.close()
@@ -547,7 +564,8 @@ def createLibrarianDay(con):
             just = LibrarianDayJustification(userId, ownerId, date)
             just.id = jr['id']
 
-            setStatus(con, just)
+            if (len(just.findById(con,[just.id])) <= 0):
+                setStatus(con, just)
 
     finally:
         cur.close()
@@ -574,7 +592,8 @@ def createTraining(con):
             just = TrainingJustification(userId, ownerId, date)
             just.id = jr['id']
 
-            setStatus(con, just)
+            if (len(just.findById(con,[just.id])) <= 0):
+                setStatus(con, just)
 
     finally:
         cur.close()
@@ -601,7 +620,8 @@ def createLateArrival(con):
             just = LateArrivalJustification(userId, ownerId, date)
             just.id = jr['id']
 
-            setStatus(con, just)
+            if (len(just.findById(con,[just.id])) <= 0):
+                setStatus(con, just)
 
     finally:
         cur.close()
@@ -628,7 +648,8 @@ def createAuthority(con):
             just = AuthorityJustification(userId, ownerId, date)
             just.id = jr['id']
 
-            setStatus(con, just)
+            if (len(just.findById(con,[just.id])) <= 0):
+                setStatus(con, just)
 
     finally:
         cur.close()
@@ -665,7 +686,8 @@ def createResol638(con):
                 days = (end - start).days + 1
                 just = Resolution638Justification(userId, ownerId, start, days)
                 just.id = jr["id"]
-                setStatus(con, just)
+                if (len(just.findById(con,[just.id])) <= 0):
+                    setStatus(con, just)
 
                 """ inicializo los datos """
                 userId = jr['user_id']
@@ -678,7 +700,8 @@ def createResol638(con):
         days = (end - start).days + 1
         just = Resolution638Justification(userId, ownerId, start, days)
         just.id = jr["id"]
-        setStatus(con, just)
+        if (len(just.findById(con,[just.id])) <= 0):
+            setStatus(con, just)
 
     finally:
         cur.close()
@@ -896,28 +919,26 @@ if __name__ == '__main__':
     try:
         con = conn.get()
 
-        # createAA(con)
-        # createCompensatory(con)
-        # createBS(con)
-        # createArt102(con)
-        # createPreExam(con)
-        # createLAO(con)
-        # createTask(con)
-        # createHoliday(con)
-        # createBirthday(con)
-        # createStrike(con)
-        # createBloodDonation(con)
-        # createEvaluation(con)
-        # createSchedule(con)
-        # createWeather(con)
-        # createLibrarianDay(con)
-        # createTraining(con)
-        # createLateArrival(con)
-        # createAuthority(con)
-        # createResol638(con)
-        SuspensionMigrate.migrate(con)
-        TravelMigrate.migrate(con)
-        # RangedJustificationMigrate.migrateAll(con)
+        createAA(con)
+        createCompensatory(con)
+        createBS(con)
+        createArt102(con)
+        createPreExam(con)
+        createLAO(con)
+        createTask(con)
+        createHoliday(con)
+        createBirthday(con)
+        createStrike(con)
+        createBloodDonation(con)
+        createEvaluation(con)
+        createSchedule(con)
+        createWeather(con)
+        createLibrarianDay(con)
+        createTraining(con)
+        createLateArrival(con)
+        createAuthority(con)
+        createResol638(con)
+        RangedJustificationMigrate.migrateAll(con)
 
         con.commit()
     finally:
