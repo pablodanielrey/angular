@@ -24,6 +24,11 @@ from model.assistance.justifications.birthdayJustification import BirthdayJustif
 from model.assistance.justifications.bloodDonationJustification import BloodDonationJustification, BloodDonationJustificationDAO
 from model.assistance.justifications.evaluationJustification import EvaluationJustification, EvaluationJustificationDAO
 from model.assistance.justifications.scheduleJustification import ScheduleJustification, ScheduleJustificationDAO
+from model.assistance.justifications.weatherJustification import WeatherJustification, WeatherJustificationDAO
+from model.assistance.justifications.librarianDayJustification import LibrarianDayJustification, LibrarianDayJustificationDAO
+from model.assistance.justifications.trainingJustification import TrainingJustification, TrainingJustificationDAO
+from model.assistance.justifications.lateArrivalJustification import LateArrivalJustification, LateArrivalJustificationDAO
+from model.assistance.justifications.authorityJustification import AuthorityJustification, AuthorityJustificationDAO
 
 """
 UNDEFINED = 0
@@ -480,17 +485,17 @@ def createSchedule(con):
         cur.close()
 
 
-def createJustifyName(con):
+def createWeather(con):
     """
-    migra las justificaciones JustifyName
+    migra las justificaciones Incumbencias Climáticas
     """
     cur = con.cursor()
     try:
-        logging.info('Migrando las Justificaciones JustifyName')
+        logging.info('Migrando las Justificaciones Incumbencias Climáticas')
         # creo la tabla
-        JustifyNameJustificationDAO._createSchema(con)
-        # id de la justificación  JustifyName
-        id = ""
+        WeatherJustificationDAO._createSchema(con)
+        # id de la justificación  Incumbencias Climáticas
+        id = "3d486aa0-745a-4914-a46d-bc559853d367"
         cur.execute('select id, user_id, requestor_id, jbegin, jend from assistance.justifications_requests where justification_id = %s',(id,))
         for jr in cur:
             logging.info('obteniendo justificacion : {}:{}'.format(jr['id'], jr['requestor_id']))
@@ -498,7 +503,115 @@ def createJustifyName(con):
             userId = jr['user_id']
             ownerId = jr['requestor_id']
             date = jr['jbegin']
-            just = JustifyNameJustification(userId, ownerId, date)
+            just = WeatherJustification(userId, ownerId, date)
+            just.id = jr['id']
+
+            setStatus(con, just)
+
+    finally:
+        cur.close()
+
+
+def createLibrarianDay(con):
+    """
+    migra las justificaciones Día del Bibliotecario
+    """
+    cur = con.cursor()
+    try:
+        logging.info('Migrando las Justificaciones Día del Bibliotecario')
+        # creo la tabla
+        LibrarianDayJustificationDAO._createSchema(con)
+        # id de la justificación  Día del Bibliotecario
+        id = "5c548eab-b8fc-40be-bb85-ef53d594dca9"
+        cur.execute('select id, user_id, requestor_id, jbegin, jend from assistance.justifications_requests where justification_id = %s',(id,))
+        for jr in cur:
+            logging.info('obteniendo justificacion : {}:{}'.format(jr['id'], jr['requestor_id']))
+
+            userId = jr['user_id']
+            ownerId = jr['requestor_id']
+            date = jr['jbegin']
+            just = LibrarianDayJustification(userId, ownerId, date)
+            just.id = jr['id']
+
+            setStatus(con, just)
+
+    finally:
+        cur.close()
+
+
+def createTraining(con):
+    """
+    migra las justificaciones Asistencia a Congresos/Capacitación
+    """
+    cur = con.cursor()
+    try:
+        logging.info('Migrando las Justificaciones Asistencia a Congresos/Capacitación')
+        # creo la tabla
+        TrainingJustificationDAO._createSchema(con)
+        # id de la justificación  Asistencia a Congresos/Capacitación
+        id = "508a9b3a-e326-4b77-a103-3399cb65f82a"
+        cur.execute('select id, user_id, requestor_id, jbegin, jend from assistance.justifications_requests where justification_id = %s',(id,))
+        for jr in cur:
+            logging.info('obteniendo justificacion : {}:{}'.format(jr['id'], jr['requestor_id']))
+
+            userId = jr['user_id']
+            ownerId = jr['requestor_id']
+            date = jr['jbegin']
+            just = TrainingJustification(userId, ownerId, date)
+            just.id = jr['id']
+
+            setStatus(con, just)
+
+    finally:
+        cur.close()
+
+
+def createLateArrival(con):
+    """
+    migra las justificaciones  Entrada Tarde Justificada
+    """
+    cur = con.cursor()
+    try:
+        logging.info('Migrando las Justificaciones  Entrada Tarde Justificada')
+        # creo la tabla
+        LateArrivalJustificationDAO._createSchema(con)
+        # id de la justificación   Entrada Tarde Justificada
+        id = "7e180d9d-0ef1-48a7-9f3f-26a0170cc2f7"
+        cur.execute('select id, user_id, requestor_id, jbegin, jend from assistance.justifications_requests where justification_id = %s',(id,))
+        for jr in cur:
+            logging.info('obteniendo justificacion : {}:{}'.format(jr['id'], jr['requestor_id']))
+
+            userId = jr['user_id']
+            ownerId = jr['requestor_id']
+            date = jr['jbegin']
+            just = LateArrivalJustification(userId, ownerId, date)
+            just.id = jr['id']
+
+            setStatus(con, just)
+
+    finally:
+        cur.close()
+
+
+def createAuthority(con):
+    """
+    migra las justificaciones Justificado Por Autoridad
+    """
+    cur = con.cursor()
+    try:
+        logging.info('Migrando las Justificaciones Justificado Por Autoridad')
+        # creo la tabla
+        AuthorityJustificationDAO._createSchema(con)
+        # id de la justificación  Justificado Por Autoridad
+        id = "c32eb2eb-882b-4905-8e8f-c03405cee727"
+        cur.execute('select id, user_id, requestor_id, jbegin, jend from assistance.justifications_requests where justification_id = %s',(id,))
+        for jr in cur:
+            logging.info('obteniendo justificacion : {}:{}'.format(jr['id'], jr['requestor_id']))
+
+            userId = jr['user_id']
+            ownerId = jr['requestor_id']
+            date = jr['jbegin']
+            just = AuthorityJustification(userId, ownerId, date)
             just.id = jr['id']
 
             setStatus(con, just)
@@ -526,9 +639,14 @@ if __name__ == '__main__':
         # createHoliday(con)
         # createBirthday(con)
         # createStrike(con)
-        createBloodDonation(con)
-        createEvaluation(con)
-        createSchedule(con)
+        # createBloodDonation(con)
+        # createEvaluation(con)
+        # createSchedule(con)
+        createWeather(con)
+        createLibrarianDay(con)
+        createTraining(con)
+        createLateArrival(con)
+        createAuthority(con)
 
         con.commit()
     finally:
