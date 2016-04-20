@@ -30,6 +30,7 @@ from model.assistance.justifications.trainingJustification import TrainingJustif
 from model.assistance.justifications.lateArrivalJustification import LateArrivalJustification, LateArrivalJustificationDAO
 from model.assistance.justifications.authorityJustification import AuthorityJustification, AuthorityJustificationDAO
 from model.assistance.justifications.resolution638Justification import Resolution638Justification, Resolution638JustificationDAO
+from model.assistance.justifications.shortDurationJustification import ShortDurationJustification, ShortDurationJustificationDAO
 
 """
 UNDEFINED = 0
@@ -670,6 +671,64 @@ def createResol638(con):
     finally:
         cur.close()
 
+class RangedJustificationMigrate():
+    """
+        atributos de clase: id
+    """
+
+    @classmethod
+    def createJustification(cls, userId, ownerId, start, days):
+        logging.info("Se debe definir en la subclase")
+        pass
+
+    @classmethod
+    def migrate(cls, con):
+        cur = con.cursor()
+        try:
+            cur.execute('select id, user_id, requestor_id, jbegin from assistance.justifications_requests where justification_id = %s order by user_id, jbegin asc',(cls.id,))
+            userId = None
+            days = 0
+            for jr in cur:
+                logging.info('obteniendo justificacion : {}:{}'.format(jr['id'], jr['requestor_id']))
+                if userId is None:
+                    userId = jr['user_id']
+                    ownerId = jr['requestor_id']
+                    start = jr['jbegin'].date()
+                    end = jr['jbegin'].date()
+
+                """ si cambio de usuario o los dias no son contiguos persisto los datos """
+                if userId != jr['user_id'] or not _isContiguos(end, jr['jbegin'].date()):
+                    days = (end - start).days + 1
+                    just = cls.createJustification(userId, ownerId, start, days)
+                    just.id = jr["id"]
+                    setStatus(con, just)
+
+                    """ inicializo los datos """
+                    userId = jr['user_id']
+                    ownerId = jr['requestor_id']
+                    start = jr['jbegin'].date()
+
+                end = jr['jbegin'].date()
+
+            """ persisto el ultimo que me quedo """
+            days = (end - start).days + 1
+            just = cls.createJustification(userId, ownerId, start, days)
+            just.id = jr["id"]
+            setStatus(con, just)
+
+        finally:
+            cur.close()
+
+
+
+class ShortDurationMigrate(RangedJustificationMigrate):
+
+    id = 'f9baed8a-a803-4d7f-943e-35c436d5db46'
+
+    @classmethod
+    def createJustification(cls, userId, ownerId, start, days):
+        return ShortDurationJustification(userId, ownerId, start, days)
+
 
 if __name__ == '__main__':
 
@@ -698,7 +757,8 @@ if __name__ == '__main__':
         # createTraining(con)
         # createLateArrival(con)
         # createAuthority(con)
-        createResol638(con)
+        # createResol638(con)
+        ShortDurationMigrate.migrate(con)
         con.commit()
     finally:
         conn.put(con)
