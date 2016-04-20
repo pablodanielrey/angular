@@ -82,7 +82,7 @@ class LongDurationJustificationDAO(AssistanceDAO):
 
         cur = con.cursor()
         try:
-            cur.execute('select * from assistance.justification_long_duration where id in %s',tuple(ids))
+            cur.execute('select * from assistance.justification_long_duration where id in %s', (tuple(ids),))
             return [ cls._fromResult(con, r) for r in cur ]
         finally:
             cur.close()
@@ -114,8 +114,17 @@ class LongDurationJustification(RangedJustification):
     registry = inject.instance(Registry).getRegistry('longDurationJustification')
 
     def __init__(self, userId, ownerId, start, days = 0, number = None):
+        assert isinstance(start, datetime.date)
         super().__init__(start, days, userId, ownerId)
         self.number = number
 
     def getIdentifier(self):
         return 'Larga Duración'
+
+    def setEnd(self, date):
+        assert isinstance(date, datetime.date)
+        self.end = date
+
+    def setStart(self, date):
+        assert isinstance(date, datetime.date)
+        self.start = date

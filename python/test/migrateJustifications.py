@@ -31,6 +31,7 @@ from model.assistance.justifications.lateArrivalJustification import LateArrival
 from model.assistance.justifications.authorityJustification import AuthorityJustification, AuthorityJustificationDAO
 from model.assistance.justifications.resolution638Justification import Resolution638Justification, Resolution638JustificationDAO
 from model.assistance.justifications.shortDurationJustification import ShortDurationJustification, ShortDurationJustificationDAO
+from model.assistance.justifications.longDurationJustification import LongDurationJustification, LongDurationJustificationDAO
 
 """
 UNDEFINED = 0
@@ -730,6 +731,15 @@ class ShortDurationMigrate(RangedJustificationMigrate):
         return ShortDurationJustification(userId, ownerId, start, days)
 
 
+class LongDurationMigrate(RangedJustificationMigrate):
+
+    id = "a93d3af3-4079-4e93-a891-91d5d3145155"
+
+    @classmethod
+    def createJustification(cls, userId, ownerId, start, days):
+        return LongDurationJustification(userId, ownerId, start, days)
+
+
 if __name__ == '__main__':
 
     logging.getLogger().setLevel(logging.INFO)
@@ -759,6 +769,7 @@ if __name__ == '__main__':
         # createAuthority(con)
         # createResol638(con)
         ShortDurationMigrate.migrate(con)
+        LongDurationMigrate.migrate(con)
         con.commit()
     finally:
         conn.put(con)
