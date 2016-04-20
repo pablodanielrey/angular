@@ -64,7 +64,7 @@ class MarriageJustificationAbstractDAO(AssistanceDAO):
                 j.type = j.__class__.__name__
                 r = j.__dict__
                 cur.execute('insert into assistance.justification_marriage (id, user_id, owner_id, jstart, jend, type) '
-                            'values (%(id)s, %(userId)s, %(ownerId)s, %(start)s, %(end)s, %(type)s', r)
+                            'values (%(id)s, %(userId)s, %(ownerId)s, %(start)s, %(end)s, %(type)s)', r)
             else:
                 r = j.__dict__
                 cur.execute('update assistance.justification_marriage set user_id = %(userId)s, owner_id = %(ownerId)s, '
@@ -143,10 +143,18 @@ class MarriageJustification(RangedJustification):
     registry = inject.instance(Registry).getRegistry('marriageJustification')
 
     def __init__(self, userId, ownerId, start, days = 0):
+        assert isinstance(start, datetime.date)
         super().__init__(start, days, userId, ownerId)
 
     def getIdentifier(self):
         return 'Matrimonio'
+
+    def getIdentifier(self):
+        return 'Maternidad'
+
+    def setEnd(self, date):
+        assert isinstance(date, datetime.date)
+        self.end = date
 
 
 class ChildMarriageJustification(RangedJustification):
@@ -155,7 +163,16 @@ class ChildMarriageJustification(RangedJustification):
     registry = inject.instance(Registry).getRegistry('childMarriageJustification')
 
     def __init__(self, userId, ownerId, start, days = 0):
+        assert isinstance(start, datetime.date)
         super().__init__(start, days, userId, ownerId)
 
     def getIdentifier(self):
         return 'Matrimonio del hijo'
+
+    def setEnd(self, date):
+        assert isinstance(date, datetime.date)
+        self.end = date
+
+    def setStart(self, date):
+        assert isinstance(date, datetime.date)
+        self.start = date

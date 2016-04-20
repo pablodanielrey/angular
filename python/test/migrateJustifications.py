@@ -37,6 +37,10 @@ from model.assistance.justifications.mourningJustification import MourningFirstG
 from model.assistance.justifications.artJustification import ARTJustification, ARTJustificationDAO
 from model.assistance.justifications.prenatalJustification import PrenatalJustification, PrenatalJustificationDAO
 from model.assistance.justifications.winterBreakJustification import WinterBreakJustification, WinterBreakJustificationDAO
+from model.assistance.justifications.paternityJustification import PaternityJustification, PaternityJustificationDAO
+from model.assistance.justifications.maternityJustification import MaternityJustification, MaternityJustificationDAO
+from model.assistance.justifications.marriageJustification import MarriageJustification, MarriageJustificationDAO
+from model.assistance.justifications.leaveWithoutSalaryJustification import LeaveWithoutSalaryJustification, LeaveWithoutSalaryJustificationDAO
 
 """
 UNDEFINED = 0
@@ -815,6 +819,50 @@ class WinterBreakMigrate(RangedJustificationMigrate):
         return WinterBreakJustification(userId, ownerId, start, days)
 
 
+class PaternityMigrate(RangedJustificationMigrate):
+
+    id = "e249bfce-5af3-4d99-8509-9adc2330700b"
+    dao = PaternityJustificationDAO
+
+    @classmethod
+    def createJustification(cls, userId, ownerId, start, days):
+        logging.info('migrando  Paternidad')
+        return PaternityJustification(userId, ownerId, start, days)
+
+
+class MaternityMigrate(RangedJustificationMigrate):
+
+    id = "68bf4c98-984d-4b71-98b0-4165c69d62ce"
+    dao = MaternityJustificationDAO
+
+    @classmethod
+    def createJustification(cls, userId, ownerId, start, days):
+        logging.info('migrando  Maternidad')
+        return MaternityJustification(userId, ownerId, start, days)
+
+
+class MarriageMigrate(RangedJustificationMigrate):
+
+    id = "30a249d5-f90c-4666-aec6-34c53b62a447"
+    dao = MarriageJustificationDAO
+
+    @classmethod
+    def createJustification(cls, userId, ownerId, start, days):
+        logging.info('migrando  Matrimonio')
+        return MarriageJustification(userId, ownerId, start, days)
+
+
+class LeaveWithoutSalaryMigrate(RangedJustificationMigrate):
+
+    id = "1c14a13c-2358-424f-89d3-d639a9404579"
+    dao = LeaveWithoutSalaryJustificationDAO
+
+    @classmethod
+    def createJustification(cls, userId, ownerId, start, days):
+        logging.info('migrando  Licencia sin goce de sueldo')
+        return LeaveWithoutSalaryJustification(userId, ownerId, start, days)
+
+
 if __name__ == '__main__':
 
     logging.getLogger().setLevel(logging.INFO)
@@ -843,7 +891,7 @@ if __name__ == '__main__':
         # createLateArrival(con)
         # createAuthority(con)
         # createResol638(con)
-        WinterBreakMigrate.migrate(con)
+        LeaveWithoutSalaryMigrate.migrate(con)
         # RangedJustificationMigrate.migrateAll(con)
 
         con.commit()
