@@ -21,6 +21,9 @@ from model.assistance.justifications.taskJustification import TaskWithoutReturnJ
 from model.assistance.justifications.holidayJustification import HolidayJustification, HolidayJustificationDAO
 from model.assistance.justifications.strikeJustification import StrikeJustification, StrikeJustificationDAO
 from model.assistance.justifications.birthdayJustification import BirthdayJustification, BirthdayJustificationDAO
+from model.assistance.justifications.bloodDonationJustification import BloodDonationJustification, BloodDonationJustificationDAO
+from model.assistance.justifications.evaluationJustification import EvaluationJustification, EvaluationJustificationDAO
+from model.assistance.justifications.scheduleJustification import ScheduleJustification, ScheduleJustificationDAO
 
 """
 UNDEFINED = 0
@@ -396,6 +399,87 @@ def createBirthday(con):
         cur.close()
 
 
+def createBloodDonation(con):
+    """
+    migra las justificaciones Donación de Sangre
+    """
+    cur = con.cursor()
+    try:
+        logging.info('Migrando las Justificaciones Donación de Sangre')
+        # creo la tabla
+        BloodDonationJustificationDAO._createSchema(con)
+        # id de la justificación  Donación de Sangre
+        id = "e8019f0e-5a70-4ef3-922c-7c70c2ce0f8b"
+        cur.execute('select id, user_id, requestor_id, jbegin, jend from assistance.justifications_requests where justification_id = %s',(id,))
+        for jr in cur:
+            logging.info('obteniendo justificacion : {}:{}'.format(jr['id'], jr['requestor_id']))
+
+            userId = jr['user_id']
+            ownerId = jr['requestor_id']
+            date = jr['jbegin']
+            just = BloodDonationJustification(userId, ownerId, date)
+            just.id = jr['id']
+
+            setStatus(con, just)
+
+    finally:
+        cur.close()
+
+
+def createEvaluation(con):
+    """
+    migra las justificaciones Concurso
+    """
+    cur = con.cursor()
+    try:
+        logging.info('Migrando las Justificaciones Concurso')
+        # creo la tabla
+        EvaluationJustificationDAO._createSchema(con)
+        # id de la justificación  Concurso
+        id = "5289eac5-9221-4a09-932c-9f1e3d099a47"
+        cur.execute('select id, user_id, requestor_id, jbegin, jend from assistance.justifications_requests where justification_id = %s',(id,))
+        for jr in cur:
+            logging.info('obteniendo justificacion : {}:{}'.format(jr['id'], jr['requestor_id']))
+
+            userId = jr['user_id']
+            ownerId = jr['requestor_id']
+            date = jr['jbegin']
+            just = EvaluationJustification(userId, ownerId, date)
+            just.id = jr['id']
+
+            setStatus(con, just)
+
+    finally:
+        cur.close()
+
+
+def createSchedule(con):
+    """
+    migra las justificaciones por Horario
+    """
+    cur = con.cursor()
+    try:
+        logging.info('Migrando las Justificaciones Horario')
+        # creo la tabla
+        ScheduleJustificationDAO._createSchema(con)
+        # id de la justificación  Horario
+        id = "3fb52f24-3eff-4ca2-8133-c7a3abfc7262"
+        cur.execute('select id, user_id, requestor_id, jbegin, jend from assistance.justifications_requests where justification_id = %s',(id,))
+        for jr in cur:
+            logging.info('obteniendo justificacion : {}:{}'.format(jr['id'], jr['requestor_id']))
+
+            userId = jr['user_id']
+            ownerId = jr['requestor_id']
+            date = jr['jbegin']
+            just = ScheduleJustification(userId, ownerId, date)
+            just.id = jr['id']
+
+            setStatus(con, just)
+
+    finally:
+        cur.close()
+
+
 def createJustifyName(con):
     """
     migra las justificaciones JustifyName
@@ -439,9 +523,12 @@ if __name__ == '__main__':
         # createPreExam(con)
         # createLAO(con)
         # createTask(con)
-        createHoliday(con)
-        createBirthday(con)
-        createStrike(con)
+        # createHoliday(con)
+        # createBirthday(con)
+        # createStrike(con)
+        createBloodDonation(con)
+        createEvaluation(con)
+        createSchedule(con)
 
         con.commit()
     finally:
