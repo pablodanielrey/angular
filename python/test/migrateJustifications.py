@@ -34,6 +34,7 @@ from model.assistance.justifications.shortDurationJustification import ShortDura
 from model.assistance.justifications.longDurationJustification import LongDurationJustification, LongDurationJustificationDAO
 from model.assistance.justifications.familyAttentionJustification import FamilyAttentionJustification, FamilyAttentionJustificationDAO
 from model.assistance.justifications.mourningJustification import MourningFirstGradeJustification, MourningSecondGradeJustification, MourningRelativeJustification, MourningJustificationDAO
+from model.assistance.justifications.artJustification import ARTJustification, ARTJustificationDAO
 
 """
 UNDEFINED = 0
@@ -777,6 +778,17 @@ class MourningMigrate(RangedJustificationMigrate):
     def createJustification(cls, userId, ownerId, start, days):
         logging.info('migrando  Duelo')
         return MourningFirstGradeJustification(userId, ownerId, start, days)
+
+
+class ARTMigrate(RangedJustificationMigrate):
+
+    id = "70e0951f-d378-44fb-9c43-f402cbfc63c8"
+    dao = ARTJustificationDAO
+
+    @classmethod
+    def createJustification(cls, userId, ownerId, start, days):
+        logging.info('migrando  ART')
+        return ARTJustification(userId, ownerId, start, days)
 
 
 if __name__ == '__main__':
