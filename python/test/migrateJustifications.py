@@ -29,6 +29,7 @@ from model.assistance.justifications.librarianDayJustification import LibrarianD
 from model.assistance.justifications.trainingJustification import TrainingJustification, TrainingJustificationDAO
 from model.assistance.justifications.lateArrivalJustification import LateArrivalJustification, LateArrivalJustificationDAO
 from model.assistance.justifications.authorityJustification import AuthorityJustification, AuthorityJustificationDAO
+from model.assistance.justifications.resolution638Justification import Resolution638Justification, Resolution638JustificationDAO
 
 """
 UNDEFINED = 0
@@ -619,6 +620,56 @@ def createAuthority(con):
     finally:
         cur.close()
 
+def createResol638(con):
+    """
+        migra las justificaciones de Resolución 638
+    """
+    cur = con.cursor()
+    try:
+        logging.info("Migrando las justificaciones de Resolución 638")
+        # creo la tabla
+        Resolution638JustificationDAO._createSchema(con)
+        # id de la justificación Resolución 638
+        id = '50998530-10dd-4d68-8b4a-a4b7a87f3972'
+        cur.execute('select id, user_id, requestor_id, jbegin from assistance.justifications_requests where justification_id = %s order by user_id, jbegin asc',(id,))
+
+        userId = None
+        ownerId = None
+        start = None
+        end = None
+        days = 0
+        for jr in cur:
+            logging.info('obteniendo justificacion : {}:{}'.format(jr['id'], jr['requestor_id']))
+
+            if userId is None:
+                userId = jr['user_id']
+                ownerId = jr['requestor_id']
+                start = jr['jbegin'].date()
+                end = jr['jbegin'].date()
+
+            """ si cambio de usuario o los dias no son contiguos persisto los datos """
+            if userId != jr['user_id'] or not _isContiguos(end, jr['jbegin'].date()):
+                days = (end - start).days + 1
+                just = Resolution638Justification(userId, ownerId, start, days)
+                just.id = jr["id"]
+                setStatus(con, just)
+
+                """ inicializo los datos """
+                userId = jr['user_id']
+                ownerId = jr['requestor_id']
+                start = jr['jbegin'].date()
+
+            end = jr['jbegin'].date()
+
+        """ persisto el ultimo que me quedo """
+        days = (end - start).days + 1
+        just = Resolution638Justification(userId, ownerId, start, days)
+        just.id = jr["id"]
+        setStatus(con, just)
+
+    finally:
+        cur.close()
+
 
 if __name__ == '__main__':
 
@@ -642,12 +693,12 @@ if __name__ == '__main__':
         # createBloodDonation(con)
         # createEvaluation(con)
         # createSchedule(con)
-        createWeather(con)
-        createLibrarianDay(con)
-        createTraining(con)
-        createLateArrival(con)
-        createAuthority(con)
-
+        # createWeather(con)
+        # createLibrarianDay(con)
+        # createTraining(con)
+        # createLateArrival(con)
+        # createAuthority(con)
+        createResol638(con)
         con.commit()
     finally:
         conn.put(con)
