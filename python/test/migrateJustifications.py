@@ -35,6 +35,8 @@ from model.assistance.justifications.longDurationJustification import LongDurati
 from model.assistance.justifications.familyAttentionJustification import FamilyAttentionJustification, FamilyAttentionJustificationDAO
 from model.assistance.justifications.mourningJustification import MourningFirstGradeJustification, MourningSecondGradeJustification, MourningRelativeJustification, MourningJustificationDAO
 from model.assistance.justifications.artJustification import ARTJustification, ARTJustificationDAO
+from model.assistance.justifications.prenatalJustification import PrenatalJustification, PrenatalJustificationDAO
+from model.assistance.justifications.winterBreakJustification import WinterBreakJustification, WinterBreakJustificationDAO
 
 """
 UNDEFINED = 0
@@ -791,6 +793,28 @@ class ARTMigrate(RangedJustificationMigrate):
         return ARTJustification(userId, ownerId, start, days)
 
 
+class PrenatalMigrate(RangedJustificationMigrate):
+
+    id = "aa41a39e-c20e-4cc4-942c-febe95569499"
+    dao = PrenatalJustificationDAO
+
+    @classmethod
+    def createJustification(cls, userId, ownerId, start, days):
+        logging.info('migrando  Pre natal')
+        return PrenatalJustification(userId, ownerId, start, days)
+
+
+class WinterBreakMigrate(RangedJustificationMigrate):
+
+    id = "f7464e86-8b9e-4415-b370-b44b624951ca"
+    dao = WinterBreakJustificationDAO
+
+    @classmethod
+    def createJustification(cls, userId, ownerId, start, days):
+        logging.info('migrando  Receso de invierno')
+        return WinterBreakJustification(userId, ownerId, start, days)
+
+
 if __name__ == '__main__':
 
     logging.getLogger().setLevel(logging.INFO)
@@ -819,8 +843,8 @@ if __name__ == '__main__':
         # createLateArrival(con)
         # createAuthority(con)
         # createResol638(con)
-
-        RangedJustificationMigrate.migrateAll(con)
+        WinterBreakMigrate.migrate(con)
+        # RangedJustificationMigrate.migrateAll(con)
 
         con.commit()
     finally:
