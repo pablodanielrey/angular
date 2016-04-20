@@ -207,36 +207,40 @@ class UserDAO(DAO):
             cur.close()
 
     @staticmethod
-    def persist(con, user):
+    def persist(con, user):        
         '''
             Agrega o actualiza un usuario dentro de la base de datos
         '''
         cur = con.cursor()
         try:
-            if not hasattr(user, 'id'):
-                user.id = str(uuid.uuid4())
-                user.version = 0
-                cur.execute('insert into profile.users (id, dni, name, lastname, genre, birthdate, city, country, address, residence_city, version, photo) values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)', (
-                    user.id,
-                    user.dni, user.name, user.lastname,
-                    user.genre,
-                    user.birthdate,
-                    user.city, user.country, user.address, user.residence_city,
-                    user.version,
-                    user.photo
-                ))
-                return user.id
-
-            ''' como tira error siempre ahora lo dejo sin chequear version '''
             params = user.__dict__
-            cur.execute('update profile.users set dni = %(dni)s, name = %(name)s, lastname = %(lastname)s, genre = %(genre)s, ' +
-                        'birthdate = %(birthdate)s, ' +
-                        'city = %(city)s, country = %(country)s, address = %(address)s, residence_city = %(residence_city)s, ' +
-                        'version = %(version)s, ' +
-                        'photo = %(photo)s ' +
-                        'where id = %(id)s', params)
+                    
+            if not hasattr(user, 'id') or user.id is None:
+                params["id"] = str(uuid.uuid4())
+                params["version"] = 0
+                cur.execute("""
+                    INSERT INTO profile.users (id, dni, name, lastname, genre, birthdate, city, country, address, residence_city, version, photo)
+                    VALUES (%(id)s, %(dni)s, %(name)s, %(lastname)s, %(genre)s, %(birthdate)s, %(city)s, %(country)s, %(address)s, %(residence_city)s, %(version)s, %(city)s)
+                    """, params)
 
-            cur.execute('delete from profile.telephones where user_id = %s', (user.id,))
+            else:
+                cur.execute("""
+                    UPDATE profile.users SET 
+                      dni = %(dni)s, 
+                      name = %(name)s, 
+                      lastname = %(lastname)s, 
+                      genre = %(genre)s,
+                      birthdate = %(birthdate)s,
+                      city = %(city)s,
+                      country = %(country)s,
+                      address = %(address)s,
+                      residence_city = %(residence_city)s,
+                      version = %(version)s,
+                      photo = %(photo)s
+                    WHERE id = %(id)s
+                 """, params)
+
+            cur.execute('delete from profile.telephones where user_id = %s', (params["id"],))
             for t in user.telephones:
                 t.id = str(uuid.uuid4())
                 t.userId = user.id
@@ -246,41 +250,24 @@ class UserDAO(DAO):
             return user.id
 
 
-            """
-            cur.execute('select version from profile.users where id = %s', (user.id,))
-            if cur.rowcount <= 0:
-                ''' el usuario no existe asi que lo creo '''
-                cur.execute('insert into profile.users (id, dni, name, lastname, genre, birthdate, city, country, address, residence_city, version, photo) values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)', (
-                    user.id,
-                    user.dni, user.name, user.lastname,
-                    user.genre,
-                    user.birthdate,
-                    user.city, user.country, user.address, user.residence_city,
-                    user.version,
-                    user.photo
-                ))
-                return user.id
-            else:
-                ''' el usuario existe asi que chequeo el número de version y si esta ok lo actualizo '''
-                v = cur.fetchone()
-                if v[0] <= user.version:
-                    user.version = user.version + 1
-                    params = user.__dict__
-                    cur.execute('update profile.users set dni = %(dni)s, name = %(name)s, lastname = %(lastname)s, genre = %(genre)s, ' +
-                                'birthdate = %(birthdate)s, ' +
-                                'city = %(city)s, country = %(country)s, address = %(address)s, residence_city = %(residence_city)s, ' +
-                                'version = %(version)s, ' +
-                                'photo = %(photo)s ' +
-                                'where id = %(id)s', params)
-                    return user.id
-                else:
-                    raise Exception('versión inferior')
-            """
         finally:
             cur.close()
 
 
-
+    
+    @classmethod
+    def deleteById(cls, con, id):
+        cur = con.cursor()
+        try:
+            cur.execute("""
+               DELETE FROM profile.telephones WHERE user_id = %s;
+               
+               DELETE FROM profile.users
+               WHERE id = %s;
+            """, (id, id))
+            
+        finally:
+            cur.close()
 
 
 
