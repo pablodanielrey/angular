@@ -1,6 +1,6 @@
-<div class="search" ng-class='getCurrentScreen()'>
+<div class="search {{view.style3}}" ng-class='getCurrentScreen()' >
 <!-- <div class="search  "> -->
-  <!-- Variables 1: screenBussines, screenFilters, screenSelected
+  <!-- Variables 1: screenBussines, screenFilters, screenSelected, screenSentNumber
        Variables2: screenSelectBusiness, screenSendBusiness, screenSending, screenSent-->
 
   <div class="header">
@@ -38,21 +38,23 @@
                   <input type="checkbox" ng-click='selectAllInscriptions()'>
                 </div>
               </th>
+
               <th>
-                <div class="dates" ng-click="view.reverseSent=!view.reverseSent;orderSents(view.reverseSent)">
-                  <i class="fa fa-bookmark"></i>
+                <div class="user" title="Editar Usuario">
+                  <i class="fa fa-user"></i>
                 </div>
               </th>
+
               <th>
-                <div class="user">
-                  <i class="fa fa-user"></i>
+                <div class="dates" title="Envios" ng-click="view.reverseSent=!view.reverseSent;orderSents(view.reverseSent)">
+                  <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
                 </div>
               </th>
 
               <!-- prioridad falta -->
               <th>
-                <div class="priority" ng-click="view.reversePriority=!view.reversePriority;orderPriority(view.reversePriority)">
-                  P
+                <div class="priority" title="Prioridad" ng-click="view.reversePriority=!view.reversePriority;orderPriority(view.reversePriority)">
+                  <i class="fa fa-star-o" aria-hidden="true"></i>
                 </div>
               </th>
 
@@ -163,18 +165,28 @@
                 -
               </div>
             </td>
+
             <td>
-              <div class="dates">
-                {{getSents(i.id)}}
-              </div>
-            </td>
-            <td>
-              <div class="user" ng-click="displayProfile(i)">
+              <div class="user" title="Editar Usuario" ng-click="displayProfile(i)">
                 <i class="fa fa-user"></i>
               </div>
             </td>
+
+
+            <td class="tdSent" ng-if='getSents(i.id) == 0'>
+              <div class="dates"  title="Cantidad de veces enviado">
+                {{getSents(i.id)}}
+              </div>
+            </td>
+
+            <td class="tdSent" ng-if='getSents(i.id) > 0' ng-mouseenter="view.style3='verEnvios'" ng-mouseleave="view.style3=''">
+              <div class="dates"  title="Cantidad de veces enviado">
+                {{getSents(i.id)}}
+              </div>
+            </td>
+
             <td>
-              <div class="priority">
+              <div class="priority" title="Prioridad">
                 {{getPriority(i.userId)}}
               </div>
             </td>
@@ -511,6 +523,10 @@
   </div>
 
   <div class="profile" ng-controller="ProfilesCtrl" ng-include="'/systems/laboralInsertion/modules/search/profileUser.html'">
+  </div>
+
+  <div class="numberSend" ng-include="'/systems/laboralInsertion/modules/search/numberSend.html'">
+
   </div>
 
 </div>

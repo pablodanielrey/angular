@@ -7,6 +7,7 @@ SearchCtrl.$inject = ['$rootScope','$scope','$location', '$window', 'Notificatio
 function SearchCtrl($rootScope, $scope, $location, $window, Notifications, LaboralInsertion, Login, Utils, Users, $wamp) {
 
   $scope.model = {
+    sentSelected: '',
     sents: {},
     inscriptions: [],
     selecteds: [],
@@ -43,6 +44,14 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     reversePriority: false,
     reverMail: false
   };
+
+  // -------------------- FUCNTIONES DE WALTER --------------
+
+  $scope.onMouseOverSend = function(i) {
+    $scope.model.sentSelected = i.id;
+  };
+
+
 
   // --------------------------------------------------------------
   // ------------------- FUNCIONES DE ORDENACION ------------------

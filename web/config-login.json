@@ -1,0 +1,4 @@
+config = {
+  url: "autodetect",
+  realm: "assistance"
+}
