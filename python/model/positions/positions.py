@@ -1,5 +1,5 @@
 
-from model.serializer.utils import JSONSerializable
+from model.serializer.utils import MySerializer, JSONSerializable
 import datetime
 
 from model.dao import DAO
@@ -7,6 +7,23 @@ from model.users.users import UserDAO
 import uuid
 import logging
 
+class Position(JSONSerializable):
+
+    def __init__(self):
+        self.userId = None
+        self.name = None
+        self.id = None
+
+    """
+    def __init__(self, userId, name):
+        self.userId = userId
+        self.name = name
+        self.id = None
+    """
+
+    @classmethod
+    def findByUser(cls, con, userIds):
+        return PositionDAO.findByUser(con, userIds)
 
 class PositionDAO(DAO):
 
@@ -32,7 +49,10 @@ class PositionDAO(DAO):
 
     @classmethod
     def _fromResult(cls, r):
-        p = Position(r['user_id'], r['name'])
+        p = Position()
+        p.id = r['id']
+        p.userId = r['user_id']
+        p.name = r['name']
         return p
 
     @classmethod
@@ -49,18 +69,3 @@ class PositionDAO(DAO):
             return [ cls._fromResult(r) for r in cur ]
         finally:
             cur.close()
-
-
-
-class Position(JSONSerializable):
-
-    dao = PositionDAO
-
-    def __init__(self, userId, name):
-        self.userId = userId
-        self.name = name
-
-
-    @classmethod
-    def findByUser(cls, con, userIds):
-        return cls.dao.findByUser(con, userIds)

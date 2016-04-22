@@ -34,8 +34,7 @@ function HomeCtrl($rootScope, $scope, Users, Login, Positions) {
 
   function loadPosition() {
     Positions.getPosition([$scope.userId]).then(function(positions) {
-      // $scope.model.position = (positions.length > 0) ? positions[0] : null;
-      $scope.model.position = positions;
+      $scope.model.position = (positions.length > 0) ? positions[0] : null;
     }, function(error) {
       console.log('Error al buscar el cargo')
     });

@@ -33,7 +33,7 @@ class PositionsWamp(ApplicationSession):
         con = self.conn.get()
         try:
             positions = Position.findByUser(con, userIds)
-            return positions[0].__dict__
+            return positions
         finally:
             self.conn.put(con)
 
