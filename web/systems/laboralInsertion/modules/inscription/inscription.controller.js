@@ -166,6 +166,7 @@ function InscriptionCtrl($rootScope, $scope, $timeout, $wamp, LaboralInsertion, 
           console.log(err);
           Notifications.message(err);
           $scope.model.laboralData.cv = null;
+          $scope.model.formatCV = true;
         }
 
     )

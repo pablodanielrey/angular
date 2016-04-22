@@ -25,6 +25,14 @@ class File:
         m.update(content.encode('utf8'))
         return m.hexdigest()
 
+    @classmethod
+    def findById(cls, con, id):
+        return FileDAO.findById(con, id)
+
+    @classmethod
+    def getContentById(cls, con, id):
+        return FileDAO.getContent(con, id)
+
 
 class FileDAO(DAO):
 
@@ -49,7 +57,7 @@ class FileDAO(DAO):
               );
             """
 
-            cur.execute(sql) 
+            cur.execute(sql)
         finally:
             cur.close()
 

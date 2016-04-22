@@ -13,11 +13,6 @@ from model.dao import DAO
 from model.files.files import FileDAO
 
 
-
-
-
-
-
 class User(JSONSerializable):
     ''' usuario básico del sistema '''
 
@@ -62,9 +57,9 @@ class Telephone(JSONSerializable):
 
 class UserDAO(DAO):
     ''' DAO para los usuarios '''
-    
+
     dependencies = [FileDAO]
-    
+
     @classmethod
     def _createSchema(cls, con):
         cls._createDependencies(con)
@@ -72,7 +67,7 @@ class UserDAO(DAO):
         try:
             sql = """
               CREATE SCHEMA IF NOT EXISTS profile;
-                     
+
               CREATE TABLE IF NOT EXISTS profile.users (
                 id VARCHAR NOT NULL PRIMARY KEY,
                 dni VARCHAR NOT NULL UNIQUE,
@@ -96,12 +91,12 @@ class UserDAO(DAO):
                 type VARCHAR
               );
               """
-              
-            cur.execute(sql) 
- 
+
+            cur.execute(sql)
+
         finally:
-            cur.close()   
-             
+            cur.close()
+
     @staticmethod
     def _fromResult(r):
         u = User()
@@ -300,7 +295,7 @@ class Student(JSONSerializable):
 class StudentDAO(DAO):
 
     dependencies = [UserDAO]
-    
+
     @classmethod
     def _createSchema(cls, con):
         cls._createDependencies(con)
@@ -308,7 +303,7 @@ class StudentDAO(DAO):
         try:
             sql = """
               CREATE SCHEMA IF NOT EXISTS students;
-                     
+
               CREATE TABLE students.users (
                 id VARCHAR PRIMARY KEY NOT NULL REFERENCES profile.users (id),
                 student_number VARCHAR UNIQUE,
@@ -316,12 +311,12 @@ class StudentDAO(DAO):
               );
               """
 
-            cur.execute(sql) 
-                
+            cur.execute(sql)
+
         finally:
-            cur.close()   
-            
-            
+            cur.close()
+
+
     @staticmethod
     def _fromResult(r):
         s = Student()
@@ -432,12 +427,12 @@ if __name__ == '__main__':
 
     con.commit()
     conn.put(con)
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
 ############### UserPassword ###############
 class UserPassword(JSONSerializable):
 
@@ -451,7 +446,7 @@ class UserPassword(JSONSerializable):
 class UserPasswordDAO(DAO):
 
     dependencies = [UserDAO]
-    
+
     @classmethod
     def _createSchema(cls, con):
         cls._createDependencies(con)
@@ -462,7 +457,7 @@ class UserPasswordDAO(DAO):
 
               CREATE TABLE IF NOT EXISTS credentials.user_password(
                 id VARCHAR NOT NULL PRIMARY KEY,
-                user_id VARCHAR NOT NULL REFERENCES profile.users (id), 
+                user_id VARCHAR NOT NULL REFERENCES profile.users (id),
                 username VARCHAR NOT NULL UNIQUE,
                 password VARCHAR NOT NULL,
                 updated TIMESTAMP DEFAULT now()
@@ -470,12 +465,12 @@ class UserPasswordDAO(DAO):
             """
 
 
-            cur.execute(sql) 
+            cur.execute(sql)
 
         finally:
             cur.close()
-            
-            
+
+
     @staticmethod
     def _fromResult(r):
         up = UserPassword()
@@ -564,9 +559,9 @@ class UserPasswordDAO(DAO):
 
         finally:
             cur.close()
-            
-            
-            
+
+
+
 ############### Mail ###############
 class Mail(JSONSerializable):
     ''' cuenta de email de un usuario '''
@@ -590,7 +585,7 @@ class Mail(JSONSerializable):
 class MailDAO(DAO):
 
     dependencies = [UserDAO]
-    
+
     @classmethod
     def _createSchema(cls, con):
         cls._createDependencies(con)
@@ -598,7 +593,7 @@ class MailDAO(DAO):
         try:
             sql = """
               CREATE SCHEMA IF NOT EXISTS profile;
-                     
+
               CREATE TABLE IF NOT EXISTS profile.mails(
                 id VARCHAR NOT NULL PRIMARY KEY,
                 user_id VARCHAR NOT NULL REFERENCES profile.users (id),
@@ -607,13 +602,13 @@ class MailDAO(DAO):
                 hash VARCHAR,
                 created TIMESTAMP DEFAULT now()
               );
-            """   
-            
-            cur.execute(sql)       
+            """
+
+            cur.execute(sql)
 
         finally:
-            cur.close()   
-             
+            cur.close()
+
 
 
 
@@ -678,4 +673,4 @@ class MailDAO(DAO):
             cur.execute('delete from profile.mails where id = %s', (mid,))
 
         finally:
-            cur.close()            
+            cur.close()

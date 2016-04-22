@@ -32,6 +32,14 @@ class Inscription:
     def getLanguages(self, con):
         return LanguageDAO.findByUser(con, self.userId)
 
+    @classmethod
+    def findAll(cls, con):
+        return InscriptionDAO.findAll(con)
+
+    @classmethod
+    def findById(cls, con, ids):
+        return InscriptionDAO.findById(con, ids)
+
 class InscriptionDAO:
 
     @staticmethod

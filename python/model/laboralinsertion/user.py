@@ -11,6 +11,9 @@ class User:
         self.cv = None
         self.priority = 0
 
+    @classmethod
+    def findById(cls, con, uid):
+        return UserDAO.findById(con, uid)
 
 class UserDAO:
 

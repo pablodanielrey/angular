@@ -148,6 +148,7 @@ class EmailToSend:
 
         return [ u['email'].email for u in self.users.values() ]
 
+
 class Sent:
     ''' datos de envíos a empresas '''
     def __init__(self):
@@ -155,6 +156,7 @@ class Sent:
         self.creation = None
         self.inscriptions = []
         self.emails = []
+
 
 class SentDAO:
 

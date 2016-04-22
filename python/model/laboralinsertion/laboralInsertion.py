@@ -90,7 +90,6 @@ class LaboralInsertion:
         for l in languages:
             LanguageDAO.persist(con, l)
 
-
     def sendMailToCompany(self, con, inscriptionIds, emails):
 
         """ pongo una restriccion que deberíamos despues chequear pero por el tema del tamaño y ram usados al enviar """
