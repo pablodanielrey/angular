@@ -134,6 +134,11 @@ class EmailToSend:
         self._attachOds(parts)
         self._attachCvs(con, parts)
 
+        """ ----------------------------------------------------------
+            A pedido de paula, se envía un mail a insercion laboral siempre con el contenido de los envíos.
+            ---------------------------------------------------------- """
+        self.mails.append('insercionlaboral@econo.unlp.edu.ar')
+
         ''' envío un mail a cada uno de los mails listados con el mensaje completo '''
         for mail in self.mails:
             m = self.mailModel.createMail('insercionlaboral@econo.unlp.edu.ar', mail, 'Bolsa de trabajo FCE')
