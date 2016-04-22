@@ -863,6 +863,9 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
   $scope.getCompaniesData = function() {
     LaboralInsertion.findAllCompanies().then(function(companies) {
       $scope.model.companies = companies;
+      $scope.model.companies.sort(function(a, b) {
+        return a.name < b.name ? -1 : (a.name > b.name ? 1 : 0)
+      });
       console.log(companies);
     }, function(err) {
       console.log(err);
