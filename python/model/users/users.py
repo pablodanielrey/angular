@@ -18,45 +18,6 @@ from model.files.files import FileDAO
 
 
 
-class User(JSONSerializable):
-    ''' usuario básico del sistema '''
-
-    def __init__(self):
-        self.id = None
-        self.dni = None
-        self.name = None
-        self.lastname = None
-        self.genre = None
-        self.birthdate = None
-        self.city = None
-        self.country = None
-        self.address = None
-        self.residence_city = None
-        self.created = datetime.datetime.now()
-        self.version = 0
-        self.photo = None
-        self.telephones = []
-
-    def getAge(self):
-        today = datetime.datetime.now()
-        born = self.birthdate
-        return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
-
-    '''
-    def _toJson():
-        pass
-
-    @staticmethod
-    def fromJson(j):
-        pass
-    '''
-
-class Telephone(JSONSerializable):
-    def __init__(self):
-        self.id = None
-        self.userId = None
-        self.number = None
-        self.type = None
 
 
 
@@ -206,6 +167,8 @@ class UserDAO(DAO):
         finally:
             cur.close()
 
+
+
     @staticmethod
     def persist(con, user):        
         '''
@@ -216,6 +179,7 @@ class UserDAO(DAO):
             params = user.__dict__
                     
             if not hasattr(user, 'id') or user.id is None:
+
                 params["id"] = str(uuid.uuid4())
                 params["version"] = 0
                 cur.execute("""
@@ -224,6 +188,7 @@ class UserDAO(DAO):
                     """, params)
 
             else:
+
                 cur.execute("""
                     UPDATE profile.users SET 
                       dni = %(dni)s, 
@@ -256,18 +221,21 @@ class UserDAO(DAO):
 
     
     @classmethod
-    def deleteById(cls, con, id):
+    def deleteById(cls, con, ids):
         cur = con.cursor()
         try:
             cur.execute("""
-               DELETE FROM profile.telephones WHERE user_id = %s;
+               DELETE FROM profile.telephones WHERE user_id IN %s;
                
                DELETE FROM profile.users
-               WHERE id = %s;
-            """, (id, id))
+               WHERE id IN %s;
+            """, (tuple(ids), tuple(ids)))
             
         finally:
             cur.close()
+
+
+
 
 
 
@@ -666,3 +634,54 @@ class MailDAO(DAO):
 
         finally:
             cur.close()            
+            
+            
+            
+class User(JSONSerializable):
+    ''' usuario básico del sistema '''
+    dao = UserDAO
+    
+    def __init__(self):
+        self.id = None
+        self.dni = None
+        self.name = None
+        self.lastname = None
+        self.genre = None
+        self.birthdate = None
+        self.city = None
+        self.country = None
+        self.address = None
+        self.residence_city = None
+        self.created = datetime.datetime.now()
+        self.version = 0
+        self.photo = None
+        self.telephones = []
+
+    def getAge(self):
+        today = datetime.datetime.now()
+        born = self.birthdate
+        return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+
+
+    def persist(self,con):
+        self.dao.persist(con,self)
+        
+    def delete(self):
+        self.dao.deleteById([self.id])
+      
+    '''
+    def _toJson():
+        pass
+
+    @staticmethod
+    def fromJson(j):
+        pass
+    '''
+
+class Telephone(JSONSerializable):
+    def __init__(self):
+        self.id = None
+        self.userId = None
+        self.number = None
+        self.type = None
+            
