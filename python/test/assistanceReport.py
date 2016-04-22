@@ -30,7 +30,6 @@ def findUser(users, uid):
         if uid == u.id:
             return u
 
-
 def workedPeriodsToPyoo(wps, users):
 
     import uuid
@@ -231,7 +230,9 @@ if __name__ == '__main__':
     try:
         users, userIds = _getUsers(con)
         a = inject.instance(AssistanceModel)
-        wps = a.getWorkPeriods(con, userIds, datetime.datetime.now() - datetime.timedelta(days=97), datetime.datetime.now())
+        stats = a.getStatistics(con, userIds, datetime.datetime.now() - datetime.timedelta(days=97), datetime.datetime.now())
+        #wps = a.getWorkPeriods(con, userIds, datetime.datetime.now() - datetime.timedelta(days=97), datetime.datetime.now())
+
 
         """
         logging.info('Calculando estadísticas')
@@ -249,7 +250,7 @@ if __name__ == '__main__':
         logging.info(datetime.datetime.now() - timer)
         """
 
-        workedPeriodsToPyoo(wps, users)
+        #workedPeriodsToPyoo(wps, users)
 
     finally:
         conn.put(con)

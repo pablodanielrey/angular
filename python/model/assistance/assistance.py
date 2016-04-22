@@ -200,7 +200,15 @@ class AssistanceModel:
         logging.info(datetime.datetime.now() - timer)
 
         return wpss
-     
-     
- 
 
+
+    def getStatistics(self, con, userIds, start, end):
+        wpss = self.getWorkPeriods(con, userIds, start, end)
+        wpssu = self._classifyByUserId(wpss)
+        totalStats = []
+        for uid in wpssu.keys():
+            stats = WpStatistics(uid)
+            for wp in wpssu[uid]:
+                stats.updateStatistics(wp)
+            totalStats.append(stats)
+        return totalStats
