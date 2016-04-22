@@ -72,17 +72,3 @@ class Periodic(object):
         self._stopped = True
         self._timer.cancel()
         self._lock.release()
-=======
-
-import json
-import datetime
-
-
-class DateTimeEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, datetime.datetime):
-            return obj.isoformat()
-        if isinstance(obj, datetime.date):
-            return obj.isoformat()
-        return json.JSONEncoder.default(self, obj)
->>>>>>> origin/insercionlaboral

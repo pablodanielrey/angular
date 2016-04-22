@@ -12,18 +12,17 @@ if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
 
     from autobahn.asyncio.wamp import ApplicationRunner
-    from model.config import Config
     from actions.systems.positions.positions import PositionsWamp
 
-    def config_injector(binder):
-        binder.bind(Config, Config('server-config.cfg'))
+    from model.registry import Registry
 
-    inject.configure(config_injector)
-    config = inject.instance(Config)
+    inject.configure()
 
-    url = config.configs['server_url']
-    realm = config.configs['server_realm']
-    debug = config.configs['server_debug']
+    reg = inject.instance(Registry)
+    registry = reg.getRegistry('wamp')
+    url = registry.get('url')
+    realm = registry.get('realm')
+    debug = registry.get('debug')
 
-    runner = ApplicationRunner(url=url, realm=realm, debug=debug, debug_wamp=debug, debug_app=debug)
+    runner = ApplicationRunner(url=url, realm=realm)
     runner.run(PositionsWamp)

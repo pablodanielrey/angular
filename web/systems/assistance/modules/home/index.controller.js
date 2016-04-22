@@ -2,12 +2,14 @@ angular
   .module('mainApp')
   .controller('HomeCtrl', HomeCtrl);
 
-HomeCtrl.inject = ['$rootScope', '$scope', 'Users', 'Login']
+HomeCtrl.inject = ['$rootScope', '$scope', 'Users', 'Login', 'Positions']
 
-function HomeCtrl($rootScope, $scope, Users, Login) {
+function HomeCtrl($rootScope, $scope, Users, Login, Positions) {
 
   $scope.initialize = initialize;
   $scope.loadUser = loadUser;
+  $scope.getUserPhoto = getUserPhoto;
+  $scope.loadPosition = loadPosition;
 
   $scope.model = {
     user: null,
@@ -27,6 +29,16 @@ function HomeCtrl($rootScope, $scope, Users, Login) {
 
   function initialize() {
     $scope.loadUser();
+    $scope.loadPosition()
+  }
+
+  function loadPosition() {
+    Positions.getPosition([$scope.userId]).then(function(positions) {
+      // $scope.model.position = (positions.length > 0) ? positions[0] : null;
+      $scope.model.position = positions;
+    }, function(error) {
+      console.log('Error al buscar el cargo')
+    });
   }
 
   function loadUser() {
@@ -35,6 +47,14 @@ function HomeCtrl($rootScope, $scope, Users, Login) {
     }, function(error) {
       console.log('Error al buscar el usuario')
     });
+  }
+
+  function getUserPhoto() {
+    if ($scope.model.user == null || $scope.model.user.photo == null || $scope.model.user.photo == '') {
+      return "../login/modules/img/imgUser.jpg";
+    } else {
+      return "/c/files.py?i=" + $scope.model.user.photo;
+    }
   }
 
 

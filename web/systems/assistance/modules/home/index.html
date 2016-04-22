@@ -13,7 +13,7 @@
               <div class="contentUser">
 
                   <div class="contentPhoto">
-                    <img class="imgUser" src="img/walter.jpg">
+                    <img class="imgUser" ng-src='{{getUserPhoto()}}' alt="foto de perfil"/>
                   </div>
 
                   <div class="contentData">
@@ -52,7 +52,7 @@
                       <b>Cargo</b>
                     </div>
                     <div>
-                       E7
+                       {{model.position.name}}
                     </div>
               </div>
 
