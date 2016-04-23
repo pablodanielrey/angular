@@ -33,18 +33,18 @@ class Inscription:
     def getLanguages(self, con):
         return LanguageDAO.findByUser(con, self.userId)
 
+
 class InscriptionDAO(DAO):
     dependencies = [UserDAO]
-    
+
     @classmethod
     def _createSchema(cls, con):
         super()._createSchema(con)
-        
         cur = con.cursor()
         try:
             cur.execute("""
                 CREATE SCHEMA IF NOT EXISTS laboral_insertion;
-                
+
                 create table IF NOT EXISTS laboral_insertion.inscriptions (
                     id varchar primary key,
                     user_id varchar not null references laboral_insertion.users (id),
