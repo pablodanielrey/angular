@@ -667,6 +667,9 @@ def createResol638(con):
         id = '50998530-10dd-4d68-8b4a-a4b7a87f3972'
         cur.execute('select id, user_id, requestor_id, jbegin from assistance.justifications_requests where justification_id = %s order by user_id, jbegin asc',(id,))
 
+        if cur.rowcount <= 0:
+            return
+
         userId = None
         ownerId = None
         start = None
@@ -729,6 +732,10 @@ class RangedJustificationMigrate():
             cls.dao._createSchema(con)
 
             cur.execute('select id, user_id, requestor_id, jbegin from assistance.justifications_requests where justification_id = %s order by user_id, jbegin asc',(cls.id,))
+
+            if cur.rowcount <= 0:
+                return
+            
             userId = None
             days = 0
             for jr in cur:
