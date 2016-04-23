@@ -37,14 +37,6 @@ class User(JSONSerializable):
         born = self.birthdate
         return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
 
-    '''
-    def _toJson():
-        pass
-
-    @staticmethod
-    def fromJson(j):
-        pass
-    '''
 
 class Telephone(JSONSerializable):
     def __init__(self):
