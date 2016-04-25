@@ -226,7 +226,7 @@ class AssistanceModel:
             for wp in wpss[uid]:
                 stats.updateStatistics(wp)
             totalStats.append(stats)
-        return totalStats
+        return self._classifyByUserId(totalStats)
 
     def getAssistanceData(self, con, userIds, start, end):
         assert isinstance(userIds, list)

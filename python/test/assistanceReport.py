@@ -166,6 +166,58 @@ def workedPeriodsToPyoo(wps, users):
         doc.close()
 
 
+
+def statsToPyoo(stats, users):
+
+    import uuid
+    f = str(uuid.uuid4())
+    fn = '/tmp/{}.ods'.format(f)
+
+    import pyoo
+    calc = pyoo.Desktop('localhost', 2002)
+    doc = calc.open_spreadsheet('templateStats.ods')
+    try:
+        sheetIndex = 0
+        i = 1
+        for user in users:
+            if user:
+                status = stats[user.id][0]
+                sheet = doc.sheets[0]
+
+                sheet[i,0].value = user.name + " " + user.lastname
+                sheet[i,1].value = datetime.timedelta(seconds=status.secondsToWork)
+                sheet[i,2].value = datetime.timedelta(seconds=status.secondsWorked)
+                sheet[i,3].value = datetime.timedelta(seconds=status.secondsLate)
+                sheet[i,4].value = status.countLate
+                sheet[i,5].value = datetime.timedelta(seconds=status.secondsEarly)
+                sheet[i,6].value = status.countEarly
+
+                i = i + 1
+
+        sheet = doc.sheets[1]
+        i = 1
+        for user in users:
+            if user:
+                status = stats[user.id][0]
+                for st in status.dailyStats:
+                    sheet[i,0].value = user.name + " " + user.lastname
+                    sheet[i,1].value = st.date
+                    sheet[i,2].value = st.start
+                    sheet[i,3].value = st.end
+                    sheet[i,4].value = datetime.timedelta(seconds=st.periodSeconds)
+                    sheet[i,5].value = st.iin
+                    sheet[i,6].value = st.out
+                    sheet[i,7].value = datetime.timedelta(seconds=st.workedSeconds)
+                    i = i + 1
+
+            #index = index + 1
+        fn = '/tmp/prueba.ods'
+        doc.save(fn)
+
+    finally:
+        doc.close()
+
+
 def _getUsers(con):
     uids = []
 
@@ -237,6 +289,7 @@ if __name__ == '__main__':
         a = inject.instance(AssistanceModel)
         stats = a.getStatistics(con, userIds, datetime.datetime.now() - datetime.timedelta(days=97), datetime.datetime.now())
         #wps = a.getWorkPeriods(con, userIds, datetime.datetime.now() - datetime.timedelta(days=97), datetime.datetime.now())
+        statsToPyoo(stats, users)
 
 
         """
