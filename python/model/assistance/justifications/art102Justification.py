@@ -86,7 +86,7 @@ class Art102JustificationDAO(AssistanceDAO):
         try:
             sDate = None if start is None else start.date()
             eDate = datetime.date.today() if end is None else end.date()
-            cur.execute('select * from assistance.justification_art102 where user_id  in %s and date BETWEEN %s AND %s', (tupe(userIds), sDate, eDate))
+            cur.execute('select * from assistance.justification_art102 where user_id  in %s and date BETWEEN %s AND %s', (tuple(userIds), sDate, eDate))
             return [ cls._fromResult(con, r) for r in cur ]
         finally:
             cur.close()
