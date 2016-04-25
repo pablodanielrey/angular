@@ -228,6 +228,11 @@ if __name__ == '__main__':
     conn = Connection(reg.getRegistry('dcsys'))
     con = conn.get()
     try:
+
+        from model.assistance.assistanceDao import AssistanceDAO
+        AssistanceDAO._createSchema(con)
+
+
         users, userIds = _getUsers(con)
         a = inject.instance(AssistanceModel)
         stats = a.getStatistics(con, userIds, datetime.datetime.now() - datetime.timedelta(days=97), datetime.datetime.now())

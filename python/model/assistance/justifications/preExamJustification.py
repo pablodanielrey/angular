@@ -102,7 +102,7 @@ class PreExamJustificationDAO(AssistanceDAO):
             eDate = datetime.date.today() if end is None else end.date()
             t = cls.type
             cur.execute('select * from assistance.justification_pre_exam where user_id in %s and '
-                        '(jstart <= %s and jend >= %s) and t = %s', (tuple(userIds), eDate, sDate, t))
+                        '(jstart <= %s and jend >= %s) and type = %s', (tuple(userIds), eDate, sDate, t))
 
             return [ cls._fromResult(con, r) for r in cur ]
         finally:

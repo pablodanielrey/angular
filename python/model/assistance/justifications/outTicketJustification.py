@@ -46,7 +46,7 @@ class OutTicketJustificationDAO(AssistanceDAO):
 
             if ((not hasattr(j, 'id')) or (j.id is None)):
                 j.id = str(uuid.uuid4())
-                
+
             if len(j.findById(con, [j.id])) <=  0:
 
                 r = j.__dict__
