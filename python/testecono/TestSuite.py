@@ -9,6 +9,9 @@ from testecono.TestUser import TestUserFindById
 from testecono.TestUser import TestUserFindAll
 
 
+from testecono.TestJustification import TestJustificationArt102Persist
+
+
 
 def suite():
     """
@@ -19,6 +22,8 @@ def suite():
     test_suite.addTest(TestUserDelete('test_delete'))
     test_suite.addTest(TestUserFindById('test_find_by_id'))
     test_suite.addTest(TestUserFindAll('test_find_all'))
+    
+    test_suite.addTest(TestJustificationArt102Persist('test_persist'))
     return test_suite
 
 mySuit=suite()
