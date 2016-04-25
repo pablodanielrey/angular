@@ -66,10 +66,12 @@ class TestUserPersist(TestUser):
         con = self.connection.get()
 
         try:
-            u = UserDAO.findByDni(con, user.dni)
-    
+            uid = User.findByDni(con, user.dni)
+            users = User.findById(con, [uid[0]])
+            u = users[0]
+
             if(u is not None):
-                UserDAO.deleteById(con, [u[0]])
+                u.delete(con)
                 con.commit()
             
         finally:
@@ -85,16 +87,16 @@ class TestUserPersist(TestUser):
                 ##### insertar #####
                 self.user.persist(con)
                 con.commit()
-                uid = UserDAO.findByDni(con, self.user.dni)
-                u = UserDAO.findById(con, [uid[0]])
-                self.assertEqualUsers(self.user, u[0])
+                uid = User.findByDni(con, self.user.dni)
+                u = User.findById(con, [uid[0]])
+                self.assertEqualUsers(self.user, u[0])                
                 
                 ##### actualizar #####
                 self.user.name = "Test Nomb"
                 self.user.persist(con)
                 con.commit()
-                uid = UserDAO.findByDni(con, self.user.dni)
-                u = UserDAO.findById(con, [uid[0]])
+                uid = User.findByDni(con, self.user.dni)
+                u = User.findById(con, [uid[0]])
                 self.assertEqualUsers(self.user, u[0])
                 
                 ##### error #####
@@ -102,7 +104,6 @@ class TestUserPersist(TestUser):
                 with self.assertRaises(Exception):
                     UserDAO.persist(con, user)
 
-                               
             finally:
                 self.connection.put(con)
                 
@@ -131,15 +132,13 @@ class TestUserFindById(TestUser):
         con = self.connection.get()
 
         try:
-            u = UserDAO.findByDni(con, user.dni)
+            u = User.findByDni(con, user.dni)
 
             if u is not None:
                 user.id = u[0]
 
-            uid = UserDAO.persist(con, user)
+            uid = user.persist(con)
             con.commit()
-            
-            u = UserDAO.findById(con,[uid])
 
             return uid, user
             
@@ -150,10 +149,10 @@ class TestUserFindById(TestUser):
         try:
             con = self.connection.get()
             try:
-                u = UserDAO.findById(con,[self.user.id])
+                u = User.findById(con,[self.user.id])
                 self.assertEqualUsers(self.user, u[0])
                 
-                u = UserDAO.findById(con, ["not_exists"])
+                u = User.findById(con, ["not_exists"])
                 self.assertEqual(u, [])
                 
                                

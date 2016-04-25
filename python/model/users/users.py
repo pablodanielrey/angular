@@ -13,37 +13,7 @@ from model.dao import DAO
 from model.files.files import FileDAO
 
 
-class User(JSONSerializable):
-    ''' usuario básico del sistema '''
 
-    def __init__(self):
-        self.id = None
-        self.dni = None
-        self.name = None
-        self.lastname = None
-        self.genre = None
-        self.birthdate = None
-        self.city = None
-        self.country = None
-        self.address = None
-        self.residence_city = None
-        self.created = datetime.datetime.now()
-        self.version = 0
-        self.photo = None
-        self.telephones = []
-
-    def getAge(self):
-        today = datetime.datetime.now()
-        born = self.birthdate
-        return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
-
-
-class Telephone(JSONSerializable):
-    def __init__(self):
-        self.id = None
-        self.userId = None
-        self.number = None
-        self.type = None
 
 
 class UserDAO(DAO):
@@ -652,3 +622,60 @@ class MailDAO(DAO):
 
         finally:
             cur.close()
+            
+            
+
+
+class User(JSONSerializable):
+    ''' usuario básico del sistema '''
+    
+    dao = UserDAO
+
+    def __init__(self):
+        self.id = None
+        self.dni = None
+        self.name = None
+        self.lastname = None
+        self.genre = None
+        self.birthdate = None
+        self.city = None
+        self.country = None
+        self.address = None
+        self.residence_city = None
+        self.created = datetime.datetime.now()
+        self.version = 0
+        self.photo = None
+        self.telephones = []
+
+    def getAge(self):
+        today = datetime.datetime.now()
+        born = self.birthdate
+        return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+
+
+
+    def persist(self, con):
+        return self.dao.persist(con, self)
+        
+        
+    def delete(self, con):
+        return self.dao.deleteById(con, [self.id])
+       
+    @classmethod 
+    def findById(cls, con, id):
+        assert cls.dao is not None
+        return cls.dao.findById(con, id)
+        
+    @classmethod 
+    def findByDni(cls, con, dni):
+        assert cls.dao is not None
+        return cls.dao.findByDni(con, dni)
+        
+    
+class Telephone(JSONSerializable):
+    def __init__(self):
+        self.id = None
+        self.userId = None
+        self.number = None
+        self.type = None            
+            
