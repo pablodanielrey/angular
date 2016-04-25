@@ -65,7 +65,7 @@ function HomeCtrl($rootScope, $scope, Users, Login, Positions, Assistance) {
   }
 
   function loadAssistanceData() {
-    if ($scope.model.date == null) {
+    if ($scope.model.date == null || $scope.userId == null) {
       return
     }
     Assistance.getAssistanceData([$scope.userId], $scope.model.date, $scope.model.date).then(function(data) {

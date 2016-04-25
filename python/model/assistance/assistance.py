@@ -220,23 +220,30 @@ class AssistanceModel:
 
     def getStatistics(self, con, userIds, start, end):
         wpss = self.getWorkPeriods(con, userIds, start, end)
-        wpssu = self._classifyByUserId(wpss)
         totalStats = []
-        for uid in wpssu.keys():
+        for uid in wpss.keys():
             stats = WpStatistics(uid)
-            for wp in wpssu[uid]:
+            for wp in wpss[uid]:
                 stats.updateStatistics(wp)
             totalStats.append(stats)
         return totalStats
 
     def getAssistanceData(self, con, userIds, start, end):
-        logging.info('assistanceData start:{} end {}'.format(start, end))
+        assert isinstance(userIds, list)
+        assert isinstance(start, datetime.datetime)
+        assert isinstance(end, datetime.datetime)
+
+        logging.info('assistanceData start:{} end {} userId:{}'.format(start, end, userIds[0]))
         stats = self.getStatistics(con, userIds, start, end)
         sts = self._classifyByUserId(stats)
         aData = []
+
         for uid in userIds:
             s = sts[uid]
             ws = []
+            # *************************************************
+            # quede hasta aca, me voy al carajo. Estoy quemado
+            # *************************************************
             for ds in s.dailyStats:
                 w = WorkedAssistanceData(ds.iin, ds.out, ds.start, ds.end)
                 ws.append(w)
