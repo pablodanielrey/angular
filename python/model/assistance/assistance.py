@@ -11,6 +11,20 @@ from model.assistance.justifications.justifications import Justification
 from model.assistance.statistics import WpStatistics
 
 
+class WorkedAssistanceData(JSONSerializable):
+
+    def __init__(self, logStart = None, logEnd = None, scheduleStart = None, scheduleEnd = None):
+        self.logStart = logStart
+        self.logEnd = logEnd
+        self.scheduleStart = self.scheduleStart
+        self.scheduleEnd = scheduleEnd
+
+class AssistanceData(JSONSerializable):
+
+    def __init__(self, userId = None, workedAssistanceData = []):
+        self.userId = userId
+        self.workedAssistanceData = workedAssistanceData
+
 class WorkPeriod(JSONSerializable):
 
     logsTolerance = datetime.timedelta(hours=2)
@@ -212,3 +226,17 @@ class AssistanceModel:
                 stats.updateStatistics(wp)
             totalStats.append(stats)
         return totalStats
+
+    def getAssistanceData(self, con, userIds, start, end):
+        logging.info('assistanceData start:{} end {}'.format(start, end))
+        stats = self.getStatistics(con, userIds, start, end)
+        sts = self._classifyByUserId(stats)
+        aData = []
+        for uid in userIds:
+            s = sts[uid]
+            ws = []
+            for ds in s.dailyStats:
+                w = WorkedAssistanceData(ds.iin, ds.out, ds.start, ds.end)
+                ws.append(w)
+            aData.append(AssistanceData(uid, ws))
+        return aData

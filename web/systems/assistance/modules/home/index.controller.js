@@ -2,18 +2,20 @@ angular
   .module('mainApp')
   .controller('HomeCtrl', HomeCtrl);
 
-HomeCtrl.inject = ['$rootScope', '$scope', 'Users', 'Login', 'Positions']
+HomeCtrl.inject = ['$rootScope', '$scope', 'Users', 'Login', 'Positions', 'Assistance']
 
-function HomeCtrl($rootScope, $scope, Users, Login, Positions) {
+function HomeCtrl($rootScope, $scope, Users, Login, Positions, Assistance) {
 
   $scope.initialize = initialize;
   $scope.loadUser = loadUser;
   $scope.getUserPhoto = getUserPhoto;
   $scope.loadPosition = loadPosition;
+  $scope.loadAssistanceData = loadAssistanceData;
 
   $scope.model = {
     user: null,
-    userId: ''
+    userId: '',
+    date : new Date()
   }
 
   $scope.$on('$viewContentLoaded', function(event) {
@@ -27,9 +29,15 @@ function HomeCtrl($rootScope, $scope, Users, Login, Positions) {
       });
   });
 
+  $scope.$watch(function() {return $scope.model.date;}, function(o,n) {
+    $scope.loadAssistanceData();
+  });
+
   function initialize() {
+    $scope.model.date = new Date();
     $scope.loadUser();
-    $scope.loadPosition()
+    $scope.loadPosition();
+    $scope.loadAssistanceData();
   }
 
   function loadPosition() {
@@ -54,6 +62,17 @@ function HomeCtrl($rootScope, $scope, Users, Login, Positions) {
     } else {
       return "/c/files.py?i=" + $scope.model.user.photo;
     }
+  }
+
+  function loadAssistanceData() {
+    if ($scope.model.date == null) {
+      return
+    }
+    Assistance.getAssistanceData([$scope.userId], $scope.model.date, $scope.model.date).then(function(data) {
+      console.log(data);
+    }, function(error) {
+      console.log("Error al obtener los datos de asistencia");
+    })
   }
 
 
