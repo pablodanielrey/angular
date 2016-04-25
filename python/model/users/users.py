@@ -240,6 +240,8 @@ class Student(JSONSerializable):
         self.id = None
         self.studentNumber = None
         self.condition = None
+        
+        
 
 class StudentDAO(DAO):
 
@@ -665,6 +667,11 @@ class User(JSONSerializable):
     def findById(cls, con, id):
         assert cls.dao is not None
         return cls.dao.findById(con, id)
+        
+    @classmethod 
+    def findAll(cls, con):
+        assert cls.dao is not None
+        return cls.dao.findAll(con)
         
     @classmethod 
     def findByDni(cls, con, dni):

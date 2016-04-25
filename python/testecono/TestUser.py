@@ -38,6 +38,27 @@ class TestUser(TestEcono):
         
         return user           
 
+
+    def defineUserAndPersist(self):
+        user = self.defineUser()
+      
+        con = self.connection.get()
+
+        try:
+            u = User.findByDni(con, user.dni)
+
+            if u is not None:
+                user.id = u[0]
+
+            uid = user.persist(con)
+            con.commit()
+
+            return uid, user
+            
+        finally:
+            self.connection.put(con)
+            
+            
     def assertEqualTelephones(self, telephone, telephone2):
         self.assertEqual(telephone.type, telephone2.type)
 
@@ -58,9 +79,9 @@ class TestUserPersist(TestUser):
     
     def setUp(self):
         super(TestUserPersist, self).setUp()
-        self.user = self.defineUserToPersist()
+        self.user = self.defineNewUser()
 
-    def defineUserToPersist(self):
+    def defineNewUser(self):
         user = self.defineUser()
       
         con = self.connection.get()
@@ -80,7 +101,7 @@ class TestUserPersist(TestUser):
         return user    
 
             
-    def test_persist_user(self):
+    def test_persist(self):
         try:
             con = self.connection.get()
             try:
@@ -122,29 +143,8 @@ class TestUserFindById(TestUser):
     
     def setUp(self):
         super(TestUserFindById, self).setUp()
-        self.user_id, self.user = self.userToFind()
+        self.user_id, self.user = self.defineUserAndPersist()
 
-
-
-    def userToFind(self):
-        user = self.defineUser()
-      
-        con = self.connection.get()
-
-        try:
-            u = User.findByDni(con, user.dni)
-
-            if u is not None:
-                user.id = u[0]
-
-            uid = user.persist(con)
-            con.commit()
-
-            return uid, user
-            
-        finally:
-            self.connection.put(con)
- 
     def test_find_by_id(self):
         try:
             con = self.connection.get()
@@ -166,4 +166,64 @@ class TestUserFindById(TestUser):
 
 
 
+
+
+
+
+class TestUserFindAll(TestUser):
+    
+    def setUp(self):
+        super(TestUserFindAll, self).setUp()
+        self.user_id, self.user = self.defineUserAndPersist()
+
+ 
+ 
+    def test_find_all(self):
+        try:
+            con = self.connection.get()
+            uTuple = (self.user_id, self.user.version)
+            try:
+                u = User.findAll(con)
+                self.assertIn(uTuple, u)
+                
+                uTupleNotExists = ("id", "0")
+                self.assertNotIn(uTupleNotExists, u)
+                
+                               
+            finally:
+                self.connection.put(con)
+                
+        except Exception as e: 
+            logging.error(str(e))
+            
+            
+            
+            
+            
+            
+            
+class TestUserDelete(TestUser):
+    
+    def setUp(self):
+        super(TestUserDelete, self).setUp()
+        self.user_id, self.user = self.defineUserAndPersist()
+
+ 
+ 
+    def test_delete(self):
+        try:
+            con = self.connection.get()
+
+            try:                
+                self.user.delete(con)
+                con.commit()
+                
+                u = User.findById(con, [self.user_id])
+                self.assertEqual(u, [])
+                               
+            finally:
+                self.connection.put(con)
+                
+        except Exception as e: 
+            logging.error(str(e))
 
