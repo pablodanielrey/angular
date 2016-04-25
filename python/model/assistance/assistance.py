@@ -7,7 +7,9 @@ from model.assistance.logs import LogDAO, Log
 from model.assistance.schedules import ScheduleDAO, Schedule
 from model.serializer.utils import JSONSerializable
 
+from model.assistance.justifications import *
 from model.assistance.justifications.justifications import Justification
+
 from model.assistance.statistics import WpStatistics
 
 
