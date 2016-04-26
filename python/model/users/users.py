@@ -8,7 +8,7 @@ import logging
 import datetime
 import uuid
 from model.connection.connection import Connection
-from model.serializer.utils import MySerializer, JSONSerializable
+from model.serializer.utils import JSONSerializable
 from model.dao import DAO
 from model.files.files import FileDAO
 
@@ -240,8 +240,8 @@ class Student(JSONSerializable):
         self.id = None
         self.studentNumber = None
         self.condition = None
-        
-        
+
+
 
 class StudentDAO(DAO):
 
@@ -624,13 +624,13 @@ class MailDAO(DAO):
 
         finally:
             cur.close()
-            
-            
+
+
 
 
 class User(JSONSerializable):
     ''' usuario básico del sistema '''
-    
+
     dao = UserDAO
 
     def __init__(self):
@@ -658,31 +658,30 @@ class User(JSONSerializable):
 
     def persist(self, con):
         return self.dao.persist(con, self)
-        
-        
+
+
     def delete(self, con):
         return self.dao.deleteById(con, [self.id])
-       
-    @classmethod 
+
+    @classmethod
     def findById(cls, con, id):
         assert cls.dao is not None
         return cls.dao.findById(con, id)
-        
-    @classmethod 
+
+    @classmethod
     def findAll(cls, con):
         assert cls.dao is not None
         return cls.dao.findAll(con)
-        
-    @classmethod 
+
+    @classmethod
     def findByDni(cls, con, dni):
         assert cls.dao is not None
         return cls.dao.findByDni(con, dni)
-        
-    
+
+
 class Telephone(JSONSerializable):
     def __init__(self):
         self.id = None
         self.userId = None
         self.number = None
-        self.type = None            
-            
+        self.type = None

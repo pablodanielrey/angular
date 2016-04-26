@@ -5,7 +5,11 @@ import dateutil.parser
 import importlib
 import re
 
+
 def serializer_loads(d):
+
+    import inject
+    inject.configure_once()
 
     for k, v in d.items():
         """
@@ -41,6 +45,9 @@ class JSONSerializable:
         return d
 
 class MySerializer(json.JSONEncoder):
+
+    import inject
+    inject.configure_once()
 
     def default(self, obj):
 
