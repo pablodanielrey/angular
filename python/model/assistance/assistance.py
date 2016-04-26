@@ -11,15 +11,18 @@ from model.assistance.justifications import *
 from model.assistance.justifications.justifications import Justification
 
 from model.assistance.statistics import WpStatistics
+from model.assistance.utils import Utils
 
 
 class WorkedAssistanceData(JSONSerializable):
 
-    def __init__(self, logStart = None, logEnd = None, scheduleStart = None, scheduleEnd = None):
-        self.logStart = logStart
-        self.logEnd = logEnd
-        self.scheduleStart = scheduleStart
-        self.scheduleEnd = scheduleEnd
+
+    def __init__(self, date = None, logStart = None, logEnd = None, scheduleStart = None, scheduleEnd = None):
+        self.logStart = Utils._localizeLocal(logStart) if Utils._isNaive(logStart) else logStart
+        self.logEnd = Utils._localizeLocal(logEnd) if Utils._isNaive(logEnd) else logEnd
+        self.scheduleStart = Utils._localizeLocal(scheduleStart) if Utils._isNaive(scheduleStart) else scheduleStart
+        self.scheduleEnd = Utils._localizeLocal(scheduleEnd) if Utils._isNaive(scheduleEnd) else scheduleEnd
+        self.date = date
 
 class AssistanceData(JSONSerializable):
 
@@ -240,12 +243,9 @@ class AssistanceModel:
         for uid in userIds:
             sts = stats[uid]
             ws = []
-            # *************************************************
-            # quede hasta aca, me voy al carajo. Estoy quemado
-            # *************************************************
             for s in sts:
                 for ds in s.dailyStats:
-                    w = WorkedAssistanceData(ds.iin, ds.out, ds.start, ds.end)
+                    w = WorkedAssistanceData(ds.date, ds.iin, ds.out, ds.start, ds.end)
                     ws.append(w)
                 aData.append(AssistanceData(uid, ws))
 
