@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<html ng-app="mainApp">
+<head>
+  <meta charset="utf-8"/>
+  <meta name='viewport' content='width=device-width'/>
+  <title>Facultad de Ciencias Económicas | Universidad Nacional de La Plata</title>
+
+  <script src="/libs/bower_components/angularjs/angular.js"></script>
+  <script src="/libs/bower_components/angular-route/angular-route.js"></script>
+  <script src="/libs/bower_components/autobahn/autobahn.js"></script>
+  <script src="/libs/bower_components/angular-wamp/release/angular-wamp.js"></script>
+
+  <!-- esto es el estilo de font awesome para tener los iconos -->
+  <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+
+  <script type="text/javascript" src="/systems/sileg/modules/docentes/index.module.js"></script>
+  <script type="text/javascript" src="/systems/sileg/modules/docentes/index.controller.js"></script>
+
+  <!-- Modulos -->
+  <!-- <script type="text/javascript" src="/systems/sileg/modules/docentes/docentes.js"></script> -->
+  <link rel="stylesheet" type="text/css" href="/systems/sileg/modules/docentes/docentes.css" />
+
+</head>
+
+<body class="sileg" ng-controller='IndexCtrl'>
+  <header>
+      <div class="logo">
+          <img src="/systems/sileg/img/logo_fce.png">
+      </div>
+      <div class="menu">
+        <a href="http://www.econo.unlp.edu.ar"><img src="/systems/sileg/img/inicio.jpg"></a>
+        <a href="http://www.econo.unlp.edu.ar/institucional"><img src="/systems/sileg/img/institucional.jpg"></a>
+        <a href="http://www.econo.unlp.edu.ar/grado"><img src="/systems/sileg/img/grado.jpg"></a>
+        <a href="http://www.econo.unlp.edu.ar/posgrado"><img src="/systems/sileg/img/posgrado.jpg"></a>
+        <a href="http://www.econo.unlp.edu.ar/investigacion"><img src="/systems/sileg/img/investigacion.jpg"></a>
+        <a href="http://www.econo.unlp.edu.ar/transferencia"><img src="/systems/sileg/img/transferencia.jpg"></a>
+        <a href="http://www.econo.unlp.edu.ar/extension"><img src="/systems/sileg/img/extension.jpg"></a>
+      </div>
+      <div class="back">
+      <i class="fa fa-angle-double-left" aria-hidden="true"></i> VOLVER > <b>DOCENTES</b> y <b>CÁTEDRAS</b>
+      </div>
+  </header>
+
+  <main class="{{view.style}}">
+    <!-- VARIABLES 1: busquedaPorDocente, busquedaPorCatedra -->
+    <i class="fa fa-search" aria-hidden="true"></i> Buscar por
+    <div class="contentMain">
+        <div class="contentLeft">
+
+          <div class="btnsSearch">
+              <button class="btnSearch" ng-click="view.style = 'busquedaPorDocente'">
+                DOCENTE
+              </button>
+              <button class="btnSearch" ng-click="view.style = 'busquedaPorCatedra'">
+                CÁTEDRA
+              </button>
+          </div>
+
+          <div class="searchDocente">
+            <button class="btnBack" ng-click="view.style = ''"><i class="fa fa-chevron-left" title="Volver"></i></button> <b>DOCENTE</b>
+            <input class="inputSearch"></input>
+            <div class="contentList">
+
+                <div class="itemList">
+                  <div class="icoList">
+                    A
+                  </div>
+                  <div>
+                      <div class="textName">
+                        Abernaldi
+                      </div>
+                      <div class="textLastName">
+                        Juan Antonio
+                      </div>
+                  </div>
+                </div>
+
+                <div class="itemList">
+                  <div class="icoList">
+                    A
+                  </div>
+                  <div>
+                      <div class="textName">
+                        Albornoz
+                      </div>
+                      <div class="textLastName">
+                        Roberto Carlos
+                      </div>
+                  </div>
+                </div>
+
+                <div class="itemList">
+                  <div class="icoList">
+                    B
+                  </div>
+                  <div>
+                      <div class="textName">
+                        Blanco
+                      </div>
+                      <div class="textLastName">
+                        Maria Micaela
+                      </div>
+                  </div>
+                </div>
+
+                <div class="itemList">
+                  <div class="icoList">
+                    B
+                  </div>
+                  <div>
+                      <div class="textName">
+                        Burrintelli
+                      </div>
+                      <div class="textLastName">
+                        Julieta Paloma
+                      </div>
+                  </div>
+                </div>
+
+                <div class="itemList">
+                  <div class="icoList">
+                    B
+                  </div>
+                  <div>
+                      <div class="textName">
+                        Bond
+                      </div>
+                      <div class="textLastName">
+                        Jean Carlos
+                      </div>
+                  </div>
+                </div>
+
+                <div class="itemList">
+                  <div class="icoList">
+                    B
+                  </div>
+                  <div>
+                      <div class="textName">
+                        Bucarelli Paz
+                      </div>
+                      <div class="textLastName">
+                        Franco Ismael
+                      </div>
+                  </div>
+                </div>
+
+                <div class="itemList">
+                  <div class="icoList">
+                    C
+                  </div>
+                  <div>
+                      <div class="textName">
+                        Cardinali
+                      </div>
+                      <div class="textLastName">
+                        Florencia
+                      </div>
+                  </div>
+                </div>
+
+                <div class="itemList">
+                  <div class="icoList">
+                    C
+                  </div>
+                  <div>
+                      <div class="textName">
+                        Cordoba
+                      </div>
+                      <div class="textLastName">
+                        Maria Antonia
+                      </div>
+                  </div>
+                </div>
+
+
+            </div>
+          </div>
+
+          <div class="searchCatedra">
+            <button class="btnBack" ng-click="view.style = ''"><i class="fa fa-chevron-left" title="Volver"></i></button> <b>CÁTEDRA</b>
+            <input class="inputSearch"></input>
+          </div>
+
+
+        </div>
+        <div class="contentRight">
+
+        </div>
+    </div>
+  </main>
+
+</body>

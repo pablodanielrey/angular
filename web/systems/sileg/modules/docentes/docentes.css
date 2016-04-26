@@ -1,0 +1,239 @@
+.sileg {
+  margin: 0px;
+  padding: 0px;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:column;
+  -webkit-flex-direction:column; /* Safari */
+  -moz-flex-direction:column; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  overflow-y: hidden;
+
+}
+
+.sileg header {
+  width: 900px;
+
+}
+
+.sileg .menu{
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  border-bottom: 3px solid #CCCCCC;
+  margin-top: 27px;
+}
+
+.sileg .back {
+  font-size: 11px;
+  color:#707173;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.sileg main {
+  width: 900px;
+  color: #707173;
+  /*background-color: red;*/
+}
+
+.sileg .menu a {
+  height: 30px;
+}
+
+.sileg .contentMain {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  width: 900px;
+  height: 400px;
+  color: #707173;
+  margin-top: 5px;
+  /*background: red;*/
+}
+
+.sileg .contentLeft {
+  width: 355px;
+  /*background-color: blue;*/
+}
+
+.sileg .contentRight {
+  /*background-color: green;*/
+  width: 100%;
+  border-left: 2px solid #CCCCCC;
+}
+
+.sileg .btnSearch {
+  background-color: #707173;
+  color:white;
+  border: none;
+  border-radius: 3px;
+  padding: 20px;
+  width: 240px;
+  margin: 5px;
+}
+
+.sileg .btnSearch:hover {
+  background-color: #8c8c8c;
+  cursor: pointer;
+}
+
+.sileg .btnsSearch  {
+  /*background-color: yellow;*/
+  height: 400px;
+  opacity: 1;
+  transform: translate3d(0,0,0);
+  -webkit-transform: translate3d(0,0,0);
+  -webkit-transition: all 300ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+     -moz-transition: all 300ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+       -o-transition: all 300ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+          transition: all 300ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+}
+
+.sileg main.busquedaPorDocente .btnsSearch,
+.sileg main.busquedaPorCatedra .btnsSearch {
+  opacity: 0;
+  transform: translate3d(0,200%,0);
+  -webkit-transform: translate3d(0,200%,0);
+  -webkit-transition: all 300ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+     -moz-transition: all 300ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+       -o-transition: all 300ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+          transition: all 300ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+}
+
+.sileg .searchDocente  {
+  /*background-color: purple;*/
+  height: 400px;
+  opacity: 0;
+  transform: translate3d(0,200%,0);
+  -webkit-transform: translate3d(0,200%,0);
+  -webkit-transition: all 300ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+     -moz-transition: all 300ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+       -o-transition: all 300ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+          transition: all 300ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+}
+
+.sileg main.busquedaPorDocente .searchDocente {
+  opacity: 1;
+  transform: translate3d(0,-400px,0);
+  -webkit-transform: translate3d(0,-400px,0);
+  -webkit-transition: all 300ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+     -moz-transition: all 300ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+       -o-transition: all 300ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+          transition: all 300ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+}
+
+.sileg .searchCatedra  {
+  /*background-color: grey;*/
+  height: 400px;
+  opacity: 0;
+  transform: translate3d(0,200%,0);
+  -webkit-transform: translate3d(0,200%,0);
+  -webkit-transition: all 300ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+     -moz-transition: all 300ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+       -o-transition: all 300ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+          transition: all 300ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+}
+
+.sileg main.busquedaPorCatedra .searchCatedra {
+  opacity: 1;
+  transform: translate3d(0,-800px,0);
+  -webkit-transform: translate3d(0,-800px,0);
+  -webkit-transition: all 300ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+     -moz-transition: all 300ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+       -o-transition: all 300ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+          transition: all 300ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+}
+
+
+.sileg .btnBack {
+  cursor: pointer;
+  background-color: #DBE2E5;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border: none;
+  color: #5C5F69;
+  padding: 5px;
+  margin-right: 5px;
+  width: 30px;
+}
+
+.sileg .inputSearch {
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  font-size: 20px;
+  padding: 11px;
+  border: 1px solid #CCCCCC;
+  margin: 10px 0 15px 0;
+  width: 220px;
+}
+
+.sileg .contentList {
+  height: 300px;
+  width: 245px;
+  /*background-color: grey;*/
+  overflow-y: auto;
+}
+
+.sileg .itemList {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  background-color: #f1f1f1;
+  color:#4a4b4c;
+  border-radius: 5px;
+  width: 225px;
+  margin-bottom: 5px;
+}
+
+.sileg .itemList:hover {
+  background-color: #e0dbdb;
+  cursor: pointer;
+}
+
+.sileg .icoList {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  font-size: 30px;
+  width: 25px;
+  height: 25px;
+  font-weight: bold;
+  background-color: #DBE2E5;
+  padding: 10px;
+  border-radius: 100%;
+  margin: 5px;
+  margin-right: 10px;
+}
+
+.sileg .textName {
+  font-size: 14px;
+}
+
+.sileg .textLastName {
+  font-size: 14px;
+}
