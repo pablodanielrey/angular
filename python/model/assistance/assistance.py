@@ -18,7 +18,7 @@ class WorkedAssistanceData(JSONSerializable):
 
     def __init__(self, ds = None):
         if (ds is None):
-            self.initialize()
+            self._initialize()
         else:
             self._initialize(ds.date, ds.iin, ds.out, ds.start, ds.end)
 
