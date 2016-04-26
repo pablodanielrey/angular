@@ -38,12 +38,13 @@ class Justification(JSONSerializable):
         assert self.getStatus().id is not None
         self.getStatus().changeStatus(con, self, statusConst, userId)
 
+    def getJustifiedSeconds(self, wp=None):
+        return Exception('abstract method')
+
     def _getLastStatus(self, con):
         if self.getStatus() is None:
             self._setStatus(Status.getLastStatus(con, self.id))
         return self.getStatus()
-
-
 
     @classmethod
     def _loadStatus(cls, con, justs):
@@ -126,6 +127,11 @@ class SingleDateJustification(Justification):
                 self.wps.append(wp)
                 wp.addJustification(self)
 
+    def getJustifiedSeconds(self, wp=None):
+        seconds = 0
+        for wp in self.wps:
+            seconds = seconds + (wp.getEndDate() - wp.getStartDate()).total_seconds()
+        return seconds
 
 class RangedJustification(Justification):
 
@@ -177,6 +183,21 @@ class RangedJustification(Justification):
                 self.wps.append(wp)
                 wp.addJustification(self)
 
+    def getJustifiedSeconds(self, wp=None):
+        """
+            retorna la cantidad de segundos justificados.
+            si se le pasa el día, entonces retorna los segundos del horario.
+            si el wp es None entonces retorna la suma de todos los horarios de los días que justifica
+        """
+        seconds = 0
+        if wp is None:
+            for wp in self.wps:
+                seconds = seconds + (wp.getEndDate() - wp.getStartDate()).total_seconds()
+            return seconds
+        else:
+            return (wp.getEndDate() - wp.getStartDate()).total_seconds()
+
+
 class RangedTimeJustification(Justification):
 
     def __init__(self, start, end, userId, ownerId):
@@ -193,3 +214,18 @@ class RangedTimeJustification(Justification):
             if wp.getStartDate() <= self.end and  wp.getEndDate() >= self.start:
                 self.wps.append(wp)
                 wp.addJustification(self)
+
+    def getJustifiedSeconds(self, wp=None):
+        """
+            retorna la cantidad de segundos justificados.
+            Si end es None entonces retorna la cantidad de segundos desde el start hasta el fin del horario
+        """
+
+        if self.end is None:
+            """
+                justifica hasta el fin del horario
+            """
+            return (wp.getEndDate() - self.start).total_seconds()
+
+        else:
+            return (self.end - self.start).total_seconds()

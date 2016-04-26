@@ -31,9 +31,13 @@ class JustificationStatistics:
     @staticmethod
     def _create(wp):
         assert wp is not None
+        if len(wp.getJustifications()) <= 0:
+            return None
+
         j = JustificationStatistics()
-        for j in wp.getJustifications():
-            j.identifer = j.getIdentifier()
+        for js in wp.getJustifications():
+            j.identifier = js.getIdentifier()
+            j.seconds = js.getJustifiedSeconds(wp)
         return j
 
 class DailyWpStatistics:

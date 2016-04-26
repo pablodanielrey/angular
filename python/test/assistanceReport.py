@@ -166,6 +166,11 @@ def workedPeriodsToPyoo(wps, users):
         doc.close()
 
 
+def _secondsToHours(seconds):
+    if seconds == 0:
+        return ""
+    else:
+        return "{0:02d}:{0:02d}".format(int((seconds / 60) / 60), int((seconds % 60) / 60))
 
 def statsToPyoo(stats, users):
 
@@ -208,6 +213,8 @@ def statsToPyoo(stats, users):
                     sheet[i,5].value = st.iin
                     sheet[i,6].value = st.out
                     sheet[i,7].value = datetime.timedelta(seconds=st.workedSeconds)
+                    sheet[i,8].value = st.justification.identifier if st.justification is not None else ''
+                    sheet[i,9].value = _secondsToHours(st.justification.seconds if st.justification is not None else 0)
                     i = i + 1
 
             #index = index + 1
@@ -233,17 +240,17 @@ def _getUsers(con):
     uid, v = UserDAO.findByDni(con, "24040623")
     uids.append(uid)
 
-    #uid, v = UserDAO.findByDni(con, "32393755")    # pablo Lozada
-    #uids.append(uid)
+    uid, v = UserDAO.findByDni(con, "32393755")    # pablo Lozada
+    uids.append(uid)
 
-    #uid, v = UserDAO.findByDni(con, "27528150")    # julio ciappa
-    #uids.append(uid)
+    uid, v = UserDAO.findByDni(con, "27528150")    # julio ciappa
+    uids.append(uid)
 
-    #uid, v = UserDAO.findByDni(con, "18609353")    # juan acosta
-    #uids.append(uid)
+    uid, v = UserDAO.findByDni(con, "18609353")    # juan acosta
+    uids.append(uid)
 
-    #uid, v = UserDAO.findByDni(con, "24040623")     # miguel rey
-    #uids.append(uid)
+    uid, v = UserDAO.findByDni(con, "24040623")     # miguel rey
+    uids.append(uid)
 
     uid, v = UserDAO.findByDni(con, "27821597")     # maxi
     uids.append(uid)
@@ -254,8 +261,8 @@ def _getUsers(con):
     uid, v = UserDAO.findByDni(con, "33212183")     # santiago
     uids.append(uid)
 
-    uid, v = UserDAO.findByDni(con, "27294557")     # pablo
-    uids.append(uid)
+    #uid, v = UserDAO.findByDni(con, "27294557")     # pablo
+    #uids.append(uid)
 
     uid, v = UserDAO.findByDni(con, "30001823")    # walter
     uids.append(uid)
