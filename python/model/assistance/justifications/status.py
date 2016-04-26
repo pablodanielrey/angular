@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 from model.serializer.utils import JSONSerializable
-import datetime, logging
+import dateutil, dateutil.tz, dateutil.parser, datetime, logging
+from dateutil.tz import tzlocal
 import uuid
 from model.assistance.assistanceDao import AssistanceDAO
 from model.users.users import UserDAO
+
 
 class Status(JSONSerializable):
     UNDEFINED = 0
@@ -17,8 +19,11 @@ class Status(JSONSerializable):
         self.justificationId = None
         self.status = Status.PENDING
         self.userId = userId
-        self.date = date
-        self.created = datetime.datetime.now()
+        if ((date.tzinfo is None) or (date.tzinfo.utcoffset(date) is None)):
+            date = date.replace(tzinfo=tzlocal())
+
+        self.date = date        
+        self.created = datetime.datetime.now(tzlocal())
 
     def _setJustificationId(self, jid):
         self.justificationId = jid
@@ -89,8 +94,8 @@ class StatusDAO(AssistanceDAO):
             id = str(uuid.uuid4())
             status.id = id
             r = status.__dict__
-            cur.execute('insert into assistance.justification_status (id, status, user_id, justification_id, date) '
-                        'values (%(id)s, %(status)s, %(userId)s, %(justificationId)s, %(date)s)', r)
+            cur.execute('insert into assistance.justification_status (id, status, user_id, justification_id, date, created) '
+                        'values (%(id)s, %(status)s, %(userId)s, %(justificationId)s, %(date)s, %(created)s)', r)
             return id
         finally:
             cur.close()

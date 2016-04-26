@@ -14,12 +14,22 @@ class TestJustification(TestEcono):
     
     def setUp(self):
         super(TestJustification, self).setUp()
+        
+    def assertEqualStatus(self, status, status2):
+        self.assertEqual(status.id, status2.id)
+        self.assertEqual(status.justificationId, status2.justificationId)
+        self.assertEqual(status.status, status2.status)
+        self.assertEqual(status.userId, status2.userId)
+        self.assertEqual(status.date, status2.date)
+        self.assertEqual(status.created, status2.created)
+   
 
     def assertEqualJustification(self, justification, justification2):
         self.assertEqual(justification.id, justification2.id)        
         self.assertEqual(justification.userId, justification2.userId)
-        self.assertEqual(justification.ownerId, justification2.ownerId)        
-
+        self.assertEqual(justification.ownerId, justification2.ownerId)
+        self.assertEqual(justification.ownerId, justification2.ownerId)
+        self.assertEqualStatus(justification.status, justification2.status)
 
 class TestJustificationArt102(TestJustification):
     
@@ -81,25 +91,15 @@ class TestJustificationArt102Persist(TestJustificationArt102):
                 con.commit()
                 justs = Art102Justification.findById(con, [self.justification.id])
                 self.assertEqualJustification(self.justification, justs[0])
-                
-                """
-                uid = User.findByDni(con, self.user.dni)
-                u = User.findById(con, [uid[0]])
-                self.assertEqualUsers(self.user, u[0])                
-                
-                ##### actualizar #####
-                self.user.name = "Test Nomb"
-                self.user.persist(con)
+                               
+                ##### cambiar estado #####
+                state = self.justification.getStatus()
+                state.changeStatus(con, self.justification, 2, self.justification.ownerId)
                 con.commit()
-                uid = User.findByDni(con, self.user.dni)
-                u = User.findById(con, [uid[0]])
-                self.assertEqualUsers(self.user, u[0])
-                
-                ##### error #####
-                user = self.defineUser()
-                with self.assertRaises(Exception):
-                    UserDAO.persist(con, user)
-                """
+                justs = Art102Justification.findById(con, [self.justification.id])
+                self.assertEqualJustification(self.justification, justs[0])
+               
+
             finally:
                 self.connection.put(con)
                 
