@@ -15,7 +15,10 @@ function HomeCtrl($rootScope, $scope, Users, Login, Positions, Assistance) {
   $scope.model = {
     user: null,
     userId: '',
-    date : new Date()
+    date : null,
+    assistanceData: {
+      'workedAssistanceData': []
+    }
   }
 
   $scope.$on('$viewContentLoaded', function(event) {
@@ -37,7 +40,6 @@ function HomeCtrl($rootScope, $scope, Users, Login, Positions, Assistance) {
     $scope.model.date = new Date();
     $scope.loadUser();
     $scope.loadPosition();
-    $scope.loadAssistanceData();
   }
 
   function loadPosition() {
@@ -68,8 +70,36 @@ function HomeCtrl($rootScope, $scope, Users, Login, Positions, Assistance) {
     if ($scope.model.date == null || $scope.userId == null) {
       return
     }
+    $scope.model.date.setHours(0);
+    $scope.model.date.setMinutes(0);
+    $scope.model.date.setSeconds(0);
     Assistance.getAssistanceData([$scope.userId], $scope.model.date, $scope.model.date).then(function(data) {
-      console.log(data);
+      $scope.model.assistanceData = {};
+      if (data.length <= 0) {
+        return;
+      }
+      sWp = data[0];
+      $scope.model.assistanceData.workedAssistanceData = sWp.workedAssistanceData;
+      $scope.model.assistanceData.scheduleActual = {};
+      $scope.model.assistanceData.logsActual = {};
+      for (var i = 0; i < sWp.workedAssistanceData.length; i++) {
+          selectDateStr = $scope.model.date.toISOString().substring(0, 10);
+          dateStr = sWp.workedAssistanceData[i].date;
+          if (selectDateStr == dateStr) {
+            wActual = sWp.workedAssistanceData[i];
+
+            sStart = (wActual.scheduleStart == null || wActual.scheduleStart == '') ? null : new Date(wActual.scheduleStart);
+            sEnd = (wActual.scheduleEnd == null || wActual.scheduleEnd == '') ? null : new Date(wActual.scheduleEnd);
+            $scope.model.assistanceData.scheduleActual = {'start' : sStart, 'end': sEnd};
+
+            console.log(wActual.scheduleStart);
+
+            lStart = (wActual.logStart == null || wActual.logStart == '') ? null : new Date(wActual.logStart);
+            lEnd = (wActual.logEnd == null || wActual.logEnd == '') ? null : new Date(wActual.logEnd);
+            $scope.model.assistanceData.logActual = {'start' : lStart, 'end': lEnd};
+          }
+      }
+      console.log($scope.model.assistanceData);
     }, function(error) {
       console.log("Error al obtener los datos de asistencia");
     })

@@ -16,7 +16,7 @@ import asyncio
 from asyncio import coroutine
 from autobahn.asyncio.wamp import ApplicationSession
 
-from model.serializer.utils import MySerializer, JSONSerializable
+from model.serializer.utils import  JSONSerializable
 
 class AssistanceWamp(ApplicationSession):
 
