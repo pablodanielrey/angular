@@ -16,12 +16,19 @@ from model.assistance.utils import Utils
 
 class WorkedAssistanceData(JSONSerializable):
 
-    def __init__(self, date = None, logStart = None, logEnd = None, scheduleStart = None, scheduleEnd = None):
+    def __init__(self, ds = None):
+        if (ds is None):
+            self._initialize()
+        else:
+            self._initialize(ds.date, ds.iin, ds.out, ds.start, ds.end)
+
+
+    def _initialize(self, date = None, logStart = None, logEnd = None, scheduleStart = None, scheduleEnd = None):
+        self.date = date
         self.logStart = Utils._localizeLocal(logStart) if Utils._isNaive(logStart) else logStart
         self.logEnd = Utils._localizeLocal(logEnd) if Utils._isNaive(logEnd) else logEnd
         self.scheduleStart = Utils._localizeLocal(scheduleStart) if Utils._isNaive(scheduleStart) else scheduleStart
         self.scheduleEnd = Utils._localizeLocal(scheduleEnd) if Utils._isNaive(scheduleEnd) else scheduleEnd
-        self.date = date
 
 
 class AssistanceData(JSONSerializable):
@@ -247,7 +254,7 @@ class AssistanceModel:
             ws = []
             for s in sts:
                 for ds in s.dailyStats:
-                    w = WorkedAssistanceData(ds.date, ds.iin, ds.out, ds.start, ds.end)
+                    w = WorkedAssistanceData(ds)
                     ws.append(w)
                 aData.append(AssistanceData(uid, ws))
 
