@@ -10,6 +10,8 @@ from testecono.TestUser import TestUserFindAll
 
 
 from testecono.TestJustification import TestJustificationArt102Persist
+from testecono.TestJustification import TestJustificationArt102FindById
+from testecono.TestJustification import TestJustificationArt102FindByUserId
 
 
 
@@ -24,6 +26,8 @@ def suite():
     test_suite.addTest(TestUserFindAll('test_find_all'))
     
     test_suite.addTest(TestJustificationArt102Persist('test_persist'))
+    test_suite.addTest(TestJustificationArt102FindById('test_find_by_id'))    
+    test_suite.addTest(TestJustificationArt102FindByUserId('test_find_by_user_id'))
     return test_suite
 
 mySuit=suite()

@@ -13,7 +13,7 @@ import datetime
 class TestJustification(TestEcono):
     
     def setUp(self):
-        super(TestJustification, self).setUp()
+        super().setUp()
         
     def assertEqualStatus(self, status, status2):
         self.assertEqual(status.id, status2.id)
@@ -28,13 +28,15 @@ class TestJustification(TestEcono):
         self.assertEqual(justification.id, justification2.id)        
         self.assertEqual(justification.userId, justification2.userId)
         self.assertEqual(justification.ownerId, justification2.ownerId)
-        self.assertEqual(justification.ownerId, justification2.ownerId)
         self.assertEqualStatus(justification.status, justification2.status)
+
+
+
 
 class TestJustificationArt102(TestJustification):
     
     def setUp(self):
-        super(TestJustificationArt102, self).setUp()
+        super().setUp()
         try:
             con = self.connection.get()
             try:
@@ -47,15 +49,25 @@ class TestJustificationArt102(TestJustification):
         except Exception as e: 
             logging.error(str(e))
         
-
-
+        
+    @classmethod
+    def defineNewJustification(cls, con):        
+        user_id, user = TestUser.defineUserAndPersist(con)
+        owner_id, owner = TestUser.defineUserAndPersist(con)
+        con.commit()
+        
+        now = datetime.datetime.now()
+        justification = Art102Justification(user_id, owner_id, now)
+      
+        return justification
+        
                 
                 
                 
                 
 class TestJustificationArt102Persist(TestJustificationArt102):
     def setUp(self):
-        super(TestJustificationArt102Persist, self).setUp()
+        super().setUp()
         try:
             con = self.connection.get()
             try:
@@ -68,19 +80,6 @@ class TestJustificationArt102Persist(TestJustificationArt102):
         except Exception as e: 
             logging.error(str(e))
     
-        
-    @classmethod
-    def defineNewJustification(cls, con):        
-        user_id, user = TestUser.defineUserAndPersist(con)
-        owner_id, owner = TestUser.defineUserAndPersist(con)
-        con.commit()
-        
-        now = datetime.datetime.now()
-        justification = Art102Justification(user_id, owner_id, now)
-      
-        return justification
-            
-            
             
     def test_persist(self):
         try:
@@ -106,3 +105,90 @@ class TestJustificationArt102Persist(TestJustificationArt102):
         except Exception as e: 
             logging.error(str(e))        
 
+
+
+
+class TestJustificationArt102FindById(TestJustificationArt102):
+    def setUp(self):
+        super().setUp()
+        try:
+            con = self.connection.get()
+            try:
+                self.justification = TestJustificationArt102FindById.defineNewJustification(con)
+                self.justification.persist(con)
+                con.commit()
+
+            finally:
+                self.connection.put(con)
+            
+        except Exception as e: 
+            logging.error(str(e))
+            
+
+    def test_find_by_id(self):
+        try:
+            con = self.connection.get()
+            try:
+                j = Art102Justification.findById(con,[self.justification.id])
+                self.assertEqualJustification(self.justification, j[0])
+                
+                j = Art102Justification.findById(con, ["not_exists"])
+                self.assertEqual(j, [])
+                               
+            finally:
+                self.connection.put(con)
+                
+        except Exception as e: 
+            logging.error(str(e))
+            
+             
+             
+             
+             
+             
+             
+class TestJustificationArt102FindByUserId(TestJustificationArt102):
+    def setUp(self):
+        super().setUp()
+        try:
+            con = self.connection.get()
+            try:
+                self.justification = TestJustificationArt102FindByUserId.defineNewJustification(con)
+                self.justification.persist(con)
+                con.commit()
+
+            finally:
+                self.connection.put(con)
+            
+        except Exception as e: 
+            logging.error(str(e))
+            
+
+    def test_find_by_user_id(self):
+        try:
+            con = self.connection.get()
+            try:
+                start = self.justification.date - datetime.timedelta(days=1)
+                end = self.justification.date + datetime.timedelta(days=1)
+                usersId = [self.justification.userId]
+                
+                justs = Art102Justification.findByUserId(con, usersId, start, end)
+
+                ids = []
+                for just in justs:
+                    ids.append(just.id)
+                    
+                self.assertIn(self.justification.id, ids)
+                
+                for just in justs:
+                    if just.id == self.justification.id:
+                        self.assertEqualJustification(just, self.justification)             
+                               
+            finally:
+                self.connection.put(con)
+                
+        except Exception as e: 
+            logging.error(str(e))
+            
+                                   
+      
