@@ -30,11 +30,13 @@ class WorkedAssistanceData(JSONSerializable):
         self.scheduleStart = Utils._localizeLocal(scheduleStart) if Utils._isNaive(scheduleStart) else scheduleStart
         self.scheduleEnd = Utils._localizeLocal(scheduleEnd) if Utils._isNaive(scheduleEnd) else scheduleEnd
 
+
 class AssistanceData(JSONSerializable):
 
     def __init__(self, userId = None, workedAssistanceData = []):
         self.userId = userId
         self.workedAssistanceData = workedAssistanceData
+
 
 class WorkPeriod(JSONSerializable):
 
@@ -49,6 +51,9 @@ class WorkPeriod(JSONSerializable):
 
     def addJustification(self, j):
         self.justifications.append(j)
+
+    def getJustifications(self):
+        return self.justifications
 
     def getStartDate(self):
         if self.schedule is None:
@@ -120,7 +125,6 @@ class AssistanceModel:
     @staticmethod
     def _cloneDate(date):
         return datetime.date.fromordinal(date.toordinal())
-
 
     def _getSchedules(self, con, userIds, start, end):
         ss = ScheduleDAO.findByUserId(con, userIds, start, end)
@@ -225,7 +229,6 @@ class AssistanceModel:
         logging.info(datetime.datetime.now() - timer)
 
         return wpss
-
 
     def getStatistics(self, con, userIds, start, end):
         wpss = self.getWorkPeriods(con, userIds, start, end)

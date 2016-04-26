@@ -26,6 +26,16 @@
 from model.users.users import UserDAO
 from dateutil.tz import tzlocal
 
+class JustificationStatistics:
+
+    @staticmethod
+    def _create(wp):
+        assert wp is not None
+        j = JustificationStatistics()
+        for j in wp.getJustifications():
+            j.identifer = j.getIdentifier()
+        return j
+
 class DailyWpStatistics:
     """ estadisticas diarias """
 
@@ -39,6 +49,7 @@ class DailyWpStatistics:
         ds.end = wp.getEndDate()
         ds.iin = None if wp.getStartLog() is None else wp.getStartLog().log.astimezone(tzlocal()).replace(tzinfo=None)
         ds.out = None if wp.getEndLog() is None else wp.getEndLog().log.astimezone(tzlocal()).replace(tzinfo=None)
+        ds.justification = JustificationStatistics._create(wp)
         ds._calculatePeriodSeconds(stats)
         ds._caculateWorkedSeconds(stats)
         ds._calculateLateAndEarly(stats)
@@ -119,7 +130,6 @@ class WpStatistics:
     def getEndDate(self):
         return self.dailyStats[-1].date
 
-
     def updateStatistics(self, wp):
         assert self.userId == wp.userId
         DailyWpStatistics._create(wp, self)
@@ -136,7 +146,7 @@ class WpStatistics:
 class WpStatisticsDAO:
 
     dependencies = [UserDAO]
-    
+
     @classmethod
     def _createSchema(cls, con):
         cur = con.cursor()
