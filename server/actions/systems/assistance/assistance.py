@@ -26,7 +26,7 @@ class AssistanceWamp(ApplicationSession):
         reg = inject.instance(Registry)
 
         self.conn = connection.Connection(reg.getRegistry('dcsys'))
-        self.profiles = inject.instance(ProfileDAO)
+        # self.profiles = inject.instance(ProfileDAO)
 
         self.assistance = inject.instance(AssistanceModel)
 

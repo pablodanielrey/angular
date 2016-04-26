@@ -18,7 +18,7 @@ class WorkedAssistanceData(JSONSerializable):
     def __init__(self, logStart = None, logEnd = None, scheduleStart = None, scheduleEnd = None):
         self.logStart = logStart
         self.logEnd = logEnd
-        self.scheduleStart = self.scheduleStart
+        self.scheduleStart = scheduleStart
         self.scheduleEnd = scheduleEnd
 
 class AssistanceData(JSONSerializable):
@@ -235,17 +235,18 @@ class AssistanceModel:
 
         logging.info('assistanceData start:{} end {} userId:{}'.format(start, end, userIds[0]))
         stats = self.getStatistics(con, userIds, start, end)
-        sts = self._classifyByUserId(stats)
         aData = []
 
         for uid in userIds:
-            s = sts[uid]
+            sts = stats[uid]
             ws = []
             # *************************************************
             # quede hasta aca, me voy al carajo. Estoy quemado
             # *************************************************
-            for ds in s.dailyStats:
-                w = WorkedAssistanceData(ds.iin, ds.out, ds.start, ds.end)
-                ws.append(w)
-            aData.append(AssistanceData(uid, ws))
+            for s in sts:
+                for ds in s.dailyStats:
+                    w = WorkedAssistanceData(ds.iin, ds.out, ds.start, ds.end)
+                    ws.append(w)
+                aData.append(AssistanceData(uid, ws))
+
         return aData
