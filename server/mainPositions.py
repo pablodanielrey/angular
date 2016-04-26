@@ -7,6 +7,7 @@ if __name__ == '__main__':
     import sys
     import logging
     import inject
+    inject.configure()
     sys.path.insert(0, '../python')
 
     logging.basicConfig(level=logging.DEBUG)
@@ -15,8 +16,6 @@ if __name__ == '__main__':
     from actions.systems.positions.positions import PositionsWamp
 
     from model.registry import Registry
-
-    inject.configure()
 
     reg = inject.instance(Registry)
     registry = reg.getRegistry('wamp')

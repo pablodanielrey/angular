@@ -1,5 +1,5 @@
 
-from model.serializer.utils import MySerializer, JSONSerializable
+from model.serializer.utils import JSONSerializable
 import datetime
 
 from model.dao import DAO
