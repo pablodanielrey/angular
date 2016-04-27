@@ -25,6 +25,7 @@ class Position(JSONSerializable):
     def findByUser(cls, con, userIds):
         return PositionDAO.findByUser(con, userIds)
 
+
 class PositionDAO(DAO):
 
     dependencies = [UserDAO]

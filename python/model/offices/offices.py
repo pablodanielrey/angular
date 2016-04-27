@@ -24,6 +24,7 @@ class Office:
         offices = [ OfficeDAO.findById(con, oi) for oi in ids ]
         return offices
 
+
 class OfficeDAO(DAO):
     ''' dao de las oficinas '''
     dependencies = [UserDAO]
