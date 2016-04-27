@@ -14,11 +14,21 @@ class Office:
         self.email = None
         self.users = None
 
+    @classmethod
+    def findAll(cls, con):
+        return OfficeDAO.findAll(con)
+
+    @classmethod
+    def findById(cls, con, ids):
+        assert isinstance(ids,list)
+        offices = [ OfficeDAO.findById(con, oi) for oi in ids ]
+        return offices
+
 
 class OfficeDAO(DAO):
     ''' dao de las oficinas '''
     dependencies = [UserDAO]
-    
+
     @classmethod
     def _createSchema(cls, con):
         super()._createSchema(con)
@@ -26,7 +36,7 @@ class OfficeDAO(DAO):
         try:
             cur.execute("""
                 CREATE SCHEMA IF NOT EXISTS offices;
-                
+
                 CREATE TABLE IF NOT EXISTS offices.offices (
                   id VARCHAR NOT NULL PRIMARY KEY,
                   name VARCHAR NOT NULL,
@@ -35,7 +45,7 @@ class OfficeDAO(DAO):
                   parent VARCHAR REFERENCES offices.offices (id),
                   UNIQUE (name, parent)
                 );
-                
+
                 CREATE TABLE IF NOT EXISTS offices.offices_users (
                   user_id VARCHAR NOT NULL REFERENCES profile.users (id),
                   office_id VARCHAR REFERENCES offices.offices (id),
@@ -44,7 +54,7 @@ class OfficeDAO(DAO):
             """)
         finally:
             cur.close()
-            
+
     @staticmethod
     def _fromResult(r):
         o = Office()

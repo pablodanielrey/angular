@@ -20,6 +20,7 @@ from model.assistance.justifications.longDurationJustification import LongDurati
 from model.assistance.justifications.status import Status
 from model.assistance.justifications.justifications import Justification
 from model.assistance.schedules import ScheduleDAO
+from model.offices.offices import Office
 
 from model.serializer.utils import MySerializer, serializer_loads
 
@@ -166,8 +167,13 @@ def workedPeriodsToPyoo(wps, users):
         doc.close()
 
 
+def _secondsToHours(seconds):
+    if seconds == 0:
+        return ""
+    else:
+        return "{0:02d}:{0:02d}".format(int((seconds / 60) / 60), int((seconds % 60) / 60))
 
-def statsToPyoo(stats, users):
+def statsToPyoo(stats, users, offices):
 
     import uuid
     f = str(uuid.uuid4())
@@ -178,37 +184,64 @@ def statsToPyoo(stats, users):
     doc = calc.open_spreadsheet('templateStats.ods')
     try:
         sheetIndex = 0
-        i = 1
-        for user in users:
-            if user:
-                status = stats[user.id][0]
-                sheet = doc.sheets[0]
+        io = 0
+        io2 = 0
 
-                sheet[i,0].value = user.name + " " + user.lastname
-                sheet[i,1].value = datetime.timedelta(seconds=status.secondsToWork)
-                sheet[i,2].value = datetime.timedelta(seconds=status.secondsWorked)
-                sheet[i,3].value = datetime.timedelta(seconds=status.secondsLate)
-                sheet[i,4].value = status.countLate
-                sheet[i,5].value = datetime.timedelta(seconds=status.secondsEarly)
-                sheet[i,6].value = status.countEarly
+        for off in offices:
 
-                i = i + 1
+            sheet = doc.sheets[0]
+            sheet[io,0].value = 'Oficina'
+            sheet[io,1].value = off.name
 
-        sheet = doc.sheets[1]
-        i = 1
-        for user in users:
-            if user:
-                status = stats[user.id][0]
-                for st in status.dailyStats:
+            sheet = doc.sheets[1]
+            sheet[io2,0].value = 'Oficina'
+            sheet[io2,1].value = off.name
+
+            i = io + 2
+            for uid in off.users:
+                user = findUser(uid, users)
+                if user:
+                    status = stats[user.id][0]
+                    sheet = doc.sheets[0]
+
                     sheet[i,0].value = user.name + " " + user.lastname
-                    sheet[i,1].value = st.date
-                    sheet[i,2].value = st.start
-                    sheet[i,3].value = st.end
-                    sheet[i,4].value = datetime.timedelta(seconds=st.periodSeconds)
-                    sheet[i,5].value = st.iin
-                    sheet[i,6].value = st.out
-                    sheet[i,7].value = datetime.timedelta(seconds=st.workedSeconds)
+                    sheet[i,1].value = datetime.timedelta(seconds=status.secondsToWork)
+                    sheet[i,2].value = datetime.timedelta(seconds=status.secondsWorked)
+                    sheet[i,3].value = datetime.timedelta(seconds=status.secondsLate)
+                    sheet[i,4].value = status.countLate
+                    sheet[i,5].value = datetime.timedelta(seconds=status.secondsEarly)
+                    sheet[i,6].value = status.countEarly
+                    sheet[i,7].value = status.countAbsences
+                    sheet[i,8].value = status.countJustificatedAbsences
+
                     i = i + 1
+
+            io = i + 1
+
+
+            sheet = doc.sheets[1]
+            i = io2 + 2
+
+            for uid in off.users:
+                user = findUser(uid, users)
+                if user:
+                    status = stats[user.id][0]
+
+                    for st in status.dailyStats:
+                        sheet[i,0].value = user.name + " " + user.lastname
+                        sheet[i,1].value = st.date
+                        sheet[i,2].value = st.start if st.start is not None else ''
+                        sheet[i,3].value = st.end if st.end is not None else ''
+                        sheet[i,4].value = datetime.timedelta(seconds=st.periodSeconds) if st.periodSeconds != 0 else ''
+                        sheet[i,5].value = st.iin if st.iin is not None else ''
+                        sheet[i,6].value = st.out if st.out is not None else ''
+                        sheet[i,7].value = datetime.timedelta(seconds=st.workedSeconds) if st.workedSeconds is not None else ''
+                        sheet[i,8].value = st.justification.identifier if st.justification is not None else ''
+                        sheet[i,9].value = _secondsToHours(st.justification.seconds) if st.justification is not None else ''
+                        sheet[i,10].value = 'J' if st.isJustificatedAbsence() else 'A' if st.isAbsence() else ''
+                        i = i + 1
+
+            io2 = i + 1
 
             #index = index + 1
         fn = '/tmp/prueba.ods'
@@ -217,10 +250,13 @@ def statsToPyoo(stats, users):
     finally:
         doc.close()
 
+def _getOffices(con):
+    return Office.findById(con, Office.findAll(con))
 
 def _getUsers(con):
     uids = []
 
+    """
     uid, v = UserDAO.findByDni(con, "26575940")
     uids.append(uid)
 
@@ -233,17 +269,17 @@ def _getUsers(con):
     uid, v = UserDAO.findByDni(con, "24040623")
     uids.append(uid)
 
-    #uid, v = UserDAO.findByDni(con, "32393755")    # pablo Lozada
-    #uids.append(uid)
+    uid, v = UserDAO.findByDni(con, "32393755")    # pablo Lozada
+    uids.append(uid)
 
-    #uid, v = UserDAO.findByDni(con, "27528150")    # julio ciappa
-    #uids.append(uid)
+    uid, v = UserDAO.findByDni(con, "27528150")    # julio ciappa
+    uids.append(uid)
 
-    #uid, v = UserDAO.findByDni(con, "18609353")    # juan acosta
-    #uids.append(uid)
+    uid, v = UserDAO.findByDni(con, "18609353")    # juan acosta
+    uids.append(uid)
 
-    #uid, v = UserDAO.findByDni(con, "24040623")     # miguel rey
-    #uids.append(uid)
+    uid, v = UserDAO.findByDni(con, "24040623")     # miguel rey
+    uids.append(uid)
 
     uid, v = UserDAO.findByDni(con, "27821597")     # maxi
     uids.append(uid)
@@ -254,8 +290,8 @@ def _getUsers(con):
     uid, v = UserDAO.findByDni(con, "33212183")     # santiago
     uids.append(uid)
 
-    uid, v = UserDAO.findByDni(con, "27294557")     # pablo
-    uids.append(uid)
+    #uid, v = UserDAO.findByDni(con, "27294557")     # pablo
+    #uids.append(uid)
 
     uid, v = UserDAO.findByDni(con, "30001823")    # walter
     uids.append(uid)
@@ -266,10 +302,26 @@ def _getUsers(con):
     uid, v = UserDAO.findByDni(con, "29694757")      # oporto
     uids.append(uid)
 
-    #uids = ScheduleDAO.findUsersWithSchedule(con)
+    uid, v = UserDAO.findByDni(con, "30078613")      # lorena mabel pereira
+    uids.append(uid)
+
+    uid, v = UserDAO.findByDni(con, "30078613")      # lorena mabel pereira
+    uids.append(uid)
+
+    uid, v = UserDAO.findByDni(con, "21430694")      # analía causa
+    uids.append(uid)
+
+    """
+    uids = ScheduleDAO.findUsersWithSchedule(con)
     users = UserDAO.findById(con, uids)
     return users, uids
 
+
+def findUser(uid, users):
+    for u in users:
+        if u.id == uid:
+            return u
+    return None
 
 if __name__ == '__main__':
 
@@ -284,12 +336,12 @@ if __name__ == '__main__':
         from model.assistance.assistanceDao import AssistanceDAO
         AssistanceDAO._createSchema(con)
 
-
+        offices = _getOffices(con)
         users, userIds = _getUsers(con)
         a = inject.instance(AssistanceModel)
-        stats = a.getStatistics(con, userIds, datetime.datetime.now() - datetime.timedelta(days=97), datetime.datetime.now())
+        stats = a.getStatistics(con, userIds, datetime.datetime.now() - datetime.timedelta(days=30), datetime.datetime.now())
         #wps = a.getWorkPeriods(con, userIds, datetime.datetime.now() - datetime.timedelta(days=97), datetime.datetime.now())
-        statsToPyoo(stats, users)
+        statsToPyoo(stats, users, offices)
 
 
         """

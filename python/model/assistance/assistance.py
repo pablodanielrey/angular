@@ -16,19 +16,27 @@ from model.assistance.utils import Utils
 
 class WorkedAssistanceData(JSONSerializable):
 
+    def __init__(self, ds = None):
+        if (ds is None):
+            self._initialize()
+        else:
+            self._initialize(ds.date, ds.iin, ds.out, ds.start, ds.end)
 
-    def __init__(self, date = None, logStart = None, logEnd = None, scheduleStart = None, scheduleEnd = None):
+
+    def _initialize(self, date = None, logStart = None, logEnd = None, scheduleStart = None, scheduleEnd = None):
+        self.date = date
         self.logStart = Utils._localizeLocal(logStart) if Utils._isNaive(logStart) else logStart
         self.logEnd = Utils._localizeLocal(logEnd) if Utils._isNaive(logEnd) else logEnd
         self.scheduleStart = Utils._localizeLocal(scheduleStart) if Utils._isNaive(scheduleStart) else scheduleStart
         self.scheduleEnd = Utils._localizeLocal(scheduleEnd) if Utils._isNaive(scheduleEnd) else scheduleEnd
-        self.date = date
+
 
 class AssistanceData(JSONSerializable):
 
     def __init__(self, userId = None, workedAssistanceData = []):
         self.userId = userId
         self.workedAssistanceData = workedAssistanceData
+
 
 class WorkPeriod(JSONSerializable):
 
@@ -43,6 +51,9 @@ class WorkPeriod(JSONSerializable):
 
     def addJustification(self, j):
         self.justifications.append(j)
+
+    def getJustifications(self):
+        return self.justifications
 
     def getStartDate(self):
         if self.schedule is None:
@@ -114,7 +125,6 @@ class AssistanceModel:
     @staticmethod
     def _cloneDate(date):
         return datetime.date.fromordinal(date.toordinal())
-
 
     def _getSchedules(self, con, userIds, start, end):
         ss = ScheduleDAO.findByUserId(con, userIds, start, end)
@@ -220,7 +230,6 @@ class AssistanceModel:
 
         return wpss
 
-
     def getStatistics(self, con, userIds, start, end):
         wpss = self.getWorkPeriods(con, userIds, start, end)
         totalStats = []
@@ -245,7 +254,7 @@ class AssistanceModel:
             ws = []
             for s in sts:
                 for ds in s.dailyStats:
-                    w = WorkedAssistanceData(ds.date, ds.iin, ds.out, ds.start, ds.end)
+                    w = WorkedAssistanceData(ds)
                     ws.append(w)
                 aData.append(AssistanceData(uid, ws))
 
