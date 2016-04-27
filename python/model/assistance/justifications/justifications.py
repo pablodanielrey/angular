@@ -66,7 +66,6 @@ class Justification(JSONSerializable):
         cls._loadStatus(con, justs)
         return justs
 
-
     @classmethod
     def findById(cls, con, ids):
         assert cls.dao is not None

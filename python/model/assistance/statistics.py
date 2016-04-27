@@ -38,6 +38,7 @@ class JustificationStatistics:
         for js in wp.getJustifications():
             j.identifier = js.getIdentifier()
             j.seconds = js.getJustifiedSeconds(wp)
+            j.status = js.getStatus().status
         return j
 
 class DailyWpStatistics:
