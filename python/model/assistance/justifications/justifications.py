@@ -108,7 +108,6 @@ class Justification(JSONSerializable):
 class SingleDateJustification(Justification):
 
     def __init__(self, date, userId, ownerId):
-        assert isinstance(date, datetime.datetime)
         super().__init__(userId, ownerId)
         self.date = date
 
@@ -165,7 +164,7 @@ class RangedJustification(Justification):
 
         continuous = self.isContinuous()
         self.start = start
-        self.end = RangedJustification._getEnd(start, days, continuous)
+        self.end = None if start is None or days is None else RangedJustification._getEnd(start, days, continuous) 
 
     def _loadWorkedPeriods(self, wps):
         assert self.getStatus() is not None

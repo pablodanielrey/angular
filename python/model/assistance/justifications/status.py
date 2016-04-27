@@ -14,15 +14,15 @@ class Status(JSONSerializable):
     REJECTED = 3
     CANCELED = 4
 
-    def __init__(self, userId, date):
+    def __init__(self, userId=None, date=None):
         self.id = None
         self.justificationId = None
         self.status = Status.PENDING
         self.userId = userId
-        if ((date.tzinfo is None) or (date.tzinfo.utcoffset(date) is None)):
+        if (date is not None and ((date.tzinfo is None) or (date.tzinfo.utcoffset(date) is None))):
             date = date.replace(tzinfo=tzlocal())
 
-        self.date = date        
+        self.date = date
         self.created = datetime.datetime.now(tzlocal())
 
     def _setJustificationId(self, jid):
@@ -65,7 +65,7 @@ class StatusDAO(AssistanceDAO):
         try:
             cur.execute("""
                 CREATE SCHEMA IF NOT EXISTS assistance;
-                
+
                 CREATE TABLE IF NOT EXISTS assistance.justification_status (
                     id varchar primary key,
                     status int not null,

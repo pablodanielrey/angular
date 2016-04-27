@@ -50,10 +50,10 @@ VARIABLES 3: solicitudesPersonales, solicitudesGrupo, cargandoSolicitudes
                 </div>
 
                 <div class="dateOrder">
-                  Inicio <input class="inputDateRequest" type="date"></input>
-                  Fin <input class="inputDateRequest" type="date"></input>
-                  <button class="btnOrder"><i class="fa fa-refresh"></i></button>
-                  <button class="btnOrder"><i class="fa fa-refresh fa-spin"></i></button>
+                  Inicio <input class="inputDateRequest" type="date" ng-model="model.start"></input>
+                  Fin <input class="inputDateRequest" type="date" ng-model="model.end"></input>
+                  <button class="btnOrder" ng-if="!view.searching" ng-click="search()"><i class="fa fa-refresh"></i></button>
+                  <button class="btnOrder" ng-if="view.searching"><i class="fa fa-refresh fa-spin"></i></button>
                 </div>
 
                 <div class="orderRequest">
@@ -68,7 +68,38 @@ VARIABLES 3: solicitudesPersonales, solicitudesGrupo, cargandoSolicitudes
             <div class="listMyRequest">
 
                 <div class="requestOwn">
-                  <!-- SOLICITUD INDIVIDUAL -->
+
+
+                  <div class="itemRequest" ng-repeat="just in model.justifications ">
+                    <div class="typeRequest">
+                        <i class="ico fa fa-ticket "></i> {{just.name}}
+                    </div>
+                    <div class="infoRequest">
+                        <div class="dateRequest">
+                          08/01/2016
+                        </div>
+                        <div class="dateRequest2">
+
+
+                        </div>
+                    </div>
+                    <div class="contentState">
+                        <div class="state">
+                          Estado
+                        </div>
+                        <div class="icoState">
+                          <div class="icoStateApproved">
+                            A
+                          </div>
+                          <div class="textIcoState">
+                            Aprobado
+                          </div>
+                        </div>
+                    </div>
+                  </div>
+
+
+                  <!--
                   <div class="itemRequest">
                     <div class="typeRequest">
                         <i class="ico fa fa-ticket "></i> Boleta de salida
@@ -101,7 +132,6 @@ VARIABLES 3: solicitudesPersonales, solicitudesGrupo, cargandoSolicitudes
 
                   </div>
 
-                  <!-- SOLICITUD INDIVIDUAL -->
                   <div class="itemRequest">
                     <div class="typeRequest">
                         <i class="ico fa fa-ticket "></i> Ausente con aviso
@@ -134,7 +164,6 @@ VARIABLES 3: solicitudesPersonales, solicitudesGrupo, cargandoSolicitudes
 
                   </div>
 
-                  <!-- SOLICITUD INDIVIDUAL -->
                   <div class="itemRequest">
                     <div class="typeRequest">
                         <i class="ico fa fa-ticket "></i> Ausente con aviso
@@ -163,151 +192,6 @@ VARIABLES 3: solicitudesPersonales, solicitudesGrupo, cargandoSolicitudes
                     </div>
                   </div>
 
-                  <!-- SOLICITUD INDIVIDUAL -->
-                  <div class="itemRequest">
-                    <div class="typeRequest">
-                        <i class="ico fa fa-ticket "></i> Ausente con aviso
-                    </div>
-                    <div class="infoRequest">
-                        <div class="dateRequest">
-                          08/01/2016
-                        </div>
-                        <div class="dateRequest2">
-
-
-                        </div>
-                    </div>
-                    <div class="contentState">
-                        <div class="state">
-                          Estado
-                        </div>
-                        <div class="icoState">
-                          <div class="icoStateApproved">
-                            A
-                          </div>
-                          <div class="textIcoState">
-                            Aprobado
-                          </div>
-                        </div>
-                    </div>
-                  </div>
-
-                  <!-- SOLICITUD INDIVIDUAL -->
-                  <div class="itemRequest">
-                    <div class="typeRequest">
-                        <i class="ico fa fa-ticket "></i> Boleta de salida
-                    </div>
-                    <div class="infoRequest">
-                        <div class="dateRequest">
-                          19/04/2016
-                        </div>
-                        <div class="bar"> | </div>
-                        <div class="dateRequest2">
-                          14:00 - 16:00
-                        </div>
-                    </div>
-                    <div class="contentState">
-                        <div class="state">
-                          Estado
-                        </div>
-                        <div class="icoState">
-                          <div class="icoStateCancel">
-                            C
-                          </div>
-                          <div class="textIcoState">
-                            Cancelado
-                          </div>
-                        </div>
-                    </div>
-                  </div>
-                    <!-- SOLICITUD INDIVIDUAL -->
-                    <div class="itemRequest">
-                      <div class="typeRequest">
-                          <i class="ico fa fa-ticket "></i> Pre-exámen
-                      </div>
-                      <div class="infoRequest">
-                          <div class="dateRequest">
-                            19/04/2016
-                          </div>
-                          <div class="bar"> | </div>
-                          <div class="dateRequest2">
-                            21/04/2016
-                          </div>
-                      </div>
-                      <div class="contentState">
-                          <div class="state">
-                            Estado
-                          </div>
-                          <div class="icoState">
-                            <div class="icoStateApproved">
-                              A
-                            </div>
-                            <div class="textIcoState">
-                              Aprobado
-                            </div>
-                          </div>
-                      </div>
-                    </div>
-
-                    <!-- SOLICITUD INDIVIDUAL -->
-                    <div class="itemRequest">
-                      <div class="typeRequest">
-                          <i class="ico fa fa-ticket "></i> Ausente con aviso
-                      </div>
-                      <div class="infoRequest">
-                          <div class="dateRequest">
-                            08/01/2016
-                          </div>
-                          <div class="dateRequest2">
-
-
-                          </div>
-                      </div>
-                      <div class="contentState">
-                          <div class="state">
-                            Estado
-                          </div>
-                          <div class="icoState">
-                            <div class="icoStateApproved">
-                              A
-                            </div>
-                            <div class="textIcoState">
-                              Aprobado
-                            </div>
-                          </div>
-                      </div>
-                    </div>
-
-                  <!-- SOLICITUD INDIVIDUAL -->
-                  <div class="itemRequest">
-                    <div class="typeRequest">
-                        <i class="ico fa fa-ticket "></i> Ausente con aviso
-                    </div>
-                    <div class="infoRequest">
-                        <div class="dateRequest">
-                          08/01/2016
-                        </div>
-                        <div class="dateRequest2">
-
-
-                        </div>
-                    </div>
-                    <div class="contentState">
-                        <div class="state">
-                          Estado
-                        </div>
-                        <div class="icoState">
-                          <div class="icoStateCancel">
-                            C
-                          </div>
-                          <div class="textIcoState">
-                            Cancelado
-                          </div>
-                        </div>
-                    </div>
-                  </div>
-
-                  <!-- SOLICITUD INDIVIDUAL -->
                   <div class="itemRequest">
                     <div class="typeRequest">
                         <i class="ico fa fa-ticket "></i> Ausente con aviso
@@ -336,7 +220,6 @@ VARIABLES 3: solicitudesPersonales, solicitudesGrupo, cargandoSolicitudes
                     </div>
                   </div>
 
-                  <!-- SOLICITUD INDIVIDUAL -->
                   <div class="itemRequest">
                     <div class="typeRequest">
                         <i class="ico fa fa-ticket "></i> Boleta de salida
@@ -364,7 +247,6 @@ VARIABLES 3: solicitudesPersonales, solicitudesGrupo, cargandoSolicitudes
                         </div>
                     </div>
                   </div>
-                    <!-- SOLICITUD INDIVIDUAL -->
                     <div class="itemRequest">
                       <div class="typeRequest">
                           <i class="ico fa fa-ticket "></i> Pre-exámen
@@ -393,7 +275,6 @@ VARIABLES 3: solicitudesPersonales, solicitudesGrupo, cargandoSolicitudes
                       </div>
                     </div>
 
-                    <!-- SOLICITUD INDIVIDUAL -->
                     <div class="itemRequest">
                       <div class="typeRequest">
                           <i class="ico fa fa-ticket "></i> Ausente con aviso
@@ -422,7 +303,145 @@ VARIABLES 3: solicitudesPersonales, solicitudesGrupo, cargandoSolicitudes
                       </div>
                     </div>
 
-                    <!-- SOLICITUD INDIVIDUAL -->
+                  <div class="itemRequest">
+                    <div class="typeRequest">
+                        <i class="ico fa fa-ticket "></i> Ausente con aviso
+                    </div>
+                    <div class="infoRequest">
+                        <div class="dateRequest">
+                          08/01/2016
+                        </div>
+                        <div class="dateRequest2">
+
+
+                        </div>
+                    </div>
+                    <div class="contentState">
+                        <div class="state">
+                          Estado
+                        </div>
+                        <div class="icoState">
+                          <div class="icoStateCancel">
+                            C
+                          </div>
+                          <div class="textIcoState">
+                            Cancelado
+                          </div>
+                        </div>
+                    </div>
+                  </div>
+
+                  <div class="itemRequest">
+                    <div class="typeRequest">
+                        <i class="ico fa fa-ticket "></i> Ausente con aviso
+                    </div>
+                    <div class="infoRequest">
+                        <div class="dateRequest">
+                          08/01/2016
+                        </div>
+                        <div class="dateRequest2">
+
+
+                        </div>
+                    </div>
+                    <div class="contentState">
+                        <div class="state">
+                          Estado
+                        </div>
+                        <div class="icoState">
+                          <div class="icoStateApproved">
+                            A
+                          </div>
+                          <div class="textIcoState">
+                            Aprobado
+                          </div>
+                        </div>
+                    </div>
+                  </div>
+
+                  <div class="itemRequest">
+                    <div class="typeRequest">
+                        <i class="ico fa fa-ticket "></i> Boleta de salida
+                    </div>
+                    <div class="infoRequest">
+                        <div class="dateRequest">
+                          19/04/2016
+                        </div>
+                        <div class="bar"> | </div>
+                        <div class="dateRequest2">
+                          14:00 - 16:00
+                        </div>
+                    </div>
+                    <div class="contentState">
+                        <div class="state">
+                          Estado
+                        </div>
+                        <div class="icoState">
+                          <div class="icoStateCancel">
+                            C
+                          </div>
+                          <div class="textIcoState">
+                            Cancelado
+                          </div>
+                        </div>
+                    </div>
+                  </div>
+                    <div class="itemRequest">
+                      <div class="typeRequest">
+                          <i class="ico fa fa-ticket "></i> Pre-exámen
+                      </div>
+                      <div class="infoRequest">
+                          <div class="dateRequest">
+                            19/04/2016
+                          </div>
+                          <div class="bar"> | </div>
+                          <div class="dateRequest2">
+                            21/04/2016
+                          </div>
+                      </div>
+                      <div class="contentState">
+                          <div class="state">
+                            Estado
+                          </div>
+                          <div class="icoState">
+                            <div class="icoStateApproved">
+                              A
+                            </div>
+                            <div class="textIcoState">
+                              Aprobado
+                            </div>
+                          </div>
+                      </div>
+                    </div>
+
+                    <div class="itemRequest">
+                      <div class="typeRequest">
+                          <i class="ico fa fa-ticket "></i> Ausente con aviso
+                      </div>
+                      <div class="infoRequest">
+                          <div class="dateRequest">
+                            08/01/2016
+                          </div>
+                          <div class="dateRequest2">
+
+
+                          </div>
+                      </div>
+                      <div class="contentState">
+                          <div class="state">
+                            Estado
+                          </div>
+                          <div class="icoState">
+                            <div class="icoStateApproved">
+                              A
+                            </div>
+                            <div class="textIcoState">
+                              Aprobado
+                            </div>
+                          </div>
+                      </div>
+                    </div>
+
                     <div class="itemRequest">
                       <div class="typeRequest">
                           <i class="ico fa fa-ticket "></i> Vacaciones
@@ -450,6 +469,7 @@ VARIABLES 3: solicitudesPersonales, solicitudesGrupo, cargandoSolicitudes
                           </div>
                       </div>
                     </div>
+                  -->
                 </div>
 
                 <div class="requestGroup">

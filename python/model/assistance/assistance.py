@@ -141,6 +141,15 @@ class AssistanceModel:
         justs = AssistanceModel._classifyByUserId(js)
         return justs
 
+    def getJustifications(self, con, userId, start, end, isAll = False):
+        if isAll:
+            # tengo que obtener todos los usuarios de las oficina que autoriaza y buscar por esos usuarios
+            # ahora hago la misma llamada pero despues lo tengo que cambiar cuando este terminado lo de office y los roles
+            return self._getJustifications(con, [userId], start, end)
+        else:
+            return self._getJustifications(con, [userId], start, end)
+
+
 
     def calculateStatistics(self, wps):
         userId = wps[0].userId
