@@ -128,6 +128,9 @@ class SingleDateJustification(Justification):
                 wp.addJustification(self)
 
     def getJustifiedSeconds(self, wp=None):
+        if wp.getSchedule() is None:
+            return 0
+
         seconds = 0
         for wp in self.wps:
             seconds = seconds + (wp.getEndDate() - wp.getStartDate()).total_seconds()
@@ -189,21 +192,16 @@ class RangedJustification(Justification):
             si se le pasa el día, entonces retorna los segundos del horario.
             si el wp es None entonces retorna la suma de todos los horarios de los días que justifica
         """
-        try:
-            seconds = 0
-            if wp is None:
-                for wp in self.wps:
-                    seconds = seconds + (wp.getEndDate() - wp.getStartDate()).total_seconds()
-                return seconds
-            else:
-                return (wp.getEndDate() - wp.getStartDate()).total_seconds()
-
-        except Exception as e:
-            ### puse esto debido a que hay varias que no tienen start ni end. cuando deberían tenerlo. horario registrado
-            logging.warn(self)
-            logging.warn(wp)
-            logging.exception(e)
+        if wp.getSchedule() is None:
             return 0
+
+        seconds = 0
+        if wp is None:
+            for wp in self.wps:
+                seconds = seconds + (wp.getEndDate() - wp.getStartDate()).total_seconds()
+            return seconds
+        else:
+            return (wp.getEndDate() - wp.getStartDate()).total_seconds()
 
 class RangedTimeJustification(Justification):
 
@@ -226,13 +224,16 @@ class RangedTimeJustification(Justification):
         """
             retorna la cantidad de segundos justificados.
             Si end es None entonces retorna la cantidad de segundos desde el start hasta el fin del horario
+            Si no tiene horario entonces retorna 0
         """
+
+        if wp.getSchedule() is None:
+            return 0
 
         if self.end is None:
             """
                 justifica hasta el fin del horario
             """
             return (wp.getEndDate() - self.start).total_seconds()
-
         else:
             return (self.end - self.start).total_seconds()

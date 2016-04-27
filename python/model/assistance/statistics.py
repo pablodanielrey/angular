@@ -54,9 +54,9 @@ class DailyWpStatistics:
         ds.iin = None if wp.getStartLog() is None else wp.getStartLog().log.astimezone(tzlocal()).replace(tzinfo=None)
         ds.out = None if wp.getEndLog() is None else wp.getEndLog().log.astimezone(tzlocal()).replace(tzinfo=None)
         ds.justification = JustificationStatistics._create(wp)
-        ds._calculatePeriodSeconds(stats)
-        ds._caculateWorkedSeconds(stats)
-        ds._calculateLateAndEarly(stats)
+        ds._calculatePeriodSeconds(wp, stats)
+        ds._caculateWorkedSeconds(wp, stats)
+        ds._calculateLateAndEarly(wp, stats)
         ds._calculateAbsence(wp)
         stats._addDailyStatistics(ds)
 
@@ -68,28 +68,24 @@ class DailyWpStatistics:
         stats._addDailyStatistics(self)
 
     def _calculateAbsence(self, wp):
-        self.absence = False
-        if self.iin is None and self.out is None and wp.getStartDate() is not None:
-            self.absence = True
-            self.justificatedAbsence = len(wp.getJustifications()) > 0
+        self.absence = wp.isAbsence()
+        self.justificatedAbsence = wp.isJustificatedAbsence()
 
-    def _calculatePeriodSeconds(self, stats):
-        if self.start is not None and self.end is not None:
-            self.periodSeconds = (self.end - self.start).total_seconds()
-            stats._addToWorkSeconds(self.periodSeconds)
+    def _calculatePeriodSeconds(self, wp, stats):
+        self.periodSeconds = wp.getScheduleSeconds()
+        stats._addToWorkSeconds(self.periodSeconds)
 
-    def _caculateWorkedSeconds(self, stats):
-        if self.iin is not None and self.out is not None:
-            self.workedSeconds = (self.out - self.iin).total_seconds()
-            stats._addWorkedSeconds(self.workedSeconds)
+    def _caculateWorkedSeconds(self, wp, stats):
+        self.workedSeconds = wp.getWorkedSeconds()
+        stats._addWorkedSeconds(self.workedSeconds)
 
-    def _calculateLateAndEarly(self, stats):
-        if self.iin is not None and self.start is not None and self.iin > self.start:
-            self.lateSeconds = (self.iin - self.start).total_seconds()
+    def _calculateLateAndEarly(self, wp, stats):
+        self.lateSeconds = wp.getLateSeconds()
+        if self.lateSeconds > 0:
             stats._addSecondsLate(self.lateSeconds)
 
-        if self.out is not None and self.end is not None and self.out < self.end:
-            self.earlySeconds = (self.end - self.out).total_seconds()
+        self.earlySeconds = wp.getEarlySeconds()
+        if self.earlySeconds > 0:
             stats._addSecondsEarly(self.earlySeconds)
 
     def isAbsence(self):
