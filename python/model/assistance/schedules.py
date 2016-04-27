@@ -1,6 +1,8 @@
 
 import datetime
 from model.serializer.utils import JSONSerializable
+from model.users.users import UserDAO
+from model.assistance.assistanceDao import AssistanceDAO
 
 class Schedule(JSONSerializable):
 
@@ -31,17 +33,23 @@ class Schedule(JSONSerializable):
         dt = datetime.datetime.combine(date, datetime.time(0,0))
         return dt + datetime.timedelta(seconds=self.end)
 
+    def getScheduleSeconds(self):
+        if self.end is None or self.start is None:
+            return 0
+        return self.end - self.start
 
 
-class ScheduleDAO:
+class ScheduleDAO(AssistanceDAO):
+    dependencies = [ UserDAO ]
 
-    @staticmethod
-    def _createSchema(con):
+    @classmethod
+    def _createSchema(cls, con):
+        super()._createSchema(con)
         cur = con.cursor()
         try:
             cur.execute("""
                 create schema if not exists assistance;
-                create table assistance.schedules (
+                create table IF NOT EXISTS assistance.schedules (
                     id varchar primary key,
                     user_id varchar not null references profile.users (id),
                     sdate date default now(),
@@ -87,6 +95,17 @@ class ScheduleDAO:
                 return None
 
             return ScheduleDAO._fromResult(cur.fetchone())
+
+        finally:
+            cur.close()
+
+    @staticmethod
+    def findUsersWithSchedule(con):
+        """ lo creo para hacer unas pruebas pero puede servir para despues. es codig BETAAA """
+        cur = con.cursor()
+        try:
+            cur.execute('select distinct user_id from assistance.schedules')
+            return [ c[0] for c in cur ]
 
         finally:
             cur.close()

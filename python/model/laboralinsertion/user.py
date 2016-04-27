@@ -1,32 +1,42 @@
 # -*- coding: utf-8 -*-
 import logging
+from model.dao import DAO
 from model.files.files import FileDAO
+from model.users.users import MailDAO
 
 class User:
     def __init__(self):
         self.id = None
         self.acceptedConditions = True
-        self.email = None
+        self.emailId = None
         self.created = None
         self.cv = None
         self.priority = 0
 
+    @classmethod
+    def findById(cls, con, uid):
+        return UserDAO.findById(con, uid)
 
-class UserDAO:
-
-    @staticmethod
-    def _createSchema(con):
+class UserDAO(DAO):
+    dependencies = [FileDAO, MailDAO]
+    
+    @classmethod
+    def _createSchema(cls, con):
+        super()._createSchema(con)
+        
         cur = con.cursor()
         try:
             cur.execute("""
-                create table laboral_insertion.users (
+                CREATE SCHEMA IF NOT EXISTS laboral_insertion;
+                
+                create table IF NOT EXISTS laboral_insertion.users (
                     id varchar primary key,
                     accepted_conditions boolean default true,
-                    email varhcar not null references profile.mails (id),
+                    email varchar not null references profile.mails (id),
                     cv varchar not null references files.files (id),
                     priority integer default 0,
                     created timestamptz default now()
-                )
+                );
             """)
         finally:
             cur.close()
@@ -36,7 +46,7 @@ class UserDAO:
         u = User()
         u.id = r['id']
         u.acceptedConditions = r['accepted_conditions']
-        u.email = r['email']
+        u.emailId = r['email']
         u.cv = r['cv']
         u.created = r['created']
         u.priority = r['priority']
@@ -56,14 +66,15 @@ class UserDAO:
                 ins['acceptedConditions'] = True
                 ins['cv'] = ins['cv'] if 'cv' in ins else None
                 ins['priority'] = ins['priority'] if 'priority' in ins else 0
+                logging.info('persist laboralinsertion.userdao {} {}'.format(u.id, u.emailId))
                 cur.execute('insert into laboral_insertion.users (id, accepted_conditions, email, cv, priority) values '
-                            '(%(id)s, %(acceptedConditions)s, %(email)s, %(cv)s, %(priority)s)', ins)
+                            '(%(id)s, %(acceptedConditions)s, %(emailId)s, %(cv)s, %(priority)s)', ins)
             else:
                 ins = u.__dict__
                 ins['acceptedConditions'] = True
                 ins['cv'] = ins['cv'] if 'cv' in ins else None
                 ins['priority'] = ins['priority'] if 'priority' in ins else 0
-                cur.execute('update laboral_insertion.users set accepted_conditions = %(acceptedConditions)s, email = %(email)s, '
+                cur.execute('update laboral_insertion.users set accepted_conditions = %(acceptedConditions)s, email = %(emailId)s, '
                             'cv = %(cv)s, priority = %(priority)s where id = %(id)s', ins)
         finally:
             cur.close()

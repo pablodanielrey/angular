@@ -7,6 +7,7 @@ SearchCtrl.$inject = ['$rootScope','$scope','$location', '$window', 'Notificatio
 function SearchCtrl($rootScope, $scope, $location, $window, Notifications, LaboralInsertion, Login, Utils, Users, $wamp) {
 
   $scope.model = {
+    sentSelected: '',
     sents: {},
     inscriptions: [],
     selecteds: [],
@@ -43,6 +44,14 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     reversePriority: false,
     reverMail: false
   };
+
+  // -------------------- FUCNTIONES DE WALTER --------------
+
+  $scope.onMouseOverSend = function(i) {
+    $scope.model.sentSelected = i.id;
+  };
+
+
 
   // --------------------------------------------------------------
   // ------------------- FUNCIONES DE ORDENACION ------------------
@@ -822,7 +831,7 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     Users.findMails(userId, function(mails) {
       d = $scope.model.data[userId];
       for ( var i = 0; i < mails.length; i++) {
-        if (d["email"] == mails[i]["id"]) {
+        if (d["emailId"] == mails[i]["id"]) {
           d["email"] = mails[i];
         }
       }
@@ -839,7 +848,7 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
       //console.log('Buscando usuario ' + ins[i].userId);
       LaboralInsertion.findByUser(ins[i].userId).then(function(data) {
         $scope.model.data[data['id']] = data;
-        if (data["email"] != "") {
+        if (data["emailId"] != "") {
           $scope.findMail(data["id"]);
         }
       }, function(err) {
@@ -854,6 +863,9 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
   $scope.getCompaniesData = function() {
     LaboralInsertion.findAllCompanies().then(function(companies) {
       $scope.model.companies = companies;
+      $scope.model.companies.sort(function(a, b) {
+        return a.name < b.name ? -1 : (a.name > b.name ? 1 : 0)
+      });
       console.log(companies);
     }, function(err) {
       console.log(err);

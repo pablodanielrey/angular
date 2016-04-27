@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+
 from model.serializer.utils import JSONSerializable
 
 class Log(JSONSerializable):
@@ -16,7 +17,32 @@ class Log(JSONSerializable):
         return (self.log >= start and self.log <= end)
 
 
-class LogDAO:
+from model.dao import DAO
+from model.users.users import UserDAO
+
+class LogDAO(DAO):
+
+    dependencies = [ UserDAO ]
+
+    @classmethod
+    def _createSchema(cls, con):
+        super()._createSchema(con)
+        cur = con.cursor()
+        try:
+            cur.execute("""
+              CREATE SCHEMA IF NOT EXISTS assistance;
+              
+              CREATE TABLE IF NOT EXISTS assistance.attlog (
+                id VARCHAR NOT NULL PRIMARY KEY,
+                device_id VARCHAR NOT NULL,
+                user_id VARCHAR NOT NULL  REFERENCES profile.users (id),
+                verifymode BIGINT NOT NULL,
+                log TIMESTAMPTZ NOT NULL,
+                created TIMESTAMPTZ DEFAULT now()
+              );
+            """)
+        finally:
+            cur.close()
 
     @staticmethod
     def _fromResult(r):

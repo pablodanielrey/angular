@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import uuid
 import hashlib
-
+from model.dao import DAO
 
 class File:
 
@@ -25,27 +25,39 @@ class File:
         m.update(content.encode('utf8'))
         return m.hexdigest()
 
+    @classmethod
+    def findById(cls, con, id):
+        return FileDAO.findById(con, id)
 
-class FileDAO:
+    @classmethod
+    def getContentById(cls, con, id):
+        return FileDAO.getContent(con, id)
 
-    @staticmethod
-    def _createSchema(con):
+
+class FileDAO(DAO):
+
+    @classmethod
+    def _createSchema(cls, con):
+        super()._createSchema(con)
         cur = con.cursor()
         try:
-            cur.execute('create schema if not exists files')
-            cur.execute("""
-                create table files.files (
-                    id varchar not null primary key,
-                    name varchar not null,
-                    hash varchar,
-                    content bytea,
-                    mimetype varchar default 'application/binary',
-                    codec varchar default 'base64',
-                    size default 0,
-                    created timestamptz default now(),
-                    modified timestampz default now()
-                )
-            """)
+            sql = """
+              CREATE SCHEMA IF NOT EXISTS files;
+
+              CREATE TABLE IF NOT EXISTS files.files (
+                  id VARCHAR NOT NULL PRIMARY KEY,
+                  name VARCHAR NOT NULL,
+                  hash VARCHAR,
+                  content BYTEA,
+                  mimetype VARCHAR DEFAULT 'application/binary',
+                  codec VARCHAR DEFAULT 'base64',
+                  size BIGINT DEFAULT 0,
+                  created TIMESTAMPTZ DEFAULT now(),
+                  modified TIMESTAMPTZ DEFAULT now()
+              );
+            """
+
+            cur.execute(sql)
         finally:
             cur.close()
 

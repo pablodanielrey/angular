@@ -5,21 +5,18 @@ import dateutil.parser
 from datetime import datetime, date, time, timedelta
 
 from model.login.profiles import ProfileDAO
+from model.assistance.assistance import AssistanceModel, AssistanceData
 
-from model-v0.systems.assistance.assistance import Assistance
-from model-v0.systems.assistance.schedule import ScheduleData
-import model-v0.systems.assistance.date
-from model-v0.systems.assistance.fails import Fails
-from model-v0.systems.assistance.schedule import Schedule
-from model-v0.systems.assistance.check.checks import ScheduleChecks
-from model-v0.systems.offices.offices import Offices
+import dateutil, dateutil.tz, dateutil.parser, datetime
 
 from model.registry import Registry
+from model.connection import connection
 
 import asyncio
 from asyncio import coroutine
 from autobahn.asyncio.wamp import ApplicationSession
 
+from model.serializer.utils import  JSONSerializable
 
 class AssistanceWamp(ApplicationSession):
 
@@ -29,384 +26,56 @@ class AssistanceWamp(ApplicationSession):
         reg = inject.instance(Registry)
 
         self.conn = connection.Connection(reg.getRegistry('dcsys'))
-        self.profiles = inject.instance(ProfileDAO)
+        # self.profiles = inject.instance(ProfileDAO)
 
-        self.assistance = inject.instance(Assistance)
-        self.fails = inject.instance(Fails)
-        self.checks = inject.instance(ScheduleChecks)
-
-        self.date = inject.instance(model.systems.assistance.date.Date)
-        self.offices = inject.instance(Offices)
-        self.schedule = inject.instance(Schedule)
+        self.assistance = inject.instance(AssistanceModel)
 
     @coroutine
     def onJoin(self, details):
         logging.debug('registering methods')
-        yield from self.register(self.getFailsByDate_async, 'assistance.getFailsByDate')
-        yield from self.register(self.getAssistanceStatusByDate_async, 'assistance.getAssistanceStatusByDate')
-        yield from self.register(self.getAssistanceStatusByUsers_async, 'assistance.getAssistanceStatusByUsers')
         yield from self.register(self.getAssistanceData_async, 'assistance.getAssistanceData')
-        yield from self.register(self.getUsersWithSchedules_async, 'assistance.getUsersWithSchedules')
-        yield from self.register(self.getSchedules_async, 'assistance.getSchedules')
-        yield from self.register(self.getSchedulesHistory_async, 'assistance.getSchedulesHistory')
-        yield from self.register(self.persistSchedule_async, 'assistance.persistSchedule')
-        yield from self.register(self.persistScheduleWeek_async, 'assistance.persistScheduleWeek')
-        yield from self.register(self.deleteSchedule_async, 'assistance.deleteSchedule')
-        yield from self.register(self.getAvailableChecks_async, 'assistance.getAvailableChecks')
-        yield from self.register(self.getChecksByUser_async, 'assistance.getChecksByUser')
-        yield from self.register(self.getUsersWithChecks_async, 'assistance.getUsersWithChecks')
-        yield from self.register(self.getSchedulesByDate_async, 'assistance.getSchedulesByDate')
-        yield from self.register(self.getLogsForSchedulesByDate_async, 'assistance.getLogsForSchedulesByDate')
+        yield from self.register(self.getJustifications_async, 'assistance.getJustifications')
 
+    def _localizeLocal(self,naive):
+        tz = dateutil.tz.tzlocal()
+        local = naive.replace(tzinfo=tz)
+        return local
 
-    def _parseDate(self, date):
-        return self.date.parse(date)
+    def _isNaive(self, date):
+        return not ((date.tzinfo != None) and (date.tzinfo.utcoffset(date) != None))
 
-    def _parseDates(self, dates):
-        ds = []
-        for d in dates:
-            ds.append(self.date.parse(d))
-        return ds
+    def _parseDate(self, datestr):
+        dt = dateutil.parser.parse(datestr)
+        if self._isNaive(dt):
+            dt = self._localizeLocal(dt)
+        return dt
 
-    def getAssistanceData(self, sid, userId, date=None):
+    def getAssistanceData(self, userIds, startStr, endStr):
         con = self.conn.get()
         try:
-            if date is not None:
-                date = self._parseDate(date)
-
-            r = self.assistance.getAssistanceData(con, userId, date)
-            scheds = r['schedule']
-            schedsMap = []
-            for s in scheds:
-                schedsMap.append(s.toMap(date))
-            r['schedule'] = schedsMap
-            return r
-
+            start = self._parseDate(startStr)
+            end = self._parseDate(endStr)
+            return self.assistance.getAssistanceData(con, userIds, start, end)
         finally:
             self.conn.put(con)
 
     @coroutine
-    def getAssistanceData_async(self, sid, userId, date=None):
+    def getAssistanceData_async(self, userIds, start, end):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getAssistanceData, sid, userId, date)
+        r = yield from loop.run_in_executor(None, self.getAssistanceData, userIds, start, end)
         return r
 
-    def getAssistanceStatusByDate(self, userId, date=None):
+    def getJustifications(self, userId, startStr, endStr, isAll):
         con = self.conn.get()
         try:
-            if date is not None:
-                date = self._parseDate(date)
-            r = self.assistance.getAssistanceStatus(con, userId, date)
-            return r
-
+            start = self._parseDate(startStr)
+            end = self._parseDate(endStr)
+            return self.assistance.getJustifications(con, userId, start, end, isAll)
         finally:
             self.conn.put(con)
 
     @coroutine
-    def getAssistanceStatusByDate_async(self, sid, userId, date=None):
+    def getJustifications_async(self, userId, start, end, isAll):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getAssistanceStatusByDate, userId, date)
-        return r
-
-    def getAssistanceStatusByUsers(self, sid, userIds, dates,status):
-        logging.debug(dates)
-        con = self.conn.get()
-        try:
-            if dates is not None:
-                dates = self._parseDates(dates)
-            st = self.assistance.getAssistanceStatusByUsers(con, userIds, dates,status)
-            b64 = self.assistance.arrangeAssistanceStatusByUsers(con,st)
-            ret = {'base64':b64,'assistances':st}
-            return ret
-
-        finally:
-            self.conn.put(con)
-
-    @coroutine
-    def getAssistanceStatusByUsers_async(self, sid, userIds, dates,status):
-        loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getAssistanceStatusByUsers, sid, userIds, dates, status)
-        return r
-
-    def getUsersWithSchedules(self, sid):
-        con = self.conn.get()
-        try:
-            r = self.schedule.getUsersInSchedules(con)
-            return r
-
-        finally:
-            self.conn.put(con)
-
-    @coroutine
-    def getUsersWithSchedules_async(self, sid):
-        loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getUsersWithSchedules, sid)
-        return r
-
-    def getSchedules(self, sid, userId, date):
-        con = self.conn.get()
-        try:
-            if date is None:
-                return None;
-
-            date = self._parseDate(date)
-            scheds = self.schedule.getSchedulesOfWeek(con, userId, date)
-
-            schedsMap = []
-
-            weekday = datetime.weekday(date)
-            date -= timedelta(days=weekday)
-            for s in scheds:
-                weekday = datetime.weekday(s.date)
-                d = date + timedelta(days=weekday)
-                schedsMap.append(s.toMap(d))
-            return schedsMap
-
-        finally:
-            self.conn.put(con)
-
-    @coroutine
-    def getSchedules_async(self, sid, userId, date):
-        loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getSchedules, sid, userId, date)
-        return r
-
-    def getSchedulesHistory(self, sid, userId):
-        con = self.conn.get()
-        try:
-            scheds = self.schedule.getSchedulesHistory(con, userId)
-            schedsMap = []
-            for s in scheds:
-                date = s.date
-                schedsMap.append(s.toMap(date))
-            return schedsMap
-
-        finally:
-            self.conn.put(con)
-
-    @coroutine
-    def getSchedulesHistory_async(self, sid, userId):
-        loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getSchedulesHistory, sid, userId)
-        return r
-
-    def persistSchedule(self, sid, userId, date, start, end, dayOfWeek=False, dayOfMonth=False, dayOfYear=False):
-        con = self.conn.get()
-        try:
-            date = self._parseDate(date)
-            r = self.schedule.persistSchedule(con, userId, date, start, end, dayOfWeek, dayOfMonth, dayOfYear)
-            con.commit()
-            return r
-
-        finally:
-            self.conn.put(con)
-
-    @coroutine
-    def persistSchedule_async(self, sid, userId, date, start, end, dayOfWeek=False, dayOfMonth=False, dayOfYear=False):
-        loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.persistSchedule, sid, userId, date, start, end, dayOfWeek, dayOfMonth, dayOfYear)
-        return r
-
-
-    def persistScheduleWeek(self, sid, userId, date, start, end, daysOfWeek):
-        con = self.conn.get()
-        try:
-            date = self._parseDate(date)
-            r = self.schedule.persistScheduleWeek(con, userId, date, start, end, daysOfWeek)
-            con.commit()
-            return r
-
-        finally:
-            self.conn.put(con)
-
-    @coroutine
-    def persistScheduleWeek_async(self, sid, userId, date, start, end, daysOfWeek):
-        loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.persistScheduleWeek, sid, userId, date, start, end, daysOfWeek)
-        return r
-
-    def deleteSchedule(self, sid, id):
-        con = self.conn.get()
-        try:
-            self.schedule.deleteSchedule(con, id)
-            con.commit()
-            return True
-
-        except Exception as e:
-            logging.exception(e)
-            return False
-
-        finally:
-            self.conn.put(con)
-
-    @coroutine
-    def deleteSchedule_async(self, sid, id):
-        loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.deleteSchedule, sid, id)
-        return r
-
-    def getAvailableChecks(self, sid):
-        con = self.conn.get()
-        try:
-            r = self.checks.getAvailableChecks()
-            cs = []
-            for c in r:
-                cs.append(type(c).__name__)
-            return cs
-
-        finally:
-            self.conn.put(con)
-
-    @coroutine
-    def getAvailableChecks_async(self, sid):
-        loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getAvailableChecks, sid)
-        return r
-
-    def getChecksByUser(self, sid, userId, date):
-        """
-           obtener checks de un usuario a partir de cierta fecha
-           @param sid Identificacion de Session
-           @param userId Identificacion de usuario
-           @param date String con la fecha, en formato "Y-m-d", por ejemplo "2000-12-31"
-        """
-        date = self.date.parse(date).date()
-
-        con = self.conn.get()
-        try:
-            cs = self.checks._getCheckData(con, userId, date)
-            logging.debug(cs)
-            return cs
-
-        finally:
-            self.conn.put(con)
-
-    @coroutine
-    def getChecksByUser_async(self, sid, userId, date):
-        loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getChecksByUser, sid, userId, date)
-        return r
-
-
-    def getUsersWithChecks(self, sid, date):
-        con = self.conn.get()
-        try:
-            cs = self.checks.getUsersWithChecks(con, date)
-            return cs
-
-        finally:
-            self.conn.put(con)
-
-    @coroutine
-    def getUsersWithChecks_async(self, sid, date):
-        loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getUsersWithChecks, sid, date)
-        return r
-
-
-    def getFailsByDate(self, sid, userId, start, end):
-        sdate = self._parseDate(start)
-        start = self.date.localizeAwareToLocal(sdate).date()
-        edate = self._parseDate(end)
-        end = self.date.localizeAwareToLocal(edate).date()
-
-        con = self.conn.get()
-        try:
-            r = self.assistance.getFailsByDate(con, userId, start, end)
-            return r
-
-        finally:
-            self.conn.put(con)
-
-    @coroutine
-    def getFailsByDate_async(self, sid, userId, start, end):
-
-        loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getFailsByDate, sid, userId, start, end)
-        return r
-
-
-
-    def getSchedulesByDate(self, userId, date):
-        """
-         " Obtener schedules de una fecha determinada
-         " @param userId Id de usuario al cual se le va a pedir los schedules
-         " @param date Fecha para la cual se quieren consultar los schedules
-         """
-
-        date = datetime.strptime(date, "%Y-%m-%d").date()
-
-        con = self.conn.get()
-        try:
-            schedulesData = self.schedule.getSchedule(con, userId, date)
-
-            schedules = []
-            for schData in schedulesData:
-
-              sch = {
-                "id":schData.id,
-                "date":schData.date,
-                "start":schData.start,
-                "end":schData.end,
-                "date":schData.date,
-                "isDayOfWeek":schData.isDayOfWeek,
-                "isDayOfMonth":schData.isDayOfMonth,
-                "isDayOfYear":schData.isDayOfYear,
-                "previousDate":schData.previousDate,
-                "nextDate":schData.nextDate,
-                "userId":schData.userId,
-
-              }
-              schedules.append(sch)
-
-            return schedules
-
-        finally:
-            self.conn.put(con)
-
-    @coroutine
-    def getSchedulesByDate_async(self, userId, date):
-        loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getSchedulesByDate, userId, date)
-        return r
-
-
-
-    def getLogsForSchedulesByDate(self, schedules, date):
-        """
-         " Obtener schedules de una fecha determinada
-         " @param schedules Lista de diccionario con los datos de los schedules del usuario al cual se le solicitaran los logs
-         """
-
-        date = datetime.strptime(date, "%Y-%m-%d").date()
-        con = self.conn.get()
-        try:
-            schedulesData = []
-            for schedule in schedules:
-                dateSch = datetime.strptime(schedule["date"], "%Y-%m-%d").date()
-
-                sch = {
-                  'id': schedule["id"],
-                  'date': dateSch,
-                  'start': schedule["start"],
-                  'end': schedule["end"],
-                  'isDayOfWeek': schedule["isDayOfWeek"],
-                  'isDayOfMonth': schedule["isDayOfMonth"],
-                  'isDayOfYear': schedule["isDayOfYear"],
-                  'userId': schedule["userId"]
-                }
-                schData = ScheduleData(sch, self.date.getLocalTimezone())
-
-                schedulesData.append(schData)
-
-            logs = self.schedule.getLogsForSchedule(con, schedulesData, date)
-            return logs
-
-        finally:
-            self.conn.put(con)
-
-    @coroutine
-    def getLogsForSchedulesByDate_async(self, schedules, date):
-        loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getLogsForSchedulesByDate, schedules, date)
+        r = yield from loop.run_in_executor(None, self.getJustifications, userId, start, end, isAll)
         return r

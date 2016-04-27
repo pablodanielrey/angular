@@ -13,15 +13,15 @@
               <div class="contentUser">
 
                   <div class="contentPhoto">
-                    <img class="imgUser" src="img/walter.jpg">
+                    <img class="imgUser" ng-src='{{getUserPhoto()}}' alt="foto de perfil"/>
                   </div>
 
                   <div class="contentData">
                       <div>
-                        <b> Walter Roberto Blanco</b>
+                        <b> {{model.user.name}} {{model.user.lastname}}</b>
                       </div>
                       <div>
-                        30001823
+                        {{model.user.dni}}
                       </div>
                   </div>
 
@@ -41,7 +41,7 @@
                       <b>Horario</b>
                     </div>
                     <div>
-                      10:00 hs / 17:00 hs
+                      {{model.assistanceData.scheduleActual.start | date: 'HH:mm'}} hs / {{model.assistanceData.scheduleActual.end | date: 'HH:mm'}} hs
                     </div>
               </div>
 
@@ -52,7 +52,7 @@
                       <b>Cargo</b>
                     </div>
                     <div>
-                       E7
+                       {{model.position.name}}
                     </div>
               </div>
 
@@ -61,20 +61,20 @@
         <div class="dailySchedule">
 
             <div class="contentTitle">
-              <div class="title"> MIS MARCACIONES</div> 
-              <input class="inputDate" type="date" placeholder="10-12-2016">
+              <div class="title"> MIS MARCACIONES</div>
+              <input class="inputDate" type="date" ng-model="model.date" placeholder="10-12-2016">
             </div>
 
             <div class="schedules">
 
               <div class="hourEntry">
                 hora de entrada </br>
-                <input class="inputHourEntry" type="text" placeholder="10:08"></input>
+                <input class="inputHourEntry" type="text" value="{{model.assistanceData.logActual.start | date: 'HH:mm'}}"> </input>
               </div>
 
               <div class="hourOutput">
                 hora de salida </br>
-                <input class="inputHourEntry" type="text" placeholder="17:18"></input>
+                <input class="inputHourEntry" type="text" value="{{model.assistanceData.logActual.end | date: 'HH:mm'}}"></input>
               </div>
 
             </div>

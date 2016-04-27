@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 import uuid
+from model.dao import DAO
+from model.laboralinsertion.user import UserDAO
 
 class Language:
     def __init__(self):
@@ -8,14 +10,19 @@ class Language:
         self.name = None
         self.level = None
 
-class LanguageDAO:
-
-    @staticmethod
-    def _createSchema(con):
+class LanguageDAO(DAO):
+    dependencies = [UserDAO]
+    
+    @classmethod
+    def _createSchema(cls, con):
+        super()._createSchema(con)
+        
         cur = con.cursor()
         try:
             cur.execute("""
-                create table laboral_insertion.languages (
+                CREATE SCHEMA IF NOT EXISTS laboral_insertion;
+                
+                create table IF NOT EXISTS laboral_insertion.languages (
                     id varchar not null primary key,
                     user_id varchar not null references laboral_insertion.users (id),
                     name varchar not null,

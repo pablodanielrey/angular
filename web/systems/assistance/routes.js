@@ -7,7 +7,7 @@ app.config(['$routeProvider', function($routeProvider) {
 
   .when('/home', {
      templateUrl: '/systems/assistance/modules/home/index.html',
-    //  controller: 'HomeCtrl'
+     controller: 'HomeCtrl'
   })
 
   .when('/request', {

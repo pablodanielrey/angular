@@ -2,6 +2,7 @@
 import uuid
 import inject
 import model.users.users
+from model.dao import DAO
 from model.laboralinsertion.user import UserDAO
 from model.laboralinsertion.languages import LanguageDAO
 
@@ -32,16 +33,21 @@ class Inscription:
     def getLanguages(self, con):
         return LanguageDAO.findByUser(con, self.userId)
 
-class InscriptionDAO:
 
-    @staticmethod
-    def _createSchema(con):
+class InscriptionDAO(DAO):
+    dependencies = [UserDAO]
+
+    @classmethod
+    def _createSchema(cls, con):
+        super()._createSchema(con)
         cur = con.cursor()
         try:
             cur.execute("""
-                create table laboral_insertion.inscriptions (
+                CREATE SCHEMA IF NOT EXISTS laboral_insertion;
+
+                create table IF NOT EXISTS laboral_insertion.inscriptions (
                     id varchar primary key,
-                    user_id varchar not null references laboral_insertion.users (id)
+                    user_id varchar not null references laboral_insertion.users (id),
                     reside boolean default false,
                     travel boolean default false,
                     checked boolean default false,
@@ -53,7 +59,7 @@ class InscriptionDAO:
                     created timestamptz default now(),
                     work_experience boolean default false,
                     deleted boolean default false
-                )
+                );
             """)
         finally:
             cur.close()
@@ -134,15 +140,16 @@ class InscriptionDAO:
             cur.close()
 
     @staticmethod
-    def findById(con, id):
-        ''' obtiene la inscripcion determinada por el id '''
+    def findById(con, ids):
+        assert isinstance(ids, list)
+        if len(ids) <= 0:
+            return []
         cur = con.cursor()
         try:
-            cur.execute('select * from laboral_insertion.inscriptions where id = %s', (id,))
+            cur.execute('select * from laboral_insertion.inscriptions where id in %s', (tuple(ids),))
             if cur.rowcount <= 0:
-                return None
-            r = cur.fetchone()
-            return InscriptionDAO._fromResult(r)
+                return []
+            return [ InscriptionDAO._fromResult(r) for r in cur ]
 
         finally:
             cur.close()

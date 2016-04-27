@@ -14,6 +14,7 @@ from model.connection.connection import Connection
 from model.assistance.assistance import AssistanceModel
 from model.assistance.justifications.shortDurationJustification import ShortDurationJustification
 from model.assistance.justifications.longDurationJustification import LongDurationJustification
+from model.assistance.justifications.familyAttentionJustification import FamilyAttentionJustification
 from model.assistance.justifications.status import Status
 from model.assistance.justifications.justifications import Justification
 
@@ -50,7 +51,7 @@ def testFindJustification(con, uid):
         con.commit()
 
         # jstart < start and jend > end
-        j = LongDurationJustification(uid, uid, start - datetime.timedelta(days=5), 30, 70003)
+        j = FamilyAttentionJustification(uid, uid, start - datetime.timedelta(days=5), 30, 80003)
         j.persist(con)
         con.commit()
 
@@ -59,7 +60,7 @@ def testFindJustification(con, uid):
 
         # obtengo las justificaciones
 
-        js = Justification.getJustifications(con, uid, start, end)
+        js = Justification.getJustifications(con, [uid], start, end)
         for j in js:
             j._getLastStatus(con)
             logging.info(j.__dict__)
@@ -73,9 +74,9 @@ if __name__ == '__main__':
     reg = inject.instance(Registry)
 
     conn = Connection(reg.getRegistry('dcsys'))
+    con = conn.get()
     try:
-        con = conn.get()
-        
+
         uid, v = UserDAO.findByDni(con, "31381082")
         uids = [uid]
         js = testFindJustification(con, uid)

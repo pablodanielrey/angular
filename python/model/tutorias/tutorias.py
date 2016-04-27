@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import re
 import uuid
+from model.dao import DAO
 from model.users.users import UserDAO, User, StudentDAO, Student
 
 class TutoringSituation:
@@ -31,21 +32,27 @@ class Tutoring:
             }
 
 
-class TutoringDAO:
 
-    @staticmethod
-    def _createSchema(con):
+class TutoringDAO(DAO):
+
+    dependencies = [UserDAO]
+    
+    @classmethod
+    def _createSchema(cls, con):
+        super()._createSchema(con)
         cur = con.cursor()
+
         try:
             cur.execute("""
                 create schema if not exists tutoring;
-                create table tutoring.tutorings (
+                
+                create table if not exists tutoring.tutorings (
                     id varchar primary key,
                     tutor_id varchar not null references profile.users (id),
                     date timestamptz default now(),
                     created timestamptz default now()
                 );
-                create table tutoring.situations (
+                create table if not exists tutoring.situations (
                     tutoring_id varchar not null references tutoring.tutorings (id),
                     user_id varchar not null references profile.users (id),
                     situation varchar not null

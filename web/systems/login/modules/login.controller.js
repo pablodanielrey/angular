@@ -139,6 +139,14 @@ function LoginCtrl($scope, $window, $interval, Notifications, Login, Users) {
        });
      }
 
+     $scope.getUserPhoto = function() {
+       if ($scope.model.user == null || $scope.model.user.photo == null || $scope.model.user.photo == '') {
+         return "modules/img/imgUser.jpg";
+       } else {
+         return "/c/files.py?i=" + $scope.model.user.photo;
+       }
+     }
+
      function sendPassword() {
        Login.login($scope.model.username, $scope.model.password)
        .then(function(data) {

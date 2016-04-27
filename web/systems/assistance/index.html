@@ -30,6 +30,9 @@
 	<script type="text/javascript" src="/services/Notifications.js"></script>
 	<script type="text/javascript" src="/services/Profiles.js"></script>
   <script type="text/javascript" src="/services/Login.js"></script>
+  <script type="text/javascript" src="/services/Users.js"></script>
+  <script type="text/javascript" src="/services/systems/positions/Positions.js"></script>
+  <script type="text/javascript" src="/services/systems/assistance/Assistance.js"></script>
 
 	<!-- modules -->
   <script type="text/javascript" src="/systems/assistance/modules/index.controller.js"></script>
@@ -41,9 +44,29 @@
   <script type="text/javascript" src="/systems/assistance/modules/request/index.controller.js"></script>
   <link rel="stylesheet" type="text/css" href="/systems/assistance/modules/request/index.css"/>
 
-  <!-- SOLICITUDES -->
+  <!--************************* SOLICITUDES ************************************ -->
+  <!-- AUSENTE CON AVISO -->
   <script type="text/javascript" src="/systems/assistance/modules/request/AA/aa.controller.js"></script>
   <link rel="stylesheet" type="text/css" href="/systems/assistance/modules/request/AA/aa.css"/>
+  <!-- BOLETA DE SALIDA -->
+  <script type="text/javascript" src="/systems/assistance/modules/request/BDS/bds.controller.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/assistance/modules/request/BDS/bds.css"/>
+  <!-- PRE-EXAMEN -->
+  <script type="text/javascript" src="/systems/assistance/modules/request/PE/pe.controller.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/assistance/modules/request/PE/pe.css"/>
+  <!--ART 102 -->
+  <script type="text/javascript" src="/systems/assistance/modules/request/A102/a102.controller.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/assistance/modules/request/A102/a102.css"/>
+  <!--COMPENSATORIO -->
+  <script type="text/javascript" src="/systems/assistance/modules/request/compensatorio/compensatorio.controller.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/assistance/modules/request/compensatorio/compensatorio.css"/>
+  <!--VACACIONES -->
+  <script type="text/javascript" src="/systems/assistance/modules/request/vacaciones/vacaciones.controller.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/assistance/modules/request/vacaciones/vacaciones.css"/>
+  <!--CUMPLEAÑO -->
+  <!-- <script type="text/javascript" src="/systems/assistance/modules/request/cumpleanos/cumpleanos.controller.js"></script> -->
+  <!-- <link rel="stylesheet" type="text/css" href="/systems/assistance/modules/request/cumpleanos/cumpleanos.css"/> -->
+  <!--************************ FIN SOLICITUDES ********************************** -->
 
 
   <script type="text/javascript" src="/systems/assistance/modules/menu/index.controller.js"></script>
@@ -54,6 +77,7 @@
   <link rel="stylesheet" type="text/css" href="/modules/messages/messages.css"/>
 
   <link rel="stylesheet" type="text/css" href="/systems/fce/modules/header/header.css"/>
+  <script type="text/javascript" src="/systems/fce/modules/header/header.controller.js"></script>
   <link rel="stylesheet" type="text/css" href="/systems/fce/modules/footer/footer.css"/>
 
 
@@ -62,7 +86,7 @@
 </head>
 <body class="sistema  {{styleMenu}}" ng-controller="IndexCtrl">
 
-    <div ng-include="'/systems/fce/modules/header/index.html'"></div>
+    <div ng-include="'/systems/fce/modules/header/index.html'" ng-controller="HeaderCtrl"></div>
     <div class="main">
       <div class="MenuContent" ng-controller="MenuCtrl" ng-include="'/systems/assistance/modules/menu/index.html'"></div>
       <div class="MenuCel" ng-controller="MenuCelCtrl" ng-include="'/systems/assistance/modules/menuCel/index.html'"></div>

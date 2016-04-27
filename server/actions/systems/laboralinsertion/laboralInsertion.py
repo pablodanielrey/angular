@@ -41,109 +41,6 @@ class Utils:
     def __init__(self):
         self.users = inject.instance(UserDAO)
 
-    """
-    def _exportToOds(self, data):
-        ods = OrderedDict()
-        ods.update({"Datos": data})
-        filename = '/tmp/{}.ods'.format(str(uuid.uuid4()))
-        writer = ODSWriter(filename)
-        writer.write(ods)
-        writer.close()
-        return filename
-
-    def _arrangeForOds(self, con, data):
-        values = [['Fecha de Inscripción', 'Apellido', 'Nombre', 'Sexo', 'Fecha Nacimiento', 'Edad', 'Dni', 'e-Mail', 'País', 'Ciudad de Origen', 'Ciudad de residencia', 'Legajo', 'Viajar', 'Residir', 'Ingles', 'Portugués', 'Otro', 'Carrera', 'Cantidad de materias', 'Promedio con aplazos', 'Promedio', 'Pasantía', 'Tiempo Completo', 'Jóvenes Profesionales']]
-        for l in data:
-            v = []
-
-            userId = l['id']
-            user = self.users.findUser(con, userId)
-            mails = self.users.listMails(con, user['id'])
-
-            v.append(l['creation'].date())
-
-            v.append(user['lastname'])
-            v.append(user['name'])
-            v.append(user['genre'] if user['genre'] != None else '')
-            v.append(user['birthdate'] if user['birthdate'] != None else '')
-            v.append('')
-            v.append(user['dni'])
-
-            if len(mails) > 0:
-                v.append(mails[0]['email'])
-            else:
-                v.append('')
-
-            v.append('')
-            v.append('')
-            v.append(user['residence_city'] if user['residence_city'] else '')
-
-            v.append('')
-
-            if l['travel']:
-                v.append('Sí')
-            else:
-                v.append('No')
-
-            if l['reside']:
-                v.append('Sí')
-            else:
-                v.append('No')
-
-            langIng = ''
-            langPort = ''
-            langOtro = ''
-            for la in l['languages']:
-                if la['name'] != None and (la['name'].lower() == 'inglés' or la['name'].lower() == 'ingles'):
-                    langIng = '{} - {}, '.format(la['name'], la['level'])
-
-                if la['name'] == 'Portugués':
-                    langPort = '{} - {}, '.format(la['name'], la['level'])
-
-                langOtro = '{} - {}, '.format(la['name'], la['level'])
-
-            v.append(langIng)
-            v.append(langPort)
-            v.append(langOtro)
-
-            if len(l['degrees']) > 0:
-                for d in l['degrees']:
-                    vaux = list(v)
-                    vaux.append(d['name'] if d['name'] else '')
-                    vaux.append(d['courses'] if d['courses'] else '')
-                    vaux.append(d['average2'] if d['average2'] else '')
-                    vaux.append(d['average1'] if d['average1'] else '')
-
-                    workType = d['work_type']
-                    if 'intership' in workType:
-                        vaux.append('Sí')
-                    else:
-                        vaux.append('No')
-
-                    if 'FullTime' in workType:
-                        vaux.append('Sí')
-                    else:
-                        vaux.append('No')
-
-                    if 'YoungProfessionals' in workType:
-                        vaux.append('Sí')
-                    else:
-                        vaux.append('No')
-
-                    values.append(vaux)
-            else:
-                v.append('')
-                v.append('')
-                v.append('')
-                v.append('')
-                v.append('')
-                v.append('')
-                v.append('')
-                values.append(v)
-
-        return values
-    """
-
     def _prepareCvs(self, cvs):
         b64s = []
         for c in cvs:
@@ -297,7 +194,8 @@ class LaboralInsertionWamp(ApplicationSession):
     def sendMailToCompany(self, inscriptions, emails):
         con = self.conn.get()
         try:
-            data = self.laboralInsertion.sendMailToCompany(con, inscriptions, emails)
+            inscriptionIds = [ i['id'] for i in inscriptions ]
+            data = self.laboralInsertion.sendMailToCompany(con, inscriptionIds, emails)
             self.publish('system.laboralInsertion.COMPANYSENDED', data)
             return True
 

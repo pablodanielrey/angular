@@ -7,13 +7,17 @@ if __name__ == '__main__':
     import sys
     import logging
     import inject
+    inject.configure()
+
     sys.path.insert(0, '../python')
 
     logging.basicConfig(level=logging.DEBUG)
+    logging.getLogger().setLevel(logging.DEBUG)
 
     from autobahn.asyncio.wamp import ApplicationRunner
     from actions.systems.assistance.assistance import AssistanceWamp
     # from actions.systems.assistance.justifications import JustificationsWamp
+    from model.registry import Registry
 
     reg = inject.instance(Registry)
     registry = reg.getRegistry('wamp')
@@ -21,6 +25,7 @@ if __name__ == '__main__':
     realm = registry.get('realm')
     debug = registry.get('debug')
 
-    runner = ApplicationRunner(url=url, realm=realm, debug=debug, debug_wamp=debug, debug_app=debug)
+    logging.info('iniciando app en {} {} {}'.format(url, realm, debug))
+    runner = ApplicationRunner(url=url, realm=realm)
     runner.run(AssistanceWamp)
     # runner.run(JustificationsWamp)

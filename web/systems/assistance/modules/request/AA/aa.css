@@ -6,7 +6,7 @@
 }
 
 .aa .contentRequestAA {
-  width: 95%;
+  width: 338px;
   height: 250px;
   margin-top: 10px;
   padding: 20px;
@@ -23,7 +23,7 @@
   overflow-x: auto;
 }
 
-.availabilityRequest {
+.aa .availabilityRequest {
   display: flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
@@ -33,7 +33,9 @@
   justify-content: flex-start;
   -webkit-justify-content: flex-start;
   -moz-justify-content: flex-start;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
+  padding-bottom: 3px;
+  border-bottom: 1px solid #DBE2E5;
 }
 .aa .ico {
   color: #5C5F69 ;
@@ -43,27 +45,53 @@
     color: #5C5F69;
 }
 
-.aa .contentCantAvailability {
-  margin-left: 10px;
+.aa .titleInfo {
+    color: #5C5F69;
+    font-size: 12px;
+    margin-bottom: 2px;
+    margin-top: 5px;
+}
+
+.aa .titleAvailability {
+  font-size: 14px;
   color: #5C5F69;
+}
+
+.aa .contentCantAvailability {
+  margin-left: 75px;
+  color: #5C5F69;
+  font-size: 12px;
 }
 
 .aa .cantAvailability {
   background-color: #92AD17;
   color: white;
-  padding: 0px 10px 0 10px;
+  padding: 0px 5px 0 5px;
   border-radius: 2px;
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
 }
 
+.aa .contentTime {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction: row;
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+  margin-bottom: 10px;
+  /*justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;*/
+  /*background-color: red;*/
+}
+
 .aa .inputDate {
     border: none;
-    font-size: 20px;
+    font-size: 18px;
     background-color: #EEEEEE;
-    margin-top: 5px;
     width: 290px;
-    height: 45px;
+    height: 35px;
     color: #5c5f69;
     border-radius: 2px;
     -moz-border-radius: 2px;
@@ -71,7 +99,33 @@
     padding-left: 10px;
 }
 
-.request .btnApply {
+.aa .inputTime {
+    border: none;
+    font-size: 15px;
+    background-color: #EEEEEE;
+    height: 30px;
+    color: #5c5f69;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    padding-left: 10px;
+    margin-right: 10px;
+}
+
+
+.aa .inputTime2 {
+    border: none;
+    font-size: 15px;
+    background-color: #EEEEEE;
+    height: 30px;
+    color: #5c5f69;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    padding-left: 10px;
+}
+
+.aa .btnApply {
     border-radius: 2px;
     -moz-border-radius: 2px;
     -webkit-border-radius: 2px;
@@ -84,6 +138,10 @@
     height: 45px;
     cursor: pointer;
     margin-top: 10px;
+}
+
+.aa .btnApply:hover {
+  background-color: #809612;
 }
 
 .aa .screenMessage {
@@ -187,7 +245,15 @@
       -webkit-border-radius: 2px;
   }
 
-  .request .btnApply {
+  .aa .inputTime {
+      width: 132px;
+  }
+
+  .aa .inputTime2 {
+      width: 132px;
+  }
+
+  .aa .btnApply {
       border-radius: 2px;
       -moz-border-radius: 2px;
       -webkit-border-radius: 2px;

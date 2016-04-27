@@ -89,9 +89,9 @@ tenia este codigo walter. pero lo comento porque lo hago con ng-show y ng-hide
   display: flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
-  flex-direction:row;
-  -webkit-flex-direction:row; /* Safari */
-  -moz-flex-direction:row; /* mozilla */
+  flex-direction:column;;
+  -webkit-flex-direction:column; /* Safari */
+  -moz-flex-direction:column; /* mozilla */
   align-items: center;
   -webkit-align-items:center; /* Safari */
   -moz-align-items:center; /* mozilla */
@@ -113,7 +113,10 @@ tenia este codigo walter. pero lo comento porque lo hago con ng-show y ng-hide
   resize: none;
 }
 
-
+.login .logoFce {
+  opacity: 0.3;
+  margin-top: 50px;
+}
 
 .login .contentLogin {
   border: 10px solid;
@@ -337,6 +340,10 @@ tenia este codigo walter. pero lo comento porque lo hago con ng-show y ng-hide
   }
 
   .login .video {
+    display: none;
+  }
+
+  .login .logoFce {
     display: none;
   }
 

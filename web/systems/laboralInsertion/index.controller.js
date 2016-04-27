@@ -17,19 +17,11 @@ function IndexCtrl($rootScope, $scope, $window, Notifications, Login) {
 
     function initialize() {
 
-      if (!Login.isLogged()) {
-        $window.location.href = '/systems/login/index.html';
-      }
-
-
-      Login.validateSession(
-        function(v) {
-          if (!v) {
-            $window.location.href = "/systems/login/index.html";
-          }
-        },
-        function(err) {
-          Notifications.message(err);
+      Login.getSessionData()
+      .then(function(s) {
+        console.log(s);
+      }, function(err) {
+        $window.location.href = "/systems/login/index.html";
       })
     }
 
