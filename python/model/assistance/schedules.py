@@ -33,11 +33,15 @@ class Schedule(JSONSerializable):
         dt = datetime.datetime.combine(date, datetime.time(0,0))
         return dt + datetime.timedelta(seconds=self.end)
 
+    def getScheduleSeconds(self):
+        if self.end is None or self.start is None:
+            return 0
+        return self.end - self.start
 
 
 class ScheduleDAO(AssistanceDAO):
     dependencies = [ UserDAO ]
-    
+
     @classmethod
     def _createSchema(cls, con):
         super()._createSchema(con)
@@ -102,6 +106,6 @@ class ScheduleDAO(AssistanceDAO):
         try:
             cur.execute('select distinct user_id from assistance.schedules')
             return [ c[0] for c in cur ]
-            
+
         finally:
             cur.close()
