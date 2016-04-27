@@ -184,14 +184,13 @@ def statsToPyoo(stats, users, offices):
     doc = calc.open_spreadsheet('templateStats.ods')
     try:
         sheetIndex = 0
-        io = 0
+        io = 1
         for off in offices:
 
             sheet = doc.sheets[0]
-            sheet[io,0].value = 'Oficina'
-            sheet[io,1].value = off.name
+            sheet[io,0].value = off.name
 
-            i = io + 1
+            i = io + 2
             for uid in off.users:
                 user = findUser(uid, users)
                 if user:
@@ -201,16 +200,17 @@ def statsToPyoo(stats, users, offices):
                     sheet[i,0].value = user.name + " " + user.lastname
                     sheet[i,1].value = _secondsToHours(status.secondsToWork)
                     sheet[i,2].value = _secondsToHours(status.secondsWorked)
-                    sheet[i,3].value = _secondsToHours(status.secondsLate)
-                    sheet[i,4].value = status.countLate
-                    sheet[i,5].value = _secondsToHours(status.secondsEarly)
-                    sheet[i,6].value = status.countEarly
-                    sheet[i,7].value = status.countAbsences
-                    sheet[i,8].value = status.countJustificatedAbsences
+                    sheet[i,4].value = _secondsToHours(status.secondsLate)
+                    sheet[i,5].value = status.countLate
+                    sheet[i,6].value = _secondsToHours(status.secondsEarly)
+                    sheet[i,7].value = status.countEarly
+                    sheet[i,8].value = status.countAbsences
+                    sheet[i,9].value = status.countJustificatedAbsences
 
                     i = i + 1
 
             io = i + 1
+
 
         sheetIndex = 2
         # los sheets de cada oficina
@@ -222,10 +222,10 @@ def statsToPyoo(stats, users, offices):
             if off.name is None:
                 off.name = 'Oficina {}'.format(sheetIndex)
 
-            logging.info(off.name)
             sheet = doc.sheets.copy('Modelo Detalle de Oficina', 'Detalle {} {}'.format(off.name, sheetIndex), sheetIndex)
             sheetIndex = sheetIndex + 1
 
+            sheet[1,0].value = off.name
             i = 3
 
             for uid in off.users:
