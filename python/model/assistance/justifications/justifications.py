@@ -108,7 +108,7 @@ class Justification(JSONSerializable):
 class SingleDateJustification(Justification):
 
     def __init__(self, date, userId, ownerId):
-        assert isinstance(date, datetime.datetime)
+        assert isinstance(date, datetime.date)
         super().__init__(userId, ownerId)
         self.date = date
 
