@@ -34,6 +34,7 @@ class AssistanceWamp(ApplicationSession):
     def onJoin(self, details):
         logging.debug('registering methods')
         yield from self.register(self.getAssistanceData_async, 'assistance.getAssistanceData')
+        yield from self.register(self.getJustifications_async, 'assistance.getJustifications')
 
     def _localizeLocal(self,naive):
         tz = dateutil.tz.tzlocal()
@@ -62,4 +63,19 @@ class AssistanceWamp(ApplicationSession):
     def getAssistanceData_async(self, userIds, start, end):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.getAssistanceData, userIds, start, end)
+        return r
+
+    def getJustifications(self, userId, startStr, endStr, isAll):
+        con = self.conn.get()
+        try:
+            start = self._parseDate(startStr)
+            end = self._parseDate(endStr)
+            return self.assistance.getJustifications(con, userId, start, end, isAll)
+        finally:
+            self.conn.put(con)
+
+    @coroutine
+    def getJustifications_async(self, userId, start, end, isAll):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.getJustifications, userId, start, end, isAll)
         return r

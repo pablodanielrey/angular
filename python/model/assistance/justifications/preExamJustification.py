@@ -139,8 +139,8 @@ class PreExamJustification(RangedJustification):
     registry = inject.instance(Registry).getRegistry('preExamJustification')
 
     def __init__(self, userId, ownerId, start, days = 0):
-        assert isinstance(start, datetime.date)
         super().__init__(start, days, userId, ownerId)
+        self.type = 'Pre exámen'
 
     def setEnd(self, date):
         assert isinstance(date, datetime.date)
@@ -153,21 +153,24 @@ class PreExamJustification(RangedJustification):
 class SchoolPreExamJustification(PreExamJustification):
 
     dao = SchoolPreExamJustificationDAO
-
+    identifier = 'Ensañanza Media'
 
     def __init__(self, userId, ownerId, start, days = 0):
         super().__init__(userId, ownerId, start, days)
+        self.identifier = SchoolPreExamJustification.identifier
 
     def getIdentifier(self):
-        return 'Pre exámen Ensañanza Media'
+        return self.type + " " + self.identifier
 
 
 class UniversityPreExamJustification(PreExamJustification):
 
     dao = UniversityPreExamJustificationDAO
+    identifier = 'Ensañanza Superior'
 
-    def __init__(self, userId, ownerId, start, days = 0):
+    def __init__(self, userId = None, ownerId = None, start = None, days = 0):
         super().__init__(userId, ownerId, start, days)
+        self.identifier = UniversityPreExamJustification.identifier
 
     def getIdentifier(self):
-        return 'Pre exámen Ensañanza Superior'
+        return self.type + " " + self.identifier
