@@ -189,14 +189,21 @@ class RangedJustification(Justification):
             si se le pasa el día, entonces retorna los segundos del horario.
             si el wp es None entonces retorna la suma de todos los horarios de los días que justifica
         """
-        seconds = 0
-        if wp is None:
-            for wp in self.wps:
-                seconds = seconds + (wp.getEndDate() - wp.getStartDate()).total_seconds()
-            return seconds
-        else:
-            return (wp.getEndDate() - wp.getStartDate()).total_seconds()
+        try:
+            seconds = 0
+            if wp is None:
+                for wp in self.wps:
+                    seconds = seconds + (wp.getEndDate() - wp.getStartDate()).total_seconds()
+                return seconds
+            else:
+                return (wp.getEndDate() - wp.getStartDate()).total_seconds()
 
+        except Exception as e:
+            ### puse esto debido a que hay varias que no tienen start ni end. cuando deberían tenerlo. horario registrado
+            logging.warn(self)
+            logging.warn(wp)
+            logging.exception(e)
+            return 0
 
 class RangedTimeJustification(Justification):
 

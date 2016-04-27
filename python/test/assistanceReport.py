@@ -196,6 +196,8 @@ def statsToPyoo(stats, users):
                 sheet[i,4].value = status.countLate
                 sheet[i,5].value = datetime.timedelta(seconds=status.secondsEarly)
                 sheet[i,6].value = status.countEarly
+                sheet[i,7].value = status.countAbsences
+                sheet[i,8].value = status.countJustificatedAbsences
 
                 i = i + 1
 
@@ -207,14 +209,15 @@ def statsToPyoo(stats, users):
                 for st in status.dailyStats:
                     sheet[i,0].value = user.name + " " + user.lastname
                     sheet[i,1].value = st.date
-                    sheet[i,2].value = st.start
-                    sheet[i,3].value = st.end
-                    sheet[i,4].value = datetime.timedelta(seconds=st.periodSeconds)
-                    sheet[i,5].value = st.iin
-                    sheet[i,6].value = st.out
-                    sheet[i,7].value = datetime.timedelta(seconds=st.workedSeconds)
+                    sheet[i,2].value = st.start if st.start is not None else ''
+                    sheet[i,3].value = st.end if st.end is not None else ''
+                    sheet[i,4].value = datetime.timedelta(seconds=st.periodSeconds) if st.periodSeconds != 0 else ''
+                    sheet[i,5].value = st.iin if st.iin is not None else ''
+                    sheet[i,6].value = st.out if st.out is not None else ''
+                    sheet[i,7].value = datetime.timedelta(seconds=st.workedSeconds) if st.workedSeconds is not None else ''
                     sheet[i,8].value = st.justification.identifier if st.justification is not None else ''
-                    sheet[i,9].value = _secondsToHours(st.justification.seconds if st.justification is not None else 0)
+                    sheet[i,9].value = _secondsToHours(st.justification.seconds) if st.justification is not None else ''
+                    sheet[i,10].value = 'J' if st.isJustificatedAbsence() else 'A' if st.isAbsence() else ''
                     i = i + 1
 
             #index = index + 1
@@ -228,6 +231,7 @@ def statsToPyoo(stats, users):
 def _getUsers(con):
     uids = []
 
+    """
     uid, v = UserDAO.findByDni(con, "26575940")
     uids.append(uid)
 
@@ -273,7 +277,17 @@ def _getUsers(con):
     uid, v = UserDAO.findByDni(con, "29694757")      # oporto
     uids.append(uid)
 
-    #uids = ScheduleDAO.findUsersWithSchedule(con)
+    uid, v = UserDAO.findByDni(con, "30078613")      # lorena mabel pereira
+    uids.append(uid)
+
+    uid, v = UserDAO.findByDni(con, "30078613")      # lorena mabel pereira
+    uids.append(uid)
+
+    uid, v = UserDAO.findByDni(con, "21430694")      # analía causa
+    uids.append(uid)
+
+    """
+    uids = ScheduleDAO.findUsersWithSchedule(con)
     users = UserDAO.findById(con, uids)
     return users, uids
 
@@ -294,7 +308,7 @@ if __name__ == '__main__':
 
         users, userIds = _getUsers(con)
         a = inject.instance(AssistanceModel)
-        stats = a.getStatistics(con, userIds, datetime.datetime.now() - datetime.timedelta(days=97), datetime.datetime.now())
+        stats = a.getStatistics(con, userIds, datetime.datetime.now() - datetime.timedelta(days=30), datetime.datetime.now())
         #wps = a.getWorkPeriods(con, userIds, datetime.datetime.now() - datetime.timedelta(days=97), datetime.datetime.now())
         statsToPyoo(stats, users)
 
