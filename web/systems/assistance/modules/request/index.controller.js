@@ -58,7 +58,7 @@ function RequestCtrl($scope, Login, Assistance, $location) {
     }
 
     $scope.model.end = ($scope.model.end == null) ? new Date($scope.model.start.getTime() + (limitDay * dayMillis))  : $scope.model.end;
-
+    $scope.model.start = ($scope.model.start >= $scope.model.end) ? new Date($scope.model.end.getTime() - (limitDay * dayMillis))  : $scope.model.start;
   });
 
   function initialize() {
@@ -106,6 +106,7 @@ function RequestCtrl($scope, Login, Assistance, $location) {
   function formatJustification(just) {
     var j = {};
     j.name = just.identifier;
+    j.type = just.type;
     j.start = just.start;
     j.end = just.end;
     j.status = just.status.status;
