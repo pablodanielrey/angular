@@ -31,9 +31,13 @@ class JustificationStatistics:
     @staticmethod
     def _create(wp):
         assert wp is not None
+        if len(wp.getJustifications()) <= 0:
+            return None
+
         j = JustificationStatistics()
-        for j in wp.getJustifications():
-            j.identifer = j.getIdentifier()
+        for js in wp.getJustifications():
+            j.identifier = js.getIdentifier()
+            j.seconds = js.getJustifiedSeconds(wp)
         return j
 
 class DailyWpStatistics:
@@ -50,9 +54,10 @@ class DailyWpStatistics:
         ds.iin = None if wp.getStartLog() is None else wp.getStartLog().log.astimezone(tzlocal()).replace(tzinfo=None)
         ds.out = None if wp.getEndLog() is None else wp.getEndLog().log.astimezone(tzlocal()).replace(tzinfo=None)
         ds.justification = JustificationStatistics._create(wp)
-        ds._calculatePeriodSeconds(stats)
-        ds._caculateWorkedSeconds(stats)
-        ds._calculateLateAndEarly(stats)
+        ds._calculatePeriodSeconds(wp, stats)
+        ds._caculateWorkedSeconds(wp, stats)
+        ds._calculateLateAndEarly(wp, stats)
+        ds._calculateAbsence(wp)
         stats._addDailyStatistics(ds)
 
     def _loadOntoStats(self, stats):
@@ -62,25 +67,32 @@ class DailyWpStatistics:
         stats._addSecondsEarly(self.earlySeconds)
         stats._addDailyStatistics(self)
 
-    def _calculatePeriodSeconds(self, stats):
-        if self.start is not None and self.end is not None:
-            self.periodSeconds = (self.end - self.start).total_seconds()
-            stats._addToWorkSeconds(self.periodSeconds)
+    def _calculateAbsence(self, wp):
+        self.absence = wp.isAbsence()
+        self.justificatedAbsence = wp.isJustificatedAbsence()
 
-    def _caculateWorkedSeconds(self, stats):
-        if self.iin is not None and self.out is not None:
-            self.workedSeconds = (self.end - self.start).total_seconds()
-            stats._addWorkedSeconds(self.workedSeconds)
+    def _calculatePeriodSeconds(self, wp, stats):
+        self.periodSeconds = wp.getScheduleSeconds()
+        stats._addToWorkSeconds(self.periodSeconds)
 
-    def _calculateLateAndEarly(self, stats):
-        if self.iin is not None and self.start is not None and self.iin > self.start:
-            self.lateSeconds = (self.iin - self.start).total_seconds()
+    def _caculateWorkedSeconds(self, wp, stats):
+        self.workedSeconds = wp.getWorkedSeconds()
+        stats._addWorkedSeconds(self.workedSeconds)
+
+    def _calculateLateAndEarly(self, wp, stats):
+        self.lateSeconds = wp.getLateSeconds()
+        if self.lateSeconds > 0:
             stats._addSecondsLate(self.lateSeconds)
 
-        if self.out is not None and self.end is not None and self.out < self.end:
-            self.earlySeconds = (self.end - self.out).total_seconds()
+        self.earlySeconds = wp.getEarlySeconds()
+        if self.earlySeconds > 0:
             stats._addSecondsEarly(self.earlySeconds)
 
+    def isAbsence(self):
+        return self.absence
+
+    def isJustificatedAbsence(self):
+        return self.justificatedAbsence
 
     def __init__(self):
         self.userId = None
@@ -93,7 +105,8 @@ class DailyWpStatistics:
         self.workedSeconds = 0
         self.lateSeconds = 0
         self.earlySeconds = 0
-
+        self.absence = False
+        self.justificatedAbsence = False
 
 class WpStatistics:
 
@@ -105,6 +118,8 @@ class WpStatistics:
         self.countLate = 0                  # cantidad de llegadas tarde
         self.secondsEarly = 0               # total de salidas tempranas
         self.countEarly = 0                 # cantidad de salidas tempranas
+        self.countAbsences = 0              # cantidad de ausencias
+        self.countJustificatedAbsences = 0  # cantidad de ausencias justificadas
         self.dailyStats = []                # estadísticas diarias
 
     def _addWorkedSeconds(self, s):
@@ -122,6 +137,11 @@ class WpStatistics:
         self.countEarly = self.countEarly + 1
 
     def _addDailyStatistics(self, ds):
+        if ds.isAbsence():
+            self.countAbsences = self.countAbsences + 1
+        if ds.isJustificatedAbsence():
+            self.countJustificatedAbsences = self.countJustificatedAbsences + 1
+
         self.dailyStats.append(ds)
 
     def getStartDate(self):

@@ -219,6 +219,9 @@ def createPreExam(con):
         id = 'b70013e3-389a-46d4-8b98-8e4ab75335d0'
         cur.execute('select id, user_id, requestor_id, jbegin, jend from assistance.justifications_requests where justification_id = %s order by user_id, jbegin asc',(id,))
 
+        if cur.rowcount <= 0:
+            return
+
         userId = None
         ownerId = None
         start = None
@@ -274,6 +277,9 @@ def createLAO(con):
         id = '76bc064a-e8bf-4aa3-9f51-a3c4483a729a'
         cur.execute('select id, user_id, requestor_id, jbegin from assistance.justifications_requests where justification_id = %s order by user_id, jbegin asc',(id,))
 
+        if cur.rowcount <= 0:
+            return
+
         userId = None
         ownerId = None
         start = None
@@ -326,6 +332,7 @@ def createTask(con):
         id = 'cb2b4583-2f44-4db0-808c-4e36ee059efe'
 
         cur.execute('select id, user_id, requestor_id, jbegin, jend from assistance.justifications_requests where justification_id = %s',(id,))
+
         for jr in cur:
             logging.info('obteniendo justificacion : {}:{}'.format(jr['id'], jr['requestor_id']))
 
@@ -735,7 +742,7 @@ class RangedJustificationMigrate():
 
             if cur.rowcount <= 0:
                 return
-            
+
             userId = None
             days = 0
             for jr in cur:

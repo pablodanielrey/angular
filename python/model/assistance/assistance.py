@@ -39,7 +39,6 @@ class AssistanceData(JSONSerializable):
 
 
 class WorkPeriod(JSONSerializable):
-
     logsTolerance = datetime.timedelta(hours=2)
 
     def __init__(self, userId = None, date = None):
@@ -76,12 +75,68 @@ class WorkPeriod(JSONSerializable):
         return self.logs[-1]
 
     def getWorkedSeconds(self):
+        """
+            Retorna los segundos trabajados
+        """
         total = 0
         workingLogs = [ self.logs[k:k+2] for k in range(0, len(self.logs), 2) ]
         for wl in workingLogs:
             if len(wl) >= 2:
                 total = total + (wl[1].log - wl[0].log).total_seconds()
         return total
+
+    def getSchedule(self):
+        return self.schedule
+
+    def getScheduleSeconds(self):
+        """
+            Retorna los segundos que debería trabajar
+        """
+        if self.schedule is None:
+            return 0
+        return self.schedule.getScheduleSeconds()
+
+    def getEarlySeconds(self):
+        """
+            Retorna los segundos de salida temprana
+            en el caso de no tener schedule entonces retorna 0
+        """
+        endDate = self.getEndDate()
+        if self.schedule is None or endDate is None:
+            return 0
+
+        if self.getEndLog() is None:
+            return 0
+
+        lastLog = self.getEndLog().log.astimezone(tzlocal()).replace(tzinfo=None)
+        return 0 if lastLog >= endDate else (endDate - lastLog).total_seconds()
+
+    def getLateSeconds(self):
+        """
+            Retorna los segundos de tardanza
+            en el caso de no tener schedule retorna 0
+        """
+        startDate = self.getStartDate()
+        if self.schedule is None or startDate is None:
+            return 0
+
+        if self.getStartLog() is None:
+            return 0
+
+        startLog = self.getStartLog().log.astimezone(tzlocal()).replace(tzinfo=None)
+        return 0 if startLog <= startDate else (startLog - startDate).total_seconds()
+
+    def isAbsence(self):
+        """
+            Retorna true si representa una ausencia
+        """
+        return self.schedule is not None and len(self.logs) <= 0
+
+    def isJustificatedAbsence(self):
+        """
+            Retorna true si representa una ausencia justificada
+        """
+        return self.isAbsence() and len(self.justifications) > 0
 
     def _loadSchedule(self, schedules):
         """ el último schedule válido para esa fecha es el que vale """
