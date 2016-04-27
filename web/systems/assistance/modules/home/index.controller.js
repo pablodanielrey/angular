@@ -22,10 +22,10 @@ function HomeCtrl($rootScope, $scope, Users, Login, Positions, Assistance) {
   }
 
   $scope.$on('$viewContentLoaded', function(event) {
-    $scope.userId = '';
+    $scope.model.userId = '';
     Login.getSessionData()
       .then(function(s) {
-          $scope.userId = s.user_id;
+          $scope.model.userId = s.user_id;
           $scope.initialize();
       }, function(err) {
         console.log(err);
@@ -43,7 +43,7 @@ function HomeCtrl($rootScope, $scope, Users, Login, Positions, Assistance) {
   }
 
   function loadPosition() {
-    Positions.getPosition([$scope.userId]).then(function(positions) {
+    Positions.getPosition([$scope.model.userId]).then(function(positions) {
       $scope.model.position = (positions.length > 0) ? positions[0] : null;
     }, function(error) {
       console.log('Error al buscar el cargo')
@@ -51,7 +51,7 @@ function HomeCtrl($rootScope, $scope, Users, Login, Positions, Assistance) {
   }
 
   function loadUser() {
-    Users.findById([$scope.userId]).then(function(users) {
+    Users.findById([$scope.model.userId]).then(function(users) {
       $scope.model.user = (users.length > 0) ? users[0] : null;
     }, function(error) {
       console.log('Error al buscar el usuario')
@@ -67,13 +67,13 @@ function HomeCtrl($rootScope, $scope, Users, Login, Positions, Assistance) {
   }
 
   function loadAssistanceData() {
-    if ($scope.model.date == null || $scope.userId == null) {
+    if ($scope.model.date == null || $scope.model.userId == null) {
       return
     }
     $scope.model.date.setHours(0);
     $scope.model.date.setMinutes(0);
     $scope.model.date.setSeconds(0);
-    Assistance.getAssistanceData([$scope.userId], $scope.model.date, $scope.model.date).then(function(data) {
+    Assistance.getAssistanceData([$scope.model.userId], $scope.model.date, $scope.model.date).then(function(data) {
       $scope.model.assistanceData = {};
       if (data.length <= 0) {
         return;
