@@ -12,6 +12,9 @@ function RequestCtrl($scope, Login, Assistance, $location) {
   $scope.search = search;
   $scope.getJustTitle = getJustTitle;
   $scope.getJustName = getJustName;
+  $scope.orderName = orderName;
+  $scope.orderStatus = orderStatus;
+  $scope.oderUserName = orderUserName;
 
   $scope.model = {
     userId: null,
@@ -21,7 +24,9 @@ function RequestCtrl($scope, Login, Assistance, $location) {
   }
 
   $scope.view = {
-    searching: false
+    searching: false,
+    reverseName: false,
+    reverseStatus: false
   }
 
   const dayMillis = 24 * 60 * 60 * 1000;
@@ -107,6 +112,7 @@ function RequestCtrl($scope, Login, Assistance, $location) {
 
   function formatJustification(just) {
     var j = {};
+    j.userId = just.userId;
     j.name = just.identifier;
     j.type = just.type;
     j.start = just.start;
@@ -124,6 +130,52 @@ function RequestCtrl($scope, Login, Assistance, $location) {
 
   function getJustName(just) {
     return (just.hasOwnProperty('type') && just.type != undefined) ? just.name : '';
+  }
+
+  function compareName(a, b) {
+    aName = (a.hasOwnProperty('type') && a.type != undefined) ? a.type + ' ' + a.name : a.name;
+    bName = (b.hasOwnProperty('type') && b.type != undefined) ? b.type + ' ' + b.name : b.name;
+    return (aName < bName) ? -1 : (aName > bName ? 1 : 0);
+  }
+
+  function orderName() {
+    if ($scope.view.reverseName) {
+      $scope.model.justifications.sort(function(a, b) {
+        return compareName(a, b);
+      });
+    } else {
+      $scope.model.justifications.sort(function(a, b) {
+        return compareName(b, a);
+      });
+    }
+    $scope.view.reverseName = !$scope.view.reverseName;
+  }
+
+  function orderStatus() {
+    if ($scope.view.reverseStatus) {
+      $scope.model.justifications.sort(function(a, b) {
+        return a.status - b.status
+      });
+    } else {
+      $scope.model.justifications.sort(function(a, b) {
+        return b.status - a.status
+      });
+    }
+    $scope.view.reverseStatus = !$scope.view.reverseStatus;
+  }
+
+  function orderUserName() {
+    // este lo tengo que cambiar, deberia ordenar por nombre de usaurio
+    if ($scope.view.reverseName) {
+      $scope.model.justifications.sort(function(a, b) {
+        return a.name < b.name ? -1 : (a.name > b.name ? 1 : 0)
+      });
+    } else {
+      $scope.model.justifications.sort(function(a, b) {
+        return b.name < a.name ? -1 : (b.name > a.name ? 1 : 0)
+      });
+    }
+    $scope.view.reverseName = !$scope.view.reverseName;
   }
 
 
