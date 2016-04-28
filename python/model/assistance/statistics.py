@@ -111,8 +111,9 @@ class DailyWpStatistics:
 
 class WpStatistics:
 
-    def __init__(self, userId):
-        self.userId = userId
+    def __init__(self):
+        self.userId = None
+        self.position = None                # cargo que ocupa en la facultad
         self.secondsToWork = 0              # total que deberia trabajar
         self.secondsWorked = 0              # total trabajado
         self.secondsLate = 0                # total de llegadas tarde

@@ -198,8 +198,9 @@ def statsToPyoo(stats, users, offices):
                     sheet = doc.sheets[0]
 
                     sheet[i,0].value = user.name + " " + user.lastname
-                    sheet[i,1].value = _secondsToHours(status.secondsToWork)
-                    sheet[i,2].value = _secondsToHours(status.secondsWorked)
+                    sheet[i,1].value = status.position if status.position is not None else ''
+                    sheet[i,2].value = _secondsToHours(status.secondsToWork)
+                    sheet[i,3].value = _secondsToHours(status.secondsWorked)
                     sheet[i,4].value = _secondsToHours(status.secondsLate)
                     sheet[i,5].value = status.countLate
                     sheet[i,6].value = _secondsToHours(status.secondsEarly)
@@ -235,6 +236,7 @@ def statsToPyoo(stats, users, offices):
 
                     for st in status.dailyStats:
                         sheet[i,0].value = user.name + " " + user.lastname
+                        sheet[i,1].value = status.position if status.position is not None else ''
                         sheet[i,2].value = st.date
                         sheet[i,3].value = st.start if st.start is not None else ''
                         sheet[i,4].value = st.end if st.end is not None else ''

@@ -10,6 +10,7 @@ from model.serializer.utils import JSONSerializable
 from model.assistance.justifications import *
 from model.assistance.justifications.justifications import Justification
 
+from model.positions.positions import Position
 from model.assistance.statistics import WpStatistics
 from model.assistance.utils import Utils
 
@@ -298,7 +299,10 @@ class AssistanceModel:
         wpss = self.getWorkPeriods(con, userIds, start, end)
         totalStats = []
         for uid in wpss.keys():
-            stats = WpStatistics(uid)
+            stats = WpStatistics()
+            stats.userId = uid
+            pos = Position.findByUser(con, [uid])
+            stats.position = pos[0].name if len(pos) > 0 else None
             for wp in wpss[uid]:
                 stats.updateStatistics(wp)
             totalStats.append(stats)
