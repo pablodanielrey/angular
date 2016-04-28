@@ -131,6 +131,7 @@ class TaskJustification(RangedTimeJustification):
     def __init__(self, userId = None, ownerId = None, start = None, end=None):
         super().__init__(start, end, userId, ownerId)
         self.type = "Boleta en comisión"
+        self.classType = RangedTimeJustification.__name__
 
 
 class TaskWithReturnJustification(TaskJustification):

@@ -153,6 +153,7 @@ class MourningJustification(RangedJustification):
     def __init__(self, userId = None, ownerId = None, start = None, days = 0):
         super().__init__(start, days, userId, ownerId)
         self.type = "Duelo"
+        self.classType = RangedJustification.__name__
 
     def setEnd(self, date):
         assert isinstance(date, datetime.date)

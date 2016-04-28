@@ -131,6 +131,7 @@ class OutTicketJustification(RangedTimeJustification):
     def __init__(self, userId = None, ownerId = None, start = None, end=None):
         super().__init__(start, end, userId, ownerId)
         self.type = 'Boleta de salida'
+        self.classType = RangedTimeJustification.__name__
 
 
 class OutTicketWithReturnJustification(OutTicketJustification):
