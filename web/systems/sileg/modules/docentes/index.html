@@ -43,8 +43,9 @@
       </div>
   </header>
 
-  <main class="{{view.style}}">
+  <main class="{{view.style}} {{view.style2}}">
     <!-- VARIABLES 1: busquedaPorDocente, busquedaPorCatedra -->
+    <!-- VARIABLES 2: verInfoDocente, verInfoCatedra -->
     <i class="fa fa-search" aria-hidden="true"></i> Buscar por
     <div class="contentMain">
         <div class="contentLeft">
@@ -59,11 +60,11 @@
           </div>
 
           <div class="searchDocente">
-            <button class="btnBack" ng-click="view.style = ''"><i class="fa fa-chevron-left" title="Volver"></i></button> <b>DOCENTE</b>
+            <button class="btnBack" ng-click="view.style='';view.style2=''"><i class="fa fa-chevron-left" title="Volver"></i></button> <b>DOCENTE</b>
             <input class="inputSearch"></input>
             <div class="contentList">
 
-                <div class="itemList">
+                <div class="itemList" ng-click="view.style2 = 'verInfoDocente'">
                   <div class="icoList">
                     A
                   </div>
@@ -180,13 +181,174 @@
           </div>
 
           <div class="searchCatedra">
-            <button class="btnBack" ng-click="view.style = ''"><i class="fa fa-chevron-left" title="Volver"></i></button> <b>CÁTEDRA</b>
+            <button class="btnBack" ng-click="view.style='';view.style2=''"><i class="fa fa-chevron-left" title="Volver"></i></button> <b>CÁTEDRA</b>
             <input class="inputSearch"></input>
+
+            <div class="contentList">
+
+                  <div class="itemList" ng-click="view.style2 = 'verInfoCatedra'">
+                    <div class="icoListCat">
+                      A
+                    </div>
+                    <div>
+                        <div class="textNameCat">
+                          Administración I
+                        </div>
+                        <div class="textLastNameCat">
+                          Cátedra A
+                        </div>
+                    </div>
+                  </div>
+
+                  <div class="itemList">
+                    <div class="icoListCat">
+                      A
+                    </div>
+                    <div>
+                        <div class="textNameCat">
+                          Administración I
+                        </div>
+                        <div class="textLastNameCat">
+                          Cátedra B
+                        </div>
+                    </div>
+                  </div>
+                  <div class="itemList">
+                    <div class="icoListCat">
+                      A
+                    </div>
+                    <div>
+                        <div class="textNameCat">
+                          Administración I
+                        </div>
+                        <div class="textLastNameCat">
+                          Cátedra C
+                        </div>
+                    </div>
+                  </div>
+
+                  <div class="itemList">
+                    <div class="icoListCat">
+                      C
+                    </div>
+                    <div>
+                        <div class="textNameCat">
+                          Contabilidad superior I
+                        </div>
+                        <div class="textLastNameCat">
+                          Cátedra A
+                        </div>
+                    </div>
+                  </div>
+                  <div class="itemList">
+                    <div class="icoListCat">
+                      C
+                    </div>
+                    <div>
+                        <div class="textNameCat">
+                          Contabilidad superior I
+                        </div>
+                        <div class="textLastNameCat">
+                          Cátedra B
+                        </div>
+                    </div>
+                  </div>
+                  <div class="itemList">
+                    <div class="icoListCat">
+                      C
+                    </div>
+                    <div>
+                        <div class="textNameCat">
+                          Contabilidad superior I
+                        </div>
+                        <div class="textLastNameCat">
+                          Cátedra C
+                        </div>
+                    </div>
+                  </div>
+
+                  <div class="itemList">
+                    <div class="icoListCat">
+                      I
+                    </div>
+                    <div>
+                        <div class="textNameCat">
+                          Introducción a la economía y estructura económica argentina
+                        </div>
+                        <div class="textLastNameCat">
+
+                        </div>
+                    </div>
+                  </div>
+
+            </div>
+
           </div>
 
 
         </div>
         <div class="contentRight">
+
+          <div class="contentDocente">
+            docente
+          </div>
+
+          <div class="contentCatedra">
+              PROFESORES TITULARES :
+
+              Cátedra A: PAOLINI, Norma (titular a cargo)
+              Cátedra B: DENDA, Elena Margarita
+              Cátedra C: GONZALEZ, Héctor Eduardo
+
+              PROFESORES ADJUNTOS:
+
+              AGUIRRE MARIA MARTA
+              ALVAREZ GELVES DIEGO CESAR
+              BURRY RICARDO
+              DI GIOVAN BATTISTA NICOLAS
+              ELIZALDE PEDRO FELIX MARIA
+              LOPEZ ARMENGOL MARTIN ANIBAL
+              MARTINS MOGO DANIEL HERNÁN
+              PAOLINI, Norma Adela
+              ROSSI SILVIA LILIANA
+              SOSA JORGE HECTOR
+              TRABUCCO NESTOR ANTONIO
+              VILLARRUEL MÓNICA BEATRIZ
+
+              JEFE DE AUXILIARES DOCENTES
+
+              DI GIOVAN BATTISTA, Juan Pablo
+              NÓBILE, Cecilia Inés
+              SCARAMELLINI, Nora
+
+              AYUDANTES DIPLOMADOS
+
+              ALFONSO ALEJANDRA MARIANA
+              BERTOLDI ANA JULIA
+              FARIAS MARIA ROSA ADRIANA
+              GONZÁLEZ JULIÁN MATIAS
+              HASPERUÉ GASTÓN (Supl.)
+              LUNGHI CARLOS GUILLERMO
+              MILLAN GUILLERMO ROGELIO
+              ODRIOZOLA JULIETA
+              PLANO MARÍA AMANDA
+              RICCI GERMAN ALFREDO
+              RUBBINI, Victoria
+              SIDOR ELEONORA ANA
+              WIESZTORT LETICIA INÉS
+
+              AYUDANTES ALUMNOS
+
+              BERRI SEBASTIAN
+              DE LUCA JUAN IGNACIO
+              FANJUL NICOLAS FRANCISCO
+              FERNANDEZ DANIELA
+              GUERRERO MARTIN ESTEBAN
+              LAFUENTE FLORENCIA GRACIELA
+              REMES LENICOV MARIA LAURA
+              SEVERO FRANCISCO DARIO
+
+          </div>
 
         </div>
     </div>
