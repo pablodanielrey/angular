@@ -93,9 +93,11 @@ class BloodDonationJustificationDAO(AssistanceDAO):
 class BloodDonationJustification(SingleDateJustification):
 
     dao = BloodDonationJustificationDAO
+    identifier = "Donación de Sangre"
 
-    def __init__(self, userId, ownerId, date):
+    def __init__(self, userId = None, ownerId = None, date = None):
         super().__init__(date, userId, ownerId)
+        self.identifier = BloodDonationJustification.identifier
 
     def getIdentifier(self):
-        return "Donación de Sangre"
+        return self.identifier

@@ -93,9 +93,11 @@ class ScheduleJustificationDAO(AssistanceDAO):
 class ScheduleJustification(SingleDateJustification):
 
     dao = ScheduleJustificationDAO
+    identifier = "Horario justificado"
 
-    def __init__(self, userId, ownerId, date):
+    def __init__(self, userId = None, ownerId = None, date = None):
         super().__init__(date, userId, ownerId)
+        self.identifier = ScheduleJustification.identifier
 
     def getIdentifier(self):
-        return "Horario justificado"
+        return self.identifier

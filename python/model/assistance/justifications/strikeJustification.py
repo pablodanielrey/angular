@@ -93,9 +93,11 @@ class StrikeJustificationDAO(AssistanceDAO):
 class StrikeJustification(SingleDateJustification):
 
     dao = StrikeJustificationDAO
+    identifier = "Paro"
 
-    def __init__(self, userId, ownerId, date):
+    def __init__(self, userId = None, ownerId = None, date = None):
         super().__init__(date, userId, ownerId)
+        self.identifier = StrikeJustification.identifier
 
     def getIdentifier(self):
-        return "Paro"
+        return self.identifier

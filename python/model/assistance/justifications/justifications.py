@@ -7,7 +7,7 @@ from model.serializer.utils import JSONSerializable
 
 class Justification(JSONSerializable):
 
-    def __init__(self, userId, ownerId):
+    def __init__(self, userId = None, ownerId = None):
         self.id = None
         self.userId = userId
         self.ownerId = ownerId
@@ -66,7 +66,6 @@ class Justification(JSONSerializable):
         cls._loadStatus(con, justs)
         return justs
 
-
     @classmethod
     def findById(cls, con, ids):
         assert cls.dao is not None
@@ -108,8 +107,7 @@ class Justification(JSONSerializable):
 
 class SingleDateJustification(Justification):
 
-    def __init__(self, date, userId, ownerId):
-        assert isinstance(date, datetime.datetime)
+    def __init__(self, date = None, userId = None, ownerId = None):
         super().__init__(userId, ownerId)
         self.date = date
 
@@ -169,12 +167,12 @@ class RangedJustification(Justification):
         else:
             return False
 
-    def __init__(self, start, days, userId, ownerId):
+    def __init__(self, start = None, days = 0, userId = None, ownerId = None):
         super().__init__(userId, ownerId)
 
         continuous = self.isContinuous()
         self.start = start
-        self.end = RangedJustification._getEnd(start, days, continuous)
+        self.end = None if start is None or days is None else RangedJustification._getEnd(start, days, continuous)
 
     def _loadWorkedPeriods(self, wps):
         assert self.getStatus() is not None
@@ -205,7 +203,7 @@ class RangedJustification(Justification):
 
 class RangedTimeJustification(Justification):
 
-    def __init__(self, start, end, userId, ownerId):
+    def __init__(self, start = None, end = None, userId = None, ownerId = None):
         super().__init__(userId, ownerId)
         self.start = start
         self.end = end

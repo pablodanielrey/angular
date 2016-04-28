@@ -112,14 +112,15 @@ class LongDurationJustification(RangedJustification):
 
     dao = LongDurationJustificationDAO
     registry = inject.instance(Registry).getRegistry('longDurationJustification')
+    identifier = 'Larga Duración'
 
-    def __init__(self, userId, ownerId, start, days = 0, number = None):
-        assert isinstance(start, datetime.date)
+    def __init__(self, userId = None, ownerId = None, start = None, days = 0, number = None):
         super().__init__(start, days, userId, ownerId)
         self.number = number
+        self.identifier = LongDurationJustification.identifier
 
     def getIdentifier(self):
-        return 'Larga Duración'
+        return self.identifier
 
     def setEnd(self, date):
         assert isinstance(date, datetime.date)

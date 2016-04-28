@@ -117,13 +117,14 @@ class TravelJustification(RangedJustification):
 
     dao = TravelJustificationDAO
     registry = inject.instance(Registry).getRegistry('travelJustification')
+    identifier = 'Viaje'
 
-    def __init__(self, userId, ownerId, start, days = 0):
-        assert isinstance(start, datetime.date)
+    def __init__(self, userId = None, ownerId = None, start = None, days = 0):
         super().__init__(start, days, userId, ownerId)
+        self.identifier = TravelJustification.identifier
 
     def getIdentifier(self):
-        return 'Viaje'
+        return self.identifier
 
     def setEnd(self, date):
         assert isinstance(date, datetime.date)

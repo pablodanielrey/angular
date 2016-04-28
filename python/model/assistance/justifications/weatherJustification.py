@@ -93,9 +93,11 @@ class WeatherJustificationDAO(AssistanceDAO):
 class WeatherJustification(SingleDateJustification):
 
     dao = WeatherJustificationDAO
+    identifier = "Incumbencias Climáticas"
 
-    def __init__(self, userId, ownerId, date):
+    def __init__(self, userId = None, ownerId = None, date = None):
         super().__init__(date, userId, ownerId)
+        self.identifier = WeatherJustification.identifier
 
     def getIdentifier(self):
-        return "Incumbencias Climáticas"
+        return self.identifier

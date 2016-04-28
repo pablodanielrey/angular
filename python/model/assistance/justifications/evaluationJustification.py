@@ -93,9 +93,11 @@ class EvaluationJustificationDAO(AssistanceDAO):
 class EvaluationJustification(SingleDateJustification):
 
     dao = EvaluationJustificationDAO
+    identifier = "Concurso"
 
-    def __init__(self, userId, ownerId, date):
+    def __init__(self, userId = None, ownerId = None, date = None):
         super().__init__(date, userId, ownerId)
+        self.identifier = EvaluationJustification.identifier
 
     def getIdentifier(self):
-        return "Concurso"
+        return self.identifier

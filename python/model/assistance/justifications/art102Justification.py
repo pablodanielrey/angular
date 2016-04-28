@@ -94,9 +94,11 @@ class Art102JustificationDAO(AssistanceDAO):
 class Art102Justification(SingleDateJustification):
 
     dao = Art102JustificationDAO
+    indentifier = "Artículo 102"
 
-    def __init__(self, userId, ownerId, date):
+    def __init__(self, userId = None, ownerId = None, date = None):
         super().__init__(date, userId, ownerId)
+        self.identifier = Art102Justification.indentifier
 
     def getIdentifier(self):
-        return "Artículo 102"
+        return self.indentifier

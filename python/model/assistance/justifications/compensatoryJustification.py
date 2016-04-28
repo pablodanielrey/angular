@@ -93,9 +93,11 @@ class CompensatoryJustificationDAO(AssistanceDAO):
 class CompensatoryJustification(SingleDateJustification):
 
     dao = CompensatoryJustificationDAO
+    identifier = "Compensatorio"
 
-    def __init__(self, userId, ownerId, date):
+    def __init__(self, userId = None, ownerId = None, date = None):
         super().__init__(date, userId, ownerId)
+        self.identifier = CompensatoryJustification.identifier
 
     def getIdentifier(self):
-        return "Compensatorio"
+        return self.identifier

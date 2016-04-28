@@ -118,10 +118,12 @@ class MedicalBoardJustification(RangedJustification):
 
     dao = MedicalBoardJustificationDAO
     registry = inject.instance(Registry).getRegistry('medicalBoardJustification')
+    identifier = 'Junta médica'
 
-    def __init__(self, userId, ownerId, start, days = 0, number = None):
+    def __init__(self, userId = None, ownerId = None, start = None, days = 0, number = None):
         super().__init__(start, days, userId, ownerId)
         self.number = number
+        self.identifier = MedicalBoardJustification.identifier
 
     def getIdentifier(self):
-        return 'Junta médica'
+        return self.identifier
