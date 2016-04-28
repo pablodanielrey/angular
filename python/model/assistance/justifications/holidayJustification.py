@@ -93,9 +93,11 @@ class HolidayJustificationDAO(AssistanceDAO):
 class HolidayJustification(SingleDateJustification):
 
     dao = HolidayJustificationDAO
+    identifier = "Feriado"
 
-    def __init__(self, userId, ownerId, date):
+    def __init__(self, userId = None, ownerId = None, date = None):
         super().__init__(date, userId, ownerId)
-
+        self.identifier = HolidayJustification.identifier
+        
     def getIdentifier(self):
-        return "Feriado"
+        return self.identifier

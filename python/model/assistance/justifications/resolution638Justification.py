@@ -117,13 +117,14 @@ class Resolution638Justification(RangedJustification):
 
     dao = Resolution638JustificationDAO
     registry = inject.instance(Registry).getRegistry('resolution638Justification')
+    identifier = 'Resolución 638'
 
-    def __init__(self, userId, ownerId, start, days = 0):
-        assert isinstance(start, datetime.date)
+    def __init__(self, userId = None, ownerId = None, start = None, days = 0):
         super().__init__(start, days, userId, ownerId)
+        self.identifier = Resolution638Justification.identifier
 
     def getIdentifier(self):
-        return 'Resolución 638'
+        return self.identifier
 
     def setEnd(self, date):
         assert isinstance(date, datetime.date)

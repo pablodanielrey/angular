@@ -150,9 +150,9 @@ class MourningJustification(RangedJustification):
 
     registry = inject.instance(Registry).getRegistry('mourningJustification')
 
-    def __init__(self, userId, ownerId, start, days = 0):
-        assert isinstance(start, datetime.date)
+    def __init__(self, userId = None, ownerId = None, start = None, days = 0):
         super().__init__(start, days, userId, ownerId)
+        self.type = "Duelo"
 
     def setEnd(self, date):
         assert isinstance(date, datetime.date)
@@ -166,31 +166,37 @@ class MourningJustification(RangedJustification):
 class MourningFirstGradeJustification(MourningJustification):
 
     dao = MourningFirstGradeJustificationDAO
+    identifier = 'Fallecimiento pariente primer grado'
 
-    def __init__(self, userId, ownerId, start, days = 0):
+    def __init__(self, userId = None, ownerId = None, start = None, days = 0):
         super().__init__(userId, ownerId, start, days)
+        self.identifier = MourningFirstGradeJustification.identifier
 
     def getIdentifier(self):
-        return 'Fallecimiento pariente primer grado'
+        return self.identifier
 
 
 class MourningSecondGradeJustification(MourningJustification):
 
     dao = MourningSecondGradeJustificationDAO
+    identifier = 'Fallecimiento pariente segundo grado'
 
-    def __init__(self, userId, ownerId, start, days = 0):
+    def __init__(self, userId = None, ownerId = None, start = None, days = 0):
         super().__init__(userId, ownerId, start, days)
+        self.identifier = MourningSecondGradeJustification.identifier
 
     def getIdentifier(self):
-        return 'Fallecimiento pariente segundo grado'
+        return self.identifier
 
 
 class MourningRelativeJustification(MourningJustification):
 
     dao = MourningRelativeJustificationDAO
+    identifier = 'Fallecimiento pariente político'
 
-    def __init__(self, userId, ownerId, start, days = 0):
+    def __init__(self, userId = None, ownerId = None, start = None, days = 0):
         super().__init__(userId, ownerId, start, days)
+        self.identifier = MourningRelativeJustification.identifier
 
     def getIdentifier(self):
-        return 'Fallecimiento pariente político'
+        return self.identifier

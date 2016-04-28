@@ -93,9 +93,11 @@ class TrainingJustificationDAO(AssistanceDAO):
 class TrainingJustification(SingleDateJustification):
 
     dao = TrainingJustificationDAO
+    identifier = "Capacitación"
 
-    def __init__(self, userId, ownerId, date):
+    def __init__(self, userId = None, ownerId = None, date = None):
         super().__init__(date, userId, ownerId)
+        self.identifier = TrainingJustification.identifier
 
     def getIdentifier(self):
-        return "Capacitación"
+        return self.identifier

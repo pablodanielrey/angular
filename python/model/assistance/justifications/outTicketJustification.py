@@ -128,19 +128,22 @@ class OutTicketWithoutReturnJustificationDAO(OutTicketJustificationDAO):
 
 class OutTicketJustification(RangedTimeJustification):
 
-    def __init__(self, userId, ownerId, start, end=None):
+    def __init__(self, userId = None, ownerId = None, start = None, end=None):
         super().__init__(start, end, userId, ownerId)
+        self.type = 'Boleta de salida'
 
 
 class OutTicketWithReturnJustification(OutTicketJustification):
 
     dao = OutTicketWithReturnJustificationDAO
+    identifier = "Boleta de salida con retorno"
 
-    def __init__(self, userId, ownerId, start, end):
+    def __init__(self, userId = None, ownerId = None, start = None, end = None):
         super().__init__(userId, ownerId, start, end)
+        self.identifier = OutTicketWithReturnJustification.identifier
 
     def getIdentifier(self):
-        return "Boleta de salida con retorno"
+        return self.identifier
 
     def changeEnd(self, con, end):
         self.end = end
@@ -149,13 +152,15 @@ class OutTicketWithReturnJustification(OutTicketJustification):
 class OutTicketWithoutReturnJustification(OutTicketJustification):
 
     dao = OutTicketWithoutReturnJustificationDAO
+    identifier = 'Boleta de salida sin retorno'
 
-    def __init__(self, userId, ownerId, start):
+    def __init__(self, userId = None, ownerId = None, start = None):
         super().__init__(userId, ownerId, start)
         self.end = None
+        self.identifier = OutTicketWithoutReturnJustification.identifier
 
     def getIdentifier(self):
-        return 'Boleta de salida sin retorno'
+        return self.indentifier
 
     def _loadWorkedPeriods(self, wps):
         assert self.getStatus() is not None

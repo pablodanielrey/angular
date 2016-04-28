@@ -117,9 +117,11 @@ class MedicalCertificateJustification(RangedJustification):
 
     dao = MedicalCertificateJustificationDAO
     registry = inject.instance(Registry).getRegistry('medicalCertificateJustification')
+    identifier = 'Certificado médico'
 
-    def __init__(self, userId, ownerId, start, days = 0):
+    def __init__(self, userId = None, ownerId = None, start = None, days = 0):
         super().__init__(start, days, userId, ownerId)
+        self.identifier = MedicalCertificateJustification.identifier
 
     def getIdentifier(self):
-        return 'Certificado médico'
+        return self.identifier

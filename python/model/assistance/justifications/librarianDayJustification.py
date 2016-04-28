@@ -93,9 +93,11 @@ class LibrarianDayJustificationDAO(AssistanceDAO):
 class LibrarianDayJustification(SingleDateJustification):
 
     dao = LibrarianDayJustificationDAO
+    identifier = "Día del bibliotecario"
 
-    def __init__(self, userId, ownerId, date):
+    def __init__(self, userId = None, ownerId = None, date = None):
         super().__init__(date, userId, ownerId)
+        self.identifier = LibrarianDayJustification.identifier
 
     def getIdentifier(self):
-        return "Día del bibliotecario"
+        return self.identifier

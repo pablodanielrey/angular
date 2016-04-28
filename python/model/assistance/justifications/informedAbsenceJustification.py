@@ -95,9 +95,11 @@ class InformedAbsenceJustificationDAO(AssistanceDAO):
 class InformedAbsenceJustification(SingleDateJustification):
 
     dao = InformedAbsenceJustificationDAO
+    identifier = "Ausente con aviso"
 
-    def __init__(self, userId, ownerId, date):
+    def __init__(self, userId = None, ownerId = None, date = None):
         super().__init__(date, userId, ownerId)
+        self.identifier = InformedAbsenceJustification.identifier
 
     def getIdentifier(self):
-        return "Ausente con aviso"
+        return self.identifier

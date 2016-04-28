@@ -48,7 +48,7 @@ class TaskJustificationDAO(AssistanceDAO):
             if ((not hasattr(j, 'id')) or (j.id is None)):
                 j.id = str(uuid.uuid4())
 
-            if len(j.findById(con, [j.id])) <=  0:                
+            if len(j.findById(con, [j.id])) <=  0:
                 r = j.__dict__
                 cur.execute('insert into assistance.justification_task (id, user_id, owner_id, jstart, jend) '
                             'values (%(id)s, %(userId)s, %(ownerId)s, %(start)s, %(end)s)', r)
@@ -128,19 +128,22 @@ class TaskWithoutReturnJustificationDAO(TaskJustificationDAO):
 
 class TaskJustification(RangedTimeJustification):
 
-    def __init__(self, userId, ownerId, start, end=None):
+    def __init__(self, userId = None, ownerId = None, start = None, end=None):
         super().__init__(start, end, userId, ownerId)
+        self.type = "Boleta en comisión"
 
 
 class TaskWithReturnJustification(TaskJustification):
 
     dao = TaskWithReturnJustificationDAO
+    identifier = "Boleta en comisión con retorno"
 
-    def __init__(self, userId, ownerId, start, end):
+    def __init__(self, userId = None, ownerId = None, start = None, end = None):
         super().__init__(userId, ownerId, start, end)
+        self.identifier = TaskWithReturnJustification.identifier
 
     def getIdentifier(self):
-        return "Boleta en comisión con retorno"
+        return self.identifier
 
     def changeEnd(self, con, end):
         self.end = end
@@ -149,12 +152,14 @@ class TaskWithReturnJustification(TaskJustification):
 class TaskWithoutReturnJustification(TaskJustification):
 
     dao = TaskWithoutReturnJustificationDAO
+    identifier = "Boleta en comisión sin retorno"
 
-    def __init__(self, userId, ownerId, start):
+    def __init__(self, userId = None, ownerId = None, start = None):
         super().__init__(userId, ownerId, start)
+        self.identifier = TaskWithoutReturnJustification.identifier
 
     def getIdentifier(self):
-        return 'Boleta en comisión sin retorno'
+        return self.identifier
 
     def _loadWorkedPeriods(self, wps):
         assert self.getStatus() is not None

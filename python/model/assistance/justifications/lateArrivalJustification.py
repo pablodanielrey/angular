@@ -93,9 +93,11 @@ class LateArrivalJustificationDAO(AssistanceDAO):
 class LateArrivalJustification(SingleDateJustification):
 
     dao = LateArrivalJustificationDAO
+    identifier = "Entrada Tarde Justificada"
 
-    def __init__(self, userId, ownerId, date):
+    def __init__(self, userId = None, ownerId = None, date = None):
         super().__init__(date, userId, ownerId)
+        self.identifier = LateArrivalJustification.identifier
 
     def getIdentifier(self):
-        return "Entrada Tarde Justificada"
+        return self.identifier

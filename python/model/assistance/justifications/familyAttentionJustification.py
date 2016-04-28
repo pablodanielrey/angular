@@ -117,14 +117,16 @@ class FamilyAttentionJustification(RangedJustification):
 
     dao = FamilyAttentionJustificationDAO
     registry = inject.instance(Registry).getRegistry('familyAttentionJustification')
+    identifier = 'Familiar enfermo'
 
-    def __init__(self, userId, ownerId, start, days = 0, number = None):
+    def __init__(self, userId = None, ownerId = None, start = None, days = 0, number = None):
         assert isinstance(start, datetime.date)
         super().__init__(start, days, userId, ownerId)
         self.number = number
+        self.identifier = FamilyAttentionJustification.identifier
 
     def getIdentifier(self):
-        return 'Familiar enfermo'
+        return self.identifier
 
     def setEnd(self, date):
         assert isinstance(date, datetime.date)

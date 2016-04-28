@@ -118,13 +118,14 @@ class ARTJustification(RangedJustification):
 
     dao = ARTJustificationDAO
     registry = inject.instance(Registry).getRegistry('artJustification')
+    identifier = 'ART'
 
-    def __init__(self, userId, ownerId, start, days = 0):
-        assert isinstance(start, datetime.date)
+    def __init__(self, userId = None, ownerId = None, start = None, days = 0):
         super().__init__(start, days, userId, ownerId)
+        self.identifier = ARTJustification.identifier
 
     def getIdentifier(self):
-        return 'ART'
+        return self.identifier
 
     def setEnd(self, date):
         assert isinstance(date, datetime.date)
