@@ -122,6 +122,7 @@ class MaternityJustification(RangedJustification):
         super().__init__(start, days, userId, ownerId)
         self.number = number
         self.identifier = MaternityJustification.identifier
+        self.classType = RangedJustification.__name__
 
     def getIdentifier(self):
         return self.identifier

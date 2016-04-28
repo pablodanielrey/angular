@@ -99,6 +99,7 @@ class Art102Justification(SingleDateJustification):
     def __init__(self, userId = None, ownerId = None, date = None):
         super().__init__(date, userId, ownerId)
         self.identifier = Art102Justification.indentifier
+        self.classType = SingleDateJustification.__name__
 
     def getIdentifier(self):
         return self.indentifier

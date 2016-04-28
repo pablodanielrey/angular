@@ -98,6 +98,7 @@ class ScheduleJustification(SingleDateJustification):
     def __init__(self, userId = None, ownerId = None, date = None):
         super().__init__(date, userId, ownerId)
         self.identifier = ScheduleJustification.identifier
+        self.classType = SingleDateJustification.__name__
 
     def getIdentifier(self):
         return self.identifier
