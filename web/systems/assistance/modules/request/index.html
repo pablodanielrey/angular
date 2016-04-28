@@ -70,25 +70,29 @@ VARIABLES 3: solicitudesPersonales, solicitudesGrupo, cargandoSolicitudes
                 <div class="requestOwn">
 
 
-                  <div class="itemRequest" ng-repeat="just in model.justifications ">
+                  <div class="itemRequest {{just.classType}} status{{just.status}}" ng-repeat="just in model.justifications ">
                     <div class="typeRequest">
-                        <i class="ico fa fa-ticket "></i> {{just.type}}
-                        <div style="font-size:small"> {{just.name}}</div>
+                        <i class="ico fa fa-ticket "></i> <span>{{getJustTitle(just)}}</span>
+                        <div style="font-size:small">{{getJustName(just)}}</div>
                     </div>
                     <div class="infoRequest">
                         <div class="dateRequest">
-                          08/01/2016
+                          {{just.date | date: 'dd/MM/yyyy'}}
                         </div>
                         <div class="dateRequest2">
-
-
+                          {{just.start | date: 'dd/MM/yyyy'}}
+                        </div>
+                        <div class="dateRequest3">
+                          {{just.end | date: 'dd/MM/yyyy'}}
                         </div>
                     </div>
                     <div class="contentState">
                         <div class="state">
                           Estado
                         </div>
-                        <div class="icoState">
+
+                        <!-- Aprobado -->
+                        <div class="stateApproved">
                           <div class="icoStateApproved">
                             A
                           </div>
@@ -96,6 +100,42 @@ VARIABLES 3: solicitudesPersonales, solicitudesGrupo, cargandoSolicitudes
                             Aprobado
                           </div>
                         </div>
+
+                        <!-- Pendiente -->
+                        <div class="statePending">
+                          <div class="icoStatePendig">
+                            P
+                          </div>
+                          <div class="textIcoState">
+                            Pendiente
+                          </div>
+                        </div>
+
+                        <!-- Rechazado -->
+                        <div class="stateRejected">
+                          <div class="icoStateCancel">
+                            R
+                          </div>
+                          <div class="textIcoState">
+                            Rechazado
+                          </div>
+                        </div>
+
+                        <!-- Cancelado -->
+                        <div class="stateCanceled">
+                          <div class="icoStateCancel">
+                            C
+                          </div>
+                          <div class="textIcoState">
+                            Cancelado
+                          </div>
+                        </div>
+
+                        <div>
+                          <button class="btnTrash" title="Eliminar"><i class="fa fa-trash-o"></i></button>
+                        </div>
+
+
                     </div>
                   </div>
 

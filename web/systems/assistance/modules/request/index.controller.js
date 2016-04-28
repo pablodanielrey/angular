@@ -10,6 +10,8 @@ function RequestCtrl($scope, Login, Assistance, $location) {
   $scope.initializeFilters = initializeFilters;
   $scope.formatJustification = formatJustification;
   $scope.search = search;
+  $scope.getJustTitle = getJustTitle;
+  $scope.getJustName = getJustName;
 
   $scope.model = {
     userId: null,
@@ -108,9 +110,20 @@ function RequestCtrl($scope, Login, Assistance, $location) {
     j.name = just.identifier;
     j.type = just.type;
     j.start = just.start;
+    j.date = just.date;
     j.end = just.end;
     j.status = just.status.status;
+    j.classType = just.classType;
     return j;
+  }
+
+  function getJustTitle(just) {
+    v = (just.hasOwnProperty('type') && just.type != undefined) ? just.type : just.name;
+    return v
+  }
+
+  function getJustName(just) {
+    return (just.hasOwnProperty('type') && just.type != undefined) ? just.name : '';
   }
 
 
