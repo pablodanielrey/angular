@@ -20,10 +20,15 @@ function RequestCtrl($scope, Login, Assistance, $location) {
     userId: null,
     start: null,
     end: null,
+    optionJustifications: null,
     justifications: []
   }
 
   $scope.view = {
+    optionsJustifications: [
+      {style: 'solicitudesPersonales', description: 'MIS SOLICITUDES', value: false},
+      {style: 'solicitudesGrupo', description: 'MI GRUPO', value: true}
+    ],
     searching: false,
     reverseName: false,
     reverseStatus: false
@@ -41,6 +46,12 @@ function RequestCtrl($scope, Login, Assistance, $location) {
       }, function(err) {
         console.log("error");
       });
+  });
+
+  $scope.$watch(function() {return $scope.model.optionJustifications;}, function(o,n) {
+    val = $scope.model.optionJustifications;
+    $scope.view.style3 = (val != null && val.hasOwnProperty('style') && val.style != undefined) ? val.style : '';
+    $scope.search();
   });
 
   $scope.$watch(function() {return $scope.model.start;}, function(o,n) {
@@ -69,9 +80,11 @@ function RequestCtrl($scope, Login, Assistance, $location) {
   });
 
   function initialize() {
+    $scope.model.optionJustifications = $scope.view.optionsJustifications[0];
     $scope.view.searching = false;
     $scope.model.justifications = [];
     $scope.initializeFilters();
+    $scope.search();
   }
 
   function initializeFilters() {
@@ -92,8 +105,10 @@ function RequestCtrl($scope, Login, Assistance, $location) {
       return
     }
     $scope.view.searching = true;
+    $scope.view.style3 = 'cargandoSolicitudes';
     Assistance.getJustifications($scope.model.userId, $scope.model.start, $scope.model.end, false).then(function(data) {
       $scope.view.searching = false;
+      $scope.view.style3 = $scope.model.optionJustifications.style;
       justifications = [];
       for (userId in data) {
         var just = data[userId];
@@ -105,6 +120,7 @@ function RequestCtrl($scope, Login, Assistance, $location) {
       $scope.model.justifications = justifications;
     }, function(error) {
       $scope.view.searching = false;
+      $scope.view.style3 = $scope.model.optionJustifications.style;
       console.log('Error al buscar las justificaciones');
     });
   }

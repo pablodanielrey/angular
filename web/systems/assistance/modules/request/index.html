@@ -1,4 +1,4 @@
-<div class="request {{view.style}} {{view.style2}} solicitudesPersonales">
+<div class="request {{view.style}} {{view.style2}} {{view.style3}} ">
 <!--
 VARIABLES 1: seleccionSolicitud
 VARIABLES 2: solicitudSeleccionada
@@ -43,9 +43,8 @@ VARIABLES 3: solicitudesPersonales, solicitudesGrupo, cargandoSolicitudes
 
             <div class="contentHeaderRequest">
                 <div>
-                    <select  class="selectRequest">
-                        <option class="title" ng-click="view.style3='solicitudesPersonales'">MIS SOLICITUDES</option>
-                        <option class="title" ng-click="view.style3='solicitudesGrupales'">MI GRUPO</option>
+                    <select  class="selectRequest" ng-model="model.optionJustifications" ng-options="op.description for op in view.optionsJustifications">
+                        <!-- <option class="title" ng-repeat="op in view.optionsJustifications">{{op.description}}</option> -->
                     </select>
                 </div>
 
