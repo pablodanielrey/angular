@@ -11,6 +11,7 @@ from model.assistance.justifications import *
 from model.assistance.justifications.justifications import Justification
 
 from model.positions.positions import Position
+from model.offices.offices import Office, OfficeDAO
 from model.assistance.statistics import WpStatistics
 from model.assistance.utils import Utils
 
@@ -207,12 +208,15 @@ class AssistanceModel:
         return justs
 
     def getJustifications(self, con, userId, start, end, isAll = False):
+        userIds = []
         if isAll:
             # tengo que obtener todos los usuarios de las oficina que autoriaza y buscar por esos usuarios
-            # ahora hago la misma llamada pero despues lo tengo que cambiar cuando este terminado lo de office y los roles
-            return self._getJustifications(con, [userId], start, end)
+            offices = OfficeDAO.getOfficesByUserRole(con, userId, False, 'autoriza')
+            userIds = OfficeDAO.getOfficesUsers(con, offices)
         else:
-            return self._getJustifications(con, [userId], start, end)
+            userIds.append(userId)
+
+        return self._getJustifications(con, userIds, start, end)
 
 
 
