@@ -46,25 +46,25 @@ from random import randint
 
 import datetime
 
-class TestJustification(TestEcono):   
+class TestJustification(TestEcono):
     justificationDAO = None
     justificationEntity = None
-    
+
     def setUp(self):
         super().setUp()
         try:
             con = self.connection.get()
-            try: 
+            try:
                 self.justificationDAO._createSchema(con)
                 con.commit()
-                
+
             finally:
                 self.connection.put(con)
-            
-        except Exception as e: 
+
+        except Exception as e:
             logging.exception(e)
-            
-            
+
+
     def assertEqualStatus(self, status, status2):
         self.assertEqual(status.id, status2.id)
         self.assertEqual(status.justificationId, status2.justificationId)
@@ -72,204 +72,182 @@ class TestJustification(TestEcono):
         self.assertEqual(status.userId, status2.userId)
         self.assertEqual(status.date, status2.date)
         self.assertEqual(status.created, status2.created)
-   
+
     def assertEqualJustification(self, justification, justification2):
-        self.assertEqual(justification.id, justification2.id)        
+        self.assertEqual(justification.id, justification2.id)
         self.assertEqual(justification.userId, justification2.userId)
         self.assertEqual(justification.ownerId, justification2.ownerId)
         self.assertEqualStatus(justification.status, justification2.status)
 
 
-
-
-
-class TestJustificationSingle(TestJustification):        
+class TestJustificationSingle(TestJustification):
     def assertEqualJustification(self, justification, justification2):
-        #self.assertEqual(justification.date, justification2.date)
         super().assertEqualJustification(justification, justification2)
-        
-    def defineNewJustification(self, con):        
-        user_id, user = TestUser.defineUserAndPersist(con)
-        owner_id, owner = TestUser.defineUserAndPersist(con)
-        con.commit()
-        
-        now = datetime.datetime.now() #mal para que funcione actualmente
-        #now = datetime.datetime.now().date() #bien, pero actualmente no funcione
-        justification = self.justificationEntity(user_id, owner_id, now)
-        return justification             
-        
-        
-        
+        #self.assertEqual(justification.date, justification2.date)
 
-        
+    def setUp(self):
+        super().setUp()
+        con = self.connection.get()
+        try:
+            self.user_id, self.user = TestUser.defineUserAndPersist(con)
+            self.owner_id, self.owner = TestUser.defineUserAndPersist(con)
+            con.commit()
+
+        finally:
+            self.connection.put(con)
+
+    def _assertEqualsWithFind(con, j, id):
+        justs = j.findById(con, [id])
+        self.assertNotNone(justs)
+        self.assertEqual(len(justs), 1)
+        self.assertEqualJustification(j, justs[0])
+
+    def test_persist(self):
+        con = self.connection.get()
+        try:
+            ##### insertar #####
+            j = self.newInstance()
+            j.persist(con)
+            con.commit()
+            self._assertEqualsWithFind(con, j, j.id)
+
+            ##### cambiar estado #####
+            state = j.getStatus()
+            state.changeStatus(con, j, 2, self.ownerId)
+            con.commit()
+            self._assertEqualsWithFind(con, j, j.id)
+
+        finally:
+            self.connection.put(con)
+
+    def test_find_by_id(self):
+        con = self.connection.get()
+        try:
+            j = self.justificationEntity.findById(con,[self.justification.id])
+            self.assertEqualJustification(self.justification, j[0])
+
+            j = self.justificationEntity.findById(con, ["not_exists"])
+            self.assertEqual(j, [])
+
+        finally:
+            self.connection.put(con)
+
+
+class TestJustificationArt102(TestJustificationSingle):
+    justificationDAO = Art102JustificationDAO
+
+    def newInstance(self):
+        j = JustificationArt102()
+        j.date = datetime.datetime.now()
+        j.owner_id = self.owner_id
+        j.user_id = self.user_id
+        return j
+
+
+
 class TestJustificationRanged(TestJustification):
     def assertEqualJustification(self, justification, justification2):
+        super().assertEqualJustification(justification, justification2)
         self.assertEqual(justification.start, justification2.start)
         self.assertEqual(justification.end, justification2.end)
-        super().assertEqualJustification(justification, justification2)
 
-
-    def defineNewJustification(self, con):        
-        user_id, user = TestUser.defineUserAndPersist(con)
-        owner_id, owner = TestUser.defineUserAndPersist(con)
-        con.commit()
-        
-        now = datetime.datetime.now().date()
-        days = randint(1,60)
-        justification = self.justificationEntity(user_id, owner_id, now, days)
-      
-        return justification
-    
-    
-    
-    
-class TestJustificationRangedTime(TestJustification):
-    def assertEqualJustification(self, justification, justification2):
-        self.assertEqual(justification.start, justification2.start)
-        self.assertEqual(justification.end, justification2.end)
-        super().assertEqualJustification(justification, justification2)
 
 
     def defineNewJustification(self, con):
         user_id, user = TestUser.defineUserAndPersist(con)
         owner_id, owner = TestUser.defineUserAndPersist(con)
         con.commit()
-        
+
+        now = datetime.datetime.now().date()
+        days = randint(1,60)
+        justification = self.justificationEntity(user_id, owner_id, now, days)
+
+        return justification
+
+
+
+
+class TestJustificationRangedTime(TestJustification):
+    def assertEqualJustification(self, justification, justification2):
+        super().assertEqualJustification(justification, justification2)
+        self.assertEqual(justification.start, justification2.start)
+        self.assertEqual(justification.end, justification2.end)
+
+
+
+    def defineNewJustification(self, con):
+        user_id, user = TestUser.defineUserAndPersist(con)
+        owner_id, owner = TestUser.defineUserAndPersist(con)
+        con.commit()
+
         start = datetime.datetime.now()
         end = datetime.datetime.now()
         justification = self.justificationEntity(user_id, owner_id, start, end)
-      
+
         return justification
-        
-        
 
 
-                   
-                
-                
-                
-                
 class TestJustificationArt102(TestJustificationSingle):
-    def setUp(self):
-        self.justificationDAO = Art102JustificationDAO
-        self.justificationEntity = Art102Justification
-        super().setUp()
-                
-             
+    justificationDAO = Art102JustificationDAO
+    justificationEntity = Art102Justification
+
+
 class TestJustificationAuthority(TestJustificationSingle):
-    def setUp(self):
-        self.justificationDAO = AuthorityJustificationDAO
-        self.justificationEntity = AuthorityJustification
-        super().setUp()
-        
+    justificationDAO = AuthorityJustificationDAO
+    justificationEntity = AuthorityJustification
+
+
 class TestJustificationBirthday(TestJustificationSingle):
-    def setUp(self):
-        self.justificationDAO = BirthdayJustificationDAO
-        self.justificationEntity = BirthdayJustification
-        super().setUp()
-        
+    justificationDAO = BirthdayJustificationDAO
+    justificationEntity = BirthdayJustification
+
+
 class TestJustificationBloodDonation(TestJustificationSingle):
-    def setUp(self):
-        self.justificationDAO = BloodDonationJustificationDAO
-        self.justificationEntity = BloodDonationJustification
-        super().setUp()        
-          
-         
+    justificationDAO = BloodDonationJustificationDAO
+    justificationEntity = BloodDonationJustification
+
+
 class TestJustificationArt(TestJustificationRanged):
-    def setUp(self):
-        self.justificationDAO = ARTJustificationDAO
-        self.justificationEntity = ARTJustification
-        super().setUp()
-                             
-                 
+    justificationDAO = ARTJustificationDAO
+    justificationEntity = ARTJustification
+
+
 class TestJustificationCompensatory(TestJustificationSingle):
-    def setUp(self):
-        self.justificationDAO = CompensatoryJustificationDAO
-        self.justificationEntity = CompensatoryJustification
-        super().setUp()
-          
-          
+    justificationDAO = CompensatoryJustificationDAO
+    justificationEntity = CompensatoryJustification
+
+
 class TestJustificationEvaluation(TestJustificationSingle):
-    def setUp(self):
-        self.justificationDAO = EvaluationJustificationDAO
-        self.justificationEntity = EvaluationJustification
-        super().setUp()                            
+    justificationDAO = EvaluationJustificationDAO
+    justificationEntity = EvaluationJustification
+
 
 class TestJustificationFamilyAttention(TestJustificationRanged):
-    def setUp(self):
-        self.justificationDAO = FamilyAttentionJustificationDAO
-        self.justificationEntity = FamilyAttentionJustification
-        super().setUp()     
+    justificationDAO = FamilyAttentionJustificationDAO
+    justificationEntity = FamilyAttentionJustification
+
 
 class TestJustificationHoliday(TestJustificationSingle):
-    def setUp(self):
-        self.justificationDAO = HolidayJustificationDAO
-        self.justificationEntity = HolidayJustification
-        super().setUp()   
+    justificationDAO = HolidayJustificationDAO
+    justificationEntity = HolidayJustification
+
 
 class TestJustificationMarriage(TestJustificationRanged):
-    def setUp(self):
-        self.justificationDAO = MarriageJustificationDAO
-        self.justificationEntity = MarriageJustification
-        super().setUp()                   
-  
-  
-class TestJustificationOutTicketWithReturn(TestJustificationRangedTime):
-    def setUp(self):
-        self.justificationDAO = OutTicketWithReturnJustificationDAO
-        self.justificationEntity = OutTicketWithReturnJustification
-        super().setUp()                   
-                              
-     
-     
-     
-     
-     
-     
-                
-class TestJustificationSinglePersist(TestJustificationSingle):
-     
-    def setUp(self):
-        super().setUp()
-        try:
-            con = self.connection.get()
-            try:
-                self.justification = self.defineNewJustification(con)
-       
-            finally:
-                self.connection.put(con)
-            
-        except Exception as e: 
-            logging.exception(e)
-       
-        
-    def test_persist(self):
-        try:
-            con = self.connection.get()
-            try:
-                ##### insertar #####
-                self.justification.persist(con)
-                con.commit()
-                justs = self.justificationEntity.findById(con, [self.justification.id])
-                self.assertEqualJustification(self.justification, justs[0])
-                               
-                ##### cambiar estado #####
-                state = self.justification.getStatus()
-                state.changeStatus(con, self.justification, 2, self.justification.ownerId)
-                con.commit()
-                justs = self.justificationEntity.findById(con, [self.justification.id])
-                self.assertEqualJustification(self.justification, justs[0])
-               
+    justificationDAO = MarriageJustificationDAO
+    justificationEntity = MarriageJustification
 
-            finally:
-                self.connection.put(con)
-                
-        except Exception as e: 
-            logging.exception(e)
+
+class TestJustificationOutTicketWithReturn(TestJustificationRangedTime):
+    justificationDAO = OutTicketWithReturnJustificationDAO
+    justificationEntity = OutTicketWithReturnJustification
+
+
+
 
 
 
 class TestJustificationSingleFindById(TestJustificationSingle):
+
     def setUp(self):
         super().setUp()
         try:
@@ -281,28 +259,20 @@ class TestJustificationSingleFindById(TestJustificationSingle):
 
             finally:
                 self.connection.put(con)
-            
-        except Exception as e: 
-            logging.exception(e)
-            
 
-    def test_find_by_id(self):
-        try:
-            con = self.connection.get()
-            try:
-                j = self.justificationEntity.findById(con,[self.justification.id])
-                self.assertEqualJustification(self.justification, j[0])
-                
-                j = self.justificationEntity.findById(con, ["not_exists"])
-                self.assertEqual(j, [])
-                               
-            finally:
-                self.connection.put(con)
-                
-        except Exception as e: 
-            logging.exception(e)             
-             
-             
+        except Exception as e:
+            logging.exception(e)
+
+
+
+
+
+
+
+
+
+
+
 
 class TestJustificationSingleFindByUserId(TestJustificationSingle):
     def setUp(self):
@@ -316,10 +286,10 @@ class TestJustificationSingleFindByUserId(TestJustificationSingle):
 
             finally:
                 self.connection.put(con)
-            
-        except Exception as e: 
+
+        except Exception as e:
             logging.exception(e)
-            
+
 
     def test_find_by_user_id(self):
         try:
@@ -328,26 +298,26 @@ class TestJustificationSingleFindByUserId(TestJustificationSingle):
                 start = datetime.datetime.combine(self.justification.date, datetime.time.min) - datetime.timedelta(days=1)
                 end = datetime.datetime.combine(self.justification.date, datetime.time.min) + datetime.timedelta(days=1)
                 usersId = [self.justification.userId]
-                
+
                 justs = self.justificationEntity.findByUserId(con, usersId, start, end)
 
                 ids = []
                 for just in justs:
                     ids.append(just.id)
-                    
+
                 self.assertIn(self.justification.id, ids)
-                
+
                 for just in justs:
                     if just.id == self.justification.id:
-                        self.assertEqualJustification(just, self.justification)             
-                               
+                        self.assertEqualJustification(just, self.justification)
+
             finally:
                 self.connection.put(con)
-                
-        except Exception as e: 
+
+        except Exception as e:
             logging.exception(e)
 
-             
+
 
 
 
@@ -359,26 +329,26 @@ class TestJustificationRangedPersist(TestJustificationRanged):
             con = self.connection.get()
             try:
                 self.justification = self.defineNewJustification(con)
-       
+
             finally:
                 self.connection.put(con)
-            
-        except Exception as e: 
+
+        except Exception as e:
             logging.exception(e)
-            
-  
-            
+
+
+
     def test_persist(self):
         try:
             con = self.connection.get()
             try:
-               
+
                 ##### insertar #####
                 self.justification.persist(con)
                 con.commit()
                 justs = self.justificationEntity.findById(con, [self.justification.id])
                 self.assertEqualJustification(self.justification, justs[0])
- 
+
                 ##### cambiar estado #####
                 state = self.justification.getStatus()
                 state.changeStatus(con, self.justification, 2, self.justification.ownerId)
@@ -388,11 +358,11 @@ class TestJustificationRangedPersist(TestJustificationRanged):
 
             finally:
                 self.connection.put(con)
-                
-        except Exception as e: 
-            logging.exception(e)     
-            
-            
+
+        except Exception as e:
+            logging.exception(e)
+
+
 class TestJustificationRangedFindById(TestJustificationRanged):
     def setUp(self):
         super().setUp()
@@ -405,10 +375,10 @@ class TestJustificationRangedFindById(TestJustificationRanged):
 
             finally:
                 self.connection.put(con)
-            
-        except Exception as e: 
+
+        except Exception as e:
             logging.exception(e)
-            
+
 
     def test_find_by_id(self):
         try:
@@ -416,15 +386,15 @@ class TestJustificationRangedFindById(TestJustificationRanged):
             try:
                 j = self.justificationEntity.findById(con,[self.justification.id])
                 self.assertEqualJustification(self.justification, j[0])
-                
+
                 j = self.justificationEntity.findById(con, ["not_exists"])
                 self.assertEqual(j, [])
-                               
+
             finally:
                 self.connection.put(con)
-                
-        except Exception as e: 
-            logging.exception(e)            
+
+        except Exception as e:
+            logging.exception(e)
 
 
 
@@ -441,10 +411,10 @@ class TestJustificationRangedFindByUserId(TestJustificationRanged):
 
             finally:
                 self.connection.put(con)
-            
-        except Exception as e: 
+
+        except Exception as e:
             logging.exception(e)
-            
+
 
     def test_find_by_user_id(self):
         try:
@@ -453,23 +423,23 @@ class TestJustificationRangedFindByUserId(TestJustificationRanged):
                 start = datetime.datetime.combine(self.justification.start, datetime.time.min) - datetime.timedelta(days=1)
                 end = datetime.datetime.combine(self.justification.end, datetime.time.min) + datetime.timedelta(days=1)
                 usersId = [self.justification.userId]
-                
+
                 justs = self.justificationEntity.findByUserId(con, usersId, start, end)
 
                 ids = []
                 for just in justs:
                     ids.append(just.id)
-                    
+
                 self.assertIn(self.justification.id, ids)
-                
+
                 for just in justs:
                     if just.id == self.justification.id:
-                        self.assertEqualJustification(just, self.justification)             
-                               
+                        self.assertEqualJustification(just, self.justification)
+
             finally:
                 self.connection.put(con)
-                
-        except Exception as e: 
+
+        except Exception as e:
             logging.exception(e)
 
 
@@ -487,26 +457,26 @@ class TestJustificationRangedTimePersist(TestJustificationRangedTime):
             con = self.connection.get()
             try:
                 self.justification = self.defineNewJustification(con)
-       
+
             finally:
                 self.connection.put(con)
-            
-        except Exception as e: 
+
+        except Exception as e:
             logging.exception(e)
-            
-  
-            
+
+
+
     def test_persist(self):
         try:
             con = self.connection.get()
             try:
-               
+
                 ##### insertar #####
                 self.justification.persist(con)
                 con.commit()
                 justs = self.justificationEntity.findById(con, [self.justification.id])
                 self.assertEqualJustification(self.justification, justs[0])
- 
+
                 ##### cambiar estado #####
                 state = self.justification.getStatus()
                 state.changeStatus(con, self.justification, 2, self.justification.ownerId)
@@ -516,12 +486,12 @@ class TestJustificationRangedTimePersist(TestJustificationRangedTime):
 
             finally:
                 self.connection.put(con)
-                
-        except Exception as e: 
-            logging.exception(e) 
-            
-            
-            
+
+        except Exception as e:
+            logging.exception(e)
+
+
+
 class TestJustificationRangedTimeFindById(TestJustificationRangedTime):
     def setUp(self):
         super().setUp()
@@ -534,10 +504,10 @@ class TestJustificationRangedTimeFindById(TestJustificationRangedTime):
 
             finally:
                 self.connection.put(con)
-            
-        except Exception as e: 
+
+        except Exception as e:
             logging.exception(e)
-            
+
 
     def test_find_by_id(self):
         try:
@@ -545,15 +515,15 @@ class TestJustificationRangedTimeFindById(TestJustificationRangedTime):
             try:
                 j = self.justificationEntity.findById(con,[self.justification.id])
                 self.assertEqualJustification(self.justification, j[0])
-                
+
                 j = self.justificationEntity.findById(con, ["not_exists"])
                 self.assertEqual(j, [])
-                               
+
             finally:
                 self.connection.put(con)
-                
-        except Exception as e: 
-            logging.exception(e)   
+
+        except Exception as e:
+            logging.exception(e)
 
 
 
@@ -570,10 +540,10 @@ class TestJustificationRangedTimeFindByUserId(TestJustificationRanged):
 
             finally:
                 self.connection.put(con)
-            
-        except Exception as e: 
+
+        except Exception as e:
             logging.exception(e)
-            
+
 
     def test_find_by_user_id(self):
         try:
@@ -582,25 +552,25 @@ class TestJustificationRangedTimeFindByUserId(TestJustificationRanged):
                 start = datetime.datetime.combine(self.justification.start, datetime.time.min) - datetime.timedelta(days=1)
                 end = datetime.datetime.combine(self.justification.end, datetime.time.min) + datetime.timedelta(days=1)
                 usersId = [self.justification.userId]
-                
+
                 justs = self.justificationEntity.findByUserId(con, usersId, start, end)
 
                 ids = []
                 for just in justs:
                     ids.append(just.id)
-                    
+
                 self.assertIn(self.justification.id, ids)
-                
+
                 for just in justs:
                     if just.id == self.justification.id:
-                        self.assertEqualJustification(just, self.justification)             
-                               
+                        self.assertEqualJustification(just, self.justification)
+
             finally:
                 self.connection.put(con)
-                
-        except Exception as e: 
+
+        except Exception as e:
             logging.exception(e)
-            
+
 
 
 
@@ -612,9 +582,9 @@ class TestJustificationArt102FindById(TestJustificationArt102, TestJustification
     pass
 
 class TestJustificationArt102FindByUserId(TestJustificationArt102, TestJustificationSingleFindByUserId):
-    pass    
-    
-    
+    pass
+
+
 ##### ART #####
 class TestJustificationArtPersist(TestJustificationArt,  TestJustificationRangedPersist):
     pass
@@ -624,15 +594,15 @@ class TestJustificationArtFindById(TestJustificationArt,  TestJustificationRange
 
 class TestJustificationArtFindByUserId(TestJustificationArt,  TestJustificationRangedFindByUserId):
     pass
-        
- 
+
+
 ##### Authority #####
 class TestJustificationAuthorityPersist(TestJustificationAuthority,  TestJustificationSinglePersist):
     pass
 
 class TestJustificationAuthorityFindById(TestJustificationAuthority, TestJustificationSingleFindById):
     pass
-         
+
 class TestJustificationAuthorityFindByUserId(TestJustificationAuthority, TestJustificationSingleFindByUserId):
     pass
 
@@ -643,7 +613,7 @@ class TestJustificationBirthdayPersist(TestJustificationBirthday,  TestJustifica
 
 class TestJustificationBirthdayFindById(TestJustificationBirthday, TestJustificationSingleFindById):
     pass
-         
+
 class TestJustificationBirthdayFindByUserId(TestJustificationBirthday, TestJustificationSingleFindByUserId):
     pass
 
@@ -655,7 +625,7 @@ class TestJustificationBloodDonationPersist(TestJustificationBloodDonation,  Tes
 
 class TestJustificationBloodDonationFindById(TestJustificationBloodDonation, TestJustificationSingleFindById):
     pass
-         
+
 class TestJustificationBloodDonationFindByUserId(TestJustificationBloodDonation, TestJustificationSingleFindByUserId):
     pass
 
@@ -667,7 +637,7 @@ class TestJustificationCompensatoryPersist(TestJustificationCompensatory,  TestJ
 
 class TestJustificationCompensatoryFindById(TestJustificationCompensatory, TestJustificationSingleFindById):
     pass
-         
+
 class TestJustificationCompensatoryFindByUserId(TestJustificationCompensatory, TestJustificationSingleFindByUserId):
     pass
 
@@ -679,7 +649,7 @@ class TestJustificationEvaluationPersist(TestJustificationEvaluation,  TestJusti
 
 class TestJustificationEvaluationFindById(TestJustificationEvaluation, TestJustificationSingleFindById):
     pass
-         
+
 class TestJustificationEvaluationFindByUserId(TestJustificationEvaluation, TestJustificationSingleFindByUserId):
     pass
 
@@ -691,7 +661,7 @@ class TestJustificationFamilyAttentionPersist(TestJustificationFamilyAttention, 
 
 class TestJustificationFamilyAttentionFindById(TestJustificationFamilyAttention, TestJustificationRangedFindById):
     pass
-         
+
 class TestJustificationFamilyAttentionFindByUserId(TestJustificationFamilyAttention, TestJustificationRangedFindByUserId):
     pass
 
@@ -705,7 +675,7 @@ class TestJustificationHolidayPersist(TestJustificationHoliday,  TestJustificati
 
 class TestJustificationHolidayFindById(TestJustificationHoliday, TestJustificationSingleFindById):
     pass
-         
+
 class TestJustificationHolidayFindByUserId(TestJustificationHoliday, TestJustificationSingleFindByUserId):
     pass
 
@@ -719,7 +689,7 @@ class TestJustificationMarriagePersist(TestJustificationMarriage,  TestJustifica
 
 class TestJustificationMarriageFindById(TestJustificationMarriage, TestJustificationRangedFindById):
     pass
-         
+
 class TestJustificationMarriageFindByUserId(TestJustificationMarriage, TestJustificationRangedFindByUserId):
     pass
 
@@ -736,14 +706,3 @@ class TestJustificationOutTicketWithReturnFindById(TestJustificationOutTicketWit
 
 class TestJustificationOutTicketWithReturnFindByUserId(TestJustificationOutTicketWithReturn,  TestJustificationRangedTimeFindByUserId):
     pass
-
-
-             
-       
-       
-       
-       
-
-
-      
-
