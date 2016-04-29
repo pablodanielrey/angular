@@ -120,7 +120,6 @@ class FamilyAttentionJustification(RangedJustification):
     identifier = 'Familiar enfermo'
 
     def __init__(self, userId = None, ownerId = None, start = None, days = 0, number = None):
-        assert isinstance(start, datetime.date)
         super().__init__(start, days, userId, ownerId)
         self.number = number
         self.identifier = FamilyAttentionJustification.identifier

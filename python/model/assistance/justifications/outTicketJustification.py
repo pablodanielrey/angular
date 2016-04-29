@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import logging
 import datetime
+import dateutil
 import uuid
 
 
@@ -83,7 +84,7 @@ class OutTicketJustificationDAO(AssistanceDAO):
 
         cur = con.cursor()
         try:
-            cur.execute('select * from assistance.justification_out_ticket where jend != null and user_id in %s and (jstart <= %s and jend >= %s)', (tuple(userIds), end, start))
+            cur.execute('select * from assistance.justification_out_ticket where user_id in %s and (jstart <= %s and jend >= %s)', (tuple(userIds), end, start))
             return [ cls._fromResult(con, r) for r in cur ]
         finally:
             cur.close()
@@ -93,7 +94,11 @@ class OutTicketWithReturnJustificationDAO(OutTicketJustificationDAO):
 
     @classmethod
     def _fromResult(cls, con, r):
-        j = OutTicketWithReturnJustification(r['user_id'], r['owner_id'], r['jstart'], r['jend'])
+        j = OutTicketWithReturnJustification()
+        j.userId = r['user_id']
+        j.ownerId = r['owner_id']
+        j.start = r['jstart'].astimezone(dateutil.tz.tzlocal()).replace(tzinfo=None)
+        j.end = r['jend'].astimezone(dateutil.tz.tzlocal()).replace(tzinfo=None)
         j.id = r['id']
         j.setStatus(Status.getLastStatus(con, j.id))
         return j
@@ -103,10 +108,15 @@ class OutTicketWithoutReturnJustificationDAO(OutTicketJustificationDAO):
 
     @classmethod
     def _fromResult(cls, con, r):
-        j = OutTicketWithoutReturnJustification(r['user_id'], r['owner_id'], r['jstart'])
+        j = OutTicketWithoutReturnJustification()
+        j.userId = r['user_id']
+        j.ownerId = r['owner_id']
+        j.start = r['jstart'].astimezone(dateutil.tz.tzlocal()).replace(tzinfo=None)
+        j.end = r['jend'].astimezone(dateutil.tz.tzlocal()).replace(tzinfo=None)
         j.id = r['id']
         j.setStatus(Status.getLastStatus(con, j.id))
         return j
+
 
     @classmethod
     def findByUserId(cls, con, userIds, start, end):
@@ -125,6 +135,7 @@ class OutTicketWithoutReturnJustificationDAO(OutTicketJustificationDAO):
             return [ cls._fromResult(con, r) for r in cur ]
         finally:
             cur.close()
+
 
 class OutTicketJustification(RangedTimeJustification):
 

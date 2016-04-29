@@ -10,16 +10,28 @@ function RequestCtrl($scope, Login, Assistance, $location) {
   $scope.initializeFilters = initializeFilters;
   $scope.formatJustification = formatJustification;
   $scope.search = search;
+  $scope.getJustTitle = getJustTitle;
+  $scope.getJustName = getJustName;
+  $scope.orderName = orderName;
+  $scope.orderStatus = orderStatus;
+  $scope.oderUserName = orderUserName;
 
   $scope.model = {
     userId: null,
     start: null,
     end: null,
+    optionJustifications: null,
     justifications: []
   }
 
   $scope.view = {
-    searching: false
+    optionsJustifications: [
+      {style: 'solicitudesPersonales', description: 'MIS SOLICITUDES', value: false},
+      {style: 'solicitudesGrupo', description: 'MI GRUPO', value: true}
+    ],
+    searching: false,
+    reverseName: false,
+    reverseStatus: false
   }
 
   const dayMillis = 24 * 60 * 60 * 1000;
@@ -34,6 +46,12 @@ function RequestCtrl($scope, Login, Assistance, $location) {
       }, function(err) {
         console.log("error");
       });
+  });
+
+  $scope.$watch(function() {return $scope.model.optionJustifications;}, function(o,n) {
+    val = $scope.model.optionJustifications;
+    $scope.view.style3 = (val != null && val.hasOwnProperty('style') && val.style != undefined) ? val.style : '';
+    $scope.search();
   });
 
   $scope.$watch(function() {return $scope.model.start;}, function(o,n) {
@@ -62,9 +80,11 @@ function RequestCtrl($scope, Login, Assistance, $location) {
   });
 
   function initialize() {
+    $scope.model.optionJustifications = $scope.view.optionsJustifications[0];
     $scope.view.searching = false;
     $scope.model.justifications = [];
     $scope.initializeFilters();
+    $scope.search();
   }
 
   function initializeFilters() {
@@ -85,8 +105,10 @@ function RequestCtrl($scope, Login, Assistance, $location) {
       return
     }
     $scope.view.searching = true;
+    $scope.view.style3 = 'cargandoSolicitudes';
     Assistance.getJustifications($scope.model.userId, $scope.model.start, $scope.model.end, false).then(function(data) {
       $scope.view.searching = false;
+      $scope.view.style3 = $scope.model.optionJustifications.style;
       justifications = [];
       for (userId in data) {
         var just = data[userId];
@@ -98,6 +120,7 @@ function RequestCtrl($scope, Login, Assistance, $location) {
       $scope.model.justifications = justifications;
     }, function(error) {
       $scope.view.searching = false;
+      $scope.view.style3 = $scope.model.optionJustifications.style;
       console.log('Error al buscar las justificaciones');
     });
   }
@@ -105,12 +128,70 @@ function RequestCtrl($scope, Login, Assistance, $location) {
 
   function formatJustification(just) {
     var j = {};
+    j.userId = just.userId;
     j.name = just.identifier;
     j.type = just.type;
     j.start = just.start;
+    j.date = just.date;
     j.end = just.end;
     j.status = just.status.status;
+    j.classType = just.classType;
     return j;
+  }
+
+  function getJustTitle(just) {
+    v = (just.hasOwnProperty('type') && just.type != undefined) ? just.type : just.name;
+    return v
+  }
+
+  function getJustName(just) {
+    return (just.hasOwnProperty('type') && just.type != undefined) ? just.name : '';
+  }
+
+  function compareName(a, b) {
+    aName = (a.hasOwnProperty('type') && a.type != undefined) ? a.type + ' ' + a.name : a.name;
+    bName = (b.hasOwnProperty('type') && b.type != undefined) ? b.type + ' ' + b.name : b.name;
+    return (aName < bName) ? -1 : (aName > bName ? 1 : 0);
+  }
+
+  function orderName() {
+    if ($scope.view.reverseName) {
+      $scope.model.justifications.sort(function(a, b) {
+        return compareName(a, b);
+      });
+    } else {
+      $scope.model.justifications.sort(function(a, b) {
+        return compareName(b, a);
+      });
+    }
+    $scope.view.reverseName = !$scope.view.reverseName;
+  }
+
+  function orderStatus() {
+    if ($scope.view.reverseStatus) {
+      $scope.model.justifications.sort(function(a, b) {
+        return a.status - b.status
+      });
+    } else {
+      $scope.model.justifications.sort(function(a, b) {
+        return b.status - a.status
+      });
+    }
+    $scope.view.reverseStatus = !$scope.view.reverseStatus;
+  }
+
+  function orderUserName() {
+    // este lo tengo que cambiar, deberia ordenar por nombre de usaurio
+    if ($scope.view.reverseName) {
+      $scope.model.justifications.sort(function(a, b) {
+        return a.name < b.name ? -1 : (a.name > b.name ? 1 : 0)
+      });
+    } else {
+      $scope.model.justifications.sort(function(a, b) {
+        return b.name < a.name ? -1 : (b.name > a.name ? 1 : 0)
+      });
+    }
+    $scope.view.reverseName = !$scope.view.reverseName;
   }
 
 

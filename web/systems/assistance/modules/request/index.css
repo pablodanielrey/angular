@@ -12,6 +12,68 @@
   font-size: 1.5em;
 }
 
+
+/* ******************************************************************
+  ESTO LO AGREGO EMANUEL - LO TIENE QUE COLOCAR WALTER DONDE DEBERIA
+ * **************************************************************** */
+ /*
+ Estados posibles
+ ----------------
+   UNDEFINED = 0
+   PENDING = 1
+   APPROVED = 2
+   REJECTED = 3
+   CANCELED = 4
+ */
+
+ .request .itemRequest .statePending {
+   display: none;
+ }
+
+ .request .itemRequest .stateApproved {
+   display: none;
+ }
+
+ .request .itemRequest .stateRejected {
+   display:none;0
+ }
+
+ .request .itemRequest .btnTrash {
+   display: none;
+ }
+
+
+ .request .itemRequest .stateCanceled {
+   display: none;
+ }
+
+ .request .itemRequest.status1 .statePending {
+   display: flex;
+   display: -webkit-flex;
+ }
+
+ .request .itemRequest.status1 .btnTrash {
+   display: flex;
+   display: -webkit-flex;
+ }
+
+ .request .itemRequest.status2 .stateApproved {
+   display: flex;
+   display: -webkit-flex;
+ }
+
+ .request .itemRequest.status3 .stateRejected {
+   display: flex;
+   display: -webkit-flex;
+ }
+
+ .request .itemRequest.status4 .stateCanceled {
+   display: flex;
+   display: -webkit-flex;
+ }
+
+ /* ******************     FIN     ****************************** */
+
 /******************************************************
 ****** INICIO PANTALLA DE CREAR TUTOTRIA **************
 *******************************************************/
