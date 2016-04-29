@@ -51,6 +51,15 @@ class OfficeDAO(DAO):
                   office_id VARCHAR REFERENCES offices.offices (id),
                   UNIQUE (user_id, office_id)
                 );
+
+                CREATE TABLE IF NOT EXISTS offices.offices_roles (
+                    user_id varchar not null references profile.users (id),
+                    office_id varchar references offices.offices (id),
+                    role varchar not null,
+                    send_mail boolean default true,
+                    constraint unique_office_roles unique (user_id,office_id,role)
+                );
+
             """)
         finally:
             cur.close()
@@ -95,6 +104,99 @@ class OfficeDAO(DAO):
 
         finally:
             cur.close()
+
+    '''
+        obtiene las oficinas hijas de las oficinas pasadas como parámetro
+    '''
+    @classmethod
+    def _getChildOffices(cls, con, offices):
+        if len(offices) <= 0:
+            return []
+
+        '''  obtengo todo el arbol de oficinas abajo de las offices '''
+        roffices = []
+        pids = []
+        pids.extend(offices)
+
+        try:
+            cur = con.cursor()
+
+            while len(pids) > 0:
+                toFollow = []
+                toFollow.extend(pids)
+                pids = []
+
+                for oId in toFollow:
+                    cur.execute('select id from offices.offices where parent = %s',(oId,))
+                    if cur.rowcount <= 0:
+                        continue
+
+                    for cOff in cur:
+                        cId = cOff[0]
+                        if cId not in pids:
+                            roffices.append(cId)
+                            pids.append(cId)
+        finally:
+            cur.close()
+
+        return roffices
+
+    '''
+        retorna los ids de los usuarios que pertenecen a las oficinas pasasdas como parámetro
+        offices = lista de ids de oficinas
+    '''
+    @classmethod
+    def getOfficesUsers(cls,con,offices):
+
+        if len(offices) <= 0:
+            return []
+
+        users = []
+        cur = con.cursor()
+
+        try:
+            child = cls._getChildOffices(con,offices)
+            for o in child:
+                offices.append(o['id'])
+
+            cur.execute('select distinct user_id from offices.offices_users ou where ou.office_id in %s',(tuple(offices),))
+            if cur.rowcount <= 0:
+                return []
+
+            for u in cur:
+                users.append(u[0])
+
+        finally:
+            cur.close()
+
+        return users
+
+
+    '''
+        obtiene todas las oficinas en las cuales el usuario tiene asignado un rol
+        si tree=True obtiene todas las hijas también
+    '''
+    @classmethod
+    def getOfficesByUserRole(cls,con,userId,tree=False,role='autoriza'):
+
+        cur = con.cursor()
+        ids = []
+        try:
+            cur.execute('select id from offices.offices o inner join offices.offices_roles ou on o.id = ou.office_id where ou.user_id = %s and ou.role = %s',(userId,role))
+            if cur.rowcount <= 0:
+                return []
+
+            for off in cur:
+                oId = off[0]
+                ids.append(oId)
+
+            if tree:
+                childrens = cls._getChildOffices(con,ids)
+                ids.extend(x for x in childrens if x not in offices)
+        finally:
+            cur.close()
+
+        return ids
 
     @staticmethod
     def persist(con, office):
