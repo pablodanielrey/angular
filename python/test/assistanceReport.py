@@ -319,7 +319,7 @@ def statsToPyoo(stats, users, offices):
                             sheet[i,13].text_color = 0xffffff
                             sheet[i,13].background_color = 0xcc3300
 
-                        elif not st.isBoss and (st.start is not None and st.end is not None) and (st.iin is None or st.out is None):
+                        elif not st.isBoss and (st.start is not None and st.end is not None) and (st.iin is None or st.out is None) and (st.justification is None):
                             sheet[i,13].value = 'M'
                             sheet[i,13].text_color = 0xffffff
                             sheet[i,13].background_color = 0xcc3300
