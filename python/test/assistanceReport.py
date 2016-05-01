@@ -3,6 +3,7 @@ import json
 import datetime
 import pytz
 from dateutil.tz import tzlocal
+import dateutil
 import sys
 sys.path.append('../../python')
 
@@ -200,8 +201,15 @@ def sortOfficeUsers(users, stats):
         r.extend(pos[k])
     return r
 
-def statsToPyoo(stats, users, offices):
 
+def createReportDir():
+    import os
+    newpath = '/tmp/reporte-asistencia-{}'.format(datetime.datetime.now())
+    if not os.path.exists(newpath):
+        os.makedirs(newpath)
+    return newpath
+
+def statsToPyoo(rp, stats, users, offices):
     import uuid
     import pyoo
     calc = pyoo.Desktop('localhost', 2002)
@@ -328,11 +336,25 @@ def statsToPyoo(stats, users, offices):
 
             #index = index + 1
         f = str(uuid.uuid4())
-        fn = '/tmp/assistencia-{}-{}.ods'.format(offices[0].name, datetime.datetime.now())
-        doc.save(fn)
+        fn = '{}/assistencia-{}.xlsx'.format(rp, offices[0].name)
+        logging.info('salvando : {}'.format(fn))
+        doc.save(fn, pyoo.FILTER_EXCEL_2007)
 
     finally:
         doc.close()
+
+def createZipFile(rp):
+    import zipfile
+    import os
+    fn = '/tmp/reporte-asistencia.zip'
+    with zipfile.ZipFile(fn, mode='w', compression=zipfile.ZIP_BZIP2) as rpzip:
+        for root, dir, files in os.walk(rp):
+            for f in files:
+                fm = '{}/{}'.format(root, f)
+                logging.info('escribiendo : {}'.format(fm))
+                rpzip.write(fm)
+    logging.info('generado : {}'.format(fn))
+
 
 def _getOffices(con):
     return Office.findById(con, Office.findAll(con))
@@ -424,7 +446,7 @@ if __name__ == '__main__':
     logging.info('Generando reporte de asistencia desde : {} hasta {}'.format(rstart, rend))
 
     reg = inject.instance(Registry)
-
+    rp = createReportDir()
     conn = Connection(reg.getRegistry('dcsys'))
     con = conn.get()
     try:
@@ -441,7 +463,8 @@ if __name__ == '__main__':
         stats = a.getStatistics(con, userIds, rstart, rend)
 
         for office in offices:
-            statsToPyoo(stats, users, [office])
+            statsToPyoo(rp, stats, users, [office])
 
     finally:
         conn.put(con)
+    createZipFile(rp)
