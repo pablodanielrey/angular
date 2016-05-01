@@ -20,7 +20,7 @@ def toPyoo(tutorings):
     import dateutil
     import uuid
     f = str(uuid.uuid4())
-    fn = '/tmp/tutorias-{}.ods'.format(f)
+    fn = '/tmp/tutorias-{}.xlsx'.format(f)
 
     import pyoo
     calc = pyoo.Desktop('localhost', 2002)
@@ -42,7 +42,7 @@ def toPyoo(tutorings):
 
                 i = i + 1
 
-        doc.save(fn)
+        doc.save(fn, pyoo.FILTER_EXCEL_2007)
 
     finally:
         doc.close()
