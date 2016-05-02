@@ -169,7 +169,13 @@ function RequestCtrl($scope, Login, Assistance, Users, $location) {
     j.name = just.identifier;
     j.type = just.type;
     j.start = (just.hasOwnProperty('start') && just.start != undefined) ? new Date(just.start) : undefined;
-    j.date = (just.hasOwnProperty('date') && just.date != undefined) ? new Date(just.date) : undefined;
+
+    if (just.hasOwnProperty('date') && just.date != undefined) {
+      dateStr = just.date.substr(0,10).replace('-','/').replace('-','/');
+      j.date = new Date(dateStr);
+    } else {
+      j.date = undefined;
+    }
     j.end = (just.hasOwnProperty('end') && just.end != undefined) ? new Date(just.end) : undefined;
     j.status = just.status.status;
     j.classType = just.classType;

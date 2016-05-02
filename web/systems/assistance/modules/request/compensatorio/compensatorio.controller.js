@@ -16,10 +16,14 @@ function CompensatoryCtrl($rootScope, $scope, Assistance) {
     styleMessage: ''
   }
 
+  $scope.model = {
+    date: new Date()
+  }
+
   function initialize(userId) {
     $scope.view.styleStatus = $scope.view.statusOptions[0];
     $scope.view.styleMessage = $scope.view.messageOptions[0];
-    $scope.date = new Date();
+    $scope.model.date = new Date();
     $scope.clazz = 'CompensatoryJustification';
     $scope.module = 'model.assistance.justifications.compensatoryJustification';
     $scope.userId = userId;
@@ -33,8 +37,8 @@ function CompensatoryCtrl($rootScope, $scope, Assistance) {
     console.log('create');
     $scope.view.styleStatus = $scope.view.statusOptions[1];
     $scope.view.styleMessage = $scope.view.messageOptions[1];
-    Assistance.createSingleDateJustification($scope.date, $scope.userId, $scope.clazz, $scope.module).then(function(data) {
-      $scope.$apply(function(){$scope.view.styleMessage = $scope.view.messageOptions[2]});      
+    Assistance.createSingleDateJustification($scope.model.date, $scope.userId, $scope.clazz, $scope.module).then(function(data) {
+      $scope.$apply(function(){$scope.view.styleMessage = $scope.view.messageOptions[2]});
     }, function(error) {
       $scope.view.styleMessage = $scope.view.messageOptions[4];
     });
