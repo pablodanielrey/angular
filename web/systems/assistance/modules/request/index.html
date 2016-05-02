@@ -29,7 +29,7 @@ VARIABLES 3: solicitudesPersonales, solicitudesGrupo, cargandoSolicitudes
                       <button class="btnRequest" ng-click="view.style2='solicitudSeleccionada'"><i class="iconoRequest fa fa-ticket "></i> Boleta de salida</button>
                       <button class="btnRequest" ng-click="view.style2='solicitudSeleccionada'"><i class="iconoRequest fa fa-ticket "></i> Pre-Examen</button>
                       <button class="btnRequest" ng-click="view.style2='solicitudSeleccionada'"><i class="iconoRequest fa fa-ticket "></i> Art. 102</button>
-                      <button class="btnRequest" ng-click="view.style2='solicitudSeleccionada'"><i class="iconoRequest fa fa-ticket "></i> Compensatorio</button>
+                      <button class="btnRequest" ng-click="selectCompensatory()"><i class="iconoRequest fa fa-ticket "></i> Compensatorio</button>
                       <button class="btnRequest" ng-click="view.style2='solicitudSeleccionada'"><i class="iconoRequest fa fa-ticket "></i> Cumpleaños</button>
                       <button class="btnRequest" ng-click="view.style2='solicitudSeleccionada'"><i class="iconoRequest fa fa-ticket "></i> Vacaciones</button>
                   </div>
@@ -709,8 +709,8 @@ VARIABLES 3: solicitudesPersonales, solicitudesGrupo, cargandoSolicitudes
           </div>
 
           <div class="contentRequestSelected">
-            <button class="btnBackCel" ng-click="view.style='seleccionSolicitud';view.style2=''"><i class="arrowBack fa fa-chevron-left"></i> VOLVER</button>
-            <div ng-if="view.style2 == 'solicitudSeleccionada'" ng-include="'/systems/assistance/modules/request/vacaciones/index.html'"></div>
+            <button class="btnBackCel" ng-click="back()"><i class="arrowBack fa fa-chevron-left"></i> VOLVER</button>
+            <div class="compensatorio" ng-include="'/systems/assistance/modules/request/compensatorio/index.html'" ng-controller='CompensatoryCtrl'></div>
           </div>
 
 

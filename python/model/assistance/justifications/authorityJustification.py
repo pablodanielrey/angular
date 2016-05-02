@@ -34,7 +34,7 @@ class AuthorityJustificationDAO(AssistanceDAO):
     @classmethod
     def _fromResult(cls, con, r):
         date = datetime.datetime.combine(r['date'], datetime.time.min)
-        c = AuthorityJustification(r['user_id'], r['owner_id'], date)
+        c = AuthorityJustification(date, r['user_id'], r['owner_id'])
         c.id = r['id']
         c.setStatus(Status.getLastStatus(con, c.id))
         return c
@@ -95,7 +95,7 @@ class AuthorityJustification(SingleDateJustification):
     dao = AuthorityJustificationDAO
     identifier = "Justificado por autoridad"
 
-    def __init__(self, userId = None, ownerId = None, date = None):
+    def __init__(self, date = None, userId = None, ownerId = None):
         super().__init__(date, userId, ownerId)
         self.identifier = AuthorityJustification.identifier
         self.classType = SingleDateJustification.__name__

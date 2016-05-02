@@ -34,7 +34,7 @@ class Art102JustificationDAO(AssistanceDAO):
     @classmethod
     def _fromResult(cls, con, r):
         date = datetime.datetime.combine(r['date'], datetime.time.min)
-        c = Art102Justification(r['user_id'], r['owner_id'], date)
+        c = Art102Justification(date, r['user_id'], r['owner_id'])
         c.id = r['id']
         c.setStatus(Status.getLastStatus(con, c.id))
         return c
@@ -96,7 +96,7 @@ class Art102Justification(SingleDateJustification):
     dao = Art102JustificationDAO
     indentifier = "Artículo 102"
 
-    def __init__(self, userId = None, ownerId = None, date = None):
+    def __init__(self, date = None, userId = None, ownerId = None):
         super().__init__(date, userId, ownerId)
         self.identifier = Art102Justification.indentifier
         self.classType = SingleDateJustification.__name__

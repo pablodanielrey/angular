@@ -11,6 +11,7 @@ import dateutil, dateutil.tz, dateutil.parser, datetime
 
 from model.registry import Registry
 from model.connection import connection
+from model.login.login import Login
 
 import asyncio
 from asyncio import coroutine
@@ -26,7 +27,7 @@ class AssistanceWamp(ApplicationSession):
         reg = inject.instance(Registry)
 
         self.conn = connection.Connection(reg.getRegistry('dcsys'))
-        # self.profiles = inject.instance(ProfileDAO)
+        self.loginModel = inject.instance(Login)
 
         self.assistance = inject.instance(AssistanceModel)
 
@@ -35,6 +36,7 @@ class AssistanceWamp(ApplicationSession):
         logging.debug('registering methods')
         yield from self.register(self.getAssistanceData_async, 'assistance.getAssistanceData')
         yield from self.register(self.getJustifications_async, 'assistance.getJustifications')
+        yield from self.register(self.createSingleDateJustification_async, 'assistance.createSingleDateJustification')
 
     def _localizeLocal(self,naive):
         tz = dateutil.tz.tzlocal()
@@ -78,4 +80,21 @@ class AssistanceWamp(ApplicationSession):
     def getJustifications_async(self, userId, start, end, isAll):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.getJustifications, userId, start, end, isAll)
+        return r
+
+    def createSingleDateJustification(self, sid, dateStr, userId, justClazz, justModule, ownerId = None):
+        con = self.conn.get()
+        try:
+            if ownerId is None:
+                ownerId = self.loginModel.getUserId(con, sid)
+            date = self._parseDate(dateStr)
+            self.assistance.createSingleDateJustification(con, date, userId, ownerId, justClazz, justModule)
+            con.commit()
+        finally:
+            self.conn.put(con)
+
+    @coroutine
+    def createSingleDateJustification_async(self, sid, date, userId, justClazz, justModule, ownerId = None):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.createSingleDateJustification, sid, date, userId, justClazz, justModule, ownerId)
         return r

@@ -97,7 +97,7 @@ class InformedAbsenceJustification(SingleDateJustification):
     dao = InformedAbsenceJustificationDAO
     identifier = "Ausente con aviso"
 
-    def __init__(self, userId = None, ownerId = None, date = None):
+    def __init__(self, date = None, userId = None, ownerId = None):
         super().__init__(date, userId, ownerId)
         self.identifier = InformedAbsenceJustification.identifier
         self.classType = SingleDateJustification.__name__
