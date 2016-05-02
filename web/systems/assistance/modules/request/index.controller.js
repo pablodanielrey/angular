@@ -17,6 +17,8 @@ function RequestCtrl($scope, Login, Assistance, Users, $location) {
   $scope.orderUserName = orderUserName;
   $scope.loadUsers = loadUsers;
   $scope.getName = getName;
+  $scope.selectCompensatory = selectCompensatory;
+  $scope.back = back;
 
   $scope.model = {
     userId: null,
@@ -36,7 +38,11 @@ function RequestCtrl($scope, Login, Assistance, Users, $location) {
     searching: false,
     reverseName: false,
     reverseUserName: false,
-    reverseStatus: false
+    reverseStatus: false,
+    style: '',
+    style_options: ['', 'seleccionSolicitud'],
+    style2: '',
+    style2_options: ['','solicitudSeleccionada']
   }
 
   const dayMillis = 24 * 60 * 60 * 1000;
@@ -52,6 +58,7 @@ function RequestCtrl($scope, Login, Assistance, Users, $location) {
         console.log("error");
       });
   });
+
 
   $scope.$watch(function() {return $scope.model.optionJustifications;}, function(o,n) {
     val = $scope.model.optionJustifications;
@@ -271,5 +278,20 @@ function RequestCtrl($scope, Login, Assistance, Users, $location) {
     $scope.view.reverseUserName = !$scope.view.reverseUserName;
   }
 
+
+  function selectCompensatory() {
+    $scope.view.style2 = $scope.view.style2_options[1];
+    $scope.$broadcast('selectCompensatoryEvent', $scope.model.userId);
+  }
+
+  $scope.$on('closeRequestEvent', function(e) {
+    $scope.view.style = $scope.view.style_options[0];
+    $scope.view.style2 = $scope.view.style2_options[0];
+  })
+
+  function back() {
+    $scope.view.style = $scope.view.style_options[0];
+    $scope.view.style2 = $scope.view.style2_options[0];
+  }
 
 }

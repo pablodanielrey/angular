@@ -133,6 +133,12 @@ class SingleDateJustification(Justification):
                 seconds = seconds + (wp.getEndDate() - wp.getStartDate()).total_seconds()
         return seconds
 
+    @classmethod
+    def create(cls, con, date, userId, ownerId):
+        j = cls(date, userId, ownerId)
+        j.persist(con)
+
+
 
 class RangedJustification(Justification):
 

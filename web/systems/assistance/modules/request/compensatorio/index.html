@@ -1,5 +1,5 @@
 <!-- VARIABLES 1:solicitud, mensaje | VARIABLES 2: procesando, procesado, sinDisponibilidad, errorDeSistema -->
-<div class="compensatorio solicitud ">
+<div class="compensatorio {{view.styleStatus}} {{view.styleMessage}}">
   <div class="title">Solicitar</div>
   <i class="ico fa fa-ticket "></i> <b> COMPENSATORIO </b>
 
@@ -11,9 +11,9 @@
               <div class="contentCantAvailability"> <b>Días</b> <b class="cantAvailability">40</b>  </div>
             </div>
             <div class="titleInfo">SELECCIONE EL DÍA</div>
-            <div><input class="inputDate" type="date"></input></div>
+            <div><input class="inputDate" type="date" ng-model="date"></input></div>
 
-            <div><button class="btnApply"> SOLICITAR</button></div>
+            <div><button class="btnApply" ng-click="create()"> SOLICITAR</button></div>
         </div>
 
         <div class="screenMessage">

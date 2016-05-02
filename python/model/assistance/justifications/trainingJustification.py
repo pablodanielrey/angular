@@ -95,7 +95,7 @@ class TrainingJustification(SingleDateJustification):
     dao = TrainingJustificationDAO
     identifier = "Capacitación"
 
-    def __init__(self, userId = None, ownerId = None, date = None):
+    def __init__(self, date = None, userId = None, ownerId = None):
         super().__init__(date, userId, ownerId)
         self.identifier = TrainingJustification.identifier
         self.classType = SingleDateJustification.__name__

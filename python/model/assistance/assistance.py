@@ -3,6 +3,7 @@ import logging
 import json
 import datetime
 from dateutil.tz import tzlocal
+import importlib
 from model.assistance.logs import LogDAO, Log
 from model.assistance.schedules import ScheduleDAO, Schedule
 from model.serializer.utils import JSONSerializable
@@ -219,7 +220,6 @@ class AssistanceModel:
         return self._getJustifications(con, userIds, start, end)
 
 
-
     def calculateStatistics(self, wps):
         userId = wps[0].userId
         stats = WpStatistics(userId)
@@ -324,3 +324,12 @@ class AssistanceModel:
                 aData.append(AssistanceData(uid, ws))
 
         return aData
+
+
+    def createSingleDateJustification(self,con, date, userId, ownerId, justClazz, justModule):
+        assert isinstance(date, datetime.datetime)
+        module = importlib.import_module(justModule)
+        clazz = getattr(module, justClazz)
+        clazz.create(con, date, userId, ownerId)
+        # instance = clazz(userId, ownerId, date)
+        # return instance.persist(con)
