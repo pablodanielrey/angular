@@ -2,9 +2,9 @@ angular
   .module('mainApp')
   .controller('CompensatoryCtrl', CompensatoryCtrl);
 
-CompensatoryCtrl.inject = ['$rootScope', '$scope', 'Assistance']
+CompensatoryCtrl.inject = ['$rootScope', '$scope', 'Assistance', '$timeout']
 
-function CompensatoryCtrl($rootScope, $scope, Assistance) {
+function CompensatoryCtrl($rootScope, $scope, Assistance, $timeout) {
 
   $scope.initialize = initialize;
   $scope.create = create;
@@ -43,7 +43,13 @@ function CompensatoryCtrl($rootScope, $scope, Assistance) {
         $scope.$emit('finishCreationJEvent');
       });
     }, function(error) {
-      $scope.view.styleMessage = $scope.view.messageOptions[4];
+      $scope.$apply(function(){
+        $scope.view.styleMessage = $scope.view.messageOptions[4];
+      });
+      $timeout(function() {
+        $scope.view.styleStatus = $scope.view.statusOptions[0];
+        $scope.view.styleMessage = $scope.view.messageOptions[0];
+      }, 2500);
     });
   }
 
