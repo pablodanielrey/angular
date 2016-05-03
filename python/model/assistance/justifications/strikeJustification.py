@@ -34,7 +34,7 @@ class StrikeJustificationDAO(AssistanceDAO):
     @classmethod
     def _fromResult(cls, con, r):
         date = datetime.datetime.combine(r['date'], datetime.time.min)
-        c = StrikeJustification(r['user_id'], r['owner_id'], date)
+        c = StrikeJustification(date, r['user_id'], r['owner_id'])
         c.id = r['id']
         c.setStatus(Status.getLastStatus(con, c.id))
         return c

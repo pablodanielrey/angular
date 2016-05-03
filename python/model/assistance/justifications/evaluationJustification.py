@@ -34,7 +34,7 @@ class EvaluationJustificationDAO(AssistanceDAO):
     @classmethod
     def _fromResult(cls, con, r):
         date = datetime.datetime.combine(r['date'], datetime.time.min)
-        c = EvaluationJustification(r['user_id'], r['owner_id'], date)
+        c = EvaluationJustification(date, r['user_id'], r['owner_id'])
         c.id = r['id']
         c.setStatus(Status.getLastStatus(con, c.id))
         return c

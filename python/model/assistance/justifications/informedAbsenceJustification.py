@@ -36,7 +36,7 @@ class InformedAbsenceJustificationDAO(AssistanceDAO):
     @classmethod
     def _fromResult(cls, con, r):
         date = datetime.datetime.combine(r['jdate'], datetime.time.min)
-        j = InformedAbsenceJustification(r['user_id'], r['owner_id'], date)
+        j = InformedAbsenceJustification(date, r['user_id'], r['owner_id'])
         j.id = r['id']
         j.setStatus(Status.getLastStatus(con, j.id))
         return j

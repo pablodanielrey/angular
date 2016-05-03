@@ -34,7 +34,7 @@ class TrainingJustificationDAO(AssistanceDAO):
     @classmethod
     def _fromResult(cls, con, r):
         date = datetime.datetime.combine(r['date'], datetime.time.min)
-        c = TrainingJustification(r['user_id'], r['owner_id'], date)
+        c = TrainingJustification(date, r['user_id'], r['owner_id'])
         c.id = r['id']
         c.setStatus(Status.getLastStatus(con, c.id))
         return c
