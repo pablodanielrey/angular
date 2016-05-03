@@ -38,7 +38,10 @@ function CompensatoryCtrl($rootScope, $scope, Assistance) {
     $scope.view.styleStatus = $scope.view.statusOptions[1];
     $scope.view.styleMessage = $scope.view.messageOptions[1];
     Assistance.createSingleDateJustification($scope.model.date, $scope.userId, $scope.clazz, $scope.module).then(function(data) {
-      $scope.$apply(function(){$scope.view.styleMessage = $scope.view.messageOptions[2]});
+      $scope.$apply(function(){
+        $scope.view.styleMessage = $scope.view.messageOptions[2];
+        $scope.$emit('finishCreationJEvent');
+      });
     }, function(error) {
       $scope.view.styleMessage = $scope.view.messageOptions[4];
     });

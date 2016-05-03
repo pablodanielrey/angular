@@ -2,9 +2,9 @@ angular
   .module('mainApp')
   .controller('RequestCtrl', RequestCtrl);
 
-RequestCtrl.inject = ['$scope', 'Login', 'Assistance', 'Users', '$location']
+RequestCtrl.inject = ['$scope', 'Login', 'Assistance', 'Users', '$location', '$timeout']
 
-function RequestCtrl($scope, Login, Assistance, Users, $location) {
+function RequestCtrl($scope, Login, Assistance, Users, $location, $timeout) {
 
   $scope.initialize = initialize;
   $scope.initializeFilters = initializeFilters;
@@ -58,6 +58,13 @@ function RequestCtrl($scope, Login, Assistance, Users, $location) {
         console.log("error");
       });
   });
+
+  $scope.$on('finishCreationJEvent', function(event) {
+    $timeout(function() {
+      $scope.view.style = $scope.view.style_options[0];
+      $scope.view.style2 = $scope.view.style2_options[0];
+    }, 1500);
+  })
 
 
   $scope.$watch(function() {return $scope.model.optionJustifications;}, function(o,n) {
@@ -299,5 +306,6 @@ function RequestCtrl($scope, Login, Assistance, Users, $location) {
     $scope.view.style = $scope.view.style_options[0];
     $scope.view.style2 = $scope.view.style2_options[0];
   }
+
 
 }
