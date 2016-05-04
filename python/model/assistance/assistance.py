@@ -215,8 +215,8 @@ class AssistanceModel:
             # tengo que obtener todos los usuarios de las oficina que autoriaza y buscar por esos usuarios
             offices = OfficeDAO.getOfficesByUserRole(con, userId, False, 'autoriza')
             userIds = OfficeDAO.getOfficesUsers(con, offices)
-        else:
-            userIds.append(userId)
+
+        userIds.append(userId)
 
         return self._getJustifications(con, userIds, start, end)
 
