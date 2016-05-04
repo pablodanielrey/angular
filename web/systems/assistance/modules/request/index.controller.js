@@ -19,6 +19,10 @@ function RequestCtrl($scope, Login, Assistance, Users, $location, $timeout) {
   $scope.getName = getName;
   $scope.selectCompensatory = selectCompensatory;
   $scope.back = back;
+  $scope.changeStatus = changeStatus;
+  $scope.cancelJustification = cancelJustification;
+  $scope.rejectJustification = rejectJustification;
+  $scope.approveJustification = approveJustification;
 
   $scope.model = {
     userId: null,
@@ -27,6 +31,14 @@ function RequestCtrl($scope, Login, Assistance, Users, $location, $timeout) {
     optionJustifications: null,
     justifications: [],
     users: {}
+  }
+
+  // PENDING, APPROVED, REJECTED, CANCELED
+  $scope.status = {
+    cancelado : 'CANCELED',
+    pendiente: 'PENDING',
+    aprobado: 'APPROVED',
+    rechazado: 'REJECTED'
   }
 
   $scope.view = {
@@ -134,6 +146,26 @@ function RequestCtrl($scope, Login, Assistance, Users, $location, $timeout) {
     });
   }
 
+  function changeStatus(just, status) {
+    Assistance.changeStatus(just, status).then(function(data) {
+      $scope.search();
+    }, function(error) {
+      console.log('error');
+    });
+  }
+
+  function cancelJustification(j) {
+    $scope.changeStatus(j.just, $scope.status.cancelado);
+  }
+
+  function approveJustification(j) {
+    $scope.changeStatus(j.just, $scope.status.aprobado);
+  }
+
+  function rejectJustification(j) {
+    $scope.changeStatus(j.just, $scope.status.rechazado);
+  }
+
   function getName(id) {
     if ($scope.model.users[id] == undefined) {
       return "No Definido";
@@ -186,6 +218,7 @@ function RequestCtrl($scope, Login, Assistance, Users, $location, $timeout) {
     j.end = (just.hasOwnProperty('end') && just.end != undefined) ? new Date(just.end) : undefined;
     j.status = just.status.status;
     j.classType = just.classType;
+    j.just = just;
     return j;
   }
 

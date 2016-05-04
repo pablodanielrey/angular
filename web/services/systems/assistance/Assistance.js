@@ -26,4 +26,16 @@ function Assistance (Utils, Session, $wamp) {
     });
 	}
 
+	this.changeStatus = function(justification, status) {
+		return new Promise(function(cok, cerr) {
+      var sid = Session.getSessionId();
+  		$wamp.call('assistance.changeStatus', [sid, justification, status])
+      .then(function(v) {
+        cok(v);
+      },function(err) {
+        cerr(err);
+      });
+    });
+	}
+
 };

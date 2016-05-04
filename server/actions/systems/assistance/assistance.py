@@ -37,6 +37,7 @@ class AssistanceWamp(ApplicationSession):
         yield from self.register(self.getAssistanceData_async, 'assistance.getAssistanceData')
         yield from self.register(self.getJustifications_async, 'assistance.getJustifications')
         yield from self.register(self.createSingleDateJustification_async, 'assistance.createSingleDateJustification')
+        yield from self.register(self.changeStatus_async, 'assistance.changeStatus')
 
     def _localizeLocal(self,naive):
         tz = dateutil.tz.tzlocal()
@@ -97,4 +98,22 @@ class AssistanceWamp(ApplicationSession):
     def createSingleDateJustification_async(self, sid, date, userId, justClazz, justModule, ownerId = None):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.createSingleDateJustification, sid, date, userId, justClazz, justModule, ownerId)
+        return r
+
+    def changeStatus(self, sid, just, status):
+        '''
+            status = UNDEFINED, PENDING, APPROVED, REJECTED, CANCELED
+        '''
+        con = self.conn.get()
+        try:
+            userId = self.loginModel.getUserId(con, sid)
+            self.assistance.changeStatus(con, just, status, userId)
+            con.commit()
+        finally:
+            self.conn.put(con)
+
+    @coroutine
+    def changeStatus_async(self, sid, just, status):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.changeStatus, sid, just, status)
         return r

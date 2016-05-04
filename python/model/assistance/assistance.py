@@ -10,6 +10,7 @@ from model.serializer.utils import JSONSerializable
 
 from model.assistance.justifications import *
 from model.assistance.justifications.justifications import Justification
+from model.assistance.justifications.justifications import Status
 
 from model.positions.positions import Position
 from model.offices.offices import Office, OfficeDAO
@@ -219,6 +220,35 @@ class AssistanceModel:
 
         return self._getJustifications(con, userIds, start, end)
 
+    def _isModifyJustification(self, con, userId, just, status):
+        oldStatus = just.getStatus().status
+        if userId == just.userId and oldStatus == Status.PENDING and  status == Status.CANCELED:
+            return True
+
+        if userId == just.userId:
+            return False
+
+        offices = OfficeDAO.getOfficesByUserRole(con, userId, False, 'autoriza')
+        userIds = OfficeDAO.getOfficesUsers(con, offices)
+        for uid in userIds:
+            if uid == just.userId:
+                return True
+
+        return False
+
+
+    def changeStatus(self, con, just, status, userId):
+        '''
+            status = UNDEFINED, PENDING, APPROVED, REJECTED, CANCELED
+        '''
+        # obtengo la constante correspondiente al estado
+        s = getattr(Status, status)
+        # verifico si tiene permisos para modificar el estado de la justificacion
+        if self._isModifyJustification(con, userId, just, s):
+            return just.changeStatus(con, s, userId)
+
+        raise Exception('No posee permisos suficientes')
+
 
     def calculateStatistics(self, wps):
         userId = wps[0].userId
@@ -330,6 +360,4 @@ class AssistanceModel:
         assert isinstance(date, datetime.datetime)
         module = importlib.import_module(justModule)
         clazz = getattr(module, justClazz)
-        clazz.create(con, date, userId, ownerId)
-        # instance = clazz(userId, ownerId, date)
-        # return instance.persist(con)
+        return clazz.create(con, date, userId, ownerId)
