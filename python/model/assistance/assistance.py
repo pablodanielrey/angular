@@ -13,7 +13,7 @@ from model.assistance.justifications.justifications import Justification
 from model.assistance.justifications.justifications import Status
 
 from model.positions.positions import Position
-from model.offices.offices import Office, OfficeDAO
+from model.offices.offices import Office
 from model.assistance.statistics import WpStatistics
 from model.assistance.utils import Utils
 
@@ -213,8 +213,8 @@ class AssistanceModel:
         userIds = []
         if isAll:
             # tengo que obtener todos los usuarios de las oficina que autoriaza y buscar por esos usuarios
-            offices = OfficeDAO.getOfficesByUserRole(con, userId, False, 'autoriza')
-            userIds = OfficeDAO.getOfficesUsers(con, offices)
+            offices = Office.getOfficesByUserRole(con, userId, False, 'autoriza')
+            userIds = Office.getOfficesUsers(con, offices)
 
         userIds.append(userId)
 
@@ -228,8 +228,8 @@ class AssistanceModel:
         if userId == just.userId:
             return False
 
-        offices = OfficeDAO.getOfficesByUserRole(con, userId, False, 'autoriza')
-        userIds = OfficeDAO.getOfficesUsers(con, offices)
+        offices = Office.getOfficesByUserRole(con, userId, False, 'autoriza')
+        userIds = Office.getOfficesUsers(con, offices)
         for uid in userIds:
             if uid == just.userId:
                 return True

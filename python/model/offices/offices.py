@@ -24,6 +24,13 @@ class Office:
         offices = [ OfficeDAO.findById(con, oi) for oi in ids ]
         return offices
 
+    @classmethod
+    def getOfficesByUserRole(cls,con,userId,tree=False,role='autoriza'):
+         return OfficeDAO.getOfficesByUserRole(con, userId, tree, role)
+
+    @classmethod
+    def getOfficesUsers(cls,con,offices):
+        return OfficeDAO.getOfficesUsers(con, offices)
 
 class OfficeDAO(DAO):
     ''' dao de las oficinas '''
