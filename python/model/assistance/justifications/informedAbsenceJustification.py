@@ -5,7 +5,7 @@ from model.assistance.justifications.status import Status
 from model.assistance.justifications.justifications import SingleDateJustification
 from model.users.users import UserDAO
 
-import datetime
+import datetime, uuid
 
 
 class InformedAbsenceJustificationDAO(AssistanceDAO):
