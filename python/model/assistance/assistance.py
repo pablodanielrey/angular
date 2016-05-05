@@ -215,10 +215,10 @@ class AssistanceModel:
             # tengo que obtener todos los usuarios de las oficina que autoriaza y buscar por esos usuarios
             offices = Office.getOfficesByUserRole(con, userId, False, 'autoriza')
             userIds = Office.getOfficesUsers(con, offices)
+        else:
+            userIds.append(userId)
 
-        userIds.append(userId)
-
-        return self._getJustifications(con, userIds, start, end)
+        return [] if len(userIds) <= 0 else self._getJustifications(con, userIds, start, end)
 
     def _isModifyJustification(self, con, userId, just, status):
         oldStatus = just.getStatus().status
