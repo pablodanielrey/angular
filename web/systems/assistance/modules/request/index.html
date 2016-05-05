@@ -16,9 +16,7 @@ VARIABLES 3: solicitudesPersonales, solicitudesGrupo, cargandoSolicitudes
         <div class="contentLeft">
 
             <div class="newRequest">
-
               <button class="btnNewRequest" ng-click="view.style='seleccionSolicitud'">NUEVA SOLICITUD</button>
-
             </div>
 
             <div class="listRequest">
@@ -37,6 +35,7 @@ VARIABLES 3: solicitudesPersonales, solicitudesGrupo, cargandoSolicitudes
 
         </div>
 
+
         <div class="contentRight">
 
           <div class="contentMyRequest">
@@ -44,7 +43,6 @@ VARIABLES 3: solicitudesPersonales, solicitudesGrupo, cargandoSolicitudes
             <div class="contentHeaderRequest">
                 <div>
                     <select  class="selectRequest" ng-model="model.optionJustifications" ng-options="op.description for op in view.optionsJustifications">
-                        <!-- <option class="title" ng-repeat="op in view.optionsJustifications">{{op.description}}</option> -->
                     </select>
                 </div>
 
@@ -66,28 +64,49 @@ VARIABLES 3: solicitudesPersonales, solicitudesGrupo, cargandoSolicitudes
 
             <div class="listMyRequest">
 
-                <div class="requestOwn">
-
+                <div class="requestContainer">
 
                   <div class="itemRequest {{just.classType}} status{{just.status}}" ng-repeat="just in model.justifications ">
-                    <div class="typeRequest">
-                        <i class="ico fa fa-ticket "></i> <span>{{getJustTitle(just)}}</span>
-                        <div style="font-size:small">{{getJustName(just)}}</div>
+
+                    <div class="nameRequest">
+                      {{getName(just.userId)}}
                     </div>
+
+                    <div class="typeRequest">
+                        <div class="shortNameTypeRequest"><i class="ico fa fa-ticket "></i> <span>{{getJustTitle(just)}}</span></div>
+                        <div class="fullNameTypeRequest" style="font-size:small">{{getJustName(just)}}</div>
+                    </div>
+
                     <div class="infoRequest">
+
+                      <div class="displayRangedTime">
+                        <div class="dateRequest">
+                          {{just.start | date: 'dd/MM/yyyy'}}
+                        </div>
+                        <!-- <div class="bar"> | </div> -->
+                        <div class="dateRequest2">
+                          {{just.start | date: 'hh:mm'}} - {{just.end | date: 'hh:mm'}}
+                        </div>
+                      </div>
+
+                      <div class="displaySingleDate">
                         <div class="dateRequest">
                           {{just.date | date: 'dd/MM/yyyy'}}
                         </div>
-                        <div class="dateRequest2">
+                      </div>
+
+                      <div class="displayRangedDate">
+                        <div class="dateRequest">
                           {{just.start | date: 'dd/MM/yyyy'}}
                         </div>
-                        <div class="dateRequest3">
+                        <!-- <div class="bar"> | </div> -->
+                        <div class="dateRequest2">
                           {{just.end | date: 'dd/MM/yyyy'}}
                         </div>
+                      </div>
+
                     </div>
-                    <div>
-                      {{getName(just.userId)}}
-                    </div>
+
                     <div class="contentState">
                         <div class="state">
                           Estado
@@ -137,6 +156,14 @@ VARIABLES 3: solicitudesPersonales, solicitudesGrupo, cargandoSolicitudes
                           <button class="btnTrash" title="Eliminar" ng-click="cancelJustification(just)"><i class="fa fa-trash-o"></i></button>
                         </div>
 
+                        <div class="actionBtns">
+                          <div>
+                            <button class="btnApprove" ng-click="approveJustification(just)">Aprobar</button>
+                          </div>
+                          <div>
+                            <button class="btnCancel" ng-click="rejectJustification(just)">Denegar</button>
+                          </div>
+                        </div>
 
                     </div>
                   </div>
@@ -515,8 +542,8 @@ VARIABLES 3: solicitudesPersonales, solicitudesGrupo, cargandoSolicitudes
                   -->
                 </div>
 
+                <!--
                 <div class="requestGroup">
-                  <!-- SOLICITUD INDIVIDUAL -->
                   <div class="itemRequest">
                     <div class="typeRequest">
                         <div class="nameRequest">Walter Roberto Blanco</div>
@@ -546,7 +573,6 @@ VARIABLES 3: solicitudesPersonales, solicitudesGrupo, cargandoSolicitudes
                     </div>
                   </div>
 
-                  <!-- SOLICITUD INDIVIDUAL -->
                   <div class="itemRequest">
                     <div class="typeRequest">
                         <div class="nameRequest">Alejandro Oporto</div>
@@ -556,10 +582,10 @@ VARIABLES 3: solicitudesPersonales, solicitudesGrupo, cargandoSolicitudes
                         <div class="dateRequest">
                           19/04/2016
                         </div>
-                        <!-- <div class="bar"> | </div>
+                        <div class="bar"> | </div>
                         <div class="dateRequest2">
                           <div>14:00 - 16:00</div>
-                        </div> -->
+                        </div>
                     </div>
                     <div class="contentState">
                         <div class="state">
@@ -576,7 +602,6 @@ VARIABLES 3: solicitudesPersonales, solicitudesGrupo, cargandoSolicitudes
                     </div>
                   </div>
 
-                  <!-- SOLICITUD INDIVIDUAL -->
                   <div class="itemRequest">
                     <div class="typeRequest">
                         <div class="nameRequest">Santiago Ojeda</div>
@@ -606,7 +631,6 @@ VARIABLES 3: solicitudesPersonales, solicitudesGrupo, cargandoSolicitudes
                     </div>
                   </div>
 
-                  <!-- SOLICITUD INDIVIDUAL -->
                   <div class="itemRequest">
                     <div class="typeRequest">
                         <div class="nameRequest">Emanuel Pais</div>
@@ -636,7 +660,6 @@ VARIABLES 3: solicitudesPersonales, solicitudesGrupo, cargandoSolicitudes
                     </div>
                   </div>
 
-                  <!-- SOLICITUD INDIVIDUAL -->
                   <div class="itemRequest">
                     <div class="typeRequest">
                         <div class="nameRequest">Maximiliano Saucedo</div>
@@ -666,7 +689,6 @@ VARIABLES 3: solicitudesPersonales, solicitudesGrupo, cargandoSolicitudes
                     </div>
                   </div>
 
-                  <!-- SOLICITUD INDIVIDUAL -->
                   <div class="itemRequest">
                     <div class="typeRequest">
                         <div class="nameRequest">Ivan Castañeda</div>
@@ -697,6 +719,7 @@ VARIABLES 3: solicitudesPersonales, solicitudesGrupo, cargandoSolicitudes
                   </div>
 
                 </div>
+                -->
 
                 <div class="loadingRequests">
                   <div class="iconMessage"><i class="fa fa-circle-o-notch fa-spin fa-4x"></i></div>

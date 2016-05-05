@@ -44,8 +44,7 @@ function RequestCtrl($scope, Login, Assistance, Users, $location, $timeout) {
   $scope.view = {
     optionsJustifications: [
       {style: 'solicitudesPersonales', description: 'MIS SOLICITUDES', value: false},
-      // {style: 'solicitudesGrupo', description: 'MI GRUPO', value: true}
-      {style: 'solicitudesPersonales', description: 'MI GRUPO', value: true}
+      {style: 'solicitudesGrupo', description: 'MI GRUPO', value: true}
     ],
     searching: false,
     reverseName: false,

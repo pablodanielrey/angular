@@ -379,20 +379,7 @@
   overflow-x: auto;
 }
 
-.request.solicitudesGrupo .requestOwn,
-.request.solicitudesGrupo .loadingRequests {
-  display: none;
-}
 
-.request.solicitudesPersonales .requestGroup,
-.request.solicitudesPersonales .loadingRequests {
-  display: none;
-}
-
-.request.cargandoSolicitudes .requestOwn,
-.request.cargandoSolicitudes .requestGroup {
-  display: none;
-}
 
 .request .loadingRequests {
   width: 100%;
@@ -417,6 +404,18 @@
   margin-bottom: 10px;
 }
 
+
+.request.solicitudesGrupo .loadingRequests {
+  display: none;
+}
+
+.request.solicitudesPersonales .loadingRequests {
+  display: none;
+}
+
+.request.cargandoSolicitudes .requestContainer {
+  display: none;
+}
 
 
 .request .itemRequest {
@@ -759,23 +758,73 @@
   color: white;
 }
 
+
+
+/*
 .request.solicitudesGrupo .state {
   display: none;
 }
 
 .request.solicitudesGrupo .typeRequest {
   display: flex;
-  display: -webkit-flex; /* Safari */
-  display: -moz-flex; /* mozilla */
+  display: -webkit-flex;
+  display: -moz-flex;
   flex-direction:row;
-  -webkit-flex-direction:row; /* Safari */
-  -moz-flex-direction:row; /* mozilla */
+  -webkit-flex-direction:row;
+  -moz-flex-direction:row;
   align-items: center;
-  -webkit-align-items:center; /* Safari */
-  -moz-align-items:center; /* mozilla */
+  -webkit-align-items:center;
+  -moz-align-items:center;
   width: 350px;
-  /*background-color: red;*/
 }
+
+*/
+
+
+
+
+/******************** SOLICITUDES TIPOS *****************************/
+
+/* Justifica horas */
+.request .itemRequest.RangedTimeJustification {}
+
+.request .itemRequest.RangedTimeJustification .infoRequest .displaySingleDate,
+.request .itemRequest.RangedTimeJustification .infoRequest .displayRangedDate {
+  display: none;
+}
+
+/* Justifica un día */
+.request .itemRequest.SingleDateJustification {}
+
+.request .itemRequest.SingleDateJustification .infoRequest .displayRangedTime,
+.request .itemRequest.SingleDateJustification .infoRequest .displayRangedDate {
+}
+
+/* Justifica un rango de fechas */
+.request .itemRequest.RangedJustification {}
+  display: none;
+.request .itemRequest.RangedJustification .infoRequest .displaySingleDate,
+.request .itemRequest.RangedJustification .infoRequest .displayRangedTime {
+  display: none;
+}
+
+ /******************* SOLICITUDES PERSONALES ************************/
+
+.request.solicitudesPersonales .itemRequest .nameRequest {
+  display:none;
+}
+
+ /******************* SOLICITUDES MI GRUPO *************************/
+
+ .request .itemRequest .actionBtns {
+   display:none;
+ }
+
+ .request.solicitudesGrupo .itemRequest.status1 .actionBtns {
+   display:block;
+   /*display: flex;*/
+   /*display: -webkit-flex;*/
+ }
 
 
 
