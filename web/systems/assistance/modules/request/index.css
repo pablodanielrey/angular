@@ -818,7 +818,6 @@
 
 /* Justifica un rango de fechas */
 .request .itemRequest.RangedJustification {}
-  display: none;
 .request .itemRequest.RangedJustification .infoRequest .displaySingleDate,
 .request .itemRequest.RangedJustification .infoRequest .displayRangedTime {
   display: none;
@@ -842,6 +841,11 @@
    /*display: -webkit-flex;*/
  }
 
+ .request.solicitudesGrupo .itemRequest.status1 .statePending,
+ .request.solicitudesGrupo .itemRequest.status1 .trashContainer,
+ .request.solicitudesGrupo .itemRequest.status1 .state {
+   display:none;
+ }
 
 
 /**********************************************************************
