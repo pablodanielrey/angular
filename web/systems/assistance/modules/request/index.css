@@ -798,6 +798,7 @@
 
 .request .itemRequest.SingleDateJustification .infoRequest .displayRangedTime,
 .request .itemRequest.SingleDateJustification .infoRequest .displayRangedDate {
+  display:none;
 }
 
 /* Justifica un rango de fechas */
