@@ -139,7 +139,7 @@ class OutTicketWithoutReturnJustificationDAO(OutTicketJustificationDAO):
 
 class OutTicketJustification(RangedTimeJustification):
 
-    def __init__(self, userId = None, ownerId = None, start = None, end=None):
+    def __init__(self, start = None, end=None, userId = None, ownerId = None):
         super().__init__(start, end, userId, ownerId)
         self.type = 'Boleta de salida'
         self.classType = RangedTimeJustification.__name__
@@ -150,8 +150,8 @@ class OutTicketWithReturnJustification(OutTicketJustification):
     dao = OutTicketWithReturnJustificationDAO
     identifier = "Boleta de salida con retorno"
 
-    def __init__(self, userId = None, ownerId = None, start = None, end = None):
-        super().__init__(userId, ownerId, start, end)
+    def __init__(self, start = None, end=None, userId = None, ownerId = None):
+        super().__init__(start, end, userId, ownerId)
         self.identifier = OutTicketWithReturnJustification.identifier
 
     def getIdentifier(self):
@@ -166,8 +166,8 @@ class OutTicketWithoutReturnJustification(OutTicketJustification):
     dao = OutTicketWithoutReturnJustificationDAO
     identifier = 'Boleta de salida sin retorno'
 
-    def __init__(self, userId = None, ownerId = None, start = None):
-        super().__init__(userId, ownerId, start)
+    def __init__(self, start = None, end = None, userId = None, ownerId = None):
+        super().__init__(start, end, userId, ownerId)
         self.end = None
         self.identifier = OutTicketWithoutReturnJustification.identifier
 

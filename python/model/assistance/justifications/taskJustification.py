@@ -128,7 +128,7 @@ class TaskWithoutReturnJustificationDAO(TaskJustificationDAO):
 
 class TaskJustification(RangedTimeJustification):
 
-    def __init__(self, userId = None, ownerId = None, start = None, end=None):
+    def __init__(self, start = None, end=None, userId = None, ownerId = None):
         super().__init__(start, end, userId, ownerId)
         self.type = "Boleta en comisión"
         self.classType = RangedTimeJustification.__name__
@@ -139,8 +139,8 @@ class TaskWithReturnJustification(TaskJustification):
     dao = TaskWithReturnJustificationDAO
     identifier = "Boleta en comisión con retorno"
 
-    def __init__(self, userId = None, ownerId = None, start = None, end = None):
-        super().__init__(userId, ownerId, start, end)
+    def __init__(self, start = None, end = None, userId = None, ownerId = None):
+        super().__init__(start, end, userId, ownerId)
         self.identifier = TaskWithReturnJustification.identifier
 
     def getIdentifier(self):
@@ -155,8 +155,8 @@ class TaskWithoutReturnJustification(TaskJustification):
     dao = TaskWithoutReturnJustificationDAO
     identifier = "Boleta en comisión sin retorno"
 
-    def __init__(self, userId = None, ownerId = None, start = None):
-        super().__init__(userId, ownerId, start)
+    def __init__(self, start = None, end = None, userId = None, ownerId = None):
+        super().__init__(start, end, userId, ownerId)
         self.identifier = TaskWithoutReturnJustification.identifier
 
     def getIdentifier(self):

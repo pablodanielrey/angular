@@ -357,7 +357,20 @@ class AssistanceModel:
 
 
     def createSingleDateJustification(self,con, date, userId, ownerId, justClazz, justModule):
-        assert isinstance(date, datetime.datetime)
         module = importlib.import_module(justModule)
         clazz = getattr(module, justClazz)
         return clazz.create(con, date, userId, ownerId)
+
+
+    def createRangedTimeWithoutReturnJustification(self, con, start, userId, ownerId, justClazz, justModule):
+        # obtengo el schedule correspondiente
+        # saco el end del schedule
+        pass
+
+
+    def createRangedTimeWithReturnJustification(self, con, start, end, userId, ownerId, justClazz, justModule):
+        assert isinstance(start, datetime.datetime)
+        assert isinstance(end, datetime.datetime)
+        module = importlib.import_module(justModule)
+        clazz = getattr(module, justClazz)
+        return clazz.create(con, start, end, userId, ownerId)

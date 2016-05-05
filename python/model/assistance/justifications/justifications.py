@@ -223,6 +223,11 @@ class RangedTimeJustification(Justification):
         self.start = start
         self.end = end
 
+    @classmethod
+    def create(cls, con, start, end, userId, ownerId):
+        j = cls(start, end, userId, ownerId)
+        j.persist(con)
+
     def _loadWorkedPeriods(self, wps):
         assert self.getStatus() is not None
         if self.getStatus().status != Status.APPROVED:
