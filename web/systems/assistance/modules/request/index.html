@@ -23,13 +23,9 @@ VARIABLES 3: solicitudesPersonales, solicitudesGrupo, cargandoSolicitudes
               <button class="btnBack" ng-click="view.style='';view.style2=''"><i class="arrowBack fa fa-chevron-left"></i> VOLVER</button>
               <div class="titleListRequest">Lista de solicitudes</div>
                   <div class="contentListRequest">
-                      <button class="btnRequest" ng-click="view.style2='solicitudSeleccionada'"><i class="iconoRequest fa fa-ticket "></i> Ausente con aviso</button>
+                      <button class="btnRequest" ng-click="selectInformedAbsence()"><i class="iconoRequest fa fa-ticket "></i> Ausente con aviso</button>
                       <button class="btnRequest" ng-click="view.style2='solicitudSeleccionada'"><i class="iconoRequest fa fa-ticket "></i> Boleta de salida</button>
-                      <button class="btnRequest" ng-click="view.style2='solicitudSeleccionada'"><i class="iconoRequest fa fa-ticket "></i> Pre-Examen</button>
-                      <button class="btnRequest" ng-click="view.style2='solicitudSeleccionada'"><i class="iconoRequest fa fa-ticket "></i> Art. 102</button>
                       <button class="btnRequest" ng-click="selectCompensatory()"><i class="iconoRequest fa fa-ticket "></i> Compensatorio</button>
-                      <button class="btnRequest" ng-click="view.style2='solicitudSeleccionada'"><i class="iconoRequest fa fa-ticket "></i> Cumpleaños</button>
-                      <button class="btnRequest" ng-click="view.style2='solicitudSeleccionada'"><i class="iconoRequest fa fa-ticket "></i> Vacaciones</button>
                   </div>
             </div>
 
@@ -731,9 +727,10 @@ VARIABLES 3: solicitudesPersonales, solicitudesGrupo, cargandoSolicitudes
             <!-- fin -->
           </div>
 
-          <div class="contentRequestSelected">
+          <div class="contentRequestSelected {{view.displayRequest}}">
             <button class="btnBackCel" ng-click="back()"><i class="arrowBack fa fa-chevron-left"></i> VOLVER</button>
             <div class="compensatorio" ng-include="'/systems/assistance/modules/request/compensatorio/index.html'" ng-controller='CompensatoryCtrl'></div>
+            <div class="ausenteConAviso" ng-include="'/systems/assistance/modules/request/AA/index.html'" ng-controller='InformedAbsenceCtrl'></div>
           </div>
 
 

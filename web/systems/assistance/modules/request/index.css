@@ -16,6 +16,16 @@
 /* ******************************************************************
   ESTO LO AGREGO EMANUEL - LO TIENE QUE COLOCAR WALTER DONDE DEBERIA
  * **************************************************************** */
+
+
+ .request .contentRequestSelected.compensatory .compensatorio {
+   display:block;
+ }
+
+ .request .contentRequestSelected.informedAbsence .ausenteConAviso {
+   display:block;
+ }
+
  /*
  Estados posibles
  ----------------
@@ -459,6 +469,11 @@
           transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
 }
 
+
+.request .contentRequestSelected .compensatorio,
+.request .contentRequestSelected .ausenteConAviso {
+  display:none;
+}
 
 .request .contentHeaderRequest {
   display: flex;
@@ -1019,5 +1034,8 @@
   .request .nameRequest {
     margin-right: 0px;
   }
+
+
+
 
 }

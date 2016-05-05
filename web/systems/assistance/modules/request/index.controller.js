@@ -18,6 +18,7 @@ function RequestCtrl($scope, Login, Assistance, Users, $location, $timeout) {
   $scope.loadUsers = loadUsers;
   $scope.getName = getName;
   $scope.selectCompensatory = selectCompensatory;
+  $scope.selectInformedAbsence = selectInformedAbsence;
   $scope.back = back;
   $scope.changeStatus = changeStatus;
   $scope.cancelJustification = cancelJustification;
@@ -53,8 +54,11 @@ function RequestCtrl($scope, Login, Assistance, Users, $location, $timeout) {
     style: '',
     style_options: ['', 'seleccionSolicitud'],
     style2: '',
-    style2_options: ['','solicitudSeleccionada']
+    style2_options: ['','solicitudSeleccionada'],
+    displayRequest: '',
+    displayRequestOptions: ['', 'compensatory', 'informedAbsence']
   }
+
 
   const dayMillis = 24 * 60 * 60 * 1000;
   const limitDay = 6;
@@ -74,6 +78,7 @@ function RequestCtrl($scope, Login, Assistance, Users, $location, $timeout) {
     $timeout(function() {
       $scope.view.style = $scope.view.style_options[0];
       $scope.view.style2 = $scope.view.style2_options[0];
+      $scope.search();
     }, 1500);
   })
 
@@ -326,7 +331,14 @@ function RequestCtrl($scope, Login, Assistance, Users, $location, $timeout) {
 
   function selectCompensatory() {
     $scope.view.style2 = $scope.view.style2_options[1];
+    $scope.view.displayRequest = $scope.view.displayRequestOptions[1];
     $scope.$broadcast('selectCompensatoryEvent', $scope.model.userId);
+  }
+
+  function selectInformedAbsence() {
+    $scope.view.style2 = $scope.view.style2_options[1];
+    $scope.view.displayRequest = $scope.view.displayRequestOptions[2];
+    $scope.$broadcast('selectInformedAbsenceEvent', $scope.model.userId);
   }
 
   $scope.$on('closeRequestEvent', function(e) {
