@@ -637,6 +637,91 @@
   -webkit-border-radius: 2px;
 }
 
+.request .textIcoStateApproved {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  width: 80px;
+  height: 20px;
+  padding: 3px;
+  border: none;
+ background-color: #92AD17;
+ color: white;
+ font-size: 12px;
+}
+
+.request .textIcoStateCancel {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  width: 80px;
+  height: 20px;
+  padding: 3px;
+  border: none;
+ background-color: #E43E46;
+ color: white;
+ font-size: 12px;
+}
+
+.request .textIcoStatePending {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  width: 80px;
+  height: 20px;
+  padding: 3px;
+  border: none;
+  /*background-color: #E43E46;*/
+  color: white;
+  font-size: 12px;
+  -webkit-animation-name: pendiente; /* Chrome, Safari, Opera */
+  -webkit-animation-duration: 1s; /* Chrome, Safari, Opera */
+  -webkit-animation-iteration-count: infinite;
+  animation-name: pendiente;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+}
+
+/* Chrome, Safari, Opera */
+@-webkit-keyframes pendiente {
+    from {background-color: #0069A6;}
+    to {background-color: #43b2f2;}
+}
+
+/* Standard syntax */
+@keyframes pendiente {
+    from {background-color: #0069A6;}
+    to {background-color: #43b2f2;}
+}
+
+
 .request .icoStatePendig {
   display: flex;
   display: -webkit-flex; /* Safari */
@@ -711,6 +796,7 @@
 .request .state {
     color: #5C5F69;
     font-size: 12px;
+    margin-right: 10px;
 }
 
 .request .textIcoState {
@@ -738,15 +824,35 @@
   height: 25px;
   padding: 3px;
   border: none;
-  background-color: #92AD17;
+  /*background-color: #92AD17;*/
   color:white;
   margin-bottom: 5px;
-}
-
-.request .btnApprove:hover {
-  background-color: #809612;
+  -webkit-animation-name: btnAprobar; /* Chrome, Safari, Opera */
+  -webkit-animation-duration: 1s; /* Chrome, Safari, Opera */
+  -webkit-animation-iteration-count: infinite;
+  animation-name: btnAprobar;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
   cursor: pointer;
 }
+
+
+/* Chrome, Safari, Opera */
+@-webkit-keyframes btnAprobar {
+    from {background-color: #0069A6;}
+    to {background-color: #43b2f2;}
+}
+
+/* Standard syntax */
+@keyframes btnAprobar {
+    from {background-color: #0069A6;}
+    to {background-color: #43b2f2;}
+}
+
+/*.request .btnApprove:hover {
+  background-color: #809612;
+  cursor: pointer;
+}*/
 
 .request .btnCancel {
   border-radius: 2px;
@@ -972,6 +1078,12 @@
     display: none;
   }
 
+  .request .textIcoStateApproved,
+  .request .textIcoStatePending,
+  .request .textIcoStateCancel {
+    display: none;
+  }
+
 
 
 
@@ -1004,6 +1116,12 @@
 }
 @media (min-width: 720px) {
   .request .btnBackCel {
+    display: none;
+  }
+  .request .icoStateApproved,
+  .request .icoStatePendig,
+  .request .icoStateCancel,
+  .request .icoStateApproved {
     display: none;
   }
 }
