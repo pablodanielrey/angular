@@ -364,11 +364,16 @@ class AssistanceModel:
 
     def createRangedTimeWithoutReturnJustification(self, con, start, userId, ownerId, justClazz, justModule):
         # obtengo el schedule correspondiente
-        
-        end = start + datetime.timedelta(days=1)
-        ss = ScheduleDAO.findByUserId(con, [userId], start, end)
+
+        wps = self.getWorkPeriods(con, [userId], start, start)
+        wpsList = wps[userId]
+        if len(wpsList) <= 0:
+            raise Exception('No tiene un horario para la fecha ingresada')
+
         # saco el end del schedule
-        end = ss[0].getEndDate(start.date());
+        end = wpsList[0].getEndDate()
+
+        end = Utils._localizeLocal(end) if Utils._isNaive(end) else end
 
         module = importlib.import_module(justModule)
         clazz = getattr(module, justClazz)
