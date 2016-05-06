@@ -133,6 +133,17 @@ class OutTicketJustification(RangedTimeJustification):
         self.typeName = 'Boleta de salida'
         self.classType = RangedTimeJustification.__name__
 
+    def persist(self, con):
+        if self.start > self.end:
+            raise Exception('La hora de finalización es menor que el inicio')
+
+        diff = (self.end - self.start).seconds
+        limitSeconds = 3 * 60 * 60
+        if diff > limitSeconds:
+            raise Exception('El tiempo requerido supera el límite')
+
+        super().persist(con)
+
 
 class OutTicketWithReturnJustification(OutTicketJustification):
 
@@ -157,7 +168,6 @@ class OutTicketWithoutReturnJustification(OutTicketJustification):
 
     def __init__(self, start = None, end = None, userId = None, ownerId = None):
         super().__init__(start, end, userId, ownerId)
-        self.end = None
         self.identifier = OutTicketWithoutReturnJustification.identifier
 
     def getIdentifier(self):
