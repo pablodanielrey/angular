@@ -364,8 +364,15 @@ class AssistanceModel:
 
     def createRangedTimeWithoutReturnJustification(self, con, start, userId, ownerId, justClazz, justModule):
         # obtengo el schedule correspondiente
+        
+        end = start + datetime.timedelta(days=1)
+        ss = ScheduleDAO.findByUserId(con, [userId], start, end)
         # saco el end del schedule
-        pass
+        end = ss[0].getEndDate(start.date());
+
+        module = importlib.import_module(justModule)
+        clazz = getattr(module, justClazz)
+        return clazz.create(con, start, end, userId, ownerId)
 
 
     def createRangedTimeWithReturnJustification(self, con, start, end, userId, ownerId, justClazz, justModule):
