@@ -211,7 +211,7 @@ function RequestCtrl($scope, Login, Assistance, Users, $location, $timeout) {
     var j = {};
     j.userId = just.userId;
     j.name = just.identifier;
-    j.type = just.type;
+    j.typeName = just.typeName;
     j.start = (just.hasOwnProperty('start') && just.start != undefined) ? new Date(just.start) : undefined;
 
     if (just.hasOwnProperty('date') && just.date != undefined) {
@@ -228,17 +228,17 @@ function RequestCtrl($scope, Login, Assistance, Users, $location, $timeout) {
   }
 
   function getJustTitle(just) {
-    v = (just.hasOwnProperty('type') && just.type != undefined) ? just.type : just.name;
+    v = (just.hasOwnProperty('typeName') && just.typeName != undefined) ? just.typeName : just.name;
     return v
   }
 
   function getJustName(just) {
-    return (just.hasOwnProperty('type') && just.type != undefined) ? just.name : '';
+    return (just.hasOwnProperty('typeName') && just.typeName != undefined) ? just.name : '';
   }
 
   function compareName(a, b) {
-    aName = (a.hasOwnProperty('type') && a.type != undefined) ? a.type + ' ' + a.name : a.name;
-    bName = (b.hasOwnProperty('type') && b.type != undefined) ? b.type + ' ' + b.name : b.name;
+    aName = (a.hasOwnProperty('typeName') && a.typeName != undefined) ? a.typeName + ' ' + a.name : a.name;
+    bName = (b.hasOwnProperty('typeName') && b.typeName != undefined) ? b.typeName + ' ' + b.name : b.name;
     return (aName < bName) ? -1 : (aName > bName ? 1 : 0);
   }
 

@@ -28,6 +28,7 @@ class OutTicketJustificationDAO(AssistanceDAO):
                     owner_id varchar not null references profile.users (id),
                     jstart timestamptz default now(),
                     jend timestamptz default now(),
+                    type varchar not null,
                     created timestamptz default now()
                 );
             """
@@ -49,14 +50,14 @@ class OutTicketJustificationDAO(AssistanceDAO):
                 j.id = str(uuid.uuid4())
 
             if len(j.findById(con, [j.id])) <=  0:
-
+                j.type = j.__class__.__name__
                 r = j.__dict__
-                cur.execute('insert into assistance.justification_out_ticket (id, user_id, owner_id, jstart, jend) '
-                            'values (%(id)s, %(userId)s, %(ownerId)s, %(start)s, %(end)s)', r)
+                cur.execute('insert into assistance.justification_out_ticket (id, user_id, owner_id, jstart, jend, type) '
+                            'values (%(id)s, %(userId)s, %(ownerId)s, %(start)s, %(end)s, %(type)s)', r)
             else:
                 r = j.__dict__
                 cur.execute('update assistance.justification_out_ticket set user_id = %(userId)s, owner_id = %(ownerId)s, '
-                            'jstart = %(start)s, jend = %(end)s where id = %(id)s', r)
+                            'jstart = %(start)s, jend = %(end)s, type = %(type)s where id = %(id)s', r)
             return j.id
 
         finally:
@@ -84,13 +85,16 @@ class OutTicketJustificationDAO(AssistanceDAO):
 
         cur = con.cursor()
         try:
-            cur.execute('select * from assistance.justification_out_ticket where user_id in %s and (jstart <= %s and jend >= %s)', (tuple(userIds), end, start))
+            t = cls.type
+            cur.execute('select * from assistance.justification_out_ticket where user_id in %s and (jstart <= %s and jend >= %s and type = %s)', (tuple(userIds), end, start, t))
             return [ cls._fromResult(con, r) for r in cur ]
         finally:
             cur.close()
 
 
 class OutTicketWithReturnJustificationDAO(OutTicketJustificationDAO):
+
+    type = "OutTicketWithReturnJustification"
 
     @classmethod
     def _fromResult(cls, con, r):
@@ -106,6 +110,8 @@ class OutTicketWithReturnJustificationDAO(OutTicketJustificationDAO):
 
 class OutTicketWithoutReturnJustificationDAO(OutTicketJustificationDAO):
 
+    type = "OutTicketWithoutReturnJustification"
+
     @classmethod
     def _fromResult(cls, con, r):
 
@@ -119,30 +125,12 @@ class OutTicketWithoutReturnJustificationDAO(OutTicketJustificationDAO):
         return j
 
 
-    @classmethod
-    def findByUserId(cls, con, userIds, start, end):
-        assert isinstance(userIds, list)
-        assert isinstance(start, datetime.datetime)
-        assert isinstance(end, datetime.datetime)
-
-        if len(userIds) <= 0:
-            return
-
-        cur = con.cursor()
-        try:
-            cur.execute('select * from assistance.justification_out_ticket where user_id in %s and '
-                        '(jstart <= %s and DATE(jstart) = %s) and jend = null', (tuple(userIds), end, start.date()))
-
-            return [ cls._fromResult(con, r) for r in cur ]
-        finally:
-            cur.close()
-
 
 class OutTicketJustification(RangedTimeJustification):
 
     def __init__(self, start = None, end=None, userId = None, ownerId = None):
         super().__init__(start, end, userId, ownerId)
-        self.type = 'Boleta de salida'
+        self.typeName = 'Boleta de salida'
         self.classType = RangedTimeJustification.__name__
 
 
