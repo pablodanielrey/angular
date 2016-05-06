@@ -38,6 +38,18 @@ function Assistance (Utils, Session, $wamp) {
     });
 	}
 
+	this.createRangedTimeWithoutReturnJustification = function(start, userId, justClazz, justModule) {
+		return new Promise(function(cok, cerr) {
+      var sid = Session.getSessionId();
+  		$wamp.call('assistance.createRangedTimeWithoutReturnJustification', [sid, start, userId, justClazz, justModule])
+      .then(function(v) {
+        cok(v);
+      },function(err) {
+        cerr(err);
+      });
+    });
+	}
+
 	this.changeStatus = function(justification, status) {
 		return new Promise(function(cok, cerr) {
       var sid = Session.getSessionId();

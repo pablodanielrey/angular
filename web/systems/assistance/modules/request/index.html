@@ -26,7 +26,7 @@ VARIABLES 3: solicitudesPersonales, solicitudesGrupo, cargandoSolicitudes
                       <button class="btnRequest" ng-click="selectInformedAbsence()"><i class="iconoRequest fa fa-ticket "></i> Ausente con aviso</button>
                       <button class="btnRequest" ng-click="selectCompensatory()"><i class="iconoRequest fa fa-ticket "></i> Compensatorio</button>
                       <button class="btnRequest" ng-click="selectOTWithReturn()"><i class="iconoRequest fa fa-ticket "></i> Boleta de salida con retorno</button>
-                      <button class="btnRequest" ng-click="view.style2='solicitudSeleccionada'"><i class="iconoRequest fa fa-ticket "></i> Boleta de salida sin retorno</button>
+                      <button class="btnRequest" ng-click="selectOTWithoutReturn()"><i class="iconoRequest fa fa-ticket "></i> Boleta de salida sin retorno</button>
                   </div>
             </div>
 
@@ -181,6 +181,7 @@ VARIABLES 3: solicitudesPersonales, solicitudesGrupo, cargandoSolicitudes
             <div class="compensatorio" ng-include="'/systems/assistance/modules/request/compensatorio/index.html'" ng-controller='CompensatoryCtrl'></div>
             <div class="ausenteConAviso" ng-include="'/systems/assistance/modules/request/AA/index.html'" ng-controller='InformedAbsenceCtrl'></div>
             <div class="boletaDeSalidaConRetorno" ng-include="'/systems/assistance/modules/request/BDS/index.html'" ng-controller='OTWithReturnCtrl'></div>
+            <div class="boletaDeSalidaSinRetorno" ng-include="'/systems/assistance/modules/request/BDS_SR/index.html'" ng-controller='OTWithoutReturnCtrl'></div>
           </div>
 
 

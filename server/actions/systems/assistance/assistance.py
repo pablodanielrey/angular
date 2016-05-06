@@ -38,6 +38,7 @@ class AssistanceWamp(ApplicationSession):
         yield from self.register(self.getJustifications_async, 'assistance.getJustifications')
         yield from self.register(self.createSingleDateJustification_async, 'assistance.createSingleDateJustification')
         yield from self.register(self.createRangedTimeWithReturnJustification_async, 'assistance.createRangedTimeWithReturnJustification')
+        yield from self.register(self.createRangedTimeWithoutReturnJustification_async, 'assistance.createRangedTimeWithoutReturnJustification')
         yield from self.register(self.changeStatus_async, 'assistance.changeStatus')
 
     def _localizeLocal(self,naive):
@@ -117,6 +118,23 @@ class AssistanceWamp(ApplicationSession):
     def createRangedTimeWithReturnJustification_async(self, sid, start, end, userId, justClazz, justModule, ownerId = None):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.createRangedTimeWithReturnJustification, sid, start, end, userId, justClazz, justModule, ownerId)
+        return r
+
+    def createRangedTimeWithoutReturnJustification(self, sid, startStr, userId, justClazz, justModule, ownerId = None):
+        con = self.conn.get()
+        try:
+            if ownerId is None:
+                ownerId = self.loginModel.getUserId(con, sid)
+            start = self._parseDate(startStr)
+            self.assistance.createRangedTimeWithoutReturnJustification(con, start, userId, ownerId, justClazz, justModule)
+            con.commit()
+        finally:
+            self.conn.put(con)
+
+    @coroutine
+    def createRangedTimeWithoutReturnJustification_async(self, sid, start, userId, justClazz, justModule, ownerId = None):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.createRangedTimeWithoutReturnJustification, sid, start, userId, justClazz, justModule, ownerId)
         return r
 
     def changeStatus(self, sid, just, status):
