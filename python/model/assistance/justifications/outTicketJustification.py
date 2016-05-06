@@ -86,7 +86,7 @@ class OutTicketJustificationDAO(AssistanceDAO):
         cur = con.cursor()
         try:
             t = cls.type
-            cur.execute('select * from assistance.justification_out_ticket where user_id in %s and (jstart <= %s and jend >= %s and type = %s)', (tuple(userIds), end, start, t))
+            cur.execute('select * from assistance.justification_out_ticket where user_id in %s and (jstart <= %s and jend >= %s) and type = %s', (tuple(userIds), end, start, t))
             return [ cls._fromResult(con, r) for r in cur ]
         finally:
             cur.close()

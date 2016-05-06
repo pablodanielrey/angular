@@ -152,7 +152,7 @@ class MourningJustification(RangedJustification):
 
     def __init__(self, userId = None, ownerId = None, start = None, days = 0):
         super().__init__(start, days, userId, ownerId)
-        self.type = "Duelo"
+        self.typeName = "Duelo"
         self.classType = RangedJustification.__name__
 
     def setEnd(self, date):
@@ -174,7 +174,7 @@ class MourningFirstGradeJustification(MourningJustification):
         self.identifier = MourningFirstGradeJustification.identifier
 
     def getIdentifier(self):
-        return self.identifier
+        return self.typeName + " " + self.identifier
 
 
 class MourningSecondGradeJustification(MourningJustification):
@@ -187,7 +187,7 @@ class MourningSecondGradeJustification(MourningJustification):
         self.identifier = MourningSecondGradeJustification.identifier
 
     def getIdentifier(self):
-        return self.identifier
+        return self.typeName + " " + self.identifier
 
 
 class MourningRelativeJustification(MourningJustification):
@@ -200,4 +200,4 @@ class MourningRelativeJustification(MourningJustification):
         self.identifier = MourningRelativeJustification.identifier
 
     def getIdentifier(self):
-        return self.identifier
+        return self.typeName + " " + self.identifier
