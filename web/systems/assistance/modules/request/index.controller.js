@@ -19,6 +19,7 @@ function RequestCtrl($scope, Login, Assistance, Users, $location, $timeout) {
   $scope.getName = getName;
   $scope.selectCompensatory = selectCompensatory;
   $scope.selectInformedAbsence = selectInformedAbsence;
+  $scope.selectOTWithReturn = selectOTWithReturn;
   $scope.back = back;
   $scope.changeStatus = changeStatus;
   $scope.cancelJustification = cancelJustification;
@@ -56,7 +57,7 @@ function RequestCtrl($scope, Login, Assistance, Users, $location, $timeout) {
     style2: '',
     style2_options: ['','solicitudSeleccionada'],
     displayRequest: '',
-    displayRequestOptions: ['', 'compensatory', 'informedAbsence']
+    displayRequestOptions: ['', 'compensatory', 'informedAbsence', 'oTWithReturn']
   }
 
 
@@ -339,6 +340,12 @@ function RequestCtrl($scope, Login, Assistance, Users, $location, $timeout) {
     $scope.view.style2 = $scope.view.style2_options[1];
     $scope.view.displayRequest = $scope.view.displayRequestOptions[2];
     $scope.$broadcast('selectInformedAbsenceEvent', $scope.model.userId);
+  }
+
+  function selectOTWithReturn() {
+    $scope.view.style2 = $scope.view.style2_options[1];
+    $scope.view.displayRequest = $scope.view.displayRequestOptions[3];
+    $scope.$broadcast('selectOTWithReturnEvent', $scope.model.userId);
   }
 
   $scope.$on('closeRequestEvent', function(e) {

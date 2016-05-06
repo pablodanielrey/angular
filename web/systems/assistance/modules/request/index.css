@@ -26,6 +26,10 @@
    display:block;
  }
 
+ .request .contentRequestSelected.oTWithReturn .boletaDeSalidaConRetorno {
+   display:block;
+ }
+
  /*
  Estados posibles
  ----------------
@@ -471,7 +475,8 @@
 
 
 .request .contentRequestSelected .compensatorio,
-.request .contentRequestSelected .ausenteConAviso {
+.request .contentRequestSelected .ausenteConAviso,
+.request .contentRequestSelected .boletaDeSalidaConRetorno {
   display:none;
 }
 

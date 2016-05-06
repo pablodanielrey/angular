@@ -97,8 +97,8 @@ class OutTicketWithReturnJustificationDAO(OutTicketJustificationDAO):
         j = OutTicketWithReturnJustification()
         j.userId = r['user_id']
         j.ownerId = r['owner_id']
-        j.start = r['jstart'].astimezone(dateutil.tz.tzlocal()).replace(tzinfo=None)
-        j.end = r['jend'].astimezone(dateutil.tz.tzlocal()).replace(tzinfo=None)
+        j.start = r['jstart']
+        j.end = r['jend']
         j.id = r['id']
         j.setStatus(Status.getLastStatus(con, j.id))
         return j
@@ -108,11 +108,12 @@ class OutTicketWithoutReturnJustificationDAO(OutTicketJustificationDAO):
 
     @classmethod
     def _fromResult(cls, con, r):
+
         j = OutTicketWithoutReturnJustification()
         j.userId = r['user_id']
         j.ownerId = r['owner_id']
-        j.start = r['jstart'].astimezone(dateutil.tz.tzlocal()).replace(tzinfo=None)
-        j.end = r['jend'].astimezone(dateutil.tz.tzlocal()).replace(tzinfo=None)
+        j.start = r['jstart']
+        j.end = r['jend']
         j.id = r['id']
         j.setStatus(Status.getLastStatus(con, j.id))
         return j
