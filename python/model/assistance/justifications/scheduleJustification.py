@@ -34,7 +34,7 @@ class ScheduleJustificationDAO(AssistanceDAO):
     @classmethod
     def _fromResult(cls, con, r):
         date = datetime.datetime.combine(r['date'], datetime.time.min)
-        c = ScheduleJustification(r['user_id'], r['owner_id'], date)
+        c = ScheduleJustification(date, r['user_id'], r['owner_id'])
         c.id = r['id']
         c.setStatus(Status.getLastStatus(con, c.id))
         return c
@@ -93,9 +93,12 @@ class ScheduleJustificationDAO(AssistanceDAO):
 class ScheduleJustification(SingleDateJustification):
 
     dao = ScheduleJustificationDAO
+    identifier = "Horario justificado"
 
-    def __init__(self, userId, ownerId, date):
+    def __init__(self, date = None, userId = None, ownerId = None):
         super().__init__(date, userId, ownerId)
+        self.identifier = ScheduleJustification.identifier
+        self.classType = SingleDateJustification.__name__
 
     def getIdentifier(self):
-        return "Horario justificado"
+        return self.identifier

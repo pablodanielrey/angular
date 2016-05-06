@@ -116,14 +116,16 @@ class MaternityJustification(RangedJustification):
 
     dao = MaternityJustificationDAO
     registry = inject.instance(Registry).getRegistry('maternityJustification')
+    identifier = 'Maternidad'
 
-    def __init__(self, userId, ownerId, start, days = 0, number = None):
-        assert isinstance(start, datetime.date)        
+    def __init__(self, userId = None, ownerId = None, start = None, days = 0, number = None):
         super().__init__(start, days, userId, ownerId)
         self.number = number
+        self.identifier = MaternityJustification.identifier
+        self.classType = RangedJustification.__name__
 
     def getIdentifier(self):
-        return 'Maternidad'
+        return self.identifier
 
     def setEnd(self, date):
         assert isinstance(date, datetime.date)

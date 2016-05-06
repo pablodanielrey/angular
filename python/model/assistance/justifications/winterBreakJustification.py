@@ -117,9 +117,12 @@ class WinterBreakJustification(RangedJustification):
 
     dao = WinterBreakJustificationDAO
     registry = inject.instance(Registry).getRegistry('winterBreakJustification')
+    identifier = 'Vacaciones de Invierno'
 
-    def __init__(self, userId, ownerId, start, days = 0):
+    def __init__(self, userId = None, ownerId = None, start = None, days = 0):
         super().__init__(start, days, userId, ownerId)
+        self.identifier = WinterBreakJustification.identifier
+        self.classType = RangedJustification.__name__
 
     def getIdentifier(self):
-        return 'Vacaciones de Invierno'
+        return self.identifier

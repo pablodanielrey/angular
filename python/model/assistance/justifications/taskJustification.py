@@ -28,6 +28,7 @@ class TaskJustificationDAO(AssistanceDAO):
                     owner_id varchar not null references profile.users (id),
                     jstart timestamptz default now(),
                     jend timestamptz default now(),
+                    type varchar not null,
                     created timestamptz default now()
                 );
             """
@@ -48,14 +49,15 @@ class TaskJustificationDAO(AssistanceDAO):
             if ((not hasattr(j, 'id')) or (j.id is None)):
                 j.id = str(uuid.uuid4())
 
-            if len(j.findById(con, [j.id])) <=  0:                
+            if len(j.findById(con, [j.id])) <=  0:
+                j.type = j.__class__.__name__
                 r = j.__dict__
-                cur.execute('insert into assistance.justification_task (id, user_id, owner_id, jstart, jend) '
-                            'values (%(id)s, %(userId)s, %(ownerId)s, %(start)s, %(end)s)', r)
+                cur.execute('insert into assistance.justification_task (id, user_id, owner_id, jstart, jend, type) '
+                            'values (%(id)s, %(userId)s, %(ownerId)s, %(start)s, %(end)s, %(type)s)', r)
             else:
                 r = j.__dict__
                 cur.execute('update assistance.justification_task set user_id = %(userId)s, owner_id = %(ownerId)s, '
-                            'jstart = %(start)s, jend = %(end)s where id = %(id)s', r)
+                            'jstart = %(start)s, jend = %(end)s, type = %(type)s where id = %(id)s', r)
             return j.id
 
         finally:
@@ -83,13 +85,16 @@ class TaskJustificationDAO(AssistanceDAO):
 
         cur = con.cursor()
         try:
-            cur.execute('select * from assistance.justification_task where jend != null and user_id in %s and (jstart <= %s and jend >= %s)', (tuple(userIds), end, start))
+            t = cls.type
+            cur.execute('select * from assistance.justification_task where jend != null and user_id in %s and (jstart <= %s and jend >= %s) and type = %s', (tuple(userIds), end, start, t))
             return [ cls._fromResult(con, r) for r in cur ]
         finally:
             cur.close()
 
 
 class TaskWithReturnJustificationDAO(TaskJustificationDAO):
+
+    type = "TaskWithReturnJustification"
 
     @classmethod
     def _fromResult(cls, con, r):
@@ -101,6 +106,8 @@ class TaskWithReturnJustificationDAO(TaskJustificationDAO):
 
 class TaskWithoutReturnJustificationDAO(TaskJustificationDAO):
 
+    type = "TaskWithoutReturnJustification"
+
     @classmethod
     def _fromResult(cls, con, r):
         j = TaskWithoutReturnJustification(r['user_id'], r['owner_id'], r['jstart'])
@@ -108,39 +115,25 @@ class TaskWithoutReturnJustificationDAO(TaskJustificationDAO):
         j.setStatus(Status.getLastStatus(con, j.id))
         return j
 
-    @classmethod
-    def findByUserId(cls, con, userIds, start, end):
-        assert isinstance(userIds, list)
-        assert isinstance(start, datetime.datetime)
-        assert isinstance(end, datetime.datetime)
-
-        if len(userIds) <= 0:
-            return
-
-        cur = con.cursor()
-        try:
-            cur.execute('select * from assistance.justification_task where user_id in %s and '
-                        '(jstart <= %s and DATE(jstart) = %s) and jend = null', (tuple(userIds), end, start.date()))
-
-            return [ cls._fromResult(con, r) for r in cur ]
-        finally:
-            cur.close()
-
 class TaskJustification(RangedTimeJustification):
 
-    def __init__(self, userId, ownerId, start, end=None):
+    def __init__(self, start = None, end=None, userId = None, ownerId = None):
         super().__init__(start, end, userId, ownerId)
+        self.typeName = "Boleta en comisión"
+        self.classType = RangedTimeJustification.__name__
 
 
 class TaskWithReturnJustification(TaskJustification):
 
     dao = TaskWithReturnJustificationDAO
+    identifier = "Boleta en comisión con retorno"
 
-    def __init__(self, userId, ownerId, start, end):
-        super().__init__(userId, ownerId, start, end)
+    def __init__(self, start = None, end = None, userId = None, ownerId = None):
+        super().__init__(start, end, userId, ownerId)
+        self.identifier = TaskWithReturnJustification.identifier
 
     def getIdentifier(self):
-        return "Boleta en comisión con retorno"
+        return self.identifier
 
     def changeEnd(self, con, end):
         self.end = end
@@ -149,12 +142,14 @@ class TaskWithReturnJustification(TaskJustification):
 class TaskWithoutReturnJustification(TaskJustification):
 
     dao = TaskWithoutReturnJustificationDAO
+    identifier = "Boleta en comisión sin retorno"
 
-    def __init__(self, userId, ownerId, start):
-        super().__init__(userId, ownerId, start)
+    def __init__(self, start = None, end = None, userId = None, ownerId = None):
+        super().__init__(start, end, userId, ownerId)
+        self.identifier = TaskWithoutReturnJustification.identifier
 
     def getIdentifier(self):
-        return 'Boleta en comisión sin retorno'
+        return self.identifier
 
     def _loadWorkedPeriods(self, wps):
         assert self.getStatus() is not None

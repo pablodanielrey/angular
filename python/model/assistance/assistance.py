@@ -3,13 +3,17 @@ import logging
 import json
 import datetime
 from dateutil.tz import tzlocal
+import importlib
 from model.assistance.logs import LogDAO, Log
 from model.assistance.schedules import ScheduleDAO, Schedule
 from model.serializer.utils import JSONSerializable
 
 from model.assistance.justifications import *
 from model.assistance.justifications.justifications import Justification
+from model.assistance.justifications.justifications import Status
 
+from model.positions.positions import Position
+from model.offices.offices import Office
 from model.assistance.statistics import WpStatistics
 from model.assistance.utils import Utils
 
@@ -41,9 +45,16 @@ class AssistanceData(JSONSerializable):
 class WorkPeriod(JSONSerializable):
     logsTolerance = datetime.timedelta(hours=2)
 
-    def __init__(self, userId = None, date = None):
-        self.userId = userId
-        self.date = date
+    @classmethod
+    def _create(cls, userId, date):
+        wp = WorkPeriod()
+        wp.userId = userId
+        wp.date = date
+        return wp
+
+    def __init__(self):
+        self.userId = None
+        self.date = None
         self.schedule = None
         self.logs = []
         self.justifications = []
@@ -53,6 +64,9 @@ class WorkPeriod(JSONSerializable):
 
     def getJustifications(self):
         return self.justifications
+
+    def getDate(self):
+        return self.date
 
     def getStartDate(self):
         if self.schedule is None:
@@ -70,7 +84,7 @@ class WorkPeriod(JSONSerializable):
         return self.logs[0]
 
     def getEndLog(self):
-        if len(self.logs) <= 0:
+        if len(self.logs) <= 1:
             return None
         return self.logs[-1]
 
@@ -142,7 +156,6 @@ class WorkPeriod(JSONSerializable):
         """ el último schedule válido para esa fecha es el que vale """
         for s in reversed(schedules):
             if s.userId == self.userId and s.isValid(self.date):
-                logging.info('eligiendo el schedule : {} para la fecha {}'.format(self.date, s.__dict__))
                 self.schedule = s
                 break
 
@@ -197,20 +210,50 @@ class AssistanceModel:
         return justs
 
     def getJustifications(self, con, userId, start, end, isAll = False):
+        userIds = []
         if isAll:
             # tengo que obtener todos los usuarios de las oficina que autoriaza y buscar por esos usuarios
-            # ahora hago la misma llamada pero despues lo tengo que cambiar cuando este terminado lo de office y los roles
-            return self._getJustifications(con, [userId], start, end)
+            offices = Office.getOfficesByUserRole(con, userId, False, 'autoriza')
+            userIds = Office.getOfficesUsers(con, offices)
         else:
-            return self._getJustifications(con, [userId], start, end)
+            userIds.append(userId)
 
+        return [] if len(userIds) <= 0 else self._getJustifications(con, userIds, start, end)
+
+    def _isModifyJustification(self, con, userId, just, status):
+        oldStatus = just.getStatus().status
+        if userId == just.userId and oldStatus == Status.PENDING and  status == Status.CANCELED:
+            return True
+
+        if userId == just.userId:
+            return False
+
+        offices = Office.getOfficesByUserRole(con, userId, False, 'autoriza')
+        userIds = Office.getOfficesUsers(con, offices)
+        for uid in userIds:
+            if uid == just.userId:
+                return True
+
+        return False
+
+
+    def changeStatus(self, con, just, status, userId):
+        '''
+            status = UNDEFINED, PENDING, APPROVED, REJECTED, CANCELED
+        '''
+        # obtengo la constante correspondiente al estado
+        s = getattr(Status, status)
+        # verifico si tiene permisos para modificar el estado de la justificacion
+        if self._isModifyJustification(con, userId, just, s):
+            return just.changeStatus(con, s, userId)
+
+        raise Exception('No posee permisos suficientes')
 
 
     def calculateStatistics(self, wps):
         userId = wps[0].userId
         stats = WpStatistics(userId)
         for wp in wps:
-            logging.info('calculando {}'.format(wp.date))
             stats.updateStatistics(wp)
         return stats
 
@@ -229,29 +272,20 @@ class AssistanceModel:
         assert isinstance(start, datetime.datetime)
         assert isinstance(end, datetime.datetime)
 
+        assert start.tzinfo is not None
+        assert end.tzinfo is not None
+
         logging.info('buscando los schedules')
-        timer = datetime.datetime.now()
         schedules = self._getSchedules(con, userIds, start, end)
-        logging.info(datetime.datetime.now() - timer)
 
         logging.info('buscando los logs')
-        timer = datetime.datetime.now()
         logs = self._getLogs(con, userIds, start, end + datetime.timedelta(days=1))
-        logging.info(datetime.datetime.now() - timer)
-        """
-        for lk in logs.keys():
-            for l in logs[lk]:
-                logging.info(l.__dict__)
-        """
 
         logging.info('buscando las justificaciones')
-        timer = datetime.datetime.now()
         justifications = self._getJustifications(con, userIds, start, end + datetime.timedelta(days=1))
-        logging.info(datetime.datetime.now() - timer)
 
         """ genero los dias a trabajar """
         logging.info('generando los dias de trabajo')
-        timer = datetime.datetime.now()
         days = []
         d = AssistanceModel._cloneDate(start.date())
         oneDay = datetime.timedelta(hours=24)
@@ -259,19 +293,15 @@ class AssistanceModel:
         while d <= dend:
             days.append(d)
             d = d + oneDay
-        logging.info(datetime.datetime.now() - timer)
 
         """ genero todos los WorkPeriods para todos los usuarios """
         logging.info('generando los periodos de trabjo')
-        timer = datetime.datetime.now()
         wpss = {}
         for uid in userIds:
-            wpss[uid] = [ WorkPeriod(uid, AssistanceModel._cloneDate(d)) for d in days ]
-        logging.info(datetime.datetime.now() - timer)
+            wpss[uid] = [ WorkPeriod._create(uid, AssistanceModel._cloneDate(d)) for d in days ]
 
         """ cargar los datos de la base """
         logging.info('cargando los datos de los periodos')
-        timer = datetime.datetime.now()
         for uid, wps in wpss.items():
             scheds = []
             if uid in schedules:
@@ -290,17 +320,18 @@ class AssistanceModel:
                 for js in justifications[uid]:
                     js._loadWorkedPeriods(wps)
 
-        logging.info(datetime.datetime.now() - timer)
-
         return wpss
 
     def getStatistics(self, con, userIds, start, end):
         wpss = self.getWorkPeriods(con, userIds, start, end)
         totalStats = []
         for uid in wpss.keys():
-            stats = WpStatistics(uid)
+            stats = WpStatistics()
+            stats.userId = uid
+            pos = Position.findByUser(con, [uid])
+            stats.position = pos[0].name if len(pos) > 0 else None
             for wp in wpss[uid]:
-                stats.updateStatistics(wp)
+                stats.updateStatistics(con, wp)
             totalStats.append(stats)
         return self._classifyByUserId(totalStats)
 
@@ -323,3 +354,23 @@ class AssistanceModel:
                 aData.append(AssistanceData(uid, ws))
 
         return aData
+
+
+    def createSingleDateJustification(self,con, date, userId, ownerId, justClazz, justModule):
+        module = importlib.import_module(justModule)
+        clazz = getattr(module, justClazz)
+        return clazz.create(con, date, userId, ownerId)
+
+
+    def createRangedTimeWithoutReturnJustification(self, con, start, userId, ownerId, justClazz, justModule):
+        # obtengo el schedule correspondiente
+        # saco el end del schedule
+        pass
+
+
+    def createRangedTimeWithReturnJustification(self, con, start, end, userId, ownerId, justClazz, justModule):
+        assert isinstance(start, datetime.datetime)
+        assert isinstance(end, datetime.datetime)
+        module = importlib.import_module(justModule)
+        clazz = getattr(module, justClazz)
+        return clazz.create(con, start, end, userId, ownerId)

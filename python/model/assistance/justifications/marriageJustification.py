@@ -141,16 +141,15 @@ class MarriageJustification(RangedJustification):
 
     dao = MarriageJustificationDAO
     registry = inject.instance(Registry).getRegistry('marriageJustification')
+    identifier = 'Matrimonio'
 
-    def __init__(self, userId, ownerId, start, days = 0):
-        assert isinstance(start, datetime.date)
+    def __init__(self, userId = None, ownerId = None, start = None, days = 0):
         super().__init__(start, days, userId, ownerId)
+        self.identifier = MarriageJustification.identifier
+        self.classType = RangedJustification.__name__
 
     def getIdentifier(self):
-        return 'Matrimonio'
-
-    def getIdentifier(self):
-        return 'Maternidad'
+        return self.identifier
 
     def setEnd(self, date):
         assert isinstance(date, datetime.date)
@@ -161,13 +160,14 @@ class ChildMarriageJustification(RangedJustification):
 
     dao = ChildMarriageJustificationDAO
     registry = inject.instance(Registry).getRegistry('childMarriageJustification')
+    identifier = 'Matrimonio del hijo'
 
-    def __init__(self, userId, ownerId, start, days = 0):
-        assert isinstance(start, datetime.date)
+    def __init__(self, userId = None, ownerId = None, start = None, days = 0):
         super().__init__(start, days, userId, ownerId)
+        self.identifier = ChildMarriageJustification.identifier
 
     def getIdentifier(self):
-        return 'Matrimonio del hijo'
+        return self.identifier
 
     def setEnd(self, date):
         assert isinstance(date, datetime.date)

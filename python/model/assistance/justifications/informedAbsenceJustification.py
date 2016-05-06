@@ -5,7 +5,7 @@ from model.assistance.justifications.status import Status
 from model.assistance.justifications.justifications import SingleDateJustification
 from model.users.users import UserDAO
 
-import datetime
+import datetime, uuid
 
 
 class InformedAbsenceJustificationDAO(AssistanceDAO):
@@ -36,7 +36,7 @@ class InformedAbsenceJustificationDAO(AssistanceDAO):
     @classmethod
     def _fromResult(cls, con, r):
         date = datetime.datetime.combine(r['jdate'], datetime.time.min)
-        j = InformedAbsenceJustification(r['user_id'], r['owner_id'], date)
+        j = InformedAbsenceJustification(date, r['user_id'], r['owner_id'])
         j.id = r['id']
         j.setStatus(Status.getLastStatus(con, j.id))
         return j
@@ -95,9 +95,12 @@ class InformedAbsenceJustificationDAO(AssistanceDAO):
 class InformedAbsenceJustification(SingleDateJustification):
 
     dao = InformedAbsenceJustificationDAO
+    identifier = "Ausente con aviso"
 
-    def __init__(self, userId, ownerId, date):
+    def __init__(self, date = None, userId = None, ownerId = None):
         super().__init__(date, userId, ownerId)
+        self.identifier = InformedAbsenceJustification.identifier
+        self.classType = SingleDateJustification.__name__
 
     def getIdentifier(self):
-        return "Ausente con aviso"
+        return self.identifier

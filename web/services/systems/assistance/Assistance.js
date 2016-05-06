@@ -14,4 +14,40 @@ function Assistance (Utils, Session, $wamp) {
 		return $wamp.call('assistance.getJustifications',[userId, start, end, isAll]);
 	}
 
+	this.createSingleDateJustification = function(date, userId, justClazz, justModule) {
+		return new Promise(function(cok, cerr) {
+      var sid = Session.getSessionId();
+  		$wamp.call('assistance.createSingleDateJustification', [sid, date, userId, justClazz, justModule])
+      .then(function(v) {
+        cok(v);
+      },function(err) {
+        cerr(err);
+      });
+    });
+	}
+
+	this.createRangedTimeWithReturnJustification = function(start, end, userId, justClazz, justModule) {
+		return new Promise(function(cok, cerr) {
+      var sid = Session.getSessionId();
+  		$wamp.call('assistance.createRangedTimeWithReturnJustification', [sid, start, end, userId, justClazz, justModule])
+      .then(function(v) {
+        cok(v);
+      },function(err) {
+        cerr(err);
+      });
+    });
+	}
+
+	this.changeStatus = function(justification, status) {
+		return new Promise(function(cok, cerr) {
+      var sid = Session.getSessionId();
+  		$wamp.call('assistance.changeStatus', [sid, justification, status])
+      .then(function(v) {
+        cok(v);
+      },function(err) {
+        cerr(err);
+      });
+    });
+	}
+
 };

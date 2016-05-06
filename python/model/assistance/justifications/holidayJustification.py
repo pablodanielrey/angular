@@ -34,7 +34,7 @@ class HolidayJustificationDAO(AssistanceDAO):
     @classmethod
     def _fromResult(cls, con, r):
         date = datetime.datetime.combine(r['date'], datetime.time.min)
-        c = HolidayJustification(r['user_id'], r['owner_id'], date)
+        c = HolidayJustification(date, r['user_id'], r['owner_id'])
         c.id = r['id']
         c.setStatus(Status.getLastStatus(con, c.id))
         return c
@@ -93,9 +93,12 @@ class HolidayJustificationDAO(AssistanceDAO):
 class HolidayJustification(SingleDateJustification):
 
     dao = HolidayJustificationDAO
+    identifier = "Feriado"
 
-    def __init__(self, userId, ownerId, date):
+    def __init__(self, date = None, userId = None, ownerId = None):
         super().__init__(date, userId, ownerId)
+        self.identifier = HolidayJustification.identifier
+        self.classType = SingleDateJustification.__name__
 
     def getIdentifier(self):
-        return "Feriado"
+        return self.identifier

@@ -140,7 +140,8 @@ class PreExamJustification(RangedJustification):
 
     def __init__(self, userId, ownerId, start, days = 0):
         super().__init__(start, days, userId, ownerId)
-        self.type = 'Pre exámen'
+        self.typeName = 'Pre exámen'
+        self.classType = RangedJustification.__name__
 
     def setEnd(self, date):
         assert isinstance(date, datetime.date)
@@ -160,7 +161,7 @@ class SchoolPreExamJustification(PreExamJustification):
         self.identifier = SchoolPreExamJustification.identifier
 
     def getIdentifier(self):
-        return self.type + " " + self.identifier
+        return self.typeName + " " + self.identifier
 
 
 class UniversityPreExamJustification(PreExamJustification):
@@ -173,4 +174,4 @@ class UniversityPreExamJustification(PreExamJustification):
         self.identifier = UniversityPreExamJustification.identifier
 
     def getIdentifier(self):
-        return self.type + " " + self.identifier
+        return self.typeName + " " + self.identifier

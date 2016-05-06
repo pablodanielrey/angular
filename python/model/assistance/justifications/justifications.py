@@ -7,7 +7,7 @@ from model.serializer.utils import JSONSerializable
 
 class Justification(JSONSerializable):
 
-    def __init__(self, userId, ownerId):
+    def __init__(self, userId = None, ownerId = None):
         self.id = None
         self.userId = userId
         self.ownerId = ownerId
@@ -18,8 +18,6 @@ class Justification(JSONSerializable):
         raise Exception('abstract method')
 
     def persist(self, con):
-        logging.info('persitiendo la justificacion : {}'.format(self.__dict__))
-
         jid = self.dao.persist(con, self)
         status = self.getStatus()
         status._setJustificationId(jid)
@@ -107,7 +105,7 @@ class Justification(JSONSerializable):
 
 class SingleDateJustification(Justification):
 
-    def __init__(self, date, userId, ownerId):
+    def __init__(self, date = None, userId = None, ownerId = None):
         super().__init__(userId, ownerId)
         self.date = date
 
@@ -121,7 +119,7 @@ class SingleDateJustification(Justification):
 
         date = self.getDate().date()
         for wp in wps:
-            if date == wp.date:
+            if date == wp.getDate():
                 self.wps.append(wp)
                 wp.addJustification(self)
 
@@ -131,8 +129,16 @@ class SingleDateJustification(Justification):
 
         seconds = 0
         for wp in self.wps:
-            seconds = seconds + (wp.getEndDate() - wp.getStartDate()).total_seconds()
+            if wp.getSchedule() is not None:
+                seconds = seconds + (wp.getEndDate() - wp.getStartDate()).total_seconds()
         return seconds
+
+    @classmethod
+    def create(cls, con, date, userId, ownerId):
+        j = cls(date, userId, ownerId)
+        j.persist(con)
+
+
 
 class RangedJustification(Justification):
 
@@ -167,12 +173,12 @@ class RangedJustification(Justification):
         else:
             return False
 
-    def __init__(self, start, days, userId, ownerId):
+    def __init__(self, start = None, days = 0, userId = None, ownerId = None):
         super().__init__(userId, ownerId)
 
         continuous = self.isContinuous()
         self.start = start
-        self.end = None if start is None or days is None else RangedJustification._getEnd(start, days, continuous) 
+        self.end = None if start is None or days is None else RangedJustification._getEnd(start, days, continuous)
 
     def _loadWorkedPeriods(self, wps):
         assert self.getStatus() is not None
@@ -180,7 +186,7 @@ class RangedJustification(Justification):
             return
 
         for wp in wps:
-            if self.start <= wp.date <= self.end:
+            if self.start <= wp.getDate() <= self.end:
                 self.wps.append(wp)
                 wp.addJustification(self)
 
@@ -196,17 +202,31 @@ class RangedJustification(Justification):
         seconds = 0
         if wp is None:
             for wp in self.wps:
-                seconds = seconds + (wp.getEndDate() - wp.getStartDate()).total_seconds()
+                wstart = wp.getStartDate()
+                wend = wp.getEndDate()
+                if wstart is None or wend is None:
+                    continue
+                seconds = seconds + (wend - wstart).total_seconds()
             return seconds
         else:
-            return (wp.getEndDate() - wp.getStartDate()).total_seconds()
+            wstart = wp.getStartDate()
+            wend = wp.getEndDate()
+            if wstart is None or wend is None:
+                return 0
+            return (wend - wstart).total_seconds()
+
 
 class RangedTimeJustification(Justification):
 
-    def __init__(self, start, end, userId, ownerId):
+    def __init__(self, start = None, end = None, userId = None, ownerId = None):
         super().__init__(userId, ownerId)
         self.start = start
         self.end = end
+
+    @classmethod
+    def create(cls, con, start, end, userId, ownerId):
+        j = cls(start, end, userId, ownerId)
+        j.persist(con)
 
     def _loadWorkedPeriods(self, wps):
         assert self.getStatus() is not None
@@ -214,7 +234,9 @@ class RangedTimeJustification(Justification):
             return
 
         for wp in wps:
-            if wp.getStartDate() <= self.end and  wp.getEndDate() >= self.start:
+            wstart = wp.getStartDate()
+            wend = wp.getEndDate()
+            if wstart is not None and wend is not None and wstart <= self.end and wend >= self.start:
                 self.wps.append(wp)
                 wp.addJustification(self)
 

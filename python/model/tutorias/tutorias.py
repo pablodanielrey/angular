@@ -31,12 +31,14 @@ class Tutoring:
                 'student': StudentDAO.findById(con, [ss.userId])[0]
             }
 
-
+    @classmethod
+    def findAll(cls, con):
+        return TutoringDAO.findAll(con)
 
 class TutoringDAO(DAO):
 
     dependencies = [UserDAO]
-    
+
     @classmethod
     def _createSchema(cls, con):
         super()._createSchema(con)
@@ -45,7 +47,7 @@ class TutoringDAO(DAO):
         try:
             cur.execute("""
                 create schema if not exists tutoring;
-                
+
                 create table if not exists tutoring.tutorings (
                     id varchar primary key,
                     tutor_id varchar not null references profile.users (id),
@@ -106,6 +108,28 @@ class TutoringDAO(DAO):
             cur.execute('delete from tutoring.situations where tutoring_id = %s', (tid,))
             cur.execute('delete from tutoring.tutorings where id = %s', (tid,))
             return (cur.rowcount > 0)
+
+        finally:
+            cur.close()
+
+    @classmethod
+    def findAll(cls, con):
+        cur = con.cursor()
+        try:
+            tutorings = []
+            cur.execute('select * from tutoring.tutorings')
+            for c in cur.fetchall():
+                tutoring = TutoringDAO._fromResult(c)
+
+                cur.execute('select * from tutoring.situations where tutoring_id = %s', (tutoring.id,))
+                for c2 in cur:
+                    tutoring.situations.append(TutoringDAO._situationFromResult(c2))
+
+                tutoring._loadTutor(con)
+                tutoring._loadStudents(con)
+                tutorings.append(tutoring)
+
+            return tutorings
 
         finally:
             cur.close()

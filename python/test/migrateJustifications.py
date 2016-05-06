@@ -107,7 +107,7 @@ def createAA(con):
             userId = jr['user_id']
             ownerId = jr['requestor_id']
             date = jr['jbegin']
-            just = InformedAbsenceJustification(userId, ownerId, date)
+            just = InformedAbsenceJustification(date, userId, ownerId)
             just.id = jr['id']
 
             if (len(just.findById(con,[just.id])) <= 0):
@@ -137,7 +137,7 @@ def createCompensatory(con):
             userId = jr['user_id']
             ownerId = jr['requestor_id']
             date = jr['jbegin']
-            just = CompensatoryJustification(userId, ownerId, date)
+            just = CompensatoryJustification(date, userId, ownerId)
             just.id = jr['id']
 
             if (len(just.findById(con,[just.id])) <= 0):
@@ -197,7 +197,7 @@ def createArt102(con):
             userId = jr['user_id']
             ownerId = jr['requestor_id']
             date = jr['jbegin']
-            just = Art102Justification(userId, ownerId, date)
+            just = Art102Justification(date, userId, ownerId)
             just.id = jr['id']
 
             if (len(just.findById(con,[just.id])) <= 0):
@@ -372,7 +372,7 @@ def createHoliday(con):
             userId = jr['user_id']
             ownerId = jr['requestor_id']
             date = jr['jbegin']
-            just = HolidayJustification(userId, ownerId, date)
+            just = HolidayJustification(date, userId, ownerId)
             just.id = jr['id']
 
             if (len(just.findById(con,[just.id])) <= 0):
@@ -400,7 +400,7 @@ def createStrike(con):
             userId = jr['user_id']
             ownerId = jr['requestor_id']
             date = jr['jbegin']
-            just = StrikeJustification(userId, ownerId, date)
+            just = StrikeJustification(date, userId, ownerId)
             just.id = jr['id']
 
             if (len(just.findById(con,[just.id])) <= 0):
@@ -428,7 +428,7 @@ def createBirthday(con):
             userId = jr['user_id']
             ownerId = jr['requestor_id']
             date = jr['jbegin']
-            just = BirthdayJustification(userId, ownerId, date)
+            just = BirthdayJustification(date, userId, ownerId)
             just.id = jr['id']
 
             if (len(just.findById(con,[just.id])) <= 0):
@@ -456,7 +456,7 @@ def createBloodDonation(con):
             userId = jr['user_id']
             ownerId = jr['requestor_id']
             date = jr['jbegin']
-            just = BloodDonationJustification(userId, ownerId, date)
+            just = BloodDonationJustification(date, userId, ownerId)
             just.id = jr['id']
 
             if (len(just.findById(con,[just.id])) <= 0):
@@ -484,7 +484,7 @@ def createEvaluation(con):
             userId = jr['user_id']
             ownerId = jr['requestor_id']
             date = jr['jbegin']
-            just = EvaluationJustification(userId, ownerId, date)
+            just = EvaluationJustification(date, userId, ownerId)
             just.id = jr['id']
 
             if (len(just.findById(con,[just.id])) <= 0):
@@ -512,7 +512,7 @@ def createSchedule(con):
             userId = jr['user_id']
             ownerId = jr['requestor_id']
             date = jr['jbegin']
-            just = ScheduleJustification(userId, ownerId, date)
+            just = ScheduleJustification(date, userId, ownerId)
             just.id = jr['id']
 
             if (len(just.findById(con,[just.id])) <= 0):
@@ -540,7 +540,7 @@ def createWeather(con):
             userId = jr['user_id']
             ownerId = jr['requestor_id']
             date = jr['jbegin']
-            just = WeatherJustification(userId, ownerId, date)
+            just = WeatherJustification(date, userId, ownerId)
             just.id = jr['id']
 
             if (len(just.findById(con,[just.id])) <= 0):
@@ -568,7 +568,7 @@ def createLibrarianDay(con):
             userId = jr['user_id']
             ownerId = jr['requestor_id']
             date = jr['jbegin']
-            just = LibrarianDayJustification(userId, ownerId, date)
+            just = LibrarianDayJustification(date, userId, ownerId)
             just.id = jr['id']
 
             if (len(just.findById(con,[just.id])) <= 0):
@@ -596,7 +596,7 @@ def createTraining(con):
             userId = jr['user_id']
             ownerId = jr['requestor_id']
             date = jr['jbegin']
-            just = TrainingJustification(userId, ownerId, date)
+            just = TrainingJustification(date, userId, ownerId)
             just.id = jr['id']
 
             if (len(just.findById(con,[just.id])) <= 0):
@@ -624,7 +624,7 @@ def createLateArrival(con):
             userId = jr['user_id']
             ownerId = jr['requestor_id']
             date = jr['jbegin']
-            just = LateArrivalJustification(userId, ownerId, date)
+            just = LateArrivalJustification(date, userId, ownerId)
             just.id = jr['id']
 
             if (len(just.findById(con,[just.id])) <= 0):
@@ -652,7 +652,7 @@ def createAuthority(con):
             userId = jr['user_id']
             ownerId = jr['requestor_id']
             date = jr['jbegin']
-            just = AuthorityJustification(userId, ownerId, date)
+            just = AuthorityJustification(date, userId, ownerId)
             just.id = jr['id']
 
             if (len(just.findById(con,[just.id])) <= 0):

@@ -3,6 +3,7 @@ import json
 import datetime
 import pytz
 from dateutil.tz import tzlocal
+import dateutil
 import sys
 sys.path.append('../../python')
 
@@ -173,25 +174,55 @@ def _secondsToHours(seconds):
     else:
         return "{0:02d}:{1:02d}".format(int((seconds / 60) / 60), int((seconds / 60) % 60))
 
-def statsToPyoo(stats, users, offices):
+def sortOfficeUsers(users, stats):
+    """
+        ordena los usuarios de acuerdo a los cargos que tienen
+        usa el segundo caracter del cargo como orden.
+    """
+    pos = {}
+    pos['xxx'] = []
+    for uid in users:
+        if uid not in stats:
+            continue
 
+        if stats[uid][0].position is None:
+            pos['xxx'].append(uid)
+            continue
+
+        if stats[uid][0].position not in pos:
+            pos[stats[uid][0].position] = []
+        pos[stats[uid][0].position].append(uid)
+
+    ks = list(pos.keys())
+    ks.sort(key=lambda x: x[1])
+
+    r = []
+    for k in ks:
+        r.extend(pos[k])
+    return r
+
+
+def createReportDir():
+    import os
+    newpath = '/tmp/reporte-asistencia-{}'.format(datetime.datetime.now())
+    if not os.path.exists(newpath):
+        os.makedirs(newpath)
+    return newpath
+
+def statsToPyoo(rp, stats, users, offices):
     import uuid
-    f = str(uuid.uuid4())
-    fn = '/tmp/{}.ods'.format(f)
-
     import pyoo
     calc = pyoo.Desktop('localhost', 2002)
     doc = calc.open_spreadsheet('templateStats.ods')
     try:
         sheetIndex = 0
-        io = 0
+        io = 1
         for off in offices:
 
             sheet = doc.sheets[0]
-            sheet[io,0].value = 'Oficina'
-            sheet[io,1].value = off.name
+            sheet[io,0].value = off.name
 
-            i = io + 1
+            i = io + 2
             for uid in off.users:
                 user = findUser(uid, users)
                 if user:
@@ -199,18 +230,22 @@ def statsToPyoo(stats, users, offices):
                     sheet = doc.sheets[0]
 
                     sheet[i,0].value = user.name + " " + user.lastname
-                    sheet[i,1].value = _secondsToHours(status.secondsToWork)
-                    sheet[i,2].value = _secondsToHours(status.secondsWorked)
-                    sheet[i,3].value = _secondsToHours(status.secondsLate)
-                    sheet[i,4].value = status.countLate
-                    sheet[i,5].value = _secondsToHours(status.secondsEarly)
-                    sheet[i,6].value = status.countEarly
-                    sheet[i,7].value = status.countAbsences
-                    sheet[i,8].value = status.countJustificatedAbsences
+                    sheet[i,1].value = status.position if status.position is not None else ''
+
+                    sheet[i,2].value = _secondsToHours(status.secondsToWork)
+                    sheet[i,3].value = _secondsToHours(status.secondsWorked)
+                    sheet[i,4].value = _secondsToHours(status.secondsLate)
+                    sheet[i,5].value = status.countLate
+                    sheet[i,6].value = _secondsToHours(status.secondsEarly)
+                    sheet[i,7].value = status.countEarly
+
+                    sheet[i,8].value = status.countAbsences
+                    sheet[i,9].value = status.countJustificatedAbsences
 
                     i = i + 1
 
             io = i + 1
+
 
         sheetIndex = 2
         # los sheets de cada oficina
@@ -222,50 +257,68 @@ def statsToPyoo(stats, users, offices):
             if off.name is None:
                 off.name = 'Oficina {}'.format(sheetIndex)
 
-            logging.info(off.name)
+            logging.info('Generando : {} - {}'.format(off.id, off.name))
+
             sheet = doc.sheets.copy('Modelo Detalle de Oficina', 'Detalle {} {}'.format(off.name, sheetIndex), sheetIndex)
             sheetIndex = sheetIndex + 1
 
+            sheet[1,0].value = off.name
             i = 3
 
-            for uid in off.users:
+            for uid in sortOfficeUsers(off.users, stats):
                 user = findUser(uid, users)
                 if user:
                     status = stats[user.id][0]
 
                     for st in status.dailyStats:
                         sheet[i,0].value = user.name + " " + user.lastname
+                        sheet[i,1].value = status.position if status.position is not None else ''
                         sheet[i,2].value = st.date
                         sheet[i,3].value = st.start if st.start is not None else ''
                         sheet[i,4].value = st.end if st.end is not None else ''
-                        sheet[i,5].value = _secondsToHours(st.periodSeconds) if st.periodSeconds > 0 else ''
+                        sheet[i,5].value = _secondsToHours(st.periodSeconds) if st.periodSeconds > 60 else ''
                         sheet[i,6].value = st.iin if st.iin is not None else ''
-                        sheet[i,7].value = st.out if st.out is not None else ''
-                        sheet[i,8].value = _secondsToHours(st.workedSeconds) if st.workedSeconds > 0 else ''
 
-                        if st.workedSeconds > 0:
-                            aditional = int(st.workedSeconds - st.periodSeconds)
-                            if aditional > 0:
-                                sheet[i,9].value = '+{}'.format(_secondsToHours(aditional))
-                                sheet[i,9].text_color = 0x669900
-                            elif aditional < 0:
-                                aditional = aditional * -1
-                                sheet[i,9].value = '-{}'.format(_secondsToHours(aditional))
-                                if aditional > (30 * 60):
-                                    sheet[i,9].text_color = 0xffffff
-                                    sheet[i,9].background_color = 0xcc3300
-                                else:
-                                    sheet[i,9].text_color = 0xcc3300
+                        if not st.isBoss:
+                            sheet[i,7].value = st.out if st.out is not None else ''
+                            sheet[i,8].value = _secondsToHours(st.workedSeconds) if st.workedSeconds > 60 else ''
+
+                            if st.workedSeconds > 0:
+                                aditional = int(st.workedSeconds - st.periodSeconds)
+                                if aditional > 60:
+                                    sheet[i,9].value = '+{}'.format(_secondsToHours(aditional))
+                                    sheet[i,9].text_color = 0x669900
+                                elif aditional < 60:
+                                    aditional = aditional * -1
+                                    sheet[i,9].value = '-{}'.format(_secondsToHours(aditional))
+                                    if aditional > (30 * 60):
+                                        sheet[i,9].text_color = 0xffffff
+                                        sheet[i,9].background_color = 0xcc3300
+                                    else:
+                                        sheet[i,9].text_color = 0xcc3300
 
                         sheet[i,10].value = st.justification.identifier if st.justification is not None else ''
                         sheet[i,11].value = _secondsToHours(st.justification.seconds) if st.justification is not None else ''
                         if st.justification is not None:
                             if st.justification.status == 1:
                                 sheet[i,12].value = 'P'
+                                sheet[i,12].text_color = 0xffffff
+                                sheet[i,12].background_color = 0x0000cc
+
                             elif st.justification.status == 2:
                                 sheet[i,12].value = 'A'
+                                sheet[i,12].text_color = 0xffffff
+                                sheet[i,12].background_color = 0x669900
+                                sheet[i,10].text_color = 0xffffff
+                                sheet[i,10].background_color = 0x669900
+                                sheet[i,11].text_color = 0xffffff
+                                sheet[i,11].background_color = 0x669900
+
                             elif st.justification.status == 3:
                                 sheet[i,12].value = 'R'
+                                sheet[i,12].text_color = 0xffffff
+                                sheet[i,12].background_color = 0xcc3300
+
                             elif st.justification.status == 4:
                                 sheet[i,12].value = 'C'
 
@@ -274,14 +327,34 @@ def statsToPyoo(stats, users, offices):
                             sheet[i,13].text_color = 0xffffff
                             sheet[i,13].background_color = 0xcc3300
 
+                        elif not st.isBoss and (st.start is not None and st.end is not None) and (st.iin is None or st.out is None) and (st.justification is None):
+                            sheet[i,13].value = 'M'
+                            sheet[i,13].text_color = 0xffffff
+                            sheet[i,13].background_color = 0xcc3300
+
                         i = i + 1
 
             #index = index + 1
-        fn = '/tmp/prueba.ods'
-        doc.save(fn)
+        f = str(uuid.uuid4())
+        fn = '{}/assistencia-{}.xlsx'.format(rp, offices[0].name)
+        logging.info('salvando : {}'.format(fn))
+        doc.save(fn, pyoo.FILTER_EXCEL_2007)
 
     finally:
         doc.close()
+
+def createZipFile(rp):
+    import zipfile
+    import os
+    fn = '/tmp/reporte-asistencia.zip'
+    with zipfile.ZipFile(fn, mode='w', compression=zipfile.ZIP_BZIP2) as rpzip:
+        for root, dir, files in os.walk(rp):
+            for f in files:
+                fm = '{}/{}'.format(root, f)
+                logging.info('escribiendo : {}'.format(fm))
+                rpzip.write(fm)
+    logging.info('generado : {}'.format(fn))
+
 
 def _getOffices(con):
     return Office.findById(con, Office.findAll(con))
@@ -360,8 +433,20 @@ if __name__ == '__main__':
 
     logging.getLogger().setLevel(logging.INFO)
 
-    reg = inject.instance(Registry)
+    rstart = datetime.datetime.now() - datetime.timedelta(days=7)
+    rend = datetime.datetime.now()
+    if len(sys.argv) >= 2:
+        import dateutil
+        rstart = dateutil.parser.parse(sys.argv[1], dayfirst=True)
+        rend = dateutil.parser.parse(sys.argv[2], dayfirst=True)
 
+    rstart = rstart.replace(tzinfo=dateutil.tz.tzlocal())
+    rend = rend.replace(tzinfo=dateutil.tz.tzlocal())
+
+    logging.info('Generando reporte de asistencia desde : {} hasta {}'.format(rstart, rend))
+
+    reg = inject.instance(Registry)
+    rp = createReportDir()
     conn = Connection(reg.getRegistry('dcsys'))
     con = conn.get()
     try:
@@ -370,30 +455,16 @@ if __name__ == '__main__':
         AssistanceDAO._createSchema(con)
 
         offices = _getOffices(con)
+        offices.sort(key=lambda x: x.name)
+
         users, userIds = _getUsers(con)
+
         a = inject.instance(AssistanceModel)
-        stats = a.getStatistics(con, userIds, datetime.datetime.now() - datetime.timedelta(days=30), datetime.datetime.now())
-        #wps = a.getWorkPeriods(con, userIds, datetime.datetime.now() - datetime.timedelta(days=97), datetime.datetime.now())
-        statsToPyoo(stats, users, offices)
+        stats = a.getStatistics(con, userIds, rstart, rend)
 
-
-        """
-        logging.info('Calculando estadísticas')
-        timer = datetime.datetime.now()
-        for uid, wp in wps.items():
-
-            # las obtengo de la base
-            #stats = WpStatistics.findByUserId(con, uid, datetime.datetime.now() - datetime.timedelta(days=97), datetime.datetime.now())
-
-            # las calculo y las persisto en la base
-            #stats = a.calculateStatistics(wp)
-            #stats.persist(con)
-            #con.commit()
-
-        logging.info(datetime.datetime.now() - timer)
-        """
-
-        #workedPeriodsToPyoo(wps, users)
+        for office in offices:
+            statsToPyoo(rp, stats, users, [office])
 
     finally:
         conn.put(con)
+    createZipFile(rp)

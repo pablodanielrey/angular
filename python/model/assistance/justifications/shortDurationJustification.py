@@ -118,14 +118,16 @@ class ShortDurationJustification(RangedJustification):
 
     dao = ShortDurationJustificationDAO
     registry = inject.instance(Registry).getRegistry('shortDurationJustification')
+    identifier = 'Corta Duración'
 
-    def __init__(self, userId, ownerId, start, days = 0, number = None):
-        assert isinstance(start, datetime.date)
+    def __init__(self, userId = None, ownerId = None, start = None, days = 0, number = None):
         super().__init__(start, days, userId, ownerId)
+        self.identifier = ShortDurationJustification.identifier
         self.number = number
+        self.classType = RangedJustification.__name__
 
     def getIdentifier(self):
-        return 'Corta Duración'
+        return self.identifier
 
     def setEnd(self, date):
         assert isinstance(date, datetime.date)

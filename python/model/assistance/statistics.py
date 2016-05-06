@@ -24,6 +24,7 @@
 
 """
 from model.users.users import UserDAO
+from model.assistance.boss import Boss, BossDAO
 from dateutil.tz import tzlocal
 
 class JustificationStatistics:
@@ -45,11 +46,17 @@ class DailyWpStatistics:
     """ estadisticas diarias """
 
     @staticmethod
-    def _create(wp, stats):
+    def _create(con, wp, stats):
         assert wp is not None
         ds = DailyWpStatistics()
         ds.userId = wp.userId
         ds.date = wp.date
+        if wp.date is not None:
+            bs = Boss.findByUserId(con, [ds.userId], ds.date)
+            if len(bs) <= 0:
+                ds.isBoss = false
+            else:
+                ds.isBoss = bs[0].isBoss
         ds.start = wp.getStartDate()
         ds.end = wp.getEndDate()
         ds.iin = None if wp.getStartLog() is None else wp.getStartLog().log.astimezone(tzlocal()).replace(tzinfo=None)
@@ -108,11 +115,13 @@ class DailyWpStatistics:
         self.earlySeconds = 0
         self.absence = False
         self.justificatedAbsence = False
+        self.isBoss = False
 
 class WpStatistics:
 
-    def __init__(self, userId):
-        self.userId = userId
+    def __init__(self):
+        self.userId = None
+        self.position = None                # cargo que ocupa en la facultad
         self.secondsToWork = 0              # total que deberia trabajar
         self.secondsWorked = 0              # total trabajado
         self.secondsLate = 0                # total de llegadas tarde
@@ -151,9 +160,9 @@ class WpStatistics:
     def getEndDate(self):
         return self.dailyStats[-1].date
 
-    def updateStatistics(self, wp):
+    def updateStatistics(self, con, wp):
         assert self.userId == wp.userId
-        DailyWpStatistics._create(wp, self)
+        DailyWpStatistics._create(con, wp, self)
 
     def persist(self, con):
         WpStatisticsDAO.persist(con, self)
@@ -166,7 +175,7 @@ class WpStatistics:
 
 class WpStatisticsDAO:
 
-    dependencies = [UserDAO]
+    dependencies = [UserDAO, BossDAO]
 
     @classmethod
     def _createSchema(cls, con):

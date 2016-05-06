@@ -12,6 +12,82 @@
   font-size: 1.5em;
 }
 
+
+/* ******************************************************************
+  ESTO LO AGREGO EMANUEL - LO TIENE QUE COLOCAR WALTER DONDE DEBERIA
+ * **************************************************************** */
+
+
+ .request .contentRequestSelected.compensatory .compensatorio {
+   display:block;
+ }
+
+ .request .contentRequestSelected.informedAbsence .ausenteConAviso {
+   display:block;
+ }
+
+ .request .contentRequestSelected.oTWithReturn .boletaDeSalidaConRetorno {
+   display:block;
+ }
+
+ /*
+ Estados posibles
+ ----------------
+   UNDEFINED = 0
+   PENDING = 1
+   APPROVED = 2
+   REJECTED = 3
+   CANCELED = 4
+ */
+
+ .request .itemRequest .statePending {
+   display: none;
+ }
+
+ .request .itemRequest .stateApproved {
+   display: none;
+ }
+
+ .request .itemRequest .stateRejected {
+   display:none;0
+ }
+
+ .request .itemRequest .btnTrash {
+   display: none;
+ }
+
+
+ .request .itemRequest .stateCanceled {
+   display: none;
+ }
+
+ .request .itemRequest.status1 .statePending {
+   display: flex;
+   display: -webkit-flex;
+ }
+
+ .request .itemRequest.status1 .btnTrash {
+   display: flex;
+   display: -webkit-flex;
+ }
+
+ .request .itemRequest.status2 .stateApproved {
+   display: flex;
+   display: -webkit-flex;
+ }
+
+ .request .itemRequest.status3 .stateRejected {
+   display: flex;
+   display: -webkit-flex;
+ }
+
+ .request .itemRequest.status4 .stateCanceled {
+   display: flex;
+   display: -webkit-flex;
+ }
+
+ /* ******************     FIN     ****************************** */
+
 /******************************************************
 ****** INICIO PANTALLA DE CREAR TUTOTRIA **************
 *******************************************************/
@@ -317,20 +393,7 @@
   overflow-x: auto;
 }
 
-.request.solicitudesGrupo .requestOwn,
-.request.solicitudesGrupo .loadingRequests {
-  display: none;
-}
 
-.request.solicitudesPersonales .requestGroup,
-.request.solicitudesPersonales .loadingRequests {
-  display: none;
-}
-
-.request.cargandoSolicitudes .requestOwn,
-.request.cargandoSolicitudes .requestGroup {
-  display: none;
-}
 
 .request .loadingRequests {
   width: 100%;
@@ -355,6 +418,18 @@
   margin-bottom: 10px;
 }
 
+
+.request.solicitudesGrupo .loadingRequests {
+  display: none;
+}
+
+.request.solicitudesPersonales .loadingRequests {
+  display: none;
+}
+
+.request.cargandoSolicitudes .requestContainer {
+  display: none;
+}
 
 
 .request .itemRequest {
@@ -398,6 +473,12 @@
           transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
 }
 
+
+.request .contentRequestSelected .compensatorio,
+.request .contentRequestSelected .ausenteConAviso,
+.request .contentRequestSelected .boletaDeSalidaConRetorno {
+  display:none;
+}
 
 .request .contentHeaderRequest {
   display: flex;
@@ -697,24 +778,79 @@
   color: white;
 }
 
+
+
+/*
 .request.solicitudesGrupo .state {
   display: none;
 }
 
 .request.solicitudesGrupo .typeRequest {
   display: flex;
-  display: -webkit-flex; /* Safari */
-  display: -moz-flex; /* mozilla */
+  display: -webkit-flex;
+  display: -moz-flex;
   flex-direction:row;
-  -webkit-flex-direction:row; /* Safari */
-  -moz-flex-direction:row; /* mozilla */
+  -webkit-flex-direction:row;
+  -moz-flex-direction:row;
   align-items: center;
-  -webkit-align-items:center; /* Safari */
-  -moz-align-items:center; /* mozilla */
+  -webkit-align-items:center;
+  -moz-align-items:center;
   width: 350px;
-  /*background-color: red;*/
 }
 
+*/
+
+
+
+
+/******************** SOLICITUDES TIPOS *****************************/
+
+/* Justifica horas */
+.request .itemRequest.RangedTimeJustification {}
+
+.request .itemRequest.RangedTimeJustification .infoRequest .displaySingleDate,
+.request .itemRequest.RangedTimeJustification .infoRequest .displayRangedDate {
+  display: none;
+}
+
+/* Justifica un día */
+.request .itemRequest.SingleDateJustification {}
+
+.request .itemRequest.SingleDateJustification .infoRequest .displayRangedTime,
+.request .itemRequest.SingleDateJustification .infoRequest .displayRangedDate {
+  display:none;
+}
+
+/* Justifica un rango de fechas */
+.request .itemRequest.RangedJustification {}
+.request .itemRequest.RangedJustification .infoRequest .displaySingleDate,
+.request .itemRequest.RangedJustification .infoRequest .displayRangedTime {
+  display: none;
+}
+
+ /******************* SOLICITUDES PERSONALES ************************/
+
+.request.solicitudesPersonales .itemRequest .nameRequest {
+  display:none;
+}
+
+ /******************* SOLICITUDES MI GRUPO *************************/
+
+ .request .itemRequest .actionBtns {
+   display:none;
+ }
+
+ .request.solicitudesGrupo .itemRequest.status1 .actionBtns {
+   display:block;
+   /*display: flex;*/
+   /*display: -webkit-flex;*/
+ }
+
+ .request.solicitudesGrupo .itemRequest.status1 .statePending,
+ .request.solicitudesGrupo .itemRequest.status1 .trashContainer,
+ .request.solicitudesGrupo .itemRequest.status1 .state {
+   display:none;
+ }
 
 
 /**********************************************************************
@@ -907,5 +1043,8 @@
   .request .nameRequest {
     margin-right: 0px;
   }
+
+
+
 
 }
