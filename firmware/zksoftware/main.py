@@ -25,6 +25,7 @@ class Main:
         #parametros generales de zksoftware
         registry = reg.getRegistry('zksoftware')
 
+        self.period = int(registry.get('period'))
         host = registry.get('host')
         port = int(registry.get('port'))
         self.zk = ZkSoftware(host, port)
@@ -163,7 +164,7 @@ if __name__ == '__main__':
     logging.info('Iniciando el sincronizador de logs')
 
     main = Main()
-    rt = Periodic(10 * 60, _sincLogs, main)
+    rt = Periodic(main.period, _sincLogs, main)
 
     def close_sig_handler(signal,frame):
         logging.info('Cerrando sistema sincronizador')
