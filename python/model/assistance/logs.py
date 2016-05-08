@@ -62,6 +62,7 @@ class LogDAO(DAO):
         try:
             if not hasattr(log, 'id') or log.id is None:
                 log.id = str(uuid.uuid4())
+            cur.execute('set timezone to utc')
             cur.execute('insert into assistance.attlog (id, device_id, user_id, verifymode, log) '
                         'select %(id)s, %(deviceId)s, %(userId)s, %(verifyMode)s, %(log)s where '
                         'not exists (select 1 from assistance.attlog where id = %(id)s)', log.__dict__)
