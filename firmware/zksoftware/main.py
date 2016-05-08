@@ -5,7 +5,6 @@ import datetime
 
 sys.path.append('../../python')
 
-from model.config import Config
 from model.utils import Periodic
 from model.users.users import Users
 from model.assistance.logs import Logs
