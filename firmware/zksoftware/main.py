@@ -68,7 +68,7 @@ class Main:
             con = self._connect()
             try:
                 offices_temp = Office.findById(con, ['45cc065a-7033-4f00-9b19-d7d097129db3'])
-                assert len(offces_temp) == 1
+                assert len(offices_temp) == 1
                 office = offices_temp[0]
 
                 logging.info('transformando logs al formato del sistema')
