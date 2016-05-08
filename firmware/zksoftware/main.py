@@ -160,9 +160,6 @@ if __name__ == '__main__':
 
     logging.basicConfig(filename='/var/log/firmware-sync.log',format='%(asctime)s %(levelname)s %(message)s',level=logging.DEBUG)
 
-    inject.configure(config_injector)
-    config = inject.instance(Config)
-
     logging.info('Iniciando el sincronizador de logs')
 
     main = Main()
