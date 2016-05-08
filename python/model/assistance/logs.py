@@ -3,18 +3,6 @@
 
 from model.serializer.utils import JSONSerializable
 
-class Log(JSONSerializable):
-
-    def __init__(self):
-        self.id = None
-        self.deviceId = None
-        self.userId = None
-        self.verifyMode = 0
-        self.log = None
-        self.created = None
-
-    def between(self, start, end):
-        return (self.log >= start and self.log <= end)
 
 
 from model.dao import DAO
@@ -31,7 +19,7 @@ class LogDAO(DAO):
         try:
             cur.execute("""
               CREATE SCHEMA IF NOT EXISTS assistance;
-              
+
               CREATE TABLE IF NOT EXISTS assistance.attlog (
                 id VARCHAR NOT NULL PRIMARY KEY,
                 device_id VARCHAR NOT NULL,
@@ -65,3 +53,35 @@ class LogDAO(DAO):
 
         finally:
             cur.close()
+
+    @classmethod
+    def persist(cls, con, log):
+        assert con is not None
+        assert log is not None
+        cur = con.cursor()
+        try:
+            if not hasattr(log, 'id') or log.id is None:
+                log.id = str(uuid.uuid4())
+            cur.execute('insert into assistance.attlog (id, device_id, user_id, verifymode, log) '
+                        'select %(id)s, %(deviceId)s, %(userId)s, %(verifyMode)s, %(log)s where '
+                        'not exists (select 1 from assistance.attlog where id = %(id)s)', log.__dict__)
+
+        finally:
+            cur.close()
+
+
+class Log(JSONSerializable):
+
+    def __init__(self):
+        self.id = None
+        self.deviceId = None
+        self.userId = None
+        self.verifyMode = 0
+        self.log = None
+        self.created = None
+
+    def between(self, start, end):
+        return (self.log >= start and self.log <= end)
+
+    def persist(self, con):
+        LogDAO.persist(con, self)

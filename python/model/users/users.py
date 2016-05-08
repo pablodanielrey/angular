@@ -13,9 +13,6 @@ from model.dao import DAO
 from model.files.files import FileDAO
 
 
-
-
-
 class UserDAO(DAO):
     ''' DAO para los usuarios '''
 
@@ -330,58 +327,6 @@ class StudentDAO(DAO):
             cur.close()
 
 
-if __name__ == '__main__':
-
-    logging.getLogger().setLevel(logging.INFO)
-    import sys
-
-    conn = inject.instance(Connection)
-    con = conn.getConnection()
-
-    dni = sys.argv[1]
-    assert dni is not None
-
-    uid = None
-
-    u = UserDAO.findByDni(con, dni)
-    if u is None:
-        u = User()
-        u.dni = dni
-        u.name = sys.argv[2]
-        u.lastname = sys.argv[3]
-        uid = UserDAO.persist(con, u)
-    else:
-        (id, version) = u
-        uid = id
-
-    s = Student()
-    s.id = uid
-    s.studentNumber = sys.argv[4]
-    s.condition = 'Regular'
-
-    StudentDAO.persist(con, s)
-    st = StudentDAO.findById(con, s.id)
-    logging.info(st.__dict__)
-
-    passw = UserPasswordDAO.findByUserId(con, uid)
-    if passw is None:
-        up = UserPassword()
-        up.userId = uid
-        up.username = dni
-        up.password = s.studentNumber
-        UserPasswordDAO.persist(con, up)
-
-    passw = UserPasswordDAO.findByUserId(con, uid)
-    for p in passw:
-        logging.info(p.__dict__)
-
-    con.commit()
-    conn.put(con)
-
-
-
-
-
 
 ############### UserPassword ###############
 class UserPassword(JSONSerializable):
@@ -664,9 +609,10 @@ class User(JSONSerializable):
         return self.dao.deleteById(con, [self.id])
 
     @classmethod
-    def findById(cls, con, id):
+    def findById(cls, con, ids):
         assert cls.dao is not None
-        return cls.dao.findById(con, id)
+        assert isinstance(ids, list)
+        return cls.dao.findById(con, ids)
 
     @classmethod
     def findAll(cls, con):

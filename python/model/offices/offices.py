@@ -14,6 +14,12 @@ class Office:
         self.email = None
         self.users = None
 
+    def appendUser(self, userId):
+        if self.users is None:
+            self.users = [userId]
+        elif userId not in self.users:
+            self.users.append(userId)
+
     @classmethod
     def findAll(cls, con):
         return OfficeDAO.findAll(con)
