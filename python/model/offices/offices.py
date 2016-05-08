@@ -20,6 +20,9 @@ class Office:
         elif userId not in self.users:
             self.users.append(userId)
 
+    def persist(self, con):
+        return OfficeDAO.persist(con, self)
+
     @classmethod
     def findAll(cls, con):
         return OfficeDAO.findAll(con)
