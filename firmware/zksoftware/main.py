@@ -6,10 +6,10 @@ import datetime
 sys.path.append('../../python')
 
 from model.utils import Periodic
-from model.users.users import Users
-from model.assistance.logs import Logs
+from model.users.users import User
+from model.assistance.logs import Log
 from model.assistance.utils import Utils
-from model.offices.offices import Offices
+from model.offices.offices import Office
 from model.registry import Registry
 from zksoftware.zkSoftware import ZkSoftware
 
@@ -74,7 +74,9 @@ class Main:
                     userData = User.findUserByDni(con, dni)
                     userId = None
                     if userData is None:
+                        (userId, version) = userData
                         user = User()
+                        user.id = userId
                         user.dni = l['PIN']
                         user.name = 'autogenerado asistencia'
                         user.lastname = 'autogenerado asistencia'
