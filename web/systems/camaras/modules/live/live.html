@@ -4,84 +4,299 @@
             <!-- <div class="openFilters" ng-click="toggleFilters()" ng-class="{true:'closeFilters',false:'openfilters'}[model.cerrado]">
               <button><i class="fa fa-cogs"></i> FILTROS</button>
             </div> -->
-            <div class="buttonFilters" ng-click='model.contentFiltersView = !model.contentFiltersView'>
+            <!-- <div class="buttonFilters" ng-click='model.contentFiltersView = !model.contentFiltersView'>
               <i class="fa fa-cogs" ></i>
             </div>
             <div class="buttonTams">
               <i class="fa fa-search-plus"></i>
-            </div>
+            </div> -->
             <div class="contentFilters  " ng-class="{false:'hidden'}[model.contentFiltersView]">
                 <div class="subContentFilters">
-                    <!-- <div>
-                      FILTROS
-                    </div> -->
-                    <div class="subContent">
-                      <h4>Subsuelo</h4> <br>
-                      <input type="checkbox"> <i class="fa fa-video-camera"></i> Todas<br>
-                      <input type="checkbox"> <i class="fa fa-video-camera"></i> 1<br>
-                      <input type="checkbox"> <i class="fa fa-video-camera"></i> 2<br>
-                      <input type="checkbox"> <i class="fa fa-video-camera"></i> 3<br>
-                      <input type="checkbox"> <i class="fa fa-video-camera"></i> 4<br>
-                      <input type="checkbox"> <i class="fa fa-video-camera"></i> 5<br>
-                    </div>
-                    <div class="subContent">
-                      <h4>P. Baja</h4> <br>
-                      <input type="checkbox"> <i class="fa fa-video-camera"></i> Todas<br>
-                      <input type="checkbox"> <i class="fa fa-video-camera"></i> 1<br>
-                      <input type="checkbox"> <i class="fa fa-video-camera"></i> 2<br>
-                      <input type="checkbox"> <i class="fa fa-video-camera"></i> 3<br>
-                      <input type="checkbox"> <i class="fa fa-video-camera"></i> 4<br>
-                      <input type="checkbox"> <i class="fa fa-video-camera"></i> 5<br>
-                    </div>
-                    <div class="subContent">
-                      <h4>1er Piso</h4> <br>
-                      <input type="checkbox"> <i class="fa fa-video-camera"></i> Todas<br>
-                      <input type="checkbox"> <i class="fa fa-video-camera"></i> 1<br>
-                      <input type="checkbox"> <i class="fa fa-video-camera"></i> 2<br>
-                      <input type="checkbox"> <i class="fa fa-video-camera"></i> 3<br>
-                      <input type="checkbox"> <i class="fa fa-video-camera"></i> 4<br>
-                      <input type="checkbox"> <i class="fa fa-video-camera"></i> 5<br>
-                    </div>
-                    <div class="subContent">
-                      <h4>2do Piso</h4> <br>
-                      <input type="checkbox"> <i class="fa fa-video-camera"></i> Todas<br>
-                      <input type="checkbox"> <i class="fa fa-video-camera"></i> 1<br>
-                      <input type="checkbox"> <i class="fa fa-video-camera"></i> 2<br>
-                      <input type="checkbox"> <i class="fa fa-video-camera"></i> 3<br>
-                      <input type="checkbox"> <i class="fa fa-video-camera"></i> 4<br>
-                      <input type="checkbox"> <i class="fa fa-video-camera"></i> 5<br>
-                    </div>
-                    <div class="subContent">
-                      <h4>3er Piso</h4> <br>
-                      <input type="checkbox"> <i class="fa fa-video-camera"></i> Todas<br>
-                      <input type="checkbox"> <i class="fa fa-video-camera"></i> 1<br>
-                      <input type="checkbox"> <i class="fa fa-video-camera"></i> 2<br>
-                      <input type="checkbox"> <i class="fa fa-video-camera"></i> 3<br>
-                      <input type="checkbox"> <i class="fa fa-video-camera"></i> 4<br>
-                      <input type="checkbox"> <i class="fa fa-video-camera"></i> 5<br>
-                    </div>
-                    <div class="subContent">
-                      <h4>4to Piso</h4> <br>
-                      <input type="checkbox"> <i class="fa fa-video-camera"></i> Todas<br>
-                      <input type="checkbox"> <i class="fa fa-video-camera"></i> 1<br>
-                      <input type="checkbox"> <i class="fa fa-video-camera"></i> 2<br>
-                      <input type="checkbox"> <i class="fa fa-video-camera"></i> 3<br>
-                      <input type="checkbox"> <i class="fa fa-video-camera"></i> 4<br>
-                      <input type="checkbox"> <i class="fa fa-video-camera"></i> 5<br>
-                    </div>
-                    <div class="subContent">
-                      <h4>5to Piso</h4> <br>
-                      <input type="checkbox"> <i class="fa fa-video-camera"></i> Todas<br>
-                      <input type="checkbox"> <i class="fa fa-video-camera"></i> 1<br>
-                      <input type="checkbox"> <i class="fa fa-video-camera"></i> 2<br>
-                      <input type="checkbox"> <i class="fa fa-video-camera"></i> 3<br>
-                      <input type="checkbox"> <i class="fa fa-video-camera"></i> 4<br>
-                      <input type="checkbox"> <i class="fa fa-video-camera"></i> 5<br>
-                    </div>
+
+
+                  <div class="CamPisos">
+                    <span>Planta Baja</span>
+                    <button class="SelectCam2" ng-click='model.contentFiltersView = !model.contentFiltersView'>
+                      <div>
+                        <i class="fa fa-video-camera fa-2x"></i
+                      </div>
+                      <div>
+                        Cámara 1
+                      </div>
+                    </button>
+                    <button class="SelectCam2" ng-click='model.contentFiltersView = !model.contentFiltersView'>
+                      <div>
+                        <i class="fa fa-video-camera fa-2x"></i>
+                      </div>
+                      <div>
+                        Cámara 2
+                      </div>
+                    </button>
+                    <button class="SelectCam2" ng-click='model.contentFiltersView = !model.contentFiltersView'>
+                      <div>
+                        <i class="fa fa-video-camera fa-2x"></i>
+                      </div>
+                      <div>
+                        Cámara 3
+                      </div>
+                    </button>
+                    <button class="SelectCam2" ng-click='model.contentFiltersView = !model.contentFiltersView'>
+                      <div>
+                        <i class="fa fa-video-camera fa-2x"></i>
+                      </div>
+                      <div>
+                        Cámara 4
+                      </div>
+                    </button>
+                    <button class="SelectCam2" ng-click='model.contentFiltersView = !model.contentFiltersView'>
+                      <div>
+                        <i class="fa fa-video-camera fa-2x"></i>
+                      </div>
+                      <div>
+                        Cámara 5
+                      </div>
+                    </button>
+                  </div>
+
+
+                  <div class="CamPisos">
+                    <span>1er Piso</span>
+                    <button class="SelectCam2" ng-click='model.contentFiltersView = !model.contentFiltersView'>
+                      <div>
+                        <i class="fa fa-video-camera fa-2x"></i
+                      </div>
+                      <div>
+                        Cámara 1
+                      </div>
+                    </button>
+                    <button class="SelectCam2" ng-click='model.contentFiltersView = !model.contentFiltersView'>
+                      <div>
+                        <i class="fa fa-video-camera fa-2x"></i>
+                      </div>
+                      <div>
+                        Cámara 2
+                      </div>
+                    </button>
+                    <button class="SelectCam2" ng-click='model.contentFiltersView = !model.contentFiltersView'>
+                      <div>
+                        <i class="fa fa-video-camera fa-2x"></i>
+                      </div>
+                      <div>
+                        Cámara 3
+                      </div>
+                    </button>
+                    <button class="SelectCam2" ng-click='model.contentFiltersView = !model.contentFiltersView'>
+                      <div>
+                        <i class="fa fa-video-camera fa-2x"></i>
+                      </div>
+                      <div>
+                        Cámara 4
+                      </div>
+                    </button>
+                    <button class="SelectCam2" ng-click='model.contentFiltersView = !model.contentFiltersView'>
+                      <div>
+                        <i class="fa fa-video-camera fa-2x"></i>
+                      </div>
+                      <div>
+                        Cámara 5
+                      </div>
+                    </button>
+                  </div>
+
+
+
+                  <div class="CamPisos">
+                    <span>2 Piso</span>
+                    <button class="SelectCam2" ng-click='model.contentFiltersView = !model.contentFiltersView'>
+                      <div>
+                        <i class="fa fa-video-camera fa-2x"></i
+                      </div>
+                      <div>
+                        Cámara 1
+                      </div>
+                    </button>
+                    <button class="SelectCam2" ng-click='model.contentFiltersView = !model.contentFiltersView'>
+                      <div>
+                        <i class="fa fa-video-camera fa-2x"></i>
+                      </div>
+                      <div>
+                        Cámara 2
+                      </div>
+                    </button>
+                    <button class="SelectCam2" ng-click='model.contentFiltersView = !model.contentFiltersView'>
+                      <div>
+                        <i class="fa fa-video-camera fa-2x"></i>
+                      </div>
+                      <div>
+                        Cámara 3
+                      </div>
+                    </button>
+                    <button class="SelectCam2" ng-click='model.contentFiltersView = !model.contentFiltersView'>
+                      <div>
+                        <i class="fa fa-video-camera fa-2x"></i>
+                      </div>
+                      <div>
+                        Cámara 4
+                      </div>
+                    </button>
+                    <button class="SelectCam2" ng-click='model.contentFiltersView = !model.contentFiltersView'>
+                      <div>
+                        <i class="fa fa-video-camera fa-2x"></i>
+                      </div>
+                      <div>
+                        Cámara 5
+                      </div>
+                    </button>
+                  </div>
+
+
+
+                  <div class="CamPisos">
+                    <span>3er Piso</span>
+                    <button class="SelectCam2" ng-click='model.contentFiltersView = !model.contentFiltersView'>
+                      <div>
+                        <i class="fa fa-video-camera fa-2x"></i
+                      </div>
+                      <div>
+                        Cámara 1
+                      </div>
+                    </button>
+                    <button class="SelectCam2" ng-click='model.contentFiltersView = !model.contentFiltersView'>
+                      <div>
+                        <i class="fa fa-video-camera fa-2x"></i>
+                      </div>
+                      <div>
+                        Cámara 2
+                      </div>
+                    </button>
+                    <button class="SelectCam2" ng-click='model.contentFiltersView = !model.contentFiltersView'>
+                      <div>
+                        <i class="fa fa-video-camera fa-2x"></i>
+                      </div>
+                      <div>
+                        Cámara 3
+                      </div>
+                    </button>
+                    <button class="SelectCam2" ng-click='model.contentFiltersView = !model.contentFiltersView'>
+                      <div>
+                        <i class="fa fa-video-camera fa-2x"></i>
+                      </div>
+                      <div>
+                        Cámara 4
+                      </div>
+                    </button>
+                    <button class="SelectCam2" ng-click='model.contentFiltersView = !model.contentFiltersView'>
+                      <div>
+                        <i class="fa fa-video-camera fa-2x"></i>
+                      </div>
+                      <div>
+                        Cámara 5
+                      </div>
+                    </button>
+                  </div>
+
+
+
+
+
+
+
+
                 </div>
             </div>
             <div class="contentCameras">
-                <div class="content">
+
+                <div class="tam colorPB">
+                  <div class="infoCam">
+                      <div class="titleCam"><i class="fa fa-video-camera"> Cámara 1 - Planta Baja</i></div>
+                      <div Class="actionCam">
+                        <a class="DownVideo" href='http://camaras.econo.unlp.edu.ar/c1/v.m3u8'><i class="fa fa-angle-double-down"></i></a>
+                        <button class="DeleteCam"><i class="fa fa-trash"></i></button>
+                      </div>
+                  </div>
+                  <div id="player"></div>
+                </div>
+
+                <div class="tam colorPB">
+                  <div class="infoCam">
+                      <div class="titleCam"><i class="fa fa-video-camera"> Cámara 2 - Planta Baja</i></div>
+                      <div Class="actionCam">
+                        <a class="DownVideo" href='http://camaras.econo.unlp.edu.ar/c2/v.m3u8'><i class="fa fa-angle-double-down"></i></a>
+                        <button class="DeleteCam"><i class="fa fa-trash"></i></button>
+                      </div>
+                  </div>
+                  <div id="player2"></div>
+                </div>
+
+                <div class="tam colorPB">
+                  <div class="infoCam">
+                      <div class="titleCam"><i class="fa fa-video-camera"> Cámara 3 - Planta Baja</i></div>
+                      <div Class="actionCam">
+                        <a class="DownVideo" href='http://camaras.econo.unlp.edu.ar/c3/v.m3u8'><i class="fa fa-angle-double-down"></i></a>
+                        <button class="DeleteCam"><i class="fa fa-trash"></i></button>
+                      </div>
+                  </div>
+                  <div id="player3"></div>
+                </div>
+
+                <div ng-if='model.contentFiltersView' class="tam colorPB">
+                  <div class="infoCam">
+                      <div class="titleCam"><i class="fa fa-video-camera"> Cámara 3 - Planta Baja</i></div>
+                      <div Class="actionCam">
+                        <a class="DownVideo" href='http://camaras.econo.unlp.edu.ar/c3/v.m3u8'><i class="fa fa-angle-double-down"></i></a>
+                        <button class="DeleteCam"><i class="fa fa-trash"></i></button>
+                      </div>
+                  </div>
+                  <div id="player3"></div>
+                </div>
+                <button ng-if='!model.contentFiltersView' class="SelectCam" ng-click='selectCammera(4)'>
+                  <div>
+                    <i class="fa fa-video-camera fa-4x"></i>
+                  </div>
+                  <div>
+                    Agregar Cámara
+                  </div>
+                </button>
+
+                <!-- <div class="tam colorPB">
+                  <div class="infoCam">
+                      <div class="titleCam"><i class="fa fa-video-camera"> Cámara 4 - Planta Baja</i></div>
+                      <div Class="actionCam">
+                        <a class="DownVideo" href='http://camaras.econo.unlp.edu.ar/c4/v.m3u8'><i class="fa fa-angle-double-down"></i></a>
+                        <button class="DeleteCam"><i class="fa fa-trash"></i></button>
+                      </div>
+                  </div>
+                  <div id="player4"></div>
+                </div> -->
+
+
+                <!-- <div class="tam">
+                  <div id="player2"></div>
+                  <a href='http://camaras.econo.unlp.edu.ar/c2/v.m3u8'>camara2</a>
+                </div>
+                <div class="tam">
+                  <div id="player3"></div>
+                  <a href='http://camaras.econo.unlp.edu.ar/c3/v.m3u8'>camara3</a>
+                </div>
+                <div class="tam">
+                  <div id="player4"></div>
+                  <a href='http://camaras.econo.unlp.edu.ar/c4/v.m3u8'>camara4</a>
+                </div> -->
+
+
+                <!-- <div id="player2"></div>
+                <div id="player3"></div>
+                <div id="player4"></div>
+
+
+                <div>
+                      <a href='http://camaras.econo.unlp.edu.ar/c1/v.m3u8'>camara1</a>
+                      <a href='http://camaras.econo.unlp.edu.ar/c2/v.m3u8'>camara2</a>
+                      <a href='http://camaras.econo.unlp.edu.ar/c3/v.m3u8'>camara3</a>
+                      <a href='http://camaras.econo.unlp.edu.ar/c4/v.m3u8'>camara4</a>
+                </div> -->
+
+                <!-- <div class="content">
                     <video  class="size" controls autoplay><source src='http://163.10.56.194:8000/camara1.ogg'/></video>
                     <div><i class="fa fa-video-camera"></i> 1 | Subsuelo </div>
                 </div>
@@ -100,7 +315,7 @@
                 <div class="content">
                     <video  class="size" controls autoplay><source src='http://163.10.56.194:8000/camara1.ogg'/></video>
                     <div><i class="fa fa-video-camera"></i> 1 | Subsuelo </div>
-                </div>
+                </div> -->
 
             </div>
         </div>

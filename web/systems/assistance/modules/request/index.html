@@ -1,0 +1,192 @@
+<div class="request {{view.style}} {{view.style2}} {{view.style3}} ">
+<!--
+VARIABLES 1: seleccionSolicitud
+VARIABLES 2: solicitudSeleccionada
+VARIABLES 3: solicitudesPersonales, solicitudesGrupo, cargandoSolicitudes
+-->
+
+    <div class="header">
+        <div>
+          SOLICITUDES
+        </div>
+    </div>
+
+    <div class="contentRequest">
+
+        <div class="contentLeft">
+
+            <div class="newRequest">
+              <button class="btnNewRequest" ng-click="view.style='seleccionSolicitud'">NUEVA SOLICITUD</button>
+            </div>
+
+            <div class="listRequest">
+              <button class="btnBack" ng-click="view.style='';view.style2=''"><i class="arrowBack fa fa-chevron-left"></i> VOLVER</button>
+              <div class="titleListRequest">Lista de solicitudes</div>
+                  <div class="contentListRequest">
+                      <button class="btnRequest" ng-click="selectInformedAbsence()"><i class="iconoRequest fa fa-ticket "></i> Ausente con aviso</button>
+                      <button class="btnRequest" ng-click="selectCompensatory()"><i class="iconoRequest fa fa-ticket "></i> Compensatorio</button>
+                      <button class="btnRequest" ng-click="selectOTWithReturn()"><i class="iconoRequest fa fa-ticket "></i> Boleta de salida con retorno</button>
+                      <button class="btnRequest" ng-click="selectOTWithoutReturn()"><i class="iconoRequest fa fa-ticket "></i> Boleta de salida sin retorno</button>
+                  </div>
+            </div>
+
+        </div>
+
+
+        <div class="contentRight">
+
+          <div class="contentMyRequest">
+
+            <div class="contentHeaderRequest">
+                <div>
+                    <select  class="selectRequest" ng-model="model.optionJustifications" ng-options="op.description for op in view.optionsJustifications">
+                    </select>
+                </div>
+
+                <div class="dateOrder">
+                  Inicio <input class="inputDateRequest" type="date" ng-model="model.start"></input>
+                  Fin <input class="inputDateRequest" type="date" ng-model="model.end"></input>
+                  <button class="btnOrder" ng-if="!view.searching" ng-click="search()"><i class="fa fa-refresh"></i></button>
+                  <button class="btnOrder" ng-if="view.searching"><i class="fa fa-refresh fa-spin"></i></button>
+                </div>
+
+                <div class="orderRequest">
+                  <i class="icoOrder fa fa-sliders"></i>
+                  <div class="textOrder"> Ordenar</div>
+                  <div><button class="btnOrder" ng-click="orderName()"><i class="fa fa-ticket"></i></button></div>
+                  <div><button class="btnOrder" ng-click="orderUserName();"><i class="fa fa-sort-alpha-asc"></i></button></div>
+                  <div><button class="btnOrder" ng-click="orderStatus();"><b>E</b></button></div>
+                </div>
+            </div>
+
+            <div class="listMyRequest">
+
+                <div class="requestContainer">
+
+                  <div class="itemRequest {{just.classType}} status{{just.status}}" ng-repeat="just in model.justifications ">
+
+                    <div class="nameRequest">
+                      {{getName(just.userId)}}
+                    </div>
+
+                    <div class="typeRequest">
+                        <div class="shortNameTypeRequest"><i class="ico fa fa-ticket "></i> <span>{{getJustTitle(just)}}</span></div>
+                        <div class="fullNameTypeRequest" style="font-size:small">{{getJustName(just)}}</div>
+                    </div>
+
+                    <div class="infoRequest">
+
+                      <div class="displayRangedTime">
+                        <div class="dateRequest">
+                          {{just.start | date: 'dd/MM/yyyy'}}
+                        </div>
+                        <!-- <div class="bar"> | </div> -->
+                        <div class="dateRequest2">
+                          {{just.start | date: 'HH:mm'}} - {{just.end | date: 'HH:mm'}}
+                        </div>
+                      </div>
+
+                      <div class="displaySingleDate">
+                        <div class="dateRequest">
+                          {{just.date | date: 'dd/MM/yyyy'}}
+                        </div>
+                      </div>
+
+                      <div class="displayRangedDate">
+                        <div class="dateRequest">
+                          {{just.start | date: 'dd/MM/yyyy'}}
+                        </div>
+                        <!-- <div class="bar"> | </div> -->
+                        <div class="dateRequest2">
+                          {{just.end | date: 'dd/MM/yyyy'}}
+                        </div>
+                      </div>
+
+                    </div>
+
+                    <div class="contentState">
+                        <div class="state">
+                          Estado
+                        </div>
+
+                        <!-- Aprobado -->
+                        <div class="stateApproved">
+                          <div class="icoStateApproved">
+                            A
+                          </div>
+                          <div class="textIcoStateApproved">
+                            Aprobado
+                          </div>
+                        </div>
+
+                        <!-- Pendiente -->
+                        <div class="statePending">
+                          <div class="icoStatePendig">
+                            P
+                          </div>
+                          <div class="textIcoStatePending">
+                            Pendiente
+                          </div>
+                        </div>
+
+                        <!-- Rechazado -->
+                        <div class="stateRejected">
+                          <div class="icoStateCancel">
+                            R
+                          </div>
+                          <div class="textIcoStateCancel">
+                            Rechazado
+                          </div>
+                        </div>
+
+                        <!-- Cancelado -->
+                        <div class="stateCanceled">
+                          <div class="icoStateCancel">
+                            C
+                          </div>
+                          <div class="textIcoStateCancel">
+                            Cancelado
+                          </div>
+                        </div>
+
+                        <div class="trashContainer">
+                          <button class="btnTrash" title="Eliminar" ng-click="cancelJustification(just)"><i class="fa fa-trash-o"></i></button>
+                        </div>
+
+                        <div class="actionBtns">
+                          <div>
+                            <button class="btnApprove" ng-click="approveJustification(just)">Aprobar</button>
+                          </div>
+                          <div>
+                            <button class="btnCancel" ng-click="rejectJustification(just)">Denegar</button>
+                          </div>
+                        </div>
+
+                    </div>
+                  </div>
+                </div>
+
+                <div class="loadingRequests">
+                  <div class="iconMessage"><i class="fa fa-circle-o-notch fa-spin fa-4x"></i></div>
+                  <div>CARGANDO SOLICITUDES</div>
+                  <div>Por favor espere... </div>
+                </div>
+
+            </div>
+            <!-- fin -->
+          </div>
+
+          <div class="contentRequestSelected {{view.displayRequest}}">
+            <button class="btnBackCel" ng-click="back()"><i class="arrowBack fa fa-chevron-left"></i> VOLVER</button>
+            <div class="compensatorio" ng-include="'/systems/assistance/modules/request/compensatorio/index.html'" ng-controller='CompensatoryCtrl'></div>
+            <div class="ausenteConAviso" ng-include="'/systems/assistance/modules/request/AA/index.html'" ng-controller='InformedAbsenceCtrl'></div>
+            <div class="boletaDeSalidaConRetorno" ng-include="'/systems/assistance/modules/request/BDS/index.html'" ng-controller='OTWithReturnCtrl'></div>
+            <div class="boletaDeSalidaSinRetorno" ng-include="'/systems/assistance/modules/request/BDS_SR/index.html'" ng-controller='OTWithoutReturnCtrl'></div>
+          </div>
+
+
+        </div>
+
+    </div>
+
+</div>

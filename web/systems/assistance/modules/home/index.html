@@ -1,0 +1,86 @@
+<div class="home">
+
+    <div class="header">
+        <div>
+            HOME
+        </div>
+    </div>
+
+    <div class="contentHome">
+
+        <div class="infoUser">
+
+              <div class="contentUser">
+
+                  <div class="contentPhoto">
+                    <img class="imgUser" ng-src='{{getUserPhoto()}}' alt="foto de perfil"/>
+                  </div>
+
+                  <div class="contentData">
+                      <div>
+                        <b> {{model.user.name}} {{model.user.lastname}}</b>
+                      </div>
+                      <div>
+                        {{model.user.dni}}
+                      </div>
+                  </div>
+
+              </div>
+
+              <div class="contentOffice">
+                    <div class="title">
+                      <b>Oficina</b>
+                    </div>
+                    <div>
+                       DiTESI
+                    </div>
+              </div>
+
+              <div class="contentSchedule">
+                    <div class="title">
+                      <b>Horario</b>
+                    </div>
+                    <div>
+                      {{model.assistanceData.scheduleActual.start | date: 'HH:mm'}} hs / {{model.assistanceData.scheduleActual.end | date: 'HH:mm'}} hs
+                    </div>
+              </div>
+
+
+
+              <div class="contentJob">
+                    <div class="title">
+                      <b>Cargo</b>
+                    </div>
+                    <div>
+                       {{model.position.name}}
+                    </div>
+              </div>
+
+        </div>
+
+        <div class="dailySchedule">
+
+            <div class="contentTitle">
+              <div class="title"> MIS MARCACIONES</div>
+              <input class="inputDate" type="date" ng-model="model.date" placeholder="10-12-2016">
+            </div>
+
+            <div class="schedules">
+
+              <div class="hourEntry">
+                hora de entrada </br>
+                <input class="inputHourEntry" type="text" value="{{model.assistanceData.logActual.start | date: 'HH:mm'}}"> </input>
+              </div>
+
+              <div class="hourOutput">
+                hora de salida </br>
+                <input class="inputHourEntry" type="text" value="{{model.assistanceData.logActual.end | date: 'HH:mm'}}"></input>
+              </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

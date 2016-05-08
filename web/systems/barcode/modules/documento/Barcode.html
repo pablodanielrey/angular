@@ -1,0 +1,15 @@
+<div class ="well">
+  <div ng-show="documento.id">
+    <p><strong>Fecha: </strong>{{documento.fecha}}</p>  
+    <p><strong>Nombre: </strong>{{documento.curso}}</p>
+    <p><strong>Numero documento: </strong>{{documento.numero_documento}}</p>
+    <p><strong>Monto: </strong>{{documento.monto}}</p>
+    
+    <barcode data=documento.id></barcode>
+    
+  </div>
+  
+  <div ng-hide="documento.id" >
+     Identificador no definido
+  </div>
+</div>

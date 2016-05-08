@@ -1,0 +1,272 @@
+.compensatorio {
+  width: 100%;
+  height: 100%;
+  /*background-color: red;*/
+  padding: 10px;
+}
+
+.compensatorio .contentRequestCompensatorio {
+  width: 338px;
+  height: 250px;
+  margin-top: 10px;
+  padding: 20px;
+  background-color: #FFF;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+  -moz-box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+  -webkit-box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  overflow-x: auto;
+}
+
+.compensatorio .availabilityRequest {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: flex-start;
+  -webkit-justify-content: flex-start;
+  -moz-justify-content: flex-start;
+  margin-bottom: 15px;
+  padding-bottom: 3px;
+  border-bottom: 1px solid #DBE2E5;
+}
+.compensatorio .ico {
+  color: #5C5F69 ;
+}
+
+.compensatorio .title {
+    color: #5C5F69;
+}
+
+.compensatorio .titleInfo {
+    color: #5C5F69;
+    font-size: 12px;
+    margin-bottom: 2px;
+    margin-top: 5px;
+}
+
+.compensatorio .titleAvailability {
+  font-size: 14px;
+  color: #5C5F69;
+}
+
+.compensatorio .contentCantAvailability {
+  margin-left: 145px;
+  color: #5C5F69;
+  font-size: 12px;
+}
+
+.compensatorio .cantAvailability {
+  background-color: #92AD17;
+  color: white;
+  padding: 0px 5px 0 5px;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+}
+
+.compensatorio .contentTime {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction: row;
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+  margin-bottom: 10px;
+  /*justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;*/
+  /*background-color: red;*/
+}
+
+.compensatorio .inputDate {
+    border: none;
+    font-size: 18px;
+    background-color: #EEEEEE;
+    width: 290px;
+    height: 35px;
+    color: #5c5f69;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    padding-left: 10px;
+}
+
+.compensatorio .inputTime {
+    border: none;
+    font-size: 15px;
+    background-color: #EEEEEE;
+    height: 30px;
+    color: #5c5f69;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    padding-left: 10px;
+    margin-right: 10px;
+}
+
+
+.compensatorio .inputTime2 {
+    border: none;
+    font-size: 15px;
+    background-color: #EEEEEE;
+    height: 30px;
+    color: #5c5f69;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    padding-left: 10px;
+}
+
+.compensatorio .btnApply {
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    border: none;
+    background-color: #92AD17;
+      font-size: 16px;
+    color: white;
+    padding: 10px;
+    width: 300px;
+    height: 45px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.compensatorio .btnApply:hover {
+  background-color: #809612;
+}
+
+.compensatorio .screenMessage {
+  width: 100%;
+  height: 100%;
+}
+
+.compensatorio .processing,
+.compensatorio .processed,
+.compensatorio .notAvailable,
+.compensatorio .errorSystem {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction: column;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  color: #5C5F69;
+}
+
+
+.compensatorio .iconMessage {
+  color: #f1f1f1;
+  margin-bottom: 10px;
+}
+
+.compensatorio .iconMessageProcessed {
+  color: #92ad17;
+}
+
+.compensatorio .iconMessageNotAvailable,
+.compensatorio .iconMessageErrorSystem {
+  color: #E43E46;
+  font-size: 20px;
+}
+
+/**********************************************************************
+*********************** VISTA DE PANTALLAS  ***************************
+***********************************************************************/
+
+.compensatorio.solicitud .screenMessage {
+  display: none;
+}
+
+.compensatorio.mensaje .screenRequest {
+  display: none;
+}
+
+.compensatorio.mensaje.procesando .processed,
+.compensatorio.mensaje.procesando .notAvailable,
+.compensatorio.mensaje.procesando .errorSystem {
+  display: none;
+}
+
+.compensatorio.mensaje.procesado .processing,
+.compensatorio.mensaje.procesado .notAvailable,
+.compensatorio.mensaje.procesado .errorSystem {
+  display: none;
+}
+
+.compensatorio.mensaje.sinDisponibilidad .processing,
+.compensatorio.mensaje.sinDisponibilidad .processed,
+.compensatorio.mensaje.sinDisponibilidad .errorSystem {
+  display: none;
+}
+
+.compensatorio.mensaje.errorDeSistema .processing,
+.compensatorio.mensaje.errorDeSistema .processed,
+.compensatorio.mensaje.errorDeSistema .notAvailable {
+  display: none;
+}
+
+/**********************************************************************
+************************* VISTA CELULAR *******************************
+***********************************************************************/
+
+@media (max-width: 719px) {
+  .compensatorio .contentRequestCompensatorio {
+    width: 88%;
+    padding: 10px;
+    overflow-x: auto;
+  }
+
+  .compensatorio .inputDate {
+      border: none;
+      font-size: 20px;
+      background-color: #EEEEEE;
+      margin-top: 5px;
+      width: 96%;
+      color: #5c5f69;
+      border-radius: 2px;
+      -moz-border-radius: 2px;
+      -webkit-border-radius: 2px;
+  }
+
+  .compensatorio .inputTime {
+      width: 132px;
+  }
+
+  .compensatorio .inputTime2 {
+      width: 132px;
+  }
+
+  .compensatorio .btnApply {
+      border-radius: 2px;
+      -moz-border-radius: 2px;
+      -webkit-border-radius: 2px;
+      border: none;
+      background-color: #92AD17;
+        font-size: 16px;
+      color: white;
+      padding: 10px;
+      width: 100%;
+      height: 45px;
+      cursor: pointer;
+      margin-top: 10px;
+  }
+
+
+}

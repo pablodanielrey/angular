@@ -1,192 +1,140 @@
 # -*- coding: utf-8 -*-
-import inject, psycopg2
+import inject
+import logging
 
-from model.systems.tutors.tutors import Tutors
-from model.systems.students.students import Students
-from model.users.users import Users
-from model.events import Events
-from model.profiles import Profiles
-from model.config import Config
+from model.tutorias.tutorias import TutoriasModel, Tutoring, TutoringSituation, TutoringDAO
 
-from model.exceptions import *
-
-"""
-    Modulo de acceso a los datos de las tutorias
-"""
-
+from model.login.login import Login
+from model.registry import Registry
+from model.connection.connection import Connection
 
 
 """
-peticion:
-{
-    "id":"",
-    "action":"persistTutorData",
-    "session":"session de usuario",
-    "request": {
-        "date":"fecha ingresada",
-        "student": "{ studentNumber:'nro de legajo del alumno',
-                      lastname:'apellido del alumno',
-                      name:'nombre del alumno',
-                      dni:'documento del alumno'
-                    }",
-        "type":"tipo de relacion"
-    }
-}
-
-respuesta:
-{
-    "id":"id de la peticion",
-    "ok":"",
-    "error":""
-}
-
+    Modulo de acceso a los datos de insercion laboral
 """
 
-class PersistTutorData:
+import asyncio
+from asyncio import coroutine
+from autobahn.asyncio.wamp import ApplicationSession
 
-    tutors = inject.attr(Tutors)
-    events = inject.attr(Events)
-    profiles = inject.attr(Profiles)
-    config = inject.attr(Config)
-    students = inject.attr(Students)
-    users = inject.attr(Users)
+class TutorsWamp(ApplicationSession):
 
+    def __init__(self, config=None):
+        logging.debug('instanciando')
+        ApplicationSession.__init__(self, config)
 
-    def handleAction(self, server, message):
+        r = inject.instance(Registry)
+        self.conn = Connection(r.getRegistry('dcsys'))
+        self.tutoriasModel = inject.instance(TutoriasModel)
+        self.login = inject.instance(Login)
 
-        if (message['action'] != 'persistTutorData'):
-            return False
-
-        if 'request' not in message or 'student' not in message['request'] or 'studentNumber' not in message['request']['student']:
-            response = {'id':message['id'], 'error':'no existe la info correspondiente a las tutorías'}
-            server.sendMessage(response)
-            return True
-
-        """ chequeo que exista la sesion, etc """
-        sid = message['session']
-        self.profiles.checkAccess(sid,['ADMIN','ADMIN-TUTOR','USER-TUTOR'])
-
+    def _createSchemas(self):
+        con = self.conn.get()
         try:
-            con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
-
-            tutor = message['request']
-
-            # obtengo la persona a ingresar
-            student = tutor['student']
-
-            # Verifico si ya existe el alumno ingresado
-            s = self.students.findStudentByNumber(con,student['studentNumber'])
-
-            if (s is not None):
-                person = self.users.findUser(con,s['id'])
-                # si existe, y no tiene los mismos datos tiro error
-
-                if (('dni' in student) and (student['dni'].strip()) and (student['dni'] != person['dni'])):
-                    response = {'id':message['id'], 'error':'Error: el alumno ingresado posee otro dni al ingresado (Datos del alumno existente: Dni:' + person['dni'] + ' Apellido:' + person['lastname'] +' Nombre:' + person['name'] +')'}
-                    server.sendMessage(response)
-                    return True
-
-                # sino, le actualizo los datos con los de la base
-                student['lastname'] = person['lastname']
-                student['name'] = person['name']
-                student['dni'] = person['dni']
-
-            tutor['userId'] = self.profiles.getLocalUserId(sid)
-
-
-            if 'dni' not  in tutor['student']:
-                tutor['student']['dni'] = ''
-
-            if 'name' not in tutor['student']:
-                tutor['student']['name'] = ''
-
-            if 'lastname' not in tutor['student']:
-                tutor['student']['lastname'] = ''
-
-            self.tutors.persist(con,tutor)
+            TutoringDAO._createSchemas(con)
             con.commit()
 
-            response = {'id':message['id'], 'ok':'Registro ingresado correctamente'}
-            server.sendMessage(response)
-
-            return True
-        except psycopg2.DatabaseError as e:
-            con.rollback()
-            raise e
-
         finally:
-            con.close()
+            self.conn.put(con)
+
+    @coroutine
+    def onJoin(self, details):
+        logging.debug('registering methods')
+        yield from self.register(self.search_async, 'tutors.search')
+        yield from self.register(self.findByTutorId_async, 'tutors.findByTutorId')
+        yield from self.register(self.persist_async, 'tutors.persist')
+        yield from self.register(self.delete_async, 'tutors.delete')
 
 
-
-"""
-
-peticion:
-{
-    "id":"",
-    "action":"listTutorData"
-    "session":"sesion de usuario"
-}
-
-respuesta:
-{
-    "id":"id de la peticion",
-    "response":[
-        {
-        "user": {
-            "dni",
-            "name",
-            "lastname"
-        }
-        "date":"fecha",
-        "student": {
-            "studentNumber",
-            "dni",
-            "name",
-            "lastname"
-        }
-        "type":"tipo",
-        "created":"fecha de creación del registro"
-        }
-    ],
-    "ok":""
-    "error":""
-}
-
-"""
-class ListTutorData:
-
-    tutor = inject.attr(Tutors)
-    profiles = inject.attr(Profiles)
-    config = inject.attr(Config)
-    users = inject.attr(Users)
-
-    def handleAction(self, server, message):
-
-        if message['action'] != 'listTutorData':
-            return False
-
-        #verificar el rol del usuario conectado a la sesion
-        sid = message['session']
-        self.profiles.checkAccess(sid,['ADMIN','ADMIN-TUTOR'])
-
+    def delete(self, tid):
+        con = self.conn.get()
         try:
-            con = psycopg2.connect(host=self.config.configs['database_host'], dbname=self.config.configs['database_database'], user=self.config.configs['database_user'], password=self.config.configs['database_password'])
-
-            tutors = self.tutor.list(con);
-
-            for t in tutors:
-                userId = t['userId']
-                user = self.users.findUser(con,userId)
-                t['user'] = {
-                    'dni':user['dni'],
-                    'name':user['name'],
-                    'lastname':user['lastname']
-                }
-
-            response = {'id':message['id'], 'ok':'', 'response':tutors}
-            server.sendMessage(response)
-            return True
+            ok = self.tutoriasModel.delete(con, tid)
+            con.commit()
+            return ok
 
         finally:
-            con.close()
+            self.conn.put(con)
+
+
+    def search(self, regex):
+        con = self.conn.get()
+        try:
+            users = self.tutoriasModel.search(con, regex)
+            susers = []
+            for u in users:
+                u2 = {
+                    'user': self._serializeUser(u['user']),
+                    'student': u['student'].__dict__
+                }
+                susers.append(u2)
+            return susers
+
+        finally:
+            self.conn.put(con)
+
+    def _serializeUser(self, u):
+        u2 = u.__dict__
+        u2['telephones'] = [ t.__dict__ for t in u.telephones ]
+        return u2
+
+    def _serializeSituation(self, s):
+        s.user['user'] = self._serializeUser(s.user['user'])
+        s.user['student'] = s.user['student'].__dict__
+        return s.__dict__
+
+    def findByTutorId(self, tId):
+        con = self.conn.get()
+        try:
+            tutorings = self.tutoriasModel.findByTutorId(con, tId)
+            for t in tutorings:
+                t.tutor = self._serializeUser(t.tutor)
+                t.situations = [ self._serializeSituation(s) for s in t.situations ]
+            tutorings = [ t.__dict__ for t in tutorings ]
+
+            return tutorings
+
+        finally:
+            self.conn.put(con)
+
+    def persist(self, tut):
+        con = self.conn.get()
+        try:
+            tutoring = Tutoring()
+            tutoring.__dict__ = tut
+            situations = []
+            for t2 in tut['situations']:
+                t = TutoringSituation()
+                t.__dict__ = t2
+                situations.append(t)
+            tutoring.situations = situations
+            id = self.tutoriasModel.persist(con, tutoring)
+            con.commit()
+            return id
+
+        finally:
+            self.conn.put(con)
+
+    @coroutine
+    def search_async(self, regex):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.search, regex)
+        return r
+
+    @coroutine
+    def findByTutorId_async(self, tid):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.findByTutorId, tid)
+        return r
+
+    @coroutine
+    def persist_async(self, tutoring):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.persist, tutoring)
+        return r
+
+    @coroutine
+    def delete_async(self, tid):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.delete, tid)
+        return r

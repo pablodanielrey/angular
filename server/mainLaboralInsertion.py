@@ -10,20 +10,20 @@ if __name__ == '__main__':
     sys.path.insert(0, '../python')
 
     logging.basicConfig(level=logging.DEBUG)
+    logging.getLogger().setLevel(logging.DEBUG)
 
     from autobahn.asyncio.wamp import ApplicationRunner
-    from model.config import Config
     from actions.systems.laboralinsertion.laboralInsertion import LaboralInsertionWamp
+    from model.registry import Registry
 
-    def config_injector(binder):
-        binder.bind(Config, Config('server-config.cfg'))
+    inject.configure()
 
-    inject.configure(config_injector)
-    config = inject.instance(Config)
+    reg = inject.instance(Registry)
+    registry = reg.getRegistry('wamp')
+    url = registry.get('url')
+    realm = registry.get('realm')
+    debug = registry.get('debug')
 
-    url = config.configs['server_url']
-    realm = config.configs['server_realm']
-    debug = config.configs['server_debug']
-
-    runner = ApplicationRunner(url=url, realm=realm, debug=debug, debug_wamp=debug, debug_app=debug)
+    logging.info('iniciando app en {} {} {}'.format(url, realm, debug))
+    runner = ApplicationRunner(url=url, realm=realm)
     runner.run(LaboralInsertionWamp)

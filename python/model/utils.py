@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # -*- coding: utf-8 -*-
 import json
 import datetime
@@ -18,6 +19,7 @@ def grouper(n, iterable, fillvalue=None):
 
 
 class DateTimeEncoder(json.JSONEncoder):
+
     def default(self, obj):
 
         if isinstance(obj, datetime.datetime):

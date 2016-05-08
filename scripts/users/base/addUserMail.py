@@ -4,13 +4,40 @@
     Lo agrega como CONFIRMADO!!! ojo
     Forma de invocación:
 
-        python3 addUserMail.py dni email
+        PYTHONPATH="../../../python" python3 addUserMail.py dni cuenta-de-email
 
 '''
-import connection
-import users
+from model.connection import connection
+from model.users import users
+from model.registry import Registry
+import createUser
 import systems
 import logging
+
+def createMail(con, dni, email):
+    u = users.UserDAO.findByDni(con, dni)
+    if u is None:
+        logging.warn('Persona inexistente')
+        return
+
+    (uid, version) = u
+
+    emails = users.MailDAO.findAll(con, uid)
+    for e in emails:
+        if e.email == email:
+            logging.warn('Ya tiene el email {} configurado'.format(email))
+            return
+
+    mail = users.Mail()
+    mail.userId = uid
+    mail.email = email
+    mail.confirmed = True
+    mid = users.MailDAO.persist(con, mail)
+
+    mails = users.MailDAO.findAll(con, uid)
+    for m in mails:
+        logging.info('{}\n'.format(m.__dict__))
+
 
 if __name__ == '__main__':
 
@@ -22,27 +49,17 @@ if __name__ == '__main__':
     assert dni is not None
     assert email is not None
 
-    logging.getLogger().setLevel(logging.INFO)
-    con = connection.getConnection()
+    logging.getLogger().setLevel(logging.DEBUG)
+
+    import inject
+    inject.configure()
+
+    r = inject.instance(Registry)
+    conn = connection.Connection(r.getRegistry('dcsys'))
+    con = conn.get()
     try:
-        u = users.UserDAO.findByDni(con, dni)
-        if u is None:
-            logging.warn('Persona inexistente')
-            sys.exit(1)
-
-        (uid, version) = u
-
-        mail = users.Mail()
-        mail.userId = uid
-        mail.email = email
-        mail.confirmed = True
-        mid = users.MailDAO.persist(con, mail)
-
-        mails = users.MailDAO.findAll(con, uid)
-        for m in mails:
-            logging.info('{}\n'.format(m.__dict__))
-
+        createMail(con, dni, email)
         con.commit()
 
     finally:
-        connection.closeConnection(con)
+        conn.put(con)

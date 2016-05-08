@@ -6,6 +6,69 @@ Users.inject = ['$rootScope', '$wamp', 'Session','Utils','Cache'];
 
 function Users($rootScope, $wamp, Session, Utils, Cache) {
 
+
+  /*
+    NORMALIZACION DE USUARIO
+  */
+  this.normalizeUser = function(user) {
+    if (!('__json_module__' in user)) {
+      user.__json_module__ =  'model.users.users';
+    }
+
+    if (!('__json_class__' in user)) {
+      user.__json_class__ = 'User';
+    }
+
+    if (user.telephones && user.telephones.length > 0) {
+        user.telephones = this.normalizeTelephones(user.telephones);
+    }
+
+    return user;
+  }
+
+  this.normalizeTelephones = function(telephones) {
+    ret = []
+    for (var i = 0; i < telephones.length; i++) {
+      t = telephones[i];
+      if (!('__json_module__' in t)) {
+        t.__json_module__ =  'model.users.users';
+      }
+
+      if (!('__json_class__' in t)) {
+        t.__json_class__ = 'Telephone';
+      }
+      ret.push(t);
+    }
+    return ret;
+  }
+
+  this.findById = function(ids) {
+    return $wamp.call('users.findById', [ids]);
+  }
+
+  this.findByDni = function(dni) {
+    return new Promise(function(cok, cerr) {
+      $wamp.call('users.findByDni', [dni])
+      .then(function(data) {
+        if (data == null) {
+          cerr(Error('No existe ese usuario'));
+          return;
+        };
+        var id = data[0];
+        var version = data[1];
+        $wamp.call('users.findById', [[id]])
+        .then(function(users) {
+          cok(users);
+        }, function(err) {
+          cerr(err);
+        });
+      }, function(err) {
+        cerr(err);
+      });
+    });
+  }
+
+
   var instance = this;
   this.userPrefix = 'user_';
 
@@ -85,15 +148,6 @@ function Users($rootScope, $wamp, Session, Utils, Cache) {
   }
 
 
-  this.normalizeUser = function(user) {
-    if (user.birthdate != undefined) {
-      //user.birthdate = new Date(user.birthdate)
-    }
-  }
-
-
-
-
 
   this.findUser = function(id, callbackOk, callbackError) {
 
@@ -107,7 +161,7 @@ function Users($rootScope, $wamp, Session, Utils, Cache) {
     $wamp.call('users.findById', [id])
       .then(function(user) {
         if (user != null) {
-          instance.normalizeUser(user);
+          user = this.normalizeUser(user);
           Cache.setItem(instance.userPrefix + user.id, user);
           callbackOk(user);
 
@@ -123,8 +177,9 @@ function Users($rootScope, $wamp, Session, Utils, Cache) {
 
   this.updateUser = function(user, callbackOk, callbackError) {
     // elimino ese usuario de la cache
-    Cache.removeItem(instance.userPrefix + user.id);
-    instance.normalizeUser(user);
+    //Cache.removeItem(instance.userPrefix + user.id);
+
+    user = this.normalizeUser(user);
 
     $wamp.call('users.persistUser', [user])
       .then(function(res) {
@@ -202,13 +257,10 @@ function Users($rootScope, $wamp, Session, Utils, Cache) {
     return $wamp.call('users.mails.persistMail', [email]);
   }
 
-  this.findByDni = function(dni) {
-    return $wamp.call('users.findByDni', [dni]);
-  }
+  // esto lo modifique solo para obtener el usuario por dni, no se como se deberia manejar con la cache
 
-  this.findById = function(id) {
-    return $wamp.call('users.findById', [id]);
-  }
+
+
 
 
 };

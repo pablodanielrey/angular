@@ -1,51 +1,43 @@
-*{
-  padding: 0px;
-  margin: 0px;
-
+.sistema .main {
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
 }
 
-body {
-  overflow-x: hidden;
-  overflow-y: auto;
-  height: 100%;
-}
+/*.sistema.celular .MenuContent {
+  display:none;
+}*/
 
-
-
-
-.principal {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: row;
-  wrap: nowrap;
-
-
-
-}
-
-.principal.ng-scope {
-  height: 100%;
-
+.sistema.celular .MenuCel {
 }
 
 
-.screen {
-  width: 100%;
-  height: 100%;
-  -webkit-transition: all 1s;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
+
+/*.sistema.full .MenuContent {
+
+}
+.sistema.full .MenuCel {
+  display:none;
+}*/
+
+
+@media (max-width: 719px){
+  .MenuContent {
+    display: none;
+  }
+
+  .sistema .main {
+    flex-direction:column;
+    -webkit-flex-direction:column; /* Safari */
+    -moz-flex-direction:column; /* mozilla */
+  }
+
+
 
 }
 
-.content {
-  width: 100%;
-}
-
-
-.systems {
-  background-color: blue;
-  width: 10%;
+@media (min-width: 720px){
+  .MenuCel {
+    display: none;
+  }
 }

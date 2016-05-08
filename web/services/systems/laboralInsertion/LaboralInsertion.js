@@ -7,6 +7,16 @@ LaboralInsertion.inject = ['$rootScope','$wamp','Session']
 
 function LaboralInsertion($rootScope,$wamp,Session) {
 
+  /*
+  */
+  this.findAllInscriptions = function(filters) {
+    return $wamp.call('system.laboralInsertion.findAllInscriptions',[filters]);
+  }
+
+  this.getFilters = function() {
+    return $wamp.call('system.laboralInsertion.getFilters');
+  }
+
   /**
     obtiene todas las inscripciones de un usuario determinado
   */
@@ -42,5 +52,67 @@ function LaboralInsertion($rootScope,$wamp,Session) {
   this.persist = function(data) {
     return $wamp.call('system.laboralInsertion.persist',[data]);
   }
+
+  /*
+    envía un mail a la empresa con los usuarios seleccionados.
+  */
+  this.sendEmailToCompany = function(inscriptions, emails) {
+    return $wamp.call('system.laboralInsertion.sendEmailToCompany', [inscriptions, emails])
+  }
+
+  /*
+    encuentra todas las companies definidas en la base de datos.
+  */
+  this.findAllCompanies = function() {
+    return $wamp.call('system.laboralInsertion.company.findAll')
+  }
+
+  this.normalizeContacts = function(contacts) {
+    ret = []
+    for (var i = 0; i < contacts.length; i++) {
+      c = contacts[i];
+      if (!('__json_module__' in c)) {
+        c.__json_module__ =  'model.laboralinsertion.company';
+      }
+
+      if (!('__json_class__' in c)) {
+        c.__json_class__ = 'Contact';
+      }
+      ret.push(c);
+    }
+    return ret;
+  }
+
+  this.normalizeCompany = function(company) {
+    if (!('__json_module__' in company)) {
+      company.__json_module__ =  'model.laboralinsertion.company';
+    }
+
+    if (!('__json_class__' in company)) {
+      company.__json_class__ = 'Company';
+    }
+
+    if (company.contacts && company.contacts.length > 0) {
+        company.contacts = this.normalizeContacts(company.contacts);
+    }
+
+    return company;
+  }
+
+  this.persistCompany = function(company) {
+    company = this.normalizeCompany(company);
+    return $wamp.call('system.laboralInsertion.company.persist',[company])
+  }
+
+  /*
+    encuentra todos los sent que tengan el id de incripcion
+  */
+  this.findSentByInscriptionId = function(id) {
+    return $wamp.call('system.laboralInsertion.sent.findByInscription', [id]).then(function(sents) {
+      return {'id':id, 'sents':sents};
+    })
+  }
+
+
 
 }

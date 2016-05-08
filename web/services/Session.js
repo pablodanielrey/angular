@@ -1,3 +1,7 @@
+/*
+	Session es un servicio del lado del cliente. no accede funcionalidad del servidor.
+*/
+
 var app = angular.module('mainApp');
 
 app.service('Session', function(Cache) {
@@ -12,7 +16,9 @@ app.service('Session', function(Cache) {
 
 	this.destroy = function() {
 		var sid = Cache.getItem(this.sessionIdentifier);
-		Cache.removeItem(sid);
+		if (sid != null) {
+			Cache.removeItem(sid);
+		}
 		Cache.removeItem(this.sessionIdentifier);
 	};
 
@@ -37,7 +43,6 @@ app.service('Session', function(Cache) {
    * Obtener id de usuario de sesion
    */
   this.getCurrentSessionUserId = function(){
-    
     var session = this.getCurrentSession();
     return session.user_id;
   };

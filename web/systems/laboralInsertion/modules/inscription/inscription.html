@@ -1,6 +1,6 @@
 <div class="inscriptionContainer">
 
-    <div class="inscription" ng-class='getInscriptionClazz()'>
+    <div class="inscription {{view.styleIsMessage}} {{view.styleMessage}}" ng-class='getInscriptionClazz()'>
 
         <!-- ************************************
         ********* DATOS BASICOS ************
@@ -11,11 +11,38 @@
             </div> -->
             <div class="dataBasic">
                 <div class"col">
-                    <div class="item">
-                      <input type="file" class="btnInputFile" id="inputPhoto" on-read-file-binary-string="addPhoto(fileName,fileContent)">
-                      <div class="photo" placeholder="Foto" ng-click='addPhoto()'><i class="fa fa-camera-retro fa-4x"></i>Subir Foto</div>
 
+
+
+                    <div ng-if="getUserPhoto() == null" class="fileUpload">
+                    <!-- <div ng-if='!model.loadingPhoto' class="fileUpload"> -->
+                        <div class="photo" placeholder="Foto"><i class="fa fa-camera-retro fa-4x"></i>Subir Foto</div>
+                        <input type="file" on-read-file-binary-string="addPhoto(fileName,fileContent)" class="upload" />
                     </div>
+
+
+                    <div  ng-if='model.loadingPhoto'>
+                      <div class="photo2" placeholder="Foto"><i class="fa fa-circle-o-notch fa-spin fa-3x"></i>Cargando imágen...</div>
+                    </div>
+
+                    <div ng-if='model.formatPhoto'>
+                      <div class="photo2" placeholder="Foto"><i class="fa fa-ban fa-4x"></i>Formato de imágen no compatible <div>(solo JPG)</div></div>
+                    </div>
+
+
+                   <div ng-if='getUserPhoto() != null' class="item">
+
+                       <div ng-if='!model.loadingPhoto' class="fileUpload2" title="Cambiar Foto">
+
+                           <input type="file" on-read-file-binary-string="addPhoto(fileName,fileContent)" class="upload" />
+                       </div>
+                        <div class="iconoFotoMiniatura"><i class="fa fa-camera-retro  fa-2x" title="Cambiar Foto"></i></div>
+
+                        <img class="photo" ng-src='{{getUserPhoto()}}' alt="Pablo"/>
+                    </div>
+
+
+
 
                     <div class="item">
                         <div>
@@ -166,9 +193,6 @@
                       </div>
                     </div>
 
-                </div>
-                <div class"col">
-
                     <div class="item">
                       <div>
                         <button><i class="fa fa-globe"></i></button>
@@ -179,12 +203,17 @@
                       </div>
                     </div>
 
+                </div>
+                <div class"col">
+
+
+
                     <div class="item">
                       <div>
                         <button><i class="fa fa-mobile"></i></button>
                       </div>
                       <div>
-                        <input type="text" placeholder="Cel. (+5492215011111)" ng-model='model.telephones.movil' name='movil' ng-blur='updateUserData()' ></input>
+                        <input type="text" placeholder="Cel. (+5492215011111)" ng-model='model.telephones.movil' name='movil' ng-blur='updateUserData()' ng-required="model.telephoneRequired"></input>
                       </div>
                     </div>
 
@@ -193,7 +222,7 @@
                         <button><i class="fa fa-phone"></i></button>
                       </div>
                       <div>
-                        <input type="text" placeholder="Fijo (+5492214231111)" ng-model='model.telephones.telephone' name='telephone' ng-blur='updateUserData()' ></input>
+                        <input type="text" placeholder="Fijo (+5492214231111)" ng-model='model.telephones.telephone' name='telephone' ng-blur='updateUserData()' ng-required="model.telephoneRequired"></input>
                       </div>
                     </div>
 
@@ -203,9 +232,9 @@
                         <button><i class="fa fa-envelope"></i></button>
                       </div>
                       <div>
-                        <select  ng-model='model.laboralData.email' name='mail' ng-change='updateLaboralData()' required>
+                        <select  ng-model='model.selectedEmail' name='mail' ng-change='updateLaboralData()' required ng-options="option.email for option in model.mails.emails | orderBy: ['email']">
                           <!-- <option class="selectGrey" disabled selected style='display:none;'>Mail</option> -->
-                          <option ng-repeat='m in model.mails.emails' value='{{m.id}}'>{{m.email}}</option>
+                          <!-- <option ng-repeat='m in model.mails.emails' value='{{m.id}}'>{{m.email}}</option> -->
                           <!--
                           <option>pablo@econo.unlp.edu.ar</option>
                           <option>pablodanielrey@gmail.com</option>
@@ -215,7 +244,11 @@
                       </div>
                     </div>
 
-                    <div>Agregue una cuenta de correo haciendo click <a target="_blank" href='http://fce.econo.unlp.edu.ar'>ACA</a></div>
+                    <a href="http://www.fce.econo.unlp.edu.ar/"  target="_blank">
+                      <input  type="button" class="cuentasCorreo"  value="Agregar / Modificar cuentas de correo"> <i class="fa fa-envelope"></i> </input>
+                    </a>
+
+                    <!-- <div>Agregue una cuenta de correo haciendo click <a target="_blank" href='http://fce.econo.unlp.edu.ar'>ACA</a></div> -->
                     <!-- ------------------------------------------------ -->
 
                     <div class="item2" ng-click='startInscription()'>
@@ -259,7 +292,7 @@
                               </div>
                               <div class="iconsInscription">
                                 <span class="icoTrash" title="Eliminar Inscripción" ng-click='removeInscription(i)'><i class="fa fa-trash-o"></i></span>
-                                <span class="icoDownload" title="Descargar Inscripción" ng-click='downloadInscription(i)'><i class="fa fa-file-pdf-o"></i></span>
+                                <!-- <span class="icoDownload" title="Descargar Inscripción" ng-click='downloadInscription(i)'><i class="fa fa-file-pdf-o"></i></span> -->
                               </div>
                           </div>
                       </div>
@@ -277,7 +310,7 @@
                     <div>
                         <h4>Formulario | OFERTA LABORAL</h4>
                     </div>
-                    <div ng-click='endInscription()'>
+                    <div ng-click='endInscription()' ng-if='!model.finish'>
                       <i class="fa fa-times-circle fa-2x" title="Cancelar"></i>
                     </div>
                 </div>
@@ -310,16 +343,20 @@
                           </div>
                         </div>
 
-                        <div>
-                          <input type='checkbox' ng-model='model.offer.graduate'>Graduado</input>
+                        <div class="subTittlesForm2">
+                          <input type='checkbox' ng-model='model.offer.graduate'> <b> Estoy graduado</b></input>
                         </div>
+
+                        <!-- <div>
+                          <input type='checkbox' ng-model='model.offer.graduate'>Graduado</input>
+                        </div> -->
 
                     </div>
 
                     <div class="p2">
 
                         <span class="subTittlesForm">
-                          <b>Materias aprobadas con final (incluyendo seminario)</b>
+                          <b>Materias aprobadas con final </b> <span class="textIncluyendoSeminario">(incluyendo seminario)</span>
                         </span>
                         <div class="item">
                             <button><i class="fa fa-book"></i></button>
@@ -331,7 +368,7 @@
                         </span>
                         <div class="item">
                             <button><i class="fa fa-book"></i></button>
-                            <input class="CantMatAprov" type="number" ng-model='model.offer.average1'></input>
+                            <input class="CantMatAprov" type="number" step='0.1' ng-model='model.offer.average1'></input>
                         </div>
 
                         <span class="subTittlesForm">
@@ -339,7 +376,7 @@
                         </span>
                         <div class="item">
                             <button><i class="fa fa-book"></i></button>
-                            <input class="CantMatAprov" type="number" ng-model='model.offer.average2'></input>
+                            <input class="CantMatAprov" type="number" step='0.1' ng-model='model.offer.average2'></input>
                         </div>
 
                     </div>
@@ -354,14 +391,28 @@
                             <button><i class="fa fa-briefcase"></i></button>
                           </div>
                           <div>
-                            <select class="carrera" ng-model='model.offer.workType'>
-                              <option class="selectGrey" disabled selected style='display:none;'>Seleccionar...</option>
+                            <select class="carrera" ng-model='model.offer.workType' ng-change='checkInscriptionPreconditions()'>
+                              <!-- <option class="selectGrey" disabled selected style='display:none;'>Seleccionar...</option> -->
                               <option ng-repeat='o in workTypes'>{{o}}</option>
                               <!--
                               <option>Pasantía</option>
                               <option>Full-Time</option>
                               <option>Programa estudiantes avanzados y jovenes profesionales</option>
                               -->
+                            </select>
+                          </div>
+                        </div>
+
+                        <div class="subTittlesForm">
+                          <b>¿ cuenta con experiencia laboral relacionada a la carrera en la que se está inscribiendo ? </b>
+                        </div>
+
+                        <div class="item">
+                          <div>
+                            <button><i class="fa fa-briefcase"></i></button>
+                          </div>
+                          <div>
+                            <select class="carrera" ng-model='model.offer.workExperience' ng-change='checkInscriptionPreconditions()' ng-options='boolToStr(item) for item in [null, true, false]'>
                             </select>
                           </div>
                         </div>
@@ -378,13 +429,7 @@
                             <button><i class="fa fa-plane"></i></button>
                           </div>
                           <div>
-                            <select class="carrera" ng-model='model.offer.travel'>
-                              <!-- <option class="selectGrey" disabled selected style='display:none;'>Seleccionar...</option> -->
-                              <option ng-repeat='o in travel' value="{{o.value}}">{{o.label}}</option>
-                              <!--
-                              <option>Si</option>
-                              <option>No</option>
-                              -->
+                            <select class="carrera" ng-change='checkInscriptionPreconditions()' ng-model='model.offer.travel' ng-options='boolToStr(item) for item in [null, true, false]'>
                             </select>
                           </div>
                         </div>
@@ -434,7 +479,7 @@
                                 <select class="lenguajeLevel" ng-model='i.level'>
                                   <option>Básico</option>
                                   <option>Intermedio</option>
-                                  <option>Excelente</option>
+                                  <option>Avanzado</option>
                                 </select>
 
                                  <span> <i class="fa fa-trash deleteLenguaje" ng-click="deleteLanguage(i)"></i> </span>
@@ -455,18 +500,31 @@
                     <div class="p6">
 
                         <div class="subTittlesForm">
-                          <b>Cargar CV</b>
+                          <b>Curriculum Vitae </b> <span class="textFormatoCV"> &nbsp; (en formato <i class="fa fa-file-pdf-o"></i> PDF </span>)
                         </div>
                         <div class="item">
                             <button><i class="fa fa-book"></i></button>
                             <div class="contentUploadPDF">
                                 <div>
                                     <div class="uploadPDF">
-                                       <p class="textBtnPDF"><i class="fa fa-arrow-circle-up"></i> Subir CV</p>
-                                       <input type="file" class="btnInputFile" id="inputcv" on-read-file-binary-string="addCV(fileName,fileContent)">
+                                       <p ng-if="model.cv_name != undefined && model.cv_name != ''" class="textBtnPDF"><i class="fa fa-arrow-circle-up"></i> Actualizar CV</p>
+                                       <p ng-if="model.cv_name == undefined || model.cv_name == ''" class="textBtnPDF"><i class="fa fa-arrow-circle-up"></i> Subir CV</p>
+                                       <input type="file" class="btnInputFile" id="inputcv" on-read-file-binary-string="addCV(fileName,fileContent)" accept='application/pdf,.pdf'>
                                     </div>
                                 </div>
                            </div>
+                        </div>
+
+                        <div ng-if='model.loadingCv' class="subTittlesForm">
+                          <span><i class="fa fa-spinner fa-spin"></i> Cargando CV<span>
+                        </div>
+
+                        <div ng-if='model.formatCV' class="subTittlesForm">
+                          <span class="textFormatoCV"><i class="fa fa-cog fa-spin"></i> Formato de CV Incompatible<span>
+                        </div>
+
+                        <div ng-if="model.cv_name != undefined && model.cv_name != ''" class="subTittlesForm">
+                          <i class="fa fa-file-pdf-o"></i> {{model.cv_name}} &nbsp;  <a href="/c/files.py?i={{model.laboralData.cv}}" target="_blank"><span class="subTittlesForm"> <i class="fa fa-download"> Ver</i></span></a>
                         </div>
 
                     </div>
@@ -489,12 +547,36 @@
                     <div>
                       <button class="btnBack" ng-click='changePreviousRegistration()'><i class="fa fa-arrow-circle-o-left"></i> Anterior </button>
                       <button class="btnNext" ng-if='model.showNext' ng-click='changeRegistration()'>Siguiente <i class="fa fa-arrow-circle-o-right"></i></button>
-                      <button class="btnSave" ng-click='uploadInscription()'><i class="fa fa-floppy-o"></i> GUARDAR </button>
+                      <button class="btnSave" ng-if='model.showNext' ng-click='uploadInscription()'><i class="fa fa-floppy-o"></i> GUARDAR </button>
+                      <button class="btnFinish" ng-if='model.finish' ng-click='finishInscription()'><i class="fa fa-check-square-o"></i> ACEPTAR </button>
                     </div>
                 </div>
             </div>
         </div>
 
+    </div>
+
+
+
+    <div class="messages">
+
+      <div class="contentMessage">
+
+          <div class="error">
+            <div class="title">Error</div>
+
+            <div class="contentError">
+              <ul>
+                <li ng-repeat="e in view.error">{{e}}</li>
+              </ul>
+            </div>
+
+            <div class="buttons">
+              <button class="btnClose" ng-click="closeMessage()">Cerrar</button>
+            </div>
+          </div>
+
+      </div>
 
     </div>
 

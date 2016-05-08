@@ -1,8 +1,8 @@
 var app = angular.module('mainApp');
 
-app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Notifications', 'Login',
+app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Notifications', 'Login', 'Session', '$window',
 
-  function ($rootScope, $scope, $location, Notifications, Login) {
+  function ($rootScope, $scope, $location, Notifications, Login, Session, $window) {
 
     $scope.model = {
       class:'',
@@ -21,13 +21,28 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Notifications'
       $location.path('/inscripcion');
     }
 
+    $scope.search = function() {
+      $location.path('/busqueda');
+    }
+
+    $scope.send = function() {
+      $location.path('/envios');
+    }
+
+    $scope.company = function() {
+      $location.path('/empresas');
+    }
+
+
+
+
+
   	$scope.exit = function() {
-      var sid = '';
-      Login.logout(sid, function(ok) {
-        $location.path('/');
+      Login.logout()
+      .then(function(ok) {
+        $window.location.href = "/systems/login/index.html";
       }, function(err) {
-        console.log(err)
-        Notifications.message(err);
+        console.log(err);
       });
   	}
 
@@ -35,16 +50,32 @@ app.controller('MenuCtrl', ["$rootScope", '$scope', '$location', 'Notifications'
       return a.n - b.n;
     }
 
-    $scope.initialize = function() {
+    $scope.initialize = function(uid) {
       $scope.model.items = [];
-      $scope.model.items.push({ n:1, label:'Inscripción', img:'fa fa-lock', function: $scope.upload });
-      $scope.model.items.push({ n:1, label:'Descargar', img:'fa fa-lock', function: $scope.download });
-      $scope.model.items.push({ n:1, label:'Salir', img:'fa fa-lock', function: $scope.exit });
+      $scope.model.items.push({ n:1, label:'Inscripción', img:'fa fa-ticket', function: $scope.upload });
+
+      if (uid == '9c5cf510-cc0d-4cc2-83e5-e61e3e39be58' ||  // paula
+          uid == 'd3df6a1e-d1e4-4e3c-8365-8420a141eaa7' ||  // lucas
+          uid == '89d88b81-fbc0-48fa-badb-d32854d3d93a' ||  // pablo
+          uid == '205de802-2a15-4652-8fde-f23c674a1246' || // walter
+          uid == '' // emanuel
+        ) {
+        $scope.model.items.push({ n:1, label:'Busqueda', img:'fa fa-search', function: $scope.search });
+        $scope.model.items.push({ n:1, label:'Envíos', img:'fa fa-list', function: $scope.send });
+        $scope.model.items.push({ n:1, label:'Empresas', img:'fa fa-building-o', function: $scope.company });
+        //$scope.model.items.push({ n:1, label:'Descargar', img:'fa fa-lock', function: $scope.download });
+      }
+      $scope.model.items.push({ n:1, label:'Salir', img:'fa fa-sign-out', function: $scope.exit });
 
     }
 
     $rootScope.$on('$viewContentLoaded', function(event) {
-      $scope.initialize();
+      Login.getSessionData()
+        .then(function(s) {
+            $scope.initialize(s.user_id);
+          }, function(err) {
+            $window.location.href = "/systems/login/index.html";
+          });
     });
 
 

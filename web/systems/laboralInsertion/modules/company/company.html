@@ -1,0 +1,150 @@
+<!-- VARIABLES 2: notificaciones | VARIABLES 3: cargando, cancelar, guardar -->
+<div class="company {{view.style}}">
+
+  <div class="contentLeft">
+      <div class="contentBtnNewCompany">
+          <button class="btnNewCompany" ng-click="selectCompany(null)"> CREAR NUEVA EMPRESA</button>
+      </div>
+      <div class="title">
+          <i class="fa fa-search"></i> BUSCAR
+      </div>
+      <input class="inputSearch" type="search" ng-model="view.search"></input>
+      <!-- <div class="title">
+          <i class="fa fa-search"></i> LISTA DE EMPRESAS
+      </div> -->
+      <div class="listCampany">
+
+          <div class="itemCompany" ng-repeat="c in model.companies | orderBy: ['name','city'] | filter: view.search" ng-click="selectCompany(c)">
+              <div class="contentPhotoRecent">
+                <img class="imgCompanyRecent" src="{{c.img}}">
+              </div>
+              <div class="contentDataRecent">
+                  <div>
+                    <b>{{c.name}}</b>
+                  </div>
+                  <div>
+                    {{c.detail}}
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <div class="contentRigth">
+
+    <div class="actions">
+      <button class="btnCreate" ng-click=save()> Guardar </button>
+      <button class="btnCancel" ng-click="cancel()"><i class="fa fa-times"></i></button>
+    </div>
+
+    <div class="dataCompany">
+
+        <div class="dataCompanyLeft">
+
+            <div>
+                <div class="title">Empresa</div>
+                <input class="inputText" type="text" ng-model="model.companySelected.name"></input>
+            </div>
+
+            <div>
+                <div class="title">Detalle</div>
+                <input class="inputText" type="text" ng-model="model.companySelected.detail"></input>
+            </div>
+
+            <div>
+                <div class="title">CUIT</div>
+                <div><input class="inputText2" type="text" ng-model="model.companySelected.cuit"></input></div>
+            </div>
+
+        </div>
+
+        <div class="dataCompanyRigth">
+
+          <div>
+              <div class="title">Docente guía</div>
+              <input class="inputText2" type="text" ng-model="model.companySelected.teacher"></input>
+          </div>
+          <div>
+              <div class="title">Responsable</div>
+              <input class="inputText2" type="text" ng-model="model.companySelected.manager"></input>
+          </div>
+
+          <div>
+              <div class="title">Convenio Marco</div>
+              <div class="contentMarco">
+                  <div class="contentTextMarco">
+                      <div class="title textMarco">Alta</div>
+                      <div><input class="inputText3" type="date" ng-model="model.companySelected.beginCM"></input></div>
+                  </div>
+                  <div>
+                      <div class="title textMarco">Vencimiento</div>
+                      <div><input class="inputText3" type="date" ng-model="model.companySelected.endCM"></input></div>
+                  </div>
+              </div>
+          </div>
+        </div>
+
+        <div class="dataCompanyBottom">
+
+            <div class="contentDataContact">
+
+                <div class="dataContact" ng-repeat="c in model.companySelected.contacts">
+
+                    <div>
+                        <div class="title">Nombre </div>
+                        <input class="inputText5" type="text" ng-model="c.name"></input>
+
+                    </div>
+
+                    <div>
+                        <div class="title">Teléfono </div>
+                        <div class="contentInput">
+                          <input class="inputText6" type="text" ng-model="c.telephone"></input>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="title">Correo electrónico </div>
+                        <div class="contentInput">
+                            <input class="inputText7" type="text" ng-model="c.email"></input>
+                            <button class="btnDelete" title="Eliminar correo" ng-click="removeContact(c)"><i class="fa fa-trash-o"></i></button>
+                            <button class="btnNewContact" title="Agregar Correo" ng-click="addContact()"><i class="fa fa-plus"></i></button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+  </div>
+
+  <div class="notification">
+
+    <div class="contentNotification">
+
+        <div class="cancel">
+            <div>¿Desea salir sin guardar?</div>
+            <div class="btns">
+                <button class="btnSi" ng-click="view.style=''; view.style3=''">SI</button>
+                <button class="btnNo" ng-click="view.style3=''">VOLVER</button>
+            </div>
+        </div>
+
+        <div class="preload">
+            <i class="fa fa-spinner fa-pulse fa-3x"></i>
+        </div>
+
+        <div class="guarded">
+            <div>Tutoría</div>
+            <div>guardada con éxito! </div>
+        </div>
+
+    </div>
+
+  </div>
+
+</div>

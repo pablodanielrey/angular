@@ -1,0 +1,41 @@
+    <form novalidate class="form-horizontal" role="form" ng-submit="submit()">
+      <fieldset>
+        <legend>Agregar Documento</legend>
+        <div class="form-group">
+          <label class="control-label col-sm-2">Monto:</label>
+          <div class="col-sm-4">
+            <input class="form-control" type="text" ng-model="documento.monto"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-sm-2">Fecha:</label>
+          <div class="col-sm-4">
+             <input class="form-control" type="text" placeholder="dd/mm/aaaa" ng-model="documento.fecha"/>
+          </div>
+
+        </div>
+        <div class="form-group">
+          <label class="control-label col-sm-2">Curso:</label>
+          <div class="col-sm-4">
+            <select class="form-control" ng-model="documento.curso">
+              <option value="">--Curso--</option>
+              <option value="DITESI">DITESI</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-sm-2">Número de Documento:</label>      
+          <div class="col-sm-4">
+            <input class="form-control" type="text" ng-model="documento.numero_documento"/>
+          </div>
+        </div>
+      </fieldset>
+      <br />
+      <div class="form-group"> 
+        <div class="col-sm-offset-2 col-sm-10">
+          <input class="btn btn-primary" type="submit" value="Aceptar" />
+          <input class="btn btn-primary" type="button" value="Cancelar" onclick="history.go(-1)"/>
+
+        </div>
+      </div> 
+  </form>

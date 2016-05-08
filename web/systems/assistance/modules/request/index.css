@@ -1,0 +1,1173 @@
+.request {
+  height: 100%;
+  width: 100%;
+}
+
+.request .header {
+  height: 102px;
+  width: 100%;
+  background: #DBE2E5;
+  color: #5C5F69;
+  padding-left: 50px;
+  font-size: 1.5em;
+}
+
+
+/* ******************************************************************
+  ESTO LO AGREGO EMANUEL - LO TIENE QUE COLOCAR WALTER DONDE DEBERIA
+ * **************************************************************** */
+
+
+ .request .contentRequestSelected.compensatory .compensatorio {
+   display:block;
+ }
+
+ .request .contentRequestSelected.informedAbsence .ausenteConAviso {
+   display:block;
+ }
+
+ .request .contentRequestSelected.oTWithReturn .boletaDeSalidaConRetorno {
+   display:block;
+ }
+
+ .request .contentRequestSelected.oTWithoutReturn .boletaDeSalidaSinRetorno {
+   display:block;
+ }
+
+ /*
+ Estados posibles
+ ----------------
+   UNDEFINED = 0
+   PENDING = 1
+   APPROVED = 2
+   REJECTED = 3
+   CANCELED = 4
+ */
+
+ .request .itemRequest .statePending {
+   display: none;
+ }
+
+ .request .itemRequest .stateApproved {
+   display: none;
+ }
+
+ .request .itemRequest .stateRejected {
+   display:none;0
+ }
+
+ .request .itemRequest .btnTrash {
+   display: none;
+ }
+
+
+ .request .itemRequest .stateCanceled {
+   display: none;
+ }
+
+ .request .itemRequest.status1 .statePending {
+   display: flex;
+   display: -webkit-flex;
+ }
+
+ .request .itemRequest.status1 .btnTrash {
+   display: flex;
+   display: -webkit-flex;
+ }
+
+ .request .itemRequest.status2 .stateApproved {
+   display: flex;
+   display: -webkit-flex;
+ }
+
+ .request .itemRequest.status3 .stateRejected {
+   display: flex;
+   display: -webkit-flex;
+ }
+
+ .request .itemRequest.status4 .stateCanceled {
+   display: flex;
+   display: -webkit-flex;
+ }
+
+ /* ******************     FIN     ****************************** */
+
+/******************************************************
+****** INICIO PANTALLA DE CREAR TUTOTRIA **************
+*******************************************************/
+
+.request .contentRequest {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  /*background-color: yellow;*/
+  background-color: #F1F1F1;
+  width: 100%;
+  height: 75%;
+
+}
+
+/******************* CONTENEDOR DE LA IZQUIERDA ***********************/
+
+.request .contentLeft {
+  /*background-color: grey;*/
+  width: 300px;
+  height: 80px;
+  border-right: 1px solid #DBE2E5;
+}
+
+.request.seleccionSolicitud .contentLeft {
+  height: 100%;
+}
+
+.request .newRequest {
+  /*background-color: green;*/
+  opacity: 1;
+  height: 100px;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  transform: translate3d(0,0,0);
+  -webkit-transform: translate3d(0,0,0);
+  -moz-transform: translate3d(0,0,0);
+  -webkit-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+     -moz-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+       -o-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+          transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+}
+
+.request.seleccionSolicitud .newRequest {
+  display: none;
+  /*opacity: 0;
+  transform: translate3d(0,1000%,0);
+  -webkit-transform: translate3d(0,1000%,0);
+  -moz-transform: translate3d(0,1000%,0);
+  -webkit-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+     -moz-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+       -o-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+          transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);*/
+}
+
+.request .btnNewRequest {
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border: none;
+  background-color: #92AD17;
+  color: white;
+  padding: 20px;
+  width: 80%;
+  cursor: pointer;
+}
+
+.request .btnNewRequest:hover {
+  background-color: #809612;
+}
+
+.request .listRequest {
+  height: 99%;
+  /*background: pink;*/
+  opacity: 0;
+  transform: translate3d(0,1000%,0);
+  -webkit-transform: translate3d(0,1000%,0);
+  -moz-transform: translate3d(0,1000%,0);
+  -webkit-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+     -moz-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+       -o-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+          transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+}
+
+.request.seleccionSolicitud .listRequest {
+  opacity: 1;
+  transform: translate3d(0,0,0);
+  -webkit-transform: translate3d(0,0,0);
+  -moz-transform: translate3d(0,0,0);
+  -webkit-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+     -moz-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+       -o-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+          transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+}
+
+.request .btnBack {
+  width: 100%;
+  border:none;
+  padding: 0px ;
+  cursor: pointer;
+  text-align: left;
+  background-color: #adadad;
+  color: #5C5F69;
+  font-size: 1em;
+}
+
+.request .btnBack:hover {
+  background-color: #bcbaba;
+}
+
+.request .arrowBack {
+  height: 100%;
+  background-color: #bcbaba;
+  padding: 17px 20px 17px 17px;
+  margin-right: 10px;
+  color: #5C5F69;
+}
+
+.request .btnBackCel {
+  width: 100%;
+  border:none;
+  padding: 0px ;
+  cursor: pointer;
+  text-align: left;
+  background-color: #adadad;
+  color: #5C5F69;
+  font-size: 1em;
+}
+
+.request .btnBackCel:hover {
+  background-color: #bcbaba;
+}
+
+.request .contentListRequest {
+  width: 90%;
+  height: 74%;
+  padding-right: 5px;
+  margin-top: 10px;
+  margin-left: 15px;
+  /*background-color: #FFF;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+  -moz-box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+  -webkit-box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;*/
+  overflow-x: auto;
+}
+
+
+
+.request .btnRequest {
+  background-color: white;
+  padding: 10px;
+  width: 100%;
+  font-size: 1em;
+  border: 1px solid #eae8e8;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  text-align: left;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  cursor: pointer;
+    margin-bottom: 5px;
+}
+
+.request .btnRequest:hover {
+  background-color: #DBE2E5;
+}
+
+
+.request .iconoRequest {
+  background-color: #DBE2E5;
+  border-radius: 100%;
+  -moz-border-radius: 100%;
+  -webkit-border-radius: 100%;
+  padding: 5px;
+  margin-right: 10px;
+  font-size: 2em;
+  color:#5C5F69;
+}
+
+.request .ico {
+  color: #5C5F69 ;
+}
+
+.request .btnRequestDisable {
+  background-color: white;
+  padding: 10px;
+  width: 100%;
+  font-size: 1em;
+  border: 1px solid #eae8e8;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  text-align: left;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+
+    margin-bottom: 5px;
+    opacity: .5;
+}
+
+
+
+/******************* CONTENEDOR DE LA DERECHA ***********************/
+
+.request .contentRight {
+  /*background-color: red;*/
+  width: 72%;
+  height: 100%;
+  opacity: 1;
+  transform: translate3d(0,0,0);
+  -webkit-transform: translate3d(0,0,0);
+  -moz-transform: translate3d(0,0,0);
+  -webkit-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+     -moz-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+       -o-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+          transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+}
+
+.request .contentMyRequest {
+  height: 90%;
+  /*background-color: purple;*/
+  padding: 20px;
+  opacity: 1;
+  transform: translate3d(0,0,0);
+  -webkit-transform: translate3d(0,0,0);
+  -moz-transform: translate3d(0,0,0);
+  -webkit-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+     -moz-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+       -o-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+          transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+}
+
+.request.solicitudSeleccionada .contentMyRequest {
+  display: none;
+  /*opacity: 0;
+  transform: translate3d(0,1000%,0);
+  -webkit-transform: translate3d(0,1000%,0);
+  -moz-transform: translate3d(0,1000%,0);
+  -webkit-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+     -moz-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+       -o-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+          transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);*/
+}
+
+.request .selectRequest {
+  border:none;
+  background-color: #F1F1F1;
+  color: #5C5F69;
+  font-size: 16px;
+  text-decoration: none;
+}
+
+.request .title {
+    color: #5C5F69;
+}
+
+.request .titleListRequest {
+  margin-top: 10px;
+  margin-left: 15px;
+  color: #5C5F69;
+}
+
+.request .listMyRequest {
+  width: 100%;
+  height: 90%;
+  padding: 10px;
+  margin-top: 10px;
+  background-color: #FFF;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+  -moz-box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+  -webkit-box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  overflow-x: auto;
+}
+
+
+
+.request .loadingRequests {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction: column;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  color: #5C5F69;
+}
+
+.request .iconMessage {
+  color: #f1f1f1;
+  margin-bottom: 10px;
+}
+
+
+.request.solicitudesGrupo .loadingRequests {
+  display: none;
+}
+
+.request.solicitudesPersonales .loadingRequests {
+  display: none;
+}
+
+.request.cargandoSolicitudes .requestContainer {
+  display: none;
+}
+
+
+.request .itemRequest {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  border-bottom: 1px solid #DBE2E5;
+  padding-bottom: 10px;
+  margin-bottom: 5px;
+}
+
+.request .contentRequestSelected {
+  /*background-color: orange;*/
+  opacity: 0;
+  transform: translate3d(0,1000%,0);
+  -webkit-transform: translate3d(0,1000%,0);
+  -moz-transform: translate3d(0,1000%,0);
+  -webkit-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+     -moz-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+       -o-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+          transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+}
+
+.request.solicitudSeleccionada .contentRequestSelected {
+  opacity: 1;
+  transform: translate3d(0,0,0);
+  -webkit-transform: translate3d(0,0,0);
+  -moz-transform: translate3d(0,0,0);
+  -webkit-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+     -moz-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+       -o-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+          transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+}
+
+
+.request .contentRequestSelected .compensatorio,
+.request .contentRequestSelected .ausenteConAviso,
+.request .contentRequestSelected .boletaDeSalidaConRetorno,
+.request .contentRequestSelected .boletaDeSalidaSinRetorno {
+  display:none;
+}
+
+.request .contentHeaderRequest {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+}
+
+
+.request .dateOrder {
+  color:#646770;
+  font-size: 12px;
+}
+
+.request .inputDateRequest {
+    width: 130px;
+    border: none;
+    background-color: #FFF;
+    color: #5c5f69;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    padding: 1px 0px 1px 5px;
+    margin: 0 5px 0 5px;
+    border: 1px solid #DBE2E5;
+}
+
+.request .infoRequest {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  font-size: 13px;
+}
+
+.request .bar {
+  margin-left: 5px;
+  margin-right: 5px;
+  color:#5C5F69 !important;
+}
+
+.request .orderRequest {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: space-between;
+}
+
+.request .icoOrder {
+  color:#c1bfbf;
+  margin-right: 5px;
+}
+
+.request .textOrder {
+  color:#c1bfbf;
+  font-size: 12px;
+  margin-right: 5px;
+}
+
+.request .btnOrder {
+  color:#5C5F69;
+  border:none;
+  padding: 3px;
+  width: 23px;
+  height: 23px;
+  margin-right: 5px;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border: 1px solid #DBE2E5;
+
+  cursor: pointer;
+}
+
+.request .btnOrder:hover {
+  background-color: #ccc7c7;
+}
+
+.request .typeRequest {
+  /*background-color: red;*/
+  width: 200px;
+}
+/*
+.request .dateRequest2 {
+  font-size: 12px;
+}*/
+
+
+.request .contentState {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+
+}
+
+.request .icoState {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+}
+
+.request .icoStateApproved {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  height: 25px;
+  width: 25px;
+  background-color: #92AD17;
+  color:white;
+  margin-left: 5px;
+  margin-right: 5px;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+}
+
+.request .textIcoStateApproved {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  width: 80px;
+  height: 20px;
+  padding: 3px;
+  border: none;
+ background-color: #92AD17;
+ color: white;
+ font-size: 12px;
+}
+
+.request .textIcoStateCancel {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  width: 80px;
+  height: 20px;
+  padding: 3px;
+  border: none;
+ background-color: #E43E46;
+ color: white;
+ font-size: 12px;
+}
+
+.request .textIcoStatePending {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  width: 80px;
+  height: 20px;
+  padding: 3px;
+  border: none;
+  /*background-color: #E43E46;*/
+  color: white;
+  font-size: 12px;
+  -webkit-animation-name: pendiente; /* Chrome, Safari, Opera */
+  -webkit-animation-duration: 1s; /* Chrome, Safari, Opera */
+  -webkit-animation-iteration-count: infinite;
+  animation-name: pendiente;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+}
+
+/* Chrome, Safari, Opera */
+@-webkit-keyframes pendiente {
+    from {background-color: #0069A6;}
+    to {background-color: #43b2f2;}
+}
+
+/* Standard syntax */
+@keyframes pendiente {
+    from {background-color: #0069A6;}
+    to {background-color: #43b2f2;}
+}
+
+
+.request .icoStatePendig {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  height: 25px;
+  width: 25px;
+  /*background-color: #0069A6;*/
+  color:white;
+  margin-left: 5px;
+  margin-right: 5px;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  -webkit-animation-name: pendiente; /* Chrome, Safari, Opera */
+  -webkit-animation-duration: 1s; /* Chrome, Safari, Opera */
+  -webkit-animation-iteration-count: infinite;
+  animation-name: pendiente;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+}
+
+/* Chrome, Safari, Opera */
+@-webkit-keyframes pendiente {
+    from {background-color: #0069A6;}
+    to {background-color: #43b2f2;}
+}
+
+/* Standard syntax */
+@keyframes pendiente {
+    from {background-color: #0069A6;}
+    to {background-color: #43b2f2;}
+}
+
+
+.request .icoStateCancel {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  height: 25px;
+  width: 25px;
+  background-color: #e43e46;
+  color:white;
+
+  margin-left: 5px;
+  margin-right: 5px;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+}
+
+
+
+
+.request .state {
+    color: #5C5F69;
+    font-size: 12px;
+    margin-right: 10px;
+}
+
+.request .textIcoState {
+  font-size: 13px;
+}
+
+.request .nameRequest {
+  font-weight: bold;
+  font-size: 14px;
+  color: #28292D;
+  margin-right:25px;
+  /*background: red;*/
+  width: 150px;
+}
+
+.request .actionBtns {
+  margin-left: 5px;
+}
+
+.request .btnApprove {
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  width: 100px;
+  height: 25px;
+  padding: 3px;
+  border: none;
+  /*background-color: #92AD17;*/
+  color:white;
+  margin-bottom: 5px;
+  -webkit-animation-name: btnAprobar; /* Chrome, Safari, Opera */
+  -webkit-animation-duration: 1s; /* Chrome, Safari, Opera */
+  -webkit-animation-iteration-count: infinite;
+  animation-name: btnAprobar;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  cursor: pointer;
+}
+
+
+/* Chrome, Safari, Opera */
+@-webkit-keyframes btnAprobar {
+    from {background-color: #0069A6;}
+    to {background-color: #43b2f2;}
+}
+
+/* Standard syntax */
+@keyframes btnAprobar {
+    from {background-color: #0069A6;}
+    to {background-color: #43b2f2;}
+}
+
+/*.request .btnApprove:hover {
+  background-color: #809612;
+  cursor: pointer;
+}*/
+
+.request .btnCancel {
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  width: 100px;
+  height: 25px;
+  padding: 3px;
+  border: none;
+  background-color: #E43E46;
+  color:white;
+}
+
+.request .btnCancel:hover {
+  background-color: #c1262b;
+  cursor: pointer;
+}
+
+.request .btnTrash {
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border: none;
+  cursor: pointer;
+  height: 25px;
+  width: 25px;
+  cursor: #5C5F69;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.request .btnTrash:hover {
+  background-color: #E43E46;
+  color: white;
+}
+
+
+
+/*
+.request.solicitudesGrupo .state {
+  display: none;
+}
+
+.request.solicitudesGrupo .typeRequest {
+  display: flex;
+  display: -webkit-flex;
+  display: -moz-flex;
+  flex-direction:row;
+  -webkit-flex-direction:row;
+  -moz-flex-direction:row;
+  align-items: center;
+  -webkit-align-items:center;
+  -moz-align-items:center;
+  width: 350px;
+}
+
+*/
+
+
+
+
+/******************** SOLICITUDES TIPOS *****************************/
+
+/* Justifica horas */
+.request .itemRequest.RangedTimeJustification {}
+
+.request .itemRequest.RangedTimeJustification .infoRequest .displaySingleDate,
+.request .itemRequest.RangedTimeJustification .infoRequest .displayRangedDate {
+  display: none;
+}
+
+/* Justifica un día */
+.request .itemRequest.SingleDateJustification {}
+
+.request .itemRequest.SingleDateJustification .infoRequest .displayRangedTime,
+.request .itemRequest.SingleDateJustification .infoRequest .displayRangedDate {
+  display:none;
+}
+
+/* Justifica un rango de fechas */
+.request .itemRequest.RangedJustification {}
+.request .itemRequest.RangedJustification .infoRequest .displaySingleDate,
+.request .itemRequest.RangedJustification .infoRequest .displayRangedTime {
+  display: none;
+}
+
+ /******************* SOLICITUDES PERSONALES ************************/
+
+.request.solicitudesPersonales .itemRequest .nameRequest {
+  display:none;
+}
+
+ /******************* SOLICITUDES MI GRUPO *************************/
+
+ .request .itemRequest .actionBtns {
+   display:none;
+ }
+
+ .request.solicitudesGrupo .itemRequest.status1 .actionBtns {
+   display:block;
+   /*display: flex;*/
+   /*display: -webkit-flex;*/
+ }
+
+ .request.solicitudesGrupo .itemRequest.status1 .statePending,
+ .request.solicitudesGrupo .itemRequest.status1 .trashContainer,
+ .request.solicitudesGrupo .itemRequest.status1 .state {
+   display:none;
+ }
+
+
+/**********************************************************************
+************************* VISTA CELULAR *******************************
+***********************************************************************/
+
+@media (max-width: 719px) {
+  .request .contentRequest {
+    display: flex;
+    display: -webkit-flex; /* Safari */
+    display: -moz-flex; /* mozilla */
+    flex-direction:column;
+    -webkit-flex-direction:column; /* Safari */
+    -moz-flex-direction:column; /* mozilla */
+    height: 78%;
+  }
+
+  .request .header {
+    display: none;
+  }
+
+  .request .contentLeft {
+    /*background-color: grey;*/
+    width: 100%;
+    height: 80px;
+  }
+
+  .request .btnNewRequest {
+    font-size: 1em;
+  }
+
+  .request .contentRight {
+    /*background-color: red;*/
+    width: 100%;
+
+  }
+
+  .request.seleccionSolicitud .contentLeft {
+    height: 100%;
+  }
+
+  .request.seleccionSolicitud .contentRight {
+    opacity: 0;
+    transform: translate3d(0,1000%,0);
+    -webkit-transform: translate3d(0,1000%,0);
+    -moz-transform: translate3d(0,1000%,0);
+    -webkit-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+       -moz-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+         -o-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+            transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+  }
+
+  .request.solicitudSeleccionada .listRequest {
+    display: none;
+    /*opacity: 0;
+    transform: translate3d(0,1000%,0);
+    -webkit-transform: translate3d(0,1000%,0);
+    -moz-transform: translate3d(0,1000%,0);
+    -webkit-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+       -moz-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+         -o-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+            transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);*/
+  }
+
+  .request.solicitudSeleccionada .contentLeft {
+    display: none;
+  }
+
+  .request.solicitudSeleccionada .contentRight {
+    opacity: 1;
+    transform: translate3d(0,0,0);
+    -webkit-transform: translate3d(0,0,0);
+    -moz-transform: translate3d(0,0,0);
+    -webkit-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+       -moz-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+         -o-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+            transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+  }
+
+  .request .typeRequest {
+    width: 140px !important;
+    /*background-color: red;*/
+  }
+
+  .request .contentMyRequest {
+    height: 65%;
+  }
+
+  .request .listRequest {
+
+  }
+
+  .request .itemRequest {
+    font-size: 11px;
+  }
+
+  .request .dateRequest {
+    font-size: 11px;
+  }
+
+  .request .dateRequest2 {
+    font-size: 11px;
+  }
+
+  .request .state {
+    display: none;
+  }
+
+  .request .textIcoState {
+    display: none;
+  }
+
+  .request .dateOrder {
+    display: none;
+  }
+
+  .request .textIcoStateApproved,
+  .request .textIcoStatePending,
+  .request .textIcoStateCancel {
+    display: none;
+  }
+
+
+
+
+  .request .nameRequest {
+    font-weight: bold;
+    font-size: 12px;
+    color: #28292D;
+    margin-right: 0px;
+    width: 130px;
+  }
+
+  .request .btnApprove {
+    width: 70px;
+    height: 20px;
+    font-size: 10px;
+    margin-bottom: 2px;
+  }
+
+  .request .btnCancel {
+    width: 70px;
+    height: 20px;
+    font-size: 10px;
+  }
+
+  .request .nameRequest {
+    margin-right: 0px;
+  }
+
+
+}
+@media (min-width: 720px) {
+  .request .btnBackCel {
+    display: none;
+  }
+  .request .icoStateApproved,
+  .request .icoStatePendig,
+  .request .icoStateCancel,
+  .request .icoStateApproved {
+    display: none;
+  }
+}
+
+@media (max-width: 1270px) {
+  .dateOrder {
+      display: none;
+  }
+  .request .state {
+    display: none;
+  }
+  .request .textIcoState {
+    display: none;
+  }
+  .request.solicitudesGrupo .typeRequest {
+    display: flex;
+    display: -webkit-flex; /* Safari */
+    display: -moz-flex; /* mozilla */
+    flex-direction:column;;
+    -webkit-flex-direction:column; /* Safari */
+    -moz-flex-direction:column; /* mozilla */
+    align-items: flex-start;
+    width: 200px;
+
+  }
+
+  .request .infoRequest {
+    display: flex;
+    display: -webkit-flex; /* Safari */
+    display: -moz-flex; /* mozilla */
+    flex-direction:column;;
+    -webkit-flex-direction:column; /* Safari */
+    -moz-flex-direction:column; /* mozilla */
+
+  }
+
+  .request .bar {
+    display: none;
+  }
+
+
+  .request .nameRequest {
+    margin-right: 0px;
+  }
+
+
+
+
+}

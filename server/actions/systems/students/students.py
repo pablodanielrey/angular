@@ -1,13 +1,10 @@
 import inject
 import json
-import psycopg2
 import logging
 
-from model.systems.students.students import Students
-from model.events import Events
-from model.profiles import Profiles
-from model.config import Config
-
+from model.users.users import Student, StudentDAO
+from model.registry import Registry
+from model.connection.connection import Connection
 
 import asyncio
 from asyncio import coroutine
@@ -25,32 +22,26 @@ class StudentsWamp(ApplicationSession):
         logging.debug('instanciando')
         ApplicationSession.__init__(self, config)
 
-        self.serverConfig = inject.instance(Config)
-        self.students = inject.instance(Students)
+        r = inject.instance(Registry)
+        self.conn = Connection(r.getRegistry('dcsys'))
+        self.students = inject.instance(StudentDAO)
 
     @coroutine
     def onJoin(self, details):
         logging.debug('registering methods')
         yield from self.register(self.persist_async, 'system.students.persist')
         yield from self.register(self.findById_async, 'system.students.findById')
-        yield from self.register(self.findByNumber_async, 'system.students.findByNumber')
-
-    def _getDatabase(self):
-        host = self.serverConfig.configs['database_host']
-        dbname = self.serverConfig.configs['database_database']
-        user = self.serverConfig.configs['database_user']
-        passw = self.serverConfig.configs['database_password']
-        return psycopg2.connect(host=host, dbname=dbname, user=user, password=passw)
+        #yield from self.register(self.findByNumber_async, 'system.students.findByNumber')
 
     def persist(self, student):
-        con = self._getDatabase()
+        con = self.conn.get()
         try:
-            self.students.persist(con, student)
+            sid = self.students.persist(con, student)
             con.commit()
-            return True
+            return sid
 
         finally:
-            con.close()
+            self.conn.put(con)
 
     @coroutine
     def persist_async(self, student):
@@ -59,13 +50,15 @@ class StudentsWamp(ApplicationSession):
         return r
 
     def findById(self, userId):
-        con = self._getDatabase()
+        con = self.conn.get()
         try:
-            student = self.students.findById(con, userId)
-            return student
+            students = self.students.findById(con, [userId])
+            if len(students) <= 0 or students[0] is None:
+                return None
+            return students[0].__dict__
 
         finally:
-            con.close()
+            self.conn.put(con)
 
     @coroutine
     def findById_async(self, userId):
@@ -73,17 +66,19 @@ class StudentsWamp(ApplicationSession):
         r = yield from loop.run_in_executor(None, self.findById, userId)
         return r
 
+    """
     def findByNumber(self, n):
-        con = self._getDatabase()
+        con = self.conn.get()
         try:
             student = self.students.findByNumber(con, n)
             return student
 
         finally:
-            con.close()
+            self.conn.put(con)
 
     @coroutine
     def findByNumber_async(self, n):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.findByNumber, n)
         return r
+    """
