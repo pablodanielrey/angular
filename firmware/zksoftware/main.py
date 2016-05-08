@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import logging, inject, time, sys, signal
-import psycopg2, uuid
+import uuid
+import psycopg2
+from psycopg2.extras import DictCursor
 import datetime
 
 sys.path.append('../../python')
@@ -12,6 +14,7 @@ from model.assistance.utils import Utils
 from model.offices.offices import Office
 from model.registry import Registry
 from zksoftware.zkSoftware import ZkSoftware
+
 
 
 class Main:
@@ -47,7 +50,7 @@ class Main:
 
 
     def _connect(self):
-        con = psycopg2.connect(host=self.host, dbname=self.db, user=self.user, password=self.passw)
+        con = psycopg2.connect(host=self.host, dbname=self.db, user=self.user, password=self.passw, cursor_factory=DictCursor)
         return con
 
 
