@@ -80,13 +80,11 @@ class Main:
                     userData = User.findByDni(con, dni)
                     userId = None
                     if userData is None:
-                        (userId, version) = userData
                         user = User()
-                        user.id = userId
                         user.dni = l['PIN']
                         user.name = 'autogenerado asistencia'
                         user.lastname = 'autogenerado asistencia'
-                        user.persist(con)
+                        userId = user.persist(con)
 
                         ''' agrego la persona a la oficina de asistencia autogenerados - el id esta en insert_basic_data.sql '''
                         office.appendUser(userId)
