@@ -1,8 +1,4 @@
 config = {
-  url: "ws://163.10.17.116:8000/ws",
-  realm: "assistance",
-  host: "127.0.0.1",
-  port: "8081",
-  ssl_host: "127.0.0.1",
-  ssl_port: "8002"
+  url: "autodetect",
+  realm: "assistance"
 }
