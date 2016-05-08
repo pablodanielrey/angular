@@ -97,13 +97,14 @@ class Main:
                     aware = Utils.localize(self.timezone, date)
                     utcaware = Utils.awareToUtc(aware)
 
-                    log = Log()
-                    log.id = str(uuid.uuid4())
-                    log.userId = userId
-                    log.deviceId = self.deviceId
-                    log.verifyMode = l['Verified']
-                    log.log = utcaware
-                    tlogs.append(log)
+                    if len(Log.findByDate(con, utcaware)) <= 0:
+                        log = Log()
+                        log.id = str(uuid.uuid4())
+                        log.userId = userId
+                        log.deviceId = self.deviceId
+                        log.verifyMode = l['Verified']
+                        log.log = utcaware
+                        tlogs.append(log)
 
                 logging.info('salvando logs en la base')
                 for l in tlogs:

@@ -55,6 +55,19 @@ class LogDAO(DAO):
             cur.close()
 
     @classmethod
+    def findByDate(cls, con, date):
+        assert con is not None
+        assert date is not None
+        cur = con.cursor()
+        try:
+            cur.execute('select * from assistance.attlog where log = %s', (date,))
+            if cur.rowcount <= 0:
+                return []
+            return [cls._fromResult(r) for r in cur]
+        finally:
+            cur.close()
+
+    @classmethod
     def persist(cls, con, log):
         assert con is not None
         assert log is not None
@@ -63,6 +76,7 @@ class LogDAO(DAO):
             if not hasattr(log, 'id') or log.id is None:
                 log.id = str(uuid.uuid4())
             cur.execute('set timezone to utc')
+            # inserta el log en el caso de que no exista otro log con ese mismo id
             cur.execute('insert into assistance.attlog (id, device_id, user_id, verifymode, log) '
                         'select %(id)s, %(deviceId)s, %(userId)s, %(verifyMode)s, %(log)s where '
                         'not exists (select 1 from assistance.attlog where id = %(id)s)', log.__dict__)
@@ -72,6 +86,8 @@ class LogDAO(DAO):
 
 
 class Log(JSONSerializable):
+
+    dao = LogDAO
 
     def __init__(self):
         self.id = None
@@ -86,3 +102,7 @@ class Log(JSONSerializable):
 
     def persist(self, con):
         LogDAO.persist(con, self)
+
+    @classmethod
+    def findByDate(cls, con, date):
+        return cls.dao.findByDate(con, date)
