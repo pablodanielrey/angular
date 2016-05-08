@@ -77,7 +77,7 @@ class Main:
                     logging.debug(l)
 
                     dni = l['PIN']
-                    userData = User.findUserByDni(con, dni)
+                    userData = User.findByDni(con, dni)
                     userId = None
                     if userData is None:
                         (userId, version) = userData
