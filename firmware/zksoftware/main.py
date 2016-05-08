@@ -27,7 +27,7 @@ class Main:
         registry = reg.getRegistry('zksoftware')
 
         host = registry.get('host')
-        port = int(registry.get('port')
+        port = int(registry.get('port'))
         self.zk = ZkSoftware(host, port)
         self.timezone = registry.get('timezone')
         self.deviceId = registry.get('device_id')
