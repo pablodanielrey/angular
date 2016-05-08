@@ -111,7 +111,7 @@ class Main:
                 """ borro los logs del reloj """
                 nowdate = datetime.datetime.now()
                 deletestart = nowdate.replace(hour=int(self.hour_start_delete), minute=int(self.minute_start_delete, second=0, microsecond=0)
-                deleteend = nowdate.replace(hour=int(self.hour_end_delete, minute=int(self.minute_end_delete), second=0, microsecond=0)
+                deleteend = nowdate.replace(hour=int(self.hour_end_delete), minute=int(self.minute_end_delete), second=0, microsecond=0)
                 if (nowdate <= deleteend and nowdate >= deletestart):
                     logscheck = self.zk.getAttLog()
                     logslen = len(logs)
