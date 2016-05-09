@@ -9,7 +9,7 @@ class Utils:
     def _cloneDate(date):
         if isinstance(date, datetime.date):
             return datetime.date.fromordinal(date.toordinal())
-        elif isinstance(date, datetime.datetime)
+        elif isinstance(date, datetime.datetime):
             return datetime.datetime.fromordinal(date.toordinal())
         else:
             return None
