@@ -108,7 +108,7 @@ class InformedAbsenceJustification(SingleDateJustification):
 
     @classmethod
     def create(cls, con, date, userId, ownerId):
-        cls._checkConstraints(cls, con, date, userId)
+        cls._checkConstraints(con, date, userId)
         return super().create(con, date, userId, ownerId)
 
     @classmethod
