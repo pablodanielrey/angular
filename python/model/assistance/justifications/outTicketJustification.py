@@ -134,15 +134,35 @@ class OutTicketJustification(RangedTimeJustification):
 
     @classmethod
     def create(cls, con, start, end, userId, ownerId):
-        if self.start > self.end:
-            raise Exception('La hora de finalización es menor que el inicio')
+        assert con is not None
+        assert isinstance(start, datetime.datetime)
+        assert isinstance(end, datetime.datetime)
 
+        cls._checkConstraints(con, start, end, userId)
+        return super().create(con, start, end, userId, ownerId)
+
+    @classmethod
+    def _checkConstraints(cls, con, start, end, userId):
+        assert start > end
+        """ chequeo cantidad de horas pedidas """
         diff = (self.end - self.start).seconds
         limitSeconds = 3 * 60 * 60
         if diff > limitSeconds:
             raise Exception('El tiempo requerido supera el límite')
 
-        return super().create(con, start, end, userId, ownerId)
+        if diff <= 60 * 60:
+            raise Exception('Como mínimo se debe pedir 1 hora')
+
+        monthStart = Utils._cloneDate(start).replace(day=1, hour=0, minute=0, second=0)
+        from calendar import monthrange
+        (dstart, dend) = monthrange(monthStart.year, monthStart.month)
+        monthEnd = Utils._cloneDate(monthStart) + datetime.timedelta(days=dend) - datetime.timedelta(second=1)
+        justs = dao.findByUserId(con, userId, monthStart, monthEnd)
+        diffSum = 0
+        for j in justs:
+            diffSum = diffSum + j.getJustifiedSeconds()
+        if diffSum >= limitSeconds:
+            raise Exception('No tiene horas disponibles')
 
 
 class OutTicketWithReturnJustification(OutTicketJustification):

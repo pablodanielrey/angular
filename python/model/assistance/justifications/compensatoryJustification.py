@@ -26,6 +26,12 @@ class CompensatoryJustificationDAO(AssistanceDAO):
                     date date not null default now(),
                     created timestamptz default now()
               );
+
+              CREATE TABLE IF NOT EXISTS assistance.justification_compensatory_stock (
+                    user_id varchar primary key references profile.users (id),
+                    stock bigint default 0,
+                    updated timestamptz default now()
+              );
               """
             cur.execute(sql)
         finally:
@@ -90,6 +96,18 @@ class CompensatoryJustificationDAO(AssistanceDAO):
         finally:
             cur.close()
 
+    @classmethod
+    def getStock(cls, con, userId):
+        cur = con.cursor()
+        try:
+            cur.execute('select stock from assistance.justification_compensatory_stock where user_id = %s', (userId,))
+            if cur.rowcount <= 0:
+                return 0
+            else:
+                return cur.fetchone()['stock']
+        finally:
+            cur.close()
+
 class CompensatoryJustification(SingleDateJustification):
 
     dao = CompensatoryJustificationDAO
@@ -102,3 +120,13 @@ class CompensatoryJustification(SingleDateJustification):
 
     def getIdentifier(self):
         return self.identifier
+
+    @classmethod
+    def create(cls, con, date, userId, ownerId):
+        if cls.getStock(con, userId) <= 0:
+            raise Exception('No tiene compensatorios')
+        return super().create(con, date, userId, ownerId)
+
+    @classmethod
+    def getStock(cls, con, userId):
+        return cls.dao.getStock(con, userId)
