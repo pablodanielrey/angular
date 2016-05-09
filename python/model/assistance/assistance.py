@@ -359,7 +359,8 @@ class AssistanceModel:
     def createSingleDateJustification(self,con, date, userId, ownerId, justClazz, justModule):
         module = importlib.import_module(justModule)
         clazz = getattr(module, justClazz)
-        return clazz.create(con, date, userId, ownerId)
+        j = clazz.create(con, date, userId, ownerId)
+        return j.persist(con)
 
 
     def createRangedTimeWithoutReturnJustification(self, con, start, userId, ownerId, justClazz, justModule):
@@ -377,7 +378,8 @@ class AssistanceModel:
 
         module = importlib.import_module(justModule)
         clazz = getattr(module, justClazz)
-        return clazz.create(con, start, end, userId, ownerId)
+        j = clazz.create(con, start, end, userId, ownerId)
+        return j.persist(con)
 
 
     def createRangedTimeWithReturnJustification(self, con, start, end, userId, ownerId, justClazz, justModule):
@@ -385,4 +387,5 @@ class AssistanceModel:
         assert isinstance(end, datetime.datetime)
         module = importlib.import_module(justModule)
         clazz = getattr(module, justClazz)
-        return clazz.create(con, start, end, userId, ownerId)
+        j = clazz.create(con, start, end, userId, ownerId)
+        return j.persist(con)

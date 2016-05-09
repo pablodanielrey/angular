@@ -135,9 +135,7 @@ class SingleDateJustification(Justification):
 
     @classmethod
     def create(cls, con, date, userId, ownerId):
-        j = cls(date, userId, ownerId)
-        j.persist(con)
-
+        return cls(date, userId, ownerId)
 
 
 class RangedJustification(Justification):
@@ -225,8 +223,7 @@ class RangedTimeJustification(Justification):
 
     @classmethod
     def create(cls, con, start, end, userId, ownerId):
-        j = cls(start, end, userId, ownerId)
-        j.persist(con)
+        return cls(start, end, userId, ownerId)
 
     def _loadWorkedPeriods(self, wps):
         assert self.getStatus() is not None

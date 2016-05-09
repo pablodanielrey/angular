@@ -125,7 +125,6 @@ class OutTicketWithoutReturnJustificationDAO(OutTicketJustificationDAO):
         return j
 
 
-
 class OutTicketJustification(RangedTimeJustification):
 
     def __init__(self, start = None, end=None, userId = None, ownerId = None):
@@ -133,7 +132,8 @@ class OutTicketJustification(RangedTimeJustification):
         self.typeName = 'Boleta de salida'
         self.classType = RangedTimeJustification.__name__
 
-    def persist(self, con):
+    @classmethod
+    def create(cls, con, start, end, userId, ownerId):
         if self.start > self.end:
             raise Exception('La hora de finalización es menor que el inicio')
 
@@ -142,17 +142,16 @@ class OutTicketJustification(RangedTimeJustification):
         if diff > limitSeconds:
             raise Exception('El tiempo requerido supera el límite')
 
-        super().persist(con)
+        return super().create(con, start, end, userId, ownerId)
 
 
 class OutTicketWithReturnJustification(OutTicketJustification):
 
     dao = OutTicketWithReturnJustificationDAO
-    identifier = "con retorno"
 
     def __init__(self, start = None, end=None, userId = None, ownerId = None):
         super().__init__(start, end, userId, ownerId)
-        self.identifier = OutTicketWithReturnJustification.identifier
+        self.identifier = "con retorno"
 
     def getIdentifier(self):
         return self.typeName + " " + self.identifier
@@ -161,14 +160,14 @@ class OutTicketWithReturnJustification(OutTicketJustification):
         self.end = end
         OutTicketWithReturnJustificationDAO.persist(con)
 
+
 class OutTicketWithoutReturnJustification(OutTicketJustification):
 
     dao = OutTicketWithoutReturnJustificationDAO
-    identifier = 'sin retorno'
 
     def __init__(self, start = None, end = None, userId = None, ownerId = None):
         super().__init__(start, end, userId, ownerId)
-        self.identifier = OutTicketWithoutReturnJustification.identifier
+        self.identifier = "sin retorno"
 
     def getIdentifier(self):
         return self.typeName + " " + self.indentifier
