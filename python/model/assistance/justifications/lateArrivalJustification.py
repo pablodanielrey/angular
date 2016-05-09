@@ -33,7 +33,7 @@ class LateArrivalJustificationDAO(AssistanceDAO):
 
     @classmethod
     def _fromResult(cls, con, r):
-        date = datetime.datetime.combine(r['jdate'], datetime.time.min)
+        date = datetime.datetime.combine(r['date'], datetime.time.min)
         c = LateArrivalJustification(date, r['user_id'], r['owner_id'])
         c.id = r['id']
         c.setStatus(Status.getLastStatus(con, c.id))
