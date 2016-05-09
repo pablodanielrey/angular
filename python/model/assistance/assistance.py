@@ -190,10 +190,6 @@ class AssistanceModel:
             result[d.userId].append(d)
         return result
 
-    @staticmethod
-    def _cloneDate(date):
-        return datetime.date.fromordinal(date.toordinal())
-
     def _getSchedules(self, con, userIds, start, end):
         ss = ScheduleDAO.findByUserId(con, userIds, start, end)
         schedules = AssistanceModel._classifyByUserId(ss)
@@ -287,7 +283,7 @@ class AssistanceModel:
         """ genero los dias a trabajar """
         logging.info('generando los dias de trabajo')
         days = []
-        d = AssistanceModel._cloneDate(start.date())
+        d = Utils._cloneDate(start.date())
         oneDay = datetime.timedelta(hours=24)
         dend = end.date()
         while d <= dend:
@@ -298,7 +294,7 @@ class AssistanceModel:
         logging.info('generando los periodos de trabjo')
         wpss = {}
         for uid in userIds:
-            wpss[uid] = [ WorkPeriod._create(uid, AssistanceModel._cloneDate(d)) for d in days ]
+            wpss[uid] = [ WorkPeriod._create(uid, Utils._cloneDate(d)) for d in days ]
 
         """ cargar los datos de la base """
         logging.info('cargando los datos de los periodos')

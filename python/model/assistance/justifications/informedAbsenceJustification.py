@@ -35,14 +35,17 @@ class InformedAbsenceJustificationDAO(AssistanceDAO):
 
     @classmethod
     def _fromResult(cls, con, r):
-        date = datetime.datetime.combine(r['jdate'], datetime.time.min)
-        j = InformedAbsenceJustification(date, r['user_id'], r['owner_id'])
+        j = InformedAbsenceJustification()
         j.id = r['id']
+        j.userId = r['user_id']
+        j.ownerId = r['owner_id']
+        j.date = r['jdate']
         j.setStatus(Status.getLastStatus(con, j.id))
         return j
 
     @classmethod
     def persist(cls, con, j):
+        assert con is not None
         assert j is not None
 
         cur = con.cursor()
@@ -77,17 +80,16 @@ class InformedAbsenceJustificationDAO(AssistanceDAO):
     @classmethod
     def findByUserId(cls, con, userIds, start, end):
         assert isinstance(userIds, list)
-        assert isinstance(start, datetime.datetime)
-        assert isinstance(end, datetime.datetime)
+        assert isinstance(start, datetime.date)
+        assert isinstance(end, datetime.date)
 
         if len(userIds) <= 0:
             return
 
         cur = con.cursor()
         try:
-            sDate = None if start is None else start.date()
-            eDate = datetime.date.today() if end is None else end.date()
-            cur.execute('select * from assistance.justification_informed_absence where user_id  in %s and jdate BETWEEN %s AND %s', (tuple(userIds), sDate, eDate))
+            eDate = datetime.date.today() if end is None else end
+            cur.execute('select * from assistance.justification_informed_absence where user_id  in %s and jdate BETWEEN %s AND %s', (tuple(userIds), start, eDate))
             return [ cls._fromResult(con, r) for r in cur ]
         finally:
             cur.close()
@@ -95,12 +97,33 @@ class InformedAbsenceJustificationDAO(AssistanceDAO):
 class InformedAbsenceJustification(SingleDateJustification):
 
     dao = InformedAbsenceJustificationDAO
-    identifier = "Ausente con aviso"
 
     def __init__(self, date = None, userId = None, ownerId = None):
         super().__init__(date, userId, ownerId)
-        self.identifier = InformedAbsenceJustification.identifier
+        self.identifier = "Ausente con aviso"
         self.classType = SingleDateJustification.__name__
 
     def getIdentifier(self):
         return self.identifier
+
+    @classmethod
+    def create(cls, con, date, userId, ownerId):
+        cls._checkConstraints(cls, con, date, userId)
+        return super().create(con, date, userId, ownerId)
+
+    @classmethod
+    def _checkConstraints(cls, con, date, userId):
+        """
+            Se controla:
+                6 anuales
+                2 mensuales
+        """
+        yearStart = Utils._cloneDate(date).replace(month=1,day=1)
+        yearEnd = Utils._cloneDate(date).replace(month=12,day=31)
+        justs = cls.dao.findByUserId(con, [userId], yearStart, yearEnd)
+        if len(justs) >= 6:
+            raise Exception('Límite anual alcanzado')
+
+        actualMonth = date.month
+        if len([j for j in justs if j.getDate().month == actualMonth]) >= 2:
+            raise Exception('Límite mensual alcanzado')

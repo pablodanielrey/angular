@@ -243,14 +243,13 @@ class RangedTimeJustification(Justification):
             Si end es None entonces retorna la cantidad de segundos desde el start hasta el fin del horario
             Si no tiene horario entonces retorna 0
         """
-
-        if wp.getSchedule() is None:
-            return 0
-
         if self.end is None:
             """
                 justifica hasta el fin del horario
             """
+            if wp.getSchedule() is None:
+                return 0
+                
             return (wp.getEndDate() - self.start).total_seconds()
         else:
             return (self.end - self.start).total_seconds()
