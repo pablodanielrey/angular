@@ -249,7 +249,7 @@ class RangedTimeJustification(Justification):
             """
             if wp.getSchedule() is None:
                 return 0
-                
+
             return (wp.getEndDate() - self.start).total_seconds()
         else:
             return (self.end - self.start).total_seconds()

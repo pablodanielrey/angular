@@ -35,6 +35,29 @@ class Status(JSONSerializable):
 
     def changeStatus(self, con, justification, statusConst, userId):
         assert userId is not None
+        """
+            transiciones entre estados permitidas:
+            undefined --> pendiente
+            pendiente --> aprobado
+            pendiente --> rechazado
+            aprobado ---> cancelado
+        """
+        ok = False
+        if self.status == Status.UNDEFINED and statusConst == Status.PENDING:
+            ok = True
+
+        if self.status == Status.PENDING and statusConst == Status.APPROVED:
+            ok = True
+
+        if self.status == Status.PENDING and statusConst == Status.REJECTED:
+            ok = True
+
+        if self.status == Status.APPROVED and statusConst == Status.CANCELED:
+            ok = True
+
+        if not ok:
+            raise Exception('No se permite el cambio de estado')
+
         date = self.date + datetime.timedelta(seconds=1)
         s = Status(userId, date)
         s.justificationId = justification.id

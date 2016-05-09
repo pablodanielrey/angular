@@ -19,6 +19,7 @@ function OTWithReturnCtrl($rootScope, $scope, Assistance, $timeout) {
 
   $scope.model = {
     start: new Date(),
+    end: new Date(),
     hours: 0,
     minutes: 0,
     limitMonth: '-',
@@ -56,10 +57,7 @@ function OTWithReturnCtrl($rootScope, $scope, Assistance, $timeout) {
 
   function initializeDate() {
     $scope.model.start = new Date();
-    $scope.model.start.setHours(7);
-    $scope.model.start.setMinutes(0);
-    $scope.model.start.setSeconds(0);
-    $scope.model.start.setMilliseconds(0);
+    $scope.model.end = new Date();
     $scope.model.hours = 0;
     $scope.model.minutes = 0;
   }
@@ -75,7 +73,7 @@ function OTWithReturnCtrl($rootScope, $scope, Assistance, $timeout) {
     minutes = $scope.model.hours * 60 + $scope.model.minutes;
     end.setMinutes(end.getMinutes() + minutes);
 
-    Assistance.createRangedTimeWithReturnJustification($scope.model.start, end, $scope.userId, $scope.clazz, $scope.module).then(function(data) {
+    Assistance.createRangedTimeWithReturnJustification($scope.model.start, $scope.model.end, $scope.userId, $scope.clazz, $scope.module).then(function(data) {
       $scope.$apply(function() {
         $scope.view.styleMessage = $scope.view.messageOptions[2];
         $scope.$emit('finishCreationJEvent');
