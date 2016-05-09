@@ -125,7 +125,7 @@ class CompensatoryJustification(SingleDateJustification):
     def create(cls, con, date, userId, ownerId):
         if cls.getStock(con, userId) <= 0:
             raise Exception('No tiene compensatorios')
-        super().create(con, date, userId, ownerId)
+        return super().create(con, date, userId, ownerId)
 
     @classmethod
     def getStock(cls, con, userId):
