@@ -97,7 +97,9 @@ class Main:
                     aware = Utils.localize(self.timezone, date)
                     utcaware = Utils.awareToUtc(aware)
 
+                    logging.debug('buscando : {}'.format(utcaware))
                     if len(Log.findByDate(con, utcaware)) <= 0:
+                        logging.debug('no encontrado : {}'.format(utcaware))
                         log = Log()
                         log.id = str(uuid.uuid4())
                         log.userId = userId
