@@ -136,7 +136,7 @@ class Main:
 
                         if equals:
                             logging.info('Eliminando {} logs del reloj'.format(logslen))
-                            #self.zk.clearAttLogs()
+                            self.zk.clearAttLogs()
 
             finally:
                 con.close()
