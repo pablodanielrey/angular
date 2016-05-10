@@ -1,0 +1,123 @@
+<!-- <div class="home {{view.style}}"> -->
+<div class="home userCreated">
+<!-- VARIABLES: contentSearch, contentUserNotExist, createUser, userCreated, infoUser, mailDeleted, loading -->
+    <div class="header">
+        <div>
+            Administración de cuentas FCE (sistema provisorio)
+        </div>
+    </div>
+
+    <div class="contentHome">
+
+      <div class="contentSearch">
+          <div class="title">
+            BUSCAR CUENTA
+          </div>
+          <div>
+              <input class="inputSearch" type="search"></input>
+              <button class="btnSearch"> <i class="fa fa-search" aria-hidden="true"></i></button>
+          </div>
+      </div>
+
+      <div class="contentUserNotExist">
+          <div>
+            <button class="btnBack" ng-click="view.style = 'contentSearch'"><i class="arrowBack fa fa-chevron-left"></i> VOLVER</button>
+          </div>
+          <div class="textUserNotExist">
+            NO EXISTE LA CUENTA!
+          </div>
+          <div class="textNumberDNI">
+            30001823
+          </div>
+          <div>
+            <button class="btnCreate" ng-click="view.style = 'createUser'"> CREAR CUENTA </i></button>
+          </div>
+      </div>
+
+      <div class="createUser">
+        <div>
+          <button class="btnBack" ng-click="view.style = 'contentSearch'"><i class="arrowBack fa fa-chevron-left"></i> VOLVER</button>
+        </div>
+          <div class="textform">Nombre</div>
+          <div><input class="inputText" type="text"></input></div>
+          <div class="textform">Apellido</div>
+          <div><input class="inputText" type="text"></input></div>
+          <div class="textform">DNI</div>
+          <div><input class="inputText" type="text"></input></div>
+          <div class="textform">Legajo</div>
+          <div><input class="inputText" type="text"></input></div>
+          <div>
+            <div class="textform">Tipo</div>
+            <select class="inputSelect">
+              <option> Alumno</option>
+              <option> Docente</option>
+            </select>
+          </div>
+          <div>
+            <button class="btnCreate" ng-click="view.style = 'userCreated'"> CREAR CUENTA </i></button>
+          </div>
+      </div>
+
+      <div class="userCreated">
+          <div class="textUserCreated">
+              CUENTA CREADA!
+          </div>
+          <div class="textform">Nombre</div>
+          <div class="textform2">Pablo Daniel</div>
+          <div class="textform">Apellido</div>
+          <div class="textform2">Rey</div>
+          <div class="textform">DNI</div>
+          <div class="textform2">29635957</div>
+          <div class="textform">Legajo</div>
+          <div class="textform2">56894/9</div>
+          <div class="textform">Tipo</div>
+          <div class="textform2">Docente</div>
+
+          <div>
+            <button class="btnOut" ng-click="view.style = 'contentSearch'"> SALIR </i></button>
+          </div>
+      </div>
+
+      <div class="infoUser">
+
+        <div>
+          <button class="btnBack" ng-click="view.style = 'contentSearch'"><i class="arrowBack fa fa-chevron-left"></i> VOLVER</button>
+        </div>
+
+        <div class="textform">Nombre y Apellido</div>
+        <div class="textform2">Pablo Daniel Rey</div>
+        <div class="textform">DNI</div>
+        <div class="textform2">29635957</div>
+        <div class="textform">Legajo</div>
+        <div class="textform2">56894/9</div>
+        <div class="textform">Tipo</div>
+        <div class="textform2">Docente</div>
+        <div class="textform">Correo FCE</div>
+        <div class="textform2">pablo@econo.unlp.edu.ar</div>
+        <div class="textform">Correo Alternativo</div>
+        <div class="textform2">pablodanielrey@gmail.com</div>
+        <div>
+          <button class="btnDeleteMail"> Eliminar correo alternativo  </i></button>
+        </div>
+
+      </div>
+
+      <div class="mailDeleted">
+        <div class="textUserCreated">
+            CORREO ELIMINADO!
+        </div>
+        <div>
+          <button class="btnOut" ng-click="view.style = 'contentSearch'"> SALIR </i></button>
+        </div>
+
+      </div>
+
+      <div class="loading">
+        <div class="iconMessage"><i class="fa fa-circle-o-notch fa-spin fa-4x"></i></div>
+        <div>PROCESANDO</div>
+        <div>Por favor espere... </div>
+      </div>
+
+    </div>
+
+</div>
