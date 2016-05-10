@@ -30,6 +30,23 @@ from model.assistance.justifications.maternityJustification import *
 from model.assistance.justifications.marriageJustification import *
 from model.assistance.justifications.medicalBoardJustification import *
 from model.assistance.justifications.outTicketJustification import *
+from model.assistance.justifications.medicalCertificateJustification import *
+from model.assistance.justifications.mourningJustification import *
+from model.assistance.justifications.paternityJustification import *
+from model.assistance.justifications.preExamJustification import *
+from model.assistance.justifications.prenatalJustification import *
+from model.assistance.justifications.prenatalJustification import *
+from model.assistance.justifications.resolution638Justification import *
+from model.assistance.justifications.scheduleJustification import *
+from model.assistance.justifications.shortDurationJustification import *
+from model.assistance.justifications.strikeJustification import *
+from model.assistance.justifications.summerBreakJustification import *
+from model.assistance.justifications.suspensionJustification import *
+from model.assistance.justifications.taskJustification import *
+from model.assistance.justifications.trainingJustification import *
+from model.assistance.justifications.travelJustification import *
+from model.assistance.justifications.weatherJustification import *
+from model.assistance.justifications.winterBreakJustification import *
 
 
 class TestJustification(TestEcono):
@@ -203,7 +220,6 @@ class TestJustificationRangedTime(TestJustification):
             usersId = [j.userId]
 
             justs = j.findByUserId(con, usersId, start, end)
-
             ids = []
             for just in justs:
                 ids.append(just.id)
@@ -384,7 +400,56 @@ class TestJustificationMedicalBoard(TestJustificationRanged):
         j = MedicalBoardJustification(self.user_id, self.owner_id, now, days)
 
         return j     
-               
+
+
+##### MEDICAL CERTIFICATE #####
+class TestJustificationMedicalCertificate(TestJustificationRanged):
+    justificationDAO = MedicalCertificateJustificationDAO
+
+    def newInstance(self):
+        now = datetime.datetime.now().date()
+        days = randint(1,60)
+        j = MedicalCertificateJustification(self.user_id, self.owner_id, now, days)
+
+        return j     
+
+##### MOURNING FIRST GRADE #####       
+class TestJustificationMourningFirstGrade(TestJustificationRanged):
+    justificationDAO = MourningFirstGradeJustificationDAO
+
+    def newInstance(self):
+        now = datetime.datetime.now().date()
+        days = randint(1,60)
+        j = MourningFirstGradeJustification(self.user_id, self.owner_id, now, days)
+
+        return j          
+                
+
+##### MOURNING SECOND GRADE #####
+class TestJustificationMourningSecondGrade(TestJustificationRanged):
+    justificationDAO = MourningSecondGradeJustificationDAO
+
+    def newInstance(self):
+        now = datetime.datetime.now().date()
+        days = randint(1,60)
+        j = MourningSecondGradeJustification(self.user_id, self.owner_id, now, days)
+
+        return j          
+                
+
+##### MOURNING RELATIVE #####
+class TestJustificationMourningRelative(TestJustificationRanged):
+    justificationDAO = MourningRelativeJustificationDAO
+
+    def newInstance(self):
+        now = datetime.datetime.now().date()
+        days = randint(1,60)
+        j = MourningRelativeJustification(self.user_id, self.owner_id, now, days)
+
+        return j          
+                
+                                
+##### OUT TICKET WITH RETURN  #####                               
 class TestJustificationOutTicketWithReturn(TestJustificationRangedTime):
     justificationDAO = OutTicketWithReturnJustificationDAO
 
@@ -396,5 +461,202 @@ class TestJustificationOutTicketWithReturn(TestJustificationRangedTime):
         return j        
         
 
+##### OUT TICKET WITHOUT RETURN #####
+class TestJustificationOutTicketWithoutReturn(TestJustificationRangedTime):
+    justificationDAO = OutTicketWithoutReturnJustificationDAO
+
+    def newInstance(self):
+        start = datetime.datetime.now(dateutil.tz.tzlocal())
+        end = datetime.datetime.now(dateutil.tz.tzlocal())
+        j = OutTicketWithoutReturnJustification(start, end, self.user_id, self.owner_id)
+
+        return j     
         
+        
+##### PATERNITY #####       
+class TestJustificationPaternity(TestJustificationRanged):
+    justificationDAO = PaternityJustificationDAO
+
+    def newInstance(self):
+        now = datetime.datetime.now().date()
+        days = randint(1,60)
+        j = PaternityJustification(self.user_id, self.owner_id, now, days)
+
+        return j            
+        
+
+##### SCHOOL PREEXAM #####
+class TestJustificationSchoolPreExam(TestJustificationRanged):
+    justificationDAO = SchoolPreExamJustificationDAO
+
+    def newInstance(self):
+        now = datetime.datetime.now().date()
+        days = randint(1,60)
+        j = SchoolPreExamJustification(self.user_id, self.owner_id, now, days)
+
+        return j            
+
+
+##### UNIVERSITY PREEXAM #####
+class TestJustificationUniversityPreExam(TestJustificationRanged):
+    justificationDAO = UniversityPreExamJustificationDAO
+
+    def newInstance(self):
+        now = datetime.datetime.now().date()
+        days = randint(1,60)
+        j = UniversityPreExamJustification(self.user_id, self.owner_id, now, days)
+
+        return j      
+
+
+##### PRENATAL #####
+class TestJustificationPrenatal(TestJustificationRanged):
+    justificationDAO = PrenatalJustificationDAO
+
+    def newInstance(self):
+        now = datetime.datetime.now().date()
+        days = randint(1,60)
+        j = PrenatalJustification(self.user_id, self.owner_id, now, days)
+
+        return j                
+
+
+##### RESOLUTION 638 #####
+class TestJustificationResolution638(TestJustificationRanged):
+    justificationDAO = Resolution638JustificationDAO
+
+    def newInstance(self):
+        now = datetime.datetime.now().date()
+        days = randint(1,60)
+        j = Resolution638Justification(self.user_id, self.owner_id, now, days)
+
+        return j                
+
+
+##### SCHEDULE #####
+class TestJustificationSchedule(TestJustificationSingle):
+    justificationDAO = ScheduleJustificationDAO
+
+    def newInstance(self):
+        j = ScheduleJustification(datetime.datetime.now(), self.user_id, self.owner_id)
+
+        return j
  
+
+##### SHORT DURATION ##### 
+class TestJustificationShortDuration(TestJustificationRanged):
+    justificationDAO = ShortDurationJustificationDAO
+
+    def newInstance(self):
+        now = datetime.datetime.now().date()
+        days = randint(1,60)
+        j = ShortDurationJustification(self.user_id, self.owner_id, now, days)
+
+        return j
+        
+        
+##### STRIKE #####
+class TestJustificationStrike(TestJustificationSingle):
+    justificationDAO = StrikeJustificationDAO
+
+    def newInstance(self):
+        j = StrikeJustification(datetime.datetime.now(), self.user_id, self.owner_id)
+
+        return j
+        
+
+##### SUMMER BREAKE #####        
+class TestJustificationSummerBreake(TestJustificationRanged):
+    justificationDAO = SummerBreakJustificationDAO
+
+    def newInstance(self):
+        now = datetime.datetime.now().date()
+        days = randint(1,60)
+        j = SummerBreakJustification(self.user_id, self.owner_id, now, days)
+
+        return j
+        
+        
+
+##### SUSPENSION #####        
+class TestJustificationSuspension(TestJustificationRanged):
+    justificationDAO = SuspensionJustificationDAO
+
+    def newInstance(self):
+        now = datetime.datetime.now().date()
+        days = randint(1,60)
+        j = SuspensionJustification(self.user_id, self.owner_id, now, days)
+
+        return j 
+        
+        
+##### TASK WITH RETURN #####
+class TestJustificationTaskWithReturn(TestJustificationRangedTime):
+    justificationDAO = TaskWithReturnJustificationDAO
+
+    def newInstance(self):
+        start = datetime.datetime.now(dateutil.tz.tzlocal())
+        end = datetime.datetime.now(dateutil.tz.tzlocal())
+        j = TaskWithReturnJustification(start, end, self.user_id, self.owner_id)
+
+        return j   
+
+              
+##### TASK WITHOUT RETURN #####                
+class TestJustificationTaskWithoutReturn(TestJustificationRangedTime):
+    justificationDAO = TaskWithoutReturnJustificationDAO
+
+    def newInstance(self):
+        start = datetime.datetime.now(dateutil.tz.tzlocal())
+        end = datetime.datetime.now(dateutil.tz.tzlocal())
+        j = TaskWithoutReturnJustification(start, end, self.user_id, self.owner_id)
+
+        return j   
+        
+     
+##### TRAINING #####   
+class TestJustificationTraining(TestJustificationSingle):
+    justificationDAO = TrainingJustificationDAO
+
+    def newInstance(self):
+        j = TrainingJustification(datetime.datetime.now(), self.user_id, self.owner_id)
+
+        return j
+        
+        
+##### TRAVEL #####        
+class TestJustificationTravel(TestJustificationRanged):
+    justificationDAO = TravelJustificationDAO
+
+    def newInstance(self):
+        now = datetime.datetime.now().date()
+        days = randint(1,60)
+        j = TravelJustification(self.user_id, self.owner_id, now, days)
+
+        return j
+
+
+##### WEATHER #####        
+class TestJustificationWeather(TestJustificationSingle):
+    justificationDAO = WeatherJustificationDAO
+
+    def newInstance(self):
+        j = WeatherJustification(datetime.datetime.now(), self.user_id, self.owner_id)
+
+        return j
+
+
+##### WINTER BREAK #####
+class TestJustificationWinterBreak(TestJustificationRanged):
+    justificationDAO = WinterBreakJustificationDAO
+
+    def newInstance(self):
+        now = datetime.datetime.now().date()
+        days = randint(1,60)
+        j = WinterBreakJustification(self.user_id, self.owner_id, now, days)
+
+        return j    
+  
+  
+        
+        
