@@ -40,6 +40,7 @@ class Status(JSONSerializable):
             undefined --> pendiente
             pendiente --> aprobado
             pendiente --> rechazado
+            pendiente --> cancelado
             aprobado ---> cancelado
         """
         ok = False
@@ -50,6 +51,9 @@ class Status(JSONSerializable):
             ok = True
 
         if self.status == Status.PENDING and statusConst == Status.REJECTED:
+            ok = True
+
+        if self.status == Status.PENDING and statusConst == Status.CANCELED:
             ok = True
 
         if self.status == Status.APPROVED and statusConst == Status.CANCELED:
