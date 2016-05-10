@@ -11,6 +11,7 @@ from model.assistance.justifications.status import StatusDAO
 
 from model.assistance.assistanceDao import AssistanceDAO
 from model.users.users import UserDAO
+from model.assistance.utils import Utils
 
 class OutTicketJustificationDAO(AssistanceDAO):
 
@@ -143,10 +144,26 @@ class OutTicketJustification(RangedTimeJustification):
         return super().create(con, start, end, userId, ownerId)
 
     @classmethod
+    def _getJustifiedTime(cls, justs):
+        diffSum = 0
+        for j in justs:
+            diffSum = diffSum + j.getJustifiedSeconds()
+        return diffSum
+
+    @classmethod
+    def _getMonthJustifications(cls, con, date, userId):
+        monthStart = Utils._cloneDate(date).replace(day=1, hour=0, minute=0, second=0)
+        from calendar import monthrange
+        (dstart, dend) = monthrange(monthStart.year, monthStart.month)
+        monthEnd = Utils._cloneDate(monthStart) + datetime.timedelta(days=dend) - datetime.timedelta(seconds=1)
+        justs = cls.dao.findByUserId(con, [userId], monthStart, monthEnd)
+        return [j for j in justs if j.getStatus().status == 1 or j.getStatus().status == 2]
+
+    @classmethod
     def _checkConstraints(cls, con, start, end, userId):
-        assert start > end
+        assert start < end
         """ chequeo cantidad de horas pedidas """
-        diff = (self.end - self.start).seconds
+        diff = (end - start).seconds
         limitSeconds = 3 * 60 * 60
         if diff > limitSeconds:
             raise Exception('El tiempo requerido supera el límite')
@@ -154,17 +171,28 @@ class OutTicketJustification(RangedTimeJustification):
         if diff <= 60 * 60:
             raise Exception('Como mínimo se debe pedir 1 hora')
 
-        monthStart = Utils._cloneDate(start).replace(day=1, hour=0, minute=0, second=0)
-        from calendar import monthrange
-        (dstart, dend) = monthrange(monthStart.year, monthStart.month)
-        monthEnd = Utils._cloneDate(monthStart) + datetime.timedelta(days=dend) - datetime.timedelta(second=1)
-        justs = dao.findByUserId(con, userId, monthStart, monthEnd)
-        diffSum = 0
-        for j in justs:
-            diffSum = diffSum + j.getJustifiedSeconds()
+        justs = cls._getMonthJustifications(con, start, userId)
+        diffSum = cls._getJustifiedTime(justs)
         if diffSum >= limitSeconds:
             raise Exception('No tiene horas disponibles')
 
+    @classmethod
+    def getData(cls, con, userId, date, schedule):
+        data = super().getData(con, userId, date, schedule)
+        justs = cls._getMonthJustifications(con, date, userId)
+        diffSum = cls._getJustifiedTime(justs)
+
+        limitSeconds = 3 * 60 * 60
+        totalSum = limitSeconds - diffSum
+        for i in range(date.month + 1, 13):
+            d = Utils._cloneDate(date).replace(month=i)
+            j = cls._getMonthJustifications(con, d, userId)
+            diff = cls._getJustifiedTime(j)
+            totalSum = totalSum + (limitSeconds - diff)
+
+        data['yStock'] = totalSum
+        data['mStock'] = limitSeconds - diffSum
+        return data
 
 class OutTicketWithReturnJustification(OutTicketJustification):
 

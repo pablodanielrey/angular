@@ -8,7 +8,10 @@
         <div class="screenRequest">
             <div class="availabilityRequest">
               <div class="titleAvailability"> Disponibilidad </div>
-              <div class="contentCantAvailability"> <b>Mensual</b> <b class="cantAvailability">{{model.limitMonth}}</b>  <b>Anual</b> <b class="cantAvailability">{{model.limitYear}}</b> </div>
+              <div class="contentCantAvailability">
+                 <b>Mensual</b> <b class="cantAvailability">{{model.justificationData.mStock.hs}}:{{model.justificationData.mStock.min}}</b>
+                 <b>Anual</b> <b class="cantAvailability">{{model.justificationData.yStock.hs}}:{{model.justificationData.yStock.min}}</b>
+              </div>
             </div>
             <div class="titleInfo">SELECCIONE EL DÍA</div>
             <div><input class="inputDate" type="date" ng-model="model.start"></input></div>
@@ -19,8 +22,7 @@
                 </div>
                 <div>
                     <div class="titleInfo">HORA FIN</div>
-                    <div><input class="inputTime" type="time" ng-model="model.hours"></input></div>
-                    <!-- <div><input class="inputTime2" type="number" max=60 min=0 ng-model="model.minutes"></input></div> -->
+                    <div><input class="inputTime" type="time" ng-model="model.end"></input></div>
                 </div>
             </div>
             <div><button class="btnApply" ng-click="create()"> SOLICITAR</button></div>
