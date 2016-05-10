@@ -2,6 +2,7 @@
 
 from model.assistance.justifications.justifications import SingleDateJustification
 from model.assistance.justifications.status import Status
+from model.assistance.justifications.status import StatusDAO
 import uuid, datetime
 
 from model.assistance.assistanceDao import AssistanceDAO
@@ -9,7 +10,7 @@ from model.users.users import UserDAO
 
 class CompensatoryJustificationDAO(AssistanceDAO):
 
-    dependencies = [UserDAO]
+    dependencies = [UserDAO, StatusDAO]
 
     @classmethod
     def _createSchema(cls, con):

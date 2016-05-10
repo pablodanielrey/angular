@@ -19,13 +19,14 @@ from model.registry import Registry
 
 from model.assistance.justifications.justifications import Justification, RangedJustification
 from model.assistance.justifications.status import Status
+from model.assistance.justifications.status import StatusDAO
 
 from model.assistance.assistanceDao import AssistanceDAO
 from model.users.users import UserDAO
 
 class PrenatalJustificationDAO(AssistanceDAO):
 
-    dependencies = [UserDAO]
+    dependencies = [UserDAO, StatusDAO]
 
     @classmethod
     def _createSchema(cls, con):

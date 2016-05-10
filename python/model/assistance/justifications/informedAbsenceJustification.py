@@ -2,6 +2,7 @@
 from model.assistance.assistanceDao import AssistanceDAO
 from model.assistance.justifications.justifications import Justification
 from model.assistance.justifications.status import Status
+from model.assistance.justifications.status import StatusDAO
 from model.assistance.justifications.justifications import SingleDateJustification
 from model.assistance.utils import Utils
 from model.users.users import UserDAO
@@ -11,7 +12,7 @@ import uuid
 
 class InformedAbsenceJustificationDAO(AssistanceDAO):
 
-    dependencies = [UserDAO]
+    dependencies = [UserDAO, StatusDAO]
 
     @classmethod
     def _createSchema(cls, con):

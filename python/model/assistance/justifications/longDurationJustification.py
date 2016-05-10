@@ -13,6 +13,7 @@ import inject
 
 from model.assistance.justifications.justifications import Justification, RangedJustification
 from model.assistance.justifications.status import Status
+from model.assistance.justifications.status import StatusDAO
 import datetime, uuid
 
 from model.assistance.assistanceDao import AssistanceDAO
@@ -21,7 +22,7 @@ from model.users.users import UserDAO
 
 class LongDurationJustificationDAO(AssistanceDAO):
 
-    dependencies = [UserDAO]
+    dependencies = [UserDAO, StatusDAO]
 
     @classmethod
     def _createSchema(cls, con):

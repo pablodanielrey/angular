@@ -6,13 +6,14 @@ import uuid
 
 from model.assistance.justifications.justifications import Justification, RangedJustification, RangedTimeJustification
 from model.assistance.justifications.status import Status
+from model.assistance.justifications.status import StatusDAO
 
 from model.assistance.assistanceDao import AssistanceDAO
 from model.users.users import UserDAO
 
 class TaskJustificationDAO(AssistanceDAO):
 
-    dependencies = [UserDAO]
+    dependencies = [UserDAO, StatusDAO]
 
     @classmethod
     def _createSchema(cls, con):
@@ -86,7 +87,12 @@ class TaskJustificationDAO(AssistanceDAO):
         cur = con.cursor()
         try:
             t = cls.type
-            cur.execute('select * from assistance.justification_task where jend != null and user_id in %s and (jstart <= %s and jend >= %s) and type = %s', (tuple(userIds), end, start, t))
+            cur.execute('''
+                SELECT * from assistance.justification_task
+                WHERE user_id in %s 
+                AND (jstart <= %s AND jend >= %s) 
+                AND type = %s
+            ''', (tuple(userIds), end, start, t))
             return [ cls._fromResult(con, r) for r in cur ]
         finally:
             cur.close()
