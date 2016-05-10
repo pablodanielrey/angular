@@ -125,7 +125,10 @@ class SingleDateJustification(Justification):
         if self.getStatus().status != Status.APPROVED:
             return
 
-        date = self.getDate().date()
+        ### HORRIBLE HACK. charlarlo mañaan
+        date = self.getDate()
+        if isinstance(date, datetime.datetime):
+            date = date.date()
         for wp in wps:
             if date == wp.getDate():
                 self.wps.append(wp)
@@ -238,9 +241,10 @@ class RangedTimeJustification(Justification):
         if self.getStatus().status != Status.APPROVED:
             return
 
+        from model.assistance.utils import Utils
         for wp in wps:
-            wstart = wp.getStartDate()
-            wend = wp.getEndDate()
+            wstart = Utils._localizeLocalIfNaive(wp.getStartDate())
+            wend = Utils._localizeLocalIfNaive(wp.getEndDate())
             if wstart is not None and wend is not None and wstart <= self.end and wend >= self.start:
                 self.wps.append(wp)
                 wp.addJustification(self)

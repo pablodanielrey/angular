@@ -15,6 +15,13 @@ class Utils:
             return None
 
     @classmethod
+    def _localizeLocalIfNaive(cls, naive):
+        if cls._isNaive(naive):
+            return cls._localizeLocal(naive)
+        else:
+            return naive
+
+    @classmethod
     def _localizeLocal(cls, naive):
         if naive is None:
             return None
