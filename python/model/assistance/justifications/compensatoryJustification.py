@@ -108,6 +108,14 @@ class CompensatoryJustificationDAO(AssistanceDAO):
         finally:
             cur.close()
 
+    @classmethod
+    def updateStock(cls, con, userId, stock):
+        cur = con.cursor()
+        try:
+            cur.execute('update assistance.justification_compensatory_stock set stock = %s where user_id = %s', (stock, userId))
+        finally:
+            cur.close()
+
 class CompensatoryJustification(SingleDateJustification):
 
     dao = CompensatoryJustificationDAO
@@ -136,3 +144,31 @@ class CompensatoryJustification(SingleDateJustification):
         data = super().getData(con, userId, date, schedule)
         data['stock'] = cls.getStock(con, userId)
         return data
+
+    def persist(self, con):
+        super().persist(con)
+        self.dao.updateStock(con, self.userId, CompensatoryJustification.getStock(con, self.userId) - 1)
+
+    def changeStatus(self, con, statusConst, userId):
+        import pdb; pdb.set_trace()
+
+        old = self.getStatus()
+        super().changeStatus(con, statusConst, userId)
+        assert self.getStatus().status == statusConst
+
+        '''
+            si estaba como pendiente o aprobado y pasa otro estado tengo que sumar uno al stock
+        '''
+        if ((old.status == Status.PENDING or old.status == Status.APPROVED) and
+            (self.getStatus().status != Status.PENDING and self.getStatus().status != Status.APPROVED)):
+            self.dao.updateStock(con, userId, CompensatoryJustification.getStock(con, userId) + 1)
+            return
+
+        '''
+            si no estaba como pendiente ni aprobado y pasa a alguno de estos estados decremento uno
+        '''
+        if ((old.status != Status.PENDING and old.status != Status.APPROVED) and
+        (self.getStatus().status == Status.PENDING and self.getStatus().status == Status.APPROVED)):
+            stock = CompensatoryJustification.getStock(con, userId) - 1
+            self.dao.updateStock(con, userId, 0 if stock < 0 else stock)
+            return
