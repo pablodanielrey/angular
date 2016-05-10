@@ -9,6 +9,7 @@ function OTWithReturnCtrl($rootScope, $scope, Assistance, $timeout) {
   $scope.initialize = initialize;
   $scope.initializeDate = initializeDate;
   $scope.create = create;
+  $scope.loadJustificationData = loadJustificationData;
 
   $scope.view = {
     styleStatus: '',
@@ -23,27 +24,25 @@ function OTWithReturnCtrl($rootScope, $scope, Assistance, $timeout) {
     hours: 0,
     minutes: 0,
     limitMonth: '-',
-    limitYear: '-'
+    limitYear: '-',
+    millisAvailables: 180,
+    justificationData: {}
   }
 
-  $scope.$watch(function() {return $scope.model.hours;}, function(o,n) {
-    if ($scope.model.hours >= 3) {
-      $scope.model.minutes = 0;
-      $scope.model.hours = 3;
-    }
 
-  });
-
-  $scope.$watch(function() {return $scope.model.minutes;}, function(o,n) {
-    if ($scope.model.minutes == 60) {
-      $scope.model.minutes = 0;
-      $scope.model.hours = $scope.model.hours + 1;
-    }
-    if ($scope.model.hours >= 3) {
-      $scope.model.hours = 3;
-      $scope.model.minutes = 0;
+  $scope.$watch(function() {return $scope.model.start;}, function(o,n) {
+    if (n == null) {
+      $scope.model.start = o;
       return;
     }
+
+    if (o == null || o.getMonth() != n.getMonth()) {
+      $scope.loadJustificationData();
+      return;
+    }
+
+    $scope.model.end = new Date($scope.model.start.getTime() + $scope.model.millisAvailables) ;
+
   });
 
   function initialize(userId) {
@@ -57,21 +56,50 @@ function OTWithReturnCtrl($rootScope, $scope, Assistance, $timeout) {
 
   function initializeDate() {
     $scope.model.start = new Date();
-    $scope.model.end = new Date();
-    $scope.model.hours = 0;
-    $scope.model.minutes = 0;
+    $scope.model.start.setSeconds(0);
+    $scope.model.start.setMilliseconds(0);
+
+    $scope.model.end = new Date($scope.model.start);
+
+    $scope.model.justificationData = {mStock: '-', yStock: ''}
+    $scope.loadJustificationData();
   }
 
   $scope.$on('selectOTWithReturnEvent', function(e, userId) {
     $scope.initialize(userId);
   })
 
+  function loadJustificationData() {
+    if ($scope.model.start == null) {
+      return;
+    }
+
+    Assistance.getJustificationData($scope.userId, $scope.model.start, $scope.clazz, $scope.module).then(function(data) {
+      if (data != null) {
+        $scope.model.justificationData = data;
+
+        minutes = Math.floor(data.mStock / 60);
+        mhs = '0' + (Math.floor(minutes / 60)).toString();
+        mmin = '0' + (minutes % 60).toString();
+        $scope.model.justificationData.mStock = {hs: mhs.substr(-2, 2), min: mmin.substr(-2, 2)};
+        $scope.model.millisAvailables = minutes * 60 * 1000 ;
+        $scope.model.end = new Date($scope.model.start.getTime() + $scope.model.millisAvailables) ;
+
+        yMinutes = Math.floor(data.yStock / 60);
+        yhs = '0' + (Math.floor(yMinutes / 60)).toString();
+        ymin = '0' + (yMinutes % 60).toString();
+        $scope.model.justificationData.yStock = {hs: yhs.substr(-2, 2), min: ymin.substr(-2, 2)};
+      } else {
+        $scope.model.justificationData = {mStock: '-', yStock: ''};
+      }
+    }, function(error) {
+      $scope.model.justificationData = {mStock: '-', yStock: ''};
+    });
+  }
+
   function create() {
     $scope.view.styleStatus = $scope.view.statusOptions[1];
     $scope.view.styleMessage = $scope.view.messageOptions[1];
-    end = new Date($scope.model.start);
-    minutes = $scope.model.hours * 60 + $scope.model.minutes;
-    end.setMinutes(end.getMinutes() + minutes);
 
     Assistance.createRangedTimeWithReturnJustification($scope.model.start, $scope.model.end, $scope.userId, $scope.clazz, $scope.module).then(function(data) {
       $scope.$apply(function() {
