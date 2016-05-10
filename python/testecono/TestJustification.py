@@ -13,6 +13,42 @@ from testecono.TestEcono import TestEcono
 from testecono.TestUser import TestUser
 
 from model.assistance.justifications import *
+from model.assistance.justifications.art102Justification import *
+from model.assistance.justifications.artJustification import *
+from model.assistance.justifications.authorityJustification import *
+from model.assistance.justifications.birthdayJustification import *
+from model.assistance.justifications.bloodDonationJustification import *
+from model.assistance.justifications.compensatoryJustification import *
+from model.assistance.justifications.evaluationJustification import *
+from model.assistance.justifications.familyAttentionJustification import *
+from model.assistance.justifications.holidayJustification import *
+from model.assistance.justifications.informedAbsenceJustification import *
+from model.assistance.justifications.lateArrivalJustification import *
+from model.assistance.justifications.leaveWithoutSalaryJustification import *
+from model.assistance.justifications.librarianDayJustification import *
+from model.assistance.justifications.longDurationJustification import *
+from model.assistance.justifications.maternityJustification import *
+from model.assistance.justifications.marriageJustification import *
+from model.assistance.justifications.medicalBoardJustification import *
+from model.assistance.justifications.outTicketJustification import *
+from model.assistance.justifications.medicalCertificateJustification import *
+from model.assistance.justifications.mourningJustification import *
+from model.assistance.justifications.paternityJustification import *
+from model.assistance.justifications.preExamJustification import *
+from model.assistance.justifications.prenatalJustification import *
+from model.assistance.justifications.prenatalJustification import *
+from model.assistance.justifications.resolution638Justification import *
+from model.assistance.justifications.scheduleJustification import *
+from model.assistance.justifications.shortDurationJustification import *
+from model.assistance.justifications.strikeJustification import *
+from model.assistance.justifications.summerBreakJustification import *
+from model.assistance.justifications.suspensionJustification import *
+from model.assistance.justifications.taskJustification import *
+from model.assistance.justifications.trainingJustification import *
+from model.assistance.justifications.travelJustification import *
+from model.assistance.justifications.weatherJustification import *
+from model.assistance.justifications.winterBreakJustification import *
+
 
 class TestJustification(TestEcono):
     justificationDAO = None
@@ -106,7 +142,7 @@ class TestJustification(TestEcono):
 class TestJustificationSingle(TestJustification):
     def assertEqualJustification(self, justification, justification2):
         super().assertEqualJustification(justification, justification2)
-        #self.assertEqual(justification.date, justification2.date) #TODO no funciona hay que modificar el codigo de justification
+        self.assertEqual(justification.date, justification2.date) #TODO no funciona hay que modificar el codigo de justification
 
     def test_find_by_user_id(self):
         con = self.connection.get()
