@@ -162,7 +162,7 @@ class SchoolPreExamJustification(PreExamJustification):
         self.identifier = SchoolPreExamJustification.identifier
 
     def getIdentifier(self):
-        return self.typeName + " " + self.identifier
+        return self.typeName
 
 
 class UniversityPreExamJustification(PreExamJustification):
@@ -175,4 +175,4 @@ class UniversityPreExamJustification(PreExamJustification):
         self.identifier = UniversityPreExamJustification.identifier
 
     def getIdentifier(self):
-        return self.typeName + " " + self.identifier
+        return self.typeName
