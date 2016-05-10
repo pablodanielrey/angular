@@ -130,3 +130,9 @@ class CompensatoryJustification(SingleDateJustification):
     @classmethod
     def getStock(cls, con, userId):
         return cls.dao.getStock(con, userId)
+
+    @classmethod
+    def getData(cls, con, userId, date, schedule):
+        data = super().getData(con, userId, date, schedule)
+        data['stock'] = cls.getStock(con, userId)
+        return data

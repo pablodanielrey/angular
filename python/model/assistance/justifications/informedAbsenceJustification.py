@@ -113,6 +113,19 @@ class InformedAbsenceJustification(SingleDateJustification):
         return super().create(con, date, userId, ownerId)
 
     @classmethod
+    def _getYearJustifications(cls, con, date, userId):
+        yearStart = Utils._cloneDate(date).replace(month=1,day=1)
+        yearEnd = Utils._cloneDate(date).replace(month=12,day=31)
+        justs = cls.dao.findByUserId(con, [userId], yearStart, yearEnd)
+        return [j for j in justs if j.getStatus().status == 1 or j.getStatus().status == 2]
+
+    @classmethod
+    def _getMonthJustifications(cls, date, justs):
+        actualMonth = date.month
+        jMonth = [j for j in justs if j.getDate().month == actualMonth and (j.getStatus().status == 1 or j.getStatus().status == 2)]
+        return jMonth
+
+    @classmethod
     def _checkConstraints(cls, con, date, userId):
         """
             Se controla:
@@ -121,10 +134,18 @@ class InformedAbsenceJustification(SingleDateJustification):
         """
         yearStart = Utils._cloneDate(date).replace(month=1,day=1)
         yearEnd = Utils._cloneDate(date).replace(month=12,day=31)
-        justs = cls.dao.findByUserId(con, [userId], yearStart, yearEnd)
+        justs = cls._getYearJustifications(con, date, userId)
         if len(justs) >= 6:
             raise Exception('Límite anual alcanzado')
 
-        actualMonth = date.month
-        if len([j for j in justs if j.getDate().month == actualMonth]) >= 2:
+        if len(cls._getMonthJustifications(date, justs)) >= 2:
             raise Exception('Límite mensual alcanzado')
+
+
+    @classmethod
+    def getData(cls, con, userId, date, schedule):
+        data = super().getData(con, userId, date, schedule)
+        justs = cls._getYearJustifications(con, date, userId)
+        data['yStock'] = 6 - len(justs)
+        data['mStock'] = 2 - len(cls._getMonthJustifications(date, justs))
+        return data

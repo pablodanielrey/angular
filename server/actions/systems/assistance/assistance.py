@@ -40,6 +40,7 @@ class AssistanceWamp(ApplicationSession):
         yield from self.register(self.createRangedTimeWithReturnJustification_async, 'assistance.createRangedTimeWithReturnJustification')
         yield from self.register(self.createRangedTimeWithoutReturnJustification_async, 'assistance.createRangedTimeWithoutReturnJustification')
         yield from self.register(self.changeStatus_async, 'assistance.changeStatus')
+        yield from self.register(self.getJustificationData_async, 'assistance.getJustificationData')
 
     def _localizeLocal(self,naive):
         tz = dateutil.tz.tzlocal()
@@ -153,4 +154,18 @@ class AssistanceWamp(ApplicationSession):
     def changeStatus_async(self, sid, just, status):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.changeStatus, sid, just, status)
+        return r
+
+    def getJustificationData(self, userId, dateStr, justClazz, justModule):
+        con = self.conn.get()
+        try:
+            date = self._parseDate(dateStr)
+            return self.assistance.getJustificationData(con, userId, date, justClazz, justModule)
+        finally:
+            self.conn.put(con)
+
+    @coroutine
+    def getJustificationData_async(self, userId, date, justClazz, justModule):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.getJustificationData, userId, date, justClazz, justModule)
         return r

@@ -14,6 +14,10 @@ function Assistance (Utils, Session, $wamp) {
 		return $wamp.call('assistance.getJustifications',[userId, start, end, isAll]);
 	}
 
+	this.getJustificationData = function (userId, date, justClazz, justModule) {
+		return $wamp.call('assistance.getJustificationData',[userId, date, justClazz, justModule]);
+	}
+
 	this.createSingleDateJustification = function(date, userId, justClazz, justModule) {
 		return new Promise(function(cok, cerr) {
       var sid = Session.getSessionId();

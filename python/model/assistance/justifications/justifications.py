@@ -103,6 +103,14 @@ class Justification(JSONSerializable):
         return finalSubC
 
 
+    @classmethod
+    def getData(cls, con, userId, date, schedule):
+        data = {}
+        data['sStart'] = None if schedule is None else schedule.getStartDate()
+        data['sEnd'] = None if schedule is None else schedule.getEndDate()
+        return data
+
+
 class SingleDateJustification(Justification):
 
     def __init__(self, date = None, userId = None, ownerId = None):

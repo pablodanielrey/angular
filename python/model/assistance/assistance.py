@@ -385,3 +385,15 @@ class AssistanceModel:
         clazz = getattr(module, justClazz)
         j = clazz.create(con, start, end, userId, ownerId)
         return j.persist(con)
+
+
+    def getJustificationData(self, con, userId, date, justClazz, justModule):
+
+        # obtengo el schedule correspondiente
+        wps = self.getWorkPeriods(con, [userId], date, date)
+        wpsList = wps[userId]
+        schedule = wpsList[0] if len(wpsList) >= 0 else None
+
+        module = importlib.import_module(justModule)
+        clazz = getattr(module, justClazz)
+        return clazz.getData(con, userId, date, schedule)

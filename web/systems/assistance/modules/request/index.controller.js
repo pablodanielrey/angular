@@ -197,7 +197,6 @@ function RequestCtrl($scope, Login, Assistance, Users, $location, $timeout) {
           justifications.push($scope.formatJustification(just[i]));
         }
       }
-      console.log(justifications);
       $scope.model.justifications = justifications;
       $scope.orderName();
     }, function(error) {
