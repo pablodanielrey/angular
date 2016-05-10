@@ -98,7 +98,11 @@ class TaskWithReturnJustificationDAO(TaskJustificationDAO):
 
     @classmethod
     def _fromResult(cls, con, r):
-        j = TaskWithReturnJustification(r['user_id'], r['owner_id'], r['jstart'], r['jend'])
+        j = TaskWithReturnJustification()
+        j.userId = r['user_id']
+        j.ownerId = r['owner_id']
+        j.start = r['jstart']
+        j.end = r['jend']
         j.id = r['id']
         j.setStatus(Status.getLastStatus(con, j.id))
         return j
@@ -110,7 +114,11 @@ class TaskWithoutReturnJustificationDAO(TaskJustificationDAO):
 
     @classmethod
     def _fromResult(cls, con, r):
-        j = TaskWithoutReturnJustification(r['user_id'], r['owner_id'], r['jstart'])
+        j = TaskWithoutReturnJustification()
+        j.userId = r['user_id']
+        j.ownerId = r['owner_id']
+        j.start = r['jstart']
+        j.end = r['jend']
         j.id = r['id']
         j.setStatus(Status.getLastStatus(con, j.id))
         return j
@@ -126,14 +134,14 @@ class TaskJustification(RangedTimeJustification):
 class TaskWithReturnJustification(TaskJustification):
 
     dao = TaskWithReturnJustificationDAO
-    identifier = "Boleta en comisión con retorno"
+    identifier = "con retorno"
 
     def __init__(self, start = None, end = None, userId = None, ownerId = None):
         super().__init__(start, end, userId, ownerId)
         self.identifier = TaskWithReturnJustification.identifier
 
     def getIdentifier(self):
-        return self.identifier
+        return self.typeName + " " + self.identifier
 
     def changeEnd(self, con, end):
         self.end = end
@@ -142,14 +150,14 @@ class TaskWithReturnJustification(TaskJustification):
 class TaskWithoutReturnJustification(TaskJustification):
 
     dao = TaskWithoutReturnJustificationDAO
-    identifier = "Boleta en comisión sin retorno"
+    identifier = "sin retorno"
 
     def __init__(self, start = None, end = None, userId = None, ownerId = None):
         super().__init__(start, end, userId, ownerId)
         self.identifier = TaskWithoutReturnJustification.identifier
 
     def getIdentifier(self):
-        return self.identifier
+        return self.typeName + " " + self.identifier
 
     def _loadWorkedPeriods(self, wps):
         assert self.getStatus() is not None
