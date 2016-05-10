@@ -8,6 +8,7 @@ function CompensatoryCtrl($rootScope, $scope, Assistance, $timeout) {
 
   $scope.initialize = initialize;
   $scope.create = create;
+  $scope.loadJustificationData = loadJustificationData;
 
   $scope.view = {
     styleStatus: '',
@@ -17,7 +18,8 @@ function CompensatoryCtrl($rootScope, $scope, Assistance, $timeout) {
   }
 
   $scope.model = {
-    date: new Date()
+    date: new Date(),
+    justificationData: {stock:0}
   }
 
   function initialize(userId) {
@@ -27,11 +29,28 @@ function CompensatoryCtrl($rootScope, $scope, Assistance, $timeout) {
     $scope.clazz = 'CompensatoryJustification';
     $scope.module = 'model.assistance.justifications.compensatoryJustification';
     $scope.userId = userId;
+    $scope.loadJustificationData();
   }
 
   $scope.$on('selectCompensatoryEvent', function(e, userId) {
     $scope.initialize(userId);
   })
+
+  function loadJustificationData() {
+    if ($scope.model.date == null) {
+      return;
+    }
+
+    Assistance.getJustificationData($scope.userId, $scope.model.date, $scope.clazz, $scope.module).then(function(data) {
+      if (data != null) {
+        $scope.model.justificationData = data;
+      } else {
+        $scope.model.justificationData = {stock: 0};
+      }
+    }, function(error) {
+      $scope.model.justificationData = {stock: 0};
+    });
+  }
 
   function create() {
     console.log('create');
