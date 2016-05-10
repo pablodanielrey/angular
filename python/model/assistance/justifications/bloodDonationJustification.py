@@ -5,11 +5,12 @@ from model.users.users import UserDAO
 
 from model.assistance.justifications.justifications import SingleDateJustification
 from model.assistance.justifications.status import Status
+from model.assistance.justifications.status import StatusDAO
 import uuid, datetime
 
 class BloodDonationJustificationDAO(AssistanceDAO):
 
-    dependencies = [UserDAO]
+    dependencies = [UserDAO, StatusDAO]
 
     @classmethod
     def _createSchema(cls, con):

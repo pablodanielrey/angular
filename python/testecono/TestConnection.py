@@ -106,6 +106,7 @@ class TestConnection(unittest.TestCase):
                   DROP SCHEMA IF EXISTS profile CASCADE;
                   DROP SCHEMA IF EXISTS files CASCADE;
                   DROP SCHEMA IF EXISTS tutoring CASCADE;
+                  DROP SCHEMA IF EXISTS ingreso CASCADE;
                   """
               cur.execute(sql)
               con.commit()
