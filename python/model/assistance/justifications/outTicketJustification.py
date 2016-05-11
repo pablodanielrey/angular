@@ -165,6 +165,9 @@ class OutTicketJustification(RangedTimeJustification):
         """ chequeo cantidad de horas pedidas """
         diff = (end - start).seconds
         limitSeconds = 3 * 60 * 60
+
+        import pdb; pdb.set_trace()
+
         if diff > limitSeconds:
             raise Exception('El tiempo requerido supera el límite')
 
@@ -173,8 +176,8 @@ class OutTicketJustification(RangedTimeJustification):
 
         justs = cls._getMonthJustifications(con, start, userId)
         diffSum = cls._getJustifiedTime(justs)
-        if diffSum >= limitSeconds:
-            raise Exception('No tiene horas disponibles')
+        if diff > (limitSeconds - diffSum):
+            raise Exception('Supera las horas disponibles')
 
     @classmethod
     def getData(cls, con, userId, date, schedule):
