@@ -160,13 +160,18 @@ class OutTicketJustification(RangedTimeJustification):
         return [j for j in justs if j.getStatus().status == 1 or j.getStatus().status == 2]
 
     @classmethod
+    def _getAllMonthJustifications(cls, con, date, userId):
+        justs = []
+        for c in OutTicketJustification.__subclasses__():
+            justs.extend(c._getMonthJustifications(con, date, userId))
+        return justs
+
+    @classmethod
     def _checkConstraints(cls, con, start, end, userId):
         assert start < end
         """ chequeo cantidad de horas pedidas """
         diff = (end - start).seconds
         limitSeconds = 3 * 60 * 60
-
-        import pdb; pdb.set_trace()
 
         if diff > limitSeconds:
             raise Exception('El tiempo requerido supera el límite')
@@ -174,7 +179,7 @@ class OutTicketJustification(RangedTimeJustification):
         if diff <= 60 * 60:
             raise Exception('Como mínimo se debe pedir 1 hora')
 
-        justs = cls._getMonthJustifications(con, start, userId)
+        justs = cls._getAllMonthJustifications(con, start, userId)
         diffSum = cls._getJustifiedTime(justs)
         if diff > (limitSeconds - diffSum):
             raise Exception('Supera las horas disponibles')
@@ -182,14 +187,14 @@ class OutTicketJustification(RangedTimeJustification):
     @classmethod
     def getData(cls, con, userId, date, schedule):
         data = super().getData(con, userId, date, schedule)
-        justs = cls._getMonthJustifications(con, date, userId)
+        justs = cls._getAllMonthJustifications(con, date, userId)
         diffSum = cls._getJustifiedTime(justs)
 
         limitSeconds = 3 * 60 * 60
         totalSum = limitSeconds - diffSum
         for i in range(date.month + 1, 13):
             d = Utils._cloneDate(date).replace(month=i)
-            j = cls._getMonthJustifications(con, d, userId)
+            j = cls._getAllMonthJustifications(con, d, userId)
             diff = cls._getJustifiedTime(j)
             totalSum = totalSum + (limitSeconds - diff)
 

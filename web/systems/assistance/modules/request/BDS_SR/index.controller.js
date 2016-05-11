@@ -9,6 +9,7 @@ function OTWithoutReturnCtrl($rootScope, $scope, Assistance, $timeout) {
   $scope.initialize = initialize;
   $scope.initializeDate = initializeDate;
   $scope.create = create;
+  $scope.loadJustificationData = loadJustificationData;
 
   $scope.view = {
     styleStatus: '',
@@ -19,8 +20,8 @@ function OTWithoutReturnCtrl($rootScope, $scope, Assistance, $timeout) {
 
   $scope.model = {
     start: new Date(),
-    limitMonth: '-',
-    limitYear: '-'
+    millisAvailables: 180,
+    justificationData: {}
   }
 
   function initialize(userId) {
@@ -38,11 +39,41 @@ function OTWithoutReturnCtrl($rootScope, $scope, Assistance, $timeout) {
     $scope.model.start.setMinutes(0);
     $scope.model.start.setSeconds(0);
     $scope.model.start.setMilliseconds(0);
+    $scope.model.justificationData = {mStock: '-', yStock: ''}
+    $scope.loadJustificationData();
   }
 
   $scope.$on('selectOTWithoutReturnEvent', function(e, userId) {
     $scope.initialize(userId);
   })
+
+  function loadJustificationData() {
+    if ($scope.model.start == null) {
+      return;
+    }
+
+    Assistance.getJustificationData($scope.userId, $scope.model.start, $scope.clazz, $scope.module).then(function(data) {
+      if (data != null) {
+        $scope.model.justificationData = data;
+
+        minutes = Math.floor(data.mStock / 60);
+        mhs = '0' + (Math.floor(minutes / 60)).toString();
+        mmin = '0' + (minutes % 60).toString();
+        $scope.model.justificationData.mStock = {hs: mhs.substr(-2, 2), min: mmin.substr(-2, 2)};
+
+        $scope.model.millisAvailables = minutes * 60 * 1000 ;
+
+        yMinutes = Math.floor(data.yStock / 60);
+        yhs = '0' + (Math.floor(yMinutes / 60)).toString();
+        ymin = '0' + (yMinutes % 60).toString();
+        $scope.model.justificationData.yStock = {hs: yhs.substr(-2, 2), min: ymin.substr(-2, 2)};
+      } else {
+        $scope.model.justificationData = {mStock: '-', yStock: ''};
+      }
+    }, function(error) {
+      $scope.model.justificationData = {mStock: '-', yStock: ''};
+    });
+  }
 
   function create() {
     $scope.view.styleStatus = $scope.view.statusOptions[1];
