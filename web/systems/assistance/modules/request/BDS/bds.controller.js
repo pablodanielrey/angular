@@ -19,8 +19,8 @@ function OTWithReturnCtrl($rootScope, $scope, Assistance, $timeout) {
   }
 
   $scope.model = {
-    start: new Date(),
-    end: new Date(),
+    start: null,
+    end: null,
     millisAvailables: 180,
     justificationData: {}
   }

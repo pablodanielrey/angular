@@ -19,7 +19,7 @@ function OTWithoutReturnCtrl($rootScope, $scope, Assistance, $timeout) {
   }
 
   $scope.model = {
-    start: new Date(),
+    start: null,
     millisAvailables: 180,
     justificationData: {}
   }
