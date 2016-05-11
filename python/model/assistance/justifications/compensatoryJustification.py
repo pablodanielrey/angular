@@ -151,8 +151,6 @@ class CompensatoryJustification(SingleDateJustification):
         self.dao.updateStock(con, self.userId, CompensatoryJustification.getStock(con, self.userId) - 1)
 
     def changeStatus(self, con, statusConst, userId):
-        import pdb; pdb.set_trace()
-
         old = self.getStatus()
         super().changeStatus(con, statusConst, userId)
         assert self.getStatus().status == statusConst
