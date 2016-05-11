@@ -12,7 +12,8 @@ class Office:
         self.name = None
         self.telephone = None
         self.email = None
-        self.users = None
+        self.users = []
+        self.childs = []
 
     def appendUser(self, userId):
         if self.users is None:
@@ -34,12 +35,13 @@ class Office:
         return offices
 
     @classmethod
-    def getOfficesByUserRole(cls,con,userId,tree=False,role='autoriza'):
+    def getOfficesByUserRole(cls, con, userId, tree=False, role='autoriza'):
          return OfficeDAO.getOfficesByUserRole(con, userId, tree, role)
 
     @classmethod
-    def getOfficesUsers(cls,con,offices):
+    def getOfficesUsers(cls, con, offices):
         return OfficeDAO.getOfficesUsers(con, offices)
+
 
 class OfficeDAO(DAO):
     ''' dao de las oficinas '''
