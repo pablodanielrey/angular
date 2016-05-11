@@ -66,7 +66,8 @@
 /*****************************************************************/
 
 .home .contentUserNotExist {
-  padding: 20px
+  padding: 20px;
+
 }
 
 
@@ -128,6 +129,7 @@
 
 .home .createUser {
   padding: 20px;
+
 }
 
 .home .textform {
@@ -158,8 +160,11 @@
     background-color: white;
 }
 
+/***********************************************/
+
 .home .userCreated {
   padding: 20px;
+
 }
 
 .home .textUserCreated {
@@ -186,6 +191,7 @@
   background-color: #809612;
 }
 
+/*---------------------------------------------------*/
 .home .loading {
   width: 300px;
   height: 200px;
@@ -204,6 +210,9 @@
   padding: 20px;
 
   color: #5C5F69;
+
+  opacity: 1;
+
 }
 
 /**************************************************************/
@@ -239,6 +248,17 @@
   padding: 20px;
 }
 
+/*---------------------------------------------------*/
+
+.home .errorData {
+  padding: 20px;
+}
+
+.home .titleError {
+  font-size: 25px;
+  color: #E43E46;
+}
+
 /******************** MEDIA QUERIS ***************************/
 
 @media (max-width: 719px){
@@ -268,52 +288,92 @@
 }
 
 
-/*VARIABLES: contentSearch, contentUserNotExist, createUser, userCreated, infoUser, mailDeleted, */
+/*<!-- VARIABLES: pantallaBusqueda, pantallaUsuarioNoExiste, pantallaCrearUsuario, pantallaUsuarioCreado, pantallaInfoDeUsuario, pantallaMailEliminado, pantallaCargando -->*/
 
-.home.contentSearch .contentUserNotExist,
-.home.contentSearch .createUser,
-.home.contentSearch .userCreated,
-.home.contentSearch .infoUser,
-.home.contentSearch .mailDeleted {
+.home.pantallaBusqueda .loading,
+.home.pantallaBusqueda .errorData,
+.home.pantallaBusqueda .contentUserNotExist,
+.home.pantallaBusqueda .createUser,
+.home.pantallaBusqueda .userCreated,
+.home.pantallaBusqueda .infoUser,
+.home.pantallaBusqueda .mailDeleted {
   display: none;
 }
 
-.home.contentUserNotExist .contentSearch,
-.home.contentUserNotExist .createUser,
-.home.contentUserNotExist .userCreated,
-.home.contentUserNotExist .infoUser,
-.home.contentUserNotExist .mailDeleted {
+.home.pantallaUsuarioNoExiste .loading,
+.home.pantallaUsuarioNoExiste .errorData,
+.home.pantallaUsuarioNoExiste .contentSearch,
+.home.pantallaUsuarioNoExiste .createUser,
+.home.pantallaUsuarioNoExiste .userCreated,
+.home.pantallaUsuarioNoExiste .infoUser,
+.home.pantallaUsuarioNoExiste .mailDeleted {
   display: none;
 }
 
-.home.createUser .contentSearch,
-.home.createUser .contentUserNotExist,
-.home.createUser .userCreated,
-.home.createUser .infoUser,
-.home.createUser .mailDeleted {
+.home.pantallaCrearUsuario .loading,
+.home.pantallaCrearUsuario .errorData,
+.home.pantallaCrearUsuario .contentSearch,
+.home.pantallaCrearUsuario .contentUserNotExist,
+.home.pantallaCrearUsuario .userCreated,
+.home.pantallaCrearUsuario .infoUser,
+.home.pantallaCrearUsuario .mailDeleted {
   display: none;
 }
 
-.home.userCreated .contentSearch,
-.home.userCreated .contentUserNotExist,
-.home.userCreated .createUser,
-.home.userCreated .infoUser,
-.home.userCreated .mailDeleted {
+.home.pantallaUsuarioCreado .loading,
+.home.pantallaUsuarioCreado .errorData,
+.home.pantallaUsuarioCreado .contentSearch,
+.home.pantallaUsuarioCreado .contentUserNotExist,
+.home.pantallaUsuarioCreado .createUser,
+.home.pantallaUsuarioCreado .infoUser,
+.home.pantallaUsuarioCreado .mailDeleted {
   display: none;
 }
 
-.home.infoUser .contentSearch,
-.home.infoUser .contentUserNotExist,
-.home.infoUser .createUser,
-.home.infoUser .userCreated,
-.home.infoUser .mailDeleted {
+.home.pantallaInfoDeUsuario .loading,
+.home.pantallaInfoDeUsuario .errorData,
+.home.pantallaInfoDeUsuario .contentSearch,
+.home.pantallaInfoDeUsuario .contentUserNotExist,
+.home.pantallaInfoDeUsuario .createUser,
+.home.pantallaInfoDeUsuario .userCreated,
+.home.pantallaInfoDeUsuario .mailDeleted {
   display: none;
 }
 
-.home.mailDeleted .contentSearch,
-.home.mailDeleted .contentUserNotExist,
-.home.mailDeleted .createUser,
-.home.mailDeleted .userCreated,
-.home.mailDeleted .infoUser {
+.home.pantallaMailEliminado .loading,
+.home.pantallaMailEliminado .errorData,
+.home.pantallaMailEliminado .contentSearch,
+.home.pantallaMailEliminado .contentUserNotExist,
+.home.pantallaMailEliminado .createUser,
+.home.pantallaMailEliminado .userCreated,
+.home.pantallaMailEliminado .infoUser {
   display: none;
+}
+
+.home.pantallaCargando .errorData,
+.home.pantallaCargando .contentSearch,
+.home.pantallaCargando .contentUserNotExist,
+.home.pantallaCargando .createUser,
+.home.pantallaCargando .userCreated,
+.home.pantallaCargando .infoUser,
+.home.pantallaCargando .mailDeleted {
+  display: none;
+}
+
+.home.pantallaError .loading,
+.home.pantallaError .contentSearch,
+.home.pantallaError .contentUserNotExist,
+.home.pantallaError .createUser,
+.home.pantallaError .userCreated,
+.home.pantallaError .infoUser,
+.home.pantallaError .mailDeleted {
+  display: none;
+}
+
+.home .botones {
+  width: 120px;
+  height: 80px;
+  background-color: red;
+  position: absolute;
+  margin-left: 900px;
 }

@@ -1,6 +1,35 @@
-<!-- <div class="home {{view.style}}"> -->
-<div class="home userCreated">
-<!-- VARIABLES: contentSearch, contentUserNotExist, createUser, userCreated, infoUser, mailDeleted, loading -->
+<div class="home {{view.style}}">
+
+<!--  VARIABLES:
+      pantallaBusqueda
+      pantallaUsuarioNoExiste
+      pantallaCrearUsuario
+      pantallaUsuarioCreado
+      pantallaInfoDeUsuario
+      pantallaMailEliminado
+      pantallaCargando
+      pantallaError (que tenga un delay de 2seg y vuelva a formulario de carga)
+-->
+
+    <!-- BORRAR ESTO DESDE ACAAAAAAA -->
+    <div class="botones">
+      <div>
+          <button ng-click="view.style = 'pantallaBusqueda'">1</button>
+          <button ng-click="view.style = 'pantallaUsuarioNoExiste'">2</button>
+          <button ng-click="view.style = 'pantallaCrearUsuario'">3</button>
+          <button ng-click="view.style = 'pantallaUsuarioCreado'">4</button>
+      </div>
+      <div>
+          <button ng-click="view.style = 'pantallaInfoDeUsuario'">1</button>
+          <button ng-click="view.style = 'pantallaMailEliminado'">2</button>
+      </div>
+      <div>
+          <button ng-click="view.style = 'pantallaCargando'">1</button>
+          <button ng-click="view.style = 'pantallaError'">2</button>
+      </div>
+    </div>
+    <!-- BORRAR HASTAA ACAAAAAAAAAAAAAAAA -->
+
     <div class="header">
         <div>
             Administración de cuentas FCE (sistema provisorio)
@@ -21,7 +50,7 @@
 
       <div class="contentUserNotExist">
           <div>
-            <button class="btnBack" ng-click="view.style = 'contentSearch'"><i class="arrowBack fa fa-chevron-left"></i> VOLVER</button>
+            <button class="btnBack" ng-click="view.style = 'pantallaBusqueda'"><i class="arrowBack fa fa-chevron-left"></i> VOLVER</button>
           </div>
           <div class="textUserNotExist">
             NO EXISTE LA CUENTA!
@@ -30,13 +59,13 @@
             30001823
           </div>
           <div>
-            <button class="btnCreate" ng-click="view.style = 'createUser'"> CREAR CUENTA </i></button>
+            <button class="btnCreate" ng-click="view.style = 'pantallaCrearUsuario'"> CREAR CUENTA </i></button>
           </div>
       </div>
 
       <div class="createUser">
         <div>
-          <button class="btnBack" ng-click="view.style = 'contentSearch'"><i class="arrowBack fa fa-chevron-left"></i> VOLVER</button>
+          <button class="btnBack" ng-click="view.style = 'pantallaBusqueda'"><i class="arrowBack fa fa-chevron-left"></i> VOLVER</button>
         </div>
           <div class="textform">Nombre</div>
           <div><input class="inputText" type="text"></input></div>
@@ -54,7 +83,7 @@
             </select>
           </div>
           <div>
-            <button class="btnCreate" ng-click="view.style = 'userCreated'"> CREAR CUENTA </i></button>
+            <button class="btnCreate" ng-click="view.style = 'pantallaUsuarioCreado'"> CREAR CUENTA </i></button>
           </div>
       </div>
 
@@ -74,14 +103,14 @@
           <div class="textform2">Docente</div>
 
           <div>
-            <button class="btnOut" ng-click="view.style = 'contentSearch'"> SALIR </i></button>
+            <button class="btnOut" ng-click="view.style = 'pantallaBusqueda'"> SALIR </i></button>
           </div>
       </div>
 
       <div class="infoUser">
 
         <div>
-          <button class="btnBack" ng-click="view.style = 'contentSearch'"><i class="arrowBack fa fa-chevron-left"></i> VOLVER</button>
+          <button class="btnBack" ng-click="view.style = 'pantallaBusqueda'"><i class="arrowBack fa fa-chevron-left"></i> VOLVER</button>
         </div>
 
         <div class="textform">Nombre y Apellido</div>
@@ -97,7 +126,7 @@
         <div class="textform">Correo Alternativo</div>
         <div class="textform2">pablodanielrey@gmail.com</div>
         <div>
-          <button class="btnDeleteMail"> Eliminar correo alternativo  </i></button>
+          <button class="btnDeleteMail" ng-click="view.style = 'pantallaMailEliminado'"> Eliminar correo alternativo  </i></button>
         </div>
 
       </div>
@@ -107,7 +136,7 @@
             CORREO ELIMINADO!
         </div>
         <div>
-          <button class="btnOut" ng-click="view.style = 'contentSearch'"> SALIR </i></button>
+          <button class="btnOut" ng-click="view.style = 'pantallaBusqueda'"> SALIR </i></button>
         </div>
 
       </div>
@@ -116,6 +145,12 @@
         <div class="iconMessage"><i class="fa fa-circle-o-notch fa-spin fa-4x"></i></div>
         <div>PROCESANDO</div>
         <div>Por favor espere... </div>
+      </div>
+
+      <div class="errorData">
+        <div class="titleError"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> ERROR</div>
+        <div>
+          Verifique los datos cargados
       </div>
 
     </div>
