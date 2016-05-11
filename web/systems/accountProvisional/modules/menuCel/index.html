@@ -1,0 +1,29 @@
+<div class="menuCel {{view.style}} ">
+
+    <div class="infoMenu">
+      <button class="btnMenuCel" ng-click="view.style='expandirMenu'"><i class="fa fa-bars fa-2x"></i> MENU</button>
+      <div class="title"><i class="fa fa-clock-o"></i> Cuentas FCE</div>
+    </div>
+
+    <div class="menuContent">
+
+      <div class="itemMenu" ng-click="selectHome();view.style='ocultarMenu'">
+          <div class="itemTextMenu">
+            <i class="fa fa-caret-right arrowItemsMenu"></i> Inicio
+          </div>
+          <div class="itemIcons" title="Inicio">
+            <i class="fa fa-user iconsMenu" ></i>
+          </div>
+      </div>
+      <!-- <div class="itemMenu"  ng-click="selectRequest();view.style='ocultarMenu'">
+          <div class="itemTextMenu">
+            <i class="fa fa-caret-right arrowItemsMenu"></i> Solicitudes
+          </div>
+          <div class="itemIcons" title="Solicitudes">
+            <i class="fa fa-user iconsMenu" ></i>
+          </div>
+      </div> -->
+
+    </div>
+
+</div>

@@ -1,0 +1,272 @@
+.vacaciones {
+  width: 100%;
+  height: 100%;
+  /*background-color: red;*/
+  padding: 20px;
+}
+
+.vacaciones .contentRequestVacaciones {
+  width: 338px;
+  height: 250px;
+  margin-top: 10px;
+  padding: 20px;
+  background-color: #FFF;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+  -moz-box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+  -webkit-box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  overflow-x: auto;
+}
+
+.vacaciones .availabilityRequest {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: flex-start;
+  -webkit-justify-content: flex-start;
+  -moz-justify-content: flex-start;
+  margin-bottom: 15px;
+  padding-bottom: 3px;
+  border-bottom: 1px solid #DBE2E5;
+}
+.vacaciones .ico {
+  color: #5C5F69 ;
+}
+
+.vacaciones .title {
+    color: #5C5F69;
+}
+
+.vacaciones .titleInfo {
+    color: #5C5F69;
+    font-size: 12px;
+    margin-bottom: 2px;
+    margin-top: 5px;
+}
+
+.vacaciones .titleAvailability {
+  font-size: 14px;
+  color: #5C5F69;
+}
+
+.vacaciones .contentCantAvailability {
+  margin-left: 145px;
+  color: #5C5F69;
+  font-size: 12px;
+}
+
+.vacaciones .cantAvailability {
+  background-color: #92AD17;
+  color: white;
+  padding: 0px 5px 0 5px;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+}
+
+.vacaciones .contentTime {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction: row;
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+  margin-bottom: 10px;
+  /*justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;*/
+  /*background-color: red;*/
+}
+
+.vacaciones .inputDate {
+    border: none;
+    font-size: 18px;
+    background-color: #EEEEEE;
+    width: 290px;
+    height: 35px;
+    color: #5c5f69;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    padding-left: 10px;
+}
+
+.vacaciones .inputTime {
+    border: none;
+    font-size: 15px;
+    background-color: #EEEEEE;
+    height: 30px;
+    color: #5c5f69;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    padding-left: 10px;
+    margin-right: 10px;
+}
+
+
+.vacaciones .inputTime2 {
+    border: none;
+    font-size: 15px;
+    background-color: #EEEEEE;
+    height: 30px;
+    color: #5c5f69;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    padding-left: 10px;
+}
+
+.vacaciones .btnApply {
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    border: none;
+    background-color: #92AD17;
+      font-size: 16px;
+    color: white;
+    padding: 10px;
+    width: 300px;
+    height: 45px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.vacaciones .btnApply:hover {
+  background-color: #809612;
+}
+
+.vacaciones .screenMessage {
+  width: 100%;
+  height: 100%;
+}
+
+.vacaciones .processing,
+.vacaciones .processed,
+.vacaciones .notAvailable,
+.vacaciones .errorSystem {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction: column;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  color: #5C5F69;
+}
+
+
+.vacaciones .iconMessage {
+  color: #f1f1f1;
+  margin-bottom: 10px;
+}
+
+.vacaciones .iconMessageProcessed {
+  color: #92ad17;
+}
+
+.vacaciones .iconMessageNotAvailable,
+.vacaciones .iconMessageErrorSystem {
+  color: #E43E46;
+  font-size: 20px;
+}
+
+/**********************************************************************
+*********************** VISTA DE PANTALLAS  ***************************
+***********************************************************************/
+
+.vacaciones.solicitud .screenMessage {
+  display: none;
+}
+
+.vacaciones.mensaje .screenRequest {
+  display: none;
+}
+
+.vacaciones.mensaje.procesando .processed,
+.vacaciones.mensaje.procesando .notAvailable,
+.vacaciones.mensaje.procesando .errorSystem {
+  display: none;
+}
+
+.vacaciones.mensaje.procesado .processing,
+.vacaciones.mensaje.procesado .notAvailable,
+.vacaciones.mensaje.procesado .errorSystem {
+  display: none;
+}
+
+.vacaciones.mensaje.sinDisponibilidad .processing,
+.vacaciones.mensaje.sinDisponibilidad .processed,
+.vacaciones.mensaje.sinDisponibilidad .errorSystem {
+  display: none;
+}
+
+.vacaciones.mensaje.errorDeSistema .processing,
+.vacaciones.mensaje.errorDeSistema .processed,
+.vacaciones.mensaje.errorDeSistema .notAvailable {
+  display: none;
+}
+
+/**********************************************************************
+************************* VISTA CELULAR *******************************
+***********************************************************************/
+
+@media (max-width: 719px) {
+  .vacaciones .contentRequestVacaciones {
+    width: 88%;
+    padding: 10px;
+    overflow-x: auto;
+  }
+
+  .vacaciones .inputDate {
+      border: none;
+      font-size: 20px;
+      background-color: #EEEEEE;
+      margin-top: 5px;
+      width: 96%;
+      color: #5c5f69;
+      border-radius: 2px;
+      -moz-border-radius: 2px;
+      -webkit-border-radius: 2px;
+  }
+
+  .vacaciones .inputTime {
+      width: 132px;
+  }
+
+  .vacaciones .inputTime2 {
+      width: 132px;
+  }
+
+  .vacaciones .btnApply {
+      border-radius: 2px;
+      -moz-border-radius: 2px;
+      -webkit-border-radius: 2px;
+      border: none;
+      background-color: #92AD17;
+        font-size: 16px;
+      color: white;
+      padding: 10px;
+      width: 100%;
+      height: 45px;
+      cursor: pointer;
+      margin-top: 10px;
+  }
+
+
+}
