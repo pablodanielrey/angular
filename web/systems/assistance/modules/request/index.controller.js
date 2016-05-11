@@ -63,7 +63,7 @@ function RequestCtrl($scope, Login, Assistance, Users, $location, $timeout) {
 
 
   const dayMillis = 24 * 60 * 60 * 1000;
-  const limitDay = 6;
+  const limitDay = 7;
 
   $scope.$on('$viewContentLoaded', function(event) {
     $scope.model.userId = '';
@@ -99,8 +99,8 @@ function RequestCtrl($scope, Login, Assistance, Users, $location, $timeout) {
         $scope.initializeFilters();
     }
 
-    $scope.model.start = ($scope.model.start == null) ? new Date($scope.model.end.getTime() - (limitDay * dayMillis))  : $scope.model.start;
-    $scope.model.end = ($scope.model.end <= $scope.model.start) ? $scope.model.start : $scope.model.end;
+    $scope.model.start = ($scope.model.start == null) ? new Date($scope.model.end) : $scope.model.start;
+    $scope.model.end = ($scope.model.end < $scope.model.start) ? new Date($scope.model.start) : $scope.model.end;
 
   });
 
@@ -112,8 +112,8 @@ function RequestCtrl($scope, Login, Assistance, Users, $location, $timeout) {
         $scope.initializeFilters();
     }
 
-    $scope.model.end = ($scope.model.end == null) ? new Date($scope.model.start.getTime() + (limitDay * dayMillis))  : $scope.model.end;
-    $scope.model.start = ($scope.model.start >= $scope.model.end) ? new Date($scope.model.end.getTime() - (limitDay * dayMillis))  : $scope.model.start;
+    $scope.model.end = ($scope.model.end == null) ? new Date($scope.model.start)  : $scope.model.end;
+    $scope.model.start = ($scope.model.start > $scope.model.end) ? new Date($scope.model.end)  : $scope.model.start;
   });
 
   function initialize() {
@@ -126,10 +126,7 @@ function RequestCtrl($scope, Login, Assistance, Users, $location, $timeout) {
 
   function initializeFilters() {
     var now = new Date()
-    // getDay obtiene el dia de la semana: 0->Domingo, 1->Lunes, ... , 6->Sábado
-    var day = (now.getDay() - 1 < 0) ? limitDay : now.getDay() - 1;
-
-    var start = new Date(now.getTime() - (day * dayMillis));
+    var start = new Date(now.getTime() - (limitDay * dayMillis));
 
     end = new Date(start.getTime() + (limitDay * dayMillis));
 
