@@ -12,6 +12,10 @@ function RequestCtrl($scope, Login, Assistance, Users, $location, $timeout) {
   $scope.search = search;
   $scope.getJustTitle = getJustTitle;
   $scope.getJustName = getJustName;
+  $scope.getSelectedOrderStatus = getSelectedOrderStatus;
+  $scope.getSelectedOrderName = getSelectedOrderName;
+  $scope.getSelectedOrderType = getSelectedOrderType;
+  $scope.order = order;
   $scope.orderName = orderName;
   $scope.orderStatus = orderStatus;
   $scope.orderUserName = orderUserName;
@@ -53,6 +57,10 @@ function RequestCtrl($scope, Login, Assistance, Users, $location, $timeout) {
     reverseName: false,
     reverseUserName: false,
     reverseStatus: false,
+    order: '',
+    order_type: 'type',
+    order_name: 'name',
+    order_status: 'status',
     style: '',
     style_options: ['', 'seleccionSolicitud'],
     style2: '',
@@ -128,10 +136,12 @@ function RequestCtrl($scope, Login, Assistance, Users, $location, $timeout) {
     var now = new Date()
     var start = new Date(now.getTime() - (limitDay * dayMillis));
 
-    end = new Date(start.getTime() + (limitDay * dayMillis));
+    end = new Date(now.getTime() + (limitDay * dayMillis));
 
     $scope.model.start = start;
     $scope.model.end = end;
+
+    $scope.view.order = $scope.view.order_status;
   }
 
   function loadUsers(ids) {
@@ -195,7 +205,8 @@ function RequestCtrl($scope, Login, Assistance, Users, $location, $timeout) {
         }
       }
       $scope.model.justifications = justifications;
-      $scope.orderName();
+      $scope.order();
+
     }, function(error) {
       $scope.view.searching = false;
       $scope.view.style3 = $scope.model.optionJustifications.style;
@@ -203,6 +214,25 @@ function RequestCtrl($scope, Login, Assistance, Users, $location, $timeout) {
     });
   }
 
+  function order() {
+    switch ($scope.view.order) {
+      case ($scope.view.order_type): $scope.orderName(); break;
+      case ($scope.view.order_name): $scope.orderUserName(); break;
+      case ($scope.view.order_status): $scope.orderStatus(); break;
+    }
+  }
+
+  function getSelectedOrderStatus() {
+    return $scope.view.order == $scope.view.order_status;
+  }
+
+  function getSelectedOrderName() {
+    return $scope.view.order == $scope.view.order_name;
+  }
+
+  function getSelectedOrderType() {
+    return $scope.view.order == $scope.view.order_type;
+  }
 
   function formatJustification(just) {
     var j = {};
@@ -252,6 +282,8 @@ function RequestCtrl($scope, Login, Assistance, Users, $location, $timeout) {
   }
 
   function orderName() {
+    $scope.view.reverseName = ($scope.view.order != $scope.view.order_type) ? true : $scope.view.reverseName;
+    $scope.view.order = $scope.view.order_type;
     if ($scope.view.reverseName) {
       $scope.model.justifications.sort(function(a, b) {
         value = compareName(a, b);
@@ -279,6 +311,8 @@ function RequestCtrl($scope, Login, Assistance, Users, $location, $timeout) {
   }
 
   function orderStatus() {
+    $scope.view.reverseStatus = ($scope.view.order != $scope.view.order_status) ? true : $scope.view.reverseStatus;
+    $scope.view.order = $scope.view.order_status;
     if ($scope.view.reverseStatus) {
       $scope.model.justifications.sort(function(a, b) {
         value = a.status - b.status;
@@ -306,6 +340,8 @@ function RequestCtrl($scope, Login, Assistance, Users, $location, $timeout) {
   }
 
   function orderUserName() {
+    $scope.view.reverseUserName = ($scope.view.order != $scope.view.order_name) ? true : $scope.view.reverseUserName;
+    $scope.view.order = $scope.view.order_name;
     if ($scope.view.reverseUserName) {
       $scope.model.justifications.sort(function(a, b) {
         value = compareUserName(a, b);

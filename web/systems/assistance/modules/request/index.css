@@ -17,6 +17,9 @@
   ESTO LO AGREGO EMANUEL - LO TIENE QUE COLOCAR WALTER DONDE DEBERIA
  * **************************************************************** */
 
+ .request .btnOrder.selected {
+    border: 1px solid #5C5F69;
+ }
 
  .request .contentRequestSelected.compensatory .compensatorio {
    display:block;
@@ -1166,7 +1169,6 @@
   .request .nameRequest {
     margin-right: 0px;
   }
-
 
 
 
