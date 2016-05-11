@@ -1,0 +1,379 @@
+.home {
+  height: 100%;
+  width: 100%;
+}
+
+.home .header {
+  height: 102px;
+  width: 100%;
+  background: #DBE2E5;
+  color: #5C5F69;
+  padding-left: 50px;
+  font-size: 1.5em;
+}
+
+/******************************************************
+************ INICIO PANTALLA DE HOME ******************
+*******************************************************/
+
+.home .contentHome {
+  /*background-color: red;*/
+  /*background-color: #F1F1F1;*/
+  height: 75%;
+  width: 100%;
+  overflow-y: auto;
+}
+
+.home .contentSearch {
+  padding: 20px;
+}
+
+
+.home .title {
+    color: #5C5F69;
+    margin-top: 20px;
+}
+
+.home .inputSearch {
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    font-size: 20px;
+    padding: 10px;
+    border: 1px solid #DBE2E5;
+    margin: 0px 0 5px 0px;
+    width: 250px;
+}
+
+.home .btnSearch {
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    border: none;
+    background-color: #92AD17;
+    color: white;
+    padding: 10px;
+    font-size: 20px;
+    margin: 5px 0 5px 0px;
+    width: 50px;
+    cursor: pointer;
+}
+
+.home .btnSearch:hover {
+  background-color: #809612;
+}
+
+/*****************************************************************/
+
+.home .contentUserNotExist {
+  padding: 20px;
+
+}
+
+
+.home .btnBack {
+  width: 100%;
+  border:none;
+  padding: 0px ;
+  cursor: pointer;
+  text-align: left;
+  background-color: #adadad;
+  color: #5C5F69;
+  font-size: 1em;
+  width: 305px;
+  margin-bottom: 10px;
+}
+
+.home .btnBack:hover {
+  background-color: #bcbaba;
+}
+
+.home .arrowBack {
+  height: 100%;
+  background-color: #bcbaba;
+  padding: 15px 15px 15px 15px;
+  margin-right: 10px;
+  color: #5C5F69;
+}
+
+.home .textUserNotExist {
+  font-size: 25px;
+}
+
+.home .textNumberDNI {
+  font-size: 30px;
+  color: #92AD17;
+}
+
+.home .btnCreate {
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border: none;
+  background-color: #92AD17;
+  color: white;
+  padding: 12px;
+  font-size: 14px;
+  margin: 5px 0 5px 0px;
+  width: 140px;
+  cursor: pointer;
+}
+
+.home .btnCreate:hover {
+  background-color: #809612;
+}
+
+
+
+/****************************************************************/
+
+.home .createUser {
+  padding: 20px;
+
+}
+
+.home .textform {
+  font-size: 12px;
+    color: #5C5F69;
+}
+
+.home .inputText {
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    font-size: 20px;
+    padding: 7px;
+    border: 1px solid #DBE2E5;
+    margin: 0px 0 5px 0px;
+    width: 250px;
+}
+
+.home .inputSelect {
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    font-size: 20px;
+    padding: 7px;
+    border: 1px solid #DBE2E5;
+    margin: 0px 0 5px 0px;
+    width: 262px;
+    background-color: white;
+}
+
+/***********************************************/
+
+.home .userCreated {
+  padding: 20px;
+
+}
+
+.home .textUserCreated {
+  font-size: 25px;
+  color: #92AD17;
+  margin-bottom: 10px;
+}
+
+.home .btnOut {
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border: none;
+  background-color: #92AD17;
+  color: white;
+  padding: 12px;
+  font-size: 14px;
+  margin: 20px 0 5px 0px;
+  width: 140px;
+  cursor: pointer;
+}
+
+.home .btnOut:hover {
+  background-color: #809612;
+}
+
+/*---------------------------------------------------*/
+.home .loading {
+  width: 300px;
+  height: 200px;
+  display: flex;
+  display: -webkit-flex;
+  display: -moz-flex;
+  flex-direction: column;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  align-items: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  padding: 20px;
+
+  color: #5C5F69;
+
+  opacity: 1;
+
+}
+
+/**************************************************************/
+
+.home .infoUser {
+  padding: 20px;
+}
+
+.home .textDataUser {
+  color: #92AD17;
+  margin-top: 15px;
+}
+
+.home .btnDeleteMail {
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border: none;
+  background-color: #92AD17;
+  color: white;
+  padding: 12px;
+  font-size: 14px;
+  margin: 20px 0 5px 0px;
+  cursor: pointer;
+}
+
+.home .btnDeleteMail:hover {
+  background-color: #809612;
+}
+
+
+.home .mailDeleted {
+  padding: 20px;
+}
+
+/*---------------------------------------------------*/
+
+.home .errorData {
+  padding: 20px;
+}
+
+.home .titleError {
+  font-size: 25px;
+  color: #E43E46;
+}
+
+/******************** MEDIA QUERIS ***************************/
+
+@media (max-width: 719px){
+  .home .header {
+      display: none;
+  }
+
+  .home .contentHome {
+    /*background-color: red;*/
+    background-color: #F1F1F1;
+    height: 80%;
+  }
+
+
+  .home .inputText {
+      padding: 5px;
+      font-size: 15px;
+
+  }
+
+  .home .inputSelect {
+      padding: 5px;
+      font-size: 15px;
+  }
+
+
+}
+
+
+/*<!-- VARIABLES: pantallaBusqueda, pantallaUsuarioNoExiste, pantallaCrearUsuario, pantallaUsuarioCreado, pantallaInfoDeUsuario, pantallaMailEliminado, pantallaCargando -->*/
+
+.home.pantallaBusqueda .loading,
+.home.pantallaBusqueda .errorData,
+.home.pantallaBusqueda .contentUserNotExist,
+.home.pantallaBusqueda .createUser,
+.home.pantallaBusqueda .userCreated,
+.home.pantallaBusqueda .infoUser,
+.home.pantallaBusqueda .mailDeleted {
+  display: none;
+}
+
+.home.pantallaUsuarioNoExiste .loading,
+.home.pantallaUsuarioNoExiste .errorData,
+.home.pantallaUsuarioNoExiste .contentSearch,
+.home.pantallaUsuarioNoExiste .createUser,
+.home.pantallaUsuarioNoExiste .userCreated,
+.home.pantallaUsuarioNoExiste .infoUser,
+.home.pantallaUsuarioNoExiste .mailDeleted {
+  display: none;
+}
+
+.home.pantallaCrearUsuario .loading,
+.home.pantallaCrearUsuario .errorData,
+.home.pantallaCrearUsuario .contentSearch,
+.home.pantallaCrearUsuario .contentUserNotExist,
+.home.pantallaCrearUsuario .userCreated,
+.home.pantallaCrearUsuario .infoUser,
+.home.pantallaCrearUsuario .mailDeleted {
+  display: none;
+}
+
+.home.pantallaUsuarioCreado .loading,
+.home.pantallaUsuarioCreado .errorData,
+.home.pantallaUsuarioCreado .contentSearch,
+.home.pantallaUsuarioCreado .contentUserNotExist,
+.home.pantallaUsuarioCreado .createUser,
+.home.pantallaUsuarioCreado .infoUser,
+.home.pantallaUsuarioCreado .mailDeleted {
+  display: none;
+}
+
+.home.pantallaInfoDeUsuario .loading,
+.home.pantallaInfoDeUsuario .errorData,
+.home.pantallaInfoDeUsuario .contentSearch,
+.home.pantallaInfoDeUsuario .contentUserNotExist,
+.home.pantallaInfoDeUsuario .createUser,
+.home.pantallaInfoDeUsuario .userCreated,
+.home.pantallaInfoDeUsuario .mailDeleted {
+  display: none;
+}
+
+.home.pantallaMailEliminado .loading,
+.home.pantallaMailEliminado .errorData,
+.home.pantallaMailEliminado .contentSearch,
+.home.pantallaMailEliminado .contentUserNotExist,
+.home.pantallaMailEliminado .createUser,
+.home.pantallaMailEliminado .userCreated,
+.home.pantallaMailEliminado .infoUser {
+  display: none;
+}
+
+.home.pantallaCargando .errorData,
+.home.pantallaCargando .contentSearch,
+.home.pantallaCargando .contentUserNotExist,
+.home.pantallaCargando .createUser,
+.home.pantallaCargando .userCreated,
+.home.pantallaCargando .infoUser,
+.home.pantallaCargando .mailDeleted {
+  display: none;
+}
+
+.home.pantallaError .loading,
+.home.pantallaError .contentSearch,
+.home.pantallaError .contentUserNotExist,
+.home.pantallaError .createUser,
+.home.pantallaError .userCreated,
+.home.pantallaError .infoUser,
+.home.pantallaError .mailDeleted {
+  display: none;
+}
+
+.home .botones {
+  width: 120px;
+  height: 80px;
+  background-color: red;
+  position: absolute;
+  margin-left: 900px;
+}
