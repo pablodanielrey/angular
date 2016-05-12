@@ -1,7 +1,114 @@
-<div class="resetPassword">
-  hola
+<!DOCTYPE html>
+<html ng-app="mainApp">
+<head>
+  <meta charset="utf-8"/>
+  <meta name='viewport' content='width=device-width'/>
+  <title>FCE | Recuperar contraseña</title>
 
 
+  <script src="/libs/bower_components/angularjs/angular.js"></script>
+  <script src="/libs/bower_components/angular-route/angular-route.js"></script>
+  <script src="/libs/bower_components/autobahn/autobahn.js"></script>
+  <script src="/libs/bower_components/angular-wamp/release/angular-wamp.js"></script>
+
+  <!--archivos principales-->
+  <script type="text/javascript" src="/systems/login/index.module.js"></script>
+  <script type="text/javascript" src="/systems/login/index.controller.js"></script>
+
+  <!-- esto es el estilo de font awesome para tener los iconos -->
+  <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+  <link rel="shortcut icon" href="/systems/fce/img/favicon2.ico">
+
+  <script type="text/javascript" src="/config.json"></script>
 
 
-</div>
+	<!-- ***** SERVICIOS ***** -->
+	<script type="text/javascript" src="/services/Cache.js"></script>
+	<script type="text/javascript" src="/services/Session.js"></script>
+  <script type="text/javascript" src="/services/Login.js"></script>
+
+  <script type="text/javascript" src="/services/Users.js"></script>
+  <script type="text/javascript" src="/services/Utils.js"></script>
+	<script type="text/javascript" src="/services/Notifications.js"></script>
+
+	<!-- ***** MODULOS ***** -->
+
+  <script type="text/javascript" src="/systems/login/modules/resetPassword/resetPassword.controller.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/login/modules/resetPassword/resetPassword.css" />
+
+</head>
+
+<body>
+
+    <div class="resetPassword">
+
+        <div class="contentHeader">
+            <div class="logo">
+                  <div class="imgLogo">
+                      <img src="/systems/fce/img/DitesiLogo.png" width="104px" height="25px">
+                  </div>
+            </div>
+        </div>
+
+        <div class="contentMain">
+
+
+            <div class="screenDNI">
+                <div class="contentTitle">
+                    <div>
+                        <div class="textTitle1">
+                          ¿Haz olvidado tu contraseña?
+                        </div>
+                        <div class="textTitle2">
+                          RECUPERAR CONTRASEÑA
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contentGuide">
+                    <div class="text">DNI</div>
+                    <div class="text2">Código</div>
+                    <div class="text2">Contraseña</div>
+                    <div class="text2">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspFin!</div>
+                </div>
+
+                <div class="contentGuide2">
+                    <div class="line"></div>
+                    <div class="circle"></div>
+                    <div class="line2"></div>
+                    <div class="circle2"></div>
+                    <div class="line2"></div>
+                    <div class="circle2"></div>
+                    <div class="line2"></div>
+                    <div class="circle2"></div>
+                    <div class="line2"></div>
+                </div>
+
+
+                
+            </div>
+
+
+            <div class="screenCode">
+                Ingrese Codigo
+            </div>
+            <div class="screenPass">
+                Ingrese Pass
+            </div>
+            <div class="screenFin">
+                fin
+            </div>
+        </div>
+
+        <div class="contentFooter">
+          <span>
+            © 2016 | DiTESI | Dirección de tecnologías y Sistemas Informáticos
+            | Facultad de Ciencias Económicas | UNLP | Calle 6 Nº 777
+          </span>
+        </div>
+
+    </div>
+
+</body>
+</html>
