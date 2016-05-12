@@ -63,6 +63,9 @@ class IngresoWamp(ApplicationSession):
                 self.credentials.createUserPassword(con, cuser)
                 apassword = password
 
+            else:
+                creds['password'] = password
+                self.credentials.updateUserPassword(con, creds)
 
             # confirmo el email
             r = self.ingreso.confirmEmail(con, eid, code)
