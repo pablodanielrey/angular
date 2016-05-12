@@ -328,13 +328,6 @@ class StudentDAO(DAO):
 
 
 ############### UserPassword ###############
-class UserPassword(JSONSerializable):
-
-    def __init__(self):
-        self.id = None
-        self.userId = None
-        self.username = None
-        self.password = None
 
 
 class UserPasswordDAO(DAO):
@@ -455,26 +448,29 @@ class UserPasswordDAO(DAO):
             cur.close()
 
 
+class UserPassword(JSONSerializable):
 
-############### Mail ###############
-class Mail(JSONSerializable):
-    ''' cuenta de email de un usuario '''
+    dao = UserPasswordDAO
 
     def __init__(self):
         self.id = None
         self.userId = None
-        self.email = None
-        self.confirmed = False
-        self.hash = None
-        self.created = None
+        self.username = None
+        self.password = None
 
-    def confirm(con, self):
-        ''' cambia el estado a confirmado '''
-        if self.confirmed:
-            return
-        self.confirmed = True
-        MailDAO.persist(con, self)
+    def setPassword(passw):
+        self.password = passw
 
+    def persist(con):
+        self.dao.persist(con, self)
+
+    @classmethod
+    def findByUserId(cls, con, userId):
+        return cls.dao.findByUserId(con, userId)
+
+
+
+############### Mail ###############
 
 class MailDAO(DAO):
 
@@ -502,10 +498,6 @@ class MailDAO(DAO):
 
         finally:
             cur.close()
-
-
-
-
 
     @staticmethod
     def _fromResult(r):
@@ -548,13 +540,15 @@ class MailDAO(DAO):
         ''' crea o actualiza un email de usuario '''
         cur = con.cursor()
         try:
-            if not hasattr(user, 'id'):
+            if not hasattr(mail, 'id') or mail.id is None:
                 mail.id = str(uuid.uuid4())
                 params = mail.__dict__
                 cur.execute('insert into profile.mails (id, user_id, email, confirmed, hash) values (%(id)s, %(userId)s, %(email)s, %(confirmed)s, %(hash)s)', params)
             else:
                 params = mail.__dict__
                 cur.execute('update profile.mails set user_id = %(userId)s, email = %(email)s, confirmed = %(confirmed)s, hash = %(hash)s where id = %(id)s', params)
+
+            return mail.id
 
         finally:
             cur.close()
@@ -568,6 +562,38 @@ class MailDAO(DAO):
 
         finally:
             cur.close()
+
+
+class Mail(JSONSerializable):
+
+    dao = MailDAO
+
+    def __init__(self):
+        self.id = None
+        self.userId = None
+        self.email = None
+        self.confirmed = False
+        self.hash = None
+        self.created = None
+
+    def confirm(self, con):
+        ''' cambia el estado a confirmado '''
+        if self.confirmed:
+            return
+        self.confirmed = True
+        return self.persist(con)
+
+    def persist(self, con):
+        return self.dao.persist(con, self)
+
+
+    @classmethod
+    def findByUserId(cls, con, userId):
+        return cls.dao.findByUserId(con, userId)
+
+    @classmethod
+    def findById(cls, con, eid):
+        return cls.dao.findById(con, eid)
 
 
 
@@ -598,11 +624,8 @@ class User(JSONSerializable):
         born = self.birthdate
         return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
 
-
-
     def persist(self, con):
         return self.dao.persist(con, self)
-
 
     def delete(self, con):
         return self.dao.deleteById(con, [self.id])

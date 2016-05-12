@@ -113,7 +113,7 @@ function IngresantesCtrl($rootScope, $scope, $window, Notifications, Users, Stud
           $scope.model.user = user;
 
           //chequeo a ver si tiene ya mails activos
-          Users.findAllMails(user.id).then(
+          $wamp.call('ingreso.user.findMails', [user.id]).then(
             function(mails) {
               if (mails == null || mails.length <= 0) {
                 // no tiene emails. por lo que esta perfecto. paso de pantalla
@@ -158,7 +158,7 @@ function IngresantesCtrl($rootScope, $scope, $window, Notifications, Users, Stud
         user_id: $scope.model.user.id,
         email: $scope.model.email.email
       };
-      Users.persistMail(oemail).then(
+      $wamp.call('ingreso.user.persistMail', [oemail]).then(
         function(eid) {
           $scope.model.email.id = eid;
           $scope.resendEmailValidation();

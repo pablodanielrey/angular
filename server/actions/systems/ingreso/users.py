@@ -8,13 +8,12 @@ import psycopg2
 import asyncio
 from asyncio import coroutine
 from autobahn.asyncio.wamp import ApplicationSession
-from model.config import Config
-from model.users.users import Users
-from model.credentials.credentials import UserPassword
+from model.registry import Registry
+from model.connection.connection import Connection
+from model.users.users import User, UserPassword
+import model.users.users
 from model.mail.mail import Mail
-from model.systems.ingreso.ingreso import Ingreso
-
-from model.exceptions import *
+from model.ingreso.ingreso import Ingreso
 
 
 class IngresoWamp(ApplicationSession):
@@ -22,11 +21,9 @@ class IngresoWamp(ApplicationSession):
     def __init__(self, config=None):
         logging.debug('instanciando')
         ApplicationSession.__init__(self, config)
-        self.users = inject.instance(Users)
-        self.serverConfig = inject.instance(Config)
-        self.mail = inject.instance(Mail)
-        self.credentials = inject.instance(UserPassword)
-        self.ingreso = inject.instance(Ingreso)
+        registry = inject.instance(Registry)
+        self.reg = registry.getRegistry('dcsys')
+        self.conn = Connection(self.reg)
 
     @coroutine
     def onJoin(self, details):
@@ -35,40 +32,24 @@ class IngresoWamp(ApplicationSession):
         yield from self.register(self.sendErrorMail_async, 'ingreso.mails.sendErrorMail')
         yield from self.register(self.uploadIngresoData_async, 'ingreso.user.uploadIngresoData')
         yield from self.register(self.findByDni_async, 'ingreso.user.findByDni')
-
-    def _getDatabase(self):
-        host = self.serverConfig.configs['database_host']
-        dbname = self.serverConfig.configs['database_database']
-        user = self.serverConfig.configs['database_user']
-        passw = self.serverConfig.configs['database_password']
-        return psycopg2.connect(host=host, dbname=dbname, user=user, password=passw)
+        yield from self.register(self.findMails_async, 'ingreso.user.findMails')
+        yield from self.register(self.persistMail_async, 'ingreso.user.persistMail')
 
     def uploadIngresoData(self, dni, password, user, email, eid, code):
-        con = self._getDatabase()
+        con = self.conn.get()
         try:
-            # genero una clave.
-            apassword = 'Ya tiene registrado una clave'
-            creds = self.credentials.findCredentials(con, dni)
-            if creds is None:
-                uuser = self.users.findUserByDni(con, dni)
-                if uuser is None:
-                    con.rollback()
-                    return False
+            user = User.findByDni(con, dni)
+            if user is None:
+                con.rollback()
+                return False
 
-                cuser = {
-                    'user_id': uuser['id'],
-                    'username': dni,
-                    'password': password
-                }
-                self.credentials.createUserPassword(con, cuser)
-                apassword = password
-
-            else:
-                creds['password'] = password
-                self.credentials.updateUserPassword(con, creds)
+            passwords = UserPassword.findByUserId(con, user.id)
+            for passwd in passwords:
+                passwd.setPassword(password)
+                passwd.persist(con)
 
             # confirmo el email
-            r = self.ingreso.confirmEmail(con, eid, code)
+            r = Ingreso.confirmEmail(con, eid, code)
             if not r:
                 con.rollback()
                 return False
@@ -76,12 +57,12 @@ class IngresoWamp(ApplicationSession):
                 con.commit()
 
             # envío el email de finalización
-            self.ingreso.sendFinalEmail(user, apassword, email)
+            Ingreso.sendFinalEmail(user, apassword, email)
 
             return True
 
         finally:
-            con.close()
+            self.conn.put(con)
 
     @coroutine
     def uploadIngresoData_async(self, dni, password, user, email, eid, code):
@@ -89,23 +70,64 @@ class IngresoWamp(ApplicationSession):
         r = yield from loop.run_in_executor(None, self.uploadIngresoData, dni, password, user, email, eid, code)
         return r
 
-    def findByDni(self, dni):
-        con = self._getDatabase()
-        try:
-            u = self.users.findUserByDni(con, dni)
 
+    def findMails(self, uid):
+        con = self.conn.get()
+        try:
+            mails = model.users.users.Mail.findByUserId(con, uid)
+            return mails
+
+        finally:
+            self.conn.put(con)
+
+    @coroutine
+    def findMails_async(self, uid):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.findMails, uid)
+        return r
+
+
+    def persistMail(self, omail):
+        con = self.conn.get()
+        try:
+            import pdb; pdb.set_trace()
+            m = model.users.users.Mail()
+            m.userId = omail['user_id']
+            m.email = omail['email']
+            m.confirmed = False
+            mid = m.persist(con)
+            con.commit()
+            return mid
+
+        finally:
+            self.conn.put(con)
+
+    @coroutine
+    def persistMail_async(self, omail):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.persistMail, omail)
+        return r
+
+
+    def findByDni(self, dni):
+        con = self.conn.get()
+        try:
+            u = User.findByDni(con, dni)
             found = False
             if u is not None:
-                found = True
+                uid, v = u
+                u = User.findById(con, [uid])
+                if u is not None and len(u) > 0:
+                    found = True
 
             cursor = con.cursor()
             cursor.execute('insert into ingreso.login (dni, found) values (%s,%s)', (dni, found))
             con.commit()
 
-            return u
+            return u[0]
 
         finally:
-            con.close()
+            self.conn.put(con)
 
     @coroutine
     def findByDni_async(self, dni):
@@ -114,14 +136,15 @@ class IngresoWamp(ApplicationSession):
         return r
 
     def sendEmailConfirmation(self, name, lastname, eid):
-        con = self._getDatabase()
+        con = self.conn.get()
         try:
-            self.ingreso.sendEmailConfirmation(con, name, lastname, eid)
+            logging.warn('sendEmailConfirmation {}'.format(eid))
+            Ingreso.sendEmailConfirmation(con, name, lastname, eid)
             con.commit()
             return True
 
         finally:
-            con.close()
+            self.conn.put(con)
 
     @coroutine
     def sendEmailConfirmation_async(self, name, lastname, eid):
@@ -130,13 +153,13 @@ class IngresoWamp(ApplicationSession):
         return r
 
     def checkEmailCode(self, eid, hash):
-        con = self._getDatabase()
+        con = self.conn.get()
         try:
-            r = self.ingreso.checkEmailCode(con, eid, hash)
+            r = Ingreso.checkEmailCode(con, eid, hash)
             return r
 
         finally:
-            con.close()
+            self.conn.put(con)
 
     @coroutine
     def checkEmailCode_async(self, eid, hash):
@@ -145,16 +168,16 @@ class IngresoWamp(ApplicationSession):
         return r
 
     def sendErrorMail(self, error, names, dni, email, comment):
-        con = self._getDatabase()
+        con = self.conn.get()
         try:
             cursor = con.cursor()
             cursor.execute('insert into ingreso.errors (error, names, dni, email, comment) values (%s,%s,%s,%s,%s)', (error, names, dni, email, comment))
             con.commit()
 
         finally:
-            con.close()
+            self.conn.put(con)
 
-        self.ingreso.sendErrorEmail(error, names, dni, email, comment)
+        Ingreso.sendErrorEmail(error, names, dni, email, comment)
         return True
 
     @coroutine
