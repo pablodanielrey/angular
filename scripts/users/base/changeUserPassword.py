@@ -11,8 +11,8 @@
         python3 changeUserPassword.py dni clave
 
 '''
-import connection
-import users
+import model.connection
+import model.users
 import logging
 
 if __name__ == '__main__':
