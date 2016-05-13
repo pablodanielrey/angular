@@ -11,6 +11,7 @@
         python3 changeUserPassword.py dni clave
 
 '''
+from model.registry import Registry
 import model.connection.connection
 import model.users.users
 import logging
