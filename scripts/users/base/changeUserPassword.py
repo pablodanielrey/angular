@@ -43,14 +43,14 @@ if __name__ == '__main__':
             up.userId = uid
             up.username = dni
             up.password = passw
-            users.UserPasswordDAO.persist(con, up)
+            model.users.users.UserPasswordDAO.persist(con, up)
 
         else:
             ''' actualizo el primero '''
             up = ups[0]
             up.username = dni
             up.password = passw
-            users.UserPasswordDAO.persist(con, up)
+            model.users.users.UserPasswordDAO.persist(con, up)
 
         con.commit()
 
