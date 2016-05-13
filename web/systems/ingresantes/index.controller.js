@@ -221,7 +221,6 @@ function IngresantesCtrl($rootScope, $scope, $window, Notifications, Users, Stud
       if (!$scope.model.passwordOk) {
         return;
       }
-
       $scope.model.se = 5;
       $scope.uploadIngresoData($scope.model.dni, $scope.model.password, $scope.model.user, $scope.model.email.email, $scope.model.email.id, $scope.model.email.code);
       /*

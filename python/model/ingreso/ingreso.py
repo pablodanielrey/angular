@@ -35,10 +35,10 @@ class Ingreso:
         To = email
 
         replace = [
-            ('###NAME###', user['name']),
-            ('###LASTNAME###', user['lastname']),
+            ('###NAME###', user.name),
+            ('###LASTNAME###', user.lastname),
             ('###PASSWORD###', password),
-            ('###USERNAME###', user['dni']),
+            ('###USERNAME###', user.dni),
             ('###EMAIL###', email)
         ]
         cls.mail.sendMail(From, [To, "red@econo.unlp.edu.ar"], subject, replace, html=template)
@@ -74,7 +74,7 @@ class Ingreso:
         emails = model.users.users.Mail.findById(con, eid)
         if emails is None or len(emails) <= 0:
             raise Exception()
-        return (email[0].hash == code)
+        return (emails[0].hash == code)
 
     @classmethod
     def confirmEmail(cls, con, eid, code):

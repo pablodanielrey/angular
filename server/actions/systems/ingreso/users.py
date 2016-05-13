@@ -38,12 +38,13 @@ class IngresoWamp(ApplicationSession):
     def uploadIngresoData(self, dni, password, user, email, eid, code):
         con = self.conn.get()
         try:
-            user = User.findByDni(con, dni)
-            if user is None:
+            puser = User.findByDni(con, dni)
+            if puser is None:
                 con.rollback()
                 return False
 
-            passwords = UserPassword.findByUserId(con, user.id)
+            uid, version = puser
+            passwords = UserPassword.findByUserId(con, uid)
             for passwd in passwords:
                 passwd.setPassword(password)
                 passwd.persist(con)
@@ -57,7 +58,7 @@ class IngresoWamp(ApplicationSession):
                 con.commit()
 
             # envío el email de finalización
-            Ingreso.sendFinalEmail(user, apassword, email)
+            Ingreso.sendFinalEmail(user, password, email)
 
             return True
 
@@ -90,7 +91,6 @@ class IngresoWamp(ApplicationSession):
     def persistMail(self, omail):
         con = self.conn.get()
         try:
-            import pdb; pdb.set_trace()
             m = model.users.users.Mail()
             m.userId = omail['user_id']
             m.email = omail['email']
@@ -124,7 +124,10 @@ class IngresoWamp(ApplicationSession):
             cursor.execute('insert into ingreso.login (dni, found) values (%s,%s)', (dni, found))
             con.commit()
 
-            return u[0]
+            if found:
+                return u[0]
+            else:
+                return None
 
         finally:
             self.conn.put(con)

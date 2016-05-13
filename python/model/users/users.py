@@ -434,7 +434,7 @@ class UserPasswordDAO(DAO):
 
         cur = con.cursor()
         try:
-            if not hasattr(user, 'id'):
+            if not hasattr(up, 'id') or up.id is None:
                 up.id = str(uuid.uuid4())
                 params = up.__dict__
                 cur.execute('insert into credentials.user_password (id, user_id, username, password, updated) values (%(id)s, %(userId)s, %(username)s, %(password)s, now())', params)
@@ -458,10 +458,10 @@ class UserPassword(JSONSerializable):
         self.username = None
         self.password = None
 
-    def setPassword(passw):
+    def setPassword(self, passw):
         self.password = passw
 
-    def persist(con):
+    def persist(self, con):
         self.dao.persist(con, self)
 
     @classmethod
