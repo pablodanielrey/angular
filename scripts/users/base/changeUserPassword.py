@@ -11,9 +11,10 @@
         python3 changeUserPassword.py dni clave
 
 '''
-import model.connection
-import model.users
+import model.connection.connection
+import model.users.users
 import logging
+import inject
 
 if __name__ == '__main__':
 
@@ -26,15 +27,16 @@ if __name__ == '__main__':
     assert passw is not None
 
     logging.getLogger().setLevel(logging.INFO)
-    con = connection.getConnection()
+    conn = model.connection.connection.Connection(inject.instance(Registry).getRegistry('dcsys'))
+    con = conn.get()
     try:
-        u = users.UserDAO.findByDni(con, dni)
+        u = model.users.users.UserDAO.findByDni(con, dni)
         if u is None:
             logging.warn('Persona inexistente')
             sys.exit(1)
 
         (uid, version) = u
-        ups = users.UserPasswordDAO.findByUserId(con, uid)
+        ups = model.users.users.UserPasswordDAO.findByUserId(con, uid)
         if len(ups) <= 0:
             up = users.UserPassword()
             up.userId = uid
@@ -52,4 +54,4 @@ if __name__ == '__main__':
         con.commit()
 
     finally:
-        connection.closeConnection(con)
+        conn.put(con)
