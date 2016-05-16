@@ -191,11 +191,14 @@ class LaboralInsertionWamp(ApplicationSession):
         finally:
             self.conn.put(con)
 
-    def sendMailToCompany(self, inscriptions, emails):
+    def sendMailToCompany(self, inscriptions, emails, inscriptionsPerMail):
         con = self.conn.get()
         try:
             inscriptionIds = [ i['id'] for i in inscriptions ]
-            data = self.laboralInsertion.sendMailToCompany(con, inscriptionIds, emails)
+            inscriptionsToSend = [ inscriptionIds.pop() for i in range(inscriptionsPerMail) if len(inscriptionsIds) > 0 ]
+            data = []
+            while len(inscriptionsToSend) > 0:
+                data.extend(self.laboralInsertion.sendMailToCompany(con, inscriptionIds, emails))
             self.publish('system.laboralInsertion.COMPANYSENDED', data)
             return True
 
@@ -318,9 +321,9 @@ class LaboralInsertionWamp(ApplicationSession):
         return r
 
     @coroutine
-    def sendMailToCompany_async(self, inscriptions, company):
+    def sendMailToCompany_async(self, inscriptions, company, inscriptionsPerMail):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.sendMailToCompany, inscriptions, company)
+        r = yield from loop.run_in_executor(None, self.sendMailToCompany, inscriptions, company, inscriptionsPerMail)
         return r
 
     @coroutine

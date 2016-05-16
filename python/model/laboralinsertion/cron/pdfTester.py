@@ -16,30 +16,34 @@ from io import BytesIO
 if __name__ == '__main__':
 
     logging.getLogger().setLevel(logging.WARNING)
-    inject.configure()
+    #inject.configure()
     conn = Connection(inject.instance(Registry).getRegistry('dcsys'))
     con = conn.get()
     try:
 
         uids = set([ i.userId for i in Inscription.findById(con, Inscription.findAll(con)) ])
         for i in uids:
+            logging.warn('chequeando cv de : {}'.format(i))
             usr = UserDAO.findById(con, [i])[0]
             cvi = model.laboralinsertion.user.User.findById(con, i)[0].cv
 
             try:
                 content = base64.b64decode(File.getContentById(con, cvi))
 
-                f = open('/tmp/insercion/{}.pdf'.format(cvi), 'wb')
-                f.write(content)
-                f.close()
+                fn = '/tmp/insercion/{}.pdf'.format(cvi)
+                with open(fn, 'wb') as f:
+                    f.write(content)
 
-                buff = BytesIO(content)
-                try:
-                    PyPDF2.PdfFileReader(buff)
-                    logging.info('{} {} {} {} ok'.format(usr.dni, usr.name, usr.lastname, cvi))
+                with BytesIO(content) as buff:
+                    try:
+                        logging.warn('comenzando a leer el pdf')
+                        PyPDF2.PdfFileReader(buff)
+                        logging.warn('{} {} {} {} ok'.format(usr.dni, usr.name, usr.lastname, cvi))
+                        import os
+                        os.remove(fn)
 
-                except PyPDF2.utils.PdfReadError:
-                    logging.warn('El usuario {} {} {} {} tiene el cv {} sin formato pdf'.format(i, usr.dni, usr.name, usr.lastname, cvi))
+                    except PyPDF2.utils.PdfReadError:
+                        logging.warn('El usuario {} {} {} {} tiene el cv {} sin formato pdf'.format(i, usr.dni, usr.name, usr.lastname, cvi))
 
             except Exception as e:
                 logging.warn('El usuario {} {} {} {} tiene error en el cv {}'.format(i, usr.dni, usr.name, usr.lastname, cvi))

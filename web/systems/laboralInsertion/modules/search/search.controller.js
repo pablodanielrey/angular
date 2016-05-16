@@ -19,7 +19,8 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     emailAddToCompany: '',
     emails: [],
     filtersData:[],
-    searching: false
+    searching: false,
+    inscriptionsPerMail: 5
   };
 
   $scope.view = {
@@ -590,7 +591,7 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     }
 
     $scope.model.currentScreen = "screenSelected screenSending";
-    LaboralInsertion.sendEmailToCompany(selectedInscriptions, $scope.model.company.emails).then(
+    LaboralInsertion.sendEmailToCompany(selectedInscriptions, $scope.model.company.emails, $scope.model.inscriptionsPerMail).then(
       function() {
         console.log('enviado');
       },
