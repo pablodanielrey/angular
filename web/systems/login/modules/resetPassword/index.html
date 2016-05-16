@@ -1,7 +1,291 @@
-<div class="resetPassword">
-  hola
+<!DOCTYPE html>
+<html ng-app="mainApp">
+<head>
+  <meta charset="utf-8"/>
+  <meta name='viewport' content='width=device-width'/>
+  <title>FCE | Recuperar contraseña</title>
 
 
+  <script src="/libs/bower_components/angularjs/angular.js"></script>
+  <script src="/libs/bower_components/angular-route/angular-route.js"></script>
+  <script src="/libs/bower_components/autobahn/autobahn.js"></script>
+  <script src="/libs/bower_components/angular-wamp/release/angular-wamp.js"></script>
+
+  <!--archivos principales-->
+  <script type="text/javascript" src="/systems/login/index.module.js"></script>
+  <script type="text/javascript" src="/systems/login/index.controller.js"></script>
+
+  <!-- esto es el estilo de font awesome para tener los iconos -->
+  <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+  <link rel="shortcut icon" href="/systems/fce/img/favicon2.ico">
+
+  <script type="text/javascript" src="/config.json"></script>
 
 
-</div>
+	<!-- ***** SERVICIOS ***** -->
+	<script type="text/javascript" src="/services/Cache.js"></script>
+	<script type="text/javascript" src="/services/Session.js"></script>
+  <script type="text/javascript" src="/services/Login.js"></script>
+
+  <script type="text/javascript" src="/services/Users.js"></script>
+  <script type="text/javascript" src="/services/Utils.js"></script>
+	<script type="text/javascript" src="/services/Notifications.js"></script>
+
+	<!-- ***** MODULOS ***** -->
+
+  <script type="text/javascript" src="/systems/login/modules/resetPassword/resetPassword.controller.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/login/modules/resetPassword/resetPassword.css" />
+
+</head>
+
+<body>
+
+    <div class="resetPassword pantallaDNI">
+
+        <!-- VARIABLES:
+        pantallaDNI (si el dni no existe agregar la clase: noExisteDNI)
+        pantallaCodigo (si el codigo es incorrecto agregar la clase: errorDeCodigo)
+        pantallaContrasena (si las contraeñas estan mal agregar la clase: errorDeContrasena)
+        pantallaFin
+        pantallaSinCorreoAlternativo
+      -->
+
+
+        <div class="contentHeader">
+            <div class="logo">
+                  <div class="imgLogo">
+                      <img src="/systems/fce/img/DitesiLogo.png" width="104px" height="25px">
+                  </div>
+            </div>
+        </div>
+
+        <div class="contentMain">
+
+            <div class="contentTitle">
+              <div>
+                  <div class="textTitle1">
+                    ¿Haz olvidado tu contraseña?
+                  </div>
+                  <div class="textTitle2">
+                    RECUPERAR CONTRASEÑA
+                  </div>
+              </div>
+            </div>
+
+            <div class="contentGuide">
+              <div class="text color1">DNI</div>
+              <div class="text2 color2">Código</div>
+              <div class="text2 color3">Contraseña</div>
+              <div class="text2 color4">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspFin!</div>
+            </div>
+
+            <div class="contentGuide2">
+              <div class="line colorb1"></div>
+              <div class="circle colorb1"></div>
+              <div class="line colorb2"></div>
+              <div class="circle colorb2"></div>
+              <div class="line colorb3"></div>
+              <div class="circle colorb3"></div>
+              <div class="line colorb4"></div>
+              <div class="circle colorb4"></div>
+              <div class="line colorb4"></div>
+            </div>
+
+            <div class="screenDNI">
+                <div class="contentTitle">
+                    <div class="textTitle3">
+                      Ingresa tu DNI
+                    </div>
+                </div>
+                <div class="contentCenter">
+                    <div>
+                        <input class="inputDNI" type="text"></input>
+                    </div>
+
+                </div>
+
+                <div class="contentCenter errorDNI">
+                  <div>
+                    <div class="arrow">
+                              <i class="fa fa-sort-asc fa-2x"></i>
+                    </div>
+                    <div class="textUserNonExistent">
+                        <i class="fa fa-frown-o"></i> Oops! <span class="textUserNonExistent2"> El DNI no existe</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="contentCenter">
+                    <div>
+                        <button class="btnNext" type="text"> Siguiente</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="screenCode">
+
+                <div class="contentCenter">
+                    <div class="mensMail">
+                      <i class="fa fa-envelope-o" aria-hidden="true"></i> Hemos enviado un código a su cuenta de correo
+                      <b><span> pablod******@gmail.com<span></b> <br>
+                      <div class="spanBackground">
+                          <span class="span"> <i class="fa fa-caret-right" aria-hidden="true"></i> Recuerda revisar la bandeja de correo no deseado (Spam) <span><br>
+                          <span class="span2">&nbsp &nbsp Si te llego como spam, Ábrelo y marca el contenido como seguro o elimina la etiqueta de Spam. </span>
+                      </div>
+                      <div class="spanBackground">
+                          <span class="span"><i class="fa fa-caret-right" aria-hidden="true"></i> Si no tienes acceso a tu correo y/o deseas cambiarlo <b>CLIC AQUÍ</b> <span><br>
+                      </div>
+                    </div>
+                </div>
+
+                <div class="contentTitle">
+                    <div class="textTitle3">
+                      Ingresa el código
+                    </div>
+                </div>
+                <div class="contentCenter">
+                    <div>
+                        <input class="inputDNI" type="text"></input>
+                    </div>
+                </div>
+                <div class="contentCenter errorCode">
+                  <div>
+                    <div class="arrow">
+                              <i class="fa fa-sort-asc fa-2x"></i>
+                    </div>
+                    <div class="textUserNonExistent">
+                        <i class="fa fa-frown-o"></i> Oops! <span class="textUserNonExistent2"> Código incorrecto</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="contentCenter">
+                    <div>
+                        <button class="btnNext" type="text"> Siguiente</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="screenPass">
+
+                <div class="contentCenter">
+                    <div class="mensMail">
+                      <i class="fa fa-key" aria-hidden="true"></i>
+                       <b> Requisitos: </b> La contraseña debe tener, al menos, seis caracteres.
+
+                    </div>
+                </div>
+
+                <div class="contentTitle">
+                    <div class="textTitle3">
+                      Nueva contraseña
+                    </div>
+                </div>
+                <div class="contentCenter">
+                    <div>
+                        <div><input class="inputDNI" type="password" placeholder="Contraseña"></input></div>
+                        <div><input class="inputDNI" type="password" placeholder="Repita contraseña"></input></div>
+                    </div>
+
+                </div>
+
+                <div class="contentCenter errorPass">
+                  <div>
+                    <div class="arrow">
+                              <i class="fa fa-sort-asc fa-2x"></i>
+                    </div>
+                    <div class="textUserNonExistent">
+                        <i class="fa fa-frown-o"></i> Oops! <span class="textUserNonExistent2"> Contraseña no válida</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="contentCenter">
+                    <div>
+                        <button class="btnNext" type="text"> Siguiente</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="screenFin">
+              <div class="contentCenter">
+                  <div class="mensMail">
+                      <i class="checkIco fa fa-check" aria-hidden="true"></i> La contraseña ha sido modificada correctamente.
+                  </div>
+
+              </div>
+
+              <div class="contentCenter">
+                  <div>
+                      <button class="btnOut" type="text"> Salir</button>
+                  </div>
+              </div>
+            </div>
+
+            <div class="noMail">
+
+                <div class="contentTitle2">
+                  <div>
+                      <div class="textTitle1">
+                        <i class="fa fa-frown-o"></i> Oops! <span class="textUserNonExistent2"> Tenemos un problema</span>
+                      </div>
+                      <div class="textTitle2">
+                        <div class="textSubTitle2">No tienes configurada una cuenta de correo alternativa.</div>
+                        <div class="textSubTitle">Sin una cuenta de correo alternativa configurada no podras restablecer tu cuenta de FCE.</div>
+                      </div>
+                  </div>
+                </div>
+
+                <div class="contentCenter">
+                    <div class="mensMail">
+                        <span class="spanBackground">
+                          Por motivos de seguridad de la información y protección de datos personales
+                          deberás comunicarte con nosotros para realizar esta configuración
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div class="contentCenter">
+                    <div>
+
+                      <div class="textC">
+                        <div class="textTitle5">ALUMNOS Y DOCENTES</div>
+                        <div class="Detise">
+                          <b>DeTISE</b>
+                          <div>detise@econo.unlp.edu.ar</div>
+                          <div class="text6">Entre piso |Facultad de Ciencias Económicas | UNLP | Calle 6 Nº 777 | La Plata | Bs. As.</div>
+                        </div>
+                          <div class="textTitle5">NoDOCENTES</div>
+                        <div class="Detise">
+                          <b>DiTeSi</b>
+                          <div>(221) 423-6769/71/72 int. 123</div>
+                          <div>ditesi@econo.unlp.edu.ar</div>
+                          <div class="text6">1er subsuelo |Facultad de Ciencias Económicas | UNLP | Calle 6 Nº 777 | La Plata | Bs. As.</div>
+                        </div>
+                      </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="contentFooter">
+          <span class="spanPC">
+            © 2016 | DiTESI | Dirección de tecnologías y Sistemas Informáticos
+            | Facultad de Ciencias Económicas | UNLP | Calle 6 Nº 777
+          </span>
+          <span class="spanCel">
+            © 2016 | DiTESI | Facultad de Ciencias Económicas | UNLP
+          </span>
+        </div>
+
+    </div>
+
+</body>
+</html>
