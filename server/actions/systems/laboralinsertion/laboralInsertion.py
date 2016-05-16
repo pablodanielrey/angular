@@ -161,7 +161,8 @@ class LaboralInsertionWamp(ApplicationSession):
         try:
             """ primero busco que no exista esa misma inscripción """
             inscriptions = self.laboralInsertion.findAllInscriptionsByUser(con, userId)
-            ins = [ i in inscriptions if i.degree == data['degree']]
+            degree = data['degree']
+            ins = [ i for i in inscriptions if i.degree == degree ]
             if len(ins) >= 1:
                 raise Exception('Ya existe esa inscripcion')
 
