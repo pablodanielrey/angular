@@ -199,6 +199,8 @@ class LaboralInsertionWamp(ApplicationSession):
             data = []
             while len(inscriptionsToSend) > 0:
                 data.extend(self.laboralInsertion.sendMailToCompany(con, inscriptionsToSend, emails))
+                inscriptionsToSend = [ inscriptionIds.pop() for i in range(inscriptionsPerMail) if len(inscriptionIds) > 0 ]
+                
             self.publish('system.laboralInsertion.COMPANYSENDED', data)
             return True
 
