@@ -195,10 +195,10 @@ class LaboralInsertionWamp(ApplicationSession):
         con = self.conn.get()
         try:
             inscriptionIds = [ i['id'] for i in inscriptions ]
-            inscriptionsToSend = [ inscriptionIds.pop() for i in range(inscriptionsPerMail) if len(inscriptionsIds) > 0 ]
+            inscriptionsToSend = [ inscriptionIds.pop() for i in range(inscriptionsPerMail) if len(inscriptionIds) > 0 ]
             data = []
             while len(inscriptionsToSend) > 0:
-                data.extend(self.laboralInsertion.sendMailToCompany(con, inscriptionIds, emails))
+                data.extend(self.laboralInsertion.sendMailToCompany(con, inscriptionsToSend, emails))
             self.publish('system.laboralInsertion.COMPANYSENDED', data)
             return True
 
