@@ -9,7 +9,7 @@
     Forma de llamar al script
 
         python3 changeUserPassword.py dni clave
-
+        
 '''
 from model.registry import Registry
 import model.connection.connection
