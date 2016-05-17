@@ -41,7 +41,7 @@
 
 <body>
 
-    <div class="resetPassword pantallaDNI">
+    <div class="screen">
 
         <!-- VARIABLES:
         pantallaDNI (si el dni no existe agregar la clase: noExisteDNI)
@@ -100,7 +100,7 @@
                 </div>
                 <div class="contentCenter">
                     <div>
-                        <input class="inputDNI" type="text"></input>
+                        <input class="inputDNI" type="text" ng-model="model.dni"></input>
                     </div>
 
                 </div>
@@ -128,7 +128,7 @@
                 <div class="contentCenter">
                     <div class="mensMail">
                       <i class="fa fa-envelope-o" aria-hidden="true"></i> Hemos enviado un código a su cuenta de correo
-                      <b><span> pablod******@gmail.com<span></b> <br>
+                      <b><span> ${model.email}<span></b> <br>
                       <div class="spanBackground">
                           <span class="span"> <i class="fa fa-caret-right" aria-hidden="true"></i> Recuerda revisar la bandeja de correo no deseado (Spam) <span><br>
                           <span class="span2">&nbsp &nbsp Si te llego como spam, Ábrelo y marca el contenido como seguro o elimina la etiqueta de Spam. </span>
@@ -146,7 +146,7 @@
                 </div>
                 <div class="contentCenter">
                     <div>
-                        <input class="inputDNI" type="text"></input>
+                        <input class="inputDNI" type="text"> ng-model="model.code"</input>
                     </div>
                 </div>
                 <div class="contentCenter errorCode">
