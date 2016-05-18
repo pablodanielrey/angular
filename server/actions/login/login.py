@@ -2,11 +2,11 @@
 import inject
 import logging
 
-from model.login.login import Login
-from model.login.session import SessionDAO, Session
+from model.users.users import User, Mail
+from model.login.login import Login, ResetPassword
+from model.login.session import Session
 from model.registry import Registry
 from model.connection import connection
-
 
 import asyncio
 from asyncio import coroutine
@@ -22,7 +22,7 @@ class LoginWamp(ApplicationSession):
         reg = inject.instance(Registry)
         self.conn = connection.Connection(reg.getRegistry('dcsys'))
         self.loginModel = inject.instance(Login)
-        self.sessionDAO = inject.instance(SessionDAO)
+
 
     @coroutine
     def onJoin(self, details):
@@ -33,6 +33,56 @@ class LoginWamp(ApplicationSession):
         yield from self.register(self.validateSession_async, 'system.session.validate')
         yield from self.register(self.hasOneRole_async, 'system.profile.hasOneRole')
 
+        yield from self.register(self.findByDni_async, 'system.login.findByDni')
+        yield from self.register(self.checkCode_async, 'system.login.checkCode')
+        yield from self.register(self.changePassword_async, 'system.login.changePassword')
+
+
+    def changePassword(self, uid, dni, eid, code, passw):
+        con = self.conn.get()
+        try:
+            ok = ResetPassword.resetPassword(con, uid, dni, eid, code, passw)
+            con.commit()
+            return ok
+
+        finally:
+            self.conn.put(con)
+
+    @coroutine
+    def changePassword_async(self, uid, dni, eid, code, passw):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.changePassword, uid, dni, eid, code, passw)
+        return r
+
+    def checkCode(self, eid, code):
+        con = self.conn.get()
+        try:
+            return ResetPassword.checkEmailCode(con, eid, code);
+
+        finally:
+            self.conn.put(con)
+
+    @coroutine
+    def checkCode_async(self, eid, code):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.checkCode, eid, code)
+        return r
+
+    def findByDni(self, dni):
+        con = self.conn.get()
+        try:
+            data = ResetPassword.findByDni(con, dni)
+            con.commit()
+            return data
+
+        finally:
+            self.conn.put(con)
+
+    @coroutine
+    def findByDni_async(self, dni):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.findByDni, dni)
+        return r
 
     def testUser(self, username):
         con = self.conn.get()
