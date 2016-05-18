@@ -1,6 +1,6 @@
 var app = angular.module('mainApp');
 
-app.controller('CreateTutoringCtrl', ["$rootScope", '$scope',
+app.controller('OrdersCtrl', ["$rootScope", '$scope',
 
 
   function ($rootScope, $scope) {
