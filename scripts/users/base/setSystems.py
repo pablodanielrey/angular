@@ -44,7 +44,7 @@ if __name__ == '__main__':
     assert dni is not None
 
     import inject
-    inject.configure()
+    #inject.configure()
 
     r = inject.instance(Registry)
     conn = connection.Connection(r.getRegistry('dcsys'))

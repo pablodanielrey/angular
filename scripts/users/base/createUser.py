@@ -89,7 +89,7 @@ if __name__ == '__main__':
     assert lastname is not None
 
     import inject
-    inject.configure()
+    #inject.configure()
 
     reg = inject.instance(Registry)
     conn = connection.Connection(reg.getRegistry('dcsys'))
