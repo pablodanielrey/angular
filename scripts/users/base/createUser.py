@@ -64,7 +64,8 @@ def showUserInfo(con, dni):
         return
 
     (uid, version) = u
-    u = users.UserDAO.findById(con, uid)
+    us = users.UserDAO.findById(con, [uid])
+    u = us[0]
     logging.info(pprint.pformat(u.__dict__))
 
     ups = users.UserPasswordDAO.findByUserId(con, u.id)
