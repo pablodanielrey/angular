@@ -35,24 +35,7 @@ class SessionExpired(Exception):
     def __str__(self):
         return 'Sesion expirada'
 
-class Session:
-    def __init__(self):
-        self.id = None
-        self.userId = None
-        self.username = None
-        self.created = None
-        self.expire = None
-        self.deleted = None
-        self.data = None
 
-    def _toJson(self):
-        return json.dumps(self)
-
-    @staticmethod
-    def _fromJson(sess):
-        s = Session()
-        s.__dict__ = json.loads(sess)
-        return s
 
 class SessionDAO(DAO):
 
@@ -78,7 +61,7 @@ class SessionDAO(DAO):
         try:
             cur.execute("""
                 create schema if not exists systems;
-                
+
                 create table IF NOT EXISTS systems.sessions (
                     id varchar primary key,
                     user_id varchar,
@@ -155,6 +138,7 @@ class SessionDAO(DAO):
             cur.close()
 
     def findById(self, con, ids=[]):
+        assert isinstance(ids, list)
         cur = con.cursor()
         try:
             cur.execute('select * from systems.sessions where id in %s and expire >= NOW()', (tuple(ids),))
@@ -174,3 +158,44 @@ class SessionDAO(DAO):
         s = json.loads(j)
         return s
     """
+
+
+class Session:
+
+    dao = SessionDAO
+
+    def __init__(self):
+        self.id = None
+        self.userId = None
+        self.username = None
+        self.created = None
+        self.expire = None
+        self.deleted = None
+        self.data = None
+
+    """
+    def _toJson(self):
+        return json.dumps(self)
+
+    @staticmethod
+    def _fromJson(sess):
+        s = Session()
+        s.__dict__ = json.loads(sess)
+        return s
+    """
+
+    def persist(self, con):
+        self.dao.persist(con, self)
+
+    @classmethod
+    def deleteById(cls, con, sid):
+        cls.dao.deleteById(con, sid)
+
+    @classmethod
+    def touch(cls, con, sid):
+        return cls.dao.touch(con, sid)
+
+    @classmethod
+    def findById(cls, con, ids):
+        assert isinstance(ids, list)
+        return cls.dao.findById(con, ids)

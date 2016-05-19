@@ -16,7 +16,7 @@ if __name__ == '__main__':
 
     print(sys.path)
 
-    inject.configure()
+    #inject.configure()
     r = inject.instance(Registry)
     conn = Connection(r.getRegistry('dcsys'))
     con = conn.get()

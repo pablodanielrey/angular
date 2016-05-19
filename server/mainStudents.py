@@ -15,7 +15,7 @@ if __name__ == '__main__':
     from actions.systems.students.students import StudentsWamp
     from model.registry import Registry
 
-    inject.configure()
+    #inject.configure()
 
     reg = inject.instance(Registry)
     registry = reg.getRegistry('wamp')

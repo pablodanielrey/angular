@@ -211,6 +211,7 @@ class AssistanceModel:
             # tengo que obtener todos los usuarios de las oficina que autoriaza y buscar por esos usuarios
             offices = Office.getOfficesByUserRole(con, userId, False, 'autoriza')
             userIds = Office.getOfficesUsers(con, offices)
+            userIds.remove(userId)
         else:
             userIds.append(userId)
 

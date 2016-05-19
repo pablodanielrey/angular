@@ -52,7 +52,7 @@ if __name__ == '__main__':
     logging.getLogger().setLevel(logging.DEBUG)
 
     import inject
-    inject.configure()
+    #inject.configure()
 
     r = inject.instance(Registry)
     conn = connection.Connection(r.getRegistry('dcsys'))

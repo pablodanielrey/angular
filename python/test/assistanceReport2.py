@@ -294,7 +294,6 @@ def findUser(uid, users):
     return None
 
 
-
 if __name__ == '__main__':
 
     logging.getLogger().setLevel(logging.INFO)
@@ -322,13 +321,18 @@ if __name__ == '__main__':
         offices = _getOffices(con)
         offices.sort(key=lambda x: x.name)
 
-        users, userIds = _getUsers(con)
+        """ obtengo los usuarios de las oficinas """
+        uids = []
+        for office in offices:
+            uids.extend([u for u in office.users if u not in uids])
+        users = UserDAO.findById(con, uids)
 
+        """ obtengo las estadisticas """
         a = inject.instance(AssistanceModel)
-        stats = a.getStatistics(con, userIds, rstart, rend)
+        stats = a.getStatistics(con, uids, rstart, rend)
 
         for office in offices:
-            rp = createReportDir()
+            rp = createReportDir(office)
             statsToPyoo(rp, stats, users, [office])
             createZipFile(office, rp)
 

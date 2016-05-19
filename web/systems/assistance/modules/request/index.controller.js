@@ -2,12 +2,13 @@ angular
   .module('mainApp')
   .controller('RequestCtrl', RequestCtrl);
 
-RequestCtrl.inject = ['$scope', 'Login', 'Assistance', 'Users', '$location', '$timeout']
+RequestCtrl.inject = ['$scope', 'Login', 'Assistance', 'Users', 'Office', '$location', '$timeout']
 
-function RequestCtrl($scope, Login, Assistance, Users, $location, $timeout) {
+function RequestCtrl($scope, Login, Assistance, Users, Office, $location, $timeout) {
 
   $scope.initialize = initialize;
   $scope.initializeFilters = initializeFilters;
+  $scope.loadOffices = loadOffices;
   $scope.formatJustification = formatJustification;
   $scope.search = search;
   $scope.getJustTitle = getJustTitle;
@@ -16,8 +17,11 @@ function RequestCtrl($scope, Login, Assistance, Users, $location, $timeout) {
   $scope.getSelectedOrderName = getSelectedOrderName;
   $scope.getSelectedOrderType = getSelectedOrderType;
   $scope.order = order;
+  $scope.sortName = sortName;
   $scope.orderName = orderName;
   $scope.orderStatus = orderStatus;
+  $scope.sortStatus = sortStatus;
+  $scope.sortUserName = sortUserName;
   $scope.orderUserName = orderUserName;
   $scope.loadUsers = loadUsers;
   $scope.getName = getName;
@@ -49,10 +53,9 @@ function RequestCtrl($scope, Login, Assistance, Users, $location, $timeout) {
   }
 
   $scope.view = {
-    optionsJustifications: [
-      {style: 'solicitudesPersonales', description: 'MIS SOLICITUDES', value: false},
-      {style: 'solicitudesGrupo', description: 'MI GRUPO', value: true}
-    ],
+    optionsJustifications: [],
+    optionGroupJustifications: {style: 'solicitudesGrupo', description: 'MI GRUPO', value: true},
+    optionMyJustifications: {style: 'solicitudesPersonales', description: 'MIS SOLICITUDES', value: false},
     searching: false,
     reverseName: false,
     reverseUserName: false,
@@ -96,7 +99,9 @@ function RequestCtrl($scope, Login, Assistance, Users, $location, $timeout) {
   $scope.$watch(function() {return $scope.model.optionJustifications;}, function(o,n) {
     val = $scope.model.optionJustifications;
     $scope.view.style3 = (val != null && val.hasOwnProperty('style') && val.style != undefined) ? val.style : '';
-    $scope.search();
+    if (val != null) {
+      $scope.search();
+    }
   });
 
   $scope.$watch(function() {return $scope.model.start;}, function(o,n) {
@@ -125,11 +130,10 @@ function RequestCtrl($scope, Login, Assistance, Users, $location, $timeout) {
   });
 
   function initialize() {
-    $scope.model.optionJustifications = $scope.view.optionsJustifications[0];
     $scope.view.searching = false;
     $scope.model.justifications = [];
     $scope.initializeFilters();
-    $scope.search();
+    $scope.loadOffices();
   }
 
   function initializeFilters() {
@@ -142,6 +146,20 @@ function RequestCtrl($scope, Login, Assistance, Users, $location, $timeout) {
     $scope.model.end = end;
 
     $scope.view.order = $scope.view.order_status;
+  }
+
+  function loadOffices() {
+    $scope.view.optionsJustifications = [];
+    $scope.view.optionsJustifications.push($scope.view.optionMyJustifications);
+    $scope.model.optionJustifications = $scope.view.optionsJustifications[0];
+
+    Office.getOfficesByUserRole($scope.model.userId, true, 'autoriza').then(function(ids) {
+      if (ids.length > 0) {
+        $scope.view.optionsJustifications.push($scope.view.optionGroupJustifications);
+      }
+    }, function(error) {
+      console.log(error);
+    });
   }
 
   function loadUsers(ids) {
@@ -281,10 +299,15 @@ function RequestCtrl($scope, Login, Assistance, Users, $location, $timeout) {
     return aDate - bDate;
   }
 
+  function sortName() {
+    $scope.view.reverseName = !$scope.view.reverseName;
+    $scope.orderName();
+  }
+
   function orderName() {
-    $scope.view.reverseName = ($scope.view.order != $scope.view.order_type) ? true : $scope.view.reverseName;
+    $scope.view.reverseName = ($scope.view.order != $scope.view.order_type) ? false : $scope.view.reverseName;
     $scope.view.order = $scope.view.order_type;
-    if ($scope.view.reverseName) {
+    if (!$scope.view.reverseName) {
       $scope.model.justifications.sort(function(a, b) {
         value = compareName(a, b);
         if (value == 0) {
@@ -307,13 +330,17 @@ function RequestCtrl($scope, Login, Assistance, Users, $location, $timeout) {
         return value;
       });
     }
-    $scope.view.reverseName = !$scope.view.reverseName;
+  }
+
+  function sortStatus() {
+    $scope.view.reverseStatus = !$scope.view.reverseStatus;
+    $scope.orderStatus();
   }
 
   function orderStatus() {
-    $scope.view.reverseStatus = ($scope.view.order != $scope.view.order_status) ? true : $scope.view.reverseStatus;
+    $scope.view.reverseStatus = ($scope.view.order != $scope.view.order_status) ? false : $scope.view.reverseStatus;
     $scope.view.order = $scope.view.order_status;
-    if ($scope.view.reverseStatus) {
+    if (!$scope.view.reverseStatus) {
       $scope.model.justifications.sort(function(a, b) {
         value = a.status - b.status;
         if (value == 0) {
@@ -336,13 +363,17 @@ function RequestCtrl($scope, Login, Assistance, Users, $location, $timeout) {
         return value;
       });
     }
-    $scope.view.reverseStatus = !$scope.view.reverseStatus;
+  }
+
+  function sortUserName() {
+    $scope.view.reverseUserName = !$scope.view.reverseUserName;
+    $scope.orderUserName();
   }
 
   function orderUserName() {
-    $scope.view.reverseUserName = ($scope.view.order != $scope.view.order_name) ? true : $scope.view.reverseUserName;
+    $scope.view.reverseUserName = ($scope.view.order != $scope.view.order_name) ? false : $scope.view.reverseUserName;
     $scope.view.order = $scope.view.order_name;
-    if ($scope.view.reverseUserName) {
+    if (!$scope.view.reverseUserName) {
       $scope.model.justifications.sort(function(a, b) {
         value = compareUserName(a, b);
         if (value == 0) {
@@ -359,7 +390,6 @@ function RequestCtrl($scope, Login, Assistance, Users, $location, $timeout) {
         return value;
       });
     }
-    $scope.view.reverseUserName = !$scope.view.reverseUserName;
   }
 
 

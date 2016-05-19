@@ -67,6 +67,7 @@ class TutoringDAO(DAO):
     def _fromResult(r):
         t = Tutoring()
         t.id = r['id']
+        t.created = r['created']
         t.date = r['date']
         t.tutorId = r['tutor_id']
         return t

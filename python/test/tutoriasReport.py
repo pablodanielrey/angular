@@ -32,13 +32,14 @@ def toPyoo(tutorings):
         for t in tutorings:
             for s in t.situations:
                 logging.info(t.date.tzinfo)
-                sheet[i,0].value = t.date.astimezone(dateutil.tz.tzlocal()).replace(tzinfo=None) if t.date is not None else ''
+                sheet[i,0].value = t.created.astimezone(dateutil.tz.tzlocal()).replace(tzinfo=None) if t.created is not None else ''
                 sheet[i,1].value = t.date.astimezone(dateutil.tz.tzlocal()).replace(tzinfo=None) if t.date is not None else ''
-                sheet[i,2].value = t.tutor.name + ' ' + t.tutor.lastname
-                sheet[i,3].value = s.user['user'].name + ' ' + s.user['user'].lastname
-                sheet[i,4].value = s.user['student'].studentNumber
-                sheet[i,5].value = s.user['user'].dni
-                sheet[i,6].value = s.situation
+                sheet[i,2].value = t.date.astimezone(dateutil.tz.tzlocal()).replace(tzinfo=None) if t.date is not None else ''
+                sheet[i,3].value = t.tutor.name + ' ' + t.tutor.lastname
+                sheet[i,4].value = s.user['user'].name + ' ' + s.user['user'].lastname
+                sheet[i,5].value = s.user['student'].studentNumber
+                sheet[i,6].value = s.user['user'].dni
+                sheet[i,7].value = s.situation
 
                 i = i + 1
 

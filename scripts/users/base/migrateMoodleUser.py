@@ -70,7 +70,7 @@ if __name__ == '__main__':
     assert dni is not None
     assert uid is not None
 
-    inject.configure()
+    #inject.configure()
     r = inject.instance(Registry)
     sr = r.getRegistry('moodle')
     conn = connection.Connection(sr)

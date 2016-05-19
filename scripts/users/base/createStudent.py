@@ -42,7 +42,7 @@ def createStudent(con, dni, name, lastname, studentN):
 if __name__ == '__main__':
 
     import inject
-    inject.configure()
+    #inject.configure()
 
     import sys
 
