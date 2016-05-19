@@ -78,6 +78,13 @@ class ResetPassword:
     mail = LoginMail
 
     @classmethod
+    def selectPreferredEmail(cls, emails):
+        for e in emails:
+            if 'gmail.com' in e.email:
+                return e
+        return emails[0]
+
+    @classmethod
     def findByDni(cls, con, dni):
         data = User.findByDni(con, dni)
         if data is None:
@@ -92,8 +99,17 @@ class ResetPassword:
         for m in mails:
             emails = [ m for m in mails if 'econo.unlp.edu.ar' not in m.email ]
 
+        """
+            ####################################
+            HACK HORRIBLE PERO PARA DAR PRIORIDAD A GMAIL YA QUE LLEGA OK
+        """
+        preferredMail = cls.selectPreferredEmail(emails)
+        """
+            ####################################
+        """
+
         if cls.mail.sendEmailConfirmation(con, user.name, user.lastname, emails):
-            return (user, mails[0])
+            return (user, preferredMail)
         else:
             raise Exception()
 

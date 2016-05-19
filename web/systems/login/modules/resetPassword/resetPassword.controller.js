@@ -51,6 +51,7 @@ function ResetPasswordCtrl($rootScope, $scope, $wamp, $window) {
             return;
           } else {
             $scope.model.userData = userData;
+            $scope.model.email = String.copy(userData[1].email).replace(/(....).*@(.*)/,'$1*****@$2');
             $scope.requestCode();
           }
         },
