@@ -52,34 +52,37 @@ class LoginMail:
         return True
 
     @classmethod
-    def sendEmailConfirmation(cls, con, name, lastname, eid):
-        emails = Mail.findById(con, eid)
-        if emails is None or len(emails) <= 0:
-            raise Exception()
-
-        email = emails[0]
+    def sendEmailConfirmation(cls, con, name, lastname, emails):
         hash = hashlib.sha1(str(uuid.uuid4()).encode('utf-8')).hexdigest()
         code = hash[:5]
-        email.hash = code
-        email.persist(con)
+        for email in emails:
+            email.hash = code
+            email.persist(con)
 
         From = cls.reg.get('confirm_mail_from')
         subject = cls.reg.get('confirm_mail_subject')
         template = cls.reg.get('confirm_mail_template')
-        To = email.email
+        To = [ email.email for email in emails ]
 
         replace = [
             ('###CODE###', code),
             ('###NAME###', name),
             ('###LASTNAME###', lastname)
         ]
-        cls.mail.sendMail(From, [To], subject, replace, html=template)
+        cls.mail.sendMail(From, To, subject, replace, html=template)
         return True
 
 
 class ResetPassword:
 
     mail = LoginMail
+
+    @classmethod
+    def selectPreferredEmail(cls, emails):
+        for e in emails:
+            if 'gmail.com' in e.email:
+                return e
+        return emails[0]
 
     @classmethod
     def findByDni(cls, con, dni):
@@ -91,18 +94,25 @@ class ResetPassword:
         user = User.findById(con, [uid])[0]
 
         mails = Mail.findByUserId(con, uid)
+        emails = []
         """ busco el primer alternativo """
-        mail = None
         for m in mails:
-            if 'econo.unlp.edu.ar' not in m.email:
-                 mail = m
-                 break
+            emails = [ m for m in mails if 'econo.unlp.edu.ar' not in m.email ]
 
-        if mail is None:
-            raise Exception()
+        if len(emails) <= 0:
+            return (user, None)
 
-        if cls.mail.sendEmailConfirmation(con, user.name, user.lastname, m.id):
-            return (user, m)
+        """
+            ####################################
+            HACK HORRIBLE PERO PARA DAR PRIORIDAD A GMAIL YA QUE LLEGA OK
+        """
+        preferredMail = cls.selectPreferredEmail(emails)
+        """
+            ####################################
+        """
+
+        if cls.mail.sendEmailConfirmation(con, user.name, user.lastname, emails):
+            return (user, preferredMail)
         else:
             raise Exception()
 
