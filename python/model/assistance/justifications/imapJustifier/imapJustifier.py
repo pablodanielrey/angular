@@ -82,7 +82,7 @@ class ImapJustifier:
 
         for cls in JustCreator.__subclasses__():
             if cls.checkType(ttype):
-                #cls.create(con, dni, start, days)
+                cls.create(con, dni, start, days)
                 return True
 
         return False
