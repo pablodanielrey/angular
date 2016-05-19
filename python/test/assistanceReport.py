@@ -442,6 +442,8 @@ def sendMail(fn):
 
 if __name__ == '__main__':
 
+    sendMail('/tmp/reporte-asistencia.zip')
+
     logging.getLogger().setLevel(logging.INFO)
 
     rstart = datetime.datetime.now() - datetime.timedelta(days=7)
