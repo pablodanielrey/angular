@@ -24,11 +24,9 @@ if __name__ == '__main__':
 
     import sys
 
-    dni = sys.argv[1]
-    eid = sys.argv[2]
+    eid = sys.argv[1]
+    assert eid is not None
 
-    assert dni is not None
-    assert email is not None
 
     logging.getLogger().setLevel(logging.DEBUG)
 
@@ -41,7 +39,7 @@ if __name__ == '__main__':
     try:
         delMail(con, eid)
         con.commit()
-        
+
     except Exception as e:
         logging.warn('Error eliminando email')
         logging.exception(e)
