@@ -444,7 +444,7 @@ if __name__ == '__main__':
 
     logging.getLogger().setLevel(logging.INFO)
 
-    rstart = datetime.datetime.now() - datetime.timedelta(days=7)
+    rstart = datetime.datetime.now() - datetime.timedelta(days=30)
     rend = datetime.datetime.now()
     if len(sys.argv) >= 2:
         import dateutil
