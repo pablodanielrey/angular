@@ -39,6 +39,7 @@ class AssistanceWamp(ApplicationSession):
         yield from self.register(self.createSingleDateJustification_async, 'assistance.createSingleDateJustification')
         yield from self.register(self.createRangedTimeWithReturnJustification_async, 'assistance.createRangedTimeWithReturnJustification')
         yield from self.register(self.createRangedTimeWithoutReturnJustification_async, 'assistance.createRangedTimeWithoutReturnJustification')
+        yield from self.register(self.createRangedJustification_async, 'assistance.createRangedJustification')
         yield from self.register(self.changeStatus_async, 'assistance.changeStatus')
         yield from self.register(self.getJustificationData_async, 'assistance.getJustificationData')
 
@@ -136,6 +137,25 @@ class AssistanceWamp(ApplicationSession):
     def createRangedTimeWithoutReturnJustification_async(self, sid, start, userId, justClazz, justModule, ownerId = None):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.createRangedTimeWithoutReturnJustification, sid, start, userId, justClazz, justModule, ownerId)
+        return r
+
+
+    def createRangedJustification(self, sid, startStr, days, userId, justClazz, justModule, ownerId = None):
+        con = self.conn.get()
+        try:
+            if ownerId is None:
+                ownerId = self.loginModel.getUserId(con, sid)
+            start = self._parseDate(startStr)
+            days = int(days)
+            self.assistance.createRangedJustification(con, start, days, userId, ownerId, justClazz, justModule)
+            con.commit()
+        finally:
+            self.conn.put(con)
+
+    @coroutine
+    def createRangedJustification_async(self, sid, start, days, userId, justClazz, justModule, ownerId = None):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.createRangedJustification, sid, start, days, userId, justClazz, justModule, ownerId)
         return r
 
     def changeStatus(self, sid, just, status):

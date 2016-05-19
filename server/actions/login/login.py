@@ -98,7 +98,7 @@ class LoginWamp(ApplicationSession):
     def validateSession(self, sid):
         con = self.conn.get()
         try:
-            self.sessionDAO.touch(con, sid)
+            self.loginModel.touch(con, sid)
             con.commit()
             return True
 
