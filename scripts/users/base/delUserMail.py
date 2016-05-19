@@ -15,7 +15,7 @@ import systems
 import logging
 
 def delMail(con, eid):
-    emails = users.Mail.findId(con, eid)
+    emails = users.Mail.findById(con, eid)
     assert len(emails) == 1
     emails[0].delete(con)
     logging.info('email eliminado')
