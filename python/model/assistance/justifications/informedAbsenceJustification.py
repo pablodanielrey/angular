@@ -133,8 +133,6 @@ class InformedAbsenceJustification(SingleDateJustification):
                 6 anuales
                 2 mensuales
         """
-        yearStart = Utils._cloneDate(date).replace(month=1,day=1)
-        yearEnd = Utils._cloneDate(date).replace(month=12,day=31)
         justs = cls._getYearJustifications(con, date, userId)
         if len(justs) >= 6:
             raise Exception('Límite anual alcanzado')

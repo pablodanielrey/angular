@@ -29,6 +29,7 @@ function RequestCtrl($scope, Login, Assistance, Users, Office, $location, $timeo
   $scope.selectInformedAbsence = selectInformedAbsence;
   $scope.selectOTWithReturn = selectOTWithReturn;
   $scope.selectOTWithoutReturn = selectOTWithoutReturn;
+  $scope.selectUniversityPreExam = selectUniversityPreExam;
   $scope.back = back;
   $scope.changeStatus = changeStatus;
   $scope.cancelJustification = cancelJustification;
@@ -69,7 +70,7 @@ function RequestCtrl($scope, Login, Assistance, Users, Office, $location, $timeo
     style2: '',
     style2_options: ['','solicitudSeleccionada'],
     displayRequest: '',
-    displayRequestOptions: ['', 'compensatory', 'informedAbsence', 'oTWithReturn', 'oTWithoutReturn']
+    displayRequestOptions: ['', 'compensatory', 'informedAbsence', 'oTWithReturn', 'oTWithoutReturn', 'universityPreExam']
   }
 
 
@@ -415,6 +416,12 @@ function RequestCtrl($scope, Login, Assistance, Users, Office, $location, $timeo
     $scope.view.style2 = $scope.view.style2_options[1];
     $scope.view.displayRequest = $scope.view.displayRequestOptions[4];
     $scope.$broadcast('selectOTWithoutReturnEvent', $scope.model.userId);
+  }
+
+  function selectUniversityPreExam() {
+    $scope.view.style2 = $scope.view.style2_options[1];
+    $scope.view.displayRequest = $scope.view.displayRequestOptions[5];
+    $scope.$broadcast('selectUniversityPreExamEvent', $scope.model.userId);
   }
 
   $scope.$on('closeRequestEvent', function(e) {

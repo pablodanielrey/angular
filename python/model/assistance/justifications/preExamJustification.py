@@ -24,6 +24,8 @@ from model.assistance.justifications.status import StatusDAO
 from model.assistance.assistanceDao import AssistanceDAO
 from model.users.users import UserDAO
 
+from model.assistance.utils import Utils
+
 
 class PreExamJustificationDAO(AssistanceDAO):
 
@@ -115,7 +117,7 @@ class SchoolPreExamJustificationDAO(PreExamJustificationDAO):
 
     @classmethod
     def _fromResult(cls, con, r):
-        j = SchoolPreExamJustification(r['user_id'], r['owner_id'], r['jstart'], 0)
+        j = SchoolPreExamJustification(r['jstart'], 0, r['user_id'], r['owner_id'])
         j.id = r['id']
         j.end = r['jend']
         j.setStatus(Status.getLastStatus(con, j.id))
@@ -128,7 +130,7 @@ class UniversityPreExamJustificationDAO(PreExamJustificationDAO):
 
     @classmethod
     def _fromResult(cls, con, r):
-        j = UniversityPreExamJustification(r['user_id'], r['owner_id'], r['jstart'], 0)
+        j = UniversityPreExamJustification(r['jstart'], 0, r['user_id'], r['owner_id'])
         j.id = r['id']
         j.end = r['jend']
         j.setStatus(Status.getLastStatus(con, j.id))
@@ -139,10 +141,30 @@ class PreExamJustification(RangedJustification):
 
     registry = inject.instance(Registry).getRegistry('preExamJustification')
 
-    def __init__(self, userId, ownerId, start, days = 0):
+    def __init__(self, start = None, days = 0, userId = None, ownerId = None):
         super().__init__(start, days, userId, ownerId)
         self.typeName = 'Pre exámen'
         self.classType = RangedJustification.__name__
+
+    @classmethod
+    def create(cls, con, start, days, userId, ownerId):
+        cls._checkConstraints(con, start, days, userId)
+        return super().create(con, start, days, userId, ownerId)
+
+    @classmethod
+    def _getYearJustifications(cls, con, date, userId):
+        yearStart = Utils._cloneDate(date).replace(month=1,day=1)
+        yearEnd = Utils._cloneDate(date).replace(month=12,day=31)
+
+        justs = cls.dao.findByUserId(con, [userId], yearStart, yearEnd)
+        return [j for j in justs if j.getStatus().status == 1 or j.getStatus().status == 2]
+
+    @classmethod
+    def _getDaysJust(cls, justs):
+        sum = 0;
+        for j in justs:
+            sum = sum + ((j.end - j.start).days + 1)
+        return sum
 
     def setEnd(self, date):
         assert isinstance(date, datetime.date)
@@ -157,22 +179,64 @@ class SchoolPreExamJustification(PreExamJustification):
     dao = SchoolPreExamJustificationDAO
     identifier = 'Ensañanza Media'
 
-    def __init__(self, userId, ownerId, start, days = 0):
-        super().__init__(userId, ownerId, start, days)
+    def __init__(self, start = None, days = 0, userId = None, ownerId = None):
+        super().__init__(start, days, userId, ownerId)
         self.identifier = SchoolPreExamJustification.identifier
 
     def getIdentifier(self):
         return self.typeName
 
+    @classmethod
+    def getData(cls, con, userId, date, schedule):
+        data = super().getData(con, userId, date, schedule)
+        justs = cls._getYearJustifications(con, date, userId)
+        data['stock'] = 20 - cls._getDaysJust(justs)
+        return data
+
+    @classmethod
+    def _checkConstraints(cls, con, start, days, userId):
+        """
+            decreto 366/06 Art. 97 inc. h
+            20 anuales
+            4 días máximo por exámen
+        """
+        if (days > 4):
+            raise Exception('No se puede pedir más de 4 días seguido')
+
+        justs = cls._getYearJustifications(con, start, userId)
+        if cls._getDaysJust(justs) + days > 20:
+            raise Exception('Límite anual alcanzado')
 
 class UniversityPreExamJustification(PreExamJustification):
 
     dao = UniversityPreExamJustificationDAO
     identifier = 'Ensañanza Superior'
 
-    def __init__(self, userId = None, ownerId = None, start = None, days = 0):
-        super().__init__(userId, ownerId, start, days)
+    def __init__(self, start = None, days = 0, userId = None, ownerId = None):
+
+        super().__init__(start, days, userId, ownerId)
         self.identifier = UniversityPreExamJustification.identifier
 
     def getIdentifier(self):
         return self.typeName
+
+    @classmethod
+    def getData(cls, con, userId, date, schedule):
+        data = super().getData(con, userId, date, schedule)
+        justs = cls._getYearJustifications(con, date, userId)
+        data['stock'] = 24 - cls._getDaysJust(justs)
+        return data
+
+    @classmethod
+    def _checkConstraints(cls, con, start, days, userId):
+        """
+            decreto 366/06 Art. 97 inc. i
+            24 anuales
+            5 días máximo por exámen
+        """
+        if (days > 5):
+            raise Exception('No se puede pedir más de 5 días seguido')
+
+        justs = cls._getYearJustifications(con, start, userId)
+        if cls._getDaysJust(justs) + days > 24:
+            raise Exception('Límite anual alcanzado')

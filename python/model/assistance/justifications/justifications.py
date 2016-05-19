@@ -182,11 +182,17 @@ class RangedJustification(Justification):
         else:
             return False
 
+    @classmethod
+    def create(cls, con, start, days, userId, ownerId):    
+        return cls(start, days, userId, ownerId)
+
+
     def __init__(self, start = None, days = 0, userId = None, ownerId = None):
         super().__init__(userId, ownerId)
 
         continuous = self.isContinuous()
         self.start = start
+
         self.end = None if start is None or days is None else RangedJustification._getEnd(start, days, continuous)
 
     def _loadWorkedPeriods(self, wps):

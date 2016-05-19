@@ -147,6 +147,7 @@ class AssistanceWamp(ApplicationSession):
                 ownerId = self.loginModel.getUserId(con, sid)
             start = self._parseDate(startStr)
             days = int(days)
+
             self.assistance.createRangedJustification(con, start, days, userId, ownerId, justClazz, justModule)
             con.commit()
         finally:

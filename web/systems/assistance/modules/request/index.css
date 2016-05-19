@@ -25,6 +25,10 @@
    display:block;
  }
 
+ .request .contentRequestSelected.universityPreExam .preExamSuperior {
+   display:block;
+ }
+
  .request .contentRequestSelected.informedAbsence .ausenteConAviso {
    display:block;
  }
@@ -482,6 +486,7 @@
 
 
 .request .contentRequestSelected .compensatorio,
+.request .contentRequestSelected .preExamSuperior,
 .request .contentRequestSelected .ausenteConAviso,
 .request .contentRequestSelected .boletaDeSalidaConRetorno,
 .request .contentRequestSelected .boletaDeSalidaSinRetorno {

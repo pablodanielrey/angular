@@ -388,6 +388,15 @@ class AssistanceModel:
         return j.persist(con)
 
 
+    def createRangedJustification(self, con, start, days, userId, ownerId, justClazz, justModule):
+        assert isinstance(start, datetime.date)
+        module = importlib.import_module(justModule)
+        clazz = getattr(module, justClazz)
+
+        j = clazz.create(con, start, days, userId, ownerId)
+        return j.persist(con)
+
+
     def getJustificationData(self, con, userId, date, justClazz, justModule):
 
         # obtengo el schedule correspondiente
