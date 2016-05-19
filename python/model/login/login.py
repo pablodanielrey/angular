@@ -94,6 +94,7 @@ class ResetPassword:
         user = User.findById(con, [uid])[0]
 
         mails = Mail.findByUserId(con, uid)
+        emails = []
         """ busco el primer alternativo """
         for m in mails:
             emails = [ m for m in mails if 'econo.unlp.edu.ar' not in m.email ]
