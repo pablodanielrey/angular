@@ -1,4 +1,9 @@
-<div class="orders {{view.style}}">
+<div class="orders {{view.style}} {{view.style2}}">
+
+    <!-- VARIABLES
+    pantallaDetallePedido
+    pantallaMensaje
+    -->
 
     <div class="header">
         <div>
@@ -352,111 +357,263 @@
 
     <div class="contentOrderDetail">
 
+
         <div class="headerDetail">
 
-          <div class="detail">
-              <div class="contentBtnReturn">
-                  <button class="btnReturn" ng-click="view.style = ''"><i class=" fa fa-angle-left" aria-hidden="true"></i></button>
-              </div>
-              <div class="itemDate">
-                  <div class="textNumerOrders">Nº 112369</div>
-                  <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
-                  <div class="textDaysOrders">Hoy</div>
-              </div>
-              <div class="itemsType">
-                    <div class="textType">SOPORTE TÉCNICO:</div>
-                      <div class="textSubType">Problema de impresora</div>
+              <div class="detail">
+                  <div class="contentBtnReturn">
+                      <button class="btnReturn" ng-click="view.style = ''"><i class=" fa fa-angle-left" aria-hidden="true"></i></button>
+                  </div>
+                  <div class="itemDate">
+                      <div class="textNumerOrders">Nº 112369</div>
+                      <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
+                      <div class="textDaysOrders">Hoy</div>
+                  </div>
+                  <div class="itemsType">
+                        <div class="textType">SOPORTE TÉCNICO:</div>
+                          <div class="textSubType">Problema de impresora</div>
+                  </div>
+
+                  <div class="itemsOffice">
+                        <div class="textOffice">MESA DE ENTRADAS</div>
+                          <div class="textName">Betiana Galle</div>
+                  </div>
               </div>
 
-              <div class="itemsOffice">
-                    <div class="textOffice">MESA DE ENTRADAS</div>
-                      <div class="textName">Betiana Galle</div>
+              <div class="actionDetail">
+                  <select class="selectStatus colorOpen">
+                    <option class="selectOptionStatus">ABIERTA</option>
+                    <option class="selectOptionStatus">EN CURSO</option>
+                    <option class="selectOptionStatus">CERRADA</option>
+                    <option class="selectOptionStatus">PAUSADA</option>
+                    <option class="selectOptionStatus">CANCELADA</option>
+                </select>
               </div>
-          </div>
 
-          <div class="actionDetail">
-              <select class="selectStatus colorOpen">
-                <option class="selectOptionStatus">ABIERTA</option>
-                <option class="selectOptionStatus">EN CURSO</option>
-                <option class="selectOptionStatus">CERRADA</option>
-                <option class="selectOptionStatus">PAUSADA</option>
-                <option class="selectOptionStatus">CANCELADA</option>
-            </select>
-          </div>
-
-        </div>
-
-        <div class="infoOrder">
-            <div class="contentUser">
-                <div class="photo">
-                    <img class="avatar"  src="/systems/pedidos/img/avatarWoman.jpg">
-                </div>
-                <div class="nameUser">
-                  Betiana </br>
-                  Galle
-                </div>
             </div>
-            <div class="contentArrow">
-              <i class="fa fa-caret-left" aria-hidden="true"></i>
-            </div>
-            <div class="contentInfo">
-                <div class="textDateDetailOrders">
-                    Hoy - 25 May. 2016 - 09:25 hs
+
+        <div class="contentTotalReplys">
+
+            <div class="infoOrder">
+                <div class="contentUser">
+                    <div class="photo">
+                        <img class="avatar"  src="/systems/pedidos/img/avatarWoman.jpg">
+                    </div>
+                    <div class="nameUser">
+                      Betiana </br>
+                      Galle
+                    </div>
                 </div>
+                <div class="contentArrow">
+                  <i class="fa fa-caret-left" aria-hidden="true"></i>
+                </div>
+                <div class="contentInfo">
+                    <div class="textDateDetailOrders">
+                        Hoy - 25 May. 2016 - 09:25 hs
+                    </div>
+                    <div>
+                        La impresora no se enciende o no responde cuando se presiona el botón de encendido.
+                        No se observan indicadores luminosos ni mensajes de error, y no hay ruidos ni movimiento
+                        en la impresora.
+                    </div>
+                </div>
+
                 <div>
-                    La impresora no se enciende o no responde cuando se presiona el botón de encendido.
-                    No se observan indicadores luminosos ni mensajes de error, y no hay ruidos ni movimiento
-                    en la impresora.
+
+                    <div class="contentAdd">
+                      <div class="textDateDetailOrders">
+                          ADJUNTOS
+                      </div>
+                      <div class="textAdd">
+                        <div>error_pantalla.jpg</div>
+                        <div>error_pantalla2.jpg</div>
+
+                      </div>
+                    </div>
+                    <div class="contentBtnReply">
+                        <button class="btnReply" ng-click="view.style2 = 'pantallaMensaje'">RESPONDER</button>
+                    </div>
+
                 </div>
+
             </div>
 
-            <div>
+            <div class="contentReplys">
 
-                <div class="contentAdd">
+                <div class="textReply">
+                    <div class="textDateDetailOrders">
+                        Hoy - 25 May. 2016 - 10:26 hs
+                    </div>
+                    <div>
+                          La impresora no se enciende o no responde cuando se presiona el botón de encendido. No se observan indicadores luminosos ni mensajes de error, y no hay ruidos ni movimiento en la impresora.
+                    </div>
+                </div>
+
+                <div class="contentArrowRight">
+                  <i class="fa fa-caret-right" aria-hidden="true"></i>
+                </div>
+
+                <div class="contentUser">
+                    <div class="photo">
+                        <img class="avatar"  src="/systems/pedidos/img/walter.jpg">
+                    </div>
+                    <div class="nameUser">
+                      Walter </br>
+                      Blanco
+                    </div>
+                </div>
+
+                <!-- <div class="contentAddReply">
                   <div class="textDateDetailOrders">
                       ADJUNTOS
                   </div>
                   <div class="textAdd">
-                    <div>error_pantalla.jpg</div>
-                    <div>error_pantalla2.jpg</div>
+                    <div>solucción.jpg</div>
+                    <div>detalle.txt</div>
+
+                  </div>
+                </div> -->
+
+            </div>
+
+            <div class="contentReplys2">
+
+                <div class="contentUser2">
+                    <div class="photo">
+                        <img class="avatar"  src="/systems/pedidos/img/avatarWoman.jpg">
+                    </div>
+                    <div class="nameUser">
+                      Betiana </br>
+                      Galle
+                    </div>
+                </div>
+
+                <div class="contentArrowRight">
+                  <i class="fa fa-caret-left" aria-hidden="true"></i>
+                </div>
+
+                <div class="textReply">
+                    <div class="textDateDetailOrders">
+                        Hoy - 25 May. 2016 - 10:26 hs
+                    </div>
+                    <div>
+                          La impresora no se enciende o no responde cuando se presiona el botón de encendido. No se observan indicadores luminosos ni mensajes de error, y no hay ruidos ni movimiento en la impresora.
+                    </div>
+                </div>
+
+<!--
+                <div class="contentAddReply2">
+                  <div class="textDateDetailOrders">
+                      ADJUNTOS
+                  </div>
+                  <div class="textAdd">
+                    <div>solucción.jpg</div>
+                    <div>detalle.txt</div>
+
+                  </div>
+                </div> -->
+
+            </div>
+
+            <div class="contentReplys">
+
+                <div class="textReply">
+                    <div class="textDateDetailOrders">
+                        Hoy - 25 May. 2016 - 10:26 hs
+                    </div>
+                    <div>
+                          La impresora no se enciende o no responde cuando se presiona el botón de encendido. No se observan indicadores luminosos ni mensajes de error, y no hay ruidos ni movimiento en la impresora.
+                    </div>
+                </div>
+
+                <div class="contentArrowRight">
+                  <i class="fa fa-caret-right" aria-hidden="true"></i>
+                </div>
+
+                <div class="contentUser">
+                    <div class="photo">
+                        <img class="avatar"  src="/systems/pedidos/img/walter.jpg">
+                    </div>
+                    <div class="nameUser">
+                      Walter </br>
+                      Blanco
+                    </div>
+                </div>
+
+                <!-- <div class="contentAddReply">
+                  <div class="textDateDetailOrders">
+                      ADJUNTOS
+                  </div>
+                  <div class="textAdd">
+                    <div>solucción.jpg</div>
+                    <div>detalle.txt</div>
+
+                  </div>
+                </div> -->
+
+            </div>
+
+            <div class="contentReplys">
+
+                <div class="textReply">
+                    <div class="textDateDetailOrders">
+                        Hoy - 25 May. 2016 - 10:26 hs
+                    </div>
+                    <div>
+                          La impresora no se enciende o no responde cuando se presiona el botón de encendido. No se observan indicadores luminosos ni mensajes de error, y no hay ruidos ni movimiento en la impresora.
+                    </div>
+                </div>
+
+                <div class="contentArrowRight">
+                  <i class="fa fa-caret-right" aria-hidden="true"></i>
+                </div>
+
+                <div class="contentUser">
+                    <div class="photo">
+                        <img class="avatar"  src="/systems/pedidos/img/walter.jpg">
+                    </div>
+                    <div class="nameUser">
+                      Walter </br>
+                      Blanco
+                    </div>
+                </div>
+
+                <!-- <div class="contentAddReply">
+                  <div class="textDateDetailOrders">
+                      ADJUNTOS
+                  </div>
+                  <div class="textAdd">
+                    <div>solucción.jpg</div>
+                    <div>detalle.txt</div>
+
+                  </div>
+                </div> -->
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="contentMessage">
+        <div class="subContentMessage">
+            <div class="message">
+                <div class="titleMessage">
+                  NUEVO MENSAJE
+                </div>
+                <div class="textMessage">
+                  <textarea class="textareaMenssage"></textarea>
+                  <div class="addMenssage">
+                      <div><button class="btnAdd"><i class="fa fa-paperclip" aria-hidden="true"></i></button></div>
+                      <div></div>
                   </div>
                 </div>
-                <div class="contentBtnReply">
-                    <button class="btnReply">RESPONDER</button>
+                <div class="actionMessage">
+                  <button>ACEPTAR</button>
+                  <button>CANCELAR</button>
                 </div>
-
             </div>
-
         </div>
-
-        <div class="contentReplys">
-
-            <div class="textReply">
-                <div class="textDateDetailOrders">
-                    Hoy - 25 May. 2016 - 10:26 hs
-                </div>
-                <div>
-                  <textarea autofocus class="textArea"></textarea>
-                </div>
-            </div>
-
-            <div class="contentArrowRight">
-              <i class="fa fa-caret-right" aria-hidden="true"></i>
-            </div>
-
-            <div class="contentUser">
-                <div class="photo">
-                    <img class="avatar"  src="/systems/pedidos/img/walter.jpg">
-                </div>
-                <div class="nameUser">
-                  Walter </br>
-                  Blanco
-                </div>
-            </div>
-
-        </div>
-
-
     </div>
 
 </div>
