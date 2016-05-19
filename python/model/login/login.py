@@ -52,28 +52,29 @@ class LoginMail:
         return True
 
     @classmethod
-    def sendEmailConfirmation(cls, con, name, lastname, eid):
-        emails = Mail.findById(con, eid)
+    def sendEmailConfirmation(cls, con, name, lastname, eids):
+        assert isinstance(eids, list)
+        emails = [ Mail.findById(con, eid) for eid in eids ]
         if emails is None or len(emails) <= 0:
             raise Exception()
 
-        email = emails[0]
         hash = hashlib.sha1(str(uuid.uuid4()).encode('utf-8')).hexdigest()
         code = hash[:5]
-        email.hash = code
-        email.persist(con)
+        for email in emails:
+            email.hash = code
+            email.persist(con)
 
         From = cls.reg.get('confirm_mail_from')
         subject = cls.reg.get('confirm_mail_subject')
         template = cls.reg.get('confirm_mail_template')
-        To = email.email
+        To = [ email.email for email in emails ]
 
         replace = [
             ('###CODE###', code),
             ('###NAME###', name),
             ('###LASTNAME###', lastname)
         ]
-        cls.mail.sendMail(From, [To], subject, replace, html=template)
+        cls.mail.sendMail(From, To, subject, replace, html=template)
         return True
 
 
@@ -93,14 +94,11 @@ class ResetPassword:
         mails = Mail.findByUserId(con, uid)
         """ busco el primer alternativo """
         found = True
-        mail = None
         for m in mails:
-            if 'econo.unlp.edu.ar' not in m.email:
-                 found = cls.mail.sendEmailConfirmation(con, user.name, user.lastname, m.id)
-                 mail = m
+            eids = [ m.id for m in mails if 'econo.unlp.edu.ar' not in m.email ]
 
-        if found:
-            return (user, mail)
+        if cls.mail.sendEmailConfirmation(con, user.name, user.lastname, eids):
+            return (user, mails[0])
         else:
             raise Exception()
 
