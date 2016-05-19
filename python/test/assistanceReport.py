@@ -433,7 +433,7 @@ def findUser(uid, users):
 def sendMail(fn):
     from model.mail.mail import Mail
     mail = inject.instance(Mail)
-    with open(fn) as f:
+    with open(fn, 'rb') as f:
         fp = mail.getFilePart('ReporteAsistencia.zip', f.read(), content_type='application', subtype='zip')
         m = mail.createMail('ditesi@econo.unlp.edu.ar', 'ditesi@econo.unlp.edu.ar', 'Reporte de Asistencia')
         m.attach(fp)
