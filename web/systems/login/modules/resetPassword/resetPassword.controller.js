@@ -7,7 +7,7 @@ ResetPasswordCtrl.$inject = ['$rootScope','$scope', '$wamp', '$window'];
 function ResetPasswordCtrl($rootScope, $scope, $wamp, $window) {
 
     $scope.model = {
-      screens: ["pantallaDNI", "pantallaCodigo", "pantallaContrasena", "pantallaFin", "pantallaSinCorreoAlternativo"],
+      screens: ["pantallaDNI", "pantallaCodigo", "pantallaContrasena", "pantallaFin", "pantallaSinCorreoAlternativo", "pantallaSinCorreoAlternativo"],
       errors: ["", "noExisteDNI", "errorDeCodigo", "errorDeContrasena"],
       clazzScreen: "pantallaDNI",
       clazzError: "",
@@ -23,6 +23,11 @@ function ResetPasswordCtrl($rootScope, $scope, $wamp, $window) {
       $scope.model.clazzError = $scope.model.errors[0];
       $scope.model.clazzScreen = $scope.model.screens[0];
     };
+
+    $scope.requestNoMail = function() {
+      $scope.model.clazzError = $scope.model.errors[0];
+      $scope.model.clazzScreen = $scope.model.screens[5];
+    }
 
     $scope.requestCode = function() {
       $scope.model.clazzError = $scope.model.errors[0];
@@ -50,9 +55,15 @@ function ResetPasswordCtrl($rootScope, $scope, $wamp, $window) {
             $scope.model.clazzError = $scope.model.errors[1];
             return;
           } else {
-            $scope.model.userData = userData;
-            $scope.model.email = String.copy(userData[1].email).replace(/(....).*@(.*)/,'$1*****@$2');
-            $scope.requestCode();
+            if (userData[1] == null) {
+              $scope.requestNoMail();
+              return;
+            } else {
+              $scope.model.userData = userData;
+              $scope.model.email = String.copy(userData[1].email).replace(/(....).*@(.*)/,'$1*****@$2');
+              $scope.requestCode();
+              return;
+            }
           }
         },
         function(err) {
