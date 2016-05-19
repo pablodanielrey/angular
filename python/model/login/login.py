@@ -92,17 +92,15 @@ class ResetPassword:
 
         mails = Mail.findByUserId(con, uid)
         """ busco el primer alternativo """
+        found = True
         mail = None
         for m in mails:
             if 'econo.unlp.edu.ar' not in m.email:
+                 found = cls.mail.sendEmailConfirmation(con, user.name, user.lastname, m.id)
                  mail = m
-                 break
 
-        if mail is None:
-            raise Exception()
-
-        if cls.mail.sendEmailConfirmation(con, user.name, user.lastname, m.id):
-            return (user, m)
+        if found:
+            return (user, mail)
         else:
             raise Exception()
 
