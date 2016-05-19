@@ -194,7 +194,7 @@ class Login:
         s.userId = up.userId
         s.username = up.username
 
-        profile = Profiles.findByUserId(con, s.userId)
+        profile = Profile.findByUserId(con, s.userId)
         if profile is not None:
             s.data = profile._toJson()
 
