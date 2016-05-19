@@ -468,6 +468,9 @@ class UserPassword(JSONSerializable):
     def findByUserId(cls, con, userId):
         return cls.dao.findByUserId(con, userId)
 
+    @classmethod
+    def findByUsername(cls, con, username):
+        return cls.dao.findByUsername(con, username)
 
 
 ############### Mail ###############
