@@ -22,7 +22,7 @@ def createMail(con, dni, email):
 
     (uid, version) = u
 
-    emails = users.MailDAO.findAll(con, uid)
+    emails = users.Mail.findByUserId(con, uid)
     for e in emails:
         if e.email == email:
             logging.warn('Ya tiene el email {} configurado'.format(email))
@@ -32,9 +32,9 @@ def createMail(con, dni, email):
     mail.userId = uid
     mail.email = email
     mail.confirmed = True
-    mid = users.MailDAO.persist(con, mail)
+    mid = mail.persist(con)
 
-    mails = users.MailDAO.findAll(con, uid)
+    mails = users.Mail.findByUserId(con, uid)
     for m in mails:
         logging.info('{}\n'.format(m.__dict__))
 
