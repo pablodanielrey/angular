@@ -12,6 +12,7 @@ class Justification(JSONSerializable):
         self.userId = userId
         self.ownerId = ownerId
         self.status = Status(userId, datetime.datetime.now())
+        self.notes = None
         self.wps = []
 
     def getIdentifier(self):
@@ -183,7 +184,7 @@ class RangedJustification(Justification):
             return False
 
     @classmethod
-    def create(cls, con, start, days, userId, ownerId):    
+    def create(cls, con, start, days, userId, ownerId):
         return cls(start, days, userId, ownerId)
 
 

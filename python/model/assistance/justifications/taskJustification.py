@@ -29,6 +29,7 @@ class TaskJustificationDAO(AssistanceDAO):
                     owner_id varchar not null references profile.users (id),
                     jstart timestamptz default now(),
                     jend timestamptz default now(),
+                    notes varchar,
                     type varchar not null,
                     created timestamptz default now()
                 );
@@ -53,12 +54,12 @@ class TaskJustificationDAO(AssistanceDAO):
             if len(j.findById(con, [j.id])) <=  0:
                 j.type = j.__class__.__name__
                 r = j.__dict__
-                cur.execute('insert into assistance.justification_task (id, user_id, owner_id, jstart, jend, type) '
-                            'values (%(id)s, %(userId)s, %(ownerId)s, %(start)s, %(end)s, %(type)s)', r)
+                cur.execute('insert into assistance.justification_task (id, user_id, owner_id, jstart, jend, type, notes) '
+                            'values (%(id)s, %(userId)s, %(ownerId)s, %(start)s, %(end)s, %(type)s, %(notes)s)', r)
             else:
                 r = j.__dict__
                 cur.execute('update assistance.justification_task set user_id = %(userId)s, owner_id = %(ownerId)s, '
-                            'jstart = %(start)s, jend = %(end)s, type = %(type)s where id = %(id)s', r)
+                            'jstart = %(start)s, jend = %(end)s, type = %(type)s, notes = %(notes)s where id = %(id)s', r)
             return j.id
 
         finally:
@@ -89,8 +90,8 @@ class TaskJustificationDAO(AssistanceDAO):
             t = cls.type
             cur.execute('''
                 SELECT * from assistance.justification_task
-                WHERE user_id in %s 
-                AND (jstart <= %s AND jend >= %s) 
+                WHERE user_id in %s
+                AND (jstart <= %s AND jend >= %s)
                 AND type = %s
             ''', (tuple(userIds), end, start, t))
             return [ cls._fromResult(con, r) for r in cur ]
@@ -110,6 +111,7 @@ class TaskWithReturnJustificationDAO(TaskJustificationDAO):
         j.start = r['jstart']
         j.end = r['jend']
         j.id = r['id']
+        j.notes = r['notes']
         j.setStatus(Status.getLastStatus(con, j.id))
         return j
 
@@ -126,6 +128,7 @@ class TaskWithoutReturnJustificationDAO(TaskJustificationDAO):
         j.start = r['jstart']
         j.end = r['jend']
         j.id = r['id']
+        j.notes = r['notes']
         j.setStatus(Status.getLastStatus(con, j.id))
         return j
 

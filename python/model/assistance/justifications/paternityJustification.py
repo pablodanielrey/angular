@@ -43,6 +43,7 @@ class PaternityJustificationDAO(AssistanceDAO):
                   owner_id varchar not null references profile.users (id),
                   jstart date default now(),
                   jend date default now(),
+                  notes varchar,
                   created timestamptz default now()
               );
               """
@@ -56,6 +57,7 @@ class PaternityJustificationDAO(AssistanceDAO):
         j = PaternityJustification(r['user_id'], r['owner_id'], r['jstart'], 0)
         j.id = r['id']
         j.end = r['jend']
+        j.notes = r['notes']
         j.setStatus(Status.getLastStatus(con, j.id))
         return j
 
@@ -70,12 +72,12 @@ class PaternityJustificationDAO(AssistanceDAO):
 
             if len(j.findById(con, [j.id])) <=  0:
                 r = j.__dict__
-                cur.execute('insert into assistance.justification_paternity (id, user_id, owner_id, jstart, jend) '
-                            'values (%(id)s, %(userId)s, %(ownerId)s, %(start)s, %(end)s)', r)
+                cur.execute('insert into assistance.justification_paternity (id, user_id, owner_id, jstart, jend, notes) '
+                            'values (%(id)s, %(userId)s, %(ownerId)s, %(start)s, %(end)s, %(notes)s)', r)
             else:
                 r = j.__dict__
                 cur.execute('update assistance.justification_paternity set user_id = %(userId)s, owner_id = %(ownerId)s, '
-                            'jstart = %(start)s, jend = %(end)s where id = %(id)s', r)
+                            'jstart = %(start)s, jend = %(end)s, notes = %(notes)s where id = %(id)s', r)
             return j.id
 
         finally:

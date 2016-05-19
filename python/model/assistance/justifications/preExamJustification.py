@@ -46,6 +46,7 @@ class PreExamJustificationDAO(AssistanceDAO):
                   jstart date default now(),
                   jend date default now(),
                   type varchar not null,
+                  notes varchar,
                   created timestamptz default now()
               );
               """
@@ -67,12 +68,12 @@ class PreExamJustificationDAO(AssistanceDAO):
                 j.type = j.__class__.__name__
 
                 r = j.__dict__
-                cur.execute('insert into assistance.justification_pre_exam (id, user_id, owner_id, jstart, jend, type) '
-                            'values (%(id)s, %(userId)s, %(ownerId)s, %(start)s, %(end)s, %(type)s)', r)
+                cur.execute('insert into assistance.justification_pre_exam (id, user_id, owner_id, jstart, jend, type, notes) '
+                            'values (%(id)s, %(userId)s, %(ownerId)s, %(start)s, %(end)s, %(type)s, %(notes)s)', r)
             else:
                 r = j.__dict__
                 cur.execute('update assistance.justification_pre_exam set user_id = %(userId)s, owner_id = %(ownerId)s, '
-                            'jstart = %(start)s, jend = %(end)s where id = %(id)s', r)
+                            'jstart = %(start)s, jend = %(end)s, notes = %(notes)s where id = %(id)s', r)
             return j.id
 
         finally:
@@ -120,6 +121,7 @@ class SchoolPreExamJustificationDAO(PreExamJustificationDAO):
         j = SchoolPreExamJustification(r['jstart'], 0, r['user_id'], r['owner_id'])
         j.id = r['id']
         j.end = r['jend']
+        j.notes = r['notes']
         j.setStatus(Status.getLastStatus(con, j.id))
         return j
 
@@ -133,6 +135,7 @@ class UniversityPreExamJustificationDAO(PreExamJustificationDAO):
         j = UniversityPreExamJustification(r['jstart'], 0, r['user_id'], r['owner_id'])
         j.id = r['id']
         j.end = r['jend']
+        j.notes = r['notes']
         j.setStatus(Status.getLastStatus(con, j.id))
         return j
 

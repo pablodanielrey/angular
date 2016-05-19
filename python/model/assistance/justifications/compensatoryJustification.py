@@ -25,6 +25,7 @@ class CompensatoryJustificationDAO(AssistanceDAO):
                     user_id varchar not null references profile.users (id),
                     owner_id varchar not null references profile.users (id),
                     date date not null default now(),
+                    notes varchar,
                     created timestamptz default now()
               );
 
@@ -43,6 +44,7 @@ class CompensatoryJustificationDAO(AssistanceDAO):
         date = datetime.datetime.combine(r['date'], datetime.time.min)
         c = CompensatoryJustification(date, r['user_id'], r['owner_id'])
         c.id = r['id']
+        c.notes = r['notes']
         c.setStatus(Status.getLastStatus(con, c.id))
         return c
 
@@ -57,12 +59,12 @@ class CompensatoryJustificationDAO(AssistanceDAO):
 
             if len(c.findById(con, [c.id])) <=  0:
                 r = c.__dict__
-                cur.execute('insert into assistance.justification_compensatory (id, user_id, owner_id, date) '
-                            'values ( %(id)s, %(userId)s, %(ownerId)s, %(date)s)', r)
+                cur.execute('insert into assistance.justification_compensatory (id, user_id, owner_id, date, notes) '
+                            'values ( %(id)s, %(userId)s, %(ownerId)s, %(date)s, %(notes)s)', r)
             else:
                 r = c.__dict__
                 cur.execute('update assistance.justification_compensatory set user_id = %(userId)s, owner_id = %(ownerId)s, '
-                            'date = %(date)s where id = %(id)s', r)
+                            'date = %(date)s, notes = %(notes)s where id = %(id)s', r)
             return c.id
 
         finally:

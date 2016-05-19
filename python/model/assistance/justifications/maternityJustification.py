@@ -42,6 +42,7 @@ class MaternityJustificationDAO(AssistanceDAO):
                     owner_id varchar not null references profile.users (id),
                     jstart date default now(),
                     jend date default now(),
+                    notes varchar,
                     number bigint,
                     created timestamptz default now()
               );
@@ -55,6 +56,7 @@ class MaternityJustificationDAO(AssistanceDAO):
         j = MaternityJustification(r['user_id'], r['owner_id'], r['jstart'], 0, r['number'])
         j.id = r['id']
         j.end = r['jend']
+        j.notes = r['notes']
         j.setStatus(Status.getLastStatus(con, j.id))
         return j
 
@@ -69,12 +71,12 @@ class MaternityJustificationDAO(AssistanceDAO):
 
             if len(j.findById(con, [j.id])) <=  0:
                 r = j.__dict__
-                cur.execute('insert into assistance.justification_maternity (id, user_id, owner_id, jstart, jend, number) '
-                            'values (%(id)s, %(userId)s, %(ownerId)s, %(start)s, %(end)s, %(number)s)', r)
+                cur.execute('insert into assistance.justification_maternity (id, user_id, owner_id, jstart, jend, number, notes) '
+                            'values (%(id)s, %(userId)s, %(ownerId)s, %(start)s, %(end)s, %(number)s, %(notes)s)', r)
             else:
                 r = j.__dict__
                 cur.execute('update assistance.justification_maternity set user_id = %(userId)s, owner_id = %(ownerId)s, '
-                            'jstart = %(start)s, jend = %(end)s, number = %(number)s where id = %(id)s', r)
+                            'jstart = %(start)s, jend = %(end)s, number = %(number)s, notes = %(notes)s where id = %(id)s', r)
             return j.id
 
         finally:

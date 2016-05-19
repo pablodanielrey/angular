@@ -28,6 +28,7 @@ class InformedAbsenceJustificationDAO(AssistanceDAO):
                     user_id varchar not null references profile.users (id),
                     owner_id varchar not null references profile.users (id),
                     jdate date default now(),
+                    notes varchar,
                     created timestamptz default now()
               );
               """
@@ -42,6 +43,7 @@ class InformedAbsenceJustificationDAO(AssistanceDAO):
         j.userId = r['user_id']
         j.ownerId = r['owner_id']
         j.date = r['jdate']
+        j.notes = r['notes']
         j.setStatus(Status.getLastStatus(con, j.id))
         return j
 
@@ -57,12 +59,12 @@ class InformedAbsenceJustificationDAO(AssistanceDAO):
 
             if len(j.findById(con, [j.id])) <=  0:
                 r = j.__dict__
-                cur.execute('insert into assistance.justification_informed_absence(id, user_id, owner_id, jdate) '
-                            'values (%(id)s, %(userId)s, %(ownerId)s, %(date)s)', r)
+                cur.execute('insert into assistance.justification_informed_absence(id, user_id, owner_id, jdate, notes) '
+                            'values (%(id)s, %(userId)s, %(ownerId)s, %(date)s, %(notes)s)', r)
             else:
                 r = j.__dict__
                 cur.execute('update assistance.justification_informed_absence set user_id = %(userId)s, owner_id = %(ownerId)s, '
-                            'jdate = %(date)s where id = %(id)s', r)
+                            'jdate = %(date)s, notes = %(notes)s where id = %(id)s', r)
             return j.id
 
         finally:

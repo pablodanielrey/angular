@@ -43,6 +43,7 @@ class MarriageJustificationAbstractDAO(AssistanceDAO):
                   owner_id varchar not null references profile.users (id),
                   jstart date default now(),
                   jend date default now(),
+                  notes varchar,
                   type varchar not null,
                   created timestamptz default now()
               );
@@ -64,12 +65,12 @@ class MarriageJustificationAbstractDAO(AssistanceDAO):
             if len(j.findById(con, [j.id])) <=  0:
                 j.type = j.__class__.__name__
                 r = j.__dict__
-                cur.execute('insert into assistance.justification_marriage (id, user_id, owner_id, jstart, jend, type) '
-                            'values (%(id)s, %(userId)s, %(ownerId)s, %(start)s, %(end)s, %(type)s)', r)
+                cur.execute('insert into assistance.justification_marriage (id, user_id, owner_id, jstart, jend, type, notes) '
+                            'values (%(id)s, %(userId)s, %(ownerId)s, %(start)s, %(end)s, %(type)s, %(notes)s)', r)
             else:
                 r = j.__dict__
                 cur.execute('update assistance.justification_marriage set user_id = %(userId)s, owner_id = %(ownerId)s, '
-                            'jstart = %(start)s, jend = %(end)s, type = %(type)s where id = %(id)s', r)
+                            'jstart = %(start)s, jend = %(end)s, type = %(type)s, notes = %(notes)s where id = %(id)s', r)
             return j.id
 
         finally:
