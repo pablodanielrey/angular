@@ -52,12 +52,7 @@ class LoginMail:
         return True
 
     @classmethod
-    def sendEmailConfirmation(cls, con, name, lastname, eids):
-        assert isinstance(eids, list)
-        emails = [ Mail.findById(con, eid) for eid in eids ]
-        if emails is None or len(emails) <= 0:
-            raise Exception()
-
+    def sendEmailConfirmation(cls, con, name, lastname, emails):
         hash = hashlib.sha1(str(uuid.uuid4()).encode('utf-8')).hexdigest()
         code = hash[:5]
         for email in emails:
@@ -95,9 +90,9 @@ class ResetPassword:
         """ busco el primer alternativo """
         found = True
         for m in mails:
-            eids = [ m.id for m in mails if 'econo.unlp.edu.ar' not in m.email ]
+            emails = [ m for m in mails if 'econo.unlp.edu.ar' not in m.email ]
 
-        if cls.mail.sendEmailConfirmation(con, user.name, user.lastname, eids):
+        if cls.mail.sendEmailConfirmation(con, user.name, user.lastname, emails):
             return (user, mails[0])
         else:
             raise Exception()
