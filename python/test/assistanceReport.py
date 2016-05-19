@@ -354,6 +354,7 @@ def createZipFile(rp):
                 logging.info('escribiendo : {}'.format(fm))
                 rpzip.write(fm)
     logging.info('generado : {}'.format(fn))
+    return fn
 
 
 def _getOffices(con):
@@ -429,6 +430,14 @@ def findUser(uid, users):
             return u
     return None
 
+def sendMail(fn):
+    from model.mail.mail import Mail
+    mail = inject.attr(Mail)
+    with open(fn) as f:
+        fp = mail.getFilePart('ReporteAsistencia.zip', f.read(), content_type='application', subtype='zip')
+        m = mail.createMail('ditesi@econo.unlp.edu.ar', 'ditesi@econo.unlp.edu.ar', 'Reporte de Asistencia')
+        m.attach(fp)
+        mail._sendMail('ditesi@econo.unlp.edu.ar', ['ditesi@econo.unlp.edu.ar'], m)
 
 
 if __name__ == '__main__':
@@ -469,4 +478,6 @@ if __name__ == '__main__':
 
     finally:
         conn.put(con)
-    createZipFile(rp)
+
+    fn = createZipFile(rp)
+    sendMail(fn)
