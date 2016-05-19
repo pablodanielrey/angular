@@ -2,9 +2,9 @@ angular
   .module('mainApp')
   .controller('ResetPasswordCtrl', ResetPasswordCtrl);
 
-ResetPasswordCtrl.$inject = ['$rootScope','$scope', '$wamp', '$location'];
+ResetPasswordCtrl.$inject = ['$rootScope','$scope', '$wamp', '$window'];
 
-function ResetPasswordCtrl($rootScope, $scope, $wamp, $location) {
+function ResetPasswordCtrl($rootScope, $scope, $wamp, $window) {
 
     $scope.model = {
       screens: ["pantallaDNI", "pantallaCodigo", "pantallaContrasena", "pantallaFin", "pantallaSinCorreoAlternativo"],
@@ -39,7 +39,7 @@ function ResetPasswordCtrl($rootScope, $scope, $wamp, $location) {
     }
 
     $scope.finish = function() {
-      $location.path('/');
+      $window.location.href = '/';
     }
 
     $scope.processDni = function() {
