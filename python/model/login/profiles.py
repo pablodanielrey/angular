@@ -101,6 +101,12 @@ class Profile:
                 return False
         return True
 
+    def persist(self, con):
+        return self.dao.persist(con, [self])
+
+    def remove(self, con):
+        return self.dao.remove(con, [self])
+
     def _toJson(self):
         return json.dumps(self, default=lambda o: o.__dict__)
 
@@ -109,3 +115,7 @@ class Profile:
         p = Profile()
         p.__dict__ = json.loads(pstring)
         return p
+
+    @classmethod
+    def findByUserId(cls, con, userId):
+        return cls.dao.findByUserId(con, userId)
