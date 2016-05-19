@@ -98,7 +98,7 @@ class ImapJustifier:
 
         m = imaplib.IMAP4_SSL(host)
         try:
-            logging.debug('login {} user {} pass {}'.format(host, user, password))
+            #logging.debug('login {} user {} pass {}'.format(host, user, password))
             rv, data = m.login(user, password)
 
             rv, mailboxes = m.list()
