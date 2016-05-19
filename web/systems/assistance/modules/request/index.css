@@ -29,6 +29,10 @@
    display:block;
  }
 
+ .request .contentRequestSelected.a102 .art102 {
+   display:block;
+ }
+
  .request .contentRequestSelected.informedAbsence .ausenteConAviso {
    display:block;
  }
@@ -487,6 +491,7 @@
 
 .request .contentRequestSelected .compensatorio,
 .request .contentRequestSelected .preExamSuperior,
+.request .contentRequestSelected .art102,
 .request .contentRequestSelected .ausenteConAviso,
 .request .contentRequestSelected .boletaDeSalidaConRetorno,
 .request .contentRequestSelected .boletaDeSalidaSinRetorno {

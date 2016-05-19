@@ -1,8 +1,8 @@
 <!-- VARIABLES 1:solicitud, mensaje | VARIABLES 2: procesando, procesado, sinDisponibilidad, errorDeSistema -->
-<div class="a102 solicitud ">
+<div class="a102 {{view.styleStatus}} {{view.styleMessage}} ">
   <div class="title">Solicitar</div>
   <i class="ico fa fa-ticket "></i> <b> ARTICULO 102 </b>
-  <i class="ico fa fa-question-circle" title="Art. 102º. Permisos excepcionales: Se podrán justificar hasta cinco (5) permisos excepcionales por año, con
+  <i class="help ico fa fa-question-circle" title="Art. 102º. Permisos excepcionales: Se podrán justificar hasta cinco (5) permisos excepcionales por año, con
 goce de haberes, otorgados por el responsable directo del área donde preste servicio el trabajador, después de
 haberse cumplido como mínimo las dos primeras horas de la jornada de labor correspondiente, y siempre que
 obedecieran a razones atendibles y el servicio lo permita"></i>
@@ -12,7 +12,7 @@ obedecieran a razones atendibles y el servicio lo permita"></i>
         <div class="screenRequest">
             <div class="availabilityRequest">
               <div class="titleAvailability"> Disponibilidad </div>
-              <div class="contentCantAvailability"> <b>Mensual</b> <b class="cantAvailability">2</b>  <b>Anual</b> <b class="cantAvailability">6</b> </div>
+              <div class="contentCantAvailability"> <b>Días</b> <b class="cantAvailability"> {{model.justificationData.stock}} </b>  </div>
             </div>
             <div class="titleInfo">SELECCIONE EL DÍA</div>
             <div><input class="inputDate" type="date"></input></div>
