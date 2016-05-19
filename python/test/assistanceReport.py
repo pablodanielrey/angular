@@ -437,7 +437,7 @@ def sendMail(fn):
         fp = mail.getFilePart('ReporteAsistencia.zip', f.read(), content_type='application', subtype='zip')
         m = mail.createMail('ditesi@econo.unlp.edu.ar', 'ditesi@econo.unlp.edu.ar', 'Reporte de Asistencia')
         m.attach(fp)
-        mail._sendMail('ditesi@econo.unlp.edu.ar', ['ditesi@econo.unlp.edu.ar'], m)
+        mail._sendMail('ditesi@econo.unlp.edu.ar', ['ditesi@econo.unlp.edu.ar', 'julio.ciappa@econo.unlp.edu.ar', 'soporte@econo.unlp.edu.ar'], m)
 
 
 if __name__ == '__main__':
