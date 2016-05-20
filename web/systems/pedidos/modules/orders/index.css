@@ -141,6 +141,20 @@
   margin-left: 20px;
 }
 
+.orders .itemDate2 {
+  font-size: 12px;
+  /*background: red;*/
+  width: 130px;
+  margin-left: 20px;
+}
+
+
+.orders .textNumerOrders2 {
+  color: #434343;
+  font-weight: bold;
+  font-size: 16px;
+}
+
 .orders .textNumerOrders,
 .orders .textType,
 .orders .textOffice {
@@ -213,7 +227,7 @@
 
 .orders .contentTotalReplys {
   overflow-y: auto;
-  height: 75%;
+  height: 50%;
   /*background-color: red;*/
 }
 
@@ -250,18 +264,19 @@
 }
 
 .orders .actionDetail {
-  margin-right: 20px;
+  margin-right: 68px;
+
 }
 
 .orders .selectStatus {
-  padding: 5px;
+  padding: 13px;
   border-radius: 3px;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
   color:white;
   font-weight: bold;
   font-size: 14px;
-  width: 150px;
+  width: 170px;
   text-align: center;
   cursor: pointer;
 
@@ -376,7 +391,7 @@
   -webkit-border-radius: 3px;
 }
 
-.orders .btnReply {
+.orders .btnReply:hover {
   background-color: #809612;
   cursor: pointer;
 }
@@ -540,6 +555,12 @@
   width: 495px;
   height: 40px;
   margin-top: -5px;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
 }
 
 .orders .btnAdd {
@@ -552,8 +573,73 @@
   color: white;
 }
 
-.orders .actionMessage {
+.orders .btnAdd:hover {
+  cursor: pointer;
+  background-color: #28292d;
+}
 
+.orders .ArchivesAdd {
+  padding-left: 5px;
+  padding-right: 15px;
+  font-size: 13px;
+  overflow-y: auto;
+  padding: 5px;
+
+
+}
+
+.orders .btnTrashAdd {
+  padding: 1px 3px 1px 3px;
+  border: none;
+    background-color: #76787c;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  color: white;
+  margin-right: 5px;
+}
+
+.orders .btnTrashAdd:hover {
+    background-color: #E43E46;
+    cursor: pointer;
+}
+
+.orders .actionMessage {
+  margin-top: 10px;
+}
+
+.orders .btnAceptMennsage {
+
+  font-size: 14px;
+  background-color: #92AD17;
+  color:white;
+  padding: 10px 20px 10px 20px;
+  border:none;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
+
+.orders .btnAceptMennsage:hover {
+  background-color: #809612;
+  cursor: pointer;
+}
+
+.orders .btnCancelMennsage {
+
+  font-size: 14px;
+  background-color: #76787C;
+  color:white;
+  padding: 10px 20px 10px 20px;
+  border:none;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
+
+.orders .btnCancelMennsage:hover {
+  background-color: #E43E46;
+  cursor: pointer;
 }
 
 /******************** MEDIA QUERIS ***************************/

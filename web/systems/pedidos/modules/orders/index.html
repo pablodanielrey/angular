@@ -364,10 +364,11 @@
                   <div class="contentBtnReturn">
                       <button class="btnReturn" ng-click="view.style = ''"><i class=" fa fa-angle-left" aria-hidden="true"></i></button>
                   </div>
-                  <div class="itemDate">
-                      <div class="textNumerOrders">Nº 112369</div>
-                      <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
-                      <div class="textDaysOrders">Hoy</div>
+                  <div class="itemDate2">
+                      <div class="textDaysOrders">Consulta</div>
+                      <div class="textNumerOrders2">Nº 112369</div>
+                      <!-- <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
+                      <div class="textDaysOrders">Hoy</div> -->
                   </div>
                   <div class="itemsType">
                         <div class="textType">SOPORTE TÉCNICO:</div>
@@ -392,51 +393,53 @@
 
             </div>
 
-        <div class="contentTotalReplys">
-
-            <div class="infoOrder">
-                <div class="contentUser">
-                    <div class="photo">
-                        <img class="avatar"  src="/systems/pedidos/img/avatarWoman.jpg">
-                    </div>
-                    <div class="nameUser">
-                      Betiana </br>
-                      Galle
-                    </div>
+        <div class="infoOrder">
+            <div class="contentUser">
+                <div class="photo">
+                    <img class="avatar"  src="/systems/pedidos/img/avatarWoman.jpg">
                 </div>
-                <div class="contentArrow">
-                  <i class="fa fa-caret-left" aria-hidden="true"></i>
+                <div class="nameUser">
+                  Betiana </br>
+                  Galle
                 </div>
-                <div class="contentInfo">
-                    <div class="textDateDetailOrders">
-                        Hoy - 25 May. 2016 - 09:25 hs
-                    </div>
-                    <div>
-                        La impresora no se enciende o no responde cuando se presiona el botón de encendido.
-                        No se observan indicadores luminosos ni mensajes de error, y no hay ruidos ni movimiento
-                        en la impresora.
-                    </div>
+            </div>
+            <div class="contentArrow">
+              <i class="fa fa-caret-left" aria-hidden="true"></i>
+            </div>
+            <div class="contentInfo">
+                <div class="textDateDetailOrders">
+                    Hoy - 25 May. 2016 - 09:25 hs
                 </div>
-
                 <div>
+                    La impresora no se enciende o no responde cuando se presiona el botón de encendido.
+                    No se observan indicadores luminosos ni mensajes de error, y no hay ruidos ni movimiento
+                    en la impresora.
+                </div>
+            </div>
 
-                    <div class="contentAdd">
-                      <div class="textDateDetailOrders">
-                          ADJUNTOS
-                      </div>
-                      <div class="textAdd">
-                        <div>error_pantalla.jpg</div>
-                        <div>error_pantalla2.jpg</div>
+            <div>
 
-                      </div>
-                    </div>
-                    <div class="contentBtnReply">
-                        <button class="btnReply" ng-click="view.style2 = 'pantallaMensaje'">RESPONDER</button>
-                    </div>
+                <div class="contentAdd">
+                  <div class="textDateDetailOrders">
+                      ADJUNTOS
+                  </div>
+                  <div class="textAdd">
+                    <div>error_pantalla.jpg</div>
+                    <div>error_pantalla2.jpg</div>
 
+                  </div>
+                </div>
+                <div class="contentBtnReply">
+                    <button class="btnReply" ng-click="view.style2 = 'pantallaMensaje'">RESPONDER</button>
                 </div>
 
             </div>
+
+        </div>
+
+        <div class="contentTotalReplys">
+
+
 
             <div class="contentReplys">
 
@@ -501,8 +504,8 @@
                     </div>
                 </div>
 
-<!--
-                <div class="contentAddReply2">
+
+                <!-- <div class="contentAddReply2">
                   <div class="textDateDetailOrders">
                       ADJUNTOS
                   </div>
@@ -604,13 +607,15 @@
                 <div class="textMessage">
                   <textarea class="textareaMenssage"></textarea>
                   <div class="addMenssage">
-                      <div><button class="btnAdd"><i class="fa fa-paperclip" aria-hidden="true"></i></button></div>
-                      <div></div>
-                  </div>
+                      <div><button class="btnAdd" title="Adjuntar Archivo"><i class="fa fa-paperclip" aria-hidden="true"></i></button></div>
+                      <div class="ArchivesAdd">
+                        <i class="fa fa-file-o" aria-hidden="true"></i> Instructivo.pdf <button class="btnTrashAdd"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                        <i class="fa fa-file-o" aria-hidden="true"></i> pantalla_de_error.jpg <button class="btnTrashAdd"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                      </div>
                 </div>
                 <div class="actionMessage">
-                  <button>ACEPTAR</button>
-                  <button>CANCELAR</button>
+                  <button class="btnAceptMennsage" ng-click="view.style2 = ''">ACEPTAR</button>
+                  <button class="btnCancelMennsage" ng-click="view.style2 = ''">CANCELAR</button>
                 </div>
             </div>
         </div>
