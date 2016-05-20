@@ -6,6 +6,7 @@ from model.users.users import UserDAO
 from model.assistance.justifications.justifications import SingleDateJustification
 from model.assistance.justifications.status import Status
 from model.assistance.justifications.status import StatusDAO
+from model.assistance.utils import Utils
 import uuid, datetime
 
 class Art102JustificationDAO(AssistanceDAO):
@@ -35,9 +36,11 @@ class Art102JustificationDAO(AssistanceDAO):
 
     @classmethod
     def _fromResult(cls, con, r):
-        date = datetime.datetime.combine(r['date'], datetime.time.min)
-        c = Art102Justification(date, r['user_id'], r['owner_id'])
+        c = Art102Justification()
         c.id = r['id']
+        c.userId = r['user_id']
+        c.ownerId = r['owner_id']
+        c.date = r['date']
         c.notes = r['notes']
         c.setStatus(Status.getLastStatus(con, c.id))
         return c
@@ -79,17 +82,16 @@ class Art102JustificationDAO(AssistanceDAO):
     @classmethod
     def findByUserId(cls, con, userIds, start, end):
         assert isinstance(userIds, list)
-        assert isinstance(start, datetime.datetime)
-        assert isinstance(end, datetime.datetime)
+        assert isinstance(start, datetime.date)
+        assert isinstance(end, datetime.date)
 
         if len(userIds) <= 0:
             return
 
         cur = con.cursor()
         try:
-            sDate = None if start is None else start.date()
-            eDate = datetime.date.today() if end is None else end.date()
-            cur.execute('select * from assistance.justification_art102 where user_id  in %s and date BETWEEN %s AND %s', (tuple(userIds), sDate, eDate))
+            eDate = datetime.date.today() if end is None else end
+            cur.execute('select * from assistance.justification_art102 where user_id  in %s and date BETWEEN %s AND %s', (tuple(userIds), start, eDate))
             return [ cls._fromResult(con, r) for r in cur ]
         finally:
             cur.close()
@@ -106,3 +108,32 @@ class Art102Justification(SingleDateJustification):
 
     def getIdentifier(self):
         return self.indentifier
+
+    @classmethod
+    def create(cls, con, date, userId, ownerId):
+        cls._checkConstraints(con, date, userId)
+        return super().create(con, date, userId, ownerId)
+
+    @classmethod
+    def _getYearJustifications(cls, con, date, userId):
+        yearStart = Utils._cloneDate(date).replace(month=1,day=1)
+        yearEnd = Utils._cloneDate(date).replace(month=12,day=31)
+        justs = cls.dao.findByUserId(con, [userId], yearStart, yearEnd)
+        return [j for j in justs if j.getStatus().status == 1 or j.getStatus().status == 2]
+
+    @classmethod
+    def _checkConstraints(cls, con, date, userId):
+        """
+            Se controla:
+                5 anuales
+        """
+        justs = cls._getYearJustifications(con, date, userId)
+        if len(justs) >= 5:
+            raise Exception('Límite anual alcanzado')
+
+    @classmethod
+    def getData(cls, con, userId, date, schedule):
+        data = super().getData(con, userId, date, schedule)
+        justs = cls._getYearJustifications(con, date, userId)
+        data['stock'] = 5 - len(justs)
+        return data
