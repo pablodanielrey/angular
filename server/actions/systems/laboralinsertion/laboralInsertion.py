@@ -159,6 +159,12 @@ class LaboralInsertionWamp(ApplicationSession):
     def persistInscriptionByUser(self, userId, data):
         con = self.conn.get()
         try:
+            """ primero busco que no exista esa misma inscripción """
+            inscriptions = self.laboralInsertion.findAllInscriptionsByUser(con, userId)
+            ins = [ i for i in inscriptions if i.degree == data['degree'] and i.workType == data['workType'] ]
+            if len(ins) >= 1:
+                raise Exception('Ya existe esa inscripcion')
+
             if 'id' not in data:
                 data['id'] = None
             data['userId'] = userId
@@ -200,7 +206,7 @@ class LaboralInsertionWamp(ApplicationSession):
             while len(inscriptionsToSend) > 0:
                 data.extend(self.laboralInsertion.sendMailToCompany(con, inscriptionsToSend, emails))
                 inscriptionsToSend = [ inscriptionIds.pop() for i in range(inscriptionsPerMail) if len(inscriptionIds) > 0 ]
-                
+
             self.publish('system.laboralInsertion.COMPANYSENDED', data)
             return True
 
