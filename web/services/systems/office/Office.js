@@ -14,4 +14,8 @@ function Office (Utils, Session, $wamp) {
 		return $wamp.call('office.findById',[ids]);
 	}
 
+	this.getOfficesUsers = function (ids) {
+		return $wamp.call('office.getOfficesUsers',[ids]);
+	}
+
 };
