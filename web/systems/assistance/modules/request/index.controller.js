@@ -24,6 +24,7 @@ function RequestCtrl($scope, Login, Assistance, Users, Office, $location, $timeo
   $scope.sortUserName = sortUserName;
   $scope.orderUserName = orderUserName;
   $scope.loadUsers = loadUsers;
+  $scope.findUsersByOffices = findUsersByOffices;
   $scope.getName = getName;
   $scope.selectCompensatory = selectCompensatory;
   $scope.selectInformedAbsence = selectInformedAbsence;
@@ -157,8 +158,17 @@ function RequestCtrl($scope, Login, Assistance, Users, Office, $location, $timeo
 
     Office.getOfficesByUserRole($scope.model.userId, true, 'autoriza').then(function(ids) {
       if (ids.length > 0) {
+        $scope.findUsersByOffices(ids);
         $scope.view.optionsJustifications.push($scope.view.optionGroupJustifications);
       }
+    }, function(error) {
+      console.log(error);
+    });
+  }
+
+  function findUsersByOffices(ids) {
+    Office.getOfficesUsers(ids).then(function (userIds) {
+      $scope.loadUsers(userIds);
     }, function(error) {
       console.log(error);
     });
@@ -217,7 +227,6 @@ function RequestCtrl($scope, Login, Assistance, Users, Office, $location, $timeo
       $scope.view.style3 = $scope.model.optionJustifications.style;
       justifications = [];
       userIds = Object.keys(data);
-      $scope.loadUsers(userIds);
       for (userId in data) {
         var just = data[userId];
         for (var i = 0; i < just.length; i++) {
