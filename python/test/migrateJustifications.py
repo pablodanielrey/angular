@@ -43,6 +43,7 @@ from model.assistance.justifications.marriageJustification import MarriageJustif
 from model.assistance.justifications.leaveWithoutSalaryJustification import LeaveWithoutSalaryJustification, LeaveWithoutSalaryJustificationDAO
 from model.assistance.justifications.suspensionJustification import SuspensionJustification, SuspensionJustificationDAO
 from model.assistance.justifications.travelJustification import TravelJustification, TravelJustificationDAO
+from model.assistance.justifications.medicalCertificateJustification import MedicalCertificateJustification, MedicalCertificateJustificationDAO
 
 """
 UNDEFINED = 0
@@ -922,6 +923,17 @@ class TravelMigrate(RangedJustificationMigrate):
     def createJustification(cls, userId, ownerId, start, days):
         logging.info('migrando  Viaje')
         return TravelJustification(userId, ownerId, start, days)
+
+
+class MedicalCertificateMigrate(RangedJustificationMigrate):
+
+    id = "478a2e35-51b8-427a-986e-591a9ee449d8"
+    dao = MedicalCertificateJustificationDAO
+
+    @classmethod
+    def createJustification(cls, userId, ownerId, start, days):
+        logging.info('migrando  certificado médico')
+        return MedicalCertificateJustification(userId, ownerId, start, days)
 
 
 if __name__ == '__main__':

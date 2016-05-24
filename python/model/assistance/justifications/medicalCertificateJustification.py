@@ -54,7 +54,7 @@ class MedicalCertificateJustificationDAO(AssistanceDAO):
 
     @classmethod
     def _fromResult(cls, con, r):
-        j = MedicalCertificateJustification(r['user_id'], r['owner_id'], r['jstart'], 0)
+        j = MedicalCertificateJustification(r['jstart'], 0, r['user_id'], r['owner_id'])
         j.id = r['id']
         j.end = r['jend']
         j.notes = r['notes']
@@ -122,7 +122,7 @@ class MedicalCertificateJustification(RangedJustification):
     registry = inject.instance(Registry).getRegistry('medicalCertificateJustification')
     identifier = 'Certificado médico'
 
-    def __init__(self, userId = None, ownerId = None, start = None, days = 0):
+    def __init__(self, start = None, days = 0, userId = None, ownerId = None):
         super().__init__(start, days, userId, ownerId)
         self.identifier = MedicalCertificateJustification.identifier
         self.classType = RangedJustification.__name__
