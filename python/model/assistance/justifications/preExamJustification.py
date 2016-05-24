@@ -94,19 +94,18 @@ class PreExamJustificationDAO(AssistanceDAO):
     @classmethod
     def findByUserId(cls, con, userIds, start, end):
         assert isinstance(userIds, list)
-        assert isinstance(start, datetime.datetime)
-        assert isinstance(end, datetime.datetime)
+        assert isinstance(start, datetime.date)
+        assert isinstance(end, datetime.date)
 
         if len(userIds) <= 0:
             return
 
         cur = con.cursor()
         try:
-            sDate = None if start is None else start.date()
-            eDate = datetime.date.today() if end is None else end.date()
+            eDate = datetime.date.today() if end is None else end
             t = cls.type
             cur.execute('select * from assistance.justification_pre_exam where user_id in %s and '
-                        '(jstart <= %s and jend >= %s) and type = %s', (tuple(userIds), eDate, sDate, t))
+                        '(jstart <= %s and jend >= %s) and type = %s', (tuple(userIds), eDate, start, t))
 
             return [ cls._fromResult(con, r) for r in cur ]
         finally:
@@ -118,9 +117,12 @@ class SchoolPreExamJustificationDAO(PreExamJustificationDAO):
 
     @classmethod
     def _fromResult(cls, con, r):
-        j = SchoolPreExamJustification(r['jstart'], 0, r['user_id'], r['owner_id'])
+        j = SchoolPreExamJustification()
         j.id = r['id']
+        j.start = r['jstart']
         j.end = r['jend']
+        j.userId = r['user_id']
+        j.ownerId = r['owner_id']
         j.notes = r['notes']
         j.setStatus(Status.getLastStatus(con, j.id))
         return j
@@ -132,9 +134,12 @@ class UniversityPreExamJustificationDAO(PreExamJustificationDAO):
 
     @classmethod
     def _fromResult(cls, con, r):
-        j = UniversityPreExamJustification(r['jstart'], 0, r['user_id'], r['owner_id'])
+        j = UniversityPreExamJustification()
         j.id = r['id']
+        j.start = r['jstart']
         j.end = r['jend']
+        j.userId = r['user_id']
+        j.ownerId = r['owner_id']
         j.notes = r['notes']
         j.setStatus(Status.getLastStatus(con, j.id))
         return j

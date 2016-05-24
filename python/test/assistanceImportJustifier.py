@@ -19,6 +19,7 @@ from model.assistance.justifications.informedAbsenceJustification import Informe
 from model.assistance.justifications.compensatoryJustification import CompensatoryJustification
 from model.assistance.justifications.trainingJustification import TrainingJustification
 from model.assistance.justifications.authorityJustification import AuthorityJustification
+from model.assistance.justifications.preExamJustification import UniversityPreExamJustification
 
 def _isContiguos(date1, date2):
     """
@@ -36,7 +37,17 @@ def _isContiguos(date1, date2):
     return False
 
 
-class MigrateSingleJustification():
+class MigrateJustification():
+
+    @classmethod
+    def isJustification(cls, just):
+        for c in cls.__subclasses__():
+            if c.identifier == just:
+                return True
+        return False
+
+class MigrateSingleJustification(MigrateJustification):
+
 
     @classmethod
     def create(cls, con, r, userId):
@@ -89,11 +100,12 @@ class MigrateAuthority(MigrateSingleJustification):
     identifier = "justificado por autoridad"
     clazz = AuthorityJustification
 
-class MigrateRangedJustification():
+class MigrateRangedJustification(MigrateJustification):
 
     @classmethod
     def create(cls, con, r, userId):
-        j = cls.clazz.create(con, r['date'], 1, userId, '1')
+        j = cls.clazz.create(con, r['start'], 1, userId, '1')
+        j.end = r['end']
         return j
 
     @classmethod
@@ -103,36 +115,26 @@ class MigrateRangedJustification():
 
     @classmethod
     def migrate(cls, con, userId, justifications):
-        date = None
-        just = None
-        # r = {'date': date, 'just': just, 'start': startDate, 'end': endDate}
         for j in justifications:
-
             if j['just'] != cls.identifier:
                 continue
 
-            if just is None:
-                just = cls.create(con, j, userId)
-                date = j['date']
-
-            if not _isContiguos(date, j['date']):
-                logging.info('persistiendo {} {}'.format(cls.identifier, just.__dict__))
-                just.end = date
-                if len(cls.clazz.findByUserId(con, [userId], just.start, just.end)) <= 0:
+            if len(cls.clazz.findByUserId(con, [userId], j['start'], j['end'])) <= 0:
+                try:
+                    just = cls.create(con, j, userId)
+                    logging.info('persistiendo {} {}'.format(cls.identifier, just.__dict__))
                     just.persist(con)
-                just = None
-
-            date = j['date']
-
-        if just is not None and not _isContiguos(date, j['date']):
-            just.end = date
-            if len(cls.clazz.findByUserId(con, [userId], just.start, just.end)) <= 0:
-                just.persist(con)
+                    just.changeStatus(con, Status.APPROVED, userId)
+                except Exception as e:
+                    logging.info('error:{} {} {}'.format(e, j, userId))
 
 class MigrateMedCertJustification(MigrateRangedJustification):
-
     identifier = "justificado por médico"
     clazz = MedicalCertificateJustification
+
+class MigratePreExamJustification(MigrateRangedJustification):
+    identifier = "Pre-examen"
+    clazz = UniversityPreExamJustification
 
 
 if __name__ == '__main__':
@@ -164,8 +166,17 @@ if __name__ == '__main__':
 
                 users.append(dni)
 
-                startDate = None if row[5].time is None else datetime.datetime.combine(date.date(), row[5].time)
-                endDate = None if row[6].time is None else datetime.datetime.combine(date.date(), row[6].time)
+                startDate = None
+                endDate = None
+
+                if (MigrateSingleJustification.isJustification(just)):
+                    startDate = None if row[5].time is None else datetime.datetime.combine(date.date(), row[5].time)
+                    endDate = None if row[6].time is None else datetime.datetime.combine(date.date(), row[6].time)
+
+                if (MigrateRangedJustification.isJustification(just)):
+                    startDate = None if row[5].date is None else row[5].date.date()
+                    endDate = None if row[6].date is None else row[6].date.date()
+
 
                 if dni not in justifications:
                     justifications[dni] = []
