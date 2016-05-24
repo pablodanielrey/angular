@@ -9,10 +9,16 @@ import pyoo
 import datetime
 from model.users.users import User
 
+
 from model.registry import Registry
 from model.connection.connection import Connection
+from model.assistance.justifications.status import Status
 from model.assistance.justifications.medicalCertificateJustification import MedicalCertificateJustification
-
+from model.assistance.justifications.art102Justification import Art102Justification
+from model.assistance.justifications.informedAbsenceJustification import InformedAbsenceJustification
+from model.assistance.justifications.compensatoryJustification import CompensatoryJustification
+from model.assistance.justifications.trainingJustification import TrainingJustification
+from model.assistance.justifications.authorityJustification import AuthorityJustification
 
 def _isContiguos(date1, date2):
     """
@@ -30,22 +36,70 @@ def _isContiguos(date1, date2):
     return False
 
 
-class MigrateRangedJustification():
+class MigrateSingleJustification():
+
+    @classmethod
+    def create(cls, con, r, userId):
+        j = cls.clazz.create(con, r['date'], userId, '1')
+        return j
 
     @classmethod
     def migrateAll(cls, con, userId, justifications):
         for c in cls.__subclasses__():
             c.migrate(con, userId, justifications)
 
-class MigrateMedCertJustification(MigrateRangedJustification):
+    @classmethod
+    def migrate(cls, con, userId, justifications):
 
-    identifier = "justificado por médico"
+        for j in justifications:
+            if j['just'] != cls.identifier:
+                continue
+
+            if len(cls.clazz.findByUserId(con, [userId], j['date'], j['date'])) <= 0:
+                try:
+                    just = cls.create(con, j, userId)
+                    logging.info('persistiendo {} {}'.format(cls.identifier, just.__dict__))
+                    just.persist(con)
+                    just.changeStatus(con, Status.APPROVED, userId)
+                except Exception as e:
+                    logging.info('error:{} {} {}'.format(e, j, userId))
+
+class MigrateArt102(MigrateSingleJustification):
+
+    identifier = "Art 102"
+    clazz = Art102Justification
+
+class MigrateInformedAbsence(MigrateSingleJustification):
+
+    identifier = "ausente con aviso"
+    clazz = InformedAbsenceJustification
+
+class MigrateCompensatory(MigrateSingleJustification):
+
+    identifier = "compensatorio"
+    clazz = CompensatoryJustification
+
+class MigrateTraining(MigrateSingleJustification):
+
+    identifier = "curso de capacitacion"
+    clazz = TrainingJustification
+
+class MigrateAuthority(MigrateSingleJustification):
+
+    identifier = "justificado por autoridad"
+    clazz = AuthorityJustification
+
+class MigrateRangedJustification():
 
     @classmethod
     def create(cls, con, r, userId):
-        # r = {'date': date, 'just': just, 'start': startDate, 'end': endDate}
-        j = MedicalCertificateJustification.create(con, r['date'], 1, userId, '1')
+        j = cls.clazz.create(con, r['date'], 1, userId, '1')
         return j
+
+    @classmethod
+    def migrateAll(cls, con, userId, justifications):
+        for c in cls.__subclasses__():
+            c.migrate(con, userId, justifications)
 
     @classmethod
     def migrate(cls, con, userId, justifications):
@@ -62,9 +116,9 @@ class MigrateMedCertJustification(MigrateRangedJustification):
                 date = j['date']
 
             if not _isContiguos(date, j['date']):
-                logging.info('persistiendo {}'.format(just.__dict__))
+                logging.info('persistiendo {} {}'.format(cls.identifier, just.__dict__))
                 just.end = date
-                if len(MedicalCertificateJustification.findByUserId(con, [userId], just.start, just.end)) <= 0:
+                if len(cls.clazz.findByUserId(con, [userId], just.start, just.end)) <= 0:
                     just.persist(con)
                 just = None
 
@@ -72,8 +126,13 @@ class MigrateMedCertJustification(MigrateRangedJustification):
 
         if just is not None and not _isContiguos(date, j['date']):
             just.end = date
-            if len(MedicalCertificateJustification.findByUserId(con, [userId], just.start, just.end)) <= 0:
+            if len(cls.clazz.findByUserId(con, [userId], just.start, just.end)) <= 0:
                 just.persist(con)
+
+class MigrateMedCertJustification(MigrateRangedJustification):
+
+    identifier = "justificado por médico"
+    clazz = MedicalCertificateJustification
 
 
 if __name__ == '__main__':
@@ -122,9 +181,8 @@ if __name__ == '__main__':
                 logging.info('el usuario {} no existe en el sistema'.format(dni))
                 continue
             (userId,version) =  t
-            logging.info('{} dni: {} just: {}'.format(userId, dni, len(justifications[dni])))
             MigrateRangedJustification.migrateAll(con, userId, justifications[dni])
-
+            MigrateSingleJustification.migrateAll(con, userId, justifications[dni])
         con.commit()
     finally:
         conn.put(con)
