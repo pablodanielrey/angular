@@ -4,7 +4,7 @@ app.controller('OrdersCtrl', ["$rootScope", '$scope',
 
 
   function ($rootScope, $scope) {
-    console.log("CreateTutoringCtrl");
+    console.log("OrdersCtrl");
   }
 
 ]);

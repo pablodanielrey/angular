@@ -4,13 +4,13 @@ app.controller('MenuCtrl', ["$rootScope", '$scope','$location',
 
   function ($rootScope, $scope, $location) {
 
-    $scope.selectHome = function() {
+    $scope.selectOrders = function() {
 
-      $location.path('/home');
+      $location.path('/oders');
     }
 
-    $scope.selectRequest = function() {
-      $location.path('/request');
+    $scope.selectMyOrders = function() {
+      $location.path('/myOrders');
     }
   }
 ]);
