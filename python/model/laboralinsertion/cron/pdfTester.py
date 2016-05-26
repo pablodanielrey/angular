@@ -30,7 +30,7 @@ if __name__ == '__main__':
             try:
                 content = base64.b64decode(File.getContentById(con, cvi))
 
-                fn = '/tmp/insercion/{}.pdf'.format(cvi)
+                fn = '/tmp/insercion/{}_{}_{}.pdf'.format(usr.dni, usr.id, cvi)
                 with open(fn, 'wb') as f:
                     f.write(content)
 
