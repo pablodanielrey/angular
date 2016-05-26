@@ -30,6 +30,10 @@ class Utils:
         return local
 
     @classmethod
+    def _naiveFromLocalAware(cls, aware):
+        return aware.replace(tzinfo=None)
+
+    @classmethod
     def _isNaive(cls, date):
         if date is None:
             return False
