@@ -346,7 +346,7 @@ def statsToPyoo(rp, stats, users, offices):
 def createZipFile(rp):
     import zipfile
     import os
-    fn = '/tmp/reporte-asistencia.zip'
+    fn = '/tmp/reporte-asistencia.7z'
     with zipfile.ZipFile(fn, mode='w', compression=zipfile.ZIP_BZIP2) as rpzip:
         for root, dir, files in os.walk(rp):
             for f in files:
@@ -434,7 +434,7 @@ def sendMail(fn):
     from model.mail.mail import Mail
     mail = inject.instance(Mail)
     with open(fn, 'rb') as f:
-        fp = mail.getFilePart('ReporteAsistencia.zip', f.read(), content_type='application', subtype='zip')
+        fp = mail.getFilePart('ReporteAsistencia.7z', f.read(), content_type='application', subtype='gzip')
         m = mail.createMail('ditesi@econo.unlp.edu.ar', 'ditesi@econo.unlp.edu.ar', 'Reporte de Asistencia')
         m.attach(fp)
         mail._sendMail('ditesi@econo.unlp.edu.ar', ['ditesi@econo.unlp.edu.ar', 'julio.ciappa@econo.unlp.edu.ar', 'soporte@econo.unlp.edu.ar'], m)
