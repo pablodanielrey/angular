@@ -28,7 +28,7 @@ function Login($rootScope, $wamp, Session) {
     return new Promise(function(cok, cerr) {
       var s = Session.getCurrentSession();
       if (s != null) {
-        var sid = s.id;
+        var sid = s.session_id;
         $wamp.call('system.session.validate', [sid])
         .then(function() {
           cok(s);

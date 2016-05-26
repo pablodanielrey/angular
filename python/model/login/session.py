@@ -35,24 +35,7 @@ class SessionExpired(Exception):
     def __str__(self):
         return 'Sesion expirada'
 
-class Session:
-    def __init__(self):
-        self.id = None
-        self.userId = None
-        self.username = None
-        self.created = None
-        self.expire = None
-        self.deleted = None
-        self.data = None
 
-    def _toJson(self):
-        return json.dumps(self)
-
-    @staticmethod
-    def _fromJson(sess):
-        s = Session()
-        s.__dict__ = json.loads(sess)
-        return s
 
 class SessionDAO(DAO):
 
@@ -60,7 +43,8 @@ class SessionDAO(DAO):
     #registry = getRegistry()
     #registry = Reg()
 
-    def _fromResult(self, r):
+    @classmethod
+    def _fromResult(cls, r):
         s = Session()
         s.id = r['id']
         s.userId = r['user_id']
@@ -78,7 +62,7 @@ class SessionDAO(DAO):
         try:
             cur.execute("""
                 create schema if not exists systems;
-                
+
                 create table IF NOT EXISTS systems.sessions (
                     id varchar primary key,
                     user_id varchar,
@@ -92,13 +76,14 @@ class SessionDAO(DAO):
         finally:
             cur.close()
 
-    def persist(self, con, sess):
+    @classmethod
+    def persist(cls, con, sess):
         cur = con.cursor()
         try:
             if sess.id is None:
                 sess.id = str(uuid.uuid4())
                 sess.created = datetime.datetime.now()
-                sess.expire = sess.created + datetime.timedelta(minutes=int(self.registry.get('expire')))
+                sess.expire = sess.created + datetime.timedelta(minutes=int(cls.registry.get('expire')))
                 sess.deleted = None
 
                 r = sess.__dict__
@@ -113,7 +98,8 @@ class SessionDAO(DAO):
         finally:
             cur.close()
 
-    def touch(self, con, sid):
+    @classmethod
+    def touch(cls, con, sid):
         cur = con.cursor()
         try:
             cur.execute('select expire from systems.sessions where id = %s', (sid,))
@@ -124,13 +110,14 @@ class SessionDAO(DAO):
             if cur.fetchone()['expire'] <= now:
                 raise SessionExpired()
 
-            exp = now + datetime.timedelta(minutes=int(self.registry.get('expire')))
+            exp = now + datetime.timedelta(minutes=int(cls.registry.get('expire')))
             cur.execute('update systems.sessions set expire = %s where id = %s', (exp, sid))
 
         finally:
             cur.close()
 
-    def deleteById(self, con, ids = []):
+    @classmethod
+    def deleteById(cls, con, ids = []):
         ''' elimina las sesiones identificadas por la lista de ids, retorna la cantidad de registros afectados '''
         if len(ids) <= 0:
             return 0
@@ -144,7 +131,8 @@ class SessionDAO(DAO):
             cur.close()
 
 
-    def expire(self, con):
+    @classmethod
+    def expire(cls, con):
         ''' elimina las sesiones que ya han expirado '''
         cur = con.cursor()
         try:
@@ -154,11 +142,13 @@ class SessionDAO(DAO):
         finally:
             cur.close()
 
-    def findById(self, con, ids=[]):
+    @classmethod
+    def findById(cls, con, ids=[]):
+        assert isinstance(ids, list)
         cur = con.cursor()
         try:
             cur.execute('select * from systems.sessions where id in %s and expire >= NOW()', (tuple(ids),))
-            return [ self._fromResult(x) for x in cur ]
+            return [ cls._fromResult(x) for x in cur ]
 
         finally:
             cur.close()
@@ -174,3 +164,44 @@ class SessionDAO(DAO):
         s = json.loads(j)
         return s
     """
+
+
+class Session:
+
+    dao = SessionDAO
+
+    def __init__(self):
+        self.id = None
+        self.userId = None
+        self.username = None
+        self.created = None
+        self.expire = None
+        self.deleted = None
+        self.data = None
+
+    """
+    def _toJson(self):
+        return json.dumps(self)
+
+    @staticmethod
+    def _fromJson(sess):
+        s = Session()
+        s.__dict__ = json.loads(sess)
+        return s
+    """
+
+    def persist(self, con):
+        return self.dao.persist(con, self)
+
+    @classmethod
+    def deleteById(cls, con, sid):
+        cls.dao.deleteById(con, sid)
+
+    @classmethod
+    def touch(cls, con, sid):
+        return cls.dao.touch(con, sid)
+
+    @classmethod
+    def findById(cls, con, ids):
+        assert isinstance(ids, list)
+        return cls.dao.findById(con, ids)

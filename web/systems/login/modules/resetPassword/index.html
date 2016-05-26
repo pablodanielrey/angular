@@ -39,9 +39,9 @@
 
 </head>
 
-<body>
+<body ng-controller='ResetPasswordCtrl'>
 
-    <div class="resetPassword pantallaDNI">
+    <div class="resetPassword {{model.clazzScreen}} {{model.clazzError}}">
 
         <!-- VARIABLES:
         pantallaDNI (si el dni no existe agregar la clase: noExisteDNI)
@@ -100,7 +100,7 @@
                 </div>
                 <div class="contentCenter">
                     <div>
-                        <input class="inputDNI" type="text"></input>
+                        <input class="inputDNI" type="text" ng-model="model.dni"></input>
                     </div>
 
                 </div>
@@ -118,7 +118,7 @@
 
                 <div class="contentCenter">
                     <div>
-                        <button class="btnNext" type="text"> Siguiente</button>
+                        <button class="btnNext" type="text" ng-click='processDni()'> Siguiente</button>
                     </div>
                 </div>
             </div>
@@ -128,7 +128,7 @@
                 <div class="contentCenter">
                     <div class="mensMail">
                       <i class="fa fa-envelope-o" aria-hidden="true"></i> Hemos enviado un código a su cuenta de correo
-                      <b><span> pablod******@gmail.com<span></b> <br>
+                      <b><span> {{model.email}}<span></b> <br>
                       <div class="spanBackground">
                           <span class="span"> <i class="fa fa-caret-right" aria-hidden="true"></i> Recuerda revisar la bandeja de correo no deseado (Spam) <span><br>
                           <span class="span2">&nbsp &nbsp Si te llego como spam, Ábrelo y marca el contenido como seguro o elimina la etiqueta de Spam. </span>
@@ -146,7 +146,7 @@
                 </div>
                 <div class="contentCenter">
                     <div>
-                        <input class="inputDNI" type="text"></input>
+                        <input class="inputDNI" type="text" ng-model="model.code"></input>
                     </div>
                 </div>
                 <div class="contentCenter errorCode">
@@ -161,7 +161,7 @@
                 </div>
                 <div class="contentCenter">
                     <div>
-                        <button class="btnNext" type="text"> Siguiente</button>
+                        <button class="btnNext" type="text" ng-click='processCode()'> Siguiente</button>
                     </div>
                 </div>
 
@@ -184,8 +184,8 @@
                 </div>
                 <div class="contentCenter">
                     <div>
-                        <div><input class="inputDNI" type="password" placeholder="Contraseña"></input></div>
-                        <div><input class="inputDNI" type="password" placeholder="Repita contraseña"></input></div>
+                        <div><input class="inputDNI" type="password" placeholder="Contraseña" ng-model='model.pass1'></input></div>
+                        <div><input class="inputDNI" type="password" placeholder="Repita contraseña" ng-model='model.pass2'></input></div>
                     </div>
 
                 </div>
@@ -203,7 +203,7 @@
 
                 <div class="contentCenter">
                     <div>
-                        <button class="btnNext" type="text"> Siguiente</button>
+                        <button class="btnNext" type="text" ng-click='processPassword()'> Siguiente</button>
                     </div>
                 </div>
 
@@ -219,7 +219,7 @@
 
               <div class="contentCenter">
                   <div>
-                      <button class="btnOut" type="text"> Salir</button>
+                      <button class="btnOut" type="text" ng-click='finish()'> Salir</button>
                   </div>
               </div>
             </div>
@@ -233,7 +233,7 @@
                       </div>
                       <div class="textTitle2">
                         <div class="textSubTitle2">No tienes configurada una cuenta de correo alternativa.</div>
-                        <div class="textSubTitle">Sin una cuenta de correo alternativa configurada no podras restablecer tu cuenta de FCE.</div>
+                        <div class="textSubTitle">Sin una cuenta de correo alternativa no podras restablecer tu clave de FCE.</div>
                       </div>
                   </div>
                 </div>
@@ -241,8 +241,8 @@
                 <div class="contentCenter">
                     <div class="mensMail">
                         <span class="spanBackground">
-                          Por motivos de seguridad de la información y protección de datos personales
-                          deberás comunicarte con nosotros para realizar esta configuración
+                          Debido a restricciones de seguridad y protección de datos personales
+                          deberás comunicarte con nosotros
                         </span>
 
                     </div>
@@ -253,13 +253,13 @@
                     <div>
 
                       <div class="textC">
-                        <div class="textTitle5">ALUMNOS Y DOCENTES</div>
+                        <!-- <div class="textTitle5">ALUMNOS Y DOCENTES</div>
                         <div class="Detise">
                           <b>DeTISE</b>
                           <div>detise@econo.unlp.edu.ar</div>
                           <div class="text6">Entre piso |Facultad de Ciencias Económicas | UNLP | Calle 6 Nº 777 | La Plata | Bs. As.</div>
                         </div>
-                          <div class="textTitle5">NoDOCENTES</div>
+                          <div class="textTitle5">NoDOCENTES</div> -->
                         <div class="Detise">
                           <b>DiTeSi</b>
                           <div>(221) 423-6769/71/72 int. 123</div>

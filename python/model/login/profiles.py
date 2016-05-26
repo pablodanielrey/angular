@@ -3,44 +3,7 @@ import json
 from model.dao import DAO
 from model.users.users import UserDAO
 
-class Profile:
 
-    def __init__(self):
-        self.userId = None
-        self.roles = []
-
-    def hasOneRole(self, role = []):
-        if len(role) <= 0:
-            return False
-
-        if len(role) == 1:
-            return role[0] in self.roles
-
-        for r in role:
-            if r in self.roles:
-                return True
-        return False
-
-    def hasRoles(self, role = []):
-        if len(role) <= 0:
-            return False
-
-        if len(role) == 1:
-            return role[0] in self.roles
-
-        for r in role:
-            if r not in self.roles:
-                return False
-        return True
-
-    def _toJson(self):
-        return json.dumps(self, default=lambda o: o.__dict__)
-
-    @staticmethod
-    def _fromJson(pstring):
-        p = Profile()
-        p.__dict__ = json.loads(pstring)
-        return p
 
 class ProfileDAO(DAO):
 
@@ -48,12 +11,12 @@ class ProfileDAO(DAO):
     @classmethod
     def _createSchema(cls, con):
         super()._createSchema(con)
-        
+
         cur = con.cursor()
         try:
             cur.execute("""
                 create schema if not exists credentials;
-                
+
                 create table IF NOT EXISTS credentials.auth_profile (
                     user_id varchar not null REFERENCES profile.users (id),
                     profile varchar not null,
@@ -108,3 +71,51 @@ class ProfileDAO(DAO):
 
         finally:
             cur.close()
+
+
+class Profile:
+
+    dao = ProfileDAO
+
+    def __init__(self):
+        self.userId = None
+        self.roles = []
+
+    def hasOneRole(self, role = []):
+        if len(role) <= 0:
+            return False
+        if len(role) == 1:
+            return role[0] in self.roles
+        for r in role:
+            if r in self.roles:
+                return True
+        return False
+
+    def hasRoles(self, role = []):
+        if len(role) <= 0:
+            return False
+        if len(role) == 1:
+            return role[0] in self.roles
+        for r in role:
+            if r not in self.roles:
+                return False
+        return True
+
+    def persist(self, con):
+        return self.dao.persist(con, [self])
+
+    def remove(self, con):
+        return self.dao.remove(con, [self])
+
+    def _toJson(self):
+        return json.dumps(self, default=lambda o: o.__dict__)
+
+    @staticmethod
+    def _fromJson(pstring):
+        p = Profile()
+        p.__dict__ = json.loads(pstring)
+        return p
+
+    @classmethod
+    def findByUserId(cls, con, userId):
+        return cls.dao.findByUserId(con, userId)

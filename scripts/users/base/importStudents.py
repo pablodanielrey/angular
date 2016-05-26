@@ -12,7 +12,7 @@ import sys
 if __name__ == '__main__':
 
     import inject
-    inject.configure()
+    #inject.configure()
     r = inject.instance(Registry)
     conn = connection.Connection(r.getRegistry('dcsys'))
     con = conn.get()

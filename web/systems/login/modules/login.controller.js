@@ -51,7 +51,6 @@ function LoginCtrl($scope, $window, $interval, Notifications, Login, Users) {
       classError: classNameNoError
     }
 
-
     /* ---------------------------------------------------
      * ---------------- INICIALIZACION -------------------
      * ---------------------------------------------------

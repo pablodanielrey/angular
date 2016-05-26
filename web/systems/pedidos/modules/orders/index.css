@@ -1,0 +1,177 @@
+.orders {
+  height: 100%;
+  width: 100%;
+  overflow-y: auto;
+}
+
+.orders .header {
+  height: 102px;
+  width: 100%;
+  background: #DBE2E5;
+  color: #5C5F69;
+  padding-left: 50px;
+  font-size: 1.5em;
+}
+
+/******************************************************
+************ INICIO PANTALLA DE HOME ******************
+*******************************************************/
+
+.orders .contentOrders {
+  background-color: #F1F1F1;
+  width: 100%;
+  max-height: 1500px;
+  overflow-y: auto;
+}
+
+.orders .itemOrders {
+  width: 95%;
+  height: 85px;
+  background-color: white;
+  margin-left: 20px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  border: 1px solid #E2E2E2;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
+
+.orders .itemOrders:hover {
+  box-shadow: 2px 2px 2px 2px #E2E2E2;
+}
+
+
+.orders .itemInfo {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+}
+
+.orders .itemStatus {
+  /*background-color: yellow;*/
+  width: 150px;
+}
+
+.orders .status {
+  padding: 5px;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  color:white;
+  font-weight: bold;
+  font-size: 14px;
+  width: 80px;
+  text-align: center;
+}
+
+.orders .colorOpen {
+  background-color: #92AD17;
+}
+
+.orders .colorProgres {
+    background-color: #0066A6;
+}
+
+.orders .colorPause {
+  background-color: #EC9122;
+}
+
+.orders .colorCancel {
+  background-color: #E43E46;
+}
+
+.orders .colorClose {
+  background-color: #afbec5;
+}
+
+
+.orders .itemsType {
+  width: 210px;
+  /*background-color: blue;*/
+}
+
+.orders .itemActions {
+  margin: 10px;
+  height: 65px;
+  width: 80px;
+  color: #808080;
+  font-size: 40px;
+  border-left: 1px solid #DDD;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+}
+
+.orders .itemActions:hover {
+  cursor: pointer;
+}
+
+.orders .itemDate {
+  font-size: 12px;
+  /*background: red;*/
+  width: 190px;
+  margin-left: 20px;
+}
+
+.orders .textNumerOrders,
+.orders .textType,
+.orders .textOffice {
+  color: #434343;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.orders .textDateOrders,
+.orders .textDaysOrders {
+  color:#848484;
+}
+
+.orders .textSubType,
+.orders .textName {
+  font-size: 13px;
+    color:#434343;
+}
+
+/******************** MEDIA QUERIS ***************************/
+
+@media (max-width: 719px){
+  .orders .header {
+      display: none;
+  }
+
+  .orders .contentOrders {
+    /*background-color: red;*/
+    background-color: #F1F1F1;
+    height: 100%;
+  }
+
+
+}

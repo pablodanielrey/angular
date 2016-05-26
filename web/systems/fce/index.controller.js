@@ -17,23 +17,17 @@ function IndexCtrl($rootScope, $scope, $wamp, $window, Notifications, Login) {
 
 
     $scope.initialize = function() {
-      if (!Login.isLogged()) {
+      $scope.styleMenu = 'full';
+      Login.getSessionData()
+      .then(function(s) {
+        console.log(s);
+      }, function(err) {
         $window.location.href = "/systems/login/index.html";
-      }
-
-      Login.validateSession(
-        function(v) {
-          if (!v) {
-            $window.location.href = "/systems/login/index.html";
-          }
-        },
-        function(err) {
-          Notifications.message(err);
       })
     }
 
     $scope.$on('$viewContentLoaded', function(event) {
-      // $scope.initialize();
+      $scope.initialize();
     });
 
 };

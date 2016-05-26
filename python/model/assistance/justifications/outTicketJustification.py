@@ -30,6 +30,7 @@ class OutTicketJustificationDAO(AssistanceDAO):
                     owner_id varchar not null references profile.users (id),
                     jstart timestamptz default now(),
                     jend timestamptz default now(),
+                    notes varchar,
                     type varchar not null,
                     created timestamptz default now()
                 );
@@ -54,12 +55,12 @@ class OutTicketJustificationDAO(AssistanceDAO):
             if len(j.findById(con, [j.id])) <=  0:
                 j.type = j.__class__.__name__
                 r = j.__dict__
-                cur.execute('insert into assistance.justification_out_ticket (id, user_id, owner_id, jstart, jend, type) '
-                            'values (%(id)s, %(userId)s, %(ownerId)s, %(start)s, %(end)s, %(type)s)', r)
+                cur.execute('insert into assistance.justification_out_ticket (id, user_id, owner_id, jstart, jend, type, notes) '
+                            'values (%(id)s, %(userId)s, %(ownerId)s, %(start)s, %(end)s, %(type)s, %(notes)s)', r)
             else:
                 r = j.__dict__
                 cur.execute('update assistance.justification_out_ticket set user_id = %(userId)s, owner_id = %(ownerId)s, '
-                            'jstart = %(start)s, jend = %(end)s, type = %(type)s where id = %(id)s', r)
+                            'jstart = %(start)s, jend = %(end)s, type = %(type)s, notes = %(notes)s where id = %(id)s', r)
             return j.id
 
         finally:
@@ -79,8 +80,8 @@ class OutTicketJustificationDAO(AssistanceDAO):
     @classmethod
     def findByUserId(cls, con, userIds, start, end):
         assert isinstance(userIds, list)
-        assert isinstance(start, datetime.datetime)
-        assert isinstance(end, datetime.datetime)
+        assert isinstance(start, datetime.date)
+        assert isinstance(end, datetime.date)
 
         if len(userIds) <= 0:
             return
@@ -88,7 +89,8 @@ class OutTicketJustificationDAO(AssistanceDAO):
         cur = con.cursor()
         try:
             t = cls.type
-            cur.execute('select * from assistance.justification_out_ticket where user_id in %s and (jstart <= %s and jend >= %s) and type = %s', (tuple(userIds), end, start, t))
+            eDate = datetime.date.today() if end is None else end
+            cur.execute('select * from assistance.justification_out_ticket where user_id in %s and (jstart <= %s and jend >= %s) and type = %s', (tuple(userIds), eDate, start, t))
             return [ cls._fromResult(con, r) for r in cur ]
         finally:
             cur.close()
@@ -106,6 +108,7 @@ class OutTicketWithReturnJustificationDAO(OutTicketJustificationDAO):
         j.start = r['jstart']
         j.end = r['jend']
         j.id = r['id']
+        j.notes = r['notes']
         j.setStatus(Status.getLastStatus(con, j.id))
         return j
 
@@ -123,6 +126,7 @@ class OutTicketWithoutReturnJustificationDAO(OutTicketJustificationDAO):
         j.start = r['jstart']
         j.end = r['jend']
         j.id = r['id']
+        j.notes = r['notes']
         j.setStatus(Status.getLastStatus(con, j.id))
         return j
 
@@ -176,7 +180,7 @@ class OutTicketJustification(RangedTimeJustification):
         if diff > limitSeconds:
             raise Exception('El tiempo requerido supera el límite')
 
-        if diff <= 60 * 60:
+        if diff < 60 * 60:
             raise Exception('Como mínimo se debe pedir 1 hora')
 
         justs = cls._getAllMonthJustifications(con, start, userId)
