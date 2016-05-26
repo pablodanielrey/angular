@@ -15,8 +15,16 @@ from model.registry import Registry
 from model.connection.connection import Connection
 from model.users.users import UserDAO
 
-def toPyoo(tutorings):
+def sendMail(fn):
+    from model.mail.mail import Mail
+    mail = inject.instance(Mail)
+    with open(fn, 'rb') as f:
+        fp = mail.getFilePart('ReporteTutorias.xlsx', f.read(), content_type='application', subtype='vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        m = mail.createMail('ditesi@econo.unlp.edu.ar', 'ditesi@econo.unlp.edu.ar', 'Reporte de Asistencia')
+        m.attach(fp)
+        mail._sendMail('ditesi@econo.unlp.edu.ar', ['ditesi@econo.unlp.edu.ar', 'lucas.langoni@econo.unlp.edu.ar'], m)
 
+def toPyoo(tutorings):
     import dateutil
     import uuid
     f = str(uuid.uuid4())
@@ -47,6 +55,8 @@ def toPyoo(tutorings):
 
     finally:
         doc.close()
+    sendMail(fn)
+
 
 if __name__ == '__main__':
 
