@@ -43,6 +43,7 @@ class ShortDurationJustificationDAO(AssistanceDAO):
                   owner_id varchar not null references profile.users (id),
                   jstart date default now(),
                   jend date default now(),
+                  notes varchar,
                   number bigint,
                   created timestamptz default now()
               );
@@ -54,9 +55,14 @@ class ShortDurationJustificationDAO(AssistanceDAO):
 
     @classmethod
     def _fromResult(cls, con, r):
-        j = ShortDurationJustification(r['user_id'], r['owner_id'], r['jstart'], 0, r['number'])
+        j = ShortDurationJustification()
         j.id = r['id']
+        j.userId = r['user_id']
+        j.ownerId = r['owner_id']
+        j.start = r['jstart']
         j.end = r['jend']
+        j.number = r['number']
+        j.notes = r['notes']
         j.setStatus(Status.getLastStatus(con, j.id))
         return j
 
@@ -71,12 +77,12 @@ class ShortDurationJustificationDAO(AssistanceDAO):
 
             if len(j.findById(con, [j.id])) <=  0:
                 r = j.__dict__
-                cur.execute('insert into assistance.justification_short_duration (id, user_id, owner_id, jstart, jend, number) '
-                            'values (%(id)s, %(userId)s, %(ownerId)s, %(start)s, %(end)s, %(number)s)', r)
+                cur.execute('insert into assistance.justification_short_duration (id, user_id, owner_id, jstart, jend, number, notes) '
+                            'values (%(id)s, %(userId)s, %(ownerId)s, %(start)s, %(end)s, %(number)s, %(notes)s)', r)
             else:
                 r = j.__dict__
                 cur.execute('update assistance.justification_short_duration set user_id = %(userId)s, owner_id = %(ownerId)s, '
-                            'jstart = %(start)s, jend = %(end)s, number = %(number)s where id = %(id)s', r)
+                            'jstart = %(start)s, jend = %(end)s, number = %(number)s, notes = %(notes)s where id = %(id)s', r)
             return j.id
 
         finally:
@@ -97,18 +103,17 @@ class ShortDurationJustificationDAO(AssistanceDAO):
     @classmethod
     def findByUserId(cls, con, userIds, start, end):
         assert isinstance(userIds, list)
-        assert isinstance(start, datetime.datetime)
-        assert isinstance(end, datetime.datetime)
+        assert isinstance(start, datetime.date)
+        assert isinstance(end, datetime.date)
 
         if len(userIds) <= 0:
             return
 
         cur = con.cursor()
         try:
-            sDate = None if start is None else start.date()
-            eDate = datetime.date.today() if end is None else end.date()
+            eDate = datetime.date.today() if end is None else end
             cur.execute('select * from assistance.justification_short_duration where user_id in %s and '
-                        '(jstart <= %s and jend >= %s)', (tuple(userIds), eDate, sDate))
+                        '(jstart <= %s and jend >= %s)', (tuple(userIds), eDate, start))
 
             return [ cls._fromResult(con, r) for r in cur ]
         finally:

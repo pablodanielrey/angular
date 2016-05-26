@@ -20,7 +20,6 @@
   <script type="text/javascript" src="/systems/fce/index.module.js"></script>
   <script type="text/javascript" src="/systems/fce/index.controller.js"></script>
   <script type="text/javascript" src="/systems/fce/routes.js"></script>
-  <script type="text/javascript" src="/systems/login/modules/logout.js"></script>
   <link rel="stylesheet" type="text/css" href="/systems/fce/index.css"/>
 
 	<!-- servicios -->
@@ -30,7 +29,9 @@
 	<script type="text/javascript" src="/services/Session.js"></script>
 	<script type="text/javascript" src="/services/Notifications.js"></script>
 	<script type="text/javascript" src="/services/Profiles.js"></script>
+
   <script type="text/javascript" src="/services/Login.js"></script>
+  <script type="text/javascript" src="/services/Users.js"></script>
 
 	<!-- modules -->
   <script type="text/javascript" src="/systems/fce/modules/index.controller.js"></script>
@@ -49,18 +50,18 @@
   <link rel="stylesheet" type="text/css" href="/systems/fce/modules/systems/index.css"/>
 
   <script type="text/javascript" src="/systems/fce/modules/menu/index.controller.js"></script>
-  <link rel="stylesheet" type="text/css" href="/systems/fce/modules/menu/index.css"/>
 
   <script type="text/javascript" src="/modules/messages/messages.js"></script>
   <link rel="stylesheet" type="text/css" href="/modules/messages/messages.css"/>
 
   <link rel="stylesheet" type="text/css" href="/systems/fce/modules/header/header.css"/>
+  <script type="text/javascript" src="/systems/fce/modules/header/header.controller.js"></script>
   <link rel="stylesheet" type="text/css" href="/systems/fce/modules/footer/footer.css"/>
 
 </head>
-<body class="sistema">
+<body class="sistema" ng-controller="IndexCtrl">
 
-    <div ng-include="'/systems/fce/modules/header/index.html'"></div>
+    <div ng-include="'/systems/fce/modules/header/index.html'" ng-controller="HeaderCtrl"></div>
     <div class="main">
       <div class="MenuContent" ng-controller="MenuCtrl" ng-include="'/systems/fce/modules/menu/index.html'"></div>
       <div class="viewContent" ng-view></div>

@@ -475,7 +475,7 @@ class UserPassword(JSONSerializable):
     @classmethod
     def findByUserPassword(cls, con, username, password):
         return cls.dao.findByUserPassword(con, username, password)
-        
+
 
 ############### Mail ###############
 
@@ -593,6 +593,8 @@ class Mail(JSONSerializable):
     def persist(self, con):
         return self.dao.persist(con, self)
 
+    def delete(self, con):
+        return self.dao.delete(con, self.id)
 
     @classmethod
     def findByUserId(cls, con, userId):

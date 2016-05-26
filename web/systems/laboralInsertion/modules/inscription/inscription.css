@@ -632,6 +632,14 @@ justify-content: center;
   padding: 5px;
 
 }
+
+.inscription .subTittlesForm3 {
+  color:black;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 5px;
+
+}
 .inscription .item .carrera {
     width: 320px;
     height: 40px;
@@ -802,9 +810,6 @@ justify-content: center;
   flex-direction:column;
   -webkit-flex-direction:column; /* Safari */
   -moz-flex-direction:column; /* mozilla */
-  align-items: center;
-  -webkit-align-items: center; /* Safari */
-  -moz-align-items: center; /* mozilla */
 }
 
 

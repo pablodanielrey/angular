@@ -25,6 +25,7 @@ class LibrarianDayJustificationDAO(AssistanceDAO):
                     user_id varchar not null references profile.users (id),
                     owner_id varchar not null references profile.users (id),
                     date date not null default now(),
+                    notes varchar,
                     created timestamptz default now()
               );
               """
@@ -34,9 +35,12 @@ class LibrarianDayJustificationDAO(AssistanceDAO):
 
     @classmethod
     def _fromResult(cls, con, r):
-        date = datetime.datetime.combine(r['date'], datetime.time.min)
-        c = LibrarianDayJustification(date, r['user_id'], r['owner_id'])
+        c = LibrarianDayJustification()
         c.id = r['id']
+        j.userId = r['user_id']
+        j.ownerId = r['owner_id']
+        j.date = r['date']
+        c.notes = r['notes']
         c.setStatus(Status.getLastStatus(con, c.id))
         return c
 
@@ -51,12 +55,12 @@ class LibrarianDayJustificationDAO(AssistanceDAO):
 
             if len(c.findById(con, [c.id])) <=  0:
                 r = c.__dict__
-                cur.execute('insert into assistance.justification_librarian_day (id, user_id, owner_id, date) '
-                            'values ( %(id)s, %(userId)s, %(ownerId)s, %(date)s)', r)
+                cur.execute('insert into assistance.justification_librarian_day (id, user_id, owner_id, date, notes) '
+                            'values ( %(id)s, %(userId)s, %(ownerId)s, %(date)s, %(notes)s)', r)
             else:
                 r = c.__dict__
                 cur.execute('update assistance.justification_librarian_day set user_id = %(userId)s, owner_id = %(ownerId)s, '
-                            'date = %(date)s where id = %(id)s', r)
+                            'date = %(date)s, notes = %(notes)s where id = %(id)s', r)
             return c.id
 
         finally:
@@ -76,17 +80,16 @@ class LibrarianDayJustificationDAO(AssistanceDAO):
     @classmethod
     def findByUserId(cls, con, userIds, start, end):
         assert isinstance(userIds, list)
-        assert isinstance(start, datetime.datetime)
-        assert isinstance(end, datetime.datetime)
+        assert isinstance(start, datetime.date)
+        assert isinstance(end, datetime.date)
 
         if len(userIds) <= 0:
             return
 
         cur = con.cursor()
         try:
-            sDate = None if start is None else start.date()
-            eDate = datetime.date.today() if end is None else end.date()
-            cur.execute('select * from assistance.justification_librarian_day where user_id  in %s and date BETWEEN %s AND %s', (tuple(userIds), sDate, eDate))
+            eDate = datetime.date.today() if end is None else end
+            cur.execute('select * from assistance.justification_librarian_day where user_id  in %s and date BETWEEN %s AND %s', (tuple(userIds), start, eDate))
             return [ cls._fromResult(con, r) for r in cur ]
         finally:
             cur.close()

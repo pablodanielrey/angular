@@ -201,11 +201,18 @@ class AssistanceModel:
         return logs
 
     def _getJustifications(self, con, userIds, start, end):
+        assert isinstance(userIds, list)
+        assert isinstance(start, datetime.date)
+        assert isinstance(end, datetime.date)
+                
         js = Justification.getJustifications(con, userIds, start, end)
         justs = AssistanceModel._classifyByUserId(js)
         return justs
 
     def getJustifications(self, con, userId, start, end, isAll = False):
+        assert isinstance(start, datetime.date)
+        assert isinstance(end, datetime.date)
+
         userIds = []
         if isAll:
             # tengo que obtener todos los usuarios de las oficina que autoriaza y buscar por esos usuarios
@@ -279,7 +286,7 @@ class AssistanceModel:
         logs = self._getLogs(con, userIds, start, end + datetime.timedelta(days=1))
 
         logging.info('buscando las justificaciones')
-        justifications = self._getJustifications(con, userIds, start, end + datetime.timedelta(days=1))
+        justifications = self._getJustifications(con, userIds, start.date(), (end + datetime.timedelta(days=1)).date())
 
         """ genero los dias a trabajar """
         logging.info('generando los dias de trabajo')
@@ -385,6 +392,15 @@ class AssistanceModel:
         module = importlib.import_module(justModule)
         clazz = getattr(module, justClazz)
         j = clazz.create(con, start, end, userId, ownerId)
+        return j.persist(con)
+
+
+    def createRangedJustification(self, con, start, days, userId, ownerId, justClazz, justModule):
+        assert isinstance(start, datetime.date)
+        module = importlib.import_module(justModule)
+        clazz = getattr(module, justClazz)
+
+        j = clazz.create(con, start, days, userId, ownerId)
         return j.persist(con)
 
 
