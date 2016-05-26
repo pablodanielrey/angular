@@ -63,8 +63,11 @@ class Justification(JSONSerializable):
         assert isinstance(userIds, list)
         assert isinstance(start, datetime.date)
         assert isinstance(end, datetime.date)
-        
         assert cls.dao is not None
+
+        if start == end:
+            end = None if end is None else end + datetime.timedelta(days=1)
+            
         justs = cls.dao.findByUserId(con, userIds, start, end)
         cls._loadStatus(con, justs)
         return justs
