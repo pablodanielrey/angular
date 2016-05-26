@@ -80,8 +80,8 @@ class OutTicketJustificationDAO(AssistanceDAO):
     @classmethod
     def findByUserId(cls, con, userIds, start, end):
         assert isinstance(userIds, list)
-        assert isinstance(start, datetime.datetime)
-        assert isinstance(end, datetime.datetime)
+        assert isinstance(start, datetime.date)
+        assert isinstance(end, datetime.date)
 
         if len(userIds) <= 0:
             return
@@ -89,7 +89,8 @@ class OutTicketJustificationDAO(AssistanceDAO):
         cur = con.cursor()
         try:
             t = cls.type
-            cur.execute('select * from assistance.justification_out_ticket where user_id in %s and (jstart <= %s and jend >= %s) and type = %s', (tuple(userIds), end, start, t))
+            eDate = datetime.date.today() if end is None else end
+            cur.execute('select * from assistance.justification_out_ticket where user_id in %s and (jstart <= %s and jend >= %s) and type = %s', (tuple(userIds), eDate, start, t))
             return [ cls._fromResult(con, r) for r in cur ]
         finally:
             cur.close()

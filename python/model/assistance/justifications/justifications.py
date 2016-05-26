@@ -60,6 +60,10 @@ class Justification(JSONSerializable):
 
     @classmethod
     def findByUserId(cls, con, userIds, start, end):
+        assert isinstance(userIds, list)
+        assert isinstance(start, datetime.date)
+        assert isinstance(end, datetime.date)
+        
         assert cls.dao is not None
         justs = cls.dao.findByUserId(con, userIds, start, end)
         cls._loadStatus(con, justs)
@@ -76,11 +80,13 @@ class Justification(JSONSerializable):
     def getJustifications(cls, con, userIds, start, end):
         """
             llama a los findByUserId de todas las sublcases hoja de la jerarquía
-            las fechas son datetime y son inclusivas
+            las fechas son date y son inclusivas
             retorna un mapa :
                 justifications[useId] = [justification1, justification2, .... ]
         """
         assert isinstance(userIds, list)
+        assert isinstance(start, datetime.date)
+        assert isinstance(end, datetime.date)
         ret = []
 
         for j in cls._getLeafSubclasses():

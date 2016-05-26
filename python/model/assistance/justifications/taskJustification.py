@@ -79,8 +79,8 @@ class TaskJustificationDAO(AssistanceDAO):
     @classmethod
     def findByUserId(cls, con, userIds, start, end):
         assert isinstance(userIds, list)
-        assert isinstance(start, datetime.datetime)
-        assert isinstance(end, datetime.datetime)
+        assert isinstance(start, datetime.date)
+        assert isinstance(end, datetime.date)
 
         if len(userIds) <= 0:
             return
@@ -88,6 +88,7 @@ class TaskJustificationDAO(AssistanceDAO):
         cur = con.cursor()
         try:
             t = cls.type
+            eDate = datetime.date.today() if end is None else end
             cur.execute('''
                 SELECT * from assistance.justification_task
                 WHERE user_id in %s

@@ -54,8 +54,11 @@ class TravelJustificationDAO(AssistanceDAO):
 
     @classmethod
     def _fromResult(cls, con, r):
-        j = TravelJustification(r['user_id'], r['owner_id'], r['jstart'], 0)
+        j = TravelJustification()
         j.id = r['id']
+        j.userId = r['user_id']
+        j.ownerId = r['owner_id']
+        j.start = r['jstart']
         j.end = r['jend']
         j.notes = r['notes']
         j.setStatus(Status.getLastStatus(con, j.id))
@@ -98,18 +101,17 @@ class TravelJustificationDAO(AssistanceDAO):
     @classmethod
     def findByUserId(cls, con, userIds, start, end):
         assert isinstance(userIds, list)
-        assert isinstance(start, datetime.datetime)
-        assert isinstance(end, datetime.datetime)
+        assert isinstance(start, datetime.date)
+        assert isinstance(end, datetime.date)
 
         if len(userIds) <= 0:
             return
 
         cur = con.cursor()
         try:
-            sDate = None if start is None else start.date()
-            eDate = datetime.date.today() if end is None else end.date()
+            eDate = datetime.date.today() if end is None else end
             cur.execute('select * from assistance.justification_travel where user_id in %s and '
-                        '(jstart <= %s and jend >= %s)', (tuple(userIds), eDate, sDate))
+                        '(jstart <= %s and jend >= %s)', (tuple(userIds), eDate, start))
 
             return [ cls._fromResult(con, r) for r in cur ]
         finally:

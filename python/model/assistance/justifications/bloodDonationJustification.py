@@ -35,9 +35,11 @@ class BloodDonationJustificationDAO(AssistanceDAO):
 
     @classmethod
     def _fromResult(cls, con, r):
-        date = datetime.datetime.combine(r['date'], datetime.time.min)
-        c = BloodDonationJustification(date, r['user_id'], r['owner_id'])
+        c = BloodDonationJustification()
         c.id = r['id']
+        c.date = r['date']
+        c.userId = r['user_id']
+        c.ownerId = r['owner_id']
         c.notes = r['notes']
         c.setStatus(Status.getLastStatus(con, c.id))
         return c
@@ -78,17 +80,16 @@ class BloodDonationJustificationDAO(AssistanceDAO):
     @classmethod
     def findByUserId(cls, con, userIds, start, end):
         assert isinstance(userIds, list)
-        assert isinstance(start, datetime.datetime)
-        assert isinstance(end, datetime.datetime)
+        assert isinstance(start, datetime.date)
+        assert isinstance(end, datetime.date)
 
         if len(userIds) <= 0:
             return
 
         cur = con.cursor()
         try:
-            sDate = None if start is None else start.date()
-            eDate = datetime.date.today() if end is None else end.date()
-            cur.execute('select * from assistance.justification_blood_donation where user_id  in %s and date BETWEEN %s AND %s', (tuple(userIds), sDate, eDate))
+            eDate = datetime.date.today() if end is None else end
+            cur.execute('select * from assistance.justification_blood_donation where user_id  in %s and date BETWEEN %s AND %s', (tuple(userIds), start, eDate))
             return [ cls._fromResult(con, r) for r in cur ]
         finally:
             cur.close()

@@ -77,6 +77,8 @@ class AssistanceWamp(ApplicationSession):
         try:
             start = self._parseDate(startStr)
             end = self._parseDate(endStr)
+            start = None if start is None else start.date()
+            end = None if end is None else end.date()
             return self.assistance.getJustifications(con, userId, start, end, isAll)
         finally:
             self.conn.put(con)
