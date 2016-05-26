@@ -20,7 +20,7 @@ def sendMail(fn):
     mail = inject.instance(Mail)
     with open(fn, 'rb') as f:
         fp = mail.getFilePart('ReporteTutorias.xlsx', f.read(), content_type='application', subtype='vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        m = mail.createMail('ditesi@econo.unlp.edu.ar', 'ditesi@econo.unlp.edu.ar', 'Reporte de Asistencia')
+        m = mail.createMail('ditesi@econo.unlp.edu.ar', 'ditesi@econo.unlp.edu.ar', 'Reporte de Tutorias')
         m.attach(fp)
         mail._sendMail('ditesi@econo.unlp.edu.ar', ['ditesi@econo.unlp.edu.ar', 'lucas.langoni@econo.unlp.edu.ar'], m)
 
