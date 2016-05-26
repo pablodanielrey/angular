@@ -346,7 +346,7 @@ def statsToPyoo(rp, stats, users, offices):
 def createZipFile(rp):
     import zipfile
     import os
-    fn = '/tmp/reporte-asistencia.zip'
+    fn = '/tmp/reporte-asistencia.7z'
     with zipfile.ZipFile(fn, mode='w', compression=zipfile.ZIP_BZIP2) as rpzip:
         for root, dir, files in os.walk(rp):
             for f in files:
