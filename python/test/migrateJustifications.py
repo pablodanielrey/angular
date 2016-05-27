@@ -107,11 +107,28 @@ class SingleJustificationMigrate():
         return j
 
     @classmethod
+    def getStock(cls, con):
+        cur = con.cursor()
+        try:
+            cur.execute('select user_id, stock, calculated from assistance.justifications_stock where justification_id = %s',(cls.id,))
+
+            if cur.rowcount <= 0:
+                return []
+            else:
+                return cur.fetchall()
+        finally:
+            cur.close()
+    @classmethod
+    def updateStock(cls, con):
+        pass
+
+    @classmethod
     def migrate(cls, con):
         cur = con.cursor()
         try:
             # creo la tabla
             cls.dao._createSchema(con)
+            cls.updateStock(con)
 
             cur.execute('select id, user_id, requestor_id, jbegin from assistance.justifications_requests where justification_id = %s',(cls.id,))
 
@@ -143,6 +160,12 @@ class CompensatoryMigrate(SingleJustificationMigrate):
     id = '48773fd7-8502-4079-8ad5-963618abe725'
     dao = CompensatoryJustificationDAO
     clazz = CompensatoryJustification
+
+    @classmethod
+    def updateStock(cls, con):
+        result = cls.getStock(con)
+        for r in result:
+            cls.clazz.updateStock(con, r['user_id'], r['stock'], r['calculated'])
 
 
 class Art102Migrate(SingleJustificationMigrate):
