@@ -180,9 +180,11 @@ class OutTicketJustification(RangedTimeJustification):
         if diff > limitSeconds:
             raise Exception('El tiempo requerido supera el límite')
 
+        '''
         if diff < 60 * 60:
             raise Exception('Como mínimo se debe pedir 1 hora')
-
+        '''
+        
         justs = cls._getAllMonthJustifications(con, start, userId)
         diffSum = cls._getJustifiedTime(justs)
         if diff > (limitSeconds - diffSum):
