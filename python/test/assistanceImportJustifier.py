@@ -8,7 +8,8 @@ inject.configure()
 import pyoo
 import datetime
 from model.users.users import User
-
+from model.assistance.assistance import AssistanceModel
+from model.assistance.utils import Utils
 
 from model.registry import Registry
 from model.connection.connection import Connection
@@ -20,6 +21,7 @@ from model.assistance.justifications.compensatoryJustification import Compensato
 from model.assistance.justifications.trainingJustification import TrainingJustification
 from model.assistance.justifications.authorityJustification import AuthorityJustification
 from model.assistance.justifications.preExamJustification import UniversityPreExamJustification
+from model.assistance.justifications.outTicketJustification import OutTicketWithReturnJustification, OutTicketWithoutReturnJustification
 
 def _isContiguos(date1, date2):
     """
@@ -66,14 +68,14 @@ class MigrateSingleJustification(MigrateJustification):
             if j['just'] != cls.identifier:
                 continue
 
-            if len(cls.clazz.findByUserId(con, [userId], j['date'], j['date'])) <= 0:
-                try:
+            try:
+                if len(cls.clazz.findByUserId(con, [userId], j['date'], j['date'])) <= 0:
                     just = cls.create(con, j, userId)
                     logging.info('persistiendo {} {}'.format(cls.identifier, just.__dict__))
                     just.persist(con)
                     just.changeStatus(con, Status.APPROVED, userId)
-                except Exception as e:
-                    logging.info('error:{} {} {}'.format(e, j, userId))
+            except Exception as e:
+                logging.info('error:{} {} {}'.format(e, j, userId))
 
 class MigrateArt102(MigrateSingleJustification):
 
@@ -104,8 +106,43 @@ class MigrateRangedJustification(MigrateJustification):
 
     @classmethod
     def create(cls, con, r, userId):
-        j = cls.clazz.create(con, r['start'], 1, userId, '1')
-        j.end = r['end']
+        j = cls.clazz.create(con, r['date'], r['days'], userId, '1')
+        return j
+
+    @classmethod
+    def migrateAll(cls, con, userId, justifications):
+        for c in cls.__subclasses__():
+            c.migrate(con, userId, justifications)
+
+    @classmethod
+    def migrate(cls, con, userId, justifications):
+        for j in justifications:
+            if j['just'] != cls.identifier:
+                continue
+            try:
+                end = j['date'] + datetime.timedelta(days=j['days'])
+                if len(cls.clazz.findByUserId(con, [userId], j['date'], end.date())) <= 0:
+                    just = cls.create(con, j, userId)
+                    logging.info('persistiendo {} {}'.format(cls.identifier, just.__dict__))
+                    just.persist(con)
+                    just.changeStatus(con, Status.APPROVED, userId)
+            except Exception as e:
+                logging.info('error:{} {} {}'.format(e, j, userId))
+
+class MigrateMedCertJustification(MigrateRangedJustification):
+    identifier = "justificado por médico"
+    clazz = MedicalCertificateJustification
+
+class MigratePreExamJustification(MigrateRangedJustification):
+    identifier = "Pre-examen"
+    clazz = UniversityPreExamJustification
+
+
+class MigrateRangedTimeJustification(MigrateJustification):
+
+    @classmethod
+    def create(cls, con , r, userId):
+        j = cls.clazz.create(con, r['start'], r['end'], userId, '1')
         return j
 
     @classmethod
@@ -119,23 +156,44 @@ class MigrateRangedJustification(MigrateJustification):
             if j['just'] != cls.identifier:
                 continue
 
-            if len(cls.clazz.findByUserId(con, [userId], j['start'], j['end'])) <= 0:
-                try:
+            start = None if j['start'] is None else j['start'].date()
+            end = None if j['end'] is None else j['end'].date()
+            try:
+                if len(cls.clazz.findByUserId(con, [userId], start, start)) <= 0:
                     just = cls.create(con, j, userId)
                     logging.info('persistiendo {} {}'.format(cls.identifier, just.__dict__))
                     just.persist(con)
                     just.changeStatus(con, Status.APPROVED, userId)
-                except Exception as e:
-                    logging.info('error:{} {} {}'.format(e, j, userId))
+            except Exception as e:
+                logging.info('error:{} {} {}'.format(e, j, userId))
 
-class MigrateMedCertJustification(MigrateRangedJustification):
-    identifier = "justificado por médico"
-    clazz = MedicalCertificateJustification
+class MigrateOutTicket(MigrateRangedTimeJustification):
 
-class MigratePreExamJustification(MigrateRangedJustification):
-    identifier = "Pre-examen"
-    clazz = UniversityPreExamJustification
+    identifier = "boleta de salida"
+    clazz = OutTicketWithReturnJustification
 
+    @classmethod
+    def create(cls, con, r, userId):
+        if r['end'] is None:
+            end = getEndSchedule(con, userId, r['start'])
+
+            j = OutTicketWithoutReturnJustification.create(con, r['start'], end, userId, '1')
+        else:
+            j = cls.clazz.create(con, r['start'], r['end'], userId, '1')
+        return j
+
+
+def getEndSchedule(con, userId, date):
+    # obtengo el schedule correspondiente
+    wps = assistance.getWorkPeriods(con, [userId], date, date)
+    wpsList = wps[userId]
+    schedule = wpsList[0] if len(wpsList) >= 0 else None
+    return None if schedule is None else schedule.getEndDate()
+
+def localize(date):
+    return Utils._localizeLocal(date)
+
+assistance = inject.instance(AssistanceModel)
 
 if __name__ == '__main__':
 
@@ -168,20 +226,20 @@ if __name__ == '__main__':
 
                 startDate = None
                 endDate = None
+                days = 0
 
-                if (MigrateSingleJustification.isJustification(just)):
-                    startDate = None if row[5].time is None else datetime.datetime.combine(date.date(), row[5].time)
-                    endDate = None if row[6].time is None else datetime.datetime.combine(date.date(), row[6].time)
+                if (MigrateRangedTimeJustification.isJustification(just)):
+                    startDate = None if row[5].time is None else localize(datetime.datetime.combine(date.date(), row[5].time))
+                    endDate = None if row[6].time is None else localize(datetime.datetime.combine(date.date(), row[6].time))
 
                 if (MigrateRangedJustification.isJustification(just)):
-                    startDate = None if row[5].date is None else row[5].date.date()
-                    endDate = None if row[6].date is None else row[6].date.date()
+                    days = None if row[5] is None else int(row[5].value)
 
 
                 if dni not in justifications:
                     justifications[dni] = []
 
-                r = {'date': date, 'just': just, 'start': startDate, 'end': endDate}
+                r = {'date': date, 'just': just, 'start': startDate, 'end': endDate, 'days': days}
                 justifications[dni].append(r)
 
         users = set(users)
@@ -194,6 +252,7 @@ if __name__ == '__main__':
             (userId,version) =  t
             MigrateRangedJustification.migrateAll(con, userId, justifications[dni])
             MigrateSingleJustification.migrateAll(con, userId, justifications[dni])
+            MigrateRangedTimeJustification.migrateAll(con, userId, justifications[dni])
         con.commit()
     finally:
         conn.put(con)

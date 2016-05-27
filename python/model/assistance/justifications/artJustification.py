@@ -77,7 +77,7 @@ class ARTJustificationDAO(AssistanceDAO):
 
                 r = j.__dict__
                 cur.execute('insert into assistance.justification_art (id, user_id, owner_id, jstart, jend, notes) '
-                            'values (%(id)s, %(userId)s, %(ownerId)s, %(start)s, %(end)s, , %(notes)s)', r)
+                            'values (%(id)s, %(userId)s, %(ownerId)s, %(start)s, %(end)s, %(notes)s)', r)
             else:
                 r = j.__dict__
                 cur.execute('update assistance.justification_art set user_id = %(userId)s, owner_id = %(ownerId)s, '
@@ -125,7 +125,7 @@ class ARTJustification(RangedJustification):
     registry = inject.instance(Registry).getRegistry('artJustification')
     identifier = 'ART'
 
-    def __init__(self, userId = None, ownerId = None, start = None, days = 0):
+    def __init__(self, start = None, days = 0, userId = None, ownerId = None):
         super().__init__(start, days, userId, ownerId)
         self.identifier = ARTJustification.identifier
         self.classType = RangedJustification.__name__

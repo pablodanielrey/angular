@@ -163,7 +163,7 @@ class MourningJustification(RangedJustification):
 
     registry = inject.instance(Registry).getRegistry('mourningJustification')
 
-    def __init__(self, userId = None, ownerId = None, start = None, days = 0):
+    def __init__(self, start = None, days = 0, userId = None, ownerId = None):
         super().__init__(start, days, userId, ownerId)
         self.typeName = "Duelo"
         self.classType = RangedJustification.__name__
@@ -182,8 +182,8 @@ class MourningFirstGradeJustification(MourningJustification):
     dao = MourningFirstGradeJustificationDAO
     identifier = 'Fallecimiento pariente primer grado'
 
-    def __init__(self, userId = None, ownerId = None, start = None, days = 0):
-        super().__init__(userId, ownerId, start, days)
+    def __init__(self, start = None, days = 0, userId = None, ownerId = None):
+        super().__init__(start, days, userId, ownerId)
         self.identifier = MourningFirstGradeJustification.identifier
 
     def getIdentifier(self):
@@ -195,8 +195,8 @@ class MourningSecondGradeJustification(MourningJustification):
     dao = MourningSecondGradeJustificationDAO
     identifier = 'Fallecimiento pariente segundo grado'
 
-    def __init__(self, userId = None, ownerId = None, start = None, days = 0):
-        super().__init__(userId, ownerId, start, days)
+    def __init__(self, start = None, days = 0, userId = None, ownerId = None):
+        super().__init__(start, days, userId, ownerId)
         self.identifier = MourningSecondGradeJustification.identifier
 
     def getIdentifier(self):
@@ -208,8 +208,8 @@ class MourningRelativeJustification(MourningJustification):
     dao = MourningRelativeJustificationDAO
     identifier = 'Fallecimiento pariente político'
 
-    def __init__(self, userId = None, ownerId = None, start = None, days = 0):
-        super().__init__(userId, ownerId, start, days)
+    def __init__(self, start = None, days = 0, userId = None, ownerId = None):
+        super().__init__(start, days, userId, ownerId)
         self.identifier = MourningRelativeJustification.identifier
 
     def getIdentifier(self):

@@ -122,7 +122,7 @@ class WorkPeriod(JSONSerializable):
         if self.getEndLog() is None:
             return 0
 
-        lastLog = self.getEndLog().log.astimezone(tzlocal()).replace(tzinfo=None)
+        lastLog = self.getEndLog().log
         return 0 if lastLog >= endDate else (endDate - lastLog).total_seconds()
 
     def getLateSeconds(self):
@@ -137,7 +137,7 @@ class WorkPeriod(JSONSerializable):
         if self.getStartLog() is None:
             return 0
 
-        startLog = self.getStartLog().log.astimezone(tzlocal()).replace(tzinfo=None)
+        startLog = self.getStartLog().log
         return 0 if startLog <= startDate else (startLog - startDate).total_seconds()
 
     def isAbsence(self):
@@ -166,8 +166,8 @@ class WorkPeriod(JSONSerializable):
 
         """ carga los logs que estén dentro de la tolerancia para esa fecha de acuerdo al horario """
         if not self.schedule.daily:
-            sd = (self.schedule.getStartDate(self.date) - WorkPeriod.logsTolerance).replace(tzinfo=tzlocal())
-            se = (self.schedule.getEndDate(self.date) + WorkPeriod.logsTolerance).replace(tzinfo=tzlocal())
+            sd = self.schedule.getStartDate(self.date) - WorkPeriod.logsTolerance
+            se = self.schedule.getEndDate(self.date) + WorkPeriod.logsTolerance
             self.logs = [ l for l in logs if l.between(sd, se) ]
         else:
             self.logs = [ l for l in logs if l.between(self._getStartOfDay(), self._getEndOfDay()) ]
@@ -204,7 +204,7 @@ class AssistanceModel:
         assert isinstance(userIds, list)
         assert isinstance(start, datetime.date)
         assert isinstance(end, datetime.date)
-                
+
         js = Justification.getJustifications(con, userIds, start, end)
         justs = AssistanceModel._classifyByUserId(js)
         return justs

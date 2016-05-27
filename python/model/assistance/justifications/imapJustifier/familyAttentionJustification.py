@@ -26,7 +26,7 @@ class FamilyAttentionCreator(JustCreator):
         uid, v = user
         assert uid is not None
 
-        just = FamilyAttentionJustification.findByUserId(con, [uid], start, start + datetime.timedelta(days = days))
+        just = FamilyAttentionJustification.findByUserId(con, [uid], start.date(), (start + datetime.timedelta(days = days)).date())
         if len(just) > 0:
             ''' ya esta justificado con una de corta duración para ese día aunque sea asi que las ignoro '''
             logging.warn('ya esta justificado {} para {}'.format(uid, start))
@@ -36,7 +36,7 @@ class FamilyAttentionCreator(JustCreator):
                     return True
             return False
 
-        s = FamilyAttentionJustification(uid, uid, start, days)
+        s = FamilyAttentionJustification(start, days, uid, uid)
         s.persist(con)
 
         return True

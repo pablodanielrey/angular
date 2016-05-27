@@ -212,6 +212,7 @@ def createReportDir():
 def statsToPyoo(rp, stats, users, offices):
     import uuid
     import pyoo
+    from model.assistance.utils import Utils
     calc = pyoo.Desktop('localhost', 2002)
     doc = calc.open_spreadsheet('templateStats.ods')
     try:
@@ -274,8 +275,8 @@ def statsToPyoo(rp, stats, users, offices):
                         sheet[i,0].value = user.name + " " + user.lastname
                         sheet[i,1].value = status.position if status.position is not None else ''
                         sheet[i,2].value = st.date
-                        sheet[i,3].value = st.start if st.start is not None else ''
-                        sheet[i,4].value = st.end if st.end is not None else ''
+                        sheet[i,3].value = Utils._naiveFromLocalAware(st.start) if st.start is not None else ''
+                        sheet[i,4].value = Utils._naiveFromLocalAware(st.end) if st.end is not None else ''
                         sheet[i,5].value = _secondsToHours(st.periodSeconds) if st.periodSeconds > 60 else ''
                         sheet[i,6].value = st.iin if st.iin is not None else ''
 
@@ -442,7 +443,7 @@ def sendMail(fn):
 
 if __name__ == '__main__':
 
-    logging.getLogger().setLevel(logging.INFO)
+    logging.getLogger().setLevel(logging.DEBUG)
 
     rstart = datetime.datetime.now() - datetime.timedelta(days=30)
     rend = datetime.datetime.now()

@@ -113,10 +113,18 @@ class CompensatoryJustificationDAO(AssistanceDAO):
             cur.close()
 
     @classmethod
-    def updateStock(cls, con, userId, stock):
+    def updateStock(cls, con, userId, stock, updated = None):
         cur = con.cursor()
         try:
-            cur.execute('update assistance.justification_compensatory_stock set stock = %s where user_id = %s', (stock, userId))
+            cur.execute('delete from assistance.justification_compensatory_stock where user_id = %s', (userId,))
+
+            if updated is None:
+                cur.execute('insert into assistance.justification_compensatory_stock (user_id, stock) '
+                            'values ( %s, %s)', (userId, stock))
+
+            else:
+                cur.execute('insert into assistance.justification_compensatory_stock (user_id, stock, updated) '
+                            'values ( %s, %s, %s)', (userId, stock, updated))
         finally:
             cur.close()
 
@@ -142,6 +150,10 @@ class CompensatoryJustification(SingleDateJustification):
     @classmethod
     def getStock(cls, con, userId):
         return cls.dao.getStock(con, userId)
+
+    @classmethod
+    def updateStock(cls, con, userId, stock, calculated = None):
+        return cls.dao.updateStock(con, userId, stock, calculated)
 
     @classmethod
     def getData(cls, con, userId, date, schedule):

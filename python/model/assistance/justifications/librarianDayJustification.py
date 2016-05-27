@@ -37,9 +37,9 @@ class LibrarianDayJustificationDAO(AssistanceDAO):
     def _fromResult(cls, con, r):
         c = LibrarianDayJustification()
         c.id = r['id']
-        j.userId = r['user_id']
-        j.ownerId = r['owner_id']
-        j.date = r['date']
+        c.userId = r['user_id']
+        c.ownerId = r['owner_id']
+        c.date = r['date']
         c.notes = r['notes']
         c.setStatus(Status.getLastStatus(con, c.id))
         return c
