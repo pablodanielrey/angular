@@ -28,13 +28,12 @@ class Schedule(JSONSerializable):
 
     def getStartDate(self, date):
         dt = datetime.datetime.combine(date, datetime.time(0,0))
-        dt = Utils._localizeLocal(dt) if Utils._isNaive(dt) else dt
-        return dt + datetime.timedelta(seconds=self.start)
+        return Utils._localizeLocal(dt + datetime.timedelta(seconds=self.end))
 
     def getEndDate(self, date):
         dt = datetime.datetime.combine(date, datetime.time(0,0))
-        dt = Utils._localizeLocal(dt) if Utils._isNaive(dt) else dt
-        return dt + datetime.timedelta(seconds=self.end)
+        return Utils._localizeLocal(dt + datetime.timedelta(seconds=self.end))
+
 
     def getScheduleSeconds(self):
         if self.end is None or self.start is None:

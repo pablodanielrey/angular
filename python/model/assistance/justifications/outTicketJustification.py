@@ -231,7 +231,7 @@ class OutTicketWithoutReturnJustification(OutTicketJustification):
         self.identifier = "sin retorno"
 
     def getIdentifier(self):
-        return self.typeName + " " + self.indentifier
+        return self.typeName + " " + self.identifier
 
     def _loadWorkedPeriods(self, wps):
         assert self.getStatus() is not None
@@ -239,6 +239,7 @@ class OutTicketWithoutReturnJustification(OutTicketJustification):
             return
 
         for wp in wps:
+            logging.debug("{} == {} and {} >= {}".format(wp.date, self.start.date(), wp.getEndDate(), self.start))
             if wp.date == self.start.date() and  wp.getEndDate() >= self.start:
                 self.wps.append(wp)
                 wp.addJustification(self)
