@@ -28,7 +28,7 @@ class Schedule(JSONSerializable):
 
     def getStartDate(self, date):
         dt = datetime.datetime.combine(date, datetime.time(0,0))
-        return Utils._localizeLocal(dt + datetime.timedelta(seconds=self.end))
+        return Utils._localizeLocal(dt + datetime.timedelta(seconds=self.start))
 
     def getEndDate(self, date):
         dt = datetime.datetime.combine(date, datetime.time(0,0))
