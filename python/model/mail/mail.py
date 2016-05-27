@@ -65,11 +65,13 @@ class Mail:
             if s == None:
               raise MailServerNotFound()
 
-            user = self.registry.get('user')
-            if user is not None:
-              username = user
-              password = self.registry.get('password')
-              s.login(username, password)
+            authenticated = self.registry.get('authenticated')
+            if authenticated and authenticated == 'true':
+                user = self.registry.get('user')
+                if user is not None:
+                  username = user
+                  password = self.registry.get('password')
+                  s.login(username, password)
 
             s.send_message(body,from_addr=ffrom,to_addrs=tos)
             #From = self.__extractFrom(ffrom)
@@ -80,7 +82,7 @@ class Mail:
 
 
     """ envía un mail con partes en html y partes en texto """
-    def sendMail(self,ffrom,tos,subject,replace=[],html=None,text=None):
+    def sendMail(self, ffrom, tos, subject, replace=[], html=None, text=None):
         enabled = self.registry.get('enabled')
         if not enabled:
             return;

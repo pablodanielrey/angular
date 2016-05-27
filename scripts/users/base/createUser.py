@@ -68,11 +68,11 @@ def showUserInfo(con, dni):
     u = us[0]
     logging.info(pprint.pformat(u.__dict__))
 
-    ups = users.UserPasswordDAO.findByUserId(con, u.id)
+    ups = users.UserPassword.findByUserId(con, u.id)
     for up in ups:
         logging.info(pprint.pformat(up.__dict__))
 
-    emails = users.MailDAO.findAll(con, u.id)
+    emails = users.Mail.findByUserId(con, u.id)
     for e in emails:
         logging.info(pprint.pformat(e.__dict__))
 

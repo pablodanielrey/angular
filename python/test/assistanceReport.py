@@ -212,6 +212,7 @@ def createReportDir():
 def statsToPyoo(rp, stats, users, offices):
     import uuid
     import pyoo
+    from model.assistance.utils import Utils
     calc = pyoo.Desktop('localhost', 2002)
     doc = calc.open_spreadsheet('templateStats.ods')
     try:
@@ -274,8 +275,8 @@ def statsToPyoo(rp, stats, users, offices):
                         sheet[i,0].value = user.name + " " + user.lastname
                         sheet[i,1].value = status.position if status.position is not None else ''
                         sheet[i,2].value = st.date
-                        sheet[i,3].value = st.start if st.start is not None else ''
-                        sheet[i,4].value = st.end if st.end is not None else ''
+                        sheet[i,3].value = Utils._naiveFromLocalAware(st.start) if st.start is not None else ''
+                        sheet[i,4].value = Utils._naiveFromLocalAware(st.end) if st.end is not None else ''
                         sheet[i,5].value = _secondsToHours(st.periodSeconds) if st.periodSeconds > 60 else ''
                         sheet[i,6].value = st.iin if st.iin is not None else ''
 
@@ -346,7 +347,7 @@ def statsToPyoo(rp, stats, users, offices):
 def createZipFile(rp):
     import zipfile
     import os
-    fn = '/tmp/reporte-asistencia.zip'
+    fn = '/tmp/reporte-asistencia.7z'
     with zipfile.ZipFile(fn, mode='w', compression=zipfile.ZIP_BZIP2) as rpzip:
         for root, dir, files in os.walk(rp):
             for f in files:
@@ -354,6 +355,7 @@ def createZipFile(rp):
                 logging.info('escribiendo : {}'.format(fm))
                 rpzip.write(fm)
     logging.info('generado : {}'.format(fn))
+    return fn
 
 
 def _getOffices(con):
@@ -429,13 +431,21 @@ def findUser(uid, users):
             return u
     return None
 
+def sendMail(fn):
+    from model.mail.mail import Mail
+    mail = inject.instance(Mail)
+    with open(fn, 'rb') as f:
+        fp = mail.getFilePart('ReporteAsistencia.7z', f.read(), content_type='application', subtype='gzip')
+        m = mail.createMail('ditesi@econo.unlp.edu.ar', 'ditesi@econo.unlp.edu.ar', 'Reporte de Asistencia')
+        m.attach(fp)
+        mail._sendMail('ditesi@econo.unlp.edu.ar', ['ditesi@econo.unlp.edu.ar', 'julio.ciappa@econo.unlp.edu.ar', 'soporte@econo.unlp.edu.ar'], m)
 
 
 if __name__ == '__main__':
 
-    logging.getLogger().setLevel(logging.INFO)
+    logging.getLogger().setLevel(logging.DEBUG)
 
-    rstart = datetime.datetime.now() - datetime.timedelta(days=7)
+    rstart = datetime.datetime.now() - datetime.timedelta(days=30)
     rend = datetime.datetime.now()
     if len(sys.argv) >= 2:
         import dateutil
@@ -469,4 +479,6 @@ if __name__ == '__main__':
 
     finally:
         conn.put(con)
-    createZipFile(rp)
+
+    fn = createZipFile(rp)
+    sendMail(fn)

@@ -43,6 +43,7 @@ class ARTJustificationDAO(AssistanceDAO):
                   owner_id varchar not null references profile.users (id),
                   jstart date default now(),
                   jend date default now(),
+                  notes varchar,
                   created timestamptz default now()
               );
               """
@@ -53,9 +54,13 @@ class ARTJustificationDAO(AssistanceDAO):
 
     @classmethod
     def _fromResult(cls, con, r):
-        j = ARTJustification(r['user_id'], r['owner_id'], r['jstart'], 0)
+        j = ARTJustification()
         j.id = r['id']
+        j.userId = r['user_id']
+        j.ownerId = r['owner_id']
+        j.start = r['jstart']
         j.end = r['jend']
+        j.notes = r['notes']
         j.setStatus(Status.getLastStatus(con, j.id))
         return j
 
@@ -71,12 +76,12 @@ class ARTJustificationDAO(AssistanceDAO):
             if len(j.findById(con, [j.id])) <=  0:
 
                 r = j.__dict__
-                cur.execute('insert into assistance.justification_art (id, user_id, owner_id, jstart, jend) '
-                            'values (%(id)s, %(userId)s, %(ownerId)s, %(start)s, %(end)s)', r)
+                cur.execute('insert into assistance.justification_art (id, user_id, owner_id, jstart, jend, notes) '
+                            'values (%(id)s, %(userId)s, %(ownerId)s, %(start)s, %(end)s, %(notes)s)', r)
             else:
                 r = j.__dict__
                 cur.execute('update assistance.justification_art set user_id = %(userId)s, owner_id = %(ownerId)s, '
-                            'jstart = %(start)s, jend = %(end)s where id = %(id)s', r)
+                            'jstart = %(start)s, jend = %(end)s, notes = %(notes)s where id = %(id)s', r)
             return j.id
 
         finally:
@@ -97,18 +102,17 @@ class ARTJustificationDAO(AssistanceDAO):
     @classmethod
     def findByUserId(cls, con, userIds, start, end):
         assert isinstance(userIds, list)
-        assert isinstance(start, datetime.datetime)
-        assert isinstance(end, datetime.datetime)
+        assert isinstance(start, datetime.date)
+        assert isinstance(end, datetime.date)
 
         if len(userIds) <= 0:
             return
 
         cur = con.cursor()
         try:
-            sDate = None if start is None else start.date()
-            eDate = datetime.date.today() if end is None else end.date()
+            eDate = datetime.date.today() if end is None else end
             cur.execute('select * from assistance.justification_art where user_id in %s and '
-                        '(jstart <= %s and jend >= %s)', (tuple(userIds), eDate, sDate))
+                        '(jstart <= %s and jend >= %s)', (tuple(userIds), eDate, start))
 
             return [ cls._fromResult(con, r) for r in cur ]
         finally:
@@ -121,7 +125,7 @@ class ARTJustification(RangedJustification):
     registry = inject.instance(Registry).getRegistry('artJustification')
     identifier = 'ART'
 
-    def __init__(self, userId = None, ownerId = None, start = None, days = 0):
+    def __init__(self, start = None, days = 0, userId = None, ownerId = None):
         super().__init__(start, days, userId, ownerId)
         self.identifier = ARTJustification.identifier
         self.classType = RangedJustification.__name__

@@ -191,7 +191,7 @@ class Session:
     """
 
     def persist(self, con):
-        self.dao.persist(con, self)
+        return self.dao.persist(con, self)
 
     @classmethod
     def deleteById(cls, con, sid):
