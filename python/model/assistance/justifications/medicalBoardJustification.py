@@ -54,7 +54,7 @@ class MedicalBoardJustificationDAO(AssistanceDAO):
 
 
     @classmethod
-    def _fromResult(cls, con, r):
+    def _fromResult(cls, con, r):        
         j = MedicalBoardJustification()
         j.id = r['id']
         j.userId = r['user_id']

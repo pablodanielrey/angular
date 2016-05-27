@@ -26,7 +26,7 @@ class MaternityCreator(JustCreator):
         uid, v = user
         assert uid is not None
 
-        just = MaternityJustification.findByUserId(con, [uid], start, start + datetime.timedelta(days = days))
+        just = MaternityJustification.findByUserId(con, [uid], start.date(), (start + datetime.timedelta(days = days)).date())
         if len(just) > 0:
             logging.warn('ya esta justificado {} para {}'.format(uid, start))
             for j in just:
@@ -36,7 +36,7 @@ class MaternityCreator(JustCreator):
                     return True
             return False
 
-        s = MaternityJustification(uid, uid, start, days)
+        s = MaternityJustification(start, days, uid, uid)
         s.persist(con)
 
         return True

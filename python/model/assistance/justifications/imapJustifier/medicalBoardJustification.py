@@ -26,7 +26,7 @@ class MedicalBoardCreator(JustCreator):
         uid, v = user
         assert uid is not None
 
-        just = MedicalBoardJustification.findByUserId(con, [uid], start, start + datetime.timedelta(days = days))
+        just = MedicalBoardJustification.findByUserId(con, [uid], start.date(), (start + datetime.timedelta(days = days)).date())
         if len(just) > 0:
             logging.warn('ya esta justificado {} para {}'.format(uid, start))
             for j in just:
@@ -35,7 +35,7 @@ class MedicalBoardCreator(JustCreator):
                     return True
             return False
 
-        s = MedicalBoardJustification(uid, uid, start, days)
+        s = MedicalBoardJustification(start, days, uid, uid)
         s.persist(con)
 
         return True

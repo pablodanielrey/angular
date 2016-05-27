@@ -26,7 +26,7 @@ class PrenatalCreator(JustCreator):
         uid, v = user
         assert uid is not None
 
-        just = PrenatalJustification.findByUserId(con, [uid], start, start + datetime.timedelta(days = days))
+        just = PrenatalJustification.findByUserId(con, [uid], start.date(), (start + datetime.timedelta(days = days)).date())
         if len(just) > 0:
             logging.warn('ya esta justificado {} para {}'.format(uid, start))
             for j in just:
@@ -36,7 +36,7 @@ class PrenatalCreator(JustCreator):
                     return True
             return False
 
-        s = PrenatalJustification(uid, uid, start, days)
+        s = PrenatalJustification(start, days, uid, uid)
         s.persist(con)
 
         return True

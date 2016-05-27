@@ -145,7 +145,7 @@ class CompensatoryJustification(SingleDateJustification):
 
     @classmethod
     def updateStock(cls, con, userId, stock):
-        return cls.dao.updateStock(con, userId, stock):
+        return cls.dao.updateStock(con, userId, stock)
 
     @classmethod
     def getData(cls, con, userId, date, schedule):
