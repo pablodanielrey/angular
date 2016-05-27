@@ -124,7 +124,7 @@ class SuspensionJustification(RangedJustification):
     registry = inject.instance(Registry).getRegistry('suspensionJustification')
     identifier = 'Suspensión'
 
-    def __init__(self, userId = None, ownerId = None, start = None, days = 0):
+    def __init__(self, start = None, days = 0, userId = None, ownerId = None):
         super().__init__(start, days, userId, ownerId)
         self.identifier = SuspensionJustification.identifier
         self.classType = RangedJustification.__name__

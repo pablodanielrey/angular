@@ -62,7 +62,7 @@ class Art102JustificationDAO(AssistanceDAO):
             else:
                 r = c.__dict__
                 cur.execute('update assistance.justification_art102 set user_id = %(userId)s, owner_id = %(ownerId)s, '
-                            'date = %(date)s, , notes = %(notes)s where id = %(id)s', r)
+                            'date = %(date)s, notes = %(notes)s where id = %(id)s', r)
             return c.id
 
         finally:

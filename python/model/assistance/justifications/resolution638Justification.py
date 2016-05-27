@@ -124,7 +124,7 @@ class Resolution638Justification(RangedJustification):
     registry = inject.instance(Registry).getRegistry('resolution638Justification')
     identifier = 'Resolución 638'
 
-    def __init__(self, userId = None, ownerId = None, start = None, days = 0):
+    def __init__(self, start = None, days = 0, userId = None, ownerId = None):
         super().__init__(start, days, userId, ownerId)
         self.identifier = Resolution638Justification.identifier
         self.classType = RangedJustification.__name__

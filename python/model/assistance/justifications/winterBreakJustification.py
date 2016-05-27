@@ -124,7 +124,7 @@ class WinterBreakJustification(RangedJustification):
     registry = inject.instance(Registry).getRegistry('winterBreakJustification')
     identifier = 'Vacaciones de Invierno'
 
-    def __init__(self, userId = None, ownerId = None, start = None, days = 0):
+    def __init__(self, start = None, days = 0, userId = None, ownerId = None):
         super().__init__(start, days, userId, ownerId)
         self.identifier = WinterBreakJustification.identifier
         self.classType = RangedJustification.__name__

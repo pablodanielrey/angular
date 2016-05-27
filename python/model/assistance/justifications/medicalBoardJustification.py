@@ -126,7 +126,7 @@ class MedicalBoardJustification(RangedJustification):
     registry = inject.instance(Registry).getRegistry('medicalBoardJustification')
     identifier = 'Junta médica'
 
-    def __init__(self, userId = None, ownerId = None, start = None, days = 0, number = None):
+    def __init__(self, start = None, days = 0, userId = None, ownerId = None, number = None):
         super().__init__(start, days, userId, ownerId)
         self.number = number
         self.identifier = MedicalBoardJustification.identifier
