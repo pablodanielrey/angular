@@ -70,7 +70,11 @@ function ProfileCtrl($rootScope, $scope, Users, Login, Systems, Files, Student) 
         function(id) {
           $scope.model.loadingPhoto = false;
           $scope.model.user.photo = id;
-          $scope.updateUserData();
+          Users.updateUser($scope.model.user, function(res) {
+
+          }, function(err) {
+            console.log(err);
+          })
         },
         function(err) {
           $scope.model.loadingPhoto = false;

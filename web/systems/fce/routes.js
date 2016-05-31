@@ -31,7 +31,7 @@ app.config(['$routeProvider', function($routeProvider) {
   })
 
   .otherwise({
-    redirectTo: '/main'
+    redirectTo: '/profile'
   });
 
 }]);

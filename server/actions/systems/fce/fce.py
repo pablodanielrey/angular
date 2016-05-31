@@ -12,6 +12,7 @@ from model.registry import Registry
 from model.connection.connection import Connection
 
 from model.users.users import User, UserPassword
+from model.login.login import Login
 from model.systems.systems import Systems
 
 class FceWamp(ApplicationSession):
@@ -53,7 +54,7 @@ class FceWamp(ApplicationSession):
         try:
             userId = self.loginModel.getUserId(con, sid)
 
-            passwords = UserPassword.findByUserId(con, uid)
+            passwords = UserPassword.findByUserId(con, userId)
             for passwd in passwords:
                 passwd.setPassword(password)
                 passwd.persist(con)

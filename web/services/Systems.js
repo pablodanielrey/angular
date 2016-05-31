@@ -18,4 +18,16 @@ function Systems (Utils, Session, $wamp) {
     });
   }
 
+  this.changePassword = function(password) {
+    return new Promise(function(cok, cerr) {
+      var sid = Session.getSessionId();
+  		$wamp.call('fce.changePassword', [sid, password])
+      .then(function(v) {
+        cok(v);
+      },function(err) {
+        cerr(err);
+      });
+    });
+  }
+
 }
