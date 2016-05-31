@@ -81,9 +81,20 @@
 
           </div>
 
+          <div class="contentProfileAdvanced">
+            Perfil Avanzado
+          </div>
+
         </div>
 
+        <hr>
 
+        <div class="contentBtnEdit">
+          <button class="btnEdit"> EDITAR</button>
+        </div>
+        <div class="contentBtnSave">
+          <button class="btnSave"> GUARDAR</button>
+        </div>
     </div>
 
 </div>
