@@ -1,8 +1,10 @@
-var app = angular.module('mainApp');
+angular
+  .module('mainApp')
+  .controller('MenuCtrl', MenuCtrl);
 
-app.controller('MenuCtrl', ["$rootScope", '$scope','$location',
+MenuCtrl.inject = ['$rootScope', '$scope','$location', 'Login', '$window'];
 
-  function ($rootScope, $scope, $location) {
+function MenuCtrl($rootScope, $scope, $location, Login, $window) {
 
     $scope.selectProfile = function() {
       $location.path('/profile');
@@ -19,5 +21,14 @@ app.controller('MenuCtrl', ["$rootScope", '$scope','$location',
     $scope.selectSystems = function() {
       $location.path('/systems');
     }
+
+    $scope.logout = function() {
+      Login.logout()
+      .then(function(ok) {
+        $window.location.href = "/systems/login/index.html";
+      }, function(err) {
+        console.log(err);
+      });
+    }
+
   }
-]);

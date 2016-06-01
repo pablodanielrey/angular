@@ -1,4 +1,4 @@
-<div class="password ocultarMensajes"> <!-- Variables: ocultarMensajes, avisoCargando, avisoError, avisoErrorPass, avisoOk -->
+<div class="password {{view.style}}"> <!-- Variables: ocultarMensajes, avisoCargando, avisoError, avisoErrorPass, avisoPassDistintos,  avisoOk -->
 
     <div class="header">
         <div>
@@ -7,40 +7,46 @@
     </div>
 
     <div class="contentPassword">
-        <div class="titlePassword">
-          MODIFICAR CONTRASEÑA
-        </div>
-        <div>
-            <input class="inputPassword" type="password" placeholder="Nueva contraseña"></imput>
-        </div>
-        <div>
-            <input class="inputPassword" type="password" placeholder="Repita contraseña"></imput>
-        </div>
+        <form ng-submit="changePassword()">
+          <div class="titlePassword">
+            MODIFICAR CONTRASEÑA
+          </div>
+          <div>
+              <input class="inputPassword" ng-model="model.password" type="password" placeholder="Nueva contraseña"></imput>
+          </div>
+          <div>
+              <input class="inputPassword" type="password" ng-model="model.password2" placeholder="Repita contraseña"></imput>
+          </div>
+
+          <input type="submit" class="btnSave" value="GUARDAR"/>
 
 
+          <div class="mensages">
 
-        <button class="btnSave"> GUARDAR</button>
+              <div class="loading">
+                <i class="fa fa-spinner fa-pulse "></i> Aguarde por favor...
+              </div>
 
+              <div class="messageErrorSystem">
+                <i class="fa fa-exclamation-triangle fa-2x"></i>  Se ha producido un error, inténtelo mas tarde
+              </div>
 
-        <div class="mensages">
+              <div class="messageErrorPassNotEquals">
+                <i class="fa fa-exclamation-triangle fa-2x"></i> Las contraseñas no coinciden
+              </div>
 
-            <div class="loading">
-              <i class="fa fa-spinner fa-pulse "></i> Aguarde por favor...
-            </div>
+              <div class="messageErrorPass">
+                <i class="fa fa-exclamation-triangle fa-2x"></i> Las contraseña no cumple con los requisitos
+              </div>
 
-            <div class="messageErrorSystem">
-              <i class="fa fa-exclamation-triangle fa-2x"></i>  Se ha producido un error, inténtelo mas tarde
-            </div>
+              <div class="messageOK">
+                <i class="fa fa-check fa-2x"></i> Tu contraseña se ha cambiado correctamente
+              </div>
 
-            <div class="messageErrorPass">
-              <i class="fa fa-exclamation-triangle fa-2x"></i> Las contraseñas no coinciden
-            </div>
+          </div>
 
-            <div class="messageOK">
-              <i class="fa fa-check fa-2x"></i> Tu contraseña se ha cambiado correctamente
-            </div>
+        </form>
 
-        </div>
     </div>
 
 </div>
