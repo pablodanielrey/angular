@@ -3,12 +3,76 @@
     <!-- VARIABLES
     pantallaDetallePedido
     pantallaMensaje
+    pantallaNuevoPedido
     -->
 
     <div class="header">
         <div>
-            Sistemas de Pedidos
+            Mis Pedidos
+            <button ng-click="view.style = 'pantallaNuevoPedido'"> NUEVO PEDIDO </button>
         </div>
+    </div>
+
+    <div class="contentNewOrder">
+      <div class="subContentNewOrder">
+          <div class="newOrder">
+              <div class="titleNewOrder">
+                NUEVO PEDIDO
+              </div>
+              <div class="subtitleNewOrder">
+                OFICINA
+              </div>
+              <div>
+                <input type="texy" class="inputNewOrder" placeholder="Buscar..."></input>
+              </div>
+              <div class="offices">
+                  <div class="itemsSelectOffice">
+                    DiTESI (Informática)
+                  </div>
+                  <div class="itemsSelectOffice">
+                    Mantenimieno y Servicios Generales
+                  </div>
+                  <div class="itemsSelectOffice">
+                    DiTESI (Informática)
+                  </div>
+                  <div class="itemsSelectOffice">
+                    Mantenimieno y Servicios Generales
+                  </div>
+                  <div class="itemsSelectOffice">
+                    DiTESI (Informática)
+                  </div>
+                  <div class="itemsSelectOffice">
+                    Mantenimieno y Servicios Generales
+                  </div>
+                  <div class="itemsSelectOffice">
+                    DiTESI (Informática)
+                  </div>
+                  <div class="itemsSelectOffice">
+                    Mantenimieno y Servicios Generales
+                  </div>
+              </div>
+              <div class="subtitleNewOrder">
+                ÁREA
+              </div>
+              <div>
+                <input type="texy" class="inputNewOrder" placeholder="Buscar..."></input>
+              </div>
+              <div class="subtitleNewOrder">
+                CONSULTA / PROBLEMA
+              </div>
+              <div>
+                <input type="texy" class="inputNewOrder" placeholder="Seleccionar..."></input>
+              </div>
+              <div class="subtitleNewOrder">
+                MENSAJE
+              </div>
+              <div>
+                <textarea class="textareaNewOrder"></textarea>
+              </div>
+
+
+          </div>
+      </div>
     </div>
 
     <div class="contentOrders">
@@ -30,13 +94,13 @@
                 </div>
 
                 <div class="itemsType">
-                      <div class="textType">SOPORTE TÉCNICO:</div>
-                        <div class="textSubType">Problema de impresora</div>
+                      <div class="textType">MANTENIMIENTO:</div>
+                        <div class="textSubType">Problema eléctrico</div>
                 </div>
 
                 <div class="itemsOffice">
-                      <div class="textOffice">MESA DE ENTRADAS</div>
-                        <div class="textName">Betiana Galle</div>
+                      <div class="textOffice">MANTENIMIENTO Y PRODUCCIÓN</div>
+                        <!-- <div class="textName">Emanuel País</div> -->
                 </div>
 
             </div>
@@ -115,244 +179,6 @@
 
         </div>
 
-        <div class="itemOrders">
-
-            <div class="itemInfo">
-
-                <div class="itemDate">
-                    <div class="textNumerOrders">Nº 112369</div>
-                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
-                    <div class="textDaysOrders">Hace 5 días</div>
-                </div>
-
-                <div class="itemStatus">
-                    <div class="status colorOpen">
-                        ABIERTA
-                    </div>
-                </div>
-
-                <div class="itemsType">
-                      <div class="textType">PROGRAMACIÓN:</div>
-                        <div class="textSubType">Actulización de sistema</div>
-                </div>
-
-                <div class="itemsOffice">
-                      <div class="textOffice">INSERCIÓN LABORAL (512)</div>
-                        <div class="textName">Paula Bayries</div>
-                </div>
-
-            </div>
-
-            <div class="itemActions">
-              <i class=" fa fa-angle-right" aria-hidden="true"></i>
-            </div>
-
-        </div>
-
-        <div class="itemOrders">
-
-            <div class="itemInfo">
-
-                <div class="itemDate">
-                    <div class="textNumerOrders">Nº 112369</div>
-                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
-                    <div class="textDaysOrders">Hace 3 días</div>
-                </div>
-
-                <div class="itemStatus">
-                    <div class="status colorProgres">
-                        EN CURSO
-                    </div>
-                </div>
-
-                <div class="itemsType">
-                      <div class="textType">SOPORTE TÉCNICO:</div>
-                        <div class="textSubType">Problema de impresora</div>
-                </div>
-
-                <div class="itemsOffice">
-                      <div class="textOffice">MESA DE ENTRADAS (101)</div>
-                        <div class="textName">Betiana Galle</div>
-                </div>
-
-            </div>
-
-            <div class="itemActions">
-              <i class=" fa fa-angle-right" aria-hidden="true"></i>
-            </div>
-
-        </div>
-
-        <div class="itemOrders">
-
-            <div class="itemInfo">
-
-                <div class="itemDate">
-                    <div class="textNumerOrders">Nº 112369</div>
-                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
-                    <div class="textDaysOrders">Hace 3 días</div>
-                </div>
-
-                <div class="itemStatus">
-                    <div class="status colorClose">
-                        CERRADA
-                    </div>
-                </div>
-
-                <div class="itemsType">
-                      <div class="textType">SOPORTE TÉCNICO:</div>
-                        <div class="textSubType">Problema de impresora</div>
-                </div>
-
-                <div class="itemsOffice">
-                      <div class="textOffice">MESA DE ENTRADAS (101)</div>
-                        <div class="textName">Betiana Galle</div>
-                </div>
-
-            </div>
-
-            <div class="itemActions">
-              <i class=" fa fa-angle-right" aria-hidden="true"></i>
-            </div>
-
-        </div>
-
-        <div class="itemOrders">
-
-            <div class="itemInfo">
-
-                <div class="itemDate">
-                    <div class="textNumerOrders">Nº 112369</div>
-                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
-                    <div class="textDaysOrders">Hace 3 días</div>
-                </div>
-
-                <div class="itemStatus">
-                    <div class="status colorClose">
-                        CERRADA
-                    </div>
-                </div>
-
-                <div class="itemsType">
-                      <div class="textType">SOPORTE TÉCNICO:</div>
-                        <div class="textSubType">Problema de impresora</div>
-                </div>
-
-                <div class="itemsOffice">
-                      <div class="textOffice">MESA DE ENTRADAS (101)</div>
-                        <div class="textName">Betiana Galle</div>
-                </div>
-
-            </div>
-
-            <div class="itemActions">
-              <i class=" fa fa-angle-right" aria-hidden="true"></i>
-            </div>
-
-        </div>
-
-        <div class="itemOrders">
-
-            <div class="itemInfo">
-
-                <div class="itemDate">
-                    <div class="textNumerOrders">Nº 112369</div>
-                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
-                    <div class="textDaysOrders">Hace 3 días</div>
-                </div>
-
-                <div class="itemStatus">
-                    <div class="status colorOpen">
-                        ABIERTA
-                    </div>
-                </div>
-
-                <div class="itemsType">
-                      <div class="textType">SOPORTE TÉCNICO:</div>
-                        <div class="textSubType">Problema de impresora</div>
-                </div>
-
-                <div class="itemsOffice">
-                      <div class="textOffice">MESA DE ENTRADAS (101)</div>
-                        <div class="textName">Betiana Galle</div>
-                </div>
-
-            </div>
-
-            <div class="itemActions">
-              <i class=" fa fa-angle-right" aria-hidden="true"></i>
-            </div>
-
-        </div>
-
-        <div class="itemOrders">
-
-            <div class="itemInfo">
-
-                <div class="itemDate">
-                    <div class="textNumerOrders">Nº 112369</div>
-                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
-                    <div class="textDaysOrders">Hace 3 días</div>
-                </div>
-
-                <div class="itemStatus">
-                    <div class="status colorProgres">
-                        EN CURSO
-                    </div>
-                </div>
-
-                <div class="itemsType">
-                      <div class="textType">SOPORTE TÉCNICO:</div>
-                        <div class="textSubType">Problema de impresora</div>
-                </div>
-
-                <div class="itemsOffice">
-                      <div class="textOffice">MESA DE ENTRADAS (101)</div>
-                        <div class="textName">Betiana Galle</div>
-                </div>
-
-            </div>
-
-            <div class="itemActions">
-              <i class=" fa fa-angle-right" aria-hidden="true"></i>
-            </div>
-
-        </div>
-
-        <div class="itemOrders">
-
-            <div class="itemInfo">
-
-                <div class="itemDate">
-                    <div class="textNumerOrders">Nº 112369</div>
-                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
-                    <div class="textDaysOrders">Hace 3 días</div>
-                </div>
-
-                <div class="itemStatus">
-                    <div class="status colorPause">
-                        PAUSADA
-                    </div>
-                </div>
-
-                <div class="itemsType">
-                      <div class="textType">SOPORTE TÉCNICO:</div>
-                        <div class="textSubType">Problema de impresora</div>
-                </div>
-
-                <div class="itemsOffice">
-                      <div class="textOffice">DECANATO</div>
-                        <div class="textName">Martin Armengol</div>
-                </div>
-
-            </div>
-
-            <div class="itemActions">
-              <i class=" fa fa-angle-right" aria-hidden="true"></i>
-            </div>
-
-        </div>
-
     </div>
 
     <div class="contentOrderDetail">
@@ -382,7 +208,7 @@
               </div>
 
               <div class="actionDetail">
-                  <select class="selectStatus colorOpen">
+                  <select disabled class="selectStatus colorOpen ">
                     <option class="selectOptionStatus">ABIERTA</option>
                     <option class="selectOptionStatus">EN CURSO</option>
                     <option class="selectOptionStatus">CERRADA</option>
@@ -620,5 +446,7 @@
             </div>
         </div>
     </div>
+
+
 
 </div>
