@@ -30,12 +30,12 @@ function SystemsCtrl($rootScope, $scope, Systems, Login, $window, $location) {
     systems: [],
     options: [
       {value:'webmail', style: 'c1', img: 'fa fa-envelope fa-3x', name:'Webmail', action: $scope.openWebmail},
-      {value:'fceBox', style: 'c2', img: 'fa fa-cloud fa-3x', name:'fceBox', action: $scope.openFceBox},
+      {value:'fcebox', style: 'c2', img: 'fa fa-cloud fa-3x', name:'fceBox', action: $scope.openFceBox},
       {value:'au24', style: 'c3', img: 'fa fa-graduation-cap fa-3x', name:'AU24', action: $scope.openAu24},
       // {value:'account', style: 'c4', img: 'fa fa-users fa-3x', name:'Cuentas FCE', action: $scope.openAccount},
       {value:'assistance', style: 'c5', img: 'fa fa-clock-o fa-3x', name:'Asistencia', action: $scope.openAssistance},
       // {value:'camera', style: 'c6', img: 'fa fa-video-camera fa-3x', name:'Cámaras', action: $scope.openCamera},
-      {value:'laboral', style: 'c7', img: 'fa fa-suitcase fa-3x', name:'Inserción', action: $scope.openLaboral},
+      {value:'laboralinsertion', style: 'c7', img: 'fa fa-suitcase fa-3x', name:'Inserción', action: $scope.openLaboral},
       // {value:'issues', style: 'c8', img: 'fa fa-ticket fa-3x', name:'Pedidos', action: $scope.openIssues},
       {value:'digesto', style: 'c9', img: 'fa fa-file-text fa-3x', name:'Digesto', action: $scope.openDigesto},
       // {value:'task', style: 'c10', img: 'fa fa-list fa-3x', name:'Tareas', action: $scope.openTask},
@@ -64,16 +64,29 @@ function SystemsCtrl($rootScope, $scope, Systems, Login, $window, $location) {
   }
 
   function listSystems() {
+    $scope.model.systems = [];
     Systems.listSystems().then(
         function(systems) {
           if (systems == null) {
             return
           }
+          var sys = [];
           for (var i = 0; i < systems.length; i++) {
-
+            var s = systems[i];
+            for (var j = 0; j < $scope.model.options.length; j++) {
+              var op = $scope.model.options[j]
+              if (s == op.value) {
+                sys.push(op);
+                continue;
+              }
+            }
           }
+          $scope.$apply(function() {
+            $scope.model.systems = sys;
+          });
         },
         function(err) {
+          console.log('error')
         }
     );
   }
