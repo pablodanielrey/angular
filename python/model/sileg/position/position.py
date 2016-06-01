@@ -15,6 +15,7 @@ class PositionDAO(SilegDAO):
               CREATE TABLE IF NOT EXISTS sileg.position (
                     id VARCHAR PRIMARY KEY,
                     description VARCHAR NOT NULL
+                    detail VARCHAR
               );"""
             cur.execute(sql)
             
