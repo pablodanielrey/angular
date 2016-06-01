@@ -116,7 +116,7 @@ function SystemsCtrl($rootScope, $scope, Systems, Login, $window, $location) {
   }
 
   function openAssistance() {
-    $window.open('/systems/assistance', '_blank');
+    $window.open('http://www.asistencia.econo.unlp.edu.ar', '_blank');
   }
 
   function openCamera() {
@@ -124,7 +124,7 @@ function SystemsCtrl($rootScope, $scope, Systems, Login, $window, $location) {
   }
 
   function openLaboral() {
-      $window.open('/systems/laboralInsertion', '_blank');
+      $window.open('http://insercionlaboral.econo.unlp.edu.ar', '_blank');
   }
 
   function openIssues() {
@@ -152,7 +152,7 @@ function SystemsCtrl($rootScope, $scope, Systems, Login, $window, $location) {
   }
 
   function openTutors() {
-      $window.open('/systems/tutorias', '_blank');
+      $window.open('http://tutorias.econo.unlp.edu.ar', '_blank');
   }
 
 }

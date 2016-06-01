@@ -41,9 +41,8 @@ function PasswordCtrl($rootScope, $scope, Systems, Login, $timeout) {
 
   function checkPassword() {
     $scope.model.passwordOk = false;
-    var re = /^([a-zA-Z]+\d+)+[a-zA-Z]*$/i;
 
-    if (re.test($scope.model.password)) {
+    if ($scope.model.password.length > 5) {
       if ($scope.model.password == $scope.model.password2) {
         return true;
       }
