@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import uuid
 from model.sileg.silegdao import SilegDAO
 from model.serializer.utils import JSONSerializable
 from model.users.users import UserDAO
@@ -21,11 +22,13 @@ class DesignationDAO(SilegDAO):
 
               CREATE TABLE IF NOT EXISTS sileg.designation (
                     id VARCHAR PRIMARY KEY,
+                    dstart DATE,
+                    dend DATE,
+                    dout DATE,
                     user_id VARCHAR NOT NULL REFERENCES profile.users (id),
                     place_id VARCHAR NOT NULL REFERENCES sileg.place (id),
-                    position_id VARCHAR NOT NULL REFERENCES sileg.position (id),
-                    dstart DATE,
-                    dend DATE
+                    position_id VARCHAR NOT NULL REFERENCES sileg.position (id)
+                    
               );
               """
             cur.execute(sql)
@@ -35,52 +38,90 @@ class DesignationDAO(SilegDAO):
           
     @classmethod
     def _fromResult(cls, r):
-        c = Designation()
-        c.id = r['id']
-        c.userId = r['user_id']
-        c.start = r['start']
-        c.end = r['end']
+        instance = Designation()
+        instance.id = r['id']
+        instance.start = r['dstart']
+        instance.end = r['dend']
+        instance.out = r['dout']
+        instance.userId = r['user_id']
+        instance.placeId = r["place_id"]
+        instance.positionId = r["position_id"]
         
         
         
     @classmethod
-    def persist(cls, con, designation):
-        assert designation is not None
-
+    def persist(cls, con, instance):        
+        assert instance is not None
+        
         cur = con.cursor()
         try:
-            if ((not hasattr(designation, 'id')) or (designation.id is None)):
-                designation.id = str(uuid.uuid4())
-
-            if len(designation.findById(con, [designation.id])) <=  0:
-
-                r = designation.__dict__
+            if ((not hasattr(instance, 'id')) or (instance.id is None)):
+                instance.id = str(uuid.uuid4())
+            
+            
+            if len(instance.findById(con, [instance.id])) <=  0:
+                data = instance.__dict__
                 cur.execute("""
-                    INSERT INTO sileg.designation (id, user_id, dstart, dend, created) 
-                    VALUES (%(id)s, %(userId)s, %(start)s, %(end)s, %(created)s)
-                """, r)
-                            
+                    INSERT INTO sileg.designation (id, dstart, dend, dout, user_id, position_id, place_id) 
+                    VALUES (%(id)s, %(start)s, %(end)s, %(out)s, %(userId)s, %(positionId)s, %(placeId)s)
+                """, data)
+                
             else:
-                r = designation.__dict__
+                data = instance.__dict__
                 cur.execute("""
                   UPDATE sileg.designation
-                  SET user_id = %(userId)s, 
-                  dstart = %(start)s, 
-                  dend = %(end)s, 
+                  SET 
+                      dstart = %(start)s, 
+                      dend = %(end)s, 
+                      dout = %(out)s, 
+                      user_id = %(userId)s, 
+                      position_id = %(positionId)s, 
+                      place_id = %(placeId)s
                   WHERE id = %(id)s
-                """, r)         
-                              
-            return designation.id
+                """, data) 
+                
+            return instance.id
 
         finally:
             cur.close()
+        
+    @classmethod
+    def findById(cls, con, ids):           
+        assert isinstance(ids, list)
+
+        cur = con.cursor()
+        try:
+            cur.execute("""
+                SELECT * FROM sileg.designation 
+                WHERE id in %s
+            """, (tuple(ids),))
+            return [ cls._fromResult(con, r) for r in cur ]
+        finally:
+            cur.close()
+  
+      
             
 
 class Designation(JSONSerializable):
 
-    def __init__(self, userId=None, start=None, end=None):
+    dao = DesignationDAO
+
+    def __init__(self):
         self.id = None
-        self.userId = userId
-        self.start = start
-        self.end = end
-        self.created = datetime.datetime.now(tzlocal())
+        self.start = None
+        self.end = None
+        self.out = None        
+        self.userId = None
+        self.placeId = None
+        self.positionId = None
+
+
+    def persist(self, con):
+        return self.dao.persist(con, self)
+
+
+    @classmethod
+    def findById(cls, con, ids):
+        return cls.dao.findById(con, ids)
+        
+ 

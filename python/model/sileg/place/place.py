@@ -128,6 +128,6 @@ class Place(JSONSerializable):
     def findById(cls, con, ids):
         return cls.dao.findById(con, ids)
         
-        
+    @classmethod 
     def findByUnique(cls, con, description, dependence = None, type = None):
         return cls.dao.findByUnique(con, description, dependence, type)

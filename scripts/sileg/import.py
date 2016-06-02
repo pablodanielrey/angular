@@ -1,14 +1,21 @@
 # -*- coding: utf-8 -*-
 import sys
 sys.path.append('../../python')
+
 import inject
 inject.configure()
 
 import logging
+logging.getLogger().setLevel(logging.INFO)
+
+
 
 from model.registry import Registry
 from model.connection import connection
 from model.sileg.place.place import Place
+from model.sileg.position.position import Position
+from model.sileg.designation.designation import Designation
+from model.users.users import User
 
 
 
@@ -30,7 +37,7 @@ if __name__ == '__main__':
 
     try:
         curS.execute("""
-          SELECT desig_observaciones, desig_fecha_desde, desig_fecha_hasta, desig_fecha_baja, tipocargo_nombre, tipodedicacion_nombre, tipocaracter_nombre, persona.pers_nombres, persona.pers_apellidos, materia_nombre, catedra_nombre, dpto_nombre, lugdetrab_nombre, funcion_nombre
+          SELECT desig_observaciones, desig_fecha_desde, desig_fecha_hasta, desig_fecha_baja, tipocargo_nombre, tipodedicacion_nombre, tipocaracter_nombre, pers_nombres, pers_apellidos, pers_nrodoc, materia_nombre, catedra_nombre, dpto_nombre, lugdetrab_nombre, funcion_nombre
           FROM designacion_docente
           INNER JOIN tipo_cargo AS tc ON (desig_tipocargo_id = tipocargo_id)
           INNER JOIN tipo_dedicacion AS td ON (desig_tipodedicacion_id = tipodedicacion_id)
@@ -49,6 +56,8 @@ if __name__ == '__main__':
         """)
 
         for r in curS:
+           
+                       
             #definir "place" del tipo "departamento" a partir del campo dpto_nombre
             if(r["dpto_nombre"] is not None):
                 place = Place()
@@ -58,16 +67,15 @@ if __name__ == '__main__':
                 place.persist(conD)
 
             #definir "place" del tipo "departamento" a partir del campo lugdetrab_nombre
-            if(r["lugdetrab_nombre"] is not None):
+            if r["lugdetrab_nombre"] is not None:
                 place = Place()
                 place.description = r["lugdetrab_nombre"]
                 place.type = "department" if "departamento" in place.description.lower() else "office"
                 place.id = place.findByUnique(con = conD, description = place.description, type = place.type)
                 place.persist(conD)
 
-
             #definir "place" del tipo "catedra"
-            if(r["materia_nombre"] is not None):    
+            if r["materia_nombre"] is not None:    
                 catedra = " Catedra " + r["catedra_nombre"] if(r["catedra_nombre"] != 'Original') else ""
                 
                 place = Place()
@@ -77,32 +85,45 @@ if __name__ == '__main__':
                 place.id = place.findByUnique(con = conD, description = place.description, type = place.type, dependence = place.dependence)
                 place.persist(conD)
                 
-                
-                
-            conD.commit()
-              
-              
-              
-              
-              
-              
-              
-          
-            """
-            #definir "place" del tipo "catedra"
-            description = r["materia_nombre"]
-            if r["catedra_nombre"] != 'Original':
-                description = description + " Catedra " + r["catedra_nombre"]
-                dependence = r["dpto_nombre"]
+            
+            #definir "position"
+            cargo = r["tipocargo_nombre"]
+            detail = r["tipocargo_nombre"] + " " + r["tipodedicacion_nombre"] + " " + r["tipocaracter_nombre"]
+            
+            position = Position()
+            position.description = cargo
+            position.detail = detail
+            position.id = position.findByUnique(con = conD, description = position.description, detail = position.detail)
+            position.persist(conD)
 
-            place = Place()
-            place.description = r["catedra_nombre"]
-            place.department = r["dpto_nombre"]
+
+            #definir "usuario"
+            user = User()
+            res = user.findByDni(conD, str(r["pers_nrodoc"]))
+
+            if res is None:
+                user.name = r["pers_nombres"]
+                user.lastname = r["pers_apellidos"]           
+                user.dni = str(r["pers_nrodoc"])           
+                user.id = user.persist(conD)
+            else: 
+                user.id = res[0]
+
+            
+            
+            #definir "designation"
+            designation = Designation()
+            designation.start = r["desig_fecha_desde"]
+            designation.end = r["desig_fecha_hasta"]
+            designation.out = r["desig_fecha_baja"]
+            designation.userId = user.id
+            designation.placeId = place.id
+            designation.positionId = position.id
+            designation.persist(conD)
+            
+            conD.commit()
             
 
-            place.persist(conD)
-
-            """
     finally:
         silegConn.put(conS)
         dcsysConn.put(conD)
