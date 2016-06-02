@@ -3,73 +3,120 @@
     <!-- VARIABLES
     pantallaDetallePedido
     pantallaMensaje
-    pantallaNuevoPedido
+    pantallaNuevoPedido (buscarOficina, buscarArea, buscarConsulta)
     -->
 
     <div class="header">
-        <div>
-            Mis Pedidos
-            <button ng-click="view.style = 'pantallaNuevoPedido'"> NUEVO PEDIDO </button>
+        <div class="contentHeader">
+            <div>
+              Mis Pedidos
+            </div>
+            <div>
+                <button class="btnApply" ng-click="view.style = 'pantallaNuevoPedido'">nuevo PEDIDO</button>
+            </div>
         </div>
     </div>
 
     <div class="contentNewOrder">
       <div class="subContentNewOrder">
           <div class="newOrder">
-              <div class="titleNewOrder">
-                NUEVO PEDIDO
-              </div>
-              <div class="subtitleNewOrder">
-                OFICINA
-              </div>
-              <div>
-                <input type="texy" class="inputNewOrder" placeholder="Buscar..."></input>
-              </div>
-              <div class="offices">
-                  <div class="itemsSelectOffice">
-                    DiTESI (Informática)
+              <div class="contentTitleNewOrder">
+                  <div class="contentBackNewOrder">
+                      <div class="contentBtnReturn">
+                          <button class="btnReturn" ng-click="view.style = ''"><i class=" fa fa-angle-left" aria-hidden="true"></i></button>
+                      </div>
+                      <div class="titleNewOrder">
+                        NUEVO PEDIDO
+                      </div>
                   </div>
-                  <div class="itemsSelectOffice">
-                    Mantenimieno y Servicios Generales
+                  <div>
+                      <button class="btnApply" ng-click="view.style = ''">SOLICITAR</button>
                   </div>
-                  <div class="itemsSelectOffice">
-                    DiTESI (Informática)
-                  </div>
-                  <div class="itemsSelectOffice">
-                    Mantenimieno y Servicios Generales
-                  </div>
-                  <div class="itemsSelectOffice">
-                    DiTESI (Informática)
-                  </div>
-                  <div class="itemsSelectOffice">
-                    Mantenimieno y Servicios Generales
-                  </div>
-                  <div class="itemsSelectOffice">
-                    DiTESI (Informática)
-                  </div>
-                  <div class="itemsSelectOffice">
-                    Mantenimieno y Servicios Generales
-                  </div>
-              </div>
-              <div class="subtitleNewOrder">
-                ÁREA
-              </div>
-              <div>
-                <input type="texy" class="inputNewOrder" placeholder="Buscar..."></input>
-              </div>
-              <div class="subtitleNewOrder">
-                CONSULTA / PROBLEMA
-              </div>
-              <div>
-                <input type="texy" class="inputNewOrder" placeholder="Seleccionar..."></input>
-              </div>
-              <div class="subtitleNewOrder">
-                MENSAJE
-              </div>
-              <div>
-                <textarea class="textareaNewOrder"></textarea>
               </div>
 
+              <div class="contentOrder">
+
+                  <div class="subtitleNewOrder">
+                    OFICINA
+                  </div>
+                  <div>
+                    <input type="texy" class="inputNewOrder" placeholder="Buscar..." ng-click="view.style2 = 'buscarOficina'"></input>
+                  </div>
+                  <div class="offices">
+                      <div class="itemsSelectOffice" ng-click="view.style2 = ''">
+                        DiTESI (Informática)
+                      </div>
+                      <div class="itemsSelectOffice">
+                        Mantenimieno y Servicios Generales
+                      </div>
+                  </div>
+
+                  <div class="subtitleNewOrder">
+                    ÁREA
+                  </div>
+                  <div>
+                    <input type="texy" class="inputNewOrder" placeholder="Buscar..." ng-click="view.style2 = 'buscarArea'"></input>
+                  </div>
+                  <div class="areas">
+                      <div class="itemsSelectArea" ng-click="view.style2 = ''">
+                        Soporte Técnico
+                      </div>
+                      <div class="itemsSelectArea">
+                        Diseño y Desarrollo de Sistemas
+                      </div>
+                      <div class="itemsSelectArea">
+                        Redes y Servidores
+                      </div>
+                      <div class="itemsSelectArea">
+                        En General
+                      </div>
+                  </div>
+
+                  <div class="subtitleNewOrder">
+                    CONSULTA / PROBLEMA
+                  </div>
+                  <div>
+                    <input type="texy" class="inputNewOrder" placeholder="Seleccionar..." ng-click="view.style2 = 'buscarConsulta'"></input>
+                  </div>
+                  <div class="querys">
+                      <div class="itemsSelectQuery" ng-click="view.style2 = ''">
+                        Sistema Operativo / Programas
+                      </div>
+                      <div class="itemsSelectQuery">
+                        CPU / otro Componente
+                      </div>
+                      <div class="itemsSelectQuery">
+                        Internet / WIFI
+                      </div>
+                      <div class="itemsSelectQuery">
+                        Correo Electrónico
+                      </div>
+                      <div class="itemsSelectQuery">
+                        Impresora / Impresión
+                      </div>
+                      <div class="itemsSelectQuery">
+                        Otro Problema / Consulta
+                      </div>
+                  </div>
+
+                  <div class="subtitleNewOrder">
+                    MENSAJE
+                  </div>
+                  <div>
+                    <textarea class="textareaNewOrder"></textarea>
+                  </div>
+
+                  <div class="addMenssage2">
+                      <div><button class="btnAdd" title="Adjuntar Archivo"><i class="fa fa-paperclip" aria-hidden="true"></i></button></div>
+                      <div class="ArchivesAdd">
+                        <i class="fa fa-file-o" aria-hidden="true"></i> Instructivo.pdf <button class="btnTrashAdd"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                        <i class="fa fa-file-o" aria-hidden="true"></i> pantalla_de_error.jpg <button class="btnTrashAdd"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                      </div>
+                  </div>
+
+
+
+              </div>
 
           </div>
       </div>
