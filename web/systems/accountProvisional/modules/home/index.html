@@ -108,9 +108,8 @@
         <div class="textform">Correo FCE</div>
         <div class="textform2">{{toMail(getMailEcono())}}</div>
         <div class="textform">Correo Alternativo</div>
-        <div class="textform2">{{toMail(getMailAlternative())}}</div>
+        <div><div class="textform2">{{toMail(getMailAlternative())}}</div><button class="btnDeleteMail" ng-click="deleteMail()"> Eliminar correo alternativo  </i></button></div>
         <div>
-          <button class="btnDeleteMail" ng-click="deleteMail()"> Eliminar correo alternativo  </i></button>
           <button class="btnDeleteMail" ng-click="updateType()"> Aceptar  </i></button>
         </div>
 
