@@ -22,6 +22,9 @@ if __name__ == '__main__':
 
     logging.getLogger().setLevel(logging.DEBUG)
 
+    import re
+    r = re.compile('[a-zA-Z\d]+')
+
     reg = inject.instance(Registry)
     conn = Connection(reg.getRegistry('dcsys'))
     con = conn.get()
@@ -33,6 +36,9 @@ if __name__ == '__main__':
 
         with open('/tmp/radius-users', 'w') as f:
             for up in users:
+                if r.match(up.username) is None:
+                    continue
+
                 f.write("""
 
 {} Cleartext-Password := "{}"
