@@ -27,11 +27,12 @@ class PlaceDAO(SilegDAO):
             
             
     @classmethod
-    def _fromResult(cls, con, r):
+    def _fromResult(cls, r):
         instance = Place()
         instance.id = r['id']
         instance.description = r['description']
         instance.dependence = r['dependence']
+        instance.type = r['type']
         return instance
         
         
@@ -78,7 +79,7 @@ class PlaceDAO(SilegDAO):
                 SELECT * FROM sileg.place 
                 WHERE id in %s
             """, (tuple(ids),))
-            return [ cls._fromResult(con, r) for r in cur ]
+            return [ cls._fromResult(r) for r in cur ]
         finally:
             cur.close()
    
