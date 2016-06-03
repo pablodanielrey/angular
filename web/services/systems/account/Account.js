@@ -1,99 +1,53 @@
-var app = angular.module('mainApp');
+angular
+  .module('mainApp')
+  .service('Account', Account);
 
-app.service('Account', function(Messages, Utils, Session, Cache) {
+Account.inject = ['Session', '$wamp']
 
-    var self = this;
-    this.prefix = 'account_'; //prefijo de identificacion de la cache
+function Account(Session, $wamp) {
 
+  this.deleteMail = function(uid) {
+    return $wamp.call('account.deleteMail', [uid]);
+  }
 
-    this.resendAccountRequest = function(accounts,ok,err) {
-      var msg = {
-        "id" : Utils.getId(),
-        "requests" : accounts,
-        "session" : Session.getSessionId(),
-        "action" : "resendAccountRequest",
-      };
+  this.createUser = function(user, student, type) {
+    return $wamp.call('account.createUser', [user, student.studentNumber, type.value]);
+  }
 
-      Messages.send(msg,
-        function(response) {
-          if (response.error != undefined) {
-            err(response.error);
-          } else {
-            ok(response.requests);
-          }
-        });
-    }
+  this.findByDni = function(dni) {
+    return new Promise(function(cok, cerr) {
+      var sid = Session.getSessionId();
+  		$wamp.call('account.findByDni', [sid, dni])
+      .then(function(v) {
+        cok(v);
+      },function(err) {
+        cerr(err);
+      });
+    });
+  }
 
+  this.getTypes = function() {
+    return new Promise(function(cok, cerr) {
+      var sid = Session.getSessionId();
+  		$wamp.call('account.getTypes', [sid])
+      .then(function(v) {
+        cok(v);
+      },function(err) {
+        cerr(err);
+      });
+    });
+  }
 
-    this.listAccounts = function(callbackOk, callbackError) {
-      var msg = {
-  			id: Utils.getId(),
-  			session : Session.getSessionId(),
-  			action : "listAccountRequests"
-		  }
+  this.updateType = function(user, type) {
+    return new Promise(function(cok, cerr) {
+      var sid = Session.getSessionId();
+  		$wamp.call('account.updateType', [sid, user, type])
+      .then(function(v) {
+        cok(v);
+      },function(err) {
+        cerr(err);
+      });
+    });
+  }
 
-      Messages.send(msg,
-          function(response) {
-              if (response.error != undefined) {
-                callbackError(response.error);
-              } else {
-                callbackOk(response.requests);
-              }
-          });
-    }
-
-    this.approveAccountsRequest = function(accounts, callbackOk, callbackError) {
-        var msg = {
-    			"id" : Utils.getId(),
-    			"requests" : accounts,
-    			"session" : Session.getSessionId(),
-    			"action" : "approveAccountRequest",
-    		};
-
-        Messages.send(msg,
-          function(response) {
-            if (response.error != undefined) {
-              callbackError(response.error);
-            } else {
-              callbackOk(response.requests);
-            }
-          });
-        }
-
-    this.removeAccountsRequest = function(accounts, callbackOk, callbackError) {
-        var msg = {
-    			"id" : Utils.getId(),
-    			"requests" : accounts,
-    			"session" : Session.getSessionId(),
-    			"action" : "removeAccountRequest",
-    		};
-
-        Messages.send(msg,
-          function(response) {
-            if (response.error != undefined) {
-              callbackError(response.error);
-            } else {
-              callbackOk(response.requests);
-            }
-          });
-    }
-
-    this.rejectAccountRequest = function(accountId,description,callbackOk, callbackError) {
-        var msg = {
-    			"id" : Utils.getId(),
-    			"reqId" : accountId,
-    			"session" : Session.getSessionId(),
-    			"description" : description,
-    			"action" : "rejectAccountRequest",
-    		};
-
-        Messages.send(msg,
-          function(response) {
-            if (response.error != undefined) {
-              callbackError(response.error);
-            } else {
-              callbackOk(response.requests);
-            }
-          });
-      }
-});
+}

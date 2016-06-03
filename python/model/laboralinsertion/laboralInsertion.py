@@ -82,6 +82,9 @@ class LaboralInsertion:
         user.languages = languages
         return user
 
+    def deleteMail(self, con, mailId):
+        return model.laboralinsertion.user.UserDAO.deleteMail(con, mailId)
+
     def persist(self, con, user, languages):
         """ actualiza la información de insercion laboral del usuario """
         logging.info(user.__dict__)

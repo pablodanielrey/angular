@@ -19,16 +19,16 @@ class User:
 
 class UserDAO(DAO):
     dependencies = [FileDAO, MailDAO]
-    
+
     @classmethod
     def _createSchema(cls, con):
         super()._createSchema(con)
-        
+
         cur = con.cursor()
         try:
             cur.execute("""
                 CREATE SCHEMA IF NOT EXISTS laboral_insertion;
-                
+
                 create table IF NOT EXISTS laboral_insertion.users (
                     id varchar primary key,
                     accepted_conditions boolean default true,
@@ -76,6 +76,18 @@ class UserDAO(DAO):
                 ins['priority'] = ins['priority'] if 'priority' in ins else 0
                 cur.execute('update laboral_insertion.users set accepted_conditions = %(acceptedConditions)s, email = %(emailId)s, '
                             'cv = %(cv)s, priority = %(priority)s where id = %(id)s', ins)
+        finally:
+            cur.close()
+
+    @staticmethod
+    def deleteMail(con, mailId):
+        if mailId is None:
+            return
+
+        cur = con.cursor()
+        try:
+            cur.execute('update laboral_insertion.users set email = null where email = %s', (mailId,))
+            return mailId
         finally:
             cur.close()
 

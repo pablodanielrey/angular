@@ -213,7 +213,7 @@ class UsersWamp(ApplicationSession):
     def deleteMail(self, id):
         con = self.conn.get()
         try:
-            UserDAO.deleteMail(con, id)
+            MailDAO.delete(con, id)
             con.commit()
             return True
 

@@ -36,6 +36,7 @@ class UserDAO(DAO):
                 city VARCHAR,
                 country VARCHAR,
                 address VARCHAR,
+                type VARCHAR,
                 residence_city VARCHAR,
                 created TIMESTAMPTZ DEFAULT now(),
                 version BIGINT DEFAULT 0,
@@ -71,6 +72,7 @@ class UserDAO(DAO):
         u.created = r['created']
         u.version = r['version']
         u.photo = r['photo']
+        u.type = r['type']
         return u
 
     @staticmethod
@@ -117,6 +119,17 @@ class UserDAO(DAO):
 
             return users
 
+        finally:
+            cur.close()
+
+    @classmethod
+    def updateType(cls, con, userId, type):
+        assert userId is not None
+
+        cur = con.cursor()
+        try:
+            cur.execute("UPDATE profile.users set type = %s where id = %s", (type, userId))
+            return userId
         finally:
             cur.close()
 
@@ -230,15 +243,6 @@ class UserDAO(DAO):
 
 
 ############### Student ###############
-class Student(JSONSerializable):
-
-    def __init__(self):
-        self.id = None
-        self.studentNumber = None
-        self.condition = None
-
-
-
 class StudentDAO(DAO):
 
     dependencies = [UserDAO]
@@ -326,7 +330,17 @@ class StudentDAO(DAO):
             cur.close()
 
 
+class Student(JSONSerializable):
 
+    dao = StudentDAO
+
+    def __init__(self):
+        self.id = None
+        self.studentNumber = None
+        self.condition = None
+
+    def persist(self, con):
+        return self.dao.persist(con, self)
 ############### UserPassword ###############
 
 
@@ -626,6 +640,7 @@ class User(JSONSerializable):
         self.created = datetime.datetime.now()
         self.version = 0
         self.photo = None
+        self.type = None
         self.telephones = []
 
     def getAge(self):
@@ -638,6 +653,9 @@ class User(JSONSerializable):
 
     def delete(self, con):
         return self.dao.deleteById(con, [self.id])
+
+    def updateType(self, con):
+        return self.dao.updateType(con, self.id, self.type)
 
     @classmethod
     def findById(cls, con, ids):
