@@ -59,7 +59,7 @@
 </head>
 <body class="sistema  {{styleMenu}}" ng-controller="IndexCtrl">
 
-    <div ng-include="'/systems/fce/modules/header/index.html'"></div>
+    <div ng-controller='HeaderCtrl' ng-include="'/systems/fce/modules/header/index.html'"></div>
     <div class="main">
       <div class="MenuContent" ng-controller="MenuCtrl" ng-include="'/systems/accountProvisional/modules/menu/index.html'"></div>
       <div class="MenuCel" ng-controller="MenuCelCtrl" ng-include="'/systems/accountProvisional/modules/menuCel/index.html'"></div>
