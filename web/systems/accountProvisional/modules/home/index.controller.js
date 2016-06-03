@@ -136,6 +136,19 @@ function HomeCtrl($rootScope, $scope, Account, Login, Users, Student, $timeout) 
   }
 
   function verifyCreate() {
+    if ($scope.model.user.name == '') {
+      return false
+    }
+    if ($scope.model.user.lastname == '') {
+      return false
+    }
+    if ($scope.model.user.dni == '') {
+      return false
+    }
+
+    if ($scope.model.selectedType.value == 'student' && $scope.model.student.studentNumber == '') {
+      return false
+    }
     return true;
   }
 
