@@ -36,7 +36,7 @@ if __name__ == '__main__':
 
         with open('/tmp/radius-users', 'w') as f:
             for up in users:
-                if r.match(up.username) is None:
+                if r.match(up.username) is None or ' ' in up.username:
                     continue
 
                 f.write("""
