@@ -22,13 +22,17 @@ class DesignationDAO(SilegDAO):
 
               CREATE TABLE IF NOT EXISTS sileg.designation (
                     id VARCHAR PRIMARY KEY,
-                    dstart DATE,
+                    dstart DATE NOT NULL,
                     dend DATE,
-                    dout DATE,
+                    description VARCHAR NOT NULL,
                     user_id VARCHAR NOT NULL REFERENCES profile.users (id),
                     place_id VARCHAR NOT NULL REFERENCES sileg.place (id),
-                    position_id VARCHAR NOT NULL REFERENCES sileg.position (id)
-                    
+                    position_id VARCHAR NOT NULL REFERENCES sileg.position (id),
+                    replace_id VARCHAR REFERENCES sileg.designation (id),
+                    old_id INTEGER NOT NULL,
+                    old_type VARCHAR NOT NULL,
+                    UNIQUE(old_id, old_type)
+
               );
               """
             cur.execute(sql)
@@ -42,10 +46,14 @@ class DesignationDAO(SilegDAO):
         instance.id = r['id']
         instance.start = r['dstart']
         instance.end = r['dend']
-        instance.out = r['dout']
+        instance.description = r["description"]
         instance.userId = r['user_id']
         instance.placeId = r["place_id"]
         instance.positionId = r["position_id"]
+        instance.replaceId = r["replace_id"]
+        instance.oldId = r["old_id"]
+        instance.oldType = r["old_type"]
+        return instance
         
         
         
@@ -62,8 +70,8 @@ class DesignationDAO(SilegDAO):
             if len(instance.findById(con, [instance.id])) <=  0:
                 data = instance.__dict__
                 cur.execute("""
-                    INSERT INTO sileg.designation (id, dstart, dend, dout, user_id, position_id, place_id) 
-                    VALUES (%(id)s, %(start)s, %(end)s, %(out)s, %(userId)s, %(positionId)s, %(placeId)s)
+                    INSERT INTO sileg.designation (id, dstart, dend, description, user_id, position_id, place_id, replace_id, old_id, old_type) 
+                    VALUES (%(id)s, %(start)s, %(end)s, %(description)s, %(userId)s, %(positionId)s, %(placeId)s, %(replaceId)s, %(oldId)s, %(oldType)s);
                 """, data)
                 
             else:
@@ -73,10 +81,14 @@ class DesignationDAO(SilegDAO):
                   SET 
                       dstart = %(start)s, 
                       dend = %(end)s, 
-                      dout = %(out)s, 
+                      description = %(description)s,
                       user_id = %(userId)s, 
                       position_id = %(positionId)s, 
-                      place_id = %(placeId)s
+                      place_id = %(placeId)s,
+                      replace_id = %(replaceId)s,
+
+                      old_id = %(oldId)s,
+                      old_type = %(oldType)s
                   WHERE id = %(id)s
                 """, data) 
                 
@@ -95,12 +107,39 @@ class DesignationDAO(SilegDAO):
                 SELECT * FROM sileg.designation 
                 WHERE id in %s
             """, (tuple(ids),))
-            return [ cls._fromResult(con, r) for r in cur ]
+            return [ cls._fromResult(r) for r in cur ]
         finally:
             cur.close()
   
-      
+  
+    @classmethod
+    def findAll(cls, con):
+        cur = con.cursor()
+        try:
+            cur.execute("""
+                SELECT id 
+                FROM sileg.designation
+            """)
+            ids = [r['id'] for r in cur]
+            return ids
+        finally:
+            cur.close()
+    
             
+    @classmethod
+    def findByUnique(cls, con, oldId, oldType):
+        cur = con.cursor()
+           
+        try:
+            cur.execute("""
+                SELECT id FROM sileg.designation 
+                WHERE old_id = %s AND old_type = %s
+            """, (oldId, oldType))
+            r = cur.fetchone()
+            return None if r is None else r ["id"]
+            
+        finally:
+            cur.close()
 
 class Designation(JSONSerializable):
 
@@ -110,10 +149,13 @@ class Designation(JSONSerializable):
         self.id = None
         self.start = None
         self.end = None
-        self.out = None        
+        self.description = None
         self.userId = None
         self.placeId = None
         self.positionId = None
+        self.replaceId = None
+        self.oldId = None
+        self.oldType = None
 
 
     def persist(self, con):
@@ -123,5 +165,13 @@ class Designation(JSONSerializable):
     @classmethod
     def findById(cls, con, ids):
         return cls.dao.findById(con, ids)
+        
+    @classmethod
+    def findAll(cls, con):
+        return cls.dao.findAll(con)
+        
+    @classmethod 
+    def findByUnique(cls, con, oldId, oldType):
+        return cls.dao.findByUnique(con, oldId, oldType)
         
  

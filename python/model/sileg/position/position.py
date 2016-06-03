@@ -24,7 +24,7 @@ class PositionDAO(SilegDAO):
             cur.close()
             
     @classmethod
-    def _fromResult(cls, con, r):
+    def _fromResult(cls, r):
         instance = Position()
         instance.id = r['id']
         instance.description = r['description']
@@ -74,7 +74,7 @@ class PositionDAO(SilegDAO):
                 SELECT * FROM sileg.position 
                 WHERE id in %s
             """, (tuple(ids),))
-            return [ cls._fromResult(con, r) for r in cur ]
+            return [ cls._fromResult(r) for r in cur ]
         finally:
             cur.close()
    

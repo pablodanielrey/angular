@@ -37,7 +37,7 @@ if __name__ == '__main__':
 
     try:
         curS.execute("""
-          SELECT desig_observaciones, desig_fecha_desde, desig_fecha_hasta, desig_fecha_baja, tipocargo_nombre, tipodedicacion_nombre, tipocaracter_nombre, pers_nombres, pers_apellidos, pers_nrodoc, materia_nombre, catedra_nombre, dpto_nombre, lugdetrab_nombre, funcion_nombre
+          SELECT desig_id, desig_observaciones, desig_fecha_desde, desig_fecha_hasta, desig_fecha_baja, tipocargo_nombre, tipodedicacion_nombre, tipocaracter_nombre, pers_nombres, pers_apellidos, pers_nrodoc, materia_nombre, catedra_nombre, dpto_nombre, lugdetrab_nombre, funcion_nombre
           FROM designacion_docente
           INNER JOIN tipo_cargo AS tc ON (desig_tipocargo_id = tipocargo_id)
           INNER JOIN tipo_dedicacion AS td ON (desig_tipodedicacion_id = tipodedicacion_id)
@@ -54,6 +54,7 @@ if __name__ == '__main__':
           LEFT OUTER JOIN extension ON (extension_designacion_id = desig_id)
           AND desig_fecha_baja IS NOT NULL
         """)
+        """
 
         for r in curS:
            
@@ -115,15 +116,85 @@ if __name__ == '__main__':
             designation = Designation()
             designation.start = r["desig_fecha_desde"]
             designation.end = r["desig_fecha_hasta"]
-            designation.out = r["desig_fecha_baja"]
+            designation.description = "teacher designation"
             designation.userId = user.id
             designation.placeId = place.id
             designation.positionId = position.id
+            
+            designation.oldType = "des"
+            designation.oldId = r["desig_id"]
+            
+            designation.id = designation.findByUnique(conD, designation.oldId, designation.oldType)
+            designation.persist(conD)
+            
+            
+            conD.commit()
+        """
+            
+        ##### carga de prorrogas #####
+        curS.execute("""
+          SELECT prorroga_id, prorroga_fecha_desde, prorroga_fecha_hasta, prorroga_prorroga_de, prorroga_prorroga_de_id
+          FROM prorroga
+        """)
+
+        for r in curS:
+            designation = Designation()
+            replaceId = designation.findByUnique(conD, r["prorroga_prorroga_de_id"], r["prorroga_prorroga_de"])
+            
+            if(replaceId is None):
+                logging.info("Prorroga sin designacion " + str(r["prorroga_id"]))
+                continue
+            
+            replace = designation.findById(conD, [replaceId])[0]
+            
+            designation.start = r["prorroga_fecha_desde"]
+            designation.end = r["prorroga_fecha_hasta"]
+            designation.description = "teacher designation"
+            designation.userId = replace.userId
+            designation.placeId = replace.placeId
+            designation.positionId = replace.positionId
+            designation.replaceId = replace.id
+            
+            designation.oldId = r["prorroga_id"]
+            designation.oldType = "pro"
+            
+            designation.id = designation.findByUnique(conD, designation.oldId, designation.oldType)
             designation.persist(conD)
             
             conD.commit()
             
+            
+        ##### carga de extensiones #####
+        curS.execute("""
+          SELECT prorroga_id, prorroga_fecha_desde, prorroga_fecha_hasta, prorroga_prorroga_de, prorroga_prorroga_de_id
+          FROM extension
+        """)
 
+        for r in curS:
+            designation = Designation()
+            replaceId = designation.findByUnique(conD, r["prorroga_prorroga_de_id"], r["prorroga_prorroga_de"])
+            
+            if(replaceId is None):
+                logging.info("Prorroga sin designacion " + str(r["prorroga_id"]))
+                continue
+            
+            replace = designation.findById(conD, [replaceId])[0]
+            
+            designation.start = r["prorroga_fecha_desde"]
+            designation.end = r["prorroga_fecha_hasta"]
+            designation.description = "teacher designation"
+            designation.userId = replace.userId
+            designation.placeId = replace.placeId
+            designation.positionId = replace.positionId
+            designation.replaceId = replace.id
+            
+            designation.oldId = r["prorroga_id"]
+            designation.oldType = "pro"
+            
+            designation.id = designation.findByUnique(conD, designation.oldId, designation.oldType)
+            designation.persist(conD)
+            
+            conD.commit()            
     finally:
         silegConn.put(conS)
         dcsysConn.put(conD)
