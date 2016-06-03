@@ -155,6 +155,7 @@ function HomeCtrl($rootScope, $scope, Account, Login, Users, Student, $timeout) 
   function updateType() {
     Account.updateType($scope.model.user, $scope.model.selectedType.value).then(function(data) {
       console.log("Se modifico correctamente");
+      alter("Se modificó correctamente");
     }, function(error) {
       console.log(error);
 
