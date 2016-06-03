@@ -102,7 +102,7 @@
         <div class="textform2">{{getStudentNumber()}}</div>
         <div class="textform">Tipo</div>
         <div class="textform2">
-          <select class="inputSelect" ng-options="item.description for item in model.types" ng-model="model.selectedType" ng-change="updateType()">
+          <select class="inputSelect" ng-options="item.description for item in model.types" ng-model="model.selectedType">
           </select>
         </div>
         <div class="textform">Correo FCE</div>
@@ -111,6 +111,7 @@
         <div class="textform2">{{toMail(getMailAlternative())}}</div>
         <div>
           <button class="btnDeleteMail" ng-click="deleteMail()"> Eliminar correo alternativo  </i></button>
+          <button class="btnDeleteMail" ng-click="updateType()"> Aceptar  </i></button>
         </div>
 
       </div>
