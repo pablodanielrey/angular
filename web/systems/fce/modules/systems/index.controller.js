@@ -112,7 +112,7 @@ function SystemsCtrl($rootScope, $scope, Systems, Login, $window, $location) {
   }
 
   function openAccount() {
-    $window.open('http://account.econo.unlp.edu.ar', '_blank');
+    $window.open('http://cuentas.econo.unlp.edu.ar', '_blank');
   }
 
   function openAssistance() {
