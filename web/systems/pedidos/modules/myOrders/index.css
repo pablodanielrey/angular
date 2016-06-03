@@ -11,6 +11,23 @@
   color: #5C5F69;
   padding-left: 50px;
   font-size: 1.5em;
+
+}
+
+.orders .contentHeader {
+  width: 92%;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
 }
 
 /******************************************************
@@ -396,6 +413,25 @@
   cursor: pointer;
 }
 
+.orders .btnApply {
+  width: 170px;
+  height: 50px;
+  font-size: 14px;
+  background-color: #92AD17 !important;
+  color:white;
+  padding: 5px 10px 5px 10px;
+  border:none;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+
+}
+
+.orders .btnApply:hover {
+  background-color: #809612 !important;
+  cursor: pointer;
+}
+
 .orders .contentReplys {
   margin-left: 220px;
   display: flex;
@@ -563,6 +599,20 @@
   -moz-flex-direction:row; /* mozilla */
 }
 
+.orders .addMenssage2 {
+  background-color: #EAEAEA;
+  border: 1px solid #E2E2E2;
+  width: 51.4%;
+  height: 40px;
+  margin-top: -5px;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+}
+
 .orders .btnAdd {
   border: none;
   font-size: 20px;
@@ -686,26 +736,54 @@
 .orders .newOrder {
 
   opacity: 0;
-  transform: translate3d(0,-100%,0);
-  -webkit-transform: translate3d(0,-100%,0);
-  -webkit-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
-     -moz-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
-       -o-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
-          transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+  transform: translate3d(0,500%,0);
+-webkit-transform: translate3d(0,500%,0);
+-webkit-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+-moz-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+-o-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
 }
 
 .orders.pantallaNuevoPedido .newOrder {
   width: 100%;
   height: 100%;
   opacity: 1;
-  padding: 20px;
+
   margin-left: auto;
   margin-right: auto;
   transform: translate3d(0,0,0);
   -webkit-transform: translate3d(0,0,0);
-  -webkit-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
-     -moz-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
-       -o-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+  -webkit-transition: all 300ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+  -moz-transition: all 300ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+  -o-transition: all 300ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+  transition: all 300ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+}
+
+.orders .contentTitleNewOrder {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  background-color: white;
+  padding: 20px;
+      border-bottom: 1px solid #E2E2E2;
+}
+
+.orders .contentBackNewOrder {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items:center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
 }
 
 .orders .titleNewOrder {
@@ -713,17 +791,27 @@
   font-size: 20px;
   margin-bottom: 3px;
   opacity: 0;
+  margin-left: 20px;
 }
 
 .orders.pantallaNuevoPedido .titleNewOrder {
   opacity: 1;
-  transition:opacity 2s linear;
+
+}
+
+.orders .contentOrder {
+  margin-left: 40px;
+  padding: 10px 0px 20px 0px;
+
+
+
 }
 
 .orders .subtitleNewOrder {
     color: #434343;
     font-weight: bold;
     font-size: 14px;
+    margin: 10px 0px 2px 0px;
 }
 
 .orders .inputNewOrder {
@@ -739,8 +827,8 @@
 
 .orders .textareaNewOrder {
     resize: none;
-    width: 50%;
-    height: 200px;
+    width: 49.5%;
+    height: 100px;
     border: none;
     padding: 10px;
     font-size: 14px;
@@ -748,27 +836,67 @@
 
 }
 
-.orders .offices {
-  height: 250px;
-  overflow-y: scroll;
+.orders.pantallaNuevoPedido.buscarOficina .offices {
+  min-height: 25px;
+  max-height: 250px;
+  overflow-y: auto;
   overflow-x: hidden;
-  width: 50%;
+  width: 49.5%;
   position: absolute;
   background-color: #F1F1F1;
-  border-bottom: 50px solid #F1F1F1;
+  border: 1px solid #DBE2E5;
+  display: block;
 }
 
-.orders .itemsSelectOffice {
+.orders.pantallaNuevoPedido.buscarArea .areas {
+  min-height: 25px;
+  max-height: 250px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 49.5%;
+  position: absolute;
+  background-color: #F1F1F1;
+  border: 1px solid #DBE2E5;
+  display: block;
+}
+
+.orders.pantallaNuevoPedido.buscarConsulta .querys {
+  min-height: 25px;
+  max-height: 250px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 49.5%;
+  position: absolute;
+  background-color: #F1F1F1;
+  border: 1px solid #DBE2E5;
+  display: block;
+}
+
+.orders .offices,
+.orders .querys,
+.orders .areas {
+  display: none;
+}
+
+.orders .itemsSelectOffice,
+.orders .itemsSelectQuery,
+.orders .itemsSelectArea {
   border-radius: 2px;
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
-  background-color: white;
+  background-color: #92AD17;
   font-size: 16px;
   padding: 7px;
-  border-bottom: 1px solid #DBE2E5;
+  border-bottom: 1px solid #798c1a;
   width: 100%;
   cursor: pointer;
-  color: #434343;
+  color: white;
+}
+
+.orders .itemsSelectOffice:hover,
+.orders .itemsSelectQuery:hover,
+.orders .itemsSelectArea:hover {
+  background-color: #798c1a;
 }
 
 /******************** MEDIA QUERIS ***************************/
