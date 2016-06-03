@@ -32,7 +32,7 @@ function SystemsCtrl($rootScope, $scope, Systems, Login, $window, $location) {
       {value:'webmail', style: 'c1', img: 'fa fa-envelope fa-3x', name:'Webmail', action: $scope.openWebmail},
       {value:'fcebox', style: 'c2', img: 'fa fa-cloud fa-3x', name:'fceBox', action: $scope.openFceBox},
       {value:'au24', style: 'c3', img: 'fa fa-graduation-cap fa-3x', name:'AU24', action: $scope.openAu24},
-      // {value:'account', style: 'c4', img: 'fa fa-users fa-3x', name:'Cuentas FCE', action: $scope.openAccount},
+      {value:'account', style: 'c4', img: 'fa fa-users fa-3x', name:'Cuentas FCE', action: $scope.openAccount},
       {value:'assistance', style: 'c5', img: 'fa fa-clock-o fa-3x', name:'Asistencia', action: $scope.openAssistance},
       // {value:'camera', style: 'c6', img: 'fa fa-video-camera fa-3x', name:'Cámaras', action: $scope.openCamera},
       {value:'laboralinsertion', style: 'c7', img: 'fa fa-suitcase fa-3x', name:'Inserción', action: $scope.openLaboral},
@@ -112,7 +112,7 @@ function SystemsCtrl($rootScope, $scope, Systems, Login, $window, $location) {
   }
 
   function openAccount() {
-    console.log("accounts");
+    $window.open('http://account.econo.unlp.edu.ar', '_blank');
   }
 
   function openAssistance() {

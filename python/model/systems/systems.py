@@ -3,10 +3,12 @@ from model.users.users import StudentDAO
 from model.tutorias.tutorias import TutoriasModel
 import inject
 
+from model.account.account import AccountModel
 
 class Systems:
 
     tutorsModel = inject.instance(TutoriasModel)
+    accountModel = inject.instance(AccountModel)
 
     @classmethod
     def listSystems(cls, con, userId):
@@ -25,6 +27,9 @@ class Systems:
 
         if cls._isTutors(con, userId):
             systems.extend['tutors']
+
+        if cls._isAccount(con, userId):
+            systems.extend(['account'])
 
         return list(set(systems))
 
@@ -66,5 +71,12 @@ class Systems:
     def _isTutors(cls, con, userId):
         tutors = cls.tutorsModel.findByTutorId(con, userId)
         if len(tutors) <= 0 or tutors[0] is None:
+            return False
+        return True
+
+    @classmethod
+    def _isAccount(cls, con, userId):
+        types = cls.accountModel.getTypes(con, userId)
+        if len(types) <= 0:
             return False
         return True
