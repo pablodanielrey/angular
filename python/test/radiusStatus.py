@@ -1,4 +1,28 @@
 
+"""
+    Recorre una estructura de directorios leyendo los archivos de registros del freeradius y procesando cada registro.
+    el formato de regsitro leído es por ejemplo :
+
+    Sat Jun  4 08:44:44 2016
+            Packet-Type = Access-Request
+            User-Name = "94274648"
+            NAS-IP-Address = 10.100.1.1
+            NAS-Identifier = "44d9e76ef751"
+            NAS-Port = 0
+            Called-Station-Id = "4E-D9-E7-6F-F7-51:posgrado"
+            Calling-Station-Id = "00-08-22-A6-DB-FB"
+            Framed-MTU = 1400
+            NAS-Port-Type = Wireless-802.11
+            Connect-Info = "CONNECT 0Mbps 802.11b"
+            EAP-Message = 0x025f00060319
+            State = 0x8ae1e4ca8abee02fe1869998b58d42e0
+            Message-Authenticator = 0x104841a8e7147f8335c255542cfb30e6
+
+
+    Invocación:
+        python3 radiusStatus.py /tmp/r/radacct
+"""
+
 import json
 import datetime
 import pytz
@@ -73,5 +97,5 @@ if __name__ == '__main__':
 
                     records.append(record)
 
-    for r in records:
+    for r in sorted(records, key=lambda x: x['origen']):
         logging.info(r)
