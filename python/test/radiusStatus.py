@@ -98,4 +98,4 @@ if __name__ == '__main__':
                     records.append(record)
 
     for r in sorted(records, key=lambda x: x['origen']):
-        logging.info(r)
+        logging.info('{} {} {} {} {}'.format(r['origen'], r['usuario'], r['ip ap'], r['destino'], r['date']))
