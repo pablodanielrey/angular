@@ -32,9 +32,10 @@
       </div>
 
       <div class="contentUserNotExist">
-          <div>
-            <button class="btnBack" ng-click="viewSearch()"><i class="arrowBack fa fa-chevron-left"></i> VOLVER</button>
-          </div>
+        <div>
+          <button class="btnBack" ng-click="viewSearch()"><i class="fa fa-angle-left"></i> </button>
+          <span class="textBack">Volver</span>
+        </div>
           <div class="textUserNotExist">
             NO EXISTE LA CUENTA!
           </div>
@@ -48,7 +49,8 @@
 
       <div class="createUser">
         <div>
-          <button class="btnBack" ng-click="viewSearch()"><i class="arrowBack fa fa-chevron-left"></i> VOLVER</button>
+          <button class="btnBack" ng-click="viewSearch()"><i class="fa fa-angle-left"></i> </button>
+          <span class="textBack">Volver</span>
         </div>
           <div class="textform">Nombre</div>
           <div><input class="inputText" type="text" ng-model="model.user.name"></input></div>
@@ -91,26 +93,34 @@
       <div class="infoUser">
 
         <div>
-          <button class="btnBack" ng-click="viewSearch()"><i class="arrowBack fa fa-chevron-left"></i> VOLVER</button>
+          <button class="btnBack" ng-click="viewSearch()"><i class="fa fa-angle-left"></i> </button>
+          <span class="textBack">Volver</span>
         </div>
 
         <div class="textform">Nombre y Apellido</div>
-        <div class="textform2">{{model.user.name}} {{model.user.lastname}}</div>
+        <div class="inputText">{{model.user.name}} {{model.user.lastname}}</div>
         <div class="textform">DNI</div>
-        <div class="textform2">{{model.user.dni}}</div>
+        <div class="inputText">{{model.user.dni}}</div>
         <div class="textform">Legajo</div>
-        <div class="textform2">{{getStudentNumber()}}</div>
+        <div class="inputText">{{getStudentNumber()}}</div>
         <div class="textform">Tipo</div>
         <div class="textform2">
           <select class="inputSelect" ng-options="item.description for item in model.types" ng-model="model.selectedType">
           </select>
         </div>
         <div class="textform">Correo FCE</div>
-        <div class="textform2">{{toMail(getMailEcono())}}</div>
-        <div class="textform">Correo Alternativo</div>
-        <div><div class="textform2">{{toMail(getMailAlternative())}}</div><button class="btnDeleteMail" ng-click="deleteMail()"> Eliminar correo alternativo  </i></button></div>
+        <div class="inputText">{{toMail(getMailEcono())}}</div>
+        <div class="contentMail">
+            <div>
+              <div class="textform">Correo Alternativo</div>
+              <div class="inputText">{{toMail(getMailAlternative())}}</div>
+            </div>
+
+              <button class="btnDeleteMail" ng-click="deleteMail()"> <i class="fa fa-trash-o" aria-hidden="true"></i> </button>
+
+        </div>
         <div>
-          <button class="btnDeleteMail" ng-click="updateType()"> Aceptar  </i></button>
+          <button class="btnCreate" ng-click="updateType()"> GUARDAR  </i></button>
         </div>
 
       </div>
@@ -134,8 +144,8 @@
       <div class="errorData">
         <div class="titleError"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> ERROR</div>
         <div>
-          Verifique los datos cargados
-      </div>
+          Verifique que esten todos los datos completos
+        </div>
 
     </div>
 

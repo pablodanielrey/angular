@@ -31,7 +31,7 @@
 
 .home .title {
     color: #5C5F69;
-    margin-top: 20px;
+    
 }
 
 .home .inputSearch {
@@ -72,20 +72,24 @@
 
 
 .home .btnBack {
-  width: 100%;
-  border:none;
-  padding: 0px ;
-  cursor: pointer;
-  text-align: left;
-  background-color: #adadad;
-  color: #5C5F69;
-  font-size: 1em;
-  width: 305px;
-  margin-bottom: 10px;
+  background-color: #BFC0C5;
+  font-size: 20px;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  padding: 5px 20px 5px 20px;
+  margin-bottom: 20px;
 }
 
 .home .btnBack:hover {
   background-color: #bcbaba;
+  cursor: pointer;
+}
+
+.home .textBack {
+  color:#5C5F69;
 }
 
 .home .arrowBack {
@@ -134,30 +138,50 @@
 
 .home .textform {
   font-size: 12px;
-    color: #5C5F69;
+    color: #28292D;
+    /*background-color: #DBE2E5;*/
+    width: 120px;
+
+
 }
 
 .home .inputText {
     border-radius: 2px;
     -moz-border-radius: 2px;
     -webkit-border-radius: 2px;
-    font-size: 20px;
-    padding: 7px;
+    font-size: 14px;
+    padding: 5px;
     border: 1px solid #DBE2E5;
-    margin: 0px 0 5px 0px;
+    margin: 0px 0px 10px 0px;
     width: 250px;
+    background-color: white;
+        font-weight: bold;
 }
 
 .home .inputSelect {
     border-radius: 2px;
     -moz-border-radius: 2px;
     -webkit-border-radius: 2px;
-    font-size: 20px;
-    padding: 7px;
+    font-size: 14px;
+    padding: 5px;
     border: 1px solid #DBE2E5;
-    margin: 0px 0 5px 0px;
-    width: 262px;
+    margin: 0px 0 10px 0px;
+    width: 261.5px;
     background-color: white;
+          font-weight: bold;
+}
+
+.home .contentMail {
+  display: flex;
+  display: -webkit-flex;
+  display: -moz-flex;
+  flex-direction: row;
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+  align-items: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+
 }
 
 /***********************************************/
@@ -231,16 +255,16 @@
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
   border: none;
-  background-color: #92AD17;
+  background-color: #5C5F69;
   color: white;
-  padding: 12px;
+  padding: 6px;
   font-size: 14px;
-  margin: 20px 0 5px 0px;
+  margin: 6px 0 0px 5px;
   cursor: pointer;
 }
 
 .home .btnDeleteMail:hover {
-  background-color: #809612;
+  background-color: #E43E46;
 }
 
 
