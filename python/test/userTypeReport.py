@@ -58,8 +58,8 @@ if __name__ == '__main__':
                 for user in t[ty]:
                     mails = Mail.findByUserId(con, user.id)
                     for mail in mails:
-                        if mail.confirmed:
-                            f.write('{},{},{},{}\n'.format(user.id, user.dni, user.name, user.lastname, mail.email))
+                        if mail.confirmed and 'econo.unlp.edu.ar' in mail.email:
+                            f.write('{},{},{},{},{}\n'.format(user.id, user.dni, user.name, user.lastname, mail.email))
 
     finally:
         conn.put(con)
