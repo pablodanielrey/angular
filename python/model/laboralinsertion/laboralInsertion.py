@@ -48,9 +48,9 @@ class LaboralInsertion:
 
         ''' aplico los filtros '''
         if len(filters) > 0:
-            inscriptions3 = Filter.apply(con, inscriptions2, filters)
+            inscriptions2 = Filter.apply(con, inscriptions2, filters)
 
-        return inscriptions3
+        return inscriptions2
 
     def getFilters(self):
         return Filters.getFilters()
