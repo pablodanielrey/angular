@@ -31,8 +31,10 @@
 
 .home .title {
     color: #5C5F69;
-    
+
 }
+
+
 
 .home .inputSearch {
     border-radius: 2px;
@@ -44,6 +46,15 @@
     margin: 0px 0 5px 0px;
     width: 250px;
 }
+
+::-webkit-input-placeholder { color: #ACADB1; font-size: 14px;}
+:-moz-placeholder { color: #ACADB1; opacity:  1; font-size: 14px;}
+::-moz-placeholder { color: #ACADB1; opacity:  1; font-size: 14px;}
+:-ms-input-placeholder { color: #ACADB1; font-size: 14px;}
+:placeholder-shown { color: #ACADB1;  font-size: 14px;}
+
+.login .inputSearch::-webkit-input-placeholder { color:#ACADB1; padding-top: 4px;}
+.login .inputSearch::-moz-input-placeholder { color:#ACADB1; padding-top: 4px;}
 
 .home .btnSearch {
     border-radius: 2px;
