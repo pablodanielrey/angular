@@ -43,6 +43,10 @@ class Office(JSONSerializable):
     def getOfficesUsers(cls, con, offices):
         return OfficeDAO.getOfficesUsers(con, offices)
 
+    @classmethod
+    def getOfficesByUser(cls, con, userId):
+        return OfficeDAO.getOfficesByUser(con, userId)
+
 
 class OfficeDAO(DAO):
     ''' dao de las oficinas '''
@@ -190,6 +194,18 @@ class OfficeDAO(DAO):
 
         return users
 
+
+    @classmethod
+    def getOfficesByUser(cls, con, userId):
+        cur = con.cursor()
+        try:
+            cur.execute("select office_id from offices.offices_users where user_id = %s",(userId,))
+            if cur.rowcount <= 0:
+                return []
+
+            return [ s['office_id'] for s in cur ]
+        finally:
+            cur.close()
 
     '''
         obtiene todas las oficinas en las cuales el usuario tiene asignado un rol
