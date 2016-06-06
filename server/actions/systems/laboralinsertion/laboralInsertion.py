@@ -204,6 +204,12 @@ class LaboralInsertionWamp(ApplicationSession):
             inscriptionsToSend = [ inscriptionIds.pop() for i in range(inscriptionsPerMail) if len(inscriptionIds) > 0 ]
             data = []
             while len(inscriptionsToSend) > 0:
+
+                logging.debug('------- enviando correo --------')
+                for ins in inscriptionsToSend:
+                    logggin.debug(ins)
+                loggin.debug('---------------------------------')
+
                 data.extend(self.laboralInsertion.sendMailToCompany(con, inscriptionsToSend, emails))
                 inscriptionsToSend = [ inscriptionIds.pop() for i in range(inscriptionsPerMail) if len(inscriptionIds) > 0 ]
 
