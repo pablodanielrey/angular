@@ -23,16 +23,18 @@ class AccountModel:
     postgraduate = 'postgraduate'
     assistance = 'assistance'
     graduate = 'graduate'
+    other = 'other'
+    becarios = 'becarios'
 
     def getTypes(self, con, userId):
         if userId in self.detise:
-            return [self.student, self.teacher, self.postgraduate, self.graduate]
+            return [self.student, self.teacher, self.postgraduate, self.graduate, self.other]
         if userId in self.posgrado:
-            return [self.student, self.teacher, self.postgraduate, self.graduate]
+            return [self.student, self.teacher, self.postgraduate, self.graduate, self.other]
         if userId in self.insercion:
             return [self.student, self.teacher, self.postgraduate, self.graduate]
         if userId in self.ditesi:
-            return [self.student, self.teacher, self.postgraduate, self.assistance, self.graduate]
+            return [self.student, self.teacher, self.postgraduate, self.assistance, self.graduate, self.other, self.becarios]
         return []
 
 

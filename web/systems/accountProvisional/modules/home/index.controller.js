@@ -26,9 +26,10 @@ function HomeCtrl($rootScope, $scope, Account, Login, Users, Student, $timeout) 
       student: null,
       mails: [],
       types: [],
-      allTypes: [{value:'student', description:'Alumno'}, {value:'teacher', description:'Profesor'},
+      allTypes: [{value:'student', description:'Alumno'}, {value:'teacher', description:'Docente'},
                 {value:'postgraduate', description:'Posgrado'}, {value:'graduate', description:'Graduado'},
-                {value:'assistance', description:'No docente'}],
+                {value:'assistance', description:'No docente'}, {value:'becarios', description:'Becarios'},
+                {value:'other', description:'Otros'}],
       selectedType: null
   }
 
