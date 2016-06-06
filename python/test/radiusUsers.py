@@ -34,7 +34,7 @@ if __name__ == '__main__':
         for uid in [i for (i, v) in userIds]:
             users.extend(UserPassword.findByUserId(con, uid))
 
-        with open('/tmp/radius-users', 'w') as f:
+        with open('/etc/freeradius/radius-users', 'w') as f:
             for up in users:
                 if r.match(up.username) is None or ' ' in up.username:
                     continue
