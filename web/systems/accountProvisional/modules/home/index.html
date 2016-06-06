@@ -81,7 +81,7 @@
           <div class="textform">DNI</div>
           <div class="textform2">{{model.user.dni}}</div>
           <div class="textform">Legajo</div>
-          <div class="textform2">{{model.student.studentNumber}}</div>
+          <div class="textform2">{{getStudentNumber()}}</div>
           <div class="textform">Tipo</div>
           <div class="textform2">{{model.selectedType.description}}</div>
 
@@ -116,7 +116,7 @@
               <div class="inputText">{{toMail(getMailAlternative())}}</div>
             </div>
 
-              <button class="btnDeleteMail" ng-click="deleteMail()"> <i class="fa fa-trash-o" aria-hidden="true"></i> </button>
+              <button class="btnDeleteMail" ng-click="deleteMail()" ng-if="getMailAlternative() != null"> <i class="fa fa-trash-o" aria-hidden="true"></i> </button>
 
         </div>
         <div>

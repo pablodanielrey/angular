@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import inject
+import uuid
 from model.users.users import User, MailDAO, Student
 from model.laboralinsertion.laboralInsertion import LaboralInsertion
 
@@ -60,8 +61,17 @@ class AccountModel:
         else:
             raise Exception("No tiene permisos para cambiar el tipo")
 
+    def _logging(self, con, creatorId, userId):
+        cur = con.cursor()
+        try:
+            # logging.info('assistanceData start:{} end {} userId:{}'.format(start, end, userIds[0]))
+            log = 'CREATE USER: {}'.format(userId)
+            cur.execute('insert into system.logs(user_id, log) values (%s, %s)',(creatorId, log))
+        finally:
+            cur.close()
 
-    def createUser(self, con, user, studentNumber, type):
+
+    def createUser(self, con, creatorId, user, studentNumber, type):
         '''
             user: {'dni': '1233487', 'lastname': 'pompin', 'name': 'pepe'}
             studentNumber : '111/1'
@@ -82,6 +92,9 @@ class AccountModel:
            s.id = person.id
            s.studentNumber = studentNumber
            s.persist(con)
+
+        self._logging(con, creatorId, person.id)
+
 
 
     def deleteMail(self, con, id):

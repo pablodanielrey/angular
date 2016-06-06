@@ -96,7 +96,7 @@ class AccountWamp(ApplicationSession):
         r = yield from loop.run_in_executor(None, self.updateType, sid, user, type)
         return r
 
-    def createUser(self, user, studentNumber, type):
+    def createUser(self, sid, user, studentNumber, type):
         '''
             user: {'dni': '1233487', 'lastname': 'pompin', 'name': 'pepe'}
             studentNumber : '111/1'
@@ -104,7 +104,8 @@ class AccountWamp(ApplicationSession):
         '''
         con = self.conn.get()
         try:
-            u = self.accountModel.createUser(con, user, studentNumber, type)
+            creatorId = self.loginModel.getUserId(con, sid)
+            u = self.accountModel.createUser(con, creatorId, user, studentNumber, type)
             con.commit()
             return True
 
@@ -112,7 +113,7 @@ class AccountWamp(ApplicationSession):
            self.conn.put(con)
 
     @coroutine
-    def createUser_async(self, user, studentNumber, type):
+    def createUser_async(self, sid, user, studentNumber, type):
        loop = asyncio.get_event_loop()
-       r = yield from loop.run_in_executor(None, self.createUser, user, studentNumber, type)
+       r = yield from loop.run_in_executor(None, self.createUser, sid, user, studentNumber, type)
        return r

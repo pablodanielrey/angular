@@ -11,7 +11,15 @@ function Account(Session, $wamp) {
   }
 
   this.createUser = function(user, student, type) {
-    return $wamp.call('account.createUser', [user, student.studentNumber, type.value]);
+    return new Promise(function(cok, cerr) {
+      var sid = Session.getSessionId();
+      $wamp.call('account.createUser', [sid, user, student.studentNumber, type.value])
+      .then(function(v) {
+        cok(v);
+      },function(err) {
+        cerr(err);
+      });
+    });
   }
 
   this.findByDni = function(dni) {

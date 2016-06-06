@@ -169,12 +169,19 @@ function HomeCtrl($rootScope, $scope, Account, Login, Users, Student, $timeout) 
     }
 
     Account.createUser($scope.model.user, $scope.model.student, $scope.model.selectedType).then(function(data) {
-      $scope.view.style = $scope.view.styles[3];
+      $scope.$apply(function() {
+        $scope.view.style = $scope.view.styles[3];
+      });
     }, function(error) {
       console.log(error);
-      $scope.view.style = $scope.view.styles[7];
+      $scope.$apply(function() {
+        $scope.view.style = $scope.view.styles[7];
+      });
+
       $timeout(function () {
-        $scope.view.style = $scope.view.styles[2];
+        $scope.$apply(function() {
+          $scope.view.style = $scope.view.styles[2];
+        });
       }, 2000);
     });
 
@@ -240,7 +247,7 @@ function HomeCtrl($rootScope, $scope, Account, Login, Users, Student, $timeout) 
   }
 
   function getStudentNumber() {
-    return ($scope.model.student == null) ? "No posee" : $scope.model.student.studentNumber;
+    return ($scope.model.student == null || $scope.model.student.studentNumber == '') ? "No posee" : $scope.model.student.studentNumber;  
   }
 
 
