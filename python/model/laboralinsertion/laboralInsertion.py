@@ -43,11 +43,14 @@ class LaboralInsertion:
         ids = InscriptionDAO.findAll(con)
         inscriptions = InscriptionDAO.findById(con, ids)
 
+        """ elimino las inscripciones eliminadas """
+        inscriptions2 = [ i for i in inscriptions if i.deleted == False ]
+
         ''' aplico los filtros '''
         if len(filters) > 0:
-            inscriptions = Filter.apply(con, inscriptions, filters)
+            inscriptions = Filter.apply(con, inscriptions2, filters)
 
-        return inscriptions
+        return inscriptions2
 
     def getFilters(self):
         return Filters.getFilters()
@@ -55,7 +58,9 @@ class LaboralInsertion:
     def findAllInscriptionsByUser(self, con, userId):
         """ obtiene los datos de las inscripciones de los alumnos """
         ids = InscriptionDAO.findByUser(con, userId)
-        return InscriptionDAO.findById(con, ids)
+        inscriptions = InscriptionDAO.findById(con, ids)
+        inscriptions2 = [ i for i in inscriptions if i.deleted == False ]
+        return inscriptions2
 
     def deleteInscriptionById(self, con, iid):
         """ elimina la inscripción con el id determinado """

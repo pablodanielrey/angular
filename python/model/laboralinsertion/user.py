@@ -19,16 +19,16 @@ class User:
 
 class UserDAO(DAO):
     dependencies = [FileDAO, MailDAO]
-    
+
     @classmethod
     def _createSchema(cls, con):
         super()._createSchema(con)
-        
+
         cur = con.cursor()
         try:
             cur.execute("""
                 CREATE SCHEMA IF NOT EXISTS laboral_insertion;
-                
+
                 create table IF NOT EXISTS laboral_insertion.users (
                     id varchar primary key,
                     accepted_conditions boolean default true,
