@@ -12,6 +12,7 @@ class Justification(JSONSerializable):
         self.userId = userId
         self.ownerId = ownerId
         self.status = Status(userId, datetime.datetime.now())
+        self.notes = None
         self.wps = []
 
     def getIdentifier(self):
@@ -59,7 +60,14 @@ class Justification(JSONSerializable):
 
     @classmethod
     def findByUserId(cls, con, userIds, start, end):
+        assert isinstance(userIds, list)
+        assert isinstance(start, datetime.date)
+        assert isinstance(end, datetime.date)
         assert cls.dao is not None
+
+        if start == end:
+            end = None if end is None else end + datetime.timedelta(days=1)
+            
         justs = cls.dao.findByUserId(con, userIds, start, end)
         cls._loadStatus(con, justs)
         return justs
@@ -75,11 +83,13 @@ class Justification(JSONSerializable):
     def getJustifications(cls, con, userIds, start, end):
         """
             llama a los findByUserId de todas las sublcases hoja de la jerarquía
-            las fechas son datetime y son inclusivas
+            las fechas son date y son inclusivas
             retorna un mapa :
                 justifications[useId] = [justification1, justification2, .... ]
         """
         assert isinstance(userIds, list)
+        assert isinstance(start, datetime.date)
+        assert isinstance(end, datetime.date)
         ret = []
 
         for j in cls._getLeafSubclasses():
@@ -182,11 +192,17 @@ class RangedJustification(Justification):
         else:
             return False
 
+    @classmethod
+    def create(cls, con, start, days, userId, ownerId):
+        return cls(start, days, userId, ownerId)
+
+
     def __init__(self, start = None, days = 0, userId = None, ownerId = None):
         super().__init__(userId, ownerId)
 
         continuous = self.isContinuous()
         self.start = start
+
         self.end = None if start is None or days is None else RangedJustification._getEnd(start, days, continuous)
 
     def _loadWorkedPeriods(self, wps):

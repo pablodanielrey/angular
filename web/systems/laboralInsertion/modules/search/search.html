@@ -432,7 +432,7 @@
                     -->
                       <div class="textBussines">
                         <b>{{c.name}}</b> <br>
-                        La Plata
+
                       </div>
                   </div>
 
@@ -453,17 +453,17 @@
               <div class="infoBussines2" ng-if='model.company != null'>
 
                   <div class="contentInfoBussines">
-                      <div>
+                      <!-- <div>
                           <img src="{{model.company.url}}" width="100px" height="34px">
+                      </div> -->
+                      <div class="textsendList">
+                      Enviar listado de postulantes a:<br>
                       </div>
                       <div class="textBussines">
-                        <b>{{model.company.name}}</b> <br>
-                        La Plata
+                        <b>{{model.company.name}}</b>
                       </div>
                   </div>
-                  <div class="textsendList">
-                  Enviar listado de postulantes a:
-                  </div>
+
                   <div class="contentMailBusines">
                       <div class="mailBussines" ng-repeat='e in model.company.emails'>
                         <div><i class="fa fa-envelope-o"></i> {{e}}<button class="btnDeleteMail" ng-click='removeEmailFromCompany(e)'> <i class="fa fa-trash-o"></i></button></div>
@@ -473,6 +473,13 @@
                     <i class="fa fa-envelope-o"></i>
                     <input class="inputMail" type=email ng-model='model.emailAddToCompany' placeholder="Nuevo Correo"></input>
                     <button class="btnAddMail" ng-click='addEmailToCompany()'> <i class="fa fa-plus"></i> Agregar</button>
+                  </div>
+
+                  <div class="textsendList">
+
+                    CANTIDAD DE POSTULANTES POR MAIL:
+
+                    <input class="inputCantMail" type=number ng-model='model.inscriptionsPerMail'></input>
                   </div>
 
               </div>

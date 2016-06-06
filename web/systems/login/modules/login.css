@@ -271,7 +271,6 @@ tenia este codigo walter. pero lo comento porque lo hago con ng-show y ng-hide
   font-size: 12px;
   cursor: pointer;
   color: #28292D;
-  opacity: 0;
 }
 
 
@@ -329,8 +328,8 @@ tenia este codigo walter. pero lo comento porque lo hago con ng-show y ng-hide
 
 }
 
-.login.screenUser .textNoPuedoAcceder {
-  opacity: 0;
+.login.screenUser .textNoPuedoAcceder a {
+    text-decoration: none;
 }
 /******************** MEDIA QUERIS ***************************/
 

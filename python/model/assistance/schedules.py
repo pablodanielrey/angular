@@ -3,6 +3,7 @@ import datetime
 from model.serializer.utils import JSONSerializable
 from model.users.users import UserDAO
 from model.assistance.assistanceDao import AssistanceDAO
+from model.assistance.utils import Utils
 
 class Schedule(JSONSerializable):
 
@@ -27,11 +28,12 @@ class Schedule(JSONSerializable):
 
     def getStartDate(self, date):
         dt = datetime.datetime.combine(date, datetime.time(0,0))
-        return dt + datetime.timedelta(seconds=self.start)
+        return Utils._localizeLocal(dt + datetime.timedelta(seconds=self.start))
 
     def getEndDate(self, date):
         dt = datetime.datetime.combine(date, datetime.time(0,0))
-        return dt + datetime.timedelta(seconds=self.end)
+        return Utils._localizeLocal(dt + datetime.timedelta(seconds=self.end))
+
 
     def getScheduleSeconds(self):
         if self.end is None or self.start is None:

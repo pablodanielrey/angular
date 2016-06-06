@@ -159,6 +159,12 @@ class LaboralInsertionWamp(ApplicationSession):
     def persistInscriptionByUser(self, userId, data):
         con = self.conn.get()
         try:
+            """ primero busco que no exista esa misma inscripción """
+            inscriptions = self.laboralInsertion.findAllInscriptionsByUser(con, userId)
+            ins = [ i for i in inscriptions if i.degree == data['degree'] and i.workType == data['workType'] and not i.deleted ]
+            if len(ins) >= 1:
+                raise Exception('Ya existe esa inscripcion')
+
             if 'id' not in data:
                 data['id'] = None
             data['userId'] = userId
@@ -191,11 +197,16 @@ class LaboralInsertionWamp(ApplicationSession):
         finally:
             self.conn.put(con)
 
-    def sendMailToCompany(self, inscriptions, emails):
+    def sendMailToCompany(self, inscriptions, emails, inscriptionsPerMail):
         con = self.conn.get()
         try:
             inscriptionIds = [ i['id'] for i in inscriptions ]
-            data = self.laboralInsertion.sendMailToCompany(con, inscriptionIds, emails)
+            inscriptionsToSend = [ inscriptionIds.pop() for i in range(inscriptionsPerMail) if len(inscriptionIds) > 0 ]
+            data = []
+            while len(inscriptionsToSend) > 0:
+                data.extend(self.laboralInsertion.sendMailToCompany(con, inscriptionsToSend, emails))
+                inscriptionsToSend = [ inscriptionIds.pop() for i in range(inscriptionsPerMail) if len(inscriptionIds) > 0 ]
+
             self.publish('system.laboralInsertion.COMPANYSENDED', data)
             return True
 
@@ -318,9 +329,9 @@ class LaboralInsertionWamp(ApplicationSession):
         return r
 
     @coroutine
-    def sendMailToCompany_async(self, inscriptions, company):
+    def sendMailToCompany_async(self, inscriptions, company, inscriptionsPerMail):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.sendMailToCompany, inscriptions, company)
+        r = yield from loop.run_in_executor(None, self.sendMailToCompany, inscriptions, company, inscriptionsPerMail)
         return r
 
     @coroutine

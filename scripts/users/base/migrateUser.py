@@ -107,7 +107,7 @@ if __name__ == '__main__':
     assert uid is not None
 
     logging.getLogger().setLevel(logging.INFO)
-    inject.configure()
+    #inject.configure()
     reg = inject.instance(Registry)
 
     password = _checkAndRemoveInLdap(reg, uid)

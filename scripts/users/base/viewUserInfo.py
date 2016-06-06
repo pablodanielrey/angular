@@ -103,7 +103,7 @@ if __name__ == '__main__':
 
     logging.getLogger().setLevel(logging.INFO)
 
-    inject.configure()
+    #inject.configure()
     reg = inject.instance(Registry)
 
     logging.info('\n\n\n----- INFORMACION DEL LDAP -------')

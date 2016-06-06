@@ -24,16 +24,20 @@ function RequestCtrl($scope, Login, Assistance, Users, Office, $location, $timeo
   $scope.sortUserName = sortUserName;
   $scope.orderUserName = orderUserName;
   $scope.loadUsers = loadUsers;
+  $scope.findUsersByOffices = findUsersByOffices;
   $scope.getName = getName;
   $scope.selectCompensatory = selectCompensatory;
   $scope.selectInformedAbsence = selectInformedAbsence;
   $scope.selectOTWithReturn = selectOTWithReturn;
   $scope.selectOTWithoutReturn = selectOTWithoutReturn;
+  $scope.selectUniversityPreExam = selectUniversityPreExam;
+  $scope.selectA102 = selectA102;
   $scope.back = back;
   $scope.changeStatus = changeStatus;
   $scope.cancelJustification = cancelJustification;
   $scope.rejectJustification = rejectJustification;
   $scope.approveJustification = approveJustification;
+  $scope.getRole = getRole;
 
   $scope.model = {
     userId: null,
@@ -69,7 +73,7 @@ function RequestCtrl($scope, Login, Assistance, Users, Office, $location, $timeo
     style2: '',
     style2_options: ['','solicitudSeleccionada'],
     displayRequest: '',
-    displayRequestOptions: ['', 'compensatory', 'informedAbsence', 'oTWithReturn', 'oTWithoutReturn']
+    displayRequestOptions: ['', 'compensatory', 'informedAbsence', 'oTWithReturn', 'oTWithoutReturn', 'universityPreExam', 'a102']
   }
 
 
@@ -155,8 +159,17 @@ function RequestCtrl($scope, Login, Assistance, Users, Office, $location, $timeo
 
     Office.getOfficesByUserRole($scope.model.userId, true, 'autoriza').then(function(ids) {
       if (ids.length > 0) {
+        $scope.findUsersByOffices(ids);
         $scope.view.optionsJustifications.push($scope.view.optionGroupJustifications);
       }
+    }, function(error) {
+      console.log(error);
+    });
+  }
+
+  function findUsersByOffices(ids) {
+    Office.getOfficesUsers(ids).then(function (userIds) {
+      $scope.loadUsers(userIds);
     }, function(error) {
       console.log(error);
     });
@@ -215,7 +228,6 @@ function RequestCtrl($scope, Login, Assistance, Users, Office, $location, $timeo
       $scope.view.style3 = $scope.model.optionJustifications.style;
       justifications = [];
       userIds = Object.keys(data);
-      $scope.loadUsers(userIds);
       for (userId in data) {
         var just = data[userId];
         for (var i = 0; i < just.length; i++) {
@@ -417,6 +429,18 @@ function RequestCtrl($scope, Login, Assistance, Users, Office, $location, $timeo
     $scope.$broadcast('selectOTWithoutReturnEvent', $scope.model.userId);
   }
 
+  function selectUniversityPreExam() {
+    $scope.view.style2 = $scope.view.style2_options[1];
+    $scope.view.displayRequest = $scope.view.displayRequestOptions[5];
+    $scope.$broadcast('selectUniversityPreExamEvent', $scope.model.userId);
+  }
+
+  function selectA102() {
+    $scope.view.style2 = $scope.view.style2_options[1];
+    $scope.view.displayRequest = $scope.view.displayRequestOptions[6];
+    $scope.$broadcast('selectA102Event', $scope.model.userId);
+  }
+
   $scope.$on('closeRequestEvent', function(e) {
     $scope.view.style = $scope.view.style_options[0];
     $scope.view.style2 = $scope.view.style2_options[0];
@@ -425,6 +449,10 @@ function RequestCtrl($scope, Login, Assistance, Users, Office, $location, $timeo
   function back() {
     $scope.view.style = $scope.view.style_options[0];
     $scope.view.style2 = $scope.view.style2_options[0];
+  }
+
+  function getRole() {
+    return "authority"
   }
 
 

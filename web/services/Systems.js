@@ -1,19 +1,33 @@
-var app = angular.module('mainApp');
+angular
+	.module('mainApp')
+	.service('Systems',Systems);
 
-app.service('Systems', function($rootScope, Messages, Session, Utils, Cache, Config) {
+Systems.inject = ['Utils','Session','$wamp'];
 
-  this.listSystems = function(callbackOk, callbackError) {
-    var  msg = {
-      id: Utils.getId(),
-      action: 'listSystems',
-      session: Session.getSessionId(),
-    };
-    Messages.send(msg, function(response) {
-      if (response.error != undefined) {
-        callbackError(response.error);
-      } else {
-        callbackOk(response.systems);
-      }
+function Systems (Utils, Session, $wamp) {
+
+  this.listSystems = function() {
+    return new Promise(function(cok, cerr) {
+      var sid = Session.getSessionId();
+  		$wamp.call('fce.listSystems', [sid])
+      .then(function(v) {
+        cok(v);
+      },function(err) {
+        cerr(err);
+      });
     });
   }
-});
+
+  this.changePassword = function(password) {
+    return new Promise(function(cok, cerr) {
+      var sid = Session.getSessionId();
+  		$wamp.call('fce.changePassword', [sid, password])
+      .then(function(v) {
+        cok(v);
+      },function(err) {
+        cerr(err);
+      });
+    });
+  }
+
+}

@@ -1,0 +1,27 @@
+<div class="menu " id="itemMenuId">
+    <div class="itemMenu"  onclick="if (document.getElementById('itemMenuId').className == 'menu close') {document.getElementById('itemMenuId').className = 'menu'} else {document.getElementById('itemMenuId').className = 'menu close'} ">
+        <div class="itemTextMenu2">
+          <b>MENU</b>
+        </div>
+        <div class="itemIcons" title="Menu">
+          <i class="fa fa-bars  iconsMenu"></i>
+        </div>
+    </div>
+    <div class="itemMenu" ng-click="selectOrders()">
+        <div class="itemTextMenu">
+          <i class="fa fa-caret-right arrowItemsMenu"></i> Pedidos
+        </div>
+        <div class="itemIcons" title="Pedidos">
+          <i class="fa fa-tags iconsMenu" ></i>
+        </div>
+    </div>
+    <div class="itemMenu"  ng-click="selectMyOrders()">
+        <div class="itemTextMenu">
+          <i class="fa fa-caret-right arrowItemsMenu"></i> Mis Pedidos
+        </div>
+        <div class="itemIcons" title="Mis Pedidos">
+          <i class="fa fa-tag iconsMenu" ></i>
+        </div>
+    </div>
+
+</div>

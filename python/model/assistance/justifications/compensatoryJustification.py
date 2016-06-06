@@ -25,6 +25,7 @@ class CompensatoryJustificationDAO(AssistanceDAO):
                     user_id varchar not null references profile.users (id),
                     owner_id varchar not null references profile.users (id),
                     date date not null default now(),
+                    notes varchar,
                     created timestamptz default now()
               );
 
@@ -40,9 +41,12 @@ class CompensatoryJustificationDAO(AssistanceDAO):
 
     @classmethod
     def _fromResult(cls, con, r):
-        date = datetime.datetime.combine(r['date'], datetime.time.min)
-        c = CompensatoryJustification(date, r['user_id'], r['owner_id'])
+        c = CompensatoryJustification()
         c.id = r['id']
+        c.date = r['date']
+        c.userId = r['user_id']
+        c.ownerId = r['owner_id']
+        c.notes = r['notes']
         c.setStatus(Status.getLastStatus(con, c.id))
         return c
 
@@ -57,12 +61,12 @@ class CompensatoryJustificationDAO(AssistanceDAO):
 
             if len(c.findById(con, [c.id])) <=  0:
                 r = c.__dict__
-                cur.execute('insert into assistance.justification_compensatory (id, user_id, owner_id, date) '
-                            'values ( %(id)s, %(userId)s, %(ownerId)s, %(date)s)', r)
+                cur.execute('insert into assistance.justification_compensatory (id, user_id, owner_id, date, notes) '
+                            'values ( %(id)s, %(userId)s, %(ownerId)s, %(date)s, %(notes)s)', r)
             else:
                 r = c.__dict__
                 cur.execute('update assistance.justification_compensatory set user_id = %(userId)s, owner_id = %(ownerId)s, '
-                            'date = %(date)s where id = %(id)s', r)
+                            'date = %(date)s, notes = %(notes)s where id = %(id)s', r)
             return c.id
 
         finally:
@@ -82,17 +86,16 @@ class CompensatoryJustificationDAO(AssistanceDAO):
     @classmethod
     def findByUserId(cls, con, userIds, start, end):
         assert isinstance(userIds, list)
-        assert isinstance(start, datetime.datetime)
-        assert isinstance(end, datetime.datetime)
+        assert isinstance(start, datetime.date)
+        assert isinstance(end, datetime.date)
 
         if len(userIds) <= 0:
             return
 
         cur = con.cursor()
         try:
-            sDate = None if start is None else start.date()
-            eDate = datetime.date.today() if end is None else end.date()
-            cur.execute('select * from assistance.justification_compensatory where user_id  in %s and date BETWEEN %s AND %s', (tuple(userIds), sDate, eDate))
+            eDate = datetime.date.today() if end is None else end
+            cur.execute('select * from assistance.justification_compensatory where user_id  in %s and date BETWEEN %s AND %s', (tuple(userIds), start, eDate))
             return [ cls._fromResult(con, r) for r in cur ]
         finally:
             cur.close()
@@ -110,10 +113,18 @@ class CompensatoryJustificationDAO(AssistanceDAO):
             cur.close()
 
     @classmethod
-    def updateStock(cls, con, userId, stock):
+    def updateStock(cls, con, userId, stock, updated = None):
         cur = con.cursor()
         try:
-            cur.execute('update assistance.justification_compensatory_stock set stock = %s where user_id = %s', (stock, userId))
+            cur.execute('delete from assistance.justification_compensatory_stock where user_id = %s', (userId,))
+
+            if updated is None:
+                cur.execute('insert into assistance.justification_compensatory_stock (user_id, stock) '
+                            'values ( %s, %s)', (userId, stock))
+
+            else:
+                cur.execute('insert into assistance.justification_compensatory_stock (user_id, stock, updated) '
+                            'values ( %s, %s, %s)', (userId, stock, updated))
         finally:
             cur.close()
 
@@ -139,6 +150,10 @@ class CompensatoryJustification(SingleDateJustification):
     @classmethod
     def getStock(cls, con, userId):
         return cls.dao.getStock(con, userId)
+
+    @classmethod
+    def updateStock(cls, con, userId, stock, calculated = None):
+        return cls.dao.updateStock(con, userId, stock, calculated)
 
     @classmethod
     def getData(cls, con, userId, date, schedule):

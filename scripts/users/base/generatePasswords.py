@@ -20,7 +20,7 @@ if __name__ == '__main__':
     count = 0
     countg = 0
 
-    inject.configure()
+    #inject.configure()
     conn = inject.instance(Connection)
     con = conn.get()
     try:

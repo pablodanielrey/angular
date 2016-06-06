@@ -16,7 +16,7 @@ if __name__ == '__main__':
     from actions.systems.laboralinsertion.laboralInsertion import LaboralInsertionWamp
     from model.registry import Registry
 
-    inject.configure()
+    #inject.configure()
 
     reg = inject.instance(Registry)
     registry = reg.getRegistry('wamp')

@@ -7,33 +7,6 @@ from model.laboralinsertion.user import UserDAO
 from model.laboralinsertion.languages import LanguageDAO
 
 
-class Inscription:
-
-    def __init__(self):
-        self.id = None
-        self.userId = None
-        self.degree = None
-        self.workType = None
-        self.reside = False
-        self.travel = False
-        self.workExperience = False
-        self.checked = False
-        self.created = None
-        self.average1 = 0
-        self.average2 = 0
-        self.approved = 0
-
-    def getUser(self, con):
-        users = model.users.users.UserDAO.findById(con, [self.userId])
-        return None if (users == None or len(users) == 0) else users[0]
-
-    def getUserData(self, con):
-        return model.laboralinsertion.user.UserDAO.findById(con, self.userId)
-
-    def getLanguages(self, con):
-        return LanguageDAO.findByUser(con, self.userId)
-
-
 class InscriptionDAO(DAO):
     dependencies = [UserDAO]
 
@@ -153,3 +126,40 @@ class InscriptionDAO(DAO):
 
         finally:
             cur.close()
+
+
+class Inscription:
+
+    dao = InscriptionDAO
+
+    def __init__(self):
+        self.id = None
+        self.userId = None
+        self.degree = None
+        self.workType = None
+        self.reside = False
+        self.travel = False
+        self.workExperience = False
+        self.checked = False
+        self.created = None
+        self.average1 = 0
+        self.average2 = 0
+        self.approved = 0
+
+    def getUser(self, con):
+        users = model.users.users.UserDAO.findById(con, [self.userId])
+        return None if (users == None or len(users) == 0) else users[0]
+
+    def getUserData(self, con):
+        return model.laboralinsertion.user.UserDAO.findById(con, self.userId)
+
+    def getLanguages(self, con):
+        return LanguageDAO.findByUser(con, self.userId)
+
+    @classmethod
+    def findById(cls, con, ids):
+        return cls.dao.findById(con, ids)
+
+    @classmethod
+    def findAll(cls, con):
+        return cls.dao.findAll(con)

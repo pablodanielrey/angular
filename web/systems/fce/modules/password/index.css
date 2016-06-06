@@ -78,6 +78,12 @@
   margin-top: 10px;
 }
 
+.password .messageErrorPassNotEquals {
+  color: #E43E46;
+  padding: 10px;
+  margin-top: 10px;
+}
+
 .password .messageOK {
   color: #92AD17;
   padding: 10px;
@@ -90,11 +96,13 @@
 
 .password.avisoCargando .messageErrorPass,
 .password.avisoCargando .messageOK,
+.password.avisoCargando .messageErrorPassNotEquals,
 .password.avisoCargando .messageErrorSystem {
   display: none;
 }
 
 .password.avisoError .messageErrorPass,
+.password.avisoError .messageErrorPassNotEquals,
 .password.avisoError .messageOK,
 .password.avisoError .loading {
   display: none;
@@ -102,12 +110,21 @@
 
 .password.avisoErrorPass .messageErrorSystem,
 .password.avisoErrorPass .messageOK,
+.password.avisoErrorPass .messageErrorPassNotEquals,
 .password.avisoErrorPass .loading {
+  display: none;
+}
+
+.password.avisoPassDistintos .messageErrorSystem,
+.password.avisoPassDistintos .messageOK,
+.password.avisoPassDistintos .messageErrorPass,
+.password.avisoPassDistintos .loading {
   display: none;
 }
 
 .password.avisoOk .messageErrorSystem,
 .password.avisoOk .messageErrorPass,
+.password.avisoOk .messageErrorPassNotEquals,
 .password.avisoOk .loading {
   display: none;
 }
