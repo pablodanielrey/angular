@@ -42,7 +42,7 @@ VARIABLES 3: solicitudesPersonales, solicitudesGrupo, cargandoSolicitudes
               </div>
                   <div class="contentListPerson">
 
-                      <div class="btnItemPerson" ng-click="view.style='seleccionSolicitud'" ng-repeat="user in model.usersArray | filter:view.search">
+                      <div class="btnItemPerson" ng-click="selectUser(user)" ng-repeat="user in model.usersArray | filter:view.search">
                           <div class="contentImgUser">
                               <img class="imgUser" ng-src='{{getUserPhoto(user.photo)}}' alt="foto de perfil">
                           </div>

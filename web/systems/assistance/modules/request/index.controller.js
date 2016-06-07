@@ -41,9 +41,11 @@ function RequestCtrl($scope, Login, Assistance, Users, Office, $location, $timeo
   $scope.approveJustification = approveJustification;
   $scope.getRole = getRole;
   $scope.selectRequestAuthority = selectRequestAuthority;
+  $scope.selectUser = selectUser;
 
   $scope.model = {
     userId: null,
+    loginUserId: null,
     start: null,
     end: null,
     optionJustifications: null,
@@ -87,9 +89,11 @@ function RequestCtrl($scope, Login, Assistance, Users, Office, $location, $timeo
 
   $scope.$on('$viewContentLoaded', function(event) {
     $scope.model.userId = '';
+    $scope.model.loginUserId = '';
     Login.getSessionData()
       .then(function(s) {
           $scope.model.userId = s.user_id;
+          $scope.model.loginUserId = s.user_id;
           $scope.initialize();
       }, function(err) {
         console.log("error");
@@ -100,6 +104,7 @@ function RequestCtrl($scope, Login, Assistance, Users, Office, $location, $timeo
     $timeout(function() {
       $scope.view.style = $scope.view.style_options[0];
       $scope.view.style2 = $scope.view.style2_options[0];
+      $scope.model.userId = $scope.model.loginUserId;
       $scope.search();
     }, 1500);
   })
@@ -485,6 +490,11 @@ function RequestCtrl($scope, Login, Assistance, Users, Office, $location, $timeo
     } else {
       return "/c/files.py?i=" + photo;
     }
+  }
+
+  function selectUser(user) {
+    $scope.model.userId = user.id;
+    $scope.view.style = 'seleccionSolicitud';
   }
 
 
