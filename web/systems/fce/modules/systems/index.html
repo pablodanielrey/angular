@@ -1,0 +1,23 @@
+<div class="systems">
+    <div class="header">
+        <div>
+            <i class="fa fa-google-wallet"></i> SISTEMAS
+        </div>
+    </div>
+
+    <div class="contentSystems">
+        <div>
+          Mis Sistemas
+        </div>
+
+        <div class="listSystems">
+
+          <div class="btnsSystems {{op.style}}" ng-repeat="op in model.systems" ng-click="op.action()">
+              <div><i class="{{op.img}}" ></i></div>
+              <div>{{op.name}}</div>
+          </div>
+
+        </div>
+    </div>
+
+</div>

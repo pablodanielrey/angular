@@ -2,19 +2,23 @@ angular
   .module('mainApp')
   .controller('IndexLoginCtrl',IndexLoginCtrl);
 
-IndexLoginCtrl.$inject = ['$rootScope','$scope','$location','Notifications'];
+IndexLoginCtrl.$inject = ['$rootScope','$scope'];
 
-function IndexLoginCtrl($rootScope, $scope, $location, Notifications) {
+function IndexLoginCtrl($rootScope, $scope) {
 
-    var vm = this;
+    $rootScope.loaded = false;
+    $scope.loaded = false;
 
-    $scope.model = {
-    }
+    $rootScope.$on("$wamp.open", function (event, session) {
+      $scope.$broadcast('wampOpenEvent', event);
+    });
 
-    $scope.initialize = function() {
-    }
+    $rootScope.$on("$wamp.close", function (event, session) {
+      $scope.$broadcast('wampCloseEvent',event);
+    });
 
     $scope.$on('$viewContentLoaded', function(event) {
-      $scope.initialize();
+      // nada
     });
+
 };

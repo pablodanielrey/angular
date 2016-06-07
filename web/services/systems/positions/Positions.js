@@ -1,42 +1,13 @@
-var app = angular.module('mainApp');
+angular
+	.module('mainApp')
+	.service('Positions', Positions);
 
-app.service('Positions', ['Utils','Session','$wmap',
+Positions.inject = ['$rootScope', '$wamp', 'Session']
 
-	function(Utils, Session, $wamp) {
+function Positions($rootScope, $wamp, Session) {
 
-    this.getPosition = function(userId, callbackOk, callbackError){
-      var sid = Session.getSessionId();
-      $wamp.call('positions.getPosition', [sid, userId])
-        .then(function(res) {
-          if (res != null) {
-            callbackOk(res);
-          } else {
-            callbackError('Error');
-          }
-        },function(err) {
-          callbackError(err);
-        });
-    };
+	this.getPosition = function (userId) {
+		return $wamp.call('positions.getPosition',[userId]);
+	}
 
-    /**
-     * Actualizar cargo del usuario
-     * @param {userId} userId
-     * @param {justificationId} justificationId
-     * @param {stock} stock
-     */
-    this.updatePosition = function(userId, position, callbackOk,callbackError) {
-      var sid = Session.getSessionId();
-      $wamp.call('positions.updatePosition', [sid, userId, position])
-        .then(function(res) {
-          if (res != null) {
-            callbackOk(res);
-          } else {
-            callbackError('Error');
-          }
-        },function(err) {
-          callbackError(err);
-        });
-    }
-
-  }
-]);
+}

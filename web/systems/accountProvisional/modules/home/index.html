@@ -1,0 +1,142 @@
+<div class="home {{view.style}}">
+
+<!--  VARIABLES:
+      pantallaBusqueda
+      pantallaUsuarioNoExiste
+      pantallaCrearUsuario
+      pantallaUsuarioCreado
+      pantallaInfoDeUsuario
+      pantallaMailEliminado
+      pantallaCargando
+      pantallaError (que tenga un delay de 2seg y vuelva a formulario de carga)
+-->
+
+    <div class="header">
+        <div>
+            Administración de cuentas FCE (sistema provisorio)
+        </div>
+    </div>
+
+    <div class="contentHome">
+
+      <div class="contentSearch">
+          <div class="title">
+            BUSCAR CUENTA
+          </div>
+          <div>
+            <form ng-submit="search()">
+              <input class="inputSearch" type="search" ng-model="model.search"></input>
+              <button type="submit" class="btnSearch" > <i class="fa fa-search" aria-hidden="true"></i></button>
+            </form>
+          </div>
+      </div>
+
+      <div class="contentUserNotExist">
+          <div>
+            <button class="btnBack" ng-click="viewSearch()"><i class="arrowBack fa fa-chevron-left"></i> VOLVER</button>
+          </div>
+          <div class="textUserNotExist">
+            NO EXISTE LA CUENTA!
+          </div>
+          <div class="textNumberDNI">
+            {{model.search}}
+          </div>
+          <div>
+            <button class="btnCreate" ng-click="createUser()"> CREAR CUENTA </i></button>
+          </div>
+      </div>
+
+      <div class="createUser">
+        <div>
+          <button class="btnBack" ng-click="viewSearch()"><i class="arrowBack fa fa-chevron-left"></i> VOLVER</button>
+        </div>
+          <div class="textform">Nombre</div>
+          <div><input class="inputText" type="text" ng-model="model.user.name"></input></div>
+          <div class="textform">Apellido</div>
+          <div><input class="inputText" type="text" ng-model="model.user.lastname"></input></div>
+          <div class="textform">DNI</div>
+          <div><input class="inputText" type="text" ng-model="model.user.dni"></input></div>
+          <div class="textform">Legajo</div>
+          <div><input class="inputText" type="text" ng-model="model.student.studentNumber"></input></div>
+          <div>
+            <div class="textform">Tipo</div>
+            <select class="inputSelect" ng-options="item.description for item in model.types" ng-model="model.selectedType">
+            </select>
+          </div>
+          <div>
+            <button class="btnCreate" ng-click="save()"> CREAR CUENTA </i></button>
+          </div>
+      </div>
+
+      <div class="userCreated">
+          <div class="textUserCreated">
+              CUENTA CREADA!
+          </div>
+          <div class="textform">Nombre</div>
+          <div class="textform2">{{model.user.name}}</div>
+          <div class="textform">Apellido</div>
+          <div class="textform2">{{model.user.lastname}}</div>
+          <div class="textform">DNI</div>
+          <div class="textform2">{{model.user.dni}}</div>
+          <div class="textform">Legajo</div>
+          <div class="textform2">{{model.student.studentNumber}}</div>
+          <div class="textform">Tipo</div>
+          <div class="textform2">{{model.selectedType.description}}</div>
+
+          <div>
+            <button class="btnOut" ng-click="viewSearch()"> SALIR </i></button>
+          </div>
+      </div>
+
+      <div class="infoUser">
+
+        <div>
+          <button class="btnBack" ng-click="viewSearch()"><i class="arrowBack fa fa-chevron-left"></i> VOLVER</button>
+        </div>
+
+        <div class="textform">Nombre y Apellido</div>
+        <div class="textform2">{{model.user.name}} {{model.user.lastname}}</div>
+        <div class="textform">DNI</div>
+        <div class="textform2">{{model.user.dni}}</div>
+        <div class="textform">Legajo</div>
+        <div class="textform2">{{getStudentNumber()}}</div>
+        <div class="textform">Tipo</div>
+        <div class="textform2">
+          <select class="inputSelect" ng-options="item.description for item in model.types" ng-model="model.selectedType" ng-change="updateType()">
+          </select>
+        </div>
+        <div class="textform">Correo FCE</div>
+        <div class="textform2">{{toMail(getMailEcono())}}</div>
+        <div class="textform">Correo Alternativo</div>
+        <div class="textform2">{{toMail(getMailAlternative())}}</div>
+        <div>
+          <button class="btnDeleteMail" ng-click="deleteMail()"> Eliminar correo alternativo  </i></button>
+        </div>
+
+      </div>
+
+      <div class="mailDeleted">
+        <div class="textUserCreated">
+            CORREO ELIMINADO!
+        </div>
+        <div>
+          <button class="btnOut" ng-click="viewSearch()"> SALIR </i></button>
+        </div>
+
+      </div>
+
+      <div class="loading">
+        <div class="iconMessage"><i class="fa fa-circle-o-notch fa-spin fa-4x"></i></div>
+        <div>PROCESANDO</div>
+        <div>Por favor espere... </div>
+      </div>
+
+      <div class="errorData">
+        <div class="titleError"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> ERROR</div>
+        <div>
+          Verifique los datos cargados
+      </div>
+
+    </div>
+
+</div>

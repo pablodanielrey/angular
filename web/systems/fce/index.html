@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name='viewport' content='width=device-width'/>
-
+  <title>DiTESI | FCE </title>
 
   <script src="/libs/bower_components/angularjs/angular.js"></script>
   <script src="/libs/bower_components/angular-route/angular-route.js"></script>
@@ -11,8 +11,9 @@
   <script src="/libs/bower_components/angular-wamp/release/angular-wamp.js"></script>
 
   <!-- esto es el estilo de font awesome para tener los iconos -->
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
   <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+  <link rel="shortcut icon" href="/systems/fce/img/favicon2.ico">
 
   <script type="text/javascript" src="/config.json"></script>
 
@@ -28,64 +29,46 @@
 	<script type="text/javascript" src="/services/Session.js"></script>
 	<script type="text/javascript" src="/services/Notifications.js"></script>
 	<script type="text/javascript" src="/services/Profiles.js"></script>
+
+  <script type="text/javascript" src="/services/Systems.js"></script>
   <script type="text/javascript" src="/services/Login.js"></script>
-
+  <script type="text/javascript" src="/services/Users.js"></script>
+  <script type="text/javascript" src="/services/systems/student/Student.js"></script>
+  <script type="text/javascript" src="/services/systems/files/Files.js"></script>
+  <script type="text/javascript" src="/directives/onReadFileBinaryString.js"></script>
 	<!-- modules -->
-  <link rel="stylesheet" type="text/css" href="/systems/fce/modules/home/home.css"/>
+  <script type="text/javascript" src="/systems/fce/modules/index.controller.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/fce/modules/index.css"/>
 
-  <script type="text/javascript" src="/systems/fce/modules/header/header.js"></script>
-  <link rel="stylesheet" type="text/css" href="/systems/fce/modules/header/header.css"/>
+  <script type="text/javascript" src="/systems/fce/modules/perfil/index.controller.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/fce/modules/perfil/index.css"/>
 
-  <script type="text/javascript" src="/systems/fce/modules/footer/footer.js"></script>
-  <link rel="stylesheet" type="text/css" href="/systems/fce/modules/footer/footer.css"/>
+  <script type="text/javascript" src="/systems/fce/modules/password/index.controller.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/fce/modules/password/index.css"/>
 
-  <script type="text/javascript" src="/systems/fce/menu/menu.js"></script>
-  <link rel="stylesheet" type="text/css" href="/systems/fce/menu/menu.css"/>
+  <script type="text/javascript" src="/systems/fce/modules/mails/index.controller.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/fce/modules/mails/index.css"/>
+
+  <script type="text/javascript" src="/systems/fce/modules/systems/index.controller.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/fce/modules/systems/index.css"/>
+
+  <script type="text/javascript" src="/systems/fce/modules/menu/index.controller.js"></script>
 
   <script type="text/javascript" src="/modules/messages/messages.js"></script>
   <link rel="stylesheet" type="text/css" href="/modules/messages/messages.css"/>
 
+  <link rel="stylesheet" type="text/css" href="/systems/fce/modules/header/header.css"/>
+  <script type="text/javascript" src="/systems/fce/modules/header/header.controller.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/fce/modules/footer/footer.css"/>
+
 </head>
-<body>
+<body class="sistema" ng-controller="IndexCtrl">
 
-
-<div ng-controller="IndexCtrl" class="principal">
-
-<div class="screen" ng-class="{true:'closeMenu', false:'openMenu'}[hideMenu()]">
-      <!--
-	    <div class="header-container" ng-controller="HeaderCtrl" ng-include="'/systems/fce/modules/header/header.html'"></div>
-      -->
-
-      <div id='main'>
-        <nav ng-class="{true:'visible',false:'hidden'}[isLogged()]">
-          <div class='menu-container' ng-controller="MenuCtrl" ng-include="'/systems/fce/menu/menu.html'">
-          </div>
-        </nav>
-
-        <article>
-          <div ng-view></div>
-          <iframe id='nnt' name='nnt' sandbox='allow-forms allow-same-origin allow-scripts'>
-          </iframe>
-        </article>
-        <!--
-        <article>
-
-        </article>
-        -->
-      </div>
-
-      <!--
-      <footer>
-        <div class='footer-container' ng-controller='FooterCtrl' ng-include="'/systems/fce/modules/footer/footer.html'">
-        </div>
-      </footer>
-      -->
+    <div ng-include="'/systems/fce/modules/header/index.html'" ng-controller="HeaderCtrl"></div>
+    <div class="main">
+      <div class="MenuContent" ng-controller="MenuCtrl" ng-include="'/systems/fce/modules/menu/index.html'"></div>
+      <div class="viewContent" ng-view></div>
     </div>
-
-    <div class='messages-container' ng-controller="MessagesCtrl" ng-include="'/modules/messages/messages.html'" ng-class="{false: 'hidden', true: 'visible'}[ isVisible() ]">
-    </div>
-
-</div>
-
+    <div ng-include="'/systems/fce/modules/footer/index.html'"></div>
 </body>
 </html>

@@ -59,7 +59,7 @@ create schema assistance;
   create table assistance.checks (
     id varchar primary key,
     user_id varchar not null references profile.users (id),
-    date timestamptz not null,
+    sdate date not null,
     enable boolean not null default true,
     type varchar not null,
     created timestamptz default now(),
@@ -75,16 +75,13 @@ create schema assistance;
   create table assistance.schedule (
     id varchar primary key,
     user_id varchar not null references profile.users (id),
-    date timestamptz not null,
-    sstart timestamptz not null,
-    send timestamptz not null,
+    sdate date not null,
+    sstart bigint not null,
+    send bigint not null,
     isDayOfWeek boolean default true not null,
     isDayOfMonth boolean default false not null,
     isDayOfYear boolean default false not null,
-    created timestamptz not null default now(),
-    CHECK(EXTRACT(TIMEZONE FROM date) = '0'),
-    CHECK(EXTRACT(TIMEZONE FROM sstart) = '0'),
-    CHECK(EXTRACT(TIMEZONE FROM send) = '0')
+    created timestamptz not null default now()
   );
 
 

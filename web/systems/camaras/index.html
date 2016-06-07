@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html ng-app="mainApp">
+<head>
+  <meta charset="utf-8"/>
+  <meta name='viewport' content='width=device-width'/>
+
+  <script type="text/javascript" src="http://cdn.clappr.io/latest/clappr.min.js"></script>
+  
+  <script src="/libs/bower_components/angularjs/angular.js"></script>
+  <script src="/libs/bower_components/angular-route/angular-route.js"></script>
+  <script src="/libs/bower_components/autobahn/autobahn.js"></script>
+  <script src="/libs/bower_components/angular-wamp/release/angular-wamp.js"></script>
+
+
+  <!-- esto es el estilo de font awesome para tener los iconos -->
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+
+  <script type="text/javascript" src="/config.json"></script>
+
+
+
+  <!--archivos principales-->
+  <link rel="stylesheet" href="/systems/camaras/camaras.css">
+  <script type="text/javascript" src="/systems/camaras/index.module.js"></script>
+  <script type="text/javascript" src="/systems/camaras/camaras.js"></script>
+  <script type="text/javascript" src="/systems/camaras/routes.js"></script>
+
+	<!-- ***** SERVICIOS ***** -->
+	<script type="text/javascript" src="/config.json"></script>
+	<script type="text/javascript" src="/services/Config.js"></script>
+	<script type="text/javascript" src="/services/Credentials.js"></script>
+	<script type="text/javascript" src="/services/Utils.js"></script>
+	<script type="text/javascript" src="/services/Cache.js"></script>
+	<script type="text/javascript" src="/services/Session.js"></script>
+	<script type="text/javascript" src="/services/WebSocket.js"></script>
+	<script type="text/javascript" src="/services/Notifications.js"></script>
+	<script type="text/javascript" src="/services/Systems.js"></script>
+	<script type="text/javascript" src="/services/Groups.js"></script>
+	<script type="text/javascript" src="/services/Users.js"></script>
+	<script type="text/javascript" src="/services/Profiles.js"></script>
+  <script type="text/javascript" src="/services/Login.js"></script>
+
+  <script type="text/javascript" src="/services/systems/camaras/Camaras.js"></script>
+
+
+	<!-- ***** MODULOS ***** -->
+  <script type="text/javascript" src="/modules/messages/messages.js"></script>
+  <link rel="stylesheet" type="text/css" href="/modules/messages/messages.css"/>
+
+  <!-- módulos de camaras -->
+
+  <script type="text/javascript" src="/systems/camaras/menu/menu.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/camaras/menu/menu.css"/>
+
+  <link rel="stylesheet" type="text/css" href="/systems/camaras/modules/commonCSS/button.css" />
+
+  <!-- **** camaras en VIVO **** -->
+  <script type="text/javascript" src="/systems/camaras/modules/live/live.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/camaras/modules/live/structure.css" />
+  <link rel="stylesheet" type="text/css" href="/systems/camaras/modules/live/visual.css" />
+  <link rel="stylesheet" type="text/css" href="/systems/camaras/modules/live/navigation.css" />
+
+  <!-- **** PANTALLA GRABACIONES **** -->
+  <script type="text/javascript" src="/systems/camaras/modules/rec/rec.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/camaras/modules/rec/structure.css" />
+  <link rel="stylesheet" type="text/css" href="/systems/camaras/modules/rec/visual.css" />
+  <link rel="stylesheet" type="text/css" href="/systems/camaras/modules/rec/navigation.css" />
+
+
+<body ng-controller="CamarasCtrl">
+
+<div class="principal" ng-controller="MenuCamerasCtrl">
+
+    <div class="screen" ng-class="{true:'closeMenu',false:'openMenu'}[model.cerrado]" >
+        <!-- <nav ng-class="{true:'visible',false:'hidden'}[isLogged()]"> -->
+        <div class="menuCamerasContainer" ng-include="'/systems/camaras/menu/menu.html'">
+        </div>
+
+        <div ng-view>
+        </div>
+
+
+
+    </div>
+
+    <div class='messages-container' ng-controller="MessagesCtrl" ng-include="'/modules/messages/messages.html'" ng-class="{false: 'hidden', true: 'visible'}[ isVisible() ]">
+    </div>
+
+</div>
+
+</body>
+</html>

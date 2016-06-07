@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-import psycopg2
 import inject
 import logging
 
-from model.config import Config
-from model.login import Login
-from model.profiles import Profiles
-from model.session import Session
+from model.users.users import User, Mail
+from model.login.login import Login, ResetPassword
+from model.login.session import Session
+from model.registry import Registry
+from model.connection import connection
 
 import asyncio
 from asyncio import coroutine
@@ -19,47 +19,87 @@ class LoginWamp(ApplicationSession):
         logging.debug('instanciando')
         ApplicationSession.__init__(self, config)
 
-        self.serverConfig = inject.instance(Config)
+        reg = inject.instance(Registry)
+        self.conn = connection.Connection(reg.getRegistry('dcsys'))
         self.loginModel = inject.instance(Login)
-        self.profiles = inject.instance(Profiles)
-        self.session = inject.instance(Session)
+
 
     @coroutine
     def onJoin(self, details):
         logging.debug('registering methods')
         yield from self.register(self.login_async, 'system.login')
         yield from self.register(self.logout_async, 'system.logout')
+        yield from self.register(self.testUser_async, 'system.testUser')
         yield from self.register(self.validateSession_async, 'system.session.validate')
-        yield from self.register(self.generateResetPasswordHash_async, 'system.password.generateResetPasswordHash')
-        yield from self.register(self.changePasswordWithHash_async, 'system.password.changePasswordWithHash')
-        yield from self.register(self.checkProfileAccess_async, 'system.profiles.checkProfileAccess')
+        yield from self.register(self.hasOneRole_async, 'system.profile.hasOneRole')
 
-    def _getDatabase(self):
-        host = self.serverConfig.configs['database_host']
-        dbname = self.serverConfig.configs['database_database']
-        user = self.serverConfig.configs['database_user']
-        passw = self.serverConfig.configs['database_password']
-        return psycopg2.connect(host=host, dbname=dbname, user=user, password=passw)
+        yield from self.register(self.findByDni_async, 'system.login.findByDni')
+        yield from self.register(self.checkCode_async, 'system.login.checkCode')
+        yield from self.register(self.changePassword_async, 'system.login.changePassword')
 
-    '''
-        Chequea que el usuario logeado en la sesion sid tenga alguno de los perfiles enviados en la lista de perfiles
-    '''
-    def checkProfileAccess(self, sid, roles):
-        con = self._getDatabase()
+
+    def changePassword(self, uid, dni, eid, code, passw):
+        con = self.conn.get()
         try:
-            r = self.profiles._checkAccessWithCon(con, sid, roles)
-            return r
+            ok = ResetPassword.resetPassword(con, uid, dni, eid, code, passw)
+            con.commit()
+            return ok
 
         finally:
-            con.close()
+            self.conn.put(con)
+
+    @coroutine
+    def changePassword_async(self, uid, dni, eid, code, passw):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.changePassword, uid, dni, eid, code, passw)
+        return r
+
+    def checkCode(self, eid, code):
+        con = self.conn.get()
+        try:
+            return ResetPassword.checkEmailCode(con, eid, code);
+
+        finally:
+            self.conn.put(con)
+
+    @coroutine
+    def checkCode_async(self, eid, code):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.checkCode, eid, code)
+        return r
+
+    def findByDni(self, dni):
+        con = self.conn.get()
+        try:
+            data = ResetPassword.findByDni(con, dni)
+            con.commit()
+            return data
+
+        finally:
+            self.conn.put(con)
+
+    @coroutine
+    def findByDni_async(self, dni):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.findByDni, dni)
+        return r
+
+    def testUser(self, username):
+        con = self.conn.get()
+        try:
+            return self.loginModel.testUser(con, username)
+
+        finally:
+            self.conn.put(con)
 
     '''
         valida que la session sid exista
     '''
     def validateSession(self, sid):
-        con = self._getDatabase()
+        con = self.conn.get()
         try:
-            self.session._findSession(con, sid)
+            self.loginModel.touch(con, sid)
+            con.commit()
             return True
 
         except Exception as e:
@@ -67,64 +107,30 @@ class LoginWamp(ApplicationSession):
             return False
 
         finally:
-            con.close()
-
-    '''
-        Genera el hash para reseteo de la clave
-    '''
-    def generateResetPasswordHash(self, username):
-        con = self._getDatabase()
-        try:
-            hash = self.loginModel.generateResetPasswordHash(con, username)
-            con.commit()
-            return hash
-
-        except Exception as e:
-            logging.exception(e)
-            return None
-
-        finally:
-            con.close()
-
-    '''
-        cambia la clave del usuario determinado por el hash pasado como parámetro
-    '''
-    def changePasswordWithHash(self, username, password, hash):
-        con = self._getDatabase()
-        try:
-            r = self.loginModel.changePasswordWithHash(con, username, password, hash)
-            con.commit()
-            return r
-
-        except Exception as e:
-            logging.exception(e)
-            return False
-
-        finally:
-            con.close()
+            self.conn.put(con)
 
     '''
         Loguea al usuario dentro del sistema y genera una sesion
     '''
     def login(self, username, password):
-        con = self._getDatabase()
+        con = self.conn.get()
         try:
-            sid = self.loginModel.login(con, username, password)
+            s = self.loginModel.login(con, username, password)
             con.commit()
-            return sid
+            return s.__dict__
 
         except Exception as e:
             logging.exception(e)
             return None
 
         finally:
-            con.close()
+            self.conn.put(con)
 
     '''
         Elimina la sesion de usuario identificada por sid
     '''
     def logout(self, sid):
-        con = self._getDatabase()
+        con = self.conn.get()
         try:
             self.loginModel.logout(con, sid)
             con.commit()
@@ -135,18 +141,33 @@ class LoginWamp(ApplicationSession):
             return False
 
         finally:
-            con.close()
+            self.conn.put(con)
+
+    '''
+        Verifica que tenga al menos un rol
+    '''
+    def hasOneRole(self, sid, roles= []):
+        con = self.conn.get()
+        try:
+            return self.loginModel.hasOneRole(con, sid, roles)
+
+        except Exception as e:
+            logging.exception(e)
+            return False
+
+        finally:
+            self.conn.put(con)
 
     @coroutine
-    def generateResetPasswordHash_async(self, username):
+    def testUser_async(self, username):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.generateResetPasswordHash, username)
+        r = yield from loop.run_in_executor(None, self.testUser, username)
         return r
 
     @coroutine
-    def changePasswordWithHash_async(self, username, password, hash):
+    def hasOneRole_async(self, sid, roles):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.changePasswordWithHash, username, password, hash)
+        r = yield from loop.run_in_executor(None, self.hasOneRole, sid, roles)
         return r
 
     @coroutine
@@ -159,12 +180,6 @@ class LoginWamp(ApplicationSession):
     def logout_async(self, sid):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.logout, sid)
-        return r
-
-    @coroutine
-    def checkProfileAccess_async(self, sid, roles):
-        loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.checkProfileAccess, sid, roles)
         return r
 
     @coroutine

@@ -1,249 +1,194 @@
 # -*- coding: utf-8 -*-
-import json
-import base64
 import logging
 import inject
-import psycopg2
-import pytz
-import datetime
 import dateutil.parser
-from model.exceptions import *
+from datetime import datetime, date, time, timedelta
 
-from model.config import Config
-from model.profiles import Profiles
+from model.login.profiles import ProfileDAO
+from model.assistance.assistance import AssistanceModel, AssistanceData
 
-from model.systems.assistance.assistance import Assistance
-import model.systems.assistance.date
-from model.systems.assistance.fails import Fails
-from model.systems.assistance.schedule import Schedule
-from model.systems.assistance.check.checks import ScheduleChecks
-from model.systems.offices.offices import Offices
-from model.systems.assistance.date import Date
+import dateutil, dateutil.tz, dateutil.parser, datetime
+
+from model.registry import Registry
+from model.connection import connection
+from model.login.login import Login
 
 import asyncio
 from asyncio import coroutine
 from autobahn.asyncio.wamp import ApplicationSession
 
+from model.serializer.utils import  JSONSerializable
 
 class AssistanceWamp(ApplicationSession):
 
     def __init__(self, config=None):
         logging.debug('instanciando')
         ApplicationSession.__init__(self, config)
+        reg = inject.instance(Registry)
 
-        self.serverConfig = inject.instance(Config)
-        self.profiles = inject.instance(Profiles)
-        self.assistance = inject.instance(Assistance)
-        self.fails = inject.instance(Fails)
-        self.dateutils = inject.instance(Date)
-        self.checks = inject.instance(ScheduleChecks)
+        self.conn = connection.Connection(reg.getRegistry('dcsys'))
+        self.loginModel = inject.instance(Login)
 
-        self.assistance = inject.instance(Assistance)
-        self.date = inject.instance(model.systems.assistance.date.Date)
-        self.offices = inject.instance(Offices)
-        self.schedule = inject.instance(Schedule)
+        self.assistance = inject.instance(AssistanceModel)
 
     @coroutine
     def onJoin(self, details):
         logging.debug('registering methods')
-        yield from self.register(self.getFailsByDate_async, 'assistance.getFailsByDate')
-        yield from self.register(self.getFailsByFilter_async, 'assistance.getFailsByFilter')
-        yield from self.register(self.getAssistanceStatusByDate_async, 'assistance.getAssistanceStatusByDate')
-        yield from self.register(self.getAssistanceStatusByUsers_async, 'assistance.getAssistanceStatusByUsers')
         yield from self.register(self.getAssistanceData_async, 'assistance.getAssistanceData')
-        yield from self.register(self.getUsersWithSchedules_async, 'assistance.getUsersWithSchedules')
-        yield from self.register(self.getSchedules_async, 'assistance.getSchedules')
-        yield from self.register(self.persistSchedule_async, 'assistance.persistSchedule')
-        yield from self.register(self.deleteSchedule_async, 'assistance.deleteSchedule')
-        yield from self.register(self.deleteSchedule_async, 'assistance.getChecksByUser')
+        yield from self.register(self.getJustifications_async, 'assistance.getJustifications')
+        yield from self.register(self.createSingleDateJustification_async, 'assistance.createSingleDateJustification')
+        yield from self.register(self.createRangedTimeWithReturnJustification_async, 'assistance.createRangedTimeWithReturnJustification')
+        yield from self.register(self.createRangedTimeWithoutReturnJustification_async, 'assistance.createRangedTimeWithoutReturnJustification')
+        yield from self.register(self.createRangedJustification_async, 'assistance.createRangedJustification')
+        yield from self.register(self.changeStatus_async, 'assistance.changeStatus')
+        yield from self.register(self.getJustificationData_async, 'assistance.getJustificationData')
 
-    def _getDatabase(self):
-        host = self.serverConfig.configs['database_host']
-        dbname = self.serverConfig.configs['database_database']
-        user = self.serverConfig.configs['database_user']
-        passw = self.serverConfig.configs['database_password']
-        return psycopg2.connect(host=host, dbname=dbname, user=user, password=passw)
+    def _localizeLocal(self,naive):
+        tz = dateutil.tz.tzlocal()
+        local = naive.replace(tzinfo=tz)
+        return local
 
-    def _parseDate(self, date):
-        return self.date.parse(date)
+    def _isNaive(self, date):
+        return not ((date.tzinfo != None) and (date.tzinfo.utcoffset(date) != None))
 
-    def _parseDates(self, dates):
-        ds = []
-        for d in dates:
-            ds.append(self.date.parse(d))
-        return ds
+    def _parseDate(self, datestr):
+        dt = dateutil.parser.parse(datestr)
+        if self._isNaive(dt):
+            dt = self._localizeLocal(dt)
+        return dt
 
-    def getAssistanceData(self, sid, userId, date=None):
-        con = self._getDatabase()
+    def getAssistanceData(self, userIds, startStr, endStr):
+        con = self.conn.get()
         try:
-            r = self.assistance.getAssistanceData(con, userId, date)
-            return r
-
+            start = self._parseDate(startStr)
+            end = self._parseDate(endStr)
+            return self.assistance.getAssistanceData(con, userIds, start, end)
         finally:
-            con.close()
+            self.conn.put(con)
 
     @coroutine
-    def getAssistanceData_async(self, sid, userId, date=None):
+    def getAssistanceData_async(self, userIds, start, end):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getAssistanceData, sid, userId, date)
+        r = yield from loop.run_in_executor(None, self.getAssistanceData, userIds, start, end)
         return r
 
-    def getAssistanceStatusByDate(self, userId, date=None):
-        con = self._getDatabase()
+    def getJustifications(self, userId, startStr, endStr, isAll):
+        con = self.conn.get()
         try:
-            if date is not None:
-                date = self._parseDate(date)
-            r = self.assistance.getAssistanceStatus(con, userId, date)
-            return r
-
+            start = self._parseDate(startStr)
+            end = self._parseDate(endStr)
+            start = None if start is None else start.date()
+            end = None if end is None else end.date()
+            return self.assistance.getJustifications(con, userId, start, end, isAll)
         finally:
-            con.close()
+            self.conn.put(con)
 
     @coroutine
-    def getAssistanceStatusByDate_async(self, sid, userId, date=None):
+    def getJustifications_async(self, userId, start, end, isAll):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getAssistanceStatusByDate, userId, date)
+        r = yield from loop.run_in_executor(None, self.getJustifications, userId, start, end, isAll)
         return r
 
-    def getAssistanceStatusByUsers(self, sid, userIds, dates):
-        logging.debug(dates)
-        con = self._getDatabase()
+    def createSingleDateJustification(self, sid, dateStr, userId, justClazz, justModule, ownerId = None):
+        con = self.conn.get()
         try:
-            if dates is not None:
-                dates = self._parseDates(dates)
-            st = self.assistance.getAssistanceStatusByUsers(con, userIds, dates)
+            if ownerId is None:
+                ownerId = self.loginModel.getUserId(con, sid)
+            date = self._parseDate(dateStr)
+            self.assistance.createSingleDateJustification(con, date, userId, ownerId, justClazz, justModule)
             con.commit()
-            return st
-
         finally:
-            con.close()
+            self.conn.put(con)
 
     @coroutine
-    def getAssistanceStatusByUsers_async(self, sid, userIds, dates):
+    def createSingleDateJustification_async(self, sid, date, userId, justClazz, justModule, ownerId = None):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getAssistanceStatusByUsers, sid, userIds, dates)
+        r = yield from loop.run_in_executor(None, self.createSingleDateJustification, sid, date, userId, justClazz, justModule, ownerId)
         return r
 
-    def getUsersWithSchedules(self, sid):
-        con = self._getDatabase()
+    def createRangedTimeWithReturnJustification(self, sid, startStr, endStr, userId, justClazz, justModule, ownerId = None):
+        con = self.conn.get()
         try:
-            r = self.schedule.getUsersInSchedules(con)
-            return r
-
-        finally:
-            con.close()
-
-    @coroutine
-    def getUsersWithSchedules_async(self, sid):
-        loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getUsersWithSchedules, sid)
-        return r
-
-    def getSchedules(self, sid, userId, date):
-        con = self._getDatabase()
-        try:
-            date = self._parseDate(date)
-            r = self.schedule.getSchedule(con, userId, date)
-            return r
-
-        finally:
-            con.close()
-
-    @coroutine
-    def getSchedules_async(self, sid, userId, date):
-        loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getSchedules, sid, userId, date)
-        return r
-
-    def persistSchedule(self, sid, userId, date, start, end, dayOfWeek=False, dayOfMonth=False, dayOfYear=False):
-        con = self._getDatabase()
-        try:
-            date = self._parseDate(date)
-            start = self._parseDate(start)
-            end = self._parseDate(end)
-            r = self.schedule.persistSchedule(con, userId, date, start, end, dayOfWeek, dayOfMonth, dayOfYear)
+            if ownerId is None:
+                ownerId = self.loginModel.getUserId(con, sid)
+            start = self._parseDate(startStr)
+            end = self._parseDate(endStr)
+            self.assistance.createRangedTimeWithReturnJustification(con, start, end, userId, ownerId, justClazz, justModule)
             con.commit()
-            return r
-
         finally:
-            con.close()
+            self.conn.put(con)
 
     @coroutine
-    def persistSchedule_async(self, sid, userId, date, start, end, dayOfWeek=False, dayOfMonth=False, dayOfYear=False):
+    def createRangedTimeWithReturnJustification_async(self, sid, start, end, userId, justClazz, justModule, ownerId = None):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.persistSchedule, sid, userId, date, start, end, dayOfWeek, dayOfMonth, dayOfYear)
+        r = yield from loop.run_in_executor(None, self.createRangedTimeWithReturnJustification, sid, start, end, userId, justClazz, justModule, ownerId)
         return r
 
-    def deleteSchedule(self, sid, id):
-        con = self._getDatabase()
+    def createRangedTimeWithoutReturnJustification(self, sid, startStr, userId, justClazz, justModule, ownerId = None):
+        con = self.conn.get()
         try:
-            self.schedule.deleteSchedule(con, id)
+            if ownerId is None:
+                ownerId = self.loginModel.getUserId(con, sid)
+            start = self._parseDate(startStr)
+            self.assistance.createRangedTimeWithoutReturnJustification(con, start, userId, ownerId, justClazz, justModule)
             con.commit()
-            return True
-
-        except Exception as e:
-            logging.exception(e)
-            return False
-
         finally:
-            con.close()
+            self.conn.put(con)
 
     @coroutine
-    def deleteSchedule_async(self, sid, id):
+    def createRangedTimeWithoutReturnJustification_async(self, sid, start, userId, justClazz, justModule, ownerId = None):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.deleteSchedule, sid, id)
-        return r
-
-    def getChecksByUser(self, sid, userId, date):
-        con = self._getDatabase()
-        try:
-            ''' .... codigo aca ... '''
-            con.commit()
-            return True
-
-        finally:
-            con.close()
-
-    @coroutine
-    def getChecksByUser_async(self, sid, userId, date):
-        loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getChecksByUser, sid, userId, date)
+        r = yield from loop.run_in_executor(None, self.createRangedTimeWithoutReturnJustification, sid, start, userId, justClazz, justModule, ownerId)
         return r
 
 
-    def getFailsByDate(self, start, end):
-        con = self._getDatabase()
+    def createRangedJustification(self, sid, startStr, days, userId, justClazz, justModule, ownerId = None):
+        con = self.conn.get()
         try:
-            ''' .... codigo aca ... '''
-            con.commit()
-            return True
+            if ownerId is None:
+                ownerId = self.loginModel.getUserId(con, sid)
+            start = self._parseDate(startStr)
+            days = int(days)
 
+            self.assistance.createRangedJustification(con, start, days, userId, ownerId, justClazz, justModule)
+            con.commit()
         finally:
-            con.close()
+            self.conn.put(con)
 
     @coroutine
-    def getFailsByDate_async(self, sid, start, end):
+    def createRangedJustification_async(self, sid, start, days, userId, justClazz, justModule, ownerId = None):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getFailsByDate, start, end)
+        r = yield from loop.run_in_executor(None, self.createRangedJustification, sid, start, days, userId, justClazz, justModule, ownerId)
         return r
 
-
-
-
-
-
-    def getFailsByFilter(self, userIds, officesIds, start, end, filter):
-        con = self._getDatabase()
+    def changeStatus(self, sid, just, status):
+        '''
+            status = UNDEFINED, PENDING, APPROVED, REJECTED, CANCELED
+        '''
+        con = self.conn.get()
         try:
-            ''' .... codigo aca ... '''
+            userId = self.loginModel.getUserId(con, sid)
+            self.assistance.changeStatus(con, just, status, userId)
             con.commit()
-            return True
-
         finally:
-            con.close()
+            self.conn.put(con)
 
     @coroutine
-    def getFailsByFilter_async(self, sid, userIds, officesIds, start, end, filter):
+    def changeStatus_async(self, sid, just, status):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getFailsByFilter, userIds, officesIds, start, end, filter)
+        r = yield from loop.run_in_executor(None, self.changeStatus, sid, just, status)
+        return r
+
+    def getJustificationData(self, userId, dateStr, justClazz, justModule):
+        con = self.conn.get()
+        try:
+            date = self._parseDate(dateStr)
+            return self.assistance.getJustificationData(con, userId, date, justClazz, justModule)
+        finally:
+            self.conn.put(con)
+
+    @coroutine
+    def getJustificationData_async(self, userId, date, justClazz, justModule):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.getJustificationData, userId, date, justClazz, justModule)
         return r

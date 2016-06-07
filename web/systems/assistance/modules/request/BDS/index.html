@@ -1,0 +1,59 @@
+<!-- VARIABLES 1:solicitud, mensaje | VARIABLES 2: procesando, procesado, sinDisponibilidad, errorDeSistema -->
+<div class="bds {{view.styleStatus}} {{view.styleMessage}} ">
+  <div class="title">Solicitar</div>
+  <i class="ico fa fa-ticket "></i> <b> BOLETA DE SALIDA </b>
+
+      <div class="contentRequestBDS">
+
+        <div class="screenRequest">
+            <div class="availabilityRequest">
+              <div class="titleAvailability"> Disponibilidad </div>
+              <div class="contentCantAvailability">
+                 <b>Mensual</b> <b class="cantAvailability">{{model.justificationData.mStock.hs}}:{{model.justificationData.mStock.min}}</b>
+                 <b>Anual</b> <b class="cantAvailability">{{model.justificationData.yStock.hs}}:{{model.justificationData.yStock.min}}</b>
+              </div>
+            </div>
+            <div class="titleInfo">SELECCIONE EL DÍA</div>
+            <div><input class="inputDate" type="date" ng-model="model.start"></input></div>
+            <div class="contentTime">
+                <div>
+                    <div class="titleInfo">HORA INICIO</div>
+                    <div><input class="inputTime" type="time" ng-model="model.start"></input></div>
+                </div>
+                <div>
+                    <div class="titleInfo">HORA FIN</div>
+                    <div><input class="inputTime" type="time" ng-model="model.end"></input></div>
+                </div>
+            </div>
+            <div><button class="btnApply" ng-click="create()"> SOLICITAR</button></div>
+        </div>
+
+        <div class="screenMessage">
+
+            <div class="processing">
+              <div class="iconMessage"><i class="fa fa-circle-o-notch fa-spin fa-4x"></i></div>
+              <div>PROCESANDO SOLICITUD</div>
+              <div>Por favor espere... </div>
+            </div>
+
+            <div class="processed">
+              <div class="iconMessageProcessed"><i class="fa fa-check fa-4x"></i></div>
+              <div>SOLICITUD PROCESADA CON ÉXITO</div>
+            </div>
+
+            <div class="notAvailable">
+              <div class="iconMessageNotAvailable"><i class="fa fa-exclamation fa-4x"></i> ERROR</div>
+              <div>No tienes más días disponibles</div>
+            </div>
+
+            <div class="errorSystem">
+              <div class="iconMessageErrorSystem"><i class="fa fa-exclamation-triangle fa-4x"></i></div>
+              <div class="iconMessageErrorSystem">ERROR EN EL SISTEMA</div>
+              <div>Por favor intente más tarde</div>
+            </div>
+
+        </div>
+
+      </div>
+
+</div>

@@ -1,43 +1,56 @@
 # -*- coding: utf-8 -*-
 import logging, inject, time, sys, signal
-import psycopg2, uuid
+import uuid
+import psycopg2
+from psycopg2.extras import DictCursor
 import datetime
 
-sys.path.append('../python')
+sys.path.append('../../python')
 
-from model.config import Config
 from model.utils import Periodic
-from model.users.users import Users
-from model.systems.assistance.logs import Logs
-from model.systems.assistance.date import Date
-from model.systems.assistance.offices.offices import Offices
-
+from model.users.users import User
+from model.assistance.logs import Log
+from model.assistance.utils import Utils
+from model.offices.offices import Office
+from model.registry import Registry
 from zksoftware.zkSoftware import ZkSoftware
 
 
 
 class Main:
 
-    config = inject.attr(Config)
-    logs = inject.attr(Logs)
-    users = inject.attr(Users)
-    date = inject.attr(Date)
-    offices = inject.attr(Offices)
+
+    #date = inject.attr(Date)
 
     def __init__(self):
-        host = self.config.configs['zksoftware_host']
-        port = int(self.config.configs['zksoftware_port'])
-        self.zk = ZkSoftware(host,port)
+        reg = inject.instance(Registry)
 
-        self.timezone = self.config.configs['zksoftware_timezone']
+        #parametros generales de zksoftware
+        registry = reg.getRegistry('zksoftware')
+
+        self.period = int(registry.get('period'))
+        host = registry.get('host')
+        port = int(registry.get('port'))
+        self.zk = ZkSoftware(host, port)
+        self.timezone = registry.get('timezone')
+        self.deviceId = registry.get('device_id')
+
+        # parametros que manejan cuando se borran los logs del reloj
+        self.hour_start_delete = registry.get('hour_start_delete')
+        self.minute_start_delete = registry.get('minute_start_delete')
+        self.hour_end_delete = registry.get('hour_end_delete')
+        self.minute_end_delete = registry.get('minute_end_delete')
+
+        # parametros de la conexion a la base
+        registry = reg.getRegistry('dcsys')
+        self.host = registry.get('host')
+        self.db = registry.get('database')
+        self.user = registry.get('user')
+        self.passw = registry.get('password')
 
 
     def _connect(self):
-        host = self.config.configs['database_host']
-        db = self.config.configs['database_database']
-        user = self.config.configs['database_user']
-        passw = self.config.configs['database_password']
-        con = psycopg2.connect(host=host, dbname=db, user=user, password=passw)
+        con = psycopg2.connect(host=self.host, dbname=self.db, user=self.user, password=self.passw, cursor_factory=DictCursor)
         return con
 
 
@@ -54,55 +67,59 @@ class Main:
 
             con = self._connect()
             try:
+                offices_temp = Office.findById(con, ['45cc065a-7033-4f00-9b19-d7d097129db3'])
+                assert len(offices_temp) == 1
+                office = offices_temp[0]
+
                 logging.info('transformando logs al formato del sistema')
                 tlogs = []
                 for l in logs:
                     logging.debug(l)
 
                     dni = l['PIN']
-                    user = self.users.findUserByDni(con,dni)
+                    userData = User.findByDni(con, dni)
                     userId = None
-                    if user is None:
-                        newUser = {
-                                'dni':l['PIN'],
-                                'name':'autogenerado asistencia',
-                                'lastname':'autogenerado asistencia'
-                        }
-                        userId = self.users.createUser(con,newUser)
+                    if userData is None:
+                        user = User()
+                        user.dni = l['PIN']
+                        user.name = 'autogenerado asistencia'
+                        user.lastname = 'autogenerado asistencia'
+                        userId = user.persist(con)
 
                         ''' agrego la persona a la oficina de asistencia autogenerados - el id esta en insert_basic_data.sql '''
-                        self.offices.addUserToOffices(con,'45cc065a-7033-4f00-9b19-d7d097129db3',userId)
+                        office.appendUser(userId)
+                        office.persist(con)
+
                     else:
-                        userId = user['id']
+                        (userId, version) = userData
 
                     date = l['DateTime']
-                    aware = self.date.localize(self.timezone,date)
-                    utcaware = self.date.awareToUtc(aware)
+                    aware = Utils.localize(self.timezone, date)
+                    utcaware = Utils.awareToUtc(aware)
 
-                    l2 = {
-                        'id':str(uuid.uuid4()),
-                        'userId':userId,
-                        'deviceId':self.config.configs['zksoftware_device_id'],
-                        'verifymode':l['Verified'],
-                        'log':utcaware
-                    }
-                    tlogs.append(l2)
+                    logging.debug('buscando : {}'.format(utcaware))
+                    if len(Log.findByDate(con, utcaware)) <= 0:
+                        logging.debug('no encontrado : {}'.format(utcaware))
+                        log = Log()
+                        log.id = str(uuid.uuid4())
+                        log.userId = userId
+                        log.deviceId = self.deviceId
+                        log.verifyMode = l['Verified']
+                        log.log = utcaware
+                        tlogs.append(log)
 
                 logging.info('salvando logs en la base')
                 for l in tlogs:
                     logging.debug(l)
-                    if self.logs.findLogByDate(con,l['log']) is None:
-                        self.logs.persist(con,l)
-                    else:
-                        logging.warn('{} ya existente'.format(l))
+                    l.persist(con)
 
                 con.commit()
 
 
                 """ borro los logs del reloj """
                 nowdate = datetime.datetime.now()
-                deletestart = nowdate.replace(hour=int(self.config.configs['zksoftware_hour_start_delete']),minute=int(self.config.configs['zksoftware_minute_start_delete']),second=0,microsecond=0)
-                deleteend = nowdate.replace(hour=int(self.config.configs['zksoftware_hour_end_delete']),minute=int(self.config.configs['zksoftware_minute_end_delete']),second=0,microsecond=0)
+                deletestart = nowdate.replace(hour=int(self.hour_start_delete), minute=int(self.minute_start_delete), second=0, microsecond=0)
+                deleteend = nowdate.replace(hour=int(self.hour_end_delete), minute=int(self.minute_end_delete), second=0, microsecond=0)
                 if (nowdate <= deleteend and nowdate >= deletestart):
                     logscheck = self.zk.getAttLog()
                     logslen = len(logs)
@@ -135,7 +152,7 @@ def _sincLogs(main):
 
 
 def config_injector(binder):
-    binder.bind(Config,Config('firmware-config.cfg'))
+    pass
 
 
 if __name__ == '__main__':
@@ -150,13 +167,10 @@ if __name__ == '__main__':
 
     logging.basicConfig(filename='/var/log/firmware-sync.log',format='%(asctime)s %(levelname)s %(message)s',level=logging.DEBUG)
 
-    inject.configure(config_injector)
-    config = inject.instance(Config)
-
     logging.info('Iniciando el sincronizador de logs')
 
     main = Main()
-    rt = Periodic(10 * 60, _sincLogs,main)
+    rt = Periodic(main.period, _sincLogs, main)
 
     def close_sig_handler(signal,frame):
         logging.info('Cerrando sistema sincronizador')

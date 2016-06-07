@@ -1,0 +1,49 @@
+.preload {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:column;
+  -webkit-flex-direction:column; /* Safari */
+  -moz-flex-direction:column; /* mozilla */
+  margin: 0px;
+  padding: 0px;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  min-height: 400px;
+  background-color: #F1F1F1;
+}
+
+
+.preload .content {
+  width: 100%;
+  height: 100%;
+
+}
+
+.preload .progress {
+  height: 5px;
+  width: 100%;
+
+}
+
+.preload .lineProgress {
+  /*width:50%;*/
+  height: 100%;
+  background-color: #92AD17;
+}
+
+.preload .iconPreload {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+}

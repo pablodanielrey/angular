@@ -4,3 +4,15 @@ cabeceras para controlar la cache.
     ("Cache-Control", "no-cache, no-store, must-revalidate")
     ("Pragma", "no-cache")
     ("Expires", "0")
+
+para configurar el apache para el tema de que sirva scripts cgi de la carpeta anguarl/server/http
+
+Alias /c /var/www/angular/server/http
+<Directory /var/www/angular/server/http>
+  Options +ExecCGI
+  AddHandler cgi-script .py
+  SetHandler cgi-script
+  Order allow,deny
+  Allow from all
+</Directory>
+ScriptLog ${APACHE_LOG_DIR}/cgi_log

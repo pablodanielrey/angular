@@ -1,22 +1,16 @@
 # -*- coding: utf-8 -*-
 import inject
-import json
-import uuid
-import re
 import logging
-import psycopg2
-import hashlib
+import uuid
 import asyncio
 from asyncio import coroutine
 from autobahn.asyncio.wamp import ApplicationSession
-from model.config import Config
-from model.users.users import Users
-from model.events import Events
-from model.profiles import Profiles
+from model.users.users import UserDAO, User, Telephone, MailDAO
+from model.tutorias.tutorias import TutoriasModel
+from model.registry import Registry
+from model.connection import connection
 from model.mail.mail import Mail
-
-
-from model.exceptions import *
+# from model.exceptions import *
 
 
 class UsersWamp(ApplicationSession):
@@ -24,16 +18,17 @@ class UsersWamp(ApplicationSession):
     def __init__(self, config=None):
         logging.debug('instanciando')
         ApplicationSession.__init__(self, config)
-        self.users = inject.instance(Users)
-        self.serverConfig = inject.instance(Config)
+        reg = inject.instance(Registry)
+        self.conn = connection.Connection(reg.getRegistry('dcsys'))
+        self.tutoriasModel = inject.instance(TutoriasModel)
+        self.mails = inject.instance(MailDAO)
         self.mail = inject.instance(Mail)
-
-
 
     @coroutine
     def onJoin(self, details):
         logging.debug('registering methods')
         yield from self.register(self.findById_async, 'users.findById')
+        yield from self.register(self.findByDni_async, 'users.findByDni')
         yield from self.register(self.persistUser_async, 'users.persistUser')
         yield from self.register(self.listUsers_async, 'users.listUsers')
         yield from self.register(self.findUsersIds_async, 'users.findUsersIds')
@@ -44,21 +39,16 @@ class UsersWamp(ApplicationSession):
         yield from self.register(self.sendEmailConfirmation_async, 'users.mails.sendEmailConfirmation')
         yield from self.register(self.confirmEmail_async, 'users.mails.confirmEmail')
 
-    def _getDatabase(self):
-        host = self.serverConfig.configs['database_host']
-        dbname = self.serverConfig.configs['database_database']
-        user = self.serverConfig.configs['database_user']
-        passw = self.serverConfig.configs['database_password']
-        return psycopg2.connect(host=host, dbname=dbname, user=user, password=passw)
 
-    def findById(self, id):
-        con = self._getDatabase()
+    def findById(self, ids):
+        assert isinstance(ids, list)
+        con = self.conn.get()
         try:
-            data = self.users.findUser(con, id)
+            data = UserDAO.findById(con, ids)
             return data
 
         finally:
-            con.close()
+            self.conn.put(con)
 
     @coroutine
     def findById_async(self, id):
@@ -66,6 +56,20 @@ class UsersWamp(ApplicationSession):
         r = yield from loop.run_in_executor(None, self.findById, id)
         return r
 
+    def findByDni(self, dni):
+        con = self.conn.get()
+        try:
+            data = UserDAO.findByDni(con, dni)
+            return data
+
+        finally:
+            self.conn.put(con)
+
+    @coroutine
+    def findByDni_async(self, dni):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.findByDni, dni)
+        return r
 
     '''
      ' Persistir usuario
@@ -83,15 +87,27 @@ class UsersWamp(ApplicationSession):
      '    version
      '''
     def persistUser(self, user):
-        con = self._getDatabase()
+        con = self.conn.get()
         try:
-            userId = self.users.updateUser(con, user)
+            ''''
+            telephones = user['telephones']
 
+            u = User()
+            u.__dict__ = user
+            u.telephones = []
+            for t in telephones:
+                logging.info(t)
+                t2 = Telephone()
+                t2.__dict__ = t
+                u.telephones.append(t2)
+                logging.info(u.telephones)
+            '''
+            userId = UserDAO.persist(con, user)
             con.commit()
             return userId
 
         finally:
-            con.close()
+            self.conn.put(con)
 
     @coroutine
     def persistUser_async(self, user):
@@ -99,18 +115,17 @@ class UsersWamp(ApplicationSession):
         r = yield from loop.run_in_executor(None, self.persistUser, user)
         return r
 
-
     '''
      ' Listar usuarios
      '''
     def listUsers(self):
-        con = self._getDatabase()
+        con = self.conn.get()
         try:
-            users = self.users.listUsers(con)
+            users = UserDAO.listUsers(con)
             return users
 
         finally:
-            con.close()
+            self.conn.put(con)
 
     @coroutine
     def listUsers_async(self):
@@ -118,15 +133,14 @@ class UsersWamp(ApplicationSession):
         r = yield from loop.run_in_executor(None, self.listUsers)
         return r
 
-
     def findUsersIds(self):
-        con = self._getDatabase()
+        con = self.conn.get()
         try:
-            usersIds = self.users.listUsersIds(con)
+            usersIds = UserDAO.listUsersIds(con)
             return usersIds
 
         finally:
-            con.close()
+            self.conn.put(con)
 
     @coroutine
     def findUsersIds_async(self):
@@ -134,18 +148,14 @@ class UsersWamp(ApplicationSession):
         r = yield from loop.run_in_executor(None, self.findUsersIds)
         return r
 
-
-
-
     def findUsersByIds(self, ids):
-        con = self._getDatabase()
+        con = self.conn.get()
         try:
-            # codigo
-            con.commit()
-            return []
+            usersIds = UserDAO.findUsersByIds(con, ids)
+            return usersIds
 
         finally:
-            con.close()
+            self.conn.put(con)
 
     @coroutine
     def findUsersByIds_async(self, ids):
@@ -153,20 +163,19 @@ class UsersWamp(ApplicationSession):
         r = yield from loop.run_in_executor(None, self.findUsersByIds, ids)
         return r
 
-
-
     '''
      ' Buscar mails a partir de un userId
      ' @param userId Uuid de usuario
      '''
     def findMails(self, userId):
-        con = self._getDatabase()
+        con = self.conn.get()
         try:
-            mails = self.users.listMails(con, userId)
+            mails = self.mails.findByUserId(con, userId)
+            # return [ m.__dict__ for m in mails ]
             return mails
 
         finally:
-            con.close()
+            self.conn.put(con)
 
     @coroutine
     def findMails_async(self, userId):
@@ -174,23 +183,22 @@ class UsersWamp(ApplicationSession):
         r = yield from loop.run_in_executor(None, self.findMails, userId)
         return r
 
-
     '''
      ' Persistir email de usuario
      ' @param email Objeto con los datos del email de usuario
-     '      userId: Id de usuario
+     '      user_id: Id de usuario
      '      email: Email propiamente dicho
      '      confirmed: Flag para indicar si el email esta confirmado (Defecto False)
      '''
     def persistMail(self, email):
-        con = self._getDatabase()
+        con = self.conn.get()
         try:
-            emailId = self.users.createMail(con, email)
+            emailId = UserDAO.createMail(con, email)
             con.commit()
             return emailId
 
         finally:
-            con.close()
+            self.conn.put(con)
 
     @coroutine
     def persistMail_async(self, email):
@@ -198,21 +206,19 @@ class UsersWamp(ApplicationSession):
         r = yield from loop.run_in_executor(None, self.persistMail, email)
         return r
 
-
-
     '''
      ' Eliminacion de email
      ' @override id uuid del email
      '''
     def deleteMail(self, id):
-        con = self._getDatabase()
+        con = self.conn.get()
         try:
-            self.users.deleteMail(con, email['id'])
+            MailDAO.delete(con, id)
             con.commit()
             return True
 
         finally:
-            con.close()
+            self.conn.put(con)
 
     @coroutine
     def deleteMail_async(self, id):
@@ -220,84 +226,39 @@ class UsersWamp(ApplicationSession):
         r = yield from loop.run_in_executor(None, self.deleteMail, id)
         return r
 
-
-
     '''
      ' Enviar confirmacion por emai
-     ' @param email Datos del email
-     '      id: Uuid del email
-     '      user_id: Uuid del usuario
-     '      email: Email propieamente dicho
-     '      confirmed: Flag para indicar si el email esta confirmado o no
+     ' @param emailId Uuid del email
      '''
-    def sendEmailConfirmation(self, email):
-        con = self._getDatabase()
+    def sendEmailConfirmation(self, emailId):
+        con = self.conn.get()
         try:
-            hash = hashlib.sha1((email['id'] + email['user_id']).encode('utf-8')).hexdigest()
-            email['hash'] = hash
-
-            self.users.updateMail(con,email)
-
-            From = self.serverConfig.configs['mail_confirm_mail_from']
-            subject = self.serverConfig.configs['mail_confirm_mail_subject']
-            To = email['email']
-            template = self.serverConfig.configs['mail_confirm_mail_template']
-
-            url = self.serverConfig.configs['mail_confirm_mail_url']
-            url = re.sub('###HASH###', hash, url)
-
-            replace = [
-                ('###URL###',url)
-            ]
-
-            self.mail.sendMail(From,[To],subject,replace,html=template)
-
+            UserDAO.sendEmailConfirmation(con, emailId)
             con.commit()
-
             return True
 
         finally:
-            con.close()
+            self.conn.put(con)
 
     @coroutine
-    def sendEmailConfirmation_async(self, email):
+    def sendEmailConfirmation_async(self, emailId):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.sendEmailConfirmation, email)
+        r = yield from loop.run_in_executor(None, self.sendEmailConfirmation, emailId)
         return r
-
 
     '''
      ' Confirmar email. Una vez confirmado se envia un email al usuario
      ' @param hash Hash del email a confirmar
      '''
     def confirmEmail(self, hash):
-        con = self._getDatabase()
+        con = self.conn.get()
         try:
-            email = self.users.findMailByHash(con, hash)
-            email['confirmed'] = True
-            email['hash'] = None
-
-            self.users.updateMail(con,email)
-
-            From = self.serverConfig.configs['mail_confirm_mail_from']
-            subject = self.serverConfig.configs['mail_confirm_mail_subject']
-            To = email['email']
-            template = self.serverConfig.configs['mail_confirm_mail_template']
-
-            url = self.serverConfig.configs['mail_mail_confirmed_template']
-            url = re.sub('###HASH###', hash, url)
-
-            replace = [
-                ('###URL###',url)
-            ]
-
-            self.mail.sendMail(From,[To],subject,replace,html=template)
-
+            UserDAO.confirmEmail(con, hash)
             con.commit()
             return True
 
         finally:
-            con.close()
+            self.conn.put(con)
 
     @coroutine
     def confirmEmail_async(self, hash):

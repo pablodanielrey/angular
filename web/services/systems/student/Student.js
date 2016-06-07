@@ -1,93 +1,22 @@
 
 var app = angular.module('mainApp');
 
-app.service('Student', function(Messages, Utils, Session, Cache) {
+app.service('Student', function($wamp) {
 
   var self = this;
   this.prefix = 'student_'; //prefijo de identificacion de la cache
 
-
-  /**
-  * buscar todos los estudiantes.
-  * @param callbackOk
-  * @param callbackError
-  */
-  this.findAllStudentsData = function(callbackOk,callbackError) {
-
-    var msg = {
-      id: Utils.getId(),
-      session: Session.getSessionId(),
-      action:'findAllStudents'
-    }
-
-    Messages.send(msg,
-      function(response){
-        callbackOk(response);
-      },
-      function(error){
-        callbackError(error);
-      })
-    }
-
-
-  /**
-   * buscar datos de estudiante
-   * @param studentId Id del estudiante. Es el mismo que el id del usuario
-   * @param callbackOk
-   * @param callbackError
-   */
-  this.findStudentData = function(studentId,callbackOk,callbackError) {
-
-    /*chequear cache para ver si existe el student
-    var student = Cache.getItem(self.prefix + studentId);
-    if (student != null) {
-      callbackOk(student);
-      return;
-    }*/
-
-    //si no existe usuario en la cache, enviar mensaje al servidor para consultar estudiante
-    var msg = {
-      id: Utils.getId(),
-      session: Session.getSessionId(),
-      action:'findStudent',
-      student: {
-        id: studentId
-      }
-    }
-
-    Messages.send(msg,
-		function(response){
-			callbackOk(response);
-			/*if(response.student != null){
-				Cache.setItem(self.prefix + response.student.id, response.student);
-			}*/
-		},
-
-		function(error){
-			callbackError(error);
-		})
+  this.findById = function(userId) {
+    return $wamp.call('system.students.findById', [userId]);
   }
 
-
-  this.persistStudent = function(student, callbackOk, callbackError){
-
-    //eliminar estudiante de la cache
-    //Cache.removeItem(self.prefix + student.id);
-
-    var msg = {
-      id: Utils.getId(),
-      session: Session.getSessionId(),
-      action: 'persistStudent',
-      student: student
+  this.persist = function(userId, sn) {
+    var student = {
+      id: userId,
+      studentNumber: sn,
+      condition: 'regular'
     };
-
-    Messages.send(msg,function(response){
-      if (response.error != undefined) {
-        callbackError(response.error);
-      } else {
-        callbackOk(response.ok);
-      }
-    });
+    return $wamp.call('system.students.persist', [student]);
   }
 
 });

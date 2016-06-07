@@ -1,0 +1,22 @@
+http://stackoverflow.com/questions/28442804/trying-to-make-a-directive-that-uses-jsbarcode
+
+
+<barcode data=studentData.pid></barcode>
+
+
+directive('barcode', function () {
+return {
+    restrict: 'EA',
+    scope: {
+            data: '='
+        },
+    template: '<canvas id=barcode></canvas>',
+    link: function($scope, element, attrs, ngModel){
+        canvas = element.find('canvas')
+        JsBarcode(canvas[0], $scope.data);
+    }
+
+};
+})
+
+

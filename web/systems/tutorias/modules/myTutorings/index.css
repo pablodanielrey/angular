@@ -1,0 +1,342 @@
+.tutors {
+  height: 100%;
+  width: 100%;
+}
+
+.tutors .header {
+  height: 102px;
+  width: 100%;
+  background: #DBE2E5;
+  color: #5C5F69;
+  padding-left: 50px;
+  font-size: 1.5em;
+}
+
+/******************************************************
+****** INICIO PANTALLA DE CREAR TUTOTRIA **************
+*******************************************************/
+
+.tutors .contentTutors {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  background-color: #F1F1F1;
+  height: 70%;
+  padding: 20px;
+}
+
+/******************* CONTENEDOR DE LA IZQUIERDA ***********************/
+
+.tutors .contentLeft {
+  /*background-color: grey;*/
+  width: 380px;
+  height: 100%;
+  border-right: 1px solid #DBE2E5;
+}
+
+.tutors .contentSearch {
+  height: 340px;
+  /*background-color: red;*/
+  overflow-y: auto;
+}
+
+.tutors .title {
+  color: #5C5F69;
+}
+
+.tutors .inputSearch {
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  font-size: 20px;
+  padding: 11px;
+  border: 1px solid #DBE2E5;
+  margin: 10px 0 15px 0;
+}
+
+
+
+/******************* CONTENEDOR DE LA DERECHA ***********************/
+
+.tutors .contentRight {
+  /*background-color: white;*/
+  margin-left: 30px;
+  width: 100%;
+  height: 100%;
+}
+
+.tutors .contentSearchResults {
+  height: 100%;
+}
+
+.tutors .searchResults {
+  height: 95%;
+  overflow-y: auto;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  flex-wrap: wrap;
+  align-content: flex-start;
+  -webkit-align-content: flex-start;
+  -moz-align-content: flex-start;
+}
+
+.tutors .contentUser {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  background-color: #EBEBEC;
+  width: 270px;
+  height: 75px;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  margin-top: 10px;
+  margin-right: 20px;
+  cursor: pointer;
+}
+
+.tutors .contentUser:hover {
+  background-color: #E4E4E6;
+}
+
+.tutors .contentPhoto {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  width: 75px;
+  height: 75px;
+  margin-left: 10px;
+}
+
+.tutors .imgUser {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+}
+
+.tutors .contentData {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:column;
+  -webkit-flex-direction:column; /* Safari */
+  -moz-flex-direction:column; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  font-size: 14PX;
+}
+
+.tutors .contentList {
+  height: 100%;
+  /*background-color: pink;*/
+  opacity: 0;
+  transform: translate3d(0,200%,0);
+  -webkit-transform: translate3d(0,200%,0);
+  -webkit-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+     -moz-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+       -o-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+          transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+
+}
+
+.tutors.verTutorias .contentList {
+  height: 100%;
+  /*background-color: pink;*/
+  opacity: 1;
+  transform: translate3d(0,0,0);
+  -webkit-transform: translate3d(0,0,0);
+  -webkit-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+     -moz-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+       -o-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+          transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+
+}
+
+.tutors .headerList {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+}
+
+.tutors .dataHeader {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+}
+
+.tutors .contentHeaderRight {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+}
+
+.tutors .textOrder {
+  font-size: 12px;
+  margin-right: 5px;
+  color: #5C5F69;
+}
+
+.tutors .btnOrder {
+    cursor: pointer;
+    background-color: #E4E4E6;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    border: none;
+    color: #5C5F69;
+    padding: 5px;
+    margin-right: 5px;
+}
+
+.tutors .btnOrder:hover {
+  background-color: #cacad1;
+}
+
+.tutors .btnCancel {
+    cursor: pointer;
+    background-color: #DBE2E5;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    border: none;
+    color: #5C5F69;
+    padding: 10px;
+    margin-left: 20px;
+}
+
+.tutors .btnCancel:hover {
+  background-color: #5C5F69;
+  color: white;
+}
+
+.tutors .imgTutor {
+  width: 30px;
+  height: 30px;
+  margin-right: 5px;
+  border-radius: 50%;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  margin-left: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.tutors .listParticipants {
+  width: 100%;
+  height: 82%;
+  padding: 20px;
+  margin-top: 10px;
+  background-color: #FFF;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+  -moz-box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+  -webkit-box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  overflow-x:auto;
+}
+
+.tutors .itemTutoring {
+    display: flex;
+    display: -webkit-flex;
+    display: -moz-flex;
+    flex-direction: row;
+    -webkit-flex-direction: row;
+    -moz-flex-direction: row;
+    align-items: center;
+    -webkit-align-items: center;
+    -moz-align-items: center;
+    justify-content: space-between;
+    -webkit-justify-content: space-between;
+    -moz-justify-content: space-between;
+    font-size: 13px;
+    border-bottom: 1px solid #DBE2E5;
+}
+
+.tutors .avatarTutors {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  /*background-color: red;*/
+  width: 350px;
+
+
+}
+
+.tutors .footerList {
+  margin-top: 10px;
+  display: flex;
+  display: -webkit-flex;
+  display: -moz-flex;
+  flex-direction: row;
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+  align-items: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  justify-content:  flex-end;
+  -webkit-justify-content: flex-end;
+  -moz-justify-content: flex-end;
+}
+
+.tutors .totales {
+  margin-right: 20px;
+}
+
+.tutors .cantTotalTutoring {
+  color: black;
+  margin-right: 20px;
+  font-weight: bold;
+}
+
+.tutors .cantTotalStudents {
+  color: black;
+  margin-right: 30px;
+  font-weight: bold;
+}
