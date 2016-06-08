@@ -1,7 +1,7 @@
-<div class="schedule">
+<div class="schedule pantallaJefe {{view.style2}}">
 <!--
-VARIABLES 1:
-VARIABLES 2:
+VARIABLES 1: pantallaJefe, pantallaUsuario
+VARIABLES 2: nuevoHorarioSemanal
 
 -->
 
@@ -32,15 +32,21 @@ VARIABLES 2:
 
             </div>
 
-            <div class="contentDate">
-                <div>
-                    <button class="btnSelectUser"> Seleccinar otro usuario</button>
+            <div class="contentDate "> <!--VARIABLES: jefe, usuario -->
+                <div class="contentBtnSelectUser">
+                    <button class="btnSelectUser"><i class="fa fa-search"></i> Usuario</button>
                 </div>
-                <div>
+                <div class="subContentDate">
+                    <div class="textDate"><i class="fa fa-calendar-o"></i>  Fecha</div>
                     <input type="date" class="inputDate"></input>
                 </div>
             </div>
 
+        </div>
+
+        <div class="textClock">
+          <div>HORARIO SEMANAL</div>
+          <div><b>35</b> Horas </div>
         </div>
 
         <div class="contentSchedules">
@@ -52,7 +58,7 @@ VARIABLES 2:
             <div class="Tuesday">
                 <div class="titleDay">Mar</div>
                 <div class="checkIn">10:00</div>
-                <div class="checkOut">17:00</div>
+                <div class="checkOut">12:00</div>
             </div>
             <div class="Wednesday">
                 <div class="titleDay">Mie</div>
@@ -81,7 +87,56 @@ VARIABLES 2:
             </div>
         </div>
 
+        <div class="contentActionButton">
+            <button class="btnAction" ng-click="view.style2='nuevoHorarioSemanal'">MODIFICAR <b>HORARIO SEMANAL</b></button>
+            <button class="btnAction" ng-click="view.style2=''">MODIFICAR <b>HORARIO ESPECIAL</b></button>
+        </div>
 
+    </div>
+
+    <div class="contentWeeklySchedule">
+      <div class="textClock">
+        <div><b>NUEVO</b> HORARIO SEMANAL</div>
+        <div><b>35</b> Horas </div>
+      </div>
+
+      <div class="contentSchedules">
+          <div class="Monday">
+              <div class="titleDay">Lun</div>
+              <input type="time" class="checkIn"></input>
+              <div class="checkOut">17:00</div>
+          </div>
+          <div class="Tuesday">
+              <div class="titleDay">Mar</div>
+              <div class="checkIn">10:00</div>
+              <div class="checkOut">12:00</div>
+          </div>
+          <div class="Wednesday">
+              <div class="titleDay">Mie</div>
+              <div class="checkIn">10:00</div>
+              <div class="checkOut">17:00</div>
+          </div>
+          <div class="Thurday">
+              <div class="titleDay">Jue</div>
+              <div class="checkIn">10:00</div>
+              <div class="checkOut">17:00</div>
+          </div>
+          <div class="Friday">
+              <div class="titleDay">Vie</div>
+              <div class="checkIn">10:00</div>
+              <div class="checkOut">17:00</div>
+          </div>
+          <div class="Saturday">
+              <div class="titleDay">Sab</div>
+              <div class="checkIn">-</div>
+              <div class="checkOut">-</div>
+          </div>
+          <div class="Sunday">
+              <div class="titleDay">Dom</div>
+              <div class="checkIn">-</div>
+              <div class="checkOut">-</div>
+          </div>
+      </div>
     </div>
 
 </div>
