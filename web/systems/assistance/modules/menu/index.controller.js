@@ -12,5 +12,9 @@ app.controller('MenuCtrl', ["$rootScope", '$scope','$location',
     $scope.selectRequest = function() {
       $location.path('/request');
     }
+
+    $scope.selectSchedule = function() {
+      $location.path('/schedule');
+    }
   }
 ]);

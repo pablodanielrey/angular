@@ -37,6 +37,7 @@ function RequestCtrl($scope, Login, Assistance, Users, Office, $location, $timeo
   $scope.cancelJustification = cancelJustification;
   $scope.rejectJustification = rejectJustification;
   $scope.approveJustification = approveJustification;
+  $scope.getRole = getRole;
 
   $scope.model = {
     userId: null,
@@ -448,6 +449,10 @@ function RequestCtrl($scope, Login, Assistance, Users, Office, $location, $timeo
   function back() {
     $scope.view.style = $scope.view.style_options[0];
     $scope.view.style2 = $scope.view.style2_options[0];
+  }
+
+  function getRole() {
+    return "authority"
   }
 
 

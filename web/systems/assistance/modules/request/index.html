@@ -1,6 +1,6 @@
 <div class="request {{view.style}} {{view.style2}} {{view.style3}} ">
 <!--
-VARIABLES 1: seleccionSolicitud
+VARIABLES 1: seleccionSolicitud, seleccionPersona
 VARIABLES 2: solicitudSeleccionada
 VARIABLES 3: solicitudesPersonales, solicitudesGrupo, cargandoSolicitudes
 -->
@@ -15,9 +15,12 @@ VARIABLES 3: solicitudesPersonales, solicitudesGrupo, cargandoSolicitudes
 
         <div class="contentLeft">
 
-            <div class="newRequest">
+            <div class="newRequest {{getRole()}}">
               <button class="btnNewRequest" ng-click="view.style='seleccionSolicitud'">NUEVA SOLICITUD</button>
+              <button class="btnNewRequest btnaAuthority" ng-click="view.style='seleccionPersona'">SOLICITUD A PERSONAL</button>
             </div>
+
+
 
             <div class="listRequest">
               <button class="btnBack" ng-click="view.style='';view.style2=''"><i class="arrowBack fa fa-chevron-left"></i> VOLVER</button>
@@ -29,6 +32,86 @@ VARIABLES 3: solicitudesPersonales, solicitudesGrupo, cargandoSolicitudes
                       <button class="btnRequest" ng-click="selectOTWithoutReturn()"><i class="iconoRequest fa fa-ticket "></i> Boleta de salida sin retorno</button>
                       <button class="btnRequest" ng-click="selectUniversityPreExam()"><i class="iconoRequest fa fa-ticket "></i> Pre Exámen</button>
                       <button class="btnRequest" ng-click="selectA102()"><i class="iconoRequest fa fa-ticket "></i> Artículo 102</button>
+                  </div>
+            </div>
+
+            <div class="listPerson">
+              <button class="btnBack" ng-click="view.style='';view.style2=''"><i class="arrowBack fa fa-chevron-left"></i> VOLVER</button>
+              <div class="titleListRequest">
+                <span class="icoInputSearch"><i class="fa fa-search" aria-hidden="true"></i></span><input class="inputSearch" type="text" placeholder="Buscar personal..."> </input>
+              </div>
+                  <div class="contentListPerson">
+
+                      <div class="btnItemPerson" ng-click="view.style='seleccionSolicitud'">
+                          <div class="contentImgUser">
+                              <img class="imgUser" src="img/walter.jpg">
+                          </div>
+                          <div class="contentNameUser">
+                            <div>Walter Roberto Blanco</div>
+                            <div class="dniUser">30001823</div>
+                          </div>
+                      </div>
+
+                      <div class="btnItemPerson" ng-click="view.style='seleccionSolicitud'">
+                          <div class="contentImgUser">
+                              <img class="imgUser" src="img/emanuel.jpg">
+                          </div>
+                          <div class="contentNameUser">
+                            <div>Emanuel Joaquin Pais</div>
+                            <div class="dniUser">32584268</div>
+                          </div>
+                      </div>
+
+                      <div class="btnItemPerson" ng-click="view.style='seleccionSolicitud'">
+                          <div class="contentImgUser">
+                              <img class="imgUser" src="img/alejandro.jpg">
+                          </div>
+                          <div class="contentNameUser">
+                            <div>Alejandro Agustin Oporto</div>
+                            <div class="dniUser">29001823</div>
+                          </div>
+                      </div>
+
+                      <div class="btnItemPerson" ng-click="view.style='seleccionSolicitud'">
+                          <div class="contentImgUser">
+                              <img class="imgUser" src="img/maxi.jpg">
+                          </div>
+                          <div class="contentNameUser">
+                            <div>Maximiliano Antonio Saucedo</div>
+                            <div class="dniUser">29568419</div>
+                          </div>
+                      </div>
+
+                      <div class="btnItemPerson" ng-click="view.style='seleccionSolicitud'">
+                          <div class="contentImgUser">
+                              <img class="imgUser" src="img/pablo.jpg">
+                          </div>
+                          <div class="contentNameUser">
+                            <div>Pablo Daniel Rey</div>
+                            <div class="dniUser">29856426</div>
+                          </div>
+                      </div>
+
+                      <div class="btnItemPerson" ng-click="view.style='seleccionSolicitud'">
+                          <div class="contentImgUser">
+                              <img class="imgUser" src="img/avatarMen.jpg">
+                          </div>
+                          <div class="contentNameUser">
+                            <div>Ivan Castañeda</div>
+                            <div class="dniUser">33562482</div>
+                          </div>
+                      </div>
+
+                      <div class="btnItemPerson" ng-click="view.style='seleccionSolicitud'">
+                          <div class="contentImgUser">
+                              <img class="imgUser" src="img/avatarMen.jpg">
+                          </div>
+                          <div class="contentNameUser">
+                            <div>Santiago Chirino Ojeda</div>
+                            <div class="dniUser">35368159</div>
+                          </div>
+                      </div>
+
                   </div>
             </div>
 
