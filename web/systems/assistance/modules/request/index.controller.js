@@ -24,6 +24,8 @@ function RequestCtrl($scope, Login, Assistance, Users, Office, $location, $timeo
   $scope.sortUserName = sortUserName;
   $scope.orderUserName = orderUserName;
   $scope.loadUsers = loadUsers;
+  $scope.getUsersArray = getUsersArray;
+  $scope.getUserPhoto = getUserPhoto;
   $scope.findUsersByOffices = findUsersByOffices;
   $scope.getName = getName;
   $scope.selectCompensatory = selectCompensatory;
@@ -38,14 +40,19 @@ function RequestCtrl($scope, Login, Assistance, Users, Office, $location, $timeo
   $scope.rejectJustification = rejectJustification;
   $scope.approveJustification = approveJustification;
   $scope.getRole = getRole;
+  $scope.selectRequestAuthority = selectRequestAuthority;
+  $scope.selectUser = selectUser;
 
   $scope.model = {
     userId: null,
+    loginUserId: null,
     start: null,
     end: null,
     optionJustifications: null,
     justifications: [],
-    users: {}
+    users: {},
+    role: '',
+    usersArray: []
   }
 
   // PENDING, APPROVED, REJECTED, CANCELED
@@ -82,9 +89,11 @@ function RequestCtrl($scope, Login, Assistance, Users, Office, $location, $timeo
 
   $scope.$on('$viewContentLoaded', function(event) {
     $scope.model.userId = '';
+    $scope.model.loginUserId = '';
     Login.getSessionData()
       .then(function(s) {
           $scope.model.userId = s.user_id;
+          $scope.model.loginUserId = s.user_id;
           $scope.initialize();
       }, function(err) {
         console.log("error");
@@ -95,6 +104,7 @@ function RequestCtrl($scope, Login, Assistance, Users, Office, $location, $timeo
     $timeout(function() {
       $scope.view.style = $scope.view.style_options[0];
       $scope.view.style2 = $scope.view.style2_options[0];
+      $scope.model.userId = $scope.model.loginUserId;
       $scope.search();
     }, 1500);
   })
@@ -153,6 +163,7 @@ function RequestCtrl($scope, Login, Assistance, Users, Office, $location, $timeo
   }
 
   function loadOffices() {
+    $scope.model.role = '';
     $scope.view.optionsJustifications = [];
     $scope.view.optionsJustifications.push($scope.view.optionMyJustifications);
     $scope.model.optionJustifications = $scope.view.optionsJustifications[0];
@@ -160,6 +171,7 @@ function RequestCtrl($scope, Login, Assistance, Users, Office, $location, $timeo
     Office.getOfficesByUserRole($scope.model.userId, true, 'autoriza').then(function(ids) {
       if (ids.length > 0) {
         $scope.findUsersByOffices(ids);
+        $scope.model.role = 'authority';
         $scope.view.optionsJustifications.push($scope.view.optionGroupJustifications);
       }
     }, function(error) {
@@ -175,6 +187,22 @@ function RequestCtrl($scope, Login, Assistance, Users, Office, $location, $timeo
     });
   }
 
+  function getUsersArray() {
+    array = [];
+    if ($scope.model.users == null || $scope.model.length <= 0) {
+      return [];
+    }
+    for (uid in $scope.model.users) {
+      array.push($scope.model.users[uid]);
+    }
+    return array;
+  }
+
+  function selectRequestAuthority() {
+    $scope.view.style = 'seleccionPersona';
+    $scope.model.usersArray = $scope.getUsersArray();
+  }
+
   function loadUsers(ids) {
     $scope.model.users = {};
     if (ids.length <= 0) {
@@ -183,6 +211,7 @@ function RequestCtrl($scope, Login, Assistance, Users, Office, $location, $timeo
     Users.findById(ids).then(function(users) {
       for (var i = 0; i < users.length; i++) {
         user = users[i];
+        user.fullname = user.name + ' ' + user.lastname;
         $scope.model.users[user['id']] = user;
       }
     }, function(error) {
@@ -452,7 +481,20 @@ function RequestCtrl($scope, Login, Assistance, Users, Office, $location, $timeo
   }
 
   function getRole() {
-    return "authority"
+    return $scope.model.role;
+  }
+
+  function getUserPhoto(photo) {
+    if (photo == null) {
+      return "../login/modules/img/imgUser.jpg";
+    } else {
+      return "/c/files.py?i=" + photo;
+    }
+  }
+
+  function selectUser(user) {
+    $scope.model.userId = user.id;
+    $scope.view.style = 'seleccionSolicitud';
   }
 
 

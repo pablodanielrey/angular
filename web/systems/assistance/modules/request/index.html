@@ -17,7 +17,7 @@ VARIABLES 3: solicitudesPersonales, solicitudesGrupo, cargandoSolicitudes
 
             <div class="newRequest {{getRole()}}">
               <button class="btnNewRequest" ng-click="view.style='seleccionSolicitud'">NUEVA SOLICITUD</button>
-              <button class="btnNewRequest btnaAuthority" ng-click="view.style='seleccionPersona'">SOLICITUD A PERSONAL</button>
+              <button class="btnNewRequest btnaAuthority" ng-click="selectRequestAuthority()">SOLICITUD A PERSONAL</button>
             </div>
 
 
@@ -32,6 +32,26 @@ VARIABLES 3: solicitudesPersonales, solicitudesGrupo, cargandoSolicitudes
                       <button class="btnRequest" ng-click="selectOTWithoutReturn()"><i class="iconoRequest fa fa-ticket "></i> Boleta de salida sin retorno</button>
                       <button class="btnRequest" ng-click="selectUniversityPreExam()"><i class="iconoRequest fa fa-ticket "></i> Pre Exámen</button>
                       <button class="btnRequest" ng-click="selectA102()"><i class="iconoRequest fa fa-ticket "></i> Artículo 102</button>
+                  </div>
+            </div>
+
+            <div class="listPerson">
+              <button class="btnBack" ng-click="view.style='';view.style2=''"><i class="arrowBack fa fa-chevron-left"></i> VOLVER</button>
+              <div class="titleListRequest">
+                <span class="icoInputSearch"><i class="fa fa-search" aria-hidden="true"></i></span><input class="inputSearch" ng-model="view.search" type="text" placeholder="Buscar personal..."> </input>
+              </div>
+                  <div class="contentListPerson">
+
+                      <div class="btnItemPerson" ng-click="selectUser(user)" ng-repeat="user in model.usersArray | filter:view.search">
+                          <div class="contentImgUser">
+                              <img class="imgUser" ng-src='{{getUserPhoto(user.photo)}}' alt="foto de perfil">
+                          </div>
+                          <div class="contentNameUser">
+                            <div>{{user.name}} {{user.lastname}}</div>
+                            <div class="dniUser">{{user.dni}}</div>
+                          </div>
+                      </div>
+
                   </div>
             </div>
 

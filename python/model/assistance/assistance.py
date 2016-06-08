@@ -37,9 +37,10 @@ class WorkedAssistanceData(JSONSerializable):
 
 class AssistanceData(JSONSerializable):
 
-    def __init__(self, userId = None, workedAssistanceData = []):
+    def __init__(self, userId = None, workedAssistanceData = [], offices = []):
         self.userId = userId
         self.workedAssistanceData = workedAssistanceData
+        self.offices = offices
 
 
 class WorkPeriod(JSONSerializable):
@@ -351,11 +352,13 @@ class AssistanceModel:
         for uid in userIds:
             sts = stats[uid]
             ws = []
+            oids = Office.getOfficesByUser(con, uid)
+            offices = Office.findById(con, oids)
             for s in sts:
                 for ds in s.dailyStats:
                     w = WorkedAssistanceData(ds)
                     ws.append(w)
-                aData.append(AssistanceData(uid, ws))
+                aData.append(AssistanceData(uid, ws, offices))
 
         return aData
 
@@ -364,7 +367,10 @@ class AssistanceModel:
         module = importlib.import_module(justModule)
         clazz = getattr(module, justClazz)
         j = clazz.create(con, date, userId, ownerId)
-        return j.persist(con)
+        jid = j.persist(con)
+        if userId != ownerId:
+            j.changeStatus(con, Status.APPROVED, ownerId)
+        return jid
 
 
     def createRangedTimeWithoutReturnJustification(self, con, start, userId, ownerId, justClazz, justModule):
@@ -383,7 +389,10 @@ class AssistanceModel:
         module = importlib.import_module(justModule)
         clazz = getattr(module, justClazz)
         j = clazz.create(con, start, end, userId, ownerId)
-        return j.persist(con)
+        jid = j.persist(con)
+        if userId != ownerId:
+            j.changeStatus(con, Status.APPROVED, ownerId)
+        return jid
 
 
     def createRangedTimeWithReturnJustification(self, con, start, end, userId, ownerId, justClazz, justModule):
@@ -392,7 +401,10 @@ class AssistanceModel:
         module = importlib.import_module(justModule)
         clazz = getattr(module, justClazz)
         j = clazz.create(con, start, end, userId, ownerId)
-        return j.persist(con)
+        jid = j.persist(con)
+        if userId != ownerId:
+            j.changeStatus(con, Status.APPROVED, ownerId)
+        return jid
 
 
     def createRangedJustification(self, con, start, days, userId, ownerId, justClazz, justModule):
@@ -401,7 +413,10 @@ class AssistanceModel:
         clazz = getattr(module, justClazz)
 
         j = clazz.create(con, start, days, userId, ownerId)
-        return j.persist(con)
+        jid = j.persist(con)
+        if userId != ownerId:
+            j.changeStatus(con, Status.APPROVED, ownerId)
+        return jid
 
 
     def getJustificationData(self, con, userId, date, justClazz, justModule):

@@ -134,6 +134,10 @@
   height: 100%;
 }
 
+.request.seleccionPersona .contentLeft {
+  height: 100%;
+}
+
 .request .newRequest {
   /*background-color: green;*/
   opacity: 1;
@@ -161,14 +165,9 @@
 
 .request.seleccionSolicitud .newRequest {
   display: none;
-  /*opacity: 0;
-  transform: translate3d(0,1000%,0);
-  -webkit-transform: translate3d(0,1000%,0);
-  -moz-transform: translate3d(0,1000%,0);
-  -webkit-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
-     -moz-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
-       -o-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
-          transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);*/
+}
+.request.seleccionPersona .newRequest {
+  display: none;
 }
 
 .request .btnNewRequest {
@@ -196,7 +195,8 @@
   display: block;
 }
 
-.request .listRequest {
+.request .listRequest,
+.request .listPerson {
   height: 99%;
   /*background: pink;*/
   opacity: 0;
@@ -219,6 +219,48 @@
        -o-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
           transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
 }
+
+.request.seleccionPersona .listPerson {
+  opacity: 1;
+  transform: translate3d(0,-100%,0);
+  -webkit-transform: translate3d(0,-100%,0);
+  -moz-transform: translate3d(0,0,0);
+  -webkit-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+     -moz-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+       -o-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+          transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+}
+
+.request .icoInputSearch {
+  background-color: #DBE2E5;
+  padding: 10px 15px 10px 15px;
+  border: 1px solid #DBE2E5;
+  border-radius: 2px 0 0 2px;
+  -moz-border-radius: 2px 0 0 2px;
+  -webkit-border-radius: 2px 0 0 2px;
+    font-size: 17px;
+}
+
+.request .inputSearch {
+  width: 65%;
+  padding: 10px;
+  font-size: 20px;
+  border: 1px solid #DBE2E5;
+  border-radius: 0 2px 2px 0;
+  -moz-border-radius: 0 2px 2px 0;
+  -webkit-border-radius: 0 2px 2px 0;
+}
+
+
+::-webkit-input-placeholder { color: #ACADB1; font-size: 14px;}
+:-moz-placeholder { color: #ACADB1; opacity:  1; font-size: 14px;}
+::-moz-placeholder { color: #ACADB1; opacity:  1; font-size: 14px;}
+:-ms-input-placeholder { color: #ACADB1; font-size: 14px;}
+:placeholder-shown { color: #ACADB1;  font-size: 14px;}
+
+.request .inputSearch::-webkit-input-placeholder { color:#ACADB1; padding-top: 4px;}
+.request .inputSearch::-moz-input-placeholder { color:#ACADB1; padding-top: 4px;}
+
 
 .request .btnBack {
   width: 100%;
@@ -277,6 +319,16 @@
   overflow-x: auto;
 }
 
+.request .contentListPerson {
+  width: 90%;
+  height: 70%;
+  padding-right: 5px;
+  margin-top: 10px;
+  margin-left: 15px;
+  overflow-x: auto;
+}
+
+
 
 
 .request .btnRequest {
@@ -303,6 +355,55 @@
   background-color: #DBE2E5;
 }
 
+.request .contentImgUser {
+  text-align: left;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+}
+
+.request .btnItemPerson {
+  background-color: white;
+  padding: 5px 10px 5px 10px;
+  border: 1px solid #eae8e8;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  text-align: left;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  cursor: pointer;
+  margin-bottom: 5px;
+}
+
+.request .btnItemPerson:hover {
+  background-color: #DBE2E5;
+}
+
+.request .imgUser {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+}
+
+.request .contentNameUser {
+  margin-left: 10px;
+  font-size: 13px;
+}
+
+.request .dniUser {
+
+    color: #5C5F69;
+}
 
 .request .iconoRequest {
   background-color: #DBE2E5;
@@ -374,15 +475,9 @@
 
 .request.solicitudSeleccionada .contentMyRequest {
   display: none;
-  /*opacity: 0;
-  transform: translate3d(0,1000%,0);
-  -webkit-transform: translate3d(0,1000%,0);
-  -moz-transform: translate3d(0,1000%,0);
-  -webkit-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
-     -moz-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
-       -o-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
-          transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);*/
 }
+
+
 
 .request .selectRequest {
   border:none;
@@ -1028,7 +1123,21 @@
     height: 100%;
   }
 
+  .request.seleccionPersona .contentLeft {
+    height: 100%;
+  }
+
   .request.seleccionSolicitud .contentRight {
+    opacity: 0;
+    transform: translate3d(0,1000%,0);
+    -webkit-transform: translate3d(0,1000%,0);
+    -moz-transform: translate3d(0,1000%,0);
+    -webkit-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+       -moz-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+         -o-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+            transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+  }
+  .request.seleccionPersona .contentRight {
     opacity: 0;
     transform: translate3d(0,1000%,0);
     -webkit-transform: translate3d(0,1000%,0);
@@ -1216,6 +1325,20 @@
          -o-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
             transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
   }
+
+  .request .inputSearch {
+    width:74%;
+  }
+
+  .request .contentListPerson {
+    width: 90%;
+    height: 64%;
+    padding-right: 5px;
+    margin-top: 10px;
+    margin-left: 15px;
+    overflow-x: auto;
+  }
+
 
 
 
