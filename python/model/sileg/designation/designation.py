@@ -125,7 +125,24 @@ class DesignationDAO(SilegDAO):
         finally:
             cur.close()
     
+    
+    @classmethod
+    def numRowsByOldType(cls, con, oldType):
+        cur = con.cursor()
+    
+        try:
+            cur.execute("""
+                SELECT count(*)
+                FROM sileg.designation 
+                WHERE old_type = %s
+            """, (oldType,))
+            r = cur.fetchone()
+            return None if r is None else r ["count"]
             
+        finally:
+            cur.close()
+            
+              
     @classmethod
     def findByUnique(cls, con, oldId, oldType):
         cur = con.cursor()
@@ -173,5 +190,9 @@ class Designation(JSONSerializable):
     @classmethod 
     def findByUnique(cls, con, oldId, oldType):
         return cls.dao.findByUnique(con, oldId, oldType)
+        
+    @classmethod 
+    def numRowsByOldType(cls, con, oldType):
+        return cls.dao.numRowsByOldType(con, oldType)        
         
  

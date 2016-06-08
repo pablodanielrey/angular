@@ -29,7 +29,7 @@ class ImportSileg():
         if(data["dpto_nombre"] is not None):
             place = Place()
             place.description = data["dpto_nombre"]
-            place.type = "university center" if  any(x in data["dpto_nombre"].lower() for x in ["c.u", "c. u"]) else "department"                
+            place.type = "Centro Universitario" if  any(x in data["dpto_nombre"].lower() for x in ["c.u", "c. u"]) else "Departamento"                
             place.id = place.findByUnique(con = con, description = place.description, type = place.type)
             place.persist(con)
             return place
@@ -53,13 +53,13 @@ class ImportSileg():
     @classmethod
     def placeFromCatedra(cls, con, data):
         #definir "place" del tipo "departamento" a partir del campo lugdetrab_nombre
-        if r["materia_nombre"] is not None:    
-            catedra = " Catedra " + r["catedra_nombre"] if(r["catedra_nombre"] != 'Original') else ""
+        if data["materia_nombre"] is not None:    
+            catedra = " Catedra " + data["catedra_nombre"] if(data["catedra_nombre"] != 'Original') else ""
             
             place = Place()
-            place.description = r["materia_nombre"] + catedra             
-            place.type = "cathedra"
-            place.dependence = None if(r["dpto_nombre"] is None) else place.findByUnique(con = con, description = r["dpto_nombre"], type = "department")
+            place.description = data["materia_nombre"] + catedra             
+            place.type = "Catedra"
+            place.dependence = None if(data["dpto_nombre"] is None) else place.findByUnique(con = con, description = data["dpto_nombre"], type = "department")
             place.id = place.findByUnique(con = con, description = place.description, type = place.type, dependence = place.dependence)
             place.persist(con)
             return place
@@ -122,13 +122,15 @@ class ImportSileg():
         replaceId = designation.findByUnique(conD, data["extension_designacion_id"], "des")
         
         if(replaceId is None):
-            logging.info("Extension sin designacion " + str(r["extension_id"]))
+            logging.info("Extension sin designacion " + str(data["extension_id"]))
             return
         
         replace = designation.findById(conD, [replaceId])[0]
             
-        designation.start = r["extension_fecha_desde"]
-        designation.end = r["extension_fecha_hasta"]
+        #definir "designation"
+        designation = Designation()
+        designation.start = data["extension_fecha_desde"]
+        designation.end = data["extension_fecha_hasta"]
         designation.description = "extension"
         designation.userId = replace.userId
         
@@ -136,27 +138,11 @@ class ImportSileg():
         designation.positionId = positionId
         designation.replaceId = replace.id
     
-    
-    
-        #definir "designation"
-        designation = Designation()
-        designation.start = data["extension_fecha_desde"]
-        designation.end = data["extension_fecha_hasta"]
-        designation.description = "extension"
-        designation.userId = userId
-        designation.placeId = placeId
-        designation.positionId = positionId
-        
         designation.oldType = "ext"
-        designation.oldId = data["desig_id"]
+        designation.oldId = data["extension_id"]
         
         designation.id = designation.findByUnique(con, designation.oldId, designation.oldType)
         designation.persist(con)       
-    """
-    
-    
-    
-    
     
     
         
@@ -220,13 +206,15 @@ FROM designacion_docente
         
         
 
+        
     @classmethod
     def importDesignacionFromExtensionCatedra(cls, conS, conD):
 
         curS = conS.cursor()
         
+        ##### la implementacion actual requiere consultar el tipo cargo y el tipo caracter para definir la posicion!!!! #####
         curS.execute("""
-          SELECT DISTINCT extension_id, extension_fecha_desde, extension_fecha_hasta, tipocargo_nombre, tipodedicacion_nombre, tipocaracter_nombre, extension_fecha_baja, extension_catxmat_id, extension_lugdetrab_id
+          SELECT DISTINCT extension_id, extension_designacion_id, extension_fecha_desde, extension_fecha_hasta, tipocargo_nombre, tipocaracter_nombre, tipodedicacion_nombre, extension_fecha_baja, extension_catxmat_id, materia_nombre, catedra_nombre, dpto_nombre
           FROM extension e
           INNER JOIN designacion_docente dd ON (e.extension_designacion_id = dd.desig_id)
           INNER JOIN tipo_dedicacion AS td ON (e.extension_nuevadedicacion_id = td.tipodedicacion_id)
@@ -247,16 +235,15 @@ FROM designacion_docente
 
         conD.commit()           
         
-        
-
 
 
     @classmethod
     def importDesignacionFromExtensionLugarTrabajo(cls, conS, conD):
         curS = conS.cursor()
         
+        ##### la implementacion actual requiere consultar el tipo cargo y el tipo caracter para definir la posicion!!!! #####
         curS.execute("""
-          SELECT DISTINCT extension_id, extension_fecha_desde, extension_fecha_hasta, tipocargo_nombre, tipodedicacion_nombre, extension_fecha_baja, tipocaracter_nombre, lugdetrab_nombre, area_nombre, funcion_nombre
+          SELECT DISTINCT extension_id, extension_designacion_id, extension_fecha_desde, extension_fecha_hasta, tipocargo_nombre, tipocaracter_nombre, tipodedicacion_nombre, extension_fecha_baja,  lugdetrab_nombre, area_nombre, funcion_nombre
           FROM extension e
           INNER JOIN designacion_docente dd ON (e.extension_designacion_id = dd.desig_id)
           INNER JOIN tipo_dedicacion AS td ON (e.extension_nuevadedicacion_id = td.tipodedicacion_id)
@@ -272,13 +259,67 @@ FROM designacion_docente
         for r in curS:
             place = ImportSileg.placeFromLugarTrabajo(conD, r)
             position = ImportSileg.position(conD, r)
-            user = ImportSileg.user(conD, r)
             
-            ImportSileg.designationFromDesignacionDocente(conD, user.id, place.id, position.id, r)
+            ImportSileg.designationFromExtension(conD, place.id, position.id, r)
+
+        conD.commit()           
+        
+    @classmethod
+    def importDesignacionFromExtensionDesignacionCatedra(cls, conS, conD):
+        curS = conS.cursor()
+        
+        ##### la implementacion actual requiere consultar el tipo cargo y el tipo caracter para definir la posicion!!!! #####
+        curS.execute("""
+          SELECT DISTINCT extension_id, extension_designacion_id, extension_fecha_desde, extension_fecha_hasta, tipocargo_nombre, tipocaracter_nombre, tipodedicacion_nombre, extension_fecha_baja, extension_catxmat_id, materia_nombre, catedra_nombre, dpto_nombre
+          FROM extension e
+          INNER JOIN designacion_docente dd ON (e.extension_designacion_id = dd.desig_id)
+          INNER JOIN tipo_dedicacion AS td ON (e.extension_nuevadedicacion_id = td.tipodedicacion_id)
+          INNER JOIN tipo_cargo tc ON (dd.desig_tipocargo_id = tc.tipocargo_id)
+          INNER JOIN tipo_caracter AS tca ON (dd.desig_tipocaracter_id = tca.tipocaracter_id)
+          INNER JOIN catedras_x_materia cxm ON (dd.desig_catxmat_id = cxm.catxmat_id)
+          INNER JOIN materia m ON (cxm.catxmat_materia_id = m.materia_id)
+          INNER JOIN catedra c ON (cxm.catxmat_catedra_id = c.catedra_id)
+          INNER JOIN departamento d ON (m.materia_dpto_id = d.dpto_id)
+          WHERE (e.extension_catxmat_id IS NULL AND e.extension_lugdetrab_id IS NULL)
+        """)
+
+        for r in curS:
+            ImportSileg.placeFromDepartamento(conD, r)
+            place = ImportSileg.placeFromCatedra(conD, r)
+            position = ImportSileg.position(conD, r)
+            
+            ImportSileg.designationFromExtension(conD, place.id, position.id, r)
 
         conD.commit()           
         
         
+    @classmethod
+    def importDesignacionFromExtensionDesignacionLugarTrabajo(cls, conS, conD):
+        curS = conS.cursor()
+        
+        ##### la implementacion actual requiere consultar el tipo cargo y el tipo caracter para definir la posicion!!!! #####
+        curS.execute("""
+          SELECT DISTINCT extension_id, extension_designacion_id, extension_fecha_desde, extension_fecha_hasta, tipocargo_nombre, tipocaracter_nombre, tipodedicacion_nombre, extension_fecha_baja,  lugdetrab_nombre, area_nombre, funcion_nombre
+FROM extension e
+          INNER JOIN designacion_docente dd ON (e.extension_designacion_id = dd.desig_id)
+          INNER JOIN tipo_dedicacion AS td ON (e.extension_nuevadedicacion_id = td.tipodedicacion_id)
+          INNER JOIN tipo_cargo tc ON (dd.desig_tipocargo_id = tc.tipocargo_id)
+          INNER JOIN tipo_caracter AS tca ON (dd.desig_tipocaracter_id = tca.tipocaracter_id)
+          INNER JOIN empleado em ON (dd.desig_empleado_id = em.empleado_id)
+          INNER JOIN persona p ON (em.empleado_pers_id = p.pers_id)
+          INNER JOIN lugar_de_trabajo lc ON (dd.desig_lugdetrab_id = lc.lugdetrab_id)
+          LEFT JOIN area a ON (lc.lugdetrab_area_id =a.area_id)
+          LEFT JOIN funcion f ON (e.extension_funcion_id = f.funcion_id)
+          WHERE (e.extension_catxmat_id IS NULL AND e.extension_lugdetrab_id IS NULL)
+        """)
+
+        for r in curS:
+            place = ImportSileg.placeFromLugarTrabajo(conD, r)
+            position = ImportSileg.position(conD, r)
+            
+            ImportSileg.designationFromExtension(conD, place.id, position.id, r)
+
+        conD.commit()                 
         
     @classmethod
     def importDesignacionFromProrroga(cls, conS, conD):
@@ -287,6 +328,7 @@ FROM designacion_docente
         curS.execute("""
           SELECT prorroga_id, prorroga_fecha_desde, prorroga_fecha_hasta, prorroga_prorroga_de, prorroga_prorroga_de_id
           FROM prorroga
+          ORDER BY prorroga_fecha_desde, prorroga_fecha_hasta
         """)
 
         for r in curS:
@@ -301,7 +343,7 @@ FROM designacion_docente
             
             designation.start = r["prorroga_fecha_desde"]
             designation.end = r["prorroga_fecha_hasta"]
-            designation.description = "teacher designation"
+            designation.description = replace.description
             designation.userId = replace.userId
             designation.placeId = replace.placeId
             designation.positionId = replace.positionId
@@ -314,6 +356,28 @@ FROM designacion_docente
             designation.persist(conD)
 
         conD.commit()   
+        
+        
+    @classmethod
+    def importDesignacionFromProrrogaCheckNumRows(cls, conS, conD):
+        curS = conS.cursor()
+        
+        designation = Designation()
+        numRowsOld = designation.numRowsByOldType(conD, "pro")
+
+        while True:
+            logging.info(numRowsOld)
+            cls.importDesignacionFromProrroga(conS, conD)
+            numRows = designation.numRowsByOldType(conD, "pro")
+            if numRows != numRowsOld:
+                numRowsOld = numRows
+            else:
+                break
+
+
+
+
+        
         
 
 if __name__ == '__main__':
@@ -329,12 +393,13 @@ if __name__ == '__main__':
     conD = dcsysConn.get()
 
     try:
-
         ImportSileg.importDesignacionFromCatedra(conS, conD)
         ImportSileg.importDesignacionFromLugarTrabajo(conS, conD)
-        ImportSileg.importDesignacionFromExtension(conS, conD)
-        ImportSileg.importDesignacionFromProrroga(conS, conD)
-        
+        ImportSileg.importDesignacionFromExtensionCatedra(conS, conD)
+        ImportSileg.importDesignacionFromExtensionLugarTrabajo(conS, conD)
+        ImportSileg.importDesignacionFromExtensionDesignacionCatedra(conS, conD)
+        ImportSileg.importDesignacionFromExtensionDesignacionLugarTrabajo(conS, conD)
+        ImportSileg.importDesignacionFromProrrogaCheckNumRows(conS, conD)
 
           
     finally:
