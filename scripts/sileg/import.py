@@ -15,6 +15,7 @@ from model.connection import connection
 from model.sileg.place.place import Place
 from model.sileg.position.position import Position
 from model.sileg.designation.designation import Designation
+from model.sileg.licence.licence import Licence
 from model.users.users import User
 
 
@@ -104,7 +105,8 @@ class ImportSileg():
         designation = Designation()
         designation.start = data["desig_fecha_desde"]
         designation.end = data["desig_fecha_hasta"]
-        designation.description = "teacher designation"
+        designation.out = data["desig_fecha_baja"]
+        designation.description = "docente"
         designation.userId = userId
         designation.placeId = placeId
         designation.positionId = positionId
@@ -131,6 +133,7 @@ class ImportSileg():
         designation = Designation()
         designation.start = data["extension_fecha_desde"]
         designation.end = data["extension_fecha_hasta"]
+        designation.out = data["extension_fecha_baja"]
         designation.description = "extension"
         designation.userId = replace.userId
         
@@ -214,7 +217,7 @@ FROM designacion_docente
         
         ##### la implementacion actual requiere consultar el tipo cargo y el tipo caracter para definir la posicion!!!! #####
         curS.execute("""
-          SELECT DISTINCT extension_id, extension_designacion_id, extension_fecha_desde, extension_fecha_hasta, tipocargo_nombre, tipocaracter_nombre, tipodedicacion_nombre, extension_fecha_baja, extension_catxmat_id, materia_nombre, catedra_nombre, dpto_nombre
+          SELECT DISTINCT extension_id, extension_designacion_id, extension_fecha_desde, extension_fecha_hasta, extension_fecha_baja, tipocargo_nombre, tipocaracter_nombre, tipodedicacion_nombre, extension_fecha_baja, extension_catxmat_id, materia_nombre, catedra_nombre, dpto_nombre
           FROM extension e
           INNER JOIN designacion_docente dd ON (e.extension_designacion_id = dd.desig_id)
           INNER JOIN tipo_dedicacion AS td ON (e.extension_nuevadedicacion_id = td.tipodedicacion_id)
@@ -243,7 +246,7 @@ FROM designacion_docente
         
         ##### la implementacion actual requiere consultar el tipo cargo y el tipo caracter para definir la posicion!!!! #####
         curS.execute("""
-          SELECT DISTINCT extension_id, extension_designacion_id, extension_fecha_desde, extension_fecha_hasta, tipocargo_nombre, tipocaracter_nombre, tipodedicacion_nombre, extension_fecha_baja,  lugdetrab_nombre, area_nombre, funcion_nombre
+          SELECT DISTINCT extension_id, extension_designacion_id, extension_fecha_desde, extension_fecha_hasta, extension_fecha_baja, tipocargo_nombre, tipocaracter_nombre, tipodedicacion_nombre, extension_fecha_baja,  lugdetrab_nombre, area_nombre, funcion_nombre
           FROM extension e
           INNER JOIN designacion_docente dd ON (e.extension_designacion_id = dd.desig_id)
           INNER JOIN tipo_dedicacion AS td ON (e.extension_nuevadedicacion_id = td.tipodedicacion_id)
@@ -270,7 +273,7 @@ FROM designacion_docente
         
         ##### la implementacion actual requiere consultar el tipo cargo y el tipo caracter para definir la posicion!!!! #####
         curS.execute("""
-          SELECT DISTINCT extension_id, extension_designacion_id, extension_fecha_desde, extension_fecha_hasta, tipocargo_nombre, tipocaracter_nombre, tipodedicacion_nombre, extension_fecha_baja, extension_catxmat_id, materia_nombre, catedra_nombre, dpto_nombre
+          SELECT DISTINCT extension_id, extension_designacion_id, extension_fecha_desde, extension_fecha_hasta, extension_fecha_baja, tipocargo_nombre, tipocaracter_nombre, tipodedicacion_nombre, extension_fecha_baja, extension_catxmat_id, materia_nombre, catedra_nombre, dpto_nombre
           FROM extension e
           INNER JOIN designacion_docente dd ON (e.extension_designacion_id = dd.desig_id)
           INNER JOIN tipo_dedicacion AS td ON (e.extension_nuevadedicacion_id = td.tipodedicacion_id)
@@ -299,7 +302,7 @@ FROM designacion_docente
         
         ##### la implementacion actual requiere consultar el tipo cargo y el tipo caracter para definir la posicion!!!! #####
         curS.execute("""
-          SELECT DISTINCT extension_id, extension_designacion_id, extension_fecha_desde, extension_fecha_hasta, tipocargo_nombre, tipocaracter_nombre, tipodedicacion_nombre, extension_fecha_baja,  lugdetrab_nombre, area_nombre, funcion_nombre
+          SELECT DISTINCT extension_id, extension_designacion_id, extension_fecha_desde, extension_fecha_hasta, extension_fecha_baja, tipocargo_nombre, tipocaracter_nombre, tipodedicacion_nombre, extension_fecha_baja,  lugdetrab_nombre, area_nombre, funcion_nombre
 FROM extension e
           INNER JOIN designacion_docente dd ON (e.extension_designacion_id = dd.desig_id)
           INNER JOIN tipo_dedicacion AS td ON (e.extension_nuevadedicacion_id = td.tipodedicacion_id)
@@ -336,14 +339,14 @@ FROM extension e
             replaceId = designation.findByUnique(conD, r["prorroga_prorroga_de_id"], r["prorroga_prorroga_de"])
             
             if(replaceId is None):
-                logging.info("Prorroga sin designacion " + str(r["prorroga_id"]))
+                #logging.info("Prorroga sin designacion " + str(r["prorroga_id"]))
                 continue
             
             replace = designation.findById(conD, [replaceId])[0]
             
             designation.start = r["prorroga_fecha_desde"]
             designation.end = r["prorroga_fecha_hasta"]
-            designation.description = replace.description
+            designation.description = "prorroga"
             designation.userId = replace.userId
             designation.placeId = replace.placeId
             designation.positionId = replace.positionId
@@ -358,6 +361,7 @@ FROM extension e
         conD.commit()   
         
         
+
     @classmethod
     def importDesignacionFromProrrogaCheckNumRows(cls, conS, conD):
         curS = conS.cursor()
@@ -375,10 +379,99 @@ FROM extension e
                 break
 
 
+    @classmethod
+    def importLicencia(cls, conS, conD):
+        curS = conS.cursor()
+        
+        curS.execute("""
+          SELECT licencia_id, licencia_designacion_id,licencia_fecha_desde, licencia_fecha_hasta, licencia_fecha_baja, licencia_articulo_id, licencia_tipolicencia_id, lc.licart_descripcion, licart_congocesueldo, tipolicencia_descripcion
+          FROM licencia AS l
+          LEFT JOIN licencia_articulos lc ON (lc.licart_id = l.licencia_articulo_id)
+          INNER JOIN tipo_licencia tl ON (tl.tipolicencia_id = licencia_tipolicencia_id)
+        """)
 
+        for r in curS:
+            designation = Designation()
+            designationId = designation.findByUnique(conD, r["licencia_designacion_id"], "des")
+            
+            if(designationId is None):
+                logging.info("Licencia sin designacion " + str(r["prorroga_id"]))
+                continue
+            
+            licence = Licence()
+            licence.start = r["licencia_fecha_desde"]
+            licence.end = r["licencia_fecha_hasta"]
+            licence.out = r["licencia_fecha_baja"]
+            licence.designationId = designationId
+            licence.description = r["tipolicencia_descripcion"] + ' ' if r["tipolicencia_descripcion"] != 'Licencia' else ''
+            licence.oldId = r["licencia_id"]
+            licence.oldType = "lic"
+            licence.salary = True
+            
+            if(r["licencia_articulo_id"] is not None):
+                licence.description = licence.description + r["licart_descripcion"]
+                licence.salary = True if r["licart_congocesueldo"] == 1 else False
+
+            
+            licence.id = licence.findByUnique(conD, licence.oldId, licence.oldType)
+            licence.persist(conD)
+            
+        conD.commit() 
 
         
         
+        
+    @classmethod
+    def importLicenceFromProrroga(cls, conS, conD):
+        curS = conS.cursor()
+        
+        curS.execute("""
+          SELECT prorroga_id, prorroga_fecha_desde, prorroga_fecha_hasta, prorroga_prorroga_de, prorroga_prorroga_de_id
+          FROM prorroga
+          ORDER BY prorroga_fecha_desde, prorroga_fecha_hasta
+        """)
+
+        for r in curS:
+            licence = Licence()
+            replaceId = licence.findByUnique(conD, r["prorroga_prorroga_de_id"], r["prorroga_prorroga_de"])
+            
+            if(replaceId is None):
+                #logging.info("Prorroga sin licencia " + str(r["prorroga_id"]))
+                continue
+            
+            replace = licence.findById(conD, [replaceId])[0]
+            
+            licence.start = r["prorroga_fecha_desde"]
+            licence.end = r["prorroga_fecha_hasta"]
+            licence.description = "prorroga"
+            licence.salary = replace.salary
+            licence.designationId = replace.designationId
+            licence.replaceId = replace.id
+            
+            licence.oldId = r["prorroga_id"]
+            licence.oldType = "pro"
+            
+            licence.id = licence.findByUnique(conD, licence.oldId, licence.oldType)
+            licence.persist(conD)
+
+        conD.commit()   
+        
+        
+    @classmethod
+    def importLicenceFromProrrogaCheckNumRows(cls, conS, conD):
+        curS = conS.cursor()
+        
+        licence = Licence()
+        numRowsOld = licence.numRowsByOldType(conD, "pro")
+
+        while True:
+            logging.info(numRowsOld)
+            cls.importLicenceFromProrroga(conS, conD)
+            numRows = licence.numRowsByOldType(conD, "pro")
+            if numRows != numRowsOld:
+                numRowsOld = numRows
+            else:
+                break
 
 if __name__ == '__main__':
 
@@ -400,6 +493,8 @@ if __name__ == '__main__':
         ImportSileg.importDesignacionFromExtensionDesignacionCatedra(conS, conD)
         ImportSileg.importDesignacionFromExtensionDesignacionLugarTrabajo(conS, conD)
         ImportSileg.importDesignacionFromProrrogaCheckNumRows(conS, conD)
+        ImportSileg.importLicencia(conS, conD)
+        ImportSileg.importLicenceFromProrrogaCheckNumRows(conS, conD)
 
           
     finally:

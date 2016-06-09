@@ -2,14 +2,12 @@
 import uuid
 from model.sileg.silegdao import SilegDAO
 from model.serializer.utils import JSONSerializable
-from model.users.users import UserDAO
-from model.sileg.position.position import PositionDAO
-from model.sileg.place.place import PlaceDAO
+from model.sileg.designation.designation import DesignationDAO
 
 
-class DesignationDAO(SilegDAO):
+class LicenceDAO(SilegDAO):
 
-    dependencies = [PlaceDAO, PositionDAO, UserDAO]
+    dependencies = [DesignationDAO]
     
     
     @classmethod
@@ -20,20 +18,18 @@ class DesignationDAO(SilegDAO):
             sql = """
               CREATE SCHEMA IF NOT EXISTS sileg;
 
-              CREATE TABLE IF NOT EXISTS sileg.designation (
+              CREATE TABLE IF NOT EXISTS sileg.licence (
                     id VARCHAR PRIMARY KEY,
                     dstart DATE NOT NULL,
                     dend DATE,
                     dout DATE,
                     description VARCHAR NOT NULL,
-                    user_id VARCHAR NOT NULL REFERENCES profile.users (id),
-                    place_id VARCHAR NOT NULL REFERENCES sileg.place (id),
-                    position_id VARCHAR NOT NULL REFERENCES sileg.position (id),
-                    replace_id VARCHAR REFERENCES sileg.designation (id),
+                    salary BOOLEAN,
+                    designation_id VARCHAR NOT NULL REFERENCES sileg.designation (id),
                     old_id INTEGER NOT NULL,
                     old_type VARCHAR NOT NULL,
+                    replace_id VARCHAR REFERENCES sileg.licence (id),
                     UNIQUE(old_id, old_type)
-
               );
               """
             cur.execute(sql)
@@ -43,18 +39,19 @@ class DesignationDAO(SilegDAO):
           
     @classmethod
     def _fromResult(cls, r):
-        instance = Designation()
+        instance = Licence()
         instance.id = r['id']
         instance.start = r['dstart']
         instance.end = r['dend']
         instance.out = r["dout"]
         instance.description = r["description"]
-        instance.userId = r['user_id']
-        instance.placeId = r["place_id"]
-        instance.positionId = r["position_id"]
+        instance.salary = r["salary"]        
+        instance.designationId = r['designation_id']
         instance.replaceId = r["replace_id"]
+                
         instance.oldId = r["old_id"]
         instance.oldType = r["old_type"]
+
         return instance
         
         
@@ -72,24 +69,23 @@ class DesignationDAO(SilegDAO):
             if len(instance.findById(con, [instance.id])) <=  0:
                 data = instance.__dict__
                 cur.execute("""
-                    INSERT INTO sileg.designation (id, dstart, dend, dout, description, user_id, position_id, place_id, replace_id, old_id, old_type) 
-                    VALUES (%(id)s, %(start)s, %(end)s, %(out)s, %(description)s, %(userId)s, %(positionId)s, %(placeId)s, %(replaceId)s, %(oldId)s, %(oldType)s);
+                    INSERT INTO sileg.licence (id, dstart, dend, dout, description, salary, designation_id, replace_id, old_id, old_type) 
+                    VALUES (%(id)s, %(start)s, %(end)s, %(out)s, %(description)s, %(salary)s, %(designationId)s, %(replaceId)s, %(oldId)s, %(oldType)s);
                 """, data)
                 
             else:
                 data = instance.__dict__
                 cur.execute("""
-                  UPDATE sileg.designation
+                  UPDATE sileg.licence
                   SET 
                       dstart = %(start)s, 
                       dend = %(end)s, 
                       dout = %(out)s, 
                       description = %(description)s,
-                      user_id = %(userId)s, 
-                      position_id = %(positionId)s, 
-                      place_id = %(placeId)s,
+                      salary = %(salary)s,
+                      designation_id = %(designationId)s,
                       replace_id = %(replaceId)s,
-
+                      
                       old_id = %(oldId)s,
                       old_type = %(oldType)s
                   WHERE id = %(id)s;
@@ -103,14 +99,31 @@ class DesignationDAO(SilegDAO):
     @classmethod
     def findById(cls, con, ids):           
         assert isinstance(ids, list)
+        if len(ids) == 0:
+            return []
 
         cur = con.cursor()
         try:
             cur.execute("""
-                SELECT * FROM sileg.designation 
+                SELECT * FROM sileg.licence 
                 WHERE id in %s;
             """, (tuple(ids),))
             return [ cls._fromResult(r) for r in cur ]
+        finally:
+            cur.close()
+            
+    @classmethod
+    def findByDesignationId(cls, con, designationId):    
+
+        cur = con.cursor()
+        try:
+            cur.execute("""
+                SELECT id 
+                FROM sileg.licence 
+                WHERE designation_id = %s;
+            """, (designationId,))
+            return [r['id'] for r in cur]
+
         finally:
             cur.close()
   
@@ -121,7 +134,7 @@ class DesignationDAO(SilegDAO):
         try:
             cur.execute("""
                 SELECT id 
-                FROM sileg.designation
+                FROM sileg.licence;
             """)
             ids = [r['id'] for r in cur]
             return ids
@@ -134,7 +147,7 @@ class DesignationDAO(SilegDAO):
         try:
             cur.execute("""
                 SELECT id 
-                FROM sileg.designation
+                FROM sileg.licence
                 WHERE dout IS NULL;
             """)
             ids = [r['id'] for r in cur]
@@ -149,31 +162,14 @@ class DesignationDAO(SilegDAO):
         try:
             cur.execute("""
                 SELECT id 
-                FROM sileg.designation
+                FROM sileg.licence
                 WHERE dout IS NOT NULL;
             """)
             ids = [r['id'] for r in cur]
             return ids
         finally:
             cur.close()
-                        
-    
-    @classmethod
-    def numRowsByOldType(cls, con, oldType):
-        cur = con.cursor()
-    
-        try:
-            cur.execute("""
-                SELECT count(*)
-                FROM sileg.designation 
-                WHERE old_type = %s
-            """, (oldType,))
-            r = cur.fetchone()
-            return None if r is None else r ["count"]
-            
-        finally:
-            cur.close()
-            
+                                  
               
     @classmethod
     def findByUnique(cls, con, oldId, oldType):
@@ -181,7 +177,7 @@ class DesignationDAO(SilegDAO):
            
         try:
             cur.execute("""
-                SELECT id FROM sileg.designation 
+                SELECT id FROM sileg.licence 
                 WHERE old_id = %s AND old_type = %s;
             """, (oldId, oldType))
             r = cur.fetchone()
@@ -189,10 +185,27 @@ class DesignationDAO(SilegDAO):
             
         finally:
             cur.close()
+            
+            
+    @classmethod
+    def numRowsByOldType(cls, con, oldType):
+        cur = con.cursor()
+    
+        try:
+            cur.execute("""
+                SELECT count(*)
+                FROM sileg.licence 
+                WHERE old_type = %s
+            """, (oldType,))
+            r = cur.fetchone()
+            return None if r is None else r ["count"]
+            
+        finally:
+            cur.close()
 
-class Designation(JSONSerializable):
+class Licence(JSONSerializable):
 
-    dao = DesignationDAO
+    dao = LicenceDAO
 
     def __init__(self):
         self.id = None
@@ -200,10 +213,10 @@ class Designation(JSONSerializable):
         self.end = None
         self.out = None
         self.description = None
-        self.userId = None
-        self.placeId = None
-        self.positionId = None
+        self.salary = None
+        self.designationId = None
         self.replaceId = None
+                
         self.oldId = None
         self.oldType = None
 
@@ -225,15 +238,19 @@ class Designation(JSONSerializable):
         return cls.dao.findAllActive(con)
         
     @classmethod
-    def findAllHistory(cls, con):
+    def findAll(cls, con):
         return cls.dao.findAllHistory(con)                
+        
+    @classmethod
+    def findByDesignationId(cls, con, designationId):
+        return cls.dao.findByDesignationId(con, designationId)      
         
     @classmethod 
     def findByUnique(cls, con, oldId, oldType):
         return cls.dao.findByUnique(con, oldId, oldType)
-        
+  
     @classmethod 
     def numRowsByOldType(cls, con, oldType):
-        return cls.dao.numRowsByOldType(con, oldType)        
-        
- 
+        return cls.dao.numRowsByOldType(con, oldType)
+  
+    

@@ -13,6 +13,7 @@ from model.sileg.silegdao import SilegDAO
 from model.sileg.position.position import PositionDAO
 from model.sileg.place.place import PlaceDAO
 from model.sileg.designation.designation import DesignationDAO
+from model.sileg.licence.licence import LicenceDAO
 
 class TestSileg(unittest.TestCase):
 
