@@ -26,9 +26,10 @@ def migrateUser(con, dni, uid):
             logging.info('No existe ese usuario {}'.format(uid))
             return
 
-        cur.execute('update mdl_user set username = %s where username = %s', ('{}.viejo'.format(dni), dni))
+        cur.execute('delete from mdl_user where username = %s', (dni,))
         if cur.rowcount > 0:
-            logging.info('{} --> {}.viejo'.format(dni, dni))
+            logging.info('{} eliminado'.format(dni))
+        #cur.execute('update mdl_user set username = %s where username = %s', ('{}.viejo'.format(dni), dni))
 
         cur.execute('update mdl_user set username = %s, auth = %s where username = %s', (dni, 'fceldap', uid))
         if cur.rowcount > 0:
