@@ -151,7 +151,7 @@ class ResetPassword:
                 passwd = UserPassword()
                 passwd.userId = uid
                 passwd.username = dni
-                passwords = [passwd]
+                ups = [passwd]
             for up in ups:
                 if up.username == dni:
                     up.setPassword(password)
