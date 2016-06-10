@@ -60,7 +60,7 @@ class ImportSileg():
             place = Place()
             place.description = data["materia_nombre"] + catedra             
             place.type = "Catedra"
-            place.dependence = None if(data["dpto_nombre"] is None) else place.findByUnique(con = con, description = data["dpto_nombre"], type = "department")
+            place.dependence = None if(data["dpto_nombre"] is None) else place.findByUnique(con = con, description = data["dpto_nombre"], type = "Departamento")
             place.id = place.findByUnique(con = con, description = place.description, type = place.type, dependence = place.dependence)
             place.persist(con)
             return place
