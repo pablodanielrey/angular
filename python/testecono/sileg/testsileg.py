@@ -17,19 +17,19 @@ from model.sileg.licence.licence import LicenceDAO
 
 class TestSileg(unittest.TestCase):
 
-  
+
     def test_create_database(self):
 
         reg = inject.instance(Registry)
-        
-        registrySection = reg.getRegistry('dcsys2')
+
+        registrySection = reg.getRegistry('dcsys')
 
         conn = Connection(registrySection)
-        
+
         con = conn.get()
         try:
             SilegDAO._createSchema(con)
             con.commit()
-            
+
         finally:
-            conn.put(con)      
+            conn.put(con)
