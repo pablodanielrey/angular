@@ -113,3 +113,4 @@ if __name__ == '__main__':
     password = _checkAndRemoveInLdap(reg, uid)
     _createUser(dni, name, lastname, uid, password)
     _migrateMoodle(dni, uid)
+    logging.info('--- script finalizado -----')
