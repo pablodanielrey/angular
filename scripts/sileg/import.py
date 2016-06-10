@@ -15,6 +15,9 @@ from model.connection import connection
 from model.sileg.place.place import Place
 from model.sileg.position.position import Position
 from model.sileg.designation.designation import Designation
+from model.sileg.designation.designation import OriginalDesignation
+from model.sileg.designation.designation import Extension
+from model.sileg.designation.designation import Prorogation
 from model.sileg.licence.licence import Licence
 from model.users.users import User
 
@@ -470,7 +473,7 @@ if __name__ == '__main__':
     reg = inject.instance(Registry)
 
     silegConn = connection.Connection(reg.getRegistry('sileg'))
-    dcsysConn = connection.Connection(reg.getRegistry('dcsys'))
+    dcsysConn = connection.Connection(reg.getRegistry('dcsys2'))
 
     conS = silegConn.get()
     try:
