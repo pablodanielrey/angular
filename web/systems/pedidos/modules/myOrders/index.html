@@ -124,107 +124,49 @@
 
     <div class="contentOrders">
 
-        <div class="itemOrders">
 
-            <div class="itemInfo">
 
-                <div class="itemDate">
-                    <div class="textNumerOrders">Nº 112369</div>
-                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
-                    <div class="textDaysOrders">Hoy</div>
-                </div>
+<!-- ****************************************************************************************** -->
 
-                <div class="itemStatus">
-                    <div class="status colorOpen">
-                        ABIERTA
-                    </div>
-                </div>
+<!-- ****************************************************************************************** -->
+      <div class="itemOrders" ng-repeat="issue in model.issues">
+          <div class="itemInfo">
 
-                <div class="itemsType">
-                      <div class="textType">MANTENIMIENTO:</div>
-                        <div class="textSubType">Problema eléctrico</div>
-                </div>
+              <div class="itemDate">
+                  <div class="textNumerOrders">Nº {{issue.id}}</div>
+                  <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
+                  <div class="textDaysOrders">Hoy</div>
+              </div>
 
-                <div class="itemsOffice">
-                      <div class="textOffice">MANTENIMIENTO Y PRODUCCIÓN</div>
-                        <!-- <div class="textName">Emanuel País</div> -->
-                </div>
+              <div class="itemStatus">
+                  <div class="status colorOpen">
+                      ABIERTA
+                  </div>
+              </div>
 
-            </div>
+              <div class="itemsType">
+                    <div class="textType">MANTENIMIENTO:</div>
+                      <div class="textSubType">{{issue.subject}}</div>
+              </div>
 
-            <div class="itemActions" ng-click="view.style = 'pantallaDetallePedido'">
-              <i class=" fa fa-angle-right" aria-hidden="true"></i>
-            </div>
+              <div class="itemsOffice">
+                    <div class="textOffice">MANTENIMIENTO Y PRODUCCIÓN</div>
+                      <!-- <div class="textName">Emanuel País</div> -->
+              </div>
 
-        </div>
+          </div>
 
-        <div class="itemOrders">
+          <div class="itemActions" ng-click="viewDetail(issue)">
+            <i class=" fa fa-angle-right" aria-hidden="true"></i>
+          </div>
 
-            <div class="itemInfo">
+      </div>
 
-                <div class="itemDate">
-                    <div class="textNumerOrders">Nº 112365</div>
-                    <div class="textDateOrders">25 May. 2016 - 08:20 hs</div>
-                    <div class="textDaysOrders">Hoy</div>
-                </div>
 
-                <div class="itemStatus">
-                    <div class="status colorOpen">
-                        ABIERTA
-                    </div>
-                </div>
+      <!-- ****************************************************************************************** -->
 
-                <div class="itemsType">
-                      <div class="textType">SOPORTE TÉCNICO:</div>
-                        <div class="textSubType">Error Windows</div>
-                </div>
+      <!-- ****************************************************************************************** -->
 
-                <div class="itemsOffice">
-                      <div class="textOffice">CECIN (312)</div>
-                        <div class="textName">Ailen Bauchet</div>
-                </div>
-
-            </div>
-
-            <div class="itemActions">
-              <i class=" fa fa-angle-right" aria-hidden="true"></i>
-            </div>
-
-        </div>
-
-        <div class="itemOrders">
-
-            <div class="itemInfo">
-
-                <div class="itemDate">
-                    <div class="textNumerOrders">Nº 112363</div>
-                    <div class="textDateOrders">25 May. 2016 - 16:14 hs</div>
-                    <div class="textDaysOrders">Hace 1 días</div>
-                </div>
-
-                <div class="itemStatus">
-                    <div class="status colorProgres">
-                        EN CURSO
-                    </div>
-                </div>
-
-                <div class="itemsType">
-                      <div class="textType">SOPORTE TÉCNICO:</div>
-                        <div class="textSubType">Problemas CPU</div>
-                </div>
-
-                <div class="itemsOffice">
-                      <div class="textOffice">FINANCIERO</div>
-                        <div class="textName">Soledad Bolano</div>
-                </div>
-
-            </div>
-
-            <div class="itemActions">
-              <i class=" fa fa-angle-right" aria-hidden="true"></i>
-            </div>
-
-        </div>
 
     </div>
 
