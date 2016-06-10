@@ -197,8 +197,25 @@
   -moz-justify-content: space-between;
   margin-left: 10px;
   padding: 0 10px 0 10px;
-  width: 530px;
+  width: 540px;
 
+  color: #5C5F69;
+}
+
+.schedule .textClock2 {
+  display: flex;
+  display: -webkit-flex;
+  display: -moz-flex;
+  flex-direction: row;
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  margin-left: 10px;
+  padding: 0 10px 0 10px;
+  width: 310px;
+  margin-top: 10px;
   color: #5C5F69;
 }
 
@@ -268,8 +285,97 @@
 }
 
 
+.schedule .contentNewSchedules {
+  margin: 10px 0px 0px 10px;
+  background-color: white;
+  width: 320px;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  padding: 10px 10px 10px 10px;
+}
 
+.schedule .subContentNewSchedules {
+  overflow-y: auto;
+  height: 238px;
+}
 
+.schedule .files {
+  display: flex;
+  display: -webkit-flex;
+  display: -moz-flex;
+  flex-direction: row;
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.schedule .titleFiles {
+  width: 165px;
+  color: #5c5f69;
+}
+
+.schedule .titleFiles2 {
+  width: 50px;
+  color: #5c5f69;
+}
+
+.schedule .textDays {
+  color: #5c5f69;
+  height: 24px;
+  width: 35px;
+  margin-top: 5px;
+  margin-right: 10px;
+}
+
+.schedule .newCheckIn {
+    border: none;
+    background-color: #EEEEEE;
+    color: #5c5f69;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    border-left: 2px solid #92AD17;
+    font-size: 16px;
+    margin-right: 10px;
+    width: 150px;
+    height: 27px;
+}
+
+.schedule .newCantHour {
+  border: none;
+  background-color: #EEEEEE;
+  color: #5c5f69;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  height: 25px;
+  font-size: 16px;
+  padding-left: 5px;
+  width: 50px;
+}
+
+.schedule .btnAdd,
+.schedule .btnTash {
+  margin-left: 10px;
+  height: 25px;
+  width: 25px;
+  border:none;
+  background-color: #EEEEEE;
+  color: #5c5f69;
+  cursor: pointer;
+}
+
+.schedule .btnAdd:hover {
+  background-color: #92AD17;
+  color:white;
+}
+
+.schedule .btnTash:hover {
+  background-color: #E43E46;
+  color: white;
+}
 
 
 /**********************************************************************
@@ -385,6 +491,15 @@
     width: 330px;
 
   }
+
+  .schedule.pantallaJefe.nuevoHorarioSemanal .contentWeeklySchedule {
+    position: absolute;
+    top:0px;
+    width: 100%;
+    height: 100%;
+    background-color: #F1F1F1;
+  }
+
 
 
 
