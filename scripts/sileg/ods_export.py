@@ -65,11 +65,12 @@ if __name__ == '__main__':
 
             row = 0
             for designation in designations:
-               logging.info('exportando {}'.format(row))
+               row = row + 1
+               logging.info('exportando {}'.format(designation.__dict__))
                places = Place.findById(con, [designation.placeId])
                users = User.findById(con, [designation.userId])
 
-               dependences = None if places[0].dependence is None else place.findById(con, [places[0].dependence])
+               dependences = None if places[0].dependence is None else Place.findById(con, [places[0].dependence])
                positions = Position.findById(con, [designation.positionId])
 
                licenceIds = Licence.findByDesignationId(con, designation.id)
@@ -93,7 +94,7 @@ if __name__ == '__main__':
                    sheet[row+1,16].value = ""
                    sheet[row+1,17].value = ""
                else:
-                   licences = License.findById(con, licenceIds)
+                   licences = Licence.findById(con, licenceIds)
                    for rowL in range(0, len(licences)):
                        sheet[row+1,0].value = designation.id
                        sheet[row+1,1].value = designation.start

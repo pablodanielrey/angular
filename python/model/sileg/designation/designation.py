@@ -202,7 +202,7 @@ class ProrogationDAO(DesignationDAO):
             cur.execute("""
                 SELECT id
                 FROM sileg.designation
-                WHERE description == %s
+                WHERE sileg.description == %s
             """, (cls._TYPE))
             ids = [r['id'] for r in cur]
             return ids
@@ -218,7 +218,7 @@ class ProrogationDAO(DesignationDAO):
             cur.execute("""
                 SELECT count(*)
                 FROM sileg.designation
-                WHERE description = %s
+                WHERE sileg.description = %s
             """, (cls._TYPE,))
             r = cur.fetchone()
             return None if r is None else r ["count"]
@@ -238,7 +238,7 @@ class ExtensionDAO(DesignationDAO):
             cur.execute("""
                 SELECT id
                 FROM sileg.designation
-                WHERE description == %s
+                WHERE sileg.description == %s
             """, (cls._TYPE))
             ids = [r['id'] for r in cur]
             return ids
@@ -254,7 +254,7 @@ class ExtensionDAO(DesignationDAO):
             cur.execute("""
                 SELECT count(*)
                 FROM sileg.designation
-                WHERE description = %s
+                WHERE sileg.description = %s
             """, (cls._TYPE,))
             r = cur.fetchone()
             return None if r is None else r ["count"]
@@ -274,7 +274,7 @@ class OriginalDesignationDAO(DesignationDAO):
             cur.execute("""
                 SELECT id
                 FROM sileg.designation
-                WHERE description == %s
+                WHERE sileg.description == %s
             """, (cls._TYPE))
             ids = [r['id'] for r in cur]
             return ids
@@ -290,7 +290,7 @@ class OriginalDesignationDAO(DesignationDAO):
             cur.execute("""
                 SELECT count(*)
                 FROM sileg.designation
-                WHERE description = %s
+                WHERE sileg.description = %s
             """, (cls._TYPE,))
             r = cur.fetchone()
             return None if r is None else r ["count"]
@@ -355,7 +355,7 @@ class OriginalDesignation(Designation):
 
     def __init__(self):
         super().__init__()
-        self.description = self.dao._TYPE
+        self.description = dao._TYPE
 
 
 class Extension(Designation):
@@ -363,7 +363,7 @@ class Extension(Designation):
 
     def __init__(self):
         super().__init__()
-        self.description = self.dao._TYPE
+        self.description = dao._TYPE
 
 
 class Prorogation(Designation):
@@ -371,4 +371,4 @@ class Prorogation(Designation):
 
     def __init__(self):
         super().__init__()
-        self.description = self.dao._TYPE
+        self.description = dao._TYPE
