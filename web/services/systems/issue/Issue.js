@@ -1,100 +1,102 @@
 angular
-  .module('mainApp')
-  .service('Issue',Issue);
+	.module('mainApp')
+	.service('Issue', Issue);
 
-Issue.inject = ['$rootScope','$wamp','Session']
+Issue.inject = ['Utils','Session','$wamp'];
 
-function Issue($rootScope,$wamp,Session) {
+function Issue (Utils, Session, $wamp) {
 
-  var services = this;
+  this.getMyIssues = getMyIssues;
+  this.getOfficesIssues = getOfficesIssues;
+  this.getAssignedIssues = getAssignedIssues;
+  this.findById = findById;
+  this.create = create;
+  this.createComment = createComment;
+  this.changeStatus = changeStatus;
 
-  // Crea una nueva tarea
-  services.newIssue = newIssue;
-  // Retornar todas las issues solicitadas por el usuario
-  services.getIssues = getIssues;
-  // Retornar todas las issues asignadas al usuario
-  services.getIssuesAdmin = getIssuesAdmin;
-  // elimina el pedido y sus hijos
-  services.deleteIssue = deleteIssue;
-  //  actualizacion de los datos del issue.
-  services.updateIssueData = updateIssueData;
 
-  // Crea una nueva tarea
-  function newIssue(issue, state, visibilities, callbackOk, callbackError) {
-    sessionId = Session.getSessionId();
-    $wamp.call('issue.issue.newIssue', [sessionId,issue,state,visibilities])
-    .then(function(res) {
-      if (res != null) {
-        callbackOk(res);
-      } else {
-        callbackError('Error');
-      }
-    },function(err) {
-      callbackError('Error');
+  function getMyIssues() {
+    return new Promise(function(cok, cerr) {
+      var sid = Session.getSessionId();
+  		$wamp.call('issue.getMyIssues', [sid])
+      .then(function(v) {
+        cok(v);
+      },function(err) {
+        cerr(err);
+      });
     });
-  }
+	}
 
-  // Retorna todas las issues que puede ver el usuario
-  // si el userId es null tomo por defecto el id del usuario logueado
-  function getIssues(userId, callbackOk, callbackError) {
-    sessionId = Session.getSessionId();
-    $wamp.call('issue.issue.getIssues', [sessionId,userId])
-    .then(function(res) {
-      if (res != null) {
-        callbackOk(res);
-      } else {
-        callbackError('Error');
-      }
-    },function(err) {
-      callbackError('Error');
+  function getOfficesIssues() {
+		return new Promise(function(cok, cerr) {
+      var sid = Session.getSessionId();
+  		$wamp.call('issue.getOfficesIssues', [sid])
+      .then(function(v) {
+        cok(v);
+      },function(err) {
+        cerr(err);
+      });
     });
-  }
+	}
 
-
-  // Retorna todas las issues asignadas al usuario
-  // si el userId es null tomo por defecto el id del usuario logueado
-  function getIssuesAdmin(userId, callbackOk, callbackError) {
-    sessionId = Session.getSessionId();
-    $wamp.call('issue.issue.getIssuesAdmin', [sessionId,userId])
-    .then(function(res) {
-      if (res != null) {
-        callbackOk(res);
-      } else {
-        callbackError('Error');
-      }
-    },function(err) {
-      callbackError('Error');
+  function getAssignedIssues() {
+		return new Promise(function(cok, cerr) {
+      var sid = Session.getSessionId();
+  		$wamp.call('issue.getAssignedIssues', [sid])
+      .then(function(v) {
+        cok(v);
+      },function(err) {
+        cerr(err);
+      });
     });
-  }
+	}
 
-  // elimina el pedido y sus hijos
-  function deleteIssue(id, callbackOk, callbackError) {
-    $wamp.call('issue.issue.deleteIssue', [id])
-    .then(function(res) {
-      if (res != null) {
-        callbackOk(res);
-      } else {
-        callbackError('Error');
-      }
-    },function(err) {
-      callbackError('Error');
+  function findById(id) {
+		return new Promise(function(cok, cerr) {
+      var sid = Session.getSessionId();
+  		$wamp.call('issue.findById', [sid, id])
+      .then(function(v) {
+        cok(v);
+      },function(err) {
+        cerr(err);
+      });
     });
-  }
+	}
 
-  // Actualiza los datos del issue
-  // userId Id del usuario que solicita la actualizacion de datos (quiza sea alguien diferente a quien solicito el issue)
-  function updateIssueData(issuer, userId, callbackOk, callbackError) {
-    sessionId = Session.getSessionId();
-    $wamp.call('issue.issue.updateIssueData', [sessionId,issuer,userId])
-    .then(function(res) {
-      if (res != null) {
-        callbackOk(res);
-      } else {
-        callbackError('Error');
-      }
-    },function(err) {
-      callbackError('Error');
+  function create(subject, description, parentId, officeId) {
+		return new Promise(function(cok, cerr) {
+      var sid = Session.getSessionId();
+  		$wamp.call('issue.create', [sid, subject, description, parentId, officeId])
+      .then(function(v) {
+        cok(v);
+      },function(err) {
+        cerr(err);
+      });
     });
-  }
+	}
+
+  function createComment(subject, description, parentId, officeId) {
+		return new Promise(function(cok, cerr) {
+      var sid = Session.getSessionId();
+  		$wamp.call('issue.createComment', [sid, subject, description, parentId, officeId])
+      .then(function(v) {
+        cok(v);
+      },function(err) {
+        cerr(err);
+      });
+    });
+	}
+
+  function changeStatus(issue, status) {
+		return new Promise(function(cok, cerr) {
+      var sid = Session.getSessionId();
+  		$wamp.call('issue.changeStatus', [sid, issue, status])
+      .then(function(v) {
+        cok(v);
+      },function(err) {
+        cerr(err);
+      });
+    });
+	}
 
 }

@@ -40,6 +40,11 @@ class Office(JSONSerializable):
          return OfficeDAO.getOfficesByUserRole(con, userId, tree, role)
 
     @classmethod
+    def getOfficesByUser(cls, con, userId, tree=False):
+        return OfficeDAO.getOfficesByUser(con, userId, tree)
+
+
+    @classmethod
     def getOfficesUsers(cls, con, offices):
         return OfficeDAO.getOfficesUsers(con, offices)
 
@@ -189,6 +194,31 @@ class OfficeDAO(DAO):
             cur.close()
 
         return users
+
+    '''
+        obtiene todas las oficinas a las cuales el usuario pertenece
+    '''
+    @classmethod
+    def getOfficesByUser(cls,con,userId,tree=False):
+
+        cur = con.cursor()
+        ids = []
+        try:
+            cur.execute('select id from offices.offices_users where user_id = %s',(userId,))
+            if cur.rowcount <= 0:
+                return []
+
+            for off in cur:
+                oId = off[0]
+                ids.append(oId)
+
+            if tree:
+                childrens = cls._getChildOffices(con,ids)
+                ids.extend(x for x in childrens if x not in offices)
+        finally:
+            cur.close()
+
+        return ids
 
 
     '''

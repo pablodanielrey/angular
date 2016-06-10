@@ -1,140 +1,165 @@
 # -*- coding: utf-8 -*-
 import inject
+import json
+import re
 import logging
 import psycopg2
+
+from model.registry import Registry
+from model.connection.connection import Connection
+
+from model.login.login import Login
+from model.issue.issue import Issue, RedmineAPI, Attachment
+from model.offices.offices import Office
 
 import asyncio
 from asyncio import coroutine
 from autobahn.asyncio.wamp import ApplicationSession
 
-from model.config import Config
-from model.systems.issue.issue import Issue
-from model.systems.issue.issueModel import IssueModel
-from model.profiles import Profiles
+from model.serializer.utils import  JSONSerializable
 
-class WampIssue(ApplicationSession):
+class IssueWamp(ApplicationSession):
 
     def __init__(self, config=None):
         logging.debug('instanciando')
         ApplicationSession.__init__(self, config)
 
-        self.serverConfig = inject.instance(Config)
-        self.issueModel = inject.instance(IssueModel)
-        self.issue = inject.instance(Issue)
-        self.profiles = inject.instance(Profiles)
+        registry = inject.instance(Registry)
+        self.reg = registry.getRegistry('dcsys')
+        self.conn = Connection(self.reg)
+
+        self.loginModel = inject.instance(Login)
 
     @coroutine
     def onJoin(self, details):
-        logging.debug('registering methods')
-        yield from self.register(self.newIssue_async,'issue.issue.newIssue')
-        yield from self.register(self.getIssues_async, "issue.issue.getIssues")
-        yield from self.register(self.getIssuesAdmin_async, "issue.issue.getIssuesAdmin")
-        yield from self.register(self.deleteIssue_async, "issue.issue.deleteIssue")
-        yield from self.register(self.updateIssueData_async, "issue.issue.updateIssueData")
+        yield from self.register(self.getMyIssues_async, 'issue.getMyIssues')
+        yield from self.register(self.getOfficesIssues_async, 'issue.getOfficesIssues')
+        yield from self.register(self.getAssignedIssues_async, 'issue.getAssignedIssues')
+        yield from self.register(self.findById_async, 'issue.findById')
+        yield from self.register(self.create_async, 'issue.create')
+        yield from self.register(self.createComment_async, 'issue.createComment')
+        yield from self.register(self.changeStatus_async, 'issue.changeStatus')
 
-    def _getDatabase(self):
-        host = self.serverConfig.configs['database_host']
-        dbname = self.serverConfig.configs['database_database']
-        user = self.serverConfig.configs['database_user']
-        passw = self.serverConfig.configs['database_password']
-        return psycopg2.connect(host=host, dbname=dbname, user=user, password=passw)
 
-    def newIssue(self, sessionId, issue, state, visibilities):
-        con = self._getDatabase()
+    def getMyIssues(self, sid):
+        con = self.conn.get()
         try:
-            userId = self.profiles.getLocalUserId(sessionId)
-            id = self.issue.create(con,issue,userId,visibilities) if state is None else self.issue.create(con,issue,userId,visibilities,state)
+            userId = self.loginModel.getUserId(con, sid)
+            return Issue.getMyIssues(con, userId)
+        finally:
+            self.conn.put(con)
+
+    @coroutine
+    def getMyIssues_async(self, sid):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.getMyIssues, sid)
+        return r
+
+
+    def getOfficesIssues(self, sid):
+        con = self.conn.get()
+        try:
+            userId = self.loginModel.getUserId(con, sid)
+            oIds = Office.getOfficesByUser(con, userId, False)
+            return Issue.getOfficesIssues(con, oIds)
+        finally:
+            self.conn.put(con)
+
+    @coroutine
+    def getOfficesIssues_async(self, sid):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.getOfficesIssues, sid)
+        return r
+
+    def getAssignedIssues(self, sid):
+        con = self.conn.get()
+        try:
+            userId = self.loginModel.getUserId(con, sid)
+            oIds = Office.getOfficesByUser(con, userId, False)
+            return Issue.getOfficesIssues(con, userId, oIds)
+        finally:
+            self.conn.put(con)
+
+    @coroutine
+    def getAssignedIssues_async(self, sid):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.getAssignedIssues, sid)
+        return r
+
+    def findById(self, sid, issue_id):
+        con = self.conn.get()
+        try:
+            userId = self.loginModel.getUserId(con, sid)
+            return Issue.findById(con, userId, issue_id)
+        finally:
+            self.conn.put(con)
+
+    @coroutine
+    def findById_async(self, sid, issue_id):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.findById, sid, issue_id)
+        return r
+
+    def create(self, sid, subject, description, parentId, officeId):
+        con = self.conn.get()
+        try:
+            userId = self.loginModel.getUserId(con, sid)
+            issue = Issue()
+            issue.parentId = parentId
+            issue.projectId = officeId
+            issue.userId = userId
+            issue.subject = subject
+            issue.description = description
+            issue.tracker = RedmineAPI.TRACKER_ERROR
+
+            iss = issue.create(con)
             con.commit()
-            return id
-        except Exception as e:
-            logging.exception(e)
-            return None
+            return iss
         finally:
-            con.close()
+            self.conn.put(con)
 
     @coroutine
-    def newIssue_async(self, sessionId, issue, state, visibilities):
+    def create_async(self, sid, subject, description, parentId, officeId):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.newIssue, sessionId, issue, state, visibilities)
+        r = yield from loop.run_in_executor(None, self.create, sid, subject, description, parentId, officeId)
         return r
 
-    # Retorna todas las issues solicitadas por el usuario
-    # si el userId es null tomo por defecto el id del usuario logueado
-    def getIssues(self, sessionId, userId):
-        con = self._getDatabase()
+    def createComment(self, sid, subject, description, parentId, officeId):
+        con = self.conn.get()
         try:
-            if userId is None:
-                userId = self.profiles.getLocalUserId(sessionId)
-            return self.issue.getIssues(con,userId)
-        except Exception as e:
-            logging.exception(e)
-            return None
-        finally:
-            con.close()
+            userId = self.loginModel.getUserId(con, sid)
+            issue = Issue()
+            issue.parentId = parentId
+            issue.projectId = officeId
+            issue.userId = userId
+            issue.subject = subject
+            issue.description = description
+            issue.tracker = RedmineAPI.TRACKER_COMMENT
 
-    @coroutine
-    def getIssues_async(self, sessionId, userId):
-        loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getIssues, sessionId, userId)
-        return r
-
-    # Retorna todas las issues asignadas al usuario
-    # si el userId es null tomo por defecto el id del usuario logueado
-    def getIssuesAdmin(self, sessionId, userId):
-        con = self._getDatabase()
-        try:
-            if userId is None:
-                userId = self.profiles.getLocalUserId(sessionId)
-            return self.issue.getIssuesAdmin(con,userId)
-        except Exception as e:
-            logging.exception(e)
-            return None
-        finally:
-            con.close()
-
-    @coroutine
-    def getIssuesAdmin_async(self, sessionId, userId):
-        loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getIssuesAdmin, sessionId, userId)
-        return r
-
-
-    def deleteIssue(self, id):
-        con = self._getDatabase()
-        try:
-            self.issue.delete(con,id)
+            iss = issue.create(con)
             con.commit()
-            return True
-        except Exception as e:
-            logging.exception(e)
-            return None
+            return iss
         finally:
-            con.close()
+            self.conn.put(con)
 
     @coroutine
-    def deleteIssue_async(self, id):
+    def createComment_async(self, sid, subject, description, parentId, officeId):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.deleteIssue, id)
+        r = yield from loop.run_in_executor(None, createComment, sid, subject, description, parentId, officeId)
         return r
 
-    #  Actualiza los datos del issue
-    #  userId Id del usuario que solicita la actualizacion de datos (quiza sea alguien diferente a quien solicito el issue)
-    def updateIssueData(self, sessionId, issuer, userId):
-        con = self._getDatabase()
+    def changeStatus(self, sid, issue, status):
+        con = self.conn.get()
         try:
-            if userId is None:
-                userId = self.profiles.getLocalUserId(sessionId)
-            id = self.issue.updateData(con,issuer,userId)
+            userId = self.loginModel.getUserId(con, sid)
+            iss = issue.changeStatus(con, status)
             con.commit()
-            return id
-        except Exception as e:
-            logging.exception(e)
-            return None
+            return iss
         finally:
-            con.close()
+            self.conn.put(con)
 
     @coroutine
-    def updateIssueData_async(self, sessionId, issuer, userId):
+    def changeStatus_async(self, sid, issue, status):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.updateIssueData, sessionId, issuer, userId)
+        r = yield from loop.run_in_executor(None, self.changeStatus, sid, issue, status)
         return r
