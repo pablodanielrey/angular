@@ -12,7 +12,7 @@
               Mis Pedidos
             </div>
             <div>
-                <button class="btnApply" ng-click="view.style = 'pantallaNuevoPedido'">nuevo PEDIDO</button>
+                <button class="btnApply" ng-click="create()">nuevo PEDIDO</button>
             </div>
         </div>
     </div>
@@ -23,14 +23,14 @@
               <div class="contentTitleNewOrder">
                   <div class="contentBackNewOrder">
                       <div class="contentBtnReturn">
-                          <button class="btnReturn" ng-click="view.style = ''"><i class=" fa fa-angle-left" aria-hidden="true"></i></button>
+                          <button class="btnReturn" ng-click="cancel()"><i class=" fa fa-angle-left" aria-hidden="true"></i></button>
                       </div>
                       <div class="titleNewOrder">
                         NUEVO PEDIDO
                       </div>
                   </div>
                   <div>
-                      <button class="btnApply" ng-click="view.style = ''">SOLICITAR</button>
+                      <button class="btnApply" ng-click="save()">SOLICITAR</button>
                   </div>
               </div>
 
@@ -134,23 +134,23 @@
 
               <div class="itemDate">
                   <div class="textNumerOrders">Nº {{issue.id}}</div>
-                  <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
-                  <div class="textDaysOrders">Hoy</div>
+                  <div class="textDateOrders">{{getDate(issue) | date: 'd MMMM  yyyy'}}</div>
+                  <div class="textDaysOrders">{{getDiffDay(issue)}}</div>
               </div>
 
               <div class="itemStatus">
                   <div class="status colorOpen">
-                      ABIERTA
+                      {{getStatus(issue)}}
                   </div>
               </div>
 
               <div class="itemsType">
-                    <div class="textType">MANTENIMIENTO:</div>
-                      <div class="textSubType">{{issue.subject}}</div>
+                    <div class="textType">{{getName(issue)}}:</div>
+                    <div class="textSubType">{{issue.subject}}</div>
               </div>
 
               <div class="itemsOffice">
-                    <div class="textOffice">MANTENIMIENTO Y PRODUCCIÓN</div>
+                    <div class="textOffice">{{issue.projectName}}</div>
                       <!-- <div class="textName">Emanuel País</div> -->
               </div>
 

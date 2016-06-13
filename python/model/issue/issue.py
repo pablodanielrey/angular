@@ -79,6 +79,7 @@ class RedmineAPI:
         issue.id = r.id
         issue.parentId = [r.parent.id if 'parent' in attrs else None][0]
         issue.projectId = r.project.id
+        issue.projectName = r.project.name
         issue.userId = r.author.id
         issue.subject = r.subject
         issue.description = r.description
