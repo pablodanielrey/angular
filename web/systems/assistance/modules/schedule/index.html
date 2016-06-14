@@ -1,8 +1,8 @@
 <div class="schedule pantallaJefe {{view.style2}}">
 <!--
 VARIABLES 1: pantallaJefe, pantallaUsuario
-VARIABLES 2: nuevoHorarioSemanal
-
+VARIABLES 2: nuevoHorarioSemanal, nuevoHorarioEspecial, pantallaUsuarios
+VARIABLES 3: pantallaMensaje
 -->
 
     <div class="header">
@@ -11,6 +11,9 @@ VARIABLES 2: nuevoHorarioSemanal
         </div>
     </div>
 
+    <!-- *************************************
+    ***** PANTALLA INICIO DE MI HORARIO ******
+    ************************************** -->
     <div class="contentSchedule">
 
         <div class="subHeader">
@@ -32,10 +35,33 @@ VARIABLES 2: nuevoHorarioSemanal
 
             </div>
 
-            <div class="contentDate "> <!--VARIABLES: jefe, usuario -->
+            <div class="contentDate ">
                 <div class="contentBtnSelectUser">
-                    <button class="btnSelectUser"><i class="fa fa-search"></i> Usuario</button>
+                    <button class="btnSelectUser" ng-click="view.style2='pantallaUsuarios'"><i class="fa fa-search"></i> Usuario</button>
                 </div>
+
+                <div class="contentListUsers">
+
+                    <div class="titleListRequest">
+                      <span class="icoInputSearch"><i class="fa fa-search"></i></span><input class="inputSearch" type="text" placeholder="Buscar personal..."> </input>
+                    </div>
+
+                    <div class="contentListPerson">
+
+                        <div class="btnItemPerson" ng-click="view.style2=''">
+                            <div class="contentImgUser">
+                                <img class="imgUser" src='img/walter.jpg' alt="foto de perfil">
+                            </div>
+                            <div class="contentNameUser">
+                              <div>Walter Blanco</div>
+                              <div class="dniUser">30001823</div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
                 <div class="subContentDate">
                     <div class="textDate"><i class="fa fa-calendar-o"></i>  Fecha</div>
                     <input type="date" class="inputDate"></input>
@@ -89,80 +115,147 @@ VARIABLES 2: nuevoHorarioSemanal
 
         <div class="contentActionButton">
             <button class="btnAction" ng-click="view.style2='nuevoHorarioSemanal'">MODIFICAR <b>HORARIO SEMANAL</b></button>
-            <button class="btnAction" ng-click="view.style2=''">MODIFICAR <b>HORARIO ESPECIAL</b></button>
+            <button class="btnAction" ng-click="view.style2='nuevoHorarioEspecial'">MODIFICAR <b>HORARIO ESPECIAL</b></button>
         </div>
 
     </div>
 
+    <!-- *******************************************
+    ***** PANTALLA MODIFICAR HHORARIO SEMANAL ******
+    ******************************************** -->
     <div class="contentWeeklySchedule">
 
-      <div class="textClock2">
-        <div><b>NUEVO</b> HORARIO SEMANAL</div>
-        <div><b>35</b> Horas </div>
-      </div>
-
-
-      <div class="contentNewSchedules">
-        <div class="files">
-            <div class="textDays"> </div>
-            <div class="titleFiles">Hora de entrada</div>
-            <div class="titleFiles2">Horas</div>
-        </div>
-        <div class="subContentNewSchedules">
-            <div class="files">
-                <div class="textDays">Lun</div>
-                <div><input class="newCheckIn" type="time"></input></div>
-                <div><input class="newCantHour" type="number"></input></div>
-                <div><button class="btnAdd"><i class="fa fa-plus"></i></button></div>
-            </div>
-            <div class="files">
-                <div class="textDays">Lun</div>
-                <div><input class="newCheckIn" type="time"></input></div>
-                <div><input class="newCantHour" type="number"></input></div>
-                <div><button class="btnTash"><i class="fa fa-trash-o"></i></button></div>
-            </div>
-            <div class="files">
-                <div class="textDays">Mar</div>
-                <div><input class="newCheckIn" type="time"></input></div>
-                <div><input class="newCantHour" type="number"></input></div>
-                <div><button class="btnAdd"><i class="fa fa-plus"></i></button></div>
-            </div>
-            <div class="files">
-                <div class="textDays">Mie</div>
-                <div><input class="newCheckIn" type="time"></input></div>
-                <div><input class="newCantHour" type="number"></input></div>
-                <div><button class="btnAdd"><i class="fa fa-plus"></i></button></div>
-            </div>
-            <div class="files">
-                <div class="textDays">Jue</div>
-                <div><input class="newCheckIn" type="time"></input></div>
-                <div><input class="newCantHour" type="number"></input></div>
-                <div><button class="btnAdd"><i class="fa fa-plus"></i></button></div>
-            </div>
-            <div class="files">
-                <div class="textDays">Vie</div>
-                <div><input class="newCheckIn" type="time"></input></div>
-                <div><input class="newCantHour" type="number"></input></div>
-                <div><button class="btnAdd"><i class="fa fa-plus"></i></button></div>
-            </div>
-            <div class="files">
-                <div class="textDays">Sab</div>
-                <div><input class="newCheckIn" type="time"></input></div>
-                <div><input class="newCantHour" type="number"></input></div>
-                <div><button class="btnAdd"><i class="fa fa-plus"></i></button></div>
-            </div>
-            <div class="files">
-                <div class="textDays">Dom</div>
-                <div><input class="newCheckIn" type="time"></input></div>
-                <div><input class="newCantHour" type="number"></input></div>
-                <div><button class="btnAdd"><i class="fa fa-plus"></i></button></div>
-            </div>
-
+        <div class="textClock2">
+          <div>NUEVO <b> HORARIO SEMANAL </b></div>
+          <div><b>35</b> Horas </div>
         </div>
 
+        <div class="contentNewSchedules">
 
-      </div>
+          <div class="contentDateNewSchedule">
+
+              <div>
+                Fecha
+                <input type="date" class="inputDateScheduleSpecial"></input>
+              </div>
+          </div>
+
+          <div class="files">
+              <div class="textDays"> </div>
+              <div class="titleFiles">Hora de entrada</div>
+              <div class="titleFiles2">Horas</div>
+          </div>
+          <div class="subContentNewSchedules">
+              <div class="files">
+                  <div class="textDays">Lun</div>
+                  <div><input class="newCheckIn" type="time"></input></div>
+                  <div><input class="newCantHour" type="number"></input></div>
+                  <div><button class="btnAdd"><i class="fa fa-plus"></i></button></div>
+              </div>
+              <div class="files">
+                  <div class="textDays">Lun</div>
+                  <div><input class="newCheckIn" type="time"></input></div>
+                  <div><input class="newCantHour" type="number"></input></div>
+                  <div><button class="btnTash"><i class="fa fa-trash-o"></i></button></div>
+              </div>
+              <div class="files">
+                  <div class="textDays">Mar</div>
+                  <div><input class="newCheckIn" type="time"></input></div>
+                  <div><input class="newCantHour" type="number"></input></div>
+                  <div><button class="btnAdd"><i class="fa fa-plus"></i></button></div>
+              </div>
+              <div class="files">
+                  <div class="textDays">Mie</div>
+                  <div><input class="newCheckIn" type="time"></input></div>
+                  <div><input class="newCantHour" type="number"></input></div>
+                  <div><button class="btnAdd"><i class="fa fa-plus"></i></button></div>
+              </div>
+              <div class="files">
+                  <div class="textDays">Jue</div>
+                  <div><input class="newCheckIn" type="time"></input></div>
+                  <div><input class="newCantHour" type="number"></input></div>
+                  <div><button class="btnAdd"><i class="fa fa-plus"></i></button></div>
+              </div>
+              <div class="files">
+                  <div class="textDays">Vie</div>
+                  <div><input class="newCheckIn" type="time"></input></div>
+                  <div><input class="newCantHour" type="number"></input></div>
+                  <div><button class="btnAdd"><i class="fa fa-plus"></i></button></div>
+              </div>
+              <div class="files">
+                  <div class="textDays">Sab</div>
+                  <div><input class="newCheckIn" type="time"></input></div>
+                  <div><input class="newCantHour" type="number"></input></div>
+                  <div><button class="btnAdd"><i class="fa fa-plus"></i></button></div>
+              </div>
+              <div class="files">
+                  <div class="textDays">Dom</div>
+                  <div><input class="newCheckIn" type="time"></input></div>
+                  <div><input class="newCantHour" type="number"></input></div>
+                  <div><button class="btnAdd"><i class="fa fa-plus"></i></button></div>
+              </div>
+
+          </div>
+
+        </div>
+
+        <div class="actionBtns">
+            <button class="btnAcept" ng-click="view.style2 = ''">ACEPTAR</button>
+            <button class="btnCancel" ng-click="view.style2 = ''">CANCELAR</button>
+        </div>
 
     </div>
+
+    <!-- *******************************************
+    ***** PANTALLA MODIFICAR HORARIO ESPECIAL ******
+    ******************************************** -->
+    <div class="contentSpecialSchedule">
+
+        <div class="textClock2">
+          <div>NUEVO <b>HORARIO ESPECIAL</b></div>
+        </div>
+
+        <div class="contentNewSchedules">
+
+          <div class="contentDateSpecial">
+              <div class="files">
+                  <div class="titleFiles">Fecha</div>
+              </div>
+
+              <div>
+                <input type="date" class="inputDateScheduleSpecial"></input>
+              </div>
+
+          </div>
+
+          <div class="files">
+              <div class="titleFiles">Hora de entrada</div>
+              <div class="titleFiles2">Horas</div>
+          </div>
+
+
+          <div class="subContentNewSchedulesSpecial">
+              <div class="files">
+                  <div><input class="newCheckIn" type="time"></input></div>
+                  <div><input class="newCantHour" type="number"></input></div>
+                  <div><button class="btnAdd"><i class="fa fa-plus"></i></button></div>
+              </div>
+              <div class="files">
+                  <div><input class="newCheckIn" type="time"></input></div>
+                  <div><input class="newCantHour" type="number"></input></div>
+                  <div><button class="btnTash"><i class="fa fa-trash-o"></i></button></div>
+              </div>
+
+          </div>
+
+        </div>
+
+        <div class="actionBtns">
+            <button class="btnAcept" ng-click="view.style2 = ''">ACEPTAR</button>
+            <button class="btnCancel" ng-click="view.style2 = ''">CANCELAR</button>
+        </div>
+
+    </div>
+
 
 </div>
