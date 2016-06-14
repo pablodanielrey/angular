@@ -14,6 +14,13 @@ function MyOrdersCtrl($rootScope, $scope, Issue, Login, $timeout, Users) {
   $scope.getStatus = getStatus;
   $scope.getName = getName;
 
+  $scope.loadOffices = loadOffices;
+  $scope.selectOffice = selectOffice;
+  $scope.selectArea = selectArea;
+  $scope.selectSubject = selectSubject;
+  $scope.loadAreas = loadAreas;
+  $scope.loadSubjects = loadSubjects;
+
   $scope.create = create;
   $scope.cancel = cancel;
   $scope.save = save;
@@ -21,7 +28,16 @@ function MyOrdersCtrl($rootScope, $scope, Issue, Login, $timeout, Users) {
   $scope.model = {
     userId: null,
     issues: [],
-    issueSelected: null
+    issueSelected: null,
+    offices: [],
+    areas: [],
+    subjects: [],
+    subject: '',
+    description: '',
+    selectedOffice: null,
+    searchOffice: {name:''},
+    searchArea: {name:''},
+    selectedArea: null
   }
 
   $scope.view = {
@@ -45,6 +61,7 @@ function MyOrdersCtrl($rootScope, $scope, Issue, Login, $timeout, Users) {
   function initialize() {
     $scope.model.issues = [];
     $scope.getMyIssues();
+    $scope.loadOffices();
   }
 
   function getMyIssues() {
@@ -68,6 +85,18 @@ function MyOrdersCtrl($rootScope, $scope, Issue, Login, $timeout, Users) {
     );
   }
 
+  function loadOffices() {
+    $scope.model.offices = [];
+    Issue.getOffices().then(
+      function(offices) {
+        $scope.model.offices = offices;
+      },
+      function(error) {
+        console.log(error);
+      }
+    )
+  }
+
   function loadUser(issue) {
     Users.findById([issue.userId.toString()]).then(
       function(users) {
@@ -84,11 +113,67 @@ function MyOrdersCtrl($rootScope, $scope, Issue, Login, $timeout, Users) {
   function create() {
     $scope.model.issue = {};
     $scope.view.style = $scope.view.styles[1];
+    clearOffice();
+    $scope.model.description = '';
   }
 
   function cancel() {
     $scope.model.issue = {};
     $scope.view.style = $scope.view.styles[0];
+  }
+
+  function selectOffice(office) {
+    clearArea();
+    $scope.model.selectedOffice = office;
+    $scope.model.searchOffice = (office == null) ? {name:''} : {name: office.name};
+    $scope.view.style2 = '';
+    loadAreas($scope.model.selectedOffice);
+    loadSubjects($scope.model.selectedOffice);
+  }
+
+  function clearOffice() {
+    $scope.model.selectedOffice = null;
+    $scope.model.searchOffice = {name: ''};
+    clearArea();
+  }
+
+  function clearArea() {
+    $scope.model.selectedArea = null;
+    $scope.model.searchArea = {name: ''};
+    clearSubject();
+  }
+
+  function clearSubject() {
+    $scope.model.subject = '';
+  }
+
+  function selectArea(area) {
+    clearSubject();
+    $scope.model.selectedArea = area;
+    $scope.model.searchArea = (area == null) ? {name:''} : {name: area.name};
+    $scope.view.style2 = '';
+    loadSubjects($scope.model.selectedArea);
+  }
+
+  function loadAreas(office) {
+    $scope.model.areas = [];
+    Issue.getAreas(office).then(
+      function(offices) {
+        $scope.model.areas = offices;
+      },
+      function(error) {
+        console.log(error);
+      }
+    )
+  }
+
+  function loadSubjects(office) {
+    $scope.model.subjects = (office == null)? [] : office.subjects;
+  }
+
+  function selectSubject(subject) {
+    $scope.model.subject = subject;
+    $scope.view.style2 = '';
   }
 
   function save() {

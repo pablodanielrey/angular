@@ -40,14 +40,11 @@
                     OFICINA
                   </div>
                   <div>
-                    <input type="texy" class="inputNewOrder" placeholder="Buscar..." ng-click="view.style2 = 'buscarOficina'"></input>
+                    <input type="texy" class="inputNewOrder" placeholder="Buscar..."  ng-model='model.searchOffice.name' ng-click="view.style2 = 'buscarOficina'"></input>
                   </div>
                   <div class="offices">
-                      <div class="itemsSelectOffice" ng-click="view.style2 = ''">
-                        DiTESI (Informática)
-                      </div>
-                      <div class="itemsSelectOffice">
-                        Mantenimieno y Servicios Generales
+                      <div class="itemsSelectOffice"  ng-repeat='office in model.offices | filter: model.searchOffice' ng-click="selectOffice(office)" >
+                        {{office.name}}
                       </div>
                   </div>
 
@@ -55,20 +52,11 @@
                     ÁREA
                   </div>
                   <div>
-                    <input type="texy" class="inputNewOrder" placeholder="Buscar..." ng-click="view.style2 = 'buscarArea'"></input>
+                    <input type="texy" class="inputNewOrder" placeholder="Buscar..." ng-model='model.searchArea.name' ng-click="view.style2 = 'buscarArea'"></input>
                   </div>
                   <div class="areas">
-                      <div class="itemsSelectArea" ng-click="view.style2 = ''">
-                        Soporte Técnico
-                      </div>
-                      <div class="itemsSelectArea">
-                        Diseño y Desarrollo de Sistemas
-                      </div>
-                      <div class="itemsSelectArea">
-                        Redes y Servidores
-                      </div>
-                      <div class="itemsSelectArea">
-                        En General
+                      <div class="itemsSelectArea" ng-repeat='area in model.areas | filter: model.searchArea' ng-click="selectArea(area)">
+                        {{area.name}}
                       </div>
                   </div>
 
@@ -76,26 +64,11 @@
                     CONSULTA / PROBLEMA
                   </div>
                   <div>
-                    <input type="texy" class="inputNewOrder" placeholder="Seleccionar..." ng-click="view.style2 = 'buscarConsulta'"></input>
+                    <input type="texy" class="inputNewOrder" placeholder="Seleccionar..." ng-model='model.subject' ng-click="view.style2 = 'buscarConsulta'"></input>
                   </div>
                   <div class="querys">
-                      <div class="itemsSelectQuery" ng-click="view.style2 = ''">
-                        Sistema Operativo / Programas
-                      </div>
-                      <div class="itemsSelectQuery">
-                        CPU / otro Componente
-                      </div>
-                      <div class="itemsSelectQuery">
-                        Internet / WIFI
-                      </div>
-                      <div class="itemsSelectQuery">
-                        Correo Electrónico
-                      </div>
-                      <div class="itemsSelectQuery">
-                        Impresora / Impresión
-                      </div>
-                      <div class="itemsSelectQuery">
-                        Otro Problema / Consulta
+                      <div class="itemsSelectQuery" ng-repeat="subject in model.subjects | filter: model.subject" ng-click="selectSubject(subject)">
+                        {{subject}}
                       </div>
                   </div>
 
@@ -103,9 +76,10 @@
                     MENSAJE
                   </div>
                   <div>
-                    <textarea class="textareaNewOrder"></textarea>
+                    <textarea class="textareaNewOrder" ng-model="model.description"></textarea>
                   </div>
 
+                  <!--
                   <div class="addMenssage2">
                       <div><button class="btnAdd" title="Adjuntar Archivo"><i class="fa fa-paperclip" aria-hidden="true"></i></button></div>
                       <div class="ArchivesAdd">
@@ -113,7 +87,7 @@
                         <i class="fa fa-file-o" aria-hidden="true"></i> pantalla_de_error.jpg <button class="btnTrashAdd"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
                       </div>
                   </div>
-
+                -->
 
 
               </div>
