@@ -168,7 +168,7 @@ function MyOrdersCtrl($rootScope, $scope, Issue, Login, $timeout, Users) {
   }
 
   function loadSubjects(office) {
-    $scope.model.subjects = (office == null)? [] : office.subjects;
+    $scope.model.subjects = ['Otro'];
   }
 
   function selectSubject(subject) {

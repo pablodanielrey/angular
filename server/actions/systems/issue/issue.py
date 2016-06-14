@@ -9,7 +9,7 @@ from model.registry import Registry
 from model.connection.connection import Connection
 
 from model.login.login import Login
-from model.issue.issue import Issue, RedmineAPI, Attachment
+from model.issue.issue import Issue, RedmineAPI, Attachment, IssueModel
 from model.offices.offices import Office
 
 import asyncio
@@ -29,6 +29,7 @@ class IssueWamp(ApplicationSession):
         self.conn = Connection(self.reg)
 
         self.loginModel = inject.instance(Login)
+        self.issueModel = inject.instance(IssueModel)
 
     @coroutine
     def onJoin(self, details):
@@ -39,6 +40,8 @@ class IssueWamp(ApplicationSession):
         yield from self.register(self.create_async, 'issue.create')
         yield from self.register(self.createComment_async, 'issue.createComment')
         yield from self.register(self.changeStatus_async, 'issue.changeStatus')
+        yield from self.register(self.getOffices_async, 'issue.getOffices')
+        yield from self.register(self.getAreas_async, 'issue.getAreas')
 
 
     def getMyIssues(self, sid):
@@ -162,4 +165,30 @@ class IssueWamp(ApplicationSession):
     def changeStatus_async(self, sid, issue, status):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.changeStatus, sid, issue, status)
+        return r
+
+    def getOffices(self):
+        con = self.conn.get()
+        try:
+            return self.issueModel.getOffices(con)
+        finally:
+            self.conn.put(con)
+
+    @coroutine
+    def getOffices_async(self):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.getOffices)
+        return r
+
+    def getAreas(self, oId):
+        con = self.conn.get()
+        try:
+            return self.issueModel.getAreas(con, oId)
+        finally:
+            self.conn.put(con)
+
+    @coroutine
+    def getAreas_async(self, oId):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.getAreas, oId)
         return r

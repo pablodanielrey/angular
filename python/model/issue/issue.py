@@ -6,6 +6,22 @@ from model.serializer.utils import JSONSerializable
 import logging
 import datetime
 
+class IssueModel():
+
+    @classmethod
+    def getOffices(cls, con):
+        offices = Office.getOffices(con)
+        return Office.findById(con, offices)
+
+    @classmethod
+    def getAreas(cls, con, oId):        
+        offs = Office.findById(con, [oId])
+        if offs is None or len(offs) <= 0:
+            return []
+        areas = offs[0].getAreas(con)
+        return Office.findById(con, areas)
+
+
 class Issue(JSONSerializable):
 
     def __init__(self):

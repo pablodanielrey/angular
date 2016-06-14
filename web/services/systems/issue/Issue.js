@@ -101,40 +101,13 @@ function Issue (Utils, Session, $wamp) {
     });
 	}
 
-	offices = [{name: 'Ditesi', id: '1', parentId: null, subjects: ['Internet', 'Wifi', 'Programas', 'No puedo iniciar la pc', 'Error en sistema','Correo Electrónico', 'Otro']},
-						 {name:'Soporte', id:'2', parentId:'1', subjects: ['Internet', 'Wifi', 'Programas', 'No puedo iniciar la pc', 'Correo Electrónico', 'Otro']},
- 						 {name:'Desarrollo', id:'3', parentId:'1', subjects: ['Error en sistema', 'Otro']},
- 						 {name:'Redes y Servidores', id:'4', parentId:'1', subjects: ['Internet', 'Wifi', 'Correo Electrónico', 'Otro']},
-						 {name:'Mantenimiento y Servicios Generales', id: '5', parentId: null, subjects: ['Limpieza', 'Electricidad', 'Tendido cableado de red', 'Otro']},
-					 	 {name:'Mantenimiento', id:'6', parentId:'5', subjects: ['Electricidad', 'Tendido cableado de red', 'Otro']},
- 						 {name:'Servicios Generales', id:'7', parentId:'5', subjects: ['Limpieza', 'Otro']}
-						]
-
-	subjects = ['Internet', 'Wifi', 'Correo Electrónico', 'Otro', 'Limpieza', 'Electricidad', 'Tendido cableado de red']
-
 	function getOffices() {
-		return new Promise(function(cok, cerr) {
-			off = []
-			for (var i = 0; i < offices.length; i++) {
-				if (offices[i].parentId == null) {
-					off.push(offices[i]);
-				}
-			}
-			cok(off);
-    });
+		return $wamp.call('issue.getOffices',[]);
 
 	}
 
 	function getAreas(office) {
-		return new Promise(function(cok, cerr) {
-			off = [];
-			for (var i = 0; i < offices.length; i++) {
-				if (offices[i].parentId == office.id) {
-					off.push(offices[i]);
-				}
-			}
-			cok(off);
-    });
+		return $wamp.call('issue.getAreas',[office.id]);
 	}
 
 

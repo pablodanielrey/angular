@@ -48,6 +48,13 @@ class Office(JSONSerializable):
     def getOfficesUsers(cls, con, offices):
         return OfficeDAO.getOfficesUsers(con, offices)
 
+    @classmethod
+    def getOffices(cls, con):
+        return OfficeDAO.getOffices(con)
+
+    def getAreas(self, con):
+        return OfficeDAO.getAreas(con, self.id)
+
 
 class OfficeDAO(DAO):
     ''' dao de las oficinas '''
@@ -67,6 +74,7 @@ class OfficeDAO(DAO):
                   telephone VARCHAR,
                   email VARCHAR,
                   parent VARCHAR REFERENCES offices.offices (id),
+                  area boolean default false,
                   UNIQUE (name, parent)
                 );
 
@@ -96,6 +104,7 @@ class OfficeDAO(DAO):
         o.name = r['name']
         o.telephone = r['telephone']
         o.email = r['email']
+        o.area = r['area']
         return o
 
     @staticmethod
@@ -123,6 +132,30 @@ class OfficeDAO(DAO):
         cur = con.cursor()
         try:
             cur.execute('select id from offices.offices')
+            ids = [o['id'] for o in cur]
+            return ids
+
+        finally:
+            cur.close()
+
+    @staticmethod
+    def getOffices(con):
+        ''' obtiene todos los ids '''
+        cur = con.cursor()
+        try:
+            cur.execute('select id from offices.offices where area = false')
+            ids = [o['id'] for o in cur]
+            return ids
+
+        finally:
+            cur.close()
+
+    @staticmethod
+    def getAreas(con, oid):
+        ''' obtiene todos los ids '''
+        cur = con.cursor()
+        try:
+            cur.execute('select id from offices.offices where area = true and parent = %s', (oid,))
             ids = [o['id'] for o in cur]
             return ids
 
