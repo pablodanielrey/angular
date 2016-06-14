@@ -22,7 +22,7 @@ class TestSileg(unittest.TestCase):
 
         reg = inject.instance(Registry)
 
-        registrySection = reg.getRegistry('dcsys')
+        registrySection = reg.getRegistry('dcsys2')
 
         conn = Connection(registrySection)
 

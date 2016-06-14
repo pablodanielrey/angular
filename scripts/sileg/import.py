@@ -473,7 +473,7 @@ if __name__ == '__main__':
     reg = inject.instance(Registry)
 
     silegConn = connection.Connection(reg.getRegistry('sileg'))
-    dcsysConn = connection.Connection(reg.getRegistry('dcsys'))
+    dcsysConn = connection.Connection(reg.getRegistry('dcsys2'))
 
     conS = silegConn.get()
     try:
