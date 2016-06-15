@@ -3,6 +3,8 @@ from redmine import Redmine
 from model.users.users  import UserPassword
 from model.offices.offices import Office
 from model.serializer.utils import JSONSerializable
+from model.registry import Registry
+
 import logging
 import datetime
 
@@ -114,11 +116,12 @@ class RedmineAPI:
             return None
         up = ups[0]
         redmine = Redmine(cls.REDMINE_URL, username = up.username, password = up.password, requests={'verify': False})
-        return redmine
+        users = redmine.user.filter(username=up.username)
+        return (users[0], redmine)
 
     @classmethod
     def findById(cls, con, userId, issue_id):
-        redmine = cls._getRedmineInstance(con, userId)
+        user, redmine = cls._getRedmineInstance(con, userId)
         if redmine is None:
             return None
         issue = redmine.issue.get(issue_id, include='children, attachments')
@@ -127,7 +130,7 @@ class RedmineAPI:
 
     @classmethod
     def findAllProjects(cls, con, userId):
-        redmine = cls._getRedmineInstance(con, userId)
+        user, redmine = cls._getRedmineInstance(con, userId)
         if redmine is None:
             return []
         projects = redmine.project.all()
@@ -172,7 +175,7 @@ class RedmineAPI:
 
     @classmethod
     def _getIssuesByProject(cls, con, userId, pidentifiers):
-        redmine = cls._getRedmineInstance(con, userId)
+        user, redmine = cls._getRedmineInstance(con, userId)
         if redmine is None:
             return []
         issues = []
@@ -184,20 +187,21 @@ class RedmineAPI:
 
     @classmethod
     def _getIssuesByUser(cls, con, userId):
-        redmine = cls._getRedmineInstance(con, userId)
+        user, redmine = cls._getRedmineInstance(con, userId)
         if redmine is None:
             return []
-        issues = redmine.issue.filter(author_id=userId)
+        issues = redmine.issue.filter(author_id=user.id)
         return issues
 
     @classmethod
     def create(cls, con, iss):
-        redmine = cls._getRedmineInstance(con, iss.userId)
+        user, redmine = cls._getRedmineInstance(con, iss.userId)
         if redmine is None:
             return None
 
         issue = redmine.issue.new()
 
+        # ACA FALTA VER EL TEMA DEL USUARIO. PREGUNTARLE A EMA
         issue.project_id = iss.projectId
         issue.subject = iss.subject
         issue.description = iss.description
@@ -218,5 +222,5 @@ class RedmineAPI:
         if redmine is None:
             return
 
-        redmine = cls._getRedmineInstance('1')
+        user, redmine = cls._getRedmineInstance('1')
         redmine.issue.update(issue_id, status_id = status)
