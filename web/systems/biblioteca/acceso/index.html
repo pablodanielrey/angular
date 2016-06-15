@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html ng-app="mainApp">
+<head>
+  <meta charset="utf-8"/>
+  <meta name='viewport' content='width=device-width'/>
+  <title>ACCESO | Biblioteca FCE</title>
+
+
+  <script src="/libs/bower_components/angularjs/angular.js"></script>
+  <script src="/libs/bower_components/angular-route/angular-route.js"></script>
+  <script src="/libs/bower_components/autobahn/autobahn.js"></script>
+  <script src="/libs/bower_components/angular-wamp/release/angular-wamp.js"></script>
+
+  <!--archivos principales-->
+  <script type="text/javascript" src="/systems/login/index.module.js"></script>
+  <script type="text/javascript" src="/systems/login/index.controller.js"></script>
+
+  <!-- esto es el estilo de font awesome para tener los iconos -->
+  <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+  <link rel="shortcut icon" href="/systems/fce/img/favicon2.ico">
+
+  <script type="text/javascript" src="/config.json"></script>
+
+
+	<!-- ***** SERVICIOS ***** -->
+	<script type="text/javascript" src="/services/Cache.js"></script>
+	<script type="text/javascript" src="/services/Session.js"></script>
+  <script type="text/javascript" src="/services/Login.js"></script>
+
+  <script type="text/javascript" src="/services/Users.js"></script>
+  <script type="text/javascript" src="/services/Utils.js"></script>
+	<script type="text/javascript" src="/services/Notifications.js"></script>
+
+	<!-- ***** MODULOS ***** -->
+
+  <script type="text/javascript" src="/systems/biblioteca/acceso/acceso.controller.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/biblioteca/acceso/acceso.css" />
+
+</head>
+
+<body ng-controller='accessCtrl'>
+
+    <div class="access ">
+
+
+        <div class="contentHeader">
+            <div class="logo">
+                  <div class="imgLogo">
+                      <img src="/systems/fce/img/DitesiLogo.png" width="104px" height="25px">
+                  </div>
+            </div>
+        </div>
+
+        <div class="contentMain">
+
+            <div class="contentAcces">
+                  <div>
+                      <input class="inputDNI" type="text" placeholder="DNI"></input>
+                  </div>
+                  <div>
+                      <input class="inputDNI" type="password" placeholder="CONTRASEÑA"></input>
+                  </div>
+                  <div>
+                      <button class="btnNext" type="text" ng-click='processDni()'> Acceder</button>
+                  </div>
+            </div>
+
+        </div>
+
+        <div class="contentFooter">
+          <span class="spanPC">
+            © 2016 | DiTESI | Dirección de tecnologías y Sistemas Informáticos
+            | Facultad de Ciencias Económicas | UNLP | Calle 6 Nº 777
+          </span>
+          <span class="spanCel">
+            © 2016 | DiTESI | Facultad de Ciencias Económicas | UNLP
+          </span>
+        </div>
+
+    </div>
+
+</body>
+</html>

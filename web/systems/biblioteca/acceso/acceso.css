@@ -1,0 +1,368 @@
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0px;
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-image: url("/systems/biblioteca/img/book.jpg");
+}
+
+.access {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:column;
+  -webkit-flex-direction:column; /* Safari */
+  -moz-flex-direction:column; /* mozilla */
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+}
+
+.access .contentHeader {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  height: 60px;
+  background-color: #28292D;
+  color:white;
+}
+
+.access .logo {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction: row;
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+}
+
+.access .imgLogo {
+  margin-left: 10px;
+}
+
+.access .contentMain {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: flex-end;
+  -webkit-justify-content: flex-end;
+  -moz-justify-content: flex-end;
+}
+
+.access .contentAcces {
+  background-color: rgba(0, 102, 166, 0.9);
+  padding: 50px 200px 50px 50px;
+  border-radius: 3px 0 0 3px;
+  -moz-border-radius:  3px 0 0 3px;
+  -webkit-border-radius:  3px 0 0 3px;
+}
+
+
+.access .inputDNI {
+      width: 200px;
+      height: 25px;
+      border: 1px solid #DBE2E5;
+      background-color: #EEEEEE;
+      border-radius: 2px;
+      -moz-border-radius: 2px;
+      -webkit-border-radius: 2px;
+      font-size: 30px;
+      padding: 10px 10px 10px 20px;
+      margin-top: 10px;
+}
+
+.access .btnNext {
+  margin-top: 10px;
+  width: 230px;
+  padding: 10px;
+  background-color: #024772;
+  height: 50px;
+  color: white;
+  font-size: 15px;
+  border: none;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+}
+
+.access .btnNext:hover {
+  background-color: #042d44;
+  cursor: pointer;
+}
+
+
+
+.access .contentFooter {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  height: 20px;
+  background-color: #28292D;;
+  color: #DBE2E5;
+  font-size: 10px;
+  padding-left: 5px;
+}
+
+
+/****************************************************
+****************  **********************
+*****************************************************/
+
+.access .mensMail {
+  background-color: #F4F4F4;
+  padding: 10px;
+  width: 525px;
+  margin-top: 20px;
+  font-size: 13px;
+}
+
+.access .spanBackground {
+  margin-top: 3px;
+  color:#0066A6;
+}
+
+.access .span2 {
+  font-size: 10px;
+}
+
+
+
+
+
+.access :placeholder-shown {
+  font-size: 14px;
+}
+
+.access .checkIco {
+  color: #0066A6;
+  font-size: 20px;
+}
+
+.access .textOut {
+    color: #0066A6;
+}
+
+
+
+/******************** MEDIA QUERIS ***************************/
+
+@media (max-width: 720px){
+  .access .contentGuide {
+      display: none;
+  }
+
+  .access .contentGuide2 {
+    display: none;
+  }
+
+  .access .spanPC {
+    display: none;
+  }
+
+}
+
+@media (min-width: 721px){
+
+  .access .spanCel {
+    display: none;
+  }
+
+}
+
+
+/******************************************************/
+.access.pantallaDNI .noMail,
+.access.pantallaDNI .screenCode,
+.access.pantallaDNI .screenPass,
+.access.pantallaDNI .screenFin {
+  display: none;
+}
+
+.access.pantallaCodigo .noMail,
+.access.pantallaCodigo .screenDNI,
+.access.pantallaCodigo .screenPass,
+.access.pantallaCodigo .screenFin {
+  display: none;
+}
+
+.access.pantallaContrasena .noMail,
+.access.pantallaContrasena .screenDNI,
+.access.pantallaContrasena .screenCode,
+.access.pantallaContrasena .screenFin {
+  display: none;
+}
+
+.access.pantallaFin .noMail,
+.access.pantallaFin .screenDNI,
+.access.pantallaFin .screenCode,
+.access.pantallaFin .screenPass {
+  display: none;
+}
+
+.access.pantallaSinCorreoAlternativo .contentTitle,
+.access.pantallaSinCorreoAlternativo .contentGuide,
+.access.pantallaSinCorreoAlternativo .contentGuide2,
+.access.pantallaSinCorreoAlternativo .screenDNI,
+.access.pantallaSinCorreoAlternativo .screenCode,
+.access.pantallaSinCorreoAlternativo .screenPass,
+.access.pantallaSinCorreoAlternativo .screenFin {
+  display: none;
+}
+
+.access .text {
+  width: 100px;
+  margin-left: 55px;
+}
+
+.access .text2 {
+  width: 100px;
+}
+
+/*pantallaDNI*/
+.access.pantallaDNI .color1 {
+  color:#0066a6;
+}
+.access.pantallaDNI .color2 {
+  color:#CCCCCC;
+}
+.access.pantallaDNI .color3 {
+  color:#CCCCCC;
+}
+.access.pantallaDNI .color4 {
+  color:#CCCCCC;
+}
+
+/*pantallaCodigo*/
+.access.pantallaCodigo .color1 {
+  color:#0066a6;
+}
+.access.pantallaCodigo .color2 {
+  color:#0066a6;
+}
+.access.pantallaCodigo .color3 {
+  color:#CCCCCC;
+}
+.access.pantallaCodigo .color4 {
+  color:#CCCCCC;
+}
+
+/*pantallaContrasena*/
+.access.pantallaContrasena .color1 {
+  color:#0066a6;
+}
+.access.pantallaContrasena .color2 {
+  color:#0066a6;
+}
+.access.pantallaContrasena .color3 {
+  color:#0066a6;
+}
+.access.pantallaContrasena .color4 {
+  color:#CCCCCC;
+}
+
+/*pantallaFin*/
+.access.pantallaFin .color1 {
+  color:#0066a6;
+}
+.access.pantallaFin .color2 {
+  color:#0066a6;
+}
+.access.pantallaFin .color3 {
+  color:#0066a6;
+}
+.access.pantallaFin .color4 {
+  color:#0066a6;
+}
+
+/**********************************************/
+
+/*pantallaDNI*/
+.access.pantallaDNI .colorb1 {
+  background-color:#0066a6;
+}
+.access.pantallaDNI .colorb2 {
+  background-color:#CCCCCC;
+}
+.access.pantallaDNI .colorb3 {
+  background-color:#CCCCCC;
+}
+.access.pantallaDNI .colorb4 {
+  background-color:#CCCCCC;
+}
+
+/*pantallaCodigo*/
+.access.pantallaCodigo .colorb1 {
+  background-color:#0066a6;
+}
+.access.pantallaCodigo .colorb2 {
+  background-color:#0066a6;
+}
+.access.pantallaCodigo .colorb3 {
+  background-color:#CCCCCC;
+}
+.access.pantallaCodigo .colorb4 {
+  background-color:#CCCCCC;
+}
+
+/*pantallaContrasena*/
+.access.pantallaContrasena .colorb1 {
+  background-color:#0066a6;
+}
+.access.pantallaContrasena .colorb2 {
+  background-color:#0066a6;
+}
+.access.pantallaContrasena .colorb3 {
+  background-color:#0066a6;
+}
+.access.pantallaContrasena .colorb4 {
+  background-color:#CCCCCC;
+}
+
+/*pantallaFin*/
+.access.pantallaFin .colorb1 {
+  background-color:#0066a6;
+}
+.access.pantallaFin .colorb2 {
+  background-color:#0066a6;
+}
+.access.pantallaFin .colorb3 {
+  background-color:#0066a6;
+}
+.access.pantallaFin .colorb4 {
+  background-color:#0066a6;
+}
+
+
+.access .line {
+  width: 100px;
+  height: 2px;
+
+}
+
+.access .circle {
+  width: 10px;
+  height: 10px;
+  border-radius: 100%;
+
+}
