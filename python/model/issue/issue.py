@@ -115,7 +115,7 @@ class RedmineAPI:
         if len(ups) <= 0:
             return None
         up = ups[0]
-        redmine = Redmine(cls.REDMINE_URL, username = up.username, password = up.password, requests={'verify': False})
+        redmine = Redmine(cls.REDMINE_URL, username = up.username, password = up.password, version='2.1.2', requests={'verify': False})
         users = redmine.user.filter(username=up.username)
         return (users[0], redmine)
 
