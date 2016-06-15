@@ -6,42 +6,36 @@
   <meta name='viewport' content='width=device-width'/>
   <title>Facultad de Ciencias Económicas | Universidad Nacional de La Plata</title>
 
-  <script src="/libs/bower_components/angularjs/angular.js"></script>
-  <script src="/libs/bower_components/angular-route/angular-route.js"></script>
-  <script src="/libs/bower_components/autobahn/autobahn.js"></script>
-  <script src="/libs/bower_components/angular-wamp/release/angular-wamp.js"></script>
 
   <!-- esto es el estilo de font awesome para tener los iconos -->
-  <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="../libs/font-awesome/css/font-awesome.min.css">
   <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" type="text/css" href="./index.css" />
 
-  <script type="text/javascript" src="/systems/sileg/modules/docentes/index.module.js"></script>
-  <script type="text/javascript" src="/systems/sileg/modules/docentes/index.controller.js"></script>
+  
+  
+  <script src="../libs/bower_components/angularjs/angular.js"></script>
+  <script src="../libs/bower_components/angular-route/angular-route.js"></script>
+  <script src="../libs/bower_components/autobahn/autobahn.js"></script>
+  <script src="../libs/bower_components/angular-wamp/release/angular-wamp.js"></script>
 
-  <!-- Modulos -->
-  <!-- <script type="text/javascript" src="/systems/sileg/modules/docentes/docentes.js"></script> -->
-  <link rel="stylesheet" type="text/css" href="/systems/sileg/modules/docentes/docentes.css" />
+  <script type="text/javascript" src="/config-sileg.json"></script>
+
+  <script type="text/javascript" src="./index.module.js"></script>
+  
+  <script type="text/javascript" src="./services/systems/sileg/Sileg.js"></script>
+
+  <script type="text/javascript" src="./index.controller.js"></script>
+
+  <script type="text/javascript" src="./modules/teacher/teacher.controller.js"></script>
+
 
 </head>
 
 <body class="sileg" ng-controller='IndexCtrl'>
-  <header>
-      <div class="logo">
-          <img src="/systems/sileg/img/logo_fce.png">
-      </div>
-      <div class="menu">
-        <a href="http://www.econo.unlp.edu.ar"><img src="/systems/sileg/img/inicio.jpg"></a>
-        <a href="http://www.econo.unlp.edu.ar/institucional"><img src="/systems/sileg/img/institucional.jpg"></a>
-        <a href="http://www.econo.unlp.edu.ar/grado"><img src="/systems/sileg/img/grado.jpg"></a>
-        <a href="http://www.econo.unlp.edu.ar/posgrado"><img src="/systems/sileg/img/posgrado.jpg"></a>
-        <a href="http://www.econo.unlp.edu.ar/investigacion"><img src="/systems/sileg/img/investigacion.jpg"></a>
-        <a href="http://www.econo.unlp.edu.ar/transferencia"><img src="/systems/sileg/img/transferencia.jpg"></a>
-        <a href="http://www.econo.unlp.edu.ar/extension"><img src="/systems/sileg/img/extension.jpg"></a>
-      </div>
-      <div class="back">
-      <i class="fa fa-angle-double-left" aria-hidden="true"></i> VOLVER > <b>DOCENTES</b> y <b>CÁTEDRAS</b>
-      </div>
-  </header>
+
+  <header ng-include="'./modules/menu/menu.html?r='+nocache"></header>
+
 
   <main class="{{view.style}} {{view.style2}}">
     <!-- VARIABLES 1: busquedaPorDocente, busquedaPorCatedra -->
@@ -58,127 +52,8 @@
                 CÁTEDRA
               </button>
           </div>
-
-          <div class="searchDocente">
-            <button class="btnBack" ng-click="view.style='';view.style2=''"><i class="fa fa-chevron-left" title="Volver"></i></button> <b>DOCENTE</b>
-            <input class="inputSearch"></input>
-            <div class="contentList">
-
-                <div class="itemList" ng-click="view.style2 = 'verInfoDocente'">
-                  <div class="icoList">
-                    A
-                  </div>
-                  <div>
-                      <div class="textName">
-                        Abernaldi
-                      </div>
-                      <div class="textLastName">
-                        Juan Antonio
-                      </div>
-                  </div>
-                </div>
-
-                <div class="itemList">
-                  <div class="icoList">
-                    A
-                  </div>
-                  <div>
-                      <div class="textName">
-                        Albornoz
-                      </div>
-                      <div class="textLastName">
-                        Roberto Carlos
-                      </div>
-                  </div>
-                </div>
-
-                <div class="itemList">
-                  <div class="icoList">
-                    B
-                  </div>
-                  <div>
-                      <div class="textName">
-                        Blanco
-                      </div>
-                      <div class="textLastName">
-                        Maria Micaela
-                      </div>
-                  </div>
-                </div>
-
-                <div class="itemList">
-                  <div class="icoList">
-                    B
-                  </div>
-                  <div>
-                      <div class="textName">
-                        Burrintelli
-                      </div>
-                      <div class="textLastName">
-                        Julieta Paloma
-                      </div>
-                  </div>
-                </div>
-
-                <div class="itemList">
-                  <div class="icoList">
-                    B
-                  </div>
-                  <div>
-                      <div class="textName">
-                        Bond
-                      </div>
-                      <div class="textLastName">
-                        Jean Carlos
-                      </div>
-                  </div>
-                </div>
-
-                <div class="itemList">
-                  <div class="icoList">
-                    B
-                  </div>
-                  <div>
-                      <div class="textName">
-                        Bucarelli Paz
-                      </div>
-                      <div class="textLastName">
-                        Franco Ismael
-                      </div>
-                  </div>
-                </div>
-
-                <div class="itemList">
-                  <div class="icoList">
-                    C
-                  </div>
-                  <div>
-                      <div class="textName">
-                        Cardinali
-                      </div>
-                      <div class="textLastName">
-                        Florencia
-                      </div>
-                  </div>
-                </div>
-
-                <div class="itemList">
-                  <div class="icoList">
-                    C
-                  </div>
-                  <div>
-                      <div class="textName">
-                        Cordoba
-                      </div>
-                      <div class="textLastName">
-                        Maria Antonia
-                      </div>
-                  </div>
-                </div>
-
-
-            </div>
-          </div>
+          
+          <div class="searchDocente" ng-include="'./modules/teacher/teacher.html?r='+nocache" ></div>
 
           <div class="searchCatedra">
             <button class="btnBack" ng-click="view.style='';view.style2=''"><i class="fa fa-chevron-left" title="Volver"></i></button> <b>CÁTEDRA</b>

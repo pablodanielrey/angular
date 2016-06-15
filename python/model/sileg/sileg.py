@@ -4,9 +4,14 @@ from model.sileg.place.place import Place
 
 class SilegModel:
 
-    @staticmethod
-    def getPlaceById(con, ids):
-        return Place.findById(con, ids)
-      
+
+    @classmethod
+    def getUsers(cls, con):
+        """
+        TODO
+        obtener todas las designaciones
+        sacar user id
+        retornar
+        """
 
    
