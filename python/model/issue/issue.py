@@ -14,7 +14,7 @@ class IssueModel():
         return Office.findById(con, offices)
 
     @classmethod
-    def getAreas(cls, con, oId):        
+    def getAreas(cls, con, oId):
         offs = Office.findById(con, [oId])
         if offs is None or len(offs) <= 0:
             return []
@@ -191,25 +191,24 @@ class RedmineAPI:
         return issues
 
     @classmethod
-    def create(cls, con, issue):
-
-        redmine = cls._getRedmineInstance(con, issue.userId)
+    def create(cls, con, iss):
+        redmine = cls._getRedmineInstance(con, iss.userId)
         if redmine is None:
             return None
 
         issue = redmine.issue.new()
 
-        issue.project_id = issue.projectId
-        issue.subject = issue.subject
-        issue.description = issue.description
-        issue.status_id = issue.statusId
+        issue.project_id = iss.projectId
+        issue.subject = iss.subject
+        issue.description = iss.description
+        issue.status_id = iss.statusId
         issue.parent_issue_id = issue.parentId
-        issue.start_date = issue.start
-        issue.tracker_id = issue.tracker
-        issue.uploads = issue.files
+        issue.start_date = iss.start
+        issue.tracker_id = iss.tracker
+        # issue.uploads = issue.files
         issue.save()
 
-        return issue
+        return True
 
     @classmethod
     def changeStatus(cls, con, userId, issue_id, project_id, status):

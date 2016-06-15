@@ -168,7 +168,7 @@ function MyOrdersCtrl($rootScope, $scope, Issue, Login, $timeout, Users) {
   }
 
   function loadSubjects(office) {
-    $scope.model.subjects = ['Otro'];
+    $scope.model.subjects = ['Otro', 'Wifi'];
   }
 
   function selectSubject(subject) {
@@ -177,7 +177,26 @@ function MyOrdersCtrl($rootScope, $scope, Issue, Login, $timeout, Users) {
   }
 
   function save() {
-    $scope.view.style = $scope.view.styles[0];
+    var office = ($scope.model.selectedArea != null) ? $scope.model.selectedArea : $scope.model.selectedOffice;
+    var subject = $scope.model.subject;
+    var description = $scope.model.description;
+
+    if (office == null || $scope.model.subjects.indexOf(subject) < 0) {
+      window.alert('Complete los campos correctamente');
+      return;
+    }
+
+    Issue.create(subject, description, null, office.id).then(
+      function(data) {
+        $scope.$apply(function() {
+          $scope.view.style = $scope.view.styles[0];
+          $scope.getMyIssues();
+        })
+      }, function(error) {
+        console.log(error);
+      }
+    );
+
   }
 
   function getDate(issue) {
