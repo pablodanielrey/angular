@@ -13,6 +13,8 @@ function MyOrdersCtrl($rootScope, $scope, Issue, Login, $timeout, Users, Office)
   $scope.getDiffDay = getDiffDay;
   $scope.getStatus = getStatus;
   $scope.getName = getName;
+  $scope.getFullName = getFullName;
+  $scope.getLastname = getLastname;
   $scope.getOffice = getOffice;
   $scope.getUserPhoto = getUserPhoto;
 
@@ -28,6 +30,7 @@ function MyOrdersCtrl($rootScope, $scope, Issue, Login, $timeout, Users, Office)
   $scope.save = save;
 
   $scope.model = {
+    users: [],
     userId: null,
     issues: [],
     issueSelected: null,
@@ -62,6 +65,7 @@ function MyOrdersCtrl($rootScope, $scope, Issue, Login, $timeout, Users, Office)
 
   function initialize() {
     $scope.model.issues = [];
+    $scope.model.users = [];
     $scope.getMyIssues();
     $scope.loadOffices();
   }
@@ -74,7 +78,7 @@ function MyOrdersCtrl($rootScope, $scope, Issue, Login, $timeout, Users, Office)
             dateStr = issues[i].start;
             dateSplit = dateStr.split('-');
             issues[i].date = new Date(dateSplit[0],dateSplit[1] - 1,dateSplit[2]);
-            loadUser(issues[i]);
+            loadUser(issues[i].userId);
           }
           $scope.model.issues = issues;
           console.log(issues);
@@ -99,45 +103,51 @@ function MyOrdersCtrl($rootScope, $scope, Issue, Login, $timeout, Users, Office)
     )
   }
 
-  function loadUser(issue) {
-    Users.findById([issue.userId.toString()]).then(
-      function(users) {
-        issue.user = users[0];
-      }
-    );
+  function loadUser(userId) {
+    if ($scope.model.users[userId] == null) {
+      Users.findById([userId]).then(
+        function(users) {
+          $scope.model.users[userId] = users[0];
+        }
+      );
+    }
   }
 
   function viewDetail(issue) {
+    $scope.model.loaded = (issue.children == undefined) ? 0 : issue.children.length;
+    for (var i = 0; i < issue.children.length; i++) {
+        child = issue.children[i];
+        if (child.user == undefined) {
+          loadUser(child.userId);
+        }
+    }
+
     $scope.model.issueSelected = issue;
-    loadIssue(issue.id);
+    loadOffice(issue);
     $scope.view.style = $scope.view.styles[2];
   }
 
-  function loadIssue(id) {
-    $scope.model.issueSelected = null;
-    Issue.findById(id).then(
-      function(issue) {
-        $scope.model.issueSelected = issue;
-        loadOffice(issue);
-      }, function(error) {
-        console.log(error);
-      }
-    );
-  }
-
   function loadOffice(issue) {
-    if (issue == null || issue.user == null) {
+    if (issue == null || issue.userId == null) {
       $scope.model.office = null;
     }
-    Office.getOfficesByUser(issue.user.id, false).then(
-      function(offices) {
-        $scope.model.office = (offices == null || offices.length <= 0) ? null : offices[0];
+    Office.getOfficesByUser(issue.userId, false).then(
+      function(ids) {
+        if (ids == null || ids.length <= 0) {
+          return;
+        }
+        Office.findById(ids).then(
+          function(offices){
+            $scope.model.office = (offices == null || offices.length <= 0) ? null : offices[0];
+          }, function(error) {
+            console.log(error);
+          }
+        )
       }, function(error) {
         console.log(error);
       }
     );
   }
-
   function create() {
     $scope.model.issue = {};
     $scope.view.style = $scope.view.styles[1];
@@ -228,7 +238,11 @@ function MyOrdersCtrl($rootScope, $scope, Issue, Login, $timeout, Users, Office)
   }
 
   function getDate(issue) {
-    return (issue == null) ? null : issue.date;
+    if (issue == null) {
+      return '';
+    }
+    var date = ('date' in issue) ? issue.date : convertDate(issue.start);
+    return date;
   }
 
   function convertDate(date) {
@@ -251,15 +265,36 @@ function MyOrdersCtrl($rootScope, $scope, Issue, Login, $timeout, Users, Office)
     return $scope.view.status[issue.statusId - 1];
   }
 
+  function getFullName(issue) {
+    if (issue == null) {
+      return;
+    }
+    user = $scope.model.users[issue.userId];
+    return (user == null) ? 'No tiene nombre' : user.name + ' ' + user.lastname;
+  }
+
   function getName(issue) {
-    return (issue == null || issue.user == null) ? 'No tiene nombre' : issue.user.name + ' ' + issue.user.lastname;
+    if (issue == null) {
+      return;
+    }
+    user = $scope.model.users[issue.userId];
+    return (user == null) ? '' : user.name;
+  }
+
+  function getLastname(issue) {
+    if (issue == null) {
+      return;
+    }
+    user = $scope.model.users[issue.userId];
+    return (user == null) ? '' : user.lastname;
   }
 
   function getOffice() {
     return ($scope.model.office == null) ? 'No posee' : $scope.model.office.name;
   }
 
-  function getUserPhoto(user) {
+  function getUserPhoto(issue) {
+    user = (issue == null) ? null : $scope.model.users[issue.userId];
     if (user == null || user.photo == null || user.photo == '') {
       return "../login/modules/img/imgUser.jpg";
     } else {

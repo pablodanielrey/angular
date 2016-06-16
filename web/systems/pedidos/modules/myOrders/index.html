@@ -119,7 +119,7 @@
               </div>
 
               <div class="itemsType">
-                    <div class="textType">{{getName(issue)}}:</div>
+                    <div class="textType">{{getFullName(issue)}}:</div>
                     <div class="textSubType">{{issue.subject}}</div>
               </div>
 
@@ -166,7 +166,7 @@
 
                   <div class="itemsOffice">
                         <div class="textOffice">{{getOffice()}}</div>
-                        <div class="textName">{{model.issueSelected.user.lastname}} {{model.issueSelected.user.name}}</div>
+                        <div class="textName">{{getName(model.issueSelected)}} {{getLastname(model.issueSelected)}}</div>
                   </div>
               </div>
 
@@ -175,7 +175,7 @@
         <div class="infoOrder">
             <div class="contentUser">
                 <div class="photo">
-                    <img class="avatar" ng-src='{{getUserPhoto(model.issueSelected.user)}}' alt="foto de perfil"/>
+                    <img class="avatar" ng-src='{{getUserPhoto(model.issueSelected)}}' alt="foto de perfil"/>
                 </div>
                 <div class="nameUser">
                   {{model.issueSelected.user.name}} </br>
@@ -216,14 +216,14 @@
 
 
 
-            <div class="contentReplys" ng-repeat="child in model.issueSelected.children">
+            <div ng-class="{true: 'contentReplys2' , false: 'contentReplys'}[model.issueSelected.userId == child.userId]" ng-repeat="child in model.issueSelected.children">
 
                 <div class="textReply">
                     <div class="textDateDetailOrders">
-                        Hoy - 25 May. 2016 - 10:26 hs
+                        {{getDiffDay(child)}} - {{getDate(child) | date: 'd MMMM  yyyy'}}
                     </div>
                     <div>
-                          La impresora no se enciende o no responde cuando se presiona el botón de encendido. No se observan indicadores luminosos ni mensajes de error, y no hay ruidos ni movimiento en la impresora.
+                          {{child.description}}
                     </div>
                 </div>
 
@@ -231,13 +231,13 @@
                   <i class="fa fa-caret-right" aria-hidden="true"></i>
                 </div>
 
-                <div class="contentUser">
+                <div class="contentUser2">
                     <div class="photo">
-                        <img class="avatar"  src="/systems/pedidos/img/walter.jpg">
+                        <img class="avatar" ng-src='{{getUserPhoto(child)}}' alt="foto de perfil"/>
                     </div>
                     <div class="nameUser">
-                      Walter </br>
-                      Blanco
+                      {{getName(child)}} </br>
+                      {{getLastname(child)}}
                     </div>
                 </div>
 
@@ -253,7 +253,7 @@
                 </div> -->
 
             </div>
-            <!--
+
             <div class="contentReplys2">
 
                 <div class="contentUser2">
@@ -279,7 +279,7 @@
                     </div>
                 </div>
             </div>
-
+            <!--
             <div class="contentReplys">
 
                 <div class="textReply">
