@@ -70,8 +70,8 @@ class LaboralInsertion:
         """ genera una inscripcion nueva por usuario """
         InscriptionDAO.persist(con, inscription)
 
-    def checkInscription(self, conf, id):
-        
+    def checkInscription(self, con, id):
+        InscriptionDAO.checkInscription(con, id)
 
     def findByUser(self, con, userId):
         """

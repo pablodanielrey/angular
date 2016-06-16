@@ -89,7 +89,7 @@ class InscriptionDAO(DAO):
 
 
     @classmethod
-    def checkInscription(con, id):
+    def checkInscription(cls, con, id):
         ''' cambia el estado del check de la inscripcion '''
         cur = con.cursor()
         try:
@@ -99,7 +99,7 @@ class InscriptionDAO(DAO):
 
             turnedValue = not cur.fetchone()['checked']
             cur.execute('update laboral_insertion.inscriptions set checked = %s where id = %s', (turnedValue, id))
-            
+
         finally:
             cur.close()
 
