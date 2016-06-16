@@ -81,6 +81,22 @@ html, body {
   -moz-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
   -o-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
   transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+  border-top: 5px solid #024772;
+
+}
+
+.access.pantallaUsuario .contentAcces {
+  animation: destello 0.5s;
+}
+
+
+@keyframes destello {
+  0% {
+  background-color:rgba(2, 71, 114, 0.9);
+  }
+  100% {
+  background-color: : white;
+  }
 }
 
 
