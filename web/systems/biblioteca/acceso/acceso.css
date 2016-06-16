@@ -59,10 +59,31 @@ html, body {
   display: flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
-  align-items: center;
-  -webkit-align-items:center; /* Safari */
-  -moz-align-items:center; /* mozilla */
+  flex-direction: column;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  justify-content:  center;
+  -webkit-justify-content:  center;
+  -moz-justify-content:  center;
 
+
+}
+
+
+.access.pantallaUsuario .progressBar {
+  background-color: #024772;
+  height: 10px;
+  animation: barrita 2s;
+  animation-delay: 1s;
+}
+
+@keyframes barrita {
+  0% {
+    width: 0px;
+  }
+  100% {
+    width: 100px;
+  }
 }
 
 .access .contentAcces {
@@ -377,6 +398,7 @@ html, body {
   -webkit-justify-content: flex-end;
   -moz-justify-content: flex-end;
   position: absolute;
+  top: 0px;
   width: 100%;
 }
 
