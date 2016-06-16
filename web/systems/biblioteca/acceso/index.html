@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name='viewport' content='width=device-width'/>
-  <title>ACCESO | Biblioteca FCE</title>
+  <title>Acceso | FCE</title>
 
 
   <script src="/libs/bower_components/angularjs/angular.js"></script>
@@ -16,8 +16,11 @@
   <script type="text/javascript" src="/systems/login/index.controller.js"></script>
 
   <!-- esto es el estilo de font awesome para tener los iconos -->
-  <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+  <!-- <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css"> -->
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Ropa+Sans' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
   <link rel="shortcut icon" href="/systems/fce/img/favicon2.ico">
 
   <script type="text/javascript" src="/config.json"></script>
@@ -41,7 +44,7 @@
 
 <body ng-controller='accessCtrl'>
 
-    <div class="access ">
+    <div class="access {{view.style}}">
 
 
         <div class="contentHeader">
@@ -54,15 +57,49 @@
 
         <div class="contentMain">
 
+            <!-- *** BORRAR ESTO **** -->
+            <div class="menu">
+              <button class="btnMenu" ng-click="view.style = 'pantallaInicio'">1</button>
+              <button class="btnMenu" ng-click="view.style = 'pantallaCargando'">2</button>
+              <button class="btnMenu" ng-click="view.style = 'pantallaUsuario'">3</button>
+
+            </div>
+            <!-- ***** HASTA ACA **** -->
+
             <div class="contentAcces">
-                  <div>
-                      <input class="inputDNI" type="text" placeholder="DNI"></input>
+                  <!-- PANTALLA DEL LOGUIN -->
+                  <div class="screenLogin">
+                        <div>
+                            <input class="inputDNI" type="text" placeholder="DNI"></input>
+                        </div>
+                        <div>
+                            <input class="inputDNI" type="password" placeholder="CONTRASEÑA"></input>
+                        </div>
+                        <div>
+                            <button class="btnNext" type="text" ng-click="view.style = 'pantallaCargando'"> Acceder</button>
+                        </div>
                   </div>
-                  <div>
-                      <input class="inputDNI" type="password" placeholder="CONTRASEÑA"></input>
+                  <!-- PANTALLA CARGANDO -->
+                  <div class="screenPreload">
+                      <div class="contentPreload">
+                          <i class="fa fa-circle-o-notch fa-spin fa-4x fa-fw"></i>
+                      </div>
                   </div>
-                  <div>
-                      <button class="btnNext" type="text" ng-click='processDni()'> Acceder</button>
+                  <!-- PANTALLA USUARIO -->
+                  <div class="screenUser">
+                      <div class="contentUser">
+                          <div class="avatarUser">
+                              <img class="imgUser" src="/systems/biblioteca/img/walter.jpg">
+                          </div>
+                      </div>
+                      <div class="contentInfoUser">
+                          <div class="textWelcome">
+                            Bienvenido!
+                          </div>
+                          <div class="textNameUser">
+                            Walter Blanco
+                          </div>
+                      </div>
                   </div>
             </div>
 
