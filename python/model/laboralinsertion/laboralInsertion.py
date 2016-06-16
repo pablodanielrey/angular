@@ -70,6 +70,9 @@ class LaboralInsertion:
         """ genera una inscripcion nueva por usuario """
         InscriptionDAO.persist(con, inscription)
 
+    def checkInscription(self, conf, id):
+        
+
     def findByUser(self, con, userId):
         """
             obtiene todos los datos referidos a las propiedades de insercion laboral que no sean inscripciones a la bolsa

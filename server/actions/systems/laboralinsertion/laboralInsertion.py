@@ -140,7 +140,9 @@ class LaboralInsertionWamp(ApplicationSession):
     def checkInscription(self, id):
         con = self.conn.get()
         try:
-            #self.laboralInsertion.checkInscription(con, id)
+            self.laboralInsertion.checkInscription(con, id)
+            con.commit()
+            
             return id
 
         finally:

@@ -88,6 +88,21 @@ class InscriptionDAO(DAO):
             cur.close()
 
 
+    @classmethod
+    def checkInscription(con, id):
+        ''' cambia el estado del check de la inscripcion '''
+        cur = con.cursor()
+        try:
+            cur.execute('select checked from laboral_insertion.inscriptions where id = %s', (id,))
+            if cur.rowcount <= 0:
+                raise Exception('No existe esa inscripcion')
+
+            turnedValue = not cur.fetchone()['checked']
+            cur.execute('update laboral_insertion.inscriptions set checked = %s where id = %s', (turnedValue, id))
+            
+        finally:
+            cur.close()
+
     @staticmethod
     def findAll(con):
         ''' obtiene todos los ids de todas las inscripciones '''
