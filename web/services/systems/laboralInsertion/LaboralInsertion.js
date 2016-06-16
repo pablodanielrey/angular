@@ -35,7 +35,7 @@ function LaboralInsertion($rootScope,$wamp,Session) {
     cambia el estado del check de la inscripcion.
   */
   this.checkInscription = function(data) {
-    return $wamp.call('system.laboralInsertion.checkInscription', [data.id]);
+    return $wamp.call('system.laboralInsertion.checkInscription', [data]);
   }
 
 
