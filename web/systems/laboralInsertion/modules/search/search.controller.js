@@ -933,7 +933,14 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
   })
 
   $scope.checkUser = function(i) {
-    console.log(i);
+    LaboralInsertion.checkInscription(i.id)
+    .then(function(id) {
+      console.log('ok');
+      $scope.search();
+    }, function(err) {
+      console.log(err);
+    });
+
   }
 
   $scope.displayProfile = function(i) {

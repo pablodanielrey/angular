@@ -78,6 +78,7 @@ class LaboralInsertionWamp(ApplicationSession):
         yield from self.register(self.persistInscriptionByUser_async, 'system.laboralInsertion.persistInscriptionByUser')
         yield from self.register(self.deleteInscriptionById_async, 'system.laboralInsertion.deleteInscriptionById')
         yield from self.register(self.sendMailToCompany_async, 'system.laboralInsertion.sendEmailToCompany');
+        yield from self.register(self.checkInscription_async, 'system.laboralInsertion.checkInscription')
         yield from self.register(self.findSentByInscriptionId_async, 'system.laboralInsertion.sent.findByInscription');
         yield from self.register(self.getFilters_async, 'system.laboralInsertion.getFilters');
         yield from self.register(self.findAllCompanies_async, 'system.laboralInsertion.company.findAll');
@@ -132,6 +133,15 @@ class LaboralInsertionWamp(ApplicationSession):
             data = self.laboralInsertion.findAllInscriptionsByUser(con, userId)
             insc = [ i.__dict__ for i in data ]
             return insc
+
+        finally:
+            self.conn.put(con)
+
+    def checkInscription(self, id):
+        con = self.conn.get()
+        try:
+            #self.laboralInsertion.checkInscription(con, id)
+            return id
 
         finally:
             self.conn.put(con)
