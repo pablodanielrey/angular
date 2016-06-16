@@ -40,8 +40,8 @@ class Issue(JSONSerializable):
         self.tracker = RedmineAPI.TRACKER_ERROR
 
     @classmethod
-    def findById(cls, con, id):
-        return RedmineAPI.findById(con, userId, issue_id)
+    def findById(cls, con, userId, id):
+        return RedmineAPI.findById(con, userId, id)
 
     @classmethod
     def getOfficesIssues(cls, con, officeIds):
@@ -89,23 +89,29 @@ class RedmineAPI:
         return att
 
     @classmethod
-    def _fromResult(cls, r):
-        attrs = dir(r)
-        issue = Issue()
-        issue.id = r.id
-        issue.parentId = [r.parent.id if 'parent' in attrs else None][0]
-        issue.projectId = r.project.id
-        issue.projectName = r.project.name
-        issue.userId = r.author.id
-        issue.subject = r.subject
-        issue.description = r.description
-        issue.statusId = r.status.id
-        issue.assignedToId =[r.assigned_to.id if 'assigned_to' in attrs else None][0]
-        issue.start = r.start_date
-        issue.updated = r.updated_on
-        issue.children = [iss.id for iss in r.children if iss is not None]
-        issue.files = [cls._loadFile(file) for file in r.attachments if file is not None]
-        return issue
+    def _fromResult(cls, con, r):
+        try:
+            attrs = dir(r)
+            issue = Issue()
+            issue.id = r.id
+            issue.parentId = [r.parent.id if 'parent' in attrs else None][0]
+            issue.projectId =  [r.project.id if 'project' in attrs else None][0]
+            issue.projectName = [r.project.name if 'project' in attrs else None][0]
+            issue.userId = r.author.id
+            issue.subject = r.subject
+            issue.description = r.description
+            issue.statusId = r.status.id
+            issue.assignedToId =[r.assigned_to.id if 'assigned_to' in attrs else None][0]
+            issue.start = r.start_date
+            issue.updated = r.updated_on
+            # issue.children = [cls.findById(con, issue.id, iss.id) for iss in r.children if iss is not None]
+            issue.files = [cls._loadFile(file) for file in r.attachments if file is not None]
+            return issue
+        except:
+            import pdb; pdb.set_trace()
+
+            print(r.__dict__)
+
 
     @classmethod
     def _getRedmineInstance(cls, con, userId):
@@ -122,7 +128,8 @@ class RedmineAPI:
         if redmine is None:
             return None
         issue = redmine.issue.get(issue_id, include='children, attachments')
-        return cls._fromResult(issue)
+
+        return cls._fromResult(con, issue)
 
 
     @classmethod
@@ -140,13 +147,13 @@ class RedmineAPI:
         issues = []
         for userId in userIds:
             issues.extend(cls.getMyIssues(con, userId))
-        return [cls._fromResult(issue) for issue in issues if not cls._include(issues,issue)]
+        return [cls._fromResult(con, issue) for issue in issues if not cls._include(issues,issue)]
 
 
     @classmethod
     def getMyIssues(cls, con, userId):
         issues = cls._getIssuesByUser(con, userId)
-        return [cls._fromResult(issue) for issue in issues if not cls._include(issues,issue)]
+        return [cls._fromResult(con, issue) for issue in issues if not cls._include(issues,issue)]
 
 
     @classmethod
@@ -167,7 +174,7 @@ class RedmineAPI:
     @classmethod
     def getAssignedIssues(cls, con, userId, oIds):
         issues = cls._getIssuesByProject(con, userId, oIds)
-        return [cls._fromResult(issue) for issue in issues if not cls._include(issues,issue)]
+        return [cls._fromResult(con, issue) for issue in issues if not cls._include(issues,issue)]
 
 
     @classmethod

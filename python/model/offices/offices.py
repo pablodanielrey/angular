@@ -237,7 +237,7 @@ class OfficeDAO(DAO):
         cur = con.cursor()
         ids = []
         try:
-            cur.execute('select id from offices.offices_users where user_id = %s',(userId,))
+            cur.execute('select office_id from offices.offices_users where user_id = %s',(userId,))
             if cur.rowcount <= 0:
                 return []
 

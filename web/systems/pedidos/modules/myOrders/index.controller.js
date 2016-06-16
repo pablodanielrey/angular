@@ -2,9 +2,9 @@ angular
   .module('mainApp')
   .controller('MyOrdersCtrl', MyOrdersCtrl);
 
-MyOrdersCtrl.inject = ['$rootScope', '$scope', 'Issue', 'Login', '$timeout', 'Users']
+MyOrdersCtrl.inject = ['$rootScope', '$scope', 'Issue', 'Login', '$timeout', 'Users', 'Office']
 
-function MyOrdersCtrl($rootScope, $scope, Issue, Login, $timeout, Users) {
+function MyOrdersCtrl($rootScope, $scope, Issue, Login, $timeout, Users, Office) {
 
   $scope.initialize = initialize;
   $scope.getMyIssues = getMyIssues;
@@ -13,6 +13,8 @@ function MyOrdersCtrl($rootScope, $scope, Issue, Login, $timeout, Users) {
   $scope.getDiffDay = getDiffDay;
   $scope.getStatus = getStatus;
   $scope.getName = getName;
+  $scope.getOffice = getOffice;
+  $scope.getUserPhoto = getUserPhoto;
 
   $scope.loadOffices = loadOffices;
   $scope.selectOffice = selectOffice;
@@ -107,7 +109,33 @@ function MyOrdersCtrl($rootScope, $scope, Issue, Login, $timeout, Users) {
 
   function viewDetail(issue) {
     $scope.model.issueSelected = issue;
+    loadIssue(issue.id);
     $scope.view.style = $scope.view.styles[2];
+  }
+
+  function loadIssue(id) {
+    $scope.model.issueSelected = null;
+    Issue.findById(id).then(
+      function(issue) {
+        $scope.model.issueSelected = issue;
+        loadOffice(issue);
+      }, function(error) {
+        console.log(error);
+      }
+    );
+  }
+
+  function loadOffice(issue) {
+    if (issue == null || issue.user == null) {
+      $scope.model.office = null;
+    }
+    Office.getOfficesByUser(issue.user.id, false).then(
+      function(offices) {
+        $scope.model.office = (offices == null || offices.length <= 0) ? null : offices[0];
+      }, function(error) {
+        console.log(error);
+      }
+    );
   }
 
   function create() {
@@ -200,12 +228,21 @@ function MyOrdersCtrl($rootScope, $scope, Issue, Login, $timeout, Users) {
   }
 
   function getDate(issue) {
-    return issue.date;
+    return (issue == null) ? null : issue.date;
+  }
+
+  function convertDate(date) {
+    dateSplit = date.split('-');
+    return new Date(dateSplit[0],dateSplit[1] - 1,dateSplit[2]);
   }
 
   function getDiffDay(issue) {
+    if (issue == null) {
+      return '';
+    }
+    date = ('date' in issue) ? issue.date : convertDate(issue.start);
     now = new Date();
-    diff = now - issue.date;
+    diff = now - date;
     days = Math.floor(diff / (1000 * 60 * 60 * 24));
     return (days == 0) ? 'Hoy' : (days == 1) ? 'Ayer' : days + ' días'
   }
@@ -216,6 +253,18 @@ function MyOrdersCtrl($rootScope, $scope, Issue, Login, $timeout, Users) {
 
   function getName(issue) {
     return (issue == null || issue.user == null) ? 'No tiene nombre' : issue.user.name + ' ' + issue.user.lastname;
+  }
+
+  function getOffice() {
+    return ($scope.model.office == null) ? 'No posee' : $scope.model.office.name;
+  }
+
+  function getUserPhoto(user) {
+    if (user == null || user.photo == null || user.photo == '') {
+      return "../login/modules/img/imgUser.jpg";
+    } else {
+      return "/c/files.py?i=" + user.photo;
+    }
   }
 
 }

@@ -30,6 +30,7 @@ class OfficeWamp(ApplicationSession):
     def onJoin(self, details):
         logging.debug('registering methods')
         yield from self.register(self.getOfficesByUserRole_async, 'office.getOfficesByUserRole')
+        yield from self.register(self.getOfficesByUser_async, 'office.getOfficesByUser')
         yield from self.register(self.findById_async, 'office.findById')
         yield from self.register(self.getOfficesUsers_async, 'office.getOfficesUsers')
 
@@ -44,6 +45,19 @@ class OfficeWamp(ApplicationSession):
     def getOfficesByUserRole_async(self, userId, tree = False, role = 'autoriza'):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.getOfficesByUserRole, userId, tree, role)
+        return r
+
+    def getOfficesByUser(self, userId, tree):
+        con = self.conn.get()
+        try:
+            return Office.getOfficesByUser(con, userId, tree)
+        finally:
+            self.conn.put(con)
+
+    @coroutine
+    def getOfficesByUser_async(self, userId, tree = False):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.getOfficesByUser, userId, tree)
         return r
 
     def findById(self, ids):
