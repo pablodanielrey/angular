@@ -66,12 +66,7 @@ def sortOfficeUsers(users, stats):
     return r
 
 
-def createReportDir(office):
-    import os
-    newpath = '/tmp/reporte-asistencia-{}-{}'.format(office, datetime.datetime.now())
-    if not os.path.exists(newpath):
-        os.makedirs(newpath)
-    return newpath
+
 
 def statsToPyoo(rp, stats, users, offices):
     import uuid
@@ -294,6 +289,25 @@ def findUser(uid, users):
     return None
 
 
+def statsToPyooUser(rp, user, stats):
+
+
+def statsToPyooOffice(rp, off, stats):
+
+
+
+def findOffice(oid, offices):
+    for o in offices:
+        if o.id == oid:
+            return o
+
+def createReportDir(user):
+    import os
+    newpath = '/tmp/reporte-asistencia-{}-{}-{}'.format(user.dni, user.name, user.lastname)
+    if not os.path.exists(newpath):
+        os.makedirs(newpath)
+    return newpath
+
 if __name__ == '__main__':
 
     logging.getLogger().setLevel(logging.INFO)
@@ -331,10 +345,19 @@ if __name__ == '__main__':
         a = inject.instance(AssistanceModel)
         stats = a.getStatistics(con, uids, rstart, rend)
 
-        for office in offices:
-            rp = createReportDir(office)
-            statsToPyoo(rp, stats, users, [office])
-            createZipFile(office, rp)
+        """ creo los reportes por usuario y se lo envio """
+        for user in users:
+            rp = createReportDir(user)
+            statsToPyooUser(rp, user, stats)
+
+            officesIds = Office.getOfficesByUserRole(con, user.id, tree=True, role='autoriza')
+            ''' genero el reporte de esa oficina '''
+            for officeId in officesIds:
+                off = findOffice(officeId, offices)
+                statsToPyooOffice(rp, off, stats)
+
+
+            createZipFile(user, rp)
 
     finally:
         conn.put(con)
