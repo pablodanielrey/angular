@@ -309,6 +309,12 @@ class LaboralInsertionWamp(ApplicationSession):
         return r
 
     @coroutine
+    def checkInscription_async(self, iid):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.checkInscription, iid)
+        return r
+
+    @coroutine
     def findAllInscriptions_async(self, filters):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.findAllInscriptions, filters)
