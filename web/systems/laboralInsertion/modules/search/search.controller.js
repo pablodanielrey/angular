@@ -932,9 +932,13 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     $scope.search();
   })
 
+  $scope.checkUser = function(i) {
+    console.log(i);
+  }
+
   $scope.displayProfile = function(i) {
     $scope.model.currentScreen = "screenProfile";
-    $scope.$broadcast('openProfileEvent',i,$scope.model.data[i.userId]);
+    $scope.$broadcast('openProfileEvent', i, $scope.model.data[i.userId]);
   }
 
   $scope.$on('closeProfileEvent', function(event) {

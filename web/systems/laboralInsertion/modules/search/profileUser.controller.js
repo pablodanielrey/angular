@@ -48,7 +48,7 @@ function ProfilesCtrl($rootScope, $scope, LaboralInsertion) {
     $scope.selectInscription.average1 = $scope.data.average1;
     $scope.selectInscription.average2 = $scope.data.average2;
     $scope.selectInscription.checked = true;
-    LaboralInsertion.persistInscriptionByUser($scope.selectInscription.userId,$scope.selectInscription).then(function(r) {
+    LaboralInsertion.persistInscriptionByUser($scope.selectInscription.userId, $scope.selectInscription).then(function(r) {
       $scope.saveUserData();
     }, function(err) {
       console.log(err);

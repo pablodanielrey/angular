@@ -160,13 +160,13 @@ class LaboralInsertionWamp(ApplicationSession):
         con = self.conn.get()
         try:
             """ primero busco que no exista esa misma inscripción """
-            inscriptions = self.laboralInsertion.findAllInscriptionsByUser(con, userId)
-            ins = [ i for i in inscriptions if i.degree == data['degree'] and i.workType == data['workType'] and not i.deleted ]
-            if len(ins) >= 1:
-                raise Exception('Ya existe esa inscripcion')
-
-            if 'id' not in data:
+            if 'id' not in data or data['id'] is None:
                 data['id'] = None
+                inscriptions = self.laboralInsertion.findAllInscriptionsByUser(con, userId)
+                ins = [ i for i in inscriptions if i.degree == data['degree'] and i.workType == data['workType'] and not i.deleted ]
+                if len(ins) >= 1:
+                    raise Exception('Ya existe esa inscripcion')
+
             data['userId'] = userId
             i = Inscription()
             i.__dict__ = data

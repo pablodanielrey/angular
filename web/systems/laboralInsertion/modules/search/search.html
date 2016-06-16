@@ -40,6 +40,12 @@
               </th>
 
               <th>
+                <div title="Checkear">
+                  <i class="fa fa-user"></i>
+                </div>
+              </th>
+
+              <th>
                 <div class="user" title="Editar Usuario">
                   <i class="fa fa-user"></i>
                 </div>
@@ -163,6 +169,17 @@
               </div>
               <div class="Select" ng-if="getMail(i.userId) == 'No Definido' || !i.checked">
                 -
+              </div>
+            </td>
+
+            <td>
+              <div title="Chequear Usuario" ng-click="checkUser(i)">
+                <div ng-if='!i.checked'>
+                  C
+                </div>
+                <div ng-if='i.checked'>
+                  OK
+                </div>
               </div>
             </td>
 
