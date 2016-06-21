@@ -252,7 +252,7 @@ function RequestCtrl($scope, Login, Assistance, Users, Office, $location, $timeo
     }
     $scope.view.searching = true;
     $scope.view.style3 = 'cargandoSolicitudes';
-    Assistance.getJustifications($scope.model.userId, $scope.model.start, $scope.model.end, $scope.model.optionJustifications.value).then(function(data) {
+    Assistance.getJustifications($scope.model.loginUserId, $scope.model.start, $scope.model.end, $scope.model.optionJustifications.value).then(function(data) {
       $scope.view.searching = false;
       $scope.view.style3 = $scope.model.optionJustifications.style;
       justifications = [];
