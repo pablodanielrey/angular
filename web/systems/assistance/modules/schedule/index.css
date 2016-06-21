@@ -310,8 +310,14 @@
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
   padding: 10px 10px 10px 10px;
-      border: 1px solid #E2E2E2;
+  border: 1px solid #E2E2E2;
 }
+
+
+.schedule.pantallaJefe.nuevoHorarioSemanal .contentNewSchedules {
+  width: 360px;
+}
+
 
 .schedule .subContentNewSchedules {
   overflow-y: auto;
@@ -328,6 +334,8 @@
   align-items: center;
   margin-bottom: 5px;
 }
+
+
 
 .schedule .titleFiles {
   width: 165px;
@@ -375,7 +383,8 @@
 }
 
 .schedule .btnAdd,
-.schedule .btnTash {
+.schedule .btnClear,
+.schedule .btnTrash {
   margin-left: 10px;
   height: 25px;
   width: 25px;
@@ -383,6 +392,7 @@
   background-color: #EEEEEE;
   color: #5c5f69;
   cursor: pointer;
+  border-radius: 2px;
 }
 
 .schedule .btnAdd:hover {
@@ -390,9 +400,32 @@
   color:white;
 }
 
-.schedule .btnTash:hover {
+.schedule .btnTrash:hover {
   background-color: #E43E46;
   color: white;
+}
+
+.schedule .btnClear:hover {
+  background-color: #EC9122;
+  color: white;
+}
+
+.schedule .files.principalSinDatos .contentBtnClear,
+.schedule .files.principalSinDatos .contentBtnTrash {
+  display: none;
+}
+
+.schedule .files.principalConDatos .contentBtnTrash {
+  display: none;
+}
+
+.schedule .files.secundarioSinDatos .contentBtnClear,
+.schedule .files.secundarioSinDatos .contentBtnAdd {
+  display: none;
+}
+
+.schedule .files.secundarioConDatos .contentBtnAdd {
+  display: none;
 }
 
 
@@ -839,7 +872,13 @@
     top:0px;
   }
 
+  .schedule.pantallaJefe.nuevoHorarioSemanal .contentNewSchedules {
+    width: 320px;
+  }
 
+  .schedule.pantallaJefe.nuevoHorarioSemanal .newCantHour {
+    width: 30px;
+  }
 
 
 }

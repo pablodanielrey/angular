@@ -3,7 +3,7 @@
 VARIABLES 1: pantallaJefe, pantallaUsuario
 VARIABLES 2: nuevoHorarioSemanal, nuevoHorarioEspecial, pantallaUsuarios
 VARIABLES 3: pantallaMensaje
-VARIABLES 3: procesando, procesado, errorDeSistema
+VARIABLES 4: procesando, procesado, errorDeSistema
 -->
 
     <div class="header">
@@ -122,7 +122,7 @@ VARIABLES 3: procesando, procesado, errorDeSistema
     </div>
 
     <!-- *******************************************
-    ***** PANTALLA MODIFICAR HHORARIO SEMANAL ******
+    ***** PANTALLA MODIFICAR HORARIO SEMANAL *******
     ******************************************** -->
     <div class="contentWeeklySchedule">
 
@@ -147,17 +147,24 @@ VARIABLES 3: procesando, procesado, errorDeSistema
               <div class="titleFiles2">Horas</div>
           </div>
           <div class="subContentNewSchedules">
-              <div class="files">
+              <div class="files secundarioConDatos">
+                  <!-- VARIABLES PARA AGREGAR AL "FILES"
+                  principalSinDatos
+                  principalConDatos
+                  secundarioSinDatos
+                  secundarioConDatos -->
                   <div class="textDays">Lun</div>
                   <div><input class="newCheckIn" type="time"></input></div>
                   <div><input class="newCantHour" type="number"></input></div>
-                  <div><button class="btnAdd"><i class="fa fa-plus"></i></button></div>
+                  <div class="contentBtnAdd"><button class="btnAdd"><i class="fa fa-plus"></i></button></div>
+                  <div class="contentBtnClear"><button class="btnClear"><i class="fa fa-eraser"></i></button></div>
+                  <div class="contentBtnTrash"><button class="btnTrash"><i class="fa fa-trash-o"></i></button></div>
               </div>
               <div class="files">
                   <div class="textDays">Lun</div>
                   <div><input class="newCheckIn" type="time"></input></div>
                   <div><input class="newCantHour" type="number"></input></div>
-                  <div><button class="btnTash"><i class="fa fa-trash-o"></i></button></div>
+                  <div><button class="btnTrash"><i class="fa fa-trash-o"></i></button></div>
               </div>
               <div class="files">
                   <div class="textDays">Mar</div>
@@ -236,10 +243,17 @@ VARIABLES 3: procesando, procesado, errorDeSistema
 
 
           <div class="subContentNewSchedulesSpecial">
-              <div class="files">
+              <div class="files principalSinDatos">
+                  <!-- VARIABLES PARA AGREGAR AL "FILES"
+                  principalSinDatos
+                  principalConDatos
+                  secundarioSinDatos
+                  secundarioConDatos -->
                   <div><input class="newCheckIn" type="time"></input></div>
                   <div><input class="newCantHour" type="number"></input></div>
-                  <div><button class="btnAdd"><i class="fa fa-plus"></i></button></div>
+                  <div class="contentBtnAdd"><button class="btnAdd"><i class="fa fa-plus"></i></button></div>
+                  <div class="contentBtnClear"><button class="btnClear"><i class="fa fa-eraser"></i></button></div>
+                  <div class="contentBtnTrash"><button class="btnTrash"><i class="fa fa-trash-o"></i></button></div>
               </div>
               <div class="files">
                   <div><input class="newCheckIn" type="time"></input></div>
