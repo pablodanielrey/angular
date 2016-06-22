@@ -238,7 +238,7 @@ if __name__ == '__main__':
 
                 if (MigrateRangedJustification.isJustification(just)):
                     days = 1
-                    if row[5].value is not None:
+                    if row[5].value is not None or row[5].value != '':
                         days = None if row[5] is None else int(row[5].value)
 
                 if dni not in justifications:
