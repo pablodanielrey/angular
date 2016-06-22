@@ -28,20 +28,67 @@ class SilegWamp(ApplicationSession):
     @coroutine
     def onJoin(self, details):
         logging.debug('registering methods')
-        yield from self.register(self.getPlaceById_async,'sileg.getPlaceById')
-
+        yield from self.register(self.getCathedras_async,'sileg.getCathedras')
+        yield from self.register(self.getUsers_async,'sileg.getUsers')
+        yield from self.register(self.getEconoPageDataUser_async,'sileg.getEconoPageDataUser')
+        yield from self.register(self.getEconoPageDataPlace_async,'sileg.getEconoPageDataPlace')
+        
+        
    
 
-    def getPlaceById(self,ids):
+    def getCathedras(self):
         con = self.conn.get()
         try:
-            return self.sileg.getPlaceById(con, ids)
+            return self.sileg.getCathedras(con)
         finally:
             self.conn.put(con)
 
     @coroutine
-    def getPlaceById_async(self, ids):
+    def getCathedras_async(self):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getPlaceById, ids)
+        r = yield from loop.run_in_executor(None, self.getCathedras)
         return r
+ 
+
+    def getUsers(self):
+        con = self.conn.get()
+        try:
+            return self.sileg.getUsers(con)
+        finally:
+            self.conn.put(con)
+
+    @coroutine
+    def getUsers_async(self):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.getUsers)
+        return r
+        
+               
+        
+    def getEconoPageDataUser(self, userId):
+        con = self.conn.get()
+        try:
+            return self.sileg.getEconoPageDataUser(con, userId)
+        finally:
+            self.conn.put(con)
+        
+    @coroutine
+    def getEconoPageDataUser_async(self, userId):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.getEconoPageDataUser, userId)
+        return r
+        
+        
+    def getEconoPageDataPlace(self, placeId):
+        con = self.conn.get()
+        try:
+            return self.sileg.getEconoPageDataPlace(con, placeId)
+        finally:
+            self.conn.put(con)
+        
+    @coroutine
+    def getEconoPageDataPlace_async(self, placeId):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.getEconoPageDataPlace, placeId)
+        return r        
         
