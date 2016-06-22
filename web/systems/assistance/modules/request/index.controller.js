@@ -9,13 +9,21 @@ function RequestCtrl($scope, Login, Assistance, Users, Office, $location, $timeo
   $scope.initialize = initialize;
   $scope.initializeFilters = initializeFilters;
   $scope.loadOffices = loadOffices;
+  $scope.loadUsers = loadUsers;
   $scope.formatJustification = formatJustification;
   $scope.search = search;
-  $scope.getJustTitle = getJustTitle;
-  $scope.getJustName = getJustName;
+  $scope.findUsersByOffices = findUsersByOffices;
+
   $scope.getSelectedOrderStatus = getSelectedOrderStatus;
   $scope.getSelectedOrderName = getSelectedOrderName;
   $scope.getSelectedOrderType = getSelectedOrderType;
+  $scope.getUsersArray = getUsersArray;
+  $scope.getUserPhoto = getUserPhoto;
+  $scope.getName = getName;
+  $scope.getJustTitle = getJustTitle;
+  $scope.getJustName = getJustName;
+  $scope.getRole = getRole;
+
   $scope.order = order;
   $scope.sortName = sortName;
   $scope.orderName = orderName;
@@ -23,25 +31,21 @@ function RequestCtrl($scope, Login, Assistance, Users, Office, $location, $timeo
   $scope.sortStatus = sortStatus;
   $scope.sortUserName = sortUserName;
   $scope.orderUserName = orderUserName;
-  $scope.loadUsers = loadUsers;
-  $scope.getUsersArray = getUsersArray;
-  $scope.getUserPhoto = getUserPhoto;
-  $scope.findUsersByOffices = findUsersByOffices;
-  $scope.getName = getName;
+
   $scope.selectCompensatory = selectCompensatory;
   $scope.selectInformedAbsence = selectInformedAbsence;
   $scope.selectOTWithReturn = selectOTWithReturn;
   $scope.selectOTWithoutReturn = selectOTWithoutReturn;
   $scope.selectUniversityPreExam = selectUniversityPreExam;
   $scope.selectA102 = selectA102;
+  $scope.selectRequestAuthority = selectRequestAuthority;
+  $scope.selectUser = selectUser;
+
   $scope.back = back;
   $scope.changeStatus = changeStatus;
   $scope.cancelJustification = cancelJustification;
   $scope.rejectJustification = rejectJustification;
   $scope.approveJustification = approveJustification;
-  $scope.getRole = getRole;
-  $scope.selectRequestAuthority = selectRequestAuthority;
-  $scope.selectUser = selectUser;
 
   $scope.model = {
     userId: null,
@@ -252,7 +256,7 @@ function RequestCtrl($scope, Login, Assistance, Users, Office, $location, $timeo
     }
     $scope.view.searching = true;
     $scope.view.style3 = 'cargandoSolicitudes';
-    Assistance.getJustifications($scope.model.userId, $scope.model.start, $scope.model.end, $scope.model.optionJustifications.value).then(function(data) {
+    Assistance.getJustifications($scope.model.loginUserId, $scope.model.start, $scope.model.end, $scope.model.optionJustifications.value).then(function(data) {
       $scope.view.searching = false;
       $scope.view.style3 = $scope.model.optionJustifications.style;
       justifications = [];

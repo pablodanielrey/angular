@@ -227,7 +227,7 @@ class OfficeDAO(DAO):
 
             if tree:
                 childrens = cls._getChildOffices(con,ids)
-                ids.extend(x for x in childrens if x not in offices)
+                ids.extend(x for x in childrens if x not in ids)
         finally:
             cur.close()
 

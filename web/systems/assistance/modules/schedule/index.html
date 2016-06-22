@@ -1,8 +1,9 @@
-<div class="schedule pantallaJefe {{view.style2}}">
+<div class="schedule {{vm.view.style}} {{vm.view.style2}} {{vm.view.style3}} {{vm.view.style4}}">
 <!--
 VARIABLES 1: pantallaJefe, pantallaUsuario
 VARIABLES 2: nuevoHorarioSemanal, nuevoHorarioEspecial, pantallaUsuarios
 VARIABLES 3: pantallaMensaje
+VARIABLES 4: procesando, procesado, errorDeSistema
 -->
 
     <div class="header">
@@ -37,7 +38,7 @@ VARIABLES 3: pantallaMensaje
 
             <div class="contentDate ">
                 <div class="contentBtnSelectUser">
-                    <button class="btnSelectUser" ng-click="view.style2='pantallaUsuarios'"><i class="fa fa-search"></i> Usuario</button>
+                    <button class="btnSelectUser" ng-click="vm.view.style2='pantallaUsuarios'"><i class="fa fa-search"></i> Usuario</button>
                 </div>
 
                 <div class="contentListUsers">
@@ -48,7 +49,7 @@ VARIABLES 3: pantallaMensaje
 
                     <div class="contentListPerson">
 
-                        <div class="btnItemPerson" ng-click="view.style2=''">
+                        <div class="btnItemPerson" ng-click="vm.view.style2=''">
                             <div class="contentImgUser">
                                 <img class="imgUser" src='img/walter.jpg' alt="foto de perfil">
                             </div>
@@ -114,14 +115,14 @@ VARIABLES 3: pantallaMensaje
         </div>
 
         <div class="contentActionButton">
-            <button class="btnAction" ng-click="view.style2='nuevoHorarioSemanal'">MODIFICAR <b>HORARIO SEMANAL</b></button>
-            <button class="btnAction" ng-click="view.style2='nuevoHorarioEspecial'">MODIFICAR <b>HORARIO ESPECIAL</b></button>
+            <button class="btnAction" ng-click="vm.view.style2='nuevoHorarioSemanal'">MODIFICAR <b>HORARIO SEMANAL</b></button>
+            <button class="btnAction" ng-click="vm.view.style2='nuevoHorarioEspecial'">MODIFICAR <b>HORARIO ESPECIAL</b></button>
         </div>
 
     </div>
 
     <!-- *******************************************
-    ***** PANTALLA MODIFICAR HHORARIO SEMANAL ******
+    ***** PANTALLA MODIFICAR HORARIO SEMANAL *******
     ******************************************** -->
     <div class="contentWeeklySchedule">
 
@@ -146,17 +147,24 @@ VARIABLES 3: pantallaMensaje
               <div class="titleFiles2">Horas</div>
           </div>
           <div class="subContentNewSchedules">
-              <div class="files">
+              <div class="files secundarioConDatos">
+                  <!-- VARIABLES PARA AGREGAR AL "FILES"
+                  principalSinDatos
+                  principalConDatos
+                  secundarioSinDatos
+                  secundarioConDatos -->
                   <div class="textDays">Lun</div>
                   <div><input class="newCheckIn" type="time"></input></div>
                   <div><input class="newCantHour" type="number"></input></div>
-                  <div><button class="btnAdd"><i class="fa fa-plus"></i></button></div>
+                  <div class="contentBtnAdd"><button class="btnAdd"><i class="fa fa-plus"></i></button></div>
+                  <div class="contentBtnClear"><button class="btnClear"><i class="fa fa-eraser"></i></button></div>
+                  <div class="contentBtnTrash"><button class="btnTrash"><i class="fa fa-trash-o"></i></button></div>
               </div>
               <div class="files">
                   <div class="textDays">Lun</div>
                   <div><input class="newCheckIn" type="time"></input></div>
                   <div><input class="newCantHour" type="number"></input></div>
-                  <div><button class="btnTash"><i class="fa fa-trash-o"></i></button></div>
+                  <div><button class="btnTrash"><i class="fa fa-trash-o"></i></button></div>
               </div>
               <div class="files">
                   <div class="textDays">Mar</div>
@@ -200,8 +208,8 @@ VARIABLES 3: pantallaMensaje
         </div>
 
         <div class="actionBtns">
-            <button class="btnAcept" ng-click="view.style2 = ''">ACEPTAR</button>
-            <button class="btnCancel" ng-click="view.style2 = ''">CANCELAR</button>
+            <button class="btnAcept" ng-click="vm.view.style2 = ''">ACEPTAR</button>
+            <button class="btnCancel" ng-click="vm.view.style2 = ''">CANCELAR</button>
         </div>
 
     </div>
@@ -235,10 +243,17 @@ VARIABLES 3: pantallaMensaje
 
 
           <div class="subContentNewSchedulesSpecial">
-              <div class="files">
+              <div class="files principalSinDatos">
+                  <!-- VARIABLES PARA AGREGAR AL "FILES"
+                  principalSinDatos
+                  principalConDatos
+                  secundarioSinDatos
+                  secundarioConDatos -->
                   <div><input class="newCheckIn" type="time"></input></div>
                   <div><input class="newCantHour" type="number"></input></div>
-                  <div><button class="btnAdd"><i class="fa fa-plus"></i></button></div>
+                  <div class="contentBtnAdd"><button class="btnAdd"><i class="fa fa-plus"></i></button></div>
+                  <div class="contentBtnClear"><button class="btnClear"><i class="fa fa-eraser"></i></button></div>
+                  <div class="contentBtnTrash"><button class="btnTrash"><i class="fa fa-trash-o"></i></button></div>
               </div>
               <div class="files">
                   <div><input class="newCheckIn" type="time"></input></div>
@@ -251,10 +266,36 @@ VARIABLES 3: pantallaMensaje
         </div>
 
         <div class="actionBtns">
-            <button class="btnAcept" ng-click="view.style2 = ''">ACEPTAR</button>
-            <button class="btnCancel" ng-click="view.style2 = ''">CANCELAR</button>
+            <button class="btnAcept" ng-click="vm.view.style2 = ''">ACEPTAR</button>
+            <button class="btnCancel" ng-click="vm.view.style2 = ''">CANCELAR</button>
         </div>
 
+    </div>
+
+    <!-- *******************************************
+    *************** PANTALLA MENSAJES **************
+    ******************************************** -->
+    <div class="contentMessages">
+        <div class="subContentMessages">
+
+            <div class="processing">
+              <div class="iconMessage"><i class="fa fa-circle-o-notch fa-spin fa-4x"></i></div>
+              <div>PROCESANDO SOLICITUD</div>
+              <div>Por favor espere... </div>
+            </div>
+
+            <div class="processed">
+              <div class="iconMessageProcessed"><i class="fa fa-check fa-4x"></i></div>
+              <div>SOLICITUD PROCESADA CON ÉXITO</div>
+            </div>
+
+            <div class="errorSystem">
+              <div class="iconMessageErrorSystem"><i class="fa fa-exclamation-triangle fa-4x"></i></div>
+              <div class="iconMessageErrorSystem">ERROR EN EL SISTEMA</div>
+              <div>Por favor intente más tarde</div>
+            </div>
+
+        </div>
     </div>
 
 
