@@ -1,11 +1,15 @@
 
 import json
-import datetime
-import dateutil.parser
+import dateutil, dateutil.tz, dateutil.parser, datetime
+from dateutil.tz import tzlocal
 import importlib
 import re
 
+
 def serializer_loads(d):
+
+    import inject
+    inject.configure_once()
 
     for k, v in d.items():
         """
@@ -42,6 +46,10 @@ class JSONSerializable:
 
 class MySerializer(json.JSONEncoder):
 
+    import inject
+    inject.configure_once()
+    tz = dateutil.tz.tzlocal()
+
     def default(self, obj):
 
         ser = getattr(obj, "__json_serialize__", None)
@@ -52,6 +60,7 @@ class MySerializer(json.JSONEncoder):
             return obj.isoformat()
 
         if isinstance(obj, datetime.date):
-            return obj.isoformat()
+            objtz = datetime.datetime.combine(obj, datetime.time()).replace(tzinfo=self.tz)
+            return objtz.isoformat()
 
         return json.JSONEncoder.default(self, obj)
