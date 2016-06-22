@@ -213,7 +213,9 @@ if __name__ == '__main__':
         user = None
         justifications = {}
         users = []
+        i = 0
         for row in sheet:
+                i = i + 1
                 dni = row[3].value
                 if dni is None or dni == '':
                     break
@@ -227,6 +229,8 @@ if __name__ == '__main__':
                 startDate = None
                 endDate = None
                 days = 0
+
+                logging.info('chequeando: {} {} '.format(i, just))
 
                 if (MigrateRangedTimeJustification.isJustification(just)):
                     startDate = None if row[5].time is None else localize(datetime.datetime.combine(date.date(), row[5].time))
