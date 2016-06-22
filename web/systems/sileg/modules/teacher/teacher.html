@@ -1,115 +1,16 @@
-            <button ng-controller="TeacherCtrl" class="btnBack" ng-click="view.style='';view.style2=''"><i class="fa fa-chevron-left" title="Volver"></i></button> <b>DOCENTE</b>
-            <input class="inputSearch"></input>
+            <button class="btnBack" ng-click="view.style='';view.style2=''"><i class="fa fa-chevron-left" title="Volver"></i></button> <b>DOCENTE</b>
+            <input class="inputSearch" ng-model="searchTeacher"></input>
             <div class="contentList">
-
-                <div class="itemList" ng-click="view.style2 = 'verInfoDocente'">
+                <div ng-repeat="u in users | filter:searchTeacher | orderBy:['lastname','name']" class="itemList" ng-click="selectUser(u)">
                   <div class="icoList">
-                    A
+                    {{u.letter}}
                   </div>
                   <div>
                       <div class="textName">
-                        Abernaldi
+                        {{u.lastname}}
                       </div>
                       <div class="textLastName">
-                        Juan Antonio
-                      </div>
-                  </div>
-                </div>
-
-                <div class="itemList">
-                  <div class="icoList">
-                    A
-                  </div>
-                  <div>
-                      <div class="textName">
-                        Albornoz
-                      </div>
-                      <div class="textLastName">
-                        Roberto Carlos
-                      </div>
-                  </div>
-                </div>
-
-                <div class="itemList">
-                  <div class="icoList">
-                    B
-                  </div>
-                  <div>
-                      <div class="textName">
-                        Blanco
-                      </div>
-                      <div class="textLastName">
-                        Maria Micaela
-                      </div>
-                  </div>
-                </div>
-
-                <div class="itemList">
-                  <div class="icoList">
-                    B
-                  </div>
-                  <div>
-                      <div class="textName">
-                        Burrintelli
-                      </div>
-                      <div class="textLastName">
-                        Julieta Paloma
-                      </div>
-                  </div>
-                </div>
-
-                <div class="itemList">
-                  <div class="icoList">
-                    B
-                  </div>
-                  <div>
-                      <div class="textName">
-                        Bond
-                      </div>
-                      <div class="textLastName">
-                        Jean Carlos
-                      </div>
-                  </div>
-                </div>
-
-                <div class="itemList">
-                  <div class="icoList">
-                    B
-                  </div>
-                  <div>
-                      <div class="textName">
-                        Bucarelli Paz
-                      </div>
-                      <div class="textLastName">
-                        Franco Ismael
-                      </div>
-                  </div>
-                </div>
-
-                <div class="itemList">
-                  <div class="icoList">
-                    C
-                  </div>
-                  <div>
-                      <div class="textName">
-                        Cardinali
-                      </div>
-                      <div class="textLastName">
-                        Florencia
-                      </div>
-                  </div>
-                </div>
-
-                <div class="itemList">
-                  <div class="icoList">
-                    C
-                  </div>
-                  <div>
-                      <div class="textName">
-                        Cordoba
-                      </div>
-                      <div class="textLastName">
-                        Maria Antonia
+                        {{u.name}}
                       </div>
                   </div>
                 </div>
