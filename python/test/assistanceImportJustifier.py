@@ -198,7 +198,7 @@ assistance = inject.instance(AssistanceModel)
 if __name__ == '__main__':
 
     calc = pyoo.Desktop('localhost',2002)
-    doc = calc.open_spreadsheet('justificaciones.ods')
+    doc = calc.open_spreadsheet('/tmp/justificaciones.ods')
     '''
         ordenado por dni, fecha
         fecha | Apellido | Nombre | DNI | pedido | hora entrada | hora salida
