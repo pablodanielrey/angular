@@ -22,15 +22,15 @@ VARIABLES 4: procesando, procesado, errorDeSistema
             <div class="contentUser">
 
                   <div class="contentPhoto">
-                    <img class="imgUser" src='img/walter.jpg' alt="foto de perfil"/>
+                    <img class="imgUser" ng-src='{{vm.getUserPhoto()}}' alt="foto de perfil"/>
                   </div>
 
                   <div class="contentData">
                       <div>
-                        <b> Walter Roberto Blanco</b>
+                        <b> {{vm.model.user.name}} {{vm.model.user.lastname}}</b>
                       </div>
                       <div>
-                        30001823
+                        {{vm.model.user.dni}}
                       </div>
                   </div>
 
@@ -65,7 +65,7 @@ VARIABLES 4: procesando, procesado, errorDeSistema
 
                 <div class="subContentDate">
                     <div class="textDate"><i class="fa fa-calendar-o"></i>  Fecha</div>
-                    <input type="date" class="inputDate"></input>
+                    <input type="date" class="inputDate" ng-model="vm.model.date"></input>
                 </div>
             </div>
 
