@@ -1,0 +1,17 @@
+            <button class="btnBack" ng-click="view.style='';view.style2=''"><i class="fa fa-chevron-left" title="Volver"></i></button> <b>CÁTEDRA</b>
+            <input class="inputSearch" ng-model="searchCathedra"></input>
+
+            <div class="contentList">
+
+                  <div ng-repeat="c in cathedras | filter:searchCathedra | orderBy:['description']" class="itemList" ng-click="selectCathedra(c)">
+                    <div class="icoListCat">
+                      {{c.letter}}
+                    </div>
+                    <div>
+                        <div class="textNameCat">
+                          {{c.description}}
+                        </div>
+                        
+                    </div>
+                  </div>
+            </div>

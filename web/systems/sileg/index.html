@@ -8,27 +8,32 @@
 
 
   <!-- esto es el estilo de font awesome para tener los iconos -->
-  <link rel="stylesheet" href="../libs/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
   <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" type="text/css" href="./index.css" />
 
   
   
-  <script src="../libs/bower_components/angularjs/angular.js"></script>
-  <script src="../libs/bower_components/angular-route/angular-route.js"></script>
-  <script src="../libs/bower_components/autobahn/autobahn.js"></script>
-  <script src="../libs/bower_components/angular-wamp/release/angular-wamp.js"></script>
+  <script src="/libs/bower_components/angularjs/angular.js"></script>
+  <script src="/libs/bower_components/angular-route/angular-route.js"></script>
+  <script src="/libs/bower_components/autobahn/autobahn.js"></script>
+  <script src="/libs/bower_components/angular-wamp/release/angular-wamp.js"></script>
 
   <script type="text/javascript" src="/config-sileg.json"></script>
 
   <script type="text/javascript" src="./index.module.js"></script>
   
   <script type="text/javascript" src="./services/systems/sileg/Sileg.js"></script>
+  <script type="text/javascript" src="./services/systems/sileg/UserFormat.js"></script>
+  <script type="text/javascript" src="./services/systems/sileg/PlaceFormat.js"></script>
+
+
 
   <script type="text/javascript" src="./index.controller.js"></script>
 
-  <script type="text/javascript" src="./modules/teacher/teacher.controller.js"></script>
 
+  <script type="text/javascript" src="./modules/teacher/teacher.controller.js"></script>
+  <script type="text/javascript" src="./modules/teacher/cathedra.controller.js"></script>
 
 </head>
 
@@ -37,208 +42,30 @@
   <header ng-include="'./modules/menu/menu.html?r='+nocache"></header>
 
 
-  <main class="{{view.style}} {{view.style2}}">
+  <main ng-controller="TeacherCtrl" class="{{view.style}} {{view.style2}}">
     <!-- VARIABLES 1: busquedaPorDocente, busquedaPorCatedra -->
     <!-- VARIABLES 2: verInfoDocente, verInfoCatedra -->
     <i class="fa fa-search" aria-hidden="true"></i> Buscar por
+    
     <div class="contentMain">
-        <div class="contentLeft">
-
-          <div class="btnsSearch">
-              <button class="btnSearch" ng-click="view.style = 'busquedaPorDocente'">
-                DOCENTE
-              </button>
-              <button class="btnSearch" ng-click="view.style = 'busquedaPorCatedra'">
-                CÁTEDRA
-              </button>
-          </div>
-          
-          <div class="searchDocente" ng-include="'./modules/teacher/teacher.html?r='+nocache" ></div>
-
-          <div class="searchCatedra">
-            <button class="btnBack" ng-click="view.style='';view.style2=''"><i class="fa fa-chevron-left" title="Volver"></i></button> <b>CÁTEDRA</b>
-            <input class="inputSearch"></input>
-
-            <div class="contentList">
-
-                  <div class="itemList" ng-click="view.style2 = 'verInfoCatedra'">
-                    <div class="icoListCat">
-                      A
-                    </div>
-                    <div>
-                        <div class="textNameCat">
-                          Administración I
-                        </div>
-                        <div class="textLastNameCat">
-                          Cátedra A
-                        </div>
-                    </div>
-                  </div>
-
-                  <div class="itemList">
-                    <div class="icoListCat">
-                      A
-                    </div>
-                    <div>
-                        <div class="textNameCat">
-                          Administración I
-                        </div>
-                        <div class="textLastNameCat">
-                          Cátedra B
-                        </div>
-                    </div>
-                  </div>
-                  <div class="itemList">
-                    <div class="icoListCat">
-                      A
-                    </div>
-                    <div>
-                        <div class="textNameCat">
-                          Administración I
-                        </div>
-                        <div class="textLastNameCat">
-                          Cátedra C
-                        </div>
-                    </div>
-                  </div>
-
-                  <div class="itemList">
-                    <div class="icoListCat">
-                      C
-                    </div>
-                    <div>
-                        <div class="textNameCat">
-                          Contabilidad superior I
-                        </div>
-                        <div class="textLastNameCat">
-                          Cátedra A
-                        </div>
-                    </div>
-                  </div>
-                  <div class="itemList">
-                    <div class="icoListCat">
-                      C
-                    </div>
-                    <div>
-                        <div class="textNameCat">
-                          Contabilidad superior I
-                        </div>
-                        <div class="textLastNameCat">
-                          Cátedra B
-                        </div>
-                    </div>
-                  </div>
-                  <div class="itemList">
-                    <div class="icoListCat">
-                      C
-                    </div>
-                    <div>
-                        <div class="textNameCat">
-                          Contabilidad superior I
-                        </div>
-                        <div class="textLastNameCat">
-                          Cátedra C
-                        </div>
-                    </div>
-                  </div>
-
-                  <div class="itemList">
-                    <div class="icoListCat">
-                      I
-                    </div>
-                    <div>
-                        <div class="textNameCat">
-                          Introducción a la economía y estructura económica argentina
-                        </div>
-                        <div class="textLastNameCat">
-
-                        </div>
-                    </div>
-                  </div>
-
-            </div>
-
-          </div>
-
-
+      <div class="contentLeft">
+        <div class="btnsSearch">
+            <button type="button" class="btnSearch" ng-click="view.style = 'busquedaPorDocente'">
+              DOCENTE
+            </button>
+            <button type="button" class="btnSearch" ng-click="view.style = 'busquedaPorCatedra'">
+              CÁTEDRA
+            </button>
         </div>
-        <div class="contentRight">
-
-          <div class="contentDocente">
-            <div>
-              <div class="titleCatedra"><b>Aberaldi Juan Antonio</b></div>
-
-              <div class="titleDocente">PROFESOR TITULAR: </div>
-
-              <div>Administración I - Cátedra A</div>
-              <div>Administración II - Cátedra A</div>
-
-              <div class="titleDocente">PROFESOR ADJUNTO:</div>
-              <div>Contabilidad I - Cátedra A</div>
-
-            </div>
-
-          </div>
-
-          <div class="contentCatedra">
-              <div>
-                  <div class="titleCatedra"><b>Administración I - Cátedra A</b></div>
-
-                  <div class="titleDocente">PROFESORES TITULARES:</div>
-
-                  <div>PAOLINI, Norma</div>
-
-                  <div class="titleDocente">PROFESORES ADJUNTOS:</div>
-
-                  <div>AGUIRRE MARIA MARTA</div>
-                  <div>ALVAREZ GELVES DIEGO CESAR</div>
-                  <div>BURRY RICARDO</div>
-                  <div>DI GIOVAN BATTISTA NICOLAS</div>
-                  <div>ELIZALDE PEDRO FELIX MARIA</div>
-                  <div>LOPEZ ARMENGOL MARTIN ANIBAL</div>
-                  <div>MARTINS MOGO DANIEL HERNÁN</div>
-                  <div>PAOLINI, Norma Adela</div>
-
-
-              </div>
-              <div>
-              <div class="titleDocente">JEFE DE AUXILIARES DOCENTES</div>
-
-              <div>DI GIOVAN BATTISTA, Juan Pablo</div>
-              <div>NÓBILE, Cecilia Inés</div>
-              <div>SCARAMELLINI, Nora</div>
-
-              <div class="titleDocente">AYUDANTES DIPLOMADOS</div>
-
-              <div>ALFONSO ALEJANDRA MARIANA</div>
-              <div>BERTOLDI ANA JULIA</div>
-              <div>FARIAS MARIA ROSA ADRIANA</div>
-              <div>GONZÁLEZ JULIÁN MATIAS</div>
-              <div>HASPERUÉ GASTÓN (Supl.)</div>
-              <div>LUNGHI CARLOS GUILLERMO</div>
-              <div>MILLAN GUILLERMO ROGELIO</div>
-              <div>ODRIOZOLA JULIETA</div>
-              <div>PLANO MARÍA AMANDA</div>
-
-              <div class="titleDocente">AYUDANTES ALUMNOS</div>
-
-              <div>BERRI SEBASTIAN</div>
-              <div>DE LUCA JUAN IGNACIO</div>
-              <div>FANJUL NICOLAS FRANCISCO</div>
-              <div>FERNANDEZ DANIELA</div>
-              <div>GUERRERO MARTIN ESTEBAN</div>
-              <div>LAFUENTE FLORENCIA GRACIELA</div>
-              <div>REMES LENICOV MARIA LAURA</div>
-              <div>SEVERO FRANCISCO DARIO</div>
-              <div>FERNANDEZ DANIELA</div>
-              <div>GUERRERO MARTIN ESTEBAN</div>
-              <div>LAFUENTE FLORENCIA GRACIELA</div>
-              <div>REMES LENICOV MARIA LAURA</div>
-              <div>SEVERO FRANCISCO DARIO</div>
-              </div>
-          </div>
-
-        </div>
+        
+        <div class="searchDocente" ng-include="'./modules/teacher/teacher.html?r='+nocache" ></div>
+        <div class="searchCatedra" ng-include="'./modules/teacher/cathedra.html?r='+nocache" ></div>
+      </div>
+      
+      <div class="contentRight">
+        <div  class="contentDocente" ng-include="'./modules/teacher/showTeacher.html?r='+nocache" ></div>
+        <div  class="contentCatedra" ng-include="'./modules/teacher/showCathedra.html?r='+nocache" ></div>
+      </div>
     </div>
   </main>
 
