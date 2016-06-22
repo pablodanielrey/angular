@@ -1,4 +1,4 @@
-<div class="orders {{view.style}} {{view.style2}}">
+<div class="myOrders {{view.style}} {{view.style2}}">
 
     <!-- VARIABLES
     pantallaDetallePedido
@@ -6,13 +6,22 @@
     pantallaNuevoPedido (buscarOficina, buscarArea, buscarConsulta)
     -->
 
+
     <div class="header">
         <div class="contentHeader">
-            <div>
+            <div class="textMisPedidos">
               Mis Pedidos
             </div>
             <div>
-                <button class="btnApply" ng-click="view.style = 'pantallaNuevoPedido'">nuevo PEDIDO</button>
+              <i class="fa fa-sliders" aria-hidden="true"></i> FILTROS
+              <button><i class="fa fa-search" aria-hidden="true"></i></button>
+              <button><i class="fa fa-calendar-o" aria-hidden="true"></i></button>
+              <button><i class="fa fa-sort-amount-asc" aria-hidden="true"></i></button>
+
+            </div>
+            <div class="contentBtnNewOrder"  ng-click="view.style = 'pantallaNuevoPedido'">
+                <div class="btnNewOrder"><i class="fa fa-pencil"></i></div>
+                <div class="btnNewOrder2"> NUEVO PEDIDO</div>
             </div>
         </div>
     </div>
@@ -124,7 +133,7 @@
 
     <div class="contentOrders">
 
-        <div class="itemOrders">
+        <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
 
             <div class="itemInfo">
 
@@ -135,53 +144,79 @@
                 </div>
 
                 <div class="itemStatus">
-                    <div class="status colorOpen">
-                        ABIERTA
+                    <div class="status abierta">
+                        <!-- VARIABLES:
+                        abierta, enProgreso, cerrada, pausada, rechazada -->
+                        <div class="textA1">ABIERTA</div>
+                        <div class="textA2"></div>
+                        <div class="textEC1">EN CURSO</div>
+                        <div class="textEC2"></div>
+                        <div class="textC1">CERRADA</div>
+                        <div class="textC2"></div>
+                        <div class="textP1">PAUSADA</div>
+                        <div class="textP2"></div>
+                        <div class="textR1">RECHAZADA</div>
+                        <div class="textR2"></div>
                     </div>
                 </div>
 
                 <div class="itemsType">
-                      <div class="textType">MANTENIMIENTO:</div>
-                        <div class="textSubType">Problema eléctrico</div>
+                      <div class="textMini">Para:</div>
+                      <div class="textType">MANTENIMIENTO</div>
+                      <div class="textSubType">Problema eléctrico</div>
                 </div>
 
                 <div class="itemsOffice">
-                      <div class="textOffice">MANTENIMIENTO Y PRODUCCIÓN</div>
-                        <!-- <div class="textName">Emanuel País</div> -->
+                      <div class="textMini">De:</div>
+                      <div class="textOffice">DITESI</div>
+                        <div class="textName">Emanuel País</div>
                 </div>
 
             </div>
 
-            <div class="itemActions" ng-click="view.style = 'pantallaDetallePedido'">
+            <div class="itemActions">
               <i class=" fa fa-angle-right" aria-hidden="true"></i>
             </div>
 
         </div>
 
-        <div class="itemOrders">
+        <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
 
             <div class="itemInfo">
 
                 <div class="itemDate">
-                    <div class="textNumerOrders">Nº 112365</div>
-                    <div class="textDateOrders">25 May. 2016 - 08:20 hs</div>
+                    <div class="textNumerOrders">Nº 112369</div>
+                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
                     <div class="textDaysOrders">Hoy</div>
                 </div>
 
                 <div class="itemStatus">
-                    <div class="status colorOpen">
-                        ABIERTA
+                    <div class="status enProgreso">
+                        <!-- VARIABLES:
+                        abierta, enProgreso, cerrada, pausada, rechazada -->
+                        <div class="textA1">ABIERTA</div>
+                        <div class="textA2"></div>
+                        <div class="textEC1">EN CURSO</div>
+                        <div class="textEC2"></div>
+                        <div class="textC1">CERRADA</div>
+                        <div class="textC2"></div>
+                        <div class="textP1">PAUSADA</div>
+                        <div class="textP2"></div>
+                        <div class="textR1">RECHAZADA</div>
+                        <div class="textR2"></div>
                     </div>
                 </div>
 
                 <div class="itemsType">
-                      <div class="textType">SOPORTE TÉCNICO:</div>
-                        <div class="textSubType">Error Windows</div>
+                      <div class="textMini">Para:</div>
+                      <div class="textType">MANTENIMIENTO</div>
+                      <div class="textSubType">Problema eléctrico</div>
                 </div>
 
                 <div class="itemsOffice">
-                      <div class="textOffice">CECIN (312)</div>
-                        <div class="textName">Ailen Bauchet</div>
+                      <div class="textMini">De:</div>
+                      <div class="textOffice">DITESI</div>
+                        <div class="textName">Emanuel País</div>
                 </div>
 
             </div>
@@ -192,30 +227,43 @@
 
         </div>
 
-        <div class="itemOrders">
+        <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
 
             <div class="itemInfo">
 
                 <div class="itemDate">
-                    <div class="textNumerOrders">Nº 112363</div>
-                    <div class="textDateOrders">25 May. 2016 - 16:14 hs</div>
-                    <div class="textDaysOrders">Hace 1 días</div>
+                    <div class="textNumerOrders">Nº 112369</div>
+                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
+                    <div class="textDaysOrders">Hoy</div>
                 </div>
 
                 <div class="itemStatus">
-                    <div class="status colorProgres">
-                        EN CURSO
+                    <div class="status cerrada">
+                        <!-- VARIABLES:
+                        abierta, enProgreso, cerrada, pausada, rechazada -->
+                        <div class="textA1">ABIERTA</div>
+                        <div class="textA2"></div>
+                        <div class="textEC1">EN CURSO</div>
+                        <div class="textEC2"></div>
+                        <div class="textC1">CERRADA</div>
+                        <div class="textC2"></div>
+                        <div class="textP1">PAUSADA</div>
+                        <div class="textP2"></div>
+                        <div class="textR1">RECHAZADA</div>
+                        <div class="textR2"></div>
                     </div>
                 </div>
 
                 <div class="itemsType">
-                      <div class="textType">SOPORTE TÉCNICO:</div>
-                        <div class="textSubType">Problemas CPU</div>
+                      <div class="textMini">Para:</div>
+                      <div class="textType">MANTENIMIENTO</div>
+                      <div class="textSubType">Problema eléctrico</div>
                 </div>
 
                 <div class="itemsOffice">
-                      <div class="textOffice">FINANCIERO</div>
-                        <div class="textName">Soledad Bolano</div>
+                      <div class="textMini">De:</div>
+                      <div class="textOffice">DITESI</div>
+                        <div class="textName">Emanuel País</div>
                 </div>
 
             </div>
@@ -225,6 +273,618 @@
             </div>
 
         </div>
+
+        <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
+
+            <div class="itemInfo">
+
+                <div class="itemDate">
+                    <div class="textNumerOrders">Nº 112369</div>
+                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
+                    <div class="textDaysOrders">Hoy</div>
+                </div>
+
+                <div class="itemStatus">
+                    <div class="status pausada">
+                        <!-- VARIABLES:
+                        abierta, enProgreso, cerrada, pausada, rechazada -->
+                        <div class="textA1">ABIERTA</div>
+                        <div class="textA2"></div>
+                        <div class="textEC1">EN CURSO</div>
+                        <div class="textEC2"></div>
+                        <div class="textC1">CERRADA</div>
+                        <div class="textC2"></div>
+                        <div class="textP1">PAUSADA</div>
+                        <div class="textP2"></div>
+                        <div class="textR1">RECHAZADA</div>
+                        <div class="textR2"></div>
+                    </div>
+                </div>
+
+                <div class="itemsType">
+                      <div class="textMini">Para:</div>
+                      <div class="textType">MANTENIMIENTO</div>
+                      <div class="textSubType">Problema eléctrico</div>
+                </div>
+
+                <div class="itemsOffice">
+                      <div class="textMini">De:</div>
+                      <div class="textOffice">DITESI</div>
+                        <div class="textName">Emanuel País</div>
+                </div>
+
+            </div>
+
+            <div class="itemActions">
+              <i class=" fa fa-angle-right" aria-hidden="true"></i>
+            </div>
+
+        </div>
+
+        <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
+
+            <div class="itemInfo">
+
+                <div class="itemDate">
+                    <div class="textNumerOrders">Nº 112369</div>
+                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
+                    <div class="textDaysOrders">Hoy</div>
+                </div>
+
+                <div class="itemStatus">
+                    <div class="status abierta">
+                        <!-- VARIABLES:
+                        abierta, enProgreso, cerrada, pausada, rechazada -->
+                        <div class="textA1">ABIERTA</div>
+                        <div class="textA2"></div>
+                        <div class="textEC1">EN CURSO</div>
+                        <div class="textEC2"></div>
+                        <div class="textC1">CERRADA</div>
+                        <div class="textC2"></div>
+                        <div class="textP1">PAUSADA</div>
+                        <div class="textP2"></div>
+                        <div class="textR1">RECHAZADA</div>
+                        <div class="textR2"></div>
+                    </div>
+                </div>
+
+                <div class="itemsType">
+                      <div class="textMini">Para:</div>
+                      <div class="textType">MANTENIMIENTO</div>
+                      <div class="textSubType">Problema eléctrico</div>
+                </div>
+
+                <div class="itemsOffice">
+                      <div class="textMini">De:</div>
+                      <div class="textOffice">DITESI</div>
+                        <div class="textName">Emanuel País</div>
+                </div>
+
+            </div>
+
+            <div class="itemActions">
+              <i class=" fa fa-angle-right" aria-hidden="true"></i>
+            </div>
+
+        </div>
+
+        <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
+
+            <div class="itemInfo">
+
+                <div class="itemDate">
+                    <div class="textNumerOrders">Nº 112369</div>
+                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
+                    <div class="textDaysOrders">Hoy</div>
+                </div>
+
+                <div class="itemStatus">
+                    <div class="status enProgreso">
+                        <!-- VARIABLES:
+                        abierta, enProgreso, cerrada, pausada, rechazada -->
+                        <div class="textA1">ABIERTA</div>
+                        <div class="textA2"></div>
+                        <div class="textEC1">EN CURSO</div>
+                        <div class="textEC2"></div>
+                        <div class="textC1">CERRADA</div>
+                        <div class="textC2"></div>
+                        <div class="textP1">PAUSADA</div>
+                        <div class="textP2"></div>
+                        <div class="textR1">RECHAZADA</div>
+                        <div class="textR2"></div>
+                    </div>
+                </div>
+
+                <div class="itemsType">
+                      <div class="textMini">Para:</div>
+                      <div class="textType">MANTENIMIENTO</div>
+                      <div class="textSubType">Problema eléctrico</div>
+                </div>
+
+                <div class="itemsOffice">
+                      <div class="textMini">De:</div>
+                      <div class="textOffice">DITESI</div>
+                        <div class="textName">Emanuel País</div>
+                </div>
+
+            </div>
+
+            <div class="itemActions">
+              <i class=" fa fa-angle-right" aria-hidden="true"></i>
+            </div>
+
+        </div>
+
+        <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
+
+            <div class="itemInfo">
+
+                <div class="itemDate">
+                    <div class="textNumerOrders">Nº 112369</div>
+                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
+                    <div class="textDaysOrders">Hoy</div>
+                </div>
+
+                <div class="itemStatus">
+                    <div class="status cerrada">
+                        <!-- VARIABLES:
+                        abierta, enProgreso, cerrada, pausada, rechazada -->
+                        <div class="textA1">ABIERTA</div>
+                        <div class="textA2"></div>
+                        <div class="textEC1">EN CURSO</div>
+                        <div class="textEC2"></div>
+                        <div class="textC1">CERRADA</div>
+                        <div class="textC2"></div>
+                        <div class="textP1">PAUSADA</div>
+                        <div class="textP2"></div>
+                        <div class="textR1">RECHAZADA</div>
+                        <div class="textR2"></div>
+                    </div>
+                </div>
+
+                <div class="itemsType">
+                      <div class="textMini">Para:</div>
+                      <div class="textType">MANTENIMIENTO</div>
+                      <div class="textSubType">Problema eléctrico</div>
+                </div>
+
+                <div class="itemsOffice">
+                      <div class="textMini">De:</div>
+                      <div class="textOffice">DITESI</div>
+                        <div class="textName">Emanuel País</div>
+                </div>
+
+            </div>
+
+            <div class="itemActions">
+              <i class=" fa fa-angle-right" aria-hidden="true"></i>
+            </div>
+
+        </div>
+
+        <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
+
+            <div class="itemInfo">
+
+                <div class="itemDate">
+                    <div class="textNumerOrders">Nº 112369</div>
+                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
+                    <div class="textDaysOrders">Hoy</div>
+                </div>
+
+                <div class="itemStatus">
+                    <div class="status pausada">
+                        <!-- VARIABLES:
+                        abierta, enProgreso, cerrada, pausada, rechazada -->
+                        <div class="textA1">ABIERTA</div>
+                        <div class="textA2"></div>
+                        <div class="textEC1">EN CURSO</div>
+                        <div class="textEC2"></div>
+                        <div class="textC1">CERRADA</div>
+                        <div class="textC2"></div>
+                        <div class="textP1">PAUSADA</div>
+                        <div class="textP2"></div>
+                        <div class="textR1">RECHAZADA</div>
+                        <div class="textR2"></div>
+                    </div>
+                </div>
+
+                <div class="itemsType">
+                      <div class="textMini">Para:</div>
+                      <div class="textType">MANTENIMIENTO</div>
+                      <div class="textSubType">Problema eléctrico</div>
+                </div>
+
+                <div class="itemsOffice">
+                      <div class="textMini">De:</div>
+                      <div class="textOffice">DITESI</div>
+                        <div class="textName">Emanuel País</div>
+                </div>
+
+            </div>
+
+            <div class="itemActions">
+              <i class=" fa fa-angle-right" aria-hidden="true"></i>
+            </div>
+
+        </div>
+
+        <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
+
+            <div class="itemInfo">
+
+                <div class="itemDate">
+                    <div class="textNumerOrders">Nº 112369</div>
+                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
+                    <div class="textDaysOrders">Hoy</div>
+                </div>
+
+                <div class="itemStatus">
+                    <div class="status abierta">
+                        <!-- VARIABLES:
+                        abierta, enProgreso, cerrada, pausada, rechazada -->
+                        <div class="textA1">ABIERTA</div>
+                        <div class="textA2"></div>
+                        <div class="textEC1">EN CURSO</div>
+                        <div class="textEC2"></div>
+                        <div class="textC1">CERRADA</div>
+                        <div class="textC2"></div>
+                        <div class="textP1">PAUSADA</div>
+                        <div class="textP2"></div>
+                        <div class="textR1">RECHAZADA</div>
+                        <div class="textR2"></div>
+                    </div>
+                </div>
+
+                <div class="itemsType">
+                      <div class="textMini">Para:</div>
+                      <div class="textType">MANTENIMIENTO</div>
+                      <div class="textSubType">Problema eléctrico</div>
+                </div>
+
+                <div class="itemsOffice">
+                      <div class="textMini">De:</div>
+                      <div class="textOffice">DITESI</div>
+                        <div class="textName">Emanuel País</div>
+                </div>
+
+            </div>
+
+            <div class="itemActions">
+              <i class=" fa fa-angle-right" aria-hidden="true"></i>
+            </div>
+
+        </div>
+
+        <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
+
+            <div class="itemInfo">
+
+                <div class="itemDate">
+                    <div class="textNumerOrders">Nº 112369</div>
+                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
+                    <div class="textDaysOrders">Hoy</div>
+                </div>
+
+                <div class="itemStatus">
+                    <div class="status enProgreso">
+                        <!-- VARIABLES:
+                        abierta, enProgreso, cerrada, pausada, rechazada -->
+                        <div class="textA1">ABIERTA</div>
+                        <div class="textA2"></div>
+                        <div class="textEC1">EN CURSO</div>
+                        <div class="textEC2"></div>
+                        <div class="textC1">CERRADA</div>
+                        <div class="textC2"></div>
+                        <div class="textP1">PAUSADA</div>
+                        <div class="textP2"></div>
+                        <div class="textR1">RECHAZADA</div>
+                        <div class="textR2"></div>
+                    </div>
+                </div>
+
+                <div class="itemsType">
+                      <div class="textMini">Para:</div>
+                      <div class="textType">MANTENIMIENTO</div>
+                      <div class="textSubType">Problema eléctrico</div>
+                </div>
+
+                <div class="itemsOffice">
+                      <div class="textMini">De:</div>
+                      <div class="textOffice">DITESI</div>
+                        <div class="textName">Emanuel País</div>
+                </div>
+
+            </div>
+
+            <div class="itemActions">
+              <i class=" fa fa-angle-right" aria-hidden="true"></i>
+            </div>
+
+        </div>
+
+        <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
+
+            <div class="itemInfo">
+
+                <div class="itemDate">
+                    <div class="textNumerOrders">Nº 112369</div>
+                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
+                    <div class="textDaysOrders">Hoy</div>
+                </div>
+
+                <div class="itemStatus">
+                    <div class="status cerrada">
+                        <!-- VARIABLES:
+                        abierta, enProgreso, cerrada, pausada, rechazada -->
+                        <div class="textA1">ABIERTA</div>
+                        <div class="textA2"></div>
+                        <div class="textEC1">EN CURSO</div>
+                        <div class="textEC2"></div>
+                        <div class="textC1">CERRADA</div>
+                        <div class="textC2"></div>
+                        <div class="textP1">PAUSADA</div>
+                        <div class="textP2"></div>
+                        <div class="textR1">RECHAZADA</div>
+                        <div class="textR2"></div>
+                    </div>
+                </div>
+
+                <div class="itemsType">
+                      <div class="textMini">Para:</div>
+                      <div class="textType">MANTENIMIENTO</div>
+                      <div class="textSubType">Problema eléctrico</div>
+                </div>
+
+                <div class="itemsOffice">
+                      <div class="textMini">De:</div>
+                      <div class="textOffice">DITESI</div>
+                        <div class="textName">Emanuel País</div>
+                </div>
+
+            </div>
+
+            <div class="itemActions">
+              <i class=" fa fa-angle-right" aria-hidden="true"></i>
+            </div>
+
+        </div>
+
+        <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
+
+            <div class="itemInfo">
+
+                <div class="itemDate">
+                    <div class="textNumerOrders">Nº 112369</div>
+                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
+                    <div class="textDaysOrders">Hoy</div>
+                </div>
+
+                <div class="itemStatus">
+                    <div class="status pausada">
+                        <!-- VARIABLES:
+                        abierta, enProgreso, cerrada, pausada, rechazada -->
+                        <div class="textA1">ABIERTA</div>
+                        <div class="textA2"></div>
+                        <div class="textEC1">EN CURSO</div>
+                        <div class="textEC2"></div>
+                        <div class="textC1">CERRADA</div>
+                        <div class="textC2"></div>
+                        <div class="textP1">PAUSADA</div>
+                        <div class="textP2"></div>
+                        <div class="textR1">RECHAZADA</div>
+                        <div class="textR2"></div>
+                    </div>
+                </div>
+
+                <div class="itemsType">
+                      <div class="textMini">Para:</div>
+                      <div class="textType">MANTENIMIENTO</div>
+                      <div class="textSubType">Problema eléctrico</div>
+                </div>
+
+                <div class="itemsOffice">
+                      <div class="textMini">De:</div>
+                      <div class="textOffice">DITESI</div>
+                        <div class="textName">Emanuel País</div>
+                </div>
+
+            </div>
+
+            <div class="itemActions">
+              <i class=" fa fa-angle-right" aria-hidden="true"></i>
+            </div>
+
+        </div>
+
+        <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
+
+            <div class="itemInfo">
+
+                <div class="itemDate">
+                    <div class="textNumerOrders">Nº 112369</div>
+                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
+                    <div class="textDaysOrders">Hoy</div>
+                </div>
+
+                <div class="itemStatus">
+                    <div class="status abierta">
+                        <!-- VARIABLES:
+                        abierta, enProgreso, cerrada, pausada, rechazada -->
+                        <div class="textA1">ABIERTA</div>
+                        <div class="textA2"></div>
+                        <div class="textEC1">EN CURSO</div>
+                        <div class="textEC2"></div>
+                        <div class="textC1">CERRADA</div>
+                        <div class="textC2"></div>
+                        <div class="textP1">PAUSADA</div>
+                        <div class="textP2"></div>
+                        <div class="textR1">RECHAZADA</div>
+                        <div class="textR2"></div>
+                    </div>
+                </div>
+
+                <div class="itemsType">
+                      <div class="textMini">Para:</div>
+                      <div class="textType">MANTENIMIENTO</div>
+                      <div class="textSubType">Problema eléctrico</div>
+                </div>
+
+                <div class="itemsOffice">
+                      <div class="textMini">De:</div>
+                      <div class="textOffice">DITESI</div>
+                        <div class="textName">Emanuel País</div>
+                </div>
+
+            </div>
+
+            <div class="itemActions">
+              <i class=" fa fa-angle-right" aria-hidden="true"></i>
+            </div>
+
+        </div>
+
+        <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
+
+            <div class="itemInfo">
+
+                <div class="itemDate">
+                    <div class="textNumerOrders">Nº 112369</div>
+                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
+                    <div class="textDaysOrders">Hoy</div>
+                </div>
+
+                <div class="itemStatus">
+                    <div class="status enProgreso">
+                        <!-- VARIABLES:
+                        abierta, enProgreso, cerrada, pausada, rechazada -->
+                        <div class="textA1">ABIERTA</div>
+                        <div class="textA2"></div>
+                        <div class="textEC1">EN CURSO</div>
+                        <div class="textEC2"></div>
+                        <div class="textC1">CERRADA</div>
+                        <div class="textC2"></div>
+                        <div class="textP1">PAUSADA</div>
+                        <div class="textP2"></div>
+                        <div class="textR1">RECHAZADA</div>
+                        <div class="textR2"></div>
+                    </div>
+                </div>
+
+                <div class="itemsType">
+                      <div class="textMini">Para:</div>
+                      <div class="textType">MANTENIMIENTO</div>
+                      <div class="textSubType">Problema eléctrico</div>
+                </div>
+
+                <div class="itemsOffice">
+                      <div class="textMini">De:</div>
+                      <div class="textOffice">DITESI</div>
+                        <div class="textName">Emanuel País</div>
+                </div>
+
+            </div>
+
+            <div class="itemActions">
+              <i class=" fa fa-angle-right" aria-hidden="true"></i>
+            </div>
+
+        </div>
+
+        <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
+
+            <div class="itemInfo">
+
+                <div class="itemDate">
+                    <div class="textNumerOrders">Nº 112369</div>
+                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
+                    <div class="textDaysOrders">Hoy</div>
+                </div>
+
+                <div class="itemStatus">
+                    <div class="status cerrada">
+                        <!-- VARIABLES:
+                        abierta, enProgreso, cerrada, pausada, rechazada -->
+                        <div class="textA1">ABIERTA</div>
+                        <div class="textA2"></div>
+                        <div class="textEC1">EN CURSO</div>
+                        <div class="textEC2"></div>
+                        <div class="textC1">CERRADA</div>
+                        <div class="textC2"></div>
+                        <div class="textP1">PAUSADA</div>
+                        <div class="textP2"></div>
+                        <div class="textR1">RECHAZADA</div>
+                        <div class="textR2"></div>
+                    </div>
+                </div>
+
+                <div class="itemsType">
+                      <div class="textMini">Para:</div>
+                      <div class="textType">MANTENIMIENTO</div>
+                      <div class="textSubType">Problema eléctrico</div>
+                </div>
+
+                <div class="itemsOffice">
+                      <div class="textMini">De:</div>
+                      <div class="textOffice">DITESI</div>
+                        <div class="textName">Emanuel País</div>
+                </div>
+
+            </div>
+
+            <div class="itemActions">
+              <i class=" fa fa-angle-right" aria-hidden="true"></i>
+            </div>
+
+        </div>
+
+        <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
+
+            <div class="itemInfo">
+
+                <div class="itemDate">
+                    <div class="textNumerOrders">Nº 112369</div>
+                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
+                    <div class="textDaysOrders">Hoy</div>
+                </div>
+
+                <div class="itemStatus">
+                    <div class="status pausada">
+                        <!-- VARIABLES:
+                        abierta, enProgreso, cerrada, pausada, rechazada -->
+                        <div class="textA1">ABIERTA</div>
+                        <div class="textA2"></div>
+                        <div class="textEC1">EN CURSO</div>
+                        <div class="textEC2"></div>
+                        <div class="textC1">CERRADA</div>
+                        <div class="textC2"></div>
+                        <div class="textP1">PAUSADA</div>
+                        <div class="textP2"></div>
+                        <div class="textR1">RECHAZADA</div>
+                        <div class="textR2"></div>
+                    </div>
+                </div>
+
+                <div class="itemsType">
+                      <div class="textMini">Para:</div>
+                      <div class="textType">MANTENIMIENTO</div>
+                      <div class="textSubType">Problema eléctrico</div>
+                </div>
+
+                <div class="itemsOffice">
+                      <div class="textMini">De:</div>
+                      <div class="textOffice">DITESI</div>
+                        <div class="textName">Emanuel País</div>
+                </div>
+
+            </div>
+
+            <div class="itemActions">
+              <i class=" fa fa-angle-right" aria-hidden="true"></i>
+            </div>
+
+        </div>
+
 
     </div>
 

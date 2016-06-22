@@ -1,21 +1,19 @@
-.orders {
+.myOrders {
   height: 100%;
   width: 100%;
   overflow-y: auto;
 }
 
-.orders .header {
+.myOrders .header {
   height: 102px;
   width: 100%;
   background: #DBE2E5;
   color: #5C5F69;
-  padding-left: 50px;
-  font-size: 1.5em;
 
 }
 
-.orders .contentHeader {
-  width: 92%;
+.myOrders .contentHeader {
+  width: 100%;
   display: flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
@@ -30,18 +28,63 @@
   -moz-justify-content: space-between;
 }
 
+.myOrders .textMisPedidos {
+  margin-left: 20px;
+}
+
+.myOrders .contentBtnNewOrder {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+}
+
+.myOrders .btnNewOrder {
+  border: none;
+  color: white;
+  background-color: #809612 !important;
+  padding: 15px;
+  border-radius: 100% 0 0 100%;
+  font-size: 25px;
+  margin: 0px !important;
+  cursor: pointer;
+}
+
+.myOrders .btnNewOrder2 {
+  border: none;
+  color: white;
+  background-color: #92AD17 !important;
+  padding: 13px;
+  font-size: 14px;
+  margin: 0px !important;
+  width: 50px;
+  cursor: pointer;
+}
+
+.myOrders .btnNewOrder2:hover {
+  background-color: #809612 !important;
+}
+.myOrders .btnNewOrder:hover {
+  background-color: #92AD17 !important;
+}
+
 /******************************************************
 ************ INICIO PANTALLA DE HOME ******************
 *******************************************************/
 
-.orders .contentOrders {
+.myOrders .contentOrders {
   background-color: #F1F1F1;
   width: 100%;
   max-height: 75%;
   overflow-y: auto;
 }
 
-.orders .itemOrders {
+.myOrders .itemOrders {
   width: 95%;
   height: 85px;
   background-color: white;
@@ -66,12 +109,12 @@
   -webkit-border-radius: 3px;
 }
 
-.orders .itemOrders:hover {
+.myOrders .itemOrders:hover {
   box-shadow: 2px 2px 2px 2px #E2E2E2;
 }
 
 
-.orders .itemInfo {
+.myOrders .itemInfo {
   display: flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
@@ -83,12 +126,12 @@
   -moz-align-items:center; /* mozilla */
 }
 
-.orders .itemStatus {
+.myOrders .itemStatus {
   /*background-color: yellow;*/
   width: 150px;
 }
 
-.orders .status {
+.myOrders .status {
   padding: 5px;
   border-radius: 3px;
   -moz-border-radius: 3px;
@@ -100,33 +143,91 @@
   text-align: center;
 }
 
-.orders .colorOpen {
+.myOrders .abierta {
   background-color: #92AD17;
 }
 
-.orders .colorProgres {
+.myOrders .enProgreso {
     background-color: #0066A6;
 }
 
-.orders .colorPause {
+.myOrders .pausada {
   background-color: #EC9122;
 }
 
-.orders .colorCancel {
+.myOrders .rechazada {
   background-color: #E43E46;
 }
 
-.orders .colorClose {
+.myOrders .cerrada {
   background-color: #afbec5;
 }
 
 
-.orders .itemsType {
+.myOrders .itemsType {
   width: 210px;
   /*background-color: blue;*/
 }
 
-.orders .itemActions {
+.myOrders .status.abierta .textEC1,
+.myOrders .status.abierta .textEC2,
+.myOrders .status.abierta .textC1,
+.myOrders .status.abierta .textC2,
+.myOrders .status.abierta .textP1,
+.myOrders .status.abierta .textP2,
+.myOrders .status.abierta .textR1,
+.myOrders .status.abierta .textR2 {
+  display: none;
+}
+
+.myOrders .status.enProgreso .textA1,
+.myOrders .status.enProgreso .textA2,
+.myOrders .status.enProgreso .textC1,
+.myOrders .status.enProgreso .textC2,
+.myOrders .status.enProgreso .textP1,
+.myOrders .status.enProgreso .textP2,
+.myOrders .status.enProgreso .textR1,
+.myOrders .status.enProgreso .textR2 {
+  display: none;
+}
+
+.myOrders .status.cerrada .textA1,
+.myOrders .status.cerrada .textA2,
+.myOrders .status.cerrada .textEC1,
+.myOrders .status.cerrada .textEC2,
+.myOrders .status.cerrada .textP1,
+.myOrders .status.cerrada .textP2,
+.myOrders .status.cerrada .textR1,
+.myOrders .status.cerrada .textR2 {
+  display: none;
+}
+
+.myOrders .status.pausada .textA1,
+.myOrders .status.pausada .textA2,
+.myOrders .status.pausada .textEC1,
+.myOrders .status.pausada .textEC2,
+.myOrders .status.pausada .textC1,
+.myOrders .status.pausada .textC2,
+.myOrders .status.pausada .textR1,
+.myOrders .status.pausada .textR2 {
+  display: none;
+}
+
+.myOrders .status.rechazada .textA1,
+.myOrders .status.rechazada .textA2,
+.myOrders .status.rechazada .textEC1,
+.myOrders .status.rechazada .textEC2,
+.myOrders .status.rechazada .textC1,
+.myOrders .status.rechazada .textC2,
+.myOrders .status.rechazada .textP1,
+.myOrders .status.rechazada .textP2 {
+  display: none;
+}
+
+
+
+
+.myOrders .itemActions {
   margin: 10px;
   height: 65px;
   width: 80px;
@@ -147,18 +248,18 @@
   -moz-justify-content: center;
 }
 
-.orders .itemActions:hover {
+.myOrders .itemActions:hover {
   cursor: pointer;
 }
 
-.orders .itemDate {
+.myOrders .itemDate {
   font-size: 12px;
   /*background: red;*/
   width: 190px;
   margin-left: 20px;
 }
 
-.orders .itemDate2 {
+.myOrders .itemDate2 {
   font-size: 12px;
   /*background: red;*/
   width: 130px;
@@ -166,29 +267,34 @@
 }
 
 
-.orders .textNumerOrders2 {
+.myOrders .textNumerOrders2 {
   color: #434343;
   font-weight: bold;
   font-size: 16px;
 }
 
-.orders .textNumerOrders,
-.orders .textType,
-.orders .textOffice {
+.myOrders .textNumerOrders,
+.myOrders .textType,
+.myOrders .textOffice {
   color: #434343;
   font-weight: bold;
   font-size: 14px;
 }
 
-.orders .textDateOrders,
-.orders .textDaysOrders {
+.myOrders .textDateorders,
+.myOrders .textDaysOrders {
   color:#848484;
 }
 
-.orders .textSubType,
-.orders .textName {
+.myOrders .textSubType,
+.myOrders .textName {
   font-size: 13px;
     color:#434343;
+}
+
+.myOrders .textMini {
+  font-size: 12px;
+  color:#92AD17;
 }
 
 
@@ -196,7 +302,7 @@
 ******************* DETALLES DEL PEDIDO ********************
 ***********************************************************/
 
-.orders.pantallaDetallePedido .contentOrderDetail {
+.myOrders.pantallaDetallePedido .contentOrderDetail {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -211,7 +317,7 @@
           transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
 }
 
-.orders .contentOrderDetail {
+.myOrders .contentOrderDetail {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -225,7 +331,7 @@
           transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
 }
 
-.orders .headerDetail {
+.myOrders .headerDetail {
   height: 85px;
   display: flex;
   display: -webkit-flex; /* Safari */
@@ -242,13 +348,13 @@
   border-bottom: 1px solid #E2E2E2;
 }
 
-.orders .contentTotalReplys {
+.myOrders .contentTotalReplys {
   overflow-y: auto;
   height: 50%;
   /*background-color: red;*/
 }
 
-.orders .detail {
+.myOrders .detail {
   display: flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
@@ -260,11 +366,11 @@
   -moz-align-items:center; /* mozilla */
 }
 
-.orders .contentBtnReturn {
+.myOrders .contentBtnReturn {
   margin-left: 20px;
 }
 
-.orders .btnReturn {
+.myOrders .btnReturn {
   background-color: #BFC0C5;
   font-size: 40px;
   color: white;
@@ -275,17 +381,17 @@
   padding: 5px 20px 5px 20px;
 }
 
-.orders .btnReturn:hover{
+.myOrders .btnReturn:hover{
   background-color: #DBE2E5;
   cursor: pointer;
 }
 
-.orders .actionDetail {
+.myOrders .actionDetail {
   margin-right: 68px;
 
 }
 
-.orders .selectStatus {
+.myOrders .selectStatus {
   padding: 13px;
   border-radius: 3px;
   -moz-border-radius: 3px;
@@ -299,7 +405,7 @@
 
 }
 
-.orders .selectOptionStatus {
+.myOrders .selectOptionStatus {
   padding: 5px;
   border-radius: 3px;
   -moz-border-radius: 3px;
@@ -313,7 +419,7 @@
 
 }
 
-.orders .infoOrder {
+.myOrders .infoOrder {
   padding: 20px;
   display: flex;
   display: -webkit-flex; /* Safari */
@@ -323,19 +429,19 @@
   -moz-flex-direction:row; /* mozilla */
 }
 
-.orders .contentUser {
+.myOrders .contentUser {
   margin-left: 10px;
 }
 
-.orders .contentUser2 {
+.myOrders .contentUser2 {
   margin-right: 10px;
 }
 
-.orders .photo {
+.myOrders .photo {
 
 }
 
-.orders .avatar {
+.myOrders .avatar {
   width: 60px;
     height: 60px;
     border-radius: 100%;
@@ -343,20 +449,20 @@
     -webkit-border-radius: 100%;
 }
 
-.orders .nameUser {
+.myOrders .nameUser {
 
   font-size: 13px;
     color: #434343;
     text-align: center;
 }
 
-.orders .contentArrow {
+.myOrders .contentArrow {
   color: #DBE2E5;
   margin-left: 10px;
   font-size: 40px;
 }
 
-.orders .contentInfo {
+.myOrders .contentInfo {
   background-color: #DBE2E5;
   max-width: 700px;
   min-height: 65px;
@@ -368,12 +474,12 @@
   overflow-y: auto;
 }
 
-.orders .textDateDetailOrders {
+.myOrders .textDateDetailOrders {
   font-size: 12px;
   color: #5C5F69;
 }
 
-.orders .contentAdd {
+.myOrders .contentAdd {
   background-color: #eaeaea;
   width: 150px;
   height: 50px;
@@ -384,18 +490,18 @@
   margin-left: 20px;
 }
 
-.orders .textAdd {
+.myOrders .textAdd {
   font-size: 12px;
   max-height: 35px;
   overflow-y: auto;
 }
 
-.orders .contentBtnReply {
+.myOrders .contentBtnReply {
   margin-left: 20px;
   margin-top: 10px;
 }
 
-.orders .btnReply {
+.myOrders .btnReply {
   width: 170px;
   height: 50px;
   font-size: 14px;
@@ -408,12 +514,12 @@
   -webkit-border-radius: 3px;
 }
 
-.orders .btnReply:hover {
+.myOrders .btnReply:hover {
   background-color: #809612;
   cursor: pointer;
 }
 
-.orders .btnApply {
+.myOrders .btnApply {
   width: 170px;
   height: 50px;
   font-size: 14px;
@@ -427,12 +533,12 @@
 
 }
 
-.orders .btnApply:hover {
+.myOrders .btnApply:hover {
   background-color: #809612 !important;
   cursor: pointer;
 }
 
-.orders .contentReplys {
+.myOrders .contentReplys {
   margin-left: 220px;
   display: flex;
   display: -webkit-flex; /* Safari */
@@ -443,7 +549,7 @@
   margin-bottom: 20px;
 }
 
-.orders .contentReplys2 {
+.myOrders .contentReplys2 {
   margin-left: 110px;
   display: flex;
   display: -webkit-flex; /* Safari */
@@ -455,7 +561,7 @@
 }
 
 
-.orders .textReply {
+.myOrders .textReply {
   background-color: #EAEAEA;
   width: 500px;
   min-height: 30px;
@@ -467,12 +573,12 @@
   overflow-y:auto;
 }
 
-.orders .contentArrowRight {
+.myOrders .contentArrowRight {
   color: #eaeaea;
   font-size: 40px;
 }
 
-.orders .textArea {
+.myOrders .textArea {
   min-width: 490px;
   max-width: 490px;
   min-height: 30px;
@@ -482,7 +588,7 @@
   border: none;
 }
 
-.orders .contentAddReply {
+.myOrders .contentAddReply {
   background-color: #eaeaea;
   width: 150px;
   height: 50px;
@@ -493,7 +599,7 @@
   margin-left: 30px;
 }
 
-.orders .contentAddReply2 {
+.myOrders .contentAddReply2 {
   background-color: #eaeaea;
   width: 150px;
   height: 50px;
@@ -508,28 +614,28 @@
 *************** PANTALLA DE NUEVO MENSAJE*******************
 ***********************************************************/
 
-.orders .contentMessage {
+.myOrders .contentMessage {
   position: absolute;
   width: 100%;
   height: 100%;
   top:9999px;
 }
 
-.orders.pantallaMensaje .contentMessage {
+.myOrders.pantallaMensaje .contentMessage {
   position: absolute;
   width: 100%;
   height: 100%;
   top:0px;
 }
 
-.orders .subContentMessage {
+.myOrders .subContentMessage {
   width: 100%;
   height: 100%;
   background-color: rgba(241,241,241,0);
 
 }
 
-.orders.pantallaMensaje .subContentMessage {
+.myOrders.pantallaMensaje .subContentMessage {
   width: 100%;
   height: 100%;
   background-color: rgba(241,241,241,1);
@@ -540,7 +646,7 @@
 
 }
 
-.orders .message {
+.myOrders .message {
 
   opacity: 0;
   transform: translate3d(0,0px,0);
@@ -551,7 +657,7 @@
           transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
 }
 
-.orders.pantallaMensaje .message {
+.myOrders.pantallaMensaje .message {
   width: 500px;
   height: 300px;
   opacity: 1;
@@ -565,17 +671,17 @@
           transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
 }
 
-.orders .titleMessage {
+.myOrders .titleMessage {
   color: #434343;
   font-size: 20px;
   margin-bottom: 3px;
 }
 
-.orders .textMessage {
+.myOrders .textMessage {
   margin-bottom: 10px;
 }
 
-.orders .textareaMenssage {
+.myOrders .textareaMenssage {
   resize: none;
   width: 475px;
   height: 200px;
@@ -585,7 +691,7 @@
   border: 1px solid #E2E2E2;
 }
 
-.orders .addMenssage {
+.myOrders .addMenssage {
   background-color: #EAEAEA;
   border: 1px solid #E2E2E2;
   width: 495px;
@@ -599,7 +705,7 @@
   -moz-flex-direction:row; /* mozilla */
 }
 
-.orders .addMenssage2 {
+.myOrders .addMenssage2 {
   background-color: #EAEAEA;
   border: 1px solid #E2E2E2;
   width: 51.4%;
@@ -613,7 +719,7 @@
   -moz-flex-direction:row; /* mozilla */
 }
 
-.orders .btnAdd {
+.myOrders .btnAdd {
   border: none;
   font-size: 20px;
   padding: 5px;
@@ -623,12 +729,12 @@
   color: white;
 }
 
-.orders .btnAdd:hover {
+.myOrders .btnAdd:hover {
   cursor: pointer;
   background-color: #28292d;
 }
 
-.orders .ArchivesAdd {
+.myOrders .ArchivesAdd {
   padding-left: 5px;
   padding-right: 15px;
   font-size: 13px;
@@ -638,7 +744,7 @@
 
 }
 
-.orders .btnTrashAdd {
+.myOrders .btnTrashAdd {
   padding: 1px 3px 1px 3px;
   border: none;
     background-color: #76787c;
@@ -649,16 +755,16 @@
   margin-right: 5px;
 }
 
-.orders .btnTrashAdd:hover {
+.myOrders .btnTrashAdd:hover {
     background-color: #E43E46;
     cursor: pointer;
 }
 
-.orders .actionMessage {
+.myOrders .actionMessage {
   margin-top: 10px;
 }
 
-.orders .btnAceptMennsage {
+.myOrders .btnAceptMennsage {
 
   font-size: 14px;
   background-color: #92AD17;
@@ -670,12 +776,12 @@
   -webkit-border-radius: 3px;
 }
 
-.orders .btnAceptMennsage:hover {
+.myOrders .btnAceptMennsage:hover {
   background-color: #809612;
   cursor: pointer;
 }
 
-.orders .btnCancelMennsage {
+.myOrders .btnCancelMennsage {
 
   font-size: 14px;
   background-color: #76787C;
@@ -687,7 +793,7 @@
   -webkit-border-radius: 3px;
 }
 
-.orders .btnCancelMennsage:hover {
+.myOrders .btnCancelMennsage:hover {
   background-color: #E43E46;
   cursor: pointer;
 }
@@ -697,14 +803,14 @@
 **************** PANTALLA NUEVO PEDIDO ********************
 ***********************************************************/
 
-.orders .contentNewOrder {
+.myOrders .contentNewOrder {
   position: absolute;
   width: 100%;
   height: 100%;
   top:9999px;
 }
 
-.orders.pantallaNuevoPedido .contentNewOrder {
+.myOrders.pantallaNuevoPedido .contentNewOrder {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -712,16 +818,16 @@
 
 }
 
-.orders .subContentMessage,
-.orders .subContentNewOrder {
+.myOrders .subContentMessage,
+.myOrders .subContentNewOrder {
   width: 100%;
   height: 100%;
   background-color: rgba(241,241,241,0);
 
 }
 
-.orders.pantallaMensaje .subContentMessage,
-.orders.pantallaNuevoPedido .subContentNewOrder {
+.myOrders.pantallaMensaje .subContentMessage,
+.myOrders.pantallaNuevoPedido .subContentNewOrder {
   width: 100%;
   height: 100%;
   background-color: rgba(241,241,241,1);
@@ -733,7 +839,7 @@
 
 }
 
-.orders .newOrder {
+.myOrders .newOrder {
 
   opacity: 0;
   transform: translate3d(0,500%,0);
@@ -744,7 +850,7 @@
 transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
 }
 
-.orders.pantallaNuevoPedido .newOrder {
+.myOrders.pantallaNuevoPedido .newOrder {
   width: 100%;
   height: 100%;
   opacity: 1;
@@ -759,7 +865,7 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
   transition: all 300ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
 }
 
-.orders .contentTitleNewOrder {
+.myOrders .contentTitleNewOrder {
   display: flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
@@ -774,7 +880,7 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
       border-bottom: 1px solid #E2E2E2;
 }
 
-.orders .contentBackNewOrder {
+.myOrders .contentBackNewOrder {
   display: flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
@@ -786,7 +892,7 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
   -moz-align-items:center; /* mozilla */
 }
 
-.orders .titleNewOrder {
+.myOrders .titleNewOrder {
   color: #434343;
   font-size: 20px;
   margin-bottom: 3px;
@@ -794,12 +900,12 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
   margin-left: 20px;
 }
 
-.orders.pantallaNuevoPedido .titleNewOrder {
+.myOrders.pantallaNuevoPedido .titleNewOrder {
   opacity: 1;
 
 }
 
-.orders .contentOrder {
+.myOrders .contentOrder {
   margin-left: 40px;
   padding: 10px 0px 20px 0px;
 
@@ -807,14 +913,14 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
 
 }
 
-.orders .subtitleNewOrder {
+.myOrders .subtitleNewOrder {
     color: #434343;
     font-weight: bold;
     font-size: 14px;
     margin: 10px 0px 2px 0px;
 }
 
-.orders .inputNewOrder {
+.myOrders .inputNewOrder {
     border-radius: 2px;
     -moz-border-radius: 2px;
     -webkit-border-radius: 2px;
@@ -825,7 +931,7 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
     margin-top: 2px;
 }
 
-.orders .textareaNewOrder {
+.myOrders .textareaNewOrder {
     resize: none;
     width: 49.5%;
     height: 100px;
@@ -836,7 +942,7 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
 
 }
 
-.orders.pantallaNuevoPedido.buscarOficina .offices {
+.myOrders.pantallaNuevoPedido.buscarOficina .offices {
   min-height: 25px;
   max-height: 250px;
   overflow-y: auto;
@@ -848,7 +954,7 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
   display: block;
 }
 
-.orders.pantallaNuevoPedido.buscarArea .areas {
+.myOrders.pantallaNuevoPedido.buscarArea .areas {
   min-height: 25px;
   max-height: 250px;
   overflow-y: auto;
@@ -860,7 +966,7 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
   display: block;
 }
 
-.orders.pantallaNuevoPedido.buscarConsulta .querys {
+.myOrders.pantallaNuevoPedido.buscarConsulta .querys {
   min-height: 25px;
   max-height: 250px;
   overflow-y: auto;
@@ -872,15 +978,15 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
   display: block;
 }
 
-.orders .offices,
-.orders .querys,
-.orders .areas {
+.myOrders .offices,
+.myOrders .querys,
+.myOrders .areas {
   display: none;
 }
 
-.orders .itemsSelectOffice,
-.orders .itemsSelectQuery,
-.orders .itemsSelectArea {
+.myOrders .itemsSelectOffice,
+.myOrders .itemsSelectQuery,
+.myOrders .itemsSelectArea {
   border-radius: 2px;
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
@@ -893,24 +999,97 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
   color: white;
 }
 
-.orders .itemsSelectOffice:hover,
-.orders .itemsSelectQuery:hover,
-.orders .itemsSelectArea:hover {
+.myOrders .itemsSelectOffice:hover,
+.myOrders .itemsSelectQuery:hover,
+.myOrders .itemsSelectArea:hover {
   background-color: #798c1a;
 }
 
 /******************** MEDIA QUERIS ***************************/
 
 @media (max-width: 719px){
-  .orders .header {
-      display: none;
+  .myOrders .header {
+      height: 50px;
   }
 
-  .orders .contentOrders {
+  .myOrders .textMisPedidos {
+    margin-left: 10px;
+    font-size: 14px;
+  }
+
+  .myOrders .contentBtnNewOrder {
+
+
+  }
+
+  .myOrders .contentOrders {
     /*background-color: red;*/
     background-color: #F1F1F1;
-    height: 100%;
+    height: 68%;
+  }
+
+  .myOrders .itemOrders {
+    margin-left: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+
   }
 
 
+  .myOrders .itemDate {
+    display: none;
+  }
+
+  .myOrders .textA1,
+  .myOrders .textEC1,
+  .myOrders .textC1,
+  .myOrders .textP1,
+  .myOrders .textR1 {
+    display: none;
+  }
+
+  .myOrders .status {
+    width: 10px;
+    height: 85px;
+    padding: 0px;
+    border-radius: 3px 0 0 3px;
+    -moz-border-radius: 3px 0 0 3px;
+    -webkit-border-radius: 3px 0 0 3px;
+  }
+
+  .myOrders .itemStatus {
+    width: 25px;
+  }
+
+  .myOrders .itemsType {
+    width: 145px;
+    /*background-color: blue;*/
+  }
+
+  .myOrders .itemsOffice {
+    width: 145px;
+    /*background-color: red;*/
+  }
+
+  .myOrders .itemActions {
+    margin: 0px;
+    height: 65px;
+    width: 80px;
+    color: #808080;
+    font-size: 30px;
+    /*background-color: yellow;*/
+    border: none;
+  }
+
+
+}
+
+@media (min-width: 720px){
+  .myOrders .textA2,
+  .myOrders .textEC2,
+  .myOrders .textC2,
+  .myOrders .textP2,
+  .myOrders .textR2 {
+    display: none;
+  }
 }
