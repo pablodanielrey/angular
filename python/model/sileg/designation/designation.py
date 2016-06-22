@@ -115,7 +115,37 @@ class DesignationDAO(SilegDAO):
         finally:
             cur.close()
 
+    @classmethod
+    def findByUserId(cls, con, userIds):
+        assert isinstance(userIds, list)
+        assert len(userIds) > 0
 
+        cur = con.cursor()
+        try:
+            cur.execute("""
+                SELECT id FROM sileg.designation
+                WHERE user_id in %s;
+            """, (tuple(userIds),))
+            return [r['id'] for r in cur]
+        finally:
+            cur.close()
+            
+    @classmethod
+    def findByPlaceId(cls, con, placeIds):
+        assert isinstance(placeIds, list)
+        assert len(placeIds) > 0
+
+        cur = con.cursor()
+        try:
+            cur.execute("""
+                SELECT id FROM sileg.designation
+                WHERE place_id in %s;
+            """, (tuple(placeIds),))
+            return [r['id'] for r in cur]
+        finally:
+            cur.close()            
+            
+            
     @classmethod
     def findAll(cls, con):
         cur = con.cursor()
@@ -337,6 +367,16 @@ class Designation(JSONSerializable):
     def findAllHistory(cls, con):
         return cls.dao.findAllHistory(con)
 
+
+    @classmethod
+    def findByUserId(cls, con, userIds):
+        return cls.dao.findByUserId(con, userIds)
+        
+    @classmethod
+    def findByPlaceId(cls, con, userIds):
+        return cls.dao.findByPlaceId(con, userIds)
+        
+        
     """
         este método se usa para chequear contra las tablas del sileg y nuestro modelo
         para ver si ya esta creada o no una entidad y no generarla de nuevo
