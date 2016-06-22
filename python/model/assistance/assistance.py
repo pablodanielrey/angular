@@ -211,6 +211,14 @@ class AssistanceModel:
         return justs
 
     def getJustifications(self, con, userId, start, end, isAll = False):
+        '''
+            obtiene todas las justificaciones entre las fechas dadas (inclusivas)
+            si isAll es True:
+                entonces obtiene todas las justificaciones de la gente que pertenece a las oficinas para las cuales
+                la persona tiene el rol autoriza.
+            si isAll es False:
+                entonces obtiene todas las justificaciones del usuario indicado por userId.
+        '''
         assert isinstance(start, datetime.date)
         assert isinstance(end, datetime.date)
 
@@ -219,7 +227,8 @@ class AssistanceModel:
             # tengo que obtener todos los usuarios de las oficina que autoriaza y buscar por esos usuarios
             offices = Office.getOfficesByUserRole(con, userId, False, 'autoriza')
             userIds = Office.getOfficesUsers(con, offices)
-            userIds.remove(userId)
+            while userId in userIds:
+                userIds.remove(userId)
         else:
             userIds.append(userId)
 

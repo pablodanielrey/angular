@@ -179,8 +179,9 @@ class OfficeDAO(DAO):
 
         try:
             child = cls._getChildOffices(con,offices)
-            for o in child:
-                offices.append(o['id'])
+            for oid in child:
+                if oid not in offices:
+                    offices.append(oid)
 
             cur.execute('select distinct user_id from offices.offices_users ou where ou.office_id in %s',(tuple(offices),))
             if cur.rowcount <= 0:
@@ -227,7 +228,7 @@ class OfficeDAO(DAO):
 
             if tree:
                 childrens = cls._getChildOffices(con,ids)
-                ids.extend(x for x in childrens if x not in offices)
+                ids.extend(x for x in childrens if x not in ids)
         finally:
             cur.close()
 
