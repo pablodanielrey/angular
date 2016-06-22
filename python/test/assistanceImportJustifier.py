@@ -237,8 +237,9 @@ if __name__ == '__main__':
                     endDate = None if row[6].time is None else localize(datetime.datetime.combine(date.date(), row[6].time))
 
                 if (MigrateRangedJustification.isJustification(just)):
-                    days = None if row[5] is None else int(row[5].value)
-
+                    days = 1
+                    if row[5].value is not None:
+                        days = None if row[5] is None else int(row[5].value)
 
                 if dni not in justifications:
                     justifications[dni] = []
