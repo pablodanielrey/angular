@@ -1,4 +1,4 @@
-<div class="myOrders {{view.style}} {{view.style2}}">
+<div class="myOrders {{view.style}} {{view.style2}} pantallaMensajeAlUsuario">
 
     <!-- ---- VARIABLES ----
     VARIABLE 1: pantallaDetallePedido
@@ -6,6 +6,7 @@
     VARIABLE 1: pantallaNuevoPedido
                 VARIABLE 2: buscarOficina, buscarArea, buscarConsulta
     VARIABLE 1: buscarPedidos
+    VARIABLE 3: pantallaMensajeAlUsuario
     -->
 
     <!-- --------------- HEADER DEL SISTEMA ----------------- -->
@@ -1154,12 +1155,14 @@
                 </div>
                 <div class="textMessage">
                   <textarea class="textareaMenssage"></textarea>
-                  <div class="addMenssage">
-                      <div><button class="btnAdd" title="Adjuntar Archivo"><i class="fa fa-paperclip" aria-hidden="true"></i></button></div>
+                  <div class="addMenssage2">
+                      <div><button class="btnAdd" title="Adjuntar Archivo"><i class="fa fa-paperclip" aria-hidden="true"></i> Subir Archivo</button></div>
                       <div class="ArchivesAdd">
-                        <i class="fa fa-file-o" aria-hidden="true"></i> Instructivo.pdf <button class="btnTrashAdd"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
-                        <i class="fa fa-file-o" aria-hidden="true"></i> pantalla_de_error.jpg <button class="btnTrashAdd"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                        <input type="file" class="inputFile"></input>
+                        <!-- <i class="fa fa-file-o"></i> Instructivo.pdf <button class="btnTrashAdd"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                        <i class="fa fa-file-o"></i> pantalla_de_error.jpg <button class="btnTrashAdd"><i class="fa fa-trash-o" aria-hidden="true"></i></button> -->
                       </div>
+                  </div>
                 </div>
                 <div class="actionMessage">
                   <button class="btnAceptMennsage" ng-click="view.style2 = ''">ACEPTAR</button>
@@ -1168,5 +1171,24 @@
             </div>
         </div>
     </div>
+
+    <!-- --------------- MENSAJES AL USUARIO ----------------- -->
+    <div class="contentMessageUser">
+        <div class="subContentMessageUser">
+            <div class="messageUser">
+                <div class="preload">
+                    <div class="circle"><i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i></div>
+                    <div><b>Cargando...</b></div>
+                    <div>Por favor espere</div>
+                </div>
+                <div class="errorSystem">
+                    <div class="circle"><i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i></div>
+                    <div><b>Se ha producido un error en el sistema</b></div>
+                    <div>Intente nuevamente</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 </div>
