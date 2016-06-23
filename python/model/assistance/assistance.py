@@ -17,6 +17,14 @@ from model.offices.offices import Office
 from model.assistance.statistics import WpStatistics
 from model.assistance.utils import Utils
 
+class ScheduleData(JSONSerializable):
+
+    def __init__(self, schedule=None, uid=None, date = None):
+        self.userId = uid
+        self.start = None if schedule is None else schedule.getStartDate(date)
+        self.end = None if schedule is None else schedule.getEndDate(date)
+        self.hours = 0 if schedule is None else int(schedule.getScheduleSeconds() / 60 /60)
+
 
 class WorkedAssistanceData(JSONSerializable):
 
@@ -370,6 +378,17 @@ class AssistanceModel:
                 aData.append(AssistanceData(uid, ws, offices))
 
         return aData
+
+    def getScheduleData(self, con, userIds, start, end):
+        schedules = self._getSchedules(con, userIds, start, end)
+        result = {}
+
+        for uid in schedules:
+            result[uid] = []
+            for sch in schedules[uid]:
+                result[uid].append(ScheduleData(sch, uid, start))
+
+        return result
 
 
     def createSingleDateJustification(self,con, date, userId, ownerId, justClazz, justModule):

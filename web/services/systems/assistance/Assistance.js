@@ -18,7 +18,11 @@ function Assistance (Utils, Session, $wamp) {
 		return $wamp.call('assistance.getJustificationData',[userId, date, justClazz, justModule]);
 	}
 
-	this.createSingleDateJustification = function(date, userId, justClazz, justModule) {		 
+	this.getScheduleData = function (userIds, start, end) {
+		return $wamp.call('assistance.getScheduleData',[userIds, start, end]);
+	}
+
+	this.createSingleDateJustification = function(date, userId, justClazz, justModule) {
 		return new Promise(function(cok, cerr) {
       var sid = Session.getSessionId();
   		$wamp.call('assistance.createSingleDateJustification', [sid, date, userId, justClazz, justModule])
