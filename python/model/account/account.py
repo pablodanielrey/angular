@@ -7,12 +7,19 @@ from model.laboralinsertion.laboralInsertion import LaboralInsertion
 class AccountModel:
 
     laboralInsertion = inject.instance(LaboralInsertion)
+
+    # matias poggio - 31298704
+    coworking = ['0c961114-b68a-442d-826f-320bb0b358ef']
+
     # anibal, ezequiel
     detise = ['4eb3ca83-34a0-45b4-895f-1b4da3390fdd', '8ade8f8d-c9e1-4a0c-8d9d-16d5e4b721af']
+
     # sebastian
     posgrado = ['86d5f163-a890-4695-a666-643c0ae05138']
+
     # paula
     insercion = ['9c5cf510-cc0d-4cc2-83e5-e61e3e39be58']
+
     # emanuel, walter, ivan, alejandro, santiago, maxi, pablo
     ditesi = ['0cd70f16-aebb-4274-bc67-a57da88ab6c7', '205de802-2a15-4652-8fde-f23c674a1246', 'd44e92c1-d277-4a45-81dc-a72a76f6ef8d',
             '35f7a8a6-d844-4d6f-b60b-aab810610809', '4b89c515-2eba-4316-97b9-a6204d344d3a', 'cd8fbf39-4ad2-4d11-b17b-3b070105f870',
@@ -25,7 +32,9 @@ class AccountModel:
     assistance = 'assistance'
     graduate = 'graduate'
     other = 'other'
+    coworkingType = 'coworking'
     becarios = 'becarios'
+    biblioType = 'biblioteca'
 
     def getTypes(self, con, userId):
         if userId in self.detise:
@@ -35,7 +44,9 @@ class AccountModel:
         if userId in self.insercion:
             return [self.student, self.teacher, self.postgraduate, self.graduate]
         if userId in self.ditesi:
-            return [self.student, self.teacher, self.postgraduate, self.assistance, self.graduate, self.other, self.becarios]
+            return [self.student, self.teacher, self.postgraduate, self.assistance, self.graduate, self.other, self.becarios, self.coworkingType, self.biblioType]
+        if userId in self.coworking:
+            return [self.coworkingType]
         return []
 
 
@@ -48,12 +59,14 @@ class AccountModel:
             return (type == self.student or type == self.teacher or type == self.postgraduate or type == self.graduate)
         if userId in self.ditesi:
             return True
+        if userId in self.coworking:
+            return (type == self.coworkingType)
 
     def updateType(self, con, userId, user, type):
         if self._verify(userId, type):
             users = User.findById(con, [user.id])
             if len(users) <= 0:
-                raise Exception("No existe el usuario")
+                raise Exception("No tiene permisos")
             u = users[0]
             u.type = type
             u.updateType(con)
@@ -104,11 +117,16 @@ class AccountModel:
     def findByDni(self, con, userId, dni):
         data = User.findByDni(con, dni)
         users = [] if data is None else User.findById(con, [data[0]])
+        if len(users) <= 0:
+            return []
+
         if userId in self.detise:
             return [u for u in users if u.type == self.student or u.type == self.teacher or u.type == self.postgraduate or u.type == self.graduate or u.type is None]
         if userId in self.posgrado:
             return [u for u in users if u.type == self.student or u.type == self.teacher or u.type == self.postgraduate or u.type == self.graduate or u.type is None]
         if userId in self.insercion:
             return [u for u in users if u.type == self.student or u.type == self.teacher or u.type == self.postgraduate or u.type == self.graduate or u.type is None]
+        if userId in self.coworking:
+            return [u for u in users if u.type == self.coworking]
         if userId in self.ditesi:
             return users
