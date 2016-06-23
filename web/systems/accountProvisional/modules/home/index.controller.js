@@ -29,7 +29,10 @@ function HomeCtrl($rootScope, $scope, Account, Login, Users, Student, $timeout) 
       allTypes: [{value:'student', description:'Alumno'}, {value:'teacher', description:'Docente'},
                 {value:'postgraduate', description:'Posgrado'}, {value:'graduate', description:'Graduado'},
                 {value:'assistance', description:'No docente'}, {value:'becarios', description:'Becarios'},
-                {value:'other', description:'Otros'}],
+                {value:'coworking', description:'CoWorking'},
+                {value:'biblioteca', description:'Biblioteca'},
+                {value:'other', description:'Otros'}
+              ],
       selectedType: null
   }
 
@@ -247,7 +250,7 @@ function HomeCtrl($rootScope, $scope, Account, Login, Users, Student, $timeout) 
   }
 
   function getStudentNumber() {
-    return ($scope.model.student == null || $scope.model.student.studentNumber == '') ? "No posee" : $scope.model.student.studentNumber;  
+    return ($scope.model.student == null || $scope.model.student.studentNumber == '') ? "No posee" : $scope.model.student.studentNumber;
   }
 
 
