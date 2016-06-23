@@ -235,20 +235,23 @@ def statsToPyooUser(rp, user, stats):
     import uuid
     import pyoo
     calc = pyoo.Desktop('localhost', 2002)
-    doc = calc.create_spreadsheet()
+    doc = calc.open_spreadsheet('templateUserStats.ods')
     try:
         sheet = doc.sheets[0]
-        sheet[0,1].value = user.dni
-        sheet[0,2].value = user.name
-        sheet[0,3].value = user.lastname
-        sheet[0,4].value = stat.position
+        sheet[1,1].value = user.dni
+        sheet[1,1].value = user.name
+        sheet[2,1].value = user.lastname
+        sheet[3,1].value = stat.position
 
-        i = 1
+        i = 5
         for ds in stat.dailyStats:
-            sheet[i,1].value = ds.date
-            sheet[i,2].value = Utils._naiveFromLocalAware(Utils.toLocalFromAware(ds.start))
-            sheet[i,3].value = Utils._naiveFromLocalAware(Utils.toLocalFromAware(ds.end))
-            sheet[i,4].value = ds.periodSeconds
+            sheet[i,2].value = ds.date if ds.date is not None else ''
+            sheet[i,3].value = Utils._naiveFromLocalAware(Utils.toLocalFromAware(ds.start)) if ds.start is not None else ''
+            sheet[i,4].value = Utils._naiveFromLocalAware(Utils.toLocalFromAware(ds.end)) if ds.end is not None else ''
+            sheet[i,5].value = datetime.timedelta(seconds=ds.periodSeconds)
+            sheet[i,6].value = ds.iin if ds.iin is not None else ''
+            sheet[i,7].value = ds.out if ds.out is not None else ''
+            sheet[i,8].value = datetime.timedelta(seconds=ds.workedSeconds)
             i = i + 1
 
         fn = '{}/asistencia.xlsx'.format(rp)
@@ -322,6 +325,10 @@ if __name__ == '__main__':
 
         """ creo los reportes por usuario y se lo envio """
         for user in users:
+
+            if user.id != '0cd70f16-aebb-4274-bc67-a57da88ab6c7':
+                continue
+
             rp = createReportDir(user)
             statsToPyooUser(rp, user, stats)
 

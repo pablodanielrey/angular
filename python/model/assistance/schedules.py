@@ -34,11 +34,14 @@ class Schedule(JSONSerializable):
         dt = datetime.datetime.combine(date, datetime.time(0,0))
         return Utils._localizeLocal(dt + datetime.timedelta(seconds=self.end))
 
-
     def getScheduleSeconds(self):
         if self.end is None or self.start is None:
             return 0
         return self.end - self.start
+
+    @classmethod
+    def findByUserId(con, ids, startDate, endDate):
+        return ScheduleDAO.findByUserId(con, ids, startDate, endDate)
 
 
 class ScheduleDAO(AssistanceDAO):
