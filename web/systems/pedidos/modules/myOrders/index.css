@@ -30,6 +30,36 @@
 
 .myOrders .textMisPedidos {
   margin-left: 20px;
+  font-size: 20px;
+}
+
+.myOrders .contentFilters {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+}
+
+.myOrders .textFilters {
+  margin-right: 10px;
+  font-size: 12px;
+}
+
+.myOrders .btnFilter {
+  background-color: #F1F1F1 !important;
+  border-radius: 2px;
+  font-size: 13px !important;
+  padding: 5px;
+  color: #5C5F69 !important;
+}
+
+.myOrders .btnFilter:hover {
+  background-color: white !important;
 }
 
 .myOrders .contentBtnNewOrder {
@@ -71,6 +101,81 @@
 }
 .myOrders .btnNewOrder:hover {
   background-color: #92AD17 !important;
+}
+
+.myOrders .contentSearchOrders {
+  display: none;
+}
+.myOrders.buscarPedido .contentSearchOrders {
+  position: absolute;
+  display: block;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  justify-content:  center;
+  -webkit-justify-content:center; /* Safari */
+  -moz-justify-content:center; /* mozilla */
+  width: 100%;
+  top:70px;
+}
+
+.myOrders .searchOrders {
+  border: 1px solid #E2E2E2;
+  width: 230px;
+  height: 270px;
+  background-color: white;
+  /*margin-left:110px;*/
+  padding: 20px;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
+
+.myOrders .inputSearch {
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  font-size: 16px;
+  padding: 7px;
+  border: 1px solid #DBE2E5;
+  width: 100%;
+  margin-top: 2px;
+  margin-bottom: 5px;
+}
+
+.myOrders .inputSearch2 {
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  font-size: 16px;
+  padding: 7px;
+  border: 1px solid #DBE2E5;
+  margin-bottom: 5px;
+  margin-top: 2px;
+  background-color: white;
+}
+
+.myOrders .textSearch1 {
+  color: #5C5F69;
+}
+
+.myOrders .textSearch1b {
+  color: #5C5F69;
+  margin-top: 5px;
+}
+
+.myOrders .textSearch2a {
+  color: #5C5F69;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.myOrders .textSearch2b {
+  color: #5C5F69;
+  font-size: 12px;
 }
 
 /******************************************************
@@ -531,6 +636,26 @@
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
 
+}
+
+.myOrders .btnNew {
+  width: 170px;
+  height: 50px;
+  font-size: 14px !important;
+  background-color: #92AD17 !important;
+  color:white;
+  padding: 5px 10px 5px 10px;
+  border:none;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  margin-right: 50px !important;
+
+}
+
+.myOrders .btnNew:hover {
+  background-color: #809612 !important;
+  cursor: pointer;
 }
 
 .myOrders .btnApply:hover {
@@ -1012,6 +1137,23 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
       height: 50px;
   }
 
+  .myOrders.buscarPedido .contentSearchOrders {
+    width: 100%;
+    height: 100%;
+    top:0px;
+  }
+
+  .myOrders .searchOrders {
+    border: none;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    border-radius: 0px;
+    -moz-border-radius: 0px;
+    -webkit-border-radius: 0px;
+  }
+
+
   .myOrders .textMisPedidos {
     margin-left: 10px;
     font-size: 14px;
@@ -1079,6 +1221,25 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
     font-size: 30px;
     /*background-color: yellow;*/
     border: none;
+  }
+
+  .myOrders .textFilters {
+    display: none;
+  }
+
+  .myOrders .btnNew {
+    width: 100px !important;
+    height: 50px;
+    font-size: 14px !important;
+    background-color: #92AD17 !important;
+    color:white;
+    padding: 5px 10px 5px 10px;
+    border:none;
+    border-radius: 0px;
+    -moz-border-radius: 0px;
+    -webkit-border-radius: 0px;
+    margin-right: 0px !important;
+
   }
 
 

@@ -1,31 +1,49 @@
 <div class="myOrders {{view.style}} {{view.style2}}">
 
-    <!-- VARIABLES
-    pantallaDetallePedido
-    pantallaMensaje
-    pantallaNuevoPedido (buscarOficina, buscarArea, buscarConsulta)
+    <!-- ---- VARIABLES ----
+    VARIABLE 1: pantallaDetallePedido
+    VARIABLE 1: pantallaMensaje
+    VARIABLE 1: pantallaNuevoPedido
+                VARIABLE 2: buscarOficina, buscarArea, buscarConsulta
+    VARIABLE 1: buscarPedidos
     -->
 
-
+    <!-- --------------- HEADER DEL SISTEMA ----------------- -->
     <div class="header">
         <div class="contentHeader">
             <div class="textMisPedidos">
               Mis Pedidos
             </div>
-            <div>
-              <i class="fa fa-sliders" aria-hidden="true"></i> FILTROS
-              <button><i class="fa fa-search" aria-hidden="true"></i></button>
-              <button><i class="fa fa-calendar-o" aria-hidden="true"></i></button>
-              <button><i class="fa fa-sort-amount-asc" aria-hidden="true"></i></button>
-
+            <div class="contentFilters">
+                <div class="textFilters"><i class="fa fa-sliders" aria-hidden="true"></i> Filtros</div>
+                <button class="btnFilter" title="Buscar..." ng-click="view.style = 'buscarPedido'"><i class="fa fa-search" aria-hidden="true"></i></button>
+                <button class="btnFilter" title="Ordenar por Fecha"><i class="fa fa-calendar-o" aria-hidden="true"></i></button>
+                <button class="btnFilter" title="Ordenar por Estado"><i class="fa fa-sort-amount-asc" aria-hidden="true"></i></button>
             </div>
-            <div class="contentBtnNewOrder"  ng-click="view.style = 'pantallaNuevoPedido'">
-                <div class="btnNewOrder"><i class="fa fa-pencil"></i></div>
-                <div class="btnNewOrder2"> NUEVO PEDIDO</div>
+            <div>
+                <button class="btnNew" ng-click="view.style = 'pantallaNuevoPedido'">NUEVO PEDIDO</button>
             </div>
         </div>
     </div>
 
+    <!-- -------------- BUSCADOR DE PEDIDOS ----------------- -->
+    <div class="contentSearchOrders">
+        <div class="searchOrders">
+            <div class="textSearch1"><i class="fa fa-search" aria-hidden="true"></i> Buscar</div>
+            <div><input class="inputSearch" type="search"></input></div>
+            <div class="textSearch1b"><i class="fa fa-calendar-o" aria-hidden="true"></i> Buscar por Fecha</div>
+            <div class="textSearch2a">Fecha Inicio</div>
+            <div><input class="inputSearch2" type="date"></input></div>
+            <div class="textSearch2b">Fecha Fin</div>
+            <div><input class="inputSearch2" type="date"></input></div>
+            <div class="actionMessage">
+                  <button class="btnAceptMennsage" ng-click="view.style = ''">ACEPTAR</button>
+                  <button class="btnCancelMennsage" ng-click="view.style = ''">CANCELAR</button>
+                </div>
+        </div>
+    </div>
+
+    <!-- ------------- CREAR UN NUEVO PEDIDO ---------------- -->
     <div class="contentNewOrder">
       <div class="subContentNewOrder">
           <div class="newOrder">
@@ -131,6 +149,7 @@
       </div>
     </div>
 
+    <!-- --------------- LISTADO DE PEDIDOS ------------------ -->
     <div class="contentOrders">
 
         <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
@@ -888,6 +907,7 @@
 
     </div>
 
+    <!-- ---------------- DETALLE DE PEDIDO ------------------ -->
     <div class="contentOrderDetail">
 
 
@@ -1131,6 +1151,7 @@
 
     </div>
 
+    <!-- ------------------ NUEVO MENSAJE -------------------- -->
     <div class="contentMessage">
         <div class="subContentMessage">
             <div class="message">
@@ -1153,7 +1174,5 @@
             </div>
         </div>
     </div>
-
-
 
 </div>
