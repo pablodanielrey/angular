@@ -253,7 +253,7 @@ def statsToPyooUser(rp, user, stats):
             sheet[i,7].value = ds.out if ds.out is not None else ''
             sheet[i,8].value = datetime.timedelta(seconds=ds.workedSeconds)
             sheet[i,9].value = ds.justification.identifier if ds.justification is not None else ''
-            sheet[i,10].value = ds.justification.status if ds.justification is not None else ''
+            sheet[i,10].value = Status.getIdentifier(ds.justification.status) if ds.justification is not None else ''
             i = i + 1
 
         fn = '{}/asistencia.xlsx'.format(rp)
@@ -328,7 +328,7 @@ if __name__ == '__main__':
         """ creo los reportes por usuario y se lo envio """
         for user in users:
 
-            if user.id != '0cd70f16-aebb-4274-bc67-a57da88ab6c7':
+            if user.id != '0cd70f16-aebb-4274-bc67-a57da88ab6c7' and user.id != '4b89c515-2eba-4316-97b9-a6204d344d3a':
                 continue
 
             rp = createReportDir(user)
