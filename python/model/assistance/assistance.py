@@ -93,7 +93,10 @@ class WorkPeriod(JSONSerializable):
         return self.logs[0]
 
     def getEndLog(self):
-        if len(self.logs) <= 1:
+        llogs = len(self.logs)
+        if llogs == 0:
+            return None
+        if llogs % 2 == 1:
             return None
         return self.logs[-1]
 

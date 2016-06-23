@@ -291,7 +291,7 @@ if __name__ == '__main__':
 
     logging.getLogger().setLevel(logging.INFO)
 
-    rstart = datetime.datetime.now() - datetime.timedelta(days=30)
+    rstart = datetime.datetime.combine((datetime.datetime.now() - datetime.timedelta(days=100)).date(),datetime.time())
     rend = datetime.datetime.now()
     if len(sys.argv) >= 2:
         import dateutil
@@ -328,8 +328,8 @@ if __name__ == '__main__':
         """ creo los reportes por usuario y se lo envio """
         for user in users:
 
-            #if user.id != '0cd70f16-aebb-4274-bc67-a57da88ab6c7' and user.id != '4b89c515-2eba-4316-97b9-a6204d344d3a':
-            #    continue
+            if user.id != '0cd70f16-aebb-4274-bc67-a57da88ab6c7' and user.id != '4b89c515-2eba-4316-97b9-a6204d344d3a' and user.id != '35f7a8a6-d844-4d6f-b60b-aab810610809' and user.id != '205de802-2a15-4652-8fde-f23c674a1246':
+                continue
 
             rp = createReportDir(user)
             statsToPyooUser(rp, user, stats)
