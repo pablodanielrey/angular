@@ -21,6 +21,7 @@ from model.assistance.justifications.longDurationJustification import LongDurati
 from model.assistance.justifications.status import Status
 from model.assistance.justifications.justifications import Justification
 from model.assistance.schedules import ScheduleDAO
+from model.assistance.utils import Utils
 from model.offices.offices import Office
 
 from model.serializer.utils import MySerializer, serializer_loads
@@ -218,70 +219,6 @@ def createZipFile(rp):
 def _getOffices(con):
     return Office.findById(con, Office.findAll(con))
 
-def _getUsers(con):
-    uids = []
-
-    """
-    uid, v = UserDAO.findByDni(con, "26575940")
-    uids.append(uid)
-
-    uid, v = UserDAO.findByDni(con, "18854479")
-    uids.append(uid)
-
-    uid, v = UserDAO.findByDni(con, "26106065")
-    uids.append(uid)
-
-    uid, v = UserDAO.findByDni(con, "24040623")
-    uids.append(uid)
-
-    uid, v = UserDAO.findByDni(con, "32393755")    # pablo Lozada
-    uids.append(uid)
-
-    uid, v = UserDAO.findByDni(con, "27528150")    # julio ciappa
-    uids.append(uid)
-
-    uid, v = UserDAO.findByDni(con, "18609353")    # juan acosta
-    uids.append(uid)
-
-    uid, v = UserDAO.findByDni(con, "24040623")     # miguel rey
-    uids.append(uid)
-
-    uid, v = UserDAO.findByDni(con, "27821597")     # maxi
-    uids.append(uid)
-
-    uid, v = UserDAO.findByDni(con, "31073351")     # ivan
-    uids.append(uid)
-
-    uid, v = UserDAO.findByDni(con, "33212183")     # santiago
-    uids.append(uid)
-
-    #uid, v = UserDAO.findByDni(con, "27294557")     # pablo
-    #uids.append(uid)
-
-    uid, v = UserDAO.findByDni(con, "30001823")    # walter
-    uids.append(uid)
-
-    uid, v = UserDAO.findByDni(con, "31381082")     # ema
-    uids.append(uid)
-
-    uid, v = UserDAO.findByDni(con, "29694757")      # oporto
-    uids.append(uid)
-
-    uid, v = UserDAO.findByDni(con, "30078613")      # lorena mabel pereira
-    uids.append(uid)
-
-    uid, v = UserDAO.findByDni(con, "30078613")      # lorena mabel pereira
-    uids.append(uid)
-
-    uid, v = UserDAO.findByDni(con, "21430694")      # analía causa
-    uids.append(uid)
-
-    """
-    uids = ScheduleDAO.findUsersWithSchedule(con)
-    users = UserDAO.findById(con, uids)
-    return users, uids
-
-
 def findUser(uid, users):
     for u in users:
         if u.id == uid:
@@ -290,11 +227,48 @@ def findUser(uid, users):
 
 
 def statsToPyooUser(rp, user, stats):
+    if user.id not in stats:
+        return
+
+    stat = stats[user.id][0]
+
+    import uuid
+    import pyoo
+    calc = pyoo.Desktop('localhost', 2002)
+    doc = calc.create_spreadsheet()
+    try:
+        sheet = doc.sheets[0]
+        sheet[0,1].value = user.dni
+        sheet[0,2].value = user.name
+        sheet[0,3].value = user.lastname
+        sheet[0,4].value = stat.position
+
+        i = 1
+        for ds in stat.dailyStats:
+            sheet[i,1].value = ds.date
+            sheet[i,2].value = Utils._naiveFromLocalAware(Utils.toLocalFromAware(ds.start))
+            sheet[i,3].value = Utils._naiveFromLocalAware(Utils.toLocalFromAware(ds.end))
+            sheet[i,4].value = ds.periodSeconds
+            i = i + 1
+
+        fn = '{}/asistencia.xlsx'.format(rp)
+        logging.info('salvando : {}'.format(fn))
+        doc.save(fn, pyoo.FILTER_EXCEL_2007)
+
+    finally:
+        doc.close()
+
 
 
 def statsToPyooOffice(rp, off, stats):
+    pass
 
-
+def findOfficeByUser(uid, offices):
+    off = []
+    for o in offices:
+        if uid in o.users:
+            off.append(o)
+    return off
 
 def findOffice(oid, offices):
     for o in offices:
@@ -342,6 +316,7 @@ if __name__ == '__main__':
         users = UserDAO.findById(con, uids)
 
         """ obtengo las estadisticas """
+        logging.info('Calculando las estadísticas de {} usuarios'.format(len(uids)))
         a = inject.instance(AssistanceModel)
         stats = a.getStatistics(con, uids, rstart, rend)
 
@@ -350,6 +325,7 @@ if __name__ == '__main__':
             rp = createReportDir(user)
             statsToPyooUser(rp, user, stats)
 
+            continue
             officesIds = Office.getOfficesByUserRole(con, user.id, tree=True, role='autoriza')
             ''' genero el reporte de esa oficina '''
             for officeId in officesIds:
