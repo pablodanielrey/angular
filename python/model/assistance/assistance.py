@@ -381,6 +381,8 @@ class AssistanceModel:
 
     def getScheduleData(self, con, userIds, start, end):
         schedules = self._getSchedules(con, userIds, start, end)
+        import pdb; pdb.set_trace()
+        
         result = {}
 
         for uid in schedules:

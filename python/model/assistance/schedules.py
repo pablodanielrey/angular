@@ -40,8 +40,15 @@ class Schedule(JSONSerializable):
         return self.end - self.start
 
     @classmethod
-    def findByUserId(con, ids, startDate, endDate):
+    def findByUserId(cls, con, ids, startDate, endDate):
         return ScheduleDAO.findByUserId(con, ids, startDate, endDate)
+
+    @classmethod
+    def findByUserIdInDate(cls, con, userId, date):
+        schedules = cls.findByUserId(con, [userId], date, date)
+        result = []
+        schedDay = [ sc for sc in schedules if sh.isValid(date)]
+        
 
 
 class ScheduleDAO(AssistanceDAO):
