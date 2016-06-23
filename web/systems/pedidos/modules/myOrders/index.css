@@ -831,8 +831,8 @@
 }
 
 .myOrders .addMenssage2 {
-  background-color: #EAEAEA;
-  border: 1px solid #E2E2E2;
+  /*background-color: #EAEAEA;*/
+  /*border: 1px solid #E2E2E2;*/
   width: 51.4%;
   height: 40px;
   margin-top: -5px;
@@ -842,21 +842,34 @@
   flex-direction:row;
   -webkit-flex-direction:row; /* Safari */
   -moz-flex-direction:row; /* mozilla */
+  margin-top: 10px;
 }
 
 .myOrders .btnAdd {
   border: none;
-  font-size: 20px;
+  font-size: 14px;
   padding: 5px;
-  width: 40px;
+  width: 150px;
   height: 40px;
-  background-color: #76787c;
-  color: white;
+  background-color: #BFC0C5;
+  color: #5C5F69;
+  cursor: pointer;
+
 }
 
 .myOrders .btnAdd:hover {
   cursor: pointer;
   background-color: #28292d;
+  color: white;
+}
+
+.myOrders .inputFile {
+  opacity: 0;
+  position: absolute;
+  left: 50px;
+  height: 35px;
+  cursor: pointer;
+
 }
 
 .myOrders .ArchivesAdd {
@@ -1032,13 +1045,17 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
 
 .myOrders .contentOrder {
   margin-left: 40px;
-  padding: 10px 0px 20px 0px;
-
-
-
+  padding: 10px;
 }
 
 .myOrders .subtitleNewOrder {
+    color: #434343;
+    font-weight: bold;
+    font-size: 14px;
+    margin: 10px 0px 2px 0px;
+}
+
+.myOrders .subtitleNewOrder2 {
     color: #434343;
     font-weight: bold;
     font-size: 14px;
@@ -1130,6 +1147,8 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
   background-color: #798c1a;
 }
 
+
+
 /******************** MEDIA QUERIS ***************************/
 
 @media (max-width: 719px){
@@ -1168,6 +1187,11 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
     /*background-color: red;*/
     background-color: #F1F1F1;
     height: 68%;
+  }
+
+  .myOrders .contentOrder {
+      padding: 10px;
+      margin-left: 0px;
   }
 
   .myOrders .itemOrders {
@@ -1241,6 +1265,105 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
     margin-right: 0px !important;
 
   }
+
+  .myOrders .contentTitleNewOrder {
+      padding: 10px;
+  }
+
+  .myOrders .contentBtnReturn {
+    margin-left: 10px;
+  }
+
+  .myOrders .subtitleNewOrder {
+      margin: 0px 0px 2px 0px;
+      width: 80px;
+      text-align: right;
+      padding-right: 10px;
+      /*background-color: red;*/
+  }
+
+  .myOrders .subtitleNewOrder2 {
+      margin: 10px 0px 2px 0px;
+      width: 80px;
+      text-align: left;;
+
+      /*background-color: red;*/
+  }
+
+  .myOrders .contentOrientation {
+    display: flex;
+    display: -webkit-flex; /* Safari */
+    display: -moz-flex; /* mozilla */
+    flex-direction:row;
+    -webkit-flex-direction:row; /* Safari */
+    -moz-flex-direction:row; /* mozilla */
+    align-items:center;
+    -webkit-align-items:center; /* Safari */
+    -moz-align-items:center; /* mozilla */
+  }
+
+  .myOrders .inputNewOrder {
+      border-radius: 2px;
+      -moz-border-radius: 2px;
+      -webkit-border-radius: 2px;
+      font-size: 16px;
+      padding: 7px;
+      border: 1px solid #DBE2E5;
+      width: 100%;
+      margin-top: 2px;
+  }
+
+  .myOrders.pantallaNuevoPedido.buscarOficina .offices {
+    max-height: 200px;
+    margin-left: 90px;
+    width: 63%;
+  }
+
+  .myOrders.pantallaNuevoPedido.buscarArea .areas {
+    max-height: 200px;
+    margin-left: 90px;
+    width: 63%;
+  }
+
+  .myOrders.pantallaNuevoPedido.buscarConsulta .querys {
+    max-height: 170px;
+    margin-left: 90px;
+    width: 63%;
+  }
+
+  .myOrders .textareaNewOrder {
+      resize: none;
+      width: 88%;
+      height: 70px;
+      border: none;
+      padding: 10px;
+      font-size: 14px;
+      border: 1px solid #E2E2E2;
+
+  }
+
+  .myOrders .addMenssage2 {
+    width: 93.5%;
+    height: 50px;
+  }
+
+
+  .myOrders .btnReturn {
+    font-size: 35px;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    padding: 5px 20px 5px 20px;
+  }
+
+
+  .myOrders .titleNewOrder {
+    font-size: 12px;
+  }
+
+
 
 
 }
