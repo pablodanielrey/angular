@@ -4,6 +4,7 @@ from model.serializer.utils import JSONSerializable
 from model.users.users import UserDAO
 from model.assistance.assistanceDao import AssistanceDAO
 from model.assistance.utils import Utils
+from operator import attrgetter
 
 class Schedule(JSONSerializable):
 
@@ -48,9 +49,18 @@ class Schedule(JSONSerializable):
     @classmethod
     def findByUserIdInDate(cls, con, userId, date):
         schedules = cls.findByUserId(con, [userId], date, date)
-        result = []
-        schedDay = [ sc for sc in schedules if sh.isValid(date)]
-        
+        schSorted = sorted([ sc for sc in schedules if sc.isValid(date)], key=attrgetter('date'), reverse=True)
+        return [sc for sc in schSorted if sc.date == schSorted[0].date]
+
+    @classmethod
+    def findByUserIdInWeek(cls, con, userId, date):
+        firstDate = date - datetime.timedelta(days=date.weekday())
+        result = {}
+        for day in range(7):
+            actual = firstDate + datetime.timedelta(days=day)
+            result[actual] = cls.findByUserIdInDate(con, userId, actual)
+        return result
+
 
 
 class ScheduleDAO(AssistanceDAO):

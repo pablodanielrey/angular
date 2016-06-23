@@ -18,8 +18,8 @@ function Assistance (Utils, Session, $wamp) {
 		return $wamp.call('assistance.getJustificationData',[userId, date, justClazz, justModule]);
 	}
 
-	this.getScheduleData = function (userIds, start, end) {
-		return $wamp.call('assistance.getScheduleData',[userIds, start, end]);
+	this.getScheduleDataInWeek = function (userId, date) {
+		return $wamp.call('assistance.getScheduleDataInWeek',[userId, date]);
 	}
 
 	this.createSingleDateJustification = function(date, userId, justClazz, justModule) {

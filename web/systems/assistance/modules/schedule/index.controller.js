@@ -38,6 +38,7 @@
         vm.getUserPhoto = getUserPhoto;
         vm.loadSchedules = loadSchedules;
         vm.setSchedules = setSchedules;
+        vm.getSchedulesInDay = getSchedulesInDay;
 
 
         /////////////////////////////////////////
@@ -94,19 +95,13 @@
             return;
           }
 
-          var start = new Date(vm.model.date);
-          var day = start.getDay() - 1;
-          var mondayDate = start.getDate() - (day < 0 ? 6 : day);
-          start.setDate(mondayDate);
-          var end = new Date(start);
-          end.setDate(end.getDate() + 6);
-          var uids = [vm.model.user.id];
+          var uid = vm.model.user.id;
           vm.initSchedules();
-          Assistance.getScheduleData(uids, start, end).then(function(data) {
+          Assistance.getScheduleDataInWeek(uid, vm.model.date).then(function(data) {
             if (data == null || data.length <= 0) {
               return;
             }
-            vm.setSchedules(data[vm.model.user.id]);
+            vm.setSchedules(data);
           }, function(error) {
             console.log('Error al buscar el usuario')
           });
@@ -115,13 +110,20 @@
         function setSchedules(schedules) {
           for (var i = 0; i < schedules.length; i++) {
             var sch = schedules[i];
-            sch.start = new Date(sch.start);
-            sch.end = new Date(sch.end);
+            sch.date = new Date(sch.date);
             vm.model.hours = vm.model.hours + sch.hours;
-            var elem = vm.model.schedules[sch.start.getDay()];
-            elem.push(sch);
+            var schs = [];
+            for (var j = 0; j < sch.schedules.length; j++) {
+              var start = new Date(sch.schedules[j].start);
+              var end = new Date(sch.schedules[j].end);
+              schs.push({start: start, end: end});
+            }
+            vm.model.schedules[sch.date.getDay()] = schs;
           }
-          console.log(vm.model.schedules);
+        }
+
+        function getSchedulesInDay(day) {
+          return vm.model.schedules[day];
         }
 
 

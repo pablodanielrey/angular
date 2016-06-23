@@ -42,7 +42,7 @@ class AssistanceWamp(ApplicationSession):
         yield from self.register(self.createRangedJustification_async, 'assistance.createRangedJustification')
         yield from self.register(self.changeStatus_async, 'assistance.changeStatus')
         yield from self.register(self.getJustificationData_async, 'assistance.getJustificationData')
-        yield from self.register(self.getScheduleData_async, 'assistance.getScheduleData')
+        yield from self.register(self.getScheduleDataInWeek_async, 'assistance.getScheduleDataInWeek')
 
     def _localizeLocal(self,naive):
         tz = dateutil.tz.tzlocal()
@@ -195,17 +195,17 @@ class AssistanceWamp(ApplicationSession):
         return r
 
 
-    def getScheduleData(self, userIds, startStr, endStr):
+    def getScheduleDataInWeek(self, userId, dateStr):
         con = self.conn.get()
         try:
-            start = self._parseDate(startStr)
-            end = self._parseDate(endStr)
-            return self.assistance.getScheduleData(con, userIds, start, end)
+            date = self._parseDate(dateStr)
+            date = None if date is None else date.date()
+            return self.assistance.getScheduleDataInWeek(con, userId, date)
         finally:
             self.conn.put(con)
 
     @coroutine
-    def getScheduleData_async(self, userIds, start, end):
+    def getScheduleDataInWeek_async(self, userId, date):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getScheduleData, userIds, start, end)
+        r = yield from loop.run_in_executor(None, self.getScheduleDataInWeek, userId, date)
         return r

@@ -73,44 +73,58 @@ VARIABLES 4: procesando, procesado, errorDeSistema
 
         <div class="textClock">
           <div>HORARIO SEMANAL</div>
-          <div><b>35</b> Horas </div>
+          <div><b>{{vm.model.hours}}</b> Horas </div>
         </div>
 
         <div class="contentSchedules">
             <div class="Monday">
                 <div class="titleDay">Lun</div>
-                <div class="checkIn">10:00</div>
-                <div class="checkOut">17:00</div>
+                <div ng-repeat="sc in vm.getSchedulesInDay(1)">
+                  <div class="checkIn">{{sc.start}}</div>
+                  <div class="checkOut">{{sc.end}}</div>
+                </div>
             </div>
             <div class="Tuesday">
                 <div class="titleDay">Mar</div>
-                <div class="checkIn">10:00</div>
-                <div class="checkOut">12:00</div>
+                <div ng-repeat="sc in vm.getSchedulesInDay(2)">
+                  <div class="checkIn">{{sc.start}}</div>
+                  <div class="checkOut">{{sc.end}}</div>
+                </div>
             </div>
             <div class="Wednesday">
                 <div class="titleDay">Mie</div>
-                <div class="checkIn">10:00</div>
-                <div class="checkOut">17:00</div>
+                <div ng-repeat="sc in vm.getSchedulesInDay(3)">
+                  <div class="checkIn">{{sc.start}}</div>
+                  <div class="checkOut">{{sc.end}}</div>
+                </div>
             </div>
             <div class="Thurday">
                 <div class="titleDay">Jue</div>
-                <div class="checkIn">10:00</div>
-                <div class="checkOut">17:00</div>
+                <div ng-repeat="sc in vm.getSchedulesInDay(4)">
+                  <div class="checkIn">{{sc.start}}</div>
+                  <div class="checkOut">{{sc.end}}</div>
+                </div>
             </div>
             <div class="Friday">
                 <div class="titleDay">Vie</div>
-                <div class="checkIn">10:00</div>
-                <div class="checkOut">17:00</div>
+                <div ng-repeat="sc in vm.getSchedulesInDay(5)">
+                  <div class="checkIn">{{sc.start}}</div>
+                  <div class="checkOut">{{sc.end}}</div>
+                </div>
             </div>
             <div class="Saturday">
                 <div class="titleDay">Sab</div>
-                <div class="checkIn">-</div>
-                <div class="checkOut">-</div>
+                <div ng-repeat="sc in vm.getSchedulesInDay(6)">
+                  <div class="checkIn">{{sc.start}}</div>
+                  <div class="checkOut">{{sc.end}}</div>
+                </div>
             </div>
             <div class="Sunday">
                 <div class="titleDay">Dom</div>
-                <div class="checkIn">-</div>
-                <div class="checkOut">-</div>
+                <div ng-repeat="sc in vm.getSchedulesInDay(7)">
+                  <div class="checkIn">{{sc.start}}</div>
+                  <div class="checkOut">{{sc.end}}</div>
+                </div>
             </div>
         </div>
 
