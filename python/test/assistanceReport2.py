@@ -231,6 +231,7 @@ def statsToPyooUser(rp, user, stats):
         return
 
     stat = stats[user.id][0]
+    justifications = {}
 
     import uuid
     import pyoo
@@ -248,12 +249,28 @@ def statsToPyooUser(rp, user, stats):
             sheet[i,2].value = ds.date if ds.date is not None else ''
             sheet[i,3].value = Utils._naiveFromLocalAware(Utils.toLocalFromAware(ds.start)) if ds.start is not None else ''
             sheet[i,4].value = Utils._naiveFromLocalAware(Utils.toLocalFromAware(ds.end)) if ds.end is not None else ''
-            sheet[i,5].value = datetime.timedelta(seconds=ds.periodSeconds)
+            sheet[i,5].value = datetime.timedelta(seconds=ds.periodSeconds) if ds.start is not None else ''
             sheet[i,6].value = ds.iin if ds.iin is not None else ''
             sheet[i,7].value = ds.out if ds.out is not None else ''
-            sheet[i,8].value = datetime.timedelta(seconds=ds.workedSeconds)
-            sheet[i,9].value = ds.justification.identifier if ds.justification is not None else ''
-            sheet[i,10].value = Status.getIdentifier(ds.justification.status) if ds.justification is not None else ''
+            sheet[i,8].value = datetime.timedelta(seconds=ds.workedSeconds) if ds.iin is not None else ''
+            #sheet[i,9].value = datetime.timedelta(seconds=ds.workedSeconds - ds.periodSeconds) if ds.start is not None or ds.iin is not None else ''
+            sheet[i,10].value = datetime.timedelta(seconds=ds.lateSeconds) if ds.lateSeconds > 0 else ''
+            sheet[i,11].value = datetime.timedelta(seconds=ds.earlySeconds) if ds.earlySeconds > 0 else ''
+            sheet[i,12].value = ds.justification.identifier if ds.justification is not None else ''
+            sheet[i,13].value = Status.getIdentifier(ds.justification.status) if ds.justification is not None else ''
+
+            if ds.justification is not None and ds.justification.status == 2:
+                if ds.justification.identifier not in justifications:
+                    justifications[ds.justification.identifier] = 1
+                else:
+                    justifications[ds.justification.identifier] = justifications[ds.justification.identifier] + 1
+
+            i = i + 1
+
+        i = i + 2
+        for j in justifications.keys():
+            sheet[i,0].value = j
+            sheet[i,1].value = justifications[j]
             i = i + 1
 
         fn = '{}/asistencia.xlsx'.format(rp)
@@ -282,7 +299,7 @@ def findOffice(oid, offices):
 
 def createReportDir(user):
     import os
-    newpath = '/tmp/reporte-asistencia-{}-{}-{}'.format(user.dni, user.name, user.lastname)
+    newpath = '/tmp/reporte-asistencia/reporte-asistencia-{}-{}-{}'.format(user.dni, user.name, user.lastname)
     if not os.path.exists(newpath):
         os.makedirs(newpath)
     return newpath
@@ -291,7 +308,7 @@ if __name__ == '__main__':
 
     logging.getLogger().setLevel(logging.INFO)
 
-    rstart = datetime.datetime.combine((datetime.datetime.now() - datetime.timedelta(days=100)).date(),datetime.time())
+    rstart = datetime.datetime.combine((datetime.datetime.now() - datetime.timedelta(days=120)).date(),datetime.time())
     rend = datetime.datetime.now()
     if len(sys.argv) >= 2:
         import dateutil
