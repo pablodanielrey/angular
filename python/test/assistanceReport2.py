@@ -273,7 +273,7 @@ def statsToPyooUser(rp, user, stats):
             sheet[i,1].value = justifications[j]
             i = i + 1
 
-        fn = '{}/asistencia.xlsx'.format(rp)
+        fn = '{}/{}-{}-{}.xlsx'.format(rp, user.lastname, user.name, user.dni)
         logging.info('salvando : {}'.format(fn))
         doc.save(fn, pyoo.FILTER_EXCEL_2007)
 
@@ -282,8 +282,15 @@ def statsToPyooUser(rp, user, stats):
 
 
 
-def statsToPyooOffice(rp, off, stats):
-    pass
+def statsToPyooOffice(rp, off, stats, users):
+    rpp = '{}/{}'.format(rp, off.name)
+    import os
+    if not os.path.exists(rpp):
+        os.makedirs(rpp)
+    for uid in off.users:
+        user = findUser(uid, users)
+        if user:
+            statsToPyooUser(rpp, user, stats)
 
 def findOfficeByUser(uid, offices):
     off = []
@@ -345,21 +352,19 @@ if __name__ == '__main__':
         """ creo los reportes por usuario y se lo envio """
         for user in users:
 
-            if user.id != '0cd70f16-aebb-4274-bc67-a57da88ab6c7' and user.id != '4b89c515-2eba-4316-97b9-a6204d344d3a' and user.id != '35f7a8a6-d844-4d6f-b60b-aab810610809' and user.id != '205de802-2a15-4652-8fde-f23c674a1246':
+            if user.id != '89d88b81-fbc0-48fa-badb-d32854d3d93a' and user.id != '0cd70f16-aebb-4274-bc67-a57da88ab6c7' and user.id != '4b89c515-2eba-4316-97b9-a6204d344d3a' and user.id != '35f7a8a6-d844-4d6f-b60b-aab810610809' and user.id != '205de802-2a15-4652-8fde-f23c674a1246':
                 continue
 
             rp = createReportDir(user)
             statsToPyooUser(rp, user, stats)
 
-            continue
             officesIds = Office.getOfficesByUserRole(con, user.id, tree=True, role='autoriza')
             ''' genero el reporte de esa oficina '''
             for officeId in officesIds:
                 off = findOffice(officeId, offices)
-                statsToPyooOffice(rp, off, stats)
+                statsToPyooOffice(rp, off, stats, users)
 
-
-            createZipFile(user, rp)
+            #createZipFile(user, rp)
 
     finally:
         conn.put(con)
