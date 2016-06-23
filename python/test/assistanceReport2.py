@@ -238,7 +238,7 @@ def statsToPyooUser(rp, user, stats):
     doc = calc.open_spreadsheet('templateUserStats.ods')
     try:
         sheet = doc.sheets[0]
-        sheet[1,1].value = user.dni
+        sheet[0,1].value = user.dni
         sheet[1,1].value = user.name
         sheet[2,1].value = user.lastname
         sheet[3,1].value = stat.position
@@ -252,6 +252,8 @@ def statsToPyooUser(rp, user, stats):
             sheet[i,6].value = ds.iin if ds.iin is not None else ''
             sheet[i,7].value = ds.out if ds.out is not None else ''
             sheet[i,8].value = datetime.timedelta(seconds=ds.workedSeconds)
+            sheet[i,9].value = ds.justification.identifier if ds.justification is not None else ''
+            sheet[i,10].value = ds.justification.status if ds.justification is not None else ''
             i = i + 1
 
         fn = '{}/asistencia.xlsx'.format(rp)
@@ -289,7 +291,7 @@ if __name__ == '__main__':
 
     logging.getLogger().setLevel(logging.INFO)
 
-    rstart = datetime.datetime.now() - datetime.timedelta(days=7)
+    rstart = datetime.datetime.now() - datetime.timedelta(days=30)
     rend = datetime.datetime.now()
     if len(sys.argv) >= 2:
         import dateutil

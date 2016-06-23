@@ -24,6 +24,8 @@ class Schedule(JSONSerializable):
         self.daily = False
 
     def isValid(self, date):
+        if not self.daily:
+            return date == self.date
         return (self.date <= date) and (self.weekday == date.weekday())
 
     def getStartDate(self, date):
