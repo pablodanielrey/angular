@@ -248,6 +248,23 @@
   text-align: center;
 }
 
+.myOrders.pantallaDetallePedido .itemStatus {
+  /*background-color: yellow;*/
+  width: 150px;
+}
+
+.myOrders.pantallaDetallePedido .status {
+  padding: 15px;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  color:white;
+  font-weight: bold;
+  font-size: 14px;
+  width: 80px;
+  text-align: center;
+}
+
 .myOrders .abierta {
   background-color: #92AD17;
 }
@@ -272,6 +289,10 @@
 .myOrders .itemsType {
   width: 210px;
   /*background-color: blue;*/
+}
+
+.myOrders .contentOffice {
+  width: 210px;
 }
 
 .myOrders .status.abierta .textEC1,
@@ -386,6 +407,12 @@
   font-size: 14px;
 }
 
+.myOrders .textType2 {
+  color: #5C5F69;
+  font-weight: bold;
+  font-size: 12px;
+}
+
 .myOrders .textDateorders,
 .myOrders .textDaysOrders {
   color:#848484;
@@ -469,6 +496,10 @@
   align-items: center;
   -webkit-align-items:center; /* Safari */
   -moz-align-items:center; /* mozilla */
+  width: 100%;
+  justify-content: space-around;
+  -webkit-justify-content: space-around;
+  -moz-justify-content: space-around;
 }
 
 .myOrders .contentBtnReturn {
@@ -569,7 +600,7 @@
 
 .myOrders .contentInfo {
   background-color: #DBE2E5;
-  max-width: 700px;
+  max-width: 100%;
   min-height: 65px;
   max-height: 90px;
   border-radius: 3px;
@@ -602,8 +633,7 @@
 }
 
 .myOrders .contentBtnReply {
-  margin-left: 20px;
-  margin-top: 10px;
+  margin-right: 25px;
 }
 
 .myOrders .btnReply {
@@ -663,16 +693,53 @@
   cursor: pointer;
 }
 
-.myOrders .contentReplys {
-  margin-left: 220px;
+.myOrders .reply {
+  width: 97%;
+
+}
+
+.myOrders .reply.miRespuesta .contentReplys {
   display: flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
   flex-direction:row;
   -webkit-flex-direction:row; /* Safari */
   -moz-flex-direction:row; /* mozilla */
+  justify-content: flex-end;
+  -webkit-justify-content: flex-end;
+  -moz-justify-content: flex-end;
   margin-bottom: 20px;
+  width: 100%;
 }
+
+.myOrders .reply.respuestaDeAutor .contentReplys {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  flex-direction:row-reverse;
+  -webkit-flex-direction:row-reverse; /* Safari */
+  -moz-flex-direction:row-reverse; /* mozilla */
+  justify-content: flex-start;
+  -webkit-justify-content: flex-start;
+  -moz-justify-content: flex-start;
+  margin-bottom: 20px;
+  width: 100%;
+
+}
+
+.myOrders .subcontentReply {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  width: 70%;
+}
+
 
 .myOrders .contentReplys2 {
   margin-left: 110px;
@@ -688,7 +755,7 @@
 
 .myOrders .textReply {
   background-color: #EAEAEA;
-  width: 500px;
+  width: 100%;
   min-height: 30px;
   max-height: 90px;
   border-radius: 3px;
@@ -1358,6 +1425,11 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
   .myOrders .itemsOffice {
     width: 145px;
     /*background-color: red;*/
+  }
+
+  .myOrders .textType,
+  .myOrders .textOffice {
+    font-size: 12px;
   }
 
   .myOrders .itemActions {
