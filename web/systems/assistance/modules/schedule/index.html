@@ -157,7 +157,7 @@ VARIABLES 4: procesando, procesado, errorDeSistema
 
         <div class="contentActionButton">
             <button class="btnAction" ng-click="vm.view.style2='nuevoHorarioSemanal'">MODIFICAR <b>HORARIO SEMANAL</b></button>
-            <button class="btnAction" ng-click="vm.view.style2='nuevoHorarioEspecial'">MODIFICAR <b>HORARIO ESPECIAL</b></button>
+            <button class="btnAction" ng-click="vm.view.style2='nuevoHorarioEspecial'">CREAR <b>HORARIO ESPECIAL</b></button>
         </div>
 
     </div>
@@ -169,7 +169,7 @@ VARIABLES 4: procesando, procesado, errorDeSistema
 
         <div class="textClock2">
           <div>NUEVO <b> HORARIO SEMANAL </b></div>
-          <div><b>35</b> Horas </div>
+          <div><b>{{vm.model.hours}}</b> Horas </div>
         </div>
 
         <div class="contentNewSchedules">
@@ -178,7 +178,7 @@ VARIABLES 4: procesando, procesado, errorDeSistema
 
               <div>
                 Fecha
-                <input type="date" class="inputDateScheduleSpecial"></input>
+                <input type="date" ng-model="vm.model.date" class="inputDateScheduleSpecial"></input>
               </div>
           </div>
 
