@@ -14,6 +14,24 @@ class Status(JSONSerializable):
     REJECTED = 3
     CANCELED = 4
 
+    @classmethod
+    def getIdentifier(cls, integer):
+        if integer == 0:
+            return 'Indefinido'
+
+        if integer == 1:
+            return 'Pendiente'
+
+        if integer == 2:
+            return 'Aprobado'
+
+        if integer == 3:
+            return 'Rechazado'
+
+        if integer == 4:
+            return 'Cancelado'
+
+
     def __init__(self, userId=None, date=None):
         self.id = None
         self.justificationId = None

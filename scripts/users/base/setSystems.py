@@ -19,7 +19,10 @@ def setSystems(con, dni):
         return
 
     (uid, version) = u
-    user = users.UserDAO.findById(con, uid)
+    luser = users.UserDAO.findById(con, [uid])
+    assert len(luser) == 1
+
+    user = luser[0]
     assert user.id is not None
 
     domains = systems.DomainDAO.findAll(con)

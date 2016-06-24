@@ -213,8 +213,9 @@ class OfficeDAO(DAO):
 
         try:
             child = cls._getChildOffices(con,offices)
-            for o in child:
-                offices.append(o['id'])
+            for oid in child:
+                if oid not in offices:
+                    offices.append(oid)
 
             cur.execute('select distinct user_id from offices.offices_users ou where ou.office_id in %s',(tuple(offices),))
             if cur.rowcount <= 0:
@@ -254,6 +255,18 @@ class OfficeDAO(DAO):
         return ids
 
 
+    @classmethod
+    def getOfficesByUser(cls, con, userId):
+        cur = con.cursor()
+        try:
+            cur.execute("select office_id from offices.offices_users where user_id = %s",(userId,))
+            if cur.rowcount <= 0:
+                return []
+
+            return [ s['office_id'] for s in cur ]
+        finally:
+            cur.close()
+
     '''
         obtiene todas las oficinas en las cuales el usuario tiene asignado un rol
         si tree=True obtiene todas las hijas también
@@ -274,7 +287,7 @@ class OfficeDAO(DAO):
 
             if tree:
                 childrens = cls._getChildOffices(con,ids)
-                ids.extend(x for x in childrens if x not in offices)
+                ids.extend(x for x in childrens if x not in ids)
         finally:
             cur.close()
 

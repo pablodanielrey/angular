@@ -1,0 +1,14 @@
+            <div>
+              <div class="titleCatedra"><b>{{user.lastname}} {{user.name}}</b></div>
+
+              <div  ng-repeat="d in data | orderBy:['position.description']" >
+                <div class="titleDocente" >
+                  {{d.position.description}}
+                </div>
+                
+                <div ng-repeat="de in d.designations | orderBy:['place.description']" >
+                  {{de.place.description}}
+                </div>
+              </div>
+
+            </div>

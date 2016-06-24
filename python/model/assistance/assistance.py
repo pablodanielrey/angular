@@ -17,6 +17,20 @@ from model.offices.offices import Office
 from model.assistance.statistics import WpStatistics
 from model.assistance.utils import Utils
 
+class ScheduleObject(JSONSerializable):
+
+    def __init__(self, schedule=None, date = None):
+        self.start = None if schedule is None else schedule.getStartDate(date)
+        self.end = None if schedule is None else schedule.getEndDate(date)
+
+class ScheduleData(JSONSerializable):
+
+    def __init__(self, date = None, schedules = [], uid = None):
+        self.userId = uid
+        self.date = date
+        self.schedules = [ScheduleObject(sc, date) for sc in schedules]
+        self.hours = sum([int(s.getScheduleSeconds() / 60 /60) for s in schedules])
+
 
 class WorkedAssistanceData(JSONSerializable):
 
@@ -37,9 +51,10 @@ class WorkedAssistanceData(JSONSerializable):
 
 class AssistanceData(JSONSerializable):
 
-    def __init__(self, userId = None, workedAssistanceData = []):
+    def __init__(self, userId = None, workedAssistanceData = [], offices = []):
         self.userId = userId
         self.workedAssistanceData = workedAssistanceData
+        self.offices = offices
 
 
 class WorkPeriod(JSONSerializable):
@@ -84,7 +99,10 @@ class WorkPeriod(JSONSerializable):
         return self.logs[0]
 
     def getEndLog(self):
-        if len(self.logs) <= 1:
+        llogs = len(self.logs)
+        if llogs == 0:
+            return None
+        if llogs % 2 == 1:
             return None
         return self.logs[-1]
 
@@ -210,6 +228,14 @@ class AssistanceModel:
         return justs
 
     def getJustifications(self, con, userId, start, end, isAll = False):
+        '''
+            obtiene todas las justificaciones entre las fechas dadas (inclusivas)
+            si isAll es True:
+                entonces obtiene todas las justificaciones de la gente que pertenece a las oficinas para las cuales
+                la persona tiene el rol autoriza.
+            si isAll es False:
+                entonces obtiene todas las justificaciones del usuario indicado por userId.
+        '''
         assert isinstance(start, datetime.date)
         assert isinstance(end, datetime.date)
 
@@ -218,7 +244,8 @@ class AssistanceModel:
             # tengo que obtener todos los usuarios de las oficina que autoriaza y buscar por esos usuarios
             offices = Office.getOfficesByUserRole(con, userId, False, 'autoriza')
             userIds = Office.getOfficesUsers(con, offices)
-            userIds.remove(userId)
+            while userId in userIds:
+                userIds.remove(userId)
         else:
             userIds.append(userId)
 
@@ -351,20 +378,29 @@ class AssistanceModel:
         for uid in userIds:
             sts = stats[uid]
             ws = []
+            oids = Office.getOfficesByUser(con, uid)
+            offices = Office.findById(con, oids)
             for s in sts:
                 for ds in s.dailyStats:
                     w = WorkedAssistanceData(ds)
                     ws.append(w)
-                aData.append(AssistanceData(uid, ws))
+                aData.append(AssistanceData(uid, ws, offices))
 
         return aData
+
+    def getScheduleDataInWeek(self, con, userId, date):
+        schedules = Schedule.findByUserIdInWeek(con, userId, date)
+        return [ScheduleData(key, schedules[key], userId) for key in schedules]
 
 
     def createSingleDateJustification(self,con, date, userId, ownerId, justClazz, justModule):
         module = importlib.import_module(justModule)
         clazz = getattr(module, justClazz)
         j = clazz.create(con, date, userId, ownerId)
-        return j.persist(con)
+        jid = j.persist(con)
+        if userId != ownerId:
+            j.changeStatus(con, Status.APPROVED, ownerId)
+        return jid
 
 
     def createRangedTimeWithoutReturnJustification(self, con, start, userId, ownerId, justClazz, justModule):
@@ -383,7 +419,10 @@ class AssistanceModel:
         module = importlib.import_module(justModule)
         clazz = getattr(module, justClazz)
         j = clazz.create(con, start, end, userId, ownerId)
-        return j.persist(con)
+        jid = j.persist(con)
+        if userId != ownerId:
+            j.changeStatus(con, Status.APPROVED, ownerId)
+        return jid
 
 
     def createRangedTimeWithReturnJustification(self, con, start, end, userId, ownerId, justClazz, justModule):
@@ -392,7 +431,10 @@ class AssistanceModel:
         module = importlib.import_module(justModule)
         clazz = getattr(module, justClazz)
         j = clazz.create(con, start, end, userId, ownerId)
-        return j.persist(con)
+        jid = j.persist(con)
+        if userId != ownerId:
+            j.changeStatus(con, Status.APPROVED, ownerId)
+        return jid
 
 
     def createRangedJustification(self, con, start, days, userId, ownerId, justClazz, justModule):
@@ -401,7 +443,10 @@ class AssistanceModel:
         clazz = getattr(module, justClazz)
 
         j = clazz.create(con, start, days, userId, ownerId)
-        return j.persist(con)
+        jid = j.persist(con)
+        if userId != ownerId:
+            j.changeStatus(con, Status.APPROVED, ownerId)
+        return jid
 
 
     def getJustificationData(self, con, userId, date, justClazz, justModule):

@@ -36,19 +36,16 @@ if __name__ == '__main__':
                     'start': c['sstart'],
                     'end': c['send'],
                     'date': c['sdate'],
+                    'daily': True,
                     'weekday': c['sdate'].weekday()
                 }
-                cur.execute('insert into assistance.schedules (id, user_id, created, sdate, sstart, send, weekday) values '
-                            '(%(id)s, %(userId)s, %(created)s, %(date)s, %(start)s, %(end)s, %(weekday)s)', params)
+                cur.execute('insert into assistance.schedules (id, user_id, created, sdate, sstart, send, daily, weekday) values '
+                            '(%(id)s, %(userId)s, %(created)s, %(date)s, %(start)s, %(end)s, %(daily)s, %(weekday)s)', params)
 
 
             """ ahora genero los dias que son fechas especiales, los genero como cambios de horario de semana """
             cur.execute('select id, user_id, created, sdate, sstart, send from assistance.schedule where isdayofmonth = false and isdayofweek = false and isdayofyear = false')
             for c in cur.fetchall():
-
-                """ guardo el schedule que tenía para esa fecha, asi cambio el horario nuevamente en la fecha del dia siguiente """
-                specificDate = c['sdate']
-                sa = ScheduleDAO.findByUserIdInDate(con, c['user_id'], specificDate)
 
                 params = {
                     'id': c['id'],
@@ -57,28 +54,11 @@ if __name__ == '__main__':
                     'start': c['sstart'],
                     'end': c['send'],
                     'date': c['sdate'],
+                    'daily': False,
                     'weekday': c['sdate'].weekday()
                 }
-                cur.execute('insert into assistance.schedules (id, user_id, created, sdate, sstart, send, weekday) values '
-                            '(%(id)s, %(userId)s, %(created)s, %(date)s, %(start)s, %(end)s, %(weekday)s)', params)
-
-
-                if sa is not None:
-                    """ genero el cambio de horario nuevamente a lo que tenia originalmente enla proxima fecha  """
-
-                    params = {
-                        'id': str(uuid.uuid4()),
-                        'userId': sa.userId,
-                        'created': datetime.datetime.now(),
-                        'start': sa.start,
-                        'end': sa.end,
-                        'date': specificDate + datetime.timedelta(1),
-                        'weekday': sa.date.weekday()
-                    }
-                    cur.execute('insert into assistance.schedules (id, user_id, created, sdate, sstart, send, weekday) values '
-                                '(%(id)s, %(userId)s, %(created)s, %(date)s, %(start)s, %(end)s, %(weekday)s)', params)
-
-
+                cur.execute('insert into assistance.schedules (id, user_id, created, sdate, sstart, send, daily, weekday) values '
+                            '(%(id)s, %(userId)s, %(created)s, %(date)s, %(start)s, %(end)s, %(daily)s, %(weekday)s)', params)
 
             con.commit()
 

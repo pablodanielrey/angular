@@ -15,6 +15,13 @@ app.config(['$routeProvider', function($routeProvider) {
      controller: 'RequestCtrl'
   })
 
+  .when('/schedule', {
+     templateUrl: '/systems/assistance/modules/schedule/index.html',
+     controller: 'ScheduleController',
+     controllerAs: 'vm'
+  })
+
+
 
   .when('/logout', {
      templateUrl: '/systems/login/modules/logout.html',

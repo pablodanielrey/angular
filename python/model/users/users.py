@@ -40,7 +40,8 @@ class UserDAO(DAO):
                 residence_city VARCHAR,
                 created TIMESTAMPTZ DEFAULT now(),
                 version BIGINT DEFAULT 0,
-                photo VARCHAR REFERENCES files.files (id)
+                photo VARCHAR REFERENCES files.files (id),
+                type VARCHAR
               );
 
               CREATE TABLE IF NOT EXISTS profile.telephones (
@@ -642,6 +643,7 @@ class User(JSONSerializable):
         self.photo = None
         self.type = None
         self.telephones = []
+        self.type = None
 
     def getAge(self):
         today = datetime.datetime.now()
