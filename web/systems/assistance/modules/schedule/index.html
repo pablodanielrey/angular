@@ -80,50 +80,78 @@ VARIABLES 4: procesando, procesado, errorDeSistema
             <div class="Monday">
                 <div class="titleDay">Lun</div>
                 <div ng-repeat="sc in vm.getSchedulesInDay(1)">
-                  <div class="checkIn">{{sc.start}}</div>
-                  <div class="checkOut">{{sc.end}}</div>
+                  <div class="checkIn">{{sc.start | date: 'HH:mm'}}</div>
+                  <div class="checkOut">{{sc.end | date: 'HH:mm'}}</div>
+                </div>
+                <div ng-show="!vm.getSchedulesInDay(1).length">
+                  <div class="checkIn"> - </div>
+                  <div class="checkOut"> - </div>
                 </div>
             </div>
             <div class="Tuesday">
                 <div class="titleDay">Mar</div>
                 <div ng-repeat="sc in vm.getSchedulesInDay(2)">
-                  <div class="checkIn">{{sc.start}}</div>
-                  <div class="checkOut">{{sc.end}}</div>
+                  <div class="checkIn">{{sc.start | date: 'HH:mm'}}</div>
+                  <div class="checkOut">{{sc.end | date: 'HH:mm'}}</div>
+                </div>
+                <div ng-show="!vm.getSchedulesInDay(2).length">
+                  <div class="checkIn"> - </div>
+                  <div class="checkOut"> - </div>
                 </div>
             </div>
             <div class="Wednesday">
                 <div class="titleDay">Mie</div>
                 <div ng-repeat="sc in vm.getSchedulesInDay(3)">
-                  <div class="checkIn">{{sc.start}}</div>
-                  <div class="checkOut">{{sc.end}}</div>
+                  <div class="checkIn">{{sc.start | date: 'HH:mm'}}</div>
+                  <div class="checkOut">{{sc.end | date: 'HH:mm'}}</div>
+                </div>
+                <div ng-show="!vm.getSchedulesInDay(3).length">
+                  <div class="checkIn"> - </div>
+                  <div class="checkOut"> - </div>
                 </div>
             </div>
             <div class="Thurday">
                 <div class="titleDay">Jue</div>
                 <div ng-repeat="sc in vm.getSchedulesInDay(4)">
-                  <div class="checkIn">{{sc.start}}</div>
-                  <div class="checkOut">{{sc.end}}</div>
+                  <div class="checkIn">{{sc.start | date: 'HH:mm'}}</div>
+                  <div class="checkOut">{{sc.end | date: 'HH:mm'}}</div>
+                </div>
+                <div ng-show="!vm.getSchedulesInDay(4).length">
+                  <div class="checkIn"> - </div>
+                  <div class="checkOut"> - </div>
                 </div>
             </div>
             <div class="Friday">
                 <div class="titleDay">Vie</div>
                 <div ng-repeat="sc in vm.getSchedulesInDay(5)">
-                  <div class="checkIn">{{sc.start}}</div>
-                  <div class="checkOut">{{sc.end}}</div>
+                  <div class="checkIn">{{sc.start | date: 'HH:mm'}}</div>
+                  <div class="checkOut">{{sc.end | date: 'HH:mm'}}</div>
+                </div>
+                <div ng-show="!vm.getSchedulesInDay(5).length">
+                  <div class="checkIn"> - </div>
+                  <div class="checkOut"> - </div>
                 </div>
             </div>
             <div class="Saturday">
                 <div class="titleDay">Sab</div>
                 <div ng-repeat="sc in vm.getSchedulesInDay(6)">
-                  <div class="checkIn">{{sc.start}}</div>
-                  <div class="checkOut">{{sc.end}}</div>
+                  <div class="checkIn">{{sc.start | date: 'HH:mm'}}</div>
+                  <div class="checkOut">{{sc.end | date: 'HH:mm'}}</div>
+                </div>
+                <div ng-show="!vm.getSchedulesInDay(6).length">
+                  <div class="checkIn"> - </div>
+                  <div class="checkOut"> - </div>
                 </div>
             </div>
             <div class="Sunday">
                 <div class="titleDay">Dom</div>
                 <div ng-repeat="sc in vm.getSchedulesInDay(7)">
-                  <div class="checkIn">{{sc.start}}</div>
-                  <div class="checkOut">{{sc.end}}</div>
+                  <div class="checkIn">{{sc.start | date: 'HH:mm'}}</div>
+                  <div class="checkOut">{{sc.end | date: 'HH:mm'}}</div>
+                </div>
+                <div ng-show="!vm.getSchedulesInDay(7).length">
+                  <div class="checkIn"> - </div>
+                  <div class="checkOut"> - </div>
                 </div>
             </div>
         </div>

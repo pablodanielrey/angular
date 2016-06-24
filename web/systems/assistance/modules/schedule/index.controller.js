@@ -5,10 +5,10 @@
         .module('mainApp')
         .controller('ScheduleController', ScheduleController);
 
-    ScheduleController.$inject = ['$scope', 'Login', 'Users', 'Assistance'];
+    ScheduleController.$inject = ['$scope', 'Login', 'Users', 'Assistance', '$filter'];
 
     /* @ngInject */
-    function ScheduleController($scope, Login, Users, Assistance) {
+    function ScheduleController($scope, Login, Users, Assistance, $filter) {
         var vm = this;
 
         // Variables
@@ -39,7 +39,6 @@
         vm.loadSchedules = loadSchedules;
         vm.setSchedules = setSchedules;
         vm.getSchedulesInDay = getSchedulesInDay;
-
 
         /////////////////////////////////////////
         activate();
@@ -125,7 +124,6 @@
         function getSchedulesInDay(day) {
           return vm.model.schedules[day];
         }
-
 
         ////////////////////////////////////////////////////
         $scope.$watch(function() {return vm.model.date;}, function(o,n) {
