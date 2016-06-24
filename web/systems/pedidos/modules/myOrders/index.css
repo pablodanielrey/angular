@@ -1221,7 +1221,10 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
           transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
 }
 
-.myOrders .preload {
+.myOrders .preload,
+.myOrders .messageSent,
+.myOrders .orderCreated,
+.myOrders .errorSystem {
   display: flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
@@ -1234,9 +1237,34 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
   justify-content: center;
   -webkit-justify-content: center;
   -moz-justify-content: center;
-  color:#5c5f69;
-  font-size: 20px;
+  /*color:#5c5f69;*/
+
 }
+
+.myOrders.pantallaMensajeAlUsuario.mensajeCargando .messageSent,
+.myOrders.pantallaMensajeAlUsuario.mensajeCargando .orderCreated,
+.myOrders.pantallaMensajeAlUsuario.mensajeCargando .errorSystem {
+  display: none;
+}
+
+.myOrders.pantallaMensajeAlUsuario.mensajeError .preload,
+.myOrders.pantallaMensajeAlUsuario.mensajeError .messageSent,
+.myOrders.pantallaMensajeAlUsuario.mensajeError .orderCreated {
+  display: none;
+}
+
+.myOrders.pantallaMensajeAlUsuario.mensajeEnviado .preload,
+.myOrders.pantallaMensajeAlUsuario.mensajeEnviado .orderCreated,
+.myOrders.pantallaMensajeAlUsuario.mensajeEnviado .errorSystem {
+  display: none;
+}
+
+.myOrders.pantallaMensajeAlUsuario.mensajePedidoCreado .preload,
+.myOrders.pantallaMensajeAlUsuario.mensajePedidoCreado .messageSent,
+.myOrders.pantallaMensajeAlUsuario.mensajePedidoCreado .errorSystem {
+  display: none;
+}
+
 
 .myOrders .circle {
   color:#d6d4d4;

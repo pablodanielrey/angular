@@ -1,4 +1,4 @@
-<div class="myOrders {{view.style}} {{view.style2}} pantallaMensajeAlUsuario">
+<div class="myOrders {{view.style}} {{view.style2}} ">
 
     <!-- ---- VARIABLES ----
     VARIABLE 1: pantallaDetallePedido
@@ -7,6 +7,7 @@
                 VARIABLE 2: buscarOficina, buscarArea, buscarConsulta
     VARIABLE 1: buscarPedidos
     VARIABLE 3: pantallaMensajeAlUsuario
+                VARIABLE 4: mensajeCargando, mensajeError, mensajeEnviado, mensajePedidoCreado
     -->
 
     <!-- --------------- HEADER DEL SISTEMA ----------------- -->
@@ -1182,9 +1183,17 @@
                     <div>Por favor espere</div>
                 </div>
                 <div class="errorSystem">
-                    <div class="circle"><i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i></div>
+                    <div class="circle"><i class="fa fa-exclamation-triangle fa-3x fa-fw"></i></div>
                     <div><b>Se ha producido un error en el sistema</b></div>
                     <div>Intente nuevamente</div>
+                </div>
+                <div class="messageSent">
+                    <div class="circle"><i class="fa fa-commenting-o fa-3x fa-fw"></i></div>
+                    <div><b>Mensaje enviado con éxito</b></div>
+                </div>
+                <div class="orderCreated">
+                    <div class="circle"><i class="fa fa-check fa-3x fa-fw"></i></div>
+                    <div><b>Pedido creado con éxito</b></div>
                 </div>
             </div>
         </div>
