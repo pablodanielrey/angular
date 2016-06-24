@@ -22,7 +22,7 @@ VARIABLES 4: procesando, procesado, errorDeSistema
             <div class="contentUser">
 
                   <div class="contentPhoto">
-                    <img class="imgUser" ng-src='{{vm.getUserPhoto()}}' alt="foto de perfil"/>
+                    <img class="imgUser" ng-src='{{vm.getUserPhoto(vm.model.user)}}' alt="foto de perfil"/>
                   </div>
 
                   <div class="contentData">
@@ -38,24 +38,23 @@ VARIABLES 4: procesando, procesado, errorDeSistema
 
             <div class="contentDate ">
                 <div class="contentBtnSelectUser">
-                    <button class="btnSelectUser" ng-click="vm.view.style2='pantallaUsuarios'"><i class="fa fa-search"></i> Usuario</button>
+                    <button class="btnSelectUser" ng-click="vm.displaySearch()"><i class="fa fa-search"></i> Usuario</button>
                 </div>
 
                 <div class="contentListUsers">
 
                     <div class="titleListRequest">
-                      <span class="icoInputSearch"><i class="fa fa-search"></i></span><input class="inputSearch" type="text" placeholder="Buscar personal..."> </input>
+                      <span class="icoInputSearch"><i class="fa fa-search"></i></span><input ng-model="vm.model.search" class="inputSearch" type="text" placeholder="Buscar personal..."> </input>
                     </div>
 
                     <div class="contentListPerson">
-
-                        <div class="btnItemPerson" ng-click="vm.view.style2=''">
+                        <div class="btnItemPerson" ng-repeat="user in vm.model.users | filter:vm.model.search" ng-click="vm.selectUser(user)" >
                             <div class="contentImgUser">
-                                <img class="imgUser" src='img/walter.jpg' alt="foto de perfil">
+                                <img class="imgUser" ng-src='{{vm.getUserPhoto(user)}}' alt="foto de perfil"/>
                             </div>
                             <div class="contentNameUser">
-                              <div>Walter Blanco</div>
-                              <div class="dniUser">30001823</div>
+                              <div>{{user.name}} {{user.lastname}}</div>
+                              <div class="dniUser">{{user.dni}}</div>
                             </div>
                         </div>
 

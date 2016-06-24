@@ -5,18 +5,21 @@
         .module('mainApp')
         .controller('ScheduleController', ScheduleController);
 
-    ScheduleController.$inject = ['$scope', 'Login', 'Users', 'Assistance', '$filter'];
+    ScheduleController.$inject = ['$scope', 'Login', 'Users', 'Assistance', 'Office', '$filter'];
 
     /* @ngInject */
-    function ScheduleController($scope, Login, Users, Assistance, $filter) {
+    function ScheduleController($scope, Login, Users, Assistance, Office, $filter) {
         var vm = this;
 
         // Variables
         vm.model = {
           sessionUser: null,
           user: null,
+          users: [],
           date: null,
-          hours: 0
+          hours: 0,
+          role: 'user',
+          search: ''
         }
 
         vm.view = {
@@ -35,10 +38,16 @@
         vm.initModel = initModel;
         vm.initSchedules = initSchedules;
 
+        vm.loadProfile = loadProfile;
+        vm.loadUsers = loadUsers;
+        vm.findUsersByOffices = findUsersByOffices;
+        vm.displaySearch = displaySearch;
+
         vm.getUserPhoto = getUserPhoto;
         vm.loadSchedules = loadSchedules;
         vm.setSchedules = setSchedules;
         vm.getSchedulesInDay = getSchedulesInDay;
+        vm.selectUser = selectUser;
 
         /////////////////////////////////////////
         activate();
@@ -63,8 +72,58 @@
         }
 
         function initModel() {
-          loadUser(vm.model.sessionUser);
+          vm.model.users = [];
+          vm.model.search = '';
+          vm.model.role = 'user';
           vm.model.date = new Date();
+          vm.loadProfile();
+        }
+
+        function displaySearch() {
+          vm.view.style2 = (vm.view.style2 == vm.view.styles2[0]) ? vm.view.styles2[1] : vm.view.styles2[0];
+        }
+
+        function loadProfile() {
+          Office.getOfficesByUserRole(vm.model.sessionUser, true, 'autoriza').then(function(ids) {
+            vm.view.style = vm.view.styles[0];
+            if (ids.length > 0) {
+              vm.view.style = vm.view.styles[1];
+              vm.findUsersByOffices(ids);
+              vm.model.role = 'authority';
+            } else {
+              vm.loadUsers([vm.model.sessionUser]);
+            }
+          }, function(error) {
+            console.log(error);
+          });
+        }
+
+        function findUsersByOffices(ids) {
+          Office.getOfficesUsers(ids).then(function (userIds) {
+            vm.loadUsers(userIds);
+          }, function(error) {
+            console.log(error);
+          });
+        }
+
+        function loadUsers(ids) {
+          vm.model.users = [];
+          if (ids.length <= 0) {
+            return;
+          }
+          Users.findById(ids).then(function(users) {
+            vm.model.users = (users == null) ? [] : users;
+            for (var i = 0; i < users.length; i++) {
+              var user = users[i];
+              if (user.id == vm.model.sessionUser) {
+                vm.model.user = user;
+                break;
+              }
+            }
+            vm.loadSchedules();
+          }, function(error) {
+            console.log('Error al buscar el usuario')
+          });
         }
 
         function initSchedules() {
@@ -72,20 +131,11 @@
           vm.model.hours = 0;
         }
 
-        function loadUser(uid) {
-          Users.findById([uid]).then(function(users) {
-            vm.model.user = (users.length > 0) ? users[0] : null;
-            vm.loadSchedules();
-          }, function(error) {
-            console.log('Error al buscar el usuario')
-          });
-        }
-
-        function getUserPhoto() {
-          if (vm.model.user == null || vm.model.user.photo == null || vm.model.user.photo == '') {
+        function getUserPhoto(user) {
+          if (user == null || user.photo == null || user.photo == '') {
             return "../login/modules/img/imgUser.jpg";
           } else {
-            return "/c/files.py?i=" + vm.model.user.photo;
+            return "/c/files.py?i=" + user.photo;
           }
         }
 
@@ -123,6 +173,15 @@
 
         function getSchedulesInDay(day) {
           return vm.model.schedules[day];
+        }
+
+        function selectUser(user) {
+          vm.view.style2 = vm.view.styles2[0];
+          if (user == null) {
+            return;
+          }
+          vm.model.user = user;
+          vm.loadSchedules();
         }
 
         ////////////////////////////////////////////////////
