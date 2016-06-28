@@ -327,6 +327,25 @@
         }
 
         function saveScheduleWeek() {
+          var modifiedScheds = [];
+          for (var day = 0; day < 7 ; day++) {
+            var newScheds = vm.model.newSchedules[day];
+            var scheds = vm.model.schedules[day];
+
+            if (newScheds.length != scheds.length) {
+              modifiedScheds = modifiedScheds.concat(newScheds);
+              continue;
+            }
+
+            for (var i = 0; i < newScheds.length; i++) {
+              var hours = (scheds[i].end - scheds[i].start) / 60 / 60 / 1000;
+              if (newScheds[i].start != scheds[i].start || newScheds[i].hours != hours) {
+                modifiedScheds.push(newScheds[i]);
+              }
+            }
+
+          }
+          console.log(modifiedScheds);
           vm.view.style2 = vm.view.styles2[0];
         }
 
