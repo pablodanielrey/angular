@@ -849,7 +849,7 @@
   -webkit-flex-direction:row; /* Safari */
   -moz-flex-direction:row; /* mozilla */
   max-width: 70%;
-  min-width: 30%;
+  min-width: 30%
 }
 
 
@@ -1812,7 +1812,8 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
   }
 
   .myOrders .subcontentReply {
-    width: 100%;
+    max-width: 100%;
+    min-width: 70%;
     padding: 0px 5px 0 5px;
   }
 
