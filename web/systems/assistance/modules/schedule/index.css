@@ -355,6 +355,14 @@
   margin-right: 10px;
 }
 
+.schedule .textDays.remove {
+  color: red;
+}
+
+.schedule .textDays.modify {
+  color: green;
+}
+
 .schedule .newCheckIn {
     border: none;
     background-color: #EEEEEE;

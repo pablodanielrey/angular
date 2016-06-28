@@ -189,20 +189,15 @@ VARIABLES 4: procesando, procesado, errorDeSistema
           </div>
           <div class="subContentNewSchedules">
 
-              <!-- VARIABLES PARA AGREGAR AL "FILES"
-              principalSinDatos
-              principalConDatos
-              secundarioSinDatos
-              secundarioConDatos -->
 
               <div ng-repeat="daySched in vm.model.newSchedules">
-                <div ng-repeat="sc in vm.getNewSchedulesInDay($index + 1)" class='files' ng-class="sc.style">
-                  <div class="textDays">{{vm.getDayName($parent.$index + 1)}}</div>
-                  <div><input class="newCheckIn" type="time" ng-model="sc.start"  sched-directive="sc"></input></div>
-                  <div><input class="newCantHour" type="number" ng-model="sc.hours" ng-change="vm.changeHours($event, sc)"></input></div>
-                  <div class="contentBtnAdd"><button class="btnAdd" ng-click="vm.addSchedule($parent.$index + 1)"><i class="fa fa-plus"></i></button></div>
-                  <div class="contentBtnClear"><button class="btnClear" ng-click="vm.clearSchedule(sc)"><i class="fa fa-eraser"></i></button></div>
-                  <div class="contentBtnTrash"><button class="btnTrash" ng-click="vm.removeSchedule($parent.$index + 1, $index)"><i class="fa fa-trash-o"></i></button></div>
+                <div ng-repeat="sc in vm.getNewSchedulesInDay($index + 1)" class='files' ng-class="sc.style" sched-directive="sc">
+                  <div class="textDays {{sc.operation}}">{{vm.getDayName($parent.$index + 1)}}</div>
+                  <div><input class="newCheckIn" type="time" ng-model="sc.start"></input></div>
+                  <div><input class="newCantHour" type="number" ng-model="sc.hours" min=0></input></div>
+                  <div title="nuevo horario" class="contentBtnAdd"><button class="btnAdd" ng-click="vm.addSchedule($parent.$index + 1)"><i class="fa fa-plus"></i></button></div>
+                  <div title="limpiar campos" class="contentBtnClear"><button class="btnClear" ng-click="vm.clearSchedule(sc)"><i class="fa fa-eraser"></i></button></div>
+                  <div title="eliminar horario" class="contentBtnTrash"><button class="btnTrash" ng-click="vm.removeSchedule($parent.$index + 1, $index)"><i class="fa fa-trash-o"></i></button></div>
                 </div>
               </div>
           </div>

@@ -60,8 +60,11 @@
         vm.addSchedule = addSchedule;
         vm.removeSchedule = removeSchedule;
         vm.clearSchedule = clearSchedule;
-        vm.changeStart = changeStart;
-        vm.changeHours = changeHours;
+        vm.updateNewHours = updateNewHours;
+
+        // comunicacion con la directiva
+        $scope.changeStart = changeStart;
+        $scope.changeHours = changeHours;
 
         /////////////////////////////////////////
         activate();
@@ -214,7 +217,7 @@
             var sched = vm.model.schedules[i];
             var newSched = [];
             if (sched.length <= 0) {
-              newSched.push({start: null, end: null, modified: false, style: vm.view.schedStyles[0], day: i});
+              newSched.push({start: null, end: null, modified: false, hours: null, style: vm.view.schedStyles[0], day: i});
             } else {
               for (var j = 0; j < sched.length; j ++) {
                 var start = sched[j].start;
@@ -229,7 +232,7 @@
         }
 
         function addSchedule(day) {
-          vm.model.newSchedules[day].push({start: null, end: null, modified: true, style: vm.view.schedStyles[2], day: day});
+          vm.model.newSchedules[day].push({start: null, end: null, modified: true, hours: null, style: vm.view.schedStyles[2], day: day});
         }
 
         function removeSchedule(day, index) {
@@ -244,22 +247,45 @@
           sch.end = null;
           sch.hours = null;
           sch.modified = true;
+          sch.operation = 'remove';
           var index = vm.view.schedStyles.indexOf(sch.style);
           sch.style = vm.view.schedStyles[index - 1];
         }
 
-        function changeStart(newVal, oldVal) {
-          console.log("Viejo ctrl:" + oldVal);
-          console.log("Nuevo ctrl:" + newVal);
+        function changeStart(newVal, oldVal, sched) {
+          changeSchedule(newVal, oldVal, sched);
         }
 
-        $scope.changeSched = function(newVal, oldVal) {
-          console.log("Viejo ctrl:" + oldVal);
-          console.log("Nuevo ctrl:" + newVal);
+        function changeHours(newVal, oldVal, sched) {
+          changeSchedule(newVal, oldVal, sched);
         }
 
-        function changeHours(event, schedule) {
-          console.log(event)
+        function changeSchedule(newVal, oldVal, sched) {
+          if (oldVal == null && newVal != null) {
+            var index = vm.view.schedStyles.indexOf(sched.style);
+            sched.style = (index % 2 == 0) ? vm.view.schedStyles[index + 1] : sched.style;
+          }
+          if (!isValid(sched)) {
+              return;
+          }
+          sched.modified = true;
+          sched.operation = 'modify';
+          vm.updateNewHours();
+        }
+
+        function updateNewHours() {
+          var hours = 0;
+          for (var i = 0; i < vm.model.newSchedules.length; i++) {
+            var scheds = vm.model.newSchedules[i];
+            for (var j = 0; j < scheds.length; j++) {
+              hours = (scheds[j].hours != null) ? hours + scheds[j].hours : hours;
+            }
+          }
+          vm.model.newSchedHours = hours;
+        }
+
+        function isValid(sched) {
+          return (sched.hours != null && sched.hours > 0) && (sched.start != null)
         }
 
         function newSpecialSchedule() {
