@@ -929,25 +929,30 @@
                           <div class="textName">Emanuel Pais</div>
                   </div>
 
-                  <div class="itemStatus">
-                      <div class="status abierta">
-                          <!-- VARIABLES:
-                          abierta, enProgreso, cerrada, pausada, rechazada -->
-                          <div class="textA1">ABIERTA</div>
-                          <div class="textA2"></div>
-                          <div class="textEC1">EN CURSO</div>
-                          <div class="textEC2"></div>
-                          <div class="textC1">CERRADA</div>
-                          <div class="textC2"></div>
-                          <div class="textP1">PAUSADA</div>
-                          <div class="textP2"></div>
-                          <div class="textR1">RECHAZADA</div>
-                          <div class="textR2"></div>
-                      </div>
-                  </div>
+                  <div class="contentActions">
 
-                  <div class="contentBtnReply">
-                      <button class="btnReply" ng-click="view.style2 = 'pantallaMensaje'">RESPONDER</button>
+                      <div class="itemStatus2">
+                          <div class="status2 rechazada">
+                              <!-- VARIABLES:
+                              abierta, enProgreso, cerrada, pausada, rechazada -->
+                              <div class="textA1">ABIERTA</div>
+                              <div class="textA2">A</div>
+                              <div class="textEC1">EN CURSO</div>
+                              <div class="textEC2">eC</div>
+                              <div class="textC1">CERRADA</div>
+                              <div class="textC2">C</div>
+                              <div class="textP1">PAUSADA</div>
+                              <div class="textP2">P</div>
+                              <div class="textR1">RECHAZADA</div>
+                              <div class="textR2">R</div>
+                          </div>
+                      </div>
+
+                      <div class="contentBtnReply">
+                          <button class="btnReply" ng-click="view.style2 = 'pantallaMensaje'">RESPONDER</button>
+                          <button class="btnReply2" ng-click="view.style2 = 'pantallaMensaje'"><i class="fa fa-comment-o fa-2x"></i></button>
+                      </div>
+
                   </div>
 
               </div>
@@ -964,9 +969,9 @@
                   Galle
                 </div>
             </div>
-            <div class="contentArrow">
+            <!-- <div class="contentArrow">
               <i class="fa fa-caret-left" aria-hidden="true"></i>
-            </div>
+            </div> -->
             <div class="contentInfo">
                 <div class="textDateDetailOrders">
                     Hoy - 25 May. 2016 - 09:25 hs
@@ -997,12 +1002,152 @@
 
         <div class="contentTotalReplys">
 
-            <div class="reply RespuestaDeAutor">
-                <!-- VARIABLES: miRespuesta, RespuestaDeAutor -->
+            <div class="reply miRespuesta">
+                <!-- VARIABLES: miRespuesta, respuestaDeAutor -->
                 <div class="contentReplys">
 
                     <div class="subcontentReply">
+                      <div class="contentArrowLeft">
+                        <i class="fa fa-caret-left" aria-hidden="true"></i>
+                      </div>
+
+                      <div class="textReply">
+                          <div class="textDateDetailOrders">
+                              Hoy - 25 May. 2016 - 10:26 hs
+                          </div>
+                          <div>
+                                presiona el botón de encendido.
+                          </div>
+                      </div>
+
                       <div class="contentArrowRight">
+                        <i class="fa fa-caret-right" aria-hidden="true"></i>
+                      </div>
+                    </div>
+
+                    <div class="contentUser">
+                      <div class="photo">
+                          <img class="avatar"  src="/systems/pedidos/img/walter.jpg">
+                      </div>
+                      <div class="nameUser">
+                        Walter </br>
+                        Blanco
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reply respuestaDeAutor">
+                <!-- VARIABLES: miRespuesta, respuestaDeAutor -->
+                <div class="contentReplys">
+
+                    <div class="subcontentReply">
+                      <div class="contentArrowLeft">
+                        <i class="fa fa-caret-left" aria-hidden="true"></i>
+                      </div>
+
+                      <div class="textReply">
+                          <div class="textDateDetailOrders">
+                              Hoy - 25 May. 2016 - 10:26 hs
+                          </div>
+                          <div>
+                                La impresora no se enciende o no responde cuando 
+                          </div>
+                      </div>
+
+                      <div class="contentArrowRight">
+                        <i class="fa fa-caret-right" aria-hidden="true"></i>
+                      </div>
+                    </div>
+
+                    <div class="contentUser">
+                      <div class="photo">
+                          <img class="avatar"  src="/systems/pedidos/img/walter.jpg">
+                      </div>
+                      <div class="nameUser">
+                        Walter </br>
+                        Blanco
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reply miRespuesta">
+                <!-- VARIABLES: miRespuesta, respuestaDeAutor -->
+                <div class="contentReplys">
+
+                    <div class="subcontentReply">
+                      <div class="contentArrowLeft">
+                        <i class="fa fa-caret-left" aria-hidden="true"></i>
+                      </div>
+
+                      <div class="textReply">
+                          <div class="textDateDetailOrders">
+                              Hoy - 25 May. 2016 - 10:26 hs
+                          </div>
+                          <div>
+                            Ok
+                          </div>
+                      </div>
+
+                      <div class="contentArrowRight">
+                        <i class="fa fa-caret-right" aria-hidden="true"></i>
+                      </div>
+                    </div>
+
+                    <div class="contentUser">
+                      <div class="photo">
+                          <img class="avatar"  src="/systems/pedidos/img/walter.jpg">
+                      </div>
+                      <div class="nameUser">
+                        Walter </br>
+                        Blanco
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reply respuestaDeAutor">
+                <!-- VARIABLES: miRespuesta, respuestaDeAutor -->
+                <div class="contentReplys">
+
+                    <div class="subcontentReply">
+                      <div class="contentArrowLeft">
+                        <i class="fa fa-caret-left" aria-hidden="true"></i>
+                      </div>
+
+                      <div class="textReply">
+                          <div class="textDateDetailOrders">
+                              Hoy - 25 May. 2016 - 10:26 hs
+                          </div>
+                          <div>
+                                La impresora no se enciende o no responde cuando se presiona el botón de encendido. No se observan indicadores luminosos ni mensajes de error, y no hay ruidos ni movimiento en la impresora.
+                          </div>
+                      </div>
+
+                      <div class="contentArrowRight">
+                        <i class="fa fa-caret-right" aria-hidden="true"></i>
+                      </div>
+                    </div>
+
+                    <div class="contentUser">
+                      <div class="photo">
+                          <img class="avatar"  src="/systems/pedidos/img/walter.jpg">
+                      </div>
+                      <div class="nameUser">
+                        Walter </br>
+                        Blanco
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reply respuestaDeAutor">
+                <!-- VARIABLES: miRespuesta, respuestaDeAutor -->
+                <div class="contentReplys">
+
+                    <div class="subcontentReply">
+                      <div class="contentArrowLeft">
                         <i class="fa fa-caret-left" aria-hidden="true"></i>
                       </div>
 
