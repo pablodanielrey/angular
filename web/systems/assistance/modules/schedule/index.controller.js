@@ -18,8 +18,11 @@
           users: [],
           date: null,
           hours: 0,
+          newSchedHours: 0,
           role: 'user',
-          search: ''
+          search: '',
+          schedules: [],
+          newSchedules: []
         }
 
         vm.view = {
@@ -30,7 +33,9 @@
           styles3: ['', 'pantallaMensaje'],
           style3: null,
           styles4: ['', 'procesando', 'procesado', 'errorDeSistema'],
-          style4: null
+          style4: null,
+          days: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
+          schedStyles: ['principalSinDatos', 'principalConDatos', 'secundarioSinDatos', 'secundarioConDatos']
         }
         // Funciones
         vm.activate = activate;
@@ -42,12 +47,21 @@
         vm.loadUsers = loadUsers;
         vm.findUsersByOffices = findUsersByOffices;
         vm.displaySearch = displaySearch;
+        vm.newWeeklySchedule = newWeeklySchedule;
 
         vm.getUserPhoto = getUserPhoto;
         vm.loadSchedules = loadSchedules;
         vm.setSchedules = setSchedules;
         vm.getSchedulesInDay = getSchedulesInDay;
+        vm.getNewSchedulesInDay = getNewSchedulesInDay;
+        vm.getDayName = getDayName;
         vm.selectUser = selectUser;
+
+        vm.addSchedule = addSchedule;
+        vm.removeSchedule = removeSchedule;
+        vm.clearSchedule = clearSchedule;
+        vm.changeStart = changeStart;
+        vm.changeHours = changeHours;
 
         /////////////////////////////////////////
         activate();
@@ -175,6 +189,14 @@
           return vm.model.schedules[day];
         }
 
+        function getNewSchedulesInDay(day) {
+          return (day == 7) ? vm.model.newSchedules[0] : vm.model.newSchedules[day];
+        }
+
+        function getDayName(index) {
+          return (index == 7) ? vm.view.days[0] : vm.view.days[index];
+        }
+
         function selectUser(user) {
           vm.view.style2 = vm.view.styles2[0];
           if (user == null) {
@@ -183,6 +205,67 @@
           vm.model.user = user;
           vm.loadSchedules();
         }
+
+        function newWeeklySchedule() {
+          vm.view.style2 = vm.view.styles2[2];
+          vm.model.newSchedules = [[],[],[],[],[],[],[]];
+          vm.model.newSchedHours = vm.model.hours;
+          for (var i = 0; i < vm.model.schedules.length; i++) {
+            var sched = vm.model.schedules[i];
+            var newSched = [];
+            if (sched.length <= 0) {
+              newSched.push({start: null, end: null, modified: false, style: vm.view.schedStyles[0], day: i});
+            } else {
+              for (var j = 0; j < sched.length; j ++) {
+                var start = sched[j].start;
+                var end = sched[j].end;
+                var hours = (end - start) / 60 / 60 / 1000;
+                var style = (j == 0) ? vm.view.schedStyles[1] : vm.view.schedStyles[3];
+                newSched.push({start: start, end: end, modified: false, hours: hours, style: style, day: i});
+              }
+            }
+            vm.model.newSchedules[i] = newSched;
+          }
+        }
+
+        function addSchedule(day) {
+          vm.model.newSchedules[day].push({start: null, end: null, modified: true, style: vm.view.schedStyles[2], day: day});
+        }
+
+        function removeSchedule(day, index) {
+          var sched = vm.model.newSchedules[day];
+          vm.model.newSchedHours = (sched[index].hours != null) ? vm.model.newSchedHours - sched[index].hours : vm.model.newSchedHours ;
+          vm.model.newSchedules[day].splice(index, 1);
+        }
+
+        function clearSchedule(sch) {
+          vm.model.newSchedHours = (sch.hours != null) ? vm.model.newSchedHours - sch.hours : vm.model.newSchedHours ;
+          sch.start = null;
+          sch.end = null;
+          sch.hours = null;
+          sch.modified = true;
+          var index = vm.view.schedStyles.indexOf(sch.style);
+          sch.style = vm.view.schedStyles[index - 1];
+        }
+
+        function changeStart(newVal, oldVal) {
+          console.log("Viejo ctrl:" + oldVal);
+          console.log("Nuevo ctrl:" + newVal);
+        }
+
+        $scope.changeSched = function(newVal, oldVal) {
+          console.log("Viejo ctrl:" + oldVal);
+          console.log("Nuevo ctrl:" + newVal);
+        }
+
+        function changeHours(event, schedule) {
+          console.log(event)
+        }
+
+        function newSpecialSchedule() {
+          vm.view.style2 = vm.view.styles2[3];
+        }
+
 
         ////////////////////////////////////////////////////
         $scope.$watch(function() {return vm.model.date;}, function(o,n) {

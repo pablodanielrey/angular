@@ -144,11 +144,11 @@ VARIABLES 4: procesando, procesado, errorDeSistema
             </div>
             <div class="Sunday">
                 <div class="titleDay">Dom</div>
-                <div ng-repeat="sc in vm.getSchedulesInDay(7)">
+                <div ng-repeat="sc in vm.getSchedulesInDay(0)">
                   <div class="checkIn">{{sc.start | date: 'HH:mm'}}</div>
                   <div class="checkOut">{{sc.end | date: 'HH:mm'}}</div>
                 </div>
-                <div ng-show="!vm.getSchedulesInDay(7).length">
+                <div ng-show="!vm.getSchedulesInDay(0).length">
                   <div class="checkIn"> - </div>
                   <div class="checkOut"> - </div>
                 </div>
@@ -156,7 +156,7 @@ VARIABLES 4: procesando, procesado, errorDeSistema
         </div>
 
         <div class="contentActionButton">
-            <button class="btnAction" ng-click="vm.view.style2='nuevoHorarioSemanal'">MODIFICAR <b>HORARIO SEMANAL</b></button>
+            <button class="btnAction" ng-click="vm.newWeeklySchedule()">MODIFICAR <b>HORARIO SEMANAL</b></button>
             <button class="btnAction" ng-click="vm.view.style2='nuevoHorarioEspecial'">CREAR <b>HORARIO ESPECIAL</b></button>
         </div>
 
@@ -169,7 +169,7 @@ VARIABLES 4: procesando, procesado, errorDeSistema
 
         <div class="textClock2">
           <div>NUEVO <b> HORARIO SEMANAL </b></div>
-          <div><b>{{vm.model.hours}}</b> Horas </div>
+          <div><b>{{vm.model.newSchedHours }}</b> Horas </div>
         </div>
 
         <div class="contentNewSchedules">
@@ -188,62 +188,23 @@ VARIABLES 4: procesando, procesado, errorDeSistema
               <div class="titleFiles2">Horas</div>
           </div>
           <div class="subContentNewSchedules">
-              <div class="files secundarioConDatos">
-                  <!-- VARIABLES PARA AGREGAR AL "FILES"
-                  principalSinDatos
-                  principalConDatos
-                  secundarioSinDatos
-                  secundarioConDatos -->
-                  <div class="textDays">Lun</div>
-                  <div><input class="newCheckIn" type="time"></input></div>
-                  <div><input class="newCantHour" type="number"></input></div>
-                  <div class="contentBtnAdd"><button class="btnAdd"><i class="fa fa-plus"></i></button></div>
-                  <div class="contentBtnClear"><button class="btnClear"><i class="fa fa-eraser"></i></button></div>
-                  <div class="contentBtnTrash"><button class="btnTrash"><i class="fa fa-trash-o"></i></button></div>
-              </div>
-              <div class="files">
-                  <div class="textDays">Lun</div>
-                  <div><input class="newCheckIn" type="time"></input></div>
-                  <div><input class="newCantHour" type="number"></input></div>
-                  <div><button class="btnTrash"><i class="fa fa-trash-o"></i></button></div>
-              </div>
-              <div class="files">
-                  <div class="textDays">Mar</div>
-                  <div><input class="newCheckIn" type="time"></input></div>
-                  <div><input class="newCantHour" type="number"></input></div>
-                  <div><button class="btnAdd"><i class="fa fa-plus"></i></button></div>
-              </div>
-              <div class="files">
-                  <div class="textDays">Mie</div>
-                  <div><input class="newCheckIn" type="time"></input></div>
-                  <div><input class="newCantHour" type="number"></input></div>
-                  <div><button class="btnAdd"><i class="fa fa-plus"></i></button></div>
-              </div>
-              <div class="files">
-                  <div class="textDays">Jue</div>
-                  <div><input class="newCheckIn" type="time"></input></div>
-                  <div><input class="newCantHour" type="number"></input></div>
-                  <div><button class="btnAdd"><i class="fa fa-plus"></i></button></div>
-              </div>
-              <div class="files">
-                  <div class="textDays">Vie</div>
-                  <div><input class="newCheckIn" type="time"></input></div>
-                  <div><input class="newCantHour" type="number"></input></div>
-                  <div><button class="btnAdd"><i class="fa fa-plus"></i></button></div>
-              </div>
-              <div class="files">
-                  <div class="textDays">Sab</div>
-                  <div><input class="newCheckIn" type="time"></input></div>
-                  <div><input class="newCantHour" type="number"></input></div>
-                  <div><button class="btnAdd"><i class="fa fa-plus"></i></button></div>
-              </div>
-              <div class="files">
-                  <div class="textDays">Dom</div>
-                  <div><input class="newCheckIn" type="time"></input></div>
-                  <div><input class="newCantHour" type="number"></input></div>
-                  <div><button class="btnAdd"><i class="fa fa-plus"></i></button></div>
-              </div>
 
+              <!-- VARIABLES PARA AGREGAR AL "FILES"
+              principalSinDatos
+              principalConDatos
+              secundarioSinDatos
+              secundarioConDatos -->
+
+              <div ng-repeat="daySched in vm.model.newSchedules">
+                <div ng-repeat="sc in vm.getNewSchedulesInDay($index + 1)" class='files' ng-class="sc.style">
+                  <div class="textDays">{{vm.getDayName($parent.$index + 1)}}</div>
+                  <div><input class="newCheckIn" type="time" ng-model="sc.start"  sched-directive="sc"></input></div>
+                  <div><input class="newCantHour" type="number" ng-model="sc.hours" ng-change="vm.changeHours($event, sc)"></input></div>
+                  <div class="contentBtnAdd"><button class="btnAdd" ng-click="vm.addSchedule($parent.$index + 1)"><i class="fa fa-plus"></i></button></div>
+                  <div class="contentBtnClear"><button class="btnClear" ng-click="vm.clearSchedule(sc)"><i class="fa fa-eraser"></i></button></div>
+                  <div class="contentBtnTrash"><button class="btnTrash" ng-click="vm.removeSchedule($parent.$index + 1, $index)"><i class="fa fa-trash-o"></i></button></div>
+                </div>
+              </div>
           </div>
 
         </div>
