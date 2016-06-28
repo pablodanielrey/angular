@@ -37,6 +37,7 @@
           days: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
           schedStyles: ['principalSinDatos', 'principalConDatos', 'secundarioSinDatos', 'secundarioConDatos']
         }
+
         // Funciones
         vm.activate = activate;
         vm.initView = initView;
@@ -61,6 +62,8 @@
         vm.removeSchedule = removeSchedule;
         vm.clearSchedule = clearSchedule;
         vm.updateNewHours = updateNewHours;
+        vm.cancel = cancel;
+        vm.saveScheduleWeek = saveScheduleWeek;
 
         // comunicacion con la directiva
         $scope.changeStart = changeStart;
@@ -257,7 +260,24 @@
         }
 
         function changeHours(newVal, oldVal, sched) {
+          var pattern = /^[0-9]+(.2|.25|.50|.5|.75|.7)?$/;
+          if(!pattern.test(newVal)) {
+            sched.hours = oldVal;
+          }
+          var patternAux = /^[0-9]+(.2|.7)+$/;
+          if(patternAux.test(newVal)) {
+            sched.hours = sched.hours + 0.05;
+          }
+
           changeSchedule(newVal, oldVal, sched);
+        }
+
+        vm.validateHours = validateHours;
+        function validateHours(sch) {
+          var pattern = /^[0-9]+(.25|.50|.5|.75)?$/;
+          if(!pattern.test(sch.hours)) {
+            sch.hours = sch.oldHs;
+          }
         }
 
         function changeSchedule(newVal, oldVal, sched) {
@@ -271,6 +291,16 @@
           sched.modified = true;
           sched.operation = 'modify';
           vm.updateNewHours();
+        }
+
+        vm.getMinutes = getMinutes;
+        function getMinutes() {
+          return (vm.model.newSchedHours - vm.getHours()) * 60;
+        }
+
+        vm.getHours = getHours;
+        function getHours() {
+          return parseInt(vm.model.newSchedHours);
         }
 
         function updateNewHours() {
@@ -290,6 +320,14 @@
 
         function newSpecialSchedule() {
           vm.view.style2 = vm.view.styles2[3];
+        }
+
+        function cancel() {
+          vm.view.style2 = vm.view.styles2[0];
+        }
+
+        function saveScheduleWeek() {
+          vm.view.style2 = vm.view.styles2[0];
         }
 
 

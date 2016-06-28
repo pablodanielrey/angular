@@ -23,9 +23,10 @@
             }
             $scope.changeStart(newVal, oldVal, obj.sc);
           },true);
-          $scope.$watch('sc.hours',function(newVal,oldVal, obj) {
+          $scope.$watch('sc.hours',function(newVal,oldVal, obj) {            
+            obj.sc.oldHs = oldVal;
             if (newVal == undefined || newVal < 0) {
-              obj.sc.hours = null;
+              return;
             }
             if (newVal == oldVal) {
               return;

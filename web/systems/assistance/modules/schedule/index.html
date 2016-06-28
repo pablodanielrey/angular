@@ -169,7 +169,7 @@ VARIABLES 4: procesando, procesado, errorDeSistema
 
         <div class="textClock2">
           <div>NUEVO <b> HORARIO SEMANAL </b></div>
-          <div><b>{{vm.model.newSchedHours }}</b> Horas </div>
+          <div><b>{{vm.getHours()}} : {{('0'+vm.getMinutes()).slice(-2)}}</b> Horas </div>
         </div>
 
         <div class="contentNewSchedules">
@@ -194,7 +194,7 @@ VARIABLES 4: procesando, procesado, errorDeSistema
                 <div ng-repeat="sc in vm.getNewSchedulesInDay($index + 1)" class='files' ng-class="sc.style" sched-directive="sc">
                   <div class="textDays {{sc.operation}}">{{vm.getDayName($parent.$index + 1)}}</div>
                   <div><input class="newCheckIn" type="time" ng-model="sc.start"></input></div>
-                  <div><input class="newCantHour" type="number" ng-model="sc.hours" min=0></input></div>
+                  <div><input class="newCantHour" type="number" ng-model="sc.hours" min=0 step="0.25" ng-blur="vm.validateHours(sc)"></input></div>
                   <div title="nuevo horario" class="contentBtnAdd"><button class="btnAdd" ng-click="vm.addSchedule($parent.$index + 1)"><i class="fa fa-plus"></i></button></div>
                   <div title="limpiar campos" class="contentBtnClear"><button class="btnClear" ng-click="vm.clearSchedule(sc)"><i class="fa fa-eraser"></i></button></div>
                   <div title="eliminar horario" class="contentBtnTrash"><button class="btnTrash" ng-click="vm.removeSchedule($parent.$index + 1, $index)"><i class="fa fa-trash-o"></i></button></div>
@@ -205,8 +205,8 @@ VARIABLES 4: procesando, procesado, errorDeSistema
         </div>
 
         <div class="actionBtns">
-            <button class="btnAcept" ng-click="vm.view.style2 = ''">ACEPTAR</button>
-            <button class="btnCancel" ng-click="vm.view.style2 = ''">CANCELAR</button>
+            <button class="btnAcept" ng-click="vm.saveScheduleWeek()">ACEPTAR</button>
+            <button class="btnCancel" ng-click="vm.cancel()">CANCELAR</button>
         </div>
 
     </div>
