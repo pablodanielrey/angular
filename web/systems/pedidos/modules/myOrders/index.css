@@ -678,8 +678,8 @@
 .myOrders .contentInfo {
   background-color: #E2E2E2;
   width: 100%;
-  min-height: 65px;
-  max-height: 90px;
+  min-height: 60px;
+  max-height: 65px;
   border-radius: 3px;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
@@ -1449,6 +1449,23 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
 .myOrders .circle {
   color:#d6d4d4;
   margin-bottom: 10px;
+}
+
+.myOrders a:link {
+ text-decoration:none;
+}
+
+.myOrders .archiveAdd {
+  color: #0069A6;
+  margin-right: 5px;
+}
+
+.myOrders .contentInfo.sinAdjunto .contentAddInfo {
+  display: none;
+}
+
+.myOrders .textReply.sinAdjunto .contentAddInfo {
+  display: none;
 }
 
 
