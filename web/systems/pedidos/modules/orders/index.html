@@ -22,6 +22,7 @@
                 <button class="btnFilter" title="Buscar..." ng-click="view.style = 'buscarPedido'"><i class="fa fa-search" aria-hidden="true"></i></button>
                 <button class="btnFilter" title="Ordenar por Fecha"><i class="fa fa-calendar-o" aria-hidden="true"></i></button>
                 <button class="btnFilter" title="Ordenar por Estado"><i class="fa fa-sort-amount-asc" aria-hidden="true"></i></button>
+                  <button class="btnFilter" title="Ordenar por Prioridad"><i class="fa fa-star-o" aria-hidden="true"></i></button>
             </div>
             <div>
                 <button class="btnNew" ng-click="view.style = 'pantallaNuevoPedido'">NUEVO PEDIDO</button>
@@ -153,6 +154,10 @@
 
             <div class="itemInfo">
 
+                <div class="contentPriority alta">
+                    <div class="subContentPriority">&nbsp;</div>
+                </div>
+
                 <div class="itemDate">
                     <div class="textNumerOrders">Nº 112369</div>
                     <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
@@ -199,6 +204,10 @@
 
             <div class="itemInfo">
 
+                <div class="contentPriority normal">
+                    <div class="subContentPriority">&nbsp;</div>
+                </div>
+
                 <div class="itemDate">
                     <div class="textNumerOrders">Nº 112369</div>
                     <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
@@ -244,6 +253,10 @@
         <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
 
             <div class="itemInfo">
+
+                <div class="contentPriority baja">
+                    <div class="subContentPriority">&nbsp;</div>
+                </div>
 
                 <div class="itemDate">
                     <div class="textNumerOrders">Nº 112369</div>
