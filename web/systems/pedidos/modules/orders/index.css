@@ -9,8 +9,173 @@
   width: 100%;
   background: #DBE2E5;
   color: #5C5F69;
-  padding-left: 50px;
-  font-size: 1.5em;
+
+}
+
+.orders .contentHeader {
+  width: 100%;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+}
+
+.orders .textMisPedidos {
+  margin-left: 20px;
+  font-size: 20px;
+}
+
+.orders .contentFilters {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+}
+
+.orders .textFilters {
+  margin-right: 10px;
+  font-size: 12px;
+}
+
+.orders .btnFilter {
+  background-color: #F1F1F1 !important;
+  border-radius: 2px;
+  font-size: 13px !important;
+  padding: 5px;
+  color: #5C5F69 !important;
+}
+
+.orders .btnFilter:hover {
+  background-color: white !important;
+}
+
+.orders .contentBtnNewOrder {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+}
+
+.orders .btnNewOrder {
+  border: none;
+  color: white;
+  background-color: #809612 !important;
+  padding: 15px;
+  border-radius: 100% 0 0 100%;
+  font-size: 25px;
+  margin: 0px !important;
+  cursor: pointer;
+}
+
+.orders .btnNewOrder2 {
+  border: none;
+  color: white;
+  background-color: #92AD17 !important;
+  padding: 13px;
+  font-size: 14px;
+  margin: 0px !important;
+  width: 50px;
+  cursor: pointer;
+}
+
+.orders .btnNewOrder2:hover {
+  background-color: #809612 !important;
+}
+.orders .btnNewOrder:hover {
+  background-color: #92AD17 !important;
+}
+
+.orders .contentSearchOrders {
+  display: none;
+}
+.orders.buscarPedido .contentSearchOrders {
+  position: absolute;
+  display: block;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  justify-content:  center;
+  -webkit-justify-content:center; /* Safari */
+  -moz-justify-content:center; /* mozilla */
+  width: 100%;
+  top:70px;
+}
+
+.orders .searchOrders {
+  border: 1px solid #E2E2E2;
+  width: 230px;
+  height: 270px;
+  background-color: white;
+  /*margin-left:110px;*/
+  padding: 20px;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
+
+.orders .inputSearch {
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  font-size: 16px;
+  padding: 7px;
+  border: 1px solid #DBE2E5;
+  width: 100%;
+  margin-top: 2px;
+  margin-bottom: 5px;
+}
+
+.orders .inputSearch2 {
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  font-size: 16px;
+  padding: 7px;
+  border: 1px solid #DBE2E5;
+  margin-bottom: 5px;
+  margin-top: 2px;
+  background-color: white;
+}
+
+.orders .textSearch1 {
+  color: #5C5F69;
+}
+
+.orders .textSearch1b {
+  color: #5C5F69;
+  margin-top: 5px;
+}
+
+.orders .textSearch2a {
+  color: #5C5F69;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.orders .textSearch2b {
+  color: #5C5F69;
+  font-size: 12px;
 }
 
 /******************************************************
@@ -69,6 +234,12 @@
 .orders .itemStatus {
   /*background-color: yellow;*/
   width: 150px;
+
+}
+
+.orders .itemStatus2 {
+  /*background-color: yellow;*/
+  width: 150px;
 }
 
 .orders .status {
@@ -83,23 +254,44 @@
   text-align: center;
 }
 
-.orders .colorOpen {
+
+.orders.pantallaDetallePedido .itemStatus2 {
+  /*background-color: yellow;*/
+  width: 150px;
+
+}
+
+
+.orders.pantallaDetallePedido .status2 {
+  padding: 15px;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  color:white;
+  font-weight: bold;
+  font-size: 14px;
+  width:100px;
+  text-align: center;
+    cursor: pointer;
+}
+
+.orders .abierta {
   background-color: #92AD17;
 }
 
-.orders .colorProgres {
+.orders .enProgreso {
     background-color: #0066A6;
 }
 
-.orders .colorPause {
+.orders .pausada {
   background-color: #EC9122;
 }
 
-.orders .colorCancel {
+.orders .rechazada {
   background-color: #E43E46;
 }
 
-.orders .colorClose {
+.orders .cerrada {
   background-color: #afbec5;
 }
 
@@ -108,6 +300,135 @@
   width: 210px;
   /*background-color: blue;*/
 }
+
+.orders .contentOffice {
+  width: 210px;
+}
+
+.orders .status.abierta .textEC1,
+.orders .status.abierta .textEC2,
+.orders .status.abierta .textC1,
+.orders .status.abierta .textC2,
+.orders .status.abierta .textP1,
+.orders .status.abierta .textP2,
+.orders .status.abierta .textR1,
+.orders .status.abierta .textR2 {
+  display: none;
+}
+
+.orders .status.enProgreso .textA1,
+.orders .status.enProgreso .textA2,
+.orders .status.enProgreso .textC1,
+.orders .status.enProgreso .textC2,
+.orders .status.enProgreso .textP1,
+.orders .status.enProgreso .textP2,
+.orders .status.enProgreso .textR1,
+.orders .status.enProgreso .textR2 {
+  display: none;
+}
+
+.orders .status.cerrada .textA1,
+.orders .status.cerrada .textA2,
+.orders .status.cerrada .textEC1,
+.orders .status.cerrada .textEC2,
+.orders .status.cerrada .textP1,
+.orders .status.cerrada .textP2,
+.orders .status.cerrada .textR1,
+.orders .status.cerrada .textR2 {
+  display: none;
+}
+
+.orders .status.pausada .textA1,
+.orders .status.pausada .textA2,
+.orders .status.pausada .textEC1,
+.orders .status.pausada .textEC2,
+.orders .status.pausada .textC1,
+.orders .status.pausada .textC2,
+.orders .status.pausada .textR1,
+.orders .status.pausada .textR2 {
+  display: none;
+}
+
+.orders .status.rechazada .textA1,
+.orders .status.rechazada .textA2,
+.orders .status.rechazada .textEC1,
+.orders .status.rechazada .textEC2,
+.orders .status.rechazada .textC1,
+.orders .status.rechazada .textC2,
+.orders .status.rechazada .textP1,
+.orders .status.rechazada .textP2 {
+  display: none;
+}
+
+
+.orders .status2.abierta .textEC1,
+.orders .status2.abierta .textEC2,
+.orders .status2.abierta .textC1,
+.orders .status2.abierta .textC2,
+.orders .status2.abierta .textP1,
+.orders .status2.abierta .textP2,
+.orders .status2.abierta .textR1,
+.orders .status2.abierta .textR2 {
+  display: none;
+}
+
+.orders .status2.enProgreso .textA1,
+.orders .status2.enProgreso .textA2,
+.orders .status2.enProgreso .textC1,
+.orders .status2.enProgreso .textC2,
+.orders .status2.enProgreso .textP1,
+.orders .status2.enProgreso .textP2,
+.orders .status2.enProgreso .textR1,
+.orders .status2.enProgreso .textR2 {
+  display: none;
+}
+
+.orders .status2.cerrada .textA1,
+.orders .status2.cerrada .textA2,
+.orders .status2.cerrada .textEC1,
+.orders .status2.cerrada .textEC2,
+.orders .status2.cerrada .textP1,
+.orders .status2.cerrada .textP2,
+.orders .status2.cerrada .textR1,
+.orders .status2.cerrada .textR2 {
+  display: none;
+}
+
+.orders .status2.pausada .textA1,
+.orders .status2.pausada .textA2,
+.orders .status2.pausada .textEC1,
+.orders .status2.pausada .textEC2,
+.orders .status2.pausada .textC1,
+.orders .status2.pausada .textC2,
+.orders .status2.pausada .textR1,
+.orders .status2.pausada .textR2 {
+  display: none;
+}
+
+.orders .status2.rechazada .textA1,
+.orders .status2.rechazada .textA2,
+.orders .status2.rechazada .textEC1,
+.orders .status2.rechazada .textEC2,
+.orders .status2.rechazada .textC1,
+.orders .status2.rechazada .textC2,
+.orders .status2.rechazada .textP1,
+.orders .status2.rechazada .textP2 {
+  display: none;
+}
+
+.orders .contentActions {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+}
+
 
 .orders .itemActions {
   margin: 10px;
@@ -163,7 +484,13 @@
   font-size: 14px;
 }
 
-.orders .textDateOrders,
+.orders .textType2 {
+  color: #5C5F69;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.orders .textDateorders,
 .orders .textDaysOrders {
   color:#848484;
 }
@@ -172,6 +499,11 @@
 .orders .textName {
   font-size: 13px;
     color:#434343;
+}
+
+.orders .textMini {
+  font-size: 12px;
+  color:#92AD17;
 }
 
 
@@ -227,7 +559,7 @@
 
 .orders .contentTotalReplys {
   overflow-y: auto;
-  height: 50%;
+  max-height: 370px;
   /*background-color: red;*/
 }
 
@@ -241,6 +573,10 @@
   align-items: center;
   -webkit-align-items:center; /* Safari */
   -moz-align-items:center; /* mozilla */
+  width: 100%;
+  justify-content: space-around;
+  -webkit-justify-content: space-around;
+  -moz-justify-content: space-around;
 }
 
 .orders .contentBtnReturn {
@@ -297,17 +633,20 @@
 }
 
 .orders .infoOrder {
-  padding: 20px;
+  padding: 10px 20px 10px 20px;
   display: flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
   flex-direction:row;
   -webkit-flex-direction:row; /* Safari */
   -moz-flex-direction:row; /* mozilla */
+  border-bottom: 1px solid #E2E2E2;
+  margin-bottom: 20px;
+  background-color: #E2E2E2;
 }
 
 .orders .contentUser {
-  margin-left: 10px;
+  margin-left: 0px;
 }
 
 .orders .contentUser2 {
@@ -334,16 +673,16 @@
 }
 
 .orders .contentArrow {
-  color: #DBE2E5;
+  color: #E2E2E2;
   margin-left: 10px;
   font-size: 40px;
 }
 
 .orders .contentInfo {
-  background-color: #DBE2E5;
-  max-width: 700px;
-  min-height: 65px;
-  max-height: 90px;
+  background-color: #E2E2E2;
+  width: 100%;
+  min-height: 60px;
+  max-height: 65px;
   border-radius: 3px;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
@@ -374,8 +713,7 @@
 }
 
 .orders .contentBtnReply {
-  margin-left: 20px;
-  margin-top: 10px;
+  margin-right: 25px;
 }
 
 .orders .btnReply {
@@ -391,21 +729,132 @@
   -webkit-border-radius: 3px;
 }
 
-.orders .btnReply:hover {
+.orders .btnReply2 {
+  display: none;
+}
+
+.orders .btnReply:hover,
+.orders .btnReply2:hover {
   background-color: #809612;
   cursor: pointer;
 }
 
-.orders .contentReplys {
-  margin-left: 220px;
+.orders .btnApply {
+  width: 170px;
+  height: 50px;
+  font-size: 14px;
+  background-color: #92AD17 !important;
+  color:white;
+  padding: 5px 10px 5px 10px;
+  border:none;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+
+}
+
+.orders .btnNew {
+  width: 170px;
+  height: 50px;
+  font-size: 14px !important;
+  background-color: #92AD17 !important;
+  color:white;
+  padding: 5px 10px 5px 10px;
+  border:none;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  margin-right: 50px !important;
+
+}
+
+.orders .btnNew:hover {
+  background-color: #809612 !important;
+  cursor: pointer;
+}
+
+.orders .btnApply:hover {
+  background-color: #809612 !important;
+  cursor: pointer;
+}
+
+.orders .reply {
+  width: 97%;
   display: flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
   flex-direction:row;
   -webkit-flex-direction:row; /* Safari */
   -moz-flex-direction:row; /* mozilla */
-  margin-bottom: 20px;
 }
+
+.orders .reply.miRespuesta .contentReplys {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  justify-content: flex-end;
+  -webkit-justify-content: flex-end;
+  -moz-justify-content: flex-end;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.orders .reply.respuestaDeAutor .contentReplys {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  justify-content: flex-start;
+  -webkit-justify-content: flex-start;
+  -moz-justify-content: flex-start;
+  margin-bottom: 20px;
+  width: 100%;
+  margin-left: 20px;
+
+}
+
+.orders .reply.respuestaDeAutor .contentUser {
+  order: -1;
+}
+
+.orders .reply.respuestaDeAutor .subcontentReply {
+  margin-left: 0px;
+}
+
+.orders .reply.respuestaDeAutor .contentArrowRight {
+  display: none;
+}
+
+.orders .reply.miRespuesta .contentArrowLeft {
+  display: none;
+}
+
+.orders .reply.respuestaDeAutor .textReply {
+  background-color: #E2E2E2;
+}
+
+.orders .reply.respuestaDeAutor .contentArrowLeft,
+.orders .reply.respuestaDeAutor .contentArrowRight {
+  color: #E2E2E2;
+}
+
+
+.orders .subcontentReply {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  max-width: 70%;
+  min-width: 30%
+}
+
 
 .orders .contentReplys2 {
   margin-left: 110px;
@@ -420,8 +869,8 @@
 
 
 .orders .textReply {
-  background-color: #EAEAEA;
-  width: 500px;
+  background-color: #dbe2e5;
+  width: 100%;
   min-height: 30px;
   max-height: 90px;
   border-radius: 3px;
@@ -431,8 +880,9 @@
   overflow-y:auto;
 }
 
-.orders .contentArrowRight {
-  color: #eaeaea;
+.orders .contentArrowRight,
+.orders .contentArrowLeft {
+  color: #dbe2e5;
   font-size: 40px;
 }
 
@@ -563,19 +1013,46 @@
   -moz-flex-direction:row; /* mozilla */
 }
 
+.orders .addMenssage2 {
+  /*background-color: #EAEAEA;*/
+  /*border: 1px solid #E2E2E2;*/
+  width: 51.4%;
+  height: 40px;
+  margin-top: -5px;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  margin-top: 10px;
+}
+
 .orders .btnAdd {
   border: none;
-  font-size: 20px;
+  font-size: 14px;
   padding: 5px;
-  width: 40px;
+  width: 150px;
   height: 40px;
-  background-color: #76787c;
-  color: white;
+  background-color: #BFC0C5;
+  color: #5C5F69;
+  cursor: pointer;
+
 }
 
 .orders .btnAdd:hover {
   cursor: pointer;
   background-color: #28292d;
+  color: white;
+}
+
+.orders .inputFile {
+  opacity: 0;
+  position: absolute;
+  left: 50px;
+  height: 35px;
+  cursor: pointer;
+
 }
 
 .orders .ArchivesAdd {
@@ -642,18 +1119,822 @@
   cursor: pointer;
 }
 
+
+/***********************************************************
+**************** PANTALLA NUEVO PEDIDO ********************
+***********************************************************/
+
+.orders .contentNewOrder {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top:9999px;
+}
+
+.orders.pantallaNuevoPedido .contentNewOrder {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top:0px;
+
+}
+
+.orders .subContentMessage,
+.orders .subContentNewOrder {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(241,241,241,0);
+
+}
+
+.orders.pantallaMensaje .subContentMessage,
+.orders.pantallaNuevoPedido .subContentNewOrder {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(241,241,241,1);
+  transition: background-color .3s ease-out;
+  -moz-transition: background-color .3s ease-out;
+  -webkit-transition: background-color .3s ease-out;
+  -o-transition: background-color .3s ease-out;
+
+
+}
+
+.orders .newOrder {
+
+  opacity: 0;
+  transform: translate3d(0,500%,0);
+-webkit-transform: translate3d(0,500%,0);
+-webkit-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+-moz-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+-o-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+}
+
+.orders.pantallaNuevoPedido .newOrder {
+  width: 100%;
+  height: 100%;
+  opacity: 1;
+
+  margin-left: auto;
+  margin-right: auto;
+  transform: translate3d(0,0,0);
+  -webkit-transform: translate3d(0,0,0);
+  -webkit-transition: all 300ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+  -moz-transition: all 300ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+  -o-transition: all 300ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+  transition: all 300ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+}
+
+.orders .contentTitleNewOrder {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  background-color: white;
+  padding: 20px;
+      border-bottom: 1px solid #E2E2E2;
+}
+
+.orders .contentBackNewOrder {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items:center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+}
+
+.orders .titleNewOrder {
+  color: #434343;
+  font-size: 20px;
+  margin-bottom: 3px;
+  opacity: 0;
+  margin-left: 20px;
+}
+
+.orders.pantallaNuevoPedido .titleNewOrder {
+  opacity: 1;
+
+}
+
+.orders .contentOrder {
+  margin-left: 40px;
+  padding: 10px;
+}
+
+.orders .subtitleNewOrder {
+    color: #434343;
+    font-weight: bold;
+    font-size: 14px;
+    margin: 10px 0px 2px 0px;
+}
+
+.orders .subtitleNewOrder2 {
+    color: #434343;
+    font-weight: bold;
+    font-size: 14px;
+    margin: 10px 0px 2px 0px;
+}
+
+.orders .inputNewOrder {
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    font-size: 16px;
+    padding: 7px;
+    border: 1px solid #DBE2E5;
+    width: 50%;
+    margin-top: 2px;
+}
+
+.orders .textareaNewOrder {
+    resize: none;
+    width: 49.5%;
+    height: 100px;
+    border: none;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #E2E2E2;
+
+}
+
+.orders.pantallaNuevoPedido.buscarOficina .offices {
+  min-height: 25px;
+  max-height: 250px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 49.5%;
+  position: absolute;
+  background-color: #F1F1F1;
+  border: 1px solid #DBE2E5;
+  display: block;
+}
+
+.orders.pantallaNuevoPedido.buscarArea .areas {
+  min-height: 25px;
+  max-height: 250px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 49.5%;
+  position: absolute;
+  background-color: #F1F1F1;
+  border: 1px solid #DBE2E5;
+  display: block;
+}
+
+.orders.pantallaNuevoPedido.buscarConsulta .querys {
+  min-height: 25px;
+  max-height: 250px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 49.5%;
+  position: absolute;
+  background-color: #F1F1F1;
+  border: 1px solid #DBE2E5;
+  display: block;
+}
+
+.orders .offices,
+.orders .querys,
+.orders .areas {
+  display: none;
+}
+
+.orders .itemsSelectOffice,
+.orders .itemsSelectQuery,
+.orders .itemsSelectArea {
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  background-color: #92AD17;
+  font-size: 16px;
+  padding: 7px;
+  border-bottom: 1px solid #798c1a;
+  width: 100%;
+  cursor: pointer;
+  color: white;
+}
+
+.orders .itemsSelectOffice:hover,
+.orders .itemsSelectQuery:hover,
+.orders .itemsSelectArea:hover {
+  background-color: #798c1a;
+}
+
+/***********************************************************
+************* PANTALLA MENSAJE AL USUARIO ******************
+***********************************************************/
+
+.orders .contentMessageUser {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top:9999px;
+}
+
+.orders.pantallaMensajeAlUsuario .contentMessageUser {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top:0px !important;
+
+}
+
+.orders .subContentMessageUser {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(241,241,241,0);
+
+}
+
+.orders.pantallaMensajeAlUsuario .subContentMessageUser {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(241,241,241,1);
+  transition: background-color .3s ease-out;
+  -moz-transition: background-color .3s ease-out;
+  -webkit-transition: background-color .3s ease-out;
+  -o-transition: background-color .3s ease-out;
+
+}
+
+.orders .messageUser {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:column;
+  -webkit-flex-direction:column; /* Safari */
+  -moz-flex-direction:column; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  opacity: 0;
+  transform: translate3d(0,0px,0);
+  -webkit-transform: translate3d(0,0px,0);
+  -webkit-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+     -moz-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+       -o-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+          transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+}
+
+.orders.pantallaMensajeAlUsuario .messageUser {
+  width: 100%;
+  height: 300px;
+  /*background-color: red;*/
+  opacity: 1;
+  margin-left: auto;
+  margin-right: auto;
+  transform: translate3d(0,100px,0);
+  -webkit-transform: translate3d(0,100px,0);
+  -webkit-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+     -moz-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+       -o-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+          transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+}
+
+.orders .preload,
+.orders .messageSent,
+.orders .orderCreated,
+.orders .errorSystem {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:column;
+  -webkit-flex-direction:column; /* Safari */
+  -moz-flex-direction:column; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  /*color:#5c5f69;*/
+
+}
+
+.orders.pantallaMensajeAlUsuario.mensajeCargando .messageSent,
+.orders.pantallaMensajeAlUsuario.mensajeCargando .orderCreated,
+.orders.pantallaMensajeAlUsuario.mensajeCargando .errorSystem {
+  display: none;
+}
+
+.orders.pantallaMensajeAlUsuario.mensajeError .preload,
+.orders.pantallaMensajeAlUsuario.mensajeError .messageSent,
+.orders.pantallaMensajeAlUsuario.mensajeError .orderCreated {
+  display: none;
+}
+
+.orders.pantallaMensajeAlUsuario.mensajeEnviado .preload,
+.orders.pantallaMensajeAlUsuario.mensajeEnviado .orderCreated,
+.orders.pantallaMensajeAlUsuario.mensajeEnviado .errorSystem {
+  display: none;
+}
+
+.orders.pantallaMensajeAlUsuario.mensajePedidoCreado .preload,
+.orders.pantallaMensajeAlUsuario.mensajePedidoCreado .messageSent,
+.orders.pantallaMensajeAlUsuario.mensajePedidoCreado .errorSystem {
+  display: none;
+}
+
+
+.orders .circle {
+  color:#d6d4d4;
+  margin-bottom: 10px;
+}
+
+.orders a:link {
+ text-decoration:none;
+}
+
+.orders .archiveAdd {
+  color: #0069A6;
+  margin-right: 5px;
+}
+
+.orders .contentInfo.sinAdjunto .contentAddInfo {
+  display: none;
+}
+
+.orders .textReply.sinAdjunto .contentAddInfo {
+  display: none;
+}
+
+
+.orders.pantallaDetallePedido.seleccionarEstado  .contentSelectState {
+  position: absolute;
+  display: block;
+  width: 150px;
+  height: 205px;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border: 1px solid #E2E2E2;
+  background-color: white;
+  margin-top: 5px;
+}
+
+.orders .contentSelectState {
+  display: none;
+}
+
+.orders .subContentSelectState{
+
+}
+
+.orders .itemsSelectState {
+  height: 40px;
+  font-size: 15px;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  border-bottom: 1px solid #E2E2E2;
+}
+
+.orders .itemsSelectState:hover {
+  background-color: #f7f4f4;
+  cursor: pointer;
+}
+
+.orders .itemState {
+  margin-left: 5px;
+}
+
+.orders .abierta2 {
+  border-left: 5px solid #92AD17;
+}
+
+.orders .enProgreso2 {
+  border-left: 5px solid #0066A6;
+}
+
+.orders .pausada2 {
+  border-left: 5px solid #EC9122;
+}
+
+.orders .rechazada2 {
+  border-left: 5px solid #E43E46;
+}
+
+.orders .cerrada2 {
+  border-left: 5px solid #afbec5;
+}
+
 /******************** MEDIA QUERIS ***************************/
 
 @media (max-width: 719px){
   .orders .header {
-      display: none;
+      height: 50px;
+  }
+
+  .orders.buscarPedido .contentSearchOrders {
+    width: 100%;
+    height: 100%;
+    top:0px;
+  }
+
+  .orders .searchOrders {
+    border: none;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    border-radius: 0px;
+    -moz-border-radius: 0px;
+    -webkit-border-radius: 0px;
+  }
+
+
+  .orders .textMisPedidos {
+    margin-left: 10px;
+    font-size: 14px;
+  }
+
+  .orders .contentBtnNewOrder {
+
+
   }
 
   .orders .contentOrders {
     /*background-color: red;*/
     background-color: #F1F1F1;
-    height: 100%;
+    height: 68%;
+  }
+
+  .orders .contentOrder {
+      padding: 10px;
+      margin-left: 0px;
+  }
+
+  .orders .itemOrders {
+    margin-left: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+
   }
 
 
+  .orders .itemDate {
+    display: none;
+  }
+
+  .orders .textA1,
+  .orders .textEC1,
+  .orders .textC1,
+  .orders .textP1,
+  .orders .textR1 {
+    display: none;
+  }
+
+  .orders .status {
+    width: 10px;
+    height: 85px;
+    padding: 0px;
+    border-radius: 3px 0 0 3px;
+    -moz-border-radius: 3px 0 0 3px;
+    -webkit-border-radius: 3px 0 0 3px;
+  }
+
+  .orders .status2 {
+    font-size: 20px !important;
+    height: inherit !important;
+    padding: 11px !important;
+    width: 30px !important;
+    /*width: 10px;
+    height: 10px;
+    padding: 0px;*/
+    border-radius: 3px 0 0 3px;
+    -moz-border-radius: 3px 0 0 3px;
+    -webkit-border-radius: 3px 0 0 3px;
+  }
+
+  .orders .itemStatus {
+    width: 25px;
+
+  }
+
+  .orders .itemStatus2 {
+    width: 25px;
+  }
+
+  .orders.pantallaDetallePedido .itemStatus2 {
+    /*background-color: yellow;*/
+    width: 60px;
+  }
+
+  .orders.pantallaDetallePedido .status2 {
+    padding: 15px;
+    width: 20px;
+    height: 20px;
+      text-align: center;
+  }
+
+  .orders .contentBtnReply {
+    margin-right: 5px;
+  }
+
+  .orders .itemsType {
+    width: 145px;
+    /*background-color: blue;*/
+  }
+
+  .orders .itemsOffice {
+    width: 145px;
+    /*background-color: red;*/
+  }
+
+  .orders .textType,
+  .orders .textOffice {
+    font-size: 12px;
+  }
+
+  .orders .itemActions {
+    margin: 0px;
+    height: 65px;
+    width: 80px;
+    color: #808080;
+    font-size: 30px;
+    /*background-color: yellow;*/
+    border: none;
+  }
+
+  .orders .textFilters {
+    display: none;
+  }
+
+  .orders .btnNew {
+    width: 100px !important;
+    height: 50px;
+    font-size: 14px !important;
+    background-color: #92AD17 !important;
+    color:white;
+    padding: 5px 10px 5px 10px;
+    border:none;
+    border-radius: 0px;
+    -moz-border-radius: 0px;
+    -webkit-border-radius: 0px;
+    margin-right: 0px !important;
+
+  }
+
+  .orders .contentTitleNewOrder {
+      padding: 10px;
+  }
+
+  .orders .contentBtnReturn {
+    margin-left: 5px;
+  }
+
+  .orders .subtitleNewOrder {
+      margin: 0px 0px 2px 0px;
+      width: 80px;
+      text-align: right;
+      padding-right: 10px;
+      /*background-color: red;*/
+  }
+
+  .orders .subtitleNewOrder2 {
+      margin: 10px 0px 2px 0px;
+      width: 80px;
+      text-align: left;;
+
+      /*background-color: red;*/
+  }
+
+  .orders .contentOrientation {
+    display: flex;
+    display: -webkit-flex; /* Safari */
+    display: -moz-flex; /* mozilla */
+    flex-direction:row;
+    -webkit-flex-direction:row; /* Safari */
+    -moz-flex-direction:row; /* mozilla */
+    align-items:center;
+    -webkit-align-items:center; /* Safari */
+    -moz-align-items:center; /* mozilla */
+  }
+
+  .orders .inputNewOrder {
+      border-radius: 2px;
+      -moz-border-radius: 2px;
+      -webkit-border-radius: 2px;
+      font-size: 16px;
+      padding: 7px;
+      border: 1px solid #DBE2E5;
+      width: 100%;
+      margin-top: 2px;
+  }
+
+  .orders.pantallaNuevoPedido.buscarOficina .offices {
+    max-height: 200px;
+    margin-left: 90px;
+    width: 63%;
+  }
+
+  .orders.pantallaNuevoPedido.buscarArea .areas {
+    max-height: 200px;
+    margin-left: 90px;
+    width: 63%;
+  }
+
+  .orders.pantallaNuevoPedido.buscarConsulta .querys {
+    max-height: 170px;
+    margin-left: 90px;
+    width: 63%;
+  }
+
+  .orders .textareaNewOrder {
+      resize: none;
+      width: 88%;
+      height: 70px;
+      border: none;
+      padding: 10px;
+      font-size: 14px;
+      border: 1px solid #E2E2E2;
+
+  }
+
+  .orders .addMenssage2 {
+    width: 93.5%;
+    height: 50px;
+  }
+
+
+  .orders .btnReturn {
+    font-size: 35px;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    padding: 5px 20px 5px 20px;
+  }
+
+
+  .orders .titleNewOrder {
+    font-size: 12px;
+  }
+
+  .orders .message {
+    margin-left: 20px;
+    margin-right: 0px;
+    opacity: 0;
+    transform: translate3d(0,0px,0);
+    -webkit-transform: translate3d(0,0px,0);
+    -webkit-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+       -moz-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+         -o-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+            transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+  }
+
+  .orders.pantallaMensaje .message {
+    width: 80%;
+    height: 300px;
+    opacity: 1;
+    margin-left: 20px;
+    margin-right: 0px;
+    transform: translate3d(0,20px,0);
+    -webkit-transform: translate3d(0,20px,0);
+    -webkit-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+       -moz-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+         -o-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+            transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+  }
+
+  .orders .textareaMenssage {
+    resize: none;
+    width: 100%;
+    height: 150px;
+    border: none;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #E2E2E2;
+  }
+
+  .orders.pantallaMensajeAlUsuario .messageUser {
+    width: 100%;
+    height: 300px;
+    /*background-color: red;*/
+    opacity: 1;
+    margin-left: auto;
+    margin-right: auto;
+    transform: translate3d(0,30px,0);
+    -webkit-transform: translate3d(0,30px,0);
+
+  }
+
+  .orders .btnReply {
+    display: none;
+  }
+
+  .orders .btnReply2 {
+    display: block;
+    width: 50px;
+    height: 50px;
+    font-size: 14px;
+    background-color: #92AD17;
+    color:white;
+    padding: 5px 10px 5px 10px;
+    border:none;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+  }
+
+  .orders .infoOrder {
+    padding: 5px 5px 5px 5px;
+    border-bottom: 1px solid #E2E2E2;
+    margin-bottom: 10px;
+
+  }
+
+  .orders .reply.respuestaDeAutor .contentUser {
+    margin-left: 5px;
+  }
+  .orders .reply.miRespuesta .contentUser {
+    margin-left: 0px;
+  }
+
+
+  .orders .contentInfo {
+
+    width: 100%;
+    min-height: 65px;
+    max-height: 100px;
+    border-radius: 3px;
+    padding: 0px 10px 0px 10px;
+  }
+
+  .orders .reply {
+    width: 100%;
+  }
+
+  .orders .reply.miRespuesta .contentReplys {
+    margin-bottom: 10px;
+    margin-right: 5px;
+  }
+
+  .orders .reply.respuestaDeAutor .contentReplys {
+    margin-bottom: 10px;
+    width: 100%;
+    margin-left: 0px;
+
+  }
+
+  .orders .subcontentReply {
+    max-width: 100%;
+    min-width: 70%;
+    padding: 0px 5px 0 5px;
+  }
+
+  .orders .textReply {
+    width: 100%;
+    min-height: 30px;
+    max-height: 100px;
+    padding: 5px 10px 5px 10px;
+  }
+
+  .orders .contentTotalReplys {
+    overflow-y: auto;
+    height: 195px;
+    /*background-color: red;*/
+  }
+
+  .orders.pantallaDetallePedido.seleccionarEstado  .contentSelectState {
+    width: 110px;
+  }
+
+
+}
+
+@media (min-width: 720px){
+  .orders .textA2,
+  .orders .textEC2,
+  .orders .textC2,
+  .orders .textP2,
+  .orders .textR2 {
+    display: none;
+  }
+}
+
+@media (max-width: 1024px){
+  .orders.pantallaDetallePedido .itemDate2 {
+    display: none;
+  }
+
+  .orders.pantallaDetallePedido .contentOffice {
+    display: none;
+  }
 }

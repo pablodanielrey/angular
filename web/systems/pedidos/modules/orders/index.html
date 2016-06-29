@@ -1,19 +1,155 @@
-<div class="orders {{view.style}} {{view.style2}}">
+<div class="orders {{view.style}} {{view.style2}} ">
 
-    <!-- VARIABLES
-    pantallaDetallePedido
-    pantallaMensaje
+    <!-- ---- VARIABLES ----
+    VARIABLE 1: pantallaDetallePedido
+    VARIABLE 1: pantallaMensaje
+    VARIABLE 1: pantallaNuevoPedido
+                VARIABLE 2: buscarOficina, buscarArea, buscarConsulta
+    VARIABLE 1: buscarPedidos
+    VARIABLE 3: pantallaMensajeAlUsuario
+                VARIABLE 4: mensajeCargando, mensajeError, mensajeEnviado, mensajePedidoCreado
+    VARIABLE 2: seleccionarEstado
     -->
 
+    <!-- --------------- HEADER DEL SISTEMA ----------------- -->
     <div class="header">
-        <div>
-            Sistemas de Pedidos
+        <div class="contentHeader">
+            <div class="textMisPedidos">
+              Pedidos
+            </div>
+            <div class="contentFilters">
+                <div class="textFilters"><i class="fa fa-sliders" aria-hidden="true"></i> Filtros</div>
+                <button class="btnFilter" title="Buscar..." ng-click="view.style = 'buscarPedido'"><i class="fa fa-search" aria-hidden="true"></i></button>
+                <button class="btnFilter" title="Ordenar por Fecha"><i class="fa fa-calendar-o" aria-hidden="true"></i></button>
+                <button class="btnFilter" title="Ordenar por Estado"><i class="fa fa-sort-amount-asc" aria-hidden="true"></i></button>
+            </div>
+            <div>
+                <button class="btnNew" ng-click="view.style = 'pantallaNuevoPedido'">NUEVO PEDIDO</button>
+            </div>
         </div>
     </div>
 
+    <!-- -------------- BUSCADOR DE PEDIDOS ----------------- -->
+    <div class="contentSearchOrders">
+        <div class="searchOrders">
+            <div class="textSearch1"><i class="fa fa-search" aria-hidden="true"></i> Buscar</div>
+            <div><input class="inputSearch" type="search"></input></div>
+            <div class="textSearch1b"><i class="fa fa-calendar-o" aria-hidden="true"></i> Buscar por Fecha</div>
+            <div class="textSearch2a">Fecha Inicio</div>
+            <div><input class="inputSearch2" type="date"></input></div>
+            <div class="textSearch2b">Fecha Fin</div>
+            <div><input class="inputSearch2" type="date"></input></div>
+            <div class="actionMessage">
+                  <button class="btnAceptMennsage" ng-click="view.style = ''">ACEPTAR</button>
+                  <button class="btnCancelMennsage" ng-click="view.style = ''">CANCELAR</button>
+                </div>
+        </div>
+    </div>
+
+    <!-- ------------- CREAR UN NUEVO PEDIDO ---------------- -->
+    <div class="contentNewOrder">
+      <div class="subContentNewOrder">
+          <div class="newOrder">
+              <!-- ---- HEADER DE SOLICITAR PEDIDO ---- -->
+              <div class="contentTitleNewOrder">
+                  <div class="contentBackNewOrder">
+                      <div class="contentBtnReturn">
+                          <button class="btnReturn" ng-click="view.style = ''"><i class=" fa fa-angle-left" aria-hidden="true"></i></button>
+                      </div>
+                      <div class="titleNewOrder">
+                        NUEVO PEDIDO
+                      </div>
+                  </div>
+                  <div>
+                      <button class="btnApply" ng-click="view.style = ''">SOLICITAR</button>
+                  </div>
+              </div>
+              <!-- ---- CAMPOS PARA LLENAR EN UN NUEVO PEDIDO ---- -->
+              <div class="contentOrder">
+                  <div class="contentOrientation">
+                      <div class="subtitleNewOrder">OFICINA</div>
+                      <div><input type="text" class="inputNewOrder" placeholder="Buscar..." ng-click="view.style2 = 'buscarOficina'"></input></div>
+                  </div>
+                  <!-- ---- LISTADO DE OFICINAS ---- -->
+                  <div class="offices">
+                      <div class="itemsSelectOffice" ng-click="view.style2 = ''">
+                        DiTESI (Informática)
+                      </div>
+                      <div class="itemsSelectOffice">
+                        Mantenimieno y Servicios Generales
+                      </div>
+                  </div>
+
+                  <div class="contentOrientation">
+                      <div class="subtitleNewOrder">ÁREA</div>
+                      <div><input type="text" class="inputNewOrder" placeholder="Buscar..." ng-click="view.style2 = 'buscarArea'"></input></div>
+                  </div>
+                  <!-- ---- LISTADO DE AREAS ---- -->
+                  <div class="areas">
+                      <div class="itemsSelectArea" ng-click="view.style2 = ''">
+                        Soporte Técnico
+                      </div>
+                      <div class="itemsSelectArea">
+                        Diseño y Desarrollo de Sistemas
+                      </div>
+                      <div class="itemsSelectArea">
+                        Redes y Servidores
+                      </div>
+                      <div class="itemsSelectArea">
+                        En General
+                      </div>
+                  </div>
+
+                  <div class="contentOrientation">
+                      <div class="subtitleNewOrder">CONSULTA</div>
+                      <div><input type="text" class="inputNewOrder" placeholder="Seleccionar..." ng-click="view.style2 = 'buscarConsulta'"></input></div>
+                  </div>
+                  <!-- ---- LISTADO DE PROBLEMAS ---- -->
+                  <div class="querys">
+                      <div class="itemsSelectQuery" ng-click="view.style2 = ''">
+                        Sistema Operativo / Programas
+                      </div>
+                      <div class="itemsSelectQuery">
+                        CPU / otro Componente
+                      </div>
+                      <div class="itemsSelectQuery">
+                        Internet / WIFI
+                      </div>
+                      <div class="itemsSelectQuery">
+                        Correo Electrónico
+                      </div>
+                      <div class="itemsSelectQuery">
+                        Impresora / Impresión
+                      </div>
+                      <div class="itemsSelectQuery">
+                        Otro Problema / Consulta
+                      </div>
+                  </div>
+
+                  <div class="subtitleNewOrder2">MENSAJE</div>
+                  <div><textarea class="textareaNewOrder"></textarea></div>
+
+                  <div class="addMenssage2">
+                      <div><button class="btnAdd" title="Adjuntar Archivo"><i class="fa fa-paperclip" aria-hidden="true"></i> Subir Archivo</button></div>
+                      <div class="ArchivesAdd">
+                        <input type="file" class="inputFile"></input>
+                        <!-- <i class="fa fa-file-o"></i> Instructivo.pdf <button class="btnTrashAdd"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                        <i class="fa fa-file-o"></i> pantalla_de_error.jpg <button class="btnTrashAdd"><i class="fa fa-trash-o" aria-hidden="true"></i></button> -->
+                      </div>
+                  </div>
+
+
+
+              </div>
+
+          </div>
+      </div>
+    </div>
+
+    <!-- --------------- LISTADO DE PEDIDOS ------------------ -->
     <div class="contentOrders">
 
-        <div class="itemOrders">
+        <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
 
             <div class="itemInfo">
 
@@ -24,53 +160,77 @@
                 </div>
 
                 <div class="itemStatus">
-                    <div class="status colorOpen">
-                        ABIERTA
+                    <div class="status abierta">
+                        <!-- VARIABLES:
+                        abierta, enProgreso, cerrada, pausada, rechazada -->
+                        <div class="textA1">ABIERTA</div>
+                        <div class="textA2"></div>
+                        <div class="textEC1">EN CURSO</div>
+                        <div class="textEC2"></div>
+                        <div class="textC1">CERRADA</div>
+                        <div class="textC2"></div>
+                        <div class="textP1">PAUSADA</div>
+                        <div class="textP2"></div>
+                        <div class="textR1">RECHAZADA</div>
+                        <div class="textR2"></div>
                     </div>
                 </div>
 
                 <div class="itemsType">
-                      <div class="textType">SOPORTE TÉCNICO:</div>
-                        <div class="textSubType">Problema de impresora</div>
+                      <div class="textType">Economico Financiero</div>
+                      <div class="textType2">Compras</div>
+                      <div class="textSubType">Problema eléctrico</div>
                 </div>
 
                 <div class="itemsOffice">
-                      <div class="textOffice">MESA DE ENTRADAS</div>
-                        <div class="textName">Betiana Galle</div>
+                      <div class="textMini">Solicitado por:</div>
+                      <div class="textName">Emanuel País</div>
                 </div>
 
             </div>
 
-            <div class="itemActions" ng-click="view.style = 'pantallaDetallePedido'">
+            <div class="itemActions">
               <i class=" fa fa-angle-right" aria-hidden="true"></i>
             </div>
 
         </div>
 
-        <div class="itemOrders">
+        <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
 
             <div class="itemInfo">
 
                 <div class="itemDate">
-                    <div class="textNumerOrders">Nº 112365</div>
-                    <div class="textDateOrders">25 May. 2016 - 08:20 hs</div>
+                    <div class="textNumerOrders">Nº 112369</div>
+                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
                     <div class="textDaysOrders">Hoy</div>
                 </div>
 
                 <div class="itemStatus">
-                    <div class="status colorOpen">
-                        ABIERTA
+                    <div class="status enProgreso">
+                        <!-- VARIABLES:
+                        abierta, enProgreso, cerrada, pausada, rechazada -->
+                        <div class="textA1">ABIERTA</div>
+                        <div class="textA2"></div>
+                        <div class="textEC1">EN CURSO</div>
+                        <div class="textEC2"></div>
+                        <div class="textC1">CERRADA</div>
+                        <div class="textC2"></div>
+                        <div class="textP1">PAUSADA</div>
+                        <div class="textP2"></div>
+                        <div class="textR1">RECHAZADA</div>
+                        <div class="textR2"></div>
                     </div>
                 </div>
 
                 <div class="itemsType">
-                      <div class="textType">SOPORTE TÉCNICO:</div>
-                        <div class="textSubType">Error Windows</div>
+                      <div class="textMini">Para:</div>
+                      <div class="textType">MANTENIMIENTO</div>
+                      <div class="textSubType">Problema eléctrico</div>
                 </div>
 
                 <div class="itemsOffice">
-                      <div class="textOffice">CECIN (312)</div>
-                        <div class="textName">Ailen Bauchet</div>
+                      <div class="textMini">Solicitado por:</div>
+                        <div class="textName">Emanuel País</div>
                 </div>
 
             </div>
@@ -81,64 +241,43 @@
 
         </div>
 
-        <div class="itemOrders">
-
-            <div class="itemInfo">
-
-                <div class="itemDate">
-                    <div class="textNumerOrders">Nº 112363</div>
-                    <div class="textDateOrders">25 May. 2016 - 16:14 hs</div>
-                    <div class="textDaysOrders">Hace 1 días</div>
-                </div>
-
-                <div class="itemStatus">
-                    <div class="status colorProgres">
-                        EN CURSO
-                    </div>
-                </div>
-
-                <div class="itemsType">
-                      <div class="textType">SOPORTE TÉCNICO:</div>
-                        <div class="textSubType">Problemas CPU</div>
-                </div>
-
-                <div class="itemsOffice">
-                      <div class="textOffice">FINANCIERO</div>
-                        <div class="textName">Soledad Bolano</div>
-                </div>
-
-            </div>
-
-            <div class="itemActions">
-              <i class=" fa fa-angle-right" aria-hidden="true"></i>
-            </div>
-
-        </div>
-
-        <div class="itemOrders">
+        <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
 
             <div class="itemInfo">
 
                 <div class="itemDate">
                     <div class="textNumerOrders">Nº 112369</div>
                     <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
-                    <div class="textDaysOrders">Hace 5 días</div>
+                    <div class="textDaysOrders">Hoy</div>
                 </div>
 
                 <div class="itemStatus">
-                    <div class="status colorOpen">
-                        ABIERTA
+                    <div class="status cerrada">
+                        <!-- VARIABLES:
+                        abierta, enProgreso, cerrada, pausada, rechazada -->
+                        <div class="textA1">ABIERTA</div>
+                        <div class="textA2"></div>
+                        <div class="textEC1">EN CURSO</div>
+                        <div class="textEC2"></div>
+                        <div class="textC1">CERRADA</div>
+                        <div class="textC2"></div>
+                        <div class="textP1">PAUSADA</div>
+                        <div class="textP2"></div>
+                        <div class="textR1">RECHAZADA</div>
+                        <div class="textR2"></div>
                     </div>
                 </div>
 
                 <div class="itemsType">
-                      <div class="textType">PROGRAMACIÓN:</div>
-                        <div class="textSubType">Actulización de sistema</div>
+                      <div class="textMini">Para:</div>
+                      <div class="textType">MANTENIMIENTO</div>
+                      <div class="textSubType">Problema eléctrico</div>
                 </div>
 
                 <div class="itemsOffice">
-                      <div class="textOffice">INSERCIÓN LABORAL (512)</div>
-                        <div class="textName">Paula Bayries</div>
+                      <div class="textMini">De:</div>
+                      <div class="textOffice">DITESI</div>
+                        <div class="textName">Emanuel País</div>
                 </div>
 
             </div>
@@ -149,30 +288,43 @@
 
         </div>
 
-        <div class="itemOrders">
+        <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
 
             <div class="itemInfo">
 
                 <div class="itemDate">
                     <div class="textNumerOrders">Nº 112369</div>
                     <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
-                    <div class="textDaysOrders">Hace 3 días</div>
+                    <div class="textDaysOrders">Hoy</div>
                 </div>
 
                 <div class="itemStatus">
-                    <div class="status colorProgres">
-                        EN CURSO
+                    <div class="status pausada">
+                        <!-- VARIABLES:
+                        abierta, enProgreso, cerrada, pausada, rechazada -->
+                        <div class="textA1">ABIERTA</div>
+                        <div class="textA2"></div>
+                        <div class="textEC1">EN CURSO</div>
+                        <div class="textEC2"></div>
+                        <div class="textC1">CERRADA</div>
+                        <div class="textC2"></div>
+                        <div class="textP1">PAUSADA</div>
+                        <div class="textP2"></div>
+                        <div class="textR1">RECHAZADA</div>
+                        <div class="textR2"></div>
                     </div>
                 </div>
 
                 <div class="itemsType">
-                      <div class="textType">SOPORTE TÉCNICO:</div>
-                        <div class="textSubType">Problema de impresora</div>
+                      <div class="textMini">Para:</div>
+                      <div class="textType">MANTENIMIENTO</div>
+                      <div class="textSubType">Problema eléctrico</div>
                 </div>
 
                 <div class="itemsOffice">
-                      <div class="textOffice">MESA DE ENTRADAS (101)</div>
-                        <div class="textName">Betiana Galle</div>
+                      <div class="textMini">De:</div>
+                      <div class="textOffice">DITESI</div>
+                        <div class="textName">Emanuel País</div>
                 </div>
 
             </div>
@@ -183,30 +335,43 @@
 
         </div>
 
-        <div class="itemOrders">
+        <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
 
             <div class="itemInfo">
 
                 <div class="itemDate">
                     <div class="textNumerOrders">Nº 112369</div>
                     <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
-                    <div class="textDaysOrders">Hace 3 días</div>
+                    <div class="textDaysOrders">Hoy</div>
                 </div>
 
                 <div class="itemStatus">
-                    <div class="status colorClose">
-                        CERRADA
+                    <div class="status abierta">
+                        <!-- VARIABLES:
+                        abierta, enProgreso, cerrada, pausada, rechazada -->
+                        <div class="textA1">ABIERTA</div>
+                        <div class="textA2"></div>
+                        <div class="textEC1">EN CURSO</div>
+                        <div class="textEC2"></div>
+                        <div class="textC1">CERRADA</div>
+                        <div class="textC2"></div>
+                        <div class="textP1">PAUSADA</div>
+                        <div class="textP2"></div>
+                        <div class="textR1">RECHAZADA</div>
+                        <div class="textR2"></div>
                     </div>
                 </div>
 
                 <div class="itemsType">
-                      <div class="textType">SOPORTE TÉCNICO:</div>
-                        <div class="textSubType">Problema de impresora</div>
+                      <div class="textMini">Para:</div>
+                      <div class="textType">MANTENIMIENTO</div>
+                      <div class="textSubType">Problema eléctrico</div>
                 </div>
 
                 <div class="itemsOffice">
-                      <div class="textOffice">MESA DE ENTRADAS (101)</div>
-                        <div class="textName">Betiana Galle</div>
+                      <div class="textMini">De:</div>
+                      <div class="textOffice">DITESI</div>
+                        <div class="textName">Emanuel País</div>
                 </div>
 
             </div>
@@ -217,30 +382,43 @@
 
         </div>
 
-        <div class="itemOrders">
+        <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
 
             <div class="itemInfo">
 
                 <div class="itemDate">
                     <div class="textNumerOrders">Nº 112369</div>
                     <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
-                    <div class="textDaysOrders">Hace 3 días</div>
+                    <div class="textDaysOrders">Hoy</div>
                 </div>
 
                 <div class="itemStatus">
-                    <div class="status colorClose">
-                        CERRADA
+                    <div class="status enProgreso">
+                        <!-- VARIABLES:
+                        abierta, enProgreso, cerrada, pausada, rechazada -->
+                        <div class="textA1">ABIERTA</div>
+                        <div class="textA2"></div>
+                        <div class="textEC1">EN CURSO</div>
+                        <div class="textEC2"></div>
+                        <div class="textC1">CERRADA</div>
+                        <div class="textC2"></div>
+                        <div class="textP1">PAUSADA</div>
+                        <div class="textP2"></div>
+                        <div class="textR1">RECHAZADA</div>
+                        <div class="textR2"></div>
                     </div>
                 </div>
 
                 <div class="itemsType">
-                      <div class="textType">SOPORTE TÉCNICO:</div>
-                        <div class="textSubType">Problema de impresora</div>
+                      <div class="textMini">Para:</div>
+                      <div class="textType">MANTENIMIENTO</div>
+                      <div class="textSubType">Problema eléctrico</div>
                 </div>
 
                 <div class="itemsOffice">
-                      <div class="textOffice">MESA DE ENTRADAS (101)</div>
-                        <div class="textName">Betiana Galle</div>
+                      <div class="textMini">De:</div>
+                      <div class="textOffice">DITESI</div>
+                        <div class="textName">Emanuel País</div>
                 </div>
 
             </div>
@@ -251,30 +429,43 @@
 
         </div>
 
-        <div class="itemOrders">
+        <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
 
             <div class="itemInfo">
 
                 <div class="itemDate">
                     <div class="textNumerOrders">Nº 112369</div>
                     <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
-                    <div class="textDaysOrders">Hace 3 días</div>
+                    <div class="textDaysOrders">Hoy</div>
                 </div>
 
                 <div class="itemStatus">
-                    <div class="status colorOpen">
-                        ABIERTA
+                    <div class="status cerrada">
+                        <!-- VARIABLES:
+                        abierta, enProgreso, cerrada, pausada, rechazada -->
+                        <div class="textA1">ABIERTA</div>
+                        <div class="textA2"></div>
+                        <div class="textEC1">EN CURSO</div>
+                        <div class="textEC2"></div>
+                        <div class="textC1">CERRADA</div>
+                        <div class="textC2"></div>
+                        <div class="textP1">PAUSADA</div>
+                        <div class="textP2"></div>
+                        <div class="textR1">RECHAZADA</div>
+                        <div class="textR2"></div>
                     </div>
                 </div>
 
                 <div class="itemsType">
-                      <div class="textType">SOPORTE TÉCNICO:</div>
-                        <div class="textSubType">Problema de impresora</div>
+                      <div class="textMini">Para:</div>
+                      <div class="textType">MANTENIMIENTO</div>
+                      <div class="textSubType">Problema eléctrico</div>
                 </div>
 
                 <div class="itemsOffice">
-                      <div class="textOffice">MESA DE ENTRADAS (101)</div>
-                        <div class="textName">Betiana Galle</div>
+                      <div class="textMini">De:</div>
+                      <div class="textOffice">DITESI</div>
+                        <div class="textName">Emanuel País</div>
                 </div>
 
             </div>
@@ -285,30 +476,43 @@
 
         </div>
 
-        <div class="itemOrders">
+        <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
 
             <div class="itemInfo">
 
                 <div class="itemDate">
                     <div class="textNumerOrders">Nº 112369</div>
                     <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
-                    <div class="textDaysOrders">Hace 3 días</div>
+                    <div class="textDaysOrders">Hoy</div>
                 </div>
 
                 <div class="itemStatus">
-                    <div class="status colorProgres">
-                        EN CURSO
+                    <div class="status pausada">
+                        <!-- VARIABLES:
+                        abierta, enProgreso, cerrada, pausada, rechazada -->
+                        <div class="textA1">ABIERTA</div>
+                        <div class="textA2"></div>
+                        <div class="textEC1">EN CURSO</div>
+                        <div class="textEC2"></div>
+                        <div class="textC1">CERRADA</div>
+                        <div class="textC2"></div>
+                        <div class="textP1">PAUSADA</div>
+                        <div class="textP2"></div>
+                        <div class="textR1">RECHAZADA</div>
+                        <div class="textR2"></div>
                     </div>
                 </div>
 
                 <div class="itemsType">
-                      <div class="textType">SOPORTE TÉCNICO:</div>
-                        <div class="textSubType">Problema de impresora</div>
+                      <div class="textMini">Para:</div>
+                      <div class="textType">MANTENIMIENTO</div>
+                      <div class="textSubType">Problema eléctrico</div>
                 </div>
 
                 <div class="itemsOffice">
-                      <div class="textOffice">MESA DE ENTRADAS (101)</div>
-                        <div class="textName">Betiana Galle</div>
+                      <div class="textMini">De:</div>
+                      <div class="textOffice">DITESI</div>
+                        <div class="textName">Emanuel País</div>
                 </div>
 
             </div>
@@ -319,30 +523,43 @@
 
         </div>
 
-        <div class="itemOrders">
+        <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
 
             <div class="itemInfo">
 
                 <div class="itemDate">
                     <div class="textNumerOrders">Nº 112369</div>
                     <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
-                    <div class="textDaysOrders">Hace 3 días</div>
+                    <div class="textDaysOrders">Hoy</div>
                 </div>
 
                 <div class="itemStatus">
-                    <div class="status colorPause">
-                        PAUSADA
+                    <div class="status abierta">
+                        <!-- VARIABLES:
+                        abierta, enProgreso, cerrada, pausada, rechazada -->
+                        <div class="textA1">ABIERTA</div>
+                        <div class="textA2"></div>
+                        <div class="textEC1">EN CURSO</div>
+                        <div class="textEC2"></div>
+                        <div class="textC1">CERRADA</div>
+                        <div class="textC2"></div>
+                        <div class="textP1">PAUSADA</div>
+                        <div class="textP2"></div>
+                        <div class="textR1">RECHAZADA</div>
+                        <div class="textR2"></div>
                     </div>
                 </div>
 
                 <div class="itemsType">
-                      <div class="textType">SOPORTE TÉCNICO:</div>
-                        <div class="textSubType">Problema de impresora</div>
+                      <div class="textMini">Para:</div>
+                      <div class="textType">MANTENIMIENTO</div>
+                      <div class="textSubType">Problema eléctrico</div>
                 </div>
 
                 <div class="itemsOffice">
-                      <div class="textOffice">DECANATO</div>
-                        <div class="textName">Martin Armengol</div>
+                      <div class="textMini">De:</div>
+                      <div class="textOffice">DITESI</div>
+                        <div class="textName">Emanuel País</div>
                 </div>
 
             </div>
@@ -352,9 +569,340 @@
             </div>
 
         </div>
+
+        <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
+
+            <div class="itemInfo">
+
+                <div class="itemDate">
+                    <div class="textNumerOrders">Nº 112369</div>
+                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
+                    <div class="textDaysOrders">Hoy</div>
+                </div>
+
+                <div class="itemStatus">
+                    <div class="status enProgreso">
+                        <!-- VARIABLES:
+                        abierta, enProgreso, cerrada, pausada, rechazada -->
+                        <div class="textA1">ABIERTA</div>
+                        <div class="textA2"></div>
+                        <div class="textEC1">EN CURSO</div>
+                        <div class="textEC2"></div>
+                        <div class="textC1">CERRADA</div>
+                        <div class="textC2"></div>
+                        <div class="textP1">PAUSADA</div>
+                        <div class="textP2"></div>
+                        <div class="textR1">RECHAZADA</div>
+                        <div class="textR2"></div>
+                    </div>
+                </div>
+
+                <div class="itemsType">
+                      <div class="textMini">Para:</div>
+                      <div class="textType">MANTENIMIENTO</div>
+                      <div class="textSubType">Problema eléctrico</div>
+                </div>
+
+                <div class="itemsOffice">
+                      <div class="textMini">De:</div>
+                      <div class="textOffice">DITESI</div>
+                        <div class="textName">Emanuel País</div>
+                </div>
+
+            </div>
+
+            <div class="itemActions">
+              <i class=" fa fa-angle-right" aria-hidden="true"></i>
+            </div>
+
+        </div>
+
+        <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
+
+            <div class="itemInfo">
+
+                <div class="itemDate">
+                    <div class="textNumerOrders">Nº 112369</div>
+                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
+                    <div class="textDaysOrders">Hoy</div>
+                </div>
+
+                <div class="itemStatus">
+                    <div class="status cerrada">
+                        <!-- VARIABLES:
+                        abierta, enProgreso, cerrada, pausada, rechazada -->
+                        <div class="textA1">ABIERTA</div>
+                        <div class="textA2"></div>
+                        <div class="textEC1">EN CURSO</div>
+                        <div class="textEC2"></div>
+                        <div class="textC1">CERRADA</div>
+                        <div class="textC2"></div>
+                        <div class="textP1">PAUSADA</div>
+                        <div class="textP2"></div>
+                        <div class="textR1">RECHAZADA</div>
+                        <div class="textR2"></div>
+                    </div>
+                </div>
+
+                <div class="itemsType">
+                      <div class="textMini">Para:</div>
+                      <div class="textType">MANTENIMIENTO</div>
+                      <div class="textSubType">Problema eléctrico</div>
+                </div>
+
+                <div class="itemsOffice">
+                      <div class="textMini">De:</div>
+                      <div class="textOffice">DITESI</div>
+                        <div class="textName">Emanuel País</div>
+                </div>
+
+            </div>
+
+            <div class="itemActions">
+              <i class=" fa fa-angle-right" aria-hidden="true"></i>
+            </div>
+
+        </div>
+
+        <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
+
+            <div class="itemInfo">
+
+                <div class="itemDate">
+                    <div class="textNumerOrders">Nº 112369</div>
+                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
+                    <div class="textDaysOrders">Hoy</div>
+                </div>
+
+                <div class="itemStatus">
+                    <div class="status pausada">
+                        <!-- VARIABLES:
+                        abierta, enProgreso, cerrada, pausada, rechazada -->
+                        <div class="textA1">ABIERTA</div>
+                        <div class="textA2"></div>
+                        <div class="textEC1">EN CURSO</div>
+                        <div class="textEC2"></div>
+                        <div class="textC1">CERRADA</div>
+                        <div class="textC2"></div>
+                        <div class="textP1">PAUSADA</div>
+                        <div class="textP2"></div>
+                        <div class="textR1">RECHAZADA</div>
+                        <div class="textR2"></div>
+                    </div>
+                </div>
+
+                <div class="itemsType">
+                      <div class="textMini">Para:</div>
+                      <div class="textType">MANTENIMIENTO</div>
+                      <div class="textSubType">Problema eléctrico</div>
+                </div>
+
+                <div class="itemsOffice">
+                      <div class="textMini">De:</div>
+                      <div class="textOffice">DITESI</div>
+                        <div class="textName">Emanuel País</div>
+                </div>
+
+            </div>
+
+            <div class="itemActions">
+              <i class=" fa fa-angle-right" aria-hidden="true"></i>
+            </div>
+
+        </div>
+
+        <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
+
+            <div class="itemInfo">
+
+                <div class="itemDate">
+                    <div class="textNumerOrders">Nº 112369</div>
+                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
+                    <div class="textDaysOrders">Hoy</div>
+                </div>
+
+                <div class="itemStatus">
+                    <div class="status abierta">
+                        <!-- VARIABLES:
+                        abierta, enProgreso, cerrada, pausada, rechazada -->
+                        <div class="textA1">ABIERTA</div>
+                        <div class="textA2"></div>
+                        <div class="textEC1">EN CURSO</div>
+                        <div class="textEC2"></div>
+                        <div class="textC1">CERRADA</div>
+                        <div class="textC2"></div>
+                        <div class="textP1">PAUSADA</div>
+                        <div class="textP2"></div>
+                        <div class="textR1">RECHAZADA</div>
+                        <div class="textR2"></div>
+                    </div>
+                </div>
+
+                <div class="itemsType">
+                      <div class="textMini">Para:</div>
+                      <div class="textType">MANTENIMIENTO</div>
+                      <div class="textSubType">Problema eléctrico</div>
+                </div>
+
+                <div class="itemsOffice">
+                      <div class="textMini">De:</div>
+                      <div class="textOffice">DITESI</div>
+                        <div class="textName">Emanuel País</div>
+                </div>
+
+            </div>
+
+            <div class="itemActions">
+              <i class=" fa fa-angle-right" aria-hidden="true"></i>
+            </div>
+
+        </div>
+
+        <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
+
+            <div class="itemInfo">
+
+                <div class="itemDate">
+                    <div class="textNumerOrders">Nº 112369</div>
+                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
+                    <div class="textDaysOrders">Hoy</div>
+                </div>
+
+                <div class="itemStatus">
+                    <div class="status enProgreso">
+                        <!-- VARIABLES:
+                        abierta, enProgreso, cerrada, pausada, rechazada -->
+                        <div class="textA1">ABIERTA</div>
+                        <div class="textA2"></div>
+                        <div class="textEC1">EN CURSO</div>
+                        <div class="textEC2"></div>
+                        <div class="textC1">CERRADA</div>
+                        <div class="textC2"></div>
+                        <div class="textP1">PAUSADA</div>
+                        <div class="textP2"></div>
+                        <div class="textR1">RECHAZADA</div>
+                        <div class="textR2"></div>
+                    </div>
+                </div>
+
+                <div class="itemsType">
+                      <div class="textMini">Para:</div>
+                      <div class="textType">MANTENIMIENTO</div>
+                      <div class="textSubType">Problema eléctrico</div>
+                </div>
+
+                <div class="itemsOffice">
+                      <div class="textMini">De:</div>
+                      <div class="textOffice">DITESI</div>
+                        <div class="textName">Emanuel País</div>
+                </div>
+
+            </div>
+
+            <div class="itemActions">
+              <i class=" fa fa-angle-right" aria-hidden="true"></i>
+            </div>
+
+        </div>
+
+        <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
+
+            <div class="itemInfo">
+
+                <div class="itemDate">
+                    <div class="textNumerOrders">Nº 112369</div>
+                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
+                    <div class="textDaysOrders">Hoy</div>
+                </div>
+
+                <div class="itemStatus">
+                    <div class="status cerrada">
+                        <!-- VARIABLES:
+                        abierta, enProgreso, cerrada, pausada, rechazada -->
+                        <div class="textA1">ABIERTA</div>
+                        <div class="textA2"></div>
+                        <div class="textEC1">EN CURSO</div>
+                        <div class="textEC2"></div>
+                        <div class="textC1">CERRADA</div>
+                        <div class="textC2"></div>
+                        <div class="textP1">PAUSADA</div>
+                        <div class="textP2"></div>
+                        <div class="textR1">RECHAZADA</div>
+                        <div class="textR2"></div>
+                    </div>
+                </div>
+
+                <div class="itemsType">
+                      <div class="textMini">Para:</div>
+                      <div class="textType">MANTENIMIENTO</div>
+                      <div class="textSubType">Problema eléctrico</div>
+                </div>
+
+                <div class="itemsOffice">
+                      <div class="textMini">De:</div>
+                      <div class="textOffice">DITESI</div>
+                        <div class="textName">Emanuel País</div>
+                </div>
+
+            </div>
+
+            <div class="itemActions">
+              <i class=" fa fa-angle-right" aria-hidden="true"></i>
+            </div>
+
+        </div>
+
+        <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
+
+            <div class="itemInfo">
+
+                <div class="itemDate">
+                    <div class="textNumerOrders">Nº 112369</div>
+                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
+                    <div class="textDaysOrders">Hoy</div>
+                </div>
+
+                <div class="itemStatus">
+                    <div class="status pausada">
+                        <!-- VARIABLES:
+                        abierta, enProgreso, cerrada, pausada, rechazada -->
+                        <div class="textA1">ABIERTA</div>
+                        <div class="textA2"></div>
+                        <div class="textEC1">EN CURSO</div>
+                        <div class="textEC2"></div>
+                        <div class="textC1">CERRADA</div>
+                        <div class="textC2"></div>
+                        <div class="textP1">PAUSADA</div>
+                        <div class="textP2"></div>
+                        <div class="textR1">RECHAZADA</div>
+                        <div class="textR2"></div>
+                    </div>
+                </div>
+
+                <div class="itemsType">
+                      <div class="textMini">Para:</div>
+                      <div class="textType">MANTENIMIENTO</div>
+                      <div class="textSubType">Problema eléctrico</div>
+                </div>
+
+                <div class="itemsOffice">
+                      <div class="textMini">De:</div>
+                      <div class="textOffice">DITESI</div>
+                        <div class="textName">Emanuel País</div>
+                </div>
+
+            </div>
+
+            <div class="itemActions">
+              <i class=" fa fa-angle-right" aria-hidden="true"></i>
+            </div>
+
+        </div>
+
 
     </div>
 
+    <!-- ---------------- DETALLE DE PEDIDO ------------------ -->
     <div class="contentOrderDetail">
 
 
@@ -367,31 +915,75 @@
                   <div class="itemDate2">
                       <div class="textDaysOrders">Consulta</div>
                       <div class="textNumerOrders2">Nº 112369</div>
-                      <!-- <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
-                      <div class="textDaysOrders">Hoy</div> -->
                   </div>
                   <div class="itemsType">
-                        <div class="textType">SOPORTE TÉCNICO:</div>
-                          <div class="textSubType">Problema de impresora</div>
+                        <div class="textType">Economico Financiero</div>
+                        <div class="textType2">Compras</div>
+                        <div class="textSubType">Problema de impresora</div>
                   </div>
 
-                  <div class="itemsOffice">
-                        <div class="textOffice">MESA DE ENTRADAS</div>
-                          <div class="textName">Betiana Galle</div>
+                  <div class="contentOffice">
+                      <div class="textMini">Solicitado por:</div>
+                        <div class="textOffice">Ditesi</div>
+                          <div class="textName">Emanuel Pais</div>
                   </div>
+
+                  <div class="contentActions">
+
+                      <div class="itemStatus2">
+                          <div class="status2 abierta" ng-click="view.style2 = 'seleccionarEstado'">
+                              <!-- VARIABLES:
+                              abierta, enProgreso, cerrada, pausada, rechazada -->
+                              <div class="textA1">ABIERTA <i class="fa fa-caret-down"></i></div>
+                              <div class="textA2" title="Abierta">A <i class="fa fa-caret-down"></i></div>
+                              <div class="textEC1">EN CURSO <i class="fa fa-caret-down"></i></div>
+                              <div class="textEC2" title="En Curso">eC <i class="fa fa-caret-down"></i></div>
+                              <div class="textC1">CERRADA <i class="fa fa-caret-down"></i></div>
+                              <div class="textC2" title="Cancelada">C <i class="fa fa-caret-down"></i></div>
+                              <div class="textP1">PAUSADA <i class="fa fa-caret-down"></i></div>
+                              <div class="textP2" title="Pausada">P <i class="fa fa-caret-down"></i></div>
+                              <div class="textR1">RECHAZADA <i class="fa fa-caret-down"></i></div>
+                              <div class="textR2" title="Rechazada">R <i class="fa fa-caret-down"></i></div>
+                          </div>
+                          <div class="contentSelectState">
+                              <div class="subContentSelectState" ng-click="view.style2 = ''">
+                                  <div class="itemsSelectState abierta2">
+                                    <div class="itemState">ABIERTA</div>
+                                  </div>
+                              </div>
+                              <div class="subContentSelectState" ng-click="view.style2 = ''">
+                                  <div class="itemsSelectState enProgreso2">
+                                    <div class="itemState">EN CURSO</div>
+                                  </div>
+                              </div>
+                              <div class="subContentSelectState" ng-click="view.style2 = ''">
+                                  <div class="itemsSelectState pausada2">
+                                    <div class="itemState">PAUSADA</div>
+                                  </div>
+                              </div>
+                              <div class="subContentSelectState" ng-click="view.style2 = ''">
+                                  <div class="itemsSelectState rechazada2">
+                                    <div class="itemState">RECHAZADA</div>
+                                  </div>
+                              </div>
+                              <div class="subContentSelectState" ng-click="view.style2 = ''">
+                                  <div class="itemsSelectState cerrada2">
+                                    <div class="itemState">CERRADA</div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+
+                      <div class="contentBtnReply">
+                          <button class="btnReply" ng-click="view.style2 = 'pantallaMensaje'">RESPONDER</button>
+                          <button class="btnReply2" ng-click="view.style2 = 'pantallaMensaje'" title="Responder"><i class="fa fa-comment-o fa-2x"></i></button>
+                      </div>
+
+                  </div>
+
               </div>
 
-              <div class="actionDetail">
-                  <select class="selectStatus colorOpen">
-                    <option class="selectOptionStatus">ABIERTA</option>
-                    <option class="selectOptionStatus">EN CURSO</option>
-                    <option class="selectOptionStatus">CERRADA</option>
-                    <option class="selectOptionStatus">PAUSADA</option>
-                    <option class="selectOptionStatus">CANCELADA</option>
-                </select>
-              </div>
-
-            </div>
+        </div>
 
         <div class="infoOrder">
             <div class="contentUser">
@@ -403,10 +995,11 @@
                   Galle
                 </div>
             </div>
-            <div class="contentArrow">
+            <!-- <div class="contentArrow">
               <i class="fa fa-caret-left" aria-hidden="true"></i>
-            </div>
-            <div class="contentInfo">
+            </div> -->
+            <div class="contentInfo ">
+                <!-- VARIABLES: conAdjunto, sinAdjunto -->
                 <div class="textDateDetailOrders">
                     Hoy - 25 May. 2016 - 09:25 hs
                 </div>
@@ -415,189 +1008,196 @@
                     No se observan indicadores luminosos ni mensajes de error, y no hay ruidos ni movimiento
                     en la impresora.
                 </div>
-            </div>
 
-            <div>
-
-                <div class="contentAdd">
-                  <div class="textDateDetailOrders">
-                      ADJUNTOS
-                  </div>
-                  <div class="textAdd">
-                    <div>error_pantalla.jpg</div>
-                    <div>error_pantalla2.jpg</div>
-
-                  </div>
-                </div>
-                <div class="contentBtnReply">
-                    <button class="btnReply" ng-click="view.style2 = 'pantallaMensaje'">RESPONDER</button>
-                </div>
-
+                <div class="contentAddInfo"><i class="fa fa-paperclip"></i> <a class="archiveAdd" href=""> ArchivoAdjunto.jpg</a></div>
             </div>
 
         </div>
 
         <div class="contentTotalReplys">
 
+            <div class="reply miRespuesta">
+                <!-- VARIABLES: miRespuesta, respuestaDeAutor -->
+                <div class="contentReplys">
 
+                    <div class="subcontentReply">
+                      <div class="contentArrowLeft">
+                        <i class="fa fa-caret-left" aria-hidden="true"></i>
+                      </div>
 
-            <div class="contentReplys">
+                      <div class="textReply ">
+                          <!-- VARIABLES: sinAdjunto, conAdjunto -->
+                          <div class="textDateDetailOrders">
+                              Hoy - 25 May. 2016 - 10:26 hs
+                          </div>
+                          <div>
+                                presiona el botón de encendido. presiona el botón de encendido. presiona el botón de encendido. presiona el botón de encendido. presiona el botón de encendido.
+                          </div>
+                          <div class="contentAddInfo"><i class="fa fa-paperclip"></i> <a class="archiveAdd" href=""> ArchivoAdjunto.jpg</a></div>
+                      </div>
 
-                <div class="textReply">
-                    <div class="textDateDetailOrders">
-                        Hoy - 25 May. 2016 - 10:26 hs
+                      <div class="contentArrowRight">
+                        <i class="fa fa-caret-right" aria-hidden="true"></i>
+                      </div>
                     </div>
-                    <div>
-                          La impresora no se enciende o no responde cuando se presiona el botón de encendido. No se observan indicadores luminosos ni mensajes de error, y no hay ruidos ni movimiento en la impresora.
+
+                    <div class="contentUser">
+                      <div class="photo">
+                          <img class="avatar"  src="/systems/pedidos/img/walter.jpg">
+                      </div>
+                      <div class="nameUser">
+                        Walter </br>
+                        Blanco
+                      </div>
                     </div>
                 </div>
-
-                <div class="contentArrowRight">
-                  <i class="fa fa-caret-right" aria-hidden="true"></i>
-                </div>
-
-                <div class="contentUser">
-                    <div class="photo">
-                        <img class="avatar"  src="/systems/pedidos/img/walter.jpg">
-                    </div>
-                    <div class="nameUser">
-                      Walter </br>
-                      Blanco
-                    </div>
-                </div>
-
-                <!-- <div class="contentAddReply">
-                  <div class="textDateDetailOrders">
-                      ADJUNTOS
-                  </div>
-                  <div class="textAdd">
-                    <div>solucción.jpg</div>
-                    <div>detalle.txt</div>
-
-                  </div>
-                </div> -->
-
             </div>
 
-            <div class="contentReplys2">
+            <div class="reply respuestaDeAutor">
+                <!-- VARIABLES: miRespuesta, respuestaDeAutor -->
+                <div class="contentReplys">
 
-                <div class="contentUser2">
-                    <div class="photo">
-                        <img class="avatar"  src="/systems/pedidos/img/avatarWoman.jpg">
+                    <div class="subcontentReply">
+                      <div class="contentArrowLeft">
+                        <i class="fa fa-caret-left" aria-hidden="true"></i>
+                      </div>
+
+                      <div class="textReply">
+                          <div class="textDateDetailOrders">
+                              Hoy - 25 May. 2016 - 10:26 hs
+                          </div>
+                          <div>
+                                La impresora no se enciende o no responde cuando La impresora no se enciende o no responde cuando
+                          </div>
+                      </div>
+
+                      <div class="contentArrowRight">
+                        <i class="fa fa-caret-right" aria-hidden="true"></i>
+                      </div>
                     </div>
-                    <div class="nameUser">
-                      Betiana </br>
-                      Galle
+
+                    <div class="contentUser">
+                      <div class="photo">
+                          <img class="avatar"  src="/systems/pedidos/img/walter.jpg">
+                      </div>
+                      <div class="nameUser">
+                        Walter </br>
+                        Blanco
+                      </div>
                     </div>
                 </div>
-
-                <div class="contentArrowRight">
-                  <i class="fa fa-caret-left" aria-hidden="true"></i>
-                </div>
-
-                <div class="textReply">
-                    <div class="textDateDetailOrders">
-                        Hoy - 25 May. 2016 - 10:26 hs
-                    </div>
-                    <div>
-                          La impresora no se enciende o no responde cuando se presiona el botón de encendido. No se observan indicadores luminosos ni mensajes de error, y no hay ruidos ni movimiento en la impresora.
-                    </div>
-                </div>
-
-
-                <!-- <div class="contentAddReply2">
-                  <div class="textDateDetailOrders">
-                      ADJUNTOS
-                  </div>
-                  <div class="textAdd">
-                    <div>solucción.jpg</div>
-                    <div>detalle.txt</div>
-
-                  </div>
-                </div> -->
-
             </div>
 
-            <div class="contentReplys">
+            <div class="reply miRespuesta">
+                <!-- VARIABLES: miRespuesta, respuestaDeAutor -->
+                <div class="contentReplys">
 
-                <div class="textReply">
-                    <div class="textDateDetailOrders">
-                        Hoy - 25 May. 2016 - 10:26 hs
+                    <div class="subcontentReply">
+                      <div class="contentArrowLeft">
+                        <i class="fa fa-caret-left" aria-hidden="true"></i>
+                      </div>
+
+                      <div class="textReply">
+                          <div class="textDateDetailOrders">
+                              Hoy - 25 May. 2016 - 10:26 hs
+                          </div>
+                          <div>
+                            Ok
+                          </div>
+                      </div>
+
+                      <div class="contentArrowRight">
+                        <i class="fa fa-caret-right" aria-hidden="true"></i>
+                      </div>
                     </div>
-                    <div>
-                          La impresora no se enciende o no responde cuando se presiona el botón de encendido. No se observan indicadores luminosos ni mensajes de error, y no hay ruidos ni movimiento en la impresora.
+
+                    <div class="contentUser">
+                      <div class="photo">
+                          <img class="avatar"  src="/systems/pedidos/img/walter.jpg">
+                      </div>
+                      <div class="nameUser">
+                        Walter </br>
+                        Blanco
+                      </div>
                     </div>
                 </div>
-
-                <div class="contentArrowRight">
-                  <i class="fa fa-caret-right" aria-hidden="true"></i>
-                </div>
-
-                <div class="contentUser">
-                    <div class="photo">
-                        <img class="avatar"  src="/systems/pedidos/img/walter.jpg">
-                    </div>
-                    <div class="nameUser">
-                      Walter </br>
-                      Blanco
-                    </div>
-                </div>
-
-                <!-- <div class="contentAddReply">
-                  <div class="textDateDetailOrders">
-                      ADJUNTOS
-                  </div>
-                  <div class="textAdd">
-                    <div>solucción.jpg</div>
-                    <div>detalle.txt</div>
-
-                  </div>
-                </div> -->
-
             </div>
 
-            <div class="contentReplys">
+            <div class="reply respuestaDeAutor">
+                <!-- VARIABLES: miRespuesta, respuestaDeAutor -->
+                <div class="contentReplys">
 
-                <div class="textReply">
-                    <div class="textDateDetailOrders">
-                        Hoy - 25 May. 2016 - 10:26 hs
+                    <div class="subcontentReply">
+                      <div class="contentArrowLeft">
+                        <i class="fa fa-caret-left" aria-hidden="true"></i>
+                      </div>
+
+                      <div class="textReply">
+                          <div class="textDateDetailOrders">
+                              Hoy - 25 May. 2016 - 10:26 hs
+                          </div>
+                          <div>
+                                La impresora no se enciende o no responde cuando se presiona el botón de encendido. No se observan indicadores luminosos ni mensajes de error, y no hay ruidos ni movimiento en la impresora.
+                          </div>
+                      </div>
+
+                      <div class="contentArrowRight">
+                        <i class="fa fa-caret-right" aria-hidden="true"></i>
+                      </div>
                     </div>
-                    <div>
-                          La impresora no se enciende o no responde cuando se presiona el botón de encendido. No se observan indicadores luminosos ni mensajes de error, y no hay ruidos ni movimiento en la impresora.
+
+                    <div class="contentUser">
+                      <div class="photo">
+                          <img class="avatar"  src="/systems/pedidos/img/walter.jpg">
+                      </div>
+                      <div class="nameUser">
+                        Walter </br>
+                        Blanco
+                      </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="contentArrowRight">
-                  <i class="fa fa-caret-right" aria-hidden="true"></i>
-                </div>
+            <div class="reply respuestaDeAutor">
+                <!-- VARIABLES: miRespuesta, respuestaDeAutor -->
+                <div class="contentReplys">
 
-                <div class="contentUser">
-                    <div class="photo">
-                        <img class="avatar"  src="/systems/pedidos/img/walter.jpg">
+                    <div class="subcontentReply">
+                      <div class="contentArrowLeft">
+                        <i class="fa fa-caret-left" aria-hidden="true"></i>
+                      </div>
+
+                      <div class="textReply">
+                          <div class="textDateDetailOrders">
+                              Hoy - 25 May. 2016 - 10:26 hs
+                          </div>
+                          <div>
+                                La impresora no se enciende o no responde cuando se presiona el botón de encendido. No se observan indicadores luminosos ni mensajes de error, y no hay ruidos ni movimiento en la impresora.
+                          </div>
+                      </div>
+
+                      <div class="contentArrowRight">
+                        <i class="fa fa-caret-right" aria-hidden="true"></i>
+                      </div>
                     </div>
-                    <div class="nameUser">
-                      Walter </br>
-                      Blanco
+
+                    <div class="contentUser">
+                      <div class="photo">
+                          <img class="avatar"  src="/systems/pedidos/img/walter.jpg">
+                      </div>
+                      <div class="nameUser">
+                        Walter </br>
+                        Blanco
+                      </div>
                     </div>
                 </div>
-
-                <!-- <div class="contentAddReply">
-                  <div class="textDateDetailOrders">
-                      ADJUNTOS
-                  </div>
-                  <div class="textAdd">
-                    <div>solucción.jpg</div>
-                    <div>detalle.txt</div>
-
-                  </div>
-                </div> -->
-
             </div>
 
         </div>
 
     </div>
 
+    <!-- ------------------ NUEVO MENSAJE -------------------- -->
     <div class="contentMessage">
         <div class="subContentMessage">
             <div class="message">
@@ -606,12 +1206,14 @@
                 </div>
                 <div class="textMessage">
                   <textarea class="textareaMenssage"></textarea>
-                  <div class="addMenssage">
-                      <div><button class="btnAdd" title="Adjuntar Archivo"><i class="fa fa-paperclip" aria-hidden="true"></i></button></div>
+                  <div class="addMenssage2">
+                      <div><button class="btnAdd" title="Adjuntar Archivo"><i class="fa fa-paperclip" aria-hidden="true"></i> Subir Archivo</button></div>
                       <div class="ArchivesAdd">
-                        <i class="fa fa-file-o" aria-hidden="true"></i> Instructivo.pdf <button class="btnTrashAdd"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
-                        <i class="fa fa-file-o" aria-hidden="true"></i> pantalla_de_error.jpg <button class="btnTrashAdd"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                        <input type="file" class="inputFile"></input>
+                        <!-- <i class="fa fa-file-o"></i> Instructivo.pdf <button class="btnTrashAdd"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                        <i class="fa fa-file-o"></i> pantalla_de_error.jpg <button class="btnTrashAdd"><i class="fa fa-trash-o" aria-hidden="true"></i></button> -->
                       </div>
+                  </div>
                 </div>
                 <div class="actionMessage">
                   <button class="btnAceptMennsage" ng-click="view.style2 = ''">ACEPTAR</button>
@@ -620,5 +1222,32 @@
             </div>
         </div>
     </div>
+
+    <!-- --------------- MENSAJES AL USUARIO ----------------- -->
+    <div class="contentMessageUser">
+        <div class="subContentMessageUser">
+            <div class="messageUser">
+                <div class="preload">
+                    <div class="circle"><i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i></div>
+                    <div><b>Cargando...</b></div>
+                    <div>Por favor espere</div>
+                </div>
+                <div class="errorSystem">
+                    <div class="circle"><i class="fa fa-exclamation-triangle fa-3x fa-fw"></i></div>
+                    <div><b>Se ha producido un error en el sistema</b></div>
+                    <div>Intente nuevamente</div>
+                </div>
+                <div class="messageSent">
+                    <div class="circle"><i class="fa fa-commenting-o fa-3x fa-fw"></i></div>
+                    <div><b>Mensaje enviado con éxito</b></div>
+                </div>
+                <div class="orderCreated">
+                    <div class="circle"><i class="fa fa-check fa-3x fa-fw"></i></div>
+                    <div><b>Pedido creado con éxito</b></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 </div>
