@@ -82,4 +82,16 @@ function Assistance (Utils, Session, $wamp) {
     });
 	}
 
+	this.createScheduleWeek = function(uid, date, scheds) {
+		return new Promise(function(cok, cerr) {
+      var sid = Session.getSessionId();
+  		$wamp.call('assistance.createScheduleWeek', [sid, uid, date, scheds])
+      .then(function(v) {
+        cok(v);
+      },function(err) {
+        cerr(err);
+      });
+    });
+	}
+
 };

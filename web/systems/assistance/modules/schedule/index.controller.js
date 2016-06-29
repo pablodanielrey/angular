@@ -5,10 +5,10 @@
         .module('mainApp')
         .controller('ScheduleController', ScheduleController);
 
-    ScheduleController.$inject = ['$scope', 'Login', 'Users', 'Assistance', 'Office', '$filter'];
+    ScheduleController.$inject = ['$scope', 'Login', 'Users', 'Assistance', 'Office', '$filter', '$timeout'];
 
     /* @ngInject */
-    function ScheduleController($scope, Login, Users, Assistance, Office, $filter) {
+    function ScheduleController($scope, Login, Users, Assistance, Office, $filter, $timeout) {
         var vm = this;
 
         // Variables
@@ -326,27 +326,91 @@
           vm.view.style2 = vm.view.styles2[0];
         }
 
-        function saveScheduleWeek() {
+        function getSchedulesModifieds() {
           var modifiedScheds = [];
           for (var day = 0; day < 7 ; day++) {
             var newScheds = vm.model.newSchedules[day];
             var scheds = vm.model.schedules[day];
+            var modified = false;
 
-            if (newScheds.length != scheds.length) {
-              modifiedScheds = modifiedScheds.concat(newScheds);
+            if (scheds.length == 0 &&  isNull(newScheds)) {
               continue;
             }
 
-            for (var i = 0; i < newScheds.length; i++) {
-              var hours = (scheds[i].end - scheds[i].start) / 60 / 60 / 1000;
-              if (newScheds[i].start != scheds[i].start || newScheds[i].hours != hours) {
-                modifiedScheds.push(newScheds[i]);
+            if (newScheds.length != scheds.length) {
+              modified = true;
+            } else {
+              for (var i = 0; i < newScheds.length; i++) {
+                var hours = (scheds[i].end - scheds[i].start) / 60 / 60 / 1000;
+                if (newScheds[i].start != scheds[i].start || newScheds[i].hours != hours) {
+                  modified = true;
+                }
               }
             }
-
+            if (modified) {
+              modifiedScheds = modifiedScheds.concat(formatSchedules(newScheds));
+            }
           }
-          console.log(modifiedScheds);
-          vm.view.style2 = vm.view.styles2[0];
+          return modifiedScheds;
+        }
+
+        function formatSchedules(scheds) {
+          var data = [];
+          for (var i = 0; i < scheds.length; i++) {
+            var s = {};
+            s.weekday = (scheds[i].day == 0) ? 6 : scheds[i].day - 1;
+            s.start = (scheds[i].start == null) ? 0 : (scheds[i].start.getHours() * 60 + scheds[i].start.getMinutes())
+            var hours = (scheds[i].hours == null) ? 0 : scheds[i].hours;
+            s.end = s.start + (parseInt(hours) * 60)  + ((hours * 60) % 60);
+            data.push(s);
+          }
+          return data;
+        }
+
+        function saveScheduleWeek() {
+          var scheds = getSchedulesModifieds();
+          vm.view.style3 = vm.view.styles3[1];
+          vm.view.style4 = vm.view.styles4[1];
+          Assistance.createScheduleWeek(vm.model.user.id, vm.model.date, scheds).then(function(data) {
+
+            $scope.$apply(function(){
+              vm.view.style3 = vm.view.styles3[1];
+              vm.view.style4 = vm.view.styles4[2];
+            });
+            $timeout(function() {
+              $scope.$apply(function() {
+                vm.loadSchedules();
+                vm.view.style3 = vm.view.styles3[0];
+                vm.view.style2 = vm.view.styles2[0];
+              });
+            }, 2500);
+
+            console.log('ok');
+          }, function(error) {
+            $scope.$apply(function(){
+              vm.view.style3 = vm.view.styles3[1];
+              vm.view.style4 = vm.view.styles4[3];
+            });
+            $timeout(function() {
+              $scope.$apply(function(){
+                vm.view.style3 = vm.view.styles3[0];
+                vm.view.style2 = vm.view.styles2[2];
+              });
+            }, 2500);
+          });
+
+        }
+
+        function isNull(scheds) {
+          if (scheds.length < 1) {
+            return true;
+          }
+
+          if (scheds.length > 1) {
+            return false;
+          }
+
+          return (scheds[0].start == null || scheds[0].hours == null);
         }
 
 

@@ -459,3 +459,17 @@ class AssistanceModel:
         module = importlib.import_module(justModule)
         clazz = getattr(module, justClazz)
         return clazz.getData(con, userId, date, schedule)
+
+    def createScheduleWeek(self, con, userId, uid, date, scheds):
+        # verificar si el userId tiene permisos para crear los schedules para el usuario uid
+        # por ahora no lo verifico
+        date = date - datetime.timedelta(days=date.weekday())
+        for sc in scheds:
+            s = Schedule()
+            s.userId = uid
+            s.date = date
+            s.weekday = sc['weekday']
+            s.start = sc['start'] * 60
+            s.end = sc['end'] * 60
+            s.daily = True
+            s.persist(con)

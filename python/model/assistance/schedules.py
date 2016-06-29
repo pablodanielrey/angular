@@ -5,6 +5,7 @@ from model.users.users import UserDAO
 from model.assistance.assistanceDao import AssistanceDAO
 from model.assistance.utils import Utils
 from operator import attrgetter
+import uuid
 
 class Schedule(JSONSerializable):
 
@@ -41,6 +42,9 @@ class Schedule(JSONSerializable):
         if self.end is None or self.start is None:
             return 0
         return self.end - self.start
+
+    def persist(self, con):
+        return ScheduleDAO.persist(con, self)
 
     @classmethod
     def findByUserId(cls, con, ids, startDate, endDate):
@@ -131,5 +135,19 @@ class ScheduleDAO(AssistanceDAO):
             cur.execute('select distinct user_id from assistance.schedules')
             return [ c[0] for c in cur ]
 
+        finally:
+            cur.close()
+
+    @classmethod
+    def persist(cls, con, sch):
+        assert sch is not None
+
+        cur = con.cursor()
+        try:            
+            sch.id = str(uuid.uuid4())
+            r = sch.__dict__
+            cur.execute('insert into assistance.schedules (id, user_id, sdate, sstart, send, weekday, daily) '
+                        'values ( %(id)s, %(userId)s, %(date)s, %(start)s, %(end)s, %(weekday)s, %(daily)s)', r)
+            return sch.id
         finally:
             cur.close()

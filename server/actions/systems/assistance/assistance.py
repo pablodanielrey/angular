@@ -43,6 +43,7 @@ class AssistanceWamp(ApplicationSession):
         yield from self.register(self.changeStatus_async, 'assistance.changeStatus')
         yield from self.register(self.getJustificationData_async, 'assistance.getJustificationData')
         yield from self.register(self.getScheduleDataInWeek_async, 'assistance.getScheduleDataInWeek')
+        yield from self.register(self.createScheduleWeek_async, 'assistance.createScheduleWeek')
 
     def _localizeLocal(self,naive):
         tz = dateutil.tz.tzlocal()
@@ -208,4 +209,21 @@ class AssistanceWamp(ApplicationSession):
     def getScheduleDataInWeek_async(self, userId, date):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.getScheduleDataInWeek, userId, date)
+        return r
+
+    def createScheduleWeek(self, sid, uid, dateStr, scheds):
+        con = self.conn.get()
+        try:
+            date = self._parseDate(dateStr)
+            date = None if date is None else date.date()
+            userId = self.loginModel.getUserId(con, sid)
+            self.assistance.createScheduleWeek(con, userId, uid, date, scheds)
+            con.commit()
+        finally:
+            self.conn.put(con)
+
+    @coroutine
+    def createScheduleWeek_async(self, sid, uid, date, scheds):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.createScheduleWeek, sid, uid, date, scheds)
         return r
