@@ -4,6 +4,8 @@ from model.serializer.utils import JSONSerializable
 from model.users.users import UserDAO
 from model.assistance.assistanceDao import AssistanceDAO
 from model.assistance.utils import Utils
+from operator import attrgetter
+import uuid
 
 class Schedule(JSONSerializable):
 
@@ -24,6 +26,8 @@ class Schedule(JSONSerializable):
         self.daily = False
 
     def isValid(self, date):
+        if not self.daily:
+            return date == self.date
         return (self.date <= date) and (self.weekday == date.weekday())
 
     def getStartDate(self, date):
@@ -34,11 +38,33 @@ class Schedule(JSONSerializable):
         dt = datetime.datetime.combine(date, datetime.time(0,0))
         return Utils._localizeLocal(dt + datetime.timedelta(seconds=self.end))
 
-
     def getScheduleSeconds(self):
         if self.end is None or self.start is None:
             return 0
         return self.end - self.start
+
+    def persist(self, con):
+        return ScheduleDAO.persist(con, self)
+
+    @classmethod
+    def findByUserId(cls, con, ids, startDate, endDate):
+        return ScheduleDAO.findByUserId(con, ids, startDate, endDate)
+
+    @classmethod
+    def findByUserIdInDate(cls, con, userId, date):
+        schedules = cls.findByUserId(con, [userId], date, date)
+        schSorted = sorted([ sc for sc in schedules if sc.isValid(date)], key=attrgetter('date'), reverse=True)
+        return [sc for sc in schSorted if sc.date == schSorted[0].date]
+
+    @classmethod
+    def findByUserIdInWeek(cls, con, userId, date):
+        firstDate = date - datetime.timedelta(days=date.weekday())
+        result = {}
+        for day in range(7):
+            actual = firstDate + datetime.timedelta(days=day)
+            result[actual] = cls.findByUserIdInDate(con, userId, actual)
+        return result
+
 
 
 class ScheduleDAO(AssistanceDAO):
@@ -109,5 +135,19 @@ class ScheduleDAO(AssistanceDAO):
             cur.execute('select distinct user_id from assistance.schedules')
             return [ c[0] for c in cur ]
 
+        finally:
+            cur.close()
+
+    @classmethod
+    def persist(cls, con, sch):
+        assert sch is not None
+
+        cur = con.cursor()
+        try:            
+            sch.id = str(uuid.uuid4())
+            r = sch.__dict__
+            cur.execute('insert into assistance.schedules (id, user_id, sdate, sstart, send, weekday, daily) '
+                        'values ( %(id)s, %(userId)s, %(date)s, %(start)s, %(end)s, %(weekday)s, %(daily)s)', r)
+            return sch.id
         finally:
             cur.close()

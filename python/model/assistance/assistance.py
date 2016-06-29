@@ -17,6 +17,20 @@ from model.offices.offices import Office
 from model.assistance.statistics import WpStatistics
 from model.assistance.utils import Utils
 
+class ScheduleObject(JSONSerializable):
+
+    def __init__(self, schedule=None, date = None):
+        self.start = None if schedule is None else schedule.getStartDate(date)
+        self.end = None if schedule is None else schedule.getEndDate(date)
+
+class ScheduleData(JSONSerializable):
+
+    def __init__(self, date = None, schedules = [], uid = None):
+        self.userId = uid
+        self.date = date
+        self.schedules = [ScheduleObject(sc, date) for sc in schedules]
+        self.hours = sum([int(s.getScheduleSeconds() / 60 /60) for s in schedules])
+
 
 class WorkedAssistanceData(JSONSerializable):
 
@@ -85,7 +99,10 @@ class WorkPeriod(JSONSerializable):
         return self.logs[0]
 
     def getEndLog(self):
-        if len(self.logs) <= 1:
+        llogs = len(self.logs)
+        if llogs == 0:
+            return None
+        if llogs % 2 == 1:
             return None
         return self.logs[-1]
 
@@ -371,6 +388,10 @@ class AssistanceModel:
 
         return aData
 
+    def getScheduleDataInWeek(self, con, userId, date):
+        schedules = Schedule.findByUserIdInWeek(con, userId, date)
+        return [ScheduleData(key, schedules[key], userId) for key in schedules]
+
 
     def createSingleDateJustification(self,con, date, userId, ownerId, justClazz, justModule):
         module = importlib.import_module(justModule)
@@ -438,3 +459,17 @@ class AssistanceModel:
         module = importlib.import_module(justModule)
         clazz = getattr(module, justClazz)
         return clazz.getData(con, userId, date, schedule)
+
+    def createScheduleWeek(self, con, userId, uid, date, scheds):
+        # verificar si el userId tiene permisos para crear los schedules para el usuario uid
+        # por ahora no lo verifico
+        date = date - datetime.timedelta(days=date.weekday())
+        for sc in scheds:
+            s = Schedule()
+            s.userId = uid
+            s.date = date
+            s.weekday = sc['weekday']
+            s.start = sc['start'] * 60
+            s.end = sc['end'] * 60
+            s.daily = True
+            s.persist(con)

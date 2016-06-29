@@ -18,7 +18,11 @@ function Assistance (Utils, Session, $wamp) {
 		return $wamp.call('assistance.getJustificationData',[userId, date, justClazz, justModule]);
 	}
 
-	this.createSingleDateJustification = function(date, userId, justClazz, justModule) {		 
+	this.getScheduleDataInWeek = function (userId, date) {
+		return $wamp.call('assistance.getScheduleDataInWeek',[userId, date]);
+	}
+
+	this.createSingleDateJustification = function(date, userId, justClazz, justModule) {
 		return new Promise(function(cok, cerr) {
       var sid = Session.getSessionId();
   		$wamp.call('assistance.createSingleDateJustification', [sid, date, userId, justClazz, justModule])
@@ -70,6 +74,18 @@ function Assistance (Utils, Session, $wamp) {
 		return new Promise(function(cok, cerr) {
       var sid = Session.getSessionId();
   		$wamp.call('assistance.changeStatus', [sid, justification, status])
+      .then(function(v) {
+        cok(v);
+      },function(err) {
+        cerr(err);
+      });
+    });
+	}
+
+	this.createScheduleWeek = function(uid, date, scheds) {
+		return new Promise(function(cok, cerr) {
+      var sid = Session.getSessionId();
+  		$wamp.call('assistance.createScheduleWeek', [sid, uid, date, scheds])
       .then(function(v) {
         cok(v);
       },function(err) {

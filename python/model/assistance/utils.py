@@ -22,6 +22,12 @@ class Utils:
             return naive
 
     @classmethod
+    def toLocalFromAware(cls, aware):
+        if aware is None:
+            return None
+        return aware.astimezone(dateutil.tz.tzlocal())
+
+    @classmethod
     def _localizeLocal(cls, naive):
         if naive is None:
             return None
@@ -31,6 +37,8 @@ class Utils:
 
     @classmethod
     def _naiveFromLocalAware(cls, aware):
+        if aware is None:
+            return None
         return aware.replace(tzinfo=None)
 
     @classmethod

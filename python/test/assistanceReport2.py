@@ -21,6 +21,7 @@ from model.assistance.justifications.longDurationJustification import LongDurati
 from model.assistance.justifications.status import Status
 from model.assistance.justifications.justifications import Justification
 from model.assistance.schedules import ScheduleDAO
+from model.assistance.utils import Utils
 from model.offices.offices import Office
 
 from model.serializer.utils import MySerializer, serializer_loads
@@ -218,70 +219,6 @@ def createZipFile(rp):
 def _getOffices(con):
     return Office.findById(con, Office.findAll(con))
 
-def _getUsers(con):
-    uids = []
-
-    """
-    uid, v = UserDAO.findByDni(con, "26575940")
-    uids.append(uid)
-
-    uid, v = UserDAO.findByDni(con, "18854479")
-    uids.append(uid)
-
-    uid, v = UserDAO.findByDni(con, "26106065")
-    uids.append(uid)
-
-    uid, v = UserDAO.findByDni(con, "24040623")
-    uids.append(uid)
-
-    uid, v = UserDAO.findByDni(con, "32393755")    # pablo Lozada
-    uids.append(uid)
-
-    uid, v = UserDAO.findByDni(con, "27528150")    # julio ciappa
-    uids.append(uid)
-
-    uid, v = UserDAO.findByDni(con, "18609353")    # juan acosta
-    uids.append(uid)
-
-    uid, v = UserDAO.findByDni(con, "24040623")     # miguel rey
-    uids.append(uid)
-
-    uid, v = UserDAO.findByDni(con, "27821597")     # maxi
-    uids.append(uid)
-
-    uid, v = UserDAO.findByDni(con, "31073351")     # ivan
-    uids.append(uid)
-
-    uid, v = UserDAO.findByDni(con, "33212183")     # santiago
-    uids.append(uid)
-
-    #uid, v = UserDAO.findByDni(con, "27294557")     # pablo
-    #uids.append(uid)
-
-    uid, v = UserDAO.findByDni(con, "30001823")    # walter
-    uids.append(uid)
-
-    uid, v = UserDAO.findByDni(con, "31381082")     # ema
-    uids.append(uid)
-
-    uid, v = UserDAO.findByDni(con, "29694757")      # oporto
-    uids.append(uid)
-
-    uid, v = UserDAO.findByDni(con, "30078613")      # lorena mabel pereira
-    uids.append(uid)
-
-    uid, v = UserDAO.findByDni(con, "30078613")      # lorena mabel pereira
-    uids.append(uid)
-
-    uid, v = UserDAO.findByDni(con, "21430694")      # analía causa
-    uids.append(uid)
-
-    """
-    uids = ScheduleDAO.findUsersWithSchedule(con)
-    users = UserDAO.findById(con, uids)
-    return users, uids
-
-
 def findUser(uid, users):
     for u in users:
         if u.id == uid:
@@ -290,11 +227,77 @@ def findUser(uid, users):
 
 
 def statsToPyooUser(rp, user, stats):
+    if user.id not in stats:
+        return
+
+    stat = stats[user.id][0]
+    justifications = {}
+
+    import uuid
+    import pyoo
+    calc = pyoo.Desktop('localhost', 2002)
+    doc = calc.open_spreadsheet('templateUserStats.ods')
+    try:
+        sheet = doc.sheets[0]
+        sheet[0,1].value = user.dni
+        sheet[1,1].value = user.name
+        sheet[2,1].value = user.lastname
+        sheet[3,1].value = stat.position
+
+        i = 5
+        for ds in stat.dailyStats:
+            sheet[i,2].value = ds.date if ds.date is not None else ''
+            sheet[i,3].value = Utils._naiveFromLocalAware(Utils.toLocalFromAware(ds.start)) if ds.start is not None else ''
+            sheet[i,4].value = Utils._naiveFromLocalAware(Utils.toLocalFromAware(ds.end)) if ds.end is not None else ''
+            sheet[i,5].value = datetime.timedelta(seconds=ds.periodSeconds) if ds.start is not None else ''
+            sheet[i,6].value = ds.iin if ds.iin is not None else ''
+            sheet[i,7].value = ds.out if ds.out is not None else ''
+            sheet[i,8].value = datetime.timedelta(seconds=ds.workedSeconds) if ds.iin is not None else ''
+            #sheet[i,9].value = datetime.timedelta(seconds=ds.workedSeconds - ds.periodSeconds) if ds.start is not None or ds.iin is not None else ''
+            sheet[i,10].value = datetime.timedelta(seconds=ds.lateSeconds) if ds.lateSeconds > 0 else ''
+            sheet[i,11].value = datetime.timedelta(seconds=ds.earlySeconds) if ds.earlySeconds > 0 else ''
+            sheet[i,12].value = ds.justification.identifier if ds.justification is not None else ''
+            sheet[i,13].value = Status.getIdentifier(ds.justification.status) if ds.justification is not None else ''
+
+            if ds.justification is not None and ds.justification.status == 2:
+                if ds.justification.identifier not in justifications:
+                    justifications[ds.justification.identifier] = 1
+                else:
+                    justifications[ds.justification.identifier] = justifications[ds.justification.identifier] + 1
+
+            i = i + 1
+
+        i = i + 2
+        for j in justifications.keys():
+            sheet[i,0].value = j
+            sheet[i,1].value = justifications[j]
+            i = i + 1
+
+        fn = '{}/{}-{}-{}.xlsx'.format(rp, user.lastname, user.name, user.dni)
+        logging.info('salvando : {}'.format(fn))
+        doc.save(fn, pyoo.FILTER_EXCEL_2007)
+
+    finally:
+        doc.close()
 
 
-def statsToPyooOffice(rp, off, stats):
 
+def statsToPyooOffice(rp, off, stats, users):
+    rpp = '{}/{}'.format(rp, off.name)
+    import os
+    if not os.path.exists(rpp):
+        os.makedirs(rpp)
+    for uid in off.users:
+        user = findUser(uid, users)
+        if user:
+            statsToPyooUser(rpp, user, stats)
 
+def findOfficeByUser(uid, offices):
+    off = []
+    for o in offices:
+        if uid in o.users:
+            off.append(o)
+    return off
 
 def findOffice(oid, offices):
     for o in offices:
@@ -303,7 +306,7 @@ def findOffice(oid, offices):
 
 def createReportDir(user):
     import os
-    newpath = '/tmp/reporte-asistencia-{}-{}-{}'.format(user.dni, user.name, user.lastname)
+    newpath = '/tmp/reporte-asistencia/reporte-asistencia-{}-{}-{}'.format(user.dni, user.name, user.lastname)
     if not os.path.exists(newpath):
         os.makedirs(newpath)
     return newpath
@@ -312,7 +315,7 @@ if __name__ == '__main__':
 
     logging.getLogger().setLevel(logging.INFO)
 
-    rstart = datetime.datetime.now() - datetime.timedelta(days=7)
+    rstart = datetime.datetime.combine((datetime.datetime.now() - datetime.timedelta(days=120)).date(),datetime.time())
     rend = datetime.datetime.now()
     if len(sys.argv) >= 2:
         import dateutil
@@ -342,11 +345,16 @@ if __name__ == '__main__':
         users = UserDAO.findById(con, uids)
 
         """ obtengo las estadisticas """
+        logging.info('Calculando las estadísticas de {} usuarios'.format(len(uids)))
         a = inject.instance(AssistanceModel)
         stats = a.getStatistics(con, uids, rstart, rend)
 
         """ creo los reportes por usuario y se lo envio """
         for user in users:
+
+            if user.id != '89d88b81-fbc0-48fa-badb-d32854d3d93a' and user.id != '0cd70f16-aebb-4274-bc67-a57da88ab6c7' and user.id != '4b89c515-2eba-4316-97b9-a6204d344d3a' and user.id != '35f7a8a6-d844-4d6f-b60b-aab810610809' and user.id != '205de802-2a15-4652-8fde-f23c674a1246':
+                continue
+
             rp = createReportDir(user)
             statsToPyooUser(rp, user, stats)
 
@@ -354,10 +362,9 @@ if __name__ == '__main__':
             ''' genero el reporte de esa oficina '''
             for officeId in officesIds:
                 off = findOffice(officeId, offices)
-                statsToPyooOffice(rp, off, stats)
+                statsToPyooOffice(rp, off, stats, users)
 
-
-            createZipFile(user, rp)
+            #createZipFile(user, rp)
 
     finally:
         conn.put(con)

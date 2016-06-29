@@ -85,7 +85,7 @@ function HomeCtrl($rootScope, $scope, Users, Login, Positions, Assistance) {
       $scope.model.assistanceData.office = (sWp.offices == undefined || sWp.offices == null || sWp.offices.length <= 0) ? 'No tiene' : sWp.offices[0].name
       for (var i = 0; i < sWp.workedAssistanceData.length; i++) {
           selectDateStr = $scope.model.date.toISOString().substring(0, 10);
-          dateStr = sWp.workedAssistanceData[i].date;
+          dateStr = sWp.workedAssistanceData[i].date.substring(0, 10);
           if (selectDateStr == dateStr) {
             wActual = sWp.workedAssistanceData[i];
 
