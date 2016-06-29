@@ -18,6 +18,8 @@ from model.sileg.designation.designation import Designation
 from model.sileg.designation.designation import OriginalDesignation
 from model.sileg.designation.designation import Extension
 from model.sileg.designation.designation import Prorogation
+from model.sileg.designation.designation import ProrogationOriginal
+from model.sileg.designation.designation import ProrogationExtension
 from model.sileg.licence.licence import Licence
 from model.users.users import User
 
@@ -62,7 +64,7 @@ class ImportSileg():
 
             place = Place()
             place.description = data["materia_nombre"] + catedra
-            place.type = "Catedra"
+            place.type = "Seminario" if "semi" in data["materia_nombre"].lower() else "Catedra"
             place.dependence = None if(data["dpto_nombre"] is None) else place.findByUnique(con = con, description = data["dpto_nombre"], type = "Departamento")
             place.id = place.findByUnique(con = con, description = place.description, type = place.type, dependence = place.dependence)
             place.persist(con)
@@ -103,7 +105,7 @@ class ImportSileg():
 
 
     @classmethod
-    def designationFromDesignacionDocente(cls, con, userId, placeId, positionId, data):
+    def importOriginal(cls, con, userId, placeId, positionId, data):
         #definir "designation"
         designation = OriginalDesignation()
         designation.start = data["desig_fecha_desde"]
@@ -121,7 +123,7 @@ class ImportSileg():
 
 
     @classmethod
-    def designationFromExtension(cls, con, placeId, positionId, data):
+    def importExtension(cls, con, placeId, positionId, data):
         replaceId = Designation.findByUnique(conD, data["extension_designacion_id"], "des")
 
         if(replaceId is None):
@@ -175,7 +177,7 @@ FROM designacion_docente
 
             user = ImportSileg.user(conD, r)
 
-            ImportSileg.designationFromDesignacionDocente(conD, user.id, place.id, position.id, r)
+            ImportSileg.importOriginal(conD, user.id, place.id, position.id, r)
 
         conD.commit()
 
@@ -203,7 +205,7 @@ FROM designacion_docente
             position = ImportSileg.position(conD, r)
             user = ImportSileg.user(conD, r)
 
-            ImportSileg.designationFromDesignacionDocente(conD, user.id, place.id, position.id, r)
+            ImportSileg.importOriginal(conD, user.id, place.id, position.id, r)
 
         conD.commit()
 
@@ -234,7 +236,7 @@ FROM designacion_docente
             place = ImportSileg.placeFromCatedra(conD, r)
             position = ImportSileg.position(conD, r)
 
-            ImportSileg.designationFromExtension(conD, place.id, position.id, r)
+            ImportSileg.importExtension(conD, place.id, position.id, r)
 
         conD.commit()
 
@@ -263,7 +265,7 @@ FROM designacion_docente
             place = ImportSileg.placeFromLugarTrabajo(conD, r)
             position = ImportSileg.position(conD, r)
 
-            ImportSileg.designationFromExtension(conD, place.id, position.id, r)
+            ImportSileg.importExtension(conD, place.id, position.id, r)
 
         conD.commit()
 
@@ -291,7 +293,7 @@ FROM designacion_docente
             place = ImportSileg.placeFromCatedra(conD, r)
             position = ImportSileg.position(conD, r)
 
-            ImportSileg.designationFromExtension(conD, place.id, position.id, r)
+            ImportSileg.importExtension(conD, place.id, position.id, r)
 
         conD.commit()
 
@@ -320,12 +322,13 @@ FROM extension e
             place = ImportSileg.placeFromLugarTrabajo(conD, r)
             position = ImportSileg.position(conD, r)
 
-            ImportSileg.designationFromExtension(conD, place.id, position.id, r)
+            ImportSileg.importExtension(conD, place.id, position.id, r)
 
         conD.commit()
 
+
     @classmethod
-    def importDesignacionFromProrroga(cls, conS, conD):
+    def _importProrrogaOriginal(cls, conS, conD):
         curS = conS.cursor()
 
         curS.execute("""
@@ -335,15 +338,74 @@ FROM extension e
         """)
 
         for r in curS:
-            replaceId = Designation.findByUnique(conD, r["prorroga_prorroga_de_id"], r["prorroga_prorroga_de"])
+            replaceId = OriginalDesignation.findByUnique(conD, r["prorroga_prorroga_de_id"], r["prorroga_prorroga_de"])
 
             if(replaceId is None):
-                #logging.info("Prorroga sin designacion " + str(r["prorroga_id"]))
-                continue
+                replaceId = ProrogationOriginal.findByUnique(conD, r["prorroga_prorroga_de_id"], r["prorroga_prorroga_de"])
+                if(replaceId is None):
+                    continue
+                else:
+                    replace = ProrogationOriginal.findById(conD, [replaceId])[0]
+            else:
+              replace = Extension.findById(conD, [replaceId])[0]
 
-            replace = Designation.findById(conD, [replaceId])[0]
+            designation = ProrogationOriginal()
+            designation.start = r["prorroga_fecha_desde"]
+            designation.end = r["prorroga_fecha_hasta"]
+            designation.userId = replace.userId
+            designation.placeId = replace.placeId
+            designation.positionId = replace.positionId
+            designation.replaceId = replace.id
 
-            designation = Prorogation()
+            designation.oldId = r["prorroga_id"]
+            designation.oldType = "pro"
+
+            designation.id = designation.findByUnique(conD, designation.oldId, designation.oldType)
+            designation.persist(conD)
+
+        conD.commit()
+
+
+    @classmethod
+    def importProrrogaOriginal(cls, conS, conD):
+        curS = conS.cursor()
+
+        numRowsOld = ProrogationOriginal.numRows(conD)
+
+        while True:
+            logging.info(numRowsOld)
+            cls._importProrrogaOriginal(conS, conD)
+            numRows = ProrogationOriginal.numRows(conD)
+            if numRows != numRowsOld:
+                numRowsOld = numRows
+            else:
+                break
+
+
+    @classmethod
+    def _importProrrogaExtension(cls, conS, conD):
+        curS = conS.cursor()
+
+        curS.execute("""
+          SELECT prorroga_id, prorroga_fecha_desde, prorroga_fecha_hasta, prorroga_prorroga_de, prorroga_prorroga_de_id
+          FROM prorroga
+          ORDER BY prorroga_fecha_desde, prorroga_fecha_hasta
+        """)
+
+        for r in curS:
+            replaceId = Extension.findByUnique(conD, r["prorroga_prorroga_de_id"], r["prorroga_prorroga_de"])
+
+            if(replaceId is None):
+                replaceId = ProrogationExtension.findByUnique(conD, r["prorroga_prorroga_de_id"], r["prorroga_prorroga_de"])
+                if(replaceId is None):
+                    continue
+                else:
+                    replace = ProrogationExtension.findById(conD, [replaceId])[0]
+            else:
+              replace = Extension.findById(conD, [replaceId])[0]
+              
+
+            designation = ProrogationExtension()
             designation.start = r["prorroga_fecha_desde"]
             designation.end = r["prorroga_fecha_hasta"]
             designation.userId = replace.userId
@@ -361,22 +423,23 @@ FROM extension e
 
 
 
+
     @classmethod
-    def importDesignacionFromProrrogaCheckNumRows(cls, conS, conD):
+    def importProrrogaExtension(cls, conS, conD):
         curS = conS.cursor()
 
-        numRowsOld = Prorogation.numRows(conD)
+        numRowsOld = ProrogationExtension.numRows(conD)
 
         while True:
             logging.info(numRowsOld)
-            cls.importDesignacionFromProrroga(conS, conD)
-            numRows = Prorogation.numRows(conD)
+            cls._importProrrogaExtension(conS, conD)
+            numRows = ProrogationExtension.numRows(conD)
             if numRows != numRowsOld:
                 numRowsOld = numRows
             else:
                 break
-
-
+                
+                
     @classmethod
     def importLicencia(cls, conS, conD):
         curS = conS.cursor()
@@ -497,8 +560,11 @@ if __name__ == '__main__':
             logging.info('importando las extensiones de las designaciones de lugar de trabajo')
             ImportSileg.importDesignacionFromExtensionDesignacionLugarTrabajo(conS, conD)
 
-            logging.info('importando las prorrogas')
-            ImportSileg.importDesignacionFromProrrogaCheckNumRows(conS, conD)
+            logging.info('importando las prorrogas de designacion original')
+            ImportSileg.importProrrogaOriginal(conS, conD)
+
+            logging.info('importando las prorrogas de extension')
+            ImportSileg.importProrrogaExtension(conS, conD)
 
             logging.info('importando las licencias')
             ImportSileg.importLicencia(conS, conD)

@@ -131,6 +131,26 @@ class DesignationDAO(SilegDAO):
             cur.close()
             
     @classmethod
+    def findLasts(cls, con):
+        cur = con.cursor()
+        try:
+            cur.execute("""
+                SELECT desi.id
+                FROM sileg.designation AS desi
+                INNER JOIN (
+                  SELECT MAX(des.dstart) AS dstart, us.id AS user_id, pos.id AS id
+                  FROM sileg.designation des
+                  INNER JOIN sileg.position pos ON (pos.id = des.position_id)
+                  INNER JOIN sileg.place pla ON (pla.id = des.place_id)
+                  INNER JOIN profile.users us ON (us.id = des.user_id)
+                  GROUP BY pos.id, us.id
+                ) max ON (desi.position_id = max.id AND desi.dstart = max.dstart AND desi.user_id = max.user_id);
+            """)
+            return [r['id'] for r in cur]
+        finally:
+            cur.close()            
+            
+    @classmethod
     def findByPlaceId(cls, con, placeIds):
         assert isinstance(placeIds, list)
         assert len(placeIds) > 0
@@ -212,14 +232,14 @@ class DesignationDAO(SilegDAO):
         try:
             cur.execute("""
                 SELECT id FROM sileg.designation
-                WHERE old_id = %s AND old_type = %s;
-            """, (oldId, oldType))
+                WHERE old_id = %s AND old_type = %s AND description = %s;
+            """, (oldId, oldType, cls._TYPE))
             r = cur.fetchone()
             return None if r is None else r ["id"]
 
         finally:
             cur.close()
-
+       
 
 class ProrogationDAO(DesignationDAO):
 
@@ -255,6 +275,19 @@ class ProrogationDAO(DesignationDAO):
 
         finally:
             cur.close()
+
+
+
+class ProrogationOriginalDAO(ProrogationDAO):
+
+    _TYPE = 'prorroga_original'
+
+
+class ProrogationExtensionDAO(ProrogationDAO):
+
+    _TYPE = 'prorroga_extension'
+
+
 
 
 class ExtensionDAO(DesignationDAO):
@@ -329,6 +362,8 @@ class OriginalDesignationDAO(DesignationDAO):
             cur.close()
 
 
+
+
 class Designation(JSONSerializable):
 
     dao = DesignationDAO
@@ -373,6 +408,10 @@ class Designation(JSONSerializable):
         return cls.dao.findByUserId(con, userIds)
         
     @classmethod
+    def findLasts(cls, con):
+        return cls.dao.findLasts(con)
+    
+    @classmethod
     def findByPlaceId(cls, con, userIds):
         return cls.dao.findByPlaceId(con, userIds)
         
@@ -388,6 +427,12 @@ class Designation(JSONSerializable):
     @classmethod
     def numRows(cls, conn):
         return cls.dao.numRows(conn)
+
+
+
+
+
+
 
 
 class OriginalDesignation(Designation):
@@ -412,3 +457,14 @@ class Prorogation(Designation):
     def __init__(self):
         super().__init__()
         self.description = self.dao._TYPE
+        
+        
+
+class ProrogationOriginal(Prorogation):
+    dao = ProrogationOriginalDAO
+
+
+
+class ProrogationExtension(Prorogation):
+    dao = ProrogationExtensionDAO
+          

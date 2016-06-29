@@ -26,12 +26,12 @@ if __name__ == '__main__':
     reg = inject.instance(Registry)
 
     logging.info('Obteniendo la conexion')
-    conn = connection.Connection(reg.getRegistry('dcsys'))
+    conn = connection.Connection(reg.getRegistry('dcsys2'))
     con = conn.get()
     try:
 
         designation = Designation()
-        designationIds = designation.findAll(con)
+        designationIds = designation.findLasts(con)
         if len(designationIds) <= 0:
             logging.info('no se encontraron designaciones')
             sys.exit(1)
@@ -62,6 +62,7 @@ if __name__ == '__main__':
             sheet[0,15].value = "hasta"
             sheet[0,16].value = "baja"
             sheet[0,17].value = "reemplaza a"
+            sheet[0,18].value = "descripcion"
 
             row = 0
             for designation in designations:
@@ -93,6 +94,7 @@ if __name__ == '__main__':
                    sheet[row+1,15].value = ""
                    sheet[row+1,16].value = ""
                    sheet[row+1,17].value = ""
+                   sheet[row+1,18].value = designation.description
                else:
                    licences = Licence.findById(con, licenceIds)
                    for rowL in range(0, len(licences)):
@@ -114,7 +116,7 @@ if __name__ == '__main__':
                        sheet[row+1,15].value = licences[rowL].end
                        sheet[row+1,16].value = licences[rowL].out
                        sheet[row+1,17].value = licences[rowL].replaceId
-
+                       sheet[row+1,18].value = designation.description
             doc.save('/tmp/designations2.ods')
 
         finally:
