@@ -94,4 +94,16 @@ function Assistance (Utils, Session, $wamp) {
     });
 	}
 
+	this.createScheduleSpecial = function(uid, date, scheds) {
+		return new Promise(function(cok, cerr) {
+      var sid = Session.getSessionId();
+  		$wamp.call('assistance.createScheduleSpecial', [sid, uid, date, scheds])
+      .then(function(v) {
+        cok(v);
+      },function(err) {
+        cerr(err);
+      });
+    });
+	}
+
 };

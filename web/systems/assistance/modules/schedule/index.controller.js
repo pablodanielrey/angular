@@ -22,7 +22,8 @@
           role: 'user',
           search: '',
           schedules: [],
-          newSchedules: []
+          newSchedules: [],
+          newSpecialSchedules: []
         }
 
         vm.view = {
@@ -49,6 +50,7 @@
         vm.findUsersByOffices = findUsersByOffices;
         vm.displaySearch = displaySearch;
         vm.newWeeklySchedule = newWeeklySchedule;
+        vm.newSpecialSchedule = newSpecialSchedule
 
         vm.getUserPhoto = getUserPhoto;
         vm.loadSchedules = loadSchedules;
@@ -57,6 +59,8 @@
         vm.getNewSchedulesInDay = getNewSchedulesInDay;
         vm.getDayName = getDayName;
         vm.selectUser = selectUser;
+        vm.getHours = getHours;
+        vm.getMinutes = getMinutes;
 
         vm.addSchedule = addSchedule;
         vm.removeSchedule = removeSchedule;
@@ -64,7 +68,12 @@
         vm.updateNewHours = updateNewHours;
         vm.cancel = cancel;
         vm.saveScheduleWeek = saveScheduleWeek;
-
+        vm.saveSpecialSchedules = saveSpecialSchedules;
+        vm.addSpecialSchedule = addSpecialSchedule;
+        vm.removeSpecialSchedule = removeSpecialSchedule;
+        vm.clearSpecialSchedule = clearSpecialSchedule;
+        vm.changeSpecialStart = changeSpecialStart;
+        vm.changeSpecialHours = changeSpecialHours;
         // comunicacion con la directiva
         $scope.changeStart = changeStart;
         $scope.changeHours = changeHours;
@@ -293,12 +302,10 @@
           vm.updateNewHours();
         }
 
-        vm.getMinutes = getMinutes;
         function getMinutes() {
           return (vm.model.newSchedHours - vm.getHours()) * 60;
         }
 
-        vm.getHours = getHours;
         function getHours() {
           return parseInt(vm.model.newSchedHours);
         }
@@ -316,10 +323,6 @@
 
         function isValid(sched) {
           return (sched.hours != null && sched.hours > 0) && (sched.start != null)
-        }
-
-        function newSpecialSchedule() {
-          vm.view.style2 = vm.view.styles2[3];
         }
 
         function cancel() {
@@ -385,7 +388,6 @@
               });
             }, 2500);
 
-            console.log('ok');
           }, function(error) {
             $scope.$apply(function(){
               vm.view.style3 = vm.view.styles3[1];
@@ -398,7 +400,6 @@
               });
             }, 2500);
           });
-
         }
 
         function isNull(scheds) {
@@ -411,6 +412,90 @@
           }
 
           return (scheds[0].start == null || scheds[0].hours == null);
+        }
+
+
+
+        /* *************************************************************
+                            HORARIO ESPECIAL
+        *  *************************************************************/
+        function newSpecialSchedule() {
+          vm.view.style2 = vm.view.styles2[3];
+          vm.model.newSpecialSchedules = [];
+          vm.model.newSpecialSchedules.push({start: null, end: null, hours: null, style: vm.view.schedStyles[0]});
+        }
+
+        function saveSpecialSchedules() {
+          var schedules = [];
+          for (var i = 0; i < vm.model.newSpecialSchedules.length; i++) {
+            var sched = vm.model.newSpecialSchedules[i];
+            var s = {};
+            s.start = (sched.start == null) ? 0 : (sched.start.getHours() * 60 + sched.start.getMinutes())
+            var hours = (sched.hours == null) ? 0 : sched.hours;
+            s.end = s.start + (parseInt(hours) * 60)  + ((hours * 60) % 60);
+            schedules.push(s);
+          }
+
+          Assistance.createScheduleSpecial(vm.model.user.id, vm.model.date, schedules).then(function(data) {
+
+            $scope.$apply(function(){
+              vm.view.style3 = vm.view.styles3[1];
+              vm.view.style4 = vm.view.styles4[2];
+            });
+            $timeout(function() {
+              $scope.$apply(function() {
+                vm.loadSchedules();
+                vm.view.style3 = vm.view.styles3[0];
+                vm.view.style2 = vm.view.styles2[0];
+              });
+            }, 2500);
+
+          }, function(error) {
+            $scope.$apply(function(){
+              vm.view.style3 = vm.view.styles3[1];
+              vm.view.style4 = vm.view.styles4[3];
+            });
+            $timeout(function() {
+              $scope.$apply(function(){
+                vm.view.style3 = vm.view.styles3[0];
+                vm.view.style2 = vm.view.styles2[2];
+              });
+            }, 2500);
+          });
+        }
+
+        function addSpecialSchedule() {
+          vm.model.newSpecialSchedules.push({start: null, end: null, hours: null, style: vm.view.schedStyles[2]});
+        }
+
+        function removeSpecialSchedule(sc) {
+          var index = vm.model.newSpecialSchedules.indexOf(sc);
+          vm.model.newSpecialSchedules.splice(index, 1);
+        }
+
+        function clearSpecialSchedule(sch) {
+          sch.start = null;
+          sch.end = null;
+          sch.hours = null;
+          var index = vm.view.schedStyles.indexOf(sch.style);
+          sch.style = vm.view.schedStyles[index - 1];
+        }
+
+        function changeSpecialStart(sc) {
+          changeStyleSpecial(sc);
+        }
+
+        function changeSpecialHours(sc) {
+          changeStyleSpecial(sc);
+        }
+
+        function changeStyleSpecial(sc) {
+          var index = vm.view.schedStyles.indexOf(sc.style);
+          if (sc.hours == null && sc.start == null) {
+            sc.style = vm.view.schedStyles[(parseInt(index/2))];
+          } else {
+            sc.style = vm.view.schedStyles[(parseInt(index/2) * 2 + 1)];
+          }
         }
 
 
