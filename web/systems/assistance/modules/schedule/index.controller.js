@@ -503,6 +503,7 @@
         $scope.$watch(function() {return vm.model.date;}, function(o,n) {
           if (vm.model.date == null) {
             vm.model.schedules = [];
+            vm.model.date = new Date();
             return;
           }
           vm.loadSchedules()
