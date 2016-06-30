@@ -4,11 +4,11 @@
     VARIABLE 1: pantallaDetallePedido
     VARIABLE 1: pantallaMensaje
     VARIABLE 1: pantallaNuevoPedido
-                VARIABLE 2: buscarOficina, buscarArea, buscarConsulta
+                VARIABLE 2: buscarOficina, buscarArea, buscarConsulta, buscarUsuario, buscarOficinaDeUsuario
     VARIABLE 1: buscarPedidos
     VARIABLE 3: pantallaMensajeAlUsuario
                 VARIABLE 4: mensajeCargando, mensajeError, mensajeEnviado, mensajePedidoCreado
-    VARIABLE 2: seleccionarEstado
+    VARIABLE 2: seleccionarEstado, seleccionarPrioridad
     -->
 
     <!-- --------------- HEADER DEL SISTEMA ----------------- -->
@@ -61,8 +61,43 @@
                         NUEVO PEDIDO
                       </div>
                   </div>
+
+                  <div class="contentUserOrder">
+                      <div class="subContentOrderLeft">
+                          <div class="textDe">De</div>
+                          <div>Oficina</div>
+                      </div>
+                      <div class="subContentOrderRight">
+                        <div class="userOrder">Walter Roberto Blanco</div>
+
+                        <div class="contentSearchUser">
+                            <div class="titleListRequest">
+                                <span class="icoInputSearch"><i class="fa fa-search"></i></span>
+                                <input class="inputSearch" type="text" placeholder="Buscar personal...">
+                            </div>
+                            <div class="contentListPerson">
+                                <div class="btnItemPerson" ng-click="view.style2 = ''">
+                                    <div class="contentImgUser">
+                                        <img class="imgUser" src="./img/walter.jpg" alt="foto de perfil">
+                                    </div>
+                                    <div class="contentNameUser">
+                                      <div class="">Walter Blanco</div>
+                                      <div class="dniUser">29694757</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="officeOrder">DiTeSI</div>
+                      </div>
+                      <div>
+                        <div class="arrowOpen" ng-click="view.style2 = 'buscarUsuario'"><i class="fa fa-caret-down" aria-hidden="true"></i></div>
+                        <div class="arrowOpen2"><i class="fa fa-caret-down" aria-hidden="true"></i></div>
+                      </div>
+                  </div>
+
                   <div>
-                      <button class="btnApply" ng-click="view.style = ''">SOLICITAR</button>
+                      <button class="btnApply" ng-click="view.style = 'buscarUsuario'">SOLICITAR</button>
                   </div>
               </div>
               <!-- ---- CAMPOS PARA LLENAR EN UN NUEVO PEDIDO ---- -->
@@ -982,6 +1017,34 @@
                               <div class="subContentSelectState" ng-click="view.style2 = ''">
                                   <div class="itemsSelectState cerrada2">
                                     <div class="itemState">CERRADA</div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+
+
+                      <div class="itemPriority">
+                          <div class="contentSelectPriority normal" ng-click="view.style2 = 'seleccionarPrioridad'">
+                              <div class="textPriority">Prioridad</div>
+                              <div class="priorityB">BAJA <i class="fa fa-caret-down"></i></div>
+                              <div class="priorityN">NORMAL <i class="fa fa-caret-down"></i></div>
+                              <div class="priorityA">ALTA <i class="fa fa-caret-down"></i></div>
+                          </div>
+
+                          <div class="contentSelectPriority2">
+                              <div class="subContentSelectPriority" ng-click="view.style2 = ''">
+                                  <div class="itemsSelectState prioridadBaja">
+                                    <div class="itemState">BAJA</div>
+                                  </div>
+                              </div>
+                              <div class="subContentSelectPriority" ng-click="view.style2 = ''">
+                                  <div class="itemsSelectState prioridadNormal">
+                                    <div class="itemState">NORMAL</div>
+                                  </div>
+                              </div>
+                              <div class="subContentSelectPriority" ng-click="view.style2 = ''">
+                                  <div class="itemsSelectState prioridadAlta">
+                                    <div class="itemState">ALTA</div>
                                   </div>
                               </div>
                           </div>
