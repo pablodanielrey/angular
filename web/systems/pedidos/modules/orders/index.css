@@ -1712,6 +1712,7 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
   /*background-color: #f9f7f7;*/
   color: #434343;
   font-weight: bold;
+    margin-bottom: 5px;
 }
 
 .orders .arrowOpen {
@@ -1744,6 +1745,7 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
   color: white;
   color: #434343;
     font-weight: bold;
+      margin-bottom: 5px;
 }
 
 .orders.pantallaNuevoPedido.buscarUsuario .contentSearchUser {
@@ -1755,7 +1757,17 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
   border: 1px solid #E2E2E2;
 }
 
-.orders .contentSearchUser {
+.orders.pantallaNuevoPedido.buscarOficinaDeUsuario .contentSearchOffice {
+  display: block;
+  position: absolute;
+  /*width: 230px;*/
+  height: 300px;
+  background-color: #DBE2E5;
+  border: 1px solid #E2E2E2;
+}
+
+.orders .contentSearchUser,
+.orders .contentSearchOffice {
   display: none;
 }
 
@@ -1786,7 +1798,8 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
     -webkit-border-radius: 0 2px 2px 0;
 }
 
-.orders .contentListPerson {
+.orders .contentListPerson,
+.orders .contentListOffice {
     width: 260px;
     max-height: 243px;
     padding-right: 5px;
@@ -1796,7 +1809,8 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
     background-color: #DBE2E5;
 }
 
-.orders .btnItemPerson {
+.orders .btnItemPerson,
+.orders .btnItemOffice {
   background-color: white;
   padding: 5px 10px 5px 10px;
   border: 1px solid #eae8e8;
@@ -1818,7 +1832,12 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
   background-color: #F1F1F1;
 }
 
-.orders .contentImgUser {
+.orders .btnItemOffice:hover {
+  background-color: #F1F1F1;
+}
+
+.orders .contentImgUser,
+.orders .contentImgOffice {
   text-align: left;
   display: flex;
   display: -webkit-flex; /* Safari */
@@ -1828,7 +1847,8 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
   -moz-align-items:center; /* mozilla */
 }
 
-.orders .imgUser {
+.orders .imgUser,
+.orders .imgOffice {
     width: 45px;
     height: 45px;
     border-radius: 50%;
@@ -1836,7 +1856,8 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
     -webkit-border-radius: 50%;
 }
 
-.orders .contentNameUser {
+.orders .contentNameUser,
+.orders .contentNameOffice {
   margin-left: 10px;
   font-size: 13px;
 }
