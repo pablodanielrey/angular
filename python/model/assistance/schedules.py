@@ -53,8 +53,8 @@ class Schedule(JSONSerializable):
     @classmethod
     def findByUserIdInDate(cls, con, userId, date):
         schedules = cls.findByUserId(con, [userId], date, date)
-        schSorted = sorted([ sc for sc in schedules if sc.isValid(date)], key=attrgetter('date'), reverse=True)
-        return [sc for sc in schSorted if sc.date == schSorted[0].date]
+        schSorted = sorted([ sc for sc in schedules if sc.isValid(date)], key=attrgetter('date'), reverse=True)        
+        return [sc for sc in schSorted if sc.date == schSorted[0].date and sc.getScheduleSeconds() > 0]
 
     @classmethod
     def findByUserIdInWeek(cls, con, userId, date):
@@ -143,7 +143,7 @@ class ScheduleDAO(AssistanceDAO):
         assert sch is not None
 
         cur = con.cursor()
-        try:            
+        try:
             sch.id = str(uuid.uuid4())
             r = sch.__dict__
             cur.execute('insert into assistance.schedules (id, user_id, sdate, sstart, send, weekday, daily) '
