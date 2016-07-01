@@ -24,6 +24,7 @@ class Schedule(JSONSerializable):
         self.start = None
         self.end = None
         self.daily = False
+        self.id = None
 
     def isValid(self, date):
         if not self.daily:
@@ -44,7 +45,18 @@ class Schedule(JSONSerializable):
         return self.end - self.start
 
     def persist(self, con):
+        days = self.weekday - self.date.weekday()
+        date = self.date + datetime.timedelta(days=days)
+        schedules = Schedule.findByUserIdInDate(con, self.userId, date)
+        for sc in schedules:
+            daySc = sc.weekday - sc.date.weekday()
+            d = sc.date + datetime.timedelta(days=daySc)
+            if d == date:
+                sc.delete(con)
         return ScheduleDAO.persist(con, self)
+
+    def delete(self, con):
+        return ScheduleDAO.delete(con, [self.id])
 
     @classmethod
     def findByUserId(cls, con, ids, startDate, endDate):
@@ -54,7 +66,7 @@ class Schedule(JSONSerializable):
     def findByUserIdInDate(cls, con, userId, date):
         schedules = cls.findByUserId(con, [userId], date, date)
         schSorted = sorted([ sc for sc in schedules if sc.isValid(date)], key=attrgetter('date'), reverse=True)
-        return [sc for sc in schSorted if sc.date == schSorted[0].date]
+        return [sc for sc in schSorted if sc.date == schSorted[0].date and sc.getScheduleSeconds() > 0]
 
     @classmethod
     def findByUserIdInWeek(cls, con, userId, date):
@@ -94,6 +106,7 @@ class ScheduleDAO(AssistanceDAO):
     @staticmethod
     def _fromResult(r):
         s = Schedule()
+        s.id = r['id']
         s.userId = r['user_id']
         s.start = r['sstart']
         s.end = r['send']
@@ -143,11 +156,23 @@ class ScheduleDAO(AssistanceDAO):
         assert sch is not None
 
         cur = con.cursor()
-        try:            
+        try:
             sch.id = str(uuid.uuid4())
             r = sch.__dict__
             cur.execute('insert into assistance.schedules (id, user_id, sdate, sstart, send, weekday, daily) '
                         'values ( %(id)s, %(userId)s, %(date)s, %(start)s, %(end)s, %(weekday)s, %(daily)s)', r)
             return sch.id
+        finally:
+            cur.close()
+
+    @classmethod
+    def delete(cls, con, ids):
+        assert isinstance(ids, list)
+
+        cur = con.cursor()
+        try:
+            cur.execute('delete from assistance.schedules where id in %s', (tuple(ids),))
+            return ids
+
         finally:
             cur.close()

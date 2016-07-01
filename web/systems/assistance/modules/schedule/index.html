@@ -157,7 +157,7 @@ VARIABLES 4: procesando, procesado, errorDeSistema
 
         <div class="contentActionButton">
             <button class="btnAction" ng-click="vm.newWeeklySchedule()">MODIFICAR <b>HORARIO SEMANAL</b></button>
-            <button class="btnAction" ng-click="vm.view.style2='nuevoHorarioEspecial'">CREAR <b>HORARIO ESPECIAL</b></button>
+            <button class="btnAction" ng-click="vm.newSpecialSchedule()">CREAR <b>HORARIO ESPECIAL</b></button>
         </div>
 
     </div>
@@ -228,7 +228,7 @@ VARIABLES 4: procesando, procesado, errorDeSistema
               </div>
 
               <div>
-                <input type="date" class="inputDateScheduleSpecial"></input>
+                <input type="date" class="inputDateScheduleSpecial" ng-model="vm.model.date"></input>
               </div>
 
           </div>
@@ -238,24 +238,13 @@ VARIABLES 4: procesando, procesado, errorDeSistema
               <div class="titleFiles2">Horas</div>
           </div>
 
-
           <div class="subContentNewSchedulesSpecial">
-              <div class="files principalSinDatos">
-                  <!-- VARIABLES PARA AGREGAR AL "FILES"
-                  principalSinDatos
-                  principalConDatos
-                  secundarioSinDatos
-                  secundarioConDatos -->
-                  <div><input class="newCheckIn" type="time"></input></div>
-                  <div><input class="newCantHour" type="number"></input></div>
-                  <div class="contentBtnAdd"><button class="btnAdd"><i class="fa fa-plus"></i></button></div>
-                  <div class="contentBtnClear"><button class="btnClear"><i class="fa fa-eraser"></i></button></div>
-                  <div class="contentBtnTrash"><button class="btnTrash"><i class="fa fa-trash-o"></i></button></div>
-              </div>
-              <div class="files">
-                  <div><input class="newCheckIn" type="time"></input></div>
-                  <div><input class="newCantHour" type="number"></input></div>
-                  <div><button class="btnTash"><i class="fa fa-trash-o"></i></button></div>
+              <div ng-repeat="sc in vm.model.newSpecialSchedules" class='files' ng-class="sc.style">
+                  <div><input class="newCheckIn" type="time" ng-model="sc.start" ng-change="vm.changeSpecialStart(sc)"></input></div>
+                  <div><input class="newCantHour" type="number" ng-model="sc.hours" ng-change="vm.changeSpecialHours(sc)"></input></div>
+                  <div title="nuevo horario" class="contentBtnAdd"><button class="btnAdd" ng-click="vm.addSpecialSchedule()"><i class="fa fa-plus"></i></button></div>
+                  <div title="limpiar campos" class="contentBtnClear"><button class="btnClear" ng-click="vm.clearSpecialSchedule(sc)"><i class="fa fa-eraser"></i></button></div>
+                  <div title="eliminar horario" class="contentBtnTrash"><button class="btnTrash" ng-click="vm.removeSpecialSchedule(sc)"><i class="fa fa-trash-o"></i></button></div>
               </div>
 
           </div>
@@ -263,8 +252,8 @@ VARIABLES 4: procesando, procesado, errorDeSistema
         </div>
 
         <div class="actionBtns">
-            <button class="btnAcept" ng-click="vm.view.style2 = ''">ACEPTAR</button>
-            <button class="btnCancel" ng-click="vm.view.style2 = ''">CANCELAR</button>
+            <button class="btnAcept" ng-click="vm.saveSpecialSchedules()">ACEPTAR</button>
+            <button class="btnCancel" ng-click="vm.cancel()">CANCELAR</button>
         </div>
 
     </div>
