@@ -17,7 +17,8 @@ app.config(['$routeProvider', function($routeProvider) {
 
   .when('/schedule', {
      templateUrl: '/systems/assistance/modules/schedule/index.html',
-     controller: 'ScheduleCtrl'
+     controller: 'ScheduleController',
+     controllerAs: 'vm'
   })
 
 

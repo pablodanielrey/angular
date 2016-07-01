@@ -198,7 +198,7 @@ assistance = inject.instance(AssistanceModel)
 if __name__ == '__main__':
 
     calc = pyoo.Desktop('localhost',2002)
-    doc = calc.open_spreadsheet('justificaciones.ods')
+    doc = calc.open_spreadsheet('/tmp/justificaciones.ods')
     '''
         ordenado por dni, fecha
         fecha | Apellido | Nombre | DNI | pedido | hora entrada | hora salida
@@ -213,7 +213,9 @@ if __name__ == '__main__':
         user = None
         justifications = {}
         users = []
+        i = 0
         for row in sheet:
+                i = i + 1
                 dni = row[3].value
                 if dni is None or dni == '':
                     break
@@ -228,13 +230,16 @@ if __name__ == '__main__':
                 endDate = None
                 days = 0
 
+                logging.info('chequeando: {} {} '.format(i, just))
+
                 if (MigrateRangedTimeJustification.isJustification(just)):
                     startDate = None if row[5].time is None else localize(datetime.datetime.combine(date.date(), row[5].time))
                     endDate = None if row[6].time is None else localize(datetime.datetime.combine(date.date(), row[6].time))
 
                 if (MigrateRangedJustification.isJustification(just)):
-                    days = None if row[5] is None else int(row[5].value)
-
+                    days = 1
+                    if row[5].value is not None and row[5].value != '':
+                        days = None if row[5] is None else int(row[5].value)
 
                 if dni not in justifications:
                     justifications[dni] = []

@@ -10,6 +10,7 @@ from dateutil import parser
 
 from model.registry import Registry
 from model.users.users import UserDAO
+from model.assistance.utils import Utils
 from model.assistance.justifications.shortDurationJustification import ShortDurationJustificationDAO, ShortDurationJustification
 from model.assistance.justifications.medicalBoardJustification import MedicalBoardJustificationDAO, MedicalBoardJustification
 from model.assistance.justifications.longDurationJustification import LongDurationJustificationDAO, LongDurationJustification
@@ -68,7 +69,8 @@ class ImapJustifier:
         if not m:
             return False
 
-        start = parser.parse(m.group('start'),dayfirst=True)
+        startNaive = parser.parse(m.group('start'),dayfirst=True)
+        start = Utils._localizeLocalIfNaive(startNaive)
 
 
         m = re.search(".*Días de licencia.*<em>(?P<days>\d*)</em>", text)

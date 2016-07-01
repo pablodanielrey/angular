@@ -67,7 +67,7 @@ class Justification(JSONSerializable):
 
         if start == end:
             end = None if end is None else end + datetime.timedelta(days=1)
-            
+
         justs = cls.dao.findByUserId(con, userIds, start, end)
         cls._loadStatus(con, justs)
         return justs
@@ -132,8 +132,8 @@ class SingleDateJustification(Justification):
 
     def _loadWorkedPeriods(self, wps):
         assert self.getStatus() is not None
-        if self.getStatus().status != Status.APPROVED:
-            return
+        #if self.getStatus().status != Status.APPROVED:
+        #    return
 
         ### HORRIBLE HACK. charlarlo mañaan
         date = self.getDate()
@@ -207,8 +207,8 @@ class RangedJustification(Justification):
 
     def _loadWorkedPeriods(self, wps):
         assert self.getStatus() is not None
-        if self.getStatus().status != Status.APPROVED:
-            return
+        #if self.getStatus().status != Status.APPROVED:
+        #    return
 
         for wp in wps:
             if self.start <= wp.getDate() <= self.end:
@@ -254,8 +254,8 @@ class RangedTimeJustification(Justification):
 
     def _loadWorkedPeriods(self, wps):
         assert self.getStatus() is not None
-        if self.getStatus().status != Status.APPROVED:
-            return
+        #if self.getStatus().status != Status.APPROVED:
+        #    return
 
         from model.assistance.utils import Utils
         for wp in wps:

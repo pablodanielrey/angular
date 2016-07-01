@@ -10,8 +10,8 @@ from model.sileg.place.place import PlaceDAO
 class DesignationDAO(SilegDAO):
 
     dependencies = [PlaceDAO, PositionDAO, UserDAO]
-    
-    
+    _TYPE = 'original'
+
     @classmethod
     def _createSchema(cls, con):
         super()._createSchema(con)
@@ -24,6 +24,7 @@ class DesignationDAO(SilegDAO):
                     id VARCHAR PRIMARY KEY,
                     dstart DATE NOT NULL,
                     dend DATE,
+                    dout DATE,
                     description VARCHAR NOT NULL,
                     user_id VARCHAR NOT NULL REFERENCES profile.users (id),
                     place_id VARCHAR NOT NULL REFERENCES sileg.place (id),
@@ -38,14 +39,15 @@ class DesignationDAO(SilegDAO):
             cur.execute(sql)
         finally:
             cur.close()
-          
-          
+
+
     @classmethod
     def _fromResult(cls, r):
         instance = Designation()
         instance.id = r['id']
         instance.start = r['dstart']
         instance.end = r['dend']
+        instance.out = r["dout"]
         instance.description = r["description"]
         instance.userId = r['user_id']
         instance.placeId = r["place_id"]
@@ -54,92 +56,313 @@ class DesignationDAO(SilegDAO):
         instance.oldId = r["old_id"]
         instance.oldType = r["old_type"]
         return instance
-        
-        
-        
+
+
+
     @classmethod
-    def persist(cls, con, instance):        
+    def persist(cls, con, instance):
         assert instance is not None
-        
+
         cur = con.cursor()
         try:
             if ((not hasattr(instance, 'id')) or (instance.id is None)):
                 instance.id = str(uuid.uuid4())
-            
-            
+
+
             if len(instance.findById(con, [instance.id])) <=  0:
                 data = instance.__dict__
                 cur.execute("""
-                    INSERT INTO sileg.designation (id, dstart, dend, description, user_id, position_id, place_id, replace_id, old_id, old_type) 
-                    VALUES (%(id)s, %(start)s, %(end)s, %(description)s, %(userId)s, %(positionId)s, %(placeId)s, %(replaceId)s, %(oldId)s, %(oldType)s);
+                    INSERT INTO sileg.designation (id, dstart, dend, dout, description, user_id, position_id, place_id, replace_id, old_id, old_type)
+                    VALUES (%(id)s, %(start)s, %(end)s, %(out)s, %(description)s, %(userId)s, %(positionId)s, %(placeId)s, %(replaceId)s, %(oldId)s, %(oldType)s);
                 """, data)
-                
+
             else:
                 data = instance.__dict__
                 cur.execute("""
                   UPDATE sileg.designation
-                  SET 
-                      dstart = %(start)s, 
-                      dend = %(end)s, 
+                  SET
+                      dstart = %(start)s,
+                      dend = %(end)s,
+                      dout = %(out)s,
                       description = %(description)s,
-                      user_id = %(userId)s, 
-                      position_id = %(positionId)s, 
+                      user_id = %(userId)s,
+                      position_id = %(positionId)s,
                       place_id = %(placeId)s,
                       replace_id = %(replaceId)s,
 
                       old_id = %(oldId)s,
                       old_type = %(oldType)s
-                  WHERE id = %(id)s
-                """, data) 
-                
+                  WHERE id = %(id)s;
+                """, data)
+
             return instance.id
 
         finally:
             cur.close()
-        
+
     @classmethod
-    def findById(cls, con, ids):           
+    def findById(cls, con, ids):
         assert isinstance(ids, list)
+        assert len(ids) > 0
 
         cur = con.cursor()
         try:
             cur.execute("""
-                SELECT * FROM sileg.designation 
-                WHERE id in %s
+                SELECT * FROM sileg.designation
+                WHERE id in %s;
             """, (tuple(ids),))
             return [ cls._fromResult(r) for r in cur ]
         finally:
             cur.close()
-  
-  
+
+    @classmethod
+    def findByUserId(cls, con, userIds):
+        assert isinstance(userIds, list)
+        assert len(userIds) > 0
+
+        cur = con.cursor()
+        try:
+            cur.execute("""
+                SELECT id FROM sileg.designation
+                WHERE user_id in %s;
+            """, (tuple(userIds),))
+            return [r['id'] for r in cur]
+        finally:
+            cur.close()
+            
+    @classmethod
+    def findLasts(cls, con):
+        cur = con.cursor()
+        try:
+            cur.execute("""
+                SELECT desi.id
+                FROM sileg.designation AS desi
+                INNER JOIN (
+                  SELECT MAX(des.dstart) AS dstart, us.id AS user_id, pos.id AS id
+                  FROM sileg.designation des
+                  INNER JOIN sileg.position pos ON (pos.id = des.position_id)
+                  INNER JOIN sileg.place pla ON (pla.id = des.place_id)
+                  INNER JOIN profile.users us ON (us.id = des.user_id)
+                  GROUP BY pos.id, us.id
+                ) max ON (desi.position_id = max.id AND desi.dstart = max.dstart AND desi.user_id = max.user_id);
+            """)
+            return [r['id'] for r in cur]
+        finally:
+            cur.close()            
+            
+    @classmethod
+    def findByPlaceId(cls, con, placeIds):
+        assert isinstance(placeIds, list)
+        assert len(placeIds) > 0
+
+        cur = con.cursor()
+        try:
+            cur.execute("""
+                SELECT id FROM sileg.designation
+                WHERE place_id in %s;
+            """, (tuple(placeIds),))
+            return [r['id'] for r in cur]
+        finally:
+            cur.close()            
+            
+            
     @classmethod
     def findAll(cls, con):
         cur = con.cursor()
         try:
             cur.execute("""
-                SELECT id 
+                SELECT id
                 FROM sileg.designation
             """)
             ids = [r['id'] for r in cur]
             return ids
         finally:
             cur.close()
-    
-            
+
+    @classmethod
+    def findAllActive(cls, con):
+        cur = con.cursor()
+        try:
+            cur.execute("""
+                SELECT id
+                FROM sileg.designation
+                WHERE dout IS NULL;
+            """)
+            ids = [r['id'] for r in cur]
+            return ids
+        finally:
+            cur.close()
+
+
+    @classmethod
+    def findAllHistory(cls, con):
+        cur = con.cursor()
+        try:
+            cur.execute("""
+                SELECT id
+                FROM sileg.designation
+                WHERE dout IS NOT NULL;
+            """)
+            ids = [r['id'] for r in cur]
+            return ids
+        finally:
+            cur.close()
+
+
+    @classmethod
+    def numRowsByOldType(cls, con, oldType):
+        cur = con.cursor()
+
+        try:
+            cur.execute("""
+                SELECT count(*)
+                FROM sileg.designation
+                WHERE old_type = %s
+            """, (oldType,))
+            r = cur.fetchone()
+            return None if r is None else r ["count"]
+
+        finally:
+            cur.close()
+
     @classmethod
     def findByUnique(cls, con, oldId, oldType):
         cur = con.cursor()
-           
+
         try:
             cur.execute("""
-                SELECT id FROM sileg.designation 
-                WHERE old_id = %s AND old_type = %s
-            """, (oldId, oldType))
+                SELECT id FROM sileg.designation
+                WHERE old_id = %s AND old_type = %s AND description = %s;
+            """, (oldId, oldType, cls._TYPE))
             r = cur.fetchone()
             return None if r is None else r ["id"]
-            
+
         finally:
             cur.close()
+       
+
+class ProrogationDAO(DesignationDAO):
+
+    _TYPE = 'prorroga'
+
+    @classmethod
+    def findAll(cls, con):
+        cur = con.cursor()
+        try:
+            cur.execute("""
+                SELECT id
+                FROM sileg.designation
+                WHERE description == %s
+            """, (cls._TYPE))
+            ids = [r['id'] for r in cur]
+            return ids
+
+        finally:
+            cur.close()
+
+    @classmethod
+    def numRows(cls, con):
+        cur = con.cursor()
+
+        try:
+            cur.execute("""
+                SELECT count(*)
+                FROM sileg.designation
+                WHERE description = %s
+            """, (cls._TYPE,))
+            r = cur.fetchone()
+            return None if r is None else r ["count"]
+
+        finally:
+            cur.close()
+
+
+
+class ProrogationOriginalDAO(ProrogationDAO):
+
+    _TYPE = 'prorroga_original'
+
+
+class ProrogationExtensionDAO(ProrogationDAO):
+
+    _TYPE = 'prorroga_extension'
+
+
+
+
+class ExtensionDAO(DesignationDAO):
+
+    _TYPE = 'extension'
+
+    @classmethod
+    def findAll(cls, con):
+        cur = con.cursor()
+        try:
+            cur.execute("""
+                SELECT id
+                FROM sileg.designation
+                WHERE description == %s
+            """, (cls._TYPE))
+            ids = [r['id'] for r in cur]
+            return ids
+
+        finally:
+            cur.close()
+
+    @classmethod
+    def numRows(cls, con):
+        cur = con.cursor()
+
+        try:
+            cur.execute("""
+                SELECT count(*)
+                FROM sileg.designation
+                WHERE description = %s
+            """, (cls._TYPE,))
+            r = cur.fetchone()
+            return None if r is None else r ["count"]
+
+        finally:
+            cur.close()
+
+
+class OriginalDesignationDAO(DesignationDAO):
+
+    _TYPE = 'original'
+
+    @classmethod
+    def findAll(cls, con):
+        cur = con.cursor()
+        try:
+            cur.execute("""
+                SELECT id
+                FROM sileg.designation
+                WHERE description == %s
+            """, (cls._TYPE))
+            ids = [r['id'] for r in cur]
+            return ids
+
+        finally:
+            cur.close()
+
+    @classmethod
+    def numRows(cls, con):
+        cur = con.cursor()
+
+        try:
+            cur.execute("""
+                SELECT count(*)
+                FROM sileg.designation
+                WHERE description = %s
+            """, (cls._TYPE,))
+            r = cur.fetchone()
+            return None if r is None else r ["count"]
+
+        finally:
+            cur.close()
+
+
+
 
 class Designation(JSONSerializable):
 
@@ -149,6 +372,7 @@ class Designation(JSONSerializable):
         self.id = None
         self.start = None
         self.end = None
+        self.out = None
         self.description = None
         self.userId = None
         self.placeId = None
@@ -165,13 +389,82 @@ class Designation(JSONSerializable):
     @classmethod
     def findById(cls, con, ids):
         return cls.dao.findById(con, ids)
-        
+
     @classmethod
     def findAll(cls, con):
         return cls.dao.findAll(con)
+
+    @classmethod
+    def findAllActive(cls, con):
+        return cls.dao.findAllActive(con)
+
+    @classmethod
+    def findAllHistory(cls, con):
+        return cls.dao.findAllHistory(con)
+
+
+    @classmethod
+    def findByUserId(cls, con, userIds):
+        return cls.dao.findByUserId(con, userIds)
         
-    @classmethod 
+    @classmethod
+    def findLasts(cls, con):
+        return cls.dao.findLasts(con)
+    
+    @classmethod
+    def findByPlaceId(cls, con, userIds):
+        return cls.dao.findByPlaceId(con, userIds)
+        
+        
+    """
+        este método se usa para chequear contra las tablas del sileg y nuestro modelo
+        para ver si ya esta creada o no una entidad y no generarla de nuevo
+    """
+    @classmethod
     def findByUnique(cls, con, oldId, oldType):
         return cls.dao.findByUnique(con, oldId, oldType)
+
+    @classmethod
+    def numRows(cls, conn):
+        return cls.dao.numRows(conn)
+
+
+
+
+
+
+
+
+class OriginalDesignation(Designation):
+    dao = OriginalDesignationDAO
+
+    def __init__(self):
+        super().__init__()
+        self.description = self.dao._TYPE
+
+
+class Extension(Designation):
+    dao = ExtensionDAO
+
+    def __init__(self):
+        super().__init__()
+        self.description = self.dao._TYPE
+
+
+class Prorogation(Designation):
+    dao = ProrogationDAO
+
+    def __init__(self):
+        super().__init__()
+        self.description = self.dao._TYPE
         
- 
+        
+
+class ProrogationOriginal(Prorogation):
+    dao = ProrogationOriginalDAO
+
+
+
+class ProrogationExtension(Prorogation):
+    dao = ProrogationExtensionDAO
+          
