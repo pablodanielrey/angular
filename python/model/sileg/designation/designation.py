@@ -26,12 +26,20 @@ class DesignationDAO(SilegDAO):
                     dend DATE,
                     dout DATE,
                     description VARCHAR NOT NULL,
+                    resolution VARCHAR,
+                    record VARCHAR,
                     user_id VARCHAR NOT NULL REFERENCES profile.users (id),
                     place_id VARCHAR NOT NULL REFERENCES sileg.place (id),
                     position_id VARCHAR NOT NULL REFERENCES sileg.position (id),
                     replace_id VARCHAR REFERENCES sileg.designation (id),
+                    original_id VARCHAR REFERENCES sileg.designation (id),
+                    
                     old_id INTEGER NOT NULL,
                     old_type VARCHAR NOT NULL,
+                    old_resolution_out VARCHAR, 
+                    old_record_out VARCHAR,
+
+                    
                     UNIQUE(old_id, old_type)
 
               );
@@ -49,12 +57,21 @@ class DesignationDAO(SilegDAO):
         instance.end = r['dend']
         instance.out = r["dout"]
         instance.description = r["description"]
+        instance.resolution = r["resolution"]
+        instance.record = r["record"]
         instance.userId = r['user_id']
         instance.placeId = r["place_id"]
         instance.positionId = r["position_id"]
         instance.replaceId = r["replace_id"]
+        instance.originalId = r["original_id"]
+        
         instance.oldId = r["old_id"]
         instance.oldType = r["old_type"]
+        instance.oldResolutionOut = r["old_resolution_out"]
+        instance.oldRecordOut = r["old_record_out"]        
+
+
+               
         return instance
 
 
@@ -72,8 +89,8 @@ class DesignationDAO(SilegDAO):
             if len(instance.findById(con, [instance.id])) <=  0:
                 data = instance.__dict__
                 cur.execute("""
-                    INSERT INTO sileg.designation (id, dstart, dend, dout, description, user_id, position_id, place_id, replace_id, old_id, old_type)
-                    VALUES (%(id)s, %(start)s, %(end)s, %(out)s, %(description)s, %(userId)s, %(positionId)s, %(placeId)s, %(replaceId)s, %(oldId)s, %(oldType)s);
+                    INSERT INTO sileg.designation (id, dstart, dend, dout, description, resolution, record, user_id, position_id, place_id, replace_id, original_id, old_id, old_type, old_resolution_out, old_record_out)
+                    VALUES (%(id)s, %(start)s, %(end)s, %(out)s, %(description)s, %(resolution)s, %(record)s, %(userId)s, %(positionId)s, %(placeId)s, %(replaceId)s, %(originalId)s, %(oldId)s, %(oldType)s, %(oldResolutionOut)s, %(oldRecordOut)s);
                 """, data)
 
             else:
@@ -85,13 +102,19 @@ class DesignationDAO(SilegDAO):
                       dend = %(end)s,
                       dout = %(out)s,
                       description = %(description)s,
+                      resolution = %(resolution)s,
+                      record = %(record)s,                      
                       user_id = %(userId)s,
                       position_id = %(positionId)s,
                       place_id = %(placeId)s,
                       replace_id = %(replaceId)s,
+                      original_id = %(originalId)s,                      
 
                       old_id = %(oldId)s,
-                      old_type = %(oldType)s
+                      old_type = %(oldType)s,
+                      old_resolution_out = %(oldResolutionOut)s,
+                      old_record_out = %(oldRecordOut)s
+
                   WHERE id = %(id)s;
                 """, data)
 
@@ -134,22 +157,43 @@ class DesignationDAO(SilegDAO):
     def findLasts(cls, con):
         cur = con.cursor()
         try:
+        
             cur.execute("""
                 SELECT desi.id
                 FROM sileg.designation AS desi
                 INNER JOIN (
-                  SELECT MAX(des.dstart) AS dstart, us.id AS user_id, pos.id AS id
+                  SELECT MAX(des.dstart) AS dstart, user_id, position_id, place_id
                   FROM sileg.designation des
-                  INNER JOIN sileg.position pos ON (pos.id = des.position_id)
-                  INNER JOIN sileg.place pla ON (pla.id = des.place_id)
-                  INNER JOIN profile.users us ON (us.id = des.user_id)
-                  GROUP BY pos.id, us.id
-                ) max ON (desi.position_id = max.id AND desi.dstart = max.dstart AND desi.user_id = max.user_id);
+                  GROUP BY place_id, position_id, user_id
+
+                ) max ON (desi.position_id = max.position_id AND desi.dstart = max.dstart AND desi.user_id = max.user_id);
             """)
             return [r['id'] for r in cur]
         finally:
             cur.close()            
             
+            
+    @classmethod
+    def findLastsAux(cls, con):
+        cur = con.cursor()
+        try:
+        
+            cur.execute("""
+                SELECT desi.id
+                FROM sileg.designation AS desi
+                INNER JOIN (
+                  SELECT MAX(des.dstart) AS dstart, user_id, position_id, place_id
+                  FROM sileg.designation des
+                  WHERE description != 'baja'
+                  GROUP BY place_id, position_id, user_id
+                ) max ON (desi.position_id = max.position_id AND desi.dstart = max.dstart AND desi.user_id = max.user_id);
+            """)
+            return [r['id'] for r in cur]
+        finally:
+            cur.close()            
+            
+            
+                        
     @classmethod
     def findByPlaceId(cls, con, placeIds):
         assert isinstance(placeIds, list)
@@ -225,6 +269,8 @@ class DesignationDAO(SilegDAO):
         finally:
             cur.close()
 
+
+
     @classmethod
     def findByUnique(cls, con, oldId, oldType):
         cur = con.cursor()
@@ -239,10 +285,43 @@ class DesignationDAO(SilegDAO):
 
         finally:
             cur.close()
-       
+
+    @classmethod
+    def findAllByDescription(cls, con):
+        cur = con.cursor()
+        try:
+            cur.execute("""
+                SELECT id
+                FROM sileg.designation
+                WHERE description = %s
+            """, (cls._TYPE))
+            ids = [r['id'] for r in cur]
+            return ids
+
+        finally:
+            cur.close()
+
+
+    @classmethod
+    def numRowsByDescription(cls, con):
+        cur = con.cursor()
+
+        try:
+            cur.execute("""
+                SELECT count(*)
+                FROM sileg.designation
+                WHERE description = %s
+            """, (cls._TYPE,))
+            r = cur.fetchone()
+            return None if r is None else r ["count"]
+
+        finally:
+            cur.close()               
+
+
+
 
 class ProrogationDAO(DesignationDAO):
-
     _TYPE = 'prorroga'
 
     @classmethod
@@ -252,13 +331,14 @@ class ProrogationDAO(DesignationDAO):
             cur.execute("""
                 SELECT id
                 FROM sileg.designation
-                WHERE description == %s
+                WHERE description = 'prorroga_original' OR description = 'prorroga_extension';
             """, (cls._TYPE))
             ids = [r['id'] for r in cur]
             return ids
 
         finally:
             cur.close()
+
 
     @classmethod
     def numRows(cls, con):
@@ -268,27 +348,51 @@ class ProrogationDAO(DesignationDAO):
             cur.execute("""
                 SELECT count(*)
                 FROM sileg.designation
-                WHERE description = %s
+                WHERE description = 'prorroga_original' OR description = 'prorroga_extension';
             """, (cls._TYPE,))
             r = cur.fetchone()
             return None if r is None else r ["count"]
 
         finally:
-            cur.close()
+            cur.close() 
+            
+    @classmethod
+    def findByUnique(cls, con, oldId, oldType):
+        cur = con.cursor()
 
+        try:
+            cur.execute("""
+                SELECT id FROM sileg.designation
+                WHERE old_id = %s AND old_type = %s AND (description = 'prorroga_original' OR description = 'prorroga_extension');
+            """, (oldId, oldType))
+            r = cur.fetchone()
+            return None if r is None else r ["id"]
+
+        finally:
+            cur.close()            
 
 
 class ProrogationOriginalDAO(ProrogationDAO):
-
     _TYPE = 'prorroga_original'
+    @classmethod
+    def findAll(cls, con):
+        return cls.findAllByDescription(con)
 
+    @classmethod
+    def numRows(cls, con):
+        return cls.numRowsByDescription(con)
 
 class ProrogationExtensionDAO(ProrogationDAO):
-
     _TYPE = 'prorroga_extension'
+    
+    @classmethod
+    def findAll(cls, con):
+        return cls.findAllByDescription(con)
 
-
-
+    @classmethod
+    def numRows(cls, con):
+        return cls.numRowsByDescription(con)
+        
 
 class ExtensionDAO(DesignationDAO):
 
@@ -296,34 +400,11 @@ class ExtensionDAO(DesignationDAO):
 
     @classmethod
     def findAll(cls, con):
-        cur = con.cursor()
-        try:
-            cur.execute("""
-                SELECT id
-                FROM sileg.designation
-                WHERE description == %s
-            """, (cls._TYPE))
-            ids = [r['id'] for r in cur]
-            return ids
-
-        finally:
-            cur.close()
+        return cls.findAllByDescription(con)
 
     @classmethod
     def numRows(cls, con):
-        cur = con.cursor()
-
-        try:
-            cur.execute("""
-                SELECT count(*)
-                FROM sileg.designation
-                WHERE description = %s
-            """, (cls._TYPE,))
-            r = cur.fetchone()
-            return None if r is None else r ["count"]
-
-        finally:
-            cur.close()
+        return cls.numRowsByDescription(con)
 
 
 class OriginalDesignationDAO(DesignationDAO):
@@ -332,34 +413,32 @@ class OriginalDesignationDAO(DesignationDAO):
 
     @classmethod
     def findAll(cls, con):
-        cur = con.cursor()
-        try:
-            cur.execute("""
-                SELECT id
-                FROM sileg.designation
-                WHERE description == %s
-            """, (cls._TYPE))
-            ids = [r['id'] for r in cur]
-            return ids
-
-        finally:
-            cur.close()
+        return cls.findAllByDescription(con)
 
     @classmethod
     def numRows(cls, con):
-        cur = con.cursor()
+        return cls.numRowsByDescription(con)
 
-        try:
-            cur.execute("""
-                SELECT count(*)
-                FROM sileg.designation
-                WHERE description = %s
-            """, (cls._TYPE,))
-            r = cur.fetchone()
-            return None if r is None else r ["count"]
 
-        finally:
-            cur.close()
+
+class ClosedDesignationDAO(DesignationDAO):
+
+    _TYPE = 'baja'
+
+    @classmethod
+    def findAll(cls, con):
+        return cls.findAllByDescription(con)
+        
+    @classmethod
+    def numRows(cls, con):
+        return cls.numRowsByDescription(con)
+                
+ 
+
+
+
+
+
 
 
 
@@ -373,13 +452,20 @@ class Designation(JSONSerializable):
         self.start = None
         self.end = None
         self.out = None
-        self.description = None
+        self.resolution = None
+        self.record = None        
         self.userId = None
         self.placeId = None
         self.positionId = None
         self.replaceId = None
+        self.originalId = None
         self.oldId = None
         self.oldType = None
+        self.oldResolutionOut = None
+        self.oldRecordOut = None
+
+        
+        self.description = self.dao._TYPE
 
 
     def persist(self, con):
@@ -410,6 +496,10 @@ class Designation(JSONSerializable):
     @classmethod
     def findLasts(cls, con):
         return cls.dao.findLasts(con)
+        
+    @classmethod
+    def findLastsAux(cls, con):
+        return cls.dao.findLastsAux(con)        
     
     @classmethod
     def findByPlaceId(cls, con, userIds):
@@ -432,39 +522,21 @@ class Designation(JSONSerializable):
 
 
 
-
-
-
 class OriginalDesignation(Designation):
     dao = OriginalDesignationDAO
-
-    def __init__(self):
-        super().__init__()
-        self.description = self.dao._TYPE
-
+    
 
 class Extension(Designation):
     dao = ExtensionDAO
 
-    def __init__(self):
-        super().__init__()
-        self.description = self.dao._TYPE
-
-
 class Prorogation(Designation):
     dao = ProrogationDAO
-
-    def __init__(self):
-        super().__init__()
-        self.description = self.dao._TYPE
-        
-        
 
 class ProrogationOriginal(Prorogation):
     dao = ProrogationOriginalDAO
 
-
-
 class ProrogationExtension(Prorogation):
     dao = ProrogationExtensionDAO
-          
+
+class ClosedDesignation(Designation):
+    dao = ClosedDesignationDAO          
