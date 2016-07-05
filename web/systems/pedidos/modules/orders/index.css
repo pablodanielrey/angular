@@ -158,6 +158,19 @@
   background-color: white;
 }
 
+
+.orders .inputSearch3 {
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  font-size: 16px;
+  padding: 7px;
+  border: 1px solid #DBE2E5;
+  margin-bottom: 5px;
+  margin-top: 2px;
+  background-color: white;
+}
+
 .orders .textSearch1 {
   color: #5C5F69;
 }
@@ -806,7 +819,20 @@
   border-radius: 3px;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
+}
 
+.orders .btnApply2 {
+  display: none;
+  width: 50px;
+  height: 50px;
+  font-size: 14px;
+  background-color: #92AD17 !important;
+  color:white;
+  padding: 5px 10px 5px 10px;
+  border:none;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
 }
 
 .orders .btnNew {
@@ -829,6 +855,7 @@
   cursor: pointer;
 }
 
+.orders .btnApply2:hover,
 .orders .btnApply:hover {
   background-color: #809612 !important;
   cursor: pointer;
@@ -1726,6 +1753,7 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
   margin-bottom: 5px;
   color: #434343;
     font-weight: bold;
+    font-size: 12px;
 }
 
 .orders .arrowOpen:hover,
@@ -1746,6 +1774,7 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
   color: #434343;
     font-weight: bold;
       margin-bottom: 5px;
+      font-size: 12px;
 }
 
 .orders.pantallaNuevoPedido.buscarUsuario .contentSearchUser {
@@ -2258,6 +2287,101 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
   .orders.pantallaDetallePedido.seleccionarEstado  .contentSelectState {
     width: 110px;
   }
+
+
+  .orders.pantallaNuevoPedido.buscarUsuario .contentSearchUser {
+    display: block;
+    position: absolute;
+    /*width: 230px;*/
+    top:0px;
+    left: 0px;
+    height: 100%;
+    width: 100%;
+    background-color: #DBE2E5;
+    border: 1px solid #E2E2E2;
+  }
+
+  .orders.pantallaNuevoPedido.buscarOficinaDeUsuario .contentSearchOffice {
+    display: block;
+    position: absolute;
+    /*width: 230px;*/
+    top:0px;
+    left: 0px;
+    height: 100%;
+    width: 100%;
+    background-color: #DBE2E5;
+    border: 1px solid #E2E2E2;
+  }
+
+  .orders .contentListOffice,
+  .orders .contentListPerson {
+      width: 95%;
+      max-height: 305px;
+      padding-right: 5px;
+      padding: 5px;
+      overflow-x: auto;
+      position: absolute;
+      background-color: #DBE2E5;
+  }
+
+  .orders .titleListRequest {
+
+  }
+
+  .orders .titleListRequest {
+      color: #5C5F69;
+      width: 100%;
+      background-color: #DBE2E5;
+      padding-top: 3px;
+          margin-top: 5px;
+  }
+
+  .orders .inputSearch3 {
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    font-size: 16px;
+    padding: 10px;
+    border: 1px solid #DBE2E5;
+    margin-bottom: 5px;
+    margin-top: 2px;
+    background-color: white;
+
+  }
+
+  .orders .btnApply2 {
+    display: block;
+  }
+
+  .orders .btnApply {
+    display: none;
+  }
+
+  .orders .subContentOrderLeft {
+    display: none;
+  }
+
+  .orders .titleNewOrder {
+    display: none;
+  }
+
+  .orders .userOrder {
+    margin-bottom: 5px;
+    color: #434343;
+    font-weight: bold;
+    font-size: 12px;
+  }
+
+
+
+
+  .orders .officeOrder {
+    margin-bottom: 5px;
+    color: #434343;
+    font-weight: bold;
+    font-size: 12px;
+  }
+
 
 
 }
