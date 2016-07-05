@@ -17,7 +17,8 @@ app.config(['$routeProvider', function($routeProvider) {
 
   .when('/mails', {
      templateUrl: '/systems/fce/modules/mails/index.html',
-     controller: 'MailsCtrl'
+     controller: 'MailsCtrl',
+     controllerAs: 'vm'
   })
 
   .when('/systems', {

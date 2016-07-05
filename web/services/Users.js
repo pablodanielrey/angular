@@ -257,8 +257,16 @@ function Users($rootScope, $wamp, Session, Utils, Cache) {
     return $wamp.call('users.mails.persistMail', [email]);
   }
 
+  this.createMail = function(email, userId) {
+    return $wamp.call('users.mails.createMail', [email, userId]);
+  }
+
   this.removeMail = function(id) {
     return $wamp.call('users.mails.deleteMail', [id]);
+  }
+
+  this.sendEmailConfirmation = function(name, lastname, eid) {
+    return $wamp.call('users.mails.sendEmailConfirmation', [name, lastname, eid]);
   }
 
   // esto lo modifique solo para obtener el usuario por dni, no se como se deberia manejar con la cache

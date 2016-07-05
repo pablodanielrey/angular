@@ -6,10 +6,12 @@ import asyncio
 from asyncio import coroutine
 from autobahn.asyncio.wamp import ApplicationSession
 from model.users.users import UserDAO, User, Telephone, MailDAO
+import model.users.users
 from model.tutorias.tutorias import TutoriasModel
 from model.registry import Registry
 from model.connection import connection
 from model.mail.mail import Mail
+from model.ingreso.ingreso import Ingreso
 # from model.exceptions import *
 
 
@@ -35,6 +37,7 @@ class UsersWamp(ApplicationSession):
         yield from self.register(self.findUsersByIds_async, 'users.findUsersByIds')
         yield from self.register(self.findMails_async, 'users.mails.findMails')
         yield from self.register(self.persistMail_async, 'users.mails.persistMail')
+        yield from self.register(self.createMail_async, 'users.mails.createMail')
         yield from self.register(self.deleteMail_async, 'users.mails.deleteMail')
         yield from self.register(self.sendEmailConfirmation_async, 'users.mails.sendEmailConfirmation')
         yield from self.register(self.confirmEmail_async, 'users.mails.confirmEmail')
@@ -190,6 +193,7 @@ class UsersWamp(ApplicationSession):
      '      email: Email propiamente dicho
      '      confirmed: Flag para indicar si el email esta confirmado (Defecto False)
      '''
+
     def persistMail(self, email):
         con = self.conn.get()
         try:
@@ -204,6 +208,27 @@ class UsersWamp(ApplicationSession):
     def persistMail_async(self, email):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.persistMail, email)
+        return r
+
+
+    def createMail(self, email, userId):
+        con = self.conn.get()
+        try:
+            m = model.users.users.Mail()
+            m.userId = userId
+            m.email = email
+            m.confirmed = False
+            m.id = m.persist(con)
+            con.commit()
+            return m
+
+        finally:
+            self.conn.put(con)
+
+    @coroutine
+    def createMail_async(self, email, userId):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.createMail, email, userId)
         return r
 
     '''
@@ -230,6 +255,7 @@ class UsersWamp(ApplicationSession):
      ' Enviar confirmacion por emai
      ' @param emailId Uuid del email
      '''
+    '''
     def sendEmailConfirmation(self, emailId):
         con = self.conn.get()
         try:
@@ -245,6 +271,28 @@ class UsersWamp(ApplicationSession):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.sendEmailConfirmation, emailId)
         return r
+    '''
+
+    def sendEmailConfirmation(self, name, lastname, eid):
+        con = self.conn.get()
+        try:
+            import pdb; pdb.set_trace()
+            
+            logging.warn('sendEmailConfirmation {}'.format(eid))
+            Ingreso.sendEmailConfirmation(con, name, lastname, eid)
+            con.commit()
+            return True
+
+        finally:
+            self.conn.put(con)
+
+    @coroutine
+    def sendEmailConfirmation_async(self, name, lastname, eid):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.sendEmailConfirmation, name, lastname, eid)
+        return r
+
+
 
     '''
      ' Confirmar email. Una vez confirmado se envia un email al usuario
