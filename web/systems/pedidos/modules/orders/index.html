@@ -4,12 +4,12 @@
     VARIABLE 1: pantallaDetallePedido
     VARIABLE 1: pantallaMensaje
     VARIABLE 1: pantallaNuevoPedido
-                VARIABLE 2: buscarOficina, buscarArea, buscarConsulta, buscarUsuario, buscarOficinaDeUsuario
     VARIABLE 1: buscarPedidos
+                VARIABLE 2: buscarOficina, buscarArea, buscarConsulta, buscarUsuario, buscarOficinaDeUsuario
+    VARIABLE 2: seleccionarEstado, seleccionarPrioridad
     VARIABLE 3: pantallaMensajeAlUsuario
                 VARIABLE 4: mensajeCargando, mensajeError, mensajeEnviado, mensajePedidoCreado
-    VARIABLE 2: seleccionarEstado, seleccionarPrioridad
-    -->
+        -->
 
     <!-- --------------- HEADER DEL SISTEMA ----------------- -->
     <div class="header">
@@ -17,6 +17,7 @@
             <div class="textMisPedidos">
               Pedidos
             </div>
+            <!-- ---- Botones de ordenacion y busqueda -->
             <div class="contentFilters">
                 <div class="textFilters"><i class="fa fa-sliders" aria-hidden="true"></i> Filtros</div>
                 <button class="btnFilter" title="Buscar..." ng-click="view.style = 'buscarPedido'"><i class="fa fa-search" aria-hidden="true"></i></button>
@@ -24,6 +25,7 @@
                 <button class="btnFilter" title="Ordenar por Estado"><i class="fa fa-sort-amount-asc" aria-hidden="true"></i></button>
                   <button class="btnFilter" title="Ordenar por Prioridad"><i class="fa fa-star-o" aria-hidden="true"></i></button>
             </div>
+            <!-- ---- Boton solicitar nuevo pedido-->
             <div>
                 <button class="btnNew" ng-click="view.style = 'pantallaNuevoPedido'">NUEVO PEDIDO</button>
             </div>
@@ -33,8 +35,10 @@
     <!-- -------------- BUSCADOR DE PEDIDOS ----------------- -->
     <div class="contentSearchOrders">
         <div class="searchOrders">
+            <!-- ---- Buscar por ID o por oficina ---- -->
             <div class="textSearch1"><i class="fa fa-search" aria-hidden="true"></i> Buscar</div>
             <div><input class="inputSearch" type="search"></input></div>
+            <!-- ---- Buscar por Rango de Fechas ---- -->
             <div class="textSearch1b"><i class="fa fa-calendar-o" aria-hidden="true"></i> Buscar por Fecha</div>
             <div class="textSearch2a">Fecha Inicio</div>
             <div><input class="inputSearch2" type="date"></input></div>
@@ -53,6 +57,7 @@
           <div class="newOrder">
               <!-- ---- HEADER DE SOLICITAR PEDIDO ---- -->
               <div class="contentTitleNewOrder">
+
                   <div class="contentBackNewOrder">
                       <div class="contentBtnReturn">
                           <button class="btnReturn" ng-click="view.style = ''"><i class=" fa fa-angle-left" aria-hidden="true"></i></button>
@@ -62,6 +67,7 @@
                       </div>
                   </div>
 
+                  <!-- ---- Cargar pedido a nombre de otro ---- -->
                   <div class="contentUserOrder">
                       <div class="subContentOrderLeft">
                           <div class="textDe">De</div>
@@ -69,7 +75,7 @@
                       </div>
                       <div class="subContentOrderRight">
                         <div class="userOrder">Walter Roberto Blanco</div>
-
+                        <!-- ---- buscar el usuario ---- -->
                         <div class="contentSearchUser">
                             <div class="titleListRequest">
                                 <span class="icoInputSearch"><i class="fa fa-search"></i></span>
@@ -85,13 +91,11 @@
                                       <div class="dniUser">29694757</div>
                                     </div>
                                 </div>
-
                             </div>
-
                         </div>
 
                         <div class="officeOrder">DiTeSI</div>
-
+                        <!-- ---- Seleccionar la oficina del usuario ---- -->
                         <div class="contentSearchOffice">
                             <div class="titleListRequest">
                                 <span class="icoInputSearch"><i class="fa fa-search"></i></span>
@@ -100,7 +104,7 @@
                             <div class="contentListOffice">
                                 <div class="btnItemOffice" ng-click="view.style2 = ''">
                                     <div class="contentImgOffice">
-                                        <img class="imgOffice" src="./img/walter.jpg" alt="foto de perfil">
+                                        <img class="imgOffice" src="./img/empresa.jpg" alt="foto de perfil">
                                     </div>
                                     <div class="contentNameOffice">
                                       <div class="">Ditesi</div>
@@ -109,7 +113,6 @@
                                 </div>
                             </div>
                         </div>
-
                       </div>
                       <div>
                         <div class="arrowOpen" ng-click="view.style2 = 'buscarUsuario'"><i class="fa fa-caret-down" aria-hidden="true"></i></div>
@@ -196,8 +199,6 @@
                       </div>
                   </div>
 
-
-
               </div>
 
           </div>
@@ -206,75 +207,26 @@
 
     <!-- --------------- LISTADO DE PEDIDOS ------------------ -->
     <div class="contentOrders">
-
+        <!-- ---- Pedido invividual ---- -->
         <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
-
+            <!-- ---- Vista rapida del pedido ---- -->
             <div class="itemInfo">
 
-                <div class="contentPriority alta">
-                    <div class="subContentPriority">&nbsp;</div>
-                </div>
-
-                <div class="itemDate">
-                    <div class="textNumerOrders">Nº 112369</div>
-                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
-                    <div class="textDaysOrders">Hoy</div>
-                </div>
-
-                <div class="itemStatus">
-                    <div class="status abierta">
-                        <!-- VARIABLES:
-                        abierta, enProgreso, cerrada, pausada, rechazada -->
-                        <div class="textA1">ABIERTA</div>
-                        <div class="textA2"></div>
-                        <div class="textEC1">EN CURSO</div>
-                        <div class="textEC2"></div>
-                        <div class="textC1">CERRADA</div>
-                        <div class="textC2"></div>
-                        <div class="textP1">PAUSADA</div>
-                        <div class="textP2"></div>
-                        <div class="textR1">RECHAZADA</div>
-                        <div class="textR2"></div>
-                    </div>
-                </div>
-
-                <div class="itemsType">
-                      <div class="textType">Economico Financiero</div>
-                      <div class="textType2">Compras</div>
-                      <div class="textSubType">Problema eléctrico</div>
-                </div>
-
-                <div class="itemsOffice">
-                      <div class="textMini">Solicitado por:</div>
-                      <div class="textName">Emanuel País</div>
-                </div>
-
-            </div>
-
-            <div class="itemActions">
-              <i class=" fa fa-angle-right" aria-hidden="true"></i>
-            </div>
-
-        </div>
-
-        <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
-
-            <div class="itemInfo">
-
+                <!-- ---- Prioridad del pedido, por defecto tiene que estar en "normal" ---- -->
                 <div class="contentPriority normal">
+                    <!-- ---- VARIABLES: baja, normal, alta ---- -->
                     <div class="subContentPriority">&nbsp;</div>
                 </div>
-
+                <!-- ---- Numero de pedido y fecha ---- -->
                 <div class="itemDate">
-                    <div class="textNumerOrders">Nº 112369</div>
-                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
-                    <div class="textDaysOrders">Hoy</div>
+                    <div class="textNumerOrders">Nº 112369</div> <!-- Numero de pedido -->
+                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div> <!-- Ene. Feb. Mar. etc (Los meses solo las 3 primeras letras) -->
+                    <div class="textDaysOrders">Hoy</div> <!-- Hoy, Ayer, Hace 2...31 días, Hace 1...12 Meses, Hace 1 Año, hace 2... Años -->
                 </div>
-
+                <!-- ---- Estado ---- -->
                 <div class="itemStatus">
-                    <div class="status enProgreso">
-                        <!-- VARIABLES:
-                        abierta, enProgreso, cerrada, pausada, rechazada -->
+                    <div class="status abierta">
+                        <!-- ---- VARIABLES: abierta, enProgreso, cerrada, pausada, rechazada ---- -->
                         <div class="textA1">ABIERTA</div>
                         <div class="textA2"></div>
                         <div class="textEC1">EN CURSO</div>
@@ -287,16 +239,23 @@
                         <div class="textR2"></div>
                     </div>
                 </div>
-
+                <!-- ---- Info oficina y solicitud ---- -->
                 <div class="itemsType">
-                      <div class="textMini">Para:</div>
-                      <div class="textType">MANTENIMIENTO</div>
-                      <div class="textSubType">Problema eléctrico</div>
+                      <div class="textType">Economico Financiero</div> <!-- Oficina Solicitante -->
+                      <div class="textType2">Soporte Técnico</div> <!-- Área a la que solicita -->
+                      <div class="textSubType">Problema impresora</div> <!-- Problema -->
                 </div>
-
-                <div class="itemsOffice">
+                <!-- ---- Usuarios de la carga del pedido ---- -->
+                <div class="itemsOffice solicitadoPorEl">
+                    <!-- ---- VARIABLES: solicitadoPorEl, solicitadoPorOtro ---- -->
+                    <div>
                       <div class="textMini">Solicitado por:</div>
-                        <div class="textName">Emanuel País</div>
+                      <div class="textName"><b>Paola Tantarelli</b></div> <!-- Usuario que pide el pedido -->
+                    </div>
+                    <div class="userUpload">
+                      <div class="textMini">Cargado por:</div>
+                      <div class="textName">Walter Blanco</div> <!-- Usuario que cargo el pedido -->
+                    </div>
                 </div>
 
             </div>
@@ -306,166 +265,26 @@
             </div>
 
         </div>
-
+        <!-- ---- Pedido invividual ---- -->
         <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
-
+            <!-- ---- Vista rapida del pedido ---- -->
             <div class="itemInfo">
 
-                <div class="contentPriority baja">
+                <!-- ---- Prioridad del pedido, por defecto tiene que estar en "normal" ---- -->
+                <div class="contentPriority alta">
+                    <!-- ---- VARIABLES: baja, normal, alta ---- -->
                     <div class="subContentPriority">&nbsp;</div>
                 </div>
-
+                <!-- ---- Numero de pedido y fecha ---- -->
                 <div class="itemDate">
-                    <div class="textNumerOrders">Nº 112369</div>
-                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
-                    <div class="textDaysOrders">Hoy</div>
+                    <div class="textNumerOrders">Nº 112369</div> <!-- Numero de pedido -->
+                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div> <!-- Ene. Feb. Mar. etc (Los meses solo las 3 primeras letras) -->
+                    <div class="textDaysOrders">Ayer</div> <!-- Hoy, Ayer, Hace 2...31 días, Hace 1...12 Meses, Hace 1 Año, hace 2... Años -->
                 </div>
-
-                <div class="itemStatus">
-                    <div class="status cerrada">
-                        <!-- VARIABLES:
-                        abierta, enProgreso, cerrada, pausada, rechazada -->
-                        <div class="textA1">ABIERTA</div>
-                        <div class="textA2"></div>
-                        <div class="textEC1">EN CURSO</div>
-                        <div class="textEC2"></div>
-                        <div class="textC1">CERRADA</div>
-                        <div class="textC2"></div>
-                        <div class="textP1">PAUSADA</div>
-                        <div class="textP2"></div>
-                        <div class="textR1">RECHAZADA</div>
-                        <div class="textR2"></div>
-                    </div>
-                </div>
-
-                <div class="itemsType">
-                      <div class="textMini">Para:</div>
-                      <div class="textType">MANTENIMIENTO</div>
-                      <div class="textSubType">Problema eléctrico</div>
-                </div>
-
-                <div class="itemsOffice">
-                      <div class="textMini">De:</div>
-                      <div class="textOffice">DITESI</div>
-                        <div class="textName">Emanuel País</div>
-                </div>
-
-            </div>
-
-            <div class="itemActions">
-              <i class=" fa fa-angle-right" aria-hidden="true"></i>
-            </div>
-
-        </div>
-
-        <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
-
-            <div class="itemInfo">
-
-                <div class="itemDate">
-                    <div class="textNumerOrders">Nº 112369</div>
-                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
-                    <div class="textDaysOrders">Hoy</div>
-                </div>
-
-                <div class="itemStatus">
-                    <div class="status pausada">
-                        <!-- VARIABLES:
-                        abierta, enProgreso, cerrada, pausada, rechazada -->
-                        <div class="textA1">ABIERTA</div>
-                        <div class="textA2"></div>
-                        <div class="textEC1">EN CURSO</div>
-                        <div class="textEC2"></div>
-                        <div class="textC1">CERRADA</div>
-                        <div class="textC2"></div>
-                        <div class="textP1">PAUSADA</div>
-                        <div class="textP2"></div>
-                        <div class="textR1">RECHAZADA</div>
-                        <div class="textR2"></div>
-                    </div>
-                </div>
-
-                <div class="itemsType">
-                      <div class="textMini">Para:</div>
-                      <div class="textType">MANTENIMIENTO</div>
-                      <div class="textSubType">Problema eléctrico</div>
-                </div>
-
-                <div class="itemsOffice">
-                      <div class="textMini">De:</div>
-                      <div class="textOffice">DITESI</div>
-                        <div class="textName">Emanuel País</div>
-                </div>
-
-            </div>
-
-            <div class="itemActions">
-              <i class=" fa fa-angle-right" aria-hidden="true"></i>
-            </div>
-
-        </div>
-
-        <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
-
-            <div class="itemInfo">
-
-                <div class="itemDate">
-                    <div class="textNumerOrders">Nº 112369</div>
-                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
-                    <div class="textDaysOrders">Hoy</div>
-                </div>
-
-                <div class="itemStatus">
-                    <div class="status abierta">
-                        <!-- VARIABLES:
-                        abierta, enProgreso, cerrada, pausada, rechazada -->
-                        <div class="textA1">ABIERTA</div>
-                        <div class="textA2"></div>
-                        <div class="textEC1">EN CURSO</div>
-                        <div class="textEC2"></div>
-                        <div class="textC1">CERRADA</div>
-                        <div class="textC2"></div>
-                        <div class="textP1">PAUSADA</div>
-                        <div class="textP2"></div>
-                        <div class="textR1">RECHAZADA</div>
-                        <div class="textR2"></div>
-                    </div>
-                </div>
-
-                <div class="itemsType">
-                      <div class="textMini">Para:</div>
-                      <div class="textType">MANTENIMIENTO</div>
-                      <div class="textSubType">Problema eléctrico</div>
-                </div>
-
-                <div class="itemsOffice">
-                      <div class="textMini">De:</div>
-                      <div class="textOffice">DITESI</div>
-                        <div class="textName">Emanuel País</div>
-                </div>
-
-            </div>
-
-            <div class="itemActions">
-              <i class=" fa fa-angle-right" aria-hidden="true"></i>
-            </div>
-
-        </div>
-
-        <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
-
-            <div class="itemInfo">
-
-                <div class="itemDate">
-                    <div class="textNumerOrders">Nº 112369</div>
-                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
-                    <div class="textDaysOrders">Hoy</div>
-                </div>
-
+                <!-- ---- Estado ---- -->
                 <div class="itemStatus">
                     <div class="status enProgreso">
-                        <!-- VARIABLES:
-                        abierta, enProgreso, cerrada, pausada, rechazada -->
+                        <!-- ---- VARIABLES: abierta, enProgreso, cerrada, pausada, rechazada ---- -->
                         <div class="textA1">ABIERTA</div>
                         <div class="textA2"></div>
                         <div class="textEC1">EN CURSO</div>
@@ -478,66 +297,25 @@
                         <div class="textR2"></div>
                     </div>
                 </div>
-
+                <!-- ---- Info oficina y solicitud ---- -->
                 <div class="itemsType">
-                      <div class="textMini">Para:</div>
-                      <div class="textType">MANTENIMIENTO</div>
-                      <div class="textSubType">Problema eléctrico</div>
+                      <div class="textType">Alumnos</div> <!-- Oficina Solicitante -->
+                      <div class="textType2">Soporte Técnico</div> <!-- Área a la que solicita -->
+                      <div class="textSubType">Error de Windows</div> <!-- Problema -->
                 </div>
-
-                <div class="itemsOffice">
-                      <div class="textMini">De:</div>
-                      <div class="textOffice">DITESI</div>
-                        <div class="textName">Emanuel País</div>
-                </div>
-
-            </div>
-
-            <div class="itemActions">
-              <i class=" fa fa-angle-right" aria-hidden="true"></i>
-            </div>
-
-        </div>
-
-        <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
-
-            <div class="itemInfo">
-
-                <div class="itemDate">
-                    <div class="textNumerOrders">Nº 112369</div>
-                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
-                    <div class="textDaysOrders">Hoy</div>
-                </div>
-
-                <div class="itemStatus">
-                    <div class="status cerrada">
-                        <!-- VARIABLES:
-                        abierta, enProgreso, cerrada, pausada, rechazada -->
-                        <div class="textA1">ABIERTA</div>
-                        <div class="textA2"></div>
-                        <div class="textEC1">EN CURSO</div>
-                        <div class="textEC2"></div>
-                        <div class="textC1">CERRADA</div>
-                        <div class="textC2"></div>
-                        <div class="textP1">PAUSADA</div>
-                        <div class="textP2"></div>
-                        <div class="textR1">RECHAZADA</div>
-                        <div class="textR2"></div>
+                <!-- ---- Usuarios de la carga del pedido ---- -->
+                <div class="itemsOffice solicitadoPorOtro">
+                    <!-- ---- VARIABLES: solicitadoPorEl, solicitadoPorOtro ---- -->
+                    <div>
+                      <div class="textMini">Solicitado por:</div>
+                      <div class="textName"><b>Roberto Tombesi</b></div> <!-- Usuario que pide el pedido -->
+                    </div>
+                    <div class="userUpload">
+                      <div class="textMini">Cargado por:</div>
+                      <div class="textName">Alejandro Oporto</div> <!-- Usuario que cargo el pedido -->
                     </div>
                 </div>
 
-                <div class="itemsType">
-                      <div class="textMini">Para:</div>
-                      <div class="textType">MANTENIMIENTO</div>
-                      <div class="textSubType">Problema eléctrico</div>
-                </div>
-
-                <div class="itemsOffice">
-                      <div class="textMini">De:</div>
-                      <div class="textOffice">DITESI</div>
-                        <div class="textName">Emanuel País</div>
-                </div>
-
             </div>
 
             <div class="itemActions">
@@ -545,115 +323,26 @@
             </div>
 
         </div>
-
+        <!-- ---- Pedido invividual ---- -->
         <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
-
+            <!-- ---- Vista rapida del pedido ---- -->
             <div class="itemInfo">
 
+                <!-- ---- Prioridad del pedido, por defecto tiene que estar en "normal" ---- -->
+                <div class="contentPriority normal">
+                    <!-- ---- VARIABLES: baja, normal, alta ---- -->
+                    <div class="subContentPriority">&nbsp;</div>
+                </div>
+                <!-- ---- Numero de pedido y fecha ---- -->
                 <div class="itemDate">
-                    <div class="textNumerOrders">Nº 112369</div>
-                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
-                    <div class="textDaysOrders">Hoy</div>
+                    <div class="textNumerOrders">Nº 112369</div> <!-- Numero de pedido -->
+                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div> <!-- Ene. Feb. Mar. etc (Los meses solo las 3 primeras letras) -->
+                    <div class="textDaysOrders">Hace 2 días</div> <!-- Hoy, Ayer, Hace 2...31 días, Hace 1...12 Meses, Hace 1 Año, hace 2... Años -->
                 </div>
-
-                <div class="itemStatus">
-                    <div class="status pausada">
-                        <!-- VARIABLES:
-                        abierta, enProgreso, cerrada, pausada, rechazada -->
-                        <div class="textA1">ABIERTA</div>
-                        <div class="textA2"></div>
-                        <div class="textEC1">EN CURSO</div>
-                        <div class="textEC2"></div>
-                        <div class="textC1">CERRADA</div>
-                        <div class="textC2"></div>
-                        <div class="textP1">PAUSADA</div>
-                        <div class="textP2"></div>
-                        <div class="textR1">RECHAZADA</div>
-                        <div class="textR2"></div>
-                    </div>
-                </div>
-
-                <div class="itemsType">
-                      <div class="textMini">Para:</div>
-                      <div class="textType">MANTENIMIENTO</div>
-                      <div class="textSubType">Problema eléctrico</div>
-                </div>
-
-                <div class="itemsOffice">
-                      <div class="textMini">De:</div>
-                      <div class="textOffice">DITESI</div>
-                        <div class="textName">Emanuel País</div>
-                </div>
-
-            </div>
-
-            <div class="itemActions">
-              <i class=" fa fa-angle-right" aria-hidden="true"></i>
-            </div>
-
-        </div>
-
-        <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
-
-            <div class="itemInfo">
-
-                <div class="itemDate">
-                    <div class="textNumerOrders">Nº 112369</div>
-                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
-                    <div class="textDaysOrders">Hoy</div>
-                </div>
-
-                <div class="itemStatus">
-                    <div class="status abierta">
-                        <!-- VARIABLES:
-                        abierta, enProgreso, cerrada, pausada, rechazada -->
-                        <div class="textA1">ABIERTA</div>
-                        <div class="textA2"></div>
-                        <div class="textEC1">EN CURSO</div>
-                        <div class="textEC2"></div>
-                        <div class="textC1">CERRADA</div>
-                        <div class="textC2"></div>
-                        <div class="textP1">PAUSADA</div>
-                        <div class="textP2"></div>
-                        <div class="textR1">RECHAZADA</div>
-                        <div class="textR2"></div>
-                    </div>
-                </div>
-
-                <div class="itemsType">
-                      <div class="textMini">Para:</div>
-                      <div class="textType">MANTENIMIENTO</div>
-                      <div class="textSubType">Problema eléctrico</div>
-                </div>
-
-                <div class="itemsOffice">
-                      <div class="textMini">De:</div>
-                      <div class="textOffice">DITESI</div>
-                        <div class="textName">Emanuel País</div>
-                </div>
-
-            </div>
-
-            <div class="itemActions">
-              <i class=" fa fa-angle-right" aria-hidden="true"></i>
-            </div>
-
-        </div>
-
-        <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
-
-            <div class="itemInfo">
-
-                <div class="itemDate">
-                    <div class="textNumerOrders">Nº 112369</div>
-                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
-                    <div class="textDaysOrders">Hoy</div>
-                </div>
-
+                <!-- ---- Estado ---- -->
                 <div class="itemStatus">
                     <div class="status enProgreso">
-                        <!-- VARIABLES:
-                        abierta, enProgreso, cerrada, pausada, rechazada -->
+                        <!-- ---- VARIABLES: abierta, enProgreso, cerrada, pausada, rechazada ---- -->
                         <div class="textA1">ABIERTA</div>
                         <div class="textA2"></div>
                         <div class="textEC1">EN CURSO</div>
@@ -666,66 +355,25 @@
                         <div class="textR2"></div>
                     </div>
                 </div>
-
+                <!-- ---- Info oficina y solicitud ---- -->
                 <div class="itemsType">
-                      <div class="textMini">Para:</div>
-                      <div class="textType">MANTENIMIENTO</div>
-                      <div class="textSubType">Problema eléctrico</div>
+                      <div class="textType">Insercíon Laboral</div> <!-- Oficina Solicitante -->
+                      <div class="textType2">Programación</div> <!-- Área a la que solicita -->
+                      <div class="textSubType">Error Sistema</div> <!-- Problema -->
                 </div>
-
-                <div class="itemsOffice">
-                      <div class="textMini">De:</div>
-                      <div class="textOffice">DITESI</div>
-                        <div class="textName">Emanuel País</div>
-                </div>
-
-            </div>
-
-            <div class="itemActions">
-              <i class=" fa fa-angle-right" aria-hidden="true"></i>
-            </div>
-
-        </div>
-
-        <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
-
-            <div class="itemInfo">
-
-                <div class="itemDate">
-                    <div class="textNumerOrders">Nº 112369</div>
-                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
-                    <div class="textDaysOrders">Hoy</div>
-                </div>
-
-                <div class="itemStatus">
-                    <div class="status cerrada">
-                        <!-- VARIABLES:
-                        abierta, enProgreso, cerrada, pausada, rechazada -->
-                        <div class="textA1">ABIERTA</div>
-                        <div class="textA2"></div>
-                        <div class="textEC1">EN CURSO</div>
-                        <div class="textEC2"></div>
-                        <div class="textC1">CERRADA</div>
-                        <div class="textC2"></div>
-                        <div class="textP1">PAUSADA</div>
-                        <div class="textP2"></div>
-                        <div class="textR1">RECHAZADA</div>
-                        <div class="textR2"></div>
+                <!-- ---- Usuarios de la carga del pedido ---- -->
+                <div class="itemsOffice solicitadoPorEl">
+                    <!-- ---- VARIABLES: solicitadoPorEl, solicitadoPorOtro ---- -->
+                    <div>
+                      <div class="textMini">Solicitado por:</div>
+                      <div class="textName"><b>Paula Beyries</b></div> <!-- Usuario que pide el pedido -->
+                    </div>
+                    <div class="userUpload">
+                      <div class="textMini">Cargado por:</div>
+                      <div class="textName">Walter Blanco</div> <!-- Usuario que cargo el pedido -->
                     </div>
                 </div>
 
-                <div class="itemsType">
-                      <div class="textMini">Para:</div>
-                      <div class="textType">MANTENIMIENTO</div>
-                      <div class="textSubType">Problema eléctrico</div>
-                </div>
-
-                <div class="itemsOffice">
-                      <div class="textMini">De:</div>
-                      <div class="textOffice">DITESI</div>
-                        <div class="textName">Emanuel País</div>
-                </div>
-
             </div>
 
             <div class="itemActions">
@@ -733,21 +381,26 @@
             </div>
 
         </div>
-
+        <!-- ---- Pedido invividual ---- -->
         <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
-
+            <!-- ---- Vista rapida del pedido ---- -->
             <div class="itemInfo">
 
-                <div class="itemDate">
-                    <div class="textNumerOrders">Nº 112369</div>
-                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
-                    <div class="textDaysOrders">Hoy</div>
+                <!-- ---- Prioridad del pedido, por defecto tiene que estar en "normal" ---- -->
+                <div class="contentPriority baja">
+                    <!-- ---- VARIABLES: baja, normal, alta ---- -->
+                    <div class="subContentPriority">&nbsp;</div>
                 </div>
-
+                <!-- ---- Numero de pedido y fecha ---- -->
+                <div class="itemDate">
+                    <div class="textNumerOrders">Nº 112369</div> <!-- Numero de pedido -->
+                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div> <!-- Ene. Feb. Mar. etc (Los meses solo las 3 primeras letras) -->
+                    <div class="textDaysOrders">Hace 5 días</div> <!-- Hoy, Ayer, Hace 2...31 días, Hace 1...12 Meses, Hace 1 Año, hace 2... Años -->
+                </div>
+                <!-- ---- Estado ---- -->
                 <div class="itemStatus">
                     <div class="status pausada">
-                        <!-- VARIABLES:
-                        abierta, enProgreso, cerrada, pausada, rechazada -->
+                        <!-- ---- VARIABLES: abierta, enProgreso, cerrada, pausada, rechazada ---- -->
                         <div class="textA1">ABIERTA</div>
                         <div class="textA2"></div>
                         <div class="textEC1">EN CURSO</div>
@@ -760,66 +413,25 @@
                         <div class="textR2"></div>
                     </div>
                 </div>
-
+                <!-- ---- Info oficina y solicitud ---- -->
                 <div class="itemsType">
-                      <div class="textMini">Para:</div>
-                      <div class="textType">MANTENIMIENTO</div>
-                      <div class="textSubType">Problema eléctrico</div>
+                      <div class="textType">Comunicación Intitucional</div> <!-- Oficina Solicitante -->
+                      <div class="textType2">Redes y Servidores</div> <!-- Área a la que solicita -->
+                      <div class="textSubType">Cableado de la oficina</div> <!-- Problema -->
                 </div>
-
-                <div class="itemsOffice">
-                      <div class="textMini">De:</div>
-                      <div class="textOffice">DITESI</div>
-                        <div class="textName">Emanuel País</div>
-                </div>
-
-            </div>
-
-            <div class="itemActions">
-              <i class=" fa fa-angle-right" aria-hidden="true"></i>
-            </div>
-
-        </div>
-
-        <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
-
-            <div class="itemInfo">
-
-                <div class="itemDate">
-                    <div class="textNumerOrders">Nº 112369</div>
-                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
-                    <div class="textDaysOrders">Hoy</div>
-                </div>
-
-                <div class="itemStatus">
-                    <div class="status abierta">
-                        <!-- VARIABLES:
-                        abierta, enProgreso, cerrada, pausada, rechazada -->
-                        <div class="textA1">ABIERTA</div>
-                        <div class="textA2"></div>
-                        <div class="textEC1">EN CURSO</div>
-                        <div class="textEC2"></div>
-                        <div class="textC1">CERRADA</div>
-                        <div class="textC2"></div>
-                        <div class="textP1">PAUSADA</div>
-                        <div class="textP2"></div>
-                        <div class="textR1">RECHAZADA</div>
-                        <div class="textR2"></div>
+                <!-- ---- Usuarios de la carga del pedido ---- -->
+                <div class="itemsOffice solicitadoPorOtro">
+                    <!-- ---- VARIABLES: solicitadoPorEl, solicitadoPorOtro ---- -->
+                    <div>
+                      <div class="textMini">Solicitado por:</div>
+                      <div class="textName"><b>Amanda Plano</b></div> <!-- Usuario que pide el pedido -->
+                    </div>
+                    <div class="userUpload">
+                      <div class="textMini">Cargado por:</div>
+                      <div class="textName">Pablo Rey</div> <!-- Usuario que cargo el pedido -->
                     </div>
                 </div>
 
-                <div class="itemsType">
-                      <div class="textMini">Para:</div>
-                      <div class="textType">MANTENIMIENTO</div>
-                      <div class="textSubType">Problema eléctrico</div>
-                </div>
-
-                <div class="itemsOffice">
-                      <div class="textMini">De:</div>
-                      <div class="textOffice">DITESI</div>
-                        <div class="textName">Emanuel País</div>
-                </div>
-
             </div>
 
             <div class="itemActions">
@@ -827,21 +439,26 @@
             </div>
 
         </div>
-
+        <!-- ---- Pedido invividual ---- -->
         <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
-
+            <!-- ---- Vista rapida del pedido ---- -->
             <div class="itemInfo">
 
-                <div class="itemDate">
-                    <div class="textNumerOrders">Nº 112369</div>
-                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
-                    <div class="textDaysOrders">Hoy</div>
+                <!-- ---- Prioridad del pedido, por defecto tiene que estar en "normal" ---- -->
+                <div class="contentPriority normal">
+                    <!-- ---- VARIABLES: baja, normal, alta ---- -->
+                    <div class="subContentPriority">&nbsp;</div>
                 </div>
-
+                <!-- ---- Numero de pedido y fecha ---- -->
+                <div class="itemDate">
+                    <div class="textNumerOrders">Nº 112369</div> <!-- Numero de pedido -->
+                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div> <!-- Ene. Feb. Mar. etc (Los meses solo las 3 primeras letras) -->
+                    <div class="textDaysOrders">Hace 10 días</div> <!-- Hoy, Ayer, Hace 2...31 días, Hace 1...12 Meses, Hace 1 Año, hace 2... Años -->
+                </div>
+                <!-- ---- Estado ---- -->
                 <div class="itemStatus">
                     <div class="status enProgreso">
-                        <!-- VARIABLES:
-                        abierta, enProgreso, cerrada, pausada, rechazada -->
+                        <!-- ---- VARIABLES: abierta, enProgreso, cerrada, pausada, rechazada ---- -->
                         <div class="textA1">ABIERTA</div>
                         <div class="textA2"></div>
                         <div class="textEC1">EN CURSO</div>
@@ -854,17 +471,23 @@
                         <div class="textR2"></div>
                     </div>
                 </div>
-
+                <!-- ---- Info oficina y solicitud ---- -->
                 <div class="itemsType">
-                      <div class="textMini">Para:</div>
-                      <div class="textType">MANTENIMIENTO</div>
-                      <div class="textSubType">Problema eléctrico</div>
+                      <div class="textType">CECIN</div> <!-- Oficina Solicitante -->
+                      <div class="textType2">Soporte Técnico</div> <!-- Área a la que solicita -->
+                      <div class="textSubType">Error de Harware</div> <!-- Problema -->
                 </div>
-
-                <div class="itemsOffice">
-                      <div class="textMini">De:</div>
-                      <div class="textOffice">DITESI</div>
-                        <div class="textName">Emanuel País</div>
+                <!-- ---- Usuarios de la carga del pedido ---- -->
+                <div class="itemsOffice solicitadoPorEl">
+                    <!-- ---- VARIABLES: solicitadoPorEl, solicitadoPorOtro ---- -->
+                    <div>
+                      <div class="textMini">Solicitado por:</div>
+                      <div class="textName"><b>Ailen Bauchet</b></div> <!-- Usuario que pide el pedido -->
+                    </div>
+                    <div class="userUpload">
+                      <div class="textMini">Cargado por:</div>
+                      <div class="textName">Walter Blanco</div> <!-- Usuario que cargo el pedido -->
+                    </div>
                 </div>
 
             </div>
@@ -874,21 +497,26 @@
             </div>
 
         </div>
-
+        <!-- ---- Pedido invividual ---- -->
         <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
-
+            <!-- ---- Vista rapida del pedido ---- -->
             <div class="itemInfo">
 
-                <div class="itemDate">
-                    <div class="textNumerOrders">Nº 112369</div>
-                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
-                    <div class="textDaysOrders">Hoy</div>
+                <!-- ---- Prioridad del pedido, por defecto tiene que estar en "normal" ---- -->
+                <div class="contentPriority alta">
+                    <!-- ---- VARIABLES: baja, normal, alta ---- -->
+                    <div class="subContentPriority">&nbsp;</div>
                 </div>
-
+                <!-- ---- Numero de pedido y fecha ---- -->
+                <div class="itemDate">
+                    <div class="textNumerOrders">Nº 112369</div> <!-- Numero de pedido -->
+                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div> <!-- Ene. Feb. Mar. etc (Los meses solo las 3 primeras letras) -->
+                    <div class="textDaysOrders">hace 1 mes</div> <!-- Hoy, Ayer, Hace 2...31 días, Hace 1...12 Meses, Hace 1 Año, hace 2... Años -->
+                </div>
+                <!-- ---- Estado ---- -->
                 <div class="itemStatus">
                     <div class="status cerrada">
-                        <!-- VARIABLES:
-                        abierta, enProgreso, cerrada, pausada, rechazada -->
+                        <!-- ---- VARIABLES: abierta, enProgreso, cerrada, pausada, rechazada ---- -->
                         <div class="textA1">ABIERTA</div>
                         <div class="textA2"></div>
                         <div class="textEC1">EN CURSO</div>
@@ -901,17 +529,23 @@
                         <div class="textR2"></div>
                     </div>
                 </div>
-
+                <!-- ---- Info oficina y solicitud ---- -->
                 <div class="itemsType">
-                      <div class="textMini">Para:</div>
-                      <div class="textType">MANTENIMIENTO</div>
-                      <div class="textSubType">Problema eléctrico</div>
+                      <div class="textType">Personal</div> <!-- Oficina Solicitante -->
+                      <div class="textType2">Programación</div> <!-- Área a la que solicita -->
+                      <div class="textSubType">Error sistema</div> <!-- Problema -->
                 </div>
-
-                <div class="itemsOffice">
-                      <div class="textMini">De:</div>
-                      <div class="textOffice">DITESI</div>
-                        <div class="textName">Emanuel País</div>
+                <!-- ---- Usuarios de la carga del pedido ---- -->
+                <div class="itemsOffice solicitadoPorEl">
+                    <!-- ---- VARIABLES: solicitadoPorEl, solicitadoPorOtro ---- -->
+                    <div>
+                      <div class="textMini">Solicitado por:</div>
+                      <div class="textName"><b>Julio Ciappa</b></div> <!-- Usuario que pide el pedido -->
+                    </div>
+                    <div class="userUpload">
+                      <div class="textMini">Cargado por:</div>
+                      <div class="textName">Walter Blanco</div> <!-- Usuario que cargo el pedido -->
+                    </div>
                 </div>
 
             </div>
@@ -921,21 +555,26 @@
             </div>
 
         </div>
-
+        <!-- ---- Pedido invividual ---- -->
         <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
-
+            <!-- ---- Vista rapida del pedido ---- -->
             <div class="itemInfo">
 
-                <div class="itemDate">
-                    <div class="textNumerOrders">Nº 112369</div>
-                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
-                    <div class="textDaysOrders">Hoy</div>
+                <!-- ---- Prioridad del pedido, por defecto tiene que estar en "normal" ---- -->
+                <div class="contentPriority normal">
+                    <!-- ---- VARIABLES: baja, normal, alta ---- -->
+                    <div class="subContentPriority">&nbsp;</div>
                 </div>
-
+                <!-- ---- Numero de pedido y fecha ---- -->
+                <div class="itemDate">
+                    <div class="textNumerOrders">Nº 112369</div> <!-- Numero de pedido -->
+                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div> <!-- Ene. Feb. Mar. etc (Los meses solo las 3 primeras letras) -->
+                    <div class="textDaysOrders">Hace 3 meses</div> <!-- Hoy, Ayer, Hace 2...31 días, Hace 1...12 Meses, Hace 1 Año, hace 2... Años -->
+                </div>
+                <!-- ---- Estado ---- -->
                 <div class="itemStatus">
-                    <div class="status pausada">
-                        <!-- VARIABLES:
-                        abierta, enProgreso, cerrada, pausada, rechazada -->
+                    <div class="status cerrada">
+                        <!-- ---- VARIABLES: abierta, enProgreso, cerrada, pausada, rechazada ---- -->
                         <div class="textA1">ABIERTA</div>
                         <div class="textA2"></div>
                         <div class="textEC1">EN CURSO</div>
@@ -948,17 +587,23 @@
                         <div class="textR2"></div>
                     </div>
                 </div>
-
+                <!-- ---- Info oficina y solicitud ---- -->
                 <div class="itemsType">
-                      <div class="textMini">Para:</div>
-                      <div class="textType">MANTENIMIENTO</div>
-                      <div class="textSubType">Problema eléctrico</div>
+                      <div class="textType">Posgrado PB</div> <!-- Oficina Solicitante -->
+                      <div class="textType2">Soporte Técnico</div> <!-- Área a la que solicita -->
+                      <div class="textSubType">Error de programas</div> <!-- Problema -->
                 </div>
-
-                <div class="itemsOffice">
-                      <div class="textMini">De:</div>
-                      <div class="textOffice">DITESI</div>
-                        <div class="textName">Emanuel País</div>
+                <!-- ---- Usuarios de la carga del pedido ---- -->
+                <div class="itemsOffice solicitadoPorEl">
+                    <!-- ---- VARIABLES: solicitadoPorEl, solicitadoPorOtro ---- -->
+                    <div>
+                      <div class="textMini">Solicitado por:</div>
+                      <div class="textName"><b>Julieta Ordiozola</b></div> <!-- Usuario que pide el pedido -->
+                    </div>
+                    <div class="userUpload">
+                      <div class="textMini">Cargado por:</div>
+                      <div class="textName">Santiago Ojeda</div> <!-- Usuario que cargo el pedido -->
+                    </div>
                 </div>
 
             </div>
@@ -968,13 +613,127 @@
             </div>
 
         </div>
+        <!-- ---- Pedido invividual ---- -->
+        <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
+            <!-- ---- Vista rapida del pedido ---- -->
+            <div class="itemInfo">
 
+                <!-- ---- Prioridad del pedido, por defecto tiene que estar en "normal" ---- -->
+                <div class="contentPriority normal">
+                    <!-- ---- VARIABLES: baja, normal, alta ---- -->
+                    <div class="subContentPriority">&nbsp;</div>
+                </div>
+                <!-- ---- Numero de pedido y fecha ---- -->
+                <div class="itemDate">
+                    <div class="textNumerOrders">Nº 112369</div> <!-- Numero de pedido -->
+                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div> <!-- Ene. Feb. Mar. etc (Los meses solo las 3 primeras letras) -->
+                    <div class="textDaysOrders">Hace 1 año</div> <!-- Hoy, Ayer, Hace 2...31 días, Hace 1...12 Meses, Hace 1 Año, hace 2... Años -->
+                </div>
+                <!-- ---- Estado ---- -->
+                <div class="itemStatus">
+                    <div class="status rechazada">
+                        <!-- ---- VARIABLES: abierta, enProgreso, cerrada, pausada, rechazada ---- -->
+                        <div class="textA1">ABIERTA</div>
+                        <div class="textA2"></div>
+                        <div class="textEC1">EN CURSO</div>
+                        <div class="textEC2"></div>
+                        <div class="textC1">CERRADA</div>
+                        <div class="textC2"></div>
+                        <div class="textP1">PAUSADA</div>
+                        <div class="textP2"></div>
+                        <div class="textR1">RECHAZADA</div>
+                        <div class="textR2"></div>
+                    </div>
+                </div>
+                <!-- ---- Info oficina y solicitud ---- -->
+                <div class="itemsType">
+                      <div class="textType">Economico Financiero</div> <!-- Oficina Solicitante -->
+                      <div class="textType2">Soporte Técnico</div> <!-- Área a la que solicita -->
+                      <div class="textSubType">Problema impresora</div> <!-- Problema -->
+                </div>
+                <!-- ---- Usuarios de la carga del pedido ---- -->
+                <div class="itemsOffice solicitadoPorOtro">
+                    <!-- ---- VARIABLES: solicitadoPorEl, solicitadoPorOtro ---- -->
+                    <div>
+                      <div class="textMini">Solicitado por:</div>
+                      <div class="textName"><b>Paola Tantarelli</b></div> <!-- Usuario que pide el pedido -->
+                    </div>
+                    <div class="userUpload">
+                      <div class="textMini">Cargado por:</div>
+                      <div class="textName">Walter Blanco</div> <!-- Usuario que cargo el pedido -->
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="itemActions">
+              <i class=" fa fa-angle-right" aria-hidden="true"></i>
+            </div>
+
+        </div>
+        <!-- ---- Pedido invividual ---- -->
+        <div class="itemOrders" ng-click="view.style = 'pantallaDetallePedido'">
+            <!-- ---- Vista rapida del pedido ---- -->
+            <div class="itemInfo">
+
+                <!-- ---- Prioridad del pedido, por defecto tiene que estar en "normal" ---- -->
+                <div class="contentPriority normal">
+                    <!-- ---- VARIABLES: baja, normal, alta ---- -->
+                    <div class="subContentPriority">&nbsp;</div>
+                </div>
+                <!-- ---- Numero de pedido y fecha ---- -->
+                <div class="itemDate">
+                    <div class="textNumerOrders">Nº 112369</div> <!-- Numero de pedido -->
+                    <div class="textDateOrders">25 May. 2016 - 09:25 hs</div> <!-- Ene. Feb. Mar. etc (Los meses solo las 3 primeras letras) -->
+                    <div class="textDaysOrders">Hace 3 meses</div> <!-- Hoy, Ayer, Hace 2...31 días, Hace 1...12 Meses, Hace 1 Año, hace 2... Años -->
+                </div>
+                <!-- ---- Estado ---- -->
+                <div class="itemStatus">
+                    <div class="status cerrada">
+                        <!-- ---- VARIABLES: abierta, enProgreso, cerrada, pausada, rechazada ---- -->
+                        <div class="textA1">ABIERTA</div>
+                        <div class="textA2"></div>
+                        <div class="textEC1">EN CURSO</div>
+                        <div class="textEC2"></div>
+                        <div class="textC1">CERRADA</div>
+                        <div class="textC2"></div>
+                        <div class="textP1">PAUSADA</div>
+                        <div class="textP2"></div>
+                        <div class="textR1">RECHAZADA</div>
+                        <div class="textR2"></div>
+                    </div>
+                </div>
+                <!-- ---- Info oficina y solicitud ---- -->
+                <div class="itemsType">
+                      <div class="textType">Posgrado PB</div> <!-- Oficina Solicitante -->
+                      <div class="textType2">Soporte Técnico</div> <!-- Área a la que solicita -->
+                      <div class="textSubType">Error de programas</div> <!-- Problema -->
+                </div>
+                <!-- ---- Usuarios de la carga del pedido ---- -->
+                <div class="itemsOffice solicitadoPorEl">
+                    <!-- ---- VARIABLES: solicitadoPorEl, solicitadoPorOtro ---- -->
+                    <div>
+                      <div class="textMini">Solicitado por:</div>
+                      <div class="textName"><b>Julieta Ordiozola</b></div> <!-- Usuario que pide el pedido -->
+                    </div>
+                    <div class="userUpload">
+                      <div class="textMini">Cargado por:</div>
+                      <div class="textName">Santiago Ojeda</div> <!-- Usuario que cargo el pedido -->
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="itemActions">
+              <i class=" fa fa-angle-right" aria-hidden="true"></i>
+            </div>
+
+        </div>
 
     </div>
 
     <!-- ---------------- DETALLE DE PEDIDO ------------------ -->
     <div class="contentOrderDetail">
-
 
         <div class="headerDetail">
 
@@ -991,15 +750,22 @@
                         <div class="textType2">Compras</div>
                         <div class="textSubType">Problema de impresora</div>
                   </div>
-
-                  <div class="contentOffice">
-                      <div class="textMini">Solicitado por:</div>
-                        <div class="textOffice">Ditesi</div>
-                          <div class="textName">Emanuel Pais</div>
+                    <!-- ---- Usuarios de la carga del pedido ---- -->
+                  <div class="contentOffice solicitadoPorEl">
+                      <!-- ---- VARIABLES: solicitadoPorEl, solicitadoPorOtro ---- -->
+                      <div>
+                        <div class="textMini">Solicitado por:</div>
+                        <div class="textName"><b>Paola Tantarelli</b></div> <!-- Usuario que pide el pedido -->
+                      </div>
+                      <div class="userUpload">
+                        <div class="textMini">Cargado por:</div>
+                        <div class="textName">Walter Blanco</div> <!-- Usuario que cargo el pedido -->
+                      </div>
                   </div>
 
+                  <!-- ---- Contenedor de Acciones del pedido ---- -->
                   <div class="contentActions">
-
+                      <!-- ---- Cambiar estado del pedido ---- -->
                       <div class="itemStatus2">
                           <div class="status2 abierta" ng-click="view.style2 = 'seleccionarEstado'">
                               <!-- VARIABLES:
@@ -1043,10 +809,10 @@
                               </div>
                           </div>
                       </div>
-
-
+                      <!-- ---- Cambiar la prioridad del pedido ---- -->
                       <div class="itemPriority">
                           <div class="contentSelectPriority normal" ng-click="view.style2 = 'seleccionarPrioridad'">
+                              <!-- ---- VARIABLES: baja, normal, alta ---- -->
                               <div class="textPriority">Prioridad</div>
                               <div class="priorityB">BAJA <i class="fa fa-caret-down"></i></div>
                               <div class="priorityN">NORMAL <i class="fa fa-caret-down"></i></div>
@@ -1076,7 +842,6 @@
                           <button class="btnReply" ng-click="view.style2 = 'pantallaMensaje'">RESPONDER</button>
                           <button class="btnReply2" ng-click="view.style2 = 'pantallaMensaje'" title="Responder"><i class="fa fa-comment-o fa-2x"></i></button>
                       </div>
-
                   </div>
 
               </div>
