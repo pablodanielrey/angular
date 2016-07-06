@@ -4,7 +4,7 @@
     VARIABLE 1: pantallaDetallePedido
     VARIABLE 1: pantallaMensaje
     VARIABLE 1: pantallaNuevoPedido
-                VARIABLE 2: buscarOficina, buscarArea, buscarConsulta
+                VARIABLE 2: buscarOficina, buscarArea, buscarConsulta, verMisOficinas
     VARIABLE 1: buscarPedidos
     VARIABLE 3: pantallaMensajeAlUsuario
                 VARIABLE 4: mensajeCargando, mensajeError, mensajeEnviado, mensajePedidoCreado
@@ -17,8 +17,8 @@
               Mis Pedidos
             </div>
             <div class="contentFilters">
-                <div class="textFilters"><i class="fa fa-sliders" aria-hidden="true"></i> Filtros</div>
-                <button class="btnFilter" title="Buscar..." ng-click="view.style = 'buscarPedido'"><i class="fa fa-search" aria-hidden="true"></i></button>
+                <div class="textFilters"><i class="fa fa-sliders" aria-hidden="true"></i> Ordenar</div>
+                <!-- <button class="btnFilter" title="Buscar..." ng-click="view.style = 'buscarPedido'"><i class="fa fa-search" aria-hidden="true"></i></button> -->
                 <button class="btnFilter" title="Ordenar por Fecha"><i class="fa fa-calendar-o" aria-hidden="true"></i></button>
                 <button class="btnFilter" title="Ordenar por Estado"><i class="fa fa-sort-amount-asc" aria-hidden="true"></i></button>
             </div>
@@ -50,7 +50,8 @@
       <div class="subContentNewOrder">
           <div class="newOrder">
               <!-- ---- HEADER DE SOLICITAR PEDIDO ---- -->
-              <div class="contentTitleNewOrder">
+              <div class="contentTitleNewOrder ">
+                  <!-- ---- VARIABLES: usuarioDeUnaSolaOficina ---- -->
                   <div class="contentBackNewOrder">
                       <div class="contentBtnReturn">
                           <button class="btnReturn" ng-click="view.style = ''"><i class=" fa fa-angle-left" aria-hidden="true"></i></button>
@@ -59,8 +60,20 @@
                         NUEVO PEDIDO
                       </div>
                   </div>
+                  <div class="contentSelectedOffice">
+                    <div class="textMini">Enviar desde</div>
+                    <div class="contentSelectOffice" ng-click="view.style2 = 'verMisOficinas'">
+                        <div>Detise</div>
+                        <div><i class="fa fa-caret-down" aria-hidden="true"></i></div>
+                    </div>
+                    <div class="contentListOffices">
+                      <div class="itemsOffice2"  ng-click="view.style2 = ''"> Detise</div>
+                      <div class="itemsOffice2"  ng-click="view.style2 = ''"> Detise</div>
+                    </div>
+                  </div>
                   <div>
                       <button class="btnApply" ng-click="view.style = ''">SOLICITAR</button>
+                      <button class="btnApply2" ng-click="view.style = 'buscarUsuario'"><i class="fa fa-paper-plane"></i></button>
                   </div>
               </div>
               <!-- ---- CAMPOS PARA LLENAR EN UN NUEVO PEDIDO ---- -->

@@ -1469,6 +1469,83 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
 }
 
 
+.myOrders .contentSelectOffice {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: space-between;
+  -webkit-justify-content:space-between;
+  -moz-justify-content: space-between;
+  border-radius: 2px 0px 0px 2px;
+  -moz-border-radius: 2px 0px 0px 2px;
+  -webkit-border-radius: 2px 0px 0px 2px;
+  padding: 2px 5px 2px 5px;
+  border: 1px solid #DBE2E5;
+  color: #434343;
+/* background-color: #f9f7f7; */
+  cursor: pointer;
+  width: 190px;
+  margin-top: 3px;
+}
+
+.myOrders .btnApply2 {
+  display: none;
+  width: 50px;
+  height: 50px;
+  font-size: 14px;
+  background-color: #92AD17 !important;
+  color:white;
+  padding: 5px 10px 5px 10px;
+  border:none;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
+
+.myOrders .contentListOffices {
+  display: none;
+}
+
+.myOrders.pantallaNuevoPedido.verMisOficinas .contentListOffices {
+  display: block;
+  position: absolute;
+  max-width: 210px;
+  min-width: 200px;
+  padding: 0px 0px 2px 0px;
+  border: 1px solid #DBE2E5;
+  font-size: 14px;
+  overflow-y: auto;
+  max-height: 60px;
+}
+
+.myOrders .itemsOffice2 {
+  border-top: 1px solid #DBE2E5;
+  padding: 5px 0 5px 5px;
+  cursor: pointer;
+  background-color: white;
+}
+
+.myOrders .itemsOffice2:hover {
+  background-color: #F1F1F1;
+}
+
+.myOrders.pantallaNuevoPedido.verMisOficinas
+
+
+.myOrders .contentTitleNewOrder.usuarioDeUnaSolaOficina .contentSelectedOffice {
+  display: none;
+}
+
+.myOrders .contentTitleNewOrder.usuarioDeUnaSolaOficina .titleNewOrder {
+  display: block;
+}
+
 /******************** MEDIA QUERIS ***************************/
 
 @media (max-width: 719px){
@@ -1845,6 +1922,18 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
     overflow-y: auto;
     height: 195px;
     /*background-color: red;*/
+  }
+
+  .myOrders .titleNewOrder {
+    display: none;
+  }
+
+  .myOrders .btnApply2 {
+    display: block;
+  }
+
+  .myOrders .btnApply {
+    display: none;
   }
 
 
