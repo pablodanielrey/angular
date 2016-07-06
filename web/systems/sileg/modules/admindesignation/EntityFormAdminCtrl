@@ -1,0 +1,74 @@
+
+//***** Controlador de formulario, encargado de administrar un conjunto de fieldsets *****
+function EntityFormAdminCtrl($scope, $location, $window, $timeout, ServerAccess){
+  TableFormAdminCtrl.call(this, $scope, ServerAccess, $location, $window);
+
+  $scope.initializeFieldsets = function(){
+    //inicializacion de variables del controlador
+    $scope.initializeScopeFieldset("fields.asignatura");
+    $scope.initializeScopeFieldset("um.carga_horaria.asignatura");
+
+    //configuracion de relaciones
+    $scope.fieldsets["um.carga_horaria.asignatura"].config["asignatura"] = false;
+   }
+
+  //***** Procesamiento del formulario *****
+  $scope.processForm = function(){
+    $scope.processFieldset("fields.asignatura"); 
+  };
+		
+  //***** fieldset inicializado *****
+  $scope.fieldsetInitialized = function(fieldsetId){
+    $scope.formInitialized(fieldsetId);
+    if(fieldsetId == "fields.asignatura"){
+      var param = $scope.fieldsets["fields.asignatura"].fields["id"];
+
+      $scope.fieldsets["um.carga_horaria.asignatura"].params["asignatura"] = param
+      $scope.$broadcast("initializeFieldsetEvent","um.carga_horaria.asignatura");
+
+    }
+  };
+
+  //***** fieldset procesado *****
+  $scope.fieldsetProcessed = function(fieldsetId){
+    $scope.fieldsetProcessedMain(fieldsetId);
+
+    if(fieldsetId === "fields.asignatura"){
+      var param = $scope.fieldsets["fields.asignatura"].fields.id;
+      $scope.fieldsets["um.carga_horaria.asignatura"].params["asignatura"] = param;
+    }
+
+    if($scope.fieldsets["fields.asignatura"].status === "processed"){
+      if($scope.fieldsets["um.carga_horaria.asignatura"].status === "pre-processing"){
+        $scope.processFieldset("um.carga_horaria.asignatura");
+      }
+
+    }
+  };
+
+  //***** Inicializar *****
+  $scope.init = function(title){
+    title = (!title) ? "Administrar Asignatura" : null
+    $scope.initializeForm("fields.asignatura", "asignatura", title);
+  }      
+  
+  
+  $scope.initializeFields = function(data){
+  
+  
+  }
+  
+  
+  //***** Evento de inicializacion de fieldset *****
+  $scope.$on('$viewContentLoaded', function(event) {
+      Entity.findById(id).then(
+        function(response){
+          $scope.initializeFields(response.data);
+        },
+        function(error){ console.log(error); }
+      );)
+  });      
+}
+
+app.controller('EntityFormAdminCtrl', EntityFormAdminCtrl);
+

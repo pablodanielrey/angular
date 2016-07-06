@@ -81,14 +81,11 @@ class SilegModel:
         
         
     @classmethod
-    def getDesignationFull(cls, con, id):
-        #obtener datos completos de una designacion
-        
-        if id is None:
+    def findDesignationsByIds(cls, con, ids):       
+        if ids is None:
             return
             
-        designations = Designation.findById(con, [id])
-        return designations[0]
+        return Designation.findById(con, [ids])
         
         
         

@@ -30,9 +30,10 @@ class SilegWamp(ApplicationSession):
         logging.debug('registering methods')
         yield from self.register(self.getCathedras_async,'sileg.getCathedras')
         yield from self.register(self.getUsers_async,'sileg.getUsers')
-        yield from self.register(self.getDesignationFull_async,'sileg.getDesignationFull')
         yield from self.register(self.getEconoPageDataUser_async,'sileg.getEconoPageDataUser')
         yield from self.register(self.getEconoPageDataPlace_async,'sileg.getEconoPageDataPlace')
+        
+        yield from self.register(self.findDesignationsByIds_async,'sileg.findDesignationsByIds')
         
         
    
@@ -65,17 +66,17 @@ class SilegWamp(ApplicationSession):
         return r
         
                
-    def getDesignationFull(self, id):
+    def findDesignationsByIds(self, ids):
         con = self.conn.get()
         try:
-            return self.sileg.getDesignationFull(con, id)
+            return self.sileg.findDesignationsByIds(con, ids)
         finally:
             self.conn.put(con)
 
     @coroutine
-    def getDesignationFull_async(self, id):
+    def findDesignationsByIds_async(self, ids):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getDesignationFull, id)
+        r = yield from loop.run_in_executor(None, self.findDesignationsByIds, ids)
         return r
         
                        

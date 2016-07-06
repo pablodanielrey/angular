@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<html ng-app="mainApp">
+<head>
+  <meta charset="utf-8"/>
+  <meta name='viewport' content='width=device-width'/>
+  <title>Facultad de Ciencias Económicas | Universidad Nacional de La Plata</title>
+
+
+  <!-- esto es el estilo de font awesome para tener los iconos -->
+  <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+
+  
+  <script src="/libs/bower_components/angularjs/angular.js"></script>
+  <script src="/libs/bower_components/angular-route/angular-route.js"></script>
+  <script src="/libs/bower_components/autobahn/autobahn.js"></script>
+  <script src="/libs/bower_components/angular-wamp/release/angular-wamp.js"></script>
+
+  <script type="text/javascript" src="/config-sileg.json"></script>
+
+  <script type="text/javascript" src="./index.module.js"></script>
+  
+  
+  <script type="text/javascript" src="../../services/Utils.js"></script>  
+  <script type="text/javascript" src="../../services/Cache.js"></script>  
+  <script type="text/javascript" src="../../services/Session.js"></script>
+  <script type="text/javascript" src="../../services/Users.js"></script>
+
+  <script type="text/javascript" src="./services/format/Format.js"></script>  
+  <script type="text/javascript" src="./services/format/DesignationFormat.js"></script>
+  <script type="text/javascript" src="./services/systems/sileg/Designation.js"></script>
+
+
+
+  <script type="text/javascript" src="./route.js"></script>
+  <script type="text/javascript" src="./index.controller.js"></script>
+
+
+  <script type="text/javascript" src="./modules/admindesignation/admindesignation.controller.js"></script>
+
+</head>
+
+<body class="sileg" ng-controller='IndexCtrl'>
+
+
+  <header ng-show="mainTitle" class="well text-info"><h2>{{mainTitle}}</h2></header>
+  
+  <div ng-view></div>
+
+</body>
