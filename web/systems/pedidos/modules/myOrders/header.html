@@ -1,0 +1,19 @@
+<!-- --------------- HEADER DEL SISTEMA ----------------- -->
+<div class="header">
+  <div class="contentHeader">
+
+    <div class="textMisPedidos">
+      Mis Pedidos
+    </div>
+
+    <div class="contentFilters">
+        <div class="textFilters"><i class="fa fa-sliders" aria-hidden="true"></i> Ordenar</div>
+        <!-- <button class="btnFilter" title="Buscar..." ng-click="view.style = 'buscarPedido'"><i class="fa fa-search" aria-hidden="true"></i></button> -->
+        <button class="btnFilter" title="Ordenar por Fecha" ng-click="vm.sortDate"><i class="fa fa-calendar-o" aria-hidden="true"></i></button>
+        <button class="btnFilter" title="Ordenar por Estado" ng-click="vm.sortStatus()"><i class="fa fa-sort-amount-asc" aria-hidden="true"></i></button>
+    </div>
+
+    <div> <button class="btnNew" ng-click="vm.create()">NUEVO PEDIDO</button> </div>
+
+  </div>
+</div>

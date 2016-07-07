@@ -1,0 +1,48 @@
+<!-- --------------- LISTADO DE PEDIDOS ------------------ -->
+    <div class="contentOrders">
+      <div class="itemOrders" ng-repeat="issue in vm.model.issues">
+          <div class="itemInfo">
+
+              <div class="itemDate">
+                  <div class="textNumerOrders">Nº {{issue.id}}</div>
+                  <div class="textDateOrders">{{vm.getDate(issue) | date: 'd MMMM  yyyy'}}</div>
+                  <div class="textDaysOrders">{{vm.getDiffDay(issue)}}</div>
+              </div>
+
+              <div class="itemStatus">
+                  <div class="status {{vm.getStatus(issue)}}">
+                      <!-- VARIABLES:
+                      abierta, enProgreso, cerrada, pausada, rechazada -->
+                      <div class="textA1">ABIERTA</div>
+                      <div class="textA2"></div>
+                      <div class="textEC1">EN CURSO</div>
+                      <div class="textEC2"></div>
+                      <div class="textC1">CERRADA</div>
+                      <div class="textC2"></div>
+                      <div class="textP1">PAUSADA</div>
+                      <div class="textP2"></div>
+                      <div class="textR1">RECHAZADA</div>
+                      <div class="textR2"></div>
+                  </div>
+              </div>
+
+              <div class="itemsType">
+                <div class="textType">Económico Financiero</div>
+                <div class="textType2">Compras</div>
+                <div class="textSubType">{{issue.subject}}</div>
+              </div>
+
+              <div class="itemsOffice">
+                <div class="textMini">Solicitado por:</div>
+                <div class="textOffice">{{issue.projectName}}</div>
+                <div class="textName">{{vm.getFullName(issue)}}</div>
+              </div>
+
+          </div>
+
+          <div class="itemActions" ng-click="vm.viewDetail(issue)">
+            <i class=" fa fa-angle-right" aria-hidden="true"></i>
+          </div>
+
+      </div>
+    </div>
