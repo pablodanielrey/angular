@@ -48,7 +48,7 @@ function MyOrdersCtrl($rootScope, $scope, Issue, Login, $timeout, Users, Office)
   $scope.view = {
     style: '',
     styles : ['', 'pantallaNuevoPedido','pantallaDetallePedido'],
-    status: ['Nueva', 'En curso', 'Finaliza', '', 'Cerrada']
+    status: ['','abierta', 'enProgreso', 'pausada', 'rechazada', 'cerrada']
   }
 
 
@@ -76,8 +76,7 @@ function MyOrdersCtrl($rootScope, $scope, Issue, Login, $timeout, Users, Office)
         $scope.$apply(function() {
           for (var i = 0; i < issues.length; i++) {
             dateStr = issues[i].start;
-            dateSplit = dateStr.split('-');
-            issues[i].date = new Date(dateSplit[0],dateSplit[1] - 1,dateSplit[2]);
+            issues[i].date = new Date(dateStr);
             loadUser(issues[i].userId);
           }
           $scope.model.issues = issues;
@@ -262,7 +261,7 @@ function MyOrdersCtrl($rootScope, $scope, Issue, Login, $timeout, Users, Office)
   }
 
   function getStatus(issue) {
-    return $scope.view.status[issue.statusId - 1];
+    return $scope.view.status[issue.statusId];
   }
 
   function getFullName(issue) {
