@@ -52,6 +52,10 @@ html, body {
   margin-left: 10px;
 }
 
+.access .textHeader {
+  color: #B9BEC2;
+}
+
 .access .contentMain {
   height: 100%;
   width: 100%;
@@ -69,12 +73,16 @@ html, body {
 
 }
 
+.access .progressBar {
+    height: 10px;
+}
 
 .access.pantallaUsuario .progressBar {
   background-color: #024772;
   height: 10px;
-  animation: barrita 2s;
-  animation-delay: 1s;
+  animation: barrita 3s;
+  /*animation-delay: 1s;*/
+  width: 100%;
 }
 
 @keyframes barrita {
@@ -82,7 +90,7 @@ html, body {
     width: 0px;
   }
   100% {
-    width: 100px;
+    width: 100%;
   }
 }
 
@@ -340,7 +348,25 @@ html, body {
   transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
 }
 
+.access .contentLogoFCE {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction: row;
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+  justify-content: flex-end;
+  -webkit-justify-content:  flex-end;
+  -moz-justify-content:  flex-end;
+  width: 100%;
+  opacity: 0.7;
 
+  /*background-color: red;*/
+}
+
+.access .imgLogo {
+    padding-right: 25px;
+}
 
 
 /******************** MEDIA QUERIS ***************************/
@@ -373,6 +399,90 @@ html, body {
     -moz-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
     -o-transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
     transition: all 200ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+  }
+
+  .access .contentInfoUser {
+    align-self: flex-start;
+    -webkit-align-self: flex-start;
+    -moz-align-self: flex-start;
+    align-items: center;
+    -webkit-align-items: center;
+    -moz-align-items: center;
+    margin-top: 20px;
+  }
+
+
+  .access .screenUser {
+    display: flex;
+    display: -webkit-flex; /* Safari */
+    display: -moz-flex; /* mozilla */
+    flex-direction: column;
+    -webkit-flex-direction: column;
+    -moz-flex-direction: column;
+    align-items:  center;
+  }
+
+  .access .contentUser {
+    align-self: flex-start;
+    -webkit-align-self: flex-start;
+    -moz-align-self: flex-start;
+    justify-content: center;
+    -webkit-justify-content: center;
+    -moz-justify-content: center;
+    width: 230px;
+    height: 100px;
+    color: #024772;
+    margin-right: 0px;
+  }
+
+ .access .avatarUser {
+    height: 100px;
+    width: 100px;
+    background-color: #024772;
+    border-radius: 100%;
+    margin-left: 0px;
+    padding: 3px;
+    animation: alfa .3s;
+  }
+
+  .access .imgUser {
+    height: 100px;
+    width: 100px;
+    border-radius: 100%;
+  }
+
+  .access.pantallaUsuario .imgUser {
+    animation: tamano .3s;
+    border-radius: 100%;
+  }
+
+  .access .textWelcome {
+    font-size: 25px;
+  }
+
+  .access .textNameUser {
+    font-size: 30px;
+  }
+
+  .access .textHeader {
+    display: none;
+  }
+
+  .access .contentLogoFCE {
+    display: none;
+  }
+
+  @keyframes tamano {
+    0% {
+      width: 0px;
+      height: 175px;
+      opacity: 0;
+    }
+    100% {
+      width: 100px;
+      height: 100px;
+      opacity: 1;
+    }
   }
 
 }
