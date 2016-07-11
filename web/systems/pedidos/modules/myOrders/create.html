@@ -72,7 +72,7 @@
             <div class="addMenssage2">
                 <div><button class="btnAdd" title="Adjuntar Archivo"><i class="fa fa-paperclip" aria-hidden="true"></i> Subir Archivo</button></div>
                 <div class="ArchivesAdd">
-                  <input type="file" class="inputFile"></input>
+                  <input type="file" on-read-file-binary-string="vm.addFile(fileName,fileContent, fileType)" class="inputFile" />
                   <!-- <i class="fa fa-file-o"></i> Instructivo.pdf <button class="btnTrashAdd"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
                   <i class="fa fa-file-o"></i> pantalla_de_error.jpg <button class="btnTrashAdd"><i class="fa fa-trash-o" aria-hidden="true"></i></button> -->
                 </div>

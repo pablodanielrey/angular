@@ -14,16 +14,16 @@ app.directive('onReadFileBinaryString', function ($parse) {
 							var file = src.files[0];
 
 							reader.fileName = file.name;
-							//reader.fileType = file.type;
-							//reader.fileSize = file.size;
+							reader.fileType = file.type;
+							reader.fileSize = file.size;
 							//reader.fileLastModified = file.lastModified;
 
 							reader.onload = function(onLoadEvent) {
 								scope.$apply(function() {
 									fn(scope, {
 										fileName: onLoadEvent.target.fileName,
-										//fileType: onLoadEvent.target.fileType,
-										//fileSize: onLoadEvent.target.fileSize,
+										fileType: onLoadEvent.target.fileType,
+										fileSize: onLoadEvent.target.fileSize,
 										//fileLastModified: onLoadEvent.target.fileLastModified,
 										fileContent:onLoadEvent.target.result
 									});

@@ -48,6 +48,7 @@
         vm.create = create;
         vm.save = save;
         vm.cancel = cancel;
+        vm.addFile = addFile;
 
         vm.sortDate = sortDate;
         vm.sortStatus = sortStatus;
@@ -170,6 +171,11 @@
           vm.view.style = vm.view.styles[1];
           clearOffice();
           vm.model.description = '';
+        }
+
+        function addFile(fileName,fileContent, fileType) {
+          console.log(fileName);
+          console.log(fileType);
         }
 
         function save() {
