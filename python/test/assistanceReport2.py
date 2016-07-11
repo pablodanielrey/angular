@@ -215,7 +215,7 @@ if __name__ == '__main__':
 
     logging.getLogger().setLevel(logging.INFO)
 
-    rstart = datetime.datetime.combine((datetime.datetime.now() - datetime.timedelta(days=120)).date(),datetime.time())
+    rstart = datetime.datetime.combine((datetime.datetime.now() - datetime.timedelta(days=30)).date(),datetime.time())
     rend = datetime.datetime.now()
     if len(sys.argv) >= 2:
         import dateutil
