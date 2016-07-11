@@ -103,28 +103,23 @@ class IssueWamp(ApplicationSession):
         r = yield from loop.run_in_executor(None, self.findById, sid, issue_id)
         return r
 
-    def create(self, sid, subject, description, parentId, officeId):
+    def create(self, sid, subject, description, parentId, officeId, fromOfficeId, authorId):
         con = self.conn.get()
         try:
+            import pdb; pdb.set_trace()
+            
             userId = self.loginModel.getUserId(con, sid)
-            issue = Issue()
-            issue.parentId = parentId
-            issue.projectId = officeId
-            issue.userId = userId
-            issue.subject = subject
-            issue.description = description
-            issue.tracker = RedmineAPI.TRACKER_ERROR
-
-            iss = issue.create(con)
+            authorId = userId if authorId is  None else authorId
+            iss = self.issueModel.create(con, parentId, officeId, authorId, subject, description, fromOfficeId, userId)
             con.commit()
             return iss
         finally:
             self.conn.put(con)
 
     @coroutine
-    def create_async(self, sid, subject, description, parentId, officeId):
+    def create_async(self, sid, subject, description, parentId, officeId, fromOfficeId, authorId):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.create, sid, subject, description, parentId, officeId)
+        r = yield from loop.run_in_executor(None, self.create, sid, subject, description, parentId, officeId, fromOfficeId, authorId)
         return r
 
     def createComment(self, sid, subject, description, parentId, officeId):

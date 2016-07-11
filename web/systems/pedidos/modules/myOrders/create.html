@@ -3,7 +3,7 @@
   <div class="subContentNewOrder">
       <div class="newOrder">
           <!-- ---- HEADER DE SOLICITAR PEDIDO ---- -->
-          <div class="contentTitleNewOrder ">
+          <div class="contentTitleNewOrder" ng-class="{true:'usuarioDeUnaSolaOficina'}[vm.getUserOffices().length <= 1]">
               <!-- ---- VARIABLES: usuarioDeUnaSolaOficina ---- -->
               <div class="contentBackNewOrder">
                   <div class="contentBtnReturn">
@@ -17,12 +17,11 @@
               <div class="contentSelectedOffice">
                 <div class="textMini">Enviar desde</div>
                 <div class="contentSelectOffice" ng-click="vm.view.style2 = 'verMisOficinas'">
-                    <div>Detise</div>
+                    <div>{{vm.model.selectedFromOffice.name}}</div>
                     <div><i class="fa fa-caret-down" aria-hidden="true"></i></div>
                 </div>
                 <div class="contentListOffices">
-                  <div class="itemsOffice2"  ng-click="vm.view.style2 = ''"> Detise</div>
-                  <div class="itemsOffice2"  ng-click="vm.view.style2 = ''"> Detise</div>
+                  <div class="itemsOffice2"  ng-repeat="office in vm.getUserOffices()" ng-click="vm.selectFromOffice(office)"> {{office.name}}</div>
                 </div>
               </div>
               <div>

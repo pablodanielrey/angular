@@ -22,6 +22,8 @@
           searchOffice: {name:''},
           offices: [],
           office: null,
+          userOffices: [],
+          selectedFromOffice: null,
           searchArea: {name:''},
           selectedArea: null,
           areas: [],
@@ -46,6 +48,7 @@
         vm.create = create;
         vm.save = save;
         vm.cancel = cancel;
+
         vm.sortDate = sortDate;
         vm.sortStatus = sortStatus;
 
@@ -53,12 +56,14 @@
         vm.getMyIssues = getMyIssues;
         vm.loadOffices = loadOffices;
         vm.loadOffice = loadOffice;
+        vm.loadUserOffices = loadUserOffices;
         vm.loadAreas = loadAreas;
         vm.loadSubjects = loadSubjects;
 
         vm.selectOffice = selectOffice;
         vm.selectArea = selectArea;
         vm.selectSubject = selectSubject;
+        vm.selectFromOffice = selectFromOffice;
 
         vm.getDate = getDate;
         vm.getDiffDay = getDiffDay;
@@ -66,6 +71,7 @@
         vm.getFullName = getFullName;
         vm.viewDetail = viewDetail;
         vm.getOffice = getOffice;
+        vm.getUserOffices = getUserOffices;
         vm.getName = getName;
         vm.getLastname = getLastname;
         vm.getUserPhoto = getUserPhoto;
@@ -88,6 +94,7 @@
           vm.model.users = [];
           vm.getMyIssues();
           vm.loadOffices();
+          vm.loadUserOffices(vm.model.userId);
         }
 
 
@@ -149,6 +156,11 @@
           vm.view.style2 = '';
         }
 
+        function selectFromOffice(office) {
+          vm.view.style2 = '';
+          vm.model.selectedFromOffice = office;
+        }
+
         /* ************************************************************************* */
         /* ***************************** CREACION ********************************** */
         /* ************************************************************************* */
@@ -164,13 +176,17 @@
           var office = (vm.model.selectedArea != null) ? vm.model.selectedArea : vm.model.selectedOffice;
           var subject = vm.model.subject;
           var description = vm.model.description;
+          var parentId = null;
+          var fromOfficeId = (vm.model.selectedFromOffice == null) ? null : vm.model.selectedFromOffice.id;
+          var authorId = vm.model.authorId;
+
 
           if (office == null || vm.model.subjects.indexOf(subject) < 0) {
             window.alert('Complete los campos correctamente');
             return;
           }
 
-          Issue.create(subject, description, null, office.id).then(
+          Issue.create(subject, description, parentId, office.id, fromOfficeId, authorId).then(
             function(data) {
               $scope.$apply(function() {
                 vm.view.style = vm.view.styles[0];
@@ -270,6 +286,33 @@
               console.log(error);
             }
           );
+        }
+
+        function loadUserOffices(userId) {
+          vm.model.selectedFromOffice = null;
+          vm.model.userOffices = [];
+          Office.getOfficesByUser(userId, false).then(
+            function(ids) {
+              if (ids == null || ids.length <= 0) {
+                return;
+              }
+              Office.findById(ids).then(
+                function(offices) {
+                  console.log(offices);
+                  vm.model.userOffices = (offices == null || offices.length <= 0) ? [] : offices;
+                  vm.model.selectedFromOffice = (offices.length > 0) ? offices[0] : null;
+                }, function(error) {
+                  console.log(error);
+                }
+              )
+            }, function(error) {
+              console.log(error);
+            }
+          );
+        }
+
+        function getUserOffices() {
+          return vm.model.userOffices;
         }
 
         function getOffice() {

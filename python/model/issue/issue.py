@@ -23,6 +23,20 @@ class IssueModel():
         areas = offs[0].getAreas(con)
         return Office.findById(con, areas)
 
+    @classmethod
+    def create(cls, con, parentId, officeId, authorId, subject, description, fromOfficeId, creatorId):
+        issue = Issue()
+        issue.parentId = parentId
+        issue.projectId = officeId
+        issue.userId = authorId
+        issue.subject = subject
+        issue.description = description
+        issue.tracker = RedmineAPI.TRACKER_ERROR
+        issue.fromOfficeId = fromOfficeId
+        issue.creatorId = creatorId
+
+        return issue.create(con)
+
 
 class Issue(JSONSerializable):
 
@@ -40,6 +54,8 @@ class Issue(JSONSerializable):
         self.children = []
         self.files = []
         self.tracker = RedmineAPI.TRACKER_ERROR
+        self.fromOfficeId = None
+        self.creatorId = None
 
     @classmethod
     def findById(cls, con, userId, id):
@@ -81,6 +97,8 @@ class RedmineAPI:
     STATUS_WORKING = 2
     STATUS_FINISH = 3
     STATUS_CLOSE = 5
+    CREATOR_FIELD = 2
+    FROM_FIELD = 3
 
     @classmethod
     def _loadFile(cls, file):
@@ -224,10 +242,22 @@ class RedmineAPI:
         issue.parent_issue_id = issue.parentId
         issue.start_date = iss.start
         issue.tracker_id = iss.tracker
+        cfields = cls.getCustomFields(iss)
+        if len(cfields) > 0:
+            issue.custom_fields = cfields
         # issue.uploads = issue.files
         issue.save()
 
         return True
+
+    @classmethod
+    def getCustomFields(cls, issue):
+        custom_fields = []
+        if issue.creatorId != issue.userId and issue.creatorId is not None:
+            custom_fields.append({'id': RedmineAPI.CREATOR_FIELD, 'value': issue.creatorId})
+        if issue.fromOfficeId is not None:
+            custom_fields.append({'id': RedmineAPI.FROM_FIELD, 'value': issue.fromOfficeId})
+        return custom_fields
 
     @classmethod
     def changeStatus(cls, con, userId, issue_id, project_id, status):

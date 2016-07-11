@@ -255,6 +255,7 @@ class OfficeDAO(DAO):
         return ids
 
 
+    '''
     @classmethod
     def getOfficesByUser(cls, con, userId):
         cur = con.cursor()
@@ -266,6 +267,7 @@ class OfficeDAO(DAO):
             return [ s['office_id'] for s in cur ]
         finally:
             cur.close()
+    '''
 
     '''
         obtiene todas las oficinas en las cuales el usuario tiene asignado un rol
