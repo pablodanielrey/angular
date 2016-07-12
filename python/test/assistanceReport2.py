@@ -180,8 +180,6 @@ def statsToPyooUser(rp, user, stats):
     finally:
         doc.close()
 
-
-
 def statsToPyooOffice(rp, off, stats, users):
     rpp = '{}/{}'.format(rp, off.name)
     import os
@@ -244,10 +242,14 @@ if __name__ == '__main__':
             uids.extend([u for u in office.users if u not in uids])
         users = UserDAO.findById(con, uids)
 
+        """ filtro a la gente que no debe ser manejada por el sistema de asistencia """
+        usersNotInAssistance = [ uid for uid in uids if not AssistanceModel.isAssistance(con, uid, rstart, rend) ]
+
         """ obtengo las estadisticas """
         logging.info('Calculando las estadísticas de {} usuarios'.format(len(uids)))
+        toGetStatistics = [ uid for uid in uids if uid not in usersNotInAssistance ]
         a = inject.instance(AssistanceModel)
-        stats = a.getStatistics(con, uids, rstart, rend)
+        stats = a.getStatistics(con, toGetStatistics, rstart, rend)
 
         """ creo los reportes por usuario y se lo envio """
         for user in users:
@@ -255,17 +257,25 @@ if __name__ == '__main__':
             #if user.id != '89d88b81-fbc0-48fa-badb-d32854d3d93a' and user.id != '0cd70f16-aebb-4274-bc67-a57da88ab6c7' and user.id != '4b89c515-2eba-4316-97b9-a6204d344d3a' and user.id != '35f7a8a6-d844-4d6f-b60b-aab810610809' and user.id != '205de802-2a15-4652-8fde-f23c674a1246':
             #    continue
 
+            send = False
             rp = createReportDir(user)
-            statsToPyooUser(rp, user, stats)
+            if user not in usersNotInAssistance:
+                send = True
+                statsToPyooUser(rp, user, stats)
 
             officesIds = Office.getOfficesByUserRole(con, user.id, tree=True, role='autoriza')
             ''' genero el reporte de esa oficina '''
             for officeId in officesIds:
                 off = findOffice(officeId, offices)
-                statsToPyooOffice(rp, off, stats, users)
 
-            fn = createZipFile(user, rp)
-            sendMail(con, user, fn)
+                """ si existe al menos un usuario dentor de la oficina que esta manejado por el sistema de asistencia """
+                if len([ uid for uid in off.users if uid not in usersNotInAssistance ]) > 0:
+                    send = True
+                    statsToPyooOffice(rp, off, stats, users)
+
+            if send:
+                fn = createZipFile(user, rp)
+                sendMail(con, user, fn)
 
     finally:
         conn.put(con)
