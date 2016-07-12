@@ -103,9 +103,10 @@ def sendMail(con, user, fn):
     encoders.encode_base64(msg)
     msg.add_header('Content-Disposition', 'attachment', filename='reporte-asistencia.zip')
 
+    name = user.name + ' ' + user.lastname + ' ' + user.dni
     logging.info('enviando correo')
     outer = MIMEMultipart()
-    outer['Subject'] = 'Reporte Asistencia'
+    outer['Subject'] = 'Reporte Asistencia {}'.format(name)
     outer['From'] = 'ditesi@econo.unlp.edu.ar'
     outer['To'] = ' ,'.join(emails)
     outer.attach(msg)
