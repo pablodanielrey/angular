@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html ng-app="mainApp">
+<head>
+  <meta charset="utf-8"/>
+  <meta name='viewport' content='width=device-width'/>
+  <title>Biblioteca | FCE </title>
+
+  <script src="/libs/bower_components/angularjs/angular.js"></script>
+  <script src="/libs/bower_components/angular-route/angular-route.js"></script>
+  <script src="/libs/bower_components/autobahn/autobahn.js"></script>
+  <script src="/libs/bower_components/angular-wamp/release/angular-wamp.js"></script>
+
+  <!-- esto es el estilo de font awesome para tener los iconos -->
+  <link rel="stylesheet" href="/libs/font-awesome-4.5.0/css/font-awesome.min.css">
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+  <link rel="shortcut icon" href="/systems/fce/img/favicon2.ico">
+
+  <script type="text/javascript" src="/config.json"></script>
+
+  <script type="text/javascript" src="/systems/biblioteca/index.module.js"></script>
+  <script type="text/javascript" src="/systems/biblioteca/index.controller.js"></script>
+  <script type="text/javascript" src="/systems/biblioteca/routes.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/fce/index.css"/>
+
+	<!-- servicios -->
+	<script type="text/javascript" src="/services/Credentials.js"></script>
+	<script type="text/javascript" src="/services/Utils.js"></script>
+	<script type="text/javascript" src="/services/Cache.js"></script>
+	<script type="text/javascript" src="/services/Session.js"></script>
+	<script type="text/javascript" src="/services/Notifications.js"></script>
+	<script type="text/javascript" src="/services/Profiles.js"></script>
+  <script type="text/javascript" src="/services/Login.js"></script>
+
+	<!-- modules -->
+  <script type="text/javascript" src="/systems/biblioteca/modules/index.controller.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/biblioteca/modules/index.css"/>
+
+  <script type="text/javascript" src="/systems/biblioteca/modules/library/index.controller.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/biblioteca/modules/library/index.css"/>
+
+  <script type="text/javascript" src="/systems/biblioteca/modules/menu/index.controller.js"></script>
+  <script type="text/javascript" src="/systems/biblioteca/modules/menuCel/index.controller.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/biblioteca/modules/menuCel/index.css"/>
+
+  <script type="text/javascript" src="/modules/messages/messages.js"></script>
+  <link rel="stylesheet" type="text/css" href="/modules/messages/messages.css"/>
+
+  <link rel="stylesheet" type="text/css" href="/systems/fce/modules/header/header.css"/>
+  <link rel="stylesheet" type="text/css" href="/systems/fce/modules/footer/footer.css"/>
+
+
+  <link rel="stylesheet" type="text/css" href="/systems/biblioteca/index.css"/>
+
+</head>
+<body class="sistema  {{styleMenu}}" ng-controller="IndexCtrl">
+
+    <div ng-include="'/systems/fce/modules/header/index.html'"></div>
+    <div class="main">
+      <div class="MenuContent" ng-controller="MenuCtrl" ng-include="'/systems/biblioteca/modules/menu/index.html'"></div>
+      <div class="MenuCel" ng-controller="MenuCelCtrl" ng-include="'/systems/biblioteca/modules/menuCel/index.html'"></div>
+      <div class="viewContent" ng-view></div>
+    </div>
+    <div ng-include="'/systems/fce/modules/footer/index.html'"></div>
+</body>
+</html>
