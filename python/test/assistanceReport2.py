@@ -111,7 +111,7 @@ def sendMail(con, user, fn):
     outer.attach(msg)
     try:
         with smtplib.SMTP('163.10.17.115') as s:
-            s.sendmail('ditesi@econo.unlp.edu.ar', ['pablo@econo.unlp.edu.ar','julio.ciappa@econo.unlp.edu.ar'], outer.as_string())
+            s.sendmail('ditesi@econo.unlp.edu.ar', ['pablo@econo.unlp.edu.ar'], outer.as_string())
     except Exception as e:
         logging.exception(e)
 
