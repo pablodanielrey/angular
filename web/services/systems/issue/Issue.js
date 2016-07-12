@@ -65,10 +65,10 @@ function Issue (Utils, Session, $wamp) {
     });
 	}
 
-  function create(subject, description, parentId, officeId, fromOfficeId, authorId) {
+  function create(subject, description, parentId, officeId, fromOfficeId, authorId, files) {
 		return new Promise(function(cok, cerr) {
       var sid = Session.getSessionId();
-  		$wamp.call('issue.create', [sid, subject, description, parentId, officeId, fromOfficeId, authorId])
+  		$wamp.call('issue.create', [sid, subject, description, parentId, officeId, fromOfficeId, authorId, files])
       .then(function(v) {
         cok(v);
       },function(err) {

@@ -103,23 +103,21 @@ class IssueWamp(ApplicationSession):
         r = yield from loop.run_in_executor(None, self.findById, sid, issue_id)
         return r
 
-    def create(self, sid, subject, description, parentId, officeId, fromOfficeId, authorId):
+    def create(self, sid, subject, description, parentId, officeId, fromOfficeId, authorId, files):
         con = self.conn.get()
         try:
-            import pdb; pdb.set_trace()
-            
             userId = self.loginModel.getUserId(con, sid)
             authorId = userId if authorId is  None else authorId
-            iss = self.issueModel.create(con, parentId, officeId, authorId, subject, description, fromOfficeId, userId)
+            iss = self.issueModel.create(con, parentId, officeId, authorId, subject, description, fromOfficeId, userId, files)
             con.commit()
             return iss
         finally:
             self.conn.put(con)
 
     @coroutine
-    def create_async(self, sid, subject, description, parentId, officeId, fromOfficeId, authorId):
+    def create_async(self, sid, subject, description, parentId, officeId, fromOfficeId, authorId, files):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.create, sid, subject, description, parentId, officeId, fromOfficeId, authorId)
+        r = yield from loop.run_in_executor(None, self.create, sid, subject, description, parentId, officeId, fromOfficeId, authorId, files)
         return r
 
     def createComment(self, sid, subject, description, parentId, officeId):

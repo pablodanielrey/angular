@@ -4,9 +4,10 @@ from model.users.users  import UserPassword, User
 from model.offices.offices import Office
 from model.serializer.utils import JSONSerializable
 from model.registry import Registry
-
+import base64
 import logging
 import datetime
+import uuid
 
 class IssueModel():
 
@@ -24,7 +25,7 @@ class IssueModel():
         return Office.findById(con, areas)
 
     @classmethod
-    def create(cls, con, parentId, officeId, authorId, subject, description, fromOfficeId, creatorId):
+    def create(cls, con, parentId, officeId, authorId, subject, description, fromOfficeId, creatorId, files):
         issue = Issue()
         issue.parentId = parentId
         issue.projectId = officeId
@@ -34,6 +35,16 @@ class IssueModel():
         issue.tracker = RedmineAPI.TRACKER_ERROR
         issue.fromOfficeId = fromOfficeId
         issue.creatorId = creatorId
+
+        issue.files = []
+        for file in files:
+            data = base64.b64decode(file['content'])
+            id = str(uuid.uuid4())
+            path = '/tmp/' + id
+            f = open(path, 'wb')
+            f.write(data)
+            f.close()
+            issue.files.append({'path':path, 'filename':file['name'], 'content_type': file['type']})
 
         return issue.create(con)
 
@@ -49,6 +60,7 @@ class Issue(JSONSerializable):
         self.description = None
         self.statusId = 1
         self.assignedToId = None
+        self.files = []
         self.start = datetime.date.today()
         self.updated = None
         self.children = []
@@ -245,7 +257,8 @@ class RedmineAPI:
         cfields = cls.getCustomFields(iss)
         if len(cfields) > 0:
             issue.custom_fields = cfields
-        # issue.uploads = issue.files
+
+        issue.uploads = iss.files
         issue.save()
 
         return True

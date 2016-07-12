@@ -5,10 +5,10 @@
         .module('mainApp')
         .controller('MyOrdersCtrl', MyOrdersCtrl);
 
-    MyOrdersCtrl.$inject = ['$scope', 'Login', 'Issue', 'Users', 'Office'];
+    MyOrdersCtrl.$inject = ['$scope', 'Login', 'Issue', 'Users', 'Office', 'Files'];
 
     /* @ngInject */
-    function MyOrdersCtrl($scope, Login, Issue, Users, Office) {
+    function MyOrdersCtrl($scope, Login, Issue, Users, Office, Files) {
         var vm = this;
 
         vm.model = {
@@ -22,6 +22,7 @@
           searchOffice: {name:''},
           offices: [],
           office: null,
+          files: [],
           userOffices: [],
           selectedFromOffice: null,
           searchArea: {name:''},
@@ -49,6 +50,7 @@
         vm.save = save;
         vm.cancel = cancel;
         vm.addFile = addFile;
+        vm.removeFile = removeFile;
 
         vm.sortDate = sortDate;
         vm.sortStatus = sortStatus;
@@ -93,6 +95,7 @@
         function initializeModel() {
           vm.model.issues = [];
           vm.model.users = [];
+          vm.model.files = [];
           vm.getMyIssues();
           vm.loadOffices();
           vm.loadUserOffices(vm.model.userId);
@@ -171,11 +174,24 @@
           vm.view.style = vm.view.styles[1];
           clearOffice();
           vm.model.description = '';
+          vm.model.files = [];
         }
 
-        function addFile(fileName,fileContent, fileType) {
-          console.log(fileName);
-          console.log(fileType);
+        function addFile(fileName,fileContent, fileType, fileSize) {
+          var file = {};
+          file.name = fileName;
+          file.content = window.btoa(fileContent);
+          file.type = fileType;
+          file.size = fileSize;
+          file.codec = Files.BASE64;
+          vm.model.files.push(file);
+        }
+
+        function removeFile(file) {
+          var index = vm.model.files.indexOf(file);
+          if (index >= 0) {
+            vm.model.files.splice(index, 1);
+          }
         }
 
         function save() {
@@ -192,7 +208,7 @@
             return;
           }
 
-          Issue.create(subject, description, parentId, office.id, fromOfficeId, authorId).then(
+          Issue.create(subject, description, parentId, office.id, fromOfficeId, authorId, vm.model.files).then(
             function(data) {
               $scope.$apply(function() {
                 vm.view.style = vm.view.styles[0];
