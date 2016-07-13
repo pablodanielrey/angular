@@ -289,25 +289,17 @@
         }
 
         function loadOffice(issue) {
-          if (issue == null || issue.userId == null) {
+          if (issue == null || issue.userId == null || issue.fromOfficeId == undefined) {
             vm.model.office = null;
+            return;
           }
-          Office.getOfficesByUser(issue.userId, false).then(
-            function(ids) {
-              if (ids == null || ids.length <= 0) {
-                return;
-              }
-              Office.findById(ids).then(
-                function(offices) {
-                  vm.model.office = (offices == null || offices.length <= 0) ? null : offices[0];
-                }, function(error) {
-                  console.log(error);
-                }
-              )
+          Office.findById([issue.fromOfficeId]).then(
+            function(offices) {
+              vm.model.office = (offices == null || offices.length <= 0) ? null : offices[0];
             }, function(error) {
               console.log(error);
             }
-          );
+          )
         }
 
         function loadUserOffices(userId) {
