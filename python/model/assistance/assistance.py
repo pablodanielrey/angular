@@ -208,6 +208,15 @@ class AssistanceModel:
             result[d.userId].append(d)
         return result
 
+    @classmethod
+    def isAssistance(cls, con, userId, start, end):
+        """
+            Chequea si ese usuario es controlado por el sistema de asistencia dentro de ese rango de fechas
+            En realidad eso quiere decir si tiene algun horario definido dentro de las fechas especificadas
+        """
+        return len(Schedule.findByUserId(con, [userId], start, end)) > 0
+
+
     def _getSchedules(self, con, userIds, start, end):
         ss = ScheduleDAO.findByUserId(con, userIds, start, end)
         schedules = AssistanceModel._classifyByUserId(ss)
@@ -391,7 +400,6 @@ class AssistanceModel:
     def getScheduleDataInWeek(self, con, userId, date):
         schedules = Schedule.findByUserIdInWeek(con, userId, date)
         return [ScheduleData(key, schedules[key], userId) for key in schedules]
-
 
     def createSingleDateJustification(self,con, date, userId, ownerId, justClazz, justModule):
         module = importlib.import_module(justModule)
