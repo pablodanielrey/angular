@@ -74,18 +74,72 @@ class SilegModel:
         return Place.findById(con, placesIds)    
         
         
+        
+
     @classmethod
-    def getPositionsById(cls, con, ids):
+    def findPlacesByIds(cls, con, ids):
+        return Place.findById(con, ids)
+
+    @classmethod
+    def findPositionsByIds(cls, con, ids):
         return Position.findById(con, ids)
-        
-        
-        
+
     @classmethod
     def findDesignationsByIds(cls, con, ids):       
-        if ids is None:
+        designations = Designation.findById(con, ids)
+        
+        for i in range(len(designations)):
+            position = Position.findById(con, [designations[i].positionId])[0]
+            designations[i].position = position
+            user = User.findById(con, [designations[i].userId])[0]
+            designations[i].user = user
+            place = Place.findById(con, [designations[i].placeId])[0]
+            designations[i].place = place
+        
+        return designations
+        
+        
+    @classmethod
+    def findUsersByIds(cls, con, ids):
+        return User.findById(con, ids) 
+        
+        
+    @classmethod
+    def findPositionsAll(cls, con):
+        positionIds =  Position.findAll(con)       
+        positions = Position.findById(con, positionIds)
+        return positions
+        
+    @classmethod
+    def findPlacesAll(cls, con):
+        placesIds =  Place.findAll(con)       
+        places = Place.findById(con, placesIds)
+        return places        
+        
+        
+    @classmethod
+    def findDesignationsBySearch(cls, con, search):
+        if search is None:
             return
             
-        return Designation.findById(con, [ids])
+        designations = Designation.findBySearch(con, search)
         
+        for i in range(len(designations)):
+            position = Position.findById(con, [designations[i].positionId])[0]
+            designations[i].position = position
+            user = User.findById(con, [designations[i].userId])[0]
+            designations[i].user = user
+            place = Place.findById(con, [designations[i].placeId])[0]
+            designations[i].place = place
+        
+        return designations
+        
+        
+    @classmethod
+    def persistDesignation(cls, con, designation):
+        designation.persist(con);          
+
+        
+    
         
         

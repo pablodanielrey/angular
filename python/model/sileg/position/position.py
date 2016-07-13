@@ -94,6 +94,22 @@ class PositionDAO(SilegDAO):
             cur.close()
             
             
+
+    @classmethod
+    def findAll(cls, con):
+        cur = con.cursor()
+           
+        try:
+            cur.execute("""
+                SELECT id 
+                FROM sileg.position 
+            """)
+            return [r['id'] for r in cur]
+            
+        finally:
+            cur.close()          
+            
+            
 class Position(JSONSerializable):
 
     dao = PositionDAO
@@ -120,3 +136,8 @@ class Position(JSONSerializable):
     @classmethod 
     def findByUnique(cls, con, description, detail):
         return cls.dao.findByUnique(con, description, detail)
+        
+        
+    @classmethod 
+    def findAll(cls, con):
+        return cls.dao.findAll(con)

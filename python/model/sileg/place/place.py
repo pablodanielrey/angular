@@ -103,6 +103,20 @@ class PlaceDAO(SilegDAO):
             cur.close()
 
 
+    @classmethod
+    def findAll(cls, con):
+        cur = con.cursor()
+           
+        try:
+            cur.execute("""
+                SELECT id 
+                FROM sileg.place 
+            """)
+            return [r['id'] for r in cur]
+            
+        finally:
+            cur.close()          
+
 
 class Place(JSONSerializable):
 

@@ -557,7 +557,7 @@ class ImportSileg():
     
     @classmethod
     def importClosed(cls, conD):       
-        ids = Designation.findLastsAux(conD)
+        ids = Designation.findLastsNonClosed(conD)
         designations = Designation.findById(conD, ids)
         
         for designation in designations:

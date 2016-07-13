@@ -65,12 +65,10 @@ class DesignationDAO(SilegDAO):
         instance.replaceId = r["replace_id"]
         instance.originalId = r["original_id"]
         
-        instance.oldId = r["old_id"]
-        instance.oldType = r["old_type"]
-        instance.oldResolutionOut = r["old_resolution_out"]
-        instance.oldRecordOut = r["old_record_out"]        
-
-
+        instance.oldId = r["old_id"] if 'old_id' in r else None
+        instance.oldType = r["old_type"] if 'old_type' in r else None
+        instance.oldResolutionOut = r["old_resolution_out"] if 'old_resolution_out' in r else None
+        instance.oldRecordOut = r["old_record_out"] if 'old_record_out' in r else None
                
         return instance
 
@@ -155,6 +153,7 @@ class DesignationDAO(SilegDAO):
             
     @classmethod
     def findLasts(cls, con):
+        #Obtener ultima designacion persona - lugar - posicion
         cur = con.cursor()
         try:
         
@@ -174,7 +173,8 @@ class DesignationDAO(SilegDAO):
             
             
     @classmethod
-    def findLastsAux(cls, con):
+    def findLastsNonClosed(cls, con):
+        #Obtener ultima designacion persona - lugar - posicion sin considerar las bajas. Este metodo es necesario para poder importar los datos del sileg
         cur = con.cursor()
         try:
         
@@ -319,6 +319,33 @@ class DesignationDAO(SilegDAO):
             cur.close()               
 
 
+    @classmethod
+    def findBySearch(cls, con, search):
+        cur = con.cursor()
+       
+        try:
+            sql = "SELECT desi.id, desi.dstart, desi.dend, desi.dout, desi.description, desi.resolution, desi.record, desi.user_id, desi.position_id, desi.replace_id, desi.original_id, desi.place_id "
+            sql = sql + "FROM sileg.designation AS desi "
+            sql = sql + "INNER JOIN sileg.place AS pla ON (pla.id = desi.place_id) "
+            sql = sql + "INNER JOIN sileg.position AS pos ON (pos.id = desi.position_id) "
+            sql = sql + "INNER JOIN profile.users AS use ON (use.id = desi.user_id) "
+            sql = sql + "WHERE (TO_CHAR(desi.dstart, 'DD/MM/YYYY') LIKE %s) "
+            sql = sql + "OR (TO_CHAR(desi.dend, 'DD/MM/YYYY') LIKE %s) "
+            sql = sql + "OR (lower(pos.description) LIKE lower(%s)) "
+            sql = sql + "OR (lower(pla.description) LIKE lower(%s)) "
+            
+            sql = sql + "LIMIT 100;"
+            
+            s="%"+search+"%"
+            cur.execute(sql, (s,s,s,s))
+            return [ cls._fromResult(r) for r in cur ]
+
+
+
+        finally:
+            cur.close()
+            
+            
 
 
 class ProrogationDAO(DesignationDAO):
@@ -515,9 +542,13 @@ class Designation(JSONSerializable):
         return cls.dao.findByUnique(con, oldId, oldType)
 
     @classmethod
-    def numRows(cls, conn):
-        return cls.dao.numRows(conn)
+    def numRows(cls, con):
+        return cls.dao.numRows(con)
 
+
+    @classmethod
+    def findBySearch(cls, con, search):
+        return cls.dao.findBySearch(con, search)
 
 
 
