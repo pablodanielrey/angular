@@ -45,8 +45,8 @@
                       </div>
 
                       <div class="contentBtnReply">
-                          <button class="btnReply" ng-click="vm.view.style2 = 'pantallaMensaje'">RESPONDER</button>
-                          <button class="btnReply2" ng-click="vm.view.style2 = 'pantallaMensaje'"><i class="fa fa-comment-o fa-2x"></i></button>
+                          <button class="btnReply" ng-click="vm.reply()">RESPONDER</button>
+                          <button class="btnReply2" ng-click="vm.reply()"><i class="fa fa-comment-o fa-2x"></i></button>
                       </div>
 
                   </div>
@@ -99,7 +99,7 @@
                         <div>
                               {{child.description}}
                         </div>
-                        <div class="contentAddInfo" ng-repeat="file in child.uploads"><i class="fa fa-paperclip"></i> <a class="archiveAdd" href=""> {{file.name}}</a></div>
+                        <div class="contentAddInfo" ng-repeat="file in child.files"><i class="fa fa-paperclip"></i> <a class="archiveAdd" href="{{file.url}}"> {{file.name}}</a></div>
                     </div>
 
                     <div class="contentArrowRight">

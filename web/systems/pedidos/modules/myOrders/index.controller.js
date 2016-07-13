@@ -16,6 +16,7 @@
           users: [],
           issues: [],
           issue: null,
+          replyDescription: '',
           description: '',
           subject: '',
           selectedOffice: null,
@@ -36,7 +37,7 @@
           style: '',
           styles : ['', 'pantallaNuevoPedido','pantallaDetallePedido', 'pantallaMensaje', 'buscarPedidos'],
           style2: '',
-          styles2: ['', 'buscarOficina', 'buscarArea', 'buscarConsulta', 'verMisOficinas'],
+          styles2: ['', 'buscarOficina', 'buscarArea', 'buscarConsulta', 'verMisOficinas', 'pantallaMensaje'],
           style3: '',
           styles3: ['','pantallaMensajeAlUsuario'],
           style4: '',
@@ -51,6 +52,9 @@
         vm.cancel = cancel;
         vm.addFile = addFile;
         vm.removeFile = removeFile;
+        vm.reply = reply;
+        vm.cancelComment = cancelComment;
+        vm.createComment = createComment;
 
         vm.sortDate = sortDate;
         vm.sortStatus = sortStatus;
@@ -226,6 +230,37 @@
           vm.model.issue = {};
           vm.view.style = vm.view.styles[0];
         }
+
+        function reply() {
+          vm.model.replyDescription = '';
+          vm.model.files = [];
+          vm.view.style2 = vm.view.styles2[5];
+        }
+
+        function cancelComment() {
+          vm.view.style2 = vm.view.styles2[0];
+          vm.model.replyDescription = '';
+          vm.model.files = [];
+        }
+
+        function createComment() {
+          var subject = vm.model.issueSelected.subject;
+          var parentId = vm.model.issueSelected.id;
+          var officeId = vm.model.issueSelected.projectId;
+
+          Issue.createComment(subject, vm.model.replyDescription, parentId, officeId, vm.model.files).then(
+            function(data) {
+              $scope.$apply(function() {
+                vm.view.style2 = vm.view.styles2[0];
+                vm.viewDetail(vm.model.issueSelected);
+              })
+            }, function(error) {
+              console.log(error);
+            }
+          );
+        }
+
+
 
         /* ************************************************************************* */
         /* ************************ FORMATEO DE DATOS ****************************** */

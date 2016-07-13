@@ -108,7 +108,8 @@ class IssueWamp(ApplicationSession):
         try:
             userId = self.loginModel.getUserId(con, sid)
             authorId = userId if authorId is  None else authorId
-            iss = self.issueModel.create(con, parentId, officeId, authorId, subject, description, fromOfficeId, userId, files)
+            tracker = self.issueModel.TRACKER_ERROR
+            iss = self.issueModel.create(con, parentId, officeId, authorId, subject, description, fromOfficeId, userId, files, tracker)
             con.commit()
             return iss
         finally:
@@ -120,28 +121,22 @@ class IssueWamp(ApplicationSession):
         r = yield from loop.run_in_executor(None, self.create, sid, subject, description, parentId, officeId, fromOfficeId, authorId, files)
         return r
 
-    def createComment(self, sid, subject, description, parentId, officeId):
+    def createComment(self, sid, subject, description, parentId, projectId, files):
         con = self.conn.get()
         try:
             userId = self.loginModel.getUserId(con, sid)
-            issue = Issue()
-            issue.parentId = parentId
-            issue.projectId = officeId
-            issue.userId = userId
-            issue.subject = subject
-            issue.description = description
-            issue.tracker = RedmineAPI.TRACKER_COMMENT
-
-            iss = issue.create(con)
+            tracker = self.issueModel.TRACKER_COMMENT
+            iss = self.issueModel.create(con, parentId, projectId, userId, subject, description, '', '', files, tracker)
             con.commit()
             return iss
         finally:
             self.conn.put(con)
 
     @coroutine
-    def createComment_async(self, sid, subject, description, parentId, officeId):
+    def createComment_async(self, sid, subject, description, parentId, projectId, files):
         loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, createComment, sid, subject, description, parentId, officeId)
+        r = yield from loop.run_in_executor(None, self.createComment, sid, subject, description, parentId, projectId, files)
+
         return r
 
     def changeStatus(self, sid, issue, status):

@@ -9,45 +9,6 @@ import logging
 import datetime
 import uuid
 
-class IssueModel():
-
-    @classmethod
-    def getOffices(cls, con):
-        offices = Office.getOffices(con)
-        return Office.findById(con, offices)
-
-    @classmethod
-    def getAreas(cls, con, oId):
-        offs = Office.findById(con, [oId])
-        if offs is None or len(offs) <= 0:
-            return []
-        areas = offs[0].getAreas(con)
-        return Office.findById(con, areas)
-
-    @classmethod
-    def create(cls, con, parentId, officeId, authorId, subject, description, fromOfficeId, creatorId, files):
-        issue = Issue()
-        issue.parentId = parentId
-        issue.projectId = officeId
-        issue.userId = authorId
-        issue.subject = subject
-        issue.description = description
-        issue.tracker = RedmineAPI.TRACKER_ERROR
-        issue.fromOfficeId = fromOfficeId
-        issue.creatorId = creatorId
-
-        issue.files = []
-        for file in files:
-            data = base64.b64decode(file['content'])
-            id = str(uuid.uuid4())
-            path = '/tmp/' + id
-            f = open(path, 'wb')
-            f.write(data)
-            f.close()
-            issue.files.append({'path':path, 'filename':file['name'], 'content_type': file['type']})
-
-        return issue.create(con)
-
 
 class Issue(JSONSerializable):
 
@@ -262,12 +223,11 @@ class RedmineAPI:
 
         issue = redmine.issue.new()
 
-        # ACA FALTA VER EL TEMA DEL USUARIO. PREGUNTARLE A EMA
         issue.project_id = iss.projectId
         issue.subject = iss.subject
         issue.description = iss.description
         issue.status_id = iss.statusId
-        issue.parent_issue_id = issue.parentId
+        issue.parent_issue_id = iss.parentId
         issue.start_date = iss.start
         issue.tracker_id = iss.tracker
         cfields = cls.getCustomFields(iss)
@@ -298,3 +258,47 @@ class RedmineAPI:
 
         user, redmine = cls._getRedmineInstance(con, userId)
         redmine.issue.update(issue_id, status_id = status)
+
+
+
+class IssueModel():
+    TRACKER_ERROR = RedmineAPI.TRACKER_ERROR
+    TRACKER_COMMENT = RedmineAPI.TRACKER_COMMENT
+
+    @classmethod
+    def getOffices(cls, con):
+        offices = Office.getOffices(con)
+        return Office.findById(con, offices)
+
+    @classmethod
+    def getAreas(cls, con, oId):
+        offs = Office.findById(con, [oId])
+        if offs is None or len(offs) <= 0:
+            return []
+        areas = offs[0].getAreas(con)
+        return Office.findById(con, areas)
+
+    @classmethod
+    def create(cls, con, parentId, officeId, authorId, subject, description, fromOfficeId, creatorId, files, tracker = TRACKER_ERROR):
+        issue = Issue()
+        issue.parentId = parentId
+        issue.projectId = officeId
+        issue.userId = authorId
+        issue.subject = subject
+        issue.description = description
+        issue.tracker = tracker
+        issue.fromOfficeId = fromOfficeId
+        issue.creatorId = creatorId
+
+
+        issue.files = []
+        for file in files:
+            data = base64.b64decode(file['content'])
+            id = str(uuid.uuid4())
+            path = '/tmp/' + id
+            f = open(path, 'wb')
+            f.write(data)
+            f.close()
+            issue.files.append({'path':path, 'filename':file['name'], 'content_type': file['type']})
+
+        return issue.create(con)

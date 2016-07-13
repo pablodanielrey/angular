@@ -77,10 +77,10 @@ function Issue (Utils, Session, $wamp) {
     });
 	}
 
-  function createComment(subject, description, parentId, officeId) {
+  function createComment(subject, description, parentId, officeId, files) {
 		return new Promise(function(cok, cerr) {
       var sid = Session.getSessionId();
-  		$wamp.call('issue.createComment', [sid, subject, description, parentId, officeId])
+  		$wamp.call('issue.createComment', [sid, subject, description, parentId, officeId, files])
       .then(function(v) {
         cok(v);
       },function(err) {
