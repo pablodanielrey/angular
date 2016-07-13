@@ -7,5 +7,5 @@ angular
   .when('/addProrogation', { templateUrl: 'modules/addprorogation/addprorogation.html', controller:'AddProrogationCtrl' })
   .when('/gridDesignation', { templateUrl: 'modules/griddesignation/griddesignation.html', controller:'GridDesignationCtrl' })
 
-  .otherwise({ redirectTo: '/adminDesignation' });
+  .otherwise({ redirectTo: '/gridDesignation' });
 }]);
