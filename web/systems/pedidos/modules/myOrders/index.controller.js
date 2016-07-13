@@ -66,6 +66,7 @@
         vm.loadUserOffices = loadUserOffices;
         vm.loadAreas = loadAreas;
         vm.loadSubjects = loadSubjects;
+        vm.loadIssue = loadIssue;
 
         vm.selectOffice = selectOffice;
         vm.selectArea = selectArea;
@@ -241,6 +242,7 @@
           vm.view.style2 = vm.view.styles2[0];
           vm.model.replyDescription = '';
           vm.model.files = [];
+          vm.loadIssue(vm.model.issueSelected.id);
         }
 
         function createComment() {
@@ -252,8 +254,8 @@
             function(data) {
               $scope.$apply(function() {
                 vm.view.style2 = vm.view.styles2[0];
-                vm.viewDetail(vm.model.issueSelected);
               })
+              vm.loadIssue(vm.model.issueSelected.id);
             }, function(error) {
               console.log(error);
             }
@@ -390,6 +392,16 @@
           } else {
             return "/c/files.py?i=" + user.photo;
           }
+        }
+
+        function loadIssue(id) {
+          Issue.findById(id).then(
+            function(issue) {
+              vm.viewDetail(issue);
+            }, function(error) {
+              console.log(error);
+            }
+          );
         }
 
 
