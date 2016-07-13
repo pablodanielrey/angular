@@ -11,6 +11,8 @@ function IndexCtrl($rootScope, $scope, $wamp, $window, Notifications, Login) {
       hideMenu: false
     };
 
+    $scope.t = (new Date()).getTime();
+
     $scope.hideMenu = function() {
       return $scope.model.hideMenu;
     }

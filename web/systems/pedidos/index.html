@@ -66,8 +66,8 @@
 
     <div ng-include="'/systems/fce/modules/header/index.html'" ng-controller="HeaderCtrl"></div>
     <div class="main">
-      <div class="MenuContent" ng-controller="MenuCtrl" ng-include="'/systems/pedidos/modules/menu/index.html'"></div>
-      <div class="MenuCel" ng-controller="MenuCelCtrl" ng-include="'/systems/pedidos/modules/menuCel/index.html'"></div>
+      <div class="MenuContent" ng-controller="MenuCtrl" ng-include="'/systems/pedidos/modules/menu/index.html?t=' + t"></div>
+      <div class="MenuCel" ng-controller="MenuCelCtrl" ng-include="'/systems/pedidos/modules/menuCel/index.html?t=' + t"></div>
       <div class="viewContent" ng-view></div>
     </div>
     <div ng-include="'/systems/fce/modules/footer/index.html'"></div>

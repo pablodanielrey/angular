@@ -298,7 +298,7 @@
                 return;
               }
               Office.findById(ids).then(
-                function(offices){
+                function(offices) {
                   vm.model.office = (offices == null || offices.length <= 0) ? null : offices[0];
                 }, function(error) {
                   console.log(error);
@@ -320,7 +320,6 @@
               }
               Office.findById(ids).then(
                 function(offices) {
-                  console.log(offices);
                   vm.model.userOffices = (offices == null || offices.length <= 0) ? [] : offices;
                   vm.model.selectedFromOffice = (offices.length > 0) ? offices[0] : null;
                 }, function(error) {

@@ -99,7 +99,7 @@
                         <div>
                               {{child.description}}
                         </div>
-                        <div class="contentAddInfo"><i class="fa fa-paperclip"></i> <a class="archiveAdd" href=""> ArchivoAdjunto.jpg</a></div>
+                        <div class="contentAddInfo" ng-repeat="file in child.uploads"><i class="fa fa-paperclip"></i> <a class="archiveAdd" href=""> {{file.name}}</a></div>
                     </div>
 
                     <div class="contentArrowRight">

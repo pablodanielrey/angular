@@ -73,8 +73,7 @@
                 <div><button class="btnAdd" title="Adjuntar Archivo"><i class="fa fa-paperclip" aria-hidden="true"></i> Subir Archivo</button></div>
                 <div class="ArchivesAdd">
                   <input type="file" on-read-file-binary-string="vm.addFile(fileName,fileContent, fileType, fileSize)" class="inputFile" />
-                  <span ng-repeat="file in vm.model.files"> <i class="fa fa-file-o"></i> {{file.name}} <button class="btnTrashAdd" ng-click="vm.removeFile(file)"><i class="fa fa-trash-o" aria-hidden="true"></i></button></span>
-                  <!-- <i class="fa fa-file-o"></i> pantalla_de_error.jpg <button class="btnTrashAdd"><i class="fa fa-trash-o" aria-hidden="true"></i></button> -->
+                  <span ng-repeat="file in vm.model.files"> <i class="fa fa-file-o"></i> {{file.name}} <button class="btnTrashAdd" ng-click="vm.removeFile(file)"><i class="fa fa-trash-o" aria-hidden="true"></i></button></span>                  
                 </div>
             </div>
 

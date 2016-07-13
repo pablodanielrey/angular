@@ -101,16 +101,16 @@ class Attachment(JSONSerializable):
 
 class RedmineAPI:
 
-    REDMINE_URL = 'https://redmine-biblio.econo.unlp.edu.ar'
-    KEY = '5f4dbcf2a503728deb879f585c24f00a1b8d6217'
+    REDMINE_URL = 'http://163.10.56.57:3000'
+    KEY = 'd9834b4adde478b3d72378c039f5b019c0bbec96'
     TRACKER_ERROR = 1
     TRACKER_COMMENT = 4
     STATUS_NEW = 1
     STATUS_WORKING = 2
     STATUS_FINISH = 3
     STATUS_CLOSE = 5
-    CREATOR_FIELD = 2
-    FROM_FIELD = 3
+    CREATOR_FIELD = 1
+    FROM_FIELD = 2
 
     @classmethod
     def _loadFile(cls, file):
@@ -123,7 +123,6 @@ class RedmineAPI:
 
     @classmethod
     def _fromResult(cls, con, r, redmine):
-
         attrs = dir(r)
         issue = Issue()
         issue.id = r.id
@@ -139,6 +138,12 @@ class RedmineAPI:
         issue.start = r.start_date
         issue.updated = r.updated_on
 
+        for cf in r.custom_fields:
+            if cf.id == cls.CREATOR_FIELD:
+                issue.creatorId = cf.value
+            elif cf.id == cls.FROM_FIELD:
+                issue.fromOfficeId = cf.value
+
         issue.children = [cls.findById(con, issue.userId, iss.id) for iss in r.children if iss is not None]
         issue.files = [cls._loadFile(file) for file in r.attachments if file is not None]
         return issue
@@ -146,14 +151,24 @@ class RedmineAPI:
 
 
     @classmethod
-    def _getRedmineInstance(cls, con, userId):
+    def _getRedmineInstance(cls, con, userId, isImpersonate = None):
         ups = UserPassword.findByUserId(con, userId)
         if len(ups) <= 0:
             return None
         up = ups[0]
-        redmine = Redmine(cls.REDMINE_URL, key = cls.KEY, version='2.1.2', requests={'verify': False})
+
+        if isImpersonate is None:
+            redmine = Redmine(cls.REDMINE_URL, key = cls.KEY, version='3.3', requests={'verify': False})
+        else:
+            redmine = Redmine(cls.REDMINE_URL, key = cls.KEY, impersonate = up.username, version='3.3', requests={'verify': False})
+
         users = redmine.user.filter(name=up.username)
-        return (users[0], redmine)
+        user = None
+        try:
+            user = users[0]
+        except:
+            logging.info('error al obtener el usuario del redmine')
+        return (user, redmine)
 
     @classmethod
     def _loadUserByUIdRedmine(cls, con, uid, redmine):
@@ -240,7 +255,8 @@ class RedmineAPI:
 
     @classmethod
     def create(cls, con, iss):
-        user, redmine = cls._getRedmineInstance(con, iss.userId)
+        user, redmine = cls._getRedmineInstance(con, iss.userId, True)
+
         if redmine is None:
             return None
 
