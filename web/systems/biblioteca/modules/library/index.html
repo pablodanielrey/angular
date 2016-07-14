@@ -14,31 +14,62 @@
                       <div class="cantPerson"><div class="textCantPerson3">568 </div> accesos en el día</div>
                 </div>
             </div>
-            <div class="contentList">
-                <div class="headerContentList">
-                    <div class="dataList">
-
-                    </div>
-                    <div class="contentFilters">
-                      <div>Ordenar </div>
-                      <div class="btnOrder" title="Ordenar por Entrada / Salida"><i class="fa fa-exchange"></i></div>
-                      <div class="btnOrder" title="Ordenar Horario"><i class="fa fa-clock-o"></i></div>
-                      <div class="btnOrder" title="Ordenar Nombre"><i class="fa fa-sort-alpha-asc"></i></div>
-                      <div class="btnSearch" ng-click="view.style = 'buscar'" title="Buscar..."><i class="fa fa-search"></i></div>
-                    </div>
-
-                    <div class="contentSearch">
-                        <div class="subContentSearch">
-                            <div>
-                              busqueda
-                            </div>
-                            <div>
-                              <div class="btnSearch2" ng-click="view.style = ''" title="Buscar..."><i class="fa fa-check"></i></div>
-                            </div>
-                        </div>
-                    </div>
+            <div class="headerContentList">
+                <div class="dataList">
 
                 </div>
+                <div class="contentFilters">
+                  <div>Ordenar </div>
+                  <div class="btnOrder" title="Ordenar por Entrada / Salida"><i class="fa fa-exchange"></i></div>
+                  <div class="btnOrder" title="Ordenar Horario"><i class="fa fa-clock-o"></i></div>
+                  <div class="btnOrder" title="Ordenar Nombre"><i class="fa fa-sort-alpha-asc"></i></div>
+                  <div class="btnSearch" ng-click="view.style = 'buscar'" title="Buscar..."><i class="fa fa-search"></i></div>
+                </div>
+
+                <div class="contentSearch">
+                    <div class="subContentSearch">
+                        <div class="contentItemSearch">
+                          <div class="icoSeach"><i class="fa fa-search"></i></div>
+                          <div><input type="search" placeholder="Buscar por Nombre, Apellido o DNI "class="inputSearch"></input></div>
+                          <div class=textRanck>
+                              <div>Rango</div>
+                              <div>Horario</div>
+                          </div>
+                          <div><input type="time"  class="inputTime"></input></div>
+                          <div> a </div>
+                          <div><input type="time" class="inputTime"></input></div>
+                        </div>
+                        <div>
+                          <div class="btnSearch2" ng-click="view.style = ''" title="Buscar..."><i class="fa fa-check"></i></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="contentList">
+
+                <div class="titleListAccess">
+                  <div class="file1">Acceso</div>
+                  <div class="file2">Hora</div>
+                  <div class="file3">Nombre y Apellido</div>
+                  <div class="file4">DNI</div>
+                  <div class="file5">Tipo</div>
+                </div>
+                <div class="listAccess">
+                  <div class="itemListAccess {{i.clase}}" ng-repeat="i in logs">
+                    <!-- VARIABLES: entrada, salida -->
+                    <div class="file1b">
+                        <i class="inOut fa fa-chevron-circle-left"></i>
+                        <div class="inOut in">Entrada</div>
+                        <div class="inOut out">Salida</div>
+                    </div>
+                    <div class="file2">{{i.hora}}</div>
+                    <div class="file3">{{i.name}} {{i.lastname}}</div>
+                    <div class="file4">{{i.dni}}</div>
+                    <div class="file5">{{i.tipo}}</div>
+                  </div>
+                </div>
+
             </div>
         </div>
         <div class="contentAside">
