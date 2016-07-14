@@ -12,6 +12,7 @@ class Office(JSONSerializable):
         self.parent = None
         self.name = None
         self.telephone = None
+        self.area = False
         self.email = None
         self.users = []
         self.childs = []

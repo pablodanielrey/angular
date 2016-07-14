@@ -8,6 +8,7 @@ import base64
 import logging
 import datetime
 import uuid
+from model.assistance.utils import Utils
 
 
 class Issue(JSONSerializable):
@@ -16,6 +17,8 @@ class Issue(JSONSerializable):
         self.id = None
         self.parentId = None
         self.projectId = None
+        self.office = None
+        self.area = None
         self.userId = None
         self.subject = ''
         self.description = None
@@ -83,12 +86,39 @@ class RedmineAPI:
         return att
 
     @classmethod
+    def _loadOffice(cls, con, redmine, officeId):
+        if officeId is None:
+            return None
+
+        project = redmine.project.get(officeId)
+        id = project.identifier
+        return cls._findOffice(con, id)
+
+    @classmethod
+    def _findOffice(cls, con, id):
+        if id is None:
+            return None
+
+        offices = Office.findById(con, [id])
+        return offices[0] if len(offices) > 0 else None
+
+    @classmethod
     def _fromResult(cls, con, r, redmine):
         attrs = dir(r)
         issue = Issue()
         issue.id = r.id
         issue.parentId = [r.parent.id if 'parent' in attrs else None][0]
         issue.projectId =  [r.project.id if 'project' in attrs else None][0]
+
+        office = cls._loadOffice(con, redmine, issue.projectId)
+        if office is not None and office.area:
+            issue.area = office
+            issue.office = cls._findOffice(con, office.parent)
+        else:
+            issue.area = None
+            issue.office = office
+
+
         issue.projectName = [r.project.name if 'project' in attrs else None][0]
 
         issue.userId = cls._loadUserByUIdRedmine(con, r.author.id, redmine)
@@ -96,8 +126,9 @@ class RedmineAPI:
         issue.description = r.description
         issue.statusId = r.status.id
         issue.assignedToId =[r.assigned_to.id if 'assigned_to' in attrs else None][0]
-        issue.start = r.start_date
-        issue.updated = r.updated_on
+
+        issue.start = Utils._localizeUtc(r.created_on) if Utils._isNaive(r.created_on) else r.created_on
+        issue.updated = Utils._localizeUtc(r.updated_on) if Utils._isNaive(r.updated_on) else r.updated_on
 
         for cf in r.custom_fields:
             if cf.id == cls.CREATOR_FIELD:

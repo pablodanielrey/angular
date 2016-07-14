@@ -83,6 +83,7 @@
         vm.getName = getName;
         vm.getLastname = getLastname;
         vm.getUserPhoto = getUserPhoto;
+        vm.getCreator = getCreator;
 
         activate();
 
@@ -268,6 +269,9 @@
         /* ************************ FORMATEO DE DATOS ****************************** */
         /* ************************************************************************* */
         function loadUser(userId) {
+          if (userId == null || userId == '') {
+            return
+          }
           if (vm.model.users[userId] == null) {
             Users.findById([userId]).then(
               function(users) {
@@ -285,15 +289,24 @@
           return date;
         }
 
+        function setInitDay(date) {
+          date.setHours(0);
+          date.setMinutes(0);
+          date.setSeconds(0);
+          date.setMilliseconds(0);
+        }
+
         function getDiffDay(issue) {
           if (issue == null) {
             return '';
           }
-          var date = ('date' in issue) ? issue.date : new Date(issue.start);
+          var date = ('date' in issue) ? new Date(issue.date) : new Date(issue.start);
           var now = new Date();
+          setInitDay(date);
+          setInitDay(now);
           var diff = now - date;
           var days = Math.floor(diff / (1000 * 60 * 60 * 24));
-          return (days == 0) ? 'Hoy' : (days == 1) ? 'Ayer' : days + ' días'
+          return (days == 0) ? 'Hoy' : (days == 1) ? 'Ayer' : 'Hace ' + days + ' días'
         }
 
         function getStatus(issue) {
@@ -385,6 +398,15 @@
           return (user == null) ? '' : user.lastname;
         }
 
+        function getCreator(issue) {
+          if (issue.creatorId == null || issue.creatorId == '') {
+            return '';
+          }
+
+          var user = vm.model.users[issue.creatorId];
+          return user.name + ' ' + user.lastname ;
+        }
+
         function getUserPhoto(issue) {
           var user = (issue == null) ? null : vm.model.users[issue.userId];
           if (user == null || user.photo == null || user.photo == '') {
@@ -417,6 +439,7 @@
                   var dateStr = issues[i].start;
                   issues[i].date = new Date(dateStr);
                   loadUser(issues[i].userId);
+                  loadUser(issues[i].creatorId);
                 }
                 vm.model.issues = issues;
                 console.log(issues);

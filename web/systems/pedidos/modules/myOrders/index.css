@@ -254,6 +254,10 @@
 }
 
 
+.myOrders .itemsOffice.solicitadoPorEl .userUpload {
+  display: none;
+}
+
 .myOrders.pantallaDetallePedido .itemStatus2 {
   /*background-color: yellow;*/
   width: 150px;
@@ -1668,6 +1672,7 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
     width: 145px;
     /*background-color: red;*/
   }
+
 
   .myOrders .textType,
   .myOrders .textOffice {

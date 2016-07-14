@@ -71,7 +71,7 @@
             <div class="contentInfo ">
                 <!-- VARIABLES: conAdjunto, sinAdjunto -->
                 <div class="textDateDetailOrders">
-                    {{vm.getDiffDay(vm.model.issueSelected)}} - {{vm.getDate(model.issueSelected) | date: 'd MMMM  yyyy'}}
+                    {{vm.getDiffDay(vm.model.issueSelected)}} - {{vm.getDate(vm.model.issueSelected) | date: 'd MMMM  yyyy - HH:mm'}} hs
                 </div>
                 <div>
                   {{vm.model.issueSelected.description}}
@@ -94,7 +94,7 @@
                     <div class="textReply">
                         <!-- VARIABLES: sinAdjunto, conAdjunto -->
                         <div class="textDateDetailOrders">
-                            {{vm.getDiffDay(child)}} - {{vm.getDate(child) | date: 'd MMMM  yyyy'}}
+                            {{vm.getDiffDay(child)}} - {{vm.getDate(child) | date: 'd MMMM  yyyy - HH:mm'}} hs
                         </div>
                         <div>
                               {{child.description}}

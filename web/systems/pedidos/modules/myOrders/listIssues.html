@@ -5,7 +5,7 @@
 
               <div class="itemDate">
                   <div class="textNumerOrders">Nº {{issue.id}}</div>
-                  <div class="textDateOrders">{{vm.getDate(issue) | date: 'd MMMM  yyyy'}}</div>
+                  <div class="textDateOrders">{{vm.getDate(issue) | date: 'd MMMM  yyyy - HH:mm'}} hs</div>
                   <div class="textDaysOrders">{{vm.getDiffDay(issue)}}</div>
               </div>
 
@@ -27,15 +27,21 @@
               </div>
 
               <div class="itemsType">
-                <div class="textType">Económico Financiero</div>
-                <div class="textType2">Compras</div>
+                <div class="textType">{{issue.office.name}}</div>
+                <div class="textType2">{{issue.area.name}}</div>
                 <div class="textSubType">{{issue.subject}}</div>
               </div>
 
-              <div class="itemsOffice">
-                <div class="textMini">Solicitado por:</div>
-                <div class="textOffice">{{issue.projectName}}</div>
-                <div class="textName">{{vm.getFullName(issue)}}</div>
+              <div class="itemsOffice" ng-class="{true: 'solicitadoPorEl', false: 'solicitadoPorOtro'}[issue.creatorId == null || issue.creatorId == '']">
+                <div>
+                  <div class="textMini">Solicitado por:</div>
+                  <div class="textOffice">{{issue.projectName}}</div>
+                  <div class="textName">{{vm.getFullName(issue)}}</div>
+                </div>
+                <div class="userUpload">
+                  <div class="textMini">Cargado por:</div>
+                  <div class="textName">{{vm.getCreator(issue)}}</div> <!-- Usuario que cargo el pedido -->
+                </div>
               </div>
 
           </div>
