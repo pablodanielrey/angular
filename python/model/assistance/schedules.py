@@ -45,15 +45,24 @@ class Schedule(JSONSerializable):
         return self.end - self.start
 
     def persist(self, con):
-        days = self.weekday - self.date.weekday()
-        date = self.date + datetime.timedelta(days=days)
-        schedules = Schedule.findByUserIdInDate(con, self.userId, date)
-        for sc in schedules:
-            daySc = sc.weekday - sc.date.weekday()
-            d = sc.date + datetime.timedelta(days=daySc)
-            if d == date:
-                sc.delete(con)
-        return ScheduleDAO.persist(con, self)
+        if self.daily:
+            ''' si es horario semanal '''
+            days = self.weekday - self.date.weekday()
+            date = self.date + datetime.timedelta(days=days)
+            schedules = Schedule.findByUserIdInDate(con, self.userId, date)
+            for sc in schedules:
+                daySc = sc.weekday - sc.date.weekday()
+                d = sc.date + datetime.timedelta(days=daySc)
+                if d == date and sc.daily:
+                    sc.delete(con)
+            return ScheduleDAO.persist(con, self)
+        else:
+            ''' si es horario especial '''
+            schedules = Schedule.findByUserIdInDate(con, self.userId, self.date)
+            for sc in schedules:
+                if not sc.daily:
+                    sc.delete(con)
+            return ScheduleDAO.persist(con, self)
 
     def delete(self, con):
         return ScheduleDAO.delete(con, [self.id])
@@ -66,7 +75,7 @@ class Schedule(JSONSerializable):
     def findByUserIdInDate(cls, con, userId, date):
         schedules = cls.findByUserId(con, [userId], date, date)
         schSorted = sorted([ sc for sc in schedules if sc.isValid(date)], key=attrgetter('date'), reverse=True)
-        return [sc for sc in schSorted if sc.date == schSorted[0].date and sc.getScheduleSeconds() > 0]
+        return [sc for sc in schSorted if sc.date == schSorted[0].date and sc.getScheduleSeconds() >= 0]
 
     @classmethod
     def findByUserIdInWeek(cls, con, userId, date):
@@ -76,6 +85,7 @@ class Schedule(JSONSerializable):
             actual = firstDate + datetime.timedelta(days=day)
             result[actual] = cls.findByUserIdInDate(con, userId, actual)
         return result
+
 
 
 
