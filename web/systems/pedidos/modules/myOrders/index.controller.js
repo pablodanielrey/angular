@@ -5,10 +5,10 @@
         .module('mainApp')
         .controller('MyOrdersCtrl', MyOrdersCtrl);
 
-    MyOrdersCtrl.$inject = ['$scope', '$filter', 'Login', 'Issue', 'Users', 'Office', 'Files'];
+    MyOrdersCtrl.$inject = ['$scope', '$timeout', '$filter', 'Login', 'Issue', 'Users', 'Office', 'Files'];
 
     /* @ngInject */
-    function MyOrdersCtrl($scope, $filter, Login, Issue, Users, Office, Files) {
+    function MyOrdersCtrl($scope, $timeout, $filter, Login, Issue, Users, Office, Files) {
         var vm = this;
 
         vm.model = {
@@ -60,6 +60,12 @@
 
         vm.sortDate = sortDate;
         vm.sortStatus = sortStatus;
+
+        vm.closeMessage = closeMessage;
+        vm.messageLoading = messageLoading;
+        vm.messageError = messageError;
+        vm.messageSending = messageSending;
+        vm.messageCreated = messageCreated;
 
         vm.initializeModel = initializeModel;
         vm.initializeView = initializeView;
@@ -194,6 +200,7 @@
           clearOffice();
           vm.model.description = '';
           vm.model.files = [];
+
         }
 
         function addFile(fileName,fileContent, fileType, fileSize) {
@@ -230,11 +237,17 @@
           Issue.create(subject, description, parentId, office.id, fromOfficeId, authorId, vm.model.files).then(
             function(data) {
               $scope.$apply(function() {
-                vm.view.style = vm.view.styles[0];
-                vm.getMyIssues();
+                vm.messageCreated();
+                $timeout(function () {
+                  vm.closeMessage();
+                  vm.view.style = vm.view.styles[0];
+                  vm.getMyIssues();
+                }, 2500);
               })
             }, function(error) {
-              console.log(error);
+              $scope.$apply(function() {
+                vm.messageError(error);
+              })
             }
           );
 
@@ -264,14 +277,21 @@
           var parentId = vm.model.issueSelected.id;
           var officeId = vm.model.issueSelected.projectId;
 
+          vm.messageLoading();
           Issue.createComment(subject, vm.model.replyDescription, parentId, officeId, vm.model.files).then(
             function(data) {
               $scope.$apply(function() {
-                vm.view.style2 = vm.view.styles2[0];
+                vm.messageSending();
+                $timeout(function () {
+                  vm.view.style2 = vm.view.styles2[0];
+                  vm.closeMessage();
+                }, 2500);
               })
               vm.loadIssue(vm.model.issueSelected.id);
             }, function(error) {
-              console.log(error);
+              $scope.$apply(function() {
+                vm.messageError(error);
+              })
             }
           );
         }
@@ -360,7 +380,9 @@
             function(offices) {
               vm.model.office = (offices == null || offices.length <= 0) ? null : offices[0];
             }, function(error) {
-              console.log(error);
+              $scope.$apply(function() {
+                vm.messageError(error);
+              })
             }
           )
         }
@@ -378,11 +400,15 @@
                   vm.model.userOffices = (offices == null || offices.length <= 0) ? [] : offices;
                   vm.model.selectedFromOffice = (offices.length > 0) ? offices[0] : null;
                 }, function(error) {
-                  console.log(error);
+                  $scope.$apply(function() {
+                    vm.messageError(error);
+                  })
                 }
               )
             }, function(error) {
-              console.log(error);
+              $scope.$apply(function() {
+                vm.messageError(error);
+              })
             }
           );
         }
@@ -434,7 +460,9 @@
             function(issue) {
               vm.viewDetail(issue);
             }, function(error) {
-              console.log(error);
+              $scope.$apply(function() {
+                vm.messageError(error);
+              })
             }
           );
         }
@@ -445,9 +473,9 @@
         /* ************************************************************************* */
 
         function getMyIssues() {
+          vm.messageLoading();
           Issue.getMyIssues().then(
             function(issues) {
-              $scope.$apply(function() {
                 for (var i = 0; i < issues.length; i++) {
                   var dateStr = issues[i].start;
                   issues[i].date = new Date(dateStr);
@@ -460,14 +488,44 @@
                   loadUser(issues[i].creatorId);
                 }
                 vm.model.issues = issues;
-                console.log(issues);
-              });
-
+                $scope.$apply(function() {
+                  vm.closeMessage();
+                })
             },
             function(err) {
-              console.log('error')
+              $scope.$apply(function() {
+                vm.messageError(error);
+              })
             }
           );
+        }
+
+        function messageError(error) {
+          vm.view.style3 = vm.view.styles3[1];
+          vm.view.style4 = vm.view.styles4[2];
+          $timeout(function() {
+            vm.closeMessage();
+          }, 2000);
+        }
+
+        function closeMessage() {
+          vm.view.style3 = vm.view.styles3[0];
+          vm.view.style4 = vm.view.styles4[0];
+        }
+
+        function messageLoading() {
+          vm.view.style3 = vm.view.styles3[1];
+          vm.view.style4 = vm.view.styles4[1];
+        }
+
+        function messageSending() {
+          vm.view.style3 = vm.view.styles3[1];
+          vm.view.style4 = vm.view.styles4[3];
+        }
+
+        function messageCreated() {
+          vm.view.style3 = vm.view.styles3[1];
+          vm.view.style4 = vm.view.styles4[4];
         }
 
         function loadOffices() {
@@ -477,7 +535,9 @@
               vm.model.offices = offices;
             },
             function(error) {
-              console.log(error);
+              $scope.$apply(function() {
+                vm.messageError(error);
+              })
             }
           )
         }
@@ -490,7 +550,9 @@
             vm.model.areas = offices;
           },
           function(error) {
-            console.log(error);
+            $scope.$apply(function() {
+              vm.messageError(error);
+            })
           }
         )
       }
