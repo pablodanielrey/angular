@@ -70,7 +70,7 @@ def createZipFile(user, rp):
     import zipfile
     import os
     fn = '/tmp/reporte-asistencia-{}.zip'.format(user.dni)
-    with zipfile.ZipFile(fn, mode='w', compression=zipfile.ZIP_BZIP2) as rpzip:
+    with zipfile.ZipFile(fn, mode='w', compression=zipfile.ZIP_DEFLATED) as rpzip:
         for root, dir, files in os.walk(rp):
             for f in files:
                 fm = '{}/{}'.format(root, f)
@@ -85,8 +85,10 @@ def sendMail(con, user, fn):
     mails = Mail.findByUserId(con, user.id)
     emails = []
     for m in mails:
-        emails.append(m.email)
+        if 'econo.unlp.edu.ar' in m:
+            emails.append(m.email)
     if len(emails) <= 0:
+        ''' no tiene correo configurado asi que no se le envía nada '''
         return
 
     logging.info('enviando correos a {}'.format(emails))
@@ -112,7 +114,7 @@ def sendMail(con, user, fn):
     outer.attach(msg)
     try:
         with smtplib.SMTP('163.10.17.115') as s:
-            s.sendmail('ditesi@econo.unlp.edu.ar', ['pablo@econo.unlp.edu.ar'], outer.as_string())
+            s.sendmail('ditesi@econo.unlp.edu.ar', emails, outer.as_string())
     except Exception as e:
         logging.exception(e)
 
