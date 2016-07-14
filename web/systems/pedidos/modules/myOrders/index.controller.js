@@ -5,10 +5,10 @@
         .module('mainApp')
         .controller('MyOrdersCtrl', MyOrdersCtrl);
 
-    MyOrdersCtrl.$inject = ['$scope', 'Login', 'Issue', 'Users', 'Office', 'Files'];
+    MyOrdersCtrl.$inject = ['$scope', '$filter', 'Login', 'Issue', 'Users', 'Office', 'Files'];
 
     /* @ngInject */
-    function MyOrdersCtrl($scope, Login, Issue, Users, Office, Files) {
+    function MyOrdersCtrl($scope, $filter, Login, Issue, Users, Office, Files) {
         var vm = this;
 
         vm.model = {
@@ -42,9 +42,11 @@
           styles3: ['','pantallaMensajeAlUsuario'],
           style4: '',
           styles4: ['', 'mensajeCargando', 'mensajeError', 'mensajeEnviado', 'mensajePedidoCreado'],
-          status: ['','abierta', 'enProgreso', 'pausada', 'rechazada', 'cerrada']
+          status: ['','abierta', 'enProgreso', 'cerrada', 'pausada', 'rechazada'],
+          statusSort: ['','abierta', 'enProgreso', 'pausada', 'rechazada', 'cerrada'],
+          reverseSortDate: false,
+          reverseSortStatus: false
         }
-
 
         // métodos
         vm.create = create;
@@ -60,6 +62,7 @@
         vm.sortStatus = sortStatus;
 
         vm.initializeModel = initializeModel;
+        vm.initializeView = initializeView;
         vm.getMyIssues = getMyIssues;
         vm.loadOffices = loadOffices;
         vm.loadOffice = loadOffice;
@@ -93,9 +96,15 @@
             .then(function(s) {
                 vm.model.userId = s.user_id;
                 vm.initializeModel();
+                vm.initializeView();
             }, function(err) {
               console.log(err);
             });
+        }
+
+        function initializeView() {
+          vm.view.reverseSortDate = false;
+          vm.view.reverseSortStatus = false;
         }
 
         function initializeModel() {
@@ -113,11 +122,15 @@
         /* ************************************************************************* */
 
         function sortDate() {
-
+          vm.view.reverseSortStatus = false;
+          vm.model.issues = $filter('orderBy')(vm.model.issues, ['start', 'statusPosition'], vm.view.reverseSortDate);
+          vm.view.reverseSortDate = !vm.view.reverseSortDate;
         }
 
         function sortStatus() {
-
+          vm.view.reverseSortDate = false;
+          vm.model.issues = $filter('orderBy')(vm.model.issues, ['statusPosition', 'start'], vm.view.reverseSortStatus);
+          vm.view.reverseSortStatus = !vm.view.reverseSortStatus;
         }
 
         /* ************************************************************************* */
@@ -438,6 +451,11 @@
                 for (var i = 0; i < issues.length; i++) {
                   var dateStr = issues[i].start;
                   issues[i].date = new Date(dateStr);
+
+                  // obtengo la posicion de ordenacion del estado
+                  var item = vm.view.status[issues[i].statusId];
+                  issues[i].statusPosition = vm.view.statusSort.indexOf(item);
+
                   loadUser(issues[i].userId);
                   loadUser(issues[i].creatorId);
                 }
