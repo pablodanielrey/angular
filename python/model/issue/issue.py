@@ -146,13 +146,13 @@ class RedmineAPI:
 
 
     @classmethod
-    def _getRedmineInstance(cls, con, userId, isImpersonate = None):
+    def _getRedmineInstance(cls, con, userId, isImpersonate = False):
         ups = UserPassword.findByUserId(con, userId)
         if len(ups) <= 0:
             return None
         up = ups[0]
 
-        if isImpersonate is None:
+        if isImpersonate is None or not isImpersonate:
             redmine = Redmine(cls.REDMINE_URL, key = cls.KEY, version='3.3', requests={'verify': False})
         else:
             redmine = Redmine(cls.REDMINE_URL, key = cls.KEY, impersonate = up.username, version='3.3', requests={'verify': False})
@@ -212,7 +212,7 @@ class RedmineAPI:
     def _getIssuesByUser(cls, con, user, redmine):
         if redmine is None:
             return []
-        issues = redmine.issue.filter(author_id=user.id)
+        issues = redmine.issue.filter(author_id=user.id, status_id='*')
         return issues
 
 
@@ -229,7 +229,7 @@ class RedmineAPI:
             return []
         issues = []
         for pidentifier in pidentifiers:
-            issues.extend(redmine.issue.filter(project_id=pidentifier))
+            issues.extend(redmine.issue.filter(project_id=pidentifier, status_id='*'))
 
         return issues
 
@@ -285,13 +285,15 @@ class RedmineAPI:
 
     @classmethod
     def changeStatus(cls, con, userId, issue_id, project_id, status):
+
+        user, redmine = cls._getRedmineInstance(con, userId, False)
+
         if status is None:
             return
 
         if redmine is None:
             return
 
-        user, redmine = cls._getRedmineInstance(con, userId)
         redmine.issue.update(issue_id, status_id = status)
 
 

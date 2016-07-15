@@ -15,8 +15,17 @@
         vm.model = {
           userId: '',
           users: [],
-          issues: []
+          issues: [],
+          selectedIssue: null
         }
+
+        // constantes
+        vm.openStatus = 1;
+        vm.workingStatus = 2;
+        vm.closeStatus = 5;
+        vm.pausedStatus = 7;
+        vm.rejectedStatus = 6;
+
 
         // variables de la vista
         vm.view = {
@@ -28,7 +37,7 @@
           styles3: ['','pantallaMensajeAlUsuario'],
           style4: '',
           styles4: ['', 'mensajeCargando', 'mensajeError', 'mensajeEnviado', 'mensajePedidoCreado'],
-          status: ['','abierta', 'enProgreso', 'cerrada', 'pausada', 'rechazada'],
+          status: ['','abierta', 'enProgreso', 'cerrada', 'comentarios', 'cerrada', 'rechazada', 'pausada'],
           statusSort: ['','abierta', 'enProgreso', 'pausada', 'rechazada', 'cerrada'],
           priorities: ['baja', 'normal', 'alta'],
           reverseSortDate: false,
@@ -52,12 +61,16 @@
         vm.createIssue = createIssue;
         vm.createComment = createComment;
         vm.selectIssue = selectIssue;
+        vm.selectStatus = selectStatus;
+        vm.cancel = cancel;
+        vm.setStatus = setStatus;
 
         vm.getPriority = getPriority;
         vm.getDate = getDate;
         vm.getDiffDay = getDiffDay;
         vm.getStatus = getStatus;
         vm.getFromOffice = getFromOffice;
+        vm.getFromArea = getFromArea;
         vm.getOffice = getOffice;
         vm.getFullName = getFullName;
         vm.getCreator = getCreator;
@@ -94,6 +107,7 @@
         }
 
         function initializeModel() {
+          vm.model.selectedIssue = null;
           vm.loadIssues();
         }
 
@@ -153,8 +167,11 @@
         vm.model.selectedIssue = issue;
       }
 
+      function selectStatus() {
+        vm.view.style2 = (vm.view.style2 == vm.view.styles2[6]) ?  vm.view.styles2[0] : vm.view.styles2[6];
+      }
+
       function cancel() {
-        vm.model.selectedIssue = null;
         vm.view.style = vm.view.styles[0];
       }
 
@@ -164,6 +181,21 @@
 
       function createComment() {
         vm.view.style = vm.view.styles[2];
+      }
+
+      function setStatus(issue, status) {
+        vm.view.style2 = vm.view.styles2[0];
+        issue.statusId = status;
+        Issue.changeStatus(issue, status).then(
+          function(data) {
+            
+          },
+          function(error) {
+            $scope.$apply(function() {
+              vm.messageError(error);
+            })
+          }
+        )
       }
 
 
@@ -212,7 +244,14 @@
       }
 
       function getFromOffice(issue) {
+        if (issue == null) {
+          return '';
+        }
         return (issue.area == null) ? issue.office.name : issue.area.name;
+      }
+
+      function getFromArea(issue) {
+        return (issue == null || issue.area == null) ? '' : issue.area.name;
       }
 
       function getOffice(issue) {
@@ -220,7 +259,7 @@
       }
 
       function getCreator(issue) {
-        if (issue.creatorId == null || issue.creatorId == '') {
+        if (issue == null || issue.creatorId == null || issue.creatorId == '') {
           return '';
         }
 
