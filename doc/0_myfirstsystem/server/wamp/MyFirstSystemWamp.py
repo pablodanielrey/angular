@@ -17,27 +17,21 @@ class MyFirstSystemWamp(ApplicationSession):
     """
       Interface entre el cliente y el servidor
     """
-    
+
     def __init__(self,config=None):
         ApplicationSession.__init__(self, config)
         reg = inject.instance(Registry)
-        
         self.conn = connection.Connection(reg.getRegistry('myfirstsystem'))
-
         self.myFirstSystem = inject.instance(MyFirstSystem)
-
 
 
     @coroutine
     def onJoin(self, details):
         logging.debug('registering methods')
-        yield from self.register(self.getMessage_async,'myfirstsystem.getMessage')
-        yield from self.register(self.helloWorld_async,'myfirstsystem.helloWorld')
-        
-        
-   
-   
-   
+        yield from self.register(self.getMessage_async, 'myfirstsystem.getMessage')
+        yield from self.register(self.helloWorld_async, 'myfirstsystem.helloWorld')
+
+
     ##### getMessage #####
     def getMessage(self):
         con = self.conn.get()
@@ -51,10 +45,10 @@ class MyFirstSystemWamp(ApplicationSession):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.getMessage)
         return r
- 
- 
- 
- 
+
+
+
+
     ##### helloWorld #####
     def helloWorld(self, param1, param2):
         con = self.conn.get()
@@ -68,6 +62,3 @@ class MyFirstSystemWamp(ApplicationSession):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.helloWorld, param1, param2)
         return r
-        
-        
-        
