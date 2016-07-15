@@ -461,7 +461,6 @@
 .library .titleListAccess {
   width: 100%;
   background-color: #c7d1d6;
-  margin-top: 2px;
   display: flex;
   display: -webkit-flex;
   display: -moz-flex;
