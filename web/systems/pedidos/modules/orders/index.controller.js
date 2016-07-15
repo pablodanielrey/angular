@@ -5,10 +5,10 @@
         .module('mainApp')
         .controller('OrdersCtrl', OrdersCtrl);
 
-    OrdersCtrl.$inject = ['$scope', '$timeout', 'Login', 'Issue', 'Users'];
+    OrdersCtrl.$inject = ['$scope', '$timeout', '$filter', 'Login', 'Issue', 'Users'];
 
     /* @ngInject */
-    function OrdersCtrl($scope, $timeout, Login, Issue, Users) {
+    function OrdersCtrl($scope, $timeout, $filter,  Login, Issue, Users) {
         var vm = this;
 
         // variables del modelo
@@ -32,7 +32,8 @@
           statusSort: ['','abierta', 'enProgreso', 'pausada', 'rechazada', 'cerrada'],
           priorities: ['baja', 'normal', 'alta'],
           reverseSortDate: false,
-          reverseSortStatus: false
+          reverseSortStatus: false,
+          reverseSortPriority: true
         }
 
         // métodos
@@ -48,6 +49,8 @@
         vm.loadIssues = loadIssues;
         vm.loadUser = loadUser;
 
+        vm.createIssue = createIssue;
+        vm.createComment = createComment;
         vm.selectIssue = selectIssue;
 
         vm.getPriority = getPriority;
@@ -59,15 +62,19 @@
         vm.getFullName = getFullName;
         vm.getCreator = getCreator;
 
+        vm.sortDate = sortDate;
+        vm.sortStatus = sortStatus;
+        vm.sortPriority = sortPriority;
+
         activate();
 
         function activate() {
           vm.model.userId = '';
+          vm.initializeView();
           Login.getSessionData()
             .then(function(s) {
                 vm.model.userId = s.user_id;
                 vm.initializeModel();
-                vm.initializeView();
             }, function(err) {
               $scope.$apply(function() {
                 vm.messageError(err);
@@ -91,7 +98,7 @@
         }
 
 /* ************************************************************************ */
-/* **********************  ********************************** */
+/* ******************** CONSULTAS AL MODELO ******************************* */
 /* ************************************************************************ */
 
       function  loadIssues() {
@@ -111,6 +118,7 @@
               vm.loadUser(issues[i].creatorId);
             }
             vm.model.issues = issues;
+            vm.sortStatus();
             $scope.$apply(function() {
               vm.closeMessage();
             })
@@ -148,6 +156,14 @@
       function cancel() {
         vm.model.selectedIssue = null;
         vm.view.style = vm.view.styles[0];
+      }
+
+      function createIssue() {
+        vm.view.style = vm.view.styles[3];
+      }
+
+      function createComment() {
+        vm.view.style = vm.view.styles[2];
       }
 
 
@@ -218,6 +234,31 @@
         }
         var user = vm.model.users[issue.userId];
         return (user == null) ? 'No tiene nombre' : user.name + ' ' + user.lastname;
+      }
+
+/* ************************************************************************* */
+/* ***************************** ORDENACION ******************************** */
+/* ************************************************************************* */
+
+      function sortDate() {
+        vm.view.reverseSortStatus = false;
+        vm.view.reverseSortPriority = true;
+        vm.model.issues = $filter('orderBy')(vm.model.issues, ['start', '-priority', 'statusPosition'], vm.view.reverseSortDate);
+        vm.view.reverseSortDate = !vm.view.reverseSortDate;
+      }
+
+      function sortStatus() {
+        vm.view.reverseSortDate = false;
+        vm.view.reverseSortPriority = true;
+        vm.model.issues = $filter('orderBy')(vm.model.issues, ['statusPosition', '-priority', 'start'], vm.view.reverseSortStatus);
+        vm.view.reverseSortStatus = !vm.view.reverseSortStatus;
+      }
+
+      function sortPriority() {
+        vm.view.reverseSortDate = false;
+        vm.view.reverseSortStatus = false;
+        vm.model.issues = $filter('orderBy')(vm.model.issues, ['priority', 'start', 'statusPosition'], vm.view.reverseSortPriority);
+        vm.view.reverseSortPriority = !vm.view.reverseSortPriority;
       }
 
 /* ************************************************************************ */

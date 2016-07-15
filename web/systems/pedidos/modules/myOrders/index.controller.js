@@ -488,6 +488,7 @@
                   loadUser(issues[i].creatorId);
                 }
                 vm.model.issues = issues;
+                vm.sortStatus();
                 $scope.$apply(function() {
                   vm.closeMessage();
                 })
