@@ -1,4 +1,8 @@
-<div class="library {{view.style}}">
+<div class="library {{view.style}} {{view.style2}}">
+    <!--
+    VARIABLES1: buscar
+    VARIABLES2: rangoHorario, rangoFechas
+    -->
 
     <!-- --------------- HEADER DEL SISTEMA ----------------- -->
     <div class="header">
@@ -16,13 +20,13 @@
             </div>
             <div class="headerContentList">
                 <div class="dataList">
-
+                    <div>Ordenar </div>
+                    <div class="btnOrder" title="Ordenar por Entrada / Salida"><i class="fa fa-exchange"></i></div>
+                    <div class="btnOrder" title="Ordenar Horario"><i class="fa fa-clock-o"></i></div>
+                    <div class="btnOrder" title="Ordenar Nombre"><i class="fa fa-sort-alpha-asc"></i></div>
                 </div>
                 <div class="contentFilters">
-                  <div>Ordenar </div>
-                  <div class="btnOrder" title="Ordenar por Entrada / Salida"><i class="fa fa-exchange"></i></div>
-                  <div class="btnOrder" title="Ordenar Horario"><i class="fa fa-clock-o"></i></div>
-                  <div class="btnOrder" title="Ordenar Nombre"><i class="fa fa-sort-alpha-asc"></i></div>
+                  <div class="btnOrder" title="Descargar Lista"><i class="fa fa-download"></i></div>
                   <div class="btnSearch" ng-click="view.style = 'buscar'" title="Buscar..."><i class="fa fa-search"></i></div>
                 </div>
 
@@ -30,19 +34,38 @@
                     <div class="subContentSearch">
                         <div class="contentItemSearch">
                           <div class="icoSeach"><i class="fa fa-search"></i></div>
-                          <div><input type="search" placeholder="Buscar por Nombre, Apellido o DNI "class="inputSearch"></input></div>
+                          <div><input type="search" placeholder="Buscar..."class="inputSearch"></input></div>
                           <div class=textRanck>
-                              <div>Rango</div>
-                              <div>Horario</div>
+                              <div>
+                                  <div class="btnOrder2" ng-click="view.style2 = 'rangoFechas'">Rango de Fechas</div>
+                                  <div class="btnOrder3" ng-click="view.style2 = 'rangoFechas'"><i class="fa fa-calendar-o"></i></div>
+
+                                  <div class="contentInputDate">
+                                    <div> Fecha Inico </div>
+                                    <div><input type="date"  class="inputTime "></input></div>
+                                    <div> Fecha Fin </div>
+                                    <div><input type="date" class="inputTime"></input></div>
+                                    <div class="btnSave" ng-click="view.style2 = ''">OK</div>
+                                  </div>
+                              </div>
+                              <div>
+                                  <div class="btnOrder2" ng-click="view.style2 = 'rangoHorario'">Rango Horario</div>
+                                  <div class="btnOrder3" ng-click="view.style2 = 'rangoHorario'"><i class="fa fa-clock-o"></i></div>
+                                  <div class="contentInputTime">
+                                    <div> Hora de Inicio </div>
+                                    <div><input type="time"  class="inputTime "></input></div>
+                                    <div> Hora Fin </div>
+                                    <div><input type="time" class="inputTime"></input></div>
+                                    <div class="btnSave" ng-click="view.style2 = ''">OK</div>
+                                  </div>
+                              </div>
                           </div>
-                          <div><input type="time"  class="inputTime"></input></div>
-                          <div> a </div>
-                          <div><input type="time" class="inputTime"></input></div>
                         </div>
                         <div>
                           <div class="btnSearch2" ng-click="view.style = ''" title="Buscar..."><i class="fa fa-check"></i></div>
                         </div>
                     </div>
+
                 </div>
 
             </div>
@@ -195,6 +218,25 @@
                     </div>
                 </div>
 
+                <div class="itemAccess salida">
+                    <div class="contentArrow">
+                      <i class="fa fa-caret-left" aria-hidden="true"></i>
+                    </div>
+                    <div class="infoUserAside">
+                        <div>
+                          <img class="imgUserAside" src="/systems/biblioteca/img/walter.jpg">
+                        </div>
+                        <div>
+                            <div class="textHora">
+                                <div class="textIn">Entrada</div>
+                                <div class="textOut">Salida</div>
+                                <div><i class="icoClock fa fa-clock-o"></i> 10:35 hs </div>
+                            </div>
+                            <div class="textName">Walter Roberto Blanco</div>
+                            <div class="textDNI">30001823</div>
+                        </div>
+                    </div>
+                </div>
 
             </div>
         </div>

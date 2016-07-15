@@ -165,7 +165,16 @@
 }
 
 .library .dataList {
-
+  display: flex;
+  display: -webkit-flex;
+  display: -moz-flex;
+  flex-direction: row;
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  justify-content: center;
+  margin-left: 10px;
 }
 
 .library .contentFilters {
@@ -207,6 +216,37 @@
   cursor: pointer;
 }
 
+.library .btnOrder2 {
+  display: block;
+  display: flex;
+  display: -webkit-flex;
+  display: -moz-flex;
+  align-items: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  font-size: 13px;
+  margin-left: 10px;
+  background-color: #5C5F69;
+  width: 150px;
+  height: 25px;
+  border-radius: 3px 3px 3px 3px ;
+  -moz-border-radius: 3px 3px 3px 3px;
+  -webkit-border-radius: 3px 3px 3px 3px;
+}
+
+.library .btnOrder2:hover {
+  background-color: #92AD17;
+  color: white;
+  cursor: pointer;
+}
+
+.library .btnOrder3 {
+  display: none;
+}
+
 .library .btnSearch {
   display: flex;
   display: -webkit-flex;
@@ -245,8 +285,8 @@
   -moz-justify-content: center;
   width: 40px;
   height: 40px;
-  background-color:#DBE2E5;
-  color: #3A3C44;
+  background-color:#92ad17;
+  color: white;
   margin-left: 15px;
   border-radius: 50px 3px 3px 50px;
   -webkit-border-radius: 50px 3px 3px 50px;
@@ -255,7 +295,7 @@
 }
 
 .library .btnSearch2:hover {
-  background-color: #92ad17;
+  background-color: #adc922;
   color: white;
   cursor: pointer;
 }
@@ -286,6 +326,46 @@
   0% {width:  0%}
   100% {width: 100%}
 }
+
+.library.buscar.rangoFechas .contentInputDate {
+  display: block;
+  position: absolute;
+  background-color: #3A3C44;
+  padding: 20px;
+}
+
+.library.buscar.rangoHorario .contentInputTime {
+  display: block;
+  position: absolute;
+  background-color: #3A3C44;
+  padding: 20px;
+}
+
+.library .contentInputDate {
+  display: none;
+}
+
+.library .contentInputTime {
+  display: none;
+}
+
+.library .btnSave {
+  background-color: #92AD17;
+  color:white;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  padding: 5px;
+  margin-top: 10px;
+  width: 30px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.library .btnSave:hover {
+  background-color: #adc922;
+}
+
 
 .library.buscar .headerContentList {
   justify-content: flex-end;
@@ -355,22 +435,17 @@
   -webkit-border-radius: 3px;
   font-size: 14px;
   padding: 3px;
-
-  min-width: 100px;
-  max-width: 150px;
+  width: 150px;
 }
 
 .library .textRanck {
   display: flex;
   display: -webkit-flex;
   display: -moz-flex;
-  flex-direction: column;
-  -webkit-flex-direction: column;
-  -moz-flex-direction: column;
-  align-items: flex-end;
-  -webkit-align-items: flex-end;
-  -moz-align-items: flex-end;
-  margin-left: 40px;
+  flex-direction: row;
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+  margin-left: 20px;
 }
 
 .library .inputTime {
@@ -378,8 +453,9 @@
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
   padding: 3px;
-  margin-left: 10px;
-  margin-right: 10px;
+  margin-top:3px;
+  margin-bottom: 3px;
+
 }
 
 .library .titleListAccess {
@@ -605,6 +681,9 @@
   .library .header {
       display: none;
   }
+
+
+
 }
 
 @media (max-width: 950px){
@@ -613,14 +692,47 @@
   }
   .library .contentMain {
     border-right: 0;
-
   }
+  .library .btnOrder3 {
+    display: block
+    display: flex;
+    display: -webkit-flex;
+    display: -moz-flex;
+    align-items: center;
+    -webkit-align-items: center;
+    -moz-align-items: center;
+    justify-content: center;
+    -webkit-justify-content: center;
+    -moz-justify-content: center;
+    font-size: 13px;
+    margin-left: 10px;
+    background-color: #5C5F69;
+    width: 50px;
+    height: 25px;
+    border-radius: 3px 3px 3px 3px ;
+    -moz-border-radius: 3px 3px 3px 3px;
+    -webkit-border-radius: 3px 3px 3px 3px;
+  }
+
+  .library .btnOrder3:hover {
+    background-color: #92AD17;
+    color: white;
+    cursor: pointer;
+  }
+
+  .library .btnOrder2 {
+    display: none;
+  }
+
+
 }
 
 @media (max-height: 719px){
   .library .header {
       display: none;
   }
+
+
 }
 
 @media (min-width: 720px){
