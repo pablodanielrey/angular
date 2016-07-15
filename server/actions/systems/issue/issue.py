@@ -79,7 +79,7 @@ class IssueWamp(ApplicationSession):
         try:
             userId = self.loginModel.getUserId(con, sid)
             oIds = Office.getOfficesByUser(con, userId, False)
-            return Issue.getOfficesIssues(con, userId, oIds)
+            return Issue.getAssignedIssues(con, userId, oIds)
         finally:
             self.conn.put(con)
 

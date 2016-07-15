@@ -1,4 +1,4 @@
-<div class="orders {{view.style}} {{view.style2}} ">
+<div class="orders {{vm.view.style}} {{vm.view.style2}} {{vm.view.style3}} {{vm.view.style4}}">
 
     <!-- ---- VARIABLES ----
     VARIABLE 1: pantallaDetallePedido
@@ -10,7 +10,6 @@
     VARIABLE 3: pantallaMensajeAlUsuario
                 VARIABLE 4: mensajeCargando, mensajeError, mensajeEnviado, mensajePedidoCreado
         -->
-
     <div ng-include="'/systems/pedidos/modules/orders/header.html?t=' + t"></div>
     <div ng-include="'/systems/pedidos/modules/orders/search.html?t=' + t"></div>
     <div ng-include="'/systems/pedidos/modules/orders/create.html?t=' + t"></div>

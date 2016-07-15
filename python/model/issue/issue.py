@@ -18,6 +18,7 @@ class Issue(JSONSerializable):
         self.parentId = None
         self.projectId = None
         self.office = None
+        self.priority = 2
         self.area = None
         self.userId = None
         self.subject = ''
@@ -124,6 +125,8 @@ class RedmineAPI:
         issue.userId = cls._loadUserByUIdRedmine(con, r.author.id, redmine)
         issue.subject = r.subject
         issue.description = r.description
+
+        issue.priority = r.priority.id
         issue.statusId = r.status.id
         issue.assignedToId =[r.assigned_to.id if 'assigned_to' in attrs else None][0]
 
@@ -261,6 +264,7 @@ class RedmineAPI:
         issue.parent_issue_id = iss.parentId
         issue.start_date = iss.start
         issue.tracker_id = iss.tracker
+        issue.priority_id = iss.priority
         cfields = cls.getCustomFields(iss)
         if len(cfields) > 0:
             issue.custom_fields = cfields

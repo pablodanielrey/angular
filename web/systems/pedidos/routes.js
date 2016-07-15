@@ -7,7 +7,8 @@ app.config(['$routeProvider', function($routeProvider) {
 
   .when('/orders', {
      templateUrl: '/systems/pedidos/modules/orders/index.html',
-     controller: 'OrdersCtrl'
+     controller: 'OrdersCtrl',
+     controllerAs: 'vm'
   })
 
   .when('/myOrders', {
