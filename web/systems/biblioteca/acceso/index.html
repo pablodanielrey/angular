@@ -45,7 +45,7 @@
 <body ng-controller='accessCtrl'>
 
     <div class="access {{view.style}}">
-        <!-- VARIABLES: pantallaInicio, pantallaCargando, pantallaUsuario -->
+        <!-- VARIABLES: pantallaInicio, pantallaCargando, pantallaUsuario, pantallaError -->
 
         <div class="contentHeader">
 
@@ -61,6 +61,7 @@
 
             <!-- *** BORRAR ESTO **** -->
             <div class="menu">
+              <button class="btnMenu" ng-click="view.style = 'pantallaError'">0</button>
               <button class="btnMenu" ng-click="view.style = 'pantallaInicio'">1</button>
               <button class="btnMenu" ng-click="view.style = 'pantallaCargando'">2</button>
               <button class="btnMenu" ng-click="view.style = 'pantallaUsuario'">3</button>
@@ -80,6 +81,17 @@
                         <div>
                             <button class="btnNext" type="text" ng-click="view.style = 'pantallaCargando'"> Acceder</button>
                         </div>
+                  </div>
+                  <!-- PANTALLA DEL ERROR USUARIO -->
+                  <div class="screenError">
+                      <div class="subContentError">
+                        <div class="emoticonError">
+                            <i class="fa fa-meh-o fa-2x" aria-hidden="true"></i> Oops!
+                        </div>
+                        <div class="textError">
+                            Usuario o contraseña <br> inconrrecto!
+                        </div>
+                      </div>
                   </div>
                   <!-- PANTALLA CARGANDO -->
                   <div class="screenPreload">

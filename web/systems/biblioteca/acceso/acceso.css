@@ -308,23 +308,54 @@ html, body {
   -moz-justify-content:  center;
 }
 
-
+.access.pantallaInicio .screenError,
 .access.pantallaInicio .screenPreload,
 .access.pantallaInicio .screenUser {
   display: none;
 }
 
+.access.pantallaCargando .screenError,
 .access.pantallaCargando .screenLogin,
 .access.pantallaCargando .screenUser {
   display: none;
 }
 
+.access.pantallaUsuario .screenError,
 .access.pantallaUsuario .screenLogin,
 .access.pantallaUsuario .screenPreload {
   display: none;
 }
 
+.access.pantallaError .screenPreload,
+.access.pantallaError .screenLogin,
+.access.pantallaError .screenUser {
+  display: none;
+}
 
+.access .screenError {
+
+}
+
+.access .subContentError {
+
+}
+
+.access .emoticonError {
+  font-size: 30px;
+  color: white;
+}
+
+.access .textError {
+  margin-top: 15px;
+  font-size: 19px;
+  color: white;
+  background-color: #024772;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  padding: 5px;
+  width: 200px;
+}
 
 .access.pantallaCargando .contentAcces {
   transform: translate3d(0,0,0);
