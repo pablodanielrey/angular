@@ -1,0 +1,190 @@
+{
+    "version": 2,
+    "controller": {
+        "id": "node1",
+        "options": {
+            "title": "crossbar-controller"
+        }
+    },
+    "workers": [
+        {
+            "id": "router1",
+            "type": "router",
+            "options": {
+              "pythonpath": [
+                  "../../python",
+                  "../../server",
+                  "components"
+              ]
+            },
+            "realms": [
+                {
+                    "name": "public",
+                    "roles": [
+                        {
+                            "name": "anonymous",
+                            "permissions": [
+                                {
+                                    "uri": "",
+                                    "match": "prefix",
+                                    "allow": {
+                                        "call": false,
+                                        "register": false,
+                                        "publish": false,
+                                        "subscribe": false
+                                    },
+                                    "disclose": {
+                                        "caller": false,
+                                        "publisher": false
+                                    },
+                                    "cache": true
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "core",
+                    "roles": [
+                        {
+                            "name": "authenticated",
+                            "permissions": [
+                                {
+                                    "uri": "",
+                                    "match": "prefix",
+                                    "allow": {
+                                        "call": true,
+                                        "register": false,
+                                        "publish": false,
+                                        "subscribe": false
+                                    },
+                                    "disclose": {
+                                        "caller": false,
+                                        "publisher": false
+                                    },
+                                    "cache": true
+                                }
+                            ]
+                        },
+                        {
+                            "name": "system",
+                            "permissions": [
+                                {
+                                    "uri": "",
+                                    "match": "prefix",
+                                    "allow": {
+                                        "call": true,
+                                        "register": true,
+                                        "publish": true,
+                                        "subscribe": true
+                                    },
+                                    "disclose": {
+                                        "caller": true,
+                                        "publisher": true
+                                    },
+                                    "cache": true
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "components": [
+            ],
+            "transports": [
+                {
+                    "id": "transport1",
+                    "type": "websocket",
+                    "debug": true,
+                    "serializers": [
+                        "json"
+                    ],
+                    "endpoint": {
+                        "type": "tcp",
+                        "version": 4,
+                        "port": 8080
+                    },
+                    "auth": {
+                        "anonymous": {
+                            "type": "static",
+                            "role": "anonymous"
+                        },
+                        "ticket": {
+                            "type": "static",
+                            "principals": {
+                                "system": {
+                                    "ticket": "password",
+                                    "role": "system"
+                                },
+                                "client": {
+                                    "ticket": "password",
+                                    "role": "authenticated"
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+        },
+
+        {
+            "type": "container",
+            "options": {
+                "pythonpath": [
+                    "../../python",
+                    "../../server",
+                    "components"
+                ]
+            },
+            "components": [
+                {
+                    "id": "register_serializer_component",
+                    "type": "class",
+                    "classname": "serializer.RegisterSerializers",
+                    "realm": "public",
+                    "transport": {
+                        "type": "websocket",
+                        "endpoint": {
+                            "type": "tcp",
+                            "host": "127.0.0.1",
+                            "port": 8080
+                        },
+                        "url": "ws://localhost:8080"
+                    }
+                },
+                {
+                    "id": "library",
+                    "type": "class",
+                    "classname": "actions.systems.library.library.LibrarySession",
+                    "realm": "core",
+                    "transport": {
+                        "type": "websocket",
+                        "endpoint": {
+                            "type": "tcp",
+                            "host": "127.0.0.1",
+                            "port": 8080
+                        },
+                        "url": "ws://localhost:8080"
+                    }
+                },
+                {
+                    "id": "libraryClient",
+                    "type": "class",
+                    "classname": "actions.systems.library.client.LibraryClient",
+                    "realm": "core",
+                    "transport": {
+                        "type": "websocket",
+                        "endpoint": {
+                            "type": "tcp",
+                            "host": "127.0.0.1",
+                            "port": 8080
+                        },
+                        "url": "ws://localhost:8080"
+                    }
+                }
+            ]
+        }
+
+
+    ]
+}

@@ -1,0 +1,126 @@
+{
+    "version": 2,
+    "controller": {
+        "id": "node1",
+        "options": {
+            "title": "crossbar-controller"
+        }
+    },
+    "workers": [
+        {
+            "id": "router1",
+            "type": "router",
+            "options": {
+                "pythonpath": [
+                    "../../python",
+                    "components"
+                ]
+            },
+            "realms": [
+                {
+                    "name": "public",
+                    "roles": [
+                        {
+                            "name": "anonymous",
+                            "permissions": [
+                                {
+                                    "uri": "",
+                                    "match": "prefix",
+                                    "allow": {
+                                        "call": false,
+                                        "register": false,
+                                        "publish": false,
+                                        "subscribe": false
+                                    },
+                                    "disclose": {
+                                        "caller": false,
+                                        "publisher": false
+                                    },
+                                    "cache": true
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "core",
+                    "roles": [
+                        {
+                            "name": "authenticated",
+                            "permissions": [
+                                {
+                                    "uri": "",
+                                    "match": "prefix",
+                                    "allow": {
+                                        "call": false,
+                                        "register": false,
+                                        "publish": false,
+                                        "subscribe": false
+                                    },
+                                    "disclose": {
+                                        "caller": false,
+                                        "publisher": false
+                                    },
+                                    "cache": true
+                                }
+                            ]
+                        },
+                        {
+                            "name": "system",
+                            "permissions": [
+                                {
+                                    "uri": "",
+                                    "match": "prefix",
+                                    "allow": {
+                                        "call": false,
+                                        "register": false,
+                                        "publish": false,
+                                        "subscribe": false
+                                    },
+                                    "disclose": {
+                                        "caller": false,
+                                        "publisher": false
+                                    },
+                                    "cache": true
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "components": [
+                {
+                    "id": "register_serializer_component",
+                    "type": "class",
+                    "classname": "serializer.RegisterSerializers",
+                    "realm": "core",
+                    "role": "system"
+                }
+            ],
+            "transports": [
+                {
+                    "id": "transport1",
+                    "type": "websocket",
+                    "debug": true,
+                    "serializers": [
+                        "json"
+                    ],
+                    "endpoint": {
+                        "type": "tcp",
+                        "version": 4,
+                        "port": 8080
+                    },
+                    "options": {
+                        "enable_webstatus": false,
+                        "fail_by_drop": true,
+                        "open_handshake_timeout": 2500,
+                        "close_handshake_timeout": 1000,
+                        "auto_ping_interval": 10000,
+                        "auto_ping_timeout": 5000,
+                        "auto_ping_size": 4
+                    }
+                }
+            ]
+        }
+    ]
+}

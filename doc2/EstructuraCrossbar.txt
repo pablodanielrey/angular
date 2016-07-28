@@ -1,0 +1,20 @@
+
+Router principal.
+
+realm "public"
+roles:
+  anonymous -- conexiones anónimas tienen este rol.
+    call - True
+
+realm "core"
+roles:
+  authenticated -- conexiones que ya están autentificadas
+    Todos los permisos
+
+  system -- rol que obtienen los componentes del sistema en las interfaces internas
+    Todos los permisos
+
+
+ejemplo de serializador:
+
+https://groups.google.com/forum/#!topic/autobahnws/aZcsudxFMMo
