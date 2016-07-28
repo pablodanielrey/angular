@@ -12,6 +12,7 @@ class LibrarySession(ApplicationSession):
     def test_serializer(self, o):
         print(o)
         print(o.__dict__)
+        return o
 
     def onConnect(self):
         self.join("core", ["ticket"], "system")

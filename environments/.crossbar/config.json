@@ -11,11 +11,7 @@
             "id": "router1",
             "type": "router",
             "options": {
-              "pythonpath": [
-                  "../../python",
-                  "../../server",
-                  "components"
-              ]
+
             },
             "realms": [
                 {

@@ -30,3 +30,4 @@ class LibraryClient(ApplicationSession):
         t = TestSer()
         res = yield self.call('test_serializer', t)
         print(res)
+        print(res.__dict__)
