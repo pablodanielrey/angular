@@ -12,6 +12,7 @@ For more information on why WAMP is a great choice for your project, read: [Why 
 
 ## Installing AngularWAMP
 
+#### With Bower
 You can [download](https://github.com/voryx/angular-wamp/archive/master.zip) the zip file or install AngularWAMP via [Bower](http://bower.io/#install-bower):
 
 ```bash
@@ -31,6 +32,34 @@ To use AngularWAMP in your project, you need to include the following files in y
 <script src="bower_components/angular-wamp/release/angular-wamp.js"></script>
 ```
 
+#### With NPM
+
+```bash
+$ npm install angular-wamp
+```
+
+And then you can import angular-wamp into your js files:
+
+```js
+import angular     from 'angular';
+import angularWamp from 'angular-wamp';
+
+// module definition
+export default angular.module('app.starter', [angularWamp])
+    .config(function($wampProvider) {
+        $wampProvider.init({
+            url: 'ws://127.0.0.1:9000/',
+            realm: 'realm1'
+            //Any other AutobahnJS options
+        });
+    })
+    .run(function($wamp){
+        $wamp.open();
+    });
+
+angular.bootstrap(document, ['app.starter']);
+
+```
 
 ## Documentation
 
@@ -131,7 +160,7 @@ note: This will probably change in the future, if I can figure out a better way 
 ```Javascript
 $scope.$on("$wamp.onchallenge", function (event, data) {
     if (data.method === "myauth"){                
-        return data.promise.resolve("some_sercet");
+        return data.promise.resolve(autobahn.auth_cra.sign('someSecret', data.extra.challenge));
      } 
      //You can also access the following objects:
      // data.session             
@@ -147,6 +176,28 @@ You can also access the ``connection`` and ``session`` through the ``$wamp`` ser
 $wamp.session;
 $wamp.connection;
 ```
+
+### Multiple Connections
+
+You can create multiple connections by creating a new provider that wraps `$wampProvider`.  You'll also need to specify a `prefix` for that services wamp events, which will be used instead of `$wamp`.
+
+```JS
+app.provider('$wamp2', function ($wampProvider) {
+
+        var options = {
+            url: 'ws://127.0.0.1:9992',
+            realm: 'thruway.auth',
+            prefix: 'wamp2'
+        };
+
+        this.$get = function ($injector) {
+            $wampProvider.init(options);
+            return $injector.invoke($wampProvider.$get);
+        };
+    })
+
+```
+You can now use the service `$wamp2` exactly like `$wamp`.
 
 ###Interceptors
 

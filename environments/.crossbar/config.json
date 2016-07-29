@@ -11,9 +11,51 @@
             "id": "router1",
             "type": "router",
             "options": {
-
+              "pythonpath": [
+                  "../../python",
+                  "../../server",
+                  "components"
+              ]
             },
             "realms": [
+                {
+                    "name": "authenticators",
+                    "roles": [
+                        {
+                            "name": "authenticator",
+                            "permissions": [
+                                {
+                                    "uri": "login.authenticate.anonymous",
+                                    "match": "exact",
+                                    "allow": {
+                                        "call": false,
+                                        "register": true,
+                                        "publish": false,
+                                        "subscribe": false
+                                    },
+                                    "disclose": {
+                                        "caller": false,
+                                        "publisher": false
+                                    }
+                                },
+                                {
+                                    "uri": "login.authenticate.ticket",
+                                    "match": "exact",
+                                    "allow": {
+                                        "call": false,
+                                        "register": true,
+                                        "publish": false,
+                                        "subscribe": false
+                                    },
+                                    "disclose": {
+                                        "caller": false,
+                                        "publisher": false
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                },
                 {
                     "name": "public",
                     "roles": [
@@ -85,8 +127,22 @@
                     ]
                 }
             ],
+
             "components": [
+                {
+                    "type": "class",
+                    "classname": "actions.systems.login.authenticator.AnonymousAuth",
+                    "realm": "authenticators",
+                    "role": "authenticator"
+                },
+                {
+                    "type": "class",
+                    "classname": "actions.systems.login.authenticator.TicketAuth",
+                    "realm": "authenticators",
+                    "role": "authenticator"
+                }
             ],
+
             "transports": [
                 {
                     "id": "transport1",
@@ -102,21 +158,28 @@
                     },
                     "auth": {
                         "anonymous": {
-                            "type": "static",
-                            "role": "anonymous"
+                            "type": "dynamic",
+                            "authenticator": "login.authenticate.anonymous",
+                            "authenticator-realm": "authenticators"
                         },
                         "ticket": {
+                            "type": "dynamic",
+                            "authenticator": "login.authenticate.ticket",
+                            "authenticator-realm": "authenticators"
+                        }
+                    }
+                },
+                {
+                    "id": "web1",
+                    "type": "web",
+                    "endpoint": {
+                        "type": "tcp",
+                        "port": 8081
+                    },
+                    "paths": {
+                        "/": {
                             "type": "static",
-                            "principals": {
-                                "system": {
-                                    "ticket": "password",
-                                    "role": "system"
-                                },
-                                "client": {
-                                    "ticket": "password",
-                                    "role": "authenticated"
-                                }
-                            }
+                            "directory": "../../web"
                         }
                     }
                 }
@@ -137,7 +200,7 @@
                     "id": "register_serializer_component",
                     "type": "class",
                     "classname": "serializer.RegisterSerializers",
-                    "realm": "public",
+                    "realm": "core",
                     "transport": {
                         "type": "websocket",
                         "endpoint": {
@@ -162,22 +225,8 @@
                         },
                         "url": "ws://localhost:8080"
                     }
-                },
-                {
-                    "id": "libraryClient",
-                    "type": "class",
-                    "classname": "actions.systems.library.client.LibraryClient",
-                    "realm": "core",
-                    "transport": {
-                        "type": "websocket",
-                        "endpoint": {
-                            "type": "tcp",
-                            "host": "127.0.0.1",
-                            "port": 8080
-                        },
-                        "url": "ws://localhost:8080"
-                    }
                 }
+
             ]
         }
 

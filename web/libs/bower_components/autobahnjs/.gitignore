@@ -1,6 +1,0 @@
-.sconsign.dblite
-*.sublime-workspace
-build
-node_modules
-*.log
-*.pyc

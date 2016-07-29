@@ -1,5 +1,5 @@
 /* commonjs package manager support */
-if (typeof module !== "undefined" && typeof exports !== "undefined" && module.exports === exports){
+if (typeof module !== "undefined" && typeof exports !== "undefined" && module.exports === exports) {
     var autobahn = require('autobahn');
     module.exports = 'vxWamp';
 }
@@ -58,6 +58,8 @@ if (typeof module !== "undefined" && typeof exports !== "undefined" && module.ex
          *
          *    Optional options:
          *
+         *      - `prefix`: `{string=}` - prefix events so we can distinguish between instances (default: '$wamp')
+         *
          *      Options that control what kind of Deferreds to use:
          *
          *      - `use_es6_promises`: `{boolean=}` - use deferreds based on ES6 promises
@@ -70,6 +72,7 @@ if (typeof module !== "undefined" && typeof exports !== "undefined" && module.ex
          *      - `max_retry_delay`: `{float=}` - Maximum delay for reconnection attempts in seconds (default: 300).
          *      - `retry_delay_growth`: `{float=}` - The growth factor applied to the retry delay between reconnection attempts (default: 1.5).
          *      - `retry_delay_jitter`: `{float=}` - The standard deviation of a Gaussian to jitter the delay on each retry cycle as a fraction of the mean (default: 0.1).
+         *      - `disable_digest`: `{boolean=}` - Disables wrapping all promises and callbacks with scope.$apply (default: false).
          *
          * @description
          * Configures the AutobhanJS Service
@@ -178,6 +181,7 @@ if (typeof module !== "undefined" && typeof exports !== "undefined" && module.ex
             var connection;
             var sessionDeferred = $q.defer();
             var sessionPromise = sessionDeferred.promise;
+            var prefix = options.prefix || "$wamp";
 
             /**
              * @param session
@@ -192,7 +196,7 @@ if (typeof module !== "undefined" && typeof exports !== "undefined" && module.ex
 
                 var onChallengeDeferred = $q.defer();
 
-                $rootScope.$broadcast("$wamp.onchallenge", {
+                $rootScope.$broadcast(prefix + ".onchallenge", {
                     promise: onChallengeDeferred,
                     session: session,
                     method: method,
@@ -202,6 +206,10 @@ if (typeof module !== "undefined" && typeof exports !== "undefined" && module.ex
                 return onChallengeDeferred.promise;
             };
 
+            var defaultOptions = {onchallenge: digestWrapper(onchallenge), use_deferred: $q.defer};
+
+            options = angular.extend(defaultOptions, options);
+
             /**
              * Interceptors stored in reverse order. Inner interceptors before outer interceptors.
              */
@@ -209,7 +217,7 @@ if (typeof module !== "undefined" && typeof exports !== "undefined" && module.ex
 
             angular.forEach(interceptors, function (interceptor) {
                 reversedInterceptors.unshift(
-                    angular.isString(interceptor) ? $injector.get(interceptor) :  $injector.invoke(interceptor));
+                    angular.isString(interceptor) ? $injector.get(interceptor) : $injector.invoke(interceptor));
             });
 
             /**
@@ -220,29 +228,39 @@ if (typeof module !== "undefined" && typeof exports !== "undefined" && module.ex
              * Wraps a callback with a function that calls scope.$apply(), so that the callback is added to the digest
              */
             function digestWrapper(func) {
+
+                if (options.disable_digest && options.disable_digest === true) {
+                    return func;
+                }
+
                 return function () {
                     var cb = func.apply(this, arguments);
-                    $rootScope.$apply();
+                    $rootScope.$applyAsync();
                     return cb;
                 };
             }
 
-            options = angular.extend({onchallenge: digestWrapper(onchallenge), use_deferred: $q.defer}, options);
-
             connection = new autobahn.Connection(options);
             connection.onopen = digestWrapper(function (session, details) {
                 $log.debug("Congrats!  You're connected to the WAMP server!");
-                $rootScope.$broadcast("$wamp.open", {session: session, details: details});
+                $rootScope.$broadcast(prefix + ".open", {session: session, details: details});
                 sessionDeferred.resolve();
             });
 
             connection.onclose = digestWrapper(function (reason, details) {
                 $log.debug("Connection Closed: ", reason, details);
-                sessionDeferred = $q.defer();
-                sessionPromise = sessionDeferred.promise;
-                $rootScope.$broadcast("$wamp.close", {reason: reason, details: details});
-            });
 
+                //Reject outstanding RPC calls
+                for (var key in connection.session._call_reqs) {
+                    if (connection.session._call_reqs.hasOwnProperty(key)) {
+                        var error = new Error("Connection Closed");
+                        var call = connection.session._call_reqs[key];
+                        call[0].reject(error);
+                    }
+                }
+
+                $rootScope.$broadcast(prefix + ".close", {reason: reason, details: details});
+            });
 
             /**
              * Subscription object which self manages reconnections
@@ -262,6 +280,10 @@ if (typeof module !== "undefined" && typeof exports !== "undefined" && module.ex
                 onOpen = function () {
                     var p = connection.session.subscribe(topic, handler, options).then(
                         function (s) {
+                            if (subscription.hasOwnProperty('id')) {
+                                delete subscription.id;
+                            }
+
                             subscription = angular.extend(s, subscription);
                             deferred.resolve(subscription);
                             return s;
@@ -277,7 +299,7 @@ if (typeof module !== "undefined" && typeof exports !== "undefined" && module.ex
                     onOpen();
                 }
 
-                unregister = $rootScope.$on("$wamp.open", onOpen);
+                unregister = $rootScope.$on(prefix + ".open", onOpen);
 
                 subscription.promise = deferred.promise;
                 subscription.unsubscribe = function () {
@@ -315,7 +337,7 @@ if (typeof module !== "undefined" && typeof exports !== "undefined" && module.ex
                  * @returns {{error: *, type: *, args: *}}
                  */
                 var error = function (error) {
-                    $log.error("$wamp error", {type: type, arguments: args, error: error});
+                    $log.error(prefix + " error", {type: type, arguments: args, error: error});
                     return $q.reject({error: error, type: type, args: args});
                 };
 
@@ -376,6 +398,14 @@ if (typeof module !== "undefined" && typeof exports !== "undefined" && module.ex
                         return Subscription(topic, handler, options, subscribedCallback);
                     });
                 },
+                subscribeOnScope: function (scope, channel, callback) {
+                    return this.subscribe(channel, callback).then(function (subscription) {
+                        scope.$on('$destroy', function () {
+                            return subscription.unsubscribe();
+                        });
+                        return subscription;
+                    });
+                },
                 unsubscribe: function (subscription) {
                     return interceptorWrapper('unsubscribe', arguments, function () {
                         return subscription.unsubscribe();
@@ -391,6 +421,11 @@ if (typeof module !== "undefined" && typeof exports !== "undefined" && module.ex
 
                     return interceptorWrapper('register', arguments, function () {
                         return connection.session.register(procedure, endpoint, options);
+                    });
+                },
+                unregister: function (registration) {
+                    return interceptorWrapper('unregister', arguments, function () {
+                        return registration.unregister();
                     });
                 },
                 call: function (procedure, args, kwargs, options) {

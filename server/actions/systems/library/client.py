@@ -17,7 +17,7 @@ class TestSer(JSONSerializable):
 class LibraryClient(ApplicationSession):
 
     def onConnect(self):
-        self.join("core", ["ticket"], "client")
+        self.join("core", ["ticket"], "system")
 
     def onChallenge(self, challenge):
         if challenge.method == 'ticket':
@@ -31,3 +31,4 @@ class LibraryClient(ApplicationSession):
         res = yield self.call('test_serializer', t)
         print(res)
         print(res.__dict__)
+        self.leave()

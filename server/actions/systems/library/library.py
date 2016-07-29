@@ -10,6 +10,7 @@ class LibrarySession(ApplicationSession):
 
     @wamp.register('test_serializer')
     def test_serializer(self, o):
+        print('test_serializer llamado')
         print(o)
         print(o.__dict__)
         return o
