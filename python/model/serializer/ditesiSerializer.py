@@ -71,63 +71,8 @@ def _my_dumps(obj):
 def _my_loads(data):
     return json.loads(data, object_hook=DiTeSiJsonEncoder._object_loads)
 
-
-
-class DiTeSiObjectSerializer(object):
-    """ una copia del JsonObjectSerializer pero que maneja el tema de las fechas a isodate """
-
-    BINARY = False
-
-    def __init__(self, batched=False):
-        """
-        Ctor.
-        :param batched: Flag that controls whether serializer operates in batched mode.
-        :type batched: bool
-        """
-        self._batched = batched
-
-    def serialize(self, obj):
-        """
-        Implements :func:`autobahn.wamp.interfaces.IObjectSerializer.serialize`
-        """
-        s = json.dumps(obj, separators=(',', ':'), ensure_ascii=False, cls=DiTeSiJsonEncoder)
-        if isinstance(s, six.text_type):
-            s = s.encode('utf8')
-        if self._batched:
-            return s + b'\30'
-        else:
-            return s
-
-    def unserialize(self, payload):
-        """
-        Implements :func:`autobahn.wamp.interfaces.IObjectSerializer.unserialize`
-        """
-        if self._batched:
-            chunks = payload.split(b'\30')[:-1]
-        else:
-            chunks = [payload]
-        if len(chunks) == 0:
-            raise Exception("batch format error")
-        return [json.loads(data.decode('utf8'), object_hook=DiTeSiJsonEncoder._object_loads) for data in chunks]
-
-
-class DiTeSiSerializer(Serializer):
-
-    SERIALIZER_ID = "json"
-    MIME_TYPE = "application/json"
-    RAWSOCKET_SERIALIZER_ID = 2
-
-    def __init__(self, batched=False):
-        super().__init__(DiTeSiObjectSerializer(batched=batched))
-        if batched:
-            self.SERIALIZER_ID = "json.batched"
-
-
 def register():
     """ reemplazo las funciones usadas por el JsonObjectSerializer del autobahn para serializar usando json """
     from autobahn.wamp import serializer
     serializer._dumps = _my_dumps
     serializer._loads = _my_loads
-
-    #IObjectSerializer.register(DiTeSiObjectSerializer)
-    #ISerializer.register(DiTeSiSerializer)

@@ -2,3 +2,4 @@
 nbproject
 **/.directory
 server/tmp/*
+node.pid
