@@ -5,6 +5,7 @@
     el componente en si no hace nada.
 """
 
+from autobahn.wamp.exception import ApplicationError
 from autobahn.twisted.wamp import ApplicationSession
 from twisted.internet.defer import inlineCallbacks
 from twisted.python import log

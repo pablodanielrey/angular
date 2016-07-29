@@ -131,6 +131,12 @@
             "components": [
                 {
                     "type": "class",
+                    "classname": "actions.wamp.session.WampSession",
+                    "realm": "core",
+                    "role": "system"
+                },
+                {
+                    "type": "class",
                     "classname": "actions.systems.login.authenticator.AnonymousAuth",
                     "realm": "authenticators",
                     "role": "authenticator"
