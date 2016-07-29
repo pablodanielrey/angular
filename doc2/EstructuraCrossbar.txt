@@ -1,4 +1,44 @@
 
+
+virtualenv -p /usr/bin/python3.5 crossbar
+source crossbar/bin/activate
+pip install crossbar
+pip install inject
+pip install psycopg2
+pip install dateutils
+
+editar el registry.cfg para que contenga la sección de crossbar
+ej:
+[crossbar]
+system_user = system
+system_password = password
+host = 127.0.0.1
+database = d
+user = u
+password = p
+
+
+para poder instalar psycopg2 deben tener instalado las librerias de desarrollo de postgresql.
+apt-get install postgresql-server-dev-all
+
+
+---
+para correr el crossbar una vez instalado solo debe entrar en:
+
+cd angular/environments/
+crossbar start
+
+siempre teniendo activo el virtualenv correcto.
+
+---
+
+la config hasta ahora sirve las páginas tambien.
+abre el puerto 8081 para la navegación web
+y el 8080 para un transporte de websocket pelado
+
+
+
+
 Router principal.
 
 realm "public"

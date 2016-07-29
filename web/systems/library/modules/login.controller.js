@@ -3,6 +3,8 @@ var app = angular.module('library');
 
 app.controller('LoginCtrl', ["$rootScope", '$scope', "$wamp", function ($rootScope, $scope, $wamp) {
 
+  $scope.message = "desconectado";
+
   $scope.$on('$viewContentLoaded', function(event) {
     $scope.initialize();
   });
@@ -16,6 +18,19 @@ app.controller('LoginCtrl', ["$rootScope", '$scope', "$wamp", function ($rootSco
     console.log($scope.password);
     return $scope.password;
   }
+
+  $scope.$on("$wamp.open", function(event, info) {
+    console.log(info.session);
+    console.log(info.details);
+    $scope.message = 'Conexión abierta';
+  });
+
+  $scope.$on("$wamp.close", function(event, info) {
+    console.log(info.session);
+    console.log(info.details);
+    $scope.message = 'Conexión cerrada';
+  });
+
 
   $scope.$on("$wamp.onchallenge", function (event, info) {
     // info.promise: promise to return to wamp,
