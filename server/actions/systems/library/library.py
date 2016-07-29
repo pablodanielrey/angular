@@ -2,6 +2,7 @@
 from twisted.internet.defer import inlineCallbacks
 from autobahn.twisted.wamp import ApplicationSession
 from autobahn import wamp
+from model.serializer.ditesiSerializer import JSONSerializable
 
 #from model.serializer import ditesiSerializer
 #ditesiSerializer.register()
@@ -12,7 +13,8 @@ class LibrarySession(ApplicationSession):
     def test_serializer(self, o):
         print('test_serializer llamado')
         print(o)
-        print(o.__dict__)
+        if isinstance(o, JSONSerializable):
+            print(o.__dict__)
         return o
 
     def onConnect(self):

@@ -29,6 +29,11 @@ app.config(['$routeProvider', function($routeProvider) {
      controller: 'LogoutCtrl'
   })
   */
+  .when('/test', {
+     templateUrl: 'modules/test.html',
+     controller: 'TestCtrl'
+  })
+
   .when('/', {
      templateUrl: 'modules/login.html',
      controller: 'LoginCtrl'
