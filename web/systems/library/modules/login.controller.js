@@ -32,6 +32,11 @@ app.controller('LoginCtrl', ["$rootScope", '$scope', "$wamp", function ($rootSco
 
   $scope.initialize = function() {
     $scope.message = 'pantalla inicial de login';
+    $scope.open = $wamp.connection.isOpen;
+    if ($scope.open) {
+      $scope.username = $rootScope.credentials.username;
+      $scope.password = $rootScope.credentials.password;
+    }
   };
 
 
@@ -39,6 +44,7 @@ app.controller('LoginCtrl', ["$rootScope", '$scope', "$wamp", function ($rootSco
     console.log(info.session);
     console.log(info.details);
     $scope.message = 'Conexión abierta';
+    $scope.open = true;
   });
 
   $scope.$on("$wamp.close", function(event, info) {
@@ -47,14 +53,16 @@ app.controller('LoginCtrl', ["$rootScope", '$scope', "$wamp", function ($rootSco
     $scope.message = 'Conexión cerrada';
   });
 
-
+  $scope.close = function() {
+    $wamp.close();
+  }
 
   $scope.login = function() {
     console.log('login llamando')
     console.log($scope.username);
     console.log($scope.password);
 
-    console.log('seteando autentificación y abriendo conexión')
+    console.log('seteando autentificación y abriendo conexión');
     $rootScope.credentials =  {
       username: $scope.username,
       password: $scope.password

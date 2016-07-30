@@ -1,12 +1,13 @@
 var app = angular.module('library');
 
-app.controller('TestCtrl', ["$rootScope", '$scope', "$wamp", function ($rootScope, $scope, $wamp) {
+app.controller('TestCtrl', ["$rootScope", '$scope', "$location", "$wamp", function ($rootScope, $scope, $location, $wamp) {
 
   $scope.message = '';
 
   $scope.test = function() {
     if (!$wamp.connection.isOpen) {
       $scope.message = 'debe loguearse antes';
+      $location.path('/');
       return;
     }
     o = {

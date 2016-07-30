@@ -38,7 +38,7 @@ class AnonymousAuth(ApplicationSession):
             }
             return principal
 
-        yield self.register(authenticate, 'login.authenticate.anonymous')
+        yield self.register(authenticate, 'authenticate.anonymous')
 
 
 class TicketAuth(ApplicationSession):
@@ -81,7 +81,6 @@ class TicketAuth(ApplicationSession):
                 username = authid
                 password = details['ticket']
                 if not login.login(con, username, password):
-                    print('3')
                     raise ApplicationError('usuario o clave incorrectas')
 
                 principal = {
@@ -100,7 +99,7 @@ class TicketAuth(ApplicationSession):
             finally:
                 conn.put(con)
 
-        yield self.register(authenticate, 'login.authenticate.ticket')
+        yield self.register(authenticate, 'authenticate.ticket')
 
 """
 class CRAAuth(ApplicationSession):

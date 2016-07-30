@@ -25,7 +25,7 @@
                             "name": "authenticator",
                             "permissions": [
                                 {
-                                    "uri": "login.authenticate.anonymous",
+                                    "uri": "authenticate.anonymous",
                                     "match": "exact",
                                     "allow": {
                                         "call": false,
@@ -39,7 +39,7 @@
                                     }
                                 },
                                 {
-                                    "uri": "login.authenticate.ticket",
+                                    "uri": "authenticate.ticket",
                                     "match": "exact",
                                     "allow": {
                                         "call": false,
@@ -131,19 +131,19 @@
             "components": [
                 {
                     "type": "class",
-                    "classname": "actions.wamp.session.WampSession",
+                    "classname": "wamp.session.WampSession",
                     "realm": "core",
                     "role": "system"
                 },
                 {
                     "type": "class",
-                    "classname": "actions.systems.login.authenticator.AnonymousAuth",
+                    "classname": "wamp.authenticator.AnonymousAuth",
                     "realm": "authenticators",
                     "role": "authenticator"
                 },
                 {
                     "type": "class",
-                    "classname": "actions.systems.login.authenticator.TicketAuth",
+                    "classname": "wamp.authenticator.TicketAuth",
                     "realm": "authenticators",
                     "role": "authenticator"
                 }
@@ -165,13 +165,24 @@
                     "auth": {
                         "anonymous": {
                             "type": "dynamic",
-                            "authenticator": "login.authenticate.anonymous",
+                            "authenticator": "authenticate.anonymous",
                             "authenticator-realm": "authenticators"
                         },
                         "ticket": {
                             "type": "dynamic",
-                            "authenticator": "login.authenticate.ticket",
+                            "authenticator": "authenticate.ticket",
                             "authenticator-realm": "authenticators"
+                        },
+                        "cookie": {
+                        }
+                    },
+                    "cookie": {
+                        "name": "cbtid",
+                        "length": 64,
+                        "max_age": 864000,
+                        "store": {
+                            "type": "file",
+                            "filename": "cookies.dat"
                         }
                     }
                 },
