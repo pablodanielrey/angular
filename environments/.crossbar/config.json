@@ -94,11 +94,11 @@
                                         "call": true,
                                         "register": false,
                                         "publish": false,
-                                        "subscribe": false
+                                        "subscribe": true
                                     },
                                     "disclose": {
-                                        "caller": false,
-                                        "publisher": false
+                                        "caller": true,
+                                        "publisher": true
                                     },
                                     "cache": false
                                 }
@@ -131,12 +131,6 @@
             "components": [
                 {
                     "type": "class",
-                    "classname": "wamp.session.WampSession",
-                    "realm": "core",
-                    "role": "system"
-                },
-                {
-                    "type": "class",
                     "classname": "wamp.authenticator.AnonymousAuth",
                     "realm": "authenticators",
                     "role": "authenticator"
@@ -146,6 +140,12 @@
                     "classname": "wamp.authenticator.TicketAuth",
                     "realm": "authenticators",
                     "role": "authenticator"
+                },
+                {
+                    "type": "class",
+                    "classname": "wamp.session.WampSession",
+                    "realm": "core",
+                    "role": "stystem"
                 }
             ],
 
@@ -226,6 +226,20 @@
                         "url": "ws://localhost:8080"
                     }
                 },
+                {
+                    "type": "class",
+                    "classname": "wamp.session.WampSession",
+                    "realm": "core",
+                    "transport": {
+                        "type": "websocket",
+                        "endpoint": {
+                            "type": "tcp",
+                            "host": "127.0.0.1",
+                            "port": 8080
+                        },
+                        "url": "ws://localhost:8080"
+                    }
+                },                
                 {
                     "id": "library",
                     "type": "class",

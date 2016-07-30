@@ -84,6 +84,7 @@ app.controller('LoginCtrl', ["$rootScope", '$scope', "$wamp", function ($rootSco
     $scope.getSessions();
 
     $scope.message = 'Conexión abierta';
+    $scope.session = info.session._id;
     $scope.open = true;
   });
 
