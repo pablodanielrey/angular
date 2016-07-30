@@ -21,12 +21,13 @@
   <div ng-repeat='s in sessions track by $index'>
     <div>
       <div>---------------------</div>
-      <span ng-if='s.session != session'>id {{s.session}}</span>
-      <span ng-if='s.session == session'>id ESTE</span>
-      <span>aid {{s.authid}}</span>
-      <span>provider {{s.authprovider}}</span>
-      <span>rol {{s.authrole}}</span>
-      <span>metodo {{s.authmethod}}</span>
+      <span ng-if='s.session != session'>{{s.session}}</span>
+      <span ng-if='s.session == session'>ESTE</span>
+      <span> {{s.authid}}</span>
+      <span> {{s.authrole}}</span>
+      <span> {{s.authprovider}}</span>
+      <span> {{s.authmethod}}</span>
+      <span> {{s.transport.http_headers_received}}</span>
       <button ng-click='closeSession(s.session)'>X</button>
       <div>---------------------</div>
     </div>

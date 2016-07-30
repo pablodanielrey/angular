@@ -43,7 +43,15 @@ app.controller('LoginCtrl', ["$rootScope", '$scope', "$wamp", function ($rootSco
   $scope.addSession = function(s) {
     console.log('addsession');
     console.log(s[0]);
-    $scope.sessions.push(s[0]);
+    var found = false;
+    for (var i = 0; i < $scope.sessions.length; i++) {
+      if ($scope.sessions[i].session == s[0].session) {
+        found = true;
+      }
+    }
+    if (!found) {
+      $scope.sessions.push(s[0]);
+    }
   }
 
   $scope.removeSession = function(s) {

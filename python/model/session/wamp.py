@@ -31,11 +31,10 @@ class WampSession:
 
     @classmethod
     def fromDetails(cls, details):
-        print(details)
         d = copy.deepcopy(details)
         c = cls()
         c.__dict__ = d
-        c.authid = str(c.authid)
+        c.session = str(c.session)
         c.transport = cls.transportClass.fromDetails(d['transport'])
         return c
 
@@ -123,7 +122,6 @@ class WampSessionDAO(DAO):
             data.update(s.transport.__dict__.copy())
             data['http_headers_sent'] = str(data['http_headers_sent'])
             data['http_headers_received'] = str(data['http_headers_received'])
-            print(data)
             cur.execute('insert into systems.wamp_sessions '
                         '(session, auth_id, auth_role, auth_method, auth_provider, protocol, http_headers_sent, http_headers_received, type, peer, cbtid) '
                         'values '
