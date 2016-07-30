@@ -7,7 +7,7 @@ import re
 import hashlib
 import uuid
 from model.registry import Registry
-from model.login.session import Session
+from model.session.session import Session
 from model.login.profiles import Profile
 # from model.users.users import UserPassword, UserPasswordDAO, User, UserDAO, UserModel
 from model.users.users import UserPassword, User, Mail

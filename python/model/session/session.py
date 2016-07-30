@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
 '''
-    implementa el manejo de sesiones del sistema.
-    dentro del registry debe existir una sección :
-
-    [sessions]
-    expire = 3600
+    Implementa el manejo de sesiones del sistema.
 
 '''
 import uuid

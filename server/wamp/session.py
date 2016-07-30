@@ -5,68 +5,50 @@ from twisted.internet.defer import inlineCallbacks
 from twisted.python import log
 
 import copy
-from model.serializer.ditesiSerializer import _my_loads, JSONSerializable
-
-class Transport(JSONSerializable):
-
-    def __init__(self):
-        self.protocol = None
-        self.http_headers_received = None
-        self.http_headers_sent = None
-        self.type = None
-        self.peer = None
-        self.cbtid = None
+from model.session.wamp import WampTransport, WampSession
+import wamp
 
 
-class Session(JSONSerializable):
+class SessionLink:
 
-    def __init__(self):
-        self.authid = None
-        self.authrole = None
-        self.authmethod = None
-        self.authprovider = None
-        self.transport = None
-        self.session = None
+    def on_session_join(self, details):
+        session = WampSession.fromDetails(details)
+        conn = wamp.getConnectionManager()
+        con = conn.get()
+        try:
+            session.create(con)
+            con.commit()
+        finally:
+            conn.put(con)
 
-
-def addJsonSerializableFields(details):
-    details['__json_class__'] = 'Session'
-    details['__json_module__'] = 'wamp.session'
-    if 'transport' in details:
-        details['transport']['__json_class__'] = 'Transport'
-        details['transport']['__json_module__'] = 'wamp.session'
-
-def on_session_join(details):
-    print('-------------------------on_join-------------------------------------')
-    d = copy.deepcopy(details)
-
-    t = Transport()
-    t.__dict__ = d['transport']
-
-    s = Session()
-    s.__dict__ = d
-    s.transport = t
-
-    print(s.authid)
-    print(s.transport.peer)
-
-def on_session_leave(details):
-    print(details);
+    def on_session_leave(self, sid):
+        sid = str(sid)
+        conn = wamp.getConnectionManager()
+        con = conn.get()
+        try:
+            sessions = WampSession.findById(con, sid)
+            for s in sessions:
+                s.destroy(con)
+            con.commit()
+        finally:
+            conn.put(con)
 
 
-class WampSession(ApplicationSession):
+
+
+class WampSessionComponent(ApplicationSession):
 
     def onConnect(self):
-        self.join("core", ["ticket"], "system")
+        self.join("core", ["ticket"], wamp.getWampCredentials()['username'])
 
     def onChallenge(self, challenge):
         if challenge.method == 'ticket':
-            return 'password'
+            return wamp.getWampCredentials()['password']
         else:
             raise Exception('Invalid auth method {}'.format(challenge.method))
 
     @inlineCallbacks
     def onJoin(self, details):
-
-        yield self.subscribe(on_session_join, 'wamp.session.on_join')
-        yield self.subscribe(on_session_leave, 'wamp.session.on_leave')
+        link = SessionLink()
+        yield self.subscribe(link.on_session_join, 'wamp.session.on_join')
+        yield self.subscribe(link.on_session_leave, 'wamp.session.on_leave')

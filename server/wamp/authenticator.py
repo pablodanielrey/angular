@@ -46,26 +46,19 @@ class TicketAuth(ApplicationSession):
     def onJoin(self, details):
 
         import inject
-        inject.configure_once()
-
-        from model.connection.connection import Connection
-        from model.registry import Registry
         from model.login.login import Login
+        import wamp
 
-        reg = inject.instance(Registry)
-        crossbar = reg.getRegistry('crossbar')
-
-        """ usados en la autentificación de los componentes del sistema """
-        system = crossbar.get('system_user')
-        systempass = crossbar.get('system_password')
-
-        conn = Connection(crossbar)
+        inject.configure_once()
         login = inject.instance(Login)
 
         def authenticate(realm, authid, details):
 
+            username = wamp.getWampCredentials()['username']
+            password = wamp.getWampCredentials()['password']
+
             """ chequeo si es un componente del sistema """
-            if authid == system and details['ticket'] == systempass:
+            if authid == username and details['ticket'] == password:
                 principal = {
                     'role': 'system',
                     'extra': {
@@ -74,7 +67,7 @@ class TicketAuth(ApplicationSession):
                 }
                 return principal
 
-            con = conn.get()
+            con = wamp.getConnectionManager().get()
             try:
                 username = authid
                 password = details['ticket']
@@ -95,7 +88,7 @@ class TicketAuth(ApplicationSession):
                 raise ApplicationError('exception in ticket authenticator')
 
             finally:
-                conn.put(con)
+                wamp.getConnectionManager().put(con)
 
         yield self.register(authenticate, 'authenticate.ticket')
 

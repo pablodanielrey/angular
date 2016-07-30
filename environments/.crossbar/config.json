@@ -140,12 +140,6 @@
                     "classname": "wamp.authenticator.TicketAuth",
                     "realm": "authenticators",
                     "role": "authenticator"
-                },
-                {
-                    "type": "class",
-                    "classname": "wamp.session.WampSession",
-                    "realm": "core",
-                    "role": "stystem"
                 }
             ],
 
@@ -228,7 +222,7 @@
                 },
                 {
                     "type": "class",
-                    "classname": "wamp.session.WampSession",
+                    "classname": "wamp.session.WampSessionComponent",
                     "realm": "core",
                     "transport": {
                         "type": "websocket",
@@ -239,7 +233,7 @@
                         },
                         "url": "ws://localhost:8080"
                     }
-                },                
+                },
                 {
                     "id": "library",
                     "type": "class",

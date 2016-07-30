@@ -18,7 +18,7 @@
     <button ng-click='close()'>Salir</button>
   </div>
 
-  <div ng-repeat='s in sessions'>
+  <div ng-repeat='s in sessions track by $index'>
     <div>
       <div>---------------------</div>
       <span ng-if='s.session != session'>id {{s.session}}</span>
