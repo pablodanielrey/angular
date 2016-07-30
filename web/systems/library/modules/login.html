@@ -16,4 +16,18 @@
   <div ng-if='open'>
     <button ng-click='close()'>Salir</button>
   </div>
+
+  <div ng-repeat='s in sessions'>
+    <div>
+      <div>---------------------</div>
+      <div>id {{s.session}}</div>
+      <div>aid {{s.authid}}</div>
+      <div>provider {{s.authprovider}}</div>
+      <div>rol {{s.authrole}}</div>
+      <div>metodo {{s.authmethod}}</div>
+      <button ng-click='closeSession(s.session)'>X</button>
+      <div>---------------------</div>
+    </div>
+  </div>
+
 </div>

@@ -32,6 +32,7 @@ app.controller('LoginCtrl', ["$rootScope", '$scope', "$wamp", function ($rootSco
 
   $scope.initialize = function() {
     $scope.message = 'pantalla inicial de login';
+    $scope.sessions = [];
     $scope.open = $wamp.connection.isOpen;
     if ($scope.open) {
       $scope.username = $rootScope.credentials.username;
@@ -39,10 +40,49 @@ app.controller('LoginCtrl', ["$rootScope", '$scope', "$wamp", function ($rootSco
     }
   };
 
+  $scope.addSession = function(s) {
+    console.log('addsession');
+    console.log(s[0]);
+    $scope.sessions.push(s[0]);
+  }
+
+  $scope.removeSession = function(s) {
+    console.log('removeSession');
+    console.log(s[0]);
+    $scope.getSessions();
+  }
+
+
+  $scope.closeSession = function(sid) {
+    $wamp.call("wamp.session.kill", [sid], {reason: '', message: ''}).then(function() {
+      $scope.getSessions();
+    });
+  }
+
+  $scope.getSessions = function() {
+    $wamp.call("wamp.session.list").then(function(s) {
+      console.log(s);
+      var cc = [];
+      for (var i = 0; i < s.length; i++) {
+        cc.push($wamp.call('wamp.session.get', [s[i]]));
+      }
+      Promise.all(cc).then(function(arr) {
+        console.log(arr);
+        $scope.$apply(function() {
+          $scope.sessions = arr;
+        });
+      })
+    });
+  }
 
   $scope.$on("$wamp.open", function(event, info) {
     console.log(info.session);
     console.log(info.details);
+
+    $wamp.subscribe('wamp.session.on_join', $scope.addSession);
+    $wamp.subscribe('wamp.session.on_leave', $scope.removeSession);
+    $scope.getSessions();
+
     $scope.message = 'Conexión abierta';
     $scope.open = true;
   });
@@ -51,6 +91,7 @@ app.controller('LoginCtrl', ["$rootScope", '$scope', "$wamp", function ($rootSco
     console.log(info.session);
     console.log(info.details);
     $scope.message = 'Conexión cerrada';
+    $scope.sessions = [];
   });
 
   $scope.close = function() {

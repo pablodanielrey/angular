@@ -75,7 +75,7 @@
                                         "caller": false,
                                         "publisher": false
                                     },
-                                    "cache": true
+                                    "cache": false
                                 }
                             ]
                         }
@@ -100,7 +100,7 @@
                                         "caller": false,
                                         "publisher": false
                                     },
-                                    "cache": true
+                                    "cache": false
                                 }
                             ]
                         },
@@ -120,7 +120,7 @@
                                         "caller": true,
                                         "publisher": true
                                     },
-                                    "cache": true
+                                    "cache": false
                                 }
                             ]
                         }
@@ -153,7 +153,7 @@
                 {
                     "id": "transport1",
                     "type": "websocket",
-                    "debug": true,
+                    "debug": false,
                     "serializers": [
                         "json"
                     ],
@@ -172,8 +172,6 @@
                             "type": "dynamic",
                             "authenticator": "authenticate.ticket",
                             "authenticator-realm": "authenticators"
-                        },
-                        "cookie": {
                         }
                     },
                     "cookie": {

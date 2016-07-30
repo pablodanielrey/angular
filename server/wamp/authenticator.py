@@ -64,7 +64,6 @@ class TicketAuth(ApplicationSession):
 
         def authenticate(realm, authid, details):
 
-            print('1')
             """ chequeo si es un componente del sistema """
             if authid == system and details['ticket'] == systempass:
                 principal = {
@@ -75,7 +74,6 @@ class TicketAuth(ApplicationSession):
                 }
                 return principal
 
-            print('2')
             con = conn.get()
             try:
                 username = authid
