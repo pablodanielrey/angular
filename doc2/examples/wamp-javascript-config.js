@@ -51,36 +51,52 @@ angular
   cada una con su provider diferente.
 */
 angular
-    .module('mainApp',['ngRoute','vxWamp'])
-    .config(function($wampProvider) {
-        var conn = {
-          url: "ws://" + location.host + ":8080",
-          realm: "core",
-          authmethods: ['ticket']
-        };
-        $wampProvider.init(conn);
-    })
+    .module('login',['ngRoute','vxWamp'])
     .provider('$wampPublic', function ($wampProvider) {
         var options = {
             url: 'ws://127.0.0.1:8080',
             realm: 'public',
-            prefix: 'wampPublic',
+            prefix: '$wampPublic',
             authmethods: ['anonymous']
         };
         this.$get = function ($injector) {
+            console.log('wampPublic injector');
             $wampProvider.init(options);
             return $injector.invoke($wampProvider.$get);
         };
     })
-    .provider('$wampPublic2', function ($wampProvider) {
+    .provider('$wampCore', function ($wampProvider) {
         var options = {
             url: 'ws://127.0.0.1:8080',
-            realm: 'public2',
-            prefix: 'wampPublic2',
-            authmethods: ['anonymous']
+            realm: 'core',
+            prefix: '$wampCore',
+            authmethods: ['ticket']
         };
         this.$get = function ($injector) {
+            console.log('wampCore injector');
             $wampProvider.init(options);
             return $injector.invoke($wampProvider.$get);
         };
     })
+
+
+/*
+  Para poder iniciar la conexion en caso de vistas que tengan ng-view
+  se puede usar el evento disparado.
+*/
+
+$scope.$on('$viewContentLoaded', function() {
+  $wamp.open();
+});
+
+
+/*
+  En caso de que no exista ng-view se puede usar app.run de angular
+*/
+angular
+  .module('login')
+  .controller('IndexLoginCtrl',IndexLoginCtrl)
+  .run(function($wampPublic) {
+    console.log('abriendo conexion');
+    $wampPublic.open();
+  });

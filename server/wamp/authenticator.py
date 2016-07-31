@@ -29,9 +29,6 @@ class AnonymousAuth(ApplicationSession):
     def onJoin(self, details):
 
         def authenticate(realm, authid, details):
-
-            print('anonymous - authenticate - {}'.format(authid))
-
             principal = {
                 'realm': 'public',
                 'role': 'anonymous',
@@ -56,9 +53,6 @@ class TicketAuth(ApplicationSession):
         login = inject.instance(Login)
 
         def authenticate(realm, authid, details):
-
-            print('ticket - authenticate - {}'.format(authid))
-
             username = wamp.getWampCredentials()['username']
             password = wamp.getWampCredentials()['password']
 
