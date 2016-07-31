@@ -9,9 +9,10 @@ from model.serializer.ditesiSerializer import JSONSerializable
 #from model.serializer import ditesiSerializer
 #ditesiSerializer.register()
 
+
 class LoginPublicSession(ApplicationSession):
 
-    @autobahn.wamp.register('system.login.getBasicData')
+    @autobahn.wamp.register('login.get_basic_data')
     def getBasicData(self, dni):
         print('-getBasicData')
         return {
@@ -21,7 +22,14 @@ class LoginPublicSession(ApplicationSession):
         }
 
     def onConnect(self):
-        self.join("public", ["anonymous"])
+        username = wamp.getWampCredentials()['username']
+        self.join("public", ["ticket"], username)
+
+    def onChallenge(self, challenge):
+        if challenge.method == 'ticket':
+            return wamp.getWampCredentials()['password']
+        else:
+            raise Exception('Invalid auth method {}'.format(challenge.method))
 
     @inlineCallbacks
     def onJoin(self, details):
@@ -34,15 +42,6 @@ class LoginPublicSession(ApplicationSession):
 
 
 class LoginSession(ApplicationSession):
-
-    @autobahn.wamp.register('login.getBasicData2')
-    def getBasicData(self, dni):
-        print('-getBasicData2')
-        return {
-            'name':'n',
-            'lastname':'p',
-            'photo':'dd'
-        }
 
     def onConnect(self):
         username = wamp.getWampCredentials()['username']

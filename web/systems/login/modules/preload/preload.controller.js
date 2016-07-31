@@ -1,6 +1,6 @@
 
 angular
-  .module('mainApp')
+  .module('login')
   .controller('PreloadCtrl', PreloadCtrl)
 
 PreloadCtrl.$inject = ['$scope','$window','$interval','Login','Users'];

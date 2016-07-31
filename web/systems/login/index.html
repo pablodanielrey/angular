@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="mainApp">
+<html ng-app="login">
 <head>
   <meta charset="utf-8"/>
   <meta name='viewport' content='width=device-width'/>
@@ -9,10 +9,10 @@
     AUTOBAHN_DEBUG = false;
   </script>
 
-  <script src="/libs/bower_components/angularjs/angular.js"></script>
-  <script src="/libs/bower_components/angular-route/angular-route.js"></script>
-  <script src="/libs/bower_components/autobahn/autobahn.js"></script>
-  <script src="/libs/bower_components/angular-wamp/release/angular-wamp.js"></script>
+  <script src="../../libs/bower_components/angular/angular.js"></script>
+  <script src="../../libs/bower_components/angular-route/angular-route.js"></script>
+  <script src="../../libs/bower_components/autobahn/autobahn.js"></script>
+  <script src="../../libs/bower_components/angular-wamp/release/angular-wamp.js"></script>
 
   <!-- esto es el estilo de font awesome para tener los iconos -->
   <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
@@ -22,18 +22,18 @@
   <!-- <script type="text/javascript" src="/config.json"></script> -->
 
   <!--archivos principales-->
-  <script type="text/javascript" src="/systems/login/index.module.js"></script>
-  <script type="text/javascript" src="/systems/login/index.controller.js"></script>
+  <script type="text/javascript" src="index.module.js"></script>
+  <script type="text/javascript" src="index.controller.js"></script>
 
 
 	<!-- ***** MODULOS ***** -->
 
-  <script type="text/javascript" src="/systems/login/modules/login.controller.js"></script>
-  <link rel="stylesheet" type="text/css" href="/systems/login/modules/login.css" />
+  <script type="text/javascript" src="modules/login.controller.js"></script>
+  <link rel="stylesheet" type="text/css" href="modules/login.css" />
 
-  <link rel="stylesheet" type="text/css" href="/systems/login/modules/help/help.css" />
+  <link rel="stylesheet" type="text/css" href="modules/help/help.css" />
 
-  <script type="text/javascript" src="/systems/login/modules/header/header.controller.js"></script>
+  <script type="text/javascript" src="modules/header/header.controller.js"></script>
 </head>
 
 <body ng-cloak ng-controller="IndexLoginCtrl" class="login">
@@ -43,7 +43,7 @@
 
   <!-- <div ng-show='{{loaded}}' class="principal"> -->
   <div class="principal">
-    <div class='login-container' ng-controller="LoginCtrl" ng-include="'/systems/login/modules/login.html'"></div>
+    <div class='login-container' ng-controller="LoginCtrl" ng-include="'modules/login.html'"></div>
   </div>
 
 

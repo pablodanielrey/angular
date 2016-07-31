@@ -255,7 +255,7 @@
                     }
                 },
                 {
-                    "id": "login_public",
+                    "id": "lp1",
                     "type": "class",
                     "classname": "actions.systems.login.login.LoginPublicSession",
                     "realm": "public",

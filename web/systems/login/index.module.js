@@ -1,5 +1,5 @@
 angular
-    .module('mainApp',['ngRoute','vxWamp'])
+    .module('login',['ngRoute','vxWamp'])
     .config(function($wampProvider) {
         var conn = {
           url: "ws://" + location.host + ":8080",

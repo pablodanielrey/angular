@@ -1,5 +1,5 @@
 angular
-  .module('mainApp')
+  .module('login')
   .controller('HeaderCtrl', HeaderCtrl)
 
 HeaderCtrl.$inject = ['$rootScope', '$scope'];

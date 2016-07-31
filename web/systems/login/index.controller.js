@@ -1,17 +1,24 @@
 angular
-  .module('mainApp')
-  .controller('IndexLoginCtrl',IndexLoginCtrl);
+  .module('login')
+  .controller('IndexLoginCtrl',IndexLoginCtrl)
+  .run(function($wampPublic) {
+    console.log('abriendo conexion');
+    $wampPublic.open();
+  });
 
 IndexLoginCtrl.$inject = ['$rootScope','$scope','$wampPublic'];
 
-function IndexLoginCtrl($rootScope, $scope) {
+function IndexLoginCtrl($rootScope, $scope, $wampPublic) {
 
     $rootScope.loaded = false;
     $scope.loaded = false;
 
+    /*
+      no es disparado ya que no existe ningun ng-view en la vista.
     $scope.$on('$viewContentLoaded', function(event) {
-      conosle.log('conectandose al wamp realm public');
+      console.log('conectandose al wamp realm public');
       $wampPublic.open();
     });
+    */
 
 };

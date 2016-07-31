@@ -1,6 +1,6 @@
 
 angular
-  .module('mainApp')
+  .module('login')
   .controller('LoginCtrl', LoginCtrl)
   .directive('mooFocusExpression', function($timeout) {
     return {
@@ -115,34 +115,16 @@ function LoginCtrl($scope, $window, $interval, $wamp, $wampPublic) {
      }
 
      function sendUsername() {
-
-       $wampPublic.call('login.getBasicData', [$scope.model.username]).then(
-         function() {
-           
-         });
-
-       Login.testUser($scope.model.username)
-       .then(function(ok) {
-         if (ok) {
-
-           Users.findByDni($scope.model.username)
-           .then(function(user) {
-               console.log(user);
-               $scope.$apply(function() {
-                 $scope.model.user = user[0];
-                 $scope.view.focus = 'inputPassword';
-                 $scope.viewPassword();
-               });
-           }, function(err) {
-             $scope.viewUserError();
-           });
-
-         } else {
+       $wampPublic.call('login.get_basic_data', [$scope.model.username]).then(
+         function(basicData) {
+           console.log(basicData);
+           $scope.model.user = basicData;
+           $scope.view.focus = 'inputPassword';
+           $scope.viewPassword();
+         },
+         function(err) {
            $scope.viewUserError();
-         }
-       }, function(err) {
-         $scope.viewUserError();
-       });
+         });
      }
 
      $scope.getUserPhoto = function() {
