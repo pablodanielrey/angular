@@ -147,7 +147,7 @@ function LoginCtrl($scope, $window, $interval, $wampCore, $wampPublic) {
 
      $scope.$on("$wampCore.open", function(event, info) {
        console.log(info);
-       alert('logueado exitoso');
+       $scope.processLogin();
      });
 
      $scope.$on("$wampCore.error", function(event, info) {
@@ -158,6 +158,10 @@ function LoginCtrl($scope, $window, $interval, $wampCore, $wampPublic) {
      function sendPassword() {
        $wampCore.setAuthId($scope.model.username);
        $wampCore.open();
+     }
+
+     $scope.processLogin = function() {
+       
      }
 
      /* ---------------------------------------------------
@@ -201,29 +205,5 @@ function LoginCtrl($scope, $window, $interval, $wampCore, $wampPublic) {
         $scope.view.classScreen = classNameViewUser;
         $scope.view.classError = classNameNoError;
       }
-
-     /* ---------------------------------------------------
-      * ------------------ CODIGO VIEJO -------------------
-      * ---------------------------------------------------
-      */
-
-    /*
-		$scope.login = function() {
-
-				// bug de angular.
-				// http://stackoverflow.com/questions/14965968/angularjs-browser-autofill-workaround-by-using-a-directive
-
-			$scope.$broadcast("autofill:update");
-
-      Login.login($scope.model.username, $scope.model.password,
-        function(sid) {
-            // usuario logueado correctamente
-            $window.location.href = "/index.html";
-
-        }, function(err) {
-            Notifications.message(err);
-        });
-
-		};*/
 
 };

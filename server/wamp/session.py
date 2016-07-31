@@ -1,12 +1,16 @@
 
+"""
 from autobahn.wamp.exception import ApplicationError
 from autobahn.twisted.wamp import ApplicationSession
 from twisted.internet.defer import inlineCallbacks
 from twisted.python import log
+"""
+
+import autobahn
 
 import copy
 from model.session.wamp import WampTransport, WampSession
-import wamp
+from wamp import SystemComponentSession
 
 
 class SessionLink:
@@ -14,6 +18,7 @@ class SessionLink:
     def __init__(self, realm):
         self.realm = realm
 
+    @autobahn.wamp.subscribe('wamp.session.on_join')
     def on_session_join(self, details):
         print('join - {}'.format(self.realm))
         session = WampSession.fromDetails(details)
@@ -25,6 +30,7 @@ class SessionLink:
         finally:
             conn.put(con)
 
+    @autobahn.wamp.subscribe('wamp.session.on_leave')
     def on_session_leave(self, sid):
         print('leave - {}'.format(self.realm))
         sid = str(sid)
@@ -39,25 +45,6 @@ class SessionLink:
             conn.put(con)
 
 
-
-
-class WampSessionComponent(ApplicationSession):
-
-    def onConnect(self):
-        """
-            ejemplo de lectura de parámetros desde la config.json de crossbar
-            self.config.extra['parametro1']
-        """
-        self.join(self.config.realm, ["ticket"], wamp.getWampCredentials()['username'])
-
-    def onChallenge(self, challenge):
-        if challenge.method == 'ticket':
-            return wamp.getWampCredentials()['password']
-        else:
-            raise Exception('Invalid auth method {}'.format(challenge.method))
-
-    @inlineCallbacks
-    def onJoin(self, details):
-        link = SessionLink(self.config.realm)
-        yield self.subscribe(link.on_session_join, 'wamp.session.on_join')
-        yield self.subscribe(link.on_session_leave, 'wamp.session.on_leave')
+class WampSessionComponent(SystemComponentSession):
+    def getWampComponents(self):
+        return [SessionLink(self.config.realm)]
