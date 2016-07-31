@@ -156,11 +156,8 @@ function LoginCtrl($scope, $window, $interval, $wampCore, $wampPublic) {
      });
 
      function sendPassword() {
-       $wampPublic.close();
-       console.log('enviando clave');
        $wampCore.setAuthId($scope.model.username);
        $wampCore.open();
-       console.log('enviando clave2');
      }
 
      /* ---------------------------------------------------
