@@ -9,15 +9,40 @@ from model.serializer.ditesiSerializer import JSONSerializable
 #from model.serializer import ditesiSerializer
 #ditesiSerializer.register()
 
-class LibrarySession(ApplicationSession):
+class LoginPublicSession(ApplicationSession):
 
-    @autobahn.wamp.register('test_serializer')
-    def test_serializer(self, o):
-        print('test_serializer llamado')
-        print(o)
-        if isinstance(o, JSONSerializable):
-            print(o.__dict__)
-        return o
+    @autobahn.wamp.register('system.login.getBasicData')
+    def getBasicData(self, dni):
+        print('-getBasicData')
+        return {
+            'name':'n',
+            'lastname':'p',
+            'photo':'dd'
+        }
+
+    def onConnect(self):
+        self.join("public", ["anonymous"])
+
+    @inlineCallbacks
+    def onJoin(self, details):
+        results = yield self.register(self)
+        for res in results:
+            if isinstance(res, autobahn.wamp.protocol.Registration):
+                print("Ok, registered procedure with registration ID {}".format(res.id))
+            else:
+                print("Failed to register procedure: {}".format(res))
+
+
+class LoginSession(ApplicationSession):
+
+    @autobahn.wamp.register('login.getBasicData2')
+    def getBasicData(self, dni):
+        print('-getBasicData2')
+        return {
+            'name':'n',
+            'lastname':'p',
+            'photo':'dd'
+        }
 
     def onConnect(self):
         username = wamp.getWampCredentials()['username']
@@ -29,10 +54,8 @@ class LibrarySession(ApplicationSession):
         else:
             raise Exception('Invalid auth method {}'.format(challenge.method))
 
-
     @inlineCallbacks
     def onJoin(self, details):
-        print(details)
         results = yield self.register(self)
         for res in results:
             if isinstance(res, autobahn.wamp.protocol.Registration):

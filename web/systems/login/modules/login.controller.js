@@ -20,9 +20,9 @@ angular
   });
 
 
-LoginCtrl.$inject = ['$scope','$window', '$interval', 'Notifications','Login','Users'];
+LoginCtrl.$inject = ['$scope','$window', '$interval', '$wamp', '$wampPublic'];
 
-function LoginCtrl($scope, $window, $interval, Notifications, Login, Users) {
+function LoginCtrl($scope, $window, $interval, $wamp, $wampPublic) {
 
   /* ---------------------------------------------------
    * --------------------- VARIABLES -------------------
@@ -74,13 +74,14 @@ function LoginCtrl($scope, $window, $interval, Notifications, Login, Users) {
       $scope.initialize();
     });
 
-    $scope.$on('wampOpenEvent', function(event) {
+    $scope.$on('$wampPublic.open', function(event) {
       $scope.connectServer();
     });
 
-    $scope.$on('wampCloseEvent', function(event) {
+    $scope.$on('$wampPublic.close', function(event) {
       $scope.disconnectServer();
     });
+
 
     /* ---------------------------------------------------
      * ---------------------- ACCIONES -------------------
@@ -114,6 +115,12 @@ function LoginCtrl($scope, $window, $interval, Notifications, Login, Users) {
      }
 
      function sendUsername() {
+
+       $wampPublic.call('login.getBasicData', [$scope.model.username]).then(
+         function() {
+           
+         });
+
        Login.testUser($scope.model.username)
        .then(function(ok) {
          if (ok) {

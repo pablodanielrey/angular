@@ -1,23 +1,22 @@
 angular
     .module('mainApp',['ngRoute','vxWamp'])
     .config(function($wampProvider) {
-
-      if (config.url == undefined || config.url == 'autodetect') {
         var conn = {
-          url: "ws://" + location.host + ":443/ws",
-          realm: config.realm
+          url: "ws://" + location.host + ":8080",
+          realm: "core",
+          authmethods: ['ticket']
         };
-        console.log(conn);
         $wampProvider.init(conn);
-      } else {
-        var conn = {
-          url: config.url,
-          realm: config.realm
-        };
-        console.log(conn);
-        $wampProvider.init(conn);
-      }
     })
-    .run(function($wamp) {
-      $wamp.open();
-    });
+    .provider('$wampPublic', function ($wampProvider) {
+        var options = {
+            url: 'ws://127.0.0.1:8080',
+            realm: 'public',
+            prefix: 'wampPublic',
+            authmethods: ['anonymous']
+        };
+        this.$get = function ($injector) {
+            $wampProvider.init(options);
+            return $injector.invoke($wampProvider.$get);
+        };
+    })

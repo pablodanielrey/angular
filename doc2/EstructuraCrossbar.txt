@@ -43,8 +43,20 @@ Router principal.
 
 realm "public"
 roles:
-  anonymous -- conexiones anónimas tienen este rol.
-    call - True
+
+  anonymous
+    clientes anónimos que solo pueden hacer calls, no pueden registrar nada.
+    se usa en componentes como el login, donde todavía no esta autentificado pero debe obtener la foto y el nombre.
+
+  system
+    componentes del sistema que registran métodos publicos.
+    estos pueden ser llamados por cualquier componente, sin necesidad de estar autentificado.
+
+    schemas publicados
+
+        login.getBasicData(dni) -> nombre y app, photo
+        
+
 
 realm "core"
 roles:

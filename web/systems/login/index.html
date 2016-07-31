@@ -6,7 +6,7 @@
   <title>FCE | Iniciar sesión</title>
 
   <script>
-    AUTOBAHN_DEBUG = true;
+    AUTOBAHN_DEBUG = false;
   </script>
 
   <script src="/libs/bower_components/angularjs/angular.js"></script>
@@ -19,23 +19,12 @@
   <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
   <link rel="shortcut icon" href="/systems/fce/img/favicon2.ico">
 
-  <script type="text/javascript" src="/config.json"></script>
+  <!-- <script type="text/javascript" src="/config.json"></script> -->
 
   <!--archivos principales-->
   <script type="text/javascript" src="/systems/login/index.module.js"></script>
   <script type="text/javascript" src="/systems/login/index.controller.js"></script>
 
-  <!-- directivas -->
-  <script type="text/javascript" src="/directives/autofill.js"></script>
-
-	<!-- ***** SERVICIOS ***** -->
-	<script type="text/javascript" src="/services/Cache.js"></script>
-	<script type="text/javascript" src="/services/Session.js"></script>
-  <script type="text/javascript" src="/services/Login.js"></script>
-
-  <script type="text/javascript" src="/services/Users.js"></script>
-  <script type="text/javascript" src="/services/Utils.js"></script>
-	<script type="text/javascript" src="/services/Notifications.js"></script>
 
 	<!-- ***** MODULOS ***** -->
 
@@ -45,10 +34,7 @@
   <link rel="stylesheet" type="text/css" href="/systems/login/modules/help/help.css" />
 
   <script type="text/javascript" src="/systems/login/modules/header/header.controller.js"></script>
-
-  <script type="text/javascript" src="/systems/login/modules/preload/preload.controller.js"></script>
-  <link rel="stylesheet" type="text/css" href="/systems/login/modules/preload/preload.css" />
-
+</head>
 
 <body ng-cloak ng-controller="IndexLoginCtrl" class="login">
 
