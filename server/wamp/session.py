@@ -11,7 +11,11 @@ import wamp
 
 class SessionLink:
 
+    def __init__(self, realm):
+        self.realm = realm
+
     def on_session_join(self, details):
+        print('join - {}'.format(self.realm))
         session = WampSession.fromDetails(details)
         conn = wamp.getConnectionManager()
         con = conn.get()
@@ -22,6 +26,7 @@ class SessionLink:
             conn.put(con)
 
     def on_session_leave(self, sid):
+        print('leave - {}'.format(self.realm))
         sid = str(sid)
         conn = wamp.getConnectionManager()
         con = conn.get()
@@ -39,7 +44,11 @@ class SessionLink:
 class WampSessionComponent(ApplicationSession):
 
     def onConnect(self):
-        self.join("core", ["ticket"], wamp.getWampCredentials()['username'])
+        """
+            ejemplo de lectura de parámetros desde la config.json de crossbar
+            self.config.extra['parametro1']
+        """
+        self.join(self.config.realm, ["ticket"], wamp.getWampCredentials()['username'])
 
     def onChallenge(self, challenge):
         if challenge.method == 'ticket':
@@ -49,6 +58,6 @@ class WampSessionComponent(ApplicationSession):
 
     @inlineCallbacks
     def onJoin(self, details):
-        link = SessionLink()
+        link = SessionLink(self.config.realm)
         yield self.subscribe(link.on_session_join, 'wamp.session.on_join')
         yield self.subscribe(link.on_session_leave, 'wamp.session.on_leave')

@@ -20,9 +20,9 @@ angular
   });
 
 
-LoginCtrl.$inject = ['$scope','$window', '$interval', '$wamp', '$wampPublic'];
+LoginCtrl.$inject = ['$scope','$window', '$interval', '$wampCore', '$wampPublic'];
 
-function LoginCtrl($scope, $window, $interval, $wamp, $wampPublic) {
+function LoginCtrl($scope, $window, $interval, $wampCore, $wampPublic) {
 
   /* ---------------------------------------------------
    * --------------------- VARIABLES -------------------
@@ -131,21 +131,36 @@ function LoginCtrl($scope, $window, $interval, $wamp, $wampPublic) {
        if ($scope.model.user == null || $scope.model.user.photo == null || $scope.model.user.photo == '') {
          return "modules/img/imgUser.jpg";
        } else {
-         return "/c/files.py?i=" + $scope.model.user.photo;
+         return $scope.model.user.photo;
        }
      }
 
+     // challege del wamp que se autentifica
+     $scope.$on("$wampCore.onchallenge", function(event, info) {
+       // info.promise: promise to return to wamp,
+       // info.session: wamp session,
+       // info.method: auth method,
+       // info.extra: extra
+       //ie. wamp-cra
+       return info.promise.resolve($scope.model.password);
+     });
+
+     $scope.$on("$wampCore.open", function(event, info) {
+       console.log(info);
+       alert('logueado exitoso');
+     });
+
+     $scope.$on("$wampCore.error", function(event, info) {
+       console.log(info);
+       $scope.viewPasswordError();
+     });
+
      function sendPassword() {
-       Login.login($scope.model.username, $scope.model.password)
-       .then(function(data) {
-           $window.location.href = "/index.html";
-         },
-         function(error) {
-           $scope.$apply(function() {
-             $scope.viewPasswordError();
-           });
-         }
-       );
+       $wampPublic.close();
+       console.log('enviando clave');
+       $wampCore.setAuthId($scope.model.username);
+       $wampCore.open();
+       console.log('enviando clave2');
      }
 
      /* ---------------------------------------------------

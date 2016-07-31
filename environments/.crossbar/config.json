@@ -167,7 +167,7 @@
                 {
                     "id": "transport1",
                     "type": "websocket",
-                    "debug": false,
+                    "debug": true,
                     "serializers": [
                         "json"
                     ],
@@ -209,6 +209,25 @@
                         "/": {
                             "type": "static",
                             "directory": "../../web"
+                        },
+                        "ws": {
+                            "type": "websocket",
+                            "debug": true,
+                            "serializers": [
+                                "json"
+                            ],
+                            "auth": {
+                                "anonymous": {
+                                    "type": "dynamic",
+                                    "authenticator": "authenticate.anonymous",
+                                    "authenticator-realm": "authenticators"
+                                },
+                                "ticket": {
+                                    "type": "dynamic",
+                                    "authenticator": "authenticate.ticket",
+                                    "authenticator-realm": "authenticators"
+                                }
+                            }
                         }
                     }
                 }
@@ -241,24 +260,13 @@
                     }
                 },
                 {
+                    "id": "s_core",
                     "type": "class",
                     "classname": "wamp.session.WampSessionComponent",
                     "realm": "core",
-                    "transport": {
-                        "type": "websocket",
-                        "endpoint": {
-                            "type": "tcp",
-                            "host": "127.0.0.1",
-                            "port": 8080
-                        },
-                        "url": "ws://localhost:8080"
-                    }
-                },
-                {
-                    "id": "lp1",
-                    "type": "class",
-                    "classname": "actions.systems.login.login.LoginPublicSession",
-                    "realm": "public",
+                    "extra": {
+                        "parametro1": "ejemplo"
+                    },
                     "transport": {
                         "type": "websocket",
                         "endpoint": {
@@ -283,8 +291,41 @@
                         },
                         "url": "ws://localhost:8080"
                     }
-                }
+                },
 
+                {
+                    "id": "s_public",
+                    "type": "class",
+                    "classname": "wamp.session.WampSessionComponent",
+                    "realm": "public",
+                    "extra": {
+                        "parametro1": "ejemplo"
+                    },
+                    "transport": {
+                        "type": "websocket",
+                        "endpoint": {
+                            "type": "tcp",
+                            "host": "127.0.0.1",
+                            "port": 8080
+                        },
+                        "url": "ws://localhost:8080"
+                    }
+                },
+                {
+                    "id": "lp1",
+                    "type": "class",
+                    "classname": "actions.systems.login.login.LoginPublicSession",
+                    "realm": "public",
+                    "transport": {
+                        "type": "websocket",
+                        "endpoint": {
+                            "type": "tcp",
+                            "host": "127.0.0.1",
+                            "port": 8080
+                        },
+                        "url": "ws://localhost:8080"
+                    }
+                }
             ]
         }
 
