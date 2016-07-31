@@ -10,7 +10,7 @@ import autobahn
 
 import copy
 from model.session.wamp import WampTransport, WampSession
-from wamp import SystemComponentSession
+import wamp
 
 
 class SessionLink:
@@ -45,6 +45,6 @@ class SessionLink:
             conn.put(con)
 
 
-class WampSessionComponent(SystemComponentSession):
+class WampSessionComponent(wamp.SystemComponentSession):
     def getWampComponents(self):
         return [SessionLink(self.config.realm)]

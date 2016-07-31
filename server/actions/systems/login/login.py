@@ -22,6 +22,30 @@ class LoginPublicSession(SystemComponentSession):
 
 class LoginSession(SystemComponentSession):
 
+    def getRegisterOptions(self):
+        return autobahn.wamp.RegisterOptions(details_arg='details')
+
     @autobahn.wamp.register('login.get_registered_systems')
-    def getRegisteredSystems(self, dni):
-        return {}
+    def getRegisteredSystems(self, details=None):
+        print(details)
+        systems = {
+            'registered': [
+                {
+                    'domain': 'localhost',
+                    'relative': '/systems/library/',
+                    'ticket': 'fnfwfewfewfmewfklemflfdlskmfsd'
+                },
+                {
+                    'domain': '127.0.0.1',
+                    'relative': '/systems/library/',
+                    'ticket': 'fnfwfewfewfmewfklemflfdlskmfsd'
+                },
+                {
+                    'domain': '',
+                    'relative': '/systems/login/',
+                    'ticket': 'fnfwfewfewfmewfklemflfdlskmfsd'
+                }
+            ],
+            'default': '/systems/login/'
+        }
+        return systems

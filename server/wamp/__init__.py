@@ -83,6 +83,12 @@ import autobahn
 
 class SystemComponentSession(ApplicationSession):
 
+    def getRegisterOptions(self):
+        """
+            debe retorar un objeto del tipo autobahn.wamp.RegisterOptions
+        """
+        return None
+
     def getWampComponents(self):
         """
             Retorna instancias de clases que tienen decorados usando
@@ -105,5 +111,5 @@ class SystemComponentSession(ApplicationSession):
     @inlineCallbacks
     def onJoin(self, details):
         for o in self.getWampComponents():
-            results = yield self.register(o)
+            results = yield self.register(o, options=self.getRegisterOptions())
             results = yield self.subscribe(o)

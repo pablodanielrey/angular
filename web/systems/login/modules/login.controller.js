@@ -20,9 +20,9 @@ angular
   });
 
 
-LoginCtrl.$inject = ['$scope','$window', '$interval', '$wampCore', '$wampPublic'];
+LoginCtrl.$inject = ['$scope','$window', '$interval', '$location', '$wampCore', '$wampPublic'];
 
-function LoginCtrl($scope, $window, $interval, $wampCore, $wampPublic) {
+function LoginCtrl($scope, $window, $interval, $location, $wampCore, $wampPublic) {
 
   /* ---------------------------------------------------
    * --------------------- VARIABLES -------------------
@@ -161,7 +161,24 @@ function LoginCtrl($scope, $window, $interval, $wampCore, $wampPublic) {
      }
 
      $scope.processLogin = function() {
-       
+       $wampCore.call('login.get_registered_systems').then(
+         function(systems) {
+           console.log(systems);
+           console.log($location);
+           for (var i = 0; i < systems['registered'].length; i++) {
+              console.log($location.host());
+               if ($location.host() == systems['registered'][i].domain) {
+                 $window.location.href = systems['registered'][i].relative;
+                 return;
+               }
+           }
+           // si no lo encuentra usa la ultima (deberia ser la de sistema en mantenimiento o algo parecido)
+           $window.location.href = systems['default'];
+         },
+         function(err) {
+           console.log(err);
+           alert('error de sistema');
+         });
      }
 
      /* ---------------------------------------------------

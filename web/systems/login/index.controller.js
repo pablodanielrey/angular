@@ -6,7 +6,7 @@ angular
     $wampPublic.open();
   });
 
-IndexLoginCtrl.$inject = ['$rootScope','$scope','$wampPublic'];
+IndexLoginCtrl.$inject = ['$rootScope','$scope'];
 
 function IndexLoginCtrl($rootScope, $scope, $wampPublic) {
 

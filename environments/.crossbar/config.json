@@ -34,8 +34,8 @@
                                         "subscribe": false
                                     },
                                     "disclose": {
-                                        "caller": false,
-                                        "publisher": false
+                                        "caller": true,
+                                        "publisher": true
                                     }
                                 },
                                 {
@@ -48,8 +48,8 @@
                                         "subscribe": false
                                     },
                                     "disclose": {
-                                        "caller": false,
-                                        "publisher": false
+                                        "caller": true,
+                                        "publisher": true
                                     }
                                 }
                             ]
@@ -72,8 +72,8 @@
                                         "subscribe": false
                                     },
                                     "disclose": {
-                                        "caller": false,
-                                        "publisher": false
+                                        "caller": true,
+                                        "publisher": true
                                     },
                                     "cache": false
                                 }
@@ -316,6 +316,21 @@
                     "type": "class",
                     "classname": "actions.systems.login.login.LoginPublicSession",
                     "realm": "public",
+                    "transport": {
+                        "type": "websocket",
+                        "endpoint": {
+                            "type": "tcp",
+                            "host": "127.0.0.1",
+                            "port": 8080
+                        },
+                        "url": "ws://localhost:8080"
+                    }
+                },
+                {
+                    "id": "lp2",
+                    "type": "class",
+                    "classname": "actions.systems.login.login.LoginSession",
+                    "realm": "core",
                     "transport": {
                         "type": "websocket",
                         "endpoint": {
