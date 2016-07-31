@@ -10,9 +10,8 @@ from model.serializer.ditesiSerializer import JSONSerializable
 
 class LoginPublicSession(SystemComponentSession):
 
-    @autobahn.wamp.register('login.get_basic_data')
-    def getBasicData(self, dni):
-        print('-getBasicData')
+    @autobahn.wamp.register('login.get_public_data')
+    def getPublicData(self, dni):
         return {
             'name':'Nombre',
             'lastname':'Apellido',

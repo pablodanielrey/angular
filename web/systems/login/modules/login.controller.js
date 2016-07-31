@@ -20,9 +20,9 @@ angular
   });
 
 
-LoginCtrl.$inject = ['$scope','$window', '$interval', '$location', '$wampCore', '$wampPublic'];
+LoginCtrl.$inject = ['$scope','$window', '$interval', '$location', 'Login'];
 
-function LoginCtrl($scope, $window, $interval, $location, $wampCore, $wampPublic) {
+function LoginCtrl($scope, $window, $interval, $location, Login) {
 
   /* ---------------------------------------------------
    * --------------------- VARIABLES -------------------
@@ -115,10 +115,9 @@ function LoginCtrl($scope, $window, $interval, $location, $wampCore, $wampPublic
      }
 
      function sendUsername() {
-       $wampPublic.call('login.get_basic_data', [$scope.model.username]).then(
-         function(basicData) {
-           console.log(basicData);
-           $scope.model.user = basicData;
+       Login.getPublicData($scope.username).then(
+         function(publicData) {
+           $scope.model.user = publicData;
            $scope.view.focus = 'inputPassword';
            $scope.viewPassword();
          },
@@ -135,38 +134,30 @@ function LoginCtrl($scope, $window, $interval, $location, $wampCore, $wampPublic
        }
      }
 
-     // challege del wamp que se autentifica
-     $scope.$on("$wampCore.onchallenge", function(event, info) {
-       // info.promise: promise to return to wamp,
-       // info.session: wamp session,
-       // info.method: auth method,
-       // info.extra: extra
-       //ie. wamp-cra
-       return info.promise.resolve($scope.model.password);
-     });
-
-     $scope.$on("$wampCore.open", function(event, info) {
-       console.log(info);
-       $scope.processLogin();
-     });
-
-     $scope.$on("$wampCore.error", function(event, info) {
-       console.log(info);
-       $scope.viewPasswordError();
-     });
-
      function sendPassword() {
-       $wampCore.setAuthId($scope.model.username);
-       $wampCore.open();
-     }
-
-     $scope.processLogin = function() {
-       $wampCore.call('login.get_registered_systems').then(
+       Login.login($scope.model.username, $scope.model.password).then(
          function(systems) {
            console.log(systems);
-           console.log($location);
            for (var i = 0; i < systems['registered'].length; i++) {
-              console.log($location.host());
+               if ($location.host() == systems['registered'][i].domain) {
+                 $window.location.href = systems['registered'][i].relative;
+                 return;
+               }
+           }
+           // si no lo encuentra usa la ultima (deberia ser la de sistema en mantenimiento o algo parecido)
+           $window.location.href = systems['default'];
+         },
+         function(err) {
+            $scope.viewPasswordError();
+         });
+     }
+
+     /*
+     $scope.processLogin = function() {
+       Login.getRegisteredSystems().then(
+         function(systems) {
+           console.log(systems);
+           for (var i = 0; i < systems['registered'].length; i++) {
                if ($location.host() == systems['registered'][i].domain) {
                  $window.location.href = systems['registered'][i].relative;
                  return;
@@ -180,6 +171,7 @@ function LoginCtrl($scope, $window, $interval, $location, $wampCore, $wampPublic
            alert('error de sistema');
          });
      }
+     */
 
      /* ---------------------------------------------------
       * ----------------- MANEJO VISUAL -------------------
