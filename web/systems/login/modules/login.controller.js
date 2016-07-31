@@ -74,11 +74,11 @@ function LoginCtrl($scope, $window, $interval, $location, Login) {
       $scope.initialize();
     });
 
-    $scope.$on('$wampPublic.open', function(event) {
+    $scope.$on('wamp.open', function(event) {
       $scope.connectServer();
     });
 
-    $scope.$on('$wampPublic.close', function(event) {
+    $scope.$on('wamp.close', function(event) {
       $scope.disconnectServer();
     });
 

@@ -6,6 +6,37 @@ Login.inject = ['$rootScope', '$wampPublic', '$wampCore', '$q'];
 
 function Login($rootScope, $wampPublic, $wampCore, $q) {
 
+  this.connected = 0;
+
+  this._open = function() {
+    this.connecetd = this.conected + 1;
+    $rootScope.broadcast('wamp.open');
+  }
+
+  this._close = function() {
+    this.connected = this.connected - 1;
+    if (this.connected <= 0) {
+      $rootScope.broadcast('wamp.close');
+    }
+  }
+
+  $rootScope.$on('$wampPublic.open', function(event) {
+    this._open();
+  });
+
+  $rootScope.$on('$wampPublic.close', function(event) {
+    this._close();
+  });
+
+  $rootScope.$on('$wampCore.open', function(event) {
+    this._open();
+  });
+
+  $rootScope.$on('$wampCore.close', function(event) {
+    this._close();
+  });
+
+
   this.getPublicData = function(username) {
     return $wampPublic.call('login.get_public_data', [username]);
   }
