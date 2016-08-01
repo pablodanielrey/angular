@@ -112,7 +112,7 @@ class TicketAuth(ApplicationSession):
 
 class TokenGeneratorComponent(wamp.SystemComponentSession):
 
-    expiration = 5
+    expiration = 60
     tokens = {}
 
     def _getNewExpiration(self):
