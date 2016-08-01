@@ -26,6 +26,10 @@
         vm.pausedStatus = 7;
         vm.rejectedStatus = 6;
 
+        vm.lowPriority = 1;
+        vm.normalPriority = 2;
+        vm.highPriority = 3;
+
 
         // variables de la vista
         vm.view = {
@@ -39,7 +43,7 @@
           styles4: ['', 'mensajeCargando', 'mensajeError', 'mensajeEnviado', 'mensajePedidoCreado'],
           status: ['','abierta', 'enProgreso', 'cerrada', 'comentarios', 'cerrada', 'rechazada', 'pausada'],
           statusSort: ['','abierta', 'enProgreso', 'pausada', 'rechazada', 'cerrada'],
-          priorities: ['baja', 'normal', 'alta'],
+          priorities: ['baja', 'normal', 'alta', 'alta', 'alta'], //solo se maneja el estilo alta, si esta como urgente o inmediata se lo toma solo como alta
           reverseSortDate: false,
           reverseSortStatus: false,
           reverseSortPriority: true
@@ -62,8 +66,10 @@
         vm.createComment = createComment;
         vm.selectIssue = selectIssue;
         vm.selectStatus = selectStatus;
+        vm.selectPriotity = selectPriotity;
         vm.cancel = cancel;
         vm.setStatus = setStatus;
+        vm.setPriority = setPriority;
 
         vm.getPriority = getPriority;
         vm.getDate = getDate;
@@ -163,12 +169,17 @@
 /* ************************************************************************ */
 
       function selectIssue(issue) {
+        console.log(issue);
         vm.view.style = vm.view.styles[1];
         vm.model.selectedIssue = issue;
       }
 
       function selectStatus() {
         vm.view.style2 = (vm.view.style2 == vm.view.styles2[6]) ?  vm.view.styles2[0] : vm.view.styles2[6];
+      }
+
+      function selectPriotity() {
+        vm.view.style2 = (vm.view.style2 == vm.view.styles2[7]) ?  vm.view.styles2[0] : vm.view.styles2[7];
       }
 
       function cancel() {
@@ -188,7 +199,22 @@
         issue.statusId = status;
         Issue.changeStatus(issue, status).then(
           function(data) {
-            
+
+          },
+          function(error) {
+            $scope.$apply(function() {
+              vm.messageError(error);
+            })
+          }
+        )
+      }
+
+      function setPriority(issue, priority) {
+        vm.view.style2 = vm.view.styles2[0];
+        issue.priority = priority;
+        Issue.changePriority(issue, priority).then(
+          function(data) {
+
           },
           function(error) {
             $scope.$apply(function() {
@@ -204,6 +230,9 @@
 /* ************************************************************************ */
 
       function getPriority(issue) {
+        if (issue == null) {
+          return '';
+        }
         var p = (issue.priority > 2) ? 2 : issue.priority - 1;
         return vm.view.priorities[p];
       }

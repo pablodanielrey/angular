@@ -40,6 +40,7 @@ class IssueWamp(ApplicationSession):
         yield from self.register(self.create_async, 'issue.create')
         yield from self.register(self.createComment_async, 'issue.createComment')
         yield from self.register(self.changeStatus_async, 'issue.changeStatus')
+        yield from self.register(self.changePriority_async, 'issue.changePriority')
         yield from self.register(self.getOffices_async, 'issue.getOffices')
         yield from self.register(self.getAreas_async, 'issue.getAreas')
 
@@ -145,7 +146,7 @@ class IssueWamp(ApplicationSession):
             userId = self.loginModel.getUserId(con, sid)
             iss = issue.changeStatus(con, status)
             con.commit()
-            return iss
+            return issue
         finally:
             self.conn.put(con)
 
@@ -153,6 +154,22 @@ class IssueWamp(ApplicationSession):
     def changeStatus_async(self, sid, issue, status):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.changeStatus, sid, issue, status)
+        return r
+
+    def changePriority(self, sid, issue, priority):
+        con = self.conn.get()
+        try:
+            userId = self.loginModel.getUserId(con, sid)
+            iss = issue.changePriority(con, priority)
+            con.commit()
+            return issue
+        finally:
+            self.conn.put(con)
+
+    @coroutine
+    def changePriority_async(self, sid, issue, priority):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.changePriority, sid, issue, priority)
         return r
 
     def getOffices(self):

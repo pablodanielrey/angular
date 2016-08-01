@@ -73,7 +73,7 @@
                   </div>
                   <!-- ---- Cambiar la prioridad del pedido ---- -->
                   <div class="itemPriority">
-                      <div class="contentSelectPriority normal" ng-click="view.style2 = 'seleccionarPrioridad'">
+                      <div class="contentSelectPriority {{vm.getPriority(vm.model.selectedIssue)}}" ng-click="vm.selectPriotity()">
                           <!-- ---- VARIABLES: baja, normal, alta ---- -->
                           <div class="textPriority">Prioridad</div>
                           <div class="priorityB">BAJA <i class="fa fa-caret-down"></i></div>
@@ -82,17 +82,17 @@
                       </div>
 
                       <div class="contentSelectPriority2">
-                          <div class="subContentSelectPriority" ng-click="view.style2 = ''">
+                          <div class="subContentSelectPriority" ng-click="vm.setPriority(vm.model.selectedIssue, vm.lowPriority)">
                               <div class="itemsSelectState prioridadBaja">
                                 <div class="itemState">BAJA</div>
                               </div>
                           </div>
-                          <div class="subContentSelectPriority" ng-click="view.style2 = ''">
+                          <div class="subContentSelectPriority" ng-click="vm.setPriority(vm.model.selectedIssue, vm.normalPriority)">
                               <div class="itemsSelectState prioridadNormal">
                                 <div class="itemState">NORMAL</div>
                               </div>
                           </div>
-                          <div class="subContentSelectPriority" ng-click="view.style2 = ''">
+                          <div class="subContentSelectPriority" ng-click="vm.setPriority(vm.model.selectedIssue, vm.highPriority)">
                               <div class="itemsSelectState prioridadAlta">
                                 <div class="itemState">ALTA</div>
                               </div>

@@ -53,6 +53,9 @@ class Issue(JSONSerializable):
     def changeStatus(self, con, status):
         return RedmineAPI.changeStatus(con, self.userId, self.id, self.projectId, status)
 
+    def changePriority(self, con, priority):
+        return RedmineAPI.changePriority(con, self.userId, self.id, self.projectId, priority)
+
     def create(self, con):
         return RedmineAPI.create(con, self)
 
@@ -294,7 +297,20 @@ class RedmineAPI:
         if redmine is None:
             return
 
-        redmine.issue.update(issue_id, status_id = status)
+        return redmine.issue.update(issue_id, status_id = status)
+
+    @classmethod
+    def changePriority(cls, con, userId, issue_id, project_id, priority):
+
+        user, redmine = cls._getRedmineInstance(con, userId, False)
+
+        if priority is None:
+            return
+
+        if redmine is None:
+            return
+
+        return redmine.issue.update(issue_id, priority_id = priority)
 
 
 

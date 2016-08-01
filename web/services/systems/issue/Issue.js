@@ -13,6 +13,7 @@ function Issue (Utils, Session, $wamp) {
   this.create = create;
   this.createComment = createComment;
   this.changeStatus = changeStatus;
+	this.changePriority = changePriority;
 	this.getOffices = getOffices;
 	this.getAreas = getAreas;
 
@@ -93,6 +94,18 @@ function Issue (Utils, Session, $wamp) {
 		return new Promise(function(cok, cerr) {
       var sid = Session.getSessionId();
   		$wamp.call('issue.changeStatus', [sid, issue, status])
+      .then(function(v) {
+        cok(v);
+      },function(err) {
+        cerr(err);
+      });
+    });
+	}
+
+  function changePriority(issue, priority) {
+		return new Promise(function(cok, cerr) {
+      var sid = Session.getSessionId();
+  		$wamp.call('issue.changePriority', [sid, issue, priority])
       .then(function(v) {
         cok(v);
       },function(err) {
