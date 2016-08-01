@@ -25,27 +25,13 @@
                             "name": "authenticator",
                             "permissions": [
                                 {
-                                    "uri": "authenticate.anonymous",
-                                    "match": "exact",
+                                    "uri": "authenticate.",
+                                    "match": "prefix",
                                     "allow": {
-                                        "call": false,
+                                        "call": true,
                                         "register": true,
-                                        "publish": false,
-                                        "subscribe": false
-                                    },
-                                    "disclose": {
-                                        "caller": true,
-                                        "publisher": true
-                                    }
-                                },
-                                {
-                                    "uri": "authenticate.ticket",
-                                    "match": "exact",
-                                    "allow": {
-                                        "call": false,
-                                        "register": true,
-                                        "publish": false,
-                                        "subscribe": false
+                                        "publish": true,
+                                        "subscribe": true
                                     },
                                     "disclose": {
                                         "caller": true,
@@ -149,6 +135,12 @@
             ],
 
             "components": [
+                {
+                    "type": "class",
+                    "classname": "wamp.authenticator.TokenGeneratorComponent",
+                    "realm": "authenticators",
+                    "role": "authenticator"
+                },
                 {
                     "type": "class",
                     "classname": "wamp.authenticator.AnonymousAuth",

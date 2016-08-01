@@ -22,6 +22,12 @@
 from twisted.internet.defer import inlineCallbacks
 from autobahn.twisted.wamp import ApplicationSession
 from autobahn.wamp.exception import ApplicationError
+import uuid
+import autobahn
+import inject
+inject.configure_once()
+
+import wamp
 
 
 class AnonymousAuth(ApplicationSession):
@@ -45,13 +51,10 @@ class TicketAuth(ApplicationSession):
     @inlineCallbacks
     def onJoin(self, details):
 
-        import inject
         from model.login.login import Login
-        import wamp
-
-        inject.configure_once()
         login = inject.instance(Login)
 
+        @inlineCallbacks
         def authenticate(realm, authid, details):
             username = wamp.getWampCredentials()['username']
             password = wamp.getWampCredentials()['password']
@@ -66,6 +69,19 @@ class TicketAuth(ApplicationSession):
                 }
                 return principal
 
+            """ chequeo si es un token ya generado """
+            username = yield self.call('authenticate.get_user_from_token', details['ticket'])
+            if (username and username == authid):
+                principal = {
+                    'role': 'authenticated',
+                    'extra': {
+                        'username': username,
+                        'ticket': details['ticket']
+                    }
+                }
+                return principal
+
+            """ chequeo si es un usuario de la base de datos """
             con = wamp.getConnectionManager().get()
             try:
                 username = authid
@@ -73,10 +89,13 @@ class TicketAuth(ApplicationSession):
                 if not login.login(con, username, password):
                     raise ApplicationError('usuario o clave incorrectas')
 
+                ticket = yield self.call('authenticate.get_new_token', [username]);
+
                 principal = {
                     'role': 'authenticated',
                     'extra': {
-                        'message': 'ticket auth'
+                        'username': username,
+                        'ticket': ticket
                     }
                 }
                 return principal
@@ -90,6 +109,26 @@ class TicketAuth(ApplicationSession):
                 wamp.getConnectionManager().put(con)
 
         yield self.register(authenticate, 'authenticate.ticket')
+
+
+class TokenGeneratorComponent(wamp.SystemComponentSession):
+
+    tokens = {}
+
+    @autobahn.wamp.register('authenticate.get_new_token')
+    def getNewToken(self, username):
+        token = str(uuid.uuid4())
+        self.tokens[token] = username
+        return token
+
+    @autobahn.wamp.register('authenticate.get_user_from_token')
+    def getUserFromToken(self, token):
+        if token in self.tokens.keys():
+            username = tokens[token]
+            return username
+        return None
+
+
 
 """
 class CRAAuth(ApplicationSession):

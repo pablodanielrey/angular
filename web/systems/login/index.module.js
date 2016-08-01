@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-      .module('login',['ngRoute','vxWamp'])
+      .module('login',['ngRoute','ngCookies','vxWamp'])
       .provider('$wampPublic', function ($wampProvider) {
           var options = {
               url: 'ws://127.0.0.1:8080',

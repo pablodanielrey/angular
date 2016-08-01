@@ -5,42 +5,21 @@
     .module('login')
     .service('Login', Login);
 
-  Login.$inject = ['$rootScope', '$wampPublic', '$wampCore', '$q'];
+  Login.$inject = ['$rootScope', '$window', '$q', '$cookies', '$wampPublic', '$wampCore'];
 
-  function Login($rootScope, $wampPublic, $wampCore, $q) {
+  function Login($rootScope, $window, $q, $cookies, $wampPublic, $wampCore) {
     var service = this;
 
-    service.connected = 0;
-
-    service._open = function() {
-      service.connecetd = service.conected + 1;
-      $rootScope.$broadcast('wamp.open');
-    }
-
-    service._close = function() {
-      service.connected = service.connected - 1;
-      if (service.connected <= 0) {
-        $rootScope.$broadcast('wamp.close');
+    service.check = function() {
+      var creds = service._getAuthCookie();
+      if (creds == null) {
+        $window.location.href = '/systems/login/';
+        return;
       }
+
+      // debo reconectarme con las nuevas credenciales en caso de no estar conectado
+
     }
-
-    $rootScope.$on('$wampPublic.open', function(event) {
-      service._open();
-    });
-
-    $rootScope.$on('$wampPublic.close', function(event) {
-      service._close();
-    });
-
-    /*
-    $rootScope.$on('$wampCore.open', function(event) {
-      service._open();
-    });
-
-    $rootScope.$on('$wampCore.close', function(event) {
-      service._close();
-    });
-    */
 
     service.getPublicData = function(username) {
       return $wampPublic.call('login.get_public_data', [username]);
@@ -70,6 +49,10 @@
 
       events.push($rootScope.$on("$wampCore.open", function(event, info) {
         console.log(info);
+
+        // seteo la cookie de autentificacion para ese usuario con la info retornada por el autenticador de crossbar.
+        service._setAuthCookie(info.details.authextra);
+
         console.log('obteniendo los sistemas registrados');
         $wampCore.call('login.get_registered_systems').then(
           function(systems) {
@@ -121,6 +104,37 @@
         events[i]();
       }
     }
+
+    service._setAuthCookie = function(info) {
+      $cookies.putObject('authlogin', info, {path:'/'});
+    }
+
+    service._getAuthCookie = function() {
+      return $cookies.getObject('authlogin');
+    }
+
+    service.connected = 0;
+
+    service._open = function() {
+      service.connecetd = service.conected + 1;
+      $rootScope.$broadcast('wamp.open');
+    }
+
+    service._close = function() {
+      service.connected = service.connected - 1;
+      if (service.connected <= 0) {
+        $rootScope.$broadcast('wamp.close');
+      }
+    }
+
+    $rootScope.$on('$wampPublic.open', function(event) {
+      service._open();
+    });
+
+    $rootScope.$on('$wampPublic.close', function(event) {
+      service._close();
+    });
+
 
   };
 
