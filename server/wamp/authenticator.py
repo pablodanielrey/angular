@@ -30,81 +30,75 @@ import autobahn
 import inject
 inject.configure_once()
 
+from model.login.login import Login
 import wamp
 
 
-class AnonymousAuth(ApplicationSession):
-    @inlineCallbacks
-    def onJoin(self, details):
+class AnonymousAuth(wamp.SystemComponentSession):
 
-        def authenticate(realm, authid, details):
+    @autobahn.wamp.register('authenticate.anonymous')
+    def authenticate(self, realm, authid, details):
+        principal = {
+            'realm': 'public',
+            'role': 'anonymous',
+            'extra': {
+                'message': 'anonymous auth'
+            }
+        }
+        return principal
+
+
+class TicketAuth(wamp.SystemComponentSession):
+
+    login = inject.instance(Login)
+    username = wamp.getWampCredentials()['username']
+    password = wamp.getWampCredentials()['password']
+
+    @autobahn.wamp.register('authenticate.ticket')
+    @inlineCallbacks
+    def authenticate(self, realm, authid, details):
+
+        """ chequeo si es un componente del sistema """
+        if authid == self.username and details['ticket'] == self.password:
             principal = {
-                'realm': 'public',
-                'role': 'anonymous',
+                'role': 'system',
                 'extra': {
-                    'message': 'anonymous auth'
+                    'message': 'system component'
                 }
             }
             return principal
 
-        yield self.register(authenticate, 'authenticate.anonymous')
+        """ chequeo si es un token ya generado """
+        token = yield self.call('authenticate.check_user_token', authid, details['ticket'])
+        if token:
+            principal = {
+                'role': 'authenticated',
+                'extra': token
+            }
+            return principal
 
+        """ chequeo si es un usuario de la base de datos """
+        con = wamp.getConnectionManager().get()
+        try:
+            username = authid
+            password = details['ticket']
+            if not self.login.login(con, username, password):
+                raise ApplicationError('usuario o clave incorrectas')
 
-class TicketAuth(ApplicationSession):
-    @inlineCallbacks
-    def onJoin(self, details):
+            token = yield self.call('authenticate.get_new_token', username);
+            principal = {
+                'role': 'authenticated',
+                'extra': token
+            }
+            return principal
 
-        from model.login.login import Login
-        login = inject.instance(Login)
+        except ApplicationError as ae:
+            raise ae
+        except Exception as e:
+            raise ApplicationError('exception in ticket authenticator')
 
-        @inlineCallbacks
-        def authenticate(realm, authid, details):
-            username = wamp.getWampCredentials()['username']
-            password = wamp.getWampCredentials()['password']
-
-            """ chequeo si es un componente del sistema """
-            if authid == username and details['ticket'] == password:
-                principal = {
-                    'role': 'system',
-                    'extra': {
-                        'message': 'system component'
-                    }
-                }
-                return principal
-
-            """ chequeo si es un token ya generado """
-            token = yield self.call('authenticate.check_user_token', authid, details['ticket'])
-            if token:
-                principal = {
-                    'role': 'authenticated',
-                    'extra': token
-                }
-                return principal
-
-            """ chequeo si es un usuario de la base de datos """
-            con = wamp.getConnectionManager().get()
-            try:
-                username = authid
-                password = details['ticket']
-                if not login.login(con, username, password):
-                    raise ApplicationError('usuario o clave incorrectas')
-
-                token = yield self.call('authenticate.get_new_token', username);
-                principal = {
-                    'role': 'authenticated',
-                    'extra': token
-                }
-                return principal
-
-            except ApplicationError as ae:
-                raise ae
-            except Exception as e:
-                raise ApplicationError('exception in ticket authenticator')
-
-            finally:
-                wamp.getConnectionManager().put(con)
-
-        yield self.register(authenticate, 'authenticate.ticket')
+        finally:
+            wamp.getConnectionManager().put(con)
 
 
 class TokenGeneratorComponent(wamp.SystemComponentSession):
