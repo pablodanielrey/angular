@@ -66,154 +66,57 @@ def sortOfficeUsers(users, stats):
         r.extend(pos[k])
     return r
 
-
-
-
-def statsToPyoo(rp, stats, users, offices):
-    import uuid
-    import pyoo
-    calc = pyoo.Desktop('localhost', 2002)
-    doc = calc.open_spreadsheet('templateStats.ods')
-    try:
-        sheetIndex = 0
-        io = 1
-        for off in offices:
-
-            sheet = doc.sheets[0]
-            sheet[io,0].value = off.name
-
-            i = io + 2
-            for uid in off.users:
-                user = findUser(uid, users)
-                if user:
-                    status = stats[user.id][0]
-                    sheet = doc.sheets[0]
-
-                    sheet[i,0].value = user.name + " " + user.lastname
-                    sheet[i,1].value = status.position if status.position is not None else ''
-
-                    sheet[i,2].value = _secondsToHours(status.secondsToWork)
-                    sheet[i,3].value = _secondsToHours(status.secondsWorked)
-                    sheet[i,4].value = _secondsToHours(status.secondsLate)
-                    sheet[i,5].value = status.countLate
-                    sheet[i,6].value = _secondsToHours(status.secondsEarly)
-                    sheet[i,7].value = status.countEarly
-
-                    sheet[i,8].value = status.countAbsences
-                    sheet[i,9].value = status.countJustificatedAbsences
-
-                    i = i + 1
-
-            io = i + 1
-
-
-        sheetIndex = 2
-        # los sheets de cada oficina
-        for off in offices:
-
-            if off is None:
-                continue
-
-            if off.name is None:
-                off.name = 'Oficina {}'.format(sheetIndex)
-
-            logging.info('Generando : {} - {}'.format(off.id, off.name))
-
-            sheet = doc.sheets.copy('Modelo Detalle de Oficina', 'Detalle {} {}'.format(off.name, sheetIndex), sheetIndex)
-            sheetIndex = sheetIndex + 1
-
-            sheet[1,0].value = off.name
-            i = 3
-
-            for uid in sortOfficeUsers(off.users, stats):
-                user = findUser(uid, users)
-                if user:
-                    status = stats[user.id][0]
-
-                    for st in status.dailyStats:
-                        sheet[i,0].value = user.name + " " + user.lastname
-                        sheet[i,1].value = status.position if status.position is not None else ''
-                        sheet[i,2].value = st.date
-                        sheet[i,3].value = st.start if st.start is not None else ''
-                        sheet[i,4].value = st.end if st.end is not None else ''
-                        sheet[i,5].value = _secondsToHours(st.periodSeconds) if st.periodSeconds > 60 else ''
-                        sheet[i,6].value = st.iin if st.iin is not None else ''
-
-                        if not st.isBoss:
-                            sheet[i,7].value = st.out if st.out is not None else ''
-                            sheet[i,8].value = _secondsToHours(st.workedSeconds) if st.workedSeconds > 60 else ''
-
-                            if st.workedSeconds > 0:
-                                aditional = int(st.workedSeconds - st.periodSeconds)
-                                if aditional > 60:
-                                    sheet[i,9].value = '+{}'.format(_secondsToHours(aditional))
-                                    sheet[i,9].text_color = 0x669900
-                                elif aditional < 60:
-                                    aditional = aditional * -1
-                                    sheet[i,9].value = '-{}'.format(_secondsToHours(aditional))
-                                    if aditional > (30 * 60):
-                                        sheet[i,9].text_color = 0xffffff
-                                        sheet[i,9].background_color = 0xcc3300
-                                    else:
-                                        sheet[i,9].text_color = 0xcc3300
-
-                        sheet[i,10].value = st.justification.identifier if st.justification is not None else ''
-                        sheet[i,11].value = _secondsToHours(st.justification.seconds) if st.justification is not None else ''
-                        if st.justification is not None:
-                            if st.justification.status == 1:
-                                sheet[i,12].value = 'P'
-                                sheet[i,12].text_color = 0xffffff
-                                sheet[i,12].background_color = 0x0000cc
-
-                            elif st.justification.status == 2:
-                                sheet[i,12].value = 'A'
-                                sheet[i,12].text_color = 0xffffff
-                                sheet[i,12].background_color = 0x669900
-                                sheet[i,10].text_color = 0xffffff
-                                sheet[i,10].background_color = 0x669900
-                                sheet[i,11].text_color = 0xffffff
-                                sheet[i,11].background_color = 0x669900
-
-                            elif st.justification.status == 3:
-                                sheet[i,12].value = 'R'
-                                sheet[i,12].text_color = 0xffffff
-                                sheet[i,12].background_color = 0xcc3300
-
-                            elif st.justification.status == 4:
-                                sheet[i,12].value = 'C'
-
-                        if st.isAbsence() and not st.isJustificatedAbsence():
-                            sheet[i,13].value = 'A'
-                            sheet[i,13].text_color = 0xffffff
-                            sheet[i,13].background_color = 0xcc3300
-
-                        elif not st.isBoss and (st.start is not None and st.end is not None) and (st.iin is None or st.out is None) and (st.justification is None):
-                            sheet[i,13].value = 'M'
-                            sheet[i,13].text_color = 0xffffff
-                            sheet[i,13].background_color = 0xcc3300
-
-                        i = i + 1
-
-            #index = index + 1
-        f = str(uuid.uuid4())
-        fn = '{}/assistencia-{}.xlsx'.format(rp, offices[0].name)
-        logging.info('salvando : {}'.format(fn))
-        doc.save(fn, pyoo.FILTER_EXCEL_2007)
-
-    finally:
-        doc.close()
-
-def createZipFile(rp):
+def createZipFile(user, rp):
     import zipfile
     import os
-    fn = '/tmp/reporte-asistencia.zip'
-    with zipfile.ZipFile(fn, mode='w', compression=zipfile.ZIP_BZIP2) as rpzip:
+    fn = '/tmp/reporte-asistencia-{}.zip'.format(user.dni)
+    with zipfile.ZipFile(fn, mode='w', compression=zipfile.ZIP_DEFLATED) as rpzip:
         for root, dir, files in os.walk(rp):
             for f in files:
                 fm = '{}/{}'.format(root, f)
                 logging.info('escribiendo : {}'.format(fm))
                 rpzip.write(fm)
     logging.info('generado : {}'.format(fn))
+    return fn
+
+def sendMail(con, user, fn):
+    logging.info('Buscando correos de {}'.format(user.dni))
+    from model.users.users import Mail
+    mails = Mail.findByUserId(con, user.id)
+    emails = []
+    for m in mails:
+        if 'econo.unlp.edu.ar' in m:
+            emails.append(m.email)
+    if len(emails) <= 0:
+        ''' no tiene correo configurado asi que no se le envía nada '''
+        return
+
+    logging.info('enviando correos a {}'.format(emails))
+
+    import smtplib
+    from email.mime.base import MIMEBase
+    from email.mime.multipart import MIMEMultipart
+    from email import encoders
+
+    logging.info('leyendo archivo {}'.format(fn))
+    with open(fn, 'rb') as fp:
+        msg = MIMEBase('application','octet-stream')
+        msg.set_payload(fp.read())
+    encoders.encode_base64(msg)
+    msg.add_header('Content-Disposition', 'attachment', filename='reporte-asistencia.zip')
+
+    name = user.name + ' ' + user.lastname + ' ' + user.dni
+    logging.info('enviando correo')
+    outer = MIMEMultipart()
+    outer['Subject'] = 'Reporte Asistencia {}'.format(name)
+    outer['From'] = 'ditesi@econo.unlp.edu.ar'
+    outer['To'] = ' ,'.join(emails)
+    outer.attach(msg)
+    try:
+        with smtplib.SMTP('163.10.17.115') as s:
+            s.sendmail('ditesi@econo.unlp.edu.ar', emails, outer.as_string())
+    except Exception as e:
+        logging.exception(e)
 
 
 def _getOffices(con):
@@ -280,8 +183,6 @@ def statsToPyooUser(rp, user, stats):
     finally:
         doc.close()
 
-
-
 def statsToPyooOffice(rp, off, stats, users):
     rpp = '{}/{}'.format(rp, off.name)
     import os
@@ -315,7 +216,7 @@ if __name__ == '__main__':
 
     logging.getLogger().setLevel(logging.INFO)
 
-    rstart = datetime.datetime.combine((datetime.datetime.now() - datetime.timedelta(days=120)).date(),datetime.time())
+    rstart = datetime.datetime.combine((datetime.datetime.now() - datetime.timedelta(days=30)).date(),datetime.time())
     rend = datetime.datetime.now()
     if len(sys.argv) >= 2:
         import dateutil
@@ -344,27 +245,40 @@ if __name__ == '__main__':
             uids.extend([u for u in office.users if u not in uids])
         users = UserDAO.findById(con, uids)
 
+        """ filtro a la gente que no debe ser manejada por el sistema de asistencia """
+        usersNotInAssistance = [ uid for uid in uids if not AssistanceModel.isAssistance(con, uid, rstart, rend) ]
+
         """ obtengo las estadisticas """
         logging.info('Calculando las estadísticas de {} usuarios'.format(len(uids)))
+        toGetStatistics = [ uid for uid in uids if uid not in usersNotInAssistance ]
         a = inject.instance(AssistanceModel)
-        stats = a.getStatistics(con, uids, rstart, rend)
+        stats = a.getStatistics(con, toGetStatistics, rstart, rend)
 
         """ creo los reportes por usuario y se lo envio """
         for user in users:
 
-            if user.id != '89d88b81-fbc0-48fa-badb-d32854d3d93a' and user.id != '0cd70f16-aebb-4274-bc67-a57da88ab6c7' and user.id != '4b89c515-2eba-4316-97b9-a6204d344d3a' and user.id != '35f7a8a6-d844-4d6f-b60b-aab810610809' and user.id != '205de802-2a15-4652-8fde-f23c674a1246':
-                continue
+            #if user.id != '89d88b81-fbc0-48fa-badb-d32854d3d93a' and user.id != '0cd70f16-aebb-4274-bc67-a57da88ab6c7' and user.id != '4b89c515-2eba-4316-97b9-a6204d344d3a' and user.id != '35f7a8a6-d844-4d6f-b60b-aab810610809' and user.id != '205de802-2a15-4652-8fde-f23c674a1246':
+            #    continue
 
+            send = False
             rp = createReportDir(user)
-            statsToPyooUser(rp, user, stats)
+            if user not in usersNotInAssistance:
+                send = True
+                statsToPyooUser(rp, user, stats)
 
             officesIds = Office.getOfficesByUserRole(con, user.id, tree=True, role='autoriza')
             ''' genero el reporte de esa oficina '''
             for officeId in officesIds:
                 off = findOffice(officeId, offices)
-                statsToPyooOffice(rp, off, stats, users)
 
-            #createZipFile(user, rp)
+                """ si existe al menos un usuario dentor de la oficina que esta manejado por el sistema de asistencia """
+                if len([ uid for uid in off.users if uid not in usersNotInAssistance ]) > 0:
+                    send = True
+                    statsToPyooOffice(rp, off, stats, users)
+
+            if send:
+                fn = createZipFile(user, rp)
+                sendMail(con, user, fn)
 
     finally:
         conn.put(con)

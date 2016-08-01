@@ -208,6 +208,15 @@ class AssistanceModel:
             result[d.userId].append(d)
         return result
 
+    @classmethod
+    def isAssistance(cls, con, userId, start, end):
+        """
+            Chequea si ese usuario es controlado por el sistema de asistencia dentro de ese rango de fechas
+            En realidad eso quiere decir si tiene algun horario definido dentro de las fechas especificadas
+        """
+        return len(Schedule.findByUserId(con, [userId], start, end)) > 0
+
+
     def _getSchedules(self, con, userIds, start, end):
         ss = ScheduleDAO.findByUserId(con, userIds, start, end)
         schedules = AssistanceModel._classifyByUserId(ss)
@@ -392,7 +401,6 @@ class AssistanceModel:
         schedules = Schedule.findByUserIdInWeek(con, userId, date)
         return [ScheduleData(key, schedules[key], userId) for key in schedules]
 
-
     def createSingleDateJustification(self,con, date, userId, ownerId, justClazz, justModule):
         module = importlib.import_module(justModule)
         clazz = getattr(module, justClazz)
@@ -459,3 +467,30 @@ class AssistanceModel:
         module = importlib.import_module(justModule)
         clazz = getattr(module, justClazz)
         return clazz.getData(con, userId, date, schedule)
+
+    def createScheduleWeek(self, con, userId, uid, date, scheds):
+        # verificar si el userId tiene permisos para crear los schedules para el usuario uid
+        # por ahora no lo verifico
+        date = date - datetime.timedelta(days=date.weekday())
+        for sc in scheds:
+            s = Schedule()
+            s.userId = uid
+            s.date = date
+            s.weekday = sc['weekday']
+            s.start = sc['start'] * 60
+            s.end = sc['end'] * 60
+            s.daily = True
+            s.persist(con)
+
+    def createScheduleSpecial(self, con, userId, uid, date, scheds):
+        # verificar si el userId tiene permisos para crear los schedules para el usuario uid
+        # por ahora no lo verifico
+        for sc in scheds:
+            s = Schedule()
+            s.userId = uid
+            s.date = date
+            s.weekday = date.weekday()
+            s.start = sc['start'] * 60
+            s.end = sc['end'] * 60
+            s.daily = False
+            s.persist(con)

@@ -1,24 +1,30 @@
-angular
-  .module('mainApp')
-  .controller('IndexLoginCtrl',IndexLoginCtrl);
 
-IndexLoginCtrl.$inject = ['$rootScope','$scope'];
+(function() {
+  'use strict';
 
-function IndexLoginCtrl($rootScope, $scope) {
-
-    $rootScope.loaded = false;
-    $scope.loaded = false;
-
-    $rootScope.$on("$wamp.open", function (event, session) {
-      $scope.$broadcast('wampOpenEvent', event);
+  angular
+    .module('login')
+    .controller('IndexLoginCtrl',IndexLoginCtrl)
+    .run(function($wampPublic) {
+      console.log('abriendo conexion');
+      $wampPublic.open();
     });
 
-    $rootScope.$on("$wamp.close", function (event, session) {
-      $scope.$broadcast('wampCloseEvent',event);
-    });
+  IndexLoginCtrl.$inject = ['$rootScope','$scope'];
 
-    $scope.$on('$viewContentLoaded', function(event) {
-      // nada
-    });
+  function IndexLoginCtrl($rootScope, $scope, $wampPublic) {
 
-};
+      $rootScope.loaded = false;
+      $scope.loaded = false;
+
+      /*
+        no es disparado ya que no existe ningun ng-view en la vista.
+      $scope.$on('$viewContentLoaded', function(event) {
+        console.log('conectandose al wamp realm public');
+        $wampPublic.open();
+      });
+      */
+
+  };
+
+})();

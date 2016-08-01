@@ -73,7 +73,7 @@ class UserDAO(DAO):
         u.created = r['created']
         u.version = r['version']
         u.photo = r['photo']
-        u.type = r['type']
+        #u.type = r['type']
         return u
 
     @staticmethod

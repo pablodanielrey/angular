@@ -2,3 +2,5 @@
 nbproject
 **/.directory
 server/tmp/*
+node.pid
+cookies.dat
