@@ -89,7 +89,7 @@ class TicketAuth(ApplicationSession):
                 if not login.login(con, username, password):
                     raise ApplicationError('usuario o clave incorrectas')
 
-                ticket = yield self.call('authenticate.get_new_token', [username]);
+                ticket = yield self.call('authenticate.get_new_token', username);
 
                 principal = {
                     'role': 'authenticated',
@@ -124,7 +124,7 @@ class TokenGeneratorComponent(wamp.SystemComponentSession):
     @autobahn.wamp.register('authenticate.get_user_from_token')
     def getUserFromToken(self, token):
         if token in self.tokens.keys():
-            username = tokens[token]
+            username = self.tokens[token]
             return username
         return None
 

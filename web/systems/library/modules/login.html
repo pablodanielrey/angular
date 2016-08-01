@@ -1,6 +1,8 @@
 <div>
   <div>{{message}}</div>
-  <div>{{session}}</div>
+  <div>usuario {{creds.username}}</div>
+  <div>token {{creds.ticket}}</div>
+
   <form ng-submit="login()">
       <div>
         USUARIO:
@@ -14,23 +16,4 @@
         <button type='submit'>Entrar</button>
       </div>
   </from>
-  <div ng-if='open'>
-    <button ng-click='close()'>Salir</button>
-  </div>
-
-  <div ng-repeat='s in sessions track by $index'>
-    <div>
-      <div>---------------------</div>
-      <span ng-if='s.session != session'>{{s.session}}</span>
-      <span ng-if='s.session == session'>ESTE</span>
-      <span> {{s.authid}}</span>
-      <span> {{s.authrole}}</span>
-      <span> {{s.authprovider}}</span>
-      <span> {{s.authmethod}}</span>
-      <span> {{s.transport.http_headers_received}}</span>
-      <button ng-click='closeSession(s.session)'>X</button>
-      <div>---------------------</div>
-    </div>
-  </div>
-
 </div>

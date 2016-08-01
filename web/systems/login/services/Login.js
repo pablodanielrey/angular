@@ -18,7 +18,21 @@
       }
 
       // debo reconectarme con las nuevas credenciales en caso de no estar conectado
+      if (!$wampCore.connection.isOpen) {
+        service._login(creds.username, creds.ticket).then(
+          function(systems) {
+            // nada
+          },
+          function(err) {
+            console.log(err);
+            $window.location.href = '/systems/login/';
+          }
+        );
+      }
+    }
 
+    service.getCredentials = function() {
+      return service._getAuthCookie();
     }
 
     service.getPublicData = function(username) {
@@ -26,10 +40,13 @@
     }
 
     service.login = function(username, password) {
-
       if ($wampCore.connection != undefined && $wampCore.connection != null && $wampCore.connection.isOpen) {
         $wampCore.close();
       }
+      return service._login(username, password);
+    }
+
+    service._login = function(username, password) {
 
       // armo la promesa que tiene en cuenta toda la cadena de eventos posibles.
       var defer = $q.defer();
