@@ -1,5 +1,5 @@
 angular
-    .module('library',['ngRoute','vxWamp'])
+    .module('example',['ngRoute','vxWamp'])
     .config(function($wampProvider) {
       /*
       if (config.url == undefined || config.url == 'autodetect') {

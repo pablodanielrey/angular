@@ -1,5 +1,5 @@
 
-var app = angular.module('library')
+var app = angular.module('example')
 
 app.config(['$routeProvider', function($routeProvider) {
 

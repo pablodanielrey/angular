@@ -1,4 +1,4 @@
-var app = angular.module('library');
+var app = angular.module('example');
 
 app.controller('TestCtrl', ["$rootScope", '$scope', "$location", "$wamp", function ($rootScope, $scope, $location, $wamp) {
 
