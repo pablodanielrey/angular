@@ -231,6 +231,8 @@ if __name__ == '__main__':
     reg = inject.instance(Registry)
     conn = Connection(reg.getRegistry('dcsys'))
     con = conn.get()
+    import psycopg2
+    con.set_isolation_level(psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
     try:
 
         from model.assistance.assistanceDao import AssistanceDAO
