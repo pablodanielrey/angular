@@ -74,9 +74,6 @@ class TicketAuth(ApplicationSession):
 
             """ chequeo si es un token ya generado """
             token = yield self.call('authenticate.check_user_token', authid, details['ticket'])
-            print(authid)
-            print(details['ticket'])
-            print(token)
             if token:
                 principal = {
                     'role': 'authenticated',
