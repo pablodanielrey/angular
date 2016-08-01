@@ -19,6 +19,9 @@
 
 """
 
+import datetime
+import dateutil.tz
+
 from twisted.internet.defer import inlineCallbacks
 from autobahn.twisted.wamp import ApplicationSession
 from autobahn.wamp.exception import ApplicationError
@@ -70,14 +73,14 @@ class TicketAuth(ApplicationSession):
                 return principal
 
             """ chequeo si es un token ya generado """
-            username = yield self.call('authenticate.get_user_from_token', details['ticket'])
-            if (username and username == authid):
+            token = yield self.call('authenticate.check_user_token', authid, details['ticket'])
+            print(authid)
+            print(details['ticket'])
+            print(token)
+            if token:
                 principal = {
                     'role': 'authenticated',
-                    'extra': {
-                        'username': username,
-                        'ticket': details['ticket']
-                    }
+                    'extra': token
                 }
                 return principal
 
@@ -89,14 +92,10 @@ class TicketAuth(ApplicationSession):
                 if not login.login(con, username, password):
                     raise ApplicationError('usuario o clave incorrectas')
 
-                ticket = yield self.call('authenticate.get_new_token', username);
-
+                token = yield self.call('authenticate.get_new_token', username);
                 principal = {
                     'role': 'authenticated',
-                    'extra': {
-                        'username': username,
-                        'ticket': ticket
-                    }
+                    'extra': token
                 }
                 return principal
 
@@ -113,19 +112,44 @@ class TicketAuth(ApplicationSession):
 
 class TokenGeneratorComponent(wamp.SystemComponentSession):
 
+    expiration = 5
     tokens = {}
+
+    def _getNewExpiration(self):
+        return (datetime.datetime.now(dateutil.tz.tzlocal()) + datetime.timedelta(seconds=self.expiration))
 
     @autobahn.wamp.register('authenticate.get_new_token')
     def getNewToken(self, username):
         token = str(uuid.uuid4())
-        self.tokens[token] = username
-        return token
+        expire = self._getNewExpiration()
+        tokenData = {
+            'username': username,
+            'ticket': token,
+            'expires': expire.isoformat()
+        }
+        self.tokens[token] = {
+            'username': username,
+            'expires': expire
+        }
+        return tokenData
 
-    @autobahn.wamp.register('authenticate.get_user_from_token')
-    def getUserFromToken(self, token):
+    @autobahn.wamp.register('authenticate.check_user_token')
+    def checkUserToken(self, username, token):
         if token in self.tokens.keys():
-            username = self.tokens[token]
-            return username
+            tk = self.tokens[token]
+            print(tk)
+            if (tk and tk['username'] == username):
+                if (tk['expires'] > datetime.datetime.now(dateutil.tz.tzlocal())):
+                    tk['expires'] = self._getNewExpiration()
+                    tokenData = {
+                        'username': username,
+                        'ticket': token,
+                        'expires': tk['expires'].isoformat()
+                    }
+                    return tokenData
+                else:
+                    print('removiendo token expirado {}'.format(token))
+                    del self.tokens[token]
         return None
 
 

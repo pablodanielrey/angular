@@ -10,10 +10,13 @@
   function Login($rootScope, $window, $q, $cookies, $wampPublic, $wampCore) {
     var service = this;
 
+    /*
+      Implementa el chequeo y reconexion para todos los sistemas.
+    */
     service.check = function() {
       var creds = service._getAuthCookie();
       if (creds == null) {
-        $window.location.href = '/systems/login/';
+        $window.location.href = '/';
         return;
       }
 
@@ -25,7 +28,7 @@
           },
           function(err) {
             console.log(err);
-            $window.location.href = '/systems/login/';
+            $window.location.href = '/';
           }
         );
       }
@@ -123,7 +126,8 @@
     }
 
     service._setAuthCookie = function(info) {
-      $cookies.putObject('authlogin', info, {path:'/'});
+      var expires = new Date(info.expires);
+      $cookies.putObject('authlogin', info, {path:'/', expires: expires});
     }
 
     service._getAuthCookie = function() {
