@@ -34,6 +34,13 @@
       }
     }
 
+    service.getTransport = function() {
+      return {
+          'public': $wampPublic,
+          'private': $wampCore
+      }
+    }
+
     service.getCredentials = function() {
       return service._getAuthCookie();
     }

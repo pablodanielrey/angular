@@ -35,13 +35,18 @@ class LoginSession(SystemComponentSession):
                     'ticket': 'fnfwfewfewfmewfklemflfdlskmfsd'
                 },
                 {
-                    'domain': '127.0.0.1',
-                    'relative': '/systems/library/',
+                    'domain': 'issues',
+                    'relative': '/systems/issues/',
                     'ticket': 'fnfwfewfewfmewfklemflfdlskmfsd'
                 },
                 {
-                    'domain': '',
-                    'relative': '/systems/login/',
+                    'domain': 'pedidos',
+                    'relative': '/systems/issues/',
+                    'ticket': 'fnfwfewfewfmewfklemflfdlskmfsd'
+                },
+                {
+                    'domain': 'asistencia',
+                    'relative': '/systems/assistance/',
                     'ticket': 'fnfwfewfewfmewfklemflfdlskmfsd'
                 }
             ],

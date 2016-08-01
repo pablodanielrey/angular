@@ -1,22 +1,31 @@
+(function() {
+    'use strict'
+    var app = angular.module('issues')
 
+    app.config(['$routeProvider', function($routeProvider) {
+      $routeProvider
 
-app.config(['$routeProvider', function($routeProvider) {
+      .when('/orders', {
+         templateUrl: 'modules/orders/index.html',
+         controller: 'OrdersCtrl',
+         controllerAs: 'vm'
+      })
 
-  $routeProvider
+      .when('/myOrders', {
+         templateUrl: 'modules/myOrders/index.html',
+         controller: 'MyOrdersCtrl',
+         controllerAs: 'vm'
+      })
 
-    .when('/request', {
-      controller: 'NewRequestCtrl',
-      templateUrl: '/systems/issues/modules/newRequest/index.html'
-    })
+      .when('/logout', {
+         templateUrl: 'modules/logout.html',
+         controller: 'LogoutCtrl'
+      })
 
-    .when('/manage', {
-      controller: 'ManageIssuesCtrl',
-      templateUrl: '/systems/issues/modules/manageIssues/index.html'
-    })
+      .otherwise({
+        redirectTo: '/orders'
+      });
 
-    .otherwise({
-        redirectTo: '/request'
-    });
+    }]);
 
-
-}]);
+})();

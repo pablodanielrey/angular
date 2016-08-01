@@ -1,9 +1,0 @@
-<div ui-tree-handle class="nameNodeOffice">
-  <input type="checkbox" ng-model="office.selected" ng-change="selectOffice(office)" ng-disabled="office.disabled"/>
-  {{office.name}}
-  Sub-Oficinas:<input type="checkbox" ng-model="office.tree" ng-click="selectTree(office)" ng-disabled="office.disabled"/>
-</div>
-<ol ui-tree-nodes ng-model="office.childrens">
-  <li ng-repeat="office in office.childrens" ui-tree-node ng-include="'modules/newRequest/nodes_offices_renderer.html'">
-  </li>
-</ol>

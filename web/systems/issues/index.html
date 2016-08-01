@@ -1,94 +1,83 @@
 <!DOCTYPE html>
-<html ng-app="mainApp">
+<html ng-app="issues">
 <head>
   <meta charset="utf-8"/>
   <meta name='viewport' content='width=device-width'/>
+  <title>Pedidos | FCE </title>
 
+  <script>
+    AUTOBAHN_DEBUG = false;
+  </script>
 
-  <script src="/libs/bower_components/angularjs/angular.js"></script>
-  <script src="/libs/bower_components/angular-route/angular-route.js"></script>
-  <script src="/libs/bower_components/autobahn/autobahn.js"></script>
-  <script src="/libs/bower_components/angular-wamp/release/angular-wamp.js"></script>
+  <script src="../../libs/bower_components/angular/angular.js"></script>
+  <script src="../../libs/bower_components/angular-route/angular-route.js"></script>
+  <script src="../../libs/bower_components/angular-cookies/angular-cookies.js"></script>
+  <script src="../../libs/bower_components/autobahn/autobahn.js"></script>
+  <script src="../../libs/bower_components/angular-wamp/release/angular-wamp.js"></script>
 
-  <script type="text/javascript" src="/angular/angular-ui-tree/angular-ui-tree.min.js"></script>
-  <link rel="stylesheet" href="/angular/angular-ui-tree/angular-ui-tree.min.css">
   <!-- esto es el estilo de font awesome para tener los iconos -->
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/libs/font-awesome-4.5.0/css/font-awesome.min.css">
   <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+  <link rel="shortcut icon" href="/systems/fce/img/favicon2.ico">
 
-  <script type="text/javascript" src="/config.json"></script>
+  <!-- TODO: ver como se puede hacer esto -->
+  <link rel="stylesheet" type="text/css" href="../fce/index.css"/>
 
-  <script type="text/javascript" src="/systems/issues/initializeApp.js"></script>
+  <script src='../login/index.module.js'></script>
+  <script src='../login/services/Login.js'></script>
 
-  <!-- ***** MENSAJES ***** -->
+  <script src='../users/index.module.js'></script>
+  <script src='../users/services/Users.js'></script>
+
+  <script src='../offices/index.module.js'></script>
+  <script src='../offices/services/Offices.js'></script>
+
+  <script src='../files/index.module.js'></script>
+  <script src='../files/services/Files.js'></script>
+
+  <script src='index.module.js'></script>
+  <script src='index.controller.js'></script>
+  <script src='routes.js'></script>
+  <script src='services/Issues.js'></script>
+
+  <link rel="stylesheet" type="text/css" href="index.css"/>
+
+  <!--
+  <script type="text/javascript" src="/directives/onReadFileBinaryString.js"></script>
+  -->
+
+	<!-- modules -->
+  <script type="text/javascript" src="modules/index.controller.js"></script>
+  <link rel="stylesheet" type="text/css" href="modules/index.css"/>
+
+  <script type="text/javascript" src="modules/orders/index.controller.js"></script>
+  <link rel="stylesheet" type="text/css" href="modules/orders/index.css"/>
+
+  <script type="text/javascript" src="modules/myOrders/index.controller.js"></script>
+  <link rel="stylesheet" type="text/css" href="modules/myOrders/index.css"/>
+
+  <script type="text/javascript" src="modules/menu/index.controller.js"></script>
+  <script type="text/javascript" src="modules/menuCel/index.controller.js"></script>
+  <link rel="stylesheet" type="text/css" href="modules/menuCel/index.css"/>
+
   <script type="text/javascript" src="/modules/messages/messages.js"></script>
   <link rel="stylesheet" type="text/css" href="/modules/messages/messages.css"/>
 
-  <!-- ***** SERVICIOS GENERALES ***** -->
-  <script type="text/javascript" src="/services/Config.js"></script>
-  <script type="text/javascript" src="/services/Credentials.js"></script>
-  <script type="text/javascript" src="/services/Utils.js"></script>
-  <script type="text/javascript" src="/services/Cache.js"></script>
-  <script type="text/javascript" src="/services/Session.js"></script>
-  <script type="text/javascript" src="/services/WebSocket.js"></script>
-  <script type="text/javascript" src="/services/Notifications.js"></script>
-  <script type="text/javascript" src="/services/Systems.js"></script>
-  <script type="text/javascript" src="/services/Groups.js"></script>
-  <script type="text/javascript" src="/services/Users.js"></script>
-  <script type="text/javascript" src="/services/Profiles.js"></script>
-  <script type="text/javascript" src="/services/Module.js"></script>
-  <script type="text/javascript" src="/services/Login.js"></script>
-  <script type="text/javascript" src="/services/systems/office/Office.js"></script>
-
-  <!-- ***** SERVICIOS DE LA APLICACION ***** -->
-
-  <!--archivos principales-->
-  <link rel="stylesheet" href="/systems/issues/index.css">
-  <script type="text/javascript" src="/systems/issues/index.js"></script>
-  <script type="text/javascript" src="/systems/issues/routes.js"></script>
-
-  <script type="text/javascript" src="/services/systems/issue/Issue.js"></script>
+  <link rel="stylesheet" type="text/css" href="modules/header/header.css"/>
+  <script type="text/javascript" src="modules/header/header.controller.js"></script>
+  <link rel="stylesheet" type="text/css" href="modules/footer/footer.css"/>
 
 
-
-  <!-- ***** MENU ***** -->
-  <script type="text/javascript" src="/systems/issues/menu/menu.js"></script>
-  <link rel="stylesheet" type="text/css" href="/systems/issues/menu/menu.css"/>
-
-  <!-- ***** MODULOS ***** -->
-  <link rel="stylesheet" href="/systems/issues/modules/newRequest/index.css">
-  <script type="text/javascript" src="/systems/issues/modules/newRequest/index.js"></script>
-  <script type="text/javascript" src="/systems/issues/modules/newRequest/visibilityOffice.controller.js"></script>
-
-  <link rel="stylesheet" href="/systems/issues/modules/manageIssues/index.css">
-  <script type="text/javascript" src="/systems/issues/modules/manageIssues/index.js"></script>
-  <script type="text/javascript" src="/systems/issues/modules/manageIssues/assigned.controller.js"></script>
 
 </head>
+<body class="sistema  {{styleMenu}}" ng-controller="IndexCtrl">
 
-<body ng-controller="IndexCtrl">
-
-  <div class="principal" ng-controller="MenuCtrl">
-
-      <div class="screen" ng-class="{true:'closeMenu',false:'openMenu'}[model.cerrado]" >
-
-        <!-- <nav ng-class="{true:'visible',false:'hidden'}[isLogged()]"> -->
-        <div class="menu-container" ng-include="'/systems/issues/menu/menu.html'">
-          </div>
-
-          <div ng-view>
-          </div>
-
-
-      </div>
-
-
-
-
-      <div class='messages-container' ng-controller="MessagesCtrl" ng-include="'/modules/messages/messages.html'" ng-class="{false: 'hidden', true: 'visible'}[ isVisible() ]">
-      </div>
-  </div>
-
-
-  </body>
-  </html>
+    <div ng-include="'../fce/modules/header/index.html'" ng-controller="HeaderCtrl"></div>
+    <div class="main">
+      <div class="MenuContent" ng-controller="MenuCtrl" ng-include="'modules/menu/index.html?t=' + t"></div>
+      <div class="MenuCel" ng-controller="MenuCelCtrl" ng-include="'modules/menuCel/index.html?t=' + t"></div>
+      <div class="viewContent" ng-view></div>
+    </div>
+    <div ng-include="'../fce/modules/footer/index.html'"></div>
+</body>
+</html>
