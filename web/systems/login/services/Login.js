@@ -36,8 +36,8 @@
 
     service.getTransport = function() {
       return {
-          'public': $wampPublic,
-          'private': $wampCore
+          public: $wampPublic,
+          private: $wampCore
       }
     }
 

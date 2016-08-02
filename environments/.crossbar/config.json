@@ -332,6 +332,22 @@
                         },
                         "url": "ws://localhost:8080"
                     }
+                },
+
+                {
+                    "id": "issues",
+                    "type": "class",
+                    "classname": "actions.systems.issues.issues.Issues",
+                    "realm": "core",
+                    "transport": {
+                        "type": "websocket",
+                        "endpoint": {
+                            "type": "tcp",
+                            "host": "127.0.0.1",
+                            "port": 8080
+                        },
+                        "url": "ws://localhost:8080"
+                    }
                 }
             ]
         }

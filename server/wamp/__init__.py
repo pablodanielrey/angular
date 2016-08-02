@@ -81,7 +81,14 @@ from twisted.internet.defer import inlineCallbacks
 from autobahn.twisted.wamp import ApplicationSession
 import autobahn
 
+from model.login.login import Login
+
 class SystemComponentSession(ApplicationSession):
+
+    def getUserId(self, con, details):
+        wampSessionId = details.caller
+        username = details.caller_authid
+        return Login.getUserIdByUsername(con, username)
 
     def getRegisterOptions(self):
         """

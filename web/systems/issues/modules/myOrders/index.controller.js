@@ -539,7 +539,7 @@
 
       function loadAreas(office) {
         vm.model.areas = [];
-        Issue.getAreas(office).then(
+        Issue.getAreas(office.id).then(
           function(offices) {
             vm.model.areas = offices;
           },

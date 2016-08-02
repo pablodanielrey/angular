@@ -18,94 +18,38 @@
 			this.changePriority = changePriority;
 			this.getOffices = getOffices;
 			this.getAreas = getAreas;
-			this.$wamp = Login.getTransport()['private'];
+			this.$wamp = Login.getTransport().private;
 
 		  function getMyIssues() {
-		    return new Promise(function(cok, cerr) {
-		  		this.$wamp.call('issues.getMyIssues')
-		      .then(function(v) {
-		        cok(v);
-		      },function(err) {
-		        cerr(err);
-		      });
-		    });
+				return this.$wamp.call('issues.get_my_issues');
 			}
 
 		  function getOfficesIssues() {
-				return new Promise(function(cok, cerr) {
-		  		this.$wamp.call('issues.getOfficesIssues')
-		      .then(function(v) {
-		        cok(v);
-		      },function(err) {
-		        cerr(err);
-		      });
-		    });
+				return this.$wamp.call('issues.getOfficesIssues');
 			}
 
 		  function getAssignedIssues() {
-				return new Promise(function(cok, cerr) {
-		  		this.$wamp.call('issues.getAssignedIssues')
-		      .then(function(v) {
-		        cok(v);
-		      },function(err) {
-		        cerr(err);
-		      });
-		    });
+				return this.$wamp.call('issues.getAssignedIssues')
 			}
 
 		  function findById(id) {
-				return new Promise(function(cok, cerr) {
-		  		this.$wamp.call('issues.findById', [id])
-		      .then(function(v) {
-		        cok(v);
-		      },function(err) {
-		        cerr(err);
-		      });
-		    });
+				return this.$wamp.call('issues.findById', [id]);
 			}
 
 		  function create(subject, description, parentId, officeId, fromOfficeId, authorId, files) {
-				return new Promise(function(cok, cerr) {
-		  		this.$wamp.call('issues.create', [subject, description, parentId, officeId, fromOfficeId, authorId, files])
-		      .then(function(v) {
-		        cok(v);
-		      },function(err) {
-		        cerr(err);
-		      });
-		    });
+				return this.$wamp.call('issues.create', [subject, description, parentId, officeId, fromOfficeId, authorId, files])
 			}
 
 		  function createComment(subject, description, parentId, officeId, files) {
-				return new Promise(function(cok, cerr) {
-		  		this.$wamp.call('issues.createComment', [subject, description, parentId, officeId, files])
-		      .then(function(v) {
-		        cok(v);
-		      },function(err) {
-		        cerr(err);
-		      });
-		    });
+				return this.$wamp.call('issues.createComment', [subject, description, parentId, officeId, files])
 			}
 
 		  function changeStatus(issue, status) {
-				return new Promise(function(cok, cerr) {
-		  		this.$wamp.call('issues.changeStatus', [issue, status])
-		      .then(function(v) {
-		        cok(v);
-		      },function(err) {
-		        cerr(err);
-		      });
-		    });
+				return this.$wamp.call('issues.changeStatus', [issue, status]);
 			}
 
 		  function changePriority(issue, priority) {
-				return new Promise(function(cok, cerr) {
-		  		this.$wamp.call('issues.changePriority', [issue, priority])
-		      .then(function(v) {
-		        cok(v);
-		      },function(err) {
-		        cerr(err);
-		      });
-		    });
+				return this.$wamp.call('issues.changePriority', [issue, priority]);
 			}
 
 			function getOffices() {
@@ -113,8 +57,8 @@
 
 			}
 
-			function getAreas(office) {
-				return this.$wamp.call('issues.getAreas',[office.id]);
+			function getAreas(officeId) {
+				return this.$wamp.call('issues.getAreas',[officeId]);
 			}
 
 		}

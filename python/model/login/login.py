@@ -160,6 +160,14 @@ class Login:
 
     reg = inject.attr(Registry)
 
+    @classmethod
+    def getUserIdByUsername(cls, con, username):
+        up = UserPassword.findByUsername(con, username)
+        if len(up) > 0:
+            return up[0].userId
+        return None
+
+
     def hasRoles(self, con, sId, roles = []):
         ss = Session.findById(con, [sId])
         if len(ss) <= 0:
@@ -193,6 +201,7 @@ class Login:
         up = UserPassword.findByUsername(con, username)
         return len(up) > 0
 
+
     def login(self, con, username, password):
         assert username is not None
         assert password is not None
@@ -200,6 +209,7 @@ class Login:
         if up is None:
             return None
 
+        """
         s = Session()
         s.userId = up.userId
         s.username = up.username
@@ -211,6 +221,8 @@ class Login:
         sid = s.persist(con)
         s.id = sid
         return s
+        """
+        return up.userId
 
     def logout(self, con, sid):
         assert sid is not None

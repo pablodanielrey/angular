@@ -4,9 +4,9 @@
       .module('issues')
       .controller('IndexCtrl', IndexCtrl);
 
-    IndexCtrl.$inject = ['$scope'];
+    IndexCtrl.$inject = ['$scope', 'Issues'];
 
-    function IndexCtrl($scope) {
+    function IndexCtrl($scope, Issues) {
         var vm = this;
 
         $scope.model = {
@@ -26,6 +26,8 @@
         $scope.$on('$viewContentLoaded', function(event) {
           $scope.initialize();
         });
+
+        Issues.getMyIssues();
     };
 
 })();

@@ -82,10 +82,12 @@ class TicketAuth(wamp.SystemComponentSession):
         try:
             username = authid
             password = details['ticket']
-            if not self.login.login(con, username, password):
+            userId = self.login.login(con, username, password)
+            if not userId:
                 raise ApplicationError('usuario o clave incorrectas')
 
             token = yield self.call('authenticate.get_new_token', username);
+            token['userId'] = userId
             principal = {
                 'role': 'authenticated',
                 'extra': token
@@ -103,7 +105,7 @@ class TicketAuth(wamp.SystemComponentSession):
 
 class TokenGeneratorComponent(wamp.SystemComponentSession):
 
-    expiration = 60
+    expiration = 600000
     tokens = {}
 
     def _getNewExpiration(self):
