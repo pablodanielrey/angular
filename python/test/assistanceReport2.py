@@ -70,7 +70,7 @@ def createZipFile(user, rp):
     import zipfile
     import os
     fn = '/tmp/reporte-asistencia-{}.zip'.format(user.dni)
-    with zipfile.ZipFile(fn, mode='w', compression=zipfile.ZIP_DEFLATED) as rpzip:
+    with zipfile.ZipFile(fn, mode='w', compression=zipfile.ZIP_STORED) as rpzip:
         for root, dir, files in os.walk(rp):
             for f in files:
                 fm = '{}/{}'.format(root, f)
