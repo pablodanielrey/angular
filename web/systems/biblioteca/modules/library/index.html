@@ -1,23 +1,23 @@
-<div class="library {{view.style}} {{view.style2}}">
+<div class="library {{view.style1}} {{view.style2}}">
     <!--
-    VARIABLES1: buscar
+    VARIABLES1: buscar, cargando
     VARIABLES2: rangoHorario, rangoFechas
     -->
 
-    <!-- --------------- HEADER DEL SISTEMA ----------------- -->
-    <div class="header">
-    </div>
-
     <!-- -------------- CONTENEDOR PRINCIPAL DEL SISTEMA ----------------- -->
     <div class="contentLibrary">
+
+        <!-- ---- CONTENEDOR DE LA IZQUIERDA ----- -->
         <div class="contentMain">
+            <!-- ---- Header del sistema ----- -->
             <div class="contentInfoList">
                 <div class="contentStatusNew">
-                      <div class="cantPerson"><div class="textCantPerson">122 </div>/ 150 personas en sala</div>
-                      <div class="cantPerson"><div class="textCantPerson2">28 </div> lugares disponibles</div>
-                      <div class="cantPerson"><div class="textCantPerson3">568 </div> accesos en el día</div>
+                      <div class="cantPerson"><div class="textCantPerson">122 </div>Presentes</div><!-- ---- Cantidad de personas presentes en la sala ----- -->
+                      <div class="cantPerson2"><div class="textCantPerson2">28 </div> Disponibilidad</div> <!-- ---- Lugares disponibles en la sala ----- -->
+                      <div class="cantPerson3"><div class="textCantPerson3">568 </div> Total de accesos</div><!-- ---- total de accesos ----- -->
                 </div>
             </div>
+            <!-- ---- Contenedor de ordenamiento y busqueda ----- -->
             <div class="headerContentList">
                 <div class="dataList">
                     <div>Ordenar </div>
@@ -30,14 +30,14 @@
                   <div class="btnOrder" title="Descargar Lista"><i class="fa fa-download"></i></div>
                   <div class="btnSearch" ng-click="view.style = 'buscar'" title="Buscar..."><i class="fa fa-search"></i></div>
                 </div>
-
+                <!-- ---- Buscador por nombre, fecha y hora ----- -->
                 <div class="contentSearch">
                     <div class="subContentSearch">
                         <div class="contentItemSearch">
                           <div class="icoSeach"><i class="fa fa-search"></i></div>
                           <div><input type="search" placeholder="Buscar..."class="inputSearch"></input></div>
                           <div class=textRanck>
-                              <div>
+                              <div class="contentRangDate">
                                   <div class="btnOrder2" ng-click="view.style2 = 'rangoFechas'">Rango de Fechas</div>
                                   <div class="btnOrder3" ng-click="view.style2 = 'rangoFechas'"><i class="fa fa-calendar-o"></i></div>
 
@@ -68,17 +68,21 @@
                     </div>
 
                 </div>
-
             </div>
-            <div class="contentList">
 
+            <!-- ---- Listado de accesos ----- -->
+            <div class="contentList">
+                <!-- ---- Titulos del listado ----- -->
                 <div class="titleListAccess">
+                  <div class="file0">A</div>
                   <div class="file1">Acceso</div>
-                  <div class="file2">Hora</div>
+                  <div class="file2">Día</div>
+                  <div class="file2b">Hora</div>
                   <div class="file3">Nombre y Apellido</div>
                   <div class="file4">DNI</div>
                   <div class="file5">Tipo</div>
                 </div>
+                <!-- ---- Accesos ----- -->
                 <div class="listAccess">
                   <div class="itemListAccess {{i.clase}}" ng-repeat="i in logs">
                     <!-- VARIABLES: entrada, salida -->
@@ -87,22 +91,27 @@
                         <div class="inOut in">Entrada</div>
                         <div class="inOut out">Salida</div>
                     </div>
-                    <div class="file2">{{i.hora}}</div>
+                    <div class="file2">{{i.dia}}</div>
+                    <div class="file2b">{{i.hora}}</div>
                     <div class="file3">{{i.name}} {{i.lastname}}</div>
                     <div class="file4">{{i.dni}}</div>
                     <div class="file5">{{i.tipo}}</div>
                   </div>
                 </div>
+                <!-- ---- Preload para la busqueda ----- -->
+                <div class="preload">
+                  <div class="circle"><i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i></div>
+                  <div><b>Cargando...</b></div>
+                  <div>Por favor espere</div>
+                </div>
 
             </div>
         </div>
+        <!-- ---- CONTENEDOR DE LA DERECHA ----- -->
         <div class="contentAside">
             <div class="contentListAside">
-
+                <!-- ---- Ultimo acceso de entrada o salida (MOSTRAR SOLO LOS ULTIMOS 7 ACCESOS) ----- -->
                 <div class="itemAccess entrada">
-                    <div class="contentArrow">
-                      <i class="fa fa-caret-left" aria-hidden="true"></i>
-                    </div>
                     <div class="infoUserAside">
                         <div>
                           <img class="imgUserAside" src="/systems/biblioteca/img/pablo.jpg">
@@ -117,12 +126,12 @@
                             <div class="textDNI">29568325</div>
                         </div>
                     </div>
+                    <div class="contentArrow">
+                      <i class="fa fa-caret-right" aria-hidden="true"></i>
+                    </div>
                 </div>
 
                 <div class="itemAccess salida">
-                    <div class="contentArrow">
-                      <i class="fa fa-caret-left" aria-hidden="true"></i>
-                    </div>
                     <div class="infoUserAside">
                         <div>
                           <img class="imgUserAside" src="/systems/biblioteca/img/walter.jpg">
@@ -137,12 +146,12 @@
                             <div class="textDNI">30001823</div>
                         </div>
                     </div>
+                    <div class="contentArrow">
+                      <i class="fa fa-caret-right" aria-hidden="true"></i>
+                    </div>
                 </div>
 
                 <div class="itemAccess entrada">
-                    <div class="contentArrow">
-                      <i class="fa fa-caret-left" aria-hidden="true"></i>
-                    </div>
                     <div class="infoUserAside">
                         <div>
                           <img class="imgUserAside" src="/systems/biblioteca/img/maxi.jpg">
@@ -157,52 +166,12 @@
                             <div class="textDNI">30001823</div>
                         </div>
                     </div>
-                </div>
-
-                <div class="itemAccess entrada">
                     <div class="contentArrow">
-                      <i class="fa fa-caret-left " aria-hidden="true"></i>
-                    </div>
-                    <div class="infoUserAside">
-                        <div>
-                          <img class="imgUserAside" src="/systems/biblioteca/img/walter.jpg">
-                        </div>
-                        <div>
-                            <div class="textHora">
-                                <div class="textIn">Entrada</div>
-                                <div class="textOut">Salida</div>
-                                <div><i class="icoClock fa fa-clock-o"></i> 10:35 hs </div>
-                            </div>
-                            <div class="textName">Walter Roberto Blanco</div>
-                            <div class="textDNI">30001823</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="itemAccess salida">
-                    <div class="contentArrow">
-                      <i class="fa fa-caret-left" aria-hidden="true"></i>
-                    </div>
-                    <div class="infoUserAside">
-                        <div>
-                          <img class="imgUserAside" src="/systems/biblioteca/img/walter.jpg">
-                        </div>
-                        <div>
-                            <div class="textHora">
-                                <div class="textIn">Entrada</div>
-                                <div class="textOut">Salida</div>
-                                <div><i class="icoClock fa fa-clock-o"></i> 10:35 hs </div>
-                            </div>
-                            <div class="textName">Walter Roberto Blanco</div>
-                            <div class="textDNI">30001823</div>
-                        </div>
+                      <i class="fa fa-caret-right" aria-hidden="true"></i>
                     </div>
                 </div>
 
                 <div class="itemAccess entrada">
-                    <div class="contentArrow">
-                      <i class="fa fa-caret-left" aria-hidden="true"></i>
-                    </div>
                     <div class="infoUserAside">
                         <div>
                           <img class="imgUserAside" src="/systems/biblioteca/img/walter.jpg">
@@ -216,13 +185,13 @@
                             <div class="textName">Walter Roberto Blanco</div>
                             <div class="textDNI">30001823</div>
                         </div>
+                    </div>
+                    <div class="contentArrow">
+                      <i class="fa fa-caret-right" aria-hidden="true"></i>
                     </div>
                 </div>
 
                 <div class="itemAccess salida">
-                    <div class="contentArrow">
-                      <i class="fa fa-caret-left" aria-hidden="true"></i>
-                    </div>
                     <div class="infoUserAside">
                         <div>
                           <img class="imgUserAside" src="/systems/biblioteca/img/walter.jpg">
@@ -236,11 +205,55 @@
                             <div class="textName">Walter Roberto Blanco</div>
                             <div class="textDNI">30001823</div>
                         </div>
+                    </div>
+                    <div class="contentArrow">
+                      <i class="fa fa-caret-right" aria-hidden="true"></i>
+                    </div>
+                </div>
+
+                <div class="itemAccess entrada">
+                    <div class="infoUserAside">
+                        <div>
+                          <img class="imgUserAside" src="/systems/biblioteca/img/walter.jpg">
+                        </div>
+                        <div>
+                            <div class="textHora">
+                                <div class="textIn">Entrada</div>
+                                <div class="textOut">Salida</div>
+                                <div><i class="icoClock fa fa-clock-o"></i> 10:35 hs </div>
+                            </div>
+                            <div class="textName">Walter Roberto Blanco</div>
+                            <div class="textDNI">30001823</div>
+                        </div>
+                    </div>
+                    <div class="contentArrow">
+                      <i class="fa fa-caret-right" aria-hidden="true"></i>
+                    </div>
+                </div>
+
+                <div class="itemAccess salida">
+                    <div class="infoUserAside">
+                        <div>
+                          <img class="imgUserAside" src="/systems/biblioteca/img/walter.jpg">
+                        </div>
+                        <div>
+                            <div class="textHora">
+                                <div class="textIn">Entrada</div>
+                                <div class="textOut">Salida</div>
+                                <div><i class="icoClock fa fa-clock-o"></i> 10:35 hs </div>
+                            </div>
+                            <div class="textName">Walter Roberto Blanco</div>
+                            <div class="textDNI">30001823</div>
+                        </div>
+                    </div>
+                    <div class="contentArrow">
+                      <i class="fa fa-caret-right" aria-hidden="true"></i>
                     </div>
                 </div>
 
             </div>
         </div>
+
     </div>
 
 </div>

@@ -34,8 +34,8 @@
   flex-direction: column;
   -webkit-flex-direction: column;
   -moz-flex-direction: column;
-  height: 590px;
-  min-width: 500px;
+  height: 565px;
+
   width: 100%;
   border-right: 2px solid #DBE2E5;
   /*color: white;*/
@@ -75,6 +75,30 @@
 }
 
 .library .cantPerson {
+  display: flex;
+  display: -webkit-flex;
+  display: -moz-flex;
+  flex-direction: row;
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+  align-items: flex-end;
+  -webkit-align-items: flex-end;
+  -moz-align-items: flex-end;
+  margin-right: 20px;
+}
+.library .cantPerson2 {
+  display: flex;
+  display: -webkit-flex;
+  display: -moz-flex;
+  flex-direction: row;
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+  align-items: flex-end;
+  -webkit-align-items: flex-end;
+  -moz-align-items: flex-end;
+  margin-right: 20px;
+}
+.library .cantPerson3 {
   display: flex;
   display: -webkit-flex;
   display: -moz-flex;
@@ -491,7 +515,14 @@
   width: 90px;
 }
 
+.library .file0 {
+  width: 25px;
+  margin-left: 16px;
+}
 .library .file2 {
+  width: 85px;
+}
+.library .file2b {
   width: 80px;
 }
 .library .file3 {
@@ -508,7 +539,7 @@
   width: 100%;
   height: 76%;
   overflow-y: scroll;
-  /*background-color: red;*/
+
 }
 
 .library .itemListAccess {
@@ -556,7 +587,7 @@
 }
 
 .library .contentListAside {
-  overflow-y: none;
+  overflow-y: auto;
   height: 100%;
 }
 
@@ -570,6 +601,9 @@
   align-items: center;
   -webkit-align-items: center;
   -moz-align-items: center;
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
   border-radius: 3px;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
@@ -622,9 +656,9 @@
   width: 30px;
   height: 100%;
   font-size: 20px;
-  border-radius: 3px 0 0 3px;
-  -moz-border-radius: 3px 0 0 3px;
-  -webkit-border-radius: 3px 0 0 3px;
+  border-radius: 0 3px 3px 0;
+  -moz-border-radius:  0 3px 3px 0;
+  -webkit-border-radius:  0 3px 3px 0;
   color: #EEEEEE;
 }
 
@@ -674,11 +708,102 @@
   margin-left: 10px;
 }
 
+.library.cargando .listAccess {
+  display: none;
+}
+
+.library .preload {
+  display: none;
+}
+
+.library.cargando .preload {
+  display: block;
+  display: flex;
+  display: -webkit-flex;
+  display: -moz-flex;
+  flex-direction: column;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  align-items: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  justify-content: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.library .circle {
+  color:#d6d4d4;
+  margin-bottom: 10px;
+}
+
+
 /******************** MEDIA QUERIS ***************************/
 
 @media (max-width: 719px){
   .library .header {
       display: none;
+  }
+  .library .cantPerson3 {
+    display: none;
+  }
+  .library .contentLibrary {
+    width: 97%;
+  }
+  .library .contentRangDate {
+    display: none;
+  }
+  .library .file2 {
+    display: none;
+  }
+  .library .file4 {
+    display: none;
+  }
+  .library .file5 {
+    display: none;
+  }
+  .library .in {
+    display: none;
+  }
+  .library .out {
+    display: none;
+  }
+  .library .file1 {
+    display: none;
+  }
+  .library .file1b {
+    width: 30px;
+  }
+
+  .library .listAccess {
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll;
+  }
+
+  .library .contentList {
+    height:270px;
+  }
+
+  .library {
+    overflow-y: hidden;
+  }
+  .library .contentInfoList {
+    height: 50px;
+  }
+  .library .headerContentList {
+    height: 40px;
+  }
+  .library.buscar.rangoHorario .contentInputTime {
+    display: block;
+    position: absolute;
+    background-color: #3A3C44;
+    padding: 20px;
+    width: 100%;
+    height: 100%;
+    top:0;
+    left: 0;
   }
 
 
@@ -734,8 +859,11 @@
 
 }
 
-@media (min-width: 720px){
 
+@media (min-width: 720px){
+  .library .file0 {
+    display: none;
+  }
 }
 
 @media (max-width: 1280px){

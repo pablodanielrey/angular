@@ -23,7 +23,8 @@ app.controller('LibraryCtrl', ["$rootScope", '$scope',
           name: nombres[i % nombres.length],
           lastname: 'Blanco',
           dni: dnis[i % dnis.length],
-          hora: '10:30 am'
+          hora: '10:30 am',
+          dia: '05/08/2026'
         }
       );
     };
