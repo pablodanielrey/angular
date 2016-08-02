@@ -30,10 +30,10 @@ class Users(wamp.SystemComponentSession):
             self.conn.put(con)
 
     @autobahn.wamp.register('users.find_photo')
-    def findPhoto(self, uid):
+    def findPhoto(self, pid):
         con = self.conn.get()
         try:
-            data = User.findPhoto(con, uid)
+            data = User.findPhoto(con, pid)
             return data
         finally:
             self.conn.put(con)

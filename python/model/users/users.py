@@ -10,7 +10,7 @@ import uuid
 from model.connection.connection import Connection
 from model.serializer import JSONSerializable
 from model.dao import DAO
-from model.files.files import FileDAO
+from model.files.files import File, FileDAO
 
 
 class UserDAO(DAO):
@@ -674,9 +674,9 @@ class User(JSONSerializable):
         return cls.dao.findByDni(con, dni)
 
     @classmethod
-    def findPhoto(cls, con, userId):
-        f = Files.findById(con, photoId)
-        content = f.getContent()
+    def findPhoto(cls, con, photoId):
+        f = File.findById(con, photoId)
+        content = f.getContent(con)
         f.content = content
         return f
 

@@ -19,8 +19,8 @@
         return this.$wamp.call('users.find_by_id', [ids]);
       }
 
-      function findPhoto(userId) {
-        return this.$wamp.call('users.find_photo', [userId]);
+      function findPhoto(photoId) {
+        return this.$wamp.call('users.find_photo', [photoId]);
       };
 
       this.normalizeUser = function(user) {

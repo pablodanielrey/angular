@@ -8,7 +8,7 @@
     MyOrdersCtrl.$inject = ['$scope', '$timeout', '$filter', 'Login', 'Issues', 'Users', 'Offices', 'Files'];
 
     /* @ngInject */
-    function MyOrdersCtrl($scope, $timeout, $filter, Login, Issues, Users, Office, Files) {
+    function MyOrdersCtrl($scope, $timeout, $filter, Login, Issues, Users, Offices, Files) {
         var vm = this;
 
         vm.model = {
@@ -292,7 +292,7 @@
             Users.findById([userId]).then(
               function(users) {
                 vm.model.users[userId] = users[0];
-                Users.findPhoto(userId).then(function(photo) {
+                Users.findPhoto(users[0].photo).then(function(photo) {
                   vm.model.users[userId].photo = Files.toDataUri(photo);
                 });
               }
@@ -362,7 +362,7 @@
             vm.model.office = null;
             return;
           }
-          Office.findById([issue.fromOfficeId]).then(
+          Offices.findById([issue.fromOfficeId]).then(
             function(offices) {
               vm.model.office = (offices == null || offices.length <= 0) ? null : offices[0];
             }, function(error) {
@@ -374,12 +374,12 @@
         function loadUserOffices(userId) {
           vm.model.selectedFromOffice = null;
           vm.model.userOffices = [];
-          Office.getOfficesByUser(userId, false).then(
+          Offices.getOfficesByUser(userId, false).then(
             function(ids) {
               if (ids == null || ids.length <= 0) {
                 return;
               }
-              Office.findById(ids).then(
+              Offices.findById(ids).then(
                 function(offices) {
                   vm.model.userOffices = (offices == null || offices.length <= 0) ? [] : offices;
                   vm.model.selectedFromOffice = (offices.length > 0) ? offices[0] : null;

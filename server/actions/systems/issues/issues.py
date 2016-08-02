@@ -5,10 +5,6 @@ import re
 import logging
 import psycopg2
 
-from model.registry import Registry
-from model.connection.connection import Connection
-
-from model.login.login import Login
 from model.issue.issue import Issue, RedmineAPI, Attachment, IssueModel
 from model.offices.offices import Office
 
@@ -74,7 +70,7 @@ class Issues(wamp.SystemComponentSession):
             userId = self.getUserId(con, details)
             authorId = userId if authorId is  None else authorId
             tracker = self.issueModel.TRACKER_ERROR
-            iss = self.issueModel.create(con, parentId, officeId, authorId, subject, description, fromOfficeId, userId, files, tracker)
+            iss = IssueModel.create(con, parentId, officeId, authorId, subject, description, fromOfficeId, userId, files, tracker)
             con.commit()
             return iss
         finally:
@@ -86,7 +82,7 @@ class Issues(wamp.SystemComponentSession):
         try:
             userId = self.getUserId(con, details)
             tracker = self.issueModel.TRACKER_COMMENT
-            iss = self.issueModel.create(con, parentId, projectId, userId, subject, description, '', '', files, tracker)
+            iss = IssueModel.create(con, parentId, projectId, userId, subject, description, '', '', files, tracker)
             con.commit()
             return iss
         finally:
@@ -118,7 +114,7 @@ class Issues(wamp.SystemComponentSession):
     def getOffices(self, details):
         con = self.conn.get()
         try:
-            return self.issueModel.getOffices(con)
+            return IssueModel.getOffices(con)
         finally:
             self.conn.put(con)
 
@@ -130,6 +126,6 @@ class Issues(wamp.SystemComponentSession):
     def getAreas(self, oId):
         con = self.conn.get()
         try:
-            return self.issueModel.getAreas(con, oId)
+            return IssueModel.getAreas(con, oId)
         finally:
             self.conn.put(con)

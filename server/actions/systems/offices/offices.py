@@ -8,7 +8,7 @@ class Offices(wamp.SystemComponentSession):
 
     conn = wamp.getConnectionManager()
 
-    @autobahn.wamp.register('offices.get_offices_by_user')
+    @autobahn.wamp.register('offices.find_offices_by_user')
     def findOfficesByUser(self, userId, tree):
         con = self.conn.get()
         try:
@@ -17,7 +17,7 @@ class Offices(wamp.SystemComponentSession):
             self.conn.put(con)
 
     @autobahn.wamp.register('offices.find_by_id')
-    def findById(self, officeId):
+    def findById(self, ids):
         con = self.conn.get()
         try:
             return Office.findById(con, ids)
