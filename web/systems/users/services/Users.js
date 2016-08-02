@@ -11,7 +11,17 @@
         NORMALIZACION DE USUARIO
       */
       this.findById = findById;
+      this.findPhoto = findPhoto;
+
       this.$wamp = Login.getTransport().private;
+
+      function findById(ids) {
+        return this.$wamp.call('users.find_by_id', [ids]);
+      }
+
+      function findPhoto(userId) {
+        return this.$wamp.call('users.find_photo', [userId]);
+      };
 
       this.normalizeUser = function(user) {
         if (!('__json_module__' in user)) {
@@ -45,9 +55,7 @@
         return ret;
       }
 
-      function findById(ids) {
-        return this.$wamp.call('users.find_by_id', [ids]);
-      }
+
 
       this.findByDni = function(dni) {
         return new Promise(function(cok, cerr) {

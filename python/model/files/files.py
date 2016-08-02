@@ -3,7 +3,9 @@ import uuid
 import hashlib
 from model.dao import DAO
 
-class File:
+from model.serializer import JSONSerializable
+
+class File(JSONSerializable):
 
     def __init__(self):
         self.id = None
@@ -18,6 +20,9 @@ class File:
 
     def _calculateHash(self):
         self.hash = File._calculateHashStatic(self.content)
+
+    def getContent(self, con):
+        return self.getContentById(con, self.content)
 
     @staticmethod
     def _calculateHashStatic(content):

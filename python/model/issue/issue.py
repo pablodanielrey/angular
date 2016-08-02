@@ -2,7 +2,7 @@
 from redmine import Redmine
 from model.users.users  import UserPassword, User
 from model.offices.offices import Office
-from model.serializer.utils import JSONSerializable
+from model.serializer import JSONSerializable
 from model.registry import Registry
 import base64
 import logging

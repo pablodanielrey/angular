@@ -2,7 +2,7 @@
 import uuid
 from model.dao import DAO
 from model.users.users import UserDAO
-from model.serializer.utils import JSONSerializable
+from model.serializer import JSONSerializable
 
 class Office(JSONSerializable):
     ''' oficina '''

@@ -302,6 +302,9 @@
             Users.findById([userId]).then(
               function(users) {
                 vm.model.users[userId] = users[0];
+                Users.findPhoto(userId).then(photo) {
+                  vm.model.users[userId].photo = Files.toDataUri(photo);
+                };
               }
             );
           }

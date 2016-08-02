@@ -18,6 +18,10 @@
 			this.upload = function(id, name, mimetype, codec, data) {
 				return $wamp.call('system.files.upload',[id, name, mimetype, codec, data]);
 			}
+
+			this.toDataUri = function(file) {
+				return 'data:' + file.mimetype + ';' + file.codec + ',' + file.content;
+			}
 		});
 
 })();

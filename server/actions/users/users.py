@@ -24,7 +24,16 @@ class Users(wamp.SystemComponentSession):
         assert isinstance(ids, list)
         con = self.conn.get()
         try:
-            data = UserDAO.findById(con, ids)
+            data = User.findById(con, ids)
+            return data
+        finally:
+            self.conn.put(con)
+
+    @autobahn.wamp.register('users.find_photo')
+    def findPhoto(self, uid):
+        con = self.conn.get()
+        try:
+            data = User.findPhoto(con, uid)
             return data
         finally:
             self.conn.put(con)
