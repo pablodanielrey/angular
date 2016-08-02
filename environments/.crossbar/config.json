@@ -348,6 +348,22 @@
                         },
                         "url": "ws://localhost:8080"
                     }
+                },
+
+                {
+                    "id": "users",
+                    "type": "class",
+                    "classname": "actions.users.users.Users",
+                    "realm": "core",
+                    "transport": {
+                        "type": "websocket",
+                        "endpoint": {
+                            "type": "tcp",
+                            "host": "127.0.0.1",
+                            "port": 8080
+                        },
+                        "url": "ws://localhost:8080"
+                    }
                 }
             ]
         }

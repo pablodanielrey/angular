@@ -88,17 +88,9 @@
         activate();
 
         function activate() {
-          vm.model.userId = '';
+          vm.model.userId = Login.getCredentials()['userId']
           vm.initializeView();
-          Login.getSessionData()
-            .then(function(s) {
-                vm.model.userId = s.user_id;
-                vm.initializeModel();
-            }, function(err) {
-              $scope.$apply(function() {
-                vm.messageError(err);
-              })
-            });
+          vm.initializeModel();
         }
 
 /* ************************************************************************ */
@@ -139,14 +131,10 @@
             }
             vm.model.issues = issues;
             vm.sortStatus();
-            $scope.$apply(function() {
-              vm.closeMessage();
-            })
+            vm.closeMessage();
           },
           function(error) {
-            $scope.$apply(function() {
-              vm.messageError(error);
-            })
+            vm.messageError(error);
           }
         );
       }
@@ -197,7 +185,7 @@
       function setStatus(issue, status) {
         vm.view.style2 = vm.view.styles2[0];
         issue.statusId = status;
-        Issue.changeStatus(issue, status).then(
+        Issues.changeStatus(issue, status).then(
           function(data) {
 
           },
@@ -212,7 +200,7 @@
       function setPriority(issue, priority) {
         vm.view.style2 = vm.view.styles2[0];
         issue.priority = priority;
-        Issue.changePriority(issue, priority).then(
+        Issues.changePriority(issue, priority).then(
           function(data) {
 
           },

@@ -23,7 +23,7 @@
       })
 
       .otherwise({
-        redirectTo: '/'
+        redirectTo: '/orders'
       });
 
     }]);

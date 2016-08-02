@@ -10,6 +10,9 @@
       /*
         NORMALIZACION DE USUARIO
       */
+      this.findById = findById;
+      this.$wamp = Login.getTransport().private;
+
       this.normalizeUser = function(user) {
         if (!('__json_module__' in user)) {
           user.__json_module__ =  'model.users.users';
@@ -42,8 +45,8 @@
         return ret;
       }
 
-      this.findById = function(ids) {
-        return $wamp.call('users.findById', [ids]);
+      function findById(ids) {
+        return this.$wamp.call('users.find_by_id', [ids]);
       }
 
       this.findByDni = function(dni) {

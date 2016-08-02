@@ -2,9 +2,9 @@
 import inject
 import logging
 import uuid
-import asyncio
-from asyncio import coroutine
-from autobahn.asyncio.wamp import ApplicationSession
+# import asyncio
+# from asyncio import coroutine
+# from autobahn.asyncio.wamp import ApplicationSession
 from model.users.users import UserDAO, User, Telephone, MailDAO
 from model.tutorias.tutorias import TutoriasModel
 from model.registry import Registry
@@ -12,7 +12,24 @@ from model.connection import connection
 from model.mail.mail import Mail
 # from model.exceptions import *
 
+import autobahn
+import wamp
 
+class Users(wamp.SystemComponentSession):
+
+    conn = wamp.getConnectionManager()
+
+    @autobahn.wamp.register('users.find_by_id')
+    def findById(self, ids):
+        assert isinstance(ids, list)
+        con = self.conn.get()
+        try:
+            data = UserDAO.findById(con, ids)
+            return data
+        finally:
+            self.conn.put(con)
+
+"""
 class UsersWamp(ApplicationSession):
 
     def __init__(self, config=None):
@@ -265,3 +282,4 @@ class UsersWamp(ApplicationSession):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.confirmEmail, hash)
         return r
+"""

@@ -4,6 +4,7 @@ from autobahn.wamp.serializer import Serializer
 import six
 import dateutil
 import dateutil.tz
+import datetime
 import importlib
 import re
 import json

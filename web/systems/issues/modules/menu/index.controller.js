@@ -6,7 +6,7 @@
 
       function ($scope, $location) {
         $scope.selectOrders = function() {
-          $location.path('/oders');
+          $location.path('/orders');
         }
         $scope.selectMyOrders = function() {
           $location.path('/myOrders');

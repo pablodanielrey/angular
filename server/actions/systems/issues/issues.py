@@ -21,6 +21,7 @@ from model.offices.offices import Office
 import autobahn
 import wamp
 
+
 class Issues(wamp.SystemComponentSession):
 
     conn = wamp.getConnectionManager()

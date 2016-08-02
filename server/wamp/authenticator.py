@@ -30,6 +30,8 @@ import autobahn
 import inject
 inject.configure_once()
 
+import copy
+
 from model.login.login import Login
 import wamp
 
@@ -86,8 +88,7 @@ class TicketAuth(wamp.SystemComponentSession):
             if not userId:
                 raise ApplicationError('usuario o clave incorrectas')
 
-            token = yield self.call('authenticate.get_new_token', username);
-            token['userId'] = userId
+            token = yield self.call('authenticate.get_new_token', username, userId);
             principal = {
                 'role': 'authenticated',
                 'extra': token
@@ -111,35 +112,32 @@ class TokenGeneratorComponent(wamp.SystemComponentSession):
     def _getNewExpiration(self):
         return (datetime.datetime.now(dateutil.tz.tzlocal()) + datetime.timedelta(seconds=self.expiration))
 
+    def _prepareToReturnToClient(self, tokenData):
+        tk = copy.deepcopy(tokenData)
+        tk['expires'] = tk['expires'].isoformat()
+        return tk
+
     @autobahn.wamp.register('authenticate.get_new_token')
-    def getNewToken(self, username):
+    def getNewToken(self, username, userId):
         token = str(uuid.uuid4())
         expire = self._getNewExpiration()
         tokenData = {
             'username': username,
+            'userId': userId,
             'ticket': token,
-            'expires': expire.isoformat()
-        }
-        self.tokens[token] = {
-            'username': username,
             'expires': expire
         }
-        return tokenData
+        self.tokens[token] = tokenData
+        return self._prepareToReturnToClient(tokenData)
 
     @autobahn.wamp.register('authenticate.check_user_token')
     def checkUserToken(self, username, token):
         if token in self.tokens.keys():
             tk = self.tokens[token]
-            print(tk)
             if (tk and tk['username'] == username):
                 if (tk['expires'] > datetime.datetime.now(dateutil.tz.tzlocal())):
                     tk['expires'] = self._getNewExpiration()
-                    tokenData = {
-                        'username': username,
-                        'ticket': token,
-                        'expires': tk['expires'].isoformat()
-                    }
-                    return tokenData
+                    return self._prepareToReturnToClient(tk)
                 else:
                     print('removiendo token expirado {}'.format(token))
                     del self.tokens[token]

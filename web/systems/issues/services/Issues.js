@@ -25,15 +25,15 @@
 			}
 
 		  function getOfficesIssues() {
-				return this.$wamp.call('issues.getOfficesIssues');
+				return this.$wamp.call('issues.get_offices_issues');
 			}
 
 		  function getAssignedIssues() {
-				return this.$wamp.call('issues.getAssignedIssues')
+				return this.$wamp.call('issues.get_assigned_issues')
 			}
 
 		  function findById(id) {
-				return this.$wamp.call('issues.findById', [id]);
+				return this.$wamp.call('issues.find_by_id', [id]);
 			}
 
 		  function create(subject, description, parentId, officeId, fromOfficeId, authorId, files) {
@@ -41,24 +41,24 @@
 			}
 
 		  function createComment(subject, description, parentId, officeId, files) {
-				return this.$wamp.call('issues.createComment', [subject, description, parentId, officeId, files])
+				return this.$wamp.call('issues.create_comment', [subject, description, parentId, officeId, files])
 			}
 
 		  function changeStatus(issue, status) {
-				return this.$wamp.call('issues.changeStatus', [issue, status]);
+				return this.$wamp.call('issues.change_status', [issue, status]);
 			}
 
 		  function changePriority(issue, priority) {
-				return this.$wamp.call('issues.changePriority', [issue, priority]);
+				return this.$wamp.call('issues.change_priority', [issue, priority]);
 			}
 
 			function getOffices() {
-				return this.$wamp.call('issues.getOffices',[]);
+				return this.$wamp.call('issues.get_offices',[]);
 
 			}
 
 			function getAreas(officeId) {
-				return this.$wamp.call('issues.getAreas',[officeId]);
+				return this.$wamp.call('issues.get_areas',[officeId]);
 			}
 
 		}

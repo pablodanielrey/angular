@@ -4,30 +4,10 @@
       .module('issues')
       .controller('IndexCtrl', IndexCtrl);
 
-    IndexCtrl.$inject = ['$scope', 'Issues'];
+    IndexCtrl.$inject = [];
 
-    function IndexCtrl($scope, Issues) {
+    function IndexCtrl() {
         var vm = this;
-
-        $scope.model = {
-          hideMenu: false
-        };
-
-        $scope.t = (new Date()).getTime();
-
-        $scope.hideMenu = function() {
-          return $scope.model.hideMenu;
-        }
-
-        $scope.initialize = function() {
-          $scope.styleMenu = 'full';
-        }
-
-        $scope.$on('$viewContentLoaded', function(event) {
-          $scope.initialize();
-        });
-
-        Issues.getMyIssues();
     };
 
 })();
