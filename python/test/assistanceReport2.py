@@ -85,7 +85,7 @@ def sendMail(con, user, fn):
     mails = Mail.findByUserId(con, user.id)
     emails = []
     for m in mails:
-        if 'econo.unlp.edu.ar' in m:
+        if 'econo.unlp.edu.ar' in m.email:
             emails.append(m.email)
     if len(emails) <= 0:
         ''' no tiene correo configurado asi que no se le envía nada '''
