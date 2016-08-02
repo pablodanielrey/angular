@@ -364,6 +364,22 @@
                         },
                         "url": "ws://localhost:8080"
                     }
+                },
+
+                {
+                    "id": "offices",
+                    "type": "class",
+                    "classname": "actions.systems.offices.offices.Offices",
+                    "realm": "core",
+                    "transport": {
+                        "type": "websocket",
+                        "endpoint": {
+                            "type": "tcp",
+                            "host": "127.0.0.1",
+                            "port": 8080
+                        },
+                        "url": "ws://localhost:8080"
+                    }
                 }
             ]
         }

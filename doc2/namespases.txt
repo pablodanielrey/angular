@@ -3,3 +3,9 @@ users:
 
   users.find_by_id
   users.find_photo
+
+
+offices:
+
+  offices.get_offices_by_user
+  offices.find_by_id

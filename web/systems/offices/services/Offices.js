@@ -8,20 +8,12 @@
 
 		function Offices(Login) {
 
-			this.getOfficesByUserRole = function (userId, tree, role) {
-				return $wamp.call('office.getOfficesByUserRole',[userId, tree, role]);
-			}
-
 			this.getOfficesByUser = function (userId, tree) {
-				return $wamp.call('office.getOfficesByUser',[userId, tree]);
+				return $wamp.call('offices.find_offices_by_user', [userId, tree]);
 			}
 
 			this.findById = function (ids) {
-				return $wamp.call('office.findById',[ids]);
-			}
-
-			this.getOfficesUsers = function (uid) {
-				return $wamp.call('office.getOfficesUsers',[uid]);
+				return $wamp.call('offices.find_by_id',[ids]);
 			}
 
 		};

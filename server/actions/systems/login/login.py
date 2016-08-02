@@ -2,7 +2,7 @@
 import autobahn
 
 from wamp import SystemComponentSession
-from model.serializer.ditesiSerializer import JSONSerializable
+from model.serializer import JSONSerializable
 
 #from model.serializer import ditesiSerializer
 #ditesiSerializer.register()

@@ -10,9 +10,9 @@ from autobahn.twisted.wamp import ApplicationSession
 from twisted.internet.defer import inlineCallbacks
 from twisted.python import log
 
-from model.serializer import ditesiSerializer
+import model.serializer
 
-ditesiSerializer.register()
+model.serializer.register()
 
 class RegisterSerializers(ApplicationSession):
     pass

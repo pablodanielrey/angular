@@ -54,7 +54,10 @@
 
 			function getOffices() {
 				return this.$wamp.call('issues.get_offices',[]);
+			}
 
+			function getOfficeSubjects(officeId) {
+				return this.$wamp.call('issues.get_office_subjects',[officeId]);
 			}
 
 			function getAreas(officeId) {

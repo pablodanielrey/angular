@@ -4,7 +4,7 @@ from autobahn.twisted.wamp import ApplicationSession
 import autobahn
 
 import wamp
-from model.serializer.ditesiSerializer import JSONSerializable
+from model.serializer import JSONSerializable
 
 #from model.serializer import ditesiSerializer
 #ditesiSerializer.register()

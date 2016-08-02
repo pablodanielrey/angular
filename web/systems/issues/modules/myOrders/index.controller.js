@@ -5,10 +5,10 @@
         .module('issues')
         .controller('MyOrdersCtrl', MyOrdersCtrl);
 
-    MyOrdersCtrl.$inject = ['$scope', '$timeout', '$filter', 'Issues', 'Users', 'Offices', 'Files'];
+    MyOrdersCtrl.$inject = ['$scope', '$timeout', '$filter', 'Login', 'Issues', 'Users', 'Offices', 'Files'];
 
     /* @ngInject */
-    function MyOrdersCtrl($scope, $timeout, $filter, Issues, Users, Office, Files) {
+    function MyOrdersCtrl($scope, $timeout, $filter, Login, Issues, Users, Office, Files) {
         var vm = this;
 
         vm.model = {
@@ -97,9 +97,7 @@
         activate();
 
         function activate() {
-          vm.model.userId = '';
-          // TODO: ver con ema esta linea para que usa el user_id
-          //vm.model.userId = s.user_id;
+          vm.model.userId = Login.getCredentials().userId;
           vm.initializeModel();
           vm.initializeView();
         }
@@ -231,18 +229,14 @@
 
           Issues.create(subject, description, parentId, office.id, fromOfficeId, authorId, vm.model.files).then(
             function(data) {
-              $scope.$apply(function() {
-                vm.messageCreated();
-                $timeout(function () {
-                  vm.closeMessage();
-                  vm.view.style = vm.view.styles[0];
-                  vm.getMyIssues();
-                }, 2500);
-              })
+              vm.messageCreated();
+              $timeout(function () {
+                vm.closeMessage();
+                vm.view.style = vm.view.styles[0];
+                vm.getMyIssues();
+              }, 2500);
             }, function(error) {
-              $scope.$apply(function() {
-                vm.messageError(error);
-              })
+              vm.messageError(error);
             }
           );
         }
@@ -273,18 +267,14 @@
           vm.messageLoading();
           Issue.createComment(subject, vm.model.replyDescription, parentId, officeId, vm.model.files).then(
             function(data) {
-              $scope.$apply(function() {
-                vm.messageSending();
-                $timeout(function () {
-                  vm.view.style2 = vm.view.styles2[0];
-                  vm.closeMessage();
-                }, 2500);
-              })
+              vm.messageSending();
+              $timeout(function () {
+                vm.view.style2 = vm.view.styles2[0];
+                vm.closeMessage();
+              }, 2500);
               vm.loadIssue(vm.model.issueSelected.id);
             }, function(error) {
-              $scope.$apply(function() {
-                vm.messageError(error);
-              })
+              vm.messageError(error);
             }
           );
         }
@@ -302,9 +292,9 @@
             Users.findById([userId]).then(
               function(users) {
                 vm.model.users[userId] = users[0];
-                Users.findPhoto(userId).then(photo) {
+                Users.findPhoto(userId).then(function(photo) {
                   vm.model.users[userId].photo = Files.toDataUri(photo);
-                };
+                });
               }
             );
           }
@@ -376,9 +366,7 @@
             function(offices) {
               vm.model.office = (offices == null || offices.length <= 0) ? null : offices[0];
             }, function(error) {
-              $scope.$apply(function() {
-                vm.messageError(error);
-              })
+              vm.messageError(error);
             }
           )
         }
@@ -396,15 +384,11 @@
                   vm.model.userOffices = (offices == null || offices.length <= 0) ? [] : offices;
                   vm.model.selectedFromOffice = (offices.length > 0) ? offices[0] : null;
                 }, function(error) {
-                  $scope.$apply(function() {
-                    vm.messageError(error);
-                  })
+                  vm.messageError(error);
                 }
               )
             }, function(error) {
-              $scope.$apply(function() {
-                vm.messageError(error);
-              })
+              vm.messageError(error);
             }
           );
         }
@@ -456,9 +440,7 @@
             function(issue) {
               vm.viewDetail(issue);
             }, function(error) {
-              $scope.$apply(function() {
-                vm.messageError(error);
-              })
+              vm.messageError(error);
             }
           );
         }
@@ -470,7 +452,7 @@
 
         function getMyIssues() {
           vm.messageLoading();
-          Issue.getMyIssues().then(
+          Issues.getMyIssues().then(
             function(issues) {
                 for (var i = 0; i < issues.length; i++) {
                   var dateStr = issues[i].start;
@@ -485,14 +467,10 @@
                 }
                 vm.model.issues = issues;
                 vm.sortStatus();
-                $scope.$apply(function() {
-                  vm.closeMessage();
-                })
+                vm.closeMessage();
             },
             function(err) {
-              $scope.$apply(function() {
-                vm.messageError(error);
-              })
+              vm.messageError(error);
             }
           );
         }
@@ -527,14 +505,12 @@
 
         function loadOffices() {
           vm.model.offices = [];
-          Issue.getOffices().then(
+          Issues.getOffices().then(
             function(offices) {
               vm.model.offices = offices;
             },
             function(error) {
-              $scope.$apply(function() {
-                vm.messageError(error);
-              })
+              vm.messageError(error);
             }
           )
         }
@@ -542,22 +518,21 @@
 
       function loadAreas(office) {
         vm.model.areas = [];
-        Issue.getAreas(office.id).then(
+        Issues.getAreas(office.id).then(
           function(offices) {
             vm.model.areas = offices;
           },
           function(error) {
-            $scope.$apply(function() {
-              vm.messageError(error);
-            })
+            vm.messageError(error);
           }
         )
       }
 
       function loadSubjects(office) {
-        vm.model.subjects = ['Otro', 'Wifi'];
+        Issues.getOfficeSubjects(office.id).then(function(subjects) {
+          vm.model.subjects = subjects;
+        });
       }
-
 
     }
 })();

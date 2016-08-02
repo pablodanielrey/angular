@@ -122,6 +122,10 @@ class Issues(wamp.SystemComponentSession):
         finally:
             self.conn.put(con)
 
+    @autobahn.wamp.register('issues.get_office_subjects')
+    def getOfficeSubjects(self, officeId, details):
+        return ['Wifi','Otro']
+
     @autobahn.wamp.register('issues.get_areas')
     def getAreas(self, oId):
         con = self.conn.get()
