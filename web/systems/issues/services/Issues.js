@@ -18,6 +18,7 @@
 			this.changePriority = changePriority;
 			this.getOffices = getOffices;
 			this.getAreas = getAreas;
+			this.getOfficeSubjects = getOfficeSubjects;
 			this.$wamp = Login.getTransport().private;
 
 		  function getMyIssues() {

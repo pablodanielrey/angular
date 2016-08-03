@@ -58,8 +58,7 @@ class Issues(wamp.SystemComponentSession):
     def findById(self, issue_id, details):
         con = self.conn.get()
         try:
-            userId = self.getUserId(con, details)
-            return Issue.findById(con, userId, issue_id)
+            return Issue.findById(con, issue_id)
         finally:
             self.conn.put(con)
 
@@ -90,25 +89,13 @@ class Issues(wamp.SystemComponentSession):
 
     @autobahn.wamp.register('issues.change_status')
     def changeStatus(self, issue, status, details):
-        con = self.conn.get()
-        try:
-            userId = self.getUserId(con, details)
-            iss = issue.changeStatus(con, status)
-            con.commit()
-            return issue
-        finally:
-            self.conn.put(con)
+        iss = issue.changeStatus(con, status)
+        return issue
 
     @autobahn.wamp.register('issues.change_priority')
     def changePriority(self, issue, priority, details):
-        con = self.conn.get()
-        try:
-            userId = self.getUserId(con, details)
-            iss = issue.changePriority(con, priority)
-            con.commit()
-            return issue
-        finally:
-            self.conn.put(con)
+        iss = issue.changePriority(con, priority)
+        return issue
 
     @autobahn.wamp.register('issues.get_offices')
     def getOffices(self, details):
@@ -123,7 +110,7 @@ class Issues(wamp.SystemComponentSession):
         return ['Wifi','Otro']
 
     @autobahn.wamp.register('issues.get_areas')
-    def getAreas(self, oId):
+    def getAreas(self, oId, details):
         con = self.conn.get()
         try:
             return IssueModel.getAreas(con, oId)

@@ -7,5 +7,20 @@ users:
 
 offices:
 
-  offices.get_offices_by_user
   offices.find_by_id
+  offices.find_offices_by_user
+
+
+issues:
+
+  issues.change_priority
+  issues.change_status
+  issues.create
+  issues.create_comment
+  issues.find_by_id
+  issues.get_areas
+  issues.get_assigned_issues
+  issues.get_my_issues
+  issues.get_office_subjects
+  issues.get_offices
+  issues.get_offices_issues

@@ -35,8 +35,8 @@ class Issue(JSONSerializable):
         self.creatorId = None
 
     @classmethod
-    def findById(cls, con, userId, id):
-        return RedmineAPI.findById(con, userId, id)
+    def findById(cls, con, id):
+        return RedmineAPI.findById(con, id)
 
     @classmethod
     def getOfficesIssues(cls, con, officeIds):
@@ -50,14 +50,15 @@ class Issue(JSONSerializable):
     def getAssignedIssues(cls, con, userId, oIds):
         return RedmineAPI.getAssignedIssues(con, userId, oIds)
 
-    def changeStatus(self, con, status):
-        return RedmineAPI.changeStatus(con, self.userId, self.id, self.projectId, status)
+    def changeStatus(self, status):
+        return RedmineAPI.changeStatus(self.id, self.projectId, status)
 
-    def changePriority(self, con, priority):
-        return RedmineAPI.changePriority(con, self.userId, self.id, self.projectId, priority)
+    def changePriority(self, priority):
+        return RedmineAPI.changePriority(self.id, self.projectId, priority)
 
     def create(self, con):
         return RedmineAPI.create(con, self)
+
 
 class Attachment(JSONSerializable):
 
@@ -66,6 +67,7 @@ class Attachment(JSONSerializable):
         self.url = ''
         self.size = 0
         self.name = ''
+
 
 class RedmineAPI:
 
@@ -142,31 +144,36 @@ class RedmineAPI:
             elif cf.id == cls.FROM_FIELD:
                 issue.fromOfficeId = cf.value
 
-        issue.children = [cls.findById(con, issue.userId, iss.id) for iss in r.children if iss is not None]
+        issue.children = [cls.findById(con, iss.id) for iss in r.children if iss is not None]
         issue.files = [cls._loadFile(file) for file in r.attachments if file is not None]
         return issue
 
 
-
     @classmethod
-    def _getRedmineInstance(cls, con, userId, isImpersonate = False):
+    def _findUserId(cls, con, redmine, userId):
+        """ retorna el id del usuario de nuestra base a id de usuario de redmine """
         ups = UserPassword.findByUserId(con, userId)
         if len(ups) <= 0:
             return None
         up = ups[0]
 
-        if isImpersonate is None or not isImpersonate:
-            redmine = Redmine(cls.REDMINE_URL, key = cls.KEY, version='3.3', requests={'verify': False})
-        else:
-            redmine = Redmine(cls.REDMINE_URL, key = cls.KEY, impersonate = up.username, version='3.3', requests={'verify': False})
-
         users = redmine.user.filter(name=up.username)
-        user = None
-        try:
-            user = users[0]
-        except:
-            logging.info('error al obtener el usuario del redmine')
-        return (user, redmine)
+        if len(users) <= 0:
+            return None
+
+        user = users[0]
+        return user.id
+
+    @classmethod
+    def _getRedmineInstance(cls, con = None, userId = None, isImpersonate = False):
+        if isImpersonate is None or not isImpersonate:
+            return Redmine(cls.REDMINE_URL, key = cls.KEY, version='3.3', requests={'verify': False})
+        else:
+            ups = UserPassword.findByUserId(con, userId)
+            if len(ups) <= 0:
+                return None
+            up = ups[0]
+            return Redmine(cls.REDMINE_URL, key = cls.KEY, impersonate = up.username, version='3.3', requests={'verify': False})
 
     @classmethod
     def _loadUserByUIdRedmine(cls, con, uid, redmine):
@@ -176,23 +183,20 @@ class RedmineAPI:
         return userId
 
     @classmethod
-    def findById(cls, con, userId, issue_id):
-        user, redmine = cls._getRedmineInstance(con, userId)
+    def findById(cls, con, issue_id):
+        redmine = cls._getRedmineInstance()
         if redmine is None:
             return None
         issue = redmine.issue.get(issue_id, include='children, attachments')
-
         return cls._fromResult(con, issue, redmine)
 
-
     @classmethod
-    def findAllProjects(cls, con, userId):
-        user, redmine = cls._getRedmineInstance(con, userId)
+    def findAllProjects(cls):
+        redmine = cls._getRedmineInstance()
         if redmine is None:
             return []
         projects = redmine.project.all()
         return [p.identifier for p in projects]
-
 
     @classmethod
     def getOfficesIssues(cls, con, officeIds):
@@ -203,25 +207,24 @@ class RedmineAPI:
         # return [cls._fromResult(con, issue) for issue in issues if not cls._include(issues,issue)]
         return [issue for issue in issues if not cls._include(issues,issue)]
 
-
     @classmethod
     def getMyIssues(cls, con, userId):
-        user, redmine = cls._getRedmineInstance(con, userId)
+        redmine = cls._getRedmineInstance()
+        user = cls._findUserId(con, redmine, userId)
         issues = cls._getIssuesByUser(con, user, redmine)
         return [cls._fromResult(con, issue, redmine) for issue in issues if not cls._include(issues,issue)]
 
-
     @classmethod
-    def _getIssuesByUser(cls, con, user, redmine):
+    def _getIssuesByUser(cls, con, userId, redmine):
         if redmine is None:
             return []
-        issues = redmine.issue.filter(author_id=user.id, status_id='*')
+        issues = redmine.issue.filter(author_id=userId, status_id='*')
         return issues
-
 
     @classmethod
     def getAssignedIssues(cls, con, userId, oIds):
-        userRedmine, redmine = cls._getRedmineInstance(con, userId)
+        redmine = cls._getRedmineInstance(con)
+        userRedmine = cls._findUserId(con, redmine, userId)
         issues = cls._getIssuesByProject(con, oIds, userRedmine, redmine)
         return [cls._fromResult(con, issue, redmine) for issue in issues if not cls._include(issues,issue)]
 
@@ -253,8 +256,7 @@ class RedmineAPI:
 
     @classmethod
     def create(cls, con, iss):
-        user, redmine = cls._getRedmineInstance(con, iss.userId, True)
-
+        redmine = cls._getRedmineInstance(con, iss.userId, True)
         if redmine is None:
             return None
 
@@ -287,31 +289,18 @@ class RedmineAPI:
         return custom_fields
 
     @classmethod
-    def changeStatus(cls, con, userId, issue_id, project_id, status):
-
-        user, redmine = cls._getRedmineInstance(con, userId, False)
-
-        if status is None:
-            return
-
-        if redmine is None:
-            return
-
+    def changeStatus(cls, issue_id, project_id, status):
+        redmine = cls._getRedmineInstance()
+        if status is None or redmine is None:
+            return None
         return redmine.issue.update(issue_id, status_id = status)
 
     @classmethod
-    def changePriority(cls, con, userId, issue_id, project_id, priority):
-
-        user, redmine = cls._getRedmineInstance(con, userId, False)
-
-        if priority is None:
-            return
-
-        if redmine is None:
-            return
-
+    def changePriority(cls, issue_id, project_id, priority):
+        redmine = cls._getRedmineInstance()
+        if priority is None or redmine is None:
+            return None
         return redmine.issue.update(issue_id, priority_id = priority)
-
 
 
 class IssueModel():
@@ -321,7 +310,8 @@ class IssueModel():
     @classmethod
     def getOffices(cls, con):
         offices = Office.getOffices(con)
-        return Office.findById(con, offices)
+        projects = RedmineAPI.findAllProjects()
+        return Office.findById(con, [oid for oid in offices if oid in projects])
 
     @classmethod
     def getAreas(cls, con, oId):
