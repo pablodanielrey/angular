@@ -42,7 +42,7 @@
           styles3: ['','pantallaMensajeAlUsuario'],
           style4: '',
           styles4: ['', 'mensajeCargando', 'mensajeError', 'mensajeEnviado', 'mensajePedidoCreado'],
-          status: ['','abierta', 'enProgreso', 'cerrada', 'pausada', 'rechazada'],
+          status: ['','abierta', 'enProgreso', 'cerrada', 'comentarios', 'cerrada', 'rechazada', 'pausada'],
           statusSort: ['','abierta', 'enProgreso', 'pausada', 'rechazada', 'cerrada'],
           reverseSortDate: false,
           reverseSortStatus: false
@@ -265,7 +265,7 @@
           var officeId = vm.model.issueSelected.projectId;
 
           vm.messageLoading();
-          Issue.createComment(subject, vm.model.replyDescription, parentId, officeId, vm.model.files).then(
+          Issues.createComment(subject, vm.model.replyDescription, parentId, officeId, vm.model.files).then(
             function(data) {
               vm.messageSending();
               $timeout(function () {
@@ -332,6 +332,7 @@
           if (issue == null) {
             return '';
           }
+          console.log(issue);
           return vm.view.status[issue.statusId];
         }
 
