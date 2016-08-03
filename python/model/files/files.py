@@ -22,7 +22,7 @@ class File(JSONSerializable):
         self.hash = File._calculateHashStatic(self.content)
 
     def getContent(self, con):
-        return self.getContentById(con, self.content)
+        return self.getContentById(con, self.id)
 
     @staticmethod
     def _calculateHashStatic(content):

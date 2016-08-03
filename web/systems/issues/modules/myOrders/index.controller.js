@@ -292,9 +292,12 @@
             Users.findById([userId]).then(
               function(users) {
                 vm.model.users[userId] = users[0];
-                Users.findPhoto(users[0].photo).then(function(photo) {
-                  vm.model.users[userId].photo = Files.toDataUri(photo);
-                });
+                var user = vm.model.users[userId];
+                if (user.photoSrc == undefined || user.photoSrc == null) {
+                  Users.findPhoto(users[0].photo).then(function(photo) {
+                    vm.model.users[userId].photoSrc = Files.toDataUri(photo);
+                  });
+                }
               }
             );
           }
@@ -428,10 +431,10 @@
 
         function getUserPhoto(issue) {
           var user = (issue == null) ? null : vm.model.users[issue.userId];
-          if (user == null || user.photo == null || user.photo == '') {
+          if (user == null || user.photo == null || user.photoSrc == '') {
             return "../login/modules/img/imgUser.jpg";
           } else {
-            return user.photo;
+            return user.photoSrc;
           }
         }
 

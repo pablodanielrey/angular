@@ -64,7 +64,9 @@ class JsonEncoder(json.JSONEncoder):
         return instance
 
 def _my_dumps(obj):
-    return json.dumps(obj, separators=(',', ':'), ensure_ascii=False, cls=JsonEncoder)
+    a = json.dumps(obj, separators=(',', ':'), ensure_ascii=False, cls=JsonEncoder)
+    print(a)
+    return a
 
 def _my_loads(data):
     return json.loads(data, object_hook=JsonEncoder._object_loads)
