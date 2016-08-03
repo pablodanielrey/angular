@@ -64,12 +64,20 @@ class JsonEncoder(json.JSONEncoder):
         return instance
 
 def _my_dumps(obj):
-    a = json.dumps(obj, separators=(',', ':'), ensure_ascii=False, cls=JsonEncoder)
-    print(a)
-    return a
+    try:
+        a = json.dumps(obj, separators=(',', ':'), ensure_ascii=False, cls=JsonEncoder)
+        print(a)
+        return a
+    except Exception as e:
+        print(e)
+        raise e
 
 def _my_loads(data):
-    return json.loads(data, object_hook=JsonEncoder._object_loads)
+    try:
+        return json.loads(data, object_hook=JsonEncoder._object_loads)
+    except Exception as e:
+        print(e)
+        raise e
 
 def register():
     """ reemplazo las funciones usadas por el JsonObjectSerializer del autobahn para serializar usando json """

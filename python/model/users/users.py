@@ -676,7 +676,7 @@ class User(JSONSerializable):
     @classmethod
     def findPhoto(cls, con, photoId):
         f = File.findById(con, photoId)
-        content = f.getContent(con)
+        content = f.getContent(con).tobytes().decode('utf-8')
         f.content = content
         return f
 

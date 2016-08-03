@@ -68,7 +68,7 @@ class Issues(wamp.SystemComponentSession):
         try:
             userId = self.getUserId(con, details)
             authorId = userId if authorId is  None else authorId
-            tracker = self.issueModel.TRACKER_ERROR
+            tracker = IssueModel.TRACKER_ERROR
             iss = IssueModel.create(con, parentId, officeId, authorId, subject, description, fromOfficeId, userId, files, tracker)
             con.commit()
             return iss
@@ -80,7 +80,7 @@ class Issues(wamp.SystemComponentSession):
         con = self.conn.get()
         try:
             userId = self.getUserId(con, details)
-            tracker = self.issueModel.TRACKER_COMMENT
+            tracker = IssueModel.TRACKER_COMMENT
             iss = IssueModel.create(con, parentId, projectId, userId, subject, description, '', '', files, tracker)
             con.commit()
             return iss
