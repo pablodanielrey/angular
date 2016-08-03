@@ -277,7 +277,7 @@ class RedmineAPI:
         issue.uploads = iss.files
         issue.save()
 
-        return True
+        return issue.id
 
     @classmethod
     def getCustomFields(cls, issue):

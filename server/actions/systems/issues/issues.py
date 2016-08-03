@@ -5,6 +5,9 @@ import re
 import logging
 import psycopg2
 
+
+from twisted.internet.defer import inlineCallbacks
+
 from model.issue.issue import Issue, RedmineAPI, Attachment, IssueModel
 from model.offices.offices import Office
 
@@ -76,16 +79,30 @@ class Issues(wamp.SystemComponentSession):
             self.conn.put(con)
 
     @autobahn.wamp.register('issues.create_comment')
+    @inlineCallbacks
     def createComment(self, subject, description, parentId, projectId, files, details):
         con = self.conn.get()
         try:
+            self.log.info('createComment')
             userId = self.getUserId(con, details)
             tracker = IssueModel.TRACKER_COMMENT
-            iss = IssueModel.create(con, parentId, projectId, userId, subject, description, '', '', files, tracker)
+            issueId = IssueModel.create(con, parentId, projectId, userId, subject, description, '', '', files, tracker)
             con.commit()
-            return iss
+            self.log.info('issues.comment_created_event')
+            yield self.publish('issues.comment_created_event', parentId, issueId)
+            #self.publish('issues.comment_created_event', parentId, issueId)
+            return issueId
+
         finally:
             self.conn.put(con)
+
+
+    @autobahn.wamp.subscribe('issues.comment_created_event')
+    def aa(self, parentId, issueId):
+        print('eventoooo')
+        print(parentId)
+        print(issueId)
+        self.log.info('{} {} ivi puto'.format(parentId, issueId))
 
     @autobahn.wamp.register('issues.change_status')
     def changeStatus(self, issue, status, details):

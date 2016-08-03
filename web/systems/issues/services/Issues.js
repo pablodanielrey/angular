@@ -19,7 +19,12 @@
 			this.getOffices = getOffices;
 			this.getAreas = getAreas;
 			this.getOfficeSubjects = getOfficeSubjects;
+			this.subscribe = subscribe;
 			this.$wamp = Login.getTransport().private;
+
+			function subscribe(event, func) {
+				this.$wamp.subscribe(event, func);
+			}
 
 		  function getMyIssues() {
 				return this.$wamp.call('issues.get_my_issues');

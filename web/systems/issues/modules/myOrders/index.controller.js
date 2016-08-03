@@ -93,6 +93,7 @@
         vm.getLastname = getLastname;
         vm.getUserPhoto = getUserPhoto;
         vm.getCreator = getCreator;
+        vm.registerEventManagers = registerEventManagers;
 
         activate();
 
@@ -100,6 +101,7 @@
           vm.model.userId = Login.getCredentials().userId;
           vm.initializeModel();
           vm.initializeView();
+          vm.registerEventManagers();
         }
 
         function initializeView() {
@@ -267,19 +269,43 @@
           vm.messageLoading();
           Issues.createComment(subject, vm.model.replyDescription, parentId, officeId, vm.model.files).then(
             function(data) {
+              /*
               vm.messageSending();
               $timeout(function () {
                 vm.view.style2 = vm.view.styles2[0];
                 vm.closeMessage();
               }, 2500);
               vm.loadIssue(vm.model.issueSelected.id);
+              */
             }, function(error) {
               vm.messageError(error);
             }
           );
         }
 
+        // TODO: manejador de eventos
+        function registerEventManagers() {
+          Issues.subscribe('issues.comment_created_event', function(params) {
+            var parentId = params[0];
+            var commentId = params[1];
+            if (vm.model.issueSelected.id == parentId) {
+              Issues.findById(commentId).then(
+                function(comment) {
+                    vm.messageSending();
+                    $timeout(function () {
+                      vm.view.style2 = vm.view.styles2[0];
+                      vm.closeMessage();
+                    }, 2500);
 
+                    vm.model.issueSelected.children.push(comment);
+                },
+                function(error) {
+                    vm.messageError(error);
+                });
+            }
+          })
+
+        }
 
         /* ************************************************************************* */
         /* ************************ FORMATEO DE DATOS ****************************** */

@@ -66,7 +66,6 @@ class JsonEncoder(json.JSONEncoder):
 def _my_dumps(obj):
     try:
         a = json.dumps(obj, separators=(',', ':'), ensure_ascii=False, cls=JsonEncoder)
-        print(a)
         return a
     except Exception as e:
         print(e)
