@@ -332,7 +332,6 @@
           if (issue == null) {
             return '';
           }
-          console.log(issue);
           return vm.view.status[issue.statusId];
         }
 
