@@ -106,12 +106,12 @@ class Issues(wamp.SystemComponentSession):
 
     @autobahn.wamp.register('issues.change_status')
     def changeStatus(self, issue, status, details):
-        iss = issue.changeStatus(con, status)
+        iss = issue.changeStatus(status)
         return issue
 
     @autobahn.wamp.register('issues.change_priority')
     def changePriority(self, issue, priority, details):
-        iss = issue.changePriority(con, priority)
+        iss = issue.changePriority(priority)
         return issue
 
     @autobahn.wamp.register('issues.get_offices')
