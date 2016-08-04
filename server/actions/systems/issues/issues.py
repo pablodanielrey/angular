@@ -66,15 +66,19 @@ class Issues(wamp.SystemComponentSession):
             self.conn.put(con)
 
     @autobahn.wamp.register('issues.create')
+    @inlineCallbacks
     def create(self, subject, description, parentId, officeId, fromOfficeId, authorId, files, details):
         con = self.conn.get()
         try:
+            print('create issue')
             userId = self.getUserId(con, details)
             authorId = userId if authorId is  None else authorId
             tracker = IssueModel.TRACKER_ERROR
-            iss = IssueModel.create(con, parentId, officeId, authorId, subject, description, fromOfficeId, userId, files, tracker)
+            issueId = IssueModel.create(con, parentId, officeId, authorId, subject, description, fromOfficeId, userId, files, tracker)
             con.commit()
-            return iss
+            print(issueId)
+            yield self.publish('issues.issue_created_event', issueId, authorId, fromOfficeId, officeId)
+            return issueId
         finally:
             self.conn.put(con)
 
@@ -88,21 +92,11 @@ class Issues(wamp.SystemComponentSession):
             tracker = IssueModel.TRACKER_COMMENT
             issueId = IssueModel.create(con, parentId, projectId, userId, subject, description, '', '', files, tracker)
             con.commit()
-            self.log.info('issues.comment_created_event')
             yield self.publish('issues.comment_created_event', parentId, issueId)
-            #self.publish('issues.comment_created_event', parentId, issueId)
             return issueId
 
         finally:
             self.conn.put(con)
-
-
-    @autobahn.wamp.subscribe('issues.comment_created_event')
-    def aa(self, parentId, issueId):
-        print('eventoooo')
-        print(parentId)
-        print(issueId)
-        self.log.info('{} {} ivi puto'.format(parentId, issueId))
 
     @autobahn.wamp.register('issues.change_status')
     def changeStatus(self, issue, status, details):

@@ -222,20 +222,19 @@
           var description = vm.model.description;
           var parentId = null;
           var fromOfficeId = (vm.model.selectedFromOffice == null) ? null : vm.model.selectedFromOffice.id;
-          var authorId = vm.model.authorId;
 
           if (office == null || vm.model.subjects.indexOf(subject) < 0) {
             window.alert('Complete los campos correctamente');
             return;
           }
 
-          Issues.create(subject, description, parentId, office.id, fromOfficeId, authorId, vm.model.files).then(
+          // vm.messageLoading();
+          Issues.create(subject, description, parentId, office.id, fromOfficeId, null, vm.model.files).then(
             function(data) {
               vm.messageCreated();
               $timeout(function () {
                 vm.closeMessage();
                 vm.view.style = vm.view.styles[0];
-                vm.getMyIssues();
               }, 2500);
             }, function(error) {
               vm.messageError(error);
@@ -269,14 +268,7 @@
           vm.messageLoading();
           Issues.createComment(subject, vm.model.replyDescription, parentId, officeId, vm.model.files).then(
             function(data) {
-              /*
-              vm.messageSending();
-              $timeout(function () {
-                vm.view.style2 = vm.view.styles2[0];
-                vm.closeMessage();
-              }, 2500);
-              vm.loadIssue(vm.model.issueSelected.id);
-              */
+
             }, function(error) {
               vm.messageError(error);
             }
@@ -303,7 +295,26 @@
                     vm.messageError(error);
                 });
             }
-          })
+          });
+
+          Issues.subscribe('issues.issue_created_event', function(params) {
+            var issueId = params[0];
+            var authorId = params[1];
+            var fromOfficeId = params[2];
+            var officeId = params[3];
+            if (authorId == vm.model.userId || vm.model.userOffices.indexOf(officeId) > -1) {
+                Issues.findById(issueId).then(
+                  function(issue) {
+                    if (issue != null) {
+                      vm.model.issues.push(issue);
+                    }
+                  },
+                  function(error) {
+
+                  }
+                )
+            }
+          });
 
         }
 
