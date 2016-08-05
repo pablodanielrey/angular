@@ -309,7 +309,7 @@
         if (issue == null) {
           return '';
         }
-        return (issue.area == null) ? issue.office.name : issue.area.name;
+        return (issue.fromOffice == null) ? '' : issue.fromOffice.name;
       }
 
       function getFromArea(issue) {
