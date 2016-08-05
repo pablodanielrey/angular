@@ -70,8 +70,8 @@
 
     <!-- <div ng-include="'../fce/modules/header/index.html'" ng-controller="HeaderCtrl"></div> -->
     <div class="main">
-      <div class="MenuContent" ng-controller="MenuCtrl" ng-include="'modules/menu/index.html?t=' + t"></div>
-      <div class="MenuCel" ng-controller="MenuCelCtrl" ng-include="'modules/menuCel/index.html?t=' + t"></div>
+      <div class="MenuContent" ng-controller="MenuCtrl" ng-include="getMenu()"></div>
+      <div class="MenuCel" ng-controller="MenuCelCtrl" ng-include="getMenuCel()"></div>
       <div class="viewContent" ng-view></div>
     </div>
     <div ng-include="'../fce/modules/footer/index.html'"></div>

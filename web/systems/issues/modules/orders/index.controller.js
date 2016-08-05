@@ -92,6 +92,7 @@
           vm.model.userId = Login.getCredentials()['userId']
           vm.initializeView();
           vm.initializeModel();
+          vm.registerEventManagers();
         }
 
 /* ************************************************************************ */
@@ -108,6 +109,49 @@
         function initializeModel() {
           vm.model.selectedIssue = null;
           vm.loadIssues();
+        }
+
+        // TODO: manejador de eventos
+        function registerEventManagers() {
+          Issues.subscribe('issues.comment_created_event', function(params) {
+            /*var parentId = params[0];
+            var commentId = params[1];
+            if (vm.model.issueSelected.id == parentId) {
+              Issues.findById(commentId).then(
+                function(comment) {
+                    vm.messageSending();
+                    $timeout(function () {
+                      vm.view.style2 = vm.view.styles2[0];
+                      vm.closeMessage();
+                    }, 2500);
+
+                    vm.model.issueSelected.children.push(comment);
+                },
+                function(error) {
+                    vm.messageError(error);
+                });
+            }*/
+          });
+
+          Issues.subscribe('issues.issue_created_event', function(params) {
+            /*var issueId = params[0];
+            var authorId = params[1];
+            var fromOfficeId = params[2];
+            var officeId = params[3];
+            if (authorId == vm.model.userId || vm.model.userOffices.indexOf(officeId) > -1) {
+                Issues.findById(issueId).then(
+                  function(issue) {
+                    if (issue != null) {
+                      vm.model.issues.push(issue);
+                    }
+                  },
+                  function(error) {
+
+                  }
+                )
+            }*/
+          });
+
         }
 
 /* ************************************************************************ */

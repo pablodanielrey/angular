@@ -143,6 +143,7 @@ class RedmineAPI:
                 issue.creatorId = cf.value
             elif cf.id == cls.FROM_FIELD:
                 issue.fromOfficeId = cf.value
+                issue.fromOffice = cls._findOffice(con, issue.fromOfficeId)
 
         issue.children = [cls.findById(con, iss.id) for iss in r.children if iss is not None]
         issue.files = [cls._loadFile(file) for file in r.attachments if file is not None]
