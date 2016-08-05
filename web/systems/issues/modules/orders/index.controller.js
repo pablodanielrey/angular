@@ -80,6 +80,7 @@
         vm.getOffice = getOffice;
         vm.getFullName = getFullName;
         vm.getCreator = getCreator;
+        vm.registerEventManagers = registerEventManagers;
 
         vm.sortDate = sortDate;
         vm.sortStatus = sortStatus;
