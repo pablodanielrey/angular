@@ -306,6 +306,15 @@
                 Issues.findById(issueId).then(
                   function(issue) {
                     if (issue != null) {
+                      var dateStr = issue.start;
+                      issue.date = new Date(dateStr);
+
+                      // obtengo la posicion de ordenacion del estado
+                      var item = vm.view.status[issue.statusId];
+                      issue.statusPosition = vm.view.statusSort.indexOf(item);
+
+                      loadUser(issue.userId);
+                      loadUser(issue.creatorId);                      
                       vm.model.issues.push(issue);
                     }
                   },
