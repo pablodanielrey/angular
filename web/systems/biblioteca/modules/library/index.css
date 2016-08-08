@@ -16,6 +16,7 @@
 .library .contentLibrary {
   width: 100%;
   height: 100%;
+  min-height: 200px;
   background-color: #EEEEEE;
   /*background-color: red;*/
   overflow-y: none;
@@ -25,6 +26,7 @@
   flex-direction:row;
   -webkit-flex-direction:row; /* Safari */
   -moz-flex-direction:row; /* mozilla */
+
 }
 
 .library .contentMain {
@@ -34,7 +36,7 @@
   flex-direction: column;
   -webkit-flex-direction: column;
   -moz-flex-direction: column;
-  height: 97%;
+  height: 95%;
   width: 100%;
   border-right: 2px solid #DBE2E5;
   /*color: white;*/
@@ -52,6 +54,7 @@
   -moz-align-items: center;
   width: 98%;
   height: 84px;
+  min-height: 40px;
   margin: 10px;
   border-radius: 3px;
   -moz-border-radius: 3px;
@@ -179,7 +182,8 @@
   background-color: #DBE2E5;
   color: #5C5F69;
   width: 98%;
-  height: 55px;
+  height: 40px;
+  min-height: 40px;
   border-radius: 3px 3px 0 0 ;
   -moz-border-radius: 3px 3px 0 0;
   -webkit-border-radius: 3px 3px 0 0;
@@ -490,9 +494,12 @@
   flex-direction: row;
   -webkit-flex-direction: row;
   -moz-flex-direction: row;
+  align-items: center;
   font-size: 13px;
   color:#3a3c44;
   padding: 2px 0 2px 0;
+  height: 25px;
+  min-height: 20px;
 
 }
 
@@ -581,7 +588,7 @@
 .library .contentAside {
   width: 30%;
   min-width: 300px;
-  height: 97%;
+  height: 95%;
   /*background-color: red;*/
 }
 
@@ -790,9 +797,18 @@
     background-color: #3A3C44;
     padding: 20px;
     width: 100%;
-    height: 100%;
+    height: 150%;
     top:0;
     left: 0;
+    zoom:2;
+  }
+
+
+
+
+  .library .contentMain {
+    height: 97%;
+    width: 97%;
   }
 
 

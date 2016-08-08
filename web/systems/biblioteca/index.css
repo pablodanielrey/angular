@@ -22,7 +22,7 @@ html, .sistema {
   -webkit-flex-direction:row; /* Safari */
   -moz-flex-direction:row; /* mozilla */
   width: 100%;
-  height: calc(100% - 80px);
+  height: calc(100% - 60px);
 }
 
 .sistema .MenuContent {
@@ -216,6 +216,6 @@ html, .sistema {
       display: none;
   }
   .sistema .main {
-    height: calc(100% - 110px);
+    height: calc(100% -60px) !important;
   }
 }
