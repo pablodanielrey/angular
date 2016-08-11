@@ -97,6 +97,10 @@
 
         activate();
 
+        $scope.hola = function(value) {
+          alert(value);
+        }
+
         function activate() {
           vm.model.userId = Login.getCredentials().userId;
           vm.initializeModel();
@@ -314,7 +318,7 @@
                       issue.statusPosition = vm.view.statusSort.indexOf(item);
 
                       loadUser(issue.userId);
-                      loadUser(issue.creatorId);                      
+                      loadUser(issue.creatorId);
                       vm.model.issues.push(issue);
                     }
                   },
@@ -331,7 +335,7 @@
         /* ************************ FORMATEO DE DATOS ****************************** */
         /* ************************************************************************* */
         function loadUser(userId) {
-          if (userId == null || userId == '') {
+          if (vm.model.users == undefined || userId == null || userId == '') {
             return
           }
           if (vm.model.users[userId] == null) {
@@ -356,6 +360,7 @@
           var date = ('date' in issue) ? issue.date : new Date(issue.start);
           return date;
         }
+
 
         function setInitDay(date) {
           date.setHours(0);
