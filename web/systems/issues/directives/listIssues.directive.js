@@ -10,17 +10,18 @@
         var directive = {
             restrict: 'E',
             templateUrl: function(elem, attr) {
-              return 'directives/listIssues.html?t=' + attr.time;
+              var time = new Date().getTime();
+              return 'directives/listIssues.html?t=' + time;
             },
-            scope: {
-              issues: '=issues',
-              users: '=users',
-              detail: '&onDetail'
-            },
+            scope: {},
             link: linkFunc,
             controller: ListIssuesDirectiveCtrl,
             controllerAs: 'vm',
-            bindToController: true
+            bindToController: {
+              issues: '=issues',
+              users: '=users',
+              detail: '&onDetail'
+            }
         };
 
         return directive;

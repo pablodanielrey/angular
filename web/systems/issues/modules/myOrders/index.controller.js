@@ -97,9 +97,6 @@
 
         activate();
 
-        $scope.hola = function(value) {
-          alert(value);
-        }
 
         function activate() {
           vm.model.userId = Login.getCredentials().userId;
