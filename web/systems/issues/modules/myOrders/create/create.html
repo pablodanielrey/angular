@@ -1,0 +1,87 @@
+<!-- ------------- CREAR UN NUEVO PEDIDO ---------------- -->
+<div class="myOrders pantallaNuevoPedido {{vm.view.style2}} {{vm.view.style3}} {{vm.view.style2}} {{vm.view.style4}} ">
+
+<div class="contentNewOrder">
+  <div class="subContentNewOrder">
+      <div class="newOrder">
+          <!-- ---- HEADER DE SOLICITAR PEDIDO ---- -->
+          <div class="contentTitleNewOrder" ng-class="{true:'usuarioDeUnaSolaOficina'}[vm.getUserOffices().length <= 1]">
+              <!-- ---- VARIABLES: usuarioDeUnaSolaOficina ---- -->
+              <div class="contentBackNewOrder">
+                  <div class="contentBtnReturn">
+                        <button class="btnReturn" ng-click="vm.cancel()"><i class=" fa fa-angle-left" aria-hidden="true"></i></button>
+                  </div>
+                  <div class="titleNewOrder">
+                    NUEVO PEDIDO
+                  </div>
+              </div>
+
+              <div class="contentSelectedOffice">
+                <div class="textMini">Enviar desde</div>
+                <div class="contentSelectOffice" ng-click="vm.view.style2 = 'verMisOficinas'">
+                    <div>{{vm.model.selectedFromOffice.name}}</div>
+                    <div><i class="fa fa-caret-down" aria-hidden="true"></i></div>
+                </div>
+                <div class="contentListOffices">
+                  <div class="itemsOffice2"  ng-repeat="office in vm.getUserOffices()" ng-click="vm.selectFromOffice(office)"> {{office.name}}</div>
+                </div>
+              </div>
+              <div>
+                  <button class="btnApply" ng-click="vm.save()">SOLICITAR</button>
+                  <button class="btnApply2" ng-click="vm.save()"><i class="fa fa-paper-plane"></i></button>
+              </div>
+          </div>
+
+          <!-- ---- CAMPOS PARA LLENAR EN UN NUEVO PEDIDO ---- -->
+          <div class="contentOrder">
+            <div class="contentOrientation">
+                <div class="subtitleNewOrder">OFICINA</div>
+                <input type="texy" class="inputNewOrder" placeholder="Buscar..."  ng-model='vm.model.searchOffice.name' ng-click="vm.view.style2 = 'buscarOficina'"></input>
+            </div>
+            <!-- ---- LISTADO DE OFICINAS ---- -->
+            <div class="offices">
+                <div class="itemsSelectOffice"  ng-repeat='office in vm.model.offices | filter: vm.model.searchOffice' ng-click="vm.selectOffice(office)" >
+                  {{office.name}}
+                </div>
+            </div>
+
+            <div class="contentOrientation">
+                <div class="subtitleNewOrder">ÁREA</div>
+                <input type="text" class="inputNewOrder" placeholder="Buscar..." ng-model='vm.model.searchArea.name' ng-click="vm.view.style2 = 'buscarArea'"></input>
+            </div>
+            <!-- ---- LISTADO DE AREAS ---- -->
+            <div class="areas">
+                <div class="itemsSelectArea" ng-repeat='area in vm.model.areas | filter: vm.model.searchArea' ng-click="vm.selectArea(area)">
+                  {{area.name}}
+                </div>
+            </div>
+
+            <div class="contentOrientation">
+                <div class="subtitleNewOrder">CONSULTA</div>
+                <input type="texy" class="inputNewOrder" placeholder="Seleccionar..." ng-model='vm.model.subject' ng-click="vm.view.style2 = 'buscarConsulta'"></input>
+            </div>
+
+            <!-- ---- LISTADO DE PROBLEMAS ---- -->
+            <div class="querys">
+                <div class="itemsSelectQuery" ng-repeat="subject in vm.model.subjects | filter: vm.model.subject" ng-click="vm.selectSubject(subject)">
+                    {{subject}}
+                </div>
+            </div>
+
+            <div class="subtitleNewOrder2">MENSAJE</div>
+            <div><textarea class="textareaNewOrder" ng-model="vm.model.description"></textarea></div>
+
+            <div class="addMenssage2">
+                <div><button class="btnAdd" title="Adjuntar Archivo"><i class="fa fa-paperclip" aria-hidden="true"></i> Subir Archivo</button></div>
+                <div class="ArchivesAdd">
+                  <input type="file" e-on-read-file-binary-string="vm.addFile(fileName,fileContent, fileType, fileSize)" class="inputFile" />
+                  <span ng-repeat="file in vm.model.files"> <i class="fa fa-file-o"></i> {{file.name}} <button class="btnTrashAdd" ng-click="vm.removeFile(file)"><i class="fa fa-trash-o" aria-hidden="true"></i></button></span>
+                </div>
+            </div>
+
+
+          </div>
+      </div>
+  </div>
+</div>
+</div>

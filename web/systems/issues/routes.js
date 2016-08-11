@@ -17,6 +17,20 @@
          controllerAs: 'vm'
       })
 
+
+      .when('/myOrdersList', {
+         templateUrl: 'modules/myOrders/list/index.html',
+         controller: 'MyOrdersListCtrl',
+         controllerAs: 'vm'
+      })
+
+      .when('/myOrdersCreate', {
+         templateUrl: 'modules/myOrders/create/create.html',
+         controller: 'MyOrdersCreateCtrl',
+         controllerAs: 'vm'
+      })
+
+
       .when('/logout', {
          templateUrl: 'modules/logout.html',
          controller: 'LogoutCtrl'
