@@ -1,0 +1,3 @@
+git clone --mirror git@github.com:username/repo-name.git
+git remote add gitlab ssh://git@servername.com/username/repo.git
+git push -f --tags gitlab refs/heads/*:refs/heads/*
