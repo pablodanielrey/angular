@@ -1,3 +1,11 @@
 git clone --mirror git@github.com:username/repo-name.git
 git remote add gitlab ssh://git@servername.com/username/repo.git
 git push -f --tags gitlab refs/heads/*:refs/heads/*
+
+
+---
+
+para tener cache en las credenciales se puede usar:
+
+git config credential.helper 'cache --timeout=9999999'
+
