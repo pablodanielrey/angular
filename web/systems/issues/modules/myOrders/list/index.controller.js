@@ -18,11 +18,10 @@
         }
 
         vm.view = {
-
-          style3: '',
-          styles3: ['','pantallaMensajeAlUsuario'],
-          style4: '',
-          styles4: ['', 'mensajeCargando'],
+          style1: '',
+          styles1: ['','pantallaMensajeAlUsuario'],
+          style2: '',
+          styles2: ['', 'mensajeCargando'],
 
           status: ['','abierta', 'enProgreso', 'cerrada', 'comentarios', 'rechazada', 'pausada'],
           statusSort: ['','abierta', 'enProgreso', 'pausada', 'rechazada', 'cerrada'],
@@ -30,21 +29,18 @@
           reverseSortStatus: false
         }
 
-
-        vm.closeMessage = closeMessage;
-        vm.getMyIssues = getMyIssues;
-        vm.messageLoading = messageLoading;
         vm.sortStatus = sortStatus;
+        vm.sortDate = sortDate;
         vm.viewDetail = viewDetail;
 
         function messageLoading() {
-          vm.view.style3 = vm.view.styles3[1];
-          vm.view.style4 = vm.view.styles4[1];
+          vm.view.style1 = vm.view.styles1[1];
+          vm.view.style2 = vm.view.styles2[1];
         }
 
         function closeMessage() {
-          vm.view.style3 = vm.view.styles3[0];
-          vm.view.style4 = vm.view.styles4[0];
+          vm.view.style1 = vm.view.styles1[0];
+          vm.view.style2 = vm.view.styles2[0];
         }
 
 
@@ -61,12 +57,12 @@
           vm.view.reverseSortDate = false;
           vm.view.reverseSortStatus = false;
 
-          vm.getMyIssues();
+          getMyIssues();
         }
 
 
         function getMyIssues() {
-          vm.messageLoading();
+          messageLoading();
           Issues.getMyIssues().then(
             function(issues) {
                 for (var i = 0; i < issues.length; i++) {
@@ -74,12 +70,15 @@
                   issues[i].date = new Date(dateStr);
 
                   // obtengo la posicion de ordenacion del estado
-                  var item = vm.view.status[issues[i].statusId];
-                  issues[i].statusPosition = vm.view.statusSort.indexOf(item);
+                  var status = vm.view.status[issues[i].statusId];
+                  issues[i].statusPosition = vm.view.statusSort.indexOf(status);
+
+                  loadUser(issues[i].userId);
+                  loadUser(issues[i].creatorId);
                 }
                 vm.model.issues = issues;
-                vm.sortStatus();
-                vm.closeMessage();
+                sortStatus();
+                closeMessage();
             },
             function(err) {
               vm.messageError(error);
@@ -94,6 +93,25 @@
           vm.view.reverseSortStatus = !vm.view.reverseSortStatus;
         }
 
+        function sortDate() {
+          vm.view.reverseSortStatus = false;
+          vm.model.issues = $filter('orderBy')(vm.model.issues, ['start', 'statusPosition'], vm.view.reverseSortDate);
+          vm.view.reverseSortDate = !vm.view.reverseSortDate;
+        }
+
+
+        //***** cargar usuario en vm.model.users *****
+        function loadUser(userId) {
+          if (!userId || userId == '') return;
+
+          if (vm.model.users[userId] == null) {
+            Users.findById([userId]).then(
+              function(users) {
+                vm.model.users[userId] = users[0];
+              }
+            );
+          }
+        }
 
         function viewDetail(issueId) {
             $location.path('/myOrdersDetail/' + issueId);
