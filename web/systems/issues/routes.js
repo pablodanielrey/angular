@@ -36,6 +36,12 @@
          controllerAs: 'vm'
       })
 
+      .when('/myOrdersComment/:issueId', {
+         templateUrl: 'modules/myOrders/comment/index.html',
+         controller: 'MyOrdersCommentCtrl',
+         controllerAs: 'vm'
+      })
+
 
       .when('/logout', {
          templateUrl: 'modules/logout.html',
