@@ -90,6 +90,7 @@
           vm.model.subject = '';
           vm.model.selectedOffice = office;
           vm.model.searchOffice = (office == null) ? {name:''} : {name: office.name};
+          vm.view.style2 = '';
           loadAreas(vm.model.selectedOffice);
           loadSubjects(vm.model.selectedOffice);
         }
@@ -99,11 +100,13 @@
           clearSubject();
           vm.model.selectedArea = area;
           vm.model.searchArea = (area == null) ? {name:''} : {name: area.name};
+          vm.view.style2 = '';
           vm.loadSubjects(vm.model.selectedArea);
         }
 
         function selectSubject(subject) {
           vm.model.subject = subject;
+          vm.view.style2 = '';
         }
 
         function loadAreas(office) {
