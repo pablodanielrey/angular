@@ -6,8 +6,8 @@
       $routeProvider
 
       .when('/orders', {
-         templateUrl: 'modules/orders/index.html',
-         controller: 'OrdersCtrl',
+         templateUrl: 'modules/orders/list/index.html',
+         controller: 'OrdersListCtrl',
          controllerAs: 'vm'
       })
 
