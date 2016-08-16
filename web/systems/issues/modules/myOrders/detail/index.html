@@ -1,5 +1,5 @@
 <!-- ---------------- DETALLE DE PEDIDO ------------------ -->
-<div class="myOrders pantallaMensaje">
+<div class="myOrders pantallaDetallePedido {{vm.view.style3}} {{vm.view.style4}}">
 
     <div class="contentOrderDetail">
 
@@ -8,29 +8,29 @@
 
               <div class="detail">
                   <div class="contentBtnReturn">
-                      <button class="btnReturn" ng-click="vm.cancel()"><i class=" fa fa-angle-left" aria-hidden="true"></i></button>
+                      <a class="btnReturn" href="#/myOrdersList"><i class=" fa fa-angle-left" aria-hidden="true"></i></a>
                   </div>
                   <div class="itemDate2">
                       <div class="textDaysOrders">Consulta</div>
-                      <div class="textNumerOrders2">Nº {{vm.model.issueSelected.id}}</div>
+                      <div class="textNumerOrders2">Nº {{vm.model.issue.id}}</div>
                       <!-- <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
                       <div class="textDaysOrders">Hoy</div> -->
                   </div>
                   <div class="itemsType">
-                        <div class="textType">{{vm.model.issueSelected.projectName}}:</div>
-                        <div class="textSubType">{{vm.model.issueSelected.subject}}</div>
+                        <div class="textType">{{vm.model.issue.projectName}}:</div>
+                        <div class="textSubType">{{vm.model.issue.subject}}</div>
                   </div>
 
                   <div class="contentOffice">
                       <div class="textMini">Solicitado por:</div>
-                        <div class="textOffice">{{vm.model.issueSelected.fromOffice.name}}</div>
-                        <div class="textName">{{vm.getName(vm.model.issueSelected)}} {{vm.getLastname(vm.model.issueSelected)}}</div>
+                        <div class="textOffice">{{vm.model.issue.fromOffice.name}}</div>
+                        <div class="textName">{{vm.getName(vm.model.issue)}} {{vm.getLastname(vm.model.issue)}}</div>
                   </div>
 
                   <div class="contentActions">
 
                       <div class="itemStatus2">
-                          <div class="status2 {{vm.getStatus(vm.model.issueSelected)}}">
+                          <div class="status2 {{vm.getStatus(vm.model.issue)}}">
                               <!-- VARIABLES:
                               abierta, enProgreso, cerrada, pausada, rechazada -->
                               <div class="textA1">ABIERTA</div>
@@ -60,11 +60,11 @@
         <div class="infoOrder">
             <div class="contentUser">
                 <div class="photo">
-                    <img class="avatar" ng-src='{{vm.getUserPhoto(vm.model.issueSelected)}}' alt="foto de perfil"/>
+                    <img class="avatar" ng-src='{{vm.getUserPhoto(vm.model.issue)}}' alt="foto de perfil"/>
                 </div>
                 <div class="nameUser">
-                  {{vm.model.issueSelected.user.name}} </br>
-                  {{vm.model.issueSelected.user.lastname}}
+                  {{vm.model.issue.user.name}} </br>
+                  {{vm.model.issue.user.lastname}}
                 </div>
             </div>
             <!-- <div class="contentArrow">
@@ -73,19 +73,19 @@
             <div class="contentInfo ">
                 <!-- VARIABLES: conAdjunto, sinAdjunto -->
                 <div class="textDateDetailOrders">
-                    {{vm.getDiffDay(vm.model.issueSelected)}} - {{vm.getDate(vm.model.issueSelected) | date: 'd MMMM  yyyy - HH:mm'}} hs
+                    {{vm.getDiffDay(vm.model.issue)}} - {{vm.getDate(vm.model.issue) | date: 'd MMMM  yyyy - HH:mm'}} hs
                 </div>
                 <div>
-                  {{vm.model.issueSelected.description}}
+                  {{vm.model.issue.description}}
                 </div>
-                <div ng-repeat="file in vm.model.issueSelected.files" class="contentAddInfo"><i class="archiveAdd"></i> <a href="{{file.url}}">{{file.name}}</a></div>
+                <div ng-repeat="file in vm.model.issue.files" class="contentAddInfo"><i class="archiveAdd"></i> <a href="{{file.url}}">{{file.name}}</a></div>
             </div>
 
         </div>
 
         <div class="contentTotalReplys">
 
-          <div class="reply" ng-class="{true: 'miRespuesta' , false: 'respuestaDeAutor'}[vm.model.issueSelected.userId != child.userId]" ng-repeat="child in vm.model.issueSelected.children">
+          <div class="reply" ng-class="{true: 'miRespuesta' , false: 'respuestaDeAutor'}[vm.model.issue.userId != child.userId]" ng-repeat="child in vm.model.issue.children">
               <!-- VARIABLES: miRespuesta, respuestaDeAutor -->
                 <div class="contentReplys">
                   <div class="subcontentReply">
