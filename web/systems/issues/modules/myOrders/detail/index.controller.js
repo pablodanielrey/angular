@@ -5,10 +5,10 @@
         .module('issues')
         .controller('MyOrdersDetailCtrl', MyOrdersDetailCtrl);
 
-    MyOrdersDetailCtrl.$inject = ['$scope', '$routeParams', '$location', 'Issues', 'Users', 'Files', 'Offices'];
+    MyOrdersDetailCtrl.$inject = ['$scope', '$routeParams', '$location', '$timeout', 'Issues', 'Users', 'Files', 'Offices'];
 
     /* @ngInject */
-    function MyOrdersDetailCtrl($scope, $routeParams, $location, Issues, Users, Files, Offices) {
+    function MyOrdersDetailCtrl($scope, $routeParams, $location, $timeout, Issues, Users, Files, Offices) {
         var vm = this;
         vm.model = {
           issue: null,
@@ -16,8 +16,13 @@
         }
 
         vm.view = {
-          status: ['','abierta', 'enProgreso', 'cerrada', 'comentarios', 'cerrada', 'rechazada', 'pausada']
+          status: ['','abierta', 'enProgreso', 'cerrada', 'comentarios', 'cerrada', 'rechazada', 'pausada'],
+          style3: '',
+          styles3: ['','pantallaMensajeAlUsuario'],
+          style4: '',
+          styles4: ['', 'mensajeCargando', 'mensajeError', 'mensajeEnviado']
         }
+
 
         vm.loadIssue = loadIssue;
         vm.getName = getName;
@@ -28,6 +33,11 @@
         vm.getDate = getDate;
         vm.reply = reply;
 
+        vm.closeMessage = closeMessage;
+        vm.messageLoading = messageLoading;
+        vm.messageError = messageError;
+        vm.messageSending = messageSending;
+
         activate();
 
         function activate() {
@@ -37,6 +47,8 @@
           }
           vm.model.users = [];
           vm.loadIssue(params.issueId);
+          registerEventManagers();
+          messageLoading();
         }
 
         function loadIssue(id) {
@@ -54,10 +66,29 @@
               if (issue.fromOfficeId != undefined) {
                 loadOffice(issue.fromOfficeId);
               }
+              closeMessage();
             }, function(error) {
               vm.messageError(error);
             }
           );
+        }
+
+        // TODO: manejador de eventos
+        function registerEventManagers() {
+          Issues.subscribe('issues.comment_created_event', function(params) {
+            var parentId = params[0];
+            var commentId = params[1];
+            if (vm.model.issue.id == parentId) {
+              Issues.findById(commentId).then(
+                function(comment) {
+
+                    vm.model.issue.children.push(comment);
+                },
+                function(error) {
+                    vm.messageError(error);
+                });
+            }
+          });
         }
 
         function loadUser(userId) {
@@ -156,6 +187,29 @@
 
         function reply() {
           $location.path('/myOrdersComment/' + vm.model.issue.id);
+        }
+
+        function messageError(error) {
+          vm.view.style3 = vm.view.styles3[1];
+          vm.view.style4 = vm.view.styles4[2];
+          $timeout(function() {
+            vm.closeMessage();
+          }, 2000);
+        }
+
+        function closeMessage() {
+          vm.view.style3 = vm.view.styles3[0];
+          vm.view.style4 = vm.view.styles4[0];
+        }
+
+        function messageLoading() {
+          vm.view.style3 = vm.view.styles3[1];
+          vm.view.style4 = vm.view.styles4[1];
+        }
+
+        function messageSending() {
+          vm.view.style3 = vm.view.styles3[1];
+          vm.view.style4 = vm.view.styles4[3];
         }
 
     }
