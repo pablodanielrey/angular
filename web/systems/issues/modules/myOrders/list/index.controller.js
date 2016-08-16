@@ -43,6 +43,13 @@
           vm.view.style2 = vm.view.styles2[0];
         }
 
+        function messageError(error) {
+          vm.view.style3 = vm.view.styles3[1];
+          vm.view.style4 = vm.view.styles4[2];
+          $timeout(function() {
+            vm.closeMessage();
+          }, 2000);
+        }
 
 
         activate();
@@ -81,10 +88,12 @@
                 closeMessage();
             },
             function(err) {
-              vm.messageError(error);
+              messageError(error);
             }
           );
         }
+
+
 
 
         function sortStatus() {
@@ -118,5 +127,35 @@
         }
 
 
+
+        function registerEventManagers() {
+          Issues.subscribe('issues.issue_created_event', function(params) {
+            var issueId = params[0];
+            var authorId = params[1];
+            var fromOfficeId = params[2];
+            var officeId = params[3];
+            if (authorId == vm.model.userId || vm.model.userOffices.indexOf(officeId) > -1) {
+                Issues.findById(issueId).then(
+                  function(issue) {
+                    if (issue != null) {
+                      var dateStr = issue.start;
+                      issue.date = new Date(dateStr);
+
+                      // obtengo la posicion de ordenacion del estado
+                      var item = vm.view.status[issue.statusId];
+                      issue.statusPosition = vm.view.statusSort.indexOf(item);
+
+                      loadUser(issue.userId);
+                      loadUser(issue.creatorId);
+                      vm.model.issues.push(issue);
+                    }
+                  },
+                  function(error) {
+                    messageError()
+                  }
+                )
+            }
+          });
+        }
     }
 })();
