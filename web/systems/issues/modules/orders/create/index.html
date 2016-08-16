@@ -1,0 +1,156 @@
+<div class="orders pantallaNuevoPedido {{vm.view.style2}} {{vm.view.style3}} {{vm.view.style4}}">
+
+<div class="contentNewOrder">
+  <div class="subContentNewOrder">
+      <div class="newOrder">
+          <!-- ---- HEADER DE SOLICITAR PEDIDO ---- -->
+          <div class="contentTitleNewOrder">
+
+              <div class="contentBackNewOrder">
+                  <div class="contentBtnReturn">
+                      <button class="btnReturn" ng-click="vm.cancel()"><i class=" fa fa-angle-left" aria-hidden="true"></i></button>
+                  </div>
+                  <div class="titleNewOrder">
+                    NUEVO PEDIDO
+                  </div>
+              </div>
+
+              <!-- ---- Cargar pedido a nombre de otro ---- -->
+              <div class="contentUserOrder">
+                  <div class="subContentOrderLeft">
+                      <div class="textDe">De</div>
+                      <div>Oficina</div>
+                  </div>
+                  <div class="subContentOrderRight">
+                    <div class="userOrder">Walter Roberto Blanco</div>
+                    <!-- ---- buscar el usuario ---- -->
+                    <div class="contentSearchUser">
+                        <div class="titleListRequest">
+                            <span class="icoInputSearch"><i class="fa fa-search"></i></span>
+                            <input class="inputSearch3" type="text" placeholder="Buscar personal...">
+                        </div>
+                        <div class="contentListPerson">
+                            <div class="btnItemPerson" ng-click="view.style2 = ''">
+                                <div class="contentImgUser">
+                                    <img class="imgUser" src="./img/walter.jpg" alt="foto de perfil">
+                                </div>
+                                <div class="contentNameUser">
+                                  <div class="">Walter Blanco</div>
+                                  <div class="dniUser">29694757</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="officeOrder">DiTeSI</div>
+                    <!-- ---- Seleccionar la oficina del usuario ---- -->
+                    <div class="contentSearchOffice">
+                        <div class="titleListRequest">
+                            <span class="icoInputSearch"><i class="fa fa-search"></i></span>
+                            <input class="inputSearch3" type="text" placeholder="Seleccionar Oficina">
+                        </div>
+                        <div class="contentListOffice">
+                            <div class="btnItemOffice" ng-click="view.style2 = ''">
+                                <div class="contentImgOffice">
+                                    <img class="imgOffice" src="./img/empresa.jpg" alt="foto de perfil">
+                                </div>
+                                <div class="contentNameOffice">
+                                  <div class="">Ditesi</div>
+                                  <div class="dniUser">FCE</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="arrowOpen" ng-click="view.style2 = 'buscarUsuario'"><i class="fa fa-caret-down" aria-hidden="true"></i></div>
+                    <div class="arrowOpen2" ng-click="view.style2 = 'buscarOficinaDeUsuario'"><i class="fa fa-caret-down" aria-hidden="true"></i></div>
+                  </div>
+              </div>
+
+              <div>
+                  <button class="btnApply" ng-click="view.style = 'buscarUsuario'">SOLICITAR</button>
+                  <button class="btnApply2" ng-click="view.style = 'buscarUsuario'"><i class="fa fa-paper-plane"></i></button>
+              </div>
+          </div>
+          <!-- ---- CAMPOS PARA LLENAR EN UN NUEVO PEDIDO ---- -->
+          <div class="contentOrder">
+              <div class="contentOrientation">
+                  <div class="subtitleNewOrder">OFICINA</div>
+                  <div><input type="text" class="inputNewOrder" placeholder="Buscar..." ng-click="view.style2 = 'buscarOficina'"></input></div>
+              </div>
+              <!-- ---- LISTADO DE OFICINAS ---- -->
+              <div class="offices">
+                  <div class="itemsSelectOffice" ng-click="view.style2 = ''">
+                    DiTESI (Informática)
+                  </div>
+                  <div class="itemsSelectOffice">
+                    Mantenimieno y Servicios Generales
+                  </div>
+              </div>
+
+              <div class="contentOrientation">
+                  <div class="subtitleNewOrder">ÁREA</div>
+                  <div><input type="text" class="inputNewOrder" placeholder="Buscar..." ng-click="view.style2 = 'buscarArea'"></input></div>
+              </div>
+              <!-- ---- LISTADO DE AREAS ---- -->
+              <div class="areas">
+                  <div class="itemsSelectArea" ng-click="view.style2 = ''">
+                    Soporte Técnico
+                  </div>
+                  <div class="itemsSelectArea">
+                    Diseño y Desarrollo de Sistemas
+                  </div>
+                  <div class="itemsSelectArea">
+                    Redes y Servidores
+                  </div>
+                  <div class="itemsSelectArea">
+                    En General
+                  </div>
+              </div>
+
+              <div class="contentOrientation">
+                  <div class="subtitleNewOrder">CONSULTA</div>
+                  <div><input type="text" class="inputNewOrder" placeholder="Seleccionar..." ng-click="view.style2 = 'buscarConsulta'"></input></div>
+              </div>
+              <!-- ---- LISTADO DE PROBLEMAS ---- -->
+              <div class="querys">
+                  <div class="itemsSelectQuery" ng-click="view.style2 = ''">
+                    Sistema Operativo / Programas
+                  </div>
+                  <div class="itemsSelectQuery">
+                    CPU / otro Componente
+                  </div>
+                  <div class="itemsSelectQuery">
+                    Internet / WIFI
+                  </div>
+                  <div class="itemsSelectQuery">
+                    Correo Electrónico
+                  </div>
+                  <div class="itemsSelectQuery">
+                    Impresora / Impresión
+                  </div>
+                  <div class="itemsSelectQuery">
+                    Otro Problema / Consulta
+                  </div>
+              </div>
+
+              <div class="subtitleNewOrder2">MENSAJE</div>
+              <div><textarea class="textareaNewOrder"></textarea></div>
+
+              <div class="addMenssage2">
+                  <div><button class="btnAdd" title="Adjuntar Archivo"><i class="fa fa-paperclip" aria-hidden="true"></i> Subir Archivo</button></div>
+                  <div class="ArchivesAdd">
+                    <input type="file" class="inputFile"></input>
+                    <!-- <i class="fa fa-file-o"></i> Instructivo.pdf <button class="btnTrashAdd"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                    <i class="fa fa-file-o"></i> pantalla_de_error.jpg <button class="btnTrashAdd"><i class="fa fa-trash-o" aria-hidden="true"></i></button> -->
+                  </div>
+              </div>
+
+          </div>
+
+      </div>
+  </div>
+</div>
+
+</div>
