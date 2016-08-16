@@ -5,10 +5,10 @@
         .module('issues')
         .controller('MyOrdersListCtrl', MyOrdersListCtrl);
 
-    MyOrdersListCtrl.$inject = ['$scope', '$timeout', '$filter', 'Login', 'Issues', 'Users', 'Offices', 'Files'];
+    MyOrdersListCtrl.$inject = ['$scope', '$location', '$timeout', '$filter', 'Login', 'Issues', 'Users', 'Offices', 'Files'];
 
     /* @ngInject */
-    function MyOrdersListCtrl($scope, $timeout, $filter, Login, Issues, Users, Offices, Files) {
+    function MyOrdersListCtrl($scope, $location, $timeout, $filter, Login, Issues, Users, Offices, Files) {
         var vm = this;
 
         vm.model = {
@@ -33,10 +33,9 @@
 
         vm.closeMessage = closeMessage;
         vm.getMyIssues = getMyIssues;
-        vm.initializeModel = initializeModel;
-        vm.initializeView = initializeView;
         vm.messageLoading = messageLoading;
         vm.sortStatus = sortStatus;
+        vm.viewDetail = viewDetail;
 
         function messageLoading() {
           vm.view.style3 = vm.view.styles3[1];
@@ -55,8 +54,14 @@
 
         function activate() {
           vm.model.userId = Login.getCredentials().userId;
-          vm.initializeModel();
+          vm.model.issues = [];
+          vm.model.users = [];
+          vm.model.files = [];
 
+          vm.view.reverseSortDate = false;
+          vm.view.reverseSortStatus = false;
+
+          vm.getMyIssues();
         }
 
 
@@ -71,7 +76,6 @@
                   // obtengo la posicion de ordenacion del estado
                   var item = vm.view.status[issues[i].statusId];
                   issues[i].statusPosition = vm.view.statusSort.indexOf(item);
-
                 }
                 vm.model.issues = issues;
                 vm.sortStatus();
@@ -84,18 +88,6 @@
         }
 
 
-        function initializeModel() {
-          vm.model.issues = [];
-          vm.model.users = [];
-          vm.model.files = [];
-          vm.getMyIssues();
-        }
-
-        function initializeView() {
-          vm.view.reverseSortDate = false;
-          vm.view.reverseSortStatus = false;
-        }
-
         function sortStatus() {
           vm.view.reverseSortDate = false;
           vm.model.issues = $filter('orderBy')(vm.model.issues, ['statusPosition', 'start'], vm.view.reverseSortStatus);
@@ -103,7 +95,9 @@
         }
 
 
-
+        function viewDetail(issueId) {
+            $location.path('/myOrdersDetail/' + issueId);
+        }
 
 
     }

@@ -32,7 +32,7 @@
 
       .when('/myOrdersDetail/:issueId', {
          templateUrl: 'modules/myOrders/detail/index.html',
-         controller: 'myOrdersDetailCtrl',
+         controller: 'MyOrdersDetailCtrl',
          controllerAs: 'vm'
       })
 

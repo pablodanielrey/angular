@@ -41,7 +41,7 @@
         vm.viewDetail = viewDetail;
 
         function viewDetail(issue) {
-          vm.detail({issue: issue});
+          vm.detail({issueId: issue.id});
         }
 
         activate();
