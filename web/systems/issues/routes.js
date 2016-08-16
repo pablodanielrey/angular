@@ -30,6 +30,12 @@
          controllerAs: 'vm'
       })
 
+      .when('/myOrdersDetail/:issueId', {
+         templateUrl: 'modules/myOrders/detail/index.html',
+         controller: 'myOrdersDetailCtrl',
+         controllerAs: 'vm'
+      })
+
 
       .when('/logout', {
          templateUrl: 'modules/logout.html',
