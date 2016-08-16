@@ -55,7 +55,6 @@
           vm.model.offices = [];
           Issues.getOffices().then(
             function(offices) {
-              console.log(offices);
               vm.model.offices = offices;
             },
             function(error) {
@@ -130,7 +129,7 @@
           vm.view.style3 = vm.view.styles3[1];
           vm.view.style4 = vm.view.styles4[1];
           $timeout(function() {
-            vm.closeMessage();
+            closeMessage();
           }, 2000);
         }
 
@@ -164,6 +163,7 @@
 
 
         function save() {
+
           var office = (vm.model.selectedArea != null) ? vm.model.selectedArea : vm.model.selectedOffice;
           var subject = vm.model.subject;
           var description = vm.model.description;
@@ -171,10 +171,9 @@
           var fromOfficeId = (vm.model.selectedFromOffice == null) ? null : vm.model.selectedFromOffice.id;
 
           if (office == null || vm.model.subjects.indexOf(subject) < 0) {
-            window.alert('Complete los campos correctamente');
+            messageError('Complete los campos correctamente');
             return;
           }
-          console.log("test");
 
           // vm.messageLoading();
           Issues.create(subject, description, parentId, office.id, fromOfficeId, null, vm.model.files).then(
