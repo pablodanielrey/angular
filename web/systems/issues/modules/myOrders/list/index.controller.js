@@ -55,8 +55,14 @@
 
         function activate() {
           vm.model.userId = Login.getCredentials().userId;
-          vm.initializeModel();
+          vm.model.issues = [];
+          vm.model.users = [];
+          vm.model.files = [];
 
+          vm.view.reverseSortDate = false;
+          vm.view.reverseSortStatus = false;
+
+          vm.getMyIssues();
         }
 
 
@@ -71,7 +77,6 @@
                   // obtengo la posicion de ordenacion del estado
                   var item = vm.view.status[issues[i].statusId];
                   issues[i].statusPosition = vm.view.statusSort.indexOf(item);
-
                 }
                 vm.model.issues = issues;
                 vm.sortStatus();
@@ -83,18 +88,6 @@
           );
         }
 
-
-        function initializeModel() {
-          vm.model.issues = [];
-          vm.model.users = [];
-          vm.model.files = [];
-          vm.getMyIssues();
-        }
-
-        function initializeView() {
-          vm.view.reverseSortDate = false;
-          vm.view.reverseSortStatus = false;
-        }
 
         function sortStatus() {
           vm.view.reverseSortDate = false;
