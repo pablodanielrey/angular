@@ -181,7 +181,7 @@
               messageCreated();
               $timeout(function () {
                 closeMessage();
-                $location.path("myOrdersList");
+                $location.path("myOrders");
               }, 2500);
             }, function(error) {
               messageError(error);

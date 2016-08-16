@@ -43,7 +43,7 @@
         function activate() {
           var params = $routeParams;
           if (params.issueId == undefined) {
-            $location.path('/myOrdersList');
+            $location.path('/myOrders');
           }
           vm.model.users = [];
           vm.loadIssue(params.issueId);

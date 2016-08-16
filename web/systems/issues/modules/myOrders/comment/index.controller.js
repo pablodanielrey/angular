@@ -40,7 +40,7 @@
         function activate() {
           var params = $routeParams;
           if (params.issueId == undefined) {
-            $location.path('/myOrdersList');
+            $location.path('/myOrders');
           }
           messageLoading();
           vm.model.files = [];

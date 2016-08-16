@@ -123,7 +123,7 @@
         }
 
         function viewDetail(issueId) {
-            $location.path('/myOrdersDetail/' + issueId);
+            $location.path('/myOrdersDetail/' + issueId + '&t=' + new Date().getTime());
         }
 
 

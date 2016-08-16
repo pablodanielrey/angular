@@ -12,13 +12,6 @@
       })
 
       .when('/myOrders', {
-         templateUrl: 'modules/myOrders/index.html',
-         controller: 'MyOrdersCtrl',
-         controllerAs: 'vm'
-      })
-
-
-      .when('/myOrdersList', {
          templateUrl: 'modules/myOrders/list/index.html',
          controller: 'MyOrdersListCtrl',
          controllerAs: 'vm'
