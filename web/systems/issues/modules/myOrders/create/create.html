@@ -1,11 +1,11 @@
 <!-- ------------- CREAR UN NUEVO PEDIDO ---------------- -->
-<div class="myOrders pantallaNuevoPedido {{vm.view.style2}} {{vm.view.style3}} {{vm.view.style2}} {{vm.view.style4}} ">
+<div class="myOrders pantallaNuevoPedido {{vm.view.style2}} {{vm.view.style3}} {{vm.view.style4}} ">
 
 <div class="contentNewOrder">
   <div class="subContentNewOrder">
       <div class="newOrder">
           <!-- ---- HEADER DE SOLICITAR PEDIDO ---- -->
-          <div class="contentTitleNewOrder" ng-class="{true:'usuarioDeUnaSolaOficina'}[vm.getUserOffices().length <= 1]">
+          <div class="contentTitleNewOrder" ng-class="{true:'usuarioDeUnaSolaOficina'}[vm.model.userOffices.length <= 1]">
               <!-- ---- VARIABLES: usuarioDeUnaSolaOficina ---- -->
               <div class="contentBackNewOrder">
                   <div class="contentBtnReturn">
@@ -23,7 +23,7 @@
                     <div><i class="fa fa-caret-down" aria-hidden="true"></i></div>
                 </div>
                 <div class="contentListOffices">
-                  <div class="itemsOffice2"  ng-repeat="office in vm.getUserOffices()" ng-click="vm.selectFromOffice(office)"> {{office.name}}</div>
+                  <div class="itemsOffice2"  ng-repeat="office in vm.model.userOffices" ng-click="vm.selectFromOffice(office)"> {{office.name}}</div>
                 </div>
               </div>
               <div>
