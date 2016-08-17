@@ -5,10 +5,10 @@
         .module('issues')
         .controller('OrdersListCtrl', OrdersListCtrl);
 
-    OrdersListCtrl.$inject = ['$scope', 'Issues', 'Users', '$filter', 'Login'];
+    OrdersListCtrl.$inject = ['$scope', '$location', 'Issues', 'Users', '$filter', 'Login'];
 
     /* @ngInject */
-    function OrdersListCtrl($scope, Issues, Users, $filter, Login) {
+    function OrdersListCtrl($scope, $location, Issues, Users, $filter, Login) {
         var vm = this;
 
         vm.model = {
@@ -39,6 +39,9 @@
         vm.closeMessage = closeMessage;
         vm.messageLoading = messageLoading;
         vm.messageError = messageError;
+
+        vm.viewDetail = viewDetail;
+
 
         activate();
 
@@ -129,6 +132,10 @@
           vm.view.reverseSortPriority = !vm.view.reverseSortPriority;
         }
 
+
+        function viewDetail(issueId) {
+          $location.path('/ordersDetail/' + issueId);
+        }
 
     }
 })();

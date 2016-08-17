@@ -11,6 +11,12 @@
          controllerAs: 'vm'
       })
 
+      .when('/ordersDetail/:issueId', {
+         templateUrl: 'modules/orders/detail/index.html',
+         controller: 'OrdersDetailCtrl',
+         controllerAs: 'vm'
+      })
+
       .when('/myOrders', {
          templateUrl: 'modules/myOrders/list/index.html',
          controller: 'MyOrdersListCtrl',
@@ -41,9 +47,9 @@
          controller: 'LogoutCtrl'
       })
 
-      .otherwise({
+      /*.otherwise({
         redirectTo: '/orders'
-      });
+      });*/
 
     }]);
 
